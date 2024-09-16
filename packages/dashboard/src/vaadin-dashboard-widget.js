@@ -54,7 +54,7 @@ class DashboardWidget extends ControllerMixin(ElementMixin(PolylitMixin(LitEleme
           display: var(--_vaadin-dashboard-widget-actions-display, none);
           position: absolute;
           bottom: 0;
-          right: 0;
+          inset-inline-end: 0;
           font-size: 30px;
           cursor: grab;
           line-height: 1;
@@ -62,6 +62,10 @@ class DashboardWidget extends ControllerMixin(ElementMixin(PolylitMixin(LitEleme
 
         #resize-handle::before {
           content: '\\2921';
+        }
+
+        :host([dir='rtl']) #resize-handle::before {
+          content: '\\2922';
         }
 
         :host::after {

@@ -5,6 +5,7 @@ import '../vaadin-dashboard.js';
 import { isSafari } from '@vaadin/component-base/src/browser-utils.js';
 import type { Dashboard, DashboardItem } from '../vaadin-dashboard.js';
 import {
+  describeBidirectional,
   expectLayout,
   fireResizeEnd,
   fireResizeOver,
@@ -51,89 +52,91 @@ describe('dashboard - widget resizing', () => {
   });
 
   describe('mouse drag', () => {
-    it('should resize a widget while dragging (start -> end)', async () => {
-      // Start dragging the first widget resize handle
-      fireResizeStart(getElementFromCell(dashboard, 0, 0)!);
-      await nextFrame();
+    describeBidirectional('horizontal', () => {
+      it('should resize a widget while dragging (start -> end)', async () => {
+        // Start dragging the first widget resize handle
+        fireResizeStart(getElementFromCell(dashboard, 0, 0)!);
+        await nextFrame();
 
-      // Drag over the end edge of the second one
-      fireResizeOver(getElementFromCell(dashboard, 0, 1)!, 'end');
-      await nextFrame();
+        // Drag over the end edge of the second one
+        fireResizeOver(getElementFromCell(dashboard, 0, 1)!, 'end');
+        await nextFrame();
 
-      fireResizeEnd(dashboard);
-      await nextFrame();
+        fireResizeEnd(dashboard);
+        await nextFrame();
 
-      // Expect the widgets to be reordered
-      // prettier-ignore
-      expectLayout(dashboard, [
-        [0, 0],
-        [1],
-      ]);
-    });
+        // Expect the widgets to be reordered
+        // prettier-ignore
+        expectLayout(dashboard, [
+          [0, 0],
+          [1],
+        ]);
+      });
 
-    it('should not resize if dragged barely over another widget (start -> end)', async () => {
-      fireResizeStart(getElementFromCell(dashboard, 0, 0)!);
-      await nextFrame();
+      it('should not resize if dragged barely over another widget (start -> end)', async () => {
+        fireResizeStart(getElementFromCell(dashboard, 0, 0)!);
+        await nextFrame();
 
-      fireResizeOver(getElementFromCell(dashboard, 0, 1)!, 'start');
-      await nextFrame();
+        fireResizeOver(getElementFromCell(dashboard, 0, 1)!, 'start');
+        await nextFrame();
 
-      fireResizeEnd(dashboard);
-      await nextFrame();
+        fireResizeEnd(dashboard);
+        await nextFrame();
 
-      // prettier-ignore
-      expectLayout(dashboard, [
-        [0, 1],
-      ]);
-    });
+        // prettier-ignore
+        expectLayout(dashboard, [
+          [0, 1],
+        ]);
+      });
 
-    it('should resize a widget while dragging (end -> start)', async () => {
-      dashboard.items = [{ id: 0, colspan: 2 }, { id: 1 }];
-      await nextFrame();
-      // prettier-ignore
-      expectLayout(dashboard, [
-        [0, 0],
-        [1],
-      ]);
+      it('should resize a widget while dragging (end -> start)', async () => {
+        dashboard.items = [{ id: 0, colspan: 2 }, { id: 1 }];
+        await nextFrame();
+        // prettier-ignore
+        expectLayout(dashboard, [
+          [0, 0],
+          [1],
+        ]);
 
-      fireResizeStart(getElementFromCell(dashboard, 0, 1)!);
-      await nextFrame();
+        fireResizeStart(getElementFromCell(dashboard, 0, 1)!);
+        await nextFrame();
 
-      fireResizeOver(getElementFromCell(dashboard, 0, 0)!, 'start');
-      await nextFrame();
+        fireResizeOver(getElementFromCell(dashboard, 0, 0)!, 'start');
+        await nextFrame();
 
-      fireResizeEnd(dashboard);
-      await nextFrame();
+        fireResizeEnd(dashboard);
+        await nextFrame();
 
-      // prettier-ignore
-      expectLayout(dashboard, [
-        [0, 1],
-      ]);
-    });
+        // prettier-ignore
+        expectLayout(dashboard, [
+          [0, 1],
+        ]);
+      });
 
-    it('should not resize if dragged barely over another widget (end -> start)', async () => {
-      dashboard.items = [{ id: 0, colspan: 2 }, { id: 1 }];
-      await nextFrame();
-      // prettier-ignore
-      expectLayout(dashboard, [
-        [0, 0],
-        [1],
-      ]);
+      it('should not resize if dragged barely over another widget (end -> start)', async () => {
+        dashboard.items = [{ id: 0, colspan: 2 }, { id: 1 }];
+        await nextFrame();
+        // prettier-ignore
+        expectLayout(dashboard, [
+          [0, 0],
+          [1],
+        ]);
 
-      fireResizeStart(getElementFromCell(dashboard, 0, 1)!);
-      await nextFrame();
+        fireResizeStart(getElementFromCell(dashboard, 0, 1)!);
+        await nextFrame();
 
-      fireResizeOver(getElementFromCell(dashboard, 0, 0)!, 'end');
-      await nextFrame();
+        fireResizeOver(getElementFromCell(dashboard, 0, 0)!, 'end');
+        await nextFrame();
 
-      fireResizeEnd(dashboard);
-      await nextFrame();
+        fireResizeEnd(dashboard);
+        await nextFrame();
 
-      // prettier-ignore
-      expectLayout(dashboard, [
-        [0, 0],
-        [1],
-      ]);
+        // prettier-ignore
+        expectLayout(dashboard, [
+          [0, 0],
+          [1],
+        ]);
+      });
     });
 
     it('should resize a widget while dragging (top -> bottom)', async () => {

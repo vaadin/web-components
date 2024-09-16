@@ -37,13 +37,15 @@ function _getRowHeights(dashboard: Element): number[] {
 }
 
 function _getElementFromCell(dashboard: HTMLElement, rowIndex: number, columnIndex: number, rowHeights: number[]) {
-  const { top, left } = dashboard.getBoundingClientRect();
+  const { top, left, right } = dashboard.getBoundingClientRect();
   const columnWidths = getColumnWidths(dashboard);
-  const x = left + columnWidths.slice(0, columnIndex).reduce((sum, width) => sum + width, 0);
+  const columnOffset = columnWidths.slice(0, columnIndex).reduce((sum, width) => sum + width, 0);
+  const rtl = document.dir === 'rtl';
+  const x = rtl ? right - columnOffset : left + columnOffset;
   const y = top + rowHeights.slice(0, rowIndex).reduce((sum, height) => sum + height, 0);
 
   return document
-    .elementsFromPoint(x + columnWidths[columnIndex] / 2, y + rowHeights[rowIndex] - 1)
+    .elementsFromPoint(x + (columnWidths[columnIndex] / 2) * (rtl ? -1 : 1), y + rowHeights[rowIndex] - 1)
     .reverse()
     .find(
       (element) =>
@@ -278,4 +280,19 @@ export function fireResizeEnd(dragOverTarget: Element): void {
 
 export function getRemoveButton(section: DashboardWidget | DashboardSection): HTMLElement {
   return section.shadowRoot!.querySelector('#remove-button') as HTMLElement;
+}
+
+export function describeBidirectional(name: string, tests: () => void): void {
+  describe(name, tests);
+  describe(`${name} (RTL)`, () => {
+    before(() => {
+      document.dir = 'rtl';
+    });
+
+    after(() => {
+      document.dir = 'ltr'; // Reset to default after tests
+    });
+
+    tests();
+  });
 }
