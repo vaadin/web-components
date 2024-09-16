@@ -24,7 +24,7 @@ describe('dashboard', () => {
 
   beforeEach(async () => {
     dashboard = fixtureSync('<vaadin-dashboard></vaadin-dashboard>');
-    dashboard.style.width = `${columnWidth * 100}px`;
+    dashboard.style.width = `${columnWidth * 2}px`;
     setMinimumColumnWidth(dashboard, columnWidth);
     setMaximumColumnWidth(dashboard, columnWidth);
     setGap(dashboard, 0);
@@ -52,7 +52,7 @@ describe('dashboard', () => {
     dashboard.items = [...dashboard.items, { id: 'Item 2' }];
     await nextFrame();
 
-    const newWidget = getElementFromCell(dashboard, 0, 2);
+    const newWidget = getElementFromCell(dashboard, 1, 0);
     expect(newWidget).to.be.ok;
     expect(newWidget?.localName).to.equal('vaadin-dashboard-widget');
     expect(newWidget).to.have.property('widgetTitle', 'Item 2 title');
@@ -249,6 +249,49 @@ describe('dashboard', () => {
       const resizeHandle = getResizeHandle(widget);
       expect(resizeHandle.getBoundingClientRect().height).to.be.above(0);
     });
+
+    describe('section', () => {
+      beforeEach(async () => {
+        dashboard.items = [
+          { id: 'Item 0' },
+          { id: 'Item 1' },
+          { title: 'Section', items: [{ id: 'Item 2' }, { id: 'Item 3' }] },
+        ];
+        await nextFrame();
+      });
+
+      it('should hide draggable handle by default', () => {
+        const widget = getElementFromCell(dashboard, 1, 0)!;
+        const section = widget.closest('vaadin-dashboard-section') as DashboardSection;
+        const draggable = getDraggable(section);
+        expect(draggable.getBoundingClientRect().height).to.equal(0);
+      });
+
+      it('should unhide draggable handle when editable', async () => {
+        dashboard.editable = true;
+        await nextFrame();
+        const widget = getElementFromCell(dashboard, 1, 0)!;
+        const section = widget.closest('vaadin-dashboard-section') as DashboardSection;
+        const draggable = getDraggable(section);
+        expect(draggable.getBoundingClientRect().height).to.be.above(0);
+      });
+
+      it('should hide remove button by default', () => {
+        const widget = getElementFromCell(dashboard, 1, 0) as DashboardSection;
+        const section = widget.closest('vaadin-dashboard-section') as DashboardSection;
+        const removeButton = getRemoveButton(section);
+        expect(removeButton.getBoundingClientRect().height).to.equal(0);
+      });
+
+      it('should unhide remove button when editable', async () => {
+        dashboard.editable = true;
+        await nextFrame();
+        const widget = getElementFromCell(dashboard, 1, 0) as DashboardSection;
+        const section = widget.closest('vaadin-dashboard-section') as DashboardSection;
+        const removeButton = getRemoveButton(section);
+        expect(removeButton.getBoundingClientRect().height).to.be.above(0);
+      });
+    });
   });
 
   describe('item components', () => {
@@ -375,6 +418,16 @@ describe('dashboard', () => {
       dashboard.items = [...dashboard.items];
       await nextFrame();
       expect(document.activeElement).to.equal(getElementFromCell(dashboard, 0, 0)!);
+    });
+
+    it('should unhide resize handle when editable', async () => {
+      getElementFromCell(dashboard, 0, 0)!.focus();
+      await nextFrame();
+      dashboard.editable = true;
+      await nextFrame();
+      const widget = getElementFromCell(dashboard, 0, 0) as DashboardWidget;
+      const resizeHandle = getResizeHandle(widget);
+      expect(resizeHandle.getBoundingClientRect().height).to.be.above(0);
     });
   });
 });
