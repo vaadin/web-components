@@ -49,6 +49,6 @@ export class DateTimePickerObserver extends ComponentObserver {
   }
 
   getFields() {
-    return this.component.__inputs;
+    return [this.component.querySelector('[slot=date-picker]'), this.component.querySelector('[slot=time-picker]')];
   }
 }
