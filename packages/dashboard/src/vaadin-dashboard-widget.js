@@ -134,7 +134,11 @@ class DashboardWidget extends ControllerMixin(ElementMixin(PolylitMixin(LitEleme
     super.connectedCallback();
 
     const wrapper = this.closest(WRAPPER_LOCAL_NAME);
-    this.toggleAttribute('editable', wrapper && wrapper.hasAttribute('editable'));
+    if (wrapper) {
+      ['editable', 'dragging'].forEach((attr) => {
+        this.toggleAttribute(attr, wrapper.hasAttribute(attr));
+      });
+    }
 
     const undefinedAncestor = this.closest('*:not(:defined)');
     if (undefinedAncestor) {

@@ -7,16 +7,12 @@ export const hasWidgetWrappers = css`
 `;
 
 export const dashboardWidgetAndSectionStyles = css`
-  /* Placeholder shown while the widget or section is dragged */
-  :host::before {
-    content: '';
-    z-index: 1;
-    position: absolute;
-    display: var(--_vaadin-dashboard-item-placeholder-display, none);
-    inset: 0;
-    border: 3px dashed black;
-    border-radius: 5px;
-    background-color: #fff;
+  :host([dragging]) {
+    border: 3px dashed black !important;
+  }
+
+  :host([dragging]) * {
+    visibility: hidden;
   }
 
   :host(:not([editable])) #drag-handle,

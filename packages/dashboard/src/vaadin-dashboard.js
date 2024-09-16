@@ -141,7 +141,9 @@ class Dashboard extends ControllerMixin(DashboardLayoutMixin(ElementMixin(Themab
       }
 
       if (cell.firstElementChild) {
-        cell.firstElementChild.toggleAttribute('editable', this.editable);
+        ['editable', 'dragging'].forEach((attr) => {
+          cell.firstElementChild.toggleAttribute(attr, cell.hasAttribute(attr));
+        });
       }
     });
   }
@@ -181,6 +183,7 @@ class Dashboard extends ControllerMixin(DashboardLayoutMixin(ElementMixin(Themab
         }
 
         section.toggleAttribute('highlight', !!this.__widgetReorderController.draggedItem);
+        ['editable', 'dragging'].forEach((attr) => section.toggleAttribute(attr, wrapper.hasAttribute(attr)));
         // Render the subitems
         this.__renderItemWrappers(item.items, section);
       }
@@ -199,16 +202,14 @@ class Dashboard extends ControllerMixin(DashboardLayoutMixin(ElementMixin(Themab
 
   /** @private */
   __updateWrapper(wrapper, item) {
-    const itemDragged = this.__widgetReorderController.draggedItem === item;
-
     const style = `
       ${item.colspan ? `--vaadin-dashboard-item-colspan: ${item.colspan};` : ''}
       ${item.rowspan ? `--vaadin-dashboard-item-rowspan: ${item.rowspan};` : ''}
-      ${itemDragged ? '--_vaadin-dashboard-item-placeholder-display: block;' : ''}
     `.trim();
 
     wrapper.setAttribute('style', style);
     wrapper.toggleAttribute('editable', this.editable);
+    wrapper.toggleAttribute('dragging', this.__widgetReorderController.draggedItem === item);
   }
 
   /** @private */
