@@ -150,8 +150,8 @@ class Dashboard extends ControllerMixin(DashboardLayoutMixin(ElementMixin(Themab
   __renderItemWrappers(items, hostElement = this) {
     // Get all the wrappers in the host element
     let wrappers = [...hostElement.children].filter((el) => el.localName === WRAPPER_LOCAL_NAME);
-
     let previousWrapper = null;
+
     items.forEach((item) => {
       // Find the wrapper for the item or create a new one
       const wrapper = wrappers.find((el) => el.__item === item) || this.__createWrapper(item);
@@ -162,27 +162,15 @@ class Dashboard extends ControllerMixin(DashboardLayoutMixin(ElementMixin(Themab
 
       if (!wrapper.contains(document.activeElement)) {
         // Insert the wrapper to the correct position inside the host element
-        // if it doesn't contain the focused element
-        if (previousWrapper) {
-          previousWrapper.after(wrapper);
-        } else if (hostElement.firstChild) {
-          hostElement.insertBefore(wrapper, hostElement.firstChild);
-        } else {
-          hostElement.appendChild(wrapper);
-        }
+        const insertBeforeElement = previousWrapper ? previousWrapper.nextSibling : hostElement.firstChild;
+        hostElement.insertBefore(wrapper, insertBeforeElement);
       }
       previousWrapper = wrapper;
 
       // Render section if the item has subitems
       if (item.items) {
-        let section = wrapper.firstElementChild;
-        if (!section) {
-          // Create a new section if it doesn't exist
-          section =
-            item.component instanceof HTMLElement ? item.component : document.createElement('vaadin-dashboard-section');
-          wrapper.appendChild(section);
-        }
-        // Update the section title
+        const section = wrapper.firstElementChild || this.__createSection(item);
+        wrapper.appendChild(section);
         section.sectionTitle = item.title;
         section.toggleAttribute('highlight', !!this.__widgetReorderController.draggedItem);
         // Render the subitems
@@ -194,6 +182,10 @@ class Dashboard extends ControllerMixin(DashboardLayoutMixin(ElementMixin(Themab
     wrappers.forEach((wrapper) => wrapper.remove());
   }
 
+  /** @private */
+  __createSection(item) {
+    return item.component instanceof HTMLElement ? item.component : document.createElement('vaadin-dashboard-section');
+  }
   /** @private */
   __createWrapper(item) {
     const wrapper = document.createElement(WRAPPER_LOCAL_NAME);
