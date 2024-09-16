@@ -279,4 +279,43 @@ describe('dashboard', () => {
       expect(section?.sectionTitle).to.equal('Section');
     });
   });
+
+  describe('focus', () => {
+    beforeEach(async () => {
+      // Use a custom renderer that reuses the same widget instance
+      // with a tab index to test focus behavior
+      dashboard.renderer = (root, _, model) => {
+        let widget = root.querySelector('vaadin-dashboard-widget');
+        if (!widget || widget.tabIndex !== 0) {
+          root.textContent = '';
+          widget = document.createElement('vaadin-dashboard-widget');
+          widget.tabIndex = 0;
+          root.appendChild(widget);
+        }
+        widget.widgetTitle = `${model.item.id} title`;
+      };
+      await nextFrame();
+    });
+
+    it('should not lose focus when reassigning items', async () => {
+      getElementFromCell(dashboard, 0, 0)!.focus();
+      dashboard.items = [...dashboard.items];
+      await nextFrame();
+      expect(document.activeElement).to.equal(getElementFromCell(dashboard, 0, 0)!);
+    });
+
+    it('should not lose focus when prepending items', async () => {
+      getElementFromCell(dashboard, 0, 0)!.focus();
+      dashboard.items = [{ id: 'Item -1' }, ...dashboard.items];
+      await nextFrame();
+      expect(document.activeElement).to.equal(getElementFromCell(dashboard, 0, 1)!);
+    });
+
+    it('should not lose focus when removing items', async () => {
+      getElementFromCell(dashboard, 0, 1)!.focus();
+      dashboard.items = [dashboard.items[1]];
+      await nextFrame();
+      expect(document.activeElement).to.equal(getElementFromCell(dashboard, 0, 0)!);
+    });
+  });
 });

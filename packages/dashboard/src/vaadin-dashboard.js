@@ -10,13 +10,13 @@
  */
 import './vaadin-dashboard-widget.js';
 import './vaadin-dashboard-section.js';
-import { html, LitElement, render } from 'lit';
+import { html, LitElement } from 'lit';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { css, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { getElementItem, getItemsArrayOfItem } from './vaadin-dashboard-helpers.js';
+import { getElementItem, getItemsArrayOfItem, WRAPPER_LOCAL_NAME } from './vaadin-dashboard-helpers.js';
 import { DashboardLayoutMixin } from './vaadin-dashboard-layout-mixin.js';
 import { hasWidgetWrappers } from './vaadin-dashboard-styles.js';
 import { WidgetReorderController } from './widget-reorder-controller.js';
@@ -127,9 +127,9 @@ class Dashboard extends ControllerMixin(DashboardLayoutMixin(ElementMixin(Themab
 
   /** @private */
   __itemsOrRendererChanged(items, renderer) {
-    render(this.__renderItemCells(items || []), this);
+    this.__renderItemWrappers(items || []);
 
-    this.querySelectorAll('vaadin-dashboard-widget-wrapper').forEach((cell) => {
+    this.querySelectorAll(WRAPPER_LOCAL_NAME).forEach((cell) => {
       if (cell.firstElementChild && cell.firstElementChild.localName === 'vaadin-dashboard-section') {
         return;
       }
@@ -147,36 +147,71 @@ class Dashboard extends ControllerMixin(DashboardLayoutMixin(ElementMixin(Themab
   }
 
   /** @private */
-  __renderItemCells(items) {
-    return items.map((item) => {
-      const itemDragged = this.__widgetReorderController.draggedItem === item;
-      const style = `
-        ${item.colspan ? `--vaadin-dashboard-item-colspan: ${item.colspan};` : ''}
-        ${item.rowspan ? `--vaadin-dashboard-item-rowspan: ${item.rowspan};` : ''}
-        ${itemDragged ? '--_vaadin-dashboard-item-placeholder-display: block;' : ''}
-      `.trim();
+  __renderItemWrappers(items, hostElement = this) {
+    // Get all the wrappers in the host element
+    let wrappers = [...hostElement.children].filter((el) => el.localName === WRAPPER_LOCAL_NAME);
 
-      if (item.items) {
-        const itemHasComponent = item.component instanceof HTMLElement;
-        if (itemHasComponent) {
-          render(this.__renderItemCells(item.items), item.component);
+    let previousWrapper = null;
+    items.forEach((item) => {
+      // Find the wrapper for the item or create a new one
+      const wrapper = wrappers.find((el) => el.__item === item) || this.__createWrapper(item);
+      wrappers = wrappers.filter((el) => el !== wrapper);
+
+      // Update the wrapper style
+      this.__updateWrapper(wrapper, item);
+
+      if (!wrapper.contains(document.activeElement)) {
+        // Insert the wrapper to the correct position inside the host element
+        // if it doesn't contain the focused element
+        if (previousWrapper) {
+          previousWrapper.after(wrapper);
+        } else if (hostElement.firstChild) {
+          hostElement.insertBefore(wrapper, hostElement.firstChild);
+        } else {
+          hostElement.appendChild(wrapper);
         }
-
-        return html`<vaadin-dashboard-widget-wrapper .__item="${item}" style="${style}">
-          ${itemHasComponent
-            ? item.component
-            : html` <vaadin-dashboard-section
-                .sectionTitle="${item.title}"
-                ?highlight="${this.__widgetReorderController.draggedItem}"
-              >
-                ${this.__renderItemCells(item.items)}
-              </vaadin-dashboard-section>`}
-        </vaadin-dashboard-widget-wrapper>`;
       }
+      previousWrapper = wrapper;
 
-      return html`<vaadin-dashboard-widget-wrapper .__item="${item}" style="${style}">
-      </vaadin-dashboard-widget-wrapper>`;
+      // Render section if the item has subitems
+      if (item.items) {
+        let section = wrapper.firstElementChild;
+        if (!section) {
+          // Create a new section if it doesn't exist
+          section =
+            item.component instanceof HTMLElement ? item.component : document.createElement('vaadin-dashboard-section');
+          wrapper.appendChild(section);
+        }
+        // Update the section title
+        section.sectionTitle = item.title;
+        section.toggleAttribute('highlight', !!this.__widgetReorderController.draggedItem);
+        // Render the subitems
+        this.__renderItemWrappers(item.items, section);
+      }
     });
+
+    // Remove the unused wrappers
+    wrappers.forEach((wrapper) => wrapper.remove());
+  }
+
+  /** @private */
+  __createWrapper(item) {
+    const wrapper = document.createElement(WRAPPER_LOCAL_NAME);
+    wrapper.__item = item;
+    return wrapper;
+  }
+
+  /** @private */
+  __updateWrapper(wrapper, item) {
+    const itemDragged = this.__widgetReorderController.draggedItem === item;
+
+    const style = `
+      ${item.colspan ? `--vaadin-dashboard-item-colspan: ${item.colspan};` : ''}
+      ${item.rowspan ? `--vaadin-dashboard-item-rowspan: ${item.rowspan};` : ''}
+      ${itemDragged ? '--_vaadin-dashboard-item-placeholder-display: block;' : ''}
+    `.trim();
+
+    wrapper.setAttribute('style', style);
   }
 
   /** @private */
