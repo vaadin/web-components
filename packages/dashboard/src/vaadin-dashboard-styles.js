@@ -19,6 +19,11 @@ export const dashboardWidgetAndSectionStyles = css`
     background-color: #fff;
   }
 
+  :host(:not([editable])) #drag-handle,
+  :host(:not([editable])) #remove-button {
+    display: none;
+  }
+
   header {
     display: flex;
     justify-content: space-between;
@@ -26,7 +31,6 @@ export const dashboardWidgetAndSectionStyles = css`
   }
 
   #drag-handle {
-    display: var(--_vaadin-dashboard-widget-actions-display, none);
     font-size: 30px;
     cursor: grab;
   }
@@ -36,7 +40,6 @@ export const dashboardWidgetAndSectionStyles = css`
   }
 
   #remove-button {
-    display: var(--_vaadin-dashboard-widget-actions-display, none);
     font-size: 30px;
     cursor: pointer;
   }

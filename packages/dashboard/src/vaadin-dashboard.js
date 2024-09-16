@@ -53,10 +53,6 @@ class Dashboard extends ControllerMixin(DashboardLayoutMixin(ElementMixin(Themab
     return [
       super.styles,
       css`
-        :host([editable]) {
-          --_vaadin-dashboard-widget-actions-display: block;
-        }
-
         #grid[resizing] {
           -webkit-user-select: none;
           user-select: none;
@@ -98,13 +94,12 @@ class Dashboard extends ControllerMixin(DashboardLayoutMixin(ElementMixin(Themab
        */
       editable: {
         type: Boolean,
-        reflectToAttribute: true,
       },
     };
   }
 
   static get observers() {
-    return ['__itemsOrRendererChanged(items, renderer)'];
+    return ['__itemsOrRendererChanged(items, renderer, editable)'];
   }
 
   constructor() {
@@ -143,6 +138,10 @@ class Dashboard extends ControllerMixin(DashboardLayoutMixin(ElementMixin(Themab
         renderer(cell, this, { item: cell.__item });
       } else {
         cell.innerHTML = '';
+      }
+
+      if (cell.firstElementChild) {
+        cell.firstElementChild.toggleAttribute('editable', this.editable);
       }
     });
   }
@@ -209,6 +208,7 @@ class Dashboard extends ControllerMixin(DashboardLayoutMixin(ElementMixin(Themab
     `.trim();
 
     wrapper.setAttribute('style', style);
+    wrapper.toggleAttribute('editable', this.editable);
   }
 
   /** @private */
