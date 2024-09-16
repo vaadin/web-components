@@ -208,7 +208,7 @@ class Dashboard extends ControllerMixin(DashboardLayoutMixin(ElementMixin(Themab
     `.trim();
 
     wrapper.setAttribute('style', style);
-    wrapper.toggleAttribute('editable', this.editable);
+    wrapper.toggleAttribute('editable', !!this.editable);
     wrapper.toggleAttribute('dragging', this.__widgetReorderController.draggedItem === item);
   }
 

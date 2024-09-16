@@ -19,7 +19,7 @@ type TestDashboardItem = DashboardItem & { id: string; component?: Element | str
 
 describe('dashboard', () => {
   let dashboard: Dashboard<TestDashboardItem>;
-  const columnWidth = 100;
+  const columnWidth = 200;
 
   beforeEach(async () => {
     dashboard = fixtureSync('<vaadin-dashboard></vaadin-dashboard>');

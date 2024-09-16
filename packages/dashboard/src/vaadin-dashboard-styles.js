@@ -7,6 +7,10 @@ export const hasWidgetWrappers = css`
 `;
 
 export const dashboardWidgetAndSectionStyles = css`
+  :host {
+    box-sizing: border-box;
+  }
+
   :host([dragging]) {
     border: 3px dashed black !important;
   }
