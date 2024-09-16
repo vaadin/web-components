@@ -16,7 +16,12 @@ import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { css, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { getElementItem, getItemsArrayOfItem, WRAPPER_LOCAL_NAME } from './vaadin-dashboard-helpers.js';
+import {
+  getElementItem,
+  getItemsArrayOfItem,
+  SYNCHRONIZED_ATTRIBUTES,
+  WRAPPER_LOCAL_NAME,
+} from './vaadin-dashboard-helpers.js';
 import { DashboardLayoutMixin } from './vaadin-dashboard-layout-mixin.js';
 import { DashboardSection } from './vaadin-dashboard-section.js';
 import { hasWidgetWrappers } from './vaadin-dashboard-styles.js';
@@ -141,7 +146,7 @@ class Dashboard extends ControllerMixin(DashboardLayoutMixin(ElementMixin(Themab
       }
 
       if (cell.firstElementChild) {
-        ['editable', 'dragging'].forEach((attr) => {
+        SYNCHRONIZED_ATTRIBUTES.forEach((attr) => {
           cell.firstElementChild.toggleAttribute(attr, cell.hasAttribute(attr));
         });
       }
@@ -183,7 +188,7 @@ class Dashboard extends ControllerMixin(DashboardLayoutMixin(ElementMixin(Themab
         }
 
         section.toggleAttribute('highlight', !!this.__widgetReorderController.draggedItem);
-        ['editable', 'dragging'].forEach((attr) => section.toggleAttribute(attr, wrapper.hasAttribute(attr)));
+        SYNCHRONIZED_ATTRIBUTES.forEach((attr) => section.toggleAttribute(attr, wrapper.hasAttribute(attr)));
         // Render the subitems
         this.__renderItemWrappers(item.items, section);
       }

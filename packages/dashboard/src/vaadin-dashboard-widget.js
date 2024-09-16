@@ -15,7 +15,7 @@ import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { css } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { TitleController } from './title-controller.js';
-import { WRAPPER_LOCAL_NAME } from './vaadin-dashboard-helpers.js';
+import { SYNCHRONIZED_ATTRIBUTES, WRAPPER_LOCAL_NAME } from './vaadin-dashboard-helpers.js';
 import { dashboardWidgetAndSectionStyles } from './vaadin-dashboard-styles.js';
 
 /**
@@ -135,7 +135,7 @@ class DashboardWidget extends ControllerMixin(ElementMixin(PolylitMixin(LitEleme
 
     const wrapper = this.closest(WRAPPER_LOCAL_NAME);
     if (wrapper) {
-      ['editable', 'dragging'].forEach((attr) => {
+      SYNCHRONIZED_ATTRIBUTES.forEach((attr) => {
         this.toggleAttribute(attr, wrapper.hasAttribute(attr));
       });
     }
