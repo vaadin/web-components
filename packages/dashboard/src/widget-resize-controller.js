@@ -62,7 +62,7 @@ export class WidgetResizeController extends EventTarget {
       return;
     }
 
-    this.__resizeWidth = this.__resizeStartWidth + e.detail.dx;
+    this.__resizeWidth = this.__resizeStartWidth + (document.dir === 'rtl' ? -e.detail.dx : e.detail.dx);
     this.__resizeHeight = this.__resizeStartHeight + e.detail.dy;
     this.__updateWidgetStyles();
 
