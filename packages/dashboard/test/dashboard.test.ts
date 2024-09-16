@@ -429,5 +429,18 @@ describe('dashboard', () => {
       const resizeHandle = getResizeHandle(widget);
       expect(resizeHandle.getBoundingClientRect().height).to.be.above(0);
     });
+
+    it('should unhide remove button of a section when editable', async () => {
+      dashboard.items = [{ title: 'Section', items: [{ id: 'Item 0' }] }, { id: 'Item 1' }];
+      await nextFrame();
+      getElementFromCell(dashboard, 0, 0)!.focus();
+      await nextFrame();
+      dashboard.editable = true;
+      await nextFrame();
+      const widget = getElementFromCell(dashboard, 0, 0) as DashboardWidget;
+      const section = widget.closest('vaadin-dashboard-section') as DashboardSection;
+      const removeButton = getRemoveButton(section);
+      expect(removeButton.getBoundingClientRect().height).to.be.above(0);
+    });
   });
 });
