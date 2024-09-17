@@ -87,7 +87,7 @@ registerStyles(
       background: var(--_disabled-background);
     }
 
-    :host([disabled]) ::slotted(*) {
+    :host([disabled]) ::slotted(:not([slot$='fix'])) {
       -webkit-text-fill-color: var(--_disabled-value-color);
       color: var(--_disabled-value-color);
     }
