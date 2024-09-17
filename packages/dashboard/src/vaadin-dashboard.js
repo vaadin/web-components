@@ -18,6 +18,7 @@ import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { css, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { getElementItem, getItemsArrayOfItem, WRAPPER_LOCAL_NAME } from './vaadin-dashboard-helpers.js';
 import { DashboardLayoutMixin } from './vaadin-dashboard-layout-mixin.js';
+import { DashboardSection } from './vaadin-dashboard-section.js';
 import { hasWidgetWrappers } from './vaadin-dashboard-styles.js';
 import { WidgetReorderController } from './widget-reorder-controller.js';
 import { WidgetResizeController } from './widget-resize-controller.js';
@@ -170,13 +171,16 @@ class Dashboard extends ControllerMixin(DashboardLayoutMixin(ElementMixin(Themab
       // Render section if the item has subitems
       if (item.items) {
         let section = wrapper.firstElementChild;
-        if (!section) {
+        const isComponentSection = item.component instanceof DashboardSection;
+        if (!(section instanceof DashboardSection)) {
           // Create a new section if it doesn't exist
-          section =
-            item.component instanceof HTMLElement ? item.component : document.createElement('vaadin-dashboard-section');
+          section = isComponentSection ? item.component : document.createElement('vaadin-dashboard-section');
           wrapper.appendChild(section);
         }
-        section.sectionTitle = item.title;
+        if (!isComponentSection) {
+          section.sectionTitle = item.title;
+        }
+
         section.toggleAttribute('highlight', !!this.__widgetReorderController.draggedItem);
         // Render the subitems
         this.__renderItemWrappers(item.items, section);

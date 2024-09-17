@@ -3,6 +3,7 @@ import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../vaadin-dashboard.js';
 import type { CustomElementType } from '@vaadin/component-base/src/define.js';
+import type { DashboardSection } from '../src/vaadin-dashboard-section.js';
 import type { DashboardWidget } from '../src/vaadin-dashboard-widget.js';
 import type { Dashboard, DashboardItem } from '../vaadin-dashboard.js';
 import {
@@ -277,6 +278,26 @@ describe('dashboard', () => {
       const section = widget?.closest('vaadin-dashboard-section');
       expect(section).to.be.ok;
       expect(section?.sectionTitle).to.equal('Section');
+    });
+
+    it('should not override the component titles', async () => {
+      const section = fixtureSync(
+        `<vaadin-dashboard-section section-title="Section"></vaadin-dashboard-section>`,
+      ) as DashboardSection;
+      const widget = fixtureSync(
+        '<vaadin-dashboard-widget widget-title="Component 0"></vaadin-dashboard-widget>',
+      ) as DashboardWidget;
+
+      (dashboard as any).items = [
+        {
+          component: section,
+          items: [{ id: 'Item 0', component: widget }],
+        },
+      ];
+      await nextFrame();
+
+      expect(widget.widgetTitle).to.equal('Component 0');
+      expect(section.sectionTitle).to.equal('Section');
     });
   });
 
