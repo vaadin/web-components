@@ -10,9 +10,8 @@ import { getElementItem, WRAPPER_LOCAL_NAME } from './vaadin-dashboard-helpers.j
 /**
  * A controller to widget resizing inside a dashboard.
  */
-export class WidgetResizeController extends EventTarget {
+export class WidgetResizeController {
   constructor(host) {
-    super();
     this.host = host;
     this.__resizedElementRemoveObserver = new MutationObserver(() => this.__restoreResizedElement());
     this.__touchMoveCancelListener = (e) => e.preventDefault();

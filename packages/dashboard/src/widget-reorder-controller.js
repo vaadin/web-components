@@ -11,9 +11,8 @@ const REORDER_EVENT_TIMEOUT = 200;
 /**
  * A controller to widget reordering inside a dashboard.
  */
-export class WidgetReorderController extends EventTarget {
+export class WidgetReorderController {
   constructor(host) {
-    super();
     this.host = host;
     this.draggedElementRemoveObserver = new MutationObserver(() => this.__restoreDraggedElement());
 
