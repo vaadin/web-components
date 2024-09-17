@@ -10,7 +10,6 @@
     <style>
       vaadin-dashboard-widget {
         background-color: #f5f5f5;
-        border: 1px solid #e0e0e0;
         border-radius: 4px;
         padding: 10px;
       }
@@ -82,11 +81,13 @@
       ];
 
       dashboard.renderer = (root, _dashboard, { item }) => {
-        root.innerHTML = `
-          <vaadin-dashboard-widget widget-title="${item.title}">
-            <span slot="header">${item.header || ''}</span>
-            ${item.type === 'chart' ? '<div class="chart"></div>' : `<div class="kpi-number">${item.content}</div>`}
-          </vaadin-dashboard-widget>
+        if (!root.firstElementChild) {
+          root.append(document.createElement('vaadin-dashboard-widget'));
+        }
+        root.firstElementChild.widgetTitle = item.title;
+        root.firstElementChild.innerHTML = `
+          <span slot="header">${item.header || ''}</span>
+          ${item.type === 'chart' ? '<div class="chart"></div>' : `<div class="kpi-number">${item.content}</div>`}
         `;
       };
 

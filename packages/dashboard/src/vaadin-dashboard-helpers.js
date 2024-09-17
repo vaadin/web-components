@@ -33,3 +33,48 @@ export function getItemsArrayOfItem(item, items) {
 export function getElementItem(element) {
   return element.closest(WRAPPER_LOCAL_NAME).__item;
 }
+
+/**
+ * Dispatches a custom event to notify about a move operation.
+ *
+ * @param {HTMLElement} element
+ * @param {Number} delta
+ */
+export function fireMove(element, delta) {
+  element.dispatchEvent(
+    new CustomEvent('item-move', {
+      bubbles: true,
+      composed: true,
+      detail: { delta },
+    }),
+  );
+}
+
+/**
+ * Dispatches a custom event to notify about a resize operation.
+ *
+ * @param {HTMLElement} element
+ * @param {Number} colspanDelta
+ * @param {Number} rowspanDelta
+ */
+export function fireResize(element, colspanDelta, rowspanDelta) {
+  element.dispatchEvent(
+    new CustomEvent('item-resize', {
+      bubbles: true,
+      composed: true,
+      detail: {
+        colspanDelta,
+        rowspanDelta,
+      },
+    }),
+  );
+}
+
+/**
+ * Dispatches a custom event to notify about a remove operation.
+ *
+ * @param {HTMLElement} element
+ */
+export function fireRemove(element) {
+  element.dispatchEvent(new CustomEvent('item-remove', { bubbles: true, composed: true }));
+}

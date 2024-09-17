@@ -16,6 +16,7 @@ export class WidgetResizeController {
     this.__resizedElementRemoveObserver = new MutationObserver(() => this.__restoreResizedElement());
     this.__touchMoveCancelListener = (e) => e.preventDefault();
     addListener(host, 'track', (e) => this.__onTrack(e));
+    host.addEventListener('item-resize', (e) => this.__itemResize(e));
   }
 
   /** @private */
@@ -78,10 +79,10 @@ export class WidgetResizeController {
     const columnWidth = parseFloat(columns[0]);
     if (this.__resizeWidth > currentElementWidth + gapSize + columnWidth / 2) {
       // Resized horizontally above the half of the next column, increase colspan
-      this.__updateResizedItem(Math.min((this.resizedItem.colspan || 1) + 1, columns.length), this.resizedItem.rowspan);
+      this.__updateResizedItem(1, 0);
     } else if (this.__resizeWidth < currentElementWidth - columnWidth / 2) {
       // Resized horizontally below the half of the current column, decrease colspan
-      this.__updateResizedItem(Math.max((this.resizedItem.colspan || 1) - 1, 1), this.resizedItem.rowspan);
+      this.__updateResizedItem(-1, 0);
     }
 
     if (!gridStyle.getPropertyValue('--vaadin-dashboard-row-min-height')) {
@@ -92,10 +93,10 @@ export class WidgetResizeController {
     const rowMinHeight = Math.min(...gridStyle.gridTemplateRows.split(' ').map((height) => parseFloat(height)));
     if (this.__resizeHeight > currentElementHeight + gapSize + rowMinHeight / 2) {
       // Resized vertically above the half of the next row, increase rowspan
-      this.__updateResizedItem(this.resizedItem.colspan, (this.resizedItem.rowspan || 1) + 1);
+      this.__updateResizedItem(0, 1);
     } else if (this.__resizeHeight < currentElementHeight - rowMinHeight / 2) {
       // Resized vertically below the half of the current row, decrease rowspan
-      this.__updateResizedItem(this.resizedItem.colspan, Math.max((this.resizedItem.rowspan || 1) - 1, 1));
+      this.__updateResizedItem(0, -1);
     }
   }
 
@@ -138,13 +139,26 @@ export class WidgetResizeController {
   }
 
   /** @private */
-  __updateResizedItem(colspan = 1, rowspan = 1) {
-    if ((this.resizedItem.colspan || 1) === colspan && (this.resizedItem.rowspan || 1) === rowspan) {
+  __updateResizedItem(colspanDelta, rowspanDelta) {
+    this.__resizeItem(this.resizedItem, colspanDelta, rowspanDelta);
+    requestAnimationFrame(() => this.__updateWidgetStyles());
+  }
+
+  /** @private */
+  __resizeItem(item, colspanDelta, rowspanDelta) {
+    const gridStyle = getComputedStyle(this.host.$.grid);
+    const columns = gridStyle.gridTemplateColumns.split(' ');
+    const newColspan = Math.min(Math.max((item.colspan || 1) + colspanDelta, 1), columns.length);
+    const newRowspan = Math.max((item.rowspan || 1) + rowspanDelta, 1);
+
+    if ((item.colspan || 1) === newColspan && (item.rowspan || 1) === newRowspan) {
+      // No change in size
       return;
     }
 
+    // TODO: Event to be removed
     const resizeEvent = new CustomEvent('dashboard-item-drag-resize', {
-      detail: { item: this.resizedItem, colspan, rowspan },
+      detail: { item: this.resizedItem, colspan: newColspan, rowspan: newRowspan },
       cancelable: true,
     });
 
@@ -153,10 +167,9 @@ export class WidgetResizeController {
       return;
     }
 
-    this.resizedItem.colspan = colspan;
-    this.resizedItem.rowspan = rowspan;
+    item.colspan = newColspan;
+    item.rowspan = newRowspan;
     this.host.items = [...this.host.items];
-    requestAnimationFrame(() => this.__updateWidgetStyles());
   }
 
   /** @private */
@@ -172,6 +185,16 @@ export class WidgetResizeController {
       this.__resizedElement.style.display = 'none';
       this.host.appendChild(this.__resizedElement);
     }
+  }
+
+  /**
+   * Handle the item-resize event dispatched by a widget / section.
+   * @private
+   */
+  __itemResize(e) {
+    e.stopImmediatePropagation();
+    const item = getElementItem(e.target);
+    this.__resizeItem(item, e.detail.colspanDelta, e.detail.rowspanDelta);
   }
 
   hostDisconnected() {
