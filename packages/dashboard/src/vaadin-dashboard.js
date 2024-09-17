@@ -79,7 +79,7 @@ class Dashboard extends ControllerMixin(DashboardLayoutMixin(ElementMixin(Themab
 
       /**
        * Custom function for rendering a widget for each dashboard item.
-       * Placing something else than a widget in the cell is not supported.
+       * Placing something else than a widget in the wrapper is not supported.
        * Receives three arguments:
        *
        * - `root` The container for the widget.
@@ -130,24 +130,24 @@ class Dashboard extends ControllerMixin(DashboardLayoutMixin(ElementMixin(Themab
   __itemsOrRendererChanged(items, renderer) {
     this.__renderItemWrappers(items || []);
 
-    this.querySelectorAll(WRAPPER_LOCAL_NAME).forEach((cell) => {
-      if (cell.firstElementChild && cell.firstElementChild.localName === 'vaadin-dashboard-section') {
+    this.querySelectorAll(WRAPPER_LOCAL_NAME).forEach((wrapper) => {
+      if (wrapper.firstElementChild && wrapper.firstElementChild.localName === 'vaadin-dashboard-section') {
         return;
       }
-      if (cell.__item.component instanceof HTMLElement) {
-        if (cell.__item.component.parentElement !== cell) {
-          cell.textContent = '';
-          cell.appendChild(cell.__item.component);
+      if (wrapper.__item.component instanceof HTMLElement) {
+        if (wrapper.__item.component.parentElement !== wrapper) {
+          wrapper.textContent = '';
+          wrapper.appendChild(wrapper.__item.component);
         }
       } else if (renderer) {
-        renderer(cell, this, { item: cell.__item });
+        renderer(wrapper, this, { item: wrapper.__item });
       } else {
-        cell.innerHTML = '';
+        wrapper.innerHTML = '';
       }
 
-      if (cell.firstElementChild) {
+      if (wrapper.firstElementChild) {
         SYNCHRONIZED_ATTRIBUTES.forEach((attr) => {
-          cell.firstElementChild.toggleAttribute(attr, cell.hasAttribute(attr));
+          wrapper.firstElementChild.toggleAttribute(attr, wrapper.hasAttribute(attr));
         });
       }
     });

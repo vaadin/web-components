@@ -128,7 +128,7 @@ declare class Dashboard<TItem extends DashboardItem = DashboardItem> extends Das
 
   /**
    * Custom function for rendering a widget for each dashboard item.
-   * Placing something else than a widget in the cell is not supported.
+   * Placing something else than a widget in the wrapper is not supported.
    * Receives three arguments:
    *
    * - `root` The container for the widget.
