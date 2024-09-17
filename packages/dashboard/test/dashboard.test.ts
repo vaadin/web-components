@@ -3,6 +3,7 @@ import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../vaadin-dashboard.js';
 import type { CustomElementType } from '@vaadin/component-base/src/define.js';
+import type { DashboardSection } from '../src/vaadin-dashboard-section.js';
 import type { DashboardWidget } from '../src/vaadin-dashboard-widget.js';
 import type { Dashboard, DashboardItem } from '../vaadin-dashboard.js';
 import {
@@ -277,6 +278,74 @@ describe('dashboard', () => {
       const section = widget?.closest('vaadin-dashboard-section');
       expect(section).to.be.ok;
       expect(section?.sectionTitle).to.equal('Section');
+    });
+
+    it('should not override the component titles', async () => {
+      const section = fixtureSync(
+        `<vaadin-dashboard-section section-title="Section"></vaadin-dashboard-section>`,
+      ) as DashboardSection;
+      const widget = fixtureSync(
+        '<vaadin-dashboard-widget widget-title="Component 0"></vaadin-dashboard-widget>',
+      ) as DashboardWidget;
+
+      (dashboard as any).items = [
+        {
+          component: section,
+          items: [{ id: 'Item 0', component: widget }],
+        },
+      ];
+      await nextFrame();
+
+      expect(widget.widgetTitle).to.equal('Component 0');
+      expect(section.sectionTitle).to.equal('Section');
+    });
+  });
+
+  describe('focus', () => {
+    beforeEach(async () => {
+      // Use a custom renderer that reuses the same widget instance
+      // with a tab index to test focus behavior
+      dashboard.renderer = (root, _, model) => {
+        let widget = root.querySelector('vaadin-dashboard-widget');
+        if (!widget || widget.tabIndex !== 0) {
+          root.textContent = '';
+          widget = document.createElement('vaadin-dashboard-widget');
+          widget.tabIndex = 0;
+          root.appendChild(widget);
+        }
+        widget.widgetTitle = `${model.item.id} title`;
+      };
+      await nextFrame();
+    });
+
+    it('should not lose focus when reassigning items', async () => {
+      getElementFromCell(dashboard, 0, 0)!.focus();
+      dashboard.items = [...dashboard.items];
+      await nextFrame();
+      expect(document.activeElement).to.equal(getElementFromCell(dashboard, 0, 0)!);
+    });
+
+    it('should not lose focus when prepending items', async () => {
+      getElementFromCell(dashboard, 0, 0)!.focus();
+      dashboard.items = [{ id: 'Item -1' }, ...dashboard.items];
+      await nextFrame();
+      expect(document.activeElement).to.equal(getElementFromCell(dashboard, 0, 1)!);
+    });
+
+    it('should not lose focus when removing items', async () => {
+      getElementFromCell(dashboard, 0, 1)!.focus();
+      dashboard.items = [dashboard.items[1]];
+      await nextFrame();
+      expect(document.activeElement).to.equal(getElementFromCell(dashboard, 0, 0)!);
+    });
+
+    it('should not lose focus when reassigning section items', async () => {
+      dashboard.items = [{ title: 'Section', items: [{ id: 'Item 0' }] }, { id: 'Item 1' }];
+      await nextFrame();
+      getElementFromCell(dashboard, 0, 0)!.focus();
+      dashboard.items = [...dashboard.items];
+      await nextFrame();
+      expect(document.activeElement).to.equal(getElementFromCell(dashboard, 0, 0)!);
     });
   });
 });
