@@ -6,6 +6,9 @@
 
 export const WRAPPER_LOCAL_NAME = 'vaadin-dashboard-widget-wrapper';
 
+// The attributes that should be synchronized from the wrapper to widget/section
+export const SYNCHRONIZED_ATTRIBUTES = ['editable', 'dragging'];
+
 /**
  * Returns the array of items that contains the given item.
  * Might be the dashboard items or the items of a section.

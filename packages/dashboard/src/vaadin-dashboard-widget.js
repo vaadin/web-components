@@ -15,6 +15,7 @@ import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { css } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { TitleController } from './title-controller.js';
+import { SYNCHRONIZED_ATTRIBUTES, WRAPPER_LOCAL_NAME } from './vaadin-dashboard-helpers.js';
 import { dashboardWidgetAndSectionStyles } from './vaadin-dashboard-styles.js';
 
 /**
@@ -45,13 +46,16 @@ class DashboardWidget extends ControllerMixin(ElementMixin(PolylitMixin(LitEleme
           display: none !important;
         }
 
+        :host(:not([editable])) #resize-handle {
+          display: none;
+        }
+
         #content {
           flex: 1;
           min-height: 100px;
         }
 
         #resize-handle {
-          display: var(--_vaadin-dashboard-widget-actions-display, none);
           position: absolute;
           bottom: 0;
           inset-inline-end: 0;
@@ -128,6 +132,13 @@ class DashboardWidget extends ControllerMixin(ElementMixin(PolylitMixin(LitEleme
   /** @protected */
   connectedCallback() {
     super.connectedCallback();
+
+    const wrapper = this.closest(WRAPPER_LOCAL_NAME);
+    if (wrapper) {
+      SYNCHRONIZED_ATTRIBUTES.forEach((attr) => {
+        this.toggleAttribute(attr, wrapper.hasAttribute(attr));
+      });
+    }
 
     const undefinedAncestor = this.closest('*:not(:defined)');
     if (undefinedAncestor) {

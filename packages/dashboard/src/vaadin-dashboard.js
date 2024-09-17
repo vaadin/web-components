@@ -16,7 +16,12 @@ import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { css, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { getElementItem, getItemsArrayOfItem, WRAPPER_LOCAL_NAME } from './vaadin-dashboard-helpers.js';
+import {
+  getElementItem,
+  getItemsArrayOfItem,
+  SYNCHRONIZED_ATTRIBUTES,
+  WRAPPER_LOCAL_NAME,
+} from './vaadin-dashboard-helpers.js';
 import { DashboardLayoutMixin } from './vaadin-dashboard-layout-mixin.js';
 import { DashboardSection } from './vaadin-dashboard-section.js';
 import { hasWidgetWrappers } from './vaadin-dashboard-styles.js';
@@ -53,10 +58,6 @@ class Dashboard extends ControllerMixin(DashboardLayoutMixin(ElementMixin(Themab
     return [
       super.styles,
       css`
-        :host([editable]) {
-          --_vaadin-dashboard-widget-actions-display: block;
-        }
-
         #grid[resizing] {
           -webkit-user-select: none;
           user-select: none;
@@ -98,13 +99,12 @@ class Dashboard extends ControllerMixin(DashboardLayoutMixin(ElementMixin(Themab
        */
       editable: {
         type: Boolean,
-        reflectToAttribute: true,
       },
     };
   }
 
   static get observers() {
-    return ['__itemsOrRendererChanged(items, renderer)'];
+    return ['__itemsOrRendererChanged(items, renderer, editable)'];
   }
 
   constructor() {
@@ -144,6 +144,12 @@ class Dashboard extends ControllerMixin(DashboardLayoutMixin(ElementMixin(Themab
       } else {
         cell.innerHTML = '';
       }
+
+      if (cell.firstElementChild) {
+        SYNCHRONIZED_ATTRIBUTES.forEach((attr) => {
+          cell.firstElementChild.toggleAttribute(attr, cell.hasAttribute(attr));
+        });
+      }
     });
   }
 
@@ -182,6 +188,7 @@ class Dashboard extends ControllerMixin(DashboardLayoutMixin(ElementMixin(Themab
         }
 
         section.toggleAttribute('highlight', !!this.__widgetReorderController.draggedItem);
+        SYNCHRONIZED_ATTRIBUTES.forEach((attr) => section.toggleAttribute(attr, wrapper.hasAttribute(attr)));
         // Render the subitems
         this.__renderItemWrappers(item.items, section);
       }
@@ -200,15 +207,14 @@ class Dashboard extends ControllerMixin(DashboardLayoutMixin(ElementMixin(Themab
 
   /** @private */
   __updateWrapper(wrapper, item) {
-    const itemDragged = this.__widgetReorderController.draggedItem === item;
-
     const style = `
       ${item.colspan ? `--vaadin-dashboard-item-colspan: ${item.colspan};` : ''}
       ${item.rowspan ? `--vaadin-dashboard-item-rowspan: ${item.rowspan};` : ''}
-      ${itemDragged ? '--_vaadin-dashboard-item-placeholder-display: block;' : ''}
     `.trim();
 
     wrapper.setAttribute('style', style);
+    wrapper.toggleAttribute('editable', !!this.editable);
+    wrapper.toggleAttribute('dragging', this.__widgetReorderController.draggedItem === item);
   }
 
   /** @private */

@@ -553,6 +553,9 @@ describe('dashboard - widget reordering', () => {
         fireDragOver(getElementFromCell(dashboard, 0, 0)!, 'top');
         await nextFrame();
 
+        fireDragEnd(dashboard);
+        await nextFrame();
+
         // prettier-ignore
         expectLayout(dashboard, [
           [2, 3],
