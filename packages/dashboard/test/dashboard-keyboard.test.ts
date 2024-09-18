@@ -41,7 +41,7 @@ describe('dashboard - keyboard interaction', () => {
     };
     await nextFrame();
 
-    // Make sure the following tab goes back to the first widget
+    // Make sure the following tab goes back to the first widget (needed for Firefox)
     const widget = getElementFromCell(dashboard, 0, 0)!;
     widget.focus();
     await nextFrame();

@@ -153,8 +153,11 @@ export class WidgetResizeController {
 
     const gridStyle = getComputedStyle(this.host.$.grid);
     const columns = gridStyle.gridTemplateColumns.split(' ');
-    const newColspan = Math.min(Math.max((item.colspan || 1) + colspanDelta, 1), columns.length);
-    const newRowspan = Math.max((item.rowspan || 1) + rowspanDelta, 1);
+    const currentColspan = item.colspan || 1;
+    const currentRowspan = item.rowspan || 1;
+
+    const newColspan = Math.min(Math.max(currentColspan + colspanDelta, 1), columns.length);
+    const newRowspan = Math.max(currentRowspan + rowspanDelta, 1);
 
     if ((item.colspan || 1) === newColspan && (item.rowspan || 1) === newRowspan) {
       // No change in size
