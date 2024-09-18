@@ -5,6 +5,34 @@ import '../vaadin-chart.js';
 import Highcharts from 'highcharts/es-modules/masters/highstock.src.js';
 
 describe('vaadin-chart properties', () => {
+  describe('title', () => {
+    let chart, chartContainer;
+
+    beforeEach(async () => {
+      chart = fixtureSync(`
+        <vaadin-chart title="My title">
+          <vaadin-chart-series values="[10, 20, 30, 40, 50]"></vaadin-chart-series>
+        </vaadin-chart>
+      `);
+      await oneEvent(chart, 'chart-load');
+      chartContainer = chart.$.chart;
+    });
+
+    it('should have custom title', () => {
+      expect(chartContainer.querySelector('.highcharts-title').textContent).to.be.equal('My title');
+    });
+
+    it('should reset title when property is set to null', () => {
+      chart.title = null;
+      expect(chartContainer.querySelector('.highcharts-title').textContent).to.be.equal('');
+    });
+
+    it('should reset title when attribute is removed', () => {
+      chart.removeAttribute('title');
+      expect(chartContainer.querySelector('.highcharts-title').textContent).to.be.equal('');
+    });
+  });
+
   describe('subtitle', () => {
     let chart, chartContainer;
 
@@ -28,6 +56,16 @@ describe('vaadin-chart properties', () => {
       expect(chartContainer.querySelector('.highcharts-title').textContent).to.equal('Awesome chart');
       expect(chartContainer.querySelector('.highcharts-subtitle').textContent).to.equal('My subtitle');
     });
+
+    it('should reset subtitle when property is set to null', () => {
+      chart.subtitle = null;
+      expect(chartContainer.querySelector('.highcharts-subtitle').textContent).to.be.equal('');
+    });
+
+    it('should reset subtitle when attribute is removed', () => {
+      chart.removeAttribute('subtitle');
+      expect(chartContainer.querySelector('.highcharts-subtitle').textContent).to.be.equal('');
+    });
   });
 
   describe('type', () => {
@@ -48,6 +86,16 @@ describe('vaadin-chart properties', () => {
       expect(series).to.have.length(1);
       const text = Array.from(series).map((node) => node.textContent);
       expect(text).to.be.deep.equal(['80']);
+    });
+
+    it('should reset type to line when type property is set to null', () => {
+      chart.type = null;
+      expect(chart.configuration.types).to.eql(['line']);
+    });
+
+    it('should reset type to line when type attribute is removed', () => {
+      chart.removeAttribute('type');
+      expect(chart.configuration.types).to.eql(['line']);
     });
   });
 
