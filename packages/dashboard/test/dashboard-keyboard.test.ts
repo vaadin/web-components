@@ -115,9 +115,8 @@ describe('dashboard - keyboard interaction', () => {
 
     it('should deselect the widget on blur', async () => {
       const widget = getElementFromCell(dashboard, 0, 0)!;
-      await sendKeys({ down: 'Shift' });
-      await sendKeys({ press: 'Tab' });
-      await sendKeys({ up: 'Shift' });
+      widget.blur();
+      await nextFrame();
       expect(widget.hasAttribute('selected')).to.be.false;
       expect(widget.hasAttribute('focused')).to.be.false;
     });
@@ -209,6 +208,23 @@ describe('dashboard - keyboard interaction', () => {
       expect(dashboard.items).to.eql([{ id: 0 }, { id: 1 }, { items: [{ id: 2 }, { id: 3 }] }]);
     });
 
+    it('should trap focus inside the widget', async () => {
+      const widget = getElementFromCell(dashboard, 0, 0)!;
+      for (let i = 0; i < 10; i++) {
+        await sendKeys({ press: 'Tab' });
+        expect(widget.contains(document.activeElement)).to.be.true;
+      }
+    });
+
+    it('should release focus trap on deselect', async () => {
+      const widget = getElementFromCell(dashboard, 0, 0)!;
+      await sendKeys({ press: 'Escape' });
+      await sendKeys({ down: 'Shift' });
+      await sendKeys({ press: 'Tab' });
+      await sendKeys({ up: 'Shift' });
+      expect(widget.contains(document.activeElement)).to.be.false;
+    });
+
     describeBidirectional('horizontal', () => {
       let arrowForwards;
       let arrowBackwards;
@@ -278,11 +294,29 @@ describe('dashboard - keyboard interaction', () => {
     });
 
     it('should deselect the section on blur', async () => {
+      section.blur();
+      await nextFrame();
+      expect(section.hasAttribute('selected')).to.be.false;
+      expect(section.hasAttribute('focused')).to.be.false;
+    });
+
+    it('should trap focus inside the widget', async () => {
+      const sectionWidgets = section.querySelectorAll('vaadin-dashboard-widget');
+      for (let i = 0; i < 10; i++) {
+        await sendKeys({ press: 'Tab' });
+        expect(section.contains(document.activeElement)).to.be.true;
+        sectionWidgets.forEach((sectionWidget) => {
+          expect(sectionWidget.contains(document.activeElement)).to.be.false;
+        });
+      }
+    });
+
+    it('should release focus trap on deselect', async () => {
+      await sendKeys({ press: 'Escape' });
       await sendKeys({ down: 'Shift' });
       await sendKeys({ press: 'Tab' });
       await sendKeys({ up: 'Shift' });
-      expect(section.hasAttribute('selected')).to.be.false;
-      expect(section.hasAttribute('focused')).to.be.false;
+      expect(section.contains(document.activeElement)).to.be.false;
     });
   });
 });

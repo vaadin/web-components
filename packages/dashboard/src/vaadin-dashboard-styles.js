@@ -33,6 +33,10 @@ export const dashboardWidgetAndSectionStyles = css`
     display: none;
   }
 
+  #focustrap {
+    display: contents;
+  }
+
   header {
     display: flex;
     justify-content: space-between;

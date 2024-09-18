@@ -9,6 +9,7 @@
  * license.
  */
 import { html, LitElement } from 'lit';
+import { FocusTrapController } from '@vaadin/a11y-base/src/focus-trap-controller.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
@@ -101,6 +102,7 @@ class DashboardSection extends ControllerMixin(ElementMixin(PolylitMixin(LitElem
         type: Boolean,
         reflectToAttribute: true,
         attribute: 'selected',
+        observer: '__selectedChanged',
       },
 
       /** @private */
@@ -125,11 +127,13 @@ class DashboardSection extends ControllerMixin(ElementMixin(PolylitMixin(LitElem
         }}"
       ></button>
 
-      <header>
-        <button id="drag-handle" draggable="true" class="drag-handle" tabindex="${this.__selected ? 0 : -1}"></button>
-        <slot name="title" @slotchange="${this.__onTitleSlotChange}"></slot>
-        <button id="remove-button" tabindex="${this.__selected ? 0 : -1}" @click="${() => fireRemove(this)}"></button>
-      </header>
+      <div id="focustrap">
+        <header>
+          <button id="drag-handle" draggable="true" class="drag-handle" tabindex="${this.__selected ? 0 : -1}"></button>
+          <slot name="title" @slotchange="${this.__onTitleSlotChange}"></slot>
+          <button id="remove-button" tabindex="${this.__selected ? 0 : -1}" @click="${() => fireRemove(this)}"></button>
+        </header>
+      </div>
 
       <slot></slot>
     `;
@@ -139,6 +143,7 @@ class DashboardSection extends ControllerMixin(ElementMixin(PolylitMixin(LitElem
     super();
     this.__keyboardController = new KeyboardController(this);
     this.__titleController = new TitleController(this);
+    this.__focusTrapController = new FocusTrapController(this);
     this.__titleController.addEventListener('slot-content-changed', (event) => {
       const { node } = event.target;
       if (node) {
@@ -152,6 +157,7 @@ class DashboardSection extends ControllerMixin(ElementMixin(PolylitMixin(LitElem
     super.ready();
     this.addController(this.__keyboardController);
     this.addController(this.__titleController);
+    this.addController(this.__focusTrapController);
 
     if (!this.hasAttribute('role')) {
       this.setAttribute('role', 'section');
@@ -161,6 +167,15 @@ class DashboardSection extends ControllerMixin(ElementMixin(PolylitMixin(LitElem
   /** @private */
   __onSectionTitleChanged(sectionTitle) {
     this.__titleController.setTitle(sectionTitle);
+  }
+
+  /** @private */
+  __selectedChanged(selected) {
+    if (selected) {
+      this.__focusTrapController.trapFocus(this.$.focustrap);
+    } else {
+      this.__focusTrapController.releaseFocus();
+    }
   }
 
   focus() {
