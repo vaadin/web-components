@@ -105,7 +105,7 @@ class DashboardWidget extends DashboardItemMixin(ControllerMixin(ElementMixin(Po
   /** @protected */
   render() {
     return html`
-      ${this.__renderFocusButton()} ${this.__renderModeControls()}
+      ${this.__renderFocusButton()} ${this.__renderModeControls()} ${this.__renderResizeControls()}
 
       <div id="focustrap">
         <header>
@@ -115,7 +115,7 @@ class DashboardWidget extends DashboardItemMixin(ControllerMixin(ElementMixin(Po
           ${this.__renderRemoveButton()}
         </header>
 
-        <button id="resize-handle" class="resize-handle" tabindex="${this.__selected ? 0 : -1}"></button>
+        ${this.__renderResizeHandle()}
       </div>
 
       <div id="content">

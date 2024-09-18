@@ -11,6 +11,9 @@ import {
   getMoveApplyButton,
   getMoveBackwardButton,
   getMoveForwardButton,
+  getResizeGrowHeightButton,
+  getResizeGrowWidthButton,
+  getResizeHandle,
   setGap,
   setMaximumColumnWidth,
   setMinimumColumnWidth,
@@ -482,6 +485,200 @@ describe('dashboard - keyboard interaction', () => {
       // This for some reason does not work on CI, passes locally
       // expect(getMoveApplyButton(widget).matches(':focus')).to.be.true;
 
+      expect(widget.hasAttribute('move-mode')).to.be.true;
+      expect(widget.hasAttribute('selected')).to.be.true;
+      expect(widget.hasAttribute('focused')).to.be.true;
+    });
+
+    it('should deselect the section on blur', async () => {
+      const widget = getElementFromCell(dashboard, 0, 0)!;
+      const anotherWidget = getElementFromCell(dashboard, 0, 1)!;
+      anotherWidget.focus();
+      await nextFrame();
+      expect(widget.hasAttribute('move-mode')).to.be.false;
+      expect(widget.hasAttribute('selected')).to.be.false;
+      expect(widget.hasAttribute('focused')).to.be.false;
+    });
+
+    it('should trap focus inside the move mode', async () => {
+      const widget = getElementFromCell(dashboard, 0, 0)!;
+      const moveModeButtons = [getMoveBackwardButton(widget), getMoveForwardButton(widget), getMoveApplyButton(widget)];
+      for (let i = 0; i < 10; i++) {
+        await sendKeys({ press: 'Tab' });
+        expect(moveModeButtons.includes(widget.shadowRoot!.activeElement as HTMLElement)).to.be.true;
+      }
+    });
+
+    it('should trap back inside the widget after exiting move mode', async () => {
+      await sendKeys({ press: 'Escape' });
+      const widget = getElementFromCell(dashboard, 0, 0)!;
+      const moveModeButtons = [getMoveBackwardButton(widget), getMoveForwardButton(widget), getMoveApplyButton(widget)];
+      for (let i = 0; i < 10; i++) {
+        await sendKeys({ press: 'Tab' });
+        expect(widget.contains(document.activeElement)).to.be.true;
+        expect(moveModeButtons.includes(widget.shadowRoot!.activeElement as HTMLElement)).to.be.false;
+      }
+    });
+
+    it('should move the section backwards on backward button click', async () => {
+      const widget = getElementFromCell(dashboard, 1, 0)!;
+      const section = widget.closest('vaadin-dashboard-section')!;
+      section.focus();
+      // Enter move mode
+      await sendKeys({ press: 'Space' });
+      await sendKeys({ press: 'Space' });
+      await nextFrame();
+
+      // backward button focused, click it
+      expect(getMoveBackwardButton(section).matches(':focus')).to.be.true;
+      await sendKeys({ press: 'Space' });
+      await nextFrame();
+
+      expect(dashboard.items).to.eql([{ id: 0 }, { items: [{ id: 2 }, { id: 3 }] }, { id: 1 }]);
+    });
+  });
+
+  it('should enter resize mode', async () => {
+    const widget = getElementFromCell(dashboard, 0, 0)!;
+    // Select
+    await sendKeys({ press: 'Tab' });
+    await sendKeys({ press: 'Space' });
+    // Enter resize mode
+    await sendKeys({ press: 'Tab' });
+    await sendKeys({ press: 'Tab' });
+    await sendKeys({ press: 'Space' });
+
+    expect(widget.hasAttribute('focused')).to.be.true;
+    expect(widget.hasAttribute('selected')).to.be.true;
+    expect(widget.hasAttribute('resize-mode')).to.be.true;
+  });
+
+  describe('widget in resize mode', () => {
+    beforeEach(async () => {
+      // Select
+      await sendKeys({ press: 'Tab' });
+      await sendKeys({ press: 'Space' });
+      // Enter resize mode
+      await sendKeys({ press: 'Tab' });
+      await sendKeys({ press: 'Tab' });
+      await sendKeys({ press: 'Space' });
+      await nextFrame();
+    });
+
+    it('should exit resize mode on escape', async () => {
+      const widget = getElementFromCell(dashboard, 0, 0)!;
+      await sendKeys({ press: 'Escape' });
+      expect(widget.hasAttribute('resize-mode')).to.be.false;
+      expect(widget.hasAttribute('selected')).to.be.true;
+      expect(widget.hasAttribute('focused')).to.be.true;
+    });
+
+    it('should exit resize mode on apply', async () => {
+      const widget = getElementFromCell(dashboard, 0, 0)!;
+      // Apply button focused, click it
+      await sendKeys({ press: 'Space' });
+      expect(widget.hasAttribute('resize-mode')).to.be.false;
+      expect(widget.hasAttribute('selected')).to.be.true;
+      expect(widget.hasAttribute('focused')).to.be.true;
+    });
+
+    it('should focus resize handle on exit move mode', async () => {
+      // Apply button focused, click it
+      await sendKeys({ press: 'Space' });
+      expect(getResizeHandle(getElementFromCell(dashboard, 0, 0)!).matches(':focus')).to.be.true;
+    });
+
+    it('should increase the widget column span on grow width button click', async () => {
+      const widget = getElementFromCell(dashboard, 0, 0)!;
+      // Focus forward button, click it
+      getResizeGrowWidthButton(widget).focus();
+      await sendKeys({ press: 'Space' });
+      expect((dashboard.items[0] as DashboardItem).colspan).to.equal(2);
+    });
+
+    it('should increase the widget row span on grow height button click', async () => {
+      const widget = getElementFromCell(dashboard, 0, 0)!;
+      // Focus forward button, click it
+      getResizeGrowHeightButton(widget).focus();
+      await sendKeys({ press: 'Space' });
+      expect((dashboard.items[0] as DashboardItem).rowspan).to.equal(2);
+    });
+
+    // TODO: SHOULD NOT INCREASE ROW HEIGHT IF MIN ROW HEIGHT IS NOT DEFINED, SAME FOR SHIFT-ARROW DOWN
+
+    it('should move the widget backwards on backward button click', async () => {
+      const widget = getElementFromCell(dashboard, 0, 0)!;
+
+      // Focus forward button, click it
+      await sendKeys({ press: 'Tab' });
+      await sendKeys({ press: 'Space' });
+      await nextFrame();
+      // Focus backward button, click it
+      await sendKeys({ down: 'Shift' });
+      await sendKeys({ press: 'Tab' });
+      await sendKeys({ press: 'Tab' });
+      await sendKeys({ up: 'Shift' });
+      await nextFrame();
+
+      expect(getMoveBackwardButton(widget).matches(':focus')).to.be.true;
+      await sendKeys({ press: 'Space' });
+      await nextFrame();
+
+      expect(dashboard.items).to.eql([{ id: 0 }, { id: 1 }, { items: [{ id: 2 }, { id: 3 }] }]);
+    });
+
+    it('should not lose move mode when the focused backward button is hidden', async () => {
+      const widget = getElementFromCell(dashboard, 0, 0)!;
+
+      // Focus forward button, click it
+      await sendKeys({ press: 'Tab' });
+      await sendKeys({ press: 'Space' });
+      await nextFrame();
+      // Focus backwards button, click it
+      await sendKeys({ down: 'Shift' });
+      await sendKeys({ press: 'Tab' });
+      await sendKeys({ press: 'Tab' });
+      await sendKeys({ up: 'Shift' });
+      await sendKeys({ press: 'Space' });
+      await nextFrame();
+
+      // As the widget becomes the first child, the backwards button is hidden but the focus
+      // should remain in the move mode (apply button focused)
+      expect(getComputedStyle(getMoveBackwardButton(widget)).display).to.equal('none');
+      if (!isFirefox) {
+        // This for some reason does not work in Firefox when running the tests in headless mode
+        expect(getMoveApplyButton(widget).matches(':focus')).to.be.true;
+      }
+      expect(widget.hasAttribute('move-mode')).to.be.true;
+      expect(widget.hasAttribute('selected')).to.be.true;
+      expect(widget.hasAttribute('focused')).to.be.true;
+    });
+
+    it('should not lose move mode when the focused forward button is hidden', async () => {
+      const widget = getElementFromCell(dashboard, 1, 0)!;
+      widget.focus();
+      await nextFrame();
+
+      // Enter move mode
+      await sendKeys({ press: 'Space' });
+      await sendKeys({ press: 'Space' });
+      await nextFrame();
+
+      // Focus forward button, click it
+      await sendKeys({ press: 'Tab' });
+      await sendKeys({ press: 'Space' });
+      await nextFrame();
+
+      // Expect the items to have been reordered
+      expect(dashboard.items).to.eql([{ id: 0 }, { id: 1 }, { items: [{ id: 3 }, { id: 2 }] }]);
+
+      // As the widget becomes the last child, the forward button is hidden but the focus
+      // should remain in the move mode (apply button focused)
+      expect(getComputedStyle(getMoveForwardButton(widget)).display).to.equal('none');
+      if (!isFirefox) {
+        // This for some reason does not work in Firefox when running the tests in headless mode
+        expect(getMoveApplyButton(widget).matches(':focus')).to.be.true;
+      }
       expect(widget.hasAttribute('move-mode')).to.be.true;
       expect(widget.hasAttribute('selected')).to.be.true;
       expect(widget.hasAttribute('focused')).to.be.true;

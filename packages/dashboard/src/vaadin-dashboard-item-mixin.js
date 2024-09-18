@@ -12,7 +12,7 @@ import { html } from 'lit';
 import { FocusTrapController } from '@vaadin/a11y-base/src/focus-trap-controller.js';
 import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
 import { KeyboardController } from './keyboard-controller.js';
-import { fireMove, fireRemove } from './vaadin-dashboard-helpers.js';
+import { fireMove, fireRemove, fireResize } from './vaadin-dashboard-helpers.js';
 import { dashboardWidgetAndSectionStyles } from './vaadin-dashboard-styles.js';
 
 /**
@@ -49,6 +49,13 @@ export const DashboardItemMixin = (superClass) =>
           type: Boolean,
           reflectToAttribute: true,
           attribute: 'move-mode',
+        },
+
+        /** @private */
+        __resizeMode: {
+          type: Boolean,
+          reflectToAttribute: true,
+          attribute: 'resize-mode',
         },
       };
     }
@@ -87,6 +94,16 @@ export const DashboardItemMixin = (superClass) =>
     }
 
     /** @private */
+    __renderResizeHandle() {
+      return html`<button
+        id="resize-handle"
+        class="resize-handle"
+        tabindex="${this.__selected ? 0 : -1}"
+        @click="${() => this.__enterResizeMode()}"
+      ></button>`;
+    }
+
+    /** @private */
     __renderModeControls() {
       return html`<div
         id="move-controls"
@@ -97,6 +114,22 @@ export const DashboardItemMixin = (superClass) =>
         <button title="Move backward" @click="${() => fireMove(this, -1)}" id="move-backward"></button>
         <button title="Apply" @click="${() => this.__exitMode(true)}" id="move-apply"></button>
         <button title="Move forward" @click="${() => fireMove(this, 1)}" id="move-forward"></button>
+      </div>`;
+    }
+
+    /** @private */
+    __renderResizeControls() {
+      return html`<div
+        id="resize-controls"
+        class="mode-controls"
+        .hidden="${!this.__resizeMode}"
+        @pointerdown="${(e) => e.preventDefault()}"
+      >
+        <button title="Apply" @click="${() => this.__exitMode(true)}" id="resize-apply"></button>
+        <button title="Shrink width" @click="${() => fireResize(this, -1, 0)}" id="resize-shrink-width"></button>
+        <button title="Grow width" @click="${() => fireResize(this, 1, 0)}" id="resize-grow-width"></button>
+        <button title="Shrink height" @click="${() => fireResize(this, 0, -1)}" id="resize-shrink-height"></button>
+        <button title="Grow height" @click="${() => fireResize(this, 0, 1)}" id="resize-grow-height"></button>
       </div>`;
     }
 
@@ -138,6 +171,12 @@ export const DashboardItemMixin = (superClass) =>
           this.$['drag-handle'].focus();
           this.__focusTrapController.trapFocus(this.$.focustrap);
         }
+      } else if (this.__resizeMode) {
+        this.__resizeMode = false;
+        if (focus) {
+          this.$['resize-handle'].focus();
+          this.__focusTrapController.trapFocus(this.$.focustrap);
+        }
       }
     }
 
@@ -154,6 +193,15 @@ export const DashboardItemMixin = (superClass) =>
       this.__moveMode = true;
       requestAnimationFrame(() => {
         this.__focusTrapController.trapFocus(this.$['move-controls']);
+      });
+    }
+
+    /** @private */
+    __enterResizeMode() {
+      this.__selected = true;
+      this.__resizeMode = true;
+      requestAnimationFrame(() => {
+        this.__focusTrapController.trapFocus(this.$['resize-controls']);
       });
     }
   };
