@@ -196,7 +196,7 @@ export class WidgetReorderController {
 
   /** @private */
   __reorderItems(draggedItem, targetIndex) {
-    if (targetIndex < 0 || targetIndex >= this.host.items.length) {
+    if (targetIndex < 0 || targetIndex >= getItemsArrayOfItem(draggedItem, this.host.items).length) {
       return;
     }
     const items = getItemsArrayOfItem(draggedItem, this.host.items);
