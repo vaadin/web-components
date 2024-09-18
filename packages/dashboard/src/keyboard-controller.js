@@ -19,9 +19,15 @@ export class KeyboardController {
   }
 
   /** @private */
-  __focusout() {
-    this.host.__focused = false;
-    this.host.__selected = false;
+  __focusout(e) {
+    const focusOutElement = e.composedPath()[0];
+    if (this.host.offsetHeight && getComputedStyle(focusOutElement).display === 'none') {
+      this.host.__focusApply();
+    } else {
+      this.host.__exitMode();
+      this.host.__focused = false;
+      this.host.__selected = false;
+    }
   }
 
   /** @private */
@@ -57,8 +63,12 @@ export class KeyboardController {
   /** @private */
   __escape(e) {
     e.preventDefault();
-    this.host.__selected = false;
-    this.host.focus();
+    if (this.host.__moveMode) {
+      this.host.__exitMode(true);
+    } else {
+      this.host.__selected = false;
+      this.host.focus();
+    }
   }
 
   /** @private */

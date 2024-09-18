@@ -41,6 +41,8 @@ describe('dashboard layout', () => {
     dashboard.style.width = `${columnWidth * dashboard.childElementCount}px`;
 
     await nextFrame();
+    // @ts-expect-error Test without padding
+    dashboard.$.grid.style.padding = '0';
 
     expect(getColumnWidths(dashboard)).to.eql([columnWidth, columnWidth]);
     /* prettier-ignore */

@@ -215,6 +215,8 @@ class Dashboard extends ControllerMixin(DashboardLayoutMixin(ElementMixin(Themab
     wrapper.setAttribute('style', style);
     wrapper.toggleAttribute('editable', !!this.editable);
     wrapper.toggleAttribute('dragging', this.__widgetReorderController.draggedItem === item);
+    wrapper.toggleAttribute('first-child', item === getItemsArrayOfItem(item, this.items)[0]);
+    wrapper.toggleAttribute('last-child', item === getItemsArrayOfItem(item, this.items).slice(-1)[0]);
   }
 
   /** @private */

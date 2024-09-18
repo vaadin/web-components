@@ -45,6 +45,9 @@ describe('dashboard - widget resizing', () => {
     };
     await nextFrame();
 
+    // @ts-expect-error Test without padding
+    dashboard.$.grid.style.padding = '0';
+
     // prettier-ignore
     expectLayout(dashboard, [
       [0, 1],

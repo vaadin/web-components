@@ -37,6 +37,9 @@ describe('dashboard', () => {
       root.appendChild(widget);
     };
     await nextFrame();
+
+    // @ts-expect-error Test without padding
+    dashboard.$.grid.style.padding = '0';
   });
 
   it('should render a widget for each item', () => {
