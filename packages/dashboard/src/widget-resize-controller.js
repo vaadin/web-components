@@ -146,6 +146,11 @@ export class WidgetResizeController {
 
   /** @private */
   __resizeItem(item, colspanDelta, rowspanDelta) {
+    if (item.items) {
+      // Do not resize sections
+      return;
+    }
+
     const gridStyle = getComputedStyle(this.host.$.grid);
     const columns = gridStyle.gridTemplateColumns.split(' ');
     const newColspan = Math.min(Math.max((item.colspan || 1) + colspanDelta, 1), columns.length);

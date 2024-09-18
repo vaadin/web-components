@@ -318,5 +318,12 @@ describe('dashboard - keyboard interaction', () => {
       await sendKeys({ up: 'Shift' });
       expect(section.contains(document.activeElement)).to.be.false;
     });
+
+    it('should not increase the section row span on shift + arrow down', async () => {
+      await sendKeys({ down: 'Shift' });
+      await sendKeys({ press: 'ArrowDown' });
+      await sendKeys({ up: 'Shift' });
+      expect(dashboard.items).to.eql([{ id: 0 }, { id: 1 }, { items: [{ id: 2 }, { id: 3 }] }]);
+    });
   });
 });
