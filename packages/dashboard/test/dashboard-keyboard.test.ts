@@ -39,7 +39,15 @@ describe('dashboard - keyboard interaction', () => {
         root.appendChild(widget);
       }
     };
-    document.body.focus();
+    await nextFrame();
+
+    // Make sure the following tab goes back to the first widget
+    const widget = getElementFromCell(dashboard, 0, 0)!;
+    widget.focus();
+    await nextFrame();
+    await sendKeys({ down: 'Shift' });
+    await sendKeys({ press: 'Tab' });
+    await sendKeys({ up: 'Shift' });
     await nextFrame();
   });
 
@@ -115,7 +123,8 @@ describe('dashboard - keyboard interaction', () => {
 
     it('should deselect the widget on blur', async () => {
       const widget = getElementFromCell(dashboard, 0, 0)!;
-      widget.blur();
+      const anotherWidget = getElementFromCell(dashboard, 0, 1)!;
+      anotherWidget.focus();
       await nextFrame();
       expect(widget.hasAttribute('selected')).to.be.false;
       expect(widget.hasAttribute('focused')).to.be.false;
@@ -294,7 +303,8 @@ describe('dashboard - keyboard interaction', () => {
     });
 
     it('should deselect the section on blur', async () => {
-      section.blur();
+      const anotherWidget = getElementFromCell(dashboard, 0, 1)!;
+      anotherWidget.focus();
       await nextFrame();
       expect(section.hasAttribute('selected')).to.be.false;
       expect(section.hasAttribute('focused')).to.be.false;

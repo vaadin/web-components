@@ -68,4 +68,8 @@ export const dashboardWidgetAndSectionStyles = css`
   #remove-button::before {
     content: '×';
   }
+
+  button:focus {
+    outline: 1px solid blue;
+  }
 `;
