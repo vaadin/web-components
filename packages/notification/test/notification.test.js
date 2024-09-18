@@ -173,6 +173,18 @@ describe('vaadin-notification', () => {
     it('notification card should have `aria-live="polite"`', () => {
       expect(notification._card.getAttribute('aria-live')).to.be.equal('polite');
     });
+
+    it('should update `aria-live` to "assertive" when assertive is set to true', () => {
+      notification.assertive = true;
+      expect(notification._card.getAttribute('aria-live')).to.be.equal('assertive');
+    });
+
+    it('should update `aria-live` to "polite" when assertive is set to false', () => {
+      notification.assertive = true;
+
+      notification.assertive = false;
+      expect(notification._card.getAttribute('aria-live')).to.be.equal('polite');
+    });
   });
 
   describe('methods', () => {
