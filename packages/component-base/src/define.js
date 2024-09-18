@@ -4,15 +4,15 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 
-export function defineCustomElement(CustomElement) {
+export function defineCustomElement(CustomElement, version = '24.5.0-beta1') {
+  Object.defineProperty(CustomElement, 'version', {
+    get() {
+      return version;
+    },
+  });
+
   const defined = customElements.get(CustomElement.is);
   if (!defined) {
-    Object.defineProperty(CustomElement, 'version', {
-      get() {
-        return '24.5.0-beta1';
-      },
-    });
-
     customElements.define(CustomElement.is, CustomElement);
   } else {
     const definedVersion = defined.version;
