@@ -180,7 +180,7 @@ export function expectLayout(dashboard: HTMLElement, layout: Array<Array<number 
 }
 
 export function getDraggable(element: Element): Element {
-  return element.shadowRoot!.querySelector('[draggable]')!;
+  return element.shadowRoot!.querySelector('#drag-handle')!;
 }
 
 type TestDragEvent = Event & {
@@ -299,4 +299,16 @@ export function describeBidirectional(name: string, tests: () => void): void {
 
     tests();
   });
+}
+
+export function getMoveForwardButton(element: HTMLElement): HTMLElement {
+  return element.shadowRoot!.querySelector('#move-forward') as HTMLElement;
+}
+
+export function getMoveBackwardButton(element: HTMLElement): HTMLElement {
+  return element.shadowRoot!.querySelector('#move-backward') as HTMLElement;
+}
+
+export function getMoveApplyButton(element: HTMLElement): HTMLElement {
+  return element.shadowRoot!.querySelector('#move-apply') as HTMLElement;
 }

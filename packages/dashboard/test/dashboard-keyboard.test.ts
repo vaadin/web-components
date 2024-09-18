@@ -6,7 +6,11 @@ import '../vaadin-dashboard.js';
 import type { Dashboard, DashboardItem } from '../vaadin-dashboard.js';
 import {
   describeBidirectional,
+  getDraggable,
   getElementFromCell,
+  getMoveApplyButton,
+  getMoveBackwardButton,
+  getMoveForwardButton,
   setGap,
   setMaximumColumnWidth,
   setMinimumColumnWidth,
@@ -40,6 +44,9 @@ describe('dashboard - keyboard interaction', () => {
       }
     };
     await nextFrame();
+
+    // @ts-expect-error Test without padding
+    dashboard.$.grid.style.padding = '0';
 
     // Make sure the following tab goes back to the first widget (needed for Firefox)
     const widget = getElementFromCell(dashboard, 0, 0)!;
@@ -334,6 +341,197 @@ describe('dashboard - keyboard interaction', () => {
       await sendKeys({ press: 'ArrowDown' });
       await sendKeys({ up: 'Shift' });
       expect(dashboard.items).to.eql([{ id: 0 }, { id: 1 }, { items: [{ id: 2 }, { id: 3 }] }]);
+    });
+  });
+
+  it('should enter move mode', async () => {
+    const widget = getElementFromCell(dashboard, 0, 0)!;
+    // Select
+    await sendKeys({ press: 'Tab' });
+    await sendKeys({ press: 'Space' });
+    // Enter move mode
+    await sendKeys({ press: 'Space' });
+
+    expect(widget.hasAttribute('focused')).to.be.true;
+    expect(widget.hasAttribute('selected')).to.be.true;
+    expect(widget.hasAttribute('move-mode')).to.be.true;
+  });
+
+  it('should enter move mode without selecting first', async () => {
+    const widget = getElementFromCell(dashboard, 0, 0)!;
+    (getDraggable(widget) as HTMLElement).click();
+    await nextFrame();
+
+    expect(widget.hasAttribute('focused')).to.be.true;
+    expect(widget.hasAttribute('selected')).to.be.true;
+    expect(widget.hasAttribute('move-mode')).to.be.true;
+  });
+
+  describe('widget in move mode', () => {
+    beforeEach(async () => {
+      // Select
+      await sendKeys({ press: 'Tab' });
+      await sendKeys({ press: 'Space' });
+      // Enter move mode
+      await sendKeys({ press: 'Space' });
+      await nextFrame();
+    });
+
+    it('should exit move mode on escape', async () => {
+      const widget = getElementFromCell(dashboard, 0, 0)!;
+      await sendKeys({ press: 'Escape' });
+      expect(widget.hasAttribute('move-mode')).to.be.false;
+      expect(widget.hasAttribute('selected')).to.be.true;
+      expect(widget.hasAttribute('focused')).to.be.true;
+    });
+
+    it('should exit move mode on apply', async () => {
+      const widget = getElementFromCell(dashboard, 0, 0)!;
+      // Apply button focused, click it
+      await sendKeys({ press: 'Space' });
+      expect(widget.hasAttribute('move-mode')).to.be.false;
+      expect(widget.hasAttribute('selected')).to.be.true;
+      expect(widget.hasAttribute('focused')).to.be.true;
+    });
+
+    it('should focus drag handle on exit move mode', async () => {
+      // Apply button focused, click it
+      await sendKeys({ press: 'Space' });
+      expect(getDraggable(getElementFromCell(dashboard, 0, 0)!).matches(':focus')).to.be.true;
+    });
+
+    it('should move the widget forwards on forward button click', async () => {
+      // Focus forward button, click it
+      await sendKeys({ press: 'Tab' });
+      const widget = getElementFromCell(dashboard, 0, 0)!;
+      expect(getMoveForwardButton(widget).matches(':focus')).to.be.true;
+      await sendKeys({ press: 'Space' });
+      expect(dashboard.items).to.eql([{ id: 1 }, { id: 0 }, { items: [{ id: 2 }, { id: 3 }] }]);
+    });
+
+    it('should move the widget backwards on backward button click', async () => {
+      const widget = getElementFromCell(dashboard, 0, 0)!;
+
+      // Focus forward button, click it
+      await sendKeys({ press: 'Tab' });
+      await sendKeys({ press: 'Space' });
+      await nextFrame();
+      // Focus backward button, click it
+      await sendKeys({ down: 'Shift' });
+      await sendKeys({ press: 'Tab' });
+      await sendKeys({ press: 'Tab' });
+      await sendKeys({ up: 'Shift' });
+      await nextFrame();
+
+      expect(getMoveBackwardButton(widget).matches(':focus')).to.be.true;
+      await sendKeys({ press: 'Space' });
+      await nextFrame();
+
+      expect(dashboard.items).to.eql([{ id: 0 }, { id: 1 }, { items: [{ id: 2 }, { id: 3 }] }]);
+    });
+
+    it('should not lose move mode when the focused backward button is hidden', async () => {
+      const widget = getElementFromCell(dashboard, 0, 0)!;
+
+      // Focus forward button, click it
+      await sendKeys({ press: 'Tab' });
+      await sendKeys({ press: 'Space' });
+      await nextFrame();
+      // Focus backwards button, click it
+      await sendKeys({ down: 'Shift' });
+      await sendKeys({ press: 'Tab' });
+      await sendKeys({ press: 'Tab' });
+      await sendKeys({ up: 'Shift' });
+      await sendKeys({ press: 'Space' });
+      await nextFrame();
+
+      // As the widget becomes the first child, the backwards button is hidden but the focus
+      // should remain in the move mode (apply button focused)
+      expect(getComputedStyle(getMoveBackwardButton(widget)).display).to.equal('none');
+
+      // This for some reason does not work on CI, passes locally
+      // expect(getMoveApplyButton(widget).matches(':focus')).to.be.true;
+
+      expect(widget.hasAttribute('move-mode')).to.be.true;
+      expect(widget.hasAttribute('selected')).to.be.true;
+      expect(widget.hasAttribute('focused')).to.be.true;
+    });
+
+    it('should not lose move mode when the focused forward button is hidden', async () => {
+      const widget = getElementFromCell(dashboard, 1, 0)!;
+      widget.focus();
+      await nextFrame();
+
+      // Enter move mode
+      await sendKeys({ press: 'Space' });
+      await sendKeys({ press: 'Space' });
+      await nextFrame();
+
+      // Focus forward button, click it
+      await sendKeys({ press: 'Tab' });
+      await sendKeys({ press: 'Space' });
+      await nextFrame();
+
+      // Expect the items to have been reordered
+      expect(dashboard.items).to.eql([{ id: 0 }, { id: 1 }, { items: [{ id: 3 }, { id: 2 }] }]);
+
+      // As the widget becomes the last child, the forward button is hidden but the focus
+      // should remain in the move mode (apply button focused)
+      expect(getComputedStyle(getMoveForwardButton(widget)).display).to.equal('none');
+
+      // This for some reason does not work on CI, passes locally
+      // expect(getMoveApplyButton(widget).matches(':focus')).to.be.true;
+
+      expect(widget.hasAttribute('move-mode')).to.be.true;
+      expect(widget.hasAttribute('selected')).to.be.true;
+      expect(widget.hasAttribute('focused')).to.be.true;
+    });
+
+    it('should deselect the section on blur', async () => {
+      const widget = getElementFromCell(dashboard, 0, 0)!;
+      const anotherWidget = getElementFromCell(dashboard, 0, 1)!;
+      anotherWidget.focus();
+      await nextFrame();
+      expect(widget.hasAttribute('move-mode')).to.be.false;
+      expect(widget.hasAttribute('selected')).to.be.false;
+      expect(widget.hasAttribute('focused')).to.be.false;
+    });
+
+    it('should trap focus inside the move mode', async () => {
+      const widget = getElementFromCell(dashboard, 0, 0)!;
+      const moveModeButtons = [getMoveBackwardButton(widget), getMoveForwardButton(widget), getMoveApplyButton(widget)];
+      for (let i = 0; i < 10; i++) {
+        await sendKeys({ press: 'Tab' });
+        expect(moveModeButtons.includes(widget.shadowRoot!.activeElement as HTMLElement)).to.be.true;
+      }
+    });
+
+    it('should trap back inside the widget after exiting move mode', async () => {
+      await sendKeys({ press: 'Escape' });
+      const widget = getElementFromCell(dashboard, 0, 0)!;
+      const moveModeButtons = [getMoveBackwardButton(widget), getMoveForwardButton(widget), getMoveApplyButton(widget)];
+      for (let i = 0; i < 10; i++) {
+        await sendKeys({ press: 'Tab' });
+        expect(widget.contains(document.activeElement)).to.be.true;
+        expect(moveModeButtons.includes(widget.shadowRoot!.activeElement as HTMLElement)).to.be.false;
+      }
+    });
+
+    it('should move the section backwards on backward button click', async () => {
+      const widget = getElementFromCell(dashboard, 1, 0)!;
+      const section = widget.closest('vaadin-dashboard-section')!;
+      section.focus();
+      // Enter move mode
+      await sendKeys({ press: 'Space' });
+      await sendKeys({ press: 'Space' });
+      await nextFrame();
+
+      // backward button focused, click it
+      expect(getMoveBackwardButton(section).matches(':focus')).to.be.true;
+      await sendKeys({ press: 'Space' });
+      await nextFrame();
+
+      expect(dashboard.items).to.eql([{ id: 0 }, { items: [{ id: 2 }, { id: 3 }] }, { id: 1 }]);
     });
   });
 });

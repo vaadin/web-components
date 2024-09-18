@@ -10,11 +10,12 @@
  */
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { DashboardItemMixin } from './vaadin-dashboard-item-mixin.js';
 
 /**
  * A Widget component for use with the Dashboard component
  */
-declare class DashboardWidget extends ControllerMixin(ElementMixin(HTMLElement)) {
+declare class DashboardWidget extends DashboardItemMixin(ControllerMixin(ElementMixin(HTMLElement))) {
   /**
    * The title of the widget
    */

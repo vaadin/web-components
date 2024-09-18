@@ -31,6 +31,7 @@ export const DashboardLayoutMixin = (superClass) =>
         }
 
         #grid {
+          padding: 20px;
           /* Default min and max column widths */
           --_vaadin-dashboard-default-col-min-width: 25rem;
           --_vaadin-dashboard-default-col-max-width: 1fr;
