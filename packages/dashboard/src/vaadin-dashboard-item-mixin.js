@@ -119,6 +119,8 @@ export const DashboardItemMixin = (superClass) =>
 
     /** @private */
     __renderResizeControls() {
+      const hasMinRowHeight = getComputedStyle(this).getPropertyValue('--vaadin-dashboard-row-min-height');
+
       return html`<div
         id="resize-controls"
         class="mode-controls"
@@ -128,8 +130,18 @@ export const DashboardItemMixin = (superClass) =>
         <button title="Apply" @click="${() => this.__exitMode(true)}" id="resize-apply"></button>
         <button title="Shrink width" @click="${() => fireResize(this, -1, 0)}" id="resize-shrink-width"></button>
         <button title="Grow width" @click="${() => fireResize(this, 1, 0)}" id="resize-grow-width"></button>
-        <button title="Shrink height" @click="${() => fireResize(this, 0, -1)}" id="resize-shrink-height"></button>
-        <button title="Grow height" @click="${() => fireResize(this, 0, 1)}" id="resize-grow-height"></button>
+        <button
+          title="Shrink height"
+          @click="${() => fireResize(this, 0, -1)}"
+          id="resize-shrink-height"
+          .hidden="${!hasMinRowHeight}"
+        ></button>
+        <button
+          title="Grow height"
+          @click="${() => fireResize(this, 0, 1)}"
+          id="resize-grow-height"
+          .hidden="${!hasMinRowHeight}"
+        ></button>
       </div>`;
     }
 
