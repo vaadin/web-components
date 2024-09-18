@@ -9,12 +9,15 @@
  * license.
  */
 import { html, LitElement } from 'lit';
+import { FocusTrapController } from '@vaadin/a11y-base/src/focus-trap-controller.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { css } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { KeyboardController } from './keyboard-controller.js';
 import { TitleController } from './title-controller.js';
+import { fireRemove } from './vaadin-dashboard-helpers.js';
 import { dashboardWidgetAndSectionStyles, hasWidgetWrappers } from './vaadin-dashboard-styles.js';
 
 /**
@@ -93,17 +96,44 @@ class DashboardSection extends ControllerMixin(ElementMixin(PolylitMixin(LitElem
         value: '',
         observer: '__onSectionTitleChanged',
       },
+
+      /** @private */
+      __selected: {
+        type: Boolean,
+        reflectToAttribute: true,
+        attribute: 'selected',
+        observer: '__selectedChanged',
+      },
+
+      /** @private */
+      __focused: {
+        type: Boolean,
+        reflectToAttribute: true,
+        attribute: 'focused',
+      },
     };
   }
 
   /** @protected */
   render() {
     return html`
-      <header>
-        <button id="drag-handle" draggable="true" class="drag-handle" tabindex="-1"></button>
-        <slot name="title" @slotchange="${this.__onTitleSlotChange}"></slot>
-        <button id="remove-button" tabindex="-1" @click="${() => this.__remove()}"></button>
-      </header>
+      <button
+        aria-label="Select Section Title for editing"
+        id="focus-button"
+        draggable="true"
+        class="drag-handle"
+        @click="${() => {
+          this.__selected = true;
+        }}"
+      ></button>
+
+      <div id="focustrap">
+        <header>
+          <button id="drag-handle" draggable="true" class="drag-handle" tabindex="${this.__selected ? 0 : -1}"></button>
+          <slot name="title" @slotchange="${this.__onTitleSlotChange}"></slot>
+          <button id="remove-button" tabindex="${this.__selected ? 0 : -1}" @click="${() => fireRemove(this)}"></button>
+        </header>
+      </div>
 
       <slot></slot>
     `;
@@ -111,7 +141,9 @@ class DashboardSection extends ControllerMixin(ElementMixin(PolylitMixin(LitElem
 
   constructor() {
     super();
+    this.__keyboardController = new KeyboardController(this);
     this.__titleController = new TitleController(this);
+    this.__focusTrapController = new FocusTrapController(this);
     this.__titleController.addEventListener('slot-content-changed', (event) => {
       const { node } = event.target;
       if (node) {
@@ -123,7 +155,9 @@ class DashboardSection extends ControllerMixin(ElementMixin(PolylitMixin(LitElem
   /** @protected */
   ready() {
     super.ready();
+    this.addController(this.__keyboardController);
     this.addController(this.__titleController);
+    this.addController(this.__focusTrapController);
 
     if (!this.hasAttribute('role')) {
       this.setAttribute('role', 'section');
@@ -136,8 +170,20 @@ class DashboardSection extends ControllerMixin(ElementMixin(PolylitMixin(LitElem
   }
 
   /** @private */
-  __remove() {
-    this.dispatchEvent(new CustomEvent('item-remove', { bubbles: true, composed: true }));
+  __selectedChanged(selected) {
+    if (selected) {
+      this.__focusTrapController.trapFocus(this.$.focustrap);
+    } else {
+      this.__focusTrapController.releaseFocus();
+    }
+  }
+
+  focus() {
+    if (this.hasAttribute('editable')) {
+      this.$['focus-button'].focus();
+    } else {
+      super.focus();
+    }
   }
 }
 

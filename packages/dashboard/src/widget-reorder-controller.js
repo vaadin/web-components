@@ -20,6 +20,7 @@ export class WidgetReorderController {
     host.addEventListener('dragend', (e) => this.__dragEnd(e));
     host.addEventListener('dragover', (e) => this.__dragOver(e));
     host.addEventListener('drop', (e) => this.__drop(e));
+    host.addEventListener('item-move', (e) => this.__itemMove(e));
   }
 
   /** @private */
@@ -195,6 +196,9 @@ export class WidgetReorderController {
 
   /** @private */
   __reorderItems(draggedItem, targetIndex) {
+    if (targetIndex < 0 || targetIndex >= getItemsArrayOfItem(draggedItem, this.host.items).length) {
+      return;
+    }
     const items = getItemsArrayOfItem(draggedItem, this.host.items);
     const draggedIndex = items.indexOf(draggedItem);
     items.splice(draggedIndex, 1);
@@ -213,5 +217,16 @@ export class WidgetReorderController {
       this.__draggedElement.style.display = 'none';
       this.host.appendChild(this.__draggedElement);
     }
+  }
+
+  /**
+   * Handle the item-move event dispatched by a widget / section.
+   * @private
+   */
+  __itemMove(e) {
+    e.stopImmediatePropagation();
+    const item = getElementItem(e.target);
+    const items = getItemsArrayOfItem(item, this.host.items);
+    this.__reorderItems(item, items.indexOf(item) + e.detail.delta);
   }
 }

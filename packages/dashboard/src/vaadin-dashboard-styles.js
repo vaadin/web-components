@@ -11,8 +11,16 @@ export const dashboardWidgetAndSectionStyles = css`
     box-sizing: border-box;
   }
 
+  :host([focused]) {
+    border: 1px solid blue;
+  }
+
+  :host([selected]) {
+    border: 4px solid red;
+  }
+
   :host([dragging]) {
-    border: 3px dashed black !important;
+    border: 3px dashed black;
   }
 
   :host([dragging]) * {
@@ -20,8 +28,13 @@ export const dashboardWidgetAndSectionStyles = css`
   }
 
   :host(:not([editable])) #drag-handle,
-  :host(:not([editable])) #remove-button {
+  :host(:not([editable])) #remove-button,
+  :host(:not([editable])) #focus-button {
     display: none;
+  }
+
+  #focustrap {
+    display: contents;
   }
 
   header {
@@ -30,9 +43,16 @@ export const dashboardWidgetAndSectionStyles = css`
     align-items: center;
   }
 
+  #focus-button {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+  }
+
   #drag-handle {
     font-size: 30px;
     cursor: grab;
+    z-index: 1;
   }
 
   #drag-handle::before {
@@ -42,9 +62,14 @@ export const dashboardWidgetAndSectionStyles = css`
   #remove-button {
     font-size: 30px;
     cursor: pointer;
+    z-index: 1;
   }
 
   #remove-button::before {
     content: '×';
+  }
+
+  button:focus {
+    outline: 1px solid blue;
   }
 `;
