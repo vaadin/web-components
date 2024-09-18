@@ -357,6 +357,16 @@ describe('dashboard - keyboard interaction', () => {
     expect(widget.hasAttribute('move-mode')).to.be.true;
   });
 
+  it('should enter move mode without selecting first', async () => {
+    const widget = getElementFromCell(dashboard, 0, 0)!;
+    (getDraggable(widget) as HTMLElement).click();
+    await nextFrame();
+
+    expect(widget.hasAttribute('focused')).to.be.true;
+    expect(widget.hasAttribute('selected')).to.be.true;
+    expect(widget.hasAttribute('move-mode')).to.be.true;
+  });
+
   describe('widget in move mode', () => {
     beforeEach(async () => {
       // Select
