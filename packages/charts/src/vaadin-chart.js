@@ -1555,9 +1555,7 @@ class Chart extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))) {
       return;
     }
 
-    if (title && title.length > 0) {
-      config.title.update({ text: title });
-    }
+    config.title.update({ text: title });
   }
 
   /** @private */
@@ -1575,11 +1573,9 @@ class Chart extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))) {
       return;
     }
 
-    if (type && type.length > 0) {
-      config.update({
-        chart: { type },
-      });
-    }
+    config.update({
+      chart: { type: type || 'line' },
+    });
   }
 
   /** @private */
@@ -1588,12 +1584,10 @@ class Chart extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))) {
       return;
     }
 
-    if (subtitle && subtitle.length > 0) {
-      if (!config.subtitle) {
-        config.setSubtitle({ text: subtitle });
-      } else {
-        config.subtitle.update({ text: subtitle });
-      }
+    if (!config.subtitle) {
+      config.setSubtitle({ text: subtitle });
+    } else {
+      config.subtitle.update({ text: subtitle });
     }
   }
 
