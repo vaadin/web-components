@@ -38,34 +38,54 @@ export class KeyboardController {
     }
 
     if (e.key === 'Backspace' || e.key === 'Delete') {
-      e.preventDefault();
-      fireRemove(this.host);
+      this.__delete(e);
     } else if (e.key === 'Escape') {
+      this.__escape(e);
+    } else if (e.shiftKey && e.key.startsWith('Arrow')) {
+      this.__resize(e);
+    } else if (e.key.startsWith('Arrow')) {
+      this.__move(e);
+    }
+  }
+
+  /** @private */
+  __delete(e) {
+    e.preventDefault();
+    fireRemove(this.host);
+  }
+
+  /** @private */
+  __escape(e) {
+    e.preventDefault();
+    this.host.__selected = false;
+    this.host.focus();
+  }
+
+  /** @private */
+  __resize(e) {
+    const resizeMap = {
+      ArrowRight: [document.dir === 'rtl' ? -1 : 1, 0],
+      ArrowLeft: [document.dir === 'rtl' ? 1 : -1, 0],
+      ArrowDown: [0, 1],
+      ArrowUp: [0, -1],
+    };
+    if (resizeMap[e.key]) {
       e.preventDefault();
-      this.host.__selected = false;
-      this.host.focus();
-    } else if (e.shiftKey) {
-      const resizeMap = {
-        ArrowRight: [document.dir === 'rtl' ? -1 : 1, 0],
-        ArrowLeft: [document.dir === 'rtl' ? 1 : -1, 0],
-        ArrowDown: [0, 1],
-        ArrowUp: [0, -1],
-      };
-      if (resizeMap[e.key]) {
-        e.preventDefault();
-        fireResize(this.host, ...resizeMap[e.key]);
-      }
-    } else {
-      const moveMap = {
-        ArrowRight: document.dir === 'rtl' ? -1 : 1,
-        ArrowLeft: document.dir === 'rtl' ? 1 : -1,
-        ArrowDown: 1,
-        ArrowUp: -1,
-      };
-      if (moveMap[e.key]) {
-        e.preventDefault();
-        fireMove(this.host, moveMap[e.key]);
-      }
+      fireResize(this.host, ...resizeMap[e.key]);
+    }
+  }
+
+  /** @private */
+  __move(e) {
+    const moveMap = {
+      ArrowRight: document.dir === 'rtl' ? -1 : 1,
+      ArrowLeft: document.dir === 'rtl' ? 1 : -1,
+      ArrowDown: 1,
+      ArrowUp: -1,
+    };
+    if (moveMap[e.key]) {
+      e.preventDefault();
+      fireMove(this.host, moveMap[e.key]);
     }
   }
 }
