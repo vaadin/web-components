@@ -11,6 +11,7 @@ import {
   getElementFromCell,
   getRemoveButton,
   getResizeHandle,
+  onceResized,
   setGap,
   setMaximumColumnWidth,
   setMinimumColumnWidth,
@@ -152,7 +153,7 @@ describe('dashboard', () => {
   describe('row span', () => {
     it('should span one row by default', async () => {
       dashboard.style.width = `${columnWidth}px`;
-      await nextFrame();
+      await onceResized(dashboard);
       const widgets = [getElementFromCell(dashboard, 0, 0), getElementFromCell(dashboard, 1, 0)];
       expect(widgets[0]).to.not.equal(widgets[1]);
     });
@@ -160,7 +161,7 @@ describe('dashboard', () => {
     it('should span multiple rows', async () => {
       dashboard.style.width = `${columnWidth}px`;
       dashboard.items = [{ rowspan: 2, id: 'Item 0' }];
-      await nextFrame();
+      await onceResized(dashboard);
 
       const widget = getElementFromCell(dashboard, 0, 0);
       expect(widget).to.have.property('widgetTitle', 'Item 0 title');

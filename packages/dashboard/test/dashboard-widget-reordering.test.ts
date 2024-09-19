@@ -13,6 +13,7 @@ import {
   getDraggable,
   getElementFromCell,
   getParentSection,
+  onceResized,
   resetReorderTimeout,
   setGap,
   setMaximumColumnWidth,
@@ -112,7 +113,7 @@ describe('dashboard - widget reordering', () => {
 
     it('should reorder the widgets while dragging (top -> bottom)', async () => {
       dashboard.style.width = `${columnWidth}px`;
-      await nextFrame();
+      await onceResized(dashboard);
 
       // prettier-ignore
       expectLayout(dashboard, [
@@ -135,7 +136,7 @@ describe('dashboard - widget reordering', () => {
 
     it('should not reorder if dragged barely over another widget (top -> bottom)', async () => {
       dashboard.style.width = `${columnWidth}px`;
-      await nextFrame();
+      await onceResized(dashboard);
 
       // prettier-ignore
       expectLayout(dashboard, [
@@ -158,7 +159,7 @@ describe('dashboard - widget reordering', () => {
 
     it('should reorder the widgets while dragging (bottom -> top)', async () => {
       dashboard.style.width = `${columnWidth}px`;
-      await nextFrame();
+      await onceResized(dashboard);
 
       // prettier-ignore
       expectLayout(dashboard, [
@@ -181,7 +182,7 @@ describe('dashboard - widget reordering', () => {
 
     it('should not reorder if dragged barely over another widget (bottom -> top)', async () => {
       dashboard.style.width = `${columnWidth}px`;
-      await nextFrame();
+      await onceResized(dashboard);
 
       // prettier-ignore
       expectLayout(dashboard, [
@@ -392,7 +393,7 @@ describe('dashboard - widget reordering', () => {
       // Add a third widget
       dashboard.style.width = `${columnWidth * 3}px`;
       dashboard.items = [...dashboard.items, { id: 2 }];
-      await nextFrame();
+      await onceResized(dashboard);
       // prettier-ignore
       expectLayout(dashboard, [
         [0, 1, 2],
