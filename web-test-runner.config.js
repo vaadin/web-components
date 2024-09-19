@@ -1,8 +1,16 @@
 /* eslint-env node */
+const { puppeteerLauncher } = require('@web/test-runner-puppeteer');
 const { createUnitTestsConfig } = require('./wtr-utils.js');
 const devServerConfig = require('./web-dev-server.config.js');
 
 const unitTestsConfig = createUnitTestsConfig({
+  browsers: [
+    puppeteerLauncher({
+      launchOptions: {
+        headless: 'shell',
+      },
+    }),
+  ],
   coverageConfig: {
     include: ['packages/**/src/**/*', 'packages/*/*.js'],
     threshold: {
