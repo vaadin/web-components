@@ -92,13 +92,11 @@
       };
 
       dashboard.addEventListener('dashboard-item-moved', (e) => {
-        console.log('dashboard-item-moved');
-        console.log('items after reorder', e.target.items);
+        console.log('dashboard-item-moved', e.detail);
       });
 
       dashboard.addEventListener('dashboard-item-resized', (e) => {
-        console.log('dashboard-item-resized');
-        console.log('item after resize', e.detail);
+        console.log('dashboard-item-resized', e.detail);
       });
 
       dashboard.addEventListener('dashboard-item-removed', (e) => {
