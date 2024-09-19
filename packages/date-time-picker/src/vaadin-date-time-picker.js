@@ -415,7 +415,6 @@ class DateTimePicker extends FieldMixin(DisabledMixin(FocusMixin(ThemableMixin(E
     this.__changeEventHandler = this.__changeEventHandler.bind(this);
     this.__valueChangedEventHandler = this.__valueChangedEventHandler.bind(this);
     this.__openedChangedEventHandler = this.__openedChangedEventHandler.bind(this);
-    this.__unparsableChangeEventHandler = this.__unparsableChangeEventHandler.bind(this);
   }
 
   /** @private */
@@ -423,27 +422,32 @@ class DateTimePicker extends FieldMixin(DisabledMixin(FocusMixin(ThemableMixin(E
     return [this.__datePicker, this.__timePicker];
   }
 
+  get __filledPickers() {
+    return this.__pickers.filter((picker) => picker.value || picker.__unparsableValue);
+  }
+
   /** @private */
-  get __completeValue() {
+  get __formattedValue() {
     const values = this.__pickers.map((picker) => picker.value);
     return values.every(Boolean) ? values.join('T') : '';
   }
 
-  /** @private */
-  get __incompleteValue() {
-    if (this.__unparsableValue) {
-      return '';
-    }
-
-    const values = this.__inputs.map((picker) => picker.value);
-    return values.filter(Boolean).length === 1 ? values.join('T') : '';
-  }
-
-  /** @private */
+  /**
+   * Values:
+   * - ""
+   * - "fooT"
+   * - "Tbar"
+   * - "fooTbar"
+   * - "T12:00"
+   * - "fooT12:00"
+   * - "2024-01-01T"
+   * - "2024-01-01Tbar"
+   *
+   * @private
+   */
   get __unparsableValue() {
-    const hasUnparsableValues = this.__inputs.some((picker) => picker.__unparsableValue);
-    if (hasUnparsableValues) {
-      return this.__inputs.map((picker) => picker.value || picker.__unparsableValue).join('T');
+    if (this.__filledPickers.length > 0 && !this.__pickers.every((picker) => picker.value)) {
+      return this.__pickers.map((picker) => picker.value || picker.__unparsableValue).join('T');
     }
 
     return '';
@@ -570,17 +574,6 @@ class DateTimePicker extends FieldMixin(DisabledMixin(FocusMixin(ThemableMixin(E
   /** @private */
   __changeEventHandler(event) {
     event.stopPropagation();
-
-    const hasUnparsableValue = !!this.__unparsableValue;
-    const hasCompleteOrEmptyValue = !this.__incompleteValue;
-    const hasPickerWithInvalidValue = this.__inputs.some((picker) => picker.value && !picker.checkValidity());
-    if (hasUnparsableValue || hasCompleteOrEmptyValue || hasPickerWithInvalidValue || this.invalid) {
-      this.__commitValueChange();
-    }
-  }
-
-  /** @private */
-  __unparsableChangeEventHandler() {
     this.__commitValueChange();
   }
 
@@ -590,6 +583,7 @@ class DateTimePicker extends FieldMixin(DisabledMixin(FocusMixin(ThemableMixin(E
     this.style.pointerEvents = opened ? 'auto' : '';
 
     if (!opened && this.__outsideClickInProcess) {
+      // TODO: Think of how to make it obvious that this path handles outside click
       this.__commitValueChange();
     }
   }
@@ -597,17 +591,17 @@ class DateTimePicker extends FieldMixin(DisabledMixin(FocusMixin(ThemableMixin(E
   /** @private */
   __addInputListeners(node) {
     node.addEventListener('change', this.__changeEventHandler);
+    node.addEventListener('unparsable-change', this.__changeEventHandler);
     node.addEventListener('value-changed', this.__valueChangedEventHandler);
     node.addEventListener('opened-changed', this.__openedChangedEventHandler);
-    node.addEventListener('unparsable-change', this.__unparsableChangeEventHandler);
   }
 
   /** @private */
   __removeInputListeners(node) {
     node.removeEventListener('change', this.__changeEventHandler);
+    node.removeEventListener('unparsable-change', this.__changeEventHandler);
     node.removeEventListener('value-changed', this.__valueChangedEventHandler);
     node.removeEventListener('opened-changed', this.__openedChangedEventHandler);
-    node.removeEventListener('unparsable-change', this.__unparsableChangeEventHandler);
   }
 
   /** @private */
@@ -951,26 +945,40 @@ class DateTimePicker extends FieldMixin(DisabledMixin(FocusMixin(ThemableMixin(E
    */
   checkValidity() {
     const hasInvalidPickers = this.__pickers.some((picker) => !picker.checkValidity());
-    const hasIncompleteValue = this.__incompleteValue;
+    const hasOnlyOneFilledPicker = this.__filledPickers.length === 1;
     const hasEmptyRequiredPickers = this.required && this.__pickers.some((picker) => !picker.value);
-    return !hasInvalidPickers && !hasEmptyRequiredPickers && !hasIncompleteValue;
+    return !hasInvalidPickers && !hasEmptyRequiredPickers && !hasOnlyOneFilledPicker;
   }
 
   /** @private */
   __commitValueChange() {
+    const wasPreviouslyInvalid = this.invalid;
+    const filledPickers = this.__pickers.filter((picker) => !!picker.value);
+    if (
+      filledPickers.length === 1 &&
+      filledPickers[0].checkValidity() &&
+      this.hasAttribute('focused') &&
+      !this.__outsideClickInProcess &&
+      !wasPreviouslyInvalid
+    ) {
+      // Skip if (a) only one picker is filled, (b) its value is valid on its own, and (c) the user
+      // is still interacting with the field. This is to give the user a chance to finish the input
+      // before giving him feedback. However, if the field is already in the invalid state due to
+      // a previous error, validate and commit the value eagarly to ensure the error message
+      // is up to date.
+      return;
+    }
+
     this.validate();
 
     if (this.__committedValue !== this.value) {
       this.dispatchEvent(new CustomEvent('change', { bubbles: true }));
     } else if (this.__committedUnparsableValue !== this.__unparsableValue) {
       this.dispatchEvent(new CustomEvent('unparsable-change'));
-    } else if (this.__committedIncompleteValue !== this.__incompleteValue) {
-      this.dispatchEvent(new CustomEvent('unparsable-change'));
     }
 
     this.__committedValue = this.value;
     this.__committedUnparsableValue = this.__unparsableValue;
-    this.__committedIncompleteValue = this.__incompleteValue;
   }
 
   // Copied from vaadin-time-picker
@@ -1036,7 +1044,6 @@ class DateTimePicker extends FieldMixin(DisabledMixin(FocusMixin(ThemableMixin(E
     if (!this.__keepCommittedValue) {
       this.__committedValue = value;
       this.__committedUnparsableValue = '';
-      this.__committedIncompleteValue = '';
     }
 
     this.toggleAttribute('has-value', !!value);
