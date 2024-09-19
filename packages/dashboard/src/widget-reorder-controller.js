@@ -102,12 +102,7 @@ export class WidgetReorderController {
     }
 
     // Dispatch the moved event
-    const section = this.host.items.find((item) => item.items && item.items.includes(this.draggedItem));
-    this.host.dispatchEvent(
-      new CustomEvent('dashboard-item-moved', {
-        detail: { item: this.draggedItem, items: this.host.items, section },
-      }),
-    );
+    this.__fireItemMovedEvent(this.draggedItem);
 
     // Reset the dragged element and item, and re-render to remove the placeholder
     this.__draggedElement = null;
@@ -116,6 +111,16 @@ export class WidgetReorderController {
 
     // Disconnect the observer for the dragged element removal
     this.draggedElementRemoveObserver.disconnect();
+  }
+
+  /** @private */
+  __fireItemMovedEvent(item) {
+    const section = this.host.items.find((hostItem) => hostItem.items && hostItem.items.includes(item));
+    this.host.dispatchEvent(
+      new CustomEvent('dashboard-item-moved', {
+        detail: { item, items: this.host.items, section },
+      }),
+    );
   }
 
   /** @private */
@@ -223,5 +228,6 @@ export class WidgetReorderController {
     const item = getElementItem(e.target);
     const items = getItemsArrayOfItem(item, this.host.items);
     this.__reorderItems(item, items.indexOf(item) + e.detail.delta);
+    this.__fireItemMovedEvent(item);
   }
 }

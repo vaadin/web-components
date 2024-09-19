@@ -118,12 +118,17 @@ export class WidgetResizeController {
     document.removeEventListener('touchmove', this.__touchMoveCancelListener);
 
     // Dispatch the resize end event
+    this.__fireItemResizedEvent(this.resizedItem);
+    this.resizedItem = null;
+  }
+
+  /** @private */
+  __fireItemResizedEvent(item) {
     this.host.dispatchEvent(
       new CustomEvent('dashboard-item-resized', {
-        detail: { item: this.resizedItem, items: this.host.items },
+        detail: { item, items: this.host.items },
       }),
     );
-    this.resizedItem = null;
   }
 
   /** @private */
@@ -190,6 +195,7 @@ export class WidgetResizeController {
     e.stopImmediatePropagation();
     const item = getElementItem(e.target);
     this.__resizeItem(item, e.detail.colspanDelta, e.detail.rowspanDelta);
+    this.__fireItemResizedEvent(item);
   }
 
   hostDisconnected() {
