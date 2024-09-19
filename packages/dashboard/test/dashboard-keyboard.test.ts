@@ -39,7 +39,6 @@ describe('dashboard - keyboard interaction', () => {
     setMinimumColumnWidth(dashboard, columnWidth);
     setMaximumColumnWidth(dashboard, columnWidth);
     setGap(dashboard, 0);
-    setMinimumRowHeight(dashboard, 100);
 
     dashboard.items = [{ id: 0 }, { id: 1 }, { items: [{ id: 2 }, { id: 3 }] }];
     dashboard.renderer = (root, _, model) => {
@@ -167,6 +166,8 @@ describe('dashboard - keyboard interaction', () => {
     });
 
     it('should increase the widget row span on shift + arrow down', async () => {
+      // Set minimum row height to enable vertical resizing
+      setMinimumRowHeight(dashboard, 100);
       await sendKeys({ down: 'Shift' });
       await sendKeys({ press: 'ArrowDown' });
       await sendKeys({ up: 'Shift' });
@@ -174,6 +175,8 @@ describe('dashboard - keyboard interaction', () => {
     });
 
     it('should decrease the widget row span on shift + arrow up', async () => {
+      // Set minimum row height to enable vertical resizing
+      setMinimumRowHeight(dashboard, 100);
       await sendKeys({ down: 'Shift' });
       await sendKeys({ press: 'ArrowDown' });
       await sendKeys({ press: 'ArrowUp' });
@@ -182,7 +185,6 @@ describe('dashboard - keyboard interaction', () => {
     });
 
     it('should not increase the widget row span on shift + arrow down if row min height is not defined', async () => {
-      setMinimumRowHeight(dashboard, undefined);
       await sendKeys({ down: 'Shift' });
       await sendKeys({ press: 'ArrowDown' });
       await sendKeys({ up: 'Shift' });
@@ -621,6 +623,13 @@ describe('dashboard - keyboard interaction', () => {
 
     it('should increase the widget row span on grow height button click', async () => {
       const widget = getElementFromCell(dashboard, 0, 0)!;
+
+      // Set minimum row height to enable vertical resizing
+      setMinimumRowHeight(dashboard, 100);
+      await sendKeys({ press: 'Escape' });
+      await sendKeys({ press: 'Space' });
+      await nextFrame();
+
       // Focus forward button, click it
       getResizeGrowHeightButton(widget).focus();
       await sendKeys({ press: 'Space' });
@@ -639,6 +648,13 @@ describe('dashboard - keyboard interaction', () => {
 
     it('should decrease the widget row span on shrink height button click', async () => {
       const widget = getElementFromCell(dashboard, 0, 0)!;
+
+      // Set minimum row height to enable vertical resizing
+      setMinimumRowHeight(dashboard, 100);
+      await sendKeys({ press: 'Escape' });
+      await sendKeys({ press: 'Space' });
+      await nextFrame();
+
       // Focus forward button, click it
       getResizeGrowHeightButton(widget).focus();
       await sendKeys({ press: 'Space' });
