@@ -48,69 +48,40 @@ export type DashboardRenderer<TItem extends DashboardItem> = (
 ) => void;
 
 /**
- * Fired when item reordering starts
+ * Fired when an item was moved
  */
-export type DashboardItemReorderStartEvent = CustomEvent;
-
-/**
- * Fired when item reordering ends
- */
-export type DashboardItemReorderEndEvent = CustomEvent;
-
-/**
- * Fired when an items will be reordered by dragging
- */
-export type DashboardItemDragReorderEvent<TItem extends DashboardItem> = CustomEvent<{
-  item: TItem | DashboardSectionItem<TItem>;
-  targetIndex: number;
-}>;
-
-/**
- * Fired when item resizing starts
- */
-export type DashboardItemResizeStartEvent<TItem extends DashboardItem> = CustomEvent<{
+export type DashboardItemMovedEvent<TItem extends DashboardItem> = CustomEvent<{
   item: TItem;
+
+  items: Array<TItem | DashboardSectionItem<TItem>>;
+
+  section: DashboardSectionItem<TItem> | undefined;
 }>;
 
 /**
- * Fired when item resizing ends
+ * Fired when an item was resized
  */
-export type DashboardItemResizeEndEvent<TItem extends DashboardItem> = CustomEvent<{
+export type DashboardItemResizedEvent<TItem extends DashboardItem> = CustomEvent<{
   item: TItem;
+
+  items: Array<TItem | DashboardSectionItem<TItem>>;
 }>;
 
 /**
- * Fired when an item will be resized by dragging
+ * Fired when an item was removed
  */
-export type DashboardItemDragResizeEvent<TItem extends DashboardItem> = CustomEvent<{
-  item: TItem;
-  colspan: number;
-  rowspan: number;
-}>;
-
-/**
- * Fired when an item is removed
- */
-export type DashboardItemRemoveEvent<TItem extends DashboardItem> = CustomEvent<{
+export type DashboardItemRemovedEvent<TItem extends DashboardItem> = CustomEvent<{
   item: TItem | DashboardSectionItem<TItem>;
 
   items: Array<TItem | DashboardSectionItem<TItem>>;
 }>;
 
 export interface DashboardCustomEventMap<TItem extends DashboardItem> {
-  'dashboard-item-reorder-start': DashboardItemReorderStartEvent;
+  'dashboard-item-moved': DashboardItemMovedEvent<TItem>;
 
-  'dashboard-item-reorder-end': DashboardItemReorderEndEvent;
+  'dashboard-item-resized': DashboardItemResizedEvent<TItem>;
 
-  'dashboard-item-drag-reorder': DashboardItemDragReorderEvent<TItem>;
-
-  'dashboard-item-resize-start': DashboardItemResizeStartEvent<TItem>;
-
-  'dashboard-item-resize-end': DashboardItemResizeEndEvent<TItem>;
-
-  'dashboard-item-drag-resize': DashboardItemDragResizeEvent<TItem>;
-
-  'dashboard-item-removed': DashboardItemRemoveEvent<TItem>;
+  'dashboard-item-removed': DashboardItemRemovedEvent<TItem>;
 }
 
 export type DashboardEventMap<TItem extends DashboardItem> = DashboardCustomEventMap<TItem> & HTMLElementEventMap;

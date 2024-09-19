@@ -31,13 +31,9 @@ import { WidgetResizeController } from './widget-resize-controller.js';
 /**
  * A responsive, grid-based dashboard layout component
  *
- * @fires {CustomEvent} dashboard-item-drag-reorder - Fired when an items will be reordered by dragging
- * @fires {CustomEvent} dashboard-item-reorder-start - Fired when item reordering starts
- * @fires {CustomEvent} dashboard-item-reorder-end - Fired when item reordering ends
- * @fires {CustomEvent} dashboard-item-drag-resize - Fired when an item will be resized by dragging
- * @fires {CustomEvent} dashboard-item-resize-start - Fired when item resizing starts
- * @fires {CustomEvent} dashboard-item-resize-end - Fired when item resizing ends
- * @fires {CustomEvent} dashboard-item-removed - Fired when an item is removed
+ * @fires {CustomEvent} dashboard-item-moved - Fired when an item was moved
+ * @fires {CustomEvent} dashboard-item-resized - Fired when an item was resized
+ * @fires {CustomEvent} dashboard-item-removed - Fired when an item was removed
  *
  * @customElement
  * @extends HTMLElement
@@ -232,43 +228,19 @@ class Dashboard extends ControllerMixin(DashboardLayoutMixin(ElementMixin(Themab
   }
 
   /**
-   * Fired when item reordering starts
+   * Fired when an item was moved
    *
-   * @event dashboard-item-reorder-start
+   * @event dashboard-item-moved
    */
 
   /**
-   * Fired when item reordering ends
+   * Fired when an item was resized
    *
-   * @event dashboard-item-reorder-end
+   * @event dashboard-item-resized
    */
 
   /**
-   * Fired when an items will be reordered by dragging
-   *
-   * @event dashboard-item-drag-reorder
-   */
-
-  /**
-   * Fired when item resizing starts
-   *
-   * @event dashboard-item-resize-start
-   */
-
-  /**
-   * Fired when item resizing ends
-   *
-   * @event dashboard-item-resize-end
-   */
-
-  /**
-   * Fired when an item will be resized by dragging
-   *
-   * @event dashboard-item-drag-resize
-   */
-
-  /**
-   * Fired when an item is removed
+   * Fired when an item was removed
    *
    * @event dashboard-item-removed
    */

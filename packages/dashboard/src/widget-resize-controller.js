@@ -46,8 +46,6 @@ export class WidgetResizeController {
     this.__resizeHeight = this.__resizeStartHeight + e.detail.dy;
     this.__updateWidgetStyles();
 
-    this.host.dispatchEvent(new CustomEvent('dashboard-item-resize-start', { detail: { item: this.resizedItem } }));
-
     this.__resizedElement = e.target;
     // Observe the removal of the resized element from the DOM
     this.__resizedElementRemoveObserver.observe(this.host, { childList: true, subtree: true });
@@ -121,9 +119,8 @@ export class WidgetResizeController {
 
     // Dispatch the resize end event
     this.host.dispatchEvent(
-      new CustomEvent('dashboard-item-resize-end', {
-        detail: { item: this.resizedItem },
-        cancelable: true,
+      new CustomEvent('dashboard-item-resized', {
+        detail: { item: this.resizedItem, items: this.host.items },
       }),
     );
     this.resizedItem = null;
@@ -162,17 +159,6 @@ export class WidgetResizeController {
 
     if ((item.colspan || 1) === newColspan && (item.rowspan || 1) === newRowspan) {
       // No change in size
-      return;
-    }
-
-    // TODO: Event to be removed
-    const resizeEvent = new CustomEvent('dashboard-item-drag-resize', {
-      detail: { item: this.resizedItem, colspan: newColspan, rowspan: newRowspan },
-      cancelable: true,
-    });
-
-    // Dispatch the resize event and resize items if the event is not canceled
-    if (!this.host.dispatchEvent(resizeEvent)) {
       return;
     }
 
