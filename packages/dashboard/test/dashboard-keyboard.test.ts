@@ -11,9 +11,16 @@ import {
   getMoveApplyButton,
   getMoveBackwardButton,
   getMoveForwardButton,
+  getResizeApplyButton,
+  getResizeGrowHeightButton,
+  getResizeGrowWidthButton,
+  getResizeHandle,
+  getResizeShrinkHeightButton,
+  getResizeShrinkWidthButton,
   setGap,
   setMaximumColumnWidth,
   setMinimumColumnWidth,
+  setMinimumRowHeight,
 } from './helpers.js';
 
 type TestDashboardItem = DashboardItem & { id: number };
@@ -159,6 +166,8 @@ describe('dashboard - keyboard interaction', () => {
     });
 
     it('should increase the widget row span on shift + arrow down', async () => {
+      // Set minimum row height to enable vertical resizing
+      setMinimumRowHeight(dashboard, 100);
       await sendKeys({ down: 'Shift' });
       await sendKeys({ press: 'ArrowDown' });
       await sendKeys({ up: 'Shift' });
@@ -166,11 +175,20 @@ describe('dashboard - keyboard interaction', () => {
     });
 
     it('should decrease the widget row span on shift + arrow up', async () => {
+      // Set minimum row height to enable vertical resizing
+      setMinimumRowHeight(dashboard, 100);
       await sendKeys({ down: 'Shift' });
       await sendKeys({ press: 'ArrowDown' });
       await sendKeys({ press: 'ArrowUp' });
       await sendKeys({ up: 'Shift' });
       expect((dashboard.items[0] as DashboardItem).rowspan).to.equal(1);
+    });
+
+    it('should not increase the widget row span on shift + arrow down if row min height is not defined', async () => {
+      await sendKeys({ down: 'Shift' });
+      await sendKeys({ press: 'ArrowDown' });
+      await sendKeys({ up: 'Shift' });
+      expect((dashboard.items[0] as DashboardItem).rowspan).to.not.equal(2);
     });
 
     it('should not move the widget on arrow down if ctrl key is pressed', async () => {
@@ -532,6 +550,171 @@ describe('dashboard - keyboard interaction', () => {
       await nextFrame();
 
       expect(dashboard.items).to.eql([{ id: 0 }, { items: [{ id: 2 }, { id: 3 }] }, { id: 1 }]);
+    });
+  });
+
+  it('should enter resize mode', async () => {
+    const widget = getElementFromCell(dashboard, 0, 0)!;
+    // Select
+    await sendKeys({ press: 'Tab' });
+    await sendKeys({ press: 'Space' });
+    // Enter resize mode
+    await sendKeys({ press: 'Tab' });
+    await sendKeys({ press: 'Tab' });
+    await sendKeys({ press: 'Space' });
+
+    expect(widget.hasAttribute('focused')).to.be.true;
+    expect(widget.hasAttribute('selected')).to.be.true;
+    expect(widget.hasAttribute('resize-mode')).to.be.true;
+  });
+
+  it('should enter resize mode without selecting first', async () => {
+    const widget = getElementFromCell(dashboard, 0, 0)!;
+    (getResizeHandle(widget) as HTMLElement).click();
+    await nextFrame();
+
+    expect(widget.hasAttribute('focused')).to.be.true;
+    expect(widget.hasAttribute('selected')).to.be.true;
+    expect(widget.hasAttribute('resize-mode')).to.be.true;
+  });
+
+  describe('widget in resize mode', () => {
+    beforeEach(async () => {
+      // Select
+      await sendKeys({ press: 'Tab' });
+      await sendKeys({ press: 'Space' });
+      // Enter resize mode
+      await sendKeys({ press: 'Tab' });
+      await sendKeys({ press: 'Tab' });
+      await sendKeys({ press: 'Space' });
+      await nextFrame();
+    });
+
+    it('should exit resize mode on escape', async () => {
+      const widget = getElementFromCell(dashboard, 0, 0)!;
+      await sendKeys({ press: 'Escape' });
+      expect(widget.hasAttribute('resize-mode')).to.be.false;
+      expect(widget.hasAttribute('selected')).to.be.true;
+      expect(widget.hasAttribute('focused')).to.be.true;
+    });
+
+    it('should exit resize mode on apply', async () => {
+      const widget = getElementFromCell(dashboard, 0, 0)!;
+      // Apply button focused, click it
+      await sendKeys({ press: 'Space' });
+      expect(widget.hasAttribute('resize-mode')).to.be.false;
+      expect(widget.hasAttribute('selected')).to.be.true;
+      expect(widget.hasAttribute('focused')).to.be.true;
+    });
+
+    it('should focus resize handle on exit move mode', async () => {
+      // Apply button focused, click it
+      await sendKeys({ press: 'Space' });
+      expect(getResizeHandle(getElementFromCell(dashboard, 0, 0)!).matches(':focus')).to.be.true;
+    });
+
+    it('should increase the widget column span on grow width button click', async () => {
+      const widget = getElementFromCell(dashboard, 0, 0)!;
+      // Focus forward button, click it
+      getResizeGrowWidthButton(widget).focus();
+      await sendKeys({ press: 'Space' });
+      expect((dashboard.items[0] as DashboardItem).colspan).to.equal(2);
+    });
+
+    it('should increase the widget row span on grow height button click', async () => {
+      const widget = getElementFromCell(dashboard, 0, 0)!;
+
+      // Set minimum row height to enable vertical resizing
+      setMinimumRowHeight(dashboard, 100);
+      await sendKeys({ press: 'Escape' });
+      await sendKeys({ press: 'Space' });
+      await nextFrame();
+
+      // Focus forward button, click it
+      getResizeGrowHeightButton(widget).focus();
+      await sendKeys({ press: 'Space' });
+      expect((dashboard.items[0] as DashboardItem).rowspan).to.equal(2);
+    });
+
+    it('should decrease the widget column span on shrink width button click', async () => {
+      const widget = getElementFromCell(dashboard, 0, 0)!;
+      // Focus forward button, click it
+      getResizeGrowWidthButton(widget).focus();
+      await sendKeys({ press: 'Space' });
+      getResizeShrinkWidthButton(widget).focus();
+      await sendKeys({ press: 'Space' });
+      expect((dashboard.items[0] as DashboardItem).colspan).to.equal(1);
+    });
+
+    it('should decrease the widget row span on shrink height button click', async () => {
+      const widget = getElementFromCell(dashboard, 0, 0)!;
+
+      // Set minimum row height to enable vertical resizing
+      setMinimumRowHeight(dashboard, 100);
+      await sendKeys({ press: 'Escape' });
+      await sendKeys({ press: 'Space' });
+      await nextFrame();
+
+      // Focus forward button, click it
+      getResizeGrowHeightButton(widget).focus();
+      await sendKeys({ press: 'Space' });
+      getResizeShrinkHeightButton(widget).focus();
+      await sendKeys({ press: 'Space' });
+      expect((dashboard.items[0] as DashboardItem).rowspan).to.equal(1);
+    });
+
+    it('should deselect the widget on blur', async () => {
+      const widget = getElementFromCell(dashboard, 0, 0)!;
+      const anotherWidget = getElementFromCell(dashboard, 0, 1)!;
+      anotherWidget.focus();
+      await nextFrame();
+      expect(widget.hasAttribute('resize-mode')).to.be.false;
+      expect(widget.hasAttribute('selected')).to.be.false;
+      expect(widget.hasAttribute('focused')).to.be.false;
+    });
+
+    it('should trap focus inside the resize mode', async () => {
+      const widget = getElementFromCell(dashboard, 0, 0)!;
+      const resizeModeButtons = [
+        getResizeGrowHeightButton(widget),
+        getResizeGrowWidthButton(widget),
+        getResizeShrinkHeightButton(widget),
+        getResizeShrinkWidthButton(widget),
+        getResizeApplyButton(widget),
+      ];
+      for (let i = 0; i < resizeModeButtons.length * 2; i++) {
+        await sendKeys({ press: 'Tab' });
+        expect(resizeModeButtons.includes(widget.shadowRoot!.activeElement as HTMLElement)).to.be.true;
+      }
+    });
+
+    it('should trap back inside the widget after exiting move mode', async () => {
+      await sendKeys({ press: 'Escape' });
+      const widget = getElementFromCell(dashboard, 0, 0)!;
+      const resizeModeButtons = [
+        getResizeGrowHeightButton(widget),
+        getResizeGrowWidthButton(widget),
+        getResizeShrinkHeightButton(widget),
+        getResizeShrinkWidthButton(widget),
+        getResizeApplyButton(widget),
+      ];
+      for (let i = 0; i < 10; i++) {
+        await sendKeys({ press: 'Tab' });
+        expect(widget.contains(document.activeElement)).to.be.true;
+        expect(resizeModeButtons.includes(widget.shadowRoot!.activeElement as HTMLElement)).to.be.false;
+      }
+    });
+
+    it('should hide the grow/shrink height buttons if row min height is not defined', async () => {
+      await sendKeys({ press: 'Escape' });
+      setMinimumRowHeight(dashboard, undefined);
+      await sendKeys({ press: 'Space' });
+      const widget = getElementFromCell(dashboard, 0, 0)!;
+
+      expect(getComputedStyle(getResizeGrowHeightButton(widget)).display).to.equal('none');
+      expect(getComputedStyle(getResizeShrinkHeightButton(widget)).display).to.equal('none');
+      expect(getComputedStyle(getResizeGrowWidthButton(widget)).display).to.not.equal('none');
+      expect(getComputedStyle(getResizeShrinkWidthButton(widget)).display).to.not.equal('none');
     });
   });
 });

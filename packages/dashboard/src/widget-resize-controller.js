@@ -85,10 +85,6 @@ export class WidgetResizeController {
       this.__updateResizedItem(-1, 0);
     }
 
-    if (!gridStyle.getPropertyValue('--vaadin-dashboard-row-min-height')) {
-      return;
-    }
-
     const currentElementHeight = itemWrapper.firstElementChild.offsetHeight;
     const rowMinHeight = Math.min(...gridStyle.gridTemplateRows.split(' ').map((height) => parseFloat(height)));
     if (this.__resizeHeight > currentElementHeight + gapSize + rowMinHeight / 2) {
@@ -152,6 +148,11 @@ export class WidgetResizeController {
     }
 
     const gridStyle = getComputedStyle(this.host.$.grid);
+    if (rowspanDelta && !gridStyle.getPropertyValue('--vaadin-dashboard-row-min-height')) {
+      // Do not resize vertically if the min row height is not set
+      return;
+    }
+
     const columns = gridStyle.gridTemplateColumns.split(' ');
     const currentColspan = item.colspan || 1;
     const currentRowspan = item.rowspan || 1;

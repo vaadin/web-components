@@ -65,7 +65,7 @@ export class KeyboardController {
   /** @private */
   __escape(e) {
     e.preventDefault();
-    if (this.host.__moveMode) {
+    if (this.host.__moveMode || this.host.__resizeMode) {
       this.host.__exitMode(true);
     } else {
       this.host.__selected = false;

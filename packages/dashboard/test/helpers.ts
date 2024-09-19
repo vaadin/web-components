@@ -312,3 +312,23 @@ export function getMoveBackwardButton(element: HTMLElement): HTMLElement {
 export function getMoveApplyButton(element: HTMLElement): HTMLElement {
   return element.shadowRoot!.querySelector('#move-apply') as HTMLElement;
 }
+
+export function getResizeApplyButton(element: HTMLElement): HTMLElement {
+  return element.shadowRoot!.querySelector('#resize-apply') as HTMLElement;
+}
+
+export function getResizeShrinkWidthButton(element: HTMLElement): HTMLElement {
+  return element.shadowRoot!.querySelector('#resize-shrink-width') as HTMLElement;
+}
+
+export function getResizeGrowWidthButton(element: HTMLElement): HTMLElement {
+  return element.shadowRoot!.querySelector('#resize-grow-width') as HTMLElement;
+}
+
+export function getResizeShrinkHeightButton(element: HTMLElement): HTMLElement {
+  return element.shadowRoot!.querySelector('#resize-shrink-height') as HTMLElement;
+}
+
+export function getResizeGrowHeightButton(element: HTMLElement): HTMLElement {
+  return element.shadowRoot!.querySelector('#resize-grow-height') as HTMLElement;
+}

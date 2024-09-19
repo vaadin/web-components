@@ -124,4 +124,58 @@ export const dashboardWidgetAndSectionStyles = css`
   :host([last-child]) #move-forward {
     display: none;
   }
+
+  /* Resize-mode buttons */
+  #resize-shrink-width,
+  #resize-shrink-height,
+  #resize-grow-width,
+  #resize-grow-height,
+  #resize-apply {
+    font-size: 30px;
+    cursor: pointer;
+    position: absolute;
+  }
+
+  #resize-shrink-width::before,
+  #resize-shrink-height::before,
+  #resize-grow-width::before,
+  #resize-grow-height::before,
+  #resize-apply::before {
+    content: var(--content);
+  }
+
+  #resize-shrink-width {
+    inset-inline-end: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    --content: '-';
+  }
+
+  #resize-grow-width {
+    inset-inline-start: 100%;
+    top: 50%;
+    transform: translateY(-50%);
+    --content: '+';
+  }
+
+  #resize-shrink-height {
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    --content: '-';
+  }
+
+  #resize-grow-height {
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    --content: '+';
+  }
+
+  #resize-apply {
+    left: 50%;
+    top: 50%;
+    --content: '✔';
+    transform: translate(-50%, -50%);
+  }
 `;
