@@ -1,5 +1,6 @@
 import { fixtureSync } from '@vaadin/testing-helpers/dist/fixture.js';
 import { visualDiff } from '@web/test-runner-visual-regression';
+import '../common.js';
 import '@vaadin/combo-box/theme/material/vaadin-combo-box.js';
 import '@vaadin/date-picker/theme/material/vaadin-date-picker.js';
 import '@vaadin/form-layout/theme/material/vaadin-form-item.js';
