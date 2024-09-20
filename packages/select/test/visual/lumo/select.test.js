@@ -4,6 +4,7 @@ import { visualDiff } from '@web/test-runner-visual-regression';
 import '@vaadin/item/theme/lumo/vaadin-item.js';
 import '@vaadin/list-box/theme/lumo/vaadin-list-box.js';
 import '../../not-animated-styles.js';
+import '../common.js';
 import '../../../theme/lumo/vaadin-select.js';
 
 describe('select', () => {
