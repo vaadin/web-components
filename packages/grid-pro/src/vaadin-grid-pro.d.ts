@@ -89,6 +89,7 @@ declare class GridPro<TItem = GridDefaultItem> extends Grid<TItem> {
   ): void;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 interface GridPro extends InlineEditingMixinClass {}
 
 declare global {
