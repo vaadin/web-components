@@ -332,3 +332,20 @@ export function getResizeShrinkHeightButton(element: HTMLElement): HTMLElement {
 export function getResizeGrowHeightButton(element: HTMLElement): HTMLElement {
   return element.shadowRoot!.querySelector('#resize-grow-height') as HTMLElement;
 }
+
+/**
+ * Resolves once the function is invoked on the given object.
+ */
+function onceInvoked(object, functionName): Promise<void> {
+  return new Promise((resolve) => {
+    sinon.replace(object, functionName, (...args) => {
+      sinon.restore();
+      object[functionName](...args);
+      resolve();
+    });
+  });
+}
+
+export async function onceResized(dashboard: HTMLElement): Promise<void> {
+  await onceInvoked(dashboard, '_onResize');
+}

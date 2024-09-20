@@ -11,6 +11,7 @@ import {
   fireResizeOver,
   fireResizeStart,
   getElementFromCell,
+  onceResized,
   setGap,
   setMaximumColumnWidth,
   setMinimumColumnWidth,
@@ -345,7 +346,7 @@ describe('dashboard - widget resizing', () => {
 
       // Narrow the dashboard to have only one column
       dashboard.style.width = `${columnWidth}px`;
-      await nextFrame();
+      await onceResized(dashboard);
       // prettier-ignore
       expectLayout(dashboard, [
         [0],
@@ -443,7 +444,7 @@ describe('dashboard - widget resizing', () => {
 
     it('should not throw with a lazy renderer while resizing', async () => {
       dashboard.style.width = `${columnWidth}px`;
-      await nextFrame();
+      await onceResized(dashboard);
       // prettier-ignore
       expectLayout(dashboard, [
         [0],
@@ -486,7 +487,7 @@ describe('dashboard - widget resizing', () => {
     it('should take gap into account when resizing', async () => {
       dashboard.style.width = `${columnWidth * 3}px`;
       setGap(dashboard, columnWidth / 2);
-      await nextFrame();
+      await onceResized(dashboard);
 
       // prettier-ignore
       expectLayout(dashboard, [
