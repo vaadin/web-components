@@ -30,3 +30,13 @@ registerStyles(
     }
   `,
 );
+
+/* Disable opacity transition */
+registerStyles(
+  'vaadin-user-tags',
+  css`
+    :host {
+      transition: none !important;
+    }
+  `,
+);
