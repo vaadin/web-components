@@ -33,7 +33,7 @@ registerStyles(
 
 /* Disable opacity transition */
 registerStyles(
-  'vaadin-user-tags',
+  'vaadin-user-tag',
   css`
     :host {
       transition: none !important;
