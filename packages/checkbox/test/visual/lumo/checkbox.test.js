@@ -2,6 +2,7 @@ import { fixtureSync } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '@vaadin/vaadin-lumo-styles/test/autoload.js';
+import '../common.js';
 import '../../../theme/lumo/vaadin-checkbox.js';
 
 describe('checkbox', () => {

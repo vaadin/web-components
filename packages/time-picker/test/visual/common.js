@@ -1,12 +1,17 @@
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
-/* Hide caret */
 registerStyles(
   'vaadin-time-picker',
   css`
+    /* Hide caret */
     :host([focus-ring]) ::slotted(input),
     :host([opened]) ::slotted(input) {
       caret-color: transparent;
+    }
+
+    /* Show error message immediately */
+    [part='error-message'] {
+      transition: none !important;
     }
   `,
 );
