@@ -44,6 +44,7 @@ const multiSelectComboBox = css`
 
   [part='chip'] {
     flex: 0 1 auto;
+    overflow: hidden;
   }
 
   :host(:is([readonly], [disabled])) ::slotted(input) {
