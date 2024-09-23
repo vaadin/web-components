@@ -48,10 +48,10 @@ describe('validation', () => {
       expect(validateSpy.calledBefore(changeSpy)).to.be.true;
     });
 
-    it('should validate before change event on blur', async () => {
+    it('should validate before change event on keyboard blur', async () => {
       input.focus();
       await sendKeys({ type: 'foo' });
-      input.blur();
+      await sendKeys({ press: 'Tab' });
       expect(changeSpy.calledOnce).to.be.true;
       expect(validateSpy.calledOnce).to.be.true;
       expect(validateSpy.calledBefore(changeSpy)).to.be.true;

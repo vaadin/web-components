@@ -217,6 +217,13 @@ describe('interactions', () => {
       expect(comboBox.hasAttribute('focused')).to.be.true;
     });
 
+    it('should not remove focused attribute after closing with outside click', () => {
+      comboBox.focus();
+      comboBox.open();
+      outsideClick();
+      expect(comboBox.hasAttribute('focused')).to.be.true;
+    });
+
     it('should keep focus-ring attribute after closing with Escape', () => {
       comboBox.focus();
       comboBox.setAttribute('focus-ring', '');
@@ -225,14 +232,12 @@ describe('interactions', () => {
       expect(comboBox.hasAttribute('focus-ring')).to.be.true;
     });
 
-    it('should not keep focus-ring attribute after closing with outside click', () => {
+    it('should not remove focus-ring attribute after closing with outside click', () => {
       comboBox.focus();
       comboBox.setAttribute('focus-ring', '');
       comboBox.open();
       outsideClick();
-      expect(comboBox.hasAttribute('focus-ring')).to.be.false;
-      // FIXME: see https://github.com/vaadin/web-components/issues/4148
-      // expect(comboBox.hasAttribute('focus-ring')).to.be.true;
+      expect(comboBox.hasAttribute('focus-ring')).to.be.true;
     });
   });
 

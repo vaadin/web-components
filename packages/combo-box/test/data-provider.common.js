@@ -1,5 +1,13 @@
 import { expect } from '@vaadin/chai-plugins';
-import { arrowDownKeyDown, aTimeout, enterKeyDown, fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
+import {
+  arrowDownKeyDown,
+  aTimeout,
+  enterKeyDown,
+  fixtureSync,
+  nextFrame,
+  nextRender,
+  tabKeyDown,
+} from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import { ComboBoxPlaceholder } from '../src/vaadin-combo-box-placeholder.js';
 import {
@@ -1074,6 +1082,8 @@ const TEMPLATES = {
       let returnedItems;
 
       const bluringDataProvider = (_, callback) => {
+        // Keyboard blur before data is returned
+        tabKeyDown(comboBox.inputElement);
         comboBox.inputElement.blur();
         callback(returnedItems, returnedItems.length);
       };

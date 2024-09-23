@@ -1397,6 +1397,11 @@ export const ComboBoxMixin = (subclass) =>
         return false;
       }
 
+      // Do not remove focused state if focus should be restored after closing on outside click.
+      if (this._overlayOpened && this._overlayElement.restoreFocusOnClose) {
+        return false;
+      }
+
       return true;
     }
 

@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
+import { fixtureSync, nextRender, outsideClick } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 
@@ -35,10 +35,19 @@ describe('vaadin-combo-box-light - validation', () => {
       expect(validateSpy.calledOnce).to.be.true;
     });
 
-    it('should validate before change event on blur', async () => {
+    it('should validate before change event on keyboard blur', async () => {
       input.focus();
       await sendKeys({ type: 'foo' });
-      input.blur();
+      await sendKeys({ press: 'Tab' });
+      expect(changeSpy.calledOnce).to.be.true;
+      expect(validateSpy.calledOnce).to.be.true;
+      expect(validateSpy.calledBefore(changeSpy)).to.be.true;
+    });
+
+    it('should validate before change event on outside click', async () => {
+      input.focus();
+      await sendKeys({ type: 'foo' });
+      outsideClick();
       expect(changeSpy.calledOnce).to.be.true;
       expect(validateSpy.calledOnce).to.be.true;
       expect(validateSpy.calledBefore(changeSpy)).to.be.true;
