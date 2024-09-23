@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, keyboardEventFor, nextRender } from '@vaadin/testing-helpers';
+import { fixtureSync, keyboardEventFor, nextRender, outsideClick } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import './not-animated-styles.js';
@@ -389,7 +389,7 @@ describe('selecting items', () => {
       await sendKeys({ type: 'an' });
       expectItems(['banana', 'orange']);
 
-      inputElement.blur();
+      outsideClick();
       expect(comboBox.filter).to.equal('');
       expect(inputElement.value).to.equal('');
     });
@@ -397,7 +397,7 @@ describe('selecting items', () => {
     it('should clear a matching filter when closing the overlay', async () => {
       await sendKeys({ type: 'apple' });
 
-      inputElement.blur();
+      await sendKeys({ press: 'Tab' });
       expect(comboBox.selectedItems).to.deep.equal([]);
       expect(comboBox.filter).to.equal('');
       expect(inputElement.value).to.equal('');
