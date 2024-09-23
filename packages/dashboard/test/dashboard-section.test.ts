@@ -109,7 +109,7 @@ describe('dashboard section', () => {
 
   describe('i18n', () => {
     it('should localize focus button aria-label', async () => {
-      section.i18n = { ...section.i18n, section: { selectTitleForEditing: 'foo' } };
+      section.i18n = { ...section.i18n, selectSectionTitleForEditing: 'foo' };
       await nextFrame();
 
       const focusButton = section.shadowRoot?.querySelector('#focus-button');
@@ -117,7 +117,7 @@ describe('dashboard section', () => {
     });
 
     it('should localize remove button title', async () => {
-      section.i18n = { ...section.i18n, remove: { title: 'foo' } };
+      section.i18n = { ...section.i18n, remove: 'foo' };
       await nextFrame();
 
       const removeButton = getRemoveButton(section);
@@ -125,7 +125,7 @@ describe('dashboard section', () => {
     });
 
     it('should localize drag handle title', async () => {
-      section.i18n = { ...section.i18n, move: { ...section.i18n.move, title: 'foo' } };
+      section.i18n = { ...section.i18n, move: 'foo' };
       await nextFrame();
 
       const dragHandle = getDraggable(section);
@@ -135,12 +135,9 @@ describe('dashboard section', () => {
     it('should localize move mode buttons', async () => {
       section.i18n = {
         ...section.i18n,
-        move: {
-          ...section.i18n.move,
-          apply: 'foo',
-          forward: 'bar',
-          backward: 'baz',
-        },
+        moveApply: 'foo',
+        moveForward: 'bar',
+        moveBackward: 'baz',
       };
 
       await nextFrame();

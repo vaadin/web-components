@@ -97,18 +97,12 @@ class DashboardSection extends DashboardItemMixin(ControllerMixin(ElementMixin(P
        * The object has the following structure and default values:
        * ```
        * {
-       *   section: {
-       *     selectTitleForEditing: 'Select section title for editing',
-       *   },
-       *   remove: {
-       *     title: 'Remove',
-       *   },
-       *   move: {
-       *     title: 'Move',
-       *     apply: 'Apply',
-       *     forward: 'Move Forward',
-       *     backward: 'Move Backward',
-       *   },
+       *   selectSectionTitleForEditing: 'Select section title for editing',
+       *   remove: 'Remove',
+       *   move: 'Move',
+       *   moveApply: 'Apply',
+       *   moveForward: 'Move Forward',
+       *   moveBackward: 'Move Backward',
        * }
        * ```
        */
@@ -116,9 +110,13 @@ class DashboardSection extends DashboardItemMixin(ControllerMixin(ElementMixin(P
         type: Object,
         value: () => {
           const i18n = getDefaultI18n();
-          delete i18n.widget;
-          delete i18n.resize;
-          return i18n;
+          return {
+            ...i18n.selectSectionTitleForEditing,
+            ...i18n.remove,
+            ...i18n.move,
+            ...i18n.moveApply,
+            ...i18n.moveForward,
+          };
         },
       },
 
@@ -136,7 +134,7 @@ class DashboardSection extends DashboardItemMixin(ControllerMixin(ElementMixin(P
   /** @protected */
   render() {
     return html`
-      ${this.__renderFocusButton(this.i18n.section)} ${this.__renderMoveControls()}
+      ${this.__renderFocusButton('selectSectionTitleForEditing')} ${this.__renderMoveControls()}
 
       <div id="focustrap">
         <header>

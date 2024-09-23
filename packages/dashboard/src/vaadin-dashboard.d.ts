@@ -127,29 +127,19 @@ declare class Dashboard<TItem extends DashboardItem = DashboardItem> extends Das
    * The object has the following structure and default values:
    * ```
    * {
-   *   widget: {
-   *     selectTitleForEditing: 'Select widget title for editing',
-   *   },
-   *   section: {
-   *     selectTitleForEditing: 'Select section title for editing',
-   *   },
-   *   remove: {
-   *     title: 'Remove',
-   *   },
-   *   resize: {
-   *     title: 'Resize',
-   *     apply: 'Apply',
-   *     shrinkWidth: 'Shrink width',
-   *     growWidth: 'Grow width',
-   *     shrinkHeight: 'Shrink height',
-   *     growHeight: 'Grow height',
-   *   },
-   *   move: {
-   *     title: 'Move',
-   *     apply: 'Apply',
-   *     forward: 'Move Forward',
-   *     backward: 'Move Backward',
-   *   },
+   *   selectSectionTitleForEditing: 'Select section title for editing',
+   *   selectWidgetTitleForEditing: 'Select widget title for editing',
+   *   remove: 'Remove',
+   *   resize: 'Resize',
+   *   resizeApply: 'Apply',
+   *   resizeShrinkWidth: 'Shrink width',
+   *   resizeGrowWidth: 'Grow width',
+   *   resizeShrinkHeight: 'Shrink height',
+   *   resizeGrowHeight: 'Grow height',
+   *   move: 'Move',
+   *   moveApply: 'Apply',
+   *   moveForward: 'Move Forward',
+   *   moveBackward: 'Move Backward',
    * }
    * ```
    */

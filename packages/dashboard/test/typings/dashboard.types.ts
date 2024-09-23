@@ -76,26 +76,18 @@ assertType<string | null | undefined>(widget.widgetTitle);
 
 assertType<DashboardWidgetI18n>(widget.i18n);
 assertType<{
-  widget: {
-    selectTitleForEditing: string;
-  };
-  remove: {
-    title: string;
-  };
-  resize: {
-    title: string;
-    apply: string;
-    shrinkWidth: string;
-    growWidth: string;
-    shrinkHeight: string;
-    growHeight: string;
-  };
-  move: {
-    title: string;
-    apply: string;
-    forward: string;
-    backward: string;
-  };
+  selectWidgetTitleForEditing: string;
+  remove: string;
+  move: string;
+  moveApply: string;
+  moveForward: string;
+  moveBackward: string;
+  resize: string;
+  resizeApply: string;
+  resizeShrinkWidth: string;
+  resizeGrowWidth: string;
+  resizeShrinkHeight: string;
+  resizeGrowHeight: string;
 }>(widget.i18n);
 
 /* DashboardSection */
@@ -106,16 +98,10 @@ assertType<string | null | undefined>(section.sectionTitle);
 
 assertType<DashboardSectionI18n>(section.i18n);
 assertType<{
-  section: {
-    selectTitleForEditing: string;
-  };
-  remove: {
-    title: string;
-  };
-  move: {
-    title: string;
-    apply: string;
-    forward: string;
-    backward: string;
-  };
+  selectSectionTitleForEditing: string;
+  remove: string;
+  move: string;
+  moveApply: string;
+  moveForward: string;
+  moveBackward: string;
 }>(section.i18n);

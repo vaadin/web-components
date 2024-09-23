@@ -11,29 +11,19 @@
 import type { Constructor } from '@open-wc/dedupe-mixin';
 
 export interface DashboardItemI18n {
-  widget: {
-    selectTitleForEditing: string;
-  };
-  section: {
-    selectTitleForEditing: string;
-  };
-  remove: {
-    title: string;
-  };
-  move: {
-    title: string;
-    apply: string;
-    forward: string;
-    backward: string;
-  };
-  resize: {
-    title: string;
-    apply: string;
-    shrinkWidth: string;
-    growWidth: string;
-    shrinkHeight: string;
-    growHeight: string;
-  };
+  selectWidgetTitleForEditing: string;
+  selectSectionTitleForEditing: string;
+  remove: string;
+  move: string;
+  moveApply: string;
+  moveForward: string;
+  moveBackward: string;
+  resize: string;
+  resizeApply: string;
+  resizeShrinkWidth: string;
+  resizeGrowWidth: string;
+  resizeShrinkHeight: string;
+  resizeGrowHeight: string;
 }
 
 /**

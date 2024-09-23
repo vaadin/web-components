@@ -12,7 +12,11 @@ import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js'
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { type DashboardItemI18n, DashboardItemMixin } from './vaadin-dashboard-item-mixin.js';
 
-export interface DashboardSectionI18n extends Omit<DashboardItemI18n, 'widget' | 'resize'> {}
+export interface DashboardSectionI18n
+  extends Pick<
+    DashboardItemI18n,
+    'selectSectionTitleForEditing' | 'remove' | 'move' | 'moveApply' | 'moveForward' | 'moveBackward'
+  > {}
 
 /**
  * A Section component for use with the Dashboard component
@@ -32,18 +36,12 @@ declare class DashboardSection extends DashboardItemMixin(ControllerMixin(Elemen
    * The object has the following structure and default values:
    * ```
    * {
-   *   section: {
-   *     selectTitleForEditing: 'Select section title for editing',
-   *   },
-   *   remove: {
-   *     title: 'Remove',
-   *   },
-   *   move: {
-   *     title: 'Move',
-   *     apply: 'Apply',
-   *     forward: 'Move Forward',
-   *     backward: 'Move Backward',
-   *   },
+   *   selectSectionTitleForEditing: 'Select section title for editing',
+   *   remove: 'Remove',
+   *   move: 'Move',
+   *   moveApply: 'Apply',
+   *   moveForward: 'Move Forward',
+   *   moveBackward: 'Move Backward',
    * }
    * ```
    */

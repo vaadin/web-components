@@ -173,20 +173,16 @@ describe('dashboard', () => {
     it('should localize widget', async () => {
       dashboard.i18n = {
         ...dashboard.i18n,
-        widget: {
-          selectTitleForEditing: 'foo',
-        },
+        selectWidgetTitleForEditing: 'foo',
       };
 
       await nextFrame();
 
       const widget = getElementFromCell(dashboard, 0, 0) as DashboardWidget;
-      expect(widget.i18n.widget.selectTitleForEditing).to.equal('foo');
+      expect(widget.i18n.selectWidgetTitleForEditing).to.equal('foo');
       expect(widget.i18n).to.eql({
         ...dashboard.i18n,
-        widget: {
-          selectTitleForEditing: 'foo',
-        },
+        selectWidgetTitleForEditing: 'foo',
       });
     });
 
@@ -210,13 +206,11 @@ describe('dashboard', () => {
 
       dashboard.i18n = {
         ...dashboard.i18n,
-        widget: {
-          selectTitleForEditing: 'foo',
-        },
+        selectWidgetTitleForEditing: 'foo',
       };
       await nextFrame();
 
-      expect(widget.i18n.widget.selectTitleForEditing).to.equal('foo');
+      expect(widget.i18n.selectWidgetTitleForEditing).to.equal('foo');
     });
 
     it('should localize a lazily rendered widget', async () => {
@@ -232,14 +226,12 @@ describe('dashboard', () => {
 
       dashboard.i18n = {
         ...dashboard.i18n,
-        widget: {
-          selectTitleForEditing: 'foo',
-        },
+        selectWidgetTitleForEditing: 'foo',
       };
       await nextFrame();
 
       const widget = getElementFromCell(dashboard, 0, 0) as DashboardWidget;
-      expect(widget.i18n.widget.selectTitleForEditing).to.equal('foo');
+      expect(widget.i18n.selectWidgetTitleForEditing).to.equal('foo');
     });
   });
 
@@ -392,21 +384,17 @@ describe('dashboard', () => {
         it('should localize section', async () => {
           dashboard.i18n = {
             ...dashboard.i18n,
-            section: {
-              selectTitleForEditing: 'foo',
-            },
+            selectSectionTitleForEditing: 'foo',
           };
 
           await nextFrame();
 
           const widget = getElementFromCell(dashboard, 1, 0) as DashboardWidget;
           const section = widget.closest('vaadin-dashboard-section') as DashboardSection;
-          expect(section.i18n.section.selectTitleForEditing).to.equal('foo');
+          expect(section.i18n.selectSectionTitleForEditing).to.equal('foo');
           expect(section.i18n).to.eql({
             ...dashboard.i18n,
-            section: {
-              selectTitleForEditing: 'foo',
-            },
+            selectSectionTitleForEditing: 'foo',
           });
         });
       });

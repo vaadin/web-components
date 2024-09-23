@@ -101,26 +101,18 @@ class DashboardWidget extends DashboardItemMixin(ControllerMixin(ElementMixin(Po
        * The object has the following structure and default values:
        * ```
        * {
-       *   widget: {
-       *     selectTitleForEditing: 'Select widget title for editing',
-       *   }
-       *   remove: {
-       *     title: 'Remove',
-       *   },
-       *   resize: {
-       *     title: 'Resize',
-       *     apply: 'Apply',
-       *     shrinkWidth: 'Shrink width',
-       *     growWidth: 'Grow width',
-       *     shrinkHeight: 'Shrink height',
-       *     growHeight: 'Grow height',
-       *   },
-       *   move: {
-       *     title: 'Move',
-       *     apply: 'Apply',
-       *     forward: 'Move Forward',
-       *     backward: 'Move Backward',
-       *   },
+       *   selectWidgetTitleForEditing: 'Select widget title for editing',
+       *   remove: 'Remove',
+       *   resize: 'Resize',
+       *   resizeApply: 'Apply',
+       *   resizeShrinkWidth: 'Shrink width',
+       *   resizeGrowWidth: 'Grow width',
+       *   resizeShrinkHeight: 'Shrink height',
+       *   resizeGrowHeight: 'Grow height',
+       *   move: 'Move',
+       *   moveApply: 'Apply',
+       *   moveForward: 'Move Forward',
+       *   moveBackward: 'Move Backward',
        * }
        * ```
        */
@@ -128,7 +120,7 @@ class DashboardWidget extends DashboardItemMixin(ControllerMixin(ElementMixin(Po
         type: Object,
         value: () => {
           const i18n = getDefaultI18n();
-          delete i18n.section;
+          delete i18n.selectSectionTitleForEditing;
           return i18n;
         },
       },
@@ -147,7 +139,8 @@ class DashboardWidget extends DashboardItemMixin(ControllerMixin(ElementMixin(Po
   /** @protected */
   render() {
     return html`
-      ${this.__renderFocusButton(this.i18n.widget)} ${this.__renderMoveControls()} ${this.__renderResizeControls()}
+      ${this.__renderFocusButton('selectWidgetTitleForEditing')} ${this.__renderMoveControls()}
+      ${this.__renderResizeControls()}
 
       <div id="focustrap">
         <header>

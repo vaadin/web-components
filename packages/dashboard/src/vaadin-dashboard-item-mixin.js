@@ -16,36 +16,26 @@ import { fireMove, fireRemove, fireResize } from './vaadin-dashboard-helpers.js'
 import { dashboardWidgetAndSectionStyles } from './vaadin-dashboard-styles.js';
 
 const DEFAULT_I18N = {
-  widget: {
-    selectTitleForEditing: 'Select widget title for editing',
-  },
-  section: {
-    selectTitleForEditing: 'Select section title for editing',
-  },
-  remove: {
-    title: 'Remove',
-  },
-  move: {
-    title: 'Move',
-    apply: 'Apply',
-    forward: 'Move Forward',
-    backward: 'Move Backward',
-  },
-  resize: {
-    title: 'Resize',
-    apply: 'Apply',
-    shrinkWidth: 'Shrink width',
-    growWidth: 'Grow width',
-    shrinkHeight: 'Shrink height',
-    growHeight: 'Grow height',
-  },
+  selectWidgetTitleForEditing: 'Select widget title for editing',
+  selectSectionTitleForEditing: 'Select section title for editing',
+  remove: 'Remove',
+  move: 'Move',
+  moveApply: 'Apply',
+  moveForward: 'Move Forward',
+  moveBackward: 'Move Backward',
+  resize: 'Resize',
+  resizeApply: 'Apply',
+  resizeShrinkWidth: 'Shrink width',
+  resizegrowWidth: 'Grow width',
+  resizeShrinkHeight: 'Shrink height',
+  resizeGrowHeight: 'Grow height',
 };
 
 /**
  * Returns a new object with the default i18n values
  */
 export function getDefaultI18n() {
-  return JSON.parse(JSON.stringify(DEFAULT_I18N));
+  return { ...DEFAULT_I18N };
 }
 
 /**
@@ -65,19 +55,6 @@ export const DashboardItemMixin = (superClass) =>
         /** @protected */
         i18n: {
           type: Object,
-          value: () => {
-            return {
-              remove: {
-                title: 'Remove',
-              },
-              move: {
-                title: 'Move',
-                apply: 'Apply',
-                forward: 'Move Forward',
-                backward: 'Move Backward',
-              },
-            };
-          },
         },
 
         /** @private */
@@ -114,7 +91,7 @@ export const DashboardItemMixin = (superClass) =>
     /** @private */
     __renderDragHandle() {
       return html`<button
-        title="${this.i18n.move.title}"
+        title="${this.i18n.move}"
         id="drag-handle"
         draggable="true"
         class="drag-handle"
@@ -126,7 +103,7 @@ export const DashboardItemMixin = (superClass) =>
     /** @private */
     __renderRemoveButton() {
       return html`<button
-        title="${this.i18n.remove.title}"
+        title="${this.i18n.remove}"
         id="remove-button"
         tabindex="${this.__selected ? 0 : -1}"
         @click="${() => fireRemove(this)}"
@@ -134,9 +111,9 @@ export const DashboardItemMixin = (superClass) =>
     }
 
     /** @private */
-    __renderFocusButton(i18n) {
+    __renderFocusButton(i18nSelectTitleForEditingProperty) {
       return html`<button
-        aria-label=${i18n ? i18n.selectTitleForEditing : ''}
+        aria-label=${this.i18n[i18nSelectTitleForEditingProperty]}
         id="focus-button"
         draggable="true"
         class="drag-handle"
@@ -149,7 +126,7 @@ export const DashboardItemMixin = (superClass) =>
     /** @private */
     __renderResizeHandle() {
       return html`<button
-        title="${this.i18n.resize.title}"
+        title="${this.i18n.resize}"
         id="resize-handle"
         class="resize-handle"
         tabindex="${this.__selected ? 0 : -1}"
@@ -165,9 +142,9 @@ export const DashboardItemMixin = (superClass) =>
         .hidden="${!this.__moveMode}"
         @pointerdown="${(e) => e.preventDefault()}"
       >
-        <button title="${this.i18n.move.backward}" @click="${() => fireMove(this, -1)}" id="move-backward"></button>
-        <button title="${this.i18n.move.apply}" @click="${() => this.__exitMode(true)}" id="move-apply"></button>
-        <button title="${this.i18n.move.forward}" @click="${() => fireMove(this, 1)}" id="move-forward"></button>
+        <button title="${this.i18n.moveBackward}" @click="${() => fireMove(this, -1)}" id="move-backward"></button>
+        <button title="${this.i18n.moveApply}" @click="${() => this.__exitMode(true)}" id="move-apply"></button>
+        <button title="${this.i18n.moveForward}" @click="${() => fireMove(this, 1)}" id="move-forward"></button>
       </div>`;
     }
 
@@ -181,25 +158,25 @@ export const DashboardItemMixin = (superClass) =>
         .hidden="${!this.__resizeMode}"
         @pointerdown="${(e) => e.preventDefault()}"
       >
-        <button title="${this.i18n.resize.apply}" @click="${() => this.__exitMode(true)}" id="resize-apply"></button>
+        <button title="${this.i18n.resizeApply}" @click="${() => this.__exitMode(true)}" id="resize-apply"></button>
         <button
-          title="${this.i18n.resize.shrinkWidth}"
+          title="${this.i18n.resizeShrinkWidth}"
           @click="${() => fireResize(this, -1, 0)}"
           id="resize-shrink-width"
         ></button>
         <button
-          title="${this.i18n.resize.growWidth}"
+          title="${this.i18n.resizeGrowWidth}"
           @click="${() => fireResize(this, 1, 0)}"
           id="resize-grow-width"
         ></button>
         <button
-          title="${this.i18n.resize.shrinkHeight}"
+          title="${this.i18n.resizeShrinkHeight}"
           @click="${() => fireResize(this, 0, -1)}"
           id="resize-shrink-height"
           .hidden="${!hasMinRowHeight}"
         ></button>
         <button
-          title="${this.i18n.resize.growHeight}"
+          title="${this.i18n.resizeGrowHeight}"
           @click="${() => fireResize(this, 0, 1)}"
           id="resize-grow-height"
           .hidden="${!hasMinRowHeight}"

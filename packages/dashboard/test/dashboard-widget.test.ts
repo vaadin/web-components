@@ -111,7 +111,7 @@ describe('dashboard widget', () => {
 
   describe('i18n', () => {
     it('should localize focus button aria-label', async () => {
-      widget.i18n = { ...widget.i18n, widget: { selectTitleForEditing: 'foo' } };
+      widget.i18n = { ...widget.i18n, selectWidgetTitleForEditing: 'foo' };
       await nextFrame();
 
       const focusButton = widget.shadowRoot?.querySelector('#focus-button');
@@ -119,7 +119,7 @@ describe('dashboard widget', () => {
     });
 
     it('should localize remove button title', async () => {
-      widget.i18n = { ...widget.i18n, remove: { title: 'foo' } };
+      widget.i18n = { ...widget.i18n, remove: 'foo' };
       await nextFrame();
 
       const removeButton = getRemoveButton(widget);
@@ -127,7 +127,7 @@ describe('dashboard widget', () => {
     });
 
     it('should localize drag handle title', async () => {
-      widget.i18n = { ...widget.i18n, move: { ...widget.i18n.move, title: 'foo' } };
+      widget.i18n = { ...widget.i18n, move: 'foo' };
       await nextFrame();
 
       const dragHandle = getDraggable(widget);
@@ -135,7 +135,7 @@ describe('dashboard widget', () => {
     });
 
     it('should localize resize handle title', async () => {
-      widget.i18n = { ...widget.i18n, resize: { ...widget.i18n.resize, title: 'foo' } };
+      widget.i18n = { ...widget.i18n, resize: 'foo' };
       await nextFrame();
 
       const resizeHandle = getResizeHandle(widget);
@@ -145,14 +145,11 @@ describe('dashboard widget', () => {
     it('should localize resize mode buttons', async () => {
       widget.i18n = {
         ...widget.i18n,
-        resize: {
-          ...widget.i18n.resize,
-          apply: 'foo',
-          shrinkHeight: 'bar',
-          shrinkWidth: 'baz',
-          growHeight: 'qux',
-          growWidth: 'quux',
-        },
+        resizeApply: 'foo',
+        resizeShrinkHeight: 'bar',
+        resizeShrinkWidth: 'baz',
+        resizeGrowHeight: 'qux',
+        resizeGrowWidth: 'quux',
       };
 
       await nextFrame();
@@ -167,12 +164,9 @@ describe('dashboard widget', () => {
     it('should localize move mode buttons', async () => {
       widget.i18n = {
         ...widget.i18n,
-        move: {
-          ...widget.i18n.move,
-          apply: 'foo',
-          forward: 'bar',
-          backward: 'baz',
-        },
+        moveApply: 'foo',
+        moveForward: 'bar',
+        moveBackward: 'baz',
       };
 
       await nextFrame();

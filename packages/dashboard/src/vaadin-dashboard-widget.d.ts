@@ -12,7 +12,7 @@ import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js'
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { type DashboardItemI18n, DashboardItemMixin } from './vaadin-dashboard-item-mixin.js';
 
-export interface DashboardWidgetI18n extends Omit<DashboardItemI18n, 'section'> {}
+export interface DashboardWidgetI18n extends Omit<DashboardItemI18n, 'selectSectionTitleForEditing'> {}
 
 /**
  * A Widget component for use with the Dashboard component
@@ -32,26 +32,18 @@ declare class DashboardWidget extends DashboardItemMixin(ControllerMixin(Element
    * The object has the following structure and default values:
    * ```
    * {
-   *   widget: {
-   *     selectTitleForEditing: 'Select widget title for editing',
-   *   },
-   *   remove: {
-   *     title: 'Remove',
-   *   },
-   *   resize: {
-   *     title: 'Resize',
-   *     apply: 'Apply',
-   *     shrinkWidth: 'Shrink width',
-   *     growWidth: 'Grow width',
-   *     shrinkHeight: 'Shrink height',
-   *     growHeight: 'Grow height',
-   *   },
-   *   move: {
-   *     title: 'Move',
-   *     apply: 'Apply',
-   *     forward: 'Move Forward',
-   *     backward: 'Move Backward',
-   *   },
+   *   selectWidgetTitleForEditing: 'Select widget title for editing',
+   *   remove: 'Remove',
+   *   resize: 'Resize',
+   *   resizeApply: 'Apply',
+   *   resizeShrinkWidth: 'Shrink width',
+   *   resizeGrowWidth: 'Grow width',
+   *   resizeShrinkHeight: 'Shrink height',
+   *   resizeGrowHeight: 'Grow height',
+   *   move: 'Move',
+   *   moveApply: 'Apply',
+   *   moveForward: 'Move Forward',
+   *   moveBackward: 'Move Backward',
    * }
    * ```
    */
