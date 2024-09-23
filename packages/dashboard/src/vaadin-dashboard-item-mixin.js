@@ -29,6 +29,24 @@ export const DashboardItemMixin = (superClass) =>
 
     static get properties() {
       return {
+        /** @protected */
+        i18n: {
+          type: Object,
+          value: () => {
+            return {
+              remove: {
+                title: 'Remove',
+              },
+              move: {
+                title: 'Move',
+                apply: 'Apply',
+                forward: 'Move Forward',
+                backward: 'Move Backward',
+              },
+            };
+          },
+        },
+
         /** @private */
         __selected: {
           type: Boolean,
@@ -63,6 +81,7 @@ export const DashboardItemMixin = (superClass) =>
     /** @private */
     __renderDragHandle() {
       return html`<button
+        title="${this.i18n.move.title}"
         id="drag-handle"
         draggable="true"
         class="drag-handle"
@@ -74,6 +93,7 @@ export const DashboardItemMixin = (superClass) =>
     /** @private */
     __renderRemoveButton() {
       return html`<button
+        title="${this.i18n.remove.title}"
         id="remove-button"
         tabindex="${this.__selected ? 0 : -1}"
         @click="${() => fireRemove(this)}"
@@ -83,7 +103,7 @@ export const DashboardItemMixin = (superClass) =>
     /** @private */
     __renderFocusButton() {
       return html`<button
-        aria-label="Select Title for editing"
+        aria-label=${this.i18n.selectTitleForEditing}
         id="focus-button"
         draggable="true"
         class="drag-handle"
@@ -96,6 +116,7 @@ export const DashboardItemMixin = (superClass) =>
     /** @private */
     __renderResizeHandle() {
       return html`<button
+        title="${this.i18n.resize.title}"
         id="resize-handle"
         class="resize-handle"
         tabindex="${this.__selected ? 0 : -1}"
@@ -104,16 +125,16 @@ export const DashboardItemMixin = (superClass) =>
     }
 
     /** @private */
-    __renderModeControls() {
+    __renderMoveControls() {
       return html`<div
         id="move-controls"
         class="mode-controls"
         .hidden="${!this.__moveMode}"
         @pointerdown="${(e) => e.preventDefault()}"
       >
-        <button title="Move backward" @click="${() => fireMove(this, -1)}" id="move-backward"></button>
-        <button title="Apply" @click="${() => this.__exitMode(true)}" id="move-apply"></button>
-        <button title="Move forward" @click="${() => fireMove(this, 1)}" id="move-forward"></button>
+        <button title="${this.i18n.move.backward}" @click="${() => fireMove(this, -1)}" id="move-backward"></button>
+        <button title="${this.i18n.move.apply}" @click="${() => this.__exitMode(true)}" id="move-apply"></button>
+        <button title="${this.i18n.move.forward}" @click="${() => fireMove(this, 1)}" id="move-forward"></button>
       </div>`;
     }
 
@@ -127,17 +148,25 @@ export const DashboardItemMixin = (superClass) =>
         .hidden="${!this.__resizeMode}"
         @pointerdown="${(e) => e.preventDefault()}"
       >
-        <button title="Apply" @click="${() => this.__exitMode(true)}" id="resize-apply"></button>
-        <button title="Shrink width" @click="${() => fireResize(this, -1, 0)}" id="resize-shrink-width"></button>
-        <button title="Grow width" @click="${() => fireResize(this, 1, 0)}" id="resize-grow-width"></button>
+        <button title="${this.i18n.resize.apply}" @click="${() => this.__exitMode(true)}" id="resize-apply"></button>
         <button
-          title="Shrink height"
+          title="${this.i18n.resize.shrinkWidth}"
+          @click="${() => fireResize(this, -1, 0)}"
+          id="resize-shrink-width"
+        ></button>
+        <button
+          title="${this.i18n.resize.growWidth}"
+          @click="${() => fireResize(this, 1, 0)}"
+          id="resize-grow-width"
+        ></button>
+        <button
+          title="${this.i18n.resize.shrinkHeight}"
           @click="${() => fireResize(this, 0, -1)}"
           id="resize-shrink-height"
           .hidden="${!hasMinRowHeight}"
         ></button>
         <button
-          title="Grow height"
+          title="${this.i18n.resize.growHeight}"
           @click="${() => fireResize(this, 0, 1)}"
           id="resize-grow-height"
           .hidden="${!hasMinRowHeight}"

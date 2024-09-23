@@ -10,6 +10,18 @@
  */
 import type { Constructor } from '@open-wc/dedupe-mixin';
 
+export interface DashboardItemI18n {
+  remove: {
+    title: string;
+  };
+  move: {
+    title: string;
+    apply: string;
+    forward: string;
+    backward: string;
+  };
+}
+
 /**
  * Shared functionality between widgets and sections
  */

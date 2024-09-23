@@ -92,6 +92,54 @@ class DashboardWidget extends DashboardItemMixin(ControllerMixin(ElementMixin(Po
   static get properties() {
     return {
       /**
+       * The object used to localize this component.
+       *
+       * To change the default localization, replace the entire
+       * `i18n` object with a custom one.
+       *
+       * The object has the following structure and default values:
+       * ```
+       * {
+       *   selectTitleForEditing: 'Select Widget Title for editing',
+       *   remove: {
+       *     title: 'Remove',
+       *   },
+       *   resize: {
+       *     title: 'Resize',
+       *     apply: 'Apply',
+       *     shrinkWidth: 'Shrink width',
+       *     growWidth: 'Grow width',
+       *     shrinkHeight: 'Shrink height',
+       *     growHeight: 'Grow height',
+       *   },
+       *   move: {
+       *     title: 'Move',
+       *     apply: 'Apply',
+       *     forward: 'Move Forward',
+       *     backward: 'Move Backward',
+       *   },
+       * }
+       * ```
+       */
+      i18n: {
+        type: Object,
+        value: () => {
+          return {
+            ...super.properties.i18n.value(),
+            selectTitleForEditing: 'Select Widget Title for editing',
+            resize: {
+              title: 'Resize',
+              apply: 'Apply',
+              shrinkWidth: 'Shrink width',
+              growWidth: 'Grow width',
+              shrinkHeight: 'Shrink height',
+              growHeight: 'Grow height',
+            },
+          };
+        },
+      },
+
+      /**
        * The title of the widget.
        */
       widgetTitle: {
@@ -105,7 +153,7 @@ class DashboardWidget extends DashboardItemMixin(ControllerMixin(ElementMixin(Po
   /** @protected */
   render() {
     return html`
-      ${this.__renderFocusButton()} ${this.__renderModeControls()} ${this.__renderResizeControls()}
+      ${this.__renderFocusButton()} ${this.__renderMoveControls()} ${this.__renderResizeControls()}
 
       <div id="focustrap">
         <header>

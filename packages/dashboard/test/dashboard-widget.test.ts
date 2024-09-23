@@ -3,6 +3,19 @@ import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import '../vaadin-dashboard-widget.js';
 import { DashboardSection } from '../vaadin-dashboard-section.js';
 import { DashboardWidget } from '../vaadin-dashboard-widget.js';
+import {
+  getDraggable,
+  getMoveApplyButton,
+  getMoveBackwardButton,
+  getMoveForwardButton,
+  getRemoveButton,
+  getResizeApplyButton,
+  getResizeGrowHeightButton,
+  getResizeGrowWidthButton,
+  getResizeHandle,
+  getResizeShrinkHeightButton,
+  getResizeShrinkWidthButton,
+} from './helpers.js';
 
 describe('dashboard widget', () => {
   let widget: DashboardWidget;
@@ -93,6 +106,80 @@ describe('dashboard widget', () => {
 
       const title = widget.querySelector('[slot="title"]');
       expect(title?.textContent).to.eql('');
+    });
+  });
+
+  describe('i18n', () => {
+    it('should localize focus button aria-label', async () => {
+      widget.i18n = { ...widget.i18n, selectTitleForEditing: 'foo' };
+      await nextFrame();
+
+      const focusButton = widget.shadowRoot?.querySelector('#focus-button');
+      expect(focusButton?.getAttribute('aria-label')).to.eql('foo');
+    });
+
+    it('should localize remove button title', async () => {
+      widget.i18n = { ...widget.i18n, remove: { title: 'foo' } };
+      await nextFrame();
+
+      const removeButton = getRemoveButton(widget);
+      expect(removeButton?.getAttribute('title')).to.eql('foo');
+    });
+
+    it('should localize drag handle title', async () => {
+      widget.i18n = { ...widget.i18n, move: { ...widget.i18n.move, title: 'foo' } };
+      await nextFrame();
+
+      const dragHandle = getDraggable(widget);
+      expect(dragHandle?.getAttribute('title')).to.eql('foo');
+    });
+
+    it('should localize resize handle title', async () => {
+      widget.i18n = { ...widget.i18n, resize: { ...widget.i18n.resize, title: 'foo' } };
+      await nextFrame();
+
+      const resizeHandle = getResizeHandle(widget);
+      expect(resizeHandle?.getAttribute('title')).to.eql('foo');
+    });
+
+    it('should localize resize mode buttons', async () => {
+      widget.i18n = {
+        ...widget.i18n,
+        resize: {
+          ...widget.i18n.resize,
+          apply: 'foo',
+          shrinkHeight: 'bar',
+          shrinkWidth: 'baz',
+          growHeight: 'qux',
+          growWidth: 'quux',
+        },
+      };
+
+      await nextFrame();
+
+      expect(getResizeApplyButton(widget)?.getAttribute('title')).to.eql('foo');
+      expect(getResizeShrinkHeightButton(widget)?.getAttribute('title')).to.eql('bar');
+      expect(getResizeShrinkWidthButton(widget)?.getAttribute('title')).to.eql('baz');
+      expect(getResizeGrowHeightButton(widget)?.getAttribute('title')).to.eql('qux');
+      expect(getResizeGrowWidthButton(widget)?.getAttribute('title')).to.eql('quux');
+    });
+
+    it('should localize move mode buttons', async () => {
+      widget.i18n = {
+        ...widget.i18n,
+        move: {
+          ...widget.i18n.move,
+          apply: 'foo',
+          forward: 'bar',
+          backward: 'baz',
+        },
+      };
+
+      await nextFrame();
+
+      expect(getMoveApplyButton(widget)?.getAttribute('title')).to.eql('foo');
+      expect(getMoveForwardButton(widget)?.getAttribute('title')).to.eql('bar');
+      expect(getMoveBackwardButton(widget)?.getAttribute('title')).to.eql('baz');
     });
   });
 });

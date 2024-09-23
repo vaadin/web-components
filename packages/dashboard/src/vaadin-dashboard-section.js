@@ -88,6 +88,38 @@ class DashboardSection extends DashboardItemMixin(ControllerMixin(ElementMixin(P
   static get properties() {
     return {
       /**
+       * The object used to localize this component.
+       *
+       * To change the default localization, replace the entire
+       * `i18n` object with a custom one.
+       *
+       * The object has the following structure and default values:
+       * ```
+       * {
+       *   selectTitleForEditing: 'Select Section Title for editing',
+       *   remove: {
+       *     title: 'Remove',
+       *   },
+       *   move: {
+       *     title: 'Move',
+       *     apply: 'Apply',
+       *     forward: 'Move Forward',
+       *     backward: 'Move Backward',
+       *   },
+       * }
+       * ```
+       */
+      i18n: {
+        type: Object,
+        value: () => {
+          return {
+            ...super.properties.i18n.value(),
+            selectTitleForEditing: 'Select Section Title for editing',
+          };
+        },
+      },
+
+      /**
        * The title of the section
        */
       sectionTitle: {
@@ -101,7 +133,7 @@ class DashboardSection extends DashboardItemMixin(ControllerMixin(ElementMixin(P
   /** @protected */
   render() {
     return html`
-      ${this.__renderFocusButton()} ${this.__renderModeControls()}
+      ${this.__renderFocusButton()} ${this.__renderMoveControls()}
 
       <div id="focustrap">
         <header>

@@ -10,7 +10,19 @@
  */
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
-import { DashboardItemMixin } from './vaadin-dashboard-item-mixin.js';
+import { type DashboardItemI18n, DashboardItemMixin } from './vaadin-dashboard-item-mixin.js';
+
+export interface DashboardWidgetI18n extends DashboardItemI18n {
+  selectTitleForEditing: string;
+  resize: {
+    title: string;
+    apply: string;
+    shrinkWidth: string;
+    growWidth: string;
+    shrinkHeight: string;
+    growHeight: string;
+  };
+}
 
 /**
  * A Widget component for use with the Dashboard component
@@ -20,6 +32,38 @@ declare class DashboardWidget extends DashboardItemMixin(ControllerMixin(Element
    * The title of the widget
    */
   widgetTitle: string | null | undefined;
+
+  /**
+   * The object used to localize this component.
+   *
+   * To change the default localization, replace the entire
+   * `i18n` object with a custom one.
+   *
+   * The object has the following structure and default values:
+   * ```
+   * {
+   *   selectTitleForEditing: 'Select Widget Title for editing',
+   *   remove: {
+   *     title: 'Remove',
+   *   },
+   *   resize: {
+   *     title: 'Resize',
+   *     apply: 'Apply',
+   *     shrinkWidth: 'Shrink width',
+   *     growWidth: 'Grow width',
+   *     shrinkHeight: 'Shrink height',
+   *     growHeight: 'Grow height',
+   *   },
+   *   move: {
+   *     title: 'Move',
+   *     apply: 'Apply',
+   *     forward: 'Move Forward',
+   *     backward: 'Move Backward',
+   *   },
+   * }
+   * ```
+   */
+  i18n: DashboardWidgetI18n;
 }
 
 declare global {

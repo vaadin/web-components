@@ -2,6 +2,13 @@ import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import '../vaadin-dashboard-section.js';
 import type { DashboardSection } from '../vaadin-dashboard-section.js';
+import {
+  getDraggable,
+  getMoveApplyButton,
+  getMoveBackwardButton,
+  getMoveForwardButton,
+  getRemoveButton,
+} from './helpers.js';
 
 describe('dashboard section', () => {
   let section: DashboardSection;
@@ -97,6 +104,50 @@ describe('dashboard section', () => {
 
       const title = section.querySelector('[slot="title"]');
       expect(title?.textContent).to.eql('');
+    });
+  });
+
+  describe('i18n', () => {
+    it('should localize focus button aria-label', async () => {
+      section.i18n = { ...section.i18n, selectTitleForEditing: 'foo' };
+      await nextFrame();
+
+      const focusButton = section.shadowRoot?.querySelector('#focus-button');
+      expect(focusButton?.getAttribute('aria-label')).to.eql('foo');
+    });
+
+    it('should localize remove button title', async () => {
+      section.i18n = { ...section.i18n, remove: { title: 'foo' } };
+      await nextFrame();
+
+      const removeButton = getRemoveButton(section);
+      expect(removeButton?.getAttribute('title')).to.eql('foo');
+    });
+
+    it('should localize drag handle title', async () => {
+      section.i18n = { ...section.i18n, move: { ...section.i18n.move, title: 'foo' } };
+      await nextFrame();
+
+      const dragHandle = getDraggable(section);
+      expect(dragHandle?.getAttribute('title')).to.eql('foo');
+    });
+
+    it('should localize move mode buttons', async () => {
+      section.i18n = {
+        ...section.i18n,
+        move: {
+          ...section.i18n.move,
+          apply: 'foo',
+          forward: 'bar',
+          backward: 'baz',
+        },
+      };
+
+      await nextFrame();
+
+      expect(getMoveApplyButton(section)?.getAttribute('title')).to.eql('foo');
+      expect(getMoveForwardButton(section)?.getAttribute('title')).to.eql('bar');
+      expect(getMoveBackwardButton(section)?.getAttribute('title')).to.eql('baz');
     });
   });
 });
