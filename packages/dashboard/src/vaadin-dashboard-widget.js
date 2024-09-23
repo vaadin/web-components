@@ -17,6 +17,7 @@ import { css } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { TitleController } from './title-controller.js';
 import { SYNCHRONIZED_ATTRIBUTES, WRAPPER_LOCAL_NAME } from './vaadin-dashboard-helpers.js';
 import { DashboardItemMixin } from './vaadin-dashboard-item-mixin.js';
+import { getDefaultI18n } from './vaadin-dashboard-item-mixin.js';
 
 /**
  * A Widget component for use with the Dashboard component
@@ -100,7 +101,9 @@ class DashboardWidget extends DashboardItemMixin(ControllerMixin(ElementMixin(Po
        * The object has the following structure and default values:
        * ```
        * {
-       *   selectTitleForEditing: 'Select Widget Title for editing',
+       *   widget: {
+       *     selectTitleForEditing: 'Select widget title for editing',
+       *   }
        *   remove: {
        *     title: 'Remove',
        *   },
@@ -124,18 +127,9 @@ class DashboardWidget extends DashboardItemMixin(ControllerMixin(ElementMixin(Po
       i18n: {
         type: Object,
         value: () => {
-          return {
-            ...super.properties.i18n.value(),
-            selectTitleForEditing: 'Select Widget Title for editing',
-            resize: {
-              title: 'Resize',
-              apply: 'Apply',
-              shrinkWidth: 'Shrink width',
-              growWidth: 'Grow width',
-              shrinkHeight: 'Shrink height',
-              growHeight: 'Grow height',
-            },
-          };
+          const i18n = getDefaultI18n();
+          delete i18n.section;
+          return i18n;
         },
       },
 
@@ -153,7 +147,7 @@ class DashboardWidget extends DashboardItemMixin(ControllerMixin(ElementMixin(Po
   /** @protected */
   render() {
     return html`
-      ${this.__renderFocusButton()} ${this.__renderMoveControls()} ${this.__renderResizeControls()}
+      ${this.__renderFocusButton(this.i18n.widget)} ${this.__renderMoveControls()} ${this.__renderResizeControls()}
 
       <div id="focustrap">
         <header>
@@ -192,6 +186,7 @@ class DashboardWidget extends DashboardItemMixin(ControllerMixin(ElementMixin(Po
       SYNCHRONIZED_ATTRIBUTES.forEach((attr) => {
         this.toggleAttribute(attr, wrapper.hasAttribute(attr));
       });
+      this.i18n = wrapper.i18n;
     }
 
     const undefinedAncestor = this.closest('*:not(:defined)');

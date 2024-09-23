@@ -12,9 +12,7 @@ import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js'
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { type DashboardItemI18n, DashboardItemMixin } from './vaadin-dashboard-item-mixin.js';
 
-export interface DashboardSectionI18n extends DashboardItemI18n {
-  selectTitleForEditing: string;
-}
+export interface DashboardSectionI18n extends Omit<DashboardItemI18n, 'widget' | 'resize'> {}
 
 /**
  * A Section component for use with the Dashboard component
@@ -34,7 +32,9 @@ declare class DashboardSection extends DashboardItemMixin(ControllerMixin(Elemen
    * The object has the following structure and default values:
    * ```
    * {
-   *   selectTitleForEditing: 'Select Section Title for editing',
+   *   section: {
+   *     selectTitleForEditing: 'Select section title for editing',
+   *   },
    *   remove: {
    *     title: 'Remove',
    *   },

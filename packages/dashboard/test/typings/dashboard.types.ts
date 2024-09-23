@@ -76,7 +76,9 @@ assertType<string | null | undefined>(widget.widgetTitle);
 
 assertType<DashboardWidgetI18n>(widget.i18n);
 assertType<{
-  selectTitleForEditing: string;
+  widget: {
+    selectTitleForEditing: string;
+  };
   remove: {
     title: string;
   };
@@ -104,7 +106,9 @@ assertType<string | null | undefined>(section.sectionTitle);
 
 assertType<DashboardSectionI18n>(section.i18n);
 assertType<{
-  selectTitleForEditing: string;
+  section: {
+    selectTitleForEditing: string;
+  };
   remove: {
     title: string;
   };

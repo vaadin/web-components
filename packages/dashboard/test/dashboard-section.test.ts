@@ -109,7 +109,7 @@ describe('dashboard section', () => {
 
   describe('i18n', () => {
     it('should localize focus button aria-label', async () => {
-      section.i18n = { ...section.i18n, selectTitleForEditing: 'foo' };
+      section.i18n = { ...section.i18n, section: { selectTitleForEditing: 'foo' } };
       await nextFrame();
 
       const focusButton = section.shadowRoot?.querySelector('#focus-button');

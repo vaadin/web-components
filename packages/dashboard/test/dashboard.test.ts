@@ -169,6 +169,80 @@ describe('dashboard', () => {
     });
   });
 
+  describe('i18n', () => {
+    it('should localize widget', async () => {
+      dashboard.i18n = {
+        ...dashboard.i18n,
+        widget: {
+          selectTitleForEditing: 'foo',
+        },
+      };
+
+      await nextFrame();
+
+      const widget = getElementFromCell(dashboard, 0, 0) as DashboardWidget;
+      expect(widget.i18n.widget.selectTitleForEditing).to.equal('foo');
+      expect(widget.i18n).to.eql({
+        ...dashboard.i18n,
+        widget: {
+          selectTitleForEditing: 'foo',
+        },
+      });
+    });
+
+    it('should localize focused widget', async () => {
+      dashboard.editable = true;
+      // Use a custom renderer that reuses the same widget instance
+      dashboard.renderer = (root, _, model) => {
+        let widget = root.querySelector('vaadin-dashboard-widget');
+        if (!widget || widget.tabIndex !== 0) {
+          root.textContent = '';
+          widget = document.createElement('vaadin-dashboard-widget');
+          widget.tabIndex = 0;
+          root.appendChild(widget);
+        }
+        widget.widgetTitle = `${model.item.id} title`;
+      };
+      await nextFrame();
+
+      const widget = getElementFromCell(dashboard, 0, 0) as DashboardWidget;
+      widget.focus();
+
+      dashboard.i18n = {
+        ...dashboard.i18n,
+        widget: {
+          selectTitleForEditing: 'foo',
+        },
+      };
+      await nextFrame();
+
+      expect(widget.i18n.widget.selectTitleForEditing).to.equal('foo');
+    });
+
+    it('should localize a lazily rendered widget', async () => {
+      // Assign a renderer that initially renders nothing
+      const syncRenderer = dashboard.renderer!;
+      dashboard.renderer = (root, _, model) => {
+        root.textContent = '';
+        requestAnimationFrame(() => {
+          syncRenderer(root, _, model);
+        });
+      };
+      await nextFrame();
+
+      dashboard.i18n = {
+        ...dashboard.i18n,
+        widget: {
+          selectTitleForEditing: 'foo',
+        },
+      };
+      await nextFrame();
+
+      const widget = getElementFromCell(dashboard, 0, 0) as DashboardWidget;
+      expect(widget.i18n.widget.selectTitleForEditing).to.equal('foo');
+    });
+  });
+
   describe('section', () => {
     beforeEach(async () => {
       dashboard.items = [
@@ -299,7 +373,7 @@ describe('dashboard', () => {
       });
 
       it('should hide remove button by default', () => {
-        const widget = getElementFromCell(dashboard, 1, 0) as DashboardSection;
+        const widget = getElementFromCell(dashboard, 1, 0) as DashboardWidget;
         const section = widget.closest('vaadin-dashboard-section') as DashboardSection;
         const removeButton = getRemoveButton(section);
         expect(removeButton.getBoundingClientRect().height).to.equal(0);
@@ -308,10 +382,33 @@ describe('dashboard', () => {
       it('should unhide remove button when editable', async () => {
         dashboard.editable = true;
         await nextFrame();
-        const widget = getElementFromCell(dashboard, 1, 0) as DashboardSection;
+        const widget = getElementFromCell(dashboard, 1, 0) as DashboardWidget;
         const section = widget.closest('vaadin-dashboard-section') as DashboardSection;
         const removeButton = getRemoveButton(section);
         expect(removeButton.getBoundingClientRect().height).to.be.above(0);
+      });
+
+      describe('i18n', () => {
+        it('should localize section', async () => {
+          dashboard.i18n = {
+            ...dashboard.i18n,
+            section: {
+              selectTitleForEditing: 'foo',
+            },
+          };
+
+          await nextFrame();
+
+          const widget = getElementFromCell(dashboard, 1, 0) as DashboardWidget;
+          const section = widget.closest('vaadin-dashboard-section') as DashboardSection;
+          expect(section.i18n.section.selectTitleForEditing).to.equal('foo');
+          expect(section.i18n).to.eql({
+            ...dashboard.i18n,
+            section: {
+              selectTitleForEditing: 'foo',
+            },
+          });
+        });
       });
     });
   });

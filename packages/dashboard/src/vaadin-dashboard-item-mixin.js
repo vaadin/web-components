@@ -15,6 +15,39 @@ import { KeyboardController } from './keyboard-controller.js';
 import { fireMove, fireRemove, fireResize } from './vaadin-dashboard-helpers.js';
 import { dashboardWidgetAndSectionStyles } from './vaadin-dashboard-styles.js';
 
+const DEFAULT_I18N = {
+  widget: {
+    selectTitleForEditing: 'Select widget title for editing',
+  },
+  section: {
+    selectTitleForEditing: 'Select section title for editing',
+  },
+  remove: {
+    title: 'Remove',
+  },
+  move: {
+    title: 'Move',
+    apply: 'Apply',
+    forward: 'Move Forward',
+    backward: 'Move Backward',
+  },
+  resize: {
+    title: 'Resize',
+    apply: 'Apply',
+    shrinkWidth: 'Shrink width',
+    growWidth: 'Grow width',
+    shrinkHeight: 'Shrink height',
+    growHeight: 'Grow height',
+  },
+};
+
+/**
+ * Returns a new object with the default i18n values
+ */
+export function getDefaultI18n() {
+  return JSON.parse(JSON.stringify(DEFAULT_I18N));
+}
+
 /**
  * Shared functionality between widgets and sections
  *
@@ -101,9 +134,9 @@ export const DashboardItemMixin = (superClass) =>
     }
 
     /** @private */
-    __renderFocusButton() {
+    __renderFocusButton(i18n) {
       return html`<button
-        aria-label=${this.i18n.selectTitleForEditing}
+        aria-label=${i18n ? i18n.selectTitleForEditing : ''}
         id="focus-button"
         draggable="true"
         class="drag-handle"

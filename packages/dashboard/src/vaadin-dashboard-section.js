@@ -16,6 +16,7 @@ import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { css } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { TitleController } from './title-controller.js';
 import { DashboardItemMixin } from './vaadin-dashboard-item-mixin.js';
+import { getDefaultI18n } from './vaadin-dashboard-item-mixin.js';
 import { hasWidgetWrappers } from './vaadin-dashboard-styles.js';
 
 /**
@@ -96,7 +97,9 @@ class DashboardSection extends DashboardItemMixin(ControllerMixin(ElementMixin(P
        * The object has the following structure and default values:
        * ```
        * {
-       *   selectTitleForEditing: 'Select Section Title for editing',
+       *   section: {
+       *     selectTitleForEditing: 'Select section title for editing',
+       *   },
        *   remove: {
        *     title: 'Remove',
        *   },
@@ -112,10 +115,10 @@ class DashboardSection extends DashboardItemMixin(ControllerMixin(ElementMixin(P
       i18n: {
         type: Object,
         value: () => {
-          return {
-            ...super.properties.i18n.value(),
-            selectTitleForEditing: 'Select Section Title for editing',
-          };
+          const i18n = getDefaultI18n();
+          delete i18n.widget;
+          delete i18n.resize;
+          return i18n;
         },
       },
 
@@ -133,7 +136,7 @@ class DashboardSection extends DashboardItemMixin(ControllerMixin(ElementMixin(P
   /** @protected */
   render() {
     return html`
-      ${this.__renderFocusButton()} ${this.__renderMoveControls()}
+      ${this.__renderFocusButton(this.i18n.section)} ${this.__renderMoveControls()}
 
       <div id="focustrap">
         <header>

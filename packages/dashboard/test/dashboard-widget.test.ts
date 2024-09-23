@@ -111,7 +111,7 @@ describe('dashboard widget', () => {
 
   describe('i18n', () => {
     it('should localize focus button aria-label', async () => {
-      widget.i18n = { ...widget.i18n, selectTitleForEditing: 'foo' };
+      widget.i18n = { ...widget.i18n, widget: { selectTitleForEditing: 'foo' } };
       await nextFrame();
 
       const focusButton = widget.shadowRoot?.querySelector('#focus-button');

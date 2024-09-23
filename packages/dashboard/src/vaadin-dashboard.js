@@ -22,6 +22,7 @@ import {
   SYNCHRONIZED_ATTRIBUTES,
   WRAPPER_LOCAL_NAME,
 } from './vaadin-dashboard-helpers.js';
+import { getDefaultI18n } from './vaadin-dashboard-item-mixin.js';
 import { DashboardLayoutMixin } from './vaadin-dashboard-layout-mixin.js';
 import { DashboardSection } from './vaadin-dashboard-section.js';
 import { hasWidgetWrappers } from './vaadin-dashboard-styles.js';
@@ -96,11 +97,20 @@ class Dashboard extends ControllerMixin(DashboardLayoutMixin(ElementMixin(Themab
       editable: {
         type: Boolean,
       },
+
+      i18n: {
+        type: Object,
+        value: () => {
+          return {
+            ...getDefaultI18n(),
+          };
+        },
+      },
     };
   }
 
   static get observers() {
-    return ['__itemsOrRendererChanged(items, renderer, editable)'];
+    return ['__itemsOrRendererChanged(items, renderer, editable, i18n)'];
   }
 
   constructor() {
@@ -145,6 +155,7 @@ class Dashboard extends ControllerMixin(DashboardLayoutMixin(ElementMixin(Themab
         SYNCHRONIZED_ATTRIBUTES.forEach((attr) => {
           wrapper.firstElementChild.toggleAttribute(attr, wrapper.hasAttribute(attr));
         });
+        wrapper.firstElementChild.i18n = this.i18n;
       }
     });
   }
@@ -185,6 +196,8 @@ class Dashboard extends ControllerMixin(DashboardLayoutMixin(ElementMixin(Themab
 
         section.toggleAttribute('highlight', !!this.__widgetReorderController.draggedItem);
         SYNCHRONIZED_ATTRIBUTES.forEach((attr) => section.toggleAttribute(attr, wrapper.hasAttribute(attr)));
+        section.i18n = this.i18n;
+
         // Render the subitems
         this.__renderItemWrappers(item.items, section);
       }
@@ -213,6 +226,7 @@ class Dashboard extends ControllerMixin(DashboardLayoutMixin(ElementMixin(Themab
     wrapper.toggleAttribute('dragging', this.__widgetReorderController.draggedItem === item);
     wrapper.toggleAttribute('first-child', item === getItemsArrayOfItem(item, this.items)[0]);
     wrapper.toggleAttribute('last-child', item === getItemsArrayOfItem(item, this.items).slice(-1)[0]);
+    wrapper.i18n = this.i18n;
   }
 
   /** @private */
