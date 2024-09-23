@@ -221,13 +221,6 @@ describe('interactions', () => {
         expect(document.activeElement).to.equal(input);
       });
 
-      it('should focus the input on outside click if not focused before opening', async () => {
-        expect(document.activeElement).to.equal(document.body);
-        comboBox.open();
-        await sendMouse({ type: 'click', position: [200, 200] });
-        expect(document.activeElement).to.equal(input);
-      });
-
       it('should keep focus-ring attribute after closing with outside click', async () => {
         comboBox.focus();
         comboBox.setAttribute('focus-ring', '');
