@@ -2,7 +2,7 @@ import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../vaadin-dashboard.js';
-import type { Dashboard, DashboardItem } from '../vaadin-dashboard.js';
+import type { Dashboard, DashboardItem, DashboardSectionItem } from '../vaadin-dashboard.js';
 import {
   createDragEvent,
   expectLayout,
@@ -249,15 +249,6 @@ describe('dashboard - widget reordering', () => {
       expect(setDragImage.getCall(0).args[2]).to.equal(draggableRect.top + draggableRect.height / 2);
     });
 
-    it('should dispatch an item reorder start event', async () => {
-      const reorderStartSpy = sinon.spy();
-      dashboard.addEventListener('dashboard-item-reorder-start', reorderStartSpy);
-      fireDragStart(getElementFromCell(dashboard, 0, 0)!);
-      await nextFrame();
-
-      expect(reorderStartSpy).to.have.been.calledOnce;
-    });
-
     it('should set data transfer data on drag start', async () => {
       const event = fireDragStart(getElementFromCell(dashboard, 0, 0)!);
       await nextFrame();
@@ -296,93 +287,23 @@ describe('dashboard - widget reordering', () => {
       expect(event.dataTransfer.dropEffect).to.equal('move');
     });
 
-    it('should dispatch an item drag reorder event', async () => {
-      const reorderSpy = sinon.spy();
-      dashboard.addEventListener('dashboard-item-drag-reorder', reorderSpy);
-      fireDragStart(getElementFromCell(dashboard, 0, 0)!);
-      await nextFrame();
-      fireDragOver(getElementFromCell(dashboard, 0, 1)!, 'end');
-      await nextFrame();
-
-      expect(reorderSpy).to.have.been.calledOnce;
-      expect(reorderSpy.getCall(0).args[0].detail).to.deep.equal({
-        item: { id: 0 },
-        targetIndex: 1,
-      });
-    });
-
-    it('should not reorder if the drag reorder event is cancelled', async () => {
-      dashboard.addEventListener('dashboard-item-drag-reorder', (e) => e.preventDefault());
-      fireDragStart(getElementFromCell(dashboard, 0, 0)!);
-      await nextFrame();
-      fireDragOver(getElementFromCell(dashboard, 0, 1)!, 'end');
-      await nextFrame();
-      // prettier-ignore
-      expectLayout(dashboard, [
-        [0, 1],
-      ]);
-    });
-
-    it('should ignore subsequent dragover events', async () => {
-      dashboard.addEventListener('dashboard-item-drag-reorder', (e) => e.preventDefault());
-      const reorderSpy = sinon.spy();
-      dashboard.addEventListener('dashboard-item-drag-reorder', reorderSpy);
-      fireDragStart(getElementFromCell(dashboard, 0, 0)!);
-      await nextFrame();
-      fireDragOver(getElementFromCell(dashboard, 0, 1)!, 'end');
-      fireDragOver(getElementFromCell(dashboard, 0, 1)!, 'end');
-      await nextFrame();
-
-      expect(reorderSpy).to.have.been.calledOnce;
-    });
-
-    it('should reorder in the app logic', async () => {
-      dashboard.addEventListener('dashboard-item-drag-reorder', (e) => {
-        const { item, targetIndex } = e.detail;
-        const items = dashboard.items.filter((i) => i !== item);
-        items.splice(targetIndex, 0, item);
-        dashboard.items = items;
-      });
-      fireDragStart(getElementFromCell(dashboard, 0, 0)!);
-      await nextFrame();
-      fireDragOver(getElementFromCell(dashboard, 0, 1)!, 'end');
-      await nextFrame();
-      // prettier-ignore
-      expectLayout(dashboard, [
-        [1, 0],
-      ]);
-    });
-
-    it('should not ignore subsequent dragover events after a short timeout', () => {
-      const clock = sinon.useFakeTimers();
-
-      dashboard.addEventListener('dashboard-item-drag-reorder', (e) => e.preventDefault());
-      const reorderSpy = sinon.spy();
-      dashboard.addEventListener('dashboard-item-drag-reorder', reorderSpy);
-      fireDragStart(getElementFromCell(dashboard, 0, 0)!);
-
-      fireDragOver(getElementFromCell(dashboard, 0, 1)!, 'end');
-      clock.tick(500);
-      fireDragOver(getElementFromCell(dashboard, 0, 1)!, 'end');
-      clock.restore();
-
-      expect(reorderSpy).to.have.been.calledTwice;
-    });
-
-    it('should dispatch an item reorder end event', async () => {
+    it('should dispatch an item moved event', async () => {
       const reorderEndSpy = sinon.spy();
-      dashboard.addEventListener('dashboard-item-reorder-end', reorderEndSpy);
+      dashboard.addEventListener('dashboard-item-moved', reorderEndSpy);
       fireDragStart(getElementFromCell(dashboard, 0, 0)!);
       await nextFrame();
       fireDragEnd(dashboard);
       await nextFrame();
 
       expect(reorderEndSpy).to.have.been.calledOnce;
+      expect(reorderEndSpy.getCall(0).args[0].detail.item).to.equal(dashboard.items[0]);
+      expect(reorderEndSpy.getCall(0).args[0].detail.items).to.deep.equal(dashboard.items);
+      expect(reorderEndSpy.getCall(0).args[0].detail.section).to.be.undefined;
     });
 
-    it('should not dispatch an item reorder end event if drag has not started', async () => {
+    it('should not dispatch an item moved event if drag has not started', async () => {
       const reorderEndSpy = sinon.spy();
-      dashboard.addEventListener('dashboard-item-reorder-end', reorderEndSpy);
+      dashboard.addEventListener('dashboard-item-moved', reorderEndSpy);
       fireDragEnd(dashboard);
       await nextFrame();
 
@@ -532,6 +453,25 @@ describe('dashboard - widget reordering', () => {
           [0, 1],
           [3, 2],
         ]);
+      });
+
+      it('should dispatch an item moved event inside a section', async () => {
+        const reorderEndSpy = sinon.spy();
+        dashboard.addEventListener('dashboard-item-moved', reorderEndSpy);
+        fireDragStart(getElementFromCell(dashboard, 1, 0)!);
+        await nextFrame();
+
+        fireDragOver(getElementFromCell(dashboard, 1, 1)!, 'end');
+        await nextFrame();
+
+        fireDragEnd(dashboard);
+
+        expect(reorderEndSpy).to.have.been.calledOnce;
+        expect(reorderEndSpy.getCall(0).args[0].detail.item).to.equal(
+          (dashboard.items[2] as DashboardSectionItem<TestDashboardItem>).items[1],
+        );
+        expect(reorderEndSpy.getCall(0).args[0].detail.items).to.deep.equal(dashboard.items);
+        expect(reorderEndSpy.getCall(0).args[0].detail.section).to.equal(dashboard.items[2]);
       });
 
       it('should reorder the widgets and sections', async () => {

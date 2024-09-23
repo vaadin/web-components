@@ -3,13 +3,9 @@ import type { DashboardLayoutMixinClass } from '../../src/vaadin-dashboard-layou
 import type {
   Dashboard,
   DashboardItem,
-  DashboardItemDragReorderEvent,
-  DashboardItemDragResizeEvent,
-  DashboardItemRemoveEvent,
-  DashboardItemReorderEndEvent,
-  DashboardItemReorderStartEvent,
-  DashboardItemResizeEndEvent,
-  DashboardItemResizeStartEvent,
+  DashboardItemMovedEvent,
+  DashboardItemRemovedEvent,
+  DashboardItemResizedEvent,
   DashboardRenderer,
   DashboardSectionItem,
 } from '../../vaadin-dashboard.js';
@@ -46,40 +42,23 @@ assertType<
   | { title?: string | null; items: Array<{ colspan?: number; rowspan?: number; testProperty: string }> }
 >(narrowedDashboard.items[0]);
 
-narrowedDashboard.addEventListener('dashboard-item-reorder-start', (event) => {
-  assertType<DashboardItemReorderStartEvent>(event);
-});
-
-narrowedDashboard.addEventListener('dashboard-item-reorder-end', (event) => {
-  assertType<DashboardItemReorderEndEvent>(event);
-});
-
-narrowedDashboard.addEventListener('dashboard-item-drag-reorder', (event) => {
-  assertType<DashboardItemDragReorderEvent<TestDashboardItem>>(event);
-  assertType<TestDashboardItem | DashboardSectionItem<TestDashboardItem>>(event.detail.item);
-  assertType<number>(event.detail.targetIndex);
-});
-
-narrowedDashboard.addEventListener('dashboard-item-resize-start', (event) => {
-  assertType<DashboardItemResizeStartEvent<TestDashboardItem>>(event);
+narrowedDashboard.addEventListener('dashboard-item-moved', (event) => {
+  assertType<DashboardItemMovedEvent<TestDashboardItem>>(event);
   assertType<TestDashboardItem>(event.detail.item);
+  assertType<Array<TestDashboardItem | DashboardSectionItem<TestDashboardItem>>>(event.detail.items);
+  assertType<DashboardSectionItem<TestDashboardItem> | undefined>(event.detail.section);
 });
 
-narrowedDashboard.addEventListener('dashboard-item-resize-end', (event) => {
-  assertType<DashboardItemResizeEndEvent<TestDashboardItem>>(event);
+narrowedDashboard.addEventListener('dashboard-item-resized', (event) => {
+  assertType<DashboardItemResizedEvent<TestDashboardItem>>(event);
   assertType<TestDashboardItem>(event.detail.item);
-});
-
-narrowedDashboard.addEventListener('dashboard-item-drag-resize', (event) => {
-  assertType<DashboardItemDragResizeEvent<TestDashboardItem>>(event);
-  assertType<TestDashboardItem>(event.detail.item);
-  assertType<number>(event.detail.colspan);
-  assertType<number>(event.detail.rowspan);
+  assertType<Array<TestDashboardItem | DashboardSectionItem<TestDashboardItem>>>(event.detail.items);
 });
 
 narrowedDashboard.addEventListener('dashboard-item-removed', (event) => {
-  assertType<DashboardItemRemoveEvent<TestDashboardItem>>(event);
+  assertType<DashboardItemRemovedEvent<TestDashboardItem>>(event);
   assertType<TestDashboardItem | DashboardSectionItem<TestDashboardItem>>(event.detail.item);
+  assertType<Array<TestDashboardItem | DashboardSectionItem<TestDashboardItem>>>(event.detail.items);
 });
 
 /* DashboardLayout */

@@ -42,8 +42,6 @@ export class WidgetReorderController {
     // Observe the removal of the dragged element from the DOM
     this.draggedElementRemoveObserver.observe(this.host, { childList: true, subtree: true });
 
-    this.host.dispatchEvent(new CustomEvent('dashboard-item-reorder-start'));
-
     requestAnimationFrame(() => {
       // Re-render to have the dragged element turn into a placeholder
       this.host.items = [...this.host.items];
@@ -87,15 +85,7 @@ export class WidgetReorderController {
       const targetItems = getItemsArrayOfItem(targetItem, this.host.items);
       const targetIndex = targetItems.indexOf(targetItem);
 
-      const reorderEvent = new CustomEvent('dashboard-item-drag-reorder', {
-        detail: { item: this.draggedItem, targetIndex },
-        cancelable: true,
-      });
-
-      // Dispatch the reorder event and reorder items if the event is not canceled
-      if (this.host.dispatchEvent(reorderEvent)) {
-        this.__reorderItems(this.draggedItem, targetIndex);
-      }
+      this.__reorderItems(this.draggedItem, targetIndex);
     }
   }
 
@@ -111,6 +101,9 @@ export class WidgetReorderController {
       this.__draggedElement.remove();
     }
 
+    // Dispatch the moved event
+    this.__fireItemMovedEvent(this.draggedItem);
+
     // Reset the dragged element and item, and re-render to remove the placeholder
     this.__draggedElement = null;
     this.draggedItem = null;
@@ -118,9 +111,16 @@ export class WidgetReorderController {
 
     // Disconnect the observer for the dragged element removal
     this.draggedElementRemoveObserver.disconnect();
+  }
 
-    // Dispatch the reorder end event
-    this.host.dispatchEvent(new CustomEvent('dashboard-item-reorder-end'));
+  /** @private */
+  __fireItemMovedEvent(item) {
+    const section = this.host.items.find((hostItem) => hostItem.items && hostItem.items.includes(item));
+    this.host.dispatchEvent(
+      new CustomEvent('dashboard-item-moved', {
+        detail: { item, items: this.host.items, section },
+      }),
+    );
   }
 
   /** @private */
@@ -228,5 +228,6 @@ export class WidgetReorderController {
     const item = getElementItem(e.target);
     const items = getItemsArrayOfItem(item, this.host.items);
     this.__reorderItems(item, items.indexOf(item) + e.detail.delta);
+    this.__fireItemMovedEvent(item);
   }
 }

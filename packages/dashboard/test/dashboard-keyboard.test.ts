@@ -154,6 +154,15 @@ describe('dashboard - keyboard interaction', () => {
       expect(dashboard.items).to.eql([{ id: 1 }, { items: [{ id: 2 }, { id: 3 }] }]);
     });
 
+    it('should dispatch an item removed event on backspace', async () => {
+      const spy = sinon.spy();
+      dashboard.addEventListener('dashboard-item-removed', spy);
+      await sendKeys({ press: 'Backspace' });
+      expect(spy.calledOnce).to.be.true;
+      expect(spy.firstCall.args[0].detail.item).to.eql({ id: 0 });
+      expect(spy.firstCall.args[0].detail.items).to.eql(dashboard.items);
+    });
+
     it('should move the widget forwards on arrow down', async () => {
       await sendKeys({ press: 'ArrowDown' });
       expect(dashboard.items).to.eql([{ id: 1 }, { id: 0 }, { items: [{ id: 2 }, { id: 3 }] }]);
@@ -163,6 +172,16 @@ describe('dashboard - keyboard interaction', () => {
       await sendKeys({ press: 'ArrowDown' });
       await sendKeys({ press: 'ArrowUp' });
       expect(dashboard.items).to.eql([{ id: 0 }, { id: 1 }, { items: [{ id: 2 }, { id: 3 }] }]);
+    });
+
+    it('should dispatch an item moved event arrow down', async () => {
+      const spy = sinon.spy();
+      dashboard.addEventListener('dashboard-item-moved', spy);
+      await sendKeys({ press: 'ArrowDown' });
+      expect(spy.calledOnce).to.be.true;
+      expect(spy.firstCall.args[0].detail.item).to.eql({ id: 0 });
+      expect(spy.firstCall.args[0].detail.items).to.eql(dashboard.items);
+      expect(spy.firstCall.args[0].detail.section).to.be.undefined;
     });
 
     it('should increase the widget row span on shift + arrow down', async () => {
@@ -182,6 +201,18 @@ describe('dashboard - keyboard interaction', () => {
       await sendKeys({ press: 'ArrowUp' });
       await sendKeys({ up: 'Shift' });
       expect((dashboard.items[0] as DashboardItem).rowspan).to.equal(1);
+    });
+
+    it('should dispatch an item resized event shift + arrow down', async () => {
+      const spy = sinon.spy();
+      dashboard.addEventListener('dashboard-item-resized', spy);
+      await sendKeys({ down: 'Shift' });
+      await sendKeys({ press: 'ArrowDown' });
+      await sendKeys({ up: 'Shift' });
+      expect(spy.calledOnce).to.be.true;
+      expect(spy.firstCall.args[0].detail.item).to.eql({ id: 0 });
+      expect(spy.firstCall.args[0].detail.items).to.eql(dashboard.items);
+      expect(spy.firstCall.args[0].detail.section).to.be.undefined;
     });
 
     it('should not increase the widget row span on shift + arrow down if row min height is not defined', async () => {
@@ -448,6 +479,18 @@ describe('dashboard - keyboard interaction', () => {
       expect(dashboard.items).to.eql([{ id: 0 }, { id: 1 }, { items: [{ id: 2 }, { id: 3 }] }]);
     });
 
+    it('should dispatch an item moved event on forward button click', async () => {
+      const spy = sinon.spy();
+      dashboard.addEventListener('dashboard-item-moved', spy);
+      // Focus forward button, click it
+      await sendKeys({ press: 'Tab' });
+      await sendKeys({ press: 'Space' });
+      expect(spy.calledOnce).to.be.true;
+      expect(spy.firstCall.args[0].detail.item).to.eql({ id: 0 });
+      expect(spy.firstCall.args[0].detail.items).to.eql(dashboard.items);
+      expect(spy.firstCall.args[0].detail.section).to.be.undefined;
+    });
+
     it('should not lose move mode when the focused backward button is hidden', async () => {
       const widget = getElementFromCell(dashboard, 0, 0)!;
 
@@ -661,6 +704,18 @@ describe('dashboard - keyboard interaction', () => {
       getResizeShrinkHeightButton(widget).focus();
       await sendKeys({ press: 'Space' });
       expect((dashboard.items[0] as DashboardItem).rowspan).to.equal(1);
+    });
+
+    it('should dispatch an item resized event on on grow width button click', async () => {
+      const spy = sinon.spy();
+      dashboard.addEventListener('dashboard-item-resized', spy);
+      // Focus forward button, click it
+      const widget = getElementFromCell(dashboard, 0, 0)!;
+      getResizeGrowWidthButton(widget).focus();
+      await sendKeys({ press: 'Space' });
+      expect(spy.calledOnce).to.be.true;
+      expect(spy.firstCall.args[0].detail.item).to.eql(dashboard.items[0]);
+      expect(spy.firstCall.args[0].detail.items).to.eql(dashboard.items);
     });
 
     it('should deselect the widget on blur', async () => {

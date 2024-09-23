@@ -91,32 +91,12 @@
         `;
       };
 
-      dashboard.addEventListener('dashboard-item-reorder-start', (e) => {
-        console.log('dashboard-item-reorder-start');
+      dashboard.addEventListener('dashboard-item-moved', (e) => {
+        console.log('dashboard-item-moved', e.detail);
       });
 
-      dashboard.addEventListener('dashboard-item-drag-reorder', (e) => {
-        console.log('dashboard-item-drag-reorder', e.detail);
-        // e.preventDefault();
-      });
-
-      dashboard.addEventListener('dashboard-item-reorder-end', (e) => {
-        console.log('dashboard-item-reorder-end');
-        console.log('items after reorder', e.target.items);
-      });
-
-      dashboard.addEventListener('dashboard-item-resize-start', (e) => {
-        console.log('dashboard-item-resize-start', e.detail);
-      });
-
-      dashboard.addEventListener('dashboard-item-drag-resize', (e) => {
-        console.log('dashboard-item-drag-resize', e.detail);
-        // e.preventDefault();
-      });
-
-      dashboard.addEventListener('dashboard-item-resize-end', (e) => {
-        console.log('dashboard-item-resize-end');
-        console.log('item after resize', e.detail);
+      dashboard.addEventListener('dashboard-item-resized', (e) => {
+        console.log('dashboard-item-resized', e.detail);
       });
 
       dashboard.addEventListener('dashboard-item-removed', (e) => {
