@@ -112,8 +112,8 @@ describe('value commit', () => {
       expectNoValueCommit();
     });
 
-    it('should commit on blur', () => {
-      timePicker.blur();
+    it('should commit on blur', async () => {
+      await sendKeys({ press: 'Tab' });
       expectValueCommit('12:00');
     });
 
@@ -152,8 +152,8 @@ describe('value commit', () => {
         await sendKeys({ press: 'Backspace' });
       });
 
-      it('should commit on blur', () => {
-        timePicker.blur();
+      it('should commit on blur', async () => {
+        await sendKeys({ press: 'Tab' });
         expectValueCommit('');
       });
 
@@ -201,8 +201,8 @@ describe('value commit', () => {
       expectNoValueCommit();
     });
 
-    it('should commit as unparsable value change on blur', () => {
-      timePicker.blur();
+    it('should commit as unparsable value change on blur', async () => {
+      await sendKeys({ press: 'Tab' });
       expectUnparsableValueCommit();
       expect(timePicker.inputElement.value).to.equal('foo');
     });
@@ -240,8 +240,8 @@ describe('value commit', () => {
         await sendKeys({ press: 'Backspace' });
       });
 
-      it('should commit as unparsable value change on blur', () => {
-        timePicker.blur();
+      it('should commit as unparsable value change on blur', async () => {
+        await sendKeys({ press: 'Tab' });
         expectUnparsableValueCommit();
       });
 
@@ -268,8 +268,8 @@ describe('value commit', () => {
         await sendKeys({ type: 'bar' });
       });
 
-      it('should commit as unparsable value change on blur', () => {
-        timePicker.blur();
+      it('should commit as unparsable value change on blur', async () => {
+        await sendKeys({ press: 'Tab' });
         expectUnparsableValueCommit();
         expect(timePicker.inputElement.value).to.equal('bar');
       });
@@ -299,8 +299,8 @@ describe('value commit', () => {
         valueChangedSpy.resetHistory();
       });
 
-      it('should not commit but validate on blur', () => {
-        timePicker.blur();
+      it('should not commit but validate on blur', async () => {
+        await sendKeys({ press: 'Tab' });
         expectValidationOnly();
       });
 
@@ -339,8 +339,8 @@ describe('value commit', () => {
         expectNoValueCommit();
       });
 
-      it('should not commit but validate on blur', () => {
-        timePicker.blur();
+      it('should not commit but validate on blur', async () => {
+        await sendKeys({ press: 'Tab' });
         expectValidationOnly();
       });
 
@@ -373,8 +373,8 @@ describe('value commit', () => {
         await sendKeys({ type: '12:00' });
       });
 
-      it('should commit on blur', () => {
-        timePicker.blur();
+      it('should commit on blur', async () => {
+        await sendKeys({ press: 'Tab' });
         expectValueCommit('12:00');
       });
 
@@ -404,8 +404,8 @@ describe('value commit', () => {
         await sendKeys({ type: 'foo' });
       });
 
-      it('should commit an empty value on blur', () => {
-        timePicker.blur();
+      it('should commit an empty value on blur', async () => {
+        await sendKeys({ press: 'Tab' });
         expectValueCommit('');
         expect(timePicker.inputElement.value).to.equal('foo');
       });
@@ -471,8 +471,8 @@ describe('value commit', () => {
         changeSpy.resetHistory();
       });
 
-      it('should not commit but validate on blur', () => {
-        timePicker.blur();
+      it('should not commit but validate on blur', async () => {
+        await sendKeys({ press: 'Tab' });
         expectValidationOnly();
       });
 
