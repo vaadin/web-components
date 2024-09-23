@@ -253,6 +253,7 @@ describe('interactions', () => {
     });
 
     it('should re-enable virtual keyboard on blur', async () => {
+      comboBox.focus();
       comboBox.open();
       comboBox.close();
       await aTimeout(0);
