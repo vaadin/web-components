@@ -26,7 +26,7 @@ const DEFAULT_I18N = {
   resize: 'Resize',
   resizeApply: 'Apply',
   resizeShrinkWidth: 'Shrink width',
-  resizegrowWidth: 'Grow width',
+  resizeGrowWidth: 'Grow width',
   resizeShrinkHeight: 'Shrink height',
   resizeGrowHeight: 'Grow height',
 };

@@ -111,38 +111,52 @@ describe('dashboard widget', () => {
 
   describe('i18n', () => {
     it('should localize focus button aria-label', async () => {
+      const focusButton = widget.shadowRoot?.querySelector('#focus-button');
+      expect(focusButton?.getAttribute('aria-label')).to.eql('Select widget title for editing');
+
       widget.i18n = { ...widget.i18n, selectWidgetTitleForEditing: 'foo' };
       await nextFrame();
 
-      const focusButton = widget.shadowRoot?.querySelector('#focus-button');
       expect(focusButton?.getAttribute('aria-label')).to.eql('foo');
     });
 
     it('should localize remove button title', async () => {
+      const removeButton = getRemoveButton(widget);
+      expect(removeButton?.getAttribute('title')).to.eql('Remove');
+
       widget.i18n = { ...widget.i18n, remove: 'foo' };
       await nextFrame();
 
-      const removeButton = getRemoveButton(widget);
       expect(removeButton?.getAttribute('title')).to.eql('foo');
     });
 
     it('should localize drag handle title', async () => {
+      const dragHandle = getDraggable(widget);
+      expect(dragHandle?.getAttribute('title')).to.eql('Move');
+
       widget.i18n = { ...widget.i18n, move: 'foo' };
       await nextFrame();
 
-      const dragHandle = getDraggable(widget);
       expect(dragHandle?.getAttribute('title')).to.eql('foo');
     });
 
     it('should localize resize handle title', async () => {
+      const resizeHandle = getResizeHandle(widget);
+      expect(resizeHandle?.getAttribute('title')).to.eql('Resize');
+
       widget.i18n = { ...widget.i18n, resize: 'foo' };
       await nextFrame();
 
-      const resizeHandle = getResizeHandle(widget);
       expect(resizeHandle?.getAttribute('title')).to.eql('foo');
     });
 
     it('should localize resize mode buttons', async () => {
+      expect(getResizeApplyButton(widget)?.getAttribute('title')).to.eql('Apply');
+      expect(getResizeShrinkHeightButton(widget)?.getAttribute('title')).to.eql('Shrink height');
+      expect(getResizeShrinkWidthButton(widget)?.getAttribute('title')).to.eql('Shrink width');
+      expect(getResizeGrowHeightButton(widget)?.getAttribute('title')).to.eql('Grow height');
+      expect(getResizeGrowWidthButton(widget)?.getAttribute('title')).to.eql('Grow width');
+
       widget.i18n = {
         ...widget.i18n,
         resizeApply: 'foo',
@@ -162,6 +176,10 @@ describe('dashboard widget', () => {
     });
 
     it('should localize move mode buttons', async () => {
+      expect(getMoveApplyButton(widget)?.getAttribute('title')).to.eql('Apply');
+      expect(getMoveForwardButton(widget)?.getAttribute('title')).to.eql('Move Forward');
+      expect(getMoveBackwardButton(widget)?.getAttribute('title')).to.eql('Move Backward');
+
       widget.i18n = {
         ...widget.i18n,
         moveApply: 'foo',

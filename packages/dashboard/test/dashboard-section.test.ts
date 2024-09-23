@@ -109,30 +109,40 @@ describe('dashboard section', () => {
 
   describe('i18n', () => {
     it('should localize focus button aria-label', async () => {
+      const focusButton = section.shadowRoot?.querySelector('#focus-button');
+      expect(focusButton?.getAttribute('aria-label')).to.eql('Select section title for editing');
+
       section.i18n = { ...section.i18n, selectSectionTitleForEditing: 'foo' };
       await nextFrame();
 
-      const focusButton = section.shadowRoot?.querySelector('#focus-button');
       expect(focusButton?.getAttribute('aria-label')).to.eql('foo');
     });
 
     it('should localize remove button title', async () => {
+      const removeButton = getRemoveButton(section);
+      expect(removeButton?.getAttribute('title')).to.eql('Remove');
+
       section.i18n = { ...section.i18n, remove: 'foo' };
       await nextFrame();
 
-      const removeButton = getRemoveButton(section);
       expect(removeButton?.getAttribute('title')).to.eql('foo');
     });
 
     it('should localize drag handle title', async () => {
+      const dragHandle = getDraggable(section);
+      expect(dragHandle?.getAttribute('title')).to.eql('Move');
+
       section.i18n = { ...section.i18n, move: 'foo' };
       await nextFrame();
 
-      const dragHandle = getDraggable(section);
       expect(dragHandle?.getAttribute('title')).to.eql('foo');
     });
 
     it('should localize move mode buttons', async () => {
+      expect(getMoveApplyButton(section)?.getAttribute('title')).to.eql('Apply');
+      expect(getMoveForwardButton(section)?.getAttribute('title')).to.eql('Move Forward');
+      expect(getMoveBackwardButton(section)?.getAttribute('title')).to.eql('Move Backward');
+
       section.i18n = {
         ...section.i18n,
         moveApply: 'foo',

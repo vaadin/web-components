@@ -170,6 +170,24 @@ describe('dashboard', () => {
   });
 
   describe('i18n', () => {
+    it('should have default values', () => {
+      expect(dashboard.i18n).to.eql({
+        selectSectionTitleForEditing: 'Select section title for editing',
+        selectWidgetTitleForEditing: 'Select widget title for editing',
+        remove: 'Remove',
+        resize: 'Resize',
+        resizeApply: 'Apply',
+        resizeShrinkWidth: 'Shrink width',
+        resizeGrowWidth: 'Grow width',
+        resizeShrinkHeight: 'Shrink height',
+        resizeGrowHeight: 'Grow height',
+        move: 'Move',
+        moveApply: 'Apply',
+        moveForward: 'Move Forward',
+        moveBackward: 'Move Backward',
+      });
+    });
+
     it('should localize widget', async () => {
       dashboard.i18n = {
         ...dashboard.i18n,

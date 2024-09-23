@@ -111,11 +111,12 @@ class DashboardSection extends DashboardItemMixin(ControllerMixin(ElementMixin(P
         value: () => {
           const i18n = getDefaultI18n();
           return {
-            ...i18n.selectSectionTitleForEditing,
-            ...i18n.remove,
-            ...i18n.move,
-            ...i18n.moveApply,
-            ...i18n.moveForward,
+            selectSectionTitleForEditing: i18n.selectSectionTitleForEditing,
+            remove: i18n.remove,
+            move: i18n.move,
+            moveApply: i18n.moveApply,
+            moveForward: i18n.moveForward,
+            moveBackward: i18n.moveBackward,
           };
         },
       },
