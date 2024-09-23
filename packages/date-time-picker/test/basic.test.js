@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { aTimeout, fixtureSync, focusin, focusout, nextFrame, nextRender, outsideClick } from '@vaadin/testing-helpers';
-import { sendKeys } from '@web/test-runner-commands';
+import { resetMouse, sendKeys, sendMouse } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import '../src/vaadin-date-time-picker.js';
 import { changeInputValue } from './helpers.js';
@@ -41,10 +41,21 @@ describe('Basic features', () => {
   let datePicker;
   let timePicker;
 
+  async function click(element) {
+    const rect = element.getBoundingClientRect();
+    const x = Math.floor(rect.x + rect.width / 2);
+    const y = Math.floor(rect.y + rect.height / 2);
+    await sendMouse({ type: 'click', position: [x, y] });
+  }
+
   beforeEach(() => {
     dateTimePicker = fixtureSync('<vaadin-date-time-picker></vaadin-date-time-picker>');
     datePicker = getDatePicker(dateTimePicker);
     timePicker = getTimePicker(dateTimePicker);
+  });
+
+  afterEach(async () => {
+    await resetMouse();
   });
 
   it('should have default value', () => {
@@ -189,13 +200,11 @@ describe('Basic features', () => {
 
   describe('date-picker focused', () => {
     it('should remove focused attribute on time-picker click', async () => {
-      datePicker.focus();
-      datePicker.click();
+      await click(datePicker);
       await nextRender();
       expect(datePicker.hasAttribute('focused')).to.be.true;
 
-      timePicker.focus();
-      timePicker.click();
+      await click(timePicker);
       expect(datePicker.hasAttribute('focused')).to.be.false;
     });
 
@@ -207,22 +216,18 @@ describe('Basic features', () => {
       await nextRender();
       expect(datePicker.hasAttribute('focus-ring')).to.be.true;
 
-      timePicker.focus();
-      timePicker.click();
+      await click(timePicker);
       expect(datePicker.hasAttribute('focus-ring')).to.be.false;
     });
   });
 
   describe('time-picker focused', () => {
     it('should remove focused attribute on date-picker click', async () => {
-      timePicker.focus();
-      timePicker.click();
+      await click(timePicker);
       await nextRender();
       expect(timePicker.hasAttribute('focused')).to.be.true;
 
-      datePicker.focus();
-      datePicker.click();
-      await nextRender();
+      await click(datePicker);
       expect(timePicker.hasAttribute('focused')).to.be.false;
     });
 
@@ -235,9 +240,7 @@ describe('Basic features', () => {
       await nextRender();
       expect(timePicker.hasAttribute('focus-ring')).to.be.true;
 
-      datePicker.focus();
-      datePicker.click();
-      await nextRender();
+      await click(datePicker);
       expect(timePicker.hasAttribute('focus-ring')).to.be.false;
     });
   });

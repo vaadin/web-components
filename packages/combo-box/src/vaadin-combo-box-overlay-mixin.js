@@ -54,7 +54,7 @@ export const ComboBoxOverlayMixin = (superClass) =>
       super._mouseDownListener(event);
 
       // Prevent global mousedown event to avoid losing focus on outside click.
-      if (this._shouldCloseOnOutsideClick(event)) {
+      if (this._shouldCloseOnOutsideClick(event) && event.target === document.documentElement) {
         event.preventDefault();
       }
     }
