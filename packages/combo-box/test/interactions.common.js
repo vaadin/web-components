@@ -13,7 +13,7 @@ import {
   tap,
   touchstart,
 } from '@vaadin/testing-helpers';
-import { sendKeys } from '@web/test-runner-commands';
+import { resetMouse, sendKeys, sendMouse } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
 import { getFirstItem, setInputValue } from './helpers.js';
@@ -161,30 +161,6 @@ describe('interactions', () => {
       expect(event.defaultPrevented).to.be.true;
     });
 
-    it('should restore focus to the input on outside click', async () => {
-      comboBox.focus();
-      comboBox.open();
-      outsideClick();
-      await aTimeout(0);
-      expect(document.activeElement).to.equal(input);
-    });
-
-    it('should restore focus to the input on toggle button click', async () => {
-      comboBox.focus();
-      comboBox.open();
-      comboBox._toggleElement.click();
-      await aTimeout(0);
-      expect(document.activeElement).to.equal(input);
-    });
-
-    it('should focus the input on outside click if not focused before opening', async () => {
-      expect(document.activeElement).to.equal(document.body);
-      comboBox.open();
-      outsideClick();
-      await aTimeout(0);
-      expect(document.activeElement).to.equal(input);
-    });
-
     // NOTE: WebKit incorrectly detects touch environment
     // See https://github.com/vaadin/web-components/issues/257
     (isTouch ? it.skip : it)('should focus the input on opening if not focused', () => {
@@ -225,14 +201,40 @@ describe('interactions', () => {
       expect(comboBox.hasAttribute('focus-ring')).to.be.true;
     });
 
-    it('should not keep focus-ring attribute after closing with outside click', () => {
-      comboBox.focus();
-      comboBox.setAttribute('focus-ring', '');
-      comboBox.open();
-      outsideClick();
-      expect(comboBox.hasAttribute('focus-ring')).to.be.false;
-      // FIXME: see https://github.com/vaadin/web-components/issues/4148
-      // expect(comboBox.hasAttribute('focus-ring')).to.be.true;
+    describe('close on click', () => {
+      afterEach(async () => {
+        await resetMouse();
+      });
+
+      it('should restore focus to the input on outside click', async () => {
+        comboBox.focus();
+        comboBox.open();
+        await sendMouse({ type: 'click', position: [200, 200] });
+        expect(document.activeElement).to.equal(input);
+      });
+
+      it('should keep focus in the input on toggle button click', async () => {
+        comboBox.focus();
+        comboBox.open();
+        const rect = comboBox._toggleElement.getBoundingClientRect();
+        await sendMouse({ type: 'click', position: [rect.x, rect.y] });
+        expect(document.activeElement).to.equal(input);
+      });
+
+      it('should focus the input on outside click if not focused before opening', async () => {
+        expect(document.activeElement).to.equal(document.body);
+        comboBox.open();
+        await sendMouse({ type: 'click', position: [200, 200] });
+        expect(document.activeElement).to.equal(input);
+      });
+
+      it('should keep focus-ring attribute after closing with outside click', async () => {
+        comboBox.focus();
+        comboBox.setAttribute('focus-ring', '');
+        comboBox.open();
+        await sendMouse({ type: 'click', position: [200, 200] });
+        expect(comboBox.hasAttribute('focus-ring')).to.be.true;
+      });
     });
   });
 

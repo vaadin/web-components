@@ -46,6 +46,19 @@ export const ComboBoxOverlayMixin = (superClass) =>
       return !eventPath.includes(this.positionTarget) && !eventPath.includes(this);
     }
 
+    /**
+     * @protected
+     * @override
+     */
+    _mouseDownListener(event) {
+      super._mouseDownListener(event);
+
+      // Prevent global mousedown event to avoid losing focus on outside click.
+      if (this._shouldCloseOnOutsideClick(event)) {
+        event.preventDefault();
+      }
+    }
+
     /** @protected */
     _updateOverlayWidth() {
       const propPrefix = this.localName;
