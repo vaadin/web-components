@@ -6,10 +6,9 @@
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
-import { OverlayMixin } from '@vaadin/overlay/src/vaadin-overlay-mixin.js';
-import { PositionMixin } from '@vaadin/overlay/src/vaadin-overlay-position-mixin.js';
 import { overlayStyles } from '@vaadin/overlay/src/vaadin-overlay-styles.js';
 import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { DatePickerOverlayMixin } from './vaadin-date-picker-overlay-mixin.js';
 import { datePickerOverlayStyles } from './vaadin-date-picker-overlay-styles.js';
 
 registerStyles('vaadin-date-picker-overlay', [overlayStyles, datePickerOverlayStyles], {
@@ -21,13 +20,12 @@ registerStyles('vaadin-date-picker-overlay', [overlayStyles, datePickerOverlaySt
  *
  * @customElement
  * @extends HTMLElement
- * @mixes PositionMixin
- * @mixes OverlayMixin
+ * @mixes DatePickerOverlayMixin
  * @mixes DirMixin
  * @mixes ThemableMixin
  * @private
  */
-class DatePickerOverlay extends PositionMixin(OverlayMixin(DirMixin(ThemableMixin(PolymerElement)))) {
+class DatePickerOverlay extends DatePickerOverlayMixin(DirMixin(ThemableMixin(PolymerElement))) {
   static get is() {
     return 'vaadin-date-picker-overlay';
   }

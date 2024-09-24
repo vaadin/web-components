@@ -7,10 +7,9 @@ import {
   nextRender,
   nextUpdate,
   oneEvent,
-  outsideClick,
   touchstart,
 } from '@vaadin/testing-helpers';
-import { sendKeys } from '@web/test-runner-commands';
+import { resetMouse, sendKeys, sendMouse } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import { getFocusedCell, monthsEqual, open, waitForOverlayRender } from './helpers.js';
 
@@ -187,19 +186,22 @@ describe('dropdown', () => {
   });
 
   describe('outside click', () => {
-    it('should restore focus to the input on outside click', async () => {
+    afterEach(async () => {
+      await resetMouse();
+    });
+
+    it('should keep focus in the input on outside mousedown', async () => {
       input.focus();
       await open(datePicker);
-      outsideClick();
-      await nextUpdate(datePicker);
-      await aTimeout(0);
+      await sendMouse({ type: 'move', position: [200, 10] });
+      await sendMouse({ type: 'down' });
       expect(document.activeElement).to.equal(input);
     });
 
     it('should focus the input on outside click', async () => {
       expect(document.activeElement).to.equal(document.body);
       await open(datePicker);
-      outsideClick();
+      await sendMouse({ type: 'click', position: [200, 10] });
       await nextUpdate(datePicker);
       await aTimeout(0);
       expect(document.activeElement).to.equal(input);
@@ -209,7 +211,7 @@ describe('dropdown', () => {
       // Focus the input with Tab
       await sendKeys({ press: 'Tab' });
       await open(datePicker);
-      outsideClick();
+      await sendMouse({ type: 'click', position: [200, 10] });
       await nextUpdate(datePicker);
       await aTimeout(0);
       expect(datePicker.hasAttribute('focus-ring')).to.be.true;
@@ -220,14 +222,14 @@ describe('dropdown', () => {
       input.focus();
       // Move focus to the calendar
       await sendKeys({ press: 'Tab' });
-      outsideClick();
+      await sendMouse({ type: 'click', position: [200, 10] });
       await aTimeout(0);
       expect(datePicker.hasAttribute('focus-ring')).to.be.true;
     });
 
     it('should not set focus-ring attribute if it was not set before opening', async () => {
       await open(datePicker);
-      outsideClick();
+      await sendMouse({ type: 'click', position: [200, 10] });
       await aTimeout(0);
       expect(datePicker.hasAttribute('focus-ring')).to.be.false;
     });
