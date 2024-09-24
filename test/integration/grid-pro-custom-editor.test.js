@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
-import { sendKeys } from '@web/test-runner-commands';
+import { resetMouse, sendKeys, sendMouse } from '@web/test-runner-commands';
 import '@vaadin/combo-box';
 import '@vaadin/date-picker';
 import '@vaadin/grid-pro';
@@ -57,6 +57,10 @@ describe('grid-pro custom editor', () => {
     await nextRender();
   });
 
+  afterEach(async () => {
+    await resetMouse();
+  });
+
   describe('date-picker', () => {
     it('should apply the updated date to the cell when exiting on Tab', async () => {
       const cell = getContainerCell(grid.$.items, 0, 2);
@@ -107,6 +111,22 @@ describe('grid-pro custom editor', () => {
 
       expect(cell._content.textContent).to.equal('active');
     });
+
+    it('should not stop editing and update value when closing on outside click', async () => {
+      const cell = getContainerCell(grid.$.items, 0, 3);
+      cell.focus();
+
+      await sendKeys({ press: 'Enter' });
+
+      await sendKeys({ press: 'ArrowDown' });
+      await sendKeys({ type: 'active' });
+
+      await sendMouse({ type: 'click', position: [10, 10] });
+
+      const editor = cell._content.querySelector('vaadin-combo-box');
+      expect(editor).to.be.ok;
+      expect(editor.value).to.equal('active');
+    });
   });
 
   describe('time-picker', () => {
@@ -132,6 +152,22 @@ describe('grid-pro custom editor', () => {
       await sendKeys({ press: 'Enter' });
 
       expect(cell._content.textContent).to.equal('10:00');
+    });
+
+    it('should not stop editing and update value when closing on outside click', async () => {
+      const cell = getContainerCell(grid.$.items, 0, 4);
+      cell.focus();
+
+      await sendKeys({ press: 'Enter' });
+
+      await sendKeys({ press: 'ArrowDown' });
+      await sendKeys({ type: '10:00' });
+
+      await sendMouse({ type: 'click', position: [10, 10] });
+
+      const editor = cell._content.querySelector('vaadin-time-picker');
+      expect(editor).to.be.ok;
+      expect(editor.value).to.equal('10:00');
     });
   });
 });
