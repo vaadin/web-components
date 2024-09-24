@@ -315,8 +315,10 @@ export const InlineEditingMixin = (superClass) =>
         const { cell, column } = this.__edited;
         const editor = column._getEditorComponent(cell);
 
+        const path = event.composedPath();
+        const nodes = path.slice(0, path.indexOf(editor) + 1).filter((node) => node.nodeType === Node.ELEMENT_NODE);
         // Detect focus moving to e.g. vaadin-select-overlay or vaadin-date-picker-overlay
-        if (typeof editor._shouldRemoveFocus === 'function' && !editor._shouldRemoveFocus(event)) {
+        if (nodes.some((el) => typeof el._shouldRemoveFocus === 'function' && !el._shouldRemoveFocus(event))) {
           return;
         }
       }
