@@ -105,7 +105,21 @@ describe('grid-pro custom editor', () => {
       expect(cell._content.querySelector('vaadin-date-picker')).to.be.ok;
     });
 
-    it('should stop editing and update value when closing on outside click', async () => {
+    it('should not stop editing when clicking inside the overlay but not on focusable element', async () => {
+      // Open the overlay
+      await sendKeys({ press: 'ArrowDown' });
+      await waitForOverlayRender();
+
+      // Click between toolbar buttons
+      const overlayContent = document.querySelector('vaadin-date-picker-overlay-content');
+      const { x, y } = middleOfNode(overlayContent.shadowRoot.querySelector('[part="toolbar"]'));
+      await sendMouse({ type: 'click', position: [Math.floor(x), Math.floor(y)] });
+      await nextRender();
+
+      expect(cell._content.querySelector('vaadin-date-picker')).to.be.ok;
+    });
+
+    it('should not stop editing and update value when closing on outside click', async () => {
       // Open the overlay
       await sendKeys({ press: 'ArrowDown' });
       await waitForOverlayRender();
@@ -124,11 +138,9 @@ describe('grid-pro custom editor', () => {
       await sendMouse({ type: 'click', position: [10, 10] });
       await nextRender();
 
-      // TODO: closing occurs in `vaadin-overlay-outside-click` listener added on global `focusin`
-      // in grid-pro. Consider replacing it with `_shouldRemoveFocus()` check on editor `focusout`
-      // so that we don't stop editing on outside click, to align with the combo-box behavior.
-      expect(cell._content.querySelector('vaadin-date-picker')).to.be.not.ok;
-      expect(cell._content.textContent).to.equal('1984-01-12');
+      const editor = cell._content.querySelector('vaadin-date-picker');
+      expect(editor).to.be.ok;
+      expect(editor.value).to.equal('1984-01-12');
     });
   });
 

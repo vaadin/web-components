@@ -282,7 +282,6 @@ export const GridProEditColumnMixin = (superClass) =>
       editor.addEventListener('focusout', this._grid.__boundEditorFocusOut);
       editor.addEventListener('focusin', this._grid.__boundEditorFocusIn);
       editor.addEventListener('internal-tab', this._grid.__boundCancelCellSwitch);
-      document.body.addEventListener('focusin', this._grid.__boundGlobalFocusIn);
       this._setEditorOptions(editor);
       this._setEditorValue(editor, get(this.path, model.item));
       editor._grid = this._grid;
@@ -300,8 +299,6 @@ export const GridProEditColumnMixin = (superClass) =>
      * @protected
      */
     _stopCellEdit(cell, model) {
-      document.body.removeEventListener('focusin', this._grid.__boundGlobalFocusIn);
-
       this._removeEditor(cell, model);
     }
   };

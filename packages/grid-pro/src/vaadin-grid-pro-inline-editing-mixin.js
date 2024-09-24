@@ -66,7 +66,6 @@ export const InlineEditingMixin = (superClass) =>
       this.__boundEditorFocusOut = this._onEditorFocusOut.bind(this);
       this.__boundEditorFocusIn = this._onEditorFocusIn.bind(this);
       this.__boundCancelCellSwitch = this._setCancelCellSwitch.bind(this);
-      this.__boundGlobalFocusIn = this._onGlobalFocusIn.bind(this);
 
       this._addEditColumnListener('mousedown', (e) => {
         // Prevent grid from resetting navigating state
@@ -305,11 +304,23 @@ export const InlineEditingMixin = (superClass) =>
     }
 
     /** @private */
-    _onEditorFocusOut() {
+    _onEditorFocusOut(event) {
       // Ignore focusout from internal tab event
       if (this.__cancelCellSwitch) {
         return;
       }
+
+      const edited = this.__edited;
+      if (edited) {
+        const { cell, column } = this.__edited;
+        const editor = column._getEditorComponent(cell);
+
+        // Detect focus moving to e.g. vaadin-select-overlay or vaadin-date-picker-overlay
+        if (typeof editor._shouldRemoveFocus === 'function' && !editor._shouldRemoveFocus(event)) {
+          return;
+        }
+      }
+
       // Schedule stop on editor component focusout
       this._debouncerStopEdit = Debouncer.debounce(this._debouncerStopEdit, animationFrame, this._stopEdit.bind(this));
     }
@@ -317,22 +328,6 @@ export const InlineEditingMixin = (superClass) =>
     /** @private */
     _onEditorFocusIn() {
       this._cancelStopEdit();
-    }
-
-    /** @private */
-    _onGlobalFocusIn(e) {
-      const edited = this.__edited;
-      if (edited) {
-        // Detect focus moving to e.g. vaadin-select-overlay
-        const overlay = Array.from(e.composedPath()).filter(
-          (node) => node.nodeType === Node.ELEMENT_NODE && /^vaadin-(?!dialog).*-overlay$/iu.test(node.localName),
-        )[0];
-
-        if (overlay) {
-          overlay.addEventListener('vaadin-overlay-outside-click', this.__boundEditorFocusOut);
-          this._cancelStopEdit();
-        }
-      }
     }
 
     /** @private */
