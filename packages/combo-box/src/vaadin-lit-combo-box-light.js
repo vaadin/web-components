@@ -46,7 +46,6 @@ class ComboBoxLight extends ComboBoxLightMixin(ThemableMixin(PolylitMixin(LitEle
         ?loading="${this.loading}"
         theme="${ifDefined(this._theme)}"
         .positionTarget="${this.inputElement}"
-        .restoreFocusNode="${this.inputElement}"
         no-vertical-overlap
       ></vaadin-combo-box-overlay>
     `;
