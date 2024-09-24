@@ -241,7 +241,7 @@ describe('Basic features', () => {
 
     it('should remove focus-ring attribute on date-picker click', async () => {
       // Focus the time-picker with the keyboard
-      await sendKeys({ press: 'Tab' });
+      datePicker.focus();
       await sendKeys({ press: 'Tab' });
       // Open the overlay with the keyboard
       await sendKeys({ press: 'ArrowDown' });
