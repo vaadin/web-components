@@ -91,6 +91,7 @@ export const DashboardItemMixin = (superClass) =>
     /** @private */
     __renderDragHandle() {
       return html`<button
+        aria-label="${this.__i18n.move}"
         title="${this.__i18n.move}"
         id="drag-handle"
         draggable="true"
@@ -103,6 +104,7 @@ export const DashboardItemMixin = (superClass) =>
     /** @private */
     __renderRemoveButton() {
       return html`<button
+        aria-label="${this.__i18n.remove}"
         title="${this.__i18n.remove}"
         id="remove-button"
         tabindex="${this.__selected ? 0 : -1}"
@@ -127,6 +129,7 @@ export const DashboardItemMixin = (superClass) =>
     /** @private */
     __renderResizeHandle() {
       return html`<button
+        aria-label="${this.__i18n.resize}"
         title="${this.__i18n.resize}"
         id="resize-handle"
         class="resize-handle"
@@ -143,9 +146,24 @@ export const DashboardItemMixin = (superClass) =>
         .hidden="${!this.__moveMode}"
         @pointerdown="${(e) => e.preventDefault()}"
       >
-        <button title="${this.__i18n.moveBackward}" @click="${() => fireMove(this, -1)}" id="move-backward"></button>
-        <button title="${this.__i18n.moveApply}" @click="${() => this.__exitMode(true)}" id="move-apply"></button>
-        <button title="${this.__i18n.moveForward}" @click="${() => fireMove(this, 1)}" id="move-forward"></button>
+        <button
+          aria-label="${this.__i18n.moveBackward}"
+          title="${this.__i18n.moveBackward}"
+          @click="${() => fireMove(this, -1)}"
+          id="move-backward"
+        ></button>
+        <button
+          aria-label="${this.__i18n.moveApply}"
+          title="${this.__i18n.moveApply}"
+          @click="${() => this.__exitMode(true)}"
+          id="move-apply"
+        ></button>
+        <button
+          aria-label="${this.__i18n.moveForward}"
+          title="${this.__i18n.moveForward}"
+          @click="${() => fireMove(this, 1)}"
+          id="move-forward"
+        ></button>
       </div>`;
     }
 
@@ -159,24 +177,33 @@ export const DashboardItemMixin = (superClass) =>
         .hidden="${!this.__resizeMode}"
         @pointerdown="${(e) => e.preventDefault()}"
       >
-        <button title="${this.__i18n.resizeApply}" @click="${() => this.__exitMode(true)}" id="resize-apply"></button>
         <button
+          aria-label="${this.__i18n.resizeApply}"
+          title="${this.__i18n.resizeApply}"
+          @click="${() => this.__exitMode(true)}"
+          id="resize-apply"
+        ></button>
+        <button
+          aria-label="${this.__i18n.resizeShrinkWidth}"
           title="${this.__i18n.resizeShrinkWidth}"
           @click="${() => fireResize(this, -1, 0)}"
           id="resize-shrink-width"
         ></button>
         <button
+          aria-label="${this.__i18n.resizeGrowWidth}"
           title="${this.__i18n.resizeGrowWidth}"
           @click="${() => fireResize(this, 1, 0)}"
           id="resize-grow-width"
         ></button>
         <button
+          aria-label="${this.__i18n.resizeShrinkHeight}"
           title="${this.__i18n.resizeShrinkHeight}"
           @click="${() => fireResize(this, 0, -1)}"
           id="resize-shrink-height"
           .hidden="${!hasMinRowHeight}"
         ></button>
         <button
+          aria-label="${this.__i18n.resizeGrowHeight}"
           title="${this.__i18n.resizeGrowHeight}"
           @click="${() => fireResize(this, 0, 1)}"
           id="resize-grow-height"
