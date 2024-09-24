@@ -178,7 +178,7 @@ class Dashboard extends ControllerMixin(DashboardLayoutMixin(ElementMixin(Themab
 
       if (wrapper.firstElementChild) {
         SYNCHRONIZED_ATTRIBUTES.forEach((attr) => {
-          wrapper.firstElementChild.toggleAttribute(attr, wrapper.hasAttribute(attr));
+          wrapper.firstElementChild.toggleAttribute(attr, !!wrapper[attr]);
         });
         wrapper.firstElementChild.__i18n = this.i18n;
       }
@@ -220,7 +220,7 @@ class Dashboard extends ControllerMixin(DashboardLayoutMixin(ElementMixin(Themab
         }
 
         section.toggleAttribute('highlight', !!this.__widgetReorderController.draggedItem);
-        SYNCHRONIZED_ATTRIBUTES.forEach((attr) => section.toggleAttribute(attr, wrapper.hasAttribute(attr)));
+        SYNCHRONIZED_ATTRIBUTES.forEach((attr) => section.toggleAttribute(attr, !!wrapper[attr]));
         section.__i18n = this.i18n;
 
         // Render the subitems
@@ -247,10 +247,10 @@ class Dashboard extends ControllerMixin(DashboardLayoutMixin(ElementMixin(Themab
     `.trim();
 
     wrapper.setAttribute('style', style);
-    wrapper.toggleAttribute('editable', !!this.editable);
-    wrapper.toggleAttribute('dragging', this.__widgetReorderController.draggedItem === item);
-    wrapper.toggleAttribute('first-child', item === getItemsArrayOfItem(item, this.items)[0]);
-    wrapper.toggleAttribute('last-child', item === getItemsArrayOfItem(item, this.items).slice(-1)[0]);
+    wrapper.editable = this.editable;
+    wrapper.dragging = this.__widgetReorderController.draggedItem === item;
+    wrapper['first-child'] = item === getItemsArrayOfItem(item, this.items)[0];
+    wrapper['last-child'] = item === getItemsArrayOfItem(item, this.items).slice(-1)[0];
     wrapper.i18n = this.i18n;
   }
 

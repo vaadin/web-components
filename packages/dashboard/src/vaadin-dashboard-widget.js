@@ -178,7 +178,7 @@ class DashboardWidget extends DashboardItemMixin(ControllerMixin(ElementMixin(Po
     const wrapper = this.closest(WRAPPER_LOCAL_NAME);
     if (wrapper) {
       SYNCHRONIZED_ATTRIBUTES.forEach((attr) => {
-        this.toggleAttribute(attr, wrapper.hasAttribute(attr));
+        this.toggleAttribute(attr, !!wrapper[attr]);
       });
       this.__i18n = wrapper.i18n;
     }
