@@ -310,6 +310,33 @@ describe('dashboard - widget reordering', () => {
       expect(reorderEndSpy).to.not.have.been.called;
     });
 
+    it('should primarily reorder the dragged over element', async () => {
+      // Add a third widget
+      dashboard.style.width = `${columnWidth * 4}px`;
+      (dashboard.items[1] as TestDashboardItem).colspan = 2;
+      dashboard.items = [...dashboard.items, { id: 2 }];
+      await onceResized(dashboard);
+
+      // prettier-ignore
+      expectLayout(dashboard, [
+        [0, 1, 1, 2],
+      ]);
+
+      // Start dragging the first widget
+      fireDragStart(getElementFromCell(dashboard, 0, 0)!);
+      await nextFrame();
+
+      // Drag the first widget over the end edge of the second one
+      fireDragOver(getElementFromCell(dashboard, 0, 1)!, 'end');
+      await nextFrame();
+
+      // Expect the widgets to be reordered
+      // prettier-ignore
+      expectLayout(dashboard, [
+        [1, 1, 0, 2],
+      ]);
+    });
+
     it('should reorder the element closest to the drag event coordinates', async () => {
       // Add a third widget
       dashboard.style.width = `${columnWidth * 3}px`;
@@ -332,6 +359,38 @@ describe('dashboard - widget reordering', () => {
       // prettier-ignore
       expectLayout(dashboard, [
         [1, 2, 0],
+      ]);
+    });
+
+    it('should reorder the element closest to the empty area under drag event coordinates', async () => {
+      // Add a third widget
+      dashboard.style.width = `${columnWidth * 2}px`;
+      dashboard.items = [...dashboard.items, { id: 2 }];
+      await onceResized(dashboard);
+      // prettier-ignore
+      expectLayout(dashboard, [
+        [0, 1],
+        [2]
+      ]);
+
+      // Start dragging the first widget
+      fireDragStart(getElementFromCell(dashboard, 0, 0)!);
+      await nextFrame();
+
+      // Drag the first over the second row but not over any widget
+      const dashboardRect = dashboard.getBoundingClientRect();
+      const dragOverEvent = createDragEvent('dragover', {
+        x: dashboardRect.left + dashboardRect.width / 2 + 1,
+        y: dashboardRect.bottom,
+      });
+      dashboard.dispatchEvent(dragOverEvent);
+      await nextFrame();
+
+      // Expect the widgets to be reordered
+      // prettier-ignore
+      expectLayout(dashboard, [
+        [1, 2],
+        [0]
       ]);
     });
 

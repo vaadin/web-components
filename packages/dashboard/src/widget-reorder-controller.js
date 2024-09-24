@@ -70,18 +70,22 @@ export class WidgetReorderController {
       return;
     }
 
-    // Find the element closest to the x and y coordinates of the drag event
-    const closestElement = this.__getClosestElement(otherElements, e.clientX, e.clientY);
+    // Find the element that is being dragged over
+    let targetElement = otherElements.find((other) => other.contains(e.target));
+    if (!targetElement) {
+      // Find the element closest to the x and y coordinates of the drag event
+      targetElement = this.__getClosestElement(otherElements, e.clientX, e.clientY);
+    }
 
-    // Check if the dragged element is dragged enough over the element closest to the drag event coordinates
-    if (!this.__reordering && this.__isDraggedOver(draggedElement, closestElement, e.clientX, e.clientY)) {
+    // Check if the dragged element is dragged enough over the target element
+    if (!this.__reordering && this.__isDraggedOver(draggedElement, targetElement, e.clientX, e.clientY)) {
       // Prevent reordering multiple times in quick succession
       this.__reordering = true;
       setTimeout(() => {
         this.__reordering = false;
       }, REORDER_EVENT_TIMEOUT);
 
-      const targetItem = getElementItem(closestElement);
+      const targetItem = getElementItem(targetElement);
       const targetItems = getItemsArrayOfItem(targetItem, this.host.items);
       const targetIndex = targetItems.indexOf(targetItem);
 
