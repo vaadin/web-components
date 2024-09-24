@@ -668,7 +668,7 @@ describe('dashboard - keyboard interaction', () => {
       expect(widget.hasAttribute('focused')).to.be.true;
     });
 
-    it('should focus resize handle on exit move mode', async () => {
+    it('should focus resize handle on exit resize mode', async () => {
       // Apply button focused, click it
       await sendKeys({ press: 'Space' });
       expect(getResizeHandle(getElementFromCell(dashboard, 0, 0)!).matches(':focus')).to.be.true;
@@ -761,7 +761,7 @@ describe('dashboard - keyboard interaction', () => {
       }
     });
 
-    it('should trap back inside the widget after exiting move mode', async () => {
+    it('should trap back inside the widget after exiting resize mode', async () => {
       await sendKeys({ press: 'Escape' });
       const widget = getElementFromCell(dashboard, 0, 0)!;
       const resizeModeButtons = [

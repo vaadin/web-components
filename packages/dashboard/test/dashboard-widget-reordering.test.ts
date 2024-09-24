@@ -409,7 +409,7 @@ describe('dashboard - widget reordering', () => {
       expect(event.defaultPrevented).to.be.false;
     });
 
-    it('should allow changs to items while dragging', async () => {
+    it('should allow changes to items while dragging', async () => {
       // Start dragging the first widget
       fireDragStart(getElementFromCell(dashboard, 0, 0)!);
       await nextFrame();

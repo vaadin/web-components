@@ -184,18 +184,10 @@ export class WidgetReorderController {
    * @private
    */
   __getDragContextElements() {
-    const draggedItemWrapper = [...this.host.querySelectorAll(WRAPPER_LOCAL_NAME)].find(
-      (el) => el.__item === this.draggedItem,
-    );
-    if (!draggedItemWrapper) {
-      return [];
-    }
-
-    const siblingWrappers = [...draggedItemWrapper.parentElement.children].filter(
-      (el) => el.localName === WRAPPER_LOCAL_NAME,
-    );
-
-    return siblingWrappers.map((el) => el.firstElementChild).filter((el) => el);
+    const items = getItemsArrayOfItem(this.draggedItem, this.host.items);
+    return [...this.host.querySelectorAll(WRAPPER_LOCAL_NAME)]
+      .filter((wrapper) => items && items.includes(wrapper.__item) && wrapper.firstElementChild)
+      .map((wrapper) => wrapper.firstElementChild);
   }
 
   /** @private */
