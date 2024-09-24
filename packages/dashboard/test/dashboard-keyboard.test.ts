@@ -184,6 +184,14 @@ describe('dashboard - keyboard interaction', () => {
       expect(spy.firstCall.args[0].detail.section).to.be.undefined;
     });
 
+    it('should not dispatch an item-move event', async () => {
+      const spy = sinon.spy();
+      // @ts-ignore unexpected event type
+      dashboard.addEventListener('item-move', spy);
+      await sendKeys({ press: 'ArrowDown' });
+      expect(spy.called).to.be.false;
+    });
+
     it('should increase the widget row span on shift + arrow down', async () => {
       // Set minimum row height to enable vertical resizing
       setMinimumRowHeight(dashboard, 100);
@@ -213,6 +221,16 @@ describe('dashboard - keyboard interaction', () => {
       expect(spy.firstCall.args[0].detail.item).to.eql({ id: 0 });
       expect(spy.firstCall.args[0].detail.items).to.eql(dashboard.items);
       expect(spy.firstCall.args[0].detail.section).to.be.undefined;
+    });
+
+    it('should not dispatch an item-resize event', async () => {
+      const spy = sinon.spy();
+      // @ts-ignore unexpected event type
+      dashboard.addEventListener('item-resize', spy);
+      await sendKeys({ down: 'Shift' });
+      await sendKeys({ press: 'ArrowDown' });
+      await sendKeys({ up: 'Shift' });
+      expect(spy.called).to.be.false;
     });
 
     it('should not increase the widget row span on shift + arrow down if row min height is not defined', async () => {
