@@ -35,6 +35,7 @@ const multiSelectComboBox = css`
   #chips {
     display: flex;
     align-items: center;
+    width: 100%;
   }
 
   ::slotted(input) {
