@@ -42,7 +42,7 @@ describe('Basic features', () => {
   let timePicker;
 
   async function click(element) {
-    const rect = element.getBoundingClientRect();
+    const rect = element.inputElement.getBoundingClientRect();
     const x = Math.floor(rect.x + rect.width / 2);
     const y = Math.floor(rect.y + rect.height / 2);
     await sendMouse({ type: 'click', position: [x, y] });
