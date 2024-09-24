@@ -114,6 +114,7 @@ export const DashboardItemMixin = (superClass) =>
     __renderFocusButton(i18nSelectTitleForEditingProperty) {
       return html`<button
         aria-label=${this.__i18n[i18nSelectTitleForEditingProperty]}
+        aria-describedby="title"
         id="focus-button"
         draggable="true"
         class="drag-handle"

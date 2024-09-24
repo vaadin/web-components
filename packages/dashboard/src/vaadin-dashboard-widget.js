@@ -146,7 +146,7 @@ class DashboardWidget extends DashboardItemMixin(ControllerMixin(ElementMixin(Po
       <div id="focustrap">
         <header>
           ${this.__renderDragHandle()}
-          <slot name="title" @slotchange="${this.__onTitleSlotChange}"></slot>
+          <slot name="title" id="title" @slotchange="${this.__onTitleSlotChange}"></slot>
           <slot name="header"></slot>
           ${this.__renderRemoveButton()}
         </header>
