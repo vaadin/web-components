@@ -222,13 +222,20 @@ describe('Basic features', () => {
   });
 
   describe('time-picker focused', () => {
+    beforeEach(() => {
+      // Disable auto-open to make tests more reliable by only moving
+      // focus on mousedown (and not the date-picker overlay opening).
+      dateTimePicker.autoOpenDisabled = true;
+    });
+
     it('should remove focused attribute on date-picker click', async () => {
       await click(timePicker);
+      // Open the overlay with the keyboard
+      await sendKeys({ press: 'ArrowDown' });
       await nextRender();
       expect(timePicker.hasAttribute('focused')).to.be.true;
 
       await click(datePicker);
-      await nextRender();
       expect(timePicker.hasAttribute('focused')).to.be.false;
     });
 
@@ -242,7 +249,6 @@ describe('Basic features', () => {
       expect(timePicker.hasAttribute('focus-ring')).to.be.true;
 
       await click(datePicker);
-      await nextRender();
       expect(timePicker.hasAttribute('focus-ring')).to.be.false;
     });
   });
