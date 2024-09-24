@@ -228,6 +228,7 @@ describe('Basic features', () => {
       expect(timePicker.hasAttribute('focused')).to.be.true;
 
       await click(datePicker);
+      await nextRender();
       expect(timePicker.hasAttribute('focused')).to.be.false;
     });
 
@@ -241,6 +242,7 @@ describe('Basic features', () => {
       expect(timePicker.hasAttribute('focus-ring')).to.be.true;
 
       await click(datePicker);
+      await nextRender();
       expect(timePicker.hasAttribute('focus-ring')).to.be.false;
     });
   });
