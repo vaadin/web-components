@@ -196,9 +196,9 @@ describe('dashboard', () => {
 
       await nextFrame();
 
-      const widget = getElementFromCell(dashboard, 0, 0) as DashboardWidget;
-      expect(widget.i18n.selectWidgetTitleForEditing).to.equal('foo');
-      expect(widget.i18n).to.eql(dashboard.i18n);
+      const widget = getElementFromCell(dashboard, 0, 0) as DashboardWidget & { __i18n: { [key: string]: string } };
+      expect(widget.__i18n.selectWidgetTitleForEditing).to.equal('foo');
+      expect(widget.__i18n).to.eql(dashboard.i18n);
     });
 
     it('should localize focused widget', async () => {
@@ -216,7 +216,7 @@ describe('dashboard', () => {
       };
       await nextFrame();
 
-      const widget = getElementFromCell(dashboard, 0, 0) as DashboardWidget;
+      const widget = getElementFromCell(dashboard, 0, 0) as DashboardWidget & { __i18n: { [key: string]: string } };
       widget.focus();
 
       dashboard.i18n = {
@@ -225,7 +225,7 @@ describe('dashboard', () => {
       };
       await nextFrame();
 
-      expect(widget.i18n.selectWidgetTitleForEditing).to.equal('foo');
+      expect(widget.__i18n.selectWidgetTitleForEditing).to.equal('foo');
     });
 
     it('should localize a lazily rendered widget', async () => {
@@ -245,8 +245,8 @@ describe('dashboard', () => {
       };
       await nextFrame();
 
-      const widget = getElementFromCell(dashboard, 0, 0) as DashboardWidget;
-      expect(widget.i18n.selectWidgetTitleForEditing).to.equal('foo');
+      const widget = getElementFromCell(dashboard, 0, 0) as DashboardWidget & { __i18n: { [key: string]: string } };
+      expect(widget.__i18n.selectWidgetTitleForEditing).to.equal('foo');
     });
   });
 
@@ -405,9 +405,11 @@ describe('dashboard', () => {
           await nextFrame();
 
           const widget = getElementFromCell(dashboard, 1, 0) as DashboardWidget;
-          const section = widget.closest('vaadin-dashboard-section') as DashboardSection;
-          expect(section.i18n.selectSectionTitleForEditing).to.equal('foo');
-          expect(section.i18n).to.eql(dashboard.i18n);
+          const section = widget.closest('vaadin-dashboard-section') as DashboardSection & {
+            __i18n: { [key: string]: string };
+          };
+          expect(section.__i18n.selectSectionTitleForEditing).to.equal('foo');
+          expect(section.__i18n).to.eql(dashboard.i18n);
         });
       });
     });

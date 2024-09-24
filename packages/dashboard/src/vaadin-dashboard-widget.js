@@ -115,8 +115,9 @@ class DashboardWidget extends DashboardItemMixin(ControllerMixin(ElementMixin(Po
        *   moveBackward: 'Move Backward',
        * }
        * ```
+       * @private
        */
-      i18n: {
+      __i18n: {
         type: Object,
         value: () => {
           const i18n = getDefaultI18n();
@@ -179,7 +180,7 @@ class DashboardWidget extends DashboardItemMixin(ControllerMixin(ElementMixin(Po
       SYNCHRONIZED_ATTRIBUTES.forEach((attr) => {
         this.toggleAttribute(attr, wrapper.hasAttribute(attr));
       });
-      this.i18n = wrapper.i18n;
+      this.__i18n = wrapper.i18n;
     }
 
     const undefinedAncestor = this.closest('*:not(:defined)');

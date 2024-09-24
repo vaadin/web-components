@@ -10,13 +10,7 @@
  */
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
-import { type DashboardItemI18n, DashboardItemMixin } from './vaadin-dashboard-item-mixin.js';
-
-export interface DashboardSectionI18n
-  extends Pick<
-    DashboardItemI18n,
-    'selectSectionTitleForEditing' | 'remove' | 'move' | 'moveApply' | 'moveForward' | 'moveBackward'
-  > {}
+import { DashboardItemMixin } from './vaadin-dashboard-item-mixin.js';
 
 /**
  * A Section component for use with the Dashboard component
@@ -26,26 +20,6 @@ declare class DashboardSection extends DashboardItemMixin(ControllerMixin(Elemen
    * The title of the section
    */
   sectionTitle: string | null | undefined;
-
-  /**
-   * The object used to localize this component.
-   *
-   * To change the default localization, replace the entire
-   * `i18n` object with a custom one.
-   *
-   * The object has the following structure and default values:
-   * ```
-   * {
-   *   selectSectionTitleForEditing: 'Select section title for editing',
-   *   remove: 'Remove',
-   *   move: 'Move',
-   *   moveApply: 'Apply',
-   *   moveForward: 'Move Forward',
-   *   moveBackward: 'Move Backward',
-   * }
-   * ```
-   */
-  i18n: DashboardSectionI18n;
 }
 
 declare global {

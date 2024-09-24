@@ -18,7 +18,7 @@ import {
 } from './helpers.js';
 
 describe('dashboard widget', () => {
-  let widget: DashboardWidget;
+  let widget: DashboardWidget & { __i18n: { [key: string]: string } };
 
   beforeEach(async () => {
     widget = fixtureSync(`<vaadin-dashboard-widget>Widget content</vaadin-dashboard-widget>`);
@@ -114,7 +114,7 @@ describe('dashboard widget', () => {
       const focusButton = widget.shadowRoot?.querySelector('#focus-button');
       expect(focusButton?.getAttribute('aria-label')).to.eql('Select widget title for editing');
 
-      widget.i18n = { ...widget.i18n, selectWidgetTitleForEditing: 'foo' };
+      widget.__i18n = { ...widget.__i18n, selectWidgetTitleForEditing: 'foo' };
       await nextFrame();
 
       expect(focusButton?.getAttribute('aria-label')).to.eql('foo');
@@ -124,7 +124,7 @@ describe('dashboard widget', () => {
       const removeButton = getRemoveButton(widget);
       expect(removeButton?.getAttribute('title')).to.eql('Remove');
 
-      widget.i18n = { ...widget.i18n, remove: 'foo' };
+      widget.__i18n = { ...widget.__i18n, remove: 'foo' };
       await nextFrame();
 
       expect(removeButton?.getAttribute('title')).to.eql('foo');
@@ -134,7 +134,7 @@ describe('dashboard widget', () => {
       const dragHandle = getDraggable(widget);
       expect(dragHandle?.getAttribute('title')).to.eql('Move');
 
-      widget.i18n = { ...widget.i18n, move: 'foo' };
+      widget.__i18n = { ...widget.__i18n, move: 'foo' };
       await nextFrame();
 
       expect(dragHandle?.getAttribute('title')).to.eql('foo');
@@ -144,7 +144,7 @@ describe('dashboard widget', () => {
       const resizeHandle = getResizeHandle(widget);
       expect(resizeHandle?.getAttribute('title')).to.eql('Resize');
 
-      widget.i18n = { ...widget.i18n, resize: 'foo' };
+      widget.__i18n = { ...widget.__i18n, resize: 'foo' };
       await nextFrame();
 
       expect(resizeHandle?.getAttribute('title')).to.eql('foo');
@@ -157,8 +157,8 @@ describe('dashboard widget', () => {
       expect(getResizeGrowHeightButton(widget)?.getAttribute('title')).to.eql('Grow height');
       expect(getResizeGrowWidthButton(widget)?.getAttribute('title')).to.eql('Grow width');
 
-      widget.i18n = {
-        ...widget.i18n,
+      widget.__i18n = {
+        ...widget.__i18n,
         resizeApply: 'foo',
         resizeShrinkHeight: 'bar',
         resizeShrinkWidth: 'baz',
@@ -180,8 +180,8 @@ describe('dashboard widget', () => {
       expect(getMoveForwardButton(widget)?.getAttribute('title')).to.eql('Move Forward');
       expect(getMoveBackwardButton(widget)?.getAttribute('title')).to.eql('Move Backward');
 
-      widget.i18n = {
-        ...widget.i18n,
+      widget.__i18n = {
+        ...widget.__i18n,
         moveApply: 'foo',
         moveForward: 'bar',
         moveBackward: 'baz',
