@@ -619,8 +619,6 @@ export const ComboBoxMixin = (subclass) =>
             this.inputElement.focus();
           }
         }
-
-        this._overlayElement.restoreFocusOnClose = true;
       } else {
         this._onClosed();
       }
@@ -719,9 +717,7 @@ export const ComboBoxMixin = (subclass) =>
     _onKeyDown(e) {
       super._onKeyDown(e);
 
-      if (e.key === 'Tab') {
-        this._overlayElement.restoreFocusOnClose = false;
-      } else if (e.key === 'ArrowDown') {
+      if (e.key === 'ArrowDown') {
         this._onArrowDown();
 
         // Prevent caret from moving

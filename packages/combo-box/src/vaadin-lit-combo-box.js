@@ -106,7 +106,6 @@ class ComboBox extends ComboBoxDataProviderMixin(
         ?loading="${this.loading}"
         theme="${ifDefined(this._theme)}"
         .positionTarget="${this._positionTarget}"
-        .restoreFocusNode="${this.inputElement}"
         no-vertical-overlap
       ></vaadin-combo-box-overlay>
 
