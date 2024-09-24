@@ -105,8 +105,9 @@ class DashboardSection extends DashboardItemMixin(ControllerMixin(ElementMixin(P
        *   moveBackward: 'Move Backward',
        * }
        * ```
+       * @private
        */
-      i18n: {
+      __i18n: {
         type: Object,
         value: () => {
           const i18n = getDefaultI18n();

@@ -180,7 +180,7 @@ class Dashboard extends ControllerMixin(DashboardLayoutMixin(ElementMixin(Themab
         SYNCHRONIZED_ATTRIBUTES.forEach((attr) => {
           wrapper.firstElementChild.toggleAttribute(attr, wrapper.hasAttribute(attr));
         });
-        wrapper.firstElementChild.i18n = this.i18n;
+        wrapper.firstElementChild.__i18n = this.i18n;
       }
     });
   }
@@ -221,7 +221,7 @@ class Dashboard extends ControllerMixin(DashboardLayoutMixin(ElementMixin(Themab
 
         section.toggleAttribute('highlight', !!this.__widgetReorderController.draggedItem);
         SYNCHRONIZED_ATTRIBUTES.forEach((attr) => section.toggleAttribute(attr, wrapper.hasAttribute(attr)));
-        section.i18n = this.i18n;
+        section.__i18n = this.i18n;
 
         // Render the subitems
         this.__renderItemWrappers(item.items, section);

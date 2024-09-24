@@ -11,7 +11,7 @@ import {
 } from './helpers.js';
 
 describe('dashboard section', () => {
-  let section: DashboardSection;
+  let section: DashboardSection & { __i18n: { [key: string]: string } };
 
   beforeEach(async () => {
     section = fixtureSync(`
@@ -112,7 +112,7 @@ describe('dashboard section', () => {
       const focusButton = section.shadowRoot?.querySelector('#focus-button');
       expect(focusButton?.getAttribute('aria-label')).to.eql('Select section title for editing');
 
-      section.i18n = { ...section.i18n, selectSectionTitleForEditing: 'foo' };
+      section.__i18n = { ...section.__i18n, selectSectionTitleForEditing: 'foo' };
       await nextFrame();
 
       expect(focusButton?.getAttribute('aria-label')).to.eql('foo');
@@ -122,7 +122,7 @@ describe('dashboard section', () => {
       const removeButton = getRemoveButton(section);
       expect(removeButton?.getAttribute('title')).to.eql('Remove');
 
-      section.i18n = { ...section.i18n, remove: 'foo' };
+      section.__i18n = { ...section.__i18n, remove: 'foo' };
       await nextFrame();
 
       expect(removeButton?.getAttribute('title')).to.eql('foo');
@@ -132,7 +132,7 @@ describe('dashboard section', () => {
       const dragHandle = getDraggable(section);
       expect(dragHandle?.getAttribute('title')).to.eql('Move');
 
-      section.i18n = { ...section.i18n, move: 'foo' };
+      section.__i18n = { ...section.__i18n, move: 'foo' };
       await nextFrame();
 
       expect(dragHandle?.getAttribute('title')).to.eql('foo');
@@ -143,8 +143,8 @@ describe('dashboard section', () => {
       expect(getMoveForwardButton(section)?.getAttribute('title')).to.eql('Move Forward');
       expect(getMoveBackwardButton(section)?.getAttribute('title')).to.eql('Move Backward');
 
-      section.i18n = {
-        ...section.i18n,
+      section.__i18n = {
+        ...section.__i18n,
         moveApply: 'foo',
         moveForward: 'bar',
         moveBackward: 'baz',
