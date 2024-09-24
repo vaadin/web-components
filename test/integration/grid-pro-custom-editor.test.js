@@ -63,12 +63,16 @@ describe('grid-pro custom editor', () => {
   });
 
   describe('date-picker', () => {
-    it('should apply the updated date to the cell when exiting on Tab', async () => {
-      const cell = getContainerCell(grid.$.items, 0, 2);
+    let cell;
+
+    beforeEach(async () => {
+      cell = getContainerCell(grid.$.items, 0, 2);
       cell.focus();
 
       await sendKeys({ press: 'Enter' });
+    });
 
+    it('should apply the updated date to the cell when exiting on Tab', async () => {
       await sendKeys({ type: '1/12/1984' });
       await sendKeys({ press: 'Tab' });
 
@@ -76,11 +80,6 @@ describe('grid-pro custom editor', () => {
     });
 
     it('should apply the updated date to the cell when exiting on Enter', async () => {
-      const cell = getContainerCell(grid.$.items, 0, 2);
-      cell.focus();
-
-      await sendKeys({ press: 'Enter' });
-
       await sendKeys({ type: '1/12/1984' });
       await sendKeys({ press: 'Enter' });
 
@@ -88,11 +87,7 @@ describe('grid-pro custom editor', () => {
     });
 
     it('should not stop editing on input click when focus is in the overlay', async () => {
-      const cell = getContainerCell(grid.$.items, 0, 2);
-      cell.focus();
-
-      await sendKeys({ press: 'Enter' });
-
+      // Open the overlay
       await sendKeys({ press: 'ArrowDown' });
 
       const { x, y } = middleOfNode(cell._content.querySelector('input'));
@@ -102,11 +97,6 @@ describe('grid-pro custom editor', () => {
     });
 
     it('should stop editing and update value when closing on outside click', async () => {
-      const cell = getContainerCell(grid.$.items, 0, 2);
-      cell.focus();
-
-      await sendKeys({ press: 'Enter' });
-
       // Open the overlay
       await sendKeys({ press: 'ArrowDown' });
       await waitForOverlayRender();
