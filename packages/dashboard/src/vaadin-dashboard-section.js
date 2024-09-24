@@ -16,6 +16,7 @@ import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { css } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { TitleController } from './title-controller.js';
 import { DashboardItemMixin } from './vaadin-dashboard-item-mixin.js';
+import { getDefaultI18n } from './vaadin-dashboard-item-mixin.js';
 import { hasWidgetWrappers } from './vaadin-dashboard-styles.js';
 
 /**
@@ -88,6 +89,39 @@ class DashboardSection extends DashboardItemMixin(ControllerMixin(ElementMixin(P
   static get properties() {
     return {
       /**
+       * The object used to localize this component.
+       *
+       * To change the default localization, replace the entire
+       * `i18n` object with a custom one.
+       *
+       * The object has the following structure and default values:
+       * ```
+       * {
+       *   selectSectionTitleForEditing: 'Select section title for editing',
+       *   remove: 'Remove',
+       *   move: 'Move',
+       *   moveApply: 'Apply',
+       *   moveForward: 'Move Forward',
+       *   moveBackward: 'Move Backward',
+       * }
+       * ```
+       */
+      i18n: {
+        type: Object,
+        value: () => {
+          const i18n = getDefaultI18n();
+          return {
+            selectSectionTitleForEditing: i18n.selectSectionTitleForEditing,
+            remove: i18n.remove,
+            move: i18n.move,
+            moveApply: i18n.moveApply,
+            moveForward: i18n.moveForward,
+            moveBackward: i18n.moveBackward,
+          };
+        },
+      },
+
+      /**
        * The title of the section
        */
       sectionTitle: {
@@ -101,7 +135,7 @@ class DashboardSection extends DashboardItemMixin(ControllerMixin(ElementMixin(P
   /** @protected */
   render() {
     return html`
-      ${this.__renderFocusButton()} ${this.__renderModeControls()}
+      ${this.__renderFocusButton('selectSectionTitleForEditing')} ${this.__renderMoveControls()}
 
       <div id="focustrap">
         <header>

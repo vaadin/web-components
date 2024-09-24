@@ -3,6 +3,19 @@ import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import '../vaadin-dashboard-widget.js';
 import { DashboardSection } from '../vaadin-dashboard-section.js';
 import { DashboardWidget } from '../vaadin-dashboard-widget.js';
+import {
+  getDraggable,
+  getMoveApplyButton,
+  getMoveBackwardButton,
+  getMoveForwardButton,
+  getRemoveButton,
+  getResizeApplyButton,
+  getResizeGrowHeightButton,
+  getResizeGrowWidthButton,
+  getResizeHandle,
+  getResizeShrinkHeightButton,
+  getResizeShrinkWidthButton,
+} from './helpers.js';
 
 describe('dashboard widget', () => {
   let widget: DashboardWidget;
@@ -93,6 +106,92 @@ describe('dashboard widget', () => {
 
       const title = widget.querySelector('[slot="title"]');
       expect(title?.textContent).to.eql('');
+    });
+  });
+
+  describe('i18n', () => {
+    it('should localize focus button aria-label', async () => {
+      const focusButton = widget.shadowRoot?.querySelector('#focus-button');
+      expect(focusButton?.getAttribute('aria-label')).to.eql('Select widget title for editing');
+
+      widget.i18n = { ...widget.i18n, selectWidgetTitleForEditing: 'foo' };
+      await nextFrame();
+
+      expect(focusButton?.getAttribute('aria-label')).to.eql('foo');
+    });
+
+    it('should localize remove button title', async () => {
+      const removeButton = getRemoveButton(widget);
+      expect(removeButton?.getAttribute('title')).to.eql('Remove');
+
+      widget.i18n = { ...widget.i18n, remove: 'foo' };
+      await nextFrame();
+
+      expect(removeButton?.getAttribute('title')).to.eql('foo');
+    });
+
+    it('should localize drag handle title', async () => {
+      const dragHandle = getDraggable(widget);
+      expect(dragHandle?.getAttribute('title')).to.eql('Move');
+
+      widget.i18n = { ...widget.i18n, move: 'foo' };
+      await nextFrame();
+
+      expect(dragHandle?.getAttribute('title')).to.eql('foo');
+    });
+
+    it('should localize resize handle title', async () => {
+      const resizeHandle = getResizeHandle(widget);
+      expect(resizeHandle?.getAttribute('title')).to.eql('Resize');
+
+      widget.i18n = { ...widget.i18n, resize: 'foo' };
+      await nextFrame();
+
+      expect(resizeHandle?.getAttribute('title')).to.eql('foo');
+    });
+
+    it('should localize resize mode buttons', async () => {
+      expect(getResizeApplyButton(widget)?.getAttribute('title')).to.eql('Apply');
+      expect(getResizeShrinkHeightButton(widget)?.getAttribute('title')).to.eql('Shrink height');
+      expect(getResizeShrinkWidthButton(widget)?.getAttribute('title')).to.eql('Shrink width');
+      expect(getResizeGrowHeightButton(widget)?.getAttribute('title')).to.eql('Grow height');
+      expect(getResizeGrowWidthButton(widget)?.getAttribute('title')).to.eql('Grow width');
+
+      widget.i18n = {
+        ...widget.i18n,
+        resizeApply: 'foo',
+        resizeShrinkHeight: 'bar',
+        resizeShrinkWidth: 'baz',
+        resizeGrowHeight: 'qux',
+        resizeGrowWidth: 'quux',
+      };
+
+      await nextFrame();
+
+      expect(getResizeApplyButton(widget)?.getAttribute('title')).to.eql('foo');
+      expect(getResizeShrinkHeightButton(widget)?.getAttribute('title')).to.eql('bar');
+      expect(getResizeShrinkWidthButton(widget)?.getAttribute('title')).to.eql('baz');
+      expect(getResizeGrowHeightButton(widget)?.getAttribute('title')).to.eql('qux');
+      expect(getResizeGrowWidthButton(widget)?.getAttribute('title')).to.eql('quux');
+    });
+
+    it('should localize move mode buttons', async () => {
+      expect(getMoveApplyButton(widget)?.getAttribute('title')).to.eql('Apply');
+      expect(getMoveForwardButton(widget)?.getAttribute('title')).to.eql('Move Forward');
+      expect(getMoveBackwardButton(widget)?.getAttribute('title')).to.eql('Move Backward');
+
+      widget.i18n = {
+        ...widget.i18n,
+        moveApply: 'foo',
+        moveForward: 'bar',
+        moveBackward: 'baz',
+      };
+
+      await nextFrame();
+
+      expect(getMoveApplyButton(widget)?.getAttribute('title')).to.eql('foo');
+      expect(getMoveForwardButton(widget)?.getAttribute('title')).to.eql('bar');
+      expect(getMoveBackwardButton(widget)?.getAttribute('title')).to.eql('baz');
     });
   });
 });

@@ -10,8 +10,8 @@ import type {
   DashboardSectionItem,
 } from '../../vaadin-dashboard.js';
 import type { DashboardLayout } from '../../vaadin-dashboard-layout.js';
-import type { DashboardSection } from '../../vaadin-dashboard-section.js';
-import type { DashboardWidget } from '../../vaadin-dashboard-widget.js';
+import type { DashboardSection, DashboardSectionI18n } from '../../vaadin-dashboard-section.js';
+import type { DashboardWidget, DashboardWidgetI18n } from '../../vaadin-dashboard-widget.js';
 
 const assertType = <TExpected>(actual: TExpected) => actual;
 
@@ -74,8 +74,34 @@ assertType<DashboardWidget>(widget);
 
 assertType<string | null | undefined>(widget.widgetTitle);
 
+assertType<DashboardWidgetI18n>(widget.i18n);
+assertType<{
+  selectWidgetTitleForEditing: string;
+  remove: string;
+  move: string;
+  moveApply: string;
+  moveForward: string;
+  moveBackward: string;
+  resize: string;
+  resizeApply: string;
+  resizeShrinkWidth: string;
+  resizeGrowWidth: string;
+  resizeShrinkHeight: string;
+  resizeGrowHeight: string;
+}>(widget.i18n);
+
 /* DashboardSection */
 const section = document.createElement('vaadin-dashboard-section');
 assertType<DashboardSection>(section);
 
 assertType<string | null | undefined>(section.sectionTitle);
+
+assertType<DashboardSectionI18n>(section.i18n);
+assertType<{
+  selectSectionTitleForEditing: string;
+  remove: string;
+  move: string;
+  moveApply: string;
+  moveForward: string;
+  moveBackward: string;
+}>(section.i18n);

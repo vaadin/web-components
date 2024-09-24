@@ -2,6 +2,13 @@ import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import '../vaadin-dashboard-section.js';
 import type { DashboardSection } from '../vaadin-dashboard-section.js';
+import {
+  getDraggable,
+  getMoveApplyButton,
+  getMoveBackwardButton,
+  getMoveForwardButton,
+  getRemoveButton,
+} from './helpers.js';
 
 describe('dashboard section', () => {
   let section: DashboardSection;
@@ -97,6 +104,57 @@ describe('dashboard section', () => {
 
       const title = section.querySelector('[slot="title"]');
       expect(title?.textContent).to.eql('');
+    });
+  });
+
+  describe('i18n', () => {
+    it('should localize focus button aria-label', async () => {
+      const focusButton = section.shadowRoot?.querySelector('#focus-button');
+      expect(focusButton?.getAttribute('aria-label')).to.eql('Select section title for editing');
+
+      section.i18n = { ...section.i18n, selectSectionTitleForEditing: 'foo' };
+      await nextFrame();
+
+      expect(focusButton?.getAttribute('aria-label')).to.eql('foo');
+    });
+
+    it('should localize remove button title', async () => {
+      const removeButton = getRemoveButton(section);
+      expect(removeButton?.getAttribute('title')).to.eql('Remove');
+
+      section.i18n = { ...section.i18n, remove: 'foo' };
+      await nextFrame();
+
+      expect(removeButton?.getAttribute('title')).to.eql('foo');
+    });
+
+    it('should localize drag handle title', async () => {
+      const dragHandle = getDraggable(section);
+      expect(dragHandle?.getAttribute('title')).to.eql('Move');
+
+      section.i18n = { ...section.i18n, move: 'foo' };
+      await nextFrame();
+
+      expect(dragHandle?.getAttribute('title')).to.eql('foo');
+    });
+
+    it('should localize move mode buttons', async () => {
+      expect(getMoveApplyButton(section)?.getAttribute('title')).to.eql('Apply');
+      expect(getMoveForwardButton(section)?.getAttribute('title')).to.eql('Move Forward');
+      expect(getMoveBackwardButton(section)?.getAttribute('title')).to.eql('Move Backward');
+
+      section.i18n = {
+        ...section.i18n,
+        moveApply: 'foo',
+        moveForward: 'bar',
+        moveBackward: 'baz',
+      };
+
+      await nextFrame();
+
+      expect(getMoveApplyButton(section)?.getAttribute('title')).to.eql('foo');
+      expect(getMoveForwardButton(section)?.getAttribute('title')).to.eql('bar');
+      expect(getMoveBackwardButton(section)?.getAttribute('title')).to.eql('baz');
     });
   });
 });

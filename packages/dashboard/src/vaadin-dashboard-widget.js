@@ -17,6 +17,7 @@ import { css } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { TitleController } from './title-controller.js';
 import { SYNCHRONIZED_ATTRIBUTES, WRAPPER_LOCAL_NAME } from './vaadin-dashboard-helpers.js';
 import { DashboardItemMixin } from './vaadin-dashboard-item-mixin.js';
+import { getDefaultI18n } from './vaadin-dashboard-item-mixin.js';
 
 /**
  * A Widget component for use with the Dashboard component
@@ -92,6 +93,39 @@ class DashboardWidget extends DashboardItemMixin(ControllerMixin(ElementMixin(Po
   static get properties() {
     return {
       /**
+       * The object used to localize this component.
+       *
+       * To change the default localization, replace the entire
+       * `i18n` object with a custom one.
+       *
+       * The object has the following structure and default values:
+       * ```
+       * {
+       *   selectWidgetTitleForEditing: 'Select widget title for editing',
+       *   remove: 'Remove',
+       *   resize: 'Resize',
+       *   resizeApply: 'Apply',
+       *   resizeShrinkWidth: 'Shrink width',
+       *   resizeGrowWidth: 'Grow width',
+       *   resizeShrinkHeight: 'Shrink height',
+       *   resizeGrowHeight: 'Grow height',
+       *   move: 'Move',
+       *   moveApply: 'Apply',
+       *   moveForward: 'Move Forward',
+       *   moveBackward: 'Move Backward',
+       * }
+       * ```
+       */
+      i18n: {
+        type: Object,
+        value: () => {
+          const i18n = getDefaultI18n();
+          delete i18n.selectSectionTitleForEditing;
+          return i18n;
+        },
+      },
+
+      /**
        * The title of the widget.
        */
       widgetTitle: {
@@ -105,7 +139,8 @@ class DashboardWidget extends DashboardItemMixin(ControllerMixin(ElementMixin(Po
   /** @protected */
   render() {
     return html`
-      ${this.__renderFocusButton()} ${this.__renderModeControls()} ${this.__renderResizeControls()}
+      ${this.__renderFocusButton('selectWidgetTitleForEditing')} ${this.__renderMoveControls()}
+      ${this.__renderResizeControls()}
 
       <div id="focustrap">
         <header>
@@ -144,6 +179,7 @@ class DashboardWidget extends DashboardItemMixin(ControllerMixin(ElementMixin(Po
       SYNCHRONIZED_ATTRIBUTES.forEach((attr) => {
         this.toggleAttribute(attr, wrapper.hasAttribute(attr));
       });
+      this.i18n = wrapper.i18n;
     }
 
     const undefinedAncestor = this.closest('*:not(:defined)');
