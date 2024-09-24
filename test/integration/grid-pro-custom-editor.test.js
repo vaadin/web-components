@@ -1,11 +1,12 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
+import { fixtureSync, middleOfNode, nextRender } from '@vaadin/testing-helpers';
 import { resetMouse, sendKeys, sendMouse } from '@web/test-runner-commands';
 import '@vaadin/combo-box';
 import '@vaadin/date-picker';
 import '@vaadin/grid-pro';
 import '@vaadin/grid-pro/vaadin-grid-pro-edit-column.js';
 import '@vaadin/time-picker';
+import { waitForOverlayRender } from '@vaadin/date-picker/test/helpers.js';
 import { flushGrid, getContainerCell } from '@vaadin/grid-pro/test/helpers.js';
 
 describe('grid-pro custom editor', () => {
@@ -62,12 +63,16 @@ describe('grid-pro custom editor', () => {
   });
 
   describe('date-picker', () => {
-    it('should apply the updated date to the cell when exiting on Tab', async () => {
-      const cell = getContainerCell(grid.$.items, 0, 2);
+    let cell;
+
+    beforeEach(async () => {
+      cell = getContainerCell(grid.$.items, 0, 2);
       cell.focus();
 
       await sendKeys({ press: 'Enter' });
+    });
 
+    it('should apply the updated date to the cell when exiting on Tab', async () => {
       await sendKeys({ type: '1/12/1984' });
       await sendKeys({ press: 'Tab' });
 
@@ -75,14 +80,45 @@ describe('grid-pro custom editor', () => {
     });
 
     it('should apply the updated date to the cell when exiting on Enter', async () => {
-      const cell = getContainerCell(grid.$.items, 0, 2);
-      cell.focus();
-
-      await sendKeys({ press: 'Enter' });
-
       await sendKeys({ type: '1/12/1984' });
       await sendKeys({ press: 'Enter' });
 
+      expect(cell._content.textContent).to.equal('1984-01-12');
+    });
+
+    it('should not stop editing on input click when focus is in the overlay', async () => {
+      // Open the overlay
+      await sendKeys({ press: 'ArrowDown' });
+
+      const { x, y } = middleOfNode(cell._content.querySelector('input'));
+      await sendMouse({ type: 'click', position: [Math.floor(x), Math.floor(y)] });
+
+      expect(cell._content.querySelector('vaadin-date-picker')).to.be.ok;
+    });
+
+    it('should stop editing and update value when closing on outside click', async () => {
+      // Open the overlay
+      await sendKeys({ press: 'ArrowDown' });
+      await waitForOverlayRender();
+
+      // Move focus back to the input
+      await sendKeys({ down: 'Shift' });
+      await sendKeys({ press: 'Tab' });
+      await sendKeys({ up: 'Shift' });
+
+      // Change single digit to avoid calendar scroll
+      const input = cell._content.querySelector('input');
+      input.setSelectionRange(3, 4);
+
+      await sendKeys({ type: '2' });
+
+      await sendMouse({ type: 'click', position: [10, 10] });
+      await nextRender();
+
+      // TODO: closing occurs in `vaadin-overlay-outside-click` listener added on global `focusin`
+      // in grid-pro. Consider replacing it with `_shouldRemoveFocus()` check on editor `focusout`
+      // so that we don't stop editing on outside click, to align with the combo-box behavior.
+      expect(cell._content.querySelector('vaadin-date-picker')).to.be.not.ok;
       expect(cell._content.textContent).to.equal('1984-01-12');
     });
   });
