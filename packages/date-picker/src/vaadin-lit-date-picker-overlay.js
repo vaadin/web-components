@@ -7,23 +7,21 @@ import { html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
-import { OverlayMixin } from '@vaadin/overlay/src/vaadin-overlay-mixin.js';
-import { PositionMixin } from '@vaadin/overlay/src/vaadin-overlay-position-mixin.js';
 import { overlayStyles } from '@vaadin/overlay/src/vaadin-overlay-styles.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { DatePickerOverlayMixin } from './vaadin-date-picker-overlay-mixin.js';
 import { datePickerOverlayStyles } from './vaadin-date-picker-overlay-styles.js';
 
 /**
  * An element used internally by `<vaadin-date-picker>`. Not intended to be used separately.
  *
  * @extends HTMLElement
- * @mixes PositionMixin
- * @mixes OverlayMixin
+ * @mixes DatePickerOverlayMixin
  * @mixes DirMixin
  * @mixes ThemableMixin
  * @private
  */
-class DatePickerOverlay extends PositionMixin(OverlayMixin(DirMixin(ThemableMixin(PolylitMixin(LitElement))))) {
+class DatePickerOverlay extends DatePickerOverlayMixin(DirMixin(ThemableMixin(PolylitMixin(LitElement)))) {
   static get is() {
     return 'vaadin-date-picker-overlay';
   }
