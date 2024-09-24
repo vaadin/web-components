@@ -141,7 +141,7 @@ class DashboardSection extends DashboardItemMixin(ControllerMixin(ElementMixin(P
       <div id="focustrap">
         <header>
           ${this.__renderDragHandle()}
-          <slot name="title" @slotchange="${this.__onTitleSlotChange}"></slot>
+          <slot name="title" id="title" @slotchange="${this.__onTitleSlotChange}"></slot>
           ${this.__renderRemoveButton()}
         </header>
       </div>
