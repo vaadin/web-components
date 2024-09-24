@@ -198,10 +198,7 @@ describe('dashboard', () => {
 
       const widget = getElementFromCell(dashboard, 0, 0) as DashboardWidget;
       expect(widget.i18n.selectWidgetTitleForEditing).to.equal('foo');
-      expect(widget.i18n).to.eql({
-        ...dashboard.i18n,
-        selectWidgetTitleForEditing: 'foo',
-      });
+      expect(widget.i18n).to.eql(dashboard.i18n);
     });
 
     it('should localize focused widget', async () => {
@@ -410,10 +407,7 @@ describe('dashboard', () => {
           const widget = getElementFromCell(dashboard, 1, 0) as DashboardWidget;
           const section = widget.closest('vaadin-dashboard-section') as DashboardSection;
           expect(section.i18n.selectSectionTitleForEditing).to.equal('foo');
-          expect(section.i18n).to.eql({
-            ...dashboard.i18n,
-            selectSectionTitleForEditing: 'foo',
-          });
+          expect(section.i18n).to.eql(dashboard.i18n);
         });
       });
     });
