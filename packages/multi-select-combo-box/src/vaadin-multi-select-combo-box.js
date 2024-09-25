@@ -26,6 +26,7 @@ import { css, registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixi
 const multiSelectComboBox = css`
   :host {
     --input-min-width: var(--vaadin-multi-select-combo-box-input-min-width, 4em);
+    --_chip-min-width: var(--vaadin-multi-select-combo-box-chip-min-width, 50px);
   }
 
   [hidden] {
@@ -122,6 +123,7 @@ registerStyles('vaadin-multi-select-combo-box', [inputFieldShared, multiSelectCo
  * `--vaadin-field-default-width`                       | Default width of the field | `12em`
  * `--vaadin-multi-select-combo-box-overlay-width`      | Width of the overlay       | `auto`
  * `--vaadin-multi-select-combo-box-overlay-max-height` | Max height of the overlay  | `65vh`
+ * `--vaadin-multi-select-combo-box-chip-min-width`     | Min width of the chip      | `50px`
  * `--vaadin-multi-select-combo-box-input-min-width`    | Min width of the input     | `4em`
  *
  * ### Internal components
