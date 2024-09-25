@@ -45,7 +45,7 @@ function _getElementFromCell(dashboard: HTMLElement, rowIndex: number, columnInd
   const y = top + rowHeights.slice(0, rowIndex).reduce((sum, height) => sum + height, 0);
 
   return document
-    .elementsFromPoint(x + (columnWidths[columnIndex] / 2) * (rtl ? -1 : 1), y + rowHeights[rowIndex] - 1)
+    .elementsFromPoint(x + (columnWidths[columnIndex] / 2) * (rtl ? -1 : 1), y + rowHeights[rowIndex] - 10)
     .reverse()
     .find(
       (element) =>
