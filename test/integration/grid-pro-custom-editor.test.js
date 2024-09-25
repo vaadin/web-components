@@ -239,7 +239,7 @@ describe('grid-pro custom editor', () => {
       expect(cell._content.textContent).to.equal('1984-01-12T09:00');
     });
 
-    it('should not stop editing and update value when closing on outside click', async () => {
+    it('should not stop editing and update value when closing on time-picker outside click', async () => {
       // TODO: replace with Tab and add a separate test to not stop editing on Tab
       cell._content.querySelector('vaadin-time-picker').focus();
 
