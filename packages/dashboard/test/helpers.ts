@@ -165,7 +165,8 @@ export function expectLayout(dashboard: HTMLElement, layout: Array<Array<number 
       if (!element) {
         actualRow.push(null);
       } else {
-        actualRow.push(parseInt(element.id.replace('item-', '')));
+        // TODO: Just use a number for all test item IDs
+        actualRow.push(parseInt(element.id.replace('item-', '').replace('Item ', ''), 10));
       }
     });
   });

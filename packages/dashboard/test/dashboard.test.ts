@@ -7,6 +7,7 @@ import type { DashboardSection } from '../src/vaadin-dashboard-section.js';
 import type { DashboardWidget } from '../src/vaadin-dashboard-widget.js';
 import type { Dashboard, DashboardItem, DashboardSectionItem } from '../vaadin-dashboard.js';
 import {
+  expectLayout,
   getDraggable,
   getElementFromCell,
   getRemoveButton,
@@ -503,6 +504,7 @@ describe('dashboard', () => {
         if (!widget || widget.tabIndex !== 0) {
           root.textContent = '';
           widget = document.createElement('vaadin-dashboard-widget');
+          widget.id = model.item.id;
           widget.tabIndex = 0;
           root.appendChild(widget);
         }
@@ -567,6 +569,8 @@ describe('dashboard', () => {
     describe('focus restore on focused item removal', () => {
       beforeEach(async () => {
         dashboard.editable = true;
+        await nextFrame();
+
         dashboard.items = [
           { id: 'Item 0' },
           { id: 'Item 1' },
@@ -575,6 +579,13 @@ describe('dashboard', () => {
           { id: 'Item 5' },
         ];
         await nextFrame();
+
+        /* prettier-ignore */
+        expectLayout(dashboard, [
+          [0, 1],
+          [2, 3],
+          [4, 5]
+        ]);
       });
 
       async function renderAndFocusRestore() {
