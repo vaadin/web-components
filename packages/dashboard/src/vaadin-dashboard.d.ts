@@ -87,8 +87,8 @@ export interface DashboardCustomEventMap<TItem extends DashboardItem> {
 export type DashboardEventMap<TItem extends DashboardItem> = DashboardCustomEventMap<TItem> & HTMLElementEventMap;
 
 export interface DashboardI18n {
-  selectSectionTitleForEditing: string;
-  selectWidgetTitleForEditing: string;
+  selectWidget: string;
+  selectSection: string;
   remove: string;
   resize: string;
   resizeApply: string;
@@ -140,8 +140,8 @@ declare class Dashboard<TItem extends DashboardItem = DashboardItem> extends Das
    * The object has the following structure and default values:
    * ```
    * {
-   *   selectSectionTitleForEditing: 'Select section title for editing',
-   *   selectWidgetTitleForEditing: 'Select widget title for editing',
+   *   selectSection: 'Select section for editing',
+   *   selectWidget: 'Select widget for editing',
    *   remove: 'Remove',
    *   resize: 'Resize',
    *   resizeApply: 'Apply',

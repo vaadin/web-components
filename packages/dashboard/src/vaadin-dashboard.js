@@ -107,8 +107,8 @@ class Dashboard extends ControllerMixin(DashboardLayoutMixin(ElementMixin(Themab
        * The object has the following structure and default values:
        * ```
        * {
-       *   selectSectionTitleForEditing: 'Select section title for editing',
-       *   selectWidgetTitleForEditing: 'Select widget title for editing',
+       *   selectSection: 'Select section for editing',
+       *   selectWidget: 'Select widget for editing',
        *   remove: 'Remove',
        *   resize: 'Resize',
        *   resizeApply: 'Apply',

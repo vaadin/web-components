@@ -16,8 +16,8 @@ import { fireMove, fireRemove, fireResize } from './vaadin-dashboard-helpers.js'
 import { dashboardWidgetAndSectionStyles } from './vaadin-dashboard-styles.js';
 
 const DEFAULT_I18N = {
-  selectWidgetTitleForEditing: 'Select widget title for editing',
-  selectSectionTitleForEditing: 'Select section title for editing',
+  selectWidget: 'Select widget for editing',
+  selectSection: 'Select section for editing',
   remove: 'Remove',
   move: 'Move',
   moveApply: 'Apply',

@@ -34,8 +34,8 @@ assertType<Array<DashboardItem | DashboardSectionItem<DashboardItem>> | null | u
 assertType<boolean>(genericDashboard.editable);
 
 assertType<{
-  selectWidgetTitleForEditing: string;
-  selectSectionTitleForEditing: string;
+  selectWidget: string;
+  selectSection: string;
   remove: string;
   resize: string;
   move: string;

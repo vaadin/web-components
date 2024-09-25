@@ -101,7 +101,7 @@ class DashboardWidget extends DashboardItemMixin(ControllerMixin(ElementMixin(Po
        * The object has the following structure and default values:
        * ```
        * {
-       *   selectWidgetTitleForEditing: 'Select widget title for editing',
+       *   selectWidget: 'Select widget for editing',
        *   remove: 'Remove',
        *   resize: 'Resize',
        *   resizeApply: 'Apply',
@@ -121,7 +121,7 @@ class DashboardWidget extends DashboardItemMixin(ControllerMixin(ElementMixin(Po
         type: Object,
         value: () => {
           const i18n = getDefaultI18n();
-          delete i18n.selectSectionTitleForEditing;
+          delete i18n.selectSection;
           return i18n;
         },
       },
@@ -140,8 +140,7 @@ class DashboardWidget extends DashboardItemMixin(ControllerMixin(ElementMixin(Po
   /** @protected */
   render() {
     return html`
-      ${this.__renderFocusButton('selectWidgetTitleForEditing')} ${this.__renderMoveControls()}
-      ${this.__renderResizeControls()}
+      ${this.__renderFocusButton('selectWidget')} ${this.__renderMoveControls()} ${this.__renderResizeControls()}
 
       <div id="focustrap">
         <header>

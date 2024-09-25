@@ -112,9 +112,9 @@ describe('dashboard widget', () => {
   describe('i18n', () => {
     it('should localize focus button aria-label', async () => {
       const focusButton = widget.shadowRoot?.querySelector('#focus-button');
-      expect(focusButton?.getAttribute('aria-label')).to.eql('Select widget title for editing');
+      expect(focusButton?.getAttribute('aria-label')).to.eql('Select widget for editing');
 
-      widget.__i18n = { ...widget.__i18n, selectWidgetTitleForEditing: 'foo' };
+      widget.__i18n = { ...widget.__i18n, selectWidget: 'foo' };
       await nextFrame();
 
       expect(focusButton?.getAttribute('aria-label')).to.eql('foo');

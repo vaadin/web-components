@@ -172,8 +172,8 @@ describe('dashboard', () => {
   describe('i18n', () => {
     it('should have default values', () => {
       expect(dashboard.i18n).to.eql({
-        selectSectionTitleForEditing: 'Select section title for editing',
-        selectWidgetTitleForEditing: 'Select widget title for editing',
+        selectSection: 'Select section for editing',
+        selectWidget: 'Select widget for editing',
         remove: 'Remove',
         resize: 'Resize',
         resizeApply: 'Apply',
@@ -191,13 +191,13 @@ describe('dashboard', () => {
     it('should localize widget', async () => {
       dashboard.i18n = {
         ...dashboard.i18n,
-        selectWidgetTitleForEditing: 'foo',
+        selectWidget: 'foo',
       };
 
       await nextFrame();
 
       const widget = getElementFromCell(dashboard, 0, 0) as DashboardWidget & { __i18n: { [key: string]: string } };
-      expect(widget.__i18n.selectWidgetTitleForEditing).to.equal('foo');
+      expect(widget.__i18n.selectWidget).to.equal('foo');
       expect(widget.__i18n).to.eql(dashboard.i18n);
     });
 
@@ -221,11 +221,11 @@ describe('dashboard', () => {
 
       dashboard.i18n = {
         ...dashboard.i18n,
-        selectWidgetTitleForEditing: 'foo',
+        selectWidget: 'foo',
       };
       await nextFrame();
 
-      expect(widget.__i18n.selectWidgetTitleForEditing).to.equal('foo');
+      expect(widget.__i18n.selectWidget).to.equal('foo');
     });
 
     it('should localize a lazily rendered widget', async () => {
@@ -241,12 +241,12 @@ describe('dashboard', () => {
 
       dashboard.i18n = {
         ...dashboard.i18n,
-        selectWidgetTitleForEditing: 'foo',
+        selectWidget: 'foo',
       };
       await nextFrame();
 
       const widget = getElementFromCell(dashboard, 0, 0) as DashboardWidget & { __i18n: { [key: string]: string } };
-      expect(widget.__i18n.selectWidgetTitleForEditing).to.equal('foo');
+      expect(widget.__i18n.selectWidget).to.equal('foo');
     });
   });
 
@@ -399,7 +399,7 @@ describe('dashboard', () => {
         it('should localize section', async () => {
           dashboard.i18n = {
             ...dashboard.i18n,
-            selectSectionTitleForEditing: 'foo',
+            selectSection: 'foo',
           };
 
           await nextFrame();
@@ -408,7 +408,7 @@ describe('dashboard', () => {
           const section = widget.closest('vaadin-dashboard-section') as DashboardSection & {
             __i18n: { [key: string]: string };
           };
-          expect(section.__i18n.selectSectionTitleForEditing).to.equal('foo');
+          expect(section.__i18n.selectSection).to.equal('foo');
           expect(section.__i18n).to.eql(dashboard.i18n);
         });
       });
