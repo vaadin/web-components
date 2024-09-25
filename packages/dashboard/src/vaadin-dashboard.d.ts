@@ -76,12 +76,42 @@ export type DashboardItemRemovedEvent<TItem extends DashboardItem> = CustomEvent
   items: Array<TItem | DashboardSectionItem<TItem>>;
 }>;
 
+/**
+ * Fired when an item selected state changed
+ */
+export type DashboardItemSeletedChangedEvent<TItem extends DashboardItem> = CustomEvent<{
+  item: TItem;
+  value: boolean;
+}>;
+
+/**
+ * Fired when an item move mode changed
+ */
+export type DashboardItemMoveModeChangedEvent<TItem extends DashboardItem> = CustomEvent<{
+  item: TItem;
+  value: boolean;
+}>;
+
+/**
+ * Fired when an item resize mode changed
+ */
+export type DashboardItemResizeModeChangedEvent<TItem extends DashboardItem> = CustomEvent<{
+  item: TItem;
+  value: boolean;
+}>;
+
 export interface DashboardCustomEventMap<TItem extends DashboardItem> {
   'dashboard-item-moved': DashboardItemMovedEvent<TItem>;
 
   'dashboard-item-resized': DashboardItemResizedEvent<TItem>;
 
   'dashboard-item-removed': DashboardItemRemovedEvent<TItem>;
+
+  'dashboard-item-selected-changed': DashboardItemSeletedChangedEvent<TItem>;
+
+  'dashboard-item-move-mode-changed': DashboardItemMoveModeChangedEvent<TItem>;
+
+  'dashboard-item-resize-mode-changed': DashboardItemResizeModeChangedEvent<TItem>;
 }
 
 export type DashboardEventMap<TItem extends DashboardItem> = DashboardCustomEventMap<TItem> & HTMLElementEventMap;

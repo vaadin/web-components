@@ -102,6 +102,18 @@
       dashboard.addEventListener('dashboard-item-removed', (e) => {
         console.log('dashboard-item-removed', e.detail);
       });
+
+      dashboard.addEventListener('dashboard-item-selected-changed', (e) => {
+        console.log('dashboard-item-selected-changed', e.detail);
+      });
+
+      dashboard.addEventListener('dashboard-item-move-mode-changed', (e) => {
+        console.log('dashboard-item-move-mode-changed', e.detail);
+      });
+
+      dashboard.addEventListener('dashboard-item-resize-mode-changed', (e) => {
+        console.log('dashboard-item-resize-mode-changed', e.detail);
+      });
     </script>
   </head>
 

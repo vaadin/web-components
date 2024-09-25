@@ -35,6 +35,9 @@ import { WidgetResizeController } from './widget-resize-controller.js';
  * @fires {CustomEvent} dashboard-item-moved - Fired when an item was moved
  * @fires {CustomEvent} dashboard-item-resized - Fired when an item was resized
  * @fires {CustomEvent} dashboard-item-removed - Fired when an item was removed
+ * @fires {CustomEvent} dashboard-item-selected-changed - Fired when an item selected state changed
+ * @fires {CustomEvent} dashboard-item-move-mode-changed - Fired when an item move mode changed
+ * @fires {CustomEvent} dashboard-item-resize-mode-changed - Fired when an item resize mode changed
  *
  * @customElement
  * @extends HTMLElement
@@ -143,6 +146,9 @@ class Dashboard extends ControllerMixin(DashboardLayoutMixin(ElementMixin(Themab
     this.__widgetReorderController = new WidgetReorderController(this);
     this.__widgetResizeController = new WidgetResizeController(this);
     this.addEventListener('item-remove', (e) => this.__itemRemove(e));
+    this.addEventListener('item-selected-changed', (e) => this.__itemSelectedChanged(e));
+    this.addEventListener('item-move-mode-changed', (e) => this.__itemMoveModeChanged(e));
+    this.addEventListener('item-resize-mode-changed', (e) => this.__itemResizeModeChanged(e));
   }
 
   /** @protected */
@@ -265,6 +271,66 @@ class Dashboard extends ControllerMixin(DashboardLayoutMixin(ElementMixin(Themab
       new CustomEvent('dashboard-item-removed', { cancelable: true, detail: { item, items: this.items } }),
     );
   }
+
+  /** @private */
+  __itemSelectedChanged(e) {
+    e.stopImmediatePropagation();
+    this.dispatchEvent(
+      new CustomEvent('dashboard-item-selected-changed', {
+        bubbles: true,
+        detail: {
+          item: getElementItem(e.target),
+          value: e.detail.value,
+        },
+      }),
+    );
+  }
+
+  /** @private */
+  __itemMoveModeChanged(e) {
+    e.stopImmediatePropagation();
+    this.dispatchEvent(
+      new CustomEvent('dashboard-item-move-mode-changed', {
+        bubbles: true,
+        detail: {
+          item: getElementItem(e.target),
+          value: e.detail.value,
+        },
+      }),
+    );
+  }
+
+  /** @private */
+  __itemResizeModeChanged(e) {
+    e.stopImmediatePropagation();
+    this.dispatchEvent(
+      new CustomEvent('dashboard-item-resize-mode-changed', {
+        bubbles: true,
+        detail: {
+          item: getElementItem(e.target),
+          value: e.detail.value,
+        },
+      }),
+    );
+  }
+
+  /**
+   * Fired when an item selected state changed
+   *
+   * @event dashboard-item-selected-changed
+   */
+
+  /**
+   * Fired when an item move mode changed
+   *
+   * @event dashboard-item-move-mode-changed
+   */
+
+  /**
+   * Fired when an item resize mode changed
+   *
+   * @event dashboard-item-resize-mode-changed
+   */
 
   /**
    * Fired when an item was moved

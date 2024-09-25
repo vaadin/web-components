@@ -77,6 +77,7 @@ export const DashboardItemMixin = (superClass) =>
           type: Boolean,
           reflectToAttribute: true,
           attribute: 'move-mode',
+          observer: '__moveModeChanged',
         },
 
         /** @private */
@@ -84,6 +85,7 @@ export const DashboardItemMixin = (superClass) =>
           type: Boolean,
           reflectToAttribute: true,
           attribute: 'resize-mode',
+          observer: '__resizeModeChanged',
         },
       };
     }
@@ -227,6 +229,9 @@ export const DashboardItemMixin = (superClass) =>
 
     /** @private */
     __selectedChanged(selected) {
+      this.dispatchEvent(
+        new CustomEvent('item-selected-changed', { bubbles: true, composed: true, detail: { value: selected } }),
+      );
       if (selected) {
         this.__focusTrapController.trapFocus(this.$.focustrap);
       } else {
@@ -282,5 +287,19 @@ export const DashboardItemMixin = (superClass) =>
       requestAnimationFrame(() => {
         this.__focusTrapController.trapFocus(this.$['resize-controls']);
       });
+    }
+
+    /** @private */
+    __moveModeChanged(moveMode) {
+      this.dispatchEvent(
+        new CustomEvent('item-move-mode-changed', { bubbles: true, composed: true, detail: { value: moveMode } }),
+      );
+    }
+
+    /** @private */
+    __resizeModeChanged(resizeMode) {
+      this.dispatchEvent(
+        new CustomEvent('item-resize-mode-changed', { bubbles: true, composed: true, detail: { value: resizeMode } }),
+      );
     }
   };
