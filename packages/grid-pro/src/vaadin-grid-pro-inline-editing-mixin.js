@@ -306,10 +306,16 @@ export const InlineEditingMixin = (superClass) =>
     /** @private */
     _onEditorFocusOut(event) {
       // Ignore focusout from internal tab event
-      if (this.__cancelCellSwitch) {
+      if (this.__cancelCellSwitch || this.__shouldIgnoreFocusOut(event)) {
         return;
       }
 
+      // Schedule stop on editor component focusout
+      this._debouncerStopEdit = Debouncer.debounce(this._debouncerStopEdit, animationFrame, this._stopEdit.bind(this));
+    }
+
+    /** @private */
+    __shouldIgnoreFocusOut(event) {
       const edited = this.__edited;
       if (edited) {
         const { cell, column } = this.__edited;
@@ -319,12 +325,9 @@ export const InlineEditingMixin = (superClass) =>
         const nodes = path.slice(0, path.indexOf(editor) + 1).filter((node) => node.nodeType === Node.ELEMENT_NODE);
         // Detect focus moving to e.g. vaadin-select-overlay or vaadin-date-picker-overlay
         if (nodes.some((el) => typeof el._shouldRemoveFocus === 'function' && !el._shouldRemoveFocus(event))) {
-          return;
+          return true;
         }
       }
-
-      // Schedule stop on editor component focusout
-      this._debouncerStopEdit = Debouncer.debounce(this._debouncerStopEdit, animationFrame, this._stopEdit.bind(this));
     }
 
     /** @private */
@@ -443,9 +446,21 @@ export const InlineEditingMixin = (superClass) =>
       // Do not prevent Tab to allow native input blur and wait for it,
       // unless the keydown event is from the edit cell select overlay.
       if (e.key === 'Tab' && editor && editor.contains(e.target)) {
-        await new Promise((resolve) => {
-          editor.addEventListener('focusout', () => resolve(), { once: true });
+        const ignore = await new Promise((resolve) => {
+          editor.addEventListener(
+            'focusout',
+            (event) => {
+              resolve(this.__shouldIgnoreFocusOut(event));
+            },
+            { once: true },
+          );
         });
+
+        // Ignore focusout event after which focus stays in the field,
+        // e.g. Tab between date and time pickers in date-time-picker.
+        if (ignore) {
+          return;
+        }
       } else {
         e.preventDefault();
       }
