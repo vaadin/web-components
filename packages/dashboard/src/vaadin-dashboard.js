@@ -238,16 +238,15 @@ class Dashboard extends ControllerMixin(DashboardLayoutMixin(ElementMixin(Themab
 
     if (focusedWrapperWillBeRemoved) {
       // The wrapper containing the focused element was removed. Try to focus the element in the closest wrapper.
-      const targetWrapper = wrapperClosestToRemovedFocused || this.querySelector(WRAPPER_LOCAL_NAME);
-      if (targetWrapper) {
-        requestAnimationFrame(() => this.__focusWrapperContent(targetWrapper));
-      }
+      requestAnimationFrame(() =>
+        this.__focusWrapperContent(wrapperClosestToRemovedFocused || this.querySelector(WRAPPER_LOCAL_NAME)),
+      );
     }
   }
 
   /** @private */
   __focusWrapperContent(wrapper) {
-    if (wrapper.firstElementChild) {
+    if (wrapper && wrapper.firstElementChild) {
       wrapper.firstElementChild.focus();
     }
   }
