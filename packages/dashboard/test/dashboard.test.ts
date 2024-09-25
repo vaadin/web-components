@@ -10,6 +10,7 @@ import {
   expectLayout,
   getDraggable,
   getElementFromCell,
+  getParentSection,
   getRemoveButton,
   getResizeHandle,
   onceResized,
@@ -575,16 +576,13 @@ describe('dashboard', () => {
           { id: 'Item 0' },
           { id: 'Item 1' },
           { title: 'Section', items: [{ id: 'Item 2' }, { id: 'Item 3' }] },
-          { id: 'Item 4' },
-          { id: 'Item 5' },
         ];
         await nextFrame();
 
         /* prettier-ignore */
         expectLayout(dashboard, [
           [0, 1],
-          [2, 3],
-          [4, 5]
+          [2, 3]
         ]);
       });
 
@@ -603,14 +601,15 @@ describe('dashboard', () => {
       });
 
       it('should focus the previous widget on focused widget removal', async () => {
-        getElementFromCell(dashboard, 2, 1)!.focus();
-        dashboard.items = dashboard.items.slice(0, 4);
+        const sectionWidget = getElementFromCell(dashboard, 1, 1)!;
+        getParentSection(sectionWidget)!.focus();
+        dashboard.items = dashboard.items.slice(0, 2);
         await renderAndFocusRestore();
-        expect(document.activeElement).to.equal(getElementFromCell(dashboard, 2, 0)!);
+        expect(document.activeElement).to.equal(getElementFromCell(dashboard, 0, 1)!);
       });
 
       it('should focus the first widget on focused widget removal', async () => {
-        getElementFromCell(dashboard, 2, 0)!.focus();
+        getElementFromCell(dashboard, 1, 0)!.focus();
         dashboard.items = [dashboard.items[0]];
         await renderAndFocusRestore();
         expect(document.activeElement).to.equal(getElementFromCell(dashboard, 0, 0)!);
@@ -618,21 +617,21 @@ describe('dashboard', () => {
 
       it('should focus the last widget on focused widget removal', async () => {
         getElementFromCell(dashboard, 0, 0)!.focus();
-        dashboard.items = [dashboard.items[4]];
+        dashboard.items = [dashboard.items[2]];
         await renderAndFocusRestore();
-        expect(document.activeElement).to.equal(getElementFromCell(dashboard, 0, 0)!);
+        expect(document.activeElement).to.equal(getParentSection(getElementFromCell(dashboard, 0, 0))!);
       });
 
       it('should focus a root level widget on focused section removal', async () => {
         getElementFromCell(dashboard, 1, 0)!.focus();
-        dashboard.items = [dashboard.items[0], dashboard.items[1], dashboard.items[3], dashboard.items[4]];
+        dashboard.items = dashboard.items.slice(0, 2);
         await renderAndFocusRestore();
-        expect(document.activeElement).to.equal(getElementFromCell(dashboard, 1, 0)!);
+        expect(document.activeElement).to.equal(getElementFromCell(dashboard, 0, 1)!);
       });
 
       it('should focus the section on focused section widget removal', async () => {
         const widget = getElementFromCell(dashboard, 1, 0)!;
-        const section = widget.closest('vaadin-dashboard-section') as DashboardSection;
+        const section = getParentSection(widget)!;
         widget.focus();
         (dashboard.items[2] as DashboardSectionItem<TestDashboardItem>).items = [];
         dashboard.items = [...dashboard.items];

@@ -14,11 +14,11 @@ export function getScrollingContainer(dashboard: Element): Element {
   return getCssGrid(dashboard);
 }
 
-export function getParentSection(element?: Element | null): Element | null {
+export function getParentSection(element?: Element | null): DashboardSection | null {
   if (!element) {
     return null;
   }
-  return element.closest('vaadin-dashboard-section');
+  return element.closest('vaadin-dashboard-section') as DashboardSection;
 }
 
 /**
