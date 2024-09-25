@@ -1,5 +1,6 @@
 import { expect } from '@esm-bundle/chai';
-import { enter, esc, fixtureSync, focusin, focusout, isIOS, nextFrame, tab } from '@vaadin/testing-helpers';
+import { enter, esc, fixtureSync, focusin, focusout, nextFrame } from '@vaadin/testing-helpers';
+import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import {
   createItems,
@@ -20,8 +21,8 @@ function indexNameRenderer(root, _, { index, item }) {
 }
 
 describe('edit column', () => {
-  (isIOS ? describe.skip : describe)('select column', () => {
-    let grid, textCell, selectCell, checkboxCell;
+  describe('select column', () => {
+    let grid, textCell, selectCell, ageCell;
 
     beforeEach(async () => {
       grid = fixtureSync(`
@@ -37,7 +38,7 @@ describe('edit column', () => {
       flushGrid(grid);
       textCell = getContainerCell(grid.$.items, 1, 0);
       selectCell = getContainerCell(grid.$.items, 1, 1);
-      checkboxCell = getContainerCell(grid.$.items, 1, 2);
+      ageCell = getContainerCell(grid.$.items, 1, 2);
       await nextFrame();
     });
 
@@ -47,27 +48,31 @@ describe('edit column', () => {
       await nextFrame();
 
       // Press Tab to edit the select cell
-      tab(document.activeElement);
+      await sendKeys({ press: 'Tab' });
       expect(getCellEditor(selectCell)).to.be.ok;
       await nextFrame();
 
-      // Press Tab to edit the checkbox cell
-      tab(document.activeElement);
-      expect(getCellEditor(checkboxCell)).to.be.ok;
+      // Press Tab to edit the age cell
+      await sendKeys({ press: 'Tab' });
+      expect(getCellEditor(ageCell)).to.be.ok;
     });
 
     it('should focus previous cell available for editing in edit mode on Shift Tab', async () => {
-      dblclick(checkboxCell._content);
-      expect(getCellEditor(checkboxCell)).to.be.ok;
+      dblclick(ageCell._content);
+      expect(getCellEditor(ageCell)).to.be.ok;
       await nextFrame();
 
       // Press Shift + Tab to edit the select cell
-      tab(document.activeElement, ['shift']);
+      await sendKeys({ down: 'Shift' });
+      await sendKeys({ press: 'Tab' });
+      await sendKeys({ up: 'Shift' });
       expect(getCellEditor(selectCell)).to.be.ok;
       await nextFrame();
 
       // Press Shift + Tab to edit the text cell
-      tab(document.activeElement, ['shift']);
+      await sendKeys({ down: 'Shift' });
+      await sendKeys({ press: 'Tab' });
+      await sendKeys({ up: 'Shift' });
       expect(getCellEditor(textCell)).to.be.ok;
     });
   });
@@ -113,7 +118,7 @@ describe('edit column', () => {
   });
 
   describe('horizontal scrolling to cell', () => {
-    let grid, input;
+    let grid;
 
     beforeEach(() => {
       grid = fixtureSync(`
@@ -130,26 +135,24 @@ describe('edit column', () => {
       flushGrid(grid);
     });
 
-    it('should scroll to the right on tab when editable cell is outside the viewport', () => {
+    it('should scroll to the right on tab when editable cell is outside the viewport', async () => {
       const firstCell = getContainerCell(grid.$.items, 1, 0);
       dblclick(firstCell._content);
-      input = getCellEditor(firstCell);
-      tab(input);
+
+      await sendKeys({ press: 'Tab' });
 
       expect(grid.$.table.scrollLeft).to.be.at.least(100);
     });
 
-    it('should scroll to the left on tab when editable cell is outside the viewport', (done) => {
+    it('should scroll to the left on tab when editable cell is outside the viewport', async () => {
       const firstCell = getContainerCell(grid.$.items, 1, 1);
       dblclick(firstCell._content);
 
-      setTimeout(() => {
-        input = getCellEditor(firstCell);
-        tab(input, ['shift']);
+      await sendKeys({ down: 'Shift' });
+      await sendKeys({ press: 'Tab' });
+      await sendKeys({ up: 'Shift' });
 
-        expect(grid.$.table.scrollLeft).to.closeTo(1, 1);
-        done();
-      });
+      expect(grid.$.table.scrollLeft).to.closeTo(1, 1);
     });
   });
 
@@ -386,7 +389,7 @@ describe('edit column', () => {
         /* prettier-ignore */
         grid.dataProvider = ({ page, pageSize }, callback) => { // NOSONAR
           const items = [...Array(pageSize).keys()].map((i) => {
-            return { 
+            return {
               id: page * pageSize + i,
               status: 'draft',
               amount: 100,
@@ -429,78 +432,91 @@ describe('edit column', () => {
       });
 
       describe('with Tab', () => {
-        it('should skip non-editable cells when navigating with Tab', () => {
+        it('should skip non-editable cells when navigating with Tab', async () => {
           let cell = getContainerCell(grid.$.items, 1, 2);
-          enter(cell);
+          cell.focus();
+          await sendKeys({ press: 'Enter' });
           expect(getCellEditor(cell)).to.be.ok;
 
-          tab(cell);
+          await sendKeys({ press: 'Tab' });
           cell = getContainerCell(grid.$.items, 1, 3);
           expect(getCellEditor(cell)).to.be.ok;
 
           // Should skip non-editable row
-          tab(cell);
+          await sendKeys({ press: 'Tab' });
           cell = getContainerCell(grid.$.items, 3, 1);
           expect(getCellEditor(cell)).to.be.ok;
 
-          tab(cell);
+          await sendKeys({ press: 'Tab' });
           cell = getContainerCell(grid.$.items, 3, 2);
           expect(getCellEditor(cell)).to.be.ok;
         });
 
-        it('should skip non-editable cells when navigating with Shift-Tab', () => {
+        it('should skip non-editable cells when navigating with Shift-Tab', async () => {
           let cell = getContainerCell(grid.$.items, 3, 2);
-          enter(cell);
+          cell.focus();
+          await sendKeys({ press: 'Enter' });
           expect(getCellEditor(cell)).to.be.ok;
 
-          tab(cell, ['shift']);
+          await sendKeys({ down: 'Shift' });
+          await sendKeys({ press: 'Tab' });
+          await sendKeys({ up: 'Shift' });
           cell = getContainerCell(grid.$.items, 3, 1);
           expect(getCellEditor(cell)).to.be.ok;
 
           // Should skip non-editable rows
-          tab(cell, ['shift']);
+          await sendKeys({ down: 'Shift' });
+          await sendKeys({ press: 'Tab' });
+          await sendKeys({ up: 'Shift' });
           cell = getContainerCell(grid.$.items, 1, 3);
           expect(getCellEditor(cell)).to.be.ok;
 
-          tab(cell, ['shift']);
+          await sendKeys({ down: 'Shift' });
+          await sendKeys({ press: 'Tab' });
+          await sendKeys({ up: 'Shift' });
           cell = getContainerCell(grid.$.items, 1, 2);
           expect(getCellEditor(cell)).to.be.ok;
         });
 
-        it('should skip cells that become non-editable after editing current cell', () => {
+        it('should skip cells that become non-editable after editing current cell', async () => {
           // Edit status in row 2 to be completed, so none of the cells in this
           // row should be editable anymore
           let cell = getContainerCell(grid.$.items, 1, 1);
-          enter(cell);
+          cell.focus();
+          await sendKeys({ press: 'Enter' });
           const input = getCellEditor(cell);
           input.value = 'completed';
-          tab(cell);
+          await sendKeys({ press: 'Tab' });
 
           // Should skip to row 4
           cell = getContainerCell(grid.$.items, 3, 1);
           expect(getCellEditor(cell)).to.be.ok;
         });
 
-        it('should stop editing and focus last edited cell if there are no more editable cells with Tab', () => {
+        it('should stop editing and focus last edited cell if there are no more editable cells with Tab', async () => {
           const cell = getContainerCell(grid.$.items, 3, 3);
-          enter(cell);
+          cell.focus();
+          await sendKeys({ press: 'Enter' });
           expect(getCellEditor(cell)).to.be.ok;
           expect(grid.querySelector('vaadin-grid-pro-edit-text-field')).to.be.ok;
 
-          tab(cell);
+          await sendKeys({ press: 'Tab' });
           expect(grid.querySelector('vaadin-grid-pro-edit-text-field')).to.not.be.ok;
           const target = cell._focusButton || cell;
           expect(grid.shadowRoot.activeElement).to.equal(target);
           expect(grid.hasAttribute('navigating')).to.be.true;
         });
 
-        it('should stop editing and focus last edited cell if there are no more editable cells with Shift-Tab', () => {
+        it('should stop editing and focus last edited cell if there are no more editable cells with Shift-Tab', async () => {
           const cell = getContainerCell(grid.$.items, 1, 1);
-          enter(cell);
+          cell.focus();
+          await sendKeys({ press: 'Enter' });
           expect(getCellEditor(cell)).to.be.ok;
           expect(grid.querySelector('vaadin-grid-pro-edit-text-field')).to.be.ok;
 
-          tab(cell, ['shift']);
+          await sendKeys({ down: 'Shift' });
+          await sendKeys({ press: 'Tab' });
+          await sendKeys({ up: 'Shift' });
           expect(grid.querySelector('vaadin-grid-pro-edit-text-field')).to.not.be.ok;
           const target = cell._focusButton || cell;
           expect(grid.shadowRoot.activeElement).to.equal(target);
@@ -513,46 +529,54 @@ describe('edit column', () => {
           grid.enterNextRow = true;
         });
 
-        it('should skip non-editable cells when navigating with Enter', () => {
+        it('should skip non-editable cells when navigating with Enter', async () => {
           let cell = getContainerCell(grid.$.items, 1, 1);
-          enter(cell);
+          cell.focus();
+          await sendKeys({ press: 'Enter' });
           expect(getCellEditor(cell)).to.be.ok;
 
-          enter(cell);
+          await sendKeys({ press: 'Enter' });
           cell = getContainerCell(grid.$.items, 3, 1);
           expect(getCellEditor(cell)).to.be.ok;
         });
 
-        it('should skip non-editable cells when navigating with Shift-Enter', () => {
+        it('should skip non-editable cells when navigating with Shift-Enter', async () => {
           let cell = getContainerCell(grid.$.items, 3, 1);
-          enter(cell);
+          cell.focus();
+          await sendKeys({ press: 'Enter' });
           expect(getCellEditor(cell)).to.be.ok;
 
-          enter(cell, ['shift']);
+          await sendKeys({ down: 'Shift' });
+          await sendKeys({ press: 'Enter' });
+          await sendKeys({ up: 'Shift' });
           cell = getContainerCell(grid.$.items, 1, 1);
           expect(getCellEditor(cell)).to.be.ok;
         });
 
-        it('should stop editing and focus last edited cell if there are no more editable cells with Enter', () => {
+        it('should stop editing and focus last edited cell if there are no more editable cells with Enter', async () => {
           const cell = getContainerCell(grid.$.items, 3, 1);
-          enter(cell);
+          cell.focus();
+          await sendKeys({ press: 'Enter' });
           expect(getCellEditor(cell)).to.be.ok;
           expect(grid.querySelector('vaadin-grid-pro-edit-text-field')).to.be.ok;
 
-          enter(cell);
+          await sendKeys({ press: 'Enter' });
           expect(grid.querySelector('vaadin-grid-pro-edit-text-field')).to.not.be.ok;
           const target = cell._focusButton || cell;
           expect(grid.shadowRoot.activeElement).to.equal(target);
           expect(grid.hasAttribute('navigating')).to.be.true;
         });
 
-        it('should stop editing and focus last edited cell if there are no more editable cells with Shift-Enter', () => {
+        it('should stop editing and focus last edited cell if there are no more editable cells with Shift-Enter', async () => {
           const cell = getContainerCell(grid.$.items, 1, 1);
-          enter(cell);
+          cell.focus();
+          await sendKeys({ press: 'Enter' });
           expect(getCellEditor(cell)).to.be.ok;
           expect(grid.querySelector('vaadin-grid-pro-edit-text-field')).to.be.ok;
 
-          enter(cell, ['shift']);
+          await sendKeys({ down: 'Shift' });
+          await sendKeys({ press: 'Enter' });
+          await sendKeys({ up: 'Shift' });
           expect(grid.querySelector('vaadin-grid-pro-edit-text-field')).to.not.be.ok;
           const target = cell._focusButton || cell;
           expect(grid.shadowRoot.activeElement).to.equal(target);
