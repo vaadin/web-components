@@ -75,6 +75,20 @@ class Dashboard extends ControllerMixin(DashboardLayoutMixin(ElementMixin(Themab
       },
 
       /**
+       * Path for the id of the item.
+       * The `itemIdPath` is used to compare and identify the same item
+       * already rendered when updating the `items` property.
+       * Using the `itemIdPath` allows setting a new set of items to the
+       * dashboard without having to re-render existing widgets representing
+       * the same items.
+       *
+       * @attr {string} item-id-path
+       */
+      itemIdPath: {
+        type: String,
+      },
+
+      /**
        * Custom function for rendering a widget for each dashboard item.
        * Placing something else than a widget in the wrapper is not supported.
        * Receives three arguments:
@@ -186,6 +200,17 @@ class Dashboard extends ControllerMixin(DashboardLayoutMixin(ElementMixin(Themab
   }
 
   /** @private */
+  __itemsEqual(a, b) {
+    if (a === b) {
+      return true;
+    }
+    if (this.itemIdPath) {
+      return a[this.itemIdPath] === b[this.itemIdPath];
+    }
+    return false;
+  }
+
+  /** @private */
   __renderItemWrappers(items, hostElement = this) {
     // Get all the wrappers in the host element
     let wrappers = [...hostElement.children].filter((el) => el.localName === WRAPPER_LOCAL_NAME);
@@ -193,7 +218,7 @@ class Dashboard extends ControllerMixin(DashboardLayoutMixin(ElementMixin(Themab
 
     items.forEach((item) => {
       // Find the wrapper for the item or create a new one
-      const wrapper = wrappers.find((el) => el.__item === item) || this.__createWrapper(item);
+      const wrapper = wrappers.find((el) => this.__itemsEqual(el.__item, item)) || this.__createWrapper(item);
       wrappers = wrappers.filter((el) => el !== wrapper);
 
       // Update the wrapper style
@@ -246,6 +271,7 @@ class Dashboard extends ControllerMixin(DashboardLayoutMixin(ElementMixin(Themab
       ${item.rowspan ? `--vaadin-dashboard-item-rowspan: ${item.rowspan};` : ''}
     `.trim();
 
+    wrapper.__item = item;
     wrapper.setAttribute('style', style);
     wrapper.editable = this.editable;
     wrapper.dragging = this.__widgetReorderController.draggedItem === item;
