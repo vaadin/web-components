@@ -207,6 +207,29 @@ describe('chips', () => {
         await nextRender();
         expect(overflow.hasAttribute('hidden')).to.be.true;
       });
+
+      it('should always show at least one chip in addition to overflow', async () => {
+        comboBox.style.width = 'auto';
+        await nextResize(comboBox);
+        comboBox.selectedItems = ['apple', 'orange'];
+        await nextRender();
+        const chips = getChips(comboBox);
+        expect(chips.length).to.equal(2);
+        expect(getChipContent(chips[1])).to.equal('orange');
+      });
+
+      it('should set show max width on the chip based on CSS property', async () => {
+        comboBox.style.width = 'auto';
+        comboBox.clearButtonVisible = true;
+        await nextResize(comboBox);
+        comboBox.selectedItems = ['apple', 'orange'];
+        await nextRender();
+
+        const chips = getChips(comboBox);
+        const minWidth = getComputedStyle(comboBox).getPropertyValue('--_chip-min-width');
+        expect(minWidth).to.be.ok;
+        expect(chips[1].style.maxWidth).to.equal(minWidth);
+      });
     });
   });
 
