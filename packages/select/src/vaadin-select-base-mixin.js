@@ -304,6 +304,10 @@ export const SelectBaseMixin = (superClass) =>
      * @private
      */
     _onClick(event) {
+      if (this.disabled) {
+        return;
+      }
+
       // Prevent parent components such as `vaadin-grid`
       // from handling the click event after it bubbles.
       event.preventDefault();
@@ -324,7 +328,7 @@ export const SelectBaseMixin = (superClass) =>
      * @override
      */
     _onKeyDown(e) {
-      if (e.target === this.focusElement && !this.readonly && !this.opened) {
+      if (e.target === this.focusElement && !this.readonly && !this.disabled && !this.opened) {
         if (/^(Enter|SpaceBar|\s|ArrowDown|Down|ArrowUp|Up)$/u.test(e.key)) {
           e.preventDefault();
           this.opened = true;
