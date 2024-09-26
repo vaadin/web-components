@@ -27,6 +27,10 @@ describe('dashboard', () => {
 
   beforeEach(async () => {
     dashboard = fixtureSync('<vaadin-dashboard></vaadin-dashboard>');
+    await nextFrame();
+    // @ts-expect-error Test without padding
+    dashboard.$.grid.style.padding = '0';
+
     dashboard.style.width = `${columnWidth * 2}px`;
     setMinimumColumnWidth(dashboard, columnWidth);
     setMaximumColumnWidth(dashboard, columnWidth);
@@ -40,10 +44,8 @@ describe('dashboard', () => {
       widget.id = model.item.id;
       root.appendChild(widget);
     };
-    await nextFrame();
 
-    // @ts-expect-error Test without padding
-    dashboard.$.grid.style.padding = '0';
+    await nextFrame();
   });
 
   it('should render a widget for each item', () => {

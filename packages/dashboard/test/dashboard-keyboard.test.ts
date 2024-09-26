@@ -17,6 +17,7 @@ import {
   getResizeHandle,
   getResizeShrinkHeightButton,
   getResizeShrinkWidthButton,
+  onceResized,
   setGap,
   setMaximumColumnWidth,
   setMinimumColumnWidth,
@@ -32,7 +33,7 @@ describe('dashboard - keyboard interaction', () => {
 
   beforeEach(async () => {
     dashboard = fixtureSync('<vaadin-dashboard></vaadin-dashboard>');
-    dashboard.style.width = `${columnWidth * 2}px`;
+    await nextFrame();
     dashboard.editable = true;
     keydownSpy = sinon.spy();
     dashboard.addEventListener('keydown', keydownSpy);
@@ -50,10 +51,11 @@ describe('dashboard - keyboard interaction', () => {
         root.appendChild(widget);
       }
     };
-    await nextFrame();
-
     // @ts-expect-error Test without padding
     dashboard.$.grid.style.padding = '0';
+
+    dashboard.style.width = `${columnWidth * 2}px`;
+    await onceResized(dashboard);
 
     // Make sure the following tab goes back to the first widget (needed for Firefox)
     const widget = getElementFromCell(dashboard, 0, 0)!;

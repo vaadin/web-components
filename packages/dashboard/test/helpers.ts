@@ -83,6 +83,8 @@ export function getElementFromCell(dashboard: HTMLElement, rowIndex: number, col
  */
 export function setMinimumColumnWidth(dashboard: HTMLElement, width?: number): void {
   dashboard.style.setProperty('--vaadin-dashboard-col-min-width', width !== undefined ? `${width}px` : null);
+  // The ResizeObserver doesn't react to changes in column width, so we need to trigger a resize manually
+  (dashboard as any)._onResize();
 }
 
 /**
@@ -90,6 +92,8 @@ export function setMinimumColumnWidth(dashboard: HTMLElement, width?: number): v
  */
 export function setMaximumColumnWidth(dashboard: HTMLElement, width?: number): void {
   dashboard.style.setProperty('--vaadin-dashboard-col-max-width', width !== undefined ? `${width}px` : null);
+  // The ResizeObserver doesn't react to changes in column width, so we need to trigger a resize manually
+  (dashboard as any)._onResize();
 }
 
 /**

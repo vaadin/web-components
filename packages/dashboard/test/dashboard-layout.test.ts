@@ -33,17 +33,18 @@ describe('dashboard layout', () => {
       </vaadin-dashboard-layout>
     `);
     childElements = [...dashboard.children] as HTMLElement[];
+    await nextFrame();
     // Disable gap between items in these tests
     setGap(dashboard, 0);
     // Set the column width to a fixed value
     setMinimumColumnWidth(dashboard, columnWidth);
     setMaximumColumnWidth(dashboard, columnWidth);
+    // @ts-expect-error Test without padding
+    dashboard.$.grid.style.padding = '0';
     // Make the dashboard wide enough to fit all items on a single row
     dashboard.style.width = `${columnWidth * dashboard.childElementCount}px`;
 
     await onceResized(dashboard);
-    // @ts-expect-error Test without padding
-    dashboard.$.grid.style.padding = '0';
 
     expect(getColumnWidths(dashboard)).to.eql([columnWidth, columnWidth]);
     /* prettier-ignore */
@@ -129,11 +130,10 @@ describe('dashboard layout', () => {
       expect(getColumnWidths(dashboard)).to.eql([columnWidth / 2]);
     });
 
-    it('should have one wide column with large minimum column width', async () => {
+    it('should have one wide column with large minimum column width', () => {
       setMaximumColumnWidth(dashboard, columnWidth * 2);
       // Set the min column width to be twice as wide
       setMinimumColumnWidth(dashboard, columnWidth * 2);
-      await onceResized(dashboard);
       // Expect there to only be one column with twice the width
       expect(getColumnWidths(dashboard)).to.eql([columnWidth * 2]);
       /* prettier-ignore */
@@ -163,10 +163,9 @@ describe('dashboard layout', () => {
       expect(getColumnWidths(dashboard)).to.eql([columnWidth * 1.5]);
     });
 
-    it('should have one wide column with large maximum column width', async () => {
+    it('should have one wide column with large maximum column width', () => {
       // Allow the column to be twice as wide
       setMaximumColumnWidth(dashboard, columnWidth * 2);
-      await onceResized(dashboard);
       // Expect there to only be one column with twice the width
       expect(getColumnWidths(dashboard)).to.eql([columnWidth * 2]);
       /* prettier-ignore */
