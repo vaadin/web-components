@@ -304,8 +304,7 @@ export const InlineEditingMixin = (superClass) =>
 
     /** @private */
     _onEditorFocusOut(event) {
-      // Ignore focusout from internal tab event
-      if (this.__cancelCellSwitch || this.__shouldIgnoreFocusOut(event)) {
+      if (this.__shouldIgnoreFocusOut(event)) {
         return;
       }
 
