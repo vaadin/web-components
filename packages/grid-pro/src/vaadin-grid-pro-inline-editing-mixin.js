@@ -65,7 +65,6 @@ export const InlineEditingMixin = (superClass) =>
       this.__boundItemPropertyChanged = this._onItemPropertyChanged.bind(this);
       this.__boundEditorFocusOut = this._onEditorFocusOut.bind(this);
       this.__boundEditorFocusIn = this._onEditorFocusIn.bind(this);
-      this.__boundCancelCellSwitch = this._setCancelCellSwitch.bind(this);
 
       this._addEditColumnListener('mousedown', (e) => {
         // Prevent grid from resetting navigating state
@@ -416,20 +415,12 @@ export const InlineEditingMixin = (superClass) =>
       }
     }
 
-    /** @private */
-    _setCancelCellSwitch() {
-      this.__cancelCellSwitch = true;
-      window.requestAnimationFrame(() => {
-        this.__cancelCellSwitch = false;
-      });
-    }
-
     /**
      * @param {!KeyboardEvent} e
      * @protected
      */
     async _switchEditCell(e) {
-      if (this.__cancelCellSwitch || (e.defaultPrevented && e.keyCode === 9)) {
+      if (e.defaultPrevented && e.keyCode === 9) {
         return;
       }
 
