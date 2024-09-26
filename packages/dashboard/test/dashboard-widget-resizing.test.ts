@@ -39,7 +39,7 @@ describe('dashboard - widget resizing', () => {
     dashboard.renderer = (root, _, model) => {
       root.textContent = '';
       const widget = fixtureSync(`
-        <vaadin-dashboard-widget id="item-${model.item.id}" widget-title="${model.item.id} title">
+        <vaadin-dashboard-widget id="${model.item.id}" widget-title="${model.item.id} title">
           <div class="content">Widget content</div>
         </vaadin-dashboard-widget>`);
       root.appendChild(widget);
@@ -495,13 +495,13 @@ describe('dashboard - widget resizing', () => {
 
         // Make sure the original dragged element is removed from the host if it was
         // restored.
-        expect(dashboard.querySelectorAll(`vaadin-dashboard-widget[id='item-0']`).length).to.equal(1);
+        expect(dashboard.querySelectorAll(`vaadin-dashboard-widget[id='0']`).length).to.equal(1);
       });
 
       it('should not remove resized element with a renderer that reuses same instances', async () => {
         const reusedWidgets = [
-          fixtureSync('<vaadin-dashboard-widget id="item-0" widget-title="0 title"></vaadin-dashboard-widget>'),
-          fixtureSync('<vaadin-dashboard-widget id="item-1" widget-title="1 title"></vaadin-dashboard-widget>'),
+          fixtureSync('<vaadin-dashboard-widget id="0" widget-title="0 title"></vaadin-dashboard-widget>'),
+          fixtureSync('<vaadin-dashboard-widget id="1" widget-title="1 title"></vaadin-dashboard-widget>'),
         ];
         dashboard.renderer = (root, _, model) => {
           root.textContent = '';

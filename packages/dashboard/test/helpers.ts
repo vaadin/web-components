@@ -135,10 +135,10 @@ export function setMinimumRowHeight(dashboard: HTMLElement, height?: number): vo
  * cells of the grid match the expected IDs.
  *
  * For example, the following layout would expect a grid with two columns
- * and three rows, where the first row has one element with ID "item-0" spanning
- * two columns, and the second row has two elements with IDs "item-1" and "item-2"
+ * and three rows, where the first row has one element with ID "0" spanning
+ * two columns, and the second row has two elements with IDs "1" and "2"
  * where the first one spans two rows, and the last cell in the third row has
- * an element with ID "item-3":
+ * an element with ID "3":
  *
  * ```
  * [
@@ -165,8 +165,7 @@ export function expectLayout(dashboard: HTMLElement, layout: Array<Array<number 
       if (!element) {
         actualRow.push(null);
       } else {
-        // TODO: Just use a number for all test item IDs
-        actualRow.push(parseInt(element.id.replace('item-', '').replace('Item ', ''), 10));
+        actualRow.push(parseInt(element.id));
       }
     });
   });

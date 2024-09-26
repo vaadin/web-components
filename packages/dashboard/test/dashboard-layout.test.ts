@@ -28,8 +28,8 @@ describe('dashboard layout', () => {
   beforeEach(async () => {
     dashboard = fixtureSync(`
       <vaadin-dashboard-layout>
-        <div id="item-0">Item 0</div>
-        <div id="item-1">Item 1</div>
+        <div id="0">Item 0</div>
+        <div id="1">Item 1</div>
       </vaadin-dashboard-layout>
     `);
     childElements = [...dashboard.children] as HTMLElement[];
@@ -413,8 +413,8 @@ describe('dashboard layout', () => {
     beforeEach(async () => {
       section = fixtureSync(`
         <vaadin-dashboard-section section-title="Section">
-          <div id="item-2">Section item 2</div>
-          <div id="item-3">Section item 3</div>
+          <div id="2">Section item 2</div>
+          <div id="3">Section item 3</div>
         </vaadin-dashboard-section>
       `);
       dashboard.appendChild(section);
@@ -443,7 +443,7 @@ describe('dashboard layout', () => {
 
     it('following items should end up in the next row', async () => {
       dashboard.style.width = `${columnWidth * 4}px`;
-      dashboard.appendChild(fixtureSync('<div id="item-4">Item 4</div>'));
+      dashboard.appendChild(fixtureSync('<div id="4">Item 4</div>'));
       await onceResized(dashboard);
 
       /* prettier-ignore */

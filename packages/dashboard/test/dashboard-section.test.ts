@@ -16,8 +16,8 @@ describe('dashboard section', () => {
   beforeEach(async () => {
     section = fixtureSync(`
       <vaadin-dashboard-section>
-        <div id="item-0">Item 0</div>
-        <div id="item-1">Item 1</div>
+        <div id="0">Item 0</div>
+        <div id="1">Item 1</div>
       </vaadin-dashboard-section>
     `);
     await nextFrame();
