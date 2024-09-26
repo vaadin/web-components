@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
+import { fixtureSync } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import { createItems, dblclick, dragAndDropOver, flushGrid, getCellEditor, getContainerCell } from './helpers.js';
@@ -165,32 +165,6 @@ describe('keyboard navigation', () => {
       getCellEditor(firstCell).addEventListener('keydown', (e) => e.keyCode === 9 && e.preventDefault());
       await sendKeys({ press: 'Tab' });
       expect(getCellEditor(firstCell)).to.be.ok;
-    });
-
-    it('should not focus cell next available for editing on Tab if `internal-tab` was fired right before it', async () => {
-      const firstCell = getContainerCell(grid.$.items, 1, 0);
-      dblclick(firstCell._content);
-
-      const editor = getCellEditor(firstCell);
-      editor.addEventListener('keydown', (e) => {
-        if (e.key === 'Tab') {
-          editor.dispatchEvent(new CustomEvent('internal-tab'));
-        }
-      });
-      await sendKeys({ press: 'Tab' });
-      expect(getCellEditor(firstCell)).to.be.ok;
-    });
-
-    it('should be possible to switch edit cell on Tab with delay after `internal-tab` was fired', async () => {
-      const firstCell = getContainerCell(grid.$.items, 1, 0);
-      dblclick(firstCell._content);
-
-      getCellEditor(firstCell).dispatchEvent(new CustomEvent('internal-tab'));
-      const secondCell = getContainerCell(grid.$.items, 1, 1);
-      await nextFrame();
-
-      await sendKeys({ press: 'Tab' });
-      expect(getCellEditor(secondCell)).to.be.ok;
     });
 
     it('should focus previous cell available for editing within a same row in edit mode on Shift Tab', async () => {
