@@ -2,83 +2,107 @@ import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, middleOfNode, nextRender } from '@vaadin/testing-helpers';
 import { resetMouse, sendKeys, sendMouse } from '@web/test-runner-commands';
 import '@vaadin/combo-box';
+import '@vaadin/custom-field';
 import '@vaadin/date-picker';
 import '@vaadin/date-time-picker';
 import '@vaadin/grid-pro';
 import '@vaadin/grid-pro/vaadin-grid-pro-edit-column.js';
+import '@vaadin/text-field';
 import '@vaadin/time-picker';
 import { waitForOverlayRender } from '@vaadin/date-picker/test/helpers.js';
 import { flushGrid, getContainerCell } from '@vaadin/grid-pro/test/helpers.js';
 
 describe('grid-pro custom editor', () => {
-  let grid;
+  let grid, cell;
 
-  beforeEach(async () => {
+  function createGrid(path) {
     grid = fixtureSync(`
       <vaadin-grid-pro>
-        <vaadin-grid-pro-edit-column path="date" editor-type="custom" width="50px"></vaadin-grid-pro-edit-column>
-        <vaadin-grid-pro-edit-column path="status" editor-type="custom" width="50px"></vaadin-grid-pro-edit-column>
-        <vaadin-grid-pro-edit-column path="time" editor-type="custom" width="50px"></vaadin-grid-pro-edit-column>
-        <vaadin-grid-pro-edit-column path="datetime" editor-type="custom"></vaadin-grid-pro-edit-column>
+        <vaadin-grid-pro-edit-column path="${path}" editor-type="custom"></vaadin-grid-pro-edit-column>
       </vaadin-gri-pro>
     `);
 
+    const column = grid.querySelector(`[path="${path}"]`);
+    switch (path) {
+      case 'date':
+        column.editModeRenderer = (root, _, model) => {
+          root.innerHTML = `
+            <vaadin-date-picker value="${model.item.date}" auto-open-disabled></vaadin-date-picker>
+          `;
+        };
+        break;
+      case 'time':
+        column.editModeRenderer = (root, _, model) => {
+          root.innerHTML = `
+            <vaadin-time-picker value="${model.item.time}" auto-open-disabled></vaadin-time-picker>
+          `;
+        };
+        break;
+      case 'status':
+        column.editModeRenderer = (root, _, model) => {
+          root.innerHTML = `
+            <vaadin-combo-box
+              value="${model.item.status}"
+              items='["active", "suspended"]'
+              auto-open-disabled
+            ></vaadin-combo-box>
+          `;
+        };
+        break;
+      case 'datetime':
+        column.editModeRenderer = (root, _, model) => {
+          root.innerHTML = `
+            <vaadin-date-time-picker value="${model.item.datetime}" auto-open-disabled>
+            </vaadin-date-time-picker>
+          `;
+        };
+        break;
+      case 'expires':
+        column.editModeRenderer = (root, _, model) => {
+          if (!root.firstChild) {
+            // NOTE: using `innerHTML` doesn't work due to the timing issue in custom-field
+            // See https://github.com/vaadin/web-components/issues/7871
+            const field = document.createElement('vaadin-custom-field');
+            field.appendChild(document.createElement('vaadin-text-field'));
+            field.appendChild(document.createElement('vaadin-text-field'));
+            root.appendChild(field);
+          }
+          root.firstChild.value = model.item.expires;
+        };
+        break;
+      default:
+      // Do nothing
+    }
+
     grid.items = [
-      { date: '1984-01-13', status: 'suspended', time: '09:00' },
-      { date: '1977-07-12', status: 'active', time: '09:30' },
-      { date: '1976-12-14', status: 'suspended', time: '10:00' },
-      { date: '1972-12-04', status: 'active', time: '10:00' },
-      { date: '1978-02-03', status: 'active', time: '10:00' },
+      { date: '1984-01-13', status: 'suspended', time: '09:00', expires: '01\t25' },
+      { date: '1977-07-12', status: 'active', time: '09:30', expires: '02\t26' },
+      { date: '1976-12-14', status: 'suspended', time: '10:00', expires: '03\t27' },
+      { date: '1972-12-04', status: 'active', time: '10:00', expires: '04\t28' },
+      { date: '1978-02-03', status: 'active', time: '10:00', expires: '05\t29' },
     ].map((item) => {
       return { ...item, datetime: `${item.date}T${item.time}` };
     });
 
-    grid.querySelector('[path="date"]').editModeRenderer = (root, _, model) => {
-      root.innerHTML = `
-        <vaadin-date-picker value="${model.item.date}" auto-open-disabled>
-        </vaadin-date-picker>
-      `;
-    };
-
-    grid.querySelector('[path="status"]').editModeRenderer = (root, _, model) => {
-      if (!root.firstChild) {
-        const comboBox = document.createElement('vaadin-combo-box');
-        comboBox.autoOpenDisabled = true;
-        comboBox.items = ['active', 'suspended'];
-        root.appendChild(comboBox);
-      }
-      root.firstChild.value = model.item.status;
-    };
-
-    grid.querySelector('[path="time"]').editModeRenderer = (root, _, model) => {
-      root.innerHTML = `
-        <vaadin-time-picker value="${model.item.time}" auto-open-disabled></vaadin-time-picker>
-      `;
-    };
-
-    grid.querySelector('[path="datetime"]').editModeRenderer = (root, _, model) => {
-      root.innerHTML = `
-        <vaadin-date-time-picker value="${model.item.datetime}" auto-open-disabled>
-        </vaadin-date-time-picker>
-      `;
-    };
-
     flushGrid(grid);
-    await nextRender();
-  });
+    return grid;
+  }
+
+  async function editFirstCell() {
+    cell = getContainerCell(grid.$.items, 0, 0);
+    cell.focus();
+    await sendKeys({ press: 'Enter' });
+  }
 
   afterEach(async () => {
     await resetMouse();
   });
 
   describe('date-picker', () => {
-    let cell;
-
     beforeEach(async () => {
-      cell = getContainerCell(grid.$.items, 0, 0);
-      cell.focus();
-
-      await sendKeys({ press: 'Enter' });
+      grid = createGrid('date');
+      await nextRender();
+      await editFirstCell();
     });
 
     it('should apply the updated date to the cell when exiting on Tab', async () => {
@@ -145,13 +169,10 @@ describe('grid-pro custom editor', () => {
   });
 
   describe('combo-box', () => {
-    let cell;
-
     beforeEach(async () => {
-      cell = getContainerCell(grid.$.items, 0, 1);
-      cell.focus();
-
-      await sendKeys({ press: 'Enter' });
+      grid = createGrid('status');
+      await nextRender();
+      await editFirstCell();
     });
 
     it('should apply the updated value to the cell when exiting on Tab', async () => {
@@ -181,13 +202,10 @@ describe('grid-pro custom editor', () => {
   });
 
   describe('time-picker', () => {
-    let cell;
-
     beforeEach(async () => {
-      cell = getContainerCell(grid.$.items, 0, 2);
-      cell.focus();
-
-      await sendKeys({ press: 'Enter' });
+      grid = createGrid('time');
+      await nextRender();
+      await editFirstCell();
     });
 
     it('should apply the updated time to the cell when exiting on Tab', async () => {
@@ -217,13 +235,10 @@ describe('grid-pro custom editor', () => {
   });
 
   describe('date-time-picker', () => {
-    let cell;
-
     beforeEach(async () => {
-      cell = getContainerCell(grid.$.items, 0, 3);
-      cell.focus();
-
-      await sendKeys({ press: 'Enter' });
+      grid = createGrid('datetime');
+      await nextRender();
+      await editFirstCell();
     });
 
     it('should not stop editing when switching between pickers using Tab', async () => {
@@ -278,6 +293,48 @@ describe('grid-pro custom editor', () => {
       const editor = cell._content.querySelector('vaadin-date-time-picker');
       expect(editor).to.be.ok;
       expect(editor.value).to.equal('1984-01-13T00:00');
+    });
+  });
+
+  describe('custom-field', () => {
+    beforeEach(async () => {
+      grid = createGrid('expires');
+      await nextRender();
+      await editFirstCell();
+    });
+
+    it('should not stop editing when switching between fields using mouse', async () => {
+      // Move focus to the second field
+      const { x, y } = middleOfNode(cell._content.querySelectorAll('input')[1]);
+      await sendMouse({ type: 'click', position: [Math.floor(x), Math.floor(y)] });
+      await nextRender();
+      expect(cell._content.querySelector('vaadin-custom-field')).to.be.ok;
+    });
+
+    it('should not stop editing when switching between fields using Tab', async () => {
+      // Move focus to the second field
+      await sendKeys({ press: 'Tab' });
+      await nextRender();
+      expect(cell._content.querySelector('vaadin-custom-field')).to.be.ok;
+
+      // Move focus to the first field
+      await sendKeys({ down: 'Shift' });
+      await sendKeys({ press: 'Tab' });
+      await sendKeys({ up: 'Shift' });
+      await nextRender();
+      expect(cell._content.querySelector('vaadin-custom-field')).to.be.ok;
+    });
+
+    it('should stop editing when moving focus outside the field using Tab', async () => {
+      // Move focus to the second field
+      await sendKeys({ press: 'Tab' });
+      await nextRender();
+      expect(cell._content.querySelector('vaadin-custom-field')).to.be.ok;
+
+      // Move focus outside of the field
+      await sendKeys({ press: 'Tab' });
+      await nextRender();
+      expect(cell._content.querySelector('vaadin-custom-field')).to.be.not.ok;
     });
   });
 });
