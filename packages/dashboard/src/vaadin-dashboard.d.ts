@@ -15,6 +15,14 @@ import { DashboardLayoutMixin } from './vaadin-dashboard-layout-mixin.js';
 
 export interface DashboardItem {
   /**
+   * The id of the item.
+   * The identifier should be unique among the dashboard items.
+   * If a unique identifier is not provided, reassigning new item instances
+   * to the dashboard while a widget is focused may cause the focus to be lost.
+   */
+  id?: unknown;
+
+  /**
    * The column span of the item
    */
   colspan?: number;
@@ -26,6 +34,14 @@ export interface DashboardItem {
 }
 
 export interface DashboardSectionItem<TItem extends DashboardItem> {
+  /**
+   * The id of the item.
+   * The identifier should be unique among the dashboard items.
+   * If a unique identifier is not provided, reassigning new item instances
+   * to the dashboard while a widget is focused may cause the focus to be lost.
+   */
+  id?: unknown;
+
   /**
    * The title of the section
    */

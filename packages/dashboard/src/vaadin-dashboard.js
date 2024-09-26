@@ -19,6 +19,7 @@ import { css, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themabl
 import {
   getElementItem,
   getItemsArrayOfItem,
+  itemsEqual,
   SYNCHRONIZED_ATTRIBUTES,
   WRAPPER_LOCAL_NAME,
 } from './vaadin-dashboard-helpers.js';
@@ -171,13 +172,14 @@ class Dashboard extends ControllerMixin(DashboardLayoutMixin(ElementMixin(Themab
       if (wrapper.firstElementChild && wrapper.firstElementChild.localName === 'vaadin-dashboard-section') {
         return;
       }
-      if (wrapper.__item.component instanceof HTMLElement) {
-        if (wrapper.__item.component.parentElement !== wrapper) {
+      const item = getElementItem(wrapper);
+      if (item.component instanceof HTMLElement) {
+        if (item.component.parentElement !== wrapper) {
           wrapper.textContent = '';
-          wrapper.appendChild(wrapper.__item.component);
+          wrapper.appendChild(item.component);
         }
       } else if (renderer) {
-        renderer(wrapper, this, { item: wrapper.__item });
+        renderer(wrapper, this, { item });
       } else {
         wrapper.innerHTML = '';
       }
@@ -204,7 +206,7 @@ class Dashboard extends ControllerMixin(DashboardLayoutMixin(ElementMixin(Themab
 
     items.forEach((item) => {
       // Find the wrapper for the item or create a new one
-      const wrapper = wrappers.find((el) => el.__item === item) || this.__createWrapper(item);
+      const wrapper = wrappers.find((el) => itemsEqual(getElementItem(el), item)) || this.__createWrapper(item);
       wrappers = wrappers.filter((el) => el !== wrapper);
 
       // Update the wrapper style
@@ -306,6 +308,7 @@ class Dashboard extends ControllerMixin(DashboardLayoutMixin(ElementMixin(Themab
       ${item.rowspan ? `--vaadin-dashboard-item-rowspan: ${item.rowspan};` : ''}
     `.trim();
 
+    wrapper.__item = item;
     wrapper.setAttribute('style', style);
     wrapper.editable = this.editable;
     wrapper.dragging = this.__widgetReorderController.draggedItem === item;

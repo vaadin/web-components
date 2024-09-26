@@ -5,7 +5,7 @@
  */
 
 import { addListener } from '@vaadin/component-base/src/gestures.js';
-import { getElementItem, WRAPPER_LOCAL_NAME } from './vaadin-dashboard-helpers.js';
+import { getElementItem, itemsEqual, WRAPPER_LOCAL_NAME } from './vaadin-dashboard-helpers.js';
 
 /**
  * A controller to widget resizing inside a dashboard.
@@ -133,7 +133,7 @@ export class WidgetResizeController {
 
   /** @private */
   __getItemWrapper(item) {
-    return [...this.host.querySelectorAll(WRAPPER_LOCAL_NAME)].find((el) => el.__item === item);
+    return [...this.host.querySelectorAll(WRAPPER_LOCAL_NAME)].find((el) => itemsEqual(el.__item, item));
   }
 
   /** @private */

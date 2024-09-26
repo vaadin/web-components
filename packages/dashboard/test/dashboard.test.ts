@@ -514,6 +514,13 @@ describe('dashboard', () => {
       expect(document.activeElement).to.equal(getElementFromCell(dashboard, 0, 0)!);
     });
 
+    it('should not lose focus when reassigning new items with same ids', async () => {
+      getElementFromCell(dashboard, 0, 0)!.focus();
+      dashboard.items = [{ id: '0' }, { id: '1' }];
+      await nextFrame();
+      expect(document.activeElement).to.equal(getElementFromCell(dashboard, 0, 0)!);
+    });
+
     it('should not lose focus when prepending items', async () => {
       getElementFromCell(dashboard, 0, 0)!.focus();
       dashboard.items = [{ id: '-1' }, ...dashboard.items];
