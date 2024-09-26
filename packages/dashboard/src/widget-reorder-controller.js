@@ -4,7 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 
-import { getElementItem, getItemsArrayOfItem, WRAPPER_LOCAL_NAME } from './vaadin-dashboard-helpers.js';
+import { getElementItem, getItemsArrayOfItem, itemsEqual, WRAPPER_LOCAL_NAME } from './vaadin-dashboard-helpers.js';
 
 const REORDER_EVENT_TIMEOUT = 200;
 
@@ -186,7 +186,10 @@ export class WidgetReorderController {
   __getDragContextElements() {
     const items = getItemsArrayOfItem(this.draggedItem, this.host.items);
     return [...this.host.querySelectorAll(WRAPPER_LOCAL_NAME)]
-      .filter((wrapper) => items && items.includes(wrapper.__item) && wrapper.firstElementChild)
+      .filter(
+        (wrapper) =>
+          items && items.some((item) => itemsEqual(item, getElementItem(wrapper))) && wrapper.firstElementChild,
+      )
       .map((wrapper) => wrapper.firstElementChild);
   }
 

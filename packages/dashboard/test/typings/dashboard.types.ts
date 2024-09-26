@@ -57,9 +57,20 @@ assertType<Dashboard<TestDashboardItem>>(narrowedDashboard);
 assertType<Array<TestDashboardItem | DashboardSectionItem<TestDashboardItem>>>(narrowedDashboard.items);
 assertType<DashboardRenderer<TestDashboardItem> | null | undefined>(narrowedDashboard.renderer);
 assertType<
-  | { colspan?: number; rowspan?: number; testProperty: string }
+  | { colspan?: number; rowspan?: number; id?: unknown; testProperty: string }
   | { title?: string | null; items: Array<{ colspan?: number; rowspan?: number; testProperty: string }> }
 >(narrowedDashboard.items[0]);
+
+const item = narrowedDashboard.items[0] as TestDashboardItem;
+assertType<unknown | undefined>(item.id);
+assertType<string>(item.testProperty);
+assertType<number | undefined>(item.colspan);
+assertType<number | undefined>(item.rowspan);
+
+const sectionItem = narrowedDashboard.items[0] as DashboardSectionItem<TestDashboardItem>;
+assertType<unknown | undefined>(sectionItem.id);
+assertType<string | null | undefined>(sectionItem.title);
+assertType<Array<TestDashboardItem | DashboardSectionItem<TestDashboardItem>>>(sectionItem.items);
 
 narrowedDashboard.addEventListener('dashboard-item-moved', (event) => {
   assertType<DashboardItemMovedEvent<TestDashboardItem>>(event);
