@@ -229,9 +229,7 @@ export const DashboardItemMixin = (superClass) =>
 
     /** @private */
     __selectedChanged(selected) {
-      this.dispatchEvent(
-        new CustomEvent('item-selected-changed', { bubbles: true, composed: true, detail: { value: selected } }),
-      );
+      this.dispatchEvent(new CustomEvent('item-selected-changed', { bubbles: true, detail: { value: selected } }));
       if (selected) {
         this.__focusTrapController.trapFocus(this.$.focustrap);
       } else {
@@ -291,15 +289,11 @@ export const DashboardItemMixin = (superClass) =>
 
     /** @private */
     __moveModeChanged(moveMode) {
-      this.dispatchEvent(
-        new CustomEvent('item-move-mode-changed', { bubbles: true, composed: true, detail: { value: moveMode } }),
-      );
+      this.dispatchEvent(new CustomEvent('item-move-mode-changed', { bubbles: true, detail: { value: moveMode } }));
     }
 
     /** @private */
     __resizeModeChanged(resizeMode) {
-      this.dispatchEvent(
-        new CustomEvent('item-resize-mode-changed', { bubbles: true, composed: true, detail: { value: resizeMode } }),
-      );
+      this.dispatchEvent(new CustomEvent('item-resize-mode-changed', { bubbles: true, detail: { value: resizeMode } }));
     }
   };

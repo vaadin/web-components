@@ -44,7 +44,6 @@ export function fireMove(element, delta) {
   element.dispatchEvent(
     new CustomEvent('item-move', {
       bubbles: true,
-      composed: true,
       detail: { delta },
     }),
   );
@@ -61,7 +60,6 @@ export function fireResize(element, colspanDelta, rowspanDelta) {
   element.dispatchEvent(
     new CustomEvent('item-resize', {
       bubbles: true,
-      composed: true,
       detail: {
         colspanDelta,
         rowspanDelta,
@@ -76,5 +74,5 @@ export function fireResize(element, colspanDelta, rowspanDelta) {
  * @param {HTMLElement} element
  */
 export function fireRemove(element) {
-  element.dispatchEvent(new CustomEvent('item-remove', { bubbles: true, composed: true }));
+  element.dispatchEvent(new CustomEvent('item-remove', { bubbles: true }));
 }

@@ -330,7 +330,6 @@ class Dashboard extends ControllerMixin(DashboardLayoutMixin(ElementMixin(Themab
   __dispatchCustomEvent(eventName, item, value) {
     this.dispatchEvent(
       new CustomEvent(eventName, {
-        bubbles: true,
         detail: {
           item,
           value,
