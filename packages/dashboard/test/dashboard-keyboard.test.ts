@@ -81,6 +81,15 @@ describe('dashboard - keyboard interaction', () => {
     expect(widget.hasAttribute('selected')).to.be.true;
   });
 
+  it('should dispatch a selection event', async () => {
+    const spy = sinon.spy();
+    dashboard.addEventListener('dashboard-item-selected-changed', spy);
+    await sendKeys({ press: 'Tab' });
+    await sendKeys({ press: 'Space' });
+    expect(spy.calledOnce).to.be.true;
+    expect(spy.firstCall.args[0].detail).to.eql({ item: { id: 0 }, value: true });
+  });
+
   it('should not remove the widget on backspace', async () => {
     await sendKeys({ press: 'Tab' });
     await sendKeys({ press: 'Backspace' });
@@ -116,6 +125,14 @@ describe('dashboard - keyboard interaction', () => {
       await sendKeys({ press: 'Escape' });
       expect(widget.hasAttribute('selected')).to.be.false;
       expect(widget.hasAttribute('focused')).to.be.true;
+    });
+
+    it('should dispatch a selection event', async () => {
+      const spy = sinon.spy();
+      dashboard.addEventListener('dashboard-item-selected-changed', spy);
+      await sendKeys({ press: 'Escape' });
+      expect(spy.calledOnce).to.be.true;
+      expect(spy.firstCall.args[0].detail).to.eql({ item: { id: 0 }, value: false });
     });
 
     it('should blur deselected widget on shift tab', async () => {
@@ -361,6 +378,14 @@ describe('dashboard - keyboard interaction', () => {
       expect(section.hasAttribute('focused')).to.be.true;
     });
 
+    it('should dispatch a selection event', async () => {
+      const spy = sinon.spy();
+      dashboard.addEventListener('dashboard-item-selected-changed', spy);
+      await sendKeys({ press: 'Escape' });
+      expect(spy.calledOnce).to.be.true;
+      expect(spy.firstCall.args[0].detail).to.eql({ item: { items: [{ id: 2 }, { id: 3 }] }, value: false });
+    });
+
     it('should blur deselected selected on shift tab', async () => {
       await sendKeys({ press: 'Escape' });
       await sendKeys({ down: 'Shift' });
@@ -434,6 +459,16 @@ describe('dashboard - keyboard interaction', () => {
     expect(widget.hasAttribute('move-mode')).to.be.true;
   });
 
+  it('should dispatch a move mode event', async () => {
+    const spy = sinon.spy();
+    dashboard.addEventListener('dashboard-item-move-mode-changed', spy);
+    const widget = getElementFromCell(dashboard, 0, 0)!;
+    (getDraggable(widget) as HTMLElement).click();
+    await nextFrame();
+    expect(spy.calledOnce).to.be.true;
+    expect(spy.firstCall.args[0].detail).to.eql({ item: { id: 0 }, value: true });
+  });
+
   describe('widget in move mode', () => {
     beforeEach(async () => {
       // Select
@@ -450,6 +485,15 @@ describe('dashboard - keyboard interaction', () => {
       expect(widget.hasAttribute('move-mode')).to.be.false;
       expect(widget.hasAttribute('selected')).to.be.true;
       expect(widget.hasAttribute('focused')).to.be.true;
+    });
+
+    it('should dispatch a move mode event', async () => {
+      const spy = sinon.spy();
+      dashboard.addEventListener('dashboard-item-move-mode-changed', spy);
+      await sendKeys({ press: 'Escape' });
+      await nextFrame();
+      expect(spy.calledOnce).to.be.true;
+      expect(spy.firstCall.args[0].detail).to.eql({ item: { id: 0 }, value: false });
     });
 
     it('should exit move mode on apply', async () => {
@@ -639,6 +683,16 @@ describe('dashboard - keyboard interaction', () => {
     expect(widget.hasAttribute('resize-mode')).to.be.true;
   });
 
+  it('should dispatch a resize mode event', async () => {
+    const spy = sinon.spy();
+    dashboard.addEventListener('dashboard-item-resize-mode-changed', spy);
+    const widget = getElementFromCell(dashboard, 0, 0)!;
+    (getResizeHandle(widget) as HTMLElement).click();
+    await nextFrame();
+    expect(spy.calledOnce).to.be.true;
+    expect(spy.firstCall.args[0].detail).to.eql({ item: { id: 0 }, value: true });
+  });
+
   describe('widget in resize mode', () => {
     beforeEach(async () => {
       // Select
@@ -657,6 +711,14 @@ describe('dashboard - keyboard interaction', () => {
       expect(widget.hasAttribute('resize-mode')).to.be.false;
       expect(widget.hasAttribute('selected')).to.be.true;
       expect(widget.hasAttribute('focused')).to.be.true;
+    });
+
+    it('should dispatch a resize mode event', async () => {
+      const spy = sinon.spy();
+      dashboard.addEventListener('dashboard-item-resize-mode-changed', spy);
+      await sendKeys({ press: 'Escape' });
+      expect(spy.calledOnce).to.be.true;
+      expect(spy.firstCall.args[0].detail).to.eql({ item: { id: 0 }, value: false });
     });
 
     it('should exit resize mode on apply', async () => {

@@ -4,8 +4,11 @@ import type {
   Dashboard,
   DashboardItem,
   DashboardItemMovedEvent,
+  DashboardItemMoveModeChangedEvent,
   DashboardItemRemovedEvent,
   DashboardItemResizedEvent,
+  DashboardItemResizeModeChangedEvent,
+  DashboardItemSeletedChangedEvent,
   DashboardRenderer,
   DashboardSectionItem,
 } from '../../vaadin-dashboard.js';
@@ -75,6 +78,24 @@ narrowedDashboard.addEventListener('dashboard-item-removed', (event) => {
   assertType<DashboardItemRemovedEvent<TestDashboardItem>>(event);
   assertType<TestDashboardItem | DashboardSectionItem<TestDashboardItem>>(event.detail.item);
   assertType<Array<TestDashboardItem | DashboardSectionItem<TestDashboardItem>>>(event.detail.items);
+});
+
+narrowedDashboard.addEventListener('dashboard-item-selected-changed', (event) => {
+  assertType<DashboardItemSeletedChangedEvent<TestDashboardItem>>(event);
+  assertType<TestDashboardItem>(event.detail.item);
+  assertType<boolean>(event.detail.value);
+});
+
+narrowedDashboard.addEventListener('dashboard-item-move-mode-changed', (event) => {
+  assertType<DashboardItemMoveModeChangedEvent<TestDashboardItem>>(event);
+  assertType<TestDashboardItem>(event.detail.item);
+  assertType<boolean>(event.detail.value);
+});
+
+narrowedDashboard.addEventListener('dashboard-item-resize-mode-changed', (event) => {
+  assertType<DashboardItemResizeModeChangedEvent<TestDashboardItem>>(event);
+  assertType<TestDashboardItem>(event.detail.item);
+  assertType<boolean>(event.detail.value);
 });
 
 /* DashboardLayout */
