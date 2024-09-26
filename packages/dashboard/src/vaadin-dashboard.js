@@ -244,12 +244,30 @@ class Dashboard extends ControllerMixin(DashboardLayoutMixin(ElementMixin(Themab
     // Remove the unused wrappers
     wrappers.forEach((wrapper) => wrapper.remove());
 
-    if (focusedWrapperWillBeRemoved) {
-      // The wrapper containing the focused element was removed. Try to focus the element in the closest wrapper.
-      requestAnimationFrame(() =>
-        this.__focusWrapperContent(wrapperClosestToRemovedFocused || this.querySelector(WRAPPER_LOCAL_NAME)),
-      );
-    }
+    requestAnimationFrame(() => {
+      if (focusedWrapperWillBeRemoved) {
+        // The wrapper containing the focused element was removed. Try to focus the element in the closest wrapper.
+        this.__focusWrapperContent(wrapperClosestToRemovedFocused || this.querySelector(WRAPPER_LOCAL_NAME));
+      }
+
+      const focusedItem = this.querySelector('[focused]');
+      if (focusedItem && !this.__insideViewport(focusedItem)) {
+        // If the focused wrapper is not in the viewport, scroll it into view
+        focusedItem.scrollIntoView();
+      }
+    });
+  }
+
+  /** @private */
+  __insideViewport(element) {
+    const rect = element.getBoundingClientRect();
+    const dashboardRect = this.getBoundingClientRect();
+    return (
+      rect.bottom >= dashboardRect.top &&
+      rect.right >= dashboardRect.left &&
+      rect.top <= dashboardRect.bottom &&
+      rect.left <= dashboardRect.right
+    );
   }
 
   /** @private */
