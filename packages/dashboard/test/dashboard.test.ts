@@ -13,6 +13,7 @@ import {
   getParentSection,
   getRemoveButton,
   getResizeHandle,
+  getScrollingContainer,
   onceResized,
   setGap,
   setMaximumColumnWidth,
@@ -567,6 +568,51 @@ describe('dashboard', () => {
       const section = widget.closest('vaadin-dashboard-section') as DashboardSection;
       const removeButton = getRemoveButton(section);
       expect(removeButton.getBoundingClientRect().height).to.be.above(0);
+    });
+
+    it('should scroll the focused item into view on render', async () => {
+      // Limit the dashboard height to force scrolling
+      dashboard.style.height = '300px';
+      await onceResized(dashboard);
+      // Focus the first item
+      getElementFromCell(dashboard, 0, 0)!.focus();
+
+      // Add enough items to push the focused item out of view
+      dashboard.items = Array.from({ length: 10 }, (_, i) => ({ id: i.toString() })).reverse();
+      await nextFrame();
+      await nextFrame();
+
+      // Expect the focused item to have been scrolled back into view
+      const widgetRect = document.activeElement!.getBoundingClientRect();
+      const dashboardRect = dashboard.getBoundingClientRect();
+      expect(widgetRect.bottom).to.be.above(dashboardRect.top);
+      expect(widgetRect.top).to.be.below(dashboardRect.bottom);
+    });
+
+    it('should not scroll the focused item into view if it is partially visible', async () => {
+      // Limit the dashboard height to force scrolling
+      dashboard.style.height = '300px';
+      await onceResized(dashboard);
+      // Focus the first item
+      getElementFromCell(dashboard, 0, 0)!.focus();
+
+      // Add enough items to make the dashboard scrollable
+      dashboard.items = Array.from({ length: 10 }, (_, i) => ({ id: i.toString() }));
+      await nextFrame();
+      await nextFrame();
+
+      // Scroll the dashboard to make the focused item partially visible
+      const scrollingContainer = getScrollingContainer(dashboard);
+      const scrollTop = Math.round(document.activeElement!.getBoundingClientRect().height / 2);
+      scrollingContainer.scrollTop = scrollTop;
+
+      // Change the items to trigger a render
+      dashboard.items = dashboard.items.slice(0, -1);
+      await nextFrame();
+      await nextFrame();
+
+      // Expect no scrolling to have occurred
+      expect(scrollingContainer.scrollTop).to.equal(scrollTop);
     });
 
     describe('focus restore on focused item removal', () => {
