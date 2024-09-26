@@ -65,6 +65,7 @@ class DashboardWidget extends DashboardItemMixin(ControllerMixin(ElementMixin(Po
           cursor: grab;
           line-height: 1;
           z-index: 1;
+          overflow: hidden;
         }
 
         #resize-handle::before {

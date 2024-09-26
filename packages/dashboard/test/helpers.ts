@@ -14,11 +14,11 @@ export function getScrollingContainer(dashboard: Element): Element {
   return getCssGrid(dashboard);
 }
 
-export function getParentSection(element?: Element | null): Element | null {
+export function getParentSection(element?: Element | null): DashboardSection | null {
   if (!element) {
     return null;
   }
-  return element.closest('vaadin-dashboard-section');
+  return element.closest('vaadin-dashboard-section') as DashboardSection;
 }
 
 /**
@@ -45,7 +45,7 @@ function _getElementFromCell(dashboard: HTMLElement, rowIndex: number, columnInd
   const y = top + rowHeights.slice(0, rowIndex).reduce((sum, height) => sum + height, 0);
 
   return document
-    .elementsFromPoint(x + (columnWidths[columnIndex] / 2) * (rtl ? -1 : 1), y + rowHeights[rowIndex] - 1)
+    .elementsFromPoint(x + (columnWidths[columnIndex] / 2) * (rtl ? -1 : 1), y + rowHeights[rowIndex] - 10)
     .reverse()
     .find(
       (element) =>
@@ -165,7 +165,8 @@ export function expectLayout(dashboard: HTMLElement, layout: Array<Array<number 
       if (!element) {
         actualRow.push(null);
       } else {
-        actualRow.push(parseInt(element.id.replace('item-', '')));
+        // TODO: Just use a number for all test item IDs
+        actualRow.push(parseInt(element.id.replace('item-', '').replace('Item ', ''), 10));
       }
     });
   });
