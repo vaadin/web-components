@@ -273,45 +273,34 @@ class Dashboard extends ControllerMixin(DashboardLayoutMixin(ElementMixin(Themab
   }
 
   /** @private */
-  __itemSelectedChanged(e) {
-    e.stopImmediatePropagation();
+  __dispatchCustomEvent(eventName, item, value) {
     this.dispatchEvent(
-      new CustomEvent('dashboard-item-selected-changed', {
+      new CustomEvent(eventName, {
         bubbles: true,
         detail: {
-          item: getElementItem(e.target),
-          value: e.detail.value,
+          item,
+          value,
         },
       }),
     );
+  }
+
+  /** @private */
+  __itemSelectedChanged(e) {
+    e.stopImmediatePropagation();
+    this.__dispatchCustomEvent('dashboard-item-selected-changed', getElementItem(e.target), e.detail.value);
   }
 
   /** @private */
   __itemMoveModeChanged(e) {
     e.stopImmediatePropagation();
-    this.dispatchEvent(
-      new CustomEvent('dashboard-item-move-mode-changed', {
-        bubbles: true,
-        detail: {
-          item: getElementItem(e.target),
-          value: e.detail.value,
-        },
-      }),
-    );
+    this.__dispatchCustomEvent('dashboard-item-move-mode-changed', getElementItem(e.target), e.detail.value);
   }
 
   /** @private */
   __itemResizeModeChanged(e) {
     e.stopImmediatePropagation();
-    this.dispatchEvent(
-      new CustomEvent('dashboard-item-resize-mode-changed', {
-        bubbles: true,
-        detail: {
-          item: getElementItem(e.target),
-          value: e.detail.value,
-        },
-      }),
-    );
+    this.__dispatchCustomEvent('dashboard-item-resize-mode-changed', getElementItem(e.target), e.detail.value);
   }
 
   /**
