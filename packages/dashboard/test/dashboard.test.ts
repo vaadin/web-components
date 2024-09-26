@@ -5,10 +5,12 @@ import '../vaadin-dashboard.js';
 import type { CustomElementType } from '@vaadin/component-base/src/define.js';
 import type { DashboardSection } from '../src/vaadin-dashboard-section.js';
 import type { DashboardWidget } from '../src/vaadin-dashboard-widget.js';
-import type { Dashboard, DashboardItem } from '../vaadin-dashboard.js';
+import type { Dashboard, DashboardItem, DashboardSectionItem } from '../vaadin-dashboard.js';
 import {
+  expectLayout,
   getDraggable,
   getElementFromCell,
+  getParentSection,
   getRemoveButton,
   getResizeHandle,
   onceResized,
@@ -503,6 +505,7 @@ describe('dashboard', () => {
         if (!widget || widget.tabIndex !== 0) {
           root.textContent = '';
           widget = document.createElement('vaadin-dashboard-widget');
+          widget.id = model.item.id;
           widget.tabIndex = 0;
           root.appendChild(widget);
         }
@@ -562,6 +565,110 @@ describe('dashboard', () => {
       const section = widget.closest('vaadin-dashboard-section') as DashboardSection;
       const removeButton = getRemoveButton(section);
       expect(removeButton.getBoundingClientRect().height).to.be.above(0);
+    });
+
+    describe('focus restore on focused item removal', () => {
+      beforeEach(async () => {
+        dashboard.editable = true;
+        await nextFrame();
+
+        dashboard.items = [
+          { id: 'Item 0' },
+          { id: 'Item 1' },
+          { title: 'Section', items: [{ id: 'Item 2' }, { id: 'Item 3' }] },
+        ];
+        await nextFrame();
+
+        /* prettier-ignore */
+        expectLayout(dashboard, [
+          [0, 1],
+          [2, 3]
+        ]);
+      });
+
+      async function renderAndFocusRestore() {
+        // Wait for the updated wrapper layout to be rendered
+        await nextFrame();
+        // Wait for the wrapper widgets to be rendered
+        await nextFrame();
+      }
+
+      it('should focus next widget on focused widget removal', async () => {
+        getElementFromCell(dashboard, 0, 0)!.focus();
+        dashboard.items = dashboard.items.slice(1);
+        await renderAndFocusRestore();
+        expect(document.activeElement).to.equal(getElementFromCell(dashboard, 0, 0)!);
+      });
+
+      it('should focus the previous widget on focused widget removal', async () => {
+        const sectionWidget = getElementFromCell(dashboard, 1, 1)!;
+        getParentSection(sectionWidget)!.focus();
+        dashboard.items = dashboard.items.slice(0, 2);
+        await renderAndFocusRestore();
+        expect(document.activeElement).to.equal(getElementFromCell(dashboard, 0, 1)!);
+      });
+
+      it('should focus the first widget on focused widget removal', async () => {
+        getElementFromCell(dashboard, 1, 0)!.focus();
+        dashboard.items = [dashboard.items[0]];
+        await renderAndFocusRestore();
+        expect(document.activeElement).to.equal(getElementFromCell(dashboard, 0, 0)!);
+      });
+
+      it('should focus the last widget on focused widget removal', async () => {
+        getElementFromCell(dashboard, 0, 0)!.focus();
+        dashboard.items = [dashboard.items[2]];
+        await renderAndFocusRestore();
+        expect(document.activeElement).to.equal(getParentSection(getElementFromCell(dashboard, 0, 0))!);
+      });
+
+      it('should focus a root level widget on focused section removal', async () => {
+        getElementFromCell(dashboard, 1, 0)!.focus();
+        dashboard.items = dashboard.items.slice(0, 2);
+        await renderAndFocusRestore();
+        expect(document.activeElement).to.equal(getElementFromCell(dashboard, 0, 1)!);
+      });
+
+      it('should focus the section on focused section widget removal', async () => {
+        const widget = getElementFromCell(dashboard, 1, 0)!;
+        const section = getParentSection(widget)!;
+        widget.focus();
+        (dashboard.items[2] as DashboardSectionItem<TestDashboardItem>).items = [];
+        dashboard.items = [...dashboard.items];
+
+        await renderAndFocusRestore();
+        expect(document.activeElement).to.equal(section);
+      });
+
+      it('should focus the body on all items removal', async () => {
+        getElementFromCell(dashboard, 0, 0)!.focus();
+        dashboard.items = [];
+        await renderAndFocusRestore();
+        expect(document.activeElement).to.equal(document.body);
+      });
+
+      it('should focus a new widget when items are replaced', async () => {
+        getElementFromCell(dashboard, 0, 0)!.focus();
+        await nextFrame();
+        dashboard.items = [{ id: 'Item 100' }];
+        await renderAndFocusRestore();
+        expect(document.activeElement).to.equal(getElementFromCell(dashboard, 0, 0)!);
+      });
+
+      it('should not restore focus if no widget had focus', async () => {
+        dashboard.items = dashboard.items.slice(1);
+        await renderAndFocusRestore();
+        expect(document.activeElement).to.equal(document.body);
+      });
+
+      it('should not try to focus an empty wrapper', async () => {
+        getElementFromCell(dashboard, 0, 0)!.focus();
+        dashboard.renderer = (root) => {
+          root.textContent = '';
+        };
+        dashboard.items = dashboard.items.slice(1);
+        await renderAndFocusRestore();
+      });
     });
   });
 });

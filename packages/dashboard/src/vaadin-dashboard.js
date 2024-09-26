@@ -197,6 +197,11 @@ class Dashboard extends ControllerMixin(DashboardLayoutMixin(ElementMixin(Themab
     let wrappers = [...hostElement.children].filter((el) => el.localName === WRAPPER_LOCAL_NAME);
     let previousWrapper = null;
 
+    const focusedWrapper = wrappers.find((wrapper) => wrapper.querySelector('[focused]'));
+    const focusedWrapperWillBeRemoved = focusedWrapper && !this.__isActiveWrapper(focusedWrapper);
+    const wrapperClosestToRemovedFocused =
+      focusedWrapperWillBeRemoved && this.__getClosestActiveWrapper(focusedWrapper);
+
     items.forEach((item) => {
       // Find the wrapper for the item or create a new one
       const wrapper = wrappers.find((el) => el.__item === item) || this.__createWrapper(item);
@@ -236,6 +241,55 @@ class Dashboard extends ControllerMixin(DashboardLayoutMixin(ElementMixin(Themab
 
     // Remove the unused wrappers
     wrappers.forEach((wrapper) => wrapper.remove());
+
+    if (focusedWrapperWillBeRemoved) {
+      // The wrapper containing the focused element was removed. Try to focus the element in the closest wrapper.
+      requestAnimationFrame(() =>
+        this.__focusWrapperContent(wrapperClosestToRemovedFocused || this.querySelector(WRAPPER_LOCAL_NAME)),
+      );
+    }
+  }
+
+  /** @private */
+  __focusWrapperContent(wrapper) {
+    if (wrapper && wrapper.firstElementChild) {
+      wrapper.firstElementChild.focus();
+    }
+  }
+
+  /**
+   * Checks if the wrapper represents an item that is part of the dashboard's items array
+   * @private
+   */
+  __isActiveWrapper(wrapper) {
+    if (!wrapper || wrapper.localName !== WRAPPER_LOCAL_NAME) {
+      return false;
+    }
+    return getItemsArrayOfItem(getElementItem(wrapper), this.items);
+  }
+
+  /** @private */
+  __getClosestActiveWrapper(wrapper) {
+    if (!wrapper || this.__isActiveWrapper(wrapper)) {
+      return wrapper;
+    }
+
+    // Starting from the given wrapper element, iterates through the siblings in the given direction
+    // to find the closest wrapper that represents an item in the dashboard's items array
+    const findSiblingWrapper = (wrapper, dir) => {
+      while (wrapper) {
+        if (this.__isActiveWrapper(wrapper)) {
+          return wrapper;
+        }
+        wrapper = dir === 1 ? wrapper.nextElementSibling : wrapper.previousElementSibling;
+      }
+    };
+
+    return (
+      findSiblingWrapper(wrapper, 1) ||
+      findSiblingWrapper(wrapper, -1) ||
+      this.__getClosestActiveWrapper(wrapper.parentElement.closest(WRAPPER_LOCAL_NAME))
+    );
   }
 
   /** @private */
