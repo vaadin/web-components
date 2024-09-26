@@ -61,7 +61,7 @@ describe('grid-pro custom editor', () => {
         column.editModeRenderer = (root, _, model) => {
           if (!root.firstChild) {
             // NOTE: using `innerHTML` doesn't work due to the timing issue in custom-field
-            // as the `inputs` array is still empty by the time when value property is set.
+            // See https://github.com/vaadin/web-components/issues/7871
             const field = document.createElement('vaadin-custom-field');
             field.appendChild(document.createElement('vaadin-text-field'));
             field.appendChild(document.createElement('vaadin-text-field'));
