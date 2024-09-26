@@ -499,15 +499,24 @@ describe('vaadin-select', () => {
     });
 
     describe('disabled', () => {
-      it('should disable the button and disable opening if select is disabled', async () => {
+      beforeEach(async () => {
         select.disabled = true;
         await nextUpdate(select);
+      });
+
+      it('should disable the value button element when disabled', () => {
         expect(valueButton.disabled).to.be.true;
+      });
 
+      it('should not open on value button Enter when disabled', () => {
         enterKeyDown(valueButton);
+        expect(select.opened).to.be.false;
         expect(select._overlayElement.opened).to.be.false;
+      });
 
+      it('should not open on value button click when disabled', () => {
         click(valueButton);
+        expect(select.opened).to.be.false;
         expect(select._overlayElement.opened).to.be.false;
       });
     });
