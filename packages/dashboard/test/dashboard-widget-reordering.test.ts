@@ -32,7 +32,6 @@ describe('dashboard - widget reordering', () => {
     // @ts-expect-error Test without padding
     dashboard.$.grid.style.padding = '0';
 
-    dashboard.style.width = `${columnWidth * 2}px`;
     setMinimumColumnWidth(dashboard, columnWidth);
     setMaximumColumnWidth(dashboard, columnWidth);
     setGap(dashboard, 0);
@@ -48,7 +47,8 @@ describe('dashboard - widget reordering', () => {
         </vaadin-dashboard-widget>`);
       root.appendChild(widget);
     };
-    await nextFrame();
+    dashboard.style.width = `${columnWidth * 2}px`;
+    await onceResized(dashboard);
 
     // prettier-ignore
     expectLayout(dashboard, [
