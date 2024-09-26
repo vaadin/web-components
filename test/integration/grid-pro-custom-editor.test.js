@@ -303,6 +303,14 @@ describe('grid-pro custom editor', () => {
       await editFirstCell();
     });
 
+    it('should not stop editing when switching between fields using mouse', async () => {
+      // Move focus to the second field
+      const { x, y } = middleOfNode(cell._content.querySelectorAll('input')[1]);
+      await sendMouse({ type: 'click', position: [Math.floor(x), Math.floor(y)] });
+      await nextRender();
+      expect(cell._content.querySelector('vaadin-custom-field')).to.be.ok;
+    });
+
     it('should not stop editing when switching between fields using Tab', async () => {
       // Move focus to the second field
       await sendKeys({ press: 'Tab' });
@@ -315,6 +323,18 @@ describe('grid-pro custom editor', () => {
       await sendKeys({ up: 'Shift' });
       await nextRender();
       expect(cell._content.querySelector('vaadin-custom-field')).to.be.ok;
+    });
+
+    it('should stop editing when moving focus outside the field using Tab', async () => {
+      // Move focus to the second field
+      await sendKeys({ press: 'Tab' });
+      await nextRender();
+      expect(cell._content.querySelector('vaadin-custom-field')).to.be.ok;
+
+      // Move focus outside of the field
+      await sendKeys({ press: 'Tab' });
+      await nextRender();
+      expect(cell._content.querySelector('vaadin-custom-field')).to.be.not.ok;
     });
   });
 });
