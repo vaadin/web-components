@@ -249,7 +249,20 @@ export const CustomFieldMixin = (superClass) =>
     /** @private */
     __setInputsFromSlot() {
       this._setInputs(this.__getInputsFromSlot());
-      this.__setValue();
+
+      // During initial render inputs might be empty due to the fact that
+      // slotted custom elements upgrade later than custom field, so they
+      // don't yet have `validate` method and don't pass "is input" check.
+      if (this.inputs.length === 0) {
+        return;
+      }
+
+      if (this.__storedValue) {
+        this.__applyInputsValue(this.__storedValue);
+        delete this.__storedValue;
+      } else {
+        this.__setValue();
+      }
     }
 
     /** @private */
@@ -261,22 +274,37 @@ export const CustomFieldMixin = (superClass) =>
     __valueChanged(value, oldValue) {
       this.__toggleHasValue(value);
 
-      if (this.__settingValue || !this.inputs) {
+      if (this.__settingValue) {
         return;
       }
 
+      // If value property is set with attribute or before adding to the DOM,
+      // the observer will run for the first time before inputs are populated.
+      // In this case we need to store the value to apply it to inputs later.
+      if (value && (!this.inputs || this.inputs.length === 0)) {
+        this.__storedValue = value;
+        return;
+      }
+
+      this.__applyInputsValue(value);
+
+      if (oldValue !== undefined) {
+        this.validate();
+      }
+    }
+
+    /** @private */
+    __applyInputsValue(value) {
       const parseFn = this.parseValue || defaultParseValue;
       const valuesArray = parseFn.apply(this, [value]);
+
       if (!valuesArray || valuesArray.length === 0) {
         console.warn('Value parser has not provided values array');
         return;
       }
 
-      this.inputs.forEach((input, id) => {
-        input.value = valuesArray[id];
+      this.inputs.forEach((input, idx) => {
+        input.value = valuesArray[idx];
       });
-      if (oldValue !== undefined) {
-        this.validate();
-      }
     }
   };

@@ -79,6 +79,27 @@ describe('custom field', () => {
     });
   });
 
+  describe('value set with attribute', () => {
+    beforeEach(async () => {
+      customField = fixtureSync(`
+        <vaadin-custom-field value="01\t25">
+          <input type="number" />
+          <input type="number" />
+        </vaadin-custom-field>
+      `);
+      await nextRender();
+    });
+
+    it('should not reset value set using attribute', () => {
+      expect(customField.value).to.equal('01\t25');
+    });
+
+    it('should apply value set using attribute to inputs', () => {
+      expect(customField.inputs[0].value).to.equal('01');
+      expect(customField.inputs[1].value).to.equal('25');
+    });
+  });
+
   describe('aria-required', () => {
     it('should toggle aria-required attribute on required property change', async () => {
       customField.required = true;
