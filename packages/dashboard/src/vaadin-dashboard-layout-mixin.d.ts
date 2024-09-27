@@ -18,4 +18,9 @@ export declare function DashboardLayoutMixin<T extends Constructor<HTMLElement>>
   base: T,
 ): Constructor<DashboardLayoutMixinClass> & Constructor<ResizeMixinClass> & T;
 
-export declare class DashboardLayoutMixinClass {}
+export declare class DashboardLayoutMixinClass {
+  /**
+   * Whether the dashboard layout is dense.
+   */
+  dense: boolean;
+}

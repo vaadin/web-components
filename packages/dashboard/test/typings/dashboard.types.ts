@@ -35,6 +35,7 @@ assertType<ElementMixinClass>(genericDashboard);
 assertType<DashboardLayoutMixinClass>(genericDashboard);
 assertType<Array<DashboardItem | DashboardSectionItem<DashboardItem>> | null | undefined>(genericDashboard.items);
 assertType<boolean>(genericDashboard.editable);
+assertType<boolean>(genericDashboard.dense);
 
 assertType<{
   selectWidget: string;
@@ -112,6 +113,7 @@ narrowedDashboard.addEventListener('dashboard-item-resize-mode-changed', (event)
 /* DashboardLayout */
 const layout = document.createElement('vaadin-dashboard-layout');
 assertType<DashboardLayout>(layout);
+assertType<boolean>(layout.dense);
 
 assertType<ElementMixinClass>(layout);
 assertType<DashboardLayoutMixinClass>(layout);

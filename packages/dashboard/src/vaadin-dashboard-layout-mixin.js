@@ -30,6 +30,10 @@ export const DashboardLayoutMixin = (superClass) =>
           display: none !important;
         }
 
+        :host([dense]) #grid {
+          grid-auto-flow: dense;
+        }
+
         #grid {
           box-sizing: border-box;
           padding: 20px;
@@ -89,6 +93,20 @@ export const DashboardLayoutMixin = (superClass) =>
           grid-row: var(--_vaadin-dashboard-item-row);
         }
       `;
+    }
+
+    static get properties() {
+      return {
+        /**
+         * Whether the dashboard layout is dense.
+         * @type {boolean}
+         */
+        dense: {
+          type: Boolean,
+          value: false,
+          reflectToAttribute: true,
+        },
+      };
     }
 
     /** @protected */

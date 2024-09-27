@@ -553,4 +553,33 @@ describe('dashboard layout', () => {
       });
     });
   });
+
+  describe('dense', () => {
+    beforeEach(async () => {
+      dashboard.appendChild(fixtureSync('<div id="2">Item 2</div>'));
+      childElements = [...dashboard.querySelectorAll('div')];
+      setColspan(childElements[1], 2);
+      dashboard.dense = true;
+      await nextFrame();
+    });
+
+    it('should display the items in dense mode', () => {
+      /* prettier-ignore */
+      expectLayout(dashboard, [
+        [0, 2],
+        [1, 1],
+      ]);
+    });
+
+    it('should retain the order of items', async () => {
+      dashboard.dense = false;
+      await nextFrame();
+      /* prettier-ignore */
+      expectLayout(dashboard, [
+        [0],
+        [1, 1],
+        [2],
+      ]);
+    });
+  });
 });
