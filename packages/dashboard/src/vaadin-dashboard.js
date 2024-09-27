@@ -103,16 +103,6 @@ class Dashboard extends ControllerMixin(DashboardLayoutMixin(ElementMixin(Themab
       },
 
       /**
-       * Whether the dashboard is in dense layout mode.
-       * @type {boolean}
-       */
-      dense: {
-        type: Boolean,
-        value: false,
-        reflectToAttribute: true,
-      },
-
-      /**
        * The object used to localize this component.
        *
        * To change the default localization, replace the entire

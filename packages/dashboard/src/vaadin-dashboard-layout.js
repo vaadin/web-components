@@ -29,20 +29,6 @@ class DashboardLayout extends DashboardLayoutMixin(ElementMixin(ThemableMixin(Po
     return 'vaadin-dashboard-layout';
   }
 
-  static get properties() {
-    return {
-      /**
-       * Whether the dashboard layout is dense.
-       * @type {boolean}
-       */
-      dense: {
-        type: Boolean,
-        value: false,
-        reflectToAttribute: true,
-      },
-    };
-  }
-
   /** @protected */
   render() {
     return html`<div id="grid"><slot></slot></div>`;

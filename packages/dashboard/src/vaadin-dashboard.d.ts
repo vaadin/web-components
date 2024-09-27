@@ -178,11 +178,6 @@ declare class Dashboard<TItem extends DashboardItem = DashboardItem> extends Das
   editable: boolean;
 
   /**
-   * Whether the dashboard is in dense layout mode.
-   */
-  dense: boolean;
-
-  /**
    * The object used to localize this component.
    *
    * To change the default localization, replace the entire

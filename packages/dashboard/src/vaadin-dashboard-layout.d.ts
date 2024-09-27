@@ -14,12 +14,7 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
 /**
  * A responsive, grid-based dashboard layout component
  */
-declare class DashboardLayout extends ElementMixin(ThemableMixin(HTMLElement)) {
-  /**
-   * Whether the dashboard layout is dense.
-   */
-  dense: boolean;
-}
+declare class DashboardLayout extends ElementMixin(ThemableMixin(HTMLElement)) {}
 
 declare global {
   interface HTMLElementTagNameMap {
