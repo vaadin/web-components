@@ -184,13 +184,18 @@ export class WidgetReorderController {
    * @private
    */
   __getDragContextElements() {
-    const items = getItemsArrayOfItem(this.draggedItem, this.host.items);
-    return [...this.host.querySelectorAll(WRAPPER_LOCAL_NAME)]
-      .filter(
-        (wrapper) =>
-          items && items.some((item) => itemsEqual(item, getElementItem(wrapper))) && wrapper.firstElementChild,
-      )
-      .map((wrapper) => wrapper.firstElementChild);
+    // Find the wrapper element representing the dragged item
+    const draggedItemWrapper = [...this.host.querySelectorAll(WRAPPER_LOCAL_NAME)].find((el) =>
+      itemsEqual(el.__item, this.draggedItem),
+    );
+    if (!draggedItemWrapper) {
+      return [];
+    }
+    // Find all child wrappers in the same parent container as the dragged item's wrapper and
+    // return their first children (the actual widgets or sections)
+    return [...draggedItemWrapper.parentElement.children]
+      .filter((el) => el.localName === WRAPPER_LOCAL_NAME && el.firstElementChild)
+      .map((el) => el.firstElementChild);
   }
 
   /** @private */

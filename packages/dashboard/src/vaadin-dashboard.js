@@ -213,9 +213,20 @@ class Dashboard extends ControllerMixin(DashboardLayoutMixin(ElementMixin(Themab
       this.__updateWrapper(wrapper, item);
 
       if (!wrapper.contains(document.activeElement)) {
-        // Insert the wrapper to the correct position inside the host element
-        const insertBeforeElement = previousWrapper ? previousWrapper.nextSibling : hostElement.firstChild;
-        hostElement.insertBefore(wrapper, insertBeforeElement);
+        if (previousWrapper) {
+          // Append the wrapper after the previous one if it's not already there
+          if (wrapper.previousElementSibling !== previousWrapper) {
+            previousWrapper.after(wrapper);
+          }
+        } else if (hostElement.firstChild) {
+          // Insert the wrapper as the first child of the host element if it's not already there
+          if (wrapper !== hostElement.firstChild) {
+            hostElement.insertBefore(wrapper, hostElement.firstChild);
+          }
+        } else {
+          // Append the wrapper to the empty host element
+          hostElement.appendChild(wrapper);
+        }
       }
       previousWrapper = wrapper;
 
