@@ -349,6 +349,9 @@ class Dashboard extends ControllerMixin(DashboardLayoutMixin(ElementMixin(Themab
 
   /** @private */
   __dispatchCustomEvent(eventName, item, value) {
+    if (!item) {
+      return;
+    }
     this.dispatchEvent(
       new CustomEvent(eventName, {
         detail: {

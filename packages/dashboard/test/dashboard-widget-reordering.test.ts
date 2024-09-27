@@ -1,7 +1,9 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
+import { fixtureSync, isFirefox, nextFrame } from '@vaadin/testing-helpers';
+import { resetMouse, sendMouse } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import '../vaadin-dashboard.js';
+import { hover } from '../../button/test/visual/helpers.js';
 import type { Dashboard, DashboardItem, DashboardSectionItem } from '../vaadin-dashboard.js';
 import {
   createDragEvent,
@@ -54,6 +56,10 @@ describe('dashboard - widget reordering', () => {
     expectLayout(dashboard, [
       [0, 1],
     ]);
+  });
+
+  afterEach(async () => {
+    await resetMouse();
   });
 
   describe('drag and drop', () => {
@@ -202,6 +208,37 @@ describe('dashboard - widget reordering', () => {
         [0],
         [1],
       ]);
+    });
+
+    // The sendMouse helper does not seem to work well with Firefox
+    (isFirefox ? it.skip : it)('should reorder using native DnD', async () => {
+      const spy = sinon.spy();
+      dashboard.addEventListener('dashboard-item-selected-changed', spy);
+      await resetMouse();
+      // Hover over the widget drag handle
+      await hover(getDraggable(getElementFromCell(dashboard, 0, 0)!));
+      // Press down the left mouse button
+      await sendMouse({
+        type: 'down',
+      });
+      // Move the mouse to the second widget
+      const secondWidget = getElementFromCell(dashboard, 0, 1)!;
+      const secondWidgetRect = secondWidget.getBoundingClientRect();
+      const y = secondWidgetRect.top + secondWidgetRect.height / 2;
+      const x = document.dir === 'rtl' ? secondWidgetRect.left + 1 : secondWidgetRect.right - 1;
+      await sendMouse({ type: 'move', position: [Math.round(x), Math.round(y)] });
+
+      // Release the left mouse button
+      await sendMouse({ type: 'up' });
+
+      // Expect the widgets to be reordered
+      // prettier-ignore
+      expectLayout(dashboard, [
+        [1, 0],
+      ]);
+
+      // Expect dashboard-item-selected-changed not to be fired
+      expect(spy).to.not.have.been.called;
     });
 
     it('should not throw with a lazy renderer while reordering', async () => {

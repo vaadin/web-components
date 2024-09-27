@@ -92,15 +92,16 @@ export const DashboardItemMixin = (superClass) =>
 
     /** @private */
     __renderDragHandle() {
-      return html`<button
-        aria-label="${this.__i18n.move}"
-        title="${this.__i18n.move}"
-        id="drag-handle"
-        draggable="true"
-        class="drag-handle"
-        tabindex="${this.__selected ? 0 : -1}"
-        @click="${() => this.__enterMoveMode()}"
-      ></button>`;
+      // To make the button draggable on Firefox, using a workaround from https://stackoverflow.com/a/55019027/3409629
+      return html`<label draggable="true" class="drag-handle" id="drag-handle-wrapper">
+        <button
+          id="drag-handle"
+          aria-label="${this.__i18n.move}"
+          title="${this.__i18n.move}"
+          tabindex="${this.__selected ? 0 : -1}"
+          @click="${() => this.__enterMoveMode()}"
+        ></button>
+      </label>`;
     }
 
     /** @private */
@@ -116,17 +117,18 @@ export const DashboardItemMixin = (superClass) =>
 
     /** @private */
     __renderFocusButton(i18nSelectTitleForEditingProperty) {
-      return html`<button
-        aria-label=${this.__i18n[i18nSelectTitleForEditingProperty]}
-        aria-describedby="title"
-        aria-pressed="${!!this.__selected}"
-        id="focus-button"
-        draggable="true"
-        class="drag-handle"
-        @click="${() => {
-          this.__selected = true;
-        }}"
-      ></button>`;
+      // To make the button draggable on Firefox, using a workaround from https://stackoverflow.com/a/55019027/3409629
+      return html`<label draggable="true" class="drag-handle" id="focus-button-wrapper">
+        <button
+          id="focus-button"
+          aria-label=${this.__i18n[i18nSelectTitleForEditingProperty]}
+          aria-describedby="title"
+          aria-pressed="${!!this.__selected}"
+          @click="${() => {
+            this.__selected = true;
+          }}"
+        ></button>
+      </label>`;
     }
 
     /** @private */
