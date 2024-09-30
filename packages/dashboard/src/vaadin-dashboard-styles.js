@@ -43,16 +43,28 @@ export const dashboardWidgetAndSectionStyles = css`
     align-items: center;
   }
 
+  #focus-button-wrapper,
   #focus-button {
     position: absolute;
     inset: 0;
     opacity: 0;
   }
 
+  #focus-button {
+    pointer-events: none;
+    padding: 0;
+    border: none;
+  }
+
+  #drag-handle-wrapper {
+    z-index: 1;
+    cursor: grab;
+  }
+
   #drag-handle {
     font-size: 30px;
-    cursor: grab;
     z-index: 1;
+    pointer-events: none;
   }
 
   #drag-handle::before {

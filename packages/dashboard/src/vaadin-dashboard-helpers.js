@@ -47,7 +47,8 @@ export function getItemsArrayOfItem(item, items) {
  * @param {HTMLElement} element the element
  */
 export function getElementItem(element) {
-  return element.closest(WRAPPER_LOCAL_NAME).__item;
+  const wrapper = element.closest(WRAPPER_LOCAL_NAME);
+  return wrapper && wrapper.__item;
 }
 
 /**
