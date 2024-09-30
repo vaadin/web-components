@@ -68,6 +68,15 @@ describe('custom field', () => {
         expect(el.value).to.equal('1');
       });
     });
+
+    it('should set has-value when updating values', async () => {
+      customField.inputs.forEach((el) => {
+        el.value = '1';
+        fire(el, 'change');
+      });
+      await nextUpdate(customField);
+      expect(customField.hasAttribute('has-value')).to.be.true;
+    });
   });
 
   describe('aria-required', () => {
