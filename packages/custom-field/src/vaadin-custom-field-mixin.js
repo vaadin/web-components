@@ -257,7 +257,7 @@ export const CustomFieldMixin = (superClass) =>
       if (inputs.length === 0) {
         return;
       }
-      
+
       // When inputs are first initialized, apply value set with property.
       if (this.value && this.value !== '\t' && (!oldInputs || oldInputs.length === 0)) {
         this.__applyInputsValue(this.value);
