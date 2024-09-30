@@ -30,7 +30,7 @@ export const DashboardLayoutMixin = (superClass) =>
           display: none !important;
         }
 
-        :host([dense]) #grid {
+        :host([dense-layout]) #grid {
           grid-auto-flow: dense;
         }
 
@@ -101,7 +101,7 @@ export const DashboardLayoutMixin = (superClass) =>
          * Whether the dashboard layout is dense.
          * @type {boolean}
          */
-        dense: {
+        denseLayout: {
           type: Boolean,
           value: false,
           reflectToAttribute: true,
