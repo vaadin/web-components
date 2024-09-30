@@ -64,6 +64,8 @@ import { DashboardItemMixin } from './vaadin-dashboard-item-mixin.js';
 declare class DashboardWidget extends DashboardItemMixin(ControllerMixin(ElementMixin(HTMLElement))) {
   /**
    * The title of the widget
+   *
+   * @attr {string} widget-title
    */
   widgetTitle: string | null | undefined;
 }

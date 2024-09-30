@@ -21,6 +21,8 @@ export declare function DashboardLayoutMixin<T extends Constructor<HTMLElement>>
 export declare class DashboardLayoutMixinClass {
   /**
    * Whether the dashboard layout is dense.
+   *
+   * @attr {boolean} dense-layout
    */
   denseLayout: boolean;
 }

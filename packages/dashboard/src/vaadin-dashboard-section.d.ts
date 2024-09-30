@@ -55,6 +55,8 @@ import { DashboardItemMixin } from './vaadin-dashboard-item-mixin.js';
 declare class DashboardSection extends DashboardItemMixin(ControllerMixin(ElementMixin(HTMLElement))) {
   /**
    * The title of the section
+   *
+   * @attr {string} section-title
    */
   sectionTitle: string | null | undefined;
 }
