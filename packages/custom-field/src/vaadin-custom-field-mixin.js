@@ -254,13 +254,15 @@ export const CustomFieldMixin = (superClass) =>
 
     /** @private */
     __inputsChanged(inputs, oldInputs) {
-      if (inputs.length > 0) {
-        // When inputs are first initialized, apply value set with property.
-        if (this.value && this.value !== '\t' && (!oldInputs || oldInputs.length === 0)) {
-          this.__applyInputsValue(this.value);
-        } else {
-          this.__setValue();
-        }
+      if (inputs.length === 0) {
+        return;
+      }
+      
+      // When inputs are first initialized, apply value set with property.
+      if (this.value && this.value !== '\t' && (!oldInputs || oldInputs.length === 0)) {
+        this.__applyInputsValue(this.value);
+      } else {
+        this.__setValue();
       }
     }
 
