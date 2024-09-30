@@ -259,11 +259,11 @@ export const CustomFieldMixin = (superClass) =>
 
     /** @private */
     __valueChanged(value, oldValue) {
+      this.__toggleHasValue(value);
+
       if (this.__settingValue || !this.inputs) {
         return;
       }
-
-      this.__toggleHasValue(value);
 
       const parseFn = this.parseValue || defaultParseValue;
       const valuesArray = parseFn.apply(this, [value]);
