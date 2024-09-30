@@ -65,6 +65,7 @@ export const CustomFieldMixin = (superClass) =>
         inputs: {
           type: Array,
           readOnly: true,
+          observer: '__inputsChanged',
         },
 
         /**
@@ -106,10 +107,6 @@ export const CustomFieldMixin = (superClass) =>
           type: Function,
         },
       };
-    }
-
-    static get observers() {
-      return ['__inputsOrValueChanged(inputs, value)'];
     }
 
     /** @protected */
@@ -256,19 +253,15 @@ export const CustomFieldMixin = (superClass) =>
     }
 
     /** @private */
-    __inputsOrValueChanged(inputs, value) {
-      const oldInputs = this.__oldInputs;
-
-      if (inputs && inputs !== oldInputs && inputs.length > 0) {
+    __inputsChanged(inputs, oldInputs) {
+      if (inputs.length > 0) {
         // When inputs are first initialized, apply value set with property.
-        if (value && value !== '\t' && (!oldInputs || oldInputs.length === 0)) {
-          this.__applyInputsValue(value);
+        if (this.value && this.value !== '\t' && (!oldInputs || oldInputs.length === 0)) {
+          this.__applyInputsValue(this.value);
         } else {
           this.__setValue();
         }
       }
-
-      this.__oldInputs = inputs;
     }
 
     /** @private */
