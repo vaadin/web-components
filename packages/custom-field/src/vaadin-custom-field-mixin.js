@@ -108,6 +108,10 @@ export const CustomFieldMixin = (superClass) =>
       };
     }
 
+    static get observers() {
+      return ['__inputsOrValueChanged(inputs, value)'];
+    }
+
     /** @protected */
     ready() {
       super.ready();
@@ -249,20 +253,22 @@ export const CustomFieldMixin = (superClass) =>
     /** @private */
     __setInputsFromSlot() {
       this._setInputs(this.__getInputsFromSlot());
+    }
 
-      // During initial render inputs might be empty due to the fact that
-      // slotted custom elements upgrade later than custom field, so they
-      // don't yet have `validate` method and don't pass "is input" check.
-      if (this.inputs.length === 0) {
-        return;
+    /** @private */
+    __inputsOrValueChanged(inputs, value) {
+      const oldInputs = this.__oldInputs;
+
+      if (inputs && inputs !== oldInputs && inputs.length > 0) {
+        // When inputs are first initialized, apply value set with property.
+        if (value && value !== '\t' && (!oldInputs || oldInputs.length === 0)) {
+          this.__applyInputsValue(value);
+        } else {
+          this.__setValue();
+        }
       }
 
-      if (this.__storedValue) {
-        this.__applyInputsValue(this.__storedValue);
-        delete this.__storedValue;
-      } else {
-        this.__setValue();
-      }
+      this.__oldInputs = inputs;
     }
 
     /** @private */
@@ -274,15 +280,7 @@ export const CustomFieldMixin = (superClass) =>
     __valueChanged(value, oldValue) {
       this.__toggleHasValue(value);
 
-      if (this.__settingValue) {
-        return;
-      }
-
-      // If value property is set with attribute or before adding to the DOM,
-      // the observer will run for the first time before inputs are populated.
-      // In this case we need to store the value to apply it to inputs later.
-      if (value && (!this.inputs || this.inputs.length === 0)) {
-        this.__storedValue = value;
+      if (this.__settingValue || !this.inputs) {
         return;
       }
 
