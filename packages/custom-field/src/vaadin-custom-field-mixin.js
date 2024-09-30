@@ -65,6 +65,7 @@ export const CustomFieldMixin = (superClass) =>
         inputs: {
           type: Array,
           readOnly: true,
+          observer: '__inputsChanged',
         },
 
         /**
@@ -249,7 +250,20 @@ export const CustomFieldMixin = (superClass) =>
     /** @private */
     __setInputsFromSlot() {
       this._setInputs(this.__getInputsFromSlot());
-      this.__setValue();
+    }
+
+    /** @private */
+    __inputsChanged(inputs, oldInputs) {
+      if (inputs.length === 0) {
+        return;
+      }
+
+      // When inputs are first initialized, apply value set with property.
+      if (this.value && this.value !== '\t' && (!oldInputs || oldInputs.length === 0)) {
+        this.__applyInputsValue(this.value);
+      } else {
+        this.__setValue();
+      }
     }
 
     /** @private */
@@ -265,18 +279,25 @@ export const CustomFieldMixin = (superClass) =>
         return;
       }
 
+      this.__applyInputsValue(value);
+
+      if (oldValue !== undefined) {
+        this.validate();
+      }
+    }
+
+    /** @private */
+    __applyInputsValue(value) {
       const parseFn = this.parseValue || defaultParseValue;
       const valuesArray = parseFn.apply(this, [value]);
+
       if (!valuesArray || valuesArray.length === 0) {
         console.warn('Value parser has not provided values array');
         return;
       }
 
-      this.inputs.forEach((input, id) => {
-        input.value = valuesArray[id];
+      this.inputs.forEach((input, idx) => {
+        input.value = valuesArray[idx];
       });
-      if (oldValue !== undefined) {
-        this.validate();
-      }
     }
   };
