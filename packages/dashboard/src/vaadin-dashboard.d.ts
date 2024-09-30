@@ -150,6 +150,70 @@ export interface DashboardI18n {
 
 /**
  * A responsive, grid-based dashboard layout component
+ *
+ * ### Quick Start
+ *
+ * Assign an array to the [`items`](#/elements/vaadin-dashboard#property-items) property.
+ * Set a renderer function to the [`renderer`](#/elements/vaadin-dashboard#property-renderer) property.
+ *
+ * The widgets and the sections will be generated and configured based on the renderer and the items provided.
+ *
+ * ```html
+ * <vaadin-dashboard></vaadin-dashboard>
+ * ```
+ *
+ * ```js
+ * const dashboard = document.querySelector('vaadin-dashboard');
+ *
+ * dashboard.items = [
+ *   { title: 'Widget 1 title', header: 'Widget 1 Header', rowspan: 2 },
+ *   { title: 'Widget 2 title', header: 'Widget 2 Header', colspan: 2 },
+ *   {
+ *     title: 'Section title',
+ *     items: [{ title: 'Widget in section title', header: 'Widget in Section Header'}]
+ *   },
+ *   // ... more items
+ * ];
+ *
+ * dashboard.renderer = (root, _dashboard, { item }) => {
+ *   if (!root.firstElementChild) {
+ *     root.append(document.createElement('vaadin-dashboard-widget'));
+ *   }
+ *   root.firstElementChild.widgetTitle = item.title;
+ *   root.firstElementChild.innerHTML = `
+ *     <span slot="header">${item.header}</span>
+ *     <div>Widget content</div>
+ *   `;
+ * };
+ * ```
+ *
+ * ### Styling
+ *
+ * The following custom properties are available:
+ *
+ * Custom Property                   | Description                            | Default
+ * ----------------------------------|----------------------------------------|---------
+ * --vaadin-dashboard-col-min-width  | minimum column width of the dashboard  | 25rem
+ * --vaadin-dashboard-col-max-width  | maximum column width of the dashboard  | 1fr
+ * --vaadin-dashboard-row-min-height | maximum column count of the dashboard  | auto
+ * --vaadin-dashboard-gap            | gap between the cells of the dashboard | 1rem
+ * --vaadin-dashboard-col-max-count  | maximum column count of the dashboard  | number of columns
+ *
+ * The following state attributes are available for styling:
+ *
+ * Attribute      | Description
+ * ---------------|-------------
+ * `editable`     | Set when the dashboard is editable.
+ * `dense-layout` | Set when the dashboard is in dense mode.
+ *
+ * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
+ *
+ * @fires {CustomEvent} dashboard-item-moved - Fired when an item was moved
+ * @fires {CustomEvent} dashboard-item-resized - Fired when an item was resized
+ * @fires {CustomEvent} dashboard-item-removed - Fired when an item was removed
+ * @fires {CustomEvent} dashboard-item-selected-changed - Fired when an item selected state changed
+ * @fires {CustomEvent} dashboard-item-move-mode-changed - Fired when an item move mode changed
+ * @fires {CustomEvent} dashboard-item-resize-mode-changed - Fired when an item resize mode changed
  */
 declare class Dashboard<TItem extends DashboardItem = DashboardItem> extends DashboardLayoutMixin(
   ElementMixin(HTMLElement),
