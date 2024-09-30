@@ -157,7 +157,8 @@ import { addLumoGlobalStyles } from './global.js';
 const fontIcons = css\`
   @font-face {
     font-family: 'lumo-icons';
-    src: url(data:application/font-woff;charset=utf-8;base64,${lumoIconsWoff.toString('base64')}) format('woff');
+    src: url(data:application/font-woff;charset=utf-8;base64,${lumoIconsWoff.toString('base64')})
+      format('woff');
     font-weight: normal;
     font-style: normal;
   }
@@ -167,7 +168,7 @@ const fontIcons = css\`
           glyphs.forEach((g) => {
             const name = g.name.replace(/\s/g, '-').toLowerCase();
             const unicode = `\\\\${g.unicode[0].charCodeAt(0).toString(16)}`;
-            output += `    --lumo-icons-${name}: "${unicode}";\n`;
+            output += `    --lumo-icons-${name}: '${unicode}';\n`;
           });
           output += `  }
 \`;
