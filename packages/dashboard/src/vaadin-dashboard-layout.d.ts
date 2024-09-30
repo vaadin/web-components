@@ -10,7 +10,7 @@
  */
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { DashboardLayoutMixin } from './vaadin-dashboard-layout-mixin';
+import { DashboardLayoutMixin } from './vaadin-dashboard-layout-mixin.js';
 
 /**
  * A responsive, grid-based dashboard layout component
