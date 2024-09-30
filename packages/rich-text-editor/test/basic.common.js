@@ -1,11 +1,25 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, focusout, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
+import { html, LitElement } from 'lit';
+
+class TestLitElement extends LitElement {
+  static properties = {
+    toggleSlot: { type: Boolean },
+  };
+  render() {
+    if (!this.toggleSlot) {
+      return html``;
+    }
+    return html`<slot></slot>`;
+  }
+}
+customElements.define('test-lit-element', TestLitElement);
 
 describe('rich text editor', () => {
   let rte, editor;
 
-  const flushValueDebouncer = () => rte.__debounceSetValue && rte.__debounceSetValue.flush();
+  const flushValueDebouncer = (el = rte) => el.__debounceSetValue && el.__debounceSetValue.flush();
 
   const getButton = (fmt) => rte.shadowRoot.querySelector(`[part~="toolbar-button-${fmt}"]`);
 
@@ -453,6 +467,19 @@ describe('rich text editor', () => {
           rte.removeAttribute('dir');
         });
       });
+    });
+
+    it('should parse htmlValue correctly when element is attached but not rendered', async () => {
+      const parent = fixtureSync(
+        '<test-lit-element><vaadin-rich-text-editor></vaadin-rich-text-editor></test-lit-element>',
+      );
+      await nextRender();
+      const rte = parent.querySelector('vaadin-rich-text-editor');
+      rte.dangerouslySetHtmlValue('<p>Foo</p><ul><li>Bar</li><li>Baz</li></ul>');
+      parent.toggleSlot = true;
+      await nextRender();
+      flushValueDebouncer(rte);
+      expect(rte.htmlValue).to.equal('<p>Foo</p><ul><li>Bar</li><li>Baz</li></ul>');
     });
   });
 
