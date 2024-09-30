@@ -554,12 +554,12 @@ describe('dashboard layout', () => {
     });
   });
 
-  describe('dense', () => {
+  describe('dense layout', () => {
     beforeEach(async () => {
       dashboard.appendChild(fixtureSync('<div id="2">Item 2</div>'));
       childElements = [...dashboard.querySelectorAll('div')];
       setColspan(childElements[1], 2);
-      dashboard.dense = true;
+      dashboard.denseLayout = true;
       await nextFrame();
     });
 
@@ -572,7 +572,7 @@ describe('dashboard layout', () => {
     });
 
     it('should retain the order of items', async () => {
-      dashboard.dense = false;
+      dashboard.denseLayout = false;
       await nextFrame();
       /* prettier-ignore */
       expectLayout(dashboard, [

@@ -22,5 +22,5 @@ export declare class DashboardLayoutMixinClass {
   /**
    * Whether the dashboard layout is dense.
    */
-  dense: boolean;
+  denseLayout: boolean;
 }
