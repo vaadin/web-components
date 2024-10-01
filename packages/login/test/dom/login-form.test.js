@@ -35,9 +35,8 @@ describe('vaadin-login-form', () => {
     });
 
     it('required', async () => {
-      form.querySelectorAll('[required]').forEach((el) => {
-        el.invalid = true;
-      });
+      form.submit();
+      await nextRender();
       await expect(form).dom.to.equalSnapshot();
     });
 
@@ -48,9 +47,8 @@ describe('vaadin-login-form', () => {
 
     it('i18n-required', async () => {
       form.i18n = I18N_FINNISH;
-      form.querySelectorAll('[required]').forEach((el) => {
-        el.invalid = true;
-      });
+      form.submit();
+      await nextRender();
       await expect(form).dom.to.equalSnapshot();
     });
 

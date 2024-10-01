@@ -51,7 +51,10 @@ export const LoginFormMixin = (superClass) =>
       this.__setErrorMessage(userName);
       this.__setErrorMessage(password);
 
-      if (this.disabled || !(userName.validate() && password.validate())) {
+      userName.validate();
+      password.validate();
+
+      if (this.disabled || userName.invalid || password.invalid) {
         return;
       }
 
