@@ -37,7 +37,7 @@ import { DashboardLayoutMixin } from './vaadin-dashboard-layout-mixin.js';
  * `--vaadin-dashboard-col-min-width`  | minimum column width of the layout
  * `--vaadin-dashboard-col-max-width`  | maximum column width of the layout
  * `--vaadin-dashboard-row-min-height` | maximum column count of the layout
- * `--vaadin-dashboard-gap`            | gap between the cells of the layout
+ * `--vaadin-dashboard-spacing`        | spacing between the cells of the layout
  * `--vaadin-dashboard-col-max-count`  | maximum column count of the layout
  *
  * The following state attributes are available for styling:

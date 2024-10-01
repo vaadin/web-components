@@ -76,7 +76,7 @@ import { WidgetResizeController } from './widget-resize-controller.js';
  * `--vaadin-dashboard-col-min-width`  | minimum column width of the dashboard
  * `--vaadin-dashboard-col-max-width`  | maximum column width of the dashboard
  * `--vaadin-dashboard-row-min-height` | maximum column count of the dashboard
- * `--vaadin-dashboard-gap`            | gap between the cells of the dashboard
+ * `--vaadin-dashboard-spacing`        | spacing between the cells of the dashboard
  * `--vaadin-dashboard-col-max-count`  | maximum column count of the dashboard
  *
  * The following state attributes are available for styling:
