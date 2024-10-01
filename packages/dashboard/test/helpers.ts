@@ -111,7 +111,7 @@ export function setRowspan(element: HTMLElement, rowspan?: number): void {
 }
 
 /**
- * Sets the specing between the cells of the dashboard.
+ * Sets the spacing between the cells of the dashboard.
  */
 export function setSpacing(dashboard: HTMLElement, spacing?: number): void {
   dashboard.style.setProperty('--vaadin-dashboard-spacing', spacing !== undefined ? `${spacing}px` : null);

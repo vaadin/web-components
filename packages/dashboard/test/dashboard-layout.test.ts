@@ -20,17 +20,14 @@ import {
   setSpacing,
 } from './helpers.js';
 
-const [defaultSpacing] = (() => {
+const [defaultSpacing, defaultMinimumColumnWidth] = (() => {
   const div = document.createElement('div');
   document.body.appendChild(div);
   div.style.width = '1rem';
   const width = getComputedStyle(div).width;
   div.remove();
-  return [parseFloat(width)];
+  return [parseFloat(width), parseFloat(width) * 25];
 })();
-
-// TODO: Fix the default minimum column width
-const defaultMinimumColumnWidth = 400;
 
 describe('dashboard layout', () => {
   let dashboard: DashboardLayout;
