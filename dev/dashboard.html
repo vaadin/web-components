@@ -86,7 +86,7 @@
         }
         root.firstElementChild.widgetTitle = item.title;
         root.firstElementChild.innerHTML = `
-          <span slot="header">${item.header || ''}</span>
+          <span slot="header-content">${item.header || ''}</span>
           ${item.type === 'chart' ? '<div class="chart"></div>' : `<div class="kpi-number">${item.content}</div>`}
         `;
       };
