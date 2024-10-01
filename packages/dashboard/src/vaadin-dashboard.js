@@ -33,6 +33,61 @@ import { WidgetResizeController } from './widget-resize-controller.js';
 /**
  * A responsive, grid-based dashboard layout component
  *
+ * ### Quick Start
+ *
+ * Assign an array to the [`items`](#/elements/vaadin-dashboard#property-items) property.
+ * Set a renderer function to the [`renderer`](#/elements/vaadin-dashboard#property-renderer) property.
+ *
+ * The widgets and the sections will be generated and configured based on the renderer and the items provided.
+ *
+ * ```html
+ * <vaadin-dashboard></vaadin-dashboard>
+ * ```
+ *
+ * ```js
+ * const dashboard = document.querySelector('vaadin-dashboard');
+ *
+ * dashboard.items = [
+ *   { title: 'Widget 1 title', content: 'Text 1', rowspan: 2 },
+ *   { title: 'Widget 2 title', content: 'Text 2', colspan: 2 },
+ *   {
+ *     title: 'Section title',
+ *     items: [{ title: 'Widget in section title', content: 'Text 3' }]
+ *   },
+ *   // ... more items
+ * ];
+ *
+ * dashboard.renderer = (root, _dashboard, { item }) => {
+ *   const widget = root.firstElementChild || document.createElement('vaadin-dashboard-widget');
+ *   if (!root.contains(widget)) {
+ *     root.appendChild(widget);
+ *   }
+ *   widget.widgetTitle = item.title;
+ *   widget.textContent = item.content;
+ * };
+ * ```
+ *
+ * ### Styling
+ *
+ * The following custom properties are available:
+ *
+ * Custom Property                     | Description
+ * ------------------------------------|-------------
+ * `--vaadin-dashboard-col-min-width`  | minimum column width of the dashboard
+ * `--vaadin-dashboard-col-max-width`  | maximum column width of the dashboard
+ * `--vaadin-dashboard-row-min-height` | maximum column count of the dashboard
+ * `--vaadin-dashboard-spacing`        | spacing between the cells of the dashboard
+ * `--vaadin-dashboard-col-max-count`  | maximum column count of the dashboard
+ *
+ * The following state attributes are available for styling:
+ *
+ * Attribute      | Description
+ * ---------------|-------------
+ * `editable`     | Set when the dashboard is editable.
+ * `dense-layout` | Set when the dashboard is in dense mode.
+ *
+ * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
+ *
  * @fires {CustomEvent} dashboard-item-moved - Fired when an item was moved
  * @fires {CustomEvent} dashboard-item-resized - Fired when an item was resized
  * @fires {CustomEvent} dashboard-item-removed - Fired when an item was removed

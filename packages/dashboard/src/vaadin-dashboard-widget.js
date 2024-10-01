@@ -22,6 +22,52 @@ import { getDefaultI18n } from './vaadin-dashboard-item-mixin.js';
 /**
  * A Widget component for use with the Dashboard component
  *
+ * ```html
+ * <vaadin-dashboard-widget widget-title="Title">
+ *   <span slot="header-content">Header</span>
+ *   <div>Content</div>
+ * </vaadin-dashboard-widget>
+ * ```
+ *
+ * ### Customization
+ *
+ * You can configure the item by using `slot` names.
+ *
+ * Slot name        | Description
+ * -----------------|-------------
+ * `title`          | A slot for the widget title. Overrides the `widgetTitle` property.
+ * `header-content` | A slot for the widget header content.
+ *
+ * #### Example
+ *
+ * ```html
+ * <vaadin-dashboard-widget>
+ *   <span slot="header-content">Header</span>
+ *   <span slot="title">Title</span>
+ *   <div>Content</div>
+ * </vaadin-dashboard-widget>
+ * ```
+ *
+ * ### Styling
+ *
+ * The following custom properties are available:
+ *
+ * Custom Property                   | Description
+ * ----------------------------------|-------------
+ * `--vaadin-dashboard-item-colspan` | colspan of the widget
+ * `--vaadin-dashboard-item-rowspan` | rowspan of the widget
+ *
+ * The following state attributes are available for styling:
+ *
+ * Attribute      | Description
+ * ---------------|-------------
+ * `selected`     | Set when the element is selected.
+ * `focused`      | Set when the element is focused.
+ * `move-mode`    | Set when the element is being moved.
+ * `resize-mode`  | Set when the element is being resized.
+ *
+ * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
+ *
  * @customElement
  * @extends HTMLElement
  * @mixes ElementMixin
@@ -129,6 +175,9 @@ class DashboardWidget extends DashboardItemMixin(ControllerMixin(ElementMixin(Po
 
       /**
        * The title of the widget.
+       *
+       * @attr {string} widget-title
+       * @type {string | null | undefined}
        */
       widgetTitle: {
         type: String,

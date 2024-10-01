@@ -18,6 +18,36 @@ import { DashboardLayoutMixin } from './vaadin-dashboard-layout-mixin.js';
 /**
  * A responsive, grid-based dashboard layout component
  *
+ * ```html
+ * <vaadin-dashboard-layout>
+ *   <vaadin-dashboard-widget widget-title="Widget 1"></vaadin-dashboard-widget>
+ *   <vaadin-dashboard-widget widget-title="Widget 2"></vaadin-dashboard-widget>
+ *   <vaadin-dashboard-section section-title="Section">
+ *     <vaadin-dashboard-widget widget-title="Widget in Section"></vaadin-dashboard-widget>
+ *   </vaadin-dashboard-section>
+ * </vaadin-dashboard-layout>
+ * ```
+ *
+ * ### Styling
+ *
+ * The following custom properties are available:
+ *
+ * Custom Property                     | Description
+ * ----------------------------------- |-------------
+ * `--vaadin-dashboard-col-min-width`  | minimum column width of the layout
+ * `--vaadin-dashboard-col-max-width`  | maximum column width of the layout
+ * `--vaadin-dashboard-row-min-height` | maximum column count of the layout
+ * `--vaadin-dashboard-spacing`        | spacing between the cells of the layout
+ * `--vaadin-dashboard-col-max-count`  | maximum column count of the layout
+ *
+ * The following state attributes are available for styling:
+ *
+ * Attribute      | Description
+ * ---------------|-------------
+ * `dense-layout` | Set when the dashboard is in dense mode.
+ *
+ * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
+ *
  * @customElement
  * @extends HTMLElement
  * @mixes DashboardLayoutMixin
