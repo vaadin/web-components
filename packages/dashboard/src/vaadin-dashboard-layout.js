@@ -33,12 +33,12 @@ import { DashboardLayoutMixin } from './vaadin-dashboard-layout-mixin.js';
  * The following custom properties are available:
  *
  * Custom Property                     | Description
- * ----------------------------------- |-------------
+ * ------------------------------------|-------------
  * `--vaadin-dashboard-col-min-width`  | minimum column width of the layout
  * `--vaadin-dashboard-col-max-width`  | maximum column width of the layout
- * `--vaadin-dashboard-row-min-height` | maximum column count of the layout
- * `--vaadin-dashboard-spacing`        | spacing between the cells of the layout
+ * `--vaadin-dashboard-row-min-height` | minimum row height of the layout
  * `--vaadin-dashboard-col-max-count`  | maximum column count of the layout
+ * `--vaadin-dashboard-spacing`        | spacing between child elements and space around its outer edges
  *
  * The following state attributes are available for styling:
  *
