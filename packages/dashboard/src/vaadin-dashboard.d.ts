@@ -166,24 +166,22 @@ export interface DashboardI18n {
  * const dashboard = document.querySelector('vaadin-dashboard');
  *
  * dashboard.items = [
- *   { title: 'Widget 1 title', header: 'Widget 1 Header', rowspan: 2 },
- *   { title: 'Widget 2 title', header: 'Widget 2 Header', colspan: 2 },
+ *   { title: 'Widget 1 title', content: 'Text 1', rowspan: 2 },
+ *   { title: 'Widget 2 title', content: 'Text 2', colspan: 2 },
  *   {
  *     title: 'Section title',
- *     items: [{ title: 'Widget in section title', header: 'Widget in Section Header'}]
+ *     items: [{ title: 'Widget in section title', content: 'Text 3' }]
  *   },
  *   // ... more items
  * ];
  *
  * dashboard.renderer = (root, _dashboard, { item }) => {
- *   if (!root.firstElementChild) {
- *     root.append(document.createElement('vaadin-dashboard-widget'));
+ *   const widget = root.firstElementChild || document.createElement('vaadin-dashboard-widget');
+ *   if (!root.contains(widget)) {
+ *     root.appendChild(widget);
  *   }
- *   root.firstElementChild.widgetTitle = item.title;
- *   root.firstElementChild.innerHTML = `
- *     <span slot="header">${item.header}</span>
- *     <div>Widget content</div>
- *   `;
+ *   widget.widgetTitle = item.title;
+ *   widget.textContent = item.content;
  * };
  * ```
  *
