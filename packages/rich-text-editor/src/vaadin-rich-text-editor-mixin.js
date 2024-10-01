@@ -806,8 +806,8 @@ export const RichTextEditorMixin = (superClass) =>
       // with the viewport before trying to set the value again.
       if (!getComputedStyle(this).display) {
         this.__savePendingHtmlValue(htmlValue);
-        const observer = new IntersectionObserver(([rte]) => {
-          if ((rte && rte.isIntersecting) || getComputedStyle(this).display) {
+        const observer = new IntersectionObserver(() => {
+          if (getComputedStyle(this).display) {
             this.__flushPendingHtmlValue();
             observer.disconnect();
           }
