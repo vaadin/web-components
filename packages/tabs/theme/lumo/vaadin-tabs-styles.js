@@ -19,8 +19,19 @@ registerStyles(
       min-height: var(--lumo-size-l);
     }
 
-    :host([orientation='horizontal']) [part='tabs'] ::slotted(vaadin-tab:not([theme~='icon-on-top'])) {
+    :host([orientation='horizontal']:not([theme~='icon-on-top'])) ::slotted(vaadin-tab:not([theme~='icon-on-top'])) {
       justify-content: center;
+    }
+
+    :host([theme~='icon-on-top']) ::slotted(vaadin-tab) {
+      --_tab-flex-direction: column;
+      --_tab-justify-content: space-around;
+      --_tab-icon-margin: 0;
+      --_tab-link-margin: -0.25rem -0.75rem;
+      --_tab-link-padding: 0.25rem 0.75rem;
+      text-align: center;
+      padding-bottom: 0.5rem;
+      padding-top: 0.25rem;
     }
 
     :host([orientation='vertical']) {

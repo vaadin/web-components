@@ -9,31 +9,60 @@
 
     <script type="module">
       import '@vaadin/tabs';
-      import '@vaadin/tooltip';
+      import '@vaadin/icon';
+      import '@vaadin/icons';
     </script>
   </head>
 
   <body>
-    <vaadin-tabs style="max-width: 100%; width: 400px">
+    <vaadin-tabs>
+      <vaadin-tab theme="icon-on-top">
+        <a href="/">
+          <vaadin-icon icon="vaadin:user" style="padding: 0.25rem;"></vaadin-icon>
+          <span>Profile</span>
+        </a>
+      </vaadin-tab>
+      <vaadin-tab theme="icon-on-top">
+        <vaadin-icon icon="vaadin:cog"></vaadin-icon>
+        <span>Settings</span>
+      </vaadin-tab>
+      <vaadin-tab theme="icon-on-top">
+        <vaadin-icon icon="vaadin:bell"></vaadin-icon>
+        <span>Notifications</span>
+      </vaadin-tab>
+    </vaadin-tabs>
+
+    <vaadin-tabs theme="icon-on-top">
       <vaadin-tab>
-        Analytics
-        <vaadin-tooltip slot="tooltip" text="Analytics tooltip"></vaadin-tooltip>
+        <a href="/">
+          <vaadin-icon icon="vaadin:user" style="padding: 0.25rem;"></vaadin-icon>
+          <span>Profile</span>
+        </a>
       </vaadin-tab>
       <vaadin-tab>
-        Customers
-        <vaadin-tooltip slot="tooltip" text="Customers tooltip"></vaadin-tooltip>
+        <vaadin-icon icon="vaadin:cog"></vaadin-icon>
+        <span>Settings</span>
       </vaadin-tab>
       <vaadin-tab>
-        Dashboards
-        <vaadin-tooltip slot="tooltip" text="Dashboards tooltip"></vaadin-tooltip>
+        <vaadin-icon icon="vaadin:bell"></vaadin-icon>
+        <span>Notifications</span>
       </vaadin-tab>
-      <vaadin-tab>
-        Documents
-        <vaadin-tooltip slot="tooltip" text="Documents tooltip"></vaadin-tooltip>
+    </vaadin-tabs>
+
+    <vaadin-tabs orientation="vertical" style="width: 120px;">
+      <vaadin-tab theme="icon-on-top">
+        <a href="/">
+          <vaadin-icon icon="vaadin:user" style="padding: 0.25rem;"></vaadin-icon>
+          <span>Profile</span>
+        </a>
       </vaadin-tab>
-      <vaadin-tab>
-        Orders
-        <vaadin-tooltip slot="tooltip" text="Orders tooltip"></vaadin-tooltip>
+      <vaadin-tab theme="icon-on-top">
+        <vaadin-icon icon="vaadin:cog"></vaadin-icon>
+        <span>Settings</span>
+      </vaadin-tab>
+      <vaadin-tab theme="icon-on-top">
+        <vaadin-icon icon="vaadin:bell"></vaadin-icon>
+        <span>Notifications</span>
       </vaadin-tab>
     </vaadin-tabs>
   </body>

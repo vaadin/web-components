@@ -21,7 +21,9 @@ registerStyles(
         0.2s transform;
       flex-shrink: 0;
       display: flex;
-      align-items: center;
+      align-items: var(--_tab-align-items, center);
+      flex-direction: var(--_tab-flex-direction, row);
+      justify-content: var(--_tab-justify-content, normal);
       position: relative;
       cursor: var(--lumo-clickable-cursor);
       transform-origin: 50% 100%;
@@ -37,6 +39,9 @@ registerStyles(
       --_focus-ring-width: var(--vaadin-focus-ring-width, 2px);
       --_selection-color: var(--vaadin-selection-color, var(--lumo-primary-color));
       --_selection-color-text: var(--vaadin-selection-color-text, var(--lumo-primary-text-color));
+      --_tab-align-items: center;
+      --_tab-flex-direction: row;
+      --_tab-icon-margin: 0 4px;
     }
 
     :host(:not([orientation='vertical'])) {
@@ -135,11 +140,13 @@ registerStyles(
 
     :host ::slotted(a) {
       display: flex;
+      align-items: var(--_tab-align-items, center);
+      flex-direction: var(--_tab-flex-direction, row);
+      justify-content: var(--_tab-justify-content, normal);
       width: 100%;
-      align-items: center;
       height: 100%;
-      margin: -0.5rem -0.75rem;
-      padding: 0.5rem 0.75rem;
+      margin: var(--_tab-link-margin, -0.5rem -0.75rem);
+      padding: var(--_tab-link-padding, 0.5rem 0.75rem);
       outline: none;
 
       /*
@@ -151,7 +158,7 @@ registerStyles(
     }
 
     :host ::slotted(vaadin-icon) {
-      margin: 0 4px;
+      margin: var(--_tab-icon-margin);
       width: var(--lumo-icon-size-m);
       height: var(--lumo-icon-size-m);
     }
@@ -171,24 +178,14 @@ registerStyles(
     }
 
     :host([theme~='icon-on-top']) {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: space-around;
+      --_tab-flex-direction: column;
+      --_tab-justify-content: space-around;
+      --_tab-icon-margin: 0;
+      --_tab-link-margin: -0.25rem -0.75rem;
+      --_tab-link-padding: 0.25rem 0.75rem;
       text-align: center;
       padding-bottom: 0.5rem;
       padding-top: 0.25rem;
-    }
-
-    :host([theme~='icon-on-top']) ::slotted(a) {
-      flex-direction: column;
-      align-items: center;
-      margin-top: -0.25rem;
-      padding-top: 0.25rem;
-    }
-
-    :host([theme~='icon-on-top']) ::slotted(vaadin-icon) {
-      margin: 0;
     }
 
     /* Disabled */
