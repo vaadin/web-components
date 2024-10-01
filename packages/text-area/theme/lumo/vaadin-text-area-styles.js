@@ -57,8 +57,7 @@ const textArea = css`
   }
 
   /* Use sticky positioning to keep prefix/suffix/clear button visible when scrolling textarea container */
-  [part='input-field'] ::slotted([slot='prefix']),
-  [part='input-field'] ::slotted([slot='suffix']),
+  [part='input-field'] ::slotted([slot$='fix']),
   [part='clear-button'] {
     position: sticky;
     top: 0;
@@ -66,8 +65,7 @@ const textArea = css`
   }
 
   /* Vertically align icon prefix/suffix/clear button with the first line of text */
-  [part='input-field'] ::slotted(vaadin-icon[slot='prefix']),
-  [part='input-field'] ::slotted(vaadin-icon[slot='suffix']),
+  [part='input-field'] ::slotted(vaadin-icon[slot$='fix']),
   [part='clear-button'] {
     top: calc((var(--lumo-icon-size-m) - 1em * var(--lumo-line-height-s)) / -2);
     margin-top: calc((var(--lumo-icon-size-m) - 1em * var(--lumo-line-height-s)) / -2);

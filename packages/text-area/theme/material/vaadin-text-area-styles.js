@@ -24,8 +24,7 @@ const textArea = css`
   }
 
   /* Use sticky positioning to keep prefix/suffix/clear button visible when scrolling textarea container */
-  [part='input-field'] ::slotted([slot='prefix']),
-  [part='input-field'] ::slotted([slot='suffix']),
+  [part='input-field'] ::slotted([slot$='fix']),
   [part='clear-button'] {
     position: sticky;
     top: 0;
