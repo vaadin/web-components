@@ -24,9 +24,11 @@ const [defaultSpacing, defaultMinimumColumnWidth] = (() => {
   const div = document.createElement('div');
   document.body.appendChild(div);
   div.style.width = '1rem';
-  const width = getComputedStyle(div).width;
+  const minColWidth = div.offsetWidth * 25;
+  div.style.width = 'var(--lumo-space-xl)';
+  const spacing = div.offsetWidth;
   div.remove();
-  return [parseFloat(width), parseFloat(width) * 25];
+  return [spacing, minColWidth];
 })();
 
 describe('dashboard layout', () => {

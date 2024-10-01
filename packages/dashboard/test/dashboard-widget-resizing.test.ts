@@ -481,6 +481,24 @@ describe('dashboard - widget resizing', () => {
       expect((dashboard.items[0] as TestDashboardItem).rowspan).to.be.undefined;
     });
 
+    it('should have resizing attributes on the widget', async () => {
+      const widget = getElementFromCell(dashboard, 0, 0)!;
+      fireResizeStart(widget);
+      await nextFrame();
+
+      expect(widget.hasAttribute('resizing')).to.be.true;
+    });
+
+    it('should remove resizing attributes from the widget', async () => {
+      const widget = getElementFromCell(dashboard, 0, 0)!;
+      fireResizeStart(widget);
+      await nextFrame();
+      fireResizeEnd(dashboard);
+      await nextFrame();
+
+      expect(widget.hasAttribute('resizing')).to.be.false;
+    });
+
     // Make sure the original resized element is restored in the host.
     // Otherwise, "track" event would stop working.
     describe('ensure track event', () => {

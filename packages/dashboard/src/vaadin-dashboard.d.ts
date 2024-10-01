@@ -11,6 +11,7 @@
 import './vaadin-dashboard-widget.js';
 import './vaadin-dashboard-section.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { ThemableMixin } from '@vaadin/vaadin-themable-mixin';
 import { DashboardLayoutMixin } from './vaadin-dashboard-layout-mixin.js';
 
 export interface DashboardItem {
@@ -203,6 +204,7 @@ export interface DashboardI18n {
  * ---------------|-------------
  * `editable`     | Set when the dashboard is editable.
  * `dense-layout` | Set when the dashboard is in dense mode.
+ * `item-selected`| Set when an item is selected.
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
@@ -214,7 +216,7 @@ export interface DashboardI18n {
  * @fires {CustomEvent} dashboard-item-resize-mode-changed - Fired when an item resize mode changed
  */
 declare class Dashboard<TItem extends DashboardItem = DashboardItem> extends DashboardLayoutMixin(
-  ElementMixin(HTMLElement),
+  ElementMixin(ThemableMixin(HTMLElement)),
 ) {
   /**
    * An array containing the items of the dashboard

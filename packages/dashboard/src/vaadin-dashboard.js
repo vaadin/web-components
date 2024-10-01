@@ -85,6 +85,7 @@ import { WidgetResizeController } from './widget-resize-controller.js';
  * ---------------|-------------
  * `editable`     | Set when the dashboard is editable.
  * `dense-layout` | Set when the dashboard is in dense mode.
+ * `item-selected`| Set when an item is selected.
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
@@ -114,7 +115,7 @@ class Dashboard extends ControllerMixin(DashboardLayoutMixin(ElementMixin(Themab
     return [
       super.styles,
       css`
-        #grid[resizing] {
+        #grid[item-resizing] {
           -webkit-user-select: none;
           user-select: none;
         }
@@ -298,7 +299,6 @@ class Dashboard extends ControllerMixin(DashboardLayoutMixin(ElementMixin(Themab
           section.sectionTitle = item.title;
         }
 
-        section.toggleAttribute('highlight', !!this.__widgetReorderController.draggedItem);
         SYNCHRONIZED_ATTRIBUTES.forEach((attr) => section.toggleAttribute(attr, !!wrapper[attr]));
         section.__i18n = this.i18n;
 
@@ -408,6 +408,7 @@ class Dashboard extends ControllerMixin(DashboardLayoutMixin(ElementMixin(Themab
     const items = getItemsArrayOfItem(item, this.items);
     items.splice(items.indexOf(item), 1);
     this.items = [...this.items];
+    this.toggleAttribute('item-selected', false);
     this.dispatchEvent(
       new CustomEvent('dashboard-item-removed', { cancelable: true, detail: { item, items: this.items } }),
     );
@@ -432,6 +433,7 @@ class Dashboard extends ControllerMixin(DashboardLayoutMixin(ElementMixin(Themab
   __itemSelectedChanged(e) {
     e.stopImmediatePropagation();
     this.__dispatchCustomEvent('dashboard-item-selected-changed', getElementItem(e.target), e.detail.value);
+    this.toggleAttribute('item-selected', e.detail.value);
   }
 
   /** @private */

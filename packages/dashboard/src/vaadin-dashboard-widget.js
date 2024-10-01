@@ -8,12 +8,13 @@
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
+import '@vaadin/button/src/vaadin-button.js';
 import { html, LitElement } from 'lit';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
-import { css } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { css, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { TitleController } from './title-controller.js';
 import { SYNCHRONIZED_ATTRIBUTES, WRAPPER_LOCAL_NAME } from './vaadin-dashboard-helpers.js';
 import { DashboardItemMixin } from './vaadin-dashboard-item-mixin.js';
@@ -50,6 +51,24 @@ import { getDefaultI18n } from './vaadin-dashboard-item-mixin.js';
  *
  * ### Styling
  *
+ * The following shadow DOM parts are available for styling:
+ *
+ * Part name                     | Description
+ * ------------------------------|-------------
+ * `header`                      | The header of the widget
+ * `content`                     | The content of the widget
+ * `move-button`                 | The move button
+ * `remove-button`               | The remove button
+ * `resize-button`               | The resize button
+ * `move-backward-button`        | The move backward button when in move mode
+ * `move-forward-button`         | The move forward button when in move mode
+ * `move-apply-button`           | The apply button when in move mode
+ * `resize-shrink-width-button`  | The shrink width button when in resize mode
+ * `resize-grow-width-button`    | The grow width button when in resize mode
+ * `resize-shrink-height-button` | The shrink height button when in resize mode
+ * `resize-grow-height-button`   | The grow height button when in resize mode
+ * `resize-apply-button`         | The apply button when in resize mode
+ *
  * The following custom properties are available:
  *
  * Custom Property                   | Description
@@ -65,16 +84,24 @@ import { getDefaultI18n } from './vaadin-dashboard-item-mixin.js';
  * `focused`      | Set when the element is focused.
  * `move-mode`    | Set when the element is being moved.
  * `resize-mode`  | Set when the element is being resized.
+ * `resizing`     | Set when the element is being resized.
+ * `dragging`     | Set when the element is being dragged.
+ * `editable`     | Set when the element is editable.
+ * `first-child`  | Set when the element is the first child of the parent.
+ * `last-child`   | Set when the element is the last child of the parent.
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
  * @customElement
  * @extends HTMLElement
  * @mixes ElementMixin
+ * @mixes ThemableMixin
  * @mixes ControllerMixin
  * @mixes DashboardItemMixin
  */
-class DashboardWidget extends DashboardItemMixin(ControllerMixin(ElementMixin(PolylitMixin(LitElement)))) {
+class DashboardWidget extends DashboardItemMixin(
+  ControllerMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElement)))),
+) {
   static get is() {
     return 'vaadin-dashboard-widget';
   }
@@ -100,29 +127,17 @@ class DashboardWidget extends DashboardItemMixin(ControllerMixin(ElementMixin(Po
 
         #content {
           flex: 1;
-          min-height: 100px;
         }
 
         #resize-handle {
           position: absolute;
           bottom: 0;
           inset-inline-end: 0;
-          font-size: 30px;
-          cursor: grab;
-          line-height: 1;
           z-index: 1;
           overflow: hidden;
         }
 
-        #resize-handle::before {
-          content: '\\2921';
-        }
-
-        :host([dir='rtl']) #resize-handle::before {
-          content: '\\2922';
-        }
-
-        :host::after {
+        :host([resizing])::after {
           content: '';
           z-index: 2;
           position: absolute;
@@ -193,7 +208,7 @@ class DashboardWidget extends DashboardItemMixin(ControllerMixin(ElementMixin(Po
       ${this.__renderFocusButton('selectWidget')} ${this.__renderMoveControls()} ${this.__renderResizeControls()}
 
       <div id="focustrap">
-        <header>
+        <header part="header">
           ${this.__renderDragHandle()}
           <slot name="title" id="title" @slotchange="${this.__onTitleSlotChange}"></slot>
           <slot name="header-content"></slot>
@@ -203,7 +218,7 @@ class DashboardWidget extends DashboardItemMixin(ControllerMixin(ElementMixin(Po
         ${this.__renderResizeHandle()}
       </div>
 
-      <div id="content">
+      <div id="content" part="content">
         <slot></slot>
       </div>
     `;

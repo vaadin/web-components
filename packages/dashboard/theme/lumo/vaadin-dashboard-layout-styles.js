@@ -1,6 +1,10 @@
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
-export const dashboardLayoutStyles = css``;
+export const dashboardLayoutStyles = css`
+  #grid {
+    --_vaadin-dashboard-default-spacing: var(--lumo-space-xl);
+  }
+`;
 
 registerStyles('vaadin-dashboard-layout', [dashboardLayoutStyles], {
   moduleId: 'lumo-dashboard-layout',

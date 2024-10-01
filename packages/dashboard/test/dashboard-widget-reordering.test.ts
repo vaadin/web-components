@@ -524,6 +524,23 @@ describe('dashboard - widget reordering', () => {
       }).to.not.throw();
     });
 
+    it('should exit mode, selection and focus state when mouse-dragging', async () => {
+      const widget = getElementFromCell(dashboard, 0, 0)!;
+      (getDraggable(widget) as HTMLElement).click();
+      await nextFrame();
+      expect(widget.hasAttribute('selected')).to.be.true;
+      expect(widget.hasAttribute('focused')).to.be.true;
+      expect(widget.hasAttribute('move-mode')).to.be.true;
+
+      fireDragStart(widget);
+      await new Promise((resolve: any) => {
+        queueMicrotask(resolve);
+      });
+      expect(widget.hasAttribute('selected')).to.be.false;
+      expect(widget.hasAttribute('focused')).to.be.false;
+      expect(widget.hasAttribute('move-mode')).to.be.false;
+    });
+
     describe('sections', () => {
       beforeEach(async () => {
         dashboard.items = [{ id: 0 }, { id: 1 }, { items: [{ id: 2 }, { id: 3 }] }];

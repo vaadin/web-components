@@ -10,6 +10,7 @@
  */
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { ThemableMixin } from '@vaadin/vaadin-themable-mixin';
 import { DashboardItemMixin } from './vaadin-dashboard-item-mixin.js';
 
 /**
@@ -43,6 +44,24 @@ import { DashboardItemMixin } from './vaadin-dashboard-item-mixin.js';
  *
  * ### Styling
  *
+ * The following shadow DOM parts are available for styling:
+ *
+ * Part name                     | Description
+ * ------------------------------|-------------
+ * `header`                      | The header of the widget
+ * `content`                     | The content of the widget
+ * `move-button`                 | The move button
+ * `remove-button`               | The remove button
+ * `resize-button`               | The resize button
+ * `move-backward-button`        | The move backward button when in move mode
+ * `move-forward-button`         | The move forward button when in move mode
+ * `move-apply-button`           | The apply button when in move mode
+ * `resize-shrink-width-button`  | The shrink width button when in resize mode
+ * `resize-grow-width-button`    | The grow width button when in resize mode
+ * `resize-shrink-height-button` | The shrink height button when in resize mode
+ * `resize-grow-height-button`   | The grow height button when in resize mode
+ * `resize-apply-button`         | The apply button when in resize mode
+ *
  * The following custom properties are available:
  *
  * Custom Property                   | Description
@@ -58,10 +77,15 @@ import { DashboardItemMixin } from './vaadin-dashboard-item-mixin.js';
  * `focused`      | Set when the element is focused.
  * `move-mode`    | Set when the element is being moved.
  * `resize-mode`  | Set when the element is being resized.
+ * `resizing`     | Set when the element is being resized.
+ * `dragging`     | Set when the element is being dragged.
+ * `editable`     | Set when the element is editable.
+ * `first-child`  | Set when the element is the first child of the parent.
+ * `last-child`   | Set when the element is the last child of the parent.
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  */
-declare class DashboardWidget extends DashboardItemMixin(ControllerMixin(ElementMixin(HTMLElement))) {
+declare class DashboardWidget extends DashboardItemMixin(ControllerMixin(ElementMixin(ThemableMixin(HTMLElement)))) {
   /**
    * The title of the widget
    *

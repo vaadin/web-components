@@ -13,7 +13,7 @@ import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js'
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
-import { css } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { css, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { TitleController } from './title-controller.js';
 import { DashboardItemMixin } from './vaadin-dashboard-item-mixin.js';
 import { getDefaultI18n } from './vaadin-dashboard-item-mixin.js';
@@ -49,23 +49,40 @@ import { hasWidgetWrappers } from './vaadin-dashboard-styles.js';
  *
  * ### Styling
  *
+ * The following shadow DOM parts are available for styling:
+ *
+ * Part name              | Description
+ * -----------------------|-------------
+ * `header`               | The header of the section
+ * `move-button`          | The move button
+ * `remove-button`        | The remove button
+ * `move-backward-button` | The move backward button when in move mode
+ * `move-forward-button`  | The move forward button when in move mode
+ * `move-apply-button`    | The apply button when in move mode
+ *
  * The following state attributes are available for styling:
  *
  * Attribute      | Description
  * ---------------|-------------
- * `selected`     | Set when the item is selected.
- * `focused`      | Set when the item is focused.
- * `move-mode`    | Set when the item is being moved.
+ * `selected`     | Set when the element is selected.
+ * `focused`      | Set when the element is focused.
+ * `move-mode`    | Set when the element is being moved.
+ * `editable`     | Set when the element is editable.
+ * `first-child`  | Set when the element is the first child of the parent.
+ * `last-child`   | Set when the element is the last child of the parent.
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
  * @customElement
  * @extends HTMLElement
  * @mixes ElementMixin
+ * @mixes ThemableMixin
  * @mixes ControllerMixin
  * @mixes DashboardItemMixin
  */
-class DashboardSection extends DashboardItemMixin(ControllerMixin(ElementMixin(PolylitMixin(LitElement)))) {
+class DashboardSection extends DashboardItemMixin(
+  ControllerMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElement)))),
+) {
   static get is() {
     return 'vaadin-dashboard-section';
   }
@@ -91,10 +108,6 @@ class DashboardSection extends DashboardItemMixin(ControllerMixin(ElementMixin(P
 
         :host([hidden]) {
           display: none !important;
-        }
-
-        :host([highlight]) {
-          background-color: #f5f5f5;
         }
 
         ::slotted(*) {
@@ -179,7 +192,7 @@ class DashboardSection extends DashboardItemMixin(ControllerMixin(ElementMixin(P
       ${this.__renderFocusButton('selectSection')} ${this.__renderMoveControls()}
 
       <div id="focustrap">
-        <header>
+        <header part="header">
           ${this.__renderDragHandle()}
           <slot name="title" id="title" @slotchange="${this.__onTitleSlotChange}"></slot>
           ${this.__renderRemoveButton()}

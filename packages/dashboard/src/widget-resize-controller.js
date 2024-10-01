@@ -37,7 +37,7 @@ export class WidgetResizeController {
       return;
     }
 
-    this.host.$.grid.toggleAttribute('resizing', true);
+    this.host.$.grid.toggleAttribute('item-resizing', true);
     this.resizedItem = getElementItem(e.target);
 
     this.__resizeStartWidth = e.target.offsetWidth;
@@ -109,8 +109,11 @@ export class WidgetResizeController {
     const itemWrapper = this.__getItemWrapper(this.resizedItem);
     itemWrapper.style.removeProperty('--_vaadin-dashboard-widget-resizer-width');
     itemWrapper.style.removeProperty('--_vaadin-dashboard-widget-resizer-height');
+    if (itemWrapper.firstElementChild) {
+      itemWrapper.firstElementChild.toggleAttribute('resizing', false);
+    }
 
-    this.host.$.grid.toggleAttribute('resizing', false);
+    this.host.$.grid.toggleAttribute('item-resizing', false);
 
     // Disconnect the observer for the resized element removal
     this.__resizedElementRemoveObserver.disconnect();
@@ -177,6 +180,9 @@ export class WidgetResizeController {
     const itemWrapper = this.__getItemWrapper(this.resizedItem);
     itemWrapper.style.setProperty('--_vaadin-dashboard-widget-resizer-width', `${this.__resizeWidth}px`);
     itemWrapper.style.setProperty('--_vaadin-dashboard-widget-resizer-height', `${this.__resizeHeight}px`);
+    if (itemWrapper.firstElementChild) {
+      itemWrapper.firstElementChild.toggleAttribute('resizing', true);
+    }
   }
 
   /** @private */

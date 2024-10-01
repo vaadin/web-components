@@ -92,27 +92,34 @@ export const DashboardItemMixin = (superClass) =>
 
     /** @private */
     __renderDragHandle() {
-      // To make the button draggable on Firefox, using a workaround from https://stackoverflow.com/a/55019027/3409629
-      return html`<label draggable="true" class="drag-handle" id="drag-handle-wrapper">
-        <button
-          id="drag-handle"
-          aria-label="${this.__i18n.move}"
-          title="${this.__i18n.move}"
-          tabindex="${this.__selected ? 0 : -1}"
-          @click="${() => this.__enterMoveMode()}"
-        ></button>
-      </label>`;
+      return html`<vaadin-button
+        id="drag-handle"
+        draggable="true"
+        class="drag-handle"
+        part="move-button"
+        theme="icon tertiary"
+        aria-label="${this.__i18n.move}"
+        title="${this.__i18n.move}"
+        tabindex="${this.__selected ? 0 : -1}"
+        @click="${() => this.__enterMoveMode()}"
+      >
+        <div class="icon"></div>
+      </vaadin-button>`;
     }
 
     /** @private */
     __renderRemoveButton() {
-      return html`<button
+      return html`<vaadin-button
         aria-label="${this.__i18n.remove}"
         title="${this.__i18n.remove}"
         id="remove-button"
+        part="remove-button"
+        theme="icon tertiary"
         tabindex="${this.__selected ? 0 : -1}"
         @click="${() => fireRemove(this)}"
-      ></button>`;
+      >
+        <div class="icon"></div>
+      </vaadin-button>`;
     }
 
     /** @private */
@@ -133,14 +140,18 @@ export const DashboardItemMixin = (superClass) =>
 
     /** @private */
     __renderResizeHandle() {
-      return html`<button
+      return html`<vaadin-button
         aria-label="${this.__i18n.resize}"
         title="${this.__i18n.resize}"
         id="resize-handle"
+        part="resize-button"
         class="resize-handle"
+        theme="icon tertiary"
         tabindex="${this.__selected ? 0 : -1}"
         @click="${() => this.__enterResizeMode()}"
-      ></button>`;
+      >
+        <div class="icon"></div>
+      </vaadin-button>`;
     }
 
     /** @private */
@@ -151,24 +162,36 @@ export const DashboardItemMixin = (superClass) =>
         .hidden="${!this.__moveMode}"
         @pointerdown="${(e) => e.preventDefault()}"
       >
-        <button
+        <vaadin-button
+          theme="primary icon"
           aria-label="${this.__i18n.moveBackward}"
           title="${this.__i18n.moveBackward}"
           @click="${() => fireMove(this, -1)}"
           id="move-backward"
-        ></button>
-        <button
+          part="move-backward-button"
+        >
+          <div class="icon"></div>
+        </vaadin-button>
+        <vaadin-button
+          theme="primary icon large"
           aria-label="${this.__i18n.moveApply}"
           title="${this.__i18n.moveApply}"
           @click="${() => this.__exitMode(true)}"
           id="move-apply"
-        ></button>
-        <button
+          part="move-apply-button"
+        >
+          <div class="icon"></div>
+        </vaadin-button>
+        <vaadin-button
+          theme="primary icon"
           aria-label="${this.__i18n.moveForward}"
           title="${this.__i18n.moveForward}"
           @click="${() => fireMove(this, 1)}"
           id="move-forward"
-        ></button>
+          part="move-forward-button"
+        >
+          <div class="icon"></div>
+        </vaadin-button>
       </div>`;
     }
 
@@ -182,38 +205,58 @@ export const DashboardItemMixin = (superClass) =>
         .hidden="${!this.__resizeMode}"
         @pointerdown="${(e) => e.preventDefault()}"
       >
-        <button
+        <vaadin-button
+          theme="primary icon large"
           aria-label="${this.__i18n.resizeApply}"
           title="${this.__i18n.resizeApply}"
           @click="${() => this.__exitMode(true)}"
           id="resize-apply"
-        ></button>
-        <button
+          part="resize-apply-button"
+        >
+          <div class="icon"></div>
+        </vaadin-button>
+        <vaadin-button
+          theme="primary icon"
           aria-label="${this.__i18n.resizeShrinkWidth}"
           title="${this.__i18n.resizeShrinkWidth}"
           @click="${() => fireResize(this, -1, 0)}"
           id="resize-shrink-width"
-        ></button>
-        <button
+          part="resize-shrink-width-button"
+        >
+          <div class="icon"></div>
+        </vaadin-button>
+        <vaadin-button
+          theme="primary icon"
           aria-label="${this.__i18n.resizeGrowWidth}"
           title="${this.__i18n.resizeGrowWidth}"
           @click="${() => fireResize(this, 1, 0)}"
           id="resize-grow-width"
-        ></button>
-        <button
+          part="resize-grow-width-button"
+        >
+          <div class="icon"></div>
+        </vaadin-button>
+        <vaadin-button
+          theme="primary icon"
           aria-label="${this.__i18n.resizeShrinkHeight}"
           title="${this.__i18n.resizeShrinkHeight}"
           @click="${() => fireResize(this, 0, -1)}"
           id="resize-shrink-height"
+          part="resize-shrink-height-button"
           .hidden="${!hasMinRowHeight}"
-        ></button>
-        <button
+        >
+          <div class="icon"></div>
+        </vaadin-button>
+        <vaadin-button
+          theme="primary icon"
           aria-label="${this.__i18n.resizeGrowHeight}"
           title="${this.__i18n.resizeGrowHeight}"
           @click="${() => fireResize(this, 0, 1)}"
           id="resize-grow-height"
+          part="resize-grow-height-button"
           .hidden="${!hasMinRowHeight}"
-        ></button>
+        >
+          <div class="icon"></div>
+        </vaadin-button>
       </div>`;
     }
 
@@ -231,7 +274,10 @@ export const DashboardItemMixin = (superClass) =>
     }
 
     /** @private */
-    __selectedChanged(selected) {
+    __selectedChanged(selected, oldSelected) {
+      if (!!selected === !!oldSelected) {
+        return;
+      }
       this.dispatchEvent(new CustomEvent('item-selected-changed', { bubbles: true, detail: { value: selected } }));
       if (selected) {
         this.__focusTrapController.trapFocus(this.$.focustrap);
@@ -291,12 +337,18 @@ export const DashboardItemMixin = (superClass) =>
     }
 
     /** @private */
-    __moveModeChanged(moveMode) {
+    __moveModeChanged(moveMode, oldMoveMode) {
+      if (!!moveMode === !!oldMoveMode) {
+        return;
+      }
       this.dispatchEvent(new CustomEvent('item-move-mode-changed', { bubbles: true, detail: { value: moveMode } }));
     }
 
     /** @private */
-    __resizeModeChanged(resizeMode) {
+    __resizeModeChanged(resizeMode, oldResizeMode) {
+      if (!!resizeMode === !!oldResizeMode) {
+        return;
+      }
       this.dispatchEvent(new CustomEvent('item-resize-mode-changed', { bubbles: true, detail: { value: resizeMode } }));
     }
   };

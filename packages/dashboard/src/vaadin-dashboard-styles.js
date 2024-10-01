@@ -9,18 +9,9 @@ export const hasWidgetWrappers = css`
 export const dashboardWidgetAndSectionStyles = css`
   :host {
     box-sizing: border-box;
-  }
-
-  :host([focused]) {
-    border: 1px solid blue;
-  }
-
-  :host([selected]) {
-    border: 4px solid red;
-  }
-
-  :host([dragging]) {
-    border: 3px dashed black;
+    --_mode-button-spacing-offset: calc(
+      max(0px, var(--_vaadin-dashboard-default-spacing) - var(--_vaadin-dashboard-spacing))
+    );
   }
 
   :host([dragging]) * {
@@ -29,7 +20,8 @@ export const dashboardWidgetAndSectionStyles = css`
 
   :host(:not([editable])) #drag-handle,
   :host(:not([editable])) #remove-button,
-  :host(:not([editable])) #focus-button {
+  :host(:not([editable])) #focus-button,
+  :host(:not([editable])) #focus-button-wrapper {
     display: none;
   }
 
@@ -39,8 +31,10 @@ export const dashboardWidgetAndSectionStyles = css`
 
   header {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+  }
+
+  vaadin-button {
+    z-index: 1;
   }
 
   #focus-button-wrapper,
@@ -56,80 +50,37 @@ export const dashboardWidgetAndSectionStyles = css`
     border: none;
   }
 
-  #drag-handle-wrapper {
-    z-index: 1;
-    cursor: grab;
-  }
-
-  #drag-handle {
-    font-size: 30px;
-    z-index: 1;
-    pointer-events: none;
-  }
-
-  #drag-handle::before {
-    content: '☰';
-  }
-
-  #remove-button {
-    font-size: 30px;
-    cursor: pointer;
-    z-index: 1;
-  }
-
-  #remove-button::before {
-    content: '×';
-  }
-
   .mode-controls {
     position: absolute;
     inset: 0;
-    background-color: rgba(255, 255, 255, 0.5);
     z-index: 2;
   }
 
-  button:focus {
-    outline: 1px solid blue;
+  .mode-controls[hidden] {
+    display: none;
   }
 
   /* Move-mode buttons */
   #move-backward,
   #move-forward,
   #move-apply {
-    font-size: 30px;
-    cursor: pointer;
     position: absolute;
     top: 50%;
-    transform: translate(-50%, -50%);
-  }
-
-  #move-backward::before,
-  #move-forward::before,
-  #move-apply::before {
-    content: var(--content);
   }
 
   #move-backward {
     inset-inline-start: 0;
-    --content: '<';
-  }
-
-  :host([dir='rtl']) #move-backward {
-    transform: translate(50%, -50%);
+    transform: translateY(-50%);
   }
 
   #move-forward {
     inset-inline-end: 0;
-    --content: '>';
-  }
-
-  :host(:not([dir='rtl'])) #move-forward {
-    transform: translate(50%, -50%);
+    transform: translateY(-50%);
   }
 
   #move-apply {
     left: 50%;
-    --content: '✔';
+    transform: translate(-50%, -50%);
   }
 
   :host([first-child]) #move-backward,
@@ -143,51 +94,37 @@ export const dashboardWidgetAndSectionStyles = css`
   #resize-grow-width,
   #resize-grow-height,
   #resize-apply {
-    font-size: 30px;
-    cursor: pointer;
     position: absolute;
   }
 
-  #resize-shrink-width::before,
-  #resize-shrink-height::before,
-  #resize-grow-width::before,
-  #resize-grow-height::before,
-  #resize-apply::before {
-    content: var(--content);
-  }
-
   #resize-shrink-width {
-    inset-inline-end: 0;
+    inset-inline-end: calc(0px + var(--_mode-button-spacing-offset));
     top: 50%;
     transform: translateY(-50%);
-    --content: '-';
   }
 
   #resize-grow-width {
-    inset-inline-start: 100%;
+    inset-inline-start: calc(100% - var(--_mode-button-spacing-offset));
     top: 50%;
     transform: translateY(-50%);
-    --content: '+';
   }
 
   #resize-shrink-height {
-    bottom: 0;
+    bottom: calc(0px + var(--_mode-button-spacing-offset));
     left: 50%;
     transform: translateX(-50%);
-    --content: '-';
   }
 
   #resize-grow-height {
-    top: 100%;
+    top: calc(100% - var(--_mode-button-spacing-offset));
     left: 50%;
     transform: translateX(-50%);
-    --content: '+';
   }
 
   #resize-apply {
     left: 50%;
     top: 50%;
-    --content: '✔';
+
     transform: translate(-50%, -50%);
   }
 `;
