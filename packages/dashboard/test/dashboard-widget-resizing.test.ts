@@ -12,10 +12,10 @@ import {
   fireResizeStart,
   getElementFromCell,
   onceResized,
-  setGap,
   setMaximumColumnWidth,
   setMinimumColumnWidth,
   setMinimumRowHeight,
+  setSpacing,
 } from './helpers.js';
 
 type TestDashboardItem = DashboardItem & { id: number };
@@ -28,11 +28,10 @@ describe('dashboard - widget resizing', () => {
   beforeEach(async () => {
     dashboard = fixtureSync('<vaadin-dashboard></vaadin-dashboard>');
     await nextFrame();
-    // @ts-expect-error Test without padding
-    dashboard.$.grid.style.padding = '0';
+
     setMinimumColumnWidth(dashboard, columnWidth);
     setMaximumColumnWidth(dashboard, columnWidth);
-    setGap(dashboard, 0);
+    setSpacing(dashboard, 0);
     setMinimumRowHeight(dashboard, rowHeight);
 
     dashboard.editable = true;
@@ -434,7 +433,7 @@ describe('dashboard - widget resizing', () => {
 
     it('should take gap into account when resizing', async () => {
       dashboard.style.width = `${columnWidth * 3}px`;
-      setGap(dashboard, columnWidth / 2);
+      setSpacing(dashboard, 20);
       await onceResized(dashboard);
 
       // prettier-ignore
@@ -444,7 +443,18 @@ describe('dashboard - widget resizing', () => {
 
       fireResizeStart(getElementFromCell(dashboard, 0, 0)!);
       await nextFrame();
-      fireResizeOver(getElementFromCell(dashboard, 0, 1)!, 'start');
+
+      const widget1Rect = getElementFromCell(dashboard, 0, 1)!.getBoundingClientRect();
+      const x = widget1Rect.left + widget1Rect.width / 2 - 10;
+      const y = widget1Rect.bottom;
+      const event = new MouseEvent('mousemove', {
+        bubbles: true,
+        composed: true,
+        clientX: x,
+        clientY: y,
+        buttons: 1,
+      });
+      dashboard.dispatchEvent(event);
       await nextFrame();
 
       // prettier-ignore

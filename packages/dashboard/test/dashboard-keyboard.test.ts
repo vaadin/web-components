@@ -18,10 +18,10 @@ import {
   getResizeShrinkHeightButton,
   getResizeShrinkWidthButton,
   onceResized,
-  setGap,
   setMaximumColumnWidth,
   setMinimumColumnWidth,
   setMinimumRowHeight,
+  setSpacing,
 } from './helpers.js';
 
 type TestDashboardItem = DashboardItem & { id: number };
@@ -39,7 +39,7 @@ describe('dashboard - keyboard interaction', () => {
     dashboard.addEventListener('keydown', keydownSpy);
     setMinimumColumnWidth(dashboard, columnWidth);
     setMaximumColumnWidth(dashboard, columnWidth);
-    setGap(dashboard, 0);
+    setSpacing(dashboard, 0);
 
     dashboard.items = [{ id: 0 }, { id: 1 }, { items: [{ id: 2 }, { id: 3 }] }];
     dashboard.renderer = (root, _, model) => {
@@ -51,8 +51,6 @@ describe('dashboard - keyboard interaction', () => {
         root.appendChild(widget);
       }
     };
-    // @ts-expect-error Test without padding
-    dashboard.$.grid.style.padding = '0';
 
     dashboard.style.width = `${columnWidth * 2}px`;
     await onceResized(dashboard);

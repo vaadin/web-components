@@ -2,6 +2,7 @@ import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import '../vaadin-dashboard-layout.js';
 import '../vaadin-dashboard-section.js';
+import '@vaadin/vaadin-lumo-styles/spacing.js';
 import type { DashboardLayout } from '../vaadin-dashboard-layout.js';
 import type { DashboardSection } from '../vaadin-dashboard-section.js';
 import {
@@ -11,19 +12,27 @@ import {
   getScrollingContainer,
   onceResized,
   setColspan,
-  setGap,
   setMaximumColumnCount,
   setMaximumColumnWidth,
   setMinimumColumnWidth,
   setMinimumRowHeight,
   setRowspan,
+  setSpacing,
 } from './helpers.js';
+
+const [defaultSpacing, defaultMinimumColumnWidth] = (() => {
+  const div = document.createElement('div');
+  document.body.appendChild(div);
+  div.style.width = '1rem';
+  const width = getComputedStyle(div).width;
+  div.remove();
+  return [parseFloat(width), parseFloat(width) * 25];
+})();
 
 describe('dashboard layout', () => {
   let dashboard: DashboardLayout;
   let childElements: HTMLElement[];
   const columnWidth = 100;
-  const remValue = parseFloat(getComputedStyle(document.documentElement).fontSize);
 
   beforeEach(async () => {
     dashboard = fixtureSync(`
@@ -34,13 +43,11 @@ describe('dashboard layout', () => {
     `);
     childElements = [...dashboard.children] as HTMLElement[];
     await nextFrame();
-    // Disable gap between items in these tests
-    setGap(dashboard, 0);
+    // Disable spacing between items in these tests
+    setSpacing(dashboard, 0);
     // Set the column width to a fixed value
     setMinimumColumnWidth(dashboard, columnWidth);
     setMaximumColumnWidth(dashboard, columnWidth);
-    // @ts-expect-error Test without padding
-    dashboard.$.grid.style.padding = '0';
     // Make the dashboard wide enough to fit all items on a single row
     dashboard.style.width = `${columnWidth * dashboard.childElementCount}px`;
 
@@ -109,7 +116,7 @@ describe('dashboard layout', () => {
       dashboard.style.width = '0';
       await onceResized(dashboard);
       // Expect the column width to equal the default minimum column width
-      expect(getColumnWidths(dashboard)).to.eql([remValue * 25]);
+      expect(getColumnWidths(dashboard)).to.eql([defaultMinimumColumnWidth]);
     });
 
     it('should have one overflown column if narrowed below minimum column width', async () => {
@@ -307,43 +314,43 @@ describe('dashboard layout', () => {
     });
   });
 
-  describe('gap', () => {
-    it('should have a default gap', async () => {
-      // Clear the gap used in the tests
-      setGap(dashboard, undefined);
-      // Increase the width of the dashboard to fit two items and a gap
-      dashboard.style.width = `${columnWidth * 2 + remValue}px`;
+  describe('spacing', () => {
+    it('should have default spacing', async () => {
+      // Clear the spacing used in the tests
+      setSpacing(dashboard, undefined);
+      // Increase the width of the dashboard to fit two items, paddings and a gap
+      dashboard.style.width = `calc(${columnWidth}px * 2 + ${defaultSpacing * 3}px)`;
       await onceResized(dashboard);
 
       const { right: item0Right } = childElements[0].getBoundingClientRect();
       const { left: item1Left } = childElements[1].getBoundingClientRect();
       // Expect the items to have a gap of 1rem
-      expect(item1Left - item0Right).to.eql(remValue);
+      expect(item1Left - item0Right).to.eql(defaultSpacing);
     });
 
-    it('should have a custom gap between items horizontally', async () => {
-      const customGap = 10;
-      setGap(dashboard, customGap);
-      // Increase the width of the dashboard to fit two items and a gap
-      dashboard.style.width = `${columnWidth * 2 + customGap}px`;
+    it('should have custom spacing between items horizontally', async () => {
+      const customSpacing = 10;
+      setSpacing(dashboard, customSpacing);
+      // Increase the width of the dashboard to fit two items, paddings and a gap
+      dashboard.style.width = `${columnWidth * 2 + customSpacing * 3}px`;
       await onceResized(dashboard);
 
       const { right: item0Right } = childElements[0].getBoundingClientRect();
       const { left: item1Left } = childElements[1].getBoundingClientRect();
       // Expect the items to have a gap of 10px
-      expect(item1Left - item0Right).to.eql(customGap);
+      expect(item1Left - item0Right).to.eql(customSpacing);
     });
 
-    it('should have a custom gap between items vertically', async () => {
-      const customGap = 10;
-      setGap(dashboard, customGap);
+    it('should have custom spacing between items vertically', async () => {
+      const customSpacing = 10;
+      setSpacing(dashboard, customSpacing);
       dashboard.style.width = `${columnWidth}px`;
       await onceResized(dashboard);
 
       const { bottom: item0Bottom } = childElements[0].getBoundingClientRect();
       const { top: item1Top } = childElements[1].getBoundingClientRect();
-      // Expect the items to have a gap of 10px
-      expect(item1Top - item0Bottom).to.eql(customGap);
+      // Expect the items to have spacing of 10px
+      expect(item1Top - item0Bottom).to.eql(customSpacing);
     });
   });
 
@@ -513,43 +520,43 @@ describe('dashboard layout', () => {
       expect(newTitleHeight).to.eql(titleHeight);
     });
 
-    describe('gap', () => {
-      it('should have a default gap', async () => {
-        // Clear the gap used in the tests
-        setGap(dashboard, undefined);
-        // Increase the width of the dashboard to fit two items and a gap
-        dashboard.style.width = `${columnWidth * 2 + remValue}px`;
+    describe('spacing', () => {
+      it('should have default spacing', async () => {
+        // Clear the spacing used in the tests
+        setSpacing(dashboard, undefined);
+        // Increase the width of the dashboard to fit two items, paddings and a gap
+        dashboard.style.width = `calc(${columnWidth}px * 2 + ${defaultSpacing * 3}px)`;
         await onceResized(dashboard);
 
         const { right: item2Right } = childElements[2].getBoundingClientRect();
         const { left: item3Left } = childElements[3].getBoundingClientRect();
         // Expect the items to have a gap of 1rem
-        expect(item3Left - item2Right).to.eql(remValue);
+        expect(item3Left - item2Right).to.eql(defaultSpacing);
       });
 
-      it('should have a custom gap between items horizontally', async () => {
-        const customGap = 10;
-        setGap(dashboard, customGap);
-        // Increase the width of the dashboard to fit two items and a gap
-        dashboard.style.width = `${columnWidth * 2 + customGap}px`;
+      it('should have a custom spacing between items horizontally', async () => {
+        const customSpacing = 10;
+        setSpacing(dashboard, customSpacing);
+        // Increase the width of the dashboard to fit two items, paddings and a gap
+        dashboard.style.width = `${columnWidth * 2 + customSpacing * 3}px`;
         await onceResized(dashboard);
 
         const { right: item2Right } = childElements[2].getBoundingClientRect();
         const { left: item3Left } = childElements[3].getBoundingClientRect();
         // Expect the items to have a gap of 10px
-        expect(item3Left - item2Right).to.eql(customGap);
+        expect(item3Left - item2Right).to.eql(customSpacing);
       });
 
-      it('should have a custom gap between items vertically', async () => {
-        const customGap = 10;
-        setGap(dashboard, customGap);
+      it('should have a custom spacing between items vertically', async () => {
+        const customSpacing = 10;
+        setSpacing(dashboard, customSpacing);
         dashboard.style.width = `${columnWidth}px`;
         await onceResized(dashboard);
 
         const { bottom: item2Bottom } = childElements[2].getBoundingClientRect();
         const { top: item3Top } = childElements[3].getBoundingClientRect();
         // Expect the items to have a gap of 10px
-        expect(item3Top - item2Bottom).to.eql(customGap);
+        expect(item3Top - item2Bottom).to.eql(customSpacing);
       });
     });
   });
