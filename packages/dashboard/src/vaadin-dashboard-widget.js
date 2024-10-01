@@ -24,7 +24,7 @@ import { getDefaultI18n } from './vaadin-dashboard-item-mixin.js';
  *
  * ```html
  * <vaadin-dashboard-widget widget-title="Title">
- *   <span slot="header">Header</span>
+ *   <span slot="header-content">Header</span>
  *   <div>Content</div>
  * </vaadin-dashboard-widget>
  * ```
@@ -33,16 +33,16 @@ import { getDefaultI18n } from './vaadin-dashboard-item-mixin.js';
  *
  * You can configure the item by using `slot` names.
  *
- * Slot name | Description
- * ----------|-------------
- * `title`   | A slot for the widget title. Overrides the `widgetTitle` property.
- * `header`  | A slot for the widget header.
+ * Slot name        | Description
+ * -----------------|-------------
+ * `title`          | A slot for the widget title. Overrides the `widgetTitle` property.
+ * `header-content` | A slot for the widget header content.
  *
  * #### Example
  *
  * ```html
  * <vaadin-dashboard-widget>
- *   <span slot="header">Header</span>
+ *   <span slot="header-content">Header</span>
  *   <span slot="title">Title</span>
  *   <div>Content</div>
  * </vaadin-dashboard-widget>
