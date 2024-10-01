@@ -42,7 +42,7 @@ class DashboardSection extends DashboardItemMixin(ControllerMixin(ElementMixin(P
           grid-template-columns: subgrid;
           --_vaadin-dashboard-section-column: 1 / calc(var(--_vaadin-dashboard-effective-col-count) + 1);
           grid-column: var(--_vaadin-dashboard-section-column) !important;
-          gap: var(--vaadin-dashboard-gap, 1rem);
+          gap: var(--_vaadin-dashboard-spacing, 1rem);
           /* Dashbaord section header height */
           --_vaadin-dashboard-section-header-height: minmax(0, auto);
           grid-template-rows: var(--_vaadin-dashboard-section-header-height) repeat(

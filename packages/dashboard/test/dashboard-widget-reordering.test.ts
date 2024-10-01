@@ -17,9 +17,9 @@ import {
   getParentSection,
   onceResized,
   resetReorderTimeout,
-  setGap,
   setMaximumColumnWidth,
   setMinimumColumnWidth,
+  setSpacing,
 } from './helpers.js';
 
 type TestDashboardItem = DashboardItem & { id: number };
@@ -31,12 +31,10 @@ describe('dashboard - widget reordering', () => {
   beforeEach(async () => {
     dashboard = fixtureSync('<vaadin-dashboard></vaadin-dashboard>');
     await nextFrame();
-    // @ts-expect-error Test without padding
-    dashboard.$.grid.style.padding = '0';
 
     setMinimumColumnWidth(dashboard, columnWidth);
     setMaximumColumnWidth(dashboard, columnWidth);
-    setGap(dashboard, 0);
+    setSpacing(dashboard, 0);
 
     dashboard.editable = true;
 

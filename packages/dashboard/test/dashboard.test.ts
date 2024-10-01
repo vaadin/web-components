@@ -15,9 +15,9 @@ import {
   getResizeHandle,
   getScrollingContainer,
   onceResized,
-  setGap,
   setMaximumColumnWidth,
   setMinimumColumnWidth,
+  setSpacing,
 } from './helpers.js';
 
 type TestDashboardItem = DashboardItem & { id: string; component?: Element | string };
@@ -29,13 +29,11 @@ describe('dashboard', () => {
   beforeEach(async () => {
     dashboard = fixtureSync('<vaadin-dashboard></vaadin-dashboard>');
     await nextFrame();
-    // @ts-expect-error Test without padding
-    dashboard.$.grid.style.padding = '0';
 
     dashboard.style.width = `${columnWidth * 2}px`;
     setMinimumColumnWidth(dashboard, columnWidth);
     setMaximumColumnWidth(dashboard, columnWidth);
-    setGap(dashboard, 0);
+    setSpacing(dashboard, 0);
 
     dashboard.items = [{ id: '0' }, { id: '1' }];
     dashboard.renderer = (root, _, model) => {
