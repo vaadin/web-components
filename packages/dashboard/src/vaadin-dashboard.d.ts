@@ -193,9 +193,9 @@ export interface DashboardI18n {
  * ------------------------------------|-------------
  * `--vaadin-dashboard-col-min-width`  | minimum column width of the dashboard
  * `--vaadin-dashboard-col-max-width`  | maximum column width of the dashboard
- * `--vaadin-dashboard-row-min-height` | maximum column count of the dashboard
- * `--vaadin-dashboard-spacing`        | spacing between the cells of the dashboard
+ * `--vaadin-dashboard-row-min-height` | minimum row height of the dashboard
  * `--vaadin-dashboard-col-max-count`  | maximum column count of the dashboard
+ * `--vaadin-dashboard-spacing`        | spacing between child elements and space around its outer edges
  *
  * The following state attributes are available for styling:
  *
