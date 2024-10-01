@@ -3,6 +3,7 @@
  * Copyright (c) 2018 - 2024 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
 import { LoginMixin } from './vaadin-login-mixin.js';
 
 /**
@@ -45,6 +46,10 @@ export const LoginFormMixin = (superClass) =>
     submit() {
       const userName = this.$.vaadinLoginUsername;
       const password = this.$.vaadinLoginPassword;
+
+      // Ensure both fields have error message
+      this.__setErrorMessage(userName);
+      this.__setErrorMessage(password);
 
       if (this.disabled || !(userName.validate() && password.validate())) {
         return;
@@ -96,10 +101,42 @@ export const LoginFormMixin = (superClass) =>
       }
     }
 
+    /** @private */
+    __setErrorMessage(field, shouldClear) {
+      const errorKey = field.id === 'vaadinLoginUsername' ? 'username' : 'password';
+      field.errorMessage = shouldClear ? '' : this.i18n.errorMessage[errorKey];
+    }
+
+    /** @protected */
+    _handleInputFocusOut(event) {
+      const { currentTarget: field } = event;
+
+      // Focus moved outside the browser tab, do nothing.
+      if (!document.hasFocus()) {
+        return;
+      }
+
+      if (isKeyboardActive()) {
+        this.__setErrorMessage(field);
+      } else {
+        // Postpone setting error message until global click since setting it
+        // will affect field height and might affect click on other elements
+        // located below it, including the "forgot password" button.
+        document.addEventListener(
+          'click',
+          () => {
+            this.__setErrorMessage(field);
+          },
+          { once: true },
+        );
+      }
+    }
+
     /** @protected */
     _handleInputKeydown(e) {
       if (e.key === 'Enter') {
         const { currentTarget: inputActive } = e;
+        this.__setErrorMessage(inputActive);
         const nextInput =
           inputActive.id === 'vaadinLoginUsername' ? this.$.vaadinLoginPassword : this.$.vaadinLoginUsername;
         if (inputActive.validate()) {
@@ -117,6 +154,10 @@ export const LoginFormMixin = (superClass) =>
       const input = e.currentTarget;
       if (e.key === 'Tab' && input instanceof HTMLInputElement) {
         input.select();
+      } else if (e.key !== 'Enter' && input.parentElement.errorMessage) {
+        // Reset error message when typing anything (including Backspace)
+        // to prevent click issues handled by the focusout event listener.
+        this.__setErrorMessage(input.parentElement, true);
       }
     }
 

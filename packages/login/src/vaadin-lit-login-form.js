@@ -56,10 +56,10 @@ class LoginForm extends LoginFormMixin(ElementMixin(ThemableMixin(PolylitMixin(L
           <vaadin-text-field
             name="username"
             label="${this.i18n.form.username}"
-            .errorMessage="${this.i18n.errorMessage.username}"
             id="vaadinLoginUsername"
             required
             @keydown="${this._handleInputKeydown}"
+            @focusout="${this._handleInputFocusOut}"
             autocapitalize="none"
             autocorrect="off"
             spellcheck="false"
@@ -71,10 +71,10 @@ class LoginForm extends LoginFormMixin(ElementMixin(ThemableMixin(PolylitMixin(L
           <vaadin-password-field
             name="password"
             .label="${this.i18n.form.password}"
-            .errorMessage="${this.i18n.errorMessage.password}"
             id="vaadinLoginPassword"
             required
             @keydown="${this._handleInputKeydown}"
+            @focusout="${this._handleInputFocusOut}"
             spellcheck="false"
             autocomplete="current-password"
           >

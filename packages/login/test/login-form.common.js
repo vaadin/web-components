@@ -1,5 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { enter, fixtureSync, nextRender, nextUpdate, tap } from '@vaadin/testing-helpers';
+import { resetMouse, sendKeys, sendMouse } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import { fillUsernameAndPassword } from './helpers.js';
 
@@ -227,6 +228,75 @@ describe('login form', () => {
   it('should have autocomplete attribute set', () => {
     const passwordField = login.$.vaadinLoginPassword;
     expect(passwordField.getAttribute('autocomplete')).to.be.equal('current-password');
+  });
+
+  describe('interactions', () => {
+    let forgotPassword;
+
+    beforeEach(() => {
+      forgotPassword = login.querySelector('[slot="forgot-password"]');
+    });
+
+    afterEach(async () => {
+      await resetMouse();
+    });
+
+    ['username', 'password'].forEach((type) => {
+      describe(type, () => {
+        let field;
+
+        beforeEach(async () => {
+          field = login.querySelector(`[name=${type}]`);
+          field.focus();
+          await nextRender();
+        });
+
+        it(`should handle forgot password click if ${type} field is focused and invalid`, async () => {
+          const spy = sinon.spy();
+          login.addEventListener('forgot-password', spy);
+
+          const { x, y } = forgotPassword.getBoundingClientRect();
+          await sendMouse({ type: 'click', position: [Math.floor(x + 5), Math.floor(y + 5)] });
+          await nextRender();
+
+          expect(spy).to.be.calledOnce;
+        });
+
+        it(`should set error message to ${type} field after the delay on click`, async () => {
+          const { x, y } = forgotPassword.getBoundingClientRect();
+          await sendMouse({ type: 'move', position: [Math.floor(x + 5), Math.floor(y + 5)] });
+
+          await sendMouse({ type: 'down' });
+          expect(field.errorMessage).to.be.not.ok;
+
+          await sendMouse({ type: 'up' });
+          expect(field.errorMessage).to.be.equal(login.i18n.errorMessage[type]);
+        });
+
+        it(`should set error message to ${type} field immediately on Tab`, async () => {
+          await sendKeys({ press: 'Tab' });
+          expect(field.errorMessage).to.be.equal(login.i18n.errorMessage[type]);
+        });
+
+        it(`should set error message to ${type} field immediately on Enter`, async () => {
+          await sendKeys({ press: 'Enter' });
+          expect(field.errorMessage).to.be.equal(login.i18n.errorMessage[type]);
+        });
+
+        it(`should reset error message to ${type} field after typing`, async () => {
+          await sendKeys({ type: 'a' });
+          await sendKeys({ press: 'Backspace' });
+          expect(field.errorMessage).to.be.not.ok;
+        });
+
+        it('should set error message to other field on form submit', () => {
+          const name = type === 'username' ? 'password' : 'username';
+          const other = login.querySelector(`[name=${name}]`);
+          login.submit();
+          expect(other.errorMessage).to.be.equal(login.i18n.errorMessage[name]);
+        });
+      });
+    });
   });
 });
 
