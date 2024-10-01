@@ -52,10 +52,10 @@ import { getDefaultI18n } from './vaadin-dashboard-item-mixin.js';
  *
  * The following custom properties are available:
  *
- * Custom Property                 | Description
- * --------------------------------|-------------
- * --vaadin-dashboard-item-colspan | colspan of the widget
- * --vaadin-dashboard-item-rowspan | rowspan of the widget
+ * Custom Property                   | Description
+ * ----------------------------------|-------------
+ * `--vaadin-dashboard-item-colspan` | colspan of the widget
+ * `--vaadin-dashboard-item-rowspan` | rowspan of the widget
  *
  * The following state attributes are available for styling:
  *
