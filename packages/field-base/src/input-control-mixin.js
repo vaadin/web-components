@@ -129,30 +129,6 @@ export const InputControlMixin = (superclass) =>
     }
 
     /**
-     * Override an event listener inherited from `InputMixin`
-     * to capture native `change` event and make sure that
-     * a new one is dispatched after validation runs.
-     * @param {Event} event
-     * @protected
-     * @override
-     */
-    _onChange(event) {
-      event.stopPropagation();
-
-      this.validate();
-
-      this.dispatchEvent(
-        new CustomEvent('change', {
-          detail: {
-            sourceEvent: event,
-          },
-          bubbles: event.bubbles,
-          cancelable: event.cancelable,
-        }),
-      );
-    }
-
-    /**
      * Override a method from `InputMixin`.
      * @param {!HTMLElement} input
      * @protected
