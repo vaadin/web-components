@@ -159,7 +159,7 @@ export const CustomFieldMixin = (superClass) =>
       super._setFocused(focused);
 
       if (!focused) {
-        this.validate();
+        this._requestValidation();
       }
     }
 
@@ -203,7 +203,7 @@ export const CustomFieldMixin = (superClass) =>
       super._requiredChanged(required);
 
       if (required === false) {
-        this.validate();
+        this._requestValidation();
       }
     }
 
@@ -233,7 +233,7 @@ export const CustomFieldMixin = (superClass) =>
       event.stopPropagation();
 
       this.__setValue();
-      this.validate();
+      this._requestValidation();
       this.dispatchEvent(
         new CustomEvent('change', {
           bubbles: true,
@@ -299,7 +299,7 @@ export const CustomFieldMixin = (superClass) =>
       this.__applyInputsValue(value || '\t');
 
       if (oldValue !== undefined) {
-        this.validate();
+        this._requestValidation();
       }
     }
 

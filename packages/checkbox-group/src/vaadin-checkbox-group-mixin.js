@@ -264,7 +264,7 @@ export const CheckboxGroupMixin = (superclass) =>
       });
 
       if (oldValue !== undefined) {
-        this.validate();
+        this._requestValidation();
       }
     }
 
@@ -304,7 +304,7 @@ export const CheckboxGroupMixin = (superclass) =>
       // Do not validate when focusout is caused by document
       // losing focus, which happens on browser tab switch.
       if (!focused && document.hasFocus()) {
-        this.validate();
+        this._requestValidation();
       }
     }
   };

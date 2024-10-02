@@ -26,6 +26,21 @@ export const ValidateMixin = dedupingMixin(
           },
 
           /**
+           * Set to true to enable manual validation mode. In this mode, automatic constraint
+           * validation is disabled, allowing you to control the validation process by yourself.
+           * The field can still be validated programmatically by calling the `validate()` method.
+           * To check the validity without changing the invalid state, use the `checkValidity()` method.
+           * This mode also allows you to manipulate the `invalid` property directly without getting
+           * conflicts with the built-in constraint validation.
+           *
+           * @attr {boolean} manual-validation
+           */
+          manualValidation: {
+            type: Boolean,
+            value: false,
+          },
+
+          /**
            * Specifies that the user must fill in a value.
            */
           required: {
@@ -77,6 +92,13 @@ export const ValidateMixin = dedupingMixin(
        */
       _shouldSetInvalid(_invalid) {
         return true;
+      }
+
+      /** @protected */
+      _requestValidation() {
+        if (!this.manualValidation) {
+          this.validate();
+        }
       }
 
       /**

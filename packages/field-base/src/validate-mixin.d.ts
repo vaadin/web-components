@@ -17,6 +17,16 @@ export declare class ValidateMixinClass {
   invalid: boolean;
 
   /**
+   * Set to true to enable manual validation mode. In this mode, automatic constraint
+   * validation is disabled, allowing you to control the validation process by yourself.
+   * The field can still be validated programmatically by calling the `validate()` method.
+   * To check the validity without changing the invalid state, use the `checkValidity()` method.
+   * This mode also allows you to manipulate the `invalid` property directly without getting
+   * conflicts with the built-in constraint validation.
+   */
+  manualValidation: boolean;
+
+  /**
    * Specifies that the user must fill in a value.
    */
   required: boolean;
@@ -30,4 +40,6 @@ export declare class ValidateMixinClass {
    * Returns true if the field value satisfies all constraints (if any).
    */
   checkValidity(): boolean;
+
+  protected _requestValidation(): void;
 }

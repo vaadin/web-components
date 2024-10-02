@@ -370,7 +370,7 @@ export const DateTimePickerMixin = (superClass) =>
       // Do not validate when focusout is caused by document
       // losing focus, which happens on browser tab switch.
       if (!focused && document.hasFocus()) {
-        this.validate();
+        this._requestValidation();
       }
     }
 
@@ -414,7 +414,7 @@ export const DateTimePickerMixin = (superClass) =>
       event.stopPropagation();
 
       if (this.__dispatchChangeForValue === this.value) {
-        this.validate();
+        this._requestValidation();
         this.__dispatchChange();
       }
       this.__dispatchChangeForValue = undefined;
@@ -473,7 +473,7 @@ export const DateTimePickerMixin = (superClass) =>
       newDatePicker.max = this.__formatDateISO(this.__maxDateTime, this.__defaultDateMinMaxValue);
 
       // Disable default internal validation for the component
-      newDatePicker.validate = () => {};
+      newDatePicker.manualValidation = true;
     }
 
     /** @private */
@@ -501,7 +501,7 @@ export const DateTimePickerMixin = (superClass) =>
       this.__updateTimePickerMinMax();
 
       // Disable default internal validation for the component
-      newTimePicker.validate = () => {};
+      newTimePicker.manualValidation = true;
     }
 
     /** @private */
@@ -603,7 +603,7 @@ export const DateTimePickerMixin = (superClass) =>
       }
 
       if (this.__oldRequired && !required) {
-        this.validate();
+        this._requestValidation();
       }
 
       this.__oldRequired = required;
@@ -796,7 +796,7 @@ export const DateTimePickerMixin = (superClass) =>
       this.__updateTimePickerMinMax();
 
       if (this.__datePicker && this.__timePicker && this.value) {
-        this.validate();
+        this._requestValidation();
       }
     }
 
@@ -809,7 +809,7 @@ export const DateTimePickerMixin = (superClass) =>
       this.__updateTimePickerMinMax();
 
       if (this.__datePicker && this.__timePicker && this.value) {
-        this.validate();
+        this._requestValidation();
       }
     }
 
@@ -910,7 +910,7 @@ export const DateTimePickerMixin = (superClass) =>
         // run initial validation here. Lit version runs observers differently and
         // this observer is executed first - ignore it to prevent validating twice.
         if ((this.min && this.__minDateTime) || (this.max && this.__maxDateTime)) {
-          this.validate();
+          this._requestValidation();
         }
       }
     }

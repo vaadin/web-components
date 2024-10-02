@@ -479,7 +479,7 @@ export const DatePickerMixin = (subclass) =>
         // Do not validate when focusout is caused by document
         // losing focus, which happens on browser tab switch.
         if (document.hasFocus()) {
-          this.validate();
+          this._requestValidation();
         }
       }
     }
@@ -717,10 +717,10 @@ export const DatePickerMixin = (subclass) =>
       const unparsableValue = this.__unparsableValue;
 
       if (this.__committedValue !== this.value) {
-        this.validate();
+        this._requestValidation();
         this.dispatchEvent(new CustomEvent('change', { bubbles: true }));
       } else if (this.__committedUnparsableValue !== unparsableValue) {
-        this.validate();
+        this._requestValidation();
         this.dispatchEvent(new CustomEvent('unparsable-change'));
       }
 
@@ -849,7 +849,7 @@ export const DatePickerMixin = (subclass) =>
 
           if (oldValue !== undefined) {
             // Validate only if `value` changes after initialization.
-            this.validate();
+            this._requestValidation();
           }
         }
       } else {
@@ -1015,7 +1015,7 @@ export const DatePickerMixin = (subclass) =>
       // Needed in case the value was not changed: open and close dropdown,
       // especially on outside click. On Esc key press, do not validate.
       if (!this.value && !this._keyboardActive) {
-        this.validate();
+        this._requestValidation();
       }
     }
 

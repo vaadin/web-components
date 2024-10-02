@@ -44,6 +44,19 @@ const runTests = (defineHelper, baseMixin) => {
       await nextUpdate(element);
       expect(spy.calledOnce).to.be.true;
     });
+
+    it('should validate on _requestValidation() when manual validation is false', () => {
+      const spy = sinon.spy(element, 'validate');
+      element._requestValidation();
+      expect(spy).to.be.calledOnce;
+    });
+
+    it('should not validate on _requestValidation() when manual validation is true', () => {
+      const spy = sinon.spy(element, 'validate');
+      element.manualValidation = true;
+      element._requestValidation();
+      expect(spy).to.be.not.called;
+    });
   });
 
   describe('checkValidity', () => {
