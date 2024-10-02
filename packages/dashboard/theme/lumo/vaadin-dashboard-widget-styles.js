@@ -15,6 +15,8 @@ const dashboardWidgetAndSection = css`
     line-height: var(--lumo-line-height-m);
     --_focus-ring-color: var(--vaadin-focus-ring-color, var(--lumo-primary-color-50pct));
     --_focus-ring-width: var(--vaadin-focus-ring-width, 2px);
+    /* default max value for the focus ring spacing offset. calc doesn't support unitless 0. */
+    /* stylelint-disable length-zero-no-unit */
     --_focus-ring-spacing-max-offset: 0px;
     /* Calculates the offset by which the focus ring should be shifted inwards based on a custom --vaadin-dashboard-spacing value.
     Effectively keeps the focus ring visible if --vaadin-dashboard-spacing is set to 0px */
@@ -113,14 +115,14 @@ const dashboardWidgetAndSection = css`
     transform: translateY(-50%);
   }
 
-  #move-backward,
+  :host(:not([dir='rtl'])) #move-backward,
   :host([dir='rtl']) #move-forward {
     border-top-left-radius: 0;
     border-bottom-left-radius: 0;
     --icon: var(--lumo-icons-angle-left);
   }
 
-  #move-forward,
+  :host(:not([dir='rtl'])) #move-forward,
   :host([dir='rtl']) #move-backward {
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
@@ -196,14 +198,14 @@ const dashboardWidget = css`
     margin: 0;
   }
 
-  #resize-shrink-width,
+  :host(:not([dir='rtl'])) #resize-shrink-width,
   :host([dir='rtl']) #resize-grow-width {
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
     --icon: var(--lumo-icons-angle-left);
   }
 
-  #resize-grow-width,
+  :host(:not([dir='rtl'])) #resize-grow-width,
   :host([dir='rtl']) #resize-shrink-width {
     border-top-left-radius: 0;
     border-bottom-left-radius: 0;
