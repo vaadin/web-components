@@ -17,6 +17,14 @@ export declare class ValidateMixinClass {
   invalid: boolean;
 
   /**
+   * When true, automatic validation is disabled and the field can be only
+   * validated programmatically by calling `validate()` method.
+   *
+   * @attr {boolean} manual-validation
+   */
+  manualValidation: boolean;
+
+  /**
    * Specifies that the user must fill in a value.
    */
   required: boolean;
@@ -30,4 +38,6 @@ export declare class ValidateMixinClass {
    * Returns true if the field value satisfies all constraints (if any).
    */
   checkValidity(): boolean;
+
+  protected _requestValidation(): void;
 }

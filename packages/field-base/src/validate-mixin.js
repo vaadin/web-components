@@ -26,6 +26,17 @@ export const ValidateMixin = dedupingMixin(
           },
 
           /**
+           * When true, automatic validation is disabled and the field can be only
+           * validated programmatically by calling `validate()` method.
+           *
+           * @attr {boolean} manual-validation
+           */
+          manualValidation: {
+            type: Boolean,
+            value: false,
+          },
+
+          /**
            * Specifies that the user must fill in a value.
            */
           required: {
@@ -77,6 +88,13 @@ export const ValidateMixin = dedupingMixin(
        */
       _shouldSetInvalid(_invalid) {
         return true;
+      }
+
+      /** @protected */
+      _requestValidation() {
+        if (!this.manualValidation) {
+          this.validate();
+        }
       }
 
       /**

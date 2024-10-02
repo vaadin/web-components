@@ -46,7 +46,10 @@ export const LoginFormMixin = (superClass) =>
       const userName = this.$.vaadinLoginUsername;
       const password = this.$.vaadinLoginPassword;
 
-      if (this.disabled || !(userName.validate() && password.validate())) {
+      userName.validate();
+      password.validate();
+
+      if (this.disabled || userName.invalid || password.invalid) {
         return;
       }
 

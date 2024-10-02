@@ -475,7 +475,7 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
       // Do not validate when focusout is caused by document
       // losing focus, which happens on browser tab switch.
       if (document.hasFocus()) {
-        this.validate();
+        this._requestValidation();
       }
     }
   }
@@ -554,10 +554,10 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
     const unparsableValue = this.__unparsableValue;
 
     if (this.__committedValue !== this.value) {
-      this.validate();
+      this._requestValidation();
       this.dispatchEvent(new CustomEvent('change', { bubbles: true }));
     } else if (this.__committedUnparsableValue !== unparsableValue) {
-      this.validate();
+      this._requestValidation();
       this.dispatchEvent(new CustomEvent('unparsable-change'));
     }
 

@@ -222,14 +222,14 @@ export const CheckboxMixin = (superclass) =>
       // Do not validate when focusout is caused by document
       // losing focus, which happens on browser tab switch.
       if (!focused && document.hasFocus()) {
-        this.validate();
+        this._requestValidation();
       }
     }
 
     /** @private */
     _checkedChanged(checked) {
       if (checked || this.__oldChecked) {
-        this.validate();
+        this._requestValidation();
       }
 
       this.__oldChecked = checked;
@@ -246,7 +246,7 @@ export const CheckboxMixin = (superclass) =>
       super._requiredChanged(required);
 
       if (required === false) {
-        this.validate();
+        this._requestValidation();
       }
     }
 

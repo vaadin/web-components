@@ -471,7 +471,7 @@ class DateTimePicker extends FieldMixin(DisabledMixin(FocusMixin(ThemableMixin(E
     // Do not validate when focusout is caused by document
     // losing focus, which happens on browser tab switch.
     if (!focused && document.hasFocus()) {
-      this.validate();
+      this._requestValidation();
     }
   }
 
@@ -513,7 +513,7 @@ class DateTimePicker extends FieldMixin(DisabledMixin(FocusMixin(ThemableMixin(E
     event.stopPropagation();
 
     if (this.__dispatchChangeForValue === this.value) {
-      this.validate();
+      this._requestValidation();
       this.__dispatchChange();
     }
     this.__dispatchChangeForValue = undefined;
@@ -723,7 +723,7 @@ class DateTimePicker extends FieldMixin(DisabledMixin(FocusMixin(ThemableMixin(E
     }
 
     if (this.__oldRequired && !required) {
-      this.validate();
+      this._requestValidation();
     }
 
     this.__oldRequired = required;
@@ -966,7 +966,7 @@ class DateTimePicker extends FieldMixin(DisabledMixin(FocusMixin(ThemableMixin(E
     this.__updateTimePickerMinMax();
 
     if (this.__datePicker && this.__timePicker && this.value) {
-      this.validate();
+      this._requestValidation();
     }
   }
 
@@ -979,7 +979,7 @@ class DateTimePicker extends FieldMixin(DisabledMixin(FocusMixin(ThemableMixin(E
     this.__updateTimePickerMinMax();
 
     if (this.__datePicker && this.__timePicker && this.value) {
-      this.validate();
+      this._requestValidation();
     }
   }
 
@@ -1076,7 +1076,7 @@ class DateTimePicker extends FieldMixin(DisabledMixin(FocusMixin(ThemableMixin(E
       this.__selectedDateTimeChanged(this.__selectedDateTime);
 
       if (this.min || this.max) {
-        this.validate();
+        this._requestValidation();
       }
     }
   }
