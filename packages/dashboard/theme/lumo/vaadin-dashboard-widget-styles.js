@@ -87,12 +87,14 @@ const dashboardWidgetAndSection = css`
     --icon: var(--lumo-icons-cross);
   }
 
-  /* Title slot styling */
-  slot[name='title']::slotted(*) {
+  /* Title styling */
+  h2,
+  h3 {
     flex: 1;
-    font-size: var(--lumo-font-size-m) !important;
+    font-size: var(--lumo-font-size-m);
     font-weight: 500;
-    color: var(--lumo-header-text-color) !important;
+    color: var(--lumo-header-text-color);
+    margin: 0;
   }
 
   /* Content styling */

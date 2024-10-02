@@ -10,6 +10,7 @@ import {
   getColumnWidths,
   getRowHeights,
   getScrollingContainer,
+  getTitleElement,
   onceResized,
   setColspan,
   setMaximumColumnCount,
@@ -511,7 +512,7 @@ describe('dashboard layout', () => {
     });
 
     it('should not use minimum row height for section header row', async () => {
-      const title = section.querySelector<HTMLHeadingElement>('[slot="title"]')!;
+      const title = getTitleElement(section);
       title.style.height = '100%';
 
       const titleHeight = title.offsetHeight;

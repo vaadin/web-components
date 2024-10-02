@@ -8,6 +8,7 @@ import {
   getMoveBackwardButton,
   getMoveForwardButton,
   getRemoveButton,
+  getTitleElement,
 } from './helpers.js';
 
 describe('dashboard section', () => {
@@ -40,28 +41,10 @@ describe('dashboard section', () => {
       expect(section.getAttribute('role')).to.eql('region');
     });
 
-    it('should add title id to aria-labelledby attribute when using property', async () => {
-      section.sectionTitle = 'Custom title';
-      await nextFrame();
-      const title = section.querySelector('[slot="title"]');
-      expect(section.getAttribute('aria-labelledby')).equal(title?.id);
-    });
-
-    it('should add title id to aria-labelledby attribute when using slot', async () => {
-      const title = document.createElement('div');
-      title.id = 'custom-title';
-      title.slot = 'title';
-      title.textContent = 'Custom title';
-      section.appendChild(title);
-
-      await nextFrame();
-      expect(section.getAttribute('aria-labelledby')).equal(title?.id);
-    });
-
     it('should have text content for the title', async () => {
       section.sectionTitle = 'Custom title';
       await nextFrame();
-      const title = section.querySelector('[slot="title"]');
+      const title = getTitleElement(section);
       expect(title?.textContent).equal('Custom title');
     });
   });
@@ -102,7 +85,7 @@ describe('dashboard section', () => {
       section.sectionTitle = null;
       await nextFrame();
 
-      const title = section.querySelector('[slot="title"]');
+      const title = getTitleElement(section);
       expect(title?.textContent).to.eql('');
     });
   });
