@@ -70,6 +70,10 @@ export function getRowHeights(dashboard: HTMLElement): number[] {
   return dashboardRowHeights;
 }
 
+export function getTitleElement(item: DashboardWidget | DashboardSection): HTMLElement {
+  return item.shadowRoot!.querySelector('#title')!;
+}
+
 /**
  * Returns the element at the center of the cell at the given row and column index.
  */

@@ -14,7 +14,6 @@ import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { css, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { TitleController } from './title-controller.js';
 import { DashboardItemMixin } from './vaadin-dashboard-item-mixin.js';
 import { getDefaultI18n } from './vaadin-dashboard-item-mixin.js';
 import { hasWidgetWrappers } from './vaadin-dashboard-styles.js';
@@ -181,7 +180,6 @@ class DashboardSection extends DashboardItemMixin(
       sectionTitle: {
         type: String,
         value: '',
-        observer: '__onSectionTitleChanged',
       },
     };
   }
@@ -194,7 +192,7 @@ class DashboardSection extends DashboardItemMixin(
       <div id="focustrap">
         <header part="header">
           ${this.__renderDragHandle()}
-          <slot name="title" id="title" @slotchange="${this.__onTitleSlotChange}"></slot>
+          <h2 id="title" part="title">${this.sectionTitle}</h2>
           ${this.__renderRemoveButton()}
         </header>
       </div>
@@ -203,30 +201,10 @@ class DashboardSection extends DashboardItemMixin(
     `;
   }
 
-  constructor() {
-    super();
-    this.__titleController = new TitleController(this);
-    this.__titleController.addEventListener('slot-content-changed', (event) => {
-      const { node } = event.target;
-      if (node) {
-        this.setAttribute('aria-labelledby', node.id);
-      }
-    });
-  }
-
   /** @protected */
   ready() {
     super.ready();
-    this.addController(this.__titleController);
-
-    if (!this.hasAttribute('role')) {
-      this.setAttribute('role', 'section');
-    }
-  }
-
-  /** @private */
-  __onSectionTitleChanged(sectionTitle) {
-    this.__titleController.setTitle(sectionTitle);
+    this.role ??= 'section';
   }
 }
 

@@ -15,7 +15,6 @@ import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { css, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { TitleController } from './title-controller.js';
 import { SYNCHRONIZED_ATTRIBUTES, WRAPPER_LOCAL_NAME } from './vaadin-dashboard-helpers.js';
 import { DashboardItemMixin } from './vaadin-dashboard-item-mixin.js';
 import { getDefaultI18n } from './vaadin-dashboard-item-mixin.js';
@@ -200,6 +199,12 @@ class DashboardWidget extends DashboardItemMixin(
         value: '',
         observer: '__onWidgetTitleChanged',
       },
+
+      /* @private */
+      __nestedHeadingLevel: {
+        type: Boolean,
+        value: false,
+      },
     };
   }
 
@@ -211,7 +216,9 @@ class DashboardWidget extends DashboardItemMixin(
       <div id="focustrap">
         <header part="header">
           ${this.__renderDragHandle()}
-          <slot name="title" id="title" @slotchange="${this.__onTitleSlotChange}"></slot>
+          ${this.__nestedHeadingLevel
+            ? html`<h3 id="title" part="title" .hidden=${!this.widgetTitle}>${this.widgetTitle}</h3>`
+            : html`<h2 id="title" part="title" .hidden=${!this.widgetTitle}>${this.widgetTitle}</h2>`}
           <slot name="header-content"></slot>
           ${this.__renderRemoveButton()}
         </header>
@@ -223,17 +230,6 @@ class DashboardWidget extends DashboardItemMixin(
         <slot></slot>
       </div>
     `;
-  }
-
-  constructor() {
-    super();
-    this.__titleController = new TitleController(this);
-    this.__titleController.addEventListener('slot-content-changed', (event) => {
-      const { node } = event.target;
-      if (node) {
-        this.setAttribute('aria-labelledby', node.id);
-      }
-    });
   }
 
   /** @protected */
@@ -259,11 +255,7 @@ class DashboardWidget extends DashboardItemMixin(
   /** @protected */
   ready() {
     super.ready();
-    this.addController(this.__titleController);
-
-    if (!this.hasAttribute('role')) {
-      this.setAttribute('role', 'article');
-    }
+    this.role ??= 'article';
   }
 
   /** @private */
@@ -273,7 +265,8 @@ class DashboardWidget extends DashboardItemMixin(
 
   /** @private */
   __updateTitle() {
-    this.__titleController.setTitle(this.widgetTitle);
+    const titleLevel = getComputedStyle(this).getPropertyValue('--_vaadin-dashboard-title-level');
+    this.__nestedHeadingLevel = titleLevel === '3';
   }
 }
 
