@@ -61,14 +61,13 @@ const dashboardWidgetAndSection = css`
   header {
     display: flex;
     align-items: center;
-    padding-block: var(--lumo-space-s);
-    padding-inline: var(--lumo-space-m);
+    padding: var(--lumo-space-s) var(--lumo-space-m);
     height: var(--lumo-size-m);
     gap: var(--lumo-space-s);
   }
 
   :host([editable]) header {
-    padding-inline: var(--lumo-space-xs);
+    padding-inline: var(--lumo-space-s);
   }
 
   /* Drag handle styling */
@@ -160,7 +159,7 @@ const dashboardWidget = css`
   #resize-handle {
     position: absolute;
     bottom: var(--lumo-space-s);
-    inset-inline-end: var(--lumo-space-xs);
+    inset-inline-end: var(--lumo-space-s);
     cursor: se-resize;
     --icon: var(--lumo-icons-chevron-down);
   }
