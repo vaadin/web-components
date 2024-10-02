@@ -724,6 +724,12 @@ class DateTimePicker extends FieldMixin(DisabledMixin(FocusMixin(ThemableMixin(E
     if (timePicker) {
       timePicker.required = required;
     }
+
+    if (this.__oldRequired && !required) {
+      this.validate();
+    }
+
+    this.__oldRequired = required;
   }
 
   /** @private */
