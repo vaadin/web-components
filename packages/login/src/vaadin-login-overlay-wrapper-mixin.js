@@ -4,8 +4,8 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
-import { SlotObserver } from '@vaadin/component-base/src/slot-observer';
-import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils';
+import { SlotObserver } from '@vaadin/component-base/src/slot-observer.js';
+import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 import { OverlayMixin } from '@vaadin/overlay/src/vaadin-overlay-mixin.js';
 
 /**
