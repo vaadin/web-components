@@ -56,8 +56,18 @@ const textArea = css`
     --_lumo-text-field-overflow-mask-image: none;
   }
 
-  /* Vertically align icon prefix/suffix with the first line of text */
-  [part='input-field'] ::slotted(vaadin-icon) {
+  /* Use sticky positioning to keep prefix/suffix/clear button visible when scrolling textarea container */
+  [part='input-field'] ::slotted([slot$='fix']),
+  [part='clear-button'] {
+    position: sticky;
+    top: 0;
+    align-self: flex-start;
+  }
+
+  /* Vertically align icon prefix/suffix/clear button with the first line of text */
+  [part='input-field'] ::slotted(vaadin-icon[slot$='fix']),
+  [part='clear-button'] {
+    top: calc((var(--lumo-icon-size-m) - 1em * var(--lumo-line-height-s)) / -2);
     margin-top: calc((var(--lumo-icon-size-m) - 1em * var(--lumo-line-height-s)) / -2);
   }
 `;
