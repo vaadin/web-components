@@ -67,6 +67,8 @@ const dashboardWidgetAndSection = css`
     align-items: center;
     padding: var(--lumo-space-s) var(--lumo-space-m);
     gap: var(--lumo-space-s);
+    min-height: var(--lumo-size-m);
+    justify-content: space-between;
   }
 
   :host([editable]) header {
