@@ -140,6 +140,9 @@ const dashboardWidget = css`
     opacity: var(--_vaadin-dashboard-widget-opacity);
     filter: var(--_vaadin-dashboard-widget-filter);
     background-color: var(--lumo-base-color);
+  }
+
+  :host(:not([selected])) {
     box-shadow: var(--lumo-box-shadow-s);
   }
 
