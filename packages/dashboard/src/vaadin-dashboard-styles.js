@@ -9,6 +9,8 @@ export const hasWidgetWrappers = css`
 export const dashboardWidgetAndSectionStyles = css`
   :host {
     box-sizing: border-box;
+    /* Calculates the offset by which mode buttons that by default overflow the widget edges
+    should be shifted inwards based on a custom --vaadin-dashboard-spacing value */
     --_mode-button-spacing-offset: calc(
       max(0px, var(--_vaadin-dashboard-default-spacing) - var(--_vaadin-dashboard-spacing))
     );

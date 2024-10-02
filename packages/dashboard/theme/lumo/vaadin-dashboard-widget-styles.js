@@ -16,6 +16,8 @@ const dashboardWidgetAndSection = css`
     --_focus-ring-color: var(--vaadin-focus-ring-color, var(--lumo-primary-color-50pct));
     --_focus-ring-width: var(--vaadin-focus-ring-width, 2px);
     --_focus-ring-spacing-max-offset: 0px;
+    /* Calculates the offset by which the focus ring should be shifted inwards based on a custom --vaadin-dashboard-spacing value.
+    Effectively keeps the focus ring visible if --vaadin-dashboard-spacing is set to 0px */
     --_focus-ring-spacing-offset: min(
       max(calc(var(--_focus-ring-width) * -1), var(--_vaadin-dashboard-spacing) - var(--_focus-ring-width)),
       var(--_focus-ring-spacing-max-offset, 0px)
