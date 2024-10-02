@@ -62,7 +62,6 @@ const dashboardWidgetAndSection = css`
     display: flex;
     align-items: center;
     padding: var(--lumo-space-s) var(--lumo-space-m);
-    height: var(--lumo-size-m);
     gap: var(--lumo-space-s);
   }
 

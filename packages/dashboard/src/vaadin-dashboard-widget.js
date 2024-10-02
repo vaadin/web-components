@@ -127,6 +127,7 @@ class DashboardWidget extends DashboardItemMixin(
 
         #content {
           flex: 1;
+          overflow: hidden;
         }
 
         #resize-handle {

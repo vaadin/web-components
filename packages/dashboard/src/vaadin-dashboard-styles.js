@@ -31,6 +31,7 @@ export const dashboardWidgetAndSectionStyles = css`
 
   header {
     display: flex;
+    overflow: hidden;
   }
 
   vaadin-button {
