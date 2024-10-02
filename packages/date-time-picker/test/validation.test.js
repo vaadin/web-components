@@ -200,6 +200,11 @@ const fixtures = {
         dateTimePicker.validate();
         expect(dateTimePicker.invalid).to.be.true;
       });
+
+      it('should validate when setting required to false', () => {
+        dateTimePicker.required = false;
+        expect(validateSpy).to.be.calledOnce;
+      });
     });
 
     describe('document losing focus', () => {
