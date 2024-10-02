@@ -48,6 +48,7 @@ const dashboardWidgetAndSection = css`
 
   .icon::before {
     display: block;
+    content: var(--icon);
   }
 
   :host(:not([selected])) *:not(.mode-controls) vaadin-button,
@@ -73,19 +74,13 @@ const dashboardWidgetAndSection = css`
   /* Drag handle styling */
   #drag-handle {
     cursor: move;
-  }
-
-  #drag-handle .icon::before {
-    content: var(--lumo-icons-menu);
+    --icon: var(--lumo-icons-menu);
   }
 
   /* Remove button styling */
   #remove-button {
     cursor: pointer;
-  }
-
-  #remove-button .icon::before {
-    content: var(--lumo-icons-cross);
+    --icon: var(--lumo-icons-cross);
   }
 
   /* Title slot styling */
@@ -122,26 +117,18 @@ const dashboardWidgetAndSection = css`
   :host([dir='rtl']) #move-forward {
     border-top-left-radius: 0;
     border-bottom-left-radius: 0;
-  }
-
-  #move-backward .icon::before,
-  :host([dir='rtl']) #move-forward .icon::before {
-    content: var(--lumo-icons-angle-left);
+    --icon: var(--lumo-icons-angle-left);
   }
 
   #move-forward,
   :host([dir='rtl']) #move-backward {
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
+    --icon: var(--lumo-icons-angle-right);
   }
 
-  #move-forward .icon::before,
-  :host(:not([dir='rtl'])) #move-forward .icon::before {
-    content: var(--lumo-icons-angle-right);
-  }
-
-  #move-apply .icon::before {
-    content: var(--lumo-icons-checkmark);
+  #move-apply {
+    --icon: var(--lumo-icons-checkmark);
     font-size: var(--lumo-icon-size-m);
   }
 `;
@@ -175,16 +162,15 @@ const dashboardWidget = css`
     bottom: var(--lumo-space-s);
     inset-inline-end: var(--lumo-space-xs);
     cursor: se-resize;
-  }
-
-  #resize-handle .icon::before {
-    display: block;
-    content: var(--lumo-icons-chevron-down);
-    transform: rotate(-45deg);
+    --icon: var(--lumo-icons-chevron-down);
   }
 
   :host([dir='rtl']) #resize-handle {
     cursor: sw-resize;
+  }
+
+  #resize-handle .icon::before {
+    transform: rotate(-45deg);
   }
 
   :host([dir='rtl']) #resize-handle .icon::before {
@@ -192,8 +178,8 @@ const dashboardWidget = css`
   }
 
   /* Resize mode styling */
-  #resize-apply .icon::before {
-    content: var(--lumo-icons-checkmark);
+  #resize-apply {
+    --icon: var(--lumo-icons-checkmark);
     font-size: var(--lumo-icon-size-m);
   }
 
@@ -214,40 +200,26 @@ const dashboardWidget = css`
   :host([dir='rtl']) #resize-grow-width {
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
-  }
-
-  #resize-shrink-width .icon::before,
-  :host([dir='rtl']) #resize-grow-width .icon::before {
-    content: var(--lumo-icons-angle-left);
+    --icon: var(--lumo-icons-angle-left);
   }
 
   #resize-grow-width,
   :host([dir='rtl']) #resize-shrink-width {
     border-top-left-radius: 0;
     border-bottom-left-radius: 0;
-  }
-
-  #resize-grow-width .icon::before,
-  :host([dir='rtl']) #resize-shrink-width .icon::before {
-    content: var(--lumo-icons-angle-right);
+    --icon: var(--lumo-icons-angle-right);
   }
 
   #resize-grow-height {
     border-top-right-radius: 0;
     border-top-left-radius: 0;
-  }
-
-  #resize-grow-height .icon::before {
-    content: var(--lumo-icons-angle-down);
+    --icon: var(--lumo-icons-angle-down);
   }
 
   #resize-shrink-height {
     border-bottom-right-radius: 0;
     border-bottom-left-radius: 0;
-  }
-
-  #resize-shrink-height .icon::before {
-    content: var(--lumo-icons-angle-up);
+    --icon: var(--lumo-icons-angle-up);
   }
 `;
 
