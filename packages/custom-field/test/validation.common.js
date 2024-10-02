@@ -1,7 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fire, fixtureSync, nextRender } from '@vaadin/testing-helpers';
+import { fire, fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import '../src/vaadin-custom-field.js';
 
 describe('validation', () => {
   let customField;
@@ -37,8 +36,9 @@ describe('validation', () => {
       expect(validateSpy.calledOnce).to.be.true;
     });
 
-    it('should validate on value change', () => {
+    it('should validate on value change', async () => {
       customField.value = 'foo,1';
+      await nextUpdate(customField);
       expect(validateSpy.calledOnce).to.be.true;
     });
 
