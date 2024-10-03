@@ -9,7 +9,7 @@ export declare function ConfirmDialogBaseMixin<T extends Constructor<HTMLElement
   base: T,
 ): Constructor<ConfirmDialogBaseMixinClass> & T;
 
-export declare class ConfirmDialogBaseMixin {
+export declare class ConfirmDialogBaseMixinClass {
   /**
    * Set the `aria-label` attribute for assistive technologies like
    * screen readers. An empty string value for this property (the
