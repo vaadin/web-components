@@ -45,7 +45,7 @@ const dashboardWidgetAndSection = css`
   }
 
   /* Buttons styling */
-  vaadin-button {
+  vaadin-dashboard-button {
     font-family: 'lumo-icons';
     font-size: var(--lumo-icon-size-s);
   }
@@ -55,9 +55,9 @@ const dashboardWidgetAndSection = css`
     content: var(--icon);
   }
 
-  :host(:not([selected])) *:not(.mode-controls) vaadin-button,
-  :host([move-mode]) *:not(.mode-controls) vaadin-button,
-  :host([resize-mode]) *:not(.mode-controls) vaadin-button {
+  :host(:not([selected])) *:not(.mode-controls) vaadin-dashboard-button,
+  :host([move-mode]) *:not(.mode-controls) vaadin-dashboard-button,
+  :host([resize-mode]) *:not(.mode-controls) vaadin-dashboard-button {
     color: var(--lumo-disabled-text-color);
   }
 
@@ -104,7 +104,7 @@ const dashboardWidgetAndSection = css`
   }
 
   /* Mode controls styling */
-  .mode-controls vaadin-button[focused] {
+  .mode-controls vaadin-dashboard-button[focused] {
     z-index: 3;
   }
 
