@@ -98,10 +98,9 @@ describe('validation', () => {
       expect(customField.invalid).to.be.true;
     });
 
-    it('should validate when setting required to false', async () => {
+    it('should validate when setting required to false', () => {
       const validateSpy = sinon.spy(customField, 'validate');
       customField.required = false;
-      await nextUpdate(customField);
       expect(validateSpy).to.be.calledOnce;
     });
   });
