@@ -1,4 +1,4 @@
-import { expect } from '@vaadin/chai-plugins';
+import { expect } from '@esm-bundle/chai';
 import { fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 
