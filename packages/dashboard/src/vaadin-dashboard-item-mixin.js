@@ -8,6 +8,7 @@
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
+import './vaadin-dashboard-button.js';
 import { html } from 'lit';
 import { FocusTrapController } from '@vaadin/a11y-base/src/focus-trap-controller.js';
 import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
@@ -92,7 +93,7 @@ export const DashboardItemMixin = (superClass) =>
 
     /** @private */
     __renderDragHandle() {
-      return html`<vaadin-button
+      return html`<vaadin-dashboard-button
         id="drag-handle"
         draggable="true"
         class="drag-handle"
@@ -104,12 +105,12 @@ export const DashboardItemMixin = (superClass) =>
         @click="${() => this.__enterMoveMode()}"
       >
         <div class="icon"></div>
-      </vaadin-button>`;
+      </vaadin-dashboard-button>`;
     }
 
     /** @private */
     __renderRemoveButton() {
-      return html`<vaadin-button
+      return html`<vaadin-dashboard-button
         aria-label="${this.__i18n.remove}"
         title="${this.__i18n.remove}"
         id="remove-button"
@@ -119,7 +120,7 @@ export const DashboardItemMixin = (superClass) =>
         @click="${() => fireRemove(this)}"
       >
         <div class="icon"></div>
-      </vaadin-button>`;
+      </vaadin-dashboard-button>`;
     }
 
     /** @private */
@@ -140,7 +141,7 @@ export const DashboardItemMixin = (superClass) =>
 
     /** @private */
     __renderResizeHandle() {
-      return html`<vaadin-button
+      return html`<vaadin-dashboard-button
         aria-label="${this.__i18n.resize}"
         title="${this.__i18n.resize}"
         id="resize-handle"
@@ -151,7 +152,7 @@ export const DashboardItemMixin = (superClass) =>
         @click="${() => this.__enterResizeMode()}"
       >
         <div class="icon"></div>
-      </vaadin-button>`;
+      </vaadin-dashboard-button>`;
     }
 
     /** @private */
@@ -162,7 +163,7 @@ export const DashboardItemMixin = (superClass) =>
         .hidden="${!this.__moveMode}"
         @pointerdown="${(e) => e.preventDefault()}"
       >
-        <vaadin-button
+        <vaadin-dashboard-button
           theme="primary icon"
           aria-label="${this.__i18n.moveBackward}"
           title="${this.__i18n.moveBackward}"
@@ -171,8 +172,8 @@ export const DashboardItemMixin = (superClass) =>
           part="move-backward-button"
         >
           <div class="icon"></div>
-        </vaadin-button>
-        <vaadin-button
+        </vaadin-dashboard-button>
+        <vaadin-dashboard-button
           theme="primary icon large"
           aria-label="${this.__i18n.moveApply}"
           title="${this.__i18n.moveApply}"
@@ -181,8 +182,8 @@ export const DashboardItemMixin = (superClass) =>
           part="move-apply-button"
         >
           <div class="icon"></div>
-        </vaadin-button>
-        <vaadin-button
+        </vaadin-dashboard-button>
+        <vaadin-dashboard-button
           theme="primary icon"
           aria-label="${this.__i18n.moveForward}"
           title="${this.__i18n.moveForward}"
@@ -191,7 +192,7 @@ export const DashboardItemMixin = (superClass) =>
           part="move-forward-button"
         >
           <div class="icon"></div>
-        </vaadin-button>
+        </vaadin-dashboard-button>
       </div>`;
     }
 
@@ -205,7 +206,7 @@ export const DashboardItemMixin = (superClass) =>
         .hidden="${!this.__resizeMode}"
         @pointerdown="${(e) => e.preventDefault()}"
       >
-        <vaadin-button
+        <vaadin-dashboard-button
           theme="primary icon large"
           aria-label="${this.__i18n.resizeApply}"
           title="${this.__i18n.resizeApply}"
@@ -214,8 +215,8 @@ export const DashboardItemMixin = (superClass) =>
           part="resize-apply-button"
         >
           <div class="icon"></div>
-        </vaadin-button>
-        <vaadin-button
+        </vaadin-dashboard-button>
+        <vaadin-dashboard-button
           theme="primary icon"
           aria-label="${this.__i18n.resizeShrinkWidth}"
           title="${this.__i18n.resizeShrinkWidth}"
@@ -224,8 +225,8 @@ export const DashboardItemMixin = (superClass) =>
           part="resize-shrink-width-button"
         >
           <div class="icon"></div>
-        </vaadin-button>
-        <vaadin-button
+        </vaadin-dashboard-button>
+        <vaadin-dashboard-button
           theme="primary icon"
           aria-label="${this.__i18n.resizeGrowWidth}"
           title="${this.__i18n.resizeGrowWidth}"
@@ -234,8 +235,8 @@ export const DashboardItemMixin = (superClass) =>
           part="resize-grow-width-button"
         >
           <div class="icon"></div>
-        </vaadin-button>
-        <vaadin-button
+        </vaadin-dashboard-button>
+        <vaadin-dashboard-button
           theme="primary icon"
           aria-label="${this.__i18n.resizeShrinkHeight}"
           title="${this.__i18n.resizeShrinkHeight}"
@@ -245,8 +246,8 @@ export const DashboardItemMixin = (superClass) =>
           .hidden="${!hasMinRowHeight}"
         >
           <div class="icon"></div>
-        </vaadin-button>
-        <vaadin-button
+        </vaadin-dashboard-button>
+        <vaadin-dashboard-button
           theme="primary icon"
           aria-label="${this.__i18n.resizeGrowHeight}"
           title="${this.__i18n.resizeGrowHeight}"
@@ -256,7 +257,7 @@ export const DashboardItemMixin = (superClass) =>
           .hidden="${!hasMinRowHeight}"
         >
           <div class="icon"></div>
-        </vaadin-button>
+        </vaadin-dashboard-button>
       </div>`;
     }
 

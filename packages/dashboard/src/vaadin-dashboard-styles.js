@@ -36,7 +36,7 @@ export const dashboardWidgetAndSectionStyles = css`
     overflow: hidden;
   }
 
-  vaadin-button {
+  vaadin-dashboard-button {
     z-index: 1;
   }
 
