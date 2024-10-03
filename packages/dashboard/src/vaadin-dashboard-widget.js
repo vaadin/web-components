@@ -254,7 +254,9 @@ class DashboardWidget extends DashboardItemMixin(
   /** @protected */
   ready() {
     super.ready();
-    this.role ??= 'article';
+    if (!this.hasAttribute('role')) {
+      this.setAttribute('role', 'article');
+    }
   }
 
   /** @private */

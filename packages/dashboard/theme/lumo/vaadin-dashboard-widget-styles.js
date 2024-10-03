@@ -27,7 +27,7 @@ const dashboardWidgetAndSection = css`
     outline: none;
   }
 
-  :host([focused])::before {
+  :host::before {
     content: '';
     display: block;
     position: absolute;
@@ -35,6 +35,9 @@ const dashboardWidgetAndSection = css`
     border-radius: var(--lumo-border-radius-l);
     pointer-events: none;
     margin: calc(var(--_focus-ring-spacing-offset) * -1);
+  }
+
+  :host([focused])::before {
     outline: var(--_focus-ring-width) solid var(--_focus-ring-color);
   }
 

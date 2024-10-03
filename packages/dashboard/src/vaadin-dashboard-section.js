@@ -204,7 +204,9 @@ class DashboardSection extends DashboardItemMixin(
   /** @protected */
   ready() {
     super.ready();
-    this.role ??= 'section';
+    if (!this.hasAttribute('role')) {
+      this.setAttribute('role', 'section');
+    }
   }
 }
 
