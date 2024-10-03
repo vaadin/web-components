@@ -191,6 +191,21 @@ export const CustomFieldMixin = (superClass) =>
     }
 
     /**
+     * Override an observer from `FieldMixin`
+     * to validate when required is removed.
+     *
+     * @protected
+     * @override
+     */
+    _requiredChanged(required) {
+      super._requiredChanged(required);
+
+      if (required === false) {
+        this.validate();
+      }
+    }
+
+    /**
      * @param {KeyboardEvent} e
      * @protected
      * @override
