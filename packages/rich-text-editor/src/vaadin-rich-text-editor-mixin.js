@@ -703,10 +703,26 @@ export const RichTextEditorMixin = (superClass) =>
      */
     dangerouslySetHtmlValue(htmlValue) {
       if (!this._editor) {
-        // The editor isn't ready yet, store the value for later
-        this.__pendingHtmlValue = htmlValue;
-        // Clear a possible value to prevent it from clearing the pending htmlValue once the editor property is set
-        this.value = '';
+        this.__savePendingHtmlValue(htmlValue);
+
+        return;
+      }
+
+      // In Firefox, the styles are not properly computed when the element is placed
+      // in a Lit component, as the element is first attached to the DOM and then
+      // the shadowRoot is initialized. This causes the `hmlValue` to not be correctly
+      // parsed into the delta format used by Quill. To work around this, we check
+      // if the display property is set and if not, we wait for the element to intersect
+      // with the viewport before trying to set the value again.
+      if (!getComputedStyle(this).display) {
+        this.__savePendingHtmlValue(htmlValue);
+        const observer = new IntersectionObserver(() => {
+          if (getComputedStyle(this).display) {
+            this.__flushPendingHtmlValue();
+            observer.disconnect();
+          }
+        });
+        observer.observe(this);
         return;
       }
 
@@ -731,6 +747,14 @@ export const RichTextEditorMixin = (superClass) =>
       });
 
       this._editor.setContents(deltaFromHtml, SOURCE.API);
+    }
+
+    /** @private */
+    __savePendingHtmlValue(htmlValue) {
+      // The editor isn't ready yet, store the value for later
+      this.__pendingHtmlValue = htmlValue;
+      // Clear a possible value to prevent it from clearing the pending htmlValue once the editor property is set
+      this.value = '';
     }
 
     /** @private */
