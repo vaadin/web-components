@@ -79,3 +79,5 @@ class SelectListBox extends ListMixin(ThemableMixin(DirMixin(ControllerMixin(Pol
 }
 
 defineCustomElement(SelectListBox);
+
+export { SelectListBox };
