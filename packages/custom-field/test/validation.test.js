@@ -97,5 +97,11 @@ describe('validation', () => {
       fire(customField.inputs[0], 'change');
       expect(customField.invalid).to.be.true;
     });
+
+    it('should validate when setting required to false', () => {
+      const validateSpy = sinon.spy(customField, 'validate');
+      customField.required = false;
+      expect(validateSpy).to.be.calledOnce;
+    });
   });
 });
