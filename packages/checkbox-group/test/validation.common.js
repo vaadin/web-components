@@ -160,6 +160,11 @@ describe('validation', () => {
       expect(group.checkValidity()).to.be.true;
     });
 
+    it('should fail validation when value set to null', () => {
+      group.value = null;
+      expect(group.checkValidity()).to.be.false;
+    });
+
     it('should be valid after selecting a checkbox', async () => {
       checkboxes[0].click();
       await nextUpdate(group);

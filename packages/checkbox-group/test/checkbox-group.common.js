@@ -141,6 +141,25 @@ describe('vaadin-checkbox-group', () => {
       expect(group.value).to.include('new');
     });
 
+    it('should add dynamically added checked checkbox value when group value is null', async () => {
+      group.value = null;
+      const checkbox = document.createElement('vaadin-checkbox');
+      checkbox.value = 'new';
+      checkbox.checked = true;
+      group.appendChild(checkbox);
+      await nextFrame();
+      expect(group.value).to.eql(['new']);
+    });
+
+    it('should ignore dynamically added unchecked checkbox value when group value is null', async () => {
+      group.value = null;
+      const checkbox = document.createElement('vaadin-checkbox');
+      checkbox.value = 'new';
+      group.appendChild(checkbox);
+      await nextFrame();
+      expect(group.value).to.be.null;
+    });
+
     it('should not add duplicate values when added checked checkbox already included in value', async () => {
       const checkbox = document.createElement('vaadin-checkbox');
       checkbox.value = 'new';
