@@ -21,6 +21,8 @@
   "type": "module",
   "files": [
     "src",
+    "!src/vaadin-lit-list-box.d.ts",
+    "!src/vaadin-lit-list-box.js",
     "theme",
     "vaadin-*.d.ts",
     "vaadin-*.js",
