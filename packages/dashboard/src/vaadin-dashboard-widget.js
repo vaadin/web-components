@@ -34,15 +34,13 @@ import { getDefaultI18n } from './vaadin-dashboard-item-mixin.js';
  *
  * Slot name        | Description
  * -----------------|-------------
- * `title`          | A slot for the widget title. Overrides the `widgetTitle` property.
  * `header-content` | A slot for the widget header content.
  *
  * #### Example
  *
  * ```html
- * <vaadin-dashboard-widget>
+ * <vaadin-dashboard-widget widget-title="Title">
  *   <span slot="header-content">Header</span>
- *   <span slot="title">Title</span>
  *   <div>Content</div>
  * </vaadin-dashboard-widget>
  * ```

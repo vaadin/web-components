@@ -23,19 +23,10 @@ import { DashboardItemMixin } from './vaadin-dashboard-item-mixin.js';
  * </vaadin-dashboard-section>
  * ```
  *
- * ### Customization
- *
- * You can configure the item by using `slot` names.
- *
- * Slot name | Description
- * ----------|-------------
- * `title`   | A slot for the section title. Overrides the `sectionTitle` property.
- *
  * #### Example
  *
  * ```html
- * <vaadin-dashboard-section>
- *   <span slot="title">Section Title</span>
+ * <vaadin-dashboard-section section-title="Section title">
  *   <vaadin-dashboard-widget widget-title="Widget 1"></vaadin-dashboard-widget>
  *   <vaadin-dashboard-widget widget-title="Widget 2"></vaadin-dashboard-widget>
  * </vaadin-dashboard-section>

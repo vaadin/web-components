@@ -50,34 +50,6 @@ describe('dashboard section', () => {
   });
 
   describe('title', () => {
-    it('should not override custom title element', async () => {
-      const title = document.createElement('div');
-      title.id = 'custom-title';
-      title.slot = 'title';
-      title.textContent = 'Custom title';
-      section.appendChild(title);
-      await nextFrame();
-
-      section.sectionTitle = 'New title';
-      await nextFrame();
-
-      const titles = section.querySelectorAll('[slot="title"]');
-      expect(titles.length).to.eql(1);
-      expect(titles[0]).to.eql(title);
-      expect(titles[0].textContent).to.eql('Custom title');
-    });
-
-    it('should not throw when initialized with a custom title', async () => {
-      expect(() => {
-        fixtureSync(`
-          <vaadin-dashboard-section>
-            <div slot="title">Custom title</div>
-          </vaadin-dashboard-section>
-        `);
-      }).not.to.throw(Error);
-      await nextFrame();
-    });
-
     it('should empty title element when cleared', async () => {
       section.sectionTitle = 'New title';
       await nextFrame();
