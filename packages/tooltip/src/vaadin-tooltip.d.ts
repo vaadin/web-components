@@ -65,7 +65,7 @@ declare class Tooltip extends TooltipMixin(ThemePropertyMixin(ControllerMixin(El
    * Sets the default hover delay to be used by all tooltip instances,
    * except for those that have hover delay configured using property.
    */
-  static setDefaultHoverDelay(delay: number): void;
+  static setDefaultHoverDelay(hoverDelay: number): void;
 }
 
 declare global {
