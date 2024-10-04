@@ -4,12 +4,12 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
-import { FocusMixin } from '@vaadin/a11y-base/src/focus-mixin.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { OverflowController } from '@vaadin/component-base/src/overflow-controller.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { ScrollerMixin } from './vaadin-scroller-mixin';
 
 /**
  * `<vaadin-scroller>` provides a simple way to enable scrolling when its content is overflowing.
@@ -32,9 +32,9 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * @mixes ThemableMixin
  * @mixes ControllerMixin
  * @mixes ElementMixin
- * @mixes FocusMixin
+ * @mixes ScrollerMixin
  */
-class Scroller extends FocusMixin(ElementMixin(ControllerMixin(ThemableMixin(PolymerElement)))) {
+class Scroller extends ScrollerMixin(ElementMixin(ControllerMixin(ThemableMixin(PolymerElement)))) {
   static get template() {
     return html`
       <style>
@@ -68,47 +68,12 @@ class Scroller extends FocusMixin(ElementMixin(ControllerMixin(ThemableMixin(Pol
     return 'vaadin-scroller';
   }
 
-  static get properties() {
-    return {
-      /**
-       * This property indicates the scroll direction. Supported values are `vertical`, `horizontal`, `none`.
-       * When `scrollDirection` is undefined scrollbars will be shown in both directions.
-       * @attr {string} scroll-direction
-       */
-      scrollDirection: {
-        type: String,
-        reflectToAttribute: true,
-      },
-
-      /**
-       * Indicates whether the element can be focused and where it participates in sequential keyboard navigation.
-       * @protected
-       */
-      tabindex: {
-        type: Number,
-        value: 0,
-        reflectToAttribute: true,
-      },
-    };
-  }
-
   /** @protected */
   ready() {
     super.ready();
 
     this.__overflowController = new OverflowController(this);
     this.addController(this.__overflowController);
-  }
-
-  /**
-   * Override method inherited from `FocusMixin` to mark the scroller as focused
-   * only when the host is focused.
-   * @param {Event} event
-   * @return {boolean}
-   * @protected
-   */
-  _shouldSetFocus(event) {
-    return event.target === this;
   }
 }
 
