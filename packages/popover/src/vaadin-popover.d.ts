@@ -93,7 +93,7 @@ declare class Popover extends PopoverPositionMixin(
    * Sets the default hover delay to be used by all popover instances,
    * except for those that have hover delay configured using property.
    */
-  static setDefaultHoverDelay(delay: number): void;
+  static setDefaultHoverDelay(hoverDelay: number): void;
 
   /**
    * String used to label the overlay to screen reader users.
