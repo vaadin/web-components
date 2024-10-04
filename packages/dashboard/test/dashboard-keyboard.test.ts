@@ -79,6 +79,7 @@ describe('dashboard - keyboard interaction', () => {
     await sendKeys({ press: 'Space' });
     expect(widget.hasAttribute('focused')).to.be.true;
     expect(widget.hasAttribute('selected')).to.be.true;
+    expect(dashboard.hasAttribute('item-selected')).to.be.true;
   });
 
   it('should dispatch a selection event', async () => {
@@ -125,6 +126,7 @@ describe('dashboard - keyboard interaction', () => {
       await sendKeys({ press: 'Escape' });
       expect(widget.hasAttribute('selected')).to.be.false;
       expect(widget.hasAttribute('focused')).to.be.true;
+      expect(dashboard.hasAttribute('item-selected')).to.be.false;
     });
 
     it('should dispatch a selection event', async () => {

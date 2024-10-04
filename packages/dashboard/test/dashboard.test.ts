@@ -47,7 +47,8 @@ describe('dashboard', () => {
     await nextFrame();
   });
 
-  it('should render a widget for each item', () => {
+  it('should render a widget for each item', async () => {
+    await nextFrame();
     const widgets = [getElementFromCell(dashboard, 0, 0), getElementFromCell(dashboard, 0, 1)];
     widgets.forEach((widget, index) => {
       expect(widget).to.be.ok;

@@ -15,6 +15,7 @@ import {
   getResizeHandle,
   getResizeShrinkHeightButton,
   getResizeShrinkWidthButton,
+  getTitleElement,
 } from './helpers.js';
 
 describe('dashboard widget', () => {
@@ -42,61 +43,15 @@ describe('dashboard widget', () => {
       expect(widget.getAttribute('role')).to.eql('region');
     });
 
-    it('should add title id to aria-labelledby attribute when using property', async () => {
-      widget.widgetTitle = 'Custom title';
-      await nextFrame();
-      const title = widget.querySelector('[slot="title"]');
-      expect(widget.getAttribute('aria-labelledby')).equal(title?.id);
-    });
-
-    it('should add title id to aria-labelledby attribute when using slot', async () => {
-      const title = document.createElement('div');
-      title.id = 'custom-title';
-      title.slot = 'title';
-      title.textContent = 'Custom title';
-      widget.appendChild(title);
-
-      await nextFrame();
-      expect(widget.getAttribute('aria-labelledby')).equal(title?.id);
-    });
-
     it('should have text content for the title', async () => {
       widget.widgetTitle = 'Custom title';
       await nextFrame();
-      const title = widget.querySelector('[slot="title"]');
+      const title = getTitleElement(widget);
       expect(title?.textContent).equal('Custom title');
     });
   });
 
   describe('title', () => {
-    it('should not override custom title element', async () => {
-      const title = document.createElement('div');
-      title.id = 'custom-title';
-      title.slot = 'title';
-      title.textContent = 'Custom title';
-      widget.appendChild(title);
-      await nextFrame();
-
-      widget.widgetTitle = 'New title';
-      await nextFrame();
-
-      const titles = widget.querySelectorAll('[slot="title"]');
-      expect(titles.length).to.eql(1);
-      expect(titles[0]).to.eql(title);
-      expect(titles[0].textContent).to.eql('Custom title');
-    });
-
-    it('should not throw when initialized with a custom title', async () => {
-      expect(() => {
-        fixtureSync(`
-          <vaadin-dashboard-widget>
-            <div slot="title">Custom title</div>
-          </vaadin-dashboard-widget>
-        `);
-      }).not.to.throw(Error);
-      await nextFrame();
-    });
-
     it('should empty title element when cleared', async () => {
       widget.widgetTitle = 'New title';
       await nextFrame();
@@ -104,7 +59,7 @@ describe('dashboard widget', () => {
       widget.widgetTitle = null;
       await nextFrame();
 
-      const title = widget.querySelector('[slot="title"]');
+      const title = getTitleElement(widget);
       expect(title?.textContent).to.eql('');
     });
   });
@@ -201,7 +156,7 @@ describe('widget title level', () => {
     const widget = fixtureSync(`<vaadin-dashboard-widget widget-title="foo"></vaadin-dashboard-widget>`);
     await nextFrame();
 
-    const title = widget.querySelector('[slot="title"]');
+    const title = getTitleElement(widget as DashboardWidget);
     expect(title?.localName).to.equal('h2');
   });
 
@@ -209,7 +164,7 @@ describe('widget title level', () => {
     const section = fixtureSync(`<vaadin-dashboard-section section-title="foo"></vaadin-dashboard-section>`);
     await nextFrame();
 
-    const title = section.querySelector('[slot="title"]');
+    const title = getTitleElement(section as DashboardSection);
     expect(title?.localName).to.equal('h2');
   });
 
@@ -221,7 +176,7 @@ describe('widget title level', () => {
     `).querySelector('vaadin-dashboard-widget')!;
     await nextFrame();
 
-    const title = widget.querySelector('[slot="title"]');
+    const title = getTitleElement(widget);
     expect(title?.localName).to.equal('h3');
   });
 
@@ -239,7 +194,7 @@ describe('widget title level', () => {
     wrapper.appendChild(widget);
     await nextFrame();
 
-    const title = widget.querySelector('[slot="title"]');
+    const title = getTitleElement(widget);
     expect(title?.localName).to.equal('h2');
   });
 
@@ -256,7 +211,7 @@ describe('widget title level', () => {
     section.appendChild(widget);
     await nextFrame();
 
-    const title = widget.querySelector('[slot="title"]');
+    const title = getTitleElement(widget);
     expect(title?.localName).to.equal('h3');
   });
 
@@ -272,7 +227,7 @@ describe('widget title level', () => {
     customElements.define('my-custom-section', MyCustomSection);
     await nextFrame();
 
-    const title = widget.querySelector('[slot="title"]');
+    const title = getTitleElement(widget);
     expect(title?.localName).to.equal('h3');
   });
 
@@ -288,7 +243,7 @@ describe('widget title level', () => {
     customElements.define('my-custom-widget', MyCustomWidget);
     await nextFrame();
 
-    const title = widget.querySelector('[slot="title"]');
+    const title = getTitleElement(widget as DashboardWidget);
     expect(title?.localName).to.equal('h3');
   });
 
@@ -308,21 +263,7 @@ describe('widget title level', () => {
     section.appendChild(wrapper);
     await nextFrame();
 
-    const title = widget.querySelector('[slot="title"]');
+    const title = getTitleElement(widget);
     expect(title?.localName).to.equal('h3');
-  });
-
-  it('should not replace an explicitly defined widget title element', async () => {
-    const widget = fixtureSync(`
-      <vaadin-dashboard-section>
-        <vaadin-dashboard-widget>
-          <h2 slot="title">foo</h2>
-        </vaadin-dashboard-widget>
-      </vaadin-dashboard-section>
-    `).querySelector('vaadin-dashboard-widget')!;
-    await nextFrame();
-
-    const title = widget.querySelector('[slot="title"]');
-    expect(title?.localName).to.equal('h2');
   });
 });

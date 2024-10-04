@@ -10,6 +10,7 @@ import {
   getColumnWidths,
   getRowHeights,
   getScrollingContainer,
+  getTitleElement,
   onceResized,
   setColspan,
   setMaximumColumnCount,
@@ -24,9 +25,11 @@ const [defaultSpacing, defaultMinimumColumnWidth] = (() => {
   const div = document.createElement('div');
   document.body.appendChild(div);
   div.style.width = '1rem';
-  const width = getComputedStyle(div).width;
+  const minColWidth = div.offsetWidth * 25;
+  div.style.width = 'var(--lumo-space-xl)';
+  const spacing = div.offsetWidth;
   div.remove();
-  return [parseFloat(width), parseFloat(width) * 25];
+  return [spacing, minColWidth];
 })();
 
 describe('dashboard layout', () => {
@@ -509,7 +512,7 @@ describe('dashboard layout', () => {
     });
 
     it('should not use minimum row height for section header row', async () => {
-      const title = section.querySelector<HTMLHeadingElement>('[slot="title"]')!;
+      const title = getTitleElement(section);
       title.style.height = '100%';
 
       const titleHeight = title.offsetHeight;

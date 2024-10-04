@@ -31,6 +31,12 @@ export class WidgetReorderController {
     }
 
     this.__draggedElement = e.target;
+
+    // Avoid having the selection/focus outline styles in the drag image
+    this.__draggedElement.__exitMode();
+    this.__draggedElement.__focused = false;
+    this.__draggedElement.__selected = false;
+
     this.draggedItem = getElementItem(this.__draggedElement);
 
     // Set the drag image to the dragged element
