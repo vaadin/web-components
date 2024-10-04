@@ -123,12 +123,7 @@ export const TabSheetMixin = (superClass) =>
 
     /** @override */
     static get delegateProps() {
-      return ['selected'];
-    }
-
-    /** @override */
-    static get delegateAttrs() {
-      return ['theme'];
+      return ['selected', '_theme'];
     }
 
     /** @protected */
@@ -169,6 +164,25 @@ export const TabSheetMixin = (superClass) =>
           }),
         ).filter((node) => node.nodeType === Node.ELEMENT_NODE);
       });
+    }
+
+    /**
+     * Override method from `DelegateStateMixin` to set delegate `theme`
+     * using attribute instead of property (needed for the Lit version).
+     * @protected
+     * @override
+     */
+    _delegateProperty(name, value) {
+      if (!this.stateTarget) {
+        return;
+      }
+
+      if (name === '_theme') {
+        this._delegateAttribute('theme', value);
+        return;
+      }
+
+      super._delegateProperty(name, value);
     }
 
     /**
