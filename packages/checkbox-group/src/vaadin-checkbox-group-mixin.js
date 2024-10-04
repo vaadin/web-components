@@ -118,7 +118,7 @@ export const CheckboxGroupMixin = (superclass) =>
      * @return {boolean}
      */
     checkValidity() {
-      return !this.required || this.value.length > 0;
+      return !this.required || Boolean(this.value && this.value.length > 0);
     }
 
     /**
@@ -165,7 +165,7 @@ export const CheckboxGroupMixin = (superclass) =>
 
       if (checkbox.checked) {
         this.__addCheckboxToValue(checkbox.value);
-      } else if (this.value.includes(checkbox.value)) {
+      } else if (this.value && this.value.includes(checkbox.value)) {
         checkbox.checked = true;
       }
     }
@@ -215,7 +215,9 @@ export const CheckboxGroupMixin = (superclass) =>
      * @private
      */
     __addCheckboxToValue(value) {
-      if (!this.value.includes(value)) {
+      if (!this.value) {
+        this.value = [value];
+      } else if (!this.value.includes(value)) {
         this.value = [...this.value, value];
       }
     }
@@ -225,7 +227,7 @@ export const CheckboxGroupMixin = (superclass) =>
      * @private
      */
     __removeCheckboxFromValue(value) {
-      if (this.value.includes(value)) {
+      if (this.value && this.value.includes(value)) {
         this.value = this.value.filter((v) => v !== value);
       }
     }
@@ -245,20 +247,20 @@ export const CheckboxGroupMixin = (superclass) =>
     }
 
     /**
-     * @param {string | null | undefined} value
-     * @param {string | null | undefined} oldValue
+     * @param {string[] | null | undefined} value
+     * @param {string[] | null | undefined} oldValue
      * @private
      */
     __valueChanged(value, oldValue) {
       // Setting initial value to empty array, skip validation
-      if (value.length === 0 && oldValue === undefined) {
+      if (value && value.length === 0 && oldValue === undefined) {
         return;
       }
 
-      this.toggleAttribute('has-value', value.length > 0);
+      this.toggleAttribute('has-value', value && value.length > 0);
 
       this.__checkboxes.forEach((checkbox) => {
-        checkbox.checked = value.includes(checkbox.value);
+        checkbox.checked = value && value.includes(checkbox.value);
       });
 
       if (oldValue !== undefined) {
