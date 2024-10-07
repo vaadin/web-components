@@ -10,7 +10,7 @@
  */
 export const WRAPPER_LOCAL_NAME = 'vaadin-dashboard-widget-wrapper';
 
-// Wrapper proeprties that should be synchronized as widget/section attributes
+// Wrapper properties that should be synchronized as widget/section attributes
 export const SYNCHRONIZED_ATTRIBUTES = ['editable', 'dragging', 'first-child', 'last-child'];
 
 /**

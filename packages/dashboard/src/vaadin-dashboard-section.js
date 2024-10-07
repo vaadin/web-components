@@ -9,7 +9,6 @@
  * license.
  */
 import { html, LitElement } from 'lit';
-import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
@@ -68,12 +67,9 @@ import { hasWidgetWrappers } from './vaadin-dashboard-styles.js';
  * @extends HTMLElement
  * @mixes ElementMixin
  * @mixes ThemableMixin
- * @mixes ControllerMixin
  * @mixes DashboardItemMixin
  */
-class DashboardSection extends DashboardItemMixin(
-  ControllerMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElement)))),
-) {
+class DashboardSection extends DashboardItemMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElement)))) {
   static get is() {
     return 'vaadin-dashboard-section';
   }

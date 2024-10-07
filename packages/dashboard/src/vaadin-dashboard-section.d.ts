@@ -8,7 +8,6 @@
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
-import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin';
 import { DashboardItemMixin } from './vaadin-dashboard-item-mixin.js';
@@ -59,7 +58,7 @@ import { DashboardItemMixin } from './vaadin-dashboard-item-mixin.js';
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  */
-declare class DashboardSection extends DashboardItemMixin(ControllerMixin(ElementMixin(ThemableMixin(HTMLElement)))) {
+declare class DashboardSection extends DashboardItemMixin(ElementMixin(ThemableMixin(HTMLElement))) {
   /**
    * The title of the section
    *

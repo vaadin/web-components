@@ -11,7 +11,6 @@
 import './vaadin-dashboard-widget.js';
 import './vaadin-dashboard-section.js';
 import { html, LitElement } from 'lit';
-import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
@@ -102,7 +101,7 @@ import { WidgetResizeController } from './widget-resize-controller.js';
  * @mixes DashboardLayoutMixin
  * @mixes ThemableMixin
  */
-class Dashboard extends ControllerMixin(DashboardLayoutMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElement))))) {
+class Dashboard extends DashboardLayoutMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElement)))) {
   static get is() {
     return 'vaadin-dashboard';
   }
