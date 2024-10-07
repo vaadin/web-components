@@ -534,7 +534,8 @@ class DateTimePicker extends FieldMixin(DisabledMixin(FocusMixin(ThemableMixin(E
     // Do not validate when focusout is caused by document
     // losing focus, which happens on browser tab switch.
     if (!focused && document.hasFocus()) {
-      this.__commitValueChange();
+      this.validate();
+      this.__commitPendingValueChange();
     }
   }
 
@@ -574,7 +575,21 @@ class DateTimePicker extends FieldMixin(DisabledMixin(FocusMixin(ThemableMixin(E
   /** @private */
   __changeEventHandler(event) {
     event.stopPropagation();
-    this.__commitValueChange();
+
+    const isAlreadyInvalid = this.invalid;
+    const filledPickers = this.__filledPickers;
+    if (filledPickers.length === 1 && filledPickers[0].checkValidity() && !isAlreadyInvalid) {
+      // Skip if (a) only one picker is filled, (b) its value is valid by itself, and (c) the user
+      // is still interacting with the field. This is to give the user a chance to finish the input
+      // before giving him feedback. However, if the field is already in the invalid state due to
+      // a previous error, proceed to committing the value to get the error message updated.
+      return;
+    }
+
+    if (this.__hasPendingValueChange) {
+      this.validate();
+      this.__commitPendingValueChange();
+    }
   }
 
   /** @private */
@@ -583,8 +598,8 @@ class DateTimePicker extends FieldMixin(DisabledMixin(FocusMixin(ThemableMixin(E
     this.style.pointerEvents = opened ? 'auto' : '';
 
     if (!opened && this.__outsideClickInProcess) {
-      // TODO: Think of how to make it obvious that this path handles outside click
-      this.__commitValueChange();
+      this.validate();
+      this.__commitPendingValueChange();
     }
   }
 
@@ -951,26 +966,7 @@ class DateTimePicker extends FieldMixin(DisabledMixin(FocusMixin(ThemableMixin(E
   }
 
   /** @private */
-  __commitValueChange() {
-    const wasPreviouslyInvalid = this.invalid;
-    const filledPickers = this.__pickers.filter((picker) => !!picker.value);
-    if (
-      filledPickers.length === 1 &&
-      filledPickers[0].checkValidity() &&
-      this.hasAttribute('focused') &&
-      !this.__outsideClickInProcess &&
-      !wasPreviouslyInvalid
-    ) {
-      // Skip if (a) only one picker is filled, (b) its value is valid on its own, and (c) the user
-      // is still interacting with the field. This is to give the user a chance to finish the input
-      // before giving him feedback. However, if the field is already in the invalid state due to
-      // a previous error, validate and commit the value eagarly to ensure the error message
-      // is up to date.
-      return;
-    }
-
-    this.validate();
-
+  __commitPendingValueChange() {
     if (this.__committedValue !== this.value) {
       this.dispatchEvent(new CustomEvent('change', { bubbles: true }));
     } else if (this.__committedUnparsableValue !== this.__unparsableValue) {
@@ -979,6 +975,10 @@ class DateTimePicker extends FieldMixin(DisabledMixin(FocusMixin(ThemableMixin(E
 
     this.__committedValue = this.value;
     this.__committedUnparsableValue = this.__unparsableValue;
+  }
+
+  get __hasPendingValueChange() {
+    return this.__committedValue !== this.value || this.__committedUnparsableValue !== this.__unparsableValue;
   }
 
   // Copied from vaadin-time-picker

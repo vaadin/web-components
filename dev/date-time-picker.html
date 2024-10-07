@@ -16,7 +16,7 @@
         dateTimePicker.addEventListener('unparsable-change', onChange);
 
         function onChange(event) {
-          console.warn(event.type)
+          console.warn(event.type);
         }
 
         function onValidated(event) {
@@ -29,11 +29,13 @@
 
           if (hasBadDatePickerInput || hasBadTimePickerInput) {
             dateTimePicker.errorMessage = 'Invalid date or time';
+          } else if (datePicker.max && datePicker.value > datePicker.max) {
+            dateTimePicker.errorMessage = 'Too late';
           } else if ((datePicker.value || timePicker.value) && !dateTimePicker.value) {
             dateTimePicker.errorMessage = 'Incomplete date or time';
           } else if (dateTimePicker.required && !dateTimePicker.value) {
             dateTimePicker.errorMessage = 'Field is required';
-          } else if (dateTimePicker.max && new Date(dateTimePicker.value) > new Date(dateTimePicker.max)) {
+          } else if (dateTimePicker.max && dateTimePicker.value > dateTimePicker.max) {
             dateTimePicker.errorMessage = 'Too late';
           } else {
             dateTimePicker.errorMessage = '';
