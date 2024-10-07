@@ -417,17 +417,14 @@ class DateTimePicker extends FieldMixin(DisabledMixin(FocusMixin(ThemableMixin(E
   }
 
   /** @private */
-  get __inputs() {
+  get __pickers() {
     return [this.__datePicker, this.__timePicker];
   }
 
   /** @private */
   get __formattedValue() {
-    const [dateValue, timeValue] = this.__inputs.map((picker) => picker.value);
-    if (dateValue && timeValue) {
-      return [dateValue, timeValue].join('T');
-    }
-    return '';
+    const values = this.__pickers.map((picker) => picker.value);
+    return values.every(Boolean) ? values.join('T') : '';
   }
 
   /** @protected */
@@ -724,6 +721,12 @@ class DateTimePicker extends FieldMixin(DisabledMixin(FocusMixin(ThemableMixin(E
     if (timePicker) {
       timePicker.required = required;
     }
+
+    if (this.__oldRequired && !required) {
+      this.validate();
+    }
+
+    this.__oldRequired = required;
   }
 
   /** @private */
@@ -876,13 +879,9 @@ class DateTimePicker extends FieldMixin(DisabledMixin(FocusMixin(ThemableMixin(E
    * @return {boolean}
    */
   checkValidity() {
-    const hasInvalidFields = this.__inputs.some((input) => !input.checkValidity());
-    const hasEmptyFields = this.required && this.__inputs.some((el) => !el.value);
-
-    if (hasInvalidFields || hasEmptyFields) {
-      return false;
-    }
-    return true;
+    const hasInvalidPickers = this.__pickers.some((picker) => !picker.checkValidity());
+    const hasEmptyRequiredPickers = this.required && this.__pickers.some((picker) => !picker.value);
+    return !hasInvalidPickers && !hasEmptyRequiredPickers;
   }
 
   // Copied from vaadin-time-picker
@@ -1014,21 +1013,9 @@ class DateTimePicker extends FieldMixin(DisabledMixin(FocusMixin(ThemableMixin(E
       return;
     }
 
-    const value = this.__formattedValue;
-
-    const [date, time] = value.split('T');
-
     this.__ignoreInputValueChange = true;
     this.__updateTimePickerMinMax();
-
-    if (date && time) {
-      if (value !== this.value) {
-        this.value = value;
-      }
-    } else {
-      this.value = '';
-    }
-
+    this.value = this.__formattedValue;
     this.__ignoreInputValueChange = false;
   }
 

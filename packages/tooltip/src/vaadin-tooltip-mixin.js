@@ -381,7 +381,7 @@ export const TooltipMixin = (superClass) =>
      * Sets the default focus delay to be used by all tooltip instances,
      * except for those that have focus delay configured using property.
      *
-     * @param {number} delay
+     * @param {number} focusDelay
      */
     static setDefaultFocusDelay(focusDelay) {
       defaultFocusDelay = focusDelay != null && focusDelay >= 0 ? focusDelay : DEFAULT_DELAY;
@@ -401,7 +401,7 @@ export const TooltipMixin = (superClass) =>
      * Sets the default hover delay to be used by all tooltip instances,
      * except for those that have hover delay configured using property.
      *
-     * @param {number} delay
+     * @param {number} hoverDelay
      */
     static setDefaultHoverDelay(hoverDelay) {
       defaultHoverDelay = hoverDelay != null && hoverDelay >= 0 ? hoverDelay : DEFAULT_DELAY;
@@ -568,6 +568,10 @@ export const TooltipMixin = (superClass) =>
 
     /** @private */
     __onMouseDown() {
+      if (this.manual) {
+        return;
+      }
+
       this._stateController.close(true);
     }
 

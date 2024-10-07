@@ -2,6 +2,8 @@
 
 A web component for creating tooltips.
 
+[Documentation + Live Demo ↗](https://vaadin.com/docs/latest/components/tooltip)
+
 [![npm version](https://badgen.net/npm/v/@vaadin/tooltip)](https://www.npmjs.com/package/@vaadin/tooltip)
 
 ```html

@@ -627,5 +627,14 @@ describe('form layout', () => {
       await nextRender(container);
       expect(getComputedStyle(itemsList[1]).marginLeft).to.be.equal('0px');
     });
+
+    it('should not update layout when setting hidden to true', async () => {
+      const percent = getParsedWidth(layout.firstElementChild).percentage;
+
+      container.hidden = true;
+      await nextRender();
+
+      expect(getParsedWidth(layout.firstElementChild).percentage).to.be.equal(percent);
+    });
   });
 });

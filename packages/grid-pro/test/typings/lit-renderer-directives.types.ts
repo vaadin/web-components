@@ -1,4 +1,4 @@
-import type { DirectiveResult } from 'lit/directive';
+import type { DirectiveResult } from 'lit/directive.js';
 import type { GridProColumnEditModeLitRenderer, GridProColumnEditModeRendererDirective } from '../../lit.js';
 import { columnEditModeRenderer } from '../../lit.js';
 

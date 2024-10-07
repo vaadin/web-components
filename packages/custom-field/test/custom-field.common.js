@@ -68,6 +68,36 @@ describe('custom field', () => {
         expect(el.value).to.equal('1');
       });
     });
+
+    it('should set has-value when updating values', async () => {
+      customField.inputs.forEach((el) => {
+        el.value = '1';
+        fire(el, 'change');
+      });
+      await nextUpdate(customField);
+      expect(customField.hasAttribute('has-value')).to.be.true;
+    });
+  });
+
+  describe('value set with attribute', () => {
+    beforeEach(async () => {
+      customField = fixtureSync(`
+        <vaadin-custom-field value="01\t25">
+          <input type="number" />
+          <input type="number" />
+        </vaadin-custom-field>
+      `);
+      await nextRender();
+    });
+
+    it('should not reset value set using attribute', () => {
+      expect(customField.value).to.equal('01\t25');
+    });
+
+    it('should apply value set using attribute to inputs', () => {
+      expect(customField.inputs[0].value).to.equal('01');
+      expect(customField.inputs[1].value).to.equal('25');
+    });
   });
 
   describe('aria-required', () => {

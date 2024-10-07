@@ -1028,7 +1028,13 @@ export const GridMixin = (superClass) =>
       // Check if there is a slotted vaadin-tooltip element.
       const tooltip = this._tooltipController.node;
       if (tooltip && tooltip.isConnected) {
-        this._tooltipController.setTarget(event.target);
+        const target = event.target;
+
+        if (!this.__isCellFullyVisible(target)) {
+          return;
+        }
+
+        this._tooltipController.setTarget(target);
         this._tooltipController.setContext(this.getEventContext(event));
 
         // Trigger opening using the corresponding delay.
@@ -1037,6 +1043,33 @@ export const GridMixin = (superClass) =>
           hover: event.type === 'mouseenter',
         });
       }
+    }
+
+    /** @private */
+    __isCellFullyVisible(cell) {
+      if (cell.hasAttribute('frozen') || cell.hasAttribute('frozen-to-end')) {
+        // Frozen cells are always fully visible
+        return true;
+      }
+
+      let { left, right } = this.getBoundingClientRect();
+
+      const frozen = [...cell.parentNode.children].find((cell) => cell.hasAttribute('last-frozen'));
+      if (frozen) {
+        const frozenRect = frozen.getBoundingClientRect();
+        left = this.__isRTL ? left : frozenRect.right;
+        right = this.__isRTL ? frozenRect.left : right;
+      }
+
+      const frozenToEnd = [...cell.parentNode.children].find((cell) => cell.hasAttribute('first-frozen-to-end'));
+      if (frozenToEnd) {
+        const frozenToEndRect = frozenToEnd.getBoundingClientRect();
+        left = this.__isRTL ? frozenToEndRect.right : left;
+        right = this.__isRTL ? right : frozenToEndRect.left;
+      }
+
+      const cellRect = cell.getBoundingClientRect();
+      return cellRect.left >= left && cellRect.right <= right;
     }
 
     /** @protected */

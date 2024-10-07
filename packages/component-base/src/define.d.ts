@@ -7,4 +7,4 @@ export interface CustomElementType extends CustomElementConstructor {
   is: string;
 }
 
-export declare function defineCustomElement(CustomElement: CustomElementConstructor): void;
+export declare function defineCustomElement(CustomElement: CustomElementConstructor, version?: string): void;

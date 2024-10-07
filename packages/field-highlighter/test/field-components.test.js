@@ -399,8 +399,8 @@ describe('field components', () => {
     beforeEach(async () => {
       field = fixtureSync(`<vaadin-date-time-picker></vaadin-date-time-picker>`);
       FieldHighlighter.init(field);
-      date = field.__inputs[0];
-      time = field.__inputs[1];
+      date = field.querySelector('vaadin-date-picker');
+      time = field.querySelector('vaadin-time-picker');
       overlay = field.$.overlay;
       showSpy = sinon.spy();
       hideSpy = sinon.spy();

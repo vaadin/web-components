@@ -65,8 +65,6 @@ export const InlineEditingMixin = (superClass) =>
       this.__boundItemPropertyChanged = this._onItemPropertyChanged.bind(this);
       this.__boundEditorFocusOut = this._onEditorFocusOut.bind(this);
       this.__boundEditorFocusIn = this._onEditorFocusIn.bind(this);
-      this.__boundCancelCellSwitch = this._setCancelCellSwitch.bind(this);
-      this.__boundGlobalFocusIn = this._onGlobalFocusIn.bind(this);
 
       this._addEditColumnListener('mousedown', (e) => {
         // Prevent grid from resetting navigating state
@@ -305,30 +303,34 @@ export const InlineEditingMixin = (superClass) =>
     }
 
     /** @private */
-    _onEditorFocusOut() {
+    _onEditorFocusOut(event) {
+      if (this.__shouldIgnoreFocusOut(event)) {
+        return;
+      }
+
       // Schedule stop on editor component focusout
       this._debouncerStopEdit = Debouncer.debounce(this._debouncerStopEdit, animationFrame, this._stopEdit.bind(this));
     }
 
     /** @private */
-    _onEditorFocusIn() {
-      this._cancelStopEdit();
+    __shouldIgnoreFocusOut(event) {
+      const edited = this.__edited;
+      if (edited) {
+        const { cell, column } = this.__edited;
+        const editor = column._getEditorComponent(cell);
+
+        const path = event.composedPath();
+        const nodes = path.slice(0, path.indexOf(editor) + 1).filter((node) => node.nodeType === Node.ELEMENT_NODE);
+        // Detect focus moving to e.g. vaadin-select-overlay or vaadin-date-picker-overlay
+        if (nodes.some((el) => typeof el._shouldRemoveFocus === 'function' && !el._shouldRemoveFocus(event))) {
+          return true;
+        }
+      }
     }
 
     /** @private */
-    _onGlobalFocusIn(e) {
-      const edited = this.__edited;
-      if (edited) {
-        // Detect focus moving to e.g. vaadin-select-overlay
-        const overlay = Array.from(e.composedPath()).filter(
-          (node) => node.nodeType === Node.ELEMENT_NODE && /^vaadin-(?!dialog).*-overlay$/iu.test(node.localName),
-        )[0];
-
-        if (overlay) {
-          overlay.addEventListener('vaadin-overlay-outside-click', this.__boundEditorFocusOut);
-          this._cancelStopEdit();
-        }
-      }
+    _onEditorFocusIn() {
+      this._cancelStopEdit();
     }
 
     /** @private */
@@ -412,20 +414,12 @@ export const InlineEditingMixin = (superClass) =>
       }
     }
 
-    /** @private */
-    _setCancelCellSwitch() {
-      this.__cancelCellSwitch = true;
-      window.requestAnimationFrame(() => {
-        this.__cancelCellSwitch = false;
-      });
-    }
-
     /**
      * @param {!KeyboardEvent} e
      * @protected
      */
-    _switchEditCell(e) {
-      if (this.__cancelCellSwitch || (e.defaultPrevented && e.keyCode === 9)) {
+    async _switchEditCell(e) {
+      if (e.defaultPrevented && e.keyCode === 9) {
         return;
       }
 
@@ -434,10 +428,34 @@ export const InlineEditingMixin = (superClass) =>
       const editableColumns = this._getEditColumns();
       const { cell, column, model } = this.__edited;
 
-      this._stopEdit();
-      e.preventDefault();
       // Prevent vaadin-grid handler from being called
       e.stopImmediatePropagation();
+
+      const editor = column._getEditorComponent(cell);
+
+      // Do not prevent Tab to allow native input blur and wait for it,
+      // unless the keydown event is from the edit cell select overlay.
+      if (e.key === 'Tab' && editor && editor.contains(e.target)) {
+        const ignore = await new Promise((resolve) => {
+          editor.addEventListener(
+            'focusout',
+            (event) => {
+              resolve(this.__shouldIgnoreFocusOut(event));
+            },
+            { once: true },
+          );
+        });
+
+        // Ignore focusout event after which focus stays in the field,
+        // e.g. Tab between date and time pickers in date-time-picker.
+        if (ignore) {
+          return;
+        }
+      } else {
+        e.preventDefault();
+      }
+
+      this._stopEdit();
 
       // Try to find the next editable cell
       let nextIndex = model.index;

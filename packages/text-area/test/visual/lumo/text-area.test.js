@@ -66,6 +66,24 @@ describe('text-area', () => {
     await visualDiff(div, 'scrolled');
   });
 
+  it('scrolled with prefix, suffix, clear button', async () => {
+    const prefix = document.createElement('span');
+    prefix.setAttribute('slot', 'prefix');
+    prefix.textContent = '$';
+    element.appendChild(prefix);
+
+    const suffix = document.createElement('span');
+    suffix.setAttribute('slot', 'suffix');
+    suffix.textContent = '$';
+    element.appendChild(suffix);
+
+    element.clearButtonVisible = true;
+    element.style.height = '70px';
+    element.value = 'a\nb\nc\nd\ne';
+    element.focus();
+    await visualDiff(div, 'scrolled-with-prefix-suffix-clear-button');
+  });
+
   it('error message', async () => {
     element.label = 'Label';
     element.errorMessage = 'This field is required';

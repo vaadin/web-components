@@ -17,11 +17,6 @@ registerStyles(
     :host([slot='overflow']) {
       margin-inline-end: 0;
     }
-
-    [part='label'] ::slotted(vaadin-menu-bar-item) {
-      position: relative;
-      z-index: 1;
-    }
   `,
   { moduleId: 'vaadin-menu-bar-button-styles' },
 );

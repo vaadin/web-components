@@ -1,18 +1,17 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync } from '@vaadin/testing-helpers';
-import '@vaadin/item/vaadin-item.js';
-import '../vaadin-list-box.js';
+import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 
 describe('vaadin-list-box', () => {
   let listBox, tagName;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     listBox = fixtureSync(`
       <vaadin-list-box>
         <vaadin-item>Foo</vaadin-item>
         <vaadin-item>Bar</vaadin-item>
       </vaadin-list-box>
     `);
+    await nextRender();
     tagName = listBox.tagName.toLowerCase();
   });
 
@@ -22,5 +21,9 @@ describe('vaadin-list-box', () => {
 
   it('should have a valid static "is" getter', () => {
     expect(customElements.get(tagName).is).to.equal(tagName);
+  });
+
+  it('should set role attribute to list-box', () => {
+    expect(listBox.getAttribute('role')).to.equal('listbox');
   });
 });

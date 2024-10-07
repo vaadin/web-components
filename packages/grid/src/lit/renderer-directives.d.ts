@@ -3,7 +3,7 @@
  * Copyright (c) 2017 - 2024 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import type { DirectiveResult } from 'lit/directive';
+import type { DirectiveResult } from 'lit/directive.js';
 import type { LitRendererResult } from '@vaadin/lit-renderer';
 import { LitRendererDirective } from '@vaadin/lit-renderer';
 import type { Grid, GridItemModel } from '../vaadin-grid.js';

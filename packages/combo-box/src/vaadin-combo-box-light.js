@@ -84,7 +84,6 @@ class ComboBoxLight extends ComboBoxLightMixin(ThemableMixin(PolymerElement)) {
         theme$="[[_theme]]"
         position-target="[[inputElement]]"
         no-vertical-overlap
-        restore-focus-node="[[inputElement]]"
       ></vaadin-combo-box-overlay>
     `;
   }

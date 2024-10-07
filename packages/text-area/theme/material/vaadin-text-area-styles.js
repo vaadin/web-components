@@ -22,6 +22,14 @@ const textArea = css`
   [part='input-field']::after {
     bottom: calc(var(--_text-area-vertical-scroll-position) * -1);
   }
+
+  /* Use sticky positioning to keep prefix/suffix/clear button visible when scrolling textarea container */
+  [part='input-field'] ::slotted([slot$='fix']),
+  [part='clear-button'] {
+    position: sticky;
+    top: 0;
+    align-self: flex-start;
+  }
 `;
 
 registerStyles('vaadin-text-area', [inputFieldShared, textArea], { moduleId: 'material-text-area' });

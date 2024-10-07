@@ -109,6 +109,7 @@ export declare class ColumnBaseMixinClass<TItem, Column extends ColumnBaseMixinC
   footerPartName: string | null | undefined;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface GridColumnMixin<TItem, Column extends GridColumnMixinClass<TItem, Column>>
   extends GridColumnMixinClass<TItem, Column> {}
 

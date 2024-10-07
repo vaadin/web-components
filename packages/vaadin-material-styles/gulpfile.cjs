@@ -89,30 +89,29 @@ gulp.task('icons', (done) => {
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import './version.js';
+import { css } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { addMaterialGlobalStyles } from './global.js';
 
-const template = document.createElement('template');
+const fontIcons = css\`
+  @font-face {
+    font-family: 'material-icons';
+    src: url(data:application/font-woff;charset=utf-8;base64,${materialIconsWoff.toString('base64')})
+      format('woff');
+    font-weight: normal;
+    font-style: normal;
+  }
 
-template.innerHTML = \`
-  <style>
-    @font-face {
-      font-family: 'material-icons';
-      src: url(data:application/font-woff;charset=utf-8;base64,${materialIconsWoff.toString('base64')}) format('woff');
-      font-weight: normal;
-      font-style: normal;
-    }
-
-    html {
+  html {
 `;
           glyphs.forEach((g) => {
             const name = g.name.replace(/\s/g, '-').toLowerCase();
             const unicode = `\\\\${g.unicode[0].charCodeAt(0).toString(16)}`;
-            output += `      --material-icons-${name}: "${unicode}";\n`;
+            output += `    --material-icons-${name}: '${unicode}';\n`;
           });
-          output += `    }
-  </style>
+          output += `  }
 \`;
 
-document.head.appendChild(template.content);
+addMaterialGlobalStyles('font-icons', fontIcons);
 `;
           fs.writeFile('font-icons.js', output, (err) => {
             if (err) {

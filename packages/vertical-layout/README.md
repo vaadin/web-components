@@ -2,7 +2,7 @@
 
 A web component that places its content top-to-bottom in a column.
 
-[Documentation + Live Demo ↗](https://vaadin.com/docs/latest/components/basic-layouts/#horizontal-layout)
+[Documentation + Live Demo ↗](https://vaadin.com/docs/latest/components/vertical-layout)
 
 ```html
 <vaadin-vertical-layout theme="spacing padding">

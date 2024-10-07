@@ -367,48 +367,6 @@ describe('vaadin-chart', () => {
     });
   });
 
-  describe('reattach', () => {
-    let wrapper, inner, chart;
-
-    beforeEach(async () => {
-      wrapper = fixtureSync(`
-        <div>
-          <vaadin-chart>
-            <vaadin-chart-series value="[0,1,2]"></vaadin-chart-series>
-            <vaadin-chart-series value="[3,2,1]"></vaadin-chart-series>
-          </vaadin-chart>
-          <div id="inner"></div>
-        </div>
-      `);
-      chart = wrapper.querySelector('vaadin-chart');
-      inner = wrapper.querySelector('#inner');
-      await oneEvent(chart, 'chart-load');
-    });
-
-    it('should keep chart configuration when attached to a new parent', async () => {
-      expect(chart.configuration.series.length).to.be.equal(chart.childElementCount);
-      inner.appendChild(chart);
-      await oneEvent(chart, 'chart-redraw');
-      expect(chart.configuration.series.length).to.be.equal(chart.childElementCount);
-    });
-
-    it('should apply configuration update when attached to a new parent', async () => {
-      chart.updateConfiguration({ title: { text: 'Awesome title' }, credits: { enabled: false } });
-      await oneEvent(chart, 'chart-redraw');
-      expect(chart.$.chart.querySelector('.highcharts-title').textContent).to.equal('Awesome title');
-      expect(chart.$.chart.querySelector('.highcharts-credits')).to.be.null;
-
-      wrapper.removeChild(chart);
-      chart.updateConfiguration({ subtitle: { text: 'Awesome subtitle' }, credits: { enabled: true, text: 'Vaadin' } });
-
-      inner.appendChild(chart);
-      await oneEvent(chart, 'chart-redraw');
-      expect(chart.$.chart.querySelector('.highcharts-title').textContent).to.equal('Awesome title');
-      expect(chart.$.chart.querySelector('.highcharts-subtitle').textContent).to.equal('Awesome subtitle');
-      expect(chart.$.chart.querySelector('.highcharts-credits').textContent).to.equal('Vaadin');
-    });
-  });
-
   describe('RTL', () => {
     let chart;
 

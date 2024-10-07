@@ -2,7 +2,7 @@
 
 A web component for displaying SVG icons.
 
-[Documentation + Live Demo ↗](https://vaadin.com/docs/latest/ds/foundation/icons)
+[Documentation + Live Demo ↗](https://vaadin.com/docs/latest/components/icons)
 
 [![npm version](https://badgen.net/npm/v/@vaadin/icon)](https://www.npmjs.com/package/@vaadin/icon)
 

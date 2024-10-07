@@ -206,7 +206,6 @@ class ComboBox extends ComboBoxDataProviderMixin(
         theme$="[[_theme]]"
         position-target="[[_positionTarget]]"
         no-vertical-overlap
-        restore-focus-node="[[inputElement]]"
       ></vaadin-combo-box-overlay>
 
       <slot name="tooltip"></slot>

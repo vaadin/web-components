@@ -5,7 +5,6 @@
  */
 import '@vaadin/input-container/theme/lumo/vaadin-input-container-styles.js';
 import '@vaadin/vaadin-lumo-styles/sizing.js';
-import { fieldButton } from '@vaadin/vaadin-lumo-styles/mixins/field-button.js';
 import { inputFieldShared } from '@vaadin/vaadin-lumo-styles/mixins/input-field-shared.js';
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
@@ -14,7 +13,7 @@ const numberField = css`
     text-align: center;
   }
 
-  [part$='button'][disabled] {
+  :host(:not([disabled])) [part$='button'][disabled] {
     opacity: 0.2;
   }
 
@@ -47,6 +46,6 @@ const numberField = css`
   }
 `;
 
-registerStyles('vaadin-number-field', [inputFieldShared, fieldButton, numberField], {
+registerStyles('vaadin-number-field', [inputFieldShared, numberField], {
   moduleId: 'lumo-number-field',
 });

@@ -1,7 +1,7 @@
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 registerStyles(
-  'vaadin-dialog-overlay',
+  'vaadin-confirm-dialog-overlay',
   css`
     :host([opening]),
     :host([closing]),

@@ -1,6 +1,7 @@
 import { fixtureSync } from '@vaadin/testing-helpers/dist/fixture.js';
 import { sendKeys } from '@web/test-runner-commands';
 import { visualDiff } from '@web/test-runner-visual-regression';
+import '../common.js';
 import '../../../theme/lumo/vaadin-checkbox-group.js';
 
 describe('checkbox-group', () => {
@@ -47,6 +48,13 @@ describe('checkbox-group', () => {
       element.label = 'Label';
       await sendKeys({ press: 'Tab' });
       await visualDiff(div, 'label-focused');
+    });
+
+    it('label focused readonly', async () => {
+      element.label = 'Label';
+      element.readonly = true;
+      await sendKeys({ press: 'Tab' });
+      await visualDiff(div, 'label-focused-readonly');
     });
 
     it('label disabled', async () => {
