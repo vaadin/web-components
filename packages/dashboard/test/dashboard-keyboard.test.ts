@@ -231,15 +231,27 @@ describe('dashboard - keyboard interaction', () => {
     });
 
     it('should dispatch an item resized event shift + arrow down', async () => {
+      // Set minimum row height to enable vertical resizing
+      setMinimumRowHeight(dashboard, 100);
       const spy = sinon.spy();
       dashboard.addEventListener('dashboard-item-resized', spy);
       await sendKeys({ down: 'Shift' });
       await sendKeys({ press: 'ArrowDown' });
       await sendKeys({ up: 'Shift' });
       expect(spy.calledOnce).to.be.true;
-      expect(spy.firstCall.args[0].detail.item).to.eql({ id: 0 });
+      expect(spy.firstCall.args[0].detail.item).to.eql(dashboard.items[0]);
       expect(spy.firstCall.args[0].detail.items).to.eql(dashboard.items);
       expect(spy.firstCall.args[0].detail.section).to.be.undefined;
+    });
+
+    it('should not dispatch an item resized event if item was not resized', async () => {
+      // Set minimum row height to enable vertical resizing
+      const spy = sinon.spy();
+      dashboard.addEventListener('dashboard-item-resized', spy);
+      await sendKeys({ down: 'Shift' });
+      await sendKeys({ press: 'ArrowDown' });
+      await sendKeys({ up: 'Shift' });
+      expect(spy.calledOnce).to.be.false;
     });
 
     it('should not dispatch an item-resize event', async () => {

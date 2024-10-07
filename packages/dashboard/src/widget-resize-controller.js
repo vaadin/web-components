@@ -200,8 +200,12 @@ export class WidgetResizeController {
   __itemResize(e) {
     e.stopImmediatePropagation();
     const item = getElementItem(e.target);
+    const { colspan, rowspan } = item;
     this.__resizeItem(item, e.detail.colspanDelta, e.detail.rowspanDelta);
-    this.__fireItemResizedEvent(item);
+    // Dispatch the resizes event if the item size was changed
+    if (item.colspan !== colspan || item.rowspan !== rowspan) {
+      this.__fireItemResizedEvent(item);
+    }
   }
 
   hostDisconnected() {
