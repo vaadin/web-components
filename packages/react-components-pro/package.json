@@ -30,6 +30,7 @@
     "@vaadin/charts": "24.6.0-alpha1",
     "@vaadin/cookie-consent": "24.6.0-alpha1",
     "@vaadin/crud": "24.6.0-alpha1",
+    "@vaadin/dashboard": "24.6.0-alpha1",
     "@vaadin/grid-pro": "24.6.0-alpha1",
     "@vaadin/map": "24.6.0-alpha1",
     "@vaadin/react-components": "24.6.0-alpha1",
@@ -99,6 +100,22 @@
       "types": "./CrudEditColumn.d.ts",
       "default": "./CrudEditColumn.js"
     },
+    "./Dashboard.js": {
+      "types": "./Dashboard.d.ts",
+      "default": "./Dashboard.js"
+    },
+    "./DashboardLayout.js": {
+      "types": "./DashboardLayout.d.ts",
+      "default": "./DashboardLayout.js"
+    },
+    "./DashboardSection.js": {
+      "types": "./DashboardSection.d.ts",
+      "default": "./DashboardSection.js"
+    },
+    "./DashboardWidget.js": {
+      "types": "./DashboardWidget.d.ts",
+      "default": "./DashboardWidget.js"
+    },
     "./GridPro.js": {
       "types": "./GridPro.d.ts",
       "default": "./GridPro.js"
@@ -123,6 +140,10 @@
     "./Crud": "./Crud.js",
     "./CrudEdit": "./CrudEdit.js",
     "./CrudEditColumn": "./CrudEditColumn.js",
+    "./Dashboard": "./Dashboard.js",
+    "./DashboardLayout": "./DashboardLayout.js",
+    "./DashboardSection": "./DashboardSection.js",
+    "./DashboardWidget": "./DashboardWidget.js",
     "./GridPro": "./GridPro.js",
     "./GridProEditColumn": "./GridProEditColumn.js",
     "./Map": "./Map.js",
