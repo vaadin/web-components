@@ -1,0 +1,56 @@
+{
+  "name": "@vaadin/dashboard",
+  "version": "24.6.0-alpha0",
+  "publishConfig": {
+    "access": "public"
+  },
+  "description": "vaadin-dashboard",
+  "license": "SEE LICENSE IN LICENSE",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/vaadin/web-components.git",
+    "directory": "packages/dashboard"
+  },
+  "author": "Vaadin Ltd",
+  "homepage": "https://vaadin.com/components",
+  "bugs": {
+    "url": "https://github.com/vaadin/web-components/issues"
+  },
+  "main": "vaadin-dashboard.js",
+  "module": "vaadin-dashboard.js",
+  "type": "module",
+  "files": [
+    "src",
+    "theme",
+    "vaadin-*.d.ts",
+    "vaadin-*.js",
+    "web-types.json",
+    "web-types.lit.json"
+  ],
+  "keywords": [
+    "Vaadin",
+    "dashboard",
+    "responsive",
+    "layout",
+    "web-components",
+    "web-component"
+  ],
+  "dependencies": {
+    "@open-wc/dedupe-mixin": "^1.3.0",
+    "@vaadin/button": "24.6.0-alpha0",
+    "@vaadin/component-base": "24.6.0-alpha0",
+    "@vaadin/vaadin-lumo-styles": "24.6.0-alpha0",
+    "@vaadin/vaadin-material-styles": "24.6.0-alpha0",
+    "@vaadin/vaadin-themable-mixin": "24.6.0-alpha0",
+    "lit": "^3.0.0"
+  },
+  "devDependencies": {
+    "@vaadin/chai-plugins": "24.6.0-alpha0",
+    "@vaadin/testing-helpers": "^1.0.0"
+  },
+  "cvdlName": "vaadin-dashboard",
+  "web-types": [
+    "web-types.json",
+    "web-types.lit.json"
+  ]
+}
