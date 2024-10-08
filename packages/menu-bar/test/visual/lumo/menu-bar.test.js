@@ -21,6 +21,7 @@ describe('menu-bar', () => {
       describe('basic', () => {
         beforeEach(async () => {
           div = document.createElement('div');
+          div.style.display = 'inline-block';
           div.style.padding = '10px';
 
           element = fixtureSync('<vaadin-menu-bar></vaadin-menu-bar>', div);
@@ -38,29 +39,33 @@ describe('menu-bar', () => {
         });
 
         it('basic', async () => {
-          await visualDiff(document.body, `${dir}-basic`);
+          await visualDiff(div, `${dir}-basic`);
         });
 
         it('opened', async () => {
+          div.style.height = '150px';
           element._buttons[1].click();
           await nextRender(element);
-          await visualDiff(document.body, `${dir}-opened`);
+          await visualDiff(div, `${dir}-opened`);
         });
 
         it('reverse-collapse opened', async () => {
-          div.style.width = '250px';
+          element.style.width = '250px';
+          div.style.width = '350px';
+          div.style.height = '150px';
           element.reverseCollapse = true;
           await nextRender(element);
           element._buttons[4].click();
           const overlay = element._subMenu._overlayElement;
           await oneEvent(overlay, 'vaadin-overlay-open');
-          await visualDiff(document.body, `${dir}-reverse-collapse-opened`);
+          await visualDiff(div, `${dir}-reverse-collapse-opened`);
         });
       });
 
       describe('single button', () => {
         beforeEach(async () => {
           div = document.createElement('div');
+          div.style.display = 'inline-block';
           div.style.padding = '10px';
 
           element = fixtureSync('<vaadin-menu-bar></vaadin-menu-bar>', div);
@@ -70,13 +75,13 @@ describe('menu-bar', () => {
         });
 
         it('single button', async () => {
-          await visualDiff(document.body, `${dir}-single-button`);
+          await visualDiff(div, `${dir}-single-button`);
         });
 
         it('single overflow button', async () => {
           element.items = [{ text: 'View' }, { text: 'Edit' }];
           element.style.maxWidth = '100px';
-          await visualDiff(document.body, `${dir}-single-button-overflow`);
+          await visualDiff(div, `${dir}-single-button-overflow`);
         });
       });
 
@@ -93,6 +98,7 @@ describe('menu-bar', () => {
 
         beforeEach(async () => {
           div = document.createElement('div');
+          div.style.display = 'inline-block';
           div.style.padding = '10px';
 
           element = fixtureSync('<vaadin-menu-bar></vaadin-menu-bar>', div);
@@ -116,53 +122,59 @@ describe('menu-bar', () => {
 
         it('primary', async () => {
           div.style.width = '320px';
+          div.style.height = '150px';
           element.setAttribute('theme', 'primary');
           arrowDown(element._buttons[1]);
           await oneEvent(overlay, 'vaadin-overlay-open');
-          await visualDiff(document.body, `${dir}-primary`);
+          await visualDiff(div, `${dir}-primary`);
         });
 
         it('secondary', async () => {
           div.style.width = '320px';
+          div.style.height = '150px';
           element.setAttribute('theme', 'secondary');
           arrowDown(element._buttons[1]);
           await oneEvent(overlay, 'vaadin-overlay-open');
-          await visualDiff(document.body, `${dir}-secondary`);
+          await visualDiff(div, `${dir}-secondary`);
         });
 
         it('tertiary', async () => {
           div.style.width = '265px';
+          div.style.height = '150px';
           element.setAttribute('theme', 'tertiary');
           arrowDown(element._buttons[1]);
           await oneEvent(overlay, 'vaadin-overlay-open');
-          await visualDiff(document.body, `${dir}-tertiary`);
+          await visualDiff(div, `${dir}-tertiary`);
         });
 
         it('tertiary-inline', async () => {
           div.style.width = '200px';
+          div.style.height = '150px';
           element.setAttribute('theme', 'tertiary-inline');
           arrowDown(element._buttons[1]);
           await oneEvent(overlay, 'vaadin-overlay-open');
-          await visualDiff(document.body, `${dir}-tertiary-inline`);
+          await visualDiff(div, `${dir}-tertiary-inline`);
         });
 
         it('small', async () => {
           div.style.width = '265px';
+          div.style.height = '150px';
           element.setAttribute('theme', 'small');
           arrowDown(element._buttons[1]);
           await oneEvent(overlay, 'vaadin-overlay-open');
-          await visualDiff(document.body, `${dir}-small`);
+          await visualDiff(div, `${dir}-small`);
         });
 
         it('end-aligned', async () => {
+          div.style.width = '600px';
           element.setAttribute('theme', 'end-aligned');
-          await visualDiff(document.body, `${dir}-end-aligned`);
+          await visualDiff(div, `${dir}-end-aligned`);
         });
 
         it('end-aligned overflow button', async () => {
           element.style.width = '100px';
           element.setAttribute('theme', 'end-aligned');
-          await visualDiff(document.body, `${dir}-end-aligned-overflow-button`);
+          await visualDiff(div, `${dir}-end-aligned-overflow-button`);
         });
       });
 
@@ -175,6 +187,7 @@ describe('menu-bar', () => {
 
         beforeEach(async () => {
           div = document.createElement('div');
+          div.style.display = 'inline-block';
           div.style.padding = '10px';
 
           element = fixtureSync('<vaadin-menu-bar></vaadin-menu-bar>', div);
