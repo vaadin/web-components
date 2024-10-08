@@ -393,8 +393,8 @@ describe('Grid', () => {
         element.dispatchEvent(new MouseEvent('dblclick', { bubbles: true }));
       }
 
-      function focusOut(element: Element) {
-        element.dispatchEvent(new FocusEvent('focusout', { bubbles: true }));
+      function focusOut(element: HTMLElement) {
+        element.blur();
       }
 
       beforeEach(() => {
