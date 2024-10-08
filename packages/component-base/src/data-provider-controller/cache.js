@@ -206,6 +206,20 @@ export class Cache {
   }
 
   /**
+   * Clears the entries for the given page from the `items` array.
+   *
+   * @param {number} page
+   */
+  clearPage(page) {
+    const startIndex = page * this.pageSize;
+    let endIndex = startIndex + this.pageSize;
+    if (this.size !== undefined && endIndex >= this.size) {
+      endIndex = this.size;
+    }
+    this.items.fill(undefined, startIndex, endIndex);
+  }
+
+  /**
    * Retrieves the sub-cache associated with the item at the given index
    * in the `items` array.
    *
