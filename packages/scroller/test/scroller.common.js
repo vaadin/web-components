@@ -1,13 +1,13 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
-import '../vaadin-scroller.js';
 
 describe('vaadin-scroller', () => {
   let scroller;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     scroller = fixtureSync('<vaadin-scroller></vaadin-scroller>');
+    await nextRender();
   });
 
   describe('focus', () => {
@@ -47,8 +47,9 @@ describe('vaadin-scroller', () => {
   });
 
   describe('scrollDirection', () => {
-    it('should reflect scrollDirection to attribute', () => {
+    it('should reflect scrollDirection to attribute', async () => {
       scroller.scrollDirection = 'horizontal';
+      await nextUpdate(scroller);
       expect(scroller.getAttribute('scroll-direction')).to.equal('horizontal');
     });
 
@@ -57,8 +58,9 @@ describe('vaadin-scroller', () => {
       expect(getComputedStyle(scroller).overflowY).to.equal('auto');
     });
 
-    it('should be possible to enable only vertical scrollbars', () => {
+    it('should be possible to enable only vertical scrollbars', async () => {
       scroller.setAttribute('scroll-direction', 'vertical');
+      await nextUpdate(scroller);
       expect(getComputedStyle(scroller).overflowY).to.equal('auto');
       expect(getComputedStyle(scroller).overflowX).to.equal('hidden');
     });
