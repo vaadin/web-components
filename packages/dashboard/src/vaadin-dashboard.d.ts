@@ -96,7 +96,7 @@ export type DashboardItemRemovedEvent<TItem extends DashboardItem> = CustomEvent
 /**
  * Fired when an item selected state changed
  */
-export type DashboardItemSeletedChangedEvent<TItem extends DashboardItem> = CustomEvent<{
+export type DashboardItemSelectedChangedEvent<TItem extends DashboardItem> = CustomEvent<{
   item: TItem;
   value: boolean;
 }>;
@@ -124,7 +124,7 @@ export interface DashboardCustomEventMap<TItem extends DashboardItem> {
 
   'dashboard-item-removed': DashboardItemRemovedEvent<TItem>;
 
-  'dashboard-item-selected-changed': DashboardItemSeletedChangedEvent<TItem>;
+  'dashboard-item-selected-changed': DashboardItemSelectedChangedEvent<TItem>;
 
   'dashboard-item-move-mode-changed': DashboardItemMoveModeChangedEvent<TItem>;
 

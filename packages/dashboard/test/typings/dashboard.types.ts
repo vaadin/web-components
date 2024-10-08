@@ -8,7 +8,7 @@ import type {
   DashboardItemRemovedEvent,
   DashboardItemResizedEvent,
   DashboardItemResizeModeChangedEvent,
-  DashboardItemSeletedChangedEvent,
+  DashboardItemSelectedChangedEvent,
   DashboardRenderer,
   DashboardSectionItem,
 } from '../../vaadin-dashboard.js';
@@ -93,7 +93,7 @@ narrowedDashboard.addEventListener('dashboard-item-removed', (event) => {
 });
 
 narrowedDashboard.addEventListener('dashboard-item-selected-changed', (event) => {
-  assertType<DashboardItemSeletedChangedEvent<TestDashboardItem>>(event);
+  assertType<DashboardItemSelectedChangedEvent<TestDashboardItem>>(event);
   assertType<TestDashboardItem>(event.detail.item);
   assertType<boolean>(event.detail.value);
 });
