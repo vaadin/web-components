@@ -9,7 +9,7 @@ import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { OverflowController } from '@vaadin/component-base/src/overflow-controller.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { ScrollerMixin } from './vaadin-scroller-mixin';
+import { ScrollerMixin } from './vaadin-scroller-mixin.js';
 
 /**
  * `<vaadin-scroller>` provides a simple way to enable scrolling when its content is overflowing.
