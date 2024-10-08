@@ -10,6 +10,7 @@ export enum NonGenericInterface {
 export type GenericElementInfo = Readonly<{
   numberOfGenerics: number;
   nonGenericInterfaces?: readonly NonGenericInterface[];
+  typeConstraints?: string[];
 }>;
 
 export const genericElements = new Map<string, GenericElementInfo>([

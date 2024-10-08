@@ -189,7 +189,13 @@ function addGenerics(node: Node, elementName: string) {
   }
 
   const genericTypeNames = createGenericTypeNames(genericElementInfo.numberOfGenerics);
-  const typeParameters = genericTypeNames.map((id) => ts.factory.createTypeParameterDeclaration(undefined, id));
+
+  const typeParameters = genericTypeNames.map((id, index) => {
+    const typeConstraint = genericElementInfo.typeConstraints?.[index];
+    const typeReference = typeConstraint ? ts.factory.createTypeReferenceNode(typeConstraint) : undefined;
+    // If typeConstraint is provided, use it as constraint and default type for the type parameter.
+    return ts.factory.createTypeParameterDeclaration(undefined, id, typeReference, typeReference);
+  });
   const typeArguments = genericTypeNames.map((id) => ts.factory.createTypeReferenceNode(id));
 
   const isEventMapGeneric = !genericElementInfo.nonGenericInterfaces?.includes(NonGenericInterface.EVENT_MAP);
@@ -220,12 +226,12 @@ function addGenerics(node: Node, elementName: string) {
     // const events = {
     //   onActiveItemChanged: "active-item-changed",
     //   ...
-    // } as GridEventMap<unknown>;
+    // } as GridEventMap<any>;
     //                     ^ adding this type argument
     return ts.factory.createTypeReferenceNode(
       ts.factory.createIdentifier(EVENT_MAP),
       isEventMapGeneric
-        ? genericTypeNames.map(() => ts.factory.createKeywordTypeNode(ts.SyntaxKind.UnknownKeyword))
+        ? genericTypeNames.map(() => ts.factory.createKeywordTypeNode(ts.SyntaxKind.AnyKeyword))
         : undefined,
     );
   }
@@ -311,6 +317,7 @@ function generateReactComponent({ name, js }: SchemaHTMLElement, { packageName, 
   const { remove: eventsToRemove, makeUnknown: eventsToBeUnknown } = eventSettings.get(elementName) ?? {};
   const hasKnownEvents =
     namedEvents?.some(({ name }) => !eventsToRemove?.includes(name) && !eventsToBeUnknown?.includes(name)) || false;
+  const genericElementInfo = genericElements.get(elementName);
 
   const ast = template(
     `
@@ -318,6 +325,7 @@ import type { EventName } from "${LIT_REACT_PATH}";
 import {
   ${COMPONENT_NAME} as ${COMPONENT_NAME}Element
   type ${COMPONENT_NAME}EventMap as _${COMPONENT_NAME}EventMap,
+  ${[...new Set(genericElementInfo?.typeConstraints || [])].map((constraint) => `type ${constraint}`)}
 } from "${MODULE_PATH}";
 import * as React from "react";
 import { createComponent, type WebComponentProps } from "${CREATE_COMPONENT_PATH}";
