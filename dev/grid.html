@@ -42,7 +42,26 @@
       };
 
       grid.addEventListener('range-selection', (event) => {
-        console.log(event.detail);
+        const { startItem, endItem } = event.detail;
+
+        const selectedItems = new Set(grid.selectedItems);
+        const startItemContext = grid._dataProviderController.getItemContext(startItem);
+        const endItemContext = grid._dataProviderController.getItemContext(endItem);
+        const startFlatIndex = Math.min(startItemContext.flatIndex, endItemContext.flatIndex);
+        const endFlatIndex = Math.max(startItemContext.flatIndex, endItemContext.flatIndex);
+
+        const shouldSelect = selectedItems.has(startItem);
+
+        for (let i = startFlatIndex; i <= endFlatIndex; i++) {
+          const { item } = grid._dataProviderController.getFlatIndexContext(i);
+          if (shouldSelect) {
+            selectedItems.add(item);
+          } else {
+            selectedItems.delete(item);
+          }
+        }
+
+        grid.selectedItems = [...selectedItems];
       });
     </script>
 
