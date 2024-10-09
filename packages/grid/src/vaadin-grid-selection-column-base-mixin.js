@@ -98,7 +98,36 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
     static get observers() {
       return [
         '_onHeaderRendererOrBindingChanged(_headerRenderer, _headerCell, path, header, selectAll, _indeterminate, _selectAllHidden)',
+        '_shiftKeyPressedOrLastActiveItemChanged(_shiftKeyPressed, _lastActiveItem)',
       ];
+    }
+
+    connectedCallback() {
+      super.connectedCallback();
+
+      if (this._grid) {
+        this._grid.addEventListener('keydown', (event) => {
+          this._shiftKeyPressed = event.shiftKey;
+        });
+
+        this._grid.addEventListener('keyup', (event) => {
+          this._shiftKeyPressed = event.shiftKey;
+        });
+      }
+    }
+
+    disconnectedCallback() {
+      super.disconnectedCallback();
+
+      // TODO: Remove key listeners
+    }
+
+    _shiftKeyPressedOrLastActiveItemChanged(shiftKeyPressed, lastActiveItem) {
+      if (shiftKeyPressed && lastActiveItem) {
+        this._grid.style.userSelect = 'none';
+      } else {
+        this._grid.style.userSelect = '';
+      }
     }
 
     /**
@@ -136,7 +165,7 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
         checkbox.setAttribute('aria-label', 'Select Row');
         root.appendChild(checkbox);
         // Add listener after appending, so we can skip the initial change event
-        checkbox.addEventListener('click', this.__onSelectRowClick.bind(this));
+        checkbox.addEventListener('checked-changed', this.__onSelectRowCheckedChanged.bind(this));
         addListener(root, 'track', this.__onCellTrack.bind(this));
         root.addEventListener('mousedown', this.__onCellMouseDown.bind(this));
         root.addEventListener('click', this.__onCellClick.bind(this));
@@ -172,23 +201,26 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
      *
      * @private
      */
-    __onSelectRowClick(e) {
-      const lastSelectedItem = this.__lastSelectedItem;
-      const currentSelectedItem = e.currentTarget.__item;
-
-      if (e.target.checked) {
-        if (e.shiftKey && lastSelectedItem) {
-          this._selectRange(lastSelectedItem, currentSelectedItem);
-        } else {
-          this._selectItem(currentSelectedItem);
-        }
-      } else if (e.shiftKey && lastSelectedItem) {
-        this._deselectRange(lastSelectedItem, currentSelectedItem);
-      } else {
-        this._deselectItem(currentSelectedItem);
+    __onSelectRowCheckedChanged(e) {
+      // Skip if the state is changed by the renderer.
+      if (e.target.checked === e.target.__rendererChecked) {
+        return;
       }
 
-      this.__lastSelectedItem = currentSelectedItem;
+      const item = e.currentTarget.__item;
+      if (e.target.checked) {
+        this._selectItem(item);
+      } else {
+        this._deselectItem(item);
+      }
+
+      const lastActiveItem = this._lastActiveItem;
+      if (this._shiftKeyPressed && lastActiveItem) {
+        this._rangeSelection(lastActiveItem, item);
+        this._lastActiveItem = null;
+      } else {
+        this._lastActiveItem = item;
+      }
     }
 
     /** @private */
@@ -364,9 +396,13 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
      */
     _deselectItem(_item) {}
 
-    _selectRange(item0, item1) {}
-
-    _deselectRange(item0, item1) {}
+    _rangeSelection(startItem, endItem) {
+      this._grid.dispatchEvent(
+        new CustomEvent('range-selection', {
+          detail: { startItem, endItem },
+        }),
+      );
+    }
 
     /**
      * IOS needs indeterminate + checked at the same time

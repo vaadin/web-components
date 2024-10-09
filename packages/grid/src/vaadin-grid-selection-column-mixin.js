@@ -29,14 +29,15 @@ export const GridSelectionColumnMixin = (superClass) =>
     constructor() {
       super();
 
-      this.__boundOnActiveItemChanged = this.__onActiveItemChanged.bind(this);
+      this.__onGridCellOrRowActivate = this.__onGridCellOrRowActivate.bind(this);
       this.__boundOnDataProviderChanged = this.__onDataProviderChanged.bind(this);
       this.__boundOnSelectedItemsChanged = this.__onSelectedItemsChanged.bind(this);
     }
 
     /** @protected */
     disconnectedCallback() {
-      this._grid.removeEventListener('active-item-changed', this.__boundOnActiveItemChanged);
+      this._grid.removeEventListener('row-activate', this.__onGridCellOrRowActivate);
+      this._grid.removeEventListener('cell-activate', this.__onGridCellOrRowActivate);
       this._grid.removeEventListener('data-provider-changed', this.__boundOnDataProviderChanged);
       this._grid.removeEventListener('filter-changed', this.__boundOnSelectedItemsChanged);
       this._grid.removeEventListener('selected-items-changed', this.__boundOnSelectedItemsChanged);
@@ -48,7 +49,8 @@ export const GridSelectionColumnMixin = (superClass) =>
     connectedCallback() {
       super.connectedCallback();
       if (this._grid) {
-        this._grid.addEventListener('active-item-changed', this.__boundOnActiveItemChanged);
+        this._grid.addEventListener('row-activate', this.__onGridCellOrRowActivate);
+        this._grid.addEventListener('cell-activate', this.__onGridCellOrRowActivate);
         this._grid.addEventListener('data-provider-changed', this.__boundOnDataProviderChanged);
         this._grid.addEventListener('filter-changed', this.__boundOnSelectedItemsChanged);
         this._grid.addEventListener('selected-items-changed', this.__boundOnSelectedItemsChanged);
@@ -123,10 +125,6 @@ export const GridSelectionColumnMixin = (superClass) =>
       this._grid.selectItem(item);
     }
 
-    _selectRange(item0, item1) {
-      this._grid.selectRange(item0, item1);
-    }
-
     /**
      * Override a method from `GridSelectionColumnBaseMixin` to handle the user
      * deselecting an item.
@@ -139,20 +137,22 @@ export const GridSelectionColumnMixin = (superClass) =>
       this._grid.deselectItem(item);
     }
 
-    _deselectRange(item0, item1) {
-      this._grid.deselectRange(item0, item1);
-    }
-
     /** @private */
-    __onActiveItemChanged(e) {
-      const activeItem = e.detail.value;
+    __onGridCellOrRowActivate(e) {
       if (this.autoSelect) {
-        const item = activeItem || this.__previousActiveItem;
+        const { item } = e.detail.model;
         if (item) {
           this._grid._toggleItem(item);
         }
+
+        const lastActiveItem = this._lastActiveItem;
+        if (this._shiftKeyPressed && lastActiveItem) {
+          this._rangeSelection(lastActiveItem, item);
+          this._lastActiveItem = null;
+        } else {
+          this._lastActiveItem = item;
+        }
       }
-      this.__previousActiveItem = activeItem;
     }
 
     /** @private */

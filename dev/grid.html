@@ -40,6 +40,10 @@
       tooltip.generator = ({ column, item }) => {
         return column && column.path && item ? `Tooltip ${column.path} ${item.name}` : '';
       };
+
+      grid.addEventListener('range-selection', (event) => {
+        console.log(event.detail);
+      });
     </script>
 
     <vaadin-grid item-id-path="name">
