@@ -30,10 +30,10 @@ describe('min-height', () => {
 
   beforeEach(async () => {
     grid = fixtureSync(`
-        <vaadin-grid style="height: 0;">
-          <vaadin-grid-column></vaadin-grid-column>
-        </vaadin-grid>
-      `);
+      <vaadin-grid style="height: 0;">
+        <vaadin-grid-column></vaadin-grid-column>
+      </vaadin-grid>
+    `);
     flushGrid(grid);
     await nextResize(grid);
   });
@@ -96,6 +96,23 @@ describe('min-height', () => {
 
     it('should should have min-height of one row', () => {
       verifyMinHeight();
+    });
+  });
+
+  describe('override', () => {
+    beforeEach(() => {
+      fixtureSync(`
+        <style>
+          vaadin-grid {
+            min-height: 200px;
+          }
+        </style>
+      `);
+    });
+
+    it('should allow overriding min-height through stylesheet', () => {
+      const height = grid.getBoundingClientRect().height;
+      expect(height).to.equal(200);
     });
   });
 });
