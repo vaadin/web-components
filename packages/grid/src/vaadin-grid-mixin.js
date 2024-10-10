@@ -6,6 +6,7 @@
 import { isElementHidden } from '@vaadin/a11y-base/src/focus-utils.js';
 import { TabindexMixin } from '@vaadin/a11y-base/src/tabindex-mixin.js';
 import { animationFrame, microTask } from '@vaadin/component-base/src/async.js';
+import { supportsAdoptingStyleSheets } from '@vaadin/component-base/src/browser-utils.js';
 import { isAndroid, isChrome, isFirefox, isIOS, isSafari, isTouch } from '@vaadin/component-base/src/browser-utils.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { getClosestElement } from '@vaadin/component-base/src/dom-utils.js';
@@ -1135,12 +1136,17 @@ export const GridMixin = (superClass) =>
       const footerHeight = this.$.footer.clientHeight;
       const minHeight = headerHeight + rowHeight + footerHeight;
 
-      if (!this.__minHeightStyleSheet) {
+      // The style is set to host instead of the scroller so that the value can be overridden by the user with "grid { min-height: 0 }"
+      // Prefer setting style in adopted style sheet to avoid the need to add a confusing inline style on the host element
+      // If adopted style sheets are not supported, the style is set inline
+      if (!this.__minHeightStyleSheet && supportsAdoptingStyleSheets) {
         this.__minHeightStyleSheet = new CSSStyleSheet();
         this.shadowRoot.adoptedStyleSheets = [...this.shadowRoot.adoptedStyleSheets, this.__minHeightStyleSheet];
       }
-      // The style is set to host instead of the scroller so that the value can be overridden by the user with "grid { min-height: 0 }"
-      // Adopted style sheet is used to avoid the need to add a confusing inline style such as --_grid-min-height on the host element
-      this.__minHeightStyleSheet.replaceSync(`:host { min-height: ${minHeight}px }`);
+      if (this.__minHeightStyleSheet) {
+        this.__minHeightStyleSheet.replaceSync(`:host { --_grid-min-height: ${minHeight}px; }`);
+      } else {
+        this.style.setProperty('--_grid-min-height', `${minHeight}px`);
+      }
     }
   };

@@ -17,6 +17,7 @@ export const gridStyles = css`
     flex-direction: column;
     animation: 1ms vaadin-grid-appear;
     height: 400px;
+    min-height: var(--_grid-min-height, 0);
     flex: 1 1 auto;
     align-self: stretch;
     position: relative;
