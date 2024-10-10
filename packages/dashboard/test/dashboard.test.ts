@@ -8,6 +8,7 @@ import type { DashboardWidget } from '../src/vaadin-dashboard-widget.js';
 import type { Dashboard, DashboardItem, DashboardSectionItem } from '../vaadin-dashboard.js';
 import {
   expectLayout,
+  getColumnWidths,
   getDraggable,
   getElementFromCell,
   getParentSection,
@@ -569,7 +570,7 @@ describe('dashboard', () => {
       expect(removeButton.getBoundingClientRect().height).to.be.above(0);
     });
 
-    it('should scroll the focused item into view on render', async () => {
+    it('should scroll the focused item outside dashboard viewport back into view', async () => {
       // Limit the dashboard height to force scrolling
       dashboard.style.height = '300px';
       await onceResized(dashboard);
@@ -612,6 +613,24 @@ describe('dashboard', () => {
 
       // Expect no scrolling to have occurred
       expect(scrollingContainer.scrollTop).to.equal(scrollTop);
+    });
+
+    it('should scroll the focused item outside browser viewport back into view', async () => {
+      // Focus the first item
+      getElementFromCell(dashboard, 0, 0)!.focus();
+
+      const columns = getColumnWidths(dashboard).length;
+      const rows = window.innerHeight / (document.activeElement as DashboardWidget).offsetHeight;
+
+      // Add enough items to push the focused item out of view
+      dashboard.items = Array.from({ length: rows * columns * 2 }, (_, i) => ({ id: i.toString() })).reverse();
+      await nextFrame();
+      await nextFrame();
+
+      // Expect the focused item to have been scrolled back into view
+      const widgetRect = document.activeElement!.getBoundingClientRect();
+      expect(widgetRect.bottom).to.be.above(0);
+      expect(widgetRect.top).to.be.below(window.innerHeight);
     });
 
     describe('focus restore on focused item removal', () => {
