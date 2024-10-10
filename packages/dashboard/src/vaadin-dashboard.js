@@ -316,7 +316,7 @@ class Dashboard extends DashboardLayoutMixin(ElementMixin(ThemableMixin(PolylitM
       }
 
       const focusedItem = this.querySelector('[focused]');
-      if (focusedItem && !this.__insideViewport(focusedItem)) {
+      if (focusedItem && this.__outsideViewport(focusedItem)) {
         // If the focused wrapper is not in the viewport, scroll it into view
         focusedItem.scrollIntoView();
       }
@@ -324,15 +324,25 @@ class Dashboard extends DashboardLayoutMixin(ElementMixin(ThemableMixin(PolylitM
   }
 
   /** @private */
-  __insideViewport(element) {
+  __outsideViewport(element) {
     const rect = element.getBoundingClientRect();
+    const viewportHeight = Math.min(window.innerHeight, document.documentElement.clientHeight);
+    const viewportWidth = Math.min(window.innerWidth, document.documentElement.clientWidth);
+    if (rect.bottom < 0 || rect.right < 0 || rect.top > viewportHeight || rect.left > viewportWidth) {
+      return true;
+    }
+
     const dashboardRect = this.getBoundingClientRect();
-    return (
-      rect.bottom >= dashboardRect.top &&
-      rect.right >= dashboardRect.left &&
-      rect.top <= dashboardRect.bottom &&
-      rect.left <= dashboardRect.right
-    );
+    if (
+      rect.bottom < dashboardRect.top ||
+      rect.right < dashboardRect.left ||
+      rect.top > dashboardRect.bottom ||
+      rect.left > dashboardRect.right
+    ) {
+      return true;
+    }
+
+    return false;
   }
 
   /** @private */
