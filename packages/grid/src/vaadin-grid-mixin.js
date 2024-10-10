@@ -277,7 +277,6 @@ export const GridMixin = (superClass) =>
 
       minHeightObserver.observe(this.$.header);
       minHeightObserver.observe(this.$.footer);
-      minHeightObserver.observe(this.$.items);
 
       processTemplates(this);
 
@@ -1129,10 +1128,12 @@ export const GridMixin = (superClass) =>
 
     /** @private */
     __updateMinHeight() {
-      // TODO: How to avoid updating this unnecessarily on resize etc?
-      const defaultRowHeight = 40;
-      const firstRowHeight = this._getRenderedRows()[0] ? this._getRenderedRows()[0].clientHeight : defaultRowHeight;
-      const minHeight = this.$.header.clientHeight + this.$.footer.clientHeight + firstRowHeight;
+      // Min height is calculated based on the header, footer and a single row
+      // For now use a hard-coded value for the row that matches a single default row in Lumo
+      const rowHeight = 36;
+      const headerHeight = this.$.header.clientHeight;
+      const footerHeight = this.$.footer.clientHeight;
+      const minHeight = headerHeight + rowHeight + footerHeight;
 
       if (!this.__minHeightStyleSheet) {
         this.__minHeightStyleSheet = new CSSStyleSheet();
