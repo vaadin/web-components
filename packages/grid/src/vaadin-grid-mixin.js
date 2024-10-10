@@ -6,8 +6,15 @@
 import { isElementHidden } from '@vaadin/a11y-base/src/focus-utils.js';
 import { TabindexMixin } from '@vaadin/a11y-base/src/tabindex-mixin.js';
 import { animationFrame, microTask } from '@vaadin/component-base/src/async.js';
-import { supportsAdoptingStyleSheets } from '@vaadin/component-base/src/browser-utils.js';
-import { isAndroid, isChrome, isFirefox, isIOS, isSafari, isTouch } from '@vaadin/component-base/src/browser-utils.js';
+import {
+  isAndroid,
+  isChrome,
+  isFirefox,
+  isIOS,
+  isSafari,
+  isTouch,
+  supportsAdoptingStyleSheets,
+} from '@vaadin/component-base/src/browser-utils.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { getClosestElement } from '@vaadin/component-base/src/dom-utils.js';
 import { SlotObserver } from '@vaadin/component-base/src/slot-observer.js';
