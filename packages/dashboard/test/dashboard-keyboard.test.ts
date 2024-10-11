@@ -451,6 +451,18 @@ describe('dashboard - keyboard interaction', () => {
     expect(widget.hasAttribute('move-mode')).to.be.true;
   });
 
+  it('should blur the focused widget when dashboard becomes non-editable', async () => {
+    const widget = getElementFromCell(dashboard, 0, 0)!;
+    await sendKeys({ press: 'Tab' });
+    await nextFrame();
+    expect(widget.contains(document.activeElement)).to.be.true;
+    expect(widget.hasAttribute('focused')).to.be.true;
+    dashboard.editable = false;
+    await nextFrame();
+    expect(widget.contains(document.activeElement)).to.be.false;
+    expect(widget.hasAttribute('focused')).to.be.false;
+  });
+
   it('should enter move mode without selecting first', async () => {
     const widget = getElementFromCell(dashboard, 0, 0)!;
     (getDraggable(widget) as HTMLElement).click();
@@ -657,6 +669,18 @@ describe('dashboard - keyboard interaction', () => {
       await nextFrame();
 
       expect(dashboard.items).to.eql([{ id: 0 }, { items: [{ id: 2 }, { id: 3 }] }, { id: 1 }]);
+    });
+
+    it('should blur the widget when dashboard becomes non-editable', async () => {
+      const widget = getElementFromCell(dashboard, 0, 0)!;
+      expect(widget.contains(document.activeElement)).to.be.true;
+      expect(widget.hasAttribute('selected')).to.be.true;
+      expect(widget.hasAttribute('focused')).to.be.true;
+      dashboard.editable = false;
+      await nextFrame();
+      expect(widget.contains(document.activeElement)).to.be.false;
+      expect(widget.hasAttribute('selected')).to.be.false;
+      expect(widget.hasAttribute('focused')).to.be.false;
     });
   });
 

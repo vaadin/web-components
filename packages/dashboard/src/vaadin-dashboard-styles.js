@@ -33,7 +33,8 @@ export const dashboardWidgetAndSectionStyles = css`
   :host(:not([editable])) #drag-handle,
   :host(:not([editable])) #remove-button,
   :host(:not([editable])) #focus-button,
-  :host(:not([editable])) #focus-button-wrapper {
+  :host(:not([editable])) #focus-button-wrapper,
+  :host(:not([editable])) .mode-controls {
     display: none;
   }
 

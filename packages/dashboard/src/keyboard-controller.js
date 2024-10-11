@@ -27,7 +27,7 @@ export class KeyboardController {
     const focusOutElement = e.composedPath()[0];
     const isHostVisible = !!this.host.offsetHeight;
     const isFocusButtonHidden = getComputedStyle(focusOutElement).display === 'none';
-    if (isHostVisible && isFocusButtonHidden) {
+    if (isHostVisible && isFocusButtonHidden && this.host.hasAttribute('editable')) {
       this.host.__focusApply();
     } else {
       this.host.__exitMode();
