@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
+import { fixtureSync, isChrome, nextFrame } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import '../vaadin-dashboard.js';
@@ -451,6 +451,19 @@ describe('dashboard - keyboard interaction', () => {
     expect(widget.hasAttribute('move-mode')).to.be.true;
   });
 
+  // These tests don't work on Firefox / Safari even though the functionality they test works
+  (isChrome ? it : it.skip)('should blur the focused widget when dashboard becomes non-editable', async () => {
+    const widget = getElementFromCell(dashboard, 0, 0)!;
+    await sendKeys({ press: 'Tab' });
+    await nextFrame();
+    expect(widget.contains(document.activeElement)).to.be.true;
+    expect(widget.hasAttribute('focused')).to.be.true;
+    dashboard.editable = false;
+    await nextFrame();
+    expect(widget.contains(document.activeElement)).to.be.false;
+    expect(widget.hasAttribute('focused')).to.be.false;
+  });
+
   it('should enter move mode without selecting first', async () => {
     const widget = getElementFromCell(dashboard, 0, 0)!;
     (getDraggable(widget) as HTMLElement).click();
@@ -657,6 +670,18 @@ describe('dashboard - keyboard interaction', () => {
       await nextFrame();
 
       expect(dashboard.items).to.eql([{ id: 0 }, { items: [{ id: 2 }, { id: 3 }] }, { id: 1 }]);
+    });
+
+    (isChrome ? it : it.skip)('should blur the widget when dashboard becomes non-editable', async () => {
+      const widget = getElementFromCell(dashboard, 0, 0)!;
+      expect(widget.contains(document.activeElement)).to.be.true;
+      expect(widget.hasAttribute('selected')).to.be.true;
+      expect(widget.hasAttribute('focused')).to.be.true;
+      dashboard.editable = false;
+      await nextFrame();
+      expect(widget.contains(document.activeElement)).to.be.false;
+      expect(widget.hasAttribute('selected')).to.be.false;
+      expect(widget.hasAttribute('focused')).to.be.false;
     });
   });
 
