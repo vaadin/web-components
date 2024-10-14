@@ -482,7 +482,6 @@ export const InlineEditingMixin = (superClass) =>
 
       if (nextRow && nextCol) {
         const nextCell = Array.from(nextRow.children).find((cell) => cell._column === nextCol);
-        e.preventDefault();
 
         if (!this.singleCellEdit && nextCell !== cell) {
           this._startEdit(nextCell, nextCol);
