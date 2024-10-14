@@ -46,8 +46,6 @@ export declare class DialogBaseMixinClass {
    * Note that the overlay top edge may not be the same as the viewport
    * top edge (e.g. the Lumo theme defines some spacing to prevent the
    * overlay from stretching all the way to the top of the viewport).
-   *
-   * @type {string}
    */
   top: string;
 
@@ -58,8 +56,6 @@ export declare class DialogBaseMixinClass {
    * Note that the overlay left edge may not be the same as the viewport
    * left edge (e.g. the Lumo theme defines some spacing to prevent the
    * overlay from stretching all the way to the left of the viewport).
-   *
-   * @type {string}
    */
   left: string;
 }
