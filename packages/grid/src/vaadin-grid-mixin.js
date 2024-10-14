@@ -6,7 +6,15 @@
 import { isElementHidden } from '@vaadin/a11y-base/src/focus-utils.js';
 import { TabindexMixin } from '@vaadin/a11y-base/src/tabindex-mixin.js';
 import { animationFrame, microTask } from '@vaadin/component-base/src/async.js';
-import { isAndroid, isChrome, isFirefox, isIOS, isSafari, isTouch } from '@vaadin/component-base/src/browser-utils.js';
+import {
+  isAndroid,
+  isChrome,
+  isFirefox,
+  isIOS,
+  isSafari,
+  isTouch,
+  supportsAdoptingStyleSheets,
+} from '@vaadin/component-base/src/browser-utils.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { getClosestElement } from '@vaadin/component-base/src/dom-utils.js';
 import { SlotObserver } from '@vaadin/component-base/src/slot-observer.js';
@@ -268,6 +276,16 @@ export const GridMixin = (superClass) =>
           this.__tryToRecalculateColumnWidthsIfPending();
         }),
       ).observe(this.$.table);
+
+      const minHeightObserver = new ResizeObserver(() =>
+        setTimeout(() => {
+          this.__updateMinHeight();
+        }),
+      );
+
+      minHeightObserver.observe(this.$.header);
+      minHeightObserver.observe(this.$.items);
+      minHeightObserver.observe(this.$.footer);
 
       processTemplates(this);
 
@@ -1114,6 +1132,30 @@ export const GridMixin = (superClass) =>
     __updateVisibleRows(start, end) {
       if (this.__virtualizer) {
         this.__virtualizer.update(start, end);
+      }
+    }
+
+    /** @private */
+    __updateMinHeight() {
+      // Min height is calculated based on the header, footer and a single row
+      // For now use a hard-coded value for the row that matches a single default row in Lumo
+      const rowHeight = 36;
+      const headerHeight = this.$.header.clientHeight;
+      const footerHeight = this.$.footer.clientHeight;
+      const scrollbarHeight = this.$.table.offsetHeight - this.$.table.clientHeight;
+      const minHeight = headerHeight + rowHeight + footerHeight + scrollbarHeight;
+
+      // The style is set to host instead of the scroller so that the value can be overridden by the user with "grid { min-height: 0 }"
+      // Prefer setting style in adopted style sheet to avoid the need to add a confusing inline style on the host element
+      // If adopted style sheets are not supported, the style is set inline
+      if (!this.__minHeightStyleSheet && supportsAdoptingStyleSheets) {
+        this.__minHeightStyleSheet = new CSSStyleSheet();
+        this.shadowRoot.adoptedStyleSheets = [...this.shadowRoot.adoptedStyleSheets, this.__minHeightStyleSheet];
+      }
+      if (this.__minHeightStyleSheet) {
+        this.__minHeightStyleSheet.replaceSync(`:host { --_grid-min-height: ${minHeight}px; }`);
+      } else {
+        this.style.setProperty('--_grid-min-height', `${minHeight}px`);
       }
     }
   };
