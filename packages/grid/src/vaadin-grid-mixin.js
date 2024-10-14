@@ -284,6 +284,7 @@ export const GridMixin = (superClass) =>
       );
 
       minHeightObserver.observe(this.$.header);
+      minHeightObserver.observe(this.$.items);
       minHeightObserver.observe(this.$.footer);
 
       processTemplates(this);
@@ -1141,7 +1142,8 @@ export const GridMixin = (superClass) =>
       const rowHeight = 36;
       const headerHeight = this.$.header.clientHeight;
       const footerHeight = this.$.footer.clientHeight;
-      const minHeight = headerHeight + rowHeight + footerHeight;
+      const scrollbarHeight = this.$.table.offsetHeight - this.$.table.clientHeight;
+      const minHeight = headerHeight + rowHeight + footerHeight + scrollbarHeight;
 
       // The style is set to host instead of the scroller so that the value can be overridden by the user with "grid { min-height: 0 }"
       // Prefer setting style in adopted style sheet to avoid the need to add a confusing inline style on the host element
