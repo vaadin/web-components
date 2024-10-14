@@ -549,6 +549,15 @@ describe('draggable', () => {
     drag(container);
     expect(container.scrollTop).to.equal(100);
   });
+
+  it('should update "top" and "left" properties on drag', async () => {
+    drag(container);
+    await nextRender();
+    const overlay = dialog.$.overlay.$.overlay;
+    const bounds = overlay.getBoundingClientRect();
+    expect(dialog.top).to.be.equal(bounds.top);
+    expect(dialog.left).to.be.equal(bounds.left);
+  });
 });
 
 describe('touch', () => {
