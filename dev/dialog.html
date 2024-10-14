@@ -30,7 +30,10 @@
           return;
         }
 
-        root.style.maxWidth = '40em';
+        const container = document.createElement('div');
+        container.style.maxWidth = '40em';
+        container.style.minWidth = '20em';
+        root.appendChild(container);
 
         // Second dialog
         const dialog2 = document.createElement('vaadin-dialog');
@@ -49,7 +52,7 @@
           root2.appendChild(btnClose2);
         };
 
-        root.appendChild(dialog2);
+        container.appendChild(dialog2);
 
         // Open second dialog
         const btnOpen2 = document.createElement('vaadin-button');
@@ -63,7 +66,7 @@
           'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Distinctio laborum optio quo perferendis unde, fuga reprehenderit molestias cum laboriosam ipsa enim voluptatem iusto fugit. Sed, veniam repudiandae consectetur recusandae laudantium.';
         text.style.marginTop = '0';
 
-        root.append(text, btnOpen2);
+        container.append(text, btnOpen2);
       };
 
       dialog1.headerRenderer = (root) => {
