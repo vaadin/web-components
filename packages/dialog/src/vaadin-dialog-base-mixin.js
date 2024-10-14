@@ -166,8 +166,8 @@ export const DialogBaseMixin = (superClass) =>
     }
 
     __positionChanged(top, left) {
-      if (!this.__bounds) {
-        this.__bounds = this.$.overlay.getBounds();
+      if (top == null || left == null) {
+        return;
       }
       this.$.overlay.setBounds({ top, left });
     }
