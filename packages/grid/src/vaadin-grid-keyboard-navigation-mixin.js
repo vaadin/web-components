@@ -783,7 +783,7 @@ export const KeyboardNavigationMixin = (superClass) =>
       }
 
       if (this._focusedItemIndex === -1) {
-        this.__resetSectionFocusable('items');
+        this.__resetItemsFocusable();
       }
 
       const rootTarget = e.composedPath()[0];
@@ -954,38 +954,31 @@ export const KeyboardNavigationMixin = (superClass) =>
         this.performUpdate();
       }
 
-      // Header / footer
       ['header', 'footer'].forEach((section) => {
         if (!this.__isValidFocusable(this[`_${section}Focusable`])) {
-          this.__resetSectionFocusable(section);
+          const firstVisibleRow = [...this.$[section].children].find((row) => row.offsetHeight);
+          const firstVisibleCell = firstVisibleRow ? [...firstVisibleRow.children].find((cell) => !cell.hidden) : null;
+          if (firstVisibleRow && firstVisibleCell) {
+            this[`_${section}Focusable`] = this.__getFocusable(firstVisibleRow, firstVisibleCell);
+          }
         }
       });
 
-      // Body
       if (!this.__isValidFocusable(this._itemsFocusable) && this.$.items.firstElementChild) {
-        this.__resetSectionFocusable('items');
+        this.__resetItemsFocusable();
       } else {
         this.__updateItemsFocusable();
       }
     }
 
-    __resetSectionFocusable(section) {
-      if (['header', 'footer'].includes(section)) {
-        const firstVisibleRow = [...this.$[section].children].find((row) => row.offsetHeight);
-        const firstVisibleCell = firstVisibleRow ? [...firstVisibleRow.children].find((cell) => !cell.hidden) : null;
-        if (firstVisibleRow && firstVisibleCell) {
-          this[`_${section}Focusable`] = this.__getFocusable(firstVisibleRow, firstVisibleCell);
-        }
-      }
-
-      if (section === 'items') {
-        const firstVisibleRow = this.__getFirstVisibleItem();
-        const firstVisibleCell = firstVisibleRow ? [...firstVisibleRow.children].find((cell) => !cell.hidden) : null;
-        if (firstVisibleCell && firstVisibleRow) {
-          // Reset memoized column
-          this._focusedColumnOrder = undefined;
-          this._itemsFocusable = this.__getFocusable(firstVisibleRow, firstVisibleCell);
-        }
+    /** @private */
+    __resetItemsFocusable() {
+      const firstVisibleRow = this.__getFirstVisibleItem();
+      const firstVisibleCell = firstVisibleRow ? [...firstVisibleRow.children].find((cell) => !cell.hidden) : null;
+      if (firstVisibleCell && firstVisibleRow) {
+        // Reset memoized column
+        this._focusedColumnOrder = undefined;
+        this._itemsFocusable = this.__getFocusable(firstVisibleRow, firstVisibleCell);
       }
     }
 
