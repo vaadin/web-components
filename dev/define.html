@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Define</title>
+    <script type="module" src="./common.js"></script>
+  </head>
+
+  <body>
+    <vaadin-card></vaadin-card>
+
+    <button>Define</button>
+
+    <script type="module">
+      import { defineCustomElement } from '@vaadin/component-base/src/define.js'
+      import { html, LitElement } from 'lit';
+
+      class Card extends LitElement {
+        static get is() {
+          return 'vaadin-card';
+        }
+
+        // This indicates the component is "experimental" and needs to be
+        // enabled explicitly in order to define a working custom element.
+        static get experimental() {
+          return true;
+        }
+
+        render() {
+          return html`<div style="padding: 10px">Card defined!</div>`;
+        }
+      }
+
+      // See the source of `defineCustomElement` for the actual logic.
+      defineCustomElement(Card);
+
+      document.querySelector('button').addEventListener('click', () => {
+        // Setting this to true will enable (register) the experimental component.
+        // It doesn't matter whether you set this before or after it is imported.
+        window.Vaadin.featureFlags.vaadinCardComponent = true;
+      });
+    </script>
+  </body>
+</html>
