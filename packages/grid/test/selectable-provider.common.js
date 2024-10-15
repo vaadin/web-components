@@ -188,6 +188,10 @@ describe('selectable-provider', () => {
       return selectAllCheckbox.checked && selectAllCheckbox.indeterminate;
     }
 
+    function isSelectAllUnchecked() {
+      return !selectAllCheckbox.checked && !selectAllCheckbox.indeterminate;
+    }
+
     it('should be checked when all selectable items are selected', () => {
       grid.selectedItems = grid.items.slice(5);
 
@@ -198,6 +202,12 @@ describe('selectable-provider', () => {
       grid.selectedItems = grid.items.slice(6);
 
       expect(isSelectAllIndeterminate()).to.be.true;
+    });
+
+    it('should be unchecked when only unselectable items are selected', () => {
+      grid.selectedItems = grid.items.slice(0, 5);
+
+      expect(isSelectAllUnchecked()).to.be.true;
     });
 
     it('should update when changing isItemSelectable', async () => {
@@ -221,6 +231,15 @@ describe('selectable-provider', () => {
 
       expect(grid.selectedItems.length).to.equal(5);
       expect(grid.selectedItems).to.include.members(grid.items.slice(5));
+    });
+
+    it('should not uncheck non-selectable items on click', async () => {
+      grid.selectedItems = grid.items.slice(0, 5);
+      selectAllCheckbox.click();
+      await nextFrame();
+
+      expect(grid.selectedItems.length).to.equal(10);
+      expect(grid.selectedItems).to.include.members(grid.items);
     });
 
     it('should only uncheck selectable items on click', async () => {
