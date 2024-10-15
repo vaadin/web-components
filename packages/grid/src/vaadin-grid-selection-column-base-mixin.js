@@ -129,8 +129,9 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
      *
      * @override
      */
-    _defaultRenderer(root, _column, { item, selected }) {
+    _defaultRenderer(root, _column, model) {
       let checkbox = root.firstElementChild;
+      const { item, selected } = model;
       if (!checkbox) {
         checkbox = document.createElement('vaadin-checkbox');
         checkbox.setAttribute('aria-label', 'Select Row');
@@ -145,6 +146,7 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
       checkbox.__item = item;
       checkbox.__rendererChecked = selected;
       checkbox.checked = selected;
+      checkbox.disabled = !this._grid.__isItemSelectable(model);
     }
 
     /**
@@ -245,9 +247,19 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
     _onCellKeyDown(e) {
       const target = e.composedPath()[0];
       // Toggle on Space without having to enter interaction mode first
-      if (e.keyCode === 32 && (target === this._headerCell || (this._cells.includes(target) && !this.autoSelect))) {
+      if (e.keyCode !== 32) {
+        return;
+      }
+      if (target === this._headerCell) {
+        if (this.selectAll) {
+          this._deselectAll();
+        } else {
+          this._selectAll();
+        }
+      } else if (this._cells.includes(target) && !this.autoSelect) {
         const checkbox = target._content.firstElementChild;
-        checkbox.checked = !checkbox.checked;
+        const item = checkbox.__item;
+        this.__toggleItem(item);
       }
     }
 
@@ -346,17 +358,30 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
 
     /**
      * Override to handle the user selecting an item.
-     * @param {Object} item the item to select
+     * @param {Object} _item the item to select
      * @protected
      */
     _selectItem(_item) {}
 
     /**
      * Override to handle the user deselecting an item.
-     * @param {Object} item the item to deselect
+     * @param {Object} _item the item to deselect
      * @protected
      */
     _deselectItem(_item) {}
+
+    /**
+     * Toggles the selected state of the given item.
+     * @param item the item to toggle
+     * @private
+     */
+    __toggleItem(item) {
+      if (this._grid._isSelected(item)) {
+        this._deselectItem(item);
+      } else {
+        this._selectItem(item);
+      }
+    }
 
     /**
      * IOS needs indeterminate + checked at the same time

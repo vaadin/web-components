@@ -162,11 +162,15 @@ export const getHeaderCellContent = (grid, row, col) => {
   return getContainerCellContent(container, row, col);
 };
 
-export const getBodyCellContent = (grid, row, col) => {
+export const getBodyCell = (grid, row, col) => {
   const physicalItems = getPhysicalItems(grid);
   const physicalRow = physicalItems.find((item) => item.index === row);
   const cells = getRowCells(physicalRow);
-  return getCellContent(cells[col]);
+  return cells[col];
+};
+
+export const getBodyCellContent = (grid, row, col) => {
+  return getCellContent(getBodyCell(grid, row, col));
 };
 
 export const fire = (type, detail, options) => {

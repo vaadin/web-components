@@ -120,7 +120,11 @@ export const GridSelectionColumnMixin = (superClass) =>
      * @override
      */
     _selectItem(item) {
-      this._grid.selectItem(item);
+      const model = this._grid.__getRowModelByItem(item);
+      const isSelectable = this._grid.__isItemSelectable(model);
+      if (isSelectable) {
+        this._grid.selectItem(item);
+      }
     }
 
     /**
@@ -132,7 +136,11 @@ export const GridSelectionColumnMixin = (superClass) =>
      * @override
      */
     _deselectItem(item) {
-      this._grid.deselectItem(item);
+      const model = this._grid.__getRowModelByItem(item);
+      const isSelectable = this._grid.__isItemSelectable(model);
+      if (isSelectable) {
+        this._grid.deselectItem(item);
+      }
     }
 
     /** @private */
@@ -141,7 +149,7 @@ export const GridSelectionColumnMixin = (superClass) =>
       if (this.autoSelect) {
         const item = activeItem || this.__previousActiveItem;
         if (item) {
-          this._grid._toggleItem(item);
+          this.__toggleItem(item);
         }
       }
       this.__previousActiveItem = activeItem;
