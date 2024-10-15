@@ -129,9 +129,8 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
      *
      * @override
      */
-    _defaultRenderer(root, _column, model) {
+    _defaultRenderer(root, _column, { item, selected }) {
       let checkbox = root.firstElementChild;
-      const { item, selected } = model;
       if (!checkbox) {
         checkbox = document.createElement('vaadin-checkbox');
         checkbox.setAttribute('aria-label', 'Select Row');
@@ -146,7 +145,7 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
       checkbox.__item = item;
       checkbox.__rendererChecked = selected;
       checkbox.checked = selected;
-      checkbox.disabled = !this._grid.__isItemSelectable(model);
+      checkbox.disabled = !this._grid.__isItemSelectable(item);
     }
 
     /**
