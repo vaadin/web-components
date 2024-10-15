@@ -725,24 +725,6 @@ export const KeyboardNavigationMixin = (superClass) =>
       } else if (focusTarget === this.$.focusexit) {
         // The focus is about to exit the grid to the bottom.
         this.$.focusexit.focus();
-      } else if (focusTarget === this._itemsFocusable) {
-        let itemsFocusTarget = focusTarget;
-        const targetRow = isRow(focusTarget) ? focusTarget : focusTarget.parentNode;
-        this._ensureScrolledToIndex(this._focusedItemIndex);
-        if (targetRow.index !== this._focusedItemIndex && isCell(focusTarget)) {
-          // The target row, which is about to be focused next, has been
-          // assigned with a new index since last focus, probably because of
-          // scrolling. Focus the row for the stored focused item index instead.
-          const columnIndex = Array.from(targetRow.children).indexOf(this._itemsFocusable);
-          const focusedItemRow = Array.from(this.$.items.children).find(
-            (row) => !row.hidden && row.index === this._focusedItemIndex,
-          );
-          if (focusedItemRow) {
-            itemsFocusTarget = focusedItemRow.children[columnIndex];
-          }
-        }
-        e.preventDefault();
-        itemsFocusTarget.focus();
       } else {
         e.preventDefault();
         focusTarget.focus();

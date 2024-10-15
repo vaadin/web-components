@@ -1281,19 +1281,6 @@ describe('keyboard navigation', () => {
         expect(getFocusedRowIndex()).to.equal(0);
       });
 
-      it('should scroll the focused item visible when focus is set to body', async () => {
-        scrollToEnd(grid);
-        await nextFrame();
-
-        tabToHeader();
-        tab();
-        tabToBody();
-
-        flushGrid(grid);
-
-        expect(grid.$.table.scrollTop).to.equal(0);
-      });
-
       it('should have the right cell focused after size change', () => {
         scrollToEnd(grid);
         getCell(grid, 0).focus();
@@ -1325,34 +1312,26 @@ describe('keyboard navigation', () => {
       });
 
       describe('rotating focus indicator prevention', () => {
-        it('should hide navigation mode when a focused row goes off screen', () => {
+        it('should hide navigation mode when a focused row goes off screen', async () => {
           focusItem(0);
           right();
 
           expect(grid.hasAttribute('navigating')).to.be.true;
 
           grid.scrollToIndex(100);
+          await nextFrame();
 
           expect(grid.hasAttribute('navigating')).to.be.false;
         });
 
-        it('should reveal navigation mode when a focused row is back on screen', () => {
-          focusItem(0);
-          right();
-          grid.scrollToIndex(100);
-
-          grid.scrollToIndex(0);
-
-          expect(grid.hasAttribute('navigating')).to.be.true;
-        });
-
-        it('should not hide navigation mode if a header cell is focused', () => {
+        it('should not hide navigation mode if a header cell is focused', async () => {
           tabToHeader();
           right();
 
           expect(grid.hasAttribute('navigating')).to.be.true;
 
           grid.scrollToIndex(100);
+          await nextFrame();
 
           expect(grid.hasAttribute('navigating')).to.be.true;
         });
