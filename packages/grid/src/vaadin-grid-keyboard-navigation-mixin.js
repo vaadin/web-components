@@ -3,7 +3,9 @@
  * Copyright (c) 2016 - 2024 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
+import { isElementFocused, isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
+import { animationFrame } from '@vaadin/component-base/src/async.js';
+import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { addValueToAttribute, removeValueFromAttribute } from '@vaadin/component-base/src/dom-utils.js';
 import { get } from '@vaadin/component-base/src/path-utils.js';
 
@@ -50,16 +52,13 @@ export const KeyboardNavigationMixin = (superClass) =>
           sync: true,
         },
 
-        /** @private */
-        _navigatingIsHidden: Boolean,
-
         /**
          * @type {number}
          * @protected
          */
         _focusedItemIndex: {
           type: Number,
-          value: 0,
+          value: -1,
         },
 
         /** @private */
@@ -801,8 +800,11 @@ export const KeyboardNavigationMixin = (superClass) =>
         this.toggleAttribute('navigating', true);
       }
 
-      const rootTarget = e.composedPath()[0];
+      if (this._focusedItemIndex === -1) {
+        this.__resetSectionFocusable('items');
+      }
 
+      const rootTarget = e.composedPath()[0];
       if (rootTarget === this.$.table || rootTarget === this.$.focusexit) {
         if (!this._isMousedown) {
           // The focus enters the top (bottom) of the grid, meaning that user has
@@ -925,21 +927,22 @@ export const KeyboardNavigationMixin = (superClass) =>
      * @param {number} index
      * @protected
      */
-    _preventScrollerRotatingCellFocus(row, index) {
-      if (
-        row.index === this._focusedItemIndex &&
-        this.hasAttribute('navigating') &&
-        this._activeRowGroup === this.$.items
-      ) {
-        // Focused item has went, hide navigation mode
-        this._navigatingIsHidden = true;
-        this.toggleAttribute('navigating', false);
+    _preventScrollerRotatingCellFocus() {
+      if (this._focusedItemIndex === -1) {
+        return;
       }
-      if (index === this._focusedItemIndex && this._navigatingIsHidden) {
-        // Focused item is back, restore navigation mode
-        this._navigatingIsHidden = false;
-        this.toggleAttribute('navigating', true);
-      }
+
+      this.__preventScrollerRotatingCellFocusDebouncer = Debouncer.debounce(
+        this.__preventScrollerRotatingCellFocusDebouncer,
+        animationFrame,
+        () => {
+          const isFocusedItemRendered = this._getRenderedRows().some((row) => row.index === this._focusedItemIndex);
+          if (!isFocusedItemRendered && isElementFocused(this._itemsFocusable)) {
+            this._itemsFocusable.blur();
+            this._focusedItemIndex = -1;
+          }
+        },
+      );
     }
 
     /**
@@ -968,29 +971,39 @@ export const KeyboardNavigationMixin = (superClass) =>
       if (!this.$ && this.performUpdate) {
         this.performUpdate();
       }
+
       // Header / footer
       ['header', 'footer'].forEach((section) => {
         if (!this.__isValidFocusable(this[`_${section}Focusable`])) {
-          const firstVisibleRow = [...this.$[section].children].find((row) => row.offsetHeight);
-          const firstVisibleCell = firstVisibleRow ? [...firstVisibleRow.children].find((cell) => !cell.hidden) : null;
-          if (firstVisibleRow && firstVisibleCell) {
-            this[`_${section}Focusable`] = this.__getFocusable(firstVisibleRow, firstVisibleCell);
-          }
+          this.__resetSectionFocusable(section);
         }
       });
 
       // Body
       if (!this.__isValidFocusable(this._itemsFocusable) && this.$.items.firstElementChild) {
+        this.__resetSectionFocusable('items');
+      } else {
+        this.__updateItemsFocusable();
+      }
+    }
+
+    __resetSectionFocusable(section) {
+      if (['header', 'footer'].includes(section)) {
+        const firstVisibleRow = [...this.$[section].children].find((row) => row.offsetHeight);
+        const firstVisibleCell = firstVisibleRow ? [...firstVisibleRow.children].find((cell) => !cell.hidden) : null;
+        if (firstVisibleRow && firstVisibleCell) {
+          this[`_${section}Focusable`] = this.__getFocusable(firstVisibleRow, firstVisibleCell);
+        }
+      }
+
+      if (section === 'items') {
         const firstVisibleRow = this.__getFirstVisibleItem();
         const firstVisibleCell = firstVisibleRow ? [...firstVisibleRow.children].find((cell) => !cell.hidden) : null;
-
         if (firstVisibleCell && firstVisibleRow) {
           // Reset memoized column
           this._focusedColumnOrder = undefined;
           this._itemsFocusable = this.__getFocusable(firstVisibleRow, firstVisibleCell);
         }
-      } else {
-        this.__updateItemsFocusable();
       }
     }
 
