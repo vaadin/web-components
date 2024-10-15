@@ -297,6 +297,10 @@ export const InlineEditingMixin = (superClass) =>
 
     /** @private */
     _onEditorFocusOut() {
+      // Ignore focusout from internal tab event
+      if (this.__cancelCellSwitch) {
+        return;
+      }
       // Schedule stop on editor component focusout
       this._debouncerStopEdit = Debouncer.debounce(this._debouncerStopEdit, animationFrame, this._stopEdit.bind(this));
     }
@@ -413,7 +417,7 @@ export const InlineEditingMixin = (superClass) =>
      * @param {!KeyboardEvent} e
      * @protected
      */
-    _switchEditCell(e) {
+    async _switchEditCell(e) {
       if (this.__cancelCellSwitch || (e.defaultPrevented && e.keyCode === 9)) {
         return;
       }
@@ -423,6 +427,22 @@ export const InlineEditingMixin = (superClass) =>
       const cols = this._getEditColumns();
 
       const { cell, column, model } = this.__edited;
+
+      // Prevent vaadin-grid handler from being called
+      e.stopImmediatePropagation();
+
+      const editor = column._getEditorComponent(cell);
+
+      // Do not prevent Tab to allow native input blur and wait for it,
+      // unless the keydown event is from the edit cell select overlay.
+      if (e.key === 'Tab' && editor && editor.contains(e.target)) {
+        await new Promise((resolve) => {
+          editor.addEventListener('focusout', () => resolve(), { once: true });
+        });
+      } else {
+        e.preventDefault();
+      }
+
       const colIndex = cols.indexOf(column);
       const { index } = model;
 
@@ -462,10 +482,6 @@ export const InlineEditingMixin = (superClass) =>
 
       if (nextRow && nextCol) {
         const nextCell = Array.from(nextRow.children).find((cell) => cell._column === nextCol);
-        e.preventDefault();
-
-        // Prevent vaadin-grid handler from being called
-        e.stopImmediatePropagation();
 
         if (!this.singleCellEdit && nextCell !== cell) {
           this._startEdit(nextCell, nextCol);

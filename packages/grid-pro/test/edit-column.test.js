@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { enter, fixtureSync, focusin, focusout, isIOS, tab } from '@vaadin/testing-helpers';
+import { enter, fixtureSync, focusin, focusout, nextFrame } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import '@vaadin/polymer-legacy-adapter/template-renderer.js';
@@ -20,10 +20,10 @@ import {
 const isMac = navigator.platform.includes('Mac');
 
 describe('edit column', () => {
-  (isIOS ? describe.skip : describe)('select column', () => {
-    let grid, textCell, selectCell, checkboxCell;
+  describe('select column', () => {
+    let grid, textCell, selectCell, ageCell;
 
-    beforeEach(() => {
+    beforeEach(async () => {
       grid = fixtureSync(`
         <vaadin-grid-pro>
           <vaadin-grid-pro-edit-column path="name"></vaadin-grid-pro-edit-column>
@@ -37,31 +37,36 @@ describe('edit column', () => {
       flushGrid(grid);
       textCell = getContainerCell(grid.$.items, 1, 0);
       selectCell = getContainerCell(grid.$.items, 1, 1);
-      checkboxCell = getContainerCell(grid.$.items, 1, 2);
+      ageCell = getContainerCell(grid.$.items, 1, 2);
+      await nextFrame();
     });
 
     it('should focus cell next available for editing in edit mode on Tab', async () => {
       dblclick(textCell._content);
       expect(getCellEditor(textCell)).to.be.ok;
+      await nextFrame();
 
       // Press Tab to edit the select cell
       await sendKeys({ press: 'Tab' });
       expect(getCellEditor(selectCell)).to.be.ok;
+      await nextFrame();
 
-      // Press Tab to edit the checkbox cell
+      // Press Tab to edit the age cell
       await sendKeys({ press: 'Tab' });
-      expect(getCellEditor(checkboxCell)).to.be.ok;
+      expect(getCellEditor(ageCell)).to.be.ok;
     });
 
     it('should focus previous cell available for editing in edit mode on Shift Tab', async () => {
-      dblclick(checkboxCell._content);
-      expect(getCellEditor(checkboxCell)).to.be.ok;
+      dblclick(ageCell._content);
+      expect(getCellEditor(ageCell)).to.be.ok;
+      await nextFrame();
 
       // Press Shift + Tab to edit the select cell
       await sendKeys({ down: 'Shift' });
       await sendKeys({ press: 'Tab' });
       await sendKeys({ up: 'Shift' });
       expect(getCellEditor(selectCell)).to.be.ok;
+      await nextFrame();
 
       // Press Shift + Tab to edit the text cell
       await sendKeys({ down: 'Shift' });
@@ -111,7 +116,7 @@ describe('edit column', () => {
   });
 
   describe('horizontal scrolling to cell', () => {
-    let grid, input;
+    let grid;
 
     beforeEach(() => {
       grid = fixtureSync(`
@@ -130,26 +135,24 @@ describe('edit column', () => {
       flushGrid(grid);
     });
 
-    it('should scroll to the right on tab when editable cell is outside the viewport', () => {
+    it('should scroll to the right on tab when editable cell is outside the viewport', async () => {
       const firstCell = getContainerCell(grid.$.items, 1, 0);
       dblclick(firstCell._content);
-      input = getCellEditor(firstCell);
-      tab(input);
+
+      await sendKeys({ press: 'Tab' });
 
       expect(grid.$.table.scrollLeft).to.be.at.least(100);
     });
 
-    it('should scroll to the left on tab when editable cell is outside the viewport', (done) => {
+    it('should scroll to the left on tab when editable cell is outside the viewport', async () => {
       const firstCell = getContainerCell(grid.$.items, 1, 1);
       dblclick(firstCell._content);
 
-      setTimeout(() => {
-        input = getCellEditor(firstCell);
-        tab(input, ['shift']);
+      await sendKeys({ down: 'Shift' });
+      await sendKeys({ press: 'Tab' });
+      await sendKeys({ up: 'Shift' });
 
-        expect(grid.$.table.scrollLeft).to.closeTo(1, 1);
-        done();
-      });
+      expect(grid.$.table.scrollLeft).to.closeTo(1, 1);
     });
   });
 
@@ -250,11 +253,12 @@ describe('edit column', () => {
       expect(input).to.be.not.ok;
     });
 
-    it('should cancel editing when disabled is set to true', () => {
+    it('should cancel editing when disabled is set to true', async () => {
       const cell = getContainerCell(grid.$.items, 1, 0);
       const oldContent = cell._content.textContent;
       enter(cell);
       grid.disabled = true;
+      await nextFrame();
       expect(cell._content.textContent).to.equal(oldContent);
     });
   });
