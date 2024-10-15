@@ -157,9 +157,13 @@ export const getContainerCellContent = (container, row, col) => {
   return getCellContent(getContainerCell(container, row, col));
 };
 
-export const getHeaderCellContent = (grid, row, col) => {
+export const getHeaderCell = (grid, row, col) => {
   const container = grid.$.header;
-  return getContainerCellContent(container, row, col);
+  return getContainerCell(container, row, col);
+};
+
+export const getHeaderCellContent = (grid, row, col) => {
+  return getCellContent(getHeaderCell(grid, row, col));
 };
 
 export const getBodyCell = (grid, row, col) => {

@@ -1,13 +1,13 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
-import { fire, flushGrid, getBodyCell, getBodyCellContent } from './helpers.js';
+import { fire, flushGrid, getBodyCell, getBodyCellContent, getHeaderCell, getHeaderCellContent } from './helpers.js';
 
 describe('selectable-provider', () => {
   let grid;
   let selectionColumn;
-  let clock;
+  let selectAllCheckbox;
 
   function getItemCheckbox(rowIndex) {
     return getBodyCellContent(grid, rowIndex, 0).querySelector('vaadin-checkbox');
@@ -23,30 +23,25 @@ describe('selectable-provider', () => {
     );
   }
 
-  beforeEach(() => {
+  beforeEach(async () => {
     grid = fixtureSync(`
         <vaadin-grid style="width: 200px; height: 400px;">
           <vaadin-grid-selection-column></vaadin-grid-selection-column>
           <vaadin-grid-column path="name"></vaadin-grid-column>
         </vaadin-grid>
       `);
-    selectionColumn = grid.querySelector('vaadin-grid-selection-column');
 
     // setup 10 items, first 5 are non-selectable
     grid.items = Array.from({ length: 10 }, (_, i) => {
-      return { name: `item ${i}` };
+      return { index: i, name: `item ${i}` };
     });
-    grid.isItemSelectable = (model) => model.index >= 5;
+    grid.isItemSelectable = (item) => item.index >= 5;
 
     flushGrid(grid);
+    await nextFrame();
 
-    clock = sinon.useFakeTimers({
-      shouldClearNativeTimers: true,
-    });
-  });
-
-  afterEach(() => {
-    clock.restore();
+    selectionColumn = grid.querySelector('vaadin-grid-selection-column');
+    selectAllCheckbox = getHeaderCellContent(grid, 0, 0).querySelector('vaadin-checkbox');
   });
 
   describe('individual selection', () => {
@@ -57,7 +52,7 @@ describe('selectable-provider', () => {
     });
 
     it('should update disabled checkboxes when changing isItemSelectable', () => {
-      grid.isItemSelectable = (model) => model.index < 5;
+      grid.isItemSelectable = (item) => item.index < 5;
       flushGrid(grid);
 
       for (let i = 0; i < grid.items.length; i++) {
@@ -65,25 +60,29 @@ describe('selectable-provider', () => {
       }
     });
 
-    it('should prevent selection on checkbox click', () => {
+    it('should prevent selection on checkbox click', async () => {
       // prevents selection for non-selectable items
       getItemCheckbox(0).click();
+      await nextFrame();
       expect(grid.selectedItems.length).to.equal(0);
 
       // allows selection for selectable items
       getItemCheckbox(5).click();
+      await nextFrame();
       expect(grid.selectedItems.length).to.equal(1);
     });
 
-    it('should prevent deselection on checkbox click', () => {
+    it('should prevent deselection on checkbox click', async () => {
       grid.selectedItems = [...grid.items];
 
       // prevents deselection for non-selectable items
       getItemCheckbox(0).click();
+      await nextFrame();
       expect(grid.selectedItems.length).to.equal(10);
 
       // allows deselection for selectable items
       getItemCheckbox(5).click();
+      await nextFrame();
       expect(grid.selectedItems.length).to.equal(9);
     });
 
@@ -137,10 +136,23 @@ describe('selectable-provider', () => {
       await sendKeys({ press: 'Space' });
       expect(grid.selectedItems.length).to.equal(9);
     });
+  });
+
+  describe('drag selection', () => {
+    let clock;
+
+    beforeEach(() => {
+      selectionColumn.dragSelect = true;
+      clock = sinon.useFakeTimers({
+        shouldClearNativeTimers: true,
+      });
+    });
+
+    afterEach(() => {
+      clock.restore();
+    });
 
     it('should prevent selection when drag selecting', () => {
-      selectionColumn.dragSelect = true;
-
       // drag select in reverse from selectable items to non-selectable items
       for (let i = 9; i >= 0; i--) {
         const cellContent = getBodyCellContent(grid, i, 0);
@@ -154,7 +166,6 @@ describe('selectable-provider', () => {
 
     it('should prevent deselection when drag selecting', () => {
       grid.selectedItems = [...grid.items];
-      selectionColumn.dragSelect = true;
 
       // drag select in reverse from selectable items to non-selectable items
       for (let i = 9; i >= 0; i--) {
@@ -163,6 +174,80 @@ describe('selectable-provider', () => {
         fireTrackEvent(cellContent, cellContent, eventState);
         clock.tick(10);
       }
+      expect(grid.selectedItems.length).to.equal(5);
+      expect(grid.selectedItems).to.include.members(grid.items.slice(0, 5));
+    });
+  });
+
+  describe('select all', () => {
+    function isSelectAllChecked() {
+      return selectAllCheckbox.checked && !selectAllCheckbox.indeterminate;
+    }
+
+    function isSelectAllIndeterminate() {
+      return selectAllCheckbox.checked && selectAllCheckbox.indeterminate;
+    }
+
+    it('should be checked when all selectable items are selected', () => {
+      grid.selectedItems = grid.items.slice(5);
+
+      expect(isSelectAllChecked()).to.be.true;
+    });
+
+    it('should be indeterminate when some selectable items are not selected', () => {
+      grid.selectedItems = grid.items.slice(6);
+
+      expect(isSelectAllIndeterminate()).to.be.true;
+    });
+
+    it('should update when changing isItemSelectable', async () => {
+      // change provider so that some selectable items are not checked
+      grid.selectedItems = grid.items.slice(5);
+      grid.isItemSelectable = (item) => item.index > 1;
+      await nextFrame();
+
+      expect(isSelectAllIndeterminate()).to.be.true;
+
+      // revert provider so that only non-selectable items are not checked
+      grid.isItemSelectable = (item) => item.index >= 5;
+      await nextFrame();
+
+      expect(isSelectAllChecked()).to.be.true;
+    });
+
+    it('should only check selectable items on click', async () => {
+      selectAllCheckbox.click();
+      await nextFrame();
+
+      expect(grid.selectedItems.length).to.equal(5);
+      expect(grid.selectedItems).to.include.members(grid.items.slice(5));
+    });
+
+    it('should only uncheck selectable items on click', async () => {
+      grid.selectedItems = [...grid.items];
+      await nextFrame();
+
+      selectAllCheckbox.click();
+      await nextFrame();
+
+      expect(grid.selectedItems.length).to.equal(5);
+      expect(grid.selectedItems).to.include.members(grid.items.slice(0, 5));
+    });
+
+    it('should only check selectable items when pressing space on cell', async () => {
+      getHeaderCell(grid, 0, 0).focus();
+      await sendKeys({ press: 'Space' });
+
+      expect(grid.selectedItems.length).to.equal(5);
+      expect(grid.selectedItems).to.include.members(grid.items.slice(5));
+    });
+
+    it('should only uncheck selectable items when pressing space on cell', async () => {
+      grid.selectedItems = [...grid.items];
+
+      getHeaderCell(grid, 0, 0).focus();
+      await sendKeys({ press: 'Space' });
+
       expect(grid.selectedItems.length).to.equal(5);
       expect(grid.selectedItems).to.include.members(grid.items.slice(0, 5));
     });

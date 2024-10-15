@@ -1021,14 +1021,6 @@ export const GridMixin = (superClass) =>
     }
 
     /**
-     * @private
-     */
-    __getRowModelByItem(item) {
-      const row = this._getRenderedRows().find((row) => row._item === item);
-      return row ? this.__getRowModel(row) : null;
-    }
-
-    /**
      * @param {Event} event
      * @protected
      */

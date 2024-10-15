@@ -30,21 +30,14 @@ export const SelectionMixin = (superClass) =>
          * items. Changing the function does not update the currently selected
          * items.
          *
-         * Receives a `model` object containing the item for an individual row,
-         * and should return a boolean indicating whether users may change the
-         * selection state of that item.
+         * Receives an item instance and should return a boolean indicating
+         * whether users may change the selection state of that item.
          *
-         * The `model` object contains:
-         * - `model.index` The index of the item.
-         * - `model.item` The item.
-         * - `model.expanded` Sublevel toggle state.
-         * - `model.level` Level of the tree represented with a horizontal offset of the toggle button.
-         * - `model.selected` Selected state.
-         *
-         * @type {(model: GridItemModel) => boolean}
+         * @type {(item: !GridItem) => boolean}
          */
         isItemSelectable: {
           type: Function,
+          notify: true,
         },
 
         /**
@@ -77,14 +70,14 @@ export const SelectionMixin = (superClass) =>
      *
      * @private
      */
-    __isItemSelectable(model) {
+    __isItemSelectable(item) {
       // Item is selectable by default if isItemSelectable is not configured
-      if (!this.isItemSelectable || !model) {
+      if (!this.isItemSelectable || !item) {
         return true;
       }
 
       // Otherwise, check isItemSelectable function
-      return this.isItemSelectable(model);
+      return this.isItemSelectable(item);
     }
 
     /**

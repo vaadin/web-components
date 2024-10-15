@@ -40,6 +40,7 @@ export const GridSelectionColumnMixin = (superClass) =>
       this._grid.removeEventListener('data-provider-changed', this.__boundOnDataProviderChanged);
       this._grid.removeEventListener('filter-changed', this.__boundOnSelectedItemsChanged);
       this._grid.removeEventListener('selected-items-changed', this.__boundOnSelectedItemsChanged);
+      this._grid.removeEventListener('is-item-selectable-changed', this.__boundOnSelectedItemsChanged);
 
       super.disconnectedCallback();
     }
@@ -52,6 +53,7 @@ export const GridSelectionColumnMixin = (superClass) =>
         this._grid.addEventListener('data-provider-changed', this.__boundOnDataProviderChanged);
         this._grid.addEventListener('filter-changed', this.__boundOnSelectedItemsChanged);
         this._grid.addEventListener('selected-items-changed', this.__boundOnSelectedItemsChanged);
+        this._grid.addEventListener('is-item-selectable-changed', this.__boundOnSelectedItemsChanged);
       }
     }
 
@@ -72,11 +74,12 @@ export const GridSelectionColumnMixin = (superClass) =>
       }
 
       if (selectAll && this.__hasArrayDataProvider()) {
-        this.__withFilteredItemsArray((items) => {
-          this._grid.selectedItems = items;
-        });
+        // Select all items that users may change the selection state of
+        this._grid.selectedItems = this.__getSelectableItems();
       } else {
-        this._grid.selectedItems = [];
+        // Deselect all, keeping items that users may not change the selection state of
+        const currentSelection = this._grid.selectedItems || [];
+        this._grid.selectedItems = currentSelection.filter((item) => !this._grid.__isItemSelectable(item));
       }
     }
 
@@ -120,8 +123,7 @@ export const GridSelectionColumnMixin = (superClass) =>
      * @override
      */
     _selectItem(item) {
-      const model = this._grid.__getRowModelByItem(item);
-      const isSelectable = this._grid.__isItemSelectable(model);
+      const isSelectable = this._grid.__isItemSelectable(item);
       if (isSelectable) {
         this._grid.selectItem(item);
       }
@@ -136,8 +138,7 @@ export const GridSelectionColumnMixin = (superClass) =>
      * @override
      */
     _deselectItem(item) {
-      const model = this._grid.__getRowModelByItem(item);
-      const isSelectable = this._grid.__isItemSelectable(model);
+      const isSelectable = this._grid.__isItemSelectable(item);
       if (isSelectable) {
         this._grid.deselectItem(item);
       }
@@ -164,18 +165,16 @@ export const GridSelectionColumnMixin = (superClass) =>
     __onSelectedItemsChanged() {
       this._selectAllChangeLock = true;
       if (this.__hasArrayDataProvider()) {
-        this.__withFilteredItemsArray((items) => {
-          if (!this._grid.selectedItems.length) {
-            this.selectAll = false;
-            this._indeterminate = false;
-          } else if (this.__arrayContains(this._grid.selectedItems, items)) {
-            this.selectAll = true;
-            this._indeterminate = false;
-          } else {
-            this.selectAll = false;
-            this._indeterminate = true;
-          }
-        });
+        if (!this._grid.selectedItems.length) {
+          this.selectAll = false;
+          this._indeterminate = false;
+        } else if (this.__arrayContains(this._grid.selectedItems, this.__getSelectableItems())) {
+          this.selectAll = true;
+          this._indeterminate = false;
+        } else {
+          this.selectAll = false;
+          this._indeterminate = true;
+        }
       }
       this._selectAllChangeLock = false;
     }
@@ -186,18 +185,22 @@ export const GridSelectionColumnMixin = (superClass) =>
     }
 
     /**
-     * Assuming the grid uses an items array data provider, fetches all the filtered items
-     * from the data provider and invokes the callback with the resulting array.
-     *
      * @private
      */
-    __withFilteredItemsArray(callback) {
+    __getSelectableItems() {
+      // Assuming the grid uses an items array data provider, fetches all the
+      // filtered items from the data provider
+      let filteredItems = [];
       const params = {
         page: 0,
         pageSize: Infinity,
         sortOrders: [],
         filters: this._grid._mapFilters(),
       };
-      this._grid.dataProvider(params, (items) => callback(items));
+      this._grid.dataProvider(params, (items) => {
+        filteredItems = items;
+      });
+      // Filter again for selectable items
+      return filteredItems.filter((item) => this._grid.__isItemSelectable(item));
     }
   };
