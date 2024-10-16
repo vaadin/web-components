@@ -839,12 +839,13 @@ export const KeyboardNavigationMixin = (superClass) =>
 
       if (section && (cell || row)) {
         this._activeRowGroup = section;
-        if (this.$.header === section) {
+
+        if (section === this.$.header) {
           this._headerFocusable = this.__getFocusable(row, cell);
-        } else if (this.$.items === section) {
+        } else if (section === this.$.items) {
           this._itemsFocusable = this.__getFocusable(row, cell);
           this._focusedItemIndex = row.index;
-        } else if (this.$.footer === section) {
+        } else if (section === this.$.footer) {
           this._footerFocusable = this.__getFocusable(row, cell);
         }
 
