@@ -75,13 +75,7 @@ export const GridSelectionColumnMixin = (superClass) =>
 
       if (selectAll && this.__hasArrayDataProvider()) {
         // Select all items that users may change the selection state of, keeping items that users may not change the selection state of
-        const newSelection = this.__getSelectableItems();
-        for (const item of this.__getNonModifiableSelectedItems()) {
-          if (!newSelection.includes(item)) {
-            newSelection.push(item);
-          }
-        }
-        this._grid.selectedItems = newSelection;
+        this._grid.selectedItems = [...this.__getNonModifiableSelectedItems(), ...this.__getSelectableItems()];
       } else {
         // Deselect all, keeping items that users may not change the selection state of
         this._grid.selectedItems = this.__getNonModifiableSelectedItems();
