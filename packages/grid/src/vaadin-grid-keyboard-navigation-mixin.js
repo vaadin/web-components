@@ -787,6 +787,7 @@ export const KeyboardNavigationMixin = (superClass) =>
       }
 
       const rootTarget = e.composedPath()[0];
+
       if (rootTarget === this.$.table || rootTarget === this.$.focusexit) {
         if (!this._isMousedown) {
           // The focus enters the top (bottom) of the grid, meaning that user has
@@ -949,7 +950,7 @@ export const KeyboardNavigationMixin = (superClass) =>
       if (!this.$ && this.performUpdate) {
         this.performUpdate();
       }
-
+      // Header / footer
       ['header', 'footer'].forEach((section) => {
         if (!this.__isValidFocusable(this[`_${section}Focusable`])) {
           const firstVisibleRow = [...this.$[section].children].find((row) => row.offsetHeight);
@@ -960,6 +961,7 @@ export const KeyboardNavigationMixin = (superClass) =>
         }
       });
 
+      // Body
       if (!this.__isValidFocusable(this._itemsFocusable) && this.$.items.firstElementChild) {
         this.__resetItemsFocusable();
       } else {
