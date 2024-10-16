@@ -3,7 +3,7 @@
  * Copyright (c) 2016 - 2024 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { isElementFocused, isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
+import { isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
 import { animationFrame } from '@vaadin/component-base/src/async.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { addValueToAttribute, removeValueFromAttribute } from '@vaadin/component-base/src/dom-utils.js';
@@ -705,6 +705,10 @@ export const KeyboardNavigationMixin = (superClass) =>
 
     /** @private */
     _onTabKeyDown(e) {
+      if (this._focusedItemIndex === -1) {
+        this.__resetItemsFocusable();
+      }
+
       const focusTarget = this._predictFocusStepTarget(e.composedPath()[0], e.shiftKey ? -1 : 1);
 
       // Can be undefined if grid has tabindex
@@ -900,11 +904,7 @@ export const KeyboardNavigationMixin = (superClass) =>
       focusTarget.tabIndex = isInteractingWithinActiveSection ? -1 : 0;
     }
 
-    /**
-     * @param {!HTMLTableRowElement} row
-     * @param {number} index
-     * @protected
-     */
+    /** @protected */
     _preventScrollerRotatingCellFocus() {
       if (this._focusedItemIndex === -1) {
         return;
@@ -915,7 +915,7 @@ export const KeyboardNavigationMixin = (superClass) =>
         animationFrame,
         () => {
           const isFocusedItemRendered = this._getRenderedRows().some((row) => row.index === this._focusedItemIndex);
-          if (!isFocusedItemRendered && isElementFocused(this._itemsFocusable)) {
+          if (!isFocusedItemRendered) {
             this._itemsFocusable.blur();
             this._focusedItemIndex = -1;
           }
