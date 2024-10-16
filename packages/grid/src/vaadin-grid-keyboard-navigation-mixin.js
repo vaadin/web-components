@@ -506,8 +506,8 @@ export const KeyboardNavigationMixin = (superClass) =>
       // listener invocation gets updated _focusedItemIndex value.
       this._focusedItemIndex = dstRowIndex;
 
-      // This has to be set after scrolling, otherwise it can be removed by
-      // `_preventScrollerRotatingCellFocus(row, index)` during scrolling.
+      // Reapply navigating state in case it was removed due to previous item
+      // being focused with the mouse.
       this.toggleAttribute('navigating', true);
 
       return {
