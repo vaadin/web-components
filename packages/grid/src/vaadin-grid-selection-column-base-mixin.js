@@ -145,7 +145,8 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
       checkbox.__item = item;
       checkbox.__rendererChecked = selected;
       checkbox.checked = selected;
-      checkbox.disabled = !this._grid.__isItemSelectable(item);
+      checkbox.readonly = !this._grid.__isItemSelectable(item);
+      checkbox.hidden = !this._grid.__isItemSelectable(item) && !selected;
     }
 
     /**

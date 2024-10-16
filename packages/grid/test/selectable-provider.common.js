@@ -44,22 +44,34 @@ describe('selectable-provider', () => {
     selectAllCheckbox = getHeaderCellContent(grid, 0, 0).querySelector('vaadin-checkbox');
   });
 
-  describe('individual selection', () => {
-    it('should disable checkboxes for non-selectable items', () => {
+  describe('checkbox states', () => {
+    it('should hide checkboxes for non-selectable items that are not selected', () => {
       for (let i = 0; i < grid.items.length; i++) {
-        expect(getItemCheckbox(i).disabled).to.equal(i < 5);
+        expect(getItemCheckbox(i).readonly).to.equal(i < 5);
+        expect(getItemCheckbox(i).hidden).to.equal(i < 5);
       }
     });
 
-    it('should update disabled checkboxes when changing isItemSelectable', () => {
+    it('should show readonly checkboxes for non-selectable items that are selected', () => {
+      grid.selectedItems = [...grid.items];
+
+      for (let i = 0; i < grid.items.length; i++) {
+        expect(getItemCheckbox(i).readonly).to.equal(i < 5);
+        expect(getItemCheckbox(i).hidden).to.be.false;
+      }
+    });
+
+    it('should update checkboxes when changing isItemSelectable', () => {
       grid.isItemSelectable = (item) => item.index < 5;
       flushGrid(grid);
 
       for (let i = 0; i < grid.items.length; i++) {
-        expect(getItemCheckbox(i).disabled).to.equal(i >= 5);
+        expect(getItemCheckbox(i).hidden).to.equal(i >= 5);
       }
     });
+  });
 
+  describe('individual selection', () => {
     it('should prevent selection on checkbox click', async () => {
       // prevents selection for non-selectable items
       getItemCheckbox(0).click();
