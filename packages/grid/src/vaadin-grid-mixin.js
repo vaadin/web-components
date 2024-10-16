@@ -873,11 +873,12 @@ export const GridMixin = (superClass) =>
     }
 
     /** @private */
-    _updateRowStateParts(row, { expanded, selected, detailsOpened }) {
+    _updateRowStateParts(row, { item, expanded, selected, detailsOpened }) {
       updateBooleanRowStates(row, {
         expanded,
         collapsed: this.__isRowExpandable(row),
         selected,
+        nonselectable: this.__isItemSelectable(item) === false,
         'details-opened': detailsOpened,
       });
     }
