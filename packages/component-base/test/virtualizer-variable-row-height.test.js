@@ -232,6 +232,40 @@ describe('virtualizer - variable row height - large variance', () => {
     await fixItemPositioningTimeout();
     expect(virtualizer.__adapter.__fixInvalidItemPositioning.callCount).to.equal(0);
   });
+
+  it('should preserve large item in viewport when new item is added', async () => {
+    // Not using the virtualizer defined above because setting size 1 after initializing with 20000 keeps multiple hidden physical items. This leads to a change in scrolling behaviour. If a new item is added and then scrolled to, it does not appear at the end but the start of the container.
+    const scrollContainer = scrollTarget.firstElementChild;
+    virtualizer = new Virtualizer({
+      createElements: (count) =>
+        Array.from(Array(count)).map(() => {
+          const el = document.createElement('div');
+          el.classList.add('item');
+          return el;
+        }),
+      updateElement,
+      scrollTarget,
+      scrollContainer,
+    });
+
+    // Initially only have a large item
+    virtualizer.size = 1;
+    expandedItems = [0];
+    virtualizer.update();
+    await nextFrame();
+
+    // Calculated using the virtualizer height of 300px and regular item height of 30px
+    const requiredRegularItemCountToFillViewport = 10;
+
+    // Add items until the large item disappears
+    for (let i = 0; i < requiredRegularItemCountToFillViewport - 1; i++) {
+      // Add a new item and scroll to the end
+      virtualizer.size += 1;
+      virtualizer.scrollToIndex(Infinity);
+      await nextFrame();
+      expect(virtualizer.firstVisibleIndex).to.equal(0);
+    }
+  });
 });
 
 describe('virtualizer - variable row height - size changes', () => {
