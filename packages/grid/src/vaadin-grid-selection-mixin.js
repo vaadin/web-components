@@ -27,7 +27,7 @@ export const SelectionMixin = (superClass) =>
          * selected or deselected by the user. Used by the selection column to
          * conditionally enable to disable checkboxes for individual items. This
          * function does not prevent programmatic selection/deselection of
-         * items. Changing the function does not update the currently selected
+         * items. Changing the function does not modify the currently selected
          * items.
          *
          * Receives an item instance and should return a boolean indicating
