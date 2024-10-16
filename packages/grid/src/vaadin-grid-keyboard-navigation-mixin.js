@@ -96,7 +96,7 @@ export const KeyboardNavigationMixin = (superClass) =>
 
     /** @private */
     get __rowFocusMode() {
-      return isRow(this._itemsFocusable) || isRow(this._headerFocusable) || isRow(this._footerFocusable);
+      return [this._headerFocusable, this._itemsFocusable, this._footerFocusable].some(isRow);
     }
 
     set __rowFocusMode(value) {
