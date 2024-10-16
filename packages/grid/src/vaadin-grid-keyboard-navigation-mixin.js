@@ -936,10 +936,10 @@ export const KeyboardNavigationMixin = (superClass) =>
           const isFocusedItemRendered = this._getRenderedRows().some((row) => row.index === this._focusedItemIndex);
           if (isFocusedItemRendered) {
             // Ensure the correct element is focused, as the virtualizer
-            // may have rendered the item using a different element.
+            // may use different elements when re-rendering visible items.
             this.__updateItemsFocusable();
 
-            // if the focused item is visible, restore the cell focus outline
+            // The focused item is visible, so restore the cell focus outline
             // and navigation mode.
             if (isItemsRowGroupActive && !this.__rowFocusMode) {
               this._focusedCell = this._itemsFocusable;
@@ -950,8 +950,8 @@ export const KeyboardNavigationMixin = (superClass) =>
               this._navigatingIsHidden = false;
             }
           } else if (isItemsRowGroupActive) {
-            // If the focused item was scrolled out of view and focus is still inside body,
-            // remove the cell focus outline and hide navigation mode.
+            // The focused item was scrolled out of view and focus is still inside body,
+            // so remove the cell focus outline and hide navigation mode.
             this._focusedCell = null;
 
             if (this.hasAttribute('navigating')) {
