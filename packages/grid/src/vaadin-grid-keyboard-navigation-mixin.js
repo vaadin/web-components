@@ -3,7 +3,7 @@
  * Copyright (c) 2016 - 2024 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { isElementFocused, isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
+import { isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
 import { animationFrame } from '@vaadin/component-base/src/async.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { addValueToAttribute, removeValueFromAttribute } from '@vaadin/component-base/src/dom-utils.js';
@@ -928,27 +928,31 @@ export const KeyboardNavigationMixin = (superClass) =>
         this.__preventScrollerRotatingCellFocusDebouncer,
         animationFrame,
         () => {
+          const isItemsRowGroupActive = this._activeRowGroup === this.$.items;
           const isFocusedItemRendered = this._getRenderedRows().some((row) => row.index === this._focusedItemIndex);
           if (isFocusedItemRendered) {
-            // Focused item was scrolled back to view, revert the focus outline
+            // Ensure the correct element is focused, as the virtualizer
+            // may render items using different elements.
             this.__updateItemsFocusable();
 
-            if (isElementFocused(this._itemsFocusable) && !this.__rowFocusMode) {
+            // Revert the cell focus outline if focus is still inside the body.
+            if (isItemsRowGroupActive && !this.__rowFocusMode) {
               this._focusedCell = this._itemsFocusable;
             }
 
+            // Restore navigation mode
             if (this._navigatingIsHidden) {
-              // Focused item is back, restore navigation mode
-              this._navigatingIsHidden = false;
               this.toggleAttribute('navigating', true);
+              this._navigatingIsHidden = false;
             }
           } else {
-            // Focused item was scrolled out of view, remove the focus outline
-            if (isElementFocused(this._itemsFocusable)) {
+            // Focused item was scrolled out of view, remove the cell focus outline
+            if (isItemsRowGroupActive) {
               this._focusedCell = null;
             }
 
-            if (this.hasAttribute('navigating') && this._activeRowGroup) {
+            // Hide navigation mode if focus is inside the body.
+            if (isItemsRowGroupActive && this.hasAttribute('navigating')) {
               this._navigatingIsHidden = true;
               this.toggleAttribute('navigating', false);
             }
