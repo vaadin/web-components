@@ -81,9 +81,6 @@ export const ScrollMixin = (superClass) =>
           type: Array,
           value: () => [],
         },
-
-        /** @private */
-        _rowWithFocusedElement: Element,
       };
     }
 
@@ -121,27 +118,22 @@ export const ScrollMixin = (superClass) =>
       this.scrollTarget = this.$.table;
 
       this.$.items.addEventListener('focusin', (e) => {
-        const itemsIndex = e.composedPath().indexOf(this.$.items);
-        this._rowWithFocusedElement = e.composedPath()[itemsIndex - 1];
+        const composedPath = e.composedPath();
+        const row = composedPath[composedPath.indexOf(this.$.items) - 1];
 
-        if (this._rowWithFocusedElement) {
+        if (row) {
           // Make sure the row with the focused element is fully inside the visible viewport
           // Don't change scroll position if the user is interacting with the mouse
           if (!this._isMousedown) {
-            this.__scrollIntoViewport(this._rowWithFocusedElement.index);
+            this.__scrollIntoViewport(row.index);
           }
 
           if (!this.$.table.contains(e.relatedTarget)) {
             // Virtualizer can't catch the event because if orginates from the light DOM.
             // Dispatch a virtualizer-element-focused event for virtualizer to catch.
-            this.$.table.dispatchEvent(
-              new CustomEvent('virtualizer-element-focused', { detail: { element: this._rowWithFocusedElement } }),
-            );
+            this.$.table.dispatchEvent(new CustomEvent('virtualizer-element-focused', { detail: { element: row } }));
           }
         }
-      });
-      this.$.items.addEventListener('focusout', () => {
-        this._rowWithFocusedElement = undefined;
       });
 
       this.$.table.addEventListener('scroll', () => this._afterScroll());
