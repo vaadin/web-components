@@ -757,12 +757,12 @@ export const KeyboardNavigationMixin = (superClass) =>
       e.preventDefault();
 
       const element = e.composedPath()[0];
-      const type = isRow(element) ? 'row' : 'cell';
-      if (type === 'row' || !element._content || !element._content.firstElementChild) {
+      const isElementRow = isRow(element);
+      if (isElementRow || !element._content || !element._content.firstElementChild) {
         this.dispatchEvent(
-          new CustomEvent(`${type}-activate`, {
+          new CustomEvent(isElementRow ? 'row-activate' : 'cell-activate', {
             detail: {
-              model: this.__getRowModel(type === 'row' ? element : element.parentElement),
+              model: this.__getRowModel(isElementRow ? element : element.parentElement),
             },
           }),
         );
