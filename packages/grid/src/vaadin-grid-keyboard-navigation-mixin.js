@@ -924,6 +924,10 @@ export const KeyboardNavigationMixin = (superClass) =>
 
     /** @protected */
     _preventScrollerRotatingCellFocus() {
+      if (this._activeRowGroup !== this.$.items) {
+        return;
+      }
+
       this.__preventScrollerRotatingCellFocusDebouncer = Debouncer.debounce(
         this.__preventScrollerRotatingCellFocusDebouncer,
         animationFrame,

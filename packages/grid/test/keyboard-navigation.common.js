@@ -26,6 +26,7 @@ import {
   getContainerCell,
   getFirstVisibleItem,
   getLastVisibleItem,
+  getPhysicalItems,
   getRowCells,
   getRows,
   infiniteDataProvider,
@@ -1580,18 +1581,77 @@ describe('keyboard navigation', () => {
   });
 
   describe('focused-cell part', () => {
-    it('should add focused-cell to cell part when focused', () => {
-      focusFirstHeaderCell();
-
-      expect(getFirstHeaderCell().getAttribute('part')).to.contain('focused-cell');
+    beforeEach(() => {
+      grid.items = undefined;
+      grid.size = 200;
+      grid.dataProvider = infiniteDataProvider;
+      flushGrid(grid);
     });
 
-    it('should remove focused-cell from cell part when blurred', () => {
-      focusFirstHeaderCell();
+    it('should add the part to cell when focused', () => {
+      focusItem(5);
+      const cell = getPhysicalItems(grid)[5].firstChild;
+      expect(cell.getAttribute('part')).to.contain('focused-cell');
+    });
 
+    it('should remove the part from cell when blurred', () => {
+      focusItem(5);
       focusable.focus();
+      const cell = getPhysicalItems(grid)[5].firstChild;
+      expect(cell.getAttribute('part')).to.not.contain('focused-cell');
+    });
 
-      expect(getFirstHeaderCell().getAttribute('part')).to.not.contain('focused-cell');
+    it('should keep the part when focused item is scrolled but still visible', async () => {
+      focusItem(5);
+      grid.scrollToIndex(2);
+      await nextFrame();
+      const cell = getPhysicalItems(grid)[5].firstChild;
+      expect(cell.getAttribute('part')).to.contain('focused-cell');
+    });
+
+    it('should remove the part when focused item is scrolled out of view', async () => {
+      focusItem(5);
+      grid.scrollToIndex(100);
+      await nextFrame();
+      expect(grid.$.items.querySelector(':not([hidden]) [part~="focused-cell"')).to.be.null;
+    });
+
+    it('should restore the part when focused item is scrolled back to view', async () => {
+      focusItem(5);
+      grid.scrollToIndex(100);
+      await nextFrame();
+
+      // Simulate real scrolling to get the virtualizer to render
+      // the focused item in a different element.
+      grid.$.table.scrollTop = 0;
+      // Virtualizer scroll handler
+      await nextFrame();
+      // preventScrollerRotatingCellFocusDebouncer
+      await nextFrame();
+
+      const cell = getPhysicalItems(grid)[5].firstChild;
+      expect(cell.getAttribute('part')).to.contain('focused-cell');
+    });
+
+    it('should not add the part to any element when focused item is scrolled back to view - row focus mode', async () => {
+      focusItem(5);
+      left();
+      grid.scrollToIndex(100);
+      await nextFrame();
+      grid.scrollToIndex(0);
+      await nextFrame();
+      expect(grid.$.items.querySelector(':not([hidden]) [part~="focused-cell"')).to.be.null;
+    });
+
+    it('should not remove the part from header cell when scrolling items', async () => {
+      focusFirstHeaderCell();
+      grid.scrollToIndex(100);
+      await nextFrame();
+      expect(getFirstHeaderCell().getAttribute('part')).to.contain('focused-cell');
+
+      grid.scrollToIndex(0);
+      await nextFrame();
+      expect(getFirstHeaderCell().getAttribute('part')).to.contain('focused-cell');
     });
   });
 
