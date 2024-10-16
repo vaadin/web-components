@@ -843,6 +843,7 @@ export const KeyboardNavigationMixin = (superClass) =>
           this._headerFocusable = this.__getFocusable(row, cell);
         } else if (this.$.items === section) {
           this._itemsFocusable = this.__getFocusable(row, cell);
+          this._focusedItemIndex = row.index;
         } else if (this.$.footer === section) {
           this._footerFocusable = this.__getFocusable(row, cell);
         }
@@ -863,8 +864,6 @@ export const KeyboardNavigationMixin = (superClass) =>
           this._focusedCell = null;
         }
       }
-
-      this._detectFocusedItemIndex(e);
     }
 
     /**
@@ -900,14 +899,6 @@ export const KeyboardNavigationMixin = (superClass) =>
       const isInteracting = e.composedPath().some((el) => el.localName === 'slot' && this.shadowRoot.contains(el));
       this._setInteracting(isInteracting);
       this.__updateHorizontalScrollPosition();
-    }
-
-    /** @private */
-    _detectFocusedItemIndex(e) {
-      const { section, row } = this._getGridEventLocation(e);
-      if (section === this.$.items) {
-        this._focusedItemIndex = row.index;
-      }
     }
 
     /**
