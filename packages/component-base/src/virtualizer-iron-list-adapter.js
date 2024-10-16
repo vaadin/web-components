@@ -759,7 +759,7 @@ export class IronListAdapter {
    */
   __getItemHeightBuffer() {
     // No need for a buffer with no items
-    if (this._physicalCount > 0) {
+    if (this._physicalCount === 0) {
       return 0;
     }
     // The regular buffer zone height for either top or bottom
