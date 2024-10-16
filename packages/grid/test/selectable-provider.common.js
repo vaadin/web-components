@@ -13,16 +13,6 @@ describe('selectable-provider', () => {
     return getBodyCellContent(grid, rowIndex, 0).querySelector('vaadin-checkbox');
   }
 
-  function fireTrackEvent(targetCell, startCell, eventState) {
-    const targetCellRect = targetCell.getBoundingClientRect();
-    const startCellRect = startCell.getBoundingClientRect();
-    fire(
-      'track',
-      { state: eventState, y: targetCellRect.y, dy: targetCellRect.y - startCellRect.y },
-      { node: targetCell },
-    );
-  }
-
   beforeEach(async () => {
     grid = fixtureSync(`
         <vaadin-grid style="width: 200px; height: 400px;">
@@ -164,6 +154,16 @@ describe('selectable-provider', () => {
       clock.restore();
     });
 
+    function fireTrackEvent(targetCell, startCell, eventState) {
+      const targetCellRect = targetCell.getBoundingClientRect();
+      const startCellRect = startCell.getBoundingClientRect();
+      fire(
+        'track',
+        { state: eventState, y: targetCellRect.y, dy: targetCellRect.y - startCellRect.y },
+        { node: targetCell },
+      );
+    }
+
     it('should prevent selection when drag selecting', () => {
       // drag select in reverse from selectable items to non-selectable items
       for (let i = 9; i >= 0; i--) {
@@ -216,7 +216,7 @@ describe('selectable-provider', () => {
       expect(isSelectAllIndeterminate()).to.be.true;
     });
 
-    it('should be unchecked when only unselectable items are selected', () => {
+    it('should be unchecked when only non-selectable items are selected', () => {
       grid.selectedItems = grid.items.slice(0, 5);
 
       expect(isSelectAllUnchecked()).to.be.true;

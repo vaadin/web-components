@@ -128,8 +128,7 @@ export const GridSelectionColumnMixin = (superClass) =>
      * @override
      */
     _selectItem(item) {
-      const isSelectable = this._grid.__isItemSelectable(item);
-      if (isSelectable) {
+      if (this._grid.__isItemSelectable(item)) {
         this._grid.selectItem(item);
       }
     }
@@ -143,8 +142,7 @@ export const GridSelectionColumnMixin = (superClass) =>
      * @override
      */
     _deselectItem(item) {
-      const isSelectable = this._grid.__isItemSelectable(item);
-      if (isSelectable) {
+      if (this._grid.__isItemSelectable(item)) {
         this._grid.deselectItem(item);
       }
     }

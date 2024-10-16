@@ -260,8 +260,7 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
         }
       } else if (this._cells.includes(target) && !this.autoSelect) {
         const checkbox = target._content.firstElementChild;
-        const item = checkbox.__item;
-        this.__toggleItem(item);
+        this.__toggleItem(checkbox.__item);
       }
     }
 
@@ -360,14 +359,14 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
 
     /**
      * Override to handle the user selecting an item.
-     * @param {Object} _item the item to select
+     * @param {Object} item the item to select
      * @protected
      */
     _selectItem(_item) {}
 
     /**
      * Override to handle the user deselecting an item.
-     * @param {Object} _item the item to deselect
+     * @param {Object} item the item to deselect
      * @protected
      */
     _deselectItem(_item) {}
