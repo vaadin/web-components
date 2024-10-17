@@ -1321,8 +1321,8 @@ describe('keyboard navigation', () => {
         grid.$.table.scrollTop = grid.$.table.scrollHeight / 2;
         flushGrid(grid);
         down();
-        expect(getFocusedRowIndex()).to.equal(1);
-        expect(getFocusedCellIndex()).to.equal(0);
+        expect(getFocusedRowIndex(grid)).to.equal(1);
+        expect(getFocusedCellIndex(grid)).to.equal(0);
       });
 
       it('should scroll focused row into view on Tab', () => {
@@ -1333,8 +1333,8 @@ describe('keyboard navigation', () => {
         grid.$.table.scrollTop = grid.$.table.scrollHeight / 2;
         flushGrid(grid);
         tab();
-        expect(getFocusedRowIndex()).to.equal(0);
-        expect(getFocusedCellIndex()).to.equal(0);
+        expect(getFocusedRowIndex(grid)).to.equal(0);
+        expect(getFocusedCellIndex(grid)).to.equal(0);
       });
 
       it('should hide navigation mode when a focused row goes off screen', () => {
