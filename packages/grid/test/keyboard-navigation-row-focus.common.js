@@ -8,7 +8,7 @@ import {
   nextRender,
   up as mouseUp,
 } from '@vaadin/testing-helpers';
-import { flushGrid, getCellContent } from './helpers.js';
+import { flushGrid, getCellContent, infiniteDataProvider } from './helpers.js';
 
 let grid, header, footer, body;
 
@@ -87,6 +87,10 @@ function tabToBody() {
   grid._itemsFocusable.focus();
 }
 
+function tabToHeader() {
+  grid._headerFocusable.focus();
+}
+
 function shiftTabToFooter() {
   grid._footerFocusable.focus();
 }
@@ -102,7 +106,8 @@ function getFocusedCellIndex() {
 function getFocusedRowIndex() {
   const activeElement = grid.shadowRoot.activeElement;
   const focusedRow = activeElement instanceof HTMLTableRowElement ? activeElement : activeElement.parentNode;
-  return Array.from(focusedRow.parentNode.children).indexOf(focusedRow);
+  const section = focusedRow.parentNode;
+  return section === grid.$.items ? focusedRow.index : [...section.children].indexOf(focusedRow);
 }
 
 function getTabbableElements(root) {
@@ -392,6 +397,32 @@ describe('keyboard navigation - row focus', () => {
       shiftTabToFooter();
 
       expect(grid.shadowRoot.activeElement).to.equal(footer.children[0]);
+    });
+  });
+
+  describe('scrolling and navigating', () => {
+    beforeEach(() => {
+      grid.items = undefined;
+      grid.size = 200;
+      grid.dataProvider = infiniteDataProvider;
+      flushGrid(grid);
+    });
+
+    it('should scroll focused row into view on arrow key', () => {
+      tabToBody();
+      grid.scrollToIndex(100);
+      flushGrid(grid);
+      down();
+      expect(getFocusedRowIndex()).to.equal(1);
+    });
+
+    it('should scroll focused row into view on Tab', () => {
+      tabToBody();
+      tabToHeader();
+      grid.scrollToIndex(100);
+      flushGrid(grid);
+      tab();
+      expect(getFocusedRowIndex()).to.equal(0);
     });
   });
 });
