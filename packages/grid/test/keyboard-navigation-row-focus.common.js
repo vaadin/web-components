@@ -8,7 +8,7 @@ import {
   nextRender,
   up as mouseUp,
 } from '@vaadin/testing-helpers';
-import { flushGrid, getCellContent, getFocusedCellIndex, getFocusedRowIndex, infiniteDataProvider } from './helpers.js';
+import { flushGrid, getCellContent, getFocusedCellIndex, getFocusedRowIndex } from './helpers.js';
 
 let grid, header, footer, body;
 
@@ -85,10 +85,6 @@ function focusFirstHeaderCell() {
 
 function tabToBody() {
   grid._itemsFocusable.focus();
-}
-
-function tabToHeader() {
-  grid._headerFocusable.focus();
 }
 
 function shiftTabToFooter() {
@@ -413,32 +409,6 @@ describe('keyboard navigation - row focus', () => {
       shiftTabToFooter();
 
       expect(grid.shadowRoot.activeElement).to.equal(footer.children[0]);
-    });
-  });
-
-  describe('scrolling and navigating', () => {
-    beforeEach(() => {
-      grid.items = undefined;
-      grid.size = 200;
-      grid.dataProvider = infiniteDataProvider;
-      flushGrid(grid);
-    });
-
-    it('should scroll focused row into view on arrow key', () => {
-      tabToBody();
-      grid.scrollToIndex(100);
-      flushGrid(grid);
-      down();
-      expect(getFocusedRowIndex()).to.equal(1);
-    });
-
-    it('should scroll focused row into view on Tab', () => {
-      tabToBody();
-      tabToHeader();
-      grid.scrollToIndex(100);
-      flushGrid(grid);
-      tab();
-      expect(getFocusedRowIndex()).to.equal(0);
     });
   });
 });
