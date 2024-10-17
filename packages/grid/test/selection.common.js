@@ -388,6 +388,20 @@ describe('multi selection column', () => {
     expect(grid.items).not.to.eql(grid.selectedItems);
   });
 
+  it('should set selectAll to true when selecting all items', () => {
+    grid.selectedItems = ['foo', 'bar', 'baz'];
+
+    expect(selectionColumn.selectAll).to.be.true;
+  });
+
+  it('should set selectAll to true when selecting copies of all items', () => {
+    grid.items = [{ value: 'foo' }, { value: 'bar' }, { value: 'baz' }];
+    grid.itemIdPath = 'value';
+    grid.selectedItems = [{ value: 'foo' }, { value: 'bar' }, { value: 'baz' }];
+
+    expect(selectionColumn.selectAll).to.be.true;
+  });
+
   it('should not set selection when data provider is used', () => {
     grid.items = undefined;
     grid.dataProvider = infiniteDataProvider;

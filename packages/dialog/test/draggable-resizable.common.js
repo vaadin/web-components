@@ -391,6 +391,16 @@ describe('draggable', () => {
     expect(Math.floor(draggedBounds.left)).to.be.eql(Math.floor(bounds.left + dx));
   });
 
+  it('should only change "position", "top", and "left" values on drag', () => {
+    drag(content);
+    const overlay = dialog.$.overlay.$.overlay;
+    const style = overlay.style;
+    expect(style.length).to.be.eql(3);
+    expect(style.position).to.be.ok;
+    expect(style.top).to.be.ok;
+    expect(style.left).to.be.ok;
+  });
+
   it('should drag and move dialog if mousedown on element with [class="draggable"] in another shadow root', () => {
     drag(dialog.$.overlay.querySelector('internally-draggable').shadowRoot.querySelector('.draggable'));
     const draggedBounds = container.getBoundingClientRect();
