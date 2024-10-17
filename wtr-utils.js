@@ -1,6 +1,7 @@
 /* eslint-env node */
 require('dotenv').config();
 const fs = require('fs');
+const argv = require('minimist')(process.argv.slice(2));
 const path = require('path');
 const glob = require('glob');
 const { execSync } = require('child_process');
@@ -137,10 +138,8 @@ const getSnapshotTestGroups = (packages) => {
  */
 const getUnitTestGroups = (packages) => {
   return packages.map((pkg) => {
-    return {
-      name: pkg,
-      files: `packages/${pkg}/test/*.test.{js,ts}`,
-    };
+    const filesGlob = argv.glob || '*';
+    return { name: pkg, files: `packages/${pkg}/test/${filesGlob}.test.{js,ts}` };
   });
 };
 
