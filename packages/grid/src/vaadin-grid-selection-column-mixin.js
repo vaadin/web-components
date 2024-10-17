@@ -81,19 +81,6 @@ export const GridSelectionColumnMixin = (superClass) =>
     }
 
     /**
-     * Return true if array `left` contains all the items in `right`,
-     * using the `getItemId` method to compare items.
-     * We need this when sorting or to preserve selection after filtering.
-     * @private
-     */
-    __arrayContains(left, right) {
-      left ||= [];
-      right ||= [];
-      const leftIds = left.map((item) => this._grid.getItemId(item));
-      return (right || []).every((item) => leftIds.includes(this._grid.getItemId(item)));
-    }
-
-    /**
      * Override a method from `GridSelectionColumnBaseMixin` to handle the user
      * selecting all items.
      *
@@ -164,7 +151,7 @@ export const GridSelectionColumnMixin = (superClass) =>
           if (!this._grid.selectedItems.length) {
             this.selectAll = false;
             this._indeterminate = false;
-          } else if (this.__arrayContains(this._grid.selectedItems, items)) {
+          } else if (this._grid._areAllSelected(items)) {
             this.selectAll = true;
             this._indeterminate = false;
           } else {

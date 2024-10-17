@@ -47,6 +47,15 @@ export const SelectionMixin = (superClass) =>
     }
 
     /**
+     * @param {!Array<!GridItem>} items
+     * @return {boolean}
+     * @protected
+     */
+    _areAllSelected(items) {
+      return items.every((item) => this.__selectedKeys.has(this.getItemId(item)));
+    }
+
+    /**
      * Selects the given item.
      *
      * @method selectItem
