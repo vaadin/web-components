@@ -16,6 +16,7 @@ export const flushGrid = (grid) => {
   ].forEach((debouncer) => debouncer?.flush());
 
   grid.__virtualizer.flush();
+  grid.__preventScrollerRotatingCellFocusDebouncer?.flush();
   grid.performUpdate?.();
 };
 

@@ -1326,38 +1326,38 @@ describe('keyboard navigation', () => {
       });
 
       describe('rotating focus indicator prevention', () => {
-        it('should hide navigation mode when a focused row goes off screen', async () => {
+        it('should hide navigation mode when a focused row goes off screen', () => {
           focusItem(0);
           right();
 
           expect(grid.hasAttribute('navigating')).to.be.true;
 
           grid.scrollToIndex(100);
-          await nextFrame();
+          flushGrid(grid);
 
           expect(grid.hasAttribute('navigating')).to.be.false;
         });
 
-        it('should reveal navigation mode when a focused row is back on screen', async () => {
+        it('should reveal navigation mode when a focused row is back on screen', () => {
           focusItem(0);
           right();
           grid.scrollToIndex(100);
-          await nextFrame();
+          flushGrid(grid);
 
           grid.scrollToIndex(0);
-          await nextFrame();
+          flushGrid(grid);
 
           expect(grid.hasAttribute('navigating')).to.be.true;
         });
 
-        it('should not hide navigation mode if a header cell is focused', async () => {
+        it('should not hide navigation mode if a header cell is focused', () => {
           tabToHeader();
           right();
 
           expect(grid.hasAttribute('navigating')).to.be.true;
 
           grid.scrollToIndex(100);
-          await nextFrame();
+          flushGrid(grid);
 
           expect(grid.hasAttribute('navigating')).to.be.true;
         });
@@ -1601,56 +1601,53 @@ describe('keyboard navigation', () => {
       expect(cell.getAttribute('part')).to.not.contain('focused-cell');
     });
 
-    it('should keep the part when focused item is scrolled but still visible', async () => {
+    it('should keep the part when focused item is scrolled but still visible', () => {
       focusItem(5);
       grid.scrollToIndex(2);
-      await nextFrame();
+      flushGrid(grid);
       const cell = getPhysicalItems(grid)[5].firstChild;
       expect(cell.getAttribute('part')).to.contain('focused-cell');
     });
 
-    it('should remove the part when focused item is scrolled out of view', async () => {
+    it('should remove the part when focused item is scrolled out of view', () => {
       focusItem(5);
       grid.scrollToIndex(100);
-      await nextFrame();
+      flushGrid(grid);
       expect(grid.$.items.querySelector(':not([hidden]) [part~="focused-cell"')).to.be.null;
     });
 
-    it('should restore the part when focused item is scrolled back to view', async () => {
+    it('should restore the part when focused item is scrolled back to view', () => {
       focusItem(5);
       grid.scrollToIndex(100);
-      await nextFrame();
+      flushGrid(grid);
 
       // Simulate real scrolling to get the virtualizer to render
       // the focused item in a different element.
       grid.$.table.scrollTop = 0;
-      // Virtualizer scroll handler
-      await nextFrame();
-      // preventScrollerRotatingCellFocusDebouncer
-      await nextFrame();
+      flushGrid(grid);
 
       const cell = getPhysicalItems(grid)[5].firstChild;
       expect(cell.getAttribute('part')).to.contain('focused-cell');
     });
 
-    it('should not add the part to any element when focused item is scrolled back to view - row focus mode', async () => {
+    it('should not add the part to any element when focused item is scrolled back to view - row focus mode', () => {
       focusItem(5);
       left();
       grid.scrollToIndex(100);
-      await nextFrame();
+      flushGrid(grid);
       grid.scrollToIndex(0);
-      await nextFrame();
+      flushGrid(grid);
       expect(grid.$.items.querySelector(':not([hidden]) [part~="focused-cell"')).to.be.null;
     });
 
-    it('should not remove the part from header cell when scrolling items', async () => {
+    it('should not remove the part from header cell when scrolling items', () => {
       focusFirstHeaderCell();
       grid.scrollToIndex(100);
-      await nextFrame();
+      flushGrid(grid);
       expect(getFirstHeaderCell().getAttribute('part')).to.contain('focused-cell');
 
       grid.scrollToIndex(0);
-      await nextFrame();
+      flushGrid(grid);
       expect(getFirstHeaderCell().getAttribute('part')).to.contain('focused-cell');
     });
   });
