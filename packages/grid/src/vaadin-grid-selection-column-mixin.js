@@ -151,7 +151,7 @@ export const GridSelectionColumnMixin = (superClass) =>
           if (!this._grid.selectedItems.length) {
             this.selectAll = false;
             this._indeterminate = false;
-          } else if (this._grid._areAllSelected(items)) {
+          } else if (items.every((item) => this._grid._isSelected(item))) {
             this.selectAll = true;
             this._indeterminate = false;
           } else {
