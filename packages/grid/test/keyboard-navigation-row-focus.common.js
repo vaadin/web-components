@@ -8,7 +8,7 @@ import {
   nextRender,
   up as mouseUp,
 } from '@vaadin/testing-helpers';
-import { flushGrid, getCellContent } from './helpers.js';
+import { flushGrid, getCellContent, getFocusedCellIndex, getFocusedRowIndex } from './helpers.js';
 
 let grid, header, footer, body;
 
@@ -89,21 +89,6 @@ function tabToBody() {
 
 function shiftTabToFooter() {
   grid._footerFocusable.focus();
-}
-
-function getFocusedCellIndex() {
-  const focusedCell = grid.shadowRoot.activeElement;
-  if (focusedCell instanceof HTMLTableCellElement) {
-    return Array.from(focusedCell.parentNode.children).indexOf(focusedCell);
-  }
-  return -1;
-}
-
-function getFocusedRowIndex() {
-  const activeElement = grid.shadowRoot.activeElement;
-  const focusedRow = activeElement instanceof HTMLTableRowElement ? activeElement : activeElement.parentNode;
-  const section = focusedRow.parentNode;
-  return section === grid.$.items ? focusedRow.index : [...section.children].indexOf(focusedRow);
 }
 
 function getTabbableElements(root) {
@@ -228,20 +213,20 @@ describe('keyboard navigation - row focus', () => {
       it('should remain in row focus mode on backwards', () => {
         backwards();
 
-        expect(getFocusedCellIndex()).to.equal(-1);
+        expect(getFocusedCellIndex(grid)).to.equal(-1);
       });
 
       it('should enter cell focus mode on forwards', () => {
         forwards();
 
-        expect(getFocusedCellIndex()).to.equal(0);
+        expect(getFocusedCellIndex(grid)).to.equal(0);
       });
 
       it('should return to row focus mode on backwards', () => {
         forwards();
         backwards();
 
-        expect(getFocusedCellIndex()).to.equal(-1);
+        expect(getFocusedCellIndex(grid)).to.equal(-1);
       });
 
       it('should expand an expandable row on forwards', () => {
@@ -258,7 +243,7 @@ describe('keyboard navigation - row focus', () => {
         // Ensure we're still in row focus mode
         backwards();
         forwards();
-        expect(getFocusedCellIndex()).to.equal(-1);
+        expect(getFocusedCellIndex(grid)).to.equal(-1);
       });
 
       it('should enter cell focus mode on an expanded row on forwards', () => {
@@ -267,7 +252,7 @@ describe('keyboard navigation - row focus', () => {
         backwards();
         forwards();
         forwards();
-        expect(getFocusedCellIndex()).to.equal(0);
+        expect(getFocusedCellIndex(grid)).to.equal(0);
       });
 
       it('should enter cell focus mode on a leaf row on forwards', () => {
@@ -276,7 +261,7 @@ describe('keyboard navigation - row focus', () => {
         backwards();
         down();
         forwards();
-        expect(getFocusedCellIndex()).to.equal(0);
+        expect(getFocusedCellIndex(grid)).to.equal(0);
       });
 
       it('should collapse an expanded row on backwards', () => {
@@ -294,7 +279,7 @@ describe('keyboard navigation - row focus', () => {
         backwards();
         openRowDetails(0);
         down();
-        expect(getFocusedRowIndex()).to.equal(1);
+        expect(getFocusedRowIndex(grid)).to.equal(1);
       });
 
       it('should return to row focus mode on backwards from details cell', () => {
@@ -310,7 +295,7 @@ describe('keyboard navigation - row focus', () => {
         down();
         // Go to row navigation mode
         backwards();
-        expect(getFocusedCellIndex()).to.equal(-1);
+        expect(getFocusedCellIndex(grid)).to.equal(-1);
       });
 
       it('should navigate rows after a cell gets click focused', () => {
@@ -318,8 +303,8 @@ describe('keyboard navigation - row focus', () => {
         clickItem(0);
         down();
 
-        expect(getFocusedRowIndex()).to.equal(1);
-        expect(getFocusedCellIndex()).to.equal(-1);
+        expect(getFocusedRowIndex(grid)).to.equal(1);
+        expect(getFocusedCellIndex(grid)).to.equal(-1);
       });
 
       it('should navigate cells after a cell gets click focused', () => {
@@ -328,8 +313,8 @@ describe('keyboard navigation - row focus', () => {
         clickItem(0);
         down();
 
-        expect(getFocusedRowIndex()).to.equal(1);
-        expect(getFocusedCellIndex()).to.equal(0);
+        expect(getFocusedRowIndex(grid)).to.equal(1);
+        expect(getFocusedCellIndex(grid)).to.equal(0);
       });
 
       it('should enable navigation mode on down', () => {
@@ -346,7 +331,7 @@ describe('keyboard navigation - row focus', () => {
 
         home();
 
-        expect(getFocusedRowIndex()).to.equal(0);
+        expect(getFocusedRowIndex(grid)).to.equal(0);
       });
 
       it('should focus last row with end', () => {
@@ -354,7 +339,7 @@ describe('keyboard navigation - row focus', () => {
 
         end();
 
-        expect(getFocusedRowIndex()).to.equal(4);
+        expect(getFocusedRowIndex(grid)).to.equal(4);
       });
     });
   });
