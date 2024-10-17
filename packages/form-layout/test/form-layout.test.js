@@ -568,7 +568,7 @@ describe('form layout', () => {
       // Wait for intersection observer
       await nextFrame();
       await nextFrame();
-      expect(getComputedStyle(layout).opacity).to.equal('0');
+      expect(getComputedStyle(layout.$.layout).opacity).to.equal('0');
 
       container.hidden = false;
 
@@ -576,7 +576,7 @@ describe('form layout', () => {
       await nextFrame();
       await nextFrame();
 
-      expect(getComputedStyle(layout).opacity).to.equal('1');
+      expect(getComputedStyle(layout.$.layout).opacity).to.equal('1');
     });
   });
 

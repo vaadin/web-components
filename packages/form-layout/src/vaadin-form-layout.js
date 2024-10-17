@@ -275,11 +275,11 @@ class FormLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))
     this.__intersectionObserver = new IntersectionObserver(([entry]) => {
       if (!entry.isIntersecting) {
         // Prevent possible jump when layout becomes visible
-        this.style.opacity = 0;
+        this.$.layout.style.opacity = 0;
       }
       if (!this.__isVisible && entry.isIntersecting) {
         this._updateLayout();
-        this.style.opacity = '';
+        this.$.layout.style.opacity = '';
       }
       this.__isVisible = entry.isIntersecting;
     });
