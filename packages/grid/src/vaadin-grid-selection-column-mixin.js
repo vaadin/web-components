@@ -81,15 +81,6 @@ export const GridSelectionColumnMixin = (superClass) =>
     }
 
     /**
-     * Return true if array `a` contains all the items in `b`
-     * We need this when sorting or to preserve selection after filtering.
-     * @private
-     */
-    __arrayContains(a, b) {
-      return Array.isArray(a) && Array.isArray(b) && b.every((i) => a.includes(i));
-    }
-
-    /**
      * Override a method from `GridSelectionColumnBaseMixin` to handle the user
      * selecting all items.
      *
@@ -160,7 +151,7 @@ export const GridSelectionColumnMixin = (superClass) =>
           if (!this._grid.selectedItems.length) {
             this.selectAll = false;
             this._indeterminate = false;
-          } else if (this.__arrayContains(this._grid.selectedItems, items)) {
+          } else if (items.every((item) => this._grid._isSelected(item))) {
             this.selectAll = true;
             this._indeterminate = false;
           } else {
