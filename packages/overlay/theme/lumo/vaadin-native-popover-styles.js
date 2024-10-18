@@ -8,4 +8,18 @@ const popoverOverlay = css`
   }
 `;
 
-registerStyles('vaadin-native-popover-overlay', [overlayContent, popoverOverlay], { moduleId: 'lumo-native-popover' });
+const popover = css`
+  :host {
+    --vaadin-popover-offset-top: var(--_vaadin-popover-default-offset);
+    --vaadin-popover-offset-bottom: var(--_vaadin-popover-default-offset);
+    --vaadin-popover-offset-start: var(--_vaadin-popover-default-offset);
+    --vaadin-popover-offset-end: var(--_vaadin-popover-default-offset);
+    --_vaadin-popover-default-offset: var(--lumo-space-xs);
+  }
+`;
+
+registerStyles('vaadin-native-popover-overlay', [overlayContent, popoverOverlay], {
+  moduleId: 'lumo-native-popover-overlay',
+});
+
+registerStyles('vaadin-native-popover', popover, { moduleId: 'lumo-native-popover' });

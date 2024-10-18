@@ -60,6 +60,35 @@ class NativePopover extends PopoverPositionMixin(
       :host {
         display: contents;
       }
+
+      #overlay::part(content) {
+        overflow: visible;
+      }
+
+      /* Increase the area so the pointer can go from the target directly to the popover. */
+      #overlay::part(overlay)::before {
+        position: absolute;
+        content: '';
+        inset-block: calc(var(--vaadin-popover-offset-top, 0) * -1) calc(var(--vaadin-popover-offset-bottom, 0) * -1);
+        inset-inline: calc(var(--vaadin-popover-offset-start, 0) * -1) calc(var(--vaadin-popover-offset-end, 0) * -1);
+        z-index: -1;
+      }
+
+      #overlay:is([position^='top'][top-aligned], [position^='bottom'][top-aligned])::part(overlay) {
+        margin-top: var(--vaadin-popover-offset-top, 0);
+      }
+
+      #overlay:is([position^='top'][bottom-aligned], [position^='bottom'][bottom-aligned])::part(overlay) {
+        margin-bottom: var(--vaadin-popover-offset-bottom, 0);
+      }
+
+      #overlay:is([position^='start'][start-aligned], [position^='end'][start-aligned])::part(overlay) {
+        margin-inline-start: var(--vaadin-popover-offset-start, 0);
+      }
+
+      #overlay:is([position^='start'][end-aligned], [position^='end'][end-aligned])::part(overlay) {
+        margin-inline-end: var(--vaadin-popover-offset-end, 0);
+      }
     `;
   }
 
@@ -79,6 +108,7 @@ class NativePopover extends PopoverPositionMixin(
 
     return html`
       <vaadin-native-popover-overlay
+        id="overlay"
         .opened="${this.opened}"
         .positionTarget="${this.target}"
         .noCloseOnEsc="${this.noCloseOnEsc}"
@@ -87,6 +117,7 @@ class NativePopover extends PopoverPositionMixin(
         ?no-vertical-overlap="${this.__computeNoVerticalOverlap(position)}"
         .horizontalAlign="${this.__computeHorizontalAlign(position)}"
         .verticalAlign="${this.__computeVerticalAlign(position)}"
+        position="${position}"
         @opened-changed="${this.__onOpenedChanged}"
         exportparts="overlay, content"
       >
