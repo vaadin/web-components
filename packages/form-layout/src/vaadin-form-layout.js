@@ -240,6 +240,11 @@ class FormLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))
       _labelsOnTop: {
         type: Boolean,
       },
+
+      /** @private */
+      __isVisible: {
+        type: Boolean,
+      },
     };
   }
 
@@ -264,6 +269,22 @@ class FormLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))
     this.addEventListener('animationend', this.__onAnimationEnd);
   }
 
+  constructor() {
+    super();
+
+    this.__intersectionObserver = new IntersectionObserver(([entry]) => {
+      if (!entry.isIntersecting) {
+        // Prevent possible jump when layout becomes visible
+        this.$.layout.style.opacity = 0;
+      }
+      if (!this.__isVisible && entry.isIntersecting) {
+        this._updateLayout();
+        this.$.layout.style.opacity = '';
+      }
+      this.__isVisible = entry.isIntersecting;
+    });
+  }
+
   /** @protected */
   connectedCallback() {
     super.connectedCallback();
@@ -272,6 +293,7 @@ class FormLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))
     requestAnimationFrame(() => this._updateLayout());
 
     this._observeChildrenColspanChange();
+    this.__intersectionObserver.observe(this);
   }
 
   /** @protected */
@@ -280,6 +302,7 @@ class FormLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))
 
     this.__mutationObserver.disconnect();
     this.__childObserver.disconnect();
+    this.__intersectionObserver.disconnect();
   }
 
   /** @private */
