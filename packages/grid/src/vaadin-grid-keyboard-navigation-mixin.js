@@ -4,6 +4,8 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
+import { animationFrame } from '@vaadin/component-base/src/async.js';
+import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { addValueToAttribute, removeValueFromAttribute } from '@vaadin/component-base/src/dom-utils.js';
 import { get } from '@vaadin/component-base/src/path-utils.js';
 
@@ -504,8 +506,8 @@ export const KeyboardNavigationMixin = (superClass) =>
       // listener invocation gets updated _focusedItemIndex value.
       this._focusedItemIndex = dstRowIndex;
 
-      // This has to be set after scrolling, otherwise it can be removed by
-      // `_preventScrollerRotatingCellFocus(row, index)` during scrolling.
+      // Reapply navigating state in case it was removed due to previous item
+      // being focused with the mouse.
       this.toggleAttribute('navigating', true);
 
       return {
@@ -920,26 +922,45 @@ export const KeyboardNavigationMixin = (superClass) =>
       focusTarget.tabIndex = isInteractingWithinActiveSection ? -1 : 0;
     }
 
-    /**
-     * @param {!HTMLTableRowElement} row
-     * @param {number} index
-     * @protected
-     */
-    _preventScrollerRotatingCellFocus(row, index) {
-      if (
-        row.index === this._focusedItemIndex &&
-        this.hasAttribute('navigating') &&
-        this._activeRowGroup === this.$.items
-      ) {
-        // Focused item has went, hide navigation mode
-        this._navigatingIsHidden = true;
-        this.toggleAttribute('navigating', false);
+    /** @protected */
+    _preventScrollerRotatingCellFocus() {
+      if (this._activeRowGroup !== this.$.items) {
+        return;
       }
-      if (index === this._focusedItemIndex && this._navigatingIsHidden) {
-        // Focused item is back, restore navigation mode
-        this._navigatingIsHidden = false;
-        this.toggleAttribute('navigating', true);
-      }
+
+      this.__preventScrollerRotatingCellFocusDebouncer = Debouncer.debounce(
+        this.__preventScrollerRotatingCellFocusDebouncer,
+        animationFrame,
+        () => {
+          const isItemsRowGroupActive = this._activeRowGroup === this.$.items;
+          const isFocusedItemRendered = this._getRenderedRows().some((row) => row.index === this._focusedItemIndex);
+          if (isFocusedItemRendered) {
+            // Ensure the correct element is focused, as the virtualizer
+            // may use different elements when re-rendering visible items.
+            this.__updateItemsFocusable();
+
+            // The focused item is visible, so restore the cell focus outline
+            // and navigation mode.
+            if (isItemsRowGroupActive && !this.__rowFocusMode) {
+              this._focusedCell = this._itemsFocusable;
+            }
+
+            if (this._navigatingIsHidden) {
+              this.toggleAttribute('navigating', true);
+              this._navigatingIsHidden = false;
+            }
+          } else if (isItemsRowGroupActive) {
+            // The focused item was scrolled out of view and focus is still inside body,
+            // so remove the cell focus outline and hide navigation mode.
+            this._focusedCell = null;
+
+            if (this.hasAttribute('navigating')) {
+              this._navigatingIsHidden = true;
+              this.toggleAttribute('navigating', false);
+            }
+          }
+        },
+      );
     }
 
     /**
