@@ -1314,29 +1314,6 @@ describe('keyboard navigation', () => {
         flushGrid(grid);
       });
 
-      it('should scroll focused row into view on arrow key', () => {
-        focusItem(0);
-        // Simulate real scrolling to get the virtualizer to render
-        // the focused item in a different element.
-        grid.$.table.scrollTop = grid.$.table.scrollHeight / 2;
-        flushGrid(grid);
-        down();
-        expect(getFocusedRowIndex(grid)).to.equal(1);
-        expect(getFocusedCellIndex(grid)).to.equal(0);
-      });
-
-      it('should scroll focused row into view on Tab', () => {
-        focusItem(0);
-        tabToHeader();
-        // Simulate real scrolling to get the virtualizer to render
-        // the focused item in a different element.
-        grid.$.table.scrollTop = grid.$.table.scrollHeight / 2;
-        flushGrid(grid);
-        tab();
-        expect(getFocusedRowIndex(grid)).to.equal(0);
-        expect(getFocusedCellIndex(grid)).to.equal(0);
-      });
-
       it('should hide navigation mode when a focused row goes off screen', () => {
         focusItem(0);
         right();
@@ -1367,6 +1344,29 @@ describe('keyboard navigation', () => {
         grid.scrollToIndex(100);
 
         expect(grid.hasAttribute('navigating')).to.be.true;
+      });
+
+      it('should scroll focused row into view on arrow key', () => {
+        focusItem(0);
+        // Simulate real scrolling to get the virtualizer to render
+        // the focused item in a different element.
+        grid.$.table.scrollTop = grid.$.table.scrollHeight / 2;
+        flushGrid(grid);
+        down();
+        expect(getFocusedRowIndex(grid)).to.equal(1);
+        expect(getFocusedCellIndex(grid)).to.equal(0);
+      });
+
+      it('should scroll focused row into view on Tab', () => {
+        focusItem(0);
+        tabToHeader();
+        // Simulate real scrolling to get the virtualizer to render
+        // the focused item in a different element.
+        grid.$.table.scrollTop = grid.$.table.scrollHeight / 2;
+        flushGrid(grid);
+        tab();
+        expect(getFocusedRowIndex(grid)).to.equal(0);
+        expect(getFocusedCellIndex(grid)).to.equal(0);
       });
     });
   });
