@@ -9,17 +9,7 @@ import '../style.js';
 import '../typography.js';
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
-const overlay = css`
-  :host {
-    top: var(--lumo-space-m);
-    right: var(--lumo-space-m);
-    bottom: var(--lumo-space-m);
-    left: var(--lumo-space-m);
-    /* Workaround for Edge issue (only on Surface), where an overflowing vaadin-list-box inside vaadin-select-overlay makes the overlay transparent */
-    /* stylelint-disable-next-line */
-    outline: 0px solid transparent;
-  }
-
+export const overlayContent = css`
   [part='overlay'] {
     background-color: var(--lumo-base-color);
     background-image: linear-gradient(var(--lumo-tint-5pct), var(--lumo-tint-5pct));
@@ -42,7 +32,21 @@ const overlay = css`
   [part='content'] {
     padding: var(--lumo-space-xs);
   }
+`;
 
+export const overlayHost = css`
+  :host {
+    top: var(--lumo-space-m);
+    right: var(--lumo-space-m);
+    bottom: var(--lumo-space-m);
+    left: var(--lumo-space-m);
+    /* Workaround for Edge issue (only on Surface), where an overflowing vaadin-list-box inside vaadin-select-overlay makes the overlay transparent */
+    /* stylelint-disable-next-line */
+    outline: 0px solid transparent;
+  }
+`;
+
+export const overlayBackdrop = css`
   [part='backdrop'] {
     background-color: var(--lumo-shade-20pct);
     animation: 0.2s lumo-overlay-backdrop-enter both;
@@ -64,7 +68,9 @@ const overlay = css`
       opacity: 0;
     }
   }
+`;
 
+const overlayAnimation = css`
   @keyframes lumo-overlay-dummy-animation {
     0% {
       opacity: 1;
@@ -76,6 +82,6 @@ const overlay = css`
   }
 `;
 
-registerStyles('', overlay, { moduleId: 'lumo-overlay' });
+export const overlay = [overlayHost, overlayAnimation, overlayContent, overlayBackdrop];
 
-export { overlay };
+registerStyles('', overlay, { moduleId: 'lumo-overlay' });
