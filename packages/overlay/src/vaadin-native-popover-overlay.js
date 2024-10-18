@@ -4,17 +4,15 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { css, html, LitElement } from 'lit';
-import { createRef, ref } from 'lit/directives/ref.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { overlayPosition } from './vaadin-overlay-position-directive.js';
-import { PositionPropertiesMixin } from './vaadin-overlay-position-properties-mixin.js';
+import { PositionMixin } from './vaadin-overlay-position-mixin.js';
 
 /**
  * An internal overlay used by `vaadin-native-popover`.
  */
-class NativePopoverOverlay extends PositionPropertiesMixin(ThemableMixin(PolylitMixin(LitElement))) {
+class NativePopoverOverlay extends PositionMixin(ThemableMixin(PolylitMixin(LitElement))) {
   static get is() {
     return 'vaadin-native-popover-overlay';
   }
@@ -57,10 +55,6 @@ class NativePopoverOverlay extends PositionPropertiesMixin(ThemableMixin(Polylit
   static get styles() {
     return css`
       :host {
-        display: contents;
-      }
-
-      [popover] {
         top: 0;
         left: 0;
         bottom: 0;
@@ -73,7 +67,7 @@ class NativePopoverOverlay extends PositionPropertiesMixin(ThemableMixin(Polylit
         overflow: visible;
       }
 
-      :host([opened]) [popover] {
+      :host([opened]) {
         display: flex;
         flex-direction: column;
       }
@@ -88,8 +82,6 @@ class NativePopoverOverlay extends PositionPropertiesMixin(ThemableMixin(Polylit
   constructor() {
     super();
 
-    this.__popoverRef = createRef();
-
     this.__onGlobalClick = this.__onGlobalClick.bind(this);
     this.__onGlobalKeyDown = this.__onGlobalKeyDown.bind(this);
   }
@@ -97,24 +89,9 @@ class NativePopoverOverlay extends PositionPropertiesMixin(ThemableMixin(Polylit
   /** @protected */
   render() {
     return html`
-      <div
-        popover="manual"
-        @toggle="${this.__onToggle}"
-        ${ref(this.__popoverRef)}
-        ${overlayPosition(
-          this.opened,
-          this.positionTarget,
-          this.noHorizontalOverlap,
-          this.noVerticalOverlap,
-          this.horizontalAlign,
-          this.verticalAlign,
-          this.requiredVerticalSpace,
-        )}
-      >
-        <div part="overlay">
-          <div part="content">
-            <slot></slot>
-          </div>
+      <div part="overlay">
+        <div part="content">
+          <slot></slot>
         </div>
       </div>
     `;
@@ -123,6 +100,10 @@ class NativePopoverOverlay extends PositionPropertiesMixin(ThemableMixin(Polylit
   /** @protected */
   connectedCallback() {
     super.connectedCallback();
+
+    if (!this.popover) {
+      this.popover = 'manual';
+    }
 
     document.documentElement.addEventListener('click', this.__onGlobalClick, true);
   }
@@ -139,10 +120,10 @@ class NativePopoverOverlay extends PositionPropertiesMixin(ThemableMixin(Polylit
   /** @private */
   __openedChanged(opened, oldOpened) {
     if (opened) {
-      this.__popoverRef.value.showPopover();
+      this.showPopover();
       document.addEventListener('keydown', this.__onGlobalKeyDown, true);
     } else if (oldOpened) {
-      this.__popoverRef.value.hidePopover();
+      this.hidePopover();
       document.removeEventListener('keydown', this.__onGlobalKeyDown, true);
     }
   }
@@ -156,7 +137,7 @@ class NativePopoverOverlay extends PositionPropertiesMixin(ThemableMixin(Polylit
   __onGlobalClick(event) {
     if (
       this.opened &&
-      !event.composedPath().some((el) => el === this.__popoverRef.value || el === this.positionTarget) &&
+      !event.composedPath().some((el) => el === this || el === this.positionTarget) &&
       !this.noCloseOnOutsideClick
     ) {
       this.opened = false;
