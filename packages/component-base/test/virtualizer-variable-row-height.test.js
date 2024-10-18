@@ -95,6 +95,19 @@ describe('virtualizer - variable row height - large variance', () => {
     }
   }
 
+  /**
+   * Sets a large size, and expands the first and the last items.
+   */
+  function initWithLargeSize() {
+    // This is kept separate because some tests need physical items
+    // to be initialized during the test.
+    virtualizer.size = 200000;
+    // Expand the first and the last item
+    expandedItems = [0, virtualizer.size - 1];
+    virtualizer.update();
+    virtualizer.scrollToIndex(0);
+  }
+
   beforeEach(() => {
     scrollTarget = fixtureSync(`
       <div style="height: 300px; width: 200px;">
@@ -128,16 +141,10 @@ describe('virtualizer - variable row height - large variance', () => {
     });
 
     sinon.spy(virtualizer.__adapter, '__fixInvalidItemPositioning');
-
-    virtualizer.size = 200000;
-
-    // Expand the first and the last item
-    expandedItems = [0, virtualizer.size - 1];
-    virtualizer.update();
-    virtualizer.scrollToIndex(0);
   });
 
   it('should reveal new items when scrolling downwards', async () => {
+    initWithLargeSize();
     const rect = scrollTarget.getBoundingClientRect();
 
     await scrollDownwardsFromStart();
@@ -155,6 +162,7 @@ describe('virtualizer - variable row height - large variance', () => {
   });
 
   it('should reveal new items when scrolling upwards', async () => {
+    initWithLargeSize();
     const rect = scrollTarget.getBoundingClientRect();
 
     await scrollToEnd();
@@ -173,6 +181,7 @@ describe('virtualizer - variable row height - large variance', () => {
   });
 
   it('should not update the item at last index', async () => {
+    initWithLargeSize();
     updateElement.resetHistory();
     await scrollDownwardsFromStart();
     await fixItemPositioningTimeout();
@@ -185,6 +194,7 @@ describe('virtualizer - variable row height - large variance', () => {
   });
 
   it('should not update the item at first index', async () => {
+    initWithLargeSize();
     await scrollToEnd();
     updateElement.resetHistory();
     await scrollUpwardsFromEnd();
@@ -197,6 +207,7 @@ describe('virtualizer - variable row height - large variance', () => {
   });
 
   it('should allow scrolling to end of a padded scroll target', async () => {
+    initWithLargeSize();
     scrollTarget.style.padding = '60px 0 ';
     scrollTarget.style.boxSizing = 'border-box';
 
@@ -208,6 +219,7 @@ describe('virtualizer - variable row height - large variance', () => {
   });
 
   it('should allow scrolling to start', async () => {
+    initWithLargeSize();
     // Expand every 10th item
     expandedItems = Array.from(Array(virtualizer.size).keys()).filter((index) => index % 10 === 0);
 
@@ -221,12 +233,14 @@ describe('virtualizer - variable row height - large variance', () => {
   });
 
   it('should not jam when when size is changed after fix', async () => {
+    initWithLargeSize();
     await scrollDownwardsFromStart();
     await fixItemPositioningTimeout();
     virtualizer.size = 1;
   });
 
   it('should not invoke when size is changed after scrolling', async () => {
+    initWithLargeSize();
     await scrollDownwardsFromStart();
     virtualizer.size = 0;
     await fixItemPositioningTimeout();
@@ -234,20 +248,6 @@ describe('virtualizer - variable row height - large variance', () => {
   });
 
   it('should preserve large item in viewport when new item is added', async () => {
-    // Not using the virtualizer defined above because setting size 1 after initializing with 20000 keeps multiple hidden physical items. This leads to a change in scrolling behaviour. If a new item is added and then scrolled to, it does not appear at the end but the start of the container.
-    const scrollContainer = scrollTarget.firstElementChild;
-    virtualizer = new Virtualizer({
-      createElements: (count) =>
-        Array.from(Array(count)).map(() => {
-          const el = document.createElement('div');
-          el.classList.add('item');
-          return el;
-        }),
-      updateElement,
-      scrollTarget,
-      scrollContainer,
-    });
-
     // Initially only have a large item
     virtualizer.size = 1;
     expandedItems = [0];
