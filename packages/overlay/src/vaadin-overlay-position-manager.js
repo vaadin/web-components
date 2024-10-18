@@ -79,8 +79,8 @@ export class OverlayPositionManager extends EventTarget {
   }
 
   get content() {
-    // TODO: consider passing content wrapper element separately
-    return this.overlay.$ ? this.overlay.$.overlay : this.overlay;
+    const root = this.overlay.shadowRoot || this.overlay;
+    return root.querySelector('[part="overlay"]');
   }
 
   /**
@@ -197,7 +197,7 @@ export class OverlayPositionManager extends EventTarget {
     const shouldAlignStartVertically = this.__shouldAlignStartVertically(targetRect);
     overlay.style.justifyContent = shouldAlignStartVertically ? 'flex-start' : 'flex-end';
 
-    const isRTL = overlay.getAttribute('dir') === 'rtl';
+    const isRTL = host.getAttribute('dir') === 'rtl';
     const shouldAlignStartHorizontally = this.__shouldAlignStartHorizontally(targetRect, isRTL);
     const flexStart = (!isRTL && shouldAlignStartHorizontally) || (isRTL && !shouldAlignStartHorizontally);
     overlay.style.alignItems = flexStart ? 'flex-start' : 'flex-end';
