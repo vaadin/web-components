@@ -37,6 +37,14 @@ export const MenuOverlayMixin = (superClass) =>
       return ['_themeChanged(_theme)'];
     }
 
+    constructor() {
+      super();
+
+      this._manager.addEventListener('position-changed', () => {
+        this._updatePosition();
+      });
+    }
+
     /** @protected */
     ready() {
       super.ready();
@@ -101,11 +109,8 @@ export const MenuOverlayMixin = (superClass) =>
 
     /**
      * @protected
-     * @override
      */
     _updatePosition() {
-      super._updatePosition();
-
       if (this.positionTarget && this.parentOverlay) {
         // This overlay is positioned by a parent menu item,
         // adjust the position by the overlay content paddings

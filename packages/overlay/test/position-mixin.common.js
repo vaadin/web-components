@@ -17,7 +17,7 @@ describe('position mixin', () => {
   let targetPositionToFlipOverlay, targetPositionForCentering;
 
   function updatePosition() {
-    overlay._updatePosition();
+    overlay._manager.updatePosition();
   }
 
   function expectEdgesAligned(overlayEdge, targetEdge) {

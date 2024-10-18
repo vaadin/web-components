@@ -80,7 +80,7 @@ export const ComboBoxOverlayMixin = (superClass) =>
       if (positionTarget && opened) {
         this._updateOverlayWidth();
 
-        this._updatePosition();
+        this._manager.updatePosition();
       }
     }
   };

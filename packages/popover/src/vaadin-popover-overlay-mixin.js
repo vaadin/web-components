@@ -33,6 +33,14 @@ export const PopoverOverlayMixin = (superClass) =>
       return 'vaadin-popover';
     }
 
+    constructor() {
+      super();
+
+      this._manager.addEventListener('position-changed', () => {
+        this._updatePosition();
+      });
+    }
+
     requestContentUpdate() {
       super.requestContentUpdate();
 
@@ -50,11 +58,8 @@ export const PopoverOverlayMixin = (superClass) =>
 
     /**
      * @protected
-     * @override
      */
     _updatePosition() {
-      super._updatePosition();
-
       if (!this.positionTarget || !this.opened) {
         return;
       }

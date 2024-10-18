@@ -58,7 +58,7 @@ describe('position mixin listeners', () => {
         root.appendChild(div);
       }
     };
-    updatePositionSpy = sinon.spy(overlay, '_updatePosition');
+    updatePositionSpy = sinon.spy(overlay._manager, 'updatePosition');
   });
 
   describe('opened without position target', () => {
@@ -120,7 +120,7 @@ describe('position mixin listeners', () => {
 
     it('should not update position on scroll that occurs inside the overlay', async () => {
       overlay.positionTarget = target;
-      // Wait for the overlay open to finish (invokes _updatePosition once)
+      // Wait for the overlay open to finish (invokes updatePosition once)
       await nextFrame();
       updatePositionSpy.resetHistory();
 
