@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Native Popover</title>
+    <script type="module" src="./common.js"></script>
+
+    <script type="module">
+      import '@vaadin/button';
+      import '@vaadin/overlay/theme/lumo/vaadin-native-popover.js';
+    </script>
+  </head>
+
+  <body>
+    <div style="width: 400px; height: 400px; display: flex; justify-content: center; align-items: center">
+      <vaadin-button id="button">Discount</vaadin-button>
+    </div>
+
+    <vaadin-native-popover for="button" no-close-on-outside-click no-close-on-esc>
+      <div>Popover content</div>
+    </vaadin-native-popover>
+  </body>
+</html>
