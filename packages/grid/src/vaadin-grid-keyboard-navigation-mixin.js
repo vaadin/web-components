@@ -7,6 +7,18 @@ import { isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
 import { addValueToAttribute, removeValueFromAttribute } from '@vaadin/component-base/src/dom-utils.js';
 import { get } from '@vaadin/component-base/src/path-utils.js';
 
+function isRow(element) {
+  return element instanceof HTMLTableRowElement;
+}
+
+function isCell(element) {
+  return element instanceof HTMLTableCellElement;
+}
+
+function isDetailsCell(element) {
+  return element.matches('[part~="details-cell"]');
+}
+
 /**
  * @polymerMixin
  */
@@ -84,9 +96,7 @@ export const KeyboardNavigationMixin = (superClass) =>
 
     /** @private */
     get __rowFocusMode() {
-      return (
-        this.__isRow(this._itemsFocusable) || this.__isRow(this._headerFocusable) || this.__isRow(this._footerFocusable)
-      );
+      return [this._headerFocusable, this._itemsFocusable, this._footerFocusable].some(isRow);
     }
 
     set __rowFocusMode(value) {
@@ -94,15 +104,15 @@ export const KeyboardNavigationMixin = (superClass) =>
         const focusable = this[prop];
         if (value) {
           const parent = focusable && focusable.parentElement;
-          if (this.__isCell(focusable)) {
+          if (isCell(focusable)) {
             // Cell itself focusable (default)
             this[prop] = parent;
-          } else if (this.__isCell(parent)) {
+          } else if (isCell(parent)) {
             // Focus button mode is enabled for the column,
             // button element inside the cell is focusable.
             this[prop] = parent.parentElement;
           }
-        } else if (!value && this.__isRow(focusable)) {
+        } else if (!value && isRow(focusable)) {
           const cell = focusable.firstElementChild;
           this[prop] = cell._focusButton || cell;
         }
@@ -200,7 +210,7 @@ export const KeyboardNavigationMixin = (superClass) =>
             if (parent) {
               // Focus button mode is enabled for the column,
               // button element inside the cell is focusable.
-              if (this.__isCell(parent)) {
+              if (isCell(parent)) {
                 cell = parent;
                 parent = parent.parentElement;
               }
@@ -286,32 +296,12 @@ export const KeyboardNavigationMixin = (superClass) =>
     }
 
     /** @private */
-    __isDetailsCell(element) {
-      return element.matches('[part~="details-cell"]');
-    }
-
-    /** @private */
-    __isCell(element) {
-      return element instanceof HTMLTableCellElement;
-    }
-
-    /** @private */
-    __isRow(element) {
-      return element instanceof HTMLTableRowElement;
-    }
-
-    /** @private */
-    __getIndexOfChildElement(el) {
-      return Array.prototype.indexOf.call(el.parentNode.children, el);
-    }
-
-    /** @private */
     _onNavigationKeyDown(e, key) {
       e.preventDefault();
 
       const isRTL = this.__isRTL;
-      const activeRow = e.composedPath().find((el) => this.__isRow(el));
-      const activeCell = e.composedPath().find((el) => this.__isCell(el));
+      const activeRow = e.composedPath().find(isRow);
+      const activeCell = e.composedPath().find(isCell);
 
       // Handle keyboard interaction as defined in:
       // https://w3c.github.io/aria-practices/#keyboard-interaction-24
@@ -406,7 +396,7 @@ export const KeyboardNavigationMixin = (superClass) =>
         } else {
           // In cell focus mode
           const activeRowCells = [...activeRow.children].sort((a, b) => a._order - b._order);
-          if (activeCell === activeRowCells[0] || this.__isDetailsCell(activeCell)) {
+          if (activeCell === activeRowCells[0] || isDetailsCell(activeCell)) {
             // "If focus is on the first cell in a row and row focus is supported, moves focus to the row."
             this.__rowFocusMode = true;
             this._onRowNavigation(activeRow, 0);
@@ -445,7 +435,7 @@ export const KeyboardNavigationMixin = (superClass) =>
       if (rowGroup === this.$.items) {
         return bodyFallbackIndex !== undefined ? bodyFallbackIndex : row.index;
       }
-      return this.__getIndexOfChildElement(row);
+      return [...rowGroup.children].indexOf(row);
     }
 
     /**
@@ -486,7 +476,7 @@ export const KeyboardNavigationMixin = (superClass) =>
 
       let dstIsRowDetails = false;
       if (activeCell) {
-        const isRowDetails = this.__isDetailsCell(activeCell);
+        const isRowDetails = isDetailsCell(activeCell);
         // Row details navigation logic
         if (activeRowGroup === this.$.items) {
           const item = activeRow._item;
@@ -536,13 +526,13 @@ export const KeyboardNavigationMixin = (superClass) =>
         return;
       }
 
-      let columnIndex = this.__getIndexOfChildElement(activeCell);
+      let columnIndex = [...activeRow.children].indexOf(activeCell);
       if (this.$.items.contains(activeCell)) {
         // lazy column rendering may be enabled, so we need use the always visible sizer cells to find the column index
         columnIndex = [...this.$.sizer.children].findIndex((sizerCell) => sizerCell._column === activeCell._column);
       }
 
-      const isCurrentCellRowDetails = this.__isDetailsCell(activeCell);
+      const isCurrentCellRowDetails = isDetailsCell(activeCell);
       const activeRowGroup = activeRow.parentNode;
       const currentRowIndex = this.__getIndexInGroup(activeRow, this._focusedItemIndex);
 
@@ -560,7 +550,7 @@ export const KeyboardNavigationMixin = (superClass) =>
 
       if (dstIsRowDetails) {
         // Focusing a row details cell on the destination row
-        const dstCell = [...dstRow.children].find((el) => this.__isDetailsCell(el));
+        const dstCell = [...dstRow.children].find(isDetailsCell);
         dstCell.focus();
       } else {
         // Focusing a regular cell on the destination row
@@ -738,9 +728,9 @@ export const KeyboardNavigationMixin = (superClass) =>
         this.$.focusexit.focus();
       } else if (focusTarget === this._itemsFocusable) {
         let itemsFocusTarget = focusTarget;
-        const targetRow = this.__isRow(focusTarget) ? focusTarget : focusTarget.parentNode;
+        const targetRow = isRow(focusTarget) ? focusTarget : focusTarget.parentNode;
         this._ensureScrolledToIndex(this._focusedItemIndex);
-        if (targetRow.index !== this._focusedItemIndex && this.__isCell(focusTarget)) {
+        if (targetRow.index !== this._focusedItemIndex && isCell(focusTarget)) {
           // The target row, which is about to be focused next, has been
           // assigned with a new index since last focus, probably because of
           // scrolling. Focus the row for the stored focused item index instead.
@@ -767,12 +757,12 @@ export const KeyboardNavigationMixin = (superClass) =>
       e.preventDefault();
 
       const element = e.composedPath()[0];
-      const isRow = this.__isRow(element);
-      if (isRow || !element._content || !element._content.firstElementChild) {
+      const isElementRow = isRow(element);
+      if (isElementRow || !element._content || !element._content.firstElementChild) {
         this.dispatchEvent(
-          new CustomEvent(isRow ? 'row-activate' : 'cell-activate', {
+          new CustomEvent(isElementRow ? 'row-activate' : 'cell-activate', {
             detail: {
-              model: this.__getRowModel(isRow ? element : element.parentElement),
+              model: this.__getRowModel(isElementRow ? element : element.parentElement),
             },
           }),
         );
@@ -849,11 +839,13 @@ export const KeyboardNavigationMixin = (superClass) =>
 
       if (section && (cell || row)) {
         this._activeRowGroup = section;
-        if (this.$.header === section) {
+
+        if (section === this.$.header) {
           this._headerFocusable = this.__getFocusable(row, cell);
-        } else if (this.$.items === section) {
+        } else if (section === this.$.items) {
           this._itemsFocusable = this.__getFocusable(row, cell);
-        } else if (this.$.footer === section) {
+          this._focusedItemIndex = row.index;
+        } else if (section === this.$.footer) {
           this._footerFocusable = this.__getFocusable(row, cell);
         }
 
@@ -873,8 +865,6 @@ export const KeyboardNavigationMixin = (superClass) =>
           this._focusedCell = null;
         }
       }
-
-      this._detectFocusedItemIndex(e);
     }
 
     /**
@@ -910,14 +900,6 @@ export const KeyboardNavigationMixin = (superClass) =>
       const isInteracting = e.composedPath().some((el) => el.localName === 'slot' && this.shadowRoot.contains(el));
       this._setInteracting(isInteracting);
       this.__updateHorizontalScrollPosition();
-    }
-
-    /** @private */
-    _detectFocusedItemIndex(e) {
-      const { section, row } = this._getGridEventLocation(e);
-      if (section === this.$.items) {
-        this._focusedItemIndex = row.index;
-      }
     }
 
     /**
@@ -1017,7 +999,7 @@ export const KeyboardNavigationMixin = (superClass) =>
      * @protected
      */
     _scrollHorizontallyToCell(dstCell) {
-      if (dstCell.hasAttribute('frozen') || dstCell.hasAttribute('frozen-to-end') || this.__isDetailsCell(dstCell)) {
+      if (dstCell.hasAttribute('frozen') || dstCell.hasAttribute('frozen-to-end') || isDetailsCell(dstCell)) {
         // These cells are, by design, always visible, no need to scroll.
         return;
       }
@@ -1030,7 +1012,7 @@ export const KeyboardNavigationMixin = (superClass) =>
         rightBoundary = tableRect.right;
       for (let i = dstCellIndex - 1; i >= 0; i--) {
         const cell = dstRow.children[i];
-        if (cell.hasAttribute('hidden') || this.__isDetailsCell(cell)) {
+        if (cell.hasAttribute('hidden') || isDetailsCell(cell)) {
           continue;
         }
         if (cell.hasAttribute('frozen') || cell.hasAttribute('frozen-to-end')) {
@@ -1040,7 +1022,7 @@ export const KeyboardNavigationMixin = (superClass) =>
       }
       for (let i = dstCellIndex + 1; i < dstRow.children.length; i++) {
         const cell = dstRow.children[i];
-        if (cell.hasAttribute('hidden') || this.__isDetailsCell(cell)) {
+        if (cell.hasAttribute('hidden') || isDetailsCell(cell)) {
           continue;
         }
         if (cell.hasAttribute('frozen') || cell.hasAttribute('frozen-to-end')) {
