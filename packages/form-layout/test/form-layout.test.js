@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { aTimeout, fixtureSync, nextRender } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '@polymer/polymer/lib/elements/dom-repeat.js';
 import '@vaadin/text-field/vaadin-text-field.js';
@@ -519,7 +519,10 @@ describe('form layout', () => {
     beforeEach(() => {
       container = fixtureSync(`
         <div hidden>
-          <vaadin-form-layout></vaadin-form-layout>
+          <vaadin-form-layout>
+            <div>Foo</div>
+            <div>Bar</div>
+          </vaadin-form-layout>
         </div>
       `);
       layout = container.querySelector('vaadin-form-layout');
@@ -545,6 +548,35 @@ describe('form layout', () => {
       const ev = new Event('animationend');
       ev.animationName = 'foo';
       layout.dispatchEvent(ev);
+    });
+
+    it('should update layout when its parent becomes visible', async () => {
+      layout.responsiveSteps = [{ columns: 1 }];
+      await nextRender();
+
+      container.hidden = false;
+
+      // Wait for intersection observer
+      await nextFrame();
+      await nextFrame();
+
+      expect(parseFloat(getParsedWidth(layout.children[0]).percentage)).to.be.closeTo(100, 0.1);
+      expect(parseFloat(getParsedWidth(layout.children[1]).percentage)).to.be.closeTo(100, 0.1);
+    });
+
+    it('should change layout opacity when its parent becomes visible', async () => {
+      // Wait for intersection observer
+      await nextFrame();
+      await nextFrame();
+      expect(layout.$.layout.style.opacity).to.equal('0');
+
+      container.hidden = false;
+
+      // Wait for intersection observer
+      await nextFrame();
+      await nextFrame();
+
+      expect(layout.$.layout.style.opacity).to.equal('');
     });
   });
 
