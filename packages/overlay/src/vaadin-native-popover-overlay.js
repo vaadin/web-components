@@ -65,6 +65,7 @@ class NativePopoverOverlay extends PositionMixin(ThemableMixin(PolylitMixin(LitE
         margin: 0;
         padding: 0;
         overflow: visible;
+        background-color: transparent;
       }
 
       :host([opened]) {
