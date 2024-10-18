@@ -164,7 +164,10 @@ function shimThemableMixin(moduleId: string) {
   return shimModule(themableMixin, {
     ...themableMixinModule,
     css(strings: readonly string[], ...values: ReadonlyArray<CSSResult | number>) {
-      return new CSSResult(moduleId, strings, values);
+      const result: readonly string[] = moduleId.endsWith('font-icons.js')
+        ? strings.map((string) => string.replace(/'\\\\([a-z0-9]+)'/g, "'\\$1'"))
+        : strings;
+      return new CSSResult(moduleId, result, values);
     },
     registerStyles() {},
     unsafeCSS,
