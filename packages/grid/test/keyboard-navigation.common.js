@@ -11,13 +11,10 @@ import {
   keyUpOn,
   listenOnce,
   nextFrame,
-  nextRender,
-  oneEvent,
   up as mouseUp,
 } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
-import { getDeepActiveElement } from '@vaadin/a11y-base/src/focus-utils.js';
 import {
   attributeRenderer,
   flushGrid,
@@ -25,6 +22,8 @@ import {
   getCellContent,
   getContainerCell,
   getFirstVisibleItem,
+  getFocusedCellIndex,
+  getFocusedRowIndex,
   getLastVisibleItem,
   getRowCells,
   getRows,
@@ -131,10 +130,6 @@ function escape(target) {
   keyDownOn(target || grid.shadowRoot.activeElement, 27, [], 'Escape');
 }
 
-function f2(target) {
-  keyDownOn(target || grid.shadowRoot.activeElement, 113, [], 'F2');
-}
-
 function getFirstHeaderCell() {
   return grid.$.header.children[0].children[0];
 }
@@ -168,20 +163,6 @@ function tabToBody() {
 
 function shiftTabToFooter() {
   grid._footerFocusable.focus();
-}
-
-function getFocusedCellIndex() {
-  const focusedCell = grid.shadowRoot.activeElement;
-  return Array.from(focusedCell.parentNode.children).indexOf(focusedCell);
-}
-
-function getFocusedRowIndex() {
-  const focusedRow = grid.shadowRoot.activeElement.parentNode;
-  if (grid.$.items.contains(focusedRow)) {
-    // If the focusedRow is a body row, we musn't rely on its DOM position within its parent
-    return focusedRow.index;
-  }
-  return Array.from(focusedRow.parentNode.children).indexOf(focusedRow);
 }
 
 function getTabbableElements(root) {
@@ -626,7 +607,7 @@ describe('keyboard navigation', () => {
 
       down();
 
-      expect(getFocusedRowIndex()).to.equal(1);
+      expect(getFocusedRowIndex(grid)).to.equal(1);
     });
 
     it('should enable navigation mode on up', () => {
@@ -642,7 +623,7 @@ describe('keyboard navigation', () => {
 
       up();
 
-      expect(getFocusedRowIndex()).to.equal(0);
+      expect(getFocusedRowIndex(grid)).to.equal(0);
     });
 
     it('should enable navigation mode on left', () => {
@@ -670,7 +651,7 @@ describe('keyboard navigation', () => {
 
           left();
 
-          expect(getFocusedCellIndex()).to.equal(direction === 'rtl' ? 2 : 0);
+          expect(getFocusedCellIndex(grid)).to.equal(direction === 'rtl' ? 2 : 0);
         });
 
         it('should navigate on right when navigation mode is off', () => {
@@ -678,7 +659,7 @@ describe('keyboard navigation', () => {
 
           right();
 
-          expect(getFocusedCellIndex()).to.equal(direction === 'rtl' ? 0 : 2);
+          expect(getFocusedCellIndex(grid)).to.equal(direction === 'rtl' ? 0 : 2);
         });
       });
     });
@@ -688,8 +669,8 @@ describe('keyboard navigation', () => {
 
       down();
 
-      expect(getFocusedRowIndex()).to.equal(1);
-      expect(getFocusedCellIndex()).to.equal(0);
+      expect(getFocusedRowIndex(grid)).to.equal(1);
+      expect(getFocusedCellIndex(grid)).to.equal(0);
     });
 
     it('should focus cell above with up', () => {
@@ -698,8 +679,8 @@ describe('keyboard navigation', () => {
 
       up();
 
-      expect(getFocusedRowIndex()).to.equal(0);
-      expect(getFocusedCellIndex()).to.equal(0);
+      expect(getFocusedRowIndex(grid)).to.equal(0);
+      expect(getFocusedCellIndex(grid)).to.equal(0);
     });
 
     it('should focus cell left with left', () => {
@@ -708,8 +689,8 @@ describe('keyboard navigation', () => {
 
       left();
 
-      expect(getFocusedCellIndex()).to.equal(0);
-      expect(getFocusedRowIndex()).to.equal(0);
+      expect(getFocusedCellIndex(grid)).to.equal(0);
+      expect(getFocusedRowIndex(grid)).to.equal(0);
     });
 
     it('should focus cell right with right', () => {
@@ -717,8 +698,8 @@ describe('keyboard navigation', () => {
 
       right();
 
-      expect(getFocusedCellIndex()).to.equal(1);
-      expect(getFocusedRowIndex()).to.equal(0);
+      expect(getFocusedCellIndex(grid)).to.equal(1);
+      expect(getFocusedRowIndex(grid)).to.equal(0);
     });
 
     describe('column _order support', () => {
@@ -733,7 +714,7 @@ describe('keyboard navigation', () => {
 
         right();
 
-        expect(getFocusedCellIndex()).to.equal(1);
+        expect(getFocusedCellIndex(grid)).to.equal(1);
       });
 
       it('should follow _order when navigating left', () => {
@@ -741,7 +722,7 @@ describe('keyboard navigation', () => {
 
         left();
 
-        expect(getFocusedCellIndex()).to.equal(1);
+        expect(getFocusedCellIndex(grid)).to.equal(1);
       });
     });
 
@@ -752,14 +733,14 @@ describe('keyboard navigation', () => {
 
         down();
 
-        expect(getFocusedCellIndex()).to.equal(2);
+        expect(getFocusedCellIndex(grid)).to.equal(2);
 
         // Focus cell in first column
         focusWithMouse(getRowCell(0, 0));
 
         down();
 
-        expect(getFocusedCellIndex()).to.equal(0);
+        expect(getFocusedCellIndex(grid)).to.equal(0);
       });
     });
 
@@ -772,7 +753,7 @@ describe('keyboard navigation', () => {
 
         right();
 
-        expect(getFocusedCellIndex()).to.equal(1);
+        expect(getFocusedCellIndex(grid)).to.equal(1);
         const columnFocusedCell = grid.shadowRoot.activeElement._column;
         expect(columnFocusedCell.hidden).to.be.false;
       });
@@ -784,7 +765,7 @@ describe('keyboard navigation', () => {
 
         left();
 
-        expect(getFocusedCellIndex()).to.equal(0);
+        expect(getFocusedCellIndex(grid)).to.equal(0);
       });
 
       it('should not navigate to hidden column with left arrow', () => {
@@ -795,7 +776,7 @@ describe('keyboard navigation', () => {
 
         left();
 
-        expect(getFocusedCellIndex()).to.equal(0);
+        expect(getFocusedCellIndex(grid)).to.equal(0);
         const columnFocusedCell = grid.shadowRoot.activeElement._column;
         expect(columnFocusedCell.hidden).to.be.false;
       });
@@ -807,7 +788,7 @@ describe('keyboard navigation', () => {
         right();
         right();
 
-        expect(getFocusedCellIndex()).to.equal(1);
+        expect(getFocusedCellIndex(grid)).to.equal(1);
       });
 
       it('should not navigate to hidden column with home', () => {
@@ -818,7 +799,7 @@ describe('keyboard navigation', () => {
 
         home();
 
-        expect(getFocusedCellIndex()).to.equal(0);
+        expect(getFocusedCellIndex(grid)).to.equal(0);
         const columnFocusedCell = grid.shadowRoot.activeElement._column;
         expect(columnFocusedCell.hidden).to.be.false;
       });
@@ -831,7 +812,7 @@ describe('keyboard navigation', () => {
 
         end();
 
-        expect(getFocusedCellIndex()).to.equal(1);
+        expect(getFocusedCellIndex(grid)).to.equal(1);
         const columnFocusedCell = grid.shadowRoot.activeElement._column;
         expect(columnFocusedCell.hidden).to.be.false;
       });
@@ -857,13 +838,13 @@ describe('keyboard navigation', () => {
         expect(findRowDetailsCell(grid.shadowRoot.activeElement.parentNode)).to.not.equal(
           grid.shadowRoot.activeElement,
         );
-        expect(getFocusedCellIndex()).to.equal(2);
+        expect(getFocusedCellIndex(grid)).to.equal(2);
       });
 
       it('should not navigate to row details with end', () => {
         end();
 
-        expect(getFocusedCellIndex()).to.equal(2);
+        expect(getFocusedCellIndex(grid)).to.equal(2);
         expect(findRowDetailsCell(grid.shadowRoot.activeElement.parentNode)).to.not.equal(
           grid.shadowRoot.activeElement,
         );
@@ -873,7 +854,7 @@ describe('keyboard navigation', () => {
         down();
 
         expect(findRowDetailsCell(grid.shadowRoot.activeElement.parentNode)).to.equal(grid.shadowRoot.activeElement);
-        expect(getFocusedRowIndex()).to.equal(0);
+        expect(getFocusedRowIndex(grid)).to.equal(0);
       });
 
       it('should navigate from row details with down arrow', () => {
@@ -884,8 +865,8 @@ describe('keyboard navigation', () => {
         expect(findRowDetailsCell(grid.shadowRoot.activeElement.parentNode)).to.not.equal(
           grid.shadowRoot.activeElement,
         );
-        expect(getFocusedRowIndex()).to.equal(1);
-        expect(getFocusedCellIndex()).to.equal(0);
+        expect(getFocusedRowIndex(grid)).to.equal(1);
+        expect(getFocusedCellIndex(grid)).to.equal(0);
       });
 
       it('should preserve the focused cell index while navigating through details', () => {
@@ -894,8 +875,8 @@ describe('keyboard navigation', () => {
 
         down();
 
-        expect(getFocusedRowIndex()).to.equal(1);
-        expect(getFocusedCellIndex()).to.equal(1);
+        expect(getFocusedRowIndex(grid)).to.equal(1);
+        expect(getFocusedCellIndex(grid)).to.equal(1);
       });
 
       it('should not navigate right while in details', () => {
@@ -904,8 +885,8 @@ describe('keyboard navigation', () => {
         right();
         down();
 
-        expect(getFocusedRowIndex()).to.equal(1);
-        expect(getFocusedCellIndex()).to.equal(0);
+        expect(getFocusedRowIndex(grid)).to.equal(1);
+        expect(getFocusedCellIndex(grid)).to.equal(0);
       });
 
       it('should not navigate to end while in details', () => {
@@ -914,8 +895,8 @@ describe('keyboard navigation', () => {
         end();
         down();
 
-        expect(getFocusedRowIndex()).to.equal(1);
-        expect(getFocusedCellIndex()).to.equal(0);
+        expect(getFocusedRowIndex(grid)).to.equal(1);
+        expect(getFocusedCellIndex(grid)).to.equal(0);
       });
 
       it('should not navigate to home while in details', () => {
@@ -925,8 +906,8 @@ describe('keyboard navigation', () => {
         home();
         down();
 
-        expect(getFocusedRowIndex()).to.equal(1);
-        expect(getFocusedCellIndex()).to.equal(1);
+        expect(getFocusedRowIndex(grid)).to.equal(1);
+        expect(getFocusedCellIndex(grid)).to.equal(1);
       });
 
       it('should navigate to row details with arrow up', () => {
@@ -936,8 +917,8 @@ describe('keyboard navigation', () => {
         up();
 
         expect(findRowDetailsCell(grid.shadowRoot.activeElement.parentNode)).to.equal(grid.shadowRoot.activeElement);
-        expect(getFocusedRowIndex()).to.equal(0);
-        expect(getFocusedCellIndex()).to.not.equal(0);
+        expect(getFocusedRowIndex(grid)).to.equal(0);
+        expect(getFocusedCellIndex(grid)).to.not.equal(0);
       });
 
       it('should navigate from row details with arrow up', () => {
@@ -950,8 +931,8 @@ describe('keyboard navigation', () => {
         expect(findRowDetailsCell(grid.shadowRoot.activeElement.parentNode)).to.not.equal(
           grid.shadowRoot.activeElement,
         );
-        expect(getFocusedRowIndex()).to.equal(0);
-        expect(getFocusedCellIndex()).to.equal(0);
+        expect(getFocusedRowIndex(grid)).to.equal(0);
+        expect(getFocusedCellIndex(grid)).to.equal(0);
       });
 
       it('should set focused cell when tapping on details cell', () => {
@@ -980,7 +961,7 @@ describe('keyboard navigation', () => {
 
       home();
 
-      expect(getFocusedCellIndex()).to.equal(0);
+      expect(getFocusedCellIndex(grid)).to.equal(0);
     });
 
     it('should focus first cell in the column with ctrl+home', () => {
@@ -990,8 +971,8 @@ describe('keyboard navigation', () => {
 
       ctrlHome();
 
-      expect(getFocusedCellIndex()).to.equal(1);
-      expect(getFocusedRowIndex()).to.equal(0);
+      expect(getFocusedCellIndex(grid)).to.equal(1);
+      expect(getFocusedRowIndex(grid)).to.equal(0);
     });
 
     it('should focus last cell with end', () => {
@@ -999,7 +980,7 @@ describe('keyboard navigation', () => {
 
       end();
 
-      expect(getFocusedCellIndex()).to.equal(2);
+      expect(getFocusedCellIndex(grid)).to.equal(2);
     });
 
     it('should focus last cell in the column with ctrl+end', () => {
@@ -1007,8 +988,8 @@ describe('keyboard navigation', () => {
 
       ctrlEnd();
 
-      expect(getFocusedCellIndex()).to.equal(0);
-      expect(getFocusedRowIndex()).to.equal(1);
+      expect(getFocusedCellIndex(grid)).to.equal(0);
+      expect(getFocusedRowIndex(grid)).to.equal(1);
     });
 
     it('should focus to last row element after scrolling to end', () => {
@@ -1257,7 +1238,7 @@ describe('keyboard navigation', () => {
         pageDown();
 
         expect(getLastVisibleItem(grid).index).to.be.gt(1); // Sanity check
-        expect(getFocusedRowIndex()).to.equal(previousLastVisibleIndex - 1);
+        expect(getFocusedRowIndex(grid)).to.equal(previousLastVisibleIndex - 1);
       });
 
       it('should previous focused item be first visible item after third page down', () => {
@@ -1265,7 +1246,7 @@ describe('keyboard navigation', () => {
         pageDown();
         pageDown();
 
-        const previousLastIndex = getFocusedRowIndex();
+        const previousLastIndex = getFocusedRowIndex(grid);
         pageDown();
 
         expect(getFirstVisibleItem(grid).index).to.equal(previousLastIndex);
@@ -1278,7 +1259,7 @@ describe('keyboard navigation', () => {
         await aTimeout(0);
         pageUp();
 
-        expect(getFocusedRowIndex()).to.equal(0);
+        expect(getFocusedRowIndex(grid)).to.equal(0);
       });
 
       it('should scroll the focused item visible when focus is set to body', async () => {
@@ -1300,11 +1281,11 @@ describe('keyboard navigation', () => {
         up();
         flushGrid(grid);
 
-        const focusedRowIndexBefore = getFocusedRowIndex();
+        const focusedRowIndexBefore = getFocusedRowIndex(grid);
 
         grid.size *= 2;
 
-        const focusedRowIndexAfter = getFocusedRowIndex();
+        const focusedRowIndexAfter = getFocusedRowIndex(grid);
         expect(focusedRowIndexBefore).to.equal(focusedRowIndexAfter);
       });
 
@@ -1591,458 +1572,6 @@ describe('keyboard navigation', () => {
     });
   });
 
-  describe('interaction mode', () => {
-    beforeEach(async () => {
-      grid = fixtureSync(`
-        <vaadin-grid theme="no-border">
-          <vaadin-grid-column id="column-0"></vaadin-grid-column>
-          <vaadin-grid-column id="column-1"></vaadin-grid-column>
-          <vaadin-grid-column id="column-2"></vaadin-grid-column>
-        </vaadin-grid>
-      `);
-
-      grid.rowDetailsRenderer = inputRenderer;
-      grid.querySelector('#column-0').renderer = indexItemRenderer;
-
-      grid.querySelector('#column-1').headerRenderer = inputRenderer;
-      grid.querySelector('#column-1').renderer = inputRenderer;
-      grid.querySelector('#column-1').footerRenderer = inputRenderer;
-
-      grid.querySelector('#column-2').headerRenderer = inputRenderer;
-      grid.querySelector('#column-2').renderer = inputRenderer;
-      grid.querySelector('#column-2').footerRenderer = inputRenderer;
-
-      flushGrid(grid);
-      scroller = grid.$.scroller;
-      header = grid.$.header;
-      body = grid.$.items;
-      footer = grid.$.footer;
-
-      grid._observer.flush();
-      flushGrid(grid);
-
-      await aTimeout(0);
-
-      grid.items = ['foo', 'bar'];
-
-      focusItem(0);
-      clickItem(0);
-    });
-
-    it('should enter interaction mode with enter', () => {
-      right();
-
-      enter();
-
-      expect(grid.hasAttribute('interacting')).to.be.true;
-    });
-
-    it('should exit interaction mode when blurred', () => {
-      grid._setInteracting(true);
-
-      focusable.focus();
-
-      expect(grid.hasAttribute('interacting')).to.be.false;
-    });
-
-    it('should exit interaction mode when tabbed into', () => {
-      grid._setInteracting(true);
-
-      tabToHeader();
-
-      expect(grid.hasAttribute('interacting')).to.be.false;
-    });
-
-    it('should exit interaction mode when shift-tabbed into', () => {
-      grid._setInteracting(true);
-
-      shiftTabToFooter();
-
-      expect(grid.hasAttribute('interacting')).to.be.false;
-    });
-
-    it('should focus the first element when entering interaction mode with enter', () => {
-      const cell = getRowCell(0, 1);
-      const input = getCellContent(cell).children[0];
-      const spy = sinon.spy(input, 'focus');
-
-      right(); // Focus the cell with input.
-
-      enter();
-
-      expect(spy.callCount).to.equal(1);
-      spy.restore();
-    });
-
-    it('should focus the first actually focusable element when entering interaction mode', () => {
-      const content = getCellContent(getRowCell(0, 1));
-      const contentElements = fixtureSync(`
-        <div>
-          <label for="disabled-input">Label</label>
-          <input id="disabled-input" disabled style="width: 20px">
-          <input style="visibility: hidden; width: 20px;">
-          <div hidden>
-            <input>
-          </div>
-          <input id="focusable" style="width: 20px">
-        </div>
-      `);
-      content.textContent = '';
-      content.append(...contentElements.childNodes);
-      const focusable = content.querySelector('#focusable');
-
-      right(); // Focus the cell with input.
-
-      enter();
-
-      expect(getDeepActiveElement()).to.equal(focusable);
-    });
-
-    it('should exit interaction mode from focused single-line input with enter', () => {
-      const cell = getRowCell(0, 1);
-      const input = getCellContent(cell).children[0];
-      input.type = 'text';
-
-      right(); // Focus the cell with input.
-      enter();
-
-      enter(input);
-
-      expect(grid.hasAttribute('interacting')).to.be.false;
-    });
-
-    it('should not exit interaction mode from focused non-single-line input with enter', () => {
-      const cell = getRowCell(0, 1);
-      const input = getCellContent(cell).children[0];
-      input.type = 'button';
-
-      right(); // Focus the cell with input.
-      enter();
-
-      enter(input);
-
-      expect(grid.hasAttribute('interacting')).to.be.true;
-    });
-
-    it('should focus the first element when entering interaction mode with f2', () => {
-      const cell = getRowCell(0, 1);
-      const input = getCellContent(cell).children[0];
-      const spy = sinon.spy(input, 'focus');
-
-      right(); // Focus the cell with input.
-
-      f2();
-      expect(spy.callCount).to.equal(1);
-      spy.restore();
-    });
-
-    it('should focus the next input element when tabbing in interaction mode', async () => {
-      // Focus first input
-      right();
-      enter();
-
-      const nextInput = getCellInput(0, 2);
-
-      await sendKeys({ press: 'Tab' });
-
-      expect(document.activeElement).to.equal(nextInput);
-    });
-
-    it('should skip the grid focus target when tabbing in interaction mode', async () => {
-      // Focus last input
-      right();
-      right();
-      enter();
-
-      const previousInput = getCellInput(0, 1);
-
-      // Shift+Tab to previous input
-      await sendKeys({ down: 'Shift' });
-      await sendKeys({ press: 'Tab' });
-      await sendKeys({ up: 'Shift' });
-
-      expect(document.activeElement).to.equal(previousInput);
-    });
-
-    it('should move cell focus target when focusing the next input element in interaction mode', async () => {
-      // Focus first input
-      right();
-      enter();
-
-      const nextCell = getRowCell(0, 2);
-
-      await sendKeys({ press: 'Tab' });
-
-      expect(grid._itemsFocusable).to.equal(nextCell);
-    });
-
-    it('should focus the element with `focus-target` when entering interaction mode', () => {
-      const cell = getRowCell(0, 1);
-      const input = getCellContent(cell).children[0];
-      const spy = sinon.spy(input, 'focus');
-      const div = document.createElement('div');
-      input.parentElement.insertBefore(div, input);
-      input.setAttribute('focus-target', '');
-
-      right(); // Focus the cell with input.
-
-      enter();
-
-      expect(spy.callCount).to.equal(1);
-
-      input.removeAttribute('focus-target');
-      input.parentElement.removeChild(div);
-      spy.restore();
-    });
-
-    it('should not navigate with arrow up when in interaction mode', () => {
-      const input = focusFirstBodyInput(1);
-
-      up(input);
-      escape(input);
-
-      expect(getFocusedRowIndex()).to.equal(1);
-      expect(getFocusedCellIndex()).to.equal(1);
-    });
-
-    it('should not navigate with arrow down when in interaction mode', () => {
-      const input = focusFirstBodyInput(0);
-
-      down(input);
-      escape(input);
-
-      expect(getFocusedRowIndex()).to.equal(0);
-      expect(getFocusedCellIndex()).to.equal(1);
-    });
-
-    it('should not navigate with arrow left when in interaction mode', () => {
-      right();
-      const input = focusFirstBodyInput(0);
-
-      left(input);
-      escape(input);
-
-      expect(getFocusedRowIndex()).to.equal(0);
-      expect(getFocusedCellIndex()).to.equal(1);
-    });
-
-    it('should not navigate with arrow right when in interaction mode', () => {
-      const input = focusFirstBodyInput(0);
-
-      right(input);
-      escape(input);
-
-      expect(getFocusedRowIndex()).to.equal(0);
-      expect(getFocusedCellIndex()).to.equal(1);
-    });
-
-    it('should not navigate with home when in interaction mode', () => {
-      right();
-      const input = focusFirstBodyInput(0);
-
-      home(input);
-      escape(input);
-
-      expect(getFocusedRowIndex()).to.equal(0);
-      expect(getFocusedCellIndex()).to.equal(1);
-    });
-
-    it('should not navigate with ctrl+home when in interaction mode', () => {
-      right();
-      const input = focusFirstBodyInput(0);
-
-      ctrlHome(input);
-      escape(input);
-
-      expect(getFocusedRowIndex()).to.equal(0);
-      expect(getFocusedCellIndex()).to.equal(1);
-    });
-
-    it('should not navigate with end when in interaction mode', () => {
-      const input = focusFirstBodyInput(0);
-
-      end(input);
-      escape(input);
-
-      expect(getFocusedRowIndex()).to.equal(0);
-      expect(getFocusedCellIndex()).to.equal(1);
-    });
-
-    it('should not navigate with ctrl+end when in interaction mode', () => {
-      const input = focusFirstBodyInput(0);
-
-      ctrlEnd(input);
-      escape(input);
-
-      expect(getFocusedRowIndex()).to.equal(0);
-      expect(getFocusedCellIndex()).to.equal(1);
-    });
-
-    it('should not navigate with page down when in interaction mode', () => {
-      const input = focusFirstBodyInput(0);
-
-      pageDown(input);
-      escape(input);
-
-      expect(getFocusedRowIndex()).to.equal(0);
-      expect(getFocusedCellIndex()).to.equal(1);
-    });
-
-    it('should not navigate with page up when in interaction mode', () => {
-      const input = focusFirstBodyInput(1);
-
-      pageUp(input);
-      escape(input);
-
-      expect(getFocusedRowIndex()).to.equal(1);
-      expect(getFocusedCellIndex()).to.equal(1);
-    });
-
-    it('should not activate on space keydown when in interaction mode', () => {
-      grid.activeItem = null;
-      const input = focusFirstBodyInput(0);
-
-      spaceDown(input);
-
-      expect(grid.activeItem).to.be.null;
-    });
-
-    it('should enter interaction mode with F2', () => {
-      right();
-
-      f2();
-
-      expect(grid.hasAttribute('interacting')).to.be.true;
-    });
-
-    it('should exit interaction mode with F2', () => {
-      const input = getCellContent(getRowCell(0, 1)).children[0];
-
-      right();
-      f2();
-
-      f2(input);
-
-      expect(grid.hasAttribute('interacting')).to.be.false;
-    });
-
-    it('should remove focus from cell when exiting interaction mode with F2', () => {
-      const input = getCellContent(getRowCell(0, 1)).children[0];
-
-      right();
-      enter();
-
-      f2(input);
-
-      expect(document.activeElement).to.not.equal(input);
-    });
-
-    it('should exit interaction mode with escape', () => {
-      grid._setInteracting(true);
-
-      escape();
-
-      expect(grid.hasAttribute('interacting')).to.be.false;
-    });
-
-    it('should remove focus from cell with escape', () => {
-      const input = focusFirstBodyInput(0);
-
-      escape(input); // Revert to navigation first
-
-      escape(); // Unfortunately this does not trigger native blur
-      focusable.focus(); // Simulate native blur on escape
-
-      expect(grid.hasAttribute('navigating')).to.be.false;
-    });
-
-    it('should revert to navigation from interaction mode with escape', () => {
-      const input = focusFirstBodyInput(0);
-
-      escape(input);
-
-      expect(grid.hasAttribute('navigating')).to.be.true;
-    });
-
-    it('should revert to navigation from interaction mode with F2', () => {
-      const input = focusFirstBodyInput(0);
-
-      f2(input);
-
-      expect(grid.hasAttribute('interacting')).to.be.false;
-      expect(grid.hasAttribute('navigating')).to.be.true;
-    });
-
-    it('should cancel navigation mode with escape', () => {
-      grid.setAttribute('navigating', '');
-      grid.removeAttribute('interacting');
-
-      escape();
-      focusable.focus(); // Simulate native blur on escape
-
-      expect(grid.hasAttribute('navigating')).to.be.false;
-    });
-
-    it('should enter interaction mode when cell contents are focused', () => {
-      focusFirstBodyInput(0);
-
-      expect(grid.hasAttribute('interacting')).to.be.true;
-    });
-
-    it('should not throw error when hit enter after focus on table body', () => {
-      expect(() => {
-        grid.$.items.focus();
-        enter(grid);
-      }).not.to.throw(Error);
-    });
-
-    it('should tab through the elements in order', async () => {
-      // Add 100 items to the grid
-      grid.items = Array.from(Array(100), (_, i) => `item-${i}`);
-
-      // Remove an unused column
-      const columns = grid.querySelectorAll('vaadin-grid-column');
-      columns[2].hidden = true;
-      flushGrid(grid);
-
-      // Focus the input on the first row
-      focusFirstBodyInput(0);
-
-      const tabToIndex = 20;
-
-      async function rendered() {
-        await nextFrame();
-        await nextRender(grid);
-        await nextFrame();
-      }
-
-      // Tab downwards
-      for (let i = 1; i <= tabToIndex; i++) {
-        await rendered();
-        queueMicrotask(async () => await sendKeys({ press: 'Tab' }));
-        await oneEvent(grid, 'focusin');
-        await rendered();
-
-        const focusedRow = document.activeElement.parentElement.assignedSlot.parentElement.parentElement;
-        expect(focusedRow.index).to.equal(i);
-      }
-
-      // Tab upwards
-      for (let i = tabToIndex - 1; i >= 0; i--) {
-        await rendered();
-        queueMicrotask(async () => {
-          await sendKeys({ down: 'Shift' });
-          await sendKeys({ press: 'Tab' });
-          await sendKeys({ up: 'Shift' });
-        });
-        await oneEvent(grid, 'focusin');
-        await rendered();
-        const focusedRow = document.activeElement.parentElement.assignedSlot.parentElement.parentElement;
-        expect(focusedRow.index).to.equal(i);
-      }
-    });
-  });
-
   describe('focus events on cell content', () => {
     it('should dispatch cell-focus on keyboard navigation', () => {
       const expectedContext = {
@@ -2159,7 +1688,7 @@ describe('keyboard navigation on column groups', () => {
     tabToHeader();
 
     expect(grid.$.header.contains(grid.shadowRoot.activeElement)).to.be.true;
-    expect(getFocusedRowIndex()).to.equal(0);
+    expect(getFocusedRowIndex(grid)).to.equal(0);
   });
 
   it('should focus header cell below with arrow down', () => {
@@ -2168,7 +1697,7 @@ describe('keyboard navigation on column groups', () => {
     down();
 
     expect(grid.$.header.contains(grid.shadowRoot.activeElement)).to.be.true;
-    expect(getFocusedRowIndex()).to.equal(1);
+    expect(getFocusedRowIndex(grid)).to.equal(1);
   });
 
   it('should focus header cell above with arrow up', () => {
@@ -2177,14 +1706,14 @@ describe('keyboard navigation on column groups', () => {
     down();
     up();
 
-    expect(getFocusedRowIndex()).to.equal(0);
+    expect(getFocusedRowIndex(grid)).to.equal(0);
   });
 
   it('should focus first footer cell first', () => {
     shiftTabToFooter();
 
     expect(grid.$.footer.contains(grid.shadowRoot.activeElement)).to.be.true;
-    expect(getFocusedRowIndex()).to.equal(0);
+    expect(getFocusedRowIndex(grid)).to.equal(0);
   });
 
   it('should focus footer cell below with arrow down', () => {
@@ -2195,7 +1724,7 @@ describe('keyboard navigation on column groups', () => {
     expect(grid.$.footer.contains(grid.shadowRoot.activeElement)).to.be.true;
     // Second how is hidden because of missing renderers.
     // Should skip to the third one, index 2.
-    expect(getFocusedRowIndex()).to.equal(2);
+    expect(getFocusedRowIndex(grid)).to.equal(2);
   });
 
   it('should focus footer cell above with arrow up', () => {
@@ -2204,7 +1733,7 @@ describe('keyboard navigation on column groups', () => {
     down();
     up();
 
-    expect(getFocusedRowIndex()).to.equal(0);
+    expect(getFocusedRowIndex(grid)).to.equal(0);
   });
 
   it('should not scroll body on header pagedown', () => {
@@ -2344,7 +1873,7 @@ describe('keyboard navigation on column groups', () => {
         down();
 
         // Expect the focus to be on the first column
-        expect(getFocusedCellIndex()).to.equal(0);
+        expect(getFocusedCellIndex(grid)).to.equal(0);
       });
 
       it('should tab to body after reducing rows', async () => {
@@ -2459,7 +1988,7 @@ describe('hierarchical data', () => {
     focusItem(0);
 
     pageDown();
-    const previousLastIndex = getFocusedRowIndex();
+    const previousLastIndex = getFocusedRowIndex(grid);
     pageDown();
 
     expect(getFirstVisibleItem(grid).index).to.equal(previousLastIndex);
