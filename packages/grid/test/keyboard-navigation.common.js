@@ -25,6 +25,7 @@ import {
   getFocusedCellIndex,
   getFocusedRowIndex,
   getLastVisibleItem,
+  getPhysicalItems,
   getRowCells,
   getRows,
   infiniteDataProvider,
@@ -1313,6 +1314,7 @@ describe('keyboard navigation', () => {
           expect(grid.hasAttribute('navigating')).to.be.true;
 
           grid.scrollToIndex(100);
+          flushGrid(grid);
 
           expect(grid.hasAttribute('navigating')).to.be.false;
         });
@@ -1321,8 +1323,10 @@ describe('keyboard navigation', () => {
           focusItem(0);
           right();
           grid.scrollToIndex(100);
+          flushGrid(grid);
 
           grid.scrollToIndex(0);
+          flushGrid(grid);
 
           expect(grid.hasAttribute('navigating')).to.be.true;
         });
@@ -1334,6 +1338,7 @@ describe('keyboard navigation', () => {
           expect(grid.hasAttribute('navigating')).to.be.true;
 
           grid.scrollToIndex(100);
+          flushGrid(grid);
 
           expect(grid.hasAttribute('navigating')).to.be.true;
         });
@@ -1557,18 +1562,74 @@ describe('keyboard navigation', () => {
   });
 
   describe('focused-cell part', () => {
-    it('should add focused-cell to cell part when focused', () => {
-      focusFirstHeaderCell();
-
-      expect(getFirstHeaderCell().getAttribute('part')).to.contain('focused-cell');
+    beforeEach(() => {
+      grid.items = undefined;
+      grid.size = 200;
+      grid.dataProvider = infiniteDataProvider;
+      flushGrid(grid);
     });
 
-    it('should remove focused-cell from cell part when blurred', () => {
-      focusFirstHeaderCell();
+    it('should add the part to cell when focused', () => {
+      focusItem(5);
+      const cell = getPhysicalItems(grid)[5].firstChild;
+      expect(cell.getAttribute('part')).to.contain('focused-cell');
+    });
 
+    it('should remove the part from cell when blurred', () => {
+      focusItem(5);
       focusable.focus();
+      const cell = getPhysicalItems(grid)[5].firstChild;
+      expect(cell.getAttribute('part')).to.not.contain('focused-cell');
+    });
 
-      expect(getFirstHeaderCell().getAttribute('part')).to.not.contain('focused-cell');
+    it('should keep the part when focused item is scrolled but still visible', () => {
+      focusItem(5);
+      grid.scrollToIndex(2);
+      flushGrid(grid);
+      const cell = getPhysicalItems(grid)[5].firstChild;
+      expect(cell.getAttribute('part')).to.contain('focused-cell');
+    });
+
+    it('should remove the part when focused item is scrolled out of view', () => {
+      focusItem(5);
+      grid.scrollToIndex(100);
+      flushGrid(grid);
+      expect(grid.$.items.querySelector(':not([hidden]) [part~="focused-cell"')).to.be.null;
+    });
+
+    it('should restore the part when focused item is scrolled back to view', () => {
+      focusItem(5);
+      grid.scrollToIndex(100);
+      flushGrid(grid);
+
+      // Simulate real scrolling to get the virtualizer to render
+      // the focused item in a different element.
+      grid.$.table.scrollTop = 0;
+      flushGrid(grid);
+
+      const cell = getPhysicalItems(grid)[5].firstChild;
+      expect(cell.getAttribute('part')).to.contain('focused-cell');
+    });
+
+    it('should not add the part to any element when focused item is scrolled back to view - row focus mode', () => {
+      focusItem(5);
+      left();
+      grid.scrollToIndex(100);
+      flushGrid(grid);
+      grid.scrollToIndex(0);
+      flushGrid(grid);
+      expect(grid.$.items.querySelector(':not([hidden]) [part~="focused-cell"')).to.be.null;
+    });
+
+    it('should not remove the part from header cell when scrolling items', () => {
+      focusFirstHeaderCell();
+      grid.scrollToIndex(100);
+      flushGrid(grid);
+      expect(getFirstHeaderCell().getAttribute('part')).to.contain('focused-cell');
+
+      grid.scrollToIndex(0);
+      flushGrid(grid);
+      expect(getFirstHeaderCell().getAttribute('part')).to.contain('focused-cell');
     });
   });
 

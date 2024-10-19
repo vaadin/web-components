@@ -145,6 +145,10 @@ export const gridStyles = css`
     white-space: nowrap;
   }
 
+  [part~='cell'] {
+    outline: none;
+  }
+
   [part~='cell'] > [tabindex] {
     display: flex;
     align-items: inherit;
