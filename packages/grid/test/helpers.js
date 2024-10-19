@@ -158,16 +158,24 @@ export const getContainerCellContent = (container, row, col) => {
   return getCellContent(getContainerCell(container, row, col));
 };
 
-export const getHeaderCellContent = (grid, row, col) => {
+export const getHeaderCell = (grid, row, col) => {
   const container = grid.$.header;
-  return getContainerCellContent(container, row, col);
+  return getContainerCell(container, row, col);
 };
 
-export const getBodyCellContent = (grid, row, col) => {
+export const getHeaderCellContent = (grid, row, col) => {
+  return getCellContent(getHeaderCell(grid, row, col));
+};
+
+export const getBodyCell = (grid, row, col) => {
   const physicalItems = getPhysicalItems(grid);
   const physicalRow = physicalItems.find((item) => item.index === row);
   const cells = getRowCells(physicalRow);
-  return getCellContent(cells[col]);
+  return cells[col];
+};
+
+export const getBodyCellContent = (grid, row, col) => {
+  return getCellContent(getBodyCell(grid, row, col));
 };
 
 export const fire = (type, detail, options) => {
