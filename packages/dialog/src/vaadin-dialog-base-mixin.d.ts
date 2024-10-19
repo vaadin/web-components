@@ -38,4 +38,24 @@ export declare class DialogBaseMixinClass {
    * @attr {string} overlay-role
    */
   overlayRole: string;
+
+  /**
+   * Set the distance of the overlay from the top of its container.
+   * If a unitless number is provided, pixels are assumed.
+   *
+   * Note that the overlay top edge may not be the same as the viewport
+   * top edge (e.g. the Lumo theme defines some spacing to prevent the
+   * overlay from stretching all the way to the top of the viewport).
+   */
+  top: string;
+
+  /**
+   * Set the distance of the overlay from the left of its container.
+   * If a unitless number is provided, pixels are assumed.
+   *
+   * Note that the overlay left edge may not be the same as the viewport
+   * left edge (e.g. the Lumo theme defines some spacing to prevent the
+   * overlay from stretching all the way to the left of the viewport).
+   */
+  left: string;
 }
