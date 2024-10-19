@@ -86,6 +86,11 @@ export class Cache<TItem> {
   setPage(page: number, items: unknown[]): void;
 
   /**
+   * Clears the entries for the given page from the `items` array.
+   */
+  clearPage(page: number): void;
+
+  /**
    * Retrieves the sub-cache associated with the item at the given index
    * in the `items` array.
    */
