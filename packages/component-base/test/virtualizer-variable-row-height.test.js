@@ -95,6 +95,19 @@ describe('virtualizer - variable row height - large variance', () => {
     }
   }
 
+  /**
+   * Sets a large size, and expands the first and the last items.
+   */
+  function initWithLargeSize() {
+    // This is kept separate because some tests need physical items
+    // to be initialized during the test.
+    virtualizer.size = 200000;
+    // Expand the first and the last item
+    expandedItems = [0, virtualizer.size - 1];
+    virtualizer.update();
+    virtualizer.scrollToIndex(0);
+  }
+
   beforeEach(() => {
     scrollTarget = fixtureSync(`
       <div style="height: 300px; width: 200px;">
@@ -128,16 +141,10 @@ describe('virtualizer - variable row height - large variance', () => {
     });
 
     sinon.spy(virtualizer.__adapter, '__fixInvalidItemPositioning');
-
-    virtualizer.size = 200000;
-
-    // Expand the first and the last item
-    expandedItems = [0, virtualizer.size - 1];
-    virtualizer.update();
-    virtualizer.scrollToIndex(0);
   });
 
   it('should reveal new items when scrolling downwards', async () => {
+    initWithLargeSize();
     const rect = scrollTarget.getBoundingClientRect();
 
     await scrollDownwardsFromStart();
@@ -155,6 +162,7 @@ describe('virtualizer - variable row height - large variance', () => {
   });
 
   it('should reveal new items when scrolling upwards', async () => {
+    initWithLargeSize();
     const rect = scrollTarget.getBoundingClientRect();
 
     await scrollToEnd();
@@ -173,6 +181,7 @@ describe('virtualizer - variable row height - large variance', () => {
   });
 
   it('should not update the item at last index', async () => {
+    initWithLargeSize();
     updateElement.resetHistory();
     await scrollDownwardsFromStart();
     await fixItemPositioningTimeout();
@@ -185,6 +194,7 @@ describe('virtualizer - variable row height - large variance', () => {
   });
 
   it('should not update the item at first index', async () => {
+    initWithLargeSize();
     await scrollToEnd();
     updateElement.resetHistory();
     await scrollUpwardsFromEnd();
@@ -197,6 +207,7 @@ describe('virtualizer - variable row height - large variance', () => {
   });
 
   it('should allow scrolling to end of a padded scroll target', async () => {
+    initWithLargeSize();
     scrollTarget.style.padding = '60px 0 ';
     scrollTarget.style.boxSizing = 'border-box';
 
@@ -208,6 +219,7 @@ describe('virtualizer - variable row height - large variance', () => {
   });
 
   it('should allow scrolling to start', async () => {
+    initWithLargeSize();
     // Expand every 10th item
     expandedItems = Array.from(Array(virtualizer.size).keys()).filter((index) => index % 10 === 0);
 
@@ -221,15 +233,37 @@ describe('virtualizer - variable row height - large variance', () => {
   });
 
   it('should not jam when when size is changed after fix', async () => {
+    initWithLargeSize();
     await scrollDownwardsFromStart();
     await fixItemPositioningTimeout();
     virtualizer.size = 1;
   });
 
   it('should not invoke when size is changed after scrolling', async () => {
+    initWithLargeSize();
     await scrollDownwardsFromStart();
     virtualizer.size = 0;
     await fixItemPositioningTimeout();
     expect(virtualizer.__adapter.__fixInvalidItemPositioning.callCount).to.equal(0);
+  });
+
+  it('should preserve large item in viewport when new item is added', async () => {
+    // Initially only have a large item
+    virtualizer.size = 1;
+    expandedItems = [0];
+    virtualizer.update();
+    await nextFrame();
+
+    // Calculated using the virtualizer height of 300px and regular item height of 30px
+    const requiredRegularItemCountToFillViewport = 10;
+
+    // Add items until the large item disappears
+    for (let i = 0; i < requiredRegularItemCountToFillViewport - 1; i++) {
+      // Add a new item and scroll to the end
+      virtualizer.size += 1;
+      virtualizer.scrollToIndex(Infinity);
+      await nextFrame();
+      expect(virtualizer.firstVisibleIndex).to.equal(0);
+    }
   });
 });

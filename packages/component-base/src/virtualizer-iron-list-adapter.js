@@ -564,6 +564,53 @@ export class IronListAdapter {
   }
 
   /**
+   * An optimal physical size such that we will have enough physical items
+   * to fill up the viewport and recycle when the user scrolls.
+   *
+   * This default value assumes that we will at least have the equivalent
+   * to a viewport of physical items above and below the user's viewport.
+   * @override
+   */
+  get _optPhysicalSize() {
+    const optPhysicalSize = super._optPhysicalSize;
+    // No need to adjust
+    if (optPhysicalSize <= 0) {
+      return optPhysicalSize;
+    }
+    // Item height buffer accounts for the cases where some items are much larger than the average.
+    // This can lead to some items not being rendered and leaving empty space in the viewport.
+    // https://github.com/vaadin/flow-components/issues/6651
+    return optPhysicalSize + this.__getItemHeightBuffer();
+  }
+
+  /**
+   * Extra item height buffer used when calculating optimal physical size.
+   *
+   * The iron list core uses the optimal physical size when determining whether to increase the item pool.
+   * For the cases where some items are much larger than the average, the iron list core might not increase item pool.
+   * This can lead to the large item not being rendered.
+   *
+   * @returns {Number} - Extra item height buffer
+   * @private
+   */
+  __getItemHeightBuffer() {
+    // No need for a buffer with no items
+    if (this._physicalCount === 0) {
+      return 0;
+    }
+    // The regular buffer zone height for either top or bottom
+    const bufferZoneHeight = Math.ceil((this._viewportHeight * (this._maxPages - 1)) / 2);
+    // The maximum height of the currently rendered items
+    const maxItemHeight = Math.max(...this._physicalSizes);
+    // Only add buffer if the item is larger that the other items
+    if (maxItemHeight > Math.min(...this._physicalSizes)) {
+      // Add a buffer height since the large item can still be in the viewport and out of the original buffer
+      return Math.max(0, maxItemHeight - bufferZoneHeight);
+    }
+    return 0;
+  }
+
+  /**
    * @returns {Number|undefined} - The browser's default font-size in pixels
    * @private
    */
