@@ -1305,43 +1305,73 @@ describe('keyboard navigation', () => {
         up();
         expect(grid.$.table.scrollTop).to.equal(scrollTop);
       });
+    });
 
-      describe('rotating focus indicator prevention', () => {
-        it('should hide navigation mode when a focused row goes off screen', () => {
-          focusItem(0);
-          right();
+    describe('scrolling and navigating', () => {
+      beforeEach(() => {
+        grid.items = undefined;
+        grid.size = 200;
+        grid.dataProvider = infiniteDataProvider;
+        flushGrid(grid);
+      });
 
-          expect(grid.hasAttribute('navigating')).to.be.true;
+      it('should hide navigation mode when a focused row goes off screen', () => {
+        focusItem(0);
+        right();
 
-          grid.scrollToIndex(100);
-          flushGrid(grid);
+        expect(grid.hasAttribute('navigating')).to.be.true;
 
-          expect(grid.hasAttribute('navigating')).to.be.false;
-        });
+        grid.scrollToIndex(100);
+        flushGrid(grid);
 
-        it('should reveal navigation mode when a focused row is back on screen', () => {
-          focusItem(0);
-          right();
-          grid.scrollToIndex(100);
-          flushGrid(grid);
+        expect(grid.hasAttribute('navigating')).to.be.false;
+      });
 
-          grid.scrollToIndex(0);
-          flushGrid(grid);
+      it('should reveal navigation mode when a focused row is back on screen', () => {
+        focusItem(0);
+        right();
+        grid.scrollToIndex(100);
+        flushGrid(grid);
 
-          expect(grid.hasAttribute('navigating')).to.be.true;
-        });
+        grid.scrollToIndex(0);
+        flushGrid(grid);
 
-        it('should not hide navigation mode if a header cell is focused', () => {
-          tabToHeader();
-          right();
+        expect(grid.hasAttribute('navigating')).to.be.true;
+      });
 
-          expect(grid.hasAttribute('navigating')).to.be.true;
+      it('should not hide navigation mode if a header cell is focused', () => {
+        tabToHeader();
+        right();
 
-          grid.scrollToIndex(100);
-          flushGrid(grid);
+        expect(grid.hasAttribute('navigating')).to.be.true;
 
-          expect(grid.hasAttribute('navigating')).to.be.true;
-        });
+        grid.scrollToIndex(100);
+        flushGrid(grid);
+
+        expect(grid.hasAttribute('navigating')).to.be.true;
+      });
+
+      it('should scroll focused row into view on arrow key', () => {
+        focusItem(0);
+        // Simulate real scrolling to get the virtualizer to render
+        // the focused item in a different element.
+        grid.$.table.scrollTop = grid.$.table.scrollHeight / 2;
+        flushGrid(grid);
+        down();
+        expect(getFocusedRowIndex(grid)).to.equal(1);
+        expect(getFocusedCellIndex(grid)).to.equal(0);
+      });
+
+      it('should scroll focused row into view on Tab', () => {
+        focusItem(0);
+        tabToHeader();
+        // Simulate real scrolling to get the virtualizer to render
+        // the focused item in a different element.
+        grid.$.table.scrollTop = grid.$.table.scrollHeight / 2;
+        flushGrid(grid);
+        tab();
+        expect(getFocusedRowIndex(grid)).to.equal(0);
+        expect(getFocusedCellIndex(grid)).to.equal(0);
       });
     });
   });
