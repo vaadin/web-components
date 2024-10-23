@@ -145,6 +145,10 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
       checkbox.__item = item;
       checkbox.__rendererChecked = selected;
       checkbox.checked = selected;
+
+      const isSelectable = this._grid.__isItemSelectable(item);
+      checkbox.readonly = !isSelectable;
+      checkbox.hidden = !isSelectable && !selected;
     }
 
     /**
@@ -245,9 +249,18 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
     _onCellKeyDown(e) {
       const target = e.composedPath()[0];
       // Toggle on Space without having to enter interaction mode first
-      if (e.keyCode === 32 && (target === this._headerCell || (this._cells.includes(target) && !this.autoSelect))) {
+      if (e.keyCode !== 32) {
+        return;
+      }
+      if (target === this._headerCell) {
+        if (this.selectAll) {
+          this._deselectAll();
+        } else {
+          this._selectAll();
+        }
+      } else if (this._cells.includes(target) && !this.autoSelect) {
         const checkbox = target._content.firstElementChild;
-        checkbox.checked = !checkbox.checked;
+        this.__toggleItem(checkbox.__item);
       }
     }
 
@@ -357,6 +370,19 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
      * @protected
      */
     _deselectItem(_item) {}
+
+    /**
+     * Toggles the selected state of the given item.
+     * @param item the item to toggle
+     * @private
+     */
+    __toggleItem(item) {
+      if (this._grid._isSelected(item)) {
+        this._deselectItem(item);
+      } else {
+        this._selectItem(item);
+      }
+    }
 
     /**
      * IOS needs indeterminate + checked at the same time

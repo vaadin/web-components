@@ -23,6 +23,29 @@ export const SelectionMixin = (superClass) =>
         },
 
         /**
+         * A function to check whether a specific item in the grid may be
+         * selected or deselected by the user. Used by the selection column to
+         * conditionally enable to disable checkboxes for individual items. This
+         * function does not prevent programmatic selection/deselection of
+         * items. Changing the function does not modify the currently selected
+         * items.
+         *
+         * Configuring this function hides the select all checkbox of the grid
+         * selection column, which means users can not select or deselect all
+         * items anymore, nor do they get feedback on whether all items are
+         * selected or not.
+         *
+         * Receives an item instance and should return a boolean indicating
+         * whether users may change the selection state of that item.
+         *
+         * @type {(item: !GridItem) => boolean}
+         */
+        isItemSelectable: {
+          type: Function,
+          notify: true,
+        },
+
+        /**
          * Set of selected item ids
          * @private
          */
@@ -34,7 +57,7 @@ export const SelectionMixin = (superClass) =>
     }
 
     static get observers() {
-      return ['__selectedItemsChanged(itemIdPath, selectedItems)'];
+      return ['__selectedItemsChanged(itemIdPath, selectedItems, isItemSelectable)'];
     }
 
     /**
@@ -44,6 +67,22 @@ export const SelectionMixin = (superClass) =>
      */
     _isSelected(item) {
       return this.__selectedKeys.has(this.getItemId(item));
+    }
+
+    /**
+     * Determines whether the selection state of an item may be changed by the
+     * user.
+     *
+     * @private
+     */
+    __isItemSelectable(item) {
+      // Item is selectable by default if isItemSelectable is not configured
+      if (!this.isItemSelectable || !item) {
+        return true;
+      }
+
+      // Otherwise, check isItemSelectable function
+      return this.isItemSelectable(item);
     }
 
     /**
@@ -67,21 +106,6 @@ export const SelectionMixin = (superClass) =>
     deselectItem(item) {
       if (this._isSelected(item)) {
         this.selectedItems = this.selectedItems.filter((i) => !this._itemsEqual(i, item));
-      }
-    }
-
-    /**
-     * Toggles the selected state of the given item.
-     *
-     * @method toggle
-     * @param {!GridItem} item The item object
-     * @protected
-     */
-    _toggleItem(item) {
-      if (!this._isSelected(item)) {
-        this.selectItem(item);
-      } else {
-        this.deselectItem(item);
       }
     }
 
