@@ -1,4 +1,4 @@
-import { expect } from '@vaadin/chai-plugins';
+import { expect } from '@esm-bundle/chai';
 import { aTimeout, fixtureSync, keyDownOn, nextFrame, nextRender, oneEvent } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
