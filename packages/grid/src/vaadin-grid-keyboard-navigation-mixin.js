@@ -712,7 +712,7 @@ export const KeyboardNavigationMixin = (superClass) =>
 
     /** @private */
     _onTabKeyDown(e) {
-      const focusTarget = this._predictFocusStepTarget(e.composedPath()[0], e.shiftKey ? -1 : 1);
+      let focusTarget = this._predictFocusStepTarget(e.composedPath()[0], e.shiftKey ? -1 : 1);
 
       // Can be undefined if grid has tabindex
       if (!focusTarget) {
@@ -722,24 +722,24 @@ export const KeyboardNavigationMixin = (superClass) =>
       // Prevent focus-trap logic from intercepting the event.
       e.stopPropagation();
 
-      if (focusTarget === this.$.table) {
-        // The focus is about to exit the grid to the top.
-        this.$.table.focus();
-      } else if (focusTarget === this.$.focusexit) {
-        // The focus is about to exit the grid to the bottom.
-        this.$.focusexit.focus();
-      } else if (focusTarget === this._itemsFocusable) {
+      if (focusTarget === this._itemsFocusable) {
         this.__ensureFlatIndexInViewport(this._focusedItemIndex);
 
         // Ensure the correct element is set as focusable after scrolling.
         // The virtualizer may use a different element to render the item.
         this.__updateItemsFocusable();
 
+        focusTarget = this._itemsFocusable;
+      }
+
+      focusTarget.focus();
+
+      // If the next element is the table or focusexit, it indicates the user
+      // intends to leave the grid. In this case, we move focus to these elements
+      // without preventing the default Tab behavior. The default behavior then
+      // starts from these elements and moves focus outside the grid.
+      if (focusTarget !== this.$.table && focusTarget !== this.$.focusexit) {
         e.preventDefault();
-        this._itemsFocusable.focus();
-      } else {
-        e.preventDefault();
-        focusTarget.focus();
       }
 
       this.toggleAttribute('navigating', true);
