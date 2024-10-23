@@ -30,6 +30,11 @@ export const SelectionMixin = (superClass) =>
          * items. Changing the function does not modify the currently selected
          * items.
          *
+         * Configuring this function hides the select all checkbox of the grid
+         * selection column, which means users can not select or deselect all
+         * items anymore, nor do they get feedback on whether all items are
+         * selected or not.
+         *
          * Receives an item instance and should return a boolean indicating
          * whether users may change the selection state of that item.
          *

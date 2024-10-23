@@ -2,7 +2,7 @@ import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
-import { fire, flushGrid, getBodyCell, getBodyCellContent, getHeaderCell, getHeaderCellContent } from './helpers.js';
+import { fire, flushGrid, getBodyCell, getBodyCellContent, getHeaderCellContent } from './helpers.js';
 
 describe('selectable-provider', () => {
   let grid;
@@ -192,95 +192,15 @@ describe('selectable-provider', () => {
   });
 
   describe('select all', () => {
-    function isSelectAllChecked() {
-      return selectAllCheckbox.checked && !selectAllCheckbox.indeterminate;
-    }
-
-    function isSelectAllIndeterminate() {
-      return selectAllCheckbox.checked && selectAllCheckbox.indeterminate;
-    }
-
-    function isSelectAllUnchecked() {
-      return !selectAllCheckbox.checked && !selectAllCheckbox.indeterminate;
-    }
-
-    it('should be checked when all selectable items are selected', () => {
-      grid.selectedItems = grid.items.slice(5);
-
-      expect(isSelectAllChecked()).to.be.true;
+    it('should hide select all checkbox when using isItemSelectable provider', () => {
+      expect(selectAllCheckbox.hasAttribute('hidden')).to.be.true;
     });
 
-    it('should be indeterminate when some selectable items are not selected', () => {
-      grid.selectedItems = grid.items.slice(6);
-
-      expect(isSelectAllIndeterminate()).to.be.true;
-    });
-
-    it('should be unchecked when only non-selectable items are selected', () => {
-      grid.selectedItems = grid.items.slice(0, 5);
-
-      expect(isSelectAllUnchecked()).to.be.true;
-    });
-
-    it('should update when changing isItemSelectable', async () => {
-      // change provider so that some selectable items are not checked
-      grid.selectedItems = grid.items.slice(5);
-      grid.isItemSelectable = (item) => item.index > 1;
+    it('should show select all checkbox when removing isItemSelectable provider', async () => {
+      grid.isItemSelectable = null;
       await nextFrame();
 
-      expect(isSelectAllIndeterminate()).to.be.true;
-
-      // revert provider so that only non-selectable items are not checked
-      grid.isItemSelectable = (item) => item.index >= 5;
-      await nextFrame();
-
-      expect(isSelectAllChecked()).to.be.true;
-    });
-
-    it('should only check selectable items on click', async () => {
-      selectAllCheckbox.click();
-      await nextFrame();
-
-      expect(grid.selectedItems.length).to.equal(5);
-      expect(grid.selectedItems).to.include.members(grid.items.slice(5));
-    });
-
-    it('should not uncheck non-selectable items on click', async () => {
-      grid.selectedItems = grid.items.slice(0, 5);
-      selectAllCheckbox.click();
-      await nextFrame();
-
-      expect(grid.selectedItems.length).to.equal(10);
-      expect(grid.selectedItems).to.include.members(grid.items);
-    });
-
-    it('should only uncheck selectable items on click', async () => {
-      grid.selectedItems = [...grid.items];
-      await nextFrame();
-
-      selectAllCheckbox.click();
-      await nextFrame();
-
-      expect(grid.selectedItems.length).to.equal(5);
-      expect(grid.selectedItems).to.include.members(grid.items.slice(0, 5));
-    });
-
-    it('should only check selectable items when pressing space on cell', async () => {
-      getHeaderCell(grid, 0, 0).focus();
-      await sendKeys({ press: 'Space' });
-
-      expect(grid.selectedItems.length).to.equal(5);
-      expect(grid.selectedItems).to.include.members(grid.items.slice(5));
-    });
-
-    it('should only uncheck selectable items when pressing space on cell', async () => {
-      grid.selectedItems = [...grid.items];
-
-      getHeaderCell(grid, 0, 0).focus();
-      await sendKeys({ press: 'Space' });
-
-      expect(grid.selectedItems.length).to.equal(5);
-      expect(grid.selectedItems).to.include.members(grid.items.slice(0, 5));
+      expect(selectAllCheckbox.hasAttribute('hidden')).to.be.false;
     });
   });
 

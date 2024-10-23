@@ -30,17 +30,17 @@ export const GridSelectionColumnMixin = (superClass) =>
       super();
 
       this.__boundOnActiveItemChanged = this.__onActiveItemChanged.bind(this);
-      this.__boundOnDataProviderChanged = this.__onDataProviderChanged.bind(this);
+      this.__boundUpdateSelectAllVisibility = this.__updateSelectAllVisibility.bind(this);
       this.__boundOnSelectedItemsChanged = this.__onSelectedItemsChanged.bind(this);
     }
 
     /** @protected */
     disconnectedCallback() {
       this._grid.removeEventListener('active-item-changed', this.__boundOnActiveItemChanged);
-      this._grid.removeEventListener('data-provider-changed', this.__boundOnDataProviderChanged);
+      this._grid.removeEventListener('data-provider-changed', this.__boundUpdateSelectAllVisibility);
+      this._grid.removeEventListener('is-item-selectable-changed', this.__boundUpdateSelectAllVisibility);
       this._grid.removeEventListener('filter-changed', this.__boundOnSelectedItemsChanged);
       this._grid.removeEventListener('selected-items-changed', this.__boundOnSelectedItemsChanged);
-      this._grid.removeEventListener('is-item-selectable-changed', this.__boundOnSelectedItemsChanged);
 
       super.disconnectedCallback();
     }
@@ -50,10 +50,10 @@ export const GridSelectionColumnMixin = (superClass) =>
       super.connectedCallback();
       if (this._grid) {
         this._grid.addEventListener('active-item-changed', this.__boundOnActiveItemChanged);
-        this._grid.addEventListener('data-provider-changed', this.__boundOnDataProviderChanged);
+        this._grid.addEventListener('data-provider-changed', this.__boundUpdateSelectAllVisibility);
+        this._grid.addEventListener('is-item-selectable-changed', this.__boundUpdateSelectAllVisibility);
         this._grid.addEventListener('filter-changed', this.__boundOnSelectedItemsChanged);
         this._grid.addEventListener('selected-items-changed', this.__boundOnSelectedItemsChanged);
-        this._grid.addEventListener('is-item-selectable-changed', this.__boundOnSelectedItemsChanged);
       }
     }
 
@@ -74,11 +74,11 @@ export const GridSelectionColumnMixin = (superClass) =>
       }
 
       if (selectAll && this.__hasArrayDataProvider()) {
-        // Select all items that users may change the selection state of, keeping items that users may not change the selection state of
-        this._grid.selectedItems = [...this.__getNonModifiableSelectedItems(), ...this.__getSelectableItems()];
+        this.__withFilteredItemsArray((items) => {
+          this._grid.selectedItems = items;
+        });
       } else {
-        // Deselect all, keeping items that users may not change the selection state of
-        this._grid.selectedItems = this.__getNonModifiableSelectedItems();
+        this._grid.selectedItems = [];
       }
     }
 
@@ -153,66 +153,43 @@ export const GridSelectionColumnMixin = (superClass) =>
     __onSelectedItemsChanged() {
       this._selectAllChangeLock = true;
       if (this.__hasArrayDataProvider()) {
-        const modifiableSelection = this.__getModifiableSelectedItems();
-        if (!modifiableSelection.length) {
-          this.selectAll = false;
-          this._indeterminate = false;
-        } else if (this.__getSelectableItems().every((item) => this._grid._isSelected(item))) {
-          this.selectAll = true;
-          this._indeterminate = false;
-        } else {
-          this.selectAll = false;
-          this._indeterminate = true;
-        }
+        this.__withFilteredItemsArray((items) => {
+          if (!this._grid.selectedItems.length) {
+            this.selectAll = false;
+            this._indeterminate = false;
+          } else if (items.every((item) => this._grid._isSelected(item))) {
+            this.selectAll = true;
+            this._indeterminate = false;
+          } else {
+            this.selectAll = false;
+            this._indeterminate = true;
+          }
+        });
       }
       this._selectAllChangeLock = false;
     }
 
     /** @private */
-    __onDataProviderChanged() {
-      this._selectAllHidden = !Array.isArray(this._grid.items);
+    __updateSelectAllVisibility() {
+      // Hide select all checkbox when we can not easily determine the select all checkbox state:
+      // - When using a custom data provider
+      // - When using conditional selection, where users may not select all items
+      this._selectAllHidden = !Array.isArray(this._grid.items) || !!this._grid.isItemSelectable;
     }
 
     /**
-     * Returns all items that the user may change the selection state of, based
-     * on the filter.
+     * Assuming the grid uses an items array data provider, fetches all the filtered items
+     * from the data provider and invokes the callback with the resulting array.
      *
      * @private
      */
-    __getSelectableItems() {
-      // Assuming the grid uses an items array data provider, fetches all the
-      // filtered items from the data provider
-      let filteredItems = [];
+    __withFilteredItemsArray(callback) {
       const params = {
         page: 0,
         pageSize: Infinity,
         sortOrders: [],
         filters: this._grid._mapFilters(),
       };
-      this._grid.dataProvider(params, (items) => {
-        filteredItems = items;
-      });
-      // Filter again for selectable items
-      return filteredItems.filter((item) => this._grid.__isItemSelectable(item));
-    }
-
-    /**
-     * Returns all selected items that the user may change the selection state
-     * of.
-     *
-     * @private
-     */
-    __getModifiableSelectedItems() {
-      return this._grid.selectedItems.filter((item) => this._grid.__isItemSelectable(item));
-    }
-
-    /**
-     * Returns all selected items that the user may not change the selection
-     * state of.
-     *
-     * @private
-     */
-    __getNonModifiableSelectedItems() {
-      return this._grid.selectedItems.filter((item) => !this._grid.__isItemSelectable(item));
+      this._grid.dataProvider(params, (items) => callback(items));
     }
   };
