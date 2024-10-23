@@ -293,3 +293,18 @@ export async function onceResized(grid) {
 export const shiftClick = (node) => {
   node.dispatchEvent(new MouseEvent('click', { shiftKey: true }));
 };
+
+export function getFocusedCellIndex(grid) {
+  const focusedCell = grid.shadowRoot.activeElement;
+  if (focusedCell instanceof HTMLTableCellElement) {
+    return [...focusedCell.parentNode.children].indexOf(focusedCell);
+  }
+  return -1;
+}
+
+export function getFocusedRowIndex(grid) {
+  const activeElement = grid.shadowRoot.activeElement;
+  const focusedRow = activeElement instanceof HTMLTableRowElement ? activeElement : activeElement.parentNode;
+  const section = focusedRow.parentNode;
+  return section === grid.$.items ? focusedRow.index : [...section.children].indexOf(focusedRow);
+}
