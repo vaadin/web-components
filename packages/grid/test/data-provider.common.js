@@ -443,18 +443,18 @@ describe('data provider', () => {
         grid.pageSize = 2;
         grid.itemIdPath = 'value';
         grid.expandedItems = [{ value: '0' }, { value: '0-0' }];
-        grid.dataProvider = ({ parentItem, page, pageSize }, cb) => {
+        grid.dataProvider = ({ parentItem, page, pageSize }, callback) => {
           const levelSize = parentItem ? 4 : 100;
 
-          const pageItems = Array.from({ length: pageSize }, (_, i) => {
-            const indexInLevel = page * pageSize + i;
+          const items = Array.from({ length: levelSize }, (_, i) => {
             return {
-              value: `${parentItem ? `${parentItem.value}-` : ''}${indexInLevel}`,
+              value: parentItem ? `${parentItem.value}-${i}` : `${i}`,
               children: true,
             };
           });
 
-          setTimeout(() => cb(pageItems, levelSize), 0);
+          const offset = page * pageSize;
+          setTimeout(() => callback(items.slice(offset, offset + pageSize), items.length));
         };
 
         await aTimeout(0); // Wait for 0 level
@@ -661,15 +661,12 @@ describe('data provider', () => {
 
       beforeEach(async () => {
         grid.itemIdPath = 'value';
-        grid.dataProvider = ({ parentItem, page, pageSize }, cb) => {
-          const pageItems = [...Array(3)].map((_, i) => {
-            const indexInLevel = page * pageSize + i;
-            return {
-              value: `${parentItem ? `${parentItem.value}-` : ''}${indexInLevel}`,
-            };
+        grid.dataProvider = ({ parentItem }, callback) => {
+          const items = Array.from({ length: 3 }, (_, i) => {
+            return { value: parentItem ? `${parentItem.value}-${i}` : `${i}` };
           });
 
-          cb(pageItems, 3);
+          callback(items, items.length);
         };
         sinon.spy(grid, '_updateItem');
         await nextFrame();

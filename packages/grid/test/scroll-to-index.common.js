@@ -306,19 +306,16 @@ describe('scroll to index', () => {
       beforeEach(async () => {
         grid.itemIdPath = 'name';
 
-        grid.dataProvider = ({ parentItem, page, pageSize }, cb) => {
-          const levelSize = 100;
-
-          const pageItems = [...Array(Math.min(levelSize, pageSize))].map((_, i) => {
-            const indexInLevel = page * pageSize + i;
-
+        grid.dataProvider = ({ parentItem, page, pageSize }, callback) => {
+          const items = Array.from({ length: 100 }, (_, i) => {
             return {
-              name: `${parentItem ? `${parentItem.name}-` : ''}${indexInLevel}`,
+              name: parentItem ? `${parentItem.name}-${i}` : `${i}`,
               hasChildren: true,
             };
           });
 
-          pendingRequests.push(() => cb(pageItems, levelSize));
+          const offset = page * pageSize;
+          pendingRequests.push(() => callback(items.slice(offset, offset + pageSize), items.length));
         };
         flushGrid(grid);
         flushPendingRequests();
@@ -529,16 +526,16 @@ describe('scroll to index', () => {
 
       describe('with a synchronous data provider', () => {
         beforeEach(() => {
-          grid.dataProvider = ({ parentItem, page, pageSize }, cb) => {
-            const pageItems = [...Array(Math.min(200, pageSize))].map((_, i) => {
-              const indexInLevel = page * pageSize + i;
+          grid.dataProvider = ({ parentItem, page, pageSize }, callback) => {
+            const items = Array.from({ length: 200 }, (_, i) => {
               return {
-                name: `${parentItem ? `${parentItem.name}-` : ''}${indexInLevel}`,
+                name: parentItem ? `${parentItem.name}-${i}` : `${i}`,
                 hasChildren: true,
               };
             });
 
-            cb(pageItems, 200);
+            const offset = page * pageSize;
+            callback(items.slice(offset, offset + pageSize), items.length);
           };
         });
 
