@@ -508,7 +508,7 @@ export const InlineEditingMixin = (superClass) =>
       if (!this.singleCellEdit && nextCell !== cell) {
         this._startEdit(nextCell, nextColumn);
       } else {
-        this._ensureScrolledToIndex(nextIndex);
+        this.__ensureFlatIndexInViewport(nextIndex);
         nextCell.focus();
       }
     }

@@ -99,11 +99,8 @@ function getTabbableRows(root) {
   return root.querySelectorAll('tr[tabindex]:not([hidden]):not([tabindex="-1"])');
 }
 
-function hierarchicalDataProvider({ parentItem }, callback) {
-  // Let's use a count lower than pageSize so we can ignore page + pageSize for now
-  const itemsOnEachLevel = 5;
-
-  const items = [...Array(itemsOnEachLevel)].map((_, i) => {
+function hierarchicalDataProvider({ parentItem, page, pageSize }, callback) {
+  const items = Array.from({ length: 100 }, (_, i) => {
     return {
       name: `${parentItem ? `${parentItem.name}-` : ''}${i}`,
       // Let's only have child items on every second item
@@ -111,7 +108,8 @@ function hierarchicalDataProvider({ parentItem }, callback) {
     };
   });
 
-  callback(items, itemsOnEachLevel);
+  const offset = page * pageSize;
+  callback(items.slice(offset, offset + pageSize), items.length);
 }
 
 describe('keyboard navigation - row focus', () => {
@@ -143,6 +141,39 @@ describe('keyboard navigation - row focus', () => {
     left();
 
     await nextRender(grid);
+  });
+
+  describe('scrolling and navigating', () => {
+    it('should scroll focused nested row into view on arrow key', () => {
+      focusItem(0);
+      // Expand first row
+      right();
+      // Focus first nested row
+      down();
+      // Simulate real scrolling to get the virtualizer to render
+      // the focused item in a different element.
+      grid.$.table.scrollTop = grid.$.table.scrollHeight / 2;
+      flushGrid(grid);
+      down();
+      expect(getFocusedRowIndex(grid)).to.equal(2);
+    });
+
+    it('should scroll focused nested row into view on Tab', () => {
+      focusItem(0);
+      // Expand first row
+      right();
+      // Focus first nested row
+      down();
+      // Move focus to header
+      shiftTab();
+      // Simulate real scrolling to get the virtualizer to render
+      // the focused item in a different element.
+      grid.$.table.scrollTop = grid.$.table.scrollHeight / 2;
+      flushGrid(grid);
+      // Move focus back to items
+      tab();
+      expect(getFocusedRowIndex(grid)).to.equal(1);
+    });
   });
 
   describe('navigating with tab', () => {
@@ -339,7 +370,7 @@ describe('keyboard navigation - row focus', () => {
 
         end();
 
-        expect(getFocusedRowIndex(grid)).to.equal(4);
+        expect(getFocusedRowIndex(grid)).to.equal(99);
       });
     });
   });
