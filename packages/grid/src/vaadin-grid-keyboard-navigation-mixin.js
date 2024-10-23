@@ -275,10 +275,10 @@ export const KeyboardNavigationMixin = (superClass) =>
     }
 
     /** @private */
-    _ensureScrolledToIndex(index) {
+    __ensureFlatIndexInViewport(index) {
       const targetRowInDom = [...this.$.items.children].find((child) => child.index === index);
       if (!targetRowInDom) {
-        this.scrollToIndex(index);
+        this._scrollToFlatIndex(index);
       } else {
         this.__scrollIntoViewport(index);
       }
@@ -499,7 +499,7 @@ export const KeyboardNavigationMixin = (superClass) =>
       }
 
       // Ensure correct vertical scroll position, destination row is visible
-      this._ensureScrolledToIndex(dstRowIndex);
+      this.__ensureFlatIndexInViewport(dstRowIndex);
 
       // When scrolling with repeated keydown, sometimes FocusEvent listeners
       // are too late to update _focusedItemIndex. Ensure next keydown
@@ -729,23 +729,14 @@ export const KeyboardNavigationMixin = (superClass) =>
         // The focus is about to exit the grid to the bottom.
         this.$.focusexit.focus();
       } else if (focusTarget === this._itemsFocusable) {
-        let itemsFocusTarget = focusTarget;
-        const targetRow = isRow(focusTarget) ? focusTarget : focusTarget.parentNode;
-        this._ensureScrolledToIndex(this._focusedItemIndex);
-        if (targetRow.index !== this._focusedItemIndex && isCell(focusTarget)) {
-          // The target row, which is about to be focused next, has been
-          // assigned with a new index since last focus, probably because of
-          // scrolling. Focus the row for the stored focused item index instead.
-          const columnIndex = Array.from(targetRow.children).indexOf(this._itemsFocusable);
-          const focusedItemRow = Array.from(this.$.items.children).find(
-            (row) => !row.hidden && row.index === this._focusedItemIndex,
-          );
-          if (focusedItemRow) {
-            itemsFocusTarget = focusedItemRow.children[columnIndex];
-          }
-        }
+        this.__ensureFlatIndexInViewport(this._focusedItemIndex);
+
+        // Ensure the correct element is set as focusable after scrolling.
+        // The virtualizer may use a different element to render the item.
+        this.__updateItemsFocusable();
+
         e.preventDefault();
-        itemsFocusTarget.focus();
+        this._itemsFocusable.focus();
       } else {
         e.preventDefault();
         focusTarget.focus();
