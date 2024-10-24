@@ -172,7 +172,7 @@ export const CustomFieldMixin = (superClass) =>
      */
     _shouldRemoveFocus(event) {
       const { relatedTarget } = event;
-      return this.inputs && !this.inputs.some((el) => relatedTarget === (el.focusElement || el));
+      return !this.inputs || !this.inputs.some((el) => relatedTarget === (el.focusElement || el));
     }
 
     /**
