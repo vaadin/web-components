@@ -172,7 +172,7 @@ export const CustomFieldMixin = (superClass) =>
      */
     _shouldRemoveFocus(event) {
       const { relatedTarget } = event;
-      return !this.inputs.some((el) => relatedTarget === (el.focusElement || el));
+      return this.inputs && !this.inputs.some((el) => relatedTarget === (el.focusElement || el));
     }
 
     /**
@@ -181,9 +181,10 @@ export const CustomFieldMixin = (superClass) =>
      * @return {boolean}
      */
     checkValidity() {
-      const invalidFields = this.inputs.filter((input) => !(input.validate || input.checkValidity).call(input));
+      const hasInvalidFields =
+        this.inputs && this.inputs.some((input) => !(input.validate || input.checkValidity).call(input));
 
-      if (invalidFields.length || (this.required && !(this.value && this.value.trim()))) {
+      if (hasInvalidFields || (this.required && !(this.value && this.value.trim()))) {
         // Either 1. one of the input fields is invalid or
         // 2. the custom field itself is required but doesn't have a value
         return false;
@@ -213,9 +214,10 @@ export const CustomFieldMixin = (superClass) =>
      */
     _onKeyDown(e) {
       if (e.key === 'Tab') {
+        const inputs = this.inputs || [];
         if (
-          (this.inputs.indexOf(e.target) < this.inputs.length - 1 && !e.shiftKey) ||
-          (this.inputs.indexOf(e.target) > 0 && e.shiftKey)
+          (inputs.indexOf(e.target) < inputs.length - 1 && !e.shiftKey) ||
+          (inputs.indexOf(e.target) > 0 && e.shiftKey)
         ) {
           this.dispatchEvent(new CustomEvent('internal-tab'));
         } else {
