@@ -109,6 +109,18 @@ Debug tests for single package:
 yarn debug --group combo-box
 ```
 
+Run or debug specific test files filtered by a glob pattern:
+
+```sh
+yarn test --group combo-box --glob="data-provider*" # all data provider tests
+yarn test --group combo-box --glob="*polymer.test.js" # all polymer tests
+yarn test --group combo-box --glob="*lit.test.js" # all lit tests
+
+yarn debug --group combo-box --glob="data-provider*" # all data provider tests
+yarn debug --group combo-box --glob="*polymer.test.js" # all polymer tests
+yarn debug --group combo-box --glob="*lit.test.js" # all lit tests
+```
+
 Run tests with code coverage:
 
 ```sh
