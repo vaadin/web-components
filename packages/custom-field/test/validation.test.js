@@ -62,6 +62,12 @@ describe('validation', () => {
       const event = validatedSpy.firstCall.args[0];
       expect(event.detail.valid).to.be.false;
     });
+
+    it('should not throw when checkValidity() called without inputs', () => {
+      expect(() => {
+        document.createElement('vaadin-custom-field').checkValidity();
+      }).to.not.throw(Error);
+    });
   });
 
   describe('required', () => {
