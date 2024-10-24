@@ -77,6 +77,17 @@ describe('custom field', () => {
       await nextUpdate(customField);
       expect(customField.hasAttribute('has-value')).to.be.true;
     });
+
+    it('should clear input values when set to null', async () => {
+      customField.value = '1\t1';
+      await nextUpdate(customField);
+
+      customField.value = null;
+      await nextUpdate(customField);
+      customField.inputs.forEach((el) => {
+        expect(el.value).to.equal('');
+      });
+    });
   });
 
   describe('value set with attribute', () => {
