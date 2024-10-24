@@ -160,6 +160,7 @@ registerStyles('vaadin-grid', gridStyles, { moduleId: 'vaadin-grid-styles' });
  * `collapsed-row`            | Collapsed row
  * `expanded-row`             | Expanded row
  * `selected-row`             | Selected row
+ * `nonselectable-row`        | Row that the user may not select or deselect
  * `details-opened-row`       | Row with details open
  * `odd-row`                  | Odd row
  * `even-row`                 | Even row
@@ -187,6 +188,7 @@ registerStyles('vaadin-grid', gridStyles, { moduleId: 'vaadin-grid-styles' });
  * `last-footer-row-cell`     | Cell in the last footer row
  * `loading-row-cell`         | Cell in a row that is waiting for data from data provider
  * `selected-row-cell`        | Cell in a selected row
+ * `nonselectable-row-cell`   | Cell in a row that the user may not select or deselect
  * `collapsed-row-cell`       | Cell in a collapsed row
  * `expanded-row-cell`        | Cell in an expanded row
  * `details-opened-row-cell`  | Cell in an row with details open
