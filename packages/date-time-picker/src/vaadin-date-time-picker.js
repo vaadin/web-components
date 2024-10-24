@@ -11,7 +11,12 @@ import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { DatePicker } from '@vaadin/date-picker/src/vaadin-date-picker.js';
-import { dateEquals, parseDate } from '@vaadin/date-picker/src/vaadin-date-picker-helper.js';
+import {
+  dateEquals,
+  formatUTCISODate,
+  normalizeUTCDate,
+  parseUTCDate,
+} from '@vaadin/date-picker/src/vaadin-date-picker-helper.js';
 import { FieldMixin } from '@vaadin/field-base/src/field-mixin.js';
 import { inputFieldShared } from '@vaadin/field-base/src/styles/input-field-shared-styles.js';
 import { TimePicker } from '@vaadin/time-picker/src/vaadin-time-picker.js';
@@ -621,16 +626,16 @@ class DateTimePicker extends FieldMixin(DisabledMixin(FocusMixin(ThemableMixin(E
   __updateTimePickerMinMax() {
     if (this.__timePicker && this.__datePicker) {
       const selectedDate = this.__parseDate(this.__datePicker.value);
-      const isMinMaxSameDay = dateEquals(this.__minDateTime, this.__maxDateTime);
+      const isMinMaxSameDay = dateEquals(this.__minDateTime, this.__maxDateTime, normalizeUTCDate);
       const oldTimeValue = this.__timePicker.value;
 
-      if ((this.__minDateTime && dateEquals(selectedDate, this.__minDateTime)) || isMinMaxSameDay) {
+      if ((this.__minDateTime && dateEquals(selectedDate, this.__minDateTime, normalizeUTCDate)) || isMinMaxSameDay) {
         this.__timePicker.min = this.__dateToIsoTimeString(this.__minDateTime);
       } else {
         this.__timePicker.min = this.__defaultTimeMinValue;
       }
 
-      if ((this.__maxDateTime && dateEquals(selectedDate, this.__maxDateTime)) || isMinMaxSameDay) {
+      if ((this.__maxDateTime && dateEquals(selectedDate, this.__maxDateTime, normalizeUTCDate)) || isMinMaxSameDay) {
         this.__timePicker.max = this.__dateToIsoTimeString(this.__maxDateTime);
       } else {
         this.__timePicker.max = this.__defaultTimeMaxValue;
@@ -756,7 +761,7 @@ class DateTimePicker extends FieldMixin(DisabledMixin(FocusMixin(ThemableMixin(E
    * @private
    */
   __parseDate(str) {
-    return parseDate(str);
+    return parseUTCDate(str);
   }
 
   /**
@@ -770,7 +775,7 @@ class DateTimePicker extends FieldMixin(DisabledMixin(FocusMixin(ThemableMixin(E
     if (!date) {
       return defaultValue;
     }
-    return DatePicker.prototype._formatISO(date);
+    return formatUTCISODate(date);
   }
 
   /**
@@ -817,10 +822,10 @@ class DateTimePicker extends FieldMixin(DisabledMixin(FocusMixin(ThemableMixin(E
       return;
     }
 
-    date.setHours(parseInt(time.hours));
-    date.setMinutes(parseInt(time.minutes || 0));
-    date.setSeconds(parseInt(time.seconds || 0));
-    date.setMilliseconds(parseInt(time.milliseconds || 0));
+    date.setUTCHours(parseInt(time.hours));
+    date.setUTCMinutes(parseInt(time.minutes || 0));
+    date.setUTCSeconds(parseInt(time.seconds || 0));
+    date.setUTCMilliseconds(parseInt(time.milliseconds || 0));
 
     return date;
   }
@@ -850,10 +855,10 @@ class DateTimePicker extends FieldMixin(DisabledMixin(FocusMixin(ThemableMixin(E
   __dateToIsoTimeString(date) {
     return this.__formatTimeISO(
       this.__validateTime({
-        hours: date.getHours(),
-        minutes: date.getMinutes(),
-        seconds: date.getSeconds(),
-        milliseconds: date.getMilliseconds(),
+        hours: date.getUTCHours(),
+        minutes: date.getUTCMinutes(),
+        seconds: date.getUTCSeconds(),
+        milliseconds: date.getUTCMilliseconds(),
       }),
     );
   }
@@ -910,14 +915,14 @@ class DateTimePicker extends FieldMixin(DisabledMixin(FocusMixin(ThemableMixin(E
    * @private
    */
   __dateTimeEquals(date1, date2) {
-    if (!dateEquals(date1, date2)) {
+    if (!dateEquals(date1, date2, normalizeUTCDate)) {
       return false;
     }
     return (
-      date1.getHours() === date2.getHours() &&
-      date1.getMinutes() === date2.getMinutes() &&
-      date1.getSeconds() === date2.getSeconds() &&
-      date1.getMilliseconds() === date2.getMilliseconds()
+      date1.getUTCHours() === date2.getUTCHours() &&
+      date1.getUTCMinutes() === date2.getUTCMinutes() &&
+      date1.getUTCSeconds() === date2.getUTCSeconds() &&
+      date1.getUTCMilliseconds() === date2.getUTCMilliseconds()
     );
   }
 

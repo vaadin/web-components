@@ -17,6 +17,7 @@ import {
   dateAllowed,
   dateEquals,
   extractDateParts,
+  formatISODate,
   getAdjustedYear,
   getClosestDate,
   parseDate,
@@ -772,28 +773,7 @@ export const DatePickerMixin = (subclass) =>
 
     /** @private */
     _formatISO(date) {
-      if (!(date instanceof Date)) {
-        return '';
-      }
-
-      const pad = (num, fmt = '00') => (fmt + num).substr((fmt + num).length - fmt.length);
-
-      let yearSign = '';
-      let yearFmt = '0000';
-      let yearAbs = date.getFullYear();
-      if (yearAbs < 0) {
-        yearAbs = -yearAbs;
-        yearSign = '-';
-        yearFmt = '000000';
-      } else if (date.getFullYear() >= 10000) {
-        yearSign = '+';
-        yearFmt = '000000';
-      }
-
-      const year = yearSign + pad(yearAbs, yearFmt);
-      const month = pad(date.getMonth() + 1);
-      const day = pad(date.getDate());
-      return [year, month, day].join('-');
+      return formatISODate(date);
     }
 
     /** @protected */
