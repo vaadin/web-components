@@ -370,22 +370,25 @@ describe('draggable', () => {
     dx = 100;
   });
 
-  it('should drag and move dialog if mousedown on .resizer-container', () => {
+  it('should drag and move dialog if mousedown on .resizer-container', async () => {
     drag(container);
+    await nextRender();
     const draggedBounds = container.getBoundingClientRect();
     expect(Math.floor(draggedBounds.top)).to.be.eql(Math.floor(bounds.top + dx));
     expect(Math.floor(draggedBounds.left)).to.be.eql(Math.floor(bounds.left + dx));
   });
 
-  it('should drag and move dialog if mousedown on [part="content"]', () => {
+  it('should drag and move dialog if mousedown on [part="content"]', async () => {
     drag(content);
+    await nextRender();
     const draggedBounds = container.getBoundingClientRect();
     expect(Math.floor(draggedBounds.top)).to.be.eql(Math.floor(bounds.top + dx));
     expect(Math.floor(draggedBounds.left)).to.be.eql(Math.floor(bounds.left + dx));
   });
 
-  it('should drag and move dialog if mousedown on element with [class="draggable"]', () => {
+  it('should drag and move dialog if mousedown on element with [class="draggable"]', async () => {
     drag(dialog.$.overlay.querySelector('.draggable'));
+    await nextRender();
     const draggedBounds = container.getBoundingClientRect();
     expect(Math.floor(draggedBounds.top)).to.be.eql(Math.floor(bounds.top + dx));
     expect(Math.floor(draggedBounds.left)).to.be.eql(Math.floor(bounds.left + dx));
@@ -401,8 +404,9 @@ describe('draggable', () => {
     expect(style.left).to.be.ok;
   });
 
-  it('should drag and move dialog if mousedown on element with [class="draggable"] in another shadow root', () => {
+  it('should drag and move dialog if mousedown on element with [class="draggable"] in another shadow root', async () => {
     drag(dialog.$.overlay.querySelector('internally-draggable').shadowRoot.querySelector('.draggable'));
+    await nextRender();
     const draggedBounds = container.getBoundingClientRect();
     expect(Math.floor(draggedBounds.top)).to.be.eql(Math.floor(bounds.top + dx));
     expect(Math.floor(draggedBounds.left)).to.be.eql(Math.floor(bounds.left + dx));
@@ -418,52 +422,57 @@ describe('draggable', () => {
     expect(Math.floor(draggedBounds.left)).to.be.eql(Math.floor(bounds.left));
   });
 
-  it('should drag by a draggable-leaf-only if it is directly the dragged element', () => {
+  it('should drag by a draggable-leaf-only if it is directly the dragged element', async () => {
     const draggable = dialog.$.overlay.querySelector('internally-draggable').shadowRoot.querySelector('.draggable');
     draggable.classList.add('draggable-leaf-only');
     drag(draggable);
+    await nextRender();
     const draggedBounds = container.getBoundingClientRect();
     expect(Math.floor(draggedBounds.top)).to.be.eql(Math.floor(bounds.top + dx));
     expect(Math.floor(draggedBounds.left)).to.be.eql(Math.floor(bounds.left + dx));
   });
 
-  it('should drag by a draggable-leaf-only child if it is marked as draggable', () => {
+  it('should drag by a draggable-leaf-only child if it is marked as draggable', async () => {
     const draggable = dialog.$.overlay.querySelector('internally-draggable').shadowRoot.querySelector('.draggable');
     draggable.classList.add('draggable-leaf-only');
     const child = draggable.firstElementChild;
     child.classList.add('draggable');
     drag(child);
+    await nextRender();
     const draggedBounds = container.getBoundingClientRect();
     expect(Math.floor(draggedBounds.top)).to.be.eql(Math.floor(bounds.top + dx));
     expect(Math.floor(draggedBounds.left)).to.be.eql(Math.floor(bounds.left + dx));
   });
 
-  it('should drag by a draggable-leaf-only child if it is marked as draggable-leaf-only', () => {
+  it('should drag by a draggable-leaf-only child if it is marked as draggable-leaf-only', async () => {
     const draggable = dialog.$.overlay.querySelector('internally-draggable').shadowRoot.querySelector('.draggable');
     draggable.classList.add('draggable-leaf-only');
     const child = draggable.firstElementChild;
     child.classList.add('draggable-leaf-only');
     drag(child);
+    await nextRender();
     const draggedBounds = container.getBoundingClientRect();
     expect(Math.floor(draggedBounds.top)).to.be.eql(Math.floor(bounds.top + dx));
     expect(Math.floor(draggedBounds.left)).to.be.eql(Math.floor(bounds.left + dx));
   });
 
-  it('should drag by a child of a draggable node ', () => {
+  it('should drag by a child of a draggable node ', async () => {
     const draggable = dialog.$.overlay.querySelector('internally-draggable').shadowRoot.querySelector('.draggable');
     const child = draggable.firstElementChild;
     drag(child);
+    await nextRender();
     const draggedBounds = container.getBoundingClientRect();
     expect(Math.floor(draggedBounds.top)).to.be.eql(Math.floor(bounds.top + dx));
     expect(Math.floor(draggedBounds.left)).to.be.eql(Math.floor(bounds.left + dx));
   });
 
-  it('should drag and move dialog after resizing', () => {
+  it('should drag and move dialog after resizing', async () => {
     resize(container.querySelector('.s'), 0, dx);
     const bounds = container.getBoundingClientRect();
     const coords = { y: bounds.top + bounds.height / 2, x: bounds.left + bounds.width / 2 };
     const target = dialog.$.overlay.shadowRoot.elementFromPoint(coords.x, coords.y);
     drag(target);
+    await nextRender();
     const draggedBounds = container.getBoundingClientRect();
     expect(Math.floor(draggedBounds.top)).to.be.eql(Math.floor(bounds.top + dx));
     expect(Math.floor(draggedBounds.left)).to.be.eql(Math.floor(bounds.left + dx));
@@ -539,6 +548,15 @@ describe('draggable', () => {
     expect(container.scrollTop).to.equal(100);
     drag(container);
     expect(container.scrollTop).to.equal(100);
+  });
+
+  it('should update "top" and "left" properties on drag', async () => {
+    drag(container);
+    await nextRender();
+    const overlay = dialog.$.overlay.$.overlay;
+    const bounds = overlay.getBoundingClientRect();
+    expect(dialog.top).to.be.equal(bounds.top);
+    expect(dialog.left).to.be.equal(bounds.left);
   });
 });
 
@@ -672,10 +690,11 @@ describe('touch', () => {
     );
   });
 
-  it('should drag and move dialog', () => {
+  it('should drag and move dialog', async () => {
     const d = 1;
     const bounds = draggableContainer.getBoundingClientRect();
     touchDrag(draggableContainer, d, d);
+    await nextRender();
     const draggedBounds = draggableContainer.getBoundingClientRect();
     expect(Math.floor(draggedBounds.top)).to.be.eql(Math.floor(bounds.top + d));
     expect(Math.floor(draggedBounds.left)).to.be.eql(Math.floor(bounds.left + d));

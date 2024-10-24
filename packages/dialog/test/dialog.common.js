@@ -262,4 +262,41 @@ describe('vaadin-dialog', () => {
       expect(getDeepActiveElement()).to.equal(button);
     });
   });
+
+  describe('position', () => {
+    let dialog, overlay;
+
+    beforeEach(async () => {
+      dialog = fixtureSync('<vaadin-dialog></vaadin-dialog>');
+      await nextRender();
+      overlay = dialog.$.overlay;
+    });
+
+    afterEach(async () => {
+      dialog.opened = false;
+      await nextRender();
+    });
+
+    it('should default to px unit when unitless values are provided', async () => {
+      dialog.opened = true;
+      await nextRender();
+      dialog.left = 100;
+      dialog.top = 200;
+      await nextRender();
+      expect(overlay.$.overlay.style.position).to.equal('absolute');
+      expect(overlay.$.overlay.style.top).to.equal('200px');
+      expect(overlay.$.overlay.style.left).to.equal('100px');
+    });
+
+    it('should allow setting position with units', async () => {
+      dialog.opened = true;
+      await nextRender();
+      dialog.left = '100px';
+      dialog.top = '10em';
+      await nextRender();
+      expect(overlay.$.overlay.style.position).to.equal('absolute');
+      expect(overlay.$.overlay.style.top).to.equal('10em');
+      expect(overlay.$.overlay.style.left).to.equal('100px');
+    });
+  });
 });
