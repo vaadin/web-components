@@ -183,7 +183,7 @@ export const CustomFieldMixin = (superClass) =>
     checkValidity() {
       const invalidFields = this.inputs.filter((input) => !(input.validate || input.checkValidity).call(input));
 
-      if (invalidFields.length || (this.required && !this.value.trim())) {
+      if (invalidFields.length || (this.required && !(this.value && this.value.trim()))) {
         // Either 1. one of the input fields is invalid or
         // 2. the custom field itself is required but doesn't have a value
         return false;
@@ -294,7 +294,7 @@ export const CustomFieldMixin = (superClass) =>
         return;
       }
 
-      this.__applyInputsValue(value);
+      this.__applyInputsValue(value || '\t');
 
       if (oldValue !== undefined) {
         this.validate();
