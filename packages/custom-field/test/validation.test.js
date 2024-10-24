@@ -85,6 +85,11 @@ describe('validation', () => {
       expect(customField.invalid).to.be.true;
     });
 
+    it('should return false on checkValidity call when value is set to null', () => {
+      customField.value = null;
+      expect(customField.checkValidity()).to.be.false;
+    });
+
     it('should become valid after receiving a non-empty value from "change" event', () => {
       customField.inputs[0].value = 'foo';
       fire(customField.inputs[0], 'change');
