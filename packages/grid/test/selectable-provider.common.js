@@ -2,7 +2,15 @@ import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
-import { fire, flushGrid, getBodyCell, getBodyCellContent, getHeaderCellContent } from './helpers.js';
+import {
+  fire,
+  flushGrid,
+  getBodyCell,
+  getBodyCellContent,
+  getHeaderCellContent,
+  getRowBodyCells,
+  getRows,
+} from './helpers.js';
 
 describe('selectable-provider', () => {
   let grid;
@@ -213,6 +221,72 @@ describe('selectable-provider', () => {
       grid.deselectItem(grid.items[0]);
       grid.deselectItem(grid.items[1]);
       expect(grid.selectedItems.length).to.equal(0);
+    });
+  });
+
+  describe('part names', () => {
+    it('should have part names for non-selectable rows', () => {
+      const rows = getRows(grid.$.items);
+
+      for (let i = 0; i < grid.items.length; i++) {
+        const row = rows[i];
+        if (i < 5) {
+          expect(row.getAttribute('part')).to.include('nonselectable-row');
+        } else {
+          expect(row.getAttribute('part')).to.not.include('nonselectable-row');
+        }
+      }
+    });
+
+    it('should update part names for non-selectable rows when changing isItemSelectable', async () => {
+      grid.isItemSelectable = (item) => item.index < 5;
+      await nextFrame();
+
+      const rows = getRows(grid.$.items);
+
+      for (let i = 0; i < grid.items.length; i++) {
+        const row = rows[i];
+        if (i >= 5) {
+          expect(row.getAttribute('part')).to.include('nonselectable-row');
+        } else {
+          expect(row.getAttribute('part')).to.not.include('nonselectable-row');
+        }
+      }
+    });
+
+    it('should have part names for non-selectable row cells', () => {
+      const rows = getRows(grid.$.items);
+
+      for (let i = 0; i < grid.items.length; i++) {
+        const row = rows[i];
+        const cells = getRowBodyCells(row);
+        cells.forEach((cell) => {
+          if (i < 5) {
+            expect(cell.getAttribute('part')).to.include('nonselectable-row-cell');
+          } else {
+            expect(cell.getAttribute('part')).to.not.include('nonselectable-row-cell');
+          }
+        });
+      }
+    });
+
+    it('should update part names for non-selectable row cells when changing isItemSelectable', async () => {
+      grid.isItemSelectable = (item) => item.index < 5;
+      await nextFrame();
+
+      const rows = getRows(grid.$.items);
+
+      for (let i = 0; i < grid.items.length; i++) {
+        const row = rows[i];
+        const cells = getRowBodyCells(row);
+        cells.forEach((cell) => {
+          if (i >= 5) {
+            expect(cell.getAttribute('part')).to.include('nonselectable-row-cell');
+          } else {
+            expect(cell.getAttribute('part')).to.not.include('nonselectable-row-cell');
+          }
+        });
+      }
     });
   });
 });
