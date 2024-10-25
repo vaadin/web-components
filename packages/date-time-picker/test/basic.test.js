@@ -189,17 +189,17 @@ describe('Basic features', () => {
 
   describe('value property formats', () => {
     it('should accept ISO format', () => {
-      const date = new Date(0, 1, 3, 8, 30, 0);
+      const date = new Date(Date.UTC(0, 1, 3, 8, 30, 0));
 
-      date.setFullYear(0);
+      date.setUTCFullYear(0);
       dateTimePicker.value = '0000-02-03T08:30:00';
       expect(dateTimePicker.__selectedDateTime).to.eql(date);
 
-      date.setFullYear(10000);
+      date.setUTCFullYear(10000);
       dateTimePicker.value = '+010000-02-03T08:30:00';
       expect(dateTimePicker.__selectedDateTime).to.eql(date);
 
-      date.setFullYear(-10000);
+      date.setUTCFullYear(-10000);
       dateTimePicker.value = '-010000-02-03T08:30:00';
       expect(dateTimePicker.__selectedDateTime).to.eql(date);
     });
@@ -221,9 +221,9 @@ describe('Basic features', () => {
     });
 
     it('should output ISO format', () => {
-      const date = new Date(0, 1, 3, 8, 30, 0);
+      const date = new Date(Date.UTC(0, 1, 3, 8, 30, 0));
 
-      date.setFullYear(0);
+      date.setUTCFullYear(0);
       dateTimePicker.__selectedDateTime = date;
       expect(dateTimePicker.value).to.equal('0000-02-03T08:30');
 
@@ -241,7 +241,7 @@ describe('Basic features', () => {
       dateTimePicker.__selectedDateTime = date;
       expect(dateTimePicker.value).to.equal('0000-02-03T08:30:00.000');
 
-      date.setFullYear(10000);
+      date.setUTCFullYear(10000);
       dateTimePicker.step = undefined;
       dateTimePicker.__selectedDateTime = new Date(date.getTime());
       expect(dateTimePicker.value).to.equal('+010000-02-03T08:30');
@@ -250,7 +250,7 @@ describe('Basic features', () => {
       dateTimePicker.step = 0.001;
       expect(dateTimePicker.value).to.equal('+010000-02-03T08:30:00.000');
 
-      date.setFullYear(-10000);
+      date.setUTCFullYear(-10000);
       dateTimePicker.step = undefined;
       dateTimePicker.__selectedDateTime = new Date(date.getTime());
       expect(dateTimePicker.value).to.equal('-010000-02-03T08:30');
