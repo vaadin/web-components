@@ -1,4 +1,4 @@
-import type { DatePickerDate } from './vaadin-date-picker-mixin';
+import type { DatePickerDate } from './vaadin-date-picker-mixin.js';
 
 /**
  * Get ISO 8601 week number for the given date.
