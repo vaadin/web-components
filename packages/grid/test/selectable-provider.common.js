@@ -204,6 +204,22 @@ describe('selectable-provider', () => {
       expect(selectAllCheckbox.hasAttribute('hidden')).to.be.true;
     });
 
+    it('should hide select all checkbox when adding a selection column to an existing grid with an isItemSelectable provider', async () => {
+      // remove existing selection column
+      selectionColumn.remove();
+      // column mixin only removes cells after an animation frame
+      await nextFrame();
+
+      // add new selection column
+      selectionColumn = document.createElement('vaadin-grid-selection-column');
+      grid.prepend(selectionColumn);
+      // column mixin only adds cells after an animation frame
+      await nextFrame();
+      selectAllCheckbox = getHeaderCellContent(grid, 0, 0).querySelector('vaadin-checkbox');
+
+      expect(selectAllCheckbox.hasAttribute('hidden')).to.be.true;
+    });
+
     it('should show select all checkbox when removing isItemSelectable provider', async () => {
       grid.isItemSelectable = null;
       await nextFrame();
