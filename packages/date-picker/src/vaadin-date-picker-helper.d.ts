@@ -1,3 +1,5 @@
+import type { DatePickerDate } from './vaadin-date-picker-mixin.js';
+
 /**
  * Get ISO 8601 week number for the given date.
  *
@@ -21,7 +23,7 @@ declare function dateAllowed(
   date: Date,
   min: Date | null,
   max: Date | null,
-  isDateDisabled: (DatePickerDate) => boolean | null,
+  isDateDisabled: (date: DatePickerDate) => boolean | null,
 ): boolean;
 
 /**
