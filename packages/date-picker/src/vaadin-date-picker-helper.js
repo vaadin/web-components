@@ -210,16 +210,33 @@ export function parseUTCDate(str) {
     return undefined;
   }
 
-  const date = new Date();
+  const date = new Date(Date.UTC(0, 0)); // Wrong date (1900-01-01), but with midnight in UTC
   date.setUTCFullYear(parseInt(parts[1], 10));
   date.setUTCMonth(parseInt(parts[2], 10) - 1);
   date.setUTCDate(parseInt(parts[3], 10));
-  date.setUTCHours(0);
-  date.setUTCMinutes(0);
-  date.setUTCSeconds(0);
-  date.setUTCMilliseconds(0);
 
   return date;
+}
+
+function formatISODateBase(dateParts) {
+  const pad = (num, fmt = '00') => (fmt + num).substr((fmt + num).length - fmt.length);
+
+  let yearSign = '';
+  let yearFmt = '0000';
+  let yearAbs = dateParts.year;
+  if (yearAbs < 0) {
+    yearAbs = -yearAbs;
+    yearSign = '-';
+    yearFmt = '000000';
+  } else if (dateParts.year >= 10000) {
+    yearSign = '+';
+    yearFmt = '000000';
+  }
+
+  const year = yearSign + pad(yearAbs, yearFmt);
+  const month = pad(dateParts.month + 1);
+  const day = pad(dateParts.day);
+  return [year, month, day].join('-');
 }
 
 /**
@@ -233,24 +250,11 @@ export function formatISODate(date) {
     return '';
   }
 
-  const pad = (num, fmt = '00') => (fmt + num).substr((fmt + num).length - fmt.length);
-
-  let yearSign = '';
-  let yearFmt = '0000';
-  let yearAbs = date.getFullYear();
-  if (yearAbs < 0) {
-    yearAbs = -yearAbs;
-    yearSign = '-';
-    yearFmt = '000000';
-  } else if (date.getFullYear() >= 10000) {
-    yearSign = '+';
-    yearFmt = '000000';
-  }
-
-  const year = yearSign + pad(yearAbs, yearFmt);
-  const month = pad(date.getMonth() + 1);
-  const day = pad(date.getDate());
-  return [year, month, day].join('-');
+  return formatISODateBase({
+    year: date.getFullYear(),
+    month: date.getMonth(),
+    day: date.getDate(),
+  });
 }
 
 /**
@@ -268,22 +272,9 @@ export function formatUTCISODate(date) {
     return '';
   }
 
-  const pad = (num, fmt = '00') => (fmt + num).substr((fmt + num).length - fmt.length);
-
-  let yearSign = '';
-  let yearFmt = '0000';
-  let yearAbs = date.getUTCFullYear();
-  if (yearAbs < 0) {
-    yearAbs = -yearAbs;
-    yearSign = '-';
-    yearFmt = '000000';
-  } else if (date.getUTCFullYear() >= 10000) {
-    yearSign = '+';
-    yearFmt = '000000';
-  }
-
-  const year = yearSign + pad(yearAbs, yearFmt);
-  const month = pad(date.getUTCMonth() + 1);
-  const day = pad(date.getUTCDate());
-  return [year, month, day].join('-');
+  return formatISODateBase({
+    year: date.getUTCFullYear(),
+    month: date.getUTCMonth(),
+    day: date.getUTCDate(),
+  });
 }
