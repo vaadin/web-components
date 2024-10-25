@@ -1083,4 +1083,72 @@ describe('drag and drop', () => {
       expect(getFirstCell(grid).getAttribute('part')).to.contain('drag-source-row-cell');
     });
   });
+
+  describe('draggable grid', () => {
+    let container;
+    let items;
+
+    beforeEach(async () => {
+      container = fixtureSync(`
+      <div style="width: 400px; height: 400px;">
+        <vaadin-grid draggable="true" style="width: 300px; height: 300px;">
+          <vaadin-grid-column path="value"></vaadin-grid-column>
+        </vaadin-grid>
+      </div>
+    `);
+      grid = container.querySelector('vaadin-grid');
+      document.body.appendChild(container);
+      flushGrid(grid);
+      await nextFrame();
+      items = grid.shadowRoot.querySelector('#items');
+    });
+
+    async function setGridItems(count) {
+      grid.items = Array.from({ length: count }, (_, i) => ({ value: `Item ${i + 1}` }));
+      await nextFrame();
+    }
+
+    async function getMaxHeightDuringDragStart(element, items) {
+      let maxHeightDuringDragStart;
+      element.addEventListener(
+        'dragstart',
+        () => {
+          maxHeightDuringDragStart = items.style.maxHeight;
+        },
+        { once: true },
+      );
+      element.dispatchEvent(new DragEvent('dragstart'));
+      await new Promise((resolve) => {
+        requestAnimationFrame(resolve);
+      });
+      return maxHeightDuringDragStart;
+    }
+
+    it('should not modify maxHeight on dragstart for small grids', async () => {
+      await setGridItems(10);
+      const initialMaxHeight = items.style.maxHeight;
+      const maxHeightDuringDragStart = await getMaxHeightDuringDragStart(grid, items);
+      expect(maxHeightDuringDragStart).to.equal(initialMaxHeight);
+    });
+
+    ['5000', '50000'].forEach((count) => {
+      it('should temporarily set maxHeight to 0 on dragstart for large grids', async () => {
+        await setGridItems(count);
+        const initialMaxHeight = items.style.maxHeight;
+        const maxHeightDuringDragStart = await getMaxHeightDuringDragStart(grid, items);
+        expect(maxHeightDuringDragStart).to.equal('0px');
+        expect(items.style.maxHeight).to.equal(initialMaxHeight);
+      });
+
+      it('should temporarily set maxHeight to 0 on dragstart for large grids in draggable containers', async () => {
+        grid.removeAttribute('draggable');
+        container.setAttribute('draggable', true);
+        await setGridItems(count);
+        const initialMaxHeight = items.style.maxHeight;
+        const maxHeightDuringDragStart = await getMaxHeightDuringDragStart(container, items);
+        expect(maxHeightDuringDragStart).to.equal('0px');
+        expect(items.style.maxHeight).to.equal(initialMaxHeight);
+      });
+    });
+  });
 });

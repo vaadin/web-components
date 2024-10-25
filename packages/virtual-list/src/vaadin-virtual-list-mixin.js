@@ -3,6 +3,7 @@
  * Copyright (c) 2021 - 2024 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { isChrome, isSafari } from '@vaadin/component-base/src/browser-utils.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { OverflowController } from '@vaadin/component-base/src/overflow-controller.js';
 import { processTemplates } from '@vaadin/component-base/src/templates.js';
@@ -75,6 +76,35 @@ export const VirtualListMixin = (superClass) =>
         scrollContainer: this.shadowRoot.querySelector('#items'),
         reorderElements: true,
       });
+
+      // Chromium based browsers cannot properly generate drag images for elements
+      // that have children with massive heights. This workaround prevents crashes
+      // and performance issues by excluding the items from the drag image.
+      // https://github.com/vaadin/web-components/issues/7985
+      if (isSafari || isChrome) {
+        document.addEventListener(
+          'dragstart',
+          (e) => {
+            // The dragged element can be the element itself or a parent of the element
+            if (e.target !== this && !e.target.contains(this)) {
+              return;
+            }
+            // The threshold value 20000 provides a buffer to both
+            //   - avoid the crash and the performance issues
+            //   - unnecessarily avoid excluding items from the drag image
+            if (this.$.items.offsetHeight > 20000) {
+              const initialMaxHeight = this.$.items.style.maxHeight;
+              // Momentarily hides the items until the browser starts generating the
+              // drag image.
+              this.$.items.style.maxHeight = '0';
+              requestAnimationFrame(() => {
+                this.$.items.style.maxHeight = initialMaxHeight;
+              });
+            }
+          },
+          { capture: true },
+        );
+      }
 
       this.__overflowController = new OverflowController(this);
       this.addController(this.__overflowController);
