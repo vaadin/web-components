@@ -298,5 +298,16 @@ describe('vaadin-dialog', () => {
       expect(overlay.$.overlay.style.top).to.equal('10em');
       expect(overlay.$.overlay.style.left).to.equal('100px');
     });
+
+    it('should allow setting position through attribute', async () => {
+      dialog.opened = true;
+      await nextRender();
+      dialog.setAttribute('left', 100);
+      dialog.setAttribute('top', 200);
+      await nextRender();
+      expect(overlay.$.overlay.style.position).to.equal('absolute');
+      expect(overlay.$.overlay.style.top).to.equal('200px');
+      expect(overlay.$.overlay.style.left).to.equal('100px');
+    });
   });
 });
