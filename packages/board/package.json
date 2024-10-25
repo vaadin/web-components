@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/board",
-  "version": "24.4.11",
+  "version": "24.4.12",
   "publishConfig": {
     "access": "public"
   },
@@ -39,8 +39,8 @@
   ],
   "dependencies": {
     "@polymer/polymer": "^3.0.0",
-    "@vaadin/a11y-base": "~24.4.11",
-    "@vaadin/component-base": "~24.4.11"
+    "@vaadin/a11y-base": "~24.4.12",
+    "@vaadin/component-base": "~24.4.12"
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.3.4",
