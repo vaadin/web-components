@@ -129,6 +129,24 @@ export const DragAndDropMixin = (superClass) =>
           e.stopPropagation();
         }
       });
+      this.__boundGridDragStartListener = this.__onGridDragStart.bind(this);
+      document.addEventListener('dragstart', this.__boundGridDragStartListener, { capture: true });
+    }
+
+    /** @protected */
+    connectedCallback() {
+      super.connectedCallback();
+      // Chromium based browsers cannot properly generate drag images for elements
+      // that have children with massive heights. This workaround prevents crashes
+      // and performance issues by excluding the items from the drag image.
+      // https://github.com/vaadin/web-components/issues/7985
+      document.addEventListener('dragstart', this.__boundGridDragStartListener, { capture: true });
+    }
+
+    /** @protected */
+    disconnectedCallback() {
+      super.disconnectedCallback();
+      document.removeEventListener('dragstart', this.__boundGridDragStartListener, { capture: true });
     }
 
     /** @private */
@@ -288,6 +306,26 @@ export const DragAndDropMixin = (superClass) =>
         } else {
           this._clearDragStyles();
         }
+      }
+    }
+
+    /** @private */
+    __onGridDragStart(e) {
+      // The dragged element can be the element itself or a parent of the element
+      if (!e.target.contains(this)) {
+        return;
+      }
+      // The threshold value 20000 provides a buffer to both
+      //   - avoid the crash and the performance issues
+      //   - unnecessarily avoid excluding items from the drag image
+      if (this.$.items.offsetHeight > 20000) {
+        const initialMaxHeight = this.$.items.style.maxHeight;
+        // Momentarily hides the items until the browser starts generating the
+        // drag image.
+        this.$.items.style.maxHeight = '0';
+        requestAnimationFrame(() => {
+          this.$.items.style.maxHeight = initialMaxHeight;
+        });
       }
     }
 
