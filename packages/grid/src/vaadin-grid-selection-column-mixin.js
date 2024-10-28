@@ -54,6 +54,7 @@ export const GridSelectionColumnMixin = (superClass) =>
         this._grid.addEventListener('is-item-selectable-changed', this.__boundUpdateSelectAllVisibility);
         this._grid.addEventListener('filter-changed', this.__boundOnSelectedItemsChanged);
         this._grid.addEventListener('selected-items-changed', this.__boundOnSelectedItemsChanged);
+        this.__updateSelectAllVisibility();
       }
     }
 
