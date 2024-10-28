@@ -263,7 +263,7 @@ describe('vaadin-dialog', () => {
     });
   });
 
-  describe('position', () => {
+  describe('position/sizing', () => {
     let dialog, overlay;
 
     beforeEach(async () => {
@@ -282,32 +282,44 @@ describe('vaadin-dialog', () => {
       await nextRender();
       dialog.left = 100;
       dialog.top = 200;
+      dialog.width = 300;
+      dialog.height = 400;
       await nextRender();
       expect(overlay.$.overlay.style.position).to.equal('absolute');
       expect(overlay.$.overlay.style.top).to.equal('200px');
       expect(overlay.$.overlay.style.left).to.equal('100px');
+      expect(overlay.$.overlay.style.width).to.equal('300px');
+      expect(overlay.$.overlay.style.height).to.equal('400px');
     });
 
-    it('should allow setting position with units', async () => {
+    it('should allow setting position/size with units', async () => {
       dialog.opened = true;
       await nextRender();
       dialog.left = '100px';
       dialog.top = '10em';
+      dialog.width = '200px';
+      dialog.height = '20em';
       await nextRender();
       expect(overlay.$.overlay.style.position).to.equal('absolute');
       expect(overlay.$.overlay.style.top).to.equal('10em');
       expect(overlay.$.overlay.style.left).to.equal('100px');
+      expect(overlay.$.overlay.style.width).to.equal('200px');
+      expect(overlay.$.overlay.style.height).to.equal('20em');
     });
 
-    it('should allow setting position through attribute', async () => {
+    it('should allow setting position/size through attribute', async () => {
       dialog.opened = true;
       await nextRender();
       dialog.setAttribute('left', 100);
       dialog.setAttribute('top', 200);
+      dialog.setAttribute('width', 300);
+      dialog.setAttribute('height', 400);
       await nextRender();
       expect(overlay.$.overlay.style.position).to.equal('absolute');
-      expect(overlay.$.overlay.style.top).to.equal('200px');
       expect(overlay.$.overlay.style.left).to.equal('100px');
+      expect(overlay.$.overlay.style.top).to.equal('200px');
+      expect(overlay.$.overlay.style.width).to.equal('300px');
+      expect(overlay.$.overlay.style.height).to.equal('400px');
     });
   });
 });

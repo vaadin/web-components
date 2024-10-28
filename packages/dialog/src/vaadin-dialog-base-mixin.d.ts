@@ -58,4 +58,16 @@ export declare class DialogBaseMixinClass {
    * overlay from stretching all the way to the left of the viewport).
    */
   left: string;
+
+  /**
+   * Set the width of the overlay.
+   * If a unitless number is provided, pixels are assumed.
+   */
+  width: string;
+
+  /**
+   * Set the height of the overlay.
+   * If a unitless number is provided, pixels are assumed.
+   */
+  height: string;
 }
