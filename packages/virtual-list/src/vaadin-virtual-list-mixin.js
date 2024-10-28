@@ -63,6 +63,11 @@ export const VirtualListMixin = (superClass) =>
       return this.__virtualizer.lastVisibleIndex;
     }
 
+    constructor() {
+      super();
+      this.__onDragStart = this.__onDragStart.bind(this);
+    }
+
     /** @protected */
     ready() {
       super.ready();
@@ -79,9 +84,6 @@ export const VirtualListMixin = (superClass) =>
       this.addController(this.__overflowController);
 
       processTemplates(this);
-
-      this.__boundDragStartListener = this.__onDragStart.bind(this);
-      document.addEventListener('dragstart', this.__boundDragStartListener, { capture: true });
     }
 
     /** @protected */
@@ -91,13 +93,13 @@ export const VirtualListMixin = (superClass) =>
       // that have children with massive heights. This workaround prevents crashes
       // and performance issues by excluding the items from the drag image.
       // https://github.com/vaadin/web-components/issues/7985
-      document.addEventListener('dragstart', this.__boundDragStartListener, { capture: true });
+      document.addEventListener('dragstart', this.__onDragStart, { capture: true });
     }
 
     /** @protected */
     disconnectedCallback() {
       super.disconnectedCallback();
-      document.removeEventListener('dragstart', this.__boundDragStartListener, { capture: true });
+      document.removeEventListener('dragstart', this.__onDragStart, { capture: true });
     }
 
     /**

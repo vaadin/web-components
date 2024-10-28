@@ -115,6 +115,11 @@ export const DragAndDropMixin = (superClass) =>
       return ['_dragDropAccessChanged(rowsDraggable, dropMode, dragFilter, dropFilter, loading)'];
     }
 
+    constructor() {
+      super();
+      this.__onDocumentDragStart = this.__onDocumentDragStart.bind(this);
+    }
+
     /** @protected */
     ready() {
       super.ready();
@@ -129,8 +134,6 @@ export const DragAndDropMixin = (superClass) =>
           e.stopPropagation();
         }
       });
-      this.__boundGridDragStartListener = this.__onGridDragStart.bind(this);
-      document.addEventListener('dragstart', this.__boundGridDragStartListener, { capture: true });
     }
 
     /** @protected */
@@ -140,13 +143,13 @@ export const DragAndDropMixin = (superClass) =>
       // that have children with massive heights. This workaround prevents crashes
       // and performance issues by excluding the items from the drag image.
       // https://github.com/vaadin/web-components/issues/7985
-      document.addEventListener('dragstart', this.__boundGridDragStartListener, { capture: true });
+      document.addEventListener('dragstart', this.__onDocumentDragStart, { capture: true });
     }
 
     /** @protected */
     disconnectedCallback() {
       super.disconnectedCallback();
-      document.removeEventListener('dragstart', this.__boundGridDragStartListener, { capture: true });
+      document.removeEventListener('dragstart', this.__onDocumentDragStart, { capture: true });
     }
 
     /** @private */
@@ -310,7 +313,7 @@ export const DragAndDropMixin = (superClass) =>
     }
 
     /** @private */
-    __onGridDragStart(e) {
+    __onDocumentDragStart(e) {
       // The dragged element can be the element itself or a parent of the element
       if (!e.target.contains(this)) {
         return;
