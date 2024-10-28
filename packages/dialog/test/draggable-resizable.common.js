@@ -129,8 +129,9 @@ describe('resizable', () => {
     dx = 30;
   });
 
-  it('should resize dialog from top right corner', () => {
+  it('should resize dialog from top right corner', async () => {
     resize(overlayPart.querySelector('.ne'), dx, -dx);
+    await nextRender();
     const resizedBounds = overlayPart.getBoundingClientRect();
     expect(Math.floor(resizedBounds.top)).to.be.eql(Math.floor(bounds.top - dx));
     expect(Math.floor(resizedBounds.left)).to.be.eql(Math.floor(bounds.left));
@@ -138,8 +139,9 @@ describe('resizable', () => {
     expect(Math.floor(resizedBounds.height)).to.be.eql(Math.floor(bounds.height + dx));
   });
 
-  it('should resize dialog from bottom right corner', () => {
+  it('should resize dialog from bottom right corner', async () => {
     resize(overlayPart.querySelector('.se'), dx, dx);
+    await nextRender();
     const resizedBounds = overlayPart.getBoundingClientRect();
     expect(Math.floor(resizedBounds.top)).to.be.eql(Math.floor(bounds.top));
     expect(Math.floor(resizedBounds.left)).to.be.eql(Math.floor(bounds.left));
@@ -147,8 +149,9 @@ describe('resizable', () => {
     expect(Math.floor(resizedBounds.height)).to.be.eql(Math.floor(bounds.height + dx));
   });
 
-  it('should resize dialog from bottom left corner', () => {
+  it('should resize dialog from bottom left corner', async () => {
     resize(overlayPart.querySelector('.sw'), -dx, dx);
+    await nextRender();
     const resizedBounds = overlayPart.getBoundingClientRect();
     expect(Math.floor(resizedBounds.top)).to.be.eql(Math.floor(bounds.top));
     expect(Math.floor(resizedBounds.left)).to.be.eql(Math.floor(bounds.left - dx));
@@ -156,8 +159,9 @@ describe('resizable', () => {
     expect(Math.floor(resizedBounds.height)).to.be.eql(Math.floor(bounds.height + dx));
   });
 
-  it('should resize dialog from top left corner', () => {
+  it('should resize dialog from top left corner', async () => {
     resize(overlayPart.querySelector('.nw'), -dx, -dx);
+    await nextRender();
     const resizedBounds = overlayPart.getBoundingClientRect();
     expect(Math.floor(resizedBounds.top)).to.be.eql(Math.floor(bounds.top - dx));
     expect(Math.floor(resizedBounds.left)).to.be.eql(Math.floor(bounds.left - dx));
@@ -165,8 +169,9 @@ describe('resizable', () => {
     expect(Math.floor(resizedBounds.height)).to.be.eql(Math.floor(bounds.height + dx));
   });
 
-  it('should resize dialog from top edge', () => {
+  it('should resize dialog from top edge', async () => {
     resize(overlayPart.querySelector('.n'), 0, -dx);
+    await nextRender();
     const resizedBounds = overlayPart.getBoundingClientRect();
     expect(Math.floor(resizedBounds.top)).to.be.eql(Math.floor(bounds.top - dx));
     expect(Math.floor(resizedBounds.left)).to.be.eql(Math.floor(bounds.left));
@@ -174,8 +179,9 @@ describe('resizable', () => {
     expect(Math.floor(resizedBounds.height)).to.be.eql(Math.floor(bounds.height + dx));
   });
 
-  it('should resize dialog from right edge', () => {
+  it('should resize dialog from right edge', async () => {
     resize(overlayPart.querySelector('.e'), dx, 0);
+    await nextRender();
     const resizedBounds = overlayPart.getBoundingClientRect();
     expect(Math.floor(resizedBounds.top)).to.be.eql(Math.floor(bounds.top));
     expect(Math.floor(resizedBounds.left)).to.be.eql(Math.floor(bounds.left));
@@ -183,8 +189,9 @@ describe('resizable', () => {
     expect(Math.floor(resizedBounds.height)).to.be.eql(Math.floor(bounds.height));
   });
 
-  it('should resize dialog from bottom edge', () => {
+  it('should resize dialog from bottom edge', async () => {
     resize(overlayPart.querySelector('.s'), 0, dx);
+    await nextRender();
     const resizedBounds = overlayPart.getBoundingClientRect();
     expect(Math.floor(resizedBounds.top)).to.be.eql(Math.floor(bounds.top));
     expect(Math.floor(resizedBounds.left)).to.be.eql(Math.floor(bounds.left));
@@ -192,8 +199,9 @@ describe('resizable', () => {
     expect(Math.floor(resizedBounds.height)).to.be.eql(Math.floor(bounds.height + dx));
   });
 
-  it('should resize dialog from left edge', () => {
+  it('should resize dialog from left edge', async () => {
     resize(overlayPart.querySelector('.w'), -dx, 0);
+    await nextRender();
     const resizedBounds = overlayPart.getBoundingClientRect();
     expect(Math.floor(resizedBounds.top)).to.be.eql(Math.floor(bounds.top));
     expect(Math.floor(resizedBounds.left)).to.be.eql(Math.floor(bounds.left - dx));
@@ -201,8 +209,9 @@ describe('resizable', () => {
     expect(Math.floor(resizedBounds.height)).to.be.eql(Math.floor(bounds.height));
   });
 
-  it('should resize content part when the overlay is resized', () => {
+  it('should resize content part when the overlay is resized', async () => {
     resize(overlayPart.querySelector('.w'), -dx, 0);
+    await nextRender();
 
     const resizedBounds = overlayPart.getBoundingClientRect();
     const contentPartBounds = dialog.$.overlay.$.content.getBoundingClientRect();
@@ -212,8 +221,9 @@ describe('resizable', () => {
     expect(Math.floor(resizedBounds.height)).to.be.eql(Math.floor(contentPartBounds.height));
   });
 
-  it('should resize content part when the overlay is expanded vertically', () => {
+  it('should resize content part when the overlay is expanded vertically', async () => {
     resize(overlayPart.querySelector('.s'), 0, 10);
+    await nextRender();
 
     const resizedBounds = overlayPart.getBoundingClientRect();
     const contentPartBounds = dialog.$.overlay.$.content.getBoundingClientRect();
@@ -284,12 +294,13 @@ describe('resizable', () => {
     expect(Math.floor(resizedBounds.height)).to.be.eql(Math.floor(bounds.height));
   });
 
-  it('should be able to resize dialog to be wider than window', () => {
+  it('should be able to resize dialog to be wider than window', async () => {
     dialog.$.overlay.$.content.style.padding = '20px';
     dx = 20;
     dialog.$.overlay.setBounds({ left: -dx });
     dx = Math.floor(window.innerWidth - bounds.width + 5);
     resize(overlayPart.querySelector('.e'), dx, 0);
+    await nextRender();
     const resizedBounds = overlayPart.getBoundingClientRect();
     expect(Math.floor(resizedBounds.width)).to.be.eql(Math.floor(bounds.width + dx));
   });
@@ -468,6 +479,7 @@ describe('draggable', () => {
 
   it('should drag and move dialog after resizing', async () => {
     resize(container.querySelector('.s'), 0, dx);
+    await nextRender();
     const bounds = container.getBoundingClientRect();
     const coords = { y: bounds.top + bounds.height / 2, x: bounds.left + bounds.width / 2 };
     const target = dialog.$.overlay.shadowRoot.elementFromPoint(coords.x, coords.y);
@@ -709,10 +721,11 @@ describe('touch', () => {
     expect(draggedBounds.top).to.eql(bounds.top);
   });
 
-  it('should resize dialog from top right corner', () => {
+  it('should resize dialog from top right corner', async () => {
     const d = 100;
     const bounds = resizableOverlayPart.getBoundingClientRect();
     touchResize(resizableOverlayPart.querySelector('.ne'), d, -d);
+    await nextRender();
     const resizedBounds = resizableOverlayPart.getBoundingClientRect();
     expect(Math.floor(resizedBounds.top)).to.be.eql(Math.floor(bounds.top - d));
     expect(Math.floor(resizedBounds.left)).to.be.eql(Math.floor(bounds.left));
