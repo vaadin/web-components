@@ -37,20 +37,40 @@ export function getISOWeekNumber(date) {
 }
 
 /**
+ * Creates a new object with the same date, but sets the hours, minutes, seconds and milliseconds to 0.
+ *
+ * @param {Date} date in system timezone
+ * @return {Date} The same date with time elements set to 0, in UTC timezone.
+ */
+export function normalizeDate(date) {
+  const normalizedDate = new Date(date);
+  normalizedDate.setHours(0, 0, 0, 0);
+  return normalizedDate;
+}
+
+/**
+ * Creates a new object with the same date, but sets the hours, minutes, seconds and milliseconds to 0.
+ *
+ * Uses UTC date components to allow handling date instances independently of
+ * the system time-zone.
+ *
+ * @param {Date} date in UTC timezone
+ * @return {Date} The same date with time elements set to 0, in UTC timezone.
+ */
+export function normalizeUTCDate(date) {
+  return new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(), 0, 0, 0, 0));
+}
+
+/**
  * Check if two dates are equal.
  *
  * @param {Date} date1
  * @param {Date} date2
+ * @param {function(Date): Date} normalizer
  * @return {boolean} True if the given date objects refer to the same date
  */
-export function dateEquals(date1, date2) {
-  return (
-    date1 instanceof Date &&
-    date2 instanceof Date &&
-    date1.getFullYear() === date2.getFullYear() &&
-    date1.getMonth() === date2.getMonth() &&
-    date1.getDate() === date2.getDate()
-  );
+export function dateEquals(date1, date2, normalizer = normalizeDate) {
+  return date1 instanceof Date && date2 instanceof Date && normalizer(date1).getTime() === normalizer(date2).getTime();
 }
 
 /**
@@ -156,7 +176,7 @@ export function getAdjustedYear(referenceDate, year, month = 0, day = 1) {
  * - ISO 8601 `"YYYY-MM-DD"`
  * - 6-digit extended ISO 8601 `"+YYYYYY-MM-DD"`, `"-YYYYYY-MM-DD"`
  * @param {!string} str Date string to parse
- * @return {Date} Parsed date
+ * @return {Date} Parsed date in system timezone
  */
 export function parseDate(str) {
   // Parsing with RegExp to ensure correct format
@@ -170,4 +190,91 @@ export function parseDate(str) {
   date.setMonth(parseInt(parts[2], 10) - 1);
   date.setDate(parseInt(parts[3], 10));
   return date;
+}
+
+/**
+ * Parse date string of one of the following date formats:
+ * - ISO 8601 `"YYYY-MM-DD"`
+ * - 6-digit extended ISO 8601 `"+YYYYYY-MM-DD"`, `"-YYYYYY-MM-DD"`
+ *
+ * Uses UTC date components to allow handling date instances independently of
+ * the system time-zone.
+ *
+ * @param {!string} str Date string to parse
+ * @return {Date} Parsed date in UTC timezone
+ */
+export function parseUTCDate(str) {
+  // Parsing with RegExp to ensure correct format
+  const parts = /^([-+]\d{1}|\d{2,4}|[-+]\d{6})-(\d{1,2})-(\d{1,2})$/u.exec(str);
+  if (!parts) {
+    return undefined;
+  }
+
+  const date = new Date(Date.UTC(0, 0)); // Wrong date (1900-01-01), but with midnight in UTC
+  date.setUTCFullYear(parseInt(parts[1], 10));
+  date.setUTCMonth(parseInt(parts[2], 10) - 1);
+  date.setUTCDate(parseInt(parts[3], 10));
+
+  return date;
+}
+
+function formatISODateBase(dateParts) {
+  const pad = (num, fmt = '00') => (fmt + num).substr((fmt + num).length - fmt.length);
+
+  let yearSign = '';
+  let yearFmt = '0000';
+  let yearAbs = dateParts.year;
+  if (yearAbs < 0) {
+    yearAbs = -yearAbs;
+    yearSign = '-';
+    yearFmt = '000000';
+  } else if (dateParts.year >= 10000) {
+    yearSign = '+';
+    yearFmt = '000000';
+  }
+
+  const year = yearSign + pad(yearAbs, yearFmt);
+  const month = pad(dateParts.month + 1);
+  const day = pad(dateParts.day);
+  return [year, month, day].join('-');
+}
+
+/**
+ * Format a date instance in ISO 8601 (`"YYYY-MM-DD"`) or 6-digit extended ISO
+ * 8601 (`"+YYYYYY-MM-DD"`, `"-YYYYYY-MM-DD"`) format.
+ * @param {Date} date in system timezone
+ * @returns {string}
+ */
+export function formatISODate(date) {
+  if (!(date instanceof Date)) {
+    return '';
+  }
+
+  return formatISODateBase({
+    year: date.getFullYear(),
+    month: date.getMonth(),
+    day: date.getDate(),
+  });
+}
+
+/**
+ * Format a date instance in ISO 8601 (`"YYYY-MM-DD"`) or 6-digit extended ISO
+ * 8601 (`"+YYYYYY-MM-DD"`, `"-YYYYYY-MM-DD"`) format.
+ *
+ * Uses UTC date components to allow handling date instances independently of
+ * the system time-zone.
+ *
+ * @param {Date} date in UTC timezone
+ * @returns {string}
+ */
+export function formatUTCISODate(date) {
+  if (!(date instanceof Date)) {
+    return '';
+  }
+
+  return formatISODateBase({
+    year: date.getUTCFullYear(),
+    month: date.getUTCMonth(),
+    day: date.getUTCDate(),
+  });
 }
