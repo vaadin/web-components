@@ -42,7 +42,7 @@ export const SelectionMixin = (superClass) =>
          */
         isItemSelectable: {
           type: Function,
-          notify: true,
+          notify: (() => true)(), // prevent Polymer analyzer from documenting a changed event
         },
 
         /**
