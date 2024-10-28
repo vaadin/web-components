@@ -109,7 +109,8 @@ export const DialogDraggableMixin = (superClass) =>
       if (eventInWindow(event)) {
         const top = this._originalBounds.top + (event.pageY - this._originalMouseCoords.top);
         const left = this._originalBounds.left + (event.pageX - this._originalMouseCoords.left);
-        this.$.overlay.setBounds({ top, left });
+        this.top = top;
+        this.left = left;
       }
     }
 

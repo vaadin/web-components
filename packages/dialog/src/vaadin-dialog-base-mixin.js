@@ -51,6 +51,30 @@ export const DialogBaseMixin = (superClass) =>
         },
 
         /**
+         * Set the distance of the overlay from the top of its container.
+         * If a unitless number is provided, pixels are assumed.
+         *
+         * Note that the overlay top edge may not be the same as the viewport
+         * top edge (e.g. the Lumo theme defines some spacing to prevent the
+         * overlay from stretching all the way to the top of the viewport).
+         */
+        top: {
+          type: String,
+        },
+
+        /**
+         * Set the distance of the overlay from the left of its container.
+         * If a unitless number is provided, pixels are assumed.
+         *
+         * Note that the overlay left edge may not be the same as the viewport
+         * left edge (e.g. the Lumo theme defines some spacing to prevent the
+         * overlay from stretching all the way to the left of the viewport).
+         */
+        left: {
+          type: String,
+        },
+
+        /**
          * The `role` attribute value to be set on the overlay. Defaults to "dialog".
          *
          * @attr {string} overlay-role
@@ -60,6 +84,10 @@ export const DialogBaseMixin = (superClass) =>
           value: 'dialog',
         },
       };
+    }
+
+    static get observers() {
+      return ['__positionChanged(top, left)'];
     }
 
     /** @protected */
@@ -135,6 +163,11 @@ export const DialogBaseMixin = (superClass) =>
       if (this.modeless) {
         this._overlayElement.bringToFront();
       }
+    }
+
+    /** @private */
+    __positionChanged(top, left) {
+      this.$.overlay.setBounds({ top, left });
     }
 
     /**

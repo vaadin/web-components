@@ -207,7 +207,7 @@ export const DialogOverlayMixin = (superClass) =>
       }
 
       Object.keys(parsedBounds).forEach((arg) => {
-        if (typeof parsedBounds[arg] === 'number') {
+        if (!isNaN(parsedBounds[arg])) {
           parsedBounds[arg] = `${parsedBounds[arg]}px`;
         }
       });
