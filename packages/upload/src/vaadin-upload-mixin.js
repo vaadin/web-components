@@ -581,12 +581,14 @@ export const UploadMixin = (superClass) =>
       async function getFilesFromEntry(entry) {
         if (entry.isFile) {
           return new Promise((resolve) => {
-            entry.file(resolve);
+            // In case of an error, resolve without any files
+            entry.file(resolve, () => resolve([]));
           });
         } else if (entry.isDirectory) {
           const reader = entry.createReader();
           const entries = await new Promise((resolve) => {
-            reader.readEntries(resolve);
+            // In case of an error, resolve without any files
+            reader.readEntries(resolve, () => resolve([]));
           });
           const files = await Promise.all(entries.map(getFilesFromEntry));
           return files.flat();

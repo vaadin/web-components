@@ -6,6 +6,8 @@ import {
   createFiles,
   createFileSystemDirectoryEntry,
   createFileSystemFileEntry,
+  createUnreadableFileSystemDirectoryEntry,
+  createUnreadableFileSystemFileEntry,
   touchDevice,
   xhrCreator,
 } from './helpers.js';
@@ -144,6 +146,19 @@ describe('adding files', () => {
     it('should handle non-file entries on drop', async () => {
       const fileEntry = createFileSystemFileEntry(100, 'text/plain');
       const dropEvent = createDndEvent('drop', [fileEntry, null]);
+      upload.dispatchEvent(dropEvent);
+      await nextUpdate(upload);
+      await nextFrame();
+
+      expect(upload.files.length).to.equal(1);
+      expect(upload.files).to.include(fileEntry._file);
+    });
+
+    it('should handle errors when reading from files or directories on drop', async () => {
+      const fileEntry = createFileSystemFileEntry(100, 'text/plain');
+      const unreadableFileEntry = createUnreadableFileSystemFileEntry();
+      const unreadableDirectoryEntry = createUnreadableFileSystemDirectoryEntry();
+      const dropEvent = createDndEvent('drop', [fileEntry, unreadableFileEntry, unreadableDirectoryEntry]);
       upload.dispatchEvent(dropEvent);
       await nextUpdate(upload);
       await nextFrame();

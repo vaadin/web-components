@@ -52,6 +52,21 @@ export function createFileSystemFileEntry(fileSize, contentType) {
 }
 
 /**
+ * Creates a FileSystemFileEntry object that returns an error when trying to read the file.
+ */
+export function createUnreadableFileSystemFileEntry() {
+  return {
+    isFile: true,
+    isDirectory: false,
+    file(_, errorCallback) {
+      if (errorCallback) {
+        errorCallback(new DOMException('File could not be read'));
+      }
+    },
+  };
+}
+
+/**
  * Creates a FileSystemDirectoryEntry object suitable to be used in a DataTransferItem.
  */
 export function createFileSystemDirectoryEntry(fileEntries) {
@@ -62,6 +77,25 @@ export function createFileSystemDirectoryEntry(fileEntries) {
       return {
         readEntries(callback) {
           callback(fileEntries);
+        },
+      };
+    },
+  };
+}
+
+/**
+ *
+ */
+export function createUnreadableFileSystemDirectoryEntry() {
+  return {
+    isFile: false,
+    isDirectory: true,
+    createReader() {
+      return {
+        readEntries(_, errorCallback) {
+          if (errorCallback) {
+            errorCallback(new DOMException('Directory could not be read'));
+          }
         },
       };
     },
@@ -95,7 +129,9 @@ export function xhrCreator(c) {
   };
   return function () {
     const xhr = new MockHttpRequest();
-    xhr.upload = { onprogress() {} };
+    xhr.upload = {
+      onprogress() {},
+    };
     xhr.onsend = function () {
       if (xhr.upload.onloadstart) {
         xhr.upload.onloadstart();
@@ -103,6 +139,7 @@ export function xhrCreator(c) {
       const total = cfg.size;
       let done = 0;
       const step = (total / cfg.uploadTime) * cfg.stepTime;
+
       function finish() {
         const error = cfg.serverValidation(xhr);
         if (error) {
@@ -117,6 +154,7 @@ export function xhrCreator(c) {
           xhr.receive(200, cfg.serverMessage);
         }
       }
+
       function progress() {
         xhr.upload.onprogress({ total, loaded: done });
         if (done < total) {
@@ -126,9 +164,11 @@ export function xhrCreator(c) {
           setTimeout(finish, cfg.serverTime);
         }
       }
+
       function start() {
         setTimeout(progress, cfg.connectTime);
       }
+
       start();
     };
     return xhr;
