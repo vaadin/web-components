@@ -1,7 +1,14 @@
 import { expect } from '@vaadin/chai-plugins';
-import { change, fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
+import { change, fixtureSync, nextFrame, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import { createFile, createFiles, touchDevice, xhrCreator } from './helpers.js';
+import {
+  createFile,
+  createFiles,
+  createFileSystemDirectoryEntry,
+  createFileSystemFileEntry,
+  touchDevice,
+  xhrCreator,
+} from './helpers.js';
 
 describe('adding files', () => {
   let upload, files;
@@ -48,11 +55,16 @@ describe('adding files', () => {
   });
 
   (touchDevice ? describe.skip : describe)('Dropping file', () => {
-    // Using dispatchEvent instead of fire in this cases because
+    // Using dispatchEvent instead of fire in this case because
     // we have to pass the info in the dataTransfer property
-    function createDndEvent(type) {
+    function createDndEvent(type, entries = []) {
       const e = new Event(type);
-      e.dataTransfer = { files: createFiles(2, testFileSize, 'application/x-bin') };
+      const items = entries.map((entry) => ({
+        webkitGetAsEntry() {
+          return entry;
+        },
+      }));
+      e.dataTransfer = { items };
       return e;
     }
 
@@ -88,19 +100,72 @@ describe('adding files', () => {
       expect(upload._dragoverValid).to.be.false;
     });
 
+    it('should add files on drop', async () => {
+      const entry1 = createFileSystemFileEntry(100, 'image/jpeg');
+      const entry2 = createFileSystemFileEntry(200, 'text/plain');
+      const dropEvent = createDndEvent('drop', [entry1, entry2]);
+      upload.dispatchEvent(dropEvent);
+      await nextUpdate(upload);
+      await nextFrame();
+
+      expect(upload.files.length).to.equal(2);
+      expect(upload.files).to.include(entry1._file);
+      expect(upload.files).to.include(entry2._file);
+    });
+
+    it('should add files from directories on drop', async () => {
+      // Drop combination of files and nested directories:
+      // - fileEntry
+      // - directoryEntry
+      //   - directoryFileEntry
+      //   - subDirectoryEntry
+      //     - subDirectoryFileEntry1
+      //     - subDirectoryFileEntry2
+      const subDirectoryFileEntry1 = createFileSystemFileEntry(100, 'image/jpeg');
+      const subDirectoryFileEntry2 = createFileSystemFileEntry(200, 'text/plain');
+      const subDirectoryEntry = createFileSystemDirectoryEntry([subDirectoryFileEntry1, subDirectoryFileEntry2]);
+
+      const directoryFileEntry = createFileSystemFileEntry(300, 'text/xml');
+      const directoryEntry = createFileSystemDirectoryEntry([directoryFileEntry, subDirectoryEntry]);
+      const fileEntry = createFileSystemFileEntry(400, 'image/png');
+
+      const dropEvent = createDndEvent('drop', [fileEntry, directoryEntry]);
+      upload.dispatchEvent(dropEvent);
+      await nextUpdate(upload);
+      await nextFrame();
+
+      expect(upload.files.length).to.equal(4);
+      expect(upload.files).to.include(fileEntry._file);
+      expect(upload.files).to.include(directoryFileEntry._file);
+      expect(upload.files).to.include(subDirectoryFileEntry1._file);
+      expect(upload.files).to.include(subDirectoryFileEntry2._file);
+    });
+
+    it('should handle non-file entries on drop', async () => {
+      const fileEntry = createFileSystemFileEntry(100, 'text/plain');
+      const dropEvent = createDndEvent('drop', [fileEntry, null]);
+      upload.dispatchEvent(dropEvent);
+      await nextUpdate(upload);
+      await nextFrame();
+
+      expect(upload.files.length).to.equal(1);
+      expect(upload.files).to.include(fileEntry._file);
+    });
+
     describe('nodrop flag', () => {
       let fileAddSpy, dropEvent;
 
       beforeEach(() => {
         fileAddSpy = sinon.spy();
         upload.addEventListener('files-changed', fileAddSpy);
-        dropEvent = createDndEvent('drop');
+        dropEvent = createDndEvent('drop', [createFileSystemFileEntry(testFileSize, 'application/x-octet-stream')]);
       });
 
       it('should fire `files-changed` event when dropping files and drop is enabled', async () => {
         upload.nodrop = false;
         upload.dispatchEvent(dropEvent);
         await nextUpdate(upload);
+        await nextFrame();
         expect(fileAddSpy.called).to.be.true;
       });
 
@@ -108,6 +173,7 @@ describe('adding files', () => {
         upload.nodrop = true;
         upload.dispatchEvent(dropEvent);
         await nextUpdate(upload);
+        await nextFrame();
         expect(fileAddSpy.called).to.be.false;
       });
 

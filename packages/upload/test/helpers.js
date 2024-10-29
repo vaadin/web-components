@@ -9,11 +9,11 @@ export const touchDevice = (function () {
   }
 })();
 
+let fileCounter = 0;
+
 /**
  * Creates a File suitable to add to FormData.
  */
-let fileCounter = 0;
-
 export function createFile(fileSize, contentType) {
   const array = [];
   for (let i = 0; i < (fileSize || 512); i++) {
@@ -34,6 +34,38 @@ export function createFiles(arraySize, fileSize, contentType) {
     files.push(createFile(fileSize, contentType));
   }
   return files;
+}
+
+/**
+ * Creates a FileSystemFileEntry object suitable to be used in a DataTransferItem.
+ */
+export function createFileSystemFileEntry(fileSize, contentType) {
+  const file = createFile(fileSize, contentType);
+  return {
+    isFile: true,
+    isDirectory: false,
+    file(callback) {
+      callback(file);
+    },
+    _file: file, // expose the file for assertions
+  };
+}
+
+/**
+ * Creates a FileSystemDirectoryEntry object suitable to be used in a DataTransferItem.
+ */
+export function createFileSystemDirectoryEntry(fileEntries) {
+  return {
+    isFile: false,
+    isDirectory: true,
+    createReader() {
+      return {
+        readEntries(callback) {
+          callback(fileEntries);
+        },
+      };
+    },
+  };
 }
 
 /**

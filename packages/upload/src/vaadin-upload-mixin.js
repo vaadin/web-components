@@ -558,12 +558,47 @@ export const UploadMixin = (superClass) =>
     }
 
     /** @private */
-    _onDrop(event) {
+    async _onDrop(event) {
       if (!this.nodrop) {
         event.preventDefault();
         this._dragover = this._dragoverValid = false;
-        this._addFiles(event.dataTransfer.files);
+
+        const files = await this.__getFilesFromDropEvent(event);
+        this._addFiles(files);
       }
+    }
+
+    /**
+     * Get the files from the drop event. The dropped items may contain a
+     * combination of files and directories. If a dropped item is a directory,
+     * it will be recursively traversed to get all files.
+     *
+     * @param {!DragEvent} dropEvent - The drop event
+     * @returns {!Array<!File>} - The files from the drop event
+     * @private
+     */
+    async __getFilesFromDropEvent(dropEvent) {
+      async function getFilesFromEntry(entry) {
+        if (entry.isFile) {
+          return new Promise((resolve) => {
+            entry.file(resolve);
+          });
+        } else if (entry.isDirectory) {
+          const reader = entry.createReader();
+          const entries = await new Promise((resolve) => {
+            reader.readEntries(resolve);
+          });
+          const files = await Promise.all(entries.map(getFilesFromEntry));
+          return files.flat();
+        }
+      }
+
+      const filePromises = Array.from(dropEvent.dataTransfer.items)
+        .map((item) => item.webkitGetAsEntry())
+        .filter((entry) => !!entry)
+        .map(getFilesFromEntry);
+
+      return await Promise.all(filePromises).then((files) => files.flat());
     }
 
     /** @private */
