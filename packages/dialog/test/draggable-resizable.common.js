@@ -338,6 +338,33 @@ describe('resizable', () => {
     expect(parseInt(detail.contentWidth)).to.be.eql(parseInt(contentStyles.width));
     expect(parseInt(detail.contentHeight)).to.be.eql(parseInt(contentStyles.height) - verticalPadding);
   });
+
+  it('should update "width" and "height" properties on resize', async () => {
+    resize(overlayPart.querySelector('.sw'), -dx, dx);
+    await nextRender();
+    const overlay = dialog.$.overlay.$.overlay;
+    const bounds = overlay.getBoundingClientRect();
+    expect(dialog.width).to.be.equal(bounds.width);
+    expect(dialog.height).to.be.equal(bounds.height);
+  });
+
+  it('should set height on resize if "width" has been defined', async () => {
+    dialog.width = '200px';
+    const overlay = dialog.$.overlay.$.overlay;
+    const bounds = overlay.getBoundingClientRect();
+    resize(overlayPart.querySelector('.w'), dx, 0);
+    await nextRender();
+    expect(parseInt(overlay.style.height)).to.be.equal(bounds.height);
+  });
+
+  it('should set width on resize if "height" has been defined', async () => {
+    dialog.height = '100px';
+    const overlay = dialog.$.overlay.$.overlay;
+    const bounds = overlay.getBoundingClientRect();
+    resize(overlayPart.querySelector('.s'), 0, dx);
+    await nextRender();
+    expect(parseInt(overlay.style.width)).to.be.equal(bounds.width);
+  });
 });
 
 describe('draggable', () => {
