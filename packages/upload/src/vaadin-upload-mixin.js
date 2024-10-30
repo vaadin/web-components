@@ -574,7 +574,7 @@ export const UploadMixin = (superClass) =>
      * it will be recursively traversed to get all files.
      *
      * @param {!DragEvent} dropEvent - The drop event
-     * @returns {!Array<!File>} - The files from the drop event
+     * @returns {Promise<File[]>} - The files from the drop event
      * @private
      */
     async __getFilesFromDropEvent(dropEvent) {
