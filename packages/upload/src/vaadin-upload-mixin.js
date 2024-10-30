@@ -577,7 +577,7 @@ export const UploadMixin = (superClass) =>
      * @returns {Promise<File[]>} - The files from the drop event
      * @private
      */
-    async __getFilesFromDropEvent(dropEvent) {
+    __getFilesFromDropEvent(dropEvent) {
       async function getFilesFromEntry(entry) {
         if (entry.isFile) {
           return new Promise((resolve) => {
@@ -600,7 +600,7 @@ export const UploadMixin = (superClass) =>
         .filter((entry) => !!entry)
         .map(getFilesFromEntry);
 
-      return await Promise.all(filePromises).then((files) => files.flat());
+      return Promise.all(filePromises).then((files) => files.flat());
     }
 
     /** @private */
