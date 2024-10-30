@@ -15,7 +15,7 @@ import { ComboBoxItemMixin } from './vaadin-combo-box-item-mixin.js';
  *
  * ## Disclaimer
  *
- * This component is an experiment not intended for publishing to npm.
+ * This component is an experiment and not yet a part of Vaadin platform.
  * There is no ETA regarding specific Vaadin version where it'll land.
  * Feel free to try this code in your apps as per Apache 2.0 license.
  */
