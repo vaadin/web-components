@@ -9,11 +9,11 @@ export const touchDevice = (function () {
   }
 })();
 
+let fileCounter = 0;
+
 /**
  * Creates a File suitable to add to FormData.
  */
-let fileCounter = 0;
-
 export function createFile(fileSize, contentType) {
   const array = [];
   for (let i = 0; i < (fileSize || 512); i++) {
@@ -34,6 +34,72 @@ export function createFiles(arraySize, fileSize, contentType) {
     files.push(createFile(fileSize, contentType));
   }
   return files;
+}
+
+/**
+ * Creates a FileSystemFileEntry object suitable to be used in a DataTransferItem.
+ */
+export function createFileSystemFileEntry(fileSize, contentType) {
+  const file = createFile(fileSize, contentType);
+  return {
+    isFile: true,
+    isDirectory: false,
+    file(callback) {
+      callback(file);
+    },
+    _file: file, // expose the file for assertions
+  };
+}
+
+/**
+ * Creates a FileSystemFileEntry object that returns an error when trying to read the file.
+ */
+export function createUnreadableFileSystemFileEntry() {
+  return {
+    isFile: true,
+    isDirectory: false,
+    file(_, errorCallback) {
+      if (errorCallback) {
+        errorCallback(new DOMException('File could not be read'));
+      }
+    },
+  };
+}
+
+/**
+ * Creates a FileSystemDirectoryEntry object suitable to be used in a DataTransferItem.
+ */
+export function createFileSystemDirectoryEntry(fileEntries) {
+  return {
+    isFile: false,
+    isDirectory: true,
+    createReader() {
+      return {
+        readEntries(callback) {
+          callback(fileEntries);
+        },
+      };
+    },
+  };
+}
+
+/**
+ * Creates a FileSystemDirectoryEntry object that returns an error when trying to read the directory.
+ */
+export function createUnreadableFileSystemDirectoryEntry() {
+  return {
+    isFile: false,
+    isDirectory: true,
+    createReader() {
+      return {
+        readEntries(_, errorCallback) {
+          if (errorCallback) {
+            errorCallback(new DOMException('Directory could not be read'));
+          }
+        },
+      };
+    },
+  };
 }
 
 /**
@@ -63,7 +129,9 @@ export function xhrCreator(c) {
   };
   return function () {
     const xhr = new MockHttpRequest();
-    xhr.upload = { onprogress() {} };
+    xhr.upload = {
+      onprogress() {},
+    };
     xhr.onsend = function () {
       if (xhr.upload.onloadstart) {
         xhr.upload.onloadstart();
@@ -71,6 +139,7 @@ export function xhrCreator(c) {
       const total = cfg.size;
       let done = 0;
       const step = (total / cfg.uploadTime) * cfg.stepTime;
+
       function finish() {
         const error = cfg.serverValidation(xhr);
         if (error) {
@@ -85,6 +154,7 @@ export function xhrCreator(c) {
           xhr.receive(200, cfg.serverMessage);
         }
       }
+
       function progress() {
         xhr.upload.onprogress({ total, loaded: done });
         if (done < total) {
@@ -94,9 +164,11 @@ export function xhrCreator(c) {
           setTimeout(finish, cfg.serverTime);
         }
       }
+
       function start() {
         setTimeout(progress, cfg.connectTime);
       }
+
       start();
     };
     return xhr;
