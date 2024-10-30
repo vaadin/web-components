@@ -21,10 +21,6 @@
   "type": "module",
   "files": [
     "src",
-    "!src/vaadin-lit-radio-button.d.ts",
-    "!src/vaadin-lit-radio-button.js",
-    "!src/vaadin-lit-radio-group.d.ts",
-    "!src/vaadin-lit-radio-group.js",
     "theme",
     "vaadin-*.d.ts",
     "vaadin-*.js",
