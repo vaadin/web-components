@@ -294,6 +294,9 @@ export const UploadMixin = (superClass) =>
          *     one: 'Upload File...',
          *     many: 'Upload Files...'
          *   },
+         *   addDirectories: {
+         *     one: 'Upload Directory...',
+         *   },
          *   error: {
          *     tooManyFiles: 'Too Many Files.',
          *     fileIsTooBig: 'File is Too Big.',
@@ -348,6 +351,9 @@ export const UploadMixin = (superClass) =>
               addFiles: {
                 one: 'Upload File...',
                 many: 'Upload Files...',
+              },
+              addDirectories: {
+                one: 'Upload Directory...',
               },
               error: {
                 tooManyFiles: 'Too Many Files.',
@@ -407,7 +413,7 @@ export const UploadMixin = (superClass) =>
 
     static get observers() {
       return [
-        '__updateAddButton(_addButton, maxFiles, i18n, maxFilesReached)',
+        '__updateAddButton(_addButton, maxFiles, i18n, maxFilesReached, directory)',
         '__updateDropLabel(_dropLabel, maxFiles, i18n)',
         '__updateFileList(_fileList, files, i18n)',
         '__updateMaxFilesReached(maxFiles, files)',
@@ -533,7 +539,8 @@ export const UploadMixin = (superClass) =>
 
         // Only update text content for the default button element
         if (addButton === this._addButtonController.defaultNode) {
-          addButton.textContent = this._i18nPlural(maxFiles, i18n.addFiles);
+          const translation = this.directory ? i18n.addDirectories : i18n.addFiles;
+          addButton.textContent = this._i18nPlural(maxFiles, translation);
         }
       }
     }
@@ -993,7 +1000,7 @@ export const UploadMixin = (superClass) =>
 
     /** @private */
     _i18nPlural(value, plural) {
-      return value === 1 ? plural.one : plural.many;
+      return (value === 1 ? plural.one : plural.many) || plural.one;
     }
 
     /** @protected */
