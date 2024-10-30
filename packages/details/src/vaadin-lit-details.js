@@ -12,7 +12,7 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
 import { DetailsBaseMixin } from './vaadin-details-base-mixin.js';
 
 /**
- * LitElement based version of `<vaadin-button>` web component.
+ * LitElement based version of `<vaadin-details>` web component.
  *
  * ## Disclaimer
  *
