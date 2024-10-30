@@ -276,7 +276,7 @@ export const UploadMixin = (superClass) =>
          *     many: 'Drop files here'
          *   },
          *   addFiles: {
-         *     one: 'Select File...',
+         *     one: 'Upload File...',
          *     many: 'Upload Files...'
          *   },
          *   error: {
@@ -296,9 +296,9 @@ export const UploadMixin = (superClass) =>
          *       unknown: 'unknown remaining time'
          *     },
          *     error: {
-         *       serverUnavailable: 'Server Unavailable',
-         *       unexpectedServerError: 'Unexpected Server Error',
-         *       forbidden: 'Forbidden'
+         *       serverUnavailable: 'Upload failed, please try again later',
+         *       unexpectedServerError: 'Upload failed due to server error',
+         *       forbidden: 'Upload forbidden'
          *     }
          *   },
          *   file: {
