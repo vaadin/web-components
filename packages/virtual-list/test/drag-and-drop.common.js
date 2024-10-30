@@ -1,5 +1,7 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
+import { resetMouse, sendMouse } from '@web/test-runner-commands';
+import { hover } from '@vaadin/button/test/visual/helpers.js';
 
 describe('drag and drop', () => {
   let virtualList;
@@ -28,45 +30,28 @@ describe('drag and drop', () => {
     await nextFrame();
   }
 
-  async function getMaxHeightDuringDragStart(element, items) {
-    let maxHeightDuringDragStart;
-    element.addEventListener(
-      'dragstart',
-      () => {
-        maxHeightDuringDragStart = items.style.maxHeight;
-      },
-      { once: true },
-    );
-    element.dispatchEvent(new DragEvent('dragstart'));
-    await new Promise((resolve) => {
-      requestAnimationFrame(resolve);
-    });
-    return maxHeightDuringDragStart;
+  async function dragElement(element) {
+    await resetMouse();
+    await hover(element);
+    await sendMouse({ type: 'down' });
+    await sendMouse({ type: 'move', position: [100, 100] });
+    await sendMouse({ type: 'up' });
   }
 
-  it('should not modify maxHeight on dragstart for small virtual lists', async () => {
-    await setVirtualListItems(50);
-    const initialMaxHeight = items.style.maxHeight;
-    const maxHeightDuringDragStart = await getMaxHeightDuringDragStart(virtualList, items);
-    expect(maxHeightDuringDragStart).to.equal(initialMaxHeight);
-  });
-
   ['5000', '50000'].forEach((count) => {
-    it('should temporarily set maxHeight to 0 on dragstart for large virtual lists', async () => {
+    it(`should not crash when dragging a virtual list with ${count} items`, async () => {
       await setVirtualListItems(count);
       const initialMaxHeight = items.style.maxHeight;
-      const maxHeightDuringDragStart = await getMaxHeightDuringDragStart(virtualList, items);
-      expect(maxHeightDuringDragStart).to.equal('0px');
+      await dragElement(virtualList);
       expect(items.style.maxHeight).to.equal(initialMaxHeight);
     });
 
-    it('should temporarily set maxHeight to 0 on dragstart for large virtual lists in draggable containers', async () => {
+    it(`should not crash when dragging a container that has a virtual list with ${count} items`, async () => {
       virtualList.removeAttribute('draggable');
       container.setAttribute('draggable', true);
       await setVirtualListItems(count);
       const initialMaxHeight = items.style.maxHeight;
-      const maxHeightDuringDragStart = await getMaxHeightDuringDragStart(container, items);
-      expect(maxHeightDuringDragStart).to.equal('0px');
+      await dragElement(container);
       expect(items.style.maxHeight).to.equal(initialMaxHeight);
     });
   });
