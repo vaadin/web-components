@@ -76,6 +76,7 @@ export { DialogOverlay } from './vaadin-dialog-overlay.js';
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
  * @fires {CustomEvent} resize - Fired when the dialog resize is finished.
+ * @fires {CustomEvent} dragged - Fired when the dialog drag is finished.
  * @fires {CustomEvent} opened-changed - Fired when the `opened` property changes.
  * @fires {CustomEvent} closed - Fired when the dialog is closed.
  *

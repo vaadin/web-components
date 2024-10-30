@@ -24,6 +24,11 @@ export type DialogResizeDimensions = {
   contentHeight: string;
 };
 
+export type DialogPosition = {
+  top: string;
+  left: string;
+};
+
 /**
  * Fired when the `opened` property changes.
  */
@@ -33,6 +38,11 @@ export type DialogOpenedChangedEvent = CustomEvent<{ value: boolean }>;
  * Fired when the dialog resize is finished.
  */
 export type DialogResizeEvent = CustomEvent<DialogResizeDimensions>;
+
+/**
+ * Fired when the dialog drag is finished.
+ */
+export type DialogDraggedEvent = CustomEvent<DialogPosition>;
 
 /**
  * Fired when the dialog is closed.
@@ -45,6 +55,8 @@ export interface DialogCustomEventMap {
   closed: DialogClosedEvent;
 
   resize: DialogResizeEvent;
+
+  dragged: DialogDraggedEvent;
 }
 
 export type DialogEventMap = DialogCustomEventMap & HTMLElementEventMap;
@@ -108,6 +120,7 @@ export type DialogEventMap = DialogCustomEventMap & HTMLElementEventMap;
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
  * @fires {CustomEvent} resize - Fired when the dialog resize is finished.
+ * @fires {CustomEvent} dragged - Fired when the dialog drag is finished.
  * @fires {CustomEvent} opened-changed - Fired when the `opened` property changes.
  * @fires {CustomEvent} closed - Fired when the dialog is closed.
  */
