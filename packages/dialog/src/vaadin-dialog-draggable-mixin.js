@@ -124,4 +124,10 @@ export const DialogDraggableMixin = (superClass) =>
       window.removeEventListener('mousemove', this._drag);
       window.removeEventListener('touchmove', this._drag);
     }
+
+    /**
+     * Fired when the dialog drag is finished.
+     *
+     * @event dragged
+     */
   };
