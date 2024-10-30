@@ -38,21 +38,26 @@ describe('drag and drop', () => {
     await sendMouse({ type: 'up' });
   }
 
+  async function assertDragSucceeds(draggedElement) {
+    // maxHeight and overflow are temporarily updated in the related fix
+    const initialItemsMaxHeight = items.style.maxHeight;
+    const initialVirtualListOverflow = virtualList.style.overflow;
+    await dragElement(draggedElement);
+    expect(items.style.maxHeight).to.equal(initialItemsMaxHeight);
+    expect(virtualList.style.overflow).to.equal(initialVirtualListOverflow);
+  }
+
   ['5000', '50000'].forEach((count) => {
     it(`should not crash when dragging a virtual list with ${count} items`, async () => {
       await setVirtualListItems(count);
-      const initialMaxHeight = items.style.maxHeight;
-      await dragElement(virtualList);
-      expect(items.style.maxHeight).to.equal(initialMaxHeight);
+      await assertDragSucceeds(virtualList);
     });
 
     it(`should not crash when dragging a container that has a virtual list with ${count} items`, async () => {
       virtualList.removeAttribute('draggable');
       container.setAttribute('draggable', true);
       await setVirtualListItems(count);
-      const initialMaxHeight = items.style.maxHeight;
-      await dragElement(container);
-      expect(items.style.maxHeight).to.equal(initialMaxHeight);
+      await assertDragSucceeds(container);
     });
   });
 });

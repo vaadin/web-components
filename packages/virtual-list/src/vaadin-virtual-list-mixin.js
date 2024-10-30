@@ -163,12 +163,15 @@ export const VirtualListMixin = (superClass) =>
       //   - avoid the crash and the performance issues
       //   - unnecessarily avoid excluding items from the drag image
       if (this.$.items.offsetHeight > 20000) {
-        const initialMaxHeight = this.$.items.style.maxHeight;
+        const initialItemsMaxHeight = this.$.items.style.maxHeight;
+        const initialVirtualListOverflow = this.style.overflow;
         // Momentarily hides the items until the browser starts generating the
         // drag image.
         this.$.items.style.maxHeight = '0';
+        this.style.overflow = 'hidden';
         requestAnimationFrame(() => {
-          this.$.items.style.maxHeight = initialMaxHeight;
+          this.$.items.style.maxHeight = initialItemsMaxHeight;
+          this.style.overflow = initialVirtualListOverflow;
         });
       }
     }

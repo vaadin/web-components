@@ -1089,6 +1089,7 @@ describe('drag and drop', () => {
   describe('draggable grid', () => {
     let container;
     let items;
+    let table;
 
     beforeEach(async () => {
       container = fixtureSync(`
@@ -1103,6 +1104,7 @@ describe('drag and drop', () => {
       flushGrid(grid);
       await nextFrame();
       items = grid.shadowRoot.querySelector('#items');
+      table = grid.shadowRoot.querySelector('#table');
     });
 
     async function setGridItems(count) {
@@ -1118,21 +1120,26 @@ describe('drag and drop', () => {
       await sendMouse({ type: 'up' });
     }
 
+    async function assertDragSucceeds(draggedElement) {
+      // maxHeight and overflow are temporarily updated in the related fix
+      const initialItemsMaxHeight = items.style.maxHeight;
+      const initialTableOverflow = table.style.overflow;
+      await dragElement(draggedElement);
+      expect(items.style.maxHeight).to.equal(initialItemsMaxHeight);
+      expect(table.style.overflow).to.equal(initialTableOverflow);
+    }
+
     ['5000', '50000'].forEach((count) => {
       it(`should not crash when dragging a grid with ${count} items`, async () => {
         await setGridItems(count);
-        const initialMaxHeight = items.style.maxHeight;
-        await dragElement(grid);
-        expect(items.style.maxHeight).to.equal(initialMaxHeight);
+        await assertDragSucceeds(grid);
       });
 
       it(`should not crash when dragging a container that has a grid with ${count} items`, async () => {
         grid.removeAttribute('draggable');
         container.setAttribute('draggable', true);
         await setGridItems(count);
-        const initialMaxHeight = items.style.maxHeight;
-        await dragElement(container);
-        expect(items.style.maxHeight).to.equal(initialMaxHeight);
+        await assertDragSucceeds(container);
       });
     });
   });
