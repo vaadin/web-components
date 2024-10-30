@@ -263,6 +263,21 @@ export const UploadMixin = (superClass) =>
         capture: String,
 
         /**
+         * In directory mode, the user can select a directory instead of files.
+         * When selecting a directory, all files in the directory will be added
+         * to the upload list. Files are still filtered by the `accept` filter,
+         * and any non-matching files will be rejected.
+         *
+         * Note that this only allows selecting a single directory, and that
+         * selecting files is not supported in this mode. Browsers may request
+         * a confirmation from the user before allowing to upload a directory.
+         */
+        directory: {
+          type: Boolean,
+          value: false,
+        },
+
+        /**
          * The object used to localize this component.
          * For changing the default localization, change the entire
          * _i18n_ object or just the property you want to modify.
