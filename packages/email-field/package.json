@@ -21,8 +21,6 @@
   "type": "module",
   "files": [
     "src",
-    "!src/vaadin-lit-email-field.d.ts",
-    "!src/vaadin-lit-email-field.js",
     "theme",
     "vaadin-*.d.ts",
     "vaadin-*.js",
