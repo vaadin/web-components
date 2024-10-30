@@ -21,8 +21,6 @@
   "type": "module",
   "files": [
     "src",
-    "!src/vaadin-lit-list-box.d.ts",
-    "!src/vaadin-lit-list-box.js",
     "theme",
     "vaadin-*.d.ts",
     "vaadin-*.js",
@@ -44,7 +42,8 @@
     "@vaadin/item": "24.6.0-alpha4",
     "@vaadin/vaadin-lumo-styles": "24.6.0-alpha4",
     "@vaadin/vaadin-material-styles": "24.6.0-alpha4",
-    "@vaadin/vaadin-themable-mixin": "24.6.0-alpha4"
+    "@vaadin/vaadin-themable-mixin": "24.6.0-alpha4",
+    "lit": "^3.0.0"
   },
   "devDependencies": {
     "@vaadin/chai-plugins": "24.6.0-alpha4",
