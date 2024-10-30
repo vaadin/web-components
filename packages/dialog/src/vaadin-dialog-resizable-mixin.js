@@ -75,7 +75,7 @@ export const DialogResizableMixin = (superClass) =>
         window.addEventListener('touchmove', this._resizeListeners.resize[direction]);
         window.addEventListener('mouseup', this._resizeListeners.stop[direction]);
         window.addEventListener('touchend', this._resizeListeners.stop[direction]);
-        if (this.$.overlay.$.overlay.style.position !== 'absolute') {
+        if (this.$.overlay.$.overlay.style.position !== 'absolute' || this.width || this.height) {
           this.$.overlay.setBounds(this._originalBounds);
         }
       }
@@ -96,21 +96,22 @@ export const DialogResizableMixin = (superClass) =>
               const height = this._originalBounds.height - (event.pageY - this._originalMouseCoords.top);
               const top = this._originalBounds.top + (event.pageY - this._originalMouseCoords.top);
               if (height > minimumSize) {
-                this.$.overlay.setBounds({ top, height });
+                this.top = top;
+                this.height = height;
               }
               break;
             }
             case 'e': {
               const width = this._originalBounds.width + (event.pageX - this._originalMouseCoords.left);
               if (width > minimumSize) {
-                this.$.overlay.setBounds({ width });
+                this.width = width;
               }
               break;
             }
             case 's': {
               const height = this._originalBounds.height + (event.pageY - this._originalMouseCoords.top);
               if (height > minimumSize) {
-                this.$.overlay.setBounds({ height });
+                this.height = height;
               }
               break;
             }
@@ -118,7 +119,8 @@ export const DialogResizableMixin = (superClass) =>
               const width = this._originalBounds.width - (event.pageX - this._originalMouseCoords.left);
               const left = this._originalBounds.left + (event.pageX - this._originalMouseCoords.left);
               if (width > minimumSize) {
-                this.$.overlay.setBounds({ left, width });
+                this.left = left;
+                this.width = width;
               }
               break;
             }
