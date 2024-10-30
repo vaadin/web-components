@@ -597,6 +597,17 @@ describe('draggable', () => {
     expect(dialog.top).to.be.equal(bounds.top);
     expect(dialog.left).to.be.equal(bounds.left);
   });
+
+  it('should fire "dragged" event on drag', async () => {
+    const onDragged = sinon.spy();
+    dialog.addEventListener('dragged', onDragged);
+    drag(container);
+    await nextRender();
+    expect(onDragged.calledOnce).to.be.true;
+    const { detail } = onDragged.args[0][0];
+    expect(detail.top).to.be.equal(dialog.top);
+    expect(detail.left).to.be.equal(dialog.left);
+  });
 });
 
 describe('touch', () => {

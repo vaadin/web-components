@@ -116,6 +116,9 @@ export const DialogDraggableMixin = (superClass) =>
 
     /** @private */
     _stopDrag() {
+      this.dispatchEvent(
+        new CustomEvent('dragged', { bubbles: true, composed: true, detail: { top: this.top, left: this.left } }),
+      );
       window.removeEventListener('mouseup', this._stopDrag);
       window.removeEventListener('touchend', this._stopDrag);
       window.removeEventListener('mousemove', this._drag);
