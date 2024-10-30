@@ -183,12 +183,12 @@ export const DialogBaseMixin = (superClass) =>
 
     /** @private */
     __positionChanged(top, left) {
-      this.$.overlay.setBounds({ top, left });
+      requestAnimationFrame(() => this.$.overlay.setBounds({ top, left }));
     }
 
     /** @private */
     __sizeChanged(width, height) {
-      this.$.overlay.setBounds({ width, height });
+      requestAnimationFrame(() => this.$.overlay.setBounds({ width, height }));
     }
 
     /**

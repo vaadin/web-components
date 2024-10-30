@@ -321,5 +321,15 @@ describe('vaadin-dialog', () => {
       expect(overlay.$.overlay.style.width).to.equal('300px');
       expect(overlay.$.overlay.style.height).to.equal('400px');
     });
+
+    it('should allow declaring position/size as attributes', async () => {
+      dialog = fixtureSync('<vaadin-dialog top="100px" left="200px" width="100px" height="200px"></vaadin-dialog>');
+      await nextRender();
+      const overlay = dialog.$.overlay.$.overlay;
+      expect(overlay.style.top).to.be.equal('100px');
+      expect(overlay.style.left).to.be.equal('200px');
+      expect(overlay.style.width).to.be.equal('100px');
+      expect(overlay.style.height).to.be.equal('200px');
+    });
   });
 });
