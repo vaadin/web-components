@@ -47,13 +47,13 @@
     "@vaadin/overlay": "24.6.0-alpha4",
     "@vaadin/vaadin-lumo-styles": "24.6.0-alpha4",
     "@vaadin/vaadin-material-styles": "24.6.0-alpha4",
-    "@vaadin/vaadin-themable-mixin": "24.6.0-alpha4"
+    "@vaadin/vaadin-themable-mixin": "24.6.0-alpha4",
+    "lit": "^3.0.0"
   },
   "devDependencies": {
     "@vaadin/chai-plugins": "24.6.0-alpha4",
     "@vaadin/testing-helpers": "^1.0.0",
     "@vaadin/text-field": "24.6.0-alpha4",
-    "lit": "^3.0.0",
     "sinon": "^18.0.0"
   },
   "web-types": [
