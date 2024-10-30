@@ -84,7 +84,7 @@ export function createFileSystemDirectoryEntry(fileEntries) {
 }
 
 /**
- *
+ * Creates a FileSystemDirectoryEntry object that returns an error when trying to read the directory.
  */
 export function createUnreadableFileSystemDirectoryEntry() {
   return {
