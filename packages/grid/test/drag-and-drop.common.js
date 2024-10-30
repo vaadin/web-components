@@ -1,6 +1,8 @@
 import { expect } from '@esm-bundle/chai';
 import { aTimeout, fixtureSync, listenOnce, nextFrame, oneEvent } from '@vaadin/testing-helpers';
+import { resetMouse, sendMouse } from '@web/test-runner-commands';
 import sinon from 'sinon';
+import { hover } from '@vaadin/button/test/visual/helpers.js';
 import { flushGrid, getBodyCellContent, getFirstCell, getRowBodyCells, getRows } from './helpers.js';
 
 describe('drag and drop', () => {
@@ -1036,6 +1038,64 @@ describe('drag and drop', () => {
       const scrollTop = grid.$.table.scrollTop;
       fireDragOver(grid.__getViewportRows()[0], 'above');
       expect(grid.$.table.scrollTop).to.be.within(scrollTop - 200, scrollTop - 100);
+    });
+  });
+
+  describe('draggable grid', () => {
+    let container;
+    let items;
+    let table;
+
+    beforeEach(async () => {
+      container = fixtureSync(`
+        <div style="width: 400px; height: 400px;">
+          <vaadin-grid draggable="true" style="width: 300px; height: 300px;">
+            <vaadin-grid-column path="value"></vaadin-grid-column>
+          </vaadin-grid>
+        </div>
+      `);
+      grid = container.querySelector('vaadin-grid');
+      document.body.appendChild(container);
+      flushGrid(grid);
+      await nextFrame();
+      items = grid.shadowRoot.querySelector('#items');
+      table = grid.shadowRoot.querySelector('#table');
+    });
+
+    async function setGridItems(count) {
+      grid.items = Array.from({ length: count }, (_, i) => ({ value: `Item ${i + 1}` }));
+      await nextFrame();
+    }
+
+    async function dragElement(element) {
+      await resetMouse();
+      await hover(element);
+      await sendMouse({ type: 'down' });
+      await sendMouse({ type: 'move', position: [100, 100] });
+      await sendMouse({ type: 'up' });
+    }
+
+    async function assertDragSucceeds(draggedElement) {
+      // maxHeight and overflow are temporarily updated in the related fix
+      const initialItemsMaxHeight = items.style.maxHeight;
+      const initialTableOverflow = table.style.overflow;
+      await dragElement(draggedElement);
+      expect(items.style.maxHeight).to.equal(initialItemsMaxHeight);
+      expect(table.style.overflow).to.equal(initialTableOverflow);
+    }
+
+    ['5000', '50000'].forEach((count) => {
+      it(`should not crash when dragging a grid with ${count} items`, async () => {
+        await setGridItems(count);
+        await assertDragSucceeds(grid);
+      });
+
+      it(`should not crash when dragging a container that has a grid with ${count} items`, async () => {
+        grid.removeAttribute('draggable');
+        container.setAttribute('draggable', true);
+        await setGridItems(count);
+        await assertDragSucceeds(container);
+      });
     });
   });
 });
