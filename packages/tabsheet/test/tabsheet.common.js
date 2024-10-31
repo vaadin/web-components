@@ -1,7 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import '../vaadin-tabsheet.js';
 
 describe('tabsheet', () => {
   let tabsheet, tabs;
@@ -54,9 +53,9 @@ describe('tabsheet', () => {
       expect(tabsheet.items.length).to.be.equal(3);
     });
 
-    it('should update items value when the tabs items change', () => {
+    it('should update items value when the tabs items change', async () => {
       tabs.removeChild(tabsheet.items[2]);
-      tabs._observer.flush();
+      await nextFrame();
       expect(tabsheet.items.length).to.be.equal(2);
     });
 
@@ -81,8 +80,9 @@ describe('tabsheet', () => {
       expect(tabsheet.items[0].selected).to.be.true;
     });
 
-    it('should update selected to new index when other tab is selected', () => {
+    it('should update selected to new index when other tab is selected', async () => {
       tabs.items[1].click();
+      await nextFrame();
       expect(tabsheet.items[1].selected).to.be.true;
       expect(tabsheet.selected).to.equal(1);
     });
@@ -92,35 +92,40 @@ describe('tabsheet', () => {
       await nextFrame();
       tabs.selected = 1;
       tabs.items[1].click();
+      await nextFrame();
       expect(tabsheet.selected).not.to.equal(1);
     });
 
-    it('should close currently selected tab when another one is selected', () => {
+    it('should close currently selected tab when another one is selected', async () => {
       tabs.items[1].click();
+      await nextFrame();
       expect(tabsheet.items[1].selected).to.be.true;
       expect(tabsheet.items[0].selected).to.be.false;
     });
 
-    it('should not change selected state if tab has been removed', () => {
+    it('should not change selected state if tab has been removed', async () => {
       const tab = tabsheet.items[1];
       tabs.removeChild(tab);
       tabs._observer.flush();
       tab.selected = true;
+      await nextFrame();
       expect(tabsheet.selected).to.equal(0);
     });
 
-    it('should dispatch selected-changed event when selected changes', () => {
+    it('should dispatch selected-changed event when selected changes', async () => {
       const spy = sinon.spy();
       tabsheet.addEventListener('selected-changed', spy);
       tabs.items[1].click();
+      await nextFrame();
       expect(spy.calledOnce).to.be.true;
     });
   });
 
   describe('syncing properties', () => {
-    it('should propagate selected value to tabs', () => {
+    it('should propagate selected value to tabs', async () => {
       expect(tabs.selected).to.equal(tabsheet.selected);
       tabsheet.selected = 1;
+      await nextFrame();
       expect(tabs.selected).to.equal(tabsheet.selected);
     });
 
@@ -128,6 +133,7 @@ describe('tabsheet', () => {
       tabs.remove();
       await nextFrame();
       tabsheet.selected = 1;
+      await nextFrame();
       expect(tabs.selected).not.to.equal(tabsheet.selected);
     });
   });
@@ -139,14 +145,16 @@ describe('tabsheet', () => {
       expect(getPanels()[2].hidden).to.be.true;
     });
 
-    it('should show another panel on tab change', () => {
+    it('should show another panel on tab change', async () => {
       tabsheet.selected = 1;
+      await nextFrame();
       expect(getPanels()[0].hidden).to.be.true;
       expect(getPanels()[1].hidden).to.be.false;
     });
 
-    it('should not show a panel if no matching panel found', () => {
+    it('should not show a panel if no matching panel found', async () => {
       tabsheet.selected = 3;
+      await nextFrame();
       expect(getPanels()[0].hidden).to.be.true;
       expect(getPanels()[1].hidden).to.be.true;
       expect(getPanels()[2].hidden).to.be.true;
@@ -227,8 +235,9 @@ describe('tabsheet', () => {
       expect(tabsheet.hasAttribute('loading')).to.be.false;
     });
 
-    it('should be in loading state after opening a tab with no panel', () => {
+    it('should be in loading state after opening a tab with no panel', async () => {
       newTab.click();
+      await nextFrame();
       expect(tabsheet.hasAttribute('loading')).to.be.true;
       expect(tabsheet.getAttribute('loading')).to.equal('');
     });
@@ -308,19 +317,23 @@ describe('tabsheet', () => {
   });
 
   describe('theme propagation', () => {
-    it('should set the theme attribute to the slotted tabs', () => {
+    it('should set the theme attribute to the slotted tabs', async () => {
       tabsheet.setAttribute('theme', 'foo');
+      await nextFrame();
       expect(tabs.getAttribute('theme')).to.equal('foo');
     });
 
-    it('should remove the theme attribute to the slotted tabs', () => {
+    it('should remove the theme attribute to the slotted tabs', async () => {
       tabsheet.setAttribute('theme', 'foo');
+      await nextFrame();
       tabsheet.removeAttribute('theme');
+      await nextFrame();
       expect(tabs.hasAttribute('theme')).to.be.false;
     });
 
     it('should set the theme attribute to newly added tabs', async () => {
       tabsheet.setAttribute('theme', 'foo');
+      await nextFrame();
       tabs.remove();
 
       const newTabs = fixtureSync(`<vaadin-tabs slot="tabs"></vaadin-tabs>`);
