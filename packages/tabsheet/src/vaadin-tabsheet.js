@@ -3,6 +3,7 @@
  * Copyright (c) 2022 - 2024 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import '@vaadin/tabs/src/vaadin-tabs.js';
 import './vaadin-tabsheet-scroller.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
