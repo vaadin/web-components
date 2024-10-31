@@ -199,7 +199,7 @@ export declare class UploadMixinClass {
    * In this mode it is still possible to add a combination of files and
    * directories using drag and drop.
    */
-  directory: string;
+  directory: boolean;
 
   /**
    * The object used to localize this component.
