@@ -21,8 +21,6 @@
   "type": "module",
   "files": [
     "src",
-    "!src/vaadin-lit-scroller.d.ts",
-    "!src/vaadin-lit-scroller.js",
     "theme",
     "vaadin-*.d.ts",
     "vaadin-*.js",
