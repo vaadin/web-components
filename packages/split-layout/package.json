@@ -21,8 +21,6 @@
   "type": "module",
   "files": [
     "src",
-    "!src/vaadin-lit-split-layout.d.ts",
-    "!src/vaadin-lit-split-layout.js",
     "theme",
     "vaadin-*.d.ts",
     "vaadin-*.js",
