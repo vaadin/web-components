@@ -21,11 +21,6 @@
   "type": "module",
   "files": [
     "src",
-    "!src/vaadin-lit-upload-file-list.js",
-    "!src/vaadin-lit-upload-file.js",
-    "!src/vaadin-lit-upload-icon.js",
-    "!src/vaadin-lit-upload.d.ts",
-    "!src/vaadin-lit-upload.js",
     "theme",
     "vaadin-*.d.ts",
     "vaadin-*.js",
