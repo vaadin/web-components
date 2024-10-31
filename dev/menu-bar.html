@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -7,38 +7,324 @@
     <title>Menu bar</title>
     <script type="module" src="./common.js"></script>
 
+    <style>
+      html,
+      body {
+        height: 100%;
+      }
+    </style>
+
     <script type="module">
       import '@vaadin/menu-bar';
-      import '@vaadin/tooltip';
+      import { css, html, LitElement } from 'lit';
 
-      const menuBar = document.querySelector('vaadin-menu-bar');
-      menuBar.items = [
-        { text: 'View', tooltip: 'Options for how to view the content' },
-        { text: 'Edit' },
-        {
-          text: 'Share',
-          children: [
-            {
-              text: 'On social media',
-              children: [{ text: 'Facebook' }, { text: 'Twitter' }, { text: 'Instagram' }],
+      export class DraggingPositionAdjuster {
+        offsetX = 0;
+        offsetY = 0;
+
+        draggingStarts(mouseDownTargetElement, mouseDownEvent) {
+          this.offsetX = mouseDownEvent.clientX - mouseDownTargetElement.getBoundingClientRect().left;
+          this.offsetY = mouseDownEvent.clientY - mouseDownTargetElement.getBoundingClientRect().top;
+        }
+
+        dragging(element, mouseMoveEvent) {
+          const mouseX = mouseMoveEvent.clientX;
+          const mouseY = mouseMoveEvent.clientY;
+          const left = mouseX - this.offsetX;
+          const right = mouseX - this.offsetX + element.getBoundingClientRect().width;
+          const top = mouseY - this.offsetY;
+          const bottom = mouseY - this.offsetY + element.getBoundingClientRect().height;
+          return this.adjust(element, left, top, right, bottom);
+        }
+        adjust(element, left, top, right, bottom) {
+          let resultLeft;
+          let resultTop;
+          let resultBottom;
+          let resultRight;
+
+          const docWidth = document.documentElement.getBoundingClientRect().width;
+          const docHeight = document.documentElement.getBoundingClientRect().height;
+          if ((right + left) / 2 < docWidth / 2) {
+            element.style.setProperty('--left', `${left}px`);
+            element.style.setProperty('--right', '');
+            resultRight = undefined;
+            resultLeft = Math.max(0, left);
+          } else {
+            element.style.removeProperty('--left');
+            element.style.setProperty('--right', `${docWidth - right}px`);
+            resultLeft = undefined;
+            resultRight = Math.max(0, docWidth - right);
+          }
+
+          if ((top + bottom) / 2 < docHeight / 2) {
+            element.style.setProperty('--top', `${top}px`);
+            element.style.setProperty('--bottom', '');
+            resultBottom = undefined;
+            resultTop = Math.max(0, top);
+          } else {
+            element.style.setProperty('--top', '');
+            element.style.setProperty('--bottom', `${docHeight - bottom}px`);
+            resultTop = undefined;
+            resultBottom = Math.max(0, docHeight - bottom);
+          }
+          return {
+            left: resultLeft,
+            right: resultRight,
+            top: resultTop,
+            bottom: resultBottom,
+          };
+        }
+
+        anchor(element) {
+          const { left, top, bottom, right } = element.getBoundingClientRect();
+          return this.adjust(element, left, top, right, bottom);
+        }
+
+        anchorLeftTop(element) {
+          const { left, top } = element.getBoundingClientRect();
+          element.style.setProperty('--left', `${left}px`);
+          element.style.setProperty('--right', '');
+          element.style.setProperty('--top', `${top}px`);
+          element.style.setProperty('--bottom', ``);
+          return {
+            left,
+            top,
+          };
+        }
+      }
+
+      const draggingPositionAdjuster = new DraggingPositionAdjuster();
+
+      const DRAGGING_START_THRESHOLD_IN_PX = 8;
+
+      export class ActivationBtn extends LitElement {
+        static get properties() {
+          return {
+            dragging: {
+              type: Boolean,
             },
-            { text: 'By email' },
-            { text: 'Get link' },
-          ],
-        },
-        {
-          text: 'Move',
-          tooltip: 'Move to a different folder or trash.',
-          children: [{ text: 'To folder' }, { text: 'To trash' }],
-        },
-        { text: 'Duplicate', tooltip: 'Create a duplicate' },
-      ];
+            initialMouseDownPosition: {
+              type: Object,
+            },
+          };
+        }
+
+        static get styles() {
+          return [
+            css`
+              :host {
+                --space: 8px;
+                --height: 28px;
+                --width: 28px;
+                position: absolute;
+                top: clamp(var(--space), var(--top), calc(100vh - var(--height) - var(--space)));
+                left: clamp(var(--space), var(--left), calc(100vw - var(--width) - var(--space)));
+                bottom: clamp(var(--space), var(--bottom), calc(100vh - var(--height) - var(--space)));
+                right: clamp(var(--space), var(--right), calc(100vw - var(--width) - var(--space)));
+                user-select: none;
+                -ms-user-select: none;
+                -moz-user-select: none;
+                -webkit-user-select: none;
+                /* Don't add a z-index or anything else that creates a stacking context */
+              }
+              :host .menu-button {
+                min-width: unset;
+              }
+              :host([document-hidden]) {
+                -webkit-filter: grayscale(100%); /* Chrome, Safari, Opera */
+                filter: grayscale(100%);
+              }
+
+              .menu-button::part(container) {
+                overflow: visible;
+              }
+
+              .menu-button vaadin-menu-bar-button {
+                all: initial;
+                display: block;
+                position: relative;
+                z-index: var(--z-index-activation-button);
+                width: var(--width);
+                height: var(--height);
+                overflow: hidden;
+                color: transparent;
+                background: hsl(0 0% 0% / 0.25);
+                border-radius: 8px;
+                box-shadow: 0 0 0 1px hsl(0 0% 100% / 0.1);
+                cursor: default;
+                -webkit-backdrop-filter: blur(8px);
+                backdrop-filter: blur(8px);
+                transition:
+                  box-shadow 0.2s,
+                  background-color 0.2s;
+              }
+
+              /* pointer-events property is set when the menu is open */
+
+              .menu-button[style*='pointer-events'] + .monkey-patch-close-on-hover {
+                position: fixed; /* escapes the host positioning context */
+                inset: 0;
+                bottom: 40px;
+                z-index: calc(var(--z-index-popover) - 1);
+                pointer-events: auto;
+              }
+
+              /* vaadin symbol */
+
+              .menu-button vaadin-menu-bar-button::after {
+                all: initial;
+                content: '';
+                position: absolute;
+                inset: 1px;
+                background: url('data:image/svg+xml;utf8,<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12.7407 9.70401C12.7407 9.74417 12.7378 9.77811 12.7335 9.81479C12.7111 10.207 12.3897 10.5195 11.9955 10.5195C11.6014 10.5195 11.2801 10.209 11.2577 9.8169C11.2534 9.7801 11.2504 9.74417 11.2504 9.70401C11.2504 9.31225 11.1572 8.90867 10.2102 8.90867H7.04307C5.61481 8.90867 5 8.22698 5 6.86345V5.70358C5 5.31505 5.29521 5 5.68008 5C6.06495 5 6.35683 5.31505 6.35683 5.70358V6.09547C6.35683 6.53423 6.655 6.85413 7.307 6.85413H10.4119C11.8248 6.85413 11.9334 7.91255 11.98 8.4729H12.0111C12.0577 7.91255 12.1663 6.85413 13.5791 6.85413H16.6841C17.3361 6.85413 17.614 6.54529 17.614 6.10641L17.6158 5.70358C17.6158 5.31505 17.9246 5 18.3095 5C18.6943 5 19 5.31505 19 5.70358V6.86345C19 8.22698 18.3763 8.90867 16.9481 8.90867H13.7809C12.8338 8.90867 12.7407 9.31225 12.7407 9.70401Z" fill="white"/><path d="M12.7536 17.7785C12.6267 18.0629 12.3469 18.2608 12.0211 18.2608C11.6907 18.2608 11.4072 18.0575 11.2831 17.7668C11.2817 17.7643 11.2803 17.7619 11.279 17.7595C11.2761 17.7544 11.2732 17.7495 11.2704 17.744L8.45986 12.4362C8.3821 12.2973 8.34106 12.1399 8.34106 11.9807C8.34106 11.4732 8.74546 11.0603 9.24238 11.0603C9.64162 11.0603 9.91294 11.2597 10.0985 11.6922L12.0216 15.3527L13.9468 11.6878C14.1301 11.2597 14.4014 11.0603 14.8008 11.0603C15.2978 11.0603 15.7021 11.4732 15.7021 11.9807C15.7021 12.1399 15.6611 12.2973 15.5826 12.4374L12.7724 17.7446C12.7683 17.7524 12.7642 17.7597 12.7601 17.767C12.7579 17.7708 12.7557 17.7746 12.7536 17.7785Z" fill="white"/></svg>');
+                background-size: 100%;
+              }
+            `,
+          ];
+        }
+
+        firstUpdated() {
+          this.menubar = this.shadowRoot.querySelector('vaadin-menu-bar');
+        }
+
+        connectedCallback() {
+          super.connectedCallback();
+          this.addEventListener('mousedown', this.mouseDownListener);
+          document.addEventListener('mouseup', this.documentMouseUpListener);
+        }
+
+        disconnectedCallback() {
+          super.disconnectedCallback();
+          this.removeEventListener('mousedown', this.mouseDownListener);
+          document.removeEventListener('mouseup', this.documentMouseUpListener);
+        }
+
+        /**
+         * Adds mouse move event to document and stores initialMouseDownPosition
+         * @param e
+         */
+        mouseDownListener = (e) => {
+          this.initialMouseDownPosition = { x: e.clientX, y: e.clientY };
+          draggingPositionAdjuster.draggingStarts(this, e);
+          document.addEventListener('mousemove', this.documentDraggingMouseMoveEventListener);
+        };
+
+        /**
+         * Tracks mouse move listener, added in mouseDown.
+         * @param e
+         */
+        documentDraggingMouseMoveEventListener = (e) => {
+          if (this.initialMouseDownPosition && !this.dragging) {
+            // Dragging should start moving the pointer for some threshold while holding first mouse button, not in mousedown directly
+            const { clientX, clientY } = e;
+            this.dragging =
+              Math.abs(clientX - this.initialMouseDownPosition.x) +
+                Math.abs(clientY - this.initialMouseDownPosition.y) >
+              DRAGGING_START_THRESHOLD_IN_PX;
+          }
+          if (this.dragging) {
+            this.setOverlayVisibility(false);
+            draggingPositionAdjuster.dragging(this, e);
+          }
+        };
+
+        /**
+         * To hide overlay while dragging
+         * @param visible
+         */
+        setOverlayVisibility(visible) {
+          // const overlay = this.shadowRoot.querySelector('vaadin-menu-bar-button').__overlay;
+          const overlay = this.menubar._subMenu._overlayElement;
+          if (visible) {
+            overlay?.style.setProperty('display', 'flex');
+            overlay?.style.setProperty('visibility', 'visible');
+            console.log('show');
+          } else {
+            overlay?.style.setProperty('display', 'none');
+            overlay?.style.setProperty('visibility', 'invisible');
+            console.log('hide');
+          }
+        }
+
+        /**
+         * To hide
+         * @param e
+         */
+        documentMouseUpListener = (e) => {
+          if (this.dragging) {
+            const positionValues = draggingPositionAdjuster.dragging(this, e);
+            this.setOverlayVisibility(true);
+          }
+          this.dragging = false;
+          // Clearing mouse down.
+          this.initialMouseDownPosition = null;
+          // Without this, activation button click is invoked if mouse up on button.
+          document.removeEventListener('mousemove', this.documentDraggingMouseMoveEventListener);
+          this.setMenuBarOnClick();
+        };
+
+        render() {
+          const items = [
+            {
+              text: 'Vaadin Copilot',
+              children: [
+                {
+                  text: 'On social media',
+                  children: [{ text: 'Facebook' }, { text: 'Twitter' }, { text: 'Instagram' }],
+                },
+                { text: 'By email' },
+                { text: 'Get link' },
+              ],
+            },
+          ];
+          console.log(`dragging =${this.dragging}`);
+          return html`
+            <vaadin-menu-bar
+              class="menu-button"
+              .items="${items}"
+              @item-selected="${(e) => {
+                this.handleMenuItemClick(e.detail.value);
+              }}"
+              open-on-hover
+              overlay-class="activation-button-menu"
+            >
+            </vaadin-menu-bar>
+            <div class="monkey-patch-close-on-hover" @mouseenter="${this.closeMenu}"></div>
+            <div part="attention-required-indicator"></div>
+          `;
+        }
+
+        dispatchSpotlightActivationEvent = (state) => {};
+
+        activationBtnClicked = (e) => {
+          if (this.dragging) {
+            e.stopPropagation();
+            this.dragging = false;
+            return;
+          }
+          e.stopPropagation();
+          this.dispatchEvent(new CustomEvent('activation-btn-clicked'));
+        };
+
+        closeMenu() {
+          this.menubar._close();
+        }
+
+        handleMenuItemClick(detail) {}
+
+        setMenuBarOnClick = () => {
+          const menubarButton = this.shadowRoot.querySelector('vaadin-menu-bar-button');
+          if (menubarButton) {
+            menubarButton.onclick = this.activationBtnClicked;
+          }
+        };
+      }
+
+      customElements.define('activation-btn', ActivationBtn);
     </script>
   </head>
 
   <body>
-    <vaadin-menu-bar>
-      <vaadin-tooltip slot="tooltip" hover-delay="500" hide-delay="500"></vaadin-tooltip>
-    </vaadin-menu-bar>
+    <activation-btn></activation-btn>
   </body>
 </html>
