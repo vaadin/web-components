@@ -21,8 +21,6 @@
   "type": "module",
   "files": [
     "src",
-    "!src/vaadin-lit-integer-field.d.ts",
-    "!src/vaadin-lit-integer-field.js",
     "theme",
     "vaadin-*.d.ts",
     "vaadin-*.js",
