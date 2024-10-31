@@ -271,6 +271,8 @@ export const UploadMixin = (superClass) =>
          * Note that this only allows selecting a single directory, and that
          * selecting files is not supported in this mode. Browsers may request
          * a confirmation from the user before allowing to upload a directory.
+         * In this mode it is still possible to add a combination of files and
+         * directories using drag and drop.
          */
         directory: {
           type: Boolean,
@@ -539,8 +541,11 @@ export const UploadMixin = (superClass) =>
 
         // Only update text content for the default button element
         if (addButton === this._addButtonController.defaultNode) {
-          const translation = this.directory ? i18n.addDirectories : i18n.addFiles;
-          addButton.textContent = this._i18nPlural(maxFiles, translation);
+          if (this.directory) {
+            addButton.textContent = i18n.addDirectories.one;
+          } else {
+            addButton.textContent = this._i18nPlural(maxFiles, i18n.addFiles);
+          }
         }
       }
     }
@@ -1000,7 +1005,7 @@ export const UploadMixin = (superClass) =>
 
     /** @private */
     _i18nPlural(value, plural) {
-      return (value === 1 ? plural.one : plural.many) || plural.one;
+      return value === 1 ? plural.one : plural.many;
     }
 
     /** @protected */
