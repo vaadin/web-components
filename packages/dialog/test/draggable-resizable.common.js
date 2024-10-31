@@ -335,6 +335,8 @@ describe('resizable', () => {
     expect(onResize.calledOnce).to.be.true;
     expect(Math.floor(resizedBounds.width)).to.be.eql(parseInt(detail.width));
     expect(Math.floor(resizedBounds.height)).to.be.eql(parseInt(detail.height));
+    expect(Math.floor(resizedBounds.left)).to.be.eql(parseInt(detail.left));
+    expect(Math.floor(resizedBounds.top)).to.be.eql(parseInt(detail.top));
     expect(parseInt(detail.contentWidth)).to.be.eql(parseInt(contentStyles.width));
     expect(parseInt(detail.contentHeight)).to.be.eql(parseInt(contentStyles.height) - verticalPadding);
   });

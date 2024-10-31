@@ -22,6 +22,8 @@ export type DialogResizeDimensions = {
   height: string;
   contentWidth: string;
   contentHeight: string;
+  top: string;
+  left: string;
 };
 
 export type DialogPosition = {
