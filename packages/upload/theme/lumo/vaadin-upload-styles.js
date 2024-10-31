@@ -4,8 +4,8 @@ import '@vaadin/vaadin-lumo-styles/sizing.js';
 import '@vaadin/vaadin-lumo-styles/spacing.js';
 import '@vaadin/vaadin-lumo-styles/style.js';
 import '@vaadin/vaadin-lumo-styles/typography.js';
-import '@vaadin/button/theme/lumo/vaadin-button.js';
-import '@vaadin/progress-bar/theme/lumo/vaadin-progress-bar.js';
+import '@vaadin/button/theme/lumo/vaadin-button-styles.js';
+import '@vaadin/progress-bar/theme/lumo/vaadin-progress-bar-styles.js';
 import { fieldButton } from '@vaadin/vaadin-lumo-styles/mixins/field-button.js';
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
