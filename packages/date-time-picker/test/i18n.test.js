@@ -2,18 +2,7 @@ import { expect } from '@vaadin/chai-plugins';
 import { aTimeout, fixtureSync } from '@vaadin/testing-helpers';
 import '../vaadin-date-time-picker.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
-
-const formatTime = (...args) =>
-  customElements
-    .get('vaadin-time-picker')
-    .properties.i18n.value()
-    .formatTime(...args);
-
-const parseTime = (...args) =>
-  customElements
-    .get('vaadin-time-picker')
-    .properties.i18n.value()
-    .parseTime(...args);
+import { formatISOTime, parseISOTime } from '@vaadin/time-picker/src/vaadin-time-picker-helper.js';
 
 customElements.define(
   'dtp-i18n-default',
@@ -31,8 +20,8 @@ customElements.define(
               cancel: 'Peruuta', // For date picker
 
               // formatTime and parseTime are needed so that time picker doesn't throw errors on init
-              formatTime,
-              parseTime,
+              formatTime: formatISOTime,
+              parseTime: parseISOTime,
             };
           },
         },
@@ -67,8 +56,8 @@ customElements.define(
           type: Object,
           value: () => {
             return {
-              formatTime,
-              parseTime,
+              formatTime: formatISOTime,
+              parseTime: parseISOTime,
             };
           },
         },
