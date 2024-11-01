@@ -1,10 +1,9 @@
 import { expect } from '@vaadin/chai-plugins';
-import { enter, fixtureSync, nextRender } from '@vaadin/testing-helpers';
+import { enter, fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import { TimePicker } from '../src/vaadin-time-picker.js';
 import { setInputValue } from './helpers.js';
 
-class TimePicker20Element extends TimePicker {
+class TimePicker20Element extends customElements.get('vaadin-time-picker') {
   checkValidity() {
     return this.value === '20:00';
   }
@@ -70,8 +69,9 @@ describe('validation', () => {
   describe('basic', () => {
     let validateSpy, changeSpy, valueChangedSpy;
 
-    beforeEach(() => {
+    beforeEach(async () => {
       timePicker = fixtureSync(`<vaadin-time-picker></vaadin-time-picker>`);
+      await nextRender();
       validateSpy = sinon.spy(timePicker, 'validate');
       changeSpy = sinon.spy();
       timePicker.addEventListener('change', changeSpy);
@@ -118,10 +118,11 @@ describe('validation', () => {
       expect(event.detail.valid).to.be.true;
     });
 
-    it('should fire a validated event on validation failure', () => {
+    it('should fire a validated event on validation failure', async () => {
       const validatedSpy = sinon.spy();
       timePicker.addEventListener('validated', validatedSpy);
       timePicker.required = true;
+      await nextFrame();
       timePicker.validate();
 
       expect(validatedSpy.calledOnce).to.be.true;
@@ -131,8 +132,9 @@ describe('validation', () => {
   });
 
   describe('input value', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       timePicker = fixtureSync(`<vaadin-time-picker></vaadin-time-picker>`);
+      await nextRender();
     });
 
     it('should be valid when committing a valid time', () => {
@@ -156,8 +158,9 @@ describe('validation', () => {
   });
 
   describe('required', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       timePicker = fixtureSync(`<vaadin-time-picker required></vaadin-time-picker>`);
+      await nextRender();
     });
 
     it('should fail validation without value', () => {
@@ -171,8 +174,9 @@ describe('validation', () => {
   });
 
   describe('min', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       timePicker = fixtureSync(`<vaadin-time-picker min="10:00"></vaadin-time-picker>`);
+      await nextRender();
     });
 
     it('should pass validation without value', () => {
@@ -196,8 +200,9 @@ describe('validation', () => {
   });
 
   describe('max', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       timePicker = fixtureSync(`<vaadin-time-picker max="10:00"></vaadin-time-picker>`);
+      await nextRender();
     });
 
     it('should pass validation without value', () => {
@@ -221,8 +226,9 @@ describe('validation', () => {
   });
 
   describe('pattern', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       timePicker = fixtureSync(`<vaadin-time-picker pattern="^1\\d:.*"></vaadin-time-picker>`);
+      await nextRender();
     });
 
     it('should pass validation without value', () => {
@@ -241,8 +247,9 @@ describe('validation', () => {
   });
 
   describe('custom validator', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       timePicker = fixtureSync(`<vaadin-time-picker-20></vaadin-time-picker-20>`);
+      await nextRender();
     });
 
     it('should validate correctly with custom validator', () => {

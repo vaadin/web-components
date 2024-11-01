@@ -1,16 +1,15 @@
 import { expect } from '@vaadin/chai-plugins';
-import { enter, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
+import { enter, fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import './not-animated-styles.js';
-import '../vaadin-time-picker.js';
 import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
 import { setInputValue } from './helpers.js';
 
 describe('time-picker', () => {
   let timePicker, comboBox, inputElement;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     timePicker = fixtureSync(`<vaadin-time-picker></vaadin-time-picker>`);
+    await nextRender();
     comboBox = timePicker.$.comboBox;
     inputElement = timePicker.inputElement;
   });
@@ -174,16 +173,19 @@ describe('time-picker', () => {
   });
 
   describe('properties and attributes', () => {
-    it('should propagate required property to input', () => {
+    it('should propagate required property to input', async () => {
       timePicker.required = true;
+      await nextFrame();
       expect(inputElement.required).to.be.true;
 
       timePicker.required = false;
+      await nextFrame();
       expect(inputElement.required).to.be.false;
     });
 
-    it('should reflect readonly property to attribute', () => {
+    it('should reflect readonly property to attribute', async () => {
       timePicker.readonly = true;
+      await nextFrame();
       expect(timePicker.hasAttribute('readonly')).to.be.true;
     });
   });
@@ -191,9 +193,10 @@ describe('time-picker', () => {
   describe('clear button', () => {
     let clearButton;
 
-    beforeEach(() => {
+    beforeEach(async () => {
       clearButton = timePicker.$.clearButton;
       timePicker.clearButtonVisible = true;
+      await nextFrame();
     });
 
     it('should not show clear button when disabled', () => {
@@ -221,10 +224,11 @@ describe('time-picker', () => {
       expect(event.defaultPrevented).to.be.true;
     });
 
-    it('should propagate clear button to the internal combo-box', () => {
+    it('should propagate clear button to the internal combo-box', async () => {
       expect(comboBox.clearButtonVisible).to.be.true;
 
       timePicker.clearButtonVisible = false;
+      await nextFrame();
       expect(comboBox.clearButtonVisible).to.be.false;
     });
   });

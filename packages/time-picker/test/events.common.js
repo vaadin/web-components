@@ -1,9 +1,7 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync } from '@vaadin/testing-helpers';
+import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
-import './not-animated-styles.js';
-import '../vaadin-time-picker.js';
 
 describe('events', () => {
   let timePicker;
@@ -11,10 +9,11 @@ describe('events', () => {
   describe('has-input-value-changed event', () => {
     let clearButton, hasInputValueChangedSpy, valueChangedSpy;
 
-    beforeEach(() => {
+    beforeEach(async () => {
       hasInputValueChangedSpy = sinon.spy();
       valueChangedSpy = sinon.spy();
       timePicker = fixtureSync('<vaadin-time-picker clear-button-visible></vaadin-time-picker>');
+      await nextRender();
       clearButton = timePicker.shadowRoot.querySelector('[part=clear-button]');
       timePicker.addEventListener('has-input-value-changed', hasInputValueChangedSpy);
       timePicker.addEventListener('value-changed', valueChangedSpy);

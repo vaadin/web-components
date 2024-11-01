@@ -34,6 +34,7 @@ export const TimePickerMixin = (superClass) =>
           type: String,
           notify: true,
           value: '',
+          sync: true,
         },
 
         /**
@@ -44,6 +45,7 @@ export const TimePickerMixin = (superClass) =>
           notify: true,
           value: false,
           reflectToAttribute: true,
+          sync: true,
         },
 
         /**
@@ -58,6 +60,7 @@ export const TimePickerMixin = (superClass) =>
         min: {
           type: String,
           value: '',
+          sync: true,
         },
 
         /**
@@ -72,6 +75,7 @@ export const TimePickerMixin = (superClass) =>
         max: {
           type: String,
           value: '',
+          sync: true,
         },
 
         /**
@@ -92,6 +96,7 @@ export const TimePickerMixin = (superClass) =>
          */
         step: {
           type: Number,
+          sync: true,
         },
 
         /**
@@ -100,6 +105,7 @@ export const TimePickerMixin = (superClass) =>
          */
         autoOpenDisabled: {
           type: Boolean,
+          sync: true,
         },
 
         /**
@@ -144,6 +150,7 @@ export const TimePickerMixin = (superClass) =>
          */
         i18n: {
           type: Object,
+          sync: true,
           value: () => {
             return {
               formatTime: formatISOTime,
@@ -155,12 +162,14 @@ export const TimePickerMixin = (superClass) =>
         /** @private */
         _comboBoxValue: {
           type: String,
+          sync: true,
           observer: '__comboBoxValueChanged',
         },
 
         /** @private */
         __dropdownItems: {
           type: Array,
+          sync: true,
         },
       };
     }
