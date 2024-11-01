@@ -391,7 +391,7 @@ describe('time-picker', () => {
 
   describe('custom functions', () => {
     it('should use custom parser if that exists', () => {
-      timePicker.set('i18n.parseTime', sinon.stub().returns({ hours: 12, minutes: 0, seconds: 0 }));
+      timePicker.i18n = { ...timePicker.i18n, parseTime: sinon.stub().returns({ hours: 12, minutes: 0, seconds: 0 }) };
       timePicker.value = '12';
       expect(timePicker.i18n.parseTime.args[0][0]).to.be.equal('12:00');
       expect(timePicker.value).to.be.equal('12:00');
@@ -399,10 +399,10 @@ describe('time-picker', () => {
 
     it('should align values of dropdown and input when i18n was reassigned', () => {
       timePicker.value = '12';
-      timePicker.set('i18n', {
+      timePicker.i18n = {
         formatTime: sinon.stub().withArgs({ hours: 12, minutes: 0 }).returns('12:00 AM'),
         parseTime: sinon.stub().returns({ hours: 12, minutes: 0, seconds: 0 }),
-      });
+      };
       expect(comboBox.selectedItem).to.be.deep.equal({ label: '12:00 AM', value: '12:00 AM' });
       expect(comboBox.value).to.be.equal('12:00 AM');
       expect(inputElement.value).to.be.equal('12:00 AM');
@@ -410,20 +410,20 @@ describe('time-picker', () => {
     });
 
     it('should use custom formatter if that exists', () => {
-      timePicker.set('i18n', {
+      timePicker.i18n = {
         formatTime: sinon.stub().withArgs({ hours: 12, minutes: 0 }).returns('12:00 AM'),
         parseTime: sinon.stub().returns({ hours: 12, minutes: 0, seconds: 0 }),
-      });
+      };
       timePicker.value = '12';
       expect(timePicker.value).to.be.equal('12:00');
       expect(comboBox.value).to.be.equal('12:00 AM');
     });
 
     it('should accept custom time formatter', () => {
-      timePicker.set('i18n.formatTime', sinon.stub().returns('1200'));
-      const parseTime = sinon.stub();
-      parseTime.withArgs('1200').returns({ hours: 12, minutes: 0 });
-      timePicker.set('i18n.parseTime', parseTime);
+      timePicker.i18n = {
+        formatTime: sinon.stub().returns('1200'),
+        parseTime: sinon.stub().withArgs('1200').returns({ hours: 12, minutes: 0 }),
+      };
       timePicker.value = '12:00';
       expect(inputElement.value).to.equal('1200');
       expect(timePicker.value).to.equal('12:00');

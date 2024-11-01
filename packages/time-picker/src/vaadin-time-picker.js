@@ -323,7 +323,7 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
   static get observers() {
     return [
       '__updateAriaAttributes(__dropdownItems, opened, inputElement)',
-      '__updateDropdownItems(i18n.*, min, max, step)',
+      '__updateDropdownItems(i18n, min, max, step)',
     ];
   }
 
@@ -589,7 +589,7 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
   }
 
   /** @private */
-  __updateDropdownItems(_i18n, min, max, step) {
+  __updateDropdownItems(i18n, min, max, step) {
     const minTimeObj = validateTime(parseISOTime(min || MIN_ALLOWED_TIME), step);
     const minSec = this.__getSec(minTimeObj);
 
@@ -605,7 +605,7 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
     }
 
     if (this.value) {
-      this._comboBoxValue = this.i18n.formatTime(this.i18n.parseTime(this.value));
+      this._comboBoxValue = i18n.formatTime(i18n.parseTime(this.value));
     }
   }
 
