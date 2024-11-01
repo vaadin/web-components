@@ -7,6 +7,11 @@ import { InputControlMixin } from '@vaadin/field-base/src/input-control-mixin.js
 import { PatternMixin } from '@vaadin/field-base/src/pattern-mixin.js';
 import { formatISOTime, parseISOTime, validateTime } from './vaadin-time-picker-helper.js';
 
+export const timePickerI18nDefaults = Object.freeze({
+  formatTime: formatISOTime,
+  parseTime: parseISOTime,
+});
+
 const MIN_ALLOWED_TIME = '00:00:00.000';
 const MAX_ALLOWED_TIME = '23:59:59.999';
 
@@ -151,12 +156,7 @@ export const TimePickerMixin = (superClass) =>
         i18n: {
           type: Object,
           sync: true,
-          value: () => {
-            return {
-              formatTime: formatISOTime,
-              parseTime: parseISOTime,
-            };
-          },
+          value: () => ({ ...timePickerI18nDefaults }),
         },
 
         /** @private */
