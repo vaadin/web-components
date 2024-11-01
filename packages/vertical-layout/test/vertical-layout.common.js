@@ -1,6 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync } from '@vaadin/testing-helpers';
-import '../vaadin-vertical-layout.js';
+import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import { getComputedCSSPropertyValue } from './helpers.js';
 
 describe('vaadin-vertical-layout', () => {
@@ -28,13 +27,14 @@ describe('vaadin-vertical-layout', () => {
   describe('theme variations', () => {
     let layout, c1, c2, space;
 
-    beforeEach(() => {
+    beforeEach(async () => {
       layout = fixtureSync(`
         <vaadin-vertical-layout style="width: 300px; height: 200px;">
           <div id="c1">c1</div>
           <div id="c2">c2</div>
         </vaadin-vertical-layout>
       `);
+      await nextFrame();
       c1 = layout.querySelector('#c1');
       c2 = layout.querySelector('#c2');
       space = getComputedCSSPropertyValue(layout, '--lumo-space-m');
