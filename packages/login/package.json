@@ -49,6 +49,7 @@
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.3.4",
+    "@vaadin/checkbox": "~24.4.12",
     "@vaadin/testing-helpers": "^0.6.0",
     "sinon": "^13.0.2"
   },
