@@ -1,20 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { aTimeout, fixtureSync } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import '../vaadin-notification.js';
-import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-
-registerStyles(
-  'vaadin-notification-card',
-  css`
-    :host {
-      width: 200px;
-      background: lightgrey;
-      animation: none !important;
-    }
-  `,
-  { moduleId: 'vaadin-notification-card-multiple-theme' },
-);
 
 describe('multiple notification', () => {
   let wrapper, notifications, container, regions;

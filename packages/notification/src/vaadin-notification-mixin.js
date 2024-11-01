@@ -26,6 +26,7 @@ export const NotificationContainerMixin = (superClass) =>
         opened: {
           type: Boolean,
           value: false,
+          sync: true,
           observer: '_openedChanged',
         },
       };
@@ -102,6 +103,7 @@ export const NotificationMixin = (superClass) =>
         assertive: {
           type: Boolean,
           value: false,
+          sync: true,
         },
 
         /**
@@ -112,6 +114,7 @@ export const NotificationMixin = (superClass) =>
         duration: {
           type: Number,
           value: 5000,
+          sync: true,
         },
 
         /**
@@ -122,6 +125,7 @@ export const NotificationMixin = (superClass) =>
           type: Boolean,
           value: false,
           notify: true,
+          sync: true,
           observer: '_openedChanged',
         },
 
@@ -134,6 +138,7 @@ export const NotificationMixin = (superClass) =>
           type: String,
           value: 'bottom-start',
           observer: '_positionChanged',
+          sync: true,
         },
 
         /**
@@ -145,7 +150,10 @@ export const NotificationMixin = (superClass) =>
          * - `notification` The reference to the `<vaadin-notification>` element.
          * @type {!NotificationRenderer | undefined}
          */
-        renderer: Function,
+        renderer: {
+          type: Function,
+          sync: true,
+        },
       };
     }
 
@@ -343,6 +351,10 @@ export const NotificationMixin = (superClass) =>
     _appendNotificationCard() {
       if (!this._card) {
         return;
+      }
+
+      if (this._container.performUpdate) {
+        this._container.performUpdate();
       }
 
       if (!this._container.shadowRoot.querySelector(`slot[name="${this.position}"]`)) {

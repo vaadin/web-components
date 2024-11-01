@@ -1,6 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { aTimeout, fixtureSync, oneEvent } from '@vaadin/testing-helpers';
-import '../vaadin-notification.js';
+import { aTimeout, fixtureSync, nextFrame, oneEvent } from '@vaadin/testing-helpers';
 
 describe('animated notifications', () => {
   let wrapper, notifications, container;
@@ -14,6 +13,7 @@ describe('animated notifications', () => {
         <vaadin-notification position="middle"></vaadin-notification>
       </div>
     `);
+    await nextFrame();
     notifications = Array.from(wrapper.children);
     container = notifications[0]._container;
 

@@ -1,18 +1,18 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import '../vaadin-notification.js';
 
 describe('renderer', () => {
   describe('basic', () => {
     let notification;
     let rendererContent;
 
-    beforeEach(() => {
+    beforeEach(async () => {
       rendererContent = document.createElement('p');
       rendererContent.textContent = 'renderer-content';
 
       notification = fixtureSync('<vaadin-notification></vaadin-notification>');
+      await nextFrame();
 
       // Force sync card attaching and removal instead of waiting for the animation
       sinon
