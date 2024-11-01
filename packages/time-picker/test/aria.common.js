@@ -1,12 +1,12 @@
 import { expect } from '@vaadin/chai-plugins';
-import { arrowDownKeyDown, escKeyDown, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
-import '../src/vaadin-time-picker.js';
+import { arrowDownKeyDown, escKeyDown, fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
 
 describe('ARIA', () => {
   let timePicker, comboBox, input;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     timePicker = fixtureSync(`<vaadin-time-picker></vaadin-time-picker>`);
+    await nextRender();
     comboBox = timePicker.$.comboBox;
     input = timePicker.inputElement;
   });
@@ -41,12 +41,14 @@ describe('ARIA', () => {
       expect(input.getAttribute('aria-activedescendant')).to.equal(items[1].id);
     });
 
-    it('should set aria-selected on item elements depending on the selected item', () => {
+    it('should set aria-selected on item elements depending on the selected item', async () => {
       timePicker.value = '00:00';
+      await nextFrame();
       expect(items[0].getAttribute('aria-selected')).to.equal('true');
       expect(items[1].getAttribute('aria-selected')).to.equal('false');
 
       timePicker.value = '01:00';
+      await nextFrame();
       expect(items[0].getAttribute('aria-selected')).to.equal('false');
       expect(items[1].getAttribute('aria-selected')).to.equal('true');
     });

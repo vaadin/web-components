@@ -1,14 +1,13 @@
 import { expect } from '@vaadin/chai-plugins';
-import { enter, fixtureSync } from '@vaadin/testing-helpers';
-import './not-animated-styles.js';
-import '../vaadin-time-picker.js';
+import { enter, fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import { setInputValue } from './helpers.js';
 
 describe('combo-box', () => {
   let timePicker, comboBox;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     timePicker = fixtureSync(`<vaadin-time-picker></vaadin-time-picker>`);
+    await nextRender();
     comboBox = timePicker.$.comboBox;
   });
 
@@ -111,8 +110,9 @@ describe('combo-box', () => {
 describe('autoOpenDisabled', () => {
   let timePicker, inputElement;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     timePicker = fixtureSync(`<vaadin-time-picker auto-open-disabled value="05:00"></vaadin-time-picker>`);
+    await nextRender();
     inputElement = timePicker.inputElement;
   });
 

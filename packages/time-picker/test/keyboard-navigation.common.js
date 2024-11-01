@@ -1,14 +1,13 @@
 import { expect } from '@vaadin/chai-plugins';
-import { arrowDown, arrowUp, fixtureSync } from '@vaadin/testing-helpers';
+import { arrowDown, arrowUp, fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import './not-animated-styles.js';
-import '../vaadin-time-picker.js';
 
 describe('keyboard navigation', () => {
   let timePicker, comboBox, inputElement;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     timePicker = fixtureSync(`<vaadin-time-picker></vaadin-time-picker>`);
+    await nextRender();
     comboBox = timePicker.$.comboBox;
     inputElement = timePicker.inputElement;
   });
@@ -219,7 +218,7 @@ describe('keyboard navigation', () => {
     it('should not open the overlay on arrow up', () => {
       timePicker.step = 0.5;
       arrowUp(inputElement);
-      expect(document.querySelector('vaadin-combo-box-overlay')).not.to.be.ok;
+      expect(document.querySelector('vaadin-time-picker-overlay')).not.to.be.ok;
     });
   });
 });
