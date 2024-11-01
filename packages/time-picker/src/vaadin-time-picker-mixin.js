@@ -162,11 +162,6 @@ export const TimePickerMixin = (superClass) =>
         __dropdownItems: {
           type: Array,
         },
-
-        /** @private */
-        _inputContainer: {
-          type: Object,
-        },
       };
     }
 

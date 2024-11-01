@@ -167,6 +167,13 @@ class TimePicker extends TimePickerMixin(ThemableMixin(ElementMixin(PolymerEleme
     `;
   }
 
+  static get properties() {
+    return {
+      /** @private */
+      _inputContainer: Object,
+    };
+  }
+
   /** @protected */
   ready() {
     super.ready();
