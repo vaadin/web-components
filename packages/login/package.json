@@ -49,6 +49,7 @@
   },
   "devDependencies": {
     "@vaadin/chai-plugins": "24.6.0-alpha4",
+    "@vaadin/checkbox": "24.6.0-alpha4",
     "@vaadin/testing-helpers": "^1.0.0",
     "sinon": "^18.0.0"
   },
