@@ -15,7 +15,7 @@ import { LabelledInputController } from '@vaadin/field-base/src/labelled-input-c
 import { PatternMixin } from '@vaadin/field-base/src/pattern-mixin.js';
 import { inputFieldShared } from '@vaadin/field-base/src/styles/input-field-shared-styles.js';
 import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { formatISOTime, parseISOTime } from './vaadin-time-picker-helper.js';
+import { formatISOTime, parseISOTime, validateTime } from './vaadin-time-picker-helper.js';
 
 const MIN_ALLOWED_TIME = '00:00:00.000';
 const MAX_ALLOWED_TIME = '23:59:59.999';
@@ -590,17 +590,17 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
 
   /** @private */
   __updateDropdownItems(_i18n, min, max, step) {
-    const minTimeObj = this.__validateTime(parseISOTime(min || MIN_ALLOWED_TIME));
+    const minTimeObj = validateTime(parseISOTime(min || MIN_ALLOWED_TIME), step);
     const minSec = this.__getSec(minTimeObj);
 
-    const maxTimeObj = this.__validateTime(parseISOTime(max || MAX_ALLOWED_TIME));
+    const maxTimeObj = validateTime(parseISOTime(max || MAX_ALLOWED_TIME), step);
     const maxSec = this.__getSec(maxTimeObj);
 
     this.__dropdownItems = this.__generateDropdownList(minSec, maxSec, step);
 
     if (step !== this.__oldStep) {
       this.__oldStep = step;
-      const parsedObj = this.__validateTime(parseISOTime(this.value));
+      const parsedObj = validateTime(parseISOTime(this.value), step);
       this.__updateValue(parsedObj);
     }
 
@@ -639,7 +639,7 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
 
     let time = -step + minSec;
     while (time + step >= minSec && time + step <= maxSec) {
-      const timeObj = this.__validateTime(this.__addStep(time * 1000, step));
+      const timeObj = validateTime(this.__addStep(time * 1000, step), step);
       time += step;
       const formatted = this.i18n.formatTime(timeObj);
       generatedList.push({ label: formatted, value: formatted });
@@ -729,44 +729,14 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
 
   /** @private */
   __updateValue(obj) {
-    const timeString = formatISOTime(this.__validateTime(obj)) || '';
+    const timeString = formatISOTime(validateTime(obj, this.step)) || '';
     this.value = timeString;
   }
 
   /** @private */
   __updateInputValue(obj) {
-    const timeString = this.i18n.formatTime(this.__validateTime(obj)) || '';
+    const timeString = this.i18n.formatTime(validateTime(obj, this.step)) || '';
     this._comboBoxValue = timeString;
-  }
-
-  /** @private */
-  __validateTime(timeObject) {
-    if (timeObject) {
-      const stepSegment = this.__getStepSegment();
-      timeObject.hours = parseInt(timeObject.hours);
-      timeObject.minutes = parseInt(timeObject.minutes || 0);
-      timeObject.seconds = stepSegment < 3 ? undefined : parseInt(timeObject.seconds || 0);
-      timeObject.milliseconds = stepSegment < 4 ? undefined : parseInt(timeObject.milliseconds || 0);
-    }
-    return timeObject;
-  }
-
-  /** @private */
-  __getStepSegment() {
-    if (this.step % 3600 === 0) {
-      // Accept hours
-      return 1;
-    } else if (this.step % 60 === 0 || !this.step) {
-      // Accept minutes
-      return 2;
-    } else if (this.step % 1 === 0) {
-      // Accept seconds
-      return 3;
-    } else if (this.step < 1) {
-      // Accept milliseconds
-      return 4;
-    }
-    return undefined;
   }
 
   /**

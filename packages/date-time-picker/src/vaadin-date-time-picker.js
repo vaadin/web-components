@@ -20,7 +20,7 @@ import {
 import { FieldMixin } from '@vaadin/field-base/src/field-mixin.js';
 import { inputFieldShared } from '@vaadin/field-base/src/styles/input-field-shared-styles.js';
 import { TimePicker } from '@vaadin/time-picker/src/vaadin-time-picker.js';
-import { formatISOTime, parseISOTime } from '@vaadin/time-picker/src/vaadin-time-picker-helper.js';
+import { formatISOTime, parseISOTime, validateTime } from '@vaadin/time-picker/src/vaadin-time-picker-helper.js';
 import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 registerStyles('vaadin-date-time-picker', inputFieldShared, { moduleId: 'vaadin-date-time-picker' });
@@ -835,27 +835,16 @@ class DateTimePicker extends FieldMixin(DisabledMixin(FocusMixin(ThemableMixin(E
    */
   __dateToIsoTimeString(date) {
     return formatISOTime(
-      this.__validateTime({
-        hours: date.getUTCHours(),
-        minutes: date.getUTCMinutes(),
-        seconds: date.getUTCSeconds(),
-        milliseconds: date.getUTCMilliseconds(),
-      }),
+      validateTime(
+        {
+          hours: date.getUTCHours(),
+          minutes: date.getUTCMinutes(),
+          seconds: date.getUTCSeconds(),
+          milliseconds: date.getUTCMilliseconds(),
+        },
+        this.step,
+      ),
     );
-  }
-
-  /**
-   * @param {!TimePickerTime} timeObject
-   * @return {!TimePickerTime}
-   * @private
-   */
-  __validateTime(timeObject) {
-    if (timeObject) {
-      const stepSegment = this.__getStepSegment();
-      timeObject.seconds = stepSegment < 3 ? undefined : timeObject.seconds;
-      timeObject.milliseconds = stepSegment < 4 ? undefined : timeObject.milliseconds;
-    }
-    return timeObject;
   }
 
   /**
@@ -868,25 +857,6 @@ class DateTimePicker extends FieldMixin(DisabledMixin(FocusMixin(ThemableMixin(E
     const hasInvalidPickers = this.__pickers.some((picker) => !picker.checkValidity());
     const hasEmptyRequiredPickers = this.required && this.__pickers.some((picker) => !picker.value);
     return !hasInvalidPickers && !hasEmptyRequiredPickers;
-  }
-
-  // Copied from vaadin-time-picker
-  /** @private */
-  __getStepSegment() {
-    const step = this.step == null ? 60 : parseFloat(this.step);
-    if (step % 3600 === 0) {
-      // Accept hours
-      return 1;
-    } else if (step % 60 === 0 || !step) {
-      // Accept minutes
-      return 2;
-    } else if (step % 1 === 0) {
-      // Accept seconds
-      return 3;
-    } else if (step < 1) {
-      // Accept milliseconds
-      return 4;
-    }
   }
 
   /**

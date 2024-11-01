@@ -22,3 +22,11 @@ export function formatISOTime(time: TimePickerTime | undefined): string;
  * `{ hours: ..., minutes: ..., seconds: ..., milliseconds: ... }`.
  */
 export function parseISOTime(timeString: string): TimePickerTime | undefined;
+
+/**
+ * A function to validate the time object based on the given step.
+ */
+export function validateTime(
+  timeObject: TimePickerTime | undefined,
+  step: number | null | undefined,
+): TimePickerTime | undefined;
