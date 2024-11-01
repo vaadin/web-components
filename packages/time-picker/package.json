@@ -35,6 +35,7 @@
     "polymer"
   ],
   "dependencies": {
+    "@open-wc/dedupe-mixin": "^1.3.0",
     "@polymer/polymer": "^3.0.0",
     "@vaadin/combo-box": "24.6.0-alpha4",
     "@vaadin/component-base": "24.6.0-alpha4",
@@ -44,7 +45,8 @@
     "@vaadin/overlay": "24.6.0-alpha4",
     "@vaadin/vaadin-lumo-styles": "24.6.0-alpha4",
     "@vaadin/vaadin-material-styles": "24.6.0-alpha4",
-    "@vaadin/vaadin-themable-mixin": "24.6.0-alpha4"
+    "@vaadin/vaadin-themable-mixin": "24.6.0-alpha4",
+    "lit": "^3.0.0"
   },
   "devDependencies": {
     "@vaadin/chai-plugins": "24.6.0-alpha4",
