@@ -110,6 +110,11 @@ class VirtualList extends ElementMixin(ControllerMixin(ThemableMixin(PolymerElem
     return ['__itemsOrRendererChanged(items, renderer, __virtualizer)'];
   }
 
+  constructor() {
+    super();
+    this.__onDragStart = this.__onDragStart.bind(this);
+  }
+
   /** @protected */
   ready() {
     super.ready();
@@ -126,6 +131,22 @@ class VirtualList extends ElementMixin(ControllerMixin(ThemableMixin(PolymerElem
     this.addController(this.__overflowController);
 
     processTemplates(this);
+  }
+
+  /** @protected */
+  connectedCallback() {
+    super.connectedCallback();
+    // Chromium based browsers cannot properly generate drag images for elements
+    // that have children with massive heights. This workaround prevents crashes
+    // and performance issues by excluding the items from the drag image.
+    // https://github.com/vaadin/web-components/issues/7985
+    document.addEventListener('dragstart', this.__onDragStart, { capture: true });
+  }
+
+  /** @protected */
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    document.removeEventListener('dragstart', this.__onDragStart, { capture: true });
   }
 
   /**
@@ -176,6 +197,29 @@ class VirtualList extends ElementMixin(ControllerMixin(ThemableMixin(PolymerElem
     if ((renderer || hasRenderedItems) && virtualizer) {
       virtualizer.size = (items || []).length;
       virtualizer.update();
+    }
+  }
+
+  /** @private */
+  __onDragStart(e) {
+    // The dragged element can be the element itself or a parent of the element
+    if (!e.target.contains(this)) {
+      return;
+    }
+    // The threshold value 20000 provides a buffer to both
+    //   - avoid the crash and the performance issues
+    //   - unnecessarily avoid excluding items from the drag image
+    if (this.$.items.offsetHeight > 20000) {
+      const initialItemsMaxHeight = this.$.items.style.maxHeight;
+      const initialVirtualListOverflow = this.style.overflow;
+      // Momentarily hides the items until the browser starts generating the
+      // drag image.
+      this.$.items.style.maxHeight = '0';
+      this.style.overflow = 'hidden';
+      requestAnimationFrame(() => {
+        this.$.items.style.maxHeight = initialItemsMaxHeight;
+        this.style.overflow = initialVirtualListOverflow;
+      });
     }
   }
 

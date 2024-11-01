@@ -145,4 +145,90 @@ describe('virtual-list', () => {
       });
     });
   });
+  describe('drag and drop', () => {
+    let container;
+    let items;
+
+    beforeEach(async () => {
+      container = fixtureSync(`
+      <div style="width: 300px; height: 300px;">
+        <vaadin-virtual-list draggable="true"></vaadin-virtual-list>
+      </div>
+    `);
+      list = container.querySelector('vaadin-virtual-list');
+      list.renderer = (root, _, { item }) => {
+        root.innerHTML = `<div>${item.label}</div>`;
+      };
+      document.body.appendChild(container);
+      await nextFrame();
+      items = list.shadowRoot.querySelector('#items');
+    });
+
+    async function setVirtualListItems(count) {
+      list.items = Array.from({ length: count }).map((_, i) => {
+        return { label: `Item ${i}` };
+      });
+      await nextFrame();
+    }
+
+    function getState() {
+      return { itemsMaxHeight: items.style.maxHeight, listOverflow: list.style.overflow };
+    }
+
+    function getExpectedDragStartState() {
+      return { itemsMaxHeight: '0px', listOverflow: 'hidden' };
+    }
+
+    function assertStatesEqual(state1, state2) {
+      expect(state1.itemsMaxHeight).to.equal(state2.itemsMaxHeight);
+      expect(state1.listOverflow).to.equal(state2.listOverflow);
+    }
+
+    async function getStateDuringDragStart(element) {
+      let stateDuringDragStart;
+      element.addEventListener(
+        'dragstart',
+        () => {
+          stateDuringDragStart = getState();
+        },
+        { once: true },
+      );
+      element.dispatchEvent(new DragEvent('dragstart'));
+      await new Promise((resolve) => {
+        requestAnimationFrame(resolve);
+      });
+      return stateDuringDragStart;
+    }
+
+    it('should not change state on dragstart for small virtual lists', async () => {
+      await setVirtualListItems(10);
+      const initialState = getState();
+      const stateDuringDragStart = await getStateDuringDragStart(list);
+      assertStatesEqual(stateDuringDragStart, initialState);
+      const finalState = getState();
+      assertStatesEqual(finalState, initialState);
+    });
+
+    ['5000', '50000'].forEach((count) => {
+      it('should temporarily change state on dragstart for large virtual lists', async () => {
+        await setVirtualListItems(count);
+        const initialState = getState();
+        const stateDuringDragStart = await getStateDuringDragStart(list);
+        assertStatesEqual(stateDuringDragStart, getExpectedDragStartState());
+        const finalState = getState();
+        assertStatesEqual(finalState, initialState);
+      });
+
+      it('should temporarily change state on dragstart for large virtual lists in draggable containers', async () => {
+        list.removeAttribute('draggable');
+        container.setAttribute('draggable', true);
+        await setVirtualListItems(count);
+        const initialState = getState();
+        const stateDuringDragStart = await getStateDuringDragStart(container);
+        assertStatesEqual(stateDuringDragStart, getExpectedDragStartState());
+        const finalState = getState();
+        assertStatesEqual(finalState, initialState);
+      });
+    });
+  });
 });
