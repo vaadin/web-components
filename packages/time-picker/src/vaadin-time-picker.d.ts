@@ -7,13 +7,9 @@ import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { InputControlMixin } from '@vaadin/field-base/src/input-control-mixin.js';
 import { PatternMixin } from '@vaadin/field-base/src/pattern-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import type { TimePickerTime } from './vaadin-time-picker-helper.js';
 
-export interface TimePickerTime {
-  hours: number | string;
-  minutes: number | string;
-  seconds?: number | string;
-  milliseconds?: number | string;
-}
+export type { TimePickerTime };
 
 export interface TimePickerI18n {
   parseTime(time: string): TimePickerTime | undefined;

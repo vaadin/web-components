@@ -15,6 +15,7 @@ import { LabelledInputController } from '@vaadin/field-base/src/labelled-input-c
 import { PatternMixin } from '@vaadin/field-base/src/pattern-mixin.js';
 import { inputFieldShared } from '@vaadin/field-base/src/styles/input-field-shared-styles.js';
 import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { formatISOTime, parseISOTime } from './vaadin-time-picker-helper.js';
 
 const MIN_ALLOWED_TIME = '00:00:00.000';
 const MAX_ALLOWED_TIME = '23:59:59.999';
@@ -302,44 +303,8 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
         type: Object,
         value: () => {
           return {
-            formatTime: (time) => {
-              if (!time) {
-                return;
-              }
-
-              const pad = (num = 0, fmt = '00') => (fmt + num).substr((fmt + num).length - fmt.length);
-              // Always display hour and minute
-              let timeString = `${pad(time.hours)}:${pad(time.minutes)}`;
-              // Adding second and millisecond depends on resolution
-              if (time.seconds !== undefined) {
-                timeString += `:${pad(time.seconds)}`;
-              }
-              if (time.milliseconds !== undefined) {
-                timeString += `.${pad(time.milliseconds, '000')}`;
-              }
-              return timeString;
-            },
-            parseTime: (text) => {
-              // Parsing with RegExp to ensure correct format
-              const MATCH_HOURS = '(\\d|[0-1]\\d|2[0-3])';
-              const MATCH_MINUTES = '(\\d|[0-5]\\d)';
-              const MATCH_SECONDS = MATCH_MINUTES;
-              const MATCH_MILLISECONDS = '(\\d{1,3})';
-              const re = new RegExp(
-                `^${MATCH_HOURS}(?::${MATCH_MINUTES}(?::${MATCH_SECONDS}(?:\\.${MATCH_MILLISECONDS})?)?)?$`,
-                'u',
-              );
-              const parts = re.exec(text);
-              if (parts) {
-                // Allows setting the milliseconds with hundreds and tens precision
-                if (parts[4]) {
-                  while (parts[4].length < 3) {
-                    parts[4] += '0';
-                  }
-                }
-                return { hours: parts[1], minutes: parts[2], seconds: parts[3], milliseconds: parts[4] };
-              }
-            },
+            formatTime: formatISOTime,
+            parseTime: parseISOTime,
           };
         },
       },
@@ -625,17 +590,17 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
 
   /** @private */
   __updateDropdownItems(_i18n, min, max, step) {
-    const minTimeObj = this.__validateTime(this.__parseISO(min || MIN_ALLOWED_TIME));
+    const minTimeObj = this.__validateTime(parseISOTime(min || MIN_ALLOWED_TIME));
     const minSec = this.__getSec(minTimeObj);
 
-    const maxTimeObj = this.__validateTime(this.__parseISO(max || MAX_ALLOWED_TIME));
+    const maxTimeObj = this.__validateTime(parseISOTime(max || MAX_ALLOWED_TIME));
     const maxSec = this.__getSec(maxTimeObj);
 
     this.__dropdownItems = this.__generateDropdownList(minSec, maxSec, step);
 
     if (step !== this.__oldStep) {
       this.__oldStep = step;
-      const parsedObj = this.__validateTime(this.__parseISO(this.value));
+      const parsedObj = this.__validateTime(parseISOTime(this.value));
       this.__updateValue(parsedObj);
     }
 
@@ -689,8 +654,8 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
    * @override
    */
   _valueChanged(value, oldValue) {
-    const parsedObj = (this.__memoValue = this.__parseISO(value));
-    const newValue = this.__formatISO(parsedObj) || '';
+    const parsedObj = (this.__memoValue = parseISOTime(value));
+    const newValue = formatISOTime(parsedObj) || '';
 
     // Mark value set programmatically by the user
     // as committed for the change event detection.
@@ -764,7 +729,7 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
 
   /** @private */
   __updateValue(obj) {
-    const timeString = this.__formatISO(this.__validateTime(obj)) || '';
+    const timeString = formatISOTime(this.__validateTime(obj)) || '';
     this.value = timeString;
   }
 
@@ -802,18 +767,6 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
       return 4;
     }
     return undefined;
-  }
-
-  /** @private */
-  __formatISO(time) {
-    // The default i18n formatter implementation is ISO 8601 compliant
-    return TimePicker.properties.i18n.value().formatTime(time);
-  }
-
-  /** @private */
-  __parseISO(text) {
-    // The default i18n parser implementation is ISO 8601 compliant
-    return TimePicker.properties.i18n.value().parseTime(text);
   }
 
   /**
