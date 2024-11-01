@@ -20,6 +20,7 @@ import {
 import { FieldMixin } from '@vaadin/field-base/src/field-mixin.js';
 import { inputFieldShared } from '@vaadin/field-base/src/styles/input-field-shared-styles.js';
 import { TimePicker } from '@vaadin/time-picker/src/vaadin-time-picker.js';
+import { formatISOTime, parseISOTime } from '@vaadin/time-picker/src/vaadin-time-picker-helper.js';
 import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 registerStyles('vaadin-date-time-picker', inputFieldShared, { moduleId: 'vaadin-date-time-picker' });
@@ -779,26 +780,6 @@ class DateTimePicker extends FieldMixin(DisabledMixin(FocusMixin(ThemableMixin(E
   }
 
   /**
-   * Custom time object to string (ISO time)
-   * @param {!TimePickerTime} time Time components as properties { hours, minutes, seconds, milliseconds }
-   * @return {string} e.g. 'hh:mm', 'hh:mm:ss', 'hh:mm:ss.fff'
-   * @private
-   */
-  __formatTimeISO(time) {
-    return timePickerI18nDefaults.formatTime(time);
-  }
-
-  /**
-   * String (ISO time) to custom time object
-   * @param {string} str e.g. 'hh:mm', 'hh:mm:ss', 'hh:mm:ss.fff'
-   * @return {!TimePickerTime | undefined} Time components as properties { hours, minutes, seconds, milliseconds }
-   * @private
-   */
-  __parseTimeISO(str) {
-    return timePickerI18nDefaults.parseTime(str);
-  }
-
-  /**
    * String (ISO date time) to Date object
    * @param {string} str e.g. 'yyyy-mm-ddThh:mm', 'yyyy-mm-ddThh:mm:ss', 'yyyy-mm-ddThh:mm:ss.fff'
    * @return {Date | undefined}
@@ -817,7 +798,7 @@ class DateTimePicker extends FieldMixin(DisabledMixin(FocusMixin(ThemableMixin(E
       return;
     }
 
-    const time = this.__parseTimeISO(timeValue);
+    const time = parseISOTime(timeValue);
     if (!time) {
       return;
     }
@@ -853,7 +834,7 @@ class DateTimePicker extends FieldMixin(DisabledMixin(FocusMixin(ThemableMixin(E
    * @private
    */
   __dateToIsoTimeString(date) {
-    return this.__formatTimeISO(
+    return formatISOTime(
       this.__validateTime({
         hours: date.getUTCHours(),
         minutes: date.getUTCMinutes(),
