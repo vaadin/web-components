@@ -98,17 +98,18 @@ describe('login form submit', () => {
     beforeEach(async () => {
       overlay = fixtureSync(`
         <vaadin-login-overlay opened>
-          <input name="foo" value="bar" slot="custom-form-area">
-          <vaadin-text-field name="code" value="1234" slot="custom-form-area"></vaadin-text-field>
+          <input name="nativeCheckbox" type="checkbox" slot="custom-form-area">
+          <vaadin-checkbox name="vaadinCheckbox" slot="custom-form-area"></vaadin-checkbox>
+          <input name="nativeTextField" value="bar" slot="custom-form-area">
+          <vaadin-text-field name="vaadinTextField" value="1234" slot="custom-form-area"></vaadin-text-field>
         </vaadin-login-overlay>
       `);
       await nextRender();
       login = overlay.$.vaadinLoginForm;
     });
 
-    it('should add values of fields in the custom form area to the login event detail', () => {
+    it('should include values of text fields in login event detail', () => {
       const loginSpy = sinon.spy();
-
       overlay.addEventListener('login', loginSpy);
 
       const { vaadinLoginUsername } = fillUsernameAndPassword(login);
@@ -117,8 +118,38 @@ describe('login form submit', () => {
       expect(loginSpy.called).to.be.true;
 
       const { detail } = loginSpy.firstCall.args[0];
-      expect(detail.custom.foo).to.be.equal('bar');
-      expect(detail.custom.code).to.be.equal('1234');
+      expect(detail.custom.nativeTextField).to.be.equal('bar');
+      expect(detail.custom.vaadinTextField).to.be.equal('1234');
+    });
+
+    it('should not include values of unchecked checkboxes in login event detail', () => {
+      const loginSpy = sinon.spy();
+      overlay.addEventListener('login', loginSpy);
+
+      const { vaadinLoginUsername } = fillUsernameAndPassword(login);
+      enter(vaadinLoginUsername);
+      expect(loginSpy.called).to.be.true;
+
+      const event = loginSpy.firstCall.args[0];
+      expect(event.detail.custom).to.not.have.property('nativeCheckbox');
+      expect(event.detail.custom).to.not.have.property('vaadinCheckbox');
+    });
+
+    it('should include values of checked checkboxes in login event detail', () => {
+      const loginSpy = sinon.spy();
+      overlay.addEventListener('login', loginSpy);
+
+      const { vaadinLoginUsername } = fillUsernameAndPassword(login);
+
+      login.querySelector('[name=nativeCheckbox]').checked = true;
+      login.querySelector('[name=vaadinCheckbox]').checked = true;
+
+      enter(vaadinLoginUsername);
+      expect(loginSpy.called).to.be.true;
+
+      const event = loginSpy.firstCall.args[0];
+      expect(event.detail.custom.nativeCheckbox).to.equal('on');
+      expect(event.detail.custom.vaadinCheckbox).to.equal('on');
     });
 
     describe('form submit', () => {
@@ -127,8 +158,20 @@ describe('login form submit', () => {
         await nextRender();
       });
 
-      it('should submit values of fields in the custom form area to the native form', (done) => {
-        testFormSubmitValues(false, true, done, { foo: 'bar', code: '1234' });
+      it('should submit values of text fields in custom form area to the native form', (done) => {
+        testFormSubmitValues(false, true, done, { nativeTextField: 'bar', vaadinTextField: '1234' });
+      });
+
+      it('should submit values of checkboxes in custom form area to the native form when checked', (done) => {
+        login.querySelector('[name=nativeCheckbox]').checked = true;
+        login.querySelector('[name=vaadinCheckbox]').checked = true;
+
+        testFormSubmitValues(false, true, done, {
+          nativeCheckbox: 'on',
+          vaadinCheckbox: 'on',
+          nativeTextField: 'bar',
+          vaadinTextField: '1234',
+        });
       });
     });
   });
