@@ -19,6 +19,7 @@ import {
   resetReorderTimeout,
   setMaximumColumnWidth,
   setMinimumColumnWidth,
+  setMinimumRowHeight,
   setSpacing,
 } from './helpers.js';
 
@@ -34,6 +35,7 @@ describe('dashboard - widget reordering', () => {
 
     setMinimumColumnWidth(dashboard, columnWidth);
     setMaximumColumnWidth(dashboard, columnWidth);
+    setMinimumRowHeight(dashboard, undefined);
     setSpacing(dashboard, 0);
 
     dashboard.editable = true;

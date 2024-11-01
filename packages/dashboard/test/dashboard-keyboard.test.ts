@@ -39,6 +39,7 @@ describe('dashboard - keyboard interaction', () => {
     dashboard.addEventListener('keydown', keydownSpy);
     setMinimumColumnWidth(dashboard, columnWidth);
     setMaximumColumnWidth(dashboard, columnWidth);
+    setMinimumRowHeight(dashboard, undefined);
     setSpacing(dashboard, 0);
 
     dashboard.items = [{ id: 0 }, { id: 1 }, { items: [{ id: 2 }, { id: 3 }] }];

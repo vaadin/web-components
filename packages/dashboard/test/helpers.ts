@@ -132,7 +132,11 @@ export function setMaximumColumnCount(dashboard: HTMLElement, count?: number): v
  * Sets the minimum row height of the dashboard.
  */
 export function setMinimumRowHeight(dashboard: HTMLElement, height?: number): void {
-  dashboard.style.setProperty('--vaadin-dashboard-row-min-height', height !== undefined ? `${height}px` : null);
+  if (height === undefined) {
+    dashboard.style.setProperty('--vaadin-dashboard-row-min-height', 'auto');
+  } else {
+    dashboard.style.setProperty('--vaadin-dashboard-row-min-height', height !== undefined ? `${height}px` : null);
+  }
 }
 
 /**

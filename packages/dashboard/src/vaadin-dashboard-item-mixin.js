@@ -198,7 +198,7 @@ export const DashboardItemMixin = (superClass) =>
 
     /** @private */
     __renderResizeControls() {
-      const hasMinRowHeight = getComputedStyle(this).getPropertyValue('--vaadin-dashboard-row-min-height');
+      const hasMinRowHeight = getComputedStyle(this).getPropertyValue('--_vaadin-dashboard-row-min-height') !== 'auto';
 
       return html`<div
         id="resize-controls"

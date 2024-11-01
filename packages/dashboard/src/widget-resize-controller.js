@@ -157,7 +157,7 @@ export class WidgetResizeController {
     }
 
     const gridStyle = getComputedStyle(this.host.$.grid);
-    if (rowspanDelta && !gridStyle.getPropertyValue('--vaadin-dashboard-row-min-height')) {
+    if (rowspanDelta && gridStyle.getPropertyValue('--_vaadin-dashboard-row-min-height') === 'auto') {
       // Do not resize vertically if the min row height is not set
       return;
     }
