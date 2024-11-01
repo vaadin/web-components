@@ -115,6 +115,11 @@ export const DragAndDropMixin = (superClass) =>
       return ['_dragDropAccessChanged(rowsDraggable, dropMode, dragFilter, dropFilter, loading)'];
     }
 
+    constructor() {
+      super();
+      this.__onDocumentDragStart = this.__onDocumentDragStart.bind(this);
+    }
+
     /** @protected */
     ready() {
       super.ready();
@@ -129,6 +134,22 @@ export const DragAndDropMixin = (superClass) =>
           e.stopPropagation();
         }
       });
+    }
+
+    /** @protected */
+    connectedCallback() {
+      super.connectedCallback();
+      // Chromium based browsers cannot properly generate drag images for elements
+      // that have children with massive heights. This workaround prevents crashes
+      // and performance issues by excluding the items from the drag image.
+      // https://github.com/vaadin/web-components/issues/7985
+      document.addEventListener('dragstart', this.__onDocumentDragStart, { capture: true });
+    }
+
+    /** @protected */
+    disconnectedCallback() {
+      super.disconnectedCallback();
+      document.removeEventListener('dragstart', this.__onDocumentDragStart, { capture: true });
     }
 
     /** @private */
@@ -288,6 +309,29 @@ export const DragAndDropMixin = (superClass) =>
         } else {
           this._clearDragStyles();
         }
+      }
+    }
+
+    /** @private */
+    __onDocumentDragStart(e) {
+      // The dragged element can be the element itself or a parent of the element
+      if (!e.target.contains(this)) {
+        return;
+      }
+      // The threshold value 20000 provides a buffer to both
+      //   - avoid the crash and the performance issues
+      //   - unnecessarily avoid excluding items from the drag image
+      if (this.$.items.offsetHeight > 20000) {
+        const initialItemsMaxHeight = this.$.items.style.maxHeight;
+        const initialTableOverflow = this.$.table.style.overflow;
+        // Momentarily hides the items until the browser starts generating the
+        // drag image.
+        this.$.items.style.maxHeight = '0';
+        this.$.table.style.overflow = 'hidden';
+        requestAnimationFrame(() => {
+          this.$.items.style.maxHeight = initialItemsMaxHeight;
+          this.$.table.style.overflow = initialTableOverflow;
+        });
       }
     }
 
