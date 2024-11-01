@@ -54,3 +54,38 @@ export function parseISOTime(timeString) {
     return { hours: parts[1], minutes: parts[2], seconds: parts[3], milliseconds: parts[4] };
   }
 }
+
+function getStepSegment(stepValue) {
+  const step = stepValue == null ? 60 : parseFloat(stepValue);
+  if (step % 3600 === 0) {
+    // Accept hours
+    return 1;
+  } else if (step % 60 === 0 || !step) {
+    // Accept minutes
+    return 2;
+  } else if (step % 1 === 0) {
+    // Accept seconds
+    return 3;
+  } else if (step < 1) {
+    // Accept milliseconds
+    return 4;
+  }
+}
+
+/**
+ * A function to validate the time object based on the given step.
+ *
+ * @param {object} timeObject
+ * @param {number} step
+ * @return {object | undefined}
+ */
+export function validateTime(timeObject, step) {
+  if (timeObject) {
+    const stepSegment = getStepSegment(step);
+    timeObject.hours = parseInt(timeObject.hours);
+    timeObject.minutes = parseInt(timeObject.minutes || 0);
+    timeObject.seconds = stepSegment < 3 ? undefined : parseInt(timeObject.seconds || 0);
+    timeObject.milliseconds = stepSegment < 4 ? undefined : parseInt(timeObject.milliseconds || 0);
+  }
+  return timeObject;
+}
