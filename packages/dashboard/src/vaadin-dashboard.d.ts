@@ -46,7 +46,7 @@ export interface DashboardSectionItem<TItem extends DashboardItem> {
   /**
    * The title of the section
    */
-  title?: string | null;
+  title?: string;
 
   /**
    * The items of the section
