@@ -1,15 +1,15 @@
 import { expect } from '@vaadin/chai-plugins';
-import { aTimeout, fixtureSync, isIOS, listenOnce } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, isIOS, listenOnce, nextFrame } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import '../vaadin-notification.js';
 
 describe('vaadin-notification', () => {
   let notification;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     notification = fixtureSync(`
       <vaadin-notification duration="20"></vaadin-notification>
     `);
+    await nextFrame();
 
     notification.renderer = (root) => {
       root.innerHTML = `Your work has been <strong>saved</strong>`;
@@ -85,7 +85,7 @@ describe('vaadin-notification', () => {
       expect(document.body.querySelectorAll('vaadin-notification-container').length).to.be.equal(0);
     });
 
-    it('should not be in the body when notification reopens', () => {
+    it('should be in the body when notification reopens', () => {
       notification.close();
       notification._removeNotificationCard();
       notification.open();
@@ -223,8 +223,9 @@ describe('vaadin-notification', () => {
   });
 
   describe('theme', () => {
-    it('should propagate theme attribute to card', () => {
+    it('should propagate theme attribute to card', async () => {
       notification.setAttribute('theme', 'foo');
+      await nextFrame();
 
       expect(notification._card.getAttribute('theme')).to.equal('foo');
     });

@@ -1,14 +1,14 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync } from '@vaadin/testing-helpers';
-import '../vaadin-notification.js';
+import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import { html, render } from 'lit';
 
 describe('lit', () => {
   describe('renderer', () => {
     let notification;
 
-    beforeEach(() => {
+    beforeEach(async () => {
       notification = fixtureSync(`<vaadin-notification></vaadin-notification>`);
+      await nextFrame();
       notification.open();
       notification.renderer = (root) => {
         render(html`Initial Content`, root);
