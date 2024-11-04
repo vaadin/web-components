@@ -69,6 +69,11 @@ export declare function UploadMixin<T extends Constructor<HTMLElement>>(base: T)
 
 export declare class UploadMixinClass {
   /**
+   * If true, the user cannot interact with this element.
+   */
+  disabled: boolean;
+
+  /**
    * Define whether the element supports dropping files on it for uploading.
    * By default it's enabled in desktop and disabled in touch devices
    * because mobile devices do not support drag events in general. Setting

@@ -69,6 +69,7 @@ export const UploadMixin = (superClass) =>
       return {
         /**
          * If true, the user cannot interact with this element.
+         * @type {boolean}
          */
         disabled: {
           type: Boolean,
