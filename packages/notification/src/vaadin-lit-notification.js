@@ -8,8 +8,7 @@ import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { NotificationMixin } from './vaadin-notification-mixin.js';
-import { NotificationContainerMixin } from './vaadin-notification-mixin.js';
+import { NotificationContainerMixin, NotificationMixin } from './vaadin-notification-mixin.js';
 import { notificationCardStyles, notificationContainerStyles } from './vaadin-notification-styles.js';
 
 /**
