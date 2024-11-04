@@ -79,12 +79,12 @@ describe('<vaadin-upload-file> element', () => {
       await nextUpdate(fileElement);
     });
 
-    it('should add focused attribute on focus', () => {
+    it('should be focusable by default', () => {
       fileElement.focus();
       expect(fileElement.hasAttribute('focused')).to.be.true;
     });
 
-    it('should not add focused attribute on focus when disabled', () => {
+    it('should not be focusable when disabled', () => {
       fileElement.disabled = true;
       fileElement.focus();
       expect(fileElement.hasAttribute('focused')).to.be.false;
