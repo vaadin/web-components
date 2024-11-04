@@ -161,7 +161,7 @@ export const UploadFileMixin = (superClass) =>
      * @protected
      */
     _shouldSetFocus(event) {
-      return event.composedPath()[0] === this;
+      return !this.disabled && event.composedPath()[0] === this;
     }
 
     /** @private */
