@@ -1,6 +1,6 @@
 import type { Constructor } from '@open-wc/dedupe-mixin';
-import type { OverlayClassMixinClass } from '@vaadin/component-base/src/overlay-class-mixin';
-import type { ThemePropertyMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin';
+import type { OverlayClassMixinClass } from '@vaadin/component-base/src/overlay-class-mixin.js';
+import type { ThemePropertyMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
 import type { Notification } from './vaadin-notification.js';
 
 export type NotificationPosition =
