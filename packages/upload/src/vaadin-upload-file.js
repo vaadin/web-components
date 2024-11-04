@@ -76,6 +76,7 @@ class UploadFile extends UploadFileMixin(ThemableMixin(ControllerMixin(PolymerEl
             file-event="file-start"
             on-click="_fireFileEvent"
             hidden$="[[!held]]"
+            disabled$="[[disabled]]"
             aria-label$="[[i18n.file.start]]"
             aria-describedby="name"
           ></button>
@@ -85,6 +86,7 @@ class UploadFile extends UploadFileMixin(ThemableMixin(ControllerMixin(PolymerEl
             file-event="file-retry"
             on-click="_fireFileEvent"
             hidden$="[[!errorMessage]]"
+            disabled$="[[disabled]]"
             aria-label$="[[i18n.file.retry]]"
             aria-describedby="name"
           ></button>
@@ -93,6 +95,7 @@ class UploadFile extends UploadFileMixin(ThemableMixin(ControllerMixin(PolymerEl
             part="remove-button"
             file-event="file-abort"
             on-click="_fireFileEvent"
+            disabled$="[[disabled]]"
             aria-label$="[[i18n.file.remove]]"
             aria-describedby="name"
           ></button>

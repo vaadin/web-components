@@ -60,6 +60,16 @@ describe('<vaadin-upload-file> element', () => {
       await nextUpdate(fileElement);
       expect(fileElement.hasAttribute('error')).to.be.true;
     });
+
+    it('should not be disabled by default', () => {
+      expect(fileElement.hasAttribute('disabled')).to.be.false;
+    });
+
+    it('should reflect disabled', async () => {
+      fileElement.disabled = true;
+      await nextUpdate(fileElement);
+      expect(fileElement.hasAttribute('disabled')).to.be.true;
+    });
   });
 
   describe('focus', () => {
@@ -111,6 +121,35 @@ describe('<vaadin-upload-file> element', () => {
       await sendKeys({ up: 'Shift' });
 
       expect(fileElement.hasAttribute('focus-ring')).to.be.false;
+    });
+  });
+
+  describe('disabled', () => {
+    it('should not disable buttons by default', () => {
+      const buttons = fileElement.shadowRoot.querySelectorAll('[part$="-button"]');
+      buttons.forEach((button) => {
+        expect(button.disabled).to.be.false;
+      });
+    });
+
+    it('should disable all buttons when disabled', async () => {
+      fileElement.disabled = true;
+      await nextUpdate(fileElement);
+
+      const buttons = fileElement.shadowRoot.querySelectorAll('[part$="-button"]');
+      buttons.forEach((button) => {
+        expect(button.disabled).to.be.true;
+      });
+    });
+
+    it('should be focusable by default', () => {
+      expect(fileElement.tabIndex).to.equal(0);
+    });
+
+    it('should not be focusable when disabled', async () => {
+      fileElement.disabled = true;
+      await nextUpdate(fileElement);
+      expect(fileElement.tabIndex).to.equal(-1);
     });
   });
 });

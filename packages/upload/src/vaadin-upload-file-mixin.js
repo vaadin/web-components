@@ -15,6 +15,16 @@ export const UploadFileMixin = (superClass) =>
     static get properties() {
       return {
         /**
+         * If true, the user cannot interact with this element.
+         */
+        disabled: {
+          type: Boolean,
+          value: false,
+          reflectToAttribute: true,
+          observer: '__disabledChanged',
+        },
+
+        /**
          * True if uploading is completed, false otherwise.
          */
         complete: {
@@ -152,6 +162,11 @@ export const UploadFileMixin = (superClass) =>
      */
     _shouldSetFocus(event) {
       return event.composedPath()[0] === this;
+    }
+
+    /** @private */
+    __disabledChanged(disabled) {
+      this.tabIndex = disabled ? -1 : 0;
     }
 
     /** @private */

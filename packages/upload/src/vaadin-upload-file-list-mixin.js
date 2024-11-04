@@ -25,11 +25,20 @@ export const UploadFileListMixin = (superClass) =>
         i18n: {
           type: Object,
         },
+
+        /**
+         * If true, the user cannot interact with this element.
+         */
+        disabled: {
+          type: Boolean,
+          value: false,
+          reflectToAttribute: true,
+        },
       };
     }
 
     static get observers() {
-      return ['__updateItems(items, i18n)'];
+      return ['__updateItems(items, i18n, disabled)'];
     }
 
     /** @private */
@@ -45,7 +54,7 @@ export const UploadFileListMixin = (superClass) =>
      * It is not guaranteed that the update happens immediately (synchronously) after it is requested.
      */
     requestContentUpdate() {
-      const { items, i18n } = this;
+      const { items, i18n, disabled } = this;
 
       render(
         html`
@@ -53,6 +62,7 @@ export const UploadFileListMixin = (superClass) =>
             (file) => html`
               <li>
                 <vaadin-upload-file
+                  .disabled="${disabled}"
                   .file="${file}"
                   .complete="${file.complete}"
                   .errorMessage="${file.error}"
