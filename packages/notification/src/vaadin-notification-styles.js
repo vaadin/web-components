@@ -11,7 +11,6 @@ export const notificationContainerStyles = css`
     z-index: 1000;
     inset: 0;
     box-sizing: border-box;
-
     display: flex;
     flex-direction: column;
     align-items: stretch;

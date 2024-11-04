@@ -7,8 +7,7 @@ import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { NotificationMixin } from './vaadin-notification-mixin.js';
-import { NotificationContainerMixin } from './vaadin-notification-mixin.js';
+import { NotificationContainerMixin, NotificationMixin } from './vaadin-notification-mixin.js';
 import { notificationCardStyles, notificationContainerStyles } from './vaadin-notification-styles.js';
 
 registerStyles('vaadin-notification-container', notificationContainerStyles, {
