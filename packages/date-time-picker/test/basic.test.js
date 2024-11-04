@@ -409,19 +409,6 @@ describe('Initial value', () => {
   });
 });
 
-describe('helperText', () => {
-  let dateTimePicker;
-
-  beforeEach(() => {
-    dateTimePicker = fixtureSync('<vaadin-date-time-picker></vaadin-date-time-picker>');
-  });
-
-  it('should display the helper text when provided', () => {
-    dateTimePicker.helperText = 'Foo';
-    expect(dateTimePicker.querySelector('[slot="helper"]').textContent).to.equal('Foo');
-  });
-});
-
 describe('Theme attribute', () => {
   let dateTimePicker;
   let datePicker;

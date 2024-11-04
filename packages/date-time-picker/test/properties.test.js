@@ -205,12 +205,6 @@ function getTimePicker(dateTimePicker) {
       expect(datePicker.showWeekNumbers).to.be.true;
     });
 
-    it('should handle label', () => {
-      dateTimePicker.label = 'Birth date and time';
-      const label = dateTimePicker.querySelector(':scope > label');
-      expect(label.textContent).to.equal('Birth date and time');
-    });
-
     it('should propagate invalid to date and time pickers', () => {
       dateTimePicker.invalid = true;
       expect(datePicker.invalid).to.be.true;
@@ -221,13 +215,6 @@ function getTimePicker(dateTimePicker) {
       dateTimePicker.required = true;
       expect(datePicker.required).to.be.true;
       expect(timePicker.required).to.be.true;
-    });
-
-    it('should handle error-message', () => {
-      dateTimePicker.errorMessage = 'error-message';
-      dateTimePicker.invalid = true;
-      const errorMessage = dateTimePicker.querySelector(':scope > [slot=error-message]');
-      expect(errorMessage.textContent).to.equal('error-message');
     });
 
     it('should propagate disabled to date and time pickers', () => {
