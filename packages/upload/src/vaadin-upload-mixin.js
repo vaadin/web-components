@@ -553,7 +553,7 @@ export const UploadMixin = (superClass) =>
     _onDragover(event) {
       event.preventDefault();
       if (!this.nodrop && !this._dragover) {
-        this._dragoverValid = !this.maxFilesReached;
+        this._dragoverValid = !this.maxFilesReached && !this.disabled;
         this._dragover = true;
       }
       event.dataTransfer.dropEffect = !this._dragoverValid || this.nodrop ? 'none' : 'copy';
@@ -569,7 +569,7 @@ export const UploadMixin = (superClass) =>
 
     /** @private */
     async _onDrop(event) {
-      if (!this.nodrop) {
+      if (!this.nodrop && !this.disabled) {
         event.preventDefault();
         this._dragover = this._dragoverValid = false;
 
