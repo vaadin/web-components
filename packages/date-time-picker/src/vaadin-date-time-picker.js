@@ -8,10 +8,9 @@ import '@vaadin/time-picker/src/vaadin-time-picker.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
-import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { inputFieldShared } from '@vaadin/field-base/src/styles/input-field-shared-styles.js';
 import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { DateTimePickerMixin, PickerSlotController } from './vaadin-date-time-picker-mixin.js';
+import { DateTimePickerMixin } from './vaadin-date-time-picker-mixin.js';
 
 registerStyles('vaadin-date-time-picker', inputFieldShared, { moduleId: 'vaadin-date-time-picker' });
 
@@ -126,32 +125,6 @@ class DateTimePicker extends DateTimePickerMixin(ThemableMixin(ElementMixin(Poly
 
   static get is() {
     return 'vaadin-date-time-picker';
-  }
-
-  /** @protected */
-  ready() {
-    super.ready();
-
-    this._datePickerController = new PickerSlotController(this, 'date');
-    this.addController(this._datePickerController);
-
-    this._timePickerController = new PickerSlotController(this, 'time');
-    this.addController(this._timePickerController);
-
-    if (this.autofocus && !this.disabled) {
-      window.requestAnimationFrame(() => this.focus());
-    }
-
-    this.setAttribute('role', 'group');
-
-    this._tooltipController = new TooltipController(this);
-    this.addController(this._tooltipController);
-    this._tooltipController.setPosition('top');
-    this._tooltipController.setShouldShow((target) => {
-      return target.__datePicker && !target.__datePicker.opened && target.__timePicker && !target.__timePicker.opened;
-    });
-
-    this.ariaTarget = this;
   }
 }
 

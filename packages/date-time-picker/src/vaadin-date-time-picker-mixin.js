@@ -6,6 +6,7 @@
 import { DisabledMixin } from '@vaadin/a11y-base/src/disabled-mixin.js';
 import { FocusMixin } from '@vaadin/a11y-base/src/focus-mixin.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
+import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import {
   dateEquals,
   formatUTCISODate,
@@ -25,7 +26,7 @@ const timePickerI18nProps = Object.keys(timePickerI18nDefaults);
  *
  * @private
  */
-export class PickerSlotController extends SlotController {
+class PickerSlotController extends SlotController {
   constructor(host, type) {
     super(host, `${type}-picker`, `vaadin-${type}-picker`, {
       initializer: (picker, host) => {
@@ -323,6 +324,32 @@ export const DateTimePickerMixin = (superClass) =>
     get __formattedValue() {
       const values = this.__pickers.map((picker) => picker.value);
       return values.every(Boolean) ? values.join('T') : '';
+    }
+
+    /** @protected */
+    ready() {
+      super.ready();
+
+      this._datePickerController = new PickerSlotController(this, 'date');
+      this.addController(this._datePickerController);
+
+      this._timePickerController = new PickerSlotController(this, 'time');
+      this.addController(this._timePickerController);
+
+      if (this.autofocus && !this.disabled) {
+        window.requestAnimationFrame(() => this.focus());
+      }
+
+      this.setAttribute('role', 'group');
+
+      this._tooltipController = new TooltipController(this);
+      this.addController(this._tooltipController);
+      this._tooltipController.setPosition('top');
+      this._tooltipController.setShouldShow((target) => {
+        return target.__datePicker && !target.__datePicker.opened && target.__timePicker && !target.__timePicker.opened;
+      });
+
+      this.ariaTarget = this;
     }
 
     focus() {
