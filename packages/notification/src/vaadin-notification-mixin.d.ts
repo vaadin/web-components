@@ -19,7 +19,9 @@ export type NotificationRenderer = (root: HTMLElement, notification: Notificatio
 /**
  * A mixin providing common notification container functionality.
  */
-export declare function NotificationContainerMixin<T>(base: T): Constructor<NotificationContainerMixinClass> & T;
+export declare function NotificationContainerMixin<T extends Constructor<HTMLElement>>(
+  base: T,
+): Constructor<NotificationContainerMixinClass> & T;
 
 export declare class NotificationContainerMixinClass {
   /**
@@ -31,7 +33,7 @@ export declare class NotificationContainerMixinClass {
 /**
  * A mixin providing common notification functionality.
  */
-export declare function NotificationMixin<T>(
+export declare function NotificationMixin<T extends Constructor<HTMLElement>>(
   base: T,
 ): Constructor<NotificationMixinClass> & Constructor<ThemePropertyMixinClass> & Constructor<OverlayClassMixinClass> & T;
 
