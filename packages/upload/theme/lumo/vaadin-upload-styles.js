@@ -46,6 +46,7 @@ registerStyles(
       color: var(--lumo-primary-text-color);
     }
 
+    :host([disabled]) [part='drop-label'],
     :host([max-files-reached]) [part='drop-label'] {
       color: var(--lumo-disabled-text-color);
     }

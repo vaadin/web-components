@@ -45,6 +45,7 @@ registerStyles(
       color: var(--material-primary-text-color);
     }
 
+    :host([disabled]) [part='drop-label'],
     :host([max-files-reached]) [part='drop-label'] {
       color: var(--material-disabled-text-color);
     }
