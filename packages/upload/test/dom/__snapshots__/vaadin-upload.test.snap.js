@@ -178,7 +178,7 @@ snapshots["vaadin-upload host disabled"] =
       <vaadin-upload-file
         complete=""
         disabled=""
-        tabindex="0"
+        tabindex="-1"
       >
         <vaadin-progress-bar
           aria-valuemax="1"
@@ -193,7 +193,7 @@ snapshots["vaadin-upload host disabled"] =
     <li>
       <vaadin-upload-file
         disabled=""
-        tabindex="0"
+        tabindex="-1"
       >
         <vaadin-progress-bar
           aria-valuemax="1"
@@ -209,7 +209,7 @@ snapshots["vaadin-upload host disabled"] =
       <vaadin-upload-file
         disabled=""
         error=""
-        tabindex="0"
+        tabindex="-1"
       >
         <vaadin-progress-bar
           aria-valuemax="1"
