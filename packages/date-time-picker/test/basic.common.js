@@ -1,8 +1,7 @@
 import { expect } from '@vaadin/chai-plugins';
-import { aTimeout, fixtureSync, focusin, focusout, nextFrame, nextRender, outsideClick } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, focusin, focusout, nextRender, outsideClick } from '@vaadin/testing-helpers';
 import { resetMouse, sendKeys, sendMouse } from '@web/test-runner-commands';
 import sinon from 'sinon';
-import '../src/vaadin-date-time-picker.js';
 import { changeInputValue } from './helpers.js';
 
 const fixtures = {
@@ -48,8 +47,9 @@ describe('Basic features', () => {
     await sendMouse({ type: 'click', position: [x, y] });
   }
 
-  beforeEach(() => {
+  beforeEach(async () => {
     dateTimePicker = fixtureSync('<vaadin-date-time-picker></vaadin-date-time-picker>');
+    await nextRender();
     datePicker = getDatePicker(dateTimePicker);
     timePicker = getTimePicker(dateTimePicker);
   });
@@ -388,8 +388,8 @@ describe('autofocus', () => {
 
   beforeEach(async () => {
     dateTimePicker = fixtureSync('<vaadin-date-time-picker autofocus></vaadin-date-time-picker>');
+    await nextRender();
     datePicker = getDatePicker(dateTimePicker);
-    await nextFrame();
   });
 
   it('should focus date picker when autofocus is set', () => {
@@ -400,8 +400,9 @@ describe('autofocus', () => {
 describe('Initial value', () => {
   let dateTimePicker;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     dateTimePicker = fixtureSync('<vaadin-date-time-picker value="2019-09-16T15:00"></vaadin-date-time-picker>');
+    await nextRender();
   });
 
   it('should use initial value from attribute without clearing it', () => {
@@ -415,8 +416,9 @@ describe('Theme attribute', () => {
   let timePicker;
 
   describe('default', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       dateTimePicker = fixtureSync('<vaadin-date-time-picker theme="foo"></vaadin-date-time-picker>');
+      await nextRender();
       datePicker = getDatePicker(dateTimePicker);
       timePicker = getTimePicker(dateTimePicker);
     });
@@ -447,15 +449,17 @@ describe('Theme attribute', () => {
       dateTimePicker.remove();
     });
 
-    it('should propagate theme attribute to date-picker when set before adding to DOM', () => {
+    it('should propagate theme attribute to date-picker when set before adding to DOM', async () => {
       dateTimePicker.setAttribute('theme', 'foo');
       document.body.appendChild(dateTimePicker);
+      await nextRender();
       expect(datePicker.getAttribute('theme')).to.equal('foo');
     });
 
-    it('should propagate theme attribute to time-picker when set before adding to DOM', () => {
+    it('should propagate theme attribute to time-picker when set before adding to DOM', async () => {
       dateTimePicker.setAttribute('theme', 'foo');
       document.body.appendChild(dateTimePicker);
+      await nextRender();
       expect(timePicker.getAttribute('theme')).to.equal('foo');
     });
   });
@@ -471,6 +475,7 @@ describe('Theme attribute', () => {
 
     beforeEach(async () => {
       dateTimePicker = fixtureSync(fixtures[`${set}-inputs`]);
+      await nextRender();
       originalDatePicker = getDatePicker(dateTimePicker);
       originalTimePicker = getTimePicker(dateTimePicker);
       datePicker = dateTimePicker.querySelector('vaadin-date-picker');
@@ -582,6 +587,7 @@ describe('Theme attribute', () => {
 
     beforeEach(async () => {
       dateTimePicker = fixtureSync(fixtures[`${set}-values`]);
+      await nextRender();
 
       if (set === 'lazy') {
         // Add slotted children lazily simulating the case where Flow adds the slotted elements after date time picker is ready

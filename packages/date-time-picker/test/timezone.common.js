@@ -1,14 +1,14 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync } from '@vaadin/testing-helpers';
-import '../src/vaadin-date-time-picker.js';
+import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 
 describe('timezone independent', () => {
   let dateTimePicker;
   let datePicker;
   let timePicker;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     dateTimePicker = fixtureSync('<vaadin-date-time-picker></vaadin-date-time-picker>');
+    await nextRender();
     datePicker = dateTimePicker.querySelector('[slot="date-picker"]');
     timePicker = dateTimePicker.querySelector('[slot="time-picker"]');
   });

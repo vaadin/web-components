@@ -1,6 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { aTimeout, fixtureSync } from '@vaadin/testing-helpers';
-import '../vaadin-date-time-picker.js';
+import { aTimeout, fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { formatISOTime, parseISOTime } from '@vaadin/time-picker/src/vaadin-time-picker-helper.js';
 
@@ -73,8 +72,9 @@ customElements.define(
 
     // No need for "beforeEach" to recreate the fixture before every test since these tests do not
     // modify the state but only check the initial state.
-    before(() => {
+    before(async () => {
       const element = fixtureSync(`<dtp-i18n-${set}></dtp-i18n-${set}>`);
+      await nextRender();
       dateTimePicker = element.$.dateTimePicker;
       datePicker = dateTimePicker.querySelector('[slot="date-picker"]');
     });
@@ -104,6 +104,7 @@ describe('setting i18n on a slotted picker before connected to the DOM', () => {
     it('should not have i18n overridden', async () => {
       await aTimeout(0);
       document.body.appendChild(dateTimePicker);
+      await nextRender();
       expect(datePicker.i18n.cancel).to.equal('Peruuta');
     });
   });
@@ -113,8 +114,9 @@ describe('accessibility', () => {
   ['date', 'time'].forEach((part) => {
     let dateTimePicker, pickerFocusElement;
 
-    beforeEach(() => {
+    beforeEach(async () => {
       dateTimePicker = fixtureSync('<vaadin-date-time-picker></vaadin-date-time-picker>');
+      await nextRender();
       pickerFocusElement = dateTimePicker.querySelector(`[slot=${part}-picker]`).focusElement;
     });
 
@@ -123,39 +125,45 @@ describe('accessibility', () => {
       expect(pickerFocusElement.getAttribute('aria-label')).to.be.null;
     });
 
-    it(`should update aria-label of ${part}-picker when ${part}Label is changed`, () => {
+    it(`should update aria-label of ${part}-picker when ${part}Label is changed`, async () => {
       dateTimePicker.i18n = { ...dateTimePicker.i18n, [`${part}Label`]: 'picker-label' };
+      await nextFrame();
       expect(pickerFocusElement.getAttribute('aria-label')).to.equal('picker-label');
     });
 
-    it(`should remove aria-label of ${part}-picker when ${part}Label is set to null`, () => {
+    it(`should remove aria-label of ${part}-picker when ${part}Label is set to null`, async () => {
       const originalI18n = dateTimePicker.i18n;
       dateTimePicker.i18n = { ...originalI18n, [`${part}Label`]: 'picker-label' };
+      await nextFrame();
       dateTimePicker.i18n = originalI18n;
+      await nextFrame();
       expect(pickerFocusElement.getAttribute('aria-label')).to.be.null;
     });
 
-    it(`should prepend ${part}Label value with date-time-picker accessible-name value`, () => {
+    it(`should prepend ${part}Label value with date-time-picker accessible-name value`, async () => {
       dateTimePicker.accessibleName = 'dtp-accessible-name';
       dateTimePicker.i18n = { ...dateTimePicker.i18n, [`${part}Label`]: 'picker-label' };
+      await nextFrame();
       expect(pickerFocusElement.getAttribute('aria-label')).to.equal('dtp-accessible-name picker-label');
     });
 
-    it(`should prepend ${part}Label value with date-time-picker label value`, () => {
+    it(`should prepend ${part}Label value with date-time-picker label value`, async () => {
       dateTimePicker.label = 'dtp-label';
       dateTimePicker.i18n = { ...dateTimePicker.i18n, [`${part}Label`]: 'picker-label' };
+      await nextFrame();
       expect(pickerFocusElement.getAttribute('aria-label')).to.equal('dtp-label picker-label');
     });
 
-    it(`should prepend ${part}label value with date-time-picker accessible-name value when label also set`, () => {
+    it(`should prepend ${part}label value with date-time-picker accessible-name value when label also set`, async () => {
       dateTimePicker.label = 'dtp-label';
       dateTimePicker.accessibleName = 'dtp-accessible-name';
       dateTimePicker.i18n = { ...dateTimePicker.i18n, [`${part}Label`]: 'picker-label' };
+      await nextFrame();
       expect(pickerFocusElement.getAttribute('aria-label')).to.equal('dtp-accessible-name picker-label');
     });
 
     describe('property set before attach', () => {
-      beforeEach(() => {
+      beforeEach(async () => {
         const parent = fixtureSync('<div></div>');
         dateTimePicker = document.createElement('vaadin-date-time-picker');
         dateTimePicker.label = 'dtp-label';
@@ -163,6 +171,7 @@ describe('accessibility', () => {
         dateTimePicker.i18n = { ...dateTimePicker.i18n, [`${part}Label`]: 'picker-label' };
 
         parent.appendChild(dateTimePicker);
+        await nextRender();
         pickerFocusElement = dateTimePicker.querySelector(`[slot=${part}-picker]`).focusElement;
       });
 
@@ -170,14 +179,16 @@ describe('accessibility', () => {
         expect(pickerFocusElement.getAttribute('aria-label')).to.equal('dtp-accessible-name picker-label');
       });
 
-      it(`should use label + ${part}Label if accessible-name is removed`, () => {
+      it(`should use label + ${part}Label if accessible-name is removed`, async () => {
         dateTimePicker.accessibleName = null;
+        await nextFrame();
         expect(pickerFocusElement.getAttribute('aria-label')).to.equal('dtp-label picker-label');
       });
 
-      it(`should use ${part}Label if accessible-name and label are removed`, () => {
+      it(`should use ${part}Label if accessible-name and label are removed`, async () => {
         dateTimePicker.accessibleName = null;
         dateTimePicker.label = null;
+        await nextFrame();
         expect(pickerFocusElement.getAttribute('aria-label')).to.equal('picker-label');
       });
     });

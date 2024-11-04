@@ -1,7 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import '../vaadin-date-time-picker.js';
 import { dispatchChange } from './helpers.js';
 
 const fixtures = {
@@ -72,8 +71,9 @@ function getTimePicker(dateTimePicker) {
     let datePicker;
     let timePicker;
 
-    beforeEach(() => {
+    beforeEach(async () => {
       dateTimePicker = fixtureSync(fixtures[set]);
+      await nextRender();
       datePicker = getDatePicker(dateTimePicker);
       timePicker = getTimePicker(dateTimePicker);
     });
@@ -205,22 +205,25 @@ function getTimePicker(dateTimePicker) {
       expect(datePicker.showWeekNumbers).to.be.true;
     });
 
-    it('should propagate invalid to date and time pickers', () => {
+    it('should propagate invalid to date and time pickers', async () => {
       dateTimePicker.invalid = true;
+      await nextFrame();
       expect(datePicker.invalid).to.be.true;
       expect(timePicker.invalid).to.be.true;
     });
 
-    it('should propagate required to date and time pickers', () => {
+    it('should propagate required to date and time pickers', async () => {
       dateTimePicker.required = true;
+      await nextFrame();
       expect(datePicker.required).to.be.true;
       expect(timePicker.required).to.be.true;
     });
 
-    it('should propagate disabled to date and time pickers', () => {
+    it('should propagate disabled to date and time pickers', async () => {
       expect(datePicker.disabled).to.be.false;
       expect(timePicker.disabled).to.be.false;
       dateTimePicker.disabled = true;
+      await nextFrame();
       expect(datePicker.disabled).to.be.true;
       expect(timePicker.disabled).to.be.true;
     });
@@ -264,8 +267,9 @@ function getTimePicker(dateTimePicker) {
 
     // No need for "beforeEach" to recreate the fixture before every test since
     // these tests do not modify the state but only check the initial state.
-    before(() => {
+    before(async () => {
       dateTimePicker = fixtureSync(fixtures[`${set}-initial`]);
+      await nextRender();
       datePicker = getDatePicker(dateTimePicker);
       timePicker = getTimePicker(dateTimePicker);
     });
