@@ -1,8 +1,7 @@
 import { expect } from '@vaadin/chai-plugins';
-import { aTimeout, fixtureSync, nextRender } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
-import '../vaadin-date-time-picker.js';
 import { waitForOverlayRender } from '@vaadin/date-picker/test/helpers.js';
 
 class DateTimePicker2020Element extends customElements.get('vaadin-date-time-picker') {
@@ -27,8 +26,9 @@ const fixtures = {
   describe(`Validation (${set})`, () => {
     let dateTimePicker, validateSpy, changeSpy, datePicker, timePicker;
 
-    beforeEach(() => {
+    beforeEach(async () => {
       dateTimePicker = fixtureSync(fixtures[set]);
+      await nextRender();
       validateSpy = sinon.spy(dateTimePicker, 'validate');
       changeSpy = sinon.spy();
       dateTimePicker.addEventListener('change', changeSpy);
@@ -76,6 +76,7 @@ const fixtures = {
       datePicker.focus();
       await sendKeys({ type: '1/1/2023' });
       await sendKeys({ press: 'Enter' });
+      await nextRender();
       expect(changeSpy.calledOnce).to.be.true;
       expect(validateSpy.calledOnce).to.be.true;
       expect(validateSpy.calledBefore(changeSpy)).to.be.true;
@@ -188,8 +189,9 @@ const fixtures = {
     });
 
     describe('required', () => {
-      beforeEach(() => {
+      beforeEach(async () => {
         dateTimePicker.required = true;
+        await nextFrame();
       });
 
       it('should not be invalid without user interactions', () => {
@@ -201,8 +203,9 @@ const fixtures = {
         expect(dateTimePicker.invalid).to.be.true;
       });
 
-      it('should validate when setting required to false', () => {
+      it('should validate when setting required to false', async () => {
         dateTimePicker.required = false;
+        await nextFrame();
         expect(validateSpy).to.be.calledOnce;
       });
     });
@@ -286,8 +289,9 @@ describe('initial validation', () => {
 describe('custom validator', () => {
   let dateTimePicker;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     dateTimePicker = fixtureSync('<vaadin-date-time-picker-2020></vaadin-date-time-picker-2020>');
+    await nextRender();
   });
 
   it('should validate correctly with custom validator', () => {

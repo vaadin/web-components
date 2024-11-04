@@ -1,14 +1,14 @@
 import { expect } from '@vaadin/chai-plugins';
-import { aTimeout, fixtureSync } from '@vaadin/testing-helpers';
-import '../vaadin-date-time-picker.js';
+import { aTimeout, fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
 
 describe('ARIA', () => {
   let dateTimePicker, error, label, helper;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     dateTimePicker = fixtureSync(
       `<vaadin-date-time-picker helper-text="Helper text" label="Date and time"></vaadin-date-time-picker>`,
     );
+    await nextRender();
     label = dateTimePicker.querySelector(':scope > [slot=label]');
     helper = dateTimePicker.querySelector(':scope > [slot=helper]');
     error = dateTimePicker.querySelector(':scope > [slot=error-message]');
@@ -34,6 +34,7 @@ describe('ARIA', () => {
 
   it('should add error message to aria-describedby when field is invalid', async () => {
     dateTimePicker.invalid = true;
+    await nextFrame();
     await aTimeout(0);
     const aria = dateTimePicker.getAttribute('aria-describedby');
     expect(aria).to.include(helper.id);

@@ -6,6 +6,7 @@
 import { DisabledMixin } from '@vaadin/a11y-base/src/disabled-mixin.js';
 import { FocusMixin } from '@vaadin/a11y-base/src/focus-mixin.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
+import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import {
   dateEquals,
   formatUTCISODate,
@@ -25,10 +26,15 @@ const timePickerI18nProps = Object.keys(timePickerI18nDefaults);
  *
  * @private
  */
-export class PickerSlotController extends SlotController {
+class PickerSlotController extends SlotController {
   constructor(host, type) {
     super(host, `${type}-picker`, `vaadin-${type}-picker`, {
       initializer: (picker, host) => {
+        // Ensure initial value-changed is fired on the slotted pickers
+        // synchronously in Lit version to avoid overriding host value.
+        if (picker.performUpdate) {
+          picker.performUpdate();
+        }
         const prop = `__${type}Picker`;
         host[prop] = picker;
       },
@@ -69,6 +75,7 @@ export const DateTimePickerMixin = (superClass) =>
           notify: true,
           value: '',
           observer: '__valueChanged',
+          sync: true,
         },
 
         /**
@@ -84,6 +91,7 @@ export const DateTimePickerMixin = (superClass) =>
         min: {
           type: String,
           observer: '__minChanged',
+          sync: true,
         },
 
         /**
@@ -99,6 +107,7 @@ export const DateTimePickerMixin = (superClass) =>
         max: {
           type: String,
           observer: '__maxChanged',
+          sync: true,
         },
 
         /**
@@ -108,6 +117,7 @@ export const DateTimePickerMixin = (superClass) =>
         __minDateTime: {
           type: Date,
           value: '',
+          sync: true,
         },
 
         /**
@@ -117,6 +127,7 @@ export const DateTimePickerMixin = (superClass) =>
         __maxDateTime: {
           type: Date,
           value: '',
+          sync: true,
         },
 
         /**
@@ -125,6 +136,7 @@ export const DateTimePickerMixin = (superClass) =>
          */
         datePlaceholder: {
           type: String,
+          sync: true,
         },
 
         /**
@@ -133,6 +145,7 @@ export const DateTimePickerMixin = (superClass) =>
          */
         timePlaceholder: {
           type: String,
+          sync: true,
         },
 
         /**
@@ -153,6 +166,7 @@ export const DateTimePickerMixin = (superClass) =>
          */
         step: {
           type: Number,
+          sync: true,
         },
 
         /**
@@ -163,6 +177,7 @@ export const DateTimePickerMixin = (superClass) =>
          */
         initialPosition: {
           type: String,
+          sync: true,
         },
 
         /**
@@ -174,6 +189,7 @@ export const DateTimePickerMixin = (superClass) =>
         showWeekNumbers: {
           type: Boolean,
           value: false,
+          sync: true,
         },
 
         /**
@@ -182,6 +198,7 @@ export const DateTimePickerMixin = (superClass) =>
          */
         autoOpenDisabled: {
           type: Boolean,
+          sync: true,
         },
 
         /**
@@ -192,6 +209,7 @@ export const DateTimePickerMixin = (superClass) =>
           type: Boolean,
           value: false,
           reflectToAttribute: true,
+          sync: true,
         },
 
         /**
@@ -208,6 +226,7 @@ export const DateTimePickerMixin = (superClass) =>
          */
         __selectedDateTime: {
           type: Date,
+          sync: true,
         },
 
         /**
@@ -222,6 +241,7 @@ export const DateTimePickerMixin = (superClass) =>
          */
         i18n: {
           type: Object,
+          sync: true,
           value: () => ({ ...datePickerI18nDefaults, ...timePickerI18nDefaults }),
         },
 
@@ -244,6 +264,7 @@ export const DateTimePickerMixin = (superClass) =>
          */
         __datePicker: {
           type: Object,
+          sync: true,
           observer: '__datePickerChanged',
         },
 
@@ -253,6 +274,7 @@ export const DateTimePickerMixin = (superClass) =>
          */
         __timePicker: {
           type: Object,
+          sync: true,
           observer: '__timePickerChanged',
         },
       };
@@ -302,6 +324,32 @@ export const DateTimePickerMixin = (superClass) =>
     get __formattedValue() {
       const values = this.__pickers.map((picker) => picker.value);
       return values.every(Boolean) ? values.join('T') : '';
+    }
+
+    /** @protected */
+    ready() {
+      super.ready();
+
+      this._datePickerController = new PickerSlotController(this, 'date');
+      this.addController(this._datePickerController);
+
+      this._timePickerController = new PickerSlotController(this, 'time');
+      this.addController(this._timePickerController);
+
+      if (this.autofocus && !this.disabled) {
+        window.requestAnimationFrame(() => this.focus());
+      }
+
+      this.setAttribute('role', 'group');
+
+      this._tooltipController = new TooltipController(this);
+      this.addController(this._tooltipController);
+      this._tooltipController.setPosition('top');
+      this._tooltipController.setShouldShow((target) => {
+        return target.__datePicker && !target.__datePicker.opened && target.__timePicker && !target.__timePicker.opened;
+      });
+
+      this.ariaTarget = this;
     }
 
     focus() {
@@ -878,7 +926,11 @@ export const DateTimePickerMixin = (superClass) =>
         // The component has a value, update the new pickers values
         this.__selectedDateTimeChanged(this.__selectedDateTime);
 
-        if (this.min || this.max) {
+        // When using Polymer version, mix and max observers are triggered initially
+        // before `ready()` and by that time pickers are not yet initialized, so we
+        // run initial validation here. Lit version runs observers differently and
+        // this observer is executed first - ignore it to prevent validating twice.
+        if ((this.min && this.__minDateTime) || (this.max && this.__maxDateTime)) {
           this.validate();
         }
       }
