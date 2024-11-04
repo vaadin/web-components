@@ -180,6 +180,10 @@ registerStyles(
       color: inherit;
     }
 
+    [part$='button'][disabled] {
+      color: var(--material-disabled-text-color);
+    }
+
     [part='done-icon']::before {
       content: var(--material-icons-check);
       color: var(--material-primary-text-color);
@@ -202,7 +206,7 @@ registerStyles(
       content: var(--material-icons-clear);
     }
 
-    [part$='button']::after {
+    [part$='button']:not([disabled])::after {
       position: absolute;
       content: '';
       top: 0;
