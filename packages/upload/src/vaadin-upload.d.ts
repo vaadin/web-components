@@ -134,6 +134,7 @@ export interface UploadEventMap extends HTMLElementEventMap, UploadCustomEventMa
  *
  * Attribute | Description | Part name
  * ---|---|---
+ * `disabled` | Set when the element is disabled | `:host`
  * `nodrop` | Set when drag and drop is disabled (e. g., on touch devices) | `:host`
  * `dragover` | A file is being dragged over the element | `:host`
  * `dragover-valid` | A dragged file is valid with `maxFiles` and `accept` criteria | `:host`

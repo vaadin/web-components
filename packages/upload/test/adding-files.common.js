@@ -90,8 +90,20 @@ describe('adding files', () => {
       expect(upload.hasAttribute('dragover')).to.be.false;
     });
 
-    it('should not have dragover property when max files added', async () => {
+    it('should not have dragoverValid property when max files added', async () => {
       upload.maxFiles = 1;
+      upload._addFile(createFile(100, 'image/jpeg'));
+      await nextUpdate(upload);
+
+      upload.dispatchEvent(createDndEvent('dragover'));
+      await nextUpdate(upload);
+
+      expect(upload._dragover).to.be.true;
+      expect(upload._dragoverValid).to.be.false;
+    });
+
+    it('should not have dragoverValid property when disabled', async () => {
+      upload.disabled = true;
       upload._addFile(createFile(100, 'image/jpeg'));
       await nextUpdate(upload);
 
@@ -165,6 +177,18 @@ describe('adding files', () => {
 
       expect(upload.files.length).to.equal(1);
       expect(upload.files).to.include(fileEntry._file);
+    });
+
+    it('should not add files on drop when disabled', async () => {
+      upload.disabled = true;
+      const entry1 = createFileSystemFileEntry(100, 'image/jpeg');
+      const entry2 = createFileSystemFileEntry(200, 'text/plain');
+      const dropEvent = createDndEvent('drop', [entry1, entry2]);
+      upload.dispatchEvent(dropEvent);
+      await nextUpdate(upload);
+      await nextFrame();
+
+      expect(upload.files.length).to.equal(0);
     });
 
     describe('nodrop flag', () => {

@@ -68,6 +68,16 @@ export const UploadMixin = (superClass) =>
     static get properties() {
       return {
         /**
+         * If true, the user cannot interact with this element.
+         * @type {boolean}
+         */
+        disabled: {
+          type: Boolean,
+          value: false,
+          reflectToAttribute: true,
+        },
+
+        /**
          * Define whether the element supports dropping files on it for uploading.
          * By default it's enabled in desktop and disabled in touch devices
          * because mobile devices do not support drag events in general. Setting
@@ -392,9 +402,9 @@ export const UploadMixin = (superClass) =>
 
     static get observers() {
       return [
-        '__updateAddButton(_addButton, maxFiles, i18n, maxFilesReached)',
+        '__updateAddButton(_addButton, maxFiles, i18n, maxFilesReached, disabled)',
         '__updateDropLabel(_dropLabel, maxFiles, i18n)',
-        '__updateFileList(_fileList, files, i18n)',
+        '__updateFileList(_fileList, files, i18n, disabled)',
         '__updateMaxFilesReached(maxFiles, files)',
       ];
     }
@@ -512,9 +522,9 @@ export const UploadMixin = (superClass) =>
     }
 
     /** @private */
-    __updateAddButton(addButton, maxFiles, i18n, maxFilesReached) {
+    __updateAddButton(addButton, maxFiles, i18n, maxFilesReached, disabled) {
       if (addButton) {
-        addButton.disabled = maxFilesReached;
+        addButton.disabled = disabled || maxFilesReached;
 
         // Only update text content for the default button element
         if (addButton === this._addButtonController.defaultNode) {
@@ -532,10 +542,11 @@ export const UploadMixin = (superClass) =>
     }
 
     /** @private */
-    __updateFileList(list, files, i18n) {
+    __updateFileList(list, files, i18n, disabled) {
       if (list) {
         list.items = [...files];
         list.i18n = i18n;
+        list.disabled = disabled;
       }
     }
 
@@ -543,7 +554,7 @@ export const UploadMixin = (superClass) =>
     _onDragover(event) {
       event.preventDefault();
       if (!this.nodrop && !this._dragover) {
-        this._dragoverValid = !this.maxFilesReached;
+        this._dragoverValid = !this.maxFilesReached && !this.disabled;
         this._dragover = true;
       }
       event.dataTransfer.dropEffect = !this._dragoverValid || this.nodrop ? 'none' : 'copy';
@@ -559,7 +570,7 @@ export const UploadMixin = (superClass) =>
 
     /** @private */
     async _onDrop(event) {
-      if (!this.nodrop) {
+      if (!this.nodrop && !this.disabled) {
         event.preventDefault();
         this._dragover = this._dragoverValid = false;
 

@@ -15,6 +15,15 @@ export const UploadFileMixin = (superClass) =>
     static get properties() {
       return {
         /**
+         * If true, the user cannot interact with this element.
+         */
+        disabled: {
+          type: Boolean,
+          value: false,
+          reflectToAttribute: true,
+        },
+
+        /**
          * True if uploading is completed, false otherwise.
          */
         complete: {
@@ -91,7 +100,6 @@ export const UploadFileMixin = (superClass) =>
         tabindex: {
           type: Number,
           value: 0,
-          reflectToAttribute: true,
         },
 
         /**
@@ -111,7 +119,7 @@ export const UploadFileMixin = (superClass) =>
     }
 
     static get observers() {
-      return ['__updateProgress(_progress, progress, indeterminate)'];
+      return ['__updateTabindex(tabindex, disabled)', '__updateProgress(_progress, progress, indeterminate)'];
     }
 
     /** @protected */
@@ -155,8 +163,26 @@ export const UploadFileMixin = (superClass) =>
     }
 
     /** @private */
+    __disabledChanged(disabled) {
+      if (disabled) {
+        this.removeAttribute('tabindex');
+      } else {
+        this.setAttribute('tabindex', this.tabindex);
+      }
+    }
+
+    /** @private */
     _errorMessageChanged(errorMessage) {
       this.toggleAttribute('error', Boolean(errorMessage));
+    }
+
+    /** @private */
+    __updateTabindex(tabindex, disabled) {
+      if (disabled) {
+        this.removeAttribute('tabindex');
+      } else {
+        this.setAttribute('tabindex', tabindex);
+      }
     }
 
     /** @private */

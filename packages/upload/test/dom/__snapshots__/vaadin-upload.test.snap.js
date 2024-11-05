@@ -156,3 +156,70 @@ snapshots["vaadin-upload shadow default"] =
 `;
 /* end snapshot vaadin-upload shadow default */
 
+snapshots["vaadin-upload host disabled"] = 
+`<vaadin-upload disabled="">
+  <vaadin-button
+    aria-disabled="true"
+    disabled=""
+    role="button"
+    slot="add-button"
+    tabindex="-1"
+  >
+    Upload Files...
+  </vaadin-button>
+  <span slot="drop-label">
+    Drop files here
+  </span>
+  <vaadin-upload-file-list
+    disabled=""
+    slot="file-list"
+  >
+    <li>
+      <vaadin-upload-file
+        complete=""
+        disabled=""
+      >
+        <vaadin-progress-bar
+          aria-valuemax="1"
+          aria-valuemin="0"
+          aria-valuenow="0"
+          role="progressbar"
+          slot="progress"
+        >
+        </vaadin-progress-bar>
+      </vaadin-upload-file>
+    </li>
+    <li>
+      <vaadin-upload-file disabled="">
+        <vaadin-progress-bar
+          aria-valuemax="1"
+          aria-valuemin="0"
+          aria-valuenow="0.6"
+          role="progressbar"
+          slot="progress"
+        >
+        </vaadin-progress-bar>
+      </vaadin-upload-file>
+    </li>
+    <li>
+      <vaadin-upload-file
+        disabled=""
+        error=""
+      >
+        <vaadin-progress-bar
+          aria-valuemax="1"
+          aria-valuemin="0"
+          aria-valuenow="0"
+          role="progressbar"
+          slot="progress"
+        >
+        </vaadin-progress-bar>
+      </vaadin-upload-file>
+    </li>
+  </vaadin-upload-file-list>
+  <vaadin-upload-icon slot="drop-label-icon">
+  </vaadin-upload-icon>
+</vaadin-upload>
+`;
+/* end snapshot vaadin-upload host disabled */
+

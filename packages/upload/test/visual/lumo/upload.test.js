@@ -108,6 +108,19 @@ describe('upload', () => {
       element = fixtureSync('<vaadin-upload></vaadin-upload>', div);
     });
 
+    it('disabled', async () => {
+      element.disabled = true;
+      element.files = [
+        {
+          name: 'Don Quixote.pdf',
+          held: true, // Show the start button
+          error: 'Could not upload file', // Show the retry button
+        },
+      ];
+
+      await visualDiff(div, 'state-disabled');
+    });
+
     it('max files reached', async () => {
       element.maxFiles = 1;
       element.files = [{ name: 'Don Quixote.pdf' }];
