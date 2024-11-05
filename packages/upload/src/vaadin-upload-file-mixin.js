@@ -21,7 +21,6 @@ export const UploadFileMixin = (superClass) =>
           type: Boolean,
           value: false,
           reflectToAttribute: true,
-          observer: '__disabledChanged',
         },
 
         /**
@@ -101,7 +100,6 @@ export const UploadFileMixin = (superClass) =>
         tabindex: {
           type: Number,
           value: 0,
-          reflectToAttribute: true,
         },
 
         /**
@@ -121,7 +119,7 @@ export const UploadFileMixin = (superClass) =>
     }
 
     static get observers() {
-      return ['__updateProgress(_progress, progress, indeterminate)'];
+      return ['__updateTabindex(tabindex, disabled)', '__updateProgress(_progress, progress, indeterminate)'];
     }
 
     /** @protected */
@@ -161,17 +159,30 @@ export const UploadFileMixin = (superClass) =>
      * @protected
      */
     _shouldSetFocus(event) {
-      return !this.disabled && event.composedPath()[0] === this;
+      return event.composedPath()[0] === this;
     }
 
     /** @private */
     __disabledChanged(disabled) {
-      this.tabIndex = disabled ? -1 : 0;
+      if (disabled) {
+        this.removeAttribute('tabindex');
+      } else {
+        this.setAttribute('tabindex', this.tabindex);
+      }
     }
 
     /** @private */
     _errorMessageChanged(errorMessage) {
       this.toggleAttribute('error', Boolean(errorMessage));
+    }
+
+    /** @private */
+    __updateTabindex(tabindex, disabled) {
+      if (disabled) {
+        this.removeAttribute('tabindex');
+      } else {
+        this.setAttribute('tabindex', tabindex);
+      }
     }
 
     /** @private */

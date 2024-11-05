@@ -82,12 +82,31 @@ describe('<vaadin-upload-file> element', () => {
     it('should be focusable by default', () => {
       fileElement.focus();
       expect(fileElement.hasAttribute('focused')).to.be.true;
+      expect(document.activeElement).to.equal(fileElement);
     });
 
-    it('should not be focusable when disabled', () => {
+    it('should not be focusable when disabled', async () => {
       fileElement.disabled = true;
+      await nextUpdate(fileElement);
       fileElement.focus();
       expect(fileElement.hasAttribute('focused')).to.be.false;
+      expect(document.activeElement).to.not.equal(fileElement);
+    });
+
+    it('should reflect tabindex to attribute', async () => {
+      expect(fileElement.getAttribute('tabindex')).to.equal('0');
+
+      fileElement.tabIndex = 1;
+      await nextUpdate(fileElement);
+      expect(fileElement.getAttribute('tabindex')).to.equal('1');
+    });
+
+    it('should remove tabindex attribute when disabled', async () => {
+      expect(fileElement.getAttribute('tabindex')).to.equal('0');
+
+      fileElement.disabled = true;
+      await nextUpdate(fileElement);
+      expect(fileElement.hasAttribute('tabindex')).to.be.false;
     });
 
     it('should not add focus-ring to the host on programmatic focus', () => {
