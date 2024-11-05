@@ -89,6 +89,8 @@ class PopoverOpenedStateController {
       this.__abortClose();
       this.__setOpened(false);
     }
+
+    this.__abortOpen();
   }
 
   /** @private */
@@ -786,7 +788,7 @@ class Popover extends PopoverPositionMixin(
   __onTargetMouseLeave(event) {
     // Do not close the popover on target focusout if the overlay is not the last one.
     // This happens e.g. when opening the nested popover that uses non-modal overlay.
-    if (!isLastOverlay(this._overlayElement)) {
+    if (this._overlayElement.opened && !isLastOverlay(this._overlayElement)) {
       return;
     }
 

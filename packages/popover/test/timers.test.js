@@ -100,6 +100,17 @@ describe('timers', () => {
       await nextUpdate(popover);
       expect(overlay.opened).to.be.true;
     });
+
+    it('should not open the overlay after mouseleave during hover delay', async () => {
+      mouseenter(target);
+      await nextUpdate(popover);
+      expect(overlay.opened).to.be.false;
+
+      mouseleave(target);
+
+      await aTimeout(5);
+      expect(overlay.opened).to.be.false;
+    });
   });
 
   describe('focusDelay', () => {
