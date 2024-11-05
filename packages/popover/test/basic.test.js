@@ -413,6 +413,24 @@ describe('popover', () => {
     });
   });
 
+  describe('content overflow', () => {
+    beforeEach(async () => {
+      popover.renderer = (root) => {
+        root.textContent = new Array(1000).fill('foo').join(' ');
+      };
+      popover.opened = true;
+      await nextRender();
+    });
+
+    it('should limit overlay height if content overflows the viewport', () => {
+      expect(overlay.$.overlay.getBoundingClientRect().height).to.equal(overlay.getBoundingClientRect().height);
+    });
+
+    it('should limit content height if content overflows the viewport', () => {
+      expect(overlay.$.content.getBoundingClientRect().height).to.equal(overlay.getBoundingClientRect().height);
+    });
+  });
+
   describe('closed event', () => {
     beforeEach(async () => {
       popover.opened = true;
