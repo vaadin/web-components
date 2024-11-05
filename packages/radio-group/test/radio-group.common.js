@@ -96,12 +96,42 @@ describe('radio-group', () => {
       groupName = group._fieldName;
     });
 
-    it('should set the group name to the dynamically added radio buttons', async () => {
+    it('should set the default name to the dynamically added radio buttons', async () => {
       const radio = document.createElement('vaadin-radio-button');
       group.appendChild(radio);
       await nextFrame();
 
       expect(radio.name).to.equal(groupName);
+    });
+
+    it('should propagate the group name to the existing radio buttons', async () => {
+      group.name = 'name';
+      await nextFrame();
+      buttons.forEach((radio) => {
+        expect(radio.name).to.equal(group.name);
+      });
+    });
+
+    it('should propagate the group name to the dynamically added radio buttons', async () => {
+      group.name = 'name';
+      await nextFrame();
+
+      const radio = document.createElement('vaadin-radio-button');
+      group.appendChild(radio);
+      await nextFrame();
+
+      expect(radio.name).to.equal(group.name);
+    });
+
+    it('should restore the default name on the radio buttons when group name removed', async () => {
+      group.name = 'name';
+      await nextFrame();
+
+      group.name = null;
+      await nextFrame();
+      buttons.forEach((radio) => {
+        expect(radio.name).to.equal(groupName);
+      });
     });
   });
 
