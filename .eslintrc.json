@@ -10,7 +10,8 @@
   "plugins": [
     "no-only-tests",
     "simple-import-sort",
-    "es"
+    "es",
+    "local-rules"
   ],
   "extends": [
     "vaadin/typescript",
@@ -27,6 +28,7 @@
     "@typescript-eslint/max-params": ["error", { "max": 5 }],
     "@typescript-eslint/no-shadow": "off",
     "@typescript-eslint/no-unused-expressions": "off",
+    "local-rules/no-direct-validate-method-calls": "error",
     "no-only-tests/no-only-tests": "error",
     "simple-import-sort/imports": [
       "error",
