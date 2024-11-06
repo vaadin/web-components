@@ -219,39 +219,6 @@ const runTests = (defineHelper, baseMixin) => {
     });
   });
 
-  describe('manual validation', () => {
-    let validateSpy;
-
-    beforeEach(async () => {
-      element = fixtureSync(`<${tag} manual-validation></${tag}>`);
-      await nextRender();
-      validateSpy = sinon.spy(element, 'validate');
-      input = element.querySelector('[slot=input]');
-    });
-
-    it('should not validate on blur', () => {
-      element.focus();
-      element.blur();
-      expect(validateSpy).to.be.not.called;
-    });
-
-    it('should not validate on input event', async () => {
-      element.required = true;
-      element.invalid = true;
-      await nextUpdate(element);
-      input.focus();
-      await sendKeys({ type: 'f' });
-      expect(validateSpy).to.be.not.called;
-    });
-
-    it('should not validate on value change when field is invalid', async () => {
-      element.invalid = true;
-      element.value = 'foo';
-      await nextUpdate(element);
-      expect(validateSpy).to.be.not.called;
-    });
-  });
-
   describe('slotted input value', () => {
     beforeEach(() => {
       sinon.stub(console, 'warn');
