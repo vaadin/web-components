@@ -50,7 +50,7 @@ const runTests = (defineHelper, baseMixin) => {
     describe('initial', () => {
       beforeEach(() => {
         element = document.createElement(tag);
-        validateSpy = sinon.spy(element, '_requestValidation');
+        validateSpy = sinon.spy(element, 'validate');
       });
 
       afterEach(() => {
@@ -264,14 +264,14 @@ const runTests = (defineHelper, baseMixin) => {
         validateSpy = sinon.spy(element, 'validate');
       });
 
-      it('should not validate when adding constraint', async () => {
+      it('should not validate when adding constraints', async () => {
         element.value = 'foo';
         element.required = true;
         await nextUpdate(element);
         expect(validateSpy).to.be.not.called;
       });
 
-      it('should not validate when removing constraint', async () => {
+      it('should not validate when removing constraints', async () => {
         element.value = 'foo';
         element.required = true;
         element.minlength = 2;
