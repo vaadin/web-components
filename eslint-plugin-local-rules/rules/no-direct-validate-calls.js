@@ -5,7 +5,7 @@ module.exports = {
     type: 'problem',
     fixable: 'code',
     docs: {
-      description: 'Disallow calling `this.validate()` directly to prevent bypassing manual validation mode',
+      description: 'Require _requestValidation() instead of direct validate() calls to respect manual validation mode',
     },
     schema: [],
   },
@@ -19,8 +19,7 @@ module.exports = {
         ) {
           context.report({
             node,
-            message:
-              'The `validate` method must not be called directly because it ignores manual validation mode. Use `_requestValidation` instead.',
+            message: `Don't call validate() directly - it bypasses manual validation mode. Use _requestValidation() instead`,
             fix: (fixer) => {
               return fixer.replaceText(node.property, '_requestValidation');
             },
