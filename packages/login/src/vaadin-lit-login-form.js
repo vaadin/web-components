@@ -59,7 +59,6 @@ class LoginForm extends LoginFormMixin(ElementMixin(ThemableMixin(PolylitMixin(L
             .errorMessage="${this.i18n.errorMessage.username}"
             id="vaadinLoginUsername"
             required
-            manual-validation
             @keydown="${this._handleInputKeydown}"
             autocapitalize="none"
             autocorrect="off"
@@ -75,7 +74,6 @@ class LoginForm extends LoginFormMixin(ElementMixin(ThemableMixin(PolylitMixin(L
             .errorMessage="${this.i18n.errorMessage.password}"
             id="vaadinLoginPassword"
             required
-            manual-validation
             @keydown="${this._handleInputKeydown}"
             spellcheck="false"
             autocomplete="current-password"
