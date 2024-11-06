@@ -289,6 +289,12 @@ const runTests = (defineHelper, baseMixin) => {
         await nextUpdate(element);
         expect(element.invalid).to.be.true;
       });
+
+      it('should not validate on input change event', () => {
+        input.value = 'foo';
+        fire(input, 'change');
+        expect(validateSpy).to.be.not.called;
+      });
     });
   });
 
