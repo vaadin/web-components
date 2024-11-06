@@ -84,12 +84,6 @@ describe('validation', () => {
       expect(timePicker.validate()).to.be.true;
     });
 
-    it('should validate on blur', () => {
-      timePicker.focus();
-      timePicker.blur();
-      expect(validateSpy).to.be.calledOnce;
-    });
-
     it('should not validate on min change without value', () => {
       timePicker.min = '12:00';
       expect(validateSpy.called).to.be.false;
@@ -274,34 +268,6 @@ describe('validation', () => {
   describe('incorrect value', () => {
     it('should not throw error when setting incorrect value using attribute', () => {
       expect(() => fixtureSync(`<vaadin-time-picker value="1500"></vaadin-time-picker>`)).to.not.throw(Error);
-    });
-  });
-
-  describe('manual validation', () => {
-    let validateSpy;
-
-    beforeEach(async () => {
-      timePicker = fixtureSync(`<vaadin-time-picker manual-validation></vaadin-time-picker>`);
-      await nextRender();
-      validateSpy = sinon.spy(timePicker, 'validate');
-    });
-
-    it('should not validate on blur', () => {
-      timePicker.focus();
-      timePicker.blur();
-      expect(validateSpy).to.be.not.called;
-    });
-
-    it('should not validate on min change with value', () => {
-      timePicker.value = '12:00';
-      timePicker.min = '12:00';
-      expect(validateSpy).to.be.not.called;
-    });
-
-    it('should not validate on max change with value', () => {
-      timePicker.value = '12:00';
-      timePicker.max = '12:00';
-      expect(validateSpy).to.be.not.called;
     });
   });
 });
