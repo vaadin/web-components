@@ -45,13 +45,13 @@ const runTests = (defineHelper, baseMixin) => {
       expect(spy.calledOnce).to.be.true;
     });
 
-    it('should validate on _requestValidation() when manual validation is false', () => {
+    it('should validate on _requestValidation() when manualValidation is false', () => {
       const spy = sinon.spy(element, 'validate');
       element._requestValidation();
       expect(spy).to.be.calledOnce;
     });
 
-    it('should not validate on _requestValidation() when manual validation is true', () => {
+    it('should not validate on _requestValidation() when manualValidation is true', () => {
       const spy = sinon.spy(element, 'validate');
       element.manualValidation = true;
       element._requestValidation();
@@ -78,6 +78,12 @@ const runTests = (defineHelper, baseMixin) => {
       element.required = true;
       element.value = 'value';
       expect(element.checkValidity()).to.be.true;
+    });
+
+    it('should still return result when manualValidation is true', () => {
+      element.manualValidation = true;
+      element.required = true;
+      expect(element.checkValidity()).to.be.false;
     });
   });
 
@@ -127,6 +133,13 @@ const runTests = (defineHelper, baseMixin) => {
       element.value = 'value';
       element.validate();
       expect(element.invalid).to.be.false;
+    });
+
+    it('should still validate when manualValidation is true', () => {
+      element.manualValidation = true;
+      element.required = true;
+      element.validate();
+      expect(element.invalid).to.be.true;
     });
 
     it('should fire a validated event on validation success', () => {
