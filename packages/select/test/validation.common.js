@@ -219,4 +219,55 @@ describe('validation', () => {
       expect(validateSpy.called).to.be.false;
     });
   });
+
+  describe('manual validation', () => {
+    let validateSpy;
+
+    beforeEach(async () => {
+      select = fixtureSync('<vaadin-select manual-validation></vaadin-select>');
+      select.items = [{ label: 'Item-0', value: 'item-0' }];
+      await nextRender();
+      validateSpy = sinon.spy(select, 'validate');
+    });
+
+    it('should not validate on blur', () => {
+      select.focus();
+      select.blur();
+      expect(validateSpy).to.be.not.called;
+    });
+
+    it('should not validate on outside click', async () => {
+      select.focus();
+      select.click();
+      await nextRender();
+      outsideClick();
+      await nextUpdate(select);
+      expect(validateSpy).to.be.not.called;
+    });
+
+    it('should not validate on Enter', async () => {
+      select.focus();
+      select.click();
+      await nextRender();
+      await sendKeys({ press: 'Enter' });
+      await nextUpdate(select);
+      expect(validateSpy).to.be.not.called;
+    });
+
+    it('should not validate on value change', async () => {
+      select.value = 'option-2';
+      await nextUpdate(select);
+      select.value = '';
+      await nextUpdate(select);
+      expect(validateSpy).to.be.not.called;
+    });
+
+    it('should not validate when removing required property', async () => {
+      select.required = true;
+      await nextUpdate(select);
+      select.required = false;
+      await nextUpdate(select);
+      expect(validateSpy).to.be.not.called;
+    });
+  });
 });
