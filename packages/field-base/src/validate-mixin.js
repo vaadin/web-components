@@ -99,7 +99,7 @@ export const ValidateMixin = dedupingMixin(
       /** @protected */
       _requestValidation() {
         if (!this.manualValidation) {
-          // eslint-disable-next-line local-rules/no-direct-validate-method-calls
+          // eslint-disable-next-line local-rules/no-direct-validate-calls
           this.validate();
         }
       }
