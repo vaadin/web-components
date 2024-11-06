@@ -32,6 +32,10 @@ const runTests = (defineHelper, baseMixin) => {
       expect(element.hasAttribute('invalid')).to.be.true;
     });
 
+    it('should have manual validation disabled by default', () => {
+      expect(element.manualValidation).to.be.false;
+    });
+
     it('should fire invalid-changed event on invalid property change', async () => {
       const spy = sinon.spy();
       element.addEventListener('invalid-changed', spy);
