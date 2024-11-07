@@ -57,6 +57,16 @@ export function deepMerge(target, source) {
   return target;
 }
 
+/**
+ * Convenience method for reading a value from a path.
+ *
+ * @param {string} path
+ * @param {object} object
+ */
+function get(path, object) {
+  return path.split('.').reduce((obj, property) => (obj ? obj[property] : undefined), object);
+}
+
 ['exportChart', 'exportChartLocal', 'getSVG'].forEach((methodName) => {
   /* eslint-disable no-invalid-this, prefer-arrow-callback */
   Highcharts.wrap(Highcharts.Chart.prototype, methodName, function (proceed, ...args) {
@@ -544,33 +554,6 @@ class Chart extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))) {
     };
   }
 
-  /** @protected */
-  connectedCallback() {
-    super.connectedCallback();
-    this.__updateStyles();
-    beforeNextRender(this, () => {
-      // Detect if the chart had already been initialized. This might happen in
-      // environments where the chart is lazily attached (e.g Grid).
-      if (this.configuration) {
-        this.__reflow();
-        return;
-      }
-
-      const options = { ...this.options, ...this._jsonConfigurationBuffer };
-      this._jsonConfigurationBuffer = null;
-      this.__initChart(options);
-      this.__addChildObserver();
-      this.__checkTurboMode();
-    });
-  }
-
-  /** @protected */
-  ready() {
-    super.ready();
-
-    this.addEventListener('chart-redraw', this.__onRedraw.bind(this));
-  }
-
   /**
    * @return {!Options}
    */
@@ -953,6 +936,31 @@ class Chart extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))) {
     };
   }
 
+  /** @protected */
+  connectedCallback() {
+    super.connectedCallback();
+    this.__updateStyles();
+    beforeNextRender(this, () => {
+      // Detect if the chart had already been initialized. This might happen in
+      // environments where the chart is lazily attached (e.g Grid).
+      if (this.configuration) {
+        this.__reflow();
+        return;
+      }
+
+      this.__resetChart();
+      this.__addChildObserver();
+      this.__checkTurboMode();
+    });
+  }
+
+  /** @protected */
+  ready() {
+    super.ready();
+
+    this.addEventListener('chart-redraw', this.__onRedraw.bind(this));
+  }
+
   /**
    * Implements resize callback from `ResizeMixin`
    * to reflow when the chart element is resized.
@@ -1093,9 +1101,22 @@ class Chart extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))) {
   /** @protected */
   disconnectedCallback() {
     super.disconnectedCallback();
+
+    if (this.configuration) {
+      this.configuration.destroy();
+      this.configuration = undefined;
+    }
+
     if (this._childObserver) {
       this._childObserver.disconnect();
     }
+  }
+
+  /** @private */
+  __resetChart() {
+    const initialOptions = { ...this.options, ...this._jsonConfigurationBuffer };
+    this.__initChart(initialOptions);
+    this._jsonConfigurationBuffer = null;
   }
 
   /**
@@ -1194,11 +1215,7 @@ class Chart extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))) {
       }
 
       if (resetConfiguration) {
-        const initialOptions = { ...this.options, ...this._jsonConfigurationBuffer };
-
-        this.__initChart(initialOptions);
-
-        this._jsonConfigurationBuffer = null;
+        this.__resetChart();
         return;
       }
 
@@ -1408,6 +1425,11 @@ class Chart extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))) {
   }
 
   /** @private */
+  __hasConfigurationBuffer(path) {
+    return get(path, this._jsonConfigurationBuffer) !== undefined;
+  }
+
+  /** @private */
   __updateOrAddCredits(credits) {
     if (this.configuration.credits) {
       this.configuration.credits.update(credits);
@@ -1455,7 +1477,7 @@ class Chart extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))) {
 
   /** @private */
   __updateCategories(categories, config) {
-    if (categories === undefined || !config) {
+    if (categories === undefined || !config || this.__hasConfigurationBuffer('xAxis.categories')) {
       return;
     }
 
@@ -1464,7 +1486,7 @@ class Chart extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))) {
 
   /** @private */
   __updateCategoryMax(max, config) {
-    if (max === undefined || !config) {
+    if (max === undefined || !config || this.__hasConfigurationBuffer('xAxis.max')) {
       return;
     }
 
@@ -1478,7 +1500,7 @@ class Chart extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))) {
 
   /** @private */
   __updateCategoryMin(min, config) {
-    if (min === undefined || !config) {
+    if (min === undefined || !config || this.__hasConfigurationBuffer('xAxis.min')) {
       return;
     }
 
@@ -1513,7 +1535,7 @@ class Chart extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))) {
 
   /** @private */
   __updateCategoryPosition(categoryPosition, config) {
-    if (categoryPosition === undefined || !config) {
+    if (categoryPosition === undefined || !config || this.__hasConfigurationBuffer('chart.inverted')) {
       return;
     }
 
@@ -1539,7 +1561,7 @@ class Chart extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))) {
 
   /** @private */
   __hideLegend(noLegend, config) {
-    if (noLegend === undefined || !config) {
+    if (noLegend === undefined || !config || this.__hasConfigurationBuffer('legend')) {
       return;
     }
 
@@ -1552,7 +1574,7 @@ class Chart extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))) {
 
   /** @private */
   __updateTitle(title, config) {
-    if (title === undefined || !config) {
+    if (title === undefined || !config || this.__hasConfigurationBuffer('title')) {
       return;
     }
 
@@ -1563,7 +1585,7 @@ class Chart extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))) {
 
   /** @private */
   __tooltipObserver(tooltip, config) {
-    if (tooltip === undefined || !config) {
+    if (tooltip === undefined || !config || this.__hasConfigurationBuffer('tooltip')) {
       return;
     }
 
@@ -1572,7 +1594,7 @@ class Chart extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))) {
 
   /** @private */
   __updateType(type, config) {
-    if (type === undefined || !config) {
+    if (type === undefined || !config || this.__hasConfigurationBuffer('chart.type')) {
       return;
     }
 
@@ -1585,7 +1607,7 @@ class Chart extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))) {
 
   /** @private */
   __updateSubtitle(subtitle, config) {
-    if (subtitle === undefined || !config) {
+    if (subtitle === undefined || !config || this.__hasConfigurationBuffer('subtitle')) {
       return;
     }
 
@@ -1616,7 +1638,7 @@ class Chart extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))) {
 
   /** @private */
   __stackingObserver(stacking, config) {
-    if (stacking === undefined || !config) {
+    if (stacking === undefined || !config || this.__hasConfigurationBuffer('plotOptions.series.stacking')) {
       return;
     }
 
@@ -1634,7 +1656,7 @@ class Chart extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))) {
 
   /** @private */
   __chart3dObserver(chart3d, config) {
-    if (chart3d === undefined || !config) {
+    if (chart3d === undefined || !config || this.__hasConfigurationBuffer('chart.options3d')) {
       return;
     }
 
@@ -1661,7 +1683,7 @@ class Chart extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))) {
 
   /** @private */
   __polarObserver(polar, config) {
-    if (polar === undefined || !config) {
+    if (polar === undefined || !config || this.__hasConfigurationBuffer('chart.polar')) {
       return;
     }
 
@@ -1672,7 +1694,7 @@ class Chart extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))) {
 
   /** @private */
   __emptyTextObserver(emptyText, config) {
-    if (emptyText === undefined || !config) {
+    if (emptyText === undefined || !config || this.__hasConfigurationBuffer('lang.noData')) {
       return;
     }
 
