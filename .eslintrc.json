@@ -61,9 +61,9 @@
   },
   "overrides": [
     {
-      // Prevent using optional-chaining in source files, as it is not supported by Polymer analyzer
       "files": ["packages/*/src/**/*.js"],
       "rules": {
+        // Prevent using optional-chaining in source files, as it is not supported by Polymer analyzer
         "es/no-optional-chaining": "error",
         "no-restricted-syntax": [
           "error",
