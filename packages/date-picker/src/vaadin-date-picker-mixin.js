@@ -624,13 +624,8 @@ export const DatePickerMixin = (subclass) =>
         !this._selectedDate || dateAllowed(this._selectedDate, this._minDate, this._maxDate, this.isDateDisabled);
 
       let inputValidity = true;
-      if (this.inputElement) {
-        if (this.inputElement.checkValidity) {
-          inputValidity = this.inputElement.checkValidity();
-        } else if (this.inputElement.validate) {
-          // Iron-form-elements have the validate API
-          inputValidity = this.inputElement.validate();
-        }
+      if (this.inputElement && this.inputElement.checkValidity) {
+        inputValidity = this.inputElement.checkValidity();
       }
 
       return inputValid && isDateValid && inputValidity;

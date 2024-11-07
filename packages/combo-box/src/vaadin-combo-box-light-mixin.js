@@ -100,17 +100,6 @@ export const ComboBoxLightMixin = (superClass) =>
     }
 
     /**
-     * Returns true if the current input value satisfies all constraints (if any).
-     * @return {boolean}
-     */
-    checkValidity() {
-      if (this.inputElement && this.inputElement.validate) {
-        return this.inputElement.validate();
-      }
-      return super.checkValidity();
-    }
-
-    /**
      * @protected
      * @override
      */
