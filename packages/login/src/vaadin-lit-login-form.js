@@ -64,6 +64,7 @@ class LoginForm extends LoginFormMixin(ElementMixin(ThemableMixin(PolylitMixin(L
             autocorrect="off"
             spellcheck="false"
             autocomplete="username"
+            manual-validation
           >
             <input type="text" slot="input" @keyup="${this._handleInputKeyup}" />
           </vaadin-text-field>
@@ -77,6 +78,7 @@ class LoginForm extends LoginFormMixin(ElementMixin(ThemableMixin(PolylitMixin(L
             @keydown="${this._handleInputKeydown}"
             spellcheck="false"
             autocomplete="current-password"
+            manual-validation
           >
             <input type="password" slot="input" @keyup="${this._handleInputKeyup}" />
           </vaadin-password-field>
