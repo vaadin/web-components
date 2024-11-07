@@ -998,6 +998,9 @@ export const GridMixin = (superClass) =>
         e.stopPropagation();
         this.__tryToRecalculateColumnWidthsIfPending();
 
+        // Ensure header and footer have tabbable elements
+        this._resetKeyboardNavigation();
+
         requestAnimationFrame(() => {
           this.__scrollToPendingIndexes();
         });
