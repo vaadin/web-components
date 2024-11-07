@@ -307,18 +307,6 @@ class Chart extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))) {
     return 'vaadin-chart';
   }
 
-  /** @private */
-  static __callHighchartsFunction(functionName, redrawCharts, ...args) {
-    const functionToCall = Highcharts[functionName];
-    if (functionToCall && typeof functionToCall === 'function') {
-      args.forEach((arg) => inflateFunctions(arg));
-      functionToCall.apply(this.configuration, args);
-      if (redrawCharts) {
-        Highcharts.charts.forEach((c) => c.redraw());
-      }
-    }
-  }
-
   static get properties() {
     return {
       /**
@@ -514,6 +502,25 @@ class Chart extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))) {
       '__updateType(type, configuration)',
       '__updateAdditionalOptions(additionalOptions.*)',
     ];
+  }
+
+  /** @private */
+  static __callHighchartsFunction(functionName, redrawCharts, ...args) {
+    const functionToCall = Highcharts[functionName];
+    if (functionToCall && typeof functionToCall === 'function') {
+      args.forEach((arg) => inflateFunctions(arg));
+      functionToCall.apply(this.configuration, args);
+      if (redrawCharts) {
+        Highcharts.charts.forEach((c) => {
+          // Ignore `undefined` values that are preserved in the array
+          // after their corresponding chart instances are destroyed.
+          // See https://github.com/vaadin/flow-components/issues/6607
+          if (c !== undefined) {
+            c.redraw();
+          }
+        });
+      }
+    }
   }
 
   constructor() {

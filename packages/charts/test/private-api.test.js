@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, oneEvent } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame, oneEvent } from '@vaadin/testing-helpers';
 import '../vaadin-chart.js';
 import { inflateFunctions } from '../src/helpers.js';
 
@@ -192,6 +192,19 @@ describe('vaadin-chart private API', () => {
     it('should inflate functions passed as string', () => {
       const legend = chart.$.chart.querySelector('.highcharts-legend-item > text').textContent;
       expect(legend).to.be.equal('value');
+    });
+
+    it('should not throw when calling after a chart is destroyed', async () => {
+      chart.updateConfiguration({}, true);
+      await nextFrame();
+
+      expect(() => {
+        chart.constructor.__callHighchartsFunction('setOptions', true, {
+          lang: {
+            shortWeekdays: ['su', 'ma', 'ti', 'ke', 'to', 'pe', 'la'],
+          },
+        });
+      }).to.not.throw(Error);
     });
   });
 });
