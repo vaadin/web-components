@@ -1,18 +1,20 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, nextFrame, oneEvent } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame, nextRender, oneEvent } from '@vaadin/testing-helpers';
+import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
-import { fire, flushGrid, getBodyCellContent, infiniteDataProvider } from './helpers.js';
+import { fire, flushGrid, getBodyCellContent, getHeaderCell, infiniteDataProvider } from './helpers.js';
 
 describe('hidden grid', () => {
   let grid;
 
   describe('initially hidden', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       grid = fixtureSync(`
       <vaadin-grid style="height: 200px; width: 200px;" hidden size="1">
         <vaadin-grid-column header="foo"></vaadin-grid-column>
       </vaadin-grid>
     `);
+      await nextRender();
       grid.querySelector('vaadin-grid-column').renderer = (root, _, model) => {
         root.textContent = model.index;
       };
@@ -30,6 +32,15 @@ describe('hidden grid', () => {
       await oneEvent(grid, 'animationend');
       await nextFrame();
       expect(getBodyCellContent(grid, 0, 0).textContent).to.equal('0');
+    });
+
+    it('should make it possible to Tab to header', async () => {
+      grid.removeAttribute('hidden');
+      await oneEvent(grid, 'animationend');
+      await nextFrame();
+
+      await sendKeys({ press: 'Tab' });
+      expect(grid.shadowRoot.activeElement).to.equal(getHeaderCell(grid, 0, 0));
     });
   });
 
