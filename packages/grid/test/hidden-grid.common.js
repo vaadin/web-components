@@ -2,7 +2,7 @@ import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextFrame, nextRender, oneEvent } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
-import { fire, flushGrid, getBodyCellContent, getHeaderCell, infiniteDataProvider } from './helpers.js';
+import { fire, flushGrid, getBodyCellContent, infiniteDataProvider } from './helpers.js';
 
 describe('hidden grid', () => {
   let grid;
@@ -40,7 +40,7 @@ describe('hidden grid', () => {
       await nextFrame();
 
       await sendKeys({ press: 'Tab' });
-      expect(grid.shadowRoot.activeElement).to.equal(getHeaderCell(grid, 0, 0));
+      expect(grid.shadowRoot.activeElement).to.equal(grid.$.header.querySelector('[part~="cell"]'));
     });
   });
 
