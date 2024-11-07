@@ -459,14 +459,7 @@ export const DateTimePickerMixin = (superClass) =>
 
       this.__addInputListeners(newDatePicker);
 
-      if (this.__isDefaultPicker(newDatePicker, 'date')) {
-        // Synchronize properties to default date picker
-        newDatePicker.placeholder = this.datePlaceholder;
-        newDatePicker.invalid = this.invalid;
-        newDatePicker.initialPosition = this.initialPosition;
-        newDatePicker.showWeekNumbers = this.showWeekNumbers;
-        this.__syncI18n(newDatePicker, this, datePickerI18nProps);
-      } else {
+      if (!this.__isDefaultPicker(newDatePicker, 'date')) {
         // Synchronize properties from slotted date picker
         this.datePlaceholder = newDatePicker.placeholder;
         this.initialPosition = newDatePicker.initialPosition;
@@ -481,7 +474,6 @@ export const DateTimePickerMixin = (superClass) =>
 
       // Disable default internal validation for the component
       newDatePicker.validate = () => {};
-      newDatePicker._validateInput = () => {};
     }
 
     /** @private */
@@ -497,13 +489,7 @@ export const DateTimePickerMixin = (superClass) =>
 
       this.__addInputListeners(newTimePicker);
 
-      if (this.__isDefaultPicker(newTimePicker, 'time')) {
-        // Synchronize properties to default time picker
-        newTimePicker.placeholder = this.timePlaceholder;
-        newTimePicker.step = this.step;
-        newTimePicker.invalid = this.invalid;
-        this.__syncI18n(newTimePicker, this, timePickerI18nProps);
-      } else {
+      if (!this.__isDefaultPicker(newTimePicker, 'time')) {
         // Synchronize properties from slotted time picker
         this.timePlaceholder = newTimePicker.placeholder;
         this.step = newTimePicker.step;
@@ -523,7 +509,6 @@ export const DateTimePickerMixin = (superClass) =>
       if (this.__timePicker && this.__datePicker) {
         const selectedDate = this.__parseDate(this.__datePicker.value);
         const isMinMaxSameDay = dateEquals(this.__minDateTime, this.__maxDateTime, normalizeUTCDate);
-        const oldTimeValue = this.__timePicker.value;
 
         if ((this.__minDateTime && dateEquals(selectedDate, this.__minDateTime, normalizeUTCDate)) || isMinMaxSameDay) {
           this.__timePicker.min = this.__dateToIsoTimeString(this.__minDateTime);
@@ -536,23 +521,17 @@ export const DateTimePickerMixin = (superClass) =>
         } else {
           this.__timePicker.max = this.__defaultTimeMaxValue;
         }
-
-        // If time picker automatically adjusts the time value due to the new min or max
-        // revert the time value
-        if (this.__timePicker.value !== oldTimeValue) {
-          this.__timePicker.value = oldTimeValue;
-        }
       }
     }
 
     /** @private */
-    __i18nChanged(i18n, datePicker, timePicker) {
+    __i18nChanged(_i18n, datePicker, timePicker) {
       if (datePicker) {
-        datePicker.i18n = { ...datePicker.i18n, ...i18n };
+        this.__syncI18n(datePicker, this, datePickerI18nProps);
       }
 
       if (timePicker) {
-        timePicker.i18n = { ...timePicker.i18n, ...i18n };
+        this.__syncI18n(timePicker, this, timePickerI18nProps);
       }
     }
 
