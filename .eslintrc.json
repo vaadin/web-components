@@ -61,10 +61,21 @@
   },
   "overrides": [
     {
-      // Prevent using optional-chaining in source files, as it is not supported by Polymer analyzer
       "files": ["packages/*/src/**/*.js"],
       "rules": {
-        "es/no-optional-chaining": "error"
+        // Prevent using optional-chaining in source files, as it is not supported by Polymer analyzer
+        "es/no-optional-chaining": "error",
+        "no-restricted-syntax": [
+          "error",
+          {
+            "selector": "ForInStatement",
+            "message": "for..in loops are slower than Object.{keys,values,entries} and have their caveats."
+          },
+          {
+            "selector": "CallExpression[callee.property.name='validate']",
+            "message": "Don't call validate() directly - it bypasses manual validation mode. Use _requestValidation() instead"
+          }
+        ]
       }
     },
     {

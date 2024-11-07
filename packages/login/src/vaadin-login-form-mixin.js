@@ -50,7 +50,12 @@ export const LoginFormMixin = (superClass) =>
       const userName = this.$.vaadinLoginUsername;
       const password = this.$.vaadinLoginPassword;
 
-      if (this.disabled || !(userName.validate() && password.validate())) {
+      // eslint-disable-next-line no-restricted-syntax
+      userName.validate();
+      // eslint-disable-next-line no-restricted-syntax
+      password.validate();
+
+      if (this.disabled || userName.invalid || password.invalid) {
         return;
       }
 
@@ -114,6 +119,7 @@ export const LoginFormMixin = (superClass) =>
         const { currentTarget: inputActive } = e;
         const nextInput =
           inputActive.id === 'vaadinLoginUsername' ? this.$.vaadinLoginPassword : this.$.vaadinLoginUsername;
+        // eslint-disable-next-line no-restricted-syntax
         if (inputActive.validate()) {
           if (nextInput.checkValidity()) {
             this.submit();

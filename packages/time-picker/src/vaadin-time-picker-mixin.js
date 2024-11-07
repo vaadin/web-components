@@ -263,7 +263,7 @@ export const TimePickerMixin = (superClass) =>
         // Do not validate when focusout is caused by document
         // losing focus, which happens on browser tab switch.
         if (document.hasFocus()) {
-          this.validate();
+          this._requestValidation();
         }
       }
     }
@@ -342,10 +342,10 @@ export const TimePickerMixin = (superClass) =>
       const unparsableValue = this.__unparsableValue;
 
       if (this.__committedValue !== this.value) {
-        this.validate();
+        this._requestValidation();
         this.dispatchEvent(new CustomEvent('change', { bubbles: true }));
       } else if (this.__committedUnparsableValue !== unparsableValue) {
-        this.validate();
+        this._requestValidation();
         this.dispatchEvent(new CustomEvent('unparsable-change'));
       }
 
