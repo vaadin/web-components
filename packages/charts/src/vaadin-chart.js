@@ -31,7 +31,6 @@ import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import Pointer from 'highcharts/es-modules/Core/Pointer.js';
 import Highcharts from 'highcharts/es-modules/masters/highstock.src.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
-import { get } from '@vaadin/component-base/src/path-utils.js';
 import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { inflateFunctions } from './helpers.js';
@@ -56,6 +55,16 @@ export function deepMerge(target, source) {
   }
 
   return target;
+}
+
+/**
+ * Convenience method for reading a value from a path.
+ *
+ * @param {string} path
+ * @param {object} object
+ */
+function get(path, object) {
+  return path.split('.').reduce((obj, property) => (obj ? obj[property] : undefined), object);
 }
 
 ['exportChart', 'exportChartLocal', 'getSVG'].forEach((methodName) => {

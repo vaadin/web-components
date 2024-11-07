@@ -1,7 +1,7 @@
-import { fixtureSync, oneEvent } from '@vaadin/testing-helpers';
+import { expect } from '@esm-bundle/chai';
+import { fixtureSync, nextFrame, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../vaadin-chart.js';
-import { expect } from '@vaadin/chai-plugins';
 
 describe('reattach', () => {
   let wrapper, inner, chart;
@@ -25,7 +25,7 @@ describe('reattach', () => {
 
     const spy = sinon.spy(chart.configuration, 'destroy');
     wrapper.removeChild(chart);
-    expect(spy).to.be.calledOnce;
+    expect(spy.calledOnce).to.be.ok;
     expect(chart.configuration).to.be.undefined;
   });
 
@@ -35,6 +35,7 @@ describe('reattach', () => {
 
     inner.appendChild(chart);
     await oneEvent(chart, 'chart-load');
+    await nextFrame();
     expect(chart.configuration.series.length).to.be.equal(chart.childElementCount);
   });
 
@@ -71,6 +72,7 @@ describe('reattach', () => {
 
     inner.appendChild(chart);
     await oneEvent(chart, 'chart-load');
+    await nextFrame();
     expect(chart.configuration.types).to.be.eql(['line']);
   });
 
@@ -162,6 +164,7 @@ describe('reattach', () => {
 
     inner.appendChild(chart);
     await oneEvent(chart, 'chart-load');
+    await nextFrame();
 
     const textNodes = chart.$.chart.querySelectorAll('.highcharts-xaxis-labels > text');
     const text = Array.from(textNodes).map((node) => node.textContent);
