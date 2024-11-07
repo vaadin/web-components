@@ -24,6 +24,8 @@ export declare class ValidateMixinClass {
    * the invalid state. In manual validation mode, you can also manipulate
    * the `invalid` property directly through your application logic without conflicts
    * with the component's internal validation.
+   *
+   * @attr {boolean} manual-validation
    */
   manualValidation: boolean;
 
