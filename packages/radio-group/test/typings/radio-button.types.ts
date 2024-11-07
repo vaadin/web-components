@@ -51,6 +51,11 @@ radio.addEventListener('checked-changed', (event) => {
 
 const group = document.createElement('vaadin-radio-group');
 
+// Group properties
+assertType<string | null | undefined>(group.name);
+assertType<string | null | undefined>(group.value);
+assertType<boolean>(group.readonly);
+
 // Group mixins
 assertType<ControllerMixinClass>(group);
 assertType<DisabledMixinClass>(group);

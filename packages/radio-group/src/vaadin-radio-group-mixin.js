@@ -25,6 +25,14 @@ export const RadioGroupMixin = (superclass) =>
     static get properties() {
       return {
         /**
+         * The name of the control, which is submitted with the form data.
+         */
+        name: {
+          type: String,
+          observer: '__nameChanged',
+        },
+
+        /**
          * The value of the radio group.
          *
          * @type {string}
@@ -190,6 +198,13 @@ export const RadioGroupMixin = (superclass) =>
       }
     }
 
+    /** @private */
+    __nameChanged(name) {
+      this.__radioButtons.forEach((radioButton) => {
+        radioButton.name = name || this._fieldName;
+      });
+    }
+
     /**
      * @param {number} index
      * @private
@@ -234,7 +249,7 @@ export const RadioGroupMixin = (superclass) =>
      * @private
      */
     __registerRadioButton(radioButton) {
-      radioButton.name = this._fieldName;
+      radioButton.name = this.name || this._fieldName;
       radioButton.addEventListener('checked-changed', this.__onRadioButtonCheckedChange);
 
       if (this.disabled || this.readonly) {
