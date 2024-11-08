@@ -1078,14 +1078,20 @@ class Chart extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))) {
   disconnectedCallback() {
     super.disconnectedCallback();
 
-    if (this.configuration) {
-      this.configuration.destroy();
-      this.configuration = undefined;
-    }
+    queueMicrotask(() => {
+      if (this.isConnected) {
+        return;
+      }
 
-    if (this._childObserver) {
-      this._childObserver.disconnect();
-    }
+      if (this.configuration) {
+        this.configuration.destroy();
+        this.configuration = undefined;
+      }
+
+      if (this._childObserver) {
+        this._childObserver.disconnect();
+      }
+    });
   }
 
   /** @private */
