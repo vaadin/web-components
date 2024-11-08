@@ -34,7 +34,7 @@ export const notificationContainerStyles = css`
     flex: 1 1 0%;
   }
 
-  @media (max-width: 420px) {
+  @media (max-width: 430px) {
     [region-group] {
       flex-direction: column;
       align-items: stretch;
