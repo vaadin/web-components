@@ -114,13 +114,32 @@ describe('renderer', () => {
     });
 
     afterEach(() => {
-      document.body.removeChild(notification);
+      notification.remove();
     });
 
     it('should not throw when the renderer is set before adding to DOM', () => {
       expect(() => {
         notification.renderer = () => {};
         document.body.appendChild(notification);
+      }).to.not.throw(Error);
+    });
+
+    it('should not throw when requesting content update after adding', () => {
+      notification.renderer = (root) => {
+        root.textContent = 'Text';
+      };
+      document.body.appendChild(notification);
+      expect(() => {
+        notification.requestContentUpdate();
+      }).to.not.throw(Error);
+    });
+
+    it('should not throw when requesting content update without adding to DOM', () => {
+      notification.renderer = (root) => {
+        root.textContent = 'Text';
+      };
+      expect(() => {
+        notification.requestContentUpdate();
       }).to.not.throw(Error);
     });
   });

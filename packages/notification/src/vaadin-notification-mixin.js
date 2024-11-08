@@ -264,7 +264,7 @@ export const NotificationMixin = (superClass) =>
      * It is not guaranteed that the update happens immediately (synchronously) after it is requested.
      */
     requestContentUpdate() {
-      if (!this.renderer) {
+      if (!this.renderer || !this._card) {
         return;
       }
 
