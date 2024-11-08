@@ -1,23 +1,22 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync } from '@vaadin/testing-helpers';
+import { defineLit, definePolymer, fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
+import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { DisabledMixin } from '../src/disabled-mixin.js';
 
-customElements.define(
-  'disabled-mixin-element',
-  class extends DisabledMixin(PolymerElement) {
-    static get template() {
-      return html`<slot></slot>`;
-    }
-  },
-);
+const runTests = (defineHelper, baseMixin) => {
+  const tag = defineHelper(
+    'disabled-mixin',
+    '<slot></slot>',
+    (Base) => class extends DisabledMixin(baseMixin(Base)) {},
+  );
 
-describe('disabled-mixin', () => {
   let element;
 
-  beforeEach(() => {
-    element = fixtureSync(`<disabled-mixin-element></disabled-mixin-element>`);
+  beforeEach(async () => {
+    element = fixtureSync(`<${tag}></${tag}>`);
+    await nextRender();
   });
 
   it('should set disabled property to false by default', () => {
@@ -47,4 +46,12 @@ describe('disabled-mixin', () => {
     element.click();
     expect(spy.called).to.be.false;
   });
+};
+
+describe('DisabledMixin + Polymer', () => {
+  runTests(definePolymer, ControllerMixin);
+});
+
+describe('DisabledMixin + Lit', () => {
+  runTests(defineLit, PolylitMixin);
 });

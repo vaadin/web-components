@@ -61,13 +61,12 @@ describe('radio-group', () => {
       buttons = [...group.querySelectorAll('vaadin-radio-button')];
     });
 
-    it('should propagate disabled property to radio buttons', async () => {
+    it('should propagate disabled property to radio buttons', () => {
       buttons.forEach((button) => {
         expect(button.disabled).to.be.true;
       });
 
       group.disabled = false;
-      await nextUpdate(group);
       buttons.forEach((button) => {
         expect(button.disabled).to.be.false;
       });
@@ -75,6 +74,15 @@ describe('radio-group', () => {
 
     it('should set disabled property to dynamically added radio buttons', async () => {
       const radio = document.createElement('vaadin-radio-button');
+      group.appendChild(radio);
+      await nextFrame();
+      expect(radio.disabled).to.be.true;
+    });
+
+    it('should not override disabled property on dynamically added radio buttons', async () => {
+      group.disabled = false;
+      const radio = document.createElement('vaadin-radio-button');
+      radio.disabled = true;
       group.appendChild(radio);
       await nextFrame();
       expect(radio.disabled).to.be.true;
