@@ -52,4 +52,10 @@ describe('horizontal-layout', () => {
     element.setAttribute('theme', 'margin padding spacing');
     await visualDiff(div, 'theme-margin-padding-spacing');
   });
+
+  it('theme-wrap', async () => {
+    element.setAttribute('theme', 'wrap');
+    element.style.width = '100px';
+    await visualDiff(div, 'theme-wrap');
+  });
 });
