@@ -29,6 +29,10 @@ const horizontalLayout = css`
   :host([theme~='spacing-xl']) {
     gap: var(--lumo-space-xl);
   }
+
+  :host([theme~='wrap']) {
+    flex-wrap: wrap;
+  }
 `;
 
 registerStyles('vaadin-horizontal-layout', horizontalLayout, { moduleId: 'lumo-horizontal-layout' });
