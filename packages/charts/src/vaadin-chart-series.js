@@ -310,7 +310,7 @@ class ChartSeries extends PolymerElement {
 
   /** @private */
   __valueMinObserver(valueMin, series) {
-    if (valueMin === undefined || series === undefined) {
+    if (valueMin === undefined || series == null) {
       return;
     }
 
@@ -319,7 +319,7 @@ class ChartSeries extends PolymerElement {
 
   /** @private */
   __valueMaxObserver(valueMax, series) {
-    if (valueMax === undefined || series === undefined) {
+    if (valueMax === undefined || series == null) {
       return;
     }
 
@@ -335,7 +335,7 @@ class ChartSeries extends PolymerElement {
 
   /** @private */
   __titleObserver(title, series) {
-    if (title === undefined || series === undefined) {
+    if (title === undefined || series == null) {
       return;
     }
     series.update({ name: title });
@@ -343,7 +343,7 @@ class ChartSeries extends PolymerElement {
 
   /** @private */
   __stackObserver(stack, series) {
-    if (stack === undefined || series === undefined) {
+    if (stack === undefined || series == null) {
       return;
     }
     series.update({ stack });
@@ -351,7 +351,7 @@ class ChartSeries extends PolymerElement {
 
   /** @private */
   __neckPositionObserver(neckPosition, series) {
-    if (neckPosition === undefined || series === undefined) {
+    if (neckPosition === undefined || series == null) {
       return;
     }
 
@@ -360,7 +360,7 @@ class ChartSeries extends PolymerElement {
 
   /** @private */
   __neckWidthObserver(neckWidth, series) {
-    if (neckWidth === undefined || series === undefined) {
+    if (neckWidth === undefined || series == null) {
       return;
     }
 
@@ -404,7 +404,7 @@ class ChartSeries extends PolymerElement {
 
   /** @private */
   __markersObserver(markers, series) {
-    if (markers === undefined || series === undefined) {
+    if (markers === undefined || series == null) {
       return;
     }
 
