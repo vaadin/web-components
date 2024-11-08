@@ -25,6 +25,8 @@ describe('reattach', () => {
 
     const spy = sinon.spy(chart.configuration, 'destroy');
     wrapper.removeChild(chart);
+    await nextFrame();
+
     expect(spy.calledOnce).to.be.ok;
     expect(chart.configuration).to.be.undefined;
   });
@@ -32,6 +34,7 @@ describe('reattach', () => {
   it('should re-create chart configuration when attached to a new parent', async () => {
     await oneEvent(chart, 'chart-load');
     wrapper.removeChild(chart);
+    await nextFrame();
 
     inner.appendChild(chart);
     await oneEvent(chart, 'chart-load');
@@ -39,11 +42,26 @@ describe('reattach', () => {
     expect(chart.configuration.series.length).to.be.equal(chart.childElementCount);
   });
 
+  it('should not re-create chart configuration when moved to a new parent', async () => {
+    await oneEvent(chart, 'chart-load');
+
+    const configuration = chart.configuration;
+
+    const spy = sinon.spy(chart.configuration, 'destroy');
+    inner.appendChild(chart);
+    await nextFrame();
+
+    expect(spy.called).to.be.false;
+    expect(chart.configuration).to.be.equal(configuration);
+  });
+
   it('should apply title updated while detached after reattach', async () => {
     chart.title = 'Title';
     await oneEvent(chart, 'chart-load');
 
     wrapper.removeChild(chart);
+    await nextFrame();
+
     chart.updateConfiguration({ title: { text: 'New title' } });
 
     inner.appendChild(chart);
@@ -56,6 +74,8 @@ describe('reattach', () => {
     await oneEvent(chart, 'chart-load');
 
     wrapper.removeChild(chart);
+    await nextFrame();
+
     chart.updateConfiguration({ subtitle: { text: 'New subtitle' } });
 
     inner.appendChild(chart);
@@ -68,6 +88,8 @@ describe('reattach', () => {
     await oneEvent(chart, 'chart-load');
 
     wrapper.removeChild(chart);
+    await nextFrame();
+
     chart.updateConfiguration({ chart: { type: 'line' } });
 
     inner.appendChild(chart);
@@ -81,6 +103,8 @@ describe('reattach', () => {
     await oneEvent(chart, 'chart-load');
 
     wrapper.removeChild(chart);
+    await nextFrame();
+
     chart.updateConfiguration({ tooltip: { enabled: false } });
 
     inner.appendChild(chart);
@@ -93,6 +117,8 @@ describe('reattach', () => {
     await oneEvent(chart, 'chart-load');
 
     wrapper.removeChild(chart);
+    await nextFrame();
+
     chart.updateConfiguration({ legend: { enabled: true } });
 
     inner.appendChild(chart);
@@ -105,6 +131,8 @@ describe('reattach', () => {
     await oneEvent(chart, 'chart-load');
 
     wrapper.removeChild(chart);
+    await nextFrame();
+
     chart.updateConfiguration({ chart: { options3d: { enabled: false } } });
 
     inner.appendChild(chart);
@@ -117,6 +145,8 @@ describe('reattach', () => {
     await oneEvent(chart, 'chart-load');
 
     wrapper.removeChild(chart);
+    await nextFrame();
+
     chart.updateConfiguration({ chart: { polar: false } });
 
     inner.appendChild(chart);
@@ -130,6 +160,8 @@ describe('reattach', () => {
     await oneEvent(chart, 'chart-load');
 
     wrapper.removeChild(chart);
+    await nextFrame();
+
     chart.updateConfiguration({ lang: { noData: 'Nothing' } });
 
     inner.appendChild(chart);
@@ -149,6 +181,7 @@ describe('reattach', () => {
         series: { stacking: 'percent' },
       },
     });
+    await nextFrame();
 
     inner.appendChild(chart);
     await oneEvent(chart, 'chart-load');
@@ -160,6 +193,8 @@ describe('reattach', () => {
     await oneEvent(chart, 'chart-load');
 
     wrapper.removeChild(chart);
+    await nextFrame();
+
     chart.updateConfiguration({ xAxis: { categories: ['Jun', 'Jul', 'Aug'] } });
 
     inner.appendChild(chart);
@@ -176,6 +211,8 @@ describe('reattach', () => {
     await oneEvent(chart, 'chart-load');
 
     wrapper.removeChild(chart);
+    await nextFrame();
+
     chart.updateConfiguration({ xAxis: { min: 1 } });
 
     inner.appendChild(chart);
@@ -188,6 +225,8 @@ describe('reattach', () => {
     await oneEvent(chart, 'chart-load');
 
     wrapper.removeChild(chart);
+    await nextFrame();
+
     chart.updateConfiguration({ xAxis: { max: 3 } });
 
     inner.appendChild(chart);
@@ -200,6 +239,8 @@ describe('reattach', () => {
     await oneEvent(chart, 'chart-load');
 
     wrapper.removeChild(chart);
+    await nextFrame();
+
     chart.updateConfiguration({ chart: { inverted: false } });
 
     inner.appendChild(chart);
