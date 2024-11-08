@@ -21,9 +21,6 @@
   "type": "module",
   "files": [
     "src",
-    "!src/vaadin-lit-tabsheet-scroller.js",
-    "!src/vaadin-lit-tabsheet.d.ts",
-    "!src/vaadin-lit-tabsheet.js",
     "theme",
     "vaadin-*.d.ts",
     "vaadin-*.js",
