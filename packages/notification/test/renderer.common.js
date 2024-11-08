@@ -134,7 +134,7 @@ describe('renderer', () => {
       }).to.not.throw(Error);
     });
 
-    it('should not throw when requesting content without adding to DOM', () => {
+    it('should not throw when requesting content update without adding to DOM', () => {
       notification.renderer = (root) => {
         root.textContent = 'Text';
       };
