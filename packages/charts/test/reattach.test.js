@@ -244,4 +244,119 @@ describe('reattach', () => {
     await oneEvent(chart, 'chart-load');
     expect(chart.configuration.inverted).to.be.undefined;
   });
+
+  describe('series', () => {
+    let series;
+
+    beforeEach(async () => {
+      await oneEvent(chart, 'chart-load');
+      series = chart.querySelector('vaadin-chart-series');
+    });
+
+    it('should apply the series title updated while detached after reattach', async () => {
+      wrapper.removeChild(chart);
+      await nextFrame();
+
+      series.title = 'Title';
+
+      wrapper.appendChild(chart);
+      await oneEvent(chart, 'chart-load');
+
+      expect(chart.configuration.series[0].name).to.be.equal('Title');
+    });
+
+    it('should apply the series type updated while detached after reattach', async () => {
+      wrapper.removeChild(chart);
+      await nextFrame();
+
+      series.type = 'area';
+
+      wrapper.appendChild(chart);
+      await oneEvent(chart, 'chart-load');
+
+      expect(chart.configuration.series[0].type).to.be.equal('area');
+    });
+
+    it('should apply the series unit updated while detached after reattach', async () => {
+      wrapper.removeChild(chart);
+      await nextFrame();
+
+      series.unit = 'unit';
+
+      wrapper.appendChild(chart);
+      await oneEvent(chart, 'chart-load');
+
+      expect(chart.configuration.yAxis[0].options.id).to.be.equal('unit');
+    });
+
+    it('should apply the series neck-width updated while detached after reattach', async () => {
+      wrapper.removeChild(chart);
+      await nextFrame();
+
+      series.neckWidth = 20;
+
+      wrapper.appendChild(chart);
+      await oneEvent(chart, 'chart-load');
+      expect(chart.configuration.series[0].options.neckWidth).to.be.equal(20);
+    });
+
+    it('should apply the series neck-position updated while detached after reattach', async () => {
+      wrapper.removeChild(chart);
+      await nextFrame();
+
+      series.neckPosition = 50;
+
+      wrapper.appendChild(chart);
+      await oneEvent(chart, 'chart-load');
+      expect(chart.configuration.series[0].options.neckHeight).to.be.equal(50);
+    });
+
+    it('should apply the series valueMin updated while detached after reattach', async () => {
+      wrapper.removeChild(chart);
+      await nextFrame();
+
+      series.valueMin = 5;
+
+      wrapper.appendChild(chart);
+      await oneEvent(chart, 'chart-load');
+
+      expect(chart.configuration.yAxis[0].options.min).to.be.equal(5);
+    });
+
+    it('should apply the series valueMax updated while detached after reattach', async () => {
+      wrapper.removeChild(chart);
+      await nextFrame();
+
+      series.valueMax = 10;
+
+      wrapper.appendChild(chart);
+      await oneEvent(chart, 'chart-load');
+
+      expect(chart.configuration.yAxis[0].options.max).to.be.equal(10);
+    });
+
+    it('should apply the series markers updated while detached after reattach', async () => {
+      wrapper.removeChild(chart);
+      await nextFrame();
+
+      series.markers = 'auto';
+
+      wrapper.appendChild(chart);
+      await oneEvent(chart, 'chart-load');
+
+      expect(chart.configuration.series[0].options.marker.enabled).to.be.equal(null);
+    });
+
+    it('should apply the series stack updated while detached after reattach', async () => {
+      wrapper.removeChild(chart);
+      await nextFrame();
+
+      series.stack = '1';
+
+      wrapper.appendChild(chart);
+      await oneEvent(chart, 'chart-load');
+
+      expect(chart.configuration.series[0].options.stack).to.be.equal('1');
+    });
+  });
 });
