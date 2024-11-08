@@ -18,6 +18,7 @@ import {
   onceResized,
   setMaximumColumnWidth,
   setMinimumColumnWidth,
+  setMinimumRowHeight,
   setSpacing,
 } from './helpers.js';
 
@@ -34,6 +35,7 @@ describe('dashboard', () => {
     dashboard.style.width = `${columnWidth * 2}px`;
     setMinimumColumnWidth(dashboard, columnWidth);
     setMaximumColumnWidth(dashboard, columnWidth);
+    setMinimumRowHeight(dashboard, undefined);
     setSpacing(dashboard, 0);
 
     dashboard.items = [{ id: '0' }, { id: '1' }];

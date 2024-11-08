@@ -51,6 +51,7 @@ describe('dashboard layout', () => {
     // Set the column width to a fixed value
     setMinimumColumnWidth(dashboard, columnWidth);
     setMaximumColumnWidth(dashboard, columnWidth);
+    setMinimumRowHeight(dashboard, undefined);
     // Make the dashboard wide enough to fit all items on a single row
     dashboard.style.width = `${columnWidth * dashboard.childElementCount}px`;
 
