@@ -264,6 +264,7 @@ describe('reattach', () => {
 
       wrapper.appendChild(chart);
       await oneEvent(chart, 'chart-load');
+      await nextFrame();
 
       expect(chart.configuration.series[0].name).to.be.equal('Title');
     });
@@ -276,6 +277,7 @@ describe('reattach', () => {
 
       wrapper.appendChild(chart);
       await oneEvent(chart, 'chart-load');
+      await nextFrame();
 
       expect(chart.configuration.series[0].type).to.be.equal('area');
     });
@@ -288,6 +290,7 @@ describe('reattach', () => {
 
       wrapper.appendChild(chart);
       await oneEvent(chart, 'chart-load');
+      await nextFrame();
 
       expect(chart.configuration.yAxis[0].options.id).to.be.equal('unit');
     });
@@ -300,6 +303,8 @@ describe('reattach', () => {
 
       wrapper.appendChild(chart);
       await oneEvent(chart, 'chart-load');
+      await nextFrame();
+
       expect(chart.configuration.series[0].options.neckWidth).to.be.equal(20);
     });
 
@@ -311,6 +316,8 @@ describe('reattach', () => {
 
       wrapper.appendChild(chart);
       await oneEvent(chart, 'chart-load');
+      await nextFrame();
+
       expect(chart.configuration.series[0].options.neckHeight).to.be.equal(50);
     });
 
@@ -322,6 +329,7 @@ describe('reattach', () => {
 
       wrapper.appendChild(chart);
       await oneEvent(chart, 'chart-load');
+      await nextFrame();
 
       expect(chart.configuration.yAxis[0].options.min).to.be.equal(5);
     });
@@ -334,6 +342,7 @@ describe('reattach', () => {
 
       wrapper.appendChild(chart);
       await oneEvent(chart, 'chart-load');
+      await nextFrame();
 
       expect(chart.configuration.yAxis[0].options.max).to.be.equal(10);
     });
@@ -346,6 +355,7 @@ describe('reattach', () => {
 
       wrapper.appendChild(chart);
       await oneEvent(chart, 'chart-load');
+      await nextFrame();
 
       expect(chart.configuration.series[0].options.marker.enabled).to.be.equal(null);
     });
@@ -358,6 +368,7 @@ describe('reattach', () => {
 
       wrapper.appendChild(chart);
       await oneEvent(chart, 'chart-load');
+      await nextFrame();
 
       expect(chart.configuration.series[0].options.stack).to.be.equal('1');
     });
