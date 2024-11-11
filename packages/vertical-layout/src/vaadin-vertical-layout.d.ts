@@ -25,6 +25,7 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * `theme="margin"` | Applies the default amount of CSS margin for the host element (specified by the theme)
  * `theme="padding"` | Applies the default amount of CSS padding for the host element (specified by the theme)
  * `theme="spacing"` | Applies the default amount of CSS margin between items (specified by the theme)
+ * `theme="wrap"` | Items wrap to the next row when they exceed the layout height
  */
 declare class VerticalLayout extends ThemableMixin(ElementMixin(HTMLElement)) {}
 

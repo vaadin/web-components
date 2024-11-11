@@ -29,6 +29,10 @@ const verticalLayout = css`
   :host([theme~='spacing-xl']) {
     gap: var(--lumo-space-xl);
   }
+
+  :host([theme~='wrap']) {
+    flex-wrap: wrap;
+  }
 `;
 
 registerStyles('vaadin-vertical-layout', verticalLayout, { moduleId: 'lumo-vertical-layout' });
