@@ -87,9 +87,9 @@ describe('menu-bar with tooltip', () => {
     expect(tooltip.opened).to.be.false;
   });
 
-  it('should hide tooltip on menu bar mouseleave', () => {
+  it('should hide tooltip on menu bar button mouseleave', () => {
     mouseover(buttons[0]);
-    mouseleave(menuBar);
+    mouseleave(buttons[0]);
     expect(tooltip.opened).to.be.false;
   });
 
@@ -307,7 +307,7 @@ describe('menu-bar with tooltip', () => {
       mouseover(buttons[0]);
       clock.tick(DEFAULT_DELAY);
 
-      mouseleave(menuBar);
+      mouseleave(buttons[0]);
       expect(tooltip.opened).to.be.true;
 
       clock.tick(100);

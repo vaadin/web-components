@@ -189,6 +189,7 @@ export const MenuBarMixin = (superClass) =>
     constructor() {
       super();
       this.__boundOnContextMenuKeydown = this.__onContextMenuKeydown.bind(this);
+      this.__boundOnButtonMouseLeave = this.__onButtonMouseLeave.bind(this);
       this.__boundOnTooltipMouseLeave = this.__onTooltipOverlayMouseLeave.bind(this);
     }
 
@@ -261,7 +262,6 @@ export const MenuBarMixin = (superClass) =>
       this.addController(this._overflowController);
 
       this.addEventListener('mousedown', () => this._hideTooltip(true));
-      this.addEventListener('mouseleave', () => this._hideTooltip());
 
       this._subMenu.addEventListener('item-selected', this.__onItemSelected.bind(this));
       this._subMenu.addEventListener('close-all-menus', this.__onEscapeClose.bind(this));
@@ -657,6 +657,8 @@ export const MenuBarMixin = (superClass) =>
         }
 
         if (!this._subMenu.opened) {
+          button.addEventListener('mouseleave', this.__boundOnButtonMouseLeave);
+
           this._tooltipController.setTarget(button);
           this._tooltipController.setContext({ item: button.item });
 
@@ -673,8 +675,15 @@ export const MenuBarMixin = (superClass) =>
     _hideTooltip(immediate) {
       const tooltip = this._tooltipController && this._tooltipController.node;
       if (tooltip) {
+        const target = this._tooltipController.target;
+        target.removeEventListener('mouseleave', this.__boundOnButtonMouseLeave);
         tooltip._stateController.close(immediate);
       }
+    }
+
+    /** @private */
+    __onButtonMouseLeave() {
+      this._hideTooltip();
     }
 
     /** @private */
