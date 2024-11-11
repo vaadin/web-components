@@ -1,4 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
+import { sendMouse } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import type { DashboardSection } from '../src/vaadin-dashboard-section.js';
 import type { DashboardWidget } from '../src/vaadin-dashboard-widget.js';
@@ -356,4 +357,11 @@ function onceInvoked(object, functionName): Promise<void> {
 
 export async function onceResized(dashboard: HTMLElement): Promise<void> {
   await onceInvoked(dashboard, '_onResize');
+}
+
+export async function hover(element: Element): Promise<void> {
+  const rect = element.getBoundingClientRect();
+  const middleX = Math.floor(rect.x + rect.width / 2);
+  const middleY = Math.floor(rect.y + rect.height / 2);
+  await sendMouse({ type: 'move', position: [middleX, middleY] });
 }

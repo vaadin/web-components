@@ -3,7 +3,6 @@ import { fixtureSync, isFirefox, nextFrame } from '@vaadin/testing-helpers';
 import { resetMouse, sendMouse } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import '../vaadin-dashboard.js';
-import { hover } from '../../button/test/visual/helpers.js';
 import type { Dashboard, DashboardItem, DashboardSectionItem } from '../vaadin-dashboard.js';
 import {
   createDragEvent,
@@ -15,6 +14,7 @@ import {
   getDraggable,
   getElementFromCell,
   getParentSection,
+  hover,
   onceResized,
   resetReorderTimeout,
   setMaximumColumnWidth,
