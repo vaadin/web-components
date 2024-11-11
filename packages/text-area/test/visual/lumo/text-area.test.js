@@ -118,4 +118,22 @@ describe('text-area', () => {
     element.appendChild(span);
     await visualDiff(div, 'suffix');
   });
+
+  it('single-row', async () => {
+    element.value = 'value';
+    element.minRows = 1;
+    await visualDiff(div, 'single-row');
+  });
+
+  it('min-rows', async () => {
+    element.value = 'value';
+    element.minRows = 4;
+    await visualDiff(div, 'min-rows');
+  });
+
+  it('max-rows', async () => {
+    element.value = Array(10).join('value\n');
+    element.maxRows = 4;
+    await visualDiff(div, 'max-rows');
+  });
 });
