@@ -40,6 +40,23 @@ export const TextAreaMixin = (superClass) =>
         pattern: {
           type: String,
         },
+
+        /**
+         * Minimum number of rows to show. Default is two rows.
+         */
+        minRows: {
+          type: Number,
+          value: 2,
+        },
+
+        /**
+         * Maximum number of rows to expand to before the text area starts scrolling. This effectively sets a max-height
+         * on the `input-field` part. By default, it is not set, and the text area grows with the content without
+         * constraints.
+         */
+        maxRows: {
+          type: Number,
+        },
       };
     }
 
@@ -49,6 +66,10 @@ export const TextAreaMixin = (superClass) =>
 
     static get constraints() {
       return [...super.constraints, 'maxlength', 'minlength', 'pattern'];
+    }
+
+    static get observers() {
+      return ['__updateMinMaxHeight(minRows, maxRows, inputElement, _inputField)'];
     }
 
     /**
@@ -176,6 +197,34 @@ export const TextAreaMixin = (superClass) =>
       inputField.style.removeProperty('display');
       inputField.style.removeProperty('height');
       inputField.scrollTop = scrollTop;
+    }
+
+    /** @private */
+    __updateMinMaxHeight(minRows, maxRows) {
+      if (!this._inputField || !this.inputElement) {
+        return;
+      }
+
+      // For minimum height, just set the number of rows on the native textarea,
+      // which causes the input container to grow as well.
+      this.inputElement.rows = minRows;
+
+      // For maximum height, we need to constrain the height of the input
+      // container to prevent it from growing further. For this we take the
+      // line height of the native textarea times the number of rows, and add
+      // the padding from the input container.
+      const inputStyle = getComputedStyle(this.inputElement);
+      const inputFieldStyle = getComputedStyle(this._inputField);
+      const lineHeight = parseFloat(inputStyle.lineHeight);
+      const paddingTop = parseFloat(inputFieldStyle.paddingTop);
+      const paddingBottom = parseFloat(inputFieldStyle.paddingBottom);
+
+      if (maxRows) {
+        const maxHeight = maxRows * lineHeight + paddingTop + paddingBottom;
+        this._inputField.style.setProperty('max-height', `${maxHeight}px`);
+      } else {
+        this._inputField.style.removeProperty('max-height');
+      }
     }
 
     /**

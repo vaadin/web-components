@@ -417,6 +417,52 @@ describe('text-area', () => {
         expect(getVerticalScrollPosition()).to.equal('0px');
       });
     });
+
+    describe('min and max rows', () => {
+      const lineHeight = 20;
+      beforeEach(async () => {
+        const fixture = fixtureSync(`
+          <div>
+            <style>
+              vaadin-text-area textarea {
+                line-height: ${lineHeight}px;
+              }
+            </style>
+            <vaadin-text-area></vaadin-text-area>
+          </div>
+        `);
+        textArea = fixture.querySelector('vaadin-text-area');
+        await nextRender();
+      });
+
+      it('should use min-height of two rows by default', () => {
+        expect(textArea.clientHeight).to.equal(lineHeight * 2);
+      });
+
+      it('should use min-height based on minimum rows', async () => {
+        textArea.minRows = 4;
+        await nextUpdate(textArea);
+
+        expect(textArea.clientHeight).to.equal(lineHeight * 4);
+      });
+
+      it('should be able to set min-height of one row', async () => {
+        textArea.minRows = 1;
+        await nextUpdate(textArea);
+
+        expect(textArea.clientHeight).to.equal(lineHeight);
+      });
+
+      it('should use max-height based on maximum rows', async () => {
+        textArea.maxRows = 4;
+        await nextUpdate(textArea);
+
+        textArea.value = Array(400).join('400');
+        await nextUpdate(textArea);
+
+        expect(textArea.clientHeight).to.equal(lineHeight * 4);
+      });
+    });
   });
 
   describe('programmatic scrolling', () => {

@@ -54,6 +54,7 @@ const textArea = css`
   [part='input-field'] ::slotted(textarea) {
     line-height: inherit;
     --_lumo-text-field-overflow-mask-image: none;
+    min-height: 0;
   }
 
   /* Use sticky positioning to keep prefix/suffix/clear button visible when scrolling textarea container */
