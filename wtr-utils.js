@@ -7,6 +7,7 @@ const glob = require('glob');
 const { execSync } = require('child_process');
 const { createSauceLabsLauncher } = require('@web/test-runner-saucelabs');
 const { visualRegressionPlugin } = require('@web/test-runner-visual-regression/plugin');
+const { esbuildPlugin } = require('@web/dev-server-esbuild');
 
 const HIDDEN_WARNINGS = [
   '<vaadin-crud> Unable to autoconfigure form because the data structure is unknown. Either specify `include` or ensure at least one item is available beforehand.',
@@ -327,6 +328,7 @@ const createVisualTestsConfig = (theme, browserVersion) => {
       }),
     ],
     plugins: [
+      esbuildPlugin({ ts: true }),
       setWindowHeightPlugin(),
       visualRegressionPlugin({
         baseDir: 'packages',
