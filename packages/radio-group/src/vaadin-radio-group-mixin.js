@@ -30,6 +30,7 @@ export const RadioGroupMixin = (superclass) =>
         name: {
           type: String,
           observer: '__nameChanged',
+          sync: true,
         },
 
         /**
@@ -41,6 +42,7 @@ export const RadioGroupMixin = (superclass) =>
           type: String,
           notify: true,
           value: '',
+          sync: true,
           observer: '__valueChanged',
         },
 
@@ -56,6 +58,7 @@ export const RadioGroupMixin = (superclass) =>
           type: Boolean,
           value: false,
           reflectToAttribute: true,
+          sync: true,
           observer: '__readonlyChanged',
         },
 
