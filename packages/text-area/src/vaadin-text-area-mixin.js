@@ -143,14 +143,13 @@ export const TextAreaMixin = (superClass) =>
       }
 
       const scrollTop = inputField.scrollTop;
-      const inputStyles = getComputedStyle(input);
 
       // Only clear the height when the content shortens to minimize scrollbar flickering.
       const valueLength = this.value ? this.value.length : 0;
 
       if (this._oldValueLength >= valueLength) {
         const inputFieldHeight = getComputedStyle(inputField).height;
-        const inputWidth = inputStyles.width;
+        const inputWidth = getComputedStyle(input).width;
 
         // Temporarily fix the height of the wrapping input field container to prevent changing the browsers scroll
         // position while resetting the textareas height. If the textarea had a large height, then removing its height
@@ -169,11 +168,7 @@ export const TextAreaMixin = (superClass) =>
 
       const inputHeight = input.scrollHeight;
       if (inputHeight > input.clientHeight) {
-        // Subtract padding to get the actual content height
-        const paddingTop = parseInt(inputStyles.paddingTop) || 0;
-        const paddingBottom = parseInt(inputStyles.paddingBottom) || 0;
-        const contentHeight = inputHeight - paddingTop - paddingBottom;
-        input.style.height = `${contentHeight}px`;
+        input.style.height = `${inputHeight}px`;
       }
 
       // Restore

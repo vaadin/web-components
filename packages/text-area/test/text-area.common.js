@@ -358,16 +358,6 @@ describe('text-area', () => {
       );
     });
 
-    it('should ignore native textarea padding when calculating content height', async () => {
-      native.style.lineHeight = '20px';
-      native.style.padding = '10px';
-      textArea.value = Array(4).join('\n'); // 4 lines
-      await nextUpdate(textArea);
-
-      // Effective height should be 4 lines of text + 2 * 10px padding
-      expect(native.clientHeight).to.be.closeTo(100, 1);
-    });
-
     describe('--_text-area-vertical-scroll-position CSS variable', () => {
       function wheel({ element = inputField, deltaY = 0 }) {
         const e = new CustomEvent('wheel', { bubbles: true, cancelable: true });
