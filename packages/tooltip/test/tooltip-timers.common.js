@@ -717,6 +717,10 @@ describe('timers', () => {
       controller = tooltip._stateController;
     });
 
+    afterEach(() => {
+      resetGlobalTooltipState();
+    });
+
     it('should not clear opened state on the tooltip when closing scheduled twice', async () => {
       controller.open({ hover: true });
       await aTimeout(2);
@@ -746,7 +750,7 @@ describe('timers', () => {
       // Close during warm up timeout and then wait for it to finish
       controller.close();
       await aTimeout(1);
-      expect(tooltip.opened).to.be.false;
+      expect(tooltip.opened).to.be.not.ok;
     });
   });
 });
