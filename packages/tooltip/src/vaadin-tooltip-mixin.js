@@ -147,7 +147,10 @@ class TooltipStateController {
     if (!this._isOpened()) {
       // First tooltip is opened, warm up.
       if (!warmedUp) {
-        this.__scheduleWarmUp(isFocus);
+        // Ensure there is no duplicate warm up.
+        if (warmUpTimeout == null) {
+          this.__scheduleWarmUp(isFocus);
+        }
       } else {
         // Warmed up, show another tooltip.
         this.__showTooltip();

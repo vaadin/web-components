@@ -737,5 +737,16 @@ describe('timers', () => {
       await aTimeout(2);
       expect(spy).to.not.be.called;
     });
+
+    it('should not keep opened state after closing when open() is called twice', async () => {
+      // Emulate opening on different targets when reusing tooltip instance
+      controller.open({ hover: true });
+      controller.open({ hover: true });
+      await aTimeout(1);
+      // Close during warm up timeout and then wait for it to finish
+      controller.close();
+      await aTimeout(1);
+      expect(tooltip.opened).to.be.false;
+    });
   });
 });
