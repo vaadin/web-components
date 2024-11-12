@@ -406,6 +406,16 @@ describe('text-area', () => {
         expect(custom.rows).to.equal(1);
         expect(textArea.clientHeight).to.closeTo(lineHeight, 1);
       });
+
+      it('should grow beyond the min-height defined by minimum rows', async () => {
+        textArea.minRows = 4;
+        await nextUpdate(textArea);
+
+        textArea.value = Array(400).join('400');
+        await nextUpdate(textArea);
+
+        expect(textArea.clientHeight).to.be.above(80);
+      });
     });
 
     describe('--_text-area-vertical-scroll-position CSS variable', () => {
