@@ -17,6 +17,7 @@ snapshots["vaadin-text-area host default"] =
   </div>
   <textarea
     id="textarea-vaadin-text-area-3"
+    rows="2"
     slot="textarea"
   >
   </textarea>
@@ -41,6 +42,7 @@ snapshots["vaadin-text-area host helper"] =
   <textarea
     aria-describedby="helper-vaadin-text-area-1"
     id="textarea-vaadin-text-area-3"
+    rows="2"
     slot="textarea"
   >
   </textarea>
@@ -77,6 +79,7 @@ snapshots["vaadin-text-area host error"] =
     aria-invalid="true"
     id="textarea-vaadin-text-area-3"
     invalid=""
+    rows="2"
     slot="textarea"
   >
   </textarea>

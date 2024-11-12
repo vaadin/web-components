@@ -40,6 +40,15 @@ export const TextAreaMixin = (superClass) =>
         pattern: {
           type: String,
         },
+
+        /**
+         * Minimum number of rows to show. Default is two rows, which is also the minimum value.
+         * @attr {number} min-rows
+         */
+        minRows: {
+          type: Number,
+          value: 2,
+        },
       };
     }
 
@@ -49,6 +58,10 @@ export const TextAreaMixin = (superClass) =>
 
     static get constraints() {
       return [...super.constraints, 'maxlength', 'minlength', 'pattern'];
+    }
+
+    static get observers() {
+      return ['__updateMinHeight(minRows, inputElement, _inputField)'];
     }
 
     /**
@@ -77,14 +90,13 @@ export const TextAreaMixin = (superClass) =>
     ready() {
       super.ready();
 
-      this.addController(
-        new TextAreaController(this, (input) => {
-          this._setInputElement(input);
-          this._setFocusElement(input);
-          this.stateTarget = input;
-          this.ariaTarget = input;
-        }),
-      );
+      this.__textAreaController = new TextAreaController(this, (input) => {
+        this._setInputElement(input);
+        this._setFocusElement(input);
+        this.stateTarget = input;
+        this.ariaTarget = input;
+      });
+      this.addController(this.__textAreaController);
       this.addController(new LabelledInputController(this.inputElement, this._labelController));
 
       this.addEventListener('animationend', this._onAnimationEnd);
@@ -176,6 +188,21 @@ export const TextAreaMixin = (superClass) =>
       inputField.style.removeProperty('display');
       inputField.style.removeProperty('height');
       inputField.scrollTop = scrollTop;
+    }
+
+    /** @private */
+    __updateMinHeight(minRows) {
+      if (!this._inputField || !this.inputElement) {
+        return;
+      }
+
+      // For minimum height, just set the number of rows on the native textarea,
+      // which causes the input container to grow as well.
+      // Do not override this on custom slotted textarea as number of rows may
+      // have been configured there.
+      if (this.inputElement === this.__textAreaController.defaultNode) {
+        this.inputElement.rows = Math.max(minRows, 2);
+      }
     }
 
     /**

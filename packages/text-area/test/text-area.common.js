@@ -358,6 +358,56 @@ describe('text-area', () => {
       );
     });
 
+    describe('min rows', () => {
+      const lineHeight = 20;
+      beforeEach(async () => {
+        const fixture = fixtureSync(`
+          <div>
+            <style>
+              vaadin-text-area textarea {
+                line-height: ${lineHeight}px;
+              }
+            </style>
+            <vaadin-text-area></vaadin-text-area>
+          </div>
+        `);
+        textArea = fixture.querySelector('vaadin-text-area');
+        await nextUpdate(textArea);
+      });
+
+      it('should use min-height of two rows by default', () => {
+        expect(textArea.clientHeight).to.equal(lineHeight * 2);
+      });
+
+      it('should use min-height based on minimum rows', async () => {
+        textArea.minRows = 4;
+        await nextUpdate(textArea);
+
+        expect(textArea.clientHeight).to.equal(lineHeight * 4);
+      });
+
+      it('should not be possible to set min-height to less than two rows', async () => {
+        textArea.minRows = 1;
+        await nextUpdate(textArea);
+
+        expect(textArea.clientHeight).to.closeTo(lineHeight * 2, 1);
+      });
+
+      it('should not overwrite rows on custom slotted textarea', async () => {
+        const custom = document.createElement('textarea');
+        custom.setAttribute('slot', 'textarea');
+        custom.rows = 1;
+        textArea.appendChild(custom);
+        await nextUpdate(textArea);
+
+        textArea.minRows = 4;
+        await nextUpdate(textArea);
+
+        expect(custom.rows).to.equal(1);
+        expect(textArea.clientHeight).to.closeTo(lineHeight, 1);
+      });
+    });
+
     describe('--_text-area-vertical-scroll-position CSS variable', () => {
       function wheel({ element = inputField, deltaY = 0 }) {
         const e = new CustomEvent('wheel', { bubbles: true, cancelable: true });
