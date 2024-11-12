@@ -750,7 +750,7 @@ describe('timers', () => {
       // Close during warm up timeout and then wait for it to finish
       controller.close();
       await aTimeout(1);
-      expect(tooltip.opened).to.be.not.ok;
+      expect(tooltip.opened).to.be.false;
     });
   });
 });
