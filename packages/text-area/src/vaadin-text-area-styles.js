@@ -54,6 +54,7 @@ export const textAreaStyles = css`
   [part='input-field'] ::slotted(textarea) {
     align-self: stretch;
     white-space: pre-wrap;
+    box-sizing: border-box;
   }
 
   [part='input-field'] ::slotted(:not(textarea)) {
