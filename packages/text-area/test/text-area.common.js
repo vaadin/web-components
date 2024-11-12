@@ -358,6 +358,70 @@ describe('text-area', () => {
       );
     });
 
+    describe('min and max rows', () => {
+      const lineHeight = 20;
+      beforeEach(async () => {
+        const fixture = fixtureSync(`
+          <div>
+            <style>
+              vaadin-text-area textarea {
+                line-height: ${lineHeight}px;
+              }
+              vaadin-text-area::part(input-field) {
+                box-sizing: border-box;
+              }
+            </style>
+            <vaadin-text-area></vaadin-text-area>
+          </div>
+        `);
+        textArea = fixture.querySelector('vaadin-text-area');
+        await nextUpdate(textArea);
+      });
+
+      it('should use min-height of two rows by default', () => {
+        expect(textArea.clientHeight).to.equal(lineHeight * 2);
+      });
+
+      it('should use min-height based on minimum rows', async () => {
+        textArea.minRows = 4;
+        await nextUpdate(textArea);
+
+        expect(textArea.clientHeight).to.equal(lineHeight * 4);
+      });
+
+      it('should be able to set min-height of one row', async () => {
+        textArea.minRows = 1;
+        await nextUpdate(textArea);
+
+        expect(textArea.clientHeight).to.closeTo(lineHeight, 1);
+      });
+
+      it('should use max-height based on maximum rows', async () => {
+        textArea.maxRows = 4;
+        textArea.value = Array(400).join('400');
+        await nextUpdate(textArea);
+
+        expect(textArea.clientHeight).to.equal(lineHeight * 4);
+      });
+
+      it('should include margins and paddings when calculating max-height', async () => {
+        const native = textArea.querySelector('textarea');
+        const inputContainer = textArea.shadowRoot.querySelector('[part="input-field"]');
+        native.style.paddingTop = '5px';
+        native.style.paddingBottom = '10px';
+        native.style.marginTop = '15px';
+        native.style.marginBottom = '20px';
+        inputContainer.style.paddingTop = '25px';
+        inputContainer.style.paddingBottom = '30px';
+
+        textArea.maxRows = 4;
+        textArea.value = Array(400).join('400');
+        await nextUpdate(textArea);
+
+        expect(textArea.clientHeight).to.equal(lineHeight * 4 + 5 + 10 + 15 + 20 + 25 + 30);
+      });
+    });
+
     describe('--_text-area-vertical-scroll-position CSS variable', () => {
       function wheel({ element = inputField, deltaY = 0 }) {
         const e = new CustomEvent('wheel', { bubbles: true, cancelable: true });
@@ -415,52 +479,6 @@ describe('text-area', () => {
         textArea.style.height = `${inputField.scrollHeight}px`;
         await nextUpdate(textArea);
         expect(getVerticalScrollPosition()).to.equal('0px');
-      });
-    });
-
-    describe('min and max rows', () => {
-      const lineHeight = 20;
-      beforeEach(async () => {
-        const fixture = fixtureSync(`
-          <div>
-            <style>
-              vaadin-text-area textarea {
-                line-height: ${lineHeight}px;
-              }
-            </style>
-            <vaadin-text-area></vaadin-text-area>
-          </div>
-        `);
-        textArea = fixture.querySelector('vaadin-text-area');
-        await nextRender();
-      });
-
-      it('should use min-height of two rows by default', () => {
-        expect(textArea.clientHeight).to.equal(lineHeight * 2);
-      });
-
-      it('should use min-height based on minimum rows', async () => {
-        textArea.minRows = 4;
-        await nextUpdate(textArea);
-
-        expect(textArea.clientHeight).to.equal(lineHeight * 4);
-      });
-
-      it('should be able to set min-height of one row', async () => {
-        textArea.minRows = 1;
-        await nextUpdate(textArea);
-
-        expect(textArea.clientHeight).to.equal(lineHeight);
-      });
-
-      it('should use max-height based on maximum rows', async () => {
-        textArea.maxRows = 4;
-        await nextUpdate(textArea);
-
-        textArea.value = Array(400).join('400');
-        await nextUpdate(textArea);
-
-        expect(textArea.clientHeight).to.equal(lineHeight * 4);
       });
     });
   });

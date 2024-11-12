@@ -209,18 +209,24 @@ export const TextAreaMixin = (superClass) =>
       // which causes the input container to grow as well.
       this.inputElement.rows = minRows;
 
-      // For maximum height, we need to constrain the height of the input
-      // container to prevent it from growing further. For this we take the
-      // line height of the native textarea times the number of rows, and add
-      // the padding from the input container.
-      const inputStyle = getComputedStyle(this.inputElement);
-      const inputFieldStyle = getComputedStyle(this._inputField);
-      const lineHeight = parseFloat(inputStyle.lineHeight);
-      const paddingTop = parseFloat(inputFieldStyle.paddingTop);
-      const paddingBottom = parseFloat(inputFieldStyle.paddingBottom);
-
       if (maxRows) {
-        const maxHeight = maxRows * lineHeight + paddingTop + paddingBottom;
+        // For maximum height, we need to constrain the height of the input
+        // container to prevent it from growing further. For this we take the
+        // line height of the native textarea times the number of rows, and add
+        // other properties affecting the height of the input container.
+        const inputStyle = getComputedStyle(this.inputElement);
+        const inputFieldStyle = getComputedStyle(this._inputField);
+
+        const lineHeight = parseFloat(inputStyle.lineHeight);
+        const contentHeight = lineHeight * maxRows;
+        const marginsAndPaddings =
+          parseInt(inputStyle.paddingTop) +
+          parseInt(inputStyle.paddingBottom) +
+          parseInt(inputStyle.marginTop) +
+          parseInt(inputStyle.marginBottom) +
+          parseInt(inputFieldStyle.paddingTop) +
+          parseInt(inputFieldStyle.paddingBottom);
+        const maxHeight = contentHeight + marginsAndPaddings;
         this._inputField.style.setProperty('max-height', `${maxHeight}px`);
       } else {
         this._inputField.style.removeProperty('max-height');
