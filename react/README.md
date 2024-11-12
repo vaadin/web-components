@@ -4,7 +4,7 @@ React wrappers for Vaadin components.
 
 ## Using Local React Components in a Vaadin Project
 
-To configure your Vaadin project to import React components from a local repository, add this Vite plugin to `vite.config.ts`:
+When developing React components locally, you may want to test your changes in a Vaadin application. To configure an application to import React components from a local repository, add this Vite plugin to the app's `vite.config.ts`:
 
 ```ts
 function useLocalReactComponents(nodeModules: string): PluginOption {
