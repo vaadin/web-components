@@ -59,7 +59,6 @@ export declare class TextAreaMixinClass {
   /**
    * A regular expression that the value is checked against.
    * The pattern must match the entire value, not just some subset.
-   * @attr {boolean} min-rows
    */
   pattern: string;
 
