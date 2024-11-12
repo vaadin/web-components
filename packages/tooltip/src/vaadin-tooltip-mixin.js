@@ -32,6 +32,8 @@ export function resetGlobalTooltipState() {
   warmedUp = false;
   clearTimeout(warmUpTimeout);
   clearTimeout(cooldownTimeout);
+  warmUpTimeout = null;
+  cooldownTimeout = null;
   closing.clear();
 }
 
