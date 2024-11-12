@@ -59,8 +59,23 @@ export declare class TextAreaMixinClass {
   /**
    * A regular expression that the value is checked against.
    * The pattern must match the entire value, not just some subset.
+   * @attr {boolean} min-rows
    */
   pattern: string;
+
+  /**
+   * Minimum number of rows to show. Default is two rows.
+   * @attr {number} min-rows
+   */
+  minRows: number;
+
+  /**
+   * Maximum number of rows to expand to before the text area starts scrolling. This effectively sets a max-height
+   * on the `input-field` part. By default, it is not set, and the text area grows with the content without
+   * constraints.
+   * @attr {number} max-rows
+   */
+  maxRows: number | null | undefined;
 
   /**
    * Scrolls the textarea to the start if it has a vertical scrollbar.
