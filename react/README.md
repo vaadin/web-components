@@ -26,7 +26,7 @@ function useLocalReactComponents(nodeModules: string): PluginOption {
       ];
     },
     resolveId(id) {
-      if (/^(@vaadin\/react-components)/.test(id)) {
+      if (/^(@vaadin|@polymer)/.test(id)) {
         return this.resolve(path.join(nodeModules, id));
       }
     },
