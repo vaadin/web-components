@@ -32,6 +32,8 @@ export function resetGlobalTooltipState() {
   warmedUp = false;
   clearTimeout(warmUpTimeout);
   clearTimeout(cooldownTimeout);
+  warmUpTimeout = null;
+  cooldownTimeout = null;
   closing.clear();
 }
 
@@ -145,12 +147,12 @@ class TooltipStateController {
   /** @private */
   __warmupTooltip(isFocus) {
     if (!this._isOpened()) {
-      // First tooltip is opened, warm up.
-      if (!warmedUp) {
-        this.__scheduleWarmUp(isFocus);
-      } else {
-        // Warmed up, show another tooltip.
+      if (warmedUp) {
+        // Warmed up, show the tooltip.
         this.__showTooltip();
+      } else if (warmUpTimeout == null) {
+        // Ensure there is no duplicate warm up.
+        this.__scheduleWarmUp(isFocus);
       }
     }
   }
