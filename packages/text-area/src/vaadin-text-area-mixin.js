@@ -42,7 +42,7 @@ export const TextAreaMixin = (superClass) =>
         },
 
         /**
-         * Minimum number of rows to show. Default is two rows.
+         * Minimum number of rows to show. Default is two rows, which is also the minimum value.
          * @attr {number} min-rows
          */
         minRows: {
@@ -209,7 +209,7 @@ export const TextAreaMixin = (superClass) =>
 
       // For minimum height, just set the number of rows on the native textarea,
       // which causes the input container to grow as well.
-      this.inputElement.rows = minRows;
+      this.inputElement.rows = Math.max(minRows, 2);
 
       if (maxRows) {
         // For maximum height, we need to constrain the height of the input

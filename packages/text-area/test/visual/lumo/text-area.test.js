@@ -119,12 +119,6 @@ describe('text-area', () => {
     await visualDiff(div, 'suffix');
   });
 
-  it('single-row', async () => {
-    element.value = 'value';
-    element.minRows = 1;
-    await visualDiff(div, 'single-row');
-  });
-
   it('min-rows', async () => {
     element.value = 'value';
     element.minRows = 4;

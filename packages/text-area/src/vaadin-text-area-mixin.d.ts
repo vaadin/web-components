@@ -64,7 +64,7 @@ export declare class TextAreaMixinClass {
   pattern: string;
 
   /**
-   * Minimum number of rows to show. Default is two rows.
+   * Minimum number of rows to show. Default is two rows, which is also the minimum value.
    * @attr {number} min-rows
    */
   minRows: number;

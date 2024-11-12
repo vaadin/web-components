@@ -389,11 +389,11 @@ describe('text-area', () => {
         expect(textArea.clientHeight).to.equal(lineHeight * 4);
       });
 
-      it('should be able to set min-height of one row', async () => {
+      it('should not be possible to set min-height to less than two rows', async () => {
         textArea.minRows = 1;
         await nextUpdate(textArea);
 
-        expect(textArea.clientHeight).to.closeTo(lineHeight, 1);
+        expect(textArea.clientHeight).to.closeTo(lineHeight * 2, 1);
       });
 
       it('should use max-height based on maximum rows', async () => {
