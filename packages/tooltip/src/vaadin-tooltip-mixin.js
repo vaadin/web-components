@@ -161,6 +161,11 @@ class TooltipStateController {
       clearTimeout(this.__closeTimeout);
       this.__closeTimeout = null;
     }
+
+    // Remove the tooltip from the closing queue.
+    if (this.isClosing) {
+      closing.delete(this.host);
+    }
   }
 
   /** @private */
@@ -181,7 +186,9 @@ class TooltipStateController {
 
   /** @private */
   __scheduleClose() {
-    if (this._isOpened()) {
+    // Do not schedule closing if it was already scheduled
+    // to avoid overriding reference to the close timeout.
+    if (this._isOpened() && !this.isClosing) {
       closing.add(this.host);
 
       this.__closeTimeout = setTimeout(() => {
