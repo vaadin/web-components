@@ -28,6 +28,10 @@ const verticalLayout = css`
   :host([theme~='spacing-xl']) {
     gap: 40px;
   }
+
+  :host([theme~='wrap']) {
+    flex-wrap: wrap;
+  }
 `;
 
 registerStyles('vaadin-vertical-layout', verticalLayout, { moduleId: 'material-vertical-layout' });
