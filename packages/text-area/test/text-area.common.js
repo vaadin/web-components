@@ -360,6 +360,8 @@ describe('text-area', () => {
 
     describe('min rows', () => {
       const lineHeight = 20;
+      let consoleWarn;
+
       beforeEach(async () => {
         const fixture = fixtureSync(`
           <div>
@@ -373,6 +375,12 @@ describe('text-area', () => {
         `);
         textArea = fixture.querySelector('vaadin-text-area');
         await nextUpdate(textArea);
+
+        consoleWarn = sinon.stub(console, 'warn');
+      });
+
+      afterEach(() => {
+        consoleWarn.restore();
       });
 
       it('should use min-height of two rows by default', () => {
@@ -391,6 +399,25 @@ describe('text-area', () => {
         await nextUpdate(textArea);
 
         expect(textArea.clientHeight).to.closeTo(lineHeight * 2, 1);
+      });
+
+      it('should log warning when setting minRows to less than two rows', async () => {
+        textArea.minRows = 1;
+        await nextUpdate(textArea);
+
+        expect(console.warn).to.be.calledWith('<vaadin-text-area> minRows must be at least 2.');
+      });
+
+      it('should not log warning when setting minRows to two rows or more', async () => {
+        textArea.minRows = 2;
+        await nextUpdate(textArea);
+
+        expect(console.warn).not.to.be.called;
+
+        textArea.minRows = 3;
+        await nextUpdate(textArea);
+
+        expect(console.warn).not.to.be.called;
       });
 
       it('should not overwrite rows on custom slotted textarea', async () => {

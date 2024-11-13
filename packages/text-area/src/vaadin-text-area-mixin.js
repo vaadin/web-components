@@ -51,6 +51,7 @@ export const TextAreaMixin = (superClass) =>
         minRows: {
           type: Number,
           value: 2,
+          observer: '__minRowsChanged',
         },
       };
     }
@@ -205,6 +206,15 @@ export const TextAreaMixin = (superClass) =>
       // have been configured there.
       if (this.inputElement === this.__textAreaController.defaultNode) {
         this.inputElement.rows = Math.max(minRows, 2);
+      }
+    }
+
+    /**
+     * @private
+     */
+    __minRowsChanged(minRows) {
+      if (minRows < 2) {
+        console.warn('<vaadin-text-area> minRows must be at least 2.');
       }
     }
 
