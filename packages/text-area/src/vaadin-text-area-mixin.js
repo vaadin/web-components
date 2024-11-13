@@ -64,7 +64,7 @@ export const TextAreaMixin = (superClass) =>
     }
 
     static get observers() {
-      return ['__updateMinHeight(minRows, inputElement, _inputField)'];
+      return ['__updateMinHeight(minRows, inputElement)'];
     }
 
     /**
@@ -195,7 +195,7 @@ export const TextAreaMixin = (superClass) =>
 
     /** @private */
     __updateMinHeight(minRows) {
-      if (!this._inputField || !this.inputElement) {
+      if (!this.inputElement) {
         return;
       }
 
