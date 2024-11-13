@@ -53,6 +53,16 @@ export const TextAreaMixin = (superClass) =>
           value: 2,
           observer: '__minRowsChanged',
         },
+
+        /**
+         * Maximum number of rows to expand to before the text area starts scrolling. This effectively sets a max-height
+         * on the `input-field` part. By default, it is not set, and the text area grows with the content without
+         * constraints.
+         * @attr {number} max-rows
+         */
+        maxRows: {
+          type: Number,
+        },
       };
     }
 
@@ -65,7 +75,7 @@ export const TextAreaMixin = (superClass) =>
     }
 
     static get observers() {
-      return ['__updateMinHeight(minRows, inputElement)'];
+      return ['__updateMinHeight(minRows, inputElement)', '__updateMaxHeight(maxRows, inputElement, _inputField)'];
     }
 
     /**
@@ -206,6 +216,36 @@ export const TextAreaMixin = (superClass) =>
       // have been configured there.
       if (this.inputElement === this.__textAreaController.defaultNode) {
         this.inputElement.rows = Math.max(minRows, 2);
+      }
+    }
+
+    /** @private */
+    __updateMaxHeight(maxRows) {
+      if (!this._inputField || !this.inputElement) {
+        return;
+      }
+
+      if (maxRows) {
+        // For maximum height, we need to constrain the height of the input
+        // container to prevent it from growing further. For this we take the
+        // line height of the native textarea times the number of rows, and add
+        // other properties affecting the height of the input container.
+        const inputStyle = getComputedStyle(this.inputElement);
+        const inputFieldStyle = getComputedStyle(this._inputField);
+
+        const lineHeight = parseInt(inputStyle.lineHeight);
+        const contentHeight = lineHeight * maxRows;
+        const marginsAndPaddings =
+          parseInt(inputStyle.paddingTop) +
+          parseInt(inputStyle.paddingBottom) +
+          parseInt(inputStyle.marginTop) +
+          parseInt(inputStyle.marginBottom) +
+          parseInt(inputFieldStyle.paddingTop) +
+          parseInt(inputFieldStyle.paddingBottom);
+        const maxHeight = contentHeight + marginsAndPaddings;
+        this._inputField.style.setProperty('max-height', `${maxHeight}px`);
+      } else {
+        this._inputField.style.removeProperty('max-height');
       }
     }
 

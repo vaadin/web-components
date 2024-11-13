@@ -358,7 +358,7 @@ describe('text-area', () => {
       );
     });
 
-    describe('min rows', () => {
+    describe('min / max rows', () => {
       const lineHeight = 20;
       let consoleWarn;
 
@@ -368,6 +368,9 @@ describe('text-area', () => {
             <style>
               vaadin-text-area textarea {
                 line-height: ${lineHeight}px;
+              }
+              vaadin-text-area::part(input-field) {
+                box-sizing: border-box;
               }
             </style>
             <vaadin-text-area></vaadin-text-area>
@@ -442,6 +445,39 @@ describe('text-area', () => {
         await nextUpdate(textArea);
 
         expect(textArea.clientHeight).to.be.above(80);
+      });
+
+      it('should use max-height based on maximum rows', async () => {
+        textArea.maxRows = 4;
+        textArea.value = Array(400).join('400');
+        await nextUpdate(textArea);
+
+        expect(textArea.clientHeight).to.equal(lineHeight * 4);
+      });
+
+      it('should include margins and paddings when calculating max-height', async () => {
+        const native = textArea.querySelector('textarea');
+        const inputContainer = textArea.shadowRoot.querySelector('[part="input-field"]');
+        native.style.paddingTop = '5px';
+        native.style.paddingBottom = '10px';
+        native.style.marginTop = '15px';
+        native.style.marginBottom = '20px';
+        inputContainer.style.paddingTop = '25px';
+        inputContainer.style.paddingBottom = '30px';
+
+        textArea.maxRows = 4;
+        textArea.value = Array(400).join('400');
+        await nextUpdate(textArea);
+
+        expect(textArea.clientHeight).to.equal(lineHeight * 4 + 5 + 10 + 15 + 20 + 25 + 30);
+      });
+
+      it('should shrink below max-height defined by maximum rows', async () => {
+        textArea.maxRows = 4;
+        textArea.value = 'value';
+        await nextUpdate(textArea);
+
+        expect(textArea.clientHeight).to.be.below(lineHeight * 4);
       });
     });
 
