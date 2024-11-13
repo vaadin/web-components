@@ -118,4 +118,10 @@ describe('text-area', () => {
     element.appendChild(span);
     await visualDiff(div, 'suffix');
   });
+
+  it('min-rows', async () => {
+    element.value = 'value';
+    element.minRows = 4;
+    await visualDiff(div, 'min-rows');
+  });
 });
