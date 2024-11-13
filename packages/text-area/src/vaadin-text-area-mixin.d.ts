@@ -64,6 +64,9 @@ export declare class TextAreaMixinClass {
 
   /**
    * Minimum number of rows to show. Default is two rows, which is also the minimum value.
+   *
+   * When using a custom slotted textarea, the minimum number of rows are not applied for backwards compatibility.
+   *
    * @attr {number} min-rows
    */
   minRows: number;
