@@ -3,13 +3,13 @@ import {
   enterKeyDown,
   escKeyDown,
   fixtureSync,
+  nextFrame,
   nextRender,
   oneEvent,
   spaceKeyDown,
   tabKeyDown,
 } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import '../vaadin-avatar-group.js';
 
 /**
  * Resolves once the function is invoked on the given object.
@@ -65,8 +65,9 @@ describe('avatar-group', () => {
       expect(items.length).to.equal(group.items.length + 1);
     });
 
-    it('should propagate theme attribute to all avatars', () => {
+    it('should propagate theme attribute to all avatars', async () => {
       group.setAttribute('theme', 'small');
+      await nextFrame();
       const items = group.querySelectorAll('vaadin-avatar');
       items.forEach((avatar) => expect(avatar.getAttribute('theme')).to.equal('small'));
     });
@@ -370,11 +371,13 @@ describe('avatar-group', () => {
 
       overflow.click();
       await oneEvent(overlay, 'vaadin-overlay-open');
+
       expect(overflow.hasAttribute('focus-ring')).to.be.false;
 
       overflow.click();
 
       await nextRender();
+
       expect(overflow.hasAttribute('focus-ring')).to.be.true;
     });
 
