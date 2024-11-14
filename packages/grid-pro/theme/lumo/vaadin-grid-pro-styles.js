@@ -46,6 +46,27 @@ registerStyles(
         var(--lumo-contrast-5pct) 14px
       );
     }
+
+    /* Loading editor cell styles are used by Flow GridPro */
+    :host([loading-editor]) [part~='focused-cell']::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      box-shadow: inset 0 0 0 var(--_focus-ring-width) transparent;
+      animation: vaadin-grid-pro-loading-editor 1.4s infinite;
+    }
+
+    :host([loading-editor]) [part~='focused-cell'] ::slotted(vaadin-grid-cell-content) {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    @keyframes vaadin-grid-pro-loading-editor {
+      50% {
+        box-shadow: inset 0 0 0 var(--_focus-ring-width) var(--_focus-ring-color);
+      }
+    }
   `,
   { moduleId: 'lumo-grid-pro' },
 );

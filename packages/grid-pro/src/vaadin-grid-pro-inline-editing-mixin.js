@@ -80,6 +80,19 @@ export const InlineEditingMixin = (superClass) =>
 
     /** @protected */
     ready() {
+      this.addEventListener(
+        'keydown',
+        (e) => {
+          if (this.hasAttribute('loading-editor') && !['Tab', 'Escape', 'Enter'].includes(e.key)) {
+            // If an editor is focused while it's loading, prevent default keydown behavior
+            // to avoid user interaction with the editor before it's fully loaded
+            // Used by Flow GridPro
+            e.preventDefault();
+            e.stopPropagation();
+          }
+        },
+        true,
+      );
       // Add listener before `vaadin-grid` interaction mode listener
       this.addEventListener('keydown', (e) => {
         switch (e.keyCode) {
