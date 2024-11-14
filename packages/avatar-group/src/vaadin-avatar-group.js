@@ -191,7 +191,7 @@ class AvatarGroup extends ResizeMixin(OverlayClassMixin(ElementMixin(ThemableMix
       /** @private */
       __maxReached: {
         type: Boolean,
-        computed: '__computeMaxReached(items.length, maxItemsVisible)',
+        computed: '__computeMaxReached(items, maxItemsVisible)',
       },
 
       /** @private */
@@ -209,7 +209,7 @@ class AvatarGroup extends ResizeMixin(OverlayClassMixin(ElementMixin(ThemableMix
       _overflowItems: {
         type: Array,
         observer: '__overflowItemsChanged',
-        computed: '__computeOverflowItems(items.*, __itemsInView, maxItemsVisible)',
+        computed: '__computeOverflowItems(items, __itemsInView, maxItemsVisible)',
       },
 
       /** @private */
@@ -227,12 +227,12 @@ class AvatarGroup extends ResizeMixin(OverlayClassMixin(ElementMixin(ThemableMix
 
   static get observers() {
     return [
-      '__i18nItemsChanged(i18n.*, items.length)',
+      '__i18nItemsChanged(i18n, items)',
       '__updateAvatarsTheme(_overflow, _avatars, _theme)',
-      '__updateAvatars(items.*, __itemsInView, maxItemsVisible, _overflow, i18n)',
-      '__updateOverflowAbbr(_overflow, items.length, __itemsInView, maxItemsVisible)',
-      '__updateOverflowHidden(_overflow, items.length, __itemsInView, __maxReached)',
-      '__updateOverflowTooltip(_overflowTooltip, items.length, __itemsInView, maxItemsVisible)',
+      '__updateAvatars(items, __itemsInView, maxItemsVisible, _overflow, i18n)',
+      '__updateOverflowAbbr(_overflow, items, __itemsInView, maxItemsVisible)',
+      '__updateOverflowHidden(_overflow, items, __itemsInView, __maxReached)',
+      '__updateOverflowTooltip(_overflowTooltip, items, __itemsInView, maxItemsVisible)',
     ];
   }
 
@@ -400,12 +400,11 @@ class AvatarGroup extends ResizeMixin(OverlayClassMixin(ElementMixin(ThemableMix
   }
 
   /** @private */
-  __updateAvatars(arr, itemsInView, maxItemsVisible, overflow) {
-    if (!overflow) {
+  __updateAvatars(items, itemsInView, maxItemsVisible, overflow) {
+    if (!overflow || !Array.isArray(items)) {
       return;
     }
 
-    const items = arr.base || [];
     const limit = this.__getLimit(items.length, itemsInView, maxItemsVisible);
 
     this.__renderAvatars(limit ? items.slice(0, limit) : items);
@@ -414,28 +413,31 @@ class AvatarGroup extends ResizeMixin(OverlayClassMixin(ElementMixin(ThemableMix
   }
 
   /** @private */
-  __computeOverflowItems(arr, itemsInView, maxItemsVisible) {
-    const items = arr.base || [];
-    const limit = this.__getLimit(items.length, itemsInView, maxItemsVisible);
+  __computeOverflowItems(items, itemsInView, maxItemsVisible) {
+    const count = Array.isArray(items) ? items.length : 0;
+    const limit = this.__getLimit(count, itemsInView, maxItemsVisible);
     return limit ? items.slice(limit) : [];
   }
 
   /** @private */
   __computeMaxReached(items, maxItemsVisible) {
-    return maxItemsVisible != null && items > this.__getMax(maxItemsVisible);
+    const count = Array.isArray(items) ? items.length : 0;
+    return maxItemsVisible != null && count > this.__getMax(maxItemsVisible);
   }
 
   /** @private */
   __updateOverflowAbbr(overflow, items, itemsInView, maxItemsVisible) {
     if (overflow) {
-      overflow.abbr = `+${items - this.__getLimit(items, itemsInView, maxItemsVisible)}`;
+      const count = Array.isArray(items) ? items.length : 0;
+      overflow.abbr = `+${count - this.__getLimit(count, itemsInView, maxItemsVisible)}`;
     }
   }
 
   /** @private */
   __updateOverflowHidden(overflow, items, itemsInView, maxReached) {
     if (overflow) {
-      overflow.toggleAttribute('hidden', !maxReached && !(itemsInView && itemsInView < items));
+      const count = Array.isArray(items) ? items.length : 0;
+      overflow.toggleAttribute('hidden', !maxReached && !(itemsInView && itemsInView < count));
     }
   }
 
@@ -454,18 +456,18 @@ class AvatarGroup extends ResizeMixin(OverlayClassMixin(ElementMixin(ThemableMix
 
   /** @private */
   __updateOverflowTooltip(tooltip, items, itemsInView, maxItemsVisible) {
-    if (!tooltip) {
+    if (!tooltip || !Array.isArray(items)) {
       return;
     }
 
-    const limit = this.__getLimit(items, itemsInView, maxItemsVisible);
+    const limit = this.__getLimit(items.length, itemsInView, maxItemsVisible);
     if (limit == null) {
       return;
     }
 
     const result = [];
-    for (let i = limit; i < items; i++) {
-      const item = this.items[i];
+    for (let i = limit; i < items.length; i++) {
+      const item = items[i];
       if (item) {
         result.push(item.name || item.abbr || 'anonymous');
       }
@@ -534,15 +536,15 @@ class AvatarGroup extends ResizeMixin(OverlayClassMixin(ElementMixin(ThemableMix
 
   /** @private */
   __i18nItemsChanged(i18n, items) {
-    const { base } = i18n;
-    if (base && base.activeUsers) {
-      const field = items === 1 ? 'one' : 'many';
-      if (base.activeUsers[field]) {
-        this.setAttribute('aria-label', base.activeUsers[field].replace('{count}', items || 0));
+    if (i18n && i18n.activeUsers) {
+      const count = Array.isArray(items) ? items.length : 0;
+      const field = count === 1 ? 'one' : 'many';
+      if (i18n.activeUsers[field]) {
+        this.setAttribute('aria-label', i18n.activeUsers[field].replace('{count}', count || 0));
       }
 
       this._avatars.forEach((avatar) => {
-        avatar.i18n = base;
+        avatar.i18n = i18n;
       });
     }
   }
