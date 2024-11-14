@@ -65,8 +65,8 @@
     "replace-in-file": "^6.3.5",
     "rimraf": "^5.0.1",
     "rollup": "^4.4.0",
-    "stylelint": "^16.8.1",
-    "stylelint-config-vaadin": "^1.0.0-alpha.1",
+    "stylelint": "^16.10.0",
+    "stylelint-config-vaadin": "^1.0.0-alpha.2",
     "typescript": "^5.5.2"
   },
   "lint-staged": {
