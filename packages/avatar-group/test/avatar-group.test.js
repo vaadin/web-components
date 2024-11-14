@@ -224,7 +224,7 @@ describe('avatar-group', () => {
     });
 
     it('should always show at least two avatars', async () => {
-      group.set('items', group.items.slice(0, 2));
+      group.items = group.items.slice(0, 2);
       group.style.width = '50px';
       await onceResized(group);
       const items = group.querySelectorAll('vaadin-avatar:not([hidden])');
