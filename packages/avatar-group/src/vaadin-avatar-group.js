@@ -7,7 +7,6 @@ import '@vaadin/avatar/src/vaadin-avatar.js';
 import './vaadin-avatar-group-menu.js';
 import './vaadin-avatar-group-menu-item.js';
 import './vaadin-avatar-group-overlay.js';
-import { calculateSplices } from '@polymer/polymer/lib/utils/array-splice.js';
 import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import { html as legacyHtml, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { html, render } from 'lit';
@@ -126,6 +125,7 @@ class AvatarGroup extends ResizeMixin(OverlayClassMixin(ElementMixin(ThemableMix
        */
       items: {
         type: Array,
+        observer: '__itemsChanged',
       },
 
       /**
@@ -195,11 +195,6 @@ class AvatarGroup extends ResizeMixin(OverlayClassMixin(ElementMixin(ThemableMix
       },
 
       /** @private */
-      __items: {
-        type: Array,
-      },
-
-      /** @private */
       __itemsInView: {
         type: Number,
         value: null,
@@ -232,7 +227,6 @@ class AvatarGroup extends ResizeMixin(OverlayClassMixin(ElementMixin(ThemableMix
 
   static get observers() {
     return [
-      '__itemsChanged(items.splices, items.*)',
       '__i18nItemsChanged(i18n.*, items.length)',
       '__updateAvatarsTheme(_overflow, _avatars, _theme)',
       '__updateAvatars(items.*, __itemsInView, maxItemsVisible, _overflow, i18n)',
@@ -500,35 +494,32 @@ class AvatarGroup extends ResizeMixin(OverlayClassMixin(ElementMixin(ThemableMix
   }
 
   /** @private */
-  __itemsChanged(splices, itemsChange) {
-    const items = itemsChange.base;
+  __itemsChanged(items, oldItems) {
     this.__setItemsInView();
 
-    // Mutation using group.splice('items')
-    if (splices && Array.isArray(splices.indexSplices)) {
-      splices.indexSplices.forEach((mutation) => {
-        this.__announceItemsChange(items, mutation);
-      });
-    } else if (Array.isArray(items) && Array.isArray(this.__oldItems)) {
-      // Mutation using group.set('items')
-      const diff = calculateSplices(items, this.__oldItems);
-      diff.forEach((mutation) => {
-        this.__announceItemsChange(items, mutation);
-      });
+    let added = [];
+    let removed = [];
+
+    const hasNewItems = Array.isArray(items);
+    const hasOldItems = Array.isArray(oldItems);
+
+    if (hasOldItems) {
+      removed = oldItems.filter((item) => hasNewItems && !items.includes(item));
     }
 
-    this.__oldItems = items;
+    if (hasNewItems) {
+      added = items.filter((item) => hasOldItems && !oldItems.includes(item));
+    }
+
+    this.__announceItemsChange(added, removed);
   }
 
   /** @private */
-  __announceItemsChange(items, mutation) {
-    const { addedCount, index, removed } = mutation;
+  __announceItemsChange(added, removed) {
     let addedMsg = [];
     let removedMsg = [];
-    if (addedCount) {
-      addedMsg = items
-        .slice(index, index + addedCount)
-        .map((user) => this.__getMessage(user, this.i18n.joined || '{user} joined'));
+    if (added) {
+      addedMsg = added.map((user) => this.__getMessage(user, this.i18n.joined || '{user} joined'));
     }
 
     if (removed) {

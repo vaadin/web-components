@@ -163,7 +163,7 @@ describe('avatar-group', () => {
     it('should hide overflow avatar when items property is changed', async () => {
       group.maxItemsVisible = 2;
       await nextRender(group);
-      group.splice('items', 1, 3);
+      group.items = group.items.slice(0, 2);
       await nextRender(group);
       expect(group._overflow.hasAttribute('hidden')).to.be.true;
     });
@@ -588,7 +588,7 @@ describe('avatar-group', () => {
     });
 
     it('should announce when adding single item', () => {
-      group.splice('items', 2, 0, { name: 'DD' });
+      group.items = [...group.items, { name: 'DD' }];
 
       clock.tick(150);
 
@@ -596,7 +596,7 @@ describe('avatar-group', () => {
     });
 
     it('should announce when removing single item', () => {
-      group.splice('items', 2, 1);
+      group.items = group.items.slice(0, 2);
 
       clock.tick(150);
 
@@ -604,7 +604,7 @@ describe('avatar-group', () => {
     });
 
     it('should announce when adding multiple items', () => {
-      group.splice('items', 2, 0, { name: 'DD' }, { name: 'EE' });
+      group.items = [...group.items, { name: 'DD' }, { name: 'EE' }];
 
       clock.tick(150);
 
@@ -612,7 +612,7 @@ describe('avatar-group', () => {
     });
 
     it('should announce when removing multiple items', () => {
-      group.splice('items', 1, 2);
+      group.items = group.items.slice(0, 1);
 
       clock.tick(150);
 
@@ -620,7 +620,7 @@ describe('avatar-group', () => {
     });
 
     it('should announce when adding and removing single item', () => {
-      group.splice('items', 2, 1, { name: 'DD' });
+      group.items = [...group.items.slice(0, 2), { name: 'DD' }];
 
       clock.tick(150);
 
@@ -628,19 +628,11 @@ describe('avatar-group', () => {
     });
 
     it('should announce when adding and removing multiple items', () => {
-      group.splice('items', 1, 2, { name: 'DD' }, { name: 'EE' });
+      group.items = [...group.items.slice(0, 1), { name: 'DD' }, { name: 'EE' }];
 
       clock.tick(150);
 
       expect(region.textContent).to.equal('BB left, CC left, DD joined, EE joined');
-    });
-
-    it('should announce when the items property is reset', () => {
-      group.set('items', [group.items[0]]);
-
-      clock.tick(150);
-
-      expect(region.textContent).to.equal('BB left, CC left');
     });
   });
 });
