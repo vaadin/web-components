@@ -634,6 +634,71 @@ describe('PolylitMixin', () => {
     });
   });
 
+  describe('dynamic property observer', () => {
+    let element;
+    let valueChangedSpy;
+
+    const tag = defineCE(
+      class extends PolylitMixin(LitElement) {
+        static get properties() {
+          return {
+            value: {
+              type: String,
+            },
+          };
+        }
+
+        render() {
+          return html`${this.value}`;
+        }
+
+        _valueChanged(_value, _oldValue) {}
+
+        _valueChangedOther(_value, _oldValue) {}
+      },
+    );
+
+    beforeEach(async () => {
+      element = fixtureSync(`<${tag}></${tag}>`);
+      valueChangedSpy = sinon.spy(element, '_valueChanged');
+      await element.updateComplete;
+    });
+
+    it('should run dynamic property observer once a property value changes', async () => {
+      element.value = 'foo';
+      await element.updateComplete;
+      expect(valueChangedSpy.calledOnce).to.be.false;
+
+      element._createPropertyObserver('value', '_valueChanged');
+      element.value = 'bar';
+      await element.updateComplete;
+      expect(valueChangedSpy.calledOnce).to.be.true;
+    });
+
+    it('should pass old and new value to dynamic property observer', async () => {
+      element.value = 'foo';
+      await element.updateComplete;
+
+      element._createPropertyObserver('value', '_valueChanged');
+
+      element.value = 'bar';
+      await element.updateComplete;
+      expect(valueChangedSpy.getCall(0).args).to.deep.equal(['bar', 'foo']);
+    });
+
+    it('should support creating multiple dynamic property observers', async () => {
+      element._createPropertyObserver('value', '_valueChanged');
+
+      const otherObserverSpy = sinon.spy(element, '_valueChangedOther');
+      element._createPropertyObserver('value', '_valueChangedOther');
+
+      element.value = 'bar';
+      await element.updateComplete;
+      expect(valueChangedSpy.calledOnce).to.be.true;
+      expect(otherObserverSpy.calledOnce).to.be.true;
+    });
+  });
+
   describe('dynamic method observer', () => {
     let element;
     let valueOrLoadingChangedSpy;

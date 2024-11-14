@@ -217,12 +217,16 @@ const PolylitMixinImplementation = (superclass) => {
         this.__runObservers(props, this.constructor.__observers);
       }
 
+      if (this.__dynamicPropertyObservers) {
+        this.__runDynamicObservers(props, this.__dynamicPropertyObservers);
+      }
+
       if (this.constructor.__complexObservers) {
         this.__runComplexObservers(props, this.constructor.__complexObservers);
       }
 
-      if (this.__dynamicObservers) {
-        this.__runComplexObservers(props, this.__dynamicObservers);
+      if (this.__dynamicMethodObservers) {
+        this.__runComplexObservers(props, this.__dynamicMethodObservers);
       }
 
       if (this.constructor.__notifyProps) {
@@ -257,9 +261,15 @@ const PolylitMixinImplementation = (superclass) => {
 
     /** @protected */
     _createMethodObserver(observer) {
-      const dynamicObservers = getOrCreateMap(this, '__dynamicObservers');
+      const dynamicObservers = getOrCreateMap(this, '__dynamicMethodObservers');
       const { method, observerProps } = parseObserver(observer);
       dynamicObservers.set(method, observerProps);
+    }
+
+    /** @protected */
+    _createPropertyObserver(property, method) {
+      const dynamicObservers = getOrCreateMap(this, '__dynamicPropertyObservers');
+      dynamicObservers.set(method, property);
     }
 
     /** @private */
@@ -271,6 +281,15 @@ const PolylitMixinImplementation = (superclass) => {
           } else {
             this[method](...observerProps.map((prop) => this[prop]));
           }
+        }
+      });
+    }
+
+    /** @private */
+    __runDynamicObservers(props, observers) {
+      observers.forEach((prop, method) => {
+        if (props.has(prop) && this[method]) {
+          this[method](this[prop], props.get(prop));
         }
       });
     }
