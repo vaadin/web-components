@@ -18,6 +18,7 @@ const MINIMUM_DISPLAYED_AVATARS = 2;
  *
  * @polymerMixin
  * @mixes ResizeMixin
+ * @mixes OverlayClassMixin
  */
 export const AvatarGroupMixin = (superClass) =>
   class AvatarGroupMixinClass extends ResizeMixin(OverlayClassMixin(superClass)) {
