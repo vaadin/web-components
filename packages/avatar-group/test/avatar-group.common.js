@@ -371,13 +371,11 @@ describe('avatar-group', () => {
 
       overflow.click();
       await oneEvent(overlay, 'vaadin-overlay-open');
-
       expect(overflow.hasAttribute('focus-ring')).to.be.false;
 
       overflow.click();
 
       await nextRender();
-
       expect(overflow.hasAttribute('focus-ring')).to.be.true;
     });
 
