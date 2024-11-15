@@ -157,8 +157,8 @@ describe('dashboard - widget reordering', () => {
       // await sendMouse({ type: 'move', position: [Math.round(startX), Math.round(startY)] });
       // Workaround an issue with sendMouse not supporting multiple subsequent moves
       const reorderController = (dashboard as any).__widgetReorderController;
-      reorderController.__previousX = startX;
-      reorderController.__previousY = startY;
+      reorderController.__startX = startX;
+      reorderController.__startY = startY;
 
       // Move the mouse to the second widget
       const secondWidget = getElementFromCell(dashboard, 0, 1)!;
@@ -409,6 +409,10 @@ describe('dashboard - widget reordering', () => {
         [1, 2],
         [0],
       ]);
+
+      // Workaround test limitations to have proper delta on the next dragover event
+      fireDragOver(getElementFromCell(dashboard, 1, 0)!, 'bottom');
+      fireDragOver(getElementFromCell(dashboard, 1, 0)!, 'top');
 
       // Drag over the new widget 2
       resetReorderTimeout(dashboard);

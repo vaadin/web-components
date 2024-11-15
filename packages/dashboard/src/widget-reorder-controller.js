@@ -11,6 +11,7 @@
 import { getElementItem, getItemsArrayOfItem, itemsEqual, WRAPPER_LOCAL_NAME } from './vaadin-dashboard-helpers.js';
 
 const REORDER_EVENT_TIMEOUT = 200;
+const REORDER_MOVE_THRESHOLD = 10;
 
 /**
  * A controller to widget reordering inside a dashboard.
@@ -64,10 +65,28 @@ export class WidgetReorderController {
       return;
     }
 
-    const dx = e.clientX - (this.__previousX || e.clientX);
-    const dy = e.clientY - (this.__previousY || e.clientY);
+    // The location agains we measure the drag distance
+    this.__startX ||= e.clientX;
+    this.__startY ||= e.clientY;
+
+    // Delta values for the current drag event
+    const currentDx = e.clientX - (this.__previousX || e.clientX);
+    const currentDy = e.clientY - (this.__previousY || e.clientY);
     this.__previousX = e.clientX;
     this.__previousY = e.clientY;
+
+    if (currentDx && this.__dx && Math.sign(currentDx) !== Math.sign(this.__dx)) {
+      // If the direction of the drag changes, reset the start position
+      this.__startX = e.clientX;
+    }
+    if (currentDy && this.__dy && Math.sign(currentDy) !== Math.sign(this.__dy)) {
+      // If the direction of the drag changes, reset the start position
+      this.__startY = e.clientY;
+    }
+
+    // The delta values for the drag event against the start position
+    this.__dx = e.clientX - this.__startX;
+    this.__dy = e.clientY - this.__startY;
 
     e.preventDefault();
     e.dataTransfer.dropEffect = 'move';
@@ -95,7 +114,12 @@ export class WidgetReorderController {
     // Check if the dragged element is dragged enough over the target element
     if (
       !this.__reordering &&
-      this.__isDraggedOver(draggedElement, targetElement, { x: e.clientX, y: e.clientY, dx, dy })
+      this.__isDraggedOver(draggedElement, targetElement, {
+        x: e.clientX,
+        y: e.clientY,
+        dx: this.__dx,
+        dy: this.__dy,
+      })
     ) {
       // Prevent reordering multiple times in quick succession
       this.__reordering = true;
@@ -119,6 +143,10 @@ export class WidgetReorderController {
 
     this.__previousX = null;
     this.__previousY = null;
+    this.__startX = null;
+    this.__startY = null;
+    this.__dx = null;
+    this.__dy = null;
 
     // If the originally dragged element is restored to the DOM (as a direct child of the host),
     // to make sure "dragend" event gets dispatched, remove it to avoid duplicates
@@ -185,16 +213,16 @@ export class WidgetReorderController {
     const targetPos = targetElement.getBoundingClientRect();
     if (draggedPos.top >= targetPos.bottom) {
       // target is on a row above the dragged widget
-      return y < targetPos.bottom && dy < 0;
+      return y < targetPos.bottom && dy < -REORDER_MOVE_THRESHOLD;
     } else if (draggedPos.bottom <= targetPos.top) {
       // target is on a row below the dragged widget
-      return y > targetPos.top && dy > 0;
+      return y > targetPos.top && dy > REORDER_MOVE_THRESHOLD;
     } else if (draggedPos.left >= targetPos.right) {
       // target is on a column to the left of the dragged widget
-      return x < targetPos.right && dx < 0;
+      return x < targetPos.right && dx < -REORDER_MOVE_THRESHOLD;
     } else if (draggedPos.right <= targetPos.left) {
       // target is on a column to the right of the dragged widget
-      return x > targetPos.left && dx > 0;
+      return x > targetPos.left && dx > REORDER_MOVE_THRESHOLD;
     }
   }
 
