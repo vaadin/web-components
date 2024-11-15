@@ -9,10 +9,6 @@ import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
-function isEnabled() {
-  return window.Vaadin && window.Vaadin.featureFlags && !!window.Vaadin.featureFlags.cardComponent;
-}
-
 /**
  * <vaadin-card> is a visual content container.
  *
@@ -46,10 +42,6 @@ class Card extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
       :host {
         display: block;
       }
-
-      :host([hidden]) {
-        display: none !important;
-      }
     `;
   }
 
@@ -59,12 +51,6 @@ class Card extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
   }
 }
 
-if (isEnabled()) {
-  defineCustomElement(Card);
-} else {
-  console.warn(
-    'WARNING: The card component is currently an experimental feature and needs to be explicitly enabled. To enable the component, `import "@vaadin/card/enable.js"` *before* importing the card module itself.',
-  );
-}
+defineCustomElement(Card);
 
 export { Card };
