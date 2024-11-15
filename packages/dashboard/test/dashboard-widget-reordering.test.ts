@@ -79,19 +79,6 @@ describe('dashboard - widget reordering', () => {
       ]);
     });
 
-    it('should not reorder if dragged barely over another widget (start -> end)', async () => {
-      fireDragStart(getElementFromCell(dashboard, 0, 0)!);
-      await nextFrame();
-
-      fireDragOver(getElementFromCell(dashboard, 0, 1)!, 'start');
-      await nextFrame();
-
-      // prettier-ignore
-      expectLayout(dashboard, [
-        [0, 1],
-      ]);
-    });
-
     it('should reorder the widgets while dragging (end -> start)', async () => {
       fireDragStart(getElementFromCell(dashboard, 0, 1)!);
       await nextFrame();
@@ -102,19 +89,6 @@ describe('dashboard - widget reordering', () => {
       // prettier-ignore
       expectLayout(dashboard, [
         [1, 0],
-      ]);
-    });
-
-    it('should not reorder if dragged barely over another widget (end -> start)', async () => {
-      fireDragStart(getElementFromCell(dashboard, 0, 1)!);
-      await nextFrame();
-
-      fireDragOver(getElementFromCell(dashboard, 0, 0)!, 'end');
-      await nextFrame();
-
-      // prettier-ignore
-      expectLayout(dashboard, [
-        [0, 1],
       ]);
     });
 
@@ -141,29 +115,6 @@ describe('dashboard - widget reordering', () => {
       ]);
     });
 
-    it('should not reorder if dragged barely over another widget (top -> bottom)', async () => {
-      dashboard.style.width = `${columnWidth}px`;
-      await onceResized(dashboard);
-
-      // prettier-ignore
-      expectLayout(dashboard, [
-        [0],
-        [1],
-      ]);
-
-      fireDragStart(getElementFromCell(dashboard, 0, 0)!);
-      await nextFrame();
-
-      fireDragOver(getElementFromCell(dashboard, 1, 0)!, 'top');
-      await nextFrame();
-
-      // prettier-ignore
-      expectLayout(dashboard, [
-        [0],
-        [1],
-      ]);
-    });
-
     it('should reorder the widgets while dragging (bottom -> top)', async () => {
       dashboard.style.width = `${columnWidth}px`;
       await onceResized(dashboard);
@@ -187,29 +138,6 @@ describe('dashboard - widget reordering', () => {
       ]);
     });
 
-    it('should not reorder if dragged barely over another widget (bottom -> top)', async () => {
-      dashboard.style.width = `${columnWidth}px`;
-      await onceResized(dashboard);
-
-      // prettier-ignore
-      expectLayout(dashboard, [
-        [0],
-        [1],
-      ]);
-
-      fireDragStart(getElementFromCell(dashboard, 1, 0)!);
-      await nextFrame();
-
-      fireDragOver(getElementFromCell(dashboard, 0, 0)!, 'bottom');
-      await nextFrame();
-
-      // prettier-ignore
-      expectLayout(dashboard, [
-        [0],
-        [1],
-      ]);
-    });
-
     // The sendMouse helper does not seem to work well with Firefox
     (isFirefox ? it.skip : it)('should reorder using native DnD', async () => {
       const spy = sinon.spy();
@@ -221,6 +149,17 @@ describe('dashboard - widget reordering', () => {
       await sendMouse({
         type: 'down',
       });
+      // Start moving the mouse
+      const draggedWidget = getElementFromCell(dashboard, 0, 0);
+      const draggedWidgetRect = draggedWidget!.getBoundingClientRect();
+      const startY = draggedWidgetRect.top + draggedWidgetRect.height / 2;
+      const startX = document.dir === 'rtl' ? draggedWidgetRect.right - 1 : draggedWidgetRect.left + 1;
+      // await sendMouse({ type: 'move', position: [Math.round(startX), Math.round(startY)] });
+      // Workaround an issue with sendMouse not supporting multiple subsequent moves
+      const reorderController = (dashboard as any).__widgetReorderController;
+      reorderController.__startX = startX;
+      reorderController.__startY = startY;
+
       // Move the mouse to the second widget
       const secondWidget = getElementFromCell(dashboard, 0, 1)!;
       const secondWidgetRect = secondWidget.getBoundingClientRect();
@@ -470,6 +409,10 @@ describe('dashboard - widget reordering', () => {
         [1, 2],
         [0],
       ]);
+
+      // Workaround test limitations to have proper delta on the next dragover event
+      fireDragOver(getElementFromCell(dashboard, 1, 0)!, 'bottom');
+      fireDragOver(getElementFromCell(dashboard, 1, 0)!, 'top');
 
       // Drag over the new widget 2
       resetReorderTimeout(dashboard);

@@ -63,6 +63,7 @@ describe('dashboard', () => {
   it('should render a new widget', async () => {
     dashboard.items = [...dashboard.items, { id: '2' }];
     await nextFrame();
+    await nextFrame();
 
     const newWidget = getElementFromCell(dashboard, 1, 0);
     expect(newWidget).to.be.ok;
@@ -117,12 +118,14 @@ describe('dashboard', () => {
     expect(spy.firstCall.args[0].detail.items).to.eql([{ id: '0' }]);
   });
 
-  it('should not dispatch an item-remove event', () => {
+  it('should not dispatch an item-remove event', async () => {
     const spy = sinon.spy();
     // @ts-ignore unexpected event type
     dashboard.addEventListener('item-remove', spy);
+    await nextFrame();
     const widget = getElementFromCell(dashboard, 0, 1);
     getRemoveButton(widget as DashboardWidget).click();
+    await nextFrame();
     expect(spy).to.not.be.called;
   });
 
