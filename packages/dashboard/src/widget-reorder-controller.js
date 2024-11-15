@@ -65,7 +65,7 @@ export class WidgetReorderController {
       return;
     }
 
-    // The location agains we measure the drag distance
+    // The location against which we measure the drag distance
     this.__startX ||= e.clientX;
     this.__startY ||= e.clientY;
 
