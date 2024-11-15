@@ -17,6 +17,7 @@ import { html, LitElement } from 'lit';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { CrudMixin } from './vaadin-crud-mixin.js';
 import { crudStyles } from './vaadin-crud-styles.js';
@@ -24,7 +25,7 @@ import { crudStyles } from './vaadin-crud-styles.js';
 /**
  *
  */
-class Crud extends ControllerMixin(ElementMixin(ThemableMixin(CrudMixin(LitElement)))) {
+class Crud extends ControllerMixin(ElementMixin(ThemableMixin(CrudMixin(PolylitMixin(LitElement))))) {
   static get styles() {
     return crudStyles;
   }

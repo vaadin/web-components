@@ -8,30 +8,38 @@
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
-import { html, LitElement } from 'lit';
+import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
-import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
+import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
+import { OverlayClassMixin } from '@vaadin/component-base/src/overlay-class-mixin.js';
+import { DialogBaseMixin } from '@vaadin/dialog/src/vaadin-dialog-base-mixin.js';
 import { dialogOverlay, resizableOverlay } from '@vaadin/dialog/src/vaadin-dialog-styles.js';
+import { OverlayMixin } from '@vaadin/overlay/src/vaadin-overlay-mixin.js';
 import { overlayStyles } from '@vaadin/overlay/src/vaadin-overlay-styles.js';
-import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { CrudDialogMixin } from './vaadin-crud-dialog-mixin.js';
+import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
 import { crudDialogOverlayStyles } from './vaadin-crud-styles.js';
-registerStyles(
-  'vaadin-crud-dialog-overlay',
-  [overlayStyles, dialogOverlay, resizableOverlay, crudDialogOverlayStyles],
-  {
-    moduleId: 'vaadin-crud-dialog-overlay-styles',
-  },
-);
 
 /**
+ * An element used internally by `<vaadin-crud>`. Not intended to be used separately.
  *
+ * @customElement
+ * @extends HTMLElement
+ * @mixes DirMixin
+ * @mixes OverlayMixin
+ * @mixes ThemableMixin
+ * @private
  */
-class CrudDialogOverlay extends CrudDialogMixin(ThemableMixin(PolylitMixin(LitElement))) {
+class CrudDialogOverlay extends OverlayMixin(DirMixin(ThemableMixin(PolymerElement))) {
   static get is() {
     return 'vaadin-crud-dialog-overlay';
   }
-  render() {
+
+  static get styles() {
+    return [overlayStyles, dialogOverlay, resizableOverlay, crudDialogOverlayStyles];
+  }
+
+  static get template() {
     return html`
       <div part="backdrop" id="backdrop" hidden$="[[!withBackdrop]]"></div>
       <div part="overlay" id="overlay" tabindex="0">
@@ -54,17 +62,38 @@ class CrudDialogOverlay extends CrudDialogMixin(ThemableMixin(PolylitMixin(LitEl
    * @protected
    * @override
    */
+  ready() {
+    super.ready();
+
+    // CRUD has header and footer but does not use renderers
+    this.setAttribute('has-header', '');
+    this.setAttribute('has-footer', '');
+  }
 }
+
 defineCustomElement(CrudDialogOverlay);
 
 /**
  * An element used internally by `<vaadin-crud>`. Not intended to be used separately.
  * @private
  */
-class CrudDialog extends CrudDialogMixin(ThemableMixin(PolylitMixin(LitElement))) {
+class CrudDialog extends DialogBaseMixin(OverlayClassMixin(ThemePropertyMixin(PolymerElement))) {
   static get is() {
     return 'vaadin-crud-dialog';
   }
+
+  static get properties() {
+    return {
+      ariaLabel: {
+        type: String,
+      },
+
+      fullscreen: {
+        type: Boolean,
+      },
+    };
+  }
+
   static get template() {
     return html`
       <style>
@@ -91,4 +120,5 @@ class CrudDialog extends CrudDialogMixin(ThemableMixin(PolylitMixin(LitElement))
     `;
   }
 }
+
 defineCustomElement(CrudDialog);
