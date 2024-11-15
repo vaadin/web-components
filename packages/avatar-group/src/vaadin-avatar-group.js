@@ -77,6 +77,7 @@ class AvatarGroup extends AvatarGroupMixin(ElementMixin(ThemableMixin(Controller
         position-target="[[_overflow]]"
         no-vertical-overlap
         on-vaadin-overlay-close="_onVaadinOverlayClose"
+        on-vaadin-overlay-open="_onVaadinOverlayOpen"
       ></vaadin-avatar-group-overlay>
     `;
   }

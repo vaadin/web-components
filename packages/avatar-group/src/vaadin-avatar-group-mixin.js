@@ -54,6 +54,7 @@ export const AvatarGroupMixin = (superClass) =>
         items: {
           type: Array,
           observer: '__itemsChanged',
+          sync: true,
         },
 
         /**
@@ -64,6 +65,7 @@ export const AvatarGroupMixin = (superClass) =>
          */
         maxItemsVisible: {
           type: Number,
+          sync: true,
         },
 
         /**
@@ -97,6 +99,7 @@ export const AvatarGroupMixin = (superClass) =>
          */
         i18n: {
           type: Object,
+          sync: true,
           value: () => {
             return {
               anonymous: 'anonymous',
@@ -114,17 +117,20 @@ export const AvatarGroupMixin = (superClass) =>
         _avatars: {
           type: Array,
           value: () => [],
+          sync: true,
         },
 
         /** @private */
         __itemsInView: {
           type: Number,
           value: null,
+          sync: true,
         },
 
         /** @private */
         _overflow: {
           type: Object,
+          sync: true,
         },
 
         /** @private */
@@ -132,17 +138,19 @@ export const AvatarGroupMixin = (superClass) =>
           type: Array,
           observer: '__overflowItemsChanged',
           computed: '__computeOverflowItems(items, __itemsInView, maxItemsVisible)',
+          sync: true,
         },
 
         /** @private */
         _overflowTooltip: {
           type: Object,
+          sync: true,
         },
 
         /** @private */
         _opened: {
           type: Boolean,
-          observer: '__openedChanged',
+          sync: true,
         },
       };
     }
@@ -150,6 +158,7 @@ export const AvatarGroupMixin = (superClass) =>
     static get observers() {
       return [
         '__i18nItemsChanged(i18n, items)',
+        '__openedChanged(_opened, _overflow)',
         '__updateAvatarsTheme(_overflow, _avatars, _theme)',
         '__updateAvatars(items, __itemsInView, maxItemsVisible, _overflow, i18n)',
         '__updateOverflowAvatar(_overflow, items, __itemsInView, maxItemsVisible)',
@@ -294,6 +303,13 @@ export const AvatarGroupMixin = (superClass) =>
     _onVaadinOverlayClose(e) {
       if (e.detail.sourceEvent && e.detail.sourceEvent.composedPath().includes(this)) {
         e.preventDefault();
+      }
+    }
+
+    /** @private */
+    _onVaadinOverlayOpen() {
+      if (this._menuElement) {
+        this._menuElement.focus();
       }
     }
 
@@ -460,22 +476,26 @@ export const AvatarGroupMixin = (superClass) =>
     }
 
     /** @private */
-    __openedChanged(opened, wasOpened) {
+    __openedChanged(opened, overflow) {
+      if (!overflow) {
+        return;
+      }
+
       if (opened) {
         if (!this._menuElement) {
           this._menuElement = this.$.overlay.querySelector('vaadin-avatar-group-menu');
         }
 
-        this._openedWithFocusRing = this._overflow.hasAttribute('focus-ring');
-
-        this._menuElement.focus();
-      } else if (wasOpened) {
-        this._overflow.focus();
+        this._openedWithFocusRing = overflow.hasAttribute('focus-ring');
+      } else if (this.__oldOpened) {
+        overflow.focus();
         if (this._openedWithFocusRing) {
-          this._overflow.setAttribute('focus-ring', '');
+          overflow.setAttribute('focus-ring', '');
         }
       }
-      this._overflow.setAttribute('aria-expanded', opened === true);
+
+      overflow.setAttribute('aria-expanded', opened === true);
+      this.__oldOpened = opened;
     }
 
     /** @private */
