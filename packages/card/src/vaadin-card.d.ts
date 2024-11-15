@@ -8,7 +8,7 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
 
 /**
  */
-declare class Card extends ElementMixin(ThemableMixin(ControllerMixin(HTMLElement))) {}
+declare class Card extends ElementMixin(ThemableMixin(HTMLElement)) {}
 
 declare global {
   interface HTMLElementTagNameMap {
