@@ -20,6 +20,7 @@ import type { LabelMixinClass } from '@vaadin/field-base/src/label-mixin.js';
 import type { ValidateMixinClass } from '@vaadin/field-base/src/validate-mixin.js';
 import type { ThemableMixinClass } from '@vaadin/vaadin-themable-mixin';
 import type { MultiSelectComboBoxItem } from '../../src/vaadin-multi-select-combo-box-item.js';
+import type { MultiSelectComboBoxMixinClass } from '../../src/vaadin-multi-select-combo-box-mixin.js';
 import type {
   MultiSelectComboBox,
   MultiSelectComboBoxChangeEvent,
@@ -122,6 +123,7 @@ assertType<ClearButtonMixinClass>(narrowedComboBox);
 assertType<Omit<InputMixinClass, 'value'>>(narrowedComboBox);
 assertType<KeyboardMixinClass>(narrowedComboBox);
 assertType<LabelMixinClass>(narrowedComboBox);
+assertType<MultiSelectComboBoxMixinClass<TestComboBoxItem>>(narrowedComboBox);
 assertType<SlotStylesMixinClass>(narrowedComboBox);
 assertType<ValidateMixinClass>(narrowedComboBox);
 assertType<ThemableMixinClass>(narrowedComboBox);
