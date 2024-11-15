@@ -14,14 +14,13 @@ import '@vaadin/grid/src/vaadin-lit-grid-filter.js';
 import '@vaadin/grid/src/vaadin-lit-grid-sorter.js';
 import './vaadin-lit-crud-edit-column.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
-import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { Grid } from '@vaadin/grid/src/vaadin-lit-grid.js';
 import { CrudGridMixin } from './vaadin-crud-grid-mixin.js';
 
 /**
  *
  */
-class CrudGrid extends CrudGridMixin(PolylitMixin(Grid)) {
+class CrudGrid extends CrudGridMixin(Grid) {
   static get is() {
     return 'vaadin-crud-grid';
   }
