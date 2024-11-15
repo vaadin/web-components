@@ -16,44 +16,17 @@ import { DialogBaseMixin } from '@vaadin/dialog/src/vaadin-dialog-base-mixin.js'
 import { dialogOverlay, resizableOverlay } from '@vaadin/dialog/src/vaadin-dialog-styles.js';
 import { OverlayMixin } from '@vaadin/overlay/src/vaadin-overlay-mixin.js';
 import { overlayStyles } from '@vaadin/overlay/src/vaadin-overlay-styles.js';
-import { css, registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
+import { crudDialogOverlayStyles } from './vaadin-crud-styles.js';
 
-const crudDialogOverlay = css`
-  [part='overlay'] {
-    max-width: 54em;
-    min-width: 20em;
-  }
-
-  [part='footer'] {
-    justify-content: flex-start;
-    flex-direction: row-reverse;
-  }
-
-  /* Make buttons clickable */
-  [part='footer'] ::slotted(:not([disabled])) {
-    pointer-events: all;
-  }
-
-  :host([fullscreen]) {
-    inset: 0;
-    padding: 0;
-  }
-
-  :host([fullscreen]) [part='overlay'] {
-    height: 100vh;
-    width: 100vw;
-    border-radius: 0 !important;
-  }
-
-  :host([fullscreen]) [part='content'] {
-    flex: 1;
-  }
-`;
-
-registerStyles('vaadin-crud-dialog-overlay', [overlayStyles, dialogOverlay, resizableOverlay, crudDialogOverlay], {
-  moduleId: 'vaadin-crud-dialog-overlay-styles',
-});
+registerStyles(
+  'vaadin-crud-dialog-overlay',
+  [overlayStyles, dialogOverlay, resizableOverlay, crudDialogOverlayStyles],
+  {
+    moduleId: 'vaadin-crud-dialog-overlay-styles',
+  },
+);
 
 /**
  * An element used internally by `<vaadin-crud>`. Not intended to be used separately.
