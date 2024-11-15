@@ -64,6 +64,11 @@ export class WidgetReorderController {
       return;
     }
 
+    const dx = e.clientX - (this.__previousX || e.clientX);
+    const dy = e.clientY - (this.__previousY || e.clientY);
+    this.__previousX = e.clientX;
+    this.__previousY = e.clientY;
+
     e.preventDefault();
     e.dataTransfer.dropEffect = 'move';
 
@@ -88,7 +93,10 @@ export class WidgetReorderController {
     }
 
     // Check if the dragged element is dragged enough over the target element
-    if (!this.__reordering && this.__isDraggedOver(draggedElement, targetElement, e.clientX, e.clientY)) {
+    if (
+      !this.__reordering &&
+      this.__isDraggedOver(draggedElement, targetElement, { x: e.clientX, y: e.clientY, dx, dy })
+    ) {
       // Prevent reordering multiple times in quick succession
       this.__reordering = true;
       setTimeout(() => {
@@ -108,6 +116,9 @@ export class WidgetReorderController {
     if (!this.draggedItem) {
       return;
     }
+
+    this.__previousX = null;
+    this.__previousY = null;
 
     // If the originally dragged element is restored to the DOM (as a direct child of the host),
     // to make sure "dragend" event gets dispatched, remove it to avoid duplicates
@@ -169,21 +180,21 @@ export class WidgetReorderController {
    * of the drag event.
    * @private
    */
-  __isDraggedOver(draggedElement, targetElement, x, y) {
+  __isDraggedOver(draggedElement, targetElement, { x, y, dx, dy }) {
     const draggedPos = draggedElement.getBoundingClientRect();
     const targetPos = targetElement.getBoundingClientRect();
     if (draggedPos.top >= targetPos.bottom) {
       // target is on a row above the dragged widget
-      return y < targetPos.top + targetPos.height / 2;
+      return y < targetPos.bottom && dy < 0;
     } else if (draggedPos.bottom <= targetPos.top) {
       // target is on a row below the dragged widget
-      return y > targetPos.top + targetPos.height / 2;
+      return y > targetPos.top && dy > 0;
     } else if (draggedPos.left >= targetPos.right) {
       // target is on a column to the left of the dragged widget
-      return x < targetPos.left + targetPos.width / 2;
+      return x < targetPos.right && dx < 0;
     } else if (draggedPos.right <= targetPos.left) {
       // target is on a column to the right of the dragged widget
-      return x > targetPos.left + targetPos.width / 2;
+      return x > targetPos.left && dx > 0;
     }
   }
 
