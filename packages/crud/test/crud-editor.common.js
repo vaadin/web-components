@@ -1,7 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { aTimeout, fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import { setViewport } from '@web/test-runner-commands';
-import '../vaadin-crud.js';
 import { flushGrid } from './helpers.js';
 
 describe('crud editor', () => {
