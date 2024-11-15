@@ -11,6 +11,7 @@
 import './vaadin-crud-edit.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { GridColumn } from '@vaadin/grid/src/vaadin-grid-column.js';
+import { editColumnDefaultRenderer } from './vaadin-crud-helpers.js';
 
 /**
  * `<vaadin-crud-edit-column>` is a helper element for the `<vaadin-grid>`
@@ -69,21 +70,8 @@ class CrudEditColumn extends GridColumn {
    *
    * @override
    */
-  _defaultRenderer(root, _column) {
-    let edit = root.firstElementChild;
-    if (!edit) {
-      edit = document.createElement('vaadin-crud-edit');
-      if (this.hasAttribute('theme')) {
-        edit.setAttribute('theme', this.getAttribute('theme'));
-      }
-      root.appendChild(edit);
-    }
-
-    if (this.ariaLabel) {
-      edit.setAttribute('aria-label', this.ariaLabel);
-    } else {
-      edit.removeAttribute('aria-label');
-    }
+  _defaultRenderer(root, column) {
+    editColumnDefaultRenderer(root, column);
   }
 }
 

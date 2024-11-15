@@ -11,7 +11,8 @@
 import '@vaadin/text-field/src/vaadin-text-field.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { FormLayout } from '@vaadin/form-layout/src/vaadin-form-layout.js';
-import { capitalize } from './vaadin-crud-helpers.js';
+import { createField } from './vaadin-crud-helpers.js';
+import { createFields } from './vaadin-crud-helpers.js';
 import { IncludedMixin } from './vaadin-crud-include-mixin.js';
 
 /**
@@ -64,31 +65,12 @@ class CrudForm extends IncludedMixin(FormLayout) {
 
   /** @private */
   __createField(parent, path) {
-    const field = document.createElement('vaadin-text-field');
-    field.label = capitalize(path);
-    field.path = path;
-    field.required = true;
-    parent.appendChild(field);
-    this._fields.push(field);
-    return field;
+    return createField(this, parent, path);
   }
 
   /** @private */
   __createFields(parent, object, path) {
-    Object.keys(object).forEach((prop) => {
-      if (!this.include && this.exclude && this.exclude.test(prop)) {
-        return;
-      }
-      const newPath = (path ? `${path}.` : '') + prop;
-      if (object[prop] && typeof object[prop] === 'object') {
-        this.__createFields(parent, object[prop], newPath);
-      } else {
-        this.__createField(parent, newPath);
-      }
-    });
-    if (!this._fields.length) {
-      this._fields = undefined;
-    }
+    return createFields(this, parent, object, path);
   }
 }
 
