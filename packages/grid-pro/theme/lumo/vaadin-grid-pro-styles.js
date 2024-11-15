@@ -57,11 +57,6 @@ registerStyles(
       animation: vaadin-grid-pro-loading-editor 1.4s infinite;
     }
 
-    :host([loading-editor]) [part~='focused-cell'] ::slotted(vaadin-grid-cell-content) {
-      opacity: 0;
-      pointer-events: none;
-    }
-
     @keyframes vaadin-grid-pro-loading-editor {
       50% {
         box-shadow: inset 0 0 0 var(--_focus-ring-width) var(--_focus-ring-color);
