@@ -8,6 +8,9 @@
     <script type="module" src="./common.js"></script>
 
     <script type="module">
+      // Enable feature flag
+      Vaadin.featureFlags.cardComponent = true;
+
       import '@vaadin/card';
       import { badge } from '@vaadin/vaadin-lumo-styles/badge.js';
       import '@vaadin/icon';
