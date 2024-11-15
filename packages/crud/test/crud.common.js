@@ -2,8 +2,6 @@ import { expect } from '@vaadin/chai-plugins';
 import { aTimeout, change, fire, fixtureSync, nextRender, oneEvent } from '@vaadin/testing-helpers';
 import { setViewport } from '@web/test-runner-commands';
 import sinon from 'sinon';
-import '../src/vaadin-crud.js';
-import { capitalize, getProperty, setProperty } from '../src/vaadin-crud-helpers.js';
 import { flushGrid, getBodyCellContent } from './helpers.js';
 
 describe('crud', () => {

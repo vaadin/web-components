@@ -1,6 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
-import '../src/vaadin-crud-form.js';
 
 describe('crud form', () => {
   let crudForm;
