@@ -19,13 +19,7 @@ import { Grid } from '@vaadin/grid/src/vaadin-lit-grid.js';
 import { CrudGridMixin } from './vaadin-crud-grid-mixin.js';
 
 /**
- * LitElement based version of `<vaadin-crud-grid>` web component.
  *
- * ## Disclaimer
- *
- * This component is an experiment and not yet a part of Vaadin platform.
- * There is no ETA regarding specific Vaadin version where it'll land.
- * Feel free to try this code in your apps as per Apache 2.0 license.
  */
 class CrudGrid extends CrudGridMixin(PolylitMixin(Grid)) {
   static get is() {
