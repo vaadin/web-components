@@ -15,13 +15,7 @@ import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themab
 import { CrudEditMixin } from './vaadin-crud-edit-mixin.js';
 
 /**
- * LitElement based version of `<vaadin-crud-edit>` web component.
  *
- * ## Disclaimer
- *
- * This component is an experiment and not yet a part of Vaadin platform.
- * There is no ETA regarding specific Vaadin version where it'll land.
- * Feel free to try this code in your apps as per Apache 2.0 license.
  */
 registerStyles(
   'vaadin-crud-edit',

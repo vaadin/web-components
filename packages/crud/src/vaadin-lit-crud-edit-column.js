@@ -15,13 +15,7 @@ import { GridColumn } from '@vaadin/grid/src/vaadin-grid-column.js';
 import { CrudEditColumnMixin } from './vaadin-crud-edit-column-mixin.js';
 
 /**
- * LitElement based version of `<vaadin-crud-edit-column>` web component.
  *
- * ## Disclaimer
- *
- * This component is an experiment and not yet a part of Vaadin platform.
- * There is no ETA regarding specific Vaadin version where it'll land.
- * Feel free to try this code in your apps as per Apache 2.0 license.
  */
 class CrudEditColumn extends CrudEditColumnMixin(PolylitMixin(LitElement)) {
   static get is() {

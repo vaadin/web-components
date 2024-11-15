@@ -25,13 +25,7 @@ registerStyles(
 );
 
 /**
- * LitElement based version of `<vaadin-crud-dialog>` web component.
  *
- * ## Disclaimer
- *
- * This component is an experiment and not yet a part of Vaadin platform.
- * There is no ETA regarding specific Vaadin version where it'll land.
- * Feel free to try this code in your apps as per Apache 2.0 license.
  */
 class CrudDialogOverlay extends CrudDialogMixin(ThemableMixin(PolylitMixin(LitElement))) {
   static get is() {
