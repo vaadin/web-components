@@ -5,7 +5,12 @@
  */
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
-import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { multiSelectComboBoxChip } from './vaadin-multi-select-combo-box-styles.js';
+
+registerStyles('vaadin-multi-select-combo-box-chip', multiSelectComboBoxChip, {
+  moduleId: 'vaadin-multi-select-combo-box-chip',
+});
 
 /**
  * An element used by `<vaadin-multi-select-combo-box>` to display selected items.
@@ -54,32 +59,6 @@ class MultiSelectComboBoxChip extends ThemableMixin(PolymerElement) {
 
   static get template() {
     return html`
-      <style>
-        :host {
-          display: inline-flex;
-          align-items: center;
-          align-self: center;
-          white-space: nowrap;
-          box-sizing: border-box;
-        }
-
-        [part='label'] {
-          overflow: hidden;
-          text-overflow: ellipsis;
-        }
-
-        :host([hidden]),
-        :host(:is([readonly], [disabled], [slot='overflow'])) [part='remove-button'] {
-          display: none !important;
-        }
-
-        @media (forced-colors: active) {
-          :host {
-            outline: 1px solid;
-            outline-offset: -1px;
-          }
-        }
-      </style>
       <div part="label">[[label]]</div>
       <div part="remove-button" on-click="_onRemoveClick"></div>
     `;
