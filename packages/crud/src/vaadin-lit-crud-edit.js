@@ -8,14 +8,15 @@
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
-import { html, LitElement } from 'lit';
+
+import { html } from 'lit';
+import { Button } from '@vaadin/button/src/vaadin-lit-button.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
-import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { CrudEditMixin } from './vaadin-crud-edit-mixin.js';
 
 /**
- *
+ * Use registerStyles instead of the `<style>` tag to make sure
+ * that this CSS will override core styles of `vaadin-button`.
  */
 registerStyles(
   'vaadin-crud-edit',
@@ -24,9 +25,7 @@ registerStyles(
       display: block;
     }
   `,
-  {
-    moduleId: 'vaadin-crud-edit-styles',
-  },
+  { moduleId: 'vaadin-crud-edit-styles' },
 );
 
 /**
@@ -39,21 +38,34 @@ registerStyles(
  *
  * @customElement
  * @extends HTMLElement
- * @mixes CrudEditMixin
  * @mixes ThemableMixin
  */
-class CrudEdit extends CrudEditMixin(PolylitMixin(LitElement)) {
+class CrudEdit extends Button {
+  static get is() {
+    return 'vaadin-crud-edit';
+  }
+
   render() {
     return html`
       <div part="icon"></div>
       <slot name="tooltip"></slot>
     `;
   }
-  static get is() {
-    return 'vaadin-crud-edit';
-  }
 
   /** @protected */
+  ready() {
+    super.ready();
+    this.addEventListener('click', this.__onClick);
+    this.setAttribute('aria-label', 'Edit');
+  }
+
+  /** @private */
+  __onClick(e) {
+    const tr = e.target.parentElement.assignedSlot.parentElement.parentElement;
+    tr.dispatchEvent(
+      new CustomEvent('edit', { detail: { item: tr._item, index: tr.index }, bubbles: true, composed: true }),
+    );
+  }
 
   /**
    * Fired when user on the icon.
@@ -63,5 +75,7 @@ class CrudEdit extends CrudEditMixin(PolylitMixin(LitElement)) {
    * @param {Object} detail.index the index of the item in the data set
    */
 }
+
 defineCustomElement(CrudEdit);
+
 export { CrudEdit };
