@@ -66,6 +66,17 @@ describe('define', () => {
       defineCustomElement(
         class XBaz extends HTMLElement {
           static get is() {
+            return 'x-baz';
+          }
+
+          static get experimental() {
+            return 'bazComponent';
+          }
+        },
+      );
+      defineCustomElement(
+        class XBaz extends HTMLElement {
+          static get is() {
             return 'x-baz-item';
           }
 
@@ -74,7 +85,11 @@ describe('define', () => {
           }
         },
       );
+      expect(customElements.get('x-baz')).to.be.not.ok;
+      expect(customElements.get('x-baz-item')).to.be.not.ok;
+
       window.Vaadin.featureFlags.bazComponent = true;
+      expect(customElements.get('x-baz')).to.be.ok;
       expect(customElements.get('x-baz-item')).to.be.ok;
     });
   });
