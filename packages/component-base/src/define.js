@@ -11,6 +11,8 @@ function dashToCamelCase(dash) {
   return dash.replace(/-[a-z]/gu, (m) => m[1].toUpperCase());
 }
 
+const experimentalMap = {};
+
 export function defineCustomElement(CustomElement, version = '24.6.0-alpha8') {
   Object.defineProperty(CustomElement, 'version', {
     get() {
@@ -19,21 +21,34 @@ export function defineCustomElement(CustomElement, version = '24.6.0-alpha8') {
   });
 
   if (CustomElement.experimental) {
-    const name = CustomElement.is.split('-').slice(1).join('-');
-    const featureFlagKey = `${dashToCamelCase(name)}Component`;
-    if (!window.Vaadin.featureFlags[featureFlagKey]) {
+    const featureFlagKey =
+      typeof CustomElement.experimental === 'string'
+        ? CustomElement.experimental
+        : `${dashToCamelCase(CustomElement.is.split('-').slice(1).join('-'))}Component`;
+
+    if (!window.Vaadin.featureFlags[featureFlagKey] && !experimentalMap[featureFlagKey]) {
       // Add setter to define experimental component when it's set to true
+      experimentalMap[featureFlagKey] = new Set();
+      experimentalMap[featureFlagKey].add(CustomElement);
+
       Object.defineProperty(window.Vaadin.featureFlags, featureFlagKey, {
         get() {
-          return !!customElements.get(CustomElement.is);
+          return experimentalMap[featureFlagKey].size === 0;
         },
         set(value) {
-          if (!!value && !customElements.get(CustomElement.is)) {
-            customElements.define(CustomElement.is, CustomElement);
+          if (!!value && experimentalMap[featureFlagKey].size > 0) {
+            experimentalMap[featureFlagKey].forEach((elementClass) => {
+              customElements.define(elementClass.is, elementClass);
+            });
+            experimentalMap[featureFlagKey].clear();
           }
         },
       });
 
+      return;
+    } else if (experimentalMap[featureFlagKey]) {
+      // Allow to register multiple components with single flag
+      experimentalMap[featureFlagKey].add(CustomElement);
       return;
     }
   }
