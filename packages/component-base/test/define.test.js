@@ -61,5 +61,21 @@ describe('define', () => {
       );
       expect(customElements.get('x-foo-bar')).to.be.ok;
     });
+
+    it('should support defining feature flag name using experimental getter', () => {
+      defineCustomElement(
+        class XBaz extends HTMLElement {
+          static get is() {
+            return 'x-baz-item';
+          }
+
+          static get experimental() {
+            return 'bazComponent';
+          }
+        },
+      );
+      window.Vaadin.featureFlags.bazComponent = true;
+      expect(customElements.get('x-baz-item')).to.be.ok;
+    });
   });
 });
