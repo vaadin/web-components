@@ -4,12 +4,39 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 
+window.Vaadin ||= {};
+window.Vaadin.featureFlags ||= {};
+
+function dashToCamelCase(dash) {
+  return dash.replace(/-[a-z]/gu, (m) => m[1].toUpperCase());
+}
+
 export function defineCustomElement(CustomElement, version = '24.6.0-alpha8') {
   Object.defineProperty(CustomElement, 'version', {
     get() {
       return version;
     },
   });
+
+  if (CustomElement.experimental) {
+    const name = CustomElement.is.split('-').slice(1).join('-');
+    const featureFlagKey = `${dashToCamelCase(name)}Component`;
+    if (!window.Vaadin.featureFlags[featureFlagKey]) {
+      // Add setter to define experimental component when it's set to true
+      Object.defineProperty(window.Vaadin.featureFlags, featureFlagKey, {
+        get() {
+          return !!customElements.get(CustomElement.is);
+        },
+        set(value) {
+          if (!!value && !customElements.get(CustomElement.is)) {
+            customElements.define(CustomElement.is, CustomElement);
+          }
+        },
+      });
+
+      return;
+    }
+  }
 
   const defined = customElements.get(CustomElement.is);
   if (!defined) {
