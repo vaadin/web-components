@@ -12,6 +12,20 @@ import { animationFrame } from '@vaadin/component-base/src/async.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { get, set } from '@vaadin/component-base/src/path-utils.js';
 import { iterateRowCells, updatePart } from '@vaadin/grid/src/vaadin-grid-helpers.js';
+import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+
+registerStyles(
+  'vaadin-grid-pro',
+  css`
+    :host([loading-editor]) [part~='focused-cell'] ::slotted(vaadin-grid-cell-content) {
+      opacity: 0;
+      pointer-events: none;
+    }
+  `,
+  {
+    moduleId: 'vaadin-grid-pro-styles',
+  },
+);
 
 /**
  * @polymerMixin
@@ -82,6 +96,19 @@ export const InlineEditingMixin = (superClass) =>
 
     /** @protected */
     ready() {
+      this.addEventListener(
+        'keydown',
+        (e) => {
+          if (this.hasAttribute('loading-editor') && !['Tab', 'Escape', 'Enter'].includes(e.key)) {
+            // If an editor is focused while it's loading, prevent default keydown behavior
+            // to avoid user interaction with the editor before it's fully loaded
+            // Used by Flow GridPro
+            e.preventDefault();
+            e.stopPropagation();
+          }
+        },
+        true,
+      );
       // Add listener before `vaadin-grid` interaction mode listener
       this.addEventListener('keydown', (e) => {
         switch (e.keyCode) {

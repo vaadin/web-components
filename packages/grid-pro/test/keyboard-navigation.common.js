@@ -2,7 +2,15 @@ import { expect } from '@esm-bundle/chai';
 import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
-import { createItems, dblclick, dragAndDropOver, flushGrid, getCellEditor, getContainerCell } from './helpers.js';
+import {
+  createItems,
+  dblclick,
+  dragAndDropOver,
+  flushGrid,
+  getCellEditor,
+  getContainerCell,
+  getContainerCellContent,
+} from './helpers.js';
 
 describe('keyboard navigation', () => {
   let grid;
@@ -297,6 +305,70 @@ describe('keyboard navigation', () => {
       await sendKeys({ press: 'Escape' });
 
       expect(focusSpy.calledAfter(stopSpy)).to.be.true;
+    });
+  });
+
+  describe('loading-editor', () => {
+    beforeEach(() => {
+      grid.toggleAttribute('loading-editor', true);
+    });
+
+    it('should not allow typing while the editor is loading', async () => {
+      const firstCell = getContainerCell(grid.$.items, 0, 0);
+      dblclick(firstCell._content);
+
+      await sendKeys({ press: 'a' });
+      await sendKeys({ press: 'Enter' });
+
+      grid.toggleAttribute('loading-editor', false);
+
+      expect(getContainerCellContent(grid.$.items, 0, 0).textContent).to.equal('0 foo');
+    });
+
+    it('should not allow keyboard interactions while the editor is loading', async () => {
+      const firstCell = getContainerCell(grid.$.items, 0, 0);
+      dblclick(firstCell._content);
+      const spy = sinon.spy();
+
+      const editor = getCellEditor(firstCell);
+      editor.addEventListener('keydown', spy);
+
+      await sendKeys({ press: 'ArrowDown' });
+
+      expect(spy.called).to.be.false;
+    });
+
+    it('should not allow pointer events while the editor is loading', async () => {
+      const firstCell = getContainerCell(grid.$.items, 0, 0);
+      dblclick(firstCell._content);
+      await nextFrame();
+      const editor = getCellEditor(firstCell);
+      expect(getComputedStyle(editor).pointerEvents).to.equal('none');
+    });
+
+    it('should hide cell content while the editor is loading', async () => {
+      const firstCell = getContainerCell(grid.$.items, 0, 0);
+      dblclick(firstCell._content);
+      await nextFrame();
+      const container = getContainerCellContent(grid.$.items, 0, 0);
+      expect(getComputedStyle(container).opacity).to.equal('0');
+    });
+
+    it('should allow tabbing to another cell while the editor is loading', async () => {
+      const firstCell = getContainerCell(grid.$.items, 0, 0);
+      dblclick(firstCell._content);
+
+      await sendKeys({ press: 'Tab' });
+      const secondCellContent = getContainerCellContent(grid.$.items, 0, 1);
+      expect(secondCellContent.contains(document.activeElement)).to.be.true;
+    });
+
+    it('should allow escaping from edit mode while the editor is loading', async () => {
+      const firstCell = getContainerCell(grid.$.items, 0, 0);
+      dblclick(firstCell._content);
+
+      await sendKeys({ press: 'Escape' });
+      expect(getContainerCellContent(grid.$.items, 0, 0).textContent).to.equal('0 foo');
     });
   });
 });
