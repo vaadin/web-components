@@ -202,6 +202,10 @@ export const TextAreaMixin = (superClass) =>
       inputField.style.removeProperty('display');
       inputField.style.removeProperty('height');
       inputField.scrollTop = scrollTop;
+
+      // Update max height in case this update was triggered by style changes
+      // affecting line height, paddings or margins.
+      this.__updateMaxHeight(this.maxRows);
     }
 
     /** @private */

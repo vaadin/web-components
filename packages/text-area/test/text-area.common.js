@@ -359,10 +359,11 @@ describe('text-area', () => {
     });
 
     describe('min / max rows', () => {
-      const lineHeight = 20;
+      let lineHeight;
       let consoleWarn;
 
       beforeEach(async () => {
+        lineHeight = 20;
         const fixture = fixtureSync(`
           <div>
             <style>
@@ -378,6 +379,7 @@ describe('text-area', () => {
         `);
         textArea = fixture.querySelector('vaadin-text-area');
         await nextUpdate(textArea);
+        native = textArea.querySelector('textarea');
 
         consoleWarn = sinon.stub(console, 'warn');
       });
@@ -478,6 +480,36 @@ describe('text-area', () => {
         await nextUpdate(textArea);
 
         expect(textArea.clientHeight).to.be.below(lineHeight * 4);
+      });
+
+      it('should update max-height when component is resized', async () => {
+        textArea.maxRows = 4;
+        textArea.value = Array(400).join('400');
+        await nextUpdate(textArea);
+
+        // Change the line height to observe a max-height change
+        lineHeight = 30;
+        native.style.setProperty('line-height', `${lineHeight}px`);
+
+        // Trigger a resize event
+        textArea._onResize();
+
+        expect(textArea.clientHeight).to.equal(lineHeight * 4);
+      });
+
+      it('should update max-height when value changes', async () => {
+        textArea.maxRows = 4;
+        textArea.value = Array(400).join('400');
+        await nextUpdate(textArea);
+
+        // Change the line height to observe a max-height change
+        lineHeight = 30;
+        native.style.setProperty('line-height', `${lineHeight}px`);
+
+        // Trigger a value change
+        textArea.value += 'change';
+
+        expect(textArea.clientHeight).to.equal(lineHeight * 4);
       });
     });
 
