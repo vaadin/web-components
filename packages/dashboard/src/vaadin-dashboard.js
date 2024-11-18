@@ -462,6 +462,23 @@ class Dashboard extends DashboardLayoutMixin(ElementMixin(ThemableMixin(PolylitM
   }
 
   /**
+   * @private
+   */
+  __updateColumnCount() {
+    const previousColumnCount = this.$.grid.style.getPropertyValue('--_vaadin-dashboard-col-count');
+    super.__updateColumnCount();
+
+    // Request update for all the widgets if the column count has changed on resize
+    if (previousColumnCount !== this.$.grid.style.getPropertyValue('--_vaadin-dashboard-col-count')) {
+      this.querySelectorAll(WRAPPER_LOCAL_NAME).forEach((wrapper) => {
+        if (wrapper.firstElementChild && 'requestUpdate' in wrapper.firstElementChild) {
+          wrapper.firstElementChild.requestUpdate();
+        }
+      });
+    }
+  }
+
+  /**
    * Fired when an item selected state changed
    *
    * @event dashboard-item-selected-changed
