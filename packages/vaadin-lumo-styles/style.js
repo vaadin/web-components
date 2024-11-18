@@ -104,7 +104,7 @@ const globals = css`
     --vaadin-input-field-readonly-border: 1px dashed var(--lumo-contrast-30pct);
     --vaadin-input-field-value-color: var(--lumo-body-text-color);
     --vaadin-input-field-value-font-size: var(--lumo-font-size-m);
-    --vaadin-input-field-value-font-weight: 400;
+    --vaadin-input-field-value-font-weight: 500;
   }
 `;
 

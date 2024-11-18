@@ -10,7 +10,7 @@ registerStyles(
     :host {
       background: var(--_background);
       padding: 0 calc(0.375em + var(--_input-container-radius) / 4 - 1px);
-      font-weight: 500;
+      font-weight: var(--vaadin-input-field-value-font-weight, 500);
       line-height: 1;
       position: relative;
       cursor: text;
