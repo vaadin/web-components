@@ -237,16 +237,16 @@ export const TextAreaMixin = (superClass) =>
         const inputStyle = getComputedStyle(this.inputElement);
         const inputFieldStyle = getComputedStyle(this._inputField);
 
-        const lineHeight = parseInt(inputStyle.lineHeight);
+        const lineHeight = parseFloat(inputStyle.lineHeight);
         const contentHeight = lineHeight * maxRows;
         const marginsAndPaddings =
-          parseInt(inputStyle.paddingTop) +
-          parseInt(inputStyle.paddingBottom) +
-          parseInt(inputStyle.marginTop) +
-          parseInt(inputStyle.marginBottom) +
-          parseInt(inputFieldStyle.paddingTop) +
-          parseInt(inputFieldStyle.paddingBottom);
-        const maxHeight = contentHeight + marginsAndPaddings;
+          parseFloat(inputStyle.paddingTop) +
+          parseFloat(inputStyle.paddingBottom) +
+          parseFloat(inputStyle.marginTop) +
+          parseFloat(inputStyle.marginBottom) +
+          parseFloat(inputFieldStyle.paddingTop) +
+          parseFloat(inputFieldStyle.paddingBottom);
+        const maxHeight = Math.ceil(contentHeight + marginsAndPaddings);
         this._inputField.style.setProperty('max-height', `${maxHeight}px`);
       } else {
         this._inputField.style.removeProperty('max-height');
