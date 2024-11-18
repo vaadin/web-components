@@ -91,6 +91,10 @@ export const MonthCalendarMixin = (superClass) =>
           value: () => false,
         },
 
+        enteredDate: {
+          type: Date,
+        },
+
         disabled: {
           type: Boolean,
           reflectToAttribute: true,

@@ -357,6 +357,11 @@ export const DatePickerMixin = (subclass) =>
           type: Object,
           sync: true,
         },
+
+        /** @private */
+        __enteredDate: {
+          type: Date,
+        },
       };
     }
 
@@ -364,7 +369,7 @@ export const DatePickerMixin = (subclass) =>
       return [
         '_selectedDateChanged(_selectedDate, i18n)',
         '_focusedDateChanged(_focusedDate, i18n)',
-        '__updateOverlayContent(_overlayContent, i18n, label, _minDate, _maxDate, _focusedDate, _selectedDate, showWeekNumbers, isDateDisabled)',
+        '__updateOverlayContent(_overlayContent, i18n, label, _minDate, _maxDate, _focusedDate, _selectedDate, showWeekNumbers, isDateDisabled, __enteredDate)',
         '__updateOverlayContentTheme(_overlayContent, _theme)',
         '__updateOverlayContentFullScreen(_overlayContent, _fullscreen)',
       ];
@@ -380,6 +385,17 @@ export const DatePickerMixin = (subclass) =>
       this._boundOnClick = this._onClick.bind(this);
       this._boundOnScroll = this._onScroll.bind(this);
       this._boundOverlayRenderer = this._overlayRenderer.bind(this);
+    }
+
+    /** @override */
+    get _inputElementValue() {
+      return super._inputElementValue;
+    }
+
+    /** @override */
+    set _inputElementValue(value) {
+      super._inputElementValue = value;
+      this.__enteredDate = this.__parseDate(value);
     }
 
     /**
@@ -833,6 +849,7 @@ export const DatePickerMixin = (subclass) =>
       selectedDate,
       showWeekNumbers,
       isDateDisabled,
+      enteredDate,
     ) {
       if (overlayContent) {
         overlayContent.i18n = i18n;
@@ -843,6 +860,7 @@ export const DatePickerMixin = (subclass) =>
         overlayContent.selectedDate = selectedDate;
         overlayContent.showWeekNumbers = showWeekNumbers;
         overlayContent.isDateDisabled = isDateDisabled;
+        overlayContent.enteredDate = enteredDate;
       }
     }
 
@@ -1166,15 +1184,17 @@ export const DatePickerMixin = (subclass) =>
         this.open();
       }
 
-      if (this._inputElementValue) {
-        const parsedDate = this.__parseDate(this._inputElementValue);
-        if (parsedDate) {
-          this._ignoreFocusedDateChange = true;
-          if (!dateEquals(parsedDate, this._focusedDate)) {
-            this._focusedDate = parsedDate;
-          }
-          this._ignoreFocusedDateChange = false;
+      const parsedDate = this.__parseDate(this._inputElementValue || '');
+      if (parsedDate) {
+        this._ignoreFocusedDateChange = true;
+        if (!dateEquals(parsedDate, this._focusedDate)) {
+          this._focusedDate = parsedDate;
         }
+        this._ignoreFocusedDateChange = false;
+      }
+
+      if (!dateEquals(parsedDate, this.__enteredDate)) {
+        this.__enteredDate = parsedDate;
       }
     }
 
