@@ -379,18 +379,18 @@ describe('text-area', () => {
         expect(textArea.clientHeight).to.equal(lineHeight * 4);
       });
 
-      it('should not be possible to set min-height to less than two rows', async () => {
+      it('should be possible to set min-height to a single row', async () => {
         textArea.minRows = 1;
         await nextUpdate(textArea);
 
-        expect(textArea.clientHeight).to.closeTo(lineHeight * 2, 1);
+        expect(textArea.clientHeight).to.closeTo(lineHeight, 1);
       });
 
-      it('should log warning when setting minRows to less than two rows', async () => {
-        textArea.minRows = 1;
+      it('should log warning when setting minRows to less than one row', async () => {
+        textArea.minRows = 0;
         await nextUpdate(textArea);
 
-        expect(console.warn).to.be.calledWith('<vaadin-text-area> minRows must be at least 2.');
+        expect(console.warn).to.be.calledWith('<vaadin-text-area> minRows must be at least 1.');
       });
 
       it('should not log warning when setting minRows to two rows or more', async () => {

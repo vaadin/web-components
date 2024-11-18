@@ -15,6 +15,7 @@ const textArea = css`
   [part='input-field'] ::slotted(textarea) {
     height: auto;
     box-sizing: border-box;
+    min-height: 0;
   }
 
   [part='input-field'] {
@@ -64,11 +65,13 @@ const textArea = css`
     align-self: flex-start;
   }
 
-  /* Vertically align icon prefix/suffix/clear button with the first line of text */
   [part='input-field'] ::slotted(vaadin-icon[slot$='fix']),
   [part='clear-button'] {
+    /* Vertically align icon prefix/suffix/clear button with the first line of text */
     top: calc((var(--lumo-icon-size-m) - 1em * var(--lumo-line-height-s)) / -2);
     margin-top: calc((var(--lumo-icon-size-m) - 1em * var(--lumo-line-height-s)) / -2);
+    /* Reduce effective height to match line height of native textarea, so icons don't increase component size when using single row */
+    margin-bottom: calc((var(--lumo-icon-size-m) - 1em * var(--lumo-line-height-s)) / -2);
   }
 `;
 

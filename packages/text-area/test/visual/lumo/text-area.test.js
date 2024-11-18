@@ -130,4 +130,12 @@ describe('text-area', () => {
     element.maxRows = 4;
     await visualDiff(div, 'max-rows');
   });
+
+  it('single-row', async () => {
+    element.minRows = 1;
+    element.value = 'value';
+    element.clearButtonVisible = true;
+
+    await visualDiff(div, 'single-row');
+  });
 });
