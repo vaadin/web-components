@@ -2,7 +2,7 @@ import { fixtureSync } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '../../../theme/material/vaadin-card.js';
 
-window.Vaadin.featureFlags.vaadinCardComponent = true;
+window.Vaadin.featureFlags.cardComponent = true;
 
 describe('card', () => {
   let div, element;
