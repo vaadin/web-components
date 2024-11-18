@@ -42,16 +42,16 @@ describe('define', () => {
     });
 
     it('should define an experimental custom element when flag is set after define', () => {
-      window.Vaadin.featureFlags.xFooComponent = true;
+      window.Vaadin.featureFlags.fooComponent = true;
       expect(customElements.get('x-foo')).to.be.ok;
     });
 
     it('should define an experimental custom element when flag is set before define', () => {
-      window.Vaadin.featureFlags.xBarComponent = true;
+      window.Vaadin.featureFlags.fooBarComponent = true;
       defineCustomElement(
-        class XBar extends HTMLElement {
+        class XFooBar extends HTMLElement {
           static get is() {
-            return 'x-bar';
+            return 'x-foo-bar';
           }
 
           static get experimental() {
@@ -59,7 +59,7 @@ describe('define', () => {
           }
         },
       );
-      expect(customElements.get('x-bar')).to.be.ok;
+      expect(customElements.get('x-foo-bar')).to.be.ok;
     });
   });
 });

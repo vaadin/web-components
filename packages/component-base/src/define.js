@@ -19,7 +19,8 @@ export function defineCustomElement(CustomElement, version = '24.6.0-alpha8') {
   });
 
   if (CustomElement.experimental) {
-    const featureFlagKey = `${dashToCamelCase(CustomElement.is)}Component`;
+    const name = CustomElement.is.split('-').slice(1).join('-');
+    const featureFlagKey = `${dashToCamelCase(name)}Component`;
     if (!window.Vaadin.featureFlags[featureFlagKey]) {
       // Add setter to define experimental component when it's set to true
       Object.defineProperty(window.Vaadin.featureFlags, featureFlagKey, {
