@@ -360,7 +360,6 @@ describe('keyboard navigation', () => {
 
       await sendKeys({ press: 'Tab' });
       const secondCellContent = getContainerCellContent(grid.$.items, 0, 1);
-      console.log(secondCellContent);
       expect(secondCellContent.contains(document.activeElement)).to.be.true;
     });
 
