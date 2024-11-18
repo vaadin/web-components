@@ -72,6 +72,14 @@ export declare class TextAreaMixinClass {
   minRows: number;
 
   /**
+   * Maximum number of rows to expand to before the text area starts scrolling. This effectively sets a max-height
+   * on the `input-field` part. By default, it is not set, and the text area grows with the content without
+   * constraints.
+   * @attr {number} max-rows
+   */
+  maxRows: number | null | undefined;
+
+  /**
    * Scrolls the textarea to the start if it has a vertical scrollbar.
    */
   scrollToStart(): void;

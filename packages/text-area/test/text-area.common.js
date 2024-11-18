@@ -358,16 +358,20 @@ describe('text-area', () => {
       );
     });
 
-    describe('min rows', () => {
-      const lineHeight = 20;
+    describe('min / max rows', () => {
+      let lineHeight;
       let consoleWarn;
 
       beforeEach(async () => {
+        lineHeight = 20;
         const fixture = fixtureSync(`
           <div>
             <style>
               vaadin-text-area textarea {
                 line-height: ${lineHeight}px;
+              }
+              vaadin-text-area::part(input-field) {
+                box-sizing: border-box;
               }
             </style>
             <vaadin-text-area></vaadin-text-area>
@@ -375,6 +379,7 @@ describe('text-area', () => {
         `);
         textArea = fixture.querySelector('vaadin-text-area');
         await nextUpdate(textArea);
+        native = textArea.querySelector('textarea');
 
         consoleWarn = sinon.stub(console, 'warn');
       });
@@ -442,6 +447,69 @@ describe('text-area', () => {
         await nextUpdate(textArea);
 
         expect(textArea.clientHeight).to.be.above(80);
+      });
+
+      it('should use max-height based on maximum rows', async () => {
+        textArea.maxRows = 4;
+        textArea.value = Array(400).join('400');
+        await nextUpdate(textArea);
+
+        expect(textArea.clientHeight).to.equal(lineHeight * 4);
+      });
+
+      it('should include margins and paddings when calculating max-height', async () => {
+        const native = textArea.querySelector('textarea');
+        const inputContainer = textArea.shadowRoot.querySelector('[part="input-field"]');
+        native.style.paddingTop = '5px';
+        native.style.paddingBottom = '10px';
+        native.style.marginTop = '15px';
+        native.style.marginBottom = '20px';
+        inputContainer.style.paddingTop = '25px';
+        inputContainer.style.paddingBottom = '30px';
+
+        textArea.maxRows = 4;
+        textArea.value = Array(400).join('400');
+        await nextUpdate(textArea);
+
+        expect(textArea.clientHeight).to.equal(lineHeight * 4 + 5 + 10 + 15 + 20 + 25 + 30);
+      });
+
+      it('should shrink below max-height defined by maximum rows', async () => {
+        textArea.maxRows = 4;
+        textArea.value = 'value';
+        await nextUpdate(textArea);
+
+        expect(textArea.clientHeight).to.be.below(lineHeight * 4);
+      });
+
+      it('should update max-height when component is resized', async () => {
+        textArea.maxRows = 4;
+        textArea.value = Array(400).join('400');
+        await nextUpdate(textArea);
+
+        // Change the line height to observe a max-height change
+        lineHeight = 30;
+        native.style.setProperty('line-height', `${lineHeight}px`);
+
+        // Trigger a resize event
+        textArea._onResize();
+
+        expect(textArea.clientHeight).to.equal(lineHeight * 4);
+      });
+
+      it('should update max-height when value changes', async () => {
+        textArea.maxRows = 4;
+        textArea.value = Array(400).join('400');
+        await nextUpdate(textArea);
+
+        // Change the line height to observe a max-height change
+        lineHeight = 30;
+        native.style.setProperty('line-height', `${lineHeight}px`);
+
+        // Trigger a value change
+        textArea.value += 'change';
+
+        expect(textArea.clientHeight).to.equal(lineHeight * 4);
       });
     });
 
