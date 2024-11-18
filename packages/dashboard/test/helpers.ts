@@ -132,7 +132,7 @@ export function setMaximumColumnCount(dashboard: HTMLElement, count?: number): v
  * Sets the minimum row height of the dashboard.
  */
 export function setMinimumRowHeight(dashboard: HTMLElement, height?: number): void {
-  dashboard.style.setProperty('--vaadin-dashboard-row-min-height', height !== undefined ? `${height}px` : null);
+  dashboard.style.setProperty('--vaadin-dashboard-row-min-height', height !== undefined ? `${height}px` : 'auto');
 }
 
 /**
@@ -224,17 +224,6 @@ export function createDragEvent(type: string, { x, y }: { x: number; y: number }
   return event;
 }
 
-export function fireDragStart(dragStartTarget: Element): TestDragEvent {
-  const draggable = getDraggable(dragStartTarget);
-  const draggableRect = draggable.getBoundingClientRect();
-  const event = createDragEvent('dragstart', {
-    x: draggableRect.left + draggableRect.width / 2,
-    y: draggableRect.top + draggableRect.height / 2,
-  });
-  draggable.dispatchEvent(event);
-  return event;
-}
-
 function getEventCoordinates(relativeElement: Element, location: 'top' | 'bottom' | 'start' | 'end') {
   const { top, bottom, left, right } = relativeElement.getBoundingClientRect();
   const y = location === 'top' ? top : bottom;
@@ -246,6 +235,26 @@ function getEventCoordinates(relativeElement: Element, location: 'top' | 'bottom
 export function fireDragOver(dragOverTarget: Element, location: 'top' | 'bottom' | 'start' | 'end'): TestDragEvent {
   const event = createDragEvent('dragover', getEventCoordinates(dragOverTarget, location));
   dragOverTarget.dispatchEvent(event);
+  return event;
+}
+
+export function fireDragStart(dragStartTarget: Element): TestDragEvent {
+  const draggable = getDraggable(dragStartTarget);
+  const draggableRect = draggable.getBoundingClientRect();
+  const event = createDragEvent('dragstart', {
+    x: draggableRect.left + draggableRect.width / 2,
+    y: draggableRect.top + draggableRect.height / 2,
+  });
+  draggable.dispatchEvent(event);
+
+  // Dispatch initial dragover event to make sure any following dragover has some delta
+  draggable.dispatchEvent(
+    createDragEvent('dragover', {
+      x: draggableRect.left + draggableRect.width / 2,
+      y: draggableRect.top + draggableRect.height / 2,
+    }),
+  );
+
   return event;
 }
 

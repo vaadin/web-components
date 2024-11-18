@@ -4,6 +4,7 @@ import type { ElementMixinClass } from '@vaadin/component-base/src/element-mixin
 import type { OverlayClassMixinClass } from '@vaadin/component-base/src/overlay-class-mixin.js';
 import type { ResizeMixinClass } from '@vaadin/component-base/src/resize-mixin.js';
 import type { ThemableMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import type { AvatarGroupMixinClass } from '../../src/vaadin-avatar-group-mixin.js';
 import type { AvatarGroupI18n, AvatarGroupItem } from '../../vaadin-avatar-group.js';
 
 const assertType = <TExpected>(value: TExpected) => value;
@@ -25,6 +26,7 @@ assertType<number | undefined>(item.colorIndex);
 assertType<string | undefined>(item.className);
 
 // Mixins
+assertType<AvatarGroupMixinClass>(group);
 assertType<ControllerMixinClass>(group);
 assertType<ElementMixinClass>(group);
 assertType<OverlayClassMixinClass>(group);

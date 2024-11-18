@@ -60,6 +60,16 @@ describe('<vaadin-upload-file> element', () => {
       await nextUpdate(fileElement);
       expect(fileElement.hasAttribute('error')).to.be.true;
     });
+
+    it('should not be disabled by default', () => {
+      expect(fileElement.hasAttribute('disabled')).to.be.false;
+    });
+
+    it('should reflect disabled', async () => {
+      fileElement.disabled = true;
+      await nextUpdate(fileElement);
+      expect(fileElement.hasAttribute('disabled')).to.be.true;
+    });
   });
 
   describe('focus', () => {
@@ -67,6 +77,36 @@ describe('<vaadin-upload-file> element', () => {
       // Show the "Start" button
       fileElement.held = true;
       await nextUpdate(fileElement);
+    });
+
+    it('should be focusable by default', () => {
+      fileElement.focus();
+      expect(fileElement.hasAttribute('focused')).to.be.true;
+      expect(document.activeElement).to.equal(fileElement);
+    });
+
+    it('should not be focusable when disabled', async () => {
+      fileElement.disabled = true;
+      await nextUpdate(fileElement);
+      fileElement.focus();
+      expect(fileElement.hasAttribute('focused')).to.be.false;
+      expect(document.activeElement).to.not.equal(fileElement);
+    });
+
+    it('should reflect tabindex to attribute', async () => {
+      expect(fileElement.getAttribute('tabindex')).to.equal('0');
+
+      fileElement.tabIndex = 1;
+      await nextUpdate(fileElement);
+      expect(fileElement.getAttribute('tabindex')).to.equal('1');
+    });
+
+    it('should remove tabindex attribute when disabled', async () => {
+      expect(fileElement.getAttribute('tabindex')).to.equal('0');
+
+      fileElement.disabled = true;
+      await nextUpdate(fileElement);
+      expect(fileElement.hasAttribute('tabindex')).to.be.false;
     });
 
     it('should not add focus-ring to the host on programmatic focus', () => {
@@ -111,6 +151,35 @@ describe('<vaadin-upload-file> element', () => {
       await sendKeys({ up: 'Shift' });
 
       expect(fileElement.hasAttribute('focus-ring')).to.be.false;
+    });
+  });
+
+  describe('disabled', () => {
+    it('should not disable buttons by default', () => {
+      const buttons = fileElement.shadowRoot.querySelectorAll('[part$="-button"]');
+      buttons.forEach((button) => {
+        expect(button.disabled).to.be.false;
+      });
+    });
+
+    it('should disable all buttons when disabled', async () => {
+      fileElement.disabled = true;
+      await nextUpdate(fileElement);
+
+      const buttons = fileElement.shadowRoot.querySelectorAll('[part$="-button"]');
+      buttons.forEach((button) => {
+        expect(button.disabled).to.be.true;
+      });
+    });
+
+    it('should be focusable by default', () => {
+      expect(fileElement.tabIndex).to.equal(0);
+    });
+
+    it('should not be focusable when disabled', async () => {
+      fileElement.disabled = true;
+      await nextUpdate(fileElement);
+      expect(fileElement.tabIndex).to.equal(-1);
     });
   });
 });

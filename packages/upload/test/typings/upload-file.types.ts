@@ -11,6 +11,7 @@ const assertType = <TExpected>(actual: TExpected) => actual;
 const uploadFile = document.createElement('vaadin-upload-file');
 
 // Properties
+assertType<boolean>(uploadFile.disabled);
 assertType<boolean>(uploadFile.complete);
 assertType<boolean>(uploadFile.held);
 assertType<boolean>(uploadFile.indeterminate);

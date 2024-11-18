@@ -26,6 +26,22 @@ export const ValidateMixin = dedupingMixin(
           },
 
           /**
+           * Set to true to enable manual validation mode. This mode disables automatic
+           * constraint validation, allowing you to control the validation process yourself.
+           * You can still trigger constraint validation manually with the `validate()` method
+           * or use `checkValidity()` to assess the component's validity without affecting
+           * the invalid state. In manual validation mode, you can also manipulate
+           * the `invalid` property directly through your application logic without conflicts
+           * with the component's internal validation.
+           *
+           * @attr {boolean} manual-validation
+           */
+          manualValidation: {
+            type: Boolean,
+            value: false,
+          },
+
+          /**
            * Specifies that the user must fill in a value.
            */
           required: {
@@ -77,6 +93,14 @@ export const ValidateMixin = dedupingMixin(
        */
       _shouldSetInvalid(_invalid) {
         return true;
+      }
+
+      /** @protected */
+      _requestValidation() {
+        if (!this.manualValidation) {
+          // eslint-disable-next-line no-restricted-syntax
+          this.validate();
+        }
       }
 
       /**

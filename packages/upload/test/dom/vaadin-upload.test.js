@@ -34,6 +34,11 @@ describe('vaadin-upload', () => {
       upload.maxFiles = 1;
       await expect(upload).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
     });
+
+    it('disabled', async () => {
+      upload.disabled = true;
+      await expect(upload).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
+    });
   });
 
   describe('shadow', () => {

@@ -27,7 +27,7 @@ const genericDashboard = document.createElement('vaadin-dashboard');
 assertType<Dashboard>(genericDashboard);
 
 assertType<{ colspan?: number; rowspan?: number }>(genericDashboard.items[0] as DashboardItem);
-assertType<{ items: DashboardItem[]; title?: string | null }>(
+assertType<{ items: DashboardItem[]; title?: string }>(
   genericDashboard.items[0] as DashboardSectionItem<DashboardItem>,
 );
 

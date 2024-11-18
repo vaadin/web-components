@@ -90,8 +90,8 @@ export const InputConstraintsMixin = dedupingMixin(
         const isLastConstraintRemoved = this.__previousHasConstraints && !hasConstraints;
 
         if ((this._hasValue || this.invalid) && hasConstraints) {
-          this.validate();
-        } else if (isLastConstraintRemoved) {
+          this._requestValidation();
+        } else if (isLastConstraintRemoved && !this.manualValidation) {
           this._setInvalid(false);
         }
 
@@ -109,7 +109,7 @@ export const InputConstraintsMixin = dedupingMixin(
       _onChange(event) {
         event.stopPropagation();
 
-        this.validate();
+        this._requestValidation();
 
         this.dispatchEvent(
           new CustomEvent('change', {

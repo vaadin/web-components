@@ -511,10 +511,10 @@ export const NumberFieldMixin = (superClass) =>
      */
     __commitValueChange() {
       if (this.__committedValue !== this.value) {
-        this.validate();
+        this._requestValidation();
         this.dispatchEvent(new CustomEvent('change', { bubbles: true }));
       } else if (this.__committedUnparsableValueStatus !== this.__hasUnparsableValue) {
-        this.validate();
+        this._requestValidation();
         this.dispatchEvent(new CustomEvent('unparsable-change'));
       }
 

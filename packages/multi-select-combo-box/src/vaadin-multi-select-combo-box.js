@@ -689,7 +689,7 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
     // losing focus, which happens on browser tab switch.
     if (!focused && document.hasFocus()) {
       this._focusedChipIndex = -1;
-      this.validate();
+      this._requestValidation();
     }
   }
 
@@ -928,7 +928,7 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
   __updateSelection(selectedItems) {
     this.selectedItems = selectedItems;
 
-    this.validate();
+    this._requestValidation();
 
     this.dispatchEvent(new CustomEvent('change', { bubbles: true }));
   }

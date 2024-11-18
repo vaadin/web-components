@@ -40,6 +40,7 @@ registerStyles('vaadin-upload-file', uploadFileStyles, { moduleId: 'vaadin-uploa
  *
  * Attribute        | Description
  * -----------------|-------------
+ * `disabled`       | Set when the element is disabled
  * `focus-ring`     | Set when the element is focused using the keyboard.
  * `focused`        | Set when the element is focused.
  * `error`          | An error has happened during uploading.
@@ -76,6 +77,7 @@ class UploadFile extends UploadFileMixin(ThemableMixin(ControllerMixin(PolymerEl
             file-event="file-start"
             on-click="_fireFileEvent"
             hidden$="[[!held]]"
+            disabled$="[[disabled]]"
             aria-label$="[[i18n.file.start]]"
             aria-describedby="name"
           ></button>
@@ -85,6 +87,7 @@ class UploadFile extends UploadFileMixin(ThemableMixin(ControllerMixin(PolymerEl
             file-event="file-retry"
             on-click="_fireFileEvent"
             hidden$="[[!errorMessage]]"
+            disabled$="[[disabled]]"
             aria-label$="[[i18n.file.retry]]"
             aria-describedby="name"
           ></button>
@@ -93,6 +96,7 @@ class UploadFile extends UploadFileMixin(ThemableMixin(ControllerMixin(PolymerEl
             part="remove-button"
             file-event="file-abort"
             on-click="_fireFileEvent"
+            disabled$="[[disabled]]"
             aria-label$="[[i18n.file.remove]]"
             aria-describedby="name"
           ></button>

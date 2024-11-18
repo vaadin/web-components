@@ -230,7 +230,7 @@ export const SelectBaseMixin = (superClass) =>
       super._requiredChanged(required);
 
       if (required === false) {
-        this.validate();
+        this._requestValidation();
       }
     }
 
@@ -294,7 +294,7 @@ export const SelectBaseMixin = (superClass) =>
       // a change event is scheduled, as validation will be
       // triggered by `__dispatchChange()` in that case.
       if (oldValue !== undefined && !this.__dispatchChangePending) {
-        this.validate();
+        this._requestValidation();
       }
     }
 
@@ -390,7 +390,7 @@ export const SelectBaseMixin = (superClass) =>
         // will be triggered by `__dispatchChange()` in that case.
         // Also, skip validation when closed on Escape or Tab keys.
         if (!this.__dispatchChangePending && !this._keyboardActive) {
-          this.validate();
+          this._requestValidation();
         }
       }
     }
@@ -596,7 +596,7 @@ export const SelectBaseMixin = (superClass) =>
       // Do not validate when focusout is caused by document
       // losing focus, which happens on browser tab switch.
       if (!focused && document.hasFocus()) {
-        this.validate();
+        this._requestValidation();
       }
     }
 
@@ -641,7 +641,7 @@ export const SelectBaseMixin = (superClass) =>
         await this.updateComplete;
       }
 
-      this.validate();
+      this._requestValidation();
       this.dispatchEvent(new CustomEvent('change', { bubbles: true }));
       this.__dispatchChangePending = false;
     }

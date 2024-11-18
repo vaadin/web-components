@@ -28,6 +28,10 @@ const horizontalLayout = css`
   :host([theme~='spacing-xl']) {
     gap: 40px;
   }
+
+  :host([theme~='wrap']) {
+    flex-wrap: wrap;
+  }
 `;
 
 registerStyles('vaadin-horizontal-layout', horizontalLayout, { moduleId: 'material-horizontal-layout' });

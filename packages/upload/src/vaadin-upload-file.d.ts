@@ -60,6 +60,7 @@ export interface UploadFileEventMap extends HTMLElementEventMap, UploadFileCusto
  *
  * Attribute        | Description
  * -----------------|-------------
+ * `disabled`       | Set when the element is disabled
  * `focus-ring`     | Set when the element is focused using the keyboard.
  * `focused`        | Set when the element is focused.
  * `error`          | An error has happened during uploading.

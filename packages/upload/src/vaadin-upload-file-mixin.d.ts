@@ -20,6 +20,11 @@ export declare function UploadFileMixin<T extends Constructor<HTMLElement>>(
 
 export declare class UploadFileMixinClass {
   /**
+   * If true, the user cannot interact with this element.
+   */
+  disabled: boolean;
+
+  /**
    * True if uploading is completed, false otherwise.
    */
   complete: boolean;

@@ -32,6 +32,10 @@ const runTests = (defineHelper, baseMixin) => {
       expect(element.hasAttribute('invalid')).to.be.true;
     });
 
+    it('should have manual validation disabled by default', () => {
+      expect(element.manualValidation).to.be.false;
+    });
+
     it('should fire invalid-changed event on invalid property change', async () => {
       const spy = sinon.spy();
       element.addEventListener('invalid-changed', spy);
@@ -43,6 +47,19 @@ const runTests = (defineHelper, baseMixin) => {
       element.invalid = false;
       await nextUpdate(element);
       expect(spy.calledOnce).to.be.true;
+    });
+
+    it('should validate on _requestValidation() when manualValidation is false', () => {
+      const spy = sinon.spy(element, 'validate');
+      element._requestValidation();
+      expect(spy).to.be.calledOnce;
+    });
+
+    it('should not validate on _requestValidation() when manualValidation is true', () => {
+      const spy = sinon.spy(element, 'validate');
+      element.manualValidation = true;
+      element._requestValidation();
+      expect(spy).to.be.not.called;
     });
   });
 
@@ -65,6 +82,12 @@ const runTests = (defineHelper, baseMixin) => {
       element.required = true;
       element.value = 'value';
       expect(element.checkValidity()).to.be.true;
+    });
+
+    it('should still return result when manualValidation is true', () => {
+      element.manualValidation = true;
+      element.required = true;
+      expect(element.checkValidity()).to.be.false;
     });
   });
 
@@ -114,6 +137,13 @@ const runTests = (defineHelper, baseMixin) => {
       element.value = 'value';
       element.validate();
       expect(element.invalid).to.be.false;
+    });
+
+    it('should still validate when manualValidation is true', () => {
+      element.manualValidation = true;
+      element.required = true;
+      element.validate();
+      expect(element.invalid).to.be.true;
     });
 
     it('should fire a validated event on validation success', () => {

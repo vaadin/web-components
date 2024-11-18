@@ -121,24 +121,6 @@ export class TextField extends TextFieldMixin(ThemableMixin(ElementMixin(Polymer
     `;
   }
 
-  static get properties() {
-    return {
-      /**
-       * Maximum number of characters (in Unicode code points) that the user can enter.
-       */
-      maxlength: {
-        type: Number,
-      },
-
-      /**
-       * Minimum number of characters (in Unicode code points) that the user can enter.
-       */
-      minlength: {
-        type: Number,
-      },
-    };
-  }
-
   /** @protected */
   ready() {
     super.ready();

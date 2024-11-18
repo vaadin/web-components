@@ -61,13 +61,12 @@ describe('radio-group', () => {
       buttons = [...group.querySelectorAll('vaadin-radio-button')];
     });
 
-    it('should propagate disabled property to radio buttons', async () => {
+    it('should propagate disabled property to radio buttons', () => {
       buttons.forEach((button) => {
         expect(button.disabled).to.be.true;
       });
 
       group.disabled = false;
-      await nextUpdate(group);
       buttons.forEach((button) => {
         expect(button.disabled).to.be.false;
       });
@@ -75,6 +74,15 @@ describe('radio-group', () => {
 
     it('should set disabled property to dynamically added radio buttons', async () => {
       const radio = document.createElement('vaadin-radio-button');
+      group.appendChild(radio);
+      await nextFrame();
+      expect(radio.disabled).to.be.true;
+    });
+
+    it('should not override disabled property on dynamically added radio buttons', async () => {
+      group.disabled = false;
+      const radio = document.createElement('vaadin-radio-button');
+      radio.disabled = true;
       group.appendChild(radio);
       await nextFrame();
       expect(radio.disabled).to.be.true;
@@ -96,12 +104,38 @@ describe('radio-group', () => {
       groupName = group._fieldName;
     });
 
-    it('should set the group name to the dynamically added radio buttons', async () => {
+    it('should set the default name to the dynamically added radio buttons', async () => {
       const radio = document.createElement('vaadin-radio-button');
       group.appendChild(radio);
       await nextFrame();
 
       expect(radio.name).to.equal(groupName);
+    });
+
+    it('should propagate the group name to the existing radio buttons', () => {
+      group.name = 'name';
+      buttons.forEach((radio) => {
+        expect(radio.name).to.equal(group.name);
+      });
+    });
+
+    it('should propagate the group name to the dynamically added radio buttons', async () => {
+      group.name = 'name';
+
+      const radio = document.createElement('vaadin-radio-button');
+      group.appendChild(radio);
+      await nextFrame();
+
+      expect(radio.name).to.equal(group.name);
+    });
+
+    it('should restore the default name on the radio buttons when group name removed', () => {
+      group.name = 'name';
+
+      group.name = null;
+      buttons.forEach((radio) => {
+        expect(radio.name).to.equal(groupName);
+      });
     });
   });
 
@@ -123,35 +157,28 @@ describe('radio-group', () => {
       });
     });
 
-    it('should enable button when value is set while readonly', async () => {
+    it('should enable button when value is set while readonly', () => {
       group.value = '2';
-      await nextUpdate(group);
       expect(buttons[0].disabled).to.be.true;
       expect(buttons[1].disabled).to.be.false;
     });
 
-    it('should enable all buttons when readonly is set back to false', async () => {
+    it('should enable all buttons when readonly is set back to false', () => {
       group.readonly = false;
-      await nextUpdate(group);
       buttons.forEach((button) => {
         expect(button.disabled).to.be.false;
       });
     });
 
-    it('should reflect to lowercase readonly attribute', async () => {
+    it('should reflect to lowercase readonly attribute', () => {
       group.readonly = false;
-      await nextUpdate(group);
       expect(group.hasAttribute('readonly')).to.be.false;
 
       group.readonly = true;
-      await nextUpdate(group);
       expect(group.hasAttribute('readonly')).to.be.true;
     });
 
     it('should disable a new button when added to a readonly group', async () => {
-      group.readonly = true;
-      await nextUpdate(group);
-
       const newRadioButton = document.createElement('vaadin-radio-button');
       newRadioButton.label = 'Button 3';
       newRadioButton.value = '3';
@@ -162,9 +189,6 @@ describe('radio-group', () => {
     });
 
     it('should not disable a checked button when added to a readonly group', async () => {
-      group.readonly = true;
-      await nextUpdate(group);
-
       const newRadioButton = document.createElement('vaadin-radio-button');
       newRadioButton.label = 'Button 3';
       newRadioButton.value = '3';
@@ -253,78 +277,65 @@ describe('radio-group', () => {
       expect(group.value).to.equal('');
     });
 
-    it('should set value when radio button is checked', async () => {
+    it('should set value when radio button is checked', () => {
       buttons[0].checked = true;
-      await nextUpdate(group);
       expect(group.value).to.eq('on');
 
       buttons[1].checked = true;
-      await nextUpdate(group);
       expect(group.value).to.eq('2');
     });
 
-    it('should check proper button when value is set', async () => {
+    it('should check proper button when value is set', () => {
       group.value = '2';
-      await nextUpdate(group);
       expect(buttons[1].checked).to.be.true;
 
       group.value = 'on';
-      await nextUpdate(group);
       expect(buttons[0].checked).to.be.true;
     });
 
-    it('should un-check proper button when value is set to null', async () => {
+    it('should un-check proper button when value is set to null', () => {
       group.value = '2';
-      await nextUpdate(group);
       expect(buttons[1].checked).to.be.true;
 
       group.value = null;
-      await nextUpdate(group);
       expect(buttons[1].checked).to.be.false;
     });
 
-    it('should un-check proper button when value is set to undefined', async () => {
+    it('should un-check proper button when value is set to undefined', () => {
       group.value = '2';
-      await nextUpdate(group);
       expect(buttons[1].checked).to.be.true;
 
       group.value = undefined;
-      await nextUpdate(group);
       expect(buttons[1].checked).to.be.false;
     });
 
-    it('should un-check proper button when value is set to empty string', async () => {
+    it('should un-check proper button when value is set to empty string', () => {
       group.value = '2';
-      await nextUpdate(group);
       expect(buttons[1].checked).to.be.true;
 
       group.value = '';
-      await nextUpdate(group);
       expect(buttons[1].checked).to.be.false;
     });
 
-    it('should dispatch value-changed event when value changes', async () => {
+    it('should dispatch value-changed event when value changes', () => {
       const spy = sinon.spy();
       group.addEventListener('value-changed', spy);
       buttons[0].checked = true;
-      await nextUpdate(group);
       expect(spy.calledOnce).to.be.true;
     });
 
-    it('should not focus radio group when value is set programmatically', async () => {
+    it('should not focus radio group when value is set programmatically', () => {
       const input = document.createElement('input');
       document.body.appendChild(input);
       input.focus();
       group.value = '2';
-      await nextUpdate(group);
       expect(document.activeElement).to.equal(input);
       document.body.removeChild(input);
     });
 
-    it('should warn when no radio button matches value set programmatically', async () => {
+    it('should warn when no radio button matches value set programmatically', () => {
       const stub = sinon.stub(console, 'warn');
       group.value = 'foo';
-      await nextUpdate(group);
       expect(stub.callCount).to.equal(1);
       stub.restore();
     });
@@ -342,23 +353,19 @@ describe('radio-group', () => {
       buttons = [...group.querySelectorAll('vaadin-radio-button')];
     });
 
-    it('should add and keep the attribute on radio button click', async () => {
+    it('should add and keep the attribute on radio button click', () => {
       buttons[0].click();
-      await nextUpdate(group);
       expect(group.hasAttribute('has-value')).to.be.true;
 
       buttons[1].click();
-      await nextUpdate(group);
       expect(group.hasAttribute('has-value')).to.be.true;
     });
 
-    it('should toggle the attribute on value change', async () => {
+    it('should toggle the attribute on value change', () => {
       group.value = '2';
-      await nextUpdate(group);
       expect(group.hasAttribute('has-value')).to.be.true;
 
       group.value = '';
-      await nextUpdate(group);
       expect(group.hasAttribute('has-value')).to.be.false;
     });
   });
@@ -500,7 +507,7 @@ describe('radio-group', () => {
     });
 
     it('should keep value when set immediately after removing and adding new children', async () => {
-      group.__radioButtons.forEach((button) => group.removeChild(button));
+      buttons.forEach((button) => group.removeChild(button));
 
       ['value1', 'value2', 'value3'].forEach((value) => {
         const radio = document.createElement('vaadin-radio-button');

@@ -75,6 +75,7 @@ class LoginForm extends LoginFormMixin(ElementMixin(ThemableMixin(PolymerElement
             autocorrect="off"
             spellcheck="false"
             autocomplete="username"
+            manual-validation
           >
             <input type="text" slot="input" on-keyup="_handleInputKeyup" />
           </vaadin-text-field>
@@ -88,6 +89,7 @@ class LoginForm extends LoginFormMixin(ElementMixin(ThemableMixin(PolymerElement
             on-keydown="_handleInputKeydown"
             spellcheck="false"
             autocomplete="current-password"
+            manual-validation
           >
             <input type="password" slot="input" on-keyup="_handleInputKeyup" />
           </vaadin-password-field>

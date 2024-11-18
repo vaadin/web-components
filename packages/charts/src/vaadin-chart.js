@@ -1078,14 +1078,26 @@ class Chart extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))) {
   disconnectedCallback() {
     super.disconnectedCallback();
 
-    if (this.configuration) {
-      this.configuration.destroy();
-      this.configuration = undefined;
-    }
+    queueMicrotask(() => {
+      if (this.isConnected) {
+        return;
+      }
 
-    if (this._childObserver) {
-      this._childObserver.disconnect();
-    }
+      if (this.configuration) {
+        this.configuration.destroy();
+        this.configuration = undefined;
+
+        // Reset series objects to avoid errors while detached
+        const seriesNodes = Array.from(this.childNodes).filter(this.__filterSeriesNodes);
+        seriesNodes.forEach((series) => {
+          series.setSeries(null);
+        });
+      }
+
+      if (this._childObserver) {
+        this._childObserver.disconnect();
+      }
+    });
   }
 
   /** @private */

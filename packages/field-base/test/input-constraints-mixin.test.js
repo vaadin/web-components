@@ -256,6 +256,46 @@ const runTests = (defineHelper, baseMixin) => {
         expect(changeSpy.firstCall.args[0].detail.sourceEvent).to.equal(event);
       });
     });
+
+    describe('manual validation', () => {
+      beforeEach(async () => {
+        element = fixtureSync(`<${tag} manual-validation></${tag}>`);
+        await nextRender();
+        validateSpy = sinon.spy(element, 'validate');
+      });
+
+      it('should not validate when adding constraints', async () => {
+        element.value = 'foo';
+        element.required = true;
+        await nextUpdate(element);
+        expect(validateSpy).to.be.not.called;
+      });
+
+      it('should not validate when removing constraints', async () => {
+        element.value = 'foo';
+        element.required = true;
+        element.minlength = 2;
+        await nextUpdate(element);
+        element.minlength = null;
+        await nextUpdate(element);
+        expect(validateSpy).to.be.not.called;
+      });
+
+      it('should not reset invalid when removing last constraint', async () => {
+        element.invalid = true;
+        element.required = true;
+        await nextUpdate(element);
+        element.required = false;
+        await nextUpdate(element);
+        expect(element.invalid).to.be.true;
+      });
+
+      it('should not validate on input change event', () => {
+        input.value = 'foo';
+        fire(input, 'change');
+        expect(validateSpy).to.be.not.called;
+      });
+    });
   });
 
   describe('checkValidity', () => {

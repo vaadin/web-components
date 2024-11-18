@@ -25,6 +25,15 @@ export const RadioGroupMixin = (superclass) =>
     static get properties() {
       return {
         /**
+         * The name of the control, which is submitted with the form data.
+         */
+        name: {
+          type: String,
+          observer: '__nameChanged',
+          sync: true,
+        },
+
+        /**
          * The value of the radio group.
          *
          * @type {string}
@@ -33,6 +42,7 @@ export const RadioGroupMixin = (superclass) =>
           type: String,
           notify: true,
           value: '',
+          sync: true,
           observer: '__valueChanged',
         },
 
@@ -48,6 +58,7 @@ export const RadioGroupMixin = (superclass) =>
           type: Boolean,
           value: false,
           reflectToAttribute: true,
+          sync: true,
           observer: '__readonlyChanged',
         },
 
@@ -190,6 +201,13 @@ export const RadioGroupMixin = (superclass) =>
       }
     }
 
+    /** @private */
+    __nameChanged(name) {
+      this.__radioButtons.forEach((radioButton) => {
+        radioButton.name = name || this._fieldName;
+      });
+    }
+
     /**
      * @param {number} index
      * @private
@@ -234,7 +252,7 @@ export const RadioGroupMixin = (superclass) =>
      * @private
      */
     __registerRadioButton(radioButton) {
-      radioButton.name = this._fieldName;
+      radioButton.name = this.name || this._fieldName;
       radioButton.addEventListener('checked-changed', this.__onRadioButtonCheckedChange);
 
       if (this.disabled || this.readonly) {
@@ -303,7 +321,7 @@ export const RadioGroupMixin = (superclass) =>
       }
 
       if (oldValue !== undefined) {
-        this.validate();
+        this._requestValidation();
       }
     }
 
@@ -380,7 +398,7 @@ export const RadioGroupMixin = (superclass) =>
       // Do not validate when focusout is caused by document
       // losing focus, which happens on browser tab switch.
       if (!focused && document.hasFocus()) {
-        this.validate();
+        this._requestValidation();
       }
     }
 

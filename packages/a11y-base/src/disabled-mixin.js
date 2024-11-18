@@ -23,6 +23,7 @@ export const DisabledMixin = dedupingMixin(
             value: false,
             observer: '_disabledChanged',
             reflectToAttribute: true,
+            sync: true,
           },
         };
       }

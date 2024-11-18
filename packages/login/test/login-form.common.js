@@ -65,6 +65,24 @@ describe('login form', () => {
     expect(spy.calledOnce).to.be.true;
   });
 
+  it('should not validate username on blur', () => {
+    const { vaadinLoginUsername } = login.$;
+
+    vaadinLoginUsername.focus();
+    vaadinLoginUsername.blur();
+
+    expect(vaadinLoginUsername.invalid).to.be.false;
+  });
+
+  it('should not validate password on blur', () => {
+    const { vaadinLoginPassword } = login.$;
+
+    vaadinLoginPassword.focus();
+    vaadinLoginPassword.blur();
+
+    expect(vaadinLoginPassword.invalid).to.be.false;
+  });
+
   it('should mark only username as invalid if user hits ENTER when field is empty', () => {
     const { vaadinLoginUsername, vaadinLoginPassword } = login.$;
 

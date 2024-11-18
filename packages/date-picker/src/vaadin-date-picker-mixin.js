@@ -23,6 +23,62 @@ import {
   parseDate,
 } from './vaadin-date-picker-helper.js';
 
+export const datePickerI18nDefaults = Object.freeze({
+  monthNames: [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
+  ],
+  weekdays: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+  weekdaysShort: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+  firstDayOfWeek: 0,
+  today: 'Today',
+  cancel: 'Cancel',
+  referenceDate: '',
+  formatDate(d) {
+    const yearStr = String(d.year).replace(/\d+/u, (y) => '0000'.substr(y.length) + y);
+    return [d.month + 1, d.day, yearStr].join('/');
+  },
+  parseDate(text) {
+    const parts = text.split('/');
+    const today = new Date();
+    let date,
+      month = today.getMonth(),
+      year = today.getFullYear();
+
+    if (parts.length === 3) {
+      month = parseInt(parts[0]) - 1;
+      date = parseInt(parts[1]);
+      year = parseInt(parts[2]);
+      if (parts[2].length < 3 && year >= 0) {
+        const usedReferenceDate = this.referenceDate ? parseDate(this.referenceDate) : new Date();
+        year = getAdjustedYear(usedReferenceDate, year, month, date);
+      }
+    } else if (parts.length === 2) {
+      month = parseInt(parts[0]) - 1;
+      date = parseInt(parts[1]);
+    } else if (parts.length === 1) {
+      date = parseInt(parts[0]);
+    }
+
+    if (date !== undefined) {
+      return { day: date, month, year };
+    }
+  },
+  formatTitle: (monthName, fullYear) => {
+    return `${monthName} ${fullYear}`;
+  },
+});
+
 /**
  * @polymerMixin
  * @mixes ControllerMixin
@@ -217,63 +273,7 @@ export const DatePickerMixin = (subclass) =>
         i18n: {
           type: Object,
           sync: true,
-          value: () => {
-            return {
-              monthNames: [
-                'January',
-                'February',
-                'March',
-                'April',
-                'May',
-                'June',
-                'July',
-                'August',
-                'September',
-                'October',
-                'November',
-                'December',
-              ],
-              weekdays: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
-              weekdaysShort: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
-              firstDayOfWeek: 0,
-              today: 'Today',
-              cancel: 'Cancel',
-              referenceDate: '',
-              formatDate(d) {
-                const yearStr = String(d.year).replace(/\d+/u, (y) => '0000'.substr(y.length) + y);
-                return [d.month + 1, d.day, yearStr].join('/');
-              },
-              parseDate(text) {
-                const parts = text.split('/');
-                const today = new Date();
-                let date,
-                  month = today.getMonth(),
-                  year = today.getFullYear();
-
-                if (parts.length === 3) {
-                  month = parseInt(parts[0]) - 1;
-                  date = parseInt(parts[1]);
-                  year = parseInt(parts[2]);
-                  if (parts[2].length < 3 && year >= 0) {
-                    const usedReferenceDate = this.referenceDate ? parseDate(this.referenceDate) : new Date();
-                    year = getAdjustedYear(usedReferenceDate, year, month, date);
-                  }
-                } else if (parts.length === 2) {
-                  month = parseInt(parts[0]) - 1;
-                  date = parseInt(parts[1]);
-                } else if (parts.length === 1) {
-                  date = parseInt(parts[0]);
-                }
-
-                if (date !== undefined) {
-                  return { day: date, month, year };
-                }
-              },
-              formatTitle: (monthName, fullYear) => {
-                return `${monthName} ${fullYear}`;
-              },
-            };
-          },
+          value: () => ({ ...datePickerI18nDefaults }),
         },
 
         /**
@@ -479,7 +479,7 @@ export const DatePickerMixin = (subclass) =>
         // Do not validate when focusout is caused by document
         // losing focus, which happens on browser tab switch.
         if (document.hasFocus()) {
-          this.validate();
+          this._requestValidation();
         }
       }
     }
@@ -624,13 +624,8 @@ export const DatePickerMixin = (subclass) =>
         !this._selectedDate || dateAllowed(this._selectedDate, this._minDate, this._maxDate, this.isDateDisabled);
 
       let inputValidity = true;
-      if (this.inputElement) {
-        if (this.inputElement.checkValidity) {
-          inputValidity = this.inputElement.checkValidity();
-        } else if (this.inputElement.validate) {
-          // Iron-form-elements have the validate API
-          inputValidity = this.inputElement.validate();
-        }
+      if (this.inputElement && this.inputElement.checkValidity) {
+        inputValidity = this.inputElement.checkValidity();
       }
 
       return inputValid && isDateValid && inputValidity;
@@ -717,10 +712,10 @@ export const DatePickerMixin = (subclass) =>
       const unparsableValue = this.__unparsableValue;
 
       if (this.__committedValue !== this.value) {
-        this.validate();
+        this._requestValidation();
         this.dispatchEvent(new CustomEvent('change', { bubbles: true }));
       } else if (this.__committedUnparsableValue !== unparsableValue) {
-        this.validate();
+        this._requestValidation();
         this.dispatchEvent(new CustomEvent('unparsable-change'));
       }
 
@@ -849,7 +844,7 @@ export const DatePickerMixin = (subclass) =>
 
           if (oldValue !== undefined) {
             // Validate only if `value` changes after initialization.
-            this.validate();
+            this._requestValidation();
           }
         }
       } else {
@@ -1015,7 +1010,7 @@ export const DatePickerMixin = (subclass) =>
       // Needed in case the value was not changed: open and close dropdown,
       // especially on outside click. On Esc key press, do not validate.
       if (!this.value && !this._keyboardActive) {
-        this.validate();
+        this._requestValidation();
       }
     }
 

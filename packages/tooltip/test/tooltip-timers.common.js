@@ -705,4 +705,52 @@ describe('timers', () => {
       expect(overlays[0].opened).to.be.false;
     });
   });
+
+  describe('state controller', () => {
+    let tooltip, controller;
+
+    beforeEach(async () => {
+      tooltip = fixtureSync(`
+        <vaadin-tooltip text="tooltip 1" hover-delay="2" hide-delay="2" manual></vaadin-tooltip>
+      `);
+      await nextRender();
+      controller = tooltip._stateController;
+    });
+
+    afterEach(() => {
+      resetGlobalTooltipState();
+    });
+
+    it('should not clear opened state on the tooltip when closing scheduled twice', async () => {
+      controller.open({ hover: true });
+      await aTimeout(2);
+      // Emulate closing on two different events e.g. `mouseleave` and `mouseover`
+      controller.close();
+      controller.close();
+      controller.open({ hover: true });
+      await aTimeout(2);
+      expect(tooltip.opened).to.be.true;
+    });
+
+    it('should not call close() on the controller when open is called', async () => {
+      controller.open({ hover: true });
+      await aTimeout(2);
+      controller.close();
+      const spy = sinon.spy(controller, 'close');
+      controller.open({ hover: true });
+      await aTimeout(2);
+      expect(spy).to.not.be.called;
+    });
+
+    it('should not keep opened state after closing when open() is called twice', async () => {
+      // Emulate opening on different targets when reusing tooltip instance
+      controller.open({ hover: true });
+      controller.open({ hover: true });
+      await aTimeout(1);
+      // Close during warm up timeout and then wait for it to finish
+      controller.close();
+      await aTimeout(1);
+      expect(tooltip.opened).to.be.false;
+    });
+  });
 });

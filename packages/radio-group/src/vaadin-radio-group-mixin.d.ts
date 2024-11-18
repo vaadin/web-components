@@ -54,6 +54,11 @@ export declare function RadioGroupMixin<T extends Constructor<HTMLElement>>(
 
 export declare class RadioGroupMixinClass {
   /**
+   * The name of the control, which is submitted with the form data.
+   */
+  name: string | null | undefined;
+
+  /**
    * The value of the radio group.
    */
   value: string | null | undefined;

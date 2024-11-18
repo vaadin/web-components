@@ -51,6 +51,7 @@ class UploadFile extends UploadFileMixin(ThemableMixin(PolylitMixin(LitElement))
             file-event="file-start"
             @click="${this._fireFileEvent}"
             ?hidden="${!this.held}"
+            ?disabled="${this.disabled}"
             aria-label="${this.i18n.file.start}"
             aria-describedby="name"
           ></button>
@@ -60,6 +61,7 @@ class UploadFile extends UploadFileMixin(ThemableMixin(PolylitMixin(LitElement))
             file-event="file-retry"
             @click="${this._fireFileEvent}"
             ?hidden="${!this.errorMessage}"
+            ?disabled="${this.disabled}"
             aria-label="${this.i18n.file.retry}"
             aria-describedby="name"
           ></button>
@@ -68,6 +70,7 @@ class UploadFile extends UploadFileMixin(ThemableMixin(PolylitMixin(LitElement))
             part="remove-button"
             file-event="file-abort"
             @click="${this._fireFileEvent}"
+            ?disabled="${this.disabled}"
             aria-label="${this.i18n.file.remove}"
             aria-describedby="name"
           ></button>

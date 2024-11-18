@@ -5,6 +5,10 @@
  */
 import { LoginMixin } from './vaadin-login-mixin.js';
 
+function isCheckbox(field) {
+  return (field.inputElement || field).type === 'checkbox';
+}
+
 /**
  * @polymerMixin
  * @mixes LoginMixin
@@ -46,7 +50,12 @@ export const LoginFormMixin = (superClass) =>
       const userName = this.$.vaadinLoginUsername;
       const password = this.$.vaadinLoginPassword;
 
-      if (this.disabled || !(userName.validate() && password.validate())) {
+      // eslint-disable-next-line no-restricted-syntax
+      userName.validate();
+      // eslint-disable-next-line no-restricted-syntax
+      password.validate();
+
+      if (this.disabled || userName.invalid || password.invalid) {
         return;
       }
 
@@ -63,6 +72,10 @@ export const LoginFormMixin = (superClass) =>
         detail.custom = {};
 
         fields.forEach((field) => {
+          if (isCheckbox(field) && !field.checked) {
+            return;
+          }
+
           detail.custom[field.name] = field.value;
         });
       }
@@ -91,6 +104,10 @@ export const LoginFormMixin = (superClass) =>
 
       if (this._customFields.length) {
         this._customFields.forEach((field) => {
+          if (isCheckbox(field) && !field.checked) {
+            return;
+          }
+
           formData.append(field.name, field.value);
         });
       }
@@ -102,6 +119,7 @@ export const LoginFormMixin = (superClass) =>
         const { currentTarget: inputActive } = e;
         const nextInput =
           inputActive.id === 'vaadinLoginUsername' ? this.$.vaadinLoginPassword : this.$.vaadinLoginUsername;
+        // eslint-disable-next-line no-restricted-syntax
         if (inputActive.validate()) {
           if (nextInput.checkValidity()) {
             this.submit();

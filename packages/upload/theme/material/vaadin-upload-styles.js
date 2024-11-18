@@ -1,8 +1,8 @@
 import '@vaadin/vaadin-material-styles/color.js';
 import '@vaadin/vaadin-material-styles/font-icons.js';
 import '@vaadin/vaadin-material-styles/typography.js';
-import '@vaadin/button/theme/material/vaadin-button.js';
-import '@vaadin/progress-bar/theme/material/vaadin-progress-bar.js';
+import '@vaadin/button/theme/material/vaadin-button-styles.js';
+import '@vaadin/progress-bar/theme/material/vaadin-progress-bar-styles.js';
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 registerStyles(
@@ -45,6 +45,7 @@ registerStyles(
       color: var(--material-primary-text-color);
     }
 
+    :host([disabled]) [part='drop-label'],
     :host([max-files-reached]) [part='drop-label'] {
       color: var(--material-disabled-text-color);
     }
@@ -179,6 +180,10 @@ registerStyles(
       color: inherit;
     }
 
+    [part$='button'][disabled] {
+      color: var(--material-disabled-text-color);
+    }
+
     [part='done-icon']::before {
       content: var(--material-icons-check);
       color: var(--material-primary-text-color);
@@ -201,7 +206,7 @@ registerStyles(
       content: var(--material-icons-clear);
     }
 
-    [part$='button']::after {
+    [part$='button']:not([disabled])::after {
       position: absolute;
       content: '';
       top: 0;

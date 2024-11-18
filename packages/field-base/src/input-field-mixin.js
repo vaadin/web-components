@@ -97,7 +97,7 @@ export const InputFieldMixin = (superclass) =>
       // Do not validate when focusout is caused by document
       // losing focus, which happens on browser tab switch.
       if (!focused && document.hasFocus()) {
-        this.validate();
+        this._requestValidation();
       }
     }
 
@@ -112,7 +112,7 @@ export const InputFieldMixin = (superclass) =>
       super._onInput(event);
 
       if (this.invalid) {
-        this.validate();
+        this._requestValidation();
       }
     }
 
@@ -133,7 +133,7 @@ export const InputFieldMixin = (superclass) =>
       }
 
       if (this.invalid) {
-        this.validate();
+        this._requestValidation();
       }
     }
   };

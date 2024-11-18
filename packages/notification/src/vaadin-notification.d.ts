@@ -5,22 +5,21 @@
  */
 import type { TemplateResult } from 'lit';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
-import { OverlayClassMixin } from '@vaadin/component-base/src/overlay-class-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
+import {
+  NotificationContainerMixin,
+  NotificationMixin,
+  type NotificationPosition,
+} from './vaadin-notification-mixin.js';
 
-export type NotificationPosition =
-  | 'bottom-center'
-  | 'bottom-end'
-  | 'bottom-start'
-  | 'bottom-stretch'
-  | 'middle'
-  | 'top-center'
-  | 'top-end'
-  | 'top-start'
-  | 'top-stretch';
+export * from './vaadin-notification-mixin.js';
 
-export type NotificationRenderer = (root: HTMLElement, notification: Notification) => void;
+export interface ShowOptions {
+  assertive?: boolean;
+  duration?: number;
+  position?: NotificationPosition;
+  theme?: string;
+}
 
 /**
  * Fired when the `opened` property changes.
@@ -39,22 +38,10 @@ export interface NotificationCustomEventMap {
 
 export interface NotificationEventMap extends HTMLElementEventMap, NotificationCustomEventMap {}
 
-export interface ShowOptions {
-  assertive?: boolean;
-  duration?: number;
-  position?: NotificationPosition;
-  theme?: string;
-}
-
 /**
  * An element used internally by `<vaadin-notification>`. Not intended to be used separately.
  */
-declare class NotificationContainer extends ElementMixin(ThemableMixin(HTMLElement)) {
-  /**
-   * True when the container is opened
-   */
-  opened: boolean;
-}
+declare class NotificationContainer extends NotificationContainerMixin(ElementMixin(ThemableMixin(HTMLElement))) {}
 
 /**
  * An element used internally by `<vaadin-notification>`. Not intended to be used separately.
@@ -108,7 +95,7 @@ declare class NotificationCard extends ThemableMixin(HTMLElement) {}
  * @fires {CustomEvent} opened-changed - Fired when the `opened` property changes.
  * @fires {CustomEvent} closed - Fired when the notification is closed.
  */
-declare class Notification extends OverlayClassMixin(ThemePropertyMixin(ElementMixin(HTMLElement))) {
+declare class Notification extends NotificationMixin(ElementMixin(HTMLElement)) {
   /**
    * Shows a notification with the given content.
    * By default, positions the notification at `bottom-start` and uses a 5 second duration.
@@ -133,58 +120,6 @@ declare class Notification extends OverlayClassMixin(ThemePropertyMixin(ElementM
    * @param options optional options for customizing the notification.
    */
   static show(contents: TemplateResult | string, options?: ShowOptions): Notification;
-
-  /**
-   * When true, the notification card has `aria-live` attribute set to
-   * `assertive` instead of `polite`. This makes screen readers announce
-   * the notification content immediately when it appears.
-   */
-  assertive: boolean;
-
-  /**
-   * The duration in milliseconds to show the notification.
-   * Set to `0` or a negative number to disable the notification auto-closing.
-   */
-  duration: number;
-
-  /**
-   * True if the notification is currently displayed.
-   */
-  opened: boolean;
-
-  /**
-   * Alignment of the notification in the viewport
-   * Valid values are `top-stretch|top-start|top-center|top-end|middle|bottom-start|bottom-center|bottom-end|bottom-stretch`
-   */
-  position: NotificationPosition;
-
-  /**
-   * Custom function for rendering the content of the notification.
-   * Receives two arguments:
-   *
-   * - `root` The `<vaadin-notification-card>` DOM element. Append
-   *   your content to it.
-   * - `notification` The reference to the `<vaadin-notification>` element.
-   */
-  renderer: NotificationRenderer | undefined;
-
-  /**
-   * Requests an update for the content of the notification.
-   * While performing the update, it invokes the renderer passed in the `renderer` property.
-   *
-   * It is not guaranteed that the update happens immediately (synchronously) after it is requested.
-   */
-  requestContentUpdate(): void;
-
-  /**
-   * Opens the notification.
-   */
-  open(): void;
-
-  /**
-   * Closes the notification.
-   */
-  close(): void;
 
   addEventListener<K extends keyof NotificationEventMap>(
     type: K,

@@ -48,10 +48,13 @@ class PopoverOverlay extends PopoverOverlayMixin(DirMixin(ThemableMixin(PolylitM
         [part='overlay'] {
           position: relative;
           overflow: visible;
+          max-height: 100%;
         }
 
         [part='content'] {
           overflow: auto;
+          box-sizing: border-box;
+          max-height: 100%;
           width: var(--_vaadin-popover-content-width);
           height: var(--_vaadin-popover-content-height);
         }

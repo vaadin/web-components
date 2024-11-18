@@ -18,6 +18,7 @@ import {
   onceResized,
   setMaximumColumnWidth,
   setMinimumColumnWidth,
+  setMinimumRowHeight,
   setSpacing,
 } from './helpers.js';
 
@@ -34,6 +35,7 @@ describe('dashboard', () => {
     dashboard.style.width = `${columnWidth * 2}px`;
     setMinimumColumnWidth(dashboard, columnWidth);
     setMaximumColumnWidth(dashboard, columnWidth);
+    setMinimumRowHeight(dashboard, undefined);
     setSpacing(dashboard, 0);
 
     dashboard.items = [{ id: '0' }, { id: '1' }];
@@ -60,6 +62,7 @@ describe('dashboard', () => {
 
   it('should render a new widget', async () => {
     dashboard.items = [...dashboard.items, { id: '2' }];
+    await nextFrame();
     await nextFrame();
 
     const newWidget = getElementFromCell(dashboard, 1, 0);
@@ -115,12 +118,14 @@ describe('dashboard', () => {
     expect(spy.firstCall.args[0].detail.items).to.eql([{ id: '0' }]);
   });
 
-  it('should not dispatch an item-remove event', () => {
+  it('should not dispatch an item-remove event', async () => {
     const spy = sinon.spy();
     // @ts-ignore unexpected event type
     dashboard.addEventListener('item-remove', spy);
+    await nextFrame();
     const widget = getElementFromCell(dashboard, 0, 1);
     getRemoveButton(widget as DashboardWidget).click();
+    await nextFrame();
     expect(spy).to.not.be.called;
   });
 
