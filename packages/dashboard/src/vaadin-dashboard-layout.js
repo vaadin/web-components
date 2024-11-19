@@ -59,6 +59,14 @@ class DashboardLayout extends DashboardLayoutMixin(ElementMixin(ThemableMixin(Po
     return 'vaadin-dashboard-layout';
   }
 
+  static get experimental() {
+    return 'dashboardComponent';
+  }
+
+  static get cvdlName() {
+    return 'vaadin-dashboard';
+  }
+
   /** @protected */
   render() {
     return html`<div id="grid"><slot></slot></div>`;

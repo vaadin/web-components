@@ -22,6 +22,10 @@ class DashboardButton extends ButtonMixin(ElementMixin(ThemableMixin(PolylitMixi
     return 'vaadin-dashboard-button';
   }
 
+  static get experimental() {
+    return 'dashboardComponent';
+  }
+
   static get styles() {
     return buttonStyles;
   }

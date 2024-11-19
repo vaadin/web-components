@@ -106,6 +106,10 @@ class Dashboard extends DashboardLayoutMixin(ElementMixin(ThemableMixin(PolylitM
     return 'vaadin-dashboard';
   }
 
+  static get experimental() {
+    return 'dashboardComponent';
+  }
+
   static get cvdlName() {
     return 'vaadin-dashboard';
   }
