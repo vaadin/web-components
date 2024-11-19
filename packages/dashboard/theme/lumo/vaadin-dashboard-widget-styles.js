@@ -81,7 +81,7 @@ const dashboardWidgetAndSection = css`
   /* Drag handle styling */
   #drag-handle {
     cursor: move;
-    --icon: var(--lumo-icons-menu);
+    --icon: var(--lumo-icons-drag-handle);
   }
 
   /* Remove button styling */
@@ -174,19 +174,15 @@ const dashboardWidget = css`
     bottom: var(--lumo-space-s);
     inset-inline-end: var(--lumo-space-s);
     cursor: se-resize;
-    --icon: var(--lumo-icons-chevron-down);
+    --icon: var(--lumo-icons-resize-handle);
   }
 
   :host([dir='rtl']) #resize-handle {
     cursor: sw-resize;
   }
 
-  #resize-handle .icon::before {
-    transform: rotate(-45deg);
-  }
-
   :host([dir='rtl']) #resize-handle .icon::before {
-    transform: rotate(45deg);
+    transform: scaleX(-1);
   }
 
   /* Resize mode styling */
