@@ -1,9 +1,7 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync } from '@vaadin/testing-helpers';
+import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
-import './not-animated-styles.js';
-import '../vaadin-multi-select-combo-box.js';
 
 describe('accessibility', () => {
   let comboBox, inputElement;
@@ -13,9 +11,10 @@ describe('accessibility', () => {
 
     describe('input', () => {
       describe('required', () => {
-        beforeEach(() => {
+        beforeEach(async () => {
           comboBox = fixtureSync(`<vaadin-multi-select-combo-box required></vaadin-multi-select-combo-box>`);
           comboBox.items = ['Apple', 'Banana', 'Lemon', 'Orange'];
+          await nextRender();
           inputElement = comboBox.inputElement;
         });
 
@@ -27,14 +26,15 @@ describe('accessibility', () => {
           expect(inputElement.hasAttribute('required')).to.be.false;
         });
 
-        it('should remove aria-required attribute from the input when not required', () => {
+        it('should remove aria-required attribute from the input when not required', async () => {
           comboBox.required = false;
+          await nextRender();
           expect(inputElement.hasAttribute('aria-required')).to.be.false;
         });
       });
 
       describe('placeholder', () => {
-        beforeEach(() => {
+        beforeEach(async () => {
           // Do not use `fixtureSync()` helper to test the case where both placeholder
           // and selectedItems are set when the component is initialized, to make sure
           // that the placeholder is correctly restored after clearing selectedItems.
@@ -43,6 +43,7 @@ describe('accessibility', () => {
           comboBox.items = ['Apple', 'Banana', 'Lemon', 'Orange'];
           comboBox.selectedItems = ['Apple', 'Banana'];
           document.body.appendChild(comboBox);
+          await nextRender();
           inputElement = comboBox.inputElement;
         });
 
@@ -93,8 +94,9 @@ describe('accessibility', () => {
     });
 
     describe('items', () => {
-      beforeEach(() => {
+      beforeEach(async () => {
         comboBox = fixtureSync(`<vaadin-multi-select-combo-box></vaadin-multi-select-combo-box>`);
+        await nextRender();
         comboBox.items = ['Apple', 'Banana', 'Lemon', 'Orange'];
         comboBox.selectedItems = ['Apple', 'Lemon'];
         comboBox.inputElement.click();
@@ -137,13 +139,14 @@ describe('accessibility', () => {
       region = document.querySelector('[aria-live]');
     });
 
-    beforeEach(() => {
+    beforeEach(async () => {
       comboBox = fixtureSync(`<vaadin-multi-select-combo-box></vaadin-multi-select-combo-box>`);
       comboBox.itemIdPath = 'id';
       comboBox.itemLabelPath = 'name';
       comboBox.items = fruits;
+      await nextRender();
       inputElement = comboBox.inputElement;
-      clock = sinon.useFakeTimers();
+      clock = sinon.useFakeTimers({ shouldClearNativeTimers: true });
     });
 
     afterEach(() => {

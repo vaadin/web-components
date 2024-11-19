@@ -22,6 +22,7 @@ export const MultiSelectComboBoxInternalMixin = (superClass) =>
         filteredItems: {
           type: Array,
           notify: true,
+          sync: true,
         },
 
         /**
@@ -40,6 +41,7 @@ export const MultiSelectComboBoxInternalMixin = (superClass) =>
         loading: {
           type: Boolean,
           notify: true,
+          sync: true,
         },
 
         /**
@@ -49,6 +51,8 @@ export const MultiSelectComboBoxInternalMixin = (superClass) =>
         size: {
           type: Number,
           notify: true,
+          observer: '_sizeChanged',
+          sync: true,
         },
 
         /**
@@ -67,6 +71,7 @@ export const MultiSelectComboBoxInternalMixin = (superClass) =>
         selectedItemsOnTop: {
           type: Boolean,
           value: false,
+          sync: true,
         },
 
         /**
@@ -76,6 +81,7 @@ export const MultiSelectComboBoxInternalMixin = (superClass) =>
         lastFilter: {
           type: String,
           notify: true,
+          sync: true,
         },
 
         /**
@@ -84,6 +90,7 @@ export const MultiSelectComboBoxInternalMixin = (superClass) =>
         topGroup: {
           type: Array,
           observer: '_topGroupChanged',
+          sync: true,
         },
 
         _target: {
@@ -131,6 +138,15 @@ export const MultiSelectComboBoxInternalMixin = (superClass) =>
 
       this._target = this;
       this._toggleElement = this.querySelector('.toggle-button');
+    }
+
+    /** @protected */
+    async _updateOverlayWidth() {
+      if (!this.$ && this.updateComplete) {
+        await this.updateComplete;
+      }
+
+      this.$.overlay._updateOverlayWidth();
     }
 
     /** @private */

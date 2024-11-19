@@ -2,8 +2,6 @@ import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextRender, outsideClick } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
-import './not-animated-styles.js';
-import '../vaadin-multi-select-combo-box.js';
 
 describe('validation', () => {
   let comboBox, validateSpy, changeSpy, input;
@@ -42,9 +40,10 @@ describe('validation', () => {
   });
 
   describe('basic', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       comboBox = fixtureSync(`<vaadin-multi-select-combo-box></vaadin-multi-select-combo-box>`);
       comboBox.items = ['apple', 'banana'];
+      await nextRender();
       input = comboBox.inputElement;
       validateSpy = sinon.spy(comboBox, 'validate');
       changeSpy = sinon.spy();
@@ -92,9 +91,10 @@ describe('validation', () => {
   });
 
   describe('required', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       comboBox = fixtureSync(`<vaadin-multi-select-combo-box required></vaadin-multi-select-combo-box>`);
       comboBox.items = ['apple', 'banana'];
+      await nextRender();
     });
 
     it('should fail validation when selectedItems is empty', () => {
