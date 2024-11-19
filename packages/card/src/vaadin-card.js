@@ -10,22 +10,13 @@ import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 /**
- * <vaadin-card> is a visual content container.
+ * `<vaadin-card>` is a visual content container.
  *
  * ```html
- * <vaadin-card class="flex flex-col overflow-hidden">
- *   <img
- *     src="https://images.unsplash.com/photo-1519681393784-d120267933ba?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=750&q=80"
- *     alt="">
- *   <div class="flex flex-col items-start p-m">
- *     <h3>Card Title</h3>
- *     <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut.</p>
- *     <span theme="badge">Label</span>
- *   </div>
+ * <vaadin-card>
+ *   <div>Card content</div>
  * </vaadin-card>
  * ```
- *
- * [<img src="https://raw.githubusercontent.com/vaadin/web-components/main/packages/card/screenshot.png" width="296" alt="Screenshot of vaadin-card">](https://vaadin.com/docs/latest/components/button)
  *
  * @customElement
  * @extends HTMLElement
