@@ -3,6 +3,9 @@ import { fixtureSync } from '@vaadin/testing-helpers';
 import '../vaadin-card.js';
 import type { Card } from '../vaadin-card.js';
 
+window.Vaadin.featureFlags ||= {};
+window.Vaadin.featureFlags.cardComponent = true;
+
 describe('vaadin-card', () => {
   let card: Card;
 
