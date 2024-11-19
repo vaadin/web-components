@@ -899,6 +899,15 @@ describe('dashboard - keyboard interaction', () => {
       expect(getComputedStyle(getResizeGrowWidthButton(widget)).display).to.equal('none');
     });
 
+    (isChrome ? it : it.skip)('should focus the apply button if focused resize button is hidden', async () => {
+      const widget = getElementFromCell(dashboard, 0, 0)!;
+      // Focus grow width button, click it
+      getResizeGrowWidthButton(widget).focus();
+      await sendKeys({ press: 'Space' });
+
+      expect(getResizeApplyButton(widget).matches(':focus')).to.be.true;
+    });
+
     it('should not hide the shrink width button if the widget covers more than one column', async () => {
       const widget = getElementFromCell(dashboard, 0, 0)!;
       // Focus grow width button, click it
