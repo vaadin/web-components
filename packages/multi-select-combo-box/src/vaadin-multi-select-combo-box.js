@@ -18,47 +18,8 @@ import { InputControlMixin } from '@vaadin/field-base/src/input-control-mixin.js
 import { InputController } from '@vaadin/field-base/src/input-controller.js';
 import { LabelledInputController } from '@vaadin/field-base/src/labelled-input-controller.js';
 import { inputFieldShared } from '@vaadin/field-base/src/styles/input-field-shared-styles.js';
-import { css, registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-
-const multiSelectComboBox = css`
-  :host {
-    --input-min-width: var(--vaadin-multi-select-combo-box-input-min-width, 4em);
-    --_chip-min-width: var(--vaadin-multi-select-combo-box-chip-min-width, 50px);
-  }
-
-  #chips {
-    display: flex;
-    align-items: center;
-  }
-
-  ::slotted(input) {
-    box-sizing: border-box;
-    flex: 1 0 var(--input-min-width);
-  }
-
-  ::slotted([slot='chip']),
-  ::slotted([slot='overflow']) {
-    flex: 0 1 auto;
-  }
-
-  ::slotted([slot='chip']) {
-    overflow: hidden;
-  }
-
-  :host(:is([readonly], [disabled])) ::slotted(input) {
-    flex-grow: 0;
-    flex-basis: 0;
-    padding: 0;
-  }
-
-  :host([auto-expand-vertically]) #chips {
-    display: contents;
-  }
-
-  :host([auto-expand-horizontally]) [class$='container'] {
-    width: auto;
-  }
-`;
+import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { multiSelectComboBox } from './vaadin-multi-select-combo-box-styles.js';
 
 registerStyles('vaadin-multi-select-combo-box', [inputFieldShared, multiSelectComboBox], {
   moduleId: 'vaadin-multi-select-combo-box-styles',
