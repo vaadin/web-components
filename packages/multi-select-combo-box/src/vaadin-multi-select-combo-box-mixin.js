@@ -31,6 +31,7 @@ export const MultiSelectComboBoxMixin = (superClass) =>
           value: false,
           reflectToAttribute: true,
           observer: '_autoExpandHorizontallyChanged',
+          sync: true,
         },
 
         /**
@@ -44,6 +45,7 @@ export const MultiSelectComboBoxMixin = (superClass) =>
           value: false,
           reflectToAttribute: true,
           observer: '_autoExpandVerticallyChanged',
+          sync: true,
         },
 
         /**
@@ -52,6 +54,7 @@ export const MultiSelectComboBoxMixin = (superClass) =>
          */
         autoOpenDisabled: {
           type: Boolean,
+          sync: true,
         },
 
         /**
@@ -63,6 +66,7 @@ export const MultiSelectComboBoxMixin = (superClass) =>
           reflectToAttribute: true,
           observer: '_clearButtonVisibleChanged',
           value: false,
+          sync: true,
         },
 
         /**
@@ -71,6 +75,7 @@ export const MultiSelectComboBoxMixin = (superClass) =>
          */
         items: {
           type: Array,
+          sync: true,
         },
 
         /**
@@ -82,6 +87,7 @@ export const MultiSelectComboBoxMixin = (superClass) =>
         itemClassNameGenerator: {
           type: Object,
           observer: '__itemClassNameGeneratorChanged',
+          sync: true,
         },
 
         /**
@@ -91,6 +97,7 @@ export const MultiSelectComboBoxMixin = (superClass) =>
         itemLabelPath: {
           type: String,
           value: 'label',
+          sync: true,
         },
 
         /**
@@ -101,6 +108,7 @@ export const MultiSelectComboBoxMixin = (superClass) =>
         itemValuePath: {
           type: String,
           value: 'value',
+          sync: true,
         },
 
         /**
@@ -109,6 +117,7 @@ export const MultiSelectComboBoxMixin = (superClass) =>
          */
         itemIdPath: {
           type: String,
+          sync: true,
         },
 
         /**
@@ -163,6 +172,7 @@ export const MultiSelectComboBoxMixin = (superClass) =>
           type: Boolean,
           value: false,
           reflectToAttribute: true,
+          sync: true,
         },
 
         /**
@@ -172,6 +182,7 @@ export const MultiSelectComboBoxMixin = (superClass) =>
          */
         overlayClass: {
           type: String,
+          sync: true,
         },
 
         /**
@@ -182,6 +193,7 @@ export const MultiSelectComboBoxMixin = (superClass) =>
           value: false,
           observer: '_readonlyChanged',
           reflectToAttribute: true,
+          sync: true,
         },
 
         /**
@@ -192,6 +204,7 @@ export const MultiSelectComboBoxMixin = (superClass) =>
           type: Array,
           value: () => [],
           notify: true,
+          sync: true,
         },
 
         /**
@@ -202,6 +215,7 @@ export const MultiSelectComboBoxMixin = (superClass) =>
           notify: true,
           value: false,
           reflectToAttribute: true,
+          sync: true,
         },
 
         /**
@@ -209,6 +223,7 @@ export const MultiSelectComboBoxMixin = (superClass) =>
          */
         size: {
           type: Number,
+          sync: true,
         },
 
         /**
@@ -219,6 +234,7 @@ export const MultiSelectComboBoxMixin = (superClass) =>
           type: Number,
           value: 50,
           observer: '_pageSizeChanged',
+          sync: true,
         },
 
         /**
@@ -235,6 +251,7 @@ export const MultiSelectComboBoxMixin = (superClass) =>
          */
         dataProvider: {
           type: Object,
+          sync: true,
         },
 
         /**
@@ -254,6 +271,7 @@ export const MultiSelectComboBoxMixin = (superClass) =>
         placeholder: {
           type: String,
           observer: '_placeholderChanged',
+          sync: true,
         },
 
         /**
@@ -267,7 +285,10 @@ export const MultiSelectComboBoxMixin = (superClass) =>
          *   - `model.index` The index of the rendered item.
          *   - `model.item` The item.
          */
-        renderer: Function,
+        renderer: {
+          type: Function,
+          sync: true,
+        },
 
         /**
          * Filtering string the user has typed into the input field.
@@ -276,6 +297,7 @@ export const MultiSelectComboBoxMixin = (superClass) =>
           type: String,
           value: '',
           notify: true,
+          sync: true,
         },
 
         /**
@@ -283,7 +305,10 @@ export const MultiSelectComboBoxMixin = (superClass) =>
          * can be assigned directly to omit the internal filtering functionality.
          * The items can be of either `String` or `Object` type.
          */
-        filteredItems: Array,
+        filteredItems: {
+          type: Array,
+          sync: true,
+        },
 
         /**
          * Set to true to group selected items at the top of the overlay.
@@ -292,6 +317,7 @@ export const MultiSelectComboBoxMixin = (superClass) =>
         selectedItemsOnTop: {
           type: Boolean,
           value: false,
+          sync: true,
         },
 
         /** @private */
@@ -303,6 +329,7 @@ export const MultiSelectComboBoxMixin = (superClass) =>
         _overflowItems: {
           type: Array,
           value: () => [],
+          sync: true,
         },
 
         /** @private */
@@ -315,6 +342,7 @@ export const MultiSelectComboBoxMixin = (superClass) =>
         /** @private */
         _lastFilter: {
           type: String,
+          sync: true,
         },
 
         /** @private */
@@ -326,7 +354,7 @@ export const MultiSelectComboBoxMixin = (superClass) =>
 
     static get observers() {
       return [
-        '_selectedItemsChanged(selectedItems, selectedItems.*)',
+        '_selectedItemsChanged(selectedItems)',
         '__updateOverflowChip(_overflow, _overflowItems, disabled, readonly)',
         '__updateTopGroup(selectedItemsOnTop, selectedItems, opened)',
       ];
@@ -619,7 +647,7 @@ export const MultiSelectComboBoxMixin = (superClass) =>
       this.requestContentUpdate();
 
       if (this.opened) {
-        this.$.comboBox.$.overlay._updateOverlayWidth();
+        this.$.comboBox._updateOverlayWidth();
       }
     }
 
@@ -781,9 +809,13 @@ export const MultiSelectComboBoxMixin = (superClass) =>
     }
 
     /** @private */
-    __updateChips() {
+    async __updateChips() {
       if (!this._inputField || !this.inputElement) {
         return;
+      }
+
+      if (!this._inputField.$) {
+        await this._inputField.updateComplete;
       }
 
       // Clear all chips except the overflow
@@ -812,6 +844,10 @@ export const MultiSelectComboBoxMixin = (superClass) =>
         for (let i = items.length - 1, refNode = null; i >= 0; i--) {
           const chip = this.__createChip(items[i]);
           this.insertBefore(chip, refNode);
+          // Render Lit based chip
+          if (chip.performUpdate) {
+            chip.performUpdate();
+          }
           refNode = chip;
           chips.unshift(chip);
         }
@@ -847,6 +883,10 @@ export const MultiSelectComboBoxMixin = (superClass) =>
       for (let i = items.length - 1, refNode = null; i >= 0; i--) {
         const chip = this.__createChip(items[i]);
         this.insertBefore(chip, refNode);
+        // Render Lit based chip
+        if (chip.performUpdate) {
+          chip.performUpdate();
+        }
 
         // When auto expanding vertically, no need to measure remaining width
         if (!this.autoExpandVertically && this.$.chips.clientWidth > remainingWidth) {

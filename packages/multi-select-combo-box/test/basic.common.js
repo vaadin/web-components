@@ -1,17 +1,16 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
-import './not-animated-styles.js';
-import '../vaadin-multi-select-combo-box.js';
 import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
 
 describe('basic', () => {
   let comboBox, internal, inputElement;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     comboBox = fixtureSync(`<vaadin-multi-select-combo-box></vaadin-multi-select-combo-box>`);
     comboBox.items = ['apple', 'banana', 'lemon', 'orange'];
+    await nextRender();
     internal = comboBox.$.comboBox;
     inputElement = comboBox.inputElement;
   });
@@ -115,7 +114,7 @@ describe('basic', () => {
       expect(internal.loading).to.be.true;
     });
 
-    it('should update size when combo-box size changes', () => {
+    it('should update loading when combo-box loading changes', () => {
       internal.loading = true;
       expect(comboBox.loading).to.be.true;
     });
@@ -137,11 +136,6 @@ describe('basic', () => {
     it('should update filteredItems when combo-box filteredItems changes', () => {
       internal.filteredItems = ['apple'];
       expect(comboBox.filteredItems).to.deep.equal(['apple']);
-    });
-
-    it('should update filteredItems on combo-box filteredItems splice', () => {
-      internal.splice('filteredItems', 0, 2);
-      expect(comboBox.filteredItems).to.deep.equal(['lemon', 'orange']);
     });
 
     it('should call clearCache() method on the combo-box', () => {
@@ -357,8 +351,9 @@ describe('basic', () => {
   });
 
   describe('theme attribute', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       comboBox.setAttribute('theme', 'foo');
+      await nextFrame();
     });
 
     it('should propagate theme attribute to input container', () => {
