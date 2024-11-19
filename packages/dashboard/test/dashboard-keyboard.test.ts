@@ -18,6 +18,7 @@ import {
   getResizeShrinkHeightButton,
   getResizeShrinkWidthButton,
   onceResized,
+  setMaximumColumnCount,
   setMaximumColumnWidth,
   setMinimumColumnWidth,
   setMinimumRowHeight,
@@ -938,6 +939,16 @@ describe('dashboard - keyboard interaction', () => {
     it('should hide the grow width button if the dashboard is shrunk to only one column', async () => {
       dashboard.style.width = `${columnWidth}px`;
       await nextFrame();
+      const widget = getElementFromCell(dashboard, 0, 0)!;
+      expect(getComputedStyle(getResizeGrowWidthButton(widget)).display).to.equal('none');
+    });
+
+    it('should hide the grow width button if dashboard max col count is shrunk to only one column', async () => {
+      setMaximumColumnCount(dashboard, 1);
+      await sendKeys({ press: 'Escape' });
+      await sendKeys({ press: 'Space' });
+      await nextFrame();
+
       const widget = getElementFromCell(dashboard, 0, 0)!;
       expect(getComputedStyle(getResizeGrowWidthButton(widget)).display).to.equal('none');
     });
