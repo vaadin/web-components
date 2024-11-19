@@ -1,4 +1,4 @@
-import { expect } from '@vaadin/chai-plugins';
+import { expect } from '@esm-bundle/chai';
 import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import '../../src/vaadin-date-picker-year-scroller.js';
 
