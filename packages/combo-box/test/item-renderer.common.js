@@ -69,6 +69,38 @@ describe('item renderer', () => {
     expect(comboBox.renderer.callCount).to.be.equal(comboBox.items.length * 2);
   });
 
+  it('should not run renderers for invisible items', () => {
+    // Set up an item renderer that maps item data to DOM elements.
+    const itemContents = {
+      foo: document.createElement('div'),
+      bar: document.createElement('div'),
+      baz: document.createElement('div'),
+    };
+    comboBox.renderer = (root, _, { item }) => {
+      root.textContent = '';
+      root.appendChild(itemContents[item]);
+    };
+    comboBox.opened = true;
+
+    // Filter the items
+    // This renders `bar` into the first item now, and hides the other items.
+    // However, the second item still has `bar` as item data.
+    setInputValue(comboBox, 'bar');
+
+    const filteredItem = getAllItems(comboBox)[0];
+    expect(filteredItem.children.length).to.equal(1);
+    expect(filteredItem.children[0]).to.equal(itemContents.bar);
+
+    // Now run requestContentUpdate. This should only render the first item, but
+    // not the second one. We test this by verifying that the `bar` item content
+    // was not moved to the second item by its renderer.
+    comboBox.requestContentUpdate();
+
+    const allItems = getAllItems(comboBox);
+    expect(allItems[0].children.length).to.equal(1);
+    expect(allItems[0].children[0]).to.equal(itemContents.bar);
+  });
+
   it('should not throw if requestContentUpdate() called before opening', () => {
     expect(() => comboBox.requestContentUpdate()).not.to.throw(Error);
   });
