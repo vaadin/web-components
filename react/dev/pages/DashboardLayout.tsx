@@ -4,6 +4,10 @@ import { DashboardSection } from '../../packages/react-components-pro/src/Dashbo
 import type { CSSProperties } from 'react';
 import './dashboard-styles.css';
 
+window.Vaadin ||= {};
+window.Vaadin.featureFlags ||= {};
+window.Vaadin.featureFlags.dashboardComponent = true;
+
 const colspan2 = {
   '--vaadin-dashboard-item-colspan': '2',
 } as CSSProperties;
