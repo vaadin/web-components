@@ -33,6 +33,7 @@
     "@vaadin/avatar": "24.6.0-alpha9",
     "@vaadin/avatar-group": "24.6.0-alpha9",
     "@vaadin/button": "24.6.0-alpha9",
+    "@vaadin/card": "24.6.0-alpha9",
     "@vaadin/checkbox": "24.6.0-alpha9",
     "@vaadin/checkbox-group": "24.6.0-alpha9",
     "@vaadin/combo-box": "24.6.0-alpha9",
@@ -146,6 +147,10 @@
     "./Button.js": {
       "types": "./Button.d.ts",
       "default": "./Button.js"
+    },
+    "./Card.js": {
+      "types": "./Card.d.ts",
+      "default": "./Card.js"
     },
     "./Checkbox.js": {
       "types": "./Checkbox.d.ts",
@@ -402,6 +407,7 @@
     "./Avatar": "./Avatar.js",
     "./AvatarGroup": "./AvatarGroup.js",
     "./Button": "./Button.js",
+    "./Card": "./Card.js",
     "./Checkbox": "./Checkbox.js",
     "./CheckboxGroup": "./CheckboxGroup.js",
     "./ComboBox": "./ComboBox.js",
