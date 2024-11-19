@@ -4,7 +4,6 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { timeOut } from '@vaadin/component-base/src/async.js';
-import { isFirefox } from '@vaadin/component-base/src/browser-utils.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 
@@ -54,7 +53,7 @@ template.innerHTML = `
     }
   </style>
 
-  <div id="scroller">
+  <div id="scroller" tabindex="-1">
     <div class="buffer"></div>
     <div class="buffer"></div>
     <div id="fullHeight"></div>
@@ -198,12 +197,6 @@ export class InfiniteScroller extends HTMLElement {
       this._buffers = [...this.shadowRoot.querySelectorAll('.buffer')];
 
       this.$.fullHeight.style.height = `${this._initialScroll * 2}px`;
-
-      // Firefox interprets elements with overflow:auto as focusable
-      // https://bugzilla.mozilla.org/show_bug.cgi?id=1069739
-      if (isFirefox) {
-        this.$.scroller.tabIndex = -1;
-      }
     }
   }
 
