@@ -53,7 +53,7 @@ template.innerHTML = `
     }
   </style>
 
-  <div id="scroller">
+  <div id="scroller" tabindex="-1">
     <div class="buffer"></div>
     <div class="buffer"></div>
     <div id="fullHeight"></div>
@@ -197,8 +197,6 @@ export class InfiniteScroller extends HTMLElement {
       this._buffers = [...this.shadowRoot.querySelectorAll('.buffer')];
 
       this.$.fullHeight.style.height = `${this._initialScroll * 2}px`;
-
-      this.$.scroller.tabIndex = -1;
     }
   }
 
