@@ -9,7 +9,9 @@
 
     <script type="module">
       // Enable feature flag
-      Vaadin.featureFlags.cardComponent = true;
+      window.Vaadin ||= {};
+      window.Vaadin.featureFlags ||= {};
+      window.Vaadin.featureFlags.cardComponent = true;
 
       import '@vaadin/card';
       import { badge } from '@vaadin/vaadin-lumo-styles/badge.js';
