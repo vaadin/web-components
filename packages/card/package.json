@@ -42,7 +42,6 @@
   },
   "devDependencies": {
     "@vaadin/chai-plugins": "24.6.0-alpha8",
-    "@vaadin/icon": "24.6.0-alpha8",
     "@vaadin/testing-helpers": "^1.0.0",
     "sinon": "^18.0.0"
   },
