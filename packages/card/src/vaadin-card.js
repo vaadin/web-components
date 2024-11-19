@@ -40,9 +40,6 @@ class Card extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
     `;
   }
 
-  // This indicates the component is "experimental" and needs to be
-  // enabled explicitly in order to define a working custom element:
-  // window.Vaadin.featureFlags.cardComponent = true;
   static get experimental() {
     return true;
   }
