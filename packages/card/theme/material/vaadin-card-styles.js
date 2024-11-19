@@ -6,7 +6,7 @@ const cardProps = css`
   html {
     --vaadin-card-background: var(--material-secondary-background-color);
     --vaadin-card-border-radius: 8px;
-    --vaadin-card-border-width: 0px;
+    --vaadin-card-border-width: 0;
     --vaadin-card-border-color: var(--material-divider-color);
   }
 `;
