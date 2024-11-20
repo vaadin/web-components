@@ -111,16 +111,15 @@ export const dashboardWidgetAndSectionStyles = css`
     top: 50%;
   }
 
-  :host(:not([dir='rtl']))
-    [part~='resize-shrink-width-button']:not(:has(~ [part~='resize-grow-width-button'][hidden])) {
+  :host(:not([dir='rtl'])) [part~='resize-shrink-width-button'] {
     transform: translateY(-50%) translateX(-100%);
   }
 
-  :host([dir='rtl']) [part~='resize-shrink-width-button']:not(:has(~ [part~='resize-grow-width-button'][hidden])) {
+  :host([dir='rtl']) [part~='resize-shrink-width-button'] {
     transform: translateY(-50%) translateX(100%);
   }
 
-  [part~='resize-shrink-width-button']:has(~ [part~='resize-grow-width-button'][hidden]) {
+  .mode-controls:has([part~='resize-grow-width-button'][hidden]) [part~='resize-shrink-width-button'] {
     transform: translateY(-50%);
   }
 
