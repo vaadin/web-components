@@ -157,8 +157,8 @@ const dashboardWidget = css`
     opacity: 1;
   }
 
-  :host([resize-mode]) [part~='content'],
-  :host([move-mode]) [part~='content'] {
+  :host([resize-mode]) [part~='content'] ::slotted(*),
+  :host([move-mode]) [part~='content'] ::slotted(*) {
     opacity: 0.3;
     filter: blur(10px);
   }
