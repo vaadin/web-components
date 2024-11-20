@@ -204,29 +204,51 @@ const dashboardWidget = css`
     margin: 0;
   }
 
-  :host(:not([dir='rtl'])) #resize-shrink-width,
-  :host([dir='rtl']) #resize-grow-width {
+  :host(:not([dir='rtl'])) [part~='resize-grow-width-button'],
+  :host(:not([dir='rtl'])) [part~='resize-shrink-width-button'] {
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
+  }
+
+  :host([dir='rtl']) [part~='resize-grow-width-button'],
+  :host([dir='rtl']) [part~='resize-shrink-width-button'] {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+  }
+
+  :host(:not([dir='rtl'])) [part~='resize-shrink-width-button']:not([hidden]) + [part~='resize-grow-width-button'] {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+  }
+
+  :host([dir='rtl']) [part~='resize-shrink-width-button']:not([hidden]) + [part~='resize-grow-width-button'] {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+
+  :host(:not([dir='rtl'])) #resize-shrink-width,
+  :host([dir='rtl']) #resize-grow-width {
     --icon: var(--lumo-icons-angle-left);
   }
 
   :host(:not([dir='rtl'])) #resize-grow-width,
   :host([dir='rtl']) #resize-shrink-width {
-    border-top-left-radius: 0;
-    border-bottom-left-radius: 0;
     --icon: var(--lumo-icons-angle-right);
   }
 
-  #resize-grow-height {
-    border-top-right-radius: 0;
-    border-top-left-radius: 0;
+  [part~='resize-grow-height-button'],
+  [part~='resize-shrink-height-button'] {
     --icon: var(--lumo-icons-angle-down);
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+
+  [part~='resize-shrink-height-button']:not([hidden]) + [part~='resize-grow-height-button'] {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
   }
 
   #resize-shrink-height {
-    border-bottom-right-radius: 0;
-    border-bottom-left-radius: 0;
     --icon: var(--lumo-icons-angle-up);
   }
 `;
