@@ -2,7 +2,7 @@ import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themab
 
 export const dashboardLayoutStyles = css`
   #grid {
-    --_vaadin-dashboard-default-spacing: var(--lumo-space-xl);
+    --_vaadin-dashboard-default-spacing: var(--lumo-space-l);
   }
 `;
 

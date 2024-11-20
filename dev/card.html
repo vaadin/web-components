@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Card</title>
+    <script type="module" src="./common.js"></script>
+
+    <script type="module">
+      // Enable feature flag
+      window.Vaadin ||= {};
+      window.Vaadin.featureFlags ||= {};
+      window.Vaadin.featureFlags.cardComponent = true;
+
+      import '@vaadin/card';
+      import { badge } from '@vaadin/vaadin-lumo-styles/badge.js';
+      import '@vaadin/icon';
+      import '@vaadin/icons';
+      import '@vaadin/vaadin-lumo-styles/icons.js';
+      import { utility } from '@vaadin/vaadin-lumo-styles/utility.js';
+      import { addGlobalThemeStyles } from '@vaadin/vaadin-themable-mixin/register-styles.js';
+
+      addGlobalThemeStyles('utility', utility);
+      addGlobalThemeStyles('badge', badge);
+    </script>
+
+    <style>
+      html {
+        background-image: linear-gradient(var(--lumo-shade-5pct), var(--lumo-shade-5pct));
+      }
+
+      .cards {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: var(--lumo-space-l);
+      }
+
+      vaadin-card img {
+        max-width: 100%;
+        height: 150px;
+        object-fit: cover;
+      }
+
+      img.square {
+        width: 40px;
+        height: 40px;
+        outline: 1px solid var(--lumo-contrast-10pct);
+        outline-offset: -1px;
+        box-shadow: 0 2px 3px -2px var(--lumo-shade-50pct);
+      }
+    </style>
+  </head>
+
+  <body class="m-0 p-l flex flex-col gap-l">
+
+    <h2>Default</h2>
+    <div class="cards">
+      <vaadin-card class="flex flex-col overflow-hidden leading-s">
+        <img
+          src="https://images.unsplash.com/photo-1519681393784-d120267933ba?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=750&q=80"
+          alt="">
+        <div class="flex flex-col gap-s p-m items-start">
+          <h3 class="text-xl">Card Title</h3>
+          <p class="m-0 text-secondary">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut.</p>
+          <span theme="badge">Label</span>
+        </div>
+      </vaadin-card>
+
+      <vaadin-card class="flex flex-col overflow-hidden leading-s">
+        <img
+          src="https://images.unsplash.com/photo-1512273222628-4daea6e55abb?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=750&q=80"
+          alt="">
+        <div class="flex flex-col gap-s p-m items-start">
+          <h3 class="text-xl">Card Title</h3>
+          <p class="m-0 text-secondary">Lorem ipsum dolor sit amet, consectetur adipisicing elit incididunt ut.</p>
+          <span theme="badge warning">Label</span>
+        </div>
+      </vaadin-card>
+
+      <vaadin-card class="flex flex-col overflow-hidden leading-s">
+        <img
+          src="https://images.unsplash.com/photo-1515705576963-95cad62945b6?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&auto=format&fit=crop&w=750&q=80"
+          alt="">
+        <div class="flex flex-col gap-s p-m items-start">
+          <h3 class="text-xl">Card Title</h3>
+          <p class="m-0 text-secondary">Lorem ipsum dolor sit amet, consectetur adipisicing elit incididunt ut.</p>
+          <span theme="badge success">Label</span>
+        </div>
+      </vaadin-card>
+    </div>
+
+    <div class="cards">
+      <vaadin-card class="flex gap-s p-s leading-s">
+        <img
+          src="https://images.unsplash.com/photo-1519681393784-d120267933ba?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=750&q=80"
+          alt=""
+          class="square flex-none rounded-m">
+        <div class="flex flex-col">
+          <h3 class="text-m">Card Title</h3>
+          <p class="m-0 text-secondary text-s">Lorem ipsum dolor sit amet</p>
+        </div>
+      </vaadin-card>
+
+      <vaadin-card class="flex gap-s p-s leading-s">
+        <img
+          src="https://images.unsplash.com/photo-1512273222628-4daea6e55abb?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=750&q=80"
+          alt="" class="square flex-none rounded-m">
+        <div class="flex flex-col">
+          <h3 class="text-m">Card Title</h3>
+          <p class="m-0 text-secondary text-s">Lorem ipsum dolor sit amet</p>
+        </div>
+      </vaadin-card>
+
+      <vaadin-card class="flex gap-s p-s leading-s">
+        <img
+          src="https://images.unsplash.com/photo-1515705576963-95cad62945b6?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&auto=format&fit=crop&w=750&q=80"
+          alt="" class="square flex-none rounded-m">
+        <div class="flex flex-col">
+          <h3 class="text-m">Card Title</h3>
+          <p class="m-0 text-secondary text-s">Lorem ipsum dolor sit amet</p>
+        </div>
+      </vaadin-card>
+    </div>
+
+
+
+
+    <div class="cards">
+      <vaadin-card class="flex flex-col p-m leading-s">
+        <div class="flex justify-between">
+          <h3 class="text-s font-medium text-secondary">Page Views</h3>
+          <vaadin-icon icon="vaadin:info-circle-o" class="text-2xs text-tertiary"></vaadin-icon>
+        </div>
+        <div class="flex flex-wrap gap-m items-center">
+          <p class="m-0 text-header text-3xl font-medium">12,450</p>
+          <span theme="badge success" class="pe-s">
+            <span class="me-xs">15.8%</span>
+            <vaadin-icon icon="lumo:arrow-up"></vaadin-icon>
+          </span>
+        </div>
+      </vaadin-card>
+      <vaadin-card class="flex flex-col p-m leading-s">
+        <div class="flex justify-between">
+          <h3 class="text-s font-medium text-secondary">Total Revenue</h3>
+          <vaadin-icon icon="vaadin:info-circle-o" class="text-2xs text-tertiary"></vaadin-icon>
+        </div>
+        <div class="flex flex-wrap gap-m items-center">
+          <p class="m-0 text-header text-3xl font-medium"><span class="text-tertiary me-xs">$</span>363.95</p>
+          <span theme="badge error" class="pe-s">
+            <span class="me-xs">34.0%</span>
+            <vaadin-icon icon="lumo:arrow-down"></vaadin-icon>
+          </span>
+        </div>
+      </vaadin-card>
+      <vaadin-card class="flex flex-col p-m leading-s">
+        <div class="flex justify-between">
+          <h3 class="text-s font-medium text-secondary">Bounce Rate</h3>
+          <vaadin-icon icon="vaadin:info-circle-o" class="text-2xs text-tertiary"></vaadin-icon>
+        </div>
+        <div class="flex flex-wrap gap-m items-center">
+          <p class="m-0 text-header text-3xl font-medium">86.5%</p>
+          <span theme="badge success" class="pe-s">
+            <span class="me-xs">24.3%</span>
+            <vaadin-icon icon="lumo:arrow-up"></vaadin-icon>
+          </span>
+        </div>
+      </vaadin-card>
+    </div>
+
+
+
+
+    <h2>Outlined</h2>
+    <div class="cards">
+      <vaadin-card theme="outlined" class="flex flex-col overflow-hidden leading-s">
+        <img
+          src="https://images.unsplash.com/photo-1519681393784-d120267933ba?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=750&q=80"
+          alt=""
+          class="">
+        <div class="flex flex-col gap-s p-m items-start">
+          <h3 class="text-xl">Card Title</h3>
+          <p class="m-0 text-secondary">Lorem ipsum dolor sit amet, consectetur adipisicing elit tempor incididunt ut.</p>
+          <span theme="badge">Label</span>
+        </div>
+      </vaadin-card>
+
+      <vaadin-card theme="outlined" class="flex flex-col overflow-hidden leading-s">
+        <img
+          src="https://images.unsplash.com/photo-1512273222628-4daea6e55abb?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=750&q=80"
+          alt=""
+          class="">
+        <div class="flex flex-col gap-s p-m items-start">
+          <h3 class="text-xl">Card Title</h3>
+          <p class="m-0 text-secondary">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut.</p>
+          <span theme="badge warning">Label</span>
+        </div>
+      </vaadin-card>
+
+      <vaadin-card theme="outlined" class="flex flex-col overflow-hidden leading-s">
+        <img
+          src="https://images.unsplash.com/photo-1515705576963-95cad62945b6?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&auto=format&fit=crop&w=750&q=80"
+          alt=""
+          class="">
+        <div class="flex flex-col gap-s p-m items-start">
+          <h3 class="text-xl">Card Title</h3>
+          <p class="m-0 text-secondary">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut.</p>
+          <span theme="badge success">Label</span>
+        </div>
+      </vaadin-card>
+    </div>
+
+
+    <div class="cards">
+      <vaadin-card theme="outlined" class="flex gap-s p-s leading-s">
+        <img
+          src="https://images.unsplash.com/photo-1519681393784-d120267933ba?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=750&q=80"
+          alt="" class="square flex-none rounded-m">
+        <div class="flex flex-col">
+          <h3 class="text-m">Card Title</h3>
+          <p class="m-0 text-secondary text-s">Lorem ipsum dolor sit amet</p>
+        </div>
+      </vaadin-card>
+
+      <vaadin-card theme="outlined" class="flex gap-s p-s leading-s">
+        <img
+          src="https://images.unsplash.com/photo-1512273222628-4daea6e55abb?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=750&q=80"
+          alt="" class="square flex-none rounded-m">
+        <div class="flex flex-col">
+          <h3 class="text-m">Card Title</h3>
+          <p class="m-0 text-secondary text-s">Lorem ipsum dolor sit amet</p>
+        </div>
+      </vaadin-card>
+
+      <vaadin-card theme="outlined" class="flex gap-s p-s leading-s">
+        <img
+          src="https://images.unsplash.com/photo-1515705576963-95cad62945b6?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&auto=format&fit=crop&w=750&q=80"
+          alt="" class="square flex-none rounded-m">
+        <div class="flex flex-col">
+          <h3 class="text-m">Card Title</h3>
+          <p class="m-0 text-secondary text-s">Lorem ipsum dolor sit amet</p>
+        </div>
+      </vaadin-card>
+    </div>
+
+
+
+    <div class="cards">
+      <vaadin-card theme="outlined" class="flex flex-col p-m leading-s">
+        <div class="flex justify-between">
+          <h3 class="text-s font-medium text-secondary">Page Views</h3>
+          <vaadin-icon icon="vaadin:info-circle-o" class="text-2xs text-tertiary"></vaadin-icon>
+        </div>
+        <div class="flex flex-wrap gap-m items-center">
+          <p class="m-0 text-header text-3xl font-medium">12,450</p>
+          <span theme="badge success" class="pe-s">
+            <span class="me-xs">15.8%</span>
+            <vaadin-icon icon="lumo:arrow-up"></vaadin-icon>
+          </span>
+        </div>
+      </vaadin-card>
+      <vaadin-card theme="outlined" class="flex flex-col p-m leading-s">
+        <div class="flex justify-between">
+          <h3 class="text-s font-medium text-secondary">Total Revenue</h3>
+          <vaadin-icon icon="vaadin:info-circle-o" class="text-2xs text-tertiary"></vaadin-icon>
+        </div>
+        <div class="flex flex-wrap gap-m items-center">
+          <p class="m-0 text-header text-3xl font-medium"><span class="text-tertiary me-xs">$</span>363.95</p>
+          <span theme="badge error" class="pe-s">
+            <span class="me-xs">34.0%</span>
+            <vaadin-icon icon="lumo:arrow-down"></vaadin-icon>
+          </span>
+        </div>
+      </vaadin-card>
+      <vaadin-card theme="outlined" class="flex flex-col p-m leading-s">
+        <div class="flex justify-between">
+          <h3 class="text-s font-medium text-secondary">Bounce Rate</h3>
+          <vaadin-icon icon="vaadin:info-circle-o" class="text-2xs text-tertiary"></vaadin-icon>
+        </div>
+        <div class="flex flex-wrap gap-m items-center">
+          <p class="m-0 text-header text-3xl font-medium">86.5%</p>
+          <span theme="badge success" class="pe-s">
+            <span class="me-xs">24.3%</span>
+            <vaadin-icon icon="lumo:arrow-up"></vaadin-icon>
+          </span>
+        </div>
+      </vaadin-card>
+    </div>
+
+
+
+
+    <h2>Elevated</h2>
+    <div class="cards">
+      <vaadin-card theme="elevated" class="flex flex-col overflow-hidden leading-s">
+        <img
+          src="https://images.unsplash.com/photo-1519681393784-d120267933ba?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=750&q=80"
+          alt="" class="">
+        <div class="flex flex-col gap-s p-m items-start">
+          <h3 class="text-xl">Card Title</h3>
+          <p class="m-0 text-secondary">Lorem ipsum dolor sit amet, consectetur adipisicing elit tempor incididunt ut.</p>
+          <span theme="badge">Label</span>
+        </div>
+      </vaadin-card>
+
+      <vaadin-card theme="elevated" class="flex flex-col overflow-hidden leading-s">
+        <img
+          src="https://images.unsplash.com/photo-1512273222628-4daea6e55abb?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=750&q=80"
+          alt="" class="">
+        <div class="flex flex-col gap-s p-m items-start">
+          <h3 class="text-xl">Card Title</h3>
+          <p class="m-0 text-secondary">Lorem ipsum dolor sit amet, consectetur adipisicing elit tempor incididunt ut.</p>
+          <span theme="badge warning">Label</span>
+        </div>
+      </vaadin-card>
+
+      <vaadin-card theme="elevated" class="flex flex-col overflow-hidden leading-s">
+        <img
+          src="https://images.unsplash.com/photo-1515705576963-95cad62945b6?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&auto=format&fit=crop&w=750&q=80"
+          alt="" class="">
+        <div class="flex flex-col gap-s p-m items-start">
+          <h3 class="text-xl">Card Title</h3>
+          <p class="m-0 text-secondary">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut.</p>
+          <span theme="badge success">Label</span>
+        </div>
+      </vaadin-card>
+    </div>
+
+
+    <div class="cards">
+      <vaadin-card theme="elevated" class="flex gap-s p-s leading-s">
+        <img
+          src="https://images.unsplash.com/photo-1519681393784-d120267933ba?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=750&q=80"
+          alt="" class="square flex-none rounded-m">
+        <div class="flex flex-col">
+          <h3 class="text-m">Card Title</h3>
+          <p class="m-0 text-secondary text-s">Lorem ipsum dolor sit amet</p>
+        </div>
+      </vaadin-card>
+
+      <vaadin-card theme="elevated" class="flex gap-s p-s leading-s">
+        <img
+          src="https://images.unsplash.com/photo-1512273222628-4daea6e55abb?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=750&q=80"
+          alt="" class="square flex-none rounded-m">
+        <div class="flex flex-col">
+          <h3 class="text-m">Card Title</h3>
+          <p class="m-0 text-secondary text-s">Lorem ipsum dolor sit amet</p>
+        </div>
+      </vaadin-card>
+
+      <vaadin-card theme="elevated" class="flex gap-s p-s leading-s">
+        <img
+          src="https://images.unsplash.com/photo-1515705576963-95cad62945b6?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&auto=format&fit=crop&w=750&q=80"
+          alt="" class="square flex-none rounded-m">
+        <div class="flex flex-col">
+          <h3 class="text-m">Card Title</h3>
+          <p class="m-0 text-secondary text-s">Lorem ipsum dolor sit amet</p>
+        </div>
+      </vaadin-card>
+    </div>
+
+
+
+    <div class="cards">
+      <vaadin-card theme="elevated" class="flex flex-col p-m leading-s">
+        <div class="flex justify-between">
+          <h3 class="text-s font-medium text-secondary">Page Views</h3>
+          <vaadin-icon icon="vaadin:info-circle-o" class="text-2xs text-tertiary"></vaadin-icon>
+        </div>
+        <div class="flex flex-wrap gap-m items-center">
+          <p class="m-0 text-header text-3xl font-medium">12,450</p>
+          <span theme="badge success" class="pe-s">
+            <span class="me-xs">15.8%</span>
+            <vaadin-icon icon="lumo:arrow-up"></vaadin-icon>
+          </span>
+        </div>
+      </vaadin-card>
+      <vaadin-card theme="elevated" class="flex flex-col p-m leading-s">
+        <div class="flex justify-between">
+          <h3 class="text-s font-medium text-secondary">Total Revenue</h3>
+          <vaadin-icon icon="vaadin:info-circle-o" class="text-2xs text-tertiary"></vaadin-icon>
+        </div>
+        <div class="flex flex-wrap gap-m items-center">
+          <p class="m-0 text-header text-3xl font-medium"><span class="text-tertiary me-xs">$</span>363.95</p>
+          <span theme="badge error" class="pe-s">
+            <span class="me-xs">34.0%</span>
+            <vaadin-icon icon="lumo:arrow-down"></vaadin-icon>
+          </span>
+        </div>
+      </vaadin-card>
+      <vaadin-card theme="elevated" class="flex flex-col p-m leading-s">
+        <div class="flex justify-between">
+          <h3 class="text-s font-medium text-secondary">Bounce Rate</h3>
+          <vaadin-icon icon="vaadin:info-circle-o" class="text-2xs text-tertiary"></vaadin-icon>
+        </div>
+        <div class="flex flex-wrap gap-m items-center">
+          <p class="m-0 text-header text-3xl font-medium">86.5%</p>
+          <span theme="badge success" class="pe-s">
+            <span class="me-xs">24.3%</span>
+            <vaadin-icon icon="lumo:arrow-up"></vaadin-icon>
+          </span>
+        </div>
+      </vaadin-card>
+    </div>
+
+
+
+
+    <h2>Outlined & Elevated</h2>
+    <div class="cards">
+      <vaadin-card theme="outlined elevated" class="flex flex-col overflow-hidden leading-s">
+        <img
+          src="https://images.unsplash.com/photo-1519681393784-d120267933ba?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=750&q=80"
+          alt="" class="">
+        <div class="flex flex-col gap-s p-m items-start">
+          <h3 class="text-xl">Card Title</h3>
+          <p class="m-0 text-secondary">Lorem ipsum dolor sit amet, consectetur adipisicing elit tempor incididunt ut.</p>
+          <span theme="badge">Label</span>
+        </div>
+      </vaadin-card>
+
+      <vaadin-card theme="outlined elevated" class="flex flex-col overflow-hidden leading-s">
+        <img
+          src="https://images.unsplash.com/photo-1512273222628-4daea6e55abb?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=750&q=80"
+          alt="" class="">
+        <div class="flex flex-col gap-s p-m items-start">
+          <h3 class="text-xl">Card Title</h3>
+          <p class="m-0 text-secondary">Lorem ipsum dolor sit amet, consectetur adipisicing elit tempor incididunt ut.</p>
+          <span theme="badge warning">Label</span>
+        </div>
+      </vaadin-card>
+
+      <vaadin-card theme="outlined elevated" class="flex flex-col overflow-hidden leading-s">
+        <img
+          src="https://images.unsplash.com/photo-1515705576963-95cad62945b6?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&auto=format&fit=crop&w=750&q=80"
+          alt="" class="">
+        <div class="flex flex-col gap-s p-m items-start">
+          <h3 class="text-xl">Card Title</h3>
+          <p class="m-0 text-secondary">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut.</p>
+          <span theme="badge success">Label</span>
+        </div>
+      </vaadin-card>
+    </div>
+
+
+    <div class="cards">
+      <vaadin-card theme="outlined elevated" class="flex gap-s p-s leading-s">
+        <img
+          src="https://images.unsplash.com/photo-1519681393784-d120267933ba?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=750&q=80"
+          alt="" class="square flex-none rounded-m">
+        <div class="flex flex-col">
+          <h3 class="text-m">Card Title</h3>
+          <p class="m-0 text-secondary text-s">Lorem ipsum dolor sit amet</p>
+        </div>
+      </vaadin-card>
+
+      <vaadin-card theme="outlined elevated" class="flex gap-s p-s leading-s">
+        <img
+          src="https://images.unsplash.com/photo-1512273222628-4daea6e55abb?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=750&q=80"
+          alt="" class="square flex-none rounded-m">
+        <div class="flex flex-col">
+          <h3 class="text-m">Card Title</h3>
+          <p class="m-0 text-secondary text-s">Lorem ipsum dolor sit amet</p>
+        </div>
+      </vaadin-card>
+
+      <vaadin-card theme="outlined elevated" class="flex gap-s p-s leading-s">
+        <img
+          src="https://images.unsplash.com/photo-1515705576963-95cad62945b6?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&auto=format&fit=crop&w=750&q=80"
+          alt="" class="square flex-none rounded-m">
+        <div class="flex flex-col">
+          <h3 class="text-m">Card Title</h3>
+          <p class="m-0 text-secondary text-s">Lorem ipsum dolor sit amet</p>
+        </div>
+      </vaadin-card>
+    </div>
+
+
+
+
+    <div class="cards">
+      <vaadin-card theme="outlined elevated" class="flex flex-col p-m leading-s">
+        <div class="flex justify-between">
+          <h3 class="text-s font-medium text-secondary">Page Views</h3>
+          <vaadin-icon icon="vaadin:info-circle-o" class="text-2xs text-tertiary"></vaadin-icon>
+        </div>
+        <div class="flex flex-wrap gap-m items-center">
+          <p class="m-0 text-header text-3xl font-medium">12,450</p>
+          <span theme="badge success" class="pe-s">
+            <span class="me-xs">15.8%</span>
+            <vaadin-icon icon="lumo:arrow-up"></vaadin-icon>
+          </span>
+        </div>
+      </vaadin-card>
+      <vaadin-card theme="outlined elevated" class="flex flex-col p-m leading-s">
+        <div class="flex justify-between">
+          <h3 class="text-s font-medium text-secondary">Total Revenue</h3>
+          <vaadin-icon icon="vaadin:info-circle-o" class="text-2xs text-tertiary"></vaadin-icon>
+        </div>
+        <div class="flex flex-wrap gap-m items-center">
+          <p class="m-0 text-header text-3xl font-medium"><span class="text-tertiary me-xs">$</span>363.95</p>
+          <span theme="badge error" class="pe-s">
+            <span class="me-xs">34.0%</span>
+            <vaadin-icon icon="lumo:arrow-down"></vaadin-icon>
+          </span>
+        </div>
+      </vaadin-card>
+      <vaadin-card theme="outlined elevated" class="flex flex-col p-m leading-s">
+        <div class="flex justify-between">
+          <h3 class="text-s font-medium text-secondary">Bounce Rate</h3>
+          <vaadin-icon icon="vaadin:info-circle-o" class="text-2xs text-tertiary"></vaadin-icon>
+        </div>
+        <div class="flex flex-wrap gap-m items-center">
+          <p class="m-0 text-header text-3xl font-medium">86.5%</p>
+          <span theme="badge success" class="pe-s">
+            <span class="me-xs">24.3%</span>
+            <vaadin-icon icon="lumo:arrow-up"></vaadin-icon>
+          </span>
+        </div>
+      </vaadin-card>
+    </div>
+
+
+
+
+
+  </body>
+</html>

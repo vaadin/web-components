@@ -106,6 +106,10 @@ class Dashboard extends DashboardLayoutMixin(ElementMixin(ThemableMixin(PolylitM
     return 'vaadin-dashboard';
   }
 
+  static get experimental() {
+    return 'dashboardComponent';
+  }
+
   static get cvdlName() {
     return 'vaadin-dashboard';
   }
@@ -455,6 +459,23 @@ class Dashboard extends DashboardLayoutMixin(ElementMixin(ThemableMixin(PolylitM
   __itemResizeModeChanged(e) {
     e.stopImmediatePropagation();
     this.__dispatchCustomEvent('dashboard-item-resize-mode-changed', getElementItem(e.target), e.detail.value);
+  }
+
+  /**
+   * @private
+   */
+  __updateColumnCount() {
+    const previousColumnCount = this.$.grid.style.getPropertyValue('--_vaadin-dashboard-col-count');
+    super.__updateColumnCount();
+
+    // Request update for all the widgets if the column count has changed on resize
+    if (previousColumnCount !== this.$.grid.style.getPropertyValue('--_vaadin-dashboard-col-count')) {
+      this.querySelectorAll(WRAPPER_LOCAL_NAME).forEach((wrapper) => {
+        if (wrapper.firstElementChild && 'requestUpdate' in wrapper.firstElementChild) {
+          wrapper.firstElementChild.requestUpdate();
+        }
+      });
+    }
   }
 
   /**

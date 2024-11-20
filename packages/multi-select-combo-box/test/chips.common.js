@@ -1,8 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
+import { fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
-import './not-animated-styles.js';
-import '../vaadin-multi-select-combo-box.js';
 
 describe('chips', () => {
   let comboBox, inputElement;
@@ -20,10 +18,9 @@ describe('chips', () => {
   beforeEach(async () => {
     comboBox = fixtureSync(`<vaadin-multi-select-combo-box></vaadin-multi-select-combo-box>`);
     comboBox.items = ['apple', 'banana', 'lemon', 'orange'];
-    inputElement = comboBox.inputElement;
-
     comboBox.selectedItems = ['orange'];
     await nextRender();
+    inputElement = comboBox.inputElement;
   });
 
   describe('programmatic update', () => {
@@ -85,8 +82,8 @@ describe('chips', () => {
       comboBox.style.width = '250px';
       await nextResize(comboBox);
       comboBox.selectedItems = ['apple', 'banana'];
-      await nextRender();
       comboBox.disabled = true;
+      await nextRender();
     });
 
     it('should hide overflow chip if width permits when disabled', () => {
@@ -233,8 +230,8 @@ describe('chips', () => {
       comboBox.style.width = '250px';
       await nextResize(comboBox);
       comboBox.selectedItems = ['apple', 'banana'];
-      await nextRender();
       comboBox.readonly = true;
+      await nextRender();
     });
 
     it('should hide overflow chip if width permits when readonly', () => {
@@ -257,15 +254,17 @@ describe('chips', () => {
       expect(chips[2].hasAttribute('readonly')).to.be.true;
     });
 
-    it('should remove readonly attribute from chips when not readonly', () => {
+    it('should remove readonly attribute from chips when not readonly', async () => {
       comboBox.readonly = false;
+      await nextUpdate(comboBox);
       const chips = getChips(comboBox);
       expect(chips[0].hasAttribute('readonly')).to.be.false;
       expect(chips[1].hasAttribute('readonly')).to.be.false;
     });
 
-    it('should set readonly attribute on added chips while readonly', () => {
+    it('should set readonly attribute on added chips while readonly', async () => {
       comboBox.selectedItems = ['lemon', 'orange'];
+      await nextUpdate(comboBox);
       const chips = getChips(comboBox);
       expect(chips[0].hasAttribute('readonly')).to.be.true;
       expect(chips[1].hasAttribute('readonly')).to.be.true;

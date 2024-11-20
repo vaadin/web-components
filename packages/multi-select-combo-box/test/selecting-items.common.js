@@ -2,8 +2,6 @@ import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, keyboardEventFor, nextRender } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
-import './not-animated-styles.js';
-import '../vaadin-multi-select-combo-box.js';
 import { getAllItems, getDataProvider, getFirstItem } from './helpers.js';
 
 describe('selecting items', () => {
@@ -17,8 +15,9 @@ describe('selecting items', () => {
     });
   }
 
-  beforeEach(() => {
+  beforeEach(async () => {
     comboBox = fixtureSync(`<vaadin-multi-select-combo-box></vaadin-multi-select-combo-box>`);
+    await nextRender();
     internal = comboBox.$.comboBox;
     inputElement = comboBox.inputElement;
     inputElement.focus();

@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, isChrome, nextFrame } from '@vaadin/testing-helpers';
+import { fixtureSync, isChrome, isFirefox, nextFrame } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import '../vaadin-dashboard.js';
@@ -18,6 +18,7 @@ import {
   getResizeShrinkHeightButton,
   getResizeShrinkWidthButton,
   onceResized,
+  setMaximumColumnCount,
   setMaximumColumnWidth,
   setMinimumColumnWidth,
   setMinimumRowHeight,
@@ -877,7 +878,88 @@ describe('dashboard - keyboard interaction', () => {
       expect(getComputedStyle(getResizeGrowHeightButton(widget)).display).to.equal('none');
       expect(getComputedStyle(getResizeShrinkHeightButton(widget)).display).to.equal('none');
       expect(getComputedStyle(getResizeGrowWidthButton(widget)).display).to.not.equal('none');
+    });
+
+    it('should hide the shrink width button if the widget only covers one column', () => {
+      const widget = getElementFromCell(dashboard, 0, 0)!;
+      expect(getComputedStyle(getResizeShrinkWidthButton(widget)).display).to.equal('none');
+    });
+
+    it('should not hide the grow width button if the widget does not cover all visible columns', () => {
+      const widget = getElementFromCell(dashboard, 0, 0)!;
+      expect(getComputedStyle(getResizeGrowWidthButton(widget)).display).to.not.equal('none');
+    });
+
+    it('should hide the grow width button if the widget already covers all visible columns', async () => {
+      const widget = getElementFromCell(dashboard, 0, 0)!;
+      // Focus grow width button, click it
+      getResizeGrowWidthButton(widget).focus();
+      await sendKeys({ press: 'Space' });
+
+      expect(getComputedStyle(getResizeGrowWidthButton(widget)).display).to.equal('none');
+    });
+
+    (isChrome ? it : it.skip)('should focus the apply button if focused resize button is hidden', async () => {
+      const widget = getElementFromCell(dashboard, 0, 0)!;
+      // Focus grow width button, click it
+      getResizeGrowWidthButton(widget).focus();
+      await sendKeys({ press: 'Space' });
+
+      expect(getResizeApplyButton(widget).matches(':focus')).to.be.true;
+    });
+
+    it('should not hide the shrink width button if the widget covers more than one column', async () => {
+      const widget = getElementFromCell(dashboard, 0, 0)!;
+      // Focus grow width button, click it
+      getResizeGrowWidthButton(widget).focus();
+      await sendKeys({ press: 'Space' });
+
       expect(getComputedStyle(getResizeShrinkWidthButton(widget)).display).to.not.equal('none');
+    });
+
+    (isFirefox ? it.skip : it)('should hide the shrink height button if the widget only covers one row', async () => {
+      // Set minimum row height to enable vertical resizing
+      setMinimumRowHeight(dashboard, 100);
+      await sendKeys({ press: 'Escape' });
+      await sendKeys({ press: 'Space' });
+      await nextFrame();
+
+      const widget = getElementFromCell(dashboard, 0, 0)!;
+      expect(getComputedStyle(getResizeShrinkHeightButton(widget)).display).to.equal('none');
+    });
+
+    (isFirefox ? it.skip : it)(
+      'should not hide the shrink height button if the widget covers more than one row',
+      async () => {
+        // Set minimum row height to enable vertical resizing
+        setMinimumRowHeight(dashboard, 100);
+        await sendKeys({ press: 'Escape' });
+        await sendKeys({ press: 'Space' });
+        await nextFrame();
+
+        const widget = getElementFromCell(dashboard, 0, 0)!;
+        // Focus grow height button, click it
+        getResizeGrowHeightButton(widget).focus();
+        await sendKeys({ press: 'Space' });
+        expect(getComputedStyle(getResizeShrinkHeightButton(widget)).display).to.not.equal('none');
+      },
+    );
+
+    it('should hide the grow width button if the dashboard is shrunk to only one column', async () => {
+      dashboard.style.width = `${columnWidth}px`;
+      await nextFrame();
+      const widget = getElementFromCell(dashboard, 0, 0)!;
+      expect(getComputedStyle(getResizeGrowWidthButton(widget)).display).to.equal('none');
+    });
+
+    it('should hide the grow width button if dashboard max col count is shrunk to only one column', async () => {
+      setMaximumColumnCount(dashboard, 1);
+      await sendKeys({ press: 'Escape' });
+      await sendKeys({ press: 'Space' });
+      await nextFrame();
+
+      const widget = getElementFromCell(dashboard, 0, 0)!;
+      expect(getComputedStyle(getResizeGrowWidthButton(widget)).display).to.equal('none');
     });
   });
 });

@@ -1,9 +1,8 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import './not-animated-styles.js';
-import '../vaadin-multi-select-combo-box.js';
 import { html, render } from 'lit';
+import { flushComboBox } from '@vaadin/combo-box/test/helpers.js';
 import { multiSelectComboBoxRenderer } from '../lit.js';
 
 async function renderComboBox(container, { items }) {
@@ -73,6 +72,8 @@ describe('lit renderer directives', () => {
         );
         await nextFrame();
         comboBox = container.querySelector('vaadin-multi-select-combo-box');
+        // Needed by Lit
+        flushComboBox(comboBox.$.comboBox);
       });
 
       it('should pass the item to the renderer', () => {

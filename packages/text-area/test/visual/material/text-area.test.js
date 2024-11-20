@@ -125,6 +125,12 @@ describe('text-area', () => {
     await visualDiff(div, 'min-rows');
   });
 
+  it('max-rows', async () => {
+    element.value = Array(10).join('value\n');
+    element.maxRows = 4;
+    await visualDiff(div, 'max-rows');
+  });
+
   it('single-row', async () => {
     element.minRows = 1;
     element.value = 'value';

@@ -1,19 +1,18 @@
 import { expect } from '@vaadin/chai-plugins';
-import { aTimeout, fixtureSync } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
-import './not-animated-styles.js';
-import '../vaadin-multi-select-combo-box.js';
 import { getAsyncDataProvider } from './helpers.js';
 
 describe('readonly', () => {
   let comboBox, inputElement, internal;
 
   describe('basic', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       comboBox = fixtureSync(`<vaadin-multi-select-combo-box readonly></vaadin-multi-select-combo-box>`);
       comboBox.items = ['apple', 'banana', 'lemon', 'orange'];
       comboBox.selectedItems = ['apple', 'orange'];
+      await nextRender();
       internal = comboBox.$.comboBox;
       inputElement = comboBox.inputElement;
       inputElement.focus();
@@ -154,11 +153,12 @@ describe('readonly', () => {
 
     const asyncDataProvider = getAsyncDataProvider(['apple', 'banana', 'lemon', 'orange']);
 
-    beforeEach(() => {
+    beforeEach(async () => {
       comboBox = fixtureSync(`<vaadin-multi-select-combo-box readonly></vaadin-multi-select-combo-box>`);
       asyncDataProviderSpy = sinon.spy(asyncDataProvider);
       comboBox.dataProvider = asyncDataProviderSpy;
       comboBox.selectedItems = ['apple', 'orange'];
+      await nextRender();
       inputElement = comboBox.inputElement;
       inputElement.focus();
     });
@@ -206,10 +206,11 @@ describe('readonly', () => {
   });
 
   describe('dataProvider is set after selectedItems', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       comboBox = fixtureSync(`<vaadin-multi-select-combo-box readonly></vaadin-multi-select-combo-box>`);
       comboBox.selectedItems = ['apple', 'orange'];
       comboBox.dataProvider = getAsyncDataProvider(['apple', 'banana', 'lemon', 'orange']);
+      await nextRender();
       inputElement = comboBox.inputElement;
     });
 
@@ -228,9 +229,10 @@ describe('readonly', () => {
     const asyncDataProvider1 = getAsyncDataProvider(['item 1', 'item 2']);
     const asyncDataProvider2 = getAsyncDataProvider(['new item 1', 'new item 2']);
 
-    beforeEach(() => {
+    beforeEach(async () => {
       comboBox = fixtureSync(`<vaadin-multi-select-combo-box></vaadin-multi-select-combo-box>`);
       comboBox.dataProvider = asyncDataProvider1;
+      await nextRender();
       // Load the first page.
       comboBox.inputElement.click();
       comboBox.readonly = true;
@@ -250,11 +252,12 @@ describe('readonly', () => {
   });
 
   describe('external filtering', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       comboBox = fixtureSync(`<vaadin-multi-select-combo-box></vaadin-multi-select-combo-box>`);
       comboBox.filteredItems = ['apple', 'banana', 'lemon', 'orange'];
       comboBox.selectedItems = ['apple', 'orange'];
       comboBox.readonly = true;
+      await nextRender();
       inputElement = comboBox.inputElement;
       inputElement.focus();
     });

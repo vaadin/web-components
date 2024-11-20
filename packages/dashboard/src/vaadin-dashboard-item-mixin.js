@@ -198,7 +198,17 @@ export const DashboardItemMixin = (superClass) =>
 
     /** @private */
     __renderResizeControls() {
-      const hasMinRowHeight = getComputedStyle(this).getPropertyValue('--_vaadin-dashboard-row-min-height') !== 'auto';
+      const style = getComputedStyle(this);
+      const hasMinRowHeight = style.getPropertyValue('--_vaadin-dashboard-row-min-height') !== 'auto';
+
+      const effectiveColCount = style.getPropertyValue('--_vaadin-dashboard-col-count');
+      const maxColCount = style.getPropertyValue('--_vaadin-dashboard-col-max-count');
+      const colCount = Math.min(effectiveColCount, maxColCount);
+      const colspan = style.getPropertyValue('--vaadin-dashboard-item-colspan') || 1;
+      const rowspan = style.getPropertyValue('--vaadin-dashboard-item-rowspan') || 1;
+      const canShrinkWidth = colspan > 1;
+      const canShrinkHeight = rowspan > 1;
+      const canGrowWidth = colspan < colCount;
 
       return html`<div
         id="resize-controls"
@@ -221,6 +231,7 @@ export const DashboardItemMixin = (superClass) =>
           aria-label="${this.__i18n.resizeShrinkWidth}"
           title="${this.__i18n.resizeShrinkWidth}"
           @click="${() => fireResize(this, -1, 0)}"
+          .hidden="${!canShrinkWidth}"
           id="resize-shrink-width"
           part="resize-shrink-width-button"
         >
@@ -231,6 +242,7 @@ export const DashboardItemMixin = (superClass) =>
           aria-label="${this.__i18n.resizeGrowWidth}"
           title="${this.__i18n.resizeGrowWidth}"
           @click="${() => fireResize(this, 1, 0)}"
+          .hidden="${!canGrowWidth}"
           id="resize-grow-width"
           part="resize-grow-width-button"
         >
@@ -243,7 +255,7 @@ export const DashboardItemMixin = (superClass) =>
           @click="${() => fireResize(this, 0, -1)}"
           id="resize-shrink-height"
           part="resize-shrink-height-button"
-          .hidden="${!hasMinRowHeight}"
+          .hidden="${!hasMinRowHeight || !canShrinkHeight}"
         >
           <div class="icon"></div>
         </vaadin-dashboard-button>
@@ -316,6 +328,8 @@ export const DashboardItemMixin = (superClass) =>
     __focusApply() {
       if (this.__moveMode) {
         this.$['move-apply'].focus();
+      } else if (this.__resizeMode) {
+        this.$['resize-apply'].focus();
       }
     }
 

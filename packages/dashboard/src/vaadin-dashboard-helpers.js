@@ -87,6 +87,10 @@ export function fireResize(element, colspanDelta, rowspanDelta) {
       },
     }),
   );
+
+  if ('requestUpdate' in element) {
+    element.requestUpdate();
+  }
 }
 
 /**
