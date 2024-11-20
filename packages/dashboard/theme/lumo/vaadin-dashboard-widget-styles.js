@@ -79,13 +79,13 @@ const dashboardWidgetAndSection = css`
   }
 
   /* Drag handle styling */
-  #drag-handle {
+  [part~='move-button'] {
     cursor: move;
     --icon: var(--lumo-icons-drag-handle);
   }
 
   /* Remove button styling */
-  #remove-button {
+  [part~='remove-button'] {
     cursor: pointer;
     --icon: var(--lumo-icons-cross);
   }
@@ -101,7 +101,7 @@ const dashboardWidgetAndSection = css`
   }
 
   /* Content styling */
-  #content {
+  [part~='content'] {
     min-height: var(--lumo-size-m);
     padding: var(--lumo-space-s);
   }
@@ -113,30 +113,30 @@ const dashboardWidgetAndSection = css`
 
   /* Move mode styling */
 
-  #move-backward {
+  [part~='move-backward-button'] {
     inset-inline-start: calc(0px - var(--_focus-ring-spacing-offset));
   }
 
-  #move-forward {
+  [part~='move-forward-button'] {
     inset-inline-end: calc(0px - var(--_focus-ring-spacing-offset));
     transform: translateY(-50%);
   }
 
-  :host(:not([dir='rtl'])) #move-backward,
-  :host([dir='rtl']) #move-forward {
+  :host(:not([dir='rtl'])) [part~='move-backward-button'],
+  :host([dir='rtl']) [part~='move-forward-button'] {
     border-top-left-radius: 0;
     border-bottom-left-radius: 0;
     --icon: var(--lumo-icons-angle-left);
   }
 
-  :host(:not([dir='rtl'])) #move-forward,
-  :host([dir='rtl']) #move-backward {
+  :host(:not([dir='rtl'])) [part~='move-forward-button'],
+  :host([dir='rtl']) [part~='move-backward-button'] {
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
     --icon: var(--lumo-icons-angle-right);
   }
 
-  #move-apply {
+  [part~='move-apply-button'] {
     --icon: var(--lumo-icons-checkmark);
     font-size: var(--lumo-icon-size-m);
   }
@@ -157,8 +157,8 @@ const dashboardWidget = css`
     opacity: 1;
   }
 
-  :host([resize-mode]) #content,
-  :host([move-mode]) #content {
+  :host([resize-mode]) [part~='content'],
+  :host([move-mode]) [part~='content'] {
     opacity: 0.3;
     filter: blur(10px);
   }
@@ -169,7 +169,7 @@ const dashboardWidget = css`
   }
 
   /* Resize handle styling */
-  #resize-handle {
+  [part~='resize-button'] {
     position: absolute;
     bottom: var(--lumo-space-s);
     inset-inline-end: var(--lumo-space-s);
@@ -177,29 +177,29 @@ const dashboardWidget = css`
     --icon: var(--lumo-icons-resize-handle);
   }
 
-  :host([dir='rtl']) #resize-handle {
+  :host([dir='rtl']) [part~='resize-button'] {
     cursor: sw-resize;
   }
 
-  :host([dir='rtl']) #resize-handle .icon::before {
+  :host([dir='rtl']) [part~='resize-button'] .icon::before {
     transform: scaleX(-1);
   }
 
   /* Resize mode styling */
-  #resize-apply {
+  [part~='resize-apply-button'] {
     --icon: var(--lumo-icons-checkmark);
     font-size: var(--lumo-icon-size-m);
   }
 
-  #resize-grow-width,
-  #resize-shrink-width {
+  [part~='resize-grow-width-button'],
+  [part~='resize-shrink-width-button'] {
     padding-right: 0;
     padding-left: 0;
     min-width: var(--lumo-size-s);
   }
 
-  #resize-grow-height,
-  #resize-shrink-height {
+  [part~='resize-grow-height-button'],
+  [part~='resize-shrink-height-button'] {
     height: var(--lumo-size-s);
     margin: 0;
   }
@@ -226,13 +226,13 @@ const dashboardWidget = css`
     border-bottom-right-radius: 0;
   }
 
-  :host(:not([dir='rtl'])) #resize-shrink-width,
-  :host([dir='rtl']) #resize-grow-width {
+  :host(:not([dir='rtl'])) [part~='resize-shrink-width-button'],
+  :host([dir='rtl']) [part~='resize-grow-width-button'] {
     --icon: var(--lumo-icons-angle-left);
   }
 
-  :host(:not([dir='rtl'])) #resize-grow-width,
-  :host([dir='rtl']) #resize-shrink-width {
+  :host(:not([dir='rtl'])) [part~='resize-grow-width-button'],
+  :host([dir='rtl']) [part~='resize-shrink-width-button'] {
     --icon: var(--lumo-icons-angle-right);
   }
 
@@ -248,7 +248,7 @@ const dashboardWidget = css`
     border-top-right-radius: 0;
   }
 
-  #resize-shrink-height {
+  [part~='resize-shrink-height-button'] {
     --icon: var(--lumo-icons-angle-up);
   }
 `;
