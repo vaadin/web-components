@@ -25,8 +25,8 @@ export const dashboardWidgetAndSectionStyles = css`
     visibility: hidden;
   }
 
-  :host(:not([editable])) #drag-handle,
-  :host(:not([editable])) #remove-button,
+  :host(:not([editable])) [part~='move-button'],
+  :host(:not([editable])) [part~='remove-button'],
   :host(:not([editable])) #focus-button,
   :host(:not([editable])) #focus-button-wrapper,
   :host(:not([editable])) .mode-controls {
@@ -70,39 +70,39 @@ export const dashboardWidgetAndSectionStyles = css`
   }
 
   /* Move-mode buttons */
-  #move-backward,
-  #move-forward,
-  #move-apply {
+  [part~='move-backward-button'],
+  [part~='move-forward-button'],
+  [part~='move-apply-button'] {
     position: absolute;
     top: 50%;
   }
 
-  #move-backward {
+  [part~='move-backward-button'] {
     inset-inline-start: 0;
     transform: translateY(-50%);
   }
 
-  #move-forward {
+  [part~='move-forward-button'] {
     inset-inline-end: 0;
     transform: translateY(-50%);
   }
 
-  #move-apply {
+  [part~='move-apply-button'] {
     left: 50%;
     transform: translate(-50%, -50%);
   }
 
-  :host([first-child]) #move-backward,
-  :host([last-child]) #move-forward {
+  :host([first-child]) [part~='move-backward-button'],
+  :host([last-child]) [part~='move-forward-button'] {
     display: none;
   }
 
   /* Resize-mode buttons */
-  #resize-shrink-width,
-  #resize-shrink-height,
-  #resize-grow-width,
-  #resize-grow-height,
-  #resize-apply {
+  [part~='resize-shrink-width-button'],
+  [part~='resize-shrink-height-button'],
+  [part~='resize-grow-width-button'],
+  [part~='resize-grow-height-button'],
+  [part~='resize-apply-button'] {
     position: absolute;
   }
 
@@ -136,19 +136,19 @@ export const dashboardWidgetAndSectionStyles = css`
     transform: translateY(-50%) translateX(100%);
   }
 
-  #resize-shrink-height {
+  [part~='resize-shrink-height-button'] {
     bottom: 0;
     left: 50%;
     transform: translateX(-50%) translateY(-100%);
   }
 
-  #resize-grow-height {
+  [part~='resize-grow-height-button'] {
     top: 100%;
     left: 50%;
     transform: translateX(-50%) translateY(-100%);
   }
 
-  #resize-apply {
+  [part~='resize-apply-button'] {
     left: 50%;
     top: 50%;
 
