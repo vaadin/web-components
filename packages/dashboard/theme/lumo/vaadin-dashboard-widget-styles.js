@@ -226,19 +226,18 @@ const dashboardWidget = css`
     border-bottom-right-radius: 0;
   }
 
-  :host(:not([dir='rtl'])) [part~='resize-shrink-width-button'],
-  :host([dir='rtl']) [part~='resize-grow-width-button'] {
-    --icon: var(--lumo-icons-angle-left);
+  [part~='resize-grow-height-button'],
+  [part~='resize-grow-width-button'] {
+    --icon: var(--lumo-icons-plus);
   }
 
-  :host(:not([dir='rtl'])) [part~='resize-grow-width-button'],
-  :host([dir='rtl']) [part~='resize-shrink-width-button'] {
-    --icon: var(--lumo-icons-angle-right);
+  [part~='resize-shrink-height-button'],
+  [part~='resize-shrink-width-button'] {
+    --icon: var(--lumo-icons-minus);
   }
 
   [part~='resize-grow-height-button'],
   [part~='resize-shrink-height-button'] {
-    --icon: var(--lumo-icons-angle-down);
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
   }
@@ -246,10 +245,6 @@ const dashboardWidget = css`
   [part~='resize-shrink-height-button']:not([hidden]) + [part~='resize-grow-height-button'] {
     border-top-left-radius: 0;
     border-top-right-radius: 0;
-  }
-
-  [part~='resize-shrink-height-button'] {
-    --icon: var(--lumo-icons-angle-up);
   }
 `;
 
