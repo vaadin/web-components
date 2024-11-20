@@ -124,4 +124,12 @@ describe('text-area', () => {
     element.minRows = 4;
     await visualDiff(div, 'min-rows');
   });
+
+  it('single-row', async () => {
+    element.minRows = 1;
+    element.value = 'value';
+    element.clearButtonVisible = true;
+
+    await visualDiff(div, 'single-row');
+  });
 });
