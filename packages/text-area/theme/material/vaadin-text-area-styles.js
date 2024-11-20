@@ -30,6 +30,12 @@ const textArea = css`
     top: 0;
     align-self: flex-start;
   }
+
+  /* Align prefix/suffix icon or text with native textarea */
+  [part='input-field'] ::slotted([slot$='fix']) {
+    top: 4px;
+    margin-top: 4px;
+  }
 `;
 
 registerStyles('vaadin-text-area', [inputFieldShared, textArea], { moduleId: 'material-text-area' });

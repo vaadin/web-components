@@ -108,6 +108,7 @@ describe('text-area', () => {
     span.setAttribute('slot', 'prefix');
     span.textContent = '$';
     element.appendChild(span);
+    element.value = 'value';
     await visualDiff(div, 'prefix');
   });
 
@@ -116,6 +117,7 @@ describe('text-area', () => {
     span.setAttribute('slot', 'suffix');
     span.textContent = '$';
     element.appendChild(span);
+    element.value = 'value';
     await visualDiff(div, 'suffix');
   });
 
