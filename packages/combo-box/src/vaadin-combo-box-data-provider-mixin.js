@@ -110,7 +110,7 @@ export const ComboBoxDataProviderMixin = (superClass) =>
       this.__dataProviderInitialized = true;
 
       if (this.dataProvider) {
-        this.synchronizeControllerState();
+        this.__synchronizeControllerState();
       }
     }
 
@@ -166,7 +166,7 @@ export const ComboBoxDataProviderMixin = (superClass) =>
       const { rootCache } = this.__dataProviderController;
       rootCache.items = [...rootCache.items];
 
-      this.synchronizeControllerState();
+      this.__synchronizeControllerState();
 
       if (!this.opened && !this._isInputFocused()) {
         this._commitValue();
@@ -183,7 +183,7 @@ export const ComboBoxDataProviderMixin = (superClass) =>
 
       this.__dataProviderController.clearCache();
 
-      this.synchronizeControllerState();
+      this.__synchronizeControllerState();
 
       if (this._shouldFetchData()) {
         this._forceNextRequest = false;
@@ -206,7 +206,7 @@ export const ComboBoxDataProviderMixin = (superClass) =>
         // The controller adds new placeholders to the cache through mutation,
         // so we need to create a new array to trigger filteredItems observers.
         rootCache.items = [...rootCache.items];
-        this.synchronizeControllerState();
+        this.__synchronizeControllerState();
       }
     }
 
@@ -224,7 +224,7 @@ export const ComboBoxDataProviderMixin = (superClass) =>
         const { rootCache } = this.__dataProviderController;
         if (rootCache.items !== items) {
           rootCache.items = items;
-          this.synchronizeControllerState();
+          this.__synchronizeControllerState();
         }
       }
     }
@@ -233,8 +233,10 @@ export const ComboBoxDataProviderMixin = (superClass) =>
      * Synchronizes the controller's state with the component, which can be
      * out of sync after the controller receives new data from the data provider
      * or if the state in the controller is directly manipulated.
+     *
+     * @private
      */
-    synchronizeControllerState() {
+    __synchronizeControllerState() {
       // When the data provider isn't initialized, it means the content update was requested
       // by an observer before the `ready()` callback. In such cases, some properties
       // in the data provider controller might still be uninitialized, so it's not safe
@@ -245,10 +247,6 @@ export const ComboBoxDataProviderMixin = (superClass) =>
         this.size = rootCache.size;
         this.filteredItems = rootCache.items;
         this.loading = this.__dataProviderController.isLoading();
-      }
-
-      if (this._scroller) {
-        this._scroller.requestContentUpdate();
       }
     }
 
