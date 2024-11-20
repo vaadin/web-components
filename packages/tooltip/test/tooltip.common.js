@@ -397,6 +397,18 @@ describe('vaadin-tooltip', () => {
       expect(overlay.opened).to.be.false;
     });
 
+    it('should close overlay on document mousedown', () => {
+      mouseenter(target);
+      mousedown(document.body);
+      expect(overlay.opened).to.be.false;
+    });
+
+    it('should not close overlay on overlay mousedown', () => {
+      mouseenter(target);
+      mousedown(overlay);
+      expect(overlay.opened).to.be.true;
+    });
+
     it('should re-open overlay on subsequent mouseenter', () => {
       mouseenter(target);
       mousedown(target);
@@ -494,16 +506,6 @@ describe('vaadin-tooltip', () => {
       tabKeyDown(target);
       target.focus();
       expect(overlay.opened).to.be.false;
-    });
-
-    it('should not close overlay on mousedown when target is reset', async () => {
-      mouseenter(target);
-
-      tooltip.target = null;
-      await nextUpdate(tooltip);
-
-      mousedown(target);
-      expect(overlay.opened).to.be.true;
     });
 
     it('should not close overlay on focusout when target is reset', async () => {

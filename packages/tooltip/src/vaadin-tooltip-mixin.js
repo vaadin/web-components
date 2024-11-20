@@ -447,6 +447,7 @@ export const TooltipMixin = (superClass) =>
       this._isConnected = true;
 
       document.body.addEventListener('vaadin-overlay-open', this.__onOverlayOpen);
+      document.addEventListener('mousedown', this.__onMouseDown, true);
     }
 
     /** @protected */
@@ -459,6 +460,7 @@ export const TooltipMixin = (superClass) =>
       this._isConnected = false;
 
       document.body.removeEventListener('vaadin-overlay-open', this.__onOverlayOpen);
+      document.removeEventListener('mousedown', this.__onMouseDown, true);
     }
 
     /** @protected */
@@ -499,7 +501,6 @@ export const TooltipMixin = (superClass) =>
       target.addEventListener('mouseleave', this.__onMouseLeave);
       target.addEventListener('focusin', this.__onFocusin);
       target.addEventListener('focusout', this.__onFocusout);
-      target.addEventListener('mousedown', this.__onMouseDown);
 
       // Wait before observing to avoid Chrome issue.
       requestAnimationFrame(() => {
@@ -517,7 +518,6 @@ export const TooltipMixin = (superClass) =>
       target.removeEventListener('mouseleave', this.__onMouseLeave);
       target.removeEventListener('focusin', this.__onFocusin);
       target.removeEventListener('focusout', this.__onFocusout);
-      target.removeEventListener('mousedown', this.__onMouseDown);
 
       this.__targetVisibilityObserver.unobserve(target);
     }
@@ -576,11 +576,13 @@ export const TooltipMixin = (superClass) =>
     }
 
     /** @private */
-    __onMouseDown() {
-      if (this.manual) {
+    __onMouseDown(event) {
+      if (this.manual || event.composedPath().includes(this._overlayElement)) {
         return;
       }
 
+      // Immediately close on any mousedown to avoid overlay from interfering
+      // with other component overlays that might open on the following click.
       this._stateController.close(true);
     }
 
