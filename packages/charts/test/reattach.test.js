@@ -186,6 +186,20 @@ describe('reattach', () => {
     expect(chart.configuration.options.plotOptions.series.stacking).to.be.equal('percent');
   });
 
+  it('should restore configuration done through `updateConfigaration` after reattach', async () => {
+    const wrapper = fixtureSync(`<div><vaadin-chart></vaadin-chart></div>`);
+    const chart = wrapper.firstElementChild;
+    chart.updateConfiguration({ title: { text: 'New title' }, series: [{ name: 'series', data: [1, 2, 3] }] });
+    await nextFrame();
+    wrapper.removeChild(chart);
+    await nextFrame();
+    wrapper.appendChild(chart);
+    await nextFrame();
+    expect(chart.configuration.options.title.text).to.be.equal('New title');
+    expect(chart.configuration.options.series.length).to.be.equal(1);
+    expect(chart.configuration.options.series[0].name).to.be.equal('series');
+  });
+
   it('should apply categories updated while detached after reattach', async () => {
     chart.categories = ['Jan', 'Feb', 'Mar'];
     await oneEvent(chart, 'chart-load');
