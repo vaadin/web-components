@@ -122,7 +122,8 @@ export function setRowspan(element: HTMLElement, rowspan?: number): void {
  * Sets the spacing of the dashboard. This value adjusts the spacing between elements within the dashboard and the space around its outer edges.
  */
 export function setSpacing(dashboard: HTMLElement, spacing?: number): void {
-  dashboard.style.setProperty('--vaadin-dashboard-spacing', spacing !== undefined ? `${spacing}px` : null);
+  dashboard.style.setProperty('--vaadin-dashboard-gap', spacing !== undefined ? `${spacing}px` : null);
+  dashboard.style.setProperty('--vaadin-dashboard-padding', spacing !== undefined ? `${spacing}px` : null);
 }
 
 /**
