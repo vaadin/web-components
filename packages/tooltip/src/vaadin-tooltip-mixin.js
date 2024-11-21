@@ -422,6 +422,7 @@ export const TooltipMixin = (superClass) =>
       this._uniqueId = `vaadin-tooltip-${generateUniqueId()}`;
       this._renderer = this.__tooltipRenderer.bind(this);
 
+      this.__onClick = this.__onClick.bind(this);
       this.__onFocusin = this.__onFocusin.bind(this);
       this.__onFocusout = this.__onFocusout.bind(this);
       this.__onMouseDown = this.__onMouseDown.bind(this);
@@ -495,6 +496,7 @@ export const TooltipMixin = (superClass) =>
      * @override
      */
     _addTargetListeners(target) {
+      target.addEventListener('click', this.__onClick);
       target.addEventListener('mouseenter', this.__onMouseEnter);
       target.addEventListener('mouseleave', this.__onMouseLeave);
       target.addEventListener('focusin', this.__onFocusin);
@@ -513,6 +515,7 @@ export const TooltipMixin = (superClass) =>
      * @override
      */
     _removeTargetListeners(target) {
+      target.removeEventListener('click', this.__onClick);
       target.removeEventListener('mouseenter', this.__onMouseEnter);
       target.removeEventListener('mouseleave', this.__onMouseLeave);
       target.removeEventListener('focusin', this.__onFocusin);
@@ -520,6 +523,22 @@ export const TooltipMixin = (superClass) =>
       target.removeEventListener('mousedown', this.__onMouseDown);
 
       this.__targetVisibilityObserver.unobserve(target);
+    }
+
+    /** @private */
+    __onClick() {
+      if (this.manual) {
+        return;
+      }
+
+      // Only close on keyboard click.
+      if (!isKeyboardActive()) {
+        return;
+      }
+
+      // Close immediately when click event is triggered
+      // by pressing Enter or Space e.g. on the button.
+      this._stateController.close(true);
     }
 
     /** @private */

@@ -1,6 +1,7 @@
 import { expect } from '@vaadin/chai-plugins';
 import {
   aTimeout,
+  enterKeyDown,
   escKeyDown,
   fixtureSync,
   focusin,
@@ -177,6 +178,15 @@ describe('timers', () => {
       target.focus();
 
       escKeyDown(target);
+      expect(overlay.opened).to.be.false;
+    });
+
+    it('should close the overlay immediately on click from keyboard', () => {
+      tabKeyDown(document.body);
+      target.focus();
+
+      enterKeyDown(target);
+      target.click();
       expect(overlay.opened).to.be.false;
     });
 

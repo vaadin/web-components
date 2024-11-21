@@ -1,5 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import {
+  enterKeyDown,
   escKeyDown,
   fixtureSync,
   focusin,
@@ -394,6 +395,15 @@ describe('vaadin-tooltip', () => {
     it('should close overlay on target mousedown', () => {
       mouseenter(target);
       mousedown(target);
+      expect(overlay.opened).to.be.false;
+    });
+
+    it('should close overlay on target keyboard click', () => {
+      tabKeyDown(target);
+      target.focus();
+
+      enterKeyDown(target);
+      target.click();
       expect(overlay.opened).to.be.false;
     });
 
