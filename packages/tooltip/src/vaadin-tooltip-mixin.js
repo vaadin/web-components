@@ -447,7 +447,7 @@ export const TooltipMixin = (superClass) =>
       this._isConnected = true;
 
       document.body.addEventListener('vaadin-overlay-open', this.__onOverlayOpen);
-      document.addEventListener('mousedown', this.__onMouseDown, true);
+      document.addEventListener('mousedown', this.__onMouseDown);
     }
 
     /** @protected */
@@ -460,7 +460,7 @@ export const TooltipMixin = (superClass) =>
       this._isConnected = false;
 
       document.body.removeEventListener('vaadin-overlay-open', this.__onOverlayOpen);
-      document.removeEventListener('mousedown', this.__onMouseDown, true);
+      document.removeEventListener('mousedown', this.__onMouseDown);
     }
 
     /** @protected */
