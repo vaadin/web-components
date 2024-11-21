@@ -32,31 +32,33 @@ describe('notification and overlays', () => {
     });
   });
 
-  beforeEach(async () => {
-    const wrapper = fixtureSync(`
-      <div>
-        <vaadin-notification></vaadin-notification>
-        <div id="target"></div>
-        <vaadin-popover for="target" manual></vaadin-popover>
-      </div>
-    `);
-    const notification = wrapper.querySelector('vaadin-notification');
-    const popover = wrapper.querySelector('vaadin-popover');
-    popover.renderer = (root) => {
-      root.textContent = 'Popover content';
-    };
-    notification.opened = true;
-    popover.opened = true;
-    await nextRender();
-  });
+  describe('notification and popover', () => {
+    beforeEach(async () => {
+      const wrapper = fixtureSync(`
+        <div>
+          <vaadin-notification></vaadin-notification>
+          <div id="target"></div>
+          <vaadin-popover for="target" manual></vaadin-popover>
+        </div>
+      `);
+      const notification = wrapper.querySelector('vaadin-notification');
+      const popover = wrapper.querySelector('vaadin-popover');
+      popover.renderer = (root) => {
+        root.textContent = 'Popover content';
+      };
+      notification.opened = true;
+      popover.opened = true;
+      await nextRender();
+    });
 
-  it('should show popovers above notifications', () => {
-    const notificationContainer = document.querySelector('vaadin-notification-container');
-    const tooltipOverlay = document.querySelector('vaadin-popover-overlay');
+    it('should show popovers above notifications', () => {
+      const notificationContainer = document.querySelector('vaadin-notification-container');
+      const popoverOverlay = document.querySelector('vaadin-popover-overlay');
 
-    const notificationZIndex = parseInt(getComputedStyle(notificationContainer).zIndex);
-    const tooltipZIndex = parseInt(getComputedStyle(tooltipOverlay).zIndex);
+      const notificationZIndex = parseInt(getComputedStyle(notificationContainer).zIndex);
+      const popoverZIndex = parseInt(getComputedStyle(popoverOverlay).zIndex);
 
-    expect(tooltipZIndex).to.be.above(notificationZIndex);
+      expect(popoverZIndex).to.be.above(notificationZIndex);
+    });
   });
 });
