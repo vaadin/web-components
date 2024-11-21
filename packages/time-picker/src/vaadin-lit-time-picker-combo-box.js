@@ -61,27 +61,6 @@ class TimePickerComboBox extends ComboBoxMixin(ThemableMixin(PolylitMixin(LitEle
     return this.querySelector('[part="clear-button"]');
   }
 
-  /**
-   * @override
-   * @protected
-   */
-  get _inputElementValue() {
-    return super._inputElementValue;
-  }
-
-  /**
-   * The setter is overridden to ensure the `_hasInputValue` property
-   * doesn't wrongly indicate true after the input element's value
-   * is reverted or cleared programmatically.
-   *
-   * @override
-   * @protected
-   */
-  set _inputElementValue(value) {
-    super._inputElementValue = value;
-    this._hasInputValue = value && value.length > 0;
-  }
-
   /** @protected */
   render() {
     return html`
