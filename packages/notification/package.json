@@ -40,6 +40,7 @@
     "@polymer/polymer": "^3.0.0",
     "@vaadin/component-base": "~24.5.3",
     "@vaadin/lit-renderer": "~24.5.3",
+    "@vaadin/overlay": "~24.5.3",
     "@vaadin/vaadin-lumo-styles": "~24.5.3",
     "@vaadin/vaadin-material-styles": "~24.5.3",
     "@vaadin/vaadin-themable-mixin": "~24.5.3",

@@ -6,6 +6,7 @@
 import type { TemplateResult } from 'lit';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { OverlayClassMixin } from '@vaadin/component-base/src/overlay-class-mixin.js';
+import { OverlayStackMixin } from '@vaadin/overlay/src/vaadin-overlay-stack-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
 
@@ -48,7 +49,7 @@ export interface ShowOptions {
 /**
  * An element used internally by `<vaadin-notification>`. Not intended to be used separately.
  */
-declare class NotificationContainer extends ElementMixin(ThemableMixin(HTMLElement)) {
+declare class NotificationContainer extends OverlayStackMixin(ElementMixin(ThemableMixin(HTMLElement))) {
   /**
    * True when the container is opened
    */

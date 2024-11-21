@@ -11,6 +11,7 @@ import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { OverlayClassMixin } from '@vaadin/component-base/src/overlay-class-mixin.js';
 import { processTemplates } from '@vaadin/component-base/src/templates.js';
+import { OverlayStackMixin } from '@vaadin/overlay/src/vaadin-overlay-stack-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
 
@@ -20,10 +21,11 @@ import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-p
  * @customElement
  * @extends HTMLElement
  * @mixes ElementMixin
+ * @mixes OverlayStackMixin
  * @mixes ThemableMixin
  * @private
  */
-class NotificationContainer extends ThemableMixin(ElementMixin(PolymerElement)) {
+class NotificationContainer extends OverlayStackMixin(ThemableMixin(ElementMixin(PolymerElement))) {
   static get template() {
     return html`
       <style>
@@ -517,6 +519,8 @@ class Notification extends OverlayClassMixin(ThemePropertyMixin(ElementMixin(Pol
       console.warn(`Invalid alignment parameter provided: position=${this.position}`);
       return;
     }
+
+    this._container.bringToFront();
 
     this._card.slot = this.position;
     if (this._container.firstElementChild && /top/u.test(this.position)) {
