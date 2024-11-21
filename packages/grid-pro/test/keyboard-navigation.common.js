@@ -31,7 +31,6 @@ describe('keyboard navigation', () => {
     flushGrid(grid);
   });
 
-  // FIXME: often fails in Firefox in CI
   describe('when `singleCellEdit` is true', () => {
     beforeEach(() => {
       grid.singleCellEdit = true;
