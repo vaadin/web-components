@@ -53,13 +53,14 @@ registerStyles(
       position: absolute;
       inset: 0;
       pointer-events: none;
-      box-shadow: inset 0 0 0 var(--_focus-ring-width) transparent;
+      box-shadow: inset 0 0 0 var(--_focus-ring-width) var(--_focus-ring-color);
       animation: vaadin-grid-pro-loading-editor 1.4s infinite;
+      opacity: 0;
     }
 
     @keyframes vaadin-grid-pro-loading-editor {
       50% {
-        box-shadow: inset 0 0 0 var(--_focus-ring-width) var(--_focus-ring-color);
+        opacity: 1;
       }
     }
   `,
