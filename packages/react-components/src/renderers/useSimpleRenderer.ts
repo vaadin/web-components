@@ -16,7 +16,7 @@ function convertSimpleRendererArgs<O extends HTMLElement>([original]: Slice<
 
 export function useSimpleRenderer<O extends HTMLElement>(
   reactRenderer?: ComponentType<ReactSimpleRendererProps<O>> | null,
-  config?: RendererConfig,
+  config?: RendererConfig<WebComponentSimpleRenderer<O>>,
 ): UseRendererResult<WebComponentSimpleRenderer<O>> {
   return useRenderer(reactRenderer, convertSimpleRendererArgs, config);
 }

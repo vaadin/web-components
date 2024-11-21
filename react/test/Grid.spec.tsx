@@ -1,6 +1,6 @@
 import { expect, use as useChaiPlugin } from '@esm-bundle/chai';
 import chaiDom from 'chai-dom';
-import { cleanup, render } from '@testing-library/react/pure.js';
+import { cleanup, render, waitFor } from '@testing-library/react/pure.js';
 import { Grid, type GridDataProvider } from '../packages/react-components/src/Grid.js';
 import { GridColumn, GridColumnElement } from '../packages/react-components/src/GridColumn.js';
 import { GridFilterColumn } from '../packages/react-components/src/GridFilterColumn.js';
@@ -9,7 +9,6 @@ import { GridSelectionColumn } from '../packages/react-components/src/GridSelect
 import { GridSortColumn } from '../packages/react-components/src/GridSortColumn.js';
 import { GridTreeColumn } from '../packages/react-components/src/GridTreeColumn.js';
 import type { GridBodyReactRendererProps } from '../packages/react-components/src/renderers/grid.js';
-import catchRender from './utils/catchRender.js';
 import { GridColumnGroup } from '../packages/react-components/src/GridColumnGroup.js';
 import { findByQuerySelector } from './utils/findByQuerySelector.js';
 import { GridPro } from '../packages/react-components-pro/src/GridPro.js';
@@ -55,29 +54,28 @@ describe('Grid', () => {
     return <>{item.name}</>;
   }
 
-  function isGridCellContentNodeRendered(node: Node) {
-    return (
-      node instanceof Text &&
-      node.parentNode instanceof HTMLElement &&
-      node.parentNode.localName === 'vaadin-grid-cell-content'
-    );
-  }
+  function getGridMeaningfulParts(
+    columnElementName: string,
+    assertions: { expectedColumnCount: number; expectedCellCount: number },
+  ) {
+    return waitFor(async () => {
+      const grid = document.querySelector('vaadin-grid, vaadin-grid-pro')!;
+      expect(grid).to.exist;
 
-  async function getGridMeaningfulParts(columnElementName: string) {
-    const grid = document.querySelector('vaadin-grid, vaadin-grid-pro')!;
-    expect(grid).to.exist;
+      const columns = document.querySelectorAll(columnElementName);
 
-    await catchRender(grid, isGridCellContentNodeRendered);
+      // Filter cells that don't have any textContent. Grid creates empty cells for some calculations,
+      // but we don't need them.
+      const cells = Array.from(grid!.querySelectorAll('vaadin-grid-cell-content')).filter(
+        ({ textContent }) => textContent,
+      );
 
-    const columns = document.querySelectorAll(columnElementName);
+      const { expectedColumnCount, expectedCellCount } = assertions;
+      expect(columns).to.have.lengthOf(expectedColumnCount);
+      expect(cells).to.have.lengthOf(expectedCellCount);
 
-    // Filter cells that don't have any textContent. Grid creates empty cells for some calculations,
-    // but we don't need them.
-    const cells = Array.from(grid!.querySelectorAll('vaadin-grid-cell-content')).filter(
-      ({ textContent }) => textContent,
-    );
-
-    return [columns, cells] as const;
+      return [columns, cells] as const;
+    });
   }
 
   afterEach(cleanup);
@@ -102,10 +100,10 @@ describe('Grid', () => {
         </Grid>,
       );
 
-      const [columns, cells] = await getGridMeaningfulParts('vaadin-grid-column');
-
-      expect(columns).to.have.length(3);
-      expect(cells).to.have.length(15);
+      const [columns, cells] = await getGridMeaningfulParts('vaadin-grid-column', {
+        expectedColumnCount: 3,
+        expectedCellCount: 15,
+      });
 
       const [headerRendererCell, headerInlineCell, nameHeaderCell, surnameHeaderCell, roleHeaderCell] = cells.slice(
         0,
@@ -217,10 +215,10 @@ describe('Grid', () => {
         </Grid>,
       );
 
-      const [columns, cells] = await getGridMeaningfulParts('vaadin-grid-column');
-
-      expect(columns).to.have.length(1);
-      expect(cells).to.have.length(6);
+      const [columns, cells] = await getGridMeaningfulParts('vaadin-grid-column', {
+        expectedColumnCount: 1,
+        expectedCellCount: 6,
+      });
 
       const [groupHeaderCell, nameHeaderCell, nameFooterCell, groupFooterCell] = cells;
 
@@ -239,9 +237,10 @@ describe('Grid', () => {
         </Grid>,
       );
 
-      const [columns, cells] = await getGridMeaningfulParts('vaadin-grid-filter-column');
-      expect(columns).to.have.length(1);
-      expect(cells).to.have.length(3);
+      const [columns, cells] = await getGridMeaningfulParts('vaadin-grid-filter-column', {
+        expectedColumnCount: 1,
+        expectedCellCount: 3,
+      });
 
       const [footerCell, bodyCell1, bodyCell2] = cells;
 
@@ -257,9 +256,10 @@ describe('Grid', () => {
         </Grid>,
       );
 
-      const [columns, cells] = await getGridMeaningfulParts('vaadin-grid-filter-column');
-      expect(columns).to.have.length(1);
-      expect(cells).to.have.length(4);
+      const [columns, cells] = await getGridMeaningfulParts('vaadin-grid-filter-column', {
+        expectedColumnCount: 1,
+        expectedCellCount: 4,
+      });
 
       const footerCell = cells[1];
 
@@ -277,9 +277,10 @@ describe('Grid', () => {
         </Grid>,
       );
 
-      const [columns, cells] = await getGridMeaningfulParts('vaadin-grid-selection-column');
-      expect(columns).to.have.length(1);
-      expect(cells).to.have.length(4);
+      const [columns, cells] = await getGridMeaningfulParts('vaadin-grid-selection-column', {
+        expectedColumnCount: 1,
+        expectedCellCount: 4,
+      });
 
       const [headerCell, footerCell, bodyCell1, bodyCell2] = cells;
 
@@ -298,9 +299,10 @@ describe('Grid', () => {
         </Grid>,
       );
 
-      const [columns, cells] = await getGridMeaningfulParts('vaadin-grid-selection-column');
-      expect(columns).to.have.length(1);
-      expect(cells).to.have.length(4);
+      const [columns, cells] = await getGridMeaningfulParts('vaadin-grid-selection-column', {
+        expectedColumnCount: 1,
+        expectedCellCount: 4,
+      });
 
       const [headerCell, footerCell] = cells;
 
@@ -317,9 +319,10 @@ describe('Grid', () => {
         </Grid>,
       );
 
-      const [columns, cells] = await getGridMeaningfulParts('vaadin-grid-sort-column');
-      expect(columns).to.have.length(1);
-      expect(cells).to.have.length(3);
+      const [columns, cells] = await getGridMeaningfulParts('vaadin-grid-sort-column', {
+        expectedColumnCount: 1,
+        expectedCellCount: 3,
+      });
 
       const [footerCell, bodyCell1, bodyCell2] = cells;
 
@@ -335,9 +338,10 @@ describe('Grid', () => {
         </Grid>,
       );
 
-      const [columns, cells] = await getGridMeaningfulParts('vaadin-grid-sort-column');
-      expect(columns).to.have.length(1);
-      expect(cells).to.have.length(4);
+      const [columns, cells] = await getGridMeaningfulParts('vaadin-grid-sort-column', {
+        expectedColumnCount: 1,
+        expectedCellCount: 4,
+      });
 
       const footerCell = cells[1];
 
@@ -355,9 +359,10 @@ describe('Grid', () => {
         </GridPro>,
       );
 
-      const [columns, cells] = await getGridMeaningfulParts('vaadin-grid-pro-edit-column');
-      expect(columns).to.have.length(1);
-      expect(cells).to.have.length(4);
+      const [columns, cells] = await getGridMeaningfulParts('vaadin-grid-pro-edit-column', {
+        expectedColumnCount: 1,
+        expectedCellCount: 4,
+      });
 
       const [headerCell, footerCell, bodyCell1, bodyCell2] = cells;
 
@@ -374,14 +379,83 @@ describe('Grid', () => {
         </GridPro>,
       );
 
-      const [columns, cells] = await getGridMeaningfulParts('vaadin-grid-pro-edit-column');
-      expect(columns).to.have.length(1);
-      expect(cells).to.have.length(4);
+      const [columns, cells] = await getGridMeaningfulParts('vaadin-grid-pro-edit-column', {
+        expectedColumnCount: 1,
+        expectedCellCount: 4,
+      });
 
       const [headerCell, footerCell] = cells;
 
       expect(headerCell).to.have.text('Name');
       expect(footerCell).to.have.text('Name Footer');
+    });
+
+    describe('default renderers', () => {
+      type GridProItem = { name: string };
+
+      let items: GridProItem[];
+
+      function doubleClick(element: Element) {
+        element.dispatchEvent(new MouseEvent('dblclick', { bubbles: true }));
+      }
+
+      beforeEach(() => {
+        items = [{ name: 'name-0' }];
+      });
+
+      it('should toggle edit mode on double click', async () => {
+        render(
+          <GridPro<GridProItem> items={items}>
+            <GridProEditColumn<Item> path="name" />
+          </GridPro>,
+        );
+
+        const cellContent = await until(() =>
+          Array.from(document.querySelectorAll('vaadin-grid-cell-content')).find(
+            (cellContent) => cellContent.textContent === 'name-0',
+          ),
+        );
+
+        for (let i = 0; i < 2; i++) {
+          expect(cellContent.textContent?.trim()).to.equal('name-0');
+          doubleClick(cellContent);
+
+          const cellEditor = await until(() =>
+            cellContent.querySelector<HTMLInputElement>('vaadin-grid-pro-edit-text-field'),
+          );
+          expect(cellContent.textContent?.trim()).to.be.empty;
+          cellEditor.blur();
+
+          await until(() => !cellContent.contains(cellEditor));
+        }
+      });
+
+      it('should update the content', async () => {
+        render(
+          <GridPro<GridProItem> items={items}>
+            <GridProEditColumn<Item> path="name" />
+          </GridPro>,
+        );
+
+        // Get the cell content
+        const cellContent = await until(() =>
+          Array.from(document.querySelectorAll('vaadin-grid-cell-content')).find(
+            (cellContent) => cellContent.textContent === 'name-0',
+          ),
+        );
+        doubleClick(cellContent);
+        const cellEditor = await until(() =>
+          cellContent.querySelector<HTMLInputElement>('vaadin-grid-pro-edit-text-field'),
+        );
+        // Set a new value
+        cellEditor.value = 'foo';
+        // Exit edit mode
+        cellEditor.blur();
+        // Wait for the editor to close
+        await until(() => !cellContent.contains(cellEditor));
+        // Expect the cell content to be connected and have the new value
+        await until(() => cellContent.textContent === 'foo');
+      });
     });
 
     describe('custom renderers', () => {
@@ -445,6 +519,33 @@ describe('Grid', () => {
         expect(cellContent.isConnected).to.be.false;
       });
 
+      it('should toggle edit mode on double click', async () => {
+        render(
+          <GridPro<GridProItem> items={items}>
+            <GridProEditColumn<Item> path="name" editModeRenderer={() => <input className="editor" />}>
+              {({ item }) => <span className="content">{item.name}</span>}
+            </GridProEditColumn>
+          </GridPro>,
+        );
+
+        const cellContent = await until(() =>
+          Array.from(document.querySelectorAll('vaadin-grid-cell-content')).find((cellContent) =>
+            cellContent.querySelector('.content'),
+          ),
+        );
+
+        for (let i = 0; i < 2; i++) {
+          expect(cellContent.textContent?.trim()).to.equal('name-0');
+          doubleClick(cellContent);
+
+          const cellEditor = await until(() => cellContent.querySelector<HTMLInputElement>('.editor'));
+          expect(cellContent.textContent?.trim()).to.be.empty;
+          cellEditor.blur();
+
+          await until(() => !cellContent.contains(cellEditor));
+        }
+      });
+
       it('should have updated content', async () => {
         render(
           <GridPro<GridProItem> items={items}>
@@ -470,6 +571,36 @@ describe('Grid', () => {
         expect(cellContent).to.have.text('foo');
       });
 
+      it('should toggle edit mode on double click without a custom editor', async () => {
+        render(
+          <GridPro<GridProItem> items={items}>
+            <GridProEditColumn<Item>
+              path="name"
+              renderer={({ item }) => <span className="content">{item.name}</span>}
+            />
+          </GridPro>,
+        );
+
+        const cellContent = await until(() =>
+          Array.from(document.querySelectorAll('vaadin-grid-cell-content')).find((cellContent) =>
+            cellContent.querySelector('.content'),
+          ),
+        );
+
+        for (let i = 0; i < 2; i++) {
+          expect(cellContent.textContent?.trim()).to.equal('name-0');
+          doubleClick(cellContent);
+
+          const cellEditor = await until(() =>
+            cellContent.querySelector<HTMLInputElement>('vaadin-grid-pro-edit-text-field'),
+          );
+          expect(cellContent.textContent?.trim()).to.be.empty;
+          cellEditor.blur();
+
+          await until(() => !cellContent.contains(cellEditor));
+        }
+      });
+
       it('should update the content without a custom editor', async () => {
         render(
           <GridPro<GridProItem> items={items}>
@@ -493,6 +624,31 @@ describe('Grid', () => {
         cellContent = await until(() => document.querySelector('.content'));
 
         expect(cellContent).to.have.text('foo');
+      });
+
+      it('should toggle edit mode on double click without a custom renderer', async () => {
+        render(
+          <GridPro<GridProItem> items={items}>
+            <GridProEditColumn<Item> path="name" editModeRenderer={() => <input className="editor" />} />
+          </GridPro>,
+        );
+
+        const cellContent = await until(() =>
+          Array.from(document.querySelectorAll('vaadin-grid-cell-content')).find(
+            (cellContent) => cellContent.textContent === 'name-0',
+          ),
+        );
+
+        for (let i = 0; i < 2; i++) {
+          expect(cellContent.textContent?.trim()).to.equal('name-0');
+          doubleClick(cellContent);
+
+          const cellEditor = await until(() => cellContent.querySelector<HTMLInputElement>('.editor'));
+          expect(cellContent.textContent?.trim()).to.equal('');
+          cellEditor.blur();
+
+          await until(() => !cellContent.contains(cellEditor));
+        }
       });
 
       it('should update the content without a custom renderer', async () => {
@@ -585,9 +741,10 @@ describe('Grid', () => {
         </Grid>,
       );
 
-      const [columns, cells] = await getGridMeaningfulParts('vaadin-grid-tree-column');
-      expect(columns).to.have.length(1);
-      expect(cells).to.have.length(7);
+      const [columns, cells] = await getGridMeaningfulParts('vaadin-grid-tree-column', {
+        expectedColumnCount: 1,
+        expectedCellCount: 7,
+      });
 
       const [treeHeaderCell, nameHeaderCell, treeFooterCell] = cells;
 
@@ -604,9 +761,10 @@ describe('Grid', () => {
         </Grid>,
       );
 
-      const [columns, cells] = await getGridMeaningfulParts('vaadin-grid-tree-column');
-      expect(columns).to.have.length(1);
-      expect(cells).to.have.length(7);
+      const [columns, cells] = await getGridMeaningfulParts('vaadin-grid-tree-column', {
+        expectedColumnCount: 1,
+        expectedCellCount: 7,
+      });
 
       const [treeHeaderCell, nameHeaderCell, treeFooterCell] = cells;
 

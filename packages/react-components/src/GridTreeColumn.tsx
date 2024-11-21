@@ -47,10 +47,10 @@ function GridTreeColumn<TItem = GridDefaultItem>(
   ref: ForwardedRef<GridTreeColumnElement<TItem>>,
 ): ReactElement | null {
   const [headerPortals, headerRenderer] = useSimpleOrChildrenRenderer(props.headerRenderer, header, {
-    renderSync: true,
+    renderMode: 'microtask',
   });
   const [footerPortals, footerRenderer] = useSimpleOrChildrenRenderer(props.footerRenderer, footer, {
-    renderSync: true,
+    renderMode: 'microtask',
   });
 
   return (

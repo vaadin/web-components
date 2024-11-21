@@ -10,7 +10,7 @@ import {
 export function useSimpleOrChildrenRenderer<O extends HTMLElement>(
   fnRenderer?: ComponentType<ReactSimpleRendererProps<O>> | null,
   children?: ReactNode | ComponentType<ReactSimpleRendererProps<O>>,
-  config?: RendererConfig,
+  config?: RendererConfig<WebComponentSimpleRenderer<O>>,
 ): UseRendererResult<WebComponentSimpleRenderer<O>> {
   let _children: ReactNode | undefined;
   let _fnRenderer: ComponentType<ReactSimpleRendererProps<O>> | null | undefined;

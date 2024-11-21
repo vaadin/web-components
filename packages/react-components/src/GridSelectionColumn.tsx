@@ -50,13 +50,13 @@ function GridSelectionColumn<TItem = GridDefaultItem>(
   ref: ForwardedRef<GridSelectionColumnElement<TItem>>,
 ): ReactElement | null {
   const [headerPortals, headerRenderer] = useSimpleOrChildrenRenderer(props.headerRenderer, header, {
-    renderSync: true,
+    renderMode: 'microtask',
   });
   const [footerPortals, footerRenderer] = useSimpleOrChildrenRenderer(props.footerRenderer, footer, {
-    renderSync: true,
+    renderMode: 'microtask',
   });
   const [bodyPortals, bodyRenderer] = useModelRenderer(props.renderer ?? props.children, {
-    renderSync: true,
+    renderMode: 'microtask',
   });
 
   return (
