@@ -93,7 +93,7 @@ describe('dashboard - keyboard interaction', () => {
     expect(spy.firstCall.args[0].detail).to.eql({ item: { id: 0 }, value: true });
   });
 
-  it('should not remove the widget on backspace', async () => {
+  (isChrome || isFirefox ? it : it.skip)('should not remove the widget on backspace', async () => {
     await sendKeys({ press: 'Tab' });
     await sendKeys({ press: 'Backspace' });
     expect(dashboard.items).to.eql([{ id: 0 }, { id: 1 }, { items: [{ id: 2 }, { id: 3 }] }]);

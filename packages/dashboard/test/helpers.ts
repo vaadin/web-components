@@ -192,7 +192,7 @@ export function expectLayout(dashboard: HTMLElement, layout: Array<Array<number 
 }
 
 export function getDraggable(element: Element): Element {
-  return element.shadowRoot!.querySelector('#drag-handle')!;
+  return element.shadowRoot!.querySelector('[part~="move-button"]')!;
 }
 
 type TestDragEvent = Event & {
@@ -304,7 +304,7 @@ export function fireResizeEnd(dragOverTarget: Element): void {
 }
 
 export function getRemoveButton(section: DashboardWidget | DashboardSection): HTMLElement {
-  return section.shadowRoot!.querySelector('#remove-button') as HTMLElement;
+  return section.shadowRoot!.querySelector('[part~="remove-button"]') as HTMLElement;
 }
 
 export function describeBidirectional(name: string, tests: () => void): void {
@@ -323,35 +323,35 @@ export function describeBidirectional(name: string, tests: () => void): void {
 }
 
 export function getMoveForwardButton(element: HTMLElement): HTMLElement {
-  return element.shadowRoot!.querySelector('#move-forward') as HTMLElement;
+  return element.shadowRoot!.querySelector('[part~="move-forward-button"]') as HTMLElement;
 }
 
 export function getMoveBackwardButton(element: HTMLElement): HTMLElement {
-  return element.shadowRoot!.querySelector('#move-backward') as HTMLElement;
+  return element.shadowRoot!.querySelector('[part~="move-backward-button"]') as HTMLElement;
 }
 
 export function getMoveApplyButton(element: HTMLElement): HTMLElement {
-  return element.shadowRoot!.querySelector('#move-apply') as HTMLElement;
+  return element.shadowRoot!.querySelector('[part~="move-apply-button"]') as HTMLElement;
 }
 
 export function getResizeApplyButton(element: HTMLElement): HTMLElement {
-  return element.shadowRoot!.querySelector('#resize-apply') as HTMLElement;
+  return element.shadowRoot!.querySelector('[part~="resize-apply-button"]') as HTMLElement;
 }
 
 export function getResizeShrinkWidthButton(element: HTMLElement): HTMLElement {
-  return element.shadowRoot!.querySelector('#resize-shrink-width') as HTMLElement;
+  return element.shadowRoot!.querySelector('[part~="resize-shrink-width-button"]') as HTMLElement;
 }
 
 export function getResizeGrowWidthButton(element: HTMLElement): HTMLElement {
-  return element.shadowRoot!.querySelector('#resize-grow-width') as HTMLElement;
+  return element.shadowRoot!.querySelector('[part~="resize-grow-width-button"]') as HTMLElement;
 }
 
 export function getResizeShrinkHeightButton(element: HTMLElement): HTMLElement {
-  return element.shadowRoot!.querySelector('#resize-shrink-height') as HTMLElement;
+  return element.shadowRoot!.querySelector('[part~="resize-shrink-height-button"]') as HTMLElement;
 }
 
 export function getResizeGrowHeightButton(element: HTMLElement): HTMLElement {
-  return element.shadowRoot!.querySelector('#resize-grow-height') as HTMLElement;
+  return element.shadowRoot!.querySelector('[part~="resize-grow-height-button"]') as HTMLElement;
 }
 
 /**

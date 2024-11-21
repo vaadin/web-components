@@ -118,16 +118,16 @@ class DashboardWidget extends DashboardItemMixin(ElementMixin(ThemableMixin(Poly
           display: none !important;
         }
 
-        :host(:not([editable])) #resize-handle {
+        :host(:not([editable])) [part~='resize-button'] {
           display: none;
         }
 
-        #content {
+        [part~='content'] {
           flex: 1;
           overflow: hidden;
         }
 
-        #resize-handle {
+        [part~='resize-button'] {
           position: absolute;
           bottom: 0;
           inset-inline-end: 0;
