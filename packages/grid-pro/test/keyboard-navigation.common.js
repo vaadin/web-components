@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, isFirefox, nextFrame } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import {
@@ -32,14 +32,15 @@ describe('keyboard navigation', () => {
   });
 
   // FIXME: often fails in Firefox in CI
-  (isFirefox ? describe.skip : describe)('when `singleCellEdit` is true', () => {
+  describe('when `singleCellEdit` is true', () => {
     beforeEach(() => {
       grid.singleCellEdit = true;
     });
 
     it('should focus cell next available for editing within a same row in non-edit mode on Tab', async () => {
       const firstCell = getContainerCell(grid.$.items, 1, 0);
-      dblclick(firstCell._content);
+      firstCell.focus();
+      await sendKeys({ press: 'Enter' });
 
       const secondCell = getContainerCell(grid.$.items, 1, 1);
       const spy = sinon.spy(secondCell, 'focus');
@@ -49,7 +50,8 @@ describe('keyboard navigation', () => {
 
     it('should focus previous cell available for editing within a same row in non-edit mode on Shift Tab', async () => {
       const firstCell = getContainerCell(grid.$.items, 1, 1);
-      dblclick(firstCell._content);
+      firstCell.focus();
+      await sendKeys({ press: 'Enter' });
 
       const secondCell = getContainerCell(grid.$.items, 1, 0);
       const spy = sinon.spy(secondCell, 'focus');
@@ -61,7 +63,8 @@ describe('keyboard navigation', () => {
 
     it('should focus cell next available for editing on the next row in non-edit mode on Tab', async () => {
       const firstCell = getContainerCell(grid.$.items, 1, 1);
-      dblclick(firstCell._content);
+      firstCell.focus();
+      await sendKeys({ press: 'Enter' });
 
       const secondCell = getContainerCell(grid.$.items, 2, 0);
       const spy = sinon.spy(secondCell, 'focus');
@@ -71,7 +74,8 @@ describe('keyboard navigation', () => {
 
     it('should focus previous cell available for editing on the previous in non-edit mode on Shift Tab', async () => {
       const firstCell = getContainerCell(grid.$.items, 2, 0);
-      dblclick(firstCell._content);
+      firstCell.focus();
+      await sendKeys({ press: 'Enter' });
 
       const secondCell = getContainerCell(grid.$.items, 1, 1);
       const spy = sinon.spy(secondCell, 'focus');
@@ -95,7 +99,8 @@ describe('keyboard navigation', () => {
 
     it('should exit the edit mode for the cell on Enter, if `enterNextRow` is false', async () => {
       const firstCell = getContainerCell(grid.$.items, 1, 0);
-      dblclick(firstCell._content);
+      firstCell.focus();
+      await sendKeys({ press: 'Enter' });
 
       await sendKeys({ press: 'Enter' });
       expect(getCellEditor(firstCell)).to.be.not.ok;
@@ -117,7 +122,8 @@ describe('keyboard navigation', () => {
 
     it('should exit the edit mode for the cell on Shift Enter, if `enterNextRow` is false', async () => {
       const firstCell = getContainerCell(grid.$.items, 1, 0);
-      dblclick(firstCell._content);
+      firstCell.focus();
+      await sendKeys({ press: 'Enter' });
 
       await sendKeys({ down: 'Shift' });
       await sendKeys({ press: 'Enter' });
@@ -134,7 +140,8 @@ describe('keyboard navigation', () => {
       dragAndDropOver(headerContent[0], headerContent[1]);
 
       const firstCell = getContainerCell(grid.$.items, 1, 1);
-      dblclick(firstCell._content);
+      firstCell.focus();
+      await sendKeys({ press: 'Enter' });
 
       const secondCell = getContainerCell(grid.$.items, 1, 0);
       const spy = sinon.spy(secondCell, 'focus');
@@ -148,7 +155,8 @@ describe('keyboard navigation', () => {
       flushGrid(grid);
 
       const firstCell = getContainerCell(grid.$.items, 1, 0);
-      dblclick(firstCell._content);
+      firstCell.focus();
+      await sendKeys({ press: 'Enter' });
 
       const secondCell = getContainerCell(grid.$.items, 2, 0);
       const spy = sinon.spy(secondCell, 'focus');
