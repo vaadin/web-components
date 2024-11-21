@@ -258,7 +258,7 @@ class Dashboard extends DashboardLayoutMixin(ElementMixin(ThemableMixin(PolylitM
     let wrappers = [...hostElement.children].filter((el) => el.localName === WRAPPER_LOCAL_NAME);
     let previousWrapper = null;
 
-    const focusedWrapper = wrappers.find((wrapper) => wrapper.querySelector('[focused]'));
+    const focusedWrapper = wrappers.find((wrapper) => wrapper.querySelector(':focus'));
     const focusedWrapperWillBeRemoved = focusedWrapper && !this.__isActiveWrapper(focusedWrapper);
     const wrapperClosestToRemovedFocused =
       focusedWrapperWillBeRemoved && this.__getClosestActiveWrapper(focusedWrapper);
@@ -319,7 +319,7 @@ class Dashboard extends DashboardLayoutMixin(ElementMixin(ThemableMixin(PolylitM
         this.__focusWrapperContent(wrapperClosestToRemovedFocused || this.querySelector(WRAPPER_LOCAL_NAME));
       }
 
-      const focusedItem = this.querySelector('[focused]');
+      const focusedItem = this.querySelector(':focus');
       if (focusedItem && this.__outsideViewport(focusedItem)) {
         // If the focused wrapper is not in the viewport, scroll it into view
         focusedItem.scrollIntoView();

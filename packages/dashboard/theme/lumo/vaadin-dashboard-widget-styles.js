@@ -37,6 +37,10 @@ const dashboardWidgetAndSection = css`
     margin: calc(var(--_focus-ring-spacing-offset) * -1);
   }
 
+  :host([selected])::before {
+    outline: 1px solid var(--_focus-ring-color);
+  }
+
   :host([focused])::before {
     outline: var(--_focus-ring-width) solid var(--_focus-ring-color);
   }

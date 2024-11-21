@@ -179,9 +179,11 @@ class DashboardSection extends DashboardItemMixin(ElementMixin(ThemableMixin(Pol
   /** @protected */
   render() {
     return html`
-      ${this.__renderFocusButton('selectSection')} ${this.__renderMoveControls()}
+      ${this.__renderMoveControls()}
 
       <div id="focustrap">
+        ${this.__renderFocusButton('selectSection')}
+
         <header part="header">
           ${this.__renderDragHandle()}
           <h2 id="title" part="title">${this.sectionTitle}</h2>
