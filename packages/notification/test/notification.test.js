@@ -162,6 +162,13 @@ describe('vaadin-notification', () => {
         expect(container._detectIosNavbar.called).to.be.true;
         container._detectIosNavbar.restore();
       });
+
+      it('should bring to front on notification open ', () => {
+        notification.opened = false;
+        const spy = sinon.spy(container, 'bringToFront');
+        notification.opened = true;
+        expect(spy).to.be.calledOnce;
+      });
     });
   });
 

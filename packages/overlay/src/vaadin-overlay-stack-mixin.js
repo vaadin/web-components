@@ -69,7 +69,7 @@ export const OverlayStackMixin = (superClass) =>
 
       // Disable pointer events in other attached overlays
       getAttachedInstances().forEach((el) => {
-        if (el !== this) {
+        if (el !== this && el.$.overlay) {
           el.$.overlay.style.pointerEvents = 'none';
         }
       });
@@ -93,7 +93,9 @@ export const OverlayStackMixin = (superClass) =>
           // Skip the current instance
           continue;
         }
-        el.$.overlay.style.removeProperty('pointer-events');
+        if (el.$.overlay) {
+          el.$.overlay.style.removeProperty('pointer-events');
+        }
         if (!el.modeless) {
           // Stop after the last modal
           break;
