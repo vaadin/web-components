@@ -453,6 +453,7 @@ class Popover extends PopoverPositionMixin(
     this.__onTargetClick = this.__onTargetClick.bind(this);
     this.__onTargetFocusIn = this.__onTargetFocusIn.bind(this);
     this.__onTargetFocusOut = this.__onTargetFocusOut.bind(this);
+    this.__onTargetMouseDown = this.__onTargetMouseDown.bind(this);
     this.__onTargetMouseEnter = this.__onTargetMouseEnter.bind(this);
     this.__onTargetMouseLeave = this.__onTargetMouseLeave.bind(this);
 
@@ -550,6 +551,7 @@ class Popover extends PopoverPositionMixin(
     target.addEventListener('click', this.__onTargetClick);
     target.addEventListener('mouseenter', this.__onTargetMouseEnter);
     target.addEventListener('mouseleave', this.__onTargetMouseLeave);
+    target.addEventListener('mousedown', this.__onTargetMouseDown);
     target.addEventListener('focusin', this.__onTargetFocusIn);
     target.addEventListener('focusout', this.__onTargetFocusOut);
   }
@@ -563,6 +565,7 @@ class Popover extends PopoverPositionMixin(
     target.removeEventListener('click', this.__onTargetClick);
     target.removeEventListener('mouseenter', this.__onTargetMouseEnter);
     target.removeEventListener('mouseleave', this.__onTargetMouseLeave);
+    target.removeEventListener('mousedown', this.__onTargetMouseDown);
     target.removeEventListener('focusin', this.__onTargetFocusIn);
     target.removeEventListener('focusout', this.__onTargetFocusOut);
   }
@@ -803,6 +806,17 @@ class Popover extends PopoverPositionMixin(
     }
 
     this.__handleMouseLeave();
+  }
+
+  /** @private */
+  __onTargetMouseDown() {
+    if (this._overlayElement.opened && !isLastOverlay(this._overlayElement)) {
+      return;
+    }
+
+    if (this.__hasTrigger('hover') && !this.__hasTrigger('click')) {
+      this._openedStateController.close(true);
+    }
   }
 
   /** @private */

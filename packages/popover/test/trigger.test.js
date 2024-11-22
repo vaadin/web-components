@@ -149,6 +149,15 @@ describe('trigger', () => {
       expect(overlay.opened).to.be.true;
     });
 
+    it('should close on target mousedown', async () => {
+      mouseenter(target);
+      await nextRender();
+
+      mousedown(target);
+      await nextUpdate(popover);
+      expect(overlay.opened).to.be.false;
+    });
+
     it('should not open on target mouseenter when detached', async () => {
       popover.remove();
       mouseenter(target);
@@ -412,6 +421,21 @@ describe('trigger', () => {
       focusin(overlay);
       mouseenter(overlay);
       mouseleave(overlay);
+      await nextUpdate(popover);
+      expect(overlay.opened).to.be.true;
+    });
+  });
+
+  describe('hover and click', () => {
+    beforeEach(async () => {
+      popover.trigger = ['hover', 'click'];
+      await nextUpdate(popover);
+    });
+
+    it('should not close on target mousedown', async () => {
+      mouseenter(target);
+      await nextRender();
+      mousedown(target);
       await nextUpdate(popover);
       expect(overlay.opened).to.be.true;
     });
