@@ -8,7 +8,7 @@ import { dashboardWidgetAndSection } from './vaadin-dashboard-widget-styles.js';
 
 const section = css`
   :host {
-    --_focus-ring-spacing-max-offset: calc(var(--_vaadin-dashboard-spacing) / 2);
+    --_focus-ring-spacing-max-offset: calc(min(var(--_vaadin-dashboard-gap), var(--_vaadin-dashboard-padding)) / 2);
   }
 
   :host([move-mode]) ::slotted(*) {

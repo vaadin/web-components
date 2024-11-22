@@ -36,12 +36,12 @@ export const DashboardLayoutMixin = (superClass) =>
 
         #grid {
           box-sizing: border-box;
-          --_vaadin-dashboard-default-spacing: 1rem;
-          --_vaadin-dashboard-spacing: max(
+          --_vaadin-dashboard-default-padding: 1rem;
+          --_vaadin-dashboard-padding: max(
             0px,
-            var(--vaadin-dashboard-spacing, var(--_vaadin-dashboard-default-spacing))
+            var(--vaadin-dashboard-padding, var(--_vaadin-dashboard-default-padding))
           );
-          padding: var(--_vaadin-dashboard-spacing);
+          padding: var(--_vaadin-dashboard-padding);
 
           /* Default min and max column widths */
           --_vaadin-dashboard-default-col-min-width: 25rem;
@@ -86,8 +86,9 @@ export const DashboardLayoutMixin = (superClass) =>
           );
 
           grid-auto-rows: var(--_vaadin-dashboard-row-height);
-
-          gap: var(--_vaadin-dashboard-spacing);
+          --_vaadin-dashboard-default-gap: 1rem;
+          --_vaadin-dashboard-gap: max(0px, var(--vaadin-dashboard-gap, var(--_vaadin-dashboard-default-gap)));
+          gap: var(--_vaadin-dashboard-gap);
         }
 
         ::slotted(*) {
