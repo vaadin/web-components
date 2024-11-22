@@ -41,7 +41,7 @@ describe('date-picker in dialog', () => {
       await sendKeys({ press: 'Tab' });
 
       await nextRender();
-      await waitForScrollToFinish(overlayContent);
+      await waitForScrollToFinish(datePicker);
 
       // Focus the Today button
       await sendKeys({ press: 'Tab' });
@@ -63,7 +63,7 @@ describe('date-picker in dialog', () => {
       await sendKeys({ press: 'Tab' });
 
       await nextRender();
-      await waitForScrollToFinish(overlayContent);
+      await waitForScrollToFinish(datePicker);
 
       const spy = sinon.spy(datePicker.inputElement, 'focus');
 

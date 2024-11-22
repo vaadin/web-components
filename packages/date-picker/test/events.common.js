@@ -27,7 +27,7 @@ describe('events', () => {
 
     it('should not be fired on programmatic value change when having user input', async () => {
       await sendKeys({ type: '1/2/2000' });
-      await waitForScrollToFinish(datePicker._overlayContent);
+      await waitForScrollToFinish(datePicker);
       datePicker.value = '2000-01-01';
       await close(datePicker);
       expect(changeSpy.called).to.be.false;
@@ -52,7 +52,7 @@ describe('events', () => {
       describe('with user input', () => {
         beforeEach(async () => {
           await sendKeys({ type: '1/1/2022' });
-          await waitForScrollToFinish(datePicker._overlayContent);
+          await waitForScrollToFinish(datePicker);
           hasInputValueChangedSpy.resetHistory();
         });
 
@@ -86,7 +86,7 @@ describe('events', () => {
     describe('with value', () => {
       beforeEach(async () => {
         await sendKeys({ type: '1/1/2022' });
-        await waitForScrollToFinish(datePicker._overlayContent);
+        await waitForScrollToFinish(datePicker);
         await sendKeys({ press: 'Enter' });
         valueChangedSpy.resetHistory();
         hasInputValueChangedSpy.resetHistory();
