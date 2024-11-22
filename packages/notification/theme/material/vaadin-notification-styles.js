@@ -10,7 +10,7 @@ registerStyles(
       inset: 0 4px;
     }
 
-    @media (min-width: 430px) {
+    @media (min-width: 420px) {
       :host {
         inset: 0 12px;
       }
@@ -60,7 +60,7 @@ const notificationCard = css`
     border-radius: 0;
   }
 
-  @media (min-width: 430px) {
+  @media (min-width: 420px) {
     :host {
       margin: 24px 12px;
     }
