@@ -532,7 +532,13 @@ class Popover extends PopoverPositionMixin(
 
     document.documentElement.removeEventListener('click', this.__onGlobalClick, true);
 
-    this._openedStateController.close(true);
+    // Automatically close popover when it is removed from DOM
+    // Avoid closing if the popover is just moved in the DOM
+    queueMicrotask(() => {
+      if (!this.isConnected) {
+        this._openedStateController.close(true);
+      }
+    });
   }
 
   /**
