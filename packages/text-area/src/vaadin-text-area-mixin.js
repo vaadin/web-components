@@ -200,7 +200,6 @@ export const TextAreaMixin = (superClass) =>
       // Restore
       input.style.removeProperty('max-width');
       input.style.removeProperty('align-self');
-      inputField.style.removeProperty('display');
       inputField.style.removeProperty('height');
       inputField.scrollTop = scrollTop;
 
