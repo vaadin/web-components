@@ -19,7 +19,7 @@ const dashboardWidgetAndSection = css`
     /* stylelint-disable length-zero-no-unit */
     --_focus-ring-spacing-max-offset: 0px;
     /* Calculates the offset by which the focus ring should be shifted inwards based on a custom --vaadin-dashboard-gap or --vaadin-dashboard-padding values.
-    Effectively keeps the focus ring visible if --vaadin-dashboard-gap or --vaadin-dashboard-spacing is set to 0px */
+    Effectively keeps the focus ring visible if --vaadin-dashboard-gap or --vaadin-dashboard-padding is set to 0px */
     --_focus-ring-spacing-offset: min(
       max(
         calc(var(--_focus-ring-width) * -1),
