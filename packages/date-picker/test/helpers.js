@@ -1,6 +1,6 @@
 import { fire, listenOnce, makeSoloTouchEvent, nextRender } from '@vaadin/testing-helpers';
-import { flush } from '@polymer/polymer/lib/utils/flush.js';
 import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
+import { flush } from '@vaadin/component-base/src/debounce.js';
 
 export function activateScroller(scroller) {
   scroller.active = true;

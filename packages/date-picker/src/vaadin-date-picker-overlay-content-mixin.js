@@ -3,10 +3,9 @@
  * Copyright (c) 2016 - 2024 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { flush } from '@polymer/polymer/lib/utils/flush.js';
 import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import { timeOut } from '@vaadin/component-base/src/async.js';
-import { Debouncer } from '@vaadin/component-base/src/debounce.js';
+import { Debouncer, flush } from '@vaadin/component-base/src/debounce.js';
 import { addListener, setTouchAction } from '@vaadin/component-base/src/gestures.js';
 import { MediaQueryController } from '@vaadin/component-base/src/media-query-controller.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
