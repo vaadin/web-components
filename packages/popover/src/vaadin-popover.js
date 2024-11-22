@@ -534,7 +534,7 @@ class Popover extends PopoverPositionMixin(
 
     // Automatically close popover when it is removed from DOM
     // Avoid closing if the popover is just moved in the DOM
-    setTimeout(() => {
+    queueMicrotask(() => {
       if (!this.isConnected) {
         this._openedStateController.close(true);
       }
