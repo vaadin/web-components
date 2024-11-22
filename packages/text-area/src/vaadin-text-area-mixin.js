@@ -155,13 +155,13 @@ export const TextAreaMixin = (superClass) =>
         // position while resetting the textareas height. If the textarea had a large height, then removing its height
         // will reset its height to the default of two rows. That might reduce the height of the page, and the
         // browser might adjust the scroll position before we can restore the measured height of the textarea.
-        inputField.style.display = 'block';
         inputField.style.height = inputFieldHeight;
 
         // Fix the input element width so its scroll height isn't affected by host's disappearing scrollbars
         input.style.maxWidth = inputWidth;
 
         // Clear the height of the textarea to allow measuring a reduced scroll height
+        input.style.alignSelf = 'flex-start';
         input.style.height = 'auto';
       }
       this._oldValueLength = valueLength;
@@ -173,7 +173,7 @@ export const TextAreaMixin = (superClass) =>
 
       // Restore
       input.style.removeProperty('max-width');
-      inputField.style.removeProperty('display');
+      input.style.removeProperty('align-self');
       inputField.style.removeProperty('height');
       inputField.scrollTop = scrollTop;
     }
