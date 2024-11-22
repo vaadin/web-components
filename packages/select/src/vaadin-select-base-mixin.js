@@ -143,7 +143,7 @@ export const SelectBaseMixin = (superClass) =>
 
         /** @private */
         _phoneMediaQuery: {
-          value: '(max-width: 430px), (max-height: 430px)',
+          value: '(max-width: 450px), (max-height: 450px)',
         },
 
         /** @private */
