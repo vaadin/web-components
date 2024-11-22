@@ -38,7 +38,8 @@ import { DashboardLayoutMixin } from './vaadin-dashboard-layout-mixin.js';
  * `--vaadin-dashboard-col-max-width`  | maximum column width of the layout
  * `--vaadin-dashboard-row-min-height` | minimum row height of the layout
  * `--vaadin-dashboard-col-max-count`  | maximum column count of the layout
- * `--vaadin-dashboard-spacing`        | spacing between child elements and space around its outer edges. Must be in length units (0 is not allowed, 0px is)
+ * `--vaadin-dashboard-gap`            | gap between child elements. Must be in length units (0 is not allowed, 0px is)
+ * `--vaadin-dashboard-padding`        | space around the dashboard's outer edges. Must be in length units (0 is not allowed, 0px is)
  *
  * The following state attributes are available for styling:
  *

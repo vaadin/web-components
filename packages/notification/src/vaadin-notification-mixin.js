@@ -8,15 +8,17 @@ import { isTemplateResult } from 'lit/directive-helpers.js';
 import { isIOS } from '@vaadin/component-base/src/browser-utils.js';
 import { OverlayClassMixin } from '@vaadin/component-base/src/overlay-class-mixin.js';
 import { processTemplates } from '@vaadin/component-base/src/templates.js';
+import { OverlayStackMixin } from '@vaadin/overlay/src/vaadin-overlay-stack-mixin.js';
 import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
 
 /**
  * A mixin providing common notification container functionality.
  *
  * @polymerMixin
+ * @mixes OverlayStackMixin
  */
 export const NotificationContainerMixin = (superClass) =>
-  class extends superClass {
+  class extends OverlayStackMixin(superClass) {
     static get properties() {
       return {
         /**
@@ -361,6 +363,8 @@ export const NotificationMixin = (superClass) =>
         console.warn(`Invalid alignment parameter provided: position=${this.position}`);
         return;
       }
+
+      this._container.bringToFront();
 
       this._card.slot = this.position;
       if (this._container.firstElementChild && /top/u.test(this.position)) {

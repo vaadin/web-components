@@ -318,9 +318,9 @@ describe('dashboard layout', () => {
     });
   });
 
-  describe('spacing', () => {
-    it('should have default spacing', async () => {
-      // Clear the spacing used in the tests
+  describe('gap', () => {
+    it('should have default gap', async () => {
+      // Clear the gap used in the tests
       setSpacing(dashboard, undefined);
       // Increase the width of the dashboard to fit two items, paddings and a gap
       dashboard.style.width = `calc(${columnWidth}px * 2 + ${defaultSpacing * 3}px)`;
@@ -332,7 +332,7 @@ describe('dashboard layout', () => {
       expect(item1Left - item0Right).to.eql(defaultSpacing);
     });
 
-    it('should have custom spacing between items horizontally', async () => {
+    it('should have custom gap between items horizontally', async () => {
       const customSpacing = 10;
       setSpacing(dashboard, customSpacing);
       // Increase the width of the dashboard to fit two items, paddings and a gap
@@ -345,7 +345,7 @@ describe('dashboard layout', () => {
       expect(item1Left - item0Right).to.eql(customSpacing);
     });
 
-    it('should have custom spacing between items vertically', async () => {
+    it('should have custom gap between items vertically', async () => {
       const customSpacing = 10;
       setSpacing(dashboard, customSpacing);
       dashboard.style.width = `${columnWidth}px`;
@@ -355,6 +355,30 @@ describe('dashboard layout', () => {
       const { top: item1Top } = childElements[1].getBoundingClientRect();
       // Expect the items to have spacing of 10px
       expect(item1Top - item0Bottom).to.eql(customSpacing);
+    });
+  });
+
+  describe('padding', () => {
+    it('should have default padding', async () => {
+      // Clear the padding used in the tests
+      setSpacing(dashboard, undefined);
+      await onceResized(dashboard);
+
+      const { left: itemLeft } = childElements[0].getBoundingClientRect();
+      const { left: dashbboardLeft } = dashboard.getBoundingClientRect();
+      // Expect the dashbaord to have default padding of 1rem
+      expect(itemLeft - dashbboardLeft).to.eql(defaultSpacing);
+    });
+
+    it('should have custom gap between items horizontally', async () => {
+      const customSpacing = 10;
+      setSpacing(dashboard, customSpacing);
+      await onceResized(dashboard);
+
+      const { left: itemLeft } = childElements[0].getBoundingClientRect();
+      const { left: dashbboardLeft } = dashboard.getBoundingClientRect();
+      // Expect the items to have a gap of 10px
+      expect(itemLeft - dashbboardLeft).to.eql(customSpacing);
     });
   });
 
@@ -524,8 +548,8 @@ describe('dashboard layout', () => {
       expect(newTitleHeight).to.eql(titleHeight);
     });
 
-    describe('spacing', () => {
-      it('should have default spacing', async () => {
+    describe('gap', () => {
+      it('should have default gap', async () => {
         // Clear the spacing used in the tests
         setSpacing(dashboard, undefined);
         // Increase the width of the dashboard to fit two items, paddings and a gap
@@ -538,7 +562,7 @@ describe('dashboard layout', () => {
         expect(item3Left - item2Right).to.eql(defaultSpacing);
       });
 
-      it('should have a custom spacing between items horizontally', async () => {
+      it('should have a custom gap between items horizontally', async () => {
         const customSpacing = 10;
         setSpacing(dashboard, customSpacing);
         // Increase the width of the dashboard to fit two items, paddings and a gap
@@ -551,7 +575,7 @@ describe('dashboard layout', () => {
         expect(item3Left - item2Right).to.eql(customSpacing);
       });
 
-      it('should have a custom spacing between items vertically', async () => {
+      it('should have a custom gap between items vertically', async () => {
         const customSpacing = 10;
         setSpacing(dashboard, customSpacing);
         dashboard.style.width = `${columnWidth}px`;
