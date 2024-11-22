@@ -40,3 +40,7 @@ assertType<(index: number) => void>(virtualList.scrollToIndex);
 
 assertType<number>(virtualList.firstVisibleIndex);
 assertType<number>(virtualList.lastVisibleIndex);
+
+assertType<'single' | 'multi' | undefined>(virtualList.selectionMode);
+assertType<TestVirtualListItem[]>(virtualList.selectedItems);
+assertType<string | null | undefined>(virtualList.itemIdPath);

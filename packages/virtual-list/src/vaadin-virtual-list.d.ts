@@ -11,6 +11,7 @@ import type {
   VirtualListMixinClass,
   VirtualListRenderer,
 } from './vaadin-virtual-list-mixin.js';
+import type { VirtualListSelectionMixinClass } from './vaadin-virtual-list-selection-mixin.js';
 
 export { VirtualListDefaultItem, VirtualListItemModel, VirtualListRenderer };
 
@@ -40,7 +41,9 @@ export { VirtualListDefaultItem, VirtualListItemModel, VirtualListRenderer };
 declare class VirtualList<TItem = VirtualListDefaultItem> extends ThemableMixin(ElementMixin(HTMLElement)) {}
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
-interface VirtualList<TItem = VirtualListDefaultItem> extends VirtualListMixinClass<TItem> {}
+interface VirtualList<TItem = VirtualListDefaultItem>
+  extends VirtualListMixinClass<TItem>,
+    VirtualListSelectionMixinClass<TItem> {}
 
 declare global {
   interface HTMLElementTagNameMap {

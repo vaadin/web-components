@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -9,6 +9,7 @@
 
     <script type="module">
       import '@vaadin/virtual-list';
+      import { render, html } from 'lit';
       // import '@vaadin/virtual-list/vaadin-lit-virtual-list.js';
 
       const items = Array.from({ length: 100000 }).map((_, i) => {
@@ -16,16 +17,26 @@
       });
 
       const renderer = (root, _, { item }) => {
-        root.innerHTML = `<div>${item.label}</div>`;
+        if (item.label.includes('0')) {
+          render(html`<button>${item.label}</button>`, root);
+        } else {
+          render(html`<div>${item.label}</div>`, root);
+        }
       };
 
       const list = document.querySelector('vaadin-virtual-list');
       list.items = items;
       list.renderer = renderer;
+
+      list.selectionMode = 'multi';
+      list.selectedItems = [items[0]];
+      list.itemIdPath = 'label';
     </script>
   </head>
 
   <body>
+    <button>Focus</button>
     <vaadin-virtual-list style="height: 400px"></vaadin-virtual-list>
+    <button>Focus</button>
   </body>
 </html>
