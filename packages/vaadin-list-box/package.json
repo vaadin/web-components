@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-list-box",
-  "version": "23.5.8",
+  "version": "23.5.9",
   "publishConfig": {
     "access": "public"
   },
@@ -33,6 +33,6 @@
     "polymer"
   ],
   "dependencies": {
-    "@vaadin/list-box": "~23.5.8"
+    "@vaadin/list-box": "~23.5.9"
   }
 }
