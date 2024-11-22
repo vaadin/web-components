@@ -571,6 +571,7 @@ export const DatePickerOverlayContentMixin = (superClass) =>
 
       if (!animate) {
         this._monthScroller.position = targetPosition;
+        this._monthScroller.forceUpdate();
         this._targetPosition = undefined;
         this._repositionYearScroller();
         this.__tryFocusDate();
@@ -626,6 +627,7 @@ export const DatePickerOverlayContentMixin = (superClass) =>
           );
 
           this._monthScroller.position = this._targetPosition;
+          this._monthScroller.forceUpdate();
           this._targetPosition = undefined;
 
           revealResolve();
