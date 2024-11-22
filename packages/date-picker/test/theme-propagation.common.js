@@ -30,9 +30,8 @@ describe('theme attribute', () => {
     });
 
     it('should propagate theme attribute to month calendar', async () => {
-      const overlayContent = datePicker._overlayContent;
-      await waitForScrollToFinish(overlayContent);
-      const monthCalendar = overlayContent.querySelector('vaadin-month-calendar');
+      await waitForScrollToFinish(datePicker);
+      const monthCalendar = datePicker._overlayContent.querySelector('vaadin-month-calendar');
       expect(monthCalendar.getAttribute('theme')).to.equal('foo');
     });
   });

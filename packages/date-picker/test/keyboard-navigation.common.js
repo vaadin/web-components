@@ -31,7 +31,7 @@ describe('keyboard navigation', () => {
         // Move focus to the calendar
         await sendKeys({ press: 'Tab' });
 
-        const cell = getFocusedCell(datePicker._overlayContent);
+        const cell = getFocusedCell(datePicker);
         expect(cell.date).to.eql(new Date(today.getFullYear(), today.getMonth(), today.getDate()));
       });
 
@@ -47,7 +47,7 @@ describe('keyboard navigation', () => {
         // Move focus to the calendar
         await sendKeys({ press: 'Tab' });
 
-        const cell = getFocusedCell(datePicker._overlayContent);
+        const cell = getFocusedCell(datePicker);
         expect(cell.date).to.eql(new Date(today.getFullYear(), today.getMonth(), today.getDate()));
       });
     });
@@ -66,7 +66,7 @@ describe('keyboard navigation', () => {
         // Move focus to the calendar
         await sendKeys({ press: 'Tab' });
 
-        const cell = getFocusedCell(datePicker._overlayContent);
+        const cell = getFocusedCell(datePicker);
         expect(cell.date).to.eql(new Date(2001, 0, 1));
       });
 
@@ -101,7 +101,7 @@ describe('keyboard navigation', () => {
         // Move focus to the calendar
         await sendKeys({ press: 'Tab' });
 
-        const cell = getFocusedCell(datePicker._overlayContent);
+        const cell = getFocusedCell(datePicker);
         expect(cell.date).to.eql(new Date(2001, 0, 1));
       });
 
@@ -115,7 +115,7 @@ describe('keyboard navigation', () => {
         // Move focus to the calendar
         await sendKeys({ press: 'Tab' });
 
-        const cell = getFocusedCell(datePicker._overlayContent);
+        const cell = getFocusedCell(datePicker);
         expect(cell.date).to.eql(new Date(2001, 0, 1));
       });
     });
@@ -142,20 +142,20 @@ describe('keyboard navigation', () => {
 
         // Move focus inside the dropdown to the typed date.
         await sendKeys({ press: 'ArrowDown' });
-        await waitForScrollToFinish(datePicker._overlayContent);
+        await waitForScrollToFinish(datePicker);
 
         // Move focus to the previous week and it should instead move to the min date
         await sendKeys({ press: 'ArrowUp' });
-        await waitForScrollToFinish(datePicker._overlayContent);
+        await waitForScrollToFinish(datePicker);
 
-        let cell = getFocusedCell(datePicker._overlayContent);
+        let cell = getFocusedCell(datePicker);
         expect(cell.date).to.eql(new Date(2010, 0, 1));
 
         // Attempt to move focus to the previous week and it should stay on the min date
         await sendKeys({ press: 'ArrowUp' });
-        await waitForScrollToFinish(datePicker._overlayContent);
+        await waitForScrollToFinish(datePicker);
 
-        cell = getFocusedCell(datePicker._overlayContent);
+        cell = getFocusedCell(datePicker);
         expect(cell.date).to.eql(new Date(2010, 0, 1));
       });
 
@@ -164,20 +164,20 @@ describe('keyboard navigation', () => {
 
         // Move focus inside the dropdown to the typed date.
         await sendKeys({ press: 'ArrowDown' });
-        await waitForScrollToFinish(datePicker._overlayContent);
+        await waitForScrollToFinish(datePicker);
 
         // Move focus to the next week and it should instead move to the max date
         await sendKeys({ press: 'ArrowDown' });
-        await waitForScrollToFinish(datePicker._overlayContent);
+        await waitForScrollToFinish(datePicker);
 
-        let cell = getFocusedCell(datePicker._overlayContent);
+        let cell = getFocusedCell(datePicker);
         expect(cell.date).to.eql(new Date(2010, 0, 31));
 
         // Attempt to move focus to the next week and it should stay on the max date
         await sendKeys({ press: 'ArrowDown' });
-        await waitForScrollToFinish(datePicker._overlayContent);
+        await waitForScrollToFinish(datePicker);
 
-        cell = getFocusedCell(datePicker._overlayContent);
+        cell = getFocusedCell(datePicker);
         expect(cell.date).to.eql(new Date(2010, 0, 31));
       });
 
@@ -186,13 +186,13 @@ describe('keyboard navigation', () => {
 
         // Move focus inside the dropdown to the typed date.
         await sendKeys({ press: 'ArrowDown' });
-        await waitForScrollToFinish(datePicker._overlayContent);
+        await waitForScrollToFinish(datePicker);
 
         // Move focus to a disabled date
         await sendKeys({ press: 'ArrowRight' });
-        await waitForScrollToFinish(datePicker._overlayContent);
+        await waitForScrollToFinish(datePicker);
 
-        const cell = getFocusedCell(datePicker._overlayContent);
+        const cell = getFocusedCell(datePicker);
         expect(cell.date).to.eql(new Date(2010, 0, 29));
       });
 
@@ -202,7 +202,7 @@ describe('keyboard navigation', () => {
         // Move focus to a disabled date
         await sendKeys({ press: 'ArrowDown' });
         await sendKeys({ press: 'ArrowRight' });
-        await waitForScrollToFinish(datePicker._overlayContent);
+        await waitForScrollToFinish(datePicker);
 
         await sendKeys({ press: 'Enter' });
 

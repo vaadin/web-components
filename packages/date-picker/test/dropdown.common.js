@@ -11,7 +11,7 @@ import {
 } from '@vaadin/testing-helpers';
 import { resetMouse, sendKeys, sendMouse } from '@web/test-runner-commands';
 import sinon from 'sinon';
-import { getFocusedCell, monthsEqual, open, waitForOverlayRender } from './helpers.js';
+import { getFocusableCell, monthsEqual, open, waitForOverlayRender } from './helpers.js';
 
 describe('dropdown', () => {
   let datePicker, input, overlay;
@@ -237,7 +237,7 @@ describe('dropdown', () => {
 
   describe('date tap', () => {
     function dateTap() {
-      const date = getFocusedCell(datePicker._overlayContent);
+      const date = getFocusableCell(datePicker);
       mousedown(date);
       date.focus();
       date.click();
