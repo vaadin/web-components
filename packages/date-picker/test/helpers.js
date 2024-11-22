@@ -1,6 +1,7 @@
 import { fire, listenOnce, makeSoloTouchEvent, nextRender } from '@vaadin/testing-helpers';
 import { flush } from '@polymer/polymer/lib/utils/flush.js';
 import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
+import { isElementFocused } from '@vaadin/a11y-base/src/focus-utils.js';
 
 export function activateScroller(scroller) {
   scroller.active = true;
@@ -108,24 +109,38 @@ export function getFirstVisibleItem(scroller, bufferOffset = 0) {
   });
 }
 
-export function getFocusedMonth(overlayContent) {
-  const months = [...overlayContent.querySelectorAll('vaadin-month-calendar')];
-  return months.find((month) => {
-    return !!month.shadowRoot.querySelector('[part~="focused"]');
+/**
+ * @param {HTMLElement} root vaadin-date-picker or vaadin-date-picker-overlay-content
+ */
+export function getFocusableCell(root) {
+  const overlayContent = root._overlayContent ?? root;
+  const focusableMonth = [...overlayContent.querySelectorAll('vaadin-month-calendar')].find((month) => {
+    return !!month.shadowRoot.querySelector('[tabindex="0"]');
   });
+
+  if (focusableMonth) {
+    return focusableMonth.shadowRoot.querySelector('[tabindex="0"]');
+  }
 }
 
-export function getFocusedCell(overlayContent) {
-  const focusedMonth = getFocusedMonth(overlayContent);
-  return focusedMonth.shadowRoot.querySelector('[part~="focused"]');
+/**
+ * @param {HTMLElement} root vaadin-date-picker or vaadin-date-picker-overlay-content
+ */
+export function getFocusedCell(root) {
+  const focusableCell = getFocusableCell(root);
+  if (focusableCell && isElementFocused(focusableCell)) {
+    return focusableCell;
+  }
 }
 
 /**
  * Waits for the scroll to finish in the date-picker overlay content.
  *
- * @param {HTMLElement} overlayContent
+ * @param {HTMLElement} root vaadin-date-picker or vaadin-date-picker-overlay-content
  */
-export async function waitForScrollToFinish(overlayContent) {
+export async function waitForScrollToFinish(root) {
+  const overlayContent = root._overlayContent ?? root;
+
   if (overlayContent._revealPromise) {
     // The overlay content is scrolling.
     await overlayContent._revealPromise;

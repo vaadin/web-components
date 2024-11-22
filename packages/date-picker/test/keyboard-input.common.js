@@ -65,8 +65,7 @@ describe('keyboard', () => {
     // FIXME: flaky test often failing locally due to scroll animation
     it.skip('should display focused date while overlay focused', async () => {
       await sendKeys({ type: '1/2/2000' });
-      const content = datePicker._overlayContent;
-      await waitForScrollToFinish(content);
+      await waitForScrollToFinish(datePicker);
 
       // Move focus to the calendar
       await sendKeys({ press: 'Tab' });
@@ -212,7 +211,7 @@ describe('keyboard', () => {
       // Move focus to the calendar
       await sendKeys({ press: 'Tab' });
       await waitForOverlayRender();
-      const cell = getFocusedCell(overlayContent);
+      const cell = getFocusedCell(datePicker);
       const spy = sinon.spy(input, 'focus');
       tap(cell);
       expect(spy.calledOnce).to.be.true;
@@ -284,9 +283,9 @@ describe('keyboard', () => {
         // Move focus to the calendar
         await sendKeys({ press: 'Tab' });
 
-        await waitForScrollToFinish(overlayContent);
+        await waitForScrollToFinish(datePicker);
 
-        const cell = getFocusedCell(overlayContent);
+        const cell = getFocusedCell(datePicker);
         expect(cell).to.be.instanceOf(HTMLTableCellElement);
         expect(cell.getAttribute('part')).to.contain('today');
       });
@@ -300,9 +299,9 @@ describe('keyboard', () => {
         await sendKeys({ press: 'Tab' });
         await sendKeys({ up: 'Shift' });
 
-        await waitForScrollToFinish(overlayContent);
+        await waitForScrollToFinish(datePicker);
 
-        const cell = getFocusedCell(overlayContent);
+        const cell = getFocusedCell(datePicker);
         expect(cell).to.be.instanceOf(HTMLTableCellElement);
         expect(cell.getAttribute('part')).to.contain('today');
       });

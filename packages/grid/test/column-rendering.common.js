@@ -541,7 +541,7 @@ import { flushGrid, getCellContent, getHeaderCellContent, onceResized } from './
         keyDownOn(grid.shadowRoot.activeElement, 9, 'shift', 'Tab');
       }
 
-      function getFocusedCellText() {
+      function getFocusableCellText() {
         const focusedCell = grid.shadowRoot.activeElement;
         return getCellContent(focusedCell).textContent;
       }
@@ -556,24 +556,24 @@ import { flushGrid, getCellContent, getHeaderCellContent, onceResized } from './
         const lastVisibleCell = getBodyCell(0, lastVisibleIndex);
         lastVisibleCell.focus();
         backward();
-        expect(getFocusedCellText()).to.equal(`cell ${lastVisibleIndex - 1}`);
+        expect(getFocusableCellText()).to.equal(`cell ${lastVisibleIndex - 1}`);
         forward();
-        expect(getFocusedCellText()).to.equal(`cell ${lastVisibleIndex}`);
+        expect(getFocusableCellText()).to.equal(`cell ${lastVisibleIndex}`);
         forward();
-        expect(getFocusedCellText()).to.equal(`cell ${lastVisibleIndex + 1}`);
+        expect(getFocusableCellText()).to.equal(`cell ${lastVisibleIndex + 1}`);
         forward();
-        expect(getFocusedCellText()).to.equal(`cell ${lastVisibleIndex + 2}`);
+        expect(getFocusableCellText()).to.equal(`cell ${lastVisibleIndex + 2}`);
       });
 
       it('should focus the last cell on the row', () => {
         end();
-        expect(getFocusedCellText()).to.equal(`cell ${columns.length - 1}`);
+        expect(getFocusableCellText()).to.equal(`cell ${columns.length - 1}`);
       });
 
       it('should focus the first cell on the row', () => {
         end();
         home();
-        expect(getFocusedCellText()).to.equal('cell 0');
+        expect(getFocusableCellText()).to.equal('cell 0');
       });
 
       it('should focus the frozen to end cell without scrolling', async () => {
@@ -597,7 +597,7 @@ import { flushGrid, getCellContent, getHeaderCellContent, onceResized } from './
         columns.at(-1).frozenToEnd = true;
         end();
         backward();
-        expect(getFocusedCellText()).to.equal(`cell ${columns.length - 2}`);
+        expect(getFocusableCellText()).to.equal(`cell ${columns.length - 2}`);
       });
 
       it('should focus the cell after frozen cell', () => {
@@ -605,7 +605,7 @@ import { flushGrid, getCellContent, getHeaderCellContent, onceResized } from './
         end();
         home();
         forward();
-        expect(getFocusedCellText()).to.equal('cell 1');
+        expect(getFocusableCellText()).to.equal('cell 1');
       });
 
       it('should have a focusable body cell after scrolling', async () => {
@@ -628,7 +628,7 @@ import { flushGrid, getCellContent, getHeaderCellContent, onceResized } from './
 
       it('should not change the focusable body cell after scrolling', async () => {
         forward();
-        const focusedCellText = getFocusedCellText();
+        const focusedCellText = getFocusableCellText();
         // Tab to header
         shiftTab();
         await nextFrame();
@@ -641,7 +641,7 @@ import { flushGrid, getCellContent, getHeaderCellContent, onceResized } from './
         await nextFrame();
 
         // Expect the focused element to be the same cell
-        expect(getFocusedCellText()).to.equal(focusedCellText);
+        expect(getFocusableCellText()).to.equal(focusedCellText);
       });
     });
   });

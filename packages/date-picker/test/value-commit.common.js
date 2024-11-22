@@ -255,7 +255,7 @@ describe('value commit', () => {
       await waitForOverlayRender();
       // Focus yesterday's date.
       await sendKeys({ press: 'ArrowLeft' });
-      await waitForScrollToFinish(datePicker._overlayContent);
+      await waitForScrollToFinish(datePicker);
     });
 
     it('should commit on focused date selection with click', () => {
@@ -315,7 +315,7 @@ describe('value commit', () => {
       beforeEach(async () => {
         // Focus yesterday's date.
         await sendKeys({ press: 'ArrowLeft' });
-        await waitForScrollToFinish(datePicker._overlayContent);
+        await waitForScrollToFinish(datePicker);
       });
 
       it('should commit on focused date selection with click', () => {
