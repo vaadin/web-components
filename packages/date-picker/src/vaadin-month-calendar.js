@@ -50,7 +50,7 @@ class MonthCalendar extends MonthCalendarMixin(ThemableMixin(PolymerElement)) {
               <template is="dom-repeat" items="[[week]]">
                 <td
                   role="gridcell"
-                  part$="[[__getDatePart(item, focusedDate, selectedDate, enteredDate, minDate, maxDate, isDateDisabled, __hasFocus)]]"
+                  part$="[[__getDatePart(item, focusedDate, selectedDate, minDate, maxDate, isDateDisabled, enteredDate, __hasFocus)]]"
                   date="[[item]]"
                   tabindex$="[[__getDayTabindex(item, focusedDate)]]"
                   disabled$="[[__isDayDisabled(item, minDate, maxDate, isDateDisabled)]]"
@@ -108,7 +108,7 @@ class MonthCalendar extends MonthCalendarMixin(ThemableMixin(PolymerElement)) {
 
   /** @private */
   // eslint-disable-next-line @typescript-eslint/max-params
-  __getDatePart(date, focusedDate, selectedDate, enteredDate, minDate, maxDate, isDateDisabled, hasFocus) {
+  __getDatePart(date, focusedDate, selectedDate, minDate, maxDate, isDateDisabled, enteredDate, hasFocus) {
     const result = ['date'];
     const greaterThanToday = date > normalizeDate(new Date());
     const lessThanToday = date < normalizeDate(new Date());
@@ -117,7 +117,7 @@ class MonthCalendar extends MonthCalendarMixin(ThemableMixin(PolymerElement)) {
       result.push('disabled');
     }
 
-    if (this.__isDayFocused(date, focusedDate, enteredDate, hasFocus)) {
+    if (dateEquals(date, focusedDate) && (hasFocus || dateEquals(date, enteredDate))) {
       result.push('focused');
     }
 
@@ -138,11 +138,6 @@ class MonthCalendar extends MonthCalendarMixin(ThemableMixin(PolymerElement)) {
     }
 
     return result.join(' ');
-  }
-
-  /** @private */
-  __isDayFocused(date, focusedDate, enteredDate, hasFocus) {
-    return dateEquals(date, focusedDate) && (hasFocus || dateEquals(date, enteredDate));
   }
 
   /** @private */
@@ -175,11 +170,7 @@ class MonthCalendar extends MonthCalendarMixin(ThemableMixin(PolymerElement)) {
 
   /** @private */
   __getDayTabindex(date, focusedDate) {
-    if (this.__isDayFocused(date, focusedDate)) {
-      return '0';
-    }
-
-    return '-1';
+    return dateEquals(date, focusedDate) ? '0' : '-1';
   }
 }
 

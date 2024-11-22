@@ -2,8 +2,16 @@ import { expect } from '@vaadin/chai-plugins';
 import { aTimeout, enter, fixtureSync, nextRender, tap } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
-import { getAdjustedYear, parseDate } from '../src/vaadin-date-picker-helper.js';
-import { close, getFocusedCell, idleCallback, open, waitForOverlayRender, waitForScrollToFinish } from './helpers.js';
+import { formatISODate, getAdjustedYear, parseDate } from '../src/vaadin-date-picker-helper.js';
+import {
+  close,
+  getFocusableCell,
+  getFocusedCell,
+  idleCallback,
+  open,
+  waitForOverlayRender,
+  waitForScrollToFinish,
+} from './helpers.js';
 
 describe('keyboard', () => {
   let datePicker;
@@ -13,6 +21,17 @@ describe('keyboard', () => {
     return datePicker._overlayContent.focusedDate;
   }
 
+  function assertFocusedPart(date) {
+    const focusableCell = getFocusableCell(datePicker);
+    expect(formatISODate(focusableCell.date)).to.equal(date);
+    expect(focusableCell.getAttribute('part')).to.contain('focused');
+  }
+
+  function assertNoFocusedPart() {
+    const focusableCell = getFocusableCell(datePicker);
+    expect(focusableCell.getAttribute('part')).to.not.contain('focused');
+  }
+
   beforeEach(async () => {
     datePicker = fixtureSync('<vaadin-date-picker></vaadin-date-picker>');
     await nextRender();
@@ -20,60 +39,62 @@ describe('keyboard', () => {
     input.focus();
   });
 
-  describe('focused date', () => {
-    it('should focus parsed date', async () => {
-      await sendKeys({ type: '1/20/2000' });
+  describe('focused part', () => {
+    it('should add the part when entering parsable dates', async () => {
+      await sendKeys({ type: '1/1/2000' });
       await waitForOverlayRender();
-
-      expect(focusedDate().getMonth()).to.equal(0);
-      expect(focusedDate().getDate()).to.equal(20);
-    });
-
-    it('should change focused date on user input', async () => {
-      datePicker.value = '2000-01-01';
+      await waitForScrollToFinish(datePicker);
+      assertFocusedPart('2000-01-01');
 
       input.select();
-      await sendKeys({ type: '1/30/2000' });
-      await waitForOverlayRender();
-      expect(focusedDate().getDate()).to.equal(30);
+      await sendKeys({ type: '2/2/2002' });
+      await waitForScrollToFinish(datePicker);
+      assertFocusedPart('2002-02-02');
     });
 
-    it('should update focus on input value change', async () => {
-      await sendKeys({ type: '1/20/20' });
-      await sendKeys({ type: '17' });
+    it('should not add the part when entered date is unparsable', async () => {
+      await sendKeys({ type: 'foobar' });
       await waitForOverlayRender();
-
-      expect(focusedDate().getMonth()).to.equal(0);
-      expect(focusedDate().getFullYear()).to.equal(2017);
+      await waitForScrollToFinish(datePicker);
+      assertNoFocusedPart();
     });
 
+    it('should add the part when moving focus to calendar', async () => {
+      await sendKeys({ press: 'ArrowDown' });
+      await waitForOverlayRender();
+      assertFocusedPart(formatISODate(new Date()));
+    });
+
+    it('should update the part on value change', async () => {
+      await sendKeys({ press: 'ArrowDown' });
+      await waitForOverlayRender();
+
+      datePicker.value = '2000-01-01';
+      await waitForScrollToFinish(datePicker);
+      assertFocusedPart('2000-01-01');
+    });
+
+    it('should remove the part when entered date is cleared', async () => {
+      await sendKeys({ type: '1/1/2000' });
+      await waitForOverlayRender();
+      await waitForScrollToFinish(datePicker);
+      assertFocusedPart('2000-01-01');
+
+      input.select();
+      await sendKeys({ press: 'Backspace' });
+      await waitForScrollToFinish(datePicker);
+
+      assertNoFocusedPart();
+    });
+  });
+
+  describe('focused date', () => {
     it('should select focused date on Enter', async () => {
       await sendKeys({ type: '1/1/2001' });
       await waitForOverlayRender();
+      await waitForScrollToFinish(datePicker);
       await sendKeys({ press: 'Enter' });
       expect(datePicker.value).to.equal('2001-01-01');
-    });
-
-    it('should update focused date on value change', async () => {
-      datePicker.value = '2000-01-01';
-      await open(datePicker);
-      expect(focusedDate().getMonth()).to.equal(0);
-      expect(focusedDate().getDate()).to.equal(1);
-      expect(focusedDate().getFullYear()).to.equal(2000);
-    });
-
-    // FIXME: flaky test often failing locally due to scroll animation
-    it.skip('should display focused date while overlay focused', async () => {
-      await sendKeys({ type: '1/2/2000' });
-      await waitForScrollToFinish(datePicker);
-
-      // Move focus to the calendar
-      await sendKeys({ press: 'Tab' });
-
-      await nextRender(datePicker);
-
-      await sendKeys({ press: 'ArrowDown' });
-      expect(input.value).not.to.equal('1/2/2000');
     });
 
     it('should reflect focused date to input', async () => {
@@ -83,9 +104,8 @@ describe('keyboard', () => {
       // Move focus to the calendar
       await sendKeys({ press: 'Tab' });
 
-      await nextRender(datePicker);
-
       await sendKeys({ press: 'ArrowDown' });
+      await waitForScrollToFinish(datePicker);
       expect(input.value).to.equal('1/8/2000');
     });
   });

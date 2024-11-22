@@ -61,6 +61,7 @@ class MonthCalendar extends MonthCalendarMixin(ThemableMixin(PolylitMixin(LitEle
                 ${week.map((date) => {
                   const isFocused =
                     dateEquals(date, this.focusedDate) && (this.__hasFocus || dateEquals(date, this.enteredDate));
+                  const tabIndex = dateEquals(date, this.focusedDate) ? '0' : '-1';
                   const isSelected = dateEquals(date, this.selectedDate);
                   const isDisabled = !dateAllowed(date, this.minDate, this.maxDate, this.isDateDisabled);
                   const greaterThanToday = date > normalizeDate(new Date());
@@ -82,7 +83,7 @@ class MonthCalendar extends MonthCalendarMixin(ThemableMixin(PolylitMixin(LitEle
                       part="${parts.join(' ')}"
                       .date="${date}"
                       ?disabled="${isDisabled}"
-                      tabindex="${isFocused ? '0' : '-1'}"
+                      tabindex="${tabIndex}"
                       aria-selected="${isSelected ? 'true' : 'false'}"
                       aria-disabled="${isDisabled ? 'true' : 'false'}"
                       aria-label="${this.__getDayAriaLabel(date)}"
