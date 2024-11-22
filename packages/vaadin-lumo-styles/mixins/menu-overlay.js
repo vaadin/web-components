@@ -45,7 +45,7 @@ registerStyles('', menuOverlayCore, { moduleId: 'lumo-menu-overlay-core' });
 const menuOverlayExt = css`
   /* Small viewport (bottom sheet) styles */
   /* Use direct media queries instead of the state attributes ([phone] and [fullscreen]) provided by the elements */
-  @media (max-width: 430px), (max-height: 430px) {
+  @media (max-width: 450px), (max-height: 450px) {
     :host {
       top: 0 !important;
       right: 0 !important;
