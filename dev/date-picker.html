@@ -9,20 +9,22 @@
     <script type="module">
       import '@vaadin/date-picker';
       import '@vaadin/tooltip';
-      // const isDateDisabled = (date) => {
-      //   // Exclude weekends and the 16th day of each month:
-      //   const checkDate = new Date(0, 0);
-      //   checkDate.setFullYear(date.year);
-      //   checkDate.setMonth(date.month);
-      //   checkDate.setDate(date.day);
-      //   return checkDate.getDay() === 0 || checkDate.getDay() === 6 || checkDate.getDate() === 16;
-      // }
-      // const picker = document.querySelector('vaadin-date-picker');
-      // picker.isDateDisabled = isDateDisabled;
-      // picker.min = '2023-11-01';
+      const isDateDisabled = (date) => {
+        // Exclude weekends and the 16th day of each month:
+        const checkDate = new Date(0, 0);
+        checkDate.setFullYear(date.year);
+        checkDate.setMonth(date.month);
+        checkDate.setDate(date.day);
+        return checkDate.getDay() === 0 || checkDate.getDay() === 6 || checkDate.getDate() === 16;
+      }
+      const picker = document.querySelector('vaadin-date-picker');
+      picker.isDateDisabled = isDateDisabled;
+      picker.min = '2023-11-01';
     </script>
   </head>
   <body>
-    <vaadin-date-picker label="Start date"></vaadin-date-picker>
+    <vaadin-date-picker label="Start date">
+      <vaadin-tooltip slot="tooltip" text="Counted as first day"></vaadin-tooltip>
+    </vaadin-date-picker>
   </body>
 </html>

@@ -50,7 +50,7 @@ class MonthCalendar extends MonthCalendarMixin(ThemableMixin(PolymerElement)) {
               <template is="dom-repeat" items="[[week]]">
                 <td
                   role="gridcell"
-                  part$="[[__getDatePart(item, focusedDate, selectedDate, enteredDate, minDate, maxDate, isDateDisabled)]]"
+                  part$="[[__getDatePart(item, focusedDate, selectedDate, enteredDate, minDate, maxDate, isDateDisabled, __hasFocus)]]"
                   date="[[item]]"
                   tabindex$="[[__getDayTabindex(item, focusedDate)]]"
                   disabled$="[[__isDayDisabled(item, minDate, maxDate, isDateDisabled)]]"
@@ -108,7 +108,7 @@ class MonthCalendar extends MonthCalendarMixin(ThemableMixin(PolymerElement)) {
 
   /** @private */
   // eslint-disable-next-line @typescript-eslint/max-params
-  __getDatePart(date, focusedDate, selectedDate, enteredDate, minDate, maxDate, isDateDisabled) {
+  __getDatePart(date, focusedDate, selectedDate, enteredDate, minDate, maxDate, isDateDisabled, hasFocus) {
     const result = ['date'];
     const greaterThanToday = date > normalizeDate(new Date());
     const lessThanToday = date < normalizeDate(new Date());
@@ -117,7 +117,7 @@ class MonthCalendar extends MonthCalendarMixin(ThemableMixin(PolymerElement)) {
       result.push('disabled');
     }
 
-    if (this.__isDayFocused(date, focusedDate, enteredDate)) {
+    if (this.__isDayFocused(date, focusedDate, enteredDate, hasFocus)) {
       result.push('focused');
     }
 
@@ -141,8 +141,8 @@ class MonthCalendar extends MonthCalendarMixin(ThemableMixin(PolymerElement)) {
   }
 
   /** @private */
-  __isDayFocused(date, focusedDate, enteredDate) {
-    return dateEquals(date, focusedDate) && dateEquals(date, enteredDate);
+  __isDayFocused(date, focusedDate, enteredDate, hasFocus) {
+    return dateEquals(date, focusedDate) && (hasFocus || dateEquals(date, enteredDate));
   }
 
   /** @private */

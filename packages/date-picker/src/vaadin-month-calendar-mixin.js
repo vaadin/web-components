@@ -114,6 +114,11 @@ export const MonthCalendarMixin = (superClass) =>
         _notTapping: {
           type: Boolean,
         },
+
+        /** @private */
+        __hasFocus: {
+          type: Boolean,
+        },
       };
     }
 
@@ -131,6 +136,12 @@ export const MonthCalendarMixin = (superClass) =>
     ready() {
       super.ready();
       addListener(this.$.monthGrid, 'tap', this._handleTap.bind(this));
+    }
+
+    /** @override */
+    _setFocused(focused) {
+      super._setFocused(focused);
+      this.__hasFocus = focused;
     }
 
     /**
