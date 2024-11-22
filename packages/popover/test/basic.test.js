@@ -232,6 +232,17 @@ describe('popover', () => {
       expect(overlay.opened).to.be.false;
     });
 
+    it('should not close overlay when popover is moved in DOM', async () => {
+      target.click();
+      await nextRender();
+
+      const parent = popover.parentElement;
+      popover.remove();
+      parent.appendChild(popover);
+      await nextRender();
+      expect(overlay.opened).to.be.true;
+    });
+
     it('should remove document click listener when popover is detached', async () => {
       const spy = sinon.spy(document.documentElement, 'removeEventListener');
       popover.remove();
