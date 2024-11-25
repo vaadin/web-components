@@ -25,7 +25,6 @@ export const OverlayFocusMixin = (superClass) =>
         focusTrap: {
           type: Boolean,
           value: false,
-          sync: true,
         },
 
         /**
@@ -35,7 +34,6 @@ export const OverlayFocusMixin = (superClass) =>
         restoreFocusOnClose: {
           type: Boolean,
           value: false,
-          sync: true,
         },
 
         /**
@@ -45,7 +43,6 @@ export const OverlayFocusMixin = (superClass) =>
          */
         restoreFocusNode: {
           type: HTMLElement,
-          sync: true,
         },
       };
     }
