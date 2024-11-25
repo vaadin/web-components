@@ -1209,7 +1209,9 @@ export const DatePickerMixin = (subclass) =>
           this.__enteredDate = date;
         }
       } else if (this.__enteredDate != null) {
-        // Preserve the undefined value
+        // Do not override initial undefined value with null
+        // to avoid triggering a Lit update that can cause
+        // other scheduled properties to flush too early.
         this.__enteredDate = null;
       }
     }
