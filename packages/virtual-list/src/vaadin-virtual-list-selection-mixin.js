@@ -197,6 +197,9 @@ export const SelectionMixin = (superClass) =>
           this.__onNavigationTabKey(e.shiftKey);
         }
       } else if (e.key === 'Escape' && !e.defaultPrevented) {
+        // Prevent closing a dialog etc. when returning to navigation mode on Escape
+        e.preventDefault();
+        e.stopPropagation();
         this.__getRootElementWithFocus().focus();
       }
     }
