@@ -396,7 +396,9 @@ export const DatePickerMixin = (subclass) =>
     /** @override */
     set _inputElementValue(value) {
       super._inputElementValue = value;
-      this.__setEnteredDate(value);
+
+      const parsedDate = this.__parseDate(value);
+      this.__setEnteredDate(parsedDate);
     }
 
     /**
@@ -1185,26 +1187,29 @@ export const DatePickerMixin = (subclass) =>
         this.open();
       }
 
-      if (this._inputElementValue) {
-        const parsedDate = this.__parseDate(this._inputElementValue);
-        if (parsedDate) {
-          this._ignoreFocusedDateChange = true;
-          if (!dateEquals(parsedDate, this._focusedDate)) {
-            this._focusedDate = parsedDate;
-          }
-          this._ignoreFocusedDateChange = false;
+      const parsedDate = this.__parseDate(this._inputElementValue || '');
+      if (parsedDate) {
+        this._ignoreFocusedDateChange = true;
+        if (!dateEquals(parsedDate, this._focusedDate)) {
+          this._focusedDate = parsedDate;
         }
+        this._ignoreFocusedDateChange = false;
       }
 
-      this.__setEnteredDate(this._inputElementValue);
+      this.__setEnteredDate(parsedDate);
     }
 
-    /** @private */
-    __setEnteredDate(value) {
-      const parsedDate = this.__parseDate(value);
-      if (value && !dateEquals(parsedDate, this.__enteredDate)) {
-        this.__enteredDate = parsedDate;
+    /**
+     * @param {Date} date
+     * @private
+     */
+    __setEnteredDate(date) {
+      if (date) {
+        if (!dateEquals(this.__enteredDate, date)) {
+          this.__enteredDate = date;
+        }
       } else if (this.__enteredDate != null) {
+        // Preserve the undefined value
         this.__enteredDate = null;
       }
     }

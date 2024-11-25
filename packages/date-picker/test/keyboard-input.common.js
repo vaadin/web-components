@@ -88,6 +88,19 @@ describe('keyboard', () => {
       assertFocusedPart(formatISODate(new Date()));
     });
 
+    it('should add the part after selecting a date with click', async () => {
+      datePicker.click();
+      await waitForOverlayRender();
+
+      const cell = getFocusableCell(datePicker);
+      tap(cell);
+
+      datePicker.click();
+      await waitForOverlayRender();
+
+      assertFocusedPart(formatISODate(new Date()));
+    });
+
     it('should update the part on value change', async () => {
       await sendKeys({ press: 'ArrowDown' });
       await waitForOverlayRender();
