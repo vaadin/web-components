@@ -152,7 +152,10 @@ export const DatePickerMixin = (subclass) =>
          * Set true to prevent the overlay from opening automatically.
          * @attr {boolean} auto-open-disabled
          */
-        autoOpenDisabled: Boolean,
+        autoOpenDisabled: {
+          type: Boolean,
+          sync: true,
+        },
 
         /**
          * Set true to display ISO-8601 week numbers in the calendar. Notice that

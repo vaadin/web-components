@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { aTimeout, fixtureSync, nextRender, nextUpdate, outsideClick, tabKeyDown, tap } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, nextRender, outsideClick, tabKeyDown, tap } from '@vaadin/testing-helpers';
 import { sendKeys, setViewport } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import { getFocusableCell, open, touchTap, waitForOverlayRender } from './helpers.js';
@@ -97,9 +97,8 @@ describe('fullscreen mode', () => {
     });
 
     describe('auto open disabled', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         datePicker.autoOpenDisabled = true;
-        await nextUpdate(datePicker);
       });
 
       it('should not open overlay on input tap', () => {
