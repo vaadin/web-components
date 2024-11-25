@@ -361,6 +361,7 @@ export const DatePickerMixin = (subclass) =>
         /** @private */
         __enteredDate: {
           type: Date,
+          sync: true,
         },
       };
     }

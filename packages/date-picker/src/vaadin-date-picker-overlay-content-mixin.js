@@ -57,7 +57,6 @@ export const DatePickerOverlayContentMixin = (superClass) =>
         initialPosition: {
           type: Object,
           observer: '_initialPositionChanged',
-          sync: true,
         },
 
         _originDate: {
@@ -127,6 +126,7 @@ export const DatePickerOverlayContentMixin = (superClass) =>
 
         enteredDate: {
           type: Date,
+          sync: true,
         },
 
         /**
