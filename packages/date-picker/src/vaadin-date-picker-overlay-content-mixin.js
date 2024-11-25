@@ -125,6 +125,11 @@ export const DatePickerOverlayContentMixin = (superClass) =>
           type: Function,
         },
 
+        enteredDate: {
+          type: Date,
+          sync: true,
+        },
+
         /**
          * Input label
          */
@@ -152,7 +157,7 @@ export const DatePickerOverlayContentMixin = (superClass) =>
 
     static get observers() {
       return [
-        '__updateCalendars(calendars, i18n, minDate, maxDate, selectedDate, focusedDate, showWeekNumbers, _ignoreTaps, _theme, isDateDisabled)',
+        '__updateCalendars(calendars, i18n, minDate, maxDate, selectedDate, focusedDate, showWeekNumbers, _ignoreTaps, _theme, isDateDisabled, enteredDate)',
         '__updateCancelButton(_cancelButton, i18n)',
         '__updateTodayButton(_todayButton, i18n, minDate, maxDate, isDateDisabled)',
         '__updateYears(years, selectedDate, _theme)',
@@ -340,6 +345,7 @@ export const DatePickerOverlayContentMixin = (superClass) =>
       ignoreTaps,
       theme,
       isDateDisabled,
+      enteredDate,
     ) {
       if (calendars && calendars.length) {
         calendars.forEach((calendar) => {
@@ -351,6 +357,7 @@ export const DatePickerOverlayContentMixin = (superClass) =>
           calendar.selectedDate = selectedDate;
           calendar.showWeekNumbers = showWeekNumbers;
           calendar.ignoreTaps = ignoreTaps;
+          calendar.enteredDate = enteredDate;
 
           if (theme) {
             calendar.setAttribute('theme', theme);

@@ -19,13 +19,13 @@ describe('WAI-ARIA', () => {
       expect(input.getAttribute('aria-expanded')).to.equal('false');
     });
 
-    it('should set aria-hidden on all calendars except focused one', async () => {
+    it('should set aria-hidden on all calendars except focusable one', async () => {
       await open(datePicker);
       await nextRender(datePicker);
       const calendars = datePicker._overlayContent.querySelectorAll('vaadin-month-calendar');
       calendars.forEach((calendar) => {
-        const focused = calendar.shadowRoot.querySelector('[part~="focused"]');
-        expect(calendar.getAttribute('aria-hidden')).to.equal(focused ? null : 'true');
+        const focusable = calendar.shadowRoot.querySelector('[tabindex="0"]');
+        expect(calendar.getAttribute('aria-hidden')).to.equal(focusable ? null : 'true');
       });
     });
   });
