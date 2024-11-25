@@ -1064,6 +1064,15 @@ describe('PolylitMixin', () => {
       expect(element.hasAttribute('helper')).to.be.true;
     });
 
+    it('should not reflect immediately when setting sync property to the same value', () => {
+      element._setHelper('Helper');
+      element.value = 'foo';
+      expect(element.hasAttribute('helper')).to.be.false;
+
+      element.performUpdate();
+      expect(element.hasAttribute('helper')).to.be.true;
+    });
+
     it('should only call ready callback once during initialization', () => {
       expect(element.count).to.equal(1);
     });

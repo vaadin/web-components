@@ -4,6 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { dedupeMixin } from '@open-wc/dedupe-mixin';
+import { notEqual } from 'lit';
 import { get, set } from './path-utils.js';
 
 const caseMap = {};
@@ -105,7 +106,7 @@ const PolylitMixinImplementation = (superclass) => {
             this.requestUpdate(name, oldValue, options);
 
             // Enforce synchronous update
-            if (this.hasUpdated) {
+            if (notEqual(oldValue, value) && this.hasUpdated) {
               this.performUpdate();
             }
           },

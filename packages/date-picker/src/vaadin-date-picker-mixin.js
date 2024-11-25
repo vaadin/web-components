@@ -365,6 +365,7 @@ export const DatePickerMixin = (subclass) =>
         __enteredDate: {
           type: Date,
           sync: true,
+          value: null,
         },
       };
     }
@@ -1211,10 +1212,7 @@ export const DatePickerMixin = (subclass) =>
         if (!dateEquals(this.__enteredDate, date)) {
           this.__enteredDate = date;
         }
-      } else if (this.__enteredDate != null) {
-        // Do not override initial undefined value with null
-        // to avoid triggering a Lit update that can cause
-        // other scheduled properties to flush too early.
+      } else {
         this.__enteredDate = null;
       }
     }
