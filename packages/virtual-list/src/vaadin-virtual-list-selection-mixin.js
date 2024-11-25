@@ -87,7 +87,7 @@ export const SelectionMixin = (superClass) =>
 
       el.toggleAttribute(
         'focused',
-        this.selectionMode && this.__focusIndex === index && el.contains(document.activeElement),
+        !!this.selectionMode && this.__focusIndex === index && el.contains(document.activeElement),
       );
     }
 
@@ -170,7 +170,11 @@ export const SelectionMixin = (superClass) =>
 
     /** @private */
     __setNavigating(navigating) {
-      this.tabIndex = this.selectionMode && navigating ? 0 : -1;
+      if (this.selectionMode && navigating) {
+        this.tabIndex = 0;
+      } else {
+        this.removeAttribute('tabindex');
+      }
       this.$.focusexit.hidden = !this.selectionMode || !navigating;
       this.toggleAttribute('navigating', navigating);
       this.toggleAttribute('interacting', !navigating);
@@ -267,11 +271,11 @@ export const SelectionMixin = (superClass) =>
     }
 
     /** @private */
-    __onFocusOut() {
+    __onFocusOut(e) {
       if (!this.selectionMode) {
         return;
       }
-      if (!this.contains(document.activeElement)) {
+      if (!this.contains(e.relatedTarget)) {
         // If the focus leaves the virtual list, restore navigating state
         this.__setNavigating(true);
       }

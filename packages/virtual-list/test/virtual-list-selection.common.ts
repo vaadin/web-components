@@ -119,6 +119,25 @@ describe('selection', () => {
       expect(getRenderedItem(0)!.hasAttribute('selected')).to.be.true;
     });
 
+    it('should update selectedItems array', async () => {
+      beforeButton.focus();
+      await sendKeys({ press: 'Tab' });
+      await sendKeys({ press: 'Space' });
+      await sendKeys({ press: 'ArrowDown' });
+      await sendKeys({ press: 'Space' });
+      await nextFrame();
+      expect(list.selectedItems).to.deep.equal([list.items![0], list.items![1]]);
+    });
+
+    it('should dispatch selected-items-changed event', async () => {
+      const spy = sinon.spy();
+      list.addEventListener('selected-items-changed', spy);
+      beforeButton.focus();
+      await sendKeys({ press: 'Tab' });
+      await sendKeys({ press: 'Space' });
+      expect(spy.calledOnce).to.be.true;
+    });
+
     it('should unselect an item by clicking again', async () => {
       await click(getRenderedItem(0)!);
       await click(getRenderedItem(0)!);
@@ -209,6 +228,12 @@ describe('selection', () => {
       expect(getRenderedItem(0)!.hasAttribute('focused')).to.be.true;
     });
 
+    it('should throw on enter when there are no focusable child elements', async () => {
+      beforeButton.focus();
+      await sendKeys({ press: 'Tab' });
+      await sendKeys({ press: 'Enter' });
+    });
+
     describe('focusable children', () => {
       beforeEach(async () => {
         list.renderer = (root, _, { item }) => {
@@ -288,6 +313,20 @@ describe('selection', () => {
       it('should not select an item when clicking a child element', async () => {
         await click(getRenderedItem(0)!.querySelector('button')!);
         expect(list.selectedItems).to.be.empty;
+      });
+
+      it('should tab trough focusable children when selection mode is unset', async () => {
+        list.selectionMode = undefined;
+        beforeButton.focus();
+        await sendKeys({ press: 'Tab' });
+        expect(document.activeElement!.parentElement).to.equal(getRenderedItem(0));
+      });
+
+      it('should not have focused items when selection mode is unset', async () => {
+        list.selectionMode = undefined;
+        list.scrollToIndex(10);
+        await nextFrame();
+        expect(list.querySelector('[focused]')).to.be.null;
       });
     });
   });
