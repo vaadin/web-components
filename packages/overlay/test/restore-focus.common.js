@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { escKeyDown, fixtureSync, mousedown, nextRender } from '@vaadin/testing-helpers';
+import { escKeyDown, fixtureSync, mousedown, nextRender, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { getDeepActiveElement } from '@vaadin/a11y-base/src/focus-utils.js';
@@ -65,9 +65,8 @@ describe('restore focus', () => {
     it('should not restore focus on close by default', async () => {
       focusInput.focus();
       overlay.opened = true;
-      await nextRender();
+      await oneEvent(overlay, 'vaadin-overlay-open');
       overlay.opened = false;
-      await nextRender();
       expect(getDeepActiveElement()).to.not.equal(focusInput);
     });
 
@@ -79,9 +78,8 @@ describe('restore focus', () => {
       it('should not restore focus on close by default', async () => {
         focusInput.focus();
         overlay.opened = true;
-        await nextRender();
+        await oneEvent(overlay, 'vaadin-overlay-open');
         overlay.opened = false;
-        await nextRender();
         expect(getDeepActiveElement()).to.not.equal(focusInput);
       });
     });
@@ -104,28 +102,25 @@ describe('restore focus', () => {
       it('should restore focus on close', async () => {
         focusInput.focus();
         overlay.opened = true;
-        await nextRender();
+        await oneEvent(overlay, 'vaadin-overlay-open');
         overlay.opened = false;
-        await nextRender();
         expect(getDeepActiveElement()).to.equal(focusInput);
       });
 
       it('should restore focus on close in Shadow DOM', async () => {
         focusable.focus();
         overlay.opened = true;
-        await nextRender();
+        await oneEvent(overlay, 'vaadin-overlay-open');
         overlay.opened = false;
-        await nextRender();
         expect(getDeepActiveElement()).to.equal(focusable);
       });
 
       it('should not restore focus on close if focus was moved outside overlay', async () => {
         focusInput.focus();
         overlay.opened = true;
-        await nextRender();
+        await oneEvent(overlay, 'vaadin-overlay-open');
         focusable.focus();
         overlay.opened = false;
-        await nextRender();
         expect(getDeepActiveElement()).to.equal(focusable);
       });
 
@@ -137,9 +132,8 @@ describe('restore focus', () => {
         it('should restore focus to the restoreFocusNode', async () => {
           focusable.focus();
           overlay.opened = true;
-          await nextRender();
+          await oneEvent(overlay, 'vaadin-overlay-open');
           overlay.opened = false;
-          await nextRender();
           expect(getDeepActiveElement()).to.equal(focusInput);
         });
       });
@@ -148,11 +142,10 @@ describe('restore focus', () => {
         it('should prevent scroll when restoring focus on close after mousedown', async () => {
           focusable.focus();
           overlay.opened = true;
-          await nextRender();
+          await oneEvent(overlay, 'vaadin-overlay-open');
           const spy = sinon.spy(focusable, 'focus');
           mousedown(document.body);
           overlay.opened = false;
-          await nextRender();
           expect(spy).to.be.calledOnce;
           expect(spy.firstCall.args[0]).to.eql({ preventScroll: true });
         });
@@ -160,11 +153,10 @@ describe('restore focus', () => {
         it('should not prevent scroll when restoring focus on close after keydown', async () => {
           focusable.focus();
           overlay.opened = true;
-          await nextRender();
+          await oneEvent(overlay, 'vaadin-overlay-open');
           const spy = sinon.spy(focusable, 'focus');
           escKeyDown(document.body);
           overlay.opened = false;
-          await nextRender();
           expect(spy).to.be.calledOnce;
           expect(spy.firstCall.args[0]).to.eql({ preventScroll: false });
         });

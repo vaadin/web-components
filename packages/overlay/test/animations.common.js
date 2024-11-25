@@ -121,81 +121,64 @@ function afterOverlayClosingFinished(overlay, callback) {
       await nextRender();
     });
 
-    afterEach(async () => {
+    afterEach(() => {
       overlay.opened = false;
-      await nextRender();
     });
 
-    it('should flush closing overlay when re-opened while closing animation is in progress', async () => {
+    it('should flush closing overlay when re-opened while closing animation is in progress', () => {
       overlay.opened = true;
-      await nextRender();
       overlay._flushAnimation('opening');
 
       overlay.opened = false;
-      await nextRender();
 
       overlay.opened = true;
-      await nextRender();
 
       expect(overlay.hasAttribute('closing')).to.be.false;
     });
 
-    it('should flush opening overlay when closed while opening animation is in progress', async () => {
+    it('should flush opening overlay when closed while opening animation is in progress', () => {
       overlay.opened = true;
-      await nextRender();
 
       overlay.opened = false;
-      await nextRender();
 
       expect(overlay.hasAttribute('opening')).to.be.false;
     });
 
-    it('should detach the overlay even if it is scheduled for reopening', async () => {
+    it('should detach the overlay even if it is scheduled for reopening', () => {
       overlay.opened = true;
-      await nextRender();
 
       overlay.opened = false;
-      await nextRender();
 
       overlay.opened = true;
-      await nextRender();
 
       overlay.opened = false;
-      await nextRender();
       overlay._flushAnimation('closing');
 
       expect(overlay.parentNode).not.to.equal(document.body);
     });
 
-    it('should not animate closing if the overlay is explicitly hidden', async () => {
+    it('should not animate closing if the overlay is explicitly hidden', () => {
       overlay.opened = true;
-      await nextRender();
 
       overlay.hidden = true;
-      await nextRender();
 
       overlay.opened = false;
-      await nextRender();
 
       expect(overlay.parentNode).not.to.equal(document.body);
     });
 
-    it('should close the overlay if hidden is set while closing', async () => {
+    it('should close the overlay if hidden is set while closing', () => {
       overlay.opened = true;
-      await nextRender();
 
       overlay.opened = false;
-      await nextRender();
 
       overlay.hidden = true;
-      await nextRender();
 
       expect(overlay.parentNode).not.to.equal(document.body);
     });
 
-    it('should close the overlay when ESC pressed while opening', async () => {
+    it('should close the overlay when ESC pressed while opening', () => {
       overlay.opened = true;
-      await nextRender();
       escKeyDown(document.body);
       expect(overlay.opened).to.equal(false);
     });
@@ -214,11 +197,10 @@ function afterOverlayClosingFinished(overlay, callback) {
       overlays[0].opened = true;
     });
 
-    afterEach(async () => {
+    afterEach(() => {
       overlays.forEach((overlay) => {
         overlay.opened = false;
       });
-      await nextRender();
     });
 
     it('should remove pointer events on previously opened overlay', (done) => {
@@ -242,11 +224,10 @@ function afterOverlayClosingFinished(overlay, callback) {
       }
     });
 
-    afterEach(async () => {
+    afterEach(() => {
       overlays.forEach((overlay) => {
         overlay.opened = false;
       });
-      await nextRender();
     });
 
     it('should not remove pointer events on last opened overlay', (done) => {
@@ -275,11 +256,10 @@ function afterOverlayClosingFinished(overlay, callback) {
       }
     });
 
-    afterEach(async () => {
+    afterEach(() => {
       overlays.forEach((overlay) => {
         overlay.opened = false;
       });
-      await nextRender();
     });
 
     it('should restore pointer events on the remaining overlay', (done) => {
@@ -330,11 +310,10 @@ function afterOverlayClosingFinished(overlay, callback) {
       }
     });
 
-    afterEach(async () => {
+    afterEach(() => {
       overlays.forEach((overlay) => {
         overlay.opened = false;
       });
-      await nextRender();
     });
 
     it('should not remove pointer events on last opened overlay', (done) => {

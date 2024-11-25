@@ -24,9 +24,8 @@ describe('interactions', () => {
       await oneEvent(overlay, 'vaadin-overlay-open');
     });
 
-    afterEach(async () => {
+    afterEach(() => {
       overlay.opened = false;
-      await nextRender();
     });
 
     it('should close on Esc', () => {
@@ -75,16 +74,14 @@ describe('interactions', () => {
           root.appendChild(div);
         }
       };
-      await nextRender();
-      overlayPart = overlay.$.overlay;
-      backdrop = overlay.$.backdrop;
       overlay.opened = true;
       await oneEvent(overlay, 'vaadin-overlay-open');
+      overlayPart = overlay.$.overlay;
+      backdrop = overlay.$.backdrop;
     });
 
-    afterEach(async () => {
+    afterEach(() => {
       overlay.opened = false;
-      await nextRender();
     });
 
     describe('close on click', () => {

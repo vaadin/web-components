@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, isIOS, nextRender, oneEvent } from '@vaadin/testing-helpers';
+import { fixtureSync, isIOS, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import { createOverlay } from './helpers.js';
 
@@ -13,23 +13,20 @@ describe('vaadin-overlay', () => {
       overlay.renderer = (root) => {
         root.textContent = 'overlay content';
       };
-      await nextRender();
       overlay.opened = true;
       await oneEvent(overlay, 'vaadin-overlay-open');
     });
 
-    afterEach(async () => {
+    afterEach(() => {
       overlay.opened = false;
-      await nextRender();
     });
 
     it('should move under document body when open', () => {
       expect(overlay.parentElement).to.eql(document.body);
     });
 
-    it('should move back to original place after closing', async () => {
+    it('should move back to original place after closing', () => {
       overlay.opened = false;
-      await nextRender();
       expect(overlay.parentElement).to.eql(parent);
     });
   });
@@ -39,19 +36,16 @@ describe('vaadin-overlay', () => {
 
     beforeEach(async () => {
       overlay = createOverlay('overlay content');
-      await nextRender();
       overlay.opened = true;
       await oneEvent(overlay, 'vaadin-overlay-open');
     });
 
-    afterEach(async () => {
+    afterEach(() => {
       overlay.opened = false;
-      await nextRender();
     });
 
-    it('should not prevent clicking elements outside overlay when modeless (non-modal)', async () => {
+    it('should not prevent clicking elements outside overlay when modeless (non-modal)', () => {
       overlay.modeless = true;
-      await nextRender();
       expect(document.body.style.pointerEvents).to.eql('');
     });
 
@@ -59,9 +53,8 @@ describe('vaadin-overlay', () => {
       expect(document.body.style.pointerEvents).to.eql('none');
     });
 
-    it('should not prevent clicking document elements after modal is closed', async () => {
+    it('should not prevent clicking document elements after modal is closed', () => {
       overlay.opened = false;
-      await nextRender();
       expect(document.body.style.pointerEvents).to.eql('');
     });
 
@@ -76,15 +69,13 @@ describe('vaadin-overlay', () => {
 
     beforeEach(async () => {
       overlay = createOverlay('overlay content');
-      await nextRender();
-      backdrop = overlay.$.backdrop;
       overlay.opened = true;
       await oneEvent(overlay, 'vaadin-overlay-open');
+      backdrop = overlay.$.backdrop;
     });
 
-    afterEach(async () => {
+    afterEach(() => {
       overlay.opened = false;
-      await nextRender();
     });
 
     it('should set withBackdrop to false by default', () => {
@@ -95,15 +86,13 @@ describe('vaadin-overlay', () => {
       expect(backdrop.hidden).to.be.true;
     });
 
-    it('should show backdrop when withBackdrop is true', async () => {
+    it('should show backdrop when withBackdrop is true', () => {
       overlay.withBackdrop = true;
-      await nextRender();
       expect(backdrop.hidden).to.be.false;
     });
 
-    it('should reflect withBackdrop property to attribute', async () => {
+    it('should reflect withBackdrop property to attribute', () => {
       overlay.withBackdrop = true;
-      await nextRender();
       expect(overlay.hasAttribute('with-backdrop')).to.be.true;
     });
   });
@@ -113,15 +102,13 @@ describe('vaadin-overlay', () => {
 
     beforeEach(async () => {
       overlay = createOverlay('overlay content');
-      await nextRender();
-      overlayPart = overlay.$.overlay;
       overlay.opened = true;
       await oneEvent(overlay, 'vaadin-overlay-open');
+      overlayPart = overlay.$.overlay;
     });
 
-    afterEach(async () => {
+    afterEach(() => {
       overlay.opened = false;
-      await nextRender();
     });
 
     it('should fit in the viewport by default', () => {
@@ -187,9 +174,8 @@ describe('vaadin-overlay', () => {
       await oneEvent(overlay, 'vaadin-overlay-open');
     });
 
-    afterEach(async () => {
+    afterEach(() => {
       overlay.opened = false;
-      await nextRender();
     });
 
     it('should set value to bottom when landscape and clientHeight > innerHeight', () => {
