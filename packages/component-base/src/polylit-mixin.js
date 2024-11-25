@@ -102,12 +102,16 @@ const PolylitMixinImplementation = (superclass) => {
           get: defaultDescriptor.get,
           set(value) {
             const oldValue = this[name];
-            this[key] = value;
-            this.requestUpdate(name, oldValue, options);
 
-            // Enforce synchronous update
-            if (notEqual(oldValue, value) && this.hasUpdated) {
-              this.performUpdate();
+            if (notEqual(value, oldValue)) {
+              this[key] = value;
+
+              this.requestUpdate(name, oldValue, options);
+
+              // Enforce synchronous update
+              if (this.hasUpdated) {
+                this.performUpdate();
+              }
             }
           },
           configurable: true,

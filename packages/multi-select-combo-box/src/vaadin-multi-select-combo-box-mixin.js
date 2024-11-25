@@ -155,6 +155,7 @@ export const MultiSelectComboBoxMixin = (superClass) =>
               total: '{count} items selected',
             };
           },
+          sync: true,
         },
 
         /**
@@ -163,6 +164,7 @@ export const MultiSelectComboBoxMixin = (superClass) =>
         keepFilter: {
           type: Boolean,
           value: false,
+          sync: true,
         },
 
         /**
@@ -261,6 +263,7 @@ export const MultiSelectComboBoxMixin = (superClass) =>
         allowCustomValue: {
           type: Boolean,
           value: false,
+          sync: true,
         },
 
         /**
@@ -323,6 +326,7 @@ export const MultiSelectComboBoxMixin = (superClass) =>
         /** @private */
         value: {
           type: String,
+          sync: true,
         },
 
         /** @private */
@@ -337,6 +341,7 @@ export const MultiSelectComboBoxMixin = (superClass) =>
           type: Number,
           value: -1,
           observer: '_focusedChipIndexChanged',
+          sync: true,
         },
 
         /** @private */
