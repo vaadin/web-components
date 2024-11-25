@@ -201,6 +201,21 @@ export class InfiniteScroller extends HTMLElement {
     }
   }
 
+  /** @protected */
+  disconnectedCallback() {
+    if (this._debouncerScrollFinish) {
+      this._debouncerScrollFinish.cancel();
+    }
+
+    if (this._debouncerUpdateClones) {
+      this._debouncerUpdateClones.cancel();
+    }
+
+    if (this.__pendingFinishInit) {
+      cancelAnimationFrame(this.__pendingFinishInit);
+    }
+  }
+
   /**
    * Force the scroller to update clones after a reset, without
    * waiting for the debouncer to resolve.
@@ -348,8 +363,9 @@ export class InfiniteScroller extends HTMLElement {
       }
     });
 
-    requestAnimationFrame(() => {
+    this.__pendingFinishInit = requestAnimationFrame(() => {
       this._finishInit();
+      this.__pendingFinishInit = null;
     });
   }
 
@@ -363,6 +379,10 @@ export class InfiniteScroller extends HTMLElement {
 
     itemWrapper.instance = this._createElement();
     itemWrapper.appendChild(itemWrapper.instance);
+
+    if (itemWrapper.instance.performUpdate) {
+      itemWrapper.instance.performUpdate();
+    }
 
     Object.keys(tmpInstance).forEach((prop) => {
       itemWrapper.instance[prop] = tmpInstance[prop];
