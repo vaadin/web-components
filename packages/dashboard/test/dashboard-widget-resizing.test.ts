@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
+import { fire, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../vaadin-dashboard.js';
 import { isSafari } from '@vaadin/component-base/src/browser-utils.js';
@@ -11,6 +11,8 @@ import {
   fireResizeOver,
   fireResizeStart,
   getElementFromCell,
+  getEventCoordinates,
+  getResizeHandle,
   onceResized,
   setMaximumColumnWidth,
   setMinimumColumnWidth,
@@ -201,10 +203,34 @@ describe('dashboard - widget resizing', () => {
         [0, 2],
       ]);
 
+      const resizeHandle = getResizeHandle(getElementFromCell(dashboard, 1, 0)!);
+      const { x: initialX, y: initialY } = getEventCoordinates(resizeHandle, 'bottom');
+
       fireResizeStart(getElementFromCell(dashboard, 1, 0)!);
       await nextFrame();
 
-      fireResizeOver(getElementFromCell(dashboard, 0, 0)!, 'top');
+      const targetElement = getElementFromCell(dashboard, 0, 0)!;
+      fireResizeOver(targetElement, 'top');
+      await nextFrame();
+
+      const { x: targetX, y: targetY } = getEventCoordinates(targetElement, 'top');
+      const event = new MouseEvent('mousemove', {
+        bubbles: true,
+        composed: true,
+        clientX: targetX,
+        clientY: targetY,
+        buttons: 1,
+      });
+      targetElement.dispatchEvent(event);
+      fire(resizeHandle, 'track', {
+        state: 'track',
+        x: targetX,
+        y: targetY - 1,
+        dx: targetX - initialX,
+        dy: targetY - initialY - 1,
+        ddx: 0,
+        ddy: -1,
+      });
       await nextFrame();
 
       fireResizeEnd(dashboard);
@@ -321,6 +347,93 @@ describe('dashboard - widget resizing', () => {
         [0],
         [1],
       ]);
+    });
+
+    it('should resize only when dragged in the same direction (top -> bottom)', async () => {
+      setMinimumRowHeight(dashboard, 50);
+      dashboard.items = [{ id: 0, rowspan: 2 }, { id: 1 }, { id: 2 }];
+      await nextFrame();
+
+      const widget = getElementFromCell(dashboard, 0, 1)!;
+      const initialHeight = widget.offsetHeight;
+      fireResizeStart(widget);
+      await nextFrame();
+
+      const targetElement = getElementFromCell(dashboard, 1, 1)!;
+      const { x, y } = getEventCoordinates(targetElement, 'top');
+      const minSizeIncreaseDelta = initialHeight / 2 + 1;
+      const minSizeIncreaseY = y + minSizeIncreaseDelta;
+      const event = new MouseEvent('mousemove', {
+        bubbles: true,
+        composed: true,
+        clientX: x,
+        clientY: minSizeIncreaseY,
+        buttons: 1,
+      });
+      targetElement.dispatchEvent(event);
+      await nextFrame();
+
+      let previousHeight = initialHeight;
+      const resizeHandle = getResizeHandle(widget);
+      for (let i = 1; i < 5; i++) {
+        fire(resizeHandle, 'track', {
+          state: 'track',
+          x,
+          y: minSizeIncreaseY + i,
+          dx: 0,
+          dy: minSizeIncreaseDelta + i,
+          ddx: 0,
+          ddy: 1,
+        });
+        await nextFrame();
+        const newHeight = getElementFromCell(dashboard, 0, 1)!.offsetHeight;
+        expect(newHeight >= previousHeight).to.be.true;
+        previousHeight = newHeight;
+      }
+    });
+
+    it('should resize only when dragged in the same direction (bottom -> top)', async () => {
+      setMinimumRowHeight(dashboard, 50);
+      dashboard.items = [{ id: 0, rowspan: 2 }, { id: 1 }, { id: 2, rowspan: 3 }];
+      await nextFrame();
+
+      const widget = getElementFromCell(dashboard, 2, 1)!;
+      const initialHeight = widget.offsetHeight;
+      fireResizeStart(widget);
+      await nextFrame();
+
+      const targetElement = getElementFromCell(dashboard, 1, 1)!;
+      const { x, y } = getEventCoordinates(targetElement, 'top');
+      const minSizeDecreaseDelta = initialHeight / 3 + 1;
+      const minSizeDecreaseY = y - minSizeDecreaseDelta;
+      const event = new MouseEvent('mousemove', {
+        bubbles: true,
+        composed: true,
+        clientX: x,
+        clientY: minSizeDecreaseY,
+        buttons: 1,
+      });
+      targetElement.dispatchEvent(event);
+      await nextFrame();
+
+      let previousHeight = initialHeight;
+      const resizeHandle = getResizeHandle(widget);
+
+      for (let i = 1; i < 5; i++) {
+        fire(resizeHandle, 'track', {
+          state: 'track',
+          x,
+          y: minSizeDecreaseY - i,
+          dx: 0,
+          dy: minSizeDecreaseDelta - i,
+          ddx: 0,
+          ddy: -1,
+        });
+        await nextFrame();
+        const newHeight = getElementFromCell(dashboard, 1, 1)!.offsetHeight;
+        expect(newHeight <= previousHeight).to.be.true;
+        previousHeight = newHeight;
+      }
     });
 
     it('should dispatch an item resized event', async () => {
