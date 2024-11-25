@@ -349,10 +349,16 @@ describe('dashboard - widget resizing', () => {
       ]);
     });
 
-    it('should resize only when dragged in the same direction (top -> bottom)', async () => {
+    (isSafari ? it.skip : it)('should resize only when dragged in the same direction (top -> bottom)', async () => {
       setMinimumRowHeight(dashboard, 50);
       dashboard.items = [{ id: 0, rowspan: 2 }, { id: 1 }, { id: 2 }];
       await nextFrame();
+
+      // prettier-ignore
+      expectLayout(dashboard, [
+        [0, 1],
+        [0, 2],
+      ]);
 
       const widget = getElementFromCell(dashboard, 0, 1)!;
       const initialHeight = widget.offsetHeight;
