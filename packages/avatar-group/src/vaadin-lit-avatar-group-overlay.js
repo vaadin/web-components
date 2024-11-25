@@ -32,22 +32,6 @@ class AvatarGroupOverlay extends PositionMixin(OverlayMixin(DirMixin(ThemableMix
     return overlayStyles;
   }
 
-  static get properties() {
-    return {
-      /**
-       * When true, the overlay is visible and attached to body.
-       * This property config is overridden to set `sync: true`.
-       */
-      opened: {
-        type: Boolean,
-        notify: true,
-        observer: '_openedChanged',
-        reflectToAttribute: true,
-        sync: true,
-      },
-    };
-  }
-
   /** @protected */
   render() {
     return html`

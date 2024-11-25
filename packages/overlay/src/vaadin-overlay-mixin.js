@@ -25,6 +25,7 @@ export const OverlayMixin = (superClass) =>
           notify: true,
           observer: '_openedChanged',
           reflectToAttribute: true,
+          sync: true,
         },
 
         /**
@@ -33,6 +34,7 @@ export const OverlayMixin = (superClass) =>
          */
         owner: {
           type: Object,
+          sync: true,
         },
 
         /**
@@ -40,6 +42,7 @@ export const OverlayMixin = (superClass) =>
          */
         model: {
           type: Object,
+          sync: true,
         },
 
         /**
@@ -53,6 +56,7 @@ export const OverlayMixin = (superClass) =>
          */
         renderer: {
           type: Object,
+          sync: true,
         },
 
         /**
@@ -65,6 +69,7 @@ export const OverlayMixin = (superClass) =>
           value: false,
           reflectToAttribute: true,
           observer: '_modelessChanged',
+          sync: true,
         },
 
         /**
@@ -76,6 +81,7 @@ export const OverlayMixin = (superClass) =>
           type: Boolean,
           reflectToAttribute: true,
           observer: '_hiddenChanged',
+          sync: true,
         },
 
         /**
@@ -86,6 +92,7 @@ export const OverlayMixin = (superClass) =>
           type: Boolean,
           value: false,
           reflectToAttribute: true,
+          sync: true,
         },
       };
     }

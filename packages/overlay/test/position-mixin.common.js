@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, nextRender, nextUpdate, oneEvent } from '@vaadin/testing-helpers';
+import { fixtureSync, nextRender, oneEvent } from '@vaadin/testing-helpers';
 import { setViewport } from '@web/test-runner-commands';
 
 describe('position mixin', () => {
@@ -67,13 +67,11 @@ describe('position mixin', () => {
     expectEdgesAligned(LEFT, LEFT);
   });
 
-  it('should update position on open', async () => {
+  it('should update position on open', () => {
     overlay.opened = false;
-    await nextUpdate(overlay);
     target.style.top = '5px';
     target.style.left = '10px';
     overlay.opened = true;
-    await nextUpdate(overlay);
     expectEdgesAligned(TOP, TOP);
     expectEdgesAligned(LEFT, LEFT);
   });
