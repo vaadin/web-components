@@ -41,6 +41,7 @@ export const GridColumnGroupMixin = (superClass) =>
         width: {
           type: String,
           readOnly: true,
+          sync: true,
         },
 
         /** @private */
