@@ -209,9 +209,11 @@ class DashboardWidget extends DashboardItemMixin(ElementMixin(ThemableMixin(Poly
   /** @protected */
   render() {
     return html`
-      ${this.__renderFocusButton('selectWidget')} ${this.__renderMoveControls()} ${this.__renderResizeControls()}
+      ${this.__renderMoveControls()} ${this.__renderResizeControls()}
 
       <div id="focustrap">
+        ${this.__renderFocusButton('selectWidget')}
+
         <header part="header">
           ${this.__renderDragHandle()}
           ${this.__nestedHeadingLevel

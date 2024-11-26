@@ -79,9 +79,27 @@ describe('dashboard - keyboard interaction', () => {
     const widget = getElementFromCell(dashboard, 0, 0)!;
     await sendKeys({ press: 'Tab' });
     await sendKeys({ press: 'Space' });
-    expect(widget.hasAttribute('focused')).to.be.true;
+    expect(widget.hasAttribute('focused')).to.be.false;
     expect(widget.hasAttribute('selected')).to.be.true;
     expect(dashboard.hasAttribute('item-selected')).to.be.true;
+  });
+
+  it('should unselect the widget on focus button click', async () => {
+    const widget = getElementFromCell(dashboard, 0, 0)!;
+    await sendKeys({ press: 'Tab' });
+    await sendKeys({ press: 'Space' });
+
+    // Focus the focus-button with shift + tab
+    await sendKeys({ down: 'Shift' });
+    await sendKeys({ press: 'Tab' });
+    await sendKeys({ up: 'Shift' });
+
+    // Click the focus-button
+    await sendKeys({ press: 'Space' });
+
+    expect(widget.hasAttribute('focused')).to.be.true;
+    expect(widget.hasAttribute('selected')).to.be.false;
+    expect(dashboard.hasAttribute('item-selected')).to.be.false;
   });
 
   it('should dispatch a selection event', async () => {
@@ -448,7 +466,7 @@ describe('dashboard - keyboard interaction', () => {
     // Enter move mode
     await sendKeys({ press: 'Space' });
 
-    expect(widget.hasAttribute('focused')).to.be.true;
+    expect(widget.hasAttribute('focused')).to.be.false;
     expect(widget.hasAttribute('selected')).to.be.true;
     expect(widget.hasAttribute('move-mode')).to.be.true;
   });
@@ -471,7 +489,7 @@ describe('dashboard - keyboard interaction', () => {
     (getDraggable(widget) as HTMLElement).click();
     await nextFrame();
 
-    expect(widget.hasAttribute('focused')).to.be.true;
+    expect(widget.hasAttribute('focused')).to.be.false;
     expect(widget.hasAttribute('selected')).to.be.true;
     expect(widget.hasAttribute('move-mode')).to.be.true;
   });
@@ -501,7 +519,7 @@ describe('dashboard - keyboard interaction', () => {
       await sendKeys({ press: 'Escape' });
       expect(widget.hasAttribute('move-mode')).to.be.false;
       expect(widget.hasAttribute('selected')).to.be.true;
-      expect(widget.hasAttribute('focused')).to.be.true;
+      expect(widget.hasAttribute('focused')).to.be.false;
     });
 
     it('should dispatch a move mode event', async () => {
@@ -519,7 +537,7 @@ describe('dashboard - keyboard interaction', () => {
       await sendKeys({ press: 'Space' });
       expect(widget.hasAttribute('move-mode')).to.be.false;
       expect(widget.hasAttribute('selected')).to.be.true;
-      expect(widget.hasAttribute('focused')).to.be.true;
+      expect(widget.hasAttribute('focused')).to.be.false;
     });
 
     it('should focus drag handle on exit move mode', async () => {
@@ -594,7 +612,7 @@ describe('dashboard - keyboard interaction', () => {
 
       expect(widget.hasAttribute('move-mode')).to.be.true;
       expect(widget.hasAttribute('selected')).to.be.true;
-      expect(widget.hasAttribute('focused')).to.be.true;
+      expect(widget.hasAttribute('focused')).to.be.false;
     });
 
     it('should not lose move mode when the focused forward button is hidden', async () => {
@@ -624,7 +642,7 @@ describe('dashboard - keyboard interaction', () => {
 
       expect(widget.hasAttribute('move-mode')).to.be.true;
       expect(widget.hasAttribute('selected')).to.be.true;
-      expect(widget.hasAttribute('focused')).to.be.true;
+      expect(widget.hasAttribute('focused')).to.be.false;
     });
 
     it('should deselect the section on blur', async () => {
@@ -678,7 +696,7 @@ describe('dashboard - keyboard interaction', () => {
       const widget = getElementFromCell(dashboard, 0, 0)!;
       expect(widget.contains(document.activeElement)).to.be.true;
       expect(widget.hasAttribute('selected')).to.be.true;
-      expect(widget.hasAttribute('focused')).to.be.true;
+      expect(widget.hasAttribute('focused')).to.be.false;
       dashboard.editable = false;
       await nextFrame();
       expect(widget.contains(document.activeElement)).to.be.false;
@@ -697,7 +715,7 @@ describe('dashboard - keyboard interaction', () => {
     await sendKeys({ press: 'Tab' });
     await sendKeys({ press: 'Space' });
 
-    expect(widget.hasAttribute('focused')).to.be.true;
+    expect(widget.hasAttribute('focused')).to.be.false;
     expect(widget.hasAttribute('selected')).to.be.true;
     expect(widget.hasAttribute('resize-mode')).to.be.true;
   });
@@ -707,7 +725,7 @@ describe('dashboard - keyboard interaction', () => {
     (getResizeHandle(widget) as HTMLElement).click();
     await nextFrame();
 
-    expect(widget.hasAttribute('focused')).to.be.true;
+    expect(widget.hasAttribute('focused')).to.be.false;
     expect(widget.hasAttribute('selected')).to.be.true;
     expect(widget.hasAttribute('resize-mode')).to.be.true;
   });
@@ -739,7 +757,7 @@ describe('dashboard - keyboard interaction', () => {
       await sendKeys({ press: 'Escape' });
       expect(widget.hasAttribute('resize-mode')).to.be.false;
       expect(widget.hasAttribute('selected')).to.be.true;
-      expect(widget.hasAttribute('focused')).to.be.true;
+      expect(widget.hasAttribute('focused')).to.be.false;
     });
 
     it('should dispatch a resize mode event', async () => {
@@ -756,7 +774,7 @@ describe('dashboard - keyboard interaction', () => {
       await sendKeys({ press: 'Space' });
       expect(widget.hasAttribute('resize-mode')).to.be.false;
       expect(widget.hasAttribute('selected')).to.be.true;
-      expect(widget.hasAttribute('focused')).to.be.true;
+      expect(widget.hasAttribute('focused')).to.be.false;
     });
 
     it('should focus resize handle on exit resize mode', async () => {
