@@ -229,7 +229,10 @@ export function createDragEvent(type: string, { x, y }: { x: number; y: number }
   return event;
 }
 
-function getEventCoordinates(relativeElement: Element, location: 'top' | 'bottom' | 'start' | 'end') {
+export function getEventCoordinates(
+  relativeElement: Element,
+  location: 'top' | 'bottom' | 'start' | 'end',
+): { x: number; y: number } {
   const { top, bottom, left, right } = relativeElement.getBoundingClientRect();
   const y = location === 'top' ? top : bottom;
   const dir = document.dir;
