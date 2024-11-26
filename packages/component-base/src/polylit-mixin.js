@@ -119,21 +119,17 @@ const PolylitMixinImplementation = (superclass) => {
       }
 
       if (options.readOnly) {
-        const setter = defaultDescriptor.set;
+        const setter = result.set;
 
         this.addCheckedInitializer((instance) => {
           // This is run during construction of the element
           instance[`_set${upper(name)}`] = function (value) {
             setter.call(instance, value);
-
-            if (options.sync) {
-              this.performUpdate();
-            }
           };
         });
 
         result = {
-          get: defaultDescriptor.get,
+          get: result.get,
           set() {
             // Do nothing, property is read-only.
           },
