@@ -365,7 +365,6 @@ export const DatePickerMixin = (subclass) =>
         __enteredDate: {
           type: Date,
           sync: true,
-          value: null,
         },
       };
     }
