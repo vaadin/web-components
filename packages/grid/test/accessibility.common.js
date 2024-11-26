@@ -359,4 +359,32 @@ describe('accessibility', () => {
       });
     });
   });
+
+  describe('accessibleName', () => {
+    it('should not define aria-label on the table when accessibleName is not set', async () => {
+      grid = fixtureSync('<vaadin-grid></vaadin-grid>');
+      await nextFrame();
+      expect(grid.$.table.getAttribute('aria-label')).to.be.null;
+    });
+
+    it('should define aria-label on the table when accessibleName is set', async () => {
+      grid = fixtureSync('<vaadin-grid accessible-name="Grid accessible name"></vaadin-grid>');
+      await nextFrame();
+      expect(grid.$.table.getAttribute('aria-label')).to.equal('Grid accessible name');
+    });
+
+    it('should update aria-label on the table when accessibleName is updated', async () => {
+      grid = fixtureSync('<vaadin-grid accessible-name="Grid accessible name"></vaadin-grid>');
+      grid.accessibleName = 'Updated accessible name';
+      await nextFrame();
+      expect(grid.$.table.getAttribute('aria-label')).to.equal('Updated accessible name');
+    });
+
+    it('should remove aria-label on the table when accessibleName is removed', async () => {
+      grid = fixtureSync('<vaadin-grid accessible-name="Grid accessible name"></vaadin-grid>');
+      grid.accessibleName = null;
+      await nextFrame();
+      expect(grid.$.table.getAttribute('aria-label')).to.be.null;
+    });
+  });
 });

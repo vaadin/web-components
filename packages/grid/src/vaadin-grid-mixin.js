@@ -144,6 +144,14 @@ export const GridMixin = (superClass) =>
           reflectToAttribute: true,
         },
 
+        /**
+         * String used to label the grid to screen reader users.
+         * @attr {string} accessible-name
+         */
+        accessibleName: {
+          type: String,
+        },
+
         /** @private */
         __pendingRecalculateColumnWidths: {
           type: Boolean,

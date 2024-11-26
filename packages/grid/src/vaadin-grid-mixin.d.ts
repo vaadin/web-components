@@ -200,6 +200,12 @@ export interface GridMixinClass<TItem>
   allRowsVisible: boolean;
 
   /**
+   * String used to label the grid to screen reader users.
+   * @attr {string} accessible-name
+   */
+  accessibleName: string;
+
+  /**
    * Updates the `width` of all columns which have `autoWidth` set to `true`.
    */
   recalculateColumnWidths(): void;
