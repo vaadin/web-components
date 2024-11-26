@@ -115,8 +115,8 @@ class TimePicker extends TimePickerMixin(ThemableMixin(ElementMixin(PolylitMixin
   }
 
   /** @protected */
-  firstUpdated() {
-    super.firstUpdated();
+  ready() {
+    super.ready();
 
     this.addController(
       new InputController(

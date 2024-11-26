@@ -94,20 +94,6 @@ class NumberField extends NumberFieldMixin(ThemableMixin(ElementMixin(PolylitMix
     this._tooltipController.setPosition('top');
     this._tooltipController.setAriaTarget(this.inputElement);
   }
-
-  /**
-   * Override method from `InputConstraintsMixin`
-   * to create observer after the initial update
-   * and preserve invalid state set as attribute.
-   *
-   * @protected
-   * @override
-   */
-  async _createConstraintsObserver() {
-    await this.updateComplete;
-
-    super._createConstraintsObserver();
-  }
 }
 
 defineCustomElement(NumberField);

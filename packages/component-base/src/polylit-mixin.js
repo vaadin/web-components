@@ -105,7 +105,6 @@ const PolylitMixinImplementation = (superclass) => {
 
             if (notEqual(value, oldValue)) {
               this[key] = value;
-
               this.requestUpdate(name, oldValue, options);
 
               // Enforce synchronous update
@@ -218,6 +217,9 @@ const PolylitMixinImplementation = (superclass) => {
 
     /** @protected */
     updated(props) {
+      const wasReady = this.__isReady;
+      this.__isReady = true;
+
       if (this.constructor.__observers) {
         this.__runObservers(props, this.constructor.__observers);
       }
@@ -238,8 +240,7 @@ const PolylitMixinImplementation = (superclass) => {
         this.__runNotifyProps(props, this.constructor.__notifyProps);
       }
 
-      if (!this.__isReadyInvoked) {
-        this.__isReadyInvoked = true;
+      if (!wasReady) {
         this.ready();
       }
     }
