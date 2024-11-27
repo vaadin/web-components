@@ -5,7 +5,7 @@ import sinon from 'sinon';
 import { html, render } from 'lit';
 import type { VirtualList } from '../vaadin-virtual-list';
 
-type TestItem = { id: number; name: string };
+type TestItem = { id: number; name: string } | undefined;
 
 async function click(el: HTMLElement) {
   el.focus();
@@ -26,7 +26,7 @@ describe('selection', () => {
 
   function getRenderedItem(index: number) {
     const childElements = Array.from(list.children) as Array<HTMLElement & { __item: TestItem }>;
-    return childElements.find((child) => !child.hidden && child.__item.id === index);
+    return childElements.find((child) => !child.hidden && child.__item?.id === index);
   }
 
   beforeEach(async () => {
@@ -41,7 +41,7 @@ describe('selection', () => {
     list.style.height = '200px';
     list.items = Array.from({ length: 100 }, (_, i) => ({ id: i, name: `Item ${i}` }));
     list.renderer = (root, _, { item }) => {
-      root.textContent = item.name;
+      root.textContent = item?.name || 'undefined';
     };
     await nextFrame();
   });
@@ -107,6 +107,14 @@ describe('selection', () => {
       await sendKeys({ press: 'Tab' });
       await sendKeys({ press: 'Space' });
       expect(getRenderedItem(0)!.hasAttribute('selected')).to.be.true;
+    });
+
+    it('should ignore selection of undefined items (Flow VirtualList)', async () => {
+      list.items = [undefined];
+      beforeButton.focus();
+      await sendKeys({ press: 'Tab' });
+      await sendKeys({ press: 'Space' });
+      expect(list.selectedItems).to.be.empty;
     });
 
     it('should select multiple items with keyboard', async () => {
@@ -237,7 +245,7 @@ describe('selection', () => {
     describe('focusable children', () => {
       beforeEach(async () => {
         list.renderer = (root, _, { item }) => {
-          render(html`<button>${item.name}</button>`, root);
+          render(html`<button>${item?.name}</button>`, root);
         };
         await nextFrame();
       });
