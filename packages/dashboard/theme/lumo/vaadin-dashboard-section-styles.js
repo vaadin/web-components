@@ -19,13 +19,19 @@ const section = css`
     min-height: var(--lumo-size-l);
   }
 
+  [part='title'] {
+    font-size: var(--lumo-font-size-xl);
+    font-weight: 600;
+  }
+
+  /* Section states */
+
   :host([editable]) {
     outline: 1px solid var(--lumo-contrast-10pct);
     outline-offset: var(--_focus-ring-spacing-max-offset);
     background: var(--lumo-contrast-5pct);
     box-shadow: 0 0 0 var(--_focus-ring-spacing-max-offset) var(--lumo-contrast-5pct);
   }
-
   :host([editable]) header {
     padding-inline: var(--lumo-space-xs);
   }
@@ -52,6 +58,8 @@ const section = css`
     outline: var(--vaadin-dashboard-drop-target-border);
     box-shadow: 0 0 0 var(--_focus-ring-spacing-max-offset) var(--vaadin-dashboard-drop-target-background-color);
   }
+
+  /* Accessible move mode controls */
 
   [part~='move-backward-button'] {
     inset-inline-start: calc(-1 * var(--_focus-ring-spacing-max-offset));
