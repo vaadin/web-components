@@ -211,7 +211,7 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
     /** @private */
     __onGridSelectStart(e) {
       // Prevent text selection when shift-selecting a range of items.
-      if (this.__lastToggledItem && this.__shiftKeyActive) {
+      if (this.__rangeSelectionStartItem && this.__shiftKeyActive) {
         e.preventDefault();
       }
     }
@@ -446,15 +446,11 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
         this._deselectItem(item);
       }
 
-      const lastToggledItem = this.__lastToggledItem;
-      const isRangeSelection =
-        this.__shiftKeyActive && lastToggledItem && !this._grid._itemsEqual(lastToggledItem, item);
-      if (isRangeSelection) {
-        this._rangeSelection(lastToggledItem, item);
-        this.__lastToggledItem = null;
-      } else {
-        this.__lastToggledItem = item;
+      const startItem = this.__rangeSelectionStartItem || item;
+      if (this.__shiftKeyActive && !this._grid._itemsEqual(startItem, item)) {
+        this._rangeSelection(startItem, item);
       }
+      this.__rangeSelectionStartItem = item;
     }
 
     /**
