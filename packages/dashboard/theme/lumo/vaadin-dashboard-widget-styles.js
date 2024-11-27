@@ -33,7 +33,7 @@ const dashboardWidgetAndSection = css`
     line-height: var(--lumo-line-height-m);
     --_focus-ring-color: var(--vaadin-focus-ring-color, var(--lumo-primary-color-50pct));
     --_focus-ring-width: var(--vaadin-focus-ring-width, 2px);
-    --_icon-color: var(--lumo-contrast-50pct);
+    --_icon-color: var(--lumo-contrast-60pct);
     opacity: var(--_vaadin-dashboard-widget-opacity);
     filter: var(--_vaadin-dashboard-widget-filter);
   }
@@ -55,7 +55,6 @@ const dashboardWidgetAndSection = css`
     gap: var(--lumo-space-xs);
   }
 
-  /* Title styling */
   [part='title'] {
     flex: 1;
     color: var(--lumo-header-text-color);
@@ -71,12 +70,12 @@ const dashboardWidgetAndSection = css`
     margin: 0;
   }
 
-  .icon::before {
+  vaadin-dashboard-button .icon::before {
     display: block;
     content: var(--icon);
   }
 
-  /* Non-mode buttons */
+  /* Common styles for non-mode edit buttons */
   [part='move-button'],
   [part='resize-button'],
   [part='remove-button'] {
@@ -93,24 +92,24 @@ const dashboardWidgetAndSection = css`
     --_icon-color: var(--lumo-disabled-text-color);
   }
 
-  /* Drag handle styling */
+  /* Drag handle */
   [part~='move-button'] {
     cursor: move;
     --icon: var(--lumo-icons-drag-handle);
   }
 
-  /* Remove button styling */
+  /* Remove button */
   [part~='remove-button'] {
     cursor: pointer;
     --icon: var(--lumo-icons-cross);
   }
 
-  /* Mode controls styling */
+  /* Mode controls */
   .mode-controls vaadin-dashboard-button[focused] {
     z-index: 3;
   }
 
-  /* Move mode styling */
+  /* Move mode */
 
   :host(:not([dir='rtl'])) [part~='move-backward-button'],
   :host([dir='rtl']) [part~='move-forward-button'] {
@@ -142,24 +141,7 @@ const dashboardWidget = css`
     box-shadow: var(--_shadow), var(--_border-shadow);
   }
 
-  @media (forced-colors: active) {
-    :host {
-      border: 1px solid;
-    }
-    :host([focused]) {
-      outline: 2px solid;
-      outline-offset: 1px;
-    }
-    :host([selected]) {
-      outline-width: 1px;
-      outline-offset: 0px;
-      outline-color: Highlight;
-    }
-    :host([selected][focused]) {
-      outline-width: 3px;
-      outline-offset: 0px;
-    }
-  }
+  /* Widget states */
 
   :host([editable]) {
     --_shadow: var(--vaadin-dashboard-widget-editable-shadow);
@@ -180,6 +162,13 @@ const dashboardWidget = css`
     border: var(--vaadin-dashboard-drop-target-border);
   }
 
+  :host([resizing])::after {
+    background: var(--vaadin-dashboard-drop-target-background-color);
+    border: var(--vaadin-dashboard-drop-target-border);
+  }
+
+  /* Widget parts */
+
   header {
     min-height: var(--lumo-size-l);
     padding: 0 var(--lumo-space-m);
@@ -195,7 +184,6 @@ const dashboardWidget = css`
     font-weight: 600;
   }
 
-  /* Content styling */
   #content {
     min-height: var(--lumo-size-m);
     padding: var(--lumo-space-s);
@@ -207,7 +195,8 @@ const dashboardWidget = css`
     filter: blur(10px);
   }
 
-  /* Resize handle styling */
+  /* Resize handle */
+
   [part~='resize-button'] {
     position: absolute;
     bottom: calc(-1 * var(--lumo-space-xs));
@@ -216,7 +205,7 @@ const dashboardWidget = css`
     --icon: var(--lumo-icons-resize-handle);
   }
 
-  :host([dir='rtl']) #resize-handle {
+  :host([dir='rtl']) [part~='resize-button'] {
     cursor: sw-resize;
   }
 
@@ -224,7 +213,8 @@ const dashboardWidget = css`
     transform: scaleX(-1);
   }
 
-  /* Resize mode styling */
+  /* Accessible resize mode controls */
+
   [part~='resize-apply-button'] {
     --icon: var(--lumo-icons-checkmark);
     font-size: var(--lumo-icon-size-m);
@@ -295,9 +285,24 @@ const dashboardWidget = css`
     border-top-right-radius: 0;
   }
 
-  :host([resizing])::after {
-    background: var(--vaadin-dashboard-drop-target-background-color);
-    border: var(--vaadin-dashboard-drop-target-border);
+  /* Windows High Contrast Mode */
+  @media (forced-colors: active) {
+    :host {
+      border: 1px solid;
+    }
+    :host([focused]) {
+      outline: 2px solid;
+      outline-offset: 1px;
+    }
+    :host([selected]) {
+      outline-width: 1px;
+      outline-offset: 0px;
+      outline-color: Highlight;
+    }
+    :host([selected][focused]) {
+      outline-width: 3px;
+      outline-offset: 0px;
+    }
   }
 `;
 
