@@ -5,6 +5,7 @@
  */
 import type { Constructor } from '@open-wc/dedupe-mixin';
 import type { DisabledMixinClass } from '@vaadin/a11y-base/src/disabled-mixin.js';
+import type { A11yMixinClass } from './vaadin-grid-a11y-mixin.js';
 import type { ActiveItemMixinClass } from './vaadin-grid-active-item-mixin.js';
 import type { ArrayDataProviderMixinClass } from './vaadin-grid-array-data-provider-mixin.js';
 import type { GridBodyRenderer, GridColumn, GridHeaderFooterRenderer } from './vaadin-grid-column.js';
@@ -162,7 +163,8 @@ export interface GridEventMap<TItem> extends HTMLElementEventMap, GridCustomEven
 
 export declare function GridMixin<TItem, T extends Constructor<HTMLElement>>(
   base: T,
-): Constructor<ActiveItemMixinClass<TItem>> &
+): Constructor<A11yMixinClass> &
+  Constructor<ActiveItemMixinClass<TItem>> &
   Constructor<ArrayDataProviderMixinClass<TItem>> &
   Constructor<ColumnReorderingMixinClass> &
   Constructor<DataProviderMixinClass<TItem>> &
@@ -179,6 +181,7 @@ export declare function GridMixin<TItem, T extends Constructor<HTMLElement>>(
 
 export interface GridMixinClass<TItem>
   extends DisabledMixinClass,
+    A11yMixinClass,
     ActiveItemMixinClass<TItem>,
     ArrayDataProviderMixinClass<TItem>,
     DataProviderMixinClass<TItem>,
@@ -198,12 +201,6 @@ export interface GridMixinClass<TItem>
    * @attr {boolean} all-rows-visible
    */
   allRowsVisible: boolean;
-
-  /**
-   * String used to label the grid to screen reader users.
-   * @attr {string} accessible-name
-   */
-  accessibleName: string;
 
   /**
    * Updates the `width` of all columns which have `autoWidth` set to `true`.
