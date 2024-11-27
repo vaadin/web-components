@@ -4,60 +4,71 @@ import '@vaadin/vaadin-lumo-styles/spacing.js';
 import '@vaadin/vaadin-lumo-styles/style.js';
 import '@vaadin/vaadin-lumo-styles/typography.js';
 import '@vaadin/vaadin-lumo-styles/font-icons.js';
+import { addGlobalThemeStyles } from '@vaadin/vaadin-themable-mixin/register-styles';
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
+/* Global styles */
+const dashboardWidgetProps = css`
+  html {
+    --vaadin-dashboard-widget-background: var(--lumo-base-color);
+    --vaadin-dashboard-widget-border-radius: var(--lumo-border-radius-l);
+    --vaadin-dashboard-widget-border-width: 1px;
+    --vaadin-dashboard-widget-border-color: var(--lumo-contrast-20pct);
+    --vaadin-dashboard-widget-shadow: 0 0 0 0 transparent;
+    --vaadin-dashboard-widget-editable-shadow: var(--lumo-box-shadow-s);
+    --vaadin-dashboard-widget-selected-shadow: 0 2px 4px -1px var(--lumo-primary-color-10pct),
+      0 3px 12px -1px var(--lumo-primary-color-50pct);
+    --vaadin-dashboard-drop-target-background-color: var(--lumo-primary-color-10pct);
+    --vaadin-dashboard-drop-target-border: 1px dashed var(--lumo-primary-color-50pct);
+  }
+`;
+addGlobalThemeStyles('dashboard-widget-props', dashboardWidgetProps);
+
+/* Styles shared between widgets and sections */
 const dashboardWidgetAndSection = css`
   :host {
-    border-radius: var(--lumo-border-radius-l);
     color: var(--lumo-body-text-color);
     font-family: var(--lumo-font-family);
     font-size: var(--lumo-font-size-m);
     line-height: var(--lumo-line-height-m);
     --_focus-ring-color: var(--vaadin-focus-ring-color, var(--lumo-primary-color-50pct));
     --_focus-ring-width: var(--vaadin-focus-ring-width, 2px);
-    /* default max value for the focus ring spacing offset. calc doesn't support unitless 0. */
-    /* stylelint-disable length-zero-no-unit */
-    --_focus-ring-spacing-max-offset: 0px;
-    /* Calculates the offset by which the focus ring should be shifted inwards based on a custom --vaadin-dashboard-gap or --vaadin-dashboard-padding values.
-    Effectively keeps the focus ring visible if --vaadin-dashboard-gap or --vaadin-dashboard-padding is set to 0px */
-    --_focus-ring-spacing-offset: min(
-      max(
-        calc(var(--_focus-ring-width) * -1),
-        min(var(--_vaadin-dashboard-gap), var(--_vaadin-dashboard-padding)) - var(--_focus-ring-width)
-      ),
-      var(--_focus-ring-spacing-max-offset, 0px)
-    );
-    outline: none;
+    --_icon-color: var(--lumo-contrast-50pct);
+    opacity: var(--_vaadin-dashboard-widget-opacity);
+    filter: var(--_vaadin-dashboard-widget-filter);
   }
 
-  :host::before {
-    content: '';
-    display: block;
-    position: absolute;
-    inset: 0;
-    border-radius: var(--lumo-border-radius-l);
-    pointer-events: none;
-    margin: calc(var(--_focus-ring-spacing-offset) * -1);
+  :host([selected]) {
+    opacity: 1;
+    z-index: 1;
   }
 
-  :host([selected])::before {
-    outline: 1px solid var(--_focus-ring-color);
+  :host([focused]) {
+    z-index: 1;
   }
 
-  :host([focused])::before {
-    outline: var(--_focus-ring-width) solid var(--_focus-ring-color);
+  header {
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+    justify-content: space-between;
+    gap: var(--lumo-space-xs);
   }
 
-  :host([selected])::before {
-    box-shadow:
-      0 2px 4px -1px var(--lumo-primary-color-10pct),
-      0 3px 12px -1px var(--lumo-primary-color-50pct);
+  /* Title styling */
+  [part='title'] {
+    flex: 1;
+    color: var(--lumo-header-text-color);
+    margin: 0;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
   }
 
-  /* Buttons styling */
   vaadin-dashboard-button {
     font-family: 'lumo-icons';
-    font-size: var(--lumo-icon-size-s);
+    font-size: var(--lumo-icon-size-m);
+    margin: 0;
   }
 
   .icon::before {
@@ -65,24 +76,21 @@ const dashboardWidgetAndSection = css`
     content: var(--icon);
   }
 
-  :host(:not([selected])) *:not(.mode-controls) vaadin-dashboard-button,
-  :host([move-mode]) *:not(.mode-controls) vaadin-dashboard-button,
-  :host([resize-mode]) *:not(.mode-controls) vaadin-dashboard-button {
-    color: var(--lumo-disabled-text-color);
+  /* Non-mode buttons */
+  [part='move-button'],
+  [part='resize-button'],
+  [part='remove-button'] {
+    color: var(--_icon-color);
+    padding-inline: 0;
   }
-
-  /* Header styling */
-  header {
-    display: flex;
-    align-items: center;
-    padding: var(--lumo-space-s) var(--lumo-space-m);
-    gap: var(--lumo-space-s);
-    min-height: var(--lumo-size-m);
-    justify-content: space-between;
+  :where([part='move-button'], [part='resize-button'], [part='remove-button']):hover {
+    --_icon-color: var(--lumo-primary-text-color);
   }
-
-  :host([editable]) header {
-    padding-inline: var(--lumo-space-s);
+  :host([selected]) {
+    --_icon-color: var(--lumo-primary-text-color);
+  }
+  :host(:is([move-mode], [resize-mode])) {
+    --_icon-color: var(--lumo-disabled-text-color);
   }
 
   /* Drag handle styling */
@@ -97,37 +105,12 @@ const dashboardWidgetAndSection = css`
     --icon: var(--lumo-icons-cross);
   }
 
-  /* Title styling */
-  h2,
-  h3 {
-    flex: 1;
-    font-size: var(--lumo-font-size-m);
-    font-weight: 500;
-    color: var(--lumo-header-text-color);
-    margin: 0;
-  }
-
-  /* Content styling */
-  [part~='content'] {
-    min-height: var(--lumo-size-m);
-    padding: var(--lumo-space-s);
-  }
-
   /* Mode controls styling */
   .mode-controls vaadin-dashboard-button[focused] {
     z-index: 3;
   }
 
   /* Move mode styling */
-
-  [part~='move-backward-button'] {
-    inset-inline-start: calc(0px - var(--_focus-ring-spacing-offset));
-  }
-
-  [part~='move-forward-button'] {
-    inset-inline-end: calc(0px - var(--_focus-ring-spacing-offset));
-    transform: translateY(-50%);
-  }
 
   :host(:not([dir='rtl'])) [part~='move-backward-button'],
   :host([dir='rtl']) [part~='move-forward-button'] {
@@ -149,42 +132,91 @@ const dashboardWidgetAndSection = css`
   }
 `;
 
+/* Widget styles */
 const dashboardWidget = css`
   :host {
-    opacity: var(--_vaadin-dashboard-widget-opacity);
-    filter: var(--_vaadin-dashboard-widget-filter);
-    background-color: var(--lumo-base-color);
+    background: var(--vaadin-dashboard-widget-background);
+    border-radius: var(--vaadin-dashboard-widget-border-radius);
+    --_border-shadow: 0 0 0 var(--vaadin-dashboard-widget-border-width) var(--vaadin-dashboard-widget-border-color);
+    --_shadow: var(--vaadin-dashboard-widget-shadow);
+    box-shadow: var(--_shadow), var(--_border-shadow);
   }
 
-  :host(:not([selected])) {
-    box-shadow: var(--lumo-box-shadow-s);
+  @media (forced-colors: active) {
+    :host {
+      border: 1px solid;
+    }
+    :host([focused]) {
+      outline: 2px solid;
+      outline-offset: 1px;
+    }
+    :host([selected]) {
+      outline-width: 1px;
+      outline-offset: 0px;
+      outline-color: Highlight;
+    }
+    :host([selected][focused]) {
+      outline-width: 3px;
+      outline-offset: 0px;
+    }
+  }
+
+  :host([editable]) {
+    --_shadow: var(--vaadin-dashboard-widget-editable-shadow);
+  }
+
+  :host([focused]) {
+    --_border-shadow: inset 0 0 0 var(--_focus-ring-width) var(--_focus-ring-color);
   }
 
   :host([selected]) {
-    opacity: 1;
+    --_shadow: var(--vaadin-dashboard-widget-selected-shadow);
+    background: var(--lumo-primary-color-10pct);
   }
 
-  :host([resize-mode]) [part~='content'] ::slotted(*),
-  :host([move-mode]) [part~='content'] ::slotted(*) {
-    opacity: 0.3;
-    filter: blur(10px);
+  :host([dragging]) {
+    box-shadow: none;
+    background: var(--vaadin-dashboard-drop-target-background-color);
+    border: var(--vaadin-dashboard-drop-target-border);
   }
 
-  /* Header styling */
   header {
+    min-height: var(--lumo-size-l);
+    padding: 0 var(--lumo-space-m);
     border-bottom: 1px solid var(--lumo-contrast-10pct);
+  }
+
+  :host([editable]) header {
+    padding-inline: var(--lumo-space-xs);
+  }
+
+  [part='title'] {
+    font-size: var(--lumo-font-size-l);
+    font-weight: 600;
+  }
+
+  /* Content styling */
+  #content {
+    min-height: var(--lumo-size-m);
+    padding: var(--lumo-space-s);
+  }
+
+  :host([resize-mode]) #content,
+  :host([move-mode]) #content {
+    opacity: 0.75;
+    filter: blur(10px);
   }
 
   /* Resize handle styling */
   [part~='resize-button'] {
     position: absolute;
-    bottom: var(--lumo-space-s);
-    inset-inline-end: var(--lumo-space-s);
-    cursor: se-resize;
+    bottom: calc(-1 * var(--lumo-space-xs));
+    inset-inline-end: calc(-1 * var(--lumo-space-xs));
+    cursor: nwse-resize;
     --icon: var(--lumo-icons-resize-handle);
   }
 
-  :host([dir='rtl']) [part~='resize-button'] {
+  :host([dir='rtl']) #resize-handle {
     cursor: sw-resize;
   }
 
@@ -205,10 +237,19 @@ const dashboardWidget = css`
     min-width: var(--lumo-size-s);
   }
 
+  [part~='resize-shrink-width-button'] + [part~='resize-grow-width-button'] {
+    margin-left: 1px;
+  }
+
   [part~='resize-grow-height-button'],
   [part~='resize-shrink-height-button'] {
     height: var(--lumo-size-s);
-    margin: 0;
+    padding-right: 0;
+    padding-left: 0;
+  }
+
+  [part~='resize-shrink-height-button'] + [part~='resize-grow-height-button'] {
+    margin-top: 1px;
   }
 
   :host(:not([dir='rtl'])) [part~='resize-grow-width-button'],
@@ -252,6 +293,11 @@ const dashboardWidget = css`
   [part~='resize-shrink-height-button']:not([hidden]) + [part~='resize-grow-height-button'] {
     border-top-left-radius: 0;
     border-top-right-radius: 0;
+  }
+
+  :host([resizing])::after {
+    background: var(--vaadin-dashboard-drop-target-background-color);
+    border: var(--vaadin-dashboard-drop-target-border);
   }
 `;
 

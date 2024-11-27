@@ -139,11 +139,12 @@ class DashboardWidget extends DashboardItemMixin(ElementMixin(ThemableMixin(Poly
           content: '';
           z-index: 2;
           position: absolute;
-          inset-inline-start: 0;
-          top: 0;
+          inset-inline-start: calc(-1);
+          top: -1px;
           width: var(--_vaadin-dashboard-widget-resizer-width, 0);
           height: var(--_vaadin-dashboard-widget-resizer-height, 0);
           background: rgba(0, 0, 0, 0.1);
+          border-radius: inherit;
         }
       `,
       super.styles,
