@@ -10,6 +10,17 @@ import { iterateChildren, iterateRowCells } from './vaadin-grid-helpers.js';
  */
 export const A11yMixin = (superClass) =>
   class A11yMixin extends superClass {
+    static get properties() {
+      return {
+        /**
+         * String used to label the grid to screen reader users.
+         * @attr {string} accessible-name
+         */
+        accessibleName: {
+          type: String,
+        },
+      };
+    }
     static get observers() {
       return ['_a11yUpdateGridSize(size, _columnTree)'];
     }

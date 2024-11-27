@@ -359,4 +359,37 @@ describe('accessibility', () => {
       });
     });
   });
+
+  describe('accessibleName', () => {
+    beforeEach(() => {
+      initFixture('default');
+    });
+
+    it('should not define aria-label on the table when accessibleName is not set', async () => {
+      await nextFrame();
+      expect(grid.$.table.getAttribute('aria-label')).to.be.null;
+    });
+
+    it('should define aria-label on the table when accessibleName is set', async () => {
+      grid.accessibleName = 'Grid accessible name';
+      await nextFrame();
+      expect(grid.$.table.getAttribute('aria-label')).to.equal('Grid accessible name');
+    });
+
+    it('should update aria-label on the table when accessibleName is updated', async () => {
+      grid.accessibleName = 'Grid accessible name';
+      await nextFrame();
+      grid.accessibleName = 'Updated accessible name';
+      await nextFrame();
+      expect(grid.$.table.getAttribute('aria-label')).to.equal('Updated accessible name');
+    });
+
+    it('should remove aria-label on the table when accessibleName is removed', async () => {
+      grid.accessibleName = 'Grid accessible name';
+      await nextFrame();
+      grid.accessibleName = null;
+      await nextFrame();
+      expect(grid.$.table.getAttribute('aria-label')).to.be.null;
+    });
+  });
 });
