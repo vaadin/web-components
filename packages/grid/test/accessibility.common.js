@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { aTimeout, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import { flushGrid } from './helpers.js';
 
 describe('accessibility', () => {
@@ -369,7 +369,6 @@ describe('accessibility', () => {
     it('should define aria-label on the table when accessibleName is set', async () => {
       grid.accessibleName = 'Grid accessible name';
       await nextFrame();
-      await aTimeout(0);
       expect(grid.$.table.getAttribute('aria-label')).to.equal('Grid accessible name');
     });
 
