@@ -1,5 +1,6 @@
 import '@vaadin/vaadin-lumo-styles/color.js';
 import '@vaadin/vaadin-lumo-styles/style.js';
+import '@vaadin/vaadin-lumo-styles/spacing.js';
 import { addGlobalThemeStyles, css, registerStyles } from '@vaadin/vaadin-themable-mixin/register-styles.js';
 
 const cardProps = css`
@@ -8,6 +9,9 @@ const cardProps = css`
     --vaadin-card-border-radius: var(--lumo-border-radius-l);
     --vaadin-card-border-width: 0;
     --vaadin-card-border-color: var(--lumo-contrast-20pct);
+    --vaadin-card-padding: var(--lumo-space-m);
+    --vaadin-card-row-gap: var(--lumo-space-s);
+    --vaadin-card-column-gap: var(--lumo-space-m);
   }
 `;
 
@@ -19,6 +23,7 @@ const card = css`
     border-radius: var(--vaadin-card-border-radius);
     box-shadow: var(--vaadin-card-box-shadow);
     position: relative;
+    line-height: var(--lumo-line-height-s);
   }
 
   /* Could be an inset outline on the host as well, but rounded outlines only work since Safari 16.4 */
@@ -26,7 +31,6 @@ const card = css`
     content: '';
     position: absolute;
     inset: 0;
-    z-index: 999;
     pointer-events: none;
     border-radius: inherit;
     border: var(--vaadin-card-border, var(--vaadin-card-border-width) solid var(--vaadin-card-border-color));
@@ -48,6 +52,32 @@ const card = css`
     box-shadow:
       inset 0 -1px 0 0 var(--lumo-shade-10pct),
       var(--vaadin-card-box-shadow);
+  }
+
+  :host(:where([theme~='cover-media'])) ::slotted([slot='media']) {
+    border-radius: var(--lumo-border-radius-m);
+    /* box-shadow: var(--lumo-box-shadow-xs); */
+  }
+
+  /* Support for rounded outlines in Safari aligns with support for the :fullscreen selector */
+  /* @supports selector(:fullscreen) {
+    ::slotted([slot='media']:not(.cover)) {
+      outline: 1px solid var(--lumo-contrast-10pct);
+      outline-offset: -1px;
+    }
+  } */
+
+  ::slotted([slot='title']) {
+    font-size: var(--lumo-font-size-l);
+    line-height: var(--lumo-line-height-xs);
+    font-weight: 600;
+    color: var(--lumo-header-text-color);
+  }
+
+  ::slotted([slot='subtitle']) {
+    font-size: var(--lumo-font-size-m);
+    line-height: var(--lumo-line-height-xs);
+    color: var(--lumo-secondary-text-color);
   }
 `;
 
