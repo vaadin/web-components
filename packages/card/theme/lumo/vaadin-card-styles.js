@@ -56,16 +56,7 @@ const card = css`
 
   :host(:where([theme~='cover-media'])) ::slotted([slot='media']) {
     border-radius: var(--lumo-border-radius-m);
-    /* box-shadow: var(--lumo-box-shadow-xs); */
   }
-
-  /* Support for rounded outlines in Safari aligns with support for the :fullscreen selector */
-  /* @supports selector(:fullscreen) {
-    ::slotted([slot='media']:not(.cover)) {
-      outline: 1px solid var(--lumo-contrast-10pct);
-      outline-offset: -1px;
-    }
-  } */
 
   ::slotted([slot='title']) {
     font-size: var(--lumo-font-size-l);
