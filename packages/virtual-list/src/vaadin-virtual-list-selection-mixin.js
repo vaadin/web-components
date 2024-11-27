@@ -81,6 +81,7 @@ export const SelectionMixin = (superClass) =>
     __updateElement(el, index) {
       const item = this.items[index];
       el.__item = item;
+      el.__index = index;
 
       el.toggleAttribute('selected', this.__isSelected(item));
       el.tabIndex = this.__isNavigating() && this.selectionMode && this.__focusIndex === index ? 0 : -1;
@@ -124,12 +125,20 @@ export const SelectionMixin = (superClass) =>
 
     /** @private */
     __getItemFromEvent(e) {
-      const element = e.composedPath().find((el) => el.parentElement === this);
+      const element = this.__getRootElementFromEvent(e);
       return element ? element.__item : null;
     }
 
     /** @private */
+    __getRootElementFromEvent(e) {
+      return e.composedPath().find((el) => el.parentElement === this);
+    }
+
+    /** @private */
     __toggleSelection(item) {
+      if (item === undefined) {
+        return;
+      }
       if (this.__isSelected(item)) {
         this.selectedItems = this.selectedItems.filter((selectedItem) => !this.__itemsEqual(selectedItem, item));
       } else if (this.selectionMode === 'multi') {
@@ -150,7 +159,7 @@ export const SelectionMixin = (superClass) =>
 
     /** @private */
     __getRenderedFocusIndexElement() {
-      return [...this.children].find((el) => this.__getItemIndex(el.__item) === this.__focusIndex);
+      return [...this.children].find((el) => el.__index === this.__focusIndex);
     }
 
     /** @private */
@@ -161,11 +170,6 @@ export const SelectionMixin = (superClass) =>
     /** @private */
     __isNavigating() {
       return this.hasAttribute('navigating');
-    }
-
-    /** @private */
-    __getItemIndex(item) {
-      return this.items.indexOf(item);
     }
 
     /** @private */
@@ -261,7 +265,7 @@ export const SelectionMixin = (superClass) =>
       // Update focus index based on the focused item
       const targetItem = this.__getItemFromEvent(e);
       if (targetItem) {
-        this.__focusIndex = this.__getItemIndex(targetItem);
+        this.__focusIndex = this.__getRootElementFromEvent(e).__index;
       }
 
       // Focus the root element matching focus index if focus came from outside

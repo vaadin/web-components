@@ -31,6 +31,16 @@
       list.selectionMode = 'multi';
       list.selectedItems = [items[0]];
       list.itemIdPath = 'label';
+
+      const selectionMode = document.querySelector('#selection-mode');
+      selectionMode.value = list.selectionMode;
+      selectionMode.addEventListener('change', (e) => {
+        if (e.target.value === 'none') {
+          list.selectionMode = null;
+        } else {
+          list.selectionMode = e.target.value;
+        }
+      });
     </script>
   </head>
 
@@ -38,5 +48,11 @@
     <button>Focus</button>
     <vaadin-virtual-list style="height: 400px"></vaadin-virtual-list>
     <button>Focus</button>
+
+    <select id="selection-mode">
+      <option>none</option>
+      <option>single</option>
+      <option>multi</option>
+    </select>
   </body>
 </html>
