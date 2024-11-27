@@ -361,6 +361,10 @@ describe('accessibility', () => {
   });
 
   describe('accessibleName', () => {
+    beforeEach(() => {
+      initFixture('default');
+    });
+
     it('should not define aria-label on the table when accessibleName is not set', async () => {
       await nextFrame();
       expect(grid.$.table.getAttribute('aria-label')).to.be.null;
