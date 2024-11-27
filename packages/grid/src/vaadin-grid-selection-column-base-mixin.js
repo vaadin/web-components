@@ -92,12 +92,6 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
 
         /** @protected */
         _selectAllHidden: Boolean,
-
-        /** @private */
-        __shiftKeyPressed: Boolean,
-
-        /** @private */
-        __lastActiveItem: Object,
       };
     }
 
@@ -211,13 +205,24 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
 
     /** @private */
     __onGridKeyboardInteraction(e) {
-      this.__shiftKeyPressed = e.shiftKey;
+      this.__shiftKeyActive = e.shiftKey;
     }
 
     /** @private */
     __onGridSelectStart(e) {
-      if (this.__shiftKeyPressed && this.__lastActiveItem) {
+      // Prevent text selection when shift-selecting a range of items.
+      if (this.__lastToggledItem && this.__shiftKeyActive) {
         e.preventDefault();
+      }
+    }
+
+    /** @private */
+    __onGridItemActivate(e) {
+      if (this.autoSelect) {
+        const { item } = e.detail.model;
+        if (item) {
+          this.__toggleItem(item);
+        }
       }
     }
 
@@ -233,38 +238,7 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
         return;
       }
 
-      const item = e.currentTarget.__item;
-      if (e.target.checked) {
-        this._selectItem(item);
-      } else {
-        this._deselectItem(item);
-      }
-
-      const lastActiveItem = this.__lastActiveItem;
-      if (this.__shiftKeyPressed && lastActiveItem) {
-        this.__lastActiveItem = null;
-        this._rangeSelection(lastActiveItem, item);
-      } else {
-        this.__lastActiveItem = item;
-      }
-    }
-
-    /** @private */
-    __onGridItemActivate(e) {
-      if (this.autoSelect) {
-        const { item } = e.detail.model;
-        if (item) {
-          this._grid._toggleItem(item);
-        }
-
-        const lastActiveItem = this.__lastActiveItem;
-        if (this.__shiftKeyPressed && lastActiveItem) {
-          this._rangeSelection(lastActiveItem, item);
-          this.__lastActiveItem = null;
-        } else {
-          this.__lastActiveItem = item;
-        }
-      }
+      this.__toggleItem(e.target.__item, e.target.checked);
     }
 
     /** @private */
@@ -460,14 +434,26 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
 
     /**
      * Toggles the selected state of the given item.
+     *
      * @param item the item to toggle
+     * @param selected the new selected state
      * @private
      */
-    __toggleItem(item) {
-      if (this._grid._isSelected(item)) {
-        this._deselectItem(item);
-      } else {
+    __toggleItem(item, selected = !this._grid._isSelected(item)) {
+      if (selected) {
         this._selectItem(item);
+      } else {
+        this._deselectItem(item);
+      }
+
+      const lastToggledItem = this.__lastToggledItem;
+      const isRangeSelection =
+        this.__shiftKeyActive && lastToggledItem && !this._grid._itemsEqual(lastToggledItem, item);
+      if (isRangeSelection) {
+        this._rangeSelection(lastToggledItem, item);
+        this.__lastToggledItem = null;
+      } else {
+        this.__lastToggledItem = item;
       }
     }
 
