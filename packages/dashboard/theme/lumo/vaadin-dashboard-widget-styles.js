@@ -26,6 +26,9 @@ addGlobalThemeStyles('dashboard-widget-props', dashboardWidgetProps);
 
 /* Styles shared between widgets and sections */
 const dashboardWidgetAndSection = css`
+  /* stylelint-disable rule-empty-line-before */
+  /* stylelint-disable length-zero-no-unit */
+
   :host {
     color: var(--lumo-body-text-color);
     font-family: var(--lumo-font-family);

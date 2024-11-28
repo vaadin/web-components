@@ -7,6 +7,8 @@ import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themab
 import { dashboardWidgetAndSection } from './vaadin-dashboard-widget-styles.js';
 
 const section = css`
+  /* stylelint-disable rule-empty-line-before */
+
   :host {
     --_section-outline-offset: calc(min(var(--_vaadin-dashboard-gap), var(--_vaadin-dashboard-padding)) / 3);
     --_focus-ring-offset: calc((var(--_section-outline-offset) - var(--_focus-ring-width)));
