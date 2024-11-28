@@ -139,7 +139,6 @@ class DashboardWidget extends DashboardItemMixin(ElementMixin(ThemableMixin(Poly
           content: '';
           z-index: 2;
           position: absolute;
-          inset-inline-start: calc(-1);
           top: -1px;
           width: var(--_vaadin-dashboard-widget-resizer-width, 0);
           height: var(--_vaadin-dashboard-widget-resizer-height, 0);
