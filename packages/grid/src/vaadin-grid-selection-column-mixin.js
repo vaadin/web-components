@@ -29,14 +29,12 @@ export const GridSelectionColumnMixin = (superClass) =>
     constructor() {
       super();
 
-      this.__boundOnActiveItemChanged = this.__onActiveItemChanged.bind(this);
       this.__boundUpdateSelectAllVisibility = this.__updateSelectAllVisibility.bind(this);
       this.__boundOnSelectedItemsChanged = this.__onSelectedItemsChanged.bind(this);
     }
 
     /** @protected */
     disconnectedCallback() {
-      this._grid.removeEventListener('active-item-changed', this.__boundOnActiveItemChanged);
       this._grid.removeEventListener('data-provider-changed', this.__boundUpdateSelectAllVisibility);
       this._grid.removeEventListener('is-item-selectable-changed', this.__boundUpdateSelectAllVisibility);
       this._grid.removeEventListener('filter-changed', this.__boundOnSelectedItemsChanged);
@@ -49,7 +47,6 @@ export const GridSelectionColumnMixin = (superClass) =>
     connectedCallback() {
       super.connectedCallback();
       if (this._grid) {
-        this._grid.addEventListener('active-item-changed', this.__boundOnActiveItemChanged);
         this._grid.addEventListener('data-provider-changed', this.__boundUpdateSelectAllVisibility);
         this._grid.addEventListener('is-item-selectable-changed', this.__boundUpdateSelectAllVisibility);
         this._grid.addEventListener('filter-changed', this.__boundOnSelectedItemsChanged);
@@ -131,18 +128,6 @@ export const GridSelectionColumnMixin = (superClass) =>
       if (this._grid.__isItemSelectable(item)) {
         this._grid.deselectItem(item);
       }
-    }
-
-    /** @private */
-    __onActiveItemChanged(e) {
-      const activeItem = e.detail.value;
-      if (this.autoSelect) {
-        const item = activeItem || this.__previousActiveItem;
-        if (item) {
-          this.__toggleItem(item);
-        }
-      }
-      this.__previousActiveItem = activeItem;
     }
 
     /** @private */

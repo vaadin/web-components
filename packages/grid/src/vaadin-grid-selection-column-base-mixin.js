@@ -101,6 +101,27 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
       ];
     }
 
+    constructor() {
+      super();
+      this.__onActiveItemChanged = this.__onActiveItemChanged.bind(this);
+    }
+
+    /** @protected */
+    connectedCallback() {
+      super.connectedCallback();
+      if (this._grid) {
+        this._grid.addEventListener('active-item-changed', this.__onActiveItemChanged);
+      }
+    }
+
+    /** @protected */
+    disconnectedCallback() {
+      super.disconnectedCallback();
+      if (this._grid) {
+        this._grid.removeEventListener('active-item-changed', this.__onActiveItemChanged);
+      }
+    }
+
     /**
      * Renders the Select All checkbox to the header cell.
      *
@@ -182,11 +203,7 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
         return;
       }
 
-      if (e.target.checked) {
-        this._selectItem(e.target.__item);
-      } else {
-        this._deselectItem(e.target.__item);
-      }
+      this.__toggleItem(e.target.__item, e.target.checked);
     }
 
     /** @private */
@@ -262,6 +279,18 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
         const checkbox = target._content.firstElementChild;
         this.__toggleItem(checkbox.__item);
       }
+    }
+
+    /** @private */
+    __onActiveItemChanged(e) {
+      const activeItem = e.detail.value;
+      if (this.autoSelect) {
+        const item = activeItem || this.__previousActiveItem;
+        if (item) {
+          this.__toggleItem(item);
+        }
+      }
+      this.__previousActiveItem = activeItem;
     }
 
     /** @private */
@@ -373,14 +402,16 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
 
     /**
      * Toggles the selected state of the given item.
+     *
      * @param item the item to toggle
+     * @param {boolean} [selected] whether to select or deselect the item
      * @private
      */
-    __toggleItem(item) {
-      if (this._grid._isSelected(item)) {
-        this._deselectItem(item);
-      } else {
+    __toggleItem(item, selected = !this._grid._isSelected(item)) {
+      if (selected) {
         this._selectItem(item);
+      } else {
+        this._deselectItem(item);
       }
     }
 
