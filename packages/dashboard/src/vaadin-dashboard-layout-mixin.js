@@ -45,6 +45,7 @@ export const DashboardLayoutMixin = (superClass) =>
             var(--vaadin-dashboard-padding, var(--_vaadin-dashboard-default-padding))
           );
           padding: var(--_vaadin-dashboard-padding);
+          padding-bottom: max(0.5rem, var(--_vaadin-dashboard-padding));
 
           /* Gap between widgets */
           --_vaadin-dashboard-default-gap: 1rem;
@@ -85,7 +86,8 @@ export const DashboardLayoutMixin = (superClass) =>
           --_vaadin-dashboard-row-height: minmax(var(--_vaadin-dashboard-row-min-height, auto), auto);
 
           display: grid;
-          overflow: auto;
+          overflow-y: auto;
+          overflow-x: hidden;
           height: 100%;
 
           grid-template-columns: repeat(
