@@ -97,6 +97,16 @@ export const SelectionMixin = (superClass) =>
       }
     }
 
+    selectItems(items) {
+      this.selectedItems = [...this.selectedItems, ...items.filter((item) => !this._isSelected(item))];
+    }
+
+    deselectItems(items) {
+      this.selectedItems = this.selectedItems.filter((item) => {
+        return !items.some((itemToDeselect) => this._itemsEqual(item, itemToDeselect));
+      });
+    }
+
     /**
      * Deselects the given item if it is already selected.
      *
@@ -107,17 +117,6 @@ export const SelectionMixin = (superClass) =>
       if (this._isSelected(item)) {
         this.selectedItems = this.selectedItems.filter((i) => !this._itemsEqual(i, item));
       }
-    }
-
-    /**
-     * @protected
-     */
-    _rangeSelection(startItem, endItem) {
-      this.dispatchEvent(
-        new CustomEvent('range-selection', {
-          detail: { startItem, endItem },
-        }),
-      );
     }
 
     /** @private */

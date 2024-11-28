@@ -205,13 +205,13 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
 
     /** @private */
     __onGridKeyboardInteraction(e) {
-      this.__shiftKeyActive = e.shiftKey;
+      this._shiftKeyActive = e.shiftKey;
     }
 
     /** @private */
     __onGridSelectStart(e) {
       // Prevent text selection when shift-selecting a range of items.
-      if (this.__rangeSelectionStartItem && this.__shiftKeyActive) {
+      if (this._shiftKeyActive) {
         e.preventDefault();
       }
     }
@@ -424,15 +424,6 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
     _deselectItem(_item) {}
 
     /**
-     * Override to handle the user selecting a range of items.
-     *
-     * @param {Object} startItem the item where the range selection started
-     * @param {Object} endItem the item where the range selection ended
-     * @protected
-     */
-    _rangeSelection(_startItem, _endItem) {}
-
-    /**
      * Toggles the selected state of the given item.
      *
      * @param item the item to toggle
@@ -445,12 +436,6 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
       } else {
         this._deselectItem(item);
       }
-
-      const startItem = this.__rangeSelectionStartItem || item;
-      if (this.__shiftKeyActive && !this._grid._itemsEqual(startItem, item)) {
-        this._rangeSelection(startItem, item);
-      }
-      this.__rangeSelectionStartItem = item;
     }
 
     /**

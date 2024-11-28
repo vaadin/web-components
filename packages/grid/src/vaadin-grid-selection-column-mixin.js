@@ -113,6 +113,14 @@ export const GridSelectionColumnMixin = (superClass) =>
     _selectItem(item) {
       if (this._grid.__isItemSelectable(item)) {
         this._grid.selectItem(item);
+        this._grid.dispatchEvent(
+          new CustomEvent('item-selected', {
+            detail: {
+              item,
+              shiftKey: this._shiftKeyActive,
+            },
+          }),
+        );
       }
     }
 
@@ -127,15 +135,15 @@ export const GridSelectionColumnMixin = (superClass) =>
     _deselectItem(item) {
       if (this._grid.__isItemSelectable(item)) {
         this._grid.deselectItem(item);
+        this._grid.dispatchEvent(
+          new CustomEvent('item-deselected', {
+            detail: {
+              item,
+              shiftKey: this._shiftKeyActive,
+            },
+          }),
+        );
       }
-    }
-
-    /**
-     * @protected
-     * @override
-     */
-    _rangeSelection(startItem, endItem) {
-      this._grid._rangeSelection(startItem, endItem);
     }
 
     /** @private */
