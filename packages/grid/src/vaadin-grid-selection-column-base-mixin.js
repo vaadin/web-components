@@ -402,7 +402,9 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
 
     /**
      * Toggles the selected state of the given item.
+     *
      * @param item the item to toggle
+     * @param {boolean} [selected] whether to select or deselect the item
      * @private
      */
     __toggleItem(item, selected = !this._grid._isSelected(item)) {
