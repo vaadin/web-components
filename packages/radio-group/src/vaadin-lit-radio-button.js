@@ -29,22 +29,6 @@ class RadioButton extends RadioButtonMixin(ElementMixin(ThemableMixin(PolylitMix
     return radioButtonStyles;
   }
 
-  static get properties() {
-    return {
-      /**
-       * True if the element is checked.
-       * @type {boolean}
-       */
-      checked: {
-        type: Boolean,
-        value: false,
-        notify: true,
-        reflectToAttribute: true,
-        sync: true,
-      },
-    };
-  }
-
   /** @protected */
   render() {
     return html`
