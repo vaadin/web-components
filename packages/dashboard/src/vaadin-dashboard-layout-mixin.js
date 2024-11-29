@@ -86,8 +86,7 @@ export const DashboardLayoutMixin = (superClass) =>
           --_vaadin-dashboard-row-height: minmax(var(--_vaadin-dashboard-row-min-height, auto), auto);
 
           display: grid;
-          overflow-y: auto;
-          overflow-x: hidden;
+          overflow-x: hidden auto;
           height: 100%;
 
           grid-template-columns: repeat(
