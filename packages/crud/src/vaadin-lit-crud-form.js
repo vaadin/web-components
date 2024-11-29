@@ -10,7 +10,8 @@
  */
 import '@vaadin/text-field/src/vaadin-lit-text-field.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
-import { FormLayout } from '@vaadin/form-layout/src/vaadin-lit-form-layout.js';
+import { FormLayout } from '@vaadin/form-layout/src/vaadin-form-layout.js';
+// import { FormLayout } from '@vaadin/form-layout/src/vaadin-lit-form-layout.js';
 import { createField, createFields } from './vaadin-crud-helpers.js';
 import { IncludedMixin } from './vaadin-crud-include-mixin.js';
 
