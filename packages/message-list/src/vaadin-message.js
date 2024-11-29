@@ -7,8 +7,11 @@ import '@vaadin/avatar/src/vaadin-avatar.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
-import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { MessageMixin } from './vaadin-message-mixin.js';
+import { messageStyles } from './vaadin-message-styles.js';
+
+registerStyles('vaadin-message', messageStyles, { moduleId: 'vaadin-message-styles' });
 
 /**
  * `<vaadin-message>` is a Web Component for showing a single message with an author, message and time.
@@ -48,43 +51,6 @@ import { MessageMixin } from './vaadin-message-mixin.js';
 class Message extends MessageMixin(ElementMixin(ThemableMixin(PolymerElement))) {
   static get template() {
     return html`
-      <style>
-        :host {
-          display: flex;
-          flex-direction: row;
-          outline: none;
-        }
-
-        :host([hidden]) {
-          display: none !important;
-        }
-
-        [part='content'] {
-          display: flex;
-          flex-direction: column;
-          flex-grow: 1;
-        }
-
-        [part='header'] {
-          align-items: baseline;
-          display: flex;
-          flex-direction: row;
-          flex-wrap: wrap;
-        }
-
-        [part='name'] {
-          font-weight: 500;
-        }
-
-        [part='message'] {
-          white-space: pre-wrap;
-        }
-
-        ::slotted([slot='avatar']) {
-          --vaadin-avatar-outline-width: 0px;
-          flex-shrink: 0;
-        }
-      </style>
       <slot name="avatar"></slot>
       <div part="content">
         <div part="header">
