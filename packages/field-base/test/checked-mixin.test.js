@@ -1,47 +1,52 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fire, fixtureSync } from '@vaadin/testing-helpers';
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { defineLit, definePolymer, fire, fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import { DelegateFocusMixin } from '@vaadin/a11y-base/src/delegate-focus-mixin.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
+import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { CheckedMixin } from '../src/checked-mixin.js';
 import { InputController } from '../src/input-controller.js';
 
-customElements.define(
-  'checked-mixin-element',
-  class extends CheckedMixin(DelegateFocusMixin(ControllerMixin(PolymerElement))) {
-    static get template() {
-      return html`<div>
+const runTests = (defineHelper, baseMixin) => {
+  const tag = defineHelper(
+    'checked-mixin',
+    `
+      <div>
         <slot></slot>
         <slot name="input"></slot>
-      </div>`;
-    }
+      </div>
+    `,
+    (Base) =>
+      class extends CheckedMixin(DelegateFocusMixin(baseMixin(Base))) {
+        constructor() {
+          super();
 
-    constructor() {
-      super();
+          this._setType('checkbox');
+        }
 
-      this._setType('checkbox');
-      this.addController(
-        new InputController(this, (input) => {
-          this._setInputElement(input);
-          this._setFocusElement(input);
-          this.stateTarget = input;
-        }),
-      );
-    }
-  },
-);
+        ready() {
+          super.ready();
 
-describe('checked-mixin', () => {
+          this.addController(
+            new InputController(this, (input) => {
+              this._setInputElement(input);
+              this._setFocusElement(input);
+              this.stateTarget = input;
+            }),
+          );
+        }
+      },
+  );
+
   let element, input, link;
 
   describe('default', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       element = fixtureSync(`
-        <checked-mixin-element>
+        <${tag}>
           I accept <a href="#">the terms and conditions</a>
-        </checked-mixin-element>
+        </${tag}>
       `);
-
+      await nextRender();
       link = element.querySelector('a');
       input = element.querySelector('[slot=input]');
     });
@@ -94,8 +99,9 @@ describe('checked-mixin', () => {
 
   describe('delegation', () => {
     describe('checked property', () => {
-      beforeEach(() => {
-        element = fixtureSync(`<checked-mixin-element checked></checked-mixin-element>`);
+      beforeEach(async () => {
+        element = fixtureSync(`<${tag} checked></${tag}>`);
+        await nextRender();
         input = element.querySelector('[slot=input]');
       });
 
@@ -107,4 +113,12 @@ describe('checked-mixin', () => {
       });
     });
   });
+};
+
+describe('CheckedMixin + Polymer', () => {
+  runTests(definePolymer, ControllerMixin);
+});
+
+describe('CheckedMixin + Lit', () => {
+  runTests(defineLit, PolylitMixin);
 });

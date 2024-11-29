@@ -30,6 +30,7 @@ export const CheckedMixin = dedupingMixin(
             value: false,
             notify: true,
             reflectToAttribute: true,
+            sync: true,
           },
         };
       }
