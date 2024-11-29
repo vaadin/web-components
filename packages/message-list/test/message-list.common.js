@@ -12,7 +12,6 @@ import {
   nextRender,
   tabKeyDown,
 } from '@vaadin/testing-helpers';
-import '../vaadin-message-list.js';
 
 describe('message-list', () => {
   let messageList, messages;
@@ -107,7 +106,7 @@ describe('message-list', () => {
       expect(firstMessage.userImg).to.be.equal(messages[0].userImg);
       expect(firstMessage.userColorIndex).to.be.equal(messages[0].userColorIndex);
       expect(firstMessage.textContent).to.be.equal(messages[0].text);
-      expect(firstMessage.theme).to.be.equal(messages[0].theme);
+      expect(firstMessage.getAttribute('theme')).to.be.equal(messages[0].theme);
     });
 
     describe('adding / removing', () => {

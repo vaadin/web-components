@@ -35,6 +35,7 @@ export const MessageListMixin = (superClass) =>
           type: Array,
           value: () => [],
           observer: '_itemsChanged',
+          sync: true,
         },
       };
     }
