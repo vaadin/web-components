@@ -128,6 +128,7 @@ export const CrudMixin = (superClass) =>
         editOnClick: {
           type: Boolean,
           value: false,
+          sync: true,
         },
 
         /**
@@ -194,6 +195,7 @@ export const CrudMixin = (superClass) =>
           reflectToAttribute: true,
           notify: true,
           observer: '__editorOpenedChanged',
+          sync: true,
         },
 
         /**
@@ -261,6 +263,7 @@ export const CrudMixin = (superClass) =>
          */
         i18n: {
           type: Object,
+          sync: true,
           value() {
             return {
               newItem: 'New item',
