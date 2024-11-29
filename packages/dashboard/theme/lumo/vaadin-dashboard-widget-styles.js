@@ -201,9 +201,10 @@ const dashboardWidget = css`
   /* Resize handle */
 
   [part~='resize-button'] {
+    --_resize-button-offset: min(var(--_vaadin-dashboard-gap), var(--_vaadin-dashboard-padding), var(--lumo-space-xs));
     position: absolute;
-    bottom: calc(-1 * var(--lumo-space-xs));
-    inset-inline-end: calc(-1 * var(--lumo-space-xs));
+    bottom: calc(-1 * var(--_resize-button-offset));
+    inset-inline-end: calc(-1 * var(--_resize-button-offset));
     cursor: nwse-resize;
     --icon: var(--lumo-icons-resize-handle);
   }
