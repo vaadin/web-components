@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import {
@@ -352,6 +352,41 @@ describe('keyboard navigation', () => {
 
       await sendKeys({ press: 'Escape' });
       expect(getContainerCellContent(grid.$.items, 0, 0).textContent).to.equal('0 foo');
+    });
+
+    it('should not fire event when tabbed through cells with slow editor', async () => {
+      const itemPropertyChangedSpy = sinon.spy();
+      grid.addEventListener('item-property-changed', itemPropertyChangedSpy);
+
+      const column = grid.querySelector('vaadin-grid-pro-edit-column');
+
+      // Custom editor with delayed operations
+      column.editModeRenderer = (root, _, __) => {
+        if (!root.firstElementChild) {
+          const input = document.createElement('input');
+          let actualValue = '';
+          Object.defineProperty(input, 'value', {
+            async get() {
+              await aTimeout(100);
+              return actualValue;
+            },
+            async set(v) {
+              await aTimeout(100);
+              actualValue = v;
+            },
+          });
+          root.appendChild(input);
+        }
+      };
+
+      const firstCell = getContainerCell(grid.$.items, 0, 0);
+      dblclick(firstCell._content);
+
+      await sendKeys({ press: 'Tab' });
+      await sendKeys({ press: 'Tab' });
+      await nextFrame();
+
+      expect(itemPropertyChangedSpy.called).to.be.false;
     });
   });
 });

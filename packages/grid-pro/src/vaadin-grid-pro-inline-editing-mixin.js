@@ -401,7 +401,7 @@ export const InlineEditingMixin = (superClass) =>
       }
       const { cell, column, model } = this.__edited;
 
-      if (!shouldCancel) {
+      if (!shouldCancel && !this.hasAttribute('loading-editor')) {
         const editor = column._getEditorComponent(cell);
         if (editor) {
           const value = column._getEditorValue(editor);
