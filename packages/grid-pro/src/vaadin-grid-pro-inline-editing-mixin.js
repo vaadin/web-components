@@ -227,7 +227,7 @@ export const InlineEditingMixin = (superClass) =>
     }
 
     /** @private */
-    _applyEdit({ path, value, index, item }) {
+    _applyEdit({ path, value, _, item }) {
       set(path, value, item);
       this.requestContentUpdate();
     }
@@ -273,6 +273,7 @@ export const InlineEditingMixin = (superClass) =>
     }
 
     /** @private */
+    // eslint-disable-next-line @typescript-eslint/class-methods-use-this
     _isEditColumn(column) {
       return column && column.localName.toLowerCase() === 'vaadin-grid-pro-edit-column';
     }
@@ -405,7 +406,7 @@ export const InlineEditingMixin = (superClass) =>
       }
       const { cell, column, model } = this.__edited;
 
-      if (!shouldCancel) {
+      if (!shouldCancel && !this.hasAttribute('loading-editor')) {
         const editor = column._getEditorComponent(cell);
         if (editor) {
           const value = column._getEditorValue(editor);
