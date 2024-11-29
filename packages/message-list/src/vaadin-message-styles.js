@@ -25,8 +25,7 @@ export const messageStyles = css`
   [part='header'] {
     align-items: baseline;
     display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
+    flex-flow: row wrap;
   }
 
   [part='name'] {
@@ -38,7 +37,7 @@ export const messageStyles = css`
   }
 
   ::slotted([slot='avatar']) {
-    --vaadin-avatar-outline-width: 0px;
+    --vaadin-avatar-outline-width: 0;
     flex-shrink: 0;
   }
 `;
