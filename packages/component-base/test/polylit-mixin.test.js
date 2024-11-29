@@ -504,7 +504,7 @@ describe('PolylitMixin', () => {
 
   describe('complex observer', () => {
     let element;
-    let valueOrLoadingChangedSpy, countOrLoadingChangedSpy;
+    let valueOrLoadingChangedSpy, countOrLoadingChangedSpy, i18nSpy;
 
     const readySpy = sinon.spy();
     const helperChangedSpy = sinon.spy();
@@ -534,6 +534,10 @@ describe('PolylitMixin', () => {
               type: String,
               value: 'Default Helper',
             },
+
+            i18n: {
+              type: Object,
+            },
           };
         }
 
@@ -543,6 +547,7 @@ describe('PolylitMixin', () => {
             '_countOrLoadingChanged(count, loading)',
             '_idChanged(id)',
             '_helperChanged(helper)',
+            '_i18nChanged(i18n.name)',
           ];
         }
 
@@ -563,6 +568,8 @@ describe('PolylitMixin', () => {
 
         _countOrLoadingChanged(_count, _loading) {}
 
+        _i18nChanged(_name) {}
+
         _helperChanged(value) {
           helperChangedSpy(value);
 
@@ -575,6 +582,7 @@ describe('PolylitMixin', () => {
       element = fixtureSync(`<${tag}></${tag}>`);
       valueOrLoadingChangedSpy = sinon.spy(element, '_valueOrLoadingChanged');
       countOrLoadingChangedSpy = sinon.spy(element, '_countOrLoadingChanged');
+      i18nSpy = sinon.spy(element, '_i18nChanged');
       await element.updateComplete;
     });
 
@@ -614,6 +622,13 @@ describe('PolylitMixin', () => {
 
     it('should run a complex observer whose dependency has a default value', () => {
       expect(countOrLoadingChangedSpy.calledOnce).to.be.true;
+    });
+
+    it('should pass sub-properties of observed object to the complex observer', async () => {
+      element.i18n = { name: 'foo' };
+      await element.updateComplete;
+      expect(i18nSpy.calledOnce).to.be.true;
+      expect(i18nSpy.getCall(0).args).to.eql(['foo']);
     });
 
     describe('missing', () => {
