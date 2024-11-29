@@ -3,20 +3,11 @@
  * Copyright (c) 2021 - 2024 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { KeyboardDirectionMixin } from '@vaadin/a11y-base/src/keyboard-direction-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { MessageListMixin } from './vaadin-message-list-mixin.js';
 
-export interface MessageListItem {
-  text?: string;
-  time?: string;
-  userName?: string;
-  userAbbr?: string;
-  userImg?: string;
-  userColorIndex?: number;
-  theme?: string;
-  className?: string;
-}
+export { MessageListItem } from './vaadin-message-list-mixin.js';
 
 /**
  * `<vaadin-message-list>` is a Web Component for showing an ordered list of messages. The messages are rendered as <vaadin-message>
@@ -51,27 +42,7 @@ export interface MessageListItem {
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  */
-declare class MessageList extends KeyboardDirectionMixin(ThemableMixin(ElementMixin(HTMLElement))) {
-  /**
-   * An array of objects which will be rendered as messages.
-   * The message objects can have the following properties:
-   * ```js
-   * Array<{
-   *   text: string,
-   *   time: string,
-   *   userName: string,
-   *   userAbbr: string,
-   *   userImg: string,
-   *   userColorIndex: number,
-   *   className: string,
-   *   theme: string
-   * }>
-   * ```
-   *
-   * @type {!Array<!MessageListItem>}
-   */
-  items: MessageListItem[] | null | undefined;
-}
+declare class MessageList extends MessageListMixin(ThemableMixin(ElementMixin(HTMLElement))) {}
 
 declare global {
   interface HTMLElementTagNameMap {
