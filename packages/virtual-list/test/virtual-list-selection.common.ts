@@ -9,8 +9,8 @@ type TestItem = { id: number; name: string } | undefined;
 
 async function click(el: HTMLElement) {
   el.focus();
-  // TODO: No await?
-  await helperClick(el);
+  helperClick(el);
+  await nextFrame();
 }
 
 async function shiftTab() {
