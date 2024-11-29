@@ -321,15 +321,15 @@ export const CrudMixin = (superClass) =>
 
     static get observers() {
       return [
-        '__headerPropsChanged(_defaultHeader, __isNew, i18n.newItem, i18n.editItem)',
+        '__headerPropsChanged(_defaultHeader, __isNew, i18n)',
         '__formPropsChanged(_form, _theme, include, exclude)',
         '__gridPropsChanged(_grid, _theme, include, exclude, noFilter, noHead, noSort, items)',
         '__i18nChanged(i18n, _grid)',
         '__editOnClickChanged(editOnClick, _grid)',
-        '__saveButtonPropsChanged(_saveButton, i18n.saveItem, __isDirty)',
-        '__cancelButtonPropsChanged(_cancelButton, i18n.cancel)',
-        '__deleteButtonPropsChanged(_deleteButton, i18n.deleteItem, __isNew)',
-        '__newButtonPropsChanged(_newButton, i18n.newItem)',
+        '__saveButtonPropsChanged(_saveButton, i18n, __isDirty)',
+        '__cancelButtonPropsChanged(_cancelButton, i18n)',
+        '__deleteButtonPropsChanged(_deleteButton, i18n, __isNew)',
+        '__newButtonPropsChanged(_newButton, i18n)',
       ];
     }
 
@@ -423,9 +423,9 @@ export const CrudMixin = (superClass) =>
      * @param {string} i18nEditItem
      * @private
      */
-    __headerPropsChanged(headerNode, isNew, i18nNewItem, i18nEditItem) {
+    __headerPropsChanged(headerNode, isNew, i18n) {
       if (headerNode) {
-        headerNode.textContent = isNew ? i18nNewItem : i18nEditItem;
+        headerNode.textContent = isNew ? i18n.newItem : i18n.editItem;
       }
     }
 
@@ -677,12 +677,12 @@ export const CrudMixin = (superClass) =>
      * @param {boolean} isDirty
      * @private
      */
-    __saveButtonPropsChanged(saveButton, i18nLabel, isDirty) {
+    __saveButtonPropsChanged(saveButton, i18n, isDirty) {
       if (saveButton) {
         saveButton.toggleAttribute('disabled', this.__isSaveBtnDisabled(isDirty));
 
         if (saveButton === this._saveButtonController.defaultNode) {
-          saveButton.textContent = i18nLabel;
+          saveButton.textContent = i18n.saveItem;
         }
       }
     }
@@ -693,12 +693,12 @@ export const CrudMixin = (superClass) =>
      * @param {boolean} isNew
      * @private
      */
-    __deleteButtonPropsChanged(deleteButton, i18nLabel, isNew) {
+    __deleteButtonPropsChanged(deleteButton, i18n, isNew) {
       if (deleteButton) {
         deleteButton.toggleAttribute('hidden', isNew);
 
         if (deleteButton === this._deleteButtonController.defaultNode) {
-          deleteButton.textContent = i18nLabel;
+          deleteButton.textContent = i18n.deleteItem;
         }
       }
     }
@@ -708,9 +708,9 @@ export const CrudMixin = (superClass) =>
      * @param {string} i18nLabel
      * @private
      */
-    __cancelButtonPropsChanged(cancelButton, i18nLabel) {
+    __cancelButtonPropsChanged(cancelButton, i18n) {
       if (cancelButton && cancelButton === this._cancelButtonController.defaultNode) {
-        cancelButton.textContent = i18nLabel;
+        cancelButton.textContent = i18n.cancel;
       }
     }
 
@@ -719,9 +719,9 @@ export const CrudMixin = (superClass) =>
      * @param {string} i18nNewItem
      * @private
      */
-    __newButtonPropsChanged(newButton, i18nNewItem) {
+    __newButtonPropsChanged(newButton, i18n) {
       if (newButton && newButton === this._newButtonController.defaultNode) {
-        newButton.textContent = i18nNewItem;
+        newButton.textContent = i18n.newItem;
       }
     }
 
