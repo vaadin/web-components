@@ -172,7 +172,7 @@ registerStyles('vaadin-crud', crudStyles, { moduleId: 'vaadin-crud-styles' });
  * @mixes ThemableMixin
  * @mixes CrudMixin
  */
-class Crud extends ControllerMixin(ElementMixin(ThemableMixin(CrudMixin(PolymerElement)))) {
+class Crud extends CrudMixin(ControllerMixin(ElementMixin(ThemableMixin(PolymerElement)))) {
   static get template() {
     return html`
       <div id="container">

@@ -8,7 +8,6 @@
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
-
 import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import { FocusRestorationController } from '@vaadin/a11y-base/src/focus-restoration-controller.js';
 import { MediaQueryController } from '@vaadin/component-base/src/media-query-controller.js';
