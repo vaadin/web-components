@@ -275,7 +275,7 @@ const PolylitMixinImplementation = (superclass) => {
     /** @private */
     __runComplexObservers(props, observers) {
       observers.forEach((observerProps, method) => {
-        if (observerProps.some((prop) => props.has(prop.split('.')[0]))) {
+        if (observerProps.some((prop) => !prop.endsWith('.*') && props.has(prop.split('.')[0]))) {
           if (!this[method]) {
             console.warn(`observer method ${method} not defined`);
           } else {

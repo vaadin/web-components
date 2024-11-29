@@ -504,7 +504,7 @@ describe('PolylitMixin', () => {
 
   describe('complex observer', () => {
     let element;
-    let valueOrLoadingChangedSpy, countOrLoadingChangedSpy, i18nSpy;
+    let valueOrLoadingChangedSpy, countOrLoadingChangedSpy, i18nSpy, wildcardSpy;
 
     const readySpy = sinon.spy();
     const helperChangedSpy = sinon.spy();
@@ -538,6 +538,10 @@ describe('PolylitMixin', () => {
             i18n: {
               type: Object,
             },
+
+            wildcard: {
+              type: Object,
+            },
           };
         }
 
@@ -548,6 +552,7 @@ describe('PolylitMixin', () => {
             '_idChanged(id)',
             '_helperChanged(helper)',
             '_i18nChanged(i18n.name)',
+            '_wildcardChanged(wildcard.*)',
           ];
         }
 
@@ -570,6 +575,8 @@ describe('PolylitMixin', () => {
 
         _i18nChanged(_name) {}
 
+        _wildcardChanged(_wildcard) {}
+
         _helperChanged(value) {
           helperChangedSpy(value);
 
@@ -583,6 +590,7 @@ describe('PolylitMixin', () => {
       valueOrLoadingChangedSpy = sinon.spy(element, '_valueOrLoadingChanged');
       countOrLoadingChangedSpy = sinon.spy(element, '_countOrLoadingChanged');
       i18nSpy = sinon.spy(element, '_i18nChanged');
+      wildcardSpy = sinon.spy(element, '_wildcardChanged');
       await element.updateComplete;
     });
 
@@ -629,6 +637,12 @@ describe('PolylitMixin', () => {
       await element.updateComplete;
       expect(i18nSpy.calledOnce).to.be.true;
       expect(i18nSpy.getCall(0).args).to.eql(['foo']);
+    });
+
+    it('should not invoke complex observer for wildcard syntax', async () => {
+      element.wildcard = { name: 'foo' };
+      await element.updateComplete;
+      expect(wildcardSpy.called).to.be.false;
     });
 
     describe('missing', () => {
