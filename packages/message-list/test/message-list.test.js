@@ -23,35 +23,34 @@ describe('message-list', () => {
     root.style.setProperty('--vaadin-user-color-2', 'blue');
 
     messageList = fixtureSync('<vaadin-message-list></vaadin-message-list>');
+
+    // Transparent 1px gif
+    const img = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
     messages = [
       {
         text: 'A message in the stream of messages',
         time: '9:34 AM',
         userName: 'Joan Doe',
         userAbbr: 'JD',
-        userImg: 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=',
+        userImg: img,
         userColorIndex: 1,
         theme: 'fancy',
       },
       {
         text: 'A message in the stream of messages',
         time: '9:35 AM',
-        user: {
-          name: 'Joan Doe',
-          abbr: 'JD',
-          img: 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=',
-          colorIndex: 1,
-        },
+        userName: 'Joan Doe',
+        userAbbr: 'JD',
+        userImg: img,
+        userColorIndex: 1,
       },
       {
         text: 'A message in the stream of messages',
         time: '9:36 AM',
-        user: {
-          name: 'Joan Doe',
-          abbr: 'JD',
-          img: 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=',
-          colorIndex: 1,
-        },
+        userName: 'Joan Doe',
+        userAbbr: 'JD',
+        userImg: img,
+        userColorIndex: 1,
       },
       {
         text: 'Call upon the times of glory',
@@ -169,11 +168,9 @@ describe('message-list', () => {
           {
             text: 'A new message arrives!',
             time: '2:35 PM',
-            user: {
-              name: 'Steve Mops',
-              abbr: 'SM',
-              colorIndex: 2,
-            },
+            userName: 'Steve Mops',
+            userAbbr: 'SM',
+            userColorIndex: 2,
           },
         ];
         await nextRender(messageList);
@@ -187,11 +184,9 @@ describe('message-list', () => {
           {
             text: 'A new message arrives!',
             time: '2:35 PM',
-            user: {
-              name: 'Steve Mops',
-              abbr: 'SM',
-              colorIndex: 2,
-            },
+            userName: 'Steve Mops',
+            userAbbr: 'SM',
+            userColorIndex: 2,
           },
         ];
         await nextRender(messageList);
@@ -214,20 +209,16 @@ describe('message-list', () => {
           {
             text: 'This is a new list',
             time: '2:35 PM',
-            user: {
-              name: 'Steve Mops',
-              abbr: 'SM',
-              colorIndex: 2,
-            },
+            userName: 'Steve Mops',
+            userAbbr: 'SM',
+            userColorIndex: 2,
           },
           {
             text: 'With two items',
             time: '2:35 PM',
-            user: {
-              name: 'Steve Mops',
-              abbr: 'SM',
-              colorIndex: 2,
-            },
+            userName: 'Steve Mops',
+            userAbbr: 'SM',
+            userColorIndex: 2,
           },
         ];
         await nextRender(messageList);
@@ -245,11 +236,9 @@ describe('message-list', () => {
           {
             text: 'A new message arrives!',
             time: '2:35 PM',
-            user: {
-              name: 'Steve Mops',
-              abbr: 'SM',
-              colorIndex: 2,
-            },
+            userName: 'Steve Mops',
+            userAbbr: 'SM',
+            userColorIndex: 2,
           },
         ];
         await nextRender(messageList);
@@ -269,20 +258,16 @@ describe('message-list', () => {
           {
             text: 'This is a new list',
             time: '2:35 PM',
-            user: {
-              name: 'Steve Mops',
-              abbr: 'SM',
-              colorIndex: 2,
-            },
+            userName: 'Steve Mops',
+            userAbbr: 'SM',
+            userColorIndex: 2,
           },
           {
             text: 'With two items',
             time: '2:35 PM',
-            user: {
-              name: 'Steve Mops',
-              abbr: 'SM',
-              colorIndex: 2,
-            },
+            userName: 'Steve Mops',
+            userAbbr: 'SM',
+            userColorIndex: 2,
           },
         ];
 
