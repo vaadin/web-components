@@ -247,6 +247,7 @@ class DatePicker extends DatePickerMixin(InputControlMixin(ThemableMixin(Element
 
   /** @private */
   _onVaadinOverlayClose(e) {
+    // Prevent closing the overlay on label element click
     if (e.detail.sourceEvent && e.detail.sourceEvent.composedPath().includes(this)) {
       e.preventDefault();
     }

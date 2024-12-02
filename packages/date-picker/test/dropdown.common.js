@@ -56,6 +56,32 @@ describe('dropdown', () => {
     });
   });
 
+  describe('label click', () => {
+    let label;
+
+    beforeEach(() => {
+      label = datePicker.querySelector('label');
+    });
+
+    it('should open by clicking the label', async () => {
+      label.click();
+      await oneEvent(overlay, 'vaadin-overlay-open');
+      expect(datePicker.opened).to.be.true;
+      expect(overlay.opened).to.be.true;
+    });
+
+    it('should prevent overlay close on label click', async () => {
+      label.click();
+      await oneEvent(overlay, 'vaadin-overlay-open');
+
+      const spy = sinon.spy();
+      overlay.addEventListener('vaadin-overlay-close', spy);
+
+      label.click();
+      expect(spy.firstCall.args[0].defaultPrevented).to.be.true;
+    });
+  });
+
   describe('scroll to date', () => {
     it('should scroll to today by default', async () => {
       datePicker.open();
