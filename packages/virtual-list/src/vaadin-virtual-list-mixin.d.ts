@@ -12,6 +12,7 @@ export type VirtualListDefaultItem = any;
 export interface VirtualListItemModel<TItem> {
   index: number;
   item: TItem;
+  selected?: boolean;
 }
 
 export type VirtualListRenderer<TItem> = (
