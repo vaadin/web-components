@@ -453,6 +453,7 @@ export const ComboBoxMixin = (subclass) =>
     /**
      * Override LitElement lifecycle callback to handle filter property change.
      * @param {Object} props
+     * @protected
      */
     updated(props) {
       super.updated(props);
