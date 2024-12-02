@@ -72,7 +72,7 @@ export const SelectionMixin = (superClass) =>
       super();
 
       this.addEventListener('keydown', (e) => this.__onKeyDown(e));
-      this.addEventListener('click', (e) => this.__onClick(e));
+      this.addEventListener('click', () => this.__onClick());
       this.addEventListener('focusin', (e) => this.__onFocusIn(e));
       this.addEventListener('focusout', (e) => this.__onFocusOut(e));
     }
@@ -149,10 +149,15 @@ export const SelectionMixin = (superClass) =>
     }
 
     /** @private */
-    __focusElementWithFocusIndex() {
+    __ensureFocusedIndexInView() {
       if (!this.__getRenderedFocusIndexElement()) {
         this.scrollToIndex(this.__focusIndex);
       }
+    }
+
+    /** @private */
+    __focusElementWithFocusIndex() {
+      this.__ensureFocusedIndexInView();
       this.__getRenderedFocusIndexElement().focus();
       this.requestContentUpdate();
     }
@@ -200,7 +205,7 @@ export const SelectionMixin = (superClass) =>
           this.__onNavigationEnterKey();
         } else if (e.key === ' ') {
           e.preventDefault();
-          this.__toggleSelection(this.__getItemFromEvent(e));
+          this.__onNavigationSpaceKey();
         } else if (e.key === 'Tab') {
           this.__onNavigationTabKey(e.shiftKey);
         }
@@ -230,6 +235,12 @@ export const SelectionMixin = (superClass) =>
     }
 
     /** @private */
+    __onNavigationSpaceKey() {
+      this.__ensureFocusedIndexInView();
+      this.__toggleSelection(this.__getRenderedFocusIndexElement().__item);
+    }
+
+    /** @private */
     __onNavigationEnterKey() {
       // Get the focused item
       const focusedItem = this.querySelector('[focused]');
@@ -241,15 +252,12 @@ export const SelectionMixin = (superClass) =>
     }
 
     /** @private */
-    __onClick(e) {
+    __onClick() {
       if (!this.selectionMode || !this.__isNavigating()) {
         return;
       }
 
-      const item = this.__getItemFromEvent(e);
-      if (item) {
-        this.__toggleSelection(item);
-      }
+      this.__toggleSelection(this.__getRenderedFocusIndexElement().__item);
     }
 
     /** @private */
