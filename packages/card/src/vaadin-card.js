@@ -33,153 +33,94 @@ class Card extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
       :host {
         display: grid;
         padding: var(--vaadin-card-padding);
+        column-gap: var(--vaadin-card-column-gap);
+        row-gap: var(--vaadin-card-row-gap);
+        grid-auto-flow: dense;
+        justify-items: start;
+        align-content: start;
+
+        --media: 0;
+        --title: 0;
+        --subtitle: 0;
+        --title-suffix: 0;
+        --content: 0;
+        --suffix: 0;
       }
 
       :host(:not([theme~='horizontal'])) {
-        row-gap: var(--vaadin-card-row-gap);
-        grid-template-columns: 1fr minmax(0, auto);
-        grid-template-rows: repeat(auto-fit, minmax(min-content, 0));
-        justify-items: start;
-        grid-auto-flow: dense;
-      }
-
-      slot {
-        border-radius: inherit;
-      }
-
-      ::slotted(:not([slot], :only-child, :first-child)) {
-        margin-top: var(--vaadin-card-gap);
-      }
-
-      :host(:not([theme~='horizontal'])) ::slotted([slot='media']) {
-        grid-column: auto / span 2;
-      }
-
-      :host(:where([theme~='cover-media'], [theme~='stretch-media'])) ::slotted([slot='media']) {
-        max-width: none;
-        width: 100%;
-        height: auto;
-        aspect-ratio: var(--vaadin-card-media-aspect-ratio, 16/9);
-        object-fit: cover;
-        align-self: stretch;
-        /* TODO looks like a missing property from avatar */
-        box-sizing: border-box;
-      }
-
-      :host(:where([theme~='cover-media'], [theme~='stretch-media'])) ::slotted([slot='media']:only-child) {
-        aspect-ratio: auto;
-        align-self: stretch;
-      }
-
-      :host(:where([theme~='stretch-media'])) ::slotted([slot='media']) {
-        margin: calc(var(--vaadin-card-padding) * -1);
-        border-radius: inherit;
-        width: calc(100% + var(--vaadin-card-padding) * 2);
-      }
-
-      :host(:where([theme~='cover-media'], [theme~='stretch-media']):not([theme~='horizontal']))
-        ::slotted([slot='media']:not(:only-child)) {
-        margin-bottom: calc(var(--vaadin-card-padding) - var(--vaadin-card-row-gap));
-      }
-
-      :host([theme~='stretch-media']:not([theme~='horizontal'])) ::slotted([slot='media']:not(:only-child)) {
-        border-end-start-radius: 0;
-        border-end-end-radius: 0;
-      }
-
-      ::slotted([slot='title']) {
-        align-self: center;
-      }
-
-      :host(:not([theme~='horizontal'])) ::slotted([slot='title']) {
-        grid-column: 1;
-      }
-
-      ::slotted([slot='subtitle']) {
-        align-self: center;
-      }
-
-      :host(:not([theme~='horizontal'])) ::slotted([slot='subtitle']) {
-        margin-top: calc(var(--vaadin-card-row-gap) * -1);
-        grid-column: 1;
-      }
-
-      ::slotted([slot='title-suffix']) {
-        align-self: center;
-        justify-self: end;
-      }
-
-      :host(:not([theme~='horizontal'])) ::slotted([slot='title-suffix']) {
-        grid-row: auto / span 2;
-        grid-column: 2;
-      }
-
-      :host(:not([theme~='horizontal'])) ::slotted(:not([slot])) {
-        grid-column: auto / span 2;
-      }
-
-      :host(:not([theme~='horizontal'])) ::slotted(:not([slot]):only-child) {
-        grid-row: 1 / span 2;
-      }
-
-      :host(:not([theme~='horizontal'])) ::slotted(*:only-child) {
-        grid-row: 1 / span 2;
-        grid-column: 1;
-      }
-
-      :host(:not([theme~='horizontal'])) ::slotted([slot='suffix']) {
-        grid-row: -1;
-        align-self: end;
-        grid-column: auto / span 2;
+        grid-template-columns: 1fr repeat(var(--title-suffix), auto);
+        grid-template-rows: auto auto auto repeat(var(--content), 1fr);
       }
 
       :host([theme~='horizontal']) {
-        column-gap: var(--vaadin-card-column-gap);
-        grid-template-rows: minmax(min-content, 0) minmax(min-content, 0);
-        --vaadin-card-media-aspect-ratio: 1;
+        grid-template-columns: [media-start] auto [media-end content-start title-start subtitle-start] 1fr [title-end subtitle-end title-suffix-start] auto [content-end title-suffix-end suffix-start] auto [suffix-end];
+        grid-template-rows: [title-start] auto [title-end subtitle-start] auto [subtitle-end content-start] 1fr [content-end];
       }
 
-      :host([theme~='horizontal']) ::slotted([slot='media']) {
-        grid-row: 1 / span 3;
+      :host(:is(:has([slot='media']), [has-media])) {
+        --media: 1;
       }
 
-      :host([theme~='horizontal']) ::slotted([slot='title']) {
-        grid-row: 1;
+      :host(:is(:has([slot='title']), [has-title])) {
+        --title: 1;
       }
 
-      :host([theme~='horizontal']) ::slotted([slot='subtitle']) {
-        grid-row: 2;
+      :host(:is(:has([slot='subtitle']), [has-subtitle])) {
+        --subtitle: 1;
       }
 
-      :host([theme~='horizontal']) ::slotted([slot='title-suffix']),
-      :host([theme~='horizontal']) slot[name='title-suffix'] span {
-        grid-row: 1 / span 2;
+      :host(:is(:has([slot='title-suffix']), [has-title-suffix])) {
+        --title-suffix: 1;
       }
 
-      :host([theme~='horizontal']) ::slotted([slot='suffix']) {
+      :host(:is(:has(:scope > :not([slot])), [has-content])) {
+        --content: 1;
+      }
+
+      :host(:is(:has([slot='suffix']), [has-suffix])) {
+        --suffix: 1;
+      }
+
+      :host(:not([theme~='horizontal'])) ::slotted(*) {
+        grid-column: 1 / -1;
+      }
+
+      :host(:not([theme~='horizontal'])) ::slotted([slot='media']) {
+        grid-row-start: 1;
+      }
+
+      :host(:not([theme~='horizontal'])) ::slotted([slot='title']) {
+        grid-row-start: calc(1 + var(--media));
+      }
+
+      :host(:not([theme~='horizontal'])) ::slotted([slot='subtitle']) {
+        grid-row-start: calc(1 + var(--media) + var(--title));
+      }
+
+      :host(:not([theme~='horizontal'])) ::slotted([slot='title-suffix']) {
+        grid-column: 2;
+        grid-row-start: calc(1 + var(--media));
+        grid-row-end: calc(1 + var(--media) + var(--title) + var(--subtitle));
         align-self: center;
-        grid-row: 1 / span 3;
       }
 
-      :host([theme~='horizontal']) ::slotted(:not([slot])) {
-        grid-column: auto / span 2;
+      :host(:not([theme~='horizontal'])) ::slotted(:is([slot='title'], [slot='subtitle'])) {
+        grid-column: 1 / calc(-1 - var(--title-suffix));
       }
 
-      :host([theme~='horizontal']) ::slotted(:not([slot], :only-child, :first-child)) {
-        margin-top: var(--vaadin-card-row-gap);
+      :host(:not([theme~='horizontal'])) ::slotted(:not([slot])) {
+        grid-row-start: calc(1 + var(--media) + var(--title) + var(--subtitle));
+        align-self: stretch;
       }
 
-      :host([theme~='stretch-media'][theme~='horizontal']) ::slotted([slot='media']) {
-        margin-inline-end: 0;
-        border-start-end-radius: 0;
-        border-end-end-radius: 0;
-        width: calc(100% + var(--vaadin-card-padding));
+      :host(:not([theme~='horizontal'])) ::slotted([slot='suffix']) {
+        grid-row-start: calc(1 + var(--media) + var(--title) + var(--subtitle) + var(--content));
+        align-self: end;
       }
 
-      :host([theme~='stretch-media'][theme~='horizontal']) ::slotted([slot='media']:only-child) {
-        max-width: calc(100% + var(--vaadin-card-padding) * 2);
-        border-radius: inherit;
-        grid-row: -1;
+      /* Last element spans any remaining rows. This assumes that the last child is also the last visible slotted row. */
+      :host(:not([theme~='horizontal'])) ::slotted(:last-child) {
+        grid-row-end: span calc(6 - var(--media) - var(--title) - var(--subtitle) - var(--content) - var(--suffix));
       }
     `;
   }
@@ -194,10 +135,39 @@ class Card extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
       <slot name="media"></slot>
       <slot name="title"></slot>
       <slot name="subtitle"></slot>
-      <slot name="title-suffix"><span></span></slot>
+      <slot name="title-suffix"></slot>
       <slot></slot>
       <slot name="suffix"></slot>
     `;
+  }
+
+  /** @private */
+  _mutationObserver;
+
+  /** @private */
+  _onMutation() {
+    this.toggleAttribute('has-media', this.querySelector(':scope > [slot="media"]'));
+    this.toggleAttribute('has-title', this.querySelector(':scope > [slot="title"]'));
+    this.toggleAttribute('has-subtitle', this.querySelector(':scope > [slot="subtitle"]'));
+    this.toggleAttribute('has-title-suffix', this.querySelector(':scope > [slot="title-suffix"]'));
+    this.toggleAttribute('has-content', this.querySelector(':scope > :not([slot])'));
+    this.toggleAttribute('has-suffix', this.querySelector(':scope > [slot="suffix"]'));
+  }
+
+  connectedCallback() {
+    super.connectedCallback();
+
+    if (!CSS.supports('selector(:host(:has([slot])))')) {
+      if (!this._mutationObserver) {
+        this._mutationObserver = new MutationObserver(this._onMutation.bind(this));
+      }
+      this._mutationObserver.observe(this, { childList: 'true' });
+    }
+  }
+
+  disconnectedCallback() {
+    if (this._mutationObserver) this._mutationObserver.disconnect();
+    super.disconnectedCallback();
   }
 }
 
