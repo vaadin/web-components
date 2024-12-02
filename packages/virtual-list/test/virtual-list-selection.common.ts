@@ -40,8 +40,8 @@ describe('selection', () => {
 
     list.style.height = '200px';
     list.items = Array.from({ length: 100 }, (_, i) => ({ id: i, name: `Item ${i}` }));
-    list.renderer = (root, _, { item }) => {
-      root.textContent = item?.name || 'undefined';
+    list.renderer = (root, _, { item, selected }) => {
+      root.textContent = `${item?.name} ${selected ? 'selected' : ''}`;
     };
     await nextFrame();
   });
@@ -276,6 +276,16 @@ describe('selection', () => {
       const listRect = list.getBoundingClientRect();
       const firstVisibleItemRect = getRenderedItem(newfirstVisibleIndex)!.getBoundingClientRect();
       expect(firstVisibleItemRect.top).to.equal(listRect.top);
+    });
+
+    it('should re-render items on selection', async () => {
+      expect(getRenderedItem(0)?.textContent).to.equal('Item 0 ');
+      list.selectedItems = [list.items![0]];
+      await nextFrame();
+      expect(getRenderedItem(0)?.textContent).to.equal('Item 0 selected');
+      list.selectedItems = [];
+      await nextFrame();
+      expect(getRenderedItem(0)?.textContent).to.equal('Item 0 ');
     });
 
     describe('focusable children', () => {

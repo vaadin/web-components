@@ -92,6 +92,16 @@ export const SelectionMixin = (superClass) =>
       );
     }
 
+    /**
+     * @private
+     */
+    __updateItemModel(model, item, index) {
+      model.selected = this.__isSelected(item);
+      if (super.__updateItemModel) {
+        super.__updateItemModel(model, item, index);
+      }
+    }
+
     /** @private */
     __selectionModeChanged() {
       this.__setNavigating(true);

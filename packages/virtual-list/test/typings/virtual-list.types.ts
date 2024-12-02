@@ -31,6 +31,7 @@ virtualList.renderer = (root, virtualList, model) => {
   assertType<VirtualList>(virtualList);
   assertType<VirtualListItemModel<TestVirtualListItem>>(model);
   assertType<number>(model.index);
+  assertType<boolean | undefined>(model.selected);
   assertType<TestVirtualListItem>(model.item);
 };
 
