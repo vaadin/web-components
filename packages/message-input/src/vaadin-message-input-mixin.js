@@ -21,6 +21,7 @@ export const MessageInputMixin = (superClass) =>
         value: {
           type: String,
           value: '',
+          sync: true,
         },
 
         /**
@@ -45,6 +46,7 @@ export const MessageInputMixin = (superClass) =>
          */
         i18n: {
           type: Object,
+          sync: true,
           value: () => ({
             send: 'Send',
             message: 'Message',
@@ -59,16 +61,19 @@ export const MessageInputMixin = (superClass) =>
           type: Boolean,
           value: false,
           reflectToAttribute: true,
+          sync: true,
         },
 
         /** @private */
         _button: {
           type: Object,
+          sync: true,
         },
 
         /** @private */
         _textArea: {
           type: Object,
+          sync: true,
         },
       };
     }
@@ -111,7 +116,18 @@ export const MessageInputMixin = (superClass) =>
             }
           });
 
-          const input = textarea.inputElement;
+          let input = textarea.inputElement;
+
+          // With Lit version, input element renders asynchronously and it will
+          // override the `rows` attribute set to `1` in the `minRows` observer.
+          // Workaround by creating a custom textarea instead to not update it.
+          // TODO: needs https://github.com/vaadin/web-components/pull/8168
+          if (!input) {
+            input = document.createElement('textarea');
+            input.setAttribute('slot', 'textarea');
+            textarea.appendChild(input);
+          }
+
           input.removeAttribute('aria-labelledby');
 
           // Set initial height to one row
@@ -149,12 +165,7 @@ export const MessageInputMixin = (superClass) =>
 
         const message = i18n.message;
         textArea.placeholder = message;
-
-        if (message) {
-          textArea.inputElement.setAttribute('aria-label', message);
-        } else {
-          textArea.inputElement.removeAttribute('aria-label');
-        }
+        textArea.accessibleName = message;
       }
     }
 
