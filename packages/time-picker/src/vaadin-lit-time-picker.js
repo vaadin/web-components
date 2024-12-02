@@ -10,9 +10,6 @@ import { ifDefined } from 'lit/directives/if-defined.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
-import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
-import { InputController } from '@vaadin/field-base/src/input-controller.js';
-import { LabelledInputController } from '@vaadin/field-base/src/labelled-input-controller.js';
 import { inputFieldShared } from '@vaadin/field-base/src/styles/input-field-shared-styles.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { TimePickerMixin } from './vaadin-time-picker-mixin.js';
@@ -50,15 +47,6 @@ class TimePicker extends TimePickerMixin(ThemableMixin(ElementMixin(PolylitMixin
         }
       `,
     ];
-  }
-
-  static get properties() {
-    return {
-      /** @private */
-      _inputContainer: {
-        type: Object,
-      },
-    };
   }
 
   /** @protected */
@@ -112,37 +100,6 @@ class TimePicker extends TimePickerMixin(ThemableMixin(ElementMixin(PolylitMixin
 
       <slot name="tooltip"></slot>
     `;
-  }
-
-  /** @protected */
-  ready() {
-    super.ready();
-
-    this.addController(
-      new InputController(
-        this,
-        (input) => {
-          this._setInputElement(input);
-          this._setFocusElement(input);
-          this.stateTarget = input;
-          this.ariaTarget = input;
-        },
-        {
-          // The "search" word is a trick to prevent Safari from enabling AutoFill,
-          // which is causing click issues:
-          // https://github.com/vaadin/web-components/issues/6817#issuecomment-2268229567
-          uniqueIdPrefix: 'search-input',
-        },
-      ),
-    );
-    this.addController(new LabelledInputController(this.inputElement, this._labelController));
-    this._inputContainer = this.shadowRoot.querySelector('[part~="input-field"]');
-
-    this._tooltipController = new TooltipController(this);
-    this._tooltipController.setShouldShow((timePicker) => !timePicker.opened);
-    this._tooltipController.setPosition('top');
-    this._tooltipController.setAriaTarget(this.inputElement);
-    this.addController(this._tooltipController);
   }
 
   /** @private */
