@@ -10,6 +10,10 @@ export const tooltipOverlayStyles = css`
     max-width: 40ch;
   }
 
+  [part='content'] {
+    white-space: pre-wrap;
+  }
+
   :host([position^='top'][top-aligned]) [part='overlay'],
   :host([position^='bottom'][top-aligned]) [part='overlay'] {
     margin-top: var(--vaadin-tooltip-offset-top, 0);
