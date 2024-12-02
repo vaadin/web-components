@@ -77,6 +77,11 @@ export const SelectionMixin = (superClass) =>
       this.addEventListener('focusout', (e) => this.__onFocusOut(e));
     }
 
+    ready() {
+      super.ready();
+      this.__updateAria();
+    }
+
     /** @private */
     __updateElement(el, index) {
       const item = this.items[index];
@@ -85,6 +90,10 @@ export const SelectionMixin = (superClass) =>
 
       el.toggleAttribute('selected', this.__isSelected(item));
       el.tabIndex = this.__isNavigating() && this.selectionMode && this.__focusIndex === index ? 0 : -1;
+      el.role = this.selectionMode ? 'option' : 'listitem';
+      el.ariaSelected = this.selectionMode ? this.__isSelected(item) : null;
+      el.ariaSetSize = this.items.length;
+      el.ariaPosInSet = index + 1;
 
       el.toggleAttribute(
         'focused',
@@ -106,6 +115,13 @@ export const SelectionMixin = (superClass) =>
     __selectionModeChanged() {
       this.__setNavigating(true);
       this.requestContentUpdate();
+      this.__updateAria();
+    }
+
+    /** @private */
+    __updateAria() {
+      this.role = this.selectionMode ? 'listbox' : 'list';
+      this.ariaMultiSelectable = this.selectionMode === 'multi' ? 'true' : null;
     }
 
     /** @private */
