@@ -11,7 +11,7 @@ import '@vaadin/radio-group';
 import '@vaadin/select';
 import '@vaadin/text-field';
 import { html, render } from 'lit';
-import { close, waitForOverlayRender } from '@vaadin/date-picker/test/helpers.js';
+import { waitForOverlayRender } from '@vaadin/date-picker/test/helpers.js';
 import { FieldHighlighter } from '../src/vaadin-field-highlighter.js';
 
 async function waitForIntersectionObserver() {
@@ -93,7 +93,7 @@ describe('field components', () => {
         field.focus();
         await open(field);
         await waitForOverlayRender();
-        await close(field);
+        field.close();
         expect(hideSpy.callCount).to.equal(0);
       });
 
@@ -102,7 +102,7 @@ describe('field components', () => {
         await waitForOverlayRender();
 
         field.focus();
-        await close(field);
+        field.close();
 
         expect(hideSpy.callCount).to.equal(0);
       });
@@ -477,7 +477,7 @@ describe('field components', () => {
       // Focus date element and then time-picker
       await date._overlayContent.focusDateElement();
       time.focus();
-      await close(date);
+      date.close();
 
       expect(hideSpy.callCount).to.equal(1);
       expect(hideSpy.firstCall.args[0].detail.fieldIndex).to.equal(0);
