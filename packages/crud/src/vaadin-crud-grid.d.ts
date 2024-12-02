@@ -9,30 +9,12 @@
  * license.
  */
 import { Grid } from '@vaadin/grid/src/vaadin-grid.js';
-import { IncludedMixin } from './vaadin-crud-include-mixin.js';
+import { CrudGridMixin } from './vaadin-crud-grid-mixin.js';
 
 /**
  * An element used internally by `<vaadin-crud>`. Not intended to be used separately.
  */
-declare class CrudGrid extends IncludedMixin(Grid) {
-  /**
-   * Disable filtering in the generated columns.
-   * @attr {boolean} no-filter
-   */
-  noFilter: boolean | null | undefined;
-
-  /**
-   * Disable sorting in the generated columns.
-   * @attr {boolean} no-sort
-   */
-  noSort: boolean | null | undefined;
-
-  /**
-   * Do not add headers to columns.
-   * @attr {boolean} no-head
-   */
-  noHead: boolean | null | undefined;
-}
+declare class CrudGrid extends CrudGridMixin(Grid) {}
 
 declare global {
   interface HTMLElementTagNameMap {
