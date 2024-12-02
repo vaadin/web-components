@@ -97,6 +97,11 @@ export const SelectionMixin = (superClass) =>
       }
     }
 
+    /** @private */
+    __selectItems(items) {
+      this.selectedItems = [...this.selectedItems, ...items.filter((item) => !this._isSelected(item))];
+    }
+
     /**
      * Deselects the given item if it is already selected.
      *
@@ -107,6 +112,12 @@ export const SelectionMixin = (superClass) =>
       if (this._isSelected(item)) {
         this.selectedItems = this.selectedItems.filter((i) => !this._itemsEqual(i, item));
       }
+    }
+
+    /** @private */
+    __deselectItems(items) {
+      const itemKeys = new Set(items.map((item) => this.getItemId(item)));
+      this.selectedItems = this.selectedItems.filter((item) => !itemKeys.has(this.getItemId(item)));
     }
 
     /** @private */

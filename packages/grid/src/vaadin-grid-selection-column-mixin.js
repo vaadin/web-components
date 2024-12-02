@@ -19,6 +19,18 @@ export const GridSelectionColumnMixin = (superClass) =>
          * @private
          */
         __previousActiveItem: Object,
+
+        /**
+         * When true, a range of rows can be selected with Shift + Click.
+         *
+         * NOTE: Only supported when using the array data provider. For other cases,
+         * range selection must be implemented manually.
+         */
+        rangeSelect: {
+          type: Boolean,
+          value: false,
+          sync: true,
+        },
       };
     }
 
@@ -121,6 +133,14 @@ export const GridSelectionColumnMixin = (superClass) =>
             },
           }),
         );
+
+        if (this.rangeSelect && this.__hasArrayDataProvider) {
+          this.__rangeStartItem ??= item;
+          if (this._shiftKeyDown) {
+            this.__selectRange(this.__rangeStartItem, item);
+          }
+          this.__rangeStartItem = item;
+        }
       }
     }
 
@@ -143,7 +163,27 @@ export const GridSelectionColumnMixin = (superClass) =>
             },
           }),
         );
+
+        if (this.rangeSelect && this.__hasArrayDataProvider) {
+          this.__rangeStartItem ??= item;
+          if (this._shiftKeyDown) {
+            this.__deselectRange(this.__rangeStartItem, item);
+          }
+          this.__rangeStartItem = item;
+        }
       }
+    }
+
+    __selectRange(startItem, endItem) {
+      this.__fetchSelectionRange([startItem, endItem], (items) => {
+        this._grid.__selectItems(items);
+      });
+    }
+
+    __deselectRange(startItem, endItem) {
+      this.__fetchSelectionRange([startItem, endItem], (items) => {
+        this._grid.__deselectItems(items);
+      });
     }
 
     /** @private */
@@ -189,9 +229,31 @@ export const GridSelectionColumnMixin = (superClass) =>
       const params = {
         page: 0,
         pageSize: Infinity,
-        sortOrders: [],
+        sortOrders: this._grid._mapSorters(),
         filters: this._grid._mapFilters(),
       };
       this._grid.dataProvider(params, (items) => callback(items));
+    }
+
+    /** @private */
+    __fetchSelectionRange([startItem, endItem], callback) {
+      this.__withFilteredItemsArray((items) => {
+        const range = new Set();
+        items.forEach((item) => {
+          if (!this._grid.__isItemSelectable(item)) {
+            return;
+          }
+          if (this._grid._itemsEqual(item, startItem)) {
+            range.add(startItem);
+          } else if (this._grid._itemsEqual(item, endItem)) {
+            range.add(endItem);
+          } else if (range.has(startItem) && !range.has(endItem)) {
+            range.add(item);
+          } else if (!range.has(startItem) && range.has(endItem)) {
+            range.add(item);
+          }
+        });
+        callback([...range]);
+      });
     }
   };
