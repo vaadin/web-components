@@ -128,8 +128,6 @@ export const MessageInputMixin = (superClass) =>
             textarea.appendChild(input);
           }
 
-          input.removeAttribute('aria-labelledby');
-
           // Set initial height to one row
           input.setAttribute('rows', 1);
           input.style.minHeight = '0';
