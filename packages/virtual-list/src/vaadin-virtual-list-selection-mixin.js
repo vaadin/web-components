@@ -152,6 +152,14 @@ export const SelectionMixin = (superClass) =>
     __ensureFocusedIndexInView() {
       if (!this.__getRenderedFocusIndexElement()) {
         this.scrollToIndex(this.__focusIndex);
+      } else {
+        const listRect = this.getBoundingClientRect();
+        const elementRect = this.__getRenderedFocusIndexElement().getBoundingClientRect();
+        if (elementRect.top < listRect.top) {
+          this.scrollTop -= listRect.top - elementRect.top;
+        } else if (elementRect.bottom > listRect.bottom) {
+          this.scrollTop += elementRect.bottom - listRect.bottom;
+        }
       }
     }
 
@@ -159,7 +167,6 @@ export const SelectionMixin = (superClass) =>
     __focusElementWithFocusIndex() {
       this.__ensureFocusedIndexInView();
       this.__getRenderedFocusIndexElement().focus();
-      this.requestContentUpdate();
     }
 
     /** @private */
