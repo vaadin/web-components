@@ -117,7 +117,7 @@ export const GridSelectionColumnMixin = (superClass) =>
           new CustomEvent('item-selected', {
             detail: {
               item,
-              shiftKey: this._shiftKeyActive,
+              shiftKey: this._shiftKeyDown,
             },
           }),
         );
@@ -139,7 +139,7 @@ export const GridSelectionColumnMixin = (superClass) =>
           new CustomEvent('item-deselected', {
             detail: {
               item,
-              shiftKey: this._shiftKeyActive,
+              shiftKey: this._shiftKeyDown,
             },
           }),
         );

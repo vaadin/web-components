@@ -94,7 +94,7 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
         _selectAllHidden: Boolean,
 
         /** @protected */
-        _shiftKeyActive: Boolean,
+        _shiftKeyDown: Boolean,
       };
     }
 
@@ -204,13 +204,13 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
 
     /** @private */
     __onGridInteraction(e) {
-      this._shiftKeyActive = e.shiftKey;
+      this._shiftKeyDown = e.shiftKey;
     }
 
     /** @private */
     __onGridSelectStart(e) {
       // Prevent text selection when shift-selecting a range of items.
-      if (this._shiftKeyActive) {
+      if (this._shiftKeyDown) {
         e.preventDefault();
       }
     }
