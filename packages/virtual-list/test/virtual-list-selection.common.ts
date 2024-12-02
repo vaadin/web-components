@@ -251,6 +251,33 @@ describe('selection', () => {
       await sendKeys({ press: 'Enter' });
     });
 
+    it('should ensure focused index in viewport when navigating down with arrow keys', async () => {
+      const lastVisibleIndex = list.lastVisibleIndex;
+      await click(getRenderedItem(lastVisibleIndex)!);
+      await sendKeys({ press: 'ArrowDown' });
+      await nextFrame();
+      const newLastVisibleIndex = list.lastVisibleIndex;
+      expect(newLastVisibleIndex).to.equal(lastVisibleIndex + 1);
+
+      const listRect = list.getBoundingClientRect();
+      const lastVisibleItemRect = getRenderedItem(newLastVisibleIndex)!.getBoundingClientRect();
+      expect(lastVisibleItemRect.bottom).to.equal(listRect.bottom);
+    });
+
+    it('should ensure focused index in viewport when navigating up with arrow keys', async () => {
+      list.scrollToIndex(list.items!.length - 1);
+      const firstVisibleIndex = list.firstVisibleIndex;
+      await click(getRenderedItem(firstVisibleIndex)!);
+      await sendKeys({ press: 'ArrowUp' });
+      await nextFrame();
+      const newfirstVisibleIndex = list.firstVisibleIndex;
+      expect(newfirstVisibleIndex).to.equal(firstVisibleIndex - 1);
+
+      const listRect = list.getBoundingClientRect();
+      const firstVisibleItemRect = getRenderedItem(newfirstVisibleIndex)!.getBoundingClientRect();
+      expect(firstVisibleItemRect.top).to.equal(listRect.top);
+    });
+
     describe('focusable children', () => {
       beforeEach(async () => {
         list.renderer = (root, _, { item }) => {
