@@ -1069,6 +1069,79 @@ describe('PolylitMixin', () => {
     });
   });
 
+  describe('sync observers', () => {
+    let element;
+    const readySpy = sinon.spy();
+    const openedChangedSpy = sinon.spy();
+    const headerChangedSpy = sinon.spy();
+    const contentChangedSpy = sinon.spy();
+
+    const tag = defineCE(
+      class extends PolylitMixin(LitElement) {
+        static get properties() {
+          return {
+            opened: {
+              type: Boolean,
+              sync: true,
+            },
+
+            header: {
+              type: String,
+              sync: true,
+            },
+
+            content: {
+              type: String,
+              sync: true,
+            },
+          };
+        }
+
+        static get observers() {
+          return ['openedChanged(opened)', 'headerChanged(opened, header)', 'contentChanged(opened, content)'];
+        }
+
+        ready() {
+          super.ready();
+          readySpy();
+        }
+
+        openedChanged(opened) {
+          openedChangedSpy();
+
+          if (opened) {
+            this.header = 'Header';
+            this.content = 'Content';
+          }
+        }
+
+        headerChanged(_opened, _header) {
+          headerChangedSpy();
+        }
+
+        contentChanged(_opened, _content) {
+          contentChangedSpy();
+        }
+      },
+    );
+
+    beforeEach(async () => {
+      element = fixtureSync(`<${tag} opened></${tag}>`);
+      await element.updateComplete;
+    });
+
+    it('should call ready after observers during initialization', () => {
+      expect(openedChangedSpy).to.be.calledOnce;
+      expect(headerChangedSpy).to.be.calledTwice;
+      expect(contentChangedSpy).to.be.calledTwice;
+
+      expect(readySpy).to.be.calledOnce;
+      expect(readySpy).to.be.calledAfter(openedChangedSpy);
+      expect(readySpy).to.be.calledAfter(headerChangedSpy);
+      expect(readySpy).to.be.calledAfter(contentChangedSpy);
+    });
+  });
+
   describe('setProperties()', () => {
     let element;
 

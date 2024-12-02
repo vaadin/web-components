@@ -109,8 +109,8 @@ class DatePicker extends DatePickerMixin(InputControlMixin(ThemableMixin(Element
   }
 
   /** @protected */
-  firstUpdated() {
-    super.firstUpdated();
+  ready() {
+    super.ready();
 
     this.addController(
       new InputController(this, (input) => {

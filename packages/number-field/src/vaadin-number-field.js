@@ -7,7 +7,6 @@ import '@vaadin/input-container/src/vaadin-input-container.js';
 import { html, PolymerElement } from '@polymer/polymer';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
-import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { inputFieldShared } from '@vaadin/field-base/src/styles/input-field-shared-styles.js';
 import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { NumberFieldMixin } from './vaadin-number-field-mixin.js';
@@ -127,16 +126,6 @@ export class NumberField extends NumberFieldMixin(ThemableMixin(ElementMixin(Pol
 
       <slot name="tooltip"></slot>
     `;
-  }
-
-  /** @protected */
-  ready() {
-    super.ready();
-
-    this._tooltipController = new TooltipController(this);
-    this.addController(this._tooltipController);
-    this._tooltipController.setPosition('top');
-    this._tooltipController.setAriaTarget(this.inputElement);
   }
 }
 
