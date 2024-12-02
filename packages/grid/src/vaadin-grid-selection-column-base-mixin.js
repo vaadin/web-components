@@ -108,7 +108,7 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
       super();
       this.__onGridSelectStart = this.__onGridSelectStart.bind(this);
       this.__onGridItemActivate = this.__onGridItemActivate.bind(this);
-      this.__onGridKeyboardInteraction = this.__onGridKeyboardInteraction.bind(this);
+      this.__onGridInteraction = this.__onGridInteraction.bind(this);
       this.__onCellTrack = this.__onCellTrack.bind(this);
       this.__onCellClick = this.__onCellClick.bind(this);
       this.__onCellMouseDown = this.__onCellMouseDown.bind(this);
@@ -120,8 +120,9 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
     connectedCallback() {
       super.connectedCallback();
       if (this._grid) {
-        this._grid.addEventListener('keydown', this.__onGridKeyboardInteraction);
-        this._grid.addEventListener('keyup', this.__onGridKeyboardInteraction);
+        this._grid.addEventListener('keydown', this.__onGridInteraction);
+        this._grid.addEventListener('keyup', this.__onGridInteraction);
+        this._grid.addEventListener('click', this.__onGridInteraction);
         this._grid.addEventListener('selectstart', this.__onGridSelectStart);
         this._grid.addEventListener('row-activate', this.__onGridItemActivate);
         this._grid.addEventListener('cell-activate', this.__onGridItemActivate);
@@ -132,8 +133,9 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
     disconnectedCallback() {
       super.disconnectedCallback();
       if (this._grid) {
-        this._grid.removeEventListener('keydown', this.__onGridKeyboardInteraction);
-        this._grid.removeEventListener('keyup', this.__onGridKeyboardInteraction);
+        this._grid.removeEventListener('keydown', this.__onGridInteraction);
+        this._grid.removeEventListener('keyup', this.__onGridInteraction);
+        this._grid.removeEventListener('click', this.__onGridInteraction);
         this._grid.removeEventListener('selectstart', this.__onGridSelectStart);
         this._grid.removeEventListener('row-activate', this.__onGridItemActivate);
         this._grid.removeEventListener('cell-activate', this.__onGridItemActivate);
@@ -201,7 +203,7 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
     }
 
     /** @private */
-    __onGridKeyboardInteraction(e) {
+    __onGridInteraction(e) {
       this._shiftKeyActive = e.shiftKey;
     }
 
