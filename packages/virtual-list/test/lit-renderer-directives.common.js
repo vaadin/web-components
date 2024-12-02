@@ -71,6 +71,7 @@ describe('lit renderer directive', () => {
         expect(rendererSpy.firstCall.args[1]).to.deep.equal({
           item: 'Item',
           index: 0,
+          selected: false,
         });
       });
 
