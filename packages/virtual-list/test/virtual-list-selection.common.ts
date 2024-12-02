@@ -384,4 +384,60 @@ describe('selection', () => {
       });
     });
   });
+
+  describe('a11y', () => {
+    it('should have role="list"', () => {
+      expect(list.role).to.equal('list');
+    });
+
+    it('should have items with role="listitem"', () => {
+      expect(getRenderedItem(0)!.role).to.equal('listitem');
+    });
+
+    it('should have items without aria-selected', () => {
+      expect(getRenderedItem(0)!.ariaSelected).to.be.null;
+    });
+
+    it('should assign aria-setsize and aria-posinset', () => {
+      list.scrollToIndex(list.items!.length - 1);
+      const lastVisibleIndex = list.lastVisibleIndex;
+      expect(getRenderedItem(lastVisibleIndex)!.ariaSetSize).to.equal('100');
+      expect(getRenderedItem(lastVisibleIndex)!.ariaPosInSet).to.equal('100');
+    });
+
+    describe('selectable', () => {
+      beforeEach(async () => {
+        list.selectionMode = 'multi';
+        await nextFrame();
+      });
+
+      it('should have role="listbox"', () => {
+        expect(list.role).to.equal('listbox');
+      });
+
+      it('should have items with role="option"', () => {
+        expect(getRenderedItem(0)!.role).to.equal('option');
+      });
+
+      it('should aria-selected="false" on non-selected items', () => {
+        expect(getRenderedItem(0)!.ariaSelected).to.equal('false');
+      });
+
+      it('should aria-selected="true" on selected items', async () => {
+        list.selectedItems = [list.items![0]];
+        await nextFrame();
+        expect(getRenderedItem(0)!.ariaSelected).to.equal('true');
+      });
+
+      it('should have aria-multiselectable="true"', () => {
+        expect(list.ariaMultiSelectable).to.equal('true');
+      });
+
+      it('should not have aria-multiselectable when selectionMode is "single"', async () => {
+        list.selectionMode = 'single';
+        await nextFrame();
+        expect(list.ariaMultiSelectable).to.be.null;
+      });
+    });
+  });
 });
