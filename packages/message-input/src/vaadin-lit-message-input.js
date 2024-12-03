@@ -13,7 +13,7 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
 import { MessageInputMixin } from './vaadin-message-input-mixin.js';
 
 /**
- * LitElement based version of `<vaadin-message>` web component.
+ * LitElement based version of `<vaadin-message-input>` web component.
  *
  * ## Disclaimer
  *
