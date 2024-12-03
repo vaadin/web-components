@@ -296,6 +296,12 @@ describe('selection', () => {
         await nextFrame();
       });
 
+      it('should be in navigating state', async () => {
+        beforeButton.focus();
+        await sendKeys({ press: 'Tab' });
+        expect(list.hasAttribute('navigating')).to.be.true;
+      });
+
       it('should not focus child elements', async () => {
         beforeButton.focus();
         await sendKeys({ press: 'Tab' });
@@ -309,6 +315,13 @@ describe('selection', () => {
         await sendKeys({ press: 'Enter' });
         expect(document.activeElement!.localName).to.equal('button');
         expect(document.activeElement!.parentElement).to.equal(getRenderedItem(0));
+      });
+
+      it('should be in interacting state', async () => {
+        beforeButton.focus();
+        await sendKeys({ press: 'Tab' });
+        await sendKeys({ press: 'Enter' });
+        expect(list.hasAttribute('interacting')).to.be.true;
       });
 
       it('should focus tab to the next focusable child', async () => {
@@ -326,6 +339,14 @@ describe('selection', () => {
         await sendKeys({ press: 'Enter' });
         await sendKeys({ press: 'Escape' });
         expect(document.activeElement).to.equal(getRenderedItem(0));
+      });
+
+      it('should return to navigating state', async () => {
+        beforeButton.focus();
+        await sendKeys({ press: 'Tab' });
+        await sendKeys({ press: 'Enter' });
+        await sendKeys({ press: 'Escape' });
+        expect(list.hasAttribute('navigating')).to.be.true;
       });
 
       it('should tab backwards from a focusable child', async () => {
@@ -381,6 +402,14 @@ describe('selection', () => {
         list.scrollToIndex(10);
         await nextFrame();
         expect(list.querySelector('[focused]')).to.be.null;
+      });
+
+      it('should clear navigating state when selection mode is unset', async () => {
+        beforeButton.focus();
+        await sendKeys({ press: 'Tab' });
+        list.selectionMode = undefined;
+        await nextFrame();
+        expect(list.hasAttribute('navigating')).to.be.false;
       });
     });
   });
