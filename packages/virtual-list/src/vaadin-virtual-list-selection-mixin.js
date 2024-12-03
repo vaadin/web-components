@@ -76,7 +76,7 @@ export const SelectionMixin = (superClass) =>
     static get observers() {
       return [
         '__selectionChanged(itemIdPath, selectedItems, __focusIndex, itemAccessibleNameGenerator)',
-        '__normalizeFocusIndex(items)',
+        '__selectionItemsUpdated(items)',
       ];
     }
 
@@ -84,7 +84,7 @@ export const SelectionMixin = (superClass) =>
       super();
 
       this.addEventListener('keydown', (e) => this.__onKeyDown(e));
-      this.addEventListener('click', () => this.__onClick());
+      this.addEventListener('click', (e) => this.__onClick(e));
       this.addEventListener('focusin', (e) => this.__onFocusIn(e));
       this.addEventListener('focusout', (e) => this.__onFocusOut(e));
     }
@@ -139,11 +139,12 @@ export const SelectionMixin = (superClass) =>
     }
 
     /** @private */
-    __normalizeFocusIndex() {
+    __selectionItemsUpdated() {
       // Needs to run in a microtask, otherwise the change to __focusIndex would synchronously invoke
       // __updateElement for items that are not yet in sync with virtualizer
       queueMicrotask(() => {
-        this.__focusIndex = Math.min(this.__focusIndex, this.items.length - 1);
+        this.__focusIndex = Math.max(Math.min(this.__focusIndex, this.items.length - 1), 0);
+        this.__setNavigating(this.__isNavigating());
       });
     }
 
@@ -233,6 +234,14 @@ export const SelectionMixin = (superClass) =>
       return this.__getRenderedRootElements().find((el) => el.contains(document.activeElement));
     }
 
+    /**
+     * Returns the rendered root element containing the given child element.
+     * @private
+     */
+    __getRootElementByChild(element) {
+      return this.__getRenderedRootElements().find((el) => el.contains(element));
+    }
+
     /** @private */
     __isNavigating() {
       return this.hasAttribute('navigating');
@@ -240,12 +249,12 @@ export const SelectionMixin = (superClass) =>
 
     /** @private */
     __setNavigating(navigating) {
-      if (this.selectionMode && navigating) {
+      if (this.selectionMode && navigating && this.items && this.items.length > 0) {
         this.tabIndex = 0;
       } else {
         this.removeAttribute('tabindex');
       }
-      this.$.focusexit.hidden = !this.selectionMode || !navigating;
+      this.$.focusexit.hidden = !this.selectionMode || !navigating || !this.items || this.items.length === 0;
       this.toggleAttribute('navigating', this.selectionMode && navigating);
       this.toggleAttribute('interacting', this.selectionMode && !navigating);
       this.requestContentUpdate();
@@ -259,8 +268,10 @@ export const SelectionMixin = (superClass) =>
 
       if (this.__isNavigating()) {
         if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
-          e.preventDefault();
-          this.__onNavigationArrowKey(e.key === 'ArrowDown');
+          if (!e.defaultPrevented) {
+            e.preventDefault();
+            this.__onNavigationArrowKey(e.key === 'ArrowDown');
+          }
         } else if (e.key === 'Enter') {
           this.__onNavigationEnterKey();
         } else if (e.key === ' ') {
@@ -318,12 +329,20 @@ export const SelectionMixin = (superClass) =>
     }
 
     /** @private */
-    __onClick() {
+    __onClick(e) {
       if (!this.selectionMode || !this.__isNavigating()) {
         return;
       }
 
-      this.__toggleSelection(this.__getRenderedFocusIndexElement().__item);
+      if (document.activeElement === this) {
+        // If the virtual list itself is clicked, focus the root element matching focus index
+        this.__focusElementWithFocusIndex();
+      }
+
+      const clickedRootElement = this.__getRootElementByChild(e.target);
+      if (clickedRootElement) {
+        this.__toggleSelection(clickedRootElement.__item);
+      }
     }
 
     /** @private */
