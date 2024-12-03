@@ -45,6 +45,14 @@ export const SelectionMixin = (superClass) =>
         },
 
         /**
+         * A function that generates accessible names for virtual list items.
+         */
+        itemAccessibleNameGenerator: {
+          type: Function,
+          sync: true,
+        },
+
+        /**
          * Set of selected item ids
          * @private
          */
@@ -65,7 +73,7 @@ export const SelectionMixin = (superClass) =>
     }
 
     static get observers() {
-      return ['__selectedItemsChanged(itemIdPath, selectedItems, __focusIndex)'];
+      return ['__selectedItemsChanged(itemIdPath, selectedItems, __focusIndex, itemAccessibleNameGenerator)'];
     }
 
     constructor() {
@@ -99,6 +107,7 @@ export const SelectionMixin = (superClass) =>
         'focused',
         !!this.selectionMode && this.__focusIndex === index && el.contains(document.activeElement),
       );
+      el.ariaLabel = this.itemAccessibleNameGenerator ? this.itemAccessibleNameGenerator(item) : null;
     }
 
     /**

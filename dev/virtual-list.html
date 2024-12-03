@@ -28,6 +28,8 @@
       list.items = items;
       list.renderer = renderer;
 
+      list.itemAccessibleNameGenerator = (item) => 'Virtual ' + item.label;
+
       list.selectionMode = 'multi';
       list.selectedItems = [items[0]];
       list.itemIdPath = 'label';

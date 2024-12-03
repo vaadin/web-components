@@ -78,7 +78,7 @@ describe('selection', () => {
       expect(document.activeElement).to.equal(afterButton);
     });
 
-    it('should not scroll when tabbing trough', async () => {
+    it('should not scroll when tabbing through', async () => {
       beforeButton.focus();
       await sendKeys({ press: 'Tab' });
       await sendKeys({ press: 'Tab' });
@@ -270,11 +270,11 @@ describe('selection', () => {
       await click(getRenderedItem(firstVisibleIndex)!);
       await sendKeys({ press: 'ArrowUp' });
       await nextFrame();
-      const newfirstVisibleIndex = list.firstVisibleIndex;
-      expect(newfirstVisibleIndex).to.equal(firstVisibleIndex - 1);
+      const newFirstVisibleIndex = list.firstVisibleIndex;
+      expect(newFirstVisibleIndex).to.equal(firstVisibleIndex - 1);
 
       const listRect = list.getBoundingClientRect();
-      const firstVisibleItemRect = getRenderedItem(newfirstVisibleIndex)!.getBoundingClientRect();
+      const firstVisibleItemRect = getRenderedItem(newFirstVisibleIndex)!.getBoundingClientRect();
       expect(firstVisibleItemRect.top).to.equal(listRect.top);
     });
 
@@ -311,7 +311,7 @@ describe('selection', () => {
         expect(document.activeElement!.parentElement).to.equal(getRenderedItem(0));
       });
 
-      it('should focus tab to the next focsuable child', async () => {
+      it('should focus tab to the next focusable child', async () => {
         beforeButton.focus();
         await sendKeys({ press: 'Tab' });
         await sendKeys({ press: 'Enter' });
@@ -369,7 +369,7 @@ describe('selection', () => {
         expect(list.selectedItems).to.be.empty;
       });
 
-      it('should tab trough focusable children when selection mode is unset', async () => {
+      it('should tab through focusable children when selection mode is unset', async () => {
         list.selectionMode = undefined;
         beforeButton.focus();
         await sendKeys({ press: 'Tab' });
@@ -403,6 +403,17 @@ describe('selection', () => {
       const lastVisibleIndex = list.lastVisibleIndex;
       expect(getRenderedItem(lastVisibleIndex)!.ariaSetSize).to.equal('100');
       expect(getRenderedItem(lastVisibleIndex)!.ariaPosInSet).to.equal('100');
+    });
+
+    it('should generate aria-label to the items', () => {
+      list.itemAccessibleNameGenerator = (item) => `Accessible ${item?.name}`;
+      expect(getRenderedItem(0)!.ariaLabel).to.equal('Accessible Item 0');
+    });
+
+    it('should remove aria-label from the items', () => {
+      list.itemAccessibleNameGenerator = (item) => `Accessible ${item?.name}`;
+      list.itemAccessibleNameGenerator = undefined;
+      expect(getRenderedItem(0)!.ariaLabel).to.be.null;
     });
 
     describe('selectable', () => {
