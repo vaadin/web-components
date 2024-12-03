@@ -25,22 +25,17 @@
 
         let startItem;
 
-        grid.addEventListener('item-selected', (event) => {
+        grid.addEventListener('user-select', (event) => {
           const { item, shiftKey } = event.detail;
 
           startItem ??= item;
           if (shiftKey) {
-            grid.selectItems(getItemsRange(grid.items, [startItem, item]));
-          }
-          startItem = item;
-        });
-
-        grid.addEventListener('item-deselected', (event) => {
-          const { item, shiftKey } = event.detail;
-
-          startItem ??= item;
-          if (shiftKey) {
-            grid.deselectItems(getItemsRange(grid.items, [startItem, item]));
+            const range = getItemsRange(grid.items, [startItem, item]);
+            if (grid.isItemSelected(item)) {
+              grid.selectItems(range);
+            } else {
+              grid.deselectItems(range);
+            }
           }
           startItem = item;
         });
@@ -52,25 +47,24 @@
 
         let startItem;
 
-        grid.addEventListener('item-selected', (event) => {
+        grid.addEventListener('user-select', (event) => {
           const { item, shiftKey } = event.detail;
 
           startItem ??= item;
-          if (shiftKey) {
-            grid.selectedItems = [...getItemsRange(grid.items, [startItem, item])];
-          } else {
+          if (grid.isItemSelected(item)) {
+            if (shiftKey) {
+              grid.selectedItems = [...getItemsRange(grid.items, [startItem, item])];
+              return;
+            }
+
             grid.selectedItems = [item];
             startItem = item;
-          }
-        });
-
-        grid.addEventListener('item-deselected', (event) => {
-          const { item, shiftKey } = event.detail;
-
-          startItem ??= item;
-          if (shiftKey && startItem !== item) {
-            grid.selectedItems = [...getItemsRange(grid.items, [startItem, item])];
           } else {
+            if (shiftKey && startItem !== item) {
+              grid.selectedItems = [...getItemsRange(grid.items, [startItem, item])];
+              return;
+            }
+
             grid.selectedItems = [];
             startItem = null;
           }
@@ -85,7 +79,7 @@
       </vaadin-grid>
 
       <vaadin-grid item-id-path="name" style="height: 800px" class="addon">
-        <vaadin-grid-selection-column auto-select></vaadin-grid-selection-column>
+        <vaadin-grid-selection-column auto-select hidden></vaadin-grid-selection-column>
         <vaadin-grid-column header="Addon behavior" path="name"></vaadin-grid-column>
       </vaadin-grid>
     </div>

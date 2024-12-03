@@ -69,6 +69,10 @@ export const SelectionMixin = (superClass) =>
       return this.__selectedKeys.has(this.getItemId(item));
     }
 
+    isItemSelected(item) {
+      return this._isSelected(item);
+    }
+
     /**
      * Determines whether the selection state of an item may be changed by the
      * user.
@@ -97,8 +101,7 @@ export const SelectionMixin = (superClass) =>
       }
     }
 
-    /** @private */
-    __selectItems(items) {
+    selectItems(items) {
       this.selectedItems = [...this.selectedItems, ...items.filter((item) => !this._isSelected(item))];
     }
 
@@ -114,8 +117,7 @@ export const SelectionMixin = (superClass) =>
       }
     }
 
-    /** @private */
-    __deselectItems(items) {
+    deselectItems(items) {
       const itemKeys = new Set(items.map((item) => this.getItemId(item)));
       this.selectedItems = this.selectedItems.filter((item) => !itemKeys.has(this.getItemId(item)));
     }

@@ -122,7 +122,7 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
       if (this._grid) {
         this._grid.addEventListener('keydown', this.__onGridInteraction);
         this._grid.addEventListener('keyup', this.__onGridInteraction);
-        this._grid.addEventListener('click', this.__onGridInteraction);
+        this._grid.addEventListener('mousedown', this.__onGridInteraction);
         this._grid.addEventListener('selectstart', this.__onGridSelectStart);
         this._grid.addEventListener('row-activate', this.__onGridItemActivate);
         this._grid.addEventListener('cell-activate', this.__onGridItemActivate);
@@ -135,7 +135,7 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
       if (this._grid) {
         this._grid.removeEventListener('keydown', this.__onGridInteraction);
         this._grid.removeEventListener('keyup', this.__onGridInteraction);
-        this._grid.removeEventListener('click', this.__onGridInteraction);
+        this._grid.removeEventListener('mousedown', this.__onGridInteraction);
         this._grid.removeEventListener('selectstart', this.__onGridSelectStart);
         this._grid.removeEventListener('row-activate', this.__onGridItemActivate);
         this._grid.removeEventListener('cell-activate', this.__onGridItemActivate);
@@ -209,9 +209,10 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
 
     /** @private */
     __onGridSelectStart(e) {
-      // Prevent text selection when shift-selecting a range of items.
-      if (this._shiftKeyDown) {
+      if (this.autoSelect && this._shiftKeyDown) {
+        // Prevent text selection when shift-selecting a range of items.
         e.preventDefault();
+        document.getSelection().removeAllRanges();
       }
     }
 
