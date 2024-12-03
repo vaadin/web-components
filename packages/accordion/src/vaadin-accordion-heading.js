@@ -73,6 +73,7 @@ class AccordionHeading extends ActiveMixin(DirMixin(ThemableMixin(PolymerElement
       opened: {
         type: Boolean,
         reflectToAttribute: true,
+        value: false,
       },
     };
   }
