@@ -25,17 +25,18 @@
 
         let startItem;
 
-        grid.addEventListener('user-select', (event) => {
-          const { item, shiftKey } = event.detail;
+        grid.addEventListener('item-selection', (event) => {
+          const { item, selected, shiftKey } = event.detail;
 
           startItem ??= item;
           if (shiftKey) {
-            const range = getItemsRange(grid.items, [startItem, item]);
-            if (grid.isItemSelected(item)) {
-              grid.selectItems(range);
-            } else {
-              grid.deselectItems(range);
-            }
+            getItemsRange(grid.items, [startItem, item]).forEach((rangeItem) => {
+              if (selected) {
+                grid.selectItem(rangeItem);
+              } else {
+                grid.deselectItem(rangeItem);
+              }
+            })
           }
           startItem = item;
         });
@@ -47,11 +48,11 @@
 
         let startItem;
 
-        grid.addEventListener('user-select', (event) => {
-          const { item, shiftKey } = event.detail;
+        grid.addEventListener('item-selection', (event) => {
+          const { item, selected, shiftKey } = event.detail;
 
           startItem ??= item;
-          if (grid.isItemSelected(item)) {
+          if (selected) {
             if (shiftKey) {
               grid.selectedItems = [...getItemsRange(grid.items, [startItem, item])];
               return;

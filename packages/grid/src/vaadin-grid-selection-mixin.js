@@ -69,10 +69,6 @@ export const SelectionMixin = (superClass) =>
       return this.__selectedKeys.has(this.getItemId(item));
     }
 
-    isItemSelected(item) {
-      return this._isSelected(item);
-    }
-
     /**
      * Determines whether the selection state of an item may be changed by the
      * user.
