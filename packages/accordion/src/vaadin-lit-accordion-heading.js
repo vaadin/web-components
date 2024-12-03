@@ -41,6 +41,7 @@ class AccordionHeading extends ActiveMixin(DirMixin(ThemableMixin(PolylitMixin(L
       opened: {
         type: Boolean,
         reflectToAttribute: true,
+        value: false,
       },
     };
   }
