@@ -139,6 +139,26 @@ describe('selection', () => {
       expect(document.activeElement).to.equal(beforeButton);
     });
 
+    it('should not focus empty list', async () => {
+      list.items = [];
+      await nextFrame();
+      beforeButton.focus();
+      await sendKeys({ press: 'Tab' });
+      expect(document.activeElement).to.equal(afterButton);
+    });
+
+    it('should focus first item after restoring items', async () => {
+      const items = list.items;
+      list.items = [];
+      await nextFrame();
+      list.items = items;
+      await nextFrame();
+
+      beforeButton.focus();
+      await sendKeys({ press: 'Tab' });
+      expect(document.activeElement).to.equal(getRenderedItem(0));
+    });
+
     it('should select an item by clicking', async () => {
       expect(getRenderedItem(0)!.hasAttribute('selected')).to.be.false;
       await click(getRenderedItem(0)!);
@@ -356,6 +376,27 @@ describe('selection', () => {
       expect(rendererSpy.getCalls().filter((call) => call.args[2].index === 0).length).to.equal(1);
     });
 
+    it('should not throw on click when there are no items', async () => {
+      list.items = [];
+      await nextFrame();
+      await click(list);
+    });
+
+    it('should focus an item on virtual list click', async () => {
+      list.items = list.items!.slice(0, 5);
+      await nextFrame();
+      click(list);
+      click(list);
+      expect(document.activeElement).to.equal(getRenderedItem(0));
+    });
+
+    it('should not select an item on virtual list click', async () => {
+      list.items = list.items!.slice(0, 5);
+      await nextFrame();
+      click(list);
+      expect(list.selectedItems).to.be.empty;
+    });
+
     describe('focusable children', () => {
       beforeEach(async () => {
         list.renderer = (root, _, { item }) => {
@@ -513,7 +554,7 @@ describe('selection', () => {
       expect(getRenderedItem(0)!.ariaLabel).to.be.null;
     });
 
-    it('should not invoke itemAccessibleNameGenerator when items are emptied ', async () => {
+    it('should not invoke itemAccessibleNameGenerator when items are emptied', async () => {
       const spy = sinon.spy((item) => `Accessible ${item?.name}`);
       list.itemAccessibleNameGenerator = spy;
       await nextFrame();
