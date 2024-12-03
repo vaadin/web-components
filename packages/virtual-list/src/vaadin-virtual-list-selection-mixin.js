@@ -227,8 +227,8 @@ export const SelectionMixin = (superClass) =>
         this.removeAttribute('tabindex');
       }
       this.$.focusexit.hidden = !this.selectionMode || !navigating;
-      this.toggleAttribute('navigating', navigating);
-      this.toggleAttribute('interacting', !navigating);
+      this.toggleAttribute('navigating', this.selectionMode && navigating);
+      this.toggleAttribute('interacting', this.selectionMode && !navigating);
       this.requestContentUpdate();
     }
 
