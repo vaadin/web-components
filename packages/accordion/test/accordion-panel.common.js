@@ -148,6 +148,16 @@ describe('vaadin-accordion-panel', () => {
         await nextUpdate(panel);
         expect(heading.hasAttribute('disabled')).to.be.false;
       });
+
+      it(`should propagate theme attribute to ${type} heading`, async () => {
+        panel.setAttribute('theme', 'filled');
+        await nextUpdate(panel);
+        expect(heading.getAttribute('theme')).to.equal('filled');
+
+        panel.removeAttribute('theme');
+        await nextUpdate(panel);
+        expect(heading.hasAttribute('theme')).to.be.false;
+      });
     });
   });
 
