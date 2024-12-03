@@ -111,6 +111,49 @@ describe('custom field', () => {
     });
   });
 
+  describe('value on input node changes', () => {
+    beforeEach(async () => {
+      customField = fixtureSync(`
+        <vaadin-custom-field value="01">
+          <input type="number" />
+        </vaadin-custom-field>
+      `);
+      await nextRender();
+    });
+
+    it('should remove value when an input node is removed after updating value via input', async () => {
+      customField.inputs[0].value = '02';
+      fire(customField.inputs[0], 'change');
+      await nextUpdate(customField);
+      expect(customField.value).to.equal('02');
+
+      customField.removeChild(customField.inputs[0]);
+      await nextUpdate(customField);
+      expect(customField.value).to.equal('');
+    });
+
+    it('should not remove value when an input node is removed after updating value using attribute', async () => {
+      customField.inputs[0].value = '02';
+      fire(customField.inputs[0], 'change');
+      await nextUpdate(customField);
+      expect(customField.value).to.equal('02');
+
+      customField.value = '01';
+      await nextUpdate(customField);
+      expect(customField.value).to.equal('01');
+
+      customField.removeChild(customField.inputs[0]);
+      await nextUpdate(customField);
+      expect(customField.value).to.equal('01');
+    });
+
+    it('should not remove value set using attribute when an input node is removed', async () => {
+      customField.removeChild(customField.inputs[0]);
+      await nextUpdate(customField);
+      expect(customField.value).to.equal('01');
+    });
+  });
+
   describe('aria-required', () => {
     it('should toggle aria-required attribute on required property change', async () => {
       customField.required = true;
