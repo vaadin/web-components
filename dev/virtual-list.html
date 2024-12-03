@@ -43,6 +43,16 @@
           list.selectionMode = e.target.value;
         }
       });
+
+      document.querySelector('#empty').addEventListener('click', () => {
+        list.items = [];
+      });
+
+      document.querySelector('#set-1000-items').addEventListener('click', () => {
+        list.items = Array.from({ length: 1000 }).map((_, i) => {
+          return { label: `Item ${i}` };
+        });
+      });
     </script>
   </head>
 
@@ -56,5 +66,8 @@
       <option>single</option>
       <option>multi</option>
     </select>
+
+    <button id="empty">Empty items</button>
+    <button id="set-1000-items">Set 1000 items</button>
   </body>
 </html>

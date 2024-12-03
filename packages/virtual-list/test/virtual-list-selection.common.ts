@@ -59,6 +59,51 @@ describe('selection', () => {
     expect(getRenderedItem(0)!.hasAttribute('selected')).to.be.true;
   });
 
+  it('should not re-render when focused', async () => {
+    const rendererSpy = sinon.spy(list.renderer!);
+    list.renderer = rendererSpy;
+    await nextFrame();
+
+    rendererSpy.resetHistory();
+    const firstItem = getRenderedItem(0)!;
+    firstItem.tabIndex = 0;
+    firstItem.focus();
+
+    expect(rendererSpy.called).to.be.false;
+  });
+
+  it('should not re-render when blurred', async () => {
+    const rendererSpy = sinon.spy(list.renderer!);
+    list.renderer = rendererSpy;
+    await nextFrame();
+    const firstItem = getRenderedItem(0)!;
+    firstItem.tabIndex = 0;
+    firstItem.focus();
+
+    rendererSpy.resetHistory();
+    await sendKeys({ press: 'Tab' });
+
+    expect(rendererSpy.called).to.be.false;
+  });
+
+  it('should not mark element focused', () => {
+    const firstItem = getRenderedItem(0)!;
+    firstItem.tabIndex = 0;
+    firstItem.focus();
+    list.requestContentUpdate();
+    expect(getRenderedItem(0)!.hasAttribute('focused')).to.be.false;
+  });
+
+  it('should not cancel Escape key default behavior', async () => {
+    const spy = sinon.spy();
+    list.addEventListener('keydown', spy);
+    const firstItem = getRenderedItem(0)!;
+    firstItem.tabIndex = 0;
+    firstItem.focus();
+    await sendKeys({ press: 'Escape' });
+    expect(spy.firstCall.args[0].defaultPrevented).to.be.false;
+  });
+
   describe('selectable', () => {
     beforeEach(async () => {
       list.selectionMode = 'multi';
@@ -210,6 +255,17 @@ describe('selection', () => {
       expect(document.activeElement).to.equal(getRenderedItem(lastIndex));
     });
 
+    it('should focus the last visible index when items length reduced', async () => {
+      const lastIndex = list.items!.length - 1;
+      list.scrollToIndex(lastIndex);
+      await click(getRenderedItem(lastIndex)!);
+
+      list.items = list.items!.slice(0, -1);
+      await nextFrame();
+      expect(document.activeElement).to.equal(getRenderedItem(lastIndex - 1));
+      expect(getRenderedItem(lastIndex - 1)!.hasAttribute('focused')).to.be.true;
+    });
+
     it('should unselect an item by clicking another item on single-selection mode', async () => {
       list.selectionMode = 'single';
       await click(getRenderedItem(0)!);
@@ -286,6 +342,18 @@ describe('selection', () => {
       list.selectedItems = [];
       await nextFrame();
       expect(getRenderedItem(0)?.textContent).to.equal('Item 0 ');
+    });
+
+    it('should re-render items once on selection', async () => {
+      const rendererSpy = sinon.spy(list.renderer!);
+      list.renderer = rendererSpy;
+      await nextFrame();
+
+      rendererSpy.resetHistory();
+      list.selectedItems = [list.items![0]];
+      await nextFrame();
+
+      expect(rendererSpy.getCalls().filter((call) => call.args[2].index === 0).length).to.equal(1);
     });
 
     describe('focusable children', () => {
@@ -443,6 +511,16 @@ describe('selection', () => {
       list.itemAccessibleNameGenerator = (item) => `Accessible ${item?.name}`;
       list.itemAccessibleNameGenerator = undefined;
       expect(getRenderedItem(0)!.ariaLabel).to.be.null;
+    });
+
+    it('should not invoke itemAccessibleNameGenerator when items are emptied ', async () => {
+      const spy = sinon.spy((item) => `Accessible ${item?.name}`);
+      list.itemAccessibleNameGenerator = spy;
+      await nextFrame();
+
+      spy.resetHistory();
+      list.items = [];
+      expect(spy.called).to.be.false;
     });
 
     describe('selectable', () => {
