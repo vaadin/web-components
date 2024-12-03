@@ -62,6 +62,7 @@ export const SelectionMixin = (superClass) =>
         },
 
         /**
+         * The index of the focused item.
          * @private
          */
         __focusIndex: {
@@ -73,7 +74,10 @@ export const SelectionMixin = (superClass) =>
     }
 
     static get observers() {
-      return ['__selectedItemsChanged(itemIdPath, selectedItems, __focusIndex, itemAccessibleNameGenerator)'];
+      return [
+        '__selectionChanged(itemIdPath, selectedItems, __focusIndex, itemAccessibleNameGenerator)',
+        '__normalizeFocusIndex(items)',
+      ];
     }
 
     constructor() {
@@ -90,7 +94,10 @@ export const SelectionMixin = (superClass) =>
       this.__updateAria();
     }
 
-    /** @private */
+    /**
+     * @private
+     * @override
+     */
     __updateElement(el, index) {
       const item = this.items[index];
       el.__item = item;
@@ -112,19 +119,17 @@ export const SelectionMixin = (superClass) =>
 
     /**
      * @private
+     * @override
      */
-    __updateItemModel(model, item, index) {
+    __updateItemModel(model, item) {
+      // Include "selected" property in the model passed to the renderer
       model.selected = this.__isSelected(item);
-      if (super.__updateItemModel) {
-        super.__updateItemModel(model, item, index);
-      }
     }
 
     /** @private */
     __selectionModeChanged() {
-      this.__setNavigating(true);
-      this.requestContentUpdate();
       this.__updateAria();
+      this.__setNavigating(true);
     }
 
     /** @private */
@@ -134,12 +139,21 @@ export const SelectionMixin = (superClass) =>
     }
 
     /** @private */
+    __normalizeFocusIndex() {
+      // Needs to run in a microtask, otherwise the change to __focusIndex would synchronously invoke
+      // __updateElement for items that are not yet in sync with virtualizer
+      queueMicrotask(() => {
+        this.__focusIndex = Math.min(this.__focusIndex, this.items.length - 1);
+      });
+    }
+
+    /** @private */
     __isSelected(item) {
       return this.__selectedKeys.has(this.__getItemId(item));
     }
 
     /** @private */
-    __selectedItemsChanged() {
+    __selectionChanged() {
       this.requestContentUpdate();
     }
 
@@ -159,26 +173,18 @@ export const SelectionMixin = (superClass) =>
     }
 
     /** @private */
-    __getItemFromEvent(e) {
-      const element = this.__getRootElementFromEvent(e);
-      return element ? element.__item : null;
-    }
-
-    /** @private */
-    __getRootElementFromEvent(e) {
-      return e.composedPath().find((el) => el.parentElement === this);
-    }
-
-    /** @private */
     __toggleSelection(item) {
       if (item === undefined) {
         return;
       }
       if (this.__isSelected(item)) {
+        // Item deselected, remove it from selected items
         this.selectedItems = this.selectedItems.filter((selectedItem) => !this.__itemsEqual(selectedItem, item));
       } else if (this.selectionMode === 'multi') {
+        // Item selected, add it to selected items
         this.selectedItems = [...this.selectedItems, item];
       } else {
+        // Single selection mode, replace the selected item
         this.selectedItems = [item];
       }
     }
@@ -186,8 +192,10 @@ export const SelectionMixin = (superClass) =>
     /** @private */
     __ensureFocusedIndexInView() {
       if (!this.__getRenderedFocusIndexElement()) {
+        // The focused element is not rendered, scroll to the focused index
         this.scrollToIndex(this.__focusIndex);
       } else {
+        // The focused element is rendered. If it's not inside the visible area, scroll to it
         const listRect = this.getBoundingClientRect();
         const elementRect = this.__getRenderedFocusIndexElement().getBoundingClientRect();
         if (elementRect.top < listRect.top) {
@@ -205,13 +213,24 @@ export const SelectionMixin = (superClass) =>
     }
 
     /** @private */
-    __getRenderedFocusIndexElement() {
-      return [...this.children].find((el) => el.__index === this.__focusIndex);
+    __getRenderedRootElements() {
+      return [...this.children].filter((el) => !el.hidden);
     }
 
-    /** @private */
+    /**
+     * Returns the rendered root element with the current focus index.
+     * @private
+     */
+    __getRenderedFocusIndexElement() {
+      return this.__getRenderedRootElements().find((el) => el.__index === this.__focusIndex);
+    }
+
+    /**
+     * Returns the rendered root element which contains focus.
+     * @private
+     */
     __getRootElementWithFocus() {
-      return [...this.children].find((el) => el.contains(document.activeElement));
+      return this.__getRenderedRootElements().find((el) => el.contains(document.activeElement));
     }
 
     /** @private */
@@ -243,7 +262,6 @@ export const SelectionMixin = (superClass) =>
           e.preventDefault();
           this.__onNavigationArrowKey(e.key === 'ArrowDown');
         } else if (e.key === 'Enter') {
-          e.preventDefault();
           this.__onNavigationEnterKey();
         } else if (e.key === ' ') {
           e.preventDefault();
@@ -268,8 +286,13 @@ export const SelectionMixin = (superClass) =>
     /** @private */
     __onNavigationTabKey(shift) {
       if (shift) {
+        // Focus the virtual list itself when shift-tabbing so the focus actually ends
+        // up on the previous element in the tab order before the virtual list
         this.focus();
       } else {
+        // Focus the focus exit element when tabbing so the focus actually ends up on
+        // the next element in the tab order after the virtual list.
+        // Focusing the focus exit element causes scroll top to get reset, so we need to save and restore it
         const scrollTop = this.scrollTop;
         this.$.focusexit.focus();
         this.scrollTop = scrollTop;
@@ -278,6 +301,7 @@ export const SelectionMixin = (superClass) =>
 
     /** @private */
     __onNavigationSpaceKey() {
+      // Ensure the focused item is in view before toggling selection
       this.__ensureFocusedIndexInView();
       this.__toggleSelection(this.__getRenderedFocusIndexElement().__item);
     }
@@ -309,13 +333,14 @@ export const SelectionMixin = (superClass) =>
       }
 
       // Set navigating state if one of the root elements, virtual-list or focusexit, is focused
+      // Set interacting state otherwise (child element is focused)
       const navigating = [...this.children, this, this.$.focusexit].includes(e.target);
       this.__setNavigating(navigating);
 
       // Update focus index based on the focused item
-      const targetItem = this.__getItemFromEvent(e);
-      if (targetItem) {
-        this.__focusIndex = this.__getRootElementFromEvent(e).__index;
+      const rootElement = this.__getRootElementWithFocus();
+      if (rootElement) {
+        this.__focusIndex = rootElement.__index;
       }
 
       // Focus the root element matching focus index if focus came from outside
