@@ -30,13 +30,15 @@
 
           startItem ??= item;
           if (shiftKey) {
+            const selectedItems = new Set(grid.selectedItems);
             getItemsRange(grid.items, [startItem, item]).forEach((rangeItem) => {
               if (selected) {
-                grid.selectItem(rangeItem);
+                selectedItems.add(rangeItem);
               } else {
-                grid.deselectItem(rangeItem);
+                selectedItems.delete(rangeItem);
               }
             })
+            grid.selectedItems = [...selectedItems];
           }
           startItem = item;
         });
