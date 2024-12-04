@@ -9,6 +9,12 @@
 
     <script type="module">
       import '@vaadin/virtual-list';
+      import '@vaadin/combo-box';
+      import '@vaadin/text-field';
+      import '@vaadin/date-picker';
+      import '@vaadin/button';
+      import '@vaadin/select';
+
       import { render, html } from 'lit';
       // import '@vaadin/virtual-list/vaadin-lit-virtual-list.js';
 
@@ -16,9 +22,25 @@
         return { label: `Item ${i}` };
       });
 
+      const selectItems = [
+        { label: 'foo', value: '0' },
+        { label: 'bar', value: '1' },
+      ];
+
       const renderer = (root, _, { item }) => {
         if (item.label.includes('0')) {
-          render(html`<button>${item.label}</button>`, root);
+          render(
+            html`
+              <input />
+              <button>${item.label}</button>
+              <vaadin-button>Hello</vaadin-button>
+              <vaadin-text-field label="Label"></vaadin-text-field>
+              <vaadin-combo-box items='["foo", "bar"]' label="Label"></vaadin-combo-box>
+              <vaadin-select .items=${selectItems} label="Label"></vaadin-select>
+              <vaadin-date-picker label="Label"></vaadin-date-picker>
+            `,
+            root,
+          );
         } else {
           render(html`<div>${item.label}</div>`, root);
         }
@@ -28,7 +50,12 @@
       list.items = items;
       list.renderer = renderer;
 
-      list.itemAccessibleNameGenerator = (item) => 'Virtual ' + item.label;
+      list.itemAccessibleNameGenerator = (item) => {
+        if (!item) {
+          debugger;
+        }
+        return 'Virtual ' + item.label;
+      };
 
       list.selectionMode = 'multi';
       list.selectedItems = [items[0]];
@@ -53,6 +80,12 @@
           return { label: `Item ${i}` };
         });
       });
+
+      document.querySelector('#set-5-items').addEventListener('click', () => {
+        list.items = Array.from({ length: 5 }).map((_, i) => {
+          return { label: `Item ${i}` };
+        });
+      });
     </script>
   </head>
 
@@ -69,5 +102,6 @@
 
     <button id="empty">Empty items</button>
     <button id="set-1000-items">Set 1000 items</button>
+    <button id="set-5-items">Set 5 items</button>
   </body>
 </html>
