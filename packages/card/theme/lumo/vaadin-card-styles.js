@@ -1,6 +1,7 @@
 import '@vaadin/vaadin-lumo-styles/color.js';
 import '@vaadin/vaadin-lumo-styles/style.js';
 import '@vaadin/vaadin-lumo-styles/spacing.js';
+import '@vaadin/vaadin-lumo-styles/typography.js';
 import { addGlobalThemeStyles, css, registerStyles } from '@vaadin/vaadin-themable-mixin/register-styles.js';
 
 const cardProps = css`
@@ -10,8 +11,7 @@ const cardProps = css`
     --vaadin-card-border-width: 0;
     --vaadin-card-border-color: var(--lumo-contrast-20pct);
     --vaadin-card-padding: var(--lumo-space-m);
-    --vaadin-card-row-gap: var(--lumo-space-s);
-    --vaadin-card-column-gap: var(--lumo-space-m);
+    --vaadin-card-gap: var(--lumo-space-s) var(--lumo-space-m);
   }
 `;
 
@@ -54,7 +54,7 @@ const card = css`
       var(--vaadin-card-box-shadow);
   }
 
-  :host(:where([theme~='cover-media'])) ::slotted([slot='media']) {
+  :host(:where([theme~='cover-media'])) ::slotted([slot='media']:is(img, video, svg, vaadin-icon)) {
     border-radius: var(--lumo-border-radius-m);
   }
 

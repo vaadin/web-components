@@ -31,9 +31,9 @@
 
       const playground = document.querySelector('.playground');
       const mediaSelect = document.querySelector('#media');
-      const contentOptions = ['title', 'subtitle', 'title-suffix', 'content', 'suffix'];
+      const contentOptions = ['header', 'title', 'subtitle', 'header-prefix', 'header-suffix', 'content', 'footer'];
       const options = document.querySelector('.playground-options');
-      const options2 = document.querySelector('.playground-options2');
+      const resizeOptions = document.querySelector('.playground-resize');
       const themeVariant = document.querySelector('.theme-variant');
 
       mediaSelect.items = [
@@ -59,11 +59,13 @@
 
 
       const contentItems = {
+        'header': playground.querySelector('[slot="header"]'),
         'title': playground.querySelector('[slot="title"]'),
         'subtitle': playground.querySelector('[slot="subtitle"]'),
-        'title-suffix': playground.querySelector('[slot="title-suffix"]'),
+        'header-prefix': playground.querySelector('[slot="header-prefix"]'),
+        'header-suffix': playground.querySelector('[slot="header-suffix"]'),
         'content': playground.querySelector(':not([slot])'),
-        'suffix': playground.querySelector('[slot="suffix"]'),
+        'footer': playground.querySelector('[slot="footer"]'),
       }
 
       options.addEventListener('value-changed', (e) => {
@@ -77,9 +79,9 @@
       });
       options.value = contentOptions;
 
-      options2.addEventListener('value-changed', (e) => {
-        playground.classList.toggle('width', e.detail.value.includes('width'));
-        playground.classList.toggle('height', e.detail.value.includes('height'));
+      resizeOptions.addEventListener('value-changed', (e) => {
+        playground.classList.toggle('resize-width', e.detail.value.includes('width'));
+        playground.classList.toggle('resize-height', e.detail.value.includes('height'));
       });
 
       themeVariant.addEventListener('value-changed', (e) => {
@@ -94,29 +96,43 @@
       }
 
       body {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-        gap: var(--lumo-space-l);
-        padding: var(--lumo-space-l);
-        margin: 0;
+        margin: var(--lumo-space-l);
       }
 
-      h2, hr, .full-row {
-        grid-column: 1 / -1;
+      .playground:not(.resize-width),
+      .playground.resize-width:not([style*="width"]) {
+        width: 30% !important;
       }
 
-      .playground.width {
-        width: 500px;
+      .playground[theme~="horizontal"]:has(img[slot="media"]):not(.resize-width),
+      .playground[theme~="horizontal"]:has(img[slot="media"]).resize-width:not([style*="width"]) {
+        width: 50% !important;
       }
 
-      .playground.height {
-        height: 500px;
+      .playground:not(.resize-height),
+      .playground.resize-height:not([style*="height"]) {
+        height: auto !important;
+      }
+
+      .playground.resize-width {
+        resize: horizontal;
+        overflow: hidden;
+      }
+
+      .playground.resize-height {
+        resize: vertical;
+        overflow: hidden;
+      }
+
+      .playground.resize-width.resize-height {
+        resize: both;
       }
 
       .options {
         display: flex;
         flex-wrap: wrap;
         gap: 0 2rem;
+        margin-bottom: 3rem;
       }
     </style>
   </head>
@@ -170,16 +186,13 @@
       </template>
 
       <vaadin-checkbox-group class="playground-options" label="Content">
+        <vaadin-checkbox label="Header" value="header"></vaadin-checkbox>
+        <vaadin-checkbox label="Header Prefix" value="header-prefix"></vaadin-checkbox>
+        <vaadin-checkbox label="Header Suffix" value="header-suffix"></vaadin-checkbox>
         <vaadin-checkbox label="Title" value="title"></vaadin-checkbox>
         <vaadin-checkbox label="Subtitle" value="subtitle"></vaadin-checkbox>
-        <vaadin-checkbox label="Title Suffix" value="title-suffix"></vaadin-checkbox>
         <vaadin-checkbox label="Content" value="content"></vaadin-checkbox>
-        <vaadin-checkbox label="Suffix" value="suffix"></vaadin-checkbox>
-      </vaadin-checkbox-group>
-
-      <vaadin-checkbox-group class="playground-options2" label="Other Options">
-        <vaadin-checkbox label="Width" value="width"></vaadin-checkbox>
-        <vaadin-checkbox label="Height" value="height"></vaadin-checkbox>
+        <vaadin-checkbox label="Footer" value="footer"></vaadin-checkbox>
       </vaadin-checkbox-group>
 
       <vaadin-checkbox-group class="theme-variant" label="Theme Variant">
@@ -190,15 +203,22 @@
         <vaadin-checkbox label="Cover Media" value="cover-media"></vaadin-checkbox>
         <vaadin-checkbox label="Stretch Media" value="stretch-media"></vaadin-checkbox>
       </vaadin-checkbox-group>
+
+      <vaadin-checkbox-group class="playground-resize" label="Resize">
+        <vaadin-checkbox label="Width" value="width"></vaadin-checkbox>
+        <vaadin-checkbox label="Height" value="height"></vaadin-checkbox>
+      </vaadin-checkbox-group>
     </div>
 
 
     <vaadin-card class="playground">
+      <h3 slot="header">Header</h3>
+      <vaadin-avatar slot="header-prefix" abbr="A"></vaadin-avatar>
       <div slot="title">Card Title</div>
       <div slot="subtitle">Subtitle for the card</div>
-      <span slot="title-suffix" theme="badge success">Badge</span>
+      <span slot="header-suffix" theme="badge success">Badge</span>
       <div>Card content. Lorem ipsum dolor sit amet consectetur adipisicing elit.</div>
-      <vaadin-button slot="suffix">Action</vaadin-button>
+      <vaadin-button slot="footer">Action</vaadin-button>
     </vaadin-card>
 
   </body>
