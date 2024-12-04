@@ -868,9 +868,9 @@ describe('multi selection column', () => {
       });
     }
 
-    function assertEvent({ item, selected, shiftKey }) {
+    function assertEvent(detail) {
       expect(itemSelectionSpy).to.be.calledOnce;
-      expect(itemSelectionSpy.args[0][0].detail).to.eql({ item, selected, shiftKey });
+      expect(itemSelectionSpy.args[0][0].detail).to.eql(detail);
       itemSelectionSpy.resetHistory();
     }
 
