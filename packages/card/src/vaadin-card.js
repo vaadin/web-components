@@ -31,30 +31,23 @@ class Card extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
   static get styles() {
     return css`
       :host {
-        display: grid;
+        display: flex;
+        flex-direction: column;
         padding: var(--vaadin-card-padding);
-        column-gap: var(--vaadin-card-column-gap);
-        row-gap: var(--vaadin-card-row-gap);
-        grid-auto-flow: dense;
-        justify-items: start;
-        align-content: start;
+        gap: var(--vaadin-card-gap);
 
         --media: 0;
         --title: 0;
         --subtitle: 0;
-        --title-suffix: 0;
+        --header: max(var(--header-prefix), var(--title), var(--subtitle), var(--header-suffix));
+        --header-prefix: 0;
+        --header-suffix: 0;
         --content: 0;
-        --suffix: 0;
+        --footer: 0;
       }
 
       :host(:not([theme~='horizontal'])) {
-        grid-template-columns: 1fr repeat(var(--title-suffix), auto);
-        grid-template-rows: auto auto auto repeat(var(--content), 1fr);
-      }
-
-      :host([theme~='horizontal']) {
-        grid-template-columns: [media-start] auto [media-end content-start title-start subtitle-start] 1fr [title-end subtitle-end title-suffix-start] auto [content-end title-suffix-end suffix-start] auto [suffix-end];
-        grid-template-rows: [title-start] auto [title-end subtitle-start] auto [subtitle-end content-start] 1fr [content-end];
+        justify-content: space-between;
       }
 
       :host(:is(:has([slot='media']), [has-media])) {
@@ -69,58 +62,194 @@ class Card extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
         --subtitle: 1;
       }
 
-      :host(:is(:has([slot='title-suffix']), [has-title-suffix])) {
-        --title-suffix: 1;
+      :host(:is(:has([slot='header']), [has-header])) {
+        --header: 1;
+        --title: 0;
+        --subtitle: 0;
       }
 
-      :host(:is(:has(:scope > :not([slot])), [has-content])) {
+      :host(:is(:has([slot='header-prefix']), [has-header-prefix])) {
+        --header-prefix: 1;
+      }
+
+      :host(:is(:has([slot='header-suffix']), [has-header-suffix])) {
+        --header-suffix: 1;
+      }
+
+      :host(:is(:has(> :not([slot])), [has-content])) {
         --content: 1;
       }
 
-      :host(:is(:has([slot='suffix']), [has-suffix])) {
-        --suffix: 1;
+      :host(:is(:has([slot='footer']), [has-footer])) {
+        --footer: 1;
       }
 
-      :host(:not([theme~='horizontal'])) ::slotted(*) {
-        grid-column: 1 / -1;
+      [part='media'],
+      [part='header'],
+      [part='content'],
+      [part='footer'] {
+        display: none;
       }
 
-      :host(:not([theme~='horizontal'])) ::slotted([slot='media']) {
-        grid-row-start: 1;
+      :host(:is(:has([slot='media']), [has-media])) [part='media'],
+      :host(:is(:has(> :not([slot])), [has-content])) [part='content'] {
+        display: block;
       }
 
-      :host(:not([theme~='horizontal'])) ::slotted([slot='title']) {
-        grid-row-start: calc(1 + var(--media));
+      :host(:is(:has([slot='footer']), [has-footer])) [part='footer'] {
+        display: flex;
+        gap: var(--vaadin-card-gap);
       }
 
-      :host(:not([theme~='horizontal'])) ::slotted([slot='subtitle']) {
-        grid-row-start: calc(1 + var(--media) + var(--title));
+      :host(
+          :is(
+              :has([slot='header']),
+              [has-header],
+              :has([slot='title']),
+              [has-title],
+              :has([slot='subtitle']),
+              [has-subtitle],
+              :has([slot='header-prefix']),
+              [has-header-prefix],
+              :has([slot='header-suffix']),
+              [has-header-suffix],
+              :not(:has([slot='header']):not([has-header]))
+            )
+        )
+        [part='header'] {
+        display: grid;
+        align-items: center;
+        gap: var(--vaadin-card-gap);
+        row-gap: 0;
       }
 
-      :host(:not([theme~='horizontal'])) ::slotted([slot='title-suffix']) {
-        grid-column: 2;
-        grid-row-start: calc(1 + var(--media));
-        grid-row-end: calc(1 + var(--media) + var(--title) + var(--subtitle));
-        align-self: center;
+      [part='header'] {
+        margin-bottom: auto;
       }
 
-      :host(:not([theme~='horizontal'])) ::slotted(:is([slot='title'], [slot='subtitle'])) {
-        grid-column: 1 / calc(-1 - var(--title-suffix));
+      :host(:is(:has([slot='header-suffix']), [has-header-suffix])) [part='header'] {
+        grid-template-columns: 1fr auto;
       }
 
-      :host(:not([theme~='horizontal'])) ::slotted(:not([slot])) {
-        grid-row-start: calc(1 + var(--media) + var(--title) + var(--subtitle));
+      :host(:is(:has([slot='header-prefix']), [has-header-prefix])) [part='header'] {
+        grid-template-columns: repeat(var(--header-prefix), auto) 1fr;
+      }
+
+      slot {
+        border-radius: inherit;
+      }
+
+      ::slotted([slot='header-prefix']) {
+        grid-column: 1;
+        grid-row: 1 / span calc(var(--title) + var(--subtitle));
+      }
+
+      ::slotted([slot='header']),
+      ::slotted([slot='title']) {
+        grid-column: calc(1 + var(--header-prefix));
+        grid-row: 1;
+      }
+
+      ::slotted([slot='subtitle']) {
+        grid-column: calc(1 + var(--header-prefix));
+        grid-row: calc(1 + var(--title));
+      }
+
+      ::slotted([slot='header-suffix']) {
+        grid-column: calc(2 + var(--header-prefix));
+        grid-row: 1 / span calc(var(--title) + var(--subtitle));
+      }
+
+      /* Horizontal */
+      :host([theme~='horizontal']) {
+        display: grid;
+        grid-template-columns: repeat(var(--media), minmax(auto, max-content)) 1fr;
+        align-items: start;
+      }
+
+      :host([theme~='horizontal']:is(:has([slot='footer']), [has-footer])) {
+        grid-template-rows: 1fr auto;
+      }
+
+      :host([theme~='horizontal']:is(:has(> :not([slot])), [has-content])) {
+        grid-template-rows: repeat(var(--header), auto) 1fr;
+      }
+
+      [part='media'] {
+        grid-column: 1;
+        grid-row: 1 / span calc(var(--header) + var(--content) + var(--footer));
         align-self: stretch;
+        border-radius: inherit;
       }
 
-      :host(:not([theme~='horizontal'])) ::slotted([slot='suffix']) {
-        grid-row-start: calc(1 + var(--media) + var(--title) + var(--subtitle) + var(--content));
+      [part='header'] {
+        grid-column: calc(1 + var(--media));
+        grid-row: 1;
+      }
+
+      [part='content'] {
+        grid-column: calc(1 + var(--media));
+        grid-row: calc(1 + var(--header));
+        flex: auto;
+      }
+
+      [part='footer'] {
+        grid-column: calc(1 + var(--media));
+        grid-row: calc(1 + var(--header) + var(--content));
+        border-radius: inherit;
+      }
+
+      :host([theme~='horizontal']) [part='footer'] {
         align-self: end;
       }
 
-      /* Last element spans any remaining rows. This assumes that the last child is also the last visible slotted row. */
-      :host(:not([theme~='horizontal'])) ::slotted(:last-child) {
-        grid-row-end: span calc(6 - var(--media) - var(--title) - var(--subtitle) - var(--content) - var(--suffix));
+      :host(:not([theme~='horizontal'])) ::slotted([slot='media']:is(img, video, svg)) {
+        max-width: 100%;
+      }
+
+      ::slotted([slot='media']) {
+        vertical-align: middle;
+      }
+
+      :host(:is([theme~='cover-media'], [theme~='stretch-media']))
+        ::slotted([slot='media']:is(img, video, svg, vaadin-icon)) {
+        width: 100%;
+        height: auto;
+        aspect-ratio: var(--vaadin-card-media-aspect-ratio, 16/9);
+        object-fit: cover;
+        margin: var(--vaadin-card-gap);
+        margin-top: 0;
+        margin-inline: 0;
+      }
+
+      :host([theme~='horizontal']:is([theme~='cover-media'], [theme~='stretch-media'])) {
+        grid-template-columns: repeat(var(--media), minmax(auto, 0.5fr)) 1fr;
+      }
+
+      :host([theme~='horizontal']:is([theme~='cover-media'], [theme~='stretch-media']))
+        ::slotted([slot='media']:is(img, video, svg, vaadin-icon)) {
+        height: 100%;
+        aspect-ratio: auto;
+      }
+
+      :host([theme~='stretch-media']) ::slotted([slot='media']:is(img, video, svg, vaadin-icon)) {
+        margin-top: calc(var(--vaadin-card-padding) * -1);
+        margin-inline: calc(var(--vaadin-card-padding) * -1);
+        width: calc(100% + var(--vaadin-card-padding) * 2);
+        max-width: none;
+        border-radius: inherit;
+        border-end-end-radius: 0;
+        border-end-start-radius: 0;
+      }
+
+      :host([theme~='horizontal'][theme~='stretch-media']) ::slotted([slot='media']:is(img, video, svg, vaadin-icon)) {
+        margin-bottom: 0;
+        margin-inline-end: 0;
+        width: calc(100% + var(--vaadin-card-padding));
+        height: calc(100% + var(--vaadin-card-padding) * 2);
+        border-radius: inherit;
+        border-start-end-radius: 0;
+        border-end-end-radius: 0;
       }
     `;
   }
@@ -132,12 +261,23 @@ class Card extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
   /** @protected */
   render() {
     return html`
-      <slot name="media"></slot>
-      <slot name="title"></slot>
-      <slot name="subtitle"></slot>
-      <slot name="title-suffix"></slot>
-      <slot></slot>
-      <slot name="suffix"></slot>
+      <div part="media">
+        <slot name="media"></slot>
+      </div>
+      <div part="header">
+        <slot name="header-prefix"></slot>
+        <slot name="header">
+          <slot name="title"></slot>
+          <slot name="subtitle"></slot>
+        </slot>
+        <slot name="header-suffix"></slot>
+      </div>
+      <div part="content">
+        <slot></slot>
+      </div>
+      <div part="footer">
+        <slot name="footer"></slot>
+      </div>
     `;
   }
 
@@ -146,12 +286,21 @@ class Card extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
 
   /** @private */
   _onMutation() {
+    // Chrome doesn't support `:host(:has())`, so we'll recreate that with custom attributes
     this.toggleAttribute('has-media', this.querySelector(':scope > [slot="media"]'));
-    this.toggleAttribute('has-title', this.querySelector(':scope > [slot="title"]'));
-    this.toggleAttribute('has-subtitle', this.querySelector(':scope > [slot="subtitle"]'));
-    this.toggleAttribute('has-title-suffix', this.querySelector(':scope > [slot="title-suffix"]'));
+    this.toggleAttribute('has-header', this.querySelector(':scope > [slot="header"]'));
+    this.toggleAttribute(
+      'has-title',
+      this.querySelector(':scope > [slot="title"]') && !this.querySelector(':scope > [slot="header"]'),
+    );
+    this.toggleAttribute(
+      'has-subtitle',
+      this.querySelector(':scope > [slot="subtitle"]') && !this.querySelector(':scope > [slot="header"]'),
+    );
+    this.toggleAttribute('has-header-prefix', this.querySelector(':scope > [slot="header-prefix"]'));
+    this.toggleAttribute('has-header-suffix', this.querySelector(':scope > [slot="header-suffix"]'));
     this.toggleAttribute('has-content', this.querySelector(':scope > :not([slot])'));
-    this.toggleAttribute('has-suffix', this.querySelector(':scope > [slot="suffix"]'));
+    this.toggleAttribute('has-footer', this.querySelector(':scope > [slot="footer"]'));
   }
 
   connectedCallback() {
@@ -161,7 +310,7 @@ class Card extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
       if (!this._mutationObserver) {
         this._mutationObserver = new MutationObserver(this._onMutation.bind(this));
       }
-      this._mutationObserver.observe(this, { childList: 'true' });
+      this._mutationObserver.observe(this, { childList: 'true', attributeFilter: ['slot'], subtree: true });
     }
   }
 
