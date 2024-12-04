@@ -906,8 +906,10 @@ describe('multi selection column', () => {
     it('should fire the event when toggling an item with Shift + click', async () => {
       await sendKeys({ down: 'Shift' });
       await mouseClick(checkboxes[0]);
+      await sendKeys({ up: 'Shift' });
       assertEvent({ item: grid.items[0], selected: true, shiftKey: true });
 
+      await sendKeys({ down: 'Shift' });
       await mouseClick(checkboxes[0]);
       await sendKeys({ up: 'Shift' });
       assertEvent({ item: grid.items[0], selected: false, shiftKey: true });
@@ -928,8 +930,10 @@ describe('multi selection column', () => {
 
       await sendKeys({ down: 'Shift' });
       await sendKeys({ press: 'Space' });
+      await sendKeys({ up: 'Shift' });
       assertEvent({ item: grid.items[0], selected: true, shiftKey: true });
 
+      await sendKeys({ down: 'Shift' });
       await sendKeys({ press: 'Space' });
       await sendKeys({ up: 'Shift' });
       assertEvent({ item: grid.items[0], selected: false, shiftKey: true });
@@ -952,8 +956,10 @@ describe('multi selection column', () => {
       it('should fire the event when toggling an item with Shift + click', async () => {
         await sendKeys({ down: 'Shift' });
         await mouseClick(rows[0]);
+        await sendKeys({ up: 'Shift' });
         assertEvent({ item: grid.items[0], selected: true, shiftKey: true });
 
+        await sendKeys({ down: 'Shift' });
         await mouseClick(rows[0]);
         await sendKeys({ up: 'Shift' });
         assertEvent({ item: grid.items[0], selected: false, shiftKey: true });
@@ -964,16 +970,18 @@ describe('multi selection column', () => {
         await sendKeys({ down: 'Shift' });
         await mouseClick(rows[1]);
         await sendKeys({ up: 'Shift' });
-        expect(document.getSelection().toString()).to.equal('');
+        expect(document.getSelection().toString()).to.be.empty;
       });
 
-      it('should remove text selection when selecting a range of items with Shift + click', async () => {
+      it('should allow text selection after selecting a range of items with Shift + click', async () => {
         await mouseClick(rows[0]);
-        document.getSelection().selectAllChildren(grid);
         await sendKeys({ down: 'Shift' });
         await mouseClick(rows[1]);
         await sendKeys({ up: 'Shift' });
-        expect(document.getSelection().toString()).to.equal('');
+
+        const row2CellContent1 = getBodyCellContent(grid, 2, 1);
+        document.getSelection().selectAllChildren(row2CellContent1);
+        expect(document.getSelection().toString()).to.be.not.empty;
       });
     });
   });

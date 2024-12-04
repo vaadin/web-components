@@ -106,7 +106,6 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
 
     constructor() {
       super();
-      this.__onGridSelectStart = this.__onGridSelectStart.bind(this);
       this.__onGridItemActivate = this.__onGridItemActivate.bind(this);
       this.__onGridInteraction = this.__onGridInteraction.bind(this);
       this.__onCellTrack = this.__onCellTrack.bind(this);
@@ -122,7 +121,6 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
       if (this._grid) {
         this._grid.addEventListener('keyup', this.__onGridInteraction);
         this._grid.addEventListener('mousedown', this.__onGridInteraction);
-        this._grid.addEventListener('selectstart', this.__onGridSelectStart);
         this._grid.addEventListener('row-activate', this.__onGridItemActivate);
         this._grid.addEventListener('cell-activate', this.__onGridItemActivate);
       }
@@ -134,7 +132,6 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
       if (this._grid) {
         this._grid.removeEventListener('keyup', this.__onGridInteraction);
         this._grid.removeEventListener('mousedown', this.__onGridInteraction);
-        this._grid.removeEventListener('selectstart', this.__onGridSelectStart);
         this._grid.removeEventListener('row-activate', this.__onGridItemActivate);
         this._grid.removeEventListener('cell-activate', this.__onGridItemActivate);
       }
@@ -203,14 +200,13 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
     /** @private */
     __onGridInteraction(e) {
       this._shiftKeyDown = e.shiftKey;
-    }
 
-    /** @private */
-    __onGridSelectStart(e) {
-      if (this.autoSelect && this._shiftKeyDown) {
-        // Prevent text selection when shift-selecting a range of items.
-        e.preventDefault();
-        document.getSelection().removeAllRanges();
+      if (this.autoSelect) {
+        if (e.shiftKey) {
+          this._grid.style.setProperty('--_grid-user-select', 'none');
+        } else {
+          this._grid.style.removeProperty('--_grid-user-select');
+        }
       }
     }
 
