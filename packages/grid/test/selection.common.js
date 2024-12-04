@@ -857,7 +857,7 @@ describe('multi selection column', () => {
     });
   });
 
-  describe('item-selection event', () => {
+  describe('item-toggle event', () => {
     let itemSelectionSpy, rows, checkboxes;
 
     async function mouseClick(element) {
@@ -888,7 +888,7 @@ describe('multi selection column', () => {
       checkboxes = [...grid.querySelectorAll('vaadin-checkbox[aria-label="Select Row"]')];
 
       itemSelectionSpy = sinon.spy();
-      grid.addEventListener('item-selection', itemSelectionSpy);
+      grid.addEventListener('item-toggle', itemSelectionSpy);
     });
 
     afterEach(async () => {

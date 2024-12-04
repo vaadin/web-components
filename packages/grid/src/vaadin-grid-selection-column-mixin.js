@@ -114,7 +114,7 @@ export const GridSelectionColumnMixin = (superClass) =>
       if (this._grid.__isItemSelectable(item)) {
         this._grid.selectItem(item);
         this._grid.dispatchEvent(
-          new CustomEvent('item-selection', {
+          new CustomEvent('item-toggle', {
             detail: {
               item,
               selected: true,
@@ -137,7 +137,7 @@ export const GridSelectionColumnMixin = (superClass) =>
       if (this._grid.__isItemSelectable(item)) {
         this._grid.deselectItem(item);
         this._grid.dispatchEvent(
-          new CustomEvent('item-selection', {
+          new CustomEvent('item-toggle', {
             detail: {
               item,
               selected: false,
