@@ -9,6 +9,7 @@ import './vaadin-lit-select-list-box.js';
 import './vaadin-lit-select-overlay.js';
 import './vaadin-lit-select-value-button.js';
 import { css, html, LitElement } from 'lit';
+import { ifDefined } from 'lit/directives/if-defined.js';
 import { screenReaderOnly } from '@vaadin/a11y-base/src/styles/sr-only-styles.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
@@ -65,7 +66,7 @@ class Select extends SelectBaseMixin(ElementMixin(ThemableMixin(PolylitMixin(Lit
           .readonly="${this.readonly}"
           .disabled="${this.disabled}"
           .invalid="${this.invalid}"
-          theme="${this._theme}"
+          theme="${ifDefined(this._theme)}"
           @click="${this._onClick}"
         >
           <slot name="prefix" slot="prefix"></slot>
@@ -89,7 +90,7 @@ class Select extends SelectBaseMixin(ElementMixin(ThemableMixin(PolylitMixin(Lit
         .withBackdrop="${this._phone}"
         .renderer="${this.renderer || this.__defaultRenderer}"
         ?phone="${this._phone}"
-        theme="${this._theme}"
+        theme="${ifDefined(this._theme)}"
         ?no-vertical-overlap="${this.noVerticalOverlap}"
         @opened-changed="${this._onOpenedChanged}"
         @vaadin-overlay-open="${this._onOverlayOpen}"
