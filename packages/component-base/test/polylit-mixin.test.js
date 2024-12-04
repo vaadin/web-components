@@ -637,6 +637,7 @@ describe('PolylitMixin', () => {
   describe('dynamic property observer', () => {
     let element;
     let valueChangedSpy;
+    let complexSpy;
 
     const tag = defineCE(
       class extends PolylitMixin(LitElement) {
@@ -648,6 +649,10 @@ describe('PolylitMixin', () => {
           };
         }
 
+        static get observers() {
+          return ['_valueChangedComplex(value)'];
+        }
+
         render() {
           return html`${this.value}`;
         }
@@ -655,12 +660,15 @@ describe('PolylitMixin', () => {
         _valueChanged(_value, _oldValue) {}
 
         _valueChangedOther(_value, _oldValue) {}
+
+        _valueChangedComplex(_value) {}
       },
     );
 
     beforeEach(async () => {
       element = fixtureSync(`<${tag}></${tag}>`);
       valueChangedSpy = sinon.spy(element, '_valueChanged');
+      complexSpy = sinon.spy(element, '_valueChangedComplex');
       await element.updateComplete;
     });
 
@@ -696,6 +704,13 @@ describe('PolylitMixin', () => {
       await element.updateComplete;
       expect(valueChangedSpy.calledOnce).to.be.true;
       expect(otherObserverSpy.calledOnce).to.be.true;
+    });
+
+    it('should run dynamic property observer after complex observer', async () => {
+      element._createPropertyObserver('value', '_valueChanged');
+      element.value = 'bar';
+      await element.updateComplete;
+      expect(complexSpy.calledBefore(valueChangedSpy)).to.be.true;
     });
   });
 
