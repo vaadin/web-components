@@ -120,7 +120,6 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
     connectedCallback() {
       super.connectedCallback();
       if (this._grid) {
-        this._grid.addEventListener('keydown', this.__onGridInteraction);
         this._grid.addEventListener('keyup', this.__onGridInteraction);
         this._grid.addEventListener('mousedown', this.__onGridInteraction);
         this._grid.addEventListener('selectstart', this.__onGridSelectStart);
@@ -133,7 +132,6 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
     disconnectedCallback() {
       super.disconnectedCallback();
       if (this._grid) {
-        this._grid.removeEventListener('keydown', this.__onGridInteraction);
         this._grid.removeEventListener('keyup', this.__onGridInteraction);
         this._grid.removeEventListener('mousedown', this.__onGridInteraction);
         this._grid.removeEventListener('selectstart', this.__onGridSelectStart);

@@ -857,59 +857,124 @@ describe('multi selection column', () => {
     });
   });
 
-  describe('range-selection event', () => {
-    let rangeSelectionSpy;
+  describe('item-selection event', () => {
+    let itemSelectionSpy, rows, checkboxes;
 
     async function mouseClick(element) {
       const { x, y, width, height } = element.getBoundingClientRect();
-
       await sendMouse({
         type: 'click',
         position: [x + width / 2, y + height / 2].map(Math.floor),
       });
     }
 
+    function assertEvent({ item, selected, shiftKey }) {
+      expect(itemSelectionSpy).to.be.calledOnce;
+      expect(itemSelectionSpy.args[0][0].detail).to.eql({ item, selected, shiftKey });
+      itemSelectionSpy.resetHistory();
+    }
+
     beforeEach(async () => {
       grid = fixtureSync(`
         <vaadin-grid style="width: 200px; height: 450px;">
           <vaadin-grid-selection-column></vaadin-grid-selection-column>
-          <vaadin-grid-column></vaadin-grid-column>
+          <vaadin-grid-column path="name"></vaadin-grid-column>
         </vaadin-grid>
       `);
-      await nextFrame();
-      grid.items = Array.from({ length: 100 }, (_, i) => `Item ${i}`);
+      grid.items = [{ name: 'Item 0' }, { name: 'Item 1' }, { name: 'Item 2' }];
+      await nextRender();
 
-      rangeSelectionSpy = sinon.spy();
-      grid.addEventListener('range-selection', rangeSelectionSpy);
+      rows = getRows(grid.$.items);
+      checkboxes = [...grid.querySelectorAll('vaadin-checkbox[aria-label="Select Row"]')];
+
+      itemSelectionSpy = sinon.spy();
+      grid.addEventListener('item-selection', itemSelectionSpy);
     });
 
     afterEach(async () => {
       await resetMouse();
     });
 
-    it('should not fire the event initially', () => {
-      expect(rangeSelectionSpy).not.to.be.called;
+    it('should fire the event when toggling an item with click', async () => {
+      await mouseClick(checkboxes[0]);
+      assertEvent({ item: grid.items[0], selected: true, shiftKey: false });
+
+      await mouseClick(checkboxes[0]);
+      assertEvent({ item: grid.items[0], selected: false, shiftKey: false });
     });
 
-    it('should fire the event on shift-range selection with mouse', async () => {
-      const row0Checkbox = getBodyCellContent(grid, 0, 0).querySelector('vaadin-checkbox');
-      const row5Checkbox = getBodyCellContent(grid, 5, 0).querySelector('vaadin-checkbox');
+    it('should fire the event when toggling an item with Shift + click', async () => {
+      await sendKeys({ down: 'Shift' });
+      await mouseClick(checkboxes[0]);
+      assertEvent({ item: grid.items[0], selected: true, shiftKey: true });
 
-      await mouseClick(row0Checkbox);
+      await mouseClick(checkboxes[0]);
+      await sendKeys({ up: 'Shift' });
+      assertEvent({ item: grid.items[0], selected: false, shiftKey: true });
+    });
+
+    it('should fire the event when toggling an item with Space', async () => {
+      checkboxes[0].focus();
+
+      await sendKeys({ press: 'Space' });
+      assertEvent({ item: grid.items[0], selected: true, shiftKey: false });
+
+      await sendKeys({ press: 'Space' });
+      assertEvent({ item: grid.items[0], selected: false, shiftKey: false });
+    });
+
+    it('should fire the event when toggling an item with Shift + Space', async () => {
+      checkboxes[0].focus();
 
       await sendKeys({ down: 'Shift' });
-      await mouseClick(row5Checkbox);
-      await sendKeys({ up: 'Shift' });
+      await sendKeys({ press: 'Space' });
+      assertEvent({ item: grid.items[0], selected: true, shiftKey: true });
 
-      expect(rangeSelectionSpy).to.be.calledOnce;
-      expect(rangeSelectionSpy.args[0][0].detail).to.eql({
-        startItem: grid.items[0],
-        endItem: grid.items[5],
-      });
+      await sendKeys({ press: 'Space' });
+      await sendKeys({ up: 'Shift' });
+      assertEvent({ item: grid.items[0], selected: false, shiftKey: true });
     });
 
-    it('should fire the event on shift-range deselection with mouse', () => {});
+    describe('autoSelect', () => {
+      beforeEach(() => {
+        const selectionColumn = grid.querySelector('vaadin-grid-selection-column');
+        selectionColumn.autoSelect = true;
+      });
 
-    it('should fire the event on shift-range selection with keyboard', () => {});
+      it('should fire the event when toggling an item with click', async () => {
+        await mouseClick(rows[0]);
+        assertEvent({ item: grid.items[0], selected: true, shiftKey: false });
+
+        await mouseClick(rows[0]);
+        assertEvent({ item: grid.items[0], selected: false, shiftKey: false });
+      });
+
+      it('should fire the event when toggling an item with Shift + click', async () => {
+        await sendKeys({ down: 'Shift' });
+        await mouseClick(rows[0]);
+        assertEvent({ item: grid.items[0], selected: true, shiftKey: true });
+
+        await mouseClick(rows[0]);
+        await sendKeys({ up: 'Shift' });
+        assertEvent({ item: grid.items[0], selected: false, shiftKey: true });
+      });
+
+      it('should prevent text selection when selecting a range of items with Shift + click', async () => {
+        await mouseClick(rows[0]);
+        await sendKeys({ down: 'Shift' });
+        await mouseClick(rows[1]);
+        await sendKeys({ up: 'Shift' });
+        expect(document.getSelection().toString()).to.equal('');
+      });
+
+      it('should remove text selection when selecting a range of items with Shift + click', async () => {
+        await mouseClick(rows[0]);
+        document.getSelection().selectAllChildren(grid);
+        await sendKeys({ down: 'Shift' });
+        await mouseClick(rows[1]);
+        await sendKeys({ up: 'Shift' });
+        expect(document.getSelection().toString()).to.equal('');
+      });
+    });
   });
 });
