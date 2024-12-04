@@ -132,20 +132,12 @@ export const SelectionMixin = (superClass) =>
      */
 
     /**
-     * Fired when the user selects an item.
+     * Fired when the user selects or deselects an item.
      *
-     * @event item-selected
+     * @event item-selection
      * @param {Object} detail
-     * @param {GridItem} detail.item the selected item
-     * @param {boolean} detail.shiftKey true if the shift key was pressed
-     */
-
-    /**
-     * Fired when the user deselects an item.
-     *
-     * @event item-deselected
-     * @param {Object} detail
-     * @param {GridItem} detail.item the deselected item
+     * @param {GridItem} detail.item the item that was selected or deselected
+     * @param {boolean} detail.selected true if the item was selected
      * @param {boolean} detail.shiftKey true if the shift key was pressed
      */
   };
