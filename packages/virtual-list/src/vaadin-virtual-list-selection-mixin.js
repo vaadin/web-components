@@ -74,10 +74,7 @@ export const SelectionMixin = (superClass) =>
     }
 
     static get observers() {
-      return [
-        '__selectionChanged(itemIdPath, selectedItems, __focusIndex, itemAccessibleNameGenerator)',
-        '__selectionItemsUpdated(items)',
-      ];
+      return ['__selectionChanged(itemIdPath, selectedItems, __focusIndex, itemAccessibleNameGenerator)'];
     }
 
     constructor() {
@@ -92,6 +89,8 @@ export const SelectionMixin = (superClass) =>
     ready() {
       super.ready();
       this.__updateAria();
+
+      this._createPropertyObserver('items', '__selectionItemsUpdated');
     }
 
     /**
@@ -139,13 +138,13 @@ export const SelectionMixin = (superClass) =>
     }
 
     /** @private */
-    __selectionItemsUpdated() {
-      // Needs to run in a microtask, otherwise the change to __focusIndex would synchronously invoke
-      // __updateElement for items that are not yet in sync with virtualizer
-      queueMicrotask(() => {
-        this.__focusIndex = Math.max(Math.min(this.__focusIndex, this.items.length - 1), 0);
-        this.__setNavigating(this.__isNavigating());
-      });
+    __selectionItemsUpdated(items) {
+      if (!this.selectionMode || !this.items) {
+        return;
+      }
+
+      this.__focusIndex = Math.max(Math.min(this.__focusIndex, items.length - 1), 0);
+      this.__setNavigating(this.__isNavigating());
     }
 
     /** @private */
