@@ -5,6 +5,7 @@
  */
 import '@vaadin/input-container/src/vaadin-lit-input-container.js';
 import { html, LitElement } from 'lit';
+import { ifDefined } from 'lit/directives/if-defined.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
@@ -45,7 +46,7 @@ export class TextField extends TextFieldMixin(ThemableMixin(ElementMixin(Polylit
           .readonly="${this.readonly}"
           .disabled="${this.disabled}"
           .invalid="${this.invalid}"
-          theme="${this._theme}"
+          theme="${ifDefined(this._theme)}"
         >
           <slot name="prefix" slot="prefix"></slot>
           <slot name="input"></slot>
