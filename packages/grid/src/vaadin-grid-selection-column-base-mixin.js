@@ -93,7 +93,11 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
         /** @protected */
         _selectAllHidden: Boolean,
 
-        /** @protected */
+        /**
+         * Indicates whether the shift key is currently pressed.
+         *
+         * @protected
+         */
         _shiftKeyDown: Boolean,
       };
     }
@@ -203,6 +207,7 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
 
       if (this.autoSelect) {
         if (e.shiftKey) {
+          // Prevent text selection when shift-clicking to select a range of items.
           this._grid.style.setProperty('--_grid-user-select', 'none');
         } else {
           this._grid.style.removeProperty('--_grid-user-select');

@@ -40,6 +40,11 @@ export declare class GridSelectionColumnBaseMixinClass<TItem> {
   dragSelect: boolean;
 
   /**
+   * Indicates whether the shift key is currently pressed.
+   */
+  protected _shiftKeyDown: boolean;
+
+  /**
    * Override to handle the user selecting all items.
    */
   protected _selectAll(): void;
