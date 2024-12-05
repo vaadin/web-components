@@ -89,14 +89,16 @@ describe('custom field', () => {
       });
     });
 
-    it('should clear value when removing all inputs', async () => {
+    it('should update value when removing inputs', async () => {
       customField.value = '1\t1';
       await nextUpdate(customField);
 
       customField.removeChild(customField.inputs[0]);
-      customField.removeChild(customField.inputs[1]);
       await nextUpdate(customField);
+      expect(customField.value).to.equal('1');
 
+      customField.removeChild(customField.inputs[0]);
+      await nextUpdate(customField);
       expect(customField.value).to.equal('');
     });
   });
