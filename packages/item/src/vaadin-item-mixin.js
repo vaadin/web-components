@@ -38,7 +38,6 @@ export const ItemMixin = (superClass) =>
           value: false,
           reflectToAttribute: true,
           observer: '_selectedChanged',
-          sync: true,
         },
 
         /** @private */
