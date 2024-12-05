@@ -3,7 +3,7 @@ import { click, fixtureSync, keyboardEventFor, nextRender, oneEvent, tap } from 
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import { parseDate } from '../src/vaadin-date-picker-helper.js';
-import { close, open, touchTap, waitForOverlayRender } from './helpers.js';
+import { open, touchTap, waitForOverlayRender } from './helpers.js';
 
 describe('basic features', () => {
   let datePicker, input, overlay;
@@ -60,13 +60,13 @@ describe('basic features', () => {
     datePicker.addEventListener('opened-changed', spy);
     await open(datePicker);
     expect(spy.calledOnce).to.be.true;
-    await close(datePicker);
+    datePicker.close();
     expect(spy.calledTwice).to.be.true;
   });
 
   it('should set opened to false with close call', async () => {
     await open(datePicker);
-    await close(datePicker);
+    datePicker.close();
     expect(datePicker.opened).to.be.false;
   });
 

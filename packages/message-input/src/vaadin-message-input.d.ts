@@ -3,14 +3,11 @@
  * Copyright (c) 2021 - 2024 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { MessageInputMixin } from './vaadin-message-input-mixin.js';
 
-export interface MessageInputI18n {
-  send: string;
-  message: string;
-}
+export { MessageInputI18n } from './vaadin-message-input-mixin.js';
 
 /**
  * Fired when a new message is submitted with `<vaadin-message-input>`, either
@@ -36,36 +33,7 @@ export type MessageInputEventMap = HTMLElementEventMap & MessageInputCustomEvent
  * <vaadin-message-input></vaadin-message-input>
  * ```
  */
-declare class MessageInput extends ThemableMixin(ElementMixin(ControllerMixin(HTMLElement))) {
-  /**
-   * Current content of the text input field
-   */
-  value: string | null | undefined;
-
-  /**
-   * The object used to localize this component.
-   * For changing the default localization, change the entire
-   * `i18n` object.
-   *
-   * The object has the following JSON structure and default values:
-   *
-   * ```
-   * {
-   *   // Used as the button label
-   *   send: 'Send',
-   *
-   *   // Used as the input field's placeholder and aria-label
-   *   message: 'Message'
-   * }
-   * ```
-   */
-  i18n: MessageInputI18n;
-
-  /**
-   * Set to true to disable this element.
-   */
-  disabled: boolean;
-
+declare class MessageInput extends MessageInputMixin(ThemableMixin(ElementMixin(HTMLElement))) {
   addEventListener<K extends keyof MessageInputEventMap>(
     type: K,
     listener: (this: MessageInput, ev: MessageInputEventMap[K]) => void,

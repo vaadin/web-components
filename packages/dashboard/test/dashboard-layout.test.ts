@@ -26,7 +26,7 @@ const [defaultSpacing, defaultMinimumColumnWidth] = (() => {
   document.body.appendChild(div);
   div.style.width = '1rem';
   const minColWidth = div.offsetWidth * 25;
-  div.style.width = 'var(--lumo-space-l)';
+  div.style.width = 'var(--lumo-space-m)';
   const spacing = div.offsetWidth;
   div.remove();
   return [spacing, minColWidth];

@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { click, fixtureSync, listenOnce, mousedown, nextFrame } from '@vaadin/testing-helpers';
+import { click, fixtureSync, listenOnce, mousedown, nextFrame, nextRender } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import {
@@ -183,7 +183,6 @@ describe('multi selection column', () => {
         <vaadin-grid-filter-column path="value"></vaadin-grid-filter-column>
       </vaadin-grid>
     `);
-    await nextFrame();
 
     grid.querySelector('[header="header"]').renderer = (root, _, { item }) => {
       root.textContent = item;
@@ -205,6 +204,8 @@ describe('multi selection column', () => {
 
     selectAllCheckbox = firstHeaderCellContent.children[0];
     firstBodyCheckbox = firstBodyCellContent.children[0];
+
+    await nextRender();
   });
 
   it('should clean up listeners on detach', () => {
@@ -216,8 +217,12 @@ describe('multi selection column', () => {
     expect(firstBodyCheckbox.localName).to.eql('vaadin-checkbox');
   });
 
+  it('should have the checkbox unselected by default', () => {
+    expect(firstBodyCheckbox.checked).to.be.false;
+  });
+
   it('should select item when checkbox is checked', async () => {
-    firstBodyCheckbox.checked = true;
+    firstBodyCheckbox.click();
     await nextFrame();
     expect(grid._isSelected(cachedItems[0])).to.be.true;
   });
@@ -225,7 +230,7 @@ describe('multi selection column', () => {
   it('should dispatch one event on selection', async () => {
     const spy = sinon.spy();
     grid.addEventListener('selected-items-changed', spy);
-    firstBodyCheckbox.checked = true;
+    firstBodyCheckbox.click();
     await nextFrame();
     expect(spy.callCount).to.equal(1);
     expect(spy.getCall(0).args[0].detail.value).to.equal(grid.selectedItems);
@@ -447,7 +452,7 @@ describe('multi selection column', () => {
   });
 
   it('should have indeterminate when an item is selected', async () => {
-    firstBodyCheckbox.checked = true;
+    firstBodyCheckbox.click();
     await nextFrame();
 
     expect(selectAllCheckbox.indeterminate).to.be.true;
@@ -458,7 +463,7 @@ describe('multi selection column', () => {
     expect(selectAllCheckbox.checked).to.be.false;
     expect(selectAllCheckbox.indeterminate).not.to.be.ok;
 
-    firstBodyCheckbox.checked = true;
+    firstBodyCheckbox.click();
     await nextFrame();
     expect(selectAllCheckbox.checked).to.be.true;
     expect(selectAllCheckbox.indeterminate).to.be.true;
@@ -469,7 +474,7 @@ describe('multi selection column', () => {
     await nextFrame();
     expect(selectAllCheckbox.indeterminate).to.be.false;
 
-    firstBodyCheckbox.checked = false;
+    firstBodyCheckbox.click();
     await nextFrame();
     expect(selectAllCheckbox.indeterminate).to.be.true;
   });
@@ -493,7 +498,7 @@ describe('multi selection column', () => {
   });
 
   it('should not have selectAll after selecting a single item', async () => {
-    firstBodyCheckbox.checked = true;
+    firstBodyCheckbox.click();
     await nextFrame();
 
     expect(selectionColumn.selectAll).to.be.false;
@@ -503,7 +508,7 @@ describe('multi selection column', () => {
     selectAllCheckbox.click();
     await nextFrame();
 
-    firstBodyCheckbox.checked = false;
+    firstBodyCheckbox.click();
     await nextFrame();
 
     expect(selectionColumn.selectAll).to.be.false;
@@ -522,10 +527,10 @@ describe('multi selection column', () => {
   it('should have selectAll after selecting all manually', async () => {
     selectAllCheckbox.click();
     await nextFrame();
-    firstBodyCheckbox.checked = true;
+    firstBodyCheckbox.click();
     await nextFrame();
 
-    firstBodyCheckbox.checked = true;
+    firstBodyCheckbox.click();
     await nextFrame();
 
     expect(selectionColumn.selectAll).to.be.true;
@@ -536,7 +541,7 @@ describe('multi selection column', () => {
     for (const row of rows) {
       const cellContent = getCellContent(getRowCells(row)[0]);
       const checkbox = cellContent.children[0];
-      checkbox.checked = true;
+      checkbox.click();
       await nextFrame();
     }
 
@@ -551,7 +556,7 @@ describe('multi selection column', () => {
     for (const row of rows) {
       const cellContent = getCellContent(getRowCells(row)[0]);
       const checkbox = cellContent.children[0];
-      checkbox.checked = false;
+      checkbox.click();
       await nextFrame();
     }
 
@@ -562,7 +567,7 @@ describe('multi selection column', () => {
   it('should update select all when filters change', async () => {
     grid.items = [{ value: 'foo' }, { value: 'bar' }];
 
-    firstBodyCheckbox.checked = true;
+    firstBodyCheckbox.click();
 
     await nextFrame();
     const filter = grid.querySelector('vaadin-grid-filter');

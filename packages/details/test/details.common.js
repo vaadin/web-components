@@ -190,6 +190,16 @@ describe('vaadin-details', () => {
         await nextUpdate(details);
         expect(summary.hasAttribute('disabled')).to.be.false;
       });
+
+      it(`should propagate theme attribute to ${type} summary`, async () => {
+        details.setAttribute('theme', 'filled');
+        await nextUpdate(details);
+        expect(summary.getAttribute('theme')).to.equal('filled');
+
+        details.removeAttribute('theme');
+        await nextUpdate(details);
+        expect(summary.hasAttribute('theme')).to.be.false;
+      });
     });
   });
 

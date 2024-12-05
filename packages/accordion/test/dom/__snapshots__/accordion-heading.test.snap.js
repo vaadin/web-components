@@ -31,6 +31,7 @@ snapshots["vaadin-accordion-heading host disabled"] =
 
 snapshots["vaadin-accordion-heading shadow default"] = 
 `<button
+  aria-expanded="false"
   id="button"
   part="content"
 >
@@ -47,6 +48,7 @@ snapshots["vaadin-accordion-heading shadow default"] =
 
 snapshots["vaadin-accordion-heading shadow disabled"] = 
 `<button
+  aria-expanded="false"
   disabled=""
   id="button"
   part="content"

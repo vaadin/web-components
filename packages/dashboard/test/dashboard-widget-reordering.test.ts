@@ -474,7 +474,7 @@ describe('dashboard - widget reordering', () => {
       (getDraggable(widget) as HTMLElement).click();
       await nextFrame();
       expect(widget.hasAttribute('selected')).to.be.true;
-      expect(widget.hasAttribute('focused')).to.be.true;
+      expect(widget.hasAttribute('focused')).to.be.false;
       expect(widget.hasAttribute('move-mode')).to.be.true;
 
       fireDragStart(widget);

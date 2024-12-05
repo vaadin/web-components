@@ -89,10 +89,10 @@ export class WidgetResizeController {
 
     const currentElementHeight = itemWrapper.firstElementChild.offsetHeight;
     const rowMinHeight = Math.min(...gridStyle.gridTemplateRows.split(' ').map((height) => parseFloat(height)));
-    if (this.__resizeHeight > currentElementHeight + gapSize + rowMinHeight / 2) {
+    if (e.detail.ddy > 0 && this.__resizeHeight > currentElementHeight + gapSize + rowMinHeight / 2) {
       // Resized vertically above the half of the next row, increase rowspan
       this.__updateResizedItem(0, 1);
-    } else if (this.__resizeHeight < currentElementHeight - rowMinHeight / 2) {
+    } else if (e.detail.ddy < 0 && this.__resizeHeight < currentElementHeight - rowMinHeight / 2) {
       // Resized vertically below the half of the current row, decrease rowspan
       this.__updateResizedItem(0, -1);
     }

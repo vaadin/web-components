@@ -637,6 +637,7 @@ describe('PolylitMixin', () => {
   describe('dynamic property observer', () => {
     let element;
     let valueChangedSpy;
+    let complexSpy;
 
     const tag = defineCE(
       class extends PolylitMixin(LitElement) {
@@ -648,6 +649,10 @@ describe('PolylitMixin', () => {
           };
         }
 
+        static get observers() {
+          return ['_valueChangedComplex(value)'];
+        }
+
         render() {
           return html`${this.value}`;
         }
@@ -655,12 +660,15 @@ describe('PolylitMixin', () => {
         _valueChanged(_value, _oldValue) {}
 
         _valueChangedOther(_value, _oldValue) {}
+
+        _valueChangedComplex(_value) {}
       },
     );
 
     beforeEach(async () => {
       element = fixtureSync(`<${tag}></${tag}>`);
       valueChangedSpy = sinon.spy(element, '_valueChanged');
+      complexSpy = sinon.spy(element, '_valueChangedComplex');
       await element.updateComplete;
     });
 
@@ -696,6 +704,13 @@ describe('PolylitMixin', () => {
       await element.updateComplete;
       expect(valueChangedSpy.calledOnce).to.be.true;
       expect(otherObserverSpy.calledOnce).to.be.true;
+    });
+
+    it('should run dynamic property observer after complex observer', async () => {
+      element._createPropertyObserver('value', '_valueChanged');
+      element.value = 'bar';
+      await element.updateComplete;
+      expect(complexSpy.calledBefore(valueChangedSpy)).to.be.true;
     });
   });
 
@@ -1080,6 +1095,79 @@ describe('PolylitMixin', () => {
 
     it('should only call ready callback once during initialization', () => {
       expect(element.count).to.equal(1);
+    });
+  });
+
+  describe('sync observers', () => {
+    let element;
+    const readySpy = sinon.spy();
+    const openedChangedSpy = sinon.spy();
+    const headerChangedSpy = sinon.spy();
+    const contentChangedSpy = sinon.spy();
+
+    const tag = defineCE(
+      class extends PolylitMixin(LitElement) {
+        static get properties() {
+          return {
+            opened: {
+              type: Boolean,
+              sync: true,
+            },
+
+            header: {
+              type: String,
+              sync: true,
+            },
+
+            content: {
+              type: String,
+              sync: true,
+            },
+          };
+        }
+
+        static get observers() {
+          return ['openedChanged(opened)', 'headerChanged(opened, header)', 'contentChanged(opened, content)'];
+        }
+
+        ready() {
+          super.ready();
+          readySpy();
+        }
+
+        openedChanged(opened) {
+          openedChangedSpy();
+
+          if (opened) {
+            this.header = 'Header';
+            this.content = 'Content';
+          }
+        }
+
+        headerChanged(_opened, _header) {
+          headerChangedSpy();
+        }
+
+        contentChanged(_opened, _content) {
+          contentChangedSpy();
+        }
+      },
+    );
+
+    beforeEach(async () => {
+      element = fixtureSync(`<${tag} opened></${tag}>`);
+      await element.updateComplete;
+    });
+
+    it('should call ready after observers during initialization', () => {
+      expect(openedChangedSpy).to.be.calledOnce;
+      expect(headerChangedSpy).to.be.calledTwice;
+      expect(contentChangedSpy).to.be.calledTwice;
+
+      expect(readySpy).to.be.calledOnce;
+      expect(readySpy).to.be.calledAfter(openedChangedSpy);
+      expect(readySpy).to.be.calledAfter(headerChangedSpy);
+      expect(readySpy).to.be.calledAfter(contentChangedSpy);
     });
   });
 

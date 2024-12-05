@@ -62,3 +62,7 @@ export function setProperty(path, value, obj) {
     set(obj, path, value);
   }
 }
+
+export function isValidEditorPosition(editorPosition) {
+  return ['bottom', 'aside'].includes(editorPosition);
+}

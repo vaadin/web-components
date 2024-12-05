@@ -36,12 +36,8 @@ export const AccordionPanelMixin = (superClass) =>
       return ['__updateAriaAttributes(focusElement, _contentElements)'];
     }
 
-    static get delegateAttrs() {
-      return ['theme'];
-    }
-
     static get delegateProps() {
-      return ['disabled', 'opened'];
+      return ['disabled', 'opened', '_theme'];
     }
 
     constructor() {
@@ -67,6 +63,25 @@ export const AccordionPanelMixin = (superClass) =>
 
       this.addController(this._summaryController);
       this.addController(this._tooltipController);
+    }
+
+    /**
+     * Override method from `DelegateStateMixin` to set delegate `theme`
+     * using attribute instead of property (needed for the Lit version).
+     * @protected
+     * @override
+     */
+    _delegateProperty(name, value) {
+      if (!this.stateTarget) {
+        return;
+      }
+
+      if (name === '_theme') {
+        this._delegateAttribute('theme', value);
+        return;
+      }
+
+      super._delegateProperty(name, value);
     }
 
     /**

@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
-import { activateScroller, close, getDefaultI18n, open } from './helpers.js';
+import { activateScroller, getDefaultI18n, open } from './helpers.js';
 
 describe('WAI-ARIA', () => {
   describe('date picker', () => {
@@ -15,7 +15,7 @@ describe('WAI-ARIA', () => {
     it('should toggle aria-expanded attribute on open', async () => {
       await open(datePicker);
       expect(input.getAttribute('aria-expanded')).to.equal('true');
-      await close(datePicker);
+      datePicker.close();
       expect(input.getAttribute('aria-expanded')).to.equal('false');
     });
 
@@ -113,7 +113,7 @@ describe('WAI-ARIA', () => {
 
     it('should remove aria-hidden from other elements when overlay is closed', async () => {
       await open(datePicker);
-      await close(datePicker);
+      datePicker.close();
       expect(button.hasAttribute('aria-hidden')).to.be.false;
       expect(input.hasAttribute('aria-hidden')).to.be.false;
     });

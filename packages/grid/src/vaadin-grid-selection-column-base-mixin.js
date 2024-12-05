@@ -101,6 +101,32 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
       ];
     }
 
+    constructor() {
+      super();
+      this.__onCellTrack = this.__onCellTrack.bind(this);
+      this.__onCellClick = this.__onCellClick.bind(this);
+      this.__onCellMouseDown = this.__onCellMouseDown.bind(this);
+      this.__onActiveItemChanged = this.__onActiveItemChanged.bind(this);
+      this.__onSelectRowCheckboxChange = this.__onSelectRowCheckboxChange.bind(this);
+      this.__onSelectAllCheckboxChange = this.__onSelectAllCheckboxChange.bind(this);
+    }
+
+    /** @protected */
+    connectedCallback() {
+      super.connectedCallback();
+      if (this._grid) {
+        this._grid.addEventListener('active-item-changed', this.__onActiveItemChanged);
+      }
+    }
+
+    /** @protected */
+    disconnectedCallback() {
+      super.disconnectedCallback();
+      if (this._grid) {
+        this._grid.removeEventListener('active-item-changed', this.__onActiveItemChanged);
+      }
+    }
+
     /**
      * Renders the Select All checkbox to the header cell.
      *
@@ -112,13 +138,11 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
         checkbox = document.createElement('vaadin-checkbox');
         checkbox.setAttribute('aria-label', 'Select All');
         checkbox.classList.add('vaadin-grid-select-all-checkbox');
+        checkbox.addEventListener('change', this.__onSelectAllCheckboxChange);
         root.appendChild(checkbox);
-        // Add listener after appending, so we can skip the initial change event
-        checkbox.addEventListener('checked-changed', this.__onSelectAllCheckedChanged.bind(this));
       }
 
       const checked = this.__isChecked(this.selectAll, this._indeterminate);
-      checkbox.__rendererChecked = checked;
       checkbox.checked = checked;
       checkbox.hidden = this._selectAllHidden;
       checkbox.indeterminate = this._indeterminate;
@@ -134,16 +158,14 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
       if (!checkbox) {
         checkbox = document.createElement('vaadin-checkbox');
         checkbox.setAttribute('aria-label', 'Select Row');
+        checkbox.addEventListener('change', this.__onSelectRowCheckboxChange);
         root.appendChild(checkbox);
-        // Add listener after appending, so we can skip the initial change event
-        checkbox.addEventListener('checked-changed', this.__onSelectRowCheckedChanged.bind(this));
-        addListener(root, 'track', this.__onCellTrack.bind(this));
-        root.addEventListener('mousedown', this.__onCellMouseDown.bind(this));
-        root.addEventListener('click', this.__onCellClick.bind(this));
+        addListener(root, 'track', this.__onCellTrack);
+        root.addEventListener('mousedown', this.__onCellMouseDown);
+        root.addEventListener('click', this.__onCellClick);
       }
 
       checkbox.__item = item;
-      checkbox.__rendererChecked = selected;
       checkbox.checked = selected;
 
       const isSelectable = this._grid.__isItemSelectable(item);
@@ -157,13 +179,8 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
      *
      * @private
      */
-    __onSelectAllCheckedChanged(e) {
-      // Skip if the state is changed by the renderer.
-      if (e.target.checked === e.target.__rendererChecked) {
-        return;
-      }
-
-      if (this._indeterminate || e.target.checked) {
+    __onSelectAllCheckboxChange(e) {
+      if (this._indeterminate || e.currentTarget.checked) {
         this._selectAll();
       } else {
         this._deselectAll();
@@ -176,17 +193,8 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
      *
      * @private
      */
-    __onSelectRowCheckedChanged(e) {
-      // Skip if the state is changed by the renderer.
-      if (e.target.checked === e.target.__rendererChecked) {
-        return;
-      }
-
-      if (e.target.checked) {
-        this._selectItem(e.target.__item);
-      } else {
-        this._deselectItem(e.target.__item);
-      }
+    __onSelectRowCheckboxChange(e) {
+      this.__toggleItem(e.currentTarget.__item, e.currentTarget.checked);
     }
 
     /** @private */
@@ -262,6 +270,18 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
         const checkbox = target._content.firstElementChild;
         this.__toggleItem(checkbox.__item);
       }
+    }
+
+    /** @private */
+    __onActiveItemChanged(e) {
+      const activeItem = e.detail.value;
+      if (this.autoSelect) {
+        const item = activeItem || this.__previousActiveItem;
+        if (item) {
+          this.__toggleItem(item);
+        }
+      }
+      this.__previousActiveItem = activeItem;
     }
 
     /** @private */
@@ -373,14 +393,16 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
 
     /**
      * Toggles the selected state of the given item.
+     *
      * @param item the item to toggle
+     * @param {boolean} [selected] whether to select or deselect the item
      * @private
      */
-    __toggleItem(item) {
-      if (this._grid._isSelected(item)) {
-        this._deselectItem(item);
-      } else {
+    __toggleItem(item, selected = !this._grid._isSelected(item)) {
+      if (selected) {
         this._selectItem(item);
+      } else {
+        this._deselectItem(item);
       }
     }
 
