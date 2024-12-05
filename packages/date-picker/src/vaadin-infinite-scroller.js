@@ -376,7 +376,8 @@ class InfiniteScroller extends PolymerElement {
 
   /** @private */
   _updateClones(viewPortOnly) {
-    this._firstIndex = ~~((this._buffers[0].translateY - this._initialScroll) / this.itemHeight) + this._initialIndex;
+    this._firstIndex =
+      Math.round((this._buffers[0].translateY - this._initialScroll) / this.itemHeight) + this._initialIndex;
 
     const scrollerRect = viewPortOnly ? this.$.scroller.getBoundingClientRect() : undefined;
     this._buffers.forEach((buffer, bufferIndex) => {
