@@ -580,6 +580,42 @@ describe('form layout', () => {
     });
   });
 
+  describe('fixed size parent', () => {
+    let container, layout;
+
+    beforeEach(async () => {
+      container = fixtureSync(`
+        <div style="height: 100px; overflow: auto">
+          <div style="height: 25px">
+            <vaadin-form-layout style="height: 100%">
+              <div>1</div>
+              <div>2</div>
+              <div>3</div>
+              <div>4</div>
+              <div>5</div>
+              <div>6</div>
+              <div>7</div>
+              <div>8</div>
+              <div>9</div>
+              <div>10</div>
+            </vaadin-form-layout>
+          </div>
+        </div>
+      `);
+      layout = container.querySelector('vaadin-form-layout');
+      layout.responsiveSteps = [{ columns: 1 }];
+      await nextRender();
+    });
+
+    it('should not set opacity to 0 when host is scrolled out due to fixed height', async () => {
+      container.scrollTop = container.scrollHeight;
+      // Wait for intersection observer
+      await nextFrame();
+      await nextFrame();
+      expect(layout.$.layout.style.opacity).to.equal('');
+    });
+  });
+
   describe('mutations', () => {
     let container, layout;
 
