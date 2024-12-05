@@ -128,7 +128,7 @@ export const SelectionMixin = (superClass) =>
     /** @private */
     __selectionModeChanged() {
       this.__updateAria();
-      this.__setNavigating(true);
+      this.__updateNavigating(true);
     }
 
     /** @private */
@@ -144,7 +144,7 @@ export const SelectionMixin = (superClass) =>
       }
 
       this.__focusIndex = Math.max(Math.min(this.__focusIndex, items.length - 1), 0);
-      this.__setNavigating(this.__isNavigating());
+      this.__updateNavigating(this.__isNavigating());
     }
 
     /** @private */
@@ -247,15 +247,21 @@ export const SelectionMixin = (superClass) =>
     }
 
     /** @private */
-    __setNavigating(navigating) {
-      if (this.selectionMode && navigating && this.items && this.items.length > 0) {
+    __updateNavigating(navigating) {
+      const isNavigating = !!(this.selectionMode && navigating);
+      this.toggleAttribute('navigating', isNavigating);
+
+      const isInteracting = !!(this.selectionMode && !navigating);
+      this.toggleAttribute('interacting', isInteracting);
+
+      const isFocusable = !!(isNavigating && this.items && this.items.length);
+      if (isFocusable) {
         this.tabIndex = 0;
       } else {
         this.removeAttribute('tabindex');
       }
-      this.$.focusexit.hidden = !this.selectionMode || !navigating || !this.items || this.items.length === 0;
-      this.toggleAttribute('navigating', this.selectionMode && navigating);
-      this.toggleAttribute('interacting', this.selectionMode && !navigating);
+      this.$.focusexit.hidden = !isFocusable;
+
       this.requestContentUpdate();
     }
 
@@ -353,7 +359,7 @@ export const SelectionMixin = (superClass) =>
       // Set navigating state if one of the root elements, virtual-list or focusexit, is focused
       // Set interacting state otherwise (child element is focused)
       const navigating = [...this.children, this, this.$.focusexit].includes(e.target);
-      this.__setNavigating(navigating);
+      this.__updateNavigating(navigating);
 
       // Update focus index based on the focused item
       const rootElement = this.__getRootElementWithFocus();
@@ -374,7 +380,7 @@ export const SelectionMixin = (superClass) =>
       }
       if (!this.contains(e.relatedTarget)) {
         // If the focus leaves the virtual list, restore navigating state
-        this.__setNavigating(true);
+        this.__updateNavigating(true);
       }
     }
 
