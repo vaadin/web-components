@@ -293,7 +293,7 @@ class FormLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))
     requestAnimationFrame(() => this._updateLayout());
 
     this._observeChildrenColspanChange();
-    this.__intersectionObserver.observe(this);
+    this.__intersectionObserver.observe(this.$.layout);
   }
 
   /** @protected */
