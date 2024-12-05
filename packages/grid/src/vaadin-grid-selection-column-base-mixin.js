@@ -110,11 +110,11 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
 
     constructor() {
       super();
-      this.__onGridItemActivate = this.__onGridItemActivate.bind(this);
-      this.__onGridInteraction = this.__onGridInteraction.bind(this);
       this.__onCellTrack = this.__onCellTrack.bind(this);
       this.__onCellClick = this.__onCellClick.bind(this);
       this.__onCellMouseDown = this.__onCellMouseDown.bind(this);
+      this.__onGridInteraction = this.__onGridInteraction.bind(this);
+      this.__onActiveItemChanged = this.__onActiveItemChanged.bind(this);
       this.__onSelectRowCheckboxChange = this.__onSelectRowCheckboxChange.bind(this);
       this.__onSelectAllCheckboxChange = this.__onSelectAllCheckboxChange.bind(this);
     }
@@ -125,8 +125,7 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
       if (this._grid) {
         this._grid.addEventListener('keyup', this.__onGridInteraction);
         this._grid.addEventListener('mousedown', this.__onGridInteraction);
-        this._grid.addEventListener('row-activate', this.__onGridItemActivate);
-        this._grid.addEventListener('cell-activate', this.__onGridItemActivate);
+        this._grid.addEventListener('active-item-changed', this.__onActiveItemChanged);
       }
     }
 
@@ -136,8 +135,7 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
       if (this._grid) {
         this._grid.removeEventListener('keyup', this.__onGridInteraction);
         this._grid.removeEventListener('mousedown', this.__onGridInteraction);
-        this._grid.removeEventListener('row-activate', this.__onGridItemActivate);
-        this._grid.removeEventListener('cell-activate', this.__onGridItemActivate);
+        this._grid.removeEventListener('active-item-changed', this.__onActiveItemChanged);
       }
     }
 
@@ -301,13 +299,15 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
     }
 
     /** @private */
-    __onGridItemActivate(e) {
+    __onActiveItemChanged(e) {
+      const activeItem = e.detail.value;
       if (this.autoSelect) {
-        const { item } = e.detail.model;
+        const item = activeItem || this.__previousActiveItem;
         if (item) {
           this.__toggleItem(item);
         }
       }
+      this.__previousActiveItem = activeItem;
     }
 
     /** @private */
