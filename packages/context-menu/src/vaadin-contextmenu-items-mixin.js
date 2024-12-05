@@ -69,7 +69,7 @@ export const ItemsMixin = (superClass) =>
       // Overlay's outside click listener doesn't work with modeless
       // overlays (submenus) so we need additional logic for it
       this.__itemsOutsideClickListener = (e) => {
-        if (!e.composedPath().some((el) => el.localName === `${this._tagNamePrefix}-overlay`)) {
+        if (this._shouldCloseOnOutsideClick(e)) {
           this.dispatchEvent(new CustomEvent('items-outside-click'));
         }
       };
@@ -99,6 +99,18 @@ export const ItemsMixin = (superClass) =>
     disconnectedCallback() {
       super.disconnectedCallback();
       document.documentElement.removeEventListener('click', this.__itemsOutsideClickListener);
+    }
+
+    /**
+     * Whether to close the overlay on outside click or not.
+     * Override this method to customize the closing logic.
+     *
+     * @param {Event} event
+     * @return {boolean}
+     * @protected
+     */
+    _shouldCloseOnOutsideClick(event) {
+      return !event.composedPath().some((el) => el.localName === `${this._tagNamePrefix}-overlay`);
     }
 
     /** @protected */
