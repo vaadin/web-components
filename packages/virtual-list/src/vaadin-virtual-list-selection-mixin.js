@@ -16,7 +16,7 @@ export const SelectionMixin = (superClass) =>
       return {
         /**
          * Selection mode for the virtual list. Available modes are: `none`, `single` and `multi`.
-         * @type {string}
+         * @attr {string} selection-mode
          */
         selectionMode: {
           type: String,
@@ -75,7 +75,7 @@ export const SelectionMixin = (superClass) =>
     }
 
     static get observers() {
-      return ['__selectionChanged(itemIdPath, selectedItems, __focusIndex, itemAccessibleNameGenerator)'];
+      return ['__selectionChanged(itemIdPath, selectedItems, itemAccessibleNameGenerator)'];
     }
 
     constructor() {
@@ -89,7 +89,6 @@ export const SelectionMixin = (superClass) =>
 
     ready() {
       super.ready();
-      this.__updateAria();
 
       this._createPropertyObserver('items', '__selectionItemsUpdated');
     }
@@ -109,16 +108,14 @@ export const SelectionMixin = (superClass) =>
       el.__index = index;
 
       el.toggleAttribute('selected', this.__isSelected(item));
-      el.tabIndex = this.__isNavigating() && this.__hasSelectionMode() && this.__focusIndex === index ? 0 : -1;
+      const isFocusable = this.__isNavigating() && this.__hasSelectionMode() && this.__focusIndex === index;
+      el.tabIndex = isFocusable ? 0 : -1;
       el.role = this.__hasSelectionMode() ? 'option' : 'listitem';
       el.ariaSelected = this.__hasSelectionMode() ? this.__isSelected(item) : null;
       el.ariaSetSize = this.items.length;
       el.ariaPosInSet = index + 1;
 
-      el.toggleAttribute(
-        'focused',
-        this.__hasSelectionMode() && this.__focusIndex === index && el.contains(document.activeElement),
-      );
+      el.toggleAttribute('focused', this.__hasSelectionMode() && el.contains(document.activeElement));
       el.ariaLabel = this.itemAccessibleNameGenerator ? this.itemAccessibleNameGenerator(item) : null;
     }
 
@@ -144,12 +141,17 @@ export const SelectionMixin = (superClass) =>
     }
 
     /** @private */
-    __selectionItemsUpdated(items) {
-      if (!this.__hasSelectionMode() || !this.items) {
+    __clampIndex(index) {
+      return Math.max(0, Math.min(index, (this.items || []).length - 1));
+    }
+
+    /** @private */
+    __selectionItemsUpdated() {
+      if (!this.__hasSelectionMode()) {
         return;
       }
 
-      this.__focusIndex = Math.max(Math.min(this.__focusIndex, items.length - 1), 0);
+      this.__focusIndex = this.__clampIndex(this.__focusIndex);
       this.__updateNavigating(this.__isNavigating());
     }
 
@@ -245,7 +247,7 @@ export const SelectionMixin = (superClass) =>
      * Returns the rendered root element containing the given child element.
      * @private
      */
-    __getRootElementByChild(element) {
+    __getRootElementByContent(element) {
       return this.__getRenderedRootElements().find((el) => el.contains(element));
     }
 
@@ -275,16 +277,14 @@ export const SelectionMixin = (superClass) =>
 
     /** @private */
     __onKeyDown(e) {
-      if (!this.__hasSelectionMode()) {
+      if (e.defaultPrevented || !this.__hasSelectionMode()) {
         return;
       }
 
       if (this.__isNavigating()) {
         if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
-          if (!e.defaultPrevented) {
-            e.preventDefault();
-            this.__onNavigationArrowKey(e.key === 'ArrowDown');
-          }
+          e.preventDefault();
+          this.__onNavigationArrowKey(e.key === 'ArrowDown');
         } else if (e.key === 'Enter') {
           this.__onNavigationEnterKey();
         } else if (e.key === ' ') {
@@ -293,7 +293,7 @@ export const SelectionMixin = (superClass) =>
         } else if (e.key === 'Tab') {
           this.__onNavigationTabKey(e.shiftKey);
         }
-      } else if (e.key === 'Escape' && !e.defaultPrevented) {
+      } else if (e.key === 'Escape') {
         // Prevent closing a dialog etc. when returning to navigation mode on Escape
         e.preventDefault();
         e.stopPropagation();
@@ -303,7 +303,7 @@ export const SelectionMixin = (superClass) =>
 
     /** @private */
     __onNavigationArrowKey(down) {
-      this.__focusIndex = Math.min(Math.max(this.__focusIndex + (down ? 1 : -1), 0), this.items.length - 1);
+      this.__focusIndex = this.__clampIndex(this.__focusIndex + (down ? 1 : -1));
       this.__focusElementWithFocusIndex();
     }
 
@@ -352,7 +352,7 @@ export const SelectionMixin = (superClass) =>
         this.__focusElementWithFocusIndex();
       }
 
-      const clickedRootElement = this.__getRootElementByChild(e.target);
+      const clickedRootElement = this.__getRootElementByContent(e.target);
       if (clickedRootElement) {
         this.__toggleSelection(clickedRootElement.__item);
       }
