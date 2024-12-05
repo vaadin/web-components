@@ -249,6 +249,14 @@ describe('selection', () => {
       expect(getRenderedItem(0)!.hasAttribute('selected')).to.be.true;
     });
 
+    it('should select items by identity when identity changed dynamically', async () => {
+      list.selectedItems = [{ id: 0, name: 'Item 0' }];
+      await nextFrame();
+      list.itemIdPath = 'id';
+      await nextFrame();
+      expect(getRenderedItem(0)!.hasAttribute('selected')).to.be.true;
+    });
+
     it('should scroll the focused item into view', async () => {
       list.scrollToIndex(100);
       expect(list.firstVisibleIndex).not.to.equal(0);
@@ -338,6 +346,12 @@ describe('selection', () => {
       expect(getRenderedItem(0)!.hasAttribute('focused')).to.be.true;
     });
 
+    it('should not mark unfocused element focused', async () => {
+      beforeButton.focus();
+      await sendKeys({ press: 'Tab' });
+      expect(getRenderedItem(1)!.hasAttribute('focused')).to.be.false;
+    });
+
     it('should throw on enter when there are no focusable child elements', async () => {
       beforeButton.focus();
       await sendKeys({ press: 'Tab' });
@@ -412,6 +426,10 @@ describe('selection', () => {
       await nextFrame();
       click(list);
       expect(list.selectedItems).to.be.empty;
+    });
+
+    it('should not throw is items are unset', () => {
+      list.items = undefined;
     });
 
     describe('focusable children', () => {
