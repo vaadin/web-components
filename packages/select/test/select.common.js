@@ -231,16 +231,18 @@ describe('vaadin-select', () => {
       });
 
       describe('default', () => {
-        it('should select items when alphanumeric keys are pressed', () => {
+        it('should select items when alphanumeric keys are pressed', async () => {
           expect(menu.selected).to.be.equal(2);
           keyDownChar(valueButton, 'o');
           keyDownChar(valueButton, 'p');
           keyDownChar(valueButton, 't');
+          await nextUpdate(menu);
           expect(menu.selected).to.be.equal(0);
           keyDownChar(valueButton, 'i');
           keyDownChar(valueButton, 'o');
           keyDownChar(valueButton, 'n');
           keyDownChar(valueButton, '2');
+          await nextUpdate(menu);
           expect(menu.selected).to.be.equal(1);
         });
       });
