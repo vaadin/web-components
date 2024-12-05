@@ -53,7 +53,7 @@ registerStyles(
 
     #level-spacer {
       display: inline-block;
-      width: calc(var(---level, '0') * var(--vaadin-grid-tree-toggle-level-offset));
+      width: calc(var(--_level, '0') * var(--vaadin-grid-tree-toggle-level-offset));
     }
 
     [part='toggle']::before {
@@ -146,6 +146,6 @@ export const GridTreeToggleMixin = (superClass) =>
     /** @private */
     _levelChanged(level) {
       const value = Number(level).toString();
-      this.style.setProperty('---level', value);
+      this.style.setProperty('--_level', value);
     }
   };
