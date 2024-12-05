@@ -24,6 +24,7 @@ export const DashboardLayoutMixin = (superClass) =>
         :host {
           display: block;
           overflow: hidden;
+          width: 100%;
         }
 
         :host([hidden]) {
@@ -36,12 +37,19 @@ export const DashboardLayoutMixin = (superClass) =>
 
         #grid {
           box-sizing: border-box;
-          --_vaadin-dashboard-default-spacing: 1rem;
-          --_vaadin-dashboard-spacing: max(
+
+          /* Padding around dashboard edges */
+          --_vaadin-dashboard-default-padding: 1rem;
+          --_vaadin-dashboard-padding: max(
             0px,
-            var(--vaadin-dashboard-spacing, var(--_vaadin-dashboard-default-spacing))
+            var(--vaadin-dashboard-padding, var(--_vaadin-dashboard-default-padding))
           );
-          padding: var(--_vaadin-dashboard-spacing);
+          padding: var(--_vaadin-dashboard-padding);
+
+          /* Gap between widgets */
+          --_vaadin-dashboard-default-gap: 1rem;
+          --_vaadin-dashboard-gap: max(0px, var(--vaadin-dashboard-gap, var(--_vaadin-dashboard-default-gap)));
+          gap: var(--_vaadin-dashboard-gap);
 
           /* Default min and max column widths */
           --_vaadin-dashboard-default-col-min-width: 25rem;
@@ -86,8 +94,6 @@ export const DashboardLayoutMixin = (superClass) =>
           );
 
           grid-auto-rows: var(--_vaadin-dashboard-row-height);
-
-          gap: var(--_vaadin-dashboard-spacing);
         }
 
         ::slotted(*) {

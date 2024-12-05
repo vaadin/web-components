@@ -4,6 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { getDeepActiveElement } from '@vaadin/a11y-base/src/focus-utils.js';
+import { TooltipController } from '@vaadin/component-base/src/tooltip-controller';
 import { InputController } from '@vaadin/field-base/src/input-controller.js';
 import { InputFieldMixin } from '@vaadin/field-base/src/input-field-mixin.js';
 import { LabelledInputController } from '@vaadin/field-base/src/labelled-input-controller.js';
@@ -127,6 +128,11 @@ export const NumberFieldMixin = (superClass) =>
       );
 
       this.addController(new LabelledInputController(this.inputElement, this._labelController));
+
+      this._tooltipController = new TooltipController(this);
+      this.addController(this._tooltipController);
+      this._tooltipController.setPosition('top');
+      this._tooltipController.setAriaTarget(this.inputElement);
     }
 
     /**

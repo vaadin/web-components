@@ -152,7 +152,10 @@ export const DatePickerMixin = (subclass) =>
          * Set true to prevent the overlay from opening automatically.
          * @attr {boolean} auto-open-disabled
          */
-        autoOpenDisabled: Boolean,
+        autoOpenDisabled: {
+          type: Boolean,
+          sync: true,
+        },
 
         /**
          * Set true to display ISO-8601 week numbers in the calendar. Notice that
@@ -358,18 +361,10 @@ export const DatePickerMixin = (subclass) =>
           sync: true,
         },
 
-        /**
-         * In date-picker, unlike other components extending `InputMixin`,
-         * the property indicates true only if the input has been entered by the user.
-         * In the case of programmatic changes, the property is reset to false.
-         * Read more about why this workaround is needed:
-         * https://github.com/vaadin/web-components/issues/5639
-         *
-         * @protected
-         * @override
-         */
-        _hasInputValue: {
-          type: Boolean,
+        /** @private */
+        __enteredDate: {
+          type: Date,
+          sync: true,
         },
       };
     }
@@ -378,7 +373,7 @@ export const DatePickerMixin = (subclass) =>
       return [
         '_selectedDateChanged(_selectedDate, i18n)',
         '_focusedDateChanged(_focusedDate, i18n)',
-        '__updateOverlayContent(_overlayContent, i18n, label, _minDate, _maxDate, _focusedDate, _selectedDate, showWeekNumbers, isDateDisabled)',
+        '__updateOverlayContent(_overlayContent, i18n, label, _minDate, _maxDate, _focusedDate, _selectedDate, showWeekNumbers, isDateDisabled, __enteredDate)',
         '__updateOverlayContentTheme(_overlayContent, _theme)',
         '__updateOverlayContentFullScreen(_overlayContent, _fullscreen)',
       ];
@@ -396,28 +391,17 @@ export const DatePickerMixin = (subclass) =>
       this._boundOverlayRenderer = this._overlayRenderer.bind(this);
     }
 
-    /**
-     * @override
-     * @protected
-     */
+    /** @override */
     get _inputElementValue() {
       return super._inputElementValue;
     }
 
-    /**
-     * The setter is overridden to reset the `_hasInputValue` property
-     * to false when the input element's value is updated programmatically.
-     * In date-picker, `_hasInputValue` is supposed to indicate true only
-     * if the input has been entered by the user.
-     * Read more about why this workaround is needed:
-     * https://github.com/vaadin/web-components/issues/5639
-     *
-     * @override
-     * @protected
-     */
+    /** @override */
     set _inputElementValue(value) {
       super._inputElementValue = value;
-      this._hasInputValue = false;
+
+      const parsedDate = this.__parseDate(value);
+      this.__setEnteredDate(parsedDate);
     }
 
     /**
@@ -871,6 +855,7 @@ export const DatePickerMixin = (subclass) =>
       selectedDate,
       showWeekNumbers,
       isDateDisabled,
+      enteredDate,
     ) {
       if (overlayContent) {
         overlayContent.i18n = i18n;
@@ -881,6 +866,7 @@ export const DatePickerMixin = (subclass) =>
         overlayContent.selectedDate = selectedDate;
         overlayContent.showWeekNumbers = showWeekNumbers;
         overlayContent.isDateDisabled = isDateDisabled;
+        overlayContent.enteredDate = enteredDate;
       }
     }
 
@@ -1204,15 +1190,32 @@ export const DatePickerMixin = (subclass) =>
         this.open();
       }
 
-      if (this._inputElementValue) {
-        const parsedDate = this.__parseDate(this._inputElementValue);
-        if (parsedDate) {
-          this._ignoreFocusedDateChange = true;
-          if (!dateEquals(parsedDate, this._focusedDate)) {
-            this._focusedDate = parsedDate;
-          }
-          this._ignoreFocusedDateChange = false;
+      const parsedDate = this.__parseDate(this._inputElementValue || '');
+      if (parsedDate) {
+        this._ignoreFocusedDateChange = true;
+        if (!dateEquals(parsedDate, this._focusedDate)) {
+          this._focusedDate = parsedDate;
         }
+        this._ignoreFocusedDateChange = false;
+      }
+
+      this.__setEnteredDate(parsedDate);
+    }
+
+    /**
+     * @param {Date} date
+     * @private
+     */
+    __setEnteredDate(date) {
+      if (date) {
+        if (!dateEquals(this.__enteredDate, date)) {
+          this.__enteredDate = date;
+        }
+      } else if (this.__enteredDate != null) {
+        // Do not override initial undefined value with null
+        // to avoid triggering a Lit update that can cause
+        // other scheduled properties to flush too early.
+        this.__enteredDate = null;
       }
     }
 

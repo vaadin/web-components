@@ -3,7 +3,10 @@
  * Copyright (c) 2018 - 2024 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { InputControlMixin } from '@vaadin/field-base/src/input-control-mixin.js';
+import { InputController } from '@vaadin/field-base/src/input-controller.js';
+import { LabelledInputController } from '@vaadin/field-base/src/labelled-input-controller.js';
 import { PatternMixin } from '@vaadin/field-base/src/pattern-mixin.js';
 import { formatISOTime, parseISOTime, validateTime } from './vaadin-time-picker-helper.js';
 
@@ -171,6 +174,11 @@ export const TimePickerMixin = (superClass) =>
           type: Array,
           sync: true,
         },
+
+        /** @private */
+        _inputContainer: {
+          type: Object,
+        },
       };
     }
 
@@ -206,6 +214,37 @@ export const TimePickerMixin = (superClass) =>
       }
 
       return '';
+    }
+
+    /** @protected */
+    ready() {
+      super.ready();
+
+      this.addController(
+        new InputController(
+          this,
+          (input) => {
+            this._setInputElement(input);
+            this._setFocusElement(input);
+            this.stateTarget = input;
+            this.ariaTarget = input;
+          },
+          {
+            // The "search" word is a trick to prevent Safari from enabling AutoFill,
+            // which is causing click issues:
+            // https://github.com/vaadin/web-components/issues/6817#issuecomment-2268229567
+            uniqueIdPrefix: 'search-input',
+          },
+        ),
+      );
+      this.addController(new LabelledInputController(this.inputElement, this._labelController));
+      this._inputContainer = this.shadowRoot.querySelector('[part~="input-field"]');
+
+      this._tooltipController = new TooltipController(this);
+      this._tooltipController.setShouldShow((timePicker) => !timePicker.opened);
+      this._tooltipController.setPosition('top');
+      this._tooltipController.setAriaTarget(this.inputElement);
+      this.addController(this._tooltipController);
     }
 
     /**

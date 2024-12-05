@@ -18,7 +18,6 @@ export class KeyboardController {
     this.host = host;
 
     host.addEventListener('focusout', (e) => this.__focusout(e));
-    host.addEventListener('focusin', (e) => this.__focusin(e));
     host.addEventListener('keydown', (e) => this.__keydown(e));
   }
 
@@ -33,13 +32,6 @@ export class KeyboardController {
       this.host.__exitMode();
       this.host.__focused = false;
       this.host.__selected = false;
-    }
-  }
-
-  /** @private */
-  __focusin(e) {
-    if (e.target === this.host) {
-      this.host.__focused = true;
     }
   }
 

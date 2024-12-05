@@ -115,6 +115,8 @@ export const InputMixin = dedupingMixin(
         if (this.inputElement) {
           this.inputElement[this._inputElementValueProperty] = value;
         }
+
+        this._hasInputValue = value && value.length > 0;
       }
 
       /**

@@ -87,7 +87,7 @@ class DashboardSection extends DashboardItemMixin(ElementMixin(ThemableMixin(Pol
           grid-template-columns: subgrid;
           --_vaadin-dashboard-section-column: 1 / calc(var(--_vaadin-dashboard-effective-col-count) + 1);
           grid-column: var(--_vaadin-dashboard-section-column) !important;
-          gap: var(--_vaadin-dashboard-spacing, 1rem);
+          gap: var(--_vaadin-dashboard-gap, 1rem);
           /* Dashboard section header height */
           --_vaadin-dashboard-section-header-height: minmax(0, auto);
           grid-template-rows: var(--_vaadin-dashboard-section-header-height) repeat(
@@ -179,9 +179,11 @@ class DashboardSection extends DashboardItemMixin(ElementMixin(ThemableMixin(Pol
   /** @protected */
   render() {
     return html`
-      ${this.__renderFocusButton('selectSection')} ${this.__renderMoveControls()}
+      ${this.__renderMoveControls()}
 
       <div id="focustrap">
+        ${this.__renderFocusButton('selectSection')}
+
         <header part="header">
           ${this.__renderDragHandle()}
           <h2 id="title" part="title">${this.sectionTitle}</h2>

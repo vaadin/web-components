@@ -6,12 +6,12 @@
 import { css } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 export const tooltipOverlayStyles = css`
-  :host {
-    z-index: 1100;
-  }
-
   [part='overlay'] {
     max-width: 40ch;
+  }
+
+  [part='content'] {
+    white-space: pre-wrap;
   }
 
   :host([position^='top'][top-aligned]) [part='overlay'],

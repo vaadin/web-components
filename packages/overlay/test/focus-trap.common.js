@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { aTimeout, fixtureSync, nextRender, oneEvent, tabKeyDown } from '@vaadin/testing-helpers';
+import { fixtureSync, nextRender, oneEvent, tabKeyDown } from '@vaadin/testing-helpers';
 import { getFocusableElements, isElementFocused } from '@vaadin/a11y-base/src/focus-utils.js';
 
 describe('focus-trap', () => {
@@ -25,17 +25,14 @@ describe('focus-trap', () => {
           `;
         }
       };
-      await nextRender();
-      overlayPart = overlay.$.overlay;
-      overlay.requestContentUpdate();
       overlay.opened = true;
       await oneEvent(overlay, 'vaadin-overlay-open');
+      overlayPart = overlay.$.overlay;
       focusableElements = getFocusableElements(overlayPart);
     });
 
-    afterEach(async () => {
+    afterEach(() => {
       overlay.opened = false;
-      await nextRender();
     });
 
     it('should properly detect focusable elements inside the content', () => {
@@ -107,7 +104,6 @@ describe('focus-trap', () => {
 
     beforeEach(async () => {
       overlay = fixtureSync('<vaadin-overlay focus-trap></vaadin-overlay>');
-      await nextRender();
       overlay.renderer = (root) => {
         if (!root.firstChild) {
           const button = document.createElement('button');
@@ -124,7 +120,6 @@ describe('focus-trap', () => {
       overlay.opened = true;
       await oneEvent(overlay, 'vaadin-overlay-open');
       focusableElements = getFocusableElements(overlay.$.overlay);
-      await nextRender();
       nested = overlay.querySelector('vaadin-overlay');
     });
 
@@ -134,7 +129,8 @@ describe('focus-trap', () => {
 
     it('should not release focus when closing nested overlay without focus-trap', async () => {
       nested.opened = true;
-      await nextRender();
+      await oneEvent(nested, 'vaadin-overlay-open');
+
       nested.opened = false;
 
       const button = overlay.querySelector('button');
@@ -148,7 +144,7 @@ describe('focus-trap', () => {
   describe('aria-hidden', () => {
     let outer, inner, overlay;
 
-    beforeEach(async () => {
+    beforeEach(() => {
       // Create outer element and pass it explicitly.
       outer = document.createElement('main');
 
@@ -165,7 +161,6 @@ describe('focus-trap', () => {
       );
 
       overlay = inner.querySelector('vaadin-overlay');
-      await nextRender();
       overlay.renderer = (root) => {
         root.innerHTML = '<input placeholder="Input">';
       };
@@ -187,8 +182,6 @@ describe('focus-trap', () => {
       await oneEvent(overlay, 'vaadin-overlay-open');
 
       overlay.opened = false;
-      await aTimeout(0);
-
       expect(outer.hasAttribute('aria-hidden')).to.be.false;
     });
 

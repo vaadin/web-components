@@ -1,13 +1,13 @@
 import { expect } from '@vaadin/chai-plugins';
-import { enterKeyDown, fixtureSync } from '@vaadin/testing-helpers';
+import { enterKeyDown, fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import '../vaadin-message-input.js';
 
 describe('message-input', () => {
   let messageInput, textArea, button;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     messageInput = fixtureSync('<vaadin-message-input></vaadin-message-input>');
+    await nextRender();
     textArea = messageInput.querySelector('vaadin-text-area');
     button = messageInput.querySelector('vaadin-button');
   });
@@ -102,13 +102,15 @@ describe('message-input', () => {
       expect(textArea.placeholder).to.be.equal('Viesti');
     });
 
-    it('should translate aria-label', () => {
+    it('should translate aria-label', async () => {
       messageInput.i18n = { ...messageInput.i18n, message: 'Viesti' };
+      await nextFrame();
       expect(textArea.inputElement.getAttribute('aria-label')).to.be.equal('Viesti');
     });
 
-    it('should remove aria-label attribute when translation not defined', () => {
+    it('should remove aria-label attribute when translation not defined', async () => {
       messageInput.i18n = {};
+      await nextFrame();
       expect(textArea.inputElement.hasAttribute('aria-label')).to.equal(false);
     });
   });

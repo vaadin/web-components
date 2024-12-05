@@ -1,17 +1,8 @@
 import { expect } from '@vaadin/chai-plugins';
-import {
-  aTimeout,
-  fire,
-  fixtureSync,
-  mousedown,
-  nextRender,
-  nextUpdate,
-  oneEvent,
-  touchstart,
-} from '@vaadin/testing-helpers';
+import { aTimeout, fire, fixtureSync, mousedown, nextRender, oneEvent, touchstart } from '@vaadin/testing-helpers';
 import { resetMouse, sendKeys, sendMouse } from '@web/test-runner-commands';
 import sinon from 'sinon';
-import { getFocusedCell, monthsEqual, open, waitForOverlayRender } from './helpers.js';
+import { getFocusableCell, monthsEqual, open, waitForOverlayRender } from './helpers.js';
 
 describe('dropdown', () => {
   let datePicker, input, overlay;
@@ -32,7 +23,6 @@ describe('dropdown', () => {
   it('should detach overlay on datePicker detach', async () => {
     await open(datePicker);
     datePicker.parentElement.removeChild(datePicker);
-    await nextUpdate(datePicker);
     expect(overlay.parentElement).to.not.be.ok;
   });
 
@@ -55,7 +45,6 @@ describe('dropdown', () => {
       await oneEvent(overlay, 'vaadin-overlay-open');
 
       toggleButton.click();
-      await nextUpdate(datePicker);
 
       expect(datePicker.opened).to.be.false;
       expect(overlay.opened).to.be.false;
@@ -67,10 +56,35 @@ describe('dropdown', () => {
     });
   });
 
+  describe('label click', () => {
+    let label;
+
+    beforeEach(() => {
+      label = datePicker.querySelector('label');
+    });
+
+    it('should open by clicking the label', async () => {
+      label.click();
+      await oneEvent(overlay, 'vaadin-overlay-open');
+      expect(datePicker.opened).to.be.true;
+      expect(overlay.opened).to.be.true;
+    });
+
+    it('should prevent overlay close on label click', async () => {
+      label.click();
+      await oneEvent(overlay, 'vaadin-overlay-open');
+
+      const spy = sinon.spy();
+      overlay.addEventListener('vaadin-overlay-close', spy);
+
+      label.click();
+      expect(spy.firstCall.args[0].defaultPrevented).to.be.true;
+    });
+  });
+
   describe('scroll to date', () => {
     it('should scroll to today by default', async () => {
       datePicker.open();
-      await nextUpdate(datePicker);
 
       const spy = sinon.spy(datePicker._overlayContent, 'scrollToDate');
       await oneEvent(overlay, 'vaadin-overlay-open');
@@ -84,7 +98,6 @@ describe('dropdown', () => {
       datePicker.initialPosition = '2016-01-01';
 
       datePicker.open();
-      await nextUpdate(datePicker);
 
       const spy = sinon.spy(datePicker._overlayContent, 'scrollToDate');
       await oneEvent(overlay, 'vaadin-overlay-open');
@@ -98,7 +111,6 @@ describe('dropdown', () => {
       datePicker.value = '2000-02-01';
 
       datePicker.open();
-      await nextUpdate(datePicker);
 
       const spy = sinon.spy(datePicker._overlayContent, 'scrollToDate');
       await oneEvent(overlay, 'vaadin-overlay-open');
@@ -122,7 +134,6 @@ describe('dropdown', () => {
 
     it('should scroll to date on reopen', async () => {
       datePicker.open();
-      await nextUpdate(datePicker);
 
       // We must scroll to initial position on reopen because
       // scrollTop can be reset while the dropdown is closed.
@@ -143,7 +154,6 @@ describe('dropdown', () => {
       datePicker.min = '2100-01-01';
 
       datePicker.open();
-      await nextUpdate(datePicker);
 
       const spy = sinon.spy(datePicker._overlayContent, 'scrollToDate');
       await oneEvent(overlay, 'vaadin-overlay-open');
@@ -157,7 +167,6 @@ describe('dropdown', () => {
       datePicker.max = '2000-01-01';
 
       datePicker.open();
-      await nextUpdate(datePicker);
 
       const spy = sinon.spy(datePicker._overlayContent, 'scrollToDate');
       await oneEvent(overlay, 'vaadin-overlay-open');
@@ -174,7 +183,6 @@ describe('dropdown', () => {
       datePicker.initialPosition = '2015-01-01';
 
       datePicker.open();
-      await nextUpdate(datePicker);
 
       const spy = sinon.spy(datePicker._overlayContent, 'scrollToDate');
       await oneEvent(overlay, 'vaadin-overlay-open');
@@ -202,7 +210,6 @@ describe('dropdown', () => {
       expect(document.activeElement).to.equal(document.body);
       await open(datePicker);
       await sendMouse({ type: 'click', position: [200, 10] });
-      await nextUpdate(datePicker);
       await aTimeout(0);
       expect(document.activeElement).to.equal(input);
     });
@@ -212,7 +219,6 @@ describe('dropdown', () => {
       await sendKeys({ press: 'Tab' });
       await open(datePicker);
       await sendMouse({ type: 'click', position: [200, 10] });
-      await nextUpdate(datePicker);
       await aTimeout(0);
       expect(datePicker.hasAttribute('focus-ring')).to.be.true;
     });
@@ -237,7 +243,7 @@ describe('dropdown', () => {
 
   describe('date tap', () => {
     function dateTap() {
-      const date = getFocusedCell(datePicker._overlayContent);
+      const date = getFocusableCell(datePicker);
       mousedown(date);
       date.focus();
       date.click();
@@ -290,7 +296,6 @@ describe('dropdown', () => {
     it('should disable virtual keyboard on close', async () => {
       await open(datePicker);
       datePicker.close();
-      await nextUpdate(datePicker);
       expect(input.inputMode).to.equal('none');
     });
 

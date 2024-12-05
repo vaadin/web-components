@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, nextFrame, nextRender, nextUpdate } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 
@@ -49,13 +49,11 @@ describe('validation', () => {
       expect(checkbox.checkValidity()).to.be.true;
     });
 
-    it('should validate when toggling checked property', async () => {
+    it('should validate when toggling checked property', () => {
       checkbox.checked = true;
-      await nextUpdate(checkbox);
       expect(validateSpy.calledOnce).to.be.true;
 
       checkbox.checked = false;
-      await nextUpdate(checkbox);
       expect(validateSpy.calledTwice).to.be.true;
     });
 

@@ -132,8 +132,19 @@ export const DashboardItemMixin = (superClass) =>
           aria-label=${this.__i18n[i18nSelectTitleForEditingProperty]}
           aria-describedby="title"
           aria-pressed="${!!this.__selected}"
+          @focus="${() => {
+            this.__focused = true;
+          }}"
+          @blur="${() => {
+            this.__focused = false;
+          }}"
           @click="${() => {
-            this.__selected = true;
+            const wasSelected = this.__selected;
+            this.__selected = !wasSelected;
+            this.__focused = wasSelected;
+            if (this.__selected) {
+              this.$['drag-handle'].focus();
+            }
           }}"
         ></button>
       </label>`;

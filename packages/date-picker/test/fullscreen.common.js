@@ -1,8 +1,8 @@
 import { expect } from '@vaadin/chai-plugins';
-import { aTimeout, fixtureSync, nextRender, nextUpdate, outsideClick, tabKeyDown, tap } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, nextRender, outsideClick, tabKeyDown, tap } from '@vaadin/testing-helpers';
 import { sendKeys, setViewport } from '@web/test-runner-commands';
 import sinon from 'sinon';
-import { getFocusedCell, open, touchTap, waitForOverlayRender } from './helpers.js';
+import { getFocusableCell, open, touchTap, waitForOverlayRender } from './helpers.js';
 
 describe('fullscreen mode', () => {
   let datePicker, input, overlay, width, height;
@@ -74,7 +74,7 @@ describe('fullscreen mode', () => {
 
       it('should focus date element when opening overlay', async () => {
         await open(datePicker);
-        const cell = getFocusedCell(datePicker._overlayContent);
+        const cell = getFocusableCell(datePicker);
         expect(cell).to.be.instanceOf(HTMLTableCellElement);
         expect(cell.getAttribute('part')).to.include('today');
       });
@@ -97,9 +97,8 @@ describe('fullscreen mode', () => {
     });
 
     describe('auto open disabled', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         datePicker.autoOpenDisabled = true;
-        await nextUpdate(datePicker);
       });
 
       it('should not open overlay on input tap', () => {
@@ -166,7 +165,7 @@ describe('fullscreen mode', () => {
     });
 
     it('should move focus to date cell button on Cancel button Tab', async () => {
-      const cell = getFocusedCell(overlayContent);
+      const cell = getFocusableCell(datePicker);
       const spy = sinon.spy(cell, 'focus');
 
       // Move focus to Cancel button

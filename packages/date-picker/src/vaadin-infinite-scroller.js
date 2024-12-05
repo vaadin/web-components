@@ -3,6 +3,7 @@
  * Copyright (c) 2016 - 2024 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { flush } from '@polymer/polymer/lib/utils/flush.js';
 import { timeOut } from '@vaadin/component-base/src/async.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
@@ -200,16 +201,37 @@ export class InfiniteScroller extends HTMLElement {
     }
   }
 
+  /** @protected */
+  disconnectedCallback() {
+    if (this._debouncerScrollFinish) {
+      this._debouncerScrollFinish.cancel();
+    }
+
+    if (this._debouncerUpdateClones) {
+      this._debouncerUpdateClones.cancel();
+    }
+
+    if (this.__pendingFinishInit) {
+      cancelAnimationFrame(this.__pendingFinishInit);
+    }
+  }
+
   /**
    * Force the scroller to update clones after a reset, without
    * waiting for the debouncer to resolve.
    */
   forceUpdate() {
+    if (this._debouncerScrollFinish) {
+      this._debouncerScrollFinish.flush();
+    }
+
     if (this._debouncerUpdateClones) {
       this._buffers[0].updated = this._buffers[1].updated = false;
       this._updateClones();
       this._debouncerUpdateClones.cancel();
     }
+
+    flush();
   }
 
   /**
@@ -341,8 +363,9 @@ export class InfiniteScroller extends HTMLElement {
       }
     });
 
-    requestAnimationFrame(() => {
+    this.__pendingFinishInit = requestAnimationFrame(() => {
       this._finishInit();
+      this.__pendingFinishInit = null;
     });
   }
 
@@ -356,6 +379,10 @@ export class InfiniteScroller extends HTMLElement {
 
     itemWrapper.instance = this._createElement();
     itemWrapper.appendChild(itemWrapper.instance);
+
+    if (itemWrapper.instance.performUpdate) {
+      itemWrapper.instance.performUpdate();
+    }
 
     Object.keys(tmpInstance).forEach((prop) => {
       itemWrapper.instance[prop] = tmpInstance[prop];

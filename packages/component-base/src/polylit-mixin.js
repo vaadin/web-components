@@ -213,16 +213,19 @@ const PolylitMixinImplementation = (superclass) => {
 
     /** @protected */
     updated(props) {
+      const wasReadyInvoked = this.__isReadyInvoked;
+      this.__isReadyInvoked = true;
+
       if (this.constructor.__observers) {
         this.__runObservers(props, this.constructor.__observers);
       }
 
-      if (this.__dynamicPropertyObservers) {
-        this.__runDynamicObservers(props, this.__dynamicPropertyObservers);
-      }
-
       if (this.constructor.__complexObservers) {
         this.__runComplexObservers(props, this.constructor.__complexObservers);
+      }
+
+      if (this.__dynamicPropertyObservers) {
+        this.__runDynamicObservers(props, this.__dynamicPropertyObservers);
       }
 
       if (this.__dynamicMethodObservers) {
@@ -233,8 +236,7 @@ const PolylitMixinImplementation = (superclass) => {
         this.__runNotifyProps(props, this.constructor.__notifyProps);
       }
 
-      if (!this.__isReadyInvoked) {
-        this.__isReadyInvoked = true;
+      if (!wasReadyInvoked) {
         this.ready();
       }
     }

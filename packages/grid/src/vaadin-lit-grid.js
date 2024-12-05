@@ -5,6 +5,7 @@
  */
 import './vaadin-lit-grid-column.js';
 import { html, LitElement } from 'lit';
+import { ifDefined } from 'lit/directives/if-defined.js';
 import { isIOS, isSafari } from '@vaadin/component-base/src/browser-utils.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
@@ -42,7 +43,13 @@ class Grid extends GridMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElement)
         column-reordering-allowed="${this.columnReorderingAllowed}"
         ?empty-state="${this.__emptyState}"
       >
-        <table id="table" role="treegrid" aria-multiselectable="true" tabindex="0">
+        <table
+          id="table"
+          role="treegrid"
+          aria-multiselectable="true"
+          tabindex="0"
+          aria-label="${ifDefined(this.accessibleName)}"
+        >
           <caption id="sizer" part="row"></caption>
           <thead id="header" role="rowgroup"></thead>
           <tbody id="items" role="rowgroup"></tbody>
