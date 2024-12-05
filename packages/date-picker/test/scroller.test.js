@@ -125,3 +125,18 @@ describe('vaadin-infinite-scroller', () => {
     });
   });
 });
+
+describe('fractional item size', () => {
+  let scroller;
+
+  beforeEach(async () => {
+    scroller = fixtureSync('<vaadin-infinite-scroller></vaadin-infinite-scroller>');
+    scroller.bufferSize = 80;
+    scroller.style.setProperty('--vaadin-infinite-scroller-item-height', '30.0001px');
+    await activateScroller(scroller);
+  });
+
+  it('should be at the position 0', () => {
+    expect(scroller.position).to.be.closeTo(0, 0.001);
+  });
+});
