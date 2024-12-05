@@ -15,12 +15,13 @@ export const SelectionMixin = (superClass) =>
     static get properties() {
       return {
         /**
-         * Selection mode for the virtual list. Available modes are: `single` and `multi`.
+         * Selection mode for the virtual list. Available modes are: `none`, `single` and `multi`.
          * @type {string}
          */
         selectionMode: {
           type: String,
           observer: '__selectionModeChanged',
+          value: 'none',
         },
 
         /**
@@ -93,6 +94,11 @@ export const SelectionMixin = (superClass) =>
       this._createPropertyObserver('items', '__selectionItemsUpdated');
     }
 
+    /** @private */
+    __hasSelectionMode() {
+      return this.selectionMode !== 'none';
+    }
+
     /**
      * @private
      * @override
@@ -103,15 +109,15 @@ export const SelectionMixin = (superClass) =>
       el.__index = index;
 
       el.toggleAttribute('selected', this.__isSelected(item));
-      el.tabIndex = this.__isNavigating() && this.selectionMode && this.__focusIndex === index ? 0 : -1;
-      el.role = this.selectionMode ? 'option' : 'listitem';
-      el.ariaSelected = this.selectionMode ? this.__isSelected(item) : null;
+      el.tabIndex = this.__isNavigating() && this.__hasSelectionMode() && this.__focusIndex === index ? 0 : -1;
+      el.role = this.__hasSelectionMode() ? 'option' : 'listitem';
+      el.ariaSelected = this.__hasSelectionMode() ? this.__isSelected(item) : null;
       el.ariaSetSize = this.items.length;
       el.ariaPosInSet = index + 1;
 
       el.toggleAttribute(
         'focused',
-        !!this.selectionMode && this.__focusIndex === index && el.contains(document.activeElement),
+        this.__hasSelectionMode() && this.__focusIndex === index && el.contains(document.activeElement),
       );
       el.ariaLabel = this.itemAccessibleNameGenerator ? this.itemAccessibleNameGenerator(item) : null;
     }
@@ -133,13 +139,13 @@ export const SelectionMixin = (superClass) =>
 
     /** @private */
     __updateAria() {
-      this.role = this.selectionMode ? 'listbox' : 'list';
+      this.role = this.__hasSelectionMode() ? 'listbox' : 'list';
       this.ariaMultiSelectable = this.selectionMode === 'multi' ? 'true' : null;
     }
 
     /** @private */
     __selectionItemsUpdated(items) {
-      if (!this.selectionMode || !this.items) {
+      if (!this.__hasSelectionMode() || !this.items) {
         return;
       }
 
@@ -250,10 +256,10 @@ export const SelectionMixin = (superClass) =>
 
     /** @private */
     __updateNavigating(navigating) {
-      const isNavigating = !!(this.selectionMode && navigating);
+      const isNavigating = !!(this.__hasSelectionMode() && navigating);
       this.toggleAttribute('navigating', isNavigating);
 
-      const isInteracting = !!(this.selectionMode && !navigating);
+      const isInteracting = !!(this.__hasSelectionMode() && !navigating);
       this.toggleAttribute('interacting', isInteracting);
 
       const isFocusable = !!(isNavigating && this.items && this.items.length);
@@ -269,7 +275,7 @@ export const SelectionMixin = (superClass) =>
 
     /** @private */
     __onKeyDown(e) {
-      if (!this.selectionMode) {
+      if (!this.__hasSelectionMode()) {
         return;
       }
 
@@ -337,7 +343,7 @@ export const SelectionMixin = (superClass) =>
 
     /** @private */
     __onClick(e) {
-      if (!this.selectionMode || !this.__isNavigating()) {
+      if (!this.__hasSelectionMode() || !this.__isNavigating()) {
         return;
       }
 
@@ -354,7 +360,7 @@ export const SelectionMixin = (superClass) =>
 
     /** @private */
     __onFocusIn(e) {
-      if (!this.selectionMode) {
+      if (!this.__hasSelectionMode()) {
         return;
       }
 
@@ -377,7 +383,7 @@ export const SelectionMixin = (superClass) =>
 
     /** @private */
     __onFocusOut(e) {
-      if (!this.selectionMode) {
+      if (!this.__hasSelectionMode()) {
         return;
       }
       if (!this.contains(e.relatedTarget)) {

@@ -12,9 +12,9 @@ export declare function VirtualListSelectionMixin<TItem, T extends Constructor<H
 
 export declare class VirtualListSelectionMixinClass<TItem = VirtualListDefaultItem> {
   /**
-   * Selection mode for the virtual list. Available modes are: `single` and `multi`.
+   * Selection mode for the virtual list. Available modes are: `none`, `single` and `multi`.
    */
-  selectionMode?: 'single' | 'multi';
+  selectionMode: 'none' | 'single' | 'multi';
 
   /**
    * Path to an item sub-property that identifies the item.

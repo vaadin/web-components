@@ -517,14 +517,14 @@ describe('selection', () => {
       });
 
       it('should tab through focusable children when selection mode is unset', async () => {
-        list.selectionMode = undefined;
+        list.selectionMode = 'none';
         beforeButton.focus();
         await sendKeys({ press: 'Tab' });
         expect(document.activeElement!.parentElement).to.equal(getRenderedItem(0));
       });
 
       it('should not have focused items when selection mode is unset', async () => {
-        list.selectionMode = undefined;
+        list.selectionMode = 'none';
         list.scrollToIndex(10);
         await nextFrame();
         expect(list.querySelector('[focused]')).to.be.null;
@@ -533,7 +533,7 @@ describe('selection', () => {
       it('should clear navigating state when selection mode is unset', async () => {
         beforeButton.focus();
         await sendKeys({ press: 'Tab' });
-        list.selectionMode = undefined;
+        list.selectionMode = 'none';
         await nextFrame();
         expect(list.hasAttribute('navigating')).to.be.false;
       });
