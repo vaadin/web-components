@@ -123,8 +123,13 @@ describe('fractional item size', () => {
   let scroller;
 
   beforeEach(async () => {
-    scroller = fixtureSync('<vaadin-infinite-scroller></vaadin-infinite-scroller>');
-    scroller.bufferSize = 80;
+    scroller = fixtureSync(`
+      <vaadin-infinite-scroller buffer-size="80">
+        <template>
+          <div>[[index]]</div>
+        </template>
+      </vaadin-infinite-scroller>
+    `);
     scroller.style.setProperty('--vaadin-infinite-scroller-item-height', '30.0001px');
     await activateScroller(scroller);
   });
