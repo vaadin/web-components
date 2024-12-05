@@ -177,15 +177,17 @@ export const SelectionMixin = (superClass) =>
       if (item === undefined) {
         return;
       }
-      if (this.__isSelected(item)) {
-        // Item deselected, remove it from selected items
-        this.selectedItems = this.selectedItems.filter((selectedItem) => !this.__itemsEqual(selectedItem, item));
+
+      if (this.selectionMode === 'single') {
+        this.selectedItems = this.__isSelected(item) ? [] : [item];
       } else if (this.selectionMode === 'multi') {
-        // Item selected, add it to selected items
-        this.selectedItems = [...this.selectedItems, item];
-      } else {
-        // Single selection mode, replace the selected item
-        this.selectedItems = [item];
+        if (this.__isSelected(item)) {
+          // Item deselected, remove it from selected items
+          this.selectedItems = this.selectedItems.filter((selectedItem) => !this.__itemsEqual(selectedItem, item));
+        } else {
+          // Item selected, add it to selected items
+          this.selectedItems = [...this.selectedItems, item];
+        }
       }
     }
 

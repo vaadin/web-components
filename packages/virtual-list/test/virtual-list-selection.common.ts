@@ -294,6 +294,23 @@ describe('selection', () => {
       expect(getRenderedItem(1)!.hasAttribute('selected')).to.be.true;
     });
 
+    it('should deselect all items when deselecting on single-selection mode', async () => {
+      list.selectionMode = 'single';
+      list.selectedItems = [list.items![0], list.items![1]];
+      await click(getRenderedItem(0)!);
+      expect(getRenderedItem(0)!.hasAttribute('selected')).to.be.false;
+      expect(getRenderedItem(1)!.hasAttribute('selected')).to.be.false;
+    });
+
+    it('should deselect other items when selecting on single-selection mode', async () => {
+      list.selectionMode = 'single';
+      list.selectedItems = [list.items![0], list.items![1]];
+      await click(getRenderedItem(2)!);
+      expect(getRenderedItem(0)!.hasAttribute('selected')).to.be.false;
+      expect(getRenderedItem(1)!.hasAttribute('selected')).to.be.false;
+      expect(getRenderedItem(2)!.hasAttribute('selected')).to.be.true;
+    });
+
     it('should cancel arrow keys default behavior', async () => {
       const spy = sinon.spy();
       list.addEventListener('keydown', spy);
