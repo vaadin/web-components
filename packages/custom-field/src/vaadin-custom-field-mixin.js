@@ -56,7 +56,6 @@ export const CustomFieldMixin = (superClass) =>
           type: String,
           observer: '__valueChanged',
           notify: true,
-          sync: true,
         },
 
         /**
@@ -67,7 +66,6 @@ export const CustomFieldMixin = (superClass) =>
           type: Array,
           readOnly: true,
           observer: '__inputsChanged',
-          sync: true,
         },
 
         /**
@@ -250,11 +248,8 @@ export const CustomFieldMixin = (superClass) =>
     /** @private */
     __setValue() {
       this.__settingValue = true;
-      const initialValue = this.value;
       const formatFn = this.formatValue || defaultFormatValue;
-      const valueToSet = formatFn.apply(this, [this.inputs.map((input) => input.value)]);
-      this.value = valueToSet;
-      this.__valueUpdatedByInputs = initialValue !== valueToSet;
+      this.value = formatFn.apply(this, [this.inputs.map((input) => input.value)]);
       this.__settingValue = false;
     }
 
@@ -277,11 +272,12 @@ export const CustomFieldMixin = (superClass) =>
     /** @private */
     __inputsChanged(inputs, oldInputs) {
       if (inputs.length === 0) {
-        if (this.__valueUpdatedByInputs) {
+        if (oldInputs && oldInputs.length > 0) {
           this.__setValue();
         }
         return;
       }
+
       // When inputs are first initialized, apply value set with property.
       if (this.value && this.value !== '\t' && (!oldInputs || oldInputs.length === 0)) {
         this.__applyInputsValue(this.value);
@@ -298,8 +294,6 @@ export const CustomFieldMixin = (superClass) =>
     /** @private */
     __valueChanged(value, oldValue) {
       this.__toggleHasValue(value);
-
-      this.__valueUpdatedByInputs = this.__settingValue;
 
       if (this.__settingValue || !this.inputs) {
         return;

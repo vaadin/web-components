@@ -88,6 +88,17 @@ describe('custom field', () => {
         expect(el.value).to.equal('');
       });
     });
+
+    it('should clear value when removing all inputs', async () => {
+      customField.value = '1\t1';
+      await nextUpdate(customField);
+
+      customField.removeChild(customField.inputs[0]);
+      customField.removeChild(customField.inputs[1]);
+      await nextUpdate(customField);
+
+      expect(customField.value).to.equal('');
+    });
   });
 
   describe('value set with attribute', () => {
@@ -108,49 +119,6 @@ describe('custom field', () => {
     it('should apply value set using attribute to inputs', () => {
       expect(customField.inputs[0].value).to.equal('01');
       expect(customField.inputs[1].value).to.equal('25');
-    });
-  });
-
-  describe('value on input node changes', () => {
-    beforeEach(async () => {
-      customField = fixtureSync(`
-        <vaadin-custom-field value="01">
-          <input type="number" />
-        </vaadin-custom-field>
-      `);
-      await nextRender();
-    });
-
-    it('should remove value when an input node is removed after updating value via input', async () => {
-      customField.inputs[0].value = '02';
-      fire(customField.inputs[0], 'change');
-      await nextUpdate(customField);
-      expect(customField.value).to.equal('02');
-
-      customField.removeChild(customField.inputs[0]);
-      await nextUpdate(customField);
-      expect(customField.value).to.equal('');
-    });
-
-    it('should not remove value when an input node is removed after updating value using attribute', async () => {
-      customField.inputs[0].value = '02';
-      fire(customField.inputs[0], 'change');
-      await nextUpdate(customField);
-      expect(customField.value).to.equal('02');
-
-      customField.value = '01';
-      await nextUpdate(customField);
-      expect(customField.value).to.equal('01');
-
-      customField.removeChild(customField.inputs[0]);
-      await nextUpdate(customField);
-      expect(customField.value).to.equal('01');
-    });
-
-    it('should not remove value set using attribute when an input node is removed', async () => {
-      customField.removeChild(customField.inputs[0]);
-      await nextUpdate(customField);
-      expect(customField.value).to.equal('01');
     });
   });
 
