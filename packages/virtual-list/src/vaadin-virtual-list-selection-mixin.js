@@ -5,7 +5,7 @@
  */
 
 import { getFocusableElements } from '@vaadin/a11y-base';
-import { get } from '@vaadin/component-base/src/path-utils';
+import { get } from '@vaadin/component-base/src/path-utils.js';
 
 /**
  * @polymerMixin
@@ -39,7 +39,7 @@ export const SelectionMixin = (superClass) =>
          * @type {!Array<!VirtualListItem>}
          */
         selectedItems: {
-          type: Object,
+          type: Array,
           notify: true,
           value: () => [],
           sync: true,
@@ -67,7 +67,7 @@ export const SelectionMixin = (superClass) =>
          * @private
          */
         __focusIndex: {
-          type: Object,
+          type: Number,
           value: 0,
           sync: true,
         },
@@ -94,7 +94,7 @@ export const SelectionMixin = (superClass) =>
     }
 
     /** @private */
-    __hasSelectionMode() {
+    __isSelectable() {
       return this.selectionMode !== 'none';
     }
 
@@ -108,14 +108,14 @@ export const SelectionMixin = (superClass) =>
       el.__index = index;
 
       el.toggleAttribute('selected', this.__isSelected(item));
-      const isFocusable = this.__isNavigating() && this.__hasSelectionMode() && this.__focusIndex === index;
+      const isFocusable = this.__isNavigating() && this.__isSelectable() && this.__focusIndex === index;
       el.tabIndex = isFocusable ? 0 : -1;
-      el.role = this.__hasSelectionMode() ? 'option' : 'listitem';
-      el.ariaSelected = this.__hasSelectionMode() ? this.__isSelected(item) : null;
+      el.role = this.__isSelectable() ? 'option' : 'listitem';
+      el.ariaSelected = this.__isSelectable() ? this.__isSelected(item) : null;
       el.ariaSetSize = this.items.length;
       el.ariaPosInSet = index + 1;
 
-      el.toggleAttribute('focused', this.__hasSelectionMode() && el.contains(document.activeElement));
+      el.toggleAttribute('focused', this.__isSelectable() && el.contains(document.activeElement));
       el.ariaLabel = this.itemAccessibleNameGenerator ? this.itemAccessibleNameGenerator(item) : null;
     }
 
@@ -136,7 +136,7 @@ export const SelectionMixin = (superClass) =>
 
     /** @private */
     __updateAria() {
-      this.role = this.__hasSelectionMode() ? 'listbox' : 'list';
+      this.role = this.__isSelectable() ? 'listbox' : 'list';
       this.ariaMultiSelectable = this.selectionMode === 'multi' ? 'true' : null;
     }
 
@@ -147,12 +147,13 @@ export const SelectionMixin = (superClass) =>
 
     /** @private */
     __selectionItemsUpdated() {
-      if (!this.__hasSelectionMode()) {
+      if (!this.__isSelectable()) {
         return;
       }
 
       this.__focusIndex = this.__clampIndex(this.__focusIndex);
-      this.__updateNavigating(this.__isNavigating());
+      // Items may have been emptied, need to update focusability
+      this.__updateFocusable();
     }
 
     /** @private */
@@ -189,25 +190,21 @@ export const SelectionMixin = (superClass) =>
       if (this.selectionMode === 'single') {
         this.selectedItems = this.__isSelected(item) ? [] : [item];
       } else if (this.selectionMode === 'multi') {
-        if (this.__isSelected(item)) {
-          // Item deselected, remove it from selected items
-          this.selectedItems = this.selectedItems.filter((selectedItem) => !this.__itemsEqual(selectedItem, item));
-        } else {
-          // Item selected, add it to selected items
-          this.selectedItems = [...this.selectedItems, item];
-        }
+        this.selectedItems = this.__isSelected(item)
+          ? this.selectedItems.filter((selectedItem) => !this.__itemsEqual(selectedItem, item))
+          : [...this.selectedItems, item];
       }
     }
 
-    /** @private */
     __ensureFocusedIndexInView() {
-      if (!this.__getRenderedFocusIndexElement()) {
+      const focusElement = this.__getRenderedFocusIndexElement();
+      if (!focusElement) {
         // The focused element is not rendered, scroll to the focused index
         this.scrollToIndex(this.__focusIndex);
       } else {
         // The focused element is rendered. If it's not inside the visible area, scroll to it
         const listRect = this.getBoundingClientRect();
-        const elementRect = this.__getRenderedFocusIndexElement().getBoundingClientRect();
+        const elementRect = focusElement.getBoundingClientRect();
         if (elementRect.top < listRect.top) {
           this.scrollTop -= listRect.top - elementRect.top;
         } else if (elementRect.bottom > listRect.bottom) {
@@ -258,26 +255,30 @@ export const SelectionMixin = (superClass) =>
 
     /** @private */
     __updateNavigating(navigating) {
-      const isNavigating = !!(this.__hasSelectionMode() && navigating);
+      const isNavigating = !!(this.__isSelectable() && navigating);
       this.toggleAttribute('navigating', isNavigating);
 
-      const isInteracting = !!(this.__hasSelectionMode() && !navigating);
+      const isInteracting = !!(this.__isSelectable() && !navigating);
       this.toggleAttribute('interacting', isInteracting);
 
-      const isFocusable = !!(isNavigating && this.items && this.items.length);
+      this.__updateFocusable();
+      this.requestContentUpdate();
+    }
+
+    /** @private */
+    __updateFocusable() {
+      const isFocusable = !!(this.__isNavigating() && this.items && this.items.length);
       if (isFocusable) {
         this.tabIndex = 0;
       } else {
         this.removeAttribute('tabindex');
       }
       this.$.focusexit.hidden = !isFocusable;
-
-      this.requestContentUpdate();
     }
 
     /** @private */
     __onKeyDown(e) {
-      if (e.defaultPrevented || !this.__hasSelectionMode()) {
+      if (e.defaultPrevented || !this.__isSelectable()) {
         return;
       }
 
@@ -343,7 +344,7 @@ export const SelectionMixin = (superClass) =>
 
     /** @private */
     __onClick(e) {
-      if (!this.__hasSelectionMode() || !this.__isNavigating()) {
+      if (!this.__isSelectable() || !this.__isNavigating()) {
         return;
       }
 
@@ -360,7 +361,7 @@ export const SelectionMixin = (superClass) =>
 
     /** @private */
     __onFocusIn(e) {
-      if (!this.__hasSelectionMode()) {
+      if (!this.__isSelectable()) {
         return;
       }
 
@@ -383,7 +384,7 @@ export const SelectionMixin = (superClass) =>
 
     /** @private */
     __onFocusOut(e) {
-      if (!this.__hasSelectionMode()) {
+      if (!this.__isSelectable()) {
         return;
       }
       if (!this.contains(e.relatedTarget)) {
