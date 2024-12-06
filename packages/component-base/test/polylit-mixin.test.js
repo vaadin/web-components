@@ -6,7 +6,6 @@ import { PolylitMixin } from '../src/polylit-mixin.js';
 
 describe('PolylitMixin', () => {
   describe('ready', () => {
-    let element;
     const readySpy = sinon.spy();
 
     const tag = defineCE(
@@ -22,12 +21,10 @@ describe('PolylitMixin', () => {
     );
 
     beforeEach(() => {
-      element = fixtureSync(`<${tag}></${tag}>`);
+      fixtureSync(`<${tag}></${tag}>`);
     });
 
-    it('should call ready when element update is complete', async () => {
-      expect(readySpy.calledOnce).to.be.false;
-      await element.updateComplete;
+    it('should call ready as soon as element is added to the DOM', () => {
       expect(readySpy.calledOnce).to.be.true;
     });
   });
@@ -50,9 +47,8 @@ describe('PolylitMixin', () => {
       },
     );
 
-    beforeEach(async () => {
+    beforeEach(() => {
       element = fixtureSync(`<${tag}></${tag}>`);
-      await element.updateComplete;
     });
 
     it('should reference elements with id', () => {
@@ -129,9 +125,8 @@ describe('PolylitMixin', () => {
       },
     );
 
-    beforeEach(async () => {
+    beforeEach(() => {
       element = fixtureSync(`<${tag}></${tag}>`);
-      await element.updateComplete;
     });
 
     it('should reflect string property to attribute', async () => {
@@ -191,9 +186,8 @@ describe('PolylitMixin', () => {
       },
     );
 
-    beforeEach(async () => {
+    beforeEach(() => {
       element = fixtureSync(`<${tag}></${tag}>`);
-      await element.updateComplete;
     });
 
     it('should not set property marked as readOnly using setter', async () => {
@@ -504,10 +498,11 @@ describe('PolylitMixin', () => {
 
   describe('complex observer', () => {
     let element;
-    let valueOrLoadingChangedSpy, countOrLoadingChangedSpy;
 
     const readySpy = sinon.spy();
     const helperChangedSpy = sinon.spy();
+    const valueOrLoadingChangedSpy = sinon.spy();
+    const countOrLoadingChangedSpy = sinon.spy();
 
     const tag = defineCE(
       class extends PolylitMixin(LitElement) {
@@ -559,9 +554,13 @@ describe('PolylitMixin', () => {
           `;
         }
 
-        _valueOrLoadingChanged(_value, _loading) {}
+        _valueOrLoadingChanged(_value, _loading) {
+          valueOrLoadingChangedSpy(_value, _loading);
+        }
 
-        _countOrLoadingChanged(_count, _loading) {}
+        _countOrLoadingChanged(_count, _loading) {
+          countOrLoadingChangedSpy(_count, _loading);
+        }
 
         _helperChanged(value) {
           helperChangedSpy(value);
@@ -571,11 +570,13 @@ describe('PolylitMixin', () => {
       },
     );
 
-    beforeEach(async () => {
+    beforeEach(() => {
       element = fixtureSync(`<${tag}></${tag}>`);
-      valueOrLoadingChangedSpy = sinon.spy(element, '_valueOrLoadingChanged');
-      countOrLoadingChangedSpy = sinon.spy(element, '_countOrLoadingChanged');
-      await element.updateComplete;
+    });
+
+    afterEach(() => {
+      valueOrLoadingChangedSpy.resetHistory();
+      countOrLoadingChangedSpy.resetHistory();
     });
 
     it('should call ready after observers during initialization', () => {
@@ -665,11 +666,10 @@ describe('PolylitMixin', () => {
       },
     );
 
-    beforeEach(async () => {
+    beforeEach(() => {
       element = fixtureSync(`<${tag}></${tag}>`);
       valueChangedSpy = sinon.spy(element, '_valueChanged');
       complexSpy = sinon.spy(element, '_valueChangedComplex');
-      await element.updateComplete;
     });
 
     it('should run dynamic property observer once a property value changes', async () => {
@@ -740,10 +740,9 @@ describe('PolylitMixin', () => {
       },
     );
 
-    beforeEach(async () => {
+    beforeEach(() => {
       element = fixtureSync(`<${tag}></${tag}>`);
       valueOrLoadingChangedSpy = sinon.spy(element, '_valueOrLoadingChanged');
-      await element.updateComplete;
     });
 
     it('should run dynamic method observer once a property value changes', async () => {
@@ -830,40 +829,52 @@ describe('PolylitMixin', () => {
       },
     );
 
-    beforeEach(async () => {
-      element = fixtureSync(`<${tag}></${tag}>`);
-      element.addEventListener('helper-changed', helperChangedSpy);
-      await element.updateComplete;
+    describe('during initialization', () => {
+      beforeEach(() => {
+        element = document.createElement(tag);
+        element.addEventListener('helper-changed', helperChangedSpy);
+        document.body.appendChild(element);
+      });
+
+      afterEach(() => {
+        document.body.removeChild(element);
+      });
+
+      it('should call ready after notification event', () => {
+        expect(helperChangedSpy.calledOnce).to.be.true;
+        expect(readySpy.calledOnce).to.be.true;
+        expect(readySpy.calledAfter(helperChangedSpy)).to.be.true;
+      });
     });
 
-    it('should call ready after notification event during initialization', () => {
-      expect(helperChangedSpy.calledOnce).to.be.true;
-      expect(readySpy.calledOnce).to.be.true;
-      expect(readySpy.calledAfter(helperChangedSpy)).to.be.true;
-    });
+    describe('after initialization', () => {
+      beforeEach(() => {
+        element = fixtureSync(`<${tag}></${tag}>`);
+      });
 
-    it('should fire notification event on property change', async () => {
-      const spy = sinon.spy();
-      element.addEventListener('value-changed', spy);
-      element.value = 'foo';
-      await element.updateComplete;
-      expect(spy.calledOnce).to.be.true;
-    });
+      it('should fire notification event on property change', async () => {
+        const spy = sinon.spy();
+        element.addEventListener('value-changed', spy);
+        element.value = 'foo';
+        await element.updateComplete;
+        expect(spy.calledOnce).to.be.true;
+      });
 
-    it('should fire notification event for property set in observer', async () => {
-      const spy = sinon.spy();
-      element.addEventListener('has-value-changed', spy);
-      element.value = 'foo';
-      await nextFrame();
-      expect(spy.calledOnce).to.be.true;
-    });
+      it('should fire notification event for property set in observer', async () => {
+        const spy = sinon.spy();
+        element.addEventListener('has-value-changed', spy);
+        element.value = 'foo';
+        await nextFrame();
+        expect(spy.calledOnce).to.be.true;
+      });
 
-    it('should fire notification event for read-only property', async () => {
-      const spy = sinon.spy();
-      element.addEventListener('loading-changed', spy);
-      element._setLoading(true);
-      await element.updateComplete;
-      expect(spy.calledOnce).to.be.true;
+      it('should fire notification event for read-only property', async () => {
+        const spy = sinon.spy();
+        element.addEventListener('loading-changed', spy);
+        element._setLoading(true);
+        await element.updateComplete;
+        expect(spy.calledOnce).to.be.true;
+      });
     });
   });
 
@@ -890,21 +901,18 @@ describe('PolylitMixin', () => {
       },
     );
 
-    it('should have a default value', async () => {
+    it('should have a default value', () => {
       element = fixtureSync(`<${tag}></${tag}>`);
-      await element.updateComplete;
       expect(element.value).to.equal(0);
     });
 
-    it('should not override initial value', async () => {
+    it('should not override initial value', () => {
       element = fixtureSync(`<${tag} value="1"></${tag}>`);
-      await element.updateComplete;
       expect(element.value).to.equal(1);
     });
 
-    it('should get the default value from a function', async () => {
+    it('should get the default value from a function', () => {
       element = fixtureSync(`<${tag}></${tag}>`);
-      await element.updateComplete;
       expect(element.count).to.equal(0);
     });
   });
@@ -934,15 +942,13 @@ describe('PolylitMixin', () => {
       },
     );
 
-    it('should compute value', async () => {
+    it('should compute value', () => {
       element = fixtureSync(`<${tag}></${tag}>`);
-      await element.updateComplete;
       expect(element.value).to.equal(1);
     });
 
     it('should update computed value', async () => {
       element = fixtureSync(`<${tag}></${tag}>`);
-      await element.updateComplete;
       element.loading = false;
       await element.updateComplete;
       expect(element.value).to.equal(0);
@@ -966,27 +972,23 @@ describe('PolylitMixin', () => {
       },
     );
 
-    it('should support String as property type', async () => {
+    it('should support String as property type', () => {
       const element = fixtureSync(`<${tag} name="foo"></${tag}>`);
-      await element.updateComplete;
       expect(element.name).to.equal('foo');
     });
 
-    it('should support Boolean as property type', async () => {
+    it('should support Boolean as property type', () => {
       const element = fixtureSync(`<${tag} opened></${tag}>`);
-      await element.updateComplete;
       expect(element.opened).to.equal(true);
     });
 
-    it('should support Number as property type', async () => {
+    it('should support Number as property type', () => {
       const element = fixtureSync(`<${tag} count="4"></${tag}>`);
-      await element.updateComplete;
       expect(element.count).to.equal(4);
     });
 
-    it('should support Array as property type', async () => {
+    it('should support Array as property type', () => {
       const element = fixtureSync(`<${tag} items="[1,2,3]"></${tag}>`);
-      await element.updateComplete;
       expect(element.items).to.eql([1, 2, 3]);
     });
   });
@@ -1177,9 +1179,8 @@ describe('PolylitMixin', () => {
       },
     );
 
-    beforeEach(async () => {
+    beforeEach(() => {
       element = fixtureSync(`<${tag}></${tag}>`);
-      await element.updateComplete;
     });
 
     it('should set property values on the element', () => {
