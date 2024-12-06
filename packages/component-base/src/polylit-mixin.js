@@ -217,6 +217,10 @@ const PolylitMixinImplementation = (superclass) => {
         const owner = treeWalker.currentNode._owner;
         if (owner && owner.id) {
           this.$[owner.id] = owner;
+
+          owner.querySelectorAll('[id]').forEach((node) => {
+            this.$[node.id] = node;
+          });
         }
       }
     }

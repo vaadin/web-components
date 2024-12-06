@@ -59,7 +59,7 @@ describe('opened overlay', () => {
     const newParent = document.createElement('div');
     document.body.appendChild(newParent);
     newParent.appendChild(overlay);
-    await nextUpdate(overlay);
+    await nextRender();
 
     expect(document.querySelector('vaadin-login-form-wrapper')).to.exist;
   });
