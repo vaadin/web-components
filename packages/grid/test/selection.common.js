@@ -965,6 +965,30 @@ describe('multi selection column', () => {
         assertEvent({ item: grid.items[0], selected: false, shiftKey: true });
       });
 
+      it('should fire the event when toggling an item with Space', async () => {
+        getRowCells(rows[0])[1].focus();
+
+        await sendKeys({ press: 'Space' });
+        assertEvent({ item: grid.items[0], selected: true, shiftKey: false });
+
+        await sendKeys({ press: 'Space' });
+        assertEvent({ item: grid.items[0], selected: false, shiftKey: false });
+      });
+
+      it('should fire the event when toggling an item with Shift + Space', async () => {
+        getRowCells(rows[0])[1].focus();
+
+        await sendKeys({ down: 'Shift' });
+        await sendKeys({ press: 'Space' });
+        await sendKeys({ up: 'Shift' });
+        assertEvent({ item: grid.items[0], selected: true, shiftKey: true });
+
+        await sendKeys({ down: 'Shift' });
+        await sendKeys({ press: 'Space' });
+        await sendKeys({ up: 'Shift' });
+        assertEvent({ item: grid.items[0], selected: false, shiftKey: true });
+      });
+
       it('should prevent text selection when selecting a range of items with Shift + click', async () => {
         await mouseClick(rows[0]);
         await sendKeys({ down: 'Shift' });

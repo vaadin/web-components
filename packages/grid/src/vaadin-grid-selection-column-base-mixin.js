@@ -98,7 +98,10 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
          *
          * @protected
          */
-        _shiftKeyDown: Boolean,
+        _shiftKeyDown: {
+          type: Boolean,
+          value: false,
+        },
       };
     }
 
@@ -124,6 +127,7 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
       super.connectedCallback();
       if (this._grid) {
         this._grid.addEventListener('keyup', this.__onGridInteraction);
+        this._grid.addEventListener('keydown', this.__onGridInteraction, { capture: true });
         this._grid.addEventListener('mousedown', this.__onGridInteraction);
         this._grid.addEventListener('active-item-changed', this.__onActiveItemChanged);
       }
@@ -134,6 +138,7 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
       super.disconnectedCallback();
       if (this._grid) {
         this._grid.removeEventListener('keyup', this.__onGridInteraction);
+        this._grid.removeEventListener('keydown', this.__onGridInteraction, { capture: true });
         this._grid.removeEventListener('mousedown', this.__onGridInteraction);
         this._grid.removeEventListener('active-item-changed', this.__onActiveItemChanged);
       }
@@ -201,10 +206,14 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
 
     /** @private */
     __onGridInteraction(e) {
-      this._shiftKeyDown = e.shiftKey;
+      if (e instanceof KeyboardEvent) {
+        this._shiftKeyDown = e.key !== 'Shift' && e.shiftKey;
+      } else {
+        this._shiftKeyDown = e.shiftKey;
+      }
 
       if (this.autoSelect) {
-        if (e.shiftKey) {
+        if (this._shiftKeyDown) {
           // Prevent text selection when shift-clicking to select a range of items.
           this._grid.style.setProperty('--_grid-user-select', 'none');
         } else {
