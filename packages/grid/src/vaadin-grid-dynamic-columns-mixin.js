@@ -36,7 +36,10 @@ export const DynamicColumnsMixin = (superClass) =>
         /**
          * @protected
          */
-        _columnTree: Object,
+        _columnTree: {
+          type: Object,
+          sync: true,
+        },
       };
     }
 
