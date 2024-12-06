@@ -362,7 +362,6 @@ export const OverlayMixin = (superClass) =>
     /** @private */
     _attachOverlay() {
       this._placeholder = document.createComment('vaadin-overlay-placeholder');
-      this._placeholder._owner = this;
       this.parentNode.insertBefore(this._placeholder, this);
       document.body.appendChild(this);
       this.bringToFront();
