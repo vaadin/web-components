@@ -36,6 +36,7 @@ export const ConfirmDialogMixin = (superClass) =>
           type: Boolean,
           value: false,
           notify: true,
+          sync: true,
         },
 
         /**
