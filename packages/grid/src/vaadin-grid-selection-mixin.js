@@ -132,7 +132,7 @@ export const SelectionMixin = (superClass) =>
      */
 
     /**
-     * Fired when the user selects or deselects an item.
+     * Fired when the user selects or deselects an item through the selection column.
      *
      * @event item-toggle
      * @param {Object} detail

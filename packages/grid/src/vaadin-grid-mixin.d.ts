@@ -99,7 +99,7 @@ export type GridDataProviderChangedEvent<TItem> = CustomEvent<{ value: GridDataP
 export type GridExpandedItemsChangedEvent<TItem> = CustomEvent<{ value: TItem[] }>;
 
 /**
- * Fired when the user selects or deselects an item.
+ * Fired when the user selects or deselects an item through the selection column.
  */
 export type GridItemToggleEvent<TItem> = CustomEvent<{ item: TItem; selected: boolean; shiftKey: boolean }>;
 
