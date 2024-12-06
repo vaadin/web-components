@@ -117,6 +117,11 @@ export const GridSorterMixin = (superClass) =>
     /** @protected */
     connectedCallback() {
       super.connectedCallback();
+
+      if (this.performUpdate) {
+        this.performUpdate();
+      }
+
       if (this._grid) {
         this._grid.__applySorters();
       } else {
