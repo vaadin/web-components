@@ -241,6 +241,10 @@ registerStyles(
       text-align: center;
     }
 
+    :host(:not([has-label])) [part='required-indicator'] {
+      display: none;
+    }
+
     /* Invalid */
     :host([invalid]) {
       --vaadin-input-field-border-color: var(--lumo-error-color);
