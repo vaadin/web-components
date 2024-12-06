@@ -1,8 +1,9 @@
 /* eslint-env node */
 const { puppeteerLauncher } = require('@web/test-runner-puppeteer');
 const { createSnapshotTestsConfig } = require('./wtr-utils.js');
+const devServerConfig = require('./web-dev-server.config.js');
 
-module.exports = createSnapshotTestsConfig({
+const snapshotsConfig = createSnapshotTestsConfig({
   browsers: [
     puppeteerLauncher({
       launchOptions: {
@@ -11,3 +12,8 @@ module.exports = createSnapshotTestsConfig({
     }),
   ],
 });
+
+module.exports = {
+  ...snapshotsConfig,
+  ...devServerConfig,
+};
