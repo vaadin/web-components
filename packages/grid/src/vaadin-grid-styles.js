@@ -108,6 +108,7 @@ export const gridStyles = css`
     width: 100%;
     left: 0;
     overflow: visible;
+    user-select: var(--_grid-user-select, auto);
   }
 
   [part~='row'] {

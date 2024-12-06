@@ -130,4 +130,14 @@ export const SelectionMixin = (superClass) =>
      *
      * @event selected-items-changed
      */
+
+    /**
+     * Fired when the user selects or deselects an item through the selection column.
+     *
+     * @event item-toggle
+     * @param {Object} detail
+     * @param {GridItem} detail.item the item that was selected or deselected
+     * @param {boolean} detail.selected true if the item was selected
+     * @param {boolean} detail.shiftKey true if the shift key was pressed
+     */
   };

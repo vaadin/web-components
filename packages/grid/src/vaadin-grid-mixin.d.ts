@@ -99,6 +99,11 @@ export type GridDataProviderChangedEvent<TItem> = CustomEvent<{ value: GridDataP
 export type GridExpandedItemsChangedEvent<TItem> = CustomEvent<{ value: TItem[] }>;
 
 /**
+ * Fired when the user selects or deselects an item through the selection column.
+ */
+export type GridItemToggleEvent<TItem> = CustomEvent<{ item: TItem; selected: boolean; shiftKey: boolean }>;
+
+/**
  * Fired when starting to drag grid rows.
  */
 export type GridDragStartEvent<TItem> = CustomEvent<{
@@ -157,6 +162,8 @@ export interface GridCustomEventMap<TItem> {
   'selected-items-changed': GridSelectedItemsChangedEvent<TItem>;
 
   'size-changed': GridSizeChangedEvent;
+
+  'item-toggle': GridItemToggleEvent<TItem>;
 }
 
 export interface GridEventMap<TItem> extends HTMLElementEventMap, GridCustomEventMap<TItem> {}
