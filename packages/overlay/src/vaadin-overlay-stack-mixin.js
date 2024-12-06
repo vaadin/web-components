@@ -14,12 +14,19 @@ const getAttachedInstances = () =>
     .sort((a, b) => a.__zIndex - b.__zIndex || 0);
 
 /**
+ * Returns all attached overlay instances excluding notification container,
+ * which only needs to be in the stack for zIndex but not pointer-events.
+ * @private
+ */
+const getOverlayInstances = () => getAttachedInstances().filter((el) => el.$.overlay);
+
+/**
  * Returns true if the overlay is the last one in the opened overlays stack.
  * @param {HTMLElement} overlay
  * @return {boolean}
  * @protected
  */
-export const isLastOverlay = (overlay) => overlay === getAttachedInstances().pop();
+export const isLastOverlay = (overlay) => overlay === getOverlayInstances().pop();
 
 /**
  * @polymerMixin
@@ -68,8 +75,8 @@ export const OverlayStackMixin = (superClass) =>
       }
 
       // Disable pointer events in other attached overlays
-      getAttachedInstances().forEach((el) => {
-        if (el !== this && el.$.overlay) {
+      getOverlayInstances().forEach((el) => {
+        if (el !== this) {
           el.$.overlay.style.pointerEvents = 'none';
         }
       });
@@ -84,7 +91,7 @@ export const OverlayStackMixin = (superClass) =>
       }
 
       // Restore pointer events in the previous overlay(s)
-      const instances = getAttachedInstances();
+      const instances = getOverlayInstances();
 
       let el;
       // Use instances.pop() to ensure the reverse order
@@ -93,9 +100,7 @@ export const OverlayStackMixin = (superClass) =>
           // Skip the current instance
           continue;
         }
-        if (el.$.overlay) {
-          el.$.overlay.style.removeProperty('pointer-events');
-        }
+        el.$.overlay.style.removeProperty('pointer-events');
         if (!el.modeless) {
           // Stop after the last modal
           break;
