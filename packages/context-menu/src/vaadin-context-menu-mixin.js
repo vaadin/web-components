@@ -4,7 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { isElementFocusable } from '@vaadin/a11y-base/src/focus-utils.js';
-import { isAndroid, isIOS, isTouch } from '@vaadin/component-base/src/browser-utils.js';
+import { isAndroid, isIOS } from '@vaadin/component-base/src/browser-utils.js';
 import { addListener, deepTargetFind, gestures, removeListener } from '@vaadin/component-base/src/gestures.js';
 import { MediaQueryController } from '@vaadin/component-base/src/media-query-controller.js';
 import { ItemsMixin } from './vaadin-contextmenu-items-mixin.js';
@@ -110,21 +110,13 @@ export const ContextMenuMixin = (superClass) =>
           type: Boolean,
         },
 
-        /** @private */
-        _touch: {
-          type: Boolean,
-          value: isTouch,
-        },
-
-        /** @private */
-        _wide: {
+        _fullscreen: {
           type: Boolean,
         },
 
-        /** @private */
-        _wideMediaQuery: {
+        _fullscreenMediaQuery: {
           type: String,
-          value: '(min-device-width: 750px)',
+          value: '(max-width: 450px), (max-height: 450px)',
         },
       };
     }
@@ -134,7 +126,7 @@ export const ContextMenuMixin = (superClass) =>
         '_openedChanged(opened)',
         '_targetOrOpenOnChanged(listenOn, openOn)',
         '_rendererChanged(renderer, items)',
-        '_touchOrWideChanged(_touch, _wide)',
+        '_fullscreenChanged(_fullscreen)',
         '_overlayContextChanged(_overlayElement, _context)',
         '_overlayModelessChanged(_overlayElement, _modeless)',
         '_overlayPhoneChanged(_overlayElement, _phone)',
@@ -182,8 +174,8 @@ export const ContextMenuMixin = (superClass) =>
       super.ready();
 
       this.addController(
-        new MediaQueryController(this._wideMediaQuery, (matches) => {
-          this._wide = matches;
+        new MediaQueryController(this._fullscreenMediaQuery, (matches) => {
+          this._fullscreen = matches;
         }),
       );
     }
@@ -282,8 +274,8 @@ export const ContextMenuMixin = (superClass) =>
     }
 
     /** @private */
-    _touchOrWideChanged(touch, wide) {
-      this._phone = !wide && touch;
+    _fullscreenChanged(fullScreen) {
+      this._phone = fullScreen;
     }
 
     /** @private */

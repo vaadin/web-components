@@ -41,7 +41,7 @@ const datePickerOverlay = css`
     margin-bottom: var(--lumo-space-xs);
   }
 
-  @media (max-width: 420px), (max-height: 420px) {
+  @media (max-width: 450px), (max-height: 450px) {
     [part='overlay'] {
       width: 100vw;
       height: 70vh;
