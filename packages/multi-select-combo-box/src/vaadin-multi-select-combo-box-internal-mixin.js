@@ -141,11 +141,7 @@ export const MultiSelectComboBoxInternalMixin = (superClass) =>
     }
 
     /** @protected */
-    async _updateOverlayWidth() {
-      if (!this.$ && this.updateComplete) {
-        await this.updateComplete;
-      }
-
+    _updateOverlayWidth() {
       this.$.overlay._updateOverlayWidth();
     }
 

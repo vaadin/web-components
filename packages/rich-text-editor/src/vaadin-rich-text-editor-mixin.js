@@ -319,12 +319,8 @@ export const RichTextEditorMixin = (superClass) =>
     }
 
     /** @protected */
-    async connectedCallback() {
+    connectedCallback() {
       super.connectedCallback();
-
-      if (!this.$ && this.updateComplete) {
-        await this.updateComplete;
-      }
 
       this._editor.emitter.connect();
     }

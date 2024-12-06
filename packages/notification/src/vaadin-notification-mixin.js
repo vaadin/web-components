@@ -356,7 +356,7 @@ export const NotificationMixin = (superClass) =>
       }
 
       if (this._container.performUpdate) {
-        this._container.performUpdate();
+        // this._container.performUpdate();
       }
 
       if (!this._container.shadowRoot.querySelector(`slot[name="${this.position}"]`)) {

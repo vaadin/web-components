@@ -195,6 +195,11 @@ const PolylitMixinImplementation = (superclass) => {
       return result;
     }
 
+    connectedCallback() {
+      super.connectedCallback();
+      this.performUpdate();
+    }
+
     /** @protected */
     firstUpdated() {
       super.firstUpdated();
@@ -206,6 +211,14 @@ const PolylitMixinImplementation = (superclass) => {
       this.renderRoot.querySelectorAll('[id]').forEach((node) => {
         this.$[node.id] = node;
       });
+
+      const treeWalker = document.createTreeWalker(this.renderRoot, NodeFilter.SHOW_COMMENT);
+      while (treeWalker.nextNode()) {
+        const owner = treeWalker.currentNode._owner;
+        if (owner && owner.id) {
+          this.$[owner.id] = owner;
+        }
+      }
     }
 
     /** @protected */

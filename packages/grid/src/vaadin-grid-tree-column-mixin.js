@@ -53,7 +53,7 @@ export const GridTreeColumnMixin = (superClass) =>
       toggle.level = level;
 
       if (toggle.performUpdate) {
-        toggle.performUpdate();
+        // toggle.performUpdate();
       }
     }
 

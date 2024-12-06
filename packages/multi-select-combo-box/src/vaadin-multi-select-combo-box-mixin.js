@@ -809,13 +809,9 @@ export const MultiSelectComboBoxMixin = (superClass) =>
     }
 
     /** @private */
-    async __updateChips() {
+    __updateChips() {
       if (!this._inputField || !this.inputElement) {
         return;
-      }
-
-      if (!this._inputField.$) {
-        await this._inputField.updateComplete;
       }
 
       // Clear all chips except the overflow
@@ -846,7 +842,7 @@ export const MultiSelectComboBoxMixin = (superClass) =>
           this.insertBefore(chip, refNode);
           // Render Lit based chip
           if (chip.performUpdate) {
-            chip.performUpdate();
+            // chip.performUpdate();
           }
           refNode = chip;
           chips.unshift(chip);
@@ -885,7 +881,7 @@ export const MultiSelectComboBoxMixin = (superClass) =>
         this.insertBefore(chip, refNode);
         // Render Lit based chip
         if (chip.performUpdate) {
-          chip.performUpdate();
+          // chip.performUpdate();
         }
 
         // When auto expanding vertically, no need to measure remaining width

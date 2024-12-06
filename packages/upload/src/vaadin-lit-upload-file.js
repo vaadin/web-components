@@ -52,7 +52,7 @@ class UploadFile extends UploadFileMixin(ThemableMixin(PolylitMixin(LitElement))
             @click="${this._fireFileEvent}"
             ?hidden="${!this.held}"
             ?disabled="${this.disabled}"
-            aria-label="${this.i18n.file.start}"
+            aria-label="${this.i18n ? this.i18n.file.start : ''}"
             aria-describedby="name"
           ></button>
           <button
@@ -62,7 +62,7 @@ class UploadFile extends UploadFileMixin(ThemableMixin(PolylitMixin(LitElement))
             @click="${this._fireFileEvent}"
             ?hidden="${!this.errorMessage}"
             ?disabled="${this.disabled}"
-            aria-label="${this.i18n.file.retry}"
+            aria-label="${this.i18n ? this.i18n.file.retry : ''}"
             aria-describedby="name"
           ></button>
           <button
@@ -71,7 +71,7 @@ class UploadFile extends UploadFileMixin(ThemableMixin(PolylitMixin(LitElement))
             file-event="file-abort"
             @click="${this._fireFileEvent}"
             ?disabled="${this.disabled}"
-            aria-label="${this.i18n.file.remove}"
+            aria-label="${this.i18n ? this.i18n.file.remove : ''}"
             aria-describedby="name"
           ></button>
         </div>

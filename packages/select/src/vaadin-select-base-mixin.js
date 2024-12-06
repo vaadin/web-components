@@ -464,7 +464,7 @@ export const SelectBaseMixin = (superClass) =>
       // Trigger observer that sets aria-selected attribute
       // so that we can then synchronously remove it below.
       if (itemElement.performUpdate) {
-        itemElement.performUpdate();
+        // itemElement.performUpdate();
       }
       itemElement.removeAttribute('tabindex');
       itemElement.removeAttribute('aria-selected');

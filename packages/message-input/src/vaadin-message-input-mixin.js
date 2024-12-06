@@ -121,8 +121,8 @@ export const MessageInputMixin = (superClass) =>
           // Workaround: perform update twice to run the observer synchronously.
           // TODO: needs https://github.com/vaadin/web-components/pull/8168
           if (textarea.performUpdate) {
-            textarea.performUpdate();
-            textarea.performUpdate();
+            // textarea.performUpdate();
+            // textarea.performUpdate();
           }
 
           const input = textarea.inputElement;

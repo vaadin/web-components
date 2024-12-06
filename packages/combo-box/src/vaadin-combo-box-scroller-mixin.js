@@ -332,7 +332,7 @@ export const ComboBoxScrollerMixin = (superClass) =>
       // NOTE: in PolylitMixin, setProperties() waits for `hasUpdated` to be set.
       // However, this causes issues with virtualizer. So we enforce sync update.
       if (el.performUpdate && !el.hasUpdated) {
-        el.performUpdate();
+        // el.performUpdate();
       }
 
       el.id = `${this.__hostTagName}-item-${index}`;

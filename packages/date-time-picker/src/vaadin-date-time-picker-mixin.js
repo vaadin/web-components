@@ -33,7 +33,7 @@ class PickerSlotController extends SlotController {
         // Ensure initial value-changed is fired on the slotted pickers
         // synchronously in Lit version to avoid overriding host value.
         if (picker.performUpdate) {
-          picker.performUpdate();
+          // picker.performUpdate();
         }
         const prop = `__${type}Picker`;
         host[prop] = picker;

@@ -549,7 +549,7 @@ export const ComboBoxMixin = (subclass) =>
         // Call `performUpdate()` in this case to mimic the Polymer version logic.
         if (scroller.performUpdate && !scroller.hasUpdated) {
           try {
-            scroller.performUpdate();
+            // scroller.performUpdate();
           } catch (_) {
             // Suppress errors in synchronous tests for pre-opened combo-box.
           }

@@ -104,7 +104,7 @@ export const DynamicColumnsMixin = (superClass) =>
         columnTree.forEach((columnArray) => {
           columnArray.forEach((column) => {
             if (column.performUpdate) {
-              column.performUpdate();
+              // column.performUpdate();
             }
           });
         });
