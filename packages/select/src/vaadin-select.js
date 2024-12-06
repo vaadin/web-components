@@ -180,6 +180,7 @@ class Select extends SelectBaseMixin(ElementMixin(ThemableMixin(PolymerElement))
       </div>
 
       <vaadin-select-overlay
+        id="overlay"
         position-target="[[_inputContainer]]"
         opened="{{opened}}"
         with-backdrop="[[_phone]]"

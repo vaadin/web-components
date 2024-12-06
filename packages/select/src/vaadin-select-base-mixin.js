@@ -182,6 +182,8 @@ export const SelectBaseMixin = (superClass) =>
     ready() {
       super.ready();
 
+      this._overlayElement = this.$.overlay;
+
       this._inputContainer = this.shadowRoot.querySelector('[part~="input-field"]');
 
       this._valueButtonController = new ButtonController(this);
@@ -461,11 +463,6 @@ export const SelectBaseMixin = (superClass) =>
      */
     __appendValueItemElement(itemElement, parent) {
       parent.appendChild(itemElement);
-      // Trigger observer that sets aria-selected attribute
-      // so that we can then synchronously remove it below.
-      if (itemElement.performUpdate) {
-        itemElement.performUpdate();
-      }
       itemElement.removeAttribute('tabindex');
       itemElement.removeAttribute('aria-selected');
       itemElement.removeAttribute('role');
