@@ -8,6 +8,10 @@ import { dedupingMixin } from '@polymer/polymer/lib/utils/mixin.js';
 const observer = new ResizeObserver((entries) => {
   setTimeout(() => {
     entries.forEach((entry) => {
+      if (!entry.target.isConnected) {
+        return;
+      }
+
       // Notify child resizables, if any
       if (entry.target.resizables) {
         entry.target.resizables.forEach((resizable) => {
