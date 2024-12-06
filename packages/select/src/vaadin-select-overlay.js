@@ -63,7 +63,6 @@ export class SelectOverlay extends SelectOverlayMixin(ThemableMixin(PolymerEleme
     // by the time when `ready()` callback of the `vaadin-select` is executed by Polymer,
     // so querySelector() would return null. So we use this workaround to set properties.
     this.owner = this.__dataHost;
-    this.owner._overlayElement = this;
   }
 
   requestContentUpdate() {
