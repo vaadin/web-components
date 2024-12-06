@@ -49,6 +49,12 @@ describe('checkbox', () => {
     await visualDiff(div, 'required');
   });
 
+  it('required empty', async () => {
+    element.required = true;
+    element.label = '';
+    await visualDiff(div, 'required-empty');
+  });
+
   it('error message', async () => {
     element.errorMessage = 'This field is required';
     element.required = true;
