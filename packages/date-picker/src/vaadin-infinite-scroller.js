@@ -380,10 +380,6 @@ export class InfiniteScroller extends HTMLElement {
     itemWrapper.instance = this._createElement();
     itemWrapper.appendChild(itemWrapper.instance);
 
-    if (itemWrapper.instance.performUpdate) {
-      // itemWrapper.instance.performUpdate();
-    }
-
     Object.keys(tmpInstance).forEach((prop) => {
       itemWrapper.instance[prop] = tmpInstance[prop];
     });

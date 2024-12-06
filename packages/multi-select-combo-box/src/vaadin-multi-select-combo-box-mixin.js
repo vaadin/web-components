@@ -840,10 +840,6 @@ export const MultiSelectComboBoxMixin = (superClass) =>
         for (let i = items.length - 1, refNode = null; i >= 0; i--) {
           const chip = this.__createChip(items[i]);
           this.insertBefore(chip, refNode);
-          // Render Lit based chip
-          if (chip.performUpdate) {
-            // chip.performUpdate();
-          }
           refNode = chip;
           chips.unshift(chip);
         }
@@ -879,10 +875,6 @@ export const MultiSelectComboBoxMixin = (superClass) =>
       for (let i = items.length - 1, refNode = null; i >= 0; i--) {
         const chip = this.__createChip(items[i]);
         this.insertBefore(chip, refNode);
-        // Render Lit based chip
-        if (chip.performUpdate) {
-          // chip.performUpdate();
-        }
 
         // When auto expanding vertically, no need to measure remaining width
         if (!this.autoExpandVertically && this.$.chips.clientWidth > remainingWidth) {

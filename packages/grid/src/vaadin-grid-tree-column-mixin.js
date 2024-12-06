@@ -51,10 +51,6 @@ export const GridTreeColumnMixin = (superClass) =>
       toggle.leaf = this.__isLeafItem(item, this._grid.itemHasChildrenPath);
       toggle.textContent = this.__getToggleContent(this.path, item);
       toggle.level = level;
-
-      if (toggle.performUpdate) {
-        // toggle.performUpdate();
-      }
     }
 
     /**
