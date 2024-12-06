@@ -161,6 +161,10 @@ registerStyles(
       color: var(--material-error-text-color);
     }
 
+    :host(:not([has-label])) [part='required-indicator'] {
+      display: none;
+    }
+
     [part='error-message'],
     [part='helper-text'] {
       font-size: 0.75em;
