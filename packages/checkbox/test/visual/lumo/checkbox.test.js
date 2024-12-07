@@ -50,6 +50,12 @@ describe('checkbox', () => {
     await visualDiff(div, 'required');
   });
 
+  it('required empty', async () => {
+    element.required = true;
+    element.label = '';
+    await visualDiff(div, 'required-empty');
+  });
+
   it('invalid focus-ring', async () => {
     element.required = true;
     element.invalid = true;
