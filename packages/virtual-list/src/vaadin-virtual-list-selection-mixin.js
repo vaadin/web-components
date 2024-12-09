@@ -331,10 +331,11 @@ export const SelectionMixin = (superClass) =>
       if (shift) {
         // Focus the virtual list itself when shift-tabbing so the focus actually ends
         // up on the previous element in the tab order before the virtual list
+        // instead of some focusable child on another row.
         this.focus();
       } else {
         // Focus the focus exit element when tabbing so the focus actually ends up on
-        // the next element in the tab order after the virtual list.
+        // the next element in the tab order after the virtual list instead of some focusable child on another row.
         // Focusing the focus exit element causes scroll top to get reset, so we need to save and restore it
         const scrollTop = this.scrollTop;
         this.$.focusexit.focus();
