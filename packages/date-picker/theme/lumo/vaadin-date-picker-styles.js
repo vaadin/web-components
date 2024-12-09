@@ -12,7 +12,7 @@ const datePicker = css`
     content: var(--lumo-icons-cross);
   }
 
-  @media (max-width: 420px), (max-height: 420px) {
+  @media (max-width: 450px), (max-height: 450px) {
     [part='overlay-content'] {
       height: 70vh;
     }
