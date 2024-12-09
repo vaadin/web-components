@@ -1189,12 +1189,10 @@ describe('PolylitMixin', () => {
         class extends PolylitMixin(LitElement) {
           connectedCallback() {
             super.connectedCallback();
-            document.body.appendChild(this);
-          }
 
-          disconnectedCallback() {
-            super.disconnectedCallback();
-            document.body.removeChild(this);
+            if (this.parentNode !== document.body) {
+              document.body.appendChild(this);
+            }
           }
 
           render() {
@@ -1217,6 +1215,10 @@ describe('PolylitMixin', () => {
       beforeEach(async () => {
         element = fixtureSync(`<${tag}></${tag}>`);
         await element.updateComplete;
+      });
+
+      afterEach(() => {
+        document.querySelector('#teleported').remove();
       });
 
       it('should register elements with id', () => {
