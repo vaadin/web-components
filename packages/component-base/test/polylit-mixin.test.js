@@ -1209,4 +1209,61 @@ describe('PolylitMixin', () => {
       }).to.not.throw(Error);
     });
   });
+
+  describe('async first render', () => {
+    let element;
+
+    const readySpy = sinon.spy();
+    const valueChangedSpy = sinon.spy();
+
+    const tag = defineCE(
+      class extends PolylitMixin(LitElement) {
+        static get polylitConfig() {
+          return {
+            asyncFirstRender: true,
+          };
+        }
+
+        static get properties() {
+          return {
+            value: {
+              type: String,
+              value: 'foo',
+              observer: 'valueChanged',
+            },
+          };
+        }
+
+        ready() {
+          super.ready();
+          readySpy();
+        }
+
+        valueChanged() {
+          valueChangedSpy();
+        }
+      },
+    );
+
+    beforeEach(() => {
+      element = fixtureSync(`<${tag}></${tag}>`);
+    });
+
+    afterEach(() => {
+      readySpy.resetHistory();
+      valueChangedSpy.resetHistory();
+    });
+
+    it('should call ready after first render', async () => {
+      expect(readySpy).to.be.not.called;
+      await element.updateComplete;
+      expect(readySpy).to.be.calledOnce;
+    });
+
+    it('should run observers after first render', async () => {
+      expect(valueChangedSpy).to.be.not.called;
+      await element.updateComplete;
+      expect(valueChangedSpy).to.be.calledOnce;
+    });
+  });
 });

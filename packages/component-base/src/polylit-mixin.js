@@ -10,8 +10,6 @@ const caseMap = {};
 
 const CAMEL_TO_DASH = /([A-Z])/gu;
 
-const HAS_POLYLIT_MIXIN = Symbol('hasPolylitMixin');
-
 function camelToDash(camel) {
   if (!caseMap[camel]) {
     caseMap[camel] = camel.replace(CAMEL_TO_DASH, '-$1').toLowerCase();
@@ -197,21 +195,25 @@ const PolylitMixinImplementation = (superclass) => {
       return result;
     }
 
-    constructor() {
-      super();
-      this[HAS_POLYLIT_MIXIN] = true;
+    static get polylitConfig() {
+      return {
+        asyncFirstRender: false,
+      };
     }
 
     connectedCallback() {
       super.connectedCallback();
 
       const parentHost = this.getRootNode().host;
-      if (parentHost && parentHost[HAS_POLYLIT_MIXIN] && this.id) {
+      if (parentHost && parentHost.constructor.polylitConfig && this.id) {
         parentHost.$ ||= {};
         parentHost.$[this.id] = this;
       }
 
-      this.performUpdate();
+      const { polylitConfig } = this.constructor;
+      if (!polylitConfig.asyncFirstRender) {
+        this.performUpdate();
+      }
     }
 
     /** @protected */
