@@ -5,6 +5,8 @@
  */
 
 import { getFocusableElements } from '@vaadin/a11y-base';
+import { timeOut } from '@vaadin/component-base/src/async';
+import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { get } from '@vaadin/component-base/src/path-utils.js';
 
 /**
@@ -155,7 +157,7 @@ export const SelectionMixin = (superClass) =>
       const oldFocusIndex = this.__focusIndex;
       this.__focusIndex = this.__clampIndex(this.__focusIndex);
       if (oldFocusIndex !== this.__focusIndex) {
-        this.requestContentUpdate();
+        this.__scheduleRequestContentUpdate();
       }
       // Items may have been emptied, need to update focusability
       this.__updateFocusable();
@@ -168,7 +170,7 @@ export const SelectionMixin = (superClass) =>
 
     /** @private */
     __selectionChanged() {
-      this.requestContentUpdate();
+      this.__scheduleRequestContentUpdate();
     }
 
     /** @private */
@@ -267,7 +269,7 @@ export const SelectionMixin = (superClass) =>
       this.toggleAttribute('interacting', isInteracting);
 
       this.__updateFocusable();
-      this.requestContentUpdate();
+      this.__scheduleRequestContentUpdate();
     }
 
     /** @private */
@@ -311,6 +313,17 @@ export const SelectionMixin = (superClass) =>
     __onNavigationArrowKey(down) {
       this.__focusIndex = this.__clampIndex(this.__focusIndex + (down ? 1 : -1));
       this.__focusElementWithFocusIndex();
+    }
+
+    /** @private */
+    __scheduleRequestContentUpdate() {
+      this.__debounceRequestContentUpdate = Debouncer.debounce(
+        this.__debounceRequestContentUpdate,
+        timeOut.after(0),
+        () => {
+          this.requestContentUpdate();
+        },
+      );
     }
 
     /** @private */
