@@ -516,7 +516,7 @@ class Popover extends PopoverPositionMixin(
   ready() {
     super.ready();
 
-    this._overlayElement = this.shadowRoot.querySelector('vaadin-popover-overlay');
+    this._overlayElement = this.$[this.__overlayId];
   }
 
   /** @protected */

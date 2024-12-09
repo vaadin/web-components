@@ -307,6 +307,7 @@ snapshots["vaadin-select host opened default"] =
 
 snapshots["vaadin-select host opened overlay"] = 
 `<vaadin-select-overlay
+  id="overlay"
   opened=""
   start-aligned=""
   top-aligned=""
@@ -339,6 +340,7 @@ snapshots["vaadin-select host opened overlay"] =
 snapshots["vaadin-select host opened overlay class"] = 
 `<vaadin-select-overlay
   class="custom select-overlay"
+  id="overlay"
   opened=""
   start-aligned=""
   top-aligned=""
@@ -403,7 +405,7 @@ snapshots["vaadin-select shadow default"] =
     </slot>
   </div>
 </div>
-<vaadin-select-overlay>
+<vaadin-select-overlay id="overlay">
   <vaadin-select-list-box
     aria-orientation="vertical"
     role="listbox"
@@ -471,7 +473,7 @@ snapshots["vaadin-select shadow disabled"] =
     </slot>
   </div>
 </div>
-<vaadin-select-overlay>
+<vaadin-select-overlay id="overlay">
   <vaadin-select-list-box
     aria-orientation="vertical"
     role="listbox"
@@ -539,7 +541,7 @@ snapshots["vaadin-select shadow readonly"] =
     </slot>
   </div>
 </div>
-<vaadin-select-overlay>
+<vaadin-select-overlay id="overlay">
   <vaadin-select-list-box
     aria-orientation="vertical"
     role="listbox"
@@ -607,7 +609,7 @@ snapshots["vaadin-select shadow invalid"] =
     </slot>
   </div>
 </div>
-<vaadin-select-overlay>
+<vaadin-select-overlay id="overlay">
   <vaadin-select-list-box
     aria-orientation="vertical"
     role="listbox"
@@ -675,7 +677,10 @@ snapshots["vaadin-select shadow theme"] =
     </slot>
   </div>
 </div>
-<vaadin-select-overlay theme="align-right">
+<vaadin-select-overlay
+  id="overlay"
+  theme="align-right"
+>
   <vaadin-select-list-box
     aria-orientation="vertical"
     role="listbox"

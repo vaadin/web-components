@@ -84,6 +84,7 @@ class Select extends SelectBaseMixin(ElementMixin(ThemableMixin(PolylitMixin(Lit
       </div>
 
       <vaadin-select-overlay
+        id="overlay"
         .owner="${this}"
         .positionTarget="${this._inputContainer}"
         .opened="${this.opened}"
@@ -106,10 +107,6 @@ class Select extends SelectBaseMixin(ElementMixin(ThemableMixin(PolylitMixin(Lit
   /** @protected */
   ready() {
     super.ready();
-
-    const overlay = this.shadowRoot.querySelector('vaadin-select-overlay');
-    overlay.owner = this;
-    this._overlayElement = overlay;
   }
 
   /** @private */

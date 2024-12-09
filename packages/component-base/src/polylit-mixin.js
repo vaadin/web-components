@@ -195,6 +195,27 @@ const PolylitMixinImplementation = (superclass) => {
       return result;
     }
 
+    static get polylitConfig() {
+      return {
+        asyncFirstRender: false,
+      };
+    }
+
+    connectedCallback() {
+      super.connectedCallback();
+
+      const parentHost = this.getRootNode().host;
+      if (parentHost && parentHost.constructor.polylitConfig && this.id) {
+        parentHost.$ ||= {};
+        parentHost.$[this.id] = this;
+      }
+
+      const { polylitConfig } = this.constructor;
+      if (!polylitConfig.asyncFirstRender) {
+        this.performUpdate();
+      }
+    }
+
     /** @protected */
     firstUpdated() {
       super.firstUpdated();
@@ -203,8 +224,10 @@ const PolylitMixinImplementation = (superclass) => {
         this.$ = {};
       }
 
-      this.renderRoot.querySelectorAll('[id]').forEach((node) => {
-        this.$[node.id] = node;
+      [...Object.values(this.$), this.renderRoot].forEach((node) => {
+        node.querySelectorAll('[id]').forEach((node) => {
+          this.$[node.id] = node;
+        });
       });
     }
 

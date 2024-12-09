@@ -177,10 +177,16 @@ export const ColumnBaseMixin = (superClass) =>
         _emptyCells: Array,
 
         /** @private */
-        _headerCell: Object,
+        _headerCell: {
+          type: Object,
+          sync: true,
+        },
 
         /** @private */
-        _footerCell: Object,
+        _footerCell: {
+          type: Object,
+          sync: true,
+        },
 
         /** @protected */
         _grid: Object,

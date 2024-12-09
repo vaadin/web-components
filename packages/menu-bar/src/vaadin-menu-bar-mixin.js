@@ -935,7 +935,7 @@ export const MenuBarMixin = (superClass) =>
 
       this._expandedButton = button;
 
-      requestAnimationFrame(async () => {
+      requestAnimationFrame(() => {
         // After changing items, buttons are recreated so the old button is
         // no longer in the DOM. Reset position target to null to prevent
         // overlay from closing due to target width / height equal to 0.
@@ -953,12 +953,6 @@ export const MenuBarMixin = (superClass) =>
         this._hideTooltip(true);
 
         this._setExpanded(button, true);
-
-        // Delay setting position target until overlay is rendered
-        // to correctly measure item content in Lit based version.
-        if (overlay.updateComplete) {
-          await overlay.updateComplete;
-        }
 
         overlay.positionTarget = button;
       });
