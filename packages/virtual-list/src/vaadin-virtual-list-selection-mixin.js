@@ -386,7 +386,9 @@ export const SelectionMixin = (superClass) =>
       // Set navigating state if one of the root elements, virtual-list or focusexit, is focused
       // Set interacting state otherwise (child element is focused)
       const navigating = [...this.children, this, this.$.focusexit].includes(e.target);
-      this.__updateNavigating(navigating);
+      if (navigating || this.__isNavigating()) {
+        this.__updateNavigating(navigating);
+      }
 
       // Update focus index based on the focused item
       const rootElement = this.__getRootElementWithFocus();

@@ -501,6 +501,26 @@ describe('selection', () => {
         expect(document.activeElement!.parentElement).to.equal(getRenderedItem(1));
       });
 
+      it('should not re-render when tabbing between focusable children inside a single parent', async () => {
+        // Create a renderer with two focusable children inside a single parent
+        const rendererSpy = sinon.spy((root, _, { item }) => {
+          render(html`<button>${item?.name}</button><button>${item?.name}</button>`, root);
+        });
+        list.renderer = rendererSpy;
+        await nextFrame();
+
+        // Enter interacting state
+        beforeButton.focus();
+        await sendKeys({ press: 'Tab' });
+        await sendKeys({ press: 'Enter' });
+        await nextFrame();
+        rendererSpy.resetHistory();
+
+        // Tab to the next focusable child inside the same parent
+        await sendKeys({ press: 'Tab' });
+        expect(rendererSpy.called).to.be.false;
+      });
+
       it('should focus the item element on escape', async () => {
         beforeButton.focus();
         await sendKeys({ press: 'Tab' });
