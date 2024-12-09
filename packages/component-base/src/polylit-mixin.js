@@ -4,6 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { dedupeMixin } from '@open-wc/dedupe-mixin';
+import { notEqual } from 'lit';
 import { get, set } from './path-utils.js';
 
 const caseMap = {};
@@ -101,12 +102,15 @@ const PolylitMixinImplementation = (superclass) => {
           get: defaultDescriptor.get,
           set(value) {
             const oldValue = this[name];
-            this[key] = value;
-            this.requestUpdate(name, oldValue, options);
 
-            // Enforce synchronous update
-            if (this.hasUpdated) {
-              this.performUpdate();
+            if (notEqual(value, oldValue)) {
+              this[key] = value;
+              this.requestUpdate(name, oldValue, options);
+
+              // Enforce synchronous update
+              if (this.hasUpdated) {
+                this.performUpdate();
+              }
             }
           },
           configurable: true,
@@ -115,21 +119,17 @@ const PolylitMixinImplementation = (superclass) => {
       }
 
       if (options.readOnly) {
-        const setter = defaultDescriptor.set;
+        const setter = result.set;
 
         this.addCheckedInitializer((instance) => {
           // This is run during construction of the element
           instance[`_set${upper(name)}`] = function (value) {
             setter.call(instance, value);
-
-            if (options.sync) {
-              this.performUpdate();
-            }
           };
         });
 
         result = {
-          get: defaultDescriptor.get,
+          get: result.get,
           set() {
             // Do nothing, property is read-only.
           },

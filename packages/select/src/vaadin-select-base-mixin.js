@@ -97,6 +97,7 @@ export const SelectBaseMixin = (superClass) =>
           value: '',
           notify: true,
           observer: '_valueChanged',
+          sync: true,
         },
 
         /**
