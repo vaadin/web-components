@@ -352,6 +352,14 @@ describe('selection', () => {
       expect(getRenderedItem(1)!.hasAttribute('focused')).to.be.false;
     });
 
+    it('should not mark element focused if it does not match virtual focus index', async () => {
+      beforeButton.focus();
+      await sendKeys({ press: 'Tab' });
+      list.scrollToIndex(list.items!.length - 1);
+
+      expect([...list.children].some((child) => child.hasAttribute('focused'))).to.be.false;
+    });
+
     it('should throw on enter when there are no focusable child elements', async () => {
       beforeButton.focus();
       await sendKeys({ press: 'Tab' });
