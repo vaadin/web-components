@@ -69,6 +69,8 @@ class Tooltip extends TooltipMixin(ThemePropertyMixin(ElementMixin(ControllerMix
         }
       </style>
       <vaadin-tooltip-overlay
+        id="overlay"
+        owner="[[__overlayOwner]]"
         renderer="[[_renderer]]"
         theme$="[[_theme]]"
         opened="[[__computeOpened(manual, opened, _autoOpened, _isConnected)]]"
@@ -85,6 +87,17 @@ class Tooltip extends TooltipMixin(ThemePropertyMixin(ElementMixin(ControllerMix
 
       <slot name="sr-label"></slot>
     `;
+  }
+
+  static get properties() {
+    return {
+      /** @private */
+      __overlayOwner: {
+        value() {
+          return this;
+        },
+      },
+    };
   }
 }
 

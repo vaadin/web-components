@@ -1,7 +1,8 @@
 import { expect } from '@vaadin/chai-plugins';
 import { defineCE, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import { html, LitElement } from 'lit';
+import { LitElement } from 'lit';
+import { html, unsafeStatic } from 'lit/static-html.js';
 import { PolylitMixin } from '../src/polylit-mixin.js';
 
 describe('PolylitMixin', () => {
@@ -37,7 +38,7 @@ describe('PolylitMixin', () => {
     const tag = defineCE(
       class extends PolylitMixin(LitElement) {
         render() {
-          return html`<div id="foo">Component</div>`;
+          return html`<div>Component</div>`;
         }
 
         get(path, object) {
@@ -55,10 +56,6 @@ describe('PolylitMixin', () => {
       await element.updateComplete;
     });
 
-    it('should reference elements with id', () => {
-      expect(element.$.foo).to.be.instanceOf(HTMLDivElement);
-    });
-
     it('should get the nested value', () => {
       expect(element.get('foo.bar', { foo: { bar: 'baz' } })).to.equal('baz');
     });
@@ -71,31 +68,6 @@ describe('PolylitMixin', () => {
       const object = { foo: {} };
       element.set('foo.bar', 'baz', object);
       expect(object.foo.bar).to.equal('baz');
-    });
-  });
-
-  describe('createRenderRoot', () => {
-    let element;
-
-    const tag = defineCE(
-      class extends PolylitMixin(LitElement) {
-        render() {
-          return html`<div id="foo">Component</div>`;
-        }
-
-        createRenderRoot() {
-          return this;
-        }
-      },
-    );
-
-    beforeEach(async () => {
-      element = fixtureSync(`<${tag}></${tag}>`);
-      await element.updateComplete;
-    });
-
-    it('should reference elements with id when rendering to light DOM', () => {
-      expect(element.$.foo).to.be.instanceOf(HTMLDivElement);
     });
   });
 
@@ -1206,6 +1178,81 @@ describe('PolylitMixin', () => {
       expect(() => {
         document.createElement(tag).setProperties({ disabled: true });
       }).to.not.throw(Error);
+    });
+  });
+
+  describe('element id map', () => {
+    let element;
+
+    describe('basic', () => {
+      const teleportedTag = defineCE(
+        class extends PolylitMixin(LitElement) {
+          connectedCallback() {
+            super.connectedCallback();
+
+            if (this.parentNode !== document.body) {
+              document.body.appendChild(this);
+            }
+          }
+
+          render() {
+            return html`Teleported`;
+          }
+        },
+      );
+
+      const tag = defineCE(
+        class extends PolylitMixin(LitElement) {
+          render() {
+            return html`
+              <div id="title">Title</div>
+              <${unsafeStatic(teleportedTag)} id="teleported" />
+            `;
+          }
+        },
+      );
+
+      beforeEach(async () => {
+        element = fixtureSync(`<${tag}></${tag}>`);
+        await element.updateComplete;
+      });
+
+      afterEach(() => {
+        document.querySelector('#teleported').remove();
+      });
+
+      it('should register elements with id', () => {
+        expect(element.$.title).to.be.instanceOf(HTMLDivElement);
+        expect(element.$.title.id).to.equal('title');
+      });
+
+      it('should register teleported elements with id', () => {
+        expect(element.$.teleported).to.be.instanceOf(HTMLElement);
+        expect(element.$.teleported.id).to.equal('teleported');
+      });
+    });
+
+    describe('createRenderRoot', () => {
+      const tag = defineCE(
+        class extends PolylitMixin(LitElement) {
+          render() {
+            return html`<div id="foo">Component</div>`;
+          }
+
+          createRenderRoot() {
+            return this;
+          }
+        },
+      );
+
+      beforeEach(async () => {
+        element = fixtureSync(`<${tag}></${tag}>`);
+        await element.updateComplete;
+      });
+
+      it('should register elements with id when rendering to light DOM', () => {
+        expect(element.$.foo).to.be.instanceOf(HTMLDivElement);
+      });
     });
   });
 });

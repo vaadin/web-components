@@ -45,6 +45,7 @@ class Tooltip extends TooltipMixin(ThemePropertyMixin(ElementMixin(PolylitMixin(
 
     return html`
       <vaadin-tooltip-overlay
+        id="overlay"
         .renderer="${this._renderer}"
         .owner="${this}"
         theme="${ifDefined(this._theme)}"
@@ -62,13 +63,6 @@ class Tooltip extends TooltipMixin(ThemePropertyMixin(ElementMixin(PolylitMixin(
 
       <slot name="sr-label"></slot>
     `;
-  }
-
-  /** @protected */
-  ready() {
-    super.ready();
-
-    this._overlayElement = this.shadowRoot.querySelector('vaadin-tooltip-overlay');
   }
 }
 

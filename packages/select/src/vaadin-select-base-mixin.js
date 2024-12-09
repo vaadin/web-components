@@ -182,6 +182,8 @@ export const SelectBaseMixin = (superClass) =>
     ready() {
       super.ready();
 
+      this._overlayElement = this.$.overlay;
+
       this._inputContainer = this.shadowRoot.querySelector('[part~="input-field"]');
 
       this._valueButtonController = new ButtonController(this);

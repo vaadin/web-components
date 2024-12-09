@@ -195,6 +195,27 @@ const PolylitMixinImplementation = (superclass) => {
       return result;
     }
 
+    constructor() {
+      super();
+      this.__hasPolylitMixin = true;
+    }
+
+    /** @protected */
+    connectedCallback() {
+      super.connectedCallback();
+
+      // Components like `vaadin-overlay` teleport themselves to the body element when opened.
+      // If their opened state is set as an attribute, the teleportation happens immediately
+      // after they are connected to the DOM. This means they won't be found by querySelector
+      // in the parent component's `firstUpdated()`. To ensure their reference is still registered
+      // in the parent host component, we propagate the reference here.
+      const parentHost = this.getRootNode().host;
+      if (parentHost && parentHost.__hasPolylitMixin && this.id) {
+        parentHost.$ ||= {};
+        parentHost.$[this.id] = this;
+      }
+    }
+
     /** @protected */
     firstUpdated() {
       super.firstUpdated();
@@ -203,8 +224,13 @@ const PolylitMixinImplementation = (superclass) => {
         this.$ = {};
       }
 
-      this.renderRoot.querySelectorAll('[id]').forEach((node) => {
-        this.$[node.id] = node;
+      // Register all elements with an id in the $ map, including those
+      // that might have been already teleported to a different element
+      // (e.g. opened overlays are teleported to the body element).
+      [...Object.values(this.$), this.renderRoot].forEach((node) => {
+        node.querySelectorAll('[id]').forEach((node) => {
+          this.$[node.id] = node;
+        });
       });
     }
 
