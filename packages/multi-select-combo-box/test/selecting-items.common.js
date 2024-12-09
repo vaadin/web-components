@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, keyboardEventFor, nextRender } from '@vaadin/testing-helpers';
-import { sendKeys } from '@web/test-runner-commands';
+import { resetMouse, sendKeys, sendMouse } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import { getAllItems, getDataProvider, getFirstItem } from './helpers.js';
 
@@ -124,6 +124,15 @@ describe('selecting items', () => {
       await sendKeys({ down: 'ArrowDown' });
       await sendKeys({ down: 'Enter' });
       await sendKeys({ down: 'Tab' });
+      expect(comboBox.selectedItems).to.deep.equal(['apple']);
+    });
+
+    it('should not unselect previously committed item on outside click', async () => {
+      await sendKeys({ down: 'ArrowDown' });
+      await sendKeys({ down: 'ArrowDown' });
+      await sendKeys({ down: 'Enter' });
+      await sendMouse({ type: 'click', position: [200, 200] });
+      await resetMouse();
       expect(comboBox.selectedItems).to.deep.equal(['apple']);
     });
 
