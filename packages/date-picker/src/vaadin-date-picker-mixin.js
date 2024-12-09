@@ -125,7 +125,7 @@ export const DatePickerMixin = (subclass) =>
          * @protected
          */
         _fullscreenMediaQuery: {
-          value: '(max-width: 420px), (max-height: 420px)',
+          value: '(max-width: 450px), (max-height: 450px)',
         },
 
         /**
