@@ -200,6 +200,7 @@ class Select extends SelectBaseMixin(ElementMixin(ThemableMixin(PolymerElement))
 
   static get properties() {
     return {
+      /** @private */
       __overlayOwner: {
         value() {
           return this;

@@ -465,6 +465,8 @@ export const TooltipMixin = (superClass) =>
     ready() {
       super.ready();
 
+      this._overlayElement = this.$.overlay;
+
       this._srLabelController = new SlotController(this, 'sr-label', 'div', {
         initializer: (element) => {
           element.id = this._uniqueId;
