@@ -9,6 +9,9 @@ type TestItem = { id: number; name: string } | undefined;
 
 async function click(el: HTMLElement) {
   el.focus();
+  await new Promise<void>((resolve) => {
+    queueMicrotask(() => resolve());
+  });
   helperClick(el);
   await nextFrame();
 }
@@ -164,6 +167,18 @@ describe('selection', () => {
       await click(getRenderedItem(0)!);
       await nextFrame();
       expect(getRenderedItem(0)!.hasAttribute('selected')).to.be.true;
+    });
+
+    it('should re-render items once on click select', async () => {
+      const rendererSpy = sinon.spy(list.renderer!);
+      list.renderer = rendererSpy;
+      await nextFrame();
+
+      rendererSpy.resetHistory();
+      await click(getRenderedItem(0)!);
+      await nextFrame();
+
+      expect(rendererSpy.getCalls().filter((call) => call.args[2].index === 0).length).to.equal(1);
     });
 
     it('should select an item with keyboard', async () => {
@@ -426,6 +441,7 @@ describe('selection', () => {
       await nextFrame();
       click(list);
       click(list);
+      await nextFrame();
       expect(document.activeElement).to.equal(getRenderedItem(0));
     });
 
@@ -586,8 +602,9 @@ describe('selection', () => {
       expect(getRenderedItem(lastVisibleIndex)!.ariaPosInSet).to.equal('100');
     });
 
-    it('should generate aria-label to the items', () => {
+    it('should generate aria-label to the items', async () => {
       list.itemAccessibleNameGenerator = (item) => `Accessible ${item?.name}`;
+      await nextFrame();
       expect(getRenderedItem(0)!.ariaLabel).to.equal('Accessible Item 0');
     });
 
