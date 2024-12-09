@@ -110,12 +110,13 @@ export const SelectionMixin = (superClass) =>
       el.toggleAttribute('selected', this.__isSelected(item));
       const isFocusable = this.__isNavigating() && this.__isSelectable() && this.__focusIndex === index;
       el.tabIndex = isFocusable ? 0 : -1;
+      el.toggleAttribute('focused', isFocusable && el.contains(document.activeElement));
+
       el.role = this.__isSelectable() ? 'option' : 'listitem';
       el.ariaSelected = this.__isSelectable() ? this.__isSelected(item) : null;
       el.ariaSetSize = this.items.length;
       el.ariaPosInSet = index + 1;
 
-      el.toggleAttribute('focused', this.__isSelectable() && el.contains(document.activeElement));
       el.ariaLabel = this.itemAccessibleNameGenerator ? this.itemAccessibleNameGenerator(item) : null;
     }
 
@@ -151,7 +152,11 @@ export const SelectionMixin = (superClass) =>
         return;
       }
 
+      const oldFocusIndex = this.__focusIndex;
       this.__focusIndex = this.__clampIndex(this.__focusIndex);
+      if (oldFocusIndex !== this.__focusIndex) {
+        this.requestContentUpdate();
+      }
       // Items may have been emptied, need to update focusability
       this.__updateFocusable();
     }
