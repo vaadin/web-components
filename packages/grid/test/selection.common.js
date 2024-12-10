@@ -670,6 +670,25 @@ describe('multi selection column', () => {
       expect(grid.selectedItems).to.eql(grid.items.slice(1, 4));
     });
 
+    it('should not attempt to select item on mouse drag if it is already selected', () => {
+      const selectItemSpy = sinon.spy(selectionColumn, '_selectItem');
+
+      const row0cell = getBodyCellContent(grid, 0, 0);
+      const row1cell = getBodyCellContent(grid, 1, 0);
+
+      grid.selectedItems = [rows[1]._item];
+
+      fireTrackEvent(row0cell, row0cell, 'start');
+      clock.tick(10);
+      fireTrackEvent(row1cell, row0cell, 'track');
+      clock.tick(10);
+      fireTrackEvent(row1cell, row0cell, 'end');
+      clock.tick(10);
+
+      expect(selectItemSpy).to.be.calledOnce;
+      expect(selectItemSpy.args[0][0]).to.not.equal('1');
+    });
+
     it('should not select any items on mouse drag when dragSelect is disabled', () => {
       selectionColumn.dragSelect = false;
 
@@ -754,6 +773,25 @@ describe('multi selection column', () => {
       });
 
       expect(grid.selectedItems).to.empty;
+    });
+
+    it('should not attempt to deselect item on mouse drag if it is already deselected', () => {
+      const deselectItemSpy = sinon.spy(selectionColumn, '_deselectItem');
+
+      const row0cell = getBodyCellContent(grid, 0, 0);
+      const row1cell = getBodyCellContent(grid, 1, 0);
+
+      grid.selectedItems = [rows[0]._item];
+
+      fireTrackEvent(row0cell, row0cell, 'start');
+      clock.tick(10);
+      fireTrackEvent(row1cell, row0cell, 'track');
+      clock.tick(10);
+      fireTrackEvent(row1cell, row0cell, 'end');
+      clock.tick(10);
+
+      expect(deselectItemSpy).to.be.calledOnce;
+      expect(deselectItemSpy.args[0][0]).to.not.equal('1');
     });
 
     it('should prevent text selection on mouse dragging', () => {
