@@ -32,7 +32,11 @@ export * from './vaadin-virtual-list-mixin.js';
  *
  * Attribute        | Description
  * -----------------|--------------------------------------------
- * `overflow`       | Set to `top`, `bottom`, both, or none.
+ * `overflow`       | Set to `top`, `bottom`, both, or none
+ * `interacting`    | Keyboard navigation in interaction mode
+ * `navigating`     | Keyboard navigation in navigation mode
+ * `selected`       | Set on a child element when the item is selected
+ * `focused`        | Set on a child element when the item is focused
  *
  * See [Virtual List](https://vaadin.com/docs/latest/components/virtual-list) documentation.
  *
