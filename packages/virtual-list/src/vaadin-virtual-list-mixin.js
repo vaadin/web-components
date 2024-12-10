@@ -11,6 +11,7 @@ import { SelectionMixin } from './vaadin-virtual-list-selection-mixin.js';
 
 /**
  * @polymerMixin
+ * @mixes SelectionMixin
  * @mixes ControllerMixin
  */
 export const VirtualListMixin = (superClass) =>

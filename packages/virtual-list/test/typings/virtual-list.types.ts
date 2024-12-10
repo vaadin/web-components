@@ -47,3 +47,8 @@ assertType<TestVirtualListItem[]>(virtualList.selectedItems);
 assertType<string | null | undefined>(virtualList.itemIdPath);
 
 assertType<((item: TestVirtualListItem) => string) | undefined>(virtualList.itemAccessibleNameGenerator);
+
+virtualList.addEventListener('selected-items-changed', (event) => {
+  assertType<CustomEvent<{ value: TestVirtualListItem[] }>>(event);
+  assertType<TestVirtualListItem[]>(event.detail.value);
+});

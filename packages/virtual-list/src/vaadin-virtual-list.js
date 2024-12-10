@@ -35,6 +35,8 @@ registerStyles('vaadin-virtual-list', virtualListStyles, { moduleId: 'vaadin-vir
  *
  * See [Virtual List](https://vaadin.com/docs/latest/components/virtual-list) documentation.
  *
+ * @fires {CustomEvent} selected-items-changed - Fired when the `selectedItems` property changes.
+ *
  * @customElement
  * @extends HTMLElement
  * @mixes ElementMixin

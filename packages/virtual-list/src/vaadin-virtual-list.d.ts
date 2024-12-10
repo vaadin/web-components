@@ -7,13 +7,11 @@ import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import type {
   VirtualListDefaultItem,
-  VirtualListItemModel,
+  VirtualListEventMap,
   VirtualListMixinClass,
-  VirtualListRenderer,
 } from './vaadin-virtual-list-mixin.js';
-import type { VirtualListSelectionMixinClass } from './vaadin-virtual-list-selection-mixin.js';
 
-export { VirtualListDefaultItem, VirtualListItemModel, VirtualListRenderer };
+export * from './vaadin-virtual-list-mixin.js';
 
 /**
  * `<vaadin-virtual-list>` is a Web Component for displaying a virtual/infinite list of items.
@@ -37,13 +35,25 @@ export { VirtualListDefaultItem, VirtualListItemModel, VirtualListRenderer };
  * `overflow`       | Set to `top`, `bottom`, both, or none.
  *
  * See [Virtual List](https://vaadin.com/docs/latest/components/virtual-list) documentation.
+ *
+ * @fires {CustomEvent} selected-items-changed - Fired when the `selectedItems` property changes.
  */
 declare class VirtualList<TItem = VirtualListDefaultItem> extends ThemableMixin(ElementMixin(HTMLElement)) {}
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
-interface VirtualList<TItem = VirtualListDefaultItem>
-  extends VirtualListMixinClass<TItem>,
-    VirtualListSelectionMixinClass<TItem> {}
+interface VirtualList<TItem = VirtualListDefaultItem> extends VirtualListMixinClass<TItem> {
+  addEventListener<K extends keyof VirtualListEventMap<TItem>>(
+    type: K,
+    listener: (this: VirtualList<TItem>, ev: VirtualListEventMap<TItem>[K]) => void,
+    options?: AddEventListenerOptions | boolean,
+  ): void;
+
+  removeEventListener<K extends keyof VirtualListEventMap<TItem>>(
+    type: K,
+    listener: (this: VirtualList<TItem>, ev: VirtualListEventMap<TItem>[K]) => void,
+    options?: EventListenerOptions | boolean,
+  ): void;
+}
 
 declare global {
   interface HTMLElementTagNameMap {
