@@ -50,7 +50,7 @@ class VirtualList extends ElementMixin(ThemableMixin(VirtualListMixin(PolymerEle
         <slot></slot>
       </div>
 
-      <div id="focusexit" tabindex="0" hidden?="[[!__focusExitVisible]]"></div>
+      <div id="focusexit" tabindex="0" hidden></div>
     `;
   }
 

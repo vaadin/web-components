@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { click as helperClick, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
+import { click as helperClick, fixtureSync, isFirefox, nextFrame } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import { html, render } from 'lit';
@@ -53,6 +53,16 @@ describe('selection', () => {
     beforeButton.focus();
     await sendKeys({ press: 'Tab' });
     expect([...list.children].includes(document.activeElement!)).to.be.false;
+  });
+
+  it('should not be focusable backwards', async () => {
+    afterButton.focus();
+    await shiftTab();
+    if (isFirefox) {
+      expect(document.activeElement).to.equal(list);
+    } else {
+      expect(document.activeElement).to.equal(beforeButton);
+    }
   });
 
   it('should select an item programmatically', async () => {
@@ -465,6 +475,14 @@ describe('selection', () => {
 
     it('should not throw is items are unset', () => {
       list.items = undefined;
+    });
+
+    it('should not change scroll position when tabbing backwards into the focus item', async () => {
+      click(getRenderedItem(5)!);
+      afterButton.focus();
+      const scrollTop = list.scrollTop;
+      await shiftTab();
+      expect(list.scrollTop).to.equal(scrollTop);
     });
 
     describe('focusable children', () => {

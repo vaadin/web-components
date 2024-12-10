@@ -73,11 +73,6 @@ export const SelectionMixin = (superClass) =>
           value: 0,
           sync: true,
         },
-
-        __focusExitVisible: {
-          type: Boolean,
-          value: false,
-        },
       };
     }
 
@@ -117,7 +112,7 @@ export const SelectionMixin = (superClass) =>
       el.toggleAttribute('selected', this.__isSelected(item));
       const isFocusable = this.__isNavigating() && this.__focusIndex === index;
       el.tabIndex = isFocusable ? 0 : -1;
-      el.toggleAttribute('focused', isFocusable && el.contains(document.activeElement));
+      el.toggleAttribute('focused', isFocusable && el.contains(this.__getActiveElement()));
 
       el.role = this.__isSelectable() ? 'option' : 'listitem';
       el.ariaSelected = this.__isSelectable() ? String(this.__isSelected(item)) : null;
@@ -252,7 +247,7 @@ export const SelectionMixin = (superClass) =>
      * @private
      */
     __getRootElementWithFocus() {
-      return this.__getRenderedRootElements().find((el) => el.contains(document.activeElement));
+      return this.__getRenderedRootElements().find((el) => el.contains(this.__getActiveElement()));
     }
 
     /**
@@ -288,7 +283,12 @@ export const SelectionMixin = (superClass) =>
       } else {
         this.removeAttribute('tabindex');
       }
-      this.__focusExitVisible = isFocusable;
+      this.$.focusexit.hidden = !isFocusable || !this.contains(this.__getActiveElement());
+    }
+
+    /** @private */
+    __getActiveElement() {
+      return this.getRootNode().activeElement;
     }
 
     /** @private */
@@ -379,8 +379,7 @@ export const SelectionMixin = (superClass) =>
       if (!this.__isSelectable() || !this.__isNavigating()) {
         return;
       }
-
-      if (document.activeElement === this) {
+      if (this.__getActiveElement() === this) {
         // If the virtual list itself is clicked, focus the root element matching focus index
         this.__focusElementWithFocusIndex();
       }
