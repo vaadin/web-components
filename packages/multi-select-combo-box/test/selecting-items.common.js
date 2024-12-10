@@ -147,6 +147,16 @@ describe('selecting items', () => {
       expect(comboBox.selectedItems).to.deep.equal(['apple']);
     });
 
+    it('should not set previously committed item to input on blur with allow custom value', async () => {
+      comboBox.allowCustomValue = true;
+      await sendKeys({ down: 'ArrowDown' });
+      await sendKeys({ down: 'ArrowDown' });
+      await sendKeys({ down: 'Enter' });
+      await sendKeys({ down: 'Tab' });
+      expect(comboBox.filter).to.equal('');
+      expect(inputElement.value).to.equal('');
+    });
+
     it('should un-select item when using clear() method', () => {
       comboBox.selectedItems = ['orange'];
       comboBox.clear();

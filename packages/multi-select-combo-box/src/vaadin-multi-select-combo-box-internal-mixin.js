@@ -366,7 +366,7 @@ export const MultiSelectComboBoxInternalMixin = (superClass) =>
         this._ignoreCommitValue = false;
 
         // Reset internal combo-box state
-        this.selectedItem = null;
+        this.clear();
         this._inputElementValue = '';
         return;
       }
