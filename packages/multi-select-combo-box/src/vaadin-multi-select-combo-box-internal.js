@@ -373,7 +373,7 @@ class MultiSelectComboBoxInternal extends ComboBoxDataProviderMixin(ComboBoxMixi
       this._ignoreCommitValue = false;
 
       // Reset internal combo-box state
-      this.selectedItem = null;
+      this.clear();
       this._inputElementValue = '';
       return;
     }
