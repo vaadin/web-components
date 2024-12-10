@@ -121,7 +121,7 @@ describe('reordering simple grid', () => {
   it('should prevent text selection while reordering', () => {
     dragStart(headerContent[0]);
     const style = window.getComputedStyle(grid);
-    const userSelect = style['user-select'] || style['-moz-user-select'] || style['-webkit-user-select'];
+    const userSelect = style['user-select'] || style['-webkit-user-select'];
     expect(userSelect).to.equal('none');
   });
 

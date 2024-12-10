@@ -114,8 +114,6 @@ class Map extends ResizeMixin(FocusMixin(ElementMixin(ThemableMixin(PolymerEleme
         .ol-unselectable {
           -webkit-touch-callout: none;
           -webkit-user-select: none;
-          -moz-user-select: none;
-          -ms-user-select: none;
           user-select: none;
           -webkit-tap-highlight-color: transparent;
         }
@@ -127,8 +125,6 @@ class Map extends ResizeMixin(FocusMixin(ElementMixin(ThemableMixin(PolymerEleme
         .ol-selectable {
           -webkit-touch-callout: default;
           -webkit-user-select: text;
-          -moz-user-select: text;
-          -ms-user-select: text;
           user-select: text;
         }
 

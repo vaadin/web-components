@@ -7,7 +7,6 @@ const gridProEditSelect = css`
     font-size: inherit;
     /* prevent selection on editor focus */
     -webkit-user-select: none;
-    -moz-user-select: none;
     user-select: none;
   }
 `;

@@ -19,7 +19,6 @@ stylesTemplate.innerHTML = `
       transform: translateX(100%);
       -webkit-tap-highlight-color: transparent;
       -webkit-user-select: none;
-      -moz-user-select: none;
       user-select: none;
       /* Center the year scroller position. */
       --vaadin-infinite-scroller-buffer-offset: 50%;

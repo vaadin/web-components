@@ -10,7 +10,6 @@ registerStyles(
       justify-content: flex-start;
       align-items: baseline;
       -webkit-user-select: none;
-      -moz-user-select: none;
       user-select: none;
       cursor: var(--lumo-clickable-cursor);
     }
