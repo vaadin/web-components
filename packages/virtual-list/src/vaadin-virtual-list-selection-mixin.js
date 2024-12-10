@@ -321,6 +321,11 @@ export const SelectionMixin = (superClass) =>
     __onNavigationArrowKey(down) {
       this.__focusIndex = this.__clampIndex(this.__focusIndex + (down ? 1 : -1));
       this.__focusElementWithFocusIndex();
+
+      if (this.__debounceRequestContentUpdate) {
+        // Render synchronously to avoid jumpiness when navigating near viewport edges
+        this.__debounceRequestContentUpdate.flush();
+      }
     }
 
     /** @private */
