@@ -112,8 +112,7 @@ class Card extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
               :has([slot='header-prefix']),
               [has-header-prefix],
               :has([slot='header-suffix']),
-              [has-header-suffix],
-              :not(:has([slot='header']):not([has-header]))
+              [has-header-suffix]
             )
         )
         [part='header'] {
@@ -191,6 +190,7 @@ class Card extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
         grid-column: calc(1 + var(--media));
         grid-row: calc(1 + var(--header));
         flex: auto;
+        min-height: 0;
       }
 
       [part='footer'] {
@@ -217,9 +217,6 @@ class Card extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
         height: auto;
         aspect-ratio: var(--vaadin-card-media-aspect-ratio, 16/9);
         object-fit: cover;
-        margin: var(--vaadin-card-gap);
-        margin-top: 0;
-        margin-inline: 0;
       }
 
       :host([theme~='horizontal']:is([theme~='cover-media'], [theme~='stretch-media'])) {
@@ -243,13 +240,23 @@ class Card extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
       }
 
       :host([theme~='horizontal'][theme~='stretch-media']) ::slotted([slot='media']:is(img, video, svg, vaadin-icon)) {
-        margin-bottom: 0;
         margin-inline-end: 0;
         width: calc(100% + var(--vaadin-card-padding));
         height: calc(100% + var(--vaadin-card-padding) * 2);
         border-radius: inherit;
         border-start-end-radius: 0;
         border-end-end-radius: 0;
+      }
+
+      /* Scroller in content */
+      [part='content'] ::slotted(vaadin-scroller) {
+        margin-inline: calc(var(--vaadin-card-padding) * -1);
+        padding-inline: var(--vaadin-card-padding);
+      }
+
+      [part='content'] ::slotted(vaadin-scroller)::before,
+      [part='content'] ::slotted(vaadin-scroller)::after {
+        margin-inline: calc(var(--vaadin-card-padding) * -1);
       }
     `;
   }
@@ -318,6 +325,9 @@ class Card extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
     if (this._mutationObserver) this._mutationObserver.disconnect();
     super.disconnectedCallback();
   }
+
+  // TODO default role
+  // TODO aria-describedby if header contains an H1-6 element
 }
 
 defineCustomElement(Card);

@@ -23,6 +23,7 @@
       import '@vaadin/icons';
       import '@vaadin/vaadin-lumo-styles/icons.js';
       import '@vaadin/select';
+      import '@vaadin/scroller';
       import { utility } from '@vaadin/vaadin-lumo-styles/utility.js';
       import { addGlobalThemeStyles } from '@vaadin/vaadin-themable-mixin/register-styles.js';
 
@@ -30,8 +31,9 @@
       addGlobalThemeStyles('badge', badge);
 
       const playground = document.querySelector('.playground');
+      const codeExample = document.querySelector('.code-example');
       const mediaSelect = document.querySelector('#media');
-      const contentOptions = ['header', 'title', 'subtitle', 'header-prefix', 'header-suffix', 'content', 'footer'];
+      const contentSelect = document.querySelector('#content');
       const options = document.querySelector('.playground-options');
       const resizeOptions = document.querySelector('.playground-resize');
       const themeVariant = document.querySelector('.theme-variant');
@@ -44,40 +46,56 @@
         { label: 'Custom SVG', value: '3' },
       ];
       mediaSelect.value = 'none';
-
-      const mediaOptions = Array.from(document.querySelector('#media-options').content.querySelectorAll('*'));
-
+      const mediaElements = Array.from(document.querySelector('#media-options').content.querySelectorAll('*'));
       mediaSelect.addEventListener('value-changed', (e) => {
         const existing = playground.querySelector('[slot="media"]');
         if (existing) {
           playground.removeChild(existing);
         }
         if (e.detail.value != 'none') {
-          playground.prepend(mediaOptions[e.detail.value]);
+          playground.prepend(mediaElements[e.detail.value]);
         }
+        updateCodeExample();
       });
 
-
-      const contentItems = {
-        'header': playground.querySelector('[slot="header"]'),
-        'title': playground.querySelector('[slot="title"]'),
-        'subtitle': playground.querySelector('[slot="subtitle"]'),
-        'header-prefix': playground.querySelector('[slot="header-prefix"]'),
-        'header-suffix': playground.querySelector('[slot="header-suffix"]'),
-        'content': playground.querySelector(':not([slot])'),
-        'footer': playground.querySelector('[slot="footer"]'),
+      const slotElements = document.querySelector('#slot-options').content.children;
+      const slotItems = {
+        'header': slotElements[0],
+        'header-prefix': slotElements[1],
+        'header-suffix': slotElements[2],
+        'title': slotElements[3],
+        'subtitle': slotElements[4],
+        'footer': slotElements[5],
       }
 
       options.addEventListener('value-changed', (e) => {
-        Object.entries(contentItems).forEach(([key, val]) => {
+        Object.entries(slotItems).forEach(([key, val]) => {
           if (e.detail.value.includes(key)) {
             playground.append(val);
-          } else if (val.parentNode) {
+          } else if (val.parentNode === playground) {
             playground.removeChild(val);
           }
         });
+        updateCodeExample();
       });
-      options.value = contentOptions;
+
+      contentSelect.items = [
+        { label: 'None', value: '-1' },
+        { label: 'Text', value: '0' },
+        { label: 'Scroller', value: '1' },
+      ];
+      const contentElements = document.querySelector('#content-options').content.children;
+      contentSelect.addEventListener('value-changed', (e) => {
+        const existing = playground.querySelector(':scope > :not([slot])');
+        if (existing) {
+          playground.removeChild(existing);
+        }
+        if (parseInt(e.detail.value) >= 0) {
+          playground.append(contentElements[e.detail.value].cloneNode(true));
+        }
+        updateCodeExample();
+      });
+      contentSelect.value = '0';
 
       resizeOptions.addEventListener('value-changed', (e) => {
         playground.classList.toggle('resize-width', e.detail.value.includes('width'));
@@ -87,7 +105,37 @@
       themeVariant.addEventListener('value-changed', (e) => {
         playground.setAttribute('theme', e.detail.value.filter(v => v != 'dark').join(' '));
         document.documentElement.setAttribute('theme', e.detail.value.includes('dark')  ? 'dark' : '');
+        updateCodeExample();
       });
+
+      function updateCodeExample() {
+        codeExample.textContent = format(playground.outerHTML
+          .replaceAll(/ tabindex="0"| role="button"| class="playground(.*?)"| style="(.+?)"| theme=""| has-content=""| has-title=""| has-subtitle=""| has-header=""| has-header-prefix=""| has-header-suffix=""| has-footer=""| has-media=""/g, '')
+          .replace(/src=".+?"/, 'src="..."')
+          .replace(/Lapland is the[\s\S]+?.</, 'Lapland is the...<')
+          .replace(/ fill="none"[\s\S]+?<\/svg>/, '>...</svg>')
+        ).replace('\n  </vaadin-avatar>', '</vaadin-avatar>');
+      }
+
+      function format(html) {
+          var tab = '  ';
+          var result = '';
+          var indent = '';
+
+          html.split(/>\s*</).forEach(function (element) {
+            if (element.match(/^\/\w/)) {
+              indent = indent.substring(tab.length);
+            }
+
+            result += indent + '<' + element + '>\r\n';
+
+            if (element.match(/^<?\w[^>]*[^\/]$/) && !element.startsWith("input")) {
+              indent += tab;
+            }
+          });
+
+          return result.substring(1, result.length - 3);
+        }
     </script>
 
     <style>
@@ -101,12 +149,12 @@
 
       .playground:not(.resize-width),
       .playground.resize-width:not([style*="width"]) {
-        width: 30% !important;
+        width: 22rem !important;
       }
 
       .playground[theme~="horizontal"]:has(img[slot="media"]):not(.resize-width),
       .playground[theme~="horizontal"]:has(img[slot="media"]).resize-width:not([style*="width"]) {
-        width: 50% !important;
+        width: 35rem !important;
       }
 
       .playground:not(.resize-height),
@@ -134,17 +182,37 @@
         gap: 0 2rem;
         margin-bottom: 3rem;
       }
+
+      .code-example {
+        white-space: pre;
+        font-family: monospace;
+        font-size: 13px;
+        line-height: 1.4;
+        padding: 1rem;
+        border: 1px solid var(--lumo-contrast-10pct);
+        background-color: var(--lumo-shade);
+        color: var(--lumo-tint-90pct);
+        border-radius: var(--lumo-border-radius-l);
+        width: fit-content;
+      }
+
+      .output {
+        display: flex;
+        align-items: start;
+        justify-content: space-between;
+        gap: 2rem;
+      }
     </style>
   </head>
 
   <body>
 
-    <div class="full-row options">
+    <div class="options">
       <vaadin-select label="Media" id="media"></vaadin-select>
       <template id="media-options">
-        <img slot="media" width="200" src="https://images.unsplash.com/photo-1519681393784-d120267933ba?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=750&q=80" alt="">
-        <vaadin-icon slot="media" icon="lumo:user" style="background: var(--lumo-success-color-10pct);"></vaadin-icon>
-        <vaadin-avatar slot="media" abbr="A" theme="large"></vaadin-avatar>
+        <img slot="media" width="200" src="https://images.unsplash.com/photo-1674572271917-ac95fbdbf76c?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTQzfHxsYXBsYW5kfGVufDB8fDB8fHww" alt="">
+        <vaadin-icon slot="media" icon="lumo:photo" style="background: var(--lumo-primary-color-10pct); color: var(--lumo-primary-color);"></vaadin-icon>
+        <vaadin-avatar slot="media" abbr="L" theme="large"></vaadin-avatar>
         <svg slot="media" width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg" style="background: var(--lumo-tint-90pct);">
           <path fill-rule="evenodd" clip-rule="evenodd"
             d="M70.9236 40.9367C70.9328 40.6256 70.9375 40.3133 70.9375 40C70.9375 39.6867 70.9328 39.3744 70.9236 39.0633L69.6741 39.1004C69.683 39.3992 69.6875 39.699 69.6875 40C69.6875 40.301 69.683 40.6008 69.6741 40.8995L70.9236 40.9367ZM70.8123 42.8017L69.5674 42.69C69.5136 43.2886 69.4421 43.882 69.3534 44.4697L70.5894 44.6563C70.6819 44.0438 70.7564 43.4254 70.8123 42.8017ZM70.2544 46.4957L69.032 46.2345C68.9066 46.8216 68.7638 47.4023 68.6041 47.976L69.8084 48.3111C69.9748 47.713 70.1237 47.1077 70.2544 46.4957ZM69.2529 50.0955L68.0712 49.6878C67.8757 50.2544 67.6636 50.8132 67.4353 51.3637L68.5899 51.8425C68.8279 51.2687 69.0491 50.6861 69.2529 50.0955ZM67.822 53.5463L66.6985 52.9983C66.4358 53.5367 66.1574 54.066 65.8637 54.5857L66.9519 55.2007C67.258 54.6592 67.5482 54.1075 67.822 53.5463ZM65.9835 56.7993L64.9344 56.1196C64.6089 56.622 64.2687 57.1139 63.9143 57.5948L64.9205 58.3364C65.2898 57.8353 65.6443 57.3228 65.9835 56.7993ZM63.7669 59.8068L62.8071 59.0061C62.4238 59.4655 62.0269 59.9132 61.617 60.3485L62.527 61.2054C62.954 60.7519 63.3676 60.2855 63.7669 59.8068ZM61.2054 62.527L60.3485 61.617C59.9132 62.0269 59.4655 62.4238 59.0061 62.8071L59.8068 63.7669C60.2855 63.3676 60.7519 62.954 61.2054 62.527ZM58.3364 64.9205L57.5948 63.9143C57.1139 64.2687 56.622 64.6089 56.1196 64.9344L56.7993 65.9835C57.3228 65.6443 57.8353 65.2898 58.3364 64.9205ZM55.2007 66.9519L54.5857 65.8637C54.066 66.1574 53.5367 66.4358 52.9983 66.6985L53.5463 67.822C54.1075 67.5482 54.6592 67.258 55.2007 66.9519ZM51.8425 68.5899L51.3637 67.4353C50.8132 67.6636 50.2544 67.8757 49.6878 68.0712L50.0955 69.2529C50.6861 69.0491 51.2687 68.8279 51.8425 68.5899ZM48.3111 69.8084L47.976 68.6041C47.4023 68.7638 46.8216 68.9066 46.2345 69.032L46.4957 70.2544C47.1077 70.1237 47.713 69.9748 48.3111 69.8084ZM44.6563 70.5894L44.4697 69.3534C43.882 69.4421 43.2886 69.5136 42.69 69.5674L42.8017 70.8123C43.4254 70.7564 44.0438 70.6819 44.6563 70.5894ZM40.9367 70.9236L40.8996 69.6741C40.6008 69.683 40.301 69.6875 40 69.6875C39.699 69.6875 39.3992 69.683 39.1005 69.6741L39.0633 70.9236C39.3744 70.9328 39.6867 70.9375 40 70.9375C40.3133 70.9375 40.6256 70.9328 40.9367 70.9236ZM37.1983 70.8123L37.31 69.5674C36.7114 69.5136 36.118 69.4421 35.5303 69.3534L35.3437 70.5894C35.9562 70.6819 36.5746 70.7564 37.1983 70.8123ZM33.5043 70.2544L33.7655 69.032C33.1784 68.9066 32.5977 68.7638 32.024 68.6041L31.6889 69.8084C32.287 69.9748 32.8923 70.1237 33.5043 70.2544ZM29.9045 69.2529L30.3122 68.0712C29.7456 67.8757 29.1868 67.6636 28.6363 67.4353L28.1575 68.5899C28.7313 68.8279 29.3139 69.0491 29.9045 69.2529ZM26.4537 67.822L27.0017 66.6985C26.4633 66.4358 25.934 66.1574 25.4143 65.8637L24.7993 66.9519C25.3408 67.258 25.8925 67.5482 26.4537 67.822ZM23.2007 65.9835L23.8804 64.9344C23.378 64.6089 22.8861 64.2687 22.4052 63.9143L21.6636 64.9205C22.1647 65.2898 22.6772 65.6443 23.2007 65.9835ZM20.1932 63.7669L20.9939 62.8071C20.5345 62.4238 20.0868 62.0269 19.6515 61.617L18.7946 62.527C19.2481 62.954 19.7145 63.3676 20.1932 63.7669ZM17.473 61.2054L18.383 60.3485C17.9731 59.9132 17.5762 59.4655 17.1929 59.0061L16.2331 59.8068C16.6324 60.2855 17.046 60.7519 17.473 61.2054ZM15.0795 58.3364L16.0857 57.5948C15.7313 57.1139 15.3911 56.622 15.0656 56.1196L14.0165 56.7993C14.3557 57.3228 14.7102 57.8353 15.0795 58.3364ZM13.0481 55.2007L14.1363 54.5857C13.8426 54.066 13.5642 53.5367 13.3015 52.9983L12.178 53.5463C12.4518 54.1075 12.742 54.6592 13.0481 55.2007ZM11.4101 51.8425L12.5647 51.3637C12.3364 50.8132 12.1243 50.2544 11.9288 49.6878L10.7471 50.0955C10.9509 50.6861 11.1721 51.2687 11.4101 51.8425ZM10.1916 48.3111L11.3959 47.976C11.2362 47.4023 11.0934 46.8216 10.968 46.2345L9.74556 46.4957C9.87633 47.1077 10.0252 47.713 10.1916 48.3111ZM9.41059 44.6563L10.6466 44.4697C10.5579 43.882 10.4864 43.2886 10.4326 42.69L9.18765 42.8017C9.24364 43.4254 9.31814 44.0438 9.41059 44.6563ZM9.07641 40.9367C9.06716 40.6256 9.0625 40.3133 9.0625 40C9.0625 39.6867 9.06716 39.3744 9.07641 39.0633L10.3259 39.1005C10.317 39.3992 10.3125 39.699 10.3125 40C10.3125 40.301 10.317 40.6008 10.3259 40.8996L9.07641 40.9367ZM9.18765 37.1983L10.4326 37.31C10.4864 36.7114 10.5579 36.118 10.6466 35.5303L9.41059 35.3437C9.31813 35.9562 9.24364 36.5746 9.18765 37.1983ZM9.74556 33.5043L10.968 33.7655C11.0934 33.1784 11.2362 32.5977 11.3959 32.024L10.1916 31.6889C10.0252 32.287 9.87633 32.8923 9.74556 33.5043ZM10.7471 29.9045L11.9288 30.3122C12.1243 29.7456 12.3364 29.1868 12.5647 28.6363L11.4101 28.1575C11.1721 28.7313 10.9509 29.3139 10.7471 29.9045ZM12.178 26.4537L13.3015 27.0017C13.5642 26.4633 13.8426 25.934 14.1363 25.4143L13.0481 24.7993C12.742 25.3408 12.4518 25.8925 12.178 26.4537ZM14.0165 23.2007L15.0656 23.8804C15.3911 23.378 15.7313 22.8861 16.0857 22.4052L15.0795 21.6636C14.7102 22.1647 14.3557 22.6772 14.0165 23.2007ZM16.2331 20.1932L17.1929 20.9939C17.5762 20.5345 17.9731 20.0868 18.383 19.6515L17.473 18.7946C17.046 19.2481 16.6324 19.7145 16.2331 20.1932ZM18.7946 17.473L19.6515 18.383C20.0868 17.9731 20.5345 17.5762 20.9939 17.1929L20.1932 16.2331C19.7145 16.6324 19.2481 17.046 18.7946 17.473ZM21.6636 15.0795L22.4052 16.0857C22.8861 15.7313 23.378 15.3911 23.8804 15.0656L23.2007 14.0165C22.6772 14.3557 22.1647 14.7102 21.6636 15.0795ZM24.7993 13.0481L25.4143 14.1363C25.934 13.8426 26.4633 13.5642 27.0017 13.3015L26.4537 12.178C25.8925 12.4518 25.3408 12.742 24.7993 13.0481ZM28.1575 11.4101L28.6363 12.5647C29.1868 12.3364 29.7456 12.1243 30.3122 11.9288L29.9045 10.7471C29.3139 10.9509 28.7313 11.1721 28.1575 11.4101ZM31.6889 10.1916L32.024 11.3959C32.5977 11.2362 33.1784 11.0934 33.7655 10.968L33.5043 9.74556C32.8923 9.87633 32.287 10.0252 31.6889 10.1916ZM35.3437 9.41059L35.5303 10.6466C36.118 10.5579 36.7114 10.4864 37.31 10.4326L37.1983 9.18765C36.5746 9.24364 35.9562 9.31814 35.3437 9.41059ZM39.0633 9.07641L39.1004 10.3259C39.3992 10.317 39.699 10.3125 40 10.3125C40.301 10.3125 40.6008 10.317 40.8995 10.3259L40.9367 9.07641C40.6256 9.06716 40.3133 9.0625 40 9.0625C39.6867 9.0625 39.3744 9.06716 39.0633 9.07641ZM42.8017 9.18765L42.69 10.4326C43.2886 10.4864 43.882 10.5579 44.4697 10.6466L44.6563 9.41059C44.0438 9.31813 43.4254 9.24364 42.8017 9.18765ZM46.4957 9.74556L46.2345 10.968C46.8216 11.0934 47.4023 11.2362 47.976 11.3959L48.3111 10.1916C47.713 10.0252 47.1077 9.87633 46.4957 9.74556ZM50.0955 10.7471L49.6878 11.9288C50.2544 12.1243 50.8132 12.3364 51.3637 12.5647L51.8425 11.4101C51.2687 11.1721 50.6861 10.9509 50.0955 10.7471ZM53.5463 12.178L52.9983 13.3015C53.5367 13.5642 54.066 13.8426 54.5857 14.1363L55.2007 13.0481C54.6592 12.742 54.1075 12.4518 53.5463 12.178ZM56.7993 14.0165L56.1196 15.0656C56.622 15.3911 57.1139 15.7313 57.5948 16.0857L58.3364 15.0795C57.8353 14.7102 57.3228 14.3557 56.7993 14.0165ZM59.8068 16.2331L59.0061 17.1929C59.4655 17.5762 59.9132 17.9731 60.3485 18.383L61.2054 17.473C60.7519 17.046 60.2855 16.6324 59.8068 16.2331ZM62.527 18.7946L61.617 19.6515C62.0269 20.0868 62.4238 20.5345 62.8071 20.9939L63.7669 20.1932C63.3676 19.7145 62.954 19.2481 62.527 18.7946ZM64.9205 21.6636L63.9143 22.4052C64.2687 22.8861 64.6089 23.378 64.9344 23.8804L65.9835 23.2007C65.6443 22.6772 65.2898 22.1647 64.9205 21.6636ZM66.9519 24.7993L65.8637 25.4143C66.1574 25.934 66.4358 26.4633 66.6985 27.0017L67.822 26.4537C67.5482 25.8925 67.258 25.3408 66.9519 24.7993ZM68.5899 28.1575L67.4353 28.6363C67.6636 29.1868 67.8757 29.7456 68.0712 30.3122L69.2529 29.9045C69.0491 29.3139 68.8279 28.7313 68.5899 28.1575ZM69.8084 31.6889L68.6041 32.024C68.7638 32.5977 68.9066 33.1784 69.032 33.7655L70.2544 33.5043C70.1237 32.8923 69.9748 32.287 69.8084 31.6889ZM70.5894 35.3437L69.3534 35.5303C69.4421 36.118 69.5136 36.7114 69.5674 37.31L70.8123 37.1983C70.7564 36.5746 70.6819 35.9562 70.5894 35.3437Z"
@@ -185,13 +253,35 @@
         </svg>
       </template>
 
+      <vaadin-select label="Content" id="content"></vaadin-select>
+      <template id="content-options">
+        <div>Lapland is the northern-most region of Finland and an active outdoor destination.</div>
+        <vaadin-scroller theme="overflow-indicators" style="height: 100%;">
+          <div>Lapland is the northern-most region of Finland and an active outdoor destination that's known for its incredible,
+          year-round light phenomena, vast arctic nature, and Santa Claus. The land of the indigenous Sámi people, known as Sámi
+          homeland or Sápmi, also crosses the northern part of the region. Explore Finnish Lapland, Europe’s last great
+          wilderness!</div>
+        </vaadin-scroller>
+      </template>
+
+      <template id="slot-options">
+        <div slot="header" class="leading-xs">
+          <b class="uppercase text-xs text-secondary">The Exotic North</b>
+          <h2>Lapland</h2>
+        </div>
+        <vaadin-avatar slot="header-prefix" abbr="L"></vaadin-avatar>
+        <span slot="header-suffix" theme="badge success">Arctic</span>
+        <div slot="title">Lapland</div>
+        <div slot="subtitle">The Exotic North</div>
+        <vaadin-button slot="footer">Book Vacation</vaadin-button>
+      </template>
+
       <vaadin-checkbox-group class="playground-options" label="Content">
         <vaadin-checkbox label="Header" value="header"></vaadin-checkbox>
         <vaadin-checkbox label="Header Prefix" value="header-prefix"></vaadin-checkbox>
         <vaadin-checkbox label="Header Suffix" value="header-suffix"></vaadin-checkbox>
         <vaadin-checkbox label="Title" value="title"></vaadin-checkbox>
         <vaadin-checkbox label="Subtitle" value="subtitle"></vaadin-checkbox>
-        <vaadin-checkbox label="Content" value="content"></vaadin-checkbox>
         <vaadin-checkbox label="Footer" value="footer"></vaadin-checkbox>
       </vaadin-checkbox-group>
 
@@ -211,15 +301,10 @@
     </div>
 
 
-    <vaadin-card class="playground">
-      <h3 slot="header">Header</h3>
-      <vaadin-avatar slot="header-prefix" abbr="A"></vaadin-avatar>
-      <div slot="title">Card Title</div>
-      <div slot="subtitle">Subtitle for the card</div>
-      <span slot="header-suffix" theme="badge success">Badge</span>
-      <div>Card content. Lorem ipsum dolor sit amet consectetur adipisicing elit.</div>
-      <vaadin-button slot="footer">Action</vaadin-button>
-    </vaadin-card>
+    <div class="output">
+      <vaadin-card class="playground"></vaadin-card>
+      <div class="code-example"></div>
+    </div>
 
   </body>
 </html>

@@ -11,7 +11,7 @@ const cardProps = css`
     --vaadin-card-border-width: 0;
     --vaadin-card-border-color: var(--lumo-contrast-20pct);
     --vaadin-card-padding: var(--lumo-space-m);
-    --vaadin-card-gap: var(--lumo-space-s) var(--lumo-space-m);
+    --vaadin-card-gap: var(--lumo-space-m);
   }
 `;
 
@@ -23,7 +23,6 @@ const card = css`
     border-radius: var(--vaadin-card-border-radius);
     box-shadow: var(--vaadin-card-box-shadow);
     position: relative;
-    line-height: var(--lumo-line-height-s);
   }
 
   /* Could be an inset outline on the host as well, but rounded outlines only work since Safari 16.4 */
