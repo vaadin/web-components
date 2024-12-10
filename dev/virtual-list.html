@@ -9,56 +9,23 @@
 
     <script type="module">
       import '@vaadin/virtual-list';
-      import '@vaadin/combo-box';
-      import '@vaadin/text-field';
-      import '@vaadin/date-picker';
-      import '@vaadin/button';
-      import '@vaadin/select';
 
       import { render, html } from 'lit';
-      // import '@vaadin/virtual-list/vaadin-lit-virtual-list.js';
 
-      const items = Array.from({ length: 100000 }).map((_, i) => {
-        return { label: `Item ${i}` };
-      });
-
-      const selectItems = [
-        { label: 'foo', value: '0' },
-        { label: 'bar', value: '1' },
-      ];
+      function generateItems(count) {
+        return Array.from({ length: count }).map((_, i) => {
+          return { label: `Item ${i}` };
+        });
+      }
 
       const renderer = (root, _, { item }) => {
-        if (item.label.includes('0')) {
-          render(
-            html`
-              <input />
-              <button>${item.label}</button>
-              <vaadin-button>Hello</vaadin-button>
-              <vaadin-text-field label="Label"></vaadin-text-field>
-              <vaadin-combo-box items='["foo", "bar"]' label="Label"></vaadin-combo-box>
-              <vaadin-select .items=${selectItems} label="Label"></vaadin-select>
-              <vaadin-date-picker label="Label"></vaadin-date-picker>
-            `,
-            root,
-          );
-        } else {
-          render(html`<div>${item.label}</div>`, root);
-        }
+        render(html`<div>${item.label}</div>`, root);
       };
 
       const list = document.querySelector('vaadin-virtual-list');
-      list.items = items;
+      list.items = generateItems(10000);
       list.renderer = renderer;
-
-      list.itemAccessibleNameGenerator = (item) => {
-        if (!item) {
-          debugger;
-        }
-        return 'Virtual ' + item.label;
-      };
-
       list.selectionMode = 'multi';
-      list.selectedItems = [items[0]];
       list.itemIdPath = 'label';
 
       const selectionMode = document.querySelector('#selection-mode');
@@ -72,15 +39,11 @@
       });
 
       document.querySelector('#set-1000-items').addEventListener('click', () => {
-        list.items = Array.from({ length: 1000 }).map((_, i) => {
-          return { label: `Item ${i}` };
-        });
+        list.items = generateItems(1000);
       });
 
       document.querySelector('#set-5-items').addEventListener('click', () => {
-        list.items = Array.from({ length: 5 }).map((_, i) => {
-          return { label: `Item ${i}` };
-        });
+        list.items = generateItems(5);
       });
     </script>
 
@@ -100,9 +63,7 @@
   </head>
 
   <body>
-    <button>Focus</button>
     <vaadin-virtual-list style="height: 400px"></vaadin-virtual-list>
-    <button>Focus</button>
 
     <select id="selection-mode">
       <option>none</option>
