@@ -393,7 +393,10 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
      */
     __toggleItem(item, selected = !this._grid._isSelected(item)) {
       if (selected === this._grid._isSelected(item)) {
-        // Do nothing if the item is already in the desired state.
+        // Skip selection if the item is already in the desired state.
+        // Note, _selectItem and _deselectItem may be overridden in custom
+        // selection column implementations, and calling them unnecessarily
+        // might affect performance (e.g. vaadin-grid-flow-selection-column).
         return;
       }
 

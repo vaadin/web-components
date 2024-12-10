@@ -690,7 +690,7 @@ describe('multi selection column', () => {
     });
 
     it('should not attempt to select item on mouse drag if it is already selected', () => {
-      const selectItemSpy = sinon.spy(grid, 'selectItem');
+      const selectItemSpy = sinon.spy(selectionColumn, '_selectItem');
 
       const row0cell = getBodyCellContent(grid, 0, 0);
       const row1cell = getBodyCellContent(grid, 1, 0);
@@ -795,7 +795,7 @@ describe('multi selection column', () => {
     });
 
     it('should not attempt to deselect item on mouse drag if it is already deselected', () => {
-      const deselectItemSpy = sinon.spy(grid, 'deselectItem');
+      const deselectItemSpy = sinon.spy(selectionColumn, '_deselectItem');
 
       const row0cell = getBodyCellContent(grid, 0, 0);
       const row1cell = getBodyCellContent(grid, 1, 0);
