@@ -35,7 +35,7 @@ class VirtualList extends VirtualListMixin(ThemableMixin(ElementMixin(PolylitMix
         <slot></slot>
       </div>
 
-      <div id="focusexit" tabindex="0" hidden></div>
+      <div id="focusexit" tabindex="0" .hidden=${!this.__focusExitVisible}></div>
     `;
   }
 }

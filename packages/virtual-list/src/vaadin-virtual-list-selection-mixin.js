@@ -73,6 +73,11 @@ export const SelectionMixin = (superClass) =>
           value: 0,
           sync: true,
         },
+
+        __focusExitVisible: {
+          type: Boolean,
+          value: false,
+        },
       };
     }
 
@@ -110,7 +115,7 @@ export const SelectionMixin = (superClass) =>
       el.__index = index;
 
       el.toggleAttribute('selected', this.__isSelected(item));
-      const isFocusable = this.__isNavigating() && this.__isSelectable() && this.__focusIndex === index;
+      const isFocusable = this.__isNavigating() && this.__focusIndex === index;
       el.tabIndex = isFocusable ? 0 : -1;
       el.toggleAttribute('focused', isFocusable && el.contains(document.activeElement));
 
@@ -265,10 +270,10 @@ export const SelectionMixin = (superClass) =>
 
     /** @private */
     __updateNavigating(navigating) {
-      const isNavigating = !!(this.__isSelectable() && navigating);
+      const isNavigating = this.__isSelectable() && navigating;
       this.toggleAttribute('navigating', isNavigating);
 
-      const isInteracting = !!(this.__isSelectable() && !navigating);
+      const isInteracting = this.__isSelectable() && !navigating;
       this.toggleAttribute('interacting', isInteracting);
 
       this.__updateFocusable();
@@ -283,7 +288,7 @@ export const SelectionMixin = (superClass) =>
       } else {
         this.removeAttribute('tabindex');
       }
-      this.$.focusexit.hidden = !isFocusable;
+      this.__focusExitVisible = isFocusable;
     }
 
     /** @private */
