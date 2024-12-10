@@ -213,12 +213,8 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
       }
 
       if (this.autoSelect) {
-        if (this._shiftKeyDown) {
-          // Prevent text selection when shift-clicking to select a range of items.
-          this._grid.style.setProperty('--_grid-user-select', 'none');
-        } else {
-          this._grid.style.removeProperty('--_grid-user-select');
-        }
+        // Prevent text selection when shift-clicking to select a range of items.
+        this._grid.$.scroller.toggleAttribute('range-selection', this._shiftKeyDown);
       }
     }
 

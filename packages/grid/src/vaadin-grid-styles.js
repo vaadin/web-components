@@ -108,7 +108,6 @@ export const gridStyles = css`
     width: 100%;
     left: 0;
     overflow: visible;
-    user-select: var(--_grid-user-select, auto);
   }
 
   [part~='row'] {
@@ -294,7 +293,8 @@ export const gridStyles = css`
     display: none;
   }
 
-  #scroller[column-resizing] {
+  #scroller[column-resizing],
+  #scroller[range-selection] {
     -ms-user-select: none;
     -moz-user-select: none;
     -webkit-user-select: none;
