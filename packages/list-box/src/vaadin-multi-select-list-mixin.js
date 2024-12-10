@@ -39,7 +39,7 @@ export const MultiSelectListMixin = (superClass) =>
     }
 
     static get observers() {
-      return ['_enhanceMultipleItems(items, multiple, selected, disabled, selectedValues, selectedValues.*)'];
+      return ['_enhanceMultipleItems(items, multiple, selected, disabled, selectedValues)'];
     }
 
     /** @protected */

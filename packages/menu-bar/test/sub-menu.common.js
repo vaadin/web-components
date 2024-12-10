@@ -94,6 +94,29 @@ describe('sub-menu', () => {
     expect(spy.calledOnce).to.be.true;
   });
 
+  it('should set pointer events to `auto` when opened on click', async () => {
+    buttons[0].click();
+    await nextRender(subMenu);
+    expect(menu.style.pointerEvents).to.equal('auto');
+  });
+
+  it('should reset pointer events after closing on click', async () => {
+    buttons[0].click();
+    await nextRender(subMenu);
+
+    buttons[0].click();
+    await nextRender(subMenu);
+    expect(menu.style.pointerEvents).to.be.empty;
+  });
+
+  it('should not stop click event from propagating when opened ', async () => {
+    const event = new CustomEvent('click', { bubbles: true });
+    const spy = sinon.spy(event, 'stopPropagation');
+    buttons[0].dispatchEvent(event);
+    await nextRender(subMenu);
+    expect(spy.called).to.be.false;
+  });
+
   it('should focus the overlay when sub-menu opened on click', async () => {
     const spy = sinon.spy(subMenuOverlay.$.overlay, 'focus');
     buttons[0].click();

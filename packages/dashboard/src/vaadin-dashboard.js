@@ -272,7 +272,7 @@ class Dashboard extends DashboardLayoutMixin(ElementMixin(ThemableMixin(PolylitM
       // Update the wrapper style
       this.__updateWrapper(wrapper, item);
 
-      if (!wrapper.contains(document.activeElement)) {
+      if (wrapper !== focusedWrapper) {
         if (previousWrapper) {
           // Append the wrapper after the previous one if it's not already there
           if (wrapper.previousElementSibling !== previousWrapper) {

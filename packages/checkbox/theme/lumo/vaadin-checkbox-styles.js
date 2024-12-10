@@ -18,7 +18,6 @@ registerStyles(
       -moz-osx-font-smoothing: grayscale;
       -webkit-tap-highlight-color: transparent;
       -webkit-user-select: none;
-      -moz-user-select: none;
       user-select: none;
       cursor: default;
       outline: none;
@@ -239,6 +238,10 @@ registerStyles(
       color: var(--lumo-required-field-indicator-color, var(--lumo-primary-text-color));
       width: 1em;
       text-align: center;
+    }
+
+    :host(:not([has-label])) [part='required-indicator'] {
+      display: none;
     }
 
     /* Invalid */

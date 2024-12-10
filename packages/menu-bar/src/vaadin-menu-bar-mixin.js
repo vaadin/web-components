@@ -904,7 +904,6 @@ export const MenuBarMixin = (superClass) =>
 
     /** @private */
     __onButtonClick(e) {
-      e.stopPropagation();
       const button = this._getButtonFromEvent(e);
       if (button) {
         this.__openSubMenu(button, button.__triggeredWithActiveKeys);

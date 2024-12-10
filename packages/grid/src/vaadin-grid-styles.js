@@ -239,7 +239,6 @@ export const gridStyles = css`
   }
 
   :host([reordering]) {
-    -moz-user-select: none;
     -webkit-user-select: none;
     user-select: none;
   }
@@ -295,8 +294,6 @@ export const gridStyles = css`
 
   #scroller[column-resizing],
   #scroller[range-selecting] {
-    -ms-user-select: none;
-    -moz-user-select: none;
     -webkit-user-select: none;
     user-select: none;
   }

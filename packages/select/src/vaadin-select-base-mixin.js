@@ -143,7 +143,7 @@ export const SelectBaseMixin = (superClass) =>
 
         /** @private */
         _phoneMediaQuery: {
-          value: '(max-width: 420px), (max-height: 420px)',
+          value: '(max-width: 450px), (max-height: 450px)',
         },
 
         /** @private */
@@ -461,6 +461,11 @@ export const SelectBaseMixin = (superClass) =>
      */
     __appendValueItemElement(itemElement, parent) {
       parent.appendChild(itemElement);
+      // Trigger observer that sets aria-selected attribute
+      // so that we can then synchronously remove it below.
+      if (itemElement.performUpdate) {
+        itemElement.performUpdate();
+      }
       itemElement.removeAttribute('tabindex');
       itemElement.removeAttribute('aria-selected');
       itemElement.removeAttribute('role');

@@ -1,4 +1,4 @@
-import { fire, listenOnce, makeSoloTouchEvent, nextRender } from '@vaadin/testing-helpers';
+import { fire, makeSoloTouchEvent, nextRender } from '@vaadin/testing-helpers';
 import { flush } from '@polymer/polymer/lib/utils/flush.js';
 import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import { isElementFocused } from '@vaadin/a11y-base/src/focus-utils.js';
@@ -58,13 +58,6 @@ export async function waitForOverlayRender() {
 export async function open(datePicker) {
   datePicker.open();
   await waitForOverlayRender();
-}
-
-export function close(datePicker) {
-  return new Promise((resolve) => {
-    listenOnce(datePicker.$.overlay, 'vaadin-overlay-close', resolve);
-    datePicker.close();
-  });
 }
 
 export function idleCallback() {

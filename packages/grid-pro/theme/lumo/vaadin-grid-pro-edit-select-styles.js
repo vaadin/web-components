@@ -14,7 +14,6 @@ const gridProEditSelect = css`
     font-size: var(--lumo-font-size-m);
     /* prevent selection on editor focus */
     -webkit-user-select: none;
-    -moz-user-select: none;
     user-select: none;
   }
 `;

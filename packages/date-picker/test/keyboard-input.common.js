@@ -4,7 +4,6 @@ import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import { formatISODate, getAdjustedYear, parseDate } from '../src/vaadin-date-picker-helper.js';
 import {
-  close,
   getFocusableCell,
   getFocusedCell,
   idleCallback,
@@ -145,7 +144,7 @@ describe('keyboard', () => {
 
     it('should select focused date on close', async () => {
       await open(datePicker);
-      await close(datePicker);
+      datePicker.close();
       expect(datePicker._selectedDate).to.equal(datePicker._focusedDate);
     });
   });
@@ -292,10 +291,10 @@ describe('keyboard', () => {
       expect(spy.called).to.be.true;
     });
 
-    it('should clear selection on close', async () => {
+    it('should clear selection on close', () => {
       input.select();
 
-      await close(datePicker);
+      datePicker.close();
       expect(input.selectionStart).to.equal(input.selectionEnd);
     });
 

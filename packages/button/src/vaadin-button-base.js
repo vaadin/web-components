@@ -12,7 +12,6 @@ export const buttonStyles = css`
     outline: none;
     white-space: nowrap;
     -webkit-user-select: none;
-    -moz-user-select: none;
     user-select: none;
   }
 

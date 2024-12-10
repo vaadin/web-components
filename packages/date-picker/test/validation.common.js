@@ -1,7 +1,7 @@
 import { expect } from '@vaadin/chai-plugins';
 import { enter, fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import { close, open, setInputValue, waitForOverlayRender } from './helpers.js';
+import { open, setInputValue, waitForOverlayRender } from './helpers.js';
 
 class DatePicker2016 extends customElements.get('vaadin-date-picker') {
   checkValidity() {
@@ -133,7 +133,7 @@ describe('validation', () => {
       expect(datePicker.validate()).to.be.false;
       await open(datePicker);
       datePicker.value = '2000-02-01';
-      await close(datePicker);
+      datePicker.close();
       expect(datePicker.invalid).to.be.false;
     });
 

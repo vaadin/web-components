@@ -2,7 +2,7 @@ import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
-import { close, open, waitForOverlayRender, waitForScrollToFinish } from './helpers.js';
+import { open, waitForOverlayRender, waitForScrollToFinish } from './helpers.js';
 
 describe('events', () => {
   let datePicker;
@@ -21,7 +21,7 @@ describe('events', () => {
     it('should not be fired on programmatic value change when opened', async () => {
       await open(datePicker);
       datePicker.value = '2000-01-01';
-      await close(datePicker);
+      datePicker.close();
       expect(changeSpy.called).to.be.false;
     });
 
@@ -29,7 +29,7 @@ describe('events', () => {
       await sendKeys({ type: '1/2/2000' });
       await waitForScrollToFinish(datePicker);
       datePicker.value = '2000-01-01';
-      await close(datePicker);
+      datePicker.close();
       expect(changeSpy.called).to.be.false;
     });
   });

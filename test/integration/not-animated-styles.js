@@ -2,7 +2,7 @@ import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themab
 
 // Disable animations for all overlays
 registerStyles(
-  'vaadin-*-overlay',
+  'vaadin-*-overlay vaadin-notification-card',
   css`
     :host([opening]),
     :host([closing]),

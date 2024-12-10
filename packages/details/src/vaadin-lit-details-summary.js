@@ -31,7 +31,6 @@ class DetailsSummary extends ButtonMixin(DirMixin(ThemableMixin(PolylitMixin(Lit
         outline: none;
         white-space: nowrap;
         -webkit-user-select: none;
-        -moz-user-select: none;
         user-select: none;
       }
 
