@@ -344,6 +344,19 @@ export const MultiSelectComboBoxInternalMixin = (superClass) =>
     /**
      * Override method inherited from the combo-box
      * to not commit an already selected item again
+     * after closing overlay on outside click.
+     * @protected
+     * @override
+     */
+    _onClosed() {
+      this._ignoreCommitValue = true;
+
+      super._onClosed();
+    }
+
+    /**
+     * Override method inherited from the combo-box
+     * to not commit an already selected item again
      * on blur, which would result in un-selecting.
      * @protected
      * @override
@@ -353,7 +366,7 @@ export const MultiSelectComboBoxInternalMixin = (superClass) =>
         this._ignoreCommitValue = false;
 
         // Reset internal combo-box state
-        this.selectedItem = null;
+        this.clear();
         this._inputElementValue = '';
         return;
       }
