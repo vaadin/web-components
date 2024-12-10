@@ -136,6 +136,17 @@ describe('selecting items', () => {
       expect(comboBox.selectedItems).to.deep.equal(['apple']);
     });
 
+    it('should not unselect previously committed item on blur after outside click with allow custom value', async () => {
+      comboBox.allowCustomValue = true;
+      await sendKeys({ down: 'ArrowDown' });
+      await sendKeys({ down: 'ArrowDown' });
+      await sendKeys({ down: 'Enter' });
+      await sendMouse({ type: 'click', position: [200, 200] });
+      await resetMouse();
+      await sendKeys({ down: 'Tab' });
+      expect(comboBox.selectedItems).to.deep.equal(['apple']);
+    });
+
     it('should un-select item when using clear() method', () => {
       comboBox.selectedItems = ['orange'];
       comboBox.clear();

@@ -328,6 +328,12 @@ export const MultiSelectComboBoxInternalMixin = (superClass) =>
      * @override
      */
     _setFocused(focused) {
+      // Disable combo-box logic that updates selectedItem
+      // based on the overlay focused index on input blur
+      if (!focused) {
+        this._ignoreCommitValue = true;
+      }
+
       super._setFocused(focused);
 
       if (!focused && this.readonly && !this._closeOnBlurIsPrevented) {
