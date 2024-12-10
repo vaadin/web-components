@@ -160,6 +160,7 @@ describe('upload', () => {
         function MockFormData() {
           this.data = [];
         }
+
         MockFormData.prototype.append = function (name, value, filename) {
           this.data.push({ name, value, filename });
         };
@@ -537,6 +538,30 @@ describe('upload', () => {
       removeFile(upload, 0);
       await clock.tickAsync(1);
       expect(upload.files.length).to.equal(0);
+    });
+  });
+
+  describe('Directory mode', () => {
+    it('should not set webkitdirectory attribute on the file input by default', () => {
+      expect(upload.$.fileInput.hasAttribute('webkitdirectory')).to.be.false;
+    });
+
+    it('should set webkitdirectory attribute on the file input when directory mode is enabled', async () => {
+      upload.directory = true;
+      await nextRender(upload);
+
+      expect(upload.$.fileInput.hasAttribute('webkitdirectory')).to.be.true;
+    });
+
+    it('should use add files translation when not using directory mode', () => {
+      expect(upload.querySelector('[slot="add-button"]').textContent).to.be.equal(upload.i18n.addFiles.many);
+    });
+
+    it('should use add directories translation when using directory mode', async () => {
+      upload.directory = true;
+      await nextRender(upload);
+
+      expect(upload.querySelector('[slot="add-button"]').textContent).to.be.equal(upload.i18n.addDirectories.one);
     });
   });
 });

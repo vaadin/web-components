@@ -273,6 +273,23 @@ export const UploadMixin = (superClass) =>
         capture: String,
 
         /**
+         * In directory mode, the user can select a directory instead of files.
+         * When selecting a directory, all files in the directory will be added
+         * to the upload list. Files are still filtered by the `accept` filter,
+         * and any non-matching files will be rejected.
+         *
+         * Note that this only allows selecting a single directory, and that
+         * selecting files is not supported in this mode. Browsers may request
+         * a confirmation from the user before allowing to upload a directory.
+         * In this mode it is still possible to add a combination of files and
+         * directories using drag and drop.
+         */
+        directory: {
+          type: Boolean,
+          value: false,
+        },
+
+        /**
          * The object used to localize this component.
          * For changing the default localization, change the entire
          * _i18n_ object or just the property you want to modify.
@@ -288,6 +305,9 @@ export const UploadMixin = (superClass) =>
          *   addFiles: {
          *     one: 'Upload File...',
          *     many: 'Upload Files...'
+         *   },
+         *   addDirectories: {
+         *     one: 'Upload Directory...',
          *   },
          *   error: {
          *     tooManyFiles: 'Too Many Files.',
@@ -343,6 +363,9 @@ export const UploadMixin = (superClass) =>
               addFiles: {
                 one: 'Upload File...',
                 many: 'Upload Files...',
+              },
+              addDirectories: {
+                one: 'Upload Directory...',
               },
               error: {
                 tooManyFiles: 'Too Many Files.',
@@ -402,7 +425,7 @@ export const UploadMixin = (superClass) =>
 
     static get observers() {
       return [
-        '__updateAddButton(_addButton, maxFiles, i18n, maxFilesReached, disabled)',
+        '__updateAddButton(_addButton, maxFiles, i18n, maxFilesReached, disabled, directory)',
         '__updateDropLabel(_dropLabel, maxFiles, i18n)',
         '__updateFileList(_fileList, files, i18n, disabled)',
         '__updateMaxFilesReached(maxFiles, files)',
@@ -528,7 +551,11 @@ export const UploadMixin = (superClass) =>
 
         // Only update text content for the default button element
         if (addButton === this._addButtonController.defaultNode) {
-          addButton.textContent = this._i18nPlural(maxFiles, i18n.addFiles);
+          if (this.directory) {
+            addButton.textContent = i18n.addDirectories.one;
+          } else {
+            addButton.textContent = this._i18nPlural(maxFiles, i18n.addFiles);
+          }
         }
       }
     }

@@ -49,6 +49,11 @@
       });
 
       upload.files = files;
+
+      const selectionMode = document.querySelector('#selection-mode');
+      selectionMode.addEventListener('value-changed', (e) => {
+        upload.directory = e.detail.value === 'directory';
+      });
     </script>
   </head>
 
@@ -61,6 +66,13 @@
       <vaadin-radio-button value="successful" checked label="Successful"></vaadin-radio-button>
       <vaadin-radio-button value="rejected" label="Rejected"></vaadin-radio-button>
       <vaadin-radio-button value="error" label="Server error"></vaadin-radio-button>
+    </vaadin-radio-group>
+
+    <br />
+
+    <vaadin-radio-group label="Selection mode" theme="vertical" id="selection-mode">
+      <vaadin-radio-button value="files" checked label="Files"></vaadin-radio-button>
+      <vaadin-radio-button value="directory" label="Directory"></vaadin-radio-button>
     </vaadin-radio-group>
   </body>
 </html>
