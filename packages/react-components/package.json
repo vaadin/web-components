@@ -26,7 +26,7 @@
     "version": "tsx ../../scripts/package-json-version.ts"
   },
   "dependencies": {
-    "@lit/react": "^1.0.5",
+    "@lit/react": "^1.0.6",
     "@vaadin/a11y-base": "24.6.0-rc1",
     "@vaadin/accordion": "24.6.0-rc1",
     "@vaadin/app-layout": "24.6.0-rc1",
