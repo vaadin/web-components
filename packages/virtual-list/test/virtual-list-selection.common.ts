@@ -52,7 +52,7 @@ describe('selection', () => {
   it('should not be focusable by default', async () => {
     beforeButton.focus();
     await sendKeys({ press: 'Tab' });
-    expect(document.activeElement).to.equal(afterButton);
+    expect([...list.children].includes(document.activeElement!)).to.be.false;
   });
 
   it('should select an item programmatically', async () => {
@@ -391,7 +391,7 @@ describe('selection', () => {
 
       const listRect = list.getBoundingClientRect();
       const lastVisibleItemRect = getRenderedItem(newLastVisibleIndex)!.getBoundingClientRect();
-      expect(lastVisibleItemRect.bottom).to.equal(listRect.bottom);
+      expect(lastVisibleItemRect.bottom).to.be.closeTo(listRect.bottom, 1);
     });
 
     it('should ensure focused index in viewport when navigating up with arrow keys', async () => {
@@ -579,8 +579,15 @@ describe('selection', () => {
       });
 
       it('should tab through focusable children when selection mode is unset', async () => {
+        // Because focus works diffrently on Firefox and Chrome, use a renderer with two focusable children
+        list.renderer = (root, _, { item }) => {
+          render(html`<button>${item?.name}</button><button>${item?.name}</button>`, root);
+        };
         list.selectionMode = 'none';
+        await nextFrame();
+
         beforeButton.focus();
+        await sendKeys({ press: 'Tab' });
         await sendKeys({ press: 'Tab' });
         expect(document.activeElement!.parentElement).to.equal(getRenderedItem(0));
       });

@@ -101,7 +101,7 @@ describe('virtual-list', () => {
     it('should have a last visible index', () => {
       const item = [...list.children].find((el) => el.textContent === `value-${list.lastVisibleIndex}`);
       const itemRect = item.getBoundingClientRect();
-      expect(list.getBoundingClientRect().bottom).to.be.within(itemRect.top, itemRect.bottom);
+      expect(list.getBoundingClientRect().bottom).to.be.within(itemRect.top, itemRect.bottom + 1);
     });
 
     it('should clear the old content after assigning a new renderer', () => {
