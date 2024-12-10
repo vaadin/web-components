@@ -50,7 +50,6 @@ export const statesStyles = css`
     pointer-events: none;
     opacity: 0.5;
     -webkit-user-select: none;
-    -moz-user-select: none;
     user-select: none;
   }
 

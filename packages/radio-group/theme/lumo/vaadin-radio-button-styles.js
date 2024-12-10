@@ -17,7 +17,6 @@ registerStyles(
       -moz-osx-font-smoothing: grayscale;
       -webkit-tap-highlight-color: transparent;
       -webkit-user-select: none;
-      -moz-user-select: none;
       user-select: none;
       cursor: default;
       outline: none;

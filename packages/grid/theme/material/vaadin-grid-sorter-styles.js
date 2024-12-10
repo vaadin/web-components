@@ -10,7 +10,6 @@ registerStyles(
       height: 100%;
       align-items: center;
       -webkit-user-select: none;
-      -moz-user-select: none;
       user-select: none;
     }
 

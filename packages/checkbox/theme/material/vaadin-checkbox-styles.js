@@ -7,8 +7,6 @@ registerStyles(
     :host {
       display: inline-block;
       -webkit-user-select: none;
-      -moz-user-select: none;
-      -ms-user-select: none;
       user-select: none;
       outline: none;
       -webkit-tap-highlight-color: transparent;
