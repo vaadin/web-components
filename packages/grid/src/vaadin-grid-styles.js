@@ -294,7 +294,7 @@ export const gridStyles = css`
   }
 
   #scroller[column-resizing],
-  #scroller[range-selection] {
+  #scroller[range-selecting] {
     -ms-user-select: none;
     -moz-user-select: none;
     -webkit-user-select: none;

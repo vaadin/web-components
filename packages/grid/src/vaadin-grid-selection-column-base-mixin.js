@@ -214,7 +214,7 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
 
       if (this.autoSelect) {
         // Prevent text selection when shift-clicking to select a range of items.
-        this._grid.$.scroller.toggleAttribute('range-selection', this._shiftKeyDown);
+        this._grid.$.scroller.toggleAttribute('range-selecting', this._shiftKeyDown);
       }
     }
 
