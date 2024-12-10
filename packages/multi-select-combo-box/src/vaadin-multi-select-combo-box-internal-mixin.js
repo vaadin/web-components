@@ -447,7 +447,7 @@ export const MultiSelectComboBoxInternalMixin = (superClass) =>
       // Prevent setting custom value on input blur or outside click,
       // so it can be only committed explicitly by pressing Enter.
       if (this._ignoreCommitValue) {
-        event.preventDefault();
+        event.stopImmediatePropagation();
       }
     }
   };

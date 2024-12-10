@@ -1113,16 +1113,11 @@ export const MultiSelectComboBoxMixin = (superClass) =>
 
     /** @private */
     _onCustomValueSet(event) {
-      // Stop the original event
-      event.stopPropagation();
-
-      // Ignore custom value unless it was committed by Enter
-      if (event.defaultPrevented) {
-        return;
-      }
-
       // Do not set combo-box value
       event.preventDefault();
+
+      // Stop the original event
+      event.stopPropagation();
 
       this.__clearInternalValue(true);
 
