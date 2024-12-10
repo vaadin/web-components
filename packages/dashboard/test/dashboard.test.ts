@@ -543,6 +543,25 @@ describe('dashboard', () => {
       expect(document.activeElement).to.equal(getElementFromCell(dashboard, 0, 0)!);
     });
 
+    it('should not lose focus when removing items inside shadow root', async () => {
+      // Move the dashboard to a shadow root
+      const wrapper = fixtureSync('<div></div>');
+      const shadow = wrapper.attachShadow({ mode: 'open' });
+      shadow.appendChild(dashboard);
+      await nextFrame();
+
+      // Focus the second widget
+      const secondWidget = dashboard.querySelectorAll('vaadin-dashboard-widget')[1];
+      secondWidget.focus();
+
+      // Remove the first widget
+      dashboard.items = [dashboard.items[1]];
+      await nextFrame();
+
+      // Expect the second widget to remain focused
+      expect(shadow.activeElement).to.equal(secondWidget);
+    });
+
     it('should not lose focus when reassigning section items', async () => {
       dashboard.items = [{ title: 'Section', items: [{ id: '0' }] }, { id: '1' }];
       await nextFrame();
