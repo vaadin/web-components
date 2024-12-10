@@ -219,11 +219,7 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
       } else if (event.detail.state === 'end') {
         // if drag start and end stays within the same item, then toggle its state
         if (this.__dragStartItem) {
-          if (this.__selectOnDrag) {
-            this._selectItem(this.__dragStartItem);
-          } else {
-            this._deselectItem(this.__dragStartItem);
-          }
+          this.__toggleItem(this.__dragStartItem, this.__selectOnDrag);
         }
         // clear drag state after timeout, which allows preventing the
         // subsequent click event if drag started and ended on the same item
@@ -289,6 +285,7 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
       if (this.__dragStartIndex === undefined) {
         return;
       }
+
       // Get the row being hovered over
       const renderedRows = this._grid._getRenderedRows();
       const hoveredRow = renderedRows.find((row) => {
@@ -313,11 +310,7 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
             (hoveredIndex > this.__dragStartIndex && row.index >= this.__dragStartIndex && row.index <= hoveredIndex) ||
             (hoveredIndex < this.__dragStartIndex && row.index <= this.__dragStartIndex && row.index >= hoveredIndex)
           ) {
-            if (this.__selectOnDrag) {
-              this._selectItem(row._item);
-            } else {
-              this._deselectItem(row._item);
-            }
+            this.__toggleItem(row._item, this.__selectOnDrag);
             this.__dragStartItem = undefined;
           }
         });
@@ -399,6 +392,14 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
      * @private
      */
     __toggleItem(item, selected = !this._grid._isSelected(item)) {
+      if (selected === this._grid._isSelected(item)) {
+        // Skip selection if the item is already in the desired state.
+        // Note, _selectItem and _deselectItem may be overridden in custom
+        // selection column implementations, and calling them unnecessarily
+        // might affect performance (e.g. vaadin-grid-flow-selection-column).
+        return;
+      }
+
       if (selected) {
         this._selectItem(item);
       } else {
