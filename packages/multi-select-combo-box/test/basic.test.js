@@ -1,6 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
-import { sendKeys } from '@web/test-runner-commands';
+import { resetMouse, sendKeys, sendMouse } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import './not-animated-styles.js';
 import '../vaadin-multi-select-combo-box.js';
@@ -330,6 +330,23 @@ describe('basic', () => {
       await sendKeys({ type: 'pear' });
       await sendKeys({ down: 'Enter' });
       expect(comboBox.selectedItems).to.deep.equal(['apple']);
+    });
+
+    it('should not fire custom-value-set event when pressing Tab', async () => {
+      const spy = sinon.spy();
+      comboBox.addEventListener('custom-value-set', spy);
+      await sendKeys({ type: 'pear' });
+      await sendKeys({ down: 'Tab' });
+      expect(spy.called).to.be.false;
+    });
+
+    it('should not fire custom-value-set event on outside click', async () => {
+      const spy = sinon.spy();
+      comboBox.addEventListener('custom-value-set', spy);
+      await sendKeys({ type: 'ap' });
+      await sendMouse({ type: 'click', position: [200, 200] });
+      await resetMouse();
+      expect(spy.called).to.be.false;
     });
   });
 
