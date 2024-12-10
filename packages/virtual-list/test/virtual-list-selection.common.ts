@@ -521,6 +521,13 @@ describe('selection', () => {
         expect(list.hasAttribute('interacting')).to.be.true;
       });
 
+      it('should have the root element in focused state', async () => {
+        beforeButton.focus();
+        await sendKeys({ press: 'Tab' });
+        await sendKeys({ press: 'Enter' });
+        expect(getRenderedItem(0)!.hasAttribute('focused')).to.be.true;
+      });
+
       it('should focus tab to the next focusable child', async () => {
         beforeButton.focus();
         await sendKeys({ press: 'Tab' });

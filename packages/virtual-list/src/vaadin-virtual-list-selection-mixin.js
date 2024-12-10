@@ -112,7 +112,10 @@ export const SelectionMixin = (superClass) =>
       el.toggleAttribute('selected', this.__isSelected(item));
       const isFocusable = this.__isNavigating() && this.__focusIndex === index;
       el.tabIndex = isFocusable ? 0 : -1;
-      el.toggleAttribute('focused', isFocusable && el.contains(this.__getActiveElement()));
+      el.toggleAttribute(
+        'focused',
+        this.__isSelectable() && this.__focusIndex === index && el.contains(this.__getActiveElement()),
+      );
 
       el.role = this.__isSelectable() ? 'option' : 'listitem';
       el.ariaSelected = this.__isSelectable() ? String(this.__isSelected(item)) : null;
