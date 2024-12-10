@@ -353,8 +353,8 @@ export const SelectionMixin = (superClass) =>
 
     /** @private */
     __onNavigationSpaceKey() {
-      // Ensure the focused item is in view before toggling selection
-      this.__ensureFocusedIndexInView();
+      // Ensure the focused item is in view and focused before toggling selection
+      this.__focusElementWithFocusIndex();
       this.__toggleSelection(this.__getRenderedFocusIndexElement().__item);
     }
 

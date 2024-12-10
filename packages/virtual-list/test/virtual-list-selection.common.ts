@@ -195,7 +195,18 @@ describe('selection', () => {
       list.scrollToIndex(100);
       await sendKeys({ press: 'Space' });
       expect(getRenderedItem(0)!.hasAttribute('selected')).to.be.true;
+      expect(getRenderedItem(0)!.hasAttribute('focused')).to.be.true;
       expect(list.selectedItems).to.deep.equal([list.items![0]]);
+    });
+
+    it('should scroll back to the focused item when selecting an item with keyboard (manual scroll)', async () => {
+      beforeButton.focus();
+      await sendKeys({ press: 'Tab' });
+      list.scrollTop = 1000;
+      await nextFrame();
+      await sendKeys({ press: 'Space' });
+      expect(getRenderedItem(0)!.hasAttribute('selected')).to.be.true;
+      expect(getRenderedItem(0)!.hasAttribute('focused')).to.be.true;
     });
 
     it('should ignore selection of undefined items (Flow VirtualList)', async () => {
