@@ -92,6 +92,16 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
 
         /** @protected */
         _selectAllHidden: Boolean,
+
+        /**
+         * Indicates whether the shift key is currently pressed.
+         *
+         * @protected
+         */
+        _shiftKeyDown: {
+          type: Boolean,
+          value: false,
+        },
       };
     }
 
@@ -106,6 +116,7 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
       this.__onCellTrack = this.__onCellTrack.bind(this);
       this.__onCellClick = this.__onCellClick.bind(this);
       this.__onCellMouseDown = this.__onCellMouseDown.bind(this);
+      this.__onGridInteraction = this.__onGridInteraction.bind(this);
       this.__onActiveItemChanged = this.__onActiveItemChanged.bind(this);
       this.__onSelectRowCheckboxChange = this.__onSelectRowCheckboxChange.bind(this);
       this.__onSelectAllCheckboxChange = this.__onSelectAllCheckboxChange.bind(this);
@@ -115,6 +126,9 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
     connectedCallback() {
       super.connectedCallback();
       if (this._grid) {
+        this._grid.addEventListener('keyup', this.__onGridInteraction);
+        this._grid.addEventListener('keydown', this.__onGridInteraction, { capture: true });
+        this._grid.addEventListener('mousedown', this.__onGridInteraction);
         this._grid.addEventListener('active-item-changed', this.__onActiveItemChanged);
       }
     }
@@ -123,6 +137,9 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
     disconnectedCallback() {
       super.disconnectedCallback();
       if (this._grid) {
+        this._grid.removeEventListener('keyup', this.__onGridInteraction);
+        this._grid.removeEventListener('keydown', this.__onGridInteraction, { capture: true });
+        this._grid.removeEventListener('mousedown', this.__onGridInteraction);
         this._grid.removeEventListener('active-item-changed', this.__onActiveItemChanged);
       }
     }
@@ -184,6 +201,20 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
         this._selectAll();
       } else {
         this._deselectAll();
+      }
+    }
+
+    /** @private */
+    __onGridInteraction(e) {
+      if (e instanceof KeyboardEvent) {
+        this._shiftKeyDown = e.key !== 'Shift' && e.shiftKey;
+      } else {
+        this._shiftKeyDown = e.shiftKey;
+      }
+
+      if (this.autoSelect) {
+        // Prevent text selection when shift-clicking to select a range of items.
+        this._grid.$.scroller.toggleAttribute('range-selecting', this._shiftKeyDown);
       }
     }
 

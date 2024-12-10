@@ -6,6 +6,7 @@ import type {
   GridFilter,
   GridFilterColumn,
   GridFilterValueChangedEvent,
+  GridItemToggleEvent,
   GridSelectionColumn,
   GridSelectionColumnSelectAllChangedEvent,
   GridSortColumn,
@@ -144,6 +145,13 @@ narrowedGrid.addEventListener('grid-drop', (event) => {
   assertType<GridDropEvent<TestGridItem>>(event);
   assertType<TestGridItem>(event.detail.dropTargetItem);
   assertType<GridDropLocation>(event.detail.dropLocation);
+});
+
+narrowedGrid.addEventListener('item-toggle', (event) => {
+  assertType<GridItemToggleEvent<TestGridItem>>(event);
+  assertType<TestGridItem>(event.detail.item);
+  assertType<boolean>(event.detail.selected);
+  assertType<boolean>(event.detail.shiftKey);
 });
 
 narrowedGrid.dataProvider = (params, callback) => {

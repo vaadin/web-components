@@ -292,7 +292,8 @@ export const gridStyles = css`
     display: none;
   }
 
-  #scroller[column-resizing] {
+  #scroller[column-resizing],
+  #scroller[range-selecting] {
     -webkit-user-select: none;
     user-select: none;
   }

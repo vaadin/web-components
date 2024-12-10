@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { click, fixtureSync, listenOnce, mousedown, nextFrame, nextRender } from '@vaadin/testing-helpers';
-import { sendKeys } from '@web/test-runner-commands';
+import { resetMouse, sendKeys, sendMouse } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import {
   fire,
@@ -854,6 +854,159 @@ describe('multi selection column', () => {
       clock.tick(10);
 
       expect(grid.$.table.scrollTop).to.be.eq(prevScrollTop);
+    });
+  });
+
+  describe('item-toggle event', () => {
+    let itemSelectionSpy, rows, checkboxes;
+
+    async function mouseClick(element) {
+      const { x, y, width, height } = element.getBoundingClientRect();
+      await sendMouse({
+        type: 'click',
+        position: [x + width / 2, y + height / 2].map(Math.floor),
+      });
+    }
+
+    function assertEvent(detail) {
+      expect(itemSelectionSpy).to.be.calledOnce;
+      expect(itemSelectionSpy.args[0][0].detail).to.eql(detail);
+      itemSelectionSpy.resetHistory();
+    }
+
+    beforeEach(async () => {
+      grid = fixtureSync(`
+        <vaadin-grid style="width: 200px; height: 450px;">
+          <vaadin-grid-selection-column></vaadin-grid-selection-column>
+          <vaadin-grid-column path="name"></vaadin-grid-column>
+        </vaadin-grid>
+      `);
+      grid.items = [{ name: 'Item 0' }, { name: 'Item 1' }, { name: 'Item 2' }];
+      await nextRender();
+
+      rows = getRows(grid.$.items);
+      checkboxes = [...grid.querySelectorAll('vaadin-checkbox[aria-label="Select Row"]')];
+
+      itemSelectionSpy = sinon.spy();
+      grid.addEventListener('item-toggle', itemSelectionSpy);
+    });
+
+    afterEach(async () => {
+      await resetMouse();
+    });
+
+    it('should fire the event when toggling an item with click', async () => {
+      await mouseClick(checkboxes[0]);
+      assertEvent({ item: grid.items[0], selected: true, shiftKey: false });
+
+      await mouseClick(checkboxes[0]);
+      assertEvent({ item: grid.items[0], selected: false, shiftKey: false });
+    });
+
+    it('should fire the event when toggling an item with Shift + click', async () => {
+      await sendKeys({ down: 'Shift' });
+      await mouseClick(checkboxes[0]);
+      await sendKeys({ up: 'Shift' });
+      assertEvent({ item: grid.items[0], selected: true, shiftKey: true });
+
+      await sendKeys({ down: 'Shift' });
+      await mouseClick(checkboxes[0]);
+      await sendKeys({ up: 'Shift' });
+      assertEvent({ item: grid.items[0], selected: false, shiftKey: true });
+    });
+
+    it('should fire the event when toggling an item with Space', async () => {
+      checkboxes[0].focus();
+
+      await sendKeys({ press: 'Space' });
+      assertEvent({ item: grid.items[0], selected: true, shiftKey: false });
+
+      await sendKeys({ press: 'Space' });
+      assertEvent({ item: grid.items[0], selected: false, shiftKey: false });
+    });
+
+    it('should fire the event when toggling an item with Shift + Space', async () => {
+      checkboxes[0].focus();
+
+      await sendKeys({ down: 'Shift' });
+      await sendKeys({ press: 'Space' });
+      await sendKeys({ up: 'Shift' });
+      assertEvent({ item: grid.items[0], selected: true, shiftKey: true });
+
+      await sendKeys({ down: 'Shift' });
+      await sendKeys({ press: 'Space' });
+      await sendKeys({ up: 'Shift' });
+      assertEvent({ item: grid.items[0], selected: false, shiftKey: true });
+    });
+
+    describe('autoSelect', () => {
+      beforeEach(() => {
+        const selectionColumn = grid.querySelector('vaadin-grid-selection-column');
+        selectionColumn.autoSelect = true;
+      });
+
+      it('should fire the event when toggling an item with click', async () => {
+        await mouseClick(rows[0]);
+        assertEvent({ item: grid.items[0], selected: true, shiftKey: false });
+
+        await mouseClick(rows[0]);
+        assertEvent({ item: grid.items[0], selected: false, shiftKey: false });
+      });
+
+      it('should fire the event when toggling an item with Shift + click', async () => {
+        await sendKeys({ down: 'Shift' });
+        await mouseClick(rows[0]);
+        await sendKeys({ up: 'Shift' });
+        assertEvent({ item: grid.items[0], selected: true, shiftKey: true });
+
+        await sendKeys({ down: 'Shift' });
+        await mouseClick(rows[0]);
+        await sendKeys({ up: 'Shift' });
+        assertEvent({ item: grid.items[0], selected: false, shiftKey: true });
+      });
+
+      it('should fire the event when toggling an item with Space', async () => {
+        getRowCells(rows[0])[1].focus();
+
+        await sendKeys({ press: 'Space' });
+        assertEvent({ item: grid.items[0], selected: true, shiftKey: false });
+
+        await sendKeys({ press: 'Space' });
+        assertEvent({ item: grid.items[0], selected: false, shiftKey: false });
+      });
+
+      it('should fire the event when toggling an item with Shift + Space', async () => {
+        getRowCells(rows[0])[1].focus();
+
+        await sendKeys({ down: 'Shift' });
+        await sendKeys({ press: 'Space' });
+        await sendKeys({ up: 'Shift' });
+        assertEvent({ item: grid.items[0], selected: true, shiftKey: true });
+
+        await sendKeys({ down: 'Shift' });
+        await sendKeys({ press: 'Space' });
+        await sendKeys({ up: 'Shift' });
+        assertEvent({ item: grid.items[0], selected: false, shiftKey: true });
+      });
+
+      it('should prevent text selection when selecting a range of items with Shift + click', async () => {
+        await mouseClick(rows[0]);
+        await sendKeys({ down: 'Shift' });
+        await mouseClick(rows[1]);
+        await sendKeys({ up: 'Shift' });
+        expect(document.getSelection().toString()).to.be.empty;
+      });
+
+      it('should allow text selection after selecting a range of items with Shift + click', async () => {
+        await mouseClick(rows[0]);
+        await sendKeys({ down: 'Shift' });
+        await mouseClick(rows[1]);
+        await sendKeys({ up: 'Shift' });
+
+        const row2CellContent1 = getBodyCellContent(grid, 2, 1);
+        document.getSelection().selectAllChildren(row2CellContent1);
+        expect(document.getSelection().toString()).to.be.not.empty;
+      });
     });
   });
 });
