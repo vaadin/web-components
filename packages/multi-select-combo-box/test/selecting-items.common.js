@@ -157,6 +157,21 @@ describe('selecting items', () => {
       expect(inputElement.value).to.equal('');
     });
 
+    it('should not select an item on outside click when it is focused', async () => {
+      await sendKeys({ down: 'ArrowDown' });
+      await sendKeys({ down: 'ArrowDown' });
+      await sendMouse({ type: 'click', position: [200, 200] });
+      await resetMouse();
+      expect(comboBox.selectedItems).to.deep.equal([]);
+    });
+
+    it('should not select an item on blur when it is focused', async () => {
+      await sendKeys({ down: 'ArrowDown' });
+      await sendKeys({ down: 'ArrowDown' });
+      await sendKeys({ down: 'Tab' });
+      expect(comboBox.selectedItems).to.deep.equal([]);
+    });
+
     it('should un-select item when using clear() method', () => {
       comboBox.selectedItems = ['orange'];
       comboBox.clear();
