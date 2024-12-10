@@ -1,8 +1,9 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import '@vaadin/date-picker';
 import '@vaadin/virtual-list';
+
 describe('date-picker in virtual-list', () => {
   let list;
 
@@ -20,6 +21,8 @@ describe('date-picker in virtual-list', () => {
   it('should not navigate the virtual list items on date picker arrow keys', async () => {
     const [firstDatePicker] = list.querySelectorAll('vaadin-date-picker');
     firstDatePicker.focus();
+    await nextFrame();
+    await nextFrame();
     expect(firstDatePicker.parentElement.hasAttribute('focused')).to.be.true;
 
     // Select a value for the date picker using arrow keys
