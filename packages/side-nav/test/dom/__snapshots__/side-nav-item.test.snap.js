@@ -208,7 +208,7 @@ snapshots["vaadin-side-nav-item shadow default"] =
   </slot>
 </ul>
 <div
-  class="sr-only"
+  hidden=""
   id="i18n"
 >
   Toggle child items
@@ -248,7 +248,7 @@ snapshots["vaadin-side-nav-item shadow expanded"] =
   </slot>
 </ul>
 <div
-  class="sr-only"
+  hidden=""
   id="i18n"
 >
   Toggle child items
@@ -289,7 +289,7 @@ snapshots["vaadin-side-nav-item shadow current"] =
   </slot>
 </ul>
 <div
-  class="sr-only"
+  hidden=""
   id="i18n"
 >
   Toggle child items
@@ -331,7 +331,7 @@ snapshots["vaadin-side-nav-item shadow path"] =
   </slot>
 </ul>
 <div
-  class="sr-only"
+  hidden=""
   id="i18n"
 >
   Toggle child items
@@ -372,7 +372,7 @@ snapshots["vaadin-side-nav-item shadow null path"] =
   </slot>
 </ul>
 <div
-  class="sr-only"
+  hidden=""
   id="i18n"
 >
   Toggle child items
@@ -413,7 +413,7 @@ snapshots["vaadin-side-nav-item shadow i18n"] =
   </slot>
 </ul>
 <div
-  class="sr-only"
+  hidden=""
   id="i18n"
 >
   Toggle children
