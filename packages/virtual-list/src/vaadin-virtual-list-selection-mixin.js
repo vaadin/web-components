@@ -386,6 +386,7 @@ export const SelectionMixin = (superClass) =>
 
       const clickedRootElement = this.__getRootElementByContent(e.target);
       if (clickedRootElement) {
+        this.__updateFocusIndex(clickedRootElement.__index);
         this.__toggleSelection(clickedRootElement.__item);
       }
     }

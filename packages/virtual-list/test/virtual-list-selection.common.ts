@@ -191,6 +191,23 @@ describe('selection', () => {
       expect(rendererSpy.getCalls().filter((call) => call.args[2].index === 0).length).to.equal(1);
     });
 
+    it('should mark a previously focused element focused by clicking', async () => {
+      // Get a reference to the element representing the first item
+      const itemElement = getRenderedItem(0)!;
+      const firstItemElementTextContent = itemElement.textContent;
+      // Focus the first item by clicking
+      await click(itemElement);
+      // Scroll manually downwards
+      list.scrollTop = list.scrollHeight;
+      await nextFrame();
+      // Expect the same elemnt instance to now represent a different item due to virtualization
+      expect(itemElement.textContent).not.to.equal(firstItemElementTextContent);
+      // Click the same element again
+      await click(itemElement);
+      // Expect the element to be marked as focused
+      expect(itemElement.hasAttribute('focused')).to.be.true;
+    });
+
     it('should select an item with keyboard', async () => {
       expect(getRenderedItem(0)!.hasAttribute('selected')).to.be.false;
       beforeButton.focus();
