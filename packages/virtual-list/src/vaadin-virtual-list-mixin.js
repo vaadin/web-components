@@ -36,13 +36,21 @@ export const VirtualListMixin = (superClass) =>
          */
         renderer: { type: Function, sync: true },
 
+        /**
+         * A function that generates accessible names for virtual list items.
+         */
+        itemAccessibleNameGenerator: {
+          type: Function,
+          sync: true,
+        },
+
         /** @private */
         __virtualizer: Object,
       };
     }
 
     static get observers() {
-      return ['__itemsOrRendererChanged(items, renderer, __virtualizer)'];
+      return ['__itemsOrRendererChanged(items, renderer, __virtualizer, itemAccessibleNameGenerator)'];
     }
 
     /**
@@ -84,6 +92,7 @@ export const VirtualListMixin = (superClass) =>
       this.addController(this.__overflowController);
 
       processTemplates(this);
+      this.__updateAria();
     }
 
     /** @protected */
@@ -117,15 +126,31 @@ export const VirtualListMixin = (superClass) =>
     }
 
     /** @private */
+    __updateAria() {
+      this.role = 'list';
+    }
+
+    /** @private */
     __updateElement(el, index) {
+      const item = this.items[index];
+      el.ariaSetSize = String(this.items.length);
+      el.ariaPosInSet = String(index + 1);
+      el.ariaLabel = this.itemAccessibleNameGenerator ? this.itemAccessibleNameGenerator(item) : null;
+      this.__updateElementRole(el);
+
       if (el.__renderer !== this.renderer) {
         el.__renderer = this.renderer;
         this.__clearRenderTargetContent(el);
       }
 
       if (this.renderer) {
-        this.renderer(el, this, { item: this.items[index], index });
+        this.renderer(el, this, { item, index });
       }
+    }
+
+    /** @private */
+    __updateElementRole(el) {
+      el.role = 'listitem';
     }
 
     /**

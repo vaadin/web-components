@@ -54,6 +54,11 @@ export declare class VirtualListMixinClass<TItem = VirtualListDefaultItem> {
   items: TItem[] | undefined;
 
   /**
+   * A function that generates accessible names for virtual list items.
+   */
+  itemAccessibleNameGenerator?: (item: TItem) => string;
+
+  /**
    * Scroll to a specific index in the virtual list.
    */
   scrollToIndex(index: number): void;
