@@ -367,11 +367,15 @@ export const SelectionMixin = (superClass) =>
     __onNavigationEnterKey() {
       // Get the focused item
       const focusedItem = this.querySelector('[focused]');
+      if (!focusedItem) {
+        return;
+      }
       // Find the first focusable element in the item and focus it
       const focusableElement = getFocusableElements(focusedItem).find((el) => el !== focusedItem);
-      if (focusableElement) {
-        focusableElement.focus();
+      if (!focusableElement) {
+        return;
       }
+      focusableElement.focus();
     }
 
     /** @private */

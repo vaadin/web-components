@@ -413,9 +413,16 @@ describe('selection', () => {
       expect([...list.children].some((child) => child.hasAttribute('focused'))).to.be.false;
     });
 
-    it('should throw on enter when there are no focusable child elements', async () => {
+    it('should not throw on enter when there are no focusable child elements', async () => {
       beforeButton.focus();
       await sendKeys({ press: 'Tab' });
+      await sendKeys({ press: 'Enter' });
+    });
+
+    it('should not throw on enter when there are no focusable root elements', async () => {
+      beforeButton.focus();
+      await sendKeys({ press: 'Tab' });
+      list.scrollToIndex(list.items!.length - 1);
       await sendKeys({ press: 'Enter' });
     });
 
