@@ -1,6 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync, keyboardEventFor, nextRender } from '@vaadin/testing-helpers';
-import { sendKeys } from '@web/test-runner-commands';
+import { resetMouse, sendKeys, sendMouse } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import './not-animated-styles.js';
 import '../vaadin-multi-select-combo-box.js';
@@ -136,6 +136,21 @@ describe('selecting items', () => {
       await sendKeys({ down: 'Tab' });
       expect(comboBox.filter).to.equal('');
       expect(inputElement.value).to.equal('');
+    });
+
+    it('should not select an item on outside click when it is focused', async () => {
+      await sendKeys({ down: 'ArrowDown' });
+      await sendKeys({ down: 'ArrowDown' });
+      await sendMouse({ type: 'click', position: [200, 200] });
+      await resetMouse();
+      expect(comboBox.selectedItems).to.deep.equal([]);
+    });
+
+    it('should not select an item on blur when it is focused', async () => {
+      await sendKeys({ down: 'ArrowDown' });
+      await sendKeys({ down: 'ArrowDown' });
+      await sendKeys({ down: 'Tab' });
+      expect(comboBox.selectedItems).to.deep.equal([]);
     });
 
     it('should un-select item when using clear() method', () => {
