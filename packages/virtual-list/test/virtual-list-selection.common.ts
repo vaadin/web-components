@@ -642,6 +642,13 @@ describe('selection', () => {
         await nextFrame();
         expect(list.hasAttribute('navigating')).to.be.false;
       });
+
+      it('should shift tab to an item from outside', async () => {
+        afterButton.focus();
+        await shiftTab();
+
+        expect(document.activeElement).to.equal(getRenderedItem(0));
+      });
     });
   });
 

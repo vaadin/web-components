@@ -25,4 +25,9 @@ export const virtualListStyles = css`
   #items {
     position: relative;
   }
+
+  #focusexit {
+    position: absolute;
+    top: 0;
+  }
 `;

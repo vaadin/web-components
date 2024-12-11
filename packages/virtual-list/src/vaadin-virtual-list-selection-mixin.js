@@ -286,7 +286,7 @@ export const SelectionMixin = (superClass) =>
       } else {
         this.removeAttribute('tabindex');
       }
-      this.$.focusexit.hidden = !isFocusable || !this.contains(this.__getActiveElement());
+      this.$.focusexit.hidden = !isFocusable;
     }
 
     /** @private */
@@ -352,10 +352,7 @@ export const SelectionMixin = (superClass) =>
       } else {
         // Focus the focus exit element when tabbing so the focus actually ends up on
         // the next element in the tab order after the virtual list instead of some focusable child on another row.
-        // Focusing the focus exit element causes scroll top to get reset, so we need to save and restore it
-        const scrollTop = this.scrollTop;
         this.$.focusexit.focus();
-        this.scrollTop = scrollTop;
       }
     }
 
