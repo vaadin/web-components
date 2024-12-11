@@ -149,6 +149,12 @@ class MultiSelectComboBoxInternal extends ComboBoxDataProviderMixin(ComboBoxMixi
     return 'vaadin-multi-select-combo-box';
   }
 
+  constructor() {
+    super();
+
+    this.addEventListener('custom-value-set', this.__onCustomValueSet.bind(this));
+  }
+
   /**
    * Override method inherited from the combo-box
    * to allow opening dropdown when readonly.
@@ -448,6 +454,15 @@ class MultiSelectComboBoxInternal extends ComboBoxDataProviderMixin(ComboBoxMixi
     }
 
     super.clearCache();
+  }
+
+  /** @private */
+  __onCustomValueSet(event) {
+    // Prevent setting custom value on input blur or outside click,
+    // so it can be only committed explicitly by pressing Enter.
+    if (this._ignoreCommitValue) {
+      event.stopImmediatePropagation();
+    }
   }
 }
 
