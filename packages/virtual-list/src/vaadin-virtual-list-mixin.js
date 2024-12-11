@@ -125,19 +125,15 @@ export const VirtualListBaseMixin = (superClass) =>
       }
 
       if (this.renderer) {
-        const model = {};
-        this.__updateItemModel(model, index);
-
-        this.renderer(el, this, model);
+        this.renderer(el, this, this.__getItemModel(index));
       }
     }
 
     /**
      * @private
      */
-    __updateItemModel(model, index) {
-      model.item = this.items[index];
-      model.index = index;
+    __getItemModel(index) {
+      return { index, item: this.items[index] };
     }
 
     /**

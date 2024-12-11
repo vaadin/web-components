@@ -131,11 +131,12 @@ export const SelectionMixin = (superClass) =>
      * @private
      * @override
      */
-    __updateItemModel(model, index) {
-      super.__updateItemModel(model, index);
-
+    __getItemModel(index) {
       // Include "selected" property in the model passed to the renderer
-      model.selected = this.__isSelected(this.items[index]);
+      return {
+        ...super.__getItemModel(index),
+        selected: this.__isSelected(this.items[index]),
+      };
     }
 
     /** @private */
