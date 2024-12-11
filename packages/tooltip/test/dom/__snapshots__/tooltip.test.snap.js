@@ -16,6 +16,7 @@ snapshots["vaadin-tooltip host"] =
 snapshots["vaadin-tooltip default"] = 
 `<vaadin-tooltip-overlay
   hidden=""
+  id="overlay"
   modeless=""
   no-vertical-overlap=""
   position="bottom"
@@ -29,6 +30,7 @@ snapshots["vaadin-tooltip default"] =
 snapshots["vaadin-tooltip top-start"] = 
 `<vaadin-tooltip-overlay
   hidden=""
+  id="overlay"
   modeless=""
   no-vertical-overlap=""
   position="top-start"
@@ -42,6 +44,7 @@ snapshots["vaadin-tooltip top-start"] =
 snapshots["vaadin-tooltip top"] = 
 `<vaadin-tooltip-overlay
   hidden=""
+  id="overlay"
   modeless=""
   no-vertical-overlap=""
   position="top"
@@ -55,6 +58,7 @@ snapshots["vaadin-tooltip top"] =
 snapshots["vaadin-tooltip top-end"] = 
 `<vaadin-tooltip-overlay
   hidden=""
+  id="overlay"
   modeless=""
   no-vertical-overlap=""
   position="top-end"
@@ -68,6 +72,7 @@ snapshots["vaadin-tooltip top-end"] =
 snapshots["vaadin-tooltip bottom-start"] = 
 `<vaadin-tooltip-overlay
   hidden=""
+  id="overlay"
   modeless=""
   no-vertical-overlap=""
   position="bottom-start"
@@ -81,6 +86,7 @@ snapshots["vaadin-tooltip bottom-start"] =
 snapshots["vaadin-tooltip bottom"] = 
 `<vaadin-tooltip-overlay
   hidden=""
+  id="overlay"
   modeless=""
   no-vertical-overlap=""
   position="bottom"
@@ -94,6 +100,7 @@ snapshots["vaadin-tooltip bottom"] =
 snapshots["vaadin-tooltip bottom-end"] = 
 `<vaadin-tooltip-overlay
   hidden=""
+  id="overlay"
   modeless=""
   no-vertical-overlap=""
   position="bottom-end"
@@ -107,6 +114,7 @@ snapshots["vaadin-tooltip bottom-end"] =
 snapshots["vaadin-tooltip start-top"] = 
 `<vaadin-tooltip-overlay
   hidden=""
+  id="overlay"
   modeless=""
   no-horizontal-overlap=""
   position="start-top"
@@ -120,6 +128,7 @@ snapshots["vaadin-tooltip start-top"] =
 snapshots["vaadin-tooltip start"] = 
 `<vaadin-tooltip-overlay
   hidden=""
+  id="overlay"
   modeless=""
   no-horizontal-overlap=""
   position="start"
@@ -133,6 +142,7 @@ snapshots["vaadin-tooltip start"] =
 snapshots["vaadin-tooltip start-bottom"] = 
 `<vaadin-tooltip-overlay
   hidden=""
+  id="overlay"
   modeless=""
   no-horizontal-overlap=""
   position="start-bottom"
@@ -146,6 +156,7 @@ snapshots["vaadin-tooltip start-bottom"] =
 snapshots["vaadin-tooltip end-top"] = 
 `<vaadin-tooltip-overlay
   hidden=""
+  id="overlay"
   modeless=""
   no-horizontal-overlap=""
   position="end-top"
@@ -159,6 +170,7 @@ snapshots["vaadin-tooltip end-top"] =
 snapshots["vaadin-tooltip end"] = 
 `<vaadin-tooltip-overlay
   hidden=""
+  id="overlay"
   modeless=""
   no-horizontal-overlap=""
   position="end"
@@ -172,6 +184,7 @@ snapshots["vaadin-tooltip end"] =
 snapshots["vaadin-tooltip end-bottom"] = 
 `<vaadin-tooltip-overlay
   hidden=""
+  id="overlay"
   modeless=""
   no-horizontal-overlap=""
   position="end-bottom"
@@ -185,6 +198,7 @@ snapshots["vaadin-tooltip end-bottom"] =
 snapshots["vaadin-tooltip opened overlay"] = 
 `<vaadin-tooltip-overlay
   hidden=""
+  id="overlay"
   modeless=""
   no-vertical-overlap=""
   opened=""
@@ -198,6 +212,7 @@ snapshots["vaadin-tooltip opened overlay class"] =
 `<vaadin-tooltip-overlay
   class="custom tooltip-overlay"
   hidden=""
+  id="overlay"
   modeless=""
   no-vertical-overlap=""
   opened=""

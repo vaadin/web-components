@@ -65,16 +65,6 @@ class SelectOverlay extends SelectOverlayMixin(ThemableMixin(PolylitMixin(LitEle
       this.requestContentUpdate();
     }
   }
-
-  requestContentUpdate() {
-    super.requestContentUpdate();
-
-    if (this.owner) {
-      // Ensure menuElement reference is correct.
-      const menuElement = this._getMenuElement();
-      this.owner._assignMenuElement(menuElement);
-    }
-  }
 }
 
 defineCustomElement(SelectOverlay);

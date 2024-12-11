@@ -180,6 +180,8 @@ class Select extends SelectBaseMixin(ElementMixin(ThemableMixin(PolymerElement))
       </div>
 
       <vaadin-select-overlay
+        id="overlay"
+        owner="[[__overlayOwner]]"
         position-target="[[_inputContainer]]"
         opened="{{opened}}"
         with-backdrop="[[_phone]]"
@@ -194,6 +196,17 @@ class Select extends SelectBaseMixin(ElementMixin(ThemableMixin(PolymerElement))
         <slot name="sr-label"></slot>
       </div>
     `;
+  }
+
+  static get properties() {
+    return {
+      /** @private */
+      __overlayOwner: {
+        value() {
+          return this;
+        },
+      },
+    };
   }
 
   static get observers() {
