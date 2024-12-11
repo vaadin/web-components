@@ -6,7 +6,9 @@ import { html, unsafeStatic } from 'lit/static-html.js';
 import { PolylitMixin } from '../src/polylit-mixin.js';
 
 describe('PolylitMixin', () => {
-  describe('ready', () => {
+  describe('first render', () => {
+    let element;
+
     const readySpy = sinon.spy();
 
     const tag = defineCE(
@@ -22,11 +24,23 @@ describe('PolylitMixin', () => {
     );
 
     beforeEach(() => {
-      fixtureSync(`<${tag}></${tag}>`);
+      element = fixtureSync(`<${tag}></${tag}>`);
     });
 
-    it('should call ready as soon as element is added to the DOM', () => {
+    afterEach(() => {
+      readySpy.resetHistory();
+    });
+
+    it('should call ready once element is connected to the DOM', () => {
       expect(readySpy.calledOnce).to.be.true;
+    });
+
+    it('should not flush updates synchronously when element is reconnected to the DOM', () => {
+      const spy = sinon.spy(element, 'performUpdate');
+      const { parentElement } = element;
+      parentElement.removeChild(element);
+      parentElement.appendChild(element);
+      expect(spy).to.be.not.called;
     });
   });
 

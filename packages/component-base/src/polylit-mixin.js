@@ -222,7 +222,7 @@ const PolylitMixinImplementation = (superclass) => {
       }
 
       const { polylitConfig } = this.constructor;
-      if (!polylitConfig.asyncFirstRender) {
+      if (!this.hasUpdated && !polylitConfig.asyncFirstRender) {
         this.performUpdate();
       }
     }
