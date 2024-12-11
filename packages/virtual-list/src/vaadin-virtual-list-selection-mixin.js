@@ -96,7 +96,7 @@ export const SelectionMixin = (superClass) =>
     }
 
     /** @private */
-    __isSelectable() {
+    get __isSelectable() {
       return this.selectionMode !== 'none';
     }
 
@@ -114,11 +114,11 @@ export const SelectionMixin = (superClass) =>
       el.tabIndex = isFocusable ? 0 : -1;
       el.toggleAttribute(
         'focused',
-        this.__isSelectable() && this.__focusIndex === index && el.contains(this.__getActiveElement()),
+        this.__isSelectable && this.__focusIndex === index && el.contains(this.__getActiveElement()),
       );
 
-      el.role = this.__isSelectable() ? 'option' : 'listitem';
-      el.ariaSelected = this.__isSelectable() ? String(this.__isSelected(item)) : null;
+      el.role = this.__isSelectable ? 'option' : 'listitem';
+      el.ariaSelected = this.__isSelectable ? String(this.__isSelected(item)) : null;
       el.ariaSetSize = String(this.items.length);
       el.ariaPosInSet = String(index + 1);
 
@@ -142,7 +142,7 @@ export const SelectionMixin = (superClass) =>
 
     /** @private */
     __updateAria() {
-      this.role = this.__isSelectable() ? 'listbox' : 'list';
+      this.role = this.__isSelectable ? 'listbox' : 'list';
       this.ariaMultiSelectable = this.selectionMode === 'multi' ? 'true' : null;
     }
 
@@ -153,7 +153,7 @@ export const SelectionMixin = (superClass) =>
 
     /** @private */
     __selectionItemsUpdated() {
-      if (!this.__isSelectable()) {
+      if (!this.__isSelectable) {
         return;
       }
 
@@ -268,10 +268,10 @@ export const SelectionMixin = (superClass) =>
 
     /** @private */
     __updateNavigating(navigating) {
-      const isNavigating = this.__isSelectable() && navigating;
+      const isNavigating = this.__isSelectable && navigating;
       this.toggleAttribute('navigating', isNavigating);
 
-      const isInteracting = this.__isSelectable() && !navigating;
+      const isInteracting = this.__isSelectable && !navigating;
       this.toggleAttribute('interacting', isInteracting);
 
       this.__updateFocusable();
@@ -281,7 +281,7 @@ export const SelectionMixin = (superClass) =>
     /** @private */
     __updateFocusable() {
       const isFocusable = !!(this.__isNavigating() && this.items && this.items.length);
-      if (this.__isSelectable()) {
+      if (this.__isSelectable) {
         this.tabIndex = isFocusable ? 0 : -1;
       } else {
         this.removeAttribute('tabindex');
@@ -296,7 +296,7 @@ export const SelectionMixin = (superClass) =>
 
     /** @private */
     __onKeyDown(e) {
-      if (e.defaultPrevented || !this.__isSelectable()) {
+      if (e.defaultPrevented || !this.__isSelectable) {
         return;
       }
 
@@ -376,7 +376,7 @@ export const SelectionMixin = (superClass) =>
 
     /** @private */
     __onClick(e) {
-      if (!this.__isSelectable() || !this.__isNavigating()) {
+      if (!this.__isSelectable || !this.__isNavigating()) {
         return;
       }
       if (this.__getActiveElement() === this) {
@@ -393,7 +393,7 @@ export const SelectionMixin = (superClass) =>
 
     /** @private */
     __onFocusIn(e) {
-      if (!this.__isSelectable()) {
+      if (!this.__isSelectable) {
         return;
       }
 
@@ -418,7 +418,7 @@ export const SelectionMixin = (superClass) =>
 
     /** @private */
     __onFocusOut(e) {
-      if (!this.__isSelectable()) {
+      if (!this.__isSelectable) {
         return;
       }
       if (!this.contains(e.relatedTarget)) {
