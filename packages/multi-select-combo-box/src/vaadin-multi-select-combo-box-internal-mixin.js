@@ -121,6 +121,12 @@ export const MultiSelectComboBoxInternalMixin = (superClass) =>
       return 'vaadin-multi-select-combo-box';
     }
 
+    constructor() {
+      super();
+
+      this.addEventListener('custom-value-set', this.__onCustomValueSet.bind(this));
+    }
+
     /**
      * Override method inherited from the combo-box
      * to allow opening dropdown when readonly.
@@ -340,6 +346,19 @@ export const MultiSelectComboBoxInternalMixin = (superClass) =>
     /**
      * Override method inherited from the combo-box
      * to not commit an already selected item again
+     * after closing overlay on outside click.
+     * @protected
+     * @override
+     */
+    _onClosed() {
+      this._ignoreCommitValue = true;
+
+      super._onClosed();
+    }
+
+    /**
+     * Override method inherited from the combo-box
+     * to not commit an already selected item again
      * on blur, which would result in un-selecting.
      * @protected
      * @override
@@ -349,7 +368,7 @@ export const MultiSelectComboBoxInternalMixin = (superClass) =>
         this._ignoreCommitValue = false;
 
         // Reset internal combo-box state
-        this.selectedItem = null;
+        this.clear();
         this._inputElementValue = '';
         return;
       }
@@ -417,5 +436,14 @@ export const MultiSelectComboBoxInternalMixin = (superClass) =>
       }
 
       super.clearCache();
+    }
+
+    /** @private */
+    __onCustomValueSet(event) {
+      // Prevent setting custom value on input blur or outside click,
+      // so it can be only committed explicitly by pressing Enter.
+      if (this._ignoreCommitValue) {
+        event.stopImmediatePropagation();
+      }
     }
   };

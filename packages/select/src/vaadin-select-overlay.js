@@ -54,26 +54,6 @@ export class SelectOverlay extends SelectOverlayMixin(ThemableMixin(PolymerEleme
       </div>
     `;
   }
-
-  /** @protected */
-  ready() {
-    super.ready();
-
-    // When setting `opened` as an attribute, the overlay is already teleported to body
-    // by the time when `ready()` callback of the `vaadin-select` is executed by Polymer,
-    // so querySelector() would return null. So we use this workaround to set properties.
-    this.owner = this.__dataHost;
-  }
-
-  requestContentUpdate() {
-    super.requestContentUpdate();
-
-    if (this.owner) {
-      // Ensure menuElement reference is correct.
-      const menuElement = this._getMenuElement();
-      this.owner._assignMenuElement(menuElement);
-    }
-  }
 }
 
 defineCustomElement(SelectOverlay);

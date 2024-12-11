@@ -10,7 +10,6 @@ export const accordionHeading = css`
     display: block;
     outline: none;
     -webkit-user-select: none;
-    -moz-user-select: none;
     user-select: none;
   }
 

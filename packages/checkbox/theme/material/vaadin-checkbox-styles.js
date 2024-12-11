@@ -7,8 +7,6 @@ registerStyles(
     :host {
       display: inline-block;
       -webkit-user-select: none;
-      -moz-user-select: none;
-      -ms-user-select: none;
       user-select: none;
       outline: none;
       -webkit-tap-highlight-color: transparent;
@@ -159,6 +157,10 @@ registerStyles(
 
     :host([invalid]) [part='required-indicator']::after {
       color: var(--material-error-text-color);
+    }
+
+    :host(:not([has-label])) [part='required-indicator'] {
+      display: none;
     }
 
     [part='error-message'],

@@ -92,6 +92,16 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
 
         /** @protected */
         _selectAllHidden: Boolean,
+
+        /**
+         * Indicates whether the shift key is currently pressed.
+         *
+         * @protected
+         */
+        _shiftKeyDown: {
+          type: Boolean,
+          value: false,
+        },
       };
     }
 
@@ -106,6 +116,7 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
       this.__onCellTrack = this.__onCellTrack.bind(this);
       this.__onCellClick = this.__onCellClick.bind(this);
       this.__onCellMouseDown = this.__onCellMouseDown.bind(this);
+      this.__onGridInteraction = this.__onGridInteraction.bind(this);
       this.__onActiveItemChanged = this.__onActiveItemChanged.bind(this);
       this.__onSelectRowCheckboxChange = this.__onSelectRowCheckboxChange.bind(this);
       this.__onSelectAllCheckboxChange = this.__onSelectAllCheckboxChange.bind(this);
@@ -115,6 +126,9 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
     connectedCallback() {
       super.connectedCallback();
       if (this._grid) {
+        this._grid.addEventListener('keyup', this.__onGridInteraction);
+        this._grid.addEventListener('keydown', this.__onGridInteraction, { capture: true });
+        this._grid.addEventListener('mousedown', this.__onGridInteraction);
         this._grid.addEventListener('active-item-changed', this.__onActiveItemChanged);
       }
     }
@@ -123,6 +137,9 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
     disconnectedCallback() {
       super.disconnectedCallback();
       if (this._grid) {
+        this._grid.removeEventListener('keyup', this.__onGridInteraction);
+        this._grid.removeEventListener('keydown', this.__onGridInteraction, { capture: true });
+        this._grid.removeEventListener('mousedown', this.__onGridInteraction);
         this._grid.removeEventListener('active-item-changed', this.__onActiveItemChanged);
       }
     }
@@ -187,6 +204,20 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
       }
     }
 
+    /** @private */
+    __onGridInteraction(e) {
+      if (e instanceof KeyboardEvent) {
+        this._shiftKeyDown = e.key !== 'Shift' && e.shiftKey;
+      } else {
+        this._shiftKeyDown = e.shiftKey;
+      }
+
+      if (this.autoSelect) {
+        // Prevent text selection when shift-clicking to select a range of items.
+        this._grid.$.scroller.toggleAttribute('range-selecting', this._shiftKeyDown);
+      }
+    }
+
     /**
      * Selects or deselects the row when the Select Row checkbox is switched.
      * The listener handles only user-fired events.
@@ -219,11 +250,7 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
       } else if (event.detail.state === 'end') {
         // if drag start and end stays within the same item, then toggle its state
         if (this.__dragStartItem) {
-          if (this.__selectOnDrag) {
-            this._selectItem(this.__dragStartItem);
-          } else {
-            this._deselectItem(this.__dragStartItem);
-          }
+          this.__toggleItem(this.__dragStartItem, this.__selectOnDrag);
         }
         // clear drag state after timeout, which allows preventing the
         // subsequent click event if drag started and ended on the same item
@@ -289,6 +316,7 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
       if (this.__dragStartIndex === undefined) {
         return;
       }
+
       // Get the row being hovered over
       const renderedRows = this._grid._getRenderedRows();
       const hoveredRow = renderedRows.find((row) => {
@@ -313,11 +341,7 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
             (hoveredIndex > this.__dragStartIndex && row.index >= this.__dragStartIndex && row.index <= hoveredIndex) ||
             (hoveredIndex < this.__dragStartIndex && row.index <= this.__dragStartIndex && row.index >= hoveredIndex)
           ) {
-            if (this.__selectOnDrag) {
-              this._selectItem(row._item);
-            } else {
-              this._deselectItem(row._item);
-            }
+            this.__toggleItem(row._item, this.__selectOnDrag);
             this.__dragStartItem = undefined;
           }
         });
@@ -399,6 +423,14 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
      * @private
      */
     __toggleItem(item, selected = !this._grid._isSelected(item)) {
+      if (selected === this._grid._isSelected(item)) {
+        // Skip selection if the item is already in the desired state.
+        // Note, _selectItem and _deselectItem may be overridden in custom
+        // selection column implementations, and calling them unnecessarily
+        // might affect performance (e.g. vaadin-grid-flow-selection-column).
+        return;
+      }
+
       if (selected) {
         this._selectItem(item);
       } else {

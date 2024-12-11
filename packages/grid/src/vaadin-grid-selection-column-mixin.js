@@ -113,6 +113,15 @@ export const GridSelectionColumnMixin = (superClass) =>
     _selectItem(item) {
       if (this._grid.__isItemSelectable(item)) {
         this._grid.selectItem(item);
+        this._grid.dispatchEvent(
+          new CustomEvent('item-toggle', {
+            detail: {
+              item,
+              selected: true,
+              shiftKey: this._shiftKeyDown,
+            },
+          }),
+        );
       }
     }
 
@@ -127,6 +136,15 @@ export const GridSelectionColumnMixin = (superClass) =>
     _deselectItem(item) {
       if (this._grid.__isItemSelectable(item)) {
         this._grid.deselectItem(item);
+        this._grid.dispatchEvent(
+          new CustomEvent('item-toggle', {
+            detail: {
+              item,
+              selected: false,
+              shiftKey: this._shiftKeyDown,
+            },
+          }),
+        );
       }
     }
 

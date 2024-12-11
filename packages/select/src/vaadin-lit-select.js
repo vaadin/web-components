@@ -104,11 +104,6 @@ class Select extends SelectBaseMixin(ElementMixin(ThemableMixin(PolylitMixin(Lit
     `;
   }
 
-  /** @protected */
-  ready() {
-    super.ready();
-  }
-
   /** @private */
   _onOpenedChanged(event) {
     this.opened = event.detail.value;

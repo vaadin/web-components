@@ -9,7 +9,6 @@ registerStyles(
   'vaadin-month-calendar',
   css`
     :host {
-      -moz-user-select: none;
       -webkit-user-select: none;
       -webkit-tap-highlight-color: transparent;
       user-select: none;

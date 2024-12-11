@@ -239,7 +239,6 @@ export const gridStyles = css`
   }
 
   :host([reordering]) {
-    -moz-user-select: none;
     -webkit-user-select: none;
     user-select: none;
   }
@@ -293,9 +292,8 @@ export const gridStyles = css`
     display: none;
   }
 
-  #scroller[column-resizing] {
-    -ms-user-select: none;
-    -moz-user-select: none;
+  #scroller[column-resizing],
+  #scroller[range-selecting] {
     -webkit-user-select: none;
     user-select: none;
   }

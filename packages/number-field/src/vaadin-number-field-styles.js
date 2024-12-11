@@ -21,7 +21,6 @@ export const numberFieldStyles = css`
   [part='decrease-button'],
   [part='increase-button'] {
     -webkit-user-select: none;
-    -moz-user-select: none;
     user-select: none;
   }
 

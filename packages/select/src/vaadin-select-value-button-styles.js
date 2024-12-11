@@ -12,7 +12,6 @@ export const valueButton = css`
     outline: none;
     white-space: nowrap;
     -webkit-user-select: none;
-    -moz-user-select: none;
     user-select: none;
     min-width: 0;
     width: 0;

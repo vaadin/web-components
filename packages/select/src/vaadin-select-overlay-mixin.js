@@ -44,4 +44,14 @@ export const SelectOverlayMixin = (superClass) =>
         }
       }
     }
+
+    requestContentUpdate() {
+      super.requestContentUpdate();
+
+      if (this.owner) {
+        // Ensure menuElement reference is correct.
+        const menuElement = this._getMenuElement();
+        this.owner._assignMenuElement(menuElement);
+      }
+    }
   };
