@@ -110,8 +110,7 @@ narrowedDashboard.addEventListener('dashboard-item-move-mode-changed', (event) =
 
 narrowedDashboard.addEventListener('dashboard-item-resize-mode-changed', (event) => {
   assertType<DashboardItemResizeModeChangedEvent<TestDashboardItem>>(event);
-  assertType<TestDashboardItem>(event.detail.item as TestDashboardItem);
-  assertType<DashboardSectionItem<TestDashboardItem>>(event.detail.item as DashboardSectionItem<TestDashboardItem>);
+  assertType<TestDashboardItem>(event.detail.item);
   assertType<boolean>(event.detail.value);
 });
 

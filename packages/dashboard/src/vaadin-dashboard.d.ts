@@ -113,7 +113,7 @@ export type DashboardItemMoveModeChangedEvent<TItem extends DashboardItem> = Cus
  * Fired when an item resize mode changed
  */
 export type DashboardItemResizeModeChangedEvent<TItem extends DashboardItem> = CustomEvent<{
-  item: TItem | DashboardSectionItem<TItem>;
+  item: TItem;
   value: boolean;
 }>;
 
