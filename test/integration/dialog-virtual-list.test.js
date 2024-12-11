@@ -3,6 +3,7 @@ import { click, fixtureSync, nextRender, oneEvent } from '@vaadin/testing-helper
 import { sendKeys } from '@web/test-runner-commands';
 import '@vaadin/dialog';
 import '@vaadin/virtual-list';
+
 describe('virtual-list in dialog', () => {
   let dialog, overlay, list;
 

@@ -44,7 +44,6 @@ export * from './vaadin-virtual-list-mixin.js';
  */
 declare class VirtualList<TItem = VirtualListDefaultItem> extends ThemableMixin(ElementMixin(HTMLElement)) {}
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 interface VirtualList<TItem = VirtualListDefaultItem> extends VirtualListMixinClass<TItem> {
   addEventListener<K extends keyof VirtualListEventMap<TItem>>(
     type: K,
