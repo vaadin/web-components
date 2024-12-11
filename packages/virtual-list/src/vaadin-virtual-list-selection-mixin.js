@@ -5,7 +5,7 @@
  */
 
 import { getFocusableElements } from '@vaadin/a11y-base';
-import { timeOut } from '@vaadin/component-base/src/async';
+import { timeOut } from '@vaadin/component-base/src/async.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { get } from '@vaadin/component-base/src/path-utils.js';
 
@@ -147,8 +147,8 @@ export const SelectionMixin = (superClass) =>
     }
 
     /** @private */
-    __clampIndex(index) {
-      return Math.max(0, Math.min(index, (this.items || []).length - 1));
+    __updateFocusIndex(index) {
+      this.__focusIndex = Math.max(0, Math.min(index, (this.items || []).length - 1));
     }
 
     /** @private */
@@ -158,9 +158,9 @@ export const SelectionMixin = (superClass) =>
       }
 
       const oldFocusIndex = this.__focusIndex;
-      this.__focusIndex = this.__clampIndex(this.__focusIndex);
+      this.__updateFocusIndex(this.__focusIndex);
       if (oldFocusIndex !== this.__focusIndex) {
-        this.__scheduleRequestContentUpdate();
+        this.__scheduleContentUpdate();
       }
       // Items may have been emptied, need to update focusability
       this.__updateFocusable();
@@ -173,7 +173,7 @@ export const SelectionMixin = (superClass) =>
 
     /** @private */
     __selectionChanged() {
-      this.__scheduleRequestContentUpdate();
+      this.__scheduleContentUpdate();
     }
 
     /** @private */
@@ -254,7 +254,7 @@ export const SelectionMixin = (superClass) =>
     }
 
     /**
-     * Returns the rendered root element containing the given child element.
+     * Returns the rendered root element matching or containing the given child element.
      * @private
      */
     __getRootElementByContent(element) {
@@ -275,7 +275,7 @@ export const SelectionMixin = (superClass) =>
       this.toggleAttribute('interacting', isInteracting);
 
       this.__updateFocusable();
-      this.__scheduleRequestContentUpdate();
+      this.__scheduleContentUpdate();
     }
 
     /** @private */
@@ -322,7 +322,7 @@ export const SelectionMixin = (superClass) =>
 
     /** @private */
     __onNavigationArrowKey(down) {
-      this.__focusIndex = this.__clampIndex(this.__focusIndex + (down ? 1 : -1));
+      this.__updateFocusIndex(this.__focusIndex + (down ? 1 : -1));
       this.__focusElementWithFocusIndex();
 
       if (this.__debounceRequestContentUpdate) {
@@ -332,7 +332,7 @@ export const SelectionMixin = (superClass) =>
     }
 
     /** @private */
-    __scheduleRequestContentUpdate() {
+    __scheduleContentUpdate() {
       this.__debounceRequestContentUpdate = Debouncer.debounce(
         this.__debounceRequestContentUpdate,
         timeOut.after(0),
@@ -370,7 +370,7 @@ export const SelectionMixin = (superClass) =>
     __onNavigationEnterKey() {
       // Get the focused item
       const focusedItem = this.querySelector('[focused]');
-      // First the first focusable element in the focused item and focus it
+      // Find the first focusable element in the item and focus it
       const focusableElement = getFocusableElements(focusedItem).find((el) => el !== focusedItem);
       if (focusableElement) {
         focusableElement.focus();
@@ -409,7 +409,7 @@ export const SelectionMixin = (superClass) =>
       // Update focus index based on the focused item
       const rootElement = this.__getRootElementWithFocus();
       if (rootElement) {
-        this.__focusIndex = rootElement.__index;
+        this.__updateFocusIndex(rootElement.__index);
       }
 
       // Focus the root element matching focus index if focus came from outside
