@@ -6,7 +6,6 @@
 import { html, LitElement } from 'lit';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import { DisabledMixin } from '@vaadin/a11y-base/src/disabled-mixin.js';
-import { screenReaderOnly } from '@vaadin/a11y-base/src/styles/sr-only-styles.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
@@ -176,7 +175,7 @@ class SideNavItem extends SideNavChildrenMixin(DisabledMixin(ElementMixin(Themab
   }
 
   static get styles() {
-    return [screenReaderOnly, sideNavItemBaseStyles];
+    return [sideNavItemBaseStyles];
   }
 
   constructor() {
@@ -271,7 +270,7 @@ class SideNavItem extends SideNavChildrenMixin(DisabledMixin(ElementMixin(Themab
       <ul part="children" role="list" ?hidden="${!this.expanded}" aria-hidden="${this.expanded ? 'false' : 'true'}">
         <slot name="children"></slot>
       </ul>
-      <div class="sr-only" id="i18n">${this.i18n.toggle}</div>
+      <div hidden id="i18n">${this.i18n.toggle}</div>
     `;
   }
 
