@@ -75,7 +75,8 @@ assertType<Array<TestDashboardItem | DashboardSectionItem<TestDashboardItem>>>(s
 
 narrowedDashboard.addEventListener('dashboard-item-moved', (event) => {
   assertType<DashboardItemMovedEvent<TestDashboardItem>>(event);
-  assertType<TestDashboardItem>(event.detail.item);
+  assertType<TestDashboardItem>(event.detail.item as TestDashboardItem);
+  assertType<DashboardSectionItem<TestDashboardItem>>(event.detail.item as DashboardSectionItem<TestDashboardItem>);
   assertType<Array<TestDashboardItem | DashboardSectionItem<TestDashboardItem>>>(event.detail.items);
   assertType<DashboardSectionItem<TestDashboardItem> | undefined>(event.detail.section);
 });
@@ -88,25 +89,29 @@ narrowedDashboard.addEventListener('dashboard-item-resized', (event) => {
 
 narrowedDashboard.addEventListener('dashboard-item-removed', (event) => {
   assertType<DashboardItemRemovedEvent<TestDashboardItem>>(event);
-  assertType<TestDashboardItem | DashboardSectionItem<TestDashboardItem>>(event.detail.item);
+  assertType<TestDashboardItem>(event.detail.item as TestDashboardItem);
+  assertType<DashboardSectionItem<TestDashboardItem>>(event.detail.item as DashboardSectionItem<TestDashboardItem>);
   assertType<Array<TestDashboardItem | DashboardSectionItem<TestDashboardItem>>>(event.detail.items);
 });
 
 narrowedDashboard.addEventListener('dashboard-item-selected-changed', (event) => {
   assertType<DashboardItemSelectedChangedEvent<TestDashboardItem>>(event);
-  assertType<TestDashboardItem>(event.detail.item);
+  assertType<TestDashboardItem>(event.detail.item as TestDashboardItem);
+  assertType<DashboardSectionItem<TestDashboardItem>>(event.detail.item as DashboardSectionItem<TestDashboardItem>);
   assertType<boolean>(event.detail.value);
 });
 
 narrowedDashboard.addEventListener('dashboard-item-move-mode-changed', (event) => {
   assertType<DashboardItemMoveModeChangedEvent<TestDashboardItem>>(event);
-  assertType<TestDashboardItem>(event.detail.item);
+  assertType<TestDashboardItem>(event.detail.item as TestDashboardItem);
+  assertType<DashboardSectionItem<TestDashboardItem>>(event.detail.item as DashboardSectionItem<TestDashboardItem>);
   assertType<boolean>(event.detail.value);
 });
 
 narrowedDashboard.addEventListener('dashboard-item-resize-mode-changed', (event) => {
   assertType<DashboardItemResizeModeChangedEvent<TestDashboardItem>>(event);
-  assertType<TestDashboardItem>(event.detail.item);
+  assertType<TestDashboardItem>(event.detail.item as TestDashboardItem);
+  assertType<DashboardSectionItem<TestDashboardItem>>(event.detail.item as DashboardSectionItem<TestDashboardItem>);
   assertType<boolean>(event.detail.value);
 });
 
