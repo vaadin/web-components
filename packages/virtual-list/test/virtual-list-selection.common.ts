@@ -677,45 +677,8 @@ describe('selection', () => {
   });
 
   describe('a11y', () => {
-    it('should have role="list"', () => {
-      expect(list.role).to.equal('list');
-    });
-
-    it('should have items with role="listitem"', () => {
-      expect(getRenderedItem(0)!.role).to.equal('listitem');
-    });
-
     it('should have items without aria-selected', () => {
       expect(getRenderedItem(0)!.ariaSelected).to.be.null;
-    });
-
-    it('should assign aria-setsize and aria-posinset', () => {
-      list.scrollToIndex(list.items!.length - 1);
-      const lastVisibleIndex = list.lastVisibleIndex;
-      expect(getRenderedItem(lastVisibleIndex)!.ariaSetSize).to.equal('100');
-      expect(getRenderedItem(lastVisibleIndex)!.ariaPosInSet).to.equal('100');
-    });
-
-    it('should generate aria-label to the items', async () => {
-      list.itemAccessibleNameGenerator = (item) => `Accessible ${item?.name}`;
-      await nextFrame();
-      expect(getRenderedItem(0)!.ariaLabel).to.equal('Accessible Item 0');
-    });
-
-    it('should remove aria-label from the items', () => {
-      list.itemAccessibleNameGenerator = (item) => `Accessible ${item?.name}`;
-      list.itemAccessibleNameGenerator = undefined;
-      expect(getRenderedItem(0)!.ariaLabel).to.be.null;
-    });
-
-    it('should not invoke itemAccessibleNameGenerator when items are emptied', async () => {
-      const spy = sinon.spy((item) => `Accessible ${item?.name}`);
-      list.itemAccessibleNameGenerator = spy;
-      await nextFrame();
-
-      spy.resetHistory();
-      list.items = [];
-      expect(spy.called).to.be.false;
     });
 
     describe('selectable', () => {
@@ -750,6 +713,18 @@ describe('selection', () => {
         list.selectionMode = 'single';
         await nextFrame();
         expect(list.ariaMultiSelectable).to.be.null;
+      });
+
+      it('should revert to role="list"', async () => {
+        list.selectionMode = 'none';
+        await nextFrame();
+        expect(list.role).to.equal('list');
+      });
+
+      it('should revert to having items with role="listitem"', async () => {
+        list.selectionMode = 'none';
+        await nextFrame();
+        expect(getRenderedItem(0)!.role).to.equal('listitem');
       });
     });
   });

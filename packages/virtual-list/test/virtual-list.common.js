@@ -4,8 +4,9 @@ import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 describe('virtual-list', () => {
   let list;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     list = fixtureSync(`<vaadin-virtual-list></vaadin-virtual-list>`);
+    await nextFrame();
   });
 
   it('should have a default height', () => {
@@ -34,6 +35,10 @@ describe('virtual-list', () => {
       </div>`);
 
     expect(flexBox.firstElementChild.offsetWidth).to.equal(flexBox.offsetWidth);
+  });
+
+  it('should have role="list"', () => {
+    expect(list.role).to.equal('list');
   });
 
   describe('with items', () => {
@@ -124,6 +129,34 @@ describe('virtual-list', () => {
       name = 'bar';
       list.requestContentUpdate();
       expect(list.children[0].textContent.trim()).to.equal('bar');
+    });
+
+    it('should have items with role="listitem"', () => {
+      expect(list.children[0].role).to.equal('listitem');
+    });
+
+    it('should assign aria-setsize and aria-posinset', () => {
+      list.scrollToIndex(list.items.length - 1);
+      const item = [...list.children].find((el) => el.textContent === `value-${list.lastVisibleIndex}`);
+      expect(item.ariaSetSize).to.equal('100');
+      expect(item.ariaPosInSet).to.equal('100');
+    });
+
+    describe('item accessible name generator', () => {
+      beforeEach(async () => {
+        list.itemAccessibleNameGenerator = (item) => `Accessible ${item.value}`;
+        await nextFrame();
+      });
+
+      it('should generate aria-label to the items', () => {
+        expect(list.children[0].ariaLabel).to.equal('Accessible value-0');
+      });
+
+      it('should remove aria-label from the items', async () => {
+        list.itemAccessibleNameGenerator = undefined;
+        await nextFrame();
+        expect(list.children[0].ariaLabel).to.be.null;
+      });
     });
 
     describe('overflow attribute', () => {

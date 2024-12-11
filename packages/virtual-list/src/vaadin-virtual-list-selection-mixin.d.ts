@@ -26,9 +26,4 @@ export declare class VirtualListSelectionMixinClass<TItem = VirtualListDefaultIt
    * An array that contains the selected items.
    */
   selectedItems: TItem[];
-
-  /**
-   * A function that generates accessible names for virtual list items.
-   */
-  itemAccessibleNameGenerator?: (item: TItem) => string;
 }

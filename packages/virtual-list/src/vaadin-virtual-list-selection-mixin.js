@@ -48,14 +48,6 @@ export const SelectionMixin = (superClass) =>
         },
 
         /**
-         * A function that generates accessible names for virtual list items.
-         */
-        itemAccessibleNameGenerator: {
-          type: Function,
-          sync: true,
-        },
-
-        /**
          * Set of selected item ids
          * @private
          */
@@ -77,7 +69,7 @@ export const SelectionMixin = (superClass) =>
     }
 
     static get observers() {
-      return ['__selectionChanged(itemIdPath, selectedItems, itemAccessibleNameGenerator)'];
+      return ['__selectionChanged(itemIdPath, selectedItems)'];
     }
 
     constructor() {
@@ -105,26 +97,32 @@ export const SelectionMixin = (superClass) =>
      * @override
      */
     __updateElement(el, index) {
-      super.__updateElement(el, index);
-
       const item = this.items[index];
       el.__item = item;
       el.__index = index;
 
       el.toggleAttribute('selected', this.__isSelected(item));
+      el.ariaSelected = this.__isSelectable ? String(this.__isSelected(item)) : null;
+
       const isFocusable = this.__isNavigating() && this.__focusIndex === index;
       el.tabIndex = isFocusable ? 0 : -1;
-      el.toggleAttribute(
-        'focused',
-        this.__isSelectable && this.__focusIndex === index && el.contains(this.__getActiveElement()),
-      );
 
-      el.role = this.__isSelectable ? 'option' : 'listitem';
-      el.ariaSelected = this.__isSelectable ? String(this.__isSelected(item)) : null;
-      el.ariaSetSize = String(this.items.length);
-      el.ariaPosInSet = String(index + 1);
+      const isFocused = this.__isSelectable && this.__focusIndex === index && el.contains(this.__getActiveElement());
+      el.toggleAttribute('focused', isFocused);
 
-      el.ariaLabel = this.itemAccessibleNameGenerator ? this.itemAccessibleNameGenerator(item) : null;
+      super.__updateElement(el, index);
+    }
+
+    /**
+     * @private
+     * @override
+     */
+    __updateElementRole(el) {
+      if (this.__isSelectable) {
+        el.role = 'option';
+      } else {
+        super.__updateElementRole(el);
+      }
     }
 
     /**
@@ -145,7 +143,10 @@ export const SelectionMixin = (superClass) =>
       this.__updateNavigating(true);
     }
 
-    /** @private */
+    /**
+     * @private
+     * @override
+     */
     __updateAria() {
       this.role = this.__isSelectable ? 'listbox' : 'list';
       this.ariaMultiSelectable = this.selectionMode === 'multi' ? 'true' : null;
