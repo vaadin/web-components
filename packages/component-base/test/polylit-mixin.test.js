@@ -1197,7 +1197,7 @@ describe('PolylitMixin', () => {
           }
 
           render() {
-            return html`Teleported`;
+            return html`<slot></slot>`;
           }
         },
       );
@@ -1207,7 +1207,10 @@ describe('PolylitMixin', () => {
           render() {
             return html`
               <div id="title">Title</div>
-              <${unsafeStatic(teleportedTag)} id="teleported" />
+
+              <${unsafeStatic(teleportedTag)} id="teleported">
+                <div id="teleportedContent">Teleported content</div>
+              </${unsafeStatic(teleportedTag)}>
             `;
           }
         },
@@ -1224,12 +1227,17 @@ describe('PolylitMixin', () => {
 
       it('should register elements with id', () => {
         expect(element.$.title).to.be.instanceOf(HTMLDivElement);
-        expect(element.$.title.id).to.equal('title');
+        expect(element.$.title.textContent.trim()).to.equal('Title');
       });
 
       it('should register teleported elements with id', () => {
         expect(element.$.teleported).to.be.instanceOf(HTMLElement);
-        expect(element.$.teleported.id).to.equal('teleported');
+        expect(element.$.teleported.textContent.trim()).to.equal('Teleported content');
+      });
+
+      it('should register children with id whose parent was teleported', () => {
+        expect(element.$.teleportedContent).to.be.instanceOf(HTMLElement);
+        expect(element.$.teleportedContent.textContent.trim()).to.equal('Teleported content');
       });
     });
 
