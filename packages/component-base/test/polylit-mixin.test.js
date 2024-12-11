@@ -526,8 +526,8 @@ describe('PolylitMixin', () => {
           `;
         }
 
-        _valueOrLoadingChanged(_value, _loading) {
-          valueOrLoadingChangedSpy(_value, _loading);
+        _valueOrLoadingChanged(value, loading) {
+          valueOrLoadingChangedSpy(value, loading);
         }
 
         _countOrLoadingChanged(_count, _loading) {
