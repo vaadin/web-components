@@ -11,11 +11,10 @@ import { SelectionMixin } from './vaadin-virtual-list-selection-mixin.js';
 
 /**
  * @polymerMixin
- * @mixes SelectionMixin
  * @mixes ControllerMixin
  */
-export const VirtualListMixin = (superClass) =>
-  class VirtualListMixinClass extends SelectionMixin(ControllerMixin(superClass)) {
+export const VirtualListBaseMixin = (superClass) =>
+  class extends ControllerMixin(superClass) {
     static get properties() {
       return {
         /**
@@ -120,10 +119,6 @@ export const VirtualListMixin = (superClass) =>
 
     /** @private */
     __updateElement(el, index) {
-      if (super.__updateElement) {
-        super.__updateElement(el, index);
-      }
-
       if (el.__renderer !== this.renderer) {
         el.__renderer = this.renderer;
         this.__clearRenderTargetContent(el);
@@ -131,7 +126,7 @@ export const VirtualListMixin = (superClass) =>
 
       if (this.renderer) {
         const model = {};
-        this.__updateItemModel(model, this.items[index], index);
+        this.__updateItemModel(model, index);
 
         this.renderer(el, this, model);
       }
@@ -140,12 +135,9 @@ export const VirtualListMixin = (superClass) =>
     /**
      * @private
      */
-    __updateItemModel(model, item, index) {
+    __updateItemModel(model, index) {
       model.item = this.items[index];
       model.index = index;
-      if (super.__updateItemModel) {
-        super.__updateItemModel(model, item, index);
-      }
     }
 
     /**
@@ -208,3 +200,10 @@ export const VirtualListMixin = (superClass) =>
       }
     }
   };
+
+/**
+ * @polymerMixin
+ * @mixes SelectionMixin
+ * @mixes VirtualListBaseMixin
+ */
+export const VirtualListMixin = (superClass) => class extends SelectionMixin(VirtualListBaseMixin(superClass)) {};

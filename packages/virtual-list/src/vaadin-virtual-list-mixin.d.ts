@@ -3,7 +3,6 @@
  * Copyright (c) 2021 - 2024 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import type { Constructor } from '@open-wc/dedupe-mixin';
 import type { ControllerMixinClass } from '@vaadin/component-base/src/controller-mixin.js';
 import type { VirtualList } from './vaadin-virtual-list.js';
 import type { VirtualListSelectionMixinClass } from './vaadin-virtual-list-selection-mixin.js';
@@ -33,13 +32,7 @@ export interface VirtualListCustomEventMap<TItem> {
 
 export interface VirtualListEventMap<TItem> extends HTMLElementEventMap, VirtualListCustomEventMap<TItem> {}
 
-export declare function VirtualListMixin<TItem, T extends Constructor<HTMLElement>>(
-  base: T,
-): Constructor<ControllerMixinClass> & Constructor<VirtualListMixinClass<TItem>> & T;
-
-export declare class VirtualListMixinClass<
-  TItem = VirtualListDefaultItem,
-> extends VirtualListSelectionMixinClass<TItem> {
+export declare class VirtualListBaseMixinClass<TItem = VirtualListDefaultItem> {
   /**
    * Gets the index of the first visible item in the viewport.
    */
@@ -81,3 +74,8 @@ export declare class VirtualListMixinClass<
    */
   requestContentUpdate(): void;
 }
+
+export interface VirtualListMixinClass<TItem>
+  extends VirtualListBaseMixinClass,
+    ControllerMixinClass,
+    VirtualListSelectionMixinClass<TItem> {}
