@@ -5,7 +5,7 @@
  */
 import '@vaadin/progress-bar/src/vaadin-progress-bar.js';
 import './vaadin-upload-icons.js';
-import { html, LitElement } from 'lit';
+import { html, LitElement, nothing } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
@@ -52,7 +52,7 @@ class UploadFile extends UploadFileMixin(ThemableMixin(PolylitMixin(LitElement))
             @click="${this._fireFileEvent}"
             ?hidden="${!this.held}"
             ?disabled="${this.disabled}"
-            aria-label="${this.i18n ? this.i18n.file.start : ''}"
+            aria-label="${this.i18n ? this.i18n.file.start : nothing}"
             aria-describedby="name"
           ></button>
           <button
@@ -62,7 +62,7 @@ class UploadFile extends UploadFileMixin(ThemableMixin(PolylitMixin(LitElement))
             @click="${this._fireFileEvent}"
             ?hidden="${!this.errorMessage}"
             ?disabled="${this.disabled}"
-            aria-label="${this.i18n ? this.i18n.file.retry : ''}"
+            aria-label="${this.i18n ? this.i18n.file.retry : nothing}"
             aria-describedby="name"
           ></button>
           <button
@@ -71,7 +71,7 @@ class UploadFile extends UploadFileMixin(ThemableMixin(PolylitMixin(LitElement))
             file-event="file-abort"
             @click="${this._fireFileEvent}"
             ?disabled="${this.disabled}"
-            aria-label="${this.i18n ? this.i18n.file.remove : ''}"
+            aria-label="${this.i18n ? this.i18n.file.remove : nothing}"
             aria-describedby="name"
           ></button>
         </div>
