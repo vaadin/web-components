@@ -38,7 +38,7 @@ class CustomField extends CustomFieldMixin(ThemableMixin(ElementMixin(PolylitMix
           <span part="required-indicator" aria-hidden="true"></span>
         </div>
 
-        <div class="inputs-wrapper" @change="${this._onInputChange}">
+        <div class="inputs-wrapper" part="input-fields" @change="${this._onInputChange}">
           <slot id="slot"></slot>
         </div>
 
