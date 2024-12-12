@@ -23,6 +23,7 @@ export const ValidateMixin = dedupingMixin(
             reflectToAttribute: true,
             notify: true,
             value: false,
+            sync: true,
           },
 
           /**
@@ -47,6 +48,7 @@ export const ValidateMixin = dedupingMixin(
           required: {
             type: Boolean,
             reflectToAttribute: true,
+            sync: true,
           },
         };
       }

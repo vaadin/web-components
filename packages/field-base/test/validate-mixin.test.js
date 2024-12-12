@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { defineLit, definePolymer, fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
+import { defineLit, definePolymer, fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
@@ -16,19 +16,17 @@ const runTests = (defineHelper, baseMixin) => {
       await nextRender();
     });
 
-    it('should reflect required property to attribute', async () => {
+    it('should reflect required property to attribute', () => {
       expect(element.hasAttribute('required')).to.be.false;
 
       element.required = true;
-      await nextUpdate(element);
       expect(element.hasAttribute('required')).to.be.true;
     });
 
-    it('should reflect invalid property to attribute', async () => {
+    it('should reflect invalid property to attribute', () => {
       expect(element.hasAttribute('invalid')).to.be.false;
 
       element.invalid = true;
-      await nextUpdate(element);
       expect(element.hasAttribute('invalid')).to.be.true;
     });
 
@@ -36,16 +34,14 @@ const runTests = (defineHelper, baseMixin) => {
       expect(element.manualValidation).to.be.false;
     });
 
-    it('should fire invalid-changed event on invalid property change', async () => {
+    it('should fire invalid-changed event on invalid property change', () => {
       const spy = sinon.spy();
       element.addEventListener('invalid-changed', spy);
       element.invalid = true;
-      await nextUpdate(element);
       expect(spy.calledOnce).to.be.true;
 
       spy.resetHistory();
       element.invalid = false;
-      await nextUpdate(element);
       expect(spy.calledOnce).to.be.true;
     });
 
