@@ -32,6 +32,7 @@ export const InputMixin = dedupingMixin(
             type: Object,
             readOnly: true,
             observer: '_inputElementChanged',
+            sync: true,
           },
 
           /**
