@@ -40,3 +40,5 @@ assertType<(index: number) => void>(virtualList.scrollToIndex);
 
 assertType<number>(virtualList.firstVisibleIndex);
 assertType<number>(virtualList.lastVisibleIndex);
+
+assertType<((item: TestVirtualListItem) => string) | undefined>(virtualList.itemAccessibleNameGenerator);

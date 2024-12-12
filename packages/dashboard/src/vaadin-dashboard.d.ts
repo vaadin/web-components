@@ -68,7 +68,7 @@ export type DashboardRenderer<TItem extends DashboardItem> = (
  * Fired when an item was moved
  */
 export type DashboardItemMovedEvent<TItem extends DashboardItem> = CustomEvent<{
-  item: TItem;
+  item: TItem | DashboardSectionItem<TItem>;
 
   items: Array<TItem | DashboardSectionItem<TItem>>;
 
@@ -97,7 +97,7 @@ export type DashboardItemRemovedEvent<TItem extends DashboardItem> = CustomEvent
  * Fired when an item selected state changed
  */
 export type DashboardItemSelectedChangedEvent<TItem extends DashboardItem> = CustomEvent<{
-  item: TItem;
+  item: TItem | DashboardSectionItem<TItem>;
   value: boolean;
 }>;
 
@@ -105,7 +105,7 @@ export type DashboardItemSelectedChangedEvent<TItem extends DashboardItem> = Cus
  * Fired when an item move mode changed
  */
 export type DashboardItemMoveModeChangedEvent<TItem extends DashboardItem> = CustomEvent<{
-  item: TItem;
+  item: TItem | DashboardSectionItem<TItem>;
   value: boolean;
 }>;
 

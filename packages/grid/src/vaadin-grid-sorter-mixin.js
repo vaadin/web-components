@@ -117,6 +117,14 @@ export const GridSorterMixin = (superClass) =>
     /** @protected */
     connectedCallback() {
       super.connectedCallback();
+
+      if (this.performUpdate) {
+        // Force Lit's first render to be synchronous to ensure
+        // _pathOrDirectionChanged is triggered before grid's
+        // __applySorters, as it is in Polymer.
+        this.performUpdate();
+      }
+
       if (this._grid) {
         this._grid.__applySorters();
       } else {

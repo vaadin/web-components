@@ -111,6 +111,7 @@ class ConfirmDialogDialog extends ConfirmDialogBaseMixin(
         .modeless="${this.modeless}"
         .withBackdrop="${!this.modeless}"
         ?resizable="${this.resizable}"
+        aria-label="${this.ariaLabel}"
         restore-focus-on-close
         focus-trap
       ></vaadin-confirm-dialog-overlay>

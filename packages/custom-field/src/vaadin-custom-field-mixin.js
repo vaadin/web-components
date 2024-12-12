@@ -56,6 +56,7 @@ export const CustomFieldMixin = (superClass) =>
           type: String,
           observer: '__valueChanged',
           notify: true,
+          sync: true,
         },
 
         /**
