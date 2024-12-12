@@ -102,7 +102,9 @@ export const SelectionMixin = (superClass) =>
       el.__index = index;
 
       el.toggleAttribute('selected', this.__isSelected(item));
-      el.ariaSelected = this.__isSelectable ? String(this.__isSelected(item)) : null;
+
+      const ariaSelected = this.__isSelectable ? String(this.__isSelected(item)) : null;
+      this.__updateArieaSelected(el, ariaSelected);
 
       const isFocusable = this.__isNavigating() && this.__focusIndex === index;
       el.tabIndex = isFocusable ? 0 : -1;
@@ -111,6 +113,14 @@ export const SelectionMixin = (superClass) =>
       el.toggleAttribute('focused', isFocused);
 
       super.__updateElement(el, index);
+    }
+
+    __updateArieaSelected(el, selected) {
+      // aria-selected must be applied this way to have VO announce it correctly on single-select mode
+      el.ariaSelected = null;
+      setTimeout(() => {
+        el.ariaSelected = selected;
+      });
     }
 
     /**
