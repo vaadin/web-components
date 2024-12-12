@@ -116,11 +116,15 @@ export const SelectionMixin = (superClass) =>
     }
 
     __updateArieaSelected(el, selected) {
-      // aria-selected must be applied this way to have VO announce it correctly on single-select mode
-      el.ariaSelected = null;
-      setTimeout(() => {
+      if (this.selectionMode === 'single') {
+        // aria-selected must be applied this way to have VO announce it correctly on single-select mode
+        el.ariaSelected = null;
+        setTimeout(() => {
+          el.ariaSelected = selected;
+        });
+      } else {
         el.ariaSelected = selected;
-      });
+      }
     }
 
     /**
