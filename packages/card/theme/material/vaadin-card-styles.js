@@ -1,5 +1,6 @@
 import '@vaadin/vaadin-material-styles/color.js';
 import '@vaadin/vaadin-material-styles/shadow.js';
+import '@vaadin/vaadin-material-styles/typography.js';
 import { addGlobalThemeStyles, css, registerStyles } from '@vaadin/vaadin-themable-mixin/register-styles.js';
 
 const cardProps = css`
@@ -8,6 +9,8 @@ const cardProps = css`
     --vaadin-card-border-radius: 8px;
     --vaadin-card-border-width: 0;
     --vaadin-card-border-color: var(--material-divider-color);
+    --vaadin-card-padding: 16px;
+    --vaadin-card-gap: 8px 16px;
   }
 `;
 
@@ -40,6 +43,19 @@ const card = css`
   :host([theme~='elevated']) {
     --vaadin-card-background: var(--material-background-color);
     --vaadin-card-box-shadow: var(--material-shadow-elevation-2dp);
+  }
+
+  :host(:where([theme~='cover-media'])) ::slotted([slot='media']:is(img, video, svg, vaadin-icon)) {
+    border-radius: 4px;
+  }
+
+  ::slotted([slot='title']) {
+    font-size: var(--material-h6-font-size);
+    font-weight: 700;
+  }
+
+  ::slotted([slot='subtitle']) {
+    color: var(--material-secondary-text-color);
   }
 `;
 
