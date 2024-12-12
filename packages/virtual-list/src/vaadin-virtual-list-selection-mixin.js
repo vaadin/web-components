@@ -342,6 +342,10 @@ export const SelectionMixin = (superClass) =>
       this.__updateFocusIndex(this.__focusIndex + (down ? 1 : -1));
       this.__focusElementWithFocusIndex();
 
+      // Flush the virtualizer's element reordering to have VO announce the element's pos-in-set correctly
+      // when navigating with arrow keys
+      this.__virtualizer.flush();
+
       if (this.__debounceRequestContentUpdate) {
         // Render synchronously to avoid jumpiness when navigating near viewport edges
         this.__debounceRequestContentUpdate.flush();
