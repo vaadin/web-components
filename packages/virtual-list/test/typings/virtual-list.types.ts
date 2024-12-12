@@ -34,6 +34,7 @@ virtualList.renderer = (root, virtualList, model) => {
   assertType<VirtualListItemModel<TestVirtualListItem>>(model);
   assertType<number>(model.index);
   assertType<boolean | undefined>(model.selected);
+  assertType<undefined>(model.selected as undefined);
   assertType<TestVirtualListItem>(model.item);
 };
 
@@ -47,8 +48,10 @@ assertType<number>(virtualList.lastVisibleIndex);
 assertType<'none' | 'single' | 'multi'>(virtualList.selectionMode);
 assertType<TestVirtualListItem[]>(virtualList.selectedItems);
 assertType<string | null | undefined>(virtualList.itemIdPath);
+assertType<undefined>(virtualList.itemIdPath as undefined);
 
 assertType<((item: TestVirtualListItem) => string) | undefined>(virtualList.itemAccessibleNameGenerator);
+assertType<undefined>(virtualList.itemAccessibleNameGenerator as undefined);
 
 virtualList.addEventListener('selected-items-changed', (event) => {
   assertType<CustomEvent<{ value: TestVirtualListItem[] }>>(event);
