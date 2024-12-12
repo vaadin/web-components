@@ -107,13 +107,8 @@ export const LoginOverlayMixin = (superClass) =>
     }
 
     /** @private */
-    async _onOpenedChange() {
+    _onOpenedChange() {
       const form = this.$.vaadinLoginForm;
-
-      // Wait for initial render on overlay initialization
-      if (!form.$ && this.updateComplete) {
-        await this.updateComplete;
-      }
 
       if (!this.opened) {
         form.$.vaadinLoginUsername.value = '';

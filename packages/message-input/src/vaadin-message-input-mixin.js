@@ -116,15 +116,6 @@ export const MessageInputMixin = (superClass) =>
             }
           });
 
-          // With Lit version, input element renders asynchronously and it will
-          // override the `rows` attribute set to `1` in the `minRows` observer.
-          // Workaround: perform update twice to run the observer synchronously.
-          // TODO: needs https://github.com/vaadin/web-components/pull/8168
-          if (textarea.performUpdate) {
-            textarea.performUpdate();
-            textarea.performUpdate();
-          }
-
           const input = textarea.inputElement;
 
           // Set initial height to one row

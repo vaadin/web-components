@@ -19,6 +19,7 @@ export const DialogBaseMixin = (superClass) =>
           type: Boolean,
           value: false,
           notify: true,
+          sync: true,
         },
 
         /**
