@@ -7,13 +7,14 @@ import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js'
 import { OverflowController } from '@vaadin/component-base/src/overflow-controller.js';
 import { processTemplates } from '@vaadin/component-base/src/templates.js';
 import { Virtualizer } from '@vaadin/component-base/src/virtualizer.js';
+import { SelectionMixin } from './vaadin-virtual-list-selection-mixin.js';
 
 /**
  * @polymerMixin
  * @mixes ControllerMixin
  */
-export const VirtualListMixin = (superClass) =>
-  class VirtualListMixinClass extends ControllerMixin(superClass) {
+export const VirtualListBaseMixin = (superClass) =>
+  class extends ControllerMixin(superClass) {
     static get properties() {
       return {
         /**
@@ -144,13 +145,20 @@ export const VirtualListMixin = (superClass) =>
       }
 
       if (this.renderer) {
-        this.renderer(el, this, { item, index });
+        this.renderer(el, this, this.__getItemModel(index));
       }
     }
 
     /** @private */
     __updateElementRole(el) {
       el.role = 'listitem';
+    }
+
+    /**
+     * @private
+     */
+    __getItemModel(index) {
+      return { index, item: this.items[index] };
     }
 
     /**
@@ -213,3 +221,10 @@ export const VirtualListMixin = (superClass) =>
       }
     }
   };
+
+/**
+ * @polymerMixin
+ * @mixes SelectionMixin
+ * @mixes VirtualListBaseMixin
+ */
+export const VirtualListMixin = (superClass) => class extends SelectionMixin(VirtualListBaseMixin(superClass)) {};

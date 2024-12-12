@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -9,23 +9,70 @@
 
     <script type="module">
       import '@vaadin/virtual-list';
-      // import '@vaadin/virtual-list/vaadin-lit-virtual-list.js';
 
-      const items = Array.from({ length: 100000 }).map((_, i) => {
-        return { label: `Item ${i}` };
-      });
+      import { render, html } from 'lit';
+
+      function generateItems(count) {
+        return Array.from({ length: count }).map((_, i) => {
+          return { label: `Item ${i}` };
+        });
+      }
 
       const renderer = (root, _, { item }) => {
-        root.innerHTML = `<div>${item.label}</div>`;
+        render(html`<div>${item.label}</div>`, root);
       };
 
       const list = document.querySelector('vaadin-virtual-list');
-      list.items = items;
+      list.items = generateItems(10000);
       list.renderer = renderer;
+      list.selectionMode = 'multi';
+      list.itemIdPath = 'label';
+
+      const selectionMode = document.querySelector('#selection-mode');
+      selectionMode.value = list.selectionMode;
+      selectionMode.addEventListener('change', (e) => {
+        list.selectionMode = e.target.value;
+      });
+
+      document.querySelector('#empty').addEventListener('click', () => {
+        list.items = [];
+      });
+
+      document.querySelector('#set-1000-items').addEventListener('click', () => {
+        list.items = generateItems(1000);
+      });
+
+      document.querySelector('#set-5-items').addEventListener('click', () => {
+        list.items = generateItems(5);
+      });
     </script>
+
+    <style>
+      vaadin-virtual-list[navigating] > [focused] {
+        box-shadow: inset 0 0 0 2px var(--lumo-primary-color-50pct);
+      }
+
+      vaadin-virtual-list > [selected] {
+        background-color: var(--lumo-primary-color-10pct);
+      }
+
+      vaadin-virtual-list > * {
+        outline: none;
+      }
+    </style>
   </head>
 
   <body>
     <vaadin-virtual-list style="height: 400px"></vaadin-virtual-list>
+
+    <select id="selection-mode">
+      <option>none</option>
+      <option>single</option>
+      <option>multi</option>
+    </select>
+
+    <button id="empty">Empty items</button>
+    <button id="set-1000-items">Set 1000 items</button>
+    <button id="set-5-items">Set 5 items</button>
   </body>
 </html>
