@@ -67,15 +67,6 @@ class ConfirmDialog extends ConfirmDialogMixin(ElementMixin(ThemePropertyMixin(P
     `;
   }
 
-  /** @protected */
-  ready() {
-    super.ready();
-
-    this._overlayElement = this.$.dialog.$.overlay;
-
-    this._initOverlay(this._overlayElement);
-  }
-
   /** @private */
   _onOpenedChanged(event) {
     this.opened = event.detail.value;
