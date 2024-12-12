@@ -133,9 +133,10 @@ export const VirtualListBaseMixin = (superClass) =>
 
     /** @private */
     __updateElement(el, index) {
+      const item = this.items[index];
       el.ariaSetSize = String(this.items.length);
       el.ariaPosInSet = String(index + 1);
-      el.ariaLabel = this.itemAccessibleNameGenerator ? this.itemAccessibleNameGenerator(this.items[index]) : null;
+      el.ariaLabel = this.itemAccessibleNameGenerator ? this.itemAccessibleNameGenerator(item) : null;
       this.__updateElementRole(el);
 
       if (el.__renderer !== this.renderer) {
