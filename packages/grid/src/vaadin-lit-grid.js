@@ -37,10 +37,10 @@ class Grid extends GridMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElement)
     return html`
       <div
         id="scroller"
-        safari="${isSafari}"
-        ios="${isIOS}"
+        ?safari="${isSafari}"
+        ?ios="${isIOS}"
         ?loading="${this.loading}"
-        column-reordering-allowed="${this.columnReorderingAllowed}"
+        ?column-reordering-allowed="${this.columnReorderingAllowed}"
         ?empty-state="${this.__emptyState}"
       >
         <table
