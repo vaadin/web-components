@@ -212,6 +212,7 @@ export const SelectionMixin = (superClass) =>
       }
     }
 
+    /** @private */
     __ensureFocusedIndexInView() {
       const focusElement = this.__getRenderedFocusIndexElement();
       if (!focusElement) {
