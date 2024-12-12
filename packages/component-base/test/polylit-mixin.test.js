@@ -1051,6 +1051,20 @@ describe('PolylitMixin', () => {
       expect(element.hasAttribute('helper')).to.be.true;
     });
 
+    it('should not reflect immediately when setting a read-only sync property to the same value', () => {
+      element._setOpened(true);
+      element._setHelper('foo'); // async property
+      element._setOpened(true); // sync property
+      expect(element.hasAttribute('helper')).to.be.false;
+    });
+
+    it('should not reflect immediately when setting sync property to the same value', () => {
+      element.disabled = true;
+      element._setHelper('foo'); // async property
+      element.disabled = true; // sync property
+      expect(element.hasAttribute('helper')).to.be.false;
+    });
+
     it('should only call ready callback once during initialization', () => {
       expect(element.count).to.equal(1);
     });

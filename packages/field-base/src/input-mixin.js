@@ -63,6 +63,7 @@ export const InputMixin = dedupingMixin(
             type: Boolean,
             value: false,
             observer: '_hasInputValueChanged',
+            sync: true,
           },
         };
       }
