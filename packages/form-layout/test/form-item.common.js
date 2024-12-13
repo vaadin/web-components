@@ -3,7 +3,6 @@ import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '@vaadin/custom-field';
 import '@vaadin/text-field';
-import '../vaadin-form-item.js';
 
 describe('form-item', () => {
   let item, label, input;

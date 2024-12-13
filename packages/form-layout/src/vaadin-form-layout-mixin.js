@@ -71,6 +71,7 @@ export const FormLayoutMixin = (superClass) =>
             ];
           },
           observer: '_responsiveStepsChanged',
+          sync: true,
         },
 
         /**
@@ -79,6 +80,7 @@ export const FormLayoutMixin = (superClass) =>
          */
         _columnCount: {
           type: Number,
+          sync: true,
         },
 
         /**
@@ -87,6 +89,7 @@ export const FormLayoutMixin = (superClass) =>
          */
         _labelsOnTop: {
           type: Boolean,
+          sync: true,
         },
 
         /** @private */
@@ -102,15 +105,12 @@ export const FormLayoutMixin = (superClass) =>
 
     /** @protected */
     ready() {
-      // Here we create and attach a style element that we use for validating
+      // Here we attach a style element that we use for validating
       // CSS values in `responsiveSteps`. We can't add this to the `<template>`,
       // because Polymer will throw it away. We need to create this before
       // `super.ready()`, because `super.ready()` invokes property observers,
       // and the observer for `responsiveSteps` does CSS value validation.
-      this._styleElement = document.createElement('style');
       this.appendChild(this._styleElement);
-      // Ensure there is a child text node in the style element
-      this._styleElement.textContent = ' ';
 
       super.ready();
 
@@ -119,6 +119,10 @@ export const FormLayoutMixin = (superClass) =>
 
     constructor() {
       super();
+
+      this._styleElement = document.createElement('style');
+      // Ensure there is a child text node in the style element
+      this._styleElement.textContent = ' ';
 
       this.__intersectionObserver = new IntersectionObserver(([entry]) => {
         if (!entry.isIntersecting) {
