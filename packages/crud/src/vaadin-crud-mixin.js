@@ -100,6 +100,7 @@ export const CrudMixin = (superClass) =>
           type: Object,
           observer: '__editedItemChanged',
           notify: true,
+          sync: true,
         },
 
         /**
@@ -117,6 +118,7 @@ export const CrudMixin = (superClass) =>
           value: '',
           reflectToAttribute: true,
           observer: '__editorPositionChanged',
+          sync: true,
         },
 
         /**
@@ -128,6 +130,7 @@ export const CrudMixin = (superClass) =>
         editOnClick: {
           type: Boolean,
           value: false,
+          sync: true,
         },
 
         /**
@@ -194,6 +197,7 @@ export const CrudMixin = (superClass) =>
           reflectToAttribute: true,
           notify: true,
           observer: '__editorOpenedChanged',
+          sync: true,
         },
 
         /**
@@ -218,6 +222,7 @@ export const CrudMixin = (superClass) =>
           type: Boolean,
           value: false,
           reflectToAttribute: true,
+          sync: true,
         },
 
         /**
@@ -261,6 +266,7 @@ export const CrudMixin = (superClass) =>
          */
         i18n: {
           type: Object,
+          sync: true,
           value() {
             return {
               newItem: 'New item',
@@ -295,7 +301,10 @@ export const CrudMixin = (superClass) =>
         __dialogAriaLabel: String,
 
         /** @private */
-        __isDirty: Boolean,
+        __isDirty: {
+          type: Boolean,
+          sync: true,
+        },
 
         /** @private */
         __isNew: Boolean,
@@ -307,6 +316,7 @@ export const CrudMixin = (superClass) =>
         _fullscreen: {
           type: Boolean,
           observer: '__fullscreenChanged',
+          sync: true,
         },
 
         /**
@@ -368,6 +378,10 @@ export const CrudMixin = (superClass) =>
     /** @protected */
     ready() {
       super.ready();
+
+      if (this.$.dialog.performUpdate) {
+        this.$.dialog.performUpdate();
+      }
 
       this.$.dialog.$.overlay.addEventListener('vaadin-overlay-outside-click', this.__cancel);
       this.$.dialog.$.overlay.addEventListener('vaadin-overlay-escape-press', this.__cancel);

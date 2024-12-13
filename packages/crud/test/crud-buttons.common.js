@@ -2,7 +2,6 @@ import { expect } from '@vaadin/chai-plugins';
 import { aTimeout, change, fire, fixtureSync, listenOnce, nextRender, oneEvent } from '@vaadin/testing-helpers';
 import { setViewport } from '@web/test-runner-commands';
 import sinon from 'sinon';
-import '../src/vaadin-crud.js';
 import { flushGrid } from './helpers.js';
 
 describe('crud buttons', () => {
@@ -419,7 +418,7 @@ describe('crud buttons', () => {
             confirmCancelOverlay = confirmCancelDialog.$.dialog.$.overlay;
             await nextRender(crud);
             flushGrid(crud._grid);
-            crud.set('items', [{ foo: 'bar' }, { foo: 'baz' }]);
+            crud.items = [{ foo: 'bar' }, { foo: 'baz' }];
           });
 
           afterEach(() => {

@@ -8,28 +8,13 @@
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
-import './vaadin-crud-edit.js';
+import './vaadin-lit-crud-edit.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
-import { GridColumn } from '@vaadin/grid/src/vaadin-grid-column.js';
+import { GridColumn } from '@vaadin/grid/src/vaadin-lit-grid-column.js';
 import { editColumnDefaultRenderer } from './vaadin-crud-helpers.js';
 
 /**
- * `<vaadin-crud-edit-column>` is a helper element for the `<vaadin-grid>`
- * that provides a clickable and themable edit icon.
  *
- * Typical usage is in a custom `<vaadin-grid>` inside a `<vaadin-crud>`.
- *
- * #### Example:
- * ```html
- * <vaadin-grid items="[[items]]">
- *  <vaadin-crud-edit-column></vaadin-crud-edit-column>
- *
- *  <vaadin-grid-column>
- *    ...
- * ```
- *
- * @customElement
- * @extends GridColumn
  */
 class CrudEditColumn extends GridColumn {
   static get is() {
