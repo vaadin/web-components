@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/multi-select-combo-box",
-  "version": "24.4.16",
+  "version": "24.4.17",
   "publishConfig": {
     "access": "public"
   },
@@ -38,17 +38,17 @@
   ],
   "dependencies": {
     "@polymer/polymer": "^3.0.0",
-    "@vaadin/a11y-base": "~24.4.16",
-    "@vaadin/combo-box": "~24.4.16",
-    "@vaadin/component-base": "~24.4.16",
-    "@vaadin/field-base": "~24.4.16",
-    "@vaadin/input-container": "~24.4.16",
-    "@vaadin/item": "~24.4.16",
-    "@vaadin/lit-renderer": "~24.4.16",
-    "@vaadin/overlay": "~24.4.16",
-    "@vaadin/vaadin-lumo-styles": "~24.4.16",
-    "@vaadin/vaadin-material-styles": "~24.4.16",
-    "@vaadin/vaadin-themable-mixin": "~24.4.16"
+    "@vaadin/a11y-base": "~24.4.17",
+    "@vaadin/combo-box": "~24.4.17",
+    "@vaadin/component-base": "~24.4.17",
+    "@vaadin/field-base": "~24.4.17",
+    "@vaadin/input-container": "~24.4.17",
+    "@vaadin/item": "~24.4.17",
+    "@vaadin/lit-renderer": "~24.4.17",
+    "@vaadin/overlay": "~24.4.17",
+    "@vaadin/vaadin-lumo-styles": "~24.4.17",
+    "@vaadin/vaadin-material-styles": "~24.4.17",
+    "@vaadin/vaadin-themable-mixin": "~24.4.17"
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.3.4",

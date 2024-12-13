@@ -4,7 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 
-export function defineCustomElement(CustomElement, version = '24.4.16') {
+export function defineCustomElement(CustomElement, version = '24.4.17') {
   Object.defineProperty(CustomElement, 'version', {
     get() {
       return version;
