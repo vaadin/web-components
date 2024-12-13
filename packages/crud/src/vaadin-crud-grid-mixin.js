@@ -39,13 +39,17 @@ export const CrudGridMixin = (superClass) =>
          */
         noHead: Boolean,
 
-        /** @private */
-        __hideEditColumn: Boolean,
+        /**
+         * Determines whether the edit column should be hidden.
+         */
+        hideEditColumn: {
+          type: Boolean,
+        },
       };
     }
 
     static get observers() {
-      return ['__onItemsChange(items)', '__onHideEditColumnChange(__hideEditColumn)'];
+      return ['__onItemsChange(items)', '__onHideEditColumnChange(hideEditColumn)'];
     }
 
     /** @private */
@@ -65,7 +69,7 @@ export const CrudGridMixin = (superClass) =>
     /** @private */
     __toggleEditColumn() {
       let editColumn = this.querySelector('vaadin-crud-edit-column');
-      if (this.__hideEditColumn) {
+      if (this.hideEditColumn) {
         if (editColumn) {
           this.removeChild(editColumn);
         }

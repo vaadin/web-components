@@ -738,7 +738,7 @@ export const CrudMixin = (superClass) =>
         return;
       }
 
-      grid.__hideEditColumn = editOnClick;
+      grid.hideEditColumn = editOnClick;
 
       if (editOnClick) {
         grid.addEventListener('active-item-changed', this.__onGridActiveItemChanged);
