@@ -141,10 +141,6 @@ export const FormLayoutMixin = (superClass) =>
     connectedCallback() {
       super.connectedCallback();
 
-      if (this.performUpdate) {
-        this.performUpdate();
-      }
-
       requestAnimationFrame(() => this._selectResponsiveStep());
       requestAnimationFrame(() => this._updateLayout());
 
