@@ -3,14 +3,12 @@
  * Copyright (c) 2017 - 2024 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-
 import { addValueToAttribute, removeValueFromAttribute } from '@vaadin/component-base/src/dom-utils.js';
 import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 
 /**
-       * @polymerMixin
-       
-      */
+ * @polymerMixin
+ */
 export const FormItemMixin = (superClass) =>
   class extends superClass {
     constructor() {
