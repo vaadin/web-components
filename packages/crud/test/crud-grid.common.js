@@ -43,8 +43,9 @@ describe('crud grid', () => {
       expect(grid.querySelectorAll('vaadin-grid-column')).to.be.empty;
     });
 
-    it('should generate one column when providing list of primitives', () => {
+    it('should generate one column when providing list of primitives', async () => {
       grid.items = ['foo', 'bar'];
+      await nextRender(grid);
       expect(grid.querySelectorAll('vaadin-grid-column').length).to.be.equal(1);
     });
 

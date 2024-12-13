@@ -25,6 +25,7 @@ describe('crud editor', () => {
 
     beforeEach(async () => {
       crud = fixtureSync('<vaadin-crud style="width: 300px;"></vaadin-crud>');
+      await nextRender();
       crud.items = [{ foo: 'bar' }];
       header = crud.querySelector('[slot=header]');
       await nextRender(crud._grid);
@@ -68,7 +69,7 @@ describe('crud editor', () => {
         await nextRender(crud);
         flushGrid(crud._grid);
 
-        crud.set('items', [{ foo: 'bar' }, { foo: 'baz' }]);
+        crud.items = [{ foo: 'bar' }, { foo: 'baz' }];
         dialog = crud.$.dialog;
         overlay = dialog.$.overlay;
         form = crud.querySelector('[slot=form]');
@@ -135,6 +136,7 @@ describe('crud editor', () => {
       it('should not cover the editor content with focus ring element', async () => {
         // Open the editor
         crud.editorPosition = 'aside';
+        await nextRender();
         crud._newButton.click();
         await nextRender();
 

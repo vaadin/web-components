@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { aTimeout, change, fire, fixtureSync, nextRender, oneEvent } from '@vaadin/testing-helpers';
+import { aTimeout, change, fire, fixtureSync, nextFrame, nextRender, oneEvent } from '@vaadin/testing-helpers';
 import { setViewport } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import { capitalize, getProperty, setProperty } from '../src/vaadin-crud-helpers.js';
@@ -70,8 +70,9 @@ describe('crud', () => {
       expect(crud._grid.querySelector('vaadin-crud-edit').getAttribute('aria-label')).to.be.equal('Editar entidad');
     });
 
-    it('should propagate theme to internal themable components', () => {
+    it('should propagate theme to internal themable components', async () => {
       crud.setAttribute('theme', 'foo');
+      await nextFrame();
       [
         crud,
         crud._grid,
@@ -416,6 +417,7 @@ describe('crud', () => {
 
     beforeEach(async () => {
       crud = fixtureSync('<vaadin-crud style="width: 300px;"></vaadin-crud>');
+      await nextRender();
       editorDialog = crud.$.dialog;
       await nextRender();
     });

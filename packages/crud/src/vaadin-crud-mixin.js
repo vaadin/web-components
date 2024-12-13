@@ -100,6 +100,7 @@ export const CrudMixin = (superClass) =>
           type: Object,
           observer: '__editedItemChanged',
           notify: true,
+          sync: true,
         },
 
         /**
@@ -117,6 +118,7 @@ export const CrudMixin = (superClass) =>
           value: '',
           reflectToAttribute: true,
           observer: '__editorPositionChanged',
+          sync: true,
         },
 
         /**
@@ -220,6 +222,7 @@ export const CrudMixin = (superClass) =>
           type: Boolean,
           value: false,
           reflectToAttribute: true,
+          sync: true,
         },
 
         /**
@@ -298,7 +301,10 @@ export const CrudMixin = (superClass) =>
         __dialogAriaLabel: String,
 
         /** @private */
-        __isDirty: Boolean,
+        __isDirty: {
+          type: Boolean,
+          sync: true,
+        },
 
         /** @private */
         __isNew: Boolean,
@@ -310,6 +316,7 @@ export const CrudMixin = (superClass) =>
         _fullscreen: {
           type: Boolean,
           observer: '__fullscreenChanged',
+          sync: true,
         },
 
         /**

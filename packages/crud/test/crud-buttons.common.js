@@ -418,7 +418,7 @@ describe('crud buttons', () => {
             confirmCancelOverlay = confirmCancelDialog.$.dialog.$.overlay;
             await nextRender(crud);
             flushGrid(crud._grid);
-            crud.set('items', [{ foo: 'bar' }, { foo: 'baz' }]);
+            crud.items = [{ foo: 'bar' }, { foo: 'baz' }];
           });
 
           afterEach(() => {
