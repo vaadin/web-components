@@ -39,8 +39,13 @@ export const CrudGridMixin = (superClass) =>
          */
         noHead: Boolean,
 
-        /** @private */
-        __hideEditColumn: Boolean,
+        /**
+         * Determines whether the edit column should be hidden.
+         * @attr {boolean} hide-edit-column
+         */
+        hideEditColumn: {
+          type: Boolean,
+        },
       };
     }
 
