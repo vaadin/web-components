@@ -42,6 +42,14 @@ export const FormItemMixin = (superClass) =>
       this.__fieldNode = null;
     }
 
+    connectedCallback() {
+      super.connectedCallback();
+
+      if (this.performUpdate) {
+        this.performUpdate();
+      }
+    }
+
     /**
      * Returns a target element to add ARIA attributes to for a field.
      *

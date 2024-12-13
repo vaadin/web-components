@@ -71,6 +71,7 @@ export const FormLayoutMixin = (superClass) =>
             ];
           },
           observer: '_responsiveStepsChanged',
+          sync: true,
         },
 
         /**
@@ -79,6 +80,7 @@ export const FormLayoutMixin = (superClass) =>
          */
         _columnCount: {
           type: Number,
+          sync: true,
         },
 
         /**
@@ -87,6 +89,7 @@ export const FormLayoutMixin = (superClass) =>
          */
         _labelsOnTop: {
           type: Boolean,
+          sync: true,
         },
 
         /** @private */
@@ -102,6 +105,14 @@ export const FormLayoutMixin = (superClass) =>
 
     /** @protected */
     ready() {
+      super.ready();
+
+      this.addEventListener('animationend', this.__onAnimationEnd);
+    }
+
+    constructor() {
+      super();
+
       // Here we create and attach a style element that we use for validating
       // CSS values in `responsiveSteps`. We can't add this to the `<template>`,
       // because Polymer will throw it away. We need to create this before
@@ -111,14 +122,6 @@ export const FormLayoutMixin = (superClass) =>
       this.appendChild(this._styleElement);
       // Ensure there is a child text node in the style element
       this._styleElement.textContent = ' ';
-
-      super.ready();
-
-      this.addEventListener('animationend', this.__onAnimationEnd);
-    }
-
-    constructor() {
-      super();
 
       this.__intersectionObserver = new IntersectionObserver(([entry]) => {
         if (!entry.isIntersecting) {
@@ -136,6 +139,10 @@ export const FormLayoutMixin = (superClass) =>
     /** @protected */
     connectedCallback() {
       super.connectedCallback();
+
+      if (this.performUpdate) {
+        this.performUpdate();
+      }
 
       requestAnimationFrame(() => this._selectResponsiveStep());
       requestAnimationFrame(() => this._updateLayout());

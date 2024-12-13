@@ -3,7 +3,6 @@ import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '@vaadin/custom-field';
 import '@vaadin/text-field';
-import '../vaadin-form-item.js';
 
 describe('form-item', () => {
   let item, label, input;
@@ -11,13 +10,14 @@ describe('form-item', () => {
   describe('basic features', () => {
     let labelSlot, inputSlot;
 
-    beforeEach(() => {
+    beforeEach(async () => {
       item = fixtureSync(`
         <vaadin-form-item>
           <label slot="label">Label</label>
           <input>
         </vaadin-form-item>
       `);
+      await nextFrame();
       label = item.querySelector('label');
       input = item.querySelector('input');
       labelSlot = item.shadowRoot.querySelector('slot[name="label"]');
@@ -39,13 +39,14 @@ describe('form-item', () => {
   });
 
   describe('label positioning', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       item = fixtureSync(`
         <vaadin-form-item>
           <label slot="label">Label</label>
           <input>
         </vaadin-form-item>
       `);
+      await nextFrame();
       label = item.querySelector('label');
       input = item.querySelector('input');
     });
@@ -85,6 +86,7 @@ describe('form-item', () => {
     beforeEach(async () => {
       const item1 = fixtureSync(`<vaadin-form-item><label slot="label">Label</label></vaadin-form-item>`);
       const item2 = fixtureSync(`<vaadin-form-item><label slot="label">Label</label></vaadin-form-item>`);
+      await nextFrame();
       label1 = item1.querySelector('label');
       label2 = item2.querySelector('label');
       await nextFrame();
@@ -312,13 +314,14 @@ describe('form-item', () => {
       document.body.removeChild(testInput);
     });
 
-    beforeEach(() => {
+    beforeEach(async () => {
       item = fixtureSync(`
         <vaadin-form-item>
           <label slot="label">Label</label>
           <input>
         </vaadin-form-item>
       `);
+      await nextFrame();
       label = item.querySelector('label');
       input = item.querySelector('input');
       item.style.width = '100%';
