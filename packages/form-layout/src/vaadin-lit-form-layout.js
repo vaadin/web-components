@@ -29,6 +29,7 @@ class FormLayout extends FormLayoutMixin(ThemableMixin(ElementMixin(PolylitMixin
     return formLayoutStyles;
   }
 
+  /** @protected */
   render() {
     return html`
       <div id="layout">
