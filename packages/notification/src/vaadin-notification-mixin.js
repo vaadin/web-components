@@ -355,10 +355,6 @@ export const NotificationMixin = (superClass) =>
         return;
       }
 
-      if (this._container.performUpdate) {
-        this._container.performUpdate();
-      }
-
       if (!this._container.shadowRoot.querySelector(`slot[name="${this.position}"]`)) {
         console.warn(`Invalid alignment parameter provided: position=${this.position}`);
         return;

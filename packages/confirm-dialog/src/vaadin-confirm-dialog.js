@@ -104,15 +104,6 @@ class ConfirmDialog extends ConfirmDialogMixin(ElementMixin(ThemePropertyMixin(C
     return 'vaadin-confirm-dialog';
   }
 
-  /** @protected */
-  ready() {
-    super.ready();
-
-    this._overlayElement = this.$.dialog.$.overlay;
-
-    this._initOverlay(this._overlayElement);
-  }
-
   /**
    * @event confirm
    * fired when Confirm button was pressed.

@@ -543,17 +543,6 @@ export const ComboBoxMixin = (subclass) =>
           theme,
           itemClassNameGenerator,
         });
-
-        // NOTE: in PolylitMixin, setProperties() waits for `hasUpdated` to be set.
-        // This means for the first opening, properties won't be set synchronously.
-        // Call `performUpdate()` in this case to mimic the Polymer version logic.
-        if (scroller.performUpdate && !scroller.hasUpdated) {
-          try {
-            scroller.performUpdate();
-          } catch (_) {
-            // Suppress errors in synchronous tests for pre-opened combo-box.
-          }
-        }
       }
     }
 

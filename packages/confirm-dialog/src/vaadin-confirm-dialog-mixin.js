@@ -36,6 +36,7 @@ export const ConfirmDialogMixin = (superClass) =>
           type: Boolean,
           value: false,
           notify: true,
+          sync: true,
         },
 
         /**
@@ -302,6 +303,10 @@ export const ConfirmDialogMixin = (superClass) =>
         },
       });
       this.addController(this._confirmController);
+
+      this._overlayElement = this.$.dialog.$.overlay;
+
+      this._initOverlay(this._overlayElement);
     }
 
     /** @protected */

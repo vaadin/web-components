@@ -195,6 +195,12 @@ const PolylitMixinImplementation = (superclass) => {
       return result;
     }
 
+    static get polylitConfig() {
+      return {
+        asyncFirstRender: false,
+      };
+    }
+
     constructor() {
       super();
       this.__hasPolylitMixin = true;
@@ -213,6 +219,11 @@ const PolylitMixinImplementation = (superclass) => {
       if (parentHost && parentHost.__hasPolylitMixin && this.id) {
         parentHost.$ ||= {};
         parentHost.$[this.id] = this;
+      }
+
+      const { polylitConfig } = this.constructor;
+      if (!this.hasUpdated && !polylitConfig.asyncFirstRender) {
+        this.performUpdate();
       }
     }
 

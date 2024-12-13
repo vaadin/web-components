@@ -464,11 +464,6 @@ export const SelectBaseMixin = (superClass) =>
      */
     __appendValueItemElement(itemElement, parent) {
       parent.appendChild(itemElement);
-      // Trigger observer that sets aria-selected attribute
-      // so that we can then synchronously remove it below.
-      if (itemElement.performUpdate) {
-        itemElement.performUpdate();
-      }
       itemElement.removeAttribute('tabindex');
       itemElement.removeAttribute('aria-selected');
       itemElement.removeAttribute('role');
