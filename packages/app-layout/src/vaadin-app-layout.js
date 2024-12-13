@@ -117,7 +117,6 @@ registerStyles('vaadin-app-layout', appLayoutStyles, { moduleId: 'vaadin-app-lay
 class AppLayout extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElement))) {
   static get template() {
     return html`
-      <style></style>
       <div part="navbar" id="navbarTop">
         <slot name="navbar" on-slotchange="_updateTouchOptimizedMode"></slot>
       </div>
