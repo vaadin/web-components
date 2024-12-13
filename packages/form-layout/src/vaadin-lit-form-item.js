@@ -28,6 +28,7 @@ class FormItem extends FormItemMixin(ThemableMixin(PolylitMixin(LitElement))) {
     return formItemStyles;
   }
 
+  /** @protected */
   render() {
     return html`
       <div id="label" part="label" @click="${this.__onLabelClick}">
