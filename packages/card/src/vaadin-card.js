@@ -318,6 +318,8 @@ class Card extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
         this._mutationObserver = new MutationObserver(this._onMutation.bind(this));
       }
       this._mutationObserver.observe(this, { childList: 'true', attributeFilter: ['slot'], subtree: true });
+      // Trigger once manually to update attributes on first render
+      this._onMutation();
     }
   }
 
