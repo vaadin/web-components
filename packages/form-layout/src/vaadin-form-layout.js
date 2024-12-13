@@ -8,7 +8,10 @@ import { isElementHidden } from '@vaadin/a11y-base/src/focus-utils.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
-import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { formLayoutStyles } from './vaadin-form-layout-styles.js';
+
+registerStyles('vaadin-form-layout', formLayoutStyles, { moduleId: 'vaadin-form-layout-styles' });
 
 /**
  * `<vaadin-form-layout>` is a Web Component providing configurable responsive
@@ -109,51 +112,6 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
 class FormLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))) {
   static get template() {
     return html`
-      <style>
-        :host {
-          display: block;
-          max-width: 100%;
-          animation: 1ms vaadin-form-layout-appear;
-          /* CSS API for host */
-          --vaadin-form-item-label-width: 8em;
-          --vaadin-form-item-label-spacing: 1em;
-          --vaadin-form-item-row-spacing: 1em;
-          --vaadin-form-layout-column-spacing: 2em; /* (default) */
-          align-self: stretch;
-        }
-
-        @keyframes vaadin-form-layout-appear {
-          to {
-            opacity: 1 !important; /* stylelint-disable-line keyframe-declaration-no-important */
-          }
-        }
-
-        :host([hidden]) {
-          display: none !important;
-        }
-
-        #layout {
-          display: flex;
-
-          align-items: baseline; /* default \`stretch\` is not appropriate */
-
-          flex-wrap: wrap; /* the items should wrap */
-        }
-
-        #layout ::slotted(*) {
-          /* Items should neither grow nor shrink. */
-          flex-grow: 0;
-          flex-shrink: 0;
-
-          /* Margins make spacing between the columns */
-          margin-left: calc(0.5 * var(--vaadin-form-layout-column-spacing));
-          margin-right: calc(0.5 * var(--vaadin-form-layout-column-spacing));
-        }
-
-        #layout ::slotted(br) {
-          display: none;
-        }
-      </style>
       <div id="layout">
         <slot id="slot"></slot>
       </div>
