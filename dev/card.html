@@ -34,7 +34,7 @@
       const codeExample = document.querySelector('.code-example');
       const mediaSelect = document.querySelector('#media');
       const contentSelect = document.querySelector('#content');
-      const options = document.querySelector('.playground-options');
+      const slotCheckboxGroup = document.querySelector('.slot-options');
       const resizeOptions = document.querySelector('.playground-resize');
       const themeVariant = document.querySelector('.theme-variant');
 
@@ -68,7 +68,7 @@
         'footer': slotElements[5],
       }
 
-      options.addEventListener('value-changed', (e) => {
+      slotCheckboxGroup.addEventListener('value-changed', (e) => {
         Object.entries(slotItems).forEach(([key, val]) => {
           if (e.detail.value.includes(key)) {
             playground.append(val);
@@ -83,6 +83,7 @@
         { label: 'None', value: '-1' },
         { label: 'Text', value: '0' },
         { label: 'Scroller', value: '1' },
+        { label: 'Image & Text', value: '2' },
       ];
       const contentElements = document.querySelector('#content-options').content.children;
       contentSelect.addEventListener('value-changed', (e) => {
@@ -111,9 +112,10 @@
       function updateCodeExample() {
         codeExample.textContent = format(playground.outerHTML
           .replaceAll(/ tabindex="0"| role="button"| class="playground(.*?)"| style="(.+?)"| theme=""| has-content=""| has-title=""| has-subtitle=""| has-header=""| has-header-prefix=""| has-header-suffix=""| has-footer=""| has-media=""/g, '')
-          .replace(/src=".+?"/, 'src="..."')
+          .replaceAll(/src=".+?"/g, 'src="..."')
           .replace(/Lapland is the[\s\S]+?.</, 'Lapland is the...<')
           .replace(/ fill="none"[\s\S]+?<\/svg>/, '>...</svg>')
+          .replace(/ overflow=".*?"/, '')
         ).replace('\n  </vaadin-avatar>', '</vaadin-avatar>');
       }
 
@@ -234,17 +236,12 @@
             fill="black" fill-opacity="0.14" />
           <path
             d="M42.3975 35.7815C42.3975 35.9123 42.3879 36.0228 42.3739 36.1423C42.3014 37.4195 41.2614 38.4368 39.9854 38.4368C38.7099 38.4368 37.6699 37.426 37.5974 36.1491C37.5834 36.0293 37.5738 35.9123 37.5738 35.7815C37.5738 34.5059 37.2721 33.1918 34.2071 33.1918H23.9564C19.3336 33.1918 17.3437 30.9722 17.3438 26.5324L17.3438 22.7557C17.3438 21.4906 18.2992 20.4648 19.5449 20.4648C20.7906 20.4648 21.7353 21.4906 21.7353 22.7557V24.0317C21.7353 25.4604 22.7003 26.502 24.8106 26.502L34.8601 26.502C39.433 26.502 39.7845 29.9483 39.9352 31.7729H40.0361C40.1868 29.9483 40.5383 26.502 45.1108 26.502H55.1607C57.271 26.502 58.1702 25.4964 58.1702 24.0674L58.1762 22.7557C58.1762 21.4906 59.1755 20.4648 60.4212 20.4648C61.6669 20.4648 62.6562 21.4906 62.6562 22.7557V26.5324C62.6562 30.9722 60.6377 33.1918 56.0149 33.1918L45.7642 33.1918C42.6988 33.1918 42.3975 34.5059 42.3975 35.7815Z"
-            fill="url(#paint0_linear_204_11)" />
+            fill="url(#grad)" />
           <path
             d="M42.3766 60.7608C41.9648 61.6894 41.0562 62.3358 39.9984 62.3358C38.9259 62.3358 38.0052 61.6718 37.6024 60.7224C37.5979 60.7143 37.5934 60.7064 37.5889 60.6986C37.5796 60.6821 37.5703 60.6659 37.5611 60.648L28.4362 43.3129C28.1837 42.8594 28.0505 42.3451 28.0505 41.8251C28.0505 40.1677 29.3635 38.8192 30.9768 38.8192C32.273 38.8192 33.1539 39.4704 33.7562 40.8829L40 52.8382L46.2504 40.8685C46.8457 39.4704 47.7266 38.8192 49.0232 38.8192C50.6369 38.8192 51.9495 40.1677 51.9495 41.8251C51.9495 42.3451 51.8163 42.8594 51.5615 43.3169L42.4377 60.65C42.4245 60.6756 42.4111 60.6994 42.3977 60.7231C42.3906 60.7356 42.3836 60.7481 42.3766 60.7608Z"
-            fill="url(#paint1_linear_204_11)" />
+            fill="url(#grad)" />
           <defs>
-            <linearGradient id="paint0_linear_204_11" x1="40.7056" y1="20.4688" x2="39.9216" y2="62.3318"
-              gradientUnits="userSpaceOnUse">
-              <stop offset="0.108604" stop-color="#00B3FF" />
-              <stop offset="1" stop-color="#086BFF" />
-            </linearGradient>
-            <linearGradient id="paint1_linear_204_11" x1="40.7056" y1="20.4688" x2="39.9216" y2="62.3318"
+            <linearGradient id="grad" x1="40.7056" y1="20.4688" x2="39.9216" y2="62.3318"
               gradientUnits="userSpaceOnUse">
               <stop offset="0.108604" stop-color="#00B3FF" />
               <stop offset="1" stop-color="#086BFF" />
@@ -256,12 +253,19 @@
       <vaadin-select label="Content" id="content"></vaadin-select>
       <template id="content-options">
         <div>Lapland is the northern-most region of Finland and an active outdoor destination.</div>
-        <vaadin-scroller theme="overflow-indicators" style="height: 100%;">
+        <vaadin-scroller theme="overflow-indicators" style="max-height: 100px; min-height: 100%;">
           <div>Lapland is the northern-most region of Finland and an active outdoor destination that's known for its incredible,
           year-round light phenomena, vast arctic nature, and Santa Claus. The land of the indigenous Sámi people, known as Sámi
           homeland or Sápmi, also crosses the northern part of the region. Explore Finnish Lapland, Europe’s last great
           wilderness!</div>
         </vaadin-scroller>
+        <div>
+          <img width="800"
+            src="https://images.unsplash.com/photo-1674572271917-ac95fbdbf76c?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTQzfHxsYXBsYW5kfGVufDB8fDB8fHww"
+            alt="" style="max-width: 100%; border-radius: var(--lumo-border-radius-m)">
+          <div>Lapland is the northern-most region of Finland and an active outdoor destination that's known for its incredible,
+            year-round light phenomena, vast arctic nature, and Santa Claus.</div>
+        </div>
       </template>
 
       <template id="slot-options">
@@ -276,7 +280,7 @@
         <vaadin-button slot="footer">Book Vacation</vaadin-button>
       </template>
 
-      <vaadin-checkbox-group class="playground-options" label="Content">
+      <vaadin-checkbox-group class="slot-options" label="Header & Footer">
         <vaadin-checkbox label="Header" value="header"></vaadin-checkbox>
         <vaadin-checkbox label="Header Prefix" value="header-prefix"></vaadin-checkbox>
         <vaadin-checkbox label="Header Suffix" value="header-suffix"></vaadin-checkbox>
@@ -290,8 +294,8 @@
         <vaadin-checkbox label="Elevated" value="elevated"></vaadin-checkbox>
         <vaadin-checkbox label="Dark" value="dark"></vaadin-checkbox>
         <vaadin-checkbox label="Horizontal" value="horizontal"></vaadin-checkbox>
-        <vaadin-checkbox label="Cover Media" value="cover-media"></vaadin-checkbox>
         <vaadin-checkbox label="Stretch Media" value="stretch-media"></vaadin-checkbox>
+        <vaadin-checkbox label="Cover Media" value="cover-media"></vaadin-checkbox>
       </vaadin-checkbox-group>
 
       <vaadin-checkbox-group class="playground-resize" label="Resize">

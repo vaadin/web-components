@@ -53,7 +53,7 @@ const card = css`
       var(--vaadin-card-box-shadow);
   }
 
-  :host(:where([theme~='cover-media'])) ::slotted([slot='media']:is(img, video, svg, vaadin-icon)) {
+  :host(:where([theme~='stretch-media'])) ::slotted([slot='media']:is(img, video, svg, vaadin-icon)) {
     border-radius: var(--lumo-border-radius-m);
   }
 

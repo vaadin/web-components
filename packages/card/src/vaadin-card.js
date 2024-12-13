@@ -229,7 +229,7 @@ class Card extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
         aspect-ratio: auto;
       }
 
-      :host([theme~='stretch-media']) ::slotted([slot='media']:is(img, video, svg, vaadin-icon)) {
+      :host([theme~='cover-media']) ::slotted([slot='media']:is(img, video, svg, vaadin-icon)) {
         margin-top: calc(var(--vaadin-card-padding) * -1);
         margin-inline: calc(var(--vaadin-card-padding) * -1);
         width: calc(100% + var(--vaadin-card-padding) * 2);
@@ -239,7 +239,7 @@ class Card extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
         border-end-start-radius: 0;
       }
 
-      :host([theme~='horizontal'][theme~='stretch-media']) ::slotted([slot='media']:is(img, video, svg, vaadin-icon)) {
+      :host([theme~='horizontal'][theme~='cover-media']) ::slotted([slot='media']:is(img, video, svg, vaadin-icon)) {
         margin-inline-end: 0;
         width: calc(100% + var(--vaadin-card-padding));
         height: calc(100% + var(--vaadin-card-padding) * 2);
