@@ -9,8 +9,6 @@ import {
   oneEvent,
 } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import '../vaadin-app-layout.js';
-import '../vaadin-drawer-toggle.js';
 
 /**
  * Resolves once the function is invoked on the given object.

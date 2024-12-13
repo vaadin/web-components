@@ -1,13 +1,13 @@
 import { expect } from '@vaadin/chai-plugins';
-import { enter, fixtureSync, nextFrame, space } from '@vaadin/testing-helpers';
+import { enter, fixtureSync, nextFrame, nextRender, space } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import '../vaadin-drawer-toggle.js';
 
 describe('drawer-toggle', () => {
   let toggle;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     toggle = fixtureSync('<vaadin-drawer-toggle></vaadin-drawer-toggle>');
+    await nextRender();
   });
 
   describe('custom element definition', () => {
