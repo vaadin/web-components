@@ -179,9 +179,8 @@ describe('a11y', () => {
       describe('delete item', () => {
         let deleteButton;
 
-        beforeEach(async () => {
+        beforeEach(() => {
           crud = createFixture();
-          await nextRender();
           crud.editorPosition = 'aside';
           newButton = crud.querySelector('[slot=new-button]');
           deleteButton = crud.querySelector('[slot=delete-button]');

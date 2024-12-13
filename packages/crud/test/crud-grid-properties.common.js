@@ -13,7 +13,6 @@ describe('crud grid properties', () => {
         crud = fixtureSync('<vaadin-crud></vaadin-crud>');
         crud.noSort = true;
         crud.items = ITEMS;
-        await nextRender();
         grid = crud.querySelector('vaadin-crud-grid');
         await nextRender();
       });
@@ -29,7 +28,6 @@ describe('crud grid properties', () => {
         crud = fixtureSync('<vaadin-crud></vaadin-crud>');
         crud.items = ITEMS;
         crud.noSort = true;
-        await nextRender();
         grid = crud.querySelector('vaadin-crud-grid');
         await nextRender();
       });
@@ -46,7 +44,6 @@ describe('crud grid properties', () => {
         crud.items = ITEMS;
         crud.noSort = true;
         crud.include = 'name';
-        await nextRender();
         grid = crud.querySelector('vaadin-crud-grid');
         await nextRender();
       });
@@ -64,7 +61,6 @@ describe('crud grid properties', () => {
         crud = fixtureSync('<vaadin-crud></vaadin-crud>');
         crud.noFilter = true;
         crud.items = ITEMS;
-        await nextRender();
         grid = crud.querySelector('vaadin-crud-grid');
         await nextRender();
       });
@@ -80,7 +76,6 @@ describe('crud grid properties', () => {
         crud = fixtureSync('<vaadin-crud></vaadin-crud>');
         crud.items = ITEMS;
         crud.noFilter = true;
-        await nextRender();
         grid = crud.querySelector('vaadin-crud-grid');
         await nextRender();
       });
@@ -97,7 +92,6 @@ describe('crud grid properties', () => {
         crud.items = ITEMS;
         crud.noFilter = true;
         crud.include = 'name';
-        await nextRender();
         grid = crud.querySelector('vaadin-crud-grid');
         await nextRender();
       });
@@ -115,7 +109,6 @@ describe('crud grid properties', () => {
         crud = fixtureSync('<vaadin-crud></vaadin-crud>');
         crud.noHead = true;
         crud.items = ITEMS;
-        await nextRender();
         grid = crud.querySelector('vaadin-crud-grid');
         await nextRender();
       });
@@ -131,7 +124,6 @@ describe('crud grid properties', () => {
         crud = fixtureSync('<vaadin-crud></vaadin-crud>');
         crud.items = ITEMS;
         crud.noHead = true;
-        await nextRender();
         grid = crud.querySelector('vaadin-crud-grid');
         await nextRender();
       });
@@ -148,7 +140,6 @@ describe('crud grid properties', () => {
         crud.items = ITEMS;
         crud.noHead = true;
         crud.include = 'name';
-        await nextRender();
         grid = crud.querySelector('vaadin-crud-grid');
         await nextRender();
       });
