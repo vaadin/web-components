@@ -45,7 +45,7 @@ export const CrudGridMixin = (superClass) =>
     }
 
     static get observers() {
-      return ['__onItemsChange(items)', '__onHideEditColumnChange(hideEditColumn)'];
+      return ['__onItemsChange(items)', '__onHideEditColumnChange(__hideEditColumn)'];
     }
 
     /** @private */
@@ -65,7 +65,7 @@ export const CrudGridMixin = (superClass) =>
     /** @private */
     __toggleEditColumn() {
       let editColumn = this.querySelector('vaadin-crud-edit-column');
-      if (this.hideEditColumn) {
+      if (this.__hideEditColumn) {
         if (editColumn) {
           this.removeChild(editColumn);
         }
