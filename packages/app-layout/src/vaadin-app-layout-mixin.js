@@ -44,6 +44,7 @@ export const AppLayoutMixin = (superclass) =>
         i18n: {
           type: Object,
           observer: '__i18nChanged',
+          sync: true,
           value: () => {
             return {
               drawer: 'Drawer',
@@ -64,6 +65,7 @@ export const AppLayoutMixin = (superclass) =>
           notify: true,
           reflectToAttribute: true,
           observer: '__primarySectionChanged',
+          sync: true,
         },
 
         /**
@@ -80,6 +82,7 @@ export const AppLayoutMixin = (superclass) =>
           value: true,
           reflectToAttribute: true,
           observer: '__drawerOpenedChanged',
+          sync: true,
         },
 
         /**
@@ -93,6 +96,7 @@ export const AppLayoutMixin = (superclass) =>
           readOnly: true,
           value: false,
           reflectToAttribute: true,
+          sync: true,
         },
 
         /**
