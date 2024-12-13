@@ -29,7 +29,6 @@ const card = css`
     content: '';
     position: absolute;
     inset: 0;
-    z-index: 999;
     pointer-events: none;
     border-radius: inherit;
     border: var(--vaadin-card-border, var(--vaadin-card-border-width) solid var(--vaadin-card-border-color));
@@ -45,7 +44,7 @@ const card = css`
     --vaadin-card-box-shadow: var(--material-shadow-elevation-2dp);
   }
 
-  :host(:where([theme~='cover-media'])) ::slotted([slot='media']:is(img, video, svg, vaadin-icon)) {
+  :host(:where([theme~='stretch-media'])) ::slotted([slot='media']:is(img, video, svg, vaadin-icon)) {
     border-radius: 4px;
   }
 
