@@ -48,6 +48,8 @@ function _getElementFromCell(dashboard: HTMLElement, rowIndex: number, columnInd
   const x = rtl ? right - columnOffset : left + columnOffset;
   const y = top + rowHeights.slice(0, rowIndex).reduce((sum, height) => sum + height, 0);
 
+  console.warn(x, y, columnWidths[columnIndex], rowHeights[rowIndex], columnIndex, rowIndex);
+
   return document
     .elementsFromPoint(x + (columnWidths[columnIndex] / 2) * (rtl ? -1 : 1), y + rowHeights[rowIndex] - 10)
     .reverse()

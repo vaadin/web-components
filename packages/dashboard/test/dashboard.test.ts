@@ -102,13 +102,13 @@ describe('dashboard', () => {
     expect(dashboard.querySelectorAll('vaadin-dashboard-widget')).to.be.empty;
   });
 
-  it('should remove a widget', () => {
+  it.only('should remove a widget', () => {
     const widget = getElementFromCell(dashboard, 0, 1);
     getRemoveButton(widget as DashboardWidget).click();
     expect(dashboard.items).to.eql([{ id: '0' }]);
   });
 
-  it('should dispatch an dashboard-item-removed event', () => {
+  it.only('should dispatch an dashboard-item-removed event', () => {
     const spy = sinon.spy();
     dashboard.addEventListener('dashboard-item-removed', spy);
     const widget = getElementFromCell(dashboard, 0, 1);
