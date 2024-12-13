@@ -4,6 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { css, html, LitElement } from 'lit';
+import { ifDefined } from 'lit/directives/if-defined.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
@@ -105,7 +106,7 @@ class Notification extends NotificationMixin(ElementMixin(ThemableMixin(PolylitM
   render() {
     return html`
       <vaadin-notification-card
-        theme="${this._theme || ''}"
+        theme="${ifDefined(this._theme)}"
         aria-live="${this.__computeAriaLive(this.assertive)}"
       ></vaadin-notification-card>
     `;
