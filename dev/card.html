@@ -66,7 +66,7 @@
         'title': slotElements[3],
         'subtitle': slotElements[4],
         'footer': slotElements[5],
-      }
+      };
 
       slotCheckboxGroup.addEventListener('value-changed', (e) => {
         Object.entries(slotItems).forEach(([key, val]) => {
@@ -131,7 +131,7 @@
 
             result += indent + '<' + element + '>\r\n';
 
-            if (element.match(/^<?\w[^>]*[^\/]$/) && !element.startsWith("input")) {
+            if (element.match(/^<?\w[^>]*[^/]$/) && !element.startsWith("input")) {
               indent += tab;
             }
           });
