@@ -316,8 +316,8 @@ export const DragAndDropMixin = (superClass) =>
      * and performance issues while still providing a visual indication of the drag.
      *
      * Related issues:
-     * - https://issues.chromium.org/issues/383356871
      * - https://github.com/vaadin/web-components/issues/7985
+     * - https://issues.chromium.org/issues/383356871
      *
      * @private
      */
