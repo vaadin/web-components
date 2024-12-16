@@ -4,6 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import {
+  generateDragImageFallback,
   iterateChildren,
   iterateRowCells,
   updateBooleanRowStates,
@@ -139,10 +140,6 @@ export const DragAndDropMixin = (superClass) =>
     /** @protected */
     connectedCallback() {
       super.connectedCallback();
-      // Chromium based browsers cannot properly generate drag images for elements
-      // that have children with massive heights. This workaround prevents crashes
-      // and performance issues by excluding the items from the drag image.
-      // https://github.com/vaadin/web-components/issues/7985
       document.addEventListener('dragstart', this.__onDocumentDragStart, { capture: true });
     }
 
@@ -312,26 +309,24 @@ export const DragAndDropMixin = (superClass) =>
       }
     }
 
-    /** @private */
+    /**
+     * Chromium-based browsers crash when generating drag images for elements
+     * that have children with massive heights. Replacing the default drag image
+     * with an auto-generated white-background SVG image helps prevent the crash
+     * and performance issues while still providing a visual indication of the drag.
+     *
+     * Related issues:
+     * - https://issues.chromium.org/issues/383356871
+     * - https://github.com/vaadin/web-components/issues/7985
+     *
+     * @private
+     */
     __onDocumentDragStart(e) {
-      // The dragged element can be the element itself or a parent of the element
-      if (!e.target.contains(this)) {
-        return;
-      }
-      // The threshold value 20000 provides a buffer to both
-      //   - avoid the crash and the performance issues
-      //   - unnecessarily avoid excluding items from the drag image
-      if (this.$.items.offsetHeight > 20000) {
-        const initialItemsMaxHeight = this.$.items.style.maxHeight;
-        const initialTableOverflow = this.$.table.style.overflow;
-        // Momentarily hides the items until the browser starts generating the
-        // drag image.
-        this.$.items.style.maxHeight = '0';
-        this.$.table.style.overflow = 'hidden';
-        requestAnimationFrame(() => {
-          this.$.items.style.maxHeight = initialItemsMaxHeight;
-          this.$.table.style.overflow = initialTableOverflow;
-        });
+      const { target } = e;
+      if (target.contains(this) && this.$.items.offsetHeight > 20000) {
+        const img = new Image();
+        img.src = generateDragImageFallback(target.offsetWidth, target.offsetHeight);
+        e.dataTransfer.setDragImage(img, 0, 0);
       }
     }
 
