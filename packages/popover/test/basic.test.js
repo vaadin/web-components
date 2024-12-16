@@ -429,6 +429,18 @@ describe('popover', () => {
 
       expect(popover.opened).to.be.true;
     });
+
+    it('should not open on target click when target is cleared', async () => {
+      popover.target = target;
+      await nextUpdate(popover);
+
+      popover.target = null;
+      await nextUpdate(popover);
+
+      target.click();
+
+      expect(popover.opened).to.be.false;
+    });
   });
 
   describe('dimensions', () => {
