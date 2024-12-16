@@ -34,27 +34,32 @@ export const PopoverTargetMixin = (superClass) =>
          */
         target: {
           type: Object,
-          observer: '__targetChanged',
+        },
+
+        /** @private */
+        __isConnected: {
+          type: Boolean,
+          sync: true,
         },
       };
+    }
+
+    static get observers() {
+      return ['__targetOrConnectedChanged(target, __isConnected)'];
     }
 
     /** @protected */
     connectedCallback() {
       super.connectedCallback();
 
-      if (this.target) {
-        this._addTargetListeners(this.target);
-      }
+      this.__isConnected = true;
     }
 
     /** @protected */
     disconnectedCallback() {
       super.disconnectedCallback();
 
-      if (this.target) {
-        this._removeTargetListeners(this.target);
-      }
+      this.__isConnected = false;
     }
 
     /** @private */
@@ -82,14 +87,16 @@ export const PopoverTargetMixin = (superClass) =>
     }
 
     /** @private */
-    __targetChanged(target, oldTarget) {
-      if (oldTarget) {
-        this._removeTargetListeners(oldTarget);
+    __targetOrConnectedChanged(target, isConnected) {
+      if (this.__previousTarget && (this.__previousTarget !== target || !isConnected)) {
+        this._removeTargetListeners(this.__previousTarget);
       }
 
-      if (target) {
+      if (target && isConnected) {
         this._addTargetListeners(target);
       }
+
+      this.__previousTarget = target;
     }
 
     /**
