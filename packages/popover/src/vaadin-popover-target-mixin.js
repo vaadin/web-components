@@ -37,7 +37,7 @@ export const PopoverTargetMixin = (superClass) =>
         },
 
         /** @private */
-        _isConnected: {
+        __isConnected: {
           type: Boolean,
           sync: true,
         },
@@ -45,21 +45,21 @@ export const PopoverTargetMixin = (superClass) =>
     }
 
     static get observers() {
-      return ['__targetOrConnectedChanged(target, _isConnected)'];
+      return ['__targetOrConnectedChanged(target, __isConnected)'];
     }
 
     /** @protected */
     connectedCallback() {
       super.connectedCallback();
 
-      this._isConnected = true;
+      this.__isConnected = true;
     }
 
     /** @protected */
     disconnectedCallback() {
       super.disconnectedCallback();
 
-      this._isConnected = false;
+      this.__isConnected = false;
     }
 
     /** @private */
