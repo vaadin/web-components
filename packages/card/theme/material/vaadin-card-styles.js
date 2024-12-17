@@ -10,7 +10,7 @@ const cardProps = css`
     --vaadin-card-border-width: 0;
     --vaadin-card-border-color: var(--material-divider-color);
     --vaadin-card-padding: 16px;
-    --vaadin-card-gap: 8px 16px;
+    --vaadin-card-gap: 16px;
   }
 `;
 
