@@ -6,7 +6,6 @@ import { hover } from '@vaadin/button/test/visual/helpers.js';
 describe('drag and drop', () => {
   let virtualList;
   let container;
-  let items;
 
   beforeEach(async () => {
     container = fixtureSync(`
@@ -20,7 +19,6 @@ describe('drag and drop', () => {
     };
     document.body.appendChild(container);
     await nextFrame();
-    items = virtualList.shadowRoot.querySelector('#items');
   });
 
   async function setVirtualListItems(count) {
@@ -40,7 +38,7 @@ describe('drag and drop', () => {
 
   async function assertDragSucceeds(draggedElement) {
     await dragElement(draggedElement);
-    expect(items.style.display).to.equal('');
+    expect(virtualList.$.items.style.display).to.equal('');
   }
 
   ['5000', '50000'].forEach((count) => {

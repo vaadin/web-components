@@ -1088,7 +1088,6 @@ describe('drag and drop', () => {
 
   describe('draggable grid', () => {
     let container;
-    let items;
 
     beforeEach(async () => {
       container = fixtureSync(`
@@ -1102,7 +1101,6 @@ describe('drag and drop', () => {
       document.body.appendChild(container);
       flushGrid(grid);
       await nextFrame();
-      items = grid.shadowRoot.querySelector('#items');
     });
 
     async function setGridItems(count) {
@@ -1120,7 +1118,7 @@ describe('drag and drop', () => {
 
     async function assertDragSucceeds(draggedElement) {
       await dragElement(draggedElement);
-      expect(items.style.display).to.equal('');
+      expect(grid.$.scroller.style.display).to.equal('');
     }
 
     ['5000', '50000'].forEach((count) => {
