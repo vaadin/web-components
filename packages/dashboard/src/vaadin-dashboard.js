@@ -366,6 +366,11 @@ class Dashboard extends DashboardLayoutMixin(ElementMixin(ThemableMixin(PolylitM
       return wrapper;
     }
 
+    // Sibling wrappers sorted by their slot name
+    const siblingWrappers = [...wrapper.parentElement.children].sort((a, b) => {
+      return a.slot < b.slot ? -1 : 1;
+    });
+
     // Starting from the given wrapper element, iterates through the siblings in the given direction
     // to find the closest wrapper that represents an item in the dashboard's items array
     const findSiblingWrapper = (wrapper, dir) => {
@@ -373,7 +378,8 @@ class Dashboard extends DashboardLayoutMixin(ElementMixin(ThemableMixin(PolylitM
         if (this.__isActiveWrapper(wrapper)) {
           return wrapper;
         }
-        wrapper = dir === 1 ? wrapper.nextElementSibling : wrapper.previousElementSibling;
+        const currentIndex = siblingWrappers.indexOf(wrapper);
+        wrapper = dir === 1 ? siblingWrappers[currentIndex + 1] : siblingWrappers[currentIndex - 1];
       }
     };
 
