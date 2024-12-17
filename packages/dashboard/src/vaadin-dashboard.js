@@ -221,7 +221,11 @@ class Dashboard extends DashboardLayoutMixin(ElementMixin(ThemableMixin(PolylitM
 
   /** @protected */
   render() {
-    return html`<div id="grid"><slot></slot></div>`;
+    return html`<div id="grid">
+      <div id="slots" style="display: contents">
+        ${(this.items || []).map((_item, index) => html`<slot name="slot-${index}"></slot>`)}
+      </div>
+    </div>`;
   }
 
   /** @private */
@@ -257,38 +261,25 @@ class Dashboard extends DashboardLayoutMixin(ElementMixin(ThemableMixin(PolylitM
   __renderItemWrappers(items, hostElement = this) {
     // Get all the wrappers in the host element
     let wrappers = [...hostElement.children].filter((el) => el.localName === WRAPPER_LOCAL_NAME);
-    let previousWrapper = null;
 
     const focusedWrapper = wrappers.find((wrapper) => wrapper.querySelector(':focus'));
     const focusedWrapperWillBeRemoved = focusedWrapper && !this.__isActiveWrapper(focusedWrapper);
     const wrapperClosestToRemovedFocused =
       focusedWrapperWillBeRemoved && this.__getClosestActiveWrapper(focusedWrapper);
 
-    items.forEach((item) => {
+    items.forEach((item, index) => {
       // Find the wrapper for the item or create a new one
       const wrapper = wrappers.find((el) => itemsEqual(getElementItem(el), item)) || this.__createWrapper(item);
       wrappers = wrappers.filter((el) => el !== wrapper);
+      if (!wrapper.isConnected) {
+        hostElement.appendChild(wrapper);
+      }
 
       // Update the wrapper style
       this.__updateWrapper(wrapper, item);
 
-      if (wrapper !== focusedWrapper) {
-        if (previousWrapper) {
-          // Append the wrapper after the previous one if it's not already there
-          if (wrapper.previousElementSibling !== previousWrapper) {
-            previousWrapper.after(wrapper);
-          }
-        } else if (hostElement.firstChild) {
-          // Insert the wrapper as the first child of the host element if it's not already there
-          if (wrapper !== hostElement.firstChild) {
-            hostElement.insertBefore(wrapper, hostElement.firstChild);
-          }
-        } else {
-          // Append the wrapper to the empty host element
-          hostElement.appendChild(wrapper);
-        }
-      }
-      previousWrapper = wrapper;
+      // Update the wrapper slot
+      wrapper.slot = `slot-${index}`;
 
       // Render section if the item has subitems
       if (item.items) {
@@ -307,6 +298,7 @@ class Dashboard extends DashboardLayoutMixin(ElementMixin(ThemableMixin(PolylitM
         section.__i18n = this.i18n;
 
         // Render the subitems
+        section.__widgetCount = item.items.length;
         this.__renderItemWrappers(item.items, section);
       }
     });

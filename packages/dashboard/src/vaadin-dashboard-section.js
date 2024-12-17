@@ -173,6 +173,11 @@ class DashboardSection extends DashboardItemMixin(ElementMixin(ThemableMixin(Pol
         type: String,
         value: '',
       },
+
+      __widgetCount: {
+        type: Number,
+        value: 0,
+      },
     };
   }
 
@@ -192,6 +197,7 @@ class DashboardSection extends DashboardItemMixin(ElementMixin(ThemableMixin(Pol
       </div>
 
       <slot></slot>
+      ${[...Array(this.__widgetCount)].map((_item, index) => html`<slot name="slot-${index}"></slot>`)}
     `;
   }
 
