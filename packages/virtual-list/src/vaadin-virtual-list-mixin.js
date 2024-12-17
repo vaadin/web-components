@@ -65,7 +65,7 @@ export const VirtualListMixin = (superClass) =>
 
     constructor() {
       super();
-      this.__onDragStart = this.__onDragStart.bind(this);
+      this.__onDocumentDragStart = this.__onDocumentDragStart.bind(this);
     }
 
     /** @protected */
@@ -89,17 +89,13 @@ export const VirtualListMixin = (superClass) =>
     /** @protected */
     connectedCallback() {
       super.connectedCallback();
-      // Chromium based browsers cannot properly generate drag images for elements
-      // that have children with massive heights. This workaround prevents crashes
-      // and performance issues by excluding the items from the drag image.
-      // https://github.com/vaadin/web-components/issues/7985
-      document.addEventListener('dragstart', this.__onDragStart, { capture: true });
+      document.addEventListener('dragstart', this.__onDocumentDragStart, { capture: true });
     }
 
     /** @protected */
     disconnectedCallback() {
       super.disconnectedCallback();
-      document.removeEventListener('dragstart', this.__onDragStart, { capture: true });
+      document.removeEventListener('dragstart', this.__onDocumentDragStart, { capture: true });
     }
 
     /**
@@ -153,25 +149,24 @@ export const VirtualListMixin = (superClass) =>
       }
     }
 
-    /** @private */
-    __onDragStart(e) {
-      // The dragged element can be the element itself or a parent of the element
-      if (!e.target.contains(this)) {
-        return;
-      }
-      // The threshold value 20000 provides a buffer to both
-      //   - avoid the crash and the performance issues
-      //   - unnecessarily avoid excluding items from the drag image
-      if (this.$.items.offsetHeight > 20000) {
-        const initialItemsMaxHeight = this.$.items.style.maxHeight;
-        const initialVirtualListOverflow = this.style.overflow;
-        // Momentarily hides the items until the browser starts generating the
-        // drag image.
-        this.$.items.style.maxHeight = '0';
-        this.style.overflow = 'hidden';
+    /**
+     * Webkit-based browsers have issues with generating drag images
+     * for elements that have children with massive heights. Chromium
+     * browsers crash, while Safari experiences significant performance
+     * issues. To mitigate these issues, we hide the items container
+     * when drag starts to remove it from the drag image.
+     *
+     * Related issues:
+     * - https://github.com/vaadin/web-components/issues/7985
+     * - https://issues.chromium.org/issues/383356871
+     *
+     * @private
+     */
+    __onDocumentDragStart(e) {
+      if (e.target.contains(this) && this.scrollHeight > 20000) {
+        this.$.items.style.display = 'none';
         requestAnimationFrame(() => {
-          this.$.items.style.maxHeight = initialItemsMaxHeight;
-          this.style.overflow = initialVirtualListOverflow;
+          this.$.items.style.display = '';
         });
       }
     }
