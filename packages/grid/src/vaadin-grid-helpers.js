@@ -174,24 +174,6 @@ export function updateCellState(cell, attribute, value, part, oldPart) {
 }
 
 /**
- * Generates a white-background SVG image with the given dimensions
- * that can be used as a drag image fallback.
- *
- * @param {number} width
- * @param {number} height
- * @returns {string}
- */
-export function generateDragImageFallback(width, height) {
-  const svg = `
-    <svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}">
-      <rect fill="white" width="${width}" height="${height}"></rect>
-    </svg>
-  `;
-
-  return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
-}
-
-/**
  * A helper for observing flattened child column list of an element.
  */
 export class ColumnObserver {

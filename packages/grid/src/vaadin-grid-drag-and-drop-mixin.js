@@ -4,7 +4,6 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import {
-  generateDragImageFallback,
   iterateChildren,
   iterateRowCells,
   updateBooleanRowStates,
@@ -310,10 +309,11 @@ export const DragAndDropMixin = (superClass) =>
     }
 
     /**
-     * Chromium-based browsers crash when generating drag images for elements
-     * that have children with massive heights. Replacing the default drag image
-     * with an auto-generated white-background SVG image helps prevent the crash
-     * and performance issues while still providing a visual indication of the drag.
+     * Webkit-based browsers have issues with generating drag images
+     * for elements that have children with massive heights. Chromium
+     * browsers crash, while Safari experiences significant performance
+     * issues. To mitigate these issues, we hide the scroller element
+     * when drag starts to remove it from the drag image.
      *
      * Related issues:
      * - https://github.com/vaadin/web-components/issues/7985
@@ -322,11 +322,11 @@ export const DragAndDropMixin = (superClass) =>
      * @private
      */
     __onDocumentDragStart(e) {
-      const { target } = e;
-      if (target.contains(this) && this.$.items.offsetHeight > 20000) {
-        const img = new Image();
-        img.src = generateDragImageFallback(target.offsetWidth, target.offsetHeight);
-        e.dataTransfer.setDragImage(img, 0, 0);
+      if (e.target.contains(this) && this.$.table.scrollHeight > 20000) {
+        this.$.scroller.style.display = 'none';
+        requestAnimationFrame(() => {
+          this.$.scroller.style.display = '';
+        });
       }
     }
 
