@@ -39,12 +39,8 @@ describe('drag and drop', () => {
   }
 
   async function assertDragSucceeds(draggedElement) {
-    // maxHeight and overflow are temporarily updated in the related fix
-    const initialItemsMaxHeight = items.style.maxHeight;
-    const initialVirtualListOverflow = virtualList.style.overflow;
     await dragElement(draggedElement);
-    expect(items.style.maxHeight).to.equal(initialItemsMaxHeight);
-    expect(virtualList.style.overflow).to.equal(initialVirtualListOverflow);
+    expect(items.style.display).to.equal('');
   }
 
   ['5000', '50000'].forEach((count) => {

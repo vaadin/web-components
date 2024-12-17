@@ -1089,7 +1089,6 @@ describe('drag and drop', () => {
   describe('draggable grid', () => {
     let container;
     let items;
-    let table;
 
     beforeEach(async () => {
       container = fixtureSync(`
@@ -1104,7 +1103,6 @@ describe('drag and drop', () => {
       flushGrid(grid);
       await nextFrame();
       items = grid.shadowRoot.querySelector('#items');
-      table = grid.shadowRoot.querySelector('#table');
     });
 
     async function setGridItems(count) {
@@ -1121,12 +1119,8 @@ describe('drag and drop', () => {
     }
 
     async function assertDragSucceeds(draggedElement) {
-      // maxHeight and overflow are temporarily updated in the related fix
-      const initialItemsMaxHeight = items.style.maxHeight;
-      const initialTableOverflow = table.style.overflow;
       await dragElement(draggedElement);
-      expect(items.style.maxHeight).to.equal(initialItemsMaxHeight);
-      expect(table.style.overflow).to.equal(initialTableOverflow);
+      expect(items.style.display).to.equal('');
     }
 
     ['5000', '50000'].forEach((count) => {
