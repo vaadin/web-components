@@ -1,14 +1,14 @@
 import { fixtureSync } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '../../../theme/lumo/vaadin-card.js';
-import '@vaadin/button';
+import '@vaadin/button/theme/lumo/vaadin-button.js';
 import '@vaadin/vaadin-lumo-styles/test/autoload.js';
 import { badge } from '@vaadin/vaadin-lumo-styles/badge.js';
 import { addGlobalThemeStyles } from '@vaadin/vaadin-themable-mixin/register-styles.js';
 addGlobalThemeStyles('badge', badge);
 import '@vaadin/icon';
 import '@vaadin/icons';
-import '@vaadin/avatar';
+import '@vaadin/avatar/theme/lumo/vaadin-avatar.js';
 
 window.Vaadin ||= {};
 window.Vaadin.featureFlags ||= {};
