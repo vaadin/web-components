@@ -35,7 +35,6 @@ class Card extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
         flex-direction: column;
         padding: var(--vaadin-card-padding);
         gap: var(--vaadin-card-gap);
-
         --media: 0;
         --title: 0;
         --subtitle: 0;
