@@ -326,9 +326,6 @@ class Card extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
     if (this._mutationObserver) this._mutationObserver.disconnect();
     super.disconnectedCallback();
   }
-
-  // TODO default role
-  // TODO aria-describedby if header contains an H1-6 element
 }
 
 defineCustomElement(Card);
