@@ -38,6 +38,10 @@ export const VirtualListMixin = (superClass) =>
 
         /**
          * A function that generates accessible names for virtual list items.
+         * The function gets the item as an argument and the
+         * return value should be a string representing that item. The
+         * result gets applied to the corresponding virtual list child element
+         * as an `aria-label` attribute.
          */
         itemAccessibleNameGenerator: {
           type: Function,
