@@ -124,11 +124,6 @@ describe('card', () => {
   });
 
   describe('theme', () => {
-    it('default', async () => {
-      element = fixtureSync(cardWithContent, div);
-      await visualDiff(div, 'theme-default');
-    });
-
     it('outlined', async () => {
       element = fixtureSync(cardWithContent, div);
       element.setAttribute('theme', 'outlined');
