@@ -209,6 +209,7 @@ describe('dashboard - keyboard interaction', () => {
 
     it('should move the widget backwards on arrow up', async () => {
       await sendKeys({ press: 'ArrowDown' });
+      await nextFrame();
       await sendKeys({ press: 'ArrowUp' });
       expect(dashboard.items).to.eql([{ id: 0 }, { id: 1 }, { items: [{ id: 2 }, { id: 3 }] }]);
     });
@@ -245,6 +246,7 @@ describe('dashboard - keyboard interaction', () => {
       setMinimumRowHeight(dashboard, 100);
       await sendKeys({ down: 'Shift' });
       await sendKeys({ press: 'ArrowDown' });
+      await nextFrame();
       await sendKeys({ press: 'ArrowUp' });
       await sendKeys({ up: 'Shift' });
       expect((dashboard.items[0] as DashboardItem).rowspan).to.equal(1);
@@ -363,6 +365,7 @@ describe('dashboard - keyboard interaction', () => {
 
       it('should move the widget backwards on arrow backwards', async () => {
         await sendKeys({ press: arrowForwards });
+        await nextFrame();
         await sendKeys({ press: arrowBackwards });
         expect(dashboard.items).to.eql([{ id: 0 }, { id: 1 }, { items: [{ id: 2 }, { id: 3 }] }]);
       });
@@ -377,6 +380,7 @@ describe('dashboard - keyboard interaction', () => {
       it('should decrease the widget column span on shift + arrow backwards', async () => {
         await sendKeys({ down: 'Shift' });
         await sendKeys({ press: arrowForwards });
+        await nextFrame();
         await sendKeys({ press: arrowBackwards });
         await sendKeys({ up: 'Shift' });
         expect((dashboard.items[0] as DashboardItem).colspan).to.equal(1);
