@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { aTimeout, fixtureSync, listenOnce, nextFrame, oneEvent } from '@vaadin/testing-helpers';
+import { aTimeout, fire, fixtureSync, listenOnce, nextFrame, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../vaadin-grid.js';
 import { flushGrid, getBodyCellContent, getFirstCell, getRows } from './helpers.js';
@@ -873,23 +873,18 @@ describe('drag and drop', () => {
 
   describe('draggable grid', () => {
     let container;
-    let items;
-    let table;
 
     beforeEach(async () => {
       container = fixtureSync(`
-      <div style="width: 400px; height: 400px;">
-        <vaadin-grid draggable="true" style="width: 300px; height: 300px;">
-          <vaadin-grid-column path="value"></vaadin-grid-column>
-        </vaadin-grid>
-      </div>
-    `);
+        <div style="width: 400px; height: 400px;">
+          <vaadin-grid draggable="true" style="width: 300px; height: 300px;">
+            <vaadin-grid-column path="value"></vaadin-grid-column>
+          </vaadin-grid>
+        </div>
+      `);
       grid = container.querySelector('vaadin-grid');
-      document.body.appendChild(container);
       flushGrid(grid);
       await nextFrame();
-      items = grid.shadowRoot.querySelector('#items');
-      table = grid.shadowRoot.querySelector('#table');
     });
 
     async function setGridItems(count) {
@@ -897,63 +892,31 @@ describe('drag and drop', () => {
       await nextFrame();
     }
 
-    function getState() {
-      return { itemsMaxHeight: items.style.maxHeight, tableOverflow: table.style.overflow };
-    }
-
-    function getExpectedDragStartState() {
-      return { itemsMaxHeight: '0px', tableOverflow: 'hidden' };
-    }
-
-    function assertStatesEqual(state1, state2) {
-      expect(state1.itemsMaxHeight).to.equal(state2.itemsMaxHeight);
-      expect(state1.tableOverflow).to.equal(state2.tableOverflow);
-    }
-
-    async function getStateDuringDragStart(element) {
-      let stateDuringDragStart;
-      element.addEventListener(
-        'dragstart',
-        () => {
-          stateDuringDragStart = getState();
-        },
-        { once: true },
-      );
-      element.dispatchEvent(new DragEvent('dragstart'));
-      await new Promise((resolve) => {
-        requestAnimationFrame(resolve);
-      });
-      return stateDuringDragStart;
-    }
-
     it('should not change state on dragstart for small grids', async () => {
       await setGridItems(10);
-      const initialState = getState();
-      const stateDuringDragStart = await getStateDuringDragStart(grid);
-      assertStatesEqual(stateDuringDragStart, initialState);
-      const finalState = getState();
-      assertStatesEqual(finalState, initialState);
+      fire(grid, 'dragstart');
+      expect(grid.$.scroller.style.display).to.equal('');
+      await nextFrame();
+      expect(grid.$.scroller.style.display).to.equal('');
     });
 
     ['5000', '50000'].forEach((count) => {
       it('should temporarily change state on dragstart for large grids', async () => {
         await setGridItems(count);
-        const initialState = getState();
-        const stateDuringDragStart = await getStateDuringDragStart(grid);
-        assertStatesEqual(stateDuringDragStart, getExpectedDragStartState());
-        const finalState = getState();
-        assertStatesEqual(finalState, initialState);
+        fire(grid, 'dragstart');
+        expect(grid.$.scroller.style.display).to.equal('none');
+        await nextFrame();
+        expect(grid.$.scroller.style.display).to.equal('');
       });
 
       it('should temporarily change state on dragstart for large grids in draggable containers', async () => {
         grid.removeAttribute('draggable');
         container.setAttribute('draggable', true);
         await setGridItems(count);
-        const initialState = getState();
-        const stateDuringDragStart = await getStateDuringDragStart(container);
-        assertStatesEqual(stateDuringDragStart, getExpectedDragStartState());
-        const finalState = getState();
-        assertStatesEqual(finalState, initialState);
+        fire(container, 'dragstart');
+        expect(grid.$.scroller.style.display).to.equal('none');
+        await nextFrame();
+        expect(grid.$.scroller.style.display).to.equal('');
       });
     });
   });
