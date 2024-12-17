@@ -12,6 +12,8 @@ async function click(el: HTMLElement) {
   await new Promise<void>((resolve) => {
     queueMicrotask(() => resolve());
   });
+  // Make focus-utils reset isKeyboardActive
+  window.dispatchEvent(new MouseEvent('mousedown'));
   helperClick(el);
   await nextFrame();
 }
@@ -663,6 +665,24 @@ describe('selection', () => {
         beforeButton.focus();
         await sendKeys({ press: 'Tab' });
         list.selectionMode = 'none';
+        await nextFrame();
+        expect(list.hasAttribute('navigating')).to.be.false;
+      });
+
+      it('should clear navigating state when clicking an item', async () => {
+        beforeButton.focus();
+        await sendKeys({ press: 'Tab' });
+        await nextFrame();
+
+        await click(getRenderedItem(0)!);
+        await nextFrame();
+        expect(list.hasAttribute('navigating')).to.be.false;
+      });
+
+      it('should clear navigating state when focus leaves the component', async () => {
+        beforeButton.focus();
+        await sendKeys({ press: 'Tab' });
+        await sendKeys({ press: 'Tab' });
         await nextFrame();
         expect(list.hasAttribute('navigating')).to.be.false;
       });

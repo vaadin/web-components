@@ -4,7 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 
-import { getFocusableElements } from '@vaadin/a11y-base';
+import { getFocusableElements, isKeyboardActive } from '@vaadin/a11y-base';
 import { timeOut } from '@vaadin/component-base/src/async.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { get } from '@vaadin/component-base/src/path-utils.js';
@@ -284,13 +284,16 @@ export const SelectionMixin = (superClass) =>
 
     /** @private */
     __isNavigating() {
-      return this.hasAttribute('navigating');
+      return !!this.__navigating;
     }
 
     /** @private */
     __updateNavigating(navigating) {
-      const isNavigating = this.__isSelectable && navigating;
-      this.toggleAttribute('navigating', isNavigating);
+      this.__navigating = this.__isSelectable && navigating;
+      this.toggleAttribute(
+        'navigating',
+        this.__navigating && isKeyboardActive() && this.contains(this.__getActiveElement()),
+      );
 
       const isInteracting = this.__isSelectable && !navigating;
       this.toggleAttribute('interacting', isInteracting);
@@ -417,6 +420,10 @@ export const SelectionMixin = (superClass) =>
       if (clickedRootElement) {
         this.__updateFocusIndex(clickedRootElement.__index);
         this.__toggleSelection(clickedRootElement.__item);
+      }
+
+      if (this.hasAttribute('navigating')) {
+        this.__updateNavigating(this.__isNavigating());
       }
     }
 
