@@ -1,4 +1,5 @@
 import '../../vaadin-virtual-list.js';
+import type { ControllerMixinClass } from '@vaadin/component-base/src/controller-mixin.js';
 import type { ElementMixinClass } from '@vaadin/component-base/src/element-mixin.js';
 import type { ThemableMixinClass } from '@vaadin/vaadin-themable-mixin';
 import type { VirtualList, VirtualListItemModel, VirtualListRenderer } from '../../vaadin-virtual-list.js';
@@ -11,6 +12,7 @@ assertType<VirtualList>(genericVirtualList);
 
 assertType<ThemableMixinClass>(genericVirtualList);
 assertType<ElementMixinClass>(genericVirtualList);
+assertType<ControllerMixinClass>(genericVirtualList);
 
 genericVirtualList.items = [1, 2, 3];
 
@@ -31,6 +33,8 @@ virtualList.renderer = (root, virtualList, model) => {
   assertType<VirtualList>(virtualList);
   assertType<VirtualListItemModel<TestVirtualListItem>>(model);
   assertType<number>(model.index);
+  assertType<boolean | undefined>(model.selected);
+  assertType<undefined>(model.selected as undefined);
   assertType<TestVirtualListItem>(model.item);
 };
 
@@ -41,4 +45,15 @@ assertType<(index: number) => void>(virtualList.scrollToIndex);
 assertType<number>(virtualList.firstVisibleIndex);
 assertType<number>(virtualList.lastVisibleIndex);
 
+assertType<'none' | 'single' | 'multi'>(virtualList.selectionMode);
+assertType<TestVirtualListItem[]>(virtualList.selectedItems);
+assertType<string | null | undefined>(virtualList.itemIdPath);
+assertType<undefined>(virtualList.itemIdPath as undefined);
+
 assertType<((item: TestVirtualListItem) => string) | undefined>(virtualList.itemAccessibleNameGenerator);
+assertType<undefined>(virtualList.itemAccessibleNameGenerator as undefined);
+
+virtualList.addEventListener('selected-items-changed', (event) => {
+  assertType<CustomEvent<{ value: TestVirtualListItem[] }>>(event);
+  assertType<TestVirtualListItem[]>(event.detail.value);
+});
