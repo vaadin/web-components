@@ -60,7 +60,9 @@ describe('validation', () => {
       select.click();
       await nextRender();
 
+      await sendKeys({ down: 'Shift' });
       await sendKeys({ press: 'Tab' });
+      await sendKeys({ up: 'Shift' });
       await nextUpdate(select);
       expect(validateSpy.calledOnce).to.be.true;
     });

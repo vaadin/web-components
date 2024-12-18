@@ -59,7 +59,9 @@ describe('virtual-keyboard-controller', () => {
     element.close();
     element.tabIndex = 1;
     element.focus();
+    await sendKeys({ down: 'Shift' });
     await sendKeys({ press: 'Tab' });
+    await sendKeys({ up: 'Shift' });
     expect(input.inputMode).to.equal('');
   });
 });

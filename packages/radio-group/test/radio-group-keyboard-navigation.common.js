@@ -43,7 +43,9 @@ describe('keyboard navigation', () => {
       expect(buttons[2].hasAttribute('focused')).to.be.false;
 
       // Move focus out of the group.
+      await sendKeys({ down: 'Shift' });
       await sendKeys({ press: 'Tab' });
+      await sendKeys({ up: 'Shift' });
       expect(buttons[0].hasAttribute('focused')).to.be.false;
       expect(buttons[1].hasAttribute('focused')).to.be.false;
       expect(buttons[2].hasAttribute('focused')).to.be.false;

@@ -33,9 +33,11 @@ describe('readonly', () => {
       expect(internal.opened).to.be.true;
     });
 
-    it('should close the dropdown on Tab when readonly', async () => {
-      await sendKeys({ down: 'ArrowDown' });
-      await sendKeys({ down: 'Tab' });
+    it('should close the dropdown on Shift+Tab when readonly', async () => {
+      await sendKeys({ press: 'ArrowDown' });
+      await sendKeys({ down: 'Shift' });
+      await sendKeys({ press: 'Tab' });
+      await sendKeys({ up: 'Shift' });
       expect(internal.opened).to.be.false;
     });
 
