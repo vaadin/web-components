@@ -379,10 +379,6 @@ export const CrudMixin = (superClass) =>
     ready() {
       super.ready();
 
-      if (this.$.dialog.performUpdate) {
-        this.$.dialog.performUpdate();
-      }
-
       this.$.dialog.$.overlay.addEventListener('vaadin-overlay-outside-click', this.__cancel);
       this.$.dialog.$.overlay.addEventListener('vaadin-overlay-escape-press', this.__cancel);
 
