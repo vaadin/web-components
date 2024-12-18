@@ -12,7 +12,7 @@ describe('crud grid', () => {
         first: 'Grant',
         last: 'Andrews',
       },
-      password: 'lorem',
+      password: 'lorem', // NOSONAR
       role: 'operator',
     },
   ];
