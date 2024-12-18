@@ -39,8 +39,8 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  *
  * Custom property | Description | Default
  * ----------------|-------------|-------------
- * `--vaadin-card-padding` | The space between the card edge and its content. Needs to a unified value for all edges, i.e., a single length value. |
- * `--vaadin-card-gap`     | The space between content elements within the card. |
+ * `--vaadin-card-padding` | The space between the card edge and its content. Needs to a unified value for all edges, i.e., a single length value. | `1em`
+ * `--vaadin-card-gap`     | The space between content elements within the card. | `1em`
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
@@ -59,16 +59,18 @@ class Card extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
       :host {
         display: flex;
         flex-direction: column;
-        padding: var(--vaadin-card-padding);
-        gap: var(--vaadin-card-gap);
-        --media: 0;
-        --title: 0;
-        --subtitle: 0;
-        --header: max(var(--header-prefix), var(--title), var(--subtitle), var(--header-suffix));
-        --header-prefix: 0;
-        --header-suffix: 0;
-        --content: 0;
-        --footer: 0;
+        padding: var(--_padding);
+        gap: var(--_gap);
+        --_padding: var(--vaadin-card-padding, 1em);
+        --_gap: var(--vaadin-card-gap, 1em);
+        --_media: 0;
+        --_title: 0;
+        --_subtitle: 0;
+        --_header: max(var(--_header-prefix), var(--_title), var(--_subtitle), var(--_header-suffix));
+        --_header-prefix: 0;
+        --_header-suffix: 0;
+        --_content: 0;
+        --_footer: 0;
       }
 
       :host(:not([theme~='horizontal'])) {
@@ -76,37 +78,37 @@ class Card extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
       }
 
       :host(:is(:has([slot='media']), [has-media])) {
-        --media: 1;
+        --_media: 1;
       }
 
       :host(:is(:has([slot='title']), [has-title])) {
-        --title: 1;
+        --_title: 1;
       }
 
       :host(:is(:has([slot='subtitle']), [has-subtitle])) {
-        --subtitle: 1;
+        --_subtitle: 1;
       }
 
       :host(:is(:has([slot='header']), [has-header])) {
-        --header: 1;
-        --title: 0;
-        --subtitle: 0;
+        --_header: 1;
+        --_title: 0;
+        --_subtitle: 0;
       }
 
       :host(:is(:has([slot='header-prefix']), [has-header-prefix])) {
-        --header-prefix: 1;
+        --_header-prefix: 1;
       }
 
       :host(:is(:has([slot='header-suffix']), [has-header-suffix])) {
-        --header-suffix: 1;
+        --_header-suffix: 1;
       }
 
       :host(:is(:has(> :not([slot])), [has-content])) {
-        --content: 1;
+        --_content: 1;
       }
 
       :host(:is(:has([slot='footer']), [has-footer])) {
-        --footer: 1;
+        --_footer: 1;
       }
 
       [part='media'],
@@ -123,7 +125,7 @@ class Card extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
 
       :host(:is(:has([slot='footer']), [has-footer])) [part='footer'] {
         display: flex;
-        gap: var(--vaadin-card-gap);
+        gap: var(--_gap);
       }
 
       :host(
@@ -143,7 +145,7 @@ class Card extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
         [part='header'] {
         display: grid;
         align-items: center;
-        gap: var(--vaadin-card-gap);
+        gap: var(--_gap);
         row-gap: 0;
       }
 
@@ -156,7 +158,7 @@ class Card extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
       }
 
       :host(:is(:has([slot='header-prefix']), [has-header-prefix])) [part='header'] {
-        grid-template-columns: repeat(var(--header-prefix), auto) 1fr;
+        grid-template-columns: repeat(var(--_header-prefix), auto) 1fr;
       }
 
       slot {
@@ -165,29 +167,29 @@ class Card extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
 
       ::slotted([slot='header-prefix']) {
         grid-column: 1;
-        grid-row: 1 / span calc(var(--title) + var(--subtitle));
+        grid-row: 1 / span calc(var(--_title) + var(--_subtitle));
       }
 
       ::slotted([slot='header']),
       ::slotted([slot='title']) {
-        grid-column: calc(1 + var(--header-prefix));
+        grid-column: calc(1 + var(--_header-prefix));
         grid-row: 1;
       }
 
       ::slotted([slot='subtitle']) {
-        grid-column: calc(1 + var(--header-prefix));
-        grid-row: calc(1 + var(--title));
+        grid-column: calc(1 + var(--_header-prefix));
+        grid-row: calc(1 + var(--_title));
       }
 
       ::slotted([slot='header-suffix']) {
-        grid-column: calc(2 + var(--header-prefix));
-        grid-row: 1 / span calc(var(--title) + var(--subtitle));
+        grid-column: calc(2 + var(--_header-prefix));
+        grid-row: 1 / span calc(var(--_title) + var(--_subtitle));
       }
 
       /* Horizontal */
       :host([theme~='horizontal']) {
         display: grid;
-        grid-template-columns: repeat(var(--media), minmax(auto, max-content)) 1fr;
+        grid-template-columns: repeat(var(--_media), minmax(auto, max-content)) 1fr;
         align-items: start;
       }
 
@@ -196,31 +198,31 @@ class Card extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
       }
 
       :host([theme~='horizontal']:is(:has(> :not([slot])), [has-content])) {
-        grid-template-rows: repeat(var(--header), auto) 1fr;
+        grid-template-rows: repeat(var(--_header), auto) 1fr;
       }
 
       [part='media'] {
         grid-column: 1;
-        grid-row: 1 / span calc(var(--header) + var(--content) + var(--footer));
+        grid-row: 1 / span calc(var(--_header) + var(--_content) + var(--_footer));
         align-self: stretch;
         border-radius: inherit;
       }
 
       [part='header'] {
-        grid-column: calc(1 + var(--media));
+        grid-column: calc(1 + var(--_media));
         grid-row: 1;
       }
 
       [part='content'] {
-        grid-column: calc(1 + var(--media));
-        grid-row: calc(1 + var(--header));
+        grid-column: calc(1 + var(--_media));
+        grid-row: calc(1 + var(--_header));
         flex: auto;
         min-height: 0;
       }
 
       [part='footer'] {
-        grid-column: calc(1 + var(--media));
-        grid-row: calc(1 + var(--header) + var(--content));
+        grid-column: calc(1 + var(--_media));
+        grid-row: calc(1 + var(--_header) + var(--_content));
         border-radius: inherit;
       }
 
@@ -245,7 +247,7 @@ class Card extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
       }
 
       :host([theme~='horizontal']:is([theme~='cover-media'], [theme~='stretch-media'])) {
-        grid-template-columns: repeat(var(--media), minmax(auto, 0.5fr)) 1fr;
+        grid-template-columns: repeat(var(--_media), minmax(auto, 0.5fr)) 1fr;
       }
 
       :host([theme~='horizontal']:is([theme~='cover-media'], [theme~='stretch-media']))
@@ -255,9 +257,9 @@ class Card extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
       }
 
       :host([theme~='cover-media']) ::slotted([slot='media']:is(img, video, svg, vaadin-icon)) {
-        margin-top: calc(var(--vaadin-card-padding) * -1);
-        margin-inline: calc(var(--vaadin-card-padding) * -1);
-        width: calc(100% + var(--vaadin-card-padding) * 2);
+        margin-top: calc(var(--_padding) * -1);
+        margin-inline: calc(var(--_padding) * -1);
+        width: calc(100% + var(--_padding) * 2);
         max-width: none;
         border-radius: inherit;
         border-end-end-radius: 0;
@@ -266,8 +268,8 @@ class Card extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
 
       :host([theme~='horizontal'][theme~='cover-media']) ::slotted([slot='media']:is(img, video, svg, vaadin-icon)) {
         margin-inline-end: 0;
-        width: calc(100% + var(--vaadin-card-padding));
-        height: calc(100% + var(--vaadin-card-padding) * 2);
+        width: calc(100% + var(--_padding));
+        height: calc(100% + var(--_padding) * 2);
         border-radius: inherit;
         border-start-end-radius: 0;
         border-end-end-radius: 0;
@@ -275,13 +277,13 @@ class Card extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
 
       /* Scroller in content */
       [part='content'] ::slotted(vaadin-scroller) {
-        margin-inline: calc(var(--vaadin-card-padding) * -1);
-        padding-inline: var(--vaadin-card-padding);
+        margin-inline: calc(var(--_padding) * -1);
+        padding-inline: var(--_padding);
       }
 
       [part='content'] ::slotted(vaadin-scroller)::before,
       [part='content'] ::slotted(vaadin-scroller)::after {
-        margin-inline: calc(var(--vaadin-card-padding) * -1);
+        margin-inline: calc(var(--_padding) * -1);
       }
     `;
   }
