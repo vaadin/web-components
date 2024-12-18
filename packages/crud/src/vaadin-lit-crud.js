@@ -14,6 +14,7 @@ import './vaadin-lit-crud-dialog.js';
 import './vaadin-lit-crud-grid.js';
 import './vaadin-lit-crud-form.js';
 import { html, LitElement } from 'lit';
+import { ifDefined } from 'lit-html/directives/if-defined.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
@@ -23,13 +24,19 @@ import { CrudMixin } from './vaadin-crud-mixin.js';
 import { crudStyles } from './vaadin-crud-styles.js';
 
 /**
+ * LitElement based version of `<vaadin-crud>` web component.
  *
+ * ## Disclaimer
+ *
+ * This component is an experiment and not yet a part of Vaadin platform.
+ * There is no ETA regarding specific Vaadin version where it'll land.
  */
 class Crud extends ControllerMixin(ElementMixin(ThemableMixin(CrudMixin(PolylitMixin(LitElement))))) {
   static get styles() {
     return crudStyles;
   }
 
+  /** @protected */
   render() {
     return html`
       <div id="container">
@@ -71,12 +78,12 @@ class Crud extends ControllerMixin(ElementMixin(ThemableMixin(CrudMixin(PolylitM
         .ariaLabel="${this.__dialogAriaLabel}"
         .noCloseOnOutsideClick="${this.__isDirty}"
         .noCloseOnEsc="${this.__isDirty}"
-        theme="${this._theme || ''}"
+        theme="${ifDefined(this._theme)}"
         @opened-changed="${this.__onDialogOpened}"
       ></vaadin-crud-dialog>
 
       <vaadin-confirm-dialog
-        theme="${this._theme || ''}"
+        theme="${ifDefined(this._theme)}"
         id="confirmCancel"
         @confirm="${this.__confirmCancel}"
         cancel-button-visible
@@ -88,7 +95,7 @@ class Crud extends ControllerMixin(ElementMixin(ThemableMixin(CrudMixin(PolylitM
       ></vaadin-confirm-dialog>
 
       <vaadin-confirm-dialog
-        theme="${this._theme || ''}"
+        theme="${ifDefined(this._theme)}"
         id="confirmDelete"
         @confirm="${this.__confirmDelete}"
         cancel-button-visible

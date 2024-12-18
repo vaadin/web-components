@@ -15,7 +15,10 @@ import { createField, createFields } from './vaadin-crud-helpers.js';
 import { IncludedMixin } from './vaadin-crud-include-mixin.js';
 
 /**
+ * An element used internally by `<vaadin-crud>`. Not intended to be used separately.
  *
+ * @extends FormLayout
+ * @mixes IncludedMixin
  * @private
  */
 class CrudForm extends IncludedMixin(FormLayout) {

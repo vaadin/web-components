@@ -12,39 +12,30 @@
 import { html } from 'lit';
 import { Button } from '@vaadin/button/src/vaadin-lit-button.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
-import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { css } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 /**
- * Use registerStyles instead of the `<style>` tag to make sure
- * that this CSS will override core styles of `vaadin-button`.
- */
-registerStyles(
-  'vaadin-crud-edit',
-  css`
-    :host {
-      display: block;
-    }
-  `,
-  { moduleId: 'vaadin-crud-edit-styles' },
-);
-
-/**
- * `<vaadin-crud-edit>` is a helper element for `<vaadin-grid-column>` that provides
- * an easily themable button that fires an `edit` event with the row item as detail
- * when clicked.
+ * LitElement based version of `<vaadin-crud-edit>` web component.
  *
- * Typical usage is in a `<vaadin-grid-column>` of a custom `<vaadin-grid>` inside
- * a `<vaadin-crud>` to enable editing.
+ * ## Disclaimer
  *
- * @customElement
- * @extends HTMLElement
- * @mixes ThemableMixin
+ * This component is an experiment and not yet a part of Vaadin platform.
+ * There is no ETA regarding specific Vaadin version where it'll land.
  */
 class CrudEdit extends Button {
   static get is() {
     return 'vaadin-crud-edit';
   }
 
+  static get styles() {
+    return css`
+      :host {
+        display: block;
+      }
+    `;
+  }
+
+  /** @protected */
   render() {
     return html`
       <div part="icon"></div>

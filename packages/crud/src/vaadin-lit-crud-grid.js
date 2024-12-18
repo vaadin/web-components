@@ -18,12 +18,18 @@ import { Grid } from '@vaadin/grid/src/vaadin-lit-grid.js';
 import { CrudGridMixin } from './vaadin-crud-grid-mixin.js';
 
 /**
+ * An element used internally by `<vaadin-crud>`. Not intended to be used separately.
  *
+ * @extends Grid
+ * @mixes CrudGridMixin
+ * @private
  */
 class CrudGrid extends CrudGridMixin(Grid) {
   static get is() {
     return 'vaadin-crud-grid';
   }
 }
+
 defineCustomElement(CrudGrid);
+
 export { CrudGrid };

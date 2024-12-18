@@ -14,7 +14,12 @@ import { GridColumn } from '@vaadin/grid/src/vaadin-lit-grid-column.js';
 import { editColumnDefaultRenderer } from './vaadin-crud-helpers.js';
 
 /**
+ * LitElement based version of `<vaadin-crud-edit-column>` web component.
  *
+ * ## Disclaimer
+ *
+ * This component is an experiment and not yet a part of Vaadin platform.
+ * There is no ETA regarding specific Vaadin version where it'll land.
  */
 class CrudEditColumn extends GridColumn {
   static get is() {
