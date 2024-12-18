@@ -109,7 +109,7 @@ class CrudDialog extends DialogBaseMixin(OverlayClassMixin(ThemePropertyMixin(Po
       <vaadin-crud-dialog-overlay
         id="overlay"
         .opened="${this.opened}"
-        .ariaLabel="${this.ariaLabel}"
+        aria-label="${ifDefined(this.ariaLabel)}"
         @opened-changed="${this._onOverlayOpened}"
         @mousedown="${this._bringOverlayToFront}"
         @touchstart="${this._bringOverlayToFront}"

@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { aTimeout, change, fire, fixtureSync, listenOnce, nextRender, oneEvent } from '@vaadin/testing-helpers';
+import { aTimeout, change, click, fire, fixtureSync, listenOnce, nextRender, oneEvent } from '@vaadin/testing-helpers';
 import { setViewport } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import { flushGrid } from './helpers.js';
@@ -124,7 +124,7 @@ describe('crud buttons', () => {
           await nextRender();
           crud._form._fields[0].value = 'baz';
           change(crud._form);
-          saveButton.click();
+          click(saveButton);
           expect(crud.items[1].foo).to.be.equal('baz');
         });
 
