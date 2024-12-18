@@ -316,10 +316,7 @@ class Card extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
   }
 
   /** @private */
-  _mutationObserver;
-
-  /** @private */
-  _onMutation() {
+  _onSlotChange() {
     // Chrome doesn't support `:host(:has())`, so we'll recreate that with custom attributes
     this.toggleAttribute('has-media', this.querySelector(':scope > [slot="media"]'));
     this.toggleAttribute('has-header', this.querySelector(':scope > [slot="header"]'));
@@ -341,17 +338,17 @@ class Card extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
     super.connectedCallback();
 
     if (!CSS.supports('selector(:host(:has([slot])))')) {
-      if (!this._mutationObserver) {
-        this._mutationObserver = new MutationObserver(this._onMutation.bind(this));
+      if (!this.__boundSlotChangeListener) {
+        this.__boundSlotChangeListener = this._onSlotChange.bind(this);
       }
-      this._mutationObserver.observe(this, { childList: 'true', attributeFilter: ['slot'], subtree: true });
-      // Trigger once manually to update attributes on first render
-      this._onMutation();
+      this.shadowRoot.addEventListener('slotchange', this.__boundSlotChangeListener);
     }
   }
 
   disconnectedCallback() {
-    if (this._mutationObserver) this._mutationObserver.disconnect();
+    if (this.__boundSlotChangeListener) {
+      this.shadowRoot.removeEventListener('slotchange', this.__boundSlotChangeListener);
+    }
     super.disconnectedCallback();
   }
 }
