@@ -309,7 +309,9 @@ describe('dropdown', () => {
     it('should re-enable virtual keyboard on blur', async () => {
       await open(datePicker);
       datePicker.close();
+      await sendKeys({ down: 'Shift' });
       await sendKeys({ press: 'Tab' });
+      await sendKeys({ up: 'Shift' });
       expect(input.inputMode).to.equal('');
     });
   });

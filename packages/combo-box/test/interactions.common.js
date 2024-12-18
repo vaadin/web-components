@@ -250,7 +250,9 @@ describe('interactions', () => {
       comboBox.open();
       comboBox.close();
       await aTimeout(0);
+      await sendKeys({ down: 'Shift' });
       await sendKeys({ press: 'Tab' });
+      await sendKeys({ up: 'Shift' });
       expect(input.inputMode).to.equal('');
     });
   });

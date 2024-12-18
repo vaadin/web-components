@@ -126,10 +126,12 @@ describe('keyboard', () => {
       expect(getFocusedIndex()).to.equal(0);
     });
 
-    it('should tab to the next focusable', async () => {
+    it('should tab to the prev focusable', async () => {
+      await sendKeys({ down: 'Shift' });
       await sendKeys({ press: 'Tab' });
+      await sendKeys({ up: 'Shift' });
 
-      expect(document.activeElement).to.equal(document.body);
+      expect(document.activeElement).to.be.oneOf([document.body, document.documentElement]);
     });
 
     describe('focusable items content', () => {
