@@ -29,6 +29,7 @@ export const IncludedMixin = (superClass) =>
         exclude: {
           value: '^_',
           observer: '__onExcludeChange',
+          sync: true,
         },
 
         /**
@@ -40,6 +41,7 @@ export const IncludedMixin = (superClass) =>
          */
         include: {
           observer: '__onIncludeChange',
+          sync: true,
         },
       };
     }
