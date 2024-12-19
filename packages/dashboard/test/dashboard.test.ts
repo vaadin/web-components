@@ -681,6 +681,22 @@ describe('dashboard', () => {
         expect(document.activeElement).to.equal(getElementFromCell(dashboard, 0, 0)!);
       });
 
+      it('should focus next widget on focused widget removal after reordering', async () => {
+        getElementFromCell(dashboard, 0, 0)!.focus();
+        // Reorder items (the focused widget is moved to the end)
+        dashboard.items = [dashboard.items[1], dashboard.items[2], dashboard.items[0]];
+        await updateComplete(dashboard);
+
+        // Remove the focused widget
+        dashboard.items = [dashboard.items[0], dashboard.items[1]];
+        await updateComplete(dashboard);
+
+        // Expect the section to be focused
+        const sectionWidget = getElementFromCell(dashboard, 1, 0)!;
+        const section = getParentSection(sectionWidget)!;
+        expect(document.activeElement).to.equal(section);
+      });
+
       it('should focus the previous widget on focused widget removal', async () => {
         const sectionWidget = getElementFromCell(dashboard, 1, 1)!;
         getParentSection(sectionWidget)!.focus();
