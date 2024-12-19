@@ -73,6 +73,10 @@ class Card extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
         --_footer: 0;
       }
 
+      :host([hidden]) {
+        display: none !important;
+      }
+
       :host(:not([theme~='horizontal'])) {
         justify-content: space-between;
       }
