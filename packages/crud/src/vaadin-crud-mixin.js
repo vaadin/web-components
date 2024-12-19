@@ -512,14 +512,15 @@ export const CrudMixin = (superClass) =>
 
     /** @private */
     __moveChildNodes(target) {
-      const nodes = [this._headerNode, this._form, this._saveButton, this._cancelButton, this._deleteButton];
+      const nodes = [this._headerNode, this._form];
+      const buttons = [this._saveButton, this._cancelButton, this._deleteButton].filter(Boolean);
       if (!nodes.every((node) => node instanceof HTMLElement)) {
         return;
       }
 
       // Teleport header node, form, and the buttons to corresponding slots.
       // NOTE: order in which buttons are moved matches the order of slots.
-      nodes.forEach((node) => {
+      [...nodes, ...buttons].forEach((node) => {
         target.appendChild(node);
       });
 

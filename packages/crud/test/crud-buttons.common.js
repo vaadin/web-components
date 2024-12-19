@@ -930,6 +930,7 @@ describe('crud buttons', () => {
     beforeEach(async () => {
       crud = document.createElement('vaadin-crud');
       crud._noDefaultButtons = true;
+      crud.items = [{ foo: 'bar' }];
       document.body.appendChild(crud);
       await nextRender();
     });
@@ -952,6 +953,14 @@ describe('crud buttons', () => {
 
     it('should not create default delete-button', () => {
       expect(crud.querySelector('[slot="delete-button"]')).to.be.null;
+    });
+
+    it('should teleport form and header when no default buttons set', async () => {
+      crud.editedItem = { foo: 'baz' };
+      await nextRender();
+      const overlay = crud.$.dialog.$.overlay;
+      expect(crud._form.parentElement).to.equal(overlay);
+      expect(crud._headerNode.parentElement).to.equal(overlay);
     });
   });
 

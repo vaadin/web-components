@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
+import { fixtureSync } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../vaadin-dashboard.js';
 import type { CustomElementType } from '@vaadin/component-base/src/define.js';
@@ -20,6 +20,7 @@ import {
   setMinimumColumnWidth,
   setMinimumRowHeight,
   setSpacing,
+  updateComplete,
 } from './helpers.js';
 
 type TestDashboardItem = DashboardItem & { id: string; component?: Element | string };
@@ -30,7 +31,7 @@ describe('dashboard', () => {
 
   beforeEach(async () => {
     dashboard = fixtureSync('<vaadin-dashboard></vaadin-dashboard>');
-    await nextFrame();
+    await updateComplete(dashboard);
 
     dashboard.style.width = `${columnWidth * 2}px`;
     setMinimumColumnWidth(dashboard, columnWidth);
@@ -47,11 +48,10 @@ describe('dashboard', () => {
       root.appendChild(widget);
     };
 
-    await nextFrame();
+    await updateComplete(dashboard);
   });
 
-  it('should render a widget for each item', async () => {
-    await nextFrame();
+  it('should render a widget for each item', () => {
     const widgets = [getElementFromCell(dashboard, 0, 0), getElementFromCell(dashboard, 0, 1)];
     widgets.forEach((widget, index) => {
       expect(widget).to.be.ok;
@@ -62,8 +62,7 @@ describe('dashboard', () => {
 
   it('should render a new widget', async () => {
     dashboard.items = [...dashboard.items, { id: '2' }];
-    await nextFrame();
-    await nextFrame();
+    await updateComplete(dashboard);
 
     const newWidget = getElementFromCell(dashboard, 1, 0);
     expect(newWidget).to.be.ok;
@@ -78,7 +77,7 @@ describe('dashboard', () => {
       widget.widgetTitle = `Item ${model.item.id} new title`;
       root.appendChild(widget);
     };
-    await nextFrame();
+    await updateComplete(dashboard);
 
     const widgets = [getElementFromCell(dashboard, 0, 0), getElementFromCell(dashboard, 0, 1)];
     widgets.forEach((widget, index) => {
@@ -90,14 +89,14 @@ describe('dashboard', () => {
 
   it('should clear the items', async () => {
     dashboard.items = [];
-    await nextFrame();
+    await updateComplete(dashboard);
 
     expect(dashboard.querySelectorAll('vaadin-dashboard-widget')).to.be.empty;
   });
 
   it('should clear the renderer', async () => {
     dashboard.renderer = undefined;
-    await nextFrame();
+    await updateComplete(dashboard);
 
     expect(dashboard.querySelectorAll('vaadin-dashboard-widget')).to.be.empty;
   });
@@ -122,10 +121,10 @@ describe('dashboard', () => {
     const spy = sinon.spy();
     // @ts-ignore unexpected event type
     dashboard.addEventListener('item-remove', spy);
-    await nextFrame();
+    await updateComplete(dashboard);
     const widget = getElementFromCell(dashboard, 0, 1);
     getRemoveButton(widget as DashboardWidget).click();
-    await nextFrame();
+    await updateComplete(dashboard);
     expect(spy).to.not.be.called;
   });
 
@@ -153,7 +152,7 @@ describe('dashboard', () => {
 
     it('should span multiple columns', async () => {
       dashboard.items = [{ colspan: 2, id: '0' }];
-      await nextFrame();
+      await updateComplete(dashboard);
 
       const widget = getElementFromCell(dashboard, 0, 0);
       expect(widget).to.have.property('widgetTitle', 'Item 0 title');
@@ -205,7 +204,7 @@ describe('dashboard', () => {
         selectWidget: 'foo',
       };
 
-      await nextFrame();
+      await updateComplete(dashboard);
 
       const widget = getElementFromCell(dashboard, 0, 0) as DashboardWidget & { __i18n: { [key: string]: string } };
       expect(widget.__i18n.selectWidget).to.equal('foo');
@@ -225,7 +224,7 @@ describe('dashboard', () => {
         }
         widget.widgetTitle = `${model.item.id} title`;
       };
-      await nextFrame();
+      await updateComplete(dashboard);
 
       const widget = getElementFromCell(dashboard, 0, 0) as DashboardWidget & { __i18n: { [key: string]: string } };
       widget.focus();
@@ -234,7 +233,7 @@ describe('dashboard', () => {
         ...dashboard.i18n,
         selectWidget: 'foo',
       };
-      await nextFrame();
+      await updateComplete(dashboard);
 
       expect(widget.__i18n.selectWidget).to.equal('foo');
     });
@@ -248,13 +247,13 @@ describe('dashboard', () => {
           syncRenderer(root, _, model);
         });
       };
-      await nextFrame();
+      await updateComplete(dashboard);
 
       dashboard.i18n = {
         ...dashboard.i18n,
         selectWidget: 'foo',
       };
-      await nextFrame();
+      await updateComplete(dashboard);
 
       const widget = getElementFromCell(dashboard, 0, 0) as DashboardWidget & { __i18n: { [key: string]: string } };
       expect(widget.__i18n.selectWidget).to.equal('foo');
@@ -264,7 +263,7 @@ describe('dashboard', () => {
   describe('section', () => {
     beforeEach(async () => {
       dashboard.items = [{ id: '0' }, { id: '1' }, { title: 'Section', items: [{ id: '2' }, { id: '3' }] }];
-      await nextFrame();
+      await updateComplete(dashboard);
     });
 
     it('should render widgets inside a section', () => {
@@ -308,7 +307,7 @@ describe('dashboard', () => {
 
     it('should unhide draggable handle when editable', async () => {
       dashboard.editable = true;
-      await nextFrame();
+      await updateComplete(dashboard);
       const widget = getElementFromCell(dashboard, 0, 0)!;
       const draggable = getDraggable(widget);
       expect(draggable.getBoundingClientRect().height).to.be.above(0);
@@ -322,7 +321,7 @@ describe('dashboard', () => {
 
     it('should unhide remove button when editable', async () => {
       dashboard.editable = true;
-      await nextFrame();
+      await updateComplete(dashboard);
       const widget = getElementFromCell(dashboard, 0, 0) as DashboardWidget;
       const removeButton = getRemoveButton(widget);
       expect(removeButton.getBoundingClientRect().height).to.be.above(0);
@@ -336,7 +335,7 @@ describe('dashboard', () => {
 
     it('should unhide resize handle when editable', async () => {
       dashboard.editable = true;
-      await nextFrame();
+      await updateComplete(dashboard);
       const widget = getElementFromCell(dashboard, 0, 0) as DashboardWidget;
       const resizeHandle = getResizeHandle(widget);
       expect(resizeHandle.getBoundingClientRect().height).to.be.above(0);
@@ -351,10 +350,10 @@ describe('dashboard', () => {
           syncRenderer(root, _, model);
         });
       };
-      await nextFrame();
+      await updateComplete(dashboard);
 
       dashboard.editable = true;
-      await nextFrame();
+      await updateComplete(dashboard);
       const widget = getElementFromCell(dashboard, 0, 0) as DashboardWidget;
       const resizeHandle = getResizeHandle(widget);
       expect(resizeHandle.getBoundingClientRect().height).to.be.above(0);
@@ -363,7 +362,7 @@ describe('dashboard', () => {
     describe('section', () => {
       beforeEach(async () => {
         dashboard.items = [{ id: '0' }, { id: '1' }, { title: 'Section', items: [{ id: '2' }, { id: '3' }] }];
-        await nextFrame();
+        await updateComplete(dashboard);
       });
 
       it('should hide draggable handle by default', () => {
@@ -375,7 +374,7 @@ describe('dashboard', () => {
 
       it('should unhide draggable handle when editable', async () => {
         dashboard.editable = true;
-        await nextFrame();
+        await updateComplete(dashboard);
         const widget = getElementFromCell(dashboard, 1, 0)!;
         const section = widget.closest('vaadin-dashboard-section') as DashboardSection;
         const draggable = getDraggable(section);
@@ -391,7 +390,7 @@ describe('dashboard', () => {
 
       it('should unhide remove button when editable', async () => {
         dashboard.editable = true;
-        await nextFrame();
+        await updateComplete(dashboard);
         const widget = getElementFromCell(dashboard, 1, 0) as DashboardWidget;
         const section = widget.closest('vaadin-dashboard-section') as DashboardSection;
         const removeButton = getRemoveButton(section);
@@ -405,7 +404,7 @@ describe('dashboard', () => {
             selectSection: 'foo',
           };
 
-          await nextFrame();
+          await updateComplete(dashboard);
 
           const widget = getElementFromCell(dashboard, 1, 0) as DashboardWidget;
           const section = widget.closest('vaadin-dashboard-section') as DashboardSection & {
@@ -422,14 +421,14 @@ describe('dashboard', () => {
     it('should use the item component as widget', async () => {
       const widget = fixtureSync('<vaadin-dashboard-widget widget-title="Component 0"></vaadin-dashboard-widget>');
       dashboard.items = [{ id: '0', component: widget }];
-      await nextFrame();
+      await updateComplete(dashboard);
 
       expect(getElementFromCell(dashboard, 0, 0)).to.equal(widget);
     });
 
     it('should render default widgets if component is not an element', async () => {
       dashboard.items = [{ id: '0', component: 'not-an-element' }];
-      await nextFrame();
+      await updateComplete(dashboard);
 
       const widget = getElementFromCell(dashboard, 0, 0);
       expect(widget).to.be.ok;
@@ -442,7 +441,7 @@ describe('dashboard', () => {
       dashboard.renderer = renderer;
       const widget = fixtureSync('<vaadin-dashboard-widget widget-title="Component 0"></vaadin-dashboard-widget>');
       dashboard.items = [{ id: '0', component: widget }];
-      await nextFrame();
+      await updateComplete(dashboard);
 
       expect(renderer).to.not.be.called;
     });
@@ -456,7 +455,7 @@ describe('dashboard', () => {
           items: [{ id: '0', component: widget }],
         },
       ];
-      await nextFrame();
+      await updateComplete(dashboard);
 
       expect(getElementFromCell(dashboard, 0, 0)).to.equal(widget);
       expect(section.contains(widget)).to.be.true;
@@ -464,7 +463,7 @@ describe('dashboard', () => {
 
     it('should render default section if component is not an element', async () => {
       (dashboard as any).items = [{ component: 'not-an-element', title: 'Section', items: [{ id: '0' }] }];
-      await nextFrame();
+      await updateComplete(dashboard);
 
       const widget = getElementFromCell(dashboard, 0, 0);
       expect(widget).to.be.ok;
@@ -490,7 +489,7 @@ describe('dashboard', () => {
           items: [{ id: '0', component: widget }],
         },
       ];
-      await nextFrame();
+      await updateComplete(dashboard);
 
       expect(widget.widgetTitle).to.equal('Component 0');
       expect(section.sectionTitle).to.equal('Section');
@@ -512,34 +511,34 @@ describe('dashboard', () => {
         }
         widget.widgetTitle = `${model.item.id} title`;
       };
-      await nextFrame();
+      await updateComplete(dashboard);
     });
 
     it('should not lose focus when reassigning items', async () => {
       getElementFromCell(dashboard, 0, 0)!.focus();
       dashboard.items = [...dashboard.items];
-      await nextFrame();
+      await updateComplete(dashboard);
       expect(document.activeElement).to.equal(getElementFromCell(dashboard, 0, 0)!);
     });
 
     it('should not lose focus when reassigning new items with same ids', async () => {
       getElementFromCell(dashboard, 0, 0)!.focus();
       dashboard.items = [{ id: '0' }, { id: '1' }];
-      await nextFrame();
+      await updateComplete(dashboard);
       expect(document.activeElement).to.equal(getElementFromCell(dashboard, 0, 0)!);
     });
 
     it('should not lose focus when prepending items', async () => {
       getElementFromCell(dashboard, 0, 0)!.focus();
       dashboard.items = [{ id: '-1' }, ...dashboard.items];
-      await nextFrame();
+      await updateComplete(dashboard);
       expect(document.activeElement).to.equal(getElementFromCell(dashboard, 0, 1)!);
     });
 
     it('should not lose focus when removing items', async () => {
       getElementFromCell(dashboard, 0, 1)!.focus();
       dashboard.items = [dashboard.items[1]];
-      await nextFrame();
+      await updateComplete(dashboard);
       expect(document.activeElement).to.equal(getElementFromCell(dashboard, 0, 0)!);
     });
 
@@ -548,7 +547,7 @@ describe('dashboard', () => {
       const wrapper = fixtureSync('<div></div>');
       const shadow = wrapper.attachShadow({ mode: 'open' });
       shadow.appendChild(dashboard);
-      await nextFrame();
+      await updateComplete(dashboard);
 
       // Focus the second widget
       const secondWidget = dashboard.querySelectorAll('vaadin-dashboard-widget')[1];
@@ -556,7 +555,7 @@ describe('dashboard', () => {
 
       // Remove the first widget
       dashboard.items = [dashboard.items[1]];
-      await nextFrame();
+      await updateComplete(dashboard);
 
       // Expect the second widget to remain focused
       expect(shadow.activeElement).to.equal(secondWidget);
@@ -564,18 +563,18 @@ describe('dashboard', () => {
 
     it('should not lose focus when reassigning section items', async () => {
       dashboard.items = [{ title: 'Section', items: [{ id: '0' }] }, { id: '1' }];
-      await nextFrame();
+      await updateComplete(dashboard);
       getElementFromCell(dashboard, 0, 0)!.focus();
       dashboard.items = [...dashboard.items];
-      await nextFrame();
+      await updateComplete(dashboard);
       expect(document.activeElement).to.equal(getElementFromCell(dashboard, 0, 0)!);
     });
 
     it('should unhide resize handle when editable', async () => {
       getElementFromCell(dashboard, 0, 0)!.focus();
-      await nextFrame();
+      await updateComplete(dashboard);
       dashboard.editable = true;
-      await nextFrame();
+      await updateComplete(dashboard);
       const widget = getElementFromCell(dashboard, 0, 0) as DashboardWidget;
       const resizeHandle = getResizeHandle(widget);
       expect(resizeHandle.getBoundingClientRect().height).to.be.above(0);
@@ -583,11 +582,11 @@ describe('dashboard', () => {
 
     it('should unhide remove button of a section when editable', async () => {
       dashboard.items = [{ title: 'Section', items: [{ id: '0' }] }, { id: '1' }];
-      await nextFrame();
+      await updateComplete(dashboard);
       getElementFromCell(dashboard, 0, 0)!.focus();
-      await nextFrame();
+      await updateComplete(dashboard);
       dashboard.editable = true;
-      await nextFrame();
+      await updateComplete(dashboard);
       const widget = getElementFromCell(dashboard, 0, 0) as DashboardWidget;
       const section = widget.closest('vaadin-dashboard-section') as DashboardSection;
       const removeButton = getRemoveButton(section);
@@ -603,8 +602,7 @@ describe('dashboard', () => {
 
       // Add enough items to push the focused item out of view
       dashboard.items = Array.from({ length: 10 }, (_, i) => ({ id: i.toString() })).reverse();
-      await nextFrame();
-      await nextFrame();
+      await updateComplete(dashboard);
 
       // Expect the focused item to have been scrolled back into view
       const widgetRect = document.activeElement!.getBoundingClientRect();
@@ -622,8 +620,7 @@ describe('dashboard', () => {
 
       // Add enough items to make the dashboard scrollable
       dashboard.items = Array.from({ length: 10 }, (_, i) => ({ id: i.toString() }));
-      await nextFrame();
-      await nextFrame();
+      await updateComplete(dashboard);
 
       // Scroll the dashboard to make the focused item partially visible
       const scrollingContainer = getScrollingContainer(dashboard);
@@ -632,8 +629,7 @@ describe('dashboard', () => {
 
       // Change the items to trigger a render
       dashboard.items = dashboard.items.slice(0, -1);
-      await nextFrame();
-      await nextFrame();
+      await updateComplete(dashboard);
 
       // Expect no scrolling to have occurred
       expect(scrollingContainer.scrollTop).to.equal(scrollTop);
@@ -648,8 +644,7 @@ describe('dashboard', () => {
 
       // Add enough items to push the focused item out of view
       dashboard.items = Array.from({ length: rows * columns * 2 }, (_, i) => ({ id: i.toString() })).reverse();
-      await nextFrame();
-      await nextFrame();
+      await updateComplete(dashboard);
 
       // Expect the focused item to have been scrolled back into view
       const widgetRect = document.activeElement!.getBoundingClientRect();
@@ -660,10 +655,10 @@ describe('dashboard', () => {
     describe('focus restore on focused item removal', () => {
       beforeEach(async () => {
         dashboard.editable = true;
-        await nextFrame();
+        await updateComplete(dashboard);
 
         dashboard.items = [{ id: '0' }, { id: '1' }, { title: 'Section', items: [{ id: '2' }, { id: '3' }] }];
-        await nextFrame();
+        await updateComplete(dashboard);
 
         /* prettier-ignore */
         expectLayout(dashboard, [
@@ -674,9 +669,9 @@ describe('dashboard', () => {
 
       async function renderAndFocusRestore() {
         // Wait for the updated wrapper layout to be rendered
-        await nextFrame();
+        await updateComplete(dashboard);
         // Wait for the wrapper widgets to be rendered
-        await nextFrame();
+        await updateComplete(dashboard);
       }
 
       it('should focus next widget on focused widget removal', async () => {
@@ -684,6 +679,22 @@ describe('dashboard', () => {
         dashboard.items = dashboard.items.slice(1);
         await renderAndFocusRestore();
         expect(document.activeElement).to.equal(getElementFromCell(dashboard, 0, 0)!);
+      });
+
+      it('should focus next widget on focused widget removal after reordering', async () => {
+        getElementFromCell(dashboard, 0, 0)!.focus();
+        // Reorder items (the focused widget is moved to the end)
+        dashboard.items = [dashboard.items[1], dashboard.items[2], dashboard.items[0]];
+        await updateComplete(dashboard);
+
+        // Remove the focused widget
+        dashboard.items = [dashboard.items[0], dashboard.items[1]];
+        await updateComplete(dashboard);
+
+        // Expect the section to be focused
+        const sectionWidget = getElementFromCell(dashboard, 1, 0)!;
+        const section = getParentSection(sectionWidget)!;
+        expect(document.activeElement).to.equal(section);
       });
 
       it('should focus the previous widget on focused widget removal', async () => {
@@ -735,7 +746,7 @@ describe('dashboard', () => {
 
       it('should focus a new widget when items are replaced', async () => {
         getElementFromCell(dashboard, 0, 0)!.focus();
-        await nextFrame();
+        await updateComplete(dashboard);
         dashboard.items = [{ id: '100' }];
         await renderAndFocusRestore();
         expect(document.activeElement).to.equal(getElementFromCell(dashboard, 0, 0)!);
