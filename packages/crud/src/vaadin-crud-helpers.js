@@ -101,9 +101,9 @@ export function createFields(crudForm, parent, object, path) {
     }
     const newPath = (path ? `${path}.` : '') + prop;
     if (object[prop] && typeof object[prop] === 'object') {
-      crudForm.__createFields(parent, object[prop], newPath);
+      createFields(crudForm, parent, object[prop], newPath);
     } else {
-      crudForm.__createField(parent, newPath);
+      createField(crudForm, parent, newPath);
     }
   });
   if (!crudForm._fields.length) {

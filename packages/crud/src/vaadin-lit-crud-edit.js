@@ -28,11 +28,14 @@ class CrudEdit extends Button {
   }
 
   static get styles() {
-    return css`
-      :host {
-        display: block;
-      }
-    `;
+    return [
+      super.styles,
+      css`
+        :host {
+          display: block;
+        }
+      `,
+    ];
   }
 
   /** @protected */
