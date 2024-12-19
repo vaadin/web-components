@@ -24,8 +24,12 @@ import {
 
 type TestDashboardItem = DashboardItem & { id: string; component?: Element | string };
 
-async function updateComplete(Dashboard: Dashboard<TestDashboardItem>) {
-  await nextUpdate(Dashboard);
+async function updateComplete(dashboard: Dashboard<TestDashboardItem>) {
+  await nextUpdate(dashboard);
+  const widgets = dashboard.querySelectorAll('vaadin-dashboard-widget');
+  for (const widget of widgets) {
+    await nextUpdate(widget);
+  }
   await nextFrame();
 }
 
@@ -626,6 +630,7 @@ describe('dashboard', () => {
       // Add enough items to make the dashboard scrollable
       dashboard.items = Array.from({ length: 10 }, (_, i) => ({ id: i.toString() }));
       await updateComplete(dashboard);
+      await nextFrame();
 
       // Scroll the dashboard to make the focused item partially visible
       const scrollingContainer = getScrollingContainer(dashboard);
@@ -635,6 +640,7 @@ describe('dashboard', () => {
       // Change the items to trigger a render
       dashboard.items = dashboard.items.slice(0, -1);
       await updateComplete(dashboard);
+      await nextFrame();
 
       // Expect no scrolling to have occurred
       expect(scrollingContainer.scrollTop).to.equal(scrollTop);
