@@ -195,6 +195,12 @@ class Dashboard extends DashboardLayoutMixin(ElementMixin(ThemableMixin(PolylitM
           };
         },
       },
+
+      /* @private */
+      __childCount: {
+        type: Number,
+        value: 0,
+      },
     };
   }
 
@@ -222,14 +228,13 @@ class Dashboard extends DashboardLayoutMixin(ElementMixin(ThemableMixin(PolylitM
   /** @protected */
   render() {
     return html`<div id="grid">
-      <div id="slots" style="display: contents">
-        ${(this.items || []).map((_item, index) => html`<slot name="slot-${index}"></slot>`)}
-      </div>
+      ${[...Array(this.__childCount)].map((_, index) => html`<slot name="slot-${index}"></slot>`)}
     </div>`;
   }
 
   /** @private */
   __itemsOrRendererChanged(items, renderer) {
+    this.__childCount = items ? items.length : 0;
     this.__renderItemWrappers(items || []);
 
     this.querySelectorAll(WRAPPER_LOCAL_NAME).forEach((wrapper) => {
@@ -298,7 +303,7 @@ class Dashboard extends DashboardLayoutMixin(ElementMixin(ThemableMixin(PolylitM
         section.__i18n = this.i18n;
 
         // Render the subitems
-        section.__widgetCount = item.items.length;
+        section.__childCount = item.items.length;
         this.__renderItemWrappers(item.items, section);
       }
     });
@@ -360,6 +365,15 @@ class Dashboard extends DashboardLayoutMixin(ElementMixin(ThemableMixin(PolylitM
     return getItemsArrayOfItem(getElementItem(wrapper), this.items);
   }
 
+  /**
+   * Parses the slot name to get the index of the item in the dashboard
+   * For example, slot name "slot-12" will return 12
+   * @private
+   */
+  __parseSlotIndex(slotName) {
+    return parseInt(slotName.split('-')[1]);
+  }
+
   /** @private */
   __getClosestActiveWrapper(wrapper) {
     if (!wrapper || this.__isActiveWrapper(wrapper)) {
@@ -368,7 +382,7 @@ class Dashboard extends DashboardLayoutMixin(ElementMixin(ThemableMixin(PolylitM
 
     // Sibling wrappers sorted by their slot name
     const siblingWrappers = [...wrapper.parentElement.children].sort((a, b) => {
-      return a.slot < b.slot ? -1 : 1;
+      return this.__parseSlotIndex(a.slot) - this.__parseSlotIndex(b.slot);
     });
 
     // Starting from the given wrapper element, iterates through the siblings in the given direction
