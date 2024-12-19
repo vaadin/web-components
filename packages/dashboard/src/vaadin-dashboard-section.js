@@ -174,7 +174,7 @@ class DashboardSection extends DashboardItemMixin(ElementMixin(ThemableMixin(Pol
         value: '',
       },
 
-      /* @private */
+      /** @private */
       __childCount: {
         type: Number,
         value: 0,

@@ -196,7 +196,7 @@ class Dashboard extends DashboardLayoutMixin(ElementMixin(ThemableMixin(PolylitM
         },
       },
 
-      /* @private */
+      /** @private */
       __childCount: {
         type: Number,
         value: 0,
