@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
+import { fixtureSync } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../vaadin-dashboard.js';
 import type { CustomElementType } from '@vaadin/component-base/src/define.js';
@@ -51,8 +51,7 @@ describe('dashboard', () => {
     await updateComplete(dashboard);
   });
 
-  it('should render a widget for each item', async () => {
-    await updateComplete(dashboard);
+  it('should render a widget for each item', () => {
     const widgets = [getElementFromCell(dashboard, 0, 0), getElementFromCell(dashboard, 0, 1)];
     widgets.forEach((widget, index) => {
       expect(widget).to.be.ok;
@@ -622,7 +621,6 @@ describe('dashboard', () => {
       // Add enough items to make the dashboard scrollable
       dashboard.items = Array.from({ length: 10 }, (_, i) => ({ id: i.toString() }));
       await updateComplete(dashboard);
-      await nextFrame();
 
       // Scroll the dashboard to make the focused item partially visible
       const scrollingContainer = getScrollingContainer(dashboard);
@@ -632,7 +630,6 @@ describe('dashboard', () => {
       // Change the items to trigger a render
       dashboard.items = dashboard.items.slice(0, -1);
       await updateComplete(dashboard);
-      await nextFrame();
 
       // Expect no scrolling to have occurred
       expect(scrollingContainer.scrollTop).to.equal(scrollTop);
