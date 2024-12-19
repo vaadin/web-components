@@ -195,6 +195,12 @@ class Dashboard extends DashboardLayoutMixin(ElementMixin(ThemableMixin(PolylitM
           };
         },
       },
+
+      /** @private */
+      __childCount: {
+        type: Number,
+        value: 0,
+      },
     };
   }
 
@@ -221,11 +227,14 @@ class Dashboard extends DashboardLayoutMixin(ElementMixin(ThemableMixin(PolylitM
 
   /** @protected */
   render() {
-    return html`<div id="grid"><slot></slot></div>`;
+    return html`<div id="grid">
+      ${[...Array(this.__childCount)].map((_, index) => html`<slot name="slot-${index}"></slot>`)}
+    </div>`;
   }
 
   /** @private */
   __itemsOrRendererChanged(items, renderer) {
+    this.__childCount = items ? items.length : 0;
     this.__renderItemWrappers(items || []);
 
     this.querySelectorAll(WRAPPER_LOCAL_NAME).forEach((wrapper) => {
@@ -257,38 +266,25 @@ class Dashboard extends DashboardLayoutMixin(ElementMixin(ThemableMixin(PolylitM
   __renderItemWrappers(items, hostElement = this) {
     // Get all the wrappers in the host element
     let wrappers = [...hostElement.children].filter((el) => el.localName === WRAPPER_LOCAL_NAME);
-    let previousWrapper = null;
 
     const focusedWrapper = wrappers.find((wrapper) => wrapper.querySelector(':focus'));
     const focusedWrapperWillBeRemoved = focusedWrapper && !this.__isActiveWrapper(focusedWrapper);
     const wrapperClosestToRemovedFocused =
       focusedWrapperWillBeRemoved && this.__getClosestActiveWrapper(focusedWrapper);
 
-    items.forEach((item) => {
+    items.forEach((item, index) => {
       // Find the wrapper for the item or create a new one
       const wrapper = wrappers.find((el) => itemsEqual(getElementItem(el), item)) || this.__createWrapper(item);
       wrappers = wrappers.filter((el) => el !== wrapper);
+      if (!wrapper.isConnected) {
+        hostElement.appendChild(wrapper);
+      }
 
       // Update the wrapper style
       this.__updateWrapper(wrapper, item);
 
-      if (wrapper !== focusedWrapper) {
-        if (previousWrapper) {
-          // Append the wrapper after the previous one if it's not already there
-          if (wrapper.previousElementSibling !== previousWrapper) {
-            previousWrapper.after(wrapper);
-          }
-        } else if (hostElement.firstChild) {
-          // Insert the wrapper as the first child of the host element if it's not already there
-          if (wrapper !== hostElement.firstChild) {
-            hostElement.insertBefore(wrapper, hostElement.firstChild);
-          }
-        } else {
-          // Append the wrapper to the empty host element
-          hostElement.appendChild(wrapper);
-        }
-      }
-      previousWrapper = wrapper;
+      // Update the wrapper slot
+      wrapper.slot = `slot-${index}`;
 
       // Render section if the item has subitems
       if (item.items) {
@@ -307,6 +303,7 @@ class Dashboard extends DashboardLayoutMixin(ElementMixin(ThemableMixin(PolylitM
         section.__i18n = this.i18n;
 
         // Render the subitems
+        section.__childCount = item.items.length;
         this.__renderItemWrappers(item.items, section);
       }
     });
@@ -368,11 +365,25 @@ class Dashboard extends DashboardLayoutMixin(ElementMixin(ThemableMixin(PolylitM
     return getItemsArrayOfItem(getElementItem(wrapper), this.items);
   }
 
+  /**
+   * Parses the slot name to get the index of the item in the dashboard
+   * For example, slot name "slot-12" will return 12
+   * @private
+   */
+  __parseSlotIndex(slotName) {
+    return parseInt(slotName.split('-')[1]);
+  }
+
   /** @private */
   __getClosestActiveWrapper(wrapper) {
     if (!wrapper || this.__isActiveWrapper(wrapper)) {
       return wrapper;
     }
+
+    // Sibling wrappers sorted by their slot name
+    const siblingWrappers = [...wrapper.parentElement.children].sort((a, b) => {
+      return this.__parseSlotIndex(a.slot) - this.__parseSlotIndex(b.slot);
+    });
 
     // Starting from the given wrapper element, iterates through the siblings in the given direction
     // to find the closest wrapper that represents an item in the dashboard's items array
@@ -381,7 +392,8 @@ class Dashboard extends DashboardLayoutMixin(ElementMixin(ThemableMixin(PolylitM
         if (this.__isActiveWrapper(wrapper)) {
           return wrapper;
         }
-        wrapper = dir === 1 ? wrapper.nextElementSibling : wrapper.previousElementSibling;
+        const currentIndex = siblingWrappers.indexOf(wrapper);
+        wrapper = dir === 1 ? siblingWrappers[currentIndex + 1] : siblingWrappers[currentIndex - 1];
       }
     };
 
