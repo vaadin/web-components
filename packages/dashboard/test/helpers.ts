@@ -378,9 +378,11 @@ export async function onceResized(dashboard: HTMLElement): Promise<void> {
 
 export async function updateComplete(dashboard: HTMLElement): Promise<void> {
   await nextUpdate(dashboard);
-  const widgets = dashboard.querySelectorAll('vaadin-dashboard-widget');
-  for (const widget of widgets) {
-    await nextUpdate(widget);
+
+  const widgetsAndSections = dashboard.querySelectorAll('vaadin-dashboard-widget, vaadin-dashboard-section');
+  for (const child of widgetsAndSections) {
+    await nextUpdate(child as HTMLElement);
   }
+
   await nextFrame();
 }
