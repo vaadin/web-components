@@ -31,7 +31,7 @@ const complexCard = `<vaadin-card>
   <vaadin-button slot="footer" theme="contained">Button</vaadin-button>
 </vaadin-card>`;
 const complexCardWithIcon = `<vaadin-card>
-  <vaadin-icon slot="media" icon="vaadin:car" style="background: var(--lumo-primary-color-10pct); color: var(--lumo-primary-color); padding: 20px;"></vaadin-icon>
+  <vaadin-icon slot="media" icon="vaadin:car" style="padding: 20px;"></vaadin-icon>
   <div slot="title">Title</div>
   <div slot="subtitle">Subtitle</div>
   <div slot="header-suffix">Suffix</div>
