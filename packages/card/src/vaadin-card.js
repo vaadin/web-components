@@ -338,6 +338,7 @@ class Card extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
     this.toggleAttribute('has-footer', this.querySelector(':scope > [slot="footer"]'));
   }
 
+  /** @protected */
   connectedCallback() {
     super.connectedCallback();
 
@@ -349,6 +350,7 @@ class Card extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
     }
   }
 
+  /** @protected */
   disconnectedCallback() {
     if (this.__boundSlotChangeListener) {
       this.shadowRoot.removeEventListener('slotchange', this.__boundSlotChangeListener);
