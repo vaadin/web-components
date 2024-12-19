@@ -12,31 +12,31 @@ window.Vaadin ||= {};
 window.Vaadin.featureFlags ||= {};
 window.Vaadin.featureFlags.cardComponent = true;
 
-const cardWithContent = `<vaadin-card><div>Content</div></vaadin-card>`;
-const cardWithTitle = `<vaadin-card><div slot="title">Title</div></vaadin-card>`;
-const cardWithSubtitle = `<vaadin-card><div slot="subtitle">Subtitle</div></vaadin-card>`;
-const cardWithHeader = `<vaadin-card><div slot="header">Header</div></vaadin-card>`;
-const cardWithHeaderPrefix = `<vaadin-card><div slot="header-prefix">Prefix</div></vaadin-card>`;
-const cardWithHeaderSuffix = `<vaadin-card><div slot="header-suffix">Suffix</div></vaadin-card>`;
-const cardWithTitleAndSubtitle = `<vaadin-card><vaadin-avatar slot="header-prefix" abbr="A"></vaadin-avatar><div slot="title">Title</div><div slot="subtitle">Subtitle</div></vaadin-card>`;
-const cardWithTitleSubtitleAndHeader = `<vaadin-card><vaadin-avatar slot="header-prefix" abbr="A"></vaadin-avatar><div slot="header">Header</div><div slot="title">Title</div><div slot="subtitle">Subtitle</div></vaadin-card>`;
-const cardWithFooter = `<vaadin-card><div slot="footer">Footer</div></vaadin-card>`;
-const cardWithMedia = `<vaadin-card><img slot="media" width="200" src="https://images.unsplash.com/photo-1674572271917-ac95fbdbf76c?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTQzfHxsYXBsYW5kfGVufDB8fDB8fHww"></vaadin-card>`;
+const content = '<div>Content</div>';
+const title = '<div slot="title">Title</div>';
+const subTitle = '<div slot="subtitle">Subtitle</div>';
+const header = '<div slot="header">Header</div>';
+const avatar = '<vaadin-avatar slot="header-prefix" abbr="A"></vaadin-avatar>';
+const suffix = '<div slot="header-suffix">Suffix</div>';
+const button = '<vaadin-button slot="footer" theme="contained">Button</vaadin-button>';
+const image = '<img slot="media" width="200" src="/packages/card/test/visual/card-image.avif">';
+
 const complexCard = `<vaadin-card>
-  <img slot="media" width="200" src="https://images.unsplash.com/photo-1674572271917-ac95fbdbf76c?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTQzfHxsYXBsYW5kfGVufDB8fDB8fHww">
-  <div slot="title">Title</div>
-  <div slot="subtitle">Subtitle</div>
-  <div slot="header-suffix">Suffix</div>
+  ${image}
+  ${title}
+  ${subTitle}
+  ${suffix}
   <div>Content lorem ipsum dolor sit amet.</div>
-  <vaadin-button slot="footer" theme="contained">Button</vaadin-button>
+  ${button}
 </vaadin-card>`;
+
 const complexCardWithIcon = `<vaadin-card>
   <vaadin-icon slot="media" icon="vaadin:car" style="padding: 20px;"></vaadin-icon>
-  <div slot="title">Title</div>
-  <div slot="subtitle">Subtitle</div>
-  <div slot="header-suffix">Suffix</div>
+  ${title}
+  ${subTitle}
+  ${suffix}
   <div>Content lorem ipsum dolor sit amet.</div>
-  <vaadin-button slot="footer" theme="contained">Button</vaadin-button>
+  ${button}
 </vaadin-card>`;
 
 describe('card', () => {
@@ -48,60 +48,56 @@ describe('card', () => {
     div.style.padding = '20px';
   });
 
-  describe('slot', () => {
-    beforeEach(() => {
-      div = document.createElement('div');
-      div.style.display = 'inline-block';
-      div.style.padding = '20px';
-    });
+  const cardFixture = (content) => fixtureSync(`<vaadin-card>${content}</vaadin-card>`, div);
 
+  describe('slot', () => {
     it('content', async () => {
-      element = fixtureSync(cardWithContent, div);
+      element = cardFixture(content);
       await visualDiff(div, 'slot-content');
     });
 
     it('title', async () => {
-      element = fixtureSync(cardWithTitle, div);
+      element = cardFixture(title);
       await visualDiff(div, 'slot-title');
     });
 
     it('subtitle', async () => {
-      element = fixtureSync(cardWithSubtitle, div);
+      element = cardFixture(subTitle);
       await visualDiff(div, 'slot-subtitle');
     });
 
     it('title-subtitle', async () => {
-      element = fixtureSync(cardWithTitleAndSubtitle, div);
+      element = cardFixture(`${avatar}${title}${subTitle}`);
       await visualDiff(div, 'slot-title-subtitle');
     });
 
     it('title-subtitle-header', async () => {
-      element = fixtureSync(cardWithTitleSubtitleAndHeader, div);
+      element = cardFixture(`${avatar}${header}${title}${subTitle}`);
       await visualDiff(div, 'slot-title-subtitle-header');
     });
 
     it('header', async () => {
-      element = fixtureSync(cardWithHeader, div);
+      element = cardFixture(header);
       await visualDiff(div, 'slot-header');
     });
 
     it('header-prefix', async () => {
-      element = fixtureSync(cardWithHeaderPrefix, div);
+      element = cardFixture('<div slot="header-prefix">Prefix</div>');
       await visualDiff(div, 'slot-header-prefix');
     });
 
     it('header-suffix', async () => {
-      element = fixtureSync(cardWithHeaderSuffix, div);
+      element = cardFixture(suffix);
       await visualDiff(div, 'slot-header-suffix');
     });
 
     it('footer', async () => {
-      element = fixtureSync(cardWithFooter, div);
+      element = cardFixture('<div slot="footer">Footer</div>');
       await visualDiff(div, 'slot-footer');
     });
 
     it('media', async () => {
-      element = fixtureSync(cardWithMedia, div);
+      element = cardFixture(image);
       await new Promise((resolve) => {
         element.querySelector('img').onload = async () => {
           await visualDiff(div, 'slot-media');
@@ -123,20 +119,20 @@ describe('card', () => {
 
   describe('theme', () => {
     it('outlined', async () => {
-      element = fixtureSync(cardWithContent, div);
+      element = cardFixture(content);
       element.setAttribute('theme', 'outlined');
       await visualDiff(div, 'theme-outlined');
     });
 
     it('elevated', async () => {
-      element = fixtureSync(cardWithContent, div);
+      element = cardFixture(content);
       div.style.setProperty('background', 'var(--material-secondary-background-color)');
       element.setAttribute('theme', 'elevated');
       await visualDiff(div, 'theme-elevated');
     });
 
     it('outlined-elevated', async () => {
-      element = fixtureSync(cardWithContent, div);
+      element = cardFixture(content);
       div.style.setProperty('background', 'var(--material-secondary-background-color)');
       element.setAttribute('theme', 'outlined elevated');
       await visualDiff(div, 'theme-outlined-elevated');
