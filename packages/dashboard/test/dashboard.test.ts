@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, nextFrame, nextUpdate } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../vaadin-dashboard.js';
 import type { CustomElementType } from '@vaadin/component-base/src/define.js';
@@ -20,18 +20,10 @@ import {
   setMinimumColumnWidth,
   setMinimumRowHeight,
   setSpacing,
+  updateComplete,
 } from './helpers.js';
 
 type TestDashboardItem = DashboardItem & { id: string; component?: Element | string };
-
-async function updateComplete(dashboard: Dashboard<TestDashboardItem>) {
-  await nextUpdate(dashboard);
-  const widgets = dashboard.querySelectorAll('vaadin-dashboard-widget');
-  for (const widget of widgets) {
-    await nextUpdate(widget);
-  }
-  await nextFrame();
-}
 
 describe('dashboard', () => {
   let dashboard: Dashboard<TestDashboardItem>;
