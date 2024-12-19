@@ -1,6 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
-import '../src/vaadin-crud.js';
 import { getHeaderCellContent } from './helpers.js';
 
 const ITEMS = [{ name: 'John' }, { name: 'Anna' }];
