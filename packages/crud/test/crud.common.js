@@ -2,7 +2,6 @@ import { expect } from '@vaadin/chai-plugins';
 import { aTimeout, change, fire, fixtureSync, nextRender, oneEvent } from '@vaadin/testing-helpers';
 import { setViewport } from '@web/test-runner-commands';
 import sinon from 'sinon';
-import '../src/vaadin-crud.js';
 import { capitalize, getProperty, setProperty } from '../src/vaadin-crud-helpers.js';
 import { flushGrid, getBodyCellContent } from './helpers.js';
 
@@ -71,8 +70,9 @@ describe('crud', () => {
       expect(crud._grid.querySelector('vaadin-crud-edit').getAttribute('aria-label')).to.be.equal('Editar entidad');
     });
 
-    it('should propagate theme to internal themable components', () => {
+    it('should propagate theme to internal themable components', async () => {
       crud.setAttribute('theme', 'foo');
+      await nextRender();
       [
         crud,
         crud._grid,

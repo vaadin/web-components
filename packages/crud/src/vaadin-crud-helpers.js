@@ -66,3 +66,47 @@ export function setProperty(path, value, obj) {
 export function isValidEditorPosition(editorPosition) {
   return ['bottom', 'aside'].includes(editorPosition);
 }
+
+export function editColumnDefaultRenderer(root, column) {
+  let edit = root.firstElementChild;
+  if (!edit) {
+    edit = document.createElement('vaadin-crud-edit');
+    if (column.hasAttribute('theme')) {
+      edit.setAttribute('theme', column.getAttribute('theme'));
+    }
+    root.appendChild(edit);
+  }
+
+  if (column.ariaLabel) {
+    edit.setAttribute('aria-label', column.ariaLabel);
+  } else {
+    edit.removeAttribute('aria-label');
+  }
+}
+
+export function createField(crudForm, parent, path) {
+  const field = document.createElement('vaadin-text-field');
+  field.label = capitalize(path);
+  field.path = path;
+  field.required = true;
+  parent.appendChild(field);
+  crudForm._fields.push(field);
+  return field;
+}
+
+export function createFields(crudForm, parent, object, path) {
+  Object.keys(object).forEach((prop) => {
+    if (!crudForm.include && crudForm.exclude && crudForm.exclude.test(prop)) {
+      return;
+    }
+    const newPath = (path ? `${path}.` : '') + prop;
+    if (object[prop] && typeof object[prop] === 'object') {
+      createFields(crudForm, parent, object[prop], newPath);
+    } else {
+      createField(crudForm, parent, newPath);
+    }
+  });
+  if (!crudForm._fields.length) {
+    crudForm._fields = undefined;
+  }
+}
