@@ -3,6 +3,7 @@
  * Copyright (c) 2021 - 2024 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { announce } from '@vaadin/a11y-base/src/announce.js';
 import { SlotChildObserveController } from '@vaadin/component-base/src/slot-child-observe-controller.js';
 
 /**
@@ -108,12 +109,8 @@ export class ErrorController extends SlotChildObserveController {
       errorNode.textContent = hasError ? errorMessage : '';
       errorNode.hidden = !hasError;
 
-      // Role alert will make the error message announce immediately
-      // as the field becomes invalid
       if (hasError) {
-        errorNode.setAttribute('role', 'alert');
-      } else {
-        errorNode.removeAttribute('role');
+        announce(errorMessage, { mode: 'assertive' });
       }
     }
 
