@@ -14,7 +14,7 @@ import './vaadin-lit-crud-dialog.js';
 import './vaadin-lit-crud-grid.js';
 import './vaadin-lit-crud-form.js';
 import { html, LitElement } from 'lit';
-import { ifDefined } from 'lit-html/directives/if-defined.js';
+import { ifDefined } from 'lit/directives/if-defined.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
@@ -54,7 +54,7 @@ class Crud extends ControllerMixin(ElementMixin(ThemableMixin(CrudMixin(PolylitM
           id="editor"
           role="group"
           aria-labelledby="header"
-          .hidden="${this.__computeEditorHidden(this.editorOpened, this._fullscreen, this.editorPosition)}"
+          ?hidden="${this.__computeEditorHidden(this.editorOpened, this._fullscreen, this.editorPosition)}"
         >
           <div part="scroller" id="scroller">
             <div part="header" id="header">

@@ -43,7 +43,7 @@ class CrudDialogOverlay extends OverlayMixin(DirMixin(ThemableMixin(PolylitMixin
   /** @protected */
   render() {
     return html`
-      <div part="backdrop" id="backdrop" .hidden="${!this.withBackdrop}"></div>
+      <div part="backdrop" id="backdrop" ?hidden="${!this.withBackdrop}"></div>
       <div part="overlay" id="overlay" tabindex="0">
         <section id="resizerContainer" class="resizer-container">
           <header part="header"><slot name="header"></slot></header>
@@ -104,6 +104,7 @@ class CrudDialog extends DialogBaseMixin(OverlayClassMixin(ThemePropertyMixin(Po
     };
   }
 
+  /** @protected */
   render() {
     return html`
       <vaadin-crud-dialog-overlay
