@@ -250,7 +250,6 @@ snapshots["vaadin-select host error"] =
   </label>
   <div
     id="error-message-vaadin-select-2"
-    role="alert"
     slot="error-message"
   >
     Error

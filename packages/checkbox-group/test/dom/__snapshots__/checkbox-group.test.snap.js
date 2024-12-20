@@ -545,7 +545,6 @@ snapshots["vaadin-checkbox-group host error"] =
   </label>
   <div
     id="error-message-vaadin-checkbox-group-2"
-    role="alert"
     slot="error-message"
   >
     Error

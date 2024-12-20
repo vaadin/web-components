@@ -394,7 +394,6 @@ snapshots["vaadin-radio-group host error"] =
   </label>
   <div
     id="error-message-vaadin-radio-group-2"
-    role="alert"
     slot="error-message"
   >
     Error

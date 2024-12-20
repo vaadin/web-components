@@ -110,6 +110,8 @@ export class ErrorController extends SlotChildObserveController {
       errorNode.hidden = !hasError;
 
       if (hasError) {
+        // Assertive mode ensures VoiceOver reads
+        // the error message on commit with Enter.
         announce(errorMessage, { mode: 'assertive' });
       }
     }
