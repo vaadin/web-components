@@ -63,6 +63,25 @@ registerStyles(
         opacity: 1;
       }
     }
+
+    [part~='updating-cell']::after {
+      content: '';
+      position: absolute;
+      inset: var(--_cell-padding);
+      margin: var(--_focus-ring-width);
+      border-radius: 4px;
+      background-size: max(4em, 50%);
+      background-repeat: no-repeat;
+      background-position: min(-200%, -4em) 0;
+      background-image: linear-gradient(90deg, transparent, var(--lumo-contrast-10pct), transparent);
+      animation: vaadin-grid-pro-updating-cell 1.3s ease-out infinite;
+    }
+
+    @keyframes vaadin-grid-pro-updating-cell {
+      100% {
+        background-position: max(300%, 8em) 0;
+      }
+    }
   `,
   { moduleId: 'lumo-grid-pro' },
 );
