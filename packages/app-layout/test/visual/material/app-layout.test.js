@@ -1,5 +1,6 @@
 import { fixtureSync } from '@vaadin/testing-helpers/dist/fixture.js';
 import { visualDiff } from '@web/test-runner-visual-regression';
+import '../fixed-height-styles.js';
 import '../../../theme/material/vaadin-app-layout.js';
 import '../../../theme/material/vaadin-drawer-toggle.js';
 
@@ -8,7 +9,7 @@ describe('app-layout', () => {
 
   beforeEach(() => {
     div = document.createElement('div');
-    div.style.height = '100%';
+    div.style.height = '600px';
 
     element = fixtureSync(
       `
