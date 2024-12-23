@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
+import { fixtureSync, nextRender, nextResize, nextUpdate } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import { createRenderer } from './helpers.js';
 
@@ -489,12 +489,6 @@ describe('header/footer feature', () => {
     });
 
     describe('resize', () => {
-      const nextResize = (target) => {
-        return new Promise((resolve) => {
-          new ResizeObserver(() => setTimeout(resolve)).observe(target);
-        });
-      };
-
       it('should not set overflow attribute when content has no scrollbar', () => {
         expect(overlay.hasAttribute('overflow')).to.be.false;
       });
