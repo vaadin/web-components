@@ -53,7 +53,7 @@
   },
   "devDependencies": {
     "@vaadin/chai-plugins": "~24.5.6",
-    "@vaadin/testing-helpers": "^1.0.0",
+    "@vaadin/testing-helpers": "^1.1.0",
     "@vaadin/text-field": "~24.5.6",
     "lit": "^3.0.0",
     "sinon": "^18.0.0"
