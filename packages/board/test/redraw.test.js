@@ -1,7 +1,8 @@
 import { expect } from '@vaadin/chai-plugins';
 import { aTimeout, fixtureSync } from '@vaadin/testing-helpers';
 import '../vaadin-board.js';
-import { allResized, onceResized } from './helpers.js';
+import { nextResize } from '../../grid/test/helpers.js';
+import { allResized } from './helpers.js';
 
 describe('redraw', () => {
   describe('board', () => {
@@ -19,7 +20,7 @@ describe('redraw', () => {
         </vaadin-board>
       `);
       row = board.firstElementChild;
-      await onceResized(row);
+      await nextResize(row);
     });
 
     it('should trigger layout after board style is changed', () => {
@@ -49,7 +50,7 @@ describe('redraw', () => {
           <div>top D</div>
         </vaadin-board-row>
       `);
-      await onceResized(row);
+      await nextResize(row);
     });
 
     it('should trigger layout after board row style is changed', () => {
@@ -85,7 +86,7 @@ describe('redraw', () => {
       `);
       row = board.querySelector('#nested');
 
-      await onceResized(row);
+      await nextResize(row);
     });
 
     it('should trigger layout for nested rows after board style is changed', () => {
@@ -199,7 +200,7 @@ describe('redraw', () => {
       expect(first.className).to.equal('');
 
       container.style.width = '1001px';
-      await onceResized(first);
+      await nextResize(first);
       expect(first.className).to.equal('large');
     });
 
