@@ -45,6 +45,7 @@ export const CrudGridMixin = (superClass) =>
          */
         hideEditColumn: {
           type: Boolean,
+          sync: true,
         },
       };
     }

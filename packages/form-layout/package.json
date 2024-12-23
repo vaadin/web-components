@@ -46,7 +46,7 @@
   "devDependencies": {
     "@vaadin/chai-plugins": "24.7.0-alpha2",
     "@vaadin/custom-field": "24.7.0-alpha2",
-    "@vaadin/testing-helpers": "^1.0.0",
+    "@vaadin/testing-helpers": "^1.1.0",
     "@vaadin/text-field": "24.7.0-alpha2",
     "sinon": "^18.0.0"
   },

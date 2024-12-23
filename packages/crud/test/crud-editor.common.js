@@ -1,7 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { aTimeout, fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import { setViewport } from '@web/test-runner-commands';
-import '../vaadin-crud.js';
 import { flushGrid } from './helpers.js';
 
 describe('crud editor', () => {
@@ -69,7 +68,7 @@ describe('crud editor', () => {
         await nextRender(crud);
         flushGrid(crud._grid);
 
-        crud.set('items', [{ foo: 'bar' }, { foo: 'baz' }]);
+        crud.items = [{ foo: 'bar' }, { foo: 'baz' }];
         dialog = crud.$.dialog;
         overlay = dialog.$.overlay;
         form = crud.querySelector('[slot=form]');
