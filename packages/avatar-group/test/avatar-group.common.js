@@ -10,26 +10,7 @@ import {
   tabKeyDown,
 } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-
-/**
- * Resolves once the function is invoked on the given object.
- */
-function onceInvoked(object, functionName) {
-  return new Promise((resolve) => {
-    sinon.replace(object, functionName, (...args) => {
-      sinon.restore();
-      object[functionName](...args);
-      resolve();
-    });
-  });
-}
-
-/**
- * Resolves once the ResizeObserver in AvatarGroup has processed a resize.
- */
-async function onceResized(group) {
-  await onceInvoked(group, '__setItemsInView');
-}
+import { nextResize } from '../../grid/test/helpers.js';
 
 describe('avatar-group', () => {
   let group;
@@ -190,7 +171,7 @@ describe('avatar-group', () => {
 
       it('should consider element width when maxItemsVisible is set', async () => {
         group.style.width = '100px';
-        await onceResized(group);
+        await nextResize(group);
 
         const items = group.querySelectorAll('vaadin-avatar');
         expect(items.length).to.equal(3);
@@ -198,7 +179,7 @@ describe('avatar-group', () => {
 
       it('should set abbr property correctly if maxItemsVisible and width are set', async () => {
         group.style.width = '100px';
-        await onceResized(group);
+        await nextResize(group);
 
         const overflow = group._overflow;
         expect(overflow.abbr).to.equal('+3');
@@ -218,7 +199,7 @@ describe('avatar-group', () => {
 
     it('should render avatars to fit width on resize', async () => {
       group.style.width = '110px';
-      await onceResized(group);
+      await nextResize(group);
       const items = group.querySelectorAll('vaadin-avatar');
       expect(items.length).to.equal(3);
       expect(overflow.abbr).to.equal('+3');
@@ -227,27 +208,27 @@ describe('avatar-group', () => {
     it('should always show at least two avatars', async () => {
       group.items = group.items.slice(0, 2);
       group.style.width = '50px';
-      await onceResized(group);
+      await nextResize(group);
       const items = group.querySelectorAll('vaadin-avatar:not([hidden])');
       expect(items.length).to.equal(2);
     });
 
     it('should not show overlay with only one avatar', async () => {
       group.style.width = '170px';
-      await onceResized(group);
+      await nextResize(group);
       expect(overflow.hasAttribute('hidden')).to.be.true;
     });
 
     it('should re-render avatars on items change', async () => {
       group.style.width = '110px';
       group.items = group.items.slice(0, 2);
-      await onceResized(group);
+      await nextResize(group);
       expect(overflow.hasAttribute('hidden')).to.be.true;
     });
 
     it('should render avatars in the menu items', async () => {
       group.style.width = '110px';
-      await onceResized(group);
+      await nextResize(group);
 
       overflow.click();
       await oneEvent(overlay, 'vaadin-overlay-open');
@@ -258,13 +239,13 @@ describe('avatar-group', () => {
 
     it('should re-render overflowing avatars on resize', async () => {
       group.style.width = '110px';
-      await onceResized(group);
+      await nextResize(group);
 
       overflow.click();
       await oneEvent(overlay, 'vaadin-overlay-open');
 
       group.style.width = '75px';
-      await onceResized(group);
+      await nextResize(group);
 
       const items = overlay.querySelectorAll('vaadin-avatar-group-menu-item');
       expect(items.length).to.equal(4);
@@ -272,13 +253,13 @@ describe('avatar-group', () => {
 
     it('should close overlay on resize when all avatars fit', async () => {
       group.style.width = '110px';
-      await onceResized(group);
+      await nextResize(group);
 
       overflow.click();
       await oneEvent(overlay, 'vaadin-overlay-open');
 
       group.style.width = '';
-      await onceResized(group);
+      await nextResize(group);
 
       expect(overlay.opened).to.be.false;
     });
