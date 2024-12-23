@@ -42,7 +42,7 @@
     "@vaadin/chai-plugins": "~24.6.0",
     "@vaadin/icon": "~24.6.0",
     "@vaadin/icons": "~24.6.0",
-    "@vaadin/testing-helpers": "^1.0.0",
+    "@vaadin/testing-helpers": "^1.1.0",
     "sinon": "^18.0.0"
   }
 }
