@@ -40,7 +40,7 @@
     "@vaadin/checkbox": "24.7.0-alpha2",
     "@vaadin/grid": "24.7.0-alpha2",
     "@vaadin/grid-pro": "24.7.0-alpha2",
-    "@vaadin/testing-helpers": "^1.0.0",
+    "@vaadin/testing-helpers": "^1.1.0",
     "sinon": "^18.0.0"
   }
 }
