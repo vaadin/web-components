@@ -173,6 +173,12 @@ class DashboardSection extends DashboardItemMixin(ElementMixin(ThemableMixin(Pol
         type: String,
         value: '',
       },
+
+      /** @private */
+      __childCount: {
+        type: Number,
+        value: 0,
+      },
     };
   }
 
@@ -191,7 +197,10 @@ class DashboardSection extends DashboardItemMixin(ElementMixin(ThemableMixin(Pol
         </header>
       </div>
 
+      <!-- Default slot is used by <vaadin-dashboard-layout> -->
       <slot></slot>
+      <!-- Named slots are used by <vaadin-dashboard> -->
+      ${[...Array(this.__childCount)].map((_, index) => html`<slot name="slot-${index}"></slot>`)}
     `;
   }
 

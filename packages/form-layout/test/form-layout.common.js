@@ -2,9 +2,6 @@ import { expect } from '@vaadin/chai-plugins';
 import { aTimeout, fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '@polymer/polymer/lib/elements/dom-repeat.js';
-import '@vaadin/text-field/vaadin-text-field.js';
-import '../vaadin-form-layout.js';
-import '../vaadin-form-item.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 
 /**

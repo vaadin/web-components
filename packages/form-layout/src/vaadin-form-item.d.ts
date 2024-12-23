@@ -4,6 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { FormItemMixin } from './vaadin-form-item-mixin.js';
 
 /**
  * `<vaadin-form-item>` is a Web Component providing labelled form item wrapper
@@ -84,16 +85,7 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  */
-declare class FormItem extends ThemableMixin(HTMLElement) {
-  /**
-   * Returns a target element to add ARIA attributes to for a field.
-   *
-   * - For Vaadin field components, the method returns an element
-   * obtained through the `ariaTarget` property defined in `FieldMixin`.
-   * - In other cases, the method returns the field element itself.
-   */
-  protected _getFieldAriaTarget(field: HTMLElement): HTMLElement;
-}
+declare class FormItem extends FormItemMixin(ThemableMixin(HTMLElement)) {}
 
 declare global {
   interface HTMLElementTagNameMap {

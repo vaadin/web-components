@@ -1,4 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
+import { aTimeout, nextFrame, nextUpdate } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import type { DashboardSection } from '../src/vaadin-dashboard-section.js';
 import type { DashboardWidget } from '../src/vaadin-dashboard-widget.js';
@@ -373,4 +374,18 @@ function onceInvoked(object, functionName): Promise<void> {
 
 export async function onceResized(dashboard: HTMLElement): Promise<void> {
   await onceInvoked(dashboard, '_onResize');
+}
+
+export async function updateComplete(dashboard: HTMLElement): Promise<void> {
+  await nextUpdate(dashboard);
+
+  const widgetsAndSections = dashboard.querySelectorAll('vaadin-dashboard-widget, vaadin-dashboard-section');
+  for (const child of widgetsAndSections) {
+    await nextUpdate(child as HTMLElement);
+  }
+
+  // Next frame is also needed to wait for a possible ResizeObserver invocation
+  // The observer uses a timeout internally so an additional timeout is also needed
+  await nextFrame();
+  await aTimeout(0);
 }

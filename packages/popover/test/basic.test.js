@@ -374,6 +374,75 @@ describe('popover', () => {
     });
   });
 
+  describe('detach and re-attach', () => {
+    let target;
+
+    beforeEach(() => {
+      target = fixtureSync('<button>Target</button>');
+    });
+
+    it('should not open on target click when detached', async () => {
+      popover.target = target;
+      await nextUpdate(popover);
+
+      popover.remove();
+      target.click();
+
+      expect(popover.opened).to.be.false;
+    });
+
+    it('should open on target click when re-attached', async () => {
+      popover.target = target;
+      await nextUpdate(popover);
+
+      popover.remove();
+
+      target.parentNode.appendChild(popover);
+      await nextUpdate(popover);
+
+      target.click();
+
+      expect(popover.opened).to.be.true;
+    });
+
+    it('should not open on target click when target set while detached', async () => {
+      popover.remove();
+
+      popover.target = target;
+      await nextUpdate(popover);
+
+      target.click();
+
+      expect(popover.opened).to.be.false;
+    });
+
+    it('should open when target set while detached after re-attached', async () => {
+      popover.remove();
+
+      popover.target = target;
+      await nextUpdate(popover);
+
+      target.parentNode.appendChild(popover);
+      await nextUpdate(popover);
+
+      target.click();
+
+      expect(popover.opened).to.be.true;
+    });
+
+    it('should not open on target click when target is cleared', async () => {
+      popover.target = target;
+      await nextUpdate(popover);
+
+      popover.target = null;
+      await nextUpdate(popover);
+
+      target.click();
+
+      expect(popover.opened).to.be.false;
+    });
+  });
+
   describe('dimensions', () => {
     function getStyleValue(element) {
       return element

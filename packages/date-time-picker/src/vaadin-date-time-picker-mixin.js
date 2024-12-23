@@ -30,11 +30,6 @@ class PickerSlotController extends SlotController {
   constructor(host, type) {
     super(host, `${type}-picker`, `vaadin-${type}-picker`, {
       initializer: (picker, host) => {
-        // Ensure initial value-changed is fired on the slotted pickers
-        // synchronously in Lit version to avoid overriding host value.
-        if (picker.performUpdate) {
-          picker.performUpdate();
-        }
         const prop = `__${type}Picker`;
         host[prop] = picker;
       },

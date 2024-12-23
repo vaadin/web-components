@@ -21,6 +21,7 @@ import {
   setMinimumColumnWidth,
   setMinimumRowHeight,
   setSpacing,
+  updateComplete,
 } from './helpers.js';
 
 type TestDashboardItem = DashboardItem & { id: number };
@@ -612,5 +613,36 @@ describe('dashboard - widget reordering', () => {
         expect(reusedWidgets[0].isConnected).to.be.true;
       });
     });
+  });
+
+  it('should not disconnect widgets when reordering', async () => {
+    // Define a test element that spies on disconnectedCallback
+    const disconnectSpy = sinon.spy();
+    customElements.define(
+      'disconnect-test-element',
+      class extends HTMLElement {
+        disconnectedCallback() {
+          disconnectSpy();
+        }
+      },
+    );
+
+    // Assign a renderer that uses the test element
+    dashboard.renderer = (root, _, model) => {
+      if (root.querySelector('disconnect-test-element')) {
+        return;
+      }
+      root.innerHTML = `<vaadin-dashboard-widget id="${model.item.id}" widget-title="${model.item.id} title">
+          <disconnect-test-element></disconnect-test-element>
+        </vaadin-dashboard-widget>`;
+    };
+    await updateComplete(dashboard);
+
+    // Reorder the items
+    dashboard.items = [dashboard.items[1], dashboard.items[0]];
+    await updateComplete(dashboard);
+
+    // Expect no test element to have been disconnected
+    expect(disconnectSpy).to.not.have.been.called;
   });
 });

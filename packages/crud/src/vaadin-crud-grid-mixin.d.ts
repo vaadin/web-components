@@ -36,4 +36,10 @@ export declare class CrudGridMixinClass {
    * @attr {boolean} no-head
    */
   noHead: boolean | null | undefined;
+
+  /**
+   * Determines whether the edit column should be hidden.
+   * @attr {boolean} hide-edit-column
+   */
+  hideEditColumn: boolean | null | undefined;
 }
