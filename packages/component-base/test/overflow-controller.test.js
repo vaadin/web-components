@@ -1,29 +1,8 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
-import sinon from 'sinon';
+import { fixtureSync, nextFrame, nextRender, nextResize } from '@vaadin/testing-helpers';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ControllerMixin } from '../src/controller-mixin.js';
 import { OverflowController } from '../src/overflow-controller.js';
-
-/**
- * Resolves once the function is invoked on the given object.
- */
-function onceInvoked(object, functionName) {
-  return new Promise((resolve) => {
-    sinon.replace(object, functionName, (...args) => {
-      sinon.restore();
-      object[functionName](...args);
-      resolve();
-    });
-  });
-}
-
-/**
- * Resolves once the ResizeObserver has processed a resize.
- */
-async function onceResized(controller) {
-  await onceInvoked(controller, '__updateOverflow');
-}
 
 customElements.define(
   'overflow-element',
@@ -124,7 +103,7 @@ describe('overflow-controller', () => {
           describe(`small viewport ${dir}`, () => {
             beforeEach(async () => {
               element.style.width = '80px';
-              await onceResized(controller);
+              await nextResize(element);
               await nextFrame();
             });
 
@@ -147,7 +126,8 @@ describe('overflow-controller', () => {
 
             it(`should update overflow attribute on host resize with ${dir}`, async () => {
               element.style.width = 'auto';
-              await onceResized(controller);
+              await nextResize(element);
+              await nextFrame();
               expect(element.hasAttribute('overflow')).to.be.false;
             });
 
@@ -155,7 +135,8 @@ describe('overflow-controller', () => {
               items.forEach((item) => {
                 item.style.minWidth = '20px';
               });
-              await onceResized(controller);
+              await Promise.all(items.map((item) => nextResize(item)));
+              await nextFrame();
               expect(element.hasAttribute('overflow')).to.be.false;
             });
 
@@ -177,7 +158,8 @@ describe('overflow-controller', () => {
               await nextFrame();
 
               div.style.minWidth = '30px';
-              await onceResized(controller);
+              await nextResize(div);
+              await nextFrame();
               expect(element.hasAttribute('overflow')).to.be.true;
             });
           });
@@ -211,7 +193,7 @@ describe('overflow-controller', () => {
       describe('small viewport', () => {
         beforeEach(async () => {
           element.style.height = '80px';
-          await onceResized(controller);
+          await nextResize(element);
           await nextFrame();
         });
 
@@ -234,7 +216,8 @@ describe('overflow-controller', () => {
 
         it('should update overflow attribute on host element resize', async () => {
           element.style.height = 'auto';
-          await onceResized(controller);
+          await nextResize(element);
+          await nextFrame();
           expect(element.hasAttribute('overflow')).to.be.false;
         });
 
@@ -242,7 +225,8 @@ describe('overflow-controller', () => {
           items.forEach((item) => {
             item.style.height = '15px';
           });
-          await onceResized(controller);
+          await Promise.all(items.map((item) => nextResize(item)));
+          await nextFrame();
           expect(element.hasAttribute('overflow')).to.be.false;
         });
 
@@ -280,7 +264,7 @@ describe('overflow-controller', () => {
       beforeEach(async () => {
         element.style.width = '80px';
         scroller.style.display = 'flex';
-        await onceResized(controller);
+        await nextResize(element);
         await nextFrame();
       });
 
@@ -294,7 +278,7 @@ describe('overflow-controller', () => {
     describe('vertical scroller', () => {
       beforeEach(async () => {
         element.style.height = '80px';
-        await onceResized(controller);
+        await nextResize(element);
         await nextFrame();
       });
 

@@ -1,26 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fire, fixtureSync, nextFrame, nextRender, nextUpdate, oneEvent } from '@vaadin/testing-helpers';
+import { fire, fixtureSync, nextFrame, nextRender, nextResize, nextUpdate, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-
-/**
- * Resolves once the function is invoked on the given object.
- */
-function onceInvoked(object, functionName) {
-  return new Promise((resolve) => {
-    sinon.replace(object, functionName, (...args) => {
-      sinon.restore();
-      object[functionName](...args);
-      resolve();
-    });
-  });
-}
-
-/**
- * Resolves once the ResizeObserver has processed a resize.
- */
-async function onceResized(element) {
-  await onceInvoked(element, '_onResize');
-}
 
 describe('text-area', () => {
   let textArea;
@@ -303,7 +283,7 @@ describe('text-area', () => {
 
       // Decrease the width
       textArea.style.width = '400px';
-      await onceResized(textArea);
+      await nextResize(textArea);
 
       // Expect the height to have increased
       expect(textArea.offsetHeight).to.be.above(height);

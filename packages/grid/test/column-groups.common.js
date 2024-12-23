@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame, nextRender, nextResize } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import {
   attributeRenderer,
@@ -9,7 +9,6 @@ import {
   getRowCells,
   getRows,
   infiniteDataProvider,
-  nextResize,
   scrollToEnd,
 } from './helpers.js';
 

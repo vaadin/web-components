@@ -1,17 +1,10 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, listenOnce, nextRender } from '@vaadin/testing-helpers';
+import { fixtureSync, listenOnce, nextRender, nextResize } from '@vaadin/testing-helpers';
 import { resetMouse, sendMouse } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import { isElementFocused } from '@vaadin/a11y-base/src/focus-utils.js';
 import { setNormalizedScrollLeft } from '@vaadin/component-base/src/dir-utils.js';
-import {
-  flushGrid,
-  getRowCells,
-  getRows,
-  infiniteDataProvider,
-  isWithinParentConstraints,
-  onceResized,
-} from './helpers.js';
+import { flushGrid, getRowCells, getRows, infiniteDataProvider, isWithinParentConstraints } from './helpers.js';
 
 // Returns true if the element's computed transform style matches with the
 // computed transform style of a div element with the given transform applied
@@ -296,7 +289,7 @@ const frozenGridFixture = (frozen, frozenToEnd) => {
           const x = cells[2].getBoundingClientRect().x;
 
           grid.style.width = '300px';
-          await onceResized(grid);
+          await nextResize(grid);
 
           expect(cells[2].getBoundingClientRect().x).to.equal(isRTL ? x - 100 : x + 100);
         });
@@ -326,7 +319,7 @@ const frozenGridFixture = (frozen, frozenToEnd) => {
           grid._columnTree[0][frozenToEndColumnIndex].flexGrow = 0;
 
           grid.style.width = '400px';
-          await onceResized(grid);
+          await nextResize(grid);
 
           const initBoundingClientRect = getRowCells(containerRows[0])[2].getBoundingClientRect();
 
@@ -347,7 +340,7 @@ const frozenGridFixture = (frozen, frozenToEnd) => {
           grid._columnTree[0][frozenToEndColumnIndex].flexGrow = 0;
 
           grid.style.width = '400px';
-          await onceResized(grid);
+          await nextResize(grid);
 
           for (let i = 0; i < 2; i++) {
             if (frozenToEndColumnIndex === i) {

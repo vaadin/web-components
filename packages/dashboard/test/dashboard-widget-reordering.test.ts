@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, isFirefox, nextFrame } from '@vaadin/testing-helpers';
+import { fixtureSync, isFirefox, nextFrame, nextResize } from '@vaadin/testing-helpers';
 import { resetMouse, sendMouse } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import '../vaadin-dashboard.js';
@@ -15,7 +15,6 @@ import {
   getDraggable,
   getElementFromCell,
   getParentSection,
-  onceResized,
   resetReorderTimeout,
   setMaximumColumnWidth,
   setMinimumColumnWidth,
@@ -51,7 +50,7 @@ describe('dashboard - widget reordering', () => {
       root.appendChild(widget);
     };
     dashboard.style.width = `${columnWidth * 2}px`;
-    await onceResized(dashboard);
+    await nextResize(dashboard);
 
     // prettier-ignore
     expectLayout(dashboard, [
@@ -95,7 +94,7 @@ describe('dashboard - widget reordering', () => {
 
     it('should reorder the widgets while dragging (top -> bottom)', async () => {
       dashboard.style.width = `${columnWidth}px`;
-      await onceResized(dashboard);
+      await nextResize(dashboard);
 
       // prettier-ignore
       expectLayout(dashboard, [
@@ -118,7 +117,7 @@ describe('dashboard - widget reordering', () => {
 
     it('should reorder the widgets while dragging (bottom -> top)', async () => {
       dashboard.style.width = `${columnWidth}px`;
-      await onceResized(dashboard);
+      await nextResize(dashboard);
 
       // prettier-ignore
       expectLayout(dashboard, [
@@ -293,7 +292,7 @@ describe('dashboard - widget reordering', () => {
       dashboard.style.width = `${columnWidth * 4}px`;
       (dashboard.items[1] as TestDashboardItem).colspan = 2;
       dashboard.items = [...dashboard.items, { id: 2 }];
-      await onceResized(dashboard);
+      await nextResize(dashboard);
 
       // prettier-ignore
       expectLayout(dashboard, [
@@ -319,7 +318,7 @@ describe('dashboard - widget reordering', () => {
       // Add a third widget
       dashboard.style.width = `${columnWidth * 3}px`;
       dashboard.items = [...dashboard.items, { id: 2 }];
-      await onceResized(dashboard);
+      await nextResize(dashboard);
       // prettier-ignore
       expectLayout(dashboard, [
         [0, 1, 2],
@@ -344,7 +343,7 @@ describe('dashboard - widget reordering', () => {
       // Add a third widget
       dashboard.style.width = `${columnWidth * 2}px`;
       dashboard.items = [...dashboard.items, { id: 2 }];
-      await onceResized(dashboard);
+      await nextResize(dashboard);
       // prettier-ignore
       expectLayout(dashboard, [
         [0, 1],

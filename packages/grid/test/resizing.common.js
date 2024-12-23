@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { aTimeout, fixtureSync, nextFrame, oneEvent } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, nextFrame, nextResize, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import {
@@ -11,7 +11,6 @@ import {
   getRowCells,
   getRows,
   infiniteDataProvider,
-  nextResize,
   scrollToEnd,
 } from './helpers.js';
 

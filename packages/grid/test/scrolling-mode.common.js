@@ -1,6 +1,14 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, isDesktopSafari, isFirefox, listenOnce, nextFrame, nextRender } from '@vaadin/testing-helpers';
-import { flushGrid, infiniteDataProvider, onceResized, scrollToEnd } from './helpers.js';
+import {
+  fixtureSync,
+  isDesktopSafari,
+  isFirefox,
+  listenOnce,
+  nextFrame,
+  nextRender,
+  nextResize,
+} from '@vaadin/testing-helpers';
+import { flushGrid, infiniteDataProvider, scrollToEnd } from './helpers.js';
 
 describe('scrolling mode', () => {
   let grid;
@@ -105,12 +113,12 @@ describe('scrolling mode', () => {
     // but not as often as in WebKit.
     (isDesktopSafari || isFirefox ? it.skip : it)('update on resize', async () => {
       grid.style.width = '200px';
-      await onceResized(grid);
+      await nextResize(grid);
       await nextFrame();
       expect(grid.getAttribute('overflow')).to.equal('bottom');
 
       grid.style.width = '50px';
-      await onceResized(grid);
+      await nextResize(grid);
       await nextFrame();
       expect(grid.getAttribute('overflow')).to.equal('bottom end right');
     });

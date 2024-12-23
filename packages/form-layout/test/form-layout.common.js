@@ -1,28 +1,8 @@
 import { expect } from '@vaadin/chai-plugins';
-import { aTimeout, fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, nextFrame, nextRender, nextResize } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '@polymer/polymer/lib/elements/dom-repeat.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
-
-/**
- * Resolves once the function is invoked on the given object.
- */
-function onceInvoked(object, functionName) {
-  return new Promise((resolve) => {
-    sinon.replace(object, functionName, (...args) => {
-      sinon.restore();
-      object[functionName](...args);
-      resolve();
-    });
-  });
-}
-
-/**
- * Resolves once the ResizeObserver in FormLayout has processed a resize.
- */
-async function onceResized(layout) {
-  await onceInvoked(layout, '_updateLayout');
-}
 
 customElements.define(
   'mutable-layout',
@@ -147,7 +127,7 @@ describe('form layout', () => {
     it('should apply default column-spacing', async () => {
       // Override to not depend on the theme changes
       layout.style.setProperty('--lumo-space-l', '2rem');
-      await onceResized(layout);
+      await nextResize(layout);
       expect(getParsedWidth(layout.firstElementChild).spacing).to.equal('1rem');
       expect(getComputedStyle(layout.firstElementChild).getPropertyValue('margin-left')).to.equal('0px'); // Zero because it's first
       expect(getComputedStyle(layout.firstElementChild).getPropertyValue('margin-right')).to.equal('16px'); // 0.5 * 2rem in px
@@ -350,17 +330,17 @@ describe('form layout', () => {
 
       it('should be responsive by default', async () => {
         document.body.style.width = '10em';
-        await onceResized(layout);
+        await nextResize(layout);
         expect(estimateEffectiveColumnCount(layout)).to.be.closeTo(1, 0.1);
         expect(layout.children[2].getAttribute('label-position')).to.equal('top');
 
         document.body.style.width = '20em';
-        await onceResized(layout);
+        await nextResize(layout);
         expect(estimateEffectiveColumnCount(layout)).to.be.closeTo(1, 0.1);
         expect(layout.children[2].getAttribute('label-position')).to.be.null;
 
         document.body.style.width = '40em';
-        await onceResized(layout);
+        await nextResize(layout);
         expect(estimateEffectiveColumnCount(layout)).to.be.closeTo(2, 0.1);
         expect(layout.children[2].getAttribute('label-position')).to.be.null;
       });
@@ -392,17 +372,17 @@ describe('form layout', () => {
         ];
 
         document.body.style.width = '10em';
-        await onceResized(layout);
+        await nextResize(layout);
         expect(estimateEffectiveColumnCount(layout)).to.be.closeTo(1, 0.1);
         expect(layout.children[2].getAttribute('label-position')).to.be.null;
 
         document.body.style.width = '20em';
-        await onceResized(layout);
+        await nextResize(layout);
         expect(estimateEffectiveColumnCount(layout)).to.be.closeTo(2, 0.1);
         expect(layout.children[2].getAttribute('label-position')).to.equal('top');
 
         document.body.style.width = '40em';
-        await onceResized(layout);
+        await nextResize(layout);
         expect(estimateEffectiveColumnCount(layout)).to.be.closeTo(5, 0.1);
         expect(layout.children[2].getAttribute('label-position')).to.be.null;
       });
