@@ -1,30 +1,7 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, isChrome, nextFrame } from '@vaadin/testing-helpers';
-import sinon from 'sinon';
+import { fixtureSync, isChrome, nextFrame, nextResize } from '@vaadin/testing-helpers';
 import { needsFontIconSizingFallback, supportsCQUnitsForPseudoElements } from '../src/vaadin-icon-helpers.js';
 import { iconFontCss } from './test-icon-font.js';
-
-/**
- * Resolves once the function is invoked on the given object.
- */
-function onceInvoked(object, functionName) {
-  return new Promise((resolve) => {
-    sinon.replace(object, functionName, (...args) => {
-      sinon.restore();
-      object[functionName](...args);
-      resolve();
-    });
-  });
-}
-
-/**
- * Resolves once the icon resize is complete.
- */
-async function onceResized(icon) {
-  if (needsFontIconSizingFallback()) {
-    await onceInvoked(icon, '_onResize');
-  }
-}
 
 describe('vaadin-icon - icon fonts', () => {
   beforeEach(() => {
@@ -40,7 +17,7 @@ describe('vaadin-icon - icon fonts', () => {
 
     beforeEach(async () => {
       icon = fixtureSync('<vaadin-icon icon-class="my-icon-font icon-before"></vaadin-icon>');
-      await onceResized(icon);
+      await nextResize(icon);
     });
 
     it('should have the same height as the host', () => {
@@ -51,7 +28,7 @@ describe('vaadin-icon - icon fonts', () => {
     it('should resize with the host', async () => {
       icon.style.width = '100px';
       icon.style.height = '100px';
-      await onceResized(icon);
+      await nextResize(icon);
       const fontIconStyle = getComputedStyle(icon, ':before');
       expect(parseInt(fontIconStyle.height)).to.be.closeTo(100, 1);
     });
@@ -59,7 +36,7 @@ describe('vaadin-icon - icon fonts', () => {
     it('should not overflow host - wider icon', async () => {
       icon.style.width = '150px';
       icon.style.height = '100px';
-      await onceResized(icon);
+      await nextResize(icon);
       const fontIconStyle = getComputedStyle(icon, ':before');
       expect(parseInt(fontIconStyle.height)).to.be.closeTo(100, 1);
     });
@@ -71,11 +48,11 @@ describe('vaadin-icon - icon fonts', () => {
 
     it('should subtract vertical padding from height', async () => {
       icon.style.padding = '5px';
-      await onceResized(icon);
+      await nextResize(icon);
       expect(parseInt(getComputedStyle(icon, ':before').height)).to.be.closeTo(14, 1);
 
       icon.style.padding = '7px';
-      await onceResized(icon);
+      await nextResize(icon);
       expect(parseInt(getComputedStyle(icon, ':before').height)).to.be.closeTo(10, 1);
     });
   });
@@ -333,7 +310,7 @@ describe('vaadin-icon - icon fonts', () => {
       await nextFrame();
       icon.style.width = '100px';
       icon.style.height = '100px';
-      await onceResized(icon);
+      await nextResize(icon);
       expect(icon.style.getPropertyValue('--_vaadin-font-icon-size')).to.equal('100px');
     });
 

@@ -1,6 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { arrowRight, fixtureSync, nextFrame, nextRender, nextUpdate } from '@vaadin/testing-helpers';
-import sinon from 'sinon';
+import { arrowRight, fixtureSync, nextFrame, nextRender, nextResize, nextUpdate } from '@vaadin/testing-helpers';
 
 // Utility function to assert a menu item is not visible
 const assertHidden = (elem) => {
@@ -15,26 +14,6 @@ const assertVisible = (elem) => {
   expect(style.visibility).to.equal('visible');
   expect(style.position).to.not.equal('absolute');
 };
-
-/**
- * Resolves once the function is invoked on the given object.
- */
-function onceInvoked(object, functionName) {
-  return new Promise((resolve) => {
-    sinon.replace(object, functionName, (...args) => {
-      sinon.restore();
-      object[functionName](...args);
-      resolve();
-    });
-  });
-}
-
-/**
- * Resolves once the ResizeObserver has processed a resize.
- */
-async function onceResized(menu) {
-  await onceInvoked(menu, '__setOverflowItems');
-}
 
 describe('overflow', () => {
   describe('overflow button', () => {
@@ -86,7 +65,7 @@ describe('overflow', () => {
 
     it('should show buttons and update overflow items when width increased', async () => {
       menu.style.width = '350px';
-      await onceResized(menu);
+      await nextResize(menu);
       assertVisible(buttons[2]);
       expect(buttons[2].disabled).to.not.be.true;
       assertVisible(buttons[3]);
@@ -98,7 +77,7 @@ describe('overflow', () => {
     it('should show buttons and update overflow items when width increased in RTL', async () => {
       menu.setAttribute('dir', 'rtl');
       menu.style.width = '350px';
-      await onceResized(menu);
+      await nextResize(menu);
       assertVisible(buttons[2]);
       expect(buttons[2].disabled).to.not.be.true;
       assertVisible(buttons[3]);
@@ -109,7 +88,7 @@ describe('overflow', () => {
 
     it('should hide buttons and update overflow items when width decreased', async () => {
       menu.style.width = '150px';
-      await onceResized(menu);
+      await nextResize(menu);
       assertHidden(buttons[1]);
       expect(buttons[1].disabled).to.be.true;
       expect(overflow.item.children.length).to.equal(4);
@@ -122,7 +101,7 @@ describe('overflow', () => {
     it('should hide buttons and update overflow items when width decreased in RTL', async () => {
       menu.setAttribute('dir', 'rtl');
       menu.style.width = '150px';
-      await onceResized(menu);
+      await nextResize(menu);
       assertHidden(buttons[1]);
       expect(buttons[1].disabled).to.be.true;
       expect(overflow.item.children.length).to.equal(4);
@@ -134,7 +113,7 @@ describe('overflow', () => {
 
     it('should hide overflow button and reset its items when all buttons fit', async () => {
       menu.style.width = 'auto';
-      await onceResized(menu);
+      await nextResize(menu);
       assertVisible(buttons[2]);
       expect(buttons[2].disabled).to.not.be.true;
       assertVisible(buttons[3]);
@@ -159,7 +138,7 @@ describe('overflow', () => {
 
     it('should show overflow button when theme makes buttons do not fit', async () => {
       menu.style.width = '400px';
-      await onceResized(menu);
+      await nextResize(menu);
       expect(overflow.hasAttribute('hidden')).to.be.true;
       menu.setAttribute('theme', 'big');
       await nextUpdate(menu);
@@ -176,7 +155,7 @@ describe('overflow', () => {
       expect(buttons[1].getAttribute('tabindex')).to.equal('0');
 
       menu.style.width = '150px';
-      await onceResized(menu);
+      await nextResize(menu);
 
       expect(buttons[0].getAttribute('tabindex')).to.equal('0');
       expect(buttons[1].getAttribute('tabindex')).to.equal('-1');
@@ -191,7 +170,7 @@ describe('overflow', () => {
       expect(buttons[1].getAttribute('tabindex')).to.equal('0');
 
       menu.style.width = '150px';
-      await onceResized(menu);
+      await nextResize(menu);
 
       expect(buttons[0].getAttribute('tabindex')).to.equal('0');
       expect(buttons[1].getAttribute('tabindex')).to.equal('-1');
@@ -271,7 +250,7 @@ describe('overflow', () => {
 
     it('should not set when one button and overflow are only visible', async () => {
       menu.style.width = '150px';
-      await onceResized(menu);
+      await nextResize(menu);
       assertVisible(buttons[0]);
       assertHidden(buttons[1]);
       expect(overflow.hasAttribute('hidden')).to.be.false;
@@ -280,7 +259,7 @@ describe('overflow', () => {
 
     it('should set when only overflow button is visible', async () => {
       menu.style.width = '100px';
-      await onceResized(menu);
+      await nextResize(menu);
       assertHidden(buttons[0]);
       assertHidden(buttons[1]);
       expect(menu.hasAttribute('has-single-button')).to.be.true;
@@ -288,16 +267,16 @@ describe('overflow', () => {
 
     it('should remove when buttons become visible after size increases', async () => {
       menu.style.width = '100px';
-      await onceResized(menu);
+      await nextResize(menu);
 
       menu.style.width = '150px';
-      await onceResized(menu);
+      await nextResize(menu);
       expect(menu.hasAttribute('has-single-button')).to.be.false;
     });
 
     it('should set when theme attribute makes other buttons not fit', async () => {
       menu.style.width = '150px';
-      await onceResized(menu);
+      await nextResize(menu);
 
       menu.setAttribute('theme', 'big');
       await nextUpdate(menu);
@@ -312,7 +291,7 @@ describe('overflow', () => {
 
     it('should not remove after changing items to not overflow', async () => {
       menu.style.width = '100px';
-      await onceResized(menu);
+      await nextResize(menu);
 
       menu.items = [{ text: 'Actions' }];
       await nextUpdate(menu);
@@ -358,14 +337,14 @@ describe('overflow', () => {
       // see https://github.com/vaadin/vaadin-menu-bar/issues/130
       menu.style.minWidth = '0';
       container.style.width = '150px';
-      await onceResized(menu);
+      await nextResize(menu);
       assertHidden(buttons[2]);
       expect(buttons[2].disabled).to.be.true;
       assertHidden(buttons[3]);
       expect(buttons[3].disabled).to.be.true;
 
       container.style.width = '400px';
-      await onceResized(menu);
+      await nextResize(menu);
       assertVisible(buttons[2]);
       expect(buttons[2].disabled).to.not.be.true;
       assertVisible(buttons[3]);
@@ -380,7 +359,7 @@ describe('overflow', () => {
       menu.disabled = true;
       await nextUpdate(menu);
       container.style.width = '150px';
-      await onceResized(menu);
+      await nextResize(menu);
       buttons.forEach((btn) => {
         expect(btn.disabled).to.be.true;
       });
@@ -402,7 +381,7 @@ describe('overflow', () => {
     describe('container', () => {
       beforeEach(async () => {
         container.append(text, menu);
-        await onceResized(menu);
+        await nextResize(menu);
         buttons = menu._buttons;
       });
 
@@ -411,7 +390,7 @@ describe('overflow', () => {
         assertHidden(buttons[3]);
 
         container.style.maxWidth = '400px';
-        await onceResized(menu);
+        await nextResize(menu);
 
         assertVisible(buttons[2]);
         assertVisible(buttons[3]);
@@ -425,7 +404,7 @@ describe('overflow', () => {
 
         other.append(text, menu);
         other.style.maxWidth = '400px';
-        await onceResized(menu);
+        await nextResize(menu);
 
         assertVisible(buttons[2]);
         assertVisible(buttons[3]);
@@ -436,7 +415,7 @@ describe('overflow', () => {
       beforeEach(async () => {
         container.attachShadow({ mode: 'open' });
         container.shadowRoot.append(text, menu);
-        await onceResized(menu);
+        await nextResize(menu);
         buttons = menu._buttons;
       });
 
@@ -445,7 +424,7 @@ describe('overflow', () => {
         assertHidden(buttons[3]);
 
         container.style.maxWidth = '400px';
-        await onceResized(menu);
+        await nextResize(menu);
 
         assertVisible(buttons[2]);
         assertVisible(buttons[3]);
@@ -479,14 +458,14 @@ describe('overflow', () => {
       subMenu = menu._subMenu;
 
       menu.style.width = '250px';
-      await onceResized(menu);
+      await nextResize(menu);
     });
 
     it('should close the overflow sub-menu on menu-bar resize', async () => {
       overflow.click();
       await nextRender(subMenu);
       menu.style.width = 'auto';
-      await onceResized(menu);
+      await nextResize(menu);
       expect(subMenu.opened).to.be.false;
     });
 
@@ -509,7 +488,7 @@ describe('overflow', () => {
       subMenu.close();
       await nextUpdate(menu);
       menu.style.width = 'auto';
-      await onceResized(menu);
+      await nextResize(menu);
       const item = buttons[2].firstChild;
       expect(item).to.equal(buttons[2].item.component);
       expect(item.getAttribute('role')).to.not.equal('menuitem');
@@ -523,7 +502,7 @@ describe('overflow', () => {
       subMenu.close();
       await nextUpdate(menu);
       menu.style.width = 'auto';
-      await onceResized(menu);
+      await nextResize(menu);
       expect(item.getAttributeNames()).to.have.members(itemAttributes);
     });
 
@@ -536,7 +515,7 @@ describe('overflow', () => {
       subMenu.close();
       await nextUpdate(menu);
       menu.style.width = 'auto';
-      await onceResized(menu);
+      await nextResize(menu);
       expect(item.classList.contains('test-class-1')).to.be.true;
     });
   });

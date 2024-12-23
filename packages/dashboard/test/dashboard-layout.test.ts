@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame, nextResize } from '@vaadin/testing-helpers';
 import '../vaadin-dashboard-layout.js';
 import '../vaadin-dashboard-section.js';
 import '@vaadin/vaadin-lumo-styles/spacing.js';
@@ -11,7 +11,6 @@ import {
   getRowHeights,
   getScrollingContainer,
   getTitleElement,
-  onceResized,
   setColspan,
   setMaximumColumnCount,
   setMaximumColumnWidth,
@@ -55,7 +54,7 @@ describe('dashboard layout', () => {
     // Make the dashboard wide enough to fit all items on a single row
     dashboard.style.width = `${columnWidth * dashboard.childElementCount}px`;
 
-    await onceResized(dashboard);
+    await nextResize(dashboard);
 
     expect(getColumnWidths(dashboard)).to.eql([columnWidth, columnWidth]);
     /* prettier-ignore */
@@ -73,7 +72,7 @@ describe('dashboard layout', () => {
   it('should be responsive', async () => {
     // Narrow down the component to fit one column
     dashboard.style.width = `${columnWidth}px`;
-    await onceResized(dashboard);
+    await nextResize(dashboard);
 
     /* prettier-ignore */
     expectLayout(dashboard, [
@@ -86,7 +85,7 @@ describe('dashboard layout', () => {
     dashboard.style.width = `${columnWidth}px`;
     const rowHeight = Math.ceil(getRowHeights(dashboard)[0]);
     dashboard.style.height = `${rowHeight}px`;
-    await onceResized(dashboard);
+    await nextResize(dashboard);
 
     const scrollingContainer = getScrollingContainer(dashboard);
     expect(getComputedStyle(scrollingContainer).overflowY).to.eql('auto');
@@ -98,7 +97,7 @@ describe('dashboard layout', () => {
 
   it('should scroll horizontally when content overflows', async () => {
     dashboard.style.width = `${columnWidth / 2}px`;
-    await onceResized(dashboard);
+    await nextResize(dashboard);
 
     const scrollingContainer = getScrollingContainer(dashboard);
     expect(getComputedStyle(scrollingContainer).overflowX).to.eql('auto');
@@ -118,7 +117,7 @@ describe('dashboard layout', () => {
       setMinimumColumnWidth(dashboard, undefined);
       // Narrow down the component to have the width of 0
       dashboard.style.width = '0';
-      await onceResized(dashboard);
+      await nextResize(dashboard);
       // Expect the column width to equal the default minimum column width
       expect(getColumnWidths(dashboard)).to.eql([defaultMinimumColumnWidth]);
     });
@@ -126,7 +125,7 @@ describe('dashboard layout', () => {
     it('should have one overflown column if narrowed below minimum column width', async () => {
       // Narrow down the component to have the width of half a column
       dashboard.style.width = `${columnWidth / 2}px`;
-      await onceResized(dashboard);
+      await nextResize(dashboard);
       // Expect the column width to still be the same (overflown)
       expect(getColumnWidths(dashboard)).to.eql([columnWidth]);
     });
@@ -136,7 +135,7 @@ describe('dashboard layout', () => {
       setMinimumColumnWidth(dashboard, columnWidth / 2);
       // Narrow down the component to have the width of half a column
       dashboard.style.width = `${columnWidth / 2}px`;
-      await onceResized(dashboard);
+      await nextResize(dashboard);
       // Expect the column width to equal the min column width
       expect(getColumnWidths(dashboard)).to.eql([columnWidth / 2]);
     });
@@ -162,15 +161,15 @@ describe('dashboard layout', () => {
       expect(getColumnWidths(dashboard)).to.eql([columnWidth, columnWidth]);
       // Widen the component to have the width of 2.5 columns
       dashboard.style.width = `${columnWidth * 2.5}px`;
-      await onceResized(dashboard);
+      await nextResize(dashboard);
       expect(getColumnWidths(dashboard)).to.eql([columnWidth * 1.25, columnWidth * 1.25]);
       // Widen the component to have the width of 3 columns
       dashboard.style.width = `${columnWidth * 3}px`;
-      await onceResized(dashboard);
+      await nextResize(dashboard);
       expect(getColumnWidths(dashboard)).to.eql([columnWidth, columnWidth, columnWidth]);
       // Shrink the component to have the width of 1.5 columns
       dashboard.style.width = `${columnWidth * 1.5}px`;
-      await onceResized(dashboard);
+      await nextResize(dashboard);
       expect(getColumnWidths(dashboard)).to.eql([columnWidth * 1.5]);
     });
 
@@ -213,7 +212,7 @@ describe('dashboard layout', () => {
     it('should use minimum row height for all rows', async () => {
       dashboard.style.width = `${columnWidth}px`;
       setMinimumRowHeight(dashboard, rowHeight);
-      await onceResized(dashboard);
+      await nextResize(dashboard);
       expect(getRowHeights(dashboard)).to.eql([rowHeight, rowHeight]);
     });
   });
@@ -235,7 +234,7 @@ describe('dashboard layout', () => {
       await nextFrame();
 
       dashboard.style.width = `${columnWidth}px`;
-      await onceResized(dashboard);
+      await nextResize(dashboard);
 
       /* prettier-ignore */
       expectLayout(dashboard, [
@@ -249,7 +248,7 @@ describe('dashboard layout', () => {
       await nextFrame();
 
       dashboard.style.width = `${columnWidth * 3}px`;
-      await onceResized(dashboard);
+      await nextResize(dashboard);
 
       /* prettier-ignore */
       expectLayout(dashboard, [
@@ -275,7 +274,7 @@ describe('dashboard layout', () => {
       // Expect widget 1 to still have the same width
       expect(childElements[1].offsetWidth).to.eql(widget1Width);
 
-      await onceResized(dashboard);
+      await nextResize(dashboard);
 
       /* prettier-ignore */
       expectLayout(dashboard, [
@@ -307,7 +306,7 @@ describe('dashboard layout', () => {
       await nextFrame();
 
       dashboard.style.width = `${columnWidth}px`;
-      await onceResized(dashboard);
+      await nextResize(dashboard);
 
       /* prettier-ignore */
       expectLayout(dashboard, [
@@ -324,7 +323,7 @@ describe('dashboard layout', () => {
       setSpacing(dashboard, undefined);
       // Increase the width of the dashboard to fit two items, paddings and a gap
       dashboard.style.width = `calc(${columnWidth}px * 2 + ${defaultSpacing * 3}px)`;
-      await onceResized(dashboard);
+      await nextResize(dashboard);
 
       const { right: item0Right } = childElements[0].getBoundingClientRect();
       const { left: item1Left } = childElements[1].getBoundingClientRect();
@@ -337,7 +336,7 @@ describe('dashboard layout', () => {
       setSpacing(dashboard, customSpacing);
       // Increase the width of the dashboard to fit two items, paddings and a gap
       dashboard.style.width = `${columnWidth * 2 + customSpacing * 3}px`;
-      await onceResized(dashboard);
+      await nextResize(dashboard);
 
       const { right: item0Right } = childElements[0].getBoundingClientRect();
       const { left: item1Left } = childElements[1].getBoundingClientRect();
@@ -349,7 +348,7 @@ describe('dashboard layout', () => {
       const customSpacing = 10;
       setSpacing(dashboard, customSpacing);
       dashboard.style.width = `${columnWidth}px`;
-      await onceResized(dashboard);
+      await nextResize(dashboard);
 
       const { bottom: item0Bottom } = childElements[0].getBoundingClientRect();
       const { top: item1Top } = childElements[1].getBoundingClientRect();
@@ -362,7 +361,7 @@ describe('dashboard layout', () => {
     it('should have default padding', async () => {
       // Clear the padding used in the tests
       setSpacing(dashboard, undefined);
-      await onceResized(dashboard);
+      await nextResize(dashboard);
 
       const { left: itemLeft } = childElements[0].getBoundingClientRect();
       const { left: dashbboardLeft } = dashboard.getBoundingClientRect();
@@ -373,7 +372,7 @@ describe('dashboard layout', () => {
     it('should have custom gap between items horizontally', async () => {
       const customSpacing = 10;
       setSpacing(dashboard, customSpacing);
-      await onceResized(dashboard);
+      await nextResize(dashboard);
 
       const { left: itemLeft } = childElements[0].getBoundingClientRect();
       const { left: dashbboardLeft } = dashboard.getBoundingClientRect();
@@ -385,21 +384,21 @@ describe('dashboard layout', () => {
   describe('maximum column count', () => {
     it('should not limit column count by default', async () => {
       dashboard.style.width = `${columnWidth * 100}px`;
-      await onceResized(dashboard);
+      await nextResize(dashboard);
       expect(getColumnWidths(dashboard).length).to.eql(100);
     });
 
     it('should limit column count to custom value', async () => {
       setMaximumColumnCount(dashboard, 5);
       dashboard.style.width = `${columnWidth * 100}px`;
-      await onceResized(dashboard);
+      await nextResize(dashboard);
       expect(getColumnWidths(dashboard).length).to.eql(5);
     });
 
     it('should limit column count to one', async () => {
       setMaximumColumnCount(dashboard, 1);
       dashboard.style.width = `${columnWidth * 10}px`;
-      await onceResized(dashboard);
+      await nextResize(dashboard);
       /* prettier-ignore */
       expectLayout(dashboard, [
         [0],
@@ -410,7 +409,7 @@ describe('dashboard layout', () => {
     it('should allow fewer columns', async () => {
       setMaximumColumnCount(dashboard, 2);
       dashboard.style.width = `${columnWidth}px`;
-      await onceResized(dashboard);
+      await nextResize(dashboard);
       /* prettier-ignore */
       expectLayout(dashboard, [
         [0],
@@ -432,7 +431,7 @@ describe('dashboard layout', () => {
     it('should increase max column count dynamically', async () => {
       setMaximumColumnCount(dashboard, 2);
       dashboard.style.width = `${columnWidth * 100}px`;
-      await onceResized(dashboard);
+      await nextResize(dashboard);
       expect(getColumnWidths(dashboard).length).to.eql(2);
 
       setMaximumColumnCount(dashboard, 20);
@@ -466,7 +465,7 @@ describe('dashboard layout', () => {
 
     it('should be on its own row', async () => {
       dashboard.style.width = `${columnWidth * 4}px`;
-      await onceResized(dashboard);
+      await nextResize(dashboard);
 
       /* prettier-ignore */
       expectLayout(dashboard, [
@@ -478,7 +477,7 @@ describe('dashboard layout', () => {
     it('following items should end up in the next row', async () => {
       dashboard.style.width = `${columnWidth * 4}px`;
       dashboard.appendChild(fixtureSync('<div id="4">Item 4</div>'));
-      await onceResized(dashboard);
+      await nextResize(dashboard);
 
       /* prettier-ignore */
       expectLayout(dashboard, [
@@ -490,7 +489,7 @@ describe('dashboard layout', () => {
 
     it('should be capped to currently available columns', async () => {
       dashboard.style.width = `${columnWidth}px`;
-      await onceResized(dashboard);
+      await nextResize(dashboard);
 
       /* prettier-ignore */
       expectLayout(dashboard, [
@@ -504,7 +503,7 @@ describe('dashboard layout', () => {
     it('should span multiple columns inside a section', async () => {
       dashboard.style.width = `${columnWidth * 3}px`;
       setColspan(childElements[2], 2);
-      await onceResized(dashboard);
+      await nextResize(dashboard);
 
       /* prettier-ignore */
       expectLayout(dashboard, [
@@ -530,7 +529,7 @@ describe('dashboard layout', () => {
     it('should use minimum row height for all section rows', async () => {
       dashboard.style.width = `${columnWidth}px`;
       setMinimumRowHeight(dashboard, 300);
-      await onceResized(dashboard);
+      await nextResize(dashboard);
 
       expect(childElements[2].offsetHeight).to.eql(300);
       expect(childElements[3].offsetHeight).to.eql(300);
@@ -554,7 +553,7 @@ describe('dashboard layout', () => {
         setSpacing(dashboard, undefined);
         // Increase the width of the dashboard to fit two items, paddings and a gap
         dashboard.style.width = `calc(${columnWidth}px * 2 + ${defaultSpacing * 3}px)`;
-        await onceResized(dashboard);
+        await nextResize(dashboard);
 
         const { right: item2Right } = childElements[2].getBoundingClientRect();
         const { left: item3Left } = childElements[3].getBoundingClientRect();
@@ -567,7 +566,7 @@ describe('dashboard layout', () => {
         setSpacing(dashboard, customSpacing);
         // Increase the width of the dashboard to fit two items, paddings and a gap
         dashboard.style.width = `${columnWidth * 2 + customSpacing * 3}px`;
-        await onceResized(dashboard);
+        await nextResize(dashboard);
 
         const { right: item2Right } = childElements[2].getBoundingClientRect();
         const { left: item3Left } = childElements[3].getBoundingClientRect();
@@ -579,7 +578,7 @@ describe('dashboard layout', () => {
         const customSpacing = 10;
         setSpacing(dashboard, customSpacing);
         dashboard.style.width = `${columnWidth}px`;
-        await onceResized(dashboard);
+        await nextResize(dashboard);
 
         const { bottom: item2Bottom } = childElements[2].getBoundingClientRect();
         const { top: item3Top } = childElements[3].getBoundingClientRect();
