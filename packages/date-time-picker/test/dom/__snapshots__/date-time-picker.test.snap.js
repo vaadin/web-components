@@ -455,7 +455,6 @@ snapshots["vaadin-date-time-picker host error"] =
   </label>
   <div
     id="error-message-vaadin-date-time-picker-2"
-    role="alert"
     slot="error-message"
   >
     Error
