@@ -6,11 +6,11 @@ import {
   makeSoloTouchEvent,
   nextFrame,
   nextRender,
+  nextResize,
   oneEvent,
 } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './not-animated-styles.js';
-import { nextResize } from '../../grid/test/helpers.js';
 
 describe('vaadin-app-layout', () => {
   let layout;

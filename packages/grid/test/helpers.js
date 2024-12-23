@@ -270,12 +270,6 @@ export const makeSoloTouchEvent = (type, xy, node) => {
   return event;
 };
 
-export const nextResize = (target) => {
-  return new Promise((resolve) => {
-    new ResizeObserver(() => setTimeout(resolve)).observe(target);
-  });
-};
-
 /**
  * Resolves once the function is invoked on the given object.
  */

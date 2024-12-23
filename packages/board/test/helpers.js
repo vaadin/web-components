@@ -1,4 +1,4 @@
-import { nextResize } from '../../grid/test/helpers.js';
+import { nextResize } from '@vaading/testing-helpers';
 
 /**
  * Resolves once the ResizeObserver in all the BoardRows has processed a resize.

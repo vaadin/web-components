@@ -5,12 +5,12 @@ import {
   fixtureSync,
   nextFrame,
   nextRender,
+  nextResize,
   oneEvent,
   spaceKeyDown,
   tabKeyDown,
 } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import { nextResize } from '../../grid/test/helpers.js';
 
 describe('avatar-group', () => {
   let group;
