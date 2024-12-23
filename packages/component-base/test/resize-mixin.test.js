@@ -1,29 +1,8 @@
 import { expect } from '@vaadin/chai-plugins';
-import { aTimeout, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, nextFrame, nextResize } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ResizeMixin } from '../src/resize-mixin.js';
-
-/**
- * Resolves once the function is invoked on the given object.
- */
-function onceInvoked(object, functionName) {
-  return new Promise((resolve) => {
-    sinon.replace(object, functionName, (...args) => {
-      sinon.restore();
-      object[functionName](...args);
-      resolve();
-    });
-  });
-}
-
-/**
- * Resolves once the ResizeObserver in AvatarGroup has processed a resize.
- */
-async function onceResized(el) {
-  // Wait for the _onResize function to be invoked by the ResizeObserver
-  await onceInvoked(el, '_onResize');
-}
 
 describe('resize-mixin', () => {
   let element, observeParent;
@@ -53,13 +32,13 @@ describe('resize-mixin', () => {
   beforeEach(async () => {
     element = fixtureSync(`<resize-mixin-element></resize-mixin-element>`);
     // Wait for the initial resize.
-    await onceResized(element);
+    await nextResize(element);
   });
 
   it('should notify resize', async () => {
     const spy = sinon.spy(element, '_onResize');
     element.style.width = '100px';
-    await onceResized(element);
+    await nextResize(element);
     expect(spy.calledOnce).to.be.true;
   });
 
@@ -83,13 +62,13 @@ describe('resize-mixin', () => {
       beforeEach(async () => {
         parent.appendChild(element);
         // Wait for the initial resize.
-        await onceResized(element);
+        await nextResize(element);
       });
 
       it('should notify parent element resize', async () => {
         const spy = sinon.spy(element, '_onResize');
         parent.style.width = '100px';
-        await onceResized(element);
+        await nextResize(element);
         expect(spy.calledOnce).to.be.true;
       });
 
@@ -130,13 +109,13 @@ describe('resize-mixin', () => {
         parent.attachShadow({ mode: 'open' });
         parent.shadowRoot.appendChild(element);
         // Wait for the initial resize.
-        await onceResized(element);
+        await nextResize(element);
       });
 
       it('should notify shadow host resize', async () => {
         const spy = sinon.spy(element, '_onResize');
         parent.style.width = '100px';
-        await onceResized(element);
+        await nextResize(element);
         expect(spy.calledOnce).to.be.true;
       });
     });
