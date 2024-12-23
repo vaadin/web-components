@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync } from '@vaadin/testing-helpers';
-import { flushGrid, infiniteDataProvider, nextResize } from './helpers.js';
+import { fixtureSync, nextResize } from '@vaadin/testing-helpers';
+import { flushGrid, infiniteDataProvider } from './helpers.js';
 
 describe('min-height', () => {
   const rowHeight = 36;

@@ -7,29 +7,10 @@ import {
   listenOnce,
   nextFrame,
   nextRender,
+  nextResize,
   space,
 } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-
-/**
- * Resolves once the function is invoked on the given object.
- */
-function onceInvoked(object, functionName) {
-  return new Promise((resolve) => {
-    sinon.replace(object, functionName, (...args) => {
-      sinon.restore();
-      object[functionName](...args);
-      resolve();
-    });
-  });
-}
-
-/**
- * Resolves once the ResizeObserver has processed a resize.
- */
-async function onceResized(tabs) {
-  await onceInvoked(tabs, '_updateOverflow');
-}
 
 describe('tabs', () => {
   let tabs;
@@ -120,7 +101,7 @@ describe('tabs', () => {
             } else {
               tabs.style.height = '100px';
             }
-            await onceResized(tabs);
+            await nextResize(tabs);
             await nextFrame();
           });
 
@@ -182,7 +163,7 @@ describe('tabs', () => {
           it('should update overflow on resize', async () => {
             tabs.style.width = 'auto';
             tabs.style.height = 'auto';
-            await onceResized(tabs);
+            await nextResize(tabs);
             expect(tabs.hasAttribute('overflow')).to.be.false;
           });
 
@@ -193,7 +174,7 @@ describe('tabs', () => {
               item.style.minHeight = '1px';
               item.style.minWidth = '1px';
             });
-            await onceResized(tabs);
+            await nextResize(tabs);
             expect(tabs.hasAttribute('overflow')).to.be.false;
           });
 
