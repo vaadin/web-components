@@ -311,7 +311,6 @@ snapshots["vaadin-email-field host error"] =
   </label>
   <div
     id="error-message-vaadin-email-field-2"
-    role="alert"
     slot="error-message"
   >
     Error

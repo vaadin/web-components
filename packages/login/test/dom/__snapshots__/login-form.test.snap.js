@@ -156,7 +156,6 @@ snapshots["vaadin-login-form host required"] =
         </label>
         <div
           id="error-message-vaadin-text-field-2"
-          role="alert"
           slot="error-message"
         >
           Username is required
@@ -192,7 +191,6 @@ snapshots["vaadin-login-form host required"] =
         </label>
         <div
           id="error-message-vaadin-password-field-5"
-          role="alert"
           slot="error-message"
         >
           Password is required
@@ -383,7 +381,6 @@ snapshots["vaadin-login-form host i18n-required"] =
         </label>
         <div
           id="error-message-vaadin-text-field-2"
-          role="alert"
           slot="error-message"
         >
           Käyttäjätunnus vaaditaan
@@ -419,7 +416,6 @@ snapshots["vaadin-login-form host i18n-required"] =
         </label>
         <div
           id="error-message-vaadin-password-field-5"
-          role="alert"
           slot="error-message"
         >
           Salasana vaaditaan

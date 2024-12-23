@@ -1,5 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { aTimeout, defineLit, definePolymer, fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
+import sinon from 'sinon';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { FieldMixin } from '../src/field-mixin.js';
@@ -142,30 +143,46 @@ const runTests = (defineHelper, baseMixin) => {
         await nextUpdate(element);
         expect(element.hasAttribute('has-error-message')).to.be.false;
       });
+    });
 
-      it('should not set alert role with no error', () => {
-        expect(error.hasAttribute('role')).to.be.false;
+    describe('announcements', () => {
+      let announceRegion, clock;
+
+      beforeEach(async () => {
+        element = fixtureSync(`<${tag}></${tag}>`);
+        await nextRender();
+        clock = sinon.useFakeTimers({ toFake: ['setTimeout'] });
+        announceRegion = document.querySelector('[aria-live]');
+        announceRegion.textContent = '';
       });
 
-      it('should set alert role when attribute is set', async () => {
+      afterEach(() => {
+        clock.restore();
+      });
+
+      it('should announce error message set via attribute when field is invalid', async () => {
+        element.invalid = true;
         element.setAttribute('error-message', 'This field is required');
         await nextUpdate(element);
-        expect(error.getAttribute('role')).to.equal('alert');
+        clock.tick(150);
+        expect(announceRegion.textContent).to.equal('This field is required');
+        expect(announceRegion.getAttribute('aria-live')).to.equal('assertive');
       });
 
-      it('should set alert role when property is set', async () => {
+      it('should announce error message set via property when field is invalid', async () => {
+        element.invalid = true;
         element.errorMessage = 'This field is required';
         await nextUpdate(element);
-        expect(error.getAttribute('role')).to.equal('alert');
+        clock.tick(150);
+        expect(announceRegion.textContent).to.equal('This field is required');
+        expect(announceRegion.getAttribute('aria-live')).to.equal('assertive');
       });
 
-      it('should remove alert role when field is valid', async () => {
+      it('should not announce error message when field is valid', async () => {
         element.errorMessage = 'This field is required';
         await nextUpdate(element);
-
-        element.invalid = false;
-        await nextUpdate(element);
-        expect(error.hasAttribute('role')).to.be.false;
+        clock.tick(150);
+        expect(announceRegion.textContent).to.equal('');
       });
     });
 
