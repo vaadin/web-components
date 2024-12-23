@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, isChrome, isFirefox, nextFrame } from '@vaadin/testing-helpers';
+import { fixtureSync, isChrome, isFirefox, nextFrame, nextResize } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import '../vaadin-dashboard.js';
@@ -17,7 +17,6 @@ import {
   getResizeHandle,
   getResizeShrinkHeightButton,
   getResizeShrinkWidthButton,
-  onceResized,
   setMaximumColumnCount,
   setMaximumColumnWidth,
   setMinimumColumnWidth,
@@ -56,7 +55,7 @@ describe('dashboard - keyboard interaction', () => {
     };
 
     dashboard.style.width = `${columnWidth * 2}px`;
-    await onceResized(dashboard);
+    await nextResize(dashboard);
 
     // Make sure the following tab goes back to the first widget (needed for Firefox)
     const widget = getElementFromCell(dashboard, 0, 0)!;

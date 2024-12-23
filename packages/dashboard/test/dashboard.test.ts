@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync } from '@vaadin/testing-helpers';
+import { fixtureSync, nextResize } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../vaadin-dashboard.js';
 import type { CustomElementType } from '@vaadin/component-base/src/define.js';
@@ -15,7 +15,6 @@ import {
   getRemoveButton,
   getResizeHandle,
   getScrollingContainer,
-  onceResized,
   setMaximumColumnWidth,
   setMinimumColumnWidth,
   setMinimumRowHeight,
@@ -163,7 +162,7 @@ describe('dashboard', () => {
   describe('row span', () => {
     it('should span one row by default', async () => {
       dashboard.style.width = `${columnWidth}px`;
-      await onceResized(dashboard);
+      await nextResize(dashboard);
       const widgets = [getElementFromCell(dashboard, 0, 0), getElementFromCell(dashboard, 1, 0)];
       expect(widgets[0]).to.not.equal(widgets[1]);
     });
@@ -171,7 +170,7 @@ describe('dashboard', () => {
     it('should span multiple rows', async () => {
       dashboard.style.width = `${columnWidth}px`;
       dashboard.items = [{ rowspan: 2, id: '0' }];
-      await onceResized(dashboard);
+      await nextResize(dashboard);
 
       const widget = getElementFromCell(dashboard, 0, 0);
       expect(widget).to.have.property('widgetTitle', 'Item 0 title');
@@ -596,7 +595,7 @@ describe('dashboard', () => {
     it('should scroll the focused item outside dashboard viewport back into view', async () => {
       // Limit the dashboard height to force scrolling
       dashboard.style.height = '300px';
-      await onceResized(dashboard);
+      await nextResize(dashboard);
       // Focus the first item
       getElementFromCell(dashboard, 0, 0)!.focus();
 
@@ -614,7 +613,7 @@ describe('dashboard', () => {
     it('should not scroll the focused item into view if it is partially visible', async () => {
       // Limit the dashboard height to force scrolling
       dashboard.style.height = '300px';
-      await onceResized(dashboard);
+      await nextResize(dashboard);
       // Focus the first item
       getElementFromCell(dashboard, 0, 0)!.focus();
 

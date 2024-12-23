@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fire, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
+import { fire, fixtureSync, nextFrame, nextResize } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../vaadin-dashboard.js';
 import { isSafari } from '@vaadin/component-base/src/browser-utils.js';
@@ -13,7 +13,6 @@ import {
   getElementFromCell,
   getEventCoordinates,
   getResizeHandle,
-  onceResized,
   setMaximumColumnWidth,
   setMinimumColumnWidth,
   setMinimumRowHeight,
@@ -48,7 +47,7 @@ describe('dashboard - widget resizing', () => {
       root.appendChild(widget);
     };
     dashboard.style.width = `${columnWidth * 2}px`;
-    await onceResized(dashboard);
+    await nextResize(dashboard);
 
     // prettier-ignore
     expectLayout(dashboard, [
@@ -321,7 +320,7 @@ describe('dashboard - widget resizing', () => {
 
       // Narrow the dashboard to have only one column
       dashboard.style.width = `${columnWidth}px`;
-      await onceResized(dashboard);
+      await nextResize(dashboard);
       // prettier-ignore
       expectLayout(dashboard, [
         [0],
@@ -510,7 +509,7 @@ describe('dashboard - widget resizing', () => {
 
     it('should not throw with a lazy renderer while resizing', async () => {
       dashboard.style.width = `${columnWidth}px`;
-      await onceResized(dashboard);
+      await nextResize(dashboard);
       // prettier-ignore
       expectLayout(dashboard, [
         [0],
@@ -553,7 +552,7 @@ describe('dashboard - widget resizing', () => {
     it('should take gap into account when resizing', async () => {
       dashboard.style.width = `${columnWidth * 3}px`;
       setSpacing(dashboard, 20);
-      await onceResized(dashboard);
+      await nextResize(dashboard);
 
       // prettier-ignore
       expectLayout(dashboard, [

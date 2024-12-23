@@ -1,7 +1,7 @@
 import { expect } from '@vaadin/chai-plugins';
-import { aTimeout, fixtureSync, keyDownOn, nextFrame, oneEvent } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, keyDownOn, nextFrame, nextResize, oneEvent } from '@vaadin/testing-helpers';
 import Sinon from 'sinon';
-import { flushGrid, getCellContent, getHeaderCellContent, onceResized } from './helpers.js';
+import { flushGrid, getCellContent, getHeaderCellContent } from './helpers.js';
 
 ['ltr', 'rtl'].forEach((dir) => {
   describe(`lazy column rendering - ${dir}`, () => {
@@ -99,7 +99,7 @@ import { flushGrid, getCellContent, getHeaderCellContent, onceResized } from './
 
       grid.columnRendering = 'lazy';
       // Wait for the initial resize observer callback
-      await onceResized(grid);
+      await nextResize(grid);
       flushGrid(grid);
     });
 
@@ -141,7 +141,7 @@ import { flushGrid, getCellContent, getHeaderCellContent, onceResized } from './
 
     it('should render columns revealed columns on resize', async () => {
       grid.style.width = `${grid.$.table.scrollWidth}px`;
-      await onceResized(grid);
+      await nextResize(grid);
       expectBodyCellUpdated(getLastVisibleColumnIndex());
       expectBodyCellUpdated(columns.length - 1);
     });
@@ -222,7 +222,7 @@ import { flushGrid, getCellContent, getHeaderCellContent, onceResized } from './
         </vaadin-grid>
       `);
       grid.items = [{ name: `Item 1` }];
-      await onceResized(grid);
+      await nextResize(grid);
       flushGrid(grid);
 
       const newColumn = document.createElement('vaadin-grid-column');
@@ -278,7 +278,7 @@ import { flushGrid, getCellContent, getHeaderCellContent, onceResized } from './
 
       it('should render columns revealed columns on resize', async () => {
         grid.style.width = `${grid.$.table.scrollWidth}px`;
-        await onceResized(grid);
+        await nextResize(grid);
         expectBodyCellUpdated(0);
         expectBodyCellUpdated(1);
       });

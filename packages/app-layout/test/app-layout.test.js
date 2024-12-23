@@ -6,31 +6,13 @@ import {
   makeSoloTouchEvent,
   nextFrame,
   nextRender,
+  nextResize,
   oneEvent,
 } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../vaadin-app-layout.js';
 import '../vaadin-drawer-toggle.js';
-
-/**
- * Resolves once the function is invoked on the given object.
- */
-function onceInvoked(object, functionName) {
-  return new Promise((resolve) => {
-    sinon.replace(object, functionName, (...args) => {
-      sinon.restore();
-      object[functionName](...args);
-      resolve();
-    });
-  });
-}
-
-/**
- * Resolves once the ResizeObserver has processed a resize.
- */
-async function onceResized(layout) {
-  await onceInvoked(layout, '_updateOffsetSize');
-}
+import './not-animated-styles.js';
 
 describe('vaadin-app-layout', () => {
   let layout;
@@ -110,12 +92,12 @@ describe('vaadin-app-layout', () => {
         navbarContent.style.height = '100px';
         navbarContent.setAttribute('slot', 'navbar');
         layout.appendChild(navbarContent);
-        await onceResized(layout);
+        await nextResize(layout);
         const initialOffset = parseInt(getComputedStyle(layout).getPropertyValue('padding-top'));
         expect(initialOffset).to.be.greaterThan(0);
         // Increase navbar content size and measure increase
         navbarContent.style.height = '200px';
-        await onceResized(layout);
+        await nextResize(layout);
         const updatedOffset = parseInt(getComputedStyle(layout).getPropertyValue('padding-top'));
         expect(updatedOffset).to.equal(initialOffset + 100);
       });
@@ -164,12 +146,12 @@ describe('vaadin-app-layout', () => {
         navbarContent.style.height = '100px';
         navbarContent.setAttribute('slot', 'navbar touch-optimized');
         layout.appendChild(navbarContent);
-        await onceResized(layout);
+        await nextResize(layout);
         const initialOffset = parseInt(getComputedStyle(layout).getPropertyValue('padding-bottom'));
         expect(initialOffset).to.be.greaterThan(0);
         // Increase navbar content size and measure increase
         navbarContent.style.height = '200px';
-        await onceResized(layout);
+        await nextResize(layout);
         const updatedOffset = parseInt(getComputedStyle(layout).getPropertyValue('padding-bottom'));
         expect(updatedOffset).to.equal(initialOffset + 100);
       });
@@ -198,7 +180,7 @@ describe('vaadin-app-layout', () => {
       drawer = layout.shadowRoot.querySelector('[part=drawer]');
       backdrop = layout.shadowRoot.querySelector('[part=backdrop]');
       // Wait for the initial resize observer callback
-      await onceResized(layout);
+      await nextResize(layout);
       await nextFrame();
     }
 
@@ -291,7 +273,7 @@ describe('vaadin-app-layout', () => {
 
       it('should only update offset size once during the drawer transition', async () => {
         layout.primarySection = 'drawer';
-        await onceResized(layout);
+        await nextResize(layout);
         await nextRender();
 
         layout.style.setProperty('--vaadin-app-layout-transition', '100ms');
