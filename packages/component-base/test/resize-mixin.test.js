@@ -62,13 +62,13 @@ describe('resize-mixin', () => {
       beforeEach(async () => {
         parent.appendChild(element);
         // Wait for the initial resize.
-        await nextResize(element);
+        await nextResize(parent);
       });
 
       it('should notify parent element resize', async () => {
         const spy = sinon.spy(element, '_onResize');
         parent.style.width = '100px';
-        await nextResize(element);
+        await nextResize(parent);
         expect(spy.calledOnce).to.be.true;
       });
 
@@ -109,13 +109,13 @@ describe('resize-mixin', () => {
         parent.attachShadow({ mode: 'open' });
         parent.shadowRoot.appendChild(element);
         // Wait for the initial resize.
-        await nextResize(element);
+        await nextResize(parent);
       });
 
       it('should notify shadow host resize', async () => {
         const spy = sinon.spy(element, '_onResize');
         parent.style.width = '100px';
-        await nextResize(element);
+        await nextResize(parent);
         expect(spy.calledOnce).to.be.true;
       });
     });
