@@ -110,7 +110,6 @@ snapshots["vaadin-time-picker host error"] =
   </label>
   <div
     id="error-message-vaadin-time-picker-2"
-    role="alert"
     slot="error-message"
   >
     Error

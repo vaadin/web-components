@@ -73,7 +73,6 @@ snapshots["vaadin-integer-field host error"] =
   </label>
   <div
     id="error-message-vaadin-integer-field-2"
-    role="alert"
     slot="error-message"
   >
     Error
