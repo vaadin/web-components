@@ -131,7 +131,6 @@ snapshots["vaadin-multi-select-combo-box host error"] =
   </label>
   <div
     id="error-message-vaadin-multi-select-combo-box-2"
-    role="alert"
     slot="error-message"
   >
     Error
