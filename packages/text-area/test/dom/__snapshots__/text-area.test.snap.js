@@ -67,7 +67,6 @@ snapshots["vaadin-text-area host error"] =
   </label>
   <div
     id="error-message-vaadin-text-area-2"
-    role="alert"
     slot="error-message"
   >
     Error

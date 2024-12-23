@@ -85,7 +85,6 @@ snapshots["vaadin-password-field host error"] =
   </label>
   <div
     id="error-message-vaadin-password-field-2"
-    role="alert"
     slot="error-message"
   >
     Error

@@ -213,7 +213,6 @@ snapshots["vaadin-date-picker host error"] =
   </label>
   <div
     id="error-message-vaadin-date-picker-2"
-    role="alert"
     slot="error-message"
   >
     Error
