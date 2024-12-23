@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
+import { fixtureSync, nextRender, nextResize } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import './not-animated-styles.js';
 import '../vaadin-multi-select-combo-box.js';
@@ -10,12 +10,6 @@ describe('chips', () => {
   const getChips = (combo) => combo.querySelectorAll('vaadin-multi-select-combo-box-chip');
 
   const getChipContent = (chip) => chip.shadowRoot.querySelector('[part="label"]').textContent;
-
-  const nextResize = (target) => {
-    return new Promise((resolve) => {
-      new ResizeObserver(() => setTimeout(resolve)).observe(target);
-    });
-  };
 
   beforeEach(async () => {
     comboBox = fixtureSync(`<vaadin-multi-select-combo-box></vaadin-multi-select-combo-box>`);

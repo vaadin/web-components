@@ -1,28 +1,7 @@
 import { expect } from '@vaadin/chai-plugins';
-import { aTimeout, fixtureSync, nextFrame, nextRender, oneEvent } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, nextFrame, nextRender, nextResize, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../vaadin-chart.js';
-
-/**
- * Resolves once the function is invoked on the given object.
- */
-function onceInvoked(object, functionName) {
-  return new Promise((resolve) => {
-    sinon.replace(object, functionName, (...args) => {
-      sinon.restore();
-      object[functionName](...args);
-      resolve();
-    });
-  });
-}
-
-/**
- * Resolves once the ResizeObserver in AvatarGroup has processed a resize.
- */
-async function onceResized(el) {
-  // Wait for the _onResize function to be invoked by the ResizeObserver
-  await onceInvoked(el, '_onResize');
-}
 
 describe('vaadin-chart', () => {
   describe('custom element definition', () => {
@@ -346,7 +325,7 @@ describe('vaadin-chart', () => {
       expect(charts[1].configuration.chartWidth).to.be.equal(500);
 
       layout.style.width = '500px';
-      await onceResized(charts[0]);
+      await nextResize(charts[0]);
 
       expect(layout.getBoundingClientRect().width).to.be.equal(500);
       expect(charts[0].configuration.chartWidth).to.be.equal(250);
@@ -359,7 +338,7 @@ describe('vaadin-chart', () => {
       expect(charts[1].configuration.chartHeight).to.be.equal(300);
 
       layout.style.height = '200px';
-      await onceResized(charts[0]);
+      await nextResize(charts[0]);
 
       expect(layout.getBoundingClientRect().height).to.be.equal(200);
       expect(charts[0].configuration.chartHeight).to.be.equal(200);
