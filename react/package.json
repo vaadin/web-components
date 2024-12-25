@@ -48,7 +48,7 @@
     "concurrently": "^9.1.0",
     "esbuild": "^0.24.0",
     "glob": "^10.4.5",
-    "json-schema-to-typescript": "^15.0.3",
+    "json-schema-to-typescript": "^14.0.5",
     "karma": "^6.4.4",
     "karma-chrome-launcher": "^3.2.0",
     "karma-coverage": "^2.2.1",
