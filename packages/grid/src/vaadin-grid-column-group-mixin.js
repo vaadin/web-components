@@ -44,6 +44,18 @@ export const GridColumnGroupMixin = (superClass) =>
           sync: true,
         },
 
+        maxWidth: {
+          type: String,
+          readOnly: true,
+          sync: true,
+        },
+
+        minWidth: {
+          type: String,
+          readOnly: true,
+          sync: true,
+        },
+
         /** @private */
         _visibleChildColumns: Array,
 
@@ -97,7 +109,7 @@ export const GridColumnGroupMixin = (superClass) =>
         this._preventHiddenSynchronization = false;
       }
 
-      if (/flexGrow|width|hidden|_childColumns/u.test(path)) {
+      if (/flexGrow|width|minWidth|maxWidth|hidden|_childColumns/u.test(path)) {
         this._updateFlexAndWidth();
       }
 
@@ -195,11 +207,28 @@ export const GridColumnGroupMixin = (superClass) =>
 
       if (this._visibleChildColumns.length > 0) {
         const width = this._visibleChildColumns
-          .reduce((prev, curr) => {
-            prev += ` + ${(curr.width || '0px').replace('calc', '')}`;
-            return prev;
-          }, '')
-          .substring(3);
+          .map((column) => {
+            if (column.width) {
+              return `clamp(${column.minWidth || column.width}, ${column.width}, ${column.maxWidth || column.width})`;
+            }
+
+            return '';
+          })
+          .filter(Boolean)
+          .join(' + ');
+        // const minWidth = this._visibleChildColumns
+        //   .map((column) => {
+        //     return column.minWidth || column.width;
+        //   })
+        //   .filter(Boolean)
+        //   .join(' + ');
+        // const maxWidth = this._visibleChildColumns
+        //   .map((column) => {
+        //     return column.maxWidth || column.width;
+        //   })
+        //   .filter(Boolean)
+        //   .join(' + ');
+
         this._setWidth(`calc(${width})`);
       } else {
         this._setWidth('0px');

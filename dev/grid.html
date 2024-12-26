@@ -36,20 +36,22 @@
         cb(pageItems, levelSize);
       };
 
-      const tooltip = document.querySelector('[slot="tooltip"]');
-      tooltip.generator = ({ column, item }) => {
-        return column && column.path && item ? `Tooltip ${column.path} ${item.name}` : '';
-      };
+      // const tooltip = document.querySelector('[slot="tooltip"]');
+      // tooltip.generator = ({ column, item }) => {
+      //   return column && column.path && item ? `Tooltip ${column.path} ${item.name}` : '';
+      // };
     </script>
 
     <vaadin-grid item-id-path="name">
-      <vaadin-grid-selection-column auto-select frozen drag-select></vaadin-grid-selection-column>
-      <vaadin-grid-tree-column frozen path="name" width="200px" flex-shrink="0"></vaadin-grid-tree-column>
-      <vaadin-grid-column path="name" width="200px" flex-shrink="0"></vaadin-grid-column>
-      <vaadin-grid-column path="name" width="200px" flex-shrink="0"></vaadin-grid-column>
-      <vaadin-grid-column path="name" width="200px" flex-shrink="0"></vaadin-grid-column>
+      <vaadin-grid-column-group header="Group 1">
+        <vaadin-grid-column path="name" max-width="150px" resizable></vaadin-grid-column>
+        <vaadin-grid-column path="name" width="150px" resizable></vaadin-grid-column>
+      </vaadin-grid-column-group>
+      <!-- <vaadin-grid-column-group header="Group 2">
+        <vaadin-grid-column path="name" width="200px" min-width="100px" max-width="500px" resizable></vaadin-grid-column>
+        <vaadin-grid-column path="name" width="200px" min-width="100px" max-width="500px" resizable></vaadin-grid-column>
+      </vaadin-grid-column-group> -->
 
-      <vaadin-tooltip slot="tooltip" hover-delay="500" hide-delay="500"></vaadin-tooltip>
     </vaadin-grid>
   </body>
 </html>
