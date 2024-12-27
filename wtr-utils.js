@@ -257,6 +257,28 @@ const createUnitTestsConfig = (config) => {
   };
 };
 
+function setWindowHeightPlugin() {
+  return {
+    name: 'set-window-height-command',
+
+    async executeCommand({ command, payload, session }) {
+      if (command === 'set-window-height') {
+        if (session.browser.type === 'webdriver') {
+          // Get the browser size (width / height)
+          const size = await session.browser.driver.getWindowSize();
+          // Get the actual viewport inner height
+          const height = await session.browser.driver.execute(() => window.innerHeight);
+          // Resize the browser to use updated height
+          // Subtract extra 1px in SauceLabs on Windows
+          await session.browser.driver.setWindowSize(size.width, size.height - height - 1 + payload.height);
+          return true;
+        }
+      }
+      return undefined;
+    },
+  };
+}
+
 const createVisualTestsConfig = (theme, browserVersion) => {
   const visualPackages = getAllVisualPackages();
   const packages = getTestPackages(visualPackages);
@@ -291,6 +313,7 @@ const createVisualTestsConfig = (theme, browserVersion) => {
       }),
     ],
     plugins: [
+      setWindowHeightPlugin(),
       visualRegressionPlugin({
         baseDir: 'packages',
         getBaselineName: getBaselineScreenshotName,
