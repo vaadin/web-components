@@ -161,7 +161,7 @@ export const SelectBaseMixin = (superClass) =>
       return [
         '_updateAriaExpanded(opened, focusElement)',
         '_updateSelectedItem(value, _items, placeholder)',
-        '_openedChanged(opened, _overlayElement)',
+        '_openedChanged(opened, _overlayElement, _inputContainer)',
       ];
     }
 
@@ -186,7 +186,6 @@ export const SelectBaseMixin = (superClass) =>
       super.ready();
 
       this._inputContainer = this.shadowRoot.querySelector('[part~="input-field"]');
-      this._overlayElement = this.$.overlay;
 
       this._valueButtonController = new ButtonController(this);
       this.addController(this._valueButtonController);
@@ -362,8 +361,8 @@ export const SelectBaseMixin = (superClass) =>
     }
 
     /** @private */
-    _openedChanged(opened, overlayElement) {
-      if (!overlayElement) {
+    _openedChanged(opened, overlayElement, inputContainer) {
+      if (!overlayElement || !inputContainer) {
         return;
       }
 
@@ -377,7 +376,7 @@ export const SelectBaseMixin = (superClass) =>
         // Avoid multiple announcements when a value gets selected from the dropdown
         this._updateAriaLive(false);
 
-        overlayElement.style.setProperty('--vaadin-select-text-field-width', `${this._inputContainer.offsetWidth}px`);
+        overlayElement.style.setProperty('--vaadin-select-text-field-width', `${inputContainer.offsetWidth}px`);
 
         // Preserve focus-ring to restore it later
         const hasFocusRing = this.hasAttribute('focus-ring');
