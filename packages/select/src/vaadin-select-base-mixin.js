@@ -64,7 +64,6 @@ export const SelectBaseMixin = (superClass) =>
           value: false,
           notify: true,
           reflectToAttribute: true,
-          observer: '_openedChanged',
         },
 
         /**
@@ -160,7 +159,11 @@ export const SelectBaseMixin = (superClass) =>
     }
 
     static get observers() {
-      return ['_updateAriaExpanded(opened, focusElement)', '_updateSelectedItem(value, _items, placeholder)'];
+      return [
+        '_updateAriaExpanded(opened, focusElement)',
+        '_updateSelectedItem(value, _items, placeholder)',
+        '_openedChanged(opened, _overlayElement)',
+      ];
     }
 
     constructor() {
@@ -183,9 +186,8 @@ export const SelectBaseMixin = (superClass) =>
     ready() {
       super.ready();
 
-      this._overlayElement = this.$.overlay;
-
       this._inputContainer = this.shadowRoot.querySelector('[part~="input-field"]');
+      this._overlayElement = this.$.overlay;
 
       this._valueButtonController = new ButtonController(this);
       this.addController(this._valueButtonController);
@@ -361,20 +363,22 @@ export const SelectBaseMixin = (superClass) =>
     }
 
     /** @private */
-    _openedChanged(opened, wasOpened) {
+    _openedChanged(opened, overlayElement) {
       if (opened) {
-        // Avoid multiple announcements when a value gets selected from the dropdown
-        this._updateAriaLive(false);
+        if (!overlayElement) {
+          return;
+        }
 
-        if (!this._overlayElement || !this._menuElement || !this.focusElement || this.disabled || this.readonly) {
+        if (this.disabled || this.readonly) {
+          // Disallow programmatic opening when disabled or readonly
           this.opened = false;
           return;
         }
 
-        this._overlayElement.style.setProperty(
-          '--vaadin-select-text-field-width',
-          `${this._inputContainer.offsetWidth}px`,
-        );
+        // Avoid multiple announcements when a value gets selected from the dropdown
+        this._updateAriaLive(false);
+
+        overlayElement.style.setProperty('--vaadin-select-text-field-width', `${this._inputContainer.offsetWidth}px`);
 
         // Preserve focus-ring to restore it later
         const hasFocusRing = this.hasAttribute('focus-ring');
@@ -384,7 +388,7 @@ export const SelectBaseMixin = (superClass) =>
         if (hasFocusRing) {
           this.removeAttribute('focus-ring');
         }
-      } else if (wasOpened) {
+      } else if (this.__oldOpened) {
         if (this._openedWithFocusRing) {
           this.setAttribute('focus-ring', '');
         }
@@ -396,6 +400,8 @@ export const SelectBaseMixin = (superClass) =>
           this._requestValidation();
         }
       }
+
+      this.__oldOpened = opened;
     }
 
     /** @private */
