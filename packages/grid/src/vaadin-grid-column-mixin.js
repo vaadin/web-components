@@ -8,7 +8,7 @@ import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { get } from '@vaadin/component-base/src/path-utils.js';
 import { processTemplates } from '@vaadin/component-base/src/templates.js';
-import { updateCellState } from './vaadin-grid-helpers.js';
+import { createClampCSSExpression, updateCellState } from './vaadin-grid-helpers.js';
 
 /**
  * @polymerMixin
@@ -409,11 +409,12 @@ export const ColumnBaseMixin = (superClass) =>
         this.parentElement._columnPropChanged('width');
       }
 
-      const minWidth = this.minWidth || 'infinity * -1px';
-      const maxWidth = this.maxWidth || 'infinity * 1px';
-
       this._allCells.forEach((cell) => {
-        cell.style.width = `clamp(${minWidth}, ${width}, ${maxWidth})`;
+        cell.style.width = createClampCSSExpression({
+          value: width,
+          minValue: this.minWidth,
+          maxValue: this.maxWidth,
+        });
       });
     }
 
