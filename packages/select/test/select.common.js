@@ -734,6 +734,21 @@ describe('vaadin-select', () => {
     });
   });
 
+  describe('initially opened', () => {
+    beforeEach(async () => {
+      select = fixtureSync(`<vaadin-select opened></vaadin-select>`);
+      select.items = [
+        { label: 'Option 0', value: 'option-0' },
+        { label: 'Option 1', value: 'option-1' },
+      ];
+      await nextRender();
+    });
+
+    it('should open the overlay when opened attribute is set initially', () => {
+      expect(select.$.overlay.opened).to.be.true;
+    });
+  });
+
   describe('with value', () => {
     let menu, valueButton;
 
