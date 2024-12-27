@@ -228,6 +228,7 @@ export const NotificationMixin = (superClass) =>
 
     /** @private */
     get _container() {
+      const Notification = customElements.get('vaadin-notification');
       if (!Notification._container) {
         Notification._container = document.createElement('vaadin-notification-container');
         document.body.appendChild(Notification._container);
