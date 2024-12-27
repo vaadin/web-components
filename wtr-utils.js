@@ -267,10 +267,14 @@ function setWindowHeightPlugin() {
           // Get the browser size (width / height)
           const size = await session.browser.driver.getWindowSize();
           // Get the actual viewport inner height
-          const height = await session.browser.driver.execute(() => window.innerHeight);
+          const { outerHeight, innerHeight } = await session.browser.driver.execute(() => {
+            return { outerHeight: window.outerHeight, innerHeight: window.innerHeight };
+          });
+          const diff = size.height - outerHeight;
+          console.warn(outerHeight, innerHeight, size.height);
           // Resize the browser to use updated height
           // Subtract extra 1px in SauceLabs on Windows
-          await session.browser.driver.setWindowSize(size.width, size.height - height - 1 + payload.height);
+          await session.browser.driver.setWindowSize(size.width, payload.height + diff);
           return true;
         }
       }
