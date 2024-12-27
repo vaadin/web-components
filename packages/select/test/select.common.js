@@ -524,7 +524,7 @@ describe('vaadin-select', () => {
         select.readonly = true;
         await nextUpdate(select);
         select.opened = true;
-        await nextUpdate(select);
+        await nextRender(select);
         expect(select._overlayElement.opened).to.be.false;
       });
     });
@@ -544,7 +544,7 @@ describe('vaadin-select', () => {
         select.readonly = true;
         await nextUpdate(select);
         select.opened = true;
-        await nextUpdate(select);
+        await nextRender(select);
         expect(select._overlayElement.opened).to.be.false;
       });
     });
