@@ -519,6 +519,14 @@ describe('vaadin-select', () => {
         expect(select.opened).to.be.false;
         expect(select._overlayElement.opened).to.be.false;
       });
+
+      it('should disallow programmatic opening when disabled', async () => {
+        select.readonly = true;
+        await nextUpdate(select);
+        select.opened = true;
+        await nextRender(select);
+        expect(select._overlayElement.opened).to.be.false;
+      });
     });
 
     describe('readonly', () => {
@@ -529,6 +537,14 @@ describe('vaadin-select', () => {
         expect(select._overlayElement.opened).to.be.false;
 
         click(valueButton);
+        expect(select._overlayElement.opened).to.be.false;
+      });
+
+      it('should disallow programmatic opening when readonly', async () => {
+        select.readonly = true;
+        await nextUpdate(select);
+        select.opened = true;
+        await nextRender(select);
         expect(select._overlayElement.opened).to.be.false;
       });
     });
@@ -776,6 +792,24 @@ describe('vaadin-select', () => {
       const select = container.querySelector('vaadin-select');
       expect(window.getComputedStyle(container).width).to.eql('500px');
       expect(parseFloat(window.getComputedStyle(select).width)).to.eql(500);
+    });
+  });
+
+  describe('pre-opened', () => {
+    beforeEach(() => {
+      select = document.createElement('vaadin-select');
+      select.items = [{ label: 'Option 1', value: 'value-1' }];
+    });
+
+    afterEach(() => {
+      select.remove();
+    });
+
+    it('should not close overlay when opened set before adding to DOM', async () => {
+      select.opened = true;
+      document.body.appendChild(select);
+      await nextUpdate(select);
+      expect(select._overlayElement.opened).to.be.true;
     });
   });
 });

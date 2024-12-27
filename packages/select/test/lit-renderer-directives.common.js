@@ -24,7 +24,7 @@ describe('lit renderer directives', () => {
     describe('basic', () => {
       beforeEach(async () => {
         select = await renderOpenedSelect(container, { content: 'Content' });
-        overlay = select.shadowRoot.querySelector('vaadin-select-overlay');
+        overlay = select._overlayElement;
       });
 
       it('should set `renderer` property when the directive is attached', () => {
