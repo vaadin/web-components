@@ -364,11 +364,11 @@ export const SelectBaseMixin = (superClass) =>
 
     /** @private */
     _openedChanged(opened, overlayElement) {
-      if (opened) {
-        if (!overlayElement) {
-          return;
-        }
+      if (!overlayElement) {
+        return;
+      }
 
+      if (opened) {
         if (this.disabled || this.readonly) {
           // Disallow programmatic opening when disabled or readonly
           this.opened = false;
