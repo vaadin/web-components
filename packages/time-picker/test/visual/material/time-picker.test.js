@@ -12,6 +12,7 @@ describe('time-picker', () => {
     div.style.display = 'inline-block';
     div.style.padding = '10px';
     element = fixtureSync('<vaadin-time-picker></vaadin-time-picker>', div);
+    element.style.setProperty('--vaadin-time-picker-overlay-max-height', '300px');
   });
 
   it('basic', async () => {
@@ -90,7 +91,7 @@ describe('time-picker', () => {
       });
 
       it('opened', async () => {
-        div.style.height = '500px';
+        div.style.height = '350px';
         div.style.width = '200px';
         element.click();
         await visualDiff(div, `${dir}-opened`);
