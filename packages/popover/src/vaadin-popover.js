@@ -954,11 +954,6 @@ class Popover extends PopoverPositionMixin(
   }
 
   /** @private */
-  get __isManual() {
-    return this.trigger == null || (Array.isArray(this.trigger) && this.trigger.length === 0);
-  }
-
-  /** @private */
   __updateDimension(overlay, dimension, value) {
     const prop = `--_vaadin-popover-content-${dimension}`;
 
