@@ -6,6 +6,7 @@ yarn-error.log
 .env
 
 # Failures from visual tests
+packages/*/test/visual/screenshots/failed
 packages/*/test/visual/*/screenshots/*/failed
 packages/icons/test/visual/screenshots/failed
 
