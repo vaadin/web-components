@@ -413,22 +413,6 @@ export const NumberFieldMixin = (superClass) =>
     }
 
     /**
-     * Native [type=number] inputs don't update their value
-     * when you are entering input that the browser is unable to parse
-     * e.g. "--5", hence we have to override this method from `InputMixin`
-     * so that, when value is empty, it would additionally check
-     * for bad input based on the native `validity.badInput` property.
-     *
-     * @param {InputEvent} event
-     * @protected
-     * @override
-     */
-    _setHasInputValue(event) {
-      const target = event.composedPath()[0];
-      this._hasInputValue = target.value.length > 0 || !!this.__unparsableValue;
-    }
-
-    /**
      * Override this method from `InputMixin` to prevent
      * the value change caused by user input from being treated
      * as initiated programmatically by the developer and therefore
