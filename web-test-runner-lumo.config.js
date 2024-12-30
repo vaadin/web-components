@@ -1,4 +1,4 @@
 /* eslint-env node */
 const { createVisualTestsConfig } = require('./wtr-utils.js');
 
-module.exports = createVisualTestsConfig('lumo', '110');
+module.exports = createVisualTestsConfig('lumo', '130');
