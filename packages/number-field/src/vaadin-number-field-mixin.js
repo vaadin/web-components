@@ -112,7 +112,7 @@ export const NumberFieldMixin = (superClass) =>
     }
 
     /**
-     * The input element's value when it cannot be parsed as a date, and an empty string otherwise.
+     * The input element's value when it cannot be parsed as a number, and an empty string otherwise.
      *
      * @return {string}
      * @private
