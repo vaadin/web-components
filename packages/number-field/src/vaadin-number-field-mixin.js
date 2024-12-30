@@ -9,6 +9,12 @@ import { InputController } from '@vaadin/field-base/src/input-controller.js';
 import { InputFieldMixin } from '@vaadin/field-base/src/input-field-mixin.js';
 import { LabelledInputController } from '@vaadin/field-base/src/labelled-input-controller.js';
 
+// [type=number] inputs return an empty string for invalid numbers,
+// which makes them indistinguishable from empty values. This string
+// is used in _inputElementValue as a marker to help Flow detect and
+// clear unparsable values (if needed).
+const BAD_INPUT_STRING = 'NaN';
+
 /**
  * A mixin providing common number field functionality.
  *
@@ -106,12 +112,13 @@ export const NumberFieldMixin = (superClass) =>
     }
 
     /**
-     * Whether the input element's value is unparsable.
+     * The input element's value when it cannot be parsed as a date, and an empty string otherwise.
      *
+     * @return {string}
      * @private
      */
-    get __hasUnparsableValue() {
-      return this.inputElement.validity.badInput;
+    get __unparsableValue() {
+      return this._inputElementValue === BAD_INPUT_STRING ? this._inputElementValue : '';
     }
 
     /** @protected */
@@ -382,7 +389,7 @@ export const NumberFieldMixin = (superClass) =>
 
       if (!this.__keepCommittedValue) {
         this.__committedValue = this.value;
-        this.__committedUnparsableValueStatus = false;
+        this.__committedUnparsableValue = '';
       }
     }
 
@@ -418,7 +425,7 @@ export const NumberFieldMixin = (superClass) =>
      */
     _setHasInputValue(event) {
       const target = event.composedPath()[0];
-      this._hasInputValue = target.value.length > 0 || this.__hasUnparsableValue;
+      this._hasInputValue = target.value.length > 0 || !!this.__unparsableValue;
     }
 
     /**
@@ -519,12 +526,23 @@ export const NumberFieldMixin = (superClass) =>
       if (this.__committedValue !== this.value) {
         this._requestValidation();
         this.dispatchEvent(new CustomEvent('change', { bubbles: true }));
-      } else if (this.__committedUnparsableValueStatus !== this.__hasUnparsableValue) {
+      } else if (this.__committedUnparsableValue !== this.__unparsableValue) {
         this._requestValidation();
         this.dispatchEvent(new CustomEvent('unparsable-change'));
       }
 
       this.__committedValue = this.value;
-      this.__committedUnparsableValueStatus = this.__hasUnparsableValue;
+      this.__committedUnparsableValue = this.__unparsableValue;
+    }
+
+    /** @override */
+    get _inputElementValue() {
+      const { validity } = this.inputElement;
+      return validity.badInput ? BAD_INPUT_STRING : super._inputElementValue;
+    }
+
+    /** @override */
+    set _inputElementValue(value) {
+      super._inputElementValue = value;
     }
   };
