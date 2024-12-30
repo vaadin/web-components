@@ -324,6 +324,15 @@ class Popover extends PopoverPositionMixin(
       },
 
       /**
+       * When true, the popover is controlled programmatically
+       * instead of reacting to click, focus, or hover triggers.
+       */
+      manual: {
+        type: Boolean,
+        value: false,
+      },
+
+      /**
        * When true, the popover prevents interacting with background elements
        * by setting `pointer-events` style on the document body to `none`.
        * This also enables trapping focus inside the overlay.
@@ -611,7 +620,7 @@ class Popover extends PopoverPositionMixin(
   __onGlobalClick(event) {
     if (
       this.opened &&
-      !this.__isManual &&
+      !this.manual &&
       !this.modal &&
       !event.composedPath().some((el) => el === this._overlayElement || el === this.target) &&
       !this.noCloseOnOutsideClick &&
@@ -623,6 +632,10 @@ class Popover extends PopoverPositionMixin(
 
   /** @private */
   __onTargetClick() {
+    if (this.manual) {
+      return;
+    }
+
     if (this.__hasTrigger('click')) {
       if (!this.opened) {
         this.__shouldRestoreFocus = true;
@@ -650,7 +663,7 @@ class Popover extends PopoverPositionMixin(
       event.key === 'Escape' &&
       !this.noCloseOnEsc &&
       this.opened &&
-      !this.__isManual &&
+      !this.manual &&
       isLastOverlay(this._overlayElement)
     ) {
       // Prevent closing parent overlay (e.g. dialog)
@@ -743,6 +756,10 @@ class Popover extends PopoverPositionMixin(
 
   /** @private */
   __onTargetFocusIn() {
+    if (this.manual) {
+      return;
+    }
+
     this.__focusInside = true;
 
     if (this.__hasTrigger('focus')) {
@@ -763,6 +780,10 @@ class Popover extends PopoverPositionMixin(
 
   /** @private */
   __onTargetFocusOut(event) {
+    if (this.manual) {
+      return;
+    }
+
     // Do not close the popover on overlay focusout if it's not the last one.
     // This covers the case when focus moves to the nested popover opened
     // without focusing parent popover overlay (e.g. using hover trigger).
@@ -779,6 +800,10 @@ class Popover extends PopoverPositionMixin(
 
   /** @private */
   __onTargetMouseEnter() {
+    if (this.manual) {
+      return;
+    }
+
     this.__hoverInside = true;
 
     if (this.__hasTrigger('hover') && !this.opened) {
@@ -792,6 +817,10 @@ class Popover extends PopoverPositionMixin(
 
   /** @private */
   __onTargetMouseLeave(event) {
+    if (this.manual) {
+      return;
+    }
+
     // Do not close the popover on target focusout if the overlay is not the last one.
     // This happens e.g. when opening the nested popover that uses non-modal overlay.
     if (this._overlayElement.opened && !isLastOverlay(this._overlayElement)) {
@@ -818,6 +847,10 @@ class Popover extends PopoverPositionMixin(
 
   /** @private */
   __onOverlayFocusOut(event) {
+    if (this.manual) {
+      return;
+    }
+
     // Do not close the popover on overlay focusout if it's not the last one.
     // This covers the following cases of nested overlay based components:
     // 1. Moving focus to the nested overlay (e.g. vaadin-select, vaadin-menu-bar)
@@ -854,6 +887,10 @@ class Popover extends PopoverPositionMixin(
 
   /** @private */
   __onOverlayMouseEnter() {
+    if (this.manual) {
+      return;
+    }
+
     this.__hoverInside = true;
 
     // Prevent closing if cursor moves to the overlay during hide delay.
@@ -864,6 +901,10 @@ class Popover extends PopoverPositionMixin(
 
   /** @private */
   __onOverlayMouseLeave(event) {
+    if (this.manual) {
+      return;
+    }
+
     // Do not close the popover on overlay focusout if it's not the last one.
     // This happens when opening the nested component that uses "modal" overlay
     // setting `pointer-events: none` on the body (combo-box, date-picker etc).
@@ -939,7 +980,7 @@ class Popover extends PopoverPositionMixin(
    * @private
    */
   __onEscapePress(e) {
-    if (this.noCloseOnEsc || this.__isManual) {
+    if (this.noCloseOnEsc || this.manual) {
       e.preventDefault();
     }
   }
@@ -949,7 +990,7 @@ class Popover extends PopoverPositionMixin(
    * @private
    */
   __onOutsideClick(e) {
-    if (this.noCloseOnOutsideClick || this.__isManual) {
+    if (this.noCloseOnOutsideClick || this.manual) {
       e.preventDefault();
     }
   }
@@ -957,11 +998,6 @@ class Popover extends PopoverPositionMixin(
   /** @private */
   __hasTrigger(trigger) {
     return Array.isArray(this.trigger) && this.trigger.includes(trigger);
-  }
-
-  /** @private */
-  get __isManual() {
-    return this.trigger == null || (Array.isArray(this.trigger) && this.trigger.length === 0);
   }
 
   /** @private */

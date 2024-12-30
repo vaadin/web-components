@@ -182,6 +182,12 @@ declare class Popover extends PopoverPositionMixin(
   renderer: PopoverRenderer | null | undefined;
 
   /**
+   * When true, the popover is controlled programmatically
+   * instead of reacting to click, focus, or hover triggers.
+   */
+  manual: boolean;
+
+  /**
    * When true, the popover prevents interacting with background elements
    * by setting `pointer-events` style on the document body to `none`.
    * This also enables trapping focus inside the overlay.

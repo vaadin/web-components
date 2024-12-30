@@ -497,51 +497,51 @@ describe('trigger', () => {
           expect(overlay.opened).to.be.true;
         });
 
-        it(`should not close on global Escape press with trigger set to ${trigger}`, async () => {
+        it(`should close on global Escape press with trigger set to ${trigger}`, async () => {
           popover.opened = true;
           await nextRender();
 
           esc(document.body);
           await nextUpdate(popover);
-          expect(overlay.opened).to.be.true;
+          expect(overlay.opened).to.be.false;
         });
 
-        it(`should not close on target Escape press with trigger set to ${trigger}`, async () => {
+        it(`should close on target Escape press with trigger set to ${trigger}`, async () => {
           popover.opened = true;
           await nextRender();
 
           esc(target);
           await nextUpdate(popover);
-          expect(overlay.opened).to.be.true;
+          expect(overlay.opened).to.be.false;
         });
 
-        it(`should not close on global Escape press when modal with trigger set to ${trigger}`, async () => {
+        it(`should close on global Escape press when modal with trigger set to ${trigger}`, async () => {
           popover.modal = true;
           popover.opened = true;
           await nextRender();
 
           esc(document.body);
           await nextUpdate(popover);
-          expect(overlay.opened).to.be.true;
+          expect(overlay.opened).to.be.false;
         });
 
-        it(`should not close on outside click when not modal with trigger set to ${trigger}`, async () => {
+        it(`should close on outside click when not modal with trigger set to ${trigger}`, async () => {
           popover.opened = true;
           await nextRender();
 
           outsideClick();
           await nextUpdate(popover);
-          expect(overlay.opened).to.be.true;
+          expect(overlay.opened).to.be.false;
         });
 
-        it(`should not close on outside click when modal with trigger set to ${trigger}`, async () => {
+        it(`should close on outside click when modal with trigger set to ${trigger}`, async () => {
           popover.modal = true;
           popover.opened = true;
           await nextRender();
 
           outsideClick();
           await nextUpdate(popover);
-          expect(overlay.opened).to.be.true;
+          expect(overlay.opened).to.be.false;
         });
 
         it(`should close when setting opened to false with trigger set to ${trigger}`, async () => {
@@ -551,6 +551,144 @@ describe('trigger', () => {
           popover.opened = false;
           await nextUpdate(popover);
           expect(overlay.opened).to.be.false;
+        });
+      });
+
+      describe('manual property', () => {
+        beforeEach(async () => {
+          popover.manual = true;
+          await nextUpdate(popover);
+        });
+
+        describe('opening', () => {
+          it('should not open on target click with click trigger in manual mode', async () => {
+            popover.trigger = ['click'];
+            target.click();
+            await nextRender();
+            expect(overlay.opened).to.be.false;
+          });
+
+          it('should not open on target mouseenter with hover trigger in manual mode', async () => {
+            popover.trigger = ['hover'];
+            mouseenter(target);
+            await nextRender();
+            expect(overlay.opened).to.be.false;
+          });
+
+          it('should not open on target focusin with focus trigger in manual mode', async () => {
+            popover.trigger = ['focus'];
+            focusin(target);
+            await nextRender();
+            expect(overlay.opened).to.be.false;
+          });
+        });
+
+        describe('closing', () => {
+          it('should not close on target click with click trigger in manual mode', async () => {
+            popover.trigger = ['click'];
+
+            popover.opened = true;
+            await nextRender();
+
+            target.click();
+            await nextRender();
+            expect(overlay.opened).to.be.true;
+          });
+
+          it('should not close on target mouseleave with hover trigger in manual mode', async () => {
+            popover.trigger = ['hover'];
+
+            popover.opened = true;
+            await nextRender();
+
+            mouseenter(target);
+            mouseleave(target);
+            await nextRender();
+            expect(overlay.opened).to.be.true;
+          });
+
+          it('should not close on overlay mouseleave with hover trigger in manual mode', async () => {
+            popover.trigger = ['hover'];
+
+            popover.opened = true;
+            await nextRender();
+
+            mouseenter(overlay);
+            mouseleave(overlay);
+            await nextRender();
+            expect(overlay.opened).to.be.true;
+          });
+
+          it('should not close on target focusout with focus trigger in manual mode', async () => {
+            popover.trigger = ['focus'];
+
+            popover.opened = true;
+            await nextRender();
+
+            focusin(target);
+            focusout(target);
+            await nextRender();
+            expect(overlay.opened).to.be.true;
+          });
+
+          it('should not close on overlay focusout with focus trigger in manual mode', async () => {
+            popover.trigger = ['focus'];
+
+            popover.opened = true;
+            await nextRender();
+
+            focusin(overlay);
+            focusout(overlay);
+            await nextRender();
+            expect(overlay.opened).to.be.true;
+          });
+
+          it('should not close on global Escape press in manual mode', async () => {
+            popover.opened = true;
+            await nextRender();
+
+            esc(document.body);
+            await nextUpdate(popover);
+            expect(overlay.opened).to.be.true;
+          });
+
+          it('should not close on target Escape press in manual mode', async () => {
+            popover.opened = true;
+            await nextRender();
+
+            esc(target);
+            await nextUpdate(popover);
+            expect(overlay.opened).to.be.true;
+          });
+
+          it('should close on global Escape press when modal in manual mode', async () => {
+            popover.modal = true;
+            popover.opened = true;
+            await nextRender();
+
+            esc(document.body);
+            await nextUpdate(popover);
+            expect(overlay.opened).to.be.true;
+          });
+
+          it('should not close on outside click when not modal in manual mode', async () => {
+            popover.opened = true;
+            await nextRender();
+
+            outsideClick();
+            await nextUpdate(popover);
+            expect(overlay.opened).to.be.true;
+          });
+
+          it('should not close on outside click when modal in manual mode', async () => {
+            popover.modal = true;
+            popover.opened = true;
+            await nextRender();
+
+            outsideClick();
+            await nextUpdate(popover);
+            expect(overlay.opened).to.be.true;
+          });
         });
       });
     });
