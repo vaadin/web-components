@@ -221,7 +221,8 @@ declare class Popover extends PopoverPositionMixin(
    * - outside click (unless `noCloseOnOutsideClick` property is true)
    *
    * When setting `trigger` property to `null`, `undefined` or empty array, the popover
-   * can be only opened or closed programmatically by changing `opened` property.
+   * can be only opened programmatically by changing `opened` property. Note, closing
+   * on Escape press or outside click is still allowed unless explicitly disabled.
    */
   trigger: PopoverTrigger[] | null | undefined;
 
