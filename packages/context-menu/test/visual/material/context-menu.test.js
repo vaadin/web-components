@@ -1,4 +1,5 @@
 import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
+import { executeServerCommand } from '@web/test-runner-commands';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '@vaadin/item/theme/material/vaadin-item.js';
 import '@vaadin/list-box/theme/material/vaadin-list-box.js';
@@ -8,6 +9,10 @@ import { openSubMenus } from '../../helpers.js';
 
 describe('context-menu', () => {
   let element;
+
+  before(async () => {
+    await executeServerCommand('set-window-height', { height: 610 });
+  });
 
   ['ltr', 'rtl'].forEach((dir) => {
     const contextmenu = (target) => {
