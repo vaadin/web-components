@@ -1,4 +1,5 @@
 import { fixtureSync, oneEvent } from '@vaadin/testing-helpers';
+import { executeServerCommand } from '@web/test-runner-commands';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '@vaadin/vaadin-material-styles/test/autoload.js';
 import '../../../theme/material/vaadin-confirm-dialog.js';
@@ -6,6 +7,10 @@ import '../../not-animated-styles.js';
 
 describe('confirm-dialog', () => {
   let div, element;
+
+  before(async () => {
+    await executeServerCommand('set-window-height', { height: 610 });
+  });
 
   beforeEach(async () => {
     div = document.createElement('div');
