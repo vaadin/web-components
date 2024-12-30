@@ -257,6 +257,26 @@ const createUnitTestsConfig = (config) => {
   };
 };
 
+/**
+ * To set viewport size properly we need to execute the process multiple times.
+ */
+async function setViewportSize(driver, height, retry = 0) {
+  // Get the browser size (width / height)
+  const size = await driver.getWindowSize();
+  // Get the actual viewport inner height
+  const innerHeight = await driver.execute(() => window.innerHeight);
+
+  const heightDiff = size.height - innerHeight;
+  await driver.setWindowSize(size.width, height + heightDiff);
+
+  const updatedHeight = await driver.execute(() => window.innerHeight);
+
+  // If viewport size not equals desired size, execute process again
+  if (updatedHeight !== height && retry < 3) {
+    await setViewportSize(driver, height, retry + 1);
+  }
+}
+
 function setWindowHeightPlugin() {
   return {
     name: 'set-window-height-command',
@@ -264,17 +284,7 @@ function setWindowHeightPlugin() {
     async executeCommand({ command, payload, session }) {
       if (command === 'set-window-height') {
         if (session.browser.type === 'webdriver') {
-          // Get the browser size (width / height)
-          const size = await session.browser.driver.getWindowSize();
-          // Get the actual viewport inner height
-          const { outerHeight, innerHeight } = await session.browser.driver.execute(() => {
-            return { outerHeight: window.outerHeight, innerHeight: window.innerHeight };
-          });
-          const diff = size.height - outerHeight;
-          console.warn(outerHeight, innerHeight, size.height);
-          // Resize the browser to use updated height
-          // Subtract extra 1px in SauceLabs on Windows
-          await session.browser.driver.setWindowSize(size.width, payload.height + diff);
+          await setViewportSize(session.browser.driver, payload.height);
           return true;
         }
       }
