@@ -1,4 +1,5 @@
 import { fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
+import { executeServerCommand } from '@web/test-runner-commands';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '../../not-animated-styles.js';
 import '../../../theme/lumo/vaadin-dialog.js';
@@ -6,6 +7,10 @@ import { createRenderer } from '../../helpers.js';
 
 describe('dialog', () => {
   let div, element;
+
+  before(async () => {
+    await executeServerCommand('set-window-height', { height: 610 });
+  });
 
   beforeEach(async () => {
     div = document.createElement('div');

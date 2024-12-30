@@ -1,10 +1,16 @@
 import { fixtureSync } from '@vaadin/testing-helpers/dist/fixture.js';
+import { executeServerCommand } from '@web/test-runner-commands';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '../../../theme/lumo/vaadin-app-layout.js';
 import '../../../theme/lumo/vaadin-drawer-toggle.js';
 
 describe('app-layout', () => {
   let div, element;
+
+  before(async () => {
+    // Use value bigger than 600 which is a threshold for the "overlay" mode
+    await executeServerCommand('set-window-height', { height: 610 });
+  });
 
   beforeEach(() => {
     div = document.createElement('div');

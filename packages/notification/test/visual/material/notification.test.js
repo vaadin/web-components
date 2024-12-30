@@ -1,10 +1,15 @@
 import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
+import { executeServerCommand } from '@web/test-runner-commands';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '../../not-animated-styles.js';
 import '../../../theme/material/vaadin-notification.js';
 
 describe('notification', () => {
   let element;
+
+  before(async () => {
+    await executeServerCommand('set-window-height', { height: 610 });
+  });
 
   beforeEach(() => {
     element = fixtureSync('<vaadin-notification duration="0"></vaadin-notification>');

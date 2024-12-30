@@ -1,10 +1,16 @@
 import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
+import { executeServerCommand } from '@web/test-runner-commands';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '../../not-animated-styles.js';
 import '../../../theme/material/vaadin-crud.js';
 
 describe('crud', () => {
   let div, element;
+
+  before(async () => {
+    // Use value bigger than 600 which is a threshold for the "fullscreen" mode
+    await executeServerCommand('set-window-height', { height: 610 });
+  });
 
   beforeEach(async () => {
     div = document.createElement('div');

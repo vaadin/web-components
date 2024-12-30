@@ -257,6 +257,42 @@ const createUnitTestsConfig = (config) => {
   };
 };
 
+/**
+ * To set viewport size properly we need to execute the process multiple times.
+ */
+async function setViewportSize(driver, height, retry = 0) {
+  // Get the browser size (width / height)
+  const size = await driver.getWindowSize();
+  // Get the actual viewport inner height
+  const innerHeight = await driver.execute(() => window.innerHeight);
+
+  const heightDiff = size.height - innerHeight;
+  await driver.setWindowSize(size.width, height + heightDiff);
+
+  const updatedHeight = await driver.execute(() => window.innerHeight);
+
+  // If viewport size not equals desired size, execute process again
+  if (updatedHeight !== height && retry < 3) {
+    await setViewportSize(driver, height, retry + 1);
+  }
+}
+
+function setWindowHeightPlugin() {
+  return {
+    name: 'set-window-height-command',
+
+    async executeCommand({ command, payload, session }) {
+      if (command === 'set-window-height') {
+        if (session.browser.type === 'webdriver') {
+          await setViewportSize(session.browser.driver, payload.height);
+          return true;
+        }
+      }
+      return undefined;
+    },
+  };
+}
+
 const createVisualTestsConfig = (theme, browserVersion) => {
   const visualPackages = getAllVisualPackages();
   const packages = getTestPackages(visualPackages);
@@ -291,6 +327,7 @@ const createVisualTestsConfig = (theme, browserVersion) => {
       }),
     ],
     plugins: [
+      setWindowHeightPlugin(),
       visualRegressionPlugin({
         baseDir: 'packages',
         getBaselineName: getBaselineScreenshotName,
