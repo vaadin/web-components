@@ -265,7 +265,7 @@ export class ColumnObserver {
   }
 }
 
-export function createClampCSSExpression({ minValue, value, maxValue }) {
+export function createCSSClampExpression({ minValue, value, maxValue }) {
   if (minValue && maxValue) {
     return `clamp(${minValue}, ${value}, ${maxValue})`;
   } else if (minValue) {

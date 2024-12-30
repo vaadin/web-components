@@ -42,16 +42,14 @@
       // };
     </script>
 
-    <vaadin-grid item-id-path="name">
+    <vaadin-grid>
       <vaadin-grid-column-group header="Group 1">
-        <vaadin-grid-column path="name" max-width="150px" resizable></vaadin-grid-column>
-        <vaadin-grid-column path="name" width="250px" resizable></vaadin-grid-column>
+        <vaadin-grid-column path="name" min-width="100px" width="200px" max-width="300px" flex-grow="0" resizable></vaadin-grid-column>
+        <vaadin-grid-column path="name" width="200px" resizable></vaadin-grid-column>
       </vaadin-grid-column-group>
       <vaadin-grid-column-group header="Group 2">
-        <vaadin-grid-column path="name" width="300px" resizable></vaadin-grid-column>
-        <vaadin-grid-column path="name" width="300px" resizable></vaadin-grid-column>
+        <vaadin-grid-column path="name" width="200px" resizable></vaadin-grid-column>
       </vaadin-grid-column-group>
-
     </vaadin-grid>
   </body>
 </html>

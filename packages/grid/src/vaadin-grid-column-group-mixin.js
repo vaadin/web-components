@@ -6,7 +6,7 @@
 import { animationFrame } from '@vaadin/component-base/src/async.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { ColumnBaseMixin } from './vaadin-grid-column-mixin.js';
-import { ColumnObserver, createClampCSSExpression, updateColumnOrders } from './vaadin-grid-helpers.js';
+import { ColumnObserver, createCSSClampExpression, updateColumnOrders } from './vaadin-grid-helpers.js';
 
 /**
  * A mixin providing common vaadin-grid-column-group functionality.
@@ -39,18 +39,6 @@ export const GridColumnGroupMixin = (superClass) =>
          * Width of the column group as the sum of the widths of its child columns.
          */
         width: {
-          type: String,
-          readOnly: true,
-          sync: true,
-        },
-
-        maxWidth: {
-          type: String,
-          readOnly: true,
-          sync: true,
-        },
-
-        minWidth: {
           type: String,
           readOnly: true,
           sync: true,
@@ -109,7 +97,7 @@ export const GridColumnGroupMixin = (superClass) =>
         this._preventHiddenSynchronization = false;
       }
 
-      if (/flexGrow|width|minWidth|maxWidth|hidden|_childColumns/u.test(path)) {
+      if (/flexGrow|width|hidden|_childColumns/u.test(path)) {
         this._updateFlexAndWidth();
       }
 
@@ -208,7 +196,7 @@ export const GridColumnGroupMixin = (superClass) =>
       if (this._visibleChildColumns.length > 0) {
         const width = this._visibleChildColumns
           .map((column) => {
-            return createClampCSSExpression({
+            return createCSSClampExpression({
               value: column.width,
               minValue: column.minWidth,
               maxValue: column.maxWidth,
@@ -216,19 +204,6 @@ export const GridColumnGroupMixin = (superClass) =>
           })
           .filter(Boolean)
           .join(' + ');
-        // const minWidth = this._visibleChildColumns
-        //   .map((column) => {
-        //     return column.minWidth || column.width;
-        //   })
-        //   .filter(Boolean)
-        //   .join(' + ');
-        // const maxWidth = this._visibleChildColumns
-        //   .map((column) => {
-        //     return column.maxWidth || column.width;
-        //   })
-        //   .filter(Boolean)
-        //   .join(' + ');
-
         this._setWidth(`calc(${width})`);
       } else {
         this._setWidth('0px');

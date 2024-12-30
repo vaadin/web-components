@@ -8,7 +8,7 @@ import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { get } from '@vaadin/component-base/src/path-utils.js';
 import { processTemplates } from '@vaadin/component-base/src/templates.js';
-import { createClampCSSExpression, updateCellState } from './vaadin-grid-helpers.js';
+import { createCSSClampExpression, updateCellState } from './vaadin-grid-helpers.js';
 
 /**
  * @polymerMixin
@@ -273,9 +273,7 @@ export const ColumnBaseMixin = (superClass) =>
 
     static get observers() {
       return [
-        '_minWidthChanged(minWidth, _headerCell, _footerCell, _cells)',
-        '_maxWidthChanged(maxWidth, _headerCell, _footerCell, _cells)',
-        '_widthChanged(width, _headerCell, _footerCell, _cells)',
+        '_widthChanged(width, minWidth, maxWidth, _headerCell, _footerCell, _cells)',
         '_frozenChanged(frozen, _headerCell, _footerCell, _cells)',
         '_frozenToEndChanged(frozenToEnd, _headerCell, _footerCell, _cells)',
         '_flexGrowChanged(flexGrow, _headerCell, _footerCell, _cells)',
@@ -404,37 +402,17 @@ export const ColumnBaseMixin = (superClass) =>
     }
 
     /** @private */
-    _widthChanged(width) {
+    _widthChanged(width, minWidth, maxWidth) {
       if (this.parentElement && this.parentElement._columnPropChanged) {
         this.parentElement._columnPropChanged('width');
       }
 
       this._allCells.forEach((cell) => {
-        cell.style.width = createClampCSSExpression({
+        cell.style.width = createCSSClampExpression({
           value: width,
-          minValue: this.minWidth,
-          maxValue: this.maxWidth,
+          minValue: minWidth,
+          maxValue: maxWidth,
         });
-      });
-    }
-
-    _minWidthChanged(minWidth) {
-      if (this.parentElement && this.parentElement._columnPropChanged) {
-        this.parentElement._columnPropChanged('minWidth');
-      }
-
-      this._allCells.forEach((cell) => {
-        cell.style.minWidth = minWidth;
-      });
-    }
-
-    _maxWidthChanged(maxWidth) {
-      if (this.parentElement && this.parentElement._columnPropChanged) {
-        this.parentElement._columnPropChanged('maxWidth');
-      }
-
-      this._allCells.forEach((cell) => {
-        cell.style.maxWidth = maxWidth;
       });
     }
 
