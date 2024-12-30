@@ -162,7 +162,7 @@ const getVisualTestGroups = (packages, theme) => {
       files: `packages/vaadin-${theme}-styles/test/visual/*.test.{js,ts}`,
     })
     .concat({
-      name: `vaadin-icons`,
+      name: `icons`,
       files: `packages/icons/test/visual/*.test.{js,ts}`,
     });
 };
