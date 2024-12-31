@@ -42,7 +42,7 @@ export const TextAreaMixin = (superClass) =>
         },
 
         /**
-         * Minimum number of rows to show. Default is two rows, which is also the minimum value.
+         * Minimum number of rows to show. Default is two rows.
          *
          * When using a custom slotted textarea, the minimum number of rows are not applied for backwards compatibility.
          *
