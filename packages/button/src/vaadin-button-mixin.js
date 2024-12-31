@@ -17,20 +17,11 @@ import { TabindexMixin } from '@vaadin/a11y-base/src/tabindex-mixin.js';
  */
 export const ButtonMixin = (superClass) =>
   class ButtonMixinClass extends ActiveMixin(TabindexMixin(FocusMixin(superClass))) {
-    static get properties() {
-      return {
-        /**
-         * Indicates whether the element can be focused and where it participates in sequential keyboard navigation.
-         *
-         * @override
-         * @protected
-         */
-        tabindex: {
-          type: Number,
-          value: 0,
-          reflectToAttribute: true,
-        },
-      };
+    constructor() {
+      super();
+
+      // Set tabindex to 0 by default
+      this.tabindex = 0;
     }
 
     /**
