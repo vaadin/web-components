@@ -6,7 +6,7 @@
 import { animationFrame } from '@vaadin/component-base/src/async.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { ColumnBaseMixin } from './vaadin-grid-column-mixin.js';
-import { ColumnObserver, createCSSClampExpression, updateColumnOrders } from './vaadin-grid-helpers.js';
+import { ColumnObserver, updateColumnOrders } from './vaadin-grid-helpers.js';
 
 /**
  * A mixin providing common vaadin-grid-column-group functionality.
@@ -195,15 +195,11 @@ export const GridColumnGroupMixin = (superClass) =>
 
       if (this._visibleChildColumns.length > 0) {
         const width = this._visibleChildColumns
-          .map((column) => {
-            return createCSSClampExpression({
-              value: column.width,
-              minValue: column.minWidth,
-              maxValue: column.maxWidth,
-            });
-          })
-          .filter(Boolean)
-          .join(' + ');
+          .reduce((prev, curr) => {
+            prev += ` + ${(curr.width || '0px').replace('calc', '')}`;
+            return prev;
+          }, '')
+          .substring(3);
         this._setWidth(`calc(${width})`);
       } else {
         this._setWidth('0px');
