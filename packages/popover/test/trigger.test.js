@@ -497,51 +497,51 @@ describe('trigger', () => {
           expect(overlay.opened).to.be.true;
         });
 
-        it(`should not close on global Escape press with trigger set to ${trigger}`, async () => {
+        it(`should close on global Escape press with trigger set to ${trigger}`, async () => {
           popover.opened = true;
           await nextRender();
 
           esc(document.body);
           await nextUpdate(popover);
-          expect(overlay.opened).to.be.true;
+          expect(overlay.opened).to.be.false;
         });
 
-        it(`should not close on target Escape press with trigger set to ${trigger}`, async () => {
+        it(`should close on target Escape press with trigger set to ${trigger}`, async () => {
           popover.opened = true;
           await nextRender();
 
           esc(target);
           await nextUpdate(popover);
-          expect(overlay.opened).to.be.true;
+          expect(overlay.opened).to.be.false;
         });
 
-        it(`should not close on global Escape press when modal with trigger set to ${trigger}`, async () => {
+        it(`should close on global Escape press when modal with trigger set to ${trigger}`, async () => {
           popover.modal = true;
           popover.opened = true;
           await nextRender();
 
           esc(document.body);
           await nextUpdate(popover);
-          expect(overlay.opened).to.be.true;
+          expect(overlay.opened).to.be.false;
         });
 
-        it(`should not close on outside click when not modal with trigger set to ${trigger}`, async () => {
+        it(`should close on outside click when not modal with trigger set to ${trigger}`, async () => {
           popover.opened = true;
           await nextRender();
 
           outsideClick();
           await nextUpdate(popover);
-          expect(overlay.opened).to.be.true;
+          expect(overlay.opened).to.be.false;
         });
 
-        it(`should not close on outside click when modal with trigger set to ${trigger}`, async () => {
+        it(`should close on outside click when modal with trigger set to ${trigger}`, async () => {
           popover.modal = true;
           popover.opened = true;
           await nextRender();
 
           outsideClick();
           await nextUpdate(popover);
-          expect(overlay.opened).to.be.true;
+          expect(overlay.opened).to.be.false;
         });
 
         it(`should close when setting opened to false with trigger set to ${trigger}`, async () => {

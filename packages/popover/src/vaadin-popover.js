@@ -372,7 +372,8 @@ class Popover extends PopoverPositionMixin(
        * - outside click (unless `noCloseOnOutsideClick` property is true)
        *
        * When setting `trigger` property to `null`, `undefined` or empty array, the popover
-       * can be only opened or closed programmatically by changing `opened` property.
+       * can be only opened programmatically by changing `opened` property. Note, closing
+       * on Escape press or outside click is still allowed unless explicitly disabled.
        */
       trigger: {
         type: Array,
@@ -611,7 +612,6 @@ class Popover extends PopoverPositionMixin(
   __onGlobalClick(event) {
     if (
       this.opened &&
-      !this.__isManual &&
       !this.modal &&
       !event.composedPath().some((el) => el === this._overlayElement || el === this.target) &&
       !this.noCloseOnOutsideClick &&
@@ -646,13 +646,7 @@ class Popover extends PopoverPositionMixin(
       return;
     }
 
-    if (
-      event.key === 'Escape' &&
-      !this.noCloseOnEsc &&
-      this.opened &&
-      !this.__isManual &&
-      isLastOverlay(this._overlayElement)
-    ) {
+    if (event.key === 'Escape' && !this.noCloseOnEsc && this.opened && isLastOverlay(this._overlayElement)) {
       // Prevent closing parent overlay (e.g. dialog)
       event.stopPropagation();
       this._openedStateController.close(true);
@@ -939,7 +933,7 @@ class Popover extends PopoverPositionMixin(
    * @private
    */
   __onEscapePress(e) {
-    if (this.noCloseOnEsc || this.__isManual) {
+    if (this.noCloseOnEsc) {
       e.preventDefault();
     }
   }
@@ -949,7 +943,7 @@ class Popover extends PopoverPositionMixin(
    * @private
    */
   __onOutsideClick(e) {
-    if (this.noCloseOnOutsideClick || this.__isManual) {
+    if (this.noCloseOnOutsideClick) {
       e.preventDefault();
     }
   }
@@ -957,11 +951,6 @@ class Popover extends PopoverPositionMixin(
   /** @private */
   __hasTrigger(trigger) {
     return Array.isArray(this.trigger) && this.trigger.includes(trigger);
-  }
-
-  /** @private */
-  get __isManual() {
-    return this.trigger == null || (Array.isArray(this.trigger) && this.trigger.length === 0);
   }
 
   /** @private */
