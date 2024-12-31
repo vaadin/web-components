@@ -9,10 +9,13 @@ import { InputController } from '@vaadin/field-base/src/input-controller.js';
 import { InputFieldMixin } from '@vaadin/field-base/src/input-field-mixin.js';
 import { LabelledInputController } from '@vaadin/field-base/src/labelled-input-controller.js';
 
-// [type=number] inputs return an empty string for invalid numbers,
-// which makes them indistinguishable from empty values. This string
-// is used in _inputElementValue as a marker to help Flow detect and
-// clear unparsable values (if needed).
+// [type=number] value returns an empty string for invalid numbers,
+// while valueAsNumber returns NaN for empty strings, which makes
+// invalid and empty values indistinguishable. It's only possible
+// to detect unparsable input by checking the validity.badInput
+// boolean property. We use this string in _inputElementValue as
+// a marker to help Flow detect and clear unparsable values
+// (if needed).
 const BAD_INPUT_STRING = 'NaN';
 
 /**
