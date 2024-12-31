@@ -15,6 +15,7 @@ const textArea = css`
 
   [part='input-field'] ::slotted(textarea) {
     padding-top: 0;
+    padding-bottom: 4px;
     margin-top: 4px;
   }
 
