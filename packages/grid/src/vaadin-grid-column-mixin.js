@@ -8,7 +8,7 @@ import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { get } from '@vaadin/component-base/src/path-utils.js';
 import { processTemplates } from '@vaadin/component-base/src/templates.js';
-import { createCSSClampExpression, updateCellState } from './vaadin-grid-helpers.js';
+import { updateCellState } from './vaadin-grid-helpers.js';
 
 /**
  * @polymerMixin
@@ -273,7 +273,7 @@ export const ColumnBaseMixin = (superClass) =>
 
     static get observers() {
       return [
-        '_widthChanged(width, minWidth, maxWidth, _headerCell, _footerCell, _cells)',
+        '_widthChanged(width, _headerCell, _footerCell, _cells)',
         '_frozenChanged(frozen, _headerCell, _footerCell, _cells)',
         '_frozenToEndChanged(frozenToEnd, _headerCell, _footerCell, _cells)',
         '_flexGrowChanged(flexGrow, _headerCell, _footerCell, _cells)',
@@ -402,17 +402,13 @@ export const ColumnBaseMixin = (superClass) =>
     }
 
     /** @private */
-    _widthChanged(width, minWidth, maxWidth) {
+    _widthChanged(width) {
       if (this.parentElement && this.parentElement._columnPropChanged) {
         this.parentElement._columnPropChanged('width');
       }
 
       this._allCells.forEach((cell) => {
-        cell.style.width = createCSSClampExpression({
-          value: width,
-          minValue: minWidth,
-          maxValue: maxWidth,
-        });
+        cell.style.width = width;
       });
     }
 
@@ -860,6 +856,16 @@ export const GridColumnMixin = (superClass) =>
   class extends ColumnBaseMixin(DirMixin(superClass)) {
     static get properties() {
       return {
+        resizeMinWidth: {
+          type: String,
+          sync: true,
+        },
+
+        resizeMaxWidth: {
+          type: String,
+          sync: true,
+        },
+
         /**
          * Width of the cells for this column.
          *
@@ -871,16 +877,6 @@ export const GridColumnMixin = (superClass) =>
         width: {
           type: String,
           value: '100px',
-          sync: true,
-        },
-
-        minWidth: {
-          type: String,
-          sync: true,
-        },
-
-        maxWidth: {
-          type: String,
           sync: true,
         },
 

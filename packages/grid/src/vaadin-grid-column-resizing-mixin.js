@@ -4,6 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { addListener } from '@vaadin/component-base/src/gestures.js';
+import { createCSSClampExpression } from './vaadin-grid-helpers.js';
 
 /**
  * @polymerMixin
@@ -78,7 +79,11 @@ export const ColumnResizingMixin = (superClass) =>
             maxWidth = cellWidth + (isRTL ? cellRect.left - eventX : eventX - cellRect.right);
           }
 
-          column.width = `${Math.max(minWidth, maxWidth)}px`;
+          column.width = createCSSClampExpression({
+            value: `${Math.max(minWidth, maxWidth)}px`,
+            minValue: column.resizeMinWidth,
+            maxValue: column.resizeMaxWidth,
+          });
           column.flexGrow = 0;
         }
         // Fix width and flex-grow for all preceding columns
