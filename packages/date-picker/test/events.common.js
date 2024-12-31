@@ -2,7 +2,7 @@ import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
-import { open, waitForOverlayRender, waitForScrollToFinish } from './helpers.js';
+import { open, waitForScrollToFinish } from './helpers.js';
 
 describe('events', () => {
   let datePicker;
@@ -31,63 +31,6 @@ describe('events', () => {
       datePicker.value = '2000-01-01';
       datePicker.close();
       expect(changeSpy.called).to.be.false;
-    });
-  });
-
-  describe('has-input-value-changed event', () => {
-    let clearButton, hasInputValueChangedSpy, valueChangedSpy;
-
-    beforeEach(async () => {
-      hasInputValueChangedSpy = sinon.spy();
-      valueChangedSpy = sinon.spy();
-      datePicker = fixtureSync('<vaadin-date-picker clear-button-visible></vaadin-date-picker>');
-      await nextRender();
-      clearButton = datePicker.shadowRoot.querySelector('[part=clear-button]');
-      datePicker.addEventListener('has-input-value-changed', hasInputValueChangedSpy);
-      datePicker.addEventListener('value-changed', valueChangedSpy);
-      datePicker.inputElement.focus();
-    });
-
-    describe('without value', () => {
-      describe('with user input', () => {
-        beforeEach(async () => {
-          await sendKeys({ type: '1/1/2022' });
-          await waitForScrollToFinish(datePicker);
-          hasInputValueChangedSpy.resetHistory();
-        });
-
-        it('should be fired when clearing the user input with Esc', async () => {
-          await sendKeys({ press: 'Escape' });
-          expect(datePicker.inputElement.value).to.be.empty;
-          expect(hasInputValueChangedSpy.calledOnce).to.be.true;
-        });
-      });
-    });
-
-    describe('with value', () => {
-      beforeEach(async () => {
-        await sendKeys({ type: '1/1/2022' });
-        await waitForScrollToFinish(datePicker);
-        await sendKeys({ press: 'Enter' });
-        valueChangedSpy.resetHistory();
-        hasInputValueChangedSpy.resetHistory();
-      });
-
-      describe('with user input', () => {
-        beforeEach(async () => {
-          await sendKeys({ type: 'foo' });
-          await waitForOverlayRender();
-          hasInputValueChangedSpy.resetHistory();
-        });
-
-        it('should be fired on clear button click', () => {
-          clearButton.click();
-          expect(datePicker.inputElement.value).to.be.empty;
-          expect(valueChangedSpy.calledOnce).to.be.true;
-          expect(hasInputValueChangedSpy.calledOnce).to.be.true;
-          expect(hasInputValueChangedSpy.calledBefore(valueChangedSpy)).to.be.true;
-        });
-      });
     });
   });
 });

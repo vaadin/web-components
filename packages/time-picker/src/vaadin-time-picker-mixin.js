@@ -580,15 +580,6 @@ export const TimePickerMixin = (superClass) =>
       this.__commitValueChange();
     }
 
-    /**
-     * Synchronizes the `_hasInputValue` property with the internal combo-box's one.
-     *
-     * @private
-     */
-    __onComboBoxHasInputValueChanged() {
-      this._hasInputValue = this.$.comboBox._hasInputValue;
-    }
-
     /** @private */
     __updateValue(obj) {
       const timeString = formatISOTime(validateTime(obj, this.step)) || '';

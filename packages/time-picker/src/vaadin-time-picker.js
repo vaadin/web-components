@@ -136,7 +136,6 @@ class TimePicker extends TimePickerMixin(ThemableMixin(ElementMixin(PolymerEleme
           position-target="[[_inputContainer]]"
           theme$="[[_theme]]"
           on-change="__onComboBoxChange"
-          on-has-input-value-changed="__onComboBoxHasInputValueChanged"
         >
           <vaadin-input-container
             part="input-field"
