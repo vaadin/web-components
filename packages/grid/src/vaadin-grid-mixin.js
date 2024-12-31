@@ -455,11 +455,15 @@ export const GridMixin = (superClass) =>
             cell.__originalWidth = cell.style.width;
             // Prepare the cell for having its intrinsic width measured
             cell.style.width = 'auto';
+            cell.style.maxWidth = col.resizeMaxWidth;
+            cell.style.minWidth = col.resizeMinWidth;
             cell.style.position = 'absolute';
           } else {
             // Restore the original width
             cell.style.width = cell.__originalWidth;
             delete cell.__originalWidth;
+            cell.style.minWidth = '';
+            cell.style.maxWidth = '';
             cell.style.position = '';
           }
         });
