@@ -54,25 +54,13 @@ export const InputMixin = dedupingMixin(
             notify: true,
             sync: true,
           },
-
-          /**
-           * Whether the input element has a non-empty value.
-           *
-           * @protected
-           */
-          _hasInputValue: {
-            type: Boolean,
-            value: false,
-            observer: '_hasInputValueChanged',
-            sync: true,
-          },
         };
       }
 
       constructor() {
         super();
 
-        this._boundOnInput = this.__onInput.bind(this);
+        this._boundOnInput = this._onInput.bind(this);
         this._boundOnChange = this._onChange.bind(this);
       }
 
@@ -117,16 +105,12 @@ export const InputMixin = dedupingMixin(
         if (this.inputElement) {
           this.inputElement[this._inputElementValueProperty] = value;
         }
-
-        this._hasInputValue = value && value.length > 0;
       }
 
       /**
        * Clear the value of the field.
        */
       clear() {
-        this._hasInputValue = false;
-
         this.value = '';
 
         // Clear the input immediately without waiting for the observer.
@@ -185,29 +169,6 @@ export const InputMixin = dedupingMixin(
         } else if (oldInput) {
           this._removeInputListeners(oldInput);
         }
-      }
-
-      /**
-       * Observer to notify about the change of private property.
-       *
-       * @private
-       */
-      _hasInputValueChanged(hasValue, oldHasValue) {
-        if (hasValue || oldHasValue) {
-          this.dispatchEvent(new CustomEvent('has-input-value-changed'));
-        }
-      }
-
-      /**
-       * An input event listener used to update `_hasInputValue` property.
-       * Do not override this method.
-       *
-       * @param {Event} event
-       * @private
-       */
-      __onInput(event) {
-        this._hasInputValue = !!this._inputElementValue;
-        this._onInput(event);
       }
 
       /**

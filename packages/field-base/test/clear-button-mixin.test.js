@@ -3,14 +3,12 @@ import {
   defineLit,
   definePolymer,
   escKeyDown,
-  fire,
   fixtureSync,
   keyboardEventFor,
   mousedown,
   nextRender,
   nextUpdate,
 } from '@vaadin/testing-helpers';
-import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
@@ -172,46 +170,6 @@ const runTests = (defineHelper, baseMixin) => {
       const spy = sinon.spy(event, 'stopPropagation');
       clearButton.dispatchEvent(event);
       expect(spy.called).to.be.false;
-    });
-  });
-
-  describe('has-input-value-changed event', () => {
-    let hasInputValueChangedSpy, valueChangedSpy;
-
-    beforeEach(async () => {
-      hasInputValueChangedSpy = sinon.spy();
-      valueChangedSpy = sinon.spy();
-      element = fixtureSync(`<${tag} clear-button-visible></${tag}>`);
-      element.addEventListener('has-input-value-changed', hasInputValueChangedSpy);
-      element.addEventListener('value-changed', valueChangedSpy);
-      await nextRender();
-      input = element.querySelector('[slot=input]');
-      clearButton = element.clearElement;
-    });
-
-    describe('with user input', () => {
-      beforeEach(async () => {
-        input.value = 'foo';
-        fire(input, 'input');
-        await nextUpdate(element);
-        hasInputValueChangedSpy.resetHistory();
-        valueChangedSpy.resetHistory();
-      });
-
-      it('should fire the event on clear button click', async () => {
-        clearButton.click();
-        await nextUpdate(element);
-        expect(hasInputValueChangedSpy.calledOnce).to.be.true;
-        expect(hasInputValueChangedSpy.calledBefore(valueChangedSpy)).to.be.true;
-      });
-
-      it('should fire the event on Esc', async () => {
-        input.focus();
-        await sendKeys({ press: 'Escape' });
-        await nextUpdate(element);
-        expect(hasInputValueChangedSpy.calledOnce).to.be.true;
-        expect(hasInputValueChangedSpy.calledBefore(valueChangedSpy)).to.be.true;
-      });
     });
   });
 };

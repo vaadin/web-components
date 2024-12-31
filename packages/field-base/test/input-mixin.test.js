@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { defineLit, definePolymer, fire, fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
+import { defineLit, definePolymer, fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
@@ -174,79 +174,6 @@ const runTests = (defineHelper, baseMixin) => {
       await nextRender();
       input.dispatchEvent(new CustomEvent('change'));
       expect(changeSpy.called).to.be.false;
-    });
-  });
-
-  describe('has-input-value-changed event', () => {
-    let tag, hasInputValueChangedSpy, valueChangedSpy;
-
-    before(() => {
-      tag = defineHelper(
-        'input-mixin-has-input-value-changed-event',
-        '<slot name="input"></slot>',
-        (Base) => class extends InputMixin(baseMixin(Base)) {},
-      );
-    });
-
-    beforeEach(async () => {
-      hasInputValueChangedSpy = sinon.spy();
-      valueChangedSpy = sinon.spy();
-      element = fixtureSync(`<${tag}></${tag}>`);
-      element.addEventListener('has-input-value-changed', hasInputValueChangedSpy);
-      element.addEventListener('value-changed', valueChangedSpy);
-      await nextRender();
-      input = document.createElement('input');
-      element.appendChild(input);
-      element._setInputElement(input);
-      await nextRender();
-    });
-
-    describe('without user input', () => {
-      it('should fire the event once when entering input', async () => {
-        input.value = 'foo';
-        fire(input, 'input');
-        await nextUpdate(element);
-        expect(hasInputValueChangedSpy.calledOnce).to.be.true;
-        expect(hasInputValueChangedSpy.calledBefore(valueChangedSpy)).to.be.true;
-      });
-
-      it('should not fire the event on programmatic clear', async () => {
-        element.clear();
-        await nextUpdate(element);
-        expect(hasInputValueChangedSpy.called).to.be.false;
-      });
-    });
-
-    describe('with user input', () => {
-      beforeEach(async () => {
-        input.value = 'foo';
-        fire(input, 'input');
-        await nextUpdate(element);
-        hasInputValueChangedSpy.resetHistory();
-        valueChangedSpy.resetHistory();
-      });
-
-      it('should not fire the event when modifying input', async () => {
-        input.value = 'foobar';
-        fire(input, 'input');
-        await nextUpdate(element);
-        expect(hasInputValueChangedSpy.called).to.be.false;
-      });
-
-      it('should fire the event once when removing input', async () => {
-        input.value = '';
-        fire(input, 'input');
-        await nextUpdate(element);
-        expect(hasInputValueChangedSpy.calledOnce).to.be.true;
-        expect(hasInputValueChangedSpy.calledBefore(valueChangedSpy)).to.be.true;
-      });
-
-      it('should fire the event once on programmatic clear', async () => {
-        element.clear();
-        await nextUpdate(element);
-        expect(hasInputValueChangedSpy.calledOnce).to.be.true;
-        expect(hasInputValueChangedSpy.calledBefore(valueChangedSpy)).to.be.true;
-      });
     });
   });
 };
