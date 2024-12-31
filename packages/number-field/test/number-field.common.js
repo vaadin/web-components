@@ -1,6 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
 import { arrowDown, arrowUp, fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
-import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 
 describe('number-field', () => {
@@ -102,40 +101,6 @@ describe('number-field', () => {
       input.focus();
       numberField.dispatchEvent(event);
       expect(event.defaultPrevented).to.be.false;
-    });
-  });
-
-  describe('has-input-value-changed event', () => {
-    let hasInputValueChangedSpy;
-
-    beforeEach(async () => {
-      numberField = fixtureSync('<vaadin-number-field></vaadin-number-field>');
-      await nextRender();
-      hasInputValueChangedSpy = sinon.spy();
-      numberField.addEventListener('has-input-value-changed', hasInputValueChangedSpy);
-      numberField.inputElement.focus();
-    });
-
-    it('should fire the event when entering and removing a valid number', async () => {
-      await sendKeys({ type: '555' });
-      expect(hasInputValueChangedSpy).to.be.calledOnce;
-
-      hasInputValueChangedSpy.resetHistory();
-      await sendKeys({ press: 'Backspace' });
-      await sendKeys({ press: 'Backspace' });
-      await sendKeys({ press: 'Backspace' });
-      expect(hasInputValueChangedSpy).to.be.calledOnce;
-    });
-
-    it('should fire the event when entering and removing an invalid number', async () => {
-      await sendKeys({ type: '--5' });
-      expect(hasInputValueChangedSpy).to.be.calledOnce;
-
-      hasInputValueChangedSpy.resetHistory();
-      await sendKeys({ press: 'Backspace' });
-      await sendKeys({ press: 'Backspace' });
-      await sendKeys({ press: 'Backspace' });
-      expect(hasInputValueChangedSpy).to.be.calledOnce;
     });
   });
 

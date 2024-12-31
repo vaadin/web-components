@@ -73,7 +73,6 @@ class TimePicker extends TimePickerMixin(ThemableMixin(ElementMixin(PolylitMixin
           @value-changed="${this.__onComboBoxValueChanged}"
           @opened-changed="${this.__onComboBoxOpenedChanged}"
           @change="${this.__onComboBoxChange}"
-          @has-input-value-changed="${this.__onComboBoxHasInputValueChanged}"
         >
           <vaadin-input-container
             part="input-field"
