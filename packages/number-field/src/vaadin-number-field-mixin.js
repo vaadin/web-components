@@ -112,13 +112,12 @@ export const NumberFieldMixin = (superClass) =>
     }
 
     /**
-     * The input element's value when it cannot be parsed as a number, and an empty string otherwise.
+     * Whether the input element's value is unparsable.
      *
-     * @return {string}
      * @private
      */
-    get __unparsableValue() {
-      return this._inputElementValue === BAD_INPUT_STRING ? this._inputElementValue : '';
+    get __hasUnparsableValue() {
+      return this._inputElementValue === BAD_INPUT_STRING;
     }
 
     /** @protected */
@@ -389,7 +388,7 @@ export const NumberFieldMixin = (superClass) =>
 
       if (!this.__keepCommittedValue) {
         this.__committedValue = this.value;
-        this.__committedUnparsableValue = '';
+        this.__committedUnparsableValueStatus = false;
       }
     }
 
@@ -510,19 +509,22 @@ export const NumberFieldMixin = (superClass) =>
       if (this.__committedValue !== this.value) {
         this._requestValidation();
         this.dispatchEvent(new CustomEvent('change', { bubbles: true }));
-      } else if (this.__committedUnparsableValue !== this.__unparsableValue) {
+      } else if (this.__committedUnparsableValueStatus !== this.__hasUnparsableValue) {
         this._requestValidation();
         this.dispatchEvent(new CustomEvent('unparsable-change'));
       }
 
       this.__committedValue = this.value;
-      this.__committedUnparsableValue = this.__unparsableValue;
+      this.__committedUnparsableValueStatus = this.__hasUnparsableValue;
     }
 
     /** @override */
     get _inputElementValue() {
-      const { validity } = this.inputElement;
-      return validity.badInput ? BAD_INPUT_STRING : super._inputElementValue;
+      if (this.inputElement && this.inputElement.validity.badInput) {
+        return BAD_INPUT_STRING;
+      }
+
+      return super._inputElementValue;
     }
 
     /** @override */
