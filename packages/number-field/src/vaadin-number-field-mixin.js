@@ -13,9 +13,9 @@ import { LabelledInputController } from '@vaadin/field-base/src/labelled-input-c
 // while valueAsNumber returns NaN for empty strings, which makes
 // invalid and empty values indistinguishable. It's only possible
 // to detect unparsable input by checking the validity.badInput
-// boolean property. We use this string in _inputElementValue as
-// a marker to help Flow detect and clear unparsable values
-// (if needed).
+// boolean property. This string is used in _inputElementValue
+// as a marker to help Flow detect and clear unparsable values
+// through that property.
 const BAD_INPUT_STRING = 'NaN';
 
 /**
