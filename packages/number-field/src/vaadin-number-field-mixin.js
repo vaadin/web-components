@@ -9,6 +9,15 @@ import { InputController } from '@vaadin/field-base/src/input-controller.js';
 import { InputFieldMixin } from '@vaadin/field-base/src/input-field-mixin.js';
 import { LabelledInputController } from '@vaadin/field-base/src/labelled-input-controller.js';
 
+// [type=number] value returns an empty string for invalid numbers,
+// while valueAsNumber returns NaN for empty strings, which makes
+// invalid and empty values indistinguishable. It's only possible
+// to detect unparsable input by checking the validity.badInput
+// boolean property. This string is used in _inputElementValue
+// as a marker to help Flow detect and clear unparsable values
+// through that property.
+const BAD_INPUT_STRING = 'NaN';
+
 /**
  * A mixin providing common number field functionality.
  *
@@ -111,7 +120,7 @@ export const NumberFieldMixin = (superClass) =>
      * @private
      */
     get __hasUnparsableValue() {
-      return this.inputElement.validity.badInput;
+      return this._inputElementValue === BAD_INPUT_STRING;
     }
 
     /** @protected */
@@ -406,22 +415,6 @@ export const NumberFieldMixin = (superClass) =>
     }
 
     /**
-     * Native [type=number] inputs don't update their value
-     * when you are entering input that the browser is unable to parse
-     * e.g. "--5", hence we have to override this method from `InputMixin`
-     * so that, when value is empty, it would additionally check
-     * for bad input based on the native `validity.badInput` property.
-     *
-     * @param {InputEvent} event
-     * @protected
-     * @override
-     */
-    _setHasInputValue(event) {
-      const target = event.composedPath()[0];
-      this._hasInputValue = target.value.length > 0 || this.__hasUnparsableValue;
-    }
-
-    /**
      * Override this method from `InputMixin` to prevent
      * the value change caused by user input from being treated
      * as initiated programmatically by the developer and therefore
@@ -526,5 +519,19 @@ export const NumberFieldMixin = (superClass) =>
 
       this.__committedValue = this.value;
       this.__committedUnparsableValueStatus = this.__hasUnparsableValue;
+    }
+
+    /** @override */
+    get _inputElementValue() {
+      if (this.inputElement && this.inputElement.validity.badInput) {
+        return BAD_INPUT_STRING;
+      }
+
+      return super._inputElementValue;
+    }
+
+    /** @override */
+    set _inputElementValue(value) {
+      super._inputElementValue = value;
     }
   };

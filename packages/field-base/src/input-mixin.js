@@ -206,7 +206,7 @@ export const InputMixin = dedupingMixin(
        * @private
        */
       __onInput(event) {
-        this._setHasInputValue(event);
+        this._hasInputValue = !!this._inputElementValue;
         this._onInput(event);
       }
 
@@ -266,20 +266,6 @@ export const InputMixin = dedupingMixin(
 
         // Setting a value programmatically, sync it to input element.
         this._forwardInputValue(newVal);
-      }
-
-      /**
-       * Sets the `_hasInputValue` property based on the `input` event.
-       *
-       * @param {InputEvent} event
-       * @protected
-       */
-      _setHasInputValue(event) {
-        // In the case a custom web component is passed as `inputElement`,
-        // the actual native input element, on which the event occurred,
-        // can be inside shadow trees.
-        const target = event.composedPath()[0];
-        this._hasInputValue = target.value.length > 0;
       }
     },
 );
