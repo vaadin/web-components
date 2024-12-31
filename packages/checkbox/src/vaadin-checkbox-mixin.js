@@ -60,18 +60,6 @@ export const CheckboxMixin = (superclass) =>
           value: false,
           reflectToAttribute: true,
         },
-
-        /**
-         * Indicates whether the element can be focused and where it participates in sequential keyboard navigation.
-         *
-         * @override
-         * @protected
-         */
-        tabindex: {
-          type: Number,
-          value: 0,
-          reflectToAttribute: true,
-        },
       };
     }
 
@@ -99,6 +87,10 @@ export const CheckboxMixin = (superclass) =>
       // Set the string "on" as the default value for the checkbox following the HTML specification:
       // https://html.spec.whatwg.org/multipage/input.html#dom-input-value-default-on
       this.value = 'on';
+
+      // Set tabindex to 0 by default to not lose focus on click in Safari
+      // See https://github.com/vaadin/web-components/pull/6780
+      this.tabindex = 0;
     }
 
     /** @protected */
