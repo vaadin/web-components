@@ -1030,6 +1030,11 @@ const chartBaseTheme = css`
     stroke-width: 1px;
   }
 
+  :where([styled-mode]) .highcharts-gantt-series .highcharts-partfill-overlay {
+    fill: hsla(0, 0%, 0%, 0.3);
+    stroke: hsla(0, 0%, 0%, 0.3);
+  }
+
   /* RTL styles */
   :host([dir='rtl']) :where([styled-mode]) .highcharts-container {
     text-align: right;
