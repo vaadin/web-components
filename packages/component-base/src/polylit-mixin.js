@@ -52,7 +52,7 @@ const PolylitMixinImplementation = (superclass) => {
         };
       }
 
-      if (options.reflectToAttribute) {
+      if (options && options.reflectToAttribute) {
         options.reflect = true;
       }
 
