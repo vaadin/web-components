@@ -925,16 +925,26 @@ describe('PolylitMixin', () => {
         __computeValue(loading) {
           return loading ? 1 : 0;
         }
+
+        render() {
+          return html`${this.value}`;
+        }
       },
     );
 
-    it('should compute value', () => {
+    beforeEach(() => {
       element = fixtureSync(`<${tag}></${tag}>`);
+    });
+
+    it('should compute value', () => {
       expect(element.value).to.equal(1);
     });
 
+    it('should render computed value', () => {
+      expect(element.shadowRoot.textContent).to.equal('1');
+    });
+
     it('should update computed value', async () => {
-      element = fixtureSync(`<${tag}></${tag}>`);
       element.loading = false;
       await element.updateComplete;
       expect(element.value).to.equal(0);

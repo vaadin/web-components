@@ -185,7 +185,7 @@ const PolylitMixinImplementation = (superclass) => {
           this[name] = this[observer.method](...props);
         };
 
-        this.getOrCreateMap('__complexObservers').set(assignComputedMethod, observer.observerProps);
+        this.getOrCreateMap('__computedObservers').set(assignComputedMethod, observer.observerProps);
       }
 
       if (!options.attribute) {
@@ -244,6 +244,13 @@ const PolylitMixinImplementation = (superclass) => {
 
     /** @protected */
     ready() {}
+
+    /** @protected */
+    willUpdate(props) {
+      if (this.constructor.__computedObservers) {
+        this.__runComplexObservers(props, this.constructor.__computedObservers);
+      }
+    }
 
     /** @protected */
     updated(props) {

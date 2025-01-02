@@ -98,26 +98,6 @@ class MonthCalendar extends MonthCalendarMixin(ThemableMixin(PolylitMixin(LitEle
       </table>
     `;
   }
-
-  /** @protected */
-  willUpdate(props) {
-    // Calculate these properties in `willUpdate()` instead of marking
-    // them as `computed` to avoid extra update because of `sync: true`
-    if (props.has('month') || props.has('i18n')) {
-      this._days = this._getDays(this.month, this.i18n);
-      this._weeks = this._getWeeks(this._days);
-    }
-
-    if (props.has('month') || props.has('minDate') || props.has('maxDate')) {
-      this.disabled = this._isDisabled(this.month, this.minDate, this.maxDate);
-    }
-
-    if (props.has('showWeekNumbers') || props.has('i18n')) {
-      // Currently only supported for locales that start the week on Monday.
-      this._showWeekNumbers = this.showWeekNumbers && this.i18n && this.i18n.firstDayOfWeek === 1;
-      this.toggleAttribute('week-numbers', this._showWeekNumbers);
-    }
-  }
 }
 
 defineCustomElement(MonthCalendar);

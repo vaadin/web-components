@@ -98,16 +98,19 @@ export const MonthCalendarMixin = (superClass) =>
         disabled: {
           type: Boolean,
           reflectToAttribute: true,
+          computed: '_isDisabled(month, minDate, maxDate)',
         },
 
         /** @protected */
         _days: {
           type: Array,
+          computed: '_getDays(month, i18n, minDate, maxDate, isDateDisabled)',
         },
 
         /** @protected */
         _weeks: {
           type: Array,
+          computed: '_getWeeks(_days)',
         },
 
         /** @private */
@@ -123,7 +126,7 @@ export const MonthCalendarMixin = (superClass) =>
     }
 
     static get observers() {
-      return ['__focusedDateChanged(focusedDate, _days)'];
+      return ['__focusedDateChanged(focusedDate, _days)', '_showWeekNumbersChanged(showWeekNumbers, i18n)'];
     }
 
     get focusableDateElement() {
@@ -327,5 +330,14 @@ export const MonthCalendarMixin = (superClass) =>
       }
 
       return ariaLabel;
+    }
+
+    /** @private */
+    _showWeekNumbersChanged(showWeekNumbers, i18n) {
+      if (showWeekNumbers && i18n && i18n.firstDayOfWeek === 1) {
+        this.setAttribute('week-numbers', '');
+      } else {
+        this.removeAttribute('week-numbers');
+      }
     }
   };

@@ -71,41 +71,6 @@ class MonthCalendar extends MonthCalendarMixin(ThemableMixin(PolymerElement)) {
     return 'vaadin-month-calendar';
   }
 
-  static get properties() {
-    return {
-      /** @protected */
-      _days: {
-        type: Array,
-        computed: '_getDays(month, i18n, minDate, maxDate, isDateDisabled)',
-      },
-
-      /** @protected */
-      _weeks: {
-        type: Array,
-        computed: '_getWeeks(_days)',
-      },
-
-      disabled: {
-        type: Boolean,
-        reflectToAttribute: true,
-        computed: '_isDisabled(month, minDate, maxDate)',
-      },
-    };
-  }
-
-  static get observers() {
-    return ['_showWeekNumbersChanged(showWeekNumbers, i18n)'];
-  }
-
-  /** @private */
-  _showWeekNumbersChanged(showWeekNumbers, i18n) {
-    if (showWeekNumbers && i18n && i18n.firstDayOfWeek === 1) {
-      this.setAttribute('week-numbers', '');
-    } else {
-      this.removeAttribute('week-numbers');
-    }
-  }
-
   /** @private */
   // eslint-disable-next-line @typescript-eslint/max-params
   __getDatePart(date, focusedDate, selectedDate, minDate, maxDate, isDateDisabled, enteredDate, hasFocus) {
