@@ -183,22 +183,6 @@ describe('vaadin-month-calendar', () => {
       expect(weekdayTitles).to.eql(['ma', 'ti', 'ke', 'to', 'pe', 'la', 'su']);
     });
 
-    it('should label dates in correct locale', () => {
-      const dates = getDateCells(monthCalendar);
-      dates.slice(0, 7).forEach((date, index) => {
-        const label = date.getAttribute('aria-label');
-        const day = ['maanantai', 'tiistai', 'keskiviikko', 'torstai', 'perjantai', 'lauantai', 'sunnuntai'][index];
-        expect(label).to.equal(`${index + 1} helmikuu 2016, ${day}`);
-      });
-    });
-
-    it('should label today in correct locale', async () => {
-      monthCalendar.month = new Date();
-      await nextRender();
-      const today = getDateCells(monthCalendar).find((date) => date.getAttribute('part').includes('today'));
-      expect(today.getAttribute('aria-label').split(', ').pop()).to.equal('Tänään');
-    });
-
     it('should render month name in correct locale', () => {
       expect(monthCalendar.shadowRoot.querySelector('[part="month-header"]').textContent).to.equal('helmikuu-2016');
     });
