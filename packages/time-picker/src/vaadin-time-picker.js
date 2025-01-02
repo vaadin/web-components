@@ -766,6 +766,11 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
   __updateValue(obj) {
     const timeString = this.__formatISO(this.__validateTime(obj)) || '';
     this.value = timeString;
+
+    // Always strip the input value to match the step interval, even
+    // if the component value hasn't changed. For example, if the step
+    // is 3600 "10:00:50" should become "10:00".
+    this.__updateInputValue(obj);
   }
 
   /** @private */
