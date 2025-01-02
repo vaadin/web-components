@@ -366,8 +366,8 @@ describe('vaadin-avatar', () => {
   });
 
   describe('a11y', () => {
-    it('should set role="button" on the avatar', () => {
-      expect(avatar.getAttribute('role')).to.equal('button');
+    it('should set role="image" on the avatar', () => {
+      expect(avatar.getAttribute('role')).to.equal('image');
     });
 
     it('should set aria-hidden="true" on the img element', () => {
@@ -386,8 +386,8 @@ describe('vaadin-avatar', () => {
     });
 
     it('should not override custom role set on the avatar', () => {
-      const custom = fixtureSync('<vaadin-avatar role="image"></vaadin-avatar>');
-      expect(custom.getAttribute('role')).to.equal('image');
+      const custom = fixtureSync('<vaadin-avatar role="button"></vaadin-avatar>');
+      expect(custom.getAttribute('role')).to.equal('button');
     });
   });
 });

@@ -118,9 +118,9 @@ export const AvatarMixin = (superClass) =>
       this.__updateVisibility();
 
       // By default, if the user hasn't provided a custom role,
-      // the role attribute is set to "button".
+      // the role attribute is set to "image".
       if (!this.hasAttribute('role')) {
-        this.setAttribute('role', 'button');
+        this.setAttribute('role', 'image');
       }
 
       if (!this.hasAttribute('tabindex')) {
