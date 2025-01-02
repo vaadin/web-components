@@ -7,7 +7,6 @@ import { html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { dateAllowed, dateEquals, normalizeDate } from './vaadin-date-picker-helper.js';
 import { MonthCalendarMixin } from './vaadin-month-calendar-mixin.js';
 import { monthCalendarStyles } from './vaadin-month-calendar-styles.js';
 
@@ -26,9 +25,9 @@ class MonthCalendar extends MonthCalendarMixin(ThemableMixin(PolylitMixin(LitEle
 
   /** @protected */
   render() {
-    const weekDayNames = this._getWeekDayNames(this.i18n, this.showWeekNumbers);
+    const weekDayNames = this.__computeWeekDayNames(this.i18n, this.showWeekNumbers);
     const weeks = this._weeks;
-    const hideWeekSeparator = !this._showWeekNumbers;
+    const hideWeekSeparator = !this.__computeShowWeekSeparator(this.showWeekNumbers, this.i18n);
 
     return html`
       <div part="month-header" id="month-header" aria-hidden="true">${this._getTitle(this.month, this.i18n)}</div>
@@ -56,37 +55,33 @@ class MonthCalendar extends MonthCalendarMixin(ThemableMixin(PolylitMixin(LitEle
             (week) => html`
               <tr role="row">
                 <td part="week-number" aria-hidden="true" ?hidden="${hideWeekSeparator}">
-                  ${this.__getWeekNumber(week)}
+                  ${this.__computeWeekNumber(week)}
                 </td>
                 ${week.map((date) => {
-                  const isFocused =
-                    dateEquals(date, this.focusedDate) && (this.__hasFocus || dateEquals(date, this.enteredDate));
-                  const tabIndex = dateEquals(date, this.focusedDate) ? '0' : '-1';
-                  const isSelected = dateEquals(date, this.selectedDate);
-                  const isDisabled = !dateAllowed(date, this.minDate, this.maxDate, this.isDateDisabled);
-                  const greaterThanToday = date > normalizeDate(new Date());
-                  const lessThanToday = date < normalizeDate(new Date());
-
-                  const parts = [
-                    'date',
-                    isDisabled && 'disabled',
-                    isFocused && 'focused',
-                    isSelected && 'selected',
-                    this._isToday(date) && 'today',
-                    greaterThanToday && 'future',
-                    lessThanToday && 'past',
-                  ].filter(Boolean);
-
                   return html`
                     <td
                       role="gridcell"
-                      part="${parts.join(' ')}"
+                      part="${this.__computeDatePart(
+                        date,
+                        this.focusedDate,
+                        this.selectedDate,
+                        this.minDate,
+                        this.maxDate,
+                        this.isDateDisabled,
+                        this.enteredDate,
+                        this.__hasFocus,
+                      )}"
                       .date="${date}"
-                      ?disabled="${isDisabled}"
-                      tabindex="${tabIndex}"
-                      aria-selected="${isSelected ? 'true' : 'false'}"
-                      aria-disabled="${isDisabled ? 'true' : 'false'}"
-                      aria-label="${this.__getDayAriaLabel(date)}"
+                      ?disabled="${this.__isDayDisabled(date, this.minDate, this.maxDate, this.isDateDisabled)}"
+                      tabindex="${this.__computeDayTabIndex(date, this.focusedDate)}"
+                      aria-selected="${this.__computeDayAriaSelected(date, this.selectedDate)}"
+                      aria-disabled="${this.__computeDayAriaDisabled(
+                        date,
+                        this.minDate,
+                        this.maxDate,
+                        this.isDateDisabled,
+                      )}"
+                      aria-label="${this.__computeDayAriaLabel(date)}"
                       >${this._getDate(date)}</td
                     >
                   `;
