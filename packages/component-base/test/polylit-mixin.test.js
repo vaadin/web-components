@@ -1359,4 +1359,13 @@ describe('PolylitMixin', () => {
       expect(valueChangedSpy).to.be.calledOnce;
     });
   });
+
+  describe('createProperty', () => {
+    it('should not throw when calling createProperty() without options', () => {
+      expect(() => {
+        const PolyLitClass = class extends PolylitMixin(LitElement) {};
+        PolyLitClass.createProperty('prop');
+      }).to.not.throw(Error);
+    });
+  });
 });
