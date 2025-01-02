@@ -23,6 +23,7 @@ snapshots["vaadin-message-list items"] =
     <vaadin-avatar
       abbr="JD"
       aria-hidden="true"
+      aria-label="Jane Doe (JD)"
       name="Jane Doe"
       role="img"
       slot="avatar"
@@ -38,6 +39,7 @@ snapshots["vaadin-message-list items"] =
     <vaadin-avatar
       abbr="LR"
       aria-hidden="true"
+      aria-label="Lina Roy (LR)"
       name="Lina Roy"
       role="img"
       slot="avatar"
@@ -63,6 +65,7 @@ snapshots["vaadin-message-list theme"] =
     <vaadin-avatar
       abbr="A"
       aria-hidden="true"
+      aria-label="Admin (A)"
       name="Admin"
       role="img"
       slot="avatar"
@@ -88,6 +91,7 @@ snapshots["vaadin-message-list className"] =
     <vaadin-avatar
       abbr="A"
       aria-hidden="true"
+      aria-label="Admin (A)"
       name="Admin"
       role="img"
       slot="avatar"
