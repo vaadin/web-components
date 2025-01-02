@@ -593,6 +593,11 @@ export const TimePickerMixin = (superClass) =>
     __updateValue(obj) {
       const timeString = formatISOTime(validateTime(obj, this.step)) || '';
       this.value = timeString;
+
+      // Always strip the input value to match the step interval, even
+      // if the component value hasn't changed. For example, if the step
+      // is 3600 "10:00:50" should become "10:00".
+      this.__updateInputValue(obj);
     }
 
     /** @private */
