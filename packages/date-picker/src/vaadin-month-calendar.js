@@ -32,8 +32,8 @@ class MonthCalendar extends MonthCalendarMixin(ThemableMixin(PolymerElement)) {
       >
         <thead id="weekdays-container">
           <tr role="row" part="weekdays">
-            <th part="weekday" aria-hidden="true" hidden$="[[!_showWeekSeparator(showWeekNumbers, i18n)]]"></th>
-            <template is="dom-repeat" items="[[_getWeekDayNames(i18n, showWeekNumbers)]]">
+            <th part="weekday" aria-hidden="true" hidden$="[[!__computeShowWeekSeparator(showWeekNumbers, i18n)]]"></th>
+            <template is="dom-repeat" items="[[__computeWeekDayNames(i18n, showWeekNumbers)]]">
               <th role="columnheader" part="weekday" scope="col" abbr$="[[item.weekDay]]" aria-hidden="true">
                 [[item.weekDayShort]]
               </th>
@@ -43,7 +43,11 @@ class MonthCalendar extends MonthCalendarMixin(ThemableMixin(PolymerElement)) {
         <tbody id="days-container">
           <template is="dom-repeat" items="[[_weeks]]" as="week">
             <tr role="row">
-              <td part="week-number" aria-hidden="true" hidden$="[[!_showWeekSeparator(showWeekNumbers, i18n)]]">
+              <td
+                part="week-number"
+                aria-hidden="true"
+                hidden$="[[!__computeShowWeekSeparator(showWeekNumbers, i18n)]]"
+              >
                 [[__computeWeekNumber(week)]]
               </td>
               <template is="dom-repeat" items="[[week]]">

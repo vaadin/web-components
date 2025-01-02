@@ -208,7 +208,7 @@ export const MonthCalendarMixin = (superClass) =>
     }
 
     /** @protected */
-    _getWeekDayNames(i18n, showWeekNumbers) {
+    __computeWeekDayNames(i18n, showWeekNumbers) {
       if (i18n === undefined || showWeekNumbers === undefined) {
         return [];
       }
@@ -242,7 +242,7 @@ export const MonthCalendarMixin = (superClass) =>
     }
 
     /** @protected */
-    _showWeekSeparator(showWeekNumbers, i18n) {
+    __computeShowWeekSeparator(showWeekNumbers, i18n) {
       // Currently only supported for locales that start the week on Monday.
       return showWeekNumbers && i18n && i18n.firstDayOfWeek === 1;
     }
@@ -334,7 +334,7 @@ export const MonthCalendarMixin = (superClass) =>
 
     /** @private */
     _showWeekNumbersChanged(showWeekNumbers, i18n) {
-      if (showWeekNumbers && i18n && i18n.firstDayOfWeek === 1) {
+      if (this.__computeShowWeekSeparator(showWeekNumbers, i18n)) {
         this.setAttribute('week-numbers', '');
       } else {
         this.removeAttribute('week-numbers');

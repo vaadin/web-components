@@ -1,7 +1,7 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import '../../src/vaadin-lit-month-calendar.js';
+import '../../src/vaadin-month-calendar.js';
 import { resetUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 import { getDefaultI18n } from '../helpers.js';
 

@@ -25,9 +25,9 @@ class MonthCalendar extends MonthCalendarMixin(ThemableMixin(PolylitMixin(LitEle
 
   /** @protected */
   render() {
-    const weekDayNames = this._getWeekDayNames(this.i18n, this.showWeekNumbers);
+    const weekDayNames = this.__computeWeekDayNames(this.i18n, this.showWeekNumbers);
     const weeks = this._weeks;
-    const hideWeekSeparator = !this._showWeekNumbers;
+    const hideWeekSeparator = !this.__computeShowWeekSeparator(this.showWeekNumbers, this.i18n);
 
     return html`
       <div part="month-header" id="month-header" aria-hidden="true">${this._getTitle(this.month, this.i18n)}</div>
