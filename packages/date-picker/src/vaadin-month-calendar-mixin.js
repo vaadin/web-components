@@ -98,19 +98,19 @@ export const MonthCalendarMixin = (superClass) =>
         disabled: {
           type: Boolean,
           reflectToAttribute: true,
-          computed: '_isDisabled(month, minDate, maxDate)',
+          computed: '__computeDisabled(month, minDate, maxDate)',
         },
 
         /** @protected */
         _days: {
           type: Array,
-          computed: '_getDays(month, i18n, minDate, maxDate, isDateDisabled)',
+          computed: '__computeDays(month, i18n, minDate, maxDate, isDateDisabled)',
         },
 
         /** @protected */
         _weeks: {
           type: Array,
-          computed: '_getWeeks(_days)',
+          computed: '__computeWeeks(_days)',
         },
 
         /** @private */
@@ -151,7 +151,7 @@ export const MonthCalendarMixin = (superClass) =>
      * Returns true if all the dates in the month are out of the allowed range
      * @protected
      */
-    __computedDisabled(month, minDate, maxDate) {
+    __computeDisabled(month, minDate, maxDate) {
       // First day of the month
       const firstDate = new Date(0, 0);
       firstDate.setFullYear(month.getFullYear());
@@ -361,11 +361,11 @@ export const MonthCalendarMixin = (superClass) =>
         result.push('today');
       }
 
-      if (date > normalizeDate(new Date())) {
+      if (date < normalizeDate(new Date())) {
         result.push('past');
       }
 
-      if (date < normalizeDate(new Date())) {
+      if (date > normalizeDate(new Date())) {
         result.push('future');
       }
 
