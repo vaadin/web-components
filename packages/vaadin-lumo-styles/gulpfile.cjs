@@ -27,7 +27,7 @@ function sortIconFilesNormalized(file1, file2) {
 function createCopyright() {
   return `/**
  * @license
- * Copyright (c) 2017 - 2024 Vaadin Ltd.
+ * Copyright (c) 2017 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */`;
 }
