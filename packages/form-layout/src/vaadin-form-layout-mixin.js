@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright (c) 2017 - 2024 Vaadin Ltd.
+ * Copyright (c) 2017 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { isElementHidden } from '@vaadin/a11y-base/src/focus-utils.js';
@@ -339,9 +339,9 @@ export const FormLayoutMixin = (superClass) =>
 
       /*
         The item width formula:
-  
+
             itemWidth = colspan / columnCount * 100% - columnSpacing
-  
+
         We have to subtract columnSpacing, because the column spacing space is taken
         by item margins of 1/2 * spacing on both sides
       */
