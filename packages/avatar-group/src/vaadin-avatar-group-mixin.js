@@ -138,7 +138,6 @@ export const AvatarGroupMixin = (superClass) =>
           type: Array,
           observer: '__overflowItemsChanged',
           computed: '__computeOverflowItems(items, __itemsInView, maxItemsVisible)',
-          sync: true,
         },
 
         /** @private */

@@ -228,7 +228,6 @@ export const ColumnBaseMixin = (superClass) =>
         _headerRenderer: {
           type: Function,
           computed: '_computeHeaderRenderer(headerRenderer, header, __initialized)',
-          sync: true,
         },
 
         /**
@@ -255,7 +254,6 @@ export const ColumnBaseMixin = (superClass) =>
         _footerRenderer: {
           type: Function,
           computed: '_computeFooterRenderer(footerRenderer, __initialized)',
-          sync: true,
         },
 
         /**
@@ -913,7 +911,6 @@ export const GridColumnMixin = (superClass) =>
         _renderer: {
           type: Function,
           computed: '_computeRenderer(renderer, __initialized)',
-          sync: true,
         },
 
         /**

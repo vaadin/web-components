@@ -326,7 +326,6 @@ export const DatePickerMixin = (subclass) =>
         _minDate: {
           type: Date,
           computed: '__computeMinOrMaxDate(min)',
-          sync: true,
         },
 
         /**
@@ -337,7 +336,6 @@ export const DatePickerMixin = (subclass) =>
         _maxDate: {
           type: Date,
           computed: '__computeMinOrMaxDate(max)',
-          sync: true,
         },
 
         /** @private */
