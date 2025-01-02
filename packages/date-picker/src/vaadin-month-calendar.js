@@ -7,7 +7,6 @@ import '@polymer/polymer/lib/elements/dom-repeat.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { dateAllowed, dateEquals, normalizeDate } from './vaadin-date-picker-helper.js';
 import { MonthCalendarMixin } from './vaadin-month-calendar-mixin.js';
 import { monthCalendarStyles } from './vaadin-month-calendar-styles.js';
 
@@ -45,18 +44,18 @@ class MonthCalendar extends MonthCalendarMixin(ThemableMixin(PolymerElement)) {
           <template is="dom-repeat" items="[[_weeks]]" as="week">
             <tr role="row">
               <td part="week-number" aria-hidden="true" hidden$="[[!_showWeekSeparator(showWeekNumbers, i18n)]]">
-                [[__getWeekNumber(week)]]
+                [[__computeWeekNumber(week)]]
               </td>
               <template is="dom-repeat" items="[[week]]">
                 <td
                   role="gridcell"
-                  part$="[[__getDatePart(item, focusedDate, selectedDate, minDate, maxDate, isDateDisabled, enteredDate, __hasFocus)]]"
+                  part$="[[__computeDatePart(item, focusedDate, selectedDate, minDate, maxDate, isDateDisabled, enteredDate, __hasFocus)]]"
                   date="[[item]]"
-                  tabindex$="[[__getDayTabindex(item, focusedDate)]]"
+                  tabindex$="[[__computeDayTabIndex(item, focusedDate)]]"
                   disabled$="[[__isDayDisabled(item, minDate, maxDate, isDateDisabled)]]"
-                  aria-selected$="[[__getDayAriaSelected(item, selectedDate)]]"
-                  aria-disabled$="[[__getDayAriaDisabled(item, minDate, maxDate, isDateDisabled)]]"
-                  aria-label$="[[__getDayAriaLabel(item)]]"
+                  aria-selected$="[[__computeDayAriaSelected(item, selectedDate)]]"
+                  aria-disabled$="[[__computeDayAriaDisabled(item, minDate, maxDate, isDateDisabled)]]"
+                  aria-label$="[[__computeDayAriaLabel(item)]]"
                   >[[_getDate(item)]]</td
                 >
               </template>
@@ -69,73 +68,6 @@ class MonthCalendar extends MonthCalendarMixin(ThemableMixin(PolymerElement)) {
 
   static get is() {
     return 'vaadin-month-calendar';
-  }
-
-  /** @private */
-  // eslint-disable-next-line @typescript-eslint/max-params
-  __getDatePart(date, focusedDate, selectedDate, minDate, maxDate, isDateDisabled, enteredDate, hasFocus) {
-    const result = ['date'];
-    const greaterThanToday = date > normalizeDate(new Date());
-    const lessThanToday = date < normalizeDate(new Date());
-
-    if (this.__isDayDisabled(date, minDate, maxDate, isDateDisabled)) {
-      result.push('disabled');
-    }
-
-    if (dateEquals(date, focusedDate) && (hasFocus || dateEquals(date, enteredDate))) {
-      result.push('focused');
-    }
-
-    if (this.__isDaySelected(date, selectedDate)) {
-      result.push('selected');
-    }
-
-    if (this._isToday(date)) {
-      result.push('today');
-    }
-
-    if (lessThanToday) {
-      result.push('past');
-    }
-
-    if (greaterThanToday) {
-      result.push('future');
-    }
-
-    return result.join(' ');
-  }
-
-  /** @private */
-  __isDaySelected(date, selectedDate) {
-    return dateEquals(date, selectedDate);
-  }
-
-  /** @private */
-  __getDayAriaSelected(date, selectedDate) {
-    if (this.__isDaySelected(date, selectedDate)) {
-      return 'true';
-    }
-  }
-
-  /** @private */
-  __isDayDisabled(date, minDate, maxDate, isDateDisabled) {
-    return !dateAllowed(date, minDate, maxDate, isDateDisabled);
-  }
-
-  /** @private */
-  __getDayAriaDisabled(date, min, max, isDateDisabled) {
-    if (date === undefined || (min === undefined && max === undefined && isDateDisabled === undefined)) {
-      return;
-    }
-
-    if (this.__isDayDisabled(date, min, max, isDateDisabled)) {
-      return 'true';
-    }
-  }
-
-  /** @private */
-  __getDayTabindex(date, focusedDate) {
-    return dateEquals(date, focusedDate) ? '0' : '-1';
   }
 }
 

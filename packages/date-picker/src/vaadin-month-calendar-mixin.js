@@ -5,7 +5,7 @@
  */
 import { FocusMixin } from '@vaadin/a11y-base/src/focus-mixin.js';
 import { addListener } from '@vaadin/component-base/src/gestures.js';
-import { dateAllowed, dateEquals, getISOWeekNumber } from './vaadin-date-picker-helper.js';
+import { dateAllowed, dateEquals, getISOWeekNumber, normalizeDate } from './vaadin-date-picker-helper.js';
 
 /**
  * @polymerMixin
@@ -151,7 +151,7 @@ export const MonthCalendarMixin = (superClass) =>
      * Returns true if all the dates in the month are out of the allowed range
      * @protected
      */
-    _isDisabled(month, minDate, maxDate) {
+    __computedDisabled(month, minDate, maxDate) {
       // First day of the month
       const firstDate = new Date(0, 0);
       firstDate.setFullYear(month.getFullYear());
@@ -253,7 +253,7 @@ export const MonthCalendarMixin = (superClass) =>
     }
 
     /** @protected */
-    _getDays(month, i18n) {
+    __computeDays(month, i18n) {
       if (month === undefined || i18n === undefined) {
         return [];
       }
@@ -281,7 +281,7 @@ export const MonthCalendarMixin = (superClass) =>
     }
 
     /** @protected */
-    _getWeeks(days) {
+    __computeWeeks(days) {
       return days.reduce((acc, day, i) => {
         if (i % 7 === 0) {
           acc.push([]);
@@ -307,7 +307,7 @@ export const MonthCalendarMixin = (superClass) =>
     }
 
     /** @protected */
-    __getWeekNumber(days) {
+    __computeWeekNumber(days) {
       const date = days.reduce((acc, d) => {
         return !acc && d ? d : acc;
       });
@@ -316,7 +316,7 @@ export const MonthCalendarMixin = (superClass) =>
     }
 
     /** @protected */
-    __getDayAriaLabel(date) {
+    __computeDayAriaLabel(date) {
       if (!date) {
         return '';
       }
@@ -339,5 +339,65 @@ export const MonthCalendarMixin = (superClass) =>
       } else {
         this.removeAttribute('week-numbers');
       }
+    }
+
+    // eslint-disable-next-line @typescript-eslint/max-params
+    __computeDatePart(date, focusedDate, selectedDate, minDate, maxDate, isDateDisabled, enteredDate, hasFocus) {
+      const result = ['date'];
+
+      if (this.__isDayDisabled(date, minDate, maxDate, isDateDisabled)) {
+        result.push('disabled');
+      }
+
+      if (dateEquals(date, focusedDate) && (hasFocus || dateEquals(date, enteredDate))) {
+        result.push('focused');
+      }
+
+      if (this.__isDaySelected(date, selectedDate)) {
+        result.push('selected');
+      }
+
+      if (this._isToday(date)) {
+        result.push('today');
+      }
+
+      if (date > normalizeDate(new Date())) {
+        result.push('past');
+      }
+
+      if (date < normalizeDate(new Date())) {
+        result.push('future');
+      }
+
+      return result.join(' ');
+    }
+
+    /** @private */
+    __isDaySelected(date, selectedDate) {
+      return dateEquals(date, selectedDate);
+    }
+
+    /** @private */
+    __computeDayAriaSelected(date, selectedDate) {
+      return String(this.__isDaySelected(date, selectedDate));
+    }
+
+    /** @private */
+    __isDayDisabled(date, minDate, maxDate, isDateDisabled) {
+      return !dateAllowed(date, minDate, maxDate, isDateDisabled);
+    }
+
+    /** @private */
+    __computeDayAriaDisabled(date, min, max, isDateDisabled) {
+      if (date === undefined || (min === undefined && max === undefined && isDateDisabled === undefined)) {
+        return 'false';
+      }
+
+      return String(this.__isDayDisabled(date, min, max, isDateDisabled));
+    }
+
+    /** @private */
+    __computeDayTabIndex(date, focusedDate) {
+      return dateEquals(date, focusedDate) ? '0' : '-1';
     }
   };
