@@ -164,7 +164,7 @@ const runTests = (defineHelper, baseMixin) => {
         element.invalid = true;
         element.setAttribute('error-message', 'This field is required');
         await nextUpdate(element);
-        clock.tick(150);
+        clock.tick(200);
         expect(announceRegion.textContent).to.equal('This field is required');
         expect(announceRegion.getAttribute('aria-live')).to.equal('assertive');
       });
@@ -173,7 +173,7 @@ const runTests = (defineHelper, baseMixin) => {
         element.invalid = true;
         element.errorMessage = 'This field is required';
         await nextUpdate(element);
-        clock.tick(150);
+        clock.tick(200);
         expect(announceRegion.textContent).to.equal('This field is required');
         expect(announceRegion.getAttribute('aria-live')).to.equal('assertive');
       });
@@ -181,7 +181,7 @@ const runTests = (defineHelper, baseMixin) => {
       it('should not announce error message when field is valid', async () => {
         element.errorMessage = 'This field is required';
         await nextUpdate(element);
-        clock.tick(150);
+        clock.tick(200);
         expect(announceRegion.textContent).to.equal('');
       });
     });
