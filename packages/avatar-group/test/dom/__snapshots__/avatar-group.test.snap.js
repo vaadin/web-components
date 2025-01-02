@@ -8,7 +8,7 @@ snapshots["vaadin-avatar-group default"] =
     aria-expanded="false"
     aria-haspopup="menu"
     hidden=""
-    role="img"
+    role="button"
     slot="overflow"
     tabindex="0"
   >
@@ -45,7 +45,7 @@ snapshots["vaadin-avatar-group items"] =
     aria-expanded="false"
     aria-haspopup="menu"
     hidden=""
-    role="img"
+    role="button"
     slot="overflow"
     tabindex="0"
   >
@@ -87,7 +87,7 @@ snapshots["vaadin-avatar-group theme"] =
     aria-expanded="false"
     aria-haspopup="menu"
     hidden=""
-    role="img"
+    role="button"
     slot="overflow"
     tabindex="0"
     theme="small"
@@ -126,7 +126,7 @@ snapshots["vaadin-avatar-group opened default"] =
     aria-expanded="false"
     aria-haspopup="menu"
     focused=""
-    role="img"
+    role="button"
     slot="overflow"
     tabindex="0"
   >

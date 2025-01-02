@@ -172,6 +172,7 @@ export const AvatarGroupMixin = (superClass) =>
 
       this._overflowController = new SlotController(this, 'overflow', 'vaadin-avatar', {
         initializer: (overflow) => {
+          overflow.setAttribute('role', 'button');
           overflow.setAttribute('aria-haspopup', 'menu');
           overflow.setAttribute('aria-expanded', 'false');
           overflow.addEventListener('click', (e) => this._onOverflowClick(e));
