@@ -65,15 +65,65 @@ describe('vaadin-chart', () => {
       expect(Array.from(chart.$.chart.querySelectorAll('.highcharts-series'))).to.have.lengthOf(1);
     });
 
-    describe('gantt chart', () => {
+    it('should create a chart in "normal" mode', async () => {
+      document.body.appendChild(chart);
+      await oneEvent(chart, 'chart-load');
+      expect(chart.mode).to.equal('normal');
+    });
+
+    describe('gantt mode', () => {
       beforeEach(async () => {
-        chart = fixtureSync('<vaadin-chart gantt></vaadin-chart>');
+        chart = fixtureSync('<vaadin-chart mode="gantt"></vaadin-chart>');
         document.body.appendChild(chart);
         await oneEvent(chart, 'chart-load');
       });
 
-      it('should create chart with gantt type', () => {
+      it('should create chart with gantt chart type', () => {
         expect(chart.configuration.options.chart.type).to.equal('gantt');
+      });
+
+      it('should create chart in gantt mode', () => {
+        expect(chart.mode).to.equal('gantt');
+      });
+    });
+
+    describe('timeline mode', () => {
+      beforeEach(async () => {
+        chart = fixtureSync('<vaadin-chart mode="timeline"></vaadin-chart>');
+        document.body.appendChild(chart);
+        await oneEvent(chart, 'chart-load');
+      });
+
+      it('should create chart in timeline mode', () => {
+        expect(chart.mode).to.equal('timeline');
+      });
+
+      it('should enable range selector', () => {
+        expect(chart.configuration.rangeSelector).to.be.ok;
+      });
+    });
+
+    describe('timeline attribute', () => {
+      beforeEach(async () => {
+        chart = fixtureSync('<vaadin-chart timeline></vaadin-chart>');
+        document.body.appendChild(chart);
+        await oneEvent(chart, 'chart-load');
+      });
+
+      it('should create chart in timeline mode', () => {
+        expect(chart.mode).to.equal('timeline');
+      });
+    });
+
+    describe('invalid mode', () => {
+      beforeEach(async () => {
+        chart = fixtureSync('<vaadin-chart mode="invalid-mode-value"></vaadin-chart>');
+        document.body.appendChild(chart);
+        await oneEvent(chart, 'chart-load');
+      });
+
+      it('should create chart in normal mode', () => {
+        expect(chart.mode).to.equal('normal');
       });
     });
   });
@@ -322,7 +372,7 @@ describe('vaadin-chart', () => {
           <vaadin-chart>
             <vaadin-chart-series values="[1,7,3,1,5,6]"></vaadin-chart-series>
           </vaadin-chart>
-          <vaadin-chart timeline>
+          <vaadin-chart mode="timeline">
             <vaadin-chart-series values="[1,7,3,1,5,6]"></vaadin-chart-series>
           </vaadin-chart>
         </div>

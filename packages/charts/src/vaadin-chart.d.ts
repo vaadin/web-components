@@ -19,6 +19,8 @@ export type ChartCategoryPosition = 'bottom' | 'left' | 'right' | 'top';
 
 export type ChartStacking = 'normal' | 'percent' | null;
 
+export type ChartMode = 'normal' | 'timeline' | 'gantt';
+
 export type ChartEvent = { target: HighchartsChart; type: string };
 
 export type ChartSeriesEvent = { target: Series; type: string };
@@ -481,6 +483,16 @@ declare class Chart extends ResizeMixin(ThemableMixin(ElementMixin(HTMLElement))
    * Specifies whether the chart is a normal chart or a timeline chart.
    */
   timeline: boolean | null | undefined;
+
+  /**
+   * Specifies whether the chart is a normal chart, a timeline chart or a gantt chart.
+   * Acceptable values are `normal`, `timeline` and `gantt`.
+   * If "mode" property is not defined on the vaadin-chart element or has an incorrect value, then
+   * the mode defaults to 'normal'.
+   *
+   * @attr {normal|timeline|gantt} mode
+   */
+  mode: ChartMode | null | undefined;
 
   /**
    * Represents the title of the chart.
