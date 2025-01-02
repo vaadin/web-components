@@ -64,6 +64,18 @@ describe('vaadin-chart', () => {
       await oneEvent(chart, 'chart-add-series');
       expect(Array.from(chart.$.chart.querySelectorAll('.highcharts-series'))).to.have.lengthOf(1);
     });
+
+    describe('gantt chart', () => {
+      beforeEach(async () => {
+        chart = fixtureSync('<vaadin-chart gantt></vaadin-chart>');
+        document.body.appendChild(chart);
+        await oneEvent(chart, 'chart-load');
+      });
+
+      it('should create chart with gantt type', () => {
+        expect(chart.configuration.options.chart.type).to.equal('gantt');
+      });
+    });
   });
 
   describe('configuration', () => {
