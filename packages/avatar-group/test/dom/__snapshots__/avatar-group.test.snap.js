@@ -8,7 +8,7 @@ snapshots["vaadin-avatar-group default"] =
     aria-expanded="false"
     aria-haspopup="menu"
     hidden=""
-    role="image"
+    role="img"
     slot="overflow"
     tabindex="0"
   >
@@ -23,7 +23,7 @@ snapshots["vaadin-avatar-group items"] =
 `<vaadin-avatar-group aria-label="Currently 2 active users">
   <vaadin-avatar
     abbr="YY"
-    role="image"
+    role="img"
     tabindex="0"
     with-tooltip=""
   >
@@ -33,7 +33,7 @@ snapshots["vaadin-avatar-group items"] =
   <vaadin-avatar
     abbr="TV"
     name="Tomi Virkki"
-    role="image"
+    role="img"
     tabindex="0"
     with-tooltip=""
   >
@@ -45,7 +45,7 @@ snapshots["vaadin-avatar-group items"] =
     aria-expanded="false"
     aria-haspopup="menu"
     hidden=""
-    role="image"
+    role="img"
     slot="overflow"
     tabindex="0"
   >
@@ -63,7 +63,7 @@ snapshots["vaadin-avatar-group theme"] =
 >
   <vaadin-avatar
     abbr="YY"
-    role="image"
+    role="img"
     tabindex="0"
     theme="small"
     with-tooltip=""
@@ -74,7 +74,7 @@ snapshots["vaadin-avatar-group theme"] =
   <vaadin-avatar
     abbr="TV"
     name="Tomi Virkki"
-    role="image"
+    role="img"
     tabindex="0"
     theme="small"
     with-tooltip=""
@@ -87,7 +87,7 @@ snapshots["vaadin-avatar-group theme"] =
     aria-expanded="false"
     aria-haspopup="menu"
     hidden=""
-    role="image"
+    role="img"
     slot="overflow"
     tabindex="0"
     theme="small"
@@ -104,7 +104,7 @@ snapshots["vaadin-avatar-group opened default"] =
   <vaadin-avatar
     abbr="AD"
     name="Abc Def"
-    role="image"
+    role="img"
     tabindex="0"
     with-tooltip=""
   >
@@ -114,7 +114,7 @@ snapshots["vaadin-avatar-group opened default"] =
   <vaadin-avatar
     abbr="GJ"
     name="Ghi Jkl"
-    role="image"
+    role="img"
     tabindex="0"
     with-tooltip=""
   >
@@ -126,7 +126,7 @@ snapshots["vaadin-avatar-group opened default"] =
     aria-expanded="false"
     aria-haspopup="menu"
     focused=""
-    role="image"
+    role="img"
     slot="overflow"
     tabindex="0"
   >
@@ -157,7 +157,7 @@ snapshots["vaadin-avatar-group opened overlay"] =
         abbr="MP"
         aria-hidden="true"
         name="Mno Pqr"
-        role="image"
+        role="img"
         tabindex="-1"
       >
       </vaadin-avatar>
@@ -172,7 +172,7 @@ snapshots["vaadin-avatar-group opened overlay"] =
         abbr="SV"
         aria-hidden="true"
         name="Stu Vwx"
-        role="image"
+        role="img"
         tabindex="-1"
       >
       </vaadin-avatar>
@@ -204,7 +204,7 @@ snapshots["vaadin-avatar-group opened overlay class"] =
         abbr="MP"
         aria-hidden="true"
         name="Mno Pqr"
-        role="image"
+        role="img"
         tabindex="-1"
       >
       </vaadin-avatar>
@@ -219,7 +219,7 @@ snapshots["vaadin-avatar-group opened overlay class"] =
         abbr="SV"
         aria-hidden="true"
         name="Stu Vwx"
-        role="image"
+        role="img"
         tabindex="-1"
       >
       </vaadin-avatar>
