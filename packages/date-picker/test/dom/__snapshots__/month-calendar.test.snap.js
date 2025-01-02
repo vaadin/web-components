@@ -1906,3 +1906,464 @@ snapshots["vaadin-month-calendar shadow disabled dates"] =
 `;
 /* end snapshot vaadin-month-calendar shadow disabled dates */
 
+snapshots["vaadin-month-calendar shadow fi-FI locale default"] = 
+`<div
+  aria-hidden="true"
+  id="month-header"
+  part="month-header"
+>
+  helmikuu-2016
+</div>
+<dom-repeat style="display: none;">
+  <template is="dom-repeat">
+  </template>
+</dom-repeat>
+<dom-repeat style="display: none;">
+  <template is="dom-repeat">
+  </template>
+</dom-repeat>
+<dom-repeat style="display: none;">
+  <template is="dom-repeat">
+  </template>
+</dom-repeat>
+<dom-repeat style="display: none;">
+  <template is="dom-repeat">
+  </template>
+</dom-repeat>
+<dom-repeat style="display: none;">
+  <template is="dom-repeat">
+  </template>
+</dom-repeat>
+<dom-repeat style="display: none;">
+  <template is="dom-repeat">
+  </template>
+</dom-repeat>
+<dom-repeat
+  as="week"
+  style="display: none;"
+>
+  <template is="dom-repeat">
+  </template>
+</dom-repeat>
+<table
+  aria-labelledby="month-header"
+  id="monthGrid"
+  role="grid"
+>
+  <thead id="weekdays-container">
+    <tr
+      part="weekdays"
+      role="row"
+    >
+      <th
+        aria-hidden="true"
+        hidden=""
+        part="weekday"
+      >
+      </th>
+      <th
+        abbr="maanantai"
+        aria-hidden="true"
+        part="weekday"
+        role="columnheader"
+        scope="col"
+      >
+        ma
+      </th>
+      <th
+        abbr="tiistai"
+        aria-hidden="true"
+        part="weekday"
+        role="columnheader"
+        scope="col"
+      >
+        ti
+      </th>
+      <th
+        abbr="keskiviikko"
+        aria-hidden="true"
+        part="weekday"
+        role="columnheader"
+        scope="col"
+      >
+        ke
+      </th>
+      <th
+        abbr="torstai"
+        aria-hidden="true"
+        part="weekday"
+        role="columnheader"
+        scope="col"
+      >
+        to
+      </th>
+      <th
+        abbr="perjantai"
+        aria-hidden="true"
+        part="weekday"
+        role="columnheader"
+        scope="col"
+      >
+        pe
+      </th>
+      <th
+        abbr="lauantai"
+        aria-hidden="true"
+        part="weekday"
+        role="columnheader"
+        scope="col"
+      >
+        la
+      </th>
+      <th
+        abbr="sunnuntai"
+        aria-hidden="true"
+        part="weekday"
+        role="columnheader"
+        scope="col"
+      >
+        su
+      </th>
+    </tr>
+  </thead>
+  <tbody id="days-container">
+    <tr role="row">
+      <td
+        aria-hidden="true"
+        hidden=""
+        part="week-number"
+      >
+        5
+      </td>
+      <td
+        aria-disabled="false"
+        aria-label="maanantai 1. helmikuuta 2016"
+        aria-selected="false"
+        part="date past"
+        role="gridcell"
+        tabindex="-1"
+      >
+        1
+      </td>
+      <td
+        aria-disabled="false"
+        aria-label="tiistai 2. helmikuuta 2016"
+        aria-selected="false"
+        part="date past"
+        role="gridcell"
+        tabindex="-1"
+      >
+        2
+      </td>
+      <td
+        aria-disabled="false"
+        aria-label="keskiviikko 3. helmikuuta 2016"
+        aria-selected="false"
+        part="date past"
+        role="gridcell"
+        tabindex="-1"
+      >
+        3
+      </td>
+      <td
+        aria-disabled="false"
+        aria-label="torstai 4. helmikuuta 2016"
+        aria-selected="false"
+        part="date past"
+        role="gridcell"
+        tabindex="-1"
+      >
+        4
+      </td>
+      <td
+        aria-disabled="false"
+        aria-label="perjantai 5. helmikuuta 2016"
+        aria-selected="false"
+        part="date today"
+        role="gridcell"
+        tabindex="-1"
+      >
+        5
+      </td>
+      <td
+        aria-disabled="false"
+        aria-label="lauantai 6. helmikuuta 2016"
+        aria-selected="false"
+        part="date future"
+        role="gridcell"
+        tabindex="-1"
+      >
+        6
+      </td>
+      <td
+        aria-disabled="false"
+        aria-label="sunnuntai 7. helmikuuta 2016"
+        aria-selected="false"
+        part="date future"
+        role="gridcell"
+        tabindex="-1"
+      >
+        7
+      </td>
+    </tr>
+    <tr role="row">
+      <td
+        aria-hidden="true"
+        hidden=""
+        part="week-number"
+      >
+        6
+      </td>
+      <td
+        aria-disabled="false"
+        aria-label="maanantai 8. helmikuuta 2016"
+        aria-selected="false"
+        part="date future"
+        role="gridcell"
+        tabindex="-1"
+      >
+        8
+      </td>
+      <td
+        aria-disabled="false"
+        aria-label="tiistai 9. helmikuuta 2016"
+        aria-selected="false"
+        part="date future"
+        role="gridcell"
+        tabindex="-1"
+      >
+        9
+      </td>
+      <td
+        aria-disabled="false"
+        aria-label="keskiviikko 10. helmikuuta 2016"
+        aria-selected="false"
+        part="date future"
+        role="gridcell"
+        tabindex="-1"
+      >
+        10
+      </td>
+      <td
+        aria-disabled="false"
+        aria-label="torstai 11. helmikuuta 2016"
+        aria-selected="false"
+        part="date future"
+        role="gridcell"
+        tabindex="-1"
+      >
+        11
+      </td>
+      <td
+        aria-disabled="false"
+        aria-label="perjantai 12. helmikuuta 2016"
+        aria-selected="false"
+        part="date future"
+        role="gridcell"
+        tabindex="-1"
+      >
+        12
+      </td>
+      <td
+        aria-disabled="false"
+        aria-label="lauantai 13. helmikuuta 2016"
+        aria-selected="false"
+        part="date future"
+        role="gridcell"
+        tabindex="-1"
+      >
+        13
+      </td>
+      <td
+        aria-disabled="false"
+        aria-label="sunnuntai 14. helmikuuta 2016"
+        aria-selected="false"
+        part="date future"
+        role="gridcell"
+        tabindex="-1"
+      >
+        14
+      </td>
+    </tr>
+    <tr role="row">
+      <td
+        aria-hidden="true"
+        hidden=""
+        part="week-number"
+      >
+        7
+      </td>
+      <td
+        aria-disabled="false"
+        aria-label="maanantai 15. helmikuuta 2016"
+        aria-selected="false"
+        part="date future"
+        role="gridcell"
+        tabindex="-1"
+      >
+        15
+      </td>
+      <td
+        aria-disabled="false"
+        aria-label="tiistai 16. helmikuuta 2016"
+        aria-selected="false"
+        part="date future"
+        role="gridcell"
+        tabindex="-1"
+      >
+        16
+      </td>
+      <td
+        aria-disabled="false"
+        aria-label="keskiviikko 17. helmikuuta 2016"
+        aria-selected="false"
+        part="date future"
+        role="gridcell"
+        tabindex="-1"
+      >
+        17
+      </td>
+      <td
+        aria-disabled="false"
+        aria-label="torstai 18. helmikuuta 2016"
+        aria-selected="false"
+        part="date future"
+        role="gridcell"
+        tabindex="-1"
+      >
+        18
+      </td>
+      <td
+        aria-disabled="false"
+        aria-label="perjantai 19. helmikuuta 2016"
+        aria-selected="false"
+        part="date future"
+        role="gridcell"
+        tabindex="-1"
+      >
+        19
+      </td>
+      <td
+        aria-disabled="false"
+        aria-label="lauantai 20. helmikuuta 2016"
+        aria-selected="false"
+        part="date future"
+        role="gridcell"
+        tabindex="-1"
+      >
+        20
+      </td>
+      <td
+        aria-disabled="false"
+        aria-label="sunnuntai 21. helmikuuta 2016"
+        aria-selected="false"
+        part="date future"
+        role="gridcell"
+        tabindex="-1"
+      >
+        21
+      </td>
+    </tr>
+    <tr role="row">
+      <td
+        aria-hidden="true"
+        hidden=""
+        part="week-number"
+      >
+        8
+      </td>
+      <td
+        aria-disabled="false"
+        aria-label="maanantai 22. helmikuuta 2016"
+        aria-selected="false"
+        part="date future"
+        role="gridcell"
+        tabindex="-1"
+      >
+        22
+      </td>
+      <td
+        aria-disabled="false"
+        aria-label="tiistai 23. helmikuuta 2016"
+        aria-selected="false"
+        part="date future"
+        role="gridcell"
+        tabindex="-1"
+      >
+        23
+      </td>
+      <td
+        aria-disabled="false"
+        aria-label="keskiviikko 24. helmikuuta 2016"
+        aria-selected="false"
+        part="date future"
+        role="gridcell"
+        tabindex="-1"
+      >
+        24
+      </td>
+      <td
+        aria-disabled="false"
+        aria-label="torstai 25. helmikuuta 2016"
+        aria-selected="false"
+        part="date future"
+        role="gridcell"
+        tabindex="-1"
+      >
+        25
+      </td>
+      <td
+        aria-disabled="false"
+        aria-label="perjantai 26. helmikuuta 2016"
+        aria-selected="false"
+        part="date future"
+        role="gridcell"
+        tabindex="-1"
+      >
+        26
+      </td>
+      <td
+        aria-disabled="false"
+        aria-label="lauantai 27. helmikuuta 2016"
+        aria-selected="false"
+        part="date future"
+        role="gridcell"
+        tabindex="-1"
+      >
+        27
+      </td>
+      <td
+        aria-disabled="false"
+        aria-label="sunnuntai 28. helmikuuta 2016"
+        aria-selected="false"
+        part="date future"
+        role="gridcell"
+        tabindex="-1"
+      >
+        28
+      </td>
+    </tr>
+    <tr role="row">
+      <td
+        aria-hidden="true"
+        hidden=""
+        part="week-number"
+      >
+        9
+      </td>
+      <td
+        aria-disabled="false"
+        aria-label="maanantai 29. helmikuuta 2016"
+        aria-selected="false"
+        part="date future"
+        role="gridcell"
+        tabindex="-1"
+      >
+        29
+      </td>
+    </tr>
+  </tbody>
+</table>
+`;
+/* end snapshot vaadin-month-calendar shadow fi-FI locale default */
+

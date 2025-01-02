@@ -161,33 +161,6 @@ describe('vaadin-month-calendar', () => {
     expect(monthCalendar.selectedDate).to.be.undefined;
   });
 
-  describe('i18n', () => {
-    beforeEach(async () => {
-      monthCalendar.i18n = {
-        monthNames:
-          'tammikuu_helmikuu_maaliskuu_huhtikuu_toukokuu_kesäkuu_heinäkuu_elokuu_syyskuu_lokakuu_marraskuu_joulukuu'.split(
-            '_',
-          ),
-        weekdays: ['sunnuntai', 'maanantai', 'tiistai', 'keskiviikko', 'torstai', 'perjantai', 'lauantai'],
-        weekdaysShort: ['su', 'ma', 'ti', 'ke', 'to', 'pe', 'la'],
-        firstDayOfWeek: 1,
-        today: 'Tänään',
-        formatTitle: (monthName, fullYear) => `${monthName}-${fullYear}`,
-      };
-      await nextRender();
-    });
-
-    it('should render weekdays in correct locale', () => {
-      const weekdays = getWeekDayCells(monthCalendar);
-      const weekdayTitles = weekdays.map((weekday) => weekday.textContent.trim());
-      expect(weekdayTitles).to.eql(['ma', 'ti', 'ke', 'to', 'pe', 'la', 'su']);
-    });
-
-    it('should render month name in correct locale', () => {
-      expect(monthCalendar.shadowRoot.querySelector('[part="month-header"]').textContent).to.equal('helmikuu-2016');
-    });
-  });
-
   describe('week numbers', () => {
     beforeEach(() => {
       monthCalendar.showWeekNumbers = true;

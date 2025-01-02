@@ -316,8 +316,8 @@ export const MonthCalendarMixin = (superClass) =>
     }
 
     /** @protected */
-    __computeDayAriaLabel(date) {
-      return date ? Intl.DateTimeFormat(undefined, { dateStyle: 'full' }).format(date) : '';
+    __computeDayAriaLabel(date, i18n) {
+      return date ? Intl.DateTimeFormat(i18n.locale, { dateStyle: 'full' }).format(date) : '';
     }
 
     /** @private */
