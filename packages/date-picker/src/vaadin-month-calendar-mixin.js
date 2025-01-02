@@ -317,19 +317,7 @@ export const MonthCalendarMixin = (superClass) =>
 
     /** @protected */
     __computeDayAriaLabel(date) {
-      if (!date) {
-        return '';
-      }
-
-      let ariaLabel = `${this._getDate(date)} ${this.i18n.monthNames[date.getMonth()]} ${date.getFullYear()}, ${
-        this.i18n.weekdays[date.getDay()]
-      }`;
-
-      if (this._isToday(date)) {
-        ariaLabel += `, ${this.i18n.today}`;
-      }
-
-      return ariaLabel;
+      return date ? Intl.DateTimeFormat(undefined, { dateStyle: 'full' }).format(date) : '';
     }
 
     /** @private */
