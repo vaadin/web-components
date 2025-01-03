@@ -204,6 +204,11 @@ export const DatePickerMixin = (subclass) =>
          *
          * ```
          * {
+         *   // A locale in BCP 47 format, e.g. "en-US". If not specified
+         *   // defaults to the browser's locale. Used for screen reader
+         *   // announcements.
+         *   locale: 'en-US',
+         *
          *   // An array with the full names of months starting
          *   // with January.
          *   monthNames: [

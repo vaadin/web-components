@@ -161,49 +161,6 @@ describe('vaadin-month-calendar', () => {
     expect(monthCalendar.selectedDate).to.be.undefined;
   });
 
-  describe('i18n', () => {
-    beforeEach(async () => {
-      monthCalendar.i18n = {
-        monthNames:
-          'tammikuu_helmikuu_maaliskuu_huhtikuu_toukokuu_kesäkuu_heinäkuu_elokuu_syyskuu_lokakuu_marraskuu_joulukuu'.split(
-            '_',
-          ),
-        weekdays: ['sunnuntai', 'maanantai', 'tiistai', 'keskiviikko', 'torstai', 'perjantai', 'lauantai'],
-        weekdaysShort: ['su', 'ma', 'ti', 'ke', 'to', 'pe', 'la'],
-        firstDayOfWeek: 1,
-        today: 'Tänään',
-        formatTitle: (monthName, fullYear) => `${monthName}-${fullYear}`,
-      };
-      await nextRender();
-    });
-
-    it('should render weekdays in correct locale', () => {
-      const weekdays = getWeekDayCells(monthCalendar);
-      const weekdayTitles = weekdays.map((weekday) => weekday.textContent.trim());
-      expect(weekdayTitles).to.eql(['ma', 'ti', 'ke', 'to', 'pe', 'la', 'su']);
-    });
-
-    it('should label dates in correct locale', () => {
-      const dates = getDateCells(monthCalendar);
-      dates.slice(0, 7).forEach((date, index) => {
-        const label = date.getAttribute('aria-label');
-        const day = ['maanantai', 'tiistai', 'keskiviikko', 'torstai', 'perjantai', 'lauantai', 'sunnuntai'][index];
-        expect(label).to.equal(`${index + 1} helmikuu 2016, ${day}`);
-      });
-    });
-
-    it('should label today in correct locale', async () => {
-      monthCalendar.month = new Date();
-      await nextRender();
-      const today = getDateCells(monthCalendar).find((date) => date.getAttribute('part').includes('today'));
-      expect(today.getAttribute('aria-label').split(', ').pop()).to.equal('Tänään');
-    });
-
-    it('should render month name in correct locale', () => {
-      expect(monthCalendar.shadowRoot.querySelector('[part="month-header"]').textContent).to.equal('helmikuu-2016');
-    });
-  });
-
   describe('week numbers', () => {
     beforeEach(() => {
       monthCalendar.showWeekNumbers = true;

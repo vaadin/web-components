@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
+import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import { activateScroller, getDefaultI18n, open } from './helpers.js';
 
 describe('WAI-ARIA', () => {
@@ -63,24 +63,6 @@ describe('WAI-ARIA', () => {
           expect(dot.getAttribute('aria-hidden')).to.equal('true');
         });
       });
-    });
-  });
-
-  describe('month calendar contents', () => {
-    let monthCalendar;
-
-    beforeEach(async () => {
-      monthCalendar = fixtureSync(`<vaadin-month-calendar></vaadin-month-calendar>`);
-      monthCalendar.i18n = getDefaultI18n();
-      monthCalendar.month = new Date(2016, 1, 1);
-      await nextRender();
-    });
-
-    it('should indicate today on date cells', async () => {
-      monthCalendar.month = new Date();
-      await nextFrame();
-      const todayElement = monthCalendar.shadowRoot.querySelector('[part~="today"]');
-      expect(todayElement.getAttribute('aria-label')).to.match(/, Today$/u);
     });
   });
 

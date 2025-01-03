@@ -57,5 +57,28 @@ describe('vaadin-month-calendar', () => {
       };
       await expect(monthCalendar).shadowDom.to.equalSnapshot();
     });
+
+    describe('fi-FI locale', () => {
+      beforeEach(async () => {
+        monthCalendar.i18n = {
+          ...monthCalendar.i18n,
+          locale: 'fi-FI',
+          monthNames:
+            'tammikuu_helmikuu_maaliskuu_huhtikuu_toukokuu_kesäkuu_heinäkuu_elokuu_syyskuu_lokakuu_marraskuu_joulukuu'.split(
+              '_',
+            ),
+          weekdays: ['sunnuntai', 'maanantai', 'tiistai', 'keskiviikko', 'torstai', 'perjantai', 'lauantai'],
+          weekdaysShort: ['su', 'ma', 'ti', 'ke', 'to', 'pe', 'la'],
+          firstDayOfWeek: 1,
+          today: 'Tänään',
+          formatTitle: (monthName, fullYear) => `${monthName}-${fullYear}`,
+        };
+        await nextFrame();
+      });
+
+      it('default', async () => {
+        await expect(monthCalendar).shadowDom.to.equalSnapshot();
+      });
+    });
   });
 });
