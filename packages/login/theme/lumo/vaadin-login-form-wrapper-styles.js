@@ -15,6 +15,10 @@ const loginFormWrapper = css`
 
   [part='form-title'] {
     margin-top: calc(var(--lumo-font-size-xxxl) - var(--lumo-font-size-xxl));
+    color: var(--lumo-header-text-color);
+    font-size: var(--lumo-font-size-xxl);
+    font-weight: 600;
+    line-height: var(--lumo-line-height-xs);
   }
 
   ::slotted([slot='submit']) {
