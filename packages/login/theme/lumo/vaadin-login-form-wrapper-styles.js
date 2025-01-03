@@ -65,8 +65,10 @@ const loginFormWrapper = css`
   }
 
   [part='error-message-title'] {
+    display: block;
     margin: 0 0 0.25em;
     color: inherit;
+    line-height: var(--lumo-line-height-xs);
   }
 
   [part='error-message-description'] {
