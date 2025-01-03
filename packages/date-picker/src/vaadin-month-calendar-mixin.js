@@ -316,8 +316,20 @@ export const MonthCalendarMixin = (superClass) =>
     }
 
     /** @protected */
-    __computeDayAriaLabel(date, i18n) {
-      return date ? Intl.DateTimeFormat(i18n.locale, { dateStyle: 'full' }).format(date) : '';
+    __computeDayAriaLabel(date) {
+      if (!date) {
+        return '';
+      }
+
+      let ariaLabel = `${this._getDate(date)} ${this.i18n.monthNames[date.getMonth()]} ${date.getFullYear()}, ${
+        this.i18n.weekdays[date.getDay()]
+      }`;
+
+      if (this._isToday(date)) {
+        ariaLabel += `, ${this.i18n.today}`;
+      }
+
+      return ariaLabel;
     }
 
     /** @private */

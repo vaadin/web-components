@@ -59,7 +59,7 @@ class MonthCalendar extends MonthCalendarMixin(ThemableMixin(PolymerElement)) {
                   disabled$="[[__isDayDisabled(item, minDate, maxDate, isDateDisabled)]]"
                   aria-selected$="[[__computeDayAriaSelected(item, selectedDate)]]"
                   aria-disabled$="[[__computeDayAriaDisabled(item, minDate, maxDate, isDateDisabled)]]"
-                  aria-label$="[[__computeDayAriaLabel(item, i18n)]]"
+                  aria-label$="[[__computeDayAriaLabel(item)]]"
                   >[[_getDate(item)]]</td
                 >
               </template>

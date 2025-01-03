@@ -20,12 +20,6 @@ export interface DatePickerDate {
 
 export interface DatePickerI18n {
   /**
-   * A locale in BCP 47 format, e.g. "en-US". If not specified
-   * defaults to the browser's locale. Used for screen reader
-   * announcements.
-   */
-  locale?: string | undefined;
-  /**
    * An array with the full names of months starting
    * with January.
    */
@@ -157,11 +151,6 @@ export declare class DatePickerMixinClass {
    *
    * ```
    * {
-   *   // A locale in BCP 47 format, e.g. "en-US". If not specified
-   *   // defaults to the browser's locale. Used for screen reader
-   *   // announcements.
-   *   locale: 'en-US',
-   *
    *   // An array with the full names of months starting
    *   // with January.
    *   monthNames: [
