@@ -93,4 +93,14 @@ export declare class LoginMixinClass {
    * ```
    */
   i18n: LoginI18n;
+
+  /**
+   * Used to customize the `aria-level` attribute on the heading element.
+   * When not specified, default value is used depending on whether the
+   * application title is displayed (so that standalone login form renders
+   * its title as `<h1>` but the form in the overlay uses `<h2>` instead).
+   *
+   * @attr {number} heading-level
+   */
+  headingLevel: number;
 }

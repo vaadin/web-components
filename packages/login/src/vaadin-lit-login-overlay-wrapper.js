@@ -35,7 +35,7 @@ class LoginOverlayWrapper extends LoginOverlayWrapperMixin(ThemableMixin(Polylit
           <section part="card">
             <div part="brand">
               <slot name="title">
-                <h1 part="title">${this.title}</h1>
+                <div part="title" role="heading" aria-level="${this.headingLevel}">${this.title}</div>
               </slot>
               <p part="description">${this.description}</p>
             </div>

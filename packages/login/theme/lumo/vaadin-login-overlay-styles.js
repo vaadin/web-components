@@ -29,6 +29,12 @@ const loginOverlayWrapper = css`
     min-height: calc(var(--lumo-size-m) * 5);
   }
 
+  [part='title'] {
+    font-size: var(--lumo-font-size-xxxl);
+    font-weight: 600;
+    line-height: var(--lumo-line-height-xs);
+  }
+
   [part='description'] {
     line-height: var(--lumo-line-height-s);
     color: var(--lumo-tint-70pct);

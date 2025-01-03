@@ -44,6 +44,13 @@ class LoginFormWrapper extends ThemableMixin(PolylitMixin(LitElement)) {
       i18n: {
         type: Object,
       },
+
+      /**
+       * Used to customize the `aria-level` attribute on the heading element.
+       */
+      headingLevel: {
+        type: Number,
+      },
     };
   }
 
@@ -51,7 +58,7 @@ class LoginFormWrapper extends ThemableMixin(PolylitMixin(LitElement)) {
   render() {
     return html`
       <section part="form">
-        <div part="form-title" role="heading" aria-level="2">${this.i18n.form.title}</div>
+        <div part="form-title" role="heading" aria-level="${this.headingLevel}">${this.i18n.form.title}</div>
         <div part="error-message" ?hidden="${!this.error}">
           <strong part="error-message-title">${this.i18n.errorMessage.title}</strong>
           <p part="error-message-description">${this.i18n.errorMessage.message}</p>

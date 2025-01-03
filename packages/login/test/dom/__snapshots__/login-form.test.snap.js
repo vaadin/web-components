@@ -574,7 +574,7 @@ snapshots["vaadin-login-form host noForgotPassword"] =
 snapshots["vaadin-login-form shadow default"] = 
 `<section part="form">
   <div
-    aria-level="2"
+    aria-level="1"
     part="form-title"
     role="heading"
   >
@@ -612,7 +612,7 @@ snapshots["vaadin-login-form shadow default"] =
 snapshots["vaadin-login-form shadow error"] = 
 `<section part="form">
   <div
-    aria-level="2"
+    aria-level="1"
     part="form-title"
     role="heading"
   >
@@ -647,7 +647,7 @@ snapshots["vaadin-login-form shadow error"] =
 snapshots["vaadin-login-form shadow i18n"] = 
 `<section part="form">
   <div
-    aria-level="2"
+    aria-level="1"
     part="form-title"
     role="heading"
   >

@@ -61,6 +61,7 @@ class LoginOverlay extends LoginOverlayMixin(ElementMixin(ThemableMixin(PolymerE
         with-backdrop
         title="[[title]]"
         description="[[description]]"
+        heading-level="[[headingLevel]]"
         theme$="[[_theme]]"
         on-vaadin-overlay-escape-press="_preventClosingLogin"
         on-vaadin-overlay-outside-click="_preventClosingLogin"
@@ -71,6 +72,7 @@ class LoginOverlay extends LoginOverlayMixin(ElementMixin(ThemableMixin(PolymerE
           action="[[action]]"
           disabled="{{disabled}}"
           error="{{error}}"
+          heading-level="[[__computeHeadingLevel(headingLevel)]]"
           no-autofocus="[[noAutofocus]]"
           no-forgot-password="[[noForgotPassword]]"
           i18n="{{i18n}}"
