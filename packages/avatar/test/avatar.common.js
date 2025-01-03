@@ -389,5 +389,33 @@ describe('vaadin-avatar', () => {
       const custom = fixtureSync('<vaadin-avatar role="button"></vaadin-avatar>');
       expect(custom.getAttribute('role')).to.equal('button');
     });
+
+    it('should set aria-label attribute to abbr value by default', async () => {
+      avatar.abbr = 'JD';
+      await nextUpdate(avatar);
+      expect(avatar.getAttribute('aria-label')).to.equal('JD');
+    });
+
+    it('should add name to aria-label attribute when tooltip is not set', async () => {
+      avatar.name = 'John Doe';
+      await nextUpdate(avatar);
+      expect(avatar.getAttribute('aria-label')).to.equal('John Doe (JD)');
+    });
+
+    it('should not add name to aria-label attribute when tooltip is set', async () => {
+      avatar.name = 'John Doe';
+      avatar.withTooltip = true;
+      await nextUpdate(avatar);
+      expect(avatar.getAttribute('aria-label')).to.equal('JD');
+    });
+
+    it('should remove aria-label attribute when abbr property is removed', async () => {
+      avatar.abbr = 'JD';
+      await nextUpdate(avatar);
+
+      avatar.abbr = null;
+      await nextUpdate(avatar);
+      expect(avatar.hasAttribute('aria-label')).to.be.false;
+    });
   });
 });
