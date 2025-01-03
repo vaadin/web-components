@@ -192,6 +192,29 @@ describe('title and description', () => {
   });
 });
 
+describe('heading level', () => {
+  let overlay, form;
+
+  beforeEach(async () => {
+    overlay = fixtureSync(`<vaadin-login-overlay opened></vaadin-login-overlay>`);
+    await nextRender();
+    form = overlay.$.vaadinLoginForm;
+  });
+
+  afterEach(() => {
+    overlay.opened = false;
+  });
+
+  it('should set login form title heading level based on the overlay', async () => {
+    expect(overlay.headingLevel).to.equal(1);
+    expect(form.headingLevel).to.equal(2);
+
+    overlay.headingLevel = 2;
+    await nextUpdate(overlay);
+    expect(form.headingLevel).to.equal(3);
+  });
+});
+
 describe('title slot', () => {
   let overlay, overlayWrapper;
 
