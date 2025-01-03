@@ -398,9 +398,13 @@ snapshots["vaadin-login-overlay shadow default"] =
     <section part="card">
       <div part="brand">
         <slot name="title">
-          <h1 part="title">
+          <div
+            aria-level="1"
+            part="title"
+            role="heading"
+          >
             App name
-          </h1>
+          </div>
         </slot>
         <p part="description">
           Application description
@@ -434,9 +438,13 @@ snapshots["vaadin-login-overlay shadow i18n"] =
     <section part="card">
       <div part="brand">
         <slot name="title">
-          <h1 part="title">
+          <div
+            aria-level="1"
+            part="title"
+            role="heading"
+          >
             Sovelluksen nimi
-          </h1>
+          </div>
         </slot>
         <p part="description">
           Sovelluksen kuvaus

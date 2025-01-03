@@ -23,7 +23,7 @@ class LoginFormWrapper extends ThemableMixin(PolymerElement) {
   static get template() {
     return html`
       <section part="form">
-        <div part="form-title" part="form-title" role="heading" aria-level="2">[[i18n.form.title]]</div>
+        <div part="form-title" part="form-title" role="heading" aria-level$="[[headingLevel]]">[[i18n.form.title]]</div>
         <div part="error-message" hidden$="[[!error]]">
           <strong part="error-message-title">[[i18n.errorMessage.title]]</strong>
           <p part="error-message-description">[[i18n.errorMessage.message]]</p>
@@ -67,6 +67,13 @@ class LoginFormWrapper extends ThemableMixin(PolymerElement) {
        */
       i18n: {
         type: Object,
+      },
+
+      /**
+       * Used to customize the `aria-level` attribute on the heading element.
+       */
+      headingLevel: {
+        type: Number,
       },
     };
   }

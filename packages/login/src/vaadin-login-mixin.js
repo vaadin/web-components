@@ -135,6 +135,19 @@ export const LoginMixin = (superClass) =>
         },
 
         /**
+         * Used to customize the `aria-level` attribute on the heading element.
+         * When not specified, default value is used depending on whether the
+         * application title is displayed (so that standalone login form renders
+         * its title as `<h1>` but the form in the overlay uses `<h2>` instead).
+         *
+         * @attr {number} heading-level
+         */
+        headingLevel: {
+          type: Number,
+          value: 1,
+        },
+
+        /**
          * If set, prevents auto enabling the component when error property is set to true.
          * @private
          */

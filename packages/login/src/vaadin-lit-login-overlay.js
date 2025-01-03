@@ -35,6 +35,7 @@ class LoginOverlay extends LoginOverlayMixin(ElementMixin(ThemableMixin(PolylitM
         .opened="${this.opened}"
         .title="${this.title}"
         .description="${this.description}"
+        .headingLevel="${this.headingLevel}"
         role="dialog"
         focus-trap
         with-backdrop
@@ -51,6 +52,7 @@ class LoginOverlay extends LoginOverlayMixin(ElementMixin(ThemableMixin(PolylitM
           .error="${this.error}"
           .noAutofocus="${this.noAutofocus}"
           .noForgotPassword="${this.noForgotPassword}"
+          .headingLevel="${this.__computeHeadingLevel(this.headingLevel)}"
           .i18n="${this.i18n}"
           @login="${this._retargetEvent}"
           @forgot-password="${this._retargetEvent}"

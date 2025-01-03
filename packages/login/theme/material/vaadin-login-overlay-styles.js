@@ -58,11 +58,14 @@ const loginOverlayWrapper = css`
     min-height: 225px;
   }
 
-  [part='brand'] h1 {
+  [part='title'] {
     color: inherit;
     margin: 0;
     font-weight: 500;
     font-size: 2rem;
+    line-height: 1.1;
+    letter-spacing: -0.015em;
+    text-indent: -0.07em;
   }
 
   [part='form'] {
@@ -91,7 +94,7 @@ const loginOverlayWrapper = css`
       padding: 0 2.5rem 5.5rem 2rem;
     }
 
-    [part='brand'] h1 {
+    [part='title'] {
       font-weight: 500;
       font-size: 1.8rem;
       text-indent: 1rem;
@@ -210,7 +213,7 @@ const loginOverlayWrapper = css`
       box-sizing: border-box;
     }
 
-    [part='brand'] h1 {
+    [part='title'] {
       font-size: 2.5em;
     }
 

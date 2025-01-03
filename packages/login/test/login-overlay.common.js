@@ -147,8 +147,8 @@ describe('title and description', () => {
       <vaadin-login-overlay title="New title" description="New description" opened></vaadin-login-overlay>
     `);
     await nextRender();
-    headerElement = overlay.$.vaadinLoginOverlayWrapper.shadowRoot.querySelector('[part="brand"] h1');
-    descriptionElement = overlay.$.vaadinLoginOverlayWrapper.shadowRoot.querySelector('[part="brand"] p');
+    headerElement = overlay.$.vaadinLoginOverlayWrapper.shadowRoot.querySelector('[part="title"]');
+    descriptionElement = overlay.$.vaadinLoginOverlayWrapper.shadowRoot.querySelector('[part="description"]');
   });
 
   afterEach(() => {

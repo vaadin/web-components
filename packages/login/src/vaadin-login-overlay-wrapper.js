@@ -35,7 +35,7 @@ class LoginOverlayWrapper extends LoginOverlayWrapperMixin(ThemableMixin(Polymer
           <section part="card">
             <div part="brand">
               <slot name="title">
-                <h1 part="title">[[title]]</h1>
+                <div part="title" role="heading" aria-level$="[[headingLevel]]">[[title]]</div>
               </slot>
               <p part="description">[[description]]</p>
             </div>

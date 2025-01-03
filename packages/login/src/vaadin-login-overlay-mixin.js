@@ -159,4 +159,9 @@ export const LoginOverlayMixin = (superClass) =>
         this.append(...teleported);
       };
     }
+
+    /** @private */
+    __computeHeadingLevel(headingLevel) {
+      return headingLevel + 1;
+    }
   };

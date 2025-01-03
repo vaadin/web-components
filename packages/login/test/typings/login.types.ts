@@ -20,6 +20,8 @@ const overlay = document.createElement('vaadin-login-overlay');
 assertType<ElementMixinClass>(overlay);
 assertType<OverlayClassMixinClass>(overlay);
 
+assertType<number>(overlay.headingLevel);
+
 overlay.addEventListener('login', (event) => {
   assertType<LoginOverlayLoginEvent>(event);
   assertType<string>(event.detail.username);
@@ -43,6 +45,8 @@ overlay.addEventListener('description-changed', (event) => {
 });
 
 const form = document.createElement('vaadin-login-form');
+
+assertType<number>(form.headingLevel);
 
 form.addEventListener('login', (event) => {
   assertType<LoginFormLoginEvent>(event);
