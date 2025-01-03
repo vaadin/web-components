@@ -573,9 +573,13 @@ snapshots["vaadin-login-form host noForgotPassword"] =
 
 snapshots["vaadin-login-form shadow default"] = 
 `<section part="form">
-  <h2 part="form-title">
+  <div
+    aria-level="2"
+    part="form-title"
+    role="heading"
+  >
     Log in
-  </h2>
+  </div>
   <div
     hidden=""
     part="error-message"
@@ -607,9 +611,13 @@ snapshots["vaadin-login-form shadow default"] =
 
 snapshots["vaadin-login-form shadow error"] = 
 `<section part="form">
-  <h2 part="form-title">
+  <div
+    aria-level="2"
+    part="form-title"
+    role="heading"
+  >
     Log in
-  </h2>
+  </div>
   <div part="error-message">
     <strong part="error-message-title">
       Incorrect username or password
@@ -638,9 +646,13 @@ snapshots["vaadin-login-form shadow error"] =
 
 snapshots["vaadin-login-form shadow i18n"] = 
 `<section part="form">
-  <h2 part="form-title">
+  <div
+    aria-level="2"
+    part="form-title"
+    role="heading"
+  >
     Kirjaudu sisään
-  </h2>
+  </div>
   <div
     hidden=""
     part="error-message"
