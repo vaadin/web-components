@@ -185,6 +185,14 @@ export const AvatarMixin = (superClass) =>
           this.__setTooltip(name);
         }
       }
+
+      if (abbr) {
+        // By default, generate aria-label attribute containing the abbr value.
+        // When no tooltip is set, prefix the aria-label with the name value.
+        this.setAttribute('aria-label', !tooltipNode && name ? `${name} (${abbr})` : abbr);
+      } else {
+        this.removeAttribute('aria-label');
+      }
     }
 
     /** @private */
