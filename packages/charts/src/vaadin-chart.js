@@ -26,6 +26,7 @@ import 'highcharts/es-modules/masters/modules/timeline.src.js';
 import 'highcharts/es-modules/masters/modules/organization.src.js';
 import 'highcharts/es-modules/masters/modules/xrange.src.js';
 import 'highcharts/es-modules/masters/modules/bullet.src.js';
+import 'highcharts/es-modules/masters/modules/gantt.src.js';
 import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
 import { beforeNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
@@ -378,10 +379,27 @@ class Chart extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))) {
       },
 
       /**
-       * Specifies whether the chart is a normal chart or a timeline chart.
+       * This deprecated property sets the chart to the "timeline" mode.
+       * If also the "mode" property is set, the value of "timeline" property is ignored.
+       *
+       * @deprecated since 24.7 and will be removed in Vaadin 25. Use `mode` attribute with value 'timeline' instead.
        */
       timeline: {
         type: Boolean,
+        reflectToAttribute: true,
+      },
+
+      /**
+       * Specifies whether the chart is a normal chart, a timeline chart or a gantt chart.
+       * Acceptable values are `normal`, `timeline` and `gantt`.
+       * If "mode" property is not defined on the vaadin-chart element or has an incorrect value, then
+       * the mode defaults to 'normal'.
+       *
+       * @attr {normal|timeline|gantt} mode
+       * @type {ChartMode | undefined}
+       */
+      mode: {
+        type: String,
         reflectToAttribute: true,
       },
 
@@ -1061,7 +1079,11 @@ class Chart extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))) {
   __initChart(options) {
     this.__initEventsListeners(options);
     this.__updateStyledMode(options);
-    if (this.timeline) {
+    this.__resolveMode();
+
+    if (this.mode === 'gantt') {
+      this.configuration = Highcharts.ganttChart(this.$.chart, options);
+    } else if (this.mode === 'timeline') {
       this.configuration = Highcharts.stockChart(this.$.chart, options);
     } else {
       this.configuration = Highcharts.chart(this.$.chart, options);
@@ -1624,6 +1646,15 @@ class Chart extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))) {
   }
 
   /** @private */
+  __isModeValid() {
+    if (['normal', 'timeline', 'gantt', null].indexOf(this.mode) === -1) {
+      this.__showWarn('mode', '"normal", "timeline", "gantt" or null');
+      return false;
+    }
+    return true;
+  }
+
+  /** @private */
   __stackingObserver(stacking, config) {
     if (stacking === undefined || !config || this.__hasConfigurationBuffer('plotOptions.series.stacking')) {
       return;
@@ -1839,6 +1870,20 @@ class Chart extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))) {
       console.warn(
         '<vaadin-chart> Turbo mode has been enabled for one or more series, because the number of data items exceeds the configured threshold. Turbo mode improves the performance of charts with lots of data, but is not compatible with every type of series. Please consult the documentation on compatibility, or how to disable turbo mode.',
       );
+    }
+  }
+
+  /** @private */
+  __resolveMode() {
+    if (this.timeline && !this.mode) {
+      console.warn(
+        '<vaadin-chart> The `timeline` property of VaadinChart is deprecated and will be removed in Vaadin 25.',
+      );
+      this.mode = 'timeline';
+    }
+
+    if (this.mode === undefined || !this.__isModeValid()) {
+      this.mode = 'normal';
     }
   }
 }

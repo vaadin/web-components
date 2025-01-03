@@ -67,7 +67,7 @@ describe('vaadin-chart events', () => {
 
     beforeEach(async () => {
       chart = fixtureSync(`
-        <vaadin-chart timeline>
+        <vaadin-chart mode="timeline">
           <vaadin-chart-series type="candlestick" values="[10,20]"></vaadin-chart-series>
         </vaadin-chart>
       `);
