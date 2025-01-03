@@ -1,5 +1,7 @@
 import '@vaadin/vaadin-lumo-styles/color.js';
 import '@vaadin/vaadin-lumo-styles/style.js';
+import '@vaadin/vaadin-lumo-styles/spacing.js';
+import '@vaadin/vaadin-lumo-styles/typography.js';
 import { addGlobalThemeStyles, css, registerStyles } from '@vaadin/vaadin-themable-mixin/register-styles.js';
 
 const cardProps = css`
@@ -8,6 +10,8 @@ const cardProps = css`
     --vaadin-card-border-radius: var(--lumo-border-radius-l);
     --vaadin-card-border-width: 0;
     --vaadin-card-border-color: var(--lumo-contrast-20pct);
+    --vaadin-card-padding: var(--lumo-space-m);
+    --vaadin-card-gap: var(--lumo-space-m);
   }
 `;
 
@@ -26,7 +30,6 @@ const card = css`
     content: '';
     position: absolute;
     inset: 0;
-    z-index: 999;
     pointer-events: none;
     border-radius: inherit;
     border: var(--vaadin-card-border, var(--vaadin-card-border-width) solid var(--vaadin-card-border-color));
@@ -48,6 +51,23 @@ const card = css`
     box-shadow:
       inset 0 -1px 0 0 var(--lumo-shade-10pct),
       var(--vaadin-card-box-shadow);
+  }
+
+  :host(:where([theme~='stretch-media'])) ::slotted([slot='media']:is(img, video, svg, vaadin-icon)) {
+    border-radius: var(--lumo-border-radius-m);
+  }
+
+  ::slotted([slot='title']) {
+    font-size: var(--lumo-font-size-l);
+    line-height: var(--lumo-line-height-xs);
+    font-weight: 600;
+    color: var(--lumo-header-text-color);
+  }
+
+  ::slotted([slot='subtitle']) {
+    font-size: var(--lumo-font-size-m);
+    line-height: var(--lumo-line-height-xs);
+    color: var(--lumo-secondary-text-color);
   }
 `;
 
