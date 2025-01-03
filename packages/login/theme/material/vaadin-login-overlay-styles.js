@@ -311,7 +311,7 @@ const loginFormWrapper = css`
     padding: 2rem 2.5rem 2rem 1.8rem;
   }
 
-  :host([theme~='with-overlay']) [part='form'] h2 {
+  :host([theme~='with-overlay']) [part='form-title'] {
     text-align: center;
     font-size: 1.8em;
     font-weight: 500;

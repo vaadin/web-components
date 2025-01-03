@@ -19,6 +19,10 @@ const loginFormWrapper = css`
   [part='form-title'] {
     margin-top: calc(var(--material-h3-font-size) - var(--material-h4-font-size));
     font-size: var(--material-h5-font-size);
+    font-weight: 300;
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+    text-indent: -0.07em;
   }
 
   ::slotted([slot='submit']) {
