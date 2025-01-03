@@ -22,6 +22,12 @@ export const ButtonMixin = (superClass) =>
 
       // Set tabindex to 0 by default
       this.tabindex = 0;
+
+      this.addEventListener('click', (event) => {
+        if (this.disabled) {
+          event.stopImmediatePropagation();
+        }
+      });
     }
 
     /**
@@ -76,5 +82,13 @@ export const ButtonMixin = (superClass) =>
         // so that it doesn't fire the `click` event when the element is disabled.
         this.click();
       }
+    }
+
+    _disabledChanged(disabled) {
+      this._setAriaDisabled(disabled);
+    }
+
+    _tabindexChanged(_tabindex) {
+      // NO-OP
     }
   };
