@@ -25,7 +25,7 @@ class LoginFormWrapper extends ThemableMixin(PolymerElement) {
       <section part="form">
         <h2 part="form-title">[[i18n.form.title]]</h2>
         <div part="error-message" hidden$="[[!error]]">
-          <h5 part="error-message-title">[[i18n.errorMessage.title]]</h5>
+          <strong part="error-message-title">[[i18n.errorMessage.title]]</strong>
           <p part="error-message-description">[[i18n.errorMessage.message]]</p>
         </div>
 

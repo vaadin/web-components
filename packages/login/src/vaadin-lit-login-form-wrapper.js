@@ -53,7 +53,7 @@ class LoginFormWrapper extends ThemableMixin(PolylitMixin(LitElement)) {
       <section part="form">
         <h2 part="form-title">${this.i18n.form.title}</h2>
         <div part="error-message" ?hidden="${!this.error}">
-          <h5 part="error-message-title">${this.i18n.errorMessage.title}</h5>
+          <strong part="error-message-title">${this.i18n.errorMessage.title}</strong>
           <p part="error-message-description">${this.i18n.errorMessage.message}</p>
         </div>
 
