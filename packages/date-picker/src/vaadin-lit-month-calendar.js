@@ -81,7 +81,7 @@ class MonthCalendar extends MonthCalendarMixin(ThemableMixin(PolylitMixin(LitEle
                         this.maxDate,
                         this.isDateDisabled,
                       )}"
-                      aria-label="${this.__computeDayAriaLabel(date, this.i18n)}"
+                      aria-label="${this.__computeDayAriaLabel(date)}"
                       >${this._getDate(date)}</td
                     >
                   `;
