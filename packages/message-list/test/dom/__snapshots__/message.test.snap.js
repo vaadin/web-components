@@ -62,6 +62,7 @@ snapshots["vaadin-message avatar username"] =
   <vaadin-avatar
     abbr="JD"
     aria-hidden="true"
+    aria-label="Joan Doe (JD)"
     name="Joan Doe"
     role="img"
     slot="avatar"
@@ -77,6 +78,7 @@ snapshots["vaadin-message avatar abbr"] =
   <vaadin-avatar
     abbr="JD"
     aria-hidden="true"
+    aria-label="JD"
     role="img"
     slot="avatar"
     tabindex="-1"
