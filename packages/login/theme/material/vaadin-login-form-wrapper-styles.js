@@ -78,9 +78,12 @@ const loginFormWrapper = css`
     margin-right: calc(2.25rem * -0.95);
   }
 
-  [part='error-message'] h5 {
+  [part='error-message-title'] {
+    display: block;
     margin: 0 0 0.25em;
     color: inherit;
+    line-height: 1.1;
+    text-indent: -0.025em;
   }
 
   [part='error-message'] p {
