@@ -580,9 +580,9 @@ snapshots["vaadin-login-form shadow default"] =
     hidden=""
     part="error-message"
   >
-    <h5 part="error-message-title">
+    <strong part="error-message-title">
       Incorrect username or password
-    </h5>
+    </strong>
     <p part="error-message-description">
       Check that you have entered the correct username and password and try again.
     </p>
@@ -611,9 +611,9 @@ snapshots["vaadin-login-form shadow error"] =
     Log in
   </h2>
   <div part="error-message">
-    <h5 part="error-message-title">
+    <strong part="error-message-title">
       Incorrect username or password
-    </h5>
+    </strong>
     <p part="error-message-description">
       Check that you have entered the correct username and password and try again.
     </p>
@@ -645,9 +645,9 @@ snapshots["vaadin-login-form shadow i18n"] =
     hidden=""
     part="error-message"
   >
-    <h5 part="error-message-title">
+    <strong part="error-message-title">
       Väärä käyttäjätunnus tai salasana
-    </h5>
+    </strong>
     <p part="error-message-description">
       Tarkista että käyttäjätunnus ja salasana ovat oikein ja yritä uudestaan.
     </p>
