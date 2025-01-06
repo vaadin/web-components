@@ -8,7 +8,7 @@
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
-import type { PointOptionsObject, Series, SeriesOptionsType } from 'highcharts';
+import type { GanttPointOptionsObject, PointOptionsObject, Series, SeriesOptionsType } from 'highcharts';
 
 export type ChartSeriesMarkers = 'auto' | 'hidden' | 'shown';
 
@@ -27,7 +27,7 @@ export interface ChartSeriesConfig {
 
 export type ChartSeriesOptions = ChartSeriesConfig & SeriesOptionsType;
 
-export type ChartSeriesValues = Array<number[] | PointOptionsObject | number>;
+export type ChartSeriesValues = Array<number[] | PointOptionsObject | GanttPointOptionsObject | number>;
 
 /**
  * `<vaadin-chart-series>` is a custom element for creating series for Vaadin Charts.
