@@ -389,4 +389,13 @@ describe('keyboard navigation', () => {
       expect(itemPropertyChangedSpy.called).to.be.false;
     });
   });
+
+  describe('updating cell', () => {
+    it('should hide cell content while cell is updating', async () => {
+      grid.cellPartNameGenerator = () => 'updating-cell';
+      await nextFrame();
+      const container = getContainerCellContent(grid.$.items, 0, 0);
+      expect(getComputedStyle(container).opacity).to.equal('0');
+    });
+  });
 });
