@@ -42,7 +42,7 @@ export const TextAreaMixin = (superClass) =>
         },
 
         /**
-         * Minimum number of rows to show. Default is two rows, which is also the minimum value.
+         * Minimum number of rows to show. Default is two rows.
          *
          * When using a custom slotted textarea, the minimum number of rows are not applied for backwards compatibility.
          *
@@ -219,7 +219,7 @@ export const TextAreaMixin = (superClass) =>
       // Do not override this on custom slotted textarea as number of rows may
       // have been configured there.
       if (this.inputElement === this.__textAreaController.defaultNode) {
-        this.inputElement.rows = Math.max(minRows, 2);
+        this.inputElement.rows = Math.max(minRows, 1);
       }
     }
 
@@ -257,8 +257,8 @@ export const TextAreaMixin = (superClass) =>
      * @private
      */
     __minRowsChanged(minRows) {
-      if (minRows < 2) {
-        console.warn('<vaadin-text-area> minRows must be at least 2.');
+      if (minRows < 1) {
+        console.warn('<vaadin-text-area> minRows must be at least 1.');
       }
     }
 
