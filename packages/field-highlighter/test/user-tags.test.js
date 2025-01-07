@@ -242,8 +242,8 @@ describe('user-tags', () => {
 
     describe('adding users when the field is partially visible and focused', () => {
       beforeEach(async () => {
-        container.scrollTop = 220;
         field.inputElement.focus();
+        container.scrollTop = 220;
         await waitForIntersectionObserver();
         addUser(user1);
         addUser(user2);
