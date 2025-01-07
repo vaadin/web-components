@@ -17,7 +17,8 @@ import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themab
 registerStyles(
   'vaadin-grid-pro',
   css`
-    :host([loading-editor]) [part~='focused-cell'] ::slotted(vaadin-grid-cell-content) {
+    :host([loading-editor]) [part~='focused-cell'] ::slotted(vaadin-grid-cell-content),
+    [part~='updating-cell'] ::slotted(vaadin-grid-cell-content) {
       opacity: 0;
       pointer-events: none;
     }
