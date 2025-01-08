@@ -6,6 +6,7 @@
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { SlotObserver } from '@vaadin/component-base/src/slot-observer.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 /**
@@ -59,14 +60,91 @@ class HorizontalLayout extends ElementMixin(ThemableMixin(PolymerElement)) {
         :host([theme~='spacing']) {
           gap: 1em;
         }
+
+        ::slotted([slot='start'][last-start-child]) {
+          margin-inline-end: auto;
+        }
+
+        :host(:not([has-start-children])) ::slotted([slot='center'][first-center-child]) {
+          margin-inline-start: auto;
+        }
+
+        :host(:not([has-end-children])) ::slotted([slot='center'][last-center-child]) {
+          margin-inline-end: auto;
+        }
+
+        ::slotted([slot='end'][first-end-child]) {
+          margin-inline-start: auto;
+        }
       </style>
 
-      <slot></slot>
+      <slot name="start"></slot>
+
+      <slot name="center"></slot>
+
+      <slot name="end"></slot>
     `;
   }
 
   static get is() {
     return 'vaadin-horizontal-layout';
+  }
+
+  /** @protected */
+  ready() {
+    super.ready();
+
+    const startSlot = this.shadowRoot.querySelector('[name="start"]');
+    this.__endSlotObserver = new SlotObserver(startSlot, ({ currentNodes, removedNodes }) => {
+      if (removedNodes.length) {
+        const firstEnd = removedNodes.find((el) => el.hasAttribute('last-start-child'));
+        if (firstEnd) {
+          firstEnd.removeAttribute('last-start-child');
+        }
+      }
+
+      if (currentNodes.length) {
+        currentNodes[currentNodes.length - 1].setAttribute('last-start-child', '');
+      }
+
+      this.toggleAttribute('has-start-children', currentNodes.length > 0);
+    });
+
+    const endSlot = this.shadowRoot.querySelector('[name="end"]');
+    this.__endSlotObserver = new SlotObserver(endSlot, ({ currentNodes, removedNodes }) => {
+      if (removedNodes.length) {
+        const firstEnd = removedNodes.find((el) => el.hasAttribute('first-end-child'));
+        if (firstEnd) {
+          firstEnd.removeAttribute('first-end-child');
+        }
+      }
+
+      if (currentNodes.length) {
+        currentNodes[0].setAttribute('first-end-child', '');
+      }
+
+      this.toggleAttribute('has-end-children', currentNodes.length > 0);
+    });
+
+    const centerSlot = this.shadowRoot.querySelector('[name="center"]');
+    this.__endSlotObserver = new SlotObserver(centerSlot, ({ currentNodes, removedNodes }) => {
+      if (removedNodes.length) {
+        const firstCenter = removedNodes.find((el) => el.hasAttribute('first-center-child'));
+        if (firstCenter) {
+          firstCenter.removeAttribute('first-center-child');
+        }
+
+        const lastCenter = removedNodes.find((el) => el.hasAttribute('last-center-child'));
+        if (lastCenter) {
+          lastCenter.removeAttribute('last-center-child');
+        }
+      }
+
+      if (currentNodes.length) {
+        currentNodes[0].setAttribute('first-center-child', '');
+        currentNodes[currentNodes.length - 1].setAttribute('last-center-child', '');
+      }
+    });
   }
 }
 
