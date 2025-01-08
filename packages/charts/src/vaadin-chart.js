@@ -1063,7 +1063,7 @@ class Chart extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))) {
   __initChart(options) {
     this.__initEventsListeners(options);
     this.__updateStyledMode(options);
-    if (this.type === 'gantt') {
+    if (options.chart.type === 'gantt') {
       this.configuration = Highcharts.ganttChart(this.$.chart, options);
     } else if (this.timeline) {
       this.configuration = Highcharts.stockChart(this.$.chart, options);
