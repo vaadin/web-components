@@ -258,15 +258,18 @@ describe('vaadin-checkbox-group', () => {
   });
 
   describe('focused attribute', () => {
+    let firstGlobalFocusable;
+
     beforeEach(async () => {
-      group = fixtureSync(
+      [firstGlobalFocusable, group] = fixtureSync(
         `<div>
+          <button>First global focusable</button>
           <vaadin-checkbox-group>
             <vaadin-checkbox value="1" label="Checkbox 1"></vaadin-checkbox>
           </vaadin-checkbox-group>
-          <button>Last global focusable</button>
         </div>`,
-      ).firstElementChild;
+      ).children;
+      firstGlobalFocusable.focus();
       await nextFrame();
       checkboxes = [...group.querySelectorAll('vaadin-checkbox')];
     });
@@ -284,7 +287,9 @@ describe('vaadin-checkbox-group', () => {
       await sendKeys({ press: 'Tab' });
 
       // Move focus out of the checkbox group.
+      await sendKeys({ down: 'Shift' });
       await sendKeys({ press: 'Tab' });
+      await sendKeys({ up: 'Shift' });
 
       expect(checkboxes[0].hasAttribute('focused')).to.be.false;
       expect(group.hasAttribute('focused')).to.be.false;

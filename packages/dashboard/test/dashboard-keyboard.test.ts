@@ -30,10 +30,17 @@ type TestDashboardItem = DashboardItem & { id: number };
 describe('dashboard - keyboard interaction', () => {
   let dashboard: Dashboard<TestDashboardItem>;
   let keydownSpy;
+  let firstGlobalFocusable: HTMLElement;
   const columnWidth = 200;
 
   beforeEach(async () => {
-    dashboard = fixtureSync('<vaadin-dashboard></vaadin-dashboard>');
+    [firstGlobalFocusable, dashboard] = fixtureSync(
+      `<div>
+        <button>First global focusable</button>
+        <vaadin-dashboard></vaadin-dashboard>
+      </div>`,
+    ).children as unknown as [HTMLElement, Dashboard<TestDashboardItem>];
+    firstGlobalFocusable.focus();
     await nextFrame();
     dashboard.editable = true;
     keydownSpy = sinon.spy();
@@ -56,15 +63,6 @@ describe('dashboard - keyboard interaction', () => {
 
     dashboard.style.width = `${columnWidth * 2}px`;
     await nextResize(dashboard);
-
-    // Make sure the following tab goes back to the first widget (needed for Firefox)
-    const widget = getElementFromCell(dashboard, 0, 0)!;
-    widget.focus();
-    await nextFrame();
-    await sendKeys({ down: 'Shift' });
-    await sendKeys({ press: 'Tab' });
-    await sendKeys({ up: 'Shift' });
-    await nextFrame();
   });
 
   it('should focus the widget', async () => {
