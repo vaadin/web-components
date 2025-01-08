@@ -9,14 +9,43 @@
 
     <script type="module">
       import '@vaadin/button';
-      import '@vaadin/tooltip';
+
+      const button = document.querySelector('vaadin-button');
+      button.addEventListener('click', () => {
+        console.log('Native button clicked');
+      }, { capture: true });
+
+      button.addEventListener('dblclick', () => {
+        console.log('Native button double clicked');
+      }, { capture: true });
+
+      button.addEventListener('mousedown', () => {
+        console.log('Native button mousedown');
+      }, { capture: true });
+
+      button.addEventListener('touchstart', () => {
+        console.log('Native button touchstart');
+      }, { capture: true });
+
+      button.addEventListener('touchend', () => {
+        console.log('Native button touchend');
+      }, { capture: true });
+
+      button.addEventListener('mouseup', () => {
+        console.log('Native button mousedown');
+      }, { capture: true });
     </script>
   </head>
 
   <body>
-    <vaadin-button>
-      Edit
-      <vaadin-tooltip slot="tooltip" text="Click to edit"></vaadin-tooltip>
-    </vaadin-button>
+    <vaadin-button disabled>Default</vaadin-button>
+    <vaadin-button theme="primary" disabled>Primary</vaadin-button>
+    <vaadin-button theme="secondary" disabled>Secondary</vaadin-button>
+    <vaadin-button theme="tertiary" disabled>Tertiary</vaadin-button>
+    <vaadin-button theme="success" disabled>Success</vaadin-button>
+    <vaadin-button theme="warning" disabled>Warning</vaadin-button>
+    <vaadin-button theme="error" disabled>Error</vaadin-button>
+
+    <button disabled>Native Button</button>
   </body>
 </html>
