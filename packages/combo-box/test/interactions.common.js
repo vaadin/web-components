@@ -22,7 +22,13 @@ describe('interactions', () => {
   let comboBox, overlay, input;
 
   beforeEach(async () => {
-    comboBox = fixtureSync('<vaadin-combo-box label="Label"></vaadin-combo-box>');
+    comboBox = fixtureSync(
+      `<div>
+        <vaadin-combo-box label="Label"></vaadin-combo-box>
+        <button>Last global focusable</button>
+      </div>`,
+    ).firstElementChild;
+
     await nextRender();
     comboBox.items = ['foo', 'bar', 'baz'];
     input = comboBox.inputElement;
@@ -250,9 +256,7 @@ describe('interactions', () => {
       comboBox.open();
       comboBox.close();
       await aTimeout(0);
-      await sendKeys({ down: 'Shift' });
       await sendKeys({ press: 'Tab' });
-      await sendKeys({ up: 'Shift' });
       expect(input.inputMode).to.equal('');
     });
   });

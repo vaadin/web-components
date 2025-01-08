@@ -9,7 +9,12 @@ describe('readonly', () => {
 
   describe('basic', () => {
     beforeEach(async () => {
-      comboBox = fixtureSync(`<vaadin-multi-select-combo-box readonly></vaadin-multi-select-combo-box>`);
+      comboBox = fixtureSync(
+        `<div>
+          <vaadin-multi-select-combo-box readonly></vaadin-multi-select-combo-box>
+          <button>Last global focusable</button>
+        </div>`,
+      ).firstElementChild;
       comboBox.items = ['apple', 'banana', 'lemon', 'orange'];
       comboBox.selectedItems = ['apple', 'orange'];
       await nextRender();
@@ -33,11 +38,9 @@ describe('readonly', () => {
       expect(internal.opened).to.be.true;
     });
 
-    it('should close the dropdown on Shift+Tab when readonly', async () => {
-      await sendKeys({ press: 'ArrowDown' });
-      await sendKeys({ down: 'Shift' });
-      await sendKeys({ press: 'Tab' });
-      await sendKeys({ up: 'Shift' });
+    it('should close the dropdown on Tab when readonly', async () => {
+      await sendKeys({ down: 'ArrowDown' });
+      await sendKeys({ down: 'Tab' });
       expect(internal.opened).to.be.false;
     });
 

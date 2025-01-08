@@ -37,7 +37,12 @@ describe('virtual-keyboard-controller', () => {
   let element, input;
 
   beforeEach(() => {
-    element = fixtureSync('<virtual-keyboard-controller-element></virtual-keyboard-controller-element>');
+    element = fixtureSync(
+      `<div>
+        <virtual-keyboard-controller-element></virtual-keyboard-controller-element>
+        <button>Last global focusable</button>
+      </div>`,
+    ).firstElementChild;
     input = element.inputElement;
   });
 
@@ -59,9 +64,7 @@ describe('virtual-keyboard-controller', () => {
     element.close();
     element.tabIndex = 1;
     element.focus();
-    await sendKeys({ down: 'Shift' });
     await sendKeys({ press: 'Tab' });
-    await sendKeys({ up: 'Shift' });
     expect(input.inputMode).to.equal('');
   });
 });

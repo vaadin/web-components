@@ -4,14 +4,7 @@ const { createUnitTestsConfig } = require('./wtr-utils.js');
 const devServerConfig = require('./web-dev-server.config.js');
 
 const unitTestsConfig = createUnitTestsConfig({
-  browsers: [
-    playwrightLauncher({
-      product: 'firefox',
-      launchOptions: {
-        firefoxUserPrefs: { 'dom.disable_tab_focus_to_root_element': false },
-      },
-    }),
-  ],
+  browsers: [playwrightLauncher({ product: 'firefox' })],
 });
 
 module.exports = {

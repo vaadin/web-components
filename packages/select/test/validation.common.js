@@ -10,7 +10,12 @@ describe('validation', () => {
 
   describe('basic', () => {
     beforeEach(async () => {
-      select = fixtureSync('<vaadin-select></vaadin-select>');
+      select = fixtureSync(
+        `<div>
+          <vaadin-select></vaadin-select>
+          <button>Last global focusable</button>
+        </div>`,
+      ).firstElementChild;
       select.items = [
         { label: 'Option 1', value: 'option-1' },
         { label: 'Option 2', value: 'option-2' },
@@ -60,9 +65,7 @@ describe('validation', () => {
       select.click();
       await nextRender();
 
-      await sendKeys({ down: 'Shift' });
       await sendKeys({ press: 'Tab' });
-      await sendKeys({ up: 'Shift' });
       await nextUpdate(select);
       expect(validateSpy.calledOnce).to.be.true;
     });

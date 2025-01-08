@@ -8,7 +8,12 @@ describe('dropdown', () => {
   let datePicker, input, overlay;
 
   beforeEach(async () => {
-    datePicker = fixtureSync(`<vaadin-date-picker></vaadin-date-picker>`);
+    datePicker = fixtureSync(
+      `<div>
+        <vaadin-date-picker></vaadin-date-picker>
+        <button>Last global focusable</button>
+      </div>`,
+    ).firstElementChild;
     await nextRender();
     input = datePicker.inputElement;
     overlay = datePicker.$.overlay;
@@ -309,9 +314,7 @@ describe('dropdown', () => {
     it('should re-enable virtual keyboard on blur', async () => {
       await open(datePicker);
       datePicker.close();
-      await sendKeys({ down: 'Shift' });
       await sendKeys({ press: 'Tab' });
-      await sendKeys({ up: 'Shift' });
       expect(input.inputMode).to.equal('');
     });
   });

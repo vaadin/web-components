@@ -15,23 +15,20 @@ import sinon from 'sinon';
 import { getViewportItems, getVisibleItemsCount, scrollToIndex, setInputValue } from './helpers.js';
 
 describe('keyboard', () => {
-  let comboBox, input, button;
+  let comboBox, input, lastGlobalFocusable;
 
   function getFocusedIndex() {
     return comboBox._focusedIndex;
   }
 
-  before(() => {
-    button = document.createElement('button');
-    document.body.appendChild(button);
-  });
-
-  after(() => {
-    button.remove();
-  });
-
   beforeEach(async () => {
-    comboBox = fixtureSync('<vaadin-combo-box></vaadin-combo-box>');
+    [comboBox, lastGlobalFocusable] = fixtureSync(
+      `<div>
+        <vaadin-combo-box></vaadin-combo-box>
+        <button>Last global focusable</button>
+      </div>`,
+    ).children;
+
     await nextRender();
     comboBox.items = ['foo', 'bar', 'baz'];
     input = comboBox.inputElement;
@@ -135,40 +132,24 @@ describe('keyboard', () => {
       expect(getFocusedIndex()).to.equal(0);
     });
 
-    it('should tab to the prev focusable', async () => {
-      await sendKeys({ down: 'Shift' });
+    it('should tab to the next focusable', async () => {
       await sendKeys({ press: 'Tab' });
-      await sendKeys({ up: 'Shift' });
-
-      expect(document.activeElement).to.equal(button);
+      expect(document.activeElement).to.equal(lastGlobalFocusable);
     });
 
     describe('focusable items content', () => {
-      let focusable;
-
-      beforeEach(() => {
-        focusable = document.createElement('input');
-      });
-
-      afterEach(() => {
-        focusable.remove();
-      });
-
       it('should tab to the next focusable when items have focusable content', async () => {
         comboBox.renderer = (root) => {
           root.innerHTML = '<input>';
         };
-        document.body.appendChild(focusable);
 
-        // Workaround Playwright sendKeys bug
-        focusable.focus();
         input.focus();
         arrowDownKeyDown(input);
 
         await aTimeout(0);
 
         await sendKeys({ press: 'Tab' });
-        expect(document.activeElement).to.equal(focusable);
+        expect(document.activeElement).to.equal(lastGlobalFocusable);
       });
     });
   });
