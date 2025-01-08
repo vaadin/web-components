@@ -204,6 +204,7 @@ describe('accessibility', () => {
         <input id="last-global-focusable" />
       </div>`);
       await nextRender();
+      await nextRender();
       const [rte, lastGlobalFocusable] = wrapper.children;
       editor = rte._editor;
       editor.focus();
