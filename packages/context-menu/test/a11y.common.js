@@ -6,19 +6,19 @@ import { getMenuItems } from './helpers.js';
 
 describe('a11y', () => {
   describe('focus restoration', () => {
-    let contextMenu, contextMenuButton, beforeButton, afterButton;
+    let contextMenu, contextMenuButton, firstGlobalFocusable, lastGlobalFocusable;
 
     beforeEach(async () => {
       const wrapper = fixtureSync(`
         <div>
-          <button>Before</button>
+          <input id="first-global-focusable" />
           <vaadin-context-menu open-on="click">
             <button>Open context menu</button>
           </vaadin-context-menu>
-          <button>After</button>
+          <input id="last-global-focusable" />
         </div>
       `);
-      [beforeButton, contextMenu, afterButton] = wrapper.children;
+      [firstGlobalFocusable, contextMenu, lastGlobalFocusable] = wrapper.children;
       contextMenu.items = [{ text: 'Item 0' }, { text: 'Item 1', children: [{ text: 'Item 1/0' }] }];
       await nextRender();
       contextMenuButton = contextMenu.querySelector('button');
@@ -82,14 +82,14 @@ describe('a11y', () => {
       await sendKeys({ down: 'Shift' });
       await sendKeys({ press: 'Tab' });
       await sendKeys({ up: 'Shift' });
-      expect(getDeepActiveElement()).to.equal(beforeButton);
+      expect(getDeepActiveElement()).to.equal(firstGlobalFocusable);
     });
 
     it('should move focus to the next element outside the menu on Tab pressed inside', async () => {
       contextMenuButton.click();
       await nextRender();
       await sendKeys({ press: 'Tab' });
-      expect(getDeepActiveElement()).to.equal(afterButton);
+      expect(getDeepActiveElement()).to.equal(lastGlobalFocusable);
     });
   });
 });

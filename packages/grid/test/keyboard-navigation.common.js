@@ -2221,7 +2221,7 @@ describe('empty state', () => {
   }
 
   function getEmptyStateFocusables() {
-    return [...getEmptyState().querySelectorAll('button')];
+    return [...getEmptyState().querySelectorAll('input')];
   }
 
   function getEmptyStateBody() {
@@ -2233,7 +2233,7 @@ describe('empty state', () => {
       <vaadin-grid>
         <vaadin-grid-column path="name"></vaadin-grid-column>
         <div slot="empty-state">
-          No items <button>button 1</button> <button>button 2</button>
+          No items <input /> <input />
         </div>
       </vaadin-grid>
     `);

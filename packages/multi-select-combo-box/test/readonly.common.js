@@ -9,7 +9,12 @@ describe('readonly', () => {
 
   describe('basic', () => {
     beforeEach(async () => {
-      comboBox = fixtureSync(`<vaadin-multi-select-combo-box readonly></vaadin-multi-select-combo-box>`);
+      comboBox = fixtureSync(
+        `<div>
+          <vaadin-multi-select-combo-box readonly></vaadin-multi-select-combo-box>
+          <input id="last-global-focusable" />
+        </div>`,
+      ).firstElementChild;
       comboBox.items = ['apple', 'banana', 'lemon', 'orange'];
       comboBox.selectedItems = ['apple', 'orange'];
       await nextRender();
