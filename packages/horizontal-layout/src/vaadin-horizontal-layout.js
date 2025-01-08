@@ -61,7 +61,7 @@ class HorizontalLayout extends ElementMixin(ThemableMixin(PolymerElement)) {
           gap: 1em;
         }
 
-        ::slotted([slot='start'][last-start-child]) {
+        ::slotted([last-start-child]) {
           margin-inline-end: auto;
         }
 
@@ -78,7 +78,7 @@ class HorizontalLayout extends ElementMixin(ThemableMixin(PolymerElement)) {
         }
       </style>
 
-      <slot name="start"></slot>
+      <slot></slot>
 
       <slot name="center"></slot>
 
@@ -94,8 +94,8 @@ class HorizontalLayout extends ElementMixin(ThemableMixin(PolymerElement)) {
   ready() {
     super.ready();
 
-    const startSlot = this.shadowRoot.querySelector('[name="start"]');
-    this.__endSlotObserver = new SlotObserver(startSlot, ({ currentNodes, removedNodes }) => {
+    const startSlot = this.shadowRoot.querySelector('slot:not([name])');
+    this.__startSlotObserver = new SlotObserver(startSlot, ({ currentNodes, removedNodes }) => {
       if (removedNodes.length) {
         const firstEnd = removedNodes.find((el) => el.hasAttribute('last-start-child'));
         if (firstEnd) {
@@ -103,11 +103,13 @@ class HorizontalLayout extends ElementMixin(ThemableMixin(PolymerElement)) {
         }
       }
 
-      if (currentNodes.length) {
-        currentNodes[currentNodes.length - 1].setAttribute('last-start-child', '');
+      const children = currentNodes.filter((node) => node.nodeType === Node.ELEMENT_NODE);
+
+      if (children.length) {
+        children[children.length - 1].setAttribute('last-start-child', '');
       }
 
-      this.toggleAttribute('has-start-children', currentNodes.length > 0);
+      this.toggleAttribute('has-start-children', children.length > 0);
     });
 
     const endSlot = this.shadowRoot.querySelector('[name="end"]');
@@ -127,7 +129,7 @@ class HorizontalLayout extends ElementMixin(ThemableMixin(PolymerElement)) {
     });
 
     const centerSlot = this.shadowRoot.querySelector('[name="center"]');
-    this.__endSlotObserver = new SlotObserver(centerSlot, ({ currentNodes, removedNodes }) => {
+    this.__centerSlotObserver = new SlotObserver(centerSlot, ({ currentNodes, removedNodes }) => {
       if (removedNodes.length) {
         const firstCenter = removedNodes.find((el) => el.hasAttribute('first-center-child'));
         if (firstCenter) {
