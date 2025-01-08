@@ -109,9 +109,9 @@ describe('dashboard - keyboard interaction', () => {
     expect(spy.firstCall.args[0].detail).to.eql({ item: { id: 0 }, value: true });
   });
 
-  (isChrome || isFirefox ? it : it.skip)('should not remove the widget on backspace', async () => {
+  (isChrome || isFirefox ? it : it.skip)('should not remove the widget on Delete', async () => {
     await sendKeys({ press: 'Tab' });
-    await sendKeys({ press: 'Backspace' });
+    await sendKeys({ press: 'Delete' });
     expect(dashboard.items).to.eql([{ id: 0 }, { id: 1 }, { items: [{ id: 2 }, { id: 3 }] }]);
   });
 
@@ -181,8 +181,8 @@ describe('dashboard - keyboard interaction', () => {
       expect(widget.hasAttribute('focused')).to.be.false;
     });
 
-    it('should remove the widget on backspace', async () => {
-      await sendKeys({ press: 'Backspace' });
+    it('should remove the widget on Delete', async () => {
+      await sendKeys({ press: 'Delete' });
       expect(dashboard.items).to.eql([{ id: 1 }, { items: [{ id: 2 }, { id: 3 }] }]);
     });
 
@@ -191,10 +191,10 @@ describe('dashboard - keyboard interaction', () => {
       expect(dashboard.items).to.eql([{ id: 1 }, { items: [{ id: 2 }, { id: 3 }] }]);
     });
 
-    it('should dispatch an item removed event on backspace', async () => {
+    it('should dispatch an item removed event on Delete', async () => {
       const spy = sinon.spy();
       dashboard.addEventListener('dashboard-item-removed', spy);
-      await sendKeys({ press: 'Backspace' });
+      await sendKeys({ press: 'Delete' });
       expect(spy.calledOnce).to.be.true;
       expect(spy.firstCall.args[0].detail.item).to.eql({ id: 0 });
       expect(spy.firstCall.args[0].detail.items).to.eql(dashboard.items);
@@ -286,9 +286,9 @@ describe('dashboard - keyboard interaction', () => {
       expect(dashboard.items).to.eql([{ id: 0 }, { id: 1 }, { items: [{ id: 2 }, { id: 3 }] }]);
     });
 
-    it('should cancel the default action on backspace', async () => {
+    it('should cancel the default action on Delete', async () => {
       keydownSpy.resetHistory();
-      await sendKeys({ press: 'Backspace' });
+      await sendKeys({ press: 'Delete' });
       expect(keydownSpy.firstCall.args[0].defaultPrevented).to.be.true;
     });
 
