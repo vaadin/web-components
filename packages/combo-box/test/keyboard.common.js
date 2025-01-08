@@ -15,11 +15,20 @@ import sinon from 'sinon';
 import { getViewportItems, getVisibleItemsCount, scrollToIndex, setInputValue } from './helpers.js';
 
 describe('keyboard', () => {
-  let comboBox, input;
+  let comboBox, input, button;
 
   function getFocusedIndex() {
     return comboBox._focusedIndex;
   }
+
+  before(() => {
+    button = document.createElement('button');
+    document.body.appendChild(button);
+  });
+
+  after(() => {
+    button.remove();
+  });
 
   beforeEach(async () => {
     comboBox = fixtureSync('<vaadin-combo-box></vaadin-combo-box>');
@@ -131,7 +140,7 @@ describe('keyboard', () => {
       await sendKeys({ press: 'Tab' });
       await sendKeys({ up: 'Shift' });
 
-      expect(document.activeElement).to.be.oneOf([document.body, document.documentElement]);
+      expect(document.activeElement).to.equal(button);
     });
 
     describe('focusable items content', () => {
