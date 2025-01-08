@@ -618,6 +618,14 @@ describe('keyboard', () => {
       expect(comboBox.value).to.equal('bar');
     });
 
+    it('should not clear the value on esc when readonly', () => {
+      comboBox.value = 'bar';
+      comboBox.clearButtonVisible = true;
+      comboBox.readonly = true;
+      escKeyDown(input);
+      expect(comboBox.value).to.equal('bar');
+    });
+
     it('should not propagate when input value is not empty', async () => {
       await sendKeys({ type: 'foo' });
 
