@@ -89,7 +89,7 @@ export const ClearButtonMixin = (superclass) =>
     _onEscape(event) {
       super._onEscape(event);
 
-      if (this.clearButtonVisible && !!this.value) {
+      if (this.clearButtonVisible && !!this.value && !this.readonly) {
         event.stopPropagation();
         this._onClearAction();
       }

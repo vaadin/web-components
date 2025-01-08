@@ -135,6 +135,12 @@ const runTests = (defineHelper, baseMixin) => {
       expect(input.value).to.equal('foo');
     });
 
+    it('should not clear value on Esc when readonly is true', () => {
+      element.readonly = true;
+      escKeyDown(clearButton);
+      expect(input.value).to.equal('foo');
+    });
+
     it('should dispatch input event when clearing value on Esc', () => {
       const spy = sinon.spy();
       input.addEventListener('input', spy);
