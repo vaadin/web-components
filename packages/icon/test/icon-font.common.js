@@ -47,12 +47,22 @@ describe('vaadin-icon - icon fonts', () => {
     });
 
     it('should subtract vertical padding from height', async () => {
+      // Workaround to trigger cqh recalculation in Safari and Firefox
+      // https://github.com/vaadin/web-components/issues/8397
+      async function iconRender(icon) {
+        icon.style.display = 'block';
+        await nextResize(icon);
+        icon.style.display = '';
+      }
+
       icon.style.padding = '5px';
       await nextResize(icon);
+      await iconRender(icon);
       expect(parseInt(getComputedStyle(icon, ':before').height)).to.be.closeTo(14, 1);
 
       icon.style.padding = '7px';
       await nextResize(icon);
+      await iconRender(icon);
       expect(parseInt(getComputedStyle(icon, ':before').height)).to.be.closeTo(10, 1);
     });
   });

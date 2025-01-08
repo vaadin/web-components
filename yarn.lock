@@ -6235,6 +6235,11 @@ fs.realpath@^1.0.0:
   resolved "https://registry.yarnpkg.com/fs.realpath/-/fs.realpath-1.0.0.tgz#1504ad2523158caa40db4a2787cb01411994ea4f"
   integrity sha512-OO0pH2lK6a0hZnAdau5ItzHPI6pUlvI7jMVnxUQRtw4owF2wk8lOSabtGDCTP4Ggrg2MbGnWO9X8K1t4+fGMDw==
 
+fsevents@2.3.2, fsevents@~2.3.2:
+  version "2.3.2"
+  resolved "https://registry.yarnpkg.com/fsevents/-/fsevents-2.3.2.tgz#8a526f78b8fdf4623b709e0b975c52c24c02fd1a"
+  integrity sha512-xiqMQR4xAeHTuB9uWm+fFRcIOgKBMiOBP+eXiyT7jsgVCq1bkVygt00oASowB7EdtpOHaaPgKt812P9ab+DDKA==
+
 fsevents@^1.2.7:
   version "1.2.13"
   resolved "https://registry.yarnpkg.com/fsevents/-/fsevents-1.2.13.tgz#f325cb0455592428bcf11b383370ef70e3bfcc38"
@@ -6242,11 +6247,6 @@ fsevents@^1.2.7:
   dependencies:
     bindings "^1.5.0"
     nan "^2.12.1"
-
-fsevents@~2.3.2:
-  version "2.3.2"
-  resolved "https://registry.yarnpkg.com/fsevents/-/fsevents-2.3.2.tgz#8a526f78b8fdf4623b709e0b975c52c24c02fd1a"
-  integrity sha512-xiqMQR4xAeHTuB9uWm+fFRcIOgKBMiOBP+eXiyT7jsgVCq1bkVygt00oASowB7EdtpOHaaPgKt812P9ab+DDKA==
 
 function-bind@^1.1.1, function-bind@^1.1.2:
   version "1.1.2"
@@ -10457,17 +10457,19 @@ pkg-dir@^4.2.0:
   dependencies:
     find-up "^4.0.0"
 
-playwright-core@1.24.2:
-  version "1.24.2"
-  resolved "https://registry.yarnpkg.com/playwright-core/-/playwright-core-1.24.2.tgz#47bc5adf3dcfcc297a5a7a332449c9009987db26"
-  integrity sha512-zfAoDoPY/0sDLsgSgLZwWmSCevIg1ym7CppBwllguVBNiHeixZkc1AdMuYUPZC6AdEYc4CxWEyLMBTw2YcmRrA==
+playwright-core@1.49.1:
+  version "1.49.1"
+  resolved "https://registry.yarnpkg.com/playwright-core/-/playwright-core-1.49.1.tgz#32c62f046e950f586ff9e35ed490a424f2248015"
+  integrity sha512-BzmpVcs4kE2CH15rWfzpjzVGhWERJfmnXmniSyKeRZUs9Ws65m+RGIi7mjJK/euCegfn3i7jvqWeWyHe9y3Vgg==
 
-playwright@^1.22.2:
-  version "1.24.2"
-  resolved "https://registry.yarnpkg.com/playwright/-/playwright-1.24.2.tgz#51e60f128b386023e5ee83deca23453aaf73ba6d"
-  integrity sha512-iMWDLgaFRT+7dXsNeYwgl8nhLHsUrzFyaRVC+ftr++P1dVs70mPrFKBZrGp1fOKigHV9d1syC03IpPbqLKlPsg==
+playwright@^1.22.2, playwright@^1.48.2:
+  version "1.49.1"
+  resolved "https://registry.yarnpkg.com/playwright/-/playwright-1.49.1.tgz#830266dbca3008022afa7b4783565db9944ded7c"
+  integrity sha512-VYL8zLoNTBxVOrJBbDuRgDWa3i+mfQgDTrL8Ah9QXZ7ax4Dsj0MSq5bYgytRnDVVe+njoKnfsYkH3HzqVj5UZA==
   dependencies:
-    playwright-core "1.24.2"
+    playwright-core "1.49.1"
+  optionalDependencies:
+    fsevents "2.3.2"
 
 plexer@^2.0.0:
   version "2.0.0"

@@ -22,7 +22,13 @@ describe('interactions', () => {
   let comboBox, overlay, input;
 
   beforeEach(async () => {
-    comboBox = fixtureSync('<vaadin-combo-box label="Label"></vaadin-combo-box>');
+    comboBox = fixtureSync(
+      `<div>
+        <vaadin-combo-box label="Label"></vaadin-combo-box>
+        <input id="last-global-focusable" />
+      </div>`,
+    ).firstElementChild;
+
     await nextRender();
     comboBox.items = ['foo', 'bar', 'baz'];
     input = comboBox.inputElement;
