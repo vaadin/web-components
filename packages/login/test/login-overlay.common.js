@@ -147,8 +147,8 @@ describe('title and description', () => {
       <vaadin-login-overlay title="New title" description="New description" opened></vaadin-login-overlay>
     `);
     await nextRender();
-    headerElement = overlay.$.vaadinLoginOverlayWrapper.shadowRoot.querySelector('[part="brand"] h1');
-    descriptionElement = overlay.$.vaadinLoginOverlayWrapper.shadowRoot.querySelector('[part="brand"] p');
+    headerElement = overlay.$.vaadinLoginOverlayWrapper.shadowRoot.querySelector('[part="title"]');
+    descriptionElement = overlay.$.vaadinLoginOverlayWrapper.shadowRoot.querySelector('[part="description"]');
   });
 
   afterEach(() => {
@@ -189,6 +189,29 @@ describe('title and description', () => {
     overlay.title = 'New title';
     await nextUpdate(overlay);
     expect(overlay.$.vaadinLoginOverlayWrapper.getAttribute('aria-label')).to.equal('New title');
+  });
+});
+
+describe('heading level', () => {
+  let overlay, form;
+
+  beforeEach(async () => {
+    overlay = fixtureSync(`<vaadin-login-overlay opened></vaadin-login-overlay>`);
+    await nextRender();
+    form = overlay.$.vaadinLoginForm;
+  });
+
+  afterEach(() => {
+    overlay.opened = false;
+  });
+
+  it('should set login form title heading level based on the overlay', async () => {
+    expect(overlay.headingLevel).to.equal(1);
+    expect(form.headingLevel).to.equal(2);
+
+    overlay.headingLevel = 2;
+    await nextUpdate(overlay);
+    expect(form.headingLevel).to.equal(3);
   });
 });
 

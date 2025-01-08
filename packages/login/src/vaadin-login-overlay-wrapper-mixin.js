@@ -31,6 +31,13 @@ export const LoginOverlayWrapperMixin = (superClass) =>
         description: {
           type: String,
         },
+
+        /**
+         * Used to customize the `aria-level` attribute on the heading element.
+         */
+        headingLevel: {
+          type: Number,
+        },
       };
     }
 

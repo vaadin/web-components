@@ -50,6 +50,7 @@ class LoginForm extends LoginFormMixin(ElementMixin(ThemableMixin(PolylitMixin(L
         theme="${ifDefined(this._theme)}"
         .error="${this.error}"
         .i18n="${this.i18n}"
+        .headingLevel="${this.headingLevel}"
       >
         <form method="POST" action="${ifDefined(this.action)}" @formdata="${this._onFormData}" slot="form">
           <input id="csrf" type="hidden" />

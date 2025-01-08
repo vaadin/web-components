@@ -28,7 +28,7 @@ export const loginOverlayWrapperStyles = css`
     justify-content: flex-end;
   }
 
-  [part='brand'] h1 {
+  [part='title'] {
     color: inherit;
     margin: 0;
   }
