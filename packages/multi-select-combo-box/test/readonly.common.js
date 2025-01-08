@@ -12,7 +12,7 @@ describe('readonly', () => {
       comboBox = fixtureSync(
         `<div>
           <vaadin-multi-select-combo-box readonly></vaadin-multi-select-combo-box>
-          <button>Last global focusable</button>
+          <input id="last-global-focusable" />
         </div>`,
       ).firstElementChild;
       comboBox.items = ['apple', 'banana', 'lemon', 'orange'];

@@ -12,7 +12,7 @@ describe('keyboard navigation', () => {
           <vaadin-radio-button label="Button 2" value="2"></vaadin-radio-button>
           <vaadin-radio-button label="Button 3" value="3"></vaadin-radio-button>
         </vaadin-radio-group>
-        <button>Last global focusable</button>
+        <input id="last-global-focusable" />
       </div>`,
     ).firstElementChild;
     await nextFrame();

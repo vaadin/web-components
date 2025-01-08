@@ -25,7 +25,7 @@ describe('interactions', () => {
     comboBox = fixtureSync(
       `<div>
         <vaadin-combo-box label="Label"></vaadin-combo-box>
-        <button>Last global focusable</button>
+        <input id="last-global-focusable" />
       </div>`,
     ).firstElementChild;
 

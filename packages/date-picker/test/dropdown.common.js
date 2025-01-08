@@ -11,7 +11,7 @@ describe('dropdown', () => {
     datePicker = fixtureSync(
       `<div>
         <vaadin-date-picker></vaadin-date-picker>
-        <button>Last global focusable</button>
+        <input id="last-global-focusable" />
       </div>`,
     ).firstElementChild;
     await nextRender();

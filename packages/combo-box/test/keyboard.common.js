@@ -25,7 +25,7 @@ describe('keyboard', () => {
     [comboBox, lastGlobalFocusable] = fixtureSync(
       `<div>
         <vaadin-combo-box></vaadin-combo-box>
-        <button>Last global focusable</button>
+        <input id="last-global-focusable" />
       </div>`,
     ).children;
 

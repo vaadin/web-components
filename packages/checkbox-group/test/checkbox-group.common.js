@@ -263,7 +263,7 @@ describe('vaadin-checkbox-group', () => {
     beforeEach(async () => {
       [firstGlobalFocusable, group] = fixtureSync(
         `<div>
-          <button>First global focusable</button>
+          <input id="first-global-focusable" />
           <vaadin-checkbox-group>
             <vaadin-checkbox value="1" label="Checkbox 1"></vaadin-checkbox>
           </vaadin-checkbox-group>

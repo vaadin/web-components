@@ -13,7 +13,7 @@ describe('validation', () => {
       select = fixtureSync(
         `<div>
           <vaadin-select></vaadin-select>
-          <button>Last global focusable</button>
+          <input id="last-global-focusable" />
         </div>`,
       ).firstElementChild;
       select.items = [

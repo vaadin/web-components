@@ -40,7 +40,7 @@ describe('virtual-keyboard-controller', () => {
     element = fixtureSync(
       `<div>
         <virtual-keyboard-controller-element></virtual-keyboard-controller-element>
-        <button>Last global focusable</button>
+        <input id="last-global-focusable" />
       </div>`,
     ).firstElementChild;
     input = element.inputElement;

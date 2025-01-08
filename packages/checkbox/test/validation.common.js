@@ -43,7 +43,7 @@ describe('validation', () => {
       checkbox = fixtureSync(
         `<div>
           <vaadin-checkbox label="Checkbox"></vaadin-checkbox>
-          <button>Last global focusable</button>
+          <input id="last-global-focusable" />
         </div>`,
       ).firstElementChild;
       await nextRender();

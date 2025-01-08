@@ -44,7 +44,7 @@ describe('validation', () => {
     beforeEach(async () => {
       [firstGlobalFocusable, group] = fixtureSync(
         `<div>
-          <button>First global focusable</button>
+          <input id="first-global-focusable" />
           <vaadin-checkbox-group>
             <vaadin-checkbox name="language" value="en" label="English"></vaadin-checkbox>
             <vaadin-checkbox name="language" value="fr" label="Français"></vaadin-checkbox>

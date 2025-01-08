@@ -36,7 +36,7 @@ describe('dashboard - keyboard interaction', () => {
   beforeEach(async () => {
     [firstGlobalFocusable, dashboard] = fixtureSync(
       `<div>
-        <button>First global focusable</button>
+        <input id="first-global-focusable" />
         <vaadin-dashboard></vaadin-dashboard>
       </div>`,
     ).children as unknown as [HTMLElement, Dashboard<TestDashboardItem>];

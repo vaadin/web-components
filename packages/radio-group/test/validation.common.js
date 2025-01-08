@@ -49,7 +49,7 @@ describe('validation', () => {
     beforeEach(async () => {
       [firstGlobalFocusable, group] = fixtureSync(
         `<div>
-          <button>First global focusable</button>
+          <input id="first-global-focusable" />
           <vaadin-radio-group>
             <vaadin-radio-button label="Button 1" value="1"></vaadin-radio-button>
             <vaadin-radio-button label="Button 2" value="2"></vaadin-radio-button>

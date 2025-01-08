@@ -223,7 +223,7 @@ describe('radio-group', () => {
     beforeEach(async () => {
       [firstGlobalFocusable, group] = fixtureSync(
         `<div>
-          <button>First global focusable</button>
+          <input id="first-global-focusable" />
           <vaadin-radio-group>
             <vaadin-radio-button label="Button 1"></vaadin-radio-button>
             <vaadin-radio-button label="Button 2"></vaadin-radio-button>
