@@ -218,6 +218,14 @@ describe('basic', () => {
       expect(comboBox.selectedItems).to.deep.equal(['apple', 'orange']);
     });
 
+    it('should not clear selected items on Esc when readonly', async () => {
+      comboBox.selectedItems = ['apple', 'orange'];
+      comboBox.readonly = true;
+      inputElement.focus();
+      await sendKeys({ press: 'Escape' });
+      expect(comboBox.selectedItems).to.deep.equal(['apple', 'orange']);
+    });
+
     it('should prevent default for touchend event on clear button', () => {
       comboBox.selectedItems = ['apple', 'orange'];
       const event = new CustomEvent('touchend', { cancelable: true });
