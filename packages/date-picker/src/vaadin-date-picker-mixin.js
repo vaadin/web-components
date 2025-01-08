@@ -1160,7 +1160,7 @@ export const DatePickerMixin = (subclass) =>
         return;
       }
 
-      if (this.clearButtonVisible && !!this.value) {
+      if (this.clearButtonVisible && !!this.value && !this.readonly) {
         // Stop event from propagating to the host element
         // to avoid closing dialog when clearing on Esc
         event.stopPropagation();
