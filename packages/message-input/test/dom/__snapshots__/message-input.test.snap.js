@@ -33,7 +33,6 @@ snapshots["vaadin-message-input default"] =
       placeholder="Message"
       rows="1"
       slot="textarea"
-      style="min-height: 0px;"
     >
     </textarea>
   </vaadin-text-area>
@@ -78,7 +77,6 @@ snapshots["vaadin-message-input disabled"] =
       placeholder="Message"
       rows="1"
       slot="textarea"
-      style="min-height: 0px;"
       tabindex="-1"
     >
     </textarea>

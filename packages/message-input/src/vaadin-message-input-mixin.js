@@ -116,11 +116,7 @@ export const MessageInputMixin = (superClass) =>
             }
           });
 
-          const input = textarea.inputElement;
-
-          // Set initial height to one row
-          input.setAttribute('rows', 1);
-          input.style.minHeight = '0';
+          textarea.minRows = 1;
 
           this._textArea = textarea;
         },
