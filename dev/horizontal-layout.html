@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Horizontal layout</title>
+    <script type="module" src="./common.js"></script>
+
+    <script type="module">
+      import '@vaadin/horizontal-layout';
+    </script>
+  </head>
+
+  <body>
+    <vaadin-horizontal-layout theme="padding" style="width: 100%">
+      <button slot="start">Start</button>
+      <button slot="start">Start</button>
+      <button slot="end">End</button>
+      <button slot="end">End</button>
+    </vaadin-horizontal-layout>
+
+    <vaadin-horizontal-layout theme="padding" style="width: 100%">
+      <button slot="start">Start</button>
+      <button slot="start">Start</button>
+      <button slot="center">Center</button>
+      <button slot="center">Center</button>
+    </vaadin-horizontal-layout>
+
+    <vaadin-horizontal-layout theme="padding" style="width: 100%">
+      <button slot="center">Center</button>
+      <button slot="center">Center</button>
+      <button slot="end">End</button>
+      <button slot="end">End</button>
+    </vaadin-horizontal-layout>
+
+    <vaadin-horizontal-layout theme="padding" style="width: 100%">
+      <button slot="start">Start</button>
+      <button slot="start">Start</button>
+      <button slot="center">Center</button>
+      <button slot="center">Center</button>
+      <button slot="end">End</button>
+      <button slot="end">End</button>
+    </vaadin-horizontal-layout>
+
+    <vaadin-horizontal-layout theme="padding" style="width: 100%">
+      <button slot="center">Center</button>
+      <button slot="center">Center</button>
+    </vaadin-horizontal-layout>
+  </body>
+</html>
