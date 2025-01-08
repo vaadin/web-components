@@ -67,8 +67,7 @@ describe('vaadin-chart', () => {
 
     describe('gantt chart', () => {
       beforeEach(async () => {
-        chart = fixtureSync('<vaadin-chart gantt></vaadin-chart>');
-        document.body.appendChild(chart);
+        chart = fixtureSync('<vaadin-chart type="chart"></vaadin-chart>');
         await oneEvent(chart, 'chart-load');
       });
 

@@ -380,16 +380,9 @@ class Chart extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))) {
 
       /**
        * Specifies whether the chart is a normal chart or a timeline chart.
+       * Value of this property is ignored for Gantt charts (type="gantt").
        */
       timeline: {
-        type: Boolean,
-        reflectToAttribute: true,
-      },
-
-      /**
-       * Specifies whether the chart is a normal chart or a Gantt chart.
-       */
-      gantt: {
         type: Boolean,
         reflectToAttribute: true,
       },
@@ -1070,7 +1063,7 @@ class Chart extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))) {
   __initChart(options) {
     this.__initEventsListeners(options);
     this.__updateStyledMode(options);
-    if (this.gantt) {
+    if (this.type === 'gantt') {
       this.configuration = Highcharts.ganttChart(this.$.chart, options);
     } else if (this.timeline) {
       this.configuration = Highcharts.stockChart(this.$.chart, options);
