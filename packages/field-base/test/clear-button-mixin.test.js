@@ -136,6 +136,7 @@ const runTests = (defineHelper, baseMixin) => {
     });
 
     it('should not clear value on Esc when readonly is true', () => {
+      element.clearButtonVisible = true;
       element.readonly = true;
       escKeyDown(clearButton);
       expect(input.value).to.equal('foo');
