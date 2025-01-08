@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, mousedown, mouseup, nextFrame, oneEvent } from '@vaadin/testing-helpers';
+import { fixtureSync, mousedown, mouseup, nextFrame } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import { Virtualizer } from '../src/virtualizer.js';
@@ -144,8 +144,7 @@ describe('reorder elements', () => {
       // Tab downwards
       for (let i = 1; i <= tabToIndex; i++) {
         await nextFrame();
-        queueMicrotask(async () => await sendKeys({ press: 'Tab' }));
-        await oneEvent(elementsContainer, 'focusin');
+        await sendKeys({ press: 'Tab' });
         await nextFrame();
         expect(document.activeElement.id).to.equal(`item-${i}`);
       }
@@ -153,12 +152,9 @@ describe('reorder elements', () => {
       // Tab upwards
       for (let i = tabToIndex - 1; i >= 0; i--) {
         await nextFrame();
-        queueMicrotask(async () => {
-          await sendKeys({ down: 'Shift' });
-          await sendKeys({ press: 'Tab' });
-          await sendKeys({ up: 'Shift' });
-        });
-        await oneEvent(elementsContainer, 'focusin');
+        await sendKeys({ down: 'Shift' });
+        await sendKeys({ press: 'Tab' });
+        await sendKeys({ up: 'Shift' });
         await nextFrame();
         expect(document.activeElement.id).to.equal(`item-${i}`);
       }

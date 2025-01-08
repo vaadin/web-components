@@ -1118,6 +1118,7 @@ describe('drag and drop', () => {
 
     async function assertDragSucceeds(draggedElement) {
       await dragElement(draggedElement);
+      await nextFrame();
       expect(grid.$.scroller.style.display).to.equal('');
     }
 
