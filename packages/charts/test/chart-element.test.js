@@ -64,16 +64,18 @@ describe('vaadin-chart', () => {
       await oneEvent(chart, 'chart-add-series');
       expect(Array.from(chart.$.chart.querySelectorAll('.highcharts-series'))).to.have.lengthOf(1);
     });
+  });
 
-    describe('gantt chart', () => {
-      beforeEach(async () => {
-        chart = fixtureSync('<vaadin-chart type="chart"></vaadin-chart>');
-        await oneEvent(chart, 'chart-load');
-      });
+  describe('gantt', () => {
+    let chart;
 
-      it('should create chart with gantt type', () => {
-        expect(chart.configuration.options.chart.type).to.equal('gantt');
-      });
+    beforeEach(async () => {
+      chart = fixtureSync('<vaadin-chart type="gantt"></vaadin-chart>');
+      await oneEvent(chart, 'chart-load');
+    });
+
+    it('should create gantt chart with gantt type', () => {
+      expect(chart.configuration.options.isGantt).to.be.ok;
     });
   });
 
