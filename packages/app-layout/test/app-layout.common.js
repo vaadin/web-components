@@ -10,7 +10,6 @@ import {
   oneEvent,
 } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import './not-animated-styles.js';
 
 describe('vaadin-app-layout', () => {
   let layout;
