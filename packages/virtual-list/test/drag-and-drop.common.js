@@ -38,6 +38,7 @@ describe('drag and drop', () => {
 
   async function assertDragSucceeds(draggedElement) {
     await dragElement(draggedElement);
+    await nextFrame();
     expect(virtualList.$.items.style.display).to.equal('');
   }
 
