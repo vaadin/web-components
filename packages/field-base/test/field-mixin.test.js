@@ -1,6 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
 import { aTimeout, defineLit, definePolymer, fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
-import sinon from 'sinon';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { FieldMixin } from '../src/field-mixin.js';
@@ -146,25 +145,20 @@ const runTests = (defineHelper, baseMixin) => {
     });
 
     describe('announcements', () => {
-      let announceRegion, clock;
+      let announceRegion;
 
       beforeEach(async () => {
         element = fixtureSync(`<${tag}></${tag}>`);
         await nextRender();
-        clock = sinon.useFakeTimers({ toFake: ['setTimeout'] });
         announceRegion = document.querySelector('[aria-live]');
         announceRegion.textContent = '';
-      });
-
-      afterEach(() => {
-        clock.restore();
       });
 
       it('should announce error message set via attribute when field is invalid', async () => {
         element.invalid = true;
         element.setAttribute('error-message', 'This field is required');
         await nextUpdate(element);
-        clock.tick(200);
+        await aTimeout(150);
         expect(announceRegion.textContent).to.equal('This field is required');
         expect(announceRegion.getAttribute('aria-live')).to.equal('assertive');
       });
@@ -173,7 +167,7 @@ const runTests = (defineHelper, baseMixin) => {
         element.invalid = true;
         element.errorMessage = 'This field is required';
         await nextUpdate(element);
-        clock.tick(200);
+        await aTimeout(150);
         expect(announceRegion.textContent).to.equal('This field is required');
         expect(announceRegion.getAttribute('aria-live')).to.equal('assertive');
       });
@@ -181,7 +175,7 @@ const runTests = (defineHelper, baseMixin) => {
       it('should not announce error message when field is valid', async () => {
         element.errorMessage = 'This field is required';
         await nextUpdate(element);
-        clock.tick(200);
+        await aTimeout(150);
         expect(announceRegion.textContent).to.equal('');
       });
     });
