@@ -10,7 +10,12 @@ describe('validation', () => {
 
   describe('basic', () => {
     beforeEach(async () => {
-      select = fixtureSync('<vaadin-select></vaadin-select>');
+      select = fixtureSync(
+        `<div>
+          <vaadin-select></vaadin-select>
+          <input id="last-global-focusable" />
+        </div>`,
+      ).firstElementChild;
       select.items = [
         { label: 'Option 1', value: 'option-1' },
         { label: 'Option 2', value: 'option-2' },

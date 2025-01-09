@@ -15,14 +15,20 @@ import sinon from 'sinon';
 import { getViewportItems, getVisibleItemsCount, scrollToIndex, setInputValue } from './helpers.js';
 
 describe('keyboard', () => {
-  let comboBox, input;
+  let comboBox, input, lastGlobalFocusable;
 
   function getFocusedIndex() {
     return comboBox._focusedIndex;
   }
 
   beforeEach(async () => {
-    comboBox = fixtureSync('<vaadin-combo-box></vaadin-combo-box>');
+    [comboBox, lastGlobalFocusable] = fixtureSync(
+      `<div>
+        <vaadin-combo-box></vaadin-combo-box>
+        <input id="last-global-focusable" />
+      </div>`,
+    ).children;
+
     await nextRender();
     comboBox.items = ['foo', 'bar', 'baz'];
     input = comboBox.inputElement;
@@ -128,36 +134,22 @@ describe('keyboard', () => {
 
     it('should tab to the next focusable', async () => {
       await sendKeys({ press: 'Tab' });
-
-      expect(document.activeElement).to.equal(document.body);
+      expect(document.activeElement).to.equal(lastGlobalFocusable);
     });
 
     describe('focusable items content', () => {
-      let focusable;
-
-      beforeEach(() => {
-        focusable = document.createElement('input');
-      });
-
-      afterEach(() => {
-        focusable.remove();
-      });
-
       it('should tab to the next focusable when items have focusable content', async () => {
         comboBox.renderer = (root) => {
           root.innerHTML = '<input>';
         };
-        document.body.appendChild(focusable);
 
-        // Workaround Playwright sendKeys bug
-        focusable.focus();
         input.focus();
         arrowDownKeyDown(input);
 
         await aTimeout(0);
 
         await sendKeys({ press: 'Tab' });
-        expect(document.activeElement).to.equal(focusable);
+        expect(document.activeElement).to.equal(lastGlobalFocusable);
       });
     });
   });

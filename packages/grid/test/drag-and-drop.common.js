@@ -1098,6 +1098,7 @@ describe('drag and drop', () => {
       const initialItemsMaxHeight = items.style.maxHeight;
       const initialTableOverflow = table.style.overflow;
       await dragElement(draggedElement);
+      await nextFrame();
       expect(items.style.maxHeight).to.equal(initialItemsMaxHeight);
       expect(table.style.overflow).to.equal(initialTableOverflow);
     }

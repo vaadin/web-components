@@ -73,6 +73,7 @@
     "typescript": "^5.9.2"
   },
   "resolutions": {
+    "playwright": "^1.50.1",
     "puppeteer": "23.2.0"
   },
   "lint-staged": {

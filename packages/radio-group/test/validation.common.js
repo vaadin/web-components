@@ -44,13 +44,19 @@ describe('validation', () => {
   });
 
   describe('basic', () => {
+    let firstGlobalFocusable;
+
     beforeEach(async () => {
-      group = fixtureSync(`
-        <vaadin-radio-group>
-          <vaadin-radio-button label="Button 1" value="1"></vaadin-radio-button>
-          <vaadin-radio-button label="Button 2" value="2"></vaadin-radio-button>
-        </vaadin-radio-group>
-      `);
+      [firstGlobalFocusable, group] = fixtureSync(
+        `<div>
+          <input id="first-global-focusable" />
+          <vaadin-radio-group>
+            <vaadin-radio-button label="Button 1" value="1"></vaadin-radio-button>
+            <vaadin-radio-button label="Button 2" value="2"></vaadin-radio-button>
+          </vaadin-radio-group>
+        </div>`,
+      ).children;
+      firstGlobalFocusable.focus();
       await nextFrame();
       validateSpy = sinon.spy(group, 'validate');
     });

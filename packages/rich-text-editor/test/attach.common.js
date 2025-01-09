@@ -50,6 +50,7 @@ describe('attach/detach', () => {
       rte.dangerouslySetHtmlValue('<p>Foo</p><ul><li>Bar</li><li>Baz</li></ul>');
       rte.parentNode.shadowRoot.innerHTML = '<slot></slot>';
       await nextRender();
+      await nextRender();
       flushValueDebouncer();
       expect(rte.htmlValue).to.equal('<p>Foo</p><ul><li>Bar</li><li>Baz</li></ul>');
     });
