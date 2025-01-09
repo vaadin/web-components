@@ -14,7 +14,7 @@
       const menuBar = document.querySelector('vaadin-menu-bar');
       menuBar.items = [
         { text: 'View', tooltip: 'Options for how to view the content' },
-        { text: 'Edit' },
+        { text: 'Edit', tooltip: 'You cannot edit', disabled: true },
         {
           text: 'Share',
           children: [

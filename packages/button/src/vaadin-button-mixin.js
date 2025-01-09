@@ -22,35 +22,6 @@ export const ButtonMixin = (superClass) =>
 
       // Set tabindex to 0 by default
       this.tabindex = 0;
-
-      this.__onUserInteraction = this.__onUserInteraction.bind(this);
-
-      [
-        'mousedown',
-        'mouseup',
-        'mouseover',
-        'mouseout',
-        'mouseenter',
-        'mouseleave',
-        'touchstart',
-        'touchmove',
-        'touchend',
-        'touchcancel',
-        'click',
-        'dblclick',
-        'keydown',
-        'keyup',
-        'pointerstart',
-        'pointerend',
-        'pointermove',
-        'pointerover',
-        'pointerout',
-        'pointerenter',
-        'pointerleave',
-        'pointercancel',
-      ].forEach((eventType) => {
-        this.addEventListener(eventType, this.__onUserInteraction, { capture: true });
-      });
     }
 
     /**
@@ -104,29 +75,6 @@ export const ButtonMixin = (superClass) =>
         // `DisabledMixin` overrides the standard `click()` method
         // so that it doesn't fire the `click` event when the element is disabled.
         this.click();
-      }
-    }
-
-    _disabledChanged(disabled) {
-      this._setAriaDisabled(disabled);
-    }
-
-    _tabindexChanged(_tabindex) {
-      // NO-OP
-    }
-
-    __onUserInteraction(event) {
-      if (this.disabled) {
-        if (event.type === 'keydown' && event.key === 'Tab') {
-          return;
-        }
-
-        if (['mousedown', 'touchstart'].includes(event.type)) {
-          this.focus();
-        }
-
-        event.preventDefault();
-        event.stopImmediatePropagation();
       }
     }
   };

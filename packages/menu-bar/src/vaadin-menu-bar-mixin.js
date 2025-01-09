@@ -577,7 +577,6 @@ export const MenuBarMixin = (superClass) =>
     /** @protected */
     _setButtonDisabled(button, disabled) {
       button.disabled = disabled;
-      button.setAttribute('tabindex', disabled ? '-1' : '0');
     }
 
     /** @protected */
@@ -693,7 +692,7 @@ export const MenuBarMixin = (superClass) =>
 
     /** @protected */
     _setTabindex(button, focused) {
-      if (this.tabNavigation && !button.disabled) {
+      if (this.tabNavigation) {
         button.setAttribute('tabindex', '0');
       } else {
         button.setAttribute('tabindex', focused ? '0' : '-1');
@@ -1034,5 +1033,10 @@ export const MenuBarMixin = (superClass) =>
      */
     close() {
       this._close();
+    }
+
+    /** @override */
+    _isItemFocusable(_item) {
+      return true;
     }
   };

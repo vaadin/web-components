@@ -45,6 +45,14 @@ class MenuBarButton extends Button {
     super._onKeyDown(event);
     this.__triggeredWithActiveKeys = null;
   }
+
+  __shouldSuppressEventWhenDisabled(event) {
+    if (event.type === 'keydown' && ['ArrowLeft', 'ArrowRight', 'Escape'].includes(event.key)) {
+      return false;
+    }
+
+    return super.__shouldSuppressEventWhenDisabled(event);
+  }
 }
 
 defineCustomElement(MenuBarButton);

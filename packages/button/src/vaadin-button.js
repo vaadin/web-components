@@ -58,12 +58,64 @@ class Button extends ButtonMixin(ElementMixin(ThemableMixin(ControllerMixin(Poly
     return buttonTemplate(html);
   }
 
+  constructor() {
+    super();
+    [
+      'mousedown',
+      'mouseup',
+      'touchstart',
+      'touchend',
+      'click',
+      'dblclick',
+      'keydown',
+      'keyup',
+      'pointerstart',
+      'pointerend',
+    ].forEach((eventType) => {
+      this.addEventListener(
+        eventType,
+        (event) => {
+          if (this.disabled) {
+            if (['mousedown', 'touchstart'].includes(event.type)) {
+              this.focus();
+            }
+
+            if (this.__shouldSuppressEventWhenDisabled(event)) {
+              event.preventDefault();
+              event.stopImmediatePropagation();
+            }
+          }
+        },
+        { capture: true },
+      );
+    });
+  }
+
   /** @protected */
   ready() {
     super.ready();
 
     this._tooltipController = new TooltipController(this);
     this.addController(this._tooltipController);
+  }
+
+  _disabledChanged(disabled) {
+    this._setAriaDisabled(disabled);
+  }
+
+  _tabindexChanged(_tabindex) {
+    // NO-OP
+  }
+
+  /**
+   * @protected
+   */
+  __shouldSuppressEventWhenDisabled(event) {
+    if (event.type === 'keydown' && event.key === 'Tab') {
+      return false;
+    }
+
+    return true;
   }
 }
 

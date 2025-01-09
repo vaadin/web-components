@@ -171,22 +171,27 @@ export const KeyboardDirectionMixin = (superclass) =>
 
         const item = items[idx];
 
-        if (!item.hasAttribute('disabled') && this.__isMatchingItem(item, condition)) {
-          return idx;
+        if (!this._isItemFocusable(item)) {
+          continue;
         }
+
+        if (typeof condition === 'function' && !condition(item)) {
+          continue;
+        }
+
+        return idx;
       }
       return -1;
     }
 
     /**
-     * Returns true if the item matches condition.
+     * Returns true if the item can be focused
      *
      * @param {Element} item - item to check
-     * @param {Function} condition - function used to check the item
-     * @return {number}
-     * @private
+     * @return {boolean}
+     * @protected
      */
-    __isMatchingItem(item, condition) {
-      return typeof condition === 'function' ? condition(item) : true;
+    _isItemFocusable(item) {
+      return !item.hasAttribute('disabled');
     }
   };
