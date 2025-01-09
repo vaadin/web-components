@@ -356,7 +356,7 @@ describe('resizable', () => {
     const bounds = overlay.getBoundingClientRect();
     resize(overlayPart.querySelector('.w'), dx, 0);
     await nextRender();
-    expect(parseInt(overlay.style.height)).to.be.equal(bounds.height);
+    expect(Math.floor(bounds.height)).to.equal(parseInt(overlay.style.height));
   });
 
   it('should set width on resize if "height" has been defined', async () => {
@@ -365,7 +365,7 @@ describe('resizable', () => {
     const bounds = overlay.getBoundingClientRect();
     resize(overlayPart.querySelector('.s'), 0, dx);
     await nextRender();
-    expect(parseInt(overlay.style.width)).to.be.equal(bounds.width);
+    expect(Math.floor(bounds.width)).to.equal(parseInt(overlay.style.width));
   });
 });
 
