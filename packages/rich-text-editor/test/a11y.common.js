@@ -100,7 +100,6 @@ describe('accessibility', () => {
       editor = rte._editor;
       buttons = Array.from(rte.shadowRoot.querySelectorAll(`[part=toolbar] button`));
       content = rte.shadowRoot.querySelector('[contenteditable]');
-      announcer = rte.shadowRoot.querySelector('[aria-live=polite]');
     });
 
     it('should have only one tabbable button in toolbar', () => {
