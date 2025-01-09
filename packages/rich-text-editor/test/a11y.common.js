@@ -21,16 +21,16 @@ describe('accessibility', () => {
 
   const flushValueDebouncer = () => rte.__debounceSetValue && rte.__debounceSetValue.flush();
 
-  beforeEach(async () => {
-    rte = fixtureSync('<vaadin-rich-text-editor></vaadin-rich-text-editor>');
-    await nextRender();
-    editor = rte._editor;
-    buttons = Array.from(rte.shadowRoot.querySelectorAll(`[part=toolbar] button`));
-    content = rte.shadowRoot.querySelector('[contenteditable]');
-    announcer = rte.shadowRoot.querySelector('[aria-live=polite]');
-  });
-
   describe('screen readers', () => {
+    beforeEach(async () => {
+      rte = fixtureSync('<vaadin-rich-text-editor></vaadin-rich-text-editor>');
+      await nextRender();
+      editor = rte._editor;
+      buttons = Array.from(rte.shadowRoot.querySelectorAll(`[part=toolbar] button`));
+      content = rte.shadowRoot.querySelector('[contenteditable]');
+      announcer = rte.shadowRoot.querySelector('[aria-live=polite]');
+    });
+
     it('should have default tooltips for the buttons', () => {
       buttons.forEach((button, index) => {
         const expectedLabel = rte.i18n[Object.keys(rte.i18n)[index]];
@@ -94,6 +94,15 @@ describe('accessibility', () => {
   });
 
   describe('keyboard navigation', () => {
+    beforeEach(async () => {
+      rte = fixtureSync('<vaadin-rich-text-editor></vaadin-rich-text-editor>');
+      await nextRender();
+      editor = rte._editor;
+      buttons = Array.from(rte.shadowRoot.querySelectorAll(`[part=toolbar] button`));
+      content = rte.shadowRoot.querySelector('[contenteditable]');
+      announcer = rte.shadowRoot.querySelector('[aria-live=polite]');
+    });
+
     it('should have only one tabbable button in toolbar', () => {
       const tabbables = rte.shadowRoot.querySelectorAll(`[part=toolbar] button:not([tabindex="-1"])`);
       expect(tabbables.length).to.equal(1);
@@ -175,54 +184,6 @@ describe('accessibility', () => {
       content.dispatchEvent(e);
     });
 
-    it('should move focus to next element after esc followed by tab are pressed', async () => {
-      const wrapper = fixtureSync(`<div>
-        <vaadin-rich-text-editor></vaadin-rich-text-editor>
-        <input id="last-global-focusable" />
-      </div>`);
-      await nextRender();
-      const [rte, lastGlobalFocusable] = wrapper.children;
-      editor = rte._editor;
-      editor.focus();
-      await sendKeys({ press: 'Escape' });
-      await sendKeys({ press: 'Tab' });
-      expect(document.activeElement).to.equal(lastGlobalFocusable);
-    });
-
-    it('should move focus to the first toolbar button after esc followed by shift-tab are pressed', async () => {
-      editor.focus();
-      await sendKeys({ press: 'Escape' });
-      await sendKeys({ down: 'Shift' });
-      await sendKeys({ press: 'Tab' });
-      await sendKeys({ up: 'Shift' });
-      expect(getDeepActiveElement()).to.equal(buttons[0]);
-    });
-
-    it('should restore default Tab behavior after multiple Esc and then Tab', async () => {
-      const wrapper = fixtureSync(`<div>
-        <vaadin-rich-text-editor></vaadin-rich-text-editor>
-        <input id="last-global-focusable" />
-      </div>`);
-      await nextRender();
-      await nextRender();
-      const [rte, lastGlobalFocusable] = wrapper.children;
-      editor = rte._editor;
-      editor.focus();
-      // Hitting Escape multiple times and Tab should move focus to next element
-      await sendKeys({ press: 'Escape' });
-      await sendKeys({ press: 'Escape' });
-      await sendKeys({ press: 'Tab' });
-      expect(document.activeElement).to.equal(lastGlobalFocusable);
-
-      // Checking that default Tab behavior is restored
-      editor.focus();
-      await sendKeys({ press: 'Tab' });
-      if (rte.__debounceSetValue) {
-        rte.__debounceSetValue.flush();
-      }
-      expect(rte.htmlValue).to.equal('<p>\t</p>');
-    });
-
     it('should change indentation and prevent shift-tab keydown in the code block', () => {
       rte.value = '[{"insert":"  foo"},{"attributes":{"code-block":true},"insert":"\\n"}]';
       editor.focus();
@@ -260,6 +221,51 @@ describe('accessibility', () => {
         done();
       });
       down(content);
+    });
+  });
+
+  describe('Tab behavior', () => {
+    let lastGlobalFocusable;
+
+    beforeEach(async () => {
+      [rte, lastGlobalFocusable] = fixtureSync(
+        `<div>
+          <vaadin-rich-text-editor></vaadin-rich-text-editor>
+          <input id="last-global-focusable" />
+        </div>`,
+      ).children;
+      await nextRender();
+      buttons = Array.from(rte.shadowRoot.querySelectorAll(`[part=toolbar] button`));
+      editor = rte._editor;
+      editor.focus();
+    });
+
+    it('should move focus to next element after esc followed by tab are pressed', async () => {
+      await sendKeys({ press: 'Escape' });
+      await sendKeys({ press: 'Tab' });
+      expect(document.activeElement).to.equal(lastGlobalFocusable);
+    });
+
+    it('should move focus to the first toolbar button after esc followed by shift-tab are pressed', async () => {
+      await sendKeys({ press: 'Escape' });
+      await sendKeys({ down: 'Shift' });
+      await sendKeys({ press: 'Tab' });
+      await sendKeys({ up: 'Shift' });
+      expect(getDeepActiveElement()).to.equal(buttons[0]);
+    });
+
+    it('should restore default Tab behavior after multiple Esc and then Tab', async () => {
+      // Hitting Escape multiple times and Tab should move focus to next element
+      await sendKeys({ press: 'Escape' });
+      await sendKeys({ press: 'Escape' });
+      await sendKeys({ press: 'Tab' });
+      expect(document.activeElement).to.equal(lastGlobalFocusable);
+
+      // Checking that default Tab behavior is restored
+      editor.focus();
+      await sendKeys({ press: 'Tab' });
+      flushValueDebouncer();
+      expect(rte.htmlValue).to.equal('<p>\t</p>');
     });
   });
 });
