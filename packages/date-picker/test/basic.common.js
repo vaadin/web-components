@@ -338,6 +338,23 @@ describe('clear button', () => {
     expect(spy.called).to.be.false;
   });
 
+  it('should not clear value on Esc when readonly is true', () => {
+    datePicker.value = '2000-02-01';
+    datePicker.readonly = true;
+    const event = keyboardEventFor('keydown', 27, [], 'Escape');
+    const spy = sinon.spy(event, 'stopPropagation');
+    datePicker.inputElement.dispatchEvent(event);
+    expect(spy.called).to.be.false;
+  });
+
+  it('should not stop propagation on Esc when readonly is true', () => {
+    datePicker.value = '2000-02-01';
+    datePicker.readonly = true;
+    const event = keyboardEventFor('keydown', 27, [], 'Escape');
+    datePicker.inputElement.dispatchEvent(event);
+    expect(datePicker.value).to.equal('2000-02-01');
+  });
+
   it('should not close on clear button click when opened', async () => {
     await open(datePicker);
     datePicker.value = '2001-01-01';
