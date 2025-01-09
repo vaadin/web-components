@@ -16,6 +16,7 @@ of steps to perform when creating a new major or minor version branch of the mon
   - [Generating icons](#generating-icons)
   - [Using a local clone of the repo](#using-a-local-clone-of-the-repo)
   - [Fixing npm dist-tag](#fixing-npm-dist-tag)
+  - [Testing Tab on WebKit](#testing-tab-on-webkit)
 
 ## Getting started
 
@@ -291,7 +292,7 @@ Re-generate SVG icon sets and icon fonts from individual SVG files for the packa
 yarn icons
 ```
 
-## Using a local clone of the repo
+### Using a local clone of the repo
 
 When using a Vaadin app, you can modify the frontend build tool config to resolve the web components modules from your local clone, instead of the versions downloaded from npm registry.
 
@@ -369,7 +370,7 @@ This will symlink the individual component packages into the `node_modules` fold
 
 After that you can start / restart your application and it should use the source code from the monorepo.
 
-## Fixing npm dist-tag
+### Fixing npm dist-tag
 
 When maintaining two stable majors (e.g. 22.0.x and 23.0.x), it is important to maintain `latest` npm tag.
 For example, we release 22.0.7 after 23.0.1 but we still want to keep `latest` pointing to 23.0.1.
@@ -379,3 +380,7 @@ Use the following script on `main` branch to run `npm dist-tag` for all packages
 ```sh
 ./scripts/fixDistTag.sh
 ```
+
+### Testing Tab on WebKit
+
+When running tests in Playwright WebKit on Mac OS, some tests using `sendKeys({ press: 'Tab' })` might fail for components using native `<button>` elements internally e.g. `<vaadin-upload>`. To fix this, [activate "Keyboard navigation"](https://www.a11y-collective.com/blog/how-to-activate-keyboard-navigation-on-macos/) toggle in "System Preferences > Keyboard".
