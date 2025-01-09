@@ -100,11 +100,14 @@ export const DynamicColumnsMixin = (superClass) =>
 
     /** @protected */
     _updateColumnTree() {
-      const columnTree = this._getColumnTree();
+      this.__normalColumnTree = this._getColumnTree();
+      const columnTree = this.__listMode ? [[this.$.listModeColumn]] : this.__normalColumnTree;
 
       if (!arrayEquals(columnTree, this._columnTree)) {
         this._columnTree = columnTree;
       }
+      // Columns may be added or removed while in list mode
+      this.requestContentUpdate();
     }
 
     /** @private */

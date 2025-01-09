@@ -294,6 +294,8 @@ class Grid extends GridMixin(ElementMixin(ThemableMixin(ControllerMixin(PolymerE
       <slot name="tooltip"></slot>
 
       <div id="focusexit" tabindex="0"></div>
+
+      <vaadin-grid-column id="listModeColumn"></vaadin-grid-column>
     `;
   }
 

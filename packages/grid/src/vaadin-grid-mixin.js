@@ -130,6 +130,16 @@ export const GridMixin = (superClass) =>
           value: isTouch,
         },
 
+        listThreshold: {
+          type: Number,
+        },
+
+        __listMode: {
+          type: Boolean,
+          value: false,
+          observer: '__listModeChanged',
+        },
+
         /**
          * If true, the grid's height is defined by its rows.
          *
@@ -211,6 +221,10 @@ export const GridMixin = (superClass) =>
       this._hideTooltip(true);
     }
 
+    __listModeChanged() {
+      this._debounceUpdateColumnTree();
+    }
+
     /** @private */
     __getFirstVisibleItem() {
       return this._getRenderedRows().find((row) => this._isInViewport(row));
@@ -258,9 +272,38 @@ export const GridMixin = (superClass) =>
       return this.getItemId(item) === this.getItemId(model.item);
     }
 
+    __listModeColumnRenderer(root, _column, model) {
+      const rootColumns = this.__normalColumnTree[this.__normalColumnTree.length - 1];
+      root.textContent = '';
+
+      rootColumns.forEach((col) => {
+        if (col.hidden) {
+          return;
+        }
+
+        const container = document.createElement('div');
+        container.style.display = 'flex';
+
+        const header = document.createElement('b');
+        header.style.width = '100px';
+        container.appendChild(header);
+
+        const content = document.createElement('div');
+        container.appendChild(content);
+
+        root.appendChild(container);
+
+        col._renderer(content, col, model);
+        col._headerRenderer(header, col, model);
+      });
+    }
+
     /** @protected */
     ready() {
       super.ready();
+
+      this.$.listModeColumn.header = 'List mode';
+      this.$.listModeColumn.renderer = this.__listModeColumnRenderer.bind(this);
 
       this.__virtualizer = new Virtualizer({
         createElements: this._createScrollerRows.bind(this),

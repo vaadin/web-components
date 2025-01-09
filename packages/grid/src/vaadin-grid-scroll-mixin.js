@@ -159,6 +159,12 @@ export const ScrollMixin = (superClass) =>
         }
         this.__previousVisible = isVisible;
       }
+
+      this.__changeListMode();
+    }
+
+    __changeListMode() {
+      this.__listMode = this.listThreshold && this.offsetWidth < this.listThreshold;
     }
 
     /**

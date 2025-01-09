@@ -370,7 +370,11 @@ export const ColumnBaseMixin = (superClass) =>
       let el = this;
       // Custom elements extending grid must have a specific localName
       while (el && !/^vaadin.*grid(-pro)?$/u.test(el.localName)) {
-        el = el.assignedSlot ? el.assignedSlot.parentNode : el.parentNode;
+        if (el.host) {
+          el = el.host;
+        } else {
+          el = el.assignedSlot ? el.assignedSlot.parentNode : el.parentNode;
+        }
       }
       return el || undefined;
     }
@@ -753,8 +757,8 @@ export const ColumnBaseMixin = (superClass) =>
      *
      * @private
      */
-    __textHeaderRenderer() {
-      this.__setTextContent(this._headerCell._content, this.header);
+    __textHeaderRenderer(content) {
+      this.__setTextContent(content, this.header);
     }
 
     /**
@@ -763,12 +767,12 @@ export const ColumnBaseMixin = (superClass) =>
      *
      * @protected
      */
-    _defaultHeaderRenderer() {
+    _defaultHeaderRenderer(content) {
       if (!this.path) {
         return;
       }
 
-      this.__setTextContent(this._headerCell._content, this._generateHeader(this.path));
+      this.__setTextContent(content, this._generateHeader(this.path));
     }
 
     /**
