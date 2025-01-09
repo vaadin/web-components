@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { aTimeout, fixtureSync, keyDownOn, nextFrame, nextRender, oneEvent } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, keyDownOn, nextFrame, nextRender } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import { getDeepActiveElement } from '@vaadin/a11y-base/src/focus-utils.js';
@@ -540,8 +540,7 @@ describe('keyboard interaction mode', () => {
     // Tab downwards
     for (let i = 1; i <= tabToIndex; i++) {
       await rendered();
-      queueMicrotask(async () => await sendKeys({ press: 'Tab' }));
-      await oneEvent(grid, 'focusin');
+      await sendKeys({ press: 'Tab' });
       await rendered();
 
       const focusedRow = document.activeElement.parentElement.assignedSlot.parentElement.parentElement;
@@ -551,12 +550,9 @@ describe('keyboard interaction mode', () => {
     // Tab upwards
     for (let i = tabToIndex - 1; i >= 0; i--) {
       await rendered();
-      queueMicrotask(async () => {
-        await sendKeys({ down: 'Shift' });
-        await sendKeys({ press: 'Tab' });
-        await sendKeys({ up: 'Shift' });
-      });
-      await oneEvent(grid, 'focusin');
+      await sendKeys({ down: 'Shift' });
+      await sendKeys({ press: 'Tab' });
+      await sendKeys({ up: 'Shift' });
       await rendered();
       const focusedRow = document.activeElement.parentElement.assignedSlot.parentElement.parentElement;
       expect(focusedRow.index).to.equal(i);

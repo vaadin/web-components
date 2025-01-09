@@ -309,6 +309,14 @@ describe('chips', () => {
 
       it('should not mark last chip on Backspace as focused when readonly', async () => {
         comboBox.readonly = true;
+        // Prevent navigating to about:blank in WebKit
+        inputElement.addEventListener(
+          'keydown',
+          (e) => {
+            e.preventDefault();
+          },
+          { once: true },
+        );
         await sendKeys({ press: 'Backspace' });
         const chips = getChips(comboBox);
         expect(chips[1].hasAttribute('focused')).to.be.false;

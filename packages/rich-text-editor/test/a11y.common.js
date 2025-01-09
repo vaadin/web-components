@@ -178,15 +178,15 @@ describe('accessibility', () => {
     it('should move focus to next element after esc followed by tab are pressed', async () => {
       const wrapper = fixtureSync(`<div>
         <vaadin-rich-text-editor></vaadin-rich-text-editor>
-        <button>button</button>
+        <input id="last-global-focusable" />
       </div>`);
       await nextRender();
-      const [rte, button] = wrapper.children;
+      const [rte, lastGlobalFocusable] = wrapper.children;
       editor = rte._editor;
       editor.focus();
       await sendKeys({ press: 'Escape' });
       await sendKeys({ press: 'Tab' });
-      expect(document.activeElement).to.equal(button);
+      expect(document.activeElement).to.equal(lastGlobalFocusable);
     });
 
     it('should move focus to the first toolbar button after esc followed by shift-tab are pressed', async () => {
@@ -201,17 +201,18 @@ describe('accessibility', () => {
     it('should restore default Tab behavior after multiple Esc and then Tab', async () => {
       const wrapper = fixtureSync(`<div>
         <vaadin-rich-text-editor></vaadin-rich-text-editor>
-        <button>button</button>
+        <input id="last-global-focusable" />
       </div>`);
       await nextRender();
-      const [rte, button] = wrapper.children;
+      await nextRender();
+      const [rte, lastGlobalFocusable] = wrapper.children;
       editor = rte._editor;
       editor.focus();
       // Hitting Escape multiple times and Tab should move focus to next element
       await sendKeys({ press: 'Escape' });
       await sendKeys({ press: 'Escape' });
       await sendKeys({ press: 'Tab' });
-      expect(document.activeElement).to.equal(button);
+      expect(document.activeElement).to.equal(lastGlobalFocusable);
 
       // Checking that default Tab behavior is restored
       editor.focus();
