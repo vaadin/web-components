@@ -106,7 +106,7 @@ const inputField = css`
   }
 
   :host([invalid][focus-ring]) [part='input-field'] {
-    box-shadow: 0 0 0 2px var(--lumo-error-color-50pct);
+    box-shadow: 0 0 0 var(--_focus-ring-width) var(--lumo-error-color-50pct);
   }
 
   :host([input-prevented]) [part='input-field'] {
