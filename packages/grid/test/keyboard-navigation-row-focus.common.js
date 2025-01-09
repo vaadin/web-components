@@ -144,7 +144,7 @@ describe('keyboard navigation - row focus', () => {
   });
 
   describe('scrolling and navigating', () => {
-    it('should scroll focused nested row into view on arrow key', () => {
+    it('should scroll focused nested row into view on arrow key', async () => {
       focusItem(0);
       // Expand first row
       right();
@@ -153,12 +153,12 @@ describe('keyboard navigation - row focus', () => {
       // Simulate real scrolling to get the virtualizer to render
       // the focused item in a different element.
       grid.$.table.scrollTop = grid.$.table.scrollHeight / 2;
-      flushGrid(grid);
+      await nextFrame();
       down();
       expect(getFocusedRowIndex(grid)).to.equal(2);
     });
 
-    it('should scroll focused nested row into view on Tab', () => {
+    it('should scroll focused nested row into view on Tab', async () => {
       focusItem(0);
       // Expand first row
       right();
@@ -169,7 +169,7 @@ describe('keyboard navigation - row focus', () => {
       // Simulate real scrolling to get the virtualizer to render
       // the focused item in a different element.
       grid.$.table.scrollTop = grid.$.table.scrollHeight / 2;
-      flushGrid(grid);
+      await nextFrame();
       // Move focus back to items
       tab();
       expect(getFocusedRowIndex(grid)).to.equal(1);
