@@ -77,15 +77,11 @@ export const mapStyles = css`
   }
 
   .ol-grabbing {
-    cursor: -webkit-grabbing;
-    cursor: -moz-grabbing;
     cursor: grabbing;
   }
 
   .ol-grab {
     cursor: move;
-    cursor: -webkit-grab;
-    cursor: -moz-grab;
     cursor: grab;
   }
 
