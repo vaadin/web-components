@@ -4,25 +4,7 @@ import '@vaadin/vaadin-lumo-styles/spacing.js';
 import '@vaadin/vaadin-lumo-styles/style.js';
 import '@vaadin/vaadin-lumo-styles/typography.js';
 import '@vaadin/vaadin-lumo-styles/font-icons.js';
-import { addGlobalThemeStyles } from '@vaadin/vaadin-themable-mixin/register-styles';
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-
-/* Global styles */
-const dashboardWidgetProps = css`
-  html {
-    --vaadin-dashboard-widget-background: var(--lumo-base-color);
-    --vaadin-dashboard-widget-border-radius: var(--lumo-border-radius-l);
-    --vaadin-dashboard-widget-border-width: 1px;
-    --vaadin-dashboard-widget-border-color: var(--lumo-contrast-20pct);
-    --vaadin-dashboard-widget-shadow: 0 0 0 0 transparent;
-    --vaadin-dashboard-widget-editable-shadow: var(--lumo-box-shadow-s);
-    --vaadin-dashboard-widget-selected-shadow: 0 2px 4px -1px var(--lumo-primary-color-10pct),
-      0 3px 12px -1px var(--lumo-primary-color-50pct);
-    --vaadin-dashboard-drop-target-background-color: var(--lumo-primary-color-10pct);
-    --vaadin-dashboard-drop-target-border: 1px dashed var(--lumo-primary-color-50pct);
-  }
-`;
-addGlobalThemeStyles('dashboard-widget-props', dashboardWidgetProps);
 
 /* Styles shared between widgets and sections */
 const dashboardWidgetAndSection = css`
@@ -30,6 +12,29 @@ const dashboardWidgetAndSection = css`
   /* stylelint-disable length-zero-no-unit */
 
   :host {
+    --_vaadin-dashboard-widget-background: var(--vaadin-dashboard-widget-background, var(--lumo-base-color));
+    --_vaadin-dashboard-widget-border-radius: var(--vaadin-dashboard-widget-border-radius, var(--lumo-border-radius-l));
+    --_vaadin-dashboard-widget-border-width: var(--vaadin-dashboard-widget-border-width, 1px);
+    --_vaadin-dashboard-widget-border-color: var(--vaadin-dashboard-widget-border-color, var(--lumo-contrast-20pct));
+    --_vaadin-dashboard-widget-shadow: var(--vaadin-dashboard-widget-shadow, 0 0 0 0 transparent);
+    --_vaadin-dashboard-widget-editable-shadow: var(
+      --vaadin-dashboard-widget-editable-shadow,
+      var(--lumo-box-shadow-s)
+    );
+    --_vaadin-dashboard-widget-selected-shadow: var(
+      --vaadin-dashboard-widget-selected-shadow,
+      0 2px 4px -1px var(--lumo-primary-color-10pct),
+      0 3px 12px -1px var(--lumo-primary-color-50pct)
+    );
+    --_vaadin-dashboard-drop-target-background-color: var(
+      --vaadin-dashboard-drop-target-background-color,
+      var(--lumo-primary-color-10pct)
+    );
+    --_vaadin-dashboard-drop-target-border: var(
+      --vaadin-dashboard-drop-target-border,
+      1px dashed var(--lumo-primary-color-50pct)
+    );
+
     color: var(--lumo-body-text-color);
     font-family: var(--lumo-font-family);
     font-size: var(--lumo-font-size-m);
@@ -137,17 +142,17 @@ const dashboardWidgetAndSection = css`
 /* Widget styles */
 const dashboardWidget = css`
   :host {
-    background: var(--vaadin-dashboard-widget-background);
-    border-radius: var(--vaadin-dashboard-widget-border-radius);
-    --_border-shadow: 0 0 0 var(--vaadin-dashboard-widget-border-width) var(--vaadin-dashboard-widget-border-color);
-    --_shadow: var(--vaadin-dashboard-widget-shadow);
+    background: var(--_vaadin-dashboard-widget-background);
+    border-radius: var(--_vaadin-dashboard-widget-border-radius);
+    --_border-shadow: 0 0 0 var(--_vaadin-dashboard-widget-border-width) var(--_vaadin-dashboard-widget-border-color);
+    --_shadow: var(--_vaadin-dashboard-widget-shadow);
     box-shadow: var(--_shadow), var(--_border-shadow);
   }
 
   /* Widget states */
 
   :host([editable]) {
-    --_shadow: var(--vaadin-dashboard-widget-editable-shadow);
+    --_shadow: var(--_vaadin-dashboard-widget-editable-shadow);
   }
 
   :host([focused]) {
@@ -155,19 +160,19 @@ const dashboardWidget = css`
   }
 
   :host([selected]) {
-    --_shadow: var(--vaadin-dashboard-widget-selected-shadow);
+    --_shadow: var(--_vaadin-dashboard-widget-selected-shadow);
     background: var(--lumo-primary-color-10pct);
   }
 
   :host([dragging]) {
     box-shadow: none;
-    background: var(--vaadin-dashboard-drop-target-background-color);
-    border: var(--vaadin-dashboard-drop-target-border);
+    background: var(--_vaadin-dashboard-drop-target-background-color);
+    border: var(--_vaadin-dashboard-drop-target-border);
   }
 
   :host([resizing])::after {
-    background: var(--vaadin-dashboard-drop-target-background-color);
-    border: var(--vaadin-dashboard-drop-target-border);
+    background: var(--_vaadin-dashboard-drop-target-background-color);
+    border: var(--_vaadin-dashboard-drop-target-border);
   }
 
   /* Widget parts */
