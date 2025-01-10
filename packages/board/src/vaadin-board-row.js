@@ -71,6 +71,10 @@ class BoardRow extends ResizeMixin(ElementMixin(PolymerElement)) {
           --medium-size: var(--vaadin-board-width-medium, 960px);
         }
 
+        :host([hidden]) {
+          display: none !important;
+        }
+
         :host ::slotted(*) {
           box-sizing: border-box;
           flex-grow: 1;
