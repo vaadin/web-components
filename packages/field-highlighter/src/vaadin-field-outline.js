@@ -6,7 +6,10 @@
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
-import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { fieldOutlineStyles } from './vaadin-field-highlighter-styles.js';
+
+registerStyles('vaadin-field-outline', fieldOutlineStyles, { moduleId: 'vaadin-field-outline-styles' });
 
 /**
  * An element used internally by `<vaadin-field-highlighter>`. Not intended to be used separately.
@@ -22,26 +25,7 @@ export class FieldOutline extends ThemableMixin(DirMixin(PolymerElement)) {
   }
 
   static get template() {
-    return html`
-      <style>
-        :host {
-          display: block;
-          box-sizing: border-box;
-          position: absolute;
-          inset: 0;
-          width: 100%;
-          height: 100%;
-          pointer-events: none;
-          user-select: none;
-          opacity: 0;
-          --_active-user-color: transparent;
-        }
-
-        :host([has-active-user]) {
-          opacity: 1;
-        }
-      </style>
-    `;
+    return html``;
   }
 
   static get properties() {

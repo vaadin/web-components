@@ -9,54 +9,8 @@ import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { OverlayMixin } from '@vaadin/overlay/src/vaadin-overlay-mixin.js';
 import { PositionMixin } from '@vaadin/overlay/src/vaadin-overlay-position-mixin.js';
 import { overlayStyles } from '@vaadin/overlay/src/vaadin-overlay-styles.js';
-import { css, registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-
-const userTagsOverlayStyles = css`
-  :host {
-    background: transparent;
-    box-shadow: none;
-  }
-
-  [part='overlay'] {
-    box-shadow: none;
-    background: transparent;
-    position: relative;
-    left: -4px;
-    padding: 4px;
-    outline: none;
-    overflow: visible;
-  }
-
-  ::slotted([part='tags']) {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  :host([dir='rtl']) [part='overlay'] {
-    left: auto;
-    right: -4px;
-  }
-
-  [part='content'] {
-    padding: 0;
-  }
-
-  :host([opening]),
-  :host([closing]) {
-    animation: 0.14s user-tags-overlay-dummy-animation;
-  }
-
-  @keyframes user-tags-overlay-dummy-animation {
-    0% {
-      opacity: 1;
-    }
-
-    100% {
-      opacity: 1;
-    }
-  }
-`;
+import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { userTagsOverlayStyles } from './vaadin-field-highlighter-styles.js';
 
 registerStyles('vaadin-user-tags-overlay', [overlayStyles, userTagsOverlayStyles]);
 

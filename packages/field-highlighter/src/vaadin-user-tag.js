@@ -6,7 +6,10 @@
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
-import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { userTagStyles } from './vaadin-field-highlighter-styles.js';
+
+registerStyles('vaadin-user-tag', userTagStyles, { moduleId: 'vaadin-user-tag-styles' });
 
 /**
  * An element used internally by `<vaadin-field-highlighter>`. Not intended to be used separately.
@@ -23,43 +26,7 @@ export class UserTag extends ThemableMixin(DirMixin(PolymerElement)) {
   }
 
   static get template() {
-    return html`
-      <style>
-        :host {
-          display: block;
-          box-sizing: border-box;
-          margin: 0 0 var(--vaadin-user-tag-offset);
-          opacity: 0;
-          height: 1.3rem;
-          transition: opacity 0.2s ease-in-out;
-          background-color: var(--vaadin-user-tag-color);
-          color: #fff;
-          cursor: default;
-          -webkit-user-select: none;
-          user-select: none;
-          --vaadin-user-tag-offset: 4px;
-        }
-
-        :host(.show) {
-          opacity: 1;
-        }
-
-        :host(:last-of-type) {
-          margin-bottom: 0;
-        }
-
-        [part='name'] {
-          overflow: hidden;
-          white-space: nowrap;
-          text-overflow: ellipsis;
-          box-sizing: border-box;
-          padding: 2px 4px;
-          height: 1.3rem;
-          font-size: 13px;
-        }
-      </style>
-      <div part="name">[[name]]</div>
-    `;
+    return html`<div part="name">[[name]]</div>`;
   }
 
   static get properties() {
