@@ -9,7 +9,7 @@
  * license.
  */
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
-import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
+import { BoardRowMixin } from './vaadin-board-row-mixin.js';
 
 /**
  * `<vaadin-board-row>` is a web component that together with `<vaadin-board>` component allows
@@ -45,17 +45,7 @@ import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
  * `--vaadin-board-width-small` | Determines the width where mode changes from `small` to `medium` | `600px`
  * `--vaadin-board-width-medium` | Determines the width where mode changes from `medium` to `large` | `960px`
  */
-declare class BoardRow extends ResizeMixin(ElementMixin(HTMLElement)) {
-  /**
-   * Redraws the row, if necessary.
-   *
-   * In most cases, a board row will redraw itself if your reconfigure it.
-   * If you dynamically change breakpoints
-   * `--vaadin-board-width-small` or `--vaadin-board-width-medium`,
-   * then you need to call this method.
-   */
-  redraw(): void;
-}
+declare class BoardRow extends BoardRowMixin(ElementMixin(HTMLElement)) {}
 
 declare global {
   interface HTMLElementTagNameMap {
