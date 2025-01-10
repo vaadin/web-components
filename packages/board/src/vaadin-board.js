@@ -44,6 +44,10 @@ class Board extends ElementMixin(PolymerElement) {
         :host {
           display: block;
         }
+
+        :host([hidden]) {
+          display: none !important;
+        }
       </style>
       <slot></slot>
     `;
