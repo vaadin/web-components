@@ -1,6 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
-import '../vaadin-board-row.js';
 
 describe('light DOM children', () => {
   let row;
