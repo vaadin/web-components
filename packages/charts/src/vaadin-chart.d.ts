@@ -479,6 +479,7 @@ declare class Chart extends ResizeMixin(ThemableMixin(ElementMixin(HTMLElement))
 
   /**
    * Specifies whether the chart is a normal chart or a timeline chart.
+   * Value of this property is ignored for Gantt charts (type="gantt").
    */
   timeline: boolean | null | undefined;
 

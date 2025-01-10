@@ -26,6 +26,7 @@ import 'highcharts/es-modules/masters/modules/timeline.src.js';
 import 'highcharts/es-modules/masters/modules/organization.src.js';
 import 'highcharts/es-modules/masters/modules/xrange.src.js';
 import 'highcharts/es-modules/masters/modules/bullet.src.js';
+import 'highcharts/es-modules/masters/modules/gantt.src.js';
 import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
 import { beforeNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
@@ -379,6 +380,7 @@ class Chart extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))) {
 
       /**
        * Specifies whether the chart is a normal chart or a timeline chart.
+       * Value of this property is ignored for Gantt charts (type="gantt").
        */
       timeline: {
         type: Boolean,
@@ -1061,7 +1063,9 @@ class Chart extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))) {
   __initChart(options) {
     this.__initEventsListeners(options);
     this.__updateStyledMode(options);
-    if (this.timeline) {
+    if (options.chart.type === 'gantt') {
+      this.configuration = Highcharts.ganttChart(this.$.chart, options);
+    } else if (this.timeline) {
       this.configuration = Highcharts.stockChart(this.$.chart, options);
     } else {
       this.configuration = Highcharts.chart(this.$.chart, options);

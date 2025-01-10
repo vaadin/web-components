@@ -66,6 +66,19 @@ describe('vaadin-chart', () => {
     });
   });
 
+  describe('gantt', () => {
+    let chart;
+
+    beforeEach(async () => {
+      chart = fixtureSync('<vaadin-chart type="gantt"></vaadin-chart>');
+      await oneEvent(chart, 'chart-load');
+    });
+
+    it('should create gantt chart with gantt type', () => {
+      expect(chart.configuration.options.isGantt).to.be.ok;
+    });
+  });
+
   describe('configuration', () => {
     const DATA = [29.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4];
     const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
