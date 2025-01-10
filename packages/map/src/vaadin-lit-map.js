@@ -37,6 +37,7 @@ class Map extends MapMixin(ThemableMixin(ElementMixin(PolylitMixin(LitElement)))
     return mapStyles;
   }
 
+  /** @protected */
   render() {
     return html``;
   }
