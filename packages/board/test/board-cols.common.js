@@ -1,7 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { aTimeout, fixtureSync } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import '../vaadin-board-row.js';
 
 describe('board-cols', () => {
   let row;
