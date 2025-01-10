@@ -1,6 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
 import { aTimeout, fixtureSync, keyboardEventFor } from '@vaadin/testing-helpers';
-import '../vaadin-cookie-consent.js';
 
 describe('vaadin-cookie-consent', () => {
   describe('custom element definition', () => {
