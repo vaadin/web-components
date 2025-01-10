@@ -879,6 +879,10 @@ export const GridColumnMixin = (superClass) =>
           sync: true,
         },
 
+        hiddenThreshold: {
+          type: Number,
+        },
+
         /**
          * Custom function for rendering the cell content.
          * Receives three arguments:

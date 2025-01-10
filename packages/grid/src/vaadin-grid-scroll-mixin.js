@@ -159,6 +159,20 @@ export const ScrollMixin = (superClass) =>
         }
         this.__previousVisible = isVisible;
       }
+
+      this.__updateHiddenColumns();
+    }
+
+    __updateHiddenColumns() {
+      const rootColumns = this._columnTree[this._columnTree.length - 1];
+      const hiddenThresholdColumn = rootColumns.find((column) => column.hiddenThreshold);
+      const hiddenThreshold = hiddenThresholdColumn ? hiddenThresholdColumn.hiddenThreshold : -1;
+      const belowThreshold = this.offsetWidth < hiddenThreshold;
+      rootColumns.forEach((column) => {
+        // TODO: Need to use another property to not override hidden state set by the user
+        column.hidden =
+          hiddenThresholdColumn && belowThreshold ? column !== hiddenThresholdColumn : column === hiddenThresholdColumn;
+      });
     }
 
     /**
