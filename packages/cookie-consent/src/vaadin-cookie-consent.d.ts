@@ -9,6 +9,7 @@
  * license.
  */
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { CookieConsentMixin } from './vaadin-cookie-consent-mixin.js';
 
 /**
  * `<vaadin-cookie-consent>` is used to show a cookie consent banner the first
@@ -36,46 +37,7 @@ import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
  * `cc-btn`        | Dismiss cookie button
  * `cc-link`       | Learn more link element
  */
-declare class CookieConsent extends ElementMixin(HTMLElement) {
-  /**
-   * The message to show in the popup.
-   */
-  message: string;
-
-  /**
-   * The text to show on the dismiss/consent button.
-   */
-  dismiss: string;
-
-  /**
-   * The text to show on the 'learn more' link.
-   * @attr {string} learn-more
-   */
-  learnMore: string;
-
-  /**
-   * The URL the 'learn more' link should open.
-   * @attr {string} learn-more-link
-   */
-  learnMoreLink: string;
-
-  /**
-   * Determines the position of the banner.
-   *
-   * Possible values are: `top`, `bottom`, `top-left`, `top-right`, `bottom-left`, `bottom-right`
-   * For `top` and `bottom`, the banner is shown with full width. For the corner positions,
-   * it is shown as a smaller popup.
-   */
-  position: 'bottom-left' | 'bottom-right' | 'bottom' | 'top-left' | 'top-right' | 'top';
-
-  /**
-   * The name of the cookie to set to remember that the user has consented.
-   *
-   * This rarely needs to be changed.
-   * @attr {string} cookie-name
-   */
-  cookieName: string;
-}
+declare class CookieConsent extends CookieConsentMixin(ElementMixin(HTMLElement)) {}
 
 declare global {
   interface HTMLElementTagNameMap {
