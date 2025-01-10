@@ -88,6 +88,7 @@ export const mapStyles = css`
   /* Control positioning and styling */
 
   .ol-overlaycontainer-stopevent {
+    /* stylelint-disable declaration-block-no-redundant-longhand-properties */
     display: grid;
     grid-template-columns: min-content 1fr min-content;
     grid-template-rows: min-content 1fr min-content min-content min-content min-content;
