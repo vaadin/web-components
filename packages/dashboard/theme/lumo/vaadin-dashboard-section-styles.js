@@ -64,9 +64,9 @@ const section = css`
   }
 
   :host([dragging]) {
-    background: var(--vaadin-dashboard-drop-target-background-color);
-    outline: var(--vaadin-dashboard-drop-target-border);
-    box-shadow: 0 0 0 var(--_section-outline-offset) var(--vaadin-dashboard-drop-target-background-color);
+    background: var(--_vaadin-dashboard-drop-target-background-color);
+    outline: var(--_vaadin-dashboard-drop-target-border);
+    box-shadow: 0 0 0 var(--_section-outline-offset) var(--_vaadin-dashboard-drop-target-background-color);
   }
 
   /* Accessible move mode controls */
