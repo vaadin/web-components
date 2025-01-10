@@ -40,7 +40,8 @@
     "@vaadin/component-base": "24.7.0-alpha4",
     "@vaadin/vaadin-lumo-styles": "24.7.0-alpha4",
     "@vaadin/vaadin-material-styles": "24.7.0-alpha4",
-    "cookieconsent": "^3.0.6"
+    "cookieconsent": "^3.0.6",
+    "lit": "^3.0.0"
   },
   "devDependencies": {
     "@vaadin/chai-plugins": "24.7.0-alpha4",
