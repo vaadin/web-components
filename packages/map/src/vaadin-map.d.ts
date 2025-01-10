@@ -8,11 +8,9 @@
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
-import type OpenLayersMap from 'ol/Map.js';
-import { FocusMixin } from '@vaadin/a11y-base/src/focus-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
-import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin';
+import { MapMixin } from './vaadin-map-mixin.js';
 
 /**
  * `vaadin-map` is a web component for displaying web maps.
@@ -50,18 +48,9 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin';
  * @extends HTMLElement
  * @mixes ThemableMixin
  * @mixes ElementMixin
- * @mixes FocusMixin
- * @mixes ResizeMixin
+ * @mixes MapMixin
  */
-declare class Map extends ResizeMixin(FocusMixin(ThemableMixin(ElementMixin(HTMLElement)))) {
-  /**
-   * The internal OpenLayers map instance used to configure the map.
-   * See the OpenLayers [API](https://openlayers.org/en/latest/apidoc/) and
-   * [examples](https://openlayers.org/en/latest/examples/) for further information.
-   * @returns {*}
-   */
-  get configuration(): OpenLayersMap;
-}
+declare class Map extends MapMixin(ThemableMixin(ElementMixin(HTMLElement))) {}
 
 declare global {
   interface HTMLElementTagNameMap {
