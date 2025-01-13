@@ -208,6 +208,9 @@ export const DragAndDropMixin = (superClass) =>
 
     /** @private */
     _onDragLeave(e) {
+      if (!this.dropMode) {
+        return;
+      }
       e.stopPropagation();
       this._clearDragStyles();
     }
