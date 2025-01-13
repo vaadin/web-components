@@ -222,6 +222,9 @@ export const DragAndDropMixin = (superClass) =>
 
     /** @private */
     _onDragEnd(e) {
+      if (!this.__draggedItems.length) {
+        return;
+      }
       this.toggleAttribute('dragging-rows', false);
       e.stopPropagation();
       const event = new CustomEvent('grid-dragend');
@@ -234,6 +237,9 @@ export const DragAndDropMixin = (superClass) =>
 
     /** @private */
     _onDragLeave(e) {
+      if (!this.dropMode) {
+        return;
+      }
       e.stopPropagation();
       this._clearDragStyles();
     }
