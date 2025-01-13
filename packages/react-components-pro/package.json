@@ -25,7 +25,7 @@
     "version": "tsx ../../scripts/package-json-version.ts"
   },
   "dependencies": {
-    "@lit/react": "^1.0.6",
+    "@lit/react": "^1.0.7",
     "@vaadin/board": "24.7.0-alpha4",
     "@vaadin/charts": "24.7.0-alpha4",
     "@vaadin/cookie-consent": "24.7.0-alpha4",
