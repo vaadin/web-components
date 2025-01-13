@@ -264,11 +264,13 @@ export class UserTags extends PolymerElement {
     const hasOldUsers = Array.isArray(this.users);
 
     if (hasOldUsers) {
-      removedUsers = this.users.filter((item) => hasNewUsers && !users.includes(item));
+      const newUserIds = (users || []).map((user) => user.id);
+      removedUsers = this.users.filter((item) => !newUserIds.includes(item.id));
     }
 
     if (hasNewUsers) {
-      addedUsers = [...users].reverse().filter((item) => hasOldUsers && !this.users.includes(item));
+      const oldUserIds = (this.users || []).map((user) => user.id);
+      addedUsers = users.filter((item) => !oldUserIds.includes(item.id)).reverse();
     }
 
     if (addedUsers.length === 0 && removedUsers.length === 0) {
