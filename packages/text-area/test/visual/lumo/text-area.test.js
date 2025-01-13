@@ -1,4 +1,5 @@
 import { fixtureSync } from '@vaadin/testing-helpers/dist/fixture.js';
+import { sendKeys } from '@web/test-runner-commands';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '../common.js';
 import '../../../theme/lumo/vaadin-text-area.js';
@@ -137,5 +138,25 @@ describe('text-area', () => {
     element.clearButtonVisible = true;
 
     await visualDiff(div, 'single-row');
+  });
+
+  describe('focus', () => {
+    it('keyboard focus-ring', async () => {
+      await sendKeys({ press: 'Tab' });
+      await visualDiff(div, 'keyboard-focus-ring');
+    });
+
+    it('pointer focus-ring disabled', async () => {
+      element.focus();
+      element.removeAttribute('focus-ring');
+      await visualDiff(div, 'pointer-focus-ring-disabled');
+    });
+
+    it('pointer focus-ring enabled', async () => {
+      element.style.setProperty('--lumo-input-field-pointer-focus-visible', '1');
+      element.focus();
+      element.removeAttribute('focus-ring');
+      await visualDiff(div, 'pointer-focus-ring-enabled');
+    });
   });
 });
