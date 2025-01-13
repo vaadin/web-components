@@ -414,12 +414,12 @@ describe('drag and drop', () => {
         expect(spy.called).to.be.false;
       });
 
-      it('should not stop the native event if not dragging', () => {
+      it('should not stop the native event on grid itself', () => {
         fireDragEnd();
 
         const spy = sinon.spy();
         listenOnce(grid, 'dragend', spy);
-        fireDragEnd();
+        fireDragEnd(grid);
         expect(spy.called).to.be.true;
       });
 
