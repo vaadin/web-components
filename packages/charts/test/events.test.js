@@ -62,6 +62,34 @@ describe('vaadin-chart events', () => {
     });
   });
 
+  describe('draggable', () => {
+    beforeEach(async () => {
+      chart = fixtureSync(`
+        <vaadin-chart type="line" additional-options='{"plotOptions": {"series": {"dragDrop": {"draggableX": true}}}}'>
+             <vaadin-chart-series values="[10, 20]"></vaadin-chart-series>
+        </vaadin-chart>
+      `);
+      await oneEvent(chart, 'chart-load');
+    });
+
+    it('should emit dragStart when point clicked', () => {
+      const spy = sinon.spy();
+      chart.addEventListener('point-drag-start', spy);
+      chart.configuration.hoverPoint = chart.configuration.series[0].points[0];
+      chart.$.chart.querySelector('.highcharts-container').dispatchEvent(new MouseEvent('mousedown'));
+      expect(spy.calledOnce).to.be.true;
+    });
+
+    it('should resolve point object on dragStart', () => {
+      const spy = sinon.spy();
+      chart.addEventListener('point-drag-start', spy);
+      chart.configuration.hoverPoint = chart.configuration.series[0].points[0];
+      chart.$.chart.querySelector('.highcharts-container').dispatchEvent(new MouseEvent('mousedown'));
+      const event = spy.firstCall.args[0];
+      expect(event.detail.point).to.be.deep.equal(chart.configuration.series[0].points[0]);
+    });
+  });
+
   describe('timeline', () => {
     let chart;
 

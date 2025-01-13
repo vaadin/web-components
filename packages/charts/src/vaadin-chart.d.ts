@@ -167,6 +167,21 @@ export type ChartPointUnselectEvent = CustomEvent<{ point: Point; originalEvent:
 export type ChartPointUpdateEvent = CustomEvent<{ point: Point; originalEvent: ChartPointEvent }>;
 
 /**
+ * Fired when starting to drag a point.
+ */
+export type ChartPointDragStartEvent = CustomEvent<{ point: Point; originalEvent: ChartPointEvent }>;
+
+/**
+ * Fired when the point is dropped.
+ */
+export type ChartPointDropEvent = CustomEvent<{ point: Point; originalEvent: ChartPointEvent }>;
+
+/**
+ * Fired while dragging a point.
+ */
+export type ChartPointDragEvent = CustomEvent<{ point: Point; originalEvent: ChartPointEvent }>;
+
+/**
  * Fired when when the minimum and maximum is set for the X axis.
  */
 export type ChartXaxesExtremesSetEvent = CustomEvent<{
@@ -244,6 +259,12 @@ export interface ChartCustomEventMap {
   'point-unselect': ChartPointUnselectEvent;
 
   'point-update': ChartPointUpdateEvent;
+
+  'point-drag-start': ChartPointDragStartEvent;
+
+  'point-drop': ChartPointDropEvent;
+
+  'point-drag': ChartPointDragEvent;
 
   'xaxes-extremes-set': ChartXaxesExtremesSetEvent;
 
@@ -404,6 +425,9 @@ export type ChartEventMap = ChartCustomEventMap & HTMLElementEventMap;
  * @fires {CustomEvent} point-select -Fired when the point is selected either programmatically or by clicking on the point.
  * @fires {CustomEvent} point-unselect - Fired when the point is unselected either programmatically or by clicking on the point.
  * @fires {CustomEvent} point-update - Fired when the point is updated programmatically through `.updateConfiguration()` method.
+ * @fires {CustomEvent} point-drag-start - Fired when starting to drag a point.
+ * @fires {CustomEvent} point-drop - Fired when the point is dropped.
+ * @fires {CustomEvent} point-drag - Fired while dragging a point.
  * @fires {CustomEvent} xaxes-extremes-set - Fired when when the minimum and maximum is set for the X axis.
  * @fires {CustomEvent} yaxes-extremes-set - Fired when when the minimum and maximum is set for the Y axis.
  */
