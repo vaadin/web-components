@@ -42,12 +42,6 @@ describe('date-picker', () => {
     await visualDiff(div, 'flex');
   });
 
-  it('focus-ring', async () => {
-    await sendKeys({ press: 'Tab' });
-
-    await visualDiff(div, 'focus-ring');
-  });
-
   ['ltr', 'rtl'].forEach((dir) => {
     describe(dir, () => {
       before(() => {
@@ -127,6 +121,26 @@ describe('date-picker', () => {
           await visualDiff(div, `${dir}-week-numbers`);
         });
       });
+    });
+  });
+
+  describe('focus', () => {
+    it('keyboard focus-ring', async () => {
+      await sendKeys({ press: 'Tab' });
+      await visualDiff(div, 'keyboard-focus-ring');
+    });
+
+    it('pointer focus-ring disabled', async () => {
+      element.focus();
+      element.removeAttribute('focus-ring');
+      await visualDiff(div, 'pointer-focus-ring-disabled');
+    });
+
+    it('pointer focus-ring enabled', async () => {
+      element.style.setProperty('--lumo-input-field-pointer-focus-visible', '1');
+      element.focus();
+      element.removeAttribute('focus-ring');
+      await visualDiff(div, 'pointer-focus-ring-enabled');
     });
   });
 });
