@@ -68,7 +68,27 @@ const inputField = css`
     transition-duration: 0.15s, 1s;
   }
 
-  /* Focus-ring */
+  /* Opt-in focus-ring when using pointer devices */
+  /* This applies a focus-ring as box-shadow when the element is focused, but
+     the ring is only visible / has a width when the respective CSS property is
+     "enabled" using a value of 1 */
+  :host([focused]) [part='input-field'] {
+    /* Borders are implemented using box-shadows as well. To avoid overriding 
+       the border on focus, even if the pointer focus-ring is disabled, we need to:
+       - Duplicate the border box shadow for this rule
+       - Remove the border (by using width of 0) when the focus-ring is visible,
+         which is the same behavior as for the keyboard focus-ring below
+       - Apply the border when the focus ring is not visible
+    */
+    --_pointer-focus-visible: clamp(0, var(--lumo-input-field-pointer-focus-visible, 0), 1);
+    --_conditional-border-width: calc(calc(1 - var(--_pointer-focus-visible)) * var(--_input-border-width));
+    --_conditional-focus-ring-width: calc(var(--_pointer-focus-visible) * var(--_focus-ring-width));
+    box-shadow:
+      inset 0 0 0 var(--_conditional-border-width) var(--_input-border-color),
+      0 0 0 var(--_conditional-focus-ring-width) var(--_focus-ring-color);
+  }
+
+  /* Focus-ring when using keyboard navigation */
   :host([focus-ring]) [part='input-field'] {
     box-shadow: 0 0 0 var(--_focus-ring-width) var(--_focus-ring-color);
   }
