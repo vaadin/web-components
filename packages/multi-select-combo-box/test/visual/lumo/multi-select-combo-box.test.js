@@ -27,12 +27,6 @@ describe('multi-select-combo-box', () => {
     await visualDiff(div, 'basic');
   });
 
-  it('focus-ring', async () => {
-    await sendKeys({ press: 'Tab' });
-
-    await visualDiff(div, 'focus-ring');
-  });
-
   it('disabled', async () => {
     element.disabled = true;
     await visualDiff(div, 'disabled');
@@ -187,6 +181,26 @@ describe('multi-select-combo-box', () => {
       element.readonly = true;
       element.$.comboBox.click();
       await visualDiff(div, 'opened-readonly');
+    });
+  });
+
+  describe('focus', () => {
+    it('keyboard focus-ring', async () => {
+      await sendKeys({ press: 'Tab' });
+      await visualDiff(div, 'keyboard-focus-ring');
+    });
+
+    it('pointer focus-ring disabled', async () => {
+      element.focus();
+      element.removeAttribute('focus-ring');
+      await visualDiff(div, 'pointer-focus-ring-disabled');
+    });
+
+    it('pointer focus-ring enabled', async () => {
+      element.style.setProperty('--lumo-input-field-pointer-focus-visible', '1');
+      element.focus();
+      element.removeAttribute('focus-ring');
+      await visualDiff(div, 'pointer-focus-ring-enabled');
     });
   });
 });
