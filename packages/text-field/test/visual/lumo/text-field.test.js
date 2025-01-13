@@ -19,11 +19,6 @@ describe('text-field', () => {
     await visualDiff(div, 'basic');
   });
 
-  it('focus-ring', async () => {
-    await sendKeys({ press: 'Tab' });
-    await visualDiff(div, 'focus-ring');
-  });
-
   it('disabled', async () => {
     element.disabled = true;
     await visualDiff(div, 'disabled');
@@ -190,6 +185,27 @@ describe('text-field', () => {
     it('Bordered input container, dark mode', async () => {
       document.documentElement.setAttribute('theme', 'dark');
       await visualDiff(div, 'bordered-input-container-dark');
+      document.documentElement.removeAttribute('theme');
+    });
+  });
+
+  describe('focus', () => {
+    it('keyboard focus-ring', async () => {
+      await sendKeys({ press: 'Tab' });
+      await visualDiff(div, 'keyboard-focus-ring');
+    });
+
+    it('pointer focus-ring disabled', async () => {
+      element.focus();
+      element.removeAttribute('focus-ring');
+      await visualDiff(div, 'pointer-focus-ring-disabled');
+    });
+
+    it('pointer focus-ring enabled', async () => {
+      element.style.setProperty('--lumo-input-field-pointer-focus-visible', '1');
+      element.focus();
+      element.removeAttribute('focus-ring');
+      await visualDiff(div, 'pointer-focus-ring-enabled');
     });
   });
 });
