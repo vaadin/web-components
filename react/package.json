@@ -1,7 +1,7 @@
 {
   "name": "react-components-workspace",
   "type": "module",
-  "version": "24.7.0-alpha4",
+  "version": "24.7.0-alpha5",
   "private": true,
   "scripts": {
     "build": "npm run build:load-schema && npm run build -w packages/react-components && npm run build -w packages/react-components-pro",
