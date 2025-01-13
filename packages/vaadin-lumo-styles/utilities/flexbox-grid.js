@@ -321,19 +321,19 @@ export const flexboxAndGrid = css`
 
   /* === Responsive design === */
   @media (min-width: 640px) {
-    .sm\\items-baseline {
+    .sm\\:items-baseline {
       align-items: baseline;
     }
-    .sm\\items-center {
+    .sm\\:items-center {
       align-items: center;
     }
-    .sm\\items-end {
+    .sm\\:items-end {
       align-items: flex-end;
     }
-    .sm\\items-start {
+    .sm\\:items-start {
       align-items: flex-start;
     }
-    .sm\\items-stretch {
+    .sm\\:items-stretch {
       align-items: stretch;
     }
     .sm\\:flex-col {
@@ -381,19 +381,19 @@ export const flexboxAndGrid = css`
   }
 
   @media (min-width: 768px) {
-    .md\\items-baseline {
+    .md\\:items-baseline {
       align-items: baseline;
     }
-    .md\\items-center {
+    .md\\:items-center {
       align-items: center;
     }
-    .md\\items-end {
+    .md\\:items-end {
       align-items: flex-end;
     }
-    .md\\items-start {
+    .md\\:items-start {
       align-items: flex-start;
     }
-    .md\\items-stretch {
+    .md\\:items-stretch {
       align-items: stretch;
     }
     .md\\:flex-col {
@@ -440,19 +440,19 @@ export const flexboxAndGrid = css`
     }
   }
   @media (min-width: 1024px) {
-    .lg\\items-baseline {
+    .lg\\:items-baseline {
       align-items: baseline;
     }
-    .lg\\items-center {
+    .lg\\:items-center {
       align-items: center;
     }
-    .lg\\items-end {
+    .lg\\:items-end {
       align-items: flex-end;
     }
-    .lg\\items-start {
+    .lg\\:items-start {
       align-items: flex-start;
     }
-    .lg\\items-stretch {
+    .lg\\:items-stretch {
       align-items: stretch;
     }
     .lg\\:flex-col {
@@ -499,19 +499,19 @@ export const flexboxAndGrid = css`
     }
   }
   @media (min-width: 1280px) {
-    .xl\\items-baseline {
+    .xl\\:items-baseline {
       align-items: baseline;
     }
-    .xl\\items-center {
+    .xl\\:items-center {
       align-items: center;
     }
-    .xl\\items-end {
+    .xl\\:items-end {
       align-items: flex-end;
     }
-    .xl\\items-start {
+    .xl\\:items-start {
       align-items: flex-start;
     }
-    .xl\\items-stretch {
+    .xl\\:items-stretch {
       align-items: stretch;
     }
     .xl\\:flex-col {
@@ -558,19 +558,19 @@ export const flexboxAndGrid = css`
     }
   }
   @media (min-width: 1536px) {
-    .\\32xl\\items-baseline {
+    .\\32xl\\:items-baseline {
       align-items: baseline;
     }
-    .\\32xl\\items-center {
+    .\\32xl\\:items-center {
       align-items: center;
     }
-    .\\32xl\\items-end {
+    .\\32xl\\:items-end {
       align-items: flex-end;
     }
-    .\\32xl\\items-start {
+    .\\32xl\\:items-start {
       align-items: flex-start;
     }
-    .\\32xl\\items-stretch {
+    .\\32xl\\:items-stretch {
       align-items: stretch;
     }
     .\\32xl\\:flex-col {
