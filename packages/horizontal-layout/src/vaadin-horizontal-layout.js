@@ -61,26 +61,26 @@ class HorizontalLayout extends ElementMixin(ThemableMixin(PolymerElement)) {
           gap: 1em;
         }
 
-        ::slotted([last-start-child]) {
+        :host(:not([has-middle-children])) ::slotted([last-start-child]) {
           margin-inline-end: auto;
         }
 
-        :host(:not([has-start-children])) ::slotted([slot='center'][first-center-child]) {
+        ::slotted([slot='middle'][first-middle-child]) {
           margin-inline-start: auto;
         }
 
-        :host(:not([has-end-children])) ::slotted([slot='center'][last-center-child]) {
+        ::slotted([slot='middle'][last-middle-child]) {
           margin-inline-end: auto;
         }
 
-        ::slotted([slot='end'][first-end-child]) {
+        :host(:not([has-middle-children])) ::slotted([slot='end'][first-end-child]) {
           margin-inline-start: auto;
         }
       </style>
 
       <slot></slot>
 
-      <slot name="center"></slot>
+      <slot name="middle"></slot>
 
       <slot name="end"></slot>
     `;
@@ -128,24 +128,26 @@ class HorizontalLayout extends ElementMixin(ThemableMixin(PolymerElement)) {
       this.toggleAttribute('has-end-children', currentNodes.length > 0);
     });
 
-    const centerSlot = this.shadowRoot.querySelector('[name="center"]');
-    this.__centerSlotObserver = new SlotObserver(centerSlot, ({ currentNodes, removedNodes }) => {
+    const middleSlot = this.shadowRoot.querySelector('[name="middle"]');
+    this.__middleSlotObserver = new SlotObserver(middleSlot, ({ currentNodes, removedNodes }) => {
       if (removedNodes.length) {
-        const firstCenter = removedNodes.find((el) => el.hasAttribute('first-center-child'));
+        const firstCenter = removedNodes.find((el) => el.hasAttribute('first-middle-child'));
         if (firstCenter) {
-          firstCenter.removeAttribute('first-center-child');
+          firstCenter.removeAttribute('first-middle-child');
         }
 
-        const lastCenter = removedNodes.find((el) => el.hasAttribute('last-center-child'));
+        const lastCenter = removedNodes.find((el) => el.hasAttribute('last-middle-child'));
         if (lastCenter) {
-          lastCenter.removeAttribute('last-center-child');
+          lastCenter.removeAttribute('last-middle-child');
         }
       }
 
       if (currentNodes.length) {
-        currentNodes[0].setAttribute('first-center-child', '');
-        currentNodes[currentNodes.length - 1].setAttribute('last-center-child', '');
+        currentNodes[0].setAttribute('first-middle-child', '');
+        currentNodes[currentNodes.length - 1].setAttribute('last-middle-child', '');
       }
+
+      this.toggleAttribute('has-middle-children', currentNodes.length > 0);
     });
   }
 }

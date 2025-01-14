@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -13,47 +13,75 @@
   </head>
 
   <body>
-    <vaadin-horizontal-layout theme="padding" style="width: 100%">
-      <button>Start</button>
-      <button>Start</button>
-      <button slot="end">End</button>
-      <button slot="end">End</button>
+    All 3 slots:
+    <vaadin-horizontal-layout theme="spacing wrap" style="width: 100%">
+      <div style="width:100px;">Fixed width</div>
+      <div>ElementWithWideIntrinsicWidth</div>
+      <div style="width:20%;">20% width</div>
+      <div slot="middle">Middle</div>
+      <div slot="end" style="width:30%;">30% width</div>
     </vaadin-horizontal-layout>
 
-    <vaadin-horizontal-layout theme="padding" style="width: 100%">
-      <button>Start</button>
-      <button>Start</button>
-      <button slot="center">Center</button>
-      <button slot="center">Center</button>
+    <br />
+
+    Left empty:
+    <vaadin-horizontal-layout theme="spacing wrap" style="width: 100%">
+      <div slot="middle">Middle</div>
+      <div slot="end" style="width:30%;">30% width</div>
     </vaadin-horizontal-layout>
 
-    <vaadin-horizontal-layout theme="padding" style="width: 100%">
-      <button slot="center">Center</button>
-      <button slot="center">Center</button>
-      <button slot="end">End</button>
-      <button slot="end">End</button>
+    <br />
+
+    Right empty:
+    <vaadin-horizontal-layout theme="spacing wrap" style="width: 100%">
+      <div style="width:100px;">Fixed width</div>
+      <div>ElementWithWideIntrinsicWidth</div>
+      <div style="width:20%;">20% width</div>
+      <div slot="middle">Middle</div>
     </vaadin-horizontal-layout>
 
-    <vaadin-horizontal-layout theme="padding" style="width: 100%">
-      <button>Start</button>
-      <button>Start</button>
-      <button slot="center">Center</button>
-      <button slot="center">Center</button>
-      <button slot="end">End</button>
-      <button slot="end">End</button>
+    <br />
+
+    Only center:
+    <vaadin-horizontal-layout theme="spacing wrap" style="width: 100%">
+      <div slot="middle">Middle</div>
     </vaadin-horizontal-layout>
 
-    <vaadin-horizontal-layout theme="padding" style="width: 100%">
-      <button slot="center">Center</button>
-      <button slot="center">Center</button>
+    <br />
+
+    Center empty:
+    <vaadin-horizontal-layout theme="spacing wrap" style="width: 100%">
+      <div style="width:100px;">Fixed width</div>
+      <div>ElementWithWideIntrinsicWidth</div>
+      <div style="width:20%;">20% width</div>
+      <div slot="end" style="width:30%;">30% width</div>
     </vaadin-horizontal-layout>
 
-    <vaadin-horizontal-layout theme="padding" style="width: 100%">
+    <br />
+
+    Left text:
+    <vaadin-horizontal-layout theme="spacing wrap" style="width: 100%">
       Some text
-      <button slot="center">Center</button>
-      <button slot="center">Center</button>
-      <button slot="end">End</button>
-      <button slot="end">End</button>
+      <div slot="middle">Middle</div>
+      <div slot="end" style="width:30%;">30% width</div>
     </vaadin-horizontal-layout>
+
+    <style>
+      vaadin-horizontal-layout {
+        border: solid 1px #ccc;
+      }
+
+      vaadin-horizontal-layout > div:not([slot]) {
+        background: lightgreen;
+      }
+
+      vaadin-horizontal-layout > [slot='middle'] {
+        background: gold;
+      }
+
+      vaadin-horizontal-layout > [slot='end'] {
+        background: lightcoral;
+      }
+    </style>
   </body>
 </html>
