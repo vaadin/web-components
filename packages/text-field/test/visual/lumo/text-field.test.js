@@ -202,6 +202,12 @@ describe('text-field', () => {
       await visualDiff(div, 'keyboard-focus-ring');
     });
 
+    it('keyboard focus-ring, invalid', async () => {
+      element.invalid = true;
+      await sendKeys({ press: 'Tab' });
+      await visualDiff(div, 'keyboard-focus-ring-invalid');
+    });
+
     it('pointer focus-ring disabled', async () => {
       const bounds = element.getBoundingClientRect();
       await sendMouse({ type: 'click', position: [bounds.left + 5, bounds.top + 5] });
@@ -213,6 +219,14 @@ describe('text-field', () => {
       const bounds = element.getBoundingClientRect();
       await sendMouse({ type: 'click', position: [bounds.left + 5, bounds.top + 5] });
       await visualDiff(div, 'pointer-focus-ring-enabled');
+    });
+
+    it('pointer focus-ring enabled, invalid', async () => {
+      element.invalid = true;
+      element.style.setProperty('--lumo-input-field-pointer-focus-visible', '1');
+      const bounds = element.getBoundingClientRect();
+      await sendMouse({ type: 'click', position: [bounds.left + 5, bounds.top + 5] });
+      await visualDiff(div, 'pointer-focus-ring-enabled-invalid');
     });
   });
 });
