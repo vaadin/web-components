@@ -417,6 +417,11 @@ export const GridMixin = (superClass) =>
         this._debouncerHiddenChanged.flush();
       }
 
+      // Flush frozen column updates
+      if (this.__debounceUpdateFrozenColumn) {
+        this.__debounceUpdateFrozenColumn.flush();
+      }
+
       this.__intrinsicWidthCache = new Map();
       // Cache the viewport rows to avoid unnecessary reflows while measuring the column widths
       const fvi = this._firstVisibleIndex;

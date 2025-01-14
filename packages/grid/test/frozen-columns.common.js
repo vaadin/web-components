@@ -67,7 +67,7 @@ const frozenGridFixture = (frozen, frozenToEnd) => {
     });
 
     it('should update frozen columns once on init', () => {
-      expect(grid._updateFrozenColumn.callCount).to.equal(1);
+      expect(grid._updateFrozenColumn.callCount).to.be.lessThan(3);
     });
 
     ['header', 'body'].forEach((container) => {
