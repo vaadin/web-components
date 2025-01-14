@@ -6,6 +6,7 @@ registerStyles(
   css`
     :host {
       --vaadin-form-layout-column-spacing: var(--lumo-space-l);
+      --vaadin-form-item-row-spacing: 0;
     }
   `,
   { moduleId: 'lumo-form-layout' },
