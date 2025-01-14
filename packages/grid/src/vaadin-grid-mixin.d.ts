@@ -9,6 +9,7 @@ import type { A11yMixinClass } from './vaadin-grid-a11y-mixin.js';
 import type { ActiveItemMixinClass } from './vaadin-grid-active-item-mixin.js';
 import type { ArrayDataProviderMixinClass } from './vaadin-grid-array-data-provider-mixin.js';
 import type { GridBodyRenderer, GridColumn, GridHeaderFooterRenderer } from './vaadin-grid-column.js';
+import type { ColumnAutoWidthMixinClass } from './vaadin-grid-column-auto-width-mixin.js';
 import type { ColumnReorderingMixinClass } from './vaadin-grid-column-reordering-mixin.js';
 import type {
   DataProviderMixinClass,
@@ -172,6 +173,7 @@ export declare function GridMixin<TItem, T extends Constructor<HTMLElement>>(
   base: T,
 ): Constructor<A11yMixinClass> &
   Constructor<ActiveItemMixinClass<TItem>> &
+  Constructor<ColumnAutoWidthMixinClass> &
   Constructor<ArrayDataProviderMixinClass<TItem>> &
   Constructor<ColumnReorderingMixinClass> &
   Constructor<DataProviderMixinClass<TItem>> &
@@ -191,6 +193,7 @@ export interface GridMixinClass<TItem>
     A11yMixinClass,
     ActiveItemMixinClass<TItem>,
     ArrayDataProviderMixinClass<TItem>,
+    ColumnAutoWidthMixinClass,
     DataProviderMixinClass<TItem>,
     RowDetailsMixinClass<TItem>,
     ScrollMixinClass,
@@ -208,11 +211,6 @@ export interface GridMixinClass<TItem>
    * @attr {boolean} all-rows-visible
    */
   allRowsVisible: boolean;
-
-  /**
-   * Updates the `width` of all columns which have `autoWidth` set to `true`.
-   */
-  recalculateColumnWidths(): void;
 
   /**
    * Requests an update for the content of cells.
