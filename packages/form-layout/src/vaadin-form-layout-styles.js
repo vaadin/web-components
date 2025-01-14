@@ -15,13 +15,13 @@ export const formLayoutStyles = css`
     container-name: form-grid;
 
     /* CSS API for host */
+    /* Let's not define defaults here – that way they can be set globally
     --vaadin-form-item-label-width: 8em;
     --vaadin-form-item-label-spacing: 1em;
     --vaadin-form-item-row-spacing: 1em;
-    --vaadin-form-layout-column-spacing: 2em; /* (default) */
+    --vaadin-form-layout-column-spacing: 2em; */
 
     /* Private shit */
-    --_default-field-column: 1;
     --_grid-cols: auto-fill; /* col count defaults to "whatever fits" if not provided - this does not actually work with colspan capping */
     --_default-field-column: auto; /* auto: auto-rows; 1: single-col default */
   }
@@ -38,13 +38,12 @@ export const formLayoutStyles = css`
 
   #layout {
     --_grid-col-width: var(--vaadin-form-layout-column-width, 1fr);
-    --_grid-col-gap: var(--vaadin-form-layout-column-spacing);
     --_grid-col-max-width: var(var(--_grid-col-width));
 
     display: grid;
     grid-template-columns: repeat(var(--_grid-cols), var(--_grid-col-width));
-    column-gap: var(--_grid-col-gap);
-    row-gap: 0;
+    column-gap: var(--vaadin-form-layout-column-spacing, 2em);
+    row-gap: var(--vaadin-form-item-row-spacing, 1em);
 
     align-items: baseline; /* default \`stretch\` is not appropriate */
     justify-content: stretch;
