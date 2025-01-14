@@ -123,10 +123,7 @@ const inputField = css`
   /* Invalid style */
   :host([invalid]) {
     --vaadin-input-field-border-color: var(--lumo-error-color);
-  }
-
-  :host([invalid][focus-ring]) [part='input-field'] {
-    box-shadow: 0 0 0 var(--_focus-ring-width) var(--lumo-error-color-50pct);
+    --_focus-ring-color: var(--lumo-error-color-50pct);
   }
 
   :host([input-prevented]) [part='input-field'] {
