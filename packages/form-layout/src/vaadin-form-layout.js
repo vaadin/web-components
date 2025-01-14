@@ -115,6 +115,7 @@ class FormLayout extends FormLayoutMixin(ThemableMixin(ElementMixin(PolymerEleme
 
   static get template() {
     return html`
+      <style id="containerQueries"></style>
       <div id="layout">
         <slot id="slot"></slot>
       </div>
