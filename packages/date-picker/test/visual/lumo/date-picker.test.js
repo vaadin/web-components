@@ -1,5 +1,5 @@
 import { fixtureSync, mousedown } from '@vaadin/testing-helpers';
-import { sendKeys } from '@web/test-runner-commands';
+import { sendKeys, sendMouse } from '@web/test-runner-commands';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '../../../theme/lumo/vaadin-date-picker.js';
 import '../../not-animated-styles.js';
@@ -125,21 +125,25 @@ describe('date-picker', () => {
   });
 
   describe('focus', () => {
+    beforeEach(() => {
+      element.autoOpenDisabled = true;
+    });
+
     it('keyboard focus-ring', async () => {
       await sendKeys({ press: 'Tab' });
       await visualDiff(div, 'keyboard-focus-ring');
     });
 
     it('pointer focus-ring disabled', async () => {
-      element.focus();
-      element.removeAttribute('focus-ring');
+      const bounds = element.getBoundingClientRect();
+      await sendMouse({ type: 'click', position: [bounds.left + 5, bounds.top + 5] });
       await visualDiff(div, 'pointer-focus-ring-disabled');
     });
 
     it('pointer focus-ring enabled', async () => {
       element.style.setProperty('--lumo-input-field-pointer-focus-visible', '1');
-      element.focus();
-      element.removeAttribute('focus-ring');
+      const bounds = element.getBoundingClientRect();
+      await sendMouse({ type: 'click', position: [bounds.left + 5, bounds.top + 5] });
       await visualDiff(div, 'pointer-focus-ring-enabled');
     });
   });

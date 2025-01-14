@@ -1,5 +1,5 @@
-import { fixtureSync } from '@vaadin/testing-helpers/dist/fixture.js';
-import { sendKeys } from '@web/test-runner-commands';
+import { fixtureSync, mousedown } from '@vaadin/testing-helpers';
+import { sendKeys, sendMouse } from '@web/test-runner-commands';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '@vaadin/vaadin-lumo-styles/test/autoload.js';
 import '../common.js';
@@ -13,6 +13,13 @@ describe('text-field', () => {
     div.style.display = 'inline-block';
     div.style.padding = '10px';
     element = fixtureSync('<vaadin-text-field></vaadin-text-field>', div);
+  });
+
+  afterEach(() => {
+    // After tests which use sendKeys() the focus-utils.js -> isKeyboardActive is set to true.
+    // Click once here on body to reset it so other tests are not affected by it.
+    // An unwanted focus-ring would be shown in other tests otherwise.
+    mousedown(document.body);
   });
 
   it('basic', async () => {
@@ -196,15 +203,15 @@ describe('text-field', () => {
     });
 
     it('pointer focus-ring disabled', async () => {
-      element.focus();
-      element.removeAttribute('focus-ring');
+      const bounds = element.getBoundingClientRect();
+      await sendMouse({ type: 'click', position: [bounds.left + 5, bounds.top + 5] });
       await visualDiff(div, 'pointer-focus-ring-disabled');
     });
 
     it('pointer focus-ring enabled', async () => {
       element.style.setProperty('--lumo-input-field-pointer-focus-visible', '1');
-      element.focus();
-      element.removeAttribute('focus-ring');
+      const bounds = element.getBoundingClientRect();
+      await sendMouse({ type: 'click', position: [bounds.left + 5, bounds.top + 5] });
       await visualDiff(div, 'pointer-focus-ring-enabled');
     });
   });
