@@ -74,33 +74,11 @@ export const FormLayoutMixin = (superClass) =>
           sync: true,
         },
 
-        /**
-         * Current number of columns in the layout
-         * @private
-         */
-        _columnCount: {
-          type: Number,
-          sync: true,
-        },
-
-        /**
-         * Indicates that labels are on top
-         * @private
-         */
-        _labelsOnTop: {
-          type: Boolean,
-          sync: true,
-        },
-
         /** @private */
         __isVisible: {
           type: Boolean,
         },
       };
-    }
-
-    static get observers() {
-      return ['_invokeUpdateLayout(_columnCount, _labelsOnTop)'];
     }
 
     /** @protected */
@@ -113,8 +91,6 @@ export const FormLayoutMixin = (superClass) =>
       this.appendChild(this._styleElement);
 
       super.ready();
-
-      this.addEventListener('animationend', this.__onAnimationEnd);
     }
 
     constructor() {
@@ -141,7 +117,6 @@ export const FormLayoutMixin = (superClass) =>
     connectedCallback() {
       super.connectedCallback();
 
-      requestAnimationFrame(() => this._selectResponsiveStep());
       requestAnimationFrame(() => this._updateLayout());
 
       this._observeChildrenColspanChange();
@@ -286,15 +261,7 @@ export const FormLayoutMixin = (superClass) =>
         }
       }
 
-      //this._selectResponsiveStep();
       this._generateContainerQueries();
-    }
-
-    /** @private */
-    __onAnimationEnd(e) {
-      if (e.animationName.indexOf('vaadin-form-layout-appear') === 0) {
-        this._selectResponsiveStep();
-      }
     }
 
     /** @private */
@@ -312,37 +279,6 @@ export const FormLayoutMixin = (superClass) =>
         cqStyles += breakpoint;
       });
       this.$.containerQueries.textContent = cqStyles;
-    }
-
-    /** @private */
-    _selectResponsiveStep() {
-      // Iterate through responsiveSteps and choose the step
-      let selectedStep;
-      const tmpStyleProp = 'background-position';
-      this.responsiveSteps.forEach((step) => {
-        // Convert minWidth to px units for comparison
-        this.$.layout.style.setProperty(tmpStyleProp, step.minWidth);
-        const stepMinWidthPx = parseFloat(getComputedStyle(this.$.layout).getPropertyValue(tmpStyleProp));
-
-        // Compare step min-width with the host width, select the passed step
-        if (stepMinWidthPx <= this.offsetWidth) {
-          selectedStep = step;
-        }
-      });
-      this.$.layout.style.removeProperty(tmpStyleProp);
-
-      // Sometimes converting units is not possible, e.g, when element is
-      // not connected. Then the `selectedStep` stays `undefined`.
-      if (selectedStep) {
-        // Apply the chosen responsive step's properties
-        this._columnCount = selectedStep.columns;
-        this._labelsOnTop = selectedStep.labelsPosition === 'top';
-      }
-    }
-
-    /** @private */
-    _invokeUpdateLayout() {
-      this._updateLayout();
     }
 
     /**
@@ -374,99 +310,5 @@ export const FormLayoutMixin = (superClass) =>
             }
           }
         });
-
-      /*
-        The item width formula:
-
-            itemWidth = colspan / columnCount * 100% - columnSpacing
-
-        We have to subtract columnSpacing, because the column spacing space is taken
-        by item margins of 1/2 * spacing on both sides
-      */
-      /*
-      const style = getComputedStyle(this);
-      const columnSpacing = style.getPropertyValue('--vaadin-form-layout-column-spacing');
-
-      const direction = style.direction;
-      const marginStartProp = `margin-${direction === 'ltr' ? 'left' : 'right'}`;
-      const marginEndProp = `margin-${direction === 'ltr' ? 'right' : 'left'}`;
-
-      const containerWidth = this.offsetWidth;
-
-      let col = 0;
-      Array.from(this.children)
-        .filter((child) => child.localName === 'br' || getComputedStyle(child).display !== 'none')
-        .forEach((child, index, children) => {
-          if (child.localName === 'br') {
-            // Reset column count on line break
-            col = 0;
-            return;
-          }
-
-          const attrColspan = child.getAttribute('colspan') || child.getAttribute('data-colspan');
-          let colspan;
-          colspan = this._naturalNumberOrOne(parseFloat(attrColspan));
-
-          // Never span further than the number of columns
-          colspan = Math.min(colspan, this._columnCount);
-
-          const childRatio = colspan / this._columnCount;
-
-          // Note: using 99.9% for 100% fixes rounding errors in MS Edge
-          // (< v16), otherwise the items might wrap, resizing is wobbly.
-          child.style.width = `calc(${childRatio * 99.9}% - ${1 - childRatio} * ${columnSpacing})`;
-
-          if (col + colspan > this._columnCount) {
-            // Too big to fit on this row, let's wrap it
-            col = 0;
-          }
-
-          // At the start edge
-          if (col === 0) {
-            child.style.setProperty(marginStartProp, '0px');
-          } else {
-            child.style.removeProperty(marginStartProp);
-          }
-
-          const nextIndex = index + 1;
-          const nextLineBreak = nextIndex < children.length && children[nextIndex].localName === 'br';
-
-          // At the end edge
-          if (col + colspan === this._columnCount) {
-            child.style.setProperty(marginEndProp, '0px');
-          } else if (nextLineBreak) {
-            const colspanRatio = (this._columnCount - col - colspan) / this._columnCount;
-            child.style.setProperty(
-              marginEndProp,
-              `calc(${colspanRatio * containerWidth}px + ${colspanRatio} * ${columnSpacing})`,
-            );
-          } else {
-            child.style.removeProperty(marginEndProp);
-          }
-
-          // Move the column counter
-          col = (col + colspan) % this._columnCount;
-
-          if (child.localName === 'vaadin-form-item') {
-            if (this._labelsOnTop) {
-              if (child.getAttribute('label-position') !== 'top') {
-                child.__useLayoutLabelPosition = true;
-                child.setAttribute('label-position', 'top');
-              }
-            } else if (child.__useLayoutLabelPosition) {
-              delete child.__useLayoutLabelPosition;
-              child.removeAttribute('label-position');
-            }
-          }
-        });
-        */
-    }
-
-    /**
-     * @protected
-     * @override
-     */
-    _onResize() {
-      this._selectResponsiveStep();
     }
   };
