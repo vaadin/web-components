@@ -83,22 +83,11 @@ export const FormLayoutMixin = (superClass) =>
 
     /** @protected */
     ready() {
-      // Here we attach a style element that we use for validating
-      // CSS values in `responsiveSteps`. We can't add this to the `<template>`,
-      // because Polymer will throw it away. We need to create this before
-      // `super.ready()`, because `super.ready()` invokes property observers,
-      // and the observer for `responsiveSteps` does CSS value validation.
-      this.appendChild(this._styleElement);
-
       super.ready();
     }
 
     constructor() {
       super();
-
-      this._styleElement = document.createElement('style');
-      // Ensure there is a child text node in the style element
-      this._styleElement.textContent = ' ';
 
       this.__intersectionObserver = new IntersectionObserver(([entry]) => {
         if (!entry.isIntersecting) {
@@ -194,34 +183,6 @@ export const FormLayoutMixin = (superClass) =>
     }
 
     /** @private */
-    _isValidCSSLength(value) {
-      // Let us choose a CSS property for validating CSS <length> values:
-      // - `border-spacing` accepts `<length> | inherit`, it's the best! But
-      //   it does not disallow invalid values at all in MSIE :-(
-      // - `letter-spacing` and `word-spacing` accept
-      //   `<length> | normal | inherit`, and disallows everything else, like
-      //   `<percentage>`, `auto` and such, good enough.
-      // - `word-spacing` is used since its shorter.
-
-      // Disallow known keywords allowed as the `word-spacing` value
-      if (value === 'inherit' || value === 'normal') {
-        return false;
-      }
-
-      // Use the value in a stylesheet and check the parsed value. Invalid
-      // input value results in empty parsed value.
-      this._styleElement.firstChild.nodeValue = `#styleElement { word-spacing: ${value}; }`;
-
-      if (!this._styleElement.sheet) {
-        // Stylesheet is not ready, probably not attached to the document yet.
-        return true;
-      }
-
-      // Safari 9 sets invalid CSS rules' value to `null`
-      return ['', null].indexOf(this._styleElement.sheet.cssRules[0].style.getPropertyValue('word-spacing')) < 0;
-    }
-
-    /** @private */
     _responsiveStepsChanged(responsiveSteps, oldResponsiveSteps) {
       try {
         if (!Array.isArray(responsiveSteps)) {
@@ -235,10 +196,6 @@ export const FormLayoutMixin = (superClass) =>
         responsiveSteps.forEach((step) => {
           if (this._naturalNumberOrOne(step.columns) !== step.columns) {
             throw new Error(`Invalid 'columns' value of ${step.columns}, a natural number is required.`);
-          }
-
-          if (step.minWidth !== undefined && !this._isValidCSSLength(step.minWidth)) {
-            throw new Error(`Invalid 'minWidth' value of ${step.minWidth}, a valid CSS length required.`);
           }
 
           if (step.labelsPosition !== undefined && ['aside', 'top'].indexOf(step.labelsPosition) === -1) {
