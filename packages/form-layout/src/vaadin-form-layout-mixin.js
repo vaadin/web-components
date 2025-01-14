@@ -286,7 +286,8 @@ export const FormLayoutMixin = (superClass) =>
         }
       }
 
-      this._selectResponsiveStep();
+      //this._selectResponsiveStep();
+      this._generateContainerQueries();
     }
 
     /** @private */
@@ -294,6 +295,23 @@ export const FormLayoutMixin = (superClass) =>
       if (e.animationName.indexOf('vaadin-form-layout-appear') === 0) {
         this._selectResponsiveStep();
       }
+    }
+
+    /** @private */
+    _generateContainerQueries() {
+      let cqStyles = '';
+      this.responsiveSteps.forEach((step) => {
+        const formItemAlign = step.labelsPosition === 'top' ? 'stretch' : 'baseline';
+        const formItemFlexDir = step.labelsPosition === 'top' ? 'column' : 'row';
+        const breakpoint =
+          `@container form-grid (min-width: ${step.minWidth}) { #layout {` +
+          `--_grid-cols: ${step.columns};` +
+          `--_vaadin-form-item-align-items: ${formItemAlign};` +
+          `--_vaadin-form-item-flex-dir: ${formItemFlexDir};` +
+          `}}\n`;
+        cqStyles += breakpoint;
+      });
+      this.$.containerQueries.textContent = cqStyles;
     }
 
     /** @private */
@@ -337,6 +355,24 @@ export const FormLayoutMixin = (superClass) =>
         return;
       }
 
+      let resetColumn = false;
+      Array.from(this.children).forEach((child) => {
+        if (child.localName === 'br') {
+          resetColumn = true;
+        } else {
+          /* colspan attribute to css property */
+          const attrColspan = child.getAttribute('colspan') || child.getAttribute('data-colspan');
+          const colspan = this._naturalNumberOrOne(parseInt(attrColspan));
+          if (colspan > 1) child.style.setProperty('--vaadin-form-layout-colspan', colspan);
+
+          /* Forces the next element after a <br> to render in column 1 */
+          if (resetColumn) {
+            child.style.setProperty('--_vaadin-form-layout-start-col', '1');
+            resetColumn = false;
+          }
+        }
+      });
+
       /*
         The item width formula:
 
@@ -345,7 +381,7 @@ export const FormLayoutMixin = (superClass) =>
         We have to subtract columnSpacing, because the column spacing space is taken
         by item margins of 1/2 * spacing on both sides
       */
-
+      /*
       const style = getComputedStyle(this);
       const columnSpacing = style.getPropertyValue('--vaadin-form-layout-column-spacing');
 
@@ -421,6 +457,7 @@ export const FormLayoutMixin = (superClass) =>
             }
           }
         });
+        */
     }
 
     /**
