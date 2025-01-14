@@ -1,4 +1,4 @@
-import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
+import { fixtureSync, mousedown, nextFrame } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '../common.js';
@@ -13,6 +13,13 @@ describe('combo-box', () => {
     div.style.display = 'inline-block';
     div.style.padding = '10px';
     element = fixtureSync('<vaadin-combo-box></vaadin-combo-box>', div);
+  });
+
+  afterEach(() => {
+    // After tests which use sendKeys() the focus-utils.js -> isKeyboardActive is set to true.
+    // Click once here on body to reset it so other tests are not affected by it.
+    // An unwanted focus-ring would be shown in other tests otherwise.
+    mousedown(document.body);
   });
 
   it('basic', async () => {
