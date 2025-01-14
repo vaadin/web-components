@@ -356,22 +356,24 @@ export const FormLayoutMixin = (superClass) =>
       }
 
       let resetColumn = false;
-      Array.from(this.children).forEach((child) => {
-        if (child.localName === 'br') {
-          resetColumn = true;
-        } else {
-          /* colspan attribute to css property */
-          const attrColspan = child.getAttribute('colspan') || child.getAttribute('data-colspan');
-          const colspan = this._naturalNumberOrOne(parseInt(attrColspan));
-          if (colspan > 1) child.style.setProperty('--vaadin-form-layout-colspan', colspan);
+      Array.from(this.children)
+        .filter((child) => child.localName === 'br' || getComputedStyle(child).display !== 'none')
+        .forEach((child) => {
+          if (child.localName === 'br') {
+            resetColumn = true;
+          } else {
+            /* colspan attribute to css property */
+            const attrColspan = child.getAttribute('colspan') || child.getAttribute('data-colspan');
+            const colspan = this._naturalNumberOrOne(parseInt(attrColspan));
+            if (colspan > 1) child.style.setProperty('--vaadin-form-layout-colspan', colspan);
 
-          /* Forces the next element after a <br> to render in column 1 */
-          if (resetColumn) {
-            child.style.setProperty('--_vaadin-form-layout-start-col', '1');
-            resetColumn = false;
+            /* Forces the next element after a <br> to render in column 1 */
+            if (resetColumn) {
+              child.style.setProperty('--_vaadin-form-layout-start-col', '1');
+              resetColumn = false;
+            }
           }
-        }
-      });
+        });
 
       /*
         The item width formula:
