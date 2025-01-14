@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Horizontal layout</title>
+    <script type="module" src="./common.js"></script>
+
+    <script type="module">
+      import '@vaadin/horizontal-layout';
+    </script>
+  </head>
+
+  <body>
+    All 3 slots:
+    <vaadin-horizontal-layout theme="spacing wrap" style="width: 100%">
+      <div style="width: 100px">Fixed width</div>
+      <div>ElementWithWideIntrinsicWidth</div>
+      <div style="width: 20%">20% width</div>
+      <div slot="middle">Middle</div>
+      <div slot="end" style="width: 30%">30% width</div>
+    </vaadin-horizontal-layout>
+
+    <br />
+
+    Left empty:
+    <vaadin-horizontal-layout theme="spacing wrap" style="width: 100%">
+      <div slot="middle">Middle</div>
+      <div slot="end" style="width: 30%">30% width</div>
+    </vaadin-horizontal-layout>
+
+    <br />
+
+    Right empty:
+    <vaadin-horizontal-layout theme="spacing wrap" style="width: 100%">
+      <div style="width: 100px">Fixed width</div>
+      <div>ElementWithWideIntrinsicWidth</div>
+      <div style="width: 20%">20% width</div>
+      <div slot="middle">Middle</div>
+    </vaadin-horizontal-layout>
+
+    <br />
+
+    Only center:
+    <vaadin-horizontal-layout theme="spacing wrap" style="width: 100%">
+      <div slot="middle">Middle</div>
+    </vaadin-horizontal-layout>
+
+    <br />
+
+    Center empty:
+    <vaadin-horizontal-layout theme="spacing wrap" style="width: 100%">
+      <div style="width: 100px">Fixed width</div>
+      <div>ElementWithWideIntrinsicWidth</div>
+      <div style="width: 20%">20% width</div>
+      <div slot="end" style="width: 30%">30% width</div>
+    </vaadin-horizontal-layout>
+
+    <br />
+
+    Left text:
+    <vaadin-horizontal-layout theme="spacing wrap" style="width: 100%">
+      Some text
+      <div slot="middle">Middle</div>
+      <div slot="end" style="width: 30%">30% width</div>
+    </vaadin-horizontal-layout>
+
+    <style>
+      vaadin-horizontal-layout {
+        border: solid 1px #ccc;
+      }
+
+      vaadin-horizontal-layout > div:not([slot]) {
+        background: lightgreen;
+      }
+
+      vaadin-horizontal-layout > [slot='middle'] {
+        background: gold;
+      }
+
+      vaadin-horizontal-layout > [slot='end'] {
+        background: lightcoral;
+      }
+    </style>
+  </body>
+</html>

@@ -6,6 +6,7 @@
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { SlotObserver } from '@vaadin/component-base/src/slot-observer.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 /**
@@ -59,14 +60,52 @@ class HorizontalLayout extends ElementMixin(ThemableMixin(PolymerElement)) {
         :host([theme~='spacing']) {
           gap: 1em;
         }
+
+        slot[name='middle']:before {
+          content: '';
+          display: block;
+          margin-inline-start: auto;
+        }
+
+        :host([theme~='spacing']) slot[name='middle']:before {
+          margin-inline-end: -1em;
+        }
+
+        slot[name='end']:before {
+          content: '';
+          display: block;
+          margin-inline-start: auto;
+        }
+
+        :host([theme~='spacing']) slot[name='end']:before {
+          margin-inline-end: -1em;
+        }
+
+        :host([has-end-children]) {
+          justify-content: flex-end;
+        }
       </style>
 
       <slot></slot>
+
+      <slot name="middle"></slot>
+
+      <slot name="end"></slot>
     `;
   }
 
   static get is() {
     return 'vaadin-horizontal-layout';
+  }
+
+  /** @protected */
+  ready() {
+    super.ready();
+
+    const endSlot = this.shadowRoot.querySelector('[name="end"]');
+    this.__endSlotObserver = new SlotObserver(endSlot, ({ currentNodes }) => {
+      this.toggleAttribute('has-end-children', currentNodes.length > 0);
+    });
   }
 }
 
