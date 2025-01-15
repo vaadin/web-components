@@ -27,6 +27,22 @@ export const baseStyles = css`
   :host([theme~='spacing']) {
     gap: 1em;
   }
+
+  :host([has-end]:not([has-middle])) ::slotted([last-start-child]) {
+    margin-inline-end: auto;
+  }
+
+  ::slotted([first-middle-child]) {
+    margin-inline-start: auto;
+  }
+
+  ::slotted([last-middle-child]) {
+    margin-inline-end: auto;
+  }
+
+  :host([has-start]:not([has-middle])) ::slotted([first-end-child]) {
+    margin-inline-start: auto;
+  }
 `;
 
 // Layout improvements are part of a feature for Flow users where children that have been configured to use full size
