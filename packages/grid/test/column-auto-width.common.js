@@ -295,6 +295,21 @@ describe('column auto-width', () => {
     expectColumnWidthsToBeOk(columns);
   });
 
+  it('should have correct column widths for lazily added columns', async () => {
+    const grid = fixtureSync(`<vaadin-grid style="width: 600px; height: 200px;">
+      <vaadin-grid-column header="Foo"></vaadin-grid-column>
+    </vaadin-grid>`);
+    await nextFrame();
+
+    fixtureSync(
+      `<vaadin-grid-column id="new" flex-grow="0" header="foo bar baz" auto-width></vaadin-grid-column>`,
+      grid,
+    );
+    const newColumn = grid.querySelector('vaadin-grid-column#new');
+    await nextFrame();
+    expect(parseFloat(newColumn.width)).to.be.closeTo(107, 5);
+  });
+
   describe('focusButtonMode column', () => {
     beforeEach(async () => {
       const column = document.createElement('vaadin-grid-column');

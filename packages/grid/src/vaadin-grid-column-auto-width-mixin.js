@@ -55,7 +55,7 @@ export const ColumnAutoWidthMixin = (superClass) =>
     /** @private */
     __columnTreeChangedAutoWidth(_columnTree) {
       // Column tree changed, recalculate column widths
-      this.recalculateColumnWidths();
+      queueMicrotask(() => this.recalculateColumnWidths());
     }
 
     /** @private */
