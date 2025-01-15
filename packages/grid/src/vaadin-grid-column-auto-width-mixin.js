@@ -74,6 +74,16 @@ export const ColumnAutoWidthMixin = (superClass) =>
       this.__tryToRecalculateColumnWidthsIfPending();
     }
 
+    /**
+     * @protected
+     * @override
+     */
+    _updateFrozenColumn() {
+      super._updateFrozenColumn();
+      // Frozen columns updated, recalculate column widths if there's a pending recalculation
+      this.__tryToRecalculateColumnWidthsIfPending();
+    }
+
     /** @private */
     __getIntrinsicWidth(col) {
       if (!this.__intrinsicWidthCache.has(col)) {
@@ -283,11 +293,15 @@ export const ColumnAutoWidthMixin = (superClass) =>
 
       const debouncingHiddenChanged = this._debouncerHiddenChanged && this._debouncerHiddenChanged.isActive();
 
+      const debouncingUpdateFrozenColumn =
+        this.__debounceUpdateFrozenColumn && this.__debounceUpdateFrozenColumn.isActive();
+
       return (
         !this._dataProviderController.isLoading() &&
         !hasRowsWithUndefinedIndex &&
         !isElementHidden(this) &&
-        !debouncingHiddenChanged
+        !debouncingHiddenChanged &&
+        !debouncingUpdateFrozenColumn
       );
     }
   };
