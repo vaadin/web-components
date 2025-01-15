@@ -213,7 +213,6 @@ const button = css`
   /* Disabled state. Keep selectors after other color variants. */
 
   :host([disabled]) {
-    pointer-events: none;
     color: var(--lumo-disabled-text-color);
   }
 

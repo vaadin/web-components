@@ -83,7 +83,6 @@ const button = css`
   }
 
   :host([disabled]) {
-    pointer-events: none;
     color: var(--material-disabled-text-color);
   }
 

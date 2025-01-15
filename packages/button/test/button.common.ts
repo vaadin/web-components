@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
-import { sendKeys } from '@web/test-runner-commands';
+import { fixtureSync, middleOfNode, nextRender, nextUpdate } from '@vaadin/testing-helpers';
+import { resetMouse, sendKeys, sendMouse } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import type { Button } from '../vaadin-button.js';
 
@@ -115,6 +115,87 @@ describe('vaadin-button', () => {
       const event = spy.firstCall.args[0];
       expect(event).to.be.an.instanceOf(KeyboardEvent);
       expect(event.defaultPrevented).to.be.false;
+    });
+  });
+
+  describe('disabled', () => {
+    let lastGlobalFocusable: HTMLInputElement;
+
+    beforeEach(async () => {
+      [button, lastGlobalFocusable] = fixtureSync(
+        `<div>
+          <vaadin-button disabled>Press me</vaadin-button>
+          <input id="last-global-focusable" />
+        </div>`,
+      ).children as unknown as [Button, HTMLInputElement];
+      await nextRender(button);
+    });
+
+    afterEach(async () => {
+      await resetMouse();
+    });
+
+    it('should prevent programmatic focus when disabled', () => {
+      lastGlobalFocusable.focus();
+      button.focus();
+      expect(document.activeElement).to.equal(lastGlobalFocusable);
+    });
+
+    it('should prevent pointer focus when disabled', async () => {
+      const { x, y } = middleOfNode(button);
+      await sendMouse({ type: 'click', position: [Math.floor(x), Math.floor(y)] });
+      expect(document.activeElement).to.equal(document.body);
+    });
+
+    it('should prevent keyboard focus when disabled', async () => {
+      await sendKeys({ press: 'Tab' });
+      expect(document.activeElement).to.equal(lastGlobalFocusable);
+    });
+  });
+
+  describe('disabled and focusableDisabledComponents=true', () => {
+    let lastGlobalFocusable: HTMLInputElement;
+
+    before(() => {
+      window.Vaadin.featureFlags ??= {};
+      window.Vaadin.featureFlags.focusableDisabledComponents = true;
+    });
+
+    after(() => {
+      window.Vaadin.featureFlags!.focusableDisabledComponents = false;
+    });
+
+    beforeEach(async () => {
+      [button, lastGlobalFocusable] = fixtureSync(
+        `<div>
+          <vaadin-button disabled>Press me</vaadin-button>
+          <input id="last-global-focusable" />
+        </div>`,
+      ).children as unknown as [Button, HTMLInputElement];
+      await nextRender(button);
+    });
+
+    afterEach(async () => {
+      await resetMouse();
+    });
+
+    it('should allow programmatic focus when disabled', () => {
+      button.focus();
+      expect(document.activeElement).to.equal(button);
+    });
+
+    it('should allow pointer focus when disabled', async () => {
+      const { x, y } = middleOfNode(button);
+      await sendMouse({ type: 'click', position: [Math.floor(x), Math.floor(y)] });
+      expect(document.activeElement).to.equal(button);
+    });
+
+    it('should allow keyboard focus when disabled', async () => {
+      await sendKeys({ press: 'Tab' });
+      expect(document.activeElement).to.equal(button);
+
+      await sendKeys({ press: 'Tab' });
+      expect(document.activeElement).to.equal(lastGlobalFocusable);
     });
   });
 });

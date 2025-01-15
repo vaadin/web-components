@@ -65,6 +65,11 @@ class Button extends ButtonMixin(ElementMixin(ThemableMixin(ControllerMixin(Poly
     this._tooltipController = new TooltipController(this);
     this.addController(this._tooltipController);
   }
+
+  /** @override */
+  _shouldAllowFocusWhenDisabled() {
+    return window.Vaadin.featureFlags.focusableDisabledComponents;
+  }
 }
 
 defineCustomElement(Button);
