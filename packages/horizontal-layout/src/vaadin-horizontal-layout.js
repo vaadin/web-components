@@ -7,6 +7,7 @@ import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { isEmptyTextNode } from '@vaadin/component-base/src/dom-utils.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
 import { SlotObserver } from '@vaadin/component-base/src/slot-observer.js';
 import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { horizontalLayoutStyles } from './vaadin-horizontal-layout-styles.js';
@@ -39,7 +40,7 @@ registerStyles('vaadin-horizontal-layout', horizontalLayoutStyles, { moduleId: '
  * @mixes ThemableMixin
  * @mixes ElementMixin
  */
-class HorizontalLayout extends ElementMixin(ThemableMixin(PolymerElement)) {
+class HorizontalLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))) {
   static get template() {
     return html`
       <slot></slot>
@@ -75,6 +76,8 @@ class HorizontalLayout extends ElementMixin(ThemableMixin(PolymerElement)) {
 
       const nodes = currentNodes.filter((node) => !isEmptyTextNode(node));
       this.toggleAttribute('has-start', nodes.length > 0);
+
+      this.__updateRowState();
     });
 
     const endSlot = this.shadowRoot.querySelector('[name="end"]');
@@ -91,6 +94,8 @@ class HorizontalLayout extends ElementMixin(ThemableMixin(PolymerElement)) {
       }
 
       this.toggleAttribute('has-end', currentNodes.length > 0);
+
+      this.__updateRowState();
     });
 
     const middleSlot = this.shadowRoot.querySelector('[name="middle"]');
@@ -113,7 +118,31 @@ class HorizontalLayout extends ElementMixin(ThemableMixin(PolymerElement)) {
       }
 
       this.toggleAttribute('has-middle', currentNodes.length > 0);
+
+      this.__updateRowState();
     });
+  }
+
+  /**
+   * @protected
+   * @override
+   */
+  _onResize() {
+    this.__updateRowState();
+  }
+
+  /** @private */
+  __updateRowState() {
+    const children = this.children;
+    let previousOffset = 0;
+    for (const child of children) {
+      if (child.offsetTop > previousOffset) {
+        previousOffset = child.offsetTop;
+        child.setAttribute('first-in-row', '');
+      } else {
+        child.removeAttribute('first-in-row');
+      }
+    }
   }
 }
 
