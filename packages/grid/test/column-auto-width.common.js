@@ -1,7 +1,20 @@
 import { expect } from '@vaadin/chai-plugins';
 import { aTimeout, fixtureSync, nextFrame, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import { flushGrid, getContainerCell } from './helpers.js';
+import { flushGrid, getContainerCell, getHeaderCell } from './helpers.js';
+
+function getCellIntrinsicWidth(cell) {
+  const originalInlineStyles = cell.getAttribute('style');
+  // Prepare the cell for having its intrinsic width measured
+  cell.style.width = 'auto';
+  cell.style.position = 'absolute';
+
+  const intrinsicWidth = parseFloat(getComputedStyle(cell).width);
+
+  // Restore the original inline styles
+  cell.setAttribute('style', originalInlineStyles);
+  return intrinsicWidth;
+}
 
 describe('column auto-width', () => {
   let grid;
@@ -250,6 +263,21 @@ describe('column auto-width', () => {
 
     await recalculateWidths();
     expectColumnWidthsToBeOk(columns);
+  });
+
+  it('should have correct column widths for frozen columns with no items', async () => {
+    const [firstColumn, lastColumn] = [columns[0], columns[columns.length - 1]];
+    firstColumn.frozen = true;
+    firstColumn.header = 'foo bar baz';
+    lastColumn.frozenToEnd = true;
+
+    grid.recalculateColumnWidths();
+    await recalculateWidths();
+
+    const frozenHeaderCell = getHeaderCell(grid, 0, 0);
+    const frozenToEndHeaderCell = getHeaderCell(grid, 0, columns.length - 1);
+    expect(parseFloat(firstColumn.width)).not.to.be.lessThan(getCellIntrinsicWidth(frozenHeaderCell));
+    expect(parseFloat(lastColumn.width)).not.to.be.lessThan(getCellIntrinsicWidth(frozenToEndHeaderCell));
   });
 
   describe('focusButtonMode column', () => {
