@@ -67,21 +67,21 @@ import { StylingMixin } from './vaadin-grid-styling-mixin.js';
  * @mixes DragAndDropMixin
  */
 export const GridMixin = (superClass) =>
-  class extends ArrayDataProviderMixin(
-    DataProviderMixin(
-      DynamicColumnsMixin(
-        ActiveItemMixin(
-          ScrollMixin(
-            SelectionMixin(
-              SortMixin(
-                RowDetailsMixin(
-                  KeyboardNavigationMixin(
-                    A11yMixin(
-                      FilterMixin(
-                        ColumnReorderingMixin(
-                          ColumnResizingMixin(
-                            EventContextMixin(
-                              DragAndDropMixin(ColumnAutoWidthMixin(StylingMixin(TabindexMixin(superClass)))),
+  class extends ColumnAutoWidthMixin(
+    ArrayDataProviderMixin(
+      DataProviderMixin(
+        DynamicColumnsMixin(
+          ActiveItemMixin(
+            ScrollMixin(
+              SelectionMixin(
+                SortMixin(
+                  RowDetailsMixin(
+                    KeyboardNavigationMixin(
+                      A11yMixin(
+                        FilterMixin(
+                          ColumnReorderingMixin(
+                            ColumnResizingMixin(
+                              EventContextMixin(DragAndDropMixin(StylingMixin(TabindexMixin(superClass)))),
                             ),
                           ),
                         ),
@@ -197,7 +197,6 @@ export const GridMixin = (superClass) =>
     connectedCallback() {
       super.connectedCallback();
       this.isAttached = true;
-      this.recalculateColumnWidths();
     }
 
     /** @protected */
@@ -269,7 +268,6 @@ export const GridMixin = (superClass) =>
       new ResizeObserver(() =>
         setTimeout(() => {
           this.__updateColumnsBodyContentHidden();
-          this.__tryToRecalculateColumnWidthsIfPending();
         }),
       ).observe(this.$.table);
 
@@ -348,15 +346,6 @@ export const GridMixin = (superClass) =>
       }
     }
 
-    /**
-     * @protected
-     * @override
-     */
-    _onDataProviderPageLoaded() {
-      super._onDataProviderPageLoaded();
-      this.__tryToRecalculateColumnWidthsIfPending();
-    }
-
     /** @private */
     _createScrollerRows(count) {
       const rows = [];
@@ -384,7 +373,6 @@ export const GridMixin = (superClass) =>
         animationFrame,
         () => {
           this._afterScroll();
-          this.__tryToRecalculateColumnWidthsIfPending();
         },
       );
       return rows;
@@ -670,7 +658,6 @@ export const GridMixin = (superClass) =>
     /** @private */
     _columnTreeChanged(columnTree) {
       this._renderColumnTree(columnTree);
-      this.recalculateColumnWidths();
       this.__updateColumnsBodyContentHidden();
     }
 
@@ -809,7 +796,6 @@ export const GridMixin = (superClass) =>
       // ShadyCSS applies scoping suffixes to animation names
       if (e.animationName.indexOf('vaadin-grid-appear') === 0) {
         e.stopPropagation();
-        this.__tryToRecalculateColumnWidthsIfPending();
 
         // Ensure header and footer have tabbable elements
         this._resetKeyboardNavigation();

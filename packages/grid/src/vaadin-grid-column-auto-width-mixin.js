@@ -22,6 +22,58 @@ export const ColumnAutoWidthMixin = (superClass) =>
       };
     }
 
+    static get observers() {
+      return [
+        '__dataProviderChangedAutoWidth(dataProvider)',
+        '__columnTreeChangedAutoWidth(_columnTree)',
+        '__flatSizeChangedAutoWidth(_flatSize)',
+      ];
+    }
+
+    constructor() {
+      super();
+      this.addEventListener('animationend', this.__onAnimationEndAutoWidth);
+    }
+
+    /** @private */
+    __onAnimationEndAutoWidth(e) {
+      if (e.animationName.indexOf('vaadin-grid-appear') === 0) {
+        this.__tryToRecalculateColumnWidthsIfPending();
+      }
+    }
+
+    /** @private */
+    __dataProviderChangedAutoWidth(_dataProvider) {
+      if (this.__hasHadRenderedRowsForColumnWidthCalculation) {
+        return;
+      }
+      // Recalculate column widths when the data provider changes if the grid has not yet had any rendered rows
+      // during previous column width calculations
+      this.recalculateColumnWidths();
+    }
+
+    /** @private */
+    __columnTreeChangedAutoWidth(_columnTree) {
+      // Column tree changed, recalculate column widths
+      this.recalculateColumnWidths();
+    }
+
+    /** @private */
+    __flatSizeChangedAutoWidth() {
+      // Flat size changed, recalculate column widths if pending (asynchronously, to allow grid to render row elements first)
+      requestAnimationFrame(() => this.__tryToRecalculateColumnWidthsIfPending());
+    }
+
+    /**
+     * @protected
+     * @override
+     */
+    _onDataProviderPageLoaded() {
+      super._onDataProviderPageLoaded();
+      // Data provider page loaded, recalculate column widths if there's a pending recalculation
+      this.__tryToRecalculateColumnWidthsIfPending();
+    }
+
     /** @private */
     __getIntrinsicWidth(col) {
       if (!this.__intrinsicWidthCache.has(col)) {
@@ -73,7 +125,7 @@ export const ColumnAutoWidthMixin = (superClass) =>
      * @param {!Array<!GridColumn>} cols the columns to auto size based on their content width
      * @private
      */
-    _recalculateColumnWidths(cols) {
+    _recalculateColumnWidths() {
       // Flush to make sure DOM is up-to-date when measuring the column widths
       this.__virtualizer.flush();
       [...this.$.header.children, ...this.$.footer.children].forEach((row) => {
@@ -82,10 +134,7 @@ export const ColumnAutoWidthMixin = (superClass) =>
         }
       });
 
-      // Flush to account for any changes to the visibility of the columns
-      if (this._debouncerHiddenChanged) {
-        this._debouncerHiddenChanged.flush();
-      }
+      this.__hasHadRenderedRowsForColumnWidthCalculation ||= this._getRenderedRows().length > 0;
 
       this.__intrinsicWidthCache = new Map();
       // Cache the viewport rows to avoid unnecessary reflows while measuring the column widths
@@ -94,6 +143,7 @@ export const ColumnAutoWidthMixin = (superClass) =>
       this.__viewportRowsCache = this._getRenderedRows().filter((row) => row.index >= fvi && row.index <= lvi);
 
       // Pre-cache the intrinsic width of each column
+      const cols = this.__getAutoWidthColumns();
       this.__calculateAndCacheIntrinsicWidths(cols);
 
       cols.forEach((col) => {
@@ -177,30 +227,47 @@ export const ColumnAutoWidthMixin = (superClass) =>
      * Updates the `width` of all columns which have `autoWidth` set to `true`.
      */
     recalculateColumnWidths() {
-      if (!this._columnTree) {
-        return; // No columns
-      }
-      if (isElementHidden(this) || this._dataProviderController.isLoading()) {
+      if (!this.__isReadyForColumnWidthCalculation()) {
         this.__pendingRecalculateColumnWidths = true;
         return;
       }
-      const cols = this._getColumns().filter((col) => !col.hidden && col.autoWidth);
+      this._recalculateColumnWidths();
+    }
 
-      const undefinedCols = cols.filter((col) => !customElements.get(col.localName));
-      if (undefinedCols.length) {
-        // Some of the columns are not defined yet, wait for them to be defined before measuring
-        Promise.all(undefinedCols.map((col) => customElements.whenDefined(col.localName))).then(() => {
-          this._recalculateColumnWidths(cols);
-        });
-      } else {
-        this._recalculateColumnWidths(cols);
+    /**
+     * This internal method should be called whenever a condition that may have prevented
+     * previous column width calculation is resolved.
+     * @private
+     */
+    __tryToRecalculateColumnWidthsIfPending() {
+      if (!this.__pendingRecalculateColumnWidths) {
+        return;
       }
+      this.__pendingRecalculateColumnWidths = false;
+      this.recalculateColumnWidths();
     }
 
     /** @private */
-    __tryToRecalculateColumnWidthsIfPending() {
-      if (!this.__pendingRecalculateColumnWidths || isElementHidden(this) || this._dataProviderController.isLoading()) {
-        return;
+    __getAutoWidthColumns() {
+      return this._getColumns().filter((col) => !col.hidden && col.autoWidth);
+    }
+
+    /**
+     * Returns true if the grid is ready for column width calculation, false otherwise.
+     * @private
+     */
+    __isReadyForColumnWidthCalculation() {
+      if (!this._columnTree) {
+        return false;
+      }
+
+      const undefinedCols = this.__getAutoWidthColumns().filter((col) => !customElements.get(col.localName));
+      if (undefinedCols.length) {
+        // Some of the columns are not defined yet, wait for them to be defined before measuring
+        Promise.all(undefinedCols.map((col) => customElements.whenDefined(col.localName))).then(() => {
+          this.__tryToRecalculateColumnWidthsIfPending();
+        });
+        return false;
       }
 
       // Delay recalculation if any rows are missing an index.
@@ -213,14 +280,14 @@ export const ColumnAutoWidthMixin = (superClass) =>
       // before all the data is loaded. Note, rows without index get updated in later iterations
       // of the virtualizer update loop, ensuring the grid eventually reaches a stable state.
       const hasRowsWithUndefinedIndex = [...this.$.items.children].some((row) => row.index === undefined);
-      if (hasRowsWithUndefinedIndex) {
-        return;
-      }
 
-      const hasRowsWithClientHeight = [...this.$.items.children].some((row) => row.clientHeight > 0);
-      if (hasRowsWithClientHeight) {
-        this.__pendingRecalculateColumnWidths = false;
-        this.recalculateColumnWidths();
-      }
+      const debouncingHiddenChanged = this._debouncerHiddenChanged && this._debouncerHiddenChanged.isActive();
+
+      return (
+        !this._dataProviderController.isLoading() &&
+        !hasRowsWithUndefinedIndex &&
+        !isElementHidden(this) &&
+        !debouncingHiddenChanged
+      );
     }
   };

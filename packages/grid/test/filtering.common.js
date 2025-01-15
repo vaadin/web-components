@@ -357,7 +357,7 @@ describe('array data provider', () => {
     expect(spy).to.be.calledOnce;
   });
 
-  it('should not filter items before grid is re-attached', () => {
+  it('should not filter items before grid is re-attached', async () => {
     filterFirst.value = 'bar';
     flushFilters(grid);
 
@@ -369,6 +369,7 @@ describe('array data provider', () => {
     expect(Object.keys(grid._dataProviderController.rootCache.items).length).to.equal(1);
 
     parentNode.appendChild(grid);
+    await nextFrame();
 
     expect(Object.keys(grid._dataProviderController.rootCache.items).length).to.equal(3);
   });

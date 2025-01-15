@@ -89,6 +89,36 @@ describe('column auto-width', () => {
     expectColumnWidthsToBeOk(grid.querySelectorAll('vaadin-grid-column'), [101]);
   });
 
+  it('should not update column widths when items are set after setting a non-empty items array', async () => {
+    // Set a non-empty items array to the grid
+    grid.items = [{ a: 'a' }, { a: 'aaaaaaaa' }];
+    flushGrid(grid);
+
+    // Assign new items
+    grid.items = [{ a: 'a' }, { a: 'a' }];
+    await nextFrame();
+
+    expectColumnWidthsToBeOk(grid.querySelectorAll('vaadin-grid-column'), [101]);
+  });
+
+  it('should have correct column widths when items are set after setting an lazy data provider', async () => {
+    // Set an empty items array to the grid
+    grid.dataProvider = (params, callback) => {
+      requestAnimationFrame(() => {
+        callback(testItems.slice(0, params.pageSize), testItems.length);
+      });
+    };
+
+    flushGrid(grid);
+    await nextFrame();
+
+    // Assign new items with the second one having a long value
+    grid.items = [{ a: 'a' }, { a: 'aaaaaaaa' }];
+    await nextFrame();
+
+    expectColumnWidthsToBeOk(grid.querySelectorAll('vaadin-grid-column'));
+  });
+
   it('should have correct column widths when the grid is visually scaled', async () => {
     grid.style.transform = 'scale(0.5)';
     grid.items = testItems;
@@ -121,6 +151,19 @@ describe('column auto-width', () => {
 
     await recalculateWidths();
     expectColumnWidthsToBeOk(columns);
+  });
+
+  it('should have correct column widths once initially visible', async () => {
+    const grid = fixtureSync(`
+      <vaadin-grid style="width: 600px; height: 200px;" hidden>
+        <vaadin-grid-column auto-width flex-grow="0" header="foo bar baz"></vaadin-grid-column>
+      </vaadin-grid>
+    `);
+
+    await nextFrame();
+    grid.hidden = false;
+    await oneEvent(grid, 'animationend');
+    expectColumnWidthsToBeOk(grid.querySelectorAll('vaadin-grid-column'), [107]);
   });
 
   it('should have correct column widths once an invisible column is made visible', async () => {
@@ -344,7 +387,7 @@ describe('async recalculateWidth columns', () => {
     let recalculateColumnWidthsSpy, dataProvider;
 
     beforeEach(() => {
-      recalculateColumnWidthsSpy = sinon.spy(grid, 'recalculateColumnWidths');
+      recalculateColumnWidthsSpy = sinon.spy(grid, '_recalculateColumnWidths');
       dataProvider = (_params, callback) => callback([], 0);
       grid.dataProvider = (params, callback) => dataProvider(params, callback);
       flushGrid(grid);
@@ -393,7 +436,7 @@ describe('column group', () => {
     return grid;
   }
 
-  it('should consider column group when calculating column width', () => {
+  it('should consider column group when calculating column width', async () => {
     const grid = createGrid(`
       <vaadin-grid style="width: 200px">
         <vaadin-grid-column-group header="a lengthy header that should change the width of the column">
@@ -401,10 +444,11 @@ describe('column group', () => {
         </vaadin-grid-column-group>
       </vaadin-grid>
     `);
+    await nextFrame();
     expectColumnsWidthToBeOk(grid, [420], 25);
   });
 
-  it('should distribute the excess space to all columns', () => {
+  it('should distribute the excess space to all columns', async () => {
     const grid = createGrid(`
       <vaadin-grid style="width: 200px">
         <vaadin-grid-column-group header="a lengthy header that should change the width of the column">
@@ -413,7 +457,7 @@ describe('column group', () => {
         </vaadin-grid-column-group>
       </vaadin-grid>
     `);
-
+    await nextFrame();
     expectColumnsWidthToBeOk(grid, [217, 217], 20);
   });
 
@@ -451,7 +495,7 @@ describe('column group', () => {
     expect(columnB.width).to.equal(columnB2.width);
   });
 
-  it('should distribute the excess space to all columns according to their initial width', () => {
+  it('should distribute the excess space to all columns according to their initial width', async () => {
     const grid = createGrid(`
       <vaadin-grid style="width: 200px">
         <vaadin-grid-column-group header="a lengthy header that should change the width of the column">
@@ -460,12 +504,12 @@ describe('column group', () => {
         </vaadin-grid-column-group>
       </vaadin-grid>
     `);
-
+    await nextFrame();
     const [columnA, columnB] = grid.querySelectorAll('vaadin-grid-column');
     expect(num(columnB.width)).to.be.greaterThan(num(columnA.width));
   });
 
-  it('should consider all the parent vaadin-grid-column-groups when calculating the necessary width', () => {
+  it('should consider all the parent vaadin-grid-column-groups when calculating the necessary width', async () => {
     const grid = createGrid(`
       <vaadin-grid style="width: 200px">
         <vaadin-grid-column-group header="a lengthy header, greater than immediate column-group">
@@ -475,10 +519,11 @@ describe('column group', () => {
         </vaadin-grid-column-group>
       </vaadin-grid>
     `);
+    await nextFrame();
     expectColumnsWidthToBeOk(grid, [403], 30);
   });
 
-  it('should consider vaadin-grid-column header when calculating column width', () => {
+  it('should consider vaadin-grid-column header when calculating column width', async () => {
     const grid = createGrid(`
       <vaadin-grid style="width: 200px">
         <vaadin-grid-column-group header="small header">
@@ -486,6 +531,7 @@ describe('column group', () => {
         </vaadin-grid-column-group>
       </vaadin-grid>
     `);
+    await nextFrame();
     expectColumnsWidthToBeOk(grid, [420], 25);
   });
 

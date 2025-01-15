@@ -14,6 +14,12 @@ export const flushGrid = (grid) => {
     grid.__debounceUpdateFrozenColumn,
   ].forEach((debouncer) => debouncer?.flush());
 
+  [...grid.$.header.children, ...grid.$.footer.children].forEach((row) => {
+    if (row.__debounceUpdateHeaderFooterRowVisibility) {
+      row.__debounceUpdateHeaderFooterRowVisibility.flush();
+    }
+  });
+
   grid.__virtualizer.flush();
   grid.__preventScrollerRotatingCellFocusDebouncer?.flush();
   grid.performUpdate?.();
