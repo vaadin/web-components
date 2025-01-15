@@ -6,7 +6,10 @@
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
-import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { horizontalLayoutStyles } from './vaadin-horizontal-layout-styles.js';
+
+registerStyles('vaadin-horizontal-layout', horizontalLayoutStyles, { moduleId: 'vaadin-horizontal-layout-styles' });
 
 /**
  * `<vaadin-horizontal-layout>` provides a simple way to horizontally align your HTML elements.
@@ -36,33 +39,7 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  */
 class HorizontalLayout extends ElementMixin(ThemableMixin(PolymerElement)) {
   static get template() {
-    return html`
-      <style>
-        :host {
-          display: flex;
-          box-sizing: border-box;
-        }
-
-        :host([hidden]) {
-          display: none !important;
-        }
-
-        /* Theme variations */
-        :host([theme~='margin']) {
-          margin: 1em;
-        }
-
-        :host([theme~='padding']) {
-          padding: 1em;
-        }
-
-        :host([theme~='spacing']) {
-          gap: 1em;
-        }
-      </style>
-
-      <slot></slot>
-    `;
+    return html`<slot></slot>`;
   }
 
   static get is() {
