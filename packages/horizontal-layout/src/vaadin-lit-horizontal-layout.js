@@ -7,6 +7,7 @@ import { html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
+import { SlotObserver } from '@vaadin/component-base/src/slot-observer.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { horizontalLayoutStyles } from './vaadin-horizontal-layout-styles.js';
 
@@ -30,7 +31,21 @@ class HorizontalLayout extends ThemableMixin(ElementMixin(PolylitMixin(LitElemen
 
   /** @protected */
   render() {
-    return html`<slot></slot>`;
+    return html`
+      <slot></slot>
+      <slot name="middle"></slot>
+      <slot name="end"></slot>
+    `;
+  }
+
+  /** @protected */
+  ready() {
+    super.ready();
+
+    const endSlot = this.shadowRoot.querySelector('[name="end"]');
+    this.__endSlotObserver = new SlotObserver(endSlot, ({ currentNodes }) => {
+      this.toggleAttribute('has-end-children', currentNodes.length > 0);
+    });
   }
 }
 
