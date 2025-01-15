@@ -44,6 +44,12 @@ class VerticalLayout extends ThemableMixin(ElementMixin(PolylitMixin(LitElement)
       :host([theme~='spacing']) {
         gap: 1em;
       }
+
+      ::slotted(*) {
+        --_vaadin-layout-item-vertical-flex: 0 1 auto;
+        min-height: calc(var(--vaadin-layout-improvements) * 0px);
+        flex: calc(var(--vaadin-layout-improvements) * var(--_vaadin-layout-item-vertical-flex));
+      }
     `;
   }
 

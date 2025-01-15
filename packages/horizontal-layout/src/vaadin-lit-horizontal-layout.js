@@ -42,6 +42,12 @@ class HorizontalLayout extends ThemableMixin(ElementMixin(PolylitMixin(LitElemen
       :host([theme~='spacing']) {
         gap: 1em;
       }
+
+      ::slotted(*) {
+        --_vaadin-layout-item-horizontal-flex: 0 1 auto;
+        min-width: calc(var(--vaadin-layout-improvements) * 0px);
+        flex: calc(var(--vaadin-layout-improvements) * var(--_vaadin-layout-item-horizontal-flex));
+      }
     `;
   }
 

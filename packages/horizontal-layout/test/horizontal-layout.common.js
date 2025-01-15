@@ -110,4 +110,51 @@ describe('vaadin-horizontal-layout', () => {
       expect(wrapper.scrollWidth).to.equal(200);
     });
   });
+
+  describe('layout improvements', () => {
+    let layout, child;
+
+    beforeEach(() => {
+      layout = fixtureSync(`
+        <vaadin-horizontal-layout>
+          <div>child</div>
+        </vaadin-horizontal-layout>
+      `);
+      child = layout.querySelector('div');
+    });
+
+    describe('disabled', () => {
+      it('should apply min-width auto to children', () => {
+        expect(getComputedStyle(child).minWidth).to.equal('auto');
+      });
+
+      it('should apply default flex to children', () => {
+        expect(getComputedStyle(child).flex).to.equal('0 1 auto');
+      });
+
+      it('should not apply custom flex property to children', () => {
+        child.style.setProperty('--_vaadin-layout-item-horizontal-flex', '1');
+        expect(getComputedStyle(child).flex).to.equal('0 1 auto');
+      });
+    });
+
+    describe('enabled', () => {
+      beforeEach(() => {
+        layout.style.setProperty('--vaadin-layout-improvements', '1');
+      });
+
+      it('should apply min-width 0px to children', () => {
+        expect(getComputedStyle(child).minWidth).to.equal('0px');
+      });
+
+      it('should apply default flex to children', () => {
+        expect(getComputedStyle(child).flex).to.equal('0 1 auto');
+      });
+
+      it('should apply custom flex property to children ', () => {
+        child.style.setProperty('--_vaadin-layout-item-horizontal-flex', '1');
+        expect(getComputedStyle(child).flex).to.equal('1 1 0%');
+      });
+    });
+  });
 });
