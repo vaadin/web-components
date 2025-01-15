@@ -3,11 +3,12 @@
  * Copyright (c) 2017 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { css, html, LitElement } from 'lit';
+import { html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { horizontalLayoutStyles } from './vaadin-horizontal-layout-styles.js';
 
 /**
  * LitElement based version of `<vaadin-horizontal-layout>` web component.
@@ -19,36 +20,15 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * Feel free to try this code in your apps as per Apache 2.0 license.
  */
 class HorizontalLayout extends ThemableMixin(ElementMixin(PolylitMixin(LitElement))) {
-  static get styles() {
-    return css`
-      :host {
-        display: flex;
-        box-sizing: border-box;
-      }
-
-      :host([hidden]) {
-        display: none !important;
-      }
-
-      /* Theme variations */
-      :host([theme~='margin']) {
-        margin: 1em;
-      }
-
-      :host([theme~='padding']) {
-        padding: 1em;
-      }
-
-      :host([theme~='spacing']) {
-        gap: 1em;
-      }
-    `;
-  }
-
   static get is() {
     return 'vaadin-horizontal-layout';
   }
 
+  static get styles() {
+    return horizontalLayoutStyles;
+  }
+
+  /** @protected */
   render() {
     return html`<slot></slot>`;
   }
