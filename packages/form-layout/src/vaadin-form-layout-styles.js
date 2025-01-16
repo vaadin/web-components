@@ -37,11 +37,14 @@ export const formLayoutStyles = css`
   }
 
   #layout {
-    --_grid-col-width: var(--_vaadin-form-layout-column-width);
-    --_grid-col-max-width: var(--_vaadin-form-layout-column-width);
-
     display: grid;
-    grid-template-columns: repeat(var(--_grid-cols), var(--_vaadin-form-layout-column-width));
+    grid-template-columns: repeat(
+      var(--_grid-cols),
+      minmax(
+        var(--_vaadin-form-layout-column-width),
+        var(--_vaadin-form-layout-column-max-width, var(--_vaadin-form-layout-column-width))
+      )
+    );
     column-gap: var(--_vaadin-form-layout-column-gap, 2em);
     row-gap: var(--vaadin-form-item-row-spacing, 1em);
 
@@ -62,6 +65,16 @@ export const formLayoutStyles = css`
 
   #layout ::slotted(br) {
     display: none;
+  }
+
+  :host([expand-columns='always']) #layout {
+    --_vaadin-form-layout-column-max-width: 1fr;
+  }
+
+  @container form-grid (max-width: 420px) {
+    :host([expand-columns='mobile']) #layout {
+      --_vaadin-form-layout-column-max-width: 1fr;
+    }
   }
 `;
 

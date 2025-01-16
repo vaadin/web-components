@@ -110,6 +110,14 @@ export const FormLayoutMixin = (superClass) =>
           reflectToAttribute: true,
         },
 
+        expandColumns: {
+          type: String,
+          value() {
+            return getComputedStyle(this).getPropertyValue('--vaadin-form-layout-expand-columns') || 'always';
+          },
+          reflectToAttribute: true,
+        },
+
         /** @private */
         __isVisible: {
           type: Boolean,
