@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame, nextResize } from '@vaadin/testing-helpers';
 import { getComputedCSSPropertyValue } from './helpers.js';
 
 describe('vaadin-horizontal-layout', () => {
@@ -282,6 +282,80 @@ describe('vaadin-horizontal-layout', () => {
         await nextFrame();
         expect(div.hasAttribute('first-end-child')).to.be.false;
       });
+    });
+  });
+
+  describe('wrapping', () => {
+    let layout, items;
+
+    beforeEach(() => {
+      layout = fixtureSync(`
+        <vaadin-horizontal-layout style="flex-wrap: wrap">
+          <div style="width: 50px">Div 1</div>
+          <div style="width: 50px">Div 1</div>
+          <div style="width: 50px">Div 1</div>
+          <div style="width: 50px">Div 1</div>
+        </vaadin-horizontal-layout>
+      `);
+      items = [...layout.children];
+    });
+
+    it('should set first-in-row on first item in row on layout resize', async () => {
+      layout.style.width = '100px';
+      await nextResize(layout);
+      expect(items[2].hasAttribute('first-in-row')).to.be.true;
+    });
+
+    it('should remove first-in-row on first item in row on layout resize', async () => {
+      layout.style.width = '100px';
+      await nextResize(layout);
+
+      layout.style.width = '200px';
+      await nextResize(layout);
+      expect(items[2].hasAttribute('first-in-row')).to.be.false;
+    });
+
+    it('should update first-in-row on remaining elements when an element is removed', async () => {
+      layout.style.width = '100px';
+      await nextResize(layout);
+
+      items[0].remove();
+      await nextFrame();
+      expect(items[2].hasAttribute('first-in-row')).to.be.false;
+      expect(items[3].hasAttribute('first-in-row')).to.be.true;
+    });
+
+    it('should remove first-in-row from the element when removing it from default slot', async () => {
+      layout.style.width = '100px';
+      await nextResize(layout);
+
+      items[2].remove();
+      await nextFrame();
+      expect(items[2].hasAttribute('first-in-row')).to.be.false;
+    });
+
+    it('should remove first-in-row from the element when removing it from middle slot', async () => {
+      items[2].setAttribute('slot', 'middle');
+      items[3].setAttribute('slot', 'middle');
+
+      layout.style.width = '100px';
+      await nextResize(layout);
+
+      items[2].remove();
+      await nextFrame();
+      expect(items[2].hasAttribute('first-in-row')).to.be.false;
+    });
+
+    it('should remove first-in-row from the element when removing it from end slot', async () => {
+      items[2].setAttribute('slot', 'end');
+      items[3].setAttribute('slot', 'end');
+
+      layout.style.width = '100px';
+      await nextResize(layout);
+
+      items[2].remove();
+      await nextFrame();
+      expect(items[2].hasAttribute('first-in-row')).to.be.false;
     });
   });
 });
