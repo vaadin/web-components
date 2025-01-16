@@ -58,4 +58,82 @@ describe('horizontal-layout', () => {
     element.style.width = '100px';
     await visualDiff(div, 'theme-wrap');
   });
+
+  describe('slots', () => {
+    describe('all', () => {
+      beforeEach(() => {
+        element = fixtureSync(
+          `
+            <vaadin-horizontal-layout style="border: solid 1px blue; width: 600px;" theme="spacing wrap">
+              <div style="background: #90ee90; width: 100px">Start</div>
+              <div style="background: #90ee90; width: 100px">Start</div>
+              <div slot="middle" style="background: #ffd700;">Middle</div>
+              <div slot="end" style="background: #f08080; width: 100px">End</div>
+            </vaadin-horizontal-layout>
+          `,
+        );
+      });
+
+      it('default', async () => {
+        await visualDiff(element, 'slots-all');
+      });
+
+      it('wrap end', async () => {
+        element.style.width = '350px';
+        await visualDiff(element, 'slots-all-wrap-end');
+      });
+
+      it('wrap middle', async () => {
+        element.style.width = '350px';
+        element.firstElementChild.style.width = '200px';
+        await visualDiff(element, 'slots-all-wrap-middle');
+      });
+    });
+
+    describe('without end', () => {
+      beforeEach(() => {
+        element = fixtureSync(
+          `
+            <vaadin-horizontal-layout style="border: solid 1px blue; width: 400px;" theme="spacing wrap">
+              <div style="background: #90ee90; width: 100px">Start</div>
+              <div style="background: #90ee90; width: 100px">Start</div>
+              <div slot="middle" style="background: #ffd700;">Middle</div>
+            </vaadin-horizontal-layout>
+          `,
+        );
+      });
+
+      it('default', async () => {
+        await visualDiff(element, 'slots-without-end');
+      });
+
+      it('wrap', async () => {
+        element.style.width = '250px';
+        await visualDiff(element, 'slots-without-end-wrap');
+      });
+    });
+
+    describe('without start', () => {
+      beforeEach(() => {
+        element = fixtureSync(
+          `
+            <vaadin-horizontal-layout style="border: solid 1px blue; width: 400px;" theme="spacing wrap">
+              <div slot="middle" style="background: #ffd700;">Middle</div>
+              <div slot="end" style="background: #f08080; width: 100px">End</div>
+              <div slot="end" style="background: #f08080; width: 100px">End</div>
+            </vaadin-horizontal-layout>
+          `,
+        );
+      });
+
+      it('default', async () => {
+        await visualDiff(element, 'slots-without-start');
+      });
+
+      it('wrap', async () => {
+        element.style.width = '250px';
+        await visualDiff(element, 'slots-without-start-wrap');
+      });
+    });
+  });
 });
