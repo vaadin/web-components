@@ -17,15 +17,6 @@ export declare function getDeepActiveElement(): Element;
 export declare function isKeyboardActive(): boolean;
 
 /**
- * Returns true if the element is hidden directly with `display: none` or `visibility: hidden`,
- * false otherwise.
- *
- * The method doesn't traverse the element's ancestors, it only checks for the CSS properties
- * set directly to or inherited by the element.
- */
-export declare function isElementHiddenDirectly(element: HTMLElement): boolean;
-
-/**
  * Returns true if the element is hidden, false otherwise.
  *
  * An element is treated as hidden when any of the following conditions are met:

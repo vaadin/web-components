@@ -8,7 +8,7 @@ import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { getNormalizedScrollLeft, setNormalizedScrollLeft } from '@vaadin/component-base/src/dir-utils.js';
 import { getFlattenedElements } from '@vaadin/component-base/src/dom-utils.js';
 import { SlotObserver } from '@vaadin/component-base/src/slot-observer.js';
-import { isElementHiddenDirectly } from './focus-utils.js';
+import { isElementHidden } from './focus-utils.js';
 import { KeyboardDirectionMixin } from './keyboard-direction-mixin.js';
 
 /**
@@ -120,7 +120,7 @@ export const ListMixin = (superClass) =>
       }
 
       const items = Array.isArray(this.items) ? this.items : [];
-      const idx = this._getAvailableIndex(items, 0, null, (item) => item.tabIndex === 0);
+      const idx = this._getAvailableIndex(items, 0, null, (item) => item.tabIndex === 0 && !isElementHidden(item));
       if (idx >= 0) {
         this._focus(idx);
       } else {
@@ -222,7 +222,12 @@ export const ListMixin = (superClass) =>
       }
 
       const idx = this._searchBuf.length === 1 ? currentIdx + 1 : currentIdx;
-      return this._getAvailableIndex(this.items, idx, 1, (item) => this.__isMatchingKey(item));
+      return this._getAvailableIndex(
+        this.items,
+        idx,
+        1,
+        (item) => this.__isMatchingKey(item) && getComputedStyle(item).display !== 'none',
+      );
     }
 
     /** @private */
@@ -334,7 +339,7 @@ export const ListMixin = (superClass) =>
 
     /** @override */
     _isItemFocusable(item) {
-      return !item.hasAttribute('disabled') && !isElementHiddenDirectly(item);
+      return !item.hasAttribute('disabled');
     }
 
     /**
