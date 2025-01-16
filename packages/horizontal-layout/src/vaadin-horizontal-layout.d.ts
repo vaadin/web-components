@@ -27,6 +27,16 @@ import { HorizontalLayoutMixin } from './vaadin-horizontal-layout-mixin.js';
  * `theme="padding"` | Applies the default amount of CSS padding for the host element (specified by the theme)
  * `theme="spacing"` | Applies the default amount of CSS margin between items (specified by the theme)
  * `theme="wrap"` | Items wrap to the next row when they exceed the layout width
+ *
+ * ### Component's slots
+ *
+ * The following slots are available to be set:
+ *
+ * Slot name          | Description
+ * -------------------|---------------
+ * no name            | Default slot
+ * `middle`           | Slot for the content placed in the middle
+ * `end`              | Slot for the content placed at the end
  */
 declare class HorizontalLayout extends HorizontalLayoutMixin(ThemableMixin(ElementMixin(HTMLElement))) {}
 
