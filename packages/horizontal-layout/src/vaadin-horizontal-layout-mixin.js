@@ -30,9 +30,13 @@ export const HorizontalLayoutMixin = (superClass) =>
 
         const children = currentNodes.filter((node) => node.nodeType === Node.ELEMENT_NODE);
 
-        if (children.length) {
-          children[children.length - 1].setAttribute('last-start-child', '');
-        }
+        children.forEach((child, idx) => {
+          if (idx === children.length - 1) {
+            child.setAttribute('last-start-child', '');
+          } else if (child.hasAttribute('last-start-child')) {
+            child.removeAttribute('last-start-child');
+          }
+        });
 
         const nodes = currentNodes.filter((node) => !isEmptyTextNode(node));
         this.toggleAttribute('has-start', nodes.length > 0);
@@ -49,9 +53,13 @@ export const HorizontalLayoutMixin = (superClass) =>
           }
         }
 
-        if (currentNodes.length) {
-          currentNodes[0].setAttribute('first-end-child', '');
-        }
+        currentNodes.forEach((child, idx) => {
+          if (idx === 0) {
+            child.setAttribute('first-end-child', '');
+          } else if (child.hasAttribute('first-end-child')) {
+            child.removeAttribute('first-end-child');
+          }
+        });
 
         this.toggleAttribute('has-end', currentNodes.length > 0);
 
@@ -72,10 +80,19 @@ export const HorizontalLayoutMixin = (superClass) =>
           }
         }
 
-        if (currentNodes.length) {
-          currentNodes[0].setAttribute('first-middle-child', '');
-          currentNodes[currentNodes.length - 1].setAttribute('last-middle-child', '');
-        }
+        currentNodes.forEach((child, idx) => {
+          if (idx === 0) {
+            child.setAttribute('first-middle-child', '');
+          } else if (child.hasAttribute('first-middle-child')) {
+            child.removeAttribute('first-middle-child');
+          }
+
+          if (idx === currentNodes.length - 1) {
+            child.setAttribute('last-middle-child', '');
+          } else if (child.hasAttribute('last-middle-child')) {
+            child.removeAttribute('last-middle-child');
+          }
+        });
 
         this.toggleAttribute('has-middle', currentNodes.length > 0);
 
