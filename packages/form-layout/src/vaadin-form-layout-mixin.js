@@ -77,7 +77,6 @@ export const FormLayoutMixin = (superClass) =>
         autoResponsive: {
           type: Boolean,
           value: false,
-          reflectToAttribute: true,
         },
 
         columnWidth: {
@@ -85,7 +84,6 @@ export const FormLayoutMixin = (superClass) =>
           value() {
             return getComputedStyle(this).getPropertyValue('--vaadin-form-layout-column-width') || '13em';
           },
-          reflectToAttribute: true,
           observer: '_columnWidthChanged',
         },
 
@@ -94,13 +92,21 @@ export const FormLayoutMixin = (superClass) =>
           value() {
             return getComputedStyle(this).getPropertyValue('--vaadin-form-layout-column-gap') || '1em';
           },
-          reflectToAttribute: true,
           observer: '_columnGapChanged',
         },
 
         maxColumns: {
           type: Number,
           value: 10,
+        },
+
+        autoRows: {
+          type: Boolean,
+          value() {
+            const defaultColProp =
+              getComputedStyle(this).getPropertyValue('--vaadin-form-layout-default-column') || 'auto';
+            return defaultColProp === 'auto';
+          },
           reflectToAttribute: true,
         },
 

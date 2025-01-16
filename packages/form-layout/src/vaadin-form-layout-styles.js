@@ -52,8 +52,12 @@ export const formLayoutStyles = css`
   }
 
   #layout ::slotted(*:not(vaadin-grid-row)) {
-    grid-column-start: var(--_vaadin-form-layout-start-col, var(--_default-field-column));
+    grid-column-start: 1;
     grid-column-end: span min(var(--vaadin-form-layout-colspan), var(--_grid-cols));
+  }
+
+  :host([auto-rows]) #layout ::slotted(*:not(vaadin-grid-row)) {
+    grid-column-start: auto;
   }
 
   #layout ::slotted(br) {
