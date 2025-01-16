@@ -25,14 +25,7 @@ export const HorizontalLayoutMixin = (superClass) =>
         }
 
         const children = currentNodes.filter((node) => node.nodeType === Node.ELEMENT_NODE);
-
-        children.forEach((child, idx) => {
-          if (idx === children.length - 1) {
-            child.setAttribute('last-start-child', '');
-          } else if (child.hasAttribute('last-start-child')) {
-            child.removeAttribute('last-start-child');
-          }
-        });
+        this.__updateAttributes(children, 'start', false, true);
 
         const nodes = currentNodes.filter((node) => !isEmptyTextNode(node));
         this.toggleAttribute('has-start', nodes.length > 0);
@@ -47,13 +40,7 @@ export const HorizontalLayoutMixin = (superClass) =>
           this.__clearAttribute(removedNodes, 'first-in-row');
         }
 
-        currentNodes.forEach((child, idx) => {
-          if (idx === 0) {
-            child.setAttribute('first-end-child', '');
-          } else if (child.hasAttribute('first-end-child')) {
-            child.removeAttribute('first-end-child');
-          }
-        });
+        this.__updateAttributes(currentNodes, 'end', true, false);
 
         this.toggleAttribute('has-end', currentNodes.length > 0);
 
@@ -68,19 +55,7 @@ export const HorizontalLayoutMixin = (superClass) =>
           this.__clearAttribute(removedNodes, 'first-in-row');
         }
 
-        currentNodes.forEach((child, idx) => {
-          if (idx === 0) {
-            child.setAttribute('first-middle-child', '');
-          } else if (child.hasAttribute('first-middle-child')) {
-            child.removeAttribute('first-middle-child');
-          }
-
-          if (idx === currentNodes.length - 1) {
-            child.setAttribute('last-middle-child', '');
-          } else if (child.hasAttribute('last-middle-child')) {
-            child.removeAttribute('last-middle-child');
-          }
-        });
+        this.__updateAttributes(currentNodes, 'middle', true, true);
 
         this.toggleAttribute('has-middle', currentNodes.length > 0);
 
@@ -102,6 +77,29 @@ export const HorizontalLayoutMixin = (superClass) =>
       if (el) {
         el.removeAttribute(attr);
       }
+    }
+
+    /** @private */
+    __updateAttributes(nodes, slot, setFirst, setLast) {
+      nodes.forEach((child, idx) => {
+        if (setFirst) {
+          const attr = `first-${slot}-child`;
+          if (idx === 0) {
+            child.setAttribute(attr, '');
+          } else if (child.hasAttribute(attr)) {
+            child.removeAttribute(attr);
+          }
+        }
+
+        if (setLast) {
+          const attr = `last-${slot}-child`;
+          if (idx === nodes.length - 1) {
+            child.setAttribute(attr, '');
+          } else if (child.hasAttribute(attr)) {
+            child.removeAttribute(attr);
+          }
+        }
+      });
     }
 
     /** @private */
