@@ -1,5 +1,5 @@
-import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
-import { sendKeys } from '@web/test-runner-commands';
+import { fixtureSync, mousedown, nextFrame } from '@vaadin/testing-helpers';
+import { sendKeys, sendMouse } from '@web/test-runner-commands';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '@vaadin/checkbox/theme/lumo/vaadin-checkbox.js';
 import '@vaadin/checkbox-group/theme/lumo/vaadin-checkbox-group.js';
@@ -21,6 +21,13 @@ describe('field-highlighter', () => {
     div.style.display = 'inline-block';
     div.style.padding = '20px';
     div.style.height = '150px';
+  });
+
+  afterEach(() => {
+    // After tests which use sendKeys() the focus-utils.js -> isKeyboardActive is set to true.
+    // Click once here on body to reset it so other tests are not affected by it.
+    // An unwanted focus-ring would be shown in other tests otherwise.
+    mousedown(document.body);
   });
 
   describe('checkbox', () => {
@@ -206,6 +213,19 @@ describe('field-highlighter', () => {
       await sendKeys({ press: 'Tab' });
       await nextFrame();
       await visualDiff(div, 'text-field-focused');
+    });
+
+    it('pointer focus-ring disabled', async () => {
+      const bounds = element.getBoundingClientRect();
+      await sendMouse({ type: 'click', position: [bounds.left + 5, bounds.top + 5] });
+      await visualDiff(div, 'text-field-pointer-focus-ring-disabled');
+    });
+
+    it('pointer focus-ring enabled', async () => {
+      element.style.setProperty('--lumo-input-field-pointer-focus-visible', '1');
+      const bounds = element.getBoundingClientRect();
+      await sendMouse({ type: 'click', position: [bounds.left + 5, bounds.top + 5] });
+      await visualDiff(div, 'text-field-pointer-focus-ring-enabled');
     });
   });
 });

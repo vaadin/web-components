@@ -4,7 +4,7 @@ registerStyles(
   'vaadin-number-field',
   css`
     /* Hide caret */
-    :host([focus-ring]) ::slotted(input) {
+    :host([focused]) ::slotted(input) {
       caret-color: transparent;
     }
 

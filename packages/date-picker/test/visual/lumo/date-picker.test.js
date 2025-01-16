@@ -1,5 +1,5 @@
 import { fixtureSync, mousedown } from '@vaadin/testing-helpers';
-import { sendKeys } from '@web/test-runner-commands';
+import { sendKeys, sendMouse } from '@web/test-runner-commands';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '../../../theme/lumo/vaadin-date-picker.js';
 import '../../not-animated-styles.js';
@@ -40,12 +40,6 @@ describe('date-picker', () => {
     div.style.display = 'inline-flex';
     div.style.height = '200px';
     await visualDiff(div, 'flex');
-  });
-
-  it('focus-ring', async () => {
-    await sendKeys({ press: 'Tab' });
-
-    await visualDiff(div, 'focus-ring');
   });
 
   ['ltr', 'rtl'].forEach((dir) => {
@@ -127,6 +121,30 @@ describe('date-picker', () => {
           await visualDiff(div, `${dir}-week-numbers`);
         });
       });
+    });
+  });
+
+  describe('focus', () => {
+    beforeEach(() => {
+      element.autoOpenDisabled = true;
+    });
+
+    it('keyboard focus-ring', async () => {
+      await sendKeys({ press: 'Tab' });
+      await visualDiff(div, 'keyboard-focus-ring');
+    });
+
+    it('pointer focus-ring disabled', async () => {
+      const bounds = element.getBoundingClientRect();
+      await sendMouse({ type: 'click', position: [bounds.left + 5, bounds.top + 5] });
+      await visualDiff(div, 'pointer-focus-ring-disabled');
+    });
+
+    it('pointer focus-ring enabled', async () => {
+      element.style.setProperty('--lumo-input-field-pointer-focus-visible', '1');
+      const bounds = element.getBoundingClientRect();
+      await sendMouse({ type: 'click', position: [bounds.left + 5, bounds.top + 5] });
+      await visualDiff(div, 'pointer-focus-ring-enabled');
     });
   });
 });

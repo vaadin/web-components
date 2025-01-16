@@ -4,7 +4,7 @@ registerStyles(
   'vaadin-date-picker',
   css`
     /* Hide caret */
-    :host([focus-ring]) ::slotted(input),
+    :host([focused]) ::slotted(input),
     :host([opened]) ::slotted(input) {
       caret-color: transparent;
     }

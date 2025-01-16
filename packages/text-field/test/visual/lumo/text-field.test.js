@@ -1,5 +1,5 @@
-import { fixtureSync } from '@vaadin/testing-helpers/dist/fixture.js';
-import { sendKeys } from '@web/test-runner-commands';
+import { fixtureSync, mousedown } from '@vaadin/testing-helpers';
+import { sendKeys, sendMouse } from '@web/test-runner-commands';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '@vaadin/vaadin-lumo-styles/test/autoload.js';
 import '../common.js';
@@ -15,13 +15,15 @@ describe('text-field', () => {
     element = fixtureSync('<vaadin-text-field></vaadin-text-field>', div);
   });
 
-  it('basic', async () => {
-    await visualDiff(div, 'basic');
+  afterEach(() => {
+    // After tests which use sendKeys() the focus-utils.js -> isKeyboardActive is set to true.
+    // Click once here on body to reset it so other tests are not affected by it.
+    // An unwanted focus-ring would be shown in other tests otherwise.
+    mousedown(document.body);
   });
 
-  it('focus-ring', async () => {
-    await sendKeys({ press: 'Tab' });
-    await visualDiff(div, 'focus-ring');
+  it('basic', async () => {
+    await visualDiff(div, 'basic');
   });
 
   it('disabled', async () => {
@@ -190,6 +192,41 @@ describe('text-field', () => {
     it('Bordered input container, dark mode', async () => {
       document.documentElement.setAttribute('theme', 'dark');
       await visualDiff(div, 'bordered-input-container-dark');
+      document.documentElement.removeAttribute('theme');
+    });
+  });
+
+  describe('focus', () => {
+    it('keyboard focus-ring', async () => {
+      await sendKeys({ press: 'Tab' });
+      await visualDiff(div, 'keyboard-focus-ring');
+    });
+
+    it('keyboard focus-ring, invalid', async () => {
+      element.invalid = true;
+      await sendKeys({ press: 'Tab' });
+      await visualDiff(div, 'keyboard-focus-ring-invalid');
+    });
+
+    it('pointer focus-ring disabled', async () => {
+      const bounds = element.getBoundingClientRect();
+      await sendMouse({ type: 'click', position: [bounds.left + 5, bounds.top + 5] });
+      await visualDiff(div, 'pointer-focus-ring-disabled');
+    });
+
+    it('pointer focus-ring enabled', async () => {
+      element.style.setProperty('--lumo-input-field-pointer-focus-visible', '1');
+      const bounds = element.getBoundingClientRect();
+      await sendMouse({ type: 'click', position: [bounds.left + 5, bounds.top + 5] });
+      await visualDiff(div, 'pointer-focus-ring-enabled');
+    });
+
+    it('pointer focus-ring enabled, invalid', async () => {
+      element.invalid = true;
+      element.style.setProperty('--lumo-input-field-pointer-focus-visible', '1');
+      const bounds = element.getBoundingClientRect();
+      await sendMouse({ type: 'click', position: [bounds.left + 5, bounds.top + 5] });
+      await visualDiff(div, 'pointer-focus-ring-enabled-invalid');
     });
   });
 });
