@@ -20,12 +20,8 @@ export const HorizontalLayoutMixin = (superClass) =>
       const startSlot = this.shadowRoot.querySelector('slot:not([name])');
       this.__startSlotObserver = new SlotObserver(startSlot, ({ currentNodes, removedNodes }) => {
         if (removedNodes.length) {
-          const last = removedNodes.find(
-            (node) => node.nodeType === Node.ELEMENT_NODE && node.hasAttribute('last-start-child'),
-          );
-          if (last) {
-            last.removeAttribute('last-start-child');
-          }
+          this.__clearAttribute(removedNodes, 'last-start-child');
+          this.__clearAttribute(removedNodes, 'first-in-row');
         }
 
         const children = currentNodes.filter((node) => node.nodeType === Node.ELEMENT_NODE);
@@ -47,10 +43,8 @@ export const HorizontalLayoutMixin = (superClass) =>
       const endSlot = this.shadowRoot.querySelector('[name="end"]');
       this.__endSlotObserver = new SlotObserver(endSlot, ({ currentNodes, removedNodes }) => {
         if (removedNodes.length) {
-          const first = removedNodes.find((el) => el.hasAttribute('first-end-child'));
-          if (first) {
-            first.removeAttribute('first-end-child');
-          }
+          this.__clearAttribute(removedNodes, 'first-end-child');
+          this.__clearAttribute(removedNodes, 'first-in-row');
         }
 
         currentNodes.forEach((child, idx) => {
@@ -69,15 +63,9 @@ export const HorizontalLayoutMixin = (superClass) =>
       const middleSlot = this.shadowRoot.querySelector('[name="middle"]');
       this.__middleSlotObserver = new SlotObserver(middleSlot, ({ currentNodes, removedNodes }) => {
         if (removedNodes.length) {
-          const first = removedNodes.find((el) => el.hasAttribute('first-middle-child'));
-          if (first) {
-            first.removeAttribute('first-middle-child');
-          }
-
-          const last = removedNodes.find((el) => el.hasAttribute('last-middle-child'));
-          if (last) {
-            last.removeAttribute('last-middle-child');
-          }
+          this.__clearAttribute(removedNodes, 'first-middle-child');
+          this.__clearAttribute(removedNodes, 'last-middle-child');
+          this.__clearAttribute(removedNodes, 'first-in-row');
         }
 
         currentNodes.forEach((child, idx) => {
@@ -109,12 +97,19 @@ export const HorizontalLayoutMixin = (superClass) =>
     }
 
     /** @private */
+    __clearAttribute(nodes, attr) {
+      const el = nodes.find((node) => node.nodeType === Node.ELEMENT_NODE && node.hasAttribute(attr));
+      if (el) {
+        el.removeAttribute(attr);
+      }
+    }
+
+    /** @private */
     __updateRowState() {
-      const children = this.children;
-      let previousOffset = 0;
-      for (const child of children) {
-        if (child.offsetTop > previousOffset) {
-          previousOffset = child.offsetTop;
+      let offset = 0;
+      for (const child of this.children) {
+        if (child.offsetTop > offset) {
+          offset = child.offsetTop;
           child.setAttribute('first-in-row', '');
         } else {
           child.removeAttribute('first-in-row');
