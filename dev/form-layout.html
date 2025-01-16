@@ -18,11 +18,15 @@
       vaadin-form-item > *:not(label) {
         width: 100%;
       }
+
+      html {
+        --vaadin-form-layout-column-width: 15em;
+      }
     </style>
   </head>
 
   <body>
-    <vaadin-form-layout>
+    <vaadin-form-layout auto-responsive column-gap="2em">
       <vaadin-form-item>
         <label slot="label">First name</label>
         <vaadin-text-field></vaadin-text-field>

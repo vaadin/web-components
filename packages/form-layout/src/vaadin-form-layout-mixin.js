@@ -74,11 +74,52 @@ export const FormLayoutMixin = (superClass) =>
           sync: true,
         },
 
+        autoResponsive: {
+          type: Boolean,
+          value: false,
+          reflectToAttribute: true,
+        },
+
+        columnWidth: {
+          type: String,
+          value() {
+            return getComputedStyle(this).getPropertyValue('--vaadin-form-layout-column-width') || '13em';
+          },
+          reflectToAttribute: true,
+          observer: '_columnWidthChanged',
+        },
+
+        columnGap: {
+          type: String,
+          value() {
+            return getComputedStyle(this).getPropertyValue('--vaadin-form-layout-column-gap') || '1em';
+          },
+          reflectToAttribute: true,
+          observer: '_columnGapChanged',
+        },
+
+        maxColumns: {
+          type: Number,
+          value: 10,
+          reflectToAttribute: true,
+        },
+
         /** @private */
         __isVisible: {
           type: Boolean,
         },
       };
+    }
+
+    /** @private */
+    _columnWidthChanged(colWidth) {
+      this.$.layout.style.setProperty('--_vaadin-form-layout-column-width', colWidth);
+      this._generateContainerQueries();
+    }
+    /** @private */
+    _columnGapChanged(colGap) {
+      this.$.layout.style.setProperty('--_vaadin-form-layout-column-gap', colGap);
+      this._generateContainerQueries();
     }
 
     /** @protected */
@@ -185,25 +226,27 @@ export const FormLayoutMixin = (superClass) =>
     /** @private */
     _responsiveStepsChanged(responsiveSteps, oldResponsiveSteps) {
       try {
-        if (!Array.isArray(responsiveSteps)) {
-          throw new Error('Invalid "responsiveSteps" type, an Array is required.');
-        }
-
-        if (responsiveSteps.length < 1) {
-          throw new Error('Invalid empty "responsiveSteps" array, at least one item is required.');
-        }
-
-        responsiveSteps.forEach((step) => {
-          if (this._naturalNumberOrOne(step.columns) !== step.columns) {
-            throw new Error(`Invalid 'columns' value of ${step.columns}, a natural number is required.`);
+        if (!this.autoResponsive) {
+          if (!Array.isArray(responsiveSteps)) {
+            throw new Error('Invalid "responsiveSteps" type, an Array is required.');
           }
 
-          if (step.labelsPosition !== undefined && ['aside', 'top'].indexOf(step.labelsPosition) === -1) {
-            throw new Error(
-              `Invalid 'labelsPosition' value of ${step.labelsPosition}, 'aside' or 'top' string is required.`,
-            );
+          if (responsiveSteps.length < 1) {
+            throw new Error('Invalid empty "responsiveSteps" array, at least one item is required.');
           }
-        });
+
+          responsiveSteps.forEach((step) => {
+            if (this._naturalNumberOrOne(step.columns) !== step.columns) {
+              throw new Error(`Invalid 'columns' value of ${step.columns}, a natural number is required.`);
+            }
+
+            if (step.labelsPosition !== undefined && ['aside', 'top'].indexOf(step.labelsPosition) === -1) {
+              throw new Error(
+                `Invalid 'labelsPosition' value of ${step.labelsPosition}, 'aside' or 'top' string is required.`,
+              );
+            }
+          });
+        }
       } catch (e) {
         if (oldResponsiveSteps && oldResponsiveSteps !== responsiveSteps) {
           console.warn(`${e.message} Using previously set 'responsiveSteps' instead.`);
@@ -224,18 +267,36 @@ export const FormLayoutMixin = (superClass) =>
     /** @private */
     _generateContainerQueries() {
       let cqStyles = '';
-      this.responsiveSteps.forEach((step) => {
-        const formItemAlign = step.labelsPosition === 'top' ? 'stretch' : 'baseline';
-        const formItemFlexDir = step.labelsPosition === 'top' ? 'column' : 'row';
-        const breakpoint =
-          `@container form-grid (min-width: ${step.minWidth}) { #layout {` +
-          `--_grid-cols: ${step.columns};` +
-          `--_vaadin-form-item-align-items: ${formItemAlign};` +
-          `--_vaadin-form-item-flex-dir: ${formItemFlexDir};` +
-          `}}\n`;
-        cqStyles += breakpoint;
-      });
+
+      if (this.autoResponsive) {
+        // Build queries based on columnWidth
+        for (let cols = 1; cols <= this.maxColumns; cols++) {
+          const minWidth = `calc(${cols} * ${this.columnWidth} + ${cols - 1} * ${this.columnGap})`;
+          const formItemAlign = 'stretch';
+          const formItemFlexDir = 'column';
+          cqStyles += this._generateBreakpoint(minWidth, cols, formItemAlign, formItemFlexDir);
+        }
+      } else {
+        // Build queries based on responsiveSteps
+        this.responsiveSteps.forEach((step) => {
+          const formItemAlign = step.labelsPosition === 'top' ? 'stretch' : 'baseline';
+          const formItemFlexDir = step.labelsPosition === 'top' ? 'column' : 'row';
+          cqStyles += this._generateBreakpoint(step.minWidth, step.columns, formItemAlign, formItemFlexDir);
+        });
+      }
+
       this.$.containerQueries.textContent = cqStyles;
+    }
+
+    /** @private */
+    _generateBreakpoint(minWidth, columns, formItemAlign, formItemFlexDir) {
+      return (
+        `@container form-grid (min-width: ${minWidth}) { #layout {` +
+        `--_grid-cols: ${columns};` +
+        `--_vaadin-form-item-align-items: ${formItemAlign};` +
+        `--_vaadin-form-item-flex-dir: ${formItemFlexDir};` +
+        `}}\n`
+      );
     }
 
     /**

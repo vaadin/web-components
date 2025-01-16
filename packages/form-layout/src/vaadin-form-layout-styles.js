@@ -37,12 +37,12 @@ export const formLayoutStyles = css`
   }
 
   #layout {
-    --_grid-col-width: var(--vaadin-form-layout-column-width, 1fr);
-    --_grid-col-max-width: var(var(--_grid-col-width));
+    --_grid-col-width: var(--_vaadin-form-layout-column-width);
+    --_grid-col-max-width: var(--_vaadin-form-layout-column-width);
 
     display: grid;
-    grid-template-columns: repeat(var(--_grid-cols), var(--_grid-col-width));
-    column-gap: var(--vaadin-form-layout-column-spacing, 2em);
+    grid-template-columns: repeat(var(--_grid-cols), var(--_vaadin-form-layout-column-width));
+    column-gap: var(--_vaadin-form-layout-column-gap, 2em);
     row-gap: var(--vaadin-form-item-row-spacing, 1em);
 
     align-items: baseline; /* default \`stretch\` is not appropriate */
