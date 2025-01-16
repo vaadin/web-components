@@ -266,15 +266,6 @@ export const ListMixin = (superClass) =>
     }
 
     /**
-     * @param {!Element} item
-     * @return {boolean}
-     * @protected
-     */
-    _isItemHidden(item) {
-      return getComputedStyle(item).display === 'none';
-    }
-
-    /**
      * @param {number} idx
      * @protected
      */
