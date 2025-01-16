@@ -171,17 +171,23 @@ export const KeyboardDirectionMixin = (superclass) =>
 
         const item = items[idx];
 
-        if (!this._isItemFocusable(item)) {
-          continue;
+        if (this._isItemFocusable(item) && this.__isMatchingItem(item, condition)) {
+          return idx;
         }
-
-        if (typeof condition === 'function' && !condition(item)) {
-          continue;
-        }
-
-        return idx;
       }
       return -1;
+    }
+
+    /**
+     * Returns true if the item matches condition.
+     *
+     * @param {Element} item - item to check
+     * @param {Function} condition - function used to check the item
+     * @return {number}
+     * @private
+     */
+    __isMatchingItem(item, condition) {
+      return typeof condition === 'function' ? condition(item) : true;
     }
 
     /**
