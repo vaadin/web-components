@@ -287,7 +287,8 @@ export const FormLayoutMixin = (superClass) =>
         this.responsiveSteps.forEach((step) => {
           const formItemAlign = step.labelsPosition === 'top' ? 'stretch' : 'baseline';
           const formItemFlexDir = step.labelsPosition === 'top' ? 'column' : 'row';
-          cqStyles += this._generateBreakpoint(step.minWidth, step.columns, formItemAlign, formItemFlexDir);
+          const columns = Math.min(this.maxColumns, step.columns);
+          cqStyles += this._generateBreakpoint(step.minWidth, columns, formItemAlign, formItemFlexDir);
         });
       }
 
