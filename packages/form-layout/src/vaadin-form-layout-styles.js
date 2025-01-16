@@ -71,7 +71,7 @@ export const formLayoutStyles = css`
     --_vaadin-form-layout-column-max-width: 1fr;
   }
 
-  @container form-grid (max-width: 420px) {
+  @media (max-width: 420px) {
     :host([expand-columns='mobile']) #layout {
       --_vaadin-form-layout-column-max-width: 1fr;
     }
