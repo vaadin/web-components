@@ -561,6 +561,8 @@ export const MenuBarMixin = (superClass) =>
         button.className = item.className;
       }
 
+      button.disabled = item.disabled;
+
       return button;
     }
 
@@ -572,12 +574,6 @@ export const MenuBarMixin = (superClass) =>
         button.setAttribute('aria-haspopup', 'true');
         button.setAttribute('aria-expanded', 'false');
       }
-    }
-
-    /** @protected */
-    _setButtonDisabled(button, disabled) {
-      button.disabled = disabled;
-      button.setAttribute('tabindex', disabled ? '-1' : '0');
     }
 
     /** @protected */
@@ -629,7 +625,6 @@ export const MenuBarMixin = (superClass) =>
       items.forEach((item) => {
         const button = this._initButton(item);
         this.insertBefore(button, this._overflow);
-        this._setButtonDisabled(button, item.disabled);
         this._initButtonAttrs(button);
         this._setButtonTheme(button, this._theme);
       });
