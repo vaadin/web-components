@@ -5,6 +5,7 @@
  */
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { HorizontalLayoutMixin } from './vaadin-horizontal-layout-mixin.js';
 
 /**
  * `<vaadin-horizontal-layout>` provides a simple way to horizontally align your HTML elements.
@@ -27,7 +28,7 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * `theme="spacing"` | Applies the default amount of CSS margin between items (specified by the theme)
  * `theme="wrap"` | Items wrap to the next row when they exceed the layout width
  */
-declare class HorizontalLayout extends ThemableMixin(ElementMixin(HTMLElement)) {}
+declare class HorizontalLayout extends HorizontalLayoutMixin(ThemableMixin(ElementMixin(HTMLElement))) {}
 
 declare global {
   interface HTMLElementTagNameMap {
