@@ -118,6 +118,14 @@ export const FormLayoutMixin = (superClass) =>
           reflectToAttribute: true,
         },
 
+        fitFields: {
+          type: String,
+          value() {
+            return getComputedStyle(this).getPropertyValue('--vaadin-form-layout-fit-fields') || 'always';
+          },
+          reflectToAttribute: true,
+        },
+
         /** @private */
         __isVisible: {
           type: Boolean,

@@ -76,6 +76,16 @@ export const formLayoutStyles = css`
       --_vaadin-form-layout-column-max-width: 1fr;
     }
   }
+
+  :host([fit-fields='always']) #layout {
+    --_vaadin-form-item-fit-content: 1;
+  }
+
+  @media (max-width: 420px) {
+    :host([fit-fields='mobile']) #layout {
+      --_vaadin-form-item-fit-content: 1;
+    }
+  }
 `;
 
 /* FORM ITEM STYLES */
@@ -109,9 +119,13 @@ export const formItemStyles = css`
     flex: 1 1 auto;
   }
 
-  #content ::slotted(.full-width) {
+  #content ::slotted(*) {
     box-sizing: border-box;
-    width: 100%;
-    min-width: 0;
+    width: calc(100% * var(--_vaadin-form-item-fit-content));
+    min-width: calc(1 - var(--_vaadin-form-item-fit-content));
+  }
+
+  #content ::slotted(.full-width) {
+    --_vaadin-form-item-fit-content: 1;
   }
 `;
