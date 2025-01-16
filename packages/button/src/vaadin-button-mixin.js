@@ -64,6 +64,10 @@ export const ButtonMixin = (superClass) =>
       if (!this.hasAttribute('role')) {
         this.setAttribute('role', 'button');
       }
+
+      if (this._shouldAllowFocusWhenDisabled()) {
+        this.style.setProperty('--_vaadin-button-disabled-pointer-events', 'auto');
+      }
     }
 
     /**

@@ -19,8 +19,8 @@ export const buttonStyles = css`
     display: none !important;
   }
 
-  :host([disabled][tabindex='-1']) {
-    pointer-events: none;
+  :host([disabled]) {
+    pointer-events: var(--_vaadin-button-disabled-pointer-events, none);
   }
 
   /* Aligns the button with form fields when placed on the same line.
