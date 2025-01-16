@@ -12,6 +12,9 @@ import type {
   ChartDrillupEvent,
   ChartLoadEvent,
   ChartPointClickEvent,
+  ChartPointDragEvent,
+  ChartPointDragStartEvent,
+  ChartPointDropEvent,
   ChartPointLegendItemClickEvent,
   ChartPointMouseOutEvent,
   ChartPointMouseOverEvent,
@@ -202,6 +205,24 @@ chart.addEventListener('point-unselect', (event) => {
 
 chart.addEventListener('point-update', (event) => {
   assertType<ChartPointUpdateEvent>(event);
+  assertType<Point>(event.detail.point);
+  assertType<Point>(event.detail.originalEvent.target);
+});
+
+chart.addEventListener('point-drag-start', (event) => {
+  assertType<ChartPointDragStartEvent>(event);
+  assertType<Point>(event.detail.point);
+  assertType<Point>(event.detail.originalEvent.target);
+});
+
+chart.addEventListener('point-drop', (event) => {
+  assertType<ChartPointDropEvent>(event);
+  assertType<Point>(event.detail.point);
+  assertType<Point>(event.detail.originalEvent.target);
+});
+
+chart.addEventListener('point-drag', (event) => {
+  assertType<ChartPointDragEvent>(event);
   assertType<Point>(event.detail.point);
   assertType<Point>(event.detail.originalEvent.target);
 });

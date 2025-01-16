@@ -27,6 +27,7 @@ import 'highcharts/es-modules/masters/modules/organization.src.js';
 import 'highcharts/es-modules/masters/modules/xrange.src.js';
 import 'highcharts/es-modules/masters/modules/bullet.src.js';
 import 'highcharts/es-modules/masters/modules/gantt.src.js';
+import 'highcharts/es-modules/masters/modules/draggable-points.src.js';
 import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
 import { beforeNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
@@ -250,6 +251,9 @@ Highcharts.setOptions({ lang: { noData: '' } });
  * @fires {CustomEvent} point-select -Fired when the point is selected either programmatically or by clicking on the point.
  * @fires {CustomEvent} point-unselect - Fired when the point is unselected either programmatically or by clicking on the point.
  * @fires {CustomEvent} point-update - Fired when the point is updated programmatically through `.updateConfiguration()` method.
+ * @fires {CustomEvent} point-drag-start - Fired when starting to drag a point.
+ * @fires {CustomEvent} point-drop - Fired when the point is dropped.
+ * @fires {CustomEvent} point-drag - Fired while dragging a point.
  * @fires {CustomEvent} xaxes-extremes-set - Fired when when the minimum and maximum is set for the X axis.
  * @fires {CustomEvent} yaxes-extremes-set - Fired when when the minimum and maximum is set for the Y axis.
  *
@@ -885,6 +889,30 @@ class Chart extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))) {
        * @param {Object} point Point object where the event was sent from
        */
       update: 'point-update',
+
+      /**
+       * Fired when starting to drag a point.
+       * @event point-drag-start
+       * @param {Object} detail.originalEvent object with details about the event sent
+       * @param {Object} point Point object where the event was sent from
+       */
+      dragStart: 'point-drag-start',
+
+      /**
+       * Fired when the point is dropped.
+       * @event point-drop
+       * @param {Object} detail.originalEvent object with details about the event sent
+       * @param {Object} point Point object where the event was sent from
+       */
+      drop: 'point-drop',
+
+      /**
+       * Fired while dragging a point.
+       * @event point-drag
+       * @param {Object} detail.originalEvent object with details about the event sent
+       * @param {Object} point Point object where the event was sent from
+       */
+      drag: 'point-drag',
     };
   }
 
@@ -1310,11 +1338,12 @@ class Chart extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))) {
   /** @private */
   __createEventListeners(eventList, configuration, pathToAdd, eventType) {
     const eventObject = this.__ensureObjectPath(configuration, pathToAdd);
+    const self = this;
 
     for (let keys = Object.keys(eventList), i = 0; i < keys.length; i++) {
       const key = keys[i];
       if (!eventObject[key]) {
-        eventObject[key] = (event) => {
+        eventObject[key] = function (event) {
           const customEvent = {
             bubbles: false,
             composed: true,
@@ -1323,6 +1352,12 @@ class Chart extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))) {
               [eventType]: event.target,
             },
           };
+
+          if (key === 'dragStart') {
+            // for dragStart there is no information about point in the
+            // event object. However, 'this' references the point being dragged
+            customEvent.detail[eventType] = this;
+          }
 
           if (event.type === 'afterSetExtremes') {
             if (event.min == null || event.max == null) {
@@ -1355,17 +1390,17 @@ class Chart extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))) {
           if (['beforePrint', 'beforeExport'].indexOf(event.type) >= 0) {
             // Guard against another print 'before print' event coming before
             // the 'after print' event.
-            if (!this.tempBodyStyle) {
+            if (!self.tempBodyStyle) {
               let effectiveCss = '';
 
-              [...this.shadowRoot.querySelectorAll('style')].forEach((style) => {
+              [...self.shadowRoot.querySelectorAll('style')].forEach((style) => {
                 effectiveCss += style.textContent;
               });
 
               // Strip off host selectors that target individual instances
               effectiveCss = effectiveCss.replace(/:host\(.+?\)/gu, (match) => {
                 const selector = match.substr(6, match.length - 7);
-                return this.matches(selector) ? '' : match;
+                return self.matches(selector) ? '' : match;
               });
 
               // Zoom out a bit to avoid clipping the chart's edge on paper
@@ -1376,10 +1411,10 @@ class Chart extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))) {
                 `    zoom: 90%;` + // Webkit
                 `}`;
 
-              this.tempBodyStyle = document.createElement('style');
-              this.tempBodyStyle.textContent = effectiveCss;
-              document.body.appendChild(this.tempBodyStyle);
-              if (this.options.chart.styledMode) {
+              self.tempBodyStyle = document.createElement('style');
+              self.tempBodyStyle.textContent = effectiveCss;
+              document.body.appendChild(self.tempBodyStyle);
+              if (self.options.chart.styledMode) {
                 document.body.setAttribute('styled-mode', '');
               }
             }
@@ -1387,18 +1422,18 @@ class Chart extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))) {
 
           // Hook into afterPrint and afterExport to revert changes made before
           if (['afterPrint', 'afterExport'].indexOf(event.type) >= 0) {
-            if (this.tempBodyStyle) {
-              document.body.removeChild(this.tempBodyStyle);
-              delete this.tempBodyStyle;
-              if (this.options.chart.styledMode) {
+            if (self.tempBodyStyle) {
+              document.body.removeChild(self.tempBodyStyle);
+              delete self.tempBodyStyle;
+              if (self.options.chart.styledMode) {
                 document.body.removeAttribute('styled-mode');
               }
             }
           }
 
-          this.dispatchEvent(new CustomEvent(eventList[key], customEvent));
+          self.dispatchEvent(new CustomEvent(eventList[key], customEvent));
 
-          if (event.type === 'legendItemClick' && this._visibilityTogglingDisabled) {
+          if (event.type === 'legendItemClick' && self._visibilityTogglingDisabled) {
             return false;
           }
         };
