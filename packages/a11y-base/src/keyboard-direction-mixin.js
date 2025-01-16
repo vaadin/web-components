@@ -185,9 +185,10 @@ export const KeyboardDirectionMixin = (superclass) =>
     }
 
     /**
-     * Returns whether the item is focusable
+     * Returns whether the item is focusable. By default,
+     * returns true if the item is not disabled.
      *
-     * @param {Element} item - item to check
+     * @param {Element} item
      * @return {boolean}
      * @protected
      */

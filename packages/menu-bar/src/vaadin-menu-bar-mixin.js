@@ -1033,7 +1033,7 @@ export const MenuBarMixin = (superClass) =>
 
     /**
      * Override method inherited from `KeyboardDirectionMixin` to allow
-     * focusing disabled buttons that are configured accordingly.
+     * focusing disabled buttons that are configured so.
      *
      * @param {Element} button
      * @protected
