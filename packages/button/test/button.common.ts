@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, middleOfNode, nextRender, nextUpdate } from '@vaadin/testing-helpers';
+import { fire, fixtureSync, middleOfNode, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import { resetMouse, sendKeys, sendMouse } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import type { Button } from '../vaadin-button.js';
@@ -151,9 +151,29 @@ describe('vaadin-button', () => {
       await sendKeys({ press: 'Tab' });
       expect(document.activeElement).to.equal(lastGlobalFocusable);
     });
+
+    [
+      'mousedown',
+      'mouseup',
+      'touchstart',
+      'touchend',
+      'click',
+      'dblclick',
+      'keydown',
+      'keyup',
+      'pointerstart',
+      'pointerend',
+    ].forEach((eventType) => {
+      it(`should suppress ${eventType} events when disabled`, () => {
+        const spy = sinon.spy();
+        button.addEventListener(eventType, spy, true);
+        fire(button, eventType);
+        expect(spy.called).to.be.false;
+      });
+    });
   });
 
-  describe('disabled and focusableDisabledComponents=true', () => {
+  describe('disabled and focusable', () => {
     let lastGlobalFocusable: HTMLInputElement;
 
     before(() => {
