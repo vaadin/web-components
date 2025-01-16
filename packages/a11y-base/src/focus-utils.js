@@ -60,7 +60,7 @@ export function isKeyboardActive() {
  * @param {HTMLElement} element
  * @return {boolean}
  */
-function isElementHiddenDirectly(element) {
+export function isElementHiddenDirectly(element) {
   // Check inline style first to save a re-flow.
   const style = element.style;
   if (style.visibility === 'hidden' || style.display === 'none') {
