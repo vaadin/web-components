@@ -8,6 +8,7 @@ import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { getNormalizedScrollLeft, setNormalizedScrollLeft } from '@vaadin/component-base/src/dir-utils.js';
 import { getFlattenedElements } from '@vaadin/component-base/src/dom-utils.js';
 import { SlotObserver } from '@vaadin/component-base/src/slot-observer.js';
+import { isElementHiddenDirectly } from './focus-utils.js';
 import { KeyboardDirectionMixin } from './keyboard-direction-mixin.js';
 
 /**
@@ -329,6 +330,11 @@ export const ListMixin = (superClass) =>
         const scrollLeft = getNormalizedScrollLeft(this._scrollerElement, dir) + pixels;
         setNormalizedScrollLeft(this._scrollerElement, dir, scrollLeft);
       }
+    }
+
+    /** @override */
+    _isItemFocusable(item) {
+      return !item.hasAttribute('disabled') && !isElementHiddenDirectly(item);
     }
 
     /**
