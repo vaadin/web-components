@@ -50,6 +50,31 @@ registerStyles('vaadin-button', buttonStyles, { moduleId: 'vaadin-button-styles'
  * @mixes ThemableMixin
  */
 class Button extends ButtonMixin(ElementMixin(ThemableMixin(ControllerMixin(PolymerElement)))) {
+  static get properties() {
+    return {
+      /**
+       * When true, disables all user interactions with the button such as
+       * clicking, focusing, etc.
+       *
+       * However, for better accessibility, it's strongly recommended to keep
+       * disabled buttons focusable so that screen readers can reach and properly
+       * announce them to users. This behavior is currently available behind the
+       * feature flag:
+       *
+       * ```
+       * // Enable before any button is attached to the DOM.
+       * window.Vaadin.featureFlags.focusableDisabledComponents = true
+       * ```
+       *
+       * In Vaadin 25, disabled buttons will be focusable by default.
+       */
+      disabled: {
+        type: Boolean,
+        value: false,
+      },
+    };
+  }
+
   static get is() {
     return 'vaadin-button';
   }
