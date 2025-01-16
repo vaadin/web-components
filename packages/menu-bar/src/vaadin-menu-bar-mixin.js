@@ -688,7 +688,7 @@ export const MenuBarMixin = (superClass) =>
 
     /** @protected */
     _setTabindex(button, focused) {
-      if (this.tabNavigation && !button.disabled) {
+      if (this.tabNavigation && this._isItemFocusable(button)) {
         button.setAttribute('tabindex', '0');
       } else {
         button.setAttribute('tabindex', focused ? '0' : '-1');
@@ -1029,5 +1029,21 @@ export const MenuBarMixin = (superClass) =>
      */
     close() {
       this._close();
+    }
+
+    /**
+     * Override method inherited from `KeyboardDirectionMixin` to allow
+     * focusing disabled buttons that are configured accordingly.
+     *
+     * @param {Element} button
+     * @protected
+     * @override
+     */
+    _isItemFocusable(button) {
+      if (button.disabled && button._shouldAllowFocusWhenDisabled) {
+        return button._shouldAllowFocusWhenDisabled();
+      }
+
+      return super._isItemFocusable(button);
     }
   };
