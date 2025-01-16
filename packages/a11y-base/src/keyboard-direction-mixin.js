@@ -34,7 +34,7 @@ export const KeyboardDirectionMixin = (superclass) =>
     focus() {
       const items = this._getItems();
       if (Array.isArray(items)) {
-        const idx = this._getAvailableIndex(items, 0, null, (item) => !isElementHidden(item));
+        const idx = this._getAvailableIndex(items, 0, null);
         if (idx >= 0) {
           this._focus(idx);
         }
@@ -91,7 +91,7 @@ export const KeyboardDirectionMixin = (superclass) =>
         idx = items.length - 1;
       }
 
-      idx = this._getAvailableIndex(items, idx, increment, (item) => !isElementHidden(item));
+      idx = this._getAvailableIndex(items, idx, increment);
 
       if (idx >= 0) {
         event.preventDefault();
@@ -171,22 +171,28 @@ export const KeyboardDirectionMixin = (superclass) =>
 
         const item = items[idx];
 
-        if (!item.hasAttribute('disabled') && this.__isMatchingItem(item, condition)) {
-          return idx;
+        if (!this._isItemFocusable(item)) {
+          continue;
         }
+
+        if (typeof condition === 'function' && !condition(item)) {
+          continue;
+        }
+
+        return idx;
       }
       return -1;
     }
 
     /**
-     * Returns true if the item matches condition.
+     * Returns whether the item is focusable. By default,
+     * returns true if the item is visible and not disabled.
      *
-     * @param {Element} item - item to check
-     * @param {Function} condition - function used to check the item
-     * @return {number}
-     * @private
+     * @param {Element} item
+     * @return {boolean}
+     * @protected
      */
-    __isMatchingItem(item, condition) {
-      return typeof condition === 'function' ? condition(item) : true;
+    _isItemFocusable(item) {
+      return !item.hasAttribute('disabled') && !isElementHidden(item);
     }
   };

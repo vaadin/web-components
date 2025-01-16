@@ -8,7 +8,6 @@ import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { getNormalizedScrollLeft, setNormalizedScrollLeft } from '@vaadin/component-base/src/dir-utils.js';
 import { getFlattenedElements } from '@vaadin/component-base/src/dom-utils.js';
 import { SlotObserver } from '@vaadin/component-base/src/slot-observer.js';
-import { isElementHidden } from './focus-utils.js';
 import { KeyboardDirectionMixin } from './keyboard-direction-mixin.js';
 
 /**
@@ -120,7 +119,7 @@ export const ListMixin = (superClass) =>
       }
 
       const items = Array.isArray(this.items) ? this.items : [];
-      const idx = this._getAvailableIndex(items, 0, null, (item) => item.tabIndex === 0 && !isElementHidden(item));
+      const idx = this._getAvailableIndex(items, 0, null, (item) => item.tabIndex === 0);
       if (idx >= 0) {
         this._focus(idx);
       } else {
@@ -222,12 +221,7 @@ export const ListMixin = (superClass) =>
       }
 
       const idx = this._searchBuf.length === 1 ? currentIdx + 1 : currentIdx;
-      return this._getAvailableIndex(
-        this.items,
-        idx,
-        1,
-        (item) => this.__isMatchingKey(item) && getComputedStyle(item).display !== 'none',
-      );
+      return this._getAvailableIndex(this.items, idx, 1, (item) => this.__isMatchingKey(item));
     }
 
     /** @private */
@@ -263,15 +257,6 @@ export const ListMixin = (superClass) =>
       }
 
       super._onKeyDown(event);
-    }
-
-    /**
-     * @param {!Element} item
-     * @return {boolean}
-     * @protected
-     */
-    _isItemHidden(item) {
-      return getComputedStyle(item).display === 'none';
     }
 
     /**

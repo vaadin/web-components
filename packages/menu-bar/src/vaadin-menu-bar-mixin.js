@@ -5,7 +5,7 @@
  */
 import { DisabledMixin } from '@vaadin/a11y-base/src/disabled-mixin.js';
 import { FocusMixin } from '@vaadin/a11y-base/src/focus-mixin.js';
-import { isElementFocused, isElementHidden, isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
+import { isElementFocused, isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
 import { KeyboardDirectionMixin } from '@vaadin/a11y-base/src/keyboard-direction-mixin.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
@@ -880,7 +880,7 @@ export const MenuBarMixin = (superClass) =>
           const currentIdx = items.indexOf(this.focused);
           const increment = e.shiftKey ? -1 : 1;
           let idx = currentIdx + increment;
-          idx = this._getAvailableIndex(items, idx, increment, (item) => !isElementHidden(item));
+          idx = this._getAvailableIndex(items, idx, increment);
           this.__switchSubMenu(items[idx]);
         }
       }

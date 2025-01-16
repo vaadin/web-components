@@ -26,7 +26,7 @@ export declare class KeyboardDirectionMixinClass {
     items: Element[],
     index: number,
     increment: number,
-    condition: (item: Element) => boolean,
+    condition?: (item: Element) => boolean,
   ): number;
 
   /**
