@@ -907,6 +907,10 @@ export const MenuBarMixin = (superClass) =>
 
     /** @private */
     __openSubMenu(button, keydown, options = {}) {
+      if (button.disabled) {
+        return;
+      }
+
       const subMenu = this._subMenu;
       const item = button.item;
 
