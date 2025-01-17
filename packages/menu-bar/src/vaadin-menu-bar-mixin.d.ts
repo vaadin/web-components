@@ -103,16 +103,17 @@ export declare class MenuBarMixinClass {
    * #### Disabled items
    *
    * When an item is disabled, it prevents any user interaction with it, such as
-   * focusing, clicking, or opening a sub-menu.
+   * focusing, clicking, opening a sub-menu, etc. The item is also removed from the
+   * tab order, which may negatively impact accessibility.
    *
    * To improve accessibility, disabled root-level items (menu bar buttons) can be
    * made focusable so that screen readers can reach and properly announce them to
-   * users. Other interactions such as clicks remain disabled. This behavior is
-   * currently experimental and can be enabled with the feature flag:
+   * users, while still preventing clicks. This is currently available as an
+   * experimental enhancement that can be enabled with the following feature flag:
    *
    * ```
    * // Set before any menu bar is attached to the DOM.
-   * window.Vaadin.featureFlags.focusableDisabledComponents = true
+   * window.Vaadin.featureFlags.accessibleDisabledButtons = true;
    * ```
    */
   items: MenuBarItem[];

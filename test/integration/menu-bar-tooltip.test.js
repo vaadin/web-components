@@ -355,11 +355,11 @@ describe('menu-bar with tooltip', () => {
   describe('focusable disabled button', () => {
     before(() => {
       window.Vaadin.featureFlags ??= {};
-      window.Vaadin.featureFlags.focusableDisabledComponents = true;
+      window.Vaadin.featureFlags.accessibleDisabledButtons = true;
     });
 
     after(() => {
-      window.Vaadin.featureFlags.focusableDisabledComponents = false;
+      window.Vaadin.featureFlags.accessibleDisabledButtons = false;
     });
 
     beforeEach(async () => {

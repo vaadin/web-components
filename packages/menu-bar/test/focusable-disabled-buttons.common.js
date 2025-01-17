@@ -7,11 +7,11 @@ describe('focusable disabled buttons', () => {
 
   before(() => {
     window.Vaadin.featureFlags ??= {};
-    window.Vaadin.featureFlags.focusableDisabledComponents = true;
+    window.Vaadin.featureFlags.accessibleDisabledButtons = true;
   });
 
   after(() => {
-    window.Vaadin.featureFlags.focusableDisabledComponents = false;
+    window.Vaadin.featureFlags.accessibleDisabledButtons = false;
   });
 
   beforeEach(async () => {
