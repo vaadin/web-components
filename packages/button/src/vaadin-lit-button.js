@@ -45,7 +45,7 @@ class Button extends ButtonMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElem
 
   /** @override */
   _shouldAllowFocusWhenDisabled() {
-    return window.Vaadin.featureFlags.focusableDisabledComponents;
+    return window.Vaadin.featureFlags.accessibleDisabledButtons;
   }
 }
 
