@@ -52,6 +52,8 @@ export const formLayoutStyles = css`
     justify-content: stretch;
 
     flex-wrap: wrap; /* the items should wrap */
+
+    min-width: 300px;
   }
 
   #layout ::slotted(*:not(vaadin-grid-row)) {
@@ -93,8 +95,9 @@ export const formLayoutStyles = css`
 export const formItemStyles = css`
   :host {
     display: inline-flex;
-    align-items: var(--_vaadin-form-item-align-items, baseline); /* stretch */
-    flex-direction: var(--_vaadin-form-item-flex-dir, row); /* column */
+    flex-flow: var(--_vaadin-form-layout-label-position, column) nowrap;
+    place-items: var(--_vaadin-form-layout-label-position, stretch) baseline;
+    justify-content: normal;
   }
 
   :host([hidden]) {
@@ -106,6 +109,7 @@ export const formItemStyles = css`
     flex: 0 0 auto;
   }
 
+  /* TODO: Refactor */
   :host([label-position='top']) #label {
     width: auto;
   }
@@ -117,6 +121,7 @@ export const formItemStyles = css`
 
   #content {
     flex: 1 1 auto;
+    overflow: hidden;
   }
 
   #content ::slotted(*) {

@@ -74,6 +74,8 @@ export const FormLayoutMixin = (superClass) =>
           sync: true,
         },
 
+        /********* NEW APIS ***********/
+
         autoResponsive: {
           type: Boolean,
           value: false,
@@ -125,6 +127,14 @@ export const FormLayoutMixin = (superClass) =>
           },
           reflectToAttribute: true,
         },
+
+        labelsAside: {
+          type: Boolean,
+          value: true,
+          reflectToAttribute: true,
+        },
+
+        /***************************************** */
 
         /** @private */
         __isVisible: {
@@ -296,15 +306,17 @@ export const FormLayoutMixin = (superClass) =>
           const minWidth = `calc(${cols} * ${this.columnWidth} + ${cols - 1} * ${this.columnGap})`;
           const formItemAlign = 'stretch';
           const formItemFlexDir = 'column';
-          cqStyles += this._generateBreakpoint(minWidth, cols, formItemAlign, formItemFlexDir);
+          const foo = this.labelsAside ? ' ' : 'initial';
+          cqStyles += this._generateBreakpoint(minWidth, cols, formItemAlign, formItemFlexDir, foo);
         }
       } else {
         // Build queries based on responsiveSteps
         this.responsiveSteps.forEach((step) => {
           const formItemAlign = step.labelsPosition === 'top' ? 'stretch' : 'baseline';
           const formItemFlexDir = step.labelsPosition === 'top' ? 'column' : 'row';
+          const foo = step.labelsPosition === 'top' ? 'initial' : ' ';
           const columns = Math.min(this.maxColumns, step.columns);
-          cqStyles += this._generateBreakpoint(step.minWidth, columns, formItemAlign, formItemFlexDir);
+          cqStyles += this._generateBreakpoint(step.minWidth, columns, formItemAlign, formItemFlexDir, foo);
         });
       }
 
@@ -312,16 +324,26 @@ export const FormLayoutMixin = (superClass) =>
     }
 
     /** @private */
-    _generateBreakpoint(minWidth, columns, formItemAlign, formItemFlexDir) {
+    _generateBreakpoint(minWidth, columns, formItemAlign, formItemFlexDir, foo) {
       return (
         `@container form-grid (min-width: ${minWidth}) { #layout {` +
         `--_grid-cols: ${columns};` +
         `--_vaadin-form-item-align-items: ${formItemAlign};` +
         `--_vaadin-form-item-flex-dir: ${formItemFlexDir};` +
+        `--_vaadin-form-layout-label-position: ${foo};` +
         `}}\n`
       );
     }
 
+    /** @private */
+    /*
+    _generateLabelPositionStyles(labelsAside) {
+      let formItemAlign = labelsAside ? 'baseline' : 'stretch';
+      let formItemFlexDir = labelsAside ? 'row' : 'column';
+      return `--_vaadin-form-item-align-items: ${formItemAlign};` +
+        `--_vaadin-form-item-flex-dir: ${formItemFlexDir};`;
+    }
+*/
     /**
      * Update the layout.
      * @protected
