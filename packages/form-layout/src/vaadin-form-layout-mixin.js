@@ -130,8 +130,11 @@ export const FormLayoutMixin = (superClass) =>
 
         labelsAside: {
           type: Boolean,
-          value: true,
+          value: false,
           reflectToAttribute: true,
+          observer() {
+            this._generateContainerQueries();
+          },
         },
 
         /***************************************** */
@@ -299,24 +302,27 @@ export const FormLayoutMixin = (superClass) =>
     /** @private */
     _generateContainerQueries() {
       let cqStyles = '';
+      let labelPos;
+      let cols;
+      let minWidth;
+      let firstCol = true;
 
       if (this.autoResponsive) {
         // Build queries based on columnWidth
-        for (let cols = 1; cols <= this.maxColumns; cols++) {
-          const minWidth = `calc(${cols} * ${this.columnWidth} + ${cols - 1} * ${this.columnGap})`;
-          const formItemAlign = 'stretch';
-          const formItemFlexDir = 'column';
-          const foo = this.labelsAside ? ' ' : 'initial';
-          cqStyles += this._generateBreakpoint(minWidth, cols, formItemAlign, formItemFlexDir, foo);
+        for (cols = 1; cols <= this.maxColumns; cols++) {
+          minWidth = firstCol ? `0` : `calc(${cols} * ${this.columnWidth} + ${cols - 1} * ${this.columnGap})`;
+          labelPos = this.labelsAside ? ' ' : 'initial';
+          cqStyles += this._generateBreakpoint(minWidth, cols, labelPos);
+          firstCol = false;
         }
       } else {
         // Build queries based on responsiveSteps
         this.responsiveSteps.forEach((step) => {
-          const formItemAlign = step.labelsPosition === 'top' ? 'stretch' : 'baseline';
-          const formItemFlexDir = step.labelsPosition === 'top' ? 'column' : 'row';
-          const foo = step.labelsPosition === 'top' ? 'initial' : ' ';
-          const columns = Math.min(this.maxColumns, step.columns);
-          cqStyles += this._generateBreakpoint(step.minWidth, columns, formItemAlign, formItemFlexDir, foo);
+          labelPos = step.labelsPosition === 'top' ? 'initial' : ' ';
+          cols = Math.min(this.maxColumns, step.columns);
+          minWidth = firstCol ? `0` : step.minWidth;
+          cqStyles += this._generateBreakpoint(minWidth, cols, labelPos);
+          firstCol = false;
         });
       }
 
@@ -324,13 +330,11 @@ export const FormLayoutMixin = (superClass) =>
     }
 
     /** @private */
-    _generateBreakpoint(minWidth, columns, formItemAlign, formItemFlexDir, foo) {
+    _generateBreakpoint(minWidth, columns, labelPos) {
       return (
         `@container form-grid (min-width: ${minWidth}) { #layout {` +
         `--_grid-cols: ${columns};` +
-        `--_vaadin-form-item-align-items: ${formItemAlign};` +
-        `--_vaadin-form-item-flex-dir: ${formItemFlexDir};` +
-        `--_vaadin-form-layout-label-position: ${foo};` +
+        `--_vaadin-form-layout-label-position: ${labelPos};` +
         `}}\n`
       );
     }

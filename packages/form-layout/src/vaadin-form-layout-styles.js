@@ -48,12 +48,9 @@ export const formLayoutStyles = css`
     column-gap: var(--_vaadin-form-layout-column-gap, 2em);
     row-gap: var(--vaadin-form-item-row-spacing, 1em);
 
-    align-items: baseline; /* default \`stretch\` is not appropriate */
+    align-items: baseline;
     justify-content: stretch;
-
-    flex-wrap: wrap; /* the items should wrap */
-
-    min-width: 300px;
+    min-width: min-content;
   }
 
   #layout ::slotted(*:not(vaadin-grid-row)) {
@@ -105,13 +102,11 @@ export const formItemStyles = css`
   }
 
   #label {
-    width: var(--vaadin-form-item-label-width, 8em);
-    flex: 0 0 auto;
-  }
-
-  /* TODO: Refactor */
-  :host([label-position='top']) #label {
-    width: auto;
+    --_not-label-pos: var(--_vaadin-form-layout-label-position, ' ') initial;
+    flex: var(--_not-label-pos, var(--vaadin-form-item-label-width, 8em))
+      var(--_vaadin-form-layout-label-position, auto);
+    flex-shrink: 0;
+    flex-grow: 0;
   }
 
   #spacing {
