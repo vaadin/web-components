@@ -533,6 +533,13 @@ describe('data provider', () => {
           }
         });
 
+        it('should not jam on clear cache', () => {
+          grid.dataProvider = (params, callback) => {
+            setTimeout(() => finiteDataProvider(params, callback), 0);
+          };
+          grid.clearCache();
+        });
+
         it('should not render synchronously until all data requests have finished', (done) => {
           generateItemIds = true;
           grid.itemIdPath = 'id';
