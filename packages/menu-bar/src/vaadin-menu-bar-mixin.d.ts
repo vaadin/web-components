@@ -99,6 +99,21 @@ export declare class MenuBarMixinClass {
    *   {text: 'Help'}
    * ];
    * ```
+   *
+   * #### Disabled items
+   *
+   * When an item is disabled, it prevents any user interaction with it, such as
+   * focusing, clicking, or opening a sub-menu. However, for better accessibility,
+   * disabled root-level items (menu bar buttons) can be made focusable so that
+   * screen readers can reach and properly announce them to users. This behavior
+   * can be enabled with the feature flag:
+   *
+   * ```
+   * // Enable before any menu bar is attached to the DOM.
+   * window.Vaadin.featureFlags.focusableDisabledComponents = true
+   * ```
+   *
+   * In Vaadin 25, disabled menu bar buttons will be focusable by default.
    */
   items: MenuBarItem[];
 
