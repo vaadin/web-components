@@ -82,37 +82,37 @@ class Card extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
         justify-content: space-between;
       }
 
-      :host(:is(:has([slot='media']), [has-media])) {
+      :host([_m]) {
         --_media: 1;
       }
 
-      :host(:is(:has([slot='title']), [has-title])) {
+      :host([_t]) {
         --_title: 1;
       }
 
-      :host(:is(:has([slot='subtitle']), [has-subtitle])) {
+      :host([_st]) {
         --_subtitle: 1;
       }
 
-      :host(:is(:has([slot='header']), [has-header])) {
+      :host([_h]) {
         --_header: 1;
         --_title: 0;
         --_subtitle: 0;
       }
 
-      :host(:is(:has([slot='header-prefix']), [has-header-prefix])) {
+      :host([_hp]) {
         --_header-prefix: 1;
       }
 
-      :host(:is(:has([slot='header-suffix']), [has-header-suffix])) {
+      :host([_hs]) {
         --_header-suffix: 1;
       }
 
-      :host(:is(:has(> :not([slot])), [has-content])) {
+      :host([_c]) {
         --_content: 1;
       }
 
-      :host(:is(:has([slot='footer']), [has-footer])) {
+      :host([_f]) {
         --_footer: 1;
       }
 
@@ -123,31 +123,17 @@ class Card extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
         display: none;
       }
 
-      :host(:is(:has([slot='media']), [has-media])) [part='media'],
-      :host(:is(:has(> :not([slot])), [has-content])) [part='content'] {
+      :host([_m]) [part='media'],
+      :host([_c]) [part='content'] {
         display: block;
       }
 
-      :host(:is(:has([slot='footer']), [has-footer])) [part='footer'] {
+      :host([_f]) [part='footer'] {
         display: flex;
         gap: var(--_gap);
       }
 
-      :host(
-          :is(
-              :has([slot='header']),
-              [has-header],
-              :has([slot='title']),
-              [has-title],
-              :has([slot='subtitle']),
-              [has-subtitle],
-              :has([slot='header-prefix']),
-              [has-header-prefix],
-              :has([slot='header-suffix']),
-              [has-header-suffix]
-            )
-        )
-        [part='header'] {
+      :host(:is([_h], [_t], [_st], [_hp], [_hs])) [part='header'] {
         display: grid;
         align-items: center;
         gap: var(--_gap);
@@ -158,11 +144,11 @@ class Card extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
         margin-bottom: auto;
       }
 
-      :host(:is(:has([slot='header-suffix']), [has-header-suffix])) [part='header'] {
+      :host([_hs]) [part='header'] {
         grid-template-columns: 1fr auto;
       }
 
-      :host(:is(:has([slot='header-prefix']), [has-header-prefix])) [part='header'] {
+      :host([_hp]) [part='header'] {
         grid-template-columns: repeat(var(--_header-prefix), auto) 1fr;
       }
 
@@ -198,11 +184,11 @@ class Card extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
         align-items: start;
       }
 
-      :host([theme~='horizontal']:is(:has([slot='footer']), [has-footer])) {
+      :host([theme~='horizontal'][_f]) {
         grid-template-rows: 1fr auto;
       }
 
-      :host([theme~='horizontal']:is(:has(> :not([slot])), [has-content])) {
+      :host([theme~='horizontal'][_c]) {
         grid-template-rows: repeat(var(--_header), auto) 1fr;
       }
 
@@ -322,31 +308,27 @@ class Card extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
 
   /** @private */
   _onSlotChange() {
-    // Chrome doesn't support `:host(:has())`, so we'll recreate that with custom attributes
-    this.toggleAttribute('has-media', this.querySelector(':scope > [slot="media"]'));
-    this.toggleAttribute('has-header', this.querySelector(':scope > [slot="header"]'));
+    this.toggleAttribute('_m', this.querySelector(':scope > [slot="media"]'));
+    this.toggleAttribute('_h', this.querySelector(':scope > [slot="header"]'));
     this.toggleAttribute(
-      'has-title',
+      '_t',
       this.querySelector(':scope > [slot="title"]') && !this.querySelector(':scope > [slot="header"]'),
     );
     this.toggleAttribute(
-      'has-subtitle',
+      '_st',
       this.querySelector(':scope > [slot="subtitle"]') && !this.querySelector(':scope > [slot="header"]'),
     );
-    this.toggleAttribute('has-header-prefix', this.querySelector(':scope > [slot="header-prefix"]'));
-    this.toggleAttribute('has-header-suffix', this.querySelector(':scope > [slot="header-suffix"]'));
-    this.toggleAttribute('has-content', this.querySelector(':scope > :not([slot])'));
-    this.toggleAttribute('has-footer', this.querySelector(':scope > [slot="footer"]'));
+    this.toggleAttribute('_hp', this.querySelector(':scope > [slot="header-prefix"]'));
+    this.toggleAttribute('_hs', this.querySelector(':scope > [slot="header-suffix"]'));
+    this.toggleAttribute('_c', this.querySelector(':scope > :not([slot])'));
+    this.toggleAttribute('_f', this.querySelector(':scope > [slot="footer"]'));
   }
 
   /** @protected */
   connectedCallback() {
     super.connectedCallback();
-
-    if (!CSS.supports('selector(:host(:has([slot])))')) {
-      if (!this.__boundSlotChangeListener) {
-        this.__boundSlotChangeListener = this._onSlotChange.bind(this);
-      }
+    if (!this.__boundSlotChangeListener) {
+      this.__boundSlotChangeListener = this._onSlotChange.bind(this);
       this.shadowRoot.addEventListener('slotchange', this.__boundSlotChangeListener);
     }
   }
