@@ -53,13 +53,12 @@ class Button extends ButtonMixin(ElementMixin(ThemableMixin(ControllerMixin(Poly
   static get properties() {
     return {
       /**
-       * When true, disables all user interactions with the button such as
-       * clicking, focusing, etc.
+       * When set to true, prevents any user interaction with the button
+       * such as clicking, focusing, etc.
        *
-       * However, for better accessibility, it's strongly recommended to keep
-       * disabled buttons focusable so that screen readers can reach and properly
-       * announce them to users. This behavior is currently available behind the
-       * feature flag:
+       * To improve accessibility, disabled buttons can be made focusable
+       * so that screen readers can reach and properly announce them to
+       * users. This behavior can be enabled with the feature flag:
        *
        * ```
        * // Enable before any button is attached to the DOM.
