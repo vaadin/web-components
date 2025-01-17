@@ -43,14 +43,14 @@ declare class Button extends ButtonMixin(ElementMixin(ThemableMixin(ControllerMi
    *
    * To improve accessibility, disabled buttons can be made focusable
    * so that screen readers can reach and properly announce them to
-   * users. This behavior can be enabled with the feature flag:
+   * users. Other interactions such as clicks remain disabled. This
+   * behavior is currently experimental and can be enabled with the
+   * feature flag:
    *
    * ```
-   * // Enable before any button is attached to the DOM.
+   * // Set before any button is attached to the DOM.
    * window.Vaadin.featureFlags.focusableDisabledComponents = true
    * ```
-   *
-   * In Vaadin 25, disabled buttons will be focusable by default.
    */
   disabled: boolean;
 }
