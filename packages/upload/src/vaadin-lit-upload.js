@@ -67,6 +67,7 @@ class Upload extends UploadMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElem
         accept="${this.accept}"
         ?multiple="${this._isMultiple(this.maxFiles)}"
         capture="${ifDefined(this.capture)}"
+        ?webkitdirectory="${this.directory}"
       />
     `;
   }
