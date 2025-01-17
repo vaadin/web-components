@@ -332,14 +332,6 @@ class Card extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
       this.shadowRoot.addEventListener('slotchange', this.__boundSlotChangeListener);
     }
   }
-
-  /** @protected */
-  disconnectedCallback() {
-    if (this.__boundSlotChangeListener) {
-      this.shadowRoot.removeEventListener('slotchange', this.__boundSlotChangeListener);
-    }
-    super.disconnectedCallback();
-  }
 }
 
 defineCustomElement(Card);
