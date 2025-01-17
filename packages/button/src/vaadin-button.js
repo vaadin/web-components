@@ -60,8 +60,8 @@ class Button extends ButtonMixin(ElementMixin(ThemableMixin(ControllerMixin(Poly
        * buttons become completely hidden from screen readers. To improve accessibility,
        * disabled buttons can be made focusable so that screen readers can reach and
        * properly announce them, including any attached tooltips and popovers, while
-       * still preventing clicks. This is currently available as an experimental feature
-       * that can be enabled with the following feature flag:
+       * still preventing clicks. This is currently available as an experimental
+       * enhancement that can be enabled with the following feature flag:
        *
        * ```
        * // Set before any button is attached to the DOM.
