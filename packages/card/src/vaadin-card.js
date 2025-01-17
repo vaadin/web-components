@@ -324,13 +324,14 @@ class Card extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
     this.toggleAttribute('_f', this.querySelector(':scope > [slot="footer"]'));
   }
 
-  /** @protected */
-  connectedCallback() {
-    super.connectedCallback();
-    if (!this.__boundSlotChangeListener) {
-      this.__boundSlotChangeListener = this._onSlotChange.bind(this);
-      this.shadowRoot.addEventListener('slotchange', this.__boundSlotChangeListener);
-    }
+  /**
+   * @protected
+   * @override
+   */
+  createRenderRoot() {
+    const root = super.createRenderRoot();
+    root.addEventListener('slotchange', () => this._onSlotChange());
+    return root;
   }
 }
 
