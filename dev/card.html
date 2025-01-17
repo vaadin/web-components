@@ -113,7 +113,7 @@
         codeExample.textContent = format(
           playground.outerHTML
             .replaceAll(
-              / tabindex="0"| role="button"| class="playground(.*?)"| style="(.+?)"| theme=""| has-content=""| has-title=""| has-subtitle=""| has-header=""| has-header-prefix=""| has-header-suffix=""| has-footer=""| has-media=""/g,
+              / tabindex="0"| role="button"| class="playground(.*?)"| style="(.+?)"| theme=""| _c=""| _t=""| _st=""| _h=""| _hp=""| _hs=""| _f=""| _m=""/g,
               '',
             )
             .replaceAll(/src=".+?"/g, 'src="..."')
