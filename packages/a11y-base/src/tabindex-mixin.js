@@ -75,4 +75,19 @@ export const TabindexMixin = (superclass) =>
         this.tabindex = -1;
       }
     }
+
+    /**
+     * Overrides the native `focus` method in order to prevent
+     * focusing the element when it is disabled. Note, setting
+     * `tabindex` to -1 does not prevent the element from being
+     * programmatically focusable.
+     *
+     * @protected
+     * @override
+     */
+    focus() {
+      if (!this.disabled) {
+        super.focus();
+      }
+    }
   };
