@@ -19,6 +19,10 @@ export const buttonStyles = css`
     display: none !important;
   }
 
+  :host([disabled]) {
+    pointer-events: none;
+  }
+
   /* Aligns the button with form fields when placed on the same line.
   Note, to make it work, the form fields should have the same "::before" pseudo-element. */
   .vaadin-button-container::before {

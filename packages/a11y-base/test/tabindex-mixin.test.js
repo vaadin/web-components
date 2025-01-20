@@ -39,10 +39,10 @@ describe('tabindex-mixin', () => {
       expect(element.tabindex).to.be.equal(1);
     });
 
-    it('should remove tabindex attribute when disabled', () => {
+    it('should set tabindex attribute to -1 when disabled', () => {
       element.tabIndex = 1;
       element.disabled = true;
-      expect(element.hasAttribute('tabindex')).to.be.false;
+      expect(element.getAttribute('tabindex')).to.be.equal('-1');
     });
 
     it('should remove tabindex attribute when enabled if no tabindex was before', () => {
@@ -62,7 +62,7 @@ describe('tabindex-mixin', () => {
       element.tabIndex = 1;
       element.disabled = true;
       element.tabIndex = 2;
-      expect(element.hasAttribute('tabindex')).to.be.false;
+      expect(element.getAttribute('tabindex')).to.be.equal('-1');
 
       element.disabled = false;
       expect(element.getAttribute('tabindex')).to.be.equal('2');
