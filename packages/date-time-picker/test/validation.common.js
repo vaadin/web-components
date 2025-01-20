@@ -101,9 +101,7 @@ const fixtures = {
       await aTimeout(1);
 
       // Move focus to date-picker
-      await sendKeys({ down: 'Shift' });
-      await sendKeys({ press: 'Tab' });
-      await sendKeys({ up: 'Shift' });
+      await sendKeys({ press: 'Shift+Tab' });
       expect(validateSpy.called).to.be.false;
     });
 

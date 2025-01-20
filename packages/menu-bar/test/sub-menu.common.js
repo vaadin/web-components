@@ -310,9 +310,7 @@ describe('sub-menu', () => {
     arrowDown(buttons[3]);
     await oneEvent(subMenu, 'opened-changed');
 
-    await sendKeys({ down: 'Shift' });
-    await sendKeys({ press: 'Tab' });
-    await sendKeys({ up: 'Shift' });
+    await sendKeys({ press: 'Shift+Tab' });
     await nextRender(subMenu);
 
     expect(subMenu.opened).to.be.true;

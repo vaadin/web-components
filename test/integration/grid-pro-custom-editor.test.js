@@ -149,9 +149,7 @@ describe('grid-pro custom editor', () => {
       await waitForOverlayRender();
 
       // Move focus back to the input
-      await sendKeys({ down: 'Shift' });
-      await sendKeys({ press: 'Tab' });
-      await sendKeys({ up: 'Shift' });
+      await sendKeys({ press: 'Shift+Tab' });
 
       // Change single digit to avoid calendar scroll
       const input = cell._content.querySelector('input');
@@ -248,9 +246,7 @@ describe('grid-pro custom editor', () => {
       expect(cell._content.querySelector('vaadin-date-time-picker')).to.be.ok;
 
       // Move focus to the date-picker
-      await sendKeys({ down: 'Shift' });
-      await sendKeys({ press: 'Tab' });
-      await sendKeys({ up: 'Shift' });
+      await sendKeys({ press: 'Shift+Tab' });
       await nextRender();
       expect(cell._content.querySelector('vaadin-date-time-picker')).to.be.ok;
     });
@@ -260,9 +256,7 @@ describe('grid-pro custom editor', () => {
       await waitForOverlayRender();
 
       // Move focus back to the input
-      await sendKeys({ down: 'Shift' });
-      await sendKeys({ press: 'Tab' });
-      await sendKeys({ up: 'Shift' });
+      await sendKeys({ press: 'Shift+Tab' });
 
       // Change single digit to avoid calendar scroll
       const input = cell._content.querySelector('input');
@@ -318,9 +312,7 @@ describe('grid-pro custom editor', () => {
       expect(cell._content.querySelector('vaadin-custom-field')).to.be.ok;
 
       // Move focus to the first field
-      await sendKeys({ down: 'Shift' });
-      await sendKeys({ press: 'Tab' });
-      await sendKeys({ up: 'Shift' });
+      await sendKeys({ press: 'Shift+Tab' });
       await nextRender();
       expect(cell._content.querySelector('vaadin-custom-field')).to.be.ok;
     });

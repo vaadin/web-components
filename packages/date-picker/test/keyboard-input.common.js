@@ -258,9 +258,7 @@ describe('keyboard', () => {
 
       const spy = sinon.spy(input, 'focus');
 
-      await sendKeys({ down: 'Shift' });
-      await sendKeys({ press: 'Tab' });
-      await sendKeys({ up: 'Shift' });
+      await sendKeys({ press: 'Shift+Tab' });
 
       expect(spy.calledOnce).to.be.true;
     });
@@ -273,9 +271,7 @@ describe('keyboard', () => {
     });
 
     it('should move focus to Cancel button on input Shift Tab', async () => {
-      await sendKeys({ down: 'Shift' });
-      await sendKeys({ press: 'Tab' });
-      await sendKeys({ up: 'Shift' });
+      await sendKeys({ press: 'Shift+Tab' });
       expect(overlayContent._cancelButton.hasAttribute('focused')).to.be.true;
     });
 
@@ -283,9 +279,7 @@ describe('keyboard', () => {
       const spy = sinon.spy(overlayContent, 'revealDate');
       overlayContent._todayButton.focus();
 
-      await sendKeys({ down: 'Shift' });
-      await sendKeys({ press: 'Tab' });
-      await sendKeys({ up: 'Shift' });
+      await sendKeys({ press: 'Shift+Tab' });
 
       await aTimeout(1);
       expect(spy.called).to.be.true;
@@ -328,9 +322,7 @@ describe('keyboard', () => {
         overlayContent._todayButton.focus();
 
         // Move focus to the calendar
-        await sendKeys({ down: 'Shift' });
-        await sendKeys({ press: 'Tab' });
-        await sendKeys({ up: 'Shift' });
+        await sendKeys({ press: 'Shift+Tab' });
 
         await waitForScrollToFinish(datePicker);
 

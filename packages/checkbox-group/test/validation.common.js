@@ -82,9 +82,7 @@ describe('validation', () => {
       expect(validateSpy.called).to.be.false;
 
       // Move focus out of the checkbox group.
-      await sendKeys({ down: 'Shift' });
-      await sendKeys({ press: 'Tab' });
-      await sendKeys({ up: 'Shift' });
+      await sendKeys({ press: 'Shift+Tab' });
       expect(validateSpy.calledOnce).to.be.true;
     });
 
@@ -132,9 +130,7 @@ describe('validation', () => {
         await sendKeys({ press: 'Tab' });
 
         // Move focus out of the checkbox group.
-        await sendKeys({ down: 'Shift' });
-        await sendKeys({ press: 'Tab' });
-        await sendKeys({ up: 'Shift' });
+        await sendKeys({ press: 'Shift+Tab' });
 
         expect(validateSpy.called).to.be.false;
       });
