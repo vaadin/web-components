@@ -3,6 +3,7 @@
  * Copyright (c) 2021 - 2024 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { isChrome, isSafari } from '@vaadin/component-base/src/browser-utils.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { OverflowController } from '@vaadin/component-base/src/overflow-controller.js';
 import { processTemplates } from '@vaadin/component-base/src/templates.js';
@@ -156,17 +157,43 @@ export const VirtualListMixin = (superClass) =>
      * issues. To mitigate these issues, we hide the items container
      * when drag starts to remove it from the drag image.
      *
+     * Virtual lists with fewer rows also have issues on Chromium and Safari
+     * where the drag image is not properly clipped and may include
+     * content outside the virtual list. Temporary inline styles are applied
+     * to mitigate this issue.
+     *
      * Related issues:
      * - https://github.com/vaadin/web-components/issues/7985
      * - https://issues.chromium.org/issues/383356871
+     * - https://github.com/vaadin/web-components/issues/8386
      *
      * @private
      */
     __onDocumentDragStart(e) {
-      if (e.target.contains(this) && this.scrollHeight > 20000) {
-        this.$.items.style.display = 'none';
+      if (e.target.contains(this)) {
+        // Record the original inline styles to restore them later
+        const elements = [e.target, this.$.items];
+        const originalInlineStyles = elements.map((element) => element.style.cssText);
+
+        // With a large number of rows, hide the items
+        if (this.scrollHeight > 20000) {
+          this.$.items.style.display = 'none';
+        }
+
+        // Workaround content outside the virtual list ending up in the drag image on Chromium
+        if (isChrome) {
+          e.target.style.willChange = 'transform';
+        }
+
+        // Workaround text content outside the virtual list ending up in the drag image on Safari
+        if (isSafari) {
+          this.$.items.style.maxHeight = '100%';
+        }
+
         requestAnimationFrame(() => {
-          this.$.items.style.display = '';
+          elements.forEach((element, index) => {
+            element.style.cssText = originalInlineStyles[index];
+          });
         });
       }
     }
