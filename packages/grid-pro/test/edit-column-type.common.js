@@ -1,4 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
+import { sendKeys } from '@vaadin/test-runner-commands';
 import {
   arrowDown,
   arrowUp,
@@ -12,7 +13,6 @@ import {
   nextRender,
   space,
 } from '@vaadin/testing-helpers';
-import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import { createItems, dblclick, flushGrid, getCellEditor, getContainerCell, onceOpened } from './helpers.js';
 

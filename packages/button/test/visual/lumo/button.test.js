@@ -1,5 +1,5 @@
+import { sendKeys } from '@vaadin/test-runner-commands';
 import { fixtureSync, mousedown } from '@vaadin/testing-helpers';
-import { sendKeys } from '@web/test-runner-commands';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '@vaadin/icon/theme/lumo/vaadin-icon.js';
 import '@vaadin/vaadin-lumo-styles/vaadin-iconset.js';
@@ -46,7 +46,7 @@ describe('button', () => {
       const wrapper = fixtureSync(`
         <div style="display: flex; align-items: baseline; gap: 20px; width: 400px">
           <vaadin-button>This is a button</vaadin-button>
-  
+
           <span style="flex-basis: 100%; background-color: #eee;">Sibling</span>
         </div>
       `);

@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
+import { resetMouse, sendKeys, sendMouse } from '@vaadin/test-runner-commands';
 import { click, fixtureSync, listenOnce, mousedown, nextFrame, nextRender } from '@vaadin/testing-helpers';
-import { resetMouse, sendKeys, sendMouse } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import {
   fire,

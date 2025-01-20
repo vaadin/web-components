@@ -1,4 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
+import { sendKeys } from '@vaadin/test-runner-commands';
 import {
   down,
   fixtureSync,
@@ -8,7 +9,6 @@ import {
   nextRender,
   nextUpdate,
 } from '@vaadin/testing-helpers';
-import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import { getDeepActiveElement } from '@vaadin/a11y-base/src/focus-utils.js';
 

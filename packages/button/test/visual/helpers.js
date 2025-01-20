@@ -1,4 +1,4 @@
-import { resetMouse, sendMouse } from '@web/test-runner-commands';
+import { resetMouse, sendMouse } from '@vaadin/test-runner-commands';
 
 export async function hover(element) {
   const rect = element.getBoundingClientRect();

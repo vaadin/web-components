@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
+import { sendKeys } from '@vaadin/test-runner-commands';
 import { aTimeout, fixtureSync, keyDownOn, nextFrame, nextRender } from '@vaadin/testing-helpers';
-import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import { getDeepActiveElement } from '@vaadin/a11y-base/src/focus-utils.js';
 import { flushGrid, getCellContent, getFocusedCellIndex, getFocusedRowIndex } from './helpers.js';

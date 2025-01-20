@@ -1,4 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
+import { resetMouse, sendMouse } from '@vaadin/test-runner-commands';
 import {
   click,
   enterKeyDown,
@@ -10,7 +11,6 @@ import {
   nextRender,
   oneEvent,
 } from '@vaadin/testing-helpers';
-import { resetMouse, sendMouse } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import { createOverlay } from './helpers.js';
 

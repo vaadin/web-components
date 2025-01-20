@@ -1,5 +1,5 @@
+import { sendKeys, sendMouse } from '@vaadin/test-runner-commands';
 import { fixtureSync, mousedown } from '@vaadin/testing-helpers';
-import { sendKeys, sendMouse } from '@web/test-runner-commands';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '../../../theme/lumo/vaadin-date-picker.js';
 import '../../not-animated-styles.js';

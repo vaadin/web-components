@@ -105,7 +105,7 @@
             "groups": [
               [
                 // Testing tools group
-                "^(@web|@vaadin/chai-plugins|@vaadin/testing-helpers|sinon)",
+                "^(@web|@vaadin/chai-plugins|@vaadin/test-runner-commands|@vaadin/testing-helpers|sinon)",
                 // Side-effects group
                 "^\\u0000",
                 // External group

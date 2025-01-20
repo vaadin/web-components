@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
+import { sendMouse } from '@vaadin/test-runner-commands';
 import { enter, esc, fixtureSync, focusout, nextFrame, space } from '@vaadin/testing-helpers';
-import { sendMouse } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import {

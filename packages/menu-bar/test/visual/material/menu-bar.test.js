@@ -1,5 +1,5 @@
+import { executeServerCommand } from '@vaadin/test-runner-commands';
 import { arrowDown, fixtureSync, nextRender, oneEvent } from '@vaadin/testing-helpers';
-import { executeServerCommand } from '@web/test-runner-commands';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '@vaadin/icon/theme/material/vaadin-icon.js';
 import '@vaadin/vaadin-lumo-styles/vaadin-iconset.js';
