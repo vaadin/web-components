@@ -214,18 +214,12 @@ export const DelegateFocusMixin = dedupingMixin(
       __forwardTabIndex(tabindex) {
         if (tabindex !== undefined && this.focusElement) {
           this.focusElement.tabIndex = tabindex;
-
-          // Preserve tabindex="-1" on the host element
-          if (tabindex !== -1) {
-            this.tabindex = undefined;
-          }
+          this.tabindex = undefined;
         }
 
-        if (this.disabled && tabindex) {
+        if (this.disabled && tabindex !== undefined) {
           // If tabindex attribute was changed while component was disabled
-          if (tabindex !== -1) {
-            this._lastTabIndex = tabindex;
-          }
+          this._lastTabIndex = tabindex;
           this.tabindex = undefined;
         }
       }

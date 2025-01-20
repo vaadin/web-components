@@ -41,10 +41,10 @@ export const TabindexMixin = (superclass) =>
     }
 
     /**
-     * When the element gets disabled, the observer saves the last known tabindex
-     * and makes the element not focusable by setting tabindex to -1.
-     * As soon as the element gets enabled, the observer restores the last known tabindex
-     * so that the element can be focusable again.
+     * When the element gets disabled, this observer saves the last known tabindex
+     * and removes the `tabindex` attribute to make the element non-focusable.
+     * Once the element is enabled again, the observer restores the saved tabindex
+     * so that the element becomes focusable again.
      *
      * @protected
      * @override
@@ -56,7 +56,7 @@ export const TabindexMixin = (superclass) =>
         if (this.tabindex !== undefined) {
           this._lastTabIndex = this.tabindex;
         }
-        this.tabindex = -1;
+        this.tabindex = undefined;
       } else if (oldDisabled) {
         this.tabindex = this._lastTabIndex;
       }
@@ -64,15 +64,18 @@ export const TabindexMixin = (superclass) =>
 
     /**
      * When the user has changed tabindex while the element is disabled,
-     * the observer reverts tabindex to -1 and rather saves the new tabindex value to apply it later.
-     * The new value will be applied as soon as the element becomes enabled.
+     * the observer removes the `tabindex` attribute to ensure the element
+     * remains non-focusable and instead saves the new tabindex value to
+     * apply it later. The new value is applied when the element is enabled
+     * again.
      *
+     * @param {number | undefined} tabindex
      * @protected
      */
     _tabindexChanged(tabindex) {
-      if (this.disabled && tabindex !== -1) {
+      if (this.disabled && tabindex !== undefined) {
         this._lastTabIndex = tabindex;
-        this.tabindex = -1;
+        this.tabindex = undefined;
       }
     }
   };

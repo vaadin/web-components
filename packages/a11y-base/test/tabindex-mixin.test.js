@@ -39,10 +39,10 @@ describe('tabindex-mixin', () => {
       expect(element.tabindex).to.be.equal(1);
     });
 
-    it('should set tabindex attribute to -1 when disabled', () => {
+    it('should remove tabindex attribute when disabled', () => {
       element.tabIndex = 1;
       element.disabled = true;
-      expect(element.getAttribute('tabindex')).to.be.equal('-1');
+      expect(element.hasAttribute('tabindex')).to.be.false;
     });
 
     it('should remove tabindex attribute when enabled if no tabindex was before', () => {
@@ -62,10 +62,23 @@ describe('tabindex-mixin', () => {
       element.tabIndex = 1;
       element.disabled = true;
       element.tabIndex = 2;
-      expect(element.getAttribute('tabindex')).to.be.equal('-1');
+      expect(element.hasAttribute('tabindex')).to.be.false;
 
       element.disabled = false;
       expect(element.getAttribute('tabindex')).to.be.equal('2');
+    });
+
+    it('should allow programmatic focus when enabled', () => {
+      element.tabIndex = 0;
+      element.focus();
+      expect(document.activeElement).to.equal(element);
+    });
+
+    it('should not allow programmatic focus when disabled', () => {
+      element.tabIndex = 0;
+      element.disabled = true;
+      element.focus();
+      expect(document.activeElement).to.equal(document.body);
     });
   });
 
