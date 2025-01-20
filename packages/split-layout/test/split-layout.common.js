@@ -1,6 +1,7 @@
 import { expect } from '@vaadin/chai-plugins';
 import { aTimeout, fixtureSync, nextFrame, nextRender, track } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
+import { html, render } from 'lit';
 
 const initialSizes = { width: 128, height: 128 };
 
@@ -461,5 +462,25 @@ describe('moving nodes between layouts', () => {
     await nextFrame();
     expect(second.getAttribute('slot')).to.equal('primary');
     expect(first.getAttribute('slot')).to.equal('secondary');
+  });
+
+  describe('nested Lit template', () => {
+    let root;
+
+    beforeEach(() => {
+      root = fixtureSync('<div></div>');
+    });
+
+    it('should not throw when re-rendering child element conditionally', async () => {
+      const fooTpl = html`<div>Foo</div>`;
+      const nestedTpl = (foo) => (foo ? html`${fooTpl}` : html`<div>Bar</div>`);
+      const parentTpl = (foo) => html`<vaadin-split-layout>${nestedTpl(foo)}</vaadin-split-layout>`;
+
+      render(parentTpl(true), root);
+      await nextFrame();
+
+      render(parentTpl(false), root);
+      await nextFrame();
+    });
   });
 });
