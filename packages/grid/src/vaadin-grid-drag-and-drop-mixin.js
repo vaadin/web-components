@@ -3,6 +3,7 @@
  * Copyright (c) 2016 - 2024 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { isChrome, isSafari } from '@vaadin/component-base/src/browser-utils.js';
 import {
   iterateChildren,
   iterateRowCells,
@@ -318,17 +319,43 @@ export const DragAndDropMixin = (superClass) =>
      * issues. To mitigate these issues, we hide the scroller element
      * when drag starts to remove it from the drag image.
      *
+     * Grids with fewer rows also have issues on Chromium and Safari
+     * where the drag image is not properly clipped and may include
+     * content outside the grid. Temporary inline styles are applied
+     * to mitigate this issue.
+     *
      * Related issues:
      * - https://github.com/vaadin/web-components/issues/7985
      * - https://issues.chromium.org/issues/383356871
+     * - https://github.com/vaadin/web-components/issues/8386
      *
      * @private
      */
     __onDocumentDragStart(e) {
-      if (e.target.contains(this) && this.$.table.scrollHeight > 20000) {
-        this.$.scroller.style.display = 'none';
+      if (e.target.contains(this)) {
+        // Record the original inline styles to restore them later
+        const elements = [e.target, this.$.items, this.$.scroller];
+        const originalInlineStyles = elements.map((element) => element.style.cssText);
+
+        // With a large number of rows, hide the scroller
+        if (this.$.table.scrollHeight > 20000) {
+          this.$.scroller.style.display = 'none';
+        }
+
+        // Workaround content outside the grid ending up in the drag image on Chromium
+        if (isChrome) {
+          e.target.style.willChange = 'transform';
+        }
+
+        // Workaround text content outside the grid ending up in the drag image on Safari
+        if (isSafari) {
+          this.$.items.style.flexShrink = 1;
+        }
+
         requestAnimationFrame(() => {
-          this.$.scroller.style.display = '';
+          elements.forEach((element, index) => {
+            element.style.cssText = originalInlineStyles[index];
+          });
         });
       }
     }
