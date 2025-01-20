@@ -54,7 +54,7 @@ export const ButtonMixin = (superClass) =>
         this.setAttribute('role', 'button');
       }
 
-      if (this._shouldAllowFocusWhenDisabled()) {
+      if (this.__shouldAllowFocusWhenDisabled()) {
         this.style.setProperty('--_vaadin-button-disabled-pointer-events', 'auto');
       }
     }
@@ -92,7 +92,7 @@ export const ButtonMixin = (superClass) =>
 
     /** @private */
     __onInteractionEvent(event) {
-      if (this._shouldSuppressInteractionEvent(event)) {
+      if (this.__shouldSuppressInteractionEvent(event)) {
         event.stopImmediatePropagation();
       }
     }
@@ -100,14 +100,10 @@ export const ButtonMixin = (superClass) =>
     /**
      * Returns whether to suppress interaction events like `click`, `keydown`, etc.
      * By default suppresses all interaction events when the button is disabled.
-     * Override to customize this behavior.
      *
-     * @param {Event} _event
-     * @return {boolean}
-     * @protected
-     * @see {INTERACTION_EVENTS}
+     * @private
      */
-    _shouldSuppressInteractionEvent(_event) {
+    __shouldSuppressInteractionEvent(_event) {
       return this.disabled;
     }
   };
