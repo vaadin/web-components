@@ -1,4 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
+import { resetMouse, sendKeys, sendMouse } from '@vaadin/test-runner-commands';
 import {
   esc,
   fixtureSync,
@@ -10,7 +11,6 @@ import {
   nextUpdate,
   outsideClick,
 } from '@vaadin/testing-helpers';
-import { resetMouse, sendKeys, sendMouse } from '@web/test-runner-commands';
 import './not-animated-styles.js';
 import { Popover } from '../vaadin-popover.js';
 import { mouseenter, mouseleave } from './helpers.js';

@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
+import { setViewport } from '@vaadin/test-runner-commands';
 import { fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
-import { setViewport } from '@web/test-runner-commands';
 import { esc, shiftTab, tab } from './helpers.js';
 
 describe('mobile navigation', () => {

@@ -1,5 +1,5 @@
+import { executeServerCommand } from '@vaadin/test-runner-commands';
 import { fixtureSync, oneEvent } from '@vaadin/testing-helpers';
-import { executeServerCommand } from '@web/test-runner-commands';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '@vaadin/vaadin-material-styles/test/autoload.js';
 import '../../../theme/material/vaadin-confirm-dialog.js';

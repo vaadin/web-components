@@ -45,6 +45,7 @@
   },
   "devDependencies": {
     "@vaadin/chai-plugins": "24.7.0-alpha6",
+    "@vaadin/test-runner-commands": "24.7.0-alpha6",
     "@vaadin/testing-helpers": "^1.1.0"
   },
   "cvdlName": "vaadin-cookie-consent",
