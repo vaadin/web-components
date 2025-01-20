@@ -85,8 +85,10 @@ export const TabindexMixin = (superclass) =>
     }
 
     /**
-     * Overrides the default element `focus` method in order to prevent
-     * focusing the element when it is disabled.
+     * Overrides the native `focus` method in order to prevent
+     * focusing the element when it is disabled. Note, setting
+     * `tabindex` to -1 does not prevent the element from being
+     * programmatically focusable.
      *
      * @protected
      * @override

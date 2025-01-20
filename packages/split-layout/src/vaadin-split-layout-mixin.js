@@ -55,7 +55,7 @@ export const SplitLayoutMixin = (superClass) =>
     /** @private */
     _cleanupNodes(nodes) {
       nodes.forEach((node) => {
-        if (!(node.parentElement instanceof this.constructor)) {
+        if (node.nodeType === Node.ELEMENT_NODE && !(node.parentElement instanceof this.constructor)) {
           const slot = node.getAttribute('slot');
           if (slot) {
             this[`_${slot}Child`] = null;

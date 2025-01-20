@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -15,14 +15,133 @@
 
       import '@vaadin/card';
       import { badge } from '@vaadin/vaadin-lumo-styles/badge.js';
+      import '@vaadin/avatar';
+      import '@vaadin/button';
+      import '@vaadin/checkbox';
+      import '@vaadin/checkbox-group';
       import '@vaadin/icon';
       import '@vaadin/icons';
       import '@vaadin/vaadin-lumo-styles/icons.js';
+      import '@vaadin/select';
+      import '@vaadin/scroller';
       import { utility } from '@vaadin/vaadin-lumo-styles/utility.js';
       import { addGlobalThemeStyles } from '@vaadin/vaadin-themable-mixin/register-styles.js';
 
       addGlobalThemeStyles('utility', utility);
       addGlobalThemeStyles('badge', badge);
+
+      const playground = document.querySelector('.playground');
+      const codeExample = document.querySelector('.code-example');
+      const mediaSelect = document.querySelector('#media');
+      const contentSelect = document.querySelector('#content');
+      const slotCheckboxGroup = document.querySelector('.slot-options');
+      const resizeOptions = document.querySelector('.playground-resize');
+      const themeVariant = document.querySelector('.theme-variant');
+
+      mediaSelect.items = [
+        { label: 'None', value: 'none' },
+        { label: 'Image', value: '0' },
+        { label: 'Icon', value: '1' },
+        { label: 'Avatar', value: '2' },
+        { label: 'Custom SVG', value: '3' },
+      ];
+      mediaSelect.value = 'none';
+      const mediaElements = Array.from(document.querySelector('#media-options').content.querySelectorAll('*'));
+      mediaSelect.addEventListener('value-changed', (e) => {
+        const existing = playground.querySelector('[slot="media"]');
+        if (existing) {
+          playground.removeChild(existing);
+        }
+        if (e.detail.value != 'none') {
+          playground.prepend(mediaElements[e.detail.value]);
+        }
+        updateCodeExample();
+      });
+
+      const slotElements = document.querySelector('#slot-options').content.children;
+      const slotItems = {
+        header: slotElements[0],
+        'header-prefix': slotElements[1],
+        'header-suffix': slotElements[2],
+        title: slotElements[3],
+        subtitle: slotElements[4],
+        footer: slotElements[5],
+      };
+
+      slotCheckboxGroup.addEventListener('value-changed', (e) => {
+        Object.entries(slotItems).forEach(([key, val]) => {
+          if (e.detail.value.includes(key)) {
+            playground.append(val);
+          } else if (val.parentNode === playground) {
+            playground.removeChild(val);
+          }
+        });
+        updateCodeExample();
+      });
+
+      contentSelect.items = [
+        { label: 'None', value: '-1' },
+        { label: 'Text', value: '0' },
+        { label: 'Scroller', value: '1' },
+        { label: 'Image & Text', value: '2' },
+      ];
+      const contentElements = document.querySelector('#content-options').content.children;
+      contentSelect.addEventListener('value-changed', (e) => {
+        const existing = playground.querySelector(':scope > :not([slot])');
+        if (existing) {
+          playground.removeChild(existing);
+        }
+        if (parseInt(e.detail.value) >= 0) {
+          playground.append(contentElements[e.detail.value].cloneNode(true));
+        }
+        updateCodeExample();
+      });
+      contentSelect.value = '0';
+
+      resizeOptions.addEventListener('value-changed', (e) => {
+        playground.classList.toggle('resize-width', e.detail.value.includes('width'));
+        playground.classList.toggle('resize-height', e.detail.value.includes('height'));
+      });
+
+      themeVariant.addEventListener('value-changed', (e) => {
+        playground.setAttribute('theme', e.detail.value.filter((v) => v != 'dark').join(' '));
+        document.documentElement.setAttribute('theme', e.detail.value.includes('dark') ? 'dark' : '');
+        updateCodeExample();
+      });
+
+      function updateCodeExample() {
+        codeExample.textContent = format(
+          playground.outerHTML
+            .replaceAll(
+              / tabindex="0"| role="button"| class="playground(.*?)"| style="(.+?)"| theme=""| _c=""| _t=""| _st=""| _h=""| _hp=""| _hs=""| _f=""| _m=""/g,
+              '',
+            )
+            .replaceAll(/src=".+?"/g, 'src="..."')
+            .replace(/Lapland is the[\s\S]+?.</, 'Lapland is the...<')
+            .replace(/ fill="none"[\s\S]+?<\/svg>/, '>...</svg>')
+            .replace(/ overflow=".*?"/, ''),
+        ).replace('\n  </vaadin-avatar>', '</vaadin-avatar>');
+      }
+
+      function format(html) {
+        var tab = '  ';
+        var result = '';
+        var indent = '';
+
+        html.split(/>\s*</).forEach(function (element) {
+          if (element.match(/^\/\w/)) {
+            indent = indent.substring(tab.length);
+          }
+
+          result += indent + '<' + element + '>\r\n';
+
+          if (element.match(/^<?\w[^>]*[^/]$/) && !element.startsWith('input')) {
+            indent += tab;
+          }
+        });
+
+        return result.substring(1, result.length - 3);
+      }
     </script>
 
     <style>
@@ -30,499 +149,223 @@
         background-image: linear-gradient(var(--lumo-shade-5pct), var(--lumo-shade-5pct));
       }
 
-      .cards {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: var(--lumo-space-l);
+      body {
+        margin: var(--lumo-space-l);
       }
 
-      vaadin-card img {
-        max-width: 100%;
-        height: 150px;
-        object-fit: cover;
+      .playground:not(.resize-width),
+      .playground.resize-width:not([style*='width']) {
+        width: 22rem !important;
       }
 
-      img.square {
-        width: 40px;
-        height: 40px;
-        outline: 1px solid var(--lumo-contrast-10pct);
-        outline-offset: -1px;
-        box-shadow: 0 2px 3px -2px var(--lumo-shade-50pct);
+      .playground[theme~='horizontal']:has(img[slot='media']):not(.resize-width),
+      .playground[theme~='horizontal']:has(img[slot='media']).resize-width:not([style*='width']) {
+        width: 35rem !important;
+      }
+
+      .playground:not(.resize-height),
+      .playground.resize-height:not([style*='height']) {
+        height: auto !important;
+      }
+
+      .playground.resize-width {
+        resize: horizontal;
+        overflow: hidden;
+      }
+
+      .playground.resize-height {
+        resize: vertical;
+        overflow: hidden;
+      }
+
+      .playground.resize-width.resize-height {
+        resize: both;
+      }
+
+      .options {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0 2rem;
+        margin-bottom: 3rem;
+      }
+
+      .code-example {
+        white-space: pre;
+        font-family: monospace;
+        font-size: 13px;
+        line-height: 1.4;
+        padding: 1rem;
+        border: 1px solid var(--lumo-contrast-10pct);
+        background-color: var(--lumo-shade);
+        color: var(--lumo-tint-90pct);
+        border-radius: var(--lumo-border-radius-l);
+        width: fit-content;
+      }
+
+      .output {
+        display: flex;
+        align-items: start;
+        justify-content: space-between;
+        gap: 2rem;
       }
     </style>
   </head>
 
-  <body class="m-0 p-l flex flex-col gap-l">
-
-    <h2>Default</h2>
-    <div class="cards">
-      <vaadin-card class="flex flex-col overflow-hidden leading-s">
+  <body>
+    <div class="options">
+      <vaadin-select label="Media" id="media"></vaadin-select>
+      <template id="media-options">
         <img
-          src="https://images.unsplash.com/photo-1519681393784-d120267933ba?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=750&q=80"
-          alt="">
-        <div class="flex flex-col gap-s p-m items-start">
-          <h3 class="text-xl">Card Title</h3>
-          <p class="m-0 text-secondary">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut.</p>
-          <span theme="badge">Label</span>
-        </div>
-      </vaadin-card>
-
-      <vaadin-card class="flex flex-col overflow-hidden leading-s">
-        <img
-          src="https://images.unsplash.com/photo-1512273222628-4daea6e55abb?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=750&q=80"
-          alt="">
-        <div class="flex flex-col gap-s p-m items-start">
-          <h3 class="text-xl">Card Title</h3>
-          <p class="m-0 text-secondary">Lorem ipsum dolor sit amet, consectetur adipisicing elit incididunt ut.</p>
-          <span theme="badge warning">Label</span>
-        </div>
-      </vaadin-card>
-
-      <vaadin-card class="flex flex-col overflow-hidden leading-s">
-        <img
-          src="https://images.unsplash.com/photo-1515705576963-95cad62945b6?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&auto=format&fit=crop&w=750&q=80"
-          alt="">
-        <div class="flex flex-col gap-s p-m items-start">
-          <h3 class="text-xl">Card Title</h3>
-          <p class="m-0 text-secondary">Lorem ipsum dolor sit amet, consectetur adipisicing elit incididunt ut.</p>
-          <span theme="badge success">Label</span>
-        </div>
-      </vaadin-card>
-    </div>
-
-    <div class="cards">
-      <vaadin-card class="flex gap-s p-s leading-s">
-        <img
-          src="https://images.unsplash.com/photo-1519681393784-d120267933ba?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=750&q=80"
+          slot="media"
+          width="200"
+          src="https://images.unsplash.com/photo-1674572271917-ac95fbdbf76c?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTQzfHxsYXBsYW5kfGVufDB8fDB8fHww"
           alt=""
-          class="square flex-none rounded-m">
-        <div class="flex flex-col">
-          <h3 class="text-m">Card Title</h3>
-          <p class="m-0 text-secondary text-s">Lorem ipsum dolor sit amet</p>
-        </div>
-      </vaadin-card>
+        />
+        <vaadin-icon
+          slot="media"
+          icon="lumo:photo"
+          style="background: var(--lumo-primary-color-10pct); color: var(--lumo-primary-color)"
+        ></vaadin-icon>
+        <vaadin-avatar slot="media" abbr="L" theme="large"></vaadin-avatar>
+        <svg
+          slot="media"
+          width="80"
+          height="80"
+          viewBox="0 0 80 80"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          style="background: var(--lumo-tint-90pct)"
+        >
+          <path
+            fill-rule="evenodd"
+            clip-rule="evenodd"
+            d="M70.9236 40.9367C70.9328 40.6256 70.9375 40.3133 70.9375 40C70.9375 39.6867 70.9328 39.3744 70.9236 39.0633L69.6741 39.1004C69.683 39.3992 69.6875 39.699 69.6875 40C69.6875 40.301 69.683 40.6008 69.6741 40.8995L70.9236 40.9367ZM70.8123 42.8017L69.5674 42.69C69.5136 43.2886 69.4421 43.882 69.3534 44.4697L70.5894 44.6563C70.6819 44.0438 70.7564 43.4254 70.8123 42.8017ZM70.2544 46.4957L69.032 46.2345C68.9066 46.8216 68.7638 47.4023 68.6041 47.976L69.8084 48.3111C69.9748 47.713 70.1237 47.1077 70.2544 46.4957ZM69.2529 50.0955L68.0712 49.6878C67.8757 50.2544 67.6636 50.8132 67.4353 51.3637L68.5899 51.8425C68.8279 51.2687 69.0491 50.6861 69.2529 50.0955ZM67.822 53.5463L66.6985 52.9983C66.4358 53.5367 66.1574 54.066 65.8637 54.5857L66.9519 55.2007C67.258 54.6592 67.5482 54.1075 67.822 53.5463ZM65.9835 56.7993L64.9344 56.1196C64.6089 56.622 64.2687 57.1139 63.9143 57.5948L64.9205 58.3364C65.2898 57.8353 65.6443 57.3228 65.9835 56.7993ZM63.7669 59.8068L62.8071 59.0061C62.4238 59.4655 62.0269 59.9132 61.617 60.3485L62.527 61.2054C62.954 60.7519 63.3676 60.2855 63.7669 59.8068ZM61.2054 62.527L60.3485 61.617C59.9132 62.0269 59.4655 62.4238 59.0061 62.8071L59.8068 63.7669C60.2855 63.3676 60.7519 62.954 61.2054 62.527ZM58.3364 64.9205L57.5948 63.9143C57.1139 64.2687 56.622 64.6089 56.1196 64.9344L56.7993 65.9835C57.3228 65.6443 57.8353 65.2898 58.3364 64.9205ZM55.2007 66.9519L54.5857 65.8637C54.066 66.1574 53.5367 66.4358 52.9983 66.6985L53.5463 67.822C54.1075 67.5482 54.6592 67.258 55.2007 66.9519ZM51.8425 68.5899L51.3637 67.4353C50.8132 67.6636 50.2544 67.8757 49.6878 68.0712L50.0955 69.2529C50.6861 69.0491 51.2687 68.8279 51.8425 68.5899ZM48.3111 69.8084L47.976 68.6041C47.4023 68.7638 46.8216 68.9066 46.2345 69.032L46.4957 70.2544C47.1077 70.1237 47.713 69.9748 48.3111 69.8084ZM44.6563 70.5894L44.4697 69.3534C43.882 69.4421 43.2886 69.5136 42.69 69.5674L42.8017 70.8123C43.4254 70.7564 44.0438 70.6819 44.6563 70.5894ZM40.9367 70.9236L40.8996 69.6741C40.6008 69.683 40.301 69.6875 40 69.6875C39.699 69.6875 39.3992 69.683 39.1005 69.6741L39.0633 70.9236C39.3744 70.9328 39.6867 70.9375 40 70.9375C40.3133 70.9375 40.6256 70.9328 40.9367 70.9236ZM37.1983 70.8123L37.31 69.5674C36.7114 69.5136 36.118 69.4421 35.5303 69.3534L35.3437 70.5894C35.9562 70.6819 36.5746 70.7564 37.1983 70.8123ZM33.5043 70.2544L33.7655 69.032C33.1784 68.9066 32.5977 68.7638 32.024 68.6041L31.6889 69.8084C32.287 69.9748 32.8923 70.1237 33.5043 70.2544ZM29.9045 69.2529L30.3122 68.0712C29.7456 67.8757 29.1868 67.6636 28.6363 67.4353L28.1575 68.5899C28.7313 68.8279 29.3139 69.0491 29.9045 69.2529ZM26.4537 67.822L27.0017 66.6985C26.4633 66.4358 25.934 66.1574 25.4143 65.8637L24.7993 66.9519C25.3408 67.258 25.8925 67.5482 26.4537 67.822ZM23.2007 65.9835L23.8804 64.9344C23.378 64.6089 22.8861 64.2687 22.4052 63.9143L21.6636 64.9205C22.1647 65.2898 22.6772 65.6443 23.2007 65.9835ZM20.1932 63.7669L20.9939 62.8071C20.5345 62.4238 20.0868 62.0269 19.6515 61.617L18.7946 62.527C19.2481 62.954 19.7145 63.3676 20.1932 63.7669ZM17.473 61.2054L18.383 60.3485C17.9731 59.9132 17.5762 59.4655 17.1929 59.0061L16.2331 59.8068C16.6324 60.2855 17.046 60.7519 17.473 61.2054ZM15.0795 58.3364L16.0857 57.5948C15.7313 57.1139 15.3911 56.622 15.0656 56.1196L14.0165 56.7993C14.3557 57.3228 14.7102 57.8353 15.0795 58.3364ZM13.0481 55.2007L14.1363 54.5857C13.8426 54.066 13.5642 53.5367 13.3015 52.9983L12.178 53.5463C12.4518 54.1075 12.742 54.6592 13.0481 55.2007ZM11.4101 51.8425L12.5647 51.3637C12.3364 50.8132 12.1243 50.2544 11.9288 49.6878L10.7471 50.0955C10.9509 50.6861 11.1721 51.2687 11.4101 51.8425ZM10.1916 48.3111L11.3959 47.976C11.2362 47.4023 11.0934 46.8216 10.968 46.2345L9.74556 46.4957C9.87633 47.1077 10.0252 47.713 10.1916 48.3111ZM9.41059 44.6563L10.6466 44.4697C10.5579 43.882 10.4864 43.2886 10.4326 42.69L9.18765 42.8017C9.24364 43.4254 9.31814 44.0438 9.41059 44.6563ZM9.07641 40.9367C9.06716 40.6256 9.0625 40.3133 9.0625 40C9.0625 39.6867 9.06716 39.3744 9.07641 39.0633L10.3259 39.1005C10.317 39.3992 10.3125 39.699 10.3125 40C10.3125 40.301 10.317 40.6008 10.3259 40.8996L9.07641 40.9367ZM9.18765 37.1983L10.4326 37.31C10.4864 36.7114 10.5579 36.118 10.6466 35.5303L9.41059 35.3437C9.31813 35.9562 9.24364 36.5746 9.18765 37.1983ZM9.74556 33.5043L10.968 33.7655C11.0934 33.1784 11.2362 32.5977 11.3959 32.024L10.1916 31.6889C10.0252 32.287 9.87633 32.8923 9.74556 33.5043ZM10.7471 29.9045L11.9288 30.3122C12.1243 29.7456 12.3364 29.1868 12.5647 28.6363L11.4101 28.1575C11.1721 28.7313 10.9509 29.3139 10.7471 29.9045ZM12.178 26.4537L13.3015 27.0017C13.5642 26.4633 13.8426 25.934 14.1363 25.4143L13.0481 24.7993C12.742 25.3408 12.4518 25.8925 12.178 26.4537ZM14.0165 23.2007L15.0656 23.8804C15.3911 23.378 15.7313 22.8861 16.0857 22.4052L15.0795 21.6636C14.7102 22.1647 14.3557 22.6772 14.0165 23.2007ZM16.2331 20.1932L17.1929 20.9939C17.5762 20.5345 17.9731 20.0868 18.383 19.6515L17.473 18.7946C17.046 19.2481 16.6324 19.7145 16.2331 20.1932ZM18.7946 17.473L19.6515 18.383C20.0868 17.9731 20.5345 17.5762 20.9939 17.1929L20.1932 16.2331C19.7145 16.6324 19.2481 17.046 18.7946 17.473ZM21.6636 15.0795L22.4052 16.0857C22.8861 15.7313 23.378 15.3911 23.8804 15.0656L23.2007 14.0165C22.6772 14.3557 22.1647 14.7102 21.6636 15.0795ZM24.7993 13.0481L25.4143 14.1363C25.934 13.8426 26.4633 13.5642 27.0017 13.3015L26.4537 12.178C25.8925 12.4518 25.3408 12.742 24.7993 13.0481ZM28.1575 11.4101L28.6363 12.5647C29.1868 12.3364 29.7456 12.1243 30.3122 11.9288L29.9045 10.7471C29.3139 10.9509 28.7313 11.1721 28.1575 11.4101ZM31.6889 10.1916L32.024 11.3959C32.5977 11.2362 33.1784 11.0934 33.7655 10.968L33.5043 9.74556C32.8923 9.87633 32.287 10.0252 31.6889 10.1916ZM35.3437 9.41059L35.5303 10.6466C36.118 10.5579 36.7114 10.4864 37.31 10.4326L37.1983 9.18765C36.5746 9.24364 35.9562 9.31814 35.3437 9.41059ZM39.0633 9.07641L39.1004 10.3259C39.3992 10.317 39.699 10.3125 40 10.3125C40.301 10.3125 40.6008 10.317 40.8995 10.3259L40.9367 9.07641C40.6256 9.06716 40.3133 9.0625 40 9.0625C39.6867 9.0625 39.3744 9.06716 39.0633 9.07641ZM42.8017 9.18765L42.69 10.4326C43.2886 10.4864 43.882 10.5579 44.4697 10.6466L44.6563 9.41059C44.0438 9.31813 43.4254 9.24364 42.8017 9.18765ZM46.4957 9.74556L46.2345 10.968C46.8216 11.0934 47.4023 11.2362 47.976 11.3959L48.3111 10.1916C47.713 10.0252 47.1077 9.87633 46.4957 9.74556ZM50.0955 10.7471L49.6878 11.9288C50.2544 12.1243 50.8132 12.3364 51.3637 12.5647L51.8425 11.4101C51.2687 11.1721 50.6861 10.9509 50.0955 10.7471ZM53.5463 12.178L52.9983 13.3015C53.5367 13.5642 54.066 13.8426 54.5857 14.1363L55.2007 13.0481C54.6592 12.742 54.1075 12.4518 53.5463 12.178ZM56.7993 14.0165L56.1196 15.0656C56.622 15.3911 57.1139 15.7313 57.5948 16.0857L58.3364 15.0795C57.8353 14.7102 57.3228 14.3557 56.7993 14.0165ZM59.8068 16.2331L59.0061 17.1929C59.4655 17.5762 59.9132 17.9731 60.3485 18.383L61.2054 17.473C60.7519 17.046 60.2855 16.6324 59.8068 16.2331ZM62.527 18.7946L61.617 19.6515C62.0269 20.0868 62.4238 20.5345 62.8071 20.9939L63.7669 20.1932C63.3676 19.7145 62.954 19.2481 62.527 18.7946ZM64.9205 21.6636L63.9143 22.4052C64.2687 22.8861 64.6089 23.378 64.9344 23.8804L65.9835 23.2007C65.6443 22.6772 65.2898 22.1647 64.9205 21.6636ZM66.9519 24.7993L65.8637 25.4143C66.1574 25.934 66.4358 26.4633 66.6985 27.0017L67.822 26.4537C67.5482 25.8925 67.258 25.3408 66.9519 24.7993ZM68.5899 28.1575L67.4353 28.6363C67.6636 29.1868 67.8757 29.7456 68.0712 30.3122L69.2529 29.9045C69.0491 29.3139 68.8279 28.7313 68.5899 28.1575ZM69.8084 31.6889L68.6041 32.024C68.7638 32.5977 68.9066 33.1784 69.032 33.7655L70.2544 33.5043C70.1237 32.8923 69.9748 32.287 69.8084 31.6889ZM70.5894 35.3437L69.3534 35.5303C69.4421 36.118 69.5136 36.7114 69.5674 37.31L70.8123 37.1983C70.7564 36.5746 70.6819 35.9562 70.5894 35.3437Z"
+            fill="black"
+            fill-opacity="0.14"
+          />
+          <path
+            fill-rule="evenodd"
+            clip-rule="evenodd"
+            d="M17.3438 17.3438H18.5938V18.099H18.099V18.5938H17.3438V17.3438ZM17.3438 61.4062V62.6562H18.5938V61.901H18.099V61.4062H17.3438ZM61.4062 62.6562H62.6562V61.4062H61.901V61.901H61.4062V62.6562ZM62.6562 18.5938V17.3438H61.4062V18.099H61.901V18.5938H62.6562ZM19.6094 17.3438V18.5938H21.1198V17.3438H19.6094ZM22.6302 17.3438V18.5938H24.1406V17.3438H22.6302ZM25.651 17.3438V18.5938H27.1615V17.3438H25.651ZM28.6719 17.3438V18.5938H30.1823V17.3438H28.6719ZM31.6927 17.3438V18.5938H33.2031V17.3438H31.6927ZM34.7135 17.3438V18.5938H36.224V17.3438H34.7135ZM37.7344 17.3438V18.5938H39.2448V17.3438H37.7344ZM40.7552 17.3438V18.5938H42.2656V17.3438H40.7552ZM43.776 17.3438V18.5938H45.2865V17.3438H43.776ZM46.7969 17.3438V18.5938H48.3073V17.3438H46.7969ZM49.8177 17.3438V18.5938H51.3281V17.3438H49.8177ZM52.8385 17.3438V18.5938H54.349V17.3438H52.8385ZM55.8594 17.3438V18.5938H57.3698V17.3438H55.8594ZM58.8802 17.3438V18.5938H60.3906V17.3438H58.8802ZM62.6562 19.6094H61.4062V21.1198H62.6562V19.6094ZM62.6562 22.6302H61.4062V24.1406H62.6562V22.6302ZM62.6562 25.651H61.4062V27.1615H62.6562V25.651ZM62.6562 28.6719H61.4062V30.1823H62.6562V28.6719ZM62.6562 31.6927H61.4062V33.2031H62.6562V31.6927ZM62.6562 34.7135H61.4062V36.224H62.6562V34.7135ZM62.6562 37.7344H61.4062V39.2448H62.6562V37.7344ZM62.6562 40.7552H61.4062V42.2656H62.6562V40.7552ZM62.6562 43.776H61.4062V45.2865H62.6562V43.776ZM62.6562 46.7969H61.4062V48.3073H62.6562V46.7969ZM62.6562 49.8177H61.4062V51.3281H62.6562V49.8177ZM62.6562 52.8385H61.4062V54.349H62.6562V52.8385ZM62.6562 55.8594H61.4062V57.3698H62.6562V55.8594ZM62.6562 58.8802H61.4062V60.3906H62.6562V58.8802ZM60.3906 62.6562V61.4062H58.8802V62.6562H60.3906ZM57.3698 62.6562V61.4062H55.8594V62.6562H57.3698ZM54.349 62.6562V61.4062H52.8385V62.6562H54.349ZM51.3281 62.6562V61.4062H49.8177V62.6562H51.3281ZM48.3073 62.6562V61.4062H46.7969V62.6562H48.3073ZM45.2865 62.6562V61.4062H43.776V62.6562H45.2865ZM42.2656 62.6562V61.4062H40.7552V62.6562H42.2656ZM39.2448 62.6562V61.4062H37.7344V62.6562H39.2448ZM36.224 62.6562V61.4062H34.7135V62.6562H36.224ZM33.2031 62.6562V61.4062H31.6927V62.6562H33.2031ZM30.1823 62.6562V61.4062H28.6719V62.6562H30.1823ZM27.1615 62.6562V61.4062H25.651V62.6562H27.1615ZM24.1406 62.6562V61.4062H22.6302V62.6562H24.1406ZM21.1198 62.6562V61.4062H19.6094V62.6562H21.1198ZM17.3438 60.3906H18.5938V58.8802H17.3438V60.3906ZM17.3438 57.3698H18.5938V55.8594H17.3438V57.3698ZM17.3438 54.349H18.5938V52.8385H17.3438V54.349ZM17.3438 51.3281H18.5938V49.8177H17.3438V51.3281ZM17.3438 48.3073H18.5938V46.7969H17.3438V48.3073ZM17.3438 45.2865H18.5938V43.776H17.3438V45.2865ZM17.3438 42.2656H18.5938V40.7552H17.3438V42.2656ZM17.3438 39.2448H18.5938V37.7344H17.3438V39.2448ZM17.3438 36.224H18.5938V34.7135H17.3438V36.224ZM17.3438 33.2031H18.5938V31.6927H17.3438V33.2031ZM17.3438 30.1823H18.5938V28.6719H17.3438V30.1823ZM17.3438 27.1615H18.5938V25.651H17.3438V27.1615ZM17.3438 24.1406H18.5938V22.6302H17.3438V24.1406ZM17.3438 21.1198H18.5938V19.6094H17.3438V21.1198Z"
+            fill="black"
+            fill-opacity="0.14"
+          />
+          <path
+            fill-rule="evenodd"
+            clip-rule="evenodd"
+            d="M12.7422 12.7422L12.1875 12.1875L13.0714 11.3036L13.6261 11.8583L12.7422 12.7422ZM14.9609 14.9609L13.8516 13.8516L14.7354 12.9677L15.8448 14.0771L14.9609 14.9609ZM17.1797 17.1797L16.0703 16.0703L16.9542 15.1864L18.0636 16.2958L17.1797 17.1797ZM19.3984 19.3984L18.2891 18.2891L19.1729 17.4052L20.2823 18.5146L19.3984 19.3984ZM21.6172 21.6172L20.5078 20.5078L21.3917 19.6239L22.5011 20.7333L21.6172 21.6172ZM23.8359 23.8359L22.7266 22.7266L23.6104 21.8427L24.7198 22.9521L23.8359 23.8359ZM26.0547 26.0547L24.9453 24.9453L25.8292 24.0614L26.9386 25.1708L26.0547 26.0547ZM28.2734 28.2734L27.1641 27.1641L28.0479 26.2802L29.1573 27.3896L28.2734 28.2734ZM30.4922 30.4922L29.3828 29.3828L30.2667 28.4989L31.3761 29.6083L30.4922 30.4922ZM32.7109 32.7109L31.6016 31.6016L32.4854 30.7177L33.5948 31.8271L32.7109 32.7109ZM34.9297 34.9297L33.8203 33.8203L34.7042 32.9364L35.8136 34.0458L34.9297 34.9297ZM37.1484 37.1484L36.0391 36.0391L36.923 35.1552L38.0323 36.2646L37.1484 37.1484ZM39.3672 39.3672L38.2578 38.2578L39.1417 37.3739L40.2511 38.4833L39.3672 39.3672ZM41.5859 41.5859L40.4766 40.4766L41.3605 39.5927L42.4698 40.7021L41.5859 41.5859ZM43.8047 43.8047L42.6953 42.6953L43.5792 41.8114L44.6886 42.9208L43.8047 43.8047ZM46.0235 46.0235L44.9141 44.9141L45.798 44.0302L46.9073 45.1396L46.0235 46.0235ZM48.2422 48.2422L47.1328 47.1328L48.0167 46.2489L49.1261 47.3583L48.2422 48.2422ZM50.461 50.461L49.3516 49.3516L50.2355 48.4677L51.3448 49.5771L50.461 50.461ZM52.6797 52.6797L51.5703 51.5703L52.4542 50.6864L53.5636 51.7958L52.6797 52.6797ZM54.8985 54.8985L53.7891 53.7891L54.673 52.9052L55.7823 54.0146L54.8985 54.8985ZM57.1172 57.1172L56.0078 56.0078L56.8917 55.1239L58.0011 56.2333L57.1172 57.1172ZM59.336 59.336L58.2266 58.2266L59.1105 57.3427L60.2198 58.4521L59.336 59.336ZM61.5547 61.5547L60.4453 60.4453L61.3292 59.5615L62.4386 60.6708L61.5547 61.5547ZM63.7735 63.7735L62.6641 62.6641L63.548 61.7802L64.6573 62.8896L63.7735 63.7735ZM65.9922 65.9922L64.8828 64.8828L65.7667 63.999L66.8761 65.1083L65.9922 65.9922ZM67.6562 67.6562L67.1016 67.1016L67.9855 66.2177L68.5401 66.7724L67.6562 67.6562Z"
+            fill="black"
+            fill-opacity="0.14"
+          />
+          <path
+            fill-rule="evenodd"
+            clip-rule="evenodd"
+            d="M67.1016 12.7422L67.6562 12.1875L66.7724 11.3036L66.2177 11.8583L67.1016 12.7422ZM64.8828 14.9609L65.9922 13.8516L65.1083 12.9677L63.9989 14.0771L64.8828 14.9609ZM62.6641 17.1797L63.7734 16.0703L62.8896 15.1864L61.7802 16.2958L62.6641 17.1797ZM60.4453 19.3984L61.5547 18.2891L60.6708 17.4052L59.5614 18.5146L60.4453 19.3984ZM58.2266 21.6172L59.3359 20.5078L58.4521 19.6239L57.3427 20.7333L58.2266 21.6172ZM56.0078 23.8359L57.1172 22.7266L56.2333 21.8427L55.1239 22.9521L56.0078 23.8359ZM53.7891 26.0547L54.8984 24.9453L54.0146 24.0614L52.9052 25.1708L53.7891 26.0547ZM51.5703 28.2734L52.6797 27.1641L51.7958 26.2802L50.6864 27.3896L51.5703 28.2734ZM49.3516 30.4922L50.4609 29.3828L49.5771 28.4989L48.4677 29.6083L49.3516 30.4922ZM47.1328 32.7109L48.2422 31.6016L47.3583 30.7177L46.2489 31.8271L47.1328 32.7109ZM44.9141 34.9297L46.0234 33.8203L45.1395 32.9364L44.0302 34.0458L44.9141 34.9297ZM42.6953 37.1484L43.8047 36.0391L42.9208 35.1552L41.8114 36.2646L42.6953 37.1484ZM40.4766 39.3672L41.5859 38.2578L40.702 37.3739L39.5927 38.4833L40.4766 39.3672ZM38.2578 41.5859L39.3672 40.4766L38.4833 39.5927L37.3739 40.7021L38.2578 41.5859ZM36.039 43.8047L37.1484 42.6953L36.2645 41.8114L35.1552 42.9208L36.039 43.8047ZM33.8203 46.0235L34.9297 44.9141L34.0458 44.0302L32.9364 45.1396L33.8203 46.0235ZM31.6015 48.2422L32.7109 47.1328L31.827 46.2489L30.7177 47.3583L31.6015 48.2422ZM29.3828 50.461L30.4922 49.3516L29.6083 48.4677L28.4989 49.5771L29.3828 50.461ZM27.164 52.6797L28.2734 51.5703L27.3895 50.6864L26.2802 51.7958L27.164 52.6797ZM24.9453 54.8985L26.0547 53.7891L25.1708 52.9052L24.0614 54.0146L24.9453 54.8985ZM22.7265 57.1172L23.8359 56.0078L22.952 55.1239L21.8427 56.2333L22.7265 57.1172ZM20.5078 59.336L21.6172 58.2266L20.7333 57.3427L19.6239 58.4521L20.5078 59.336ZM18.289 61.5547L19.3984 60.4453L18.5145 59.5615L17.4052 60.6708L18.289 61.5547ZM16.0703 63.7735L17.1797 62.6641L16.2958 61.7802L15.1864 62.8896L16.0703 63.7735ZM13.8515 65.9922L14.9609 64.8828L14.077 63.999L12.9676 65.1083L13.8515 65.9922ZM12.1875 67.6562L12.7422 67.1016L11.8583 66.2177L11.3036 66.7724L12.1875 67.6562Z"
+            fill="black"
+            fill-opacity="0.14"
+          />
+          <path
+            fill-rule="evenodd"
+            clip-rule="evenodd"
+            d="M40 8.60742V7.8125L41.25 7.8125V8.60742L40 8.60742ZM40 11.7871V10.1973H41.25V11.7871H40ZM40 14.9668V13.377H41.25V14.9668H40ZM40 18.1465V16.5566H41.25V18.1465H40ZM40 21.3262V19.7363H41.25V21.3262H40ZM40 24.5059V22.916H41.25V24.5059H40ZM40 27.6855V26.0957H41.25V27.6855H40ZM40 30.8652V29.2754H41.25V30.8652H40ZM40 34.0449V32.4551H41.25V34.0449H40ZM40 37.2246V35.6348H41.25V37.2246H40ZM40 40.4043V38.8145H41.25V40.4043H40ZM40 43.584V41.9941H41.25V43.584H40ZM40 46.7637V45.1738H41.25V46.7637H40ZM40 49.9434V48.3535H41.25V49.9434H40ZM40 53.123V51.5332H41.25V53.123H40ZM40 56.3027V54.7129H41.25V56.3027H40ZM40 59.4824V57.8926H41.25V59.4824H40ZM40 62.6621V61.0723H41.25V62.6621H40ZM40 65.8418V64.2519H41.25V65.8418H40ZM40 69.0215V67.4316H41.25V69.0215H40ZM40 71.4062V70.6113H41.25V71.4062H40Z"
+            fill="black"
+            fill-opacity="0.14"
+          />
+          <path
+            fill-rule="evenodd"
+            clip-rule="evenodd"
+            d="M71.002 39.6094H71.7969V40.8594H71.002V39.6094ZM67.8223 39.6094H69.4121V40.8594H67.8223V39.6094ZM64.6426 39.6094H66.2324V40.8594H64.6426V39.6094ZM61.4629 39.6094H63.0527V40.8594H61.4629L61.4629 39.6094ZM58.2832 39.6094H59.873V40.8594H58.2832V39.6094ZM55.1035 39.6094H56.6934V40.8594H55.1035L55.1035 39.6094ZM51.9238 39.6094H53.5137V40.8594H51.9238V39.6094ZM48.7441 39.6094H50.334V40.8594H48.7441L48.7441 39.6094ZM45.5644 39.6094H47.1543V40.8594H45.5644V39.6094ZM42.3848 39.6094H43.9746V40.8594H42.3848V39.6094ZM39.2051 39.6094H40.7949V40.8594H39.2051V39.6094ZM36.0254 39.6094H37.6152V40.8594H36.0254V39.6094ZM32.8457 39.6094H34.4355V40.8594H32.8457V39.6094ZM29.666 39.6094L31.2559 39.6094V40.8594L29.666 40.8594V39.6094ZM26.4863 39.6094H28.0762V40.8594H26.4863V39.6094ZM23.3066 39.6094H24.8965V40.8594H23.3066V39.6094ZM20.127 39.6094H21.7168V40.8594H20.127V39.6094ZM16.9473 39.6094H18.5371V40.8594H16.9473V39.6094ZM13.7676 39.6094H15.3574V40.8594H13.7676V39.6094ZM10.5879 39.6094H12.1777V40.8594H10.5879L10.5879 39.6094ZM8.20313 39.6094H8.99807L8.99806 40.8594H8.20312L8.20313 39.6094Z"
+            fill="black"
+            fill-opacity="0.14"
+          />
+          <path
+            d="M42.3975 35.7815C42.3975 35.9123 42.3879 36.0228 42.3739 36.1423C42.3014 37.4195 41.2614 38.4368 39.9854 38.4368C38.7099 38.4368 37.6699 37.426 37.5974 36.1491C37.5834 36.0293 37.5738 35.9123 37.5738 35.7815C37.5738 34.5059 37.2721 33.1918 34.2071 33.1918H23.9564C19.3336 33.1918 17.3437 30.9722 17.3438 26.5324L17.3438 22.7557C17.3438 21.4906 18.2992 20.4648 19.5449 20.4648C20.7906 20.4648 21.7353 21.4906 21.7353 22.7557V24.0317C21.7353 25.4604 22.7003 26.502 24.8106 26.502L34.8601 26.502C39.433 26.502 39.7845 29.9483 39.9352 31.7729H40.0361C40.1868 29.9483 40.5383 26.502 45.1108 26.502H55.1607C57.271 26.502 58.1702 25.4964 58.1702 24.0674L58.1762 22.7557C58.1762 21.4906 59.1755 20.4648 60.4212 20.4648C61.6669 20.4648 62.6562 21.4906 62.6562 22.7557V26.5324C62.6562 30.9722 60.6377 33.1918 56.0149 33.1918L45.7642 33.1918C42.6988 33.1918 42.3975 34.5059 42.3975 35.7815Z"
+            fill="url(#grad)"
+          />
+          <path
+            d="M42.3766 60.7608C41.9648 61.6894 41.0562 62.3358 39.9984 62.3358C38.9259 62.3358 38.0052 61.6718 37.6024 60.7224C37.5979 60.7143 37.5934 60.7064 37.5889 60.6986C37.5796 60.6821 37.5703 60.6659 37.5611 60.648L28.4362 43.3129C28.1837 42.8594 28.0505 42.3451 28.0505 41.8251C28.0505 40.1677 29.3635 38.8192 30.9768 38.8192C32.273 38.8192 33.1539 39.4704 33.7562 40.8829L40 52.8382L46.2504 40.8685C46.8457 39.4704 47.7266 38.8192 49.0232 38.8192C50.6369 38.8192 51.9495 40.1677 51.9495 41.8251C51.9495 42.3451 51.8163 42.8594 51.5615 43.3169L42.4377 60.65C42.4245 60.6756 42.4111 60.6994 42.3977 60.7231C42.3906 60.7356 42.3836 60.7481 42.3766 60.7608Z"
+            fill="url(#grad)"
+          />
+          <defs>
+            <linearGradient
+              id="grad"
+              x1="40.7056"
+              y1="20.4688"
+              x2="39.9216"
+              y2="62.3318"
+              gradientUnits="userSpaceOnUse"
+            >
+              <stop offset="0.108604" stop-color="#00B3FF" />
+              <stop offset="1" stop-color="#086BFF" />
+            </linearGradient>
+          </defs>
+        </svg>
+      </template>
 
-      <vaadin-card class="flex gap-s p-s leading-s">
-        <img
-          src="https://images.unsplash.com/photo-1512273222628-4daea6e55abb?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=750&q=80"
-          alt="" class="square flex-none rounded-m">
-        <div class="flex flex-col">
-          <h3 class="text-m">Card Title</h3>
-          <p class="m-0 text-secondary text-s">Lorem ipsum dolor sit amet</p>
+      <vaadin-select label="Content" id="content"></vaadin-select>
+      <template id="content-options">
+        <div>Lapland is the northern-most region of Finland and an active outdoor destination.</div>
+        <vaadin-scroller theme="overflow-indicators" style="max-height: 100px; min-height: 100%">
+          <div
+            >Lapland is the northern-most region of Finland and an active outdoor destination that's known for its
+            incredible, year-round light phenomena, vast arctic nature, and Santa Claus. The land of the indigenous Sámi
+            people, known as Sámi homeland or Sápmi, also crosses the northern part of the region. Explore Finnish
+            Lapland, Europe’s last great wilderness!</div
+          >
+        </vaadin-scroller>
+        <div>
+          <img
+            width="800"
+            src="https://images.unsplash.com/photo-1674572271917-ac95fbdbf76c?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTQzfHxsYXBsYW5kfGVufDB8fDB8fHww"
+            alt=""
+            style="max-width: 100%; border-radius: var(--lumo-border-radius-m)"
+          />
+          <div
+            >Lapland is the northern-most region of Finland and an active outdoor destination that's known for its
+            incredible, year-round light phenomena, vast arctic nature, and Santa Claus.</div
+          >
         </div>
-      </vaadin-card>
+      </template>
 
-      <vaadin-card class="flex gap-s p-s leading-s">
-        <img
-          src="https://images.unsplash.com/photo-1515705576963-95cad62945b6?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&auto=format&fit=crop&w=750&q=80"
-          alt="" class="square flex-none rounded-m">
-        <div class="flex flex-col">
-          <h3 class="text-m">Card Title</h3>
-          <p class="m-0 text-secondary text-s">Lorem ipsum dolor sit amet</p>
+      <template id="slot-options">
+        <div slot="header" class="leading-xs">
+          <b class="uppercase text-xs text-secondary">The Exotic North</b>
+          <h2>Lapland</h2>
         </div>
-      </vaadin-card>
+        <vaadin-avatar slot="header-prefix" abbr="L"></vaadin-avatar>
+        <span slot="header-suffix" theme="badge success">Arctic</span>
+        <div slot="title">Lapland</div>
+        <div slot="subtitle">The Exotic North</div>
+        <vaadin-button slot="footer">Book Vacation</vaadin-button>
+      </template>
+
+      <vaadin-checkbox-group class="slot-options" label="Header & Footer">
+        <vaadin-checkbox label="Header" value="header"></vaadin-checkbox>
+        <vaadin-checkbox label="Header Prefix" value="header-prefix"></vaadin-checkbox>
+        <vaadin-checkbox label="Header Suffix" value="header-suffix"></vaadin-checkbox>
+        <vaadin-checkbox label="Title" value="title"></vaadin-checkbox>
+        <vaadin-checkbox label="Subtitle" value="subtitle"></vaadin-checkbox>
+        <vaadin-checkbox label="Footer" value="footer"></vaadin-checkbox>
+      </vaadin-checkbox-group>
+
+      <vaadin-checkbox-group class="theme-variant" label="Theme Variant">
+        <vaadin-checkbox label="Outlined" value="outlined"></vaadin-checkbox>
+        <vaadin-checkbox label="Elevated" value="elevated"></vaadin-checkbox>
+        <vaadin-checkbox label="Dark" value="dark"></vaadin-checkbox>
+        <vaadin-checkbox label="Horizontal" value="horizontal"></vaadin-checkbox>
+        <vaadin-checkbox label="Stretch Media" value="stretch-media"></vaadin-checkbox>
+        <vaadin-checkbox label="Cover Media" value="cover-media"></vaadin-checkbox>
+      </vaadin-checkbox-group>
+
+      <vaadin-checkbox-group class="playground-resize" label="Resize">
+        <vaadin-checkbox label="Width" value="width"></vaadin-checkbox>
+        <vaadin-checkbox label="Height" value="height"></vaadin-checkbox>
+      </vaadin-checkbox-group>
     </div>
 
-
-
-
-    <div class="cards">
-      <vaadin-card class="flex flex-col p-m leading-s">
-        <div class="flex justify-between">
-          <h3 class="text-s font-medium text-secondary">Page Views</h3>
-          <vaadin-icon icon="vaadin:info-circle-o" class="text-2xs text-tertiary"></vaadin-icon>
-        </div>
-        <div class="flex flex-wrap gap-m items-center">
-          <p class="m-0 text-header text-3xl font-medium">12,450</p>
-          <span theme="badge success" class="pe-s">
-            <span class="me-xs">15.8%</span>
-            <vaadin-icon icon="lumo:arrow-up"></vaadin-icon>
-          </span>
-        </div>
-      </vaadin-card>
-      <vaadin-card class="flex flex-col p-m leading-s">
-        <div class="flex justify-between">
-          <h3 class="text-s font-medium text-secondary">Total Revenue</h3>
-          <vaadin-icon icon="vaadin:info-circle-o" class="text-2xs text-tertiary"></vaadin-icon>
-        </div>
-        <div class="flex flex-wrap gap-m items-center">
-          <p class="m-0 text-header text-3xl font-medium"><span class="text-tertiary me-xs">$</span>363.95</p>
-          <span theme="badge error" class="pe-s">
-            <span class="me-xs">34.0%</span>
-            <vaadin-icon icon="lumo:arrow-down"></vaadin-icon>
-          </span>
-        </div>
-      </vaadin-card>
-      <vaadin-card class="flex flex-col p-m leading-s">
-        <div class="flex justify-between">
-          <h3 class="text-s font-medium text-secondary">Bounce Rate</h3>
-          <vaadin-icon icon="vaadin:info-circle-o" class="text-2xs text-tertiary"></vaadin-icon>
-        </div>
-        <div class="flex flex-wrap gap-m items-center">
-          <p class="m-0 text-header text-3xl font-medium">86.5%</p>
-          <span theme="badge success" class="pe-s">
-            <span class="me-xs">24.3%</span>
-            <vaadin-icon icon="lumo:arrow-up"></vaadin-icon>
-          </span>
-        </div>
-      </vaadin-card>
+    <div class="output">
+      <vaadin-card class="playground"></vaadin-card>
+      <div class="code-example"></div>
     </div>
-
-
-
-
-    <h2>Outlined</h2>
-    <div class="cards">
-      <vaadin-card theme="outlined" class="flex flex-col overflow-hidden leading-s">
-        <img
-          src="https://images.unsplash.com/photo-1519681393784-d120267933ba?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=750&q=80"
-          alt=""
-          class="">
-        <div class="flex flex-col gap-s p-m items-start">
-          <h3 class="text-xl">Card Title</h3>
-          <p class="m-0 text-secondary">Lorem ipsum dolor sit amet, consectetur adipisicing elit tempor incididunt ut.</p>
-          <span theme="badge">Label</span>
-        </div>
-      </vaadin-card>
-
-      <vaadin-card theme="outlined" class="flex flex-col overflow-hidden leading-s">
-        <img
-          src="https://images.unsplash.com/photo-1512273222628-4daea6e55abb?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=750&q=80"
-          alt=""
-          class="">
-        <div class="flex flex-col gap-s p-m items-start">
-          <h3 class="text-xl">Card Title</h3>
-          <p class="m-0 text-secondary">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut.</p>
-          <span theme="badge warning">Label</span>
-        </div>
-      </vaadin-card>
-
-      <vaadin-card theme="outlined" class="flex flex-col overflow-hidden leading-s">
-        <img
-          src="https://images.unsplash.com/photo-1515705576963-95cad62945b6?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&auto=format&fit=crop&w=750&q=80"
-          alt=""
-          class="">
-        <div class="flex flex-col gap-s p-m items-start">
-          <h3 class="text-xl">Card Title</h3>
-          <p class="m-0 text-secondary">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut.</p>
-          <span theme="badge success">Label</span>
-        </div>
-      </vaadin-card>
-    </div>
-
-
-    <div class="cards">
-      <vaadin-card theme="outlined" class="flex gap-s p-s leading-s">
-        <img
-          src="https://images.unsplash.com/photo-1519681393784-d120267933ba?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=750&q=80"
-          alt="" class="square flex-none rounded-m">
-        <div class="flex flex-col">
-          <h3 class="text-m">Card Title</h3>
-          <p class="m-0 text-secondary text-s">Lorem ipsum dolor sit amet</p>
-        </div>
-      </vaadin-card>
-
-      <vaadin-card theme="outlined" class="flex gap-s p-s leading-s">
-        <img
-          src="https://images.unsplash.com/photo-1512273222628-4daea6e55abb?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=750&q=80"
-          alt="" class="square flex-none rounded-m">
-        <div class="flex flex-col">
-          <h3 class="text-m">Card Title</h3>
-          <p class="m-0 text-secondary text-s">Lorem ipsum dolor sit amet</p>
-        </div>
-      </vaadin-card>
-
-      <vaadin-card theme="outlined" class="flex gap-s p-s leading-s">
-        <img
-          src="https://images.unsplash.com/photo-1515705576963-95cad62945b6?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&auto=format&fit=crop&w=750&q=80"
-          alt="" class="square flex-none rounded-m">
-        <div class="flex flex-col">
-          <h3 class="text-m">Card Title</h3>
-          <p class="m-0 text-secondary text-s">Lorem ipsum dolor sit amet</p>
-        </div>
-      </vaadin-card>
-    </div>
-
-
-
-    <div class="cards">
-      <vaadin-card theme="outlined" class="flex flex-col p-m leading-s">
-        <div class="flex justify-between">
-          <h3 class="text-s font-medium text-secondary">Page Views</h3>
-          <vaadin-icon icon="vaadin:info-circle-o" class="text-2xs text-tertiary"></vaadin-icon>
-        </div>
-        <div class="flex flex-wrap gap-m items-center">
-          <p class="m-0 text-header text-3xl font-medium">12,450</p>
-          <span theme="badge success" class="pe-s">
-            <span class="me-xs">15.8%</span>
-            <vaadin-icon icon="lumo:arrow-up"></vaadin-icon>
-          </span>
-        </div>
-      </vaadin-card>
-      <vaadin-card theme="outlined" class="flex flex-col p-m leading-s">
-        <div class="flex justify-between">
-          <h3 class="text-s font-medium text-secondary">Total Revenue</h3>
-          <vaadin-icon icon="vaadin:info-circle-o" class="text-2xs text-tertiary"></vaadin-icon>
-        </div>
-        <div class="flex flex-wrap gap-m items-center">
-          <p class="m-0 text-header text-3xl font-medium"><span class="text-tertiary me-xs">$</span>363.95</p>
-          <span theme="badge error" class="pe-s">
-            <span class="me-xs">34.0%</span>
-            <vaadin-icon icon="lumo:arrow-down"></vaadin-icon>
-          </span>
-        </div>
-      </vaadin-card>
-      <vaadin-card theme="outlined" class="flex flex-col p-m leading-s">
-        <div class="flex justify-between">
-          <h3 class="text-s font-medium text-secondary">Bounce Rate</h3>
-          <vaadin-icon icon="vaadin:info-circle-o" class="text-2xs text-tertiary"></vaadin-icon>
-        </div>
-        <div class="flex flex-wrap gap-m items-center">
-          <p class="m-0 text-header text-3xl font-medium">86.5%</p>
-          <span theme="badge success" class="pe-s">
-            <span class="me-xs">24.3%</span>
-            <vaadin-icon icon="lumo:arrow-up"></vaadin-icon>
-          </span>
-        </div>
-      </vaadin-card>
-    </div>
-
-
-
-
-    <h2>Elevated</h2>
-    <div class="cards">
-      <vaadin-card theme="elevated" class="flex flex-col overflow-hidden leading-s">
-        <img
-          src="https://images.unsplash.com/photo-1519681393784-d120267933ba?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=750&q=80"
-          alt="" class="">
-        <div class="flex flex-col gap-s p-m items-start">
-          <h3 class="text-xl">Card Title</h3>
-          <p class="m-0 text-secondary">Lorem ipsum dolor sit amet, consectetur adipisicing elit tempor incididunt ut.</p>
-          <span theme="badge">Label</span>
-        </div>
-      </vaadin-card>
-
-      <vaadin-card theme="elevated" class="flex flex-col overflow-hidden leading-s">
-        <img
-          src="https://images.unsplash.com/photo-1512273222628-4daea6e55abb?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=750&q=80"
-          alt="" class="">
-        <div class="flex flex-col gap-s p-m items-start">
-          <h3 class="text-xl">Card Title</h3>
-          <p class="m-0 text-secondary">Lorem ipsum dolor sit amet, consectetur adipisicing elit tempor incididunt ut.</p>
-          <span theme="badge warning">Label</span>
-        </div>
-      </vaadin-card>
-
-      <vaadin-card theme="elevated" class="flex flex-col overflow-hidden leading-s">
-        <img
-          src="https://images.unsplash.com/photo-1515705576963-95cad62945b6?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&auto=format&fit=crop&w=750&q=80"
-          alt="" class="">
-        <div class="flex flex-col gap-s p-m items-start">
-          <h3 class="text-xl">Card Title</h3>
-          <p class="m-0 text-secondary">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut.</p>
-          <span theme="badge success">Label</span>
-        </div>
-      </vaadin-card>
-    </div>
-
-
-    <div class="cards">
-      <vaadin-card theme="elevated" class="flex gap-s p-s leading-s">
-        <img
-          src="https://images.unsplash.com/photo-1519681393784-d120267933ba?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=750&q=80"
-          alt="" class="square flex-none rounded-m">
-        <div class="flex flex-col">
-          <h3 class="text-m">Card Title</h3>
-          <p class="m-0 text-secondary text-s">Lorem ipsum dolor sit amet</p>
-        </div>
-      </vaadin-card>
-
-      <vaadin-card theme="elevated" class="flex gap-s p-s leading-s">
-        <img
-          src="https://images.unsplash.com/photo-1512273222628-4daea6e55abb?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=750&q=80"
-          alt="" class="square flex-none rounded-m">
-        <div class="flex flex-col">
-          <h3 class="text-m">Card Title</h3>
-          <p class="m-0 text-secondary text-s">Lorem ipsum dolor sit amet</p>
-        </div>
-      </vaadin-card>
-
-      <vaadin-card theme="elevated" class="flex gap-s p-s leading-s">
-        <img
-          src="https://images.unsplash.com/photo-1515705576963-95cad62945b6?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&auto=format&fit=crop&w=750&q=80"
-          alt="" class="square flex-none rounded-m">
-        <div class="flex flex-col">
-          <h3 class="text-m">Card Title</h3>
-          <p class="m-0 text-secondary text-s">Lorem ipsum dolor sit amet</p>
-        </div>
-      </vaadin-card>
-    </div>
-
-
-
-    <div class="cards">
-      <vaadin-card theme="elevated" class="flex flex-col p-m leading-s">
-        <div class="flex justify-between">
-          <h3 class="text-s font-medium text-secondary">Page Views</h3>
-          <vaadin-icon icon="vaadin:info-circle-o" class="text-2xs text-tertiary"></vaadin-icon>
-        </div>
-        <div class="flex flex-wrap gap-m items-center">
-          <p class="m-0 text-header text-3xl font-medium">12,450</p>
-          <span theme="badge success" class="pe-s">
-            <span class="me-xs">15.8%</span>
-            <vaadin-icon icon="lumo:arrow-up"></vaadin-icon>
-          </span>
-        </div>
-      </vaadin-card>
-      <vaadin-card theme="elevated" class="flex flex-col p-m leading-s">
-        <div class="flex justify-between">
-          <h3 class="text-s font-medium text-secondary">Total Revenue</h3>
-          <vaadin-icon icon="vaadin:info-circle-o" class="text-2xs text-tertiary"></vaadin-icon>
-        </div>
-        <div class="flex flex-wrap gap-m items-center">
-          <p class="m-0 text-header text-3xl font-medium"><span class="text-tertiary me-xs">$</span>363.95</p>
-          <span theme="badge error" class="pe-s">
-            <span class="me-xs">34.0%</span>
-            <vaadin-icon icon="lumo:arrow-down"></vaadin-icon>
-          </span>
-        </div>
-      </vaadin-card>
-      <vaadin-card theme="elevated" class="flex flex-col p-m leading-s">
-        <div class="flex justify-between">
-          <h3 class="text-s font-medium text-secondary">Bounce Rate</h3>
-          <vaadin-icon icon="vaadin:info-circle-o" class="text-2xs text-tertiary"></vaadin-icon>
-        </div>
-        <div class="flex flex-wrap gap-m items-center">
-          <p class="m-0 text-header text-3xl font-medium">86.5%</p>
-          <span theme="badge success" class="pe-s">
-            <span class="me-xs">24.3%</span>
-            <vaadin-icon icon="lumo:arrow-up"></vaadin-icon>
-          </span>
-        </div>
-      </vaadin-card>
-    </div>
-
-
-
-
-    <h2>Outlined & Elevated</h2>
-    <div class="cards">
-      <vaadin-card theme="outlined elevated" class="flex flex-col overflow-hidden leading-s">
-        <img
-          src="https://images.unsplash.com/photo-1519681393784-d120267933ba?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=750&q=80"
-          alt="" class="">
-        <div class="flex flex-col gap-s p-m items-start">
-          <h3 class="text-xl">Card Title</h3>
-          <p class="m-0 text-secondary">Lorem ipsum dolor sit amet, consectetur adipisicing elit tempor incididunt ut.</p>
-          <span theme="badge">Label</span>
-        </div>
-      </vaadin-card>
-
-      <vaadin-card theme="outlined elevated" class="flex flex-col overflow-hidden leading-s">
-        <img
-          src="https://images.unsplash.com/photo-1512273222628-4daea6e55abb?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=750&q=80"
-          alt="" class="">
-        <div class="flex flex-col gap-s p-m items-start">
-          <h3 class="text-xl">Card Title</h3>
-          <p class="m-0 text-secondary">Lorem ipsum dolor sit amet, consectetur adipisicing elit tempor incididunt ut.</p>
-          <span theme="badge warning">Label</span>
-        </div>
-      </vaadin-card>
-
-      <vaadin-card theme="outlined elevated" class="flex flex-col overflow-hidden leading-s">
-        <img
-          src="https://images.unsplash.com/photo-1515705576963-95cad62945b6?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&auto=format&fit=crop&w=750&q=80"
-          alt="" class="">
-        <div class="flex flex-col gap-s p-m items-start">
-          <h3 class="text-xl">Card Title</h3>
-          <p class="m-0 text-secondary">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut.</p>
-          <span theme="badge success">Label</span>
-        </div>
-      </vaadin-card>
-    </div>
-
-
-    <div class="cards">
-      <vaadin-card theme="outlined elevated" class="flex gap-s p-s leading-s">
-        <img
-          src="https://images.unsplash.com/photo-1519681393784-d120267933ba?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=750&q=80"
-          alt="" class="square flex-none rounded-m">
-        <div class="flex flex-col">
-          <h3 class="text-m">Card Title</h3>
-          <p class="m-0 text-secondary text-s">Lorem ipsum dolor sit amet</p>
-        </div>
-      </vaadin-card>
-
-      <vaadin-card theme="outlined elevated" class="flex gap-s p-s leading-s">
-        <img
-          src="https://images.unsplash.com/photo-1512273222628-4daea6e55abb?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=750&q=80"
-          alt="" class="square flex-none rounded-m">
-        <div class="flex flex-col">
-          <h3 class="text-m">Card Title</h3>
-          <p class="m-0 text-secondary text-s">Lorem ipsum dolor sit amet</p>
-        </div>
-      </vaadin-card>
-
-      <vaadin-card theme="outlined elevated" class="flex gap-s p-s leading-s">
-        <img
-          src="https://images.unsplash.com/photo-1515705576963-95cad62945b6?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&auto=format&fit=crop&w=750&q=80"
-          alt="" class="square flex-none rounded-m">
-        <div class="flex flex-col">
-          <h3 class="text-m">Card Title</h3>
-          <p class="m-0 text-secondary text-s">Lorem ipsum dolor sit amet</p>
-        </div>
-      </vaadin-card>
-    </div>
-
-
-
-
-    <div class="cards">
-      <vaadin-card theme="outlined elevated" class="flex flex-col p-m leading-s">
-        <div class="flex justify-between">
-          <h3 class="text-s font-medium text-secondary">Page Views</h3>
-          <vaadin-icon icon="vaadin:info-circle-o" class="text-2xs text-tertiary"></vaadin-icon>
-        </div>
-        <div class="flex flex-wrap gap-m items-center">
-          <p class="m-0 text-header text-3xl font-medium">12,450</p>
-          <span theme="badge success" class="pe-s">
-            <span class="me-xs">15.8%</span>
-            <vaadin-icon icon="lumo:arrow-up"></vaadin-icon>
-          </span>
-        </div>
-      </vaadin-card>
-      <vaadin-card theme="outlined elevated" class="flex flex-col p-m leading-s">
-        <div class="flex justify-between">
-          <h3 class="text-s font-medium text-secondary">Total Revenue</h3>
-          <vaadin-icon icon="vaadin:info-circle-o" class="text-2xs text-tertiary"></vaadin-icon>
-        </div>
-        <div class="flex flex-wrap gap-m items-center">
-          <p class="m-0 text-header text-3xl font-medium"><span class="text-tertiary me-xs">$</span>363.95</p>
-          <span theme="badge error" class="pe-s">
-            <span class="me-xs">34.0%</span>
-            <vaadin-icon icon="lumo:arrow-down"></vaadin-icon>
-          </span>
-        </div>
-      </vaadin-card>
-      <vaadin-card theme="outlined elevated" class="flex flex-col p-m leading-s">
-        <div class="flex justify-between">
-          <h3 class="text-s font-medium text-secondary">Bounce Rate</h3>
-          <vaadin-icon icon="vaadin:info-circle-o" class="text-2xs text-tertiary"></vaadin-icon>
-        </div>
-        <div class="flex flex-wrap gap-m items-center">
-          <p class="m-0 text-header text-3xl font-medium">86.5%</p>
-          <span theme="badge success" class="pe-s">
-            <span class="me-xs">24.3%</span>
-            <vaadin-icon icon="lumo:arrow-up"></vaadin-icon>
-          </span>
-        </div>
-      </vaadin-card>
-    </div>
-
-
-
-
-
   </body>
 </html>

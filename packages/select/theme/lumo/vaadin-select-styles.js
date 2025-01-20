@@ -18,6 +18,11 @@ registerStyles('vaadin-select-item', item, { moduleId: 'lumo-select-item' });
 registerStyles('vaadin-select-list-box', listBox, { moduleId: 'lumo-select-list-box' });
 
 const select = css`
+  :host {
+    /* Disable pointer focus-ring for select, not supported yet */
+    --lumo-input-field-pointer-focus-visible: 0;
+  }
+
   :host(:not([theme*='align'])) ::slotted([slot='value']) {
     text-align: start;
   }
