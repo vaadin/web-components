@@ -966,14 +966,10 @@ describe('multi selection column', () => {
     it('should fire the event when toggling an item with Shift + Space', async () => {
       checkboxes[0].focus();
 
-      await sendKeys({ down: 'Shift' });
-      await sendKeys({ press: 'Space' });
-      await sendKeys({ up: 'Shift' });
+      await sendKeys({ press: 'Shift+Space' });
       assertEvent({ item: grid.items[0], selected: true, shiftKey: true });
 
-      await sendKeys({ down: 'Shift' });
-      await sendKeys({ press: 'Space' });
-      await sendKeys({ up: 'Shift' });
+      await sendKeys({ press: 'Shift+Space' });
       assertEvent({ item: grid.items[0], selected: false, shiftKey: true });
     });
 
@@ -1016,14 +1012,10 @@ describe('multi selection column', () => {
       it('should fire the event when toggling an item with Shift + Space', async () => {
         getRowCells(rows[0])[1].focus();
 
-        await sendKeys({ down: 'Shift' });
-        await sendKeys({ press: 'Space' });
-        await sendKeys({ up: 'Shift' });
+        await sendKeys({ press: 'Shift+Space' });
         assertEvent({ item: grid.items[0], selected: true, shiftKey: true });
 
-        await sendKeys({ down: 'Shift' });
-        await sendKeys({ press: 'Space' });
-        await sendKeys({ up: 'Shift' });
+        await sendKeys({ press: 'Shift+Space' });
         assertEvent({ item: grid.items[0], selected: false, shiftKey: true });
       });
 

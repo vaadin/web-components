@@ -58,9 +58,7 @@ async function tab() {
 }
 
 async function shiftTab() {
-  await sendKeys({ down: 'Shift' });
-  await sendKeys({ press: 'Tab' });
-  await sendKeys({ up: 'Shift' });
+  await sendKeys({ press: 'Shift+Tab' });
   return document.activeElement;
 }
 
