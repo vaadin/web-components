@@ -16,8 +16,18 @@ import type { TabindexMixinClass } from '@vaadin/a11y-base/src/tabindex-mixin.js
 export declare function ButtonMixin<T extends Constructor<HTMLElement>>(
   base: T,
 ): Constructor<ActiveMixinClass> &
+  Constructor<ButtonMixinClass> &
   Constructor<DisabledMixinClass> &
   Constructor<FocusMixinClass> &
   Constructor<KeyboardMixinClass> &
   Constructor<TabindexMixinClass> &
   T;
+
+export declare class ButtonMixinClass {
+  /**
+   * Returns whether to suppress interaction events like `click`, `keydown`, etc.
+   * By default suppresses all interaction events when the button is disabled.
+   * Override to customize this behavior.
+   */
+  _shouldSuppressInteractionEvent(event: Event): boolean;
+}

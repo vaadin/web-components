@@ -111,7 +111,7 @@ export const ButtonMixin = (superClass) =>
     /**
      * Returns whether to suppress interaction events like `click`, `keydown`, etc.
      * By default suppresses all interaction events when the button is disabled.
-     * Override to customize this for a particular event.
+     * Override to customize this behavior.
      *
      * @param {Event} _event
      * @return {boolean}

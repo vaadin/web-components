@@ -33,4 +33,10 @@ export declare class TabindexMixinClass {
    * The new value will be applied as soon as the element becomes enabled.
    */
   protected _tabindexChanged(tabindex: number | null | undefined): void;
+
+  /**
+   * Returns whether the component should be focusable when disabled.
+   * Returns false by default. Override to customize this behavior.
+   */
+  protected _shouldAllowFocusWhenDisabled(): boolean;
 }
