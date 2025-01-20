@@ -152,18 +152,7 @@ describe('vaadin-button', () => {
       expect(document.activeElement).to.equal(lastGlobalFocusable);
     });
 
-    [
-      'mousedown',
-      'mouseup',
-      'touchstart',
-      'touchend',
-      'click',
-      'dblclick',
-      'keydown',
-      'keyup',
-      'pointerstart',
-      'pointerend',
-    ].forEach((eventType) => {
+    ['mousedown', 'mouseup', 'click', 'dblclick', 'keypress', 'keydown', 'keyup'].forEach((eventType) => {
       it(`should suppress ${eventType} events when disabled`, () => {
         const spy = sinon.spy();
         button.addEventListener(eventType, spy, true);

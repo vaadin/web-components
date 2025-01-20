@@ -7,18 +7,7 @@ import { ActiveMixin } from '@vaadin/a11y-base/src/active-mixin.js';
 import { FocusMixin } from '@vaadin/a11y-base/src/focus-mixin.js';
 import { TabindexMixin } from '@vaadin/a11y-base/src/tabindex-mixin.js';
 
-const INTERACTION_EVENTS = [
-  'mousedown',
-  'mouseup',
-  'touchstart',
-  'touchend',
-  'click',
-  'dblclick',
-  'keydown',
-  'keyup',
-  'pointerstart',
-  'pointerend',
-];
+const INTERACTION_EVENTS = ['mousedown', 'mouseup', 'click', 'dblclick', 'keypress', 'keydown', 'keyup'];
 
 /**
  * A mixin providing common button functionality.
