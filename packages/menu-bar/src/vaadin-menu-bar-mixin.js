@@ -81,12 +81,12 @@ export const MenuBarMixin = (superClass) =>
          * #### Disabled items
          *
          * When an item is disabled, it prevents any user interaction with it, such as
-         * focusing, clicking, opening a sub-menu, etc. The item is also removed from the
-         * tab order, which may negatively impact accessibility.
+         * focusing, clicking, opening a sub-menu, etc. The item is also removed from
+         * tab order, which makes it inaccessible to screen readers.
          *
          * To improve accessibility, disabled root-level items (menu bar buttons) can be
-         * made focusable so that screen readers can reach and properly announce them to
-         * users, while still preventing clicks. This is currently available as an
+         * made focusable so that screen readers can still reach and properly announce
+         * them, while still preventing clicks. This is currently available as an
          * experimental enhancement that can be enabled with the following feature flag:
          *
          * ```
