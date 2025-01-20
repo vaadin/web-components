@@ -92,8 +92,18 @@ export const ButtonMixin = (superClass) =>
 
     /** @private */
     __onInteractionEvent(event) {
-      if (this.disabled) {
+      if (this.__shouldSuppressInteractionEvent(event)) {
         event.stopImmediatePropagation();
       }
+    }
+
+    /**
+     * Returns whether to suppress interaction events like `click`, `keydown`, etc.
+     * By default suppresses all interaction events when the button is disabled.
+     *
+     * @private
+     */
+    __shouldSuppressInteractionEvent(_event) {
+      return this.disabled;
     }
   };

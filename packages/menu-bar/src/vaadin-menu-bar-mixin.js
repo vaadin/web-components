@@ -1060,8 +1060,8 @@ export const MenuBarMixin = (superClass) =>
      * @override
      */
     _isItemFocusable(button) {
-      if (button.disabled && button._shouldAllowFocusWhenDisabled) {
-        return button._shouldAllowFocusWhenDisabled();
+      if (button.disabled && button.__shouldAllowFocusWhenDisabled) {
+        return button.__shouldAllowFocusWhenDisabled();
       }
 
       return super._isItemFocusable(button);
