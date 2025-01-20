@@ -14,8 +14,6 @@ import { ButtonMixin } from './vaadin-button-mixin.js';
 
 registerStyles('vaadin-button', buttonStyles, { moduleId: 'vaadin-button-styles' });
 
-window.Vaadin.featureFlags.accessibleDisabledButtons = true;
-
 /**
  * `<vaadin-button>` is an accessible and customizable button that allows users to perform actions.
  *
