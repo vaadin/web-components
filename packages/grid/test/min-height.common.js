@@ -39,7 +39,7 @@ describe('min-height', () => {
   });
 
   describe('without header or footer', () => {
-    it('should should have min-height of one row', () => {
+    it('should have min-height of one row', () => {
       verifyMinHeight();
     });
   });
@@ -51,7 +51,7 @@ describe('min-height', () => {
       await nextResize(grid);
     });
 
-    it('should should have min-height of header and one row', () => {
+    it('should have min-height of header and one row', () => {
       verifyMinHeight(true, false);
     });
   });
@@ -65,7 +65,7 @@ describe('min-height', () => {
       await nextResize(grid);
     });
 
-    it('should should have min-height of footer and one row', () => {
+    it('should have min-height of footer and one row', () => {
       verifyMinHeight(false, true);
     });
   });
@@ -80,7 +80,7 @@ describe('min-height', () => {
       await nextResize(grid);
     });
 
-    it('should should have min-height of header, footer and one row', () => {
+    it('should have min-height of header, footer and one row', () => {
       verifyMinHeight(true, true);
     });
   });
@@ -94,7 +94,7 @@ describe('min-height', () => {
       await nextResize(grid);
     });
 
-    it('should should have min-height of one row', () => {
+    it('should have min-height of one row', () => {
       verifyMinHeight();
     });
   });
@@ -113,6 +113,16 @@ describe('min-height', () => {
     it('should allow overriding min-height through stylesheet', () => {
       const height = grid.getBoundingClientRect().height;
       expect(height).to.equal(200);
+    });
+  });
+
+  describe('with all rows visible', () => {
+    beforeEach(() => {
+      grid.allRowsVisible = true;
+    });
+
+    it('should have min-height of one row', () => {
+      verifyMinHeight();
     });
   });
 });
