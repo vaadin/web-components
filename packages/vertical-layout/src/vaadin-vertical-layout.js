@@ -43,6 +43,11 @@ class VerticalLayout extends ElementMixin(ThemableMixin(PolymerElement)) {
           flex-direction: column;
           align-items: flex-start;
           box-sizing: border-box;
+          --vaadin-spacing-xs: 0.25rem;
+          --vaadin-spacing-s: 0.5rem;
+          --vaadin-spacing-m: 1rem;
+          --vaadin-spacing-l: 1.5rem;
+          --vaadin-spacing-xl: 2.5rem;
         }
 
         :host([hidden]) {
@@ -59,7 +64,7 @@ class VerticalLayout extends ElementMixin(ThemableMixin(PolymerElement)) {
         }
 
         :host([theme~='spacing']) {
-          gap: 1em;
+          gap: var(--vaadin-spacing-m);
         }
       </style>
 

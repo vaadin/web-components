@@ -2,6 +2,14 @@ import '@vaadin/vaadin-lumo-styles/spacing.js';
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 const horizontalLayout = css`
+  :host {
+    --vaadin-spacing-xs: var(--lumo-space-xs);
+    --vaadin-spacing-s: var(--lumo-space-s);
+    --vaadin-spacing-m: var(--lumo-space-m);
+    --vaadin-spacing-l: var(--lumo-space-l);
+    --vaadin-spacing-xl: var(--lumo-space-xl);
+  }
+
   :host([theme~='margin']) {
     margin: var(--lumo-space-m);
   }
