@@ -30,6 +30,9 @@ describe('confirm-dialog with fields', () => {
         dialog = document.createElement('vaadin-confirm-dialog');
         field = document.createElement(`vaadin-${component}`);
         field.label = 'Label';
+        if (component === 'date-picker') {
+          field.autoOpenDisabled = true;
+        }
         dialog.appendChild(field);
         document.body.appendChild(dialog);
         dialog.opened = true;

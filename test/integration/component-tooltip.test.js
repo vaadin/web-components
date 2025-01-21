@@ -119,13 +119,14 @@ before(() => {
       expect(tooltipOverlay.position).to.equal(position || 'bottom');
     });
 
-    it('should or should not show tooltip', () => {
+    it('should or should not show tooltip', async () => {
       mouseenter(tooltip.target);
       expect(tooltipOverlay.opened).to.be.true;
       mouseleave(tooltip.target);
 
       if (applyShouldNotShowCondition) {
         applyShouldNotShowCondition(element);
+        await nextRender();
 
         mouseenter(tooltip.target);
         expect(tooltipOverlay.opened).to.be.false;
