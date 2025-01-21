@@ -352,7 +352,7 @@ describe('menu-bar with tooltip', () => {
     });
   });
 
-  describe('focusable disabled button', () => {
+  describe('accessible disabled button', () => {
     before(() => {
       window.Vaadin.featureFlags ??= {};
       window.Vaadin.featureFlags.accessibleDisabledButtons = true;

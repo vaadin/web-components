@@ -2,7 +2,7 @@ import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, middleOfNode, nextRender } from '@vaadin/testing-helpers';
 import { resetMouse, sendKeys, sendMouse } from '@web/test-runner-commands';
 
-describe('focusable disabled buttons', () => {
+describe('accessible disabled buttons', () => {
   let menuBar, buttons;
 
   before(() => {
