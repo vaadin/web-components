@@ -65,7 +65,7 @@ export const userTagsOverlayStyles = css`
     box-shadow: none;
   }
 
-  [part='overlay'] {
+  :scope [part='overlay'] {
     box-shadow: none;
     background: transparent;
     position: relative;
