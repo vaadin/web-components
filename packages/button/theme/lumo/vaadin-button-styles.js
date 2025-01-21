@@ -75,7 +75,7 @@ const button = css`
   /* Hover */
 
   @media (any-hover: hover) {
-    :host(:hover)::before {
+    :host(:not([disabled]):hover)::before {
       opacity: 0.02;
     }
   }
@@ -159,7 +159,7 @@ const button = css`
   }
 
   @media (any-hover: hover) {
-    :host([theme~='primary']:hover)::before {
+    :host([theme~='primary']:not([disabled]):hover)::before {
       opacity: 0.05;
     }
   }

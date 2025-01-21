@@ -25,9 +25,6 @@ const DropLocation = {
   EMPTY: 'empty',
 };
 
-// Detects if the browser doesn't support HTML5 Drag & Drop API (and falls back to the @vaadin/vaadin-mobile-drag-drop polyfill)
-const usesDnDPolyfill = !('draggable' in document.createElement('div'));
-
 /**
  * @polymerMixin
  */
@@ -178,13 +175,8 @@ export const DragAndDropMixin = (superClass) =>
 
         const rowRect = row.getBoundingClientRect();
 
-        if (usesDnDPolyfill) {
-          // The polyfill drag image is automatically centered so there is no need to adjust the position
-          e.dataTransfer.setDragImage(row);
-        } else {
-          // The native drag image needs to be shifted manually to compensate for the touch position offset
-          e.dataTransfer.setDragImage(row, e.clientX - rowRect.left, e.clientY - rowRect.top);
-        }
+        // The native drag image needs to be shifted manually to compensate for the touch position offset
+        e.dataTransfer.setDragImage(row, e.clientX - rowRect.left, e.clientY - rowRect.top);
 
         let rows = [row];
         if (this._isSelected(row._item)) {

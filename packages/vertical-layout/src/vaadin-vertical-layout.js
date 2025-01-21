@@ -6,7 +6,10 @@
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
-import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { verticalLayoutStyles } from './vaadin-vertical-layout-styles.js';
+
+registerStyles('vaadin-vertical-layout', verticalLayoutStyles, { moduleId: 'vaadin-vertical-layout-styles' });
 
 /**
  * `<vaadin-vertical-layout>` provides a simple way to vertically align your HTML elements.
@@ -36,40 +39,7 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  */
 class VerticalLayout extends ElementMixin(ThemableMixin(PolymerElement)) {
   static get template() {
-    return html`
-      <style>
-        :host {
-          display: flex;
-          flex-direction: column;
-          align-items: flex-start;
-          box-sizing: border-box;
-          --vaadin-spacing-xs: 0.25rem;
-          --vaadin-spacing-s: 0.5rem;
-          --vaadin-spacing-m: 1rem;
-          --vaadin-spacing-l: 1.5rem;
-          --vaadin-spacing-xl: 2.5rem;
-        }
-
-        :host([hidden]) {
-          display: none !important;
-        }
-
-        /* Theme variations */
-        :host([theme~='margin']) {
-          margin: 1em;
-        }
-
-        :host([theme~='padding']) {
-          padding: 1em;
-        }
-
-        :host([theme~='spacing']) {
-          gap: var(--vaadin-spacing-m);
-        }
-      </style>
-
-      <slot></slot>
-    `;
+    return html`<slot></slot>`;
   }
 
   static get is() {

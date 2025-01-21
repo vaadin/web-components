@@ -171,7 +171,7 @@ export const KeyboardDirectionMixin = (superclass) =>
 
         const item = items[idx];
 
-        if (!item.hasAttribute('disabled') && this.__isMatchingItem(item, condition)) {
+        if (this._isItemFocusable(item) && this.__isMatchingItem(item, condition)) {
           return idx;
         }
       }
@@ -188,5 +188,17 @@ export const KeyboardDirectionMixin = (superclass) =>
      */
     __isMatchingItem(item, condition) {
       return typeof condition === 'function' ? condition(item) : true;
+    }
+
+    /**
+     * Returns whether the item is focusable. By default,
+     * returns true if the item is not disabled.
+     *
+     * @param {Element} item
+     * @return {boolean}
+     * @protected
+     */
+    _isItemFocusable(item) {
+      return !item.hasAttribute('disabled');
     }
   };

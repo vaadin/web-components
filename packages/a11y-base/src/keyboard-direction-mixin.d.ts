@@ -38,4 +38,10 @@ export declare class KeyboardDirectionMixinClass {
    * Focus the given item. Override this method to add custom logic.
    */
   protected _focusItem(item: Element, navigating: boolean): void;
+
+  /**
+   * Returns whether the item is focusable. By default,
+   * returns true if the item is not disabled.
+   */
+  protected _isItemFocusable(item: Element): boolean;
 }

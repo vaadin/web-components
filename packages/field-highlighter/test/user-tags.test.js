@@ -108,6 +108,14 @@ describe('user-tags', () => {
       expect(getComputedStyle(tags[1]).backgroundColor).to.equal('rgb(255, 0, 0)');
     });
 
+    it('should not clear tags with a new instance of same user', () => {
+      setUsers([user1]);
+      setUsers([{ ...user1 }]);
+
+      const tags = getTags();
+      expect(tags).to.have.lengthOf(1);
+    });
+
     it('should not set custom property if index is null', () => {
       addUser({ name: 'xyz', colorIndex: null });
       const tags = getTags();
