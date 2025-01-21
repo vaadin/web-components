@@ -48,6 +48,20 @@ class MenuBarButton extends Button {
     super._onKeyDown(event);
     this.__triggeredWithActiveKeys = null;
   }
+
+  /**
+   * Override method inherited from `ButtonMixin` to allow keyboard navigation with
+   * arrow keys in the menu bar when the button is focusable in the disabled state.
+   *
+   * @override
+   */
+  __shouldSuppressInteractionEvent(event) {
+    if (event.type === 'keydown' && ['ArrowLeft', 'ArrowRight'].includes(event.key)) {
+      return false;
+    }
+
+    return super.__shouldSuppressInteractionEvent(event);
+  }
 }
 
 defineCustomElement(MenuBarButton);

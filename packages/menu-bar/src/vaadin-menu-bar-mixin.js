@@ -78,6 +78,26 @@ export const MenuBarMixin = (superClass) =>
          * ];
          * ```
          *
+         * #### Disabled buttons
+         *
+         * When a root-level item (menu bar button) is disabled, it prevents all user
+         * interactions with it, such as focusing, clicking, opening a sub-menu, etc.
+         * The button is also removed from tab order, which makes it unreachable via
+         * the keyboard navigation.
+         *
+         * While the default behavior effectively prevents accidental interactions,
+         * it has an accessibility drawback: screen readers skip disabled buttons
+         * entirely, and users can't see tooltips that might explain why the button
+         * is disabled. To address this, an experimental enhancement allows disabled
+         * menu bar buttons to receive focus and show tooltips, while still preventing
+         * other interactions. This feature can be enabled with the following feature
+         * flag:
+         *
+         * ```
+         * // Set before any menu bar is attached to the DOM.
+         * window.Vaadin.featureFlags.accessibleDisabledButtons = true;
+         * ```
+         *
          * @type {!Array<!MenuBarItem>}
          */
         items: {
@@ -688,7 +708,7 @@ export const MenuBarMixin = (superClass) =>
 
     /** @protected */
     _setTabindex(button, focused) {
-      if (this.tabNavigation && !button.disabled) {
+      if (this.tabNavigation && this._isItemFocusable(button)) {
         button.setAttribute('tabindex', '0');
       } else {
         button.setAttribute('tabindex', focused ? '0' : '-1');
@@ -907,6 +927,10 @@ export const MenuBarMixin = (superClass) =>
 
     /** @private */
     __openSubMenu(button, keydown, options = {}) {
+      if (button.disabled) {
+        return;
+      }
+
       const subMenu = this._subMenu;
       const item = button.item;
 
@@ -1029,5 +1053,21 @@ export const MenuBarMixin = (superClass) =>
      */
     close() {
       this._close();
+    }
+
+    /**
+     * Override method inherited from `KeyboardDirectionMixin` to allow
+     * focusing disabled buttons that are configured so.
+     *
+     * @param {Element} button
+     * @protected
+     * @override
+     */
+    _isItemFocusable(button) {
+      if (button.disabled && button.__shouldAllowFocusWhenDisabled) {
+        return button.__shouldAllowFocusWhenDisabled();
+      }
+
+      return super._isItemFocusable(button);
     }
   };
