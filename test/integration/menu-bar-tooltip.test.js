@@ -14,8 +14,8 @@ import {
 } from '@vaadin/testing-helpers';
 import { resetMouse, sendKeys, sendMouse } from '@web/test-runner-commands';
 import sinon from 'sinon';
-import '@vaadin/menu-bar';
 import './not-animated-styles.js';
+import '@vaadin/menu-bar';
 import { Tooltip } from '@vaadin/tooltip';
 import { mouseenter, mouseleave } from '@vaadin/tooltip/test/helpers.js';
 
