@@ -86,7 +86,7 @@ export const userTagsOverlayStyles = css`
     right: -4px;
   }
 
-  [part='content'] {
+  :scope [part='content'] {
     padding: 0;
   }
 
