@@ -53,19 +53,20 @@ class Button extends ButtonMixin(ElementMixin(ThemableMixin(ControllerMixin(Poly
   static get properties() {
     return {
       /**
-       * When set to true, prevents any user interaction with the button such as
+       * When set to true, prevents all user interactions with the button such as
        * clicking or hovering, and removes the button from the tab order, which
-       * makes it inaccessible to screen readers.
+       * makes it unreachable via the keyboard navigation.
        *
-       * To improve accessibility, disabled buttons can be made focusable so that
-       * screen readers can still reach and properly announce them, including any
-       * attached tooltips and popovers, while still preventing clicks. This is
-       * currently available as an experimental enhancement that can be enabled
-       * with the following feature flag:
+       * While the default behavior effectively prevents accidental interactions,
+       * it has an accessibility drawback: screen readers skip disabled buttons
+       * entirely, and users can't see tooltips that might explain why the button
+       * is disabled. To address this, an experimental enhancement allows disabled
+       * buttons to receive focus and show tooltips, while still preventing other
+       * interactions. This feature can be enabled with the following feature flag:
        *
        * ```
        * // Set before any button is attached to the DOM.
-       * window.Vaadin.featureFlags.accessibleDisabledButtons = true;
+       * window.Vaadin.featureFlags.accessibleDisabledButtons = true
        * ```
        */
       disabled: {
