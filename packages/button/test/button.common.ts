@@ -161,4 +161,50 @@ describe('vaadin-button', () => {
       });
     });
   });
+
+  describe('disabled and accessible', () => {
+    let lastGlobalFocusable: HTMLInputElement;
+
+    before(() => {
+      window.Vaadin.featureFlags ??= {};
+      window.Vaadin.featureFlags.accessibleDisabledButtons = true;
+    });
+
+    after(() => {
+      window.Vaadin.featureFlags!.accessibleDisabledButtons = false;
+    });
+
+    beforeEach(async () => {
+      [button, lastGlobalFocusable] = fixtureSync(
+        `<div>
+          <vaadin-button disabled>Press me</vaadin-button>
+          <input id="last-global-focusable" />
+        </div>`,
+      ).children as unknown as [Button, HTMLInputElement];
+      await nextRender(button);
+    });
+
+    afterEach(async () => {
+      await resetMouse();
+    });
+
+    it('should allow programmatic focus when disabled', () => {
+      button.focus();
+      expect(document.activeElement).to.equal(button);
+    });
+
+    it('should allow pointer focus when disabled', async () => {
+      const { x, y } = middleOfNode(button);
+      await sendMouse({ type: 'click', position: [Math.floor(x), Math.floor(y)] });
+      expect(document.activeElement).to.equal(button);
+    });
+
+    it('should allow keyboard focus when disabled', async () => {
+      await sendKeys({ press: 'Tab' });
+      expect(document.activeElement).to.equal(button);
+
+      await sendKeys({ press: 'Tab' });
+      expect(document.activeElement).to.equal(lastGlobalFocusable);
+    });
+  });
 });

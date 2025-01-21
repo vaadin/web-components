@@ -36,7 +36,26 @@ import { ButtonMixin } from './vaadin-button-mixin.js';
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  */
-declare class Button extends ButtonMixin(ElementMixin(ThemableMixin(ControllerMixin(HTMLElement)))) {}
+declare class Button extends ButtonMixin(ElementMixin(ThemableMixin(ControllerMixin(HTMLElement)))) {
+  /**
+   * When set to true, prevents all user interactions with the button such as
+   * clicking or hovering, and removes the button from the tab order, which
+   * makes it unreachable via the keyboard navigation.
+   *
+   * While the default behavior effectively prevents accidental interactions,
+   * it has an accessibility drawback: screen readers skip disabled buttons
+   * entirely, and users can't see tooltips that might explain why the button
+   * is disabled. To address this, an experimental enhancement allows disabled
+   * buttons to receive focus and show tooltips, while still preventing other
+   * interactions. This feature can be enabled with the following feature flag:
+   *
+   * ```
+   * // Set before any button is attached to the DOM.
+   * window.Vaadin.featureFlags.accessibleDisabledButtons = true
+   * ```
+   */
+  disabled: boolean;
+}
 
 declare global {
   interface HTMLElementTagNameMap {

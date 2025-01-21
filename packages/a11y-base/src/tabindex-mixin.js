@@ -52,6 +52,10 @@ export const TabindexMixin = (superclass) =>
     _disabledChanged(disabled, oldDisabled) {
       super._disabledChanged(disabled, oldDisabled);
 
+      if (this.__shouldAllowFocusWhenDisabled()) {
+        return;
+      }
+
       if (disabled) {
         if (this.tabindex !== undefined) {
           this._lastTabIndex = this.tabindex;
@@ -70,6 +74,10 @@ export const TabindexMixin = (superclass) =>
      * @protected
      */
     _tabindexChanged(tabindex) {
+      if (this.__shouldAllowFocusWhenDisabled()) {
+        return;
+      }
+
       if (this.disabled && tabindex !== -1) {
         this._lastTabIndex = tabindex;
         this.tabindex = -1;
@@ -86,8 +94,19 @@ export const TabindexMixin = (superclass) =>
      * @override
      */
     focus() {
-      if (!this.disabled) {
+      if (!this.disabled || this.__shouldAllowFocusWhenDisabled()) {
         super.focus();
       }
+    }
+
+    /**
+     * Returns whether the component should be focusable when disabled.
+     * Returns false by default.
+     *
+     * @private
+     * @return {boolean}
+     */
+    __shouldAllowFocusWhenDisabled() {
+      return false;
     }
   };

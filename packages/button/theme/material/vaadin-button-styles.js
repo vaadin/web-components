@@ -60,7 +60,7 @@ const button = css`
     vertical-align: middle;
   }
 
-  :host(:hover)::before,
+  :host(:hover:not([disabled]))::before,
   :host([focus-ring])::before {
     opacity: 0.08;
     transition-duration: 0.2s;
@@ -77,7 +77,7 @@ const button = css`
     transition: 0s;
   }
 
-  :host(:hover:not([active]))::after {
+  :host(:hover:not([active]):not([disabled]))::after {
     transform: translate(-50%, -50%) scale(1);
     opacity: 0;
   }
@@ -106,7 +106,7 @@ const button = css`
     background-color: var(--material-secondary-background-color);
   }
 
-  :host([theme~='contained']:hover) {
+  :host([theme~='contained']:not([disabled]):hover) {
     box-shadow: var(--material-shadow-elevation-4dp);
   }
 
@@ -149,7 +149,7 @@ const button = css`
     transform: translate(50%, -50%) scale(0.0000001);
   }
 
-  :host(:hover:not([active])[dir='rtl'])::after {
+  :host(:hover:not([active]):not([disabled])[dir='rtl'])::after {
     transform: translate(50%, -50%) scale(1);
   }
 

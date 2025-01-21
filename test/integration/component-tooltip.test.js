@@ -1,5 +1,7 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, nextRender, tabKeyDown } from '@vaadin/testing-helpers';
+import { fixtureSync, middleOfNode, nextRender, tabKeyDown } from '@vaadin/testing-helpers';
+import { resetMouse, sendKeys, sendMouse } from '@web/test-runner-commands';
+import './not-animated-styles.js';
 import { Button } from '@vaadin/button';
 import { Checkbox } from '@vaadin/checkbox';
 import { CheckboxGroup } from '@vaadin/checkbox-group';
@@ -24,6 +26,12 @@ import { TextField } from '@vaadin/text-field';
 import { TimePicker } from '@vaadin/time-picker';
 import { Tooltip } from '@vaadin/tooltip';
 import { mouseenter, mouseleave } from '@vaadin/tooltip/test/helpers.js';
+
+before(() => {
+  Tooltip.setDefaultFocusDelay(0);
+  Tooltip.setDefaultHoverDelay(0);
+  Tooltip.setDefaultHideDelay(0);
+});
 
 [
   { tagName: Button.is },
@@ -84,12 +92,6 @@ import { mouseenter, mouseleave } from '@vaadin/tooltip/test/helpers.js';
 ].forEach(({ tagName, targetSelector, position, applyShouldNotShowCondition, ariaTargetSelector, children = '' }) => {
   describe(`${tagName} with a slotted tooltip`, () => {
     let element, tooltip, tooltipOverlay;
-
-    before(() => {
-      Tooltip.setDefaultFocusDelay(0);
-      Tooltip.setDefaultHoverDelay(0);
-      Tooltip.setDefaultHideDelay(0);
-    });
 
     beforeEach(() => {
       element = fixtureSync(`
@@ -197,5 +199,52 @@ import { mouseenter, mouseleave } from '@vaadin/tooltip/test/helpers.js';
       await nextRender();
       expect(tooltipOverlay.opened).to.be.false;
     });
+  });
+});
+
+describe('accessible disabled button', () => {
+  let button, tooltip;
+
+  before(() => {
+    window.Vaadin.featureFlags ??= {};
+    window.Vaadin.featureFlags.accessibleDisabledButtons = true;
+  });
+
+  after(() => {
+    window.Vaadin.featureFlags.accessibleDisabledButtons = false;
+  });
+
+  beforeEach(() => {
+    button = fixtureSync(
+      `<div>
+        <vaadin-button disabled>
+          Press me
+          <vaadin-tooltip slot="tooltip" text="Tooltip text"></vaadin-tooltip>
+        </vaadin-button>
+        <input id="last-global-focusable" />
+      </div>`,
+    ).firstElementChild;
+    tooltip = button.querySelector('vaadin-tooltip');
+  });
+
+  afterEach(async () => {
+    await resetMouse();
+  });
+
+  it('should toggle tooltip on hover when button is disabled', async () => {
+    const { x, y } = middleOfNode(button);
+    await sendMouse({ type: 'move', position: [Math.floor(x), Math.floor(y)] });
+    expect(tooltip._overlayElement.opened).to.be.true;
+
+    await sendMouse({ type: 'move', position: [0, 0] });
+    expect(tooltip._overlayElement.opened).to.be.false;
+  });
+
+  it('should toggle tooltip on focus when button is disabled', async () => {
+    await sendKeys({ press: 'Tab' });
+    expect(tooltip._overlayElement.opened).to.be.true;
+
+    await sendKeys({ press: 'Tab' });
+    expect(tooltip._overlayElement.opened).to.be.false;
   });
 });
