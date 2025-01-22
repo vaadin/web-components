@@ -36,31 +36,8 @@ function initIconsMap(iconset, name) {
  */
 export const IconsetMixin = (superClass) =>
   class extends superClass {
-    static get properties() {
-      return {
-        /**
-         * The name of the iconset. Every iconset is required to have its own unique name.
-         * All the SVG icons in the iconset must have IDs conforming to its name.
-         *
-         * See also [`name`](#/elements/vaadin-icon#property-name) property of `vaadin-icon`.
-         */
-        name: {
-          type: String,
-          observer: '__nameChanged',
-          sync: true,
-        },
-        /**
-         * The size of an individual icon. Note that icons must be square.
-         *
-         * When using `vaadin-icon`, the size of the iconset will take precedence
-         * over the size defined by the user to ensure correct appearance.
-         */
-        size: {
-          type: Number,
-          value: 24,
-          sync: true,
-        },
-      };
+    static get observedAttributes() {
+      return ['name', 'size'];
     }
 
     /**
@@ -123,23 +100,75 @@ export const IconsetMixin = (superClass) =>
         initIconsMap(iconset, name);
         iconset.size = size;
         iconset.name = name;
-
-        // Call this function manually instead of using observer
-        // to make it work without appending element to the DOM.
-        iconset.__nameChanged(name);
       }
+    }
+
+    /**
+     * The name of the iconset. Every iconset is required to have its own unique name.
+     * All the SVG icons in the iconset must have IDs conforming to its name.
+     *
+     * See also [`name`](#/elements/vaadin-icon#property-name) property of `vaadin-icon`.
+     *
+     * @return {string}
+     */
+    get name() {
+      return this.__name;
+    }
+
+    /**
+     * @type {string}
+     */
+    set name(name) {
+      const oldName = this.__name;
+      this.__name = name;
+      this.__nameChanged(name, oldName);
+    }
+
+    /**
+     * The size of an individual icon. Note that icons must be square.
+     *
+     * When using `vaadin-icon`, the size of the iconset will take precedence
+     * over the size defined by the user to ensure correct appearance.
+     *
+     * @return {number}
+     */
+    get size() {
+      // Use default property value as a fallback here instead of the constructor
+      // to not override an instance property in the lazy upgrade scenario below.
+      return this.__size !== undefined ? this.__size : 24;
+    }
+
+    /**
+     * @type {number}
+     */
+    set size(size) {
+      this.__size = size;
     }
 
     /** @protected */
     connectedCallback() {
-      super.connectedCallback();
-      this.style.display = 'none';
+      // A user may set a property on an _instance_ of an element
+      // before the custom element is lazily imported and upgraded.
+      // If so, we need to run it through the proper class setter.
+      ['name', 'size'].forEach((prop) => {
+        // eslint-disable-next-line no-prototype-builtins
+        if (this.hasOwnProperty(prop)) {
+          const value = this[prop];
+          delete this[prop];
+          this[prop] = value;
+        }
+      });
 
-      // Store reference and init icons.
-      const { name } = this;
-      iconsetRegistry[name] = this;
-      initIconsMap(this, name);
-      this.__updateIcons(name);
+      this.style.display = 'none';
+    }
+
+    /** @protected */
+    attributeChangedCallback(attr, _oldValue, newValue) {
+      if (attr === 'name') {
+        this.name = newValue;
+      } else if (attr === 'size') {
+        this.size = newValue == null ? null : Number(newValue);
+      }
     }
 
     /**
@@ -159,10 +188,11 @@ export const IconsetMixin = (superClass) =>
     /** @private */
     __nameChanged(name, oldName) {
       if (oldName) {
-        iconsetRegistry[name] = iconsetRegistry[oldName];
         delete iconsetRegistry[oldName];
       }
       if (name) {
+        iconsetRegistry[name] = this;
+        initIconsMap(this, name);
         this.__updateIcons(name);
       }
     }
