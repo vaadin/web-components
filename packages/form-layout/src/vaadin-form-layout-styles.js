@@ -13,6 +13,8 @@ export const formLayoutStyles = css`
     align-self: stretch;
     container-type: inline-size;
     container-name: form-grid;
+    --_label-col-width: var(--vaadin-form-item-label-width, 8em);
+    --_label-col-spacing: var(--vaadin-form-item-label-spacing, 1em);
 
     /* CSS API for host */
     /* Let's not define defaults here – that way they can be set globally
@@ -103,14 +105,13 @@ export const formItemStyles = css`
 
   #label {
     --_not-label-pos: var(--_vaadin-form-layout-label-position, ' ') initial;
-    flex: var(--_not-label-pos, var(--vaadin-form-item-label-width, 8em))
-      var(--_vaadin-form-layout-label-position, auto);
+    flex: var(--_not-label-pos, var(--_label-col-width)) var(--_vaadin-form-layout-label-position, auto);
     flex-shrink: 0;
     flex-grow: 0;
   }
 
   #spacing {
-    width: var(--vaadin-form-item-label-spacing, 1em);
+    width: var(--_label-col-spacing);
     flex: 0 0 auto;
   }
 

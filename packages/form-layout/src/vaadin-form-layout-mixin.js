@@ -147,8 +147,7 @@ export const FormLayoutMixin = (superClass) =>
     }
 
     /** @private */
-    _columnWidthChanged(colWidth) {
-      this.$.layout.style.setProperty('--_vaadin-form-layout-column-width', colWidth);
+    _columnWidthChanged() {
       this._generateContainerQueries();
     }
     /** @private */
@@ -306,13 +305,19 @@ export const FormLayoutMixin = (superClass) =>
       let cols;
       let minWidth;
       let firstCol = true;
+      const labelColWidth = getComputedStyle(this).getPropertyValue('--_label-col-width');
+      const labelColSpacing = getComputedStyle(this).getPropertyValue('--_label-col-spacing');
+      const totalLayoutColWidth = this.labelsAside
+        ? `calc(${labelColWidth} + ${labelColSpacing} + ${this.columnWidth})`
+        : this.columnWidth;
 
       if (this.autoResponsive) {
         // Build queries based on columnWidth
         for (cols = 1; cols <= this.maxColumns; cols++) {
-          minWidth = firstCol ? `0` : `calc(${cols} * ${this.columnWidth} + ${cols - 1} * ${this.columnGap})`;
           labelPos = this.labelsAside ? ' ' : 'initial';
-          cqStyles += this._generateBreakpoint(minWidth, cols, labelPos);
+
+          minWidth = firstCol ? `0` : `calc(${cols} * (${totalLayoutColWidth}) + ${cols - 1} * ${this.columnGap})`;
+          cqStyles += this._generateBreakpoint(minWidth, cols, labelPos, totalLayoutColWidth);
           firstCol = false;
         }
       } else {
@@ -321,7 +326,7 @@ export const FormLayoutMixin = (superClass) =>
           labelPos = step.labelsPosition === 'top' ? 'initial' : ' ';
           cols = Math.min(this.maxColumns, step.columns);
           minWidth = firstCol ? `0` : step.minWidth;
-          cqStyles += this._generateBreakpoint(minWidth, cols, labelPos);
+          cqStyles += this._generateBreakpoint(minWidth, cols, labelPos, this.columnWidth);
           firstCol = false;
         });
       }
@@ -330,12 +335,13 @@ export const FormLayoutMixin = (superClass) =>
     }
 
     /** @private */
-    _generateBreakpoint(minWidth, columns, labelPos) {
+    _generateBreakpoint(minWidth, columns, labelPos, totalLayoutColWidth) {
+      const colWidthOverride = totalLayoutColWidth ? `--_vaadin-form-layout-column-width: ${totalLayoutColWidth};` : ``;
+
       return (
         `@container form-grid (min-width: ${minWidth}) { #layout {` +
         `--_grid-cols: ${columns};` +
-        `--_vaadin-form-layout-label-position: ${labelPos};` +
-        `}}\n`
+        `--_vaadin-form-layout-label-position: ${labelPos};${colWidthOverride}}}\n`
       );
     }
 
