@@ -55,7 +55,7 @@ export const formLayoutStyles = css`
     min-width: min-content;
   }
 
-  #layout ::slotted(*:not(vaadin-grid-row)) {
+  #layout ::slotted(*) {
     grid-column-start: 1;
     grid-column-end: span min(var(--vaadin-form-layout-colspan), var(--_grid-cols));
   }

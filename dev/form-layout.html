@@ -10,6 +10,7 @@
     <script type="module">
       import '@vaadin/form-layout/vaadin-form-layout.js';
       import '@vaadin/form-layout/vaadin-form-item.js';
+      import '@vaadin/form-layout/src/vaadin-form-row.js';
       import '@vaadin/text-field';
       import '@vaadin/password-field';
     </script>
@@ -29,32 +30,37 @@
 
   <body>
     <vaadin-form-layout auto-responsive>
-      <vaadin-form-item>
-        <label slot="label">First name</label>
-        <vaadin-text-field></vaadin-text-field>
-      </vaadin-form-item>
+      <vaadin-form-row>
+        <vaadin-form-item>
+          <label slot="label">First name</label>
+          <vaadin-text-field></vaadin-text-field>
+        </vaadin-form-item>
 
-      <vaadin-form-item>
-        <label slot="label">Last name</label>
-        <vaadin-text-field></vaadin-text-field>
-      </vaadin-form-item>
+        <vaadin-form-item>
+          <label slot="label">Last name</label>
+          <vaadin-text-field></vaadin-text-field>
+        </vaadin-form-item>
+      </vaadin-form-row>
 
       <vaadin-form-item colspan="2">
         <label slot="label">Username</label>
         <vaadin-text-field required></vaadin-text-field>
       </vaadin-form-item>
 
-      <vaadin-form-item>
-        <label slot="label">Password</label>
-        <vaadin-password-field></vaadin-password-field>
-      </vaadin-form-item>
+      <vaadin-form-row>
+      
+        <vaadin-form-item>
+          <label slot="label">Password</label>
+          <vaadin-password-field></vaadin-password-field>
+        </vaadin-form-item>
 
-      <br/>
+        <vaadin-form-item>
+          <label slot="label">Confirm</label>
+          <vaadin-password-field></vaadin-password-field>
+        </vaadin-form-item>
 
-      <vaadin-form-item>
-        <label slot="label">Confirm</label>
-        <vaadin-password-field></vaadin-password-field>
-      </vaadin-form-item>
+      </vaadin-form-row>
+
     </vaadin-form-layout>
   </body>
 </html>
