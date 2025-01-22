@@ -106,7 +106,7 @@ export const FormLayoutMixin = (superClass) =>
           type: Boolean,
           value() {
             const defaultColProp =
-              getComputedStyle(this).getPropertyValue('--vaadin-form-layout-default-column') || 'auto';
+              getComputedStyle(this).getPropertyValue('--vaadin-form-layout-default-column') || '1';
             return defaultColProp === 'auto';
           },
           reflectToAttribute: true,
@@ -280,6 +280,7 @@ export const FormLayoutMixin = (superClass) =>
               );
             }
           });
+          this.autoRows = true;
         }
       } catch (e) {
         if (oldResponsiveSteps && oldResponsiveSteps !== responsiveSteps) {
@@ -318,7 +319,6 @@ export const FormLayoutMixin = (superClass) =>
           labelPos = this.labelsAside ? ' ' : 'initial';
           minWidth = `calc(${cols} * (${totalLayoutColWidth}) + ${cols - 1} * ${this.columnGap})`;
           cqStyles += this._generateBreakpoint(minWidth, cols, labelPos, totalLayoutColWidth);
-          firstCol = false;
         }
       } else {
         // Build queries based on responsiveSteps
