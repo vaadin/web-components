@@ -313,10 +313,10 @@ export const FormLayoutMixin = (superClass) =>
 
       if (this.autoResponsive) {
         // Build queries based on columnWidth
+        cqStyles = this._generateBreakpoint('0', 1, 'initial', this.columnWidth);
         for (cols = 1; cols <= this.maxColumns; cols++) {
           labelPos = this.labelsAside ? ' ' : 'initial';
-
-          minWidth = firstCol ? `0` : `calc(${cols} * (${totalLayoutColWidth}) + ${cols - 1} * ${this.columnGap})`;
+          minWidth = `calc(${cols} * (${totalLayoutColWidth}) + ${cols - 1} * ${this.columnGap})`;
           cqStyles += this._generateBreakpoint(minWidth, cols, labelPos, totalLayoutColWidth);
           firstCol = false;
         }
