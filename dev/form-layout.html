@@ -11,6 +11,7 @@
       import '@vaadin/form-layout/vaadin-form-layout.js';
       import '@vaadin/form-layout/vaadin-form-item.js';
       import '@vaadin/form-layout/src/vaadin-form-row.js';
+      import '@vaadin/form-layout/src/vaadin-form-section.js';
       import '@vaadin/text-field';
       import '@vaadin/password-field';
     </script>
@@ -47,19 +48,23 @@
         <vaadin-text-field required></vaadin-text-field>
       </vaadin-form-item>
 
-      <vaadin-form-row>
-      
-        <vaadin-form-item>
-          <label slot="label">Password</label>
-          <vaadin-password-field></vaadin-password-field>
-        </vaadin-form-item>
+      <vaadin-form-section title="Password Stuff">
+        
+        <vaadin-form-row>
 
-        <vaadin-form-item>
-          <label slot="label">Confirm</label>
-          <vaadin-password-field></vaadin-password-field>
-        </vaadin-form-item>
+          <vaadin-form-item>
+            <label slot="label">Password</label>
+            <vaadin-password-field></vaadin-password-field>
+          </vaadin-form-item>
 
-      </vaadin-form-row>
+          <vaadin-form-item>
+            <label slot="label">Confirm</label>
+            <vaadin-password-field></vaadin-password-field>
+          </vaadin-form-item>
+
+        </vaadin-form-row>
+
+      </vaadin-form-section>
 
     </vaadin-form-layout>
   </body>

@@ -130,3 +130,21 @@ export const formItemStyles = css`
     --_vaadin-form-item-fit-content: 1;
   }
 `;
+
+export const formSectionStyles = css`
+  :host {
+    display: contents;
+  }
+
+  [part~='header'] {
+    grid-column: 1 / -1;
+  }
+
+  [part~='title'] {
+    margin-block: 1em 0;
+  }
+
+  ::slotted(*:first-child) {
+    grid-column-start: 1;
+  }
+`;
