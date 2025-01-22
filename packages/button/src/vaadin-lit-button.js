@@ -6,6 +6,7 @@
 import { html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { useLitComponents } from '@vaadin/component-base/src/lit-flag.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
@@ -49,6 +50,8 @@ class Button extends ButtonMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElem
   }
 }
 
-defineCustomElement(Button);
+if (!window.Vaadin.polymerImports || useLitComponents) {
+  defineCustomElement(Button);
+}
 
 export { Button };

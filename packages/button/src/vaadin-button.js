@@ -3,16 +3,21 @@
  * Copyright (c) 2017 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import '@vaadin/component-base/src/polymer-flag.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { useLitComponents } from '@vaadin/component-base/src/lit-flag.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { buttonStyles, buttonTemplate } from './vaadin-button-base.js';
 import { ButtonMixin } from './vaadin-button-mixin.js';
+import { Button as LitButton } from './vaadin-lit-button.js';
 
-registerStyles('vaadin-button', buttonStyles, { moduleId: 'vaadin-button-styles' });
+if (!useLitComponents) {
+  registerStyles('vaadin-button', buttonStyles, { moduleId: 'vaadin-button-styles' });
+}
 
 /**
  * `<vaadin-button>` is an accessible and customizable button that allows users to perform actions.
@@ -49,7 +54,7 @@ registerStyles('vaadin-button', buttonStyles, { moduleId: 'vaadin-button-styles'
  * @mixes ElementMixin
  * @mixes ThemableMixin
  */
-class Button extends ButtonMixin(ElementMixin(ThemableMixin(ControllerMixin(PolymerElement)))) {
+class PolymerButton extends ButtonMixin(ElementMixin(ThemableMixin(ControllerMixin(PolymerElement)))) {
   static get properties() {
     return {
       /**
@@ -98,6 +103,9 @@ class Button extends ButtonMixin(ElementMixin(ThemableMixin(ControllerMixin(Poly
   }
 }
 
-defineCustomElement(Button);
+if (!useLitComponents) {
+  defineCustomElement(PolymerButton);
+}
 
+const Button = useLitComponents ? LitButton : PolymerButton;
 export { Button };
