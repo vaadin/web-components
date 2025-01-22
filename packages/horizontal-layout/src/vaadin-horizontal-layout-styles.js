@@ -3,7 +3,9 @@
  * Copyright (c) 2017 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { css } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { css, unsafeCSS } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+
+const enableLayoutImprovements = window.Vaadin.featureFlags.layoutImprovements;
 
 export const horizontalLayoutStyles = css`
   :host {
@@ -27,4 +29,18 @@ export const horizontalLayoutStyles = css`
   :host([theme~='spacing']) {
     gap: 1em;
   }
+
+  ${enableLayoutImprovements
+    ? unsafeCSS`
+    ::slotted([style^='width: 100%']),
+    ::slotted([style*=' width: 100%']) {
+      flex: 1;
+    }
+  
+    ::slotted(vaadin-horizontal-layout),
+    ::slotted(vaadin-vertical-layout) {
+      min-width: 0;
+    }
+  `
+    : unsafeCSS``}
 `;
