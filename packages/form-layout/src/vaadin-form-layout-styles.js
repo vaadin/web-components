@@ -60,12 +60,12 @@ export const formLayoutStyles = css`
     grid-column-end: span min(var(--vaadin-form-layout-colspan), var(--_grid-cols));
   }
 
-  :host([auto-rows]) #layout ::slotted(*:not(vaadin-grid-row)) {
-    grid-column-start: auto;
+  :host([auto-rows]) #layout ::slotted(*) {
+    grid-column-start: var(--_vaadin-form-layout-start-col, auto);
   }
 
   #layout ::slotted(br) {
-    display: none;
+    grid-column: 1 / -1;
   }
 
   :host([expand-columns='always']) #layout {
