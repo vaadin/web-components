@@ -3,7 +3,6 @@
  * Copyright (c) 2021 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import type { Icon } from './vaadin-icon.js';
 import type { IconSvgLiteral } from './vaadin-icon-svg.js';
 import { IconsetMixin } from './vaadin-iconset-mixin.js';
@@ -11,7 +10,7 @@ import { IconsetMixin } from './vaadin-iconset-mixin.js';
 /**
  * `<vaadin-iconset>` is a Web Component for creating SVG icon collections.
  */
-declare class Iconset extends ElementMixin(IconsetMixin(HTMLElement)) {
+declare class Iconset extends IconsetMixin(HTMLElement) {
   /**
    * Set of the `vaadin-icon` instances in the DOM.
    */
