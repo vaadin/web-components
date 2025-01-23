@@ -27,6 +27,7 @@ class NotificationContainer extends NotificationContainerMixin(ElementMixin(Them
     return notificationContainerStyles;
   }
 
+  /** @protected */
   render() {
     return html`
       <div region="top-stretch"><slot name="top-stretch"></slot></div>
@@ -64,6 +65,7 @@ class NotificationCard extends ElementMixin(ThemableMixin(PolylitMixin(LitElemen
     return notificationCardStyles;
   }
 
+  /** @protected */
   render() {
     return html`
       <div part="overlay">
@@ -103,6 +105,7 @@ class Notification extends NotificationMixin(ElementMixin(ThemableMixin(PolylitM
     `;
   }
 
+  /** @protected */
   render() {
     return html`
       <vaadin-notification-card
