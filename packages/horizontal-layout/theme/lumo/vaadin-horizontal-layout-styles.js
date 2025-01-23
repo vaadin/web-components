@@ -11,23 +11,23 @@ const horizontalLayout = css`
   }
 
   :host([theme~='spacing-xs']) {
-    gap: var(--lumo-space-xs);
+    --_gap: var(--lumo-space-xs);
   }
 
   :host([theme~='spacing-s']) {
-    gap: var(--lumo-space-s);
+    --_gap: var(--lumo-space-s);
   }
 
-  :host([theme~='spacing']) {
-    gap: var(--lumo-space-m);
+  :host([theme*='spacing']) {
+    gap: var(--_gap);
   }
 
   :host([theme~='spacing-l']) {
-    gap: var(--lumo-space-l);
+    --_gap: var(--lumo-space-l);
   }
 
   :host([theme~='spacing-xl']) {
-    gap: var(--lumo-space-xl);
+    --_gap: var(--_vaadin-spacing-xl);
   }
 
   :host([theme~='wrap']) {

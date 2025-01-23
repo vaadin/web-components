@@ -9,6 +9,12 @@ export const horizontalLayoutStyles = css`
   :host {
     display: flex;
     box-sizing: border-box;
+    --_vaadin-spacing-xs: var(--vaadin-spacing-xs, 0.25rem);
+    --_vaadin-spacing-s: var(--vaadin-spacing-s, 0.5rem);
+    --_vaadin-spacing-m: var(--vaadin-spacing-m, 1rem);
+    --_vaadin-spacing-l: var(--vaadin-spacing-l, 1.5rem);
+    --_vaadin-spacing-xl: var(--vaadin-spacing-xl, 2.5rem);
+    --_gap: var(--_vaadin-spacing-m);
   }
 
   :host([hidden]) {
@@ -25,6 +31,6 @@ export const horizontalLayoutStyles = css`
   }
 
   :host([theme~='spacing']) {
-    gap: 1em;
+    gap: var(--_gap);
   }
 `;
