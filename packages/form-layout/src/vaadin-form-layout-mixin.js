@@ -21,44 +21,7 @@ export const FormLayoutMixin = (superClass) =>
          * @property {number} columns - Number of columns. Only natural numbers are valid.
          * @property {string} labelsPosition - Labels position option, valid values: `"aside"` (default), `"top"`.
          */
-
         /**
-         * Allows specifying a responsive behavior with the number of columns
-         * and the label position depending on the layout width.
-         *
-         * Format: array of objects, each object defines one responsive step
-         * with `minWidth` CSS length, `columns` number, and optional
-         * `labelsPosition` string of `"aside"` or `"top"`. At least one item is required.
-         *
-         * #### Examples
-         *
-         * ```javascript
-         * formLayout.responsiveSteps = [{columns: 1}];
-         * // The layout is always a single column, labels aside.
-         * ```
-         *
-         * ```javascript
-         * formLayout.responsiveSteps = [
-         *   {minWidth: 0, columns: 1},
-         *   {minWidth: '40em', columns: 2}
-         * ];
-         * // Sets two responsive steps:
-         * // 1. When the layout width is < 40em, one column, labels aside.
-         * // 2. Width >= 40em, two columns, labels aside.
-         * ```
-         *
-         * ```javascript
-         * formLayout.responsiveSteps = [
-         *   {minWidth: 0, columns: 1, labelsPosition: 'top'},
-         *   {minWidth: '20em', columns: 1},
-         *   {minWidth: '40em', columns: 2}
-         * ];
-         * // Default value. Three responsive steps:
-         * // 1. Width < 20em, one column, labels on top.
-         * // 2. 20em <= width < 40em, one column, labels aside.
-         * // 3. Width >= 40em, two columns, labels aside.
-         * ```
-         *
          * @type {!Array<!FormLayoutResponsiveStep>}
          */
         responsiveSteps: {
@@ -74,13 +37,38 @@ export const FormLayoutMixin = (superClass) =>
           sync: true,
         },
 
-        /********* NEW APIS ***********/
+        /** @private */
+        __isVisible: {
+          type: Boolean,
+        },
 
+        /********** NEW APIS ***********/
+
+        /**
+         * Switches to the new layout model,
+         * where breakpoints are automatically calculcated
+         * based on columnWidth and the layout's width
+         * (responsiveSteps is ignored, even if set).
+         *
+         * Defaults to false for backward compat with old FormLayout.
+         *
+         * In V25, autoResponsive will default to true and responsiveSteps to null,
+         * and the old behavior can be brought back by setting responsiveSteps.
+         **/
         autoResponsive: {
           type: Boolean,
           value: false,
         },
 
+        /**
+         * The column width.
+         * Defaults to 13em, or --vaadin-form-layout-column-width if defined.
+         *
+         * Has no effect if autoResponsive = false.
+         *
+         * (In labels-aside mode, the width of the label column, and the space between,
+         *  is set separately through css custom properties.)
+         */
         columnWidth: {
           type: String,
           value() {
@@ -89,6 +77,14 @@ export const FormLayoutMixin = (superClass) =>
           observer: '_columnWidthChanged',
         },
 
+        /**
+         * The gap between columns. Defaults to 1em, or --vaadin-form-layout-column-gap if defined.
+         *
+         * When set via component property, sets the -_vaadin-form-layout-column-gap property on the
+         * internal #layout element.
+         *
+         * (The space between label and field in labels-aside mode is set through a css custom proprety.)
+         */
         columnGap: {
           type: String,
           value() {
@@ -97,11 +93,24 @@ export const FormLayoutMixin = (superClass) =>
           observer: '_columnGapChanged',
         },
 
+        /**
+         * Max column count.
+         */
         maxColumns: {
           type: Number,
           value: 10,
         },
 
+        /**
+         * If false, lays each field into a new css-grid-row, unless wrapped into a vaadin-form-row.
+         * If true, lays fields into as many columns as are available (like old FormLayout).
+         *
+         * Defaults to false, or --vaadin-form-layout-default-column if defined, where
+         * --vaadin-form-layout-default-column: 1 ==> false
+         * --vaadin-form-layout-default-column: auto ==> true
+         *
+         * Has currently no effect if autoResponsive = false.
+         */
         autoRows: {
           type: Boolean,
           value() {
@@ -112,6 +121,16 @@ export const FormLayoutMixin = (superClass) =>
           reflectToAttribute: true,
         },
 
+        /**
+         * Expands columns to fill extra available space in the layout.
+         *
+         * Possible values:
+         * - always: always expand columns
+         * - mobile: only expand columns when viewport is smaller than 420px "mobile" breakpoint
+         * - never: never expand columns
+         *
+         * Defaults to 'always', or --vaadin-form-layout-expand-columns, if defined.
+         */
         expandColumns: {
           type: String,
           value() {
@@ -120,6 +139,16 @@ export const FormLayoutMixin = (superClass) =>
           reflectToAttribute: true,
         },
 
+        /**
+         * Makes fields scale (grow/shrink) to fit the column.
+         *
+         * Possible values:
+         * - always: always expand columns
+         * - mobile: only expand columns when viewport is smaller than 420px "mobile" breakpoint
+         * - never: never expand columns
+         *
+         * Defaults to 'always', or --vaadin-form-layout-fit-fields, if defined.
+         */
         fitFields: {
           type: String,
           value() {
@@ -128,6 +157,12 @@ export const FormLayoutMixin = (superClass) =>
           reflectToAttribute: true,
         },
 
+        /**
+         * Sets label position to aside.
+         *
+         * Ignored if autoResponsive = false; ignored when responsiveSteps used.
+         * (Would actually be better if this setting worked as the default for responsiveSteps...)
+         */
         labelsAside: {
           type: Boolean,
           value: false,
@@ -136,13 +171,6 @@ export const FormLayoutMixin = (superClass) =>
             this._generateContainerQueries();
           },
         },
-
-        /***************************************** */
-
-        /** @private */
-        __isVisible: {
-          type: Boolean,
-        },
       };
     }
 
@@ -150,6 +178,7 @@ export const FormLayoutMixin = (superClass) =>
     _columnWidthChanged() {
       this._generateContainerQueries();
     }
+
     /** @private */
     _columnGapChanged(colGap) {
       this.$.layout.style.setProperty('--_vaadin-form-layout-column-gap', colGap);
@@ -280,6 +309,7 @@ export const FormLayoutMixin = (superClass) =>
               );
             }
           });
+          // If valid responsiveSteps set, uses "legacy mode", sets autoRows=false
           this.autoRows = true;
         }
       } catch (e) {
@@ -306,14 +336,21 @@ export const FormLayoutMixin = (superClass) =>
       let cols;
       let minWidth;
       let firstCol = true;
+
+      // Label col and spacing sizes used in labels-aside-mode:
+      // Label col width set either by --vaadin-form-item-label-width or fallback in css
       const labelColWidth = getComputedStyle(this).getPropertyValue('--_label-col-width');
+      // Label col spacing set either by --vaadin-form-item-label-width or fallback in css
       const labelColSpacing = getComputedStyle(this).getPropertyValue('--_label-col-spacing');
+      // In labels-aside-mode, total layout col width is labelCol + labelColSpacing + fieldCol
+      // otherwise simply the columnWidth property's value:
       const totalLayoutColWidth = this.labelsAside
         ? `calc(${labelColWidth} + ${labelColSpacing} + ${this.columnWidth})`
         : this.columnWidth;
 
       if (this.autoResponsive) {
-        // Build queries based on columnWidth
+        // NEW LAYOUT MODEL WITH BREAKPOINTS CALCULATED FROM columnWidth and layout width.
+        // Smallest breakpoint at 0 always sets labels-above:
         cqStyles = this._generateBreakpoint('0', 1, 'initial', this.columnWidth);
         for (cols = 1; cols <= this.maxColumns; cols++) {
           labelPos = this.labelsAside ? ' ' : 'initial';
@@ -321,10 +358,12 @@ export const FormLayoutMixin = (superClass) =>
           cqStyles += this._generateBreakpoint(minWidth, cols, labelPos, totalLayoutColWidth);
         }
       } else {
-        // Build queries based on responsiveSteps
+        // LEGACY LAYOUT MODEL WITH BREAKPOINTS BASED ON responsiveSteps.
         this.responsiveSteps.forEach((step) => {
           labelPos = step.labelsPosition === 'top' ? 'initial' : ' ';
           cols = Math.min(this.maxColumns, step.columns);
+          // First breakpoint should always be at 0 width
+          // (this fixes an issue in old FormLayout that breaks it if it's smaller than smallest step's minWidth)
           minWidth = firstCol ? `0` : step.minWidth;
           cqStyles += this._generateBreakpoint(minWidth, cols, labelPos, this.columnWidth);
           firstCol = false;
@@ -336,24 +375,18 @@ export const FormLayoutMixin = (superClass) =>
 
     /** @private */
     _generateBreakpoint(minWidth, columns, labelPos, totalLayoutColWidth) {
+      // This sets the css-grid column width to the combined label+space+field width
+      // in aside-labels mode, to ensure that the FormLayout doesn't shrink below that:
       const colWidthOverride = totalLayoutColWidth ? `--_vaadin-form-layout-column-width: ${totalLayoutColWidth};` : ``;
 
       return (
         `@container form-grid (min-width: ${minWidth}) { #layout {` +
         `--_grid-cols: ${columns};` +
-        `--_vaadin-form-layout-label-position: ${labelPos};${colWidthOverride}}}\n`
+        `--_vaadin-form-layout-label-position: ${labelPos};` +
+        `${colWidthOverride}}}\n`
       );
     }
 
-    /** @private */
-    /*
-    _generateLabelPositionStyles(labelsAside) {
-      let formItemAlign = labelsAside ? 'baseline' : 'stretch';
-      let formItemFlexDir = labelsAside ? 'row' : 'column';
-      return `--_vaadin-form-item-align-items: ${formItemAlign};` +
-        `--_vaadin-form-item-flex-dir: ${formItemFlexDir};`;
-    }
-*/
     /**
      * Update the layout.
      * @protected
@@ -365,9 +398,17 @@ export const FormLayoutMixin = (superClass) =>
       }
 
       let resetColumn = false;
+      /**
+       * TODO: Iterate through children of vaadin-form-row and vaadin-form-section as well.
+       */
       Array.from(this.children)
         .filter((child) => child.localName === 'br' || getComputedStyle(child).display !== 'none')
         .forEach((child) => {
+          /**
+           * Forces the column to 1 at <br>, so that the following field
+           * is rendered on a new line.
+           * TODO: This also needs to apply to elements following a vaadin-form-row and vaadin-form-section.
+           */
           if (child.localName === 'br') {
             resetColumn = true;
           } else {
