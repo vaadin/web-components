@@ -7,6 +7,12 @@
     <title>Menu bar</title>
     <script type="module" src="./common.js"></script>
 
+    <script>
+      window.Vaadin ||= {};
+      window.Vaadin.featureFlags ||= {};
+      window.Vaadin.featureFlags.useLitComponents = true;
+    </script>
+
     <script type="module">
       import '@vaadin/menu-bar';
       import '@vaadin/tooltip';

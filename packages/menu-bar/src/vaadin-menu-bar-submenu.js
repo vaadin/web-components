@@ -9,6 +9,7 @@ import './vaadin-menu-bar-overlay.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
+import { useLitComponents } from '@vaadin/component-base/src/lit-flag.js';
 import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
 import { SubMenuMixin } from './vaadin-menu-bar-submenu-mixin.js';
 
@@ -57,4 +58,6 @@ class MenuBarSubmenu extends SubMenuMixin(ControllerMixin(ThemePropertyMixin(Pol
   }
 }
 
-defineCustomElement(MenuBarSubmenu);
+if (!useLitComponents) {
+  defineCustomElement(MenuBarSubmenu);
+}

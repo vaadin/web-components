@@ -6,6 +6,7 @@
 import { css, html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
+import { useLitComponents } from '@vaadin/component-base/src/lit-flag.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { ItemMixin } from '@vaadin/item/src/vaadin-item-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
@@ -57,6 +58,8 @@ class MenuBarItem extends ItemMixin(ThemableMixin(DirMixin(PolylitMixin(LitEleme
   }
 }
 
-defineCustomElement(MenuBarItem);
+if (!window.Vaadin.polymerImports || useLitComponents) {
+  defineCustomElement(MenuBarItem);
+}
 
 export { MenuBarItem };

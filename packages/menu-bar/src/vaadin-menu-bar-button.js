@@ -3,23 +3,26 @@
  * Copyright (c) 2019 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { Button } from '@vaadin/button/src/vaadin-button.js';
+import { Button } from '@vaadin/button/src/vaadin-polymer-button.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
+import { useLitComponents } from '@vaadin/component-base/src/lit-flag.js';
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
-registerStyles(
-  'vaadin-menu-bar-button',
-  css`
-    :host {
-      flex-shrink: 0;
-    }
+if (!useLitComponents) {
+  registerStyles(
+    'vaadin-menu-bar-button',
+    css`
+      :host {
+        flex-shrink: 0;
+      }
 
-    :host([slot='overflow']) {
-      margin-inline-end: 0;
-    }
-  `,
-  { moduleId: 'vaadin-menu-bar-button-styles' },
-);
+      :host([slot='overflow']) {
+        margin-inline-end: 0;
+      }
+    `,
+    { moduleId: 'vaadin-menu-bar-button-styles' },
+  );
+}
 
 /**
  * An element used internally by `<vaadin-menu-bar>`. Not intended to be used separately.
@@ -61,4 +64,6 @@ class MenuBarButton extends Button {
   }
 }
 
-defineCustomElement(MenuBarButton);
+if (!useLitComponents) {
+  defineCustomElement(MenuBarButton);
+}

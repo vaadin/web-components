@@ -3,14 +3,77 @@
  * Copyright (c) 2019 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import '@vaadin/component-base/src/polymer-flag.js';
 import './vaadin-menu-bar-submenu.js';
 import './vaadin-menu-bar-button.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { useLitComponents } from '@vaadin/component-base/src/lit-flag.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { MenuBar as LitMenuBar } from './vaadin-lit-menu-bar.js';
 import { MenuBarMixin } from './vaadin-menu-bar-mixin.js';
+
+/**
+ * Polymer based version of `<vaadin-menu-bar>` web component.
+ */
+class PolymerMenuBar extends MenuBarMixin(ElementMixin(ThemableMixin(PolymerElement))) {
+  static get template() {
+    return html`
+      <style>
+        :host {
+          display: block;
+        }
+
+        :host([hidden]) {
+          display: none !important;
+        }
+
+        [part='container'] {
+          position: relative;
+          display: flex;
+          width: 100%;
+          flex-wrap: nowrap;
+          overflow: hidden;
+        }
+      </style>
+
+      <div part="container">
+        <slot></slot>
+        <slot name="overflow"></slot>
+      </div>
+      <vaadin-menu-bar-submenu is-root overlay-class="[[overlayClass]]"></vaadin-menu-bar-submenu>
+
+      <slot name="tooltip"></slot>
+    `;
+  }
+
+  static get is() {
+    return 'vaadin-menu-bar';
+  }
+
+  /** @protected */
+  ready() {
+    super.ready();
+
+    this._tooltipController = new TooltipController(this);
+    this._tooltipController.setManual(true);
+    this.addController(this._tooltipController);
+  }
+
+  /**
+   * Fired when either a submenu item or menu bar button without nested children is clicked.
+   *
+   * @event item-selected
+   * @param {Object} detail
+   * @param {Object} detail.value the selected menu bar item
+   */
+}
+
+if (!useLitComponents) {
+  defineCustomElement(PolymerMenuBar);
+}
 
 /**
  * `<vaadin-menu-bar>` is a Web Component providing a set of horizontally stacked buttons offering
@@ -68,65 +131,12 @@ import { MenuBarMixin } from './vaadin-menu-bar-mixin.js';
  *
  * @fires {CustomEvent<boolean>} item-selected - Fired when a submenu item or menu bar button without children is clicked.
  *
- * @customElement
+ * @customElement vaadin-menu-bar
  * @extends HTMLElement
  * @mixes ElementMixin
  * @mixes MenuBarMixin
  * @mixes ThemableMixin
  */
-class MenuBar extends MenuBarMixin(ElementMixin(ThemableMixin(PolymerElement))) {
-  static get template() {
-    return html`
-      <style>
-        :host {
-          display: block;
-        }
-
-        :host([hidden]) {
-          display: none !important;
-        }
-
-        [part='container'] {
-          position: relative;
-          display: flex;
-          width: 100%;
-          flex-wrap: nowrap;
-          overflow: hidden;
-        }
-      </style>
-
-      <div part="container">
-        <slot></slot>
-        <slot name="overflow"></slot>
-      </div>
-      <vaadin-menu-bar-submenu is-root overlay-class="[[overlayClass]]"></vaadin-menu-bar-submenu>
-
-      <slot name="tooltip"></slot>
-    `;
-  }
-
-  static get is() {
-    return 'vaadin-menu-bar';
-  }
-
-  /** @protected */
-  ready() {
-    super.ready();
-
-    this._tooltipController = new TooltipController(this);
-    this._tooltipController.setManual(true);
-    this.addController(this._tooltipController);
-  }
-
-  /**
-   * Fired when either a submenu item or menu bar button without nested children is clicked.
-   *
-   * @event item-selected
-   * @param {Object} detail
-   * @param {Object} detail.value the selected menu bar item
-   */
-}
-
-defineCustomElement(MenuBar);
+const MenuBar = useLitComponents ? LitMenuBar : PolymerMenuBar;
 
 export { MenuBar };

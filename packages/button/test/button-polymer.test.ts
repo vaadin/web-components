@@ -1,2 +1,2 @@
-import '../vaadin-button.js';
+import '../src/vaadin-polymer-button.js';
 import './button.common.js';

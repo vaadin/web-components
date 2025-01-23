@@ -6,15 +6,18 @@
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
+import { useLitComponents } from '@vaadin/component-base/src/lit-flag.js';
 import { MenuOverlayMixin } from '@vaadin/context-menu/src/vaadin-menu-overlay-mixin.js';
 import { styles } from '@vaadin/context-menu/src/vaadin-menu-overlay-styles.js';
 import { OverlayMixin } from '@vaadin/overlay/src/vaadin-overlay-mixin.js';
 import { overlayStyles } from '@vaadin/overlay/src/vaadin-overlay-styles.js';
 import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
-registerStyles('vaadin-menu-bar-overlay', [overlayStyles, styles], {
-  moduleId: 'vaadin-menu-bar-overlay-styles',
-});
+if (!useLitComponents) {
+  registerStyles('vaadin-menu-bar-overlay', [overlayStyles, styles], {
+    moduleId: 'vaadin-menu-bar-overlay-styles',
+  });
+}
 
 /**
  * An element used internally by `<vaadin-menu-bar>`. Not intended to be used separately.
@@ -44,4 +47,6 @@ export class MenuBarOverlay extends MenuOverlayMixin(OverlayMixin(DirMixin(Thema
   }
 }
 
-defineCustomElement(MenuBarOverlay);
+if (!useLitComponents) {
+  defineCustomElement(MenuBarOverlay);
+}

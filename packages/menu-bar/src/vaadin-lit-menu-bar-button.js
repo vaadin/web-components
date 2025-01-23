@@ -5,6 +5,7 @@
  */
 import { Button } from '@vaadin/button/src/vaadin-lit-button.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
+import { useLitComponents } from '@vaadin/component-base/src/lit-flag.js';
 import { css } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 /**
@@ -64,4 +65,6 @@ class MenuBarButton extends Button {
   }
 }
 
-defineCustomElement(MenuBarButton);
+if (!window.Vaadin.polymerImports || useLitComponents) {
+  defineCustomElement(MenuBarButton);
+}

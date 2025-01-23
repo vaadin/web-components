@@ -8,6 +8,7 @@ import './vaadin-lit-menu-bar-list-box.js';
 import './vaadin-lit-menu-bar-overlay.js';
 import { css, html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
+import { useLitComponents } from '@vaadin/component-base/src/lit-flag.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
 import { SubMenuMixin } from './vaadin-menu-bar-submenu-mixin.js';
@@ -54,4 +55,6 @@ class MenuBarSubmenu extends SubMenuMixin(ThemePropertyMixin(PolylitMixin(LitEle
   }
 }
 
-defineCustomElement(MenuBarSubmenu);
+if (!window.Vaadin.polymerImports || useLitComponents) {
+  defineCustomElement(MenuBarSubmenu);
+}

@@ -6,6 +6,7 @@
 import { html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
+import { useLitComponents } from '@vaadin/component-base/src/lit-flag.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { MenuOverlayMixin } from '@vaadin/context-menu/src/vaadin-menu-overlay-mixin.js';
 import { styles } from '@vaadin/context-menu/src/vaadin-menu-overlay-styles.js';
@@ -46,4 +47,6 @@ export class MenuBarOverlay extends MenuOverlayMixin(OverlayMixin(DirMixin(Thema
   }
 }
 
-defineCustomElement(MenuBarOverlay);
+if (!window.Vaadin.polymerImports || useLitComponents) {
+  defineCustomElement(MenuBarOverlay);
+}
