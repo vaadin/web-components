@@ -110,4 +110,50 @@ describe('vaadin-horizontal-layout', () => {
       expect(wrapper.scrollWidth).to.equal(200);
     });
   });
+
+  describe('layout improvements disabled', () => {
+    let layout, children;
+
+    describe('flex', () => {
+      beforeEach(async () => {
+        layout = fixtureSync(`
+        <vaadin-horizontal-layout>
+          <div></div>
+          <div style="width: 100%"></div>
+          <div style="height: 50px; width: 100%"></div>
+          <div style="min-width: 100%"></div>
+        </vaadin-horizontal-layout>
+      `);
+        children = Array.from(layout.querySelectorAll('*'));
+        await nextFrame();
+      });
+
+      it('should not set flex on any children', () => {
+        children.forEach((child) => {
+          expect(getComputedStyle(child).flex).to.equal('0 1 auto');
+        });
+      });
+    });
+
+    describe('min-width', () => {
+      beforeEach(async () => {
+        layout = fixtureSync(`
+        <vaadin-horizontal-layout>
+          <div></div>
+          <vaadin-button></vaadin-button>
+          <vaadin-horizontal-layout></vaadin-horizontal-layout>
+          <vaadin-vertical-layout></vaadin-vertical-layout>
+        </vaadin-horizontal-layout>
+      `);
+        children = Array.from(layout.querySelectorAll('*'));
+        await nextFrame();
+      });
+
+      it('should not set min-width on any children', () => {
+        children.forEach((child) => {
+          expect(getComputedStyle(child).minWidth).to.equal('auto');
+        });
+      });
+    });
+  });
 });
