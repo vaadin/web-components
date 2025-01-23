@@ -29,6 +29,7 @@ class VirtualList extends VirtualListMixin(ThemableMixin(ElementMixin(PolylitMix
     return [virtualListStyles];
   }
 
+  /** @protected */
   render() {
     return html`
       <div id="items">

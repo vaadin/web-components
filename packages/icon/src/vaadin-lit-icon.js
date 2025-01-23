@@ -26,6 +26,7 @@ import { iconStyles } from './vaadin-icon-styles.js';
 class Icon extends IconMixin(ControllerMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElement))))) {
   static styles = iconStyles;
 
+  /** @protected */
   render() {
     return html`
       <svg
