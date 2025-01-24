@@ -1,7 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { aTimeout, fixtureSync, nextRender, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import '../vaadin-chart.js';
 
 describe('vaadin-chart-series', () => {
   describe('properties', () => {
@@ -256,7 +255,8 @@ describe('vaadin-chart-series', () => {
     });
 
     it('should react to additionalOptions sub property change', () => {
-      series.set('additionalOptions.type', 'line');
+      series.additionalOptions.type = 'line';
+      series.additionalOptions = { ...series.additionalOptions };
       expect(chart.configuration.series[0].type).to.be.equal('line');
     });
   });

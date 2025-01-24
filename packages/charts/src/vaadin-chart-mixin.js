@@ -122,7 +122,10 @@ export const ChartMixin = (superClass) =>
          * For detailed documentation of available API check the [API site](http://api.highcharts.com/class-reference/classes.list)
          * @type {!Highcharts.Chart | undefined}
          */
-        configuration: Object,
+        configuration: {
+          type: Object,
+          sync: true,
+        },
 
         /**
          * If categories are present names are used instead of numbers for the category axis.
@@ -133,6 +136,7 @@ export const ChartMixin = (superClass) =>
         categories: {
           type: Object,
           reflectToAttribute: true,
+          sync: true,
         },
 
         /**
@@ -142,6 +146,7 @@ export const ChartMixin = (superClass) =>
         categoryMax: {
           type: Number,
           reflectToAttribute: true,
+          sync: true,
         },
 
         /**
@@ -151,6 +156,7 @@ export const ChartMixin = (superClass) =>
         categoryMin: {
           type: Number,
           reflectToAttribute: true,
+          sync: true,
         },
 
         /**
@@ -167,6 +173,7 @@ export const ChartMixin = (superClass) =>
         categoryPosition: {
           type: String,
           reflectToAttribute: true,
+          sync: true,
         },
 
         /**
@@ -177,6 +184,7 @@ export const ChartMixin = (superClass) =>
         noLegend: {
           type: Boolean,
           reflectToAttribute: true,
+          sync: true,
         },
 
         /**
@@ -190,6 +198,7 @@ export const ChartMixin = (superClass) =>
         stacking: {
           type: String,
           reflectToAttribute: true,
+          sync: true,
         },
 
         /**
@@ -199,6 +208,7 @@ export const ChartMixin = (superClass) =>
         timeline: {
           type: Boolean,
           reflectToAttribute: true,
+          sync: true,
         },
 
         /**
@@ -208,6 +218,7 @@ export const ChartMixin = (superClass) =>
         title: {
           type: String,
           reflectToAttribute: true,
+          sync: true,
         },
 
         /**
@@ -216,6 +227,7 @@ export const ChartMixin = (superClass) =>
         tooltip: {
           type: Boolean,
           reflectToAttribute: true,
+          sync: true,
         },
 
         /**
@@ -225,6 +237,7 @@ export const ChartMixin = (superClass) =>
         type: {
           type: String,
           reflectToAttribute: true,
+          sync: true,
         },
 
         /**
@@ -234,6 +247,7 @@ export const ChartMixin = (superClass) =>
         subtitle: {
           type: String,
           reflectToAttribute: true,
+          sync: true,
         },
 
         /**
@@ -247,6 +261,7 @@ export const ChartMixin = (superClass) =>
         chart3d: {
           type: Boolean,
           reflectToAttribute: true,
+          sync: true,
         },
 
         /**
@@ -257,6 +272,7 @@ export const ChartMixin = (superClass) =>
         emptyText: {
           type: String,
           reflectToAttribute: true,
+          sync: true,
         },
 
         /**
@@ -266,6 +282,7 @@ export const ChartMixin = (superClass) =>
         additionalOptions: {
           type: Object,
           reflectToAttribute: true,
+          sync: true,
         },
 
         /**
@@ -275,6 +292,7 @@ export const ChartMixin = (superClass) =>
         polar: {
           type: Boolean,
           reflectToAttribute: true,
+          sync: true,
         },
       };
     }
@@ -294,7 +312,7 @@ export const ChartMixin = (superClass) =>
         '__updateSubtitle(subtitle, configuration)',
         '__updateTitle(title, configuration)',
         '__updateType(type, configuration)',
-        '__updateAdditionalOptions(additionalOptions.*)',
+        '__updateAdditionalOptions(additionalOptions)',
       ];
     }
 
@@ -1466,8 +1484,8 @@ export const ChartMixin = (superClass) =>
 
     /** @private */
     __updateAdditionalOptions(options) {
-      if (this.configuration && options.base) {
-        this.updateConfiguration(options.base);
+      if (this.configuration && options) {
+        this.updateConfiguration(options);
       }
     }
 

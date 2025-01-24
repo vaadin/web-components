@@ -1,6 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextFrame, oneEvent } from '@vaadin/testing-helpers';
-import '../vaadin-chart.js';
 import { inflateFunctions } from '../src/helpers.js';
 
 describe('vaadin-chart private API', () => {
