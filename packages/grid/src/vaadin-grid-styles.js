@@ -45,7 +45,7 @@ export const gridStyles = css`
   :host([all-rows-visible]) {
     height: auto;
     align-self: flex-start;
-    flex-shrink: 0;
+    min-height: auto;
     flex-grow: 0;
     width: 100%;
   }
