@@ -1,6 +1,7 @@
 /* eslint-env node */
 const fs = require('fs');
 const { esbuildPlugin } = require('@web/dev-server-esbuild');
+const path = require('path');
 
 const preventFouc = `
   <style>
@@ -19,6 +20,7 @@ const preventFouc = `
   </script>
 `;
 
+/** @type {import('@web/test-runner').TestRunnerConfig} */
 module.exports = {
   plugins: [
     {
@@ -50,6 +52,20 @@ module.exports = {
       },
     },
     esbuildPlugin({ ts: true }),
+    {
+      // Transform Polymer imports to Lit
+      transformImport({ source, context }) {
+        if (context.url.includes('-generated-lit.test')) {
+          const dependencyPath = path.resolve(path.dirname(context.url), source);
+          const litDependencyPath = dependencyPath.replace('/vaadin-', '/vaadin-lit-');
+          const isPolymerDependency = /vaadin-(?!lit).+/u.test(dependencyPath);
+          if (isPolymerDependency && fs.existsSync(`.${litDependencyPath}`)) {
+            return litDependencyPath;
+          }
+        }
+        return source;
+      },
+    },
   ],
   nodeResolve: {
     // Use Lit in production mode

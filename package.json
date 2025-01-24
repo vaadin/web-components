@@ -14,7 +14,7 @@
     "lint:css": "stylelint packages/**/src/*.js packages/**/theme/**/*-styles.js",
     "lint:js": "eslint --ext .js,.ts *.js scripts packages test",
     "lint:types": "tsc",
-    "postinstall": "patch-package",
+    "postinstall": "patch-package & node scripts/generateLitTests.js",
     "prepare": "husky",
     "serve:dist": "web-dev-server --app-index dist/index.html --open",
     "start": "web-dev-server --node-resolve --open /dev",

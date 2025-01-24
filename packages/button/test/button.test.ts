@@ -2,6 +2,7 @@ import { expect } from '@vaadin/chai-plugins';
 import { fire, fixtureSync, middleOfNode, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import { resetMouse, sendKeys, sendMouse } from '@web/test-runner-commands';
 import sinon from 'sinon';
+import '../vaadin-button.js';
 import type { Button } from '../vaadin-button.js';
 
 describe('vaadin-button', () => {
