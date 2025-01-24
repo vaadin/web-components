@@ -53,6 +53,10 @@ describe('vaadin-confirm-dialog', () => {
       overlay = dialog.$.overlay;
     });
 
+    afterEach(() => {
+      confirm.opened = false;
+    });
+
     it('should set opened to false by default', () => {
       expect(confirm.opened).to.be.false;
     });
@@ -137,6 +141,10 @@ describe('vaadin-confirm-dialog', () => {
         headerSlot = overlay.shadowRoot.querySelector('slot[name="header"]');
       });
 
+      afterEach(() => {
+        confirm.opened = false;
+      });
+
       it('should set the header text content using header property', () => {
         const headerNode = headerSlot.assignedNodes()[0];
         expect(headerNode.textContent.trim()).to.equal('Property header');
@@ -160,6 +168,10 @@ describe('vaadin-confirm-dialog', () => {
         await nextRender();
         overlay = confirm.$.dialog.$.overlay;
         headerSlot = overlay.shadowRoot.querySelector('slot[name="header"]');
+      });
+
+      afterEach(() => {
+        confirm.opened = false;
       });
 
       it('should keep the element text content as a message', () => {
@@ -191,6 +203,10 @@ describe('vaadin-confirm-dialog', () => {
         overlay = confirm.$.dialog.$.overlay;
         messageSlot = overlay.shadowRoot.querySelector('[part="message"] > slot');
         await nextUpdate(overlay);
+      });
+
+      afterEach(() => {
+        confirm.opened = false;
       });
 
       it('should set the message text content using message property', () => {
@@ -227,6 +243,10 @@ describe('vaadin-confirm-dialog', () => {
         messageSlot = overlay.shadowRoot.querySelector('[part="message"] > slot');
       });
 
+      afterEach(() => {
+        confirm.opened = false;
+      });
+
       it('should place all the slotted elements in the message slot', () => {
         const nodes = messageSlot.assignedNodes();
         expect(nodes[0].textContent.trim()).to.equal('Confirmation message');
@@ -255,6 +275,10 @@ describe('vaadin-confirm-dialog', () => {
         await nextRender();
         overlay = confirm.$.dialog.$.overlay;
         messageSlot = overlay.shadowRoot.querySelector('[part="message"] > slot');
+      });
+
+      afterEach(() => {
+        confirm.opened = false;
       });
 
       it('should wrap slotted children inside <div> elements', () => {
@@ -293,6 +317,10 @@ describe('vaadin-confirm-dialog', () => {
       confirm = fixtureSync('<vaadin-confirm-dialog opened>Confirmation message</vaadin-confirm-dialog>');
       await nextRender();
       overlay = confirm.$.dialog.$.overlay;
+    });
+
+    afterEach(() => {
+      confirm.opened = false;
     });
 
     describe('confirm', () => {
@@ -450,6 +478,10 @@ describe('vaadin-confirm-dialog', () => {
       overlay = confirm.$.dialog.$.overlay;
     });
 
+    afterEach(() => {
+      confirm.opened = false;
+    });
+
     it('should teleport buttons under overlay when opened', async () => {
       const buttons = Array.from(confirm.querySelectorAll('button'));
       confirm.opened = true;
@@ -503,6 +535,10 @@ describe('vaadin-confirm-dialog', () => {
       confirm = fixtureSync('<vaadin-confirm-dialog opened>Confirmation message</vaadin-confirm-dialog>');
       await nextRender();
       overlay = confirm.$.dialog.$.overlay;
+    });
+
+    afterEach(() => {
+      confirm.opened = false;
     });
 
     it('should dispatch confirm event on confirm button click', () => {
@@ -560,6 +596,10 @@ describe('vaadin-confirm-dialog', () => {
       await nextRender();
       spy = sinon.spy();
       confirm.addEventListener('cancel', spy);
+    });
+
+    afterEach(() => {
+      confirm.opened = false;
     });
 
     it('should close but not cancel dialog by default', () => {
