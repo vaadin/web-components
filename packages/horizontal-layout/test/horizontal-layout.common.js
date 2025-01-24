@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame, nextResize } from '@vaadin/testing-helpers';
 import { getComputedCSSPropertyValue } from './helpers.js';
 
 describe('vaadin-horizontal-layout', () => {
@@ -108,6 +108,254 @@ describe('vaadin-horizontal-layout', () => {
       wrapper.style.width = '200px';
       layout.style.minWidth = '200px';
       expect(wrapper.scrollWidth).to.equal(200);
+    });
+  });
+
+  describe('slots', () => {
+    let layout;
+
+    beforeEach(() => {
+      layout = fixtureSync('<vaadin-horizontal-layout></vaadin-horizontal-layout>');
+    });
+
+    describe('start', () => {
+      it('should set has-start attribute when element added to default slot', async () => {
+        const div = document.createElement('div');
+        layout.appendChild(div);
+        await nextFrame();
+        expect(layout.hasAttribute('has-start')).to.be.true;
+      });
+
+      it('should remove has-start attribute when element removed from default slot', async () => {
+        const div = document.createElement('div');
+        layout.appendChild(div);
+        await nextFrame();
+
+        layout.removeChild(div);
+        await nextFrame();
+        expect(layout.hasAttribute('has-start')).to.be.false;
+      });
+
+      it('should set last-start-child attribute on last element in the default slot', async () => {
+        const div = document.createElement('div');
+        layout.appendChild(div);
+        await nextFrame();
+        expect(div.hasAttribute('last-start-child')).to.be.true;
+
+        const other = document.createElement('div');
+        layout.appendChild(other);
+        await nextFrame();
+        expect(div.hasAttribute('last-start-child')).to.be.false;
+        expect(other.hasAttribute('last-start-child')).to.be.true;
+      });
+
+      it('should remove last-start-child attribute when element is removed', async () => {
+        const div = document.createElement('div');
+        layout.appendChild(div);
+        await nextFrame();
+        expect(div.hasAttribute('last-start-child')).to.be.true;
+
+        layout.removeChild(div);
+        await nextFrame();
+        expect(div.hasAttribute('last-start-child')).to.be.false;
+      });
+    });
+
+    describe('middle', () => {
+      it('should set has-middle attribute when element added to middle slot', async () => {
+        const div = document.createElement('div');
+        div.setAttribute('slot', 'middle');
+        layout.appendChild(div);
+        await nextFrame();
+        expect(layout.hasAttribute('has-middle')).to.be.true;
+      });
+
+      it('should remove has-middle attribute when element removed from middle slot', async () => {
+        const div = document.createElement('div');
+        div.setAttribute('slot', 'middle');
+        layout.appendChild(div);
+        await nextFrame();
+
+        layout.removeChild(div);
+        await nextFrame();
+        expect(layout.hasAttribute('has-middle')).to.be.false;
+      });
+
+      it('should set first-middle-child attribute on first element in the middle slot', async () => {
+        const div = document.createElement('div');
+        div.setAttribute('slot', 'middle');
+        layout.appendChild(div);
+        await nextFrame();
+        expect(div.hasAttribute('first-middle-child')).to.be.true;
+
+        const other = document.createElement('div');
+        other.setAttribute('slot', 'middle');
+        layout.insertBefore(other, div);
+        await nextFrame();
+        expect(div.hasAttribute('first-middle-child')).to.be.false;
+        expect(other.hasAttribute('first-middle-child')).to.be.true;
+      });
+
+      it('should set last-middle-child attribute on last element in the middle slot', async () => {
+        const div = document.createElement('div');
+        div.setAttribute('slot', 'middle');
+        layout.appendChild(div);
+        await nextFrame();
+        expect(div.hasAttribute('last-middle-child')).to.be.true;
+
+        const other = document.createElement('div');
+        other.setAttribute('slot', 'middle');
+        layout.appendChild(other);
+        await nextFrame();
+        expect(div.hasAttribute('last-middle-child')).to.be.false;
+        expect(other.hasAttribute('last-middle-child')).to.be.true;
+      });
+
+      it('should remove first-middle-child attribute when element is removed', async () => {
+        const div = document.createElement('div');
+        div.setAttribute('slot', 'middle');
+        layout.appendChild(div);
+        await nextFrame();
+        expect(div.hasAttribute('first-middle-child')).to.be.true;
+
+        layout.removeChild(div);
+        await nextFrame();
+        expect(div.hasAttribute('first-middle-child')).to.be.false;
+      });
+
+      it('should remove last-middle-child attribute when element is removed', async () => {
+        const div = document.createElement('div');
+        div.setAttribute('slot', 'middle');
+        layout.appendChild(div);
+        await nextFrame();
+        expect(div.hasAttribute('last-middle-child')).to.be.true;
+
+        layout.removeChild(div);
+        await nextFrame();
+        expect(div.hasAttribute('last-middle-child')).to.be.false;
+      });
+    });
+
+    describe('end', () => {
+      it('should set has-end attribute when element added to end slot', async () => {
+        const div = document.createElement('div');
+        div.setAttribute('slot', 'end');
+        layout.appendChild(div);
+        await nextFrame();
+        expect(layout.hasAttribute('has-end')).to.be.true;
+      });
+
+      it('should remove has-end attribute when element removed from end slot', async () => {
+        const div = document.createElement('div');
+        div.setAttribute('slot', 'end');
+        layout.appendChild(div);
+        await nextFrame();
+
+        layout.removeChild(div);
+        await nextFrame();
+        expect(layout.hasAttribute('has-end')).to.be.false;
+      });
+
+      it('should set first-end-child attribute on first element in the end slot', async () => {
+        const div = document.createElement('div');
+        div.setAttribute('slot', 'end');
+        layout.appendChild(div);
+        await nextFrame();
+        expect(div.hasAttribute('first-end-child')).to.be.true;
+
+        const other = document.createElement('div');
+        other.setAttribute('slot', 'end');
+        layout.insertBefore(other, div);
+        await nextFrame();
+        expect(div.hasAttribute('first-end-child')).to.be.false;
+        expect(other.hasAttribute('first-end-child')).to.be.true;
+      });
+
+      it('should remove first-end-child attribute when element is removed', async () => {
+        const div = document.createElement('div');
+        div.setAttribute('slot', 'end');
+        layout.appendChild(div);
+        await nextFrame();
+        expect(div.hasAttribute('first-end-child')).to.be.true;
+
+        layout.removeChild(div);
+        await nextFrame();
+        expect(div.hasAttribute('first-end-child')).to.be.false;
+      });
+    });
+  });
+
+  describe('wrapping', () => {
+    let layout, items;
+
+    beforeEach(() => {
+      layout = fixtureSync(`
+        <vaadin-horizontal-layout style="flex-wrap: wrap">
+          <div style="width: 50px">Div 1</div>
+          <div style="width: 50px">Div 1</div>
+          <div style="width: 50px">Div 1</div>
+          <div style="width: 50px">Div 1</div>
+        </vaadin-horizontal-layout>
+      `);
+      items = [...layout.children];
+    });
+
+    it('should set first-in-row on first item in row on layout resize', async () => {
+      layout.style.width = '100px';
+      await nextResize(layout);
+      expect(items[2].hasAttribute('first-in-row')).to.be.true;
+    });
+
+    it('should remove first-in-row on first item in row on layout resize', async () => {
+      layout.style.width = '100px';
+      await nextResize(layout);
+
+      layout.style.width = '200px';
+      await nextResize(layout);
+      expect(items[2].hasAttribute('first-in-row')).to.be.false;
+    });
+
+    it('should update first-in-row on remaining elements when an element is removed', async () => {
+      layout.style.width = '100px';
+      await nextResize(layout);
+
+      items[0].remove();
+      await nextFrame();
+      expect(items[2].hasAttribute('first-in-row')).to.be.false;
+      expect(items[3].hasAttribute('first-in-row')).to.be.true;
+    });
+
+    it('should remove first-in-row from the element when removing it from default slot', async () => {
+      layout.style.width = '100px';
+      await nextResize(layout);
+
+      items[2].remove();
+      await nextFrame();
+      expect(items[2].hasAttribute('first-in-row')).to.be.false;
+    });
+
+    it('should remove first-in-row from the element when removing it from middle slot', async () => {
+      items[2].setAttribute('slot', 'middle');
+      items[3].setAttribute('slot', 'middle');
+
+      layout.style.width = '100px';
+      await nextResize(layout);
+
+      items[2].remove();
+      await nextFrame();
+      expect(items[2].hasAttribute('first-in-row')).to.be.false;
+    });
+
+    it('should remove first-in-row from the element when removing it from end slot', async () => {
+      items[2].setAttribute('slot', 'end');
+      items[3].setAttribute('slot', 'end');
+
+      layout.style.width = '100px';
+      await nextResize(layout);
+
+      items[2].remove();
+      await nextFrame();
+      expect(items[2].hasAttribute('first-in-row')).to.be.false;
     });
   });
 });
