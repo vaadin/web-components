@@ -5,7 +5,7 @@ const packages = fs.readdirSync('packages');
 
 packages
   .filter((pkg) => {
-    return fs.existsSync(`packages/${pkg}/vaadin-lit-${pkg}.js`);
+    return glob.sync(`packages/${pkg}/vaadin-lit-*`).length > 0;
   })
   .flatMap((pkg) => {
     return glob.sync(`packages/${pkg}/test/*.test.{js,ts}`);

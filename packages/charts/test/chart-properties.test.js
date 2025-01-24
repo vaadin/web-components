@@ -134,7 +134,8 @@ describe('vaadin-chart properties', () => {
     });
 
     it('should react to additionalOptions sub property change', async () => {
-      chart.set('additionalOptions.title.text', 'Reindeer statistics');
+      chart.additionalOptions.title.text = 'Reindeer statistics';
+      chart.additionalOptions = { ...chart.additionalOptions };
       await oneEvent(chart, 'chart-redraw');
       expect(chartContainer.querySelector('.highcharts-title').textContent).to.be.equal('Reindeer statistics');
     });
@@ -239,7 +240,7 @@ describe('vaadin-chart properties', () => {
     });
 
     it('should have tooltips when tooltip is set using additionalOptions', async () => {
-      chart.set('additionalOptions', { tooltip: { enabled: true, pointFormat: 'custom' } });
+      chart.additionalOptions = { tooltip: { enabled: true, pointFormat: 'custom' } };
       await aTimeout(50);
       expect(chart.configuration.tooltip.options.enabled).to.be.true;
     });
