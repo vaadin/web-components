@@ -1,7 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import '../vaadin-chart.js';
 
 describe('vaadin-chart events', () => {
   let chart;
