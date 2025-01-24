@@ -7,18 +7,24 @@
     <title>Select</title>
     <script type="module" src="./common.js"></script>
     <script type="module">
+      import '@vaadin/item';
+      import '@vaadin/list-box';
       import '@vaadin/select';
       import '@vaadin/tooltip';
     </script>
   </head>
   <body>
-    <vaadin-select label="Size">
+    <vaadin-select id="default" label="Size">
       <vaadin-tooltip slot="tooltip" text="Stock availability may vary"></vaadin-tooltip>
     </vaadin-select>
 
-    <script>
-      const select = document.querySelector('vaadin-select');
-      select.items = items = [
+    <vaadin-select id="custom" label="Size"></vaadin-select>
+
+    <script type="module">
+      import { html, render } from 'lit';
+
+      const select1 = document.querySelector('#default');
+      select1.items = [
         { label: 'Show all', value: 'all' },
         { component: 'hr' },
         { label: 'XS (out of stock)', value: 'xs', disabled: true },
@@ -27,6 +33,24 @@
         { label: 'L', value: 'l' },
         { label: 'XL', value: 'xl' },
       ];
+
+      const select2 = document.querySelector('#custom');
+      select2.renderer = (root) => {
+        render(
+          html`
+            <vaadin-list-box>
+              <vaadin-item value="all">Show all</vaadin-item>
+              <hr>
+              <vaadin-item value="xs" disabled>XS (out of stock)</vaadin-item>
+              <vaadin-item value="s">S</vaadin-item>
+              <vaadin-item value="m">M</vaadin-item>
+              <vaadin-item value="l">L</vaadin-item>
+              <vaadin-item value="xl">XL</vaadin-item>
+            </vaadin-list-box>
+          `,
+          root,
+        );
+      };
     </script>
   </body>
 </html>

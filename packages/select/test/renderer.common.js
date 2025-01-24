@@ -11,9 +11,10 @@ describe('renderer', () => {
 
   function generateRendererWithItems(items) {
     return function (root, select) {
-      if (root.firstChild) {
-        root.firstChild.items?.forEach((item, index) => {
+      if (select._menuElement) {
+        select._menuElement.items?.forEach((item, index) => {
           item.textContent = items[index] + (select.__testVar || '');
+          item.value = items[index];
         });
         return;
       }
@@ -54,10 +55,10 @@ describe('renderer', () => {
       expect(overlay.textContent).to.equal('Content');
     });
 
-    it('should clear the content when removing the renderer', async () => {
+    it('should reset the default slot when removing the renderer', async () => {
       select.renderer = null;
       await nextUpdate(select);
-      expect(overlay.childNodes).to.be.empty;
+      expect(overlay.innerHTML).to.be.equal('<slot></slot>');
     });
 
     it('should not override the content on items property change', async () => {

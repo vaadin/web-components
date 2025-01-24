@@ -345,6 +345,8 @@ export const OverlayMixin = (superClass) =>
         this._flushAnimation('closing');
       }
       this._attachOverlay();
+      this._appendAttachedInstance();
+      this.bringToFront();
       if (!this.modeless) {
         this._enterModalState();
       }
@@ -364,7 +366,6 @@ export const OverlayMixin = (superClass) =>
       this._placeholder = document.createComment('vaadin-overlay-placeholder');
       this.parentNode.insertBefore(this._placeholder, this);
       document.body.appendChild(this);
-      this.bringToFront();
     }
 
     /** @private */
@@ -375,6 +376,7 @@ export const OverlayMixin = (superClass) =>
     /** @private */
     _finishClosing() {
       this._detachOverlay();
+      this._removeAttachedInstance();
       this.$.overlay.style.removeProperty('pointer-events');
       this.removeAttribute('closing');
       this.dispatchEvent(new CustomEvent('vaadin-overlay-closed'));
@@ -385,7 +387,7 @@ export const OverlayMixin = (superClass) =>
       if (this.hasAttribute('opening')) {
         this._flushAnimation('opening');
       }
-      if (this._placeholder) {
+      if (this._isAttached) {
         this._exitModalState();
         this.setAttribute('closing', '');
         this.dispatchEvent(new CustomEvent('vaadin-overlay-closing'));

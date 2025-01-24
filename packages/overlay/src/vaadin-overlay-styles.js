@@ -65,3 +65,23 @@ export const overlayStyles = css`
     pointer-events: auto;
   }
 `;
+
+/**
+ * Styles used to override certain browser defaults for native `[popover]`.
+ * - https://github.com/chromium/chromium/blob/8726218/third_party/blink/renderer/core/html/resources/html.css#L1495-L1506
+ * - https://searchfox.org/mozilla-central/rev/f41e8cacb8e8ce254204e2526e98d49d024f1674/layout/style/res/html.css#891
+ */
+export const popoverOverlayStyles = css`
+  :host {
+    /* Needed for proper positioning */
+    width: auto;
+    height: auto;
+    /* Reset visuals */
+    border: none;
+    margin: 0;
+    padding: 0;
+    background-color: transparent;
+    /* Do not clip shadows */
+    overflow: visible;
+  }
+`;

@@ -6,7 +6,7 @@
 import { css, html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
-import { overlayStyles } from '@vaadin/overlay/src/vaadin-overlay-styles.js';
+import { overlayStyles, popoverOverlayStyles } from '@vaadin/overlay/src/vaadin-overlay-styles.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { SelectOverlayMixin } from './vaadin-select-overlay-mixin.js';
 
@@ -26,6 +26,7 @@ class SelectOverlay extends SelectOverlayMixin(ThemableMixin(PolylitMixin(LitEle
   static get styles() {
     return [
       overlayStyles,
+      popoverOverlayStyles,
       css`
         :host {
           align-items: flex-start;

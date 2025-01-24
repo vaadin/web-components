@@ -79,7 +79,7 @@ describe('vaadin-select', () => {
       await nextUpdate(select);
       const listBox = select._menuElement;
       expect(listBox.isConnected).to.be.true;
-      expect(listBox.parentNode).to.equal(select._overlayElement);
+      expect(listBox.parentNode).to.equal(select);
     });
 
     it('should have position set to relative', () => {
@@ -416,11 +416,11 @@ describe('vaadin-select', () => {
         expect(focusedSpy.called).to.be.true;
       });
 
-      it('should focus the button before moving the focus to next selectable element', async () => {
+      it('should not focus the button on menu item Tab before moving the focus', async () => {
         const focusedSpy = sinon.spy(valueButton, 'focus');
         tab(menu);
         await nextUpdate(select);
-        expect(focusedSpy.called).to.be.true;
+        expect(focusedSpy.called).to.be.false;
       });
 
       it('should close the overlay when clicking on the overlay', async () => {

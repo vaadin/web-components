@@ -5,7 +5,7 @@
  */
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
-import { overlayStyles } from '@vaadin/overlay/src/vaadin-overlay-styles.js';
+import { overlayStyles, popoverOverlayStyles } from '@vaadin/overlay/src/vaadin-overlay-styles.js';
 import { css, registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { SelectOverlayMixin } from './vaadin-select-overlay-mixin.js';
 
@@ -26,7 +26,7 @@ const selectOverlayStyles = css`
   }
 `;
 
-registerStyles('vaadin-select-overlay', [overlayStyles, selectOverlayStyles], {
+registerStyles('vaadin-select-overlay', [overlayStyles, popoverOverlayStyles, selectOverlayStyles], {
   moduleId: 'vaadin-select-overlay-styles',
 });
 

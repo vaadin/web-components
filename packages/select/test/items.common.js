@@ -11,7 +11,7 @@ describe('items', () => {
     overlay = select.shadowRoot.querySelector('vaadin-select-overlay');
     select.opened = true;
     await oneEvent(overlay, 'vaadin-overlay-open');
-    listBox = overlay.querySelector('vaadin-select-list-box');
+    listBox = select.querySelector('vaadin-select-list-box');
   });
 
   it('should render items', () => {
@@ -38,22 +38,22 @@ describe('items', () => {
     expect(listBox.childNodes[0].value).to.equal('new-value');
   });
 
-  it('should clear the content when setting items property to an empty array', async () => {
+  it('should restore default slot when setting items property to an empty array', async () => {
     select.items = [];
     await nextUpdate(select);
-    expect(overlay.childNodes).to.be.empty;
+    expect(overlay.innerHTML.trim()).to.be.equal('<slot></slot>');
   });
 
-  it('should clear the content when setting items property to null', async () => {
+  it('should restore default slot when setting items property to null', async () => {
     select.items = null;
     await nextUpdate(select);
-    expect(overlay.childNodes).to.be.empty;
+    expect(overlay.innerHTML.trim()).to.be.equal('<slot></slot>');
   });
 
-  it('should clear the content when setting items property to undefined', async () => {
+  it('should restore default slot when setting items property to undefined', async () => {
     select.items = undefined;
     await nextUpdate(select);
-    expect(overlay.childNodes).to.be.empty;
+    expect(overlay.innerHTML.trim()).to.be.equal('<slot></slot>');
   });
 
   it('should render item with a custom component', async () => {
@@ -92,7 +92,7 @@ describe('items', () => {
     it('should render items when removing the renderer', async () => {
       select.renderer = null;
       await nextUpdate(select);
-      const newListBox = overlay.querySelector('vaadin-select-list-box');
+      const newListBox = select.querySelector('vaadin-select-list-box');
       expect(newListBox).to.be.ok;
       expect(newListBox.childNodes).to.have.lengthOf(1);
       expect(newListBox.childNodes[0].textContent).to.equal('Option 1');

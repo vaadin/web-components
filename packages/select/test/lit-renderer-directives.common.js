@@ -37,12 +37,12 @@ describe('lit renderer directives', () => {
       });
 
       it('should render the content with the renderer', () => {
-        expect(overlay.textContent).to.equal('Content');
+        expect(overlay.textContent.trim()).to.equal('Content');
       });
 
       it('should re-render the content when a renderer dependency changes', async () => {
         await renderOpenedSelect(container, { content: 'New Content' });
-        expect(overlay.textContent).to.equal('New Content');
+        expect(overlay.textContent.trim()).to.equal('New Content');
       });
     });
 

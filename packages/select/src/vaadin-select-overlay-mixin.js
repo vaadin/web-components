@@ -20,15 +20,34 @@ export const SelectOverlayMixin = (superClass) =>
     }
 
     /** @protected */
-    ready() {
-      super.ready();
+    _attachOverlay() {
+      this.setAttribute('popover', 'manual');
+      this.showPopover();
+    }
 
-      this.restoreFocusOnClose = true;
+    /** @protected */
+    _detachOverlay() {
+      this.hidePopover();
+    }
+
+    /**
+     * @protected
+     * @override
+     */
+    _shouldRestoreFocus() {
+      // Default implementation checks for element to be either in body
+      // or a child of the overlay, but in select it's actually slotted
+      // so we override the check here to always restore focus on close
+      // except for Tab key, when `restoreFocusOnClose` is set to false.
+      return true;
     }
 
     /** @protected */
     _getMenuElement() {
-      return Array.from(this.children).find((el) => el.localName !== 'style');
+      return (
+        this.owner.querySelector('vaadin-select-list-box') ||
+        Array.from(this.children).find((el) => el.localName !== 'style' && el.localName !== 'slot')
+      );
     }
 
     /** @private */

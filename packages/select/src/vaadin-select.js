@@ -188,8 +188,11 @@ class Select extends SelectBaseMixin(ElementMixin(ThemableMixin(PolymerElement))
         phone$="[[_phone]]"
         theme$="[[_theme]]"
         no-vertical-overlap$="[[noVerticalOverlap]]"
+        restore-focus-on-close="[[__shouldRestoreFocus]]"
         on-vaadin-overlay-open="_onOverlayOpen"
-      ></vaadin-select-overlay>
+      >
+        <slot></slot>
+      </vaadin-select-overlay>
 
       <slot name="tooltip"></slot>
       <div class="sr-only">
@@ -239,6 +242,7 @@ class Select extends SelectBaseMixin(ElementMixin(ThemableMixin(PolymerElement))
   _onOverlayOpen() {
     if (this._menuElement) {
       this._menuElement.focus();
+      this.__shouldRestoreFocus = true;
     }
   }
 

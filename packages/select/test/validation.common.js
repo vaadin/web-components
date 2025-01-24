@@ -187,6 +187,7 @@ describe('validation', () => {
       await sendKeys({ press: 'ArrowUp' });
       await sendKeys({ press: 'Enter' });
       await nextUpdate(select);
+      expect(select.value).to.be.equal('');
       expect(select.invalid).to.be.true;
     });
   });

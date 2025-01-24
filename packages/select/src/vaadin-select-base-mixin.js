@@ -152,6 +152,13 @@ export const SelectBaseMixin = (superClass) =>
 
         /** @private */
         _items: Object,
+
+        /** @private */
+        __shouldRestoreFocus: {
+          type: Boolean,
+          value: true,
+          sync: true,
+        },
       };
     }
 
@@ -219,10 +226,6 @@ export const SelectBaseMixin = (superClass) =>
       }
 
       this._overlayElement.requestContentUpdate();
-
-      if (this._menuElement && this._menuElement.items) {
-        this._updateSelectedItem(this.value, this._menuElement.items);
-      }
     }
 
     /**
@@ -251,12 +254,28 @@ export const SelectBaseMixin = (superClass) =>
       }
     }
 
+    /** @private */
+    __ensureDefaultSlot() {
+      // Custom renderer might remove the slot attribute defined
+      // in the `vaadin-select` template. If so, we restore it.
+      if (this._overlayElement && !this._overlayElement.querySelector('slot')) {
+        const slot = document.createElement('slot');
+        this._overlayElement.appendChild(slot);
+      }
+    }
+
     /**
      * @param {HTMLElement} menuElement
      * @protected
      */
     _assignMenuElement(menuElement) {
       if (menuElement && menuElement !== this.__lastMenuElement) {
+        // Make sure list-box and items are placed in the light DOM
+        if (menuElement.parentNode !== this) {
+          this.__ensureDefaultSlot();
+          this.appendChild(menuElement);
+        }
+
         this._menuElement = menuElement;
 
         // Ensure items are initialized
@@ -282,6 +301,12 @@ export const SelectBaseMixin = (superClass) =>
 
         // Store the menu element reference
         this.__lastMenuElement = menuElement;
+      }
+
+      // When the renderer was re-assigned so that menu element is preserved
+      // but its items have changed, make sure selected property is updated.
+      if (this._menuElement && this._menuElement.items) {
+        this._updateSelectedItem(this.value, this._menuElement.items);
       }
     }
 
@@ -359,6 +384,7 @@ export const SelectBaseMixin = (superClass) =>
      */
     _onKeyDownInside(e) {
       if (/^(Tab)$/u.test(e.key)) {
+        this.__shouldRestoreFocus = false;
         this.opened = false;
       }
     }
@@ -390,7 +416,7 @@ export const SelectBaseMixin = (superClass) =>
           this.removeAttribute('focus-ring');
         }
       } else if (this.__oldOpened) {
-        if (this._openedWithFocusRing) {
+        if (this._openedWithFocusRing && this.__shouldRestoreFocus) {
           this.setAttribute('focus-ring', '');
         }
 
@@ -590,8 +616,16 @@ export const SelectBaseMixin = (superClass) =>
      * @protected
      * @override
      */
-    _shouldRemoveFocus() {
-      return !this.opened;
+    _shouldRemoveFocus(event) {
+      // Component is about to be closed by Tab, remove focus.
+      if (!this.__shouldRestoreFocus) {
+        return true;
+      }
+
+      // With native popover, the overlay item focusout event bubbles to the host,
+      // so we need to ignore it here in order to not call `_setFocused(false)`
+      // as focus is about to be immediately restored on overlay close.
+      return !this.opened && !event.composedPath().includes(this._overlayElement);
     }
 
     /**
@@ -625,16 +659,21 @@ export const SelectBaseMixin = (superClass) =>
      * @param {!Select} _select
      * @private
      */
-    __defaultRenderer(root, _select) {
+    __defaultRenderer(root, select) {
       if (!this.items || this.items.length === 0) {
-        root.textContent = '';
+        root.innerHTML = '<slot></slot>';
         return;
       }
 
-      let listBox = root.firstElementChild;
+      this.__ensureDefaultSlot();
+
+      // Append list-box to the select element, so it remains in the light DOM
+      // (and then gets slotted in the overlay) to allow global CSS for items.
+      let listBox = select._menuElement;
       if (!listBox) {
         listBox = document.createElement('vaadin-select-list-box');
-        root.appendChild(listBox);
+        select.appendChild(listBox);
+        select._menuElement = listBox;
       }
 
       listBox.textContent = '';
