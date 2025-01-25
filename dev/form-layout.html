@@ -17,23 +17,27 @@
     </script>
 
     <style>
-    /*
-      vaadin-form-item > *:not(label) {
+
+      h1 {
         width: 100%;
-      }
-*/
-      html {
-        x--vaadin-form-layout-column-width: 15em;
-        x--vaadin-form-layout-expand-columns: mobile;
+        background: yellow;
+        margin-block: 0.5em;
       }
     </style>
   </head>
 
   <body>
-    <vaadin-form-layout auto-responsive labels-aside>
+
+  <h1>New</h1>
+    <vaadin-form-layout auto-responsive column-width="200px">
       <vaadin-form-row>
         <vaadin-form-item>
           <label slot="label">First name</label>
+          <vaadin-text-field></vaadin-text-field>
+        </vaadin-form-item>
+
+        <vaadin-form-item>
+          <label slot="label">Middle name</label>
           <vaadin-text-field></vaadin-text-field>
         </vaadin-form-item>
 
@@ -43,7 +47,7 @@
         </vaadin-form-item>
       </vaadin-form-row>
 
-      <vaadin-form-item colspan="2">
+      <vaadin-form-item >
         <label slot="label">Username</label>
         <vaadin-text-field required></vaadin-text-field>
       </vaadin-form-item>
@@ -67,5 +71,42 @@
       </vaadin-form-section>
 
     </vaadin-form-layout>
+
+
+    <br><br>
+    <h1>Legacy</h1>
+    <vaadin-form-layout>
+
+      <vaadin-form-item>
+        <label slot="label">First name</label>
+        <vaadin-text-field></vaadin-text-field>
+      </vaadin-form-item>
+
+      <vaadin-form-item>
+        <label slot="label">Last name</label>
+        <vaadin-text-field></vaadin-text-field>
+      </vaadin-form-item>
+
+      <br/>
+
+      <vaadin-form-item colspan="2">
+        <label slot="label">Username</label>
+        <vaadin-text-field required></vaadin-text-field>
+      </vaadin-form-item>
+
+      <br/>
+
+      <vaadin-form-item>
+        <label slot="label">Password</label>
+        <vaadin-password-field></vaadin-password-field>
+      </vaadin-form-item>
+
+      <vaadin-form-item>
+        <label slot="label">Confirm</label>
+        <vaadin-password-field></vaadin-password-field>
+      </vaadin-form-item>
+
+    </vaadin-form-layout>
+
   </body>
 </html>
