@@ -1,23 +1,23 @@
 const fs = require('fs');
-const path = require('path');
 const glob = require('glob');
 
-const litPackages = fs.readdirSync('packages').filter((package) => {
-  return fs.existsSync(`packages/${package}/vaadin-lit-${package}.js`);
-});
+const packages = fs.readdirSync('packages');
 
-litPackages
-  .flatMap((package) => {
-    return glob.sync(`packages/${package}/test/*.test.{js,ts}`);
+packages
+  .filter((pkg) => {
+    return fs.existsSync(`packages/${pkg}/vaadin-lit-${pkg}.js`);
+  })
+  .flatMap((pkg) => {
+    return glob.sync(`packages/${pkg}/test/*.test.{js,ts}`);
   })
   .filter((testPath) => {
-    return !/(-polymer|-lit)\.test/u.test(testPath);
+    return !/(-polymer|-lit)(\.generated)?\.test/u.test(testPath);
   })
   .forEach((testPath) => {
-    const litTestPath = testPath.replace('.test.', '-generated-lit.test.');
-    if (fs.existsSync(litTestPath)) {
-      return;
-    }
+    console.log(testPath);
+    const generatedLitTestPath = testPath.replace('.test.', '-lit.generated.test.');
 
-    fs.symlinkSync(path.relative(path.dirname(testPath), testPath), litTestPath, 'file');
+    if (!fs.existsSync(generatedLitTestPath)) {
+      fs.symlinkSync(fs.realpathSync(testPath), generatedLitTestPath);
+    }
   });
