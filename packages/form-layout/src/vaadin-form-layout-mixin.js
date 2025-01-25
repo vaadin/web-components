@@ -335,7 +335,6 @@ export const FormLayoutMixin = (superClass) =>
       let labelPos;
       let cols;
       let minWidth;
-      let firstCol = true;
 
       // Label col and spacing sizes used in labels-aside-mode:
       // Label col width set either by --vaadin-form-item-label-width or fallback in css
@@ -352,6 +351,7 @@ export const FormLayoutMixin = (superClass) =>
         // NEW LAYOUT MODEL WITH BREAKPOINTS CALCULATED FROM columnWidth and layout width.
         // Smallest breakpoint at 0 always sets labels-above:
         cqStyles = this._generateBreakpoint('0', 1, 'initial', this.columnWidth);
+        // Remaining breakpoints calculated based on totalLayoutColWidth
         for (cols = 1; cols <= this.maxColumns; cols++) {
           labelPos = this.labelsAside ? ' ' : 'initial';
           minWidth = `calc(${cols} * (${totalLayoutColWidth}) + ${cols - 1} * ${this.columnGap})`;
@@ -359,14 +359,12 @@ export const FormLayoutMixin = (superClass) =>
         }
       } else {
         // LEGACY LAYOUT MODEL WITH BREAKPOINTS BASED ON responsiveSteps.
+        // Smallest breakpoint at 0 always sets labels-above (this is a fix over actual legacy)
+        cqStyles = this._generateBreakpoint('0', 1, 'initial', this.columnWidth);
         this.responsiveSteps.forEach((step) => {
           labelPos = step.labelsPosition === 'top' ? 'initial' : ' ';
           cols = Math.min(this.maxColumns, step.columns);
-          // First breakpoint should always be at 0 width
-          // (this fixes an issue in old FormLayout that breaks it if it's smaller than smallest step's minWidth)
-          minWidth = firstCol ? `0` : step.minWidth;
-          cqStyles += this._generateBreakpoint(minWidth, cols, labelPos, this.columnWidth);
-          firstCol = false;
+          cqStyles += this._generateBreakpoint(step.minWidth, cols, labelPos, this.columnWidth);
         });
       }
 
