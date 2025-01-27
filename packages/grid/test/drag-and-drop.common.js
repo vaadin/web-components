@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
+import { resetMouse, sendMouse } from '@vaadin/test-runner-commands';
 import { aTimeout, fixtureSync, listenOnce, nextFrame, oneEvent } from '@vaadin/testing-helpers';
-import { resetMouse, sendMouse } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import { hover } from '@vaadin/button/test/visual/helpers.js';
 import { flushGrid, getBodyCellContent, getFirstCell, getRowBodyCells, getRows } from './helpers.js';

@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
+import { resetMouse, sendMouse } from '@vaadin/test-runner-commands';
 import { fixtureSync, listenOnce, nextRender, nextResize } from '@vaadin/testing-helpers';
-import { resetMouse, sendMouse } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import { isElementFocused } from '@vaadin/a11y-base/src/focus-utils.js';
 import { setNormalizedScrollLeft } from '@vaadin/component-base/src/dir-utils.js';

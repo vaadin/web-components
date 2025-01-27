@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
+import { setViewport } from '@vaadin/test-runner-commands';
 import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
-import { setViewport } from '@web/test-runner-commands';
 import '../../src/vaadin-app-layout.js';
 import '../../vaadin-drawer-toggle.js';
 

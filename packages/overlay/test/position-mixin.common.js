@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
+import { setViewport } from '@vaadin/test-runner-commands';
 import { fixtureSync, nextRender, nextUpdate, oneEvent } from '@vaadin/testing-helpers';
-import { setViewport } from '@web/test-runner-commands';
 
 describe('position mixin', () => {
   const TOP = 'top';

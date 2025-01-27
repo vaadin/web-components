@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
+import { setViewport } from '@vaadin/test-runner-commands';
 import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
-import { setViewport } from '@web/test-runner-commands';
 import '../../vaadin-crud.js';
 import { resetUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 

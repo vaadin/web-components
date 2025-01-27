@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
+import { sendKeys, setViewport } from '@vaadin/test-runner-commands';
 import { aTimeout, fixtureSync, nextRender, nextUpdate, outsideClick, tabKeyDown, tap } from '@vaadin/testing-helpers';
-import { sendKeys, setViewport } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import { getFocusableCell, open, touchTap, waitForOverlayRender } from './helpers.js';
 

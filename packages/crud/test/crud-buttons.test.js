@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
+import { setViewport } from '@vaadin/test-runner-commands';
 import { aTimeout, change, fire, fixtureSync, listenOnce, nextRender, oneEvent } from '@vaadin/testing-helpers';
-import { setViewport } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import '../src/vaadin-crud.js';
 import { flushGrid } from './helpers.js';

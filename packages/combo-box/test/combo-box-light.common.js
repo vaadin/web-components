@@ -1,4 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
+import { sendKeys } from '@vaadin/test-runner-commands';
 import {
   arrowDownKeyDown,
   click,
@@ -12,7 +13,6 @@ import {
   touchend,
   touchstart,
 } from '@vaadin/testing-helpers';
-import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import '@vaadin/text-field/vaadin-text-field.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
