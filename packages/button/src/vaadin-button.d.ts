@@ -36,7 +36,26 @@ import { ButtonMixin } from './vaadin-button-mixin.js';
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  */
-declare class Button extends ButtonMixin(ElementMixin(ThemableMixin(ControllerMixin(HTMLElement)))) {}
+declare class Button extends ButtonMixin(ElementMixin(ThemableMixin(ControllerMixin(HTMLElement)))) {
+  /**
+   * When disabled, the button is rendered as "dimmed" and prevents all
+   * user interactions (mouse and keyboard).
+   *
+   * Since disabled buttons are not focusable and cannot react to hover
+   * events by default, it can cause accessibility issues by making them
+   * entirely invisible to assistive technologies, and prevents the use
+   * of Tooltips to explain why the action is not available. This can be
+   * addressed by enabling the feature flag `accessibleDisabledButtons`,
+   * which makes disabled buttons focusable and hoverable, while still
+   * preventing them from being triggered:
+   *
+   * ```
+   * // Set before any button is attached to the DOM.
+   * window.Vaadin.featureFlags.accessibleDisabledButtons = true
+   * ```
+   */
+  disabled: boolean;
+}
 
 declare global {
   interface HTMLElementTagNameMap {

@@ -67,6 +67,19 @@ describe('tabindex-mixin', () => {
       element.disabled = false;
       expect(element.getAttribute('tabindex')).to.be.equal('2');
     });
+
+    it('should allow programmatic focus when enabled', () => {
+      element.tabIndex = 0;
+      element.focus();
+      expect(document.activeElement).to.equal(element);
+    });
+
+    it('should not allow programmatic focus when disabled', () => {
+      element.tabIndex = 0;
+      element.disabled = true;
+      element.focus();
+      expect(document.activeElement).to.equal(document.body);
+    });
   });
 
   describe('custom', () => {

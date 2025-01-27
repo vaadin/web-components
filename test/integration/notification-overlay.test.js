@@ -85,7 +85,6 @@ describe('notification and overlays', () => {
               const close = document.createElement('button');
               close.textContent = 'Close and show notification';
               close.addEventListener('click', () => {
-                console.log('close and show');
                 notification.opened = true;
                 dialog2.opened = false;
               });

@@ -158,6 +158,23 @@ describe('resizing', () => {
       component.style.flexDirection = 'row';
       expect(grid.getBoundingClientRect().width).to.be.above(780);
     });
+
+    it('should not shrink vertically inside a column flexbox with another child', () => {
+      grid.size = 5;
+
+      component.style.height = '500px';
+      grid.after(fixtureSync('<div style="height: 100%"></div>'));
+
+      expect(grid._firstVisibleIndex).to.equal(0);
+      expect(grid._lastVisibleIndex).to.equal(grid.size - 1);
+    });
+
+    it('should shrink horizontally inside a row flexbox with another child', () => {
+      component.style.flexDirection = 'row';
+      grid.after(fixtureSync('<div style="height: 100%; width: 100px;"></div>'));
+
+      expect(grid.getBoundingClientRect().width).to.be.below(780);
+    });
   });
 });
 

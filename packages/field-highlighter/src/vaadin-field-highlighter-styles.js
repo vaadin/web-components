@@ -65,7 +65,7 @@ export const userTagsOverlayStyles = css`
     box-shadow: none;
   }
 
-  [part='overlay'] {
+  :scope [part='overlay'] {
     box-shadow: none;
     background: transparent;
     position: relative;
@@ -86,7 +86,7 @@ export const userTagsOverlayStyles = css`
     right: -4px;
   }
 
-  [part='content'] {
+  :scope [part='content'] {
     padding: 0;
   }
 

@@ -5,11 +5,11 @@
  */
 import './vaadin-user-tag.js';
 import './vaadin-user-tags-overlay.js';
-import { calculateSplices } from '@polymer/polymer/lib/utils/array-splice.js';
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { css, html, LitElement } from 'lit';
 import { timeOut } from '@vaadin/component-base/src/async.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
+import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 
 const listenOnce = (elem, type) => {
   return new Promise((resolve) => {
@@ -28,24 +28,28 @@ const listenOnce = (elem, type) => {
  * @extends HTMLElement
  * @private
  */
-export class UserTags extends PolymerElement {
+export class UserTags extends PolylitMixin(LitElement) {
   static get is() {
     return 'vaadin-user-tags';
   }
 
-  static get template() {
+  static get styles() {
+    return css`
+      :host {
+        position: absolute;
+      }
+    `;
+  }
+
+  /** @protected */
+  render() {
     return html`
-      <style>
-        :host {
-          position: absolute;
-        }
-      </style>
       <vaadin-user-tags-overlay
         id="overlay"
         modeless
-        opened="[[opened]]"
+        .opened="${this.opened}"
         no-vertical-overlap
-        on-vaadin-overlay-open="_onOverlayOpen"
+        @vaadin-overlay-open="${this._onOverlayOpen}"
       ></vaadin-user-tags-overlay>
     `;
   }
@@ -68,6 +72,7 @@ export class UserTags extends PolymerElement {
       opened: {
         type: Boolean,
         value: false,
+        sync: true,
       },
 
       /**
@@ -233,27 +238,6 @@ export class UserTags extends PolymerElement {
     return { added, removed };
   }
 
-  getChangedUsers(users, splices) {
-    const usersToAdd = [];
-    const usersToRemove = [];
-
-    splices.forEach((splice) => {
-      splice.removed.forEach((user) => {
-        usersToRemove.push(user);
-      });
-
-      for (let i = splice.addedCount - 1; i >= 0; i--) {
-        usersToAdd.push(users[splice.index + i]);
-      }
-    });
-
-    // Filter out users that are only moved
-    const addedUsers = usersToAdd.filter((u) => !usersToRemove.some((u2) => u.id === u2.id));
-    const removedUsers = usersToRemove.filter((u) => !usersToAdd.some((u2) => u.id === u2.id));
-
-    return { addedUsers, removedUsers };
-  }
-
   applyTagsStart({ added, removed }) {
     const wrapper = this.wrapper;
     removed.forEach((tag) => {
@@ -279,12 +263,22 @@ export class UserTags extends PolymerElement {
     // Apply pending change if needed
     this.requestContentUpdate();
 
-    const splices = calculateSplices(users, this.users);
-    if (splices.length === 0) {
-      return;
+    let addedUsers = [];
+    let removedUsers = [];
+
+    const hasNewUsers = Array.isArray(users);
+    const hasOldUsers = Array.isArray(this.users);
+
+    if (hasOldUsers) {
+      const newUserIds = (users || []).map((user) => user.id);
+      removedUsers = this.users.filter((item) => !newUserIds.includes(item.id));
     }
 
-    const { addedUsers, removedUsers } = this.getChangedUsers(users, splices);
+    if (hasNewUsers) {
+      const oldUserIds = (this.users || []).map((user) => user.id);
+      addedUsers = users.filter((item) => !oldUserIds.includes(item.id)).reverse();
+    }
+
     if (addedUsers.length === 0 && removedUsers.length === 0) {
       return;
     }
@@ -300,7 +294,7 @@ export class UserTags extends PolymerElement {
 
         this.__flashQueue.forEach((tags) => {
           if (tags.some((tag) => tag.uid === user.id)) {
-            this.splice('__flashQueue', i, 1);
+            this.__flashQueue = this.__flashQueue.filter((_, index) => index !== i);
           }
         });
       });
@@ -323,7 +317,7 @@ export class UserTags extends PolymerElement {
 
       if (this.flashing || !this.__isTargetVisible) {
         // Schedule next flash later
-        this.push('__flashQueue', addedTags);
+        this.__flashQueue = [...this.__flashQueue, addedTags];
       } else {
         this.flashTags(addedTags);
       }
@@ -394,7 +388,7 @@ export class UserTags extends PolymerElement {
     }).then(() => {
       if (this.__flashQueue.length > 0) {
         const tags = this.__flashQueue[0];
-        this.splice('__flashQueue', 0, 1);
+        this.__flashQueue = [...this.__flashQueue].slice(1);
         this.flashTags(tags);
       }
     });
@@ -416,7 +410,7 @@ export class UserTags extends PolymerElement {
     this.applyTagsStart(changed);
 
     this._debounceRender = Debouncer.debounce(this._debounceRender, timeOut.after(this.duration), () => {
-      this.set('users', users);
+      this.users = users;
 
       this.applyTagsEnd(changed);
 
@@ -428,7 +422,7 @@ export class UserTags extends PolymerElement {
 
   updateTagsSync(users, changed) {
     this.applyTagsStart(changed);
-    this.set('users', users);
+    this.users = users;
     this.applyTagsEnd(changed);
   }
 

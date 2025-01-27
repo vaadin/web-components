@@ -85,7 +85,7 @@
       }
     },
     {
-      "files": ["scripts/**/*.js", "*.js"],
+      "files": ["scripts/**/*.js", "*.config.js", "wtr-utils.js"],
       "rules": {
         "@typescript-eslint/no-require-imports": "off",
         "no-console": "off"
