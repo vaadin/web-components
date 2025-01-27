@@ -20,61 +20,19 @@
 
       h1 {
         width: 100%;
-        background: yellow;
-        margin-block: 0.5em;
+        margin-top: 2em;
+        margin-bottom: 0.5em;
+        &:first-child {
+          margin-top: 0;
+        }
       }
     </style>
   </head>
 
   <body>
 
-  <h1>New</h1>
-    <vaadin-form-layout auto-responsive column-width="200px">
-      <vaadin-form-row>
-        <vaadin-form-item>
-          <label slot="label">First name</label>
-          <vaadin-text-field></vaadin-text-field>
-        </vaadin-form-item>
+    <h1>Legacy (default settings)</h1>
 
-        <vaadin-form-item>
-          <label slot="label">Middle name</label>
-          <vaadin-text-field></vaadin-text-field>
-        </vaadin-form-item>
-
-        <vaadin-form-item>
-          <label slot="label">Last name</label>
-          <vaadin-text-field></vaadin-text-field>
-        </vaadin-form-item>
-      </vaadin-form-row>
-
-      <vaadin-form-item >
-        <label slot="label">Username</label>
-        <vaadin-text-field required></vaadin-text-field>
-      </vaadin-form-item>
-
-      <vaadin-form-section title="Password Stuff">
-        
-        <vaadin-form-row>
-
-          <vaadin-form-item>
-            <label slot="label">Password</label>
-            <vaadin-password-field></vaadin-password-field>
-          </vaadin-form-item>
-
-          <vaadin-form-item>
-            <label slot="label">Confirm</label>
-            <vaadin-password-field></vaadin-password-field>
-          </vaadin-form-item>
-
-        </vaadin-form-row>
-
-      </vaadin-form-section>
-
-    </vaadin-form-layout>
-
-
-    <br><br>
-    <h1>Legacy</h1>
     <vaadin-form-layout>
 
       <vaadin-form-item>
@@ -107,6 +65,192 @@
       </vaadin-form-item>
 
     </vaadin-form-layout>
+
+
+    <h1>autoResponsive</h1>
+
+    <vaadin-form-layout auto-responsive>
+              
+      <vaadin-form-item>
+        <label slot="label">First name</label>
+        <vaadin-text-field></vaadin-text-field>
+      </vaadin-form-item>
+
+      <vaadin-form-item>
+        <label slot="label">Last name</label>
+        <vaadin-text-field></vaadin-text-field>
+      </vaadin-form-item>
+
+      <vaadin-form-item colspan="2">
+        <label slot="label">Username</label>
+        <vaadin-text-field required></vaadin-text-field>
+      </vaadin-form-item>
+
+      <vaadin-form-item>
+        <label slot="label">Password</label>
+        <vaadin-password-field></vaadin-password-field>
+      </vaadin-form-item>
+
+      <vaadin-form-item>
+        <label slot="label">Confirm</label>
+        <vaadin-password-field></vaadin-password-field>
+      </vaadin-form-item>
+
+    </vaadin-form-layout>
+
+
+    <h1>autoResponsive + explicit rows</h1>
+
+    <vaadin-form-layout auto-responsive>
+      
+      <vaadin-form-row>
+        
+        <vaadin-form-item>
+          <label slot="label">First name</label>
+          <vaadin-text-field></vaadin-text-field>
+        </vaadin-form-item>
+
+        <vaadin-form-item>
+          <label slot="label">Last name</label>
+          <vaadin-text-field></vaadin-text-field>
+        </vaadin-form-item>
+
+      </vaadin-form-row>
+
+      <vaadin-form-item colspan="2">
+        <label slot="label">Username</label>
+        <vaadin-text-field required></vaadin-text-field>
+      </vaadin-form-item>
+
+      <vaadin-form-row>
+
+        <vaadin-form-item>
+          <label slot="label">Password</label>
+          <vaadin-password-field></vaadin-password-field>
+        </vaadin-form-item>
+
+        <vaadin-form-item>
+          <label slot="label">Confirm</label>
+          <vaadin-password-field></vaadin-password-field>
+        </vaadin-form-item>
+
+      </vaadin-form-row>
+
+    </vaadin-form-layout>
+
+
+    <h1>autoResponsive + explicit rows + expandColumns=never</h1>
+
+    <vaadin-form-layout auto-responsive expand-columns="never">
+      
+      <vaadin-form-row>
+        
+        <vaadin-form-item>
+          <label slot="label">First name</label>
+          <vaadin-text-field></vaadin-text-field>
+        </vaadin-form-item>
+
+        <vaadin-form-item>
+          <label slot="label">Last name</label>
+          <vaadin-text-field></vaadin-text-field>
+        </vaadin-form-item>
+
+      </vaadin-form-row>
+
+      <vaadin-form-item colspan="2">
+        <label slot="label">Username</label>
+        <vaadin-text-field required></vaadin-text-field>
+      </vaadin-form-item>
+
+      <vaadin-form-row>
+
+        <vaadin-form-item>
+          <label slot="label">Password</label>
+          <vaadin-password-field></vaadin-password-field>
+        </vaadin-form-item>
+
+        <vaadin-form-item>
+          <label slot="label">Confirm</label>
+          <vaadin-password-field></vaadin-password-field>
+        </vaadin-form-item>
+
+      </vaadin-form-row>
+
+    </vaadin-form-layout>
+
+
+    <h1>autoResponsive + autoRows</h1>
+
+    <vaadin-form-layout auto-responsive auto-rows>
+              
+      <vaadin-form-item>
+        <label slot="label">First name</label>
+        <vaadin-text-field></vaadin-text-field>
+      </vaadin-form-item>
+
+      <vaadin-form-item>
+        <label slot="label">Last name</label>
+        <vaadin-text-field></vaadin-text-field>
+      </vaadin-form-item>
+
+      <vaadin-form-item colspan="2">
+        <label slot="label">Username</label>
+        <vaadin-text-field required></vaadin-text-field>
+      </vaadin-form-item>
+
+      <vaadin-form-item>
+        <label slot="label">Password</label>
+        <vaadin-password-field></vaadin-password-field>
+      </vaadin-form-item>
+
+      <vaadin-form-item>
+        <label slot="label">Confirm</label>
+        <vaadin-password-field></vaadin-password-field>
+      </vaadin-form-item>
+
+    </vaadin-form-layout>
+
+
+    <h1>autoResponsive + labelsAside</h1>
+
+    <vaadin-form-layout auto-responsive labels-aside>
+              
+      <vaadin-form-row>
+        
+        <vaadin-form-item>
+          <label slot="label">First name</label>
+          <vaadin-text-field></vaadin-text-field>
+        </vaadin-form-item>
+
+        <vaadin-form-item>
+          <label slot="label">Last name</label>
+          <vaadin-text-field></vaadin-text-field>
+        </vaadin-form-item>
+
+      </vaadin-form-row>
+
+      <vaadin-form-item colspan="2">
+        <label slot="label">Username</label>
+        <vaadin-text-field required></vaadin-text-field>
+      </vaadin-form-item>
+
+      <vaadin-form-row>
+
+        <vaadin-form-item>
+          <label slot="label">Password</label>
+          <vaadin-password-field></vaadin-password-field>
+        </vaadin-form-item>
+
+        <vaadin-form-item>
+          <label slot="label">Confirm</label>
+          <vaadin-password-field></vaadin-password-field>
+        </vaadin-form-item>
+
+      </vaadin-form-row>
+
+    </vaadin-form-layout>
+
+
 
   </body>
 </html>
