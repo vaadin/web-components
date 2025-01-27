@@ -4,7 +4,7 @@ export * from '@web/test-runner-commands';
 
 export async function sendKeys(options) {
   const { press } = options;
-  if (press) {
+  if (press && press.includes('+')) {
     const keys = press.split('+').map((key) => key.trim());
 
     for (const key of keys) {
