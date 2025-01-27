@@ -3,27 +3,30 @@ import { executeServerCommand } from '@web/test-runner-commands';
 export * from '@web/test-runner-commands';
 
 /**
- * Moves the mouse to the center of an element and
+ * Moves the mouse to the center of an element and optionally clicks
+ * a mouse button on it.
  *
- * Remember to call `resetMouse()` after the test to reset
- * the mouse position to avoid affecting other tests.
+ * After using this function, remember to call `resetMouse` to reset
+ * the mouse position and avoid affecting other tests.
  *
- * @param {Element} element
+ * @typedef {{ type: 'move', element: Element }} MovePayload
+ * @typedef {{ type: 'click', element: Element, button?: 'left' | 'middle' | 'right' }} ClickPayload
+ * @param {Element | MovePayload | ClickPayload} payload
+ * @return {Promise<void>}
+ *
+ * @example
+ * // Move the mouse to the center of an element
+ * await sendMouseToElement(document.querySelector('#my-element'));
+ *
+ * // Click the left mouse button on an element
+ * await sendMouseToElement({ type: 'click', element: document.querySelector('#my-element') });
  */
-export async function sendMouseToElement(options) {
-  let element;
-
-  if (options instanceof Element) {
-    element = options;
-    options = {};
-  } else {
-    element = options.element;
-  }
+export async function sendMouseToElement(payload) {
+  const element = payload instanceof Element ? payload : payload.element;
+  const payload = payload instanceof Element ? { type: 'move' } : payload;
 
   const rect = element.getBoundingClientRect();
   const x = Math.floor(rect.x + rect.width / 2);
   const y = Math.floor(rect.y + rect.height / 2);
-  const position = [x, y];
-
-  await executeServerCommand('send-mouse', { type: 'move', position, ...options });
+  await executeServerCommand('send-mouse', { ...payload, position: [x, y] });
 }
