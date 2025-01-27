@@ -88,9 +88,7 @@ describe('dashboard - keyboard interaction', () => {
     await sendKeys({ press: 'Space' });
 
     // Focus the focus-button with shift + tab
-    await sendKeys({ down: 'Shift' });
-    await sendKeys({ press: 'Tab' });
-    await sendKeys({ up: 'Shift' });
+    await sendKeys({ press: 'Shift+Tab' });
 
     // Click the focus-button
     await sendKeys({ press: 'Space' });
@@ -158,9 +156,7 @@ describe('dashboard - keyboard interaction', () => {
     it('should blur deselected widget on shift tab', async () => {
       const widget = getElementFromCell(dashboard, 0, 0)!;
       await sendKeys({ press: 'Escape' });
-      await sendKeys({ down: 'Shift' });
-      await sendKeys({ press: 'Tab' });
-      await sendKeys({ up: 'Shift' });
+      await sendKeys({ press: 'Shift+Tab' });
       expect(widget.hasAttribute('selected')).to.be.false;
       expect(widget.hasAttribute('focused')).to.be.false;
       expect(widget.contains(document.activeElement)).to.be.false;
@@ -233,29 +229,23 @@ describe('dashboard - keyboard interaction', () => {
     it('should increase the widget row span on shift + arrow down', async () => {
       // Set minimum row height to enable vertical resizing
       setMinimumRowHeight(dashboard, 100);
-      await sendKeys({ down: 'Shift' });
-      await sendKeys({ press: 'ArrowDown' });
-      await sendKeys({ up: 'Shift' });
+      await sendKeys({ press: 'Shift+ArrowDown' });
       expect((dashboard.items[0] as DashboardItem).rowspan).to.equal(2);
     });
 
     it('should decrease the widget row span on shift + arrow up', async () => {
       // Set minimum row height to enable vertical resizing
       setMinimumRowHeight(dashboard, 100);
-      await sendKeys({ down: 'Shift' });
-      await sendKeys({ press: 'ArrowDown' });
+      await sendKeys({ press: 'Shift+ArrowDown' });
       await updateComplete(dashboard);
-      await sendKeys({ press: 'ArrowUp' });
-      await sendKeys({ up: 'Shift' });
+      await sendKeys({ press: 'Shift+ArrowUp' });
       expect((dashboard.items[0] as DashboardItem).rowspan).to.equal(1);
     });
 
     it('should dispatch an item resized event shift + arrow down', async () => {
       const spy = sinon.spy();
       dashboard.addEventListener('dashboard-item-resized', spy);
-      await sendKeys({ down: 'Shift' });
-      await sendKeys({ press: 'ArrowDown' });
-      await sendKeys({ up: 'Shift' });
+      await sendKeys({ press: 'Shift+ArrowDown' });
       expect(spy.calledOnce).to.be.true;
       expect(spy.firstCall.args[0].detail.item).to.eql({ id: 0 });
       expect(spy.firstCall.args[0].detail.items).to.eql(dashboard.items);
@@ -266,16 +256,12 @@ describe('dashboard - keyboard interaction', () => {
       const spy = sinon.spy();
       // @ts-ignore unexpected event type
       dashboard.addEventListener('item-resize', spy);
-      await sendKeys({ down: 'Shift' });
-      await sendKeys({ press: 'ArrowDown' });
-      await sendKeys({ up: 'Shift' });
+      await sendKeys({ press: 'Shift+ArrowDown' });
       expect(spy.called).to.be.false;
     });
 
     it('should not increase the widget row span on shift + arrow down if row min height is not defined', async () => {
-      await sendKeys({ down: 'Shift' });
-      await sendKeys({ press: 'ArrowDown' });
-      await sendKeys({ up: 'Shift' });
+      await sendKeys({ press: 'Shift+ArrowDown' });
       expect((dashboard.items[0] as DashboardItem).rowspan).to.not.equal(2);
     });
 
@@ -341,9 +327,7 @@ describe('dashboard - keyboard interaction', () => {
     it('should release focus trap on deselect', async () => {
       const widget = getElementFromCell(dashboard, 0, 0)!;
       await sendKeys({ press: 'Escape' });
-      await sendKeys({ down: 'Shift' });
-      await sendKeys({ press: 'Tab' });
-      await sendKeys({ up: 'Shift' });
+      await sendKeys({ press: 'Shift+Tab' });
       expect(widget.contains(document.activeElement)).to.be.false;
     });
 
@@ -369,18 +353,14 @@ describe('dashboard - keyboard interaction', () => {
       });
 
       it('should increase the widget column span on shift + arrow forwards', async () => {
-        await sendKeys({ down: 'Shift' });
-        await sendKeys({ press: arrowForwards });
-        await sendKeys({ up: 'Shift' });
+        await sendKeys({ press: `Shift+${arrowForwards}` });
         expect((dashboard.items[0] as DashboardItem).colspan).to.equal(2);
       });
 
       it('should decrease the widget column span on shift + arrow backwards', async () => {
-        await sendKeys({ down: 'Shift' });
-        await sendKeys({ press: arrowForwards });
+        await sendKeys({ press: `Shift+${arrowForwards}` });
         await updateComplete(dashboard);
-        await sendKeys({ press: arrowBackwards });
-        await sendKeys({ up: 'Shift' });
+        await sendKeys({ press: `Shift+${arrowBackwards}` });
         expect((dashboard.items[0] as DashboardItem).colspan).to.equal(1);
       });
     });
@@ -412,9 +392,7 @@ describe('dashboard - keyboard interaction', () => {
 
     it('should blur deselected selected on shift tab', async () => {
       await sendKeys({ press: 'Escape' });
-      await sendKeys({ down: 'Shift' });
-      await sendKeys({ press: 'Tab' });
-      await sendKeys({ up: 'Shift' });
+      await sendKeys({ press: 'Shift+Tab' });
       expect(section.hasAttribute('selected')).to.be.false;
       expect(section.hasAttribute('focused')).to.be.false;
       expect(section.contains(document.activeElement)).to.be.false;
@@ -446,16 +424,12 @@ describe('dashboard - keyboard interaction', () => {
 
     it('should release focus trap on deselect', async () => {
       await sendKeys({ press: 'Escape' });
-      await sendKeys({ down: 'Shift' });
-      await sendKeys({ press: 'Tab' });
-      await sendKeys({ up: 'Shift' });
+      await sendKeys({ press: 'Shift+Tab' });
       expect(section.contains(document.activeElement)).to.be.false;
     });
 
     it('should not increase the section row span on shift + arrow down', async () => {
-      await sendKeys({ down: 'Shift' });
-      await sendKeys({ press: 'ArrowDown' });
-      await sendKeys({ up: 'Shift' });
+      await sendKeys({ press: 'Shift+ArrowDown' });
       expect(dashboard.items).to.eql([{ id: 0 }, { id: 1 }, { items: [{ id: 2 }, { id: 3 }] }]);
     });
   });
@@ -565,10 +539,8 @@ describe('dashboard - keyboard interaction', () => {
       await sendKeys({ press: 'Space' });
       await nextFrame();
       // Focus backward button, click it
-      await sendKeys({ down: 'Shift' });
-      await sendKeys({ press: 'Tab' });
-      await sendKeys({ press: 'Tab' });
-      await sendKeys({ up: 'Shift' });
+      await sendKeys({ press: 'Shift+Tab' });
+      await sendKeys({ press: 'Shift+Tab' });
       await nextFrame();
 
       expect(getMoveBackwardButton(widget).matches(':focus')).to.be.true;
@@ -598,10 +570,8 @@ describe('dashboard - keyboard interaction', () => {
       await sendKeys({ press: 'Space' });
       await nextFrame();
       // Focus backwards button, click it
-      await sendKeys({ down: 'Shift' });
-      await sendKeys({ press: 'Tab' });
-      await sendKeys({ press: 'Tab' });
-      await sendKeys({ up: 'Shift' });
+      await sendKeys({ press: 'Shift+Tab' });
+      await sendKeys({ press: 'Shift+Tab' });
       await sendKeys({ press: 'Space' });
       await nextFrame();
 
