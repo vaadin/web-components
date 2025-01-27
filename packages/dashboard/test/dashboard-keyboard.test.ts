@@ -266,9 +266,7 @@ describe('dashboard - keyboard interaction', () => {
     });
 
     it('should not move the widget on arrow down if ctrl key is pressed', async () => {
-      await sendKeys({ down: 'Control' });
-      await sendKeys({ press: 'ArrowDown' });
-      await sendKeys({ up: 'Control' });
+      await sendKeys({ press: 'Control+ArrowDown' });
       expect(dashboard.items).to.eql([{ id: 0 }, { id: 1 }, { items: [{ id: 2 }, { id: 3 }] }]);
     });
 
