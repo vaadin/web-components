@@ -1,4 +1,4 @@
-import { sendKeys } from '@web/test-runner-commands';
+import { sendKeys } from '@vaadin/test-runner-commands';
 
 export async function esc() {
   await sendKeys({ press: 'Escape' });

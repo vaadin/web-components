@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
+import { sendKeys, sendMouse } from '@vaadin/test-runner-commands';
 import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
-import { sendKeys, sendMouse } from '@web/test-runner-commands';
 import { flushGrid, getContainerCell, getLastVisibleItem, getPhysicalItems } from './helpers.js';
 
 describe('scroll into view', () => {

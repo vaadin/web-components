@@ -1,4 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
+import { resetMouse, sendKeys, sendMouse } from '@vaadin/test-runner-commands';
 import {
   aTimeout,
   fire,
@@ -9,7 +10,6 @@ import {
   oneEvent,
   touchstart,
 } from '@vaadin/testing-helpers';
-import { resetMouse, sendKeys, sendMouse } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import { getFocusableCell, monthsEqual, open, waitForOverlayRender } from './helpers.js';
 

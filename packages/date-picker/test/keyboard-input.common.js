@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
+import { sendKeys } from '@vaadin/test-runner-commands';
 import { aTimeout, enter, fixtureSync, nextRender, tap } from '@vaadin/testing-helpers';
-import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import { getAdjustedYear, parseDate } from '../src/vaadin-date-picker-helper.js';
 import { close, getFocusedCell, idleCallback, open, waitForOverlayRender, waitForScrollToFinish } from './helpers.js';

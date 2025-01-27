@@ -1,0 +1,14 @@
+{
+  "name": "@vaadin/test-runner-commands",
+  "version": "24.6.2",
+  "private": true,
+  "description": "Vaadin web components test runner helpers",
+  "license": "Apache-2.0",
+  "author": "Vaadin Ltd",
+  "main": "index.js",
+  "module": "index.js",
+  "type": "module",
+  "dependencies": {
+    "@web/test-runner-commands": "^0.9.0"
+  }
+}

@@ -1,5 +1,5 @@
+import { sendKeys } from '@vaadin/test-runner-commands';
 import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
-import { sendKeys } from '@web/test-runner-commands';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '@vaadin/checkbox/theme/lumo/vaadin-checkbox.js';
 import '@vaadin/checkbox-group/theme/lumo/vaadin-checkbox-group.js';
