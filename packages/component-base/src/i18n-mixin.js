@@ -5,18 +5,21 @@
  */
 
 function deepMerge(target, ...sources) {
-  const isObject = (item) => item && typeof item === 'object' && !Array.isArray(item);
+  const isArray = (item) => Array.isArray(item);
+  const isObject = (item) => item && typeof item === 'object' && !isArray(item);
   const merge = (target, source) => {
     if (isObject(source) && isObject(target)) {
       Object.keys(source).forEach((key) => {
-        if (isObject(source[key])) {
+        const sourceValue = source[key];
+        if (isObject(sourceValue)) {
           if (!target[key]) {
             target[key] = {};
           }
-
-          merge(target[key], source[key]);
-        } else if (source[key] !== undefined && source[key] !== null) {
-          target[key] = source[key];
+          merge(target[key], sourceValue);
+        } else if (isArray(sourceValue)) {
+          target[key] = [...sourceValue];
+        } else if (sourceValue !== undefined && sourceValue !== null) {
+          target[key] = sourceValue;
         }
       });
     }

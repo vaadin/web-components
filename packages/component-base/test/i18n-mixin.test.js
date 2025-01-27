@@ -10,6 +10,7 @@ const DEFAULT_I18N = {
   bar: {
     baz: 'Baz',
   },
+  qux: ['q', 'u', 'x'],
 };
 
 class I18nMixinPolymerElement extends I18nMixin(PolymerElement, DEFAULT_I18N) {
@@ -37,12 +38,16 @@ const runTests = (baseClass) => {
     await nextRender();
   });
 
-  it('should initialize with copy of defaults', () => {
+  it('should initialize with deep copy of defaults', () => {
     expect(element.i18n).to.deep.equal(DEFAULT_I18N);
     expect(element.i18n).to.not.equal(DEFAULT_I18N);
+    expect(element.i18n.bar).to.not.equal(DEFAULT_I18N.bar);
+    expect(element.i18n.qux).to.not.equal(DEFAULT_I18N.qux);
 
     expect(element.__effectiveI18n).to.deep.equal(DEFAULT_I18N);
     expect(element.__effectiveI18n).to.not.equal(DEFAULT_I18N);
+    expect(element.__effectiveI18n.bar).to.not.equal(DEFAULT_I18N.bar);
+    expect(element.__effectiveI18n.qux).to.not.equal(DEFAULT_I18N.qux);
   });
 
   it('should return same reference that was set previously', () => {
@@ -56,10 +61,10 @@ const runTests = (baseClass) => {
     expect(element.__effectiveI18n).to.deep.equal(DEFAULT_I18N);
 
     element.i18n = { foo: 'Custom Foo' };
-    expect(element.__effectiveI18n).to.deep.equal({ foo: 'Custom Foo', bar: { baz: 'Baz' } });
+    expect(element.__effectiveI18n).to.deep.equal({ ...DEFAULT_I18N, foo: 'Custom Foo' });
 
     element.i18n = { bar: { baz: 'Custom Baz' } };
-    expect(element.__effectiveI18n).to.deep.equal({ foo: 'Foo', bar: { baz: 'Custom Baz' } });
+    expect(element.__effectiveI18n).to.deep.equal({ ...DEFAULT_I18N, bar: { baz: 'Custom Baz' } });
   });
 
   it('should ignore null and undefined values in custom i18n', () => {
