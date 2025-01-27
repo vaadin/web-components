@@ -22,8 +22,13 @@ export * from '@web/test-runner-commands';
  * await sendMouseToElement({ type: 'click', element: document.querySelector('#my-element') });
  */
 export async function sendMouseToElement(payload) {
-  const element = payload instanceof Element ? payload : payload.element;
-  const payload = payload instanceof Element ? { type: 'move' } : payload;
+  let element;
+  if (payload instanceof Element) {
+    element = payload;
+    payload = { type: 'move' };
+  } else {
+    element = payload.element;
+  }
 
   const rect = element.getBoundingClientRect();
   const x = Math.floor(rect.x + rect.width / 2);
