@@ -1,4 +1,4 @@
-import { resetMouse, sendKeys, sendMouse } from '@vaadin/test-runner-commands';
+import { resetMouse, sendKeys, sendMouseToElement } from '@vaadin/test-runner-commands';
 import { fixtureSync, mousedown } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '@vaadin/icon/theme/lumo/vaadin-icon.js';
@@ -67,7 +67,7 @@ describe('button', () => {
 
     it('primary hover', async () => {
       element.setAttribute('theme', 'primary');
-      await sendMouse({ type: 'move', element });
+      await sendMouseToElement(element);
       await visualDiff(div, 'theme-primary-hover');
     });
 
@@ -90,7 +90,7 @@ describe('button', () => {
 
     it('secondary hover', async () => {
       element.setAttribute('theme', 'secondary');
-      await sendMouse({ type: 'move', element });
+      await sendMouseToElement(element);
       await visualDiff(div, 'theme-secondary-hover');
     });
 
@@ -107,7 +107,7 @@ describe('button', () => {
 
     it('tertiary hover', async () => {
       element.setAttribute('theme', 'tertiary');
-      await sendMouse({ type: 'move', element });
+      await sendMouseToElement(element);
       await visualDiff(div, 'theme-tertiary-hover');
     });
 

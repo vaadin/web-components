@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
-import { resetMouse, sendKeys, sendMouse } from '@vaadin/test-runner-commands';
-import { fire, fixtureSync, middleOfNode, nextRender, nextUpdate } from '@vaadin/testing-helpers';
+import { resetMouse, sendKeys, sendMouseToElement } from '@vaadin/test-runner-commands';
+import { fire, fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import type { Button } from '../vaadin-button.js';
 
@@ -142,8 +142,7 @@ describe('vaadin-button', () => {
     });
 
     it('should prevent pointer focus when disabled', async () => {
-      const { x, y } = middleOfNode(button);
-      await sendMouse({ type: 'click', position: [Math.floor(x), Math.floor(y)] });
+      await sendMouseToElement({ type: 'click', element: button });
       expect(document.activeElement).to.equal(document.body);
     });
 
@@ -194,8 +193,7 @@ describe('vaadin-button', () => {
     });
 
     it('should allow pointer focus when disabled', async () => {
-      const { x, y } = middleOfNode(button);
-      await sendMouse({ type: 'click', position: [Math.floor(x), Math.floor(y)] });
+      await sendMouseToElement({ type: 'click', element: button });
       expect(document.activeElement).to.equal(button);
     });
 

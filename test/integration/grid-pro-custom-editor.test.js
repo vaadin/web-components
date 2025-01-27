@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
-import { resetMouse, sendKeys, sendMouse } from '@vaadin/test-runner-commands';
-import { fixtureSync, middleOfNode, nextRender } from '@vaadin/testing-helpers';
+import { resetMouse, sendKeys, sendMouse, sendMouseToElement } from '@vaadin/test-runner-commands';
+import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import '@vaadin/combo-box';
 import '@vaadin/custom-field';
 import '@vaadin/date-picker';
@@ -123,8 +123,8 @@ describe('grid-pro custom editor', () => {
       // Open the overlay
       await sendKeys({ press: 'ArrowDown' });
 
-      const { x, y } = middleOfNode(cell._content.querySelector('input'));
-      await sendMouse({ type: 'click', position: [Math.floor(x), Math.floor(y)] });
+      const input = cell._content.querySelector('input');
+      await sendMouseToElement({ type: 'click', element: input });
 
       expect(cell._content.querySelector('vaadin-date-picker')).to.be.ok;
     });
@@ -136,8 +136,8 @@ describe('grid-pro custom editor', () => {
 
       // Click between toolbar buttons
       const overlayContent = document.querySelector('vaadin-date-picker-overlay-content');
-      const { x, y } = middleOfNode(overlayContent.shadowRoot.querySelector('[part="toolbar"]'));
-      await sendMouse({ type: 'click', position: [Math.floor(x), Math.floor(y)] });
+      const toolbar = overlayContent.shadowRoot.querySelector('[part="toolbar"]');
+      await sendMouseToElement({ type: 'click', element: toolbar });
       await nextRender();
 
       expect(cell._content.querySelector('vaadin-date-picker')).to.be.ok;
@@ -305,8 +305,8 @@ describe('grid-pro custom editor', () => {
 
     it('should not stop editing when switching between fields using mouse', async () => {
       // Move focus to the second field
-      const { x, y } = middleOfNode(cell._content.querySelectorAll('input')[1]);
-      await sendMouse({ type: 'click', position: [Math.floor(x), Math.floor(y)] });
+      const input = cell._content.querySelectorAll('input')[1];
+      await sendMouseToElement({ type: 'click', element: input });
       await nextRender();
       expect(cell._content.querySelector('vaadin-custom-field')).to.be.ok;
     });

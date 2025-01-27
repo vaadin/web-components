@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
-import { resetMouse, sendKeys, sendMouse } from '@vaadin/test-runner-commands';
-import { fixtureSync, middleOfNode, nextRender } from '@vaadin/testing-helpers';
+import { resetMouse, sendKeys, sendMouseToElement } from '@vaadin/test-runner-commands';
+import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 
 describe('accessible disabled buttons', () => {
   let menuBar, buttons;
@@ -30,15 +30,13 @@ describe('accessible disabled buttons', () => {
   });
 
   it('should not open sub-menu on disabled button click', async () => {
-    const { x, y } = middleOfNode(buttons[1]);
-    await sendMouse({ type: 'click', position: [Math.floor(x), Math.floor(y)] });
+    await sendMouseToElement({ type: 'click', element: buttons[1] });
     expect(buttons[1].hasAttribute('expanded')).to.be.false;
   });
 
   it('should not open sub-menu on disabled button hover', async () => {
     menuBar.openOnHover = true;
-    const { x, y } = middleOfNode(buttons[1]);
-    await sendMouse({ type: 'move', position: [Math.floor(x), Math.floor(y)] });
+    await sendMouseToElement({ type: 'move', element: buttons[1] });
     expect(buttons[1].hasAttribute('expanded')).to.be.false;
   });
 

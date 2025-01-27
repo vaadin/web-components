@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { resetMouse, sendKeys, sendMouse } from '@vaadin/test-runner-commands';
+import { resetMouse, sendKeys, sendMouseToElement } from '@vaadin/test-runner-commands';
 import { fixtureSync, mousedown, mouseup, nextFrame, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 
@@ -156,20 +156,12 @@ describe('checkbox', () => {
     });
 
     describe('focus', () => {
-      let inputX, inputY;
-
-      beforeEach(() => {
-        const rect = input.getBoundingClientRect();
-        inputX = Math.floor(rect.x + rect.width / 2);
-        inputY = Math.floor(rect.y + rect.height / 2);
-      });
-
       afterEach(async () => {
         await resetMouse();
       });
 
       it('should focus on input click when not focused yet', async () => {
-        await sendMouse({ type: 'click', position: [inputX, inputY] });
+        await sendMouseToElement({ type: 'click', element: input });
         expect(checkbox.hasAttribute('focused')).to.be.true;
       });
 
@@ -177,7 +169,7 @@ describe('checkbox', () => {
         const spy = sinon.spy();
         checkbox.addEventListener('focusout', spy);
         input.focus();
-        await sendMouse({ type: 'click', position: [inputX, inputY] });
+        await sendMouseToElement({ type: 'click', element: input });
         expect(spy).to.be.not.called;
       });
     });
