@@ -1,4 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
+import { sendKeys } from '@vaadin/test-runner-commands';
 import {
   arrowDown,
   aTimeout,
@@ -13,7 +14,6 @@ import {
   nextRender,
   tabKeyDown,
 } from '@vaadin/testing-helpers';
-import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import '@vaadin/grid/vaadin-grid.js';
 import { flushGrid, getCell, getContainerCell } from '@vaadin/grid/test/helpers.js';

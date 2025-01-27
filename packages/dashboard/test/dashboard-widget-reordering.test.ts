@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
+import { resetMouse, sendMouse } from '@vaadin/test-runner-commands';
 import { fixtureSync, isFirefox, nextFrame, nextResize } from '@vaadin/testing-helpers';
-import { resetMouse, sendMouse } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import '../vaadin-dashboard.js';
 import { hover } from '../../button/test/visual/helpers.js';
