@@ -1,7 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { resetMouse, sendMouse } from '@vaadin/test-runner-commands';
 import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
-import { hover } from '@vaadin/button/test/visual/helpers.js';
 
 describe('drag and drop', () => {
   let virtualList;
@@ -30,7 +29,7 @@ describe('drag and drop', () => {
 
   async function dragElement(element) {
     await resetMouse();
-    await hover(element);
+    await sendMouse({ type: 'move', element });
     await sendMouse({ type: 'down' });
     await sendMouse({ type: 'move', position: [100, 100] });
     await sendMouse({ type: 'up' });
