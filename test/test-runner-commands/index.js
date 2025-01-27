@@ -3,7 +3,7 @@ import { executeServerCommand } from '@web/test-runner-commands';
 export * from '@web/test-runner-commands';
 
 /**
- * Extends the `sendKeys` command to support sending multiple keys
+ * Extends the `sendKeys` command to support pressing multiple keys
  * simultaneously when provided in the format "Shift+Tab". This format
  * is natively supported by Playwright but not by Puppeteer. This wrapper
  * enables the same syntax to be used in Puppeteer.
@@ -19,7 +19,20 @@ export * from '@web/test-runner-commands';
  * @typedef {{ down: string }} DownPayload
  * @typedef {{ up: string }} UpPayload
  * @param payload {TypePayload | PressPayload | DownPayload | UpPayload}
- **/
+ *
+ * @example
+ * // Tab to the next element
+ * await sendKeys({ press: 'Tab' });
+ *
+ * // Tab to the previous element
+ * await sendKeys({ press: 'Shift+Tab' });
+ *
+ * @example
+ * // Type a string in caps
+ * await sendKeys({ down: 'Shift' });
+ * await sendKeys({ type: 'Hello' });
+ * await sendKeys({ up: 'Shift' });
+ */
 export async function sendKeys(payload) {
   const { press } = payload;
   if (press && press.includes('+')) {
