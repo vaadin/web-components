@@ -24,13 +24,13 @@ export * from '@web/test-runner-commands';
  * // Tab to the next element
  * await sendKeys({ press: 'Tab' });
  *
+ * @example
  * // Tab to the previous element
  * await sendKeys({ press: 'Shift+Tab' });
  *
  * @example
- * // Type a string in caps
  * await sendKeys({ down: 'Shift' });
- * await sendKeys({ type: 'Hello' });
+ * // Do something while holding Shift
  * await sendKeys({ up: 'Shift' });
  */
 export async function sendKeys(payload) {
