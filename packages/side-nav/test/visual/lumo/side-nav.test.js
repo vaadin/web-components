@@ -1,5 +1,5 @@
+import { sendKeys } from '@vaadin/test-runner-commands';
 import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
-import { sendKeys } from '@web/test-runner-commands';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '../not-animated-styles.js';
 import '../../../theme/lumo/vaadin-side-nav.js';

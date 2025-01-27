@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
+import { sendKeys } from '@vaadin/test-runner-commands';
 import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
-import { sendKeys } from '@web/test-runner-commands';
 import { flushGrid } from './helpers.js';
 
 describe('disabled', () => {

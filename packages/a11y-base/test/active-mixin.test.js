@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
+import { sendKeys } from '@vaadin/test-runner-commands';
 import { fixtureSync, isIOS, mousedown, mouseup, touchend, touchstart } from '@vaadin/testing-helpers';
-import { sendKeys } from '@web/test-runner-commands';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ActiveMixin } from '../src/active-mixin.js';
 
