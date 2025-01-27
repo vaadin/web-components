@@ -5,12 +5,6 @@
  */
 import type { Constructor } from '@open-wc/dedupe-mixin';
 
-type DeepPartial<T> = T extends object
-  ? {
-      [P in keyof T]?: DeepPartial<T[P]>;
-    }
-  : T;
-
 /**
  * A mixin that allows to set partial I18N properties.
  */
@@ -25,5 +19,5 @@ export declare class I18nMixinClass<I> {
    * localization, replace this with an object that provides all properties, or
    * just the individual properties you want to change.
    */
-  i18n: DeepPartial<I>;
+  i18n: I;
 }

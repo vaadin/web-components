@@ -1,4 +1,4 @@
-import { I18nMixin } from '../../../src/i18n-mixin';
+import { I18nMixin } from '../../../src/i18n-mixin.js';
 
 const assertType = <TExpected>(actual: TExpected) => actual;
 
@@ -14,7 +14,4 @@ class TestElement extends I18nMixin(HTMLElement, DEFAULT_I18N) {}
 
 const element = new TestElement();
 
-// Verify i18n property accepts deep partials
-assertType<{ foo?: string }>(element.i18n);
-assertType<{ bar?: object }>(element.i18n);
-assertType<{ bar?: { baz?: string } }>(element.i18n);
+assertType<typeof DEFAULT_I18N>(element.i18n);
