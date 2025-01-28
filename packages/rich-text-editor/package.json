@@ -55,6 +55,7 @@
   "devDependencies": {
     "@vaadin/a11y-base": "~24.6.3",
     "@vaadin/chai-plugins": "~24.6.3",
+    "@vaadin/test-runner-commands": "~24.6.3",
     "@vaadin/testing-helpers": "^1.1.0",
     "gulp": "^4.0.2",
     "gulp-cli": "^2.3.0",
