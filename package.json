@@ -36,7 +36,6 @@
     "@types/mocha": "^10.0.7",
     "@types/sinon": "^17.0.3",
     "@vaadin/testing-helpers": "^1.1.0",
-    "@vaadin/test-runner-commands": "24.6.2",
     "@web/dev-server": "^0.4.3",
     "@web/dev-server-esbuild": "^1.0.2",
     "@web/rollup-plugin-html": "^2.0.0",

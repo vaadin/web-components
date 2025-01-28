@@ -37,6 +37,7 @@
   },
   "devDependencies": {
     "@vaadin/chai-plugins": "~24.5.8",
+    "@vaadin/test-runner-commands": "~24.5.8",
     "@vaadin/checkbox": "~24.5.8",
     "@vaadin/grid": "~24.5.8",
     "@vaadin/grid-pro": "~24.5.8",
