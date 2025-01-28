@@ -9,8 +9,8 @@ import '@vaadin/list-box/theme/lumo/vaadin-list-box.js';
 import '@vaadin/radio-group/theme/lumo/vaadin-radio-group.js';
 import '@vaadin/text-area/theme/lumo/vaadin-text-area.js';
 import '@vaadin/text-field/theme/lumo/vaadin-text-field.js';
-import '../../../theme/lumo/vaadin-field-highlighter.js';
 import '../common.js';
+import '../../../theme/lumo/vaadin-field-highlighter.js';
 import { setUsers } from '../helpers.js';
 
 describe('field-highlighter', () => {
