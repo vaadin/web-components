@@ -2,8 +2,8 @@ import { sendKeys, sendMouse } from '@vaadin/test-runner-commands';
 import { fixtureSync, mousedown, nextFrame } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '../common.js';
-import '../../../theme/lumo/vaadin-combo-box.js';
 import '../../not-animated-styles.js';
+import '../../../theme/lumo/vaadin-combo-box.js';
 
 describe('combo-box', () => {
   let div, element;
