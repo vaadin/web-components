@@ -120,9 +120,7 @@ describe('vaadin-vertical-layout', () => {
         layout = fixtureSync(`
         <vaadin-vertical-layout>
           <div></div>
-          <div style="width: 100%"></div>
-          <div style="height: 50px; width: 100%"></div>
-          <div style="min-width: 100%"></div>
+          <div data-full-height></div>
         </vaadin-vertical-layout>
       `);
         children = Array.from(layout.querySelectorAll('*'));
@@ -136,23 +134,27 @@ describe('vaadin-vertical-layout', () => {
       });
     });
 
-    describe('min-width', () => {
+    describe('min-height', () => {
       beforeEach(async () => {
         layout = fixtureSync(`
         <vaadin-vertical-layout>
           <div></div>
+          <div data-full-height></div>
           <vaadin-button></vaadin-button>
+          <vaadin-button data-full-height></vaadin-button>
           <vaadin-horizontal-layout></vaadin-horizontal-layout>
+          <vaadin-horizontal-layout data-full-height></vaadin-horizontal-layout>
           <vaadin-vertical-layout></vaadin-vertical-layout>
+          <vaadin-vertical-layout data-full-height></vaadin-vertical-layout>
         </vaadin-vertical-layout>
       `);
         children = Array.from(layout.querySelectorAll('*'));
         await nextFrame();
       });
 
-      it('should not set min-width on any children', () => {
+      it('should not set min-height on any children', () => {
         children.forEach((child) => {
-          expect(getComputedStyle(child).minWidth).to.equal('auto');
+          expect(getComputedStyle(child).minHeight).to.equal('auto');
         });
       });
     });

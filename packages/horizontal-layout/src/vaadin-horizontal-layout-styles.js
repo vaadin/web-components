@@ -32,13 +32,12 @@ export const horizontalLayoutStyles = css`
 
   ${enableLayoutImprovements
     ? unsafeCSS`
-    ::slotted([style^='width: 100%']),
-    ::slotted([style*=' width: 100%']) {
+    ::slotted([data-full-width]) {
       flex: 1;
     }
   
-    ::slotted(vaadin-horizontal-layout),
-    ::slotted(vaadin-vertical-layout) {
+    ::slotted(vaadin-horizontal-layout[data-full-width]),
+    ::slotted(vaadin-vertical-layout[data-full-width]) {
       min-width: 0;
     }
   `

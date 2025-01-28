@@ -9,9 +9,7 @@ describe('layout improvements enabled', () => {
       layout = fixtureSync(`
         <vaadin-horizontal-layout>
           <div></div>
-          <div style="width: 100%"></div>
-          <div style="height: 50px; width: 100%"></div>
-          <div style="min-width: 100%"></div>
+          <div data-full-width></div>
         </vaadin-horizontal-layout>
       `);
       children = Array.from(layout.querySelectorAll('*'));
@@ -19,7 +17,7 @@ describe('layout improvements enabled', () => {
     });
 
     it('should set flex on full width children only', () => {
-      const fullWidthChildren = children.filter((child) => child.style.width === '100%');
+      const fullWidthChildren = children.filter((child) => child.hasAttribute('data-full-width'));
       const remainingChildren = children.filter((child) => !fullWidthChildren.includes(child));
 
       fullWidthChildren.forEach((child) => {
@@ -36,17 +34,23 @@ describe('layout improvements enabled', () => {
       layout = fixtureSync(`
         <vaadin-horizontal-layout>
           <div></div>
+          <div data-full-width></div>
           <vaadin-button></vaadin-button>
+          <vaadin-button data-full-width></vaadin-button>
           <vaadin-horizontal-layout></vaadin-horizontal-layout>
+          <vaadin-horizontal-layout data-full-width></vaadin-horizontal-layout>
           <vaadin-vertical-layout></vaadin-vertical-layout>
+          <vaadin-vertical-layout data-full-width></vaadin-vertical-layout>
         </vaadin-horizontal-layout>
       `);
       children = Array.from(layout.querySelectorAll('*'));
       await nextFrame();
     });
 
-    it('should set min-width on layout components only', () => {
-      const layoutChildren = children.filter((child) => child.localName.endsWith('layout'));
+    it('should set min-width on layout components with full width only', () => {
+      const layoutChildren = children.filter(
+        (child) => child.localName.endsWith('layout') && child.hasAttribute('data-full-width'),
+      );
       const remainingChildren = children.filter((child) => !layoutChildren.includes(child));
 
       layoutChildren.forEach((child) => {

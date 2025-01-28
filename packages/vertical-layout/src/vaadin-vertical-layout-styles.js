@@ -34,13 +34,12 @@ export const verticalLayoutStyles = css`
 
   ${enableLayoutImprovements
     ? unsafeCSS`
-    ::slotted([style^='height: 100%']),
-    ::slotted([style*=' height: 100%']) {
+    ::slotted([data-full-height]) {
       flex: 1;
     }
   
-    ::slotted(vaadin-horizontal-layout),
-    ::slotted(vaadin-vertical-layout) {
+    ::slotted(vaadin-horizontal-layout[data-full-height]),
+    ::slotted(vaadin-vertical-layout[data-full-height]) {
       min-height: 0;
     }
   `

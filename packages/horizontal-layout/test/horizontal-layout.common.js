@@ -119,9 +119,7 @@ describe('vaadin-horizontal-layout', () => {
         layout = fixtureSync(`
         <vaadin-horizontal-layout>
           <div></div>
-          <div style="width: 100%"></div>
-          <div style="height: 50px; width: 100%"></div>
-          <div style="min-width: 100%"></div>
+          <div data-full-width></div>
         </vaadin-horizontal-layout>
       `);
         children = Array.from(layout.querySelectorAll('*'));
@@ -140,9 +138,13 @@ describe('vaadin-horizontal-layout', () => {
         layout = fixtureSync(`
         <vaadin-horizontal-layout>
           <div></div>
+          <div data-full-width></div>
           <vaadin-button></vaadin-button>
+          <vaadin-button data-full-width></vaadin-button>
           <vaadin-horizontal-layout></vaadin-horizontal-layout>
+          <vaadin-horizontal-layout data-full-width></vaadin-horizontal-layout>
           <vaadin-vertical-layout></vaadin-vertical-layout>
+          <vaadin-vertical-layout data-full-width></vaadin-vertical-layout>
         </vaadin-horizontal-layout>
       `);
         children = Array.from(layout.querySelectorAll('*'));

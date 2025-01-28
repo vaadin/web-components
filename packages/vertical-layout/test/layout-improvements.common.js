@@ -9,20 +9,18 @@ describe('layout improvements enabled', () => {
       layout = fixtureSync(`
         <vaadin-vertical-layout>
           <div></div>
-          <div style="height: 100%"></div>
-          <div style="height: 50px; height: 100%"></div>
-          <div style="min-height: 100%"></div>
+          <div data-full-height></div>
         </vaadin-vertical-layout>
       `);
       children = Array.from(layout.querySelectorAll('*'));
       await nextFrame();
     });
 
-    it('should set flex on full width children only', () => {
-      const fullWidthChildren = children.filter((child) => child.style.height === '100%');
-      const remainingChildren = children.filter((child) => !fullWidthChildren.includes(child));
+    it('should set flex on full height children only', () => {
+      const fullHeightChildren = children.filter((child) => child.hasAttribute('data-full-height'));
+      const remainingChildren = children.filter((child) => !fullHeightChildren.includes(child));
 
-      fullWidthChildren.forEach((child) => {
+      fullHeightChildren.forEach((child) => {
         expect(getComputedStyle(child).flex).to.equal('1 1 0%');
       });
       remainingChildren.forEach((child) => {
@@ -31,22 +29,28 @@ describe('layout improvements enabled', () => {
     });
   });
 
-  describe('min-width', () => {
+  describe('min-height', () => {
     beforeEach(async () => {
       layout = fixtureSync(`
         <vaadin-vertical-layout>
           <div></div>
+          <div data-full-height></div>
           <vaadin-button></vaadin-button>
+          <vaadin-button data-full-height></vaadin-button>
           <vaadin-horizontal-layout></vaadin-horizontal-layout>
+          <vaadin-horizontal-layout data-full-height></vaadin-horizontal-layout>
           <vaadin-vertical-layout></vaadin-vertical-layout>
+          <vaadin-vertical-layout data-full-height></vaadin-vertical-layout>
         </vaadin-vertical-layout>
       `);
       children = Array.from(layout.querySelectorAll('*'));
       await nextFrame();
     });
 
-    it('should set min-width on layout components only', () => {
-      const layoutChildren = children.filter((child) => child.localName.endsWith('layout'));
+    it('should set min-height on layout components with full height only', () => {
+      const layoutChildren = children.filter(
+        (child) => child.localName.endsWith('layout') && child.hasAttribute('data-full-height'),
+      );
       const remainingChildren = children.filter((child) => !layoutChildren.includes(child));
 
       layoutChildren.forEach((child) => {
