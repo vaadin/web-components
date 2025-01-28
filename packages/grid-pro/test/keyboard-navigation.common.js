@@ -93,6 +93,8 @@ describe('keyboard navigation', () => {
       const secondCell = getContainerCell(grid.$.items, 2, 0);
       const spy = sinon.spy(secondCell, 'focus');
       await sendKeys({ press: 'Enter' });
+      // Wait for possible scroll to get the cell into view
+      await nextFrame();
       expect(spy.calledOnce).to.be.true;
     });
 
