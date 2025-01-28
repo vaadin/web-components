@@ -12,6 +12,7 @@ const HIDDEN_WARNINGS = [
   'The <vaadin-grid> needs the total number of items in order to display rows. Set the total number of items to the `size` property, or provide the total number of items in the second argument of the `dataProvider`’s `callback` call.',
   /^WARNING: Since Vaadin 22, .* is deprecated.*/,
   /^WARNING: <template> inside <[^>]+> is deprecated. Use a renderer function instead/,
+  /Lit is in dev mode/u,
 ];
 
 const filterBrowserLogs = (log) => {
