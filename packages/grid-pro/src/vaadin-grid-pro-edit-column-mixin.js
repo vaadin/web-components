@@ -285,11 +285,7 @@ export const GridProEditColumnMixin = (superClass) =>
       this._setEditorValue(editor, get(this.path, model.item));
       editor._grid = this._grid;
 
-      if (editor.updateComplete) {
-        editor.updateComplete.then(() => this._focusEditor(editor));
-      } else {
-        this._focusEditor(editor);
-      }
+      this._focusEditor(editor);
     }
 
     /**
