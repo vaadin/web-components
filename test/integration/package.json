@@ -10,6 +10,7 @@
     "@vaadin/accordion": "~24.5.8",
     "@vaadin/button": "~24.5.8",
     "@vaadin/chai-plugins": "~24.5.8",
+    "@vaadin/test-runner-commands": "~24.5.8",
     "@vaadin/checkbox": "~24.5.8",
     "@vaadin/checkbox-group": "~24.5.8",
     "@vaadin/combo-box": "~24.5.8",

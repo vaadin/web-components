@@ -40,6 +40,7 @@
   },
   "devDependencies": {
     "@vaadin/chai-plugins": "~24.5.8",
+    "@vaadin/test-runner-commands": "~24.5.8",
     "@vaadin/icon": "~24.5.8",
     "@vaadin/icons": "~24.5.8",
     "@vaadin/testing-helpers": "^1.1.0",
