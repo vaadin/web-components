@@ -133,9 +133,7 @@ describe('<vaadin-upload-file> element', () => {
       button.focus();
 
       // Move focus back to the upload file.
-      await sendKeys({ down: 'Shift' });
-      await sendKeys({ press: 'Tab' });
-      await sendKeys({ up: 'Shift' });
+      await sendKeys({ press: 'Shift+Tab' });
 
       expect(fileElement.hasAttribute('focus-ring')).to.be.true;
     });
@@ -146,9 +144,7 @@ describe('<vaadin-upload-file> element', () => {
       await sendKeys({ press: 'Tab' });
 
       // Move focus back to the button.
-      await sendKeys({ down: 'Shift' });
-      await sendKeys({ press: 'Tab' });
-      await sendKeys({ up: 'Shift' });
+      await sendKeys({ press: 'Shift+Tab' });
 
       expect(fileElement.hasAttribute('focus-ring')).to.be.false;
     });

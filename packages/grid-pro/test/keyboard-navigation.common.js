@@ -56,9 +56,7 @@ describe('keyboard navigation', () => {
 
       const secondCell = getContainerCell(grid.$.items, 1, 0);
       const spy = sinon.spy(secondCell, 'focus');
-      await sendKeys({ down: 'Shift' });
-      await sendKeys({ press: 'Tab' });
-      await sendKeys({ up: 'Shift' });
+      await sendKeys({ press: 'Shift+Tab' });
       expect(spy.calledOnce).to.be.true;
     });
 
@@ -80,9 +78,7 @@ describe('keyboard navigation', () => {
 
       const secondCell = getContainerCell(grid.$.items, 1, 1);
       const spy = sinon.spy(secondCell, 'focus');
-      await sendKeys({ down: 'Shift' });
-      await sendKeys({ press: 'Tab' });
-      await sendKeys({ up: 'Shift' });
+      await sendKeys({ press: 'Shift+Tab' });
       expect(spy.calledOnce).to.be.true;
     });
 
@@ -115,9 +111,7 @@ describe('keyboard navigation', () => {
 
       const secondCell = getContainerCell(grid.$.items, 0, 0);
       const spy = sinon.spy(secondCell, 'focus');
-      await sendKeys({ down: 'Shift' });
-      await sendKeys({ press: 'Enter' });
-      await sendKeys({ up: 'Shift' });
+      await sendKeys({ press: 'Shift+Enter' });
       expect(spy.calledOnce).to.be.true;
     });
 
@@ -126,9 +120,7 @@ describe('keyboard navigation', () => {
       firstCell.focus();
       await sendKeys({ press: 'Enter' });
 
-      await sendKeys({ down: 'Shift' });
-      await sendKeys({ press: 'Enter' });
-      await sendKeys({ up: 'Shift' });
+      await sendKeys({ press: 'Shift+Enter' });
       expect(getCellEditor(firstCell)).to.be.not.ok;
     });
 
@@ -190,9 +182,7 @@ describe('keyboard navigation', () => {
       dblclick(firstCell._content);
 
       const secondCell = getContainerCell(grid.$.items, 1, 0);
-      await sendKeys({ down: 'Shift' });
-      await sendKeys({ press: 'Tab' });
-      await sendKeys({ up: 'Shift' });
+      await sendKeys({ press: 'Shift+Tab' });
       expect(getCellEditor(secondCell)).to.be.ok;
     });
 
@@ -210,9 +200,7 @@ describe('keyboard navigation', () => {
       dblclick(firstCell._content);
 
       const secondCell = getContainerCell(grid.$.items, 1, 1);
-      await sendKeys({ down: 'Shift' });
-      await sendKeys({ press: 'Tab' });
-      await sendKeys({ up: 'Shift' });
+      await sendKeys({ press: 'Shift+Tab' });
       expect(getCellEditor(secondCell)).to.be.ok;
     });
 
@@ -242,9 +230,7 @@ describe('keyboard navigation', () => {
       await sendKeys({ press: 'Enter' });
 
       const secondCell = getContainerCell(grid.$.items, 0, 0);
-      await sendKeys({ down: 'Shift' });
-      await sendKeys({ press: 'Enter' });
-      await sendKeys({ up: 'Shift' });
+      await sendKeys({ press: 'Shift+Enter' });
       expect(getCellEditor(secondCell)).to.be.ok;
     });
 
@@ -263,9 +249,7 @@ describe('keyboard navigation', () => {
       const firstCell = getContainerCell(grid.$.items, 1, 0);
       dblclick(firstCell._content);
 
-      await sendKeys({ down: 'Shift' });
-      await sendKeys({ press: 'Enter' });
-      await sendKeys({ up: 'Shift' });
+      await sendKeys({ press: 'Shift+Enter' });
       expect(getCellEditor(firstCell)).to.be.not.ok;
     });
   });
