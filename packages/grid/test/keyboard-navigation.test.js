@@ -1,4 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
+import { sendKeys } from '@vaadin/test-runner-commands';
 import {
   aTimeout,
   down as mouseDown,
@@ -13,7 +14,6 @@ import {
   nextFrame,
   up as mouseUp,
 } from '@vaadin/testing-helpers';
-import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import '../all-imports.js';
 import {

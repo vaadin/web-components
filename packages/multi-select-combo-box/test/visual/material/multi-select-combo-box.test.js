@@ -1,9 +1,9 @@
+import { sendKeys } from '@vaadin/test-runner-commands';
 import { fixtureSync, mousedown } from '@vaadin/testing-helpers';
-import { sendKeys } from '@web/test-runner-commands';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '../common.js';
-import '../../../theme/material/vaadin-multi-select-combo-box.js';
 import '../../not-animated-styles.js';
+import '../../../theme/material/vaadin-multi-select-combo-box.js';
 
 describe('multi-select-combo-box', () => {
   let div, element;

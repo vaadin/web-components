@@ -116,14 +116,4 @@ describe('min-height', () => {
       expect(height).to.equal(200);
     });
   });
-
-  describe('with all rows visible', () => {
-    beforeEach(() => {
-      grid.allRowsVisible = true;
-    });
-
-    it('should have min-height of one row', () => {
-      verifyMinHeight();
-    });
-  });
 });

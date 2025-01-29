@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
+import { sendKeys } from '@vaadin/test-runner-commands';
 import { fixtureSync, isChrome, isFirefox, nextFrame, nextResize } from '@vaadin/testing-helpers';
-import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import '../vaadin-dashboard.js';
 import type { Dashboard, DashboardItem } from '../vaadin-dashboard.js';

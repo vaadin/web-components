@@ -1,4 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
+import { resetMouse, sendKeys, sendMouse } from '@vaadin/test-runner-commands';
 import {
   arrowDown,
   arrowRight,
@@ -12,7 +13,6 @@ import {
   nextRender,
   tabKeyDown,
 } from '@vaadin/testing-helpers';
-import { resetMouse, sendKeys, sendMouse } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import './not-animated-styles.js';
 import '@vaadin/menu-bar';
