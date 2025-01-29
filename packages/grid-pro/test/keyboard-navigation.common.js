@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { sendKeys } from '@vaadin/test-runner-commands';
-import { aTimeout, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, nextFrame, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import {
   createItems,
@@ -15,7 +15,7 @@ import {
 describe('keyboard navigation', () => {
   let grid;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     grid = fixtureSync(`
       <vaadin-grid-pro>
         <vaadin-grid-pro-edit-column path="name" header="Name"></vaadin-grid-pro-edit-column>
@@ -28,6 +28,8 @@ describe('keyboard navigation', () => {
     };
 
     grid.items = createItems();
+    // Wait for vaadin-grid-appear animation to finish
+    await oneEvent(grid, 'animationend');
     flushGrid(grid);
   });
 
@@ -93,8 +95,6 @@ describe('keyboard navigation', () => {
       const secondCell = getContainerCell(grid.$.items, 2, 0);
       const spy = sinon.spy(secondCell, 'focus');
       await sendKeys({ press: 'Enter' });
-      // Wait for possible scroll to get the cell into view
-      await nextFrame();
       expect(spy.calledOnce).to.be.true;
     });
 
