@@ -371,9 +371,7 @@ describe('a11y', () => {
       const spy = sinon.spy(target, 'focus');
 
       // Move focus back to the target
-      await sendKeys({ down: 'Shift' });
-      await sendKeys({ press: 'Tab' });
-      await sendKeys({ up: 'Shift' });
+      await sendKeys({ press: 'Shift+Tab' });
 
       expect(spy).to.be.calledOnce;
     });
@@ -401,9 +399,7 @@ describe('a11y', () => {
       const focusable = overlay.querySelector('input');
       const spy = sinon.spy(focusable, 'focus');
 
-      await sendKeys({ down: 'Shift' });
-      await sendKeys({ press: 'Tab' });
-      await sendKeys({ up: 'Shift' });
+      await sendKeys({ press: 'Shift+Tab' });
 
       expect(spy).to.be.calledOnce;
     });
@@ -429,9 +425,7 @@ describe('a11y', () => {
       await nextRender();
 
       // Move focus back from the target
-      await sendKeys({ down: 'Shift' });
-      await sendKeys({ press: 'Tab' });
-      await sendKeys({ up: 'Shift' });
+      await sendKeys({ press: 'Shift+Tab' });
       await nextRender();
 
       const activeElement = getDeepActiveElement();

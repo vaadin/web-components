@@ -243,9 +243,7 @@ describe('root menu layout', () => {
 
     it('should move focus to prev button on Shift Tab keydown', async () => {
       buttons[1].focus();
-      await sendKeys({ down: 'Shift' });
-      await sendKeys({ press: 'Tab' });
-      await sendKeys({ up: 'Shift' });
+      await sendKeys({ press: 'Shift+Tab' });
       expect(buttons[0].hasAttribute('focused')).to.be.true;
     });
 
