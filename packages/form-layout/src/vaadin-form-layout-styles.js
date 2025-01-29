@@ -42,6 +42,7 @@ export const formLayoutStyles = css`
   }
 
   #layout ::slotted(*) {
+    grid-column-start: var(--_grid-colstart, auto);
     grid-column-end: span min(var(--_grid-colspan, 1), var(--_grid-cols));
   }
 
