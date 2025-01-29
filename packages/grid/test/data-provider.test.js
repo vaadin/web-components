@@ -1,8 +1,8 @@
 import { expect } from '@vaadin/chai-plugins';
 import { aTimeout, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import '../all-imports.js';
 import './data-provider.styles.js';
+import '../all-imports.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import {
   flushGrid,
