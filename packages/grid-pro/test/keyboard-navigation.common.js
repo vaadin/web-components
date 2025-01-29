@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { aTimeout, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, nextFrame, oneEvent } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import {
@@ -15,7 +15,7 @@ import {
 describe('keyboard navigation', () => {
   let grid;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     grid = fixtureSync(`
       <vaadin-grid-pro>
         <vaadin-grid-pro-edit-column path="name" header="Name"></vaadin-grid-pro-edit-column>
@@ -28,6 +28,8 @@ describe('keyboard navigation', () => {
     };
 
     grid.items = createItems();
+    // Wait for vaadin-grid-appear animation to finish
+    await oneEvent(grid, 'animationend');
     flushGrid(grid);
   });
 
