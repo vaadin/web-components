@@ -123,7 +123,7 @@ describe('vaadin-vertical-layout', () => {
           <div data-full-height></div>
         </vaadin-vertical-layout>
       `);
-        children = Array.from(layout.querySelectorAll('*'));
+        children = Array.from(layout.children);
         await nextFrame();
       });
 
@@ -148,7 +148,7 @@ describe('vaadin-vertical-layout', () => {
           <vaadin-vertical-layout data-full-height></vaadin-vertical-layout>
         </vaadin-vertical-layout>
       `);
-        children = Array.from(layout.querySelectorAll('*'));
+        children = Array.from(layout.children);
         await nextFrame();
       });
 

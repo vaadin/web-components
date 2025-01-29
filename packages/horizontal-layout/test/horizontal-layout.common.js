@@ -122,7 +122,7 @@ describe('vaadin-horizontal-layout', () => {
           <div data-full-width></div>
         </vaadin-horizontal-layout>
       `);
-        children = Array.from(layout.querySelectorAll('*'));
+        children = Array.from(layout.children);
         await nextFrame();
       });
 
@@ -147,7 +147,7 @@ describe('vaadin-horizontal-layout', () => {
           <vaadin-vertical-layout data-full-width></vaadin-vertical-layout>
         </vaadin-horizontal-layout>
       `);
-        children = Array.from(layout.querySelectorAll('*'));
+        children = Array.from(layout.children);
         await nextFrame();
       });
 
