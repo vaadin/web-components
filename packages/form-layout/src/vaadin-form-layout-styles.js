@@ -35,18 +35,14 @@ export const formLayoutStyles = css`
   #layout {
     display: grid;
     grid-template-columns: repeat(var(--_grid-cols), 1fr);
-    column-gap: var(--vaadin-form-layout-column-spacing);
-    row-gap: var(--vaadin-form-item-row-spacing);
+    gap: var(--vaadin-form-item-row-spacing) var(--vaadin-form-layout-column-spacing);
     align-items: baseline; /* default \`stretch\` is not appropriate */
     justify-content: stretch;
     min-width: min-content;
   }
 
   #layout ::slotted(*) {
-    /* Unless auto-rows is on, each field starts on a new line */
-    grid-column-start: 1;
-    /* Span is set via custom prop set by the WC; capped by current breakpoint's column count */
-    grid-column-end: span min(var(--vaadin-form-layout-colspan), var(--_grid-cols));
+    grid-column: 1 / span min(var(--vaadin-form-layout-colspan), var(--_grid-cols));
   }
 
   #layout ::slotted(br) {
