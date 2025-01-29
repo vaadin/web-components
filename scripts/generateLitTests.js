@@ -14,7 +14,6 @@ packages
     return !/(-polymer|-lit)(\.generated)?\.test/u.test(testPath);
   })
   .forEach((testPath) => {
-    console.log(testPath);
     const generatedLitTestPath = testPath.replace('.test.', '-lit.generated.test.');
 
     if (!fs.existsSync(generatedLitTestPath)) {
