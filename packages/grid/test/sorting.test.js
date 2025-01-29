@@ -2,6 +2,7 @@ import { expect } from '@vaadin/chai-plugins';
 import { click, fixtureSync, keyUpOn, nextFrame } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../all-imports.js';
+import { Grid } from '../src/vaadin-grid.js';
 import {
   buildDataSet,
   flushGrid,
@@ -11,8 +12,6 @@ import {
   getRows,
   shiftClick,
 } from './helpers.js';
-
-const Grid = customElements.get('vaadin-grid');
 
 describe('sorting', () => {
   describe('sorter', () => {
