@@ -35,12 +35,12 @@ export const baseStyles = css`
 // class.
 const enableLayoutImprovements = window.Vaadin.featureFlags.layoutImprovements;
 const layoutImprovementStyles = css`
-  ::slotted([data-full-width]) {
+  ::slotted([data-width-full]) {
     flex: 1;
   }
 
-  ::slotted(vaadin-horizontal-layout[data-full-width]),
-  ::slotted(vaadin-vertical-layout[data-full-width]) {
+  ::slotted(vaadin-horizontal-layout[data-width-full]),
+  ::slotted(vaadin-vertical-layout[data-width-full]) {
     min-width: 0;
 `;
 

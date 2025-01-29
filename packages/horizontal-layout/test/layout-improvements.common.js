@@ -9,7 +9,7 @@ describe('layout improvements enabled', () => {
       layout = fixtureSync(`
         <vaadin-horizontal-layout>
           <div></div>
-          <div data-full-width></div>
+          <div data-width-full></div>
         </vaadin-horizontal-layout>
       `);
       children = Array.from(layout.children);
@@ -17,7 +17,7 @@ describe('layout improvements enabled', () => {
     });
 
     it('should set flex on full width children only', () => {
-      const fullWidthChildren = children.filter((child) => child.hasAttribute('data-full-width'));
+      const fullWidthChildren = children.filter((child) => child.hasAttribute('data-width-full'));
       const remainingChildren = children.filter((child) => !fullWidthChildren.includes(child));
 
       fullWidthChildren.forEach((child) => {
@@ -34,13 +34,13 @@ describe('layout improvements enabled', () => {
       layout = fixtureSync(`
         <vaadin-horizontal-layout>
           <div></div>
-          <div data-full-width></div>
+          <div data-width-full></div>
           <vaadin-button></vaadin-button>
-          <vaadin-button data-full-width></vaadin-button>
+          <vaadin-button data-width-full></vaadin-button>
           <vaadin-horizontal-layout></vaadin-horizontal-layout>
-          <vaadin-horizontal-layout data-full-width></vaadin-horizontal-layout>
+          <vaadin-horizontal-layout data-width-full></vaadin-horizontal-layout>
           <vaadin-vertical-layout></vaadin-vertical-layout>
-          <vaadin-vertical-layout data-full-width></vaadin-vertical-layout>
+          <vaadin-vertical-layout data-width-full></vaadin-vertical-layout>
         </vaadin-horizontal-layout>
       `);
       children = Array.from(layout.children);
@@ -49,7 +49,7 @@ describe('layout improvements enabled', () => {
 
     it('should set min-width on layout components with full width only', () => {
       const layoutChildren = children.filter(
-        (child) => child.localName.endsWith('layout') && child.hasAttribute('data-full-width'),
+        (child) => child.localName.endsWith('layout') && child.hasAttribute('data-width-full'),
       );
       const remainingChildren = children.filter((child) => !layoutChildren.includes(child));
 

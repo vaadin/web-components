@@ -38,12 +38,12 @@ export const baseStyles = css`
 // class.
 const enableLayoutImprovements = window.Vaadin.featureFlags.layoutImprovements;
 const layoutImprovementStyles = css`
-  ::slotted([data-full-height]) {
+  ::slotted([data-height-full]) {
     flex: 1;
   }
 
-  ::slotted(vaadin-horizontal-layout[data-full-height]),
-  ::slotted(vaadin-vertical-layout[data-full-height]) {
+  ::slotted(vaadin-horizontal-layout[data-height-full]),
+  ::slotted(vaadin-vertical-layout[data-height-full]) {
     min-height: 0;
   }
 `;

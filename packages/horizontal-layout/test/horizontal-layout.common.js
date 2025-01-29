@@ -119,7 +119,7 @@ describe('vaadin-horizontal-layout', () => {
         layout = fixtureSync(`
           <vaadin-horizontal-layout>
             <div></div>
-            <div data-full-width></div>
+            <div data-width-full></div>
           </vaadin-horizontal-layout>
         `);
         children = Array.from(layout.children);
@@ -138,13 +138,13 @@ describe('vaadin-horizontal-layout', () => {
         layout = fixtureSync(`
           <vaadin-horizontal-layout>
             <div></div>
-            <div data-full-width></div>
+            <div data-width-full></div>
             <vaadin-button></vaadin-button>
-            <vaadin-button data-full-width></vaadin-button>
+            <vaadin-button data-width-full></vaadin-button>
             <vaadin-horizontal-layout></vaadin-horizontal-layout>
-            <vaadin-horizontal-layout data-full-width></vaadin-horizontal-layout>
+            <vaadin-horizontal-layout data-width-full></vaadin-horizontal-layout>
             <vaadin-vertical-layout></vaadin-vertical-layout>
-            <vaadin-vertical-layout data-full-width></vaadin-vertical-layout>
+            <vaadin-vertical-layout data-width-full></vaadin-vertical-layout>
           </vaadin-horizontal-layout>
         `);
         children = Array.from(layout.children);
