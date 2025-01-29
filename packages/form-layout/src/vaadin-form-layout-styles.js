@@ -10,16 +10,16 @@ export const formLayoutStyles = css`
     display: block;
     max-width: 100%;
     animation: 1ms vaadin-form-layout-appear;
-    align-self: stretch;
     container-type: inline-size;
     container-name: form-grid;
-    --_grid-cols: 10; /* Number of cols, defined by breakpoints. Default value is probably pointless. */
+    /* Number of cols, defined by breakpoints. Default value is probably pointless. */
+    --_grid-cols: 10;
     /* CSS API for host */
-    /* Let's not define defaults here – that way they can be set globally */
     --vaadin-form-item-label-width: 8em;
     --vaadin-form-item-label-spacing: 1em;
     --vaadin-form-item-row-spacing: 1em;
-    --vaadin-form-layout-column-spacing: 2em;
+    --vaadin-form-layout-column-spacing: 2em; /* (default) */
+    align-self: stretch;
   }
 
   @keyframes vaadin-form-layout-appear {
@@ -37,7 +37,7 @@ export const formLayoutStyles = css`
     grid-template-columns: repeat(var(--_grid-cols), 1fr);
     column-gap: var(--vaadin-form-layout-column-spacing);
     row-gap: var(--vaadin-form-item-row-spacing);
-    align-items: baseline;
+    align-items: baseline; /* default \`stretch\` is not appropriate */
     justify-content: stretch;
     min-width: min-content;
   }
