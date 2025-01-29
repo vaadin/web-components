@@ -6,7 +6,6 @@ import '../../../theme/lumo/vaadin-grid-selection-column.js';
 import '../../../theme/lumo/vaadin-grid-sorter.js';
 import '../../../theme/lumo/vaadin-grid-sort-column.js';
 import '../../../theme/lumo/vaadin-grid-tree-column.js';
-import '../grid.common.js';
 import { flushGrid } from '../../helpers.js';
 import { users } from '../users.js';
 
