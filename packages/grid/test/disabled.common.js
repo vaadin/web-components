@@ -82,9 +82,7 @@ describe('disabled', () => {
     it('should skip disabled grid when navigating on Shift Tab', async () => {
       inputAfter.focus();
 
-      await sendKeys({ down: 'Shift' });
-      await sendKeys({ press: 'Tab' });
-      await sendKeys({ up: 'Shift' });
+      await sendKeys({ press: 'Shift+Tab' });
 
       expect(document.activeElement).to.equal(inputBefore);
     });
