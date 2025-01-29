@@ -42,7 +42,7 @@ export const formLayoutStyles = css`
   }
 
   #layout ::slotted(*) {
-    grid-column: 1 / span min(var(--vaadin-form-layout-colspan), var(--_grid-cols));
+    grid-column-end: span min(var(--_grid-colspan, 1), var(--_grid-cols));
   }
 
   #layout ::slotted(br) {
