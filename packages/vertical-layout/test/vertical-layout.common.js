@@ -118,11 +118,11 @@ describe('vaadin-vertical-layout', () => {
     describe('flex', () => {
       beforeEach(async () => {
         layout = fixtureSync(`
-        <vaadin-vertical-layout>
-          <div></div>
-          <div data-full-height></div>
-        </vaadin-vertical-layout>
-      `);
+          <vaadin-vertical-layout>
+            <div></div>
+            <div data-full-height></div>
+          </vaadin-vertical-layout>
+        `);
         children = Array.from(layout.children);
         await nextFrame();
       });
@@ -137,17 +137,17 @@ describe('vaadin-vertical-layout', () => {
     describe('min-height', () => {
       beforeEach(async () => {
         layout = fixtureSync(`
-        <vaadin-vertical-layout>
-          <div></div>
-          <div data-full-height></div>
-          <vaadin-button></vaadin-button>
-          <vaadin-button data-full-height></vaadin-button>
-          <vaadin-horizontal-layout></vaadin-horizontal-layout>
-          <vaadin-horizontal-layout data-full-height></vaadin-horizontal-layout>
-          <vaadin-vertical-layout></vaadin-vertical-layout>
-          <vaadin-vertical-layout data-full-height></vaadin-vertical-layout>
-        </vaadin-vertical-layout>
-      `);
+          <vaadin-vertical-layout>
+            <div></div>
+            <div data-full-height></div>
+            <vaadin-button></vaadin-button>
+            <vaadin-button data-full-height></vaadin-button>
+            <vaadin-horizontal-layout></vaadin-horizontal-layout>
+            <vaadin-horizontal-layout data-full-height></vaadin-horizontal-layout>
+            <vaadin-vertical-layout></vaadin-vertical-layout>
+            <vaadin-vertical-layout data-full-height></vaadin-vertical-layout>
+          </vaadin-vertical-layout>
+        `);
         children = Array.from(layout.children);
         await nextFrame();
       });
