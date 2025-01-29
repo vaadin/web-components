@@ -9,7 +9,5 @@ export async function tab() {
 }
 
 export async function shiftTab() {
-  await sendKeys({ down: 'Shift' });
-  await sendKeys({ press: 'Tab' });
-  await sendKeys({ up: 'Shift' });
+  await sendKeys({ press: 'Shift+Tab' });
 }
