@@ -279,9 +279,7 @@ describe('keyboard interaction mode', () => {
     const previousInput = getCellInput(0, 1);
 
     // Shift+Tab to previous input
-    await sendKeys({ down: 'Shift' });
-    await sendKeys({ press: 'Tab' });
-    await sendKeys({ up: 'Shift' });
+    await sendKeys({ press: 'Shift+Tab' });
 
     expect(document.activeElement).to.equal(previousInput);
   });
@@ -551,9 +549,7 @@ describe('keyboard interaction mode', () => {
     // Tab upwards
     for (let i = tabToIndex - 1; i >= 0; i--) {
       await rendered();
-      await sendKeys({ down: 'Shift' });
-      await sendKeys({ press: 'Tab' });
-      await sendKeys({ up: 'Shift' });
+      await sendKeys({ press: 'Shift+Tab' });
       await rendered();
       const focusedRow = document.activeElement.parentElement.assignedSlot.parentElement.parentElement;
       expect(focusedRow.index).to.equal(i);
