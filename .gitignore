@@ -9,6 +9,9 @@ yarn-error.log
 packages/*/test/visual/*/screenshots/*/failed
 packages/icons/test/visual/screenshots/failed
 
+# Generated Lit test files
+packages/*/test/*.generated.*
+
 # Generated theme folders .ts files
 packages/**/theme/**/*.d.ts
 
