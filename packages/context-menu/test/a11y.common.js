@@ -79,9 +79,7 @@ describe('a11y', () => {
     it('should move focus to the prev element outside the menu on Shift+Tab pressed inside', async () => {
       contextMenuButton.click();
       await nextRender();
-      await sendKeys({ down: 'Shift' });
-      await sendKeys({ press: 'Tab' });
-      await sendKeys({ up: 'Shift' });
+      await sendKeys({ press: 'Shift+Tab' });
       expect(getDeepActiveElement()).to.equal(firstGlobalFocusable);
     });
 

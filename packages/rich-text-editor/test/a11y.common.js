@@ -247,9 +247,7 @@ describe('accessibility', () => {
 
     it('should move focus to the first toolbar button after esc followed by shift-tab are pressed', async () => {
       await sendKeys({ press: 'Escape' });
-      await sendKeys({ down: 'Shift' });
-      await sendKeys({ press: 'Tab' });
-      await sendKeys({ up: 'Shift' });
+      await sendKeys({ press: 'Shift+Tab' });
       expect(getDeepActiveElement()).to.equal(buttons[0]);
     });
 

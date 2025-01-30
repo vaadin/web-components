@@ -287,9 +287,7 @@ describe('vaadin-checkbox-group', () => {
       await sendKeys({ press: 'Tab' });
 
       // Move focus out of the checkbox group.
-      await sendKeys({ down: 'Shift' });
-      await sendKeys({ press: 'Tab' });
-      await sendKeys({ up: 'Shift' });
+      await sendKeys({ press: 'Shift+Tab' });
 
       expect(checkboxes[0].hasAttribute('focused')).to.be.false;
       expect(group.hasAttribute('focused')).to.be.false;

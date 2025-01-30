@@ -152,9 +152,7 @@ describe('reorder elements', () => {
       // Tab upwards
       for (let i = tabToIndex - 1; i >= 0; i--) {
         await nextFrame();
-        await sendKeys({ down: 'Shift' });
-        await sendKeys({ press: 'Tab' });
-        await sendKeys({ up: 'Shift' });
+        await sendKeys({ press: 'Shift+Tab' });
         await nextFrame();
         expect(document.activeElement.id).to.equal(`item-${i}`);
       }
