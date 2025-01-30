@@ -18,7 +18,6 @@ export const baseStyles = css`
   }
 
   /* Theme variations */
-
   :host([theme~='margin']) {
     margin: 1em;
   }
