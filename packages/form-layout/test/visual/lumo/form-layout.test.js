@@ -260,7 +260,7 @@ describe('form-layout', () => {
       describe('container overflow', () => {
         beforeEach(() => {
           element = fixtureSync(`
-            <div style="padding: 10px">
+            <div style="display: inline-block; padding: 10px">
               <style>
                 vaadin-form-layout > div:nth-child(even) {
                   background: var(--lumo-contrast-10pct);
