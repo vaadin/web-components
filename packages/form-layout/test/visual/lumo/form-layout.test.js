@@ -260,36 +260,34 @@ describe('form-layout', () => {
       describe('container overflow', () => {
         beforeEach(() => {
           element = fixtureSync(`
-            <div style="width: 300px; overflow: auto; border: 1px solid #8EA3A6;">
+            <div style="padding: 10px">
               <style>
-                vaadin-form-layout > div {
-                  padding: 0.5em;
-                  box-sizing: border-box;
-                }
-
                 vaadin-form-layout > div:nth-child(even) {
-                  background: #E6E9AF;
+                  background: var(--lumo-contrast-10pct);
                 }
 
                 vaadin-form-layout > div:nth-child(odd) {
-                  background: #605EA1;
+                  background: var(--lumo-contrast-50pct);
                 }
               </style>
-              <vaadin-form-layout responsive-steps='[{"columns": 3}]'>
-                <div>1/3</div>
-                <div>1/3</div>
-                <div>1/3</div>
-                <br>
-                <div style="display: none;">hidden</div>
-                <div colspan="2">2/3</div>
-                <div style="display: none;">hidden</div>
-                <br>
-                <div>1/3</div>
-                <div colspan="2">2/3</div>
-                <div colspan="2">2/3</div>
-                <div>1/3</div>
-                <div colspan="3">3/3</div>
-              </vaadin-form-layout>
+
+              <div style="width: 300px; overflow: auto; border: 1px solid;">
+                <vaadin-form-layout responsive-steps='[{"columns": 3}]'>
+                  <div>1/3</div>
+                  <div>1/3</div>
+                  <div>1/3</div>
+                  <br>
+                  <div style="display: none;">hidden</div>
+                  <div colspan="2">2/3</div>
+                  <div style="display: none;">hidden</div>
+                  <br>
+                  <div>1/3</div>
+                  <div colspan="2">2/3</div>
+                  <div colspan="2">2/3</div>
+                  <div>1/3</div>
+                  <div colspan="3">3/3</div>
+                </vaadin-form-layout>
+              </div>
             </div>
           `);
         });
