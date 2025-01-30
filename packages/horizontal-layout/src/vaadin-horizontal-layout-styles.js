@@ -42,7 +42,7 @@ const layoutImprovementStyles = css`
   ::slotted(vaadin-horizontal-layout[data-width-full]),
   ::slotted(vaadin-vertical-layout[data-width-full]) {
     min-width: 0;
-  } 
+  }
 `;
 
 export const horizontalLayoutStyles = enableLayoutImprovements ? [baseStyles, layoutImprovementStyles] : [baseStyles];
