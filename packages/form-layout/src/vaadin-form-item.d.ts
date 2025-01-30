@@ -43,6 +43,10 @@ import { FormItemMixin } from './vaadin-form-item-mixin.js';
  * because the `label-position` attribute is triggered automatically by the parent
  * `<vaadin-form-layout>`, depending on its width and responsive behavior.
  *
+ * **Deprecation note:** The `label-position` attribute is getting deprecated since
+ * V24.7 and will be removed in V25, when a new method for setting the label position
+ * will be introduced.
+ *
  * ### Input Width
  *
  * By default, `<vaadin-form-item>` does not manipulate the width of the slotted
@@ -65,6 +69,10 @@ import { FormItemMixin } from './vaadin-form-item-mixin.js';
  *   padding-top: 0.5rem;
  * }
  * ```
+ *
+ * **Deprecation note:** The `label-position` attribute is getting deprecated since
+ * V24.7 and will be removed in V25, when a new method for styling the form-item based
+ * on the label position will be introduced.
  *
  * The following shadow DOM parts are available for styling:
  *
