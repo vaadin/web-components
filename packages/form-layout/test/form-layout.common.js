@@ -2,42 +2,6 @@ import { expect } from '@vaadin/chai-plugins';
 import { aTimeout, fixtureSync, nextFrame, nextRender, nextResize } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '@polymer/polymer/lib/elements/dom-repeat.js';
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
-
-customElements.define(
-  'mutable-layout',
-  class extends PolymerElement {
-    static get template() {
-      return html`
-        <vaadin-form-layout>
-          <vaadin-form-item>
-            <label slot="label">Address</label>
-            <input class="full-width" />
-          </vaadin-form-item>
-          <vaadin-form-item>
-            <label slot="label">First Name</label>
-            <input class="full-width" value="Jane" />
-          </vaadin-form-item>
-          <template is="dom-repeat" items="[[items]]">
-            <vaadin-form-item colspan$="[[item.colspan]]">
-              <label slot="label">[[item.label]]</label>
-              <input class="full-width" />
-            </vaadin-form-item>
-          </template>
-        </vaadin-form-layout>
-      `;
-    }
-
-    static get properties() {
-      return {
-        items: {
-          type: Array,
-          value: () => [],
-        },
-      };
-    }
-  },
-);
 
 function getParsedWidth(el) {
   const width = el.style.getPropertyValue('width');
@@ -219,14 +183,6 @@ describe('form layout', () => {
         { minWidth: '20em', columns: 1 },
         { minWidth: '40em', columns: 2 },
       ]);
-    });
-
-    it('should assign width inline style on items', () => {
-      layout.responsiveSteps = [{ columns: 3 }];
-
-      const parsedWidth = getParsedWidth(layout.firstElementChild);
-      expect(parsedWidth.percentage).to.match(/%$/u);
-      expect(parseFloat(parsedWidth.percentage)).to.be.closeTo(33, 0.5);
     });
 
     it('should set label-position attribute to child form-item elements', () => {
@@ -548,43 +504,53 @@ describe('form layout', () => {
   });
 
   describe('mutations', () => {
-    let container, layout;
+    let container, layout, items;
 
     beforeEach(async () => {
-      container = fixtureSync('<mutable-layout></mutable-layout>');
-      layout = container.shadowRoot.querySelector('vaadin-form-layout');
+      container = fixtureSync(`
+        <div>
+          <vaadin-form-layout>
+            <vaadin-form-item>
+              <label slot="label">Address</label>
+              <input class="full-width" />
+            </vaadin-form-item>
+            <vaadin-form-item>
+              <label slot="label">First Name</label>
+              <input class="full-width" value="Jane" />
+            </vaadin-form-item>
+          </vaadin-form-layout>
+        </div>
+      `);
+      layout = container.querySelector('vaadin-form-layout');
+      items = layout.querySelectorAll('vaadin-form-item');
       await nextRender(container);
     });
 
-    function estimateEffectiveColspan(el) {
-      return parseFloat(getParsedWidth(el).percentage) / (100 / 2);
-    }
+    it('should update grid-column-end after updating a colspan attribute', async () => {
+      expect(getComputedStyle(items[0]).gridColumnEnd).to.equal('span 1');
 
-    it('should update layout after updating a colspan attribute', async () => {
-      expect(estimateEffectiveColspan(layout.children[0])).to.be.closeTo(1, 0.1);
-
-      layout.children[0].setAttribute('colspan', 2);
-      await nextRender(container);
-      expect(estimateEffectiveColspan(layout.children[0])).to.be.closeTo(2, 0.1);
+      items[0].setAttribute('colspan', 2);
+      await nextRender(layout);
+      expect(getComputedStyle(items[0]).gridColumnEnd).to.equal('span 2');
     });
 
-    it('should update layout after updating a data-colspan attribute', async () => {
-      expect(estimateEffectiveColspan(layout.children[0])).to.be.closeTo(1, 0.1);
+    it('should update grid-column-end after updating a data-colspan attribute', async () => {
+      expect(getComputedStyle(items[0]).gridColumnEnd).to.equal('span 1');
 
-      layout.children[0].setAttribute('data-colspan', 2);
-      await nextRender(container);
-      expect(estimateEffectiveColspan(layout.children[0])).to.be.closeTo(2, 0.1);
+      items[0].setAttribute('data-colspan', 2);
+      await nextRender(layout);
+      expect(getComputedStyle(items[0]).gridColumnEnd).to.equal('span 2');
     });
 
     it('should prefer colspan attribute over data-colspan when both are set', async () => {
-      layout.children[0].setAttribute('colspan', 2);
-      layout.children[0].setAttribute('data-colspan', 1);
-      await nextRender(container);
-      expect(estimateEffectiveColspan(layout.children[0])).to.be.closeTo(2, 0.1);
+      items[0].setAttribute('colspan', 2);
+      items[0].setAttribute('data-colspan', 1);
+      await nextRender(layout);
+      expect(getComputedStyle(items[0]).gridColumnEnd).to.equal('span 2');
     });
 
     it('should update style if hidden property of layout-item is changed and the element has not had style yet', async () => {
-      const itemWidth = layout.children[0].getBoundingClientRect().width;
+      const itemWidth = items[0].getBoundingClientRect().width;
       expect(itemWidth).to.be.above(0);
 
       const newFormItem = document.createElement('vaadin-form-item');
@@ -599,32 +565,21 @@ describe('form layout', () => {
       expect(unhiddenItemWidth).to.equal(itemWidth);
     });
 
-    it('should update layout after updating a colspan attribute on the lazily stamped node', async () => {
-      container.push('items', { label: 'Email', colspan: 1 });
-      await nextRender(container);
-      const item = layout.querySelectorAll('vaadin-form-item')[2];
-      expect(estimateEffectiveColspan(item)).to.be.closeTo(1, 0.1);
-
-      container.set('items.0.colspan', 2);
-      await nextRender(container);
-      expect(estimateEffectiveColspan(item)).to.be.closeTo(2, 0.1);
+    it('should update grid-column-start after adding <br>', async () => {
+      const br = document.createElement('br');
+      items[0].after(br);
+      await nextRender(layout);
+      expect(getComputedStyle(items[1]).gridColumnStart).to.equal('1');
     });
 
-    it('should update layout after a new item is added', async () => {
-      const newFormItem = document.createElement('vaadin-form-item');
-      newFormItem.innerHTML = '<label slot="label">Age</label><input class="full-width">';
-      layout.appendChild(newFormItem);
-      await nextRender(container);
-      expect(getComputedStyle(newFormItem).marginLeft).to.be.equal('0px');
-    });
+    it('should update grid-column-start after removing <br>', async () => {
+      const br = document.createElement('br');
+      items[0].after(br);
+      await nextRender(layout);
 
-    it('should update layout after an item is removed', async () => {
-      const itemsList = layout.querySelectorAll('vaadin-form-item');
-      expect(getComputedStyle(itemsList[1]).marginLeft).to.not.be.equal('0px');
-
-      layout.removeChild(itemsList[0]);
-      await nextRender(container);
-      expect(getComputedStyle(itemsList[1]).marginLeft).to.be.equal('0px');
+      br.remove();
+      await nextRender(layout);
+      expect(getComputedStyle(items[1]).gridColumnStart).to.equal('auto');
     });
 
     it('should not update layout when setting hidden to true', async () => {
