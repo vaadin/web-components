@@ -81,8 +81,18 @@ class ListBox extends ElementMixin(MultiSelectListMixin(ThemableMixin(PolylitMix
 
     this.setAttribute('role', 'listbox');
 
+    setTimeout(this._checkImport.bind(this), 2000);
+
     this._tooltipController = new TooltipController(this);
     this.addController(this._tooltipController);
+  }
+
+  /** @private */
+  _checkImport() {
+    const item = this.querySelector('vaadin-item');
+    if (item && !(item instanceof LitElement)) {
+      console.warn(`Make sure you have imported the vaadin-item element.`);
+    }
   }
 }
 
