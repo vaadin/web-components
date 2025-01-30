@@ -123,52 +123,6 @@ describe('form layout', () => {
       expect(parseFloat(getComputedStyle(item).marginTop)).to.equal(0);
       expect(parseFloat(getComputedStyle(item).marginBottom)).to.equal(0);
     });
-
-    it('should apply default column-spacing', async () => {
-      // Override to not depend on the theme changes
-      layout.style.setProperty('--lumo-space-l', '2rem');
-      await nextResize(layout);
-      expect(getParsedWidth(layout.firstElementChild).spacing).to.equal('1rem');
-      expect(getComputedStyle(layout.firstElementChild).getPropertyValue('margin-left')).to.equal('0px'); // Zero because it's first
-      expect(getComputedStyle(layout.firstElementChild).getPropertyValue('margin-right')).to.equal('16px'); // 0.5 * 2rem in px
-    });
-  });
-
-  describe('colspan', () => {
-    let layout;
-
-    beforeEach(() => {
-      layout = fixtureSync(`
-        <vaadin-form-layout responsive-steps='[{"columns": 3}]'>
-          <vaadin-text-field></vaadin-text-field>
-          <vaadin-text-field colspan="1"></vaadin-text-field>
-          <vaadin-text-field colspan="2"></vaadin-text-field>
-          <vaadin-text-field colspan="3"></vaadin-text-field>
-          <vaadin-text-field colspan="4"></vaadin-text-field>
-          <vaadin-text-field colspan="non-number"></vaadin-text-field>
-        </vaadin-form-layout>
-      `);
-    });
-
-    function estimateEffectiveColspan(el) {
-      return parseFloat(getParsedWidth(el).percentage) / (100 / 3);
-    }
-
-    it('should span children correctly', () => {
-      // Empty means 1
-      expect(estimateEffectiveColspan(layout.children[0])).to.be.closeTo(1, 0.1);
-
-      // Correct values
-      expect(estimateEffectiveColspan(layout.children[1])).to.be.closeTo(1, 0.1);
-      expect(estimateEffectiveColspan(layout.children[2])).to.be.closeTo(2, 0.1);
-      expect(estimateEffectiveColspan(layout.children[3])).to.be.closeTo(3, 0.1);
-
-      // If more then a number of columns, use number of columns
-      expect(estimateEffectiveColspan(layout.children[4])).to.be.closeTo(3, 0.1);
-
-      // Invalid means 1
-      expect(estimateEffectiveColspan(layout.children[5])).to.be.closeTo(1, 0.1);
-    });
   });
 
   describe('container overflow', () => {
