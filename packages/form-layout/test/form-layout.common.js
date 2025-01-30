@@ -1,7 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { aTimeout, fixtureSync, nextFrame, nextRender, nextResize } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import '@polymer/polymer/lib/elements/dom-repeat.js';
 
 function getParsedWidth(el) {
   const width = el.style.getPropertyValue('width');
