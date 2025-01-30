@@ -774,7 +774,6 @@ const runTests = (defineHelper, baseMixin) => {
 
     it('should reset previously selected item when listbox and items are disabled', async () => {
       list.selected = 3;
-      await nextUpdate(list);
       expect(items[3].selected).to.be.true;
 
       list.disabled = true;
@@ -788,7 +787,6 @@ const runTests = (defineHelper, baseMixin) => {
 
     it('should restore previously selected item when listbox becomes re-enabled', async () => {
       list.selected = 3;
-      await nextUpdate(list);
 
       list.disabled = true;
       items.forEach((item) => {
