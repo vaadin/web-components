@@ -341,7 +341,7 @@ describe('form layout', () => {
     describe('value validation', () => {
       beforeEach(async () => {
         layout = fixtureSync(`<vaadin-form-layout></vaadin-form-layout>`);
-        await nextFrame();
+        await nextRender();
 
         sinon.stub(console, 'warn');
       });
