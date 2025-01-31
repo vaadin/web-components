@@ -1128,7 +1128,7 @@ describe('drag and drop', () => {
 
     async function dragElement(element) {
       await resetMouse();
-      await sendMouseToElement(element);
+      await sendMouseToElement({ type: 'move', element });
       await sendMouse({ type: 'down' });
       await sendMouse({ type: 'move', position: [100, 100] });
       await sendMouse({ type: 'up' });

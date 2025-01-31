@@ -11,26 +11,19 @@ export * from '@web/test-runner-commands';
  *
  * @typedef {{ type: 'move', element: Element }} MovePayload
  * @typedef {{ type: 'click', element: Element, button?: 'left' | 'middle' | 'right' }} ClickPayload
- * @param {Element | MovePayload | ClickPayload} payload
+ * @param {MovePayload | ClickPayload} payload
  * @return {Promise<void>}
  *
  * @example
  * // Move the mouse to the center of an element
- * await sendMouseToElement(document.querySelector('#my-element'));
+ * await sendMouseToElement({ type: 'move', element: document.querySelector('#my-element') });
  *
  * @example
  * // Click the left mouse button on an element
  * await sendMouseToElement({ type: 'click', element: document.querySelector('#my-element') });
  */
 export async function sendMouseToElement(payload) {
-  let element;
-  if (payload instanceof Element) {
-    element = payload;
-    payload = { type: 'move' };
-  } else {
-    element = payload.element;
-  }
-
+  const { element } = payload;
   const rect = element.getBoundingClientRect();
   const x = Math.floor(rect.x + rect.width / 2);
   const y = Math.floor(rect.y + rect.height / 2);

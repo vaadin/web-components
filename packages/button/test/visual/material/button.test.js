@@ -65,7 +65,7 @@ describe('button', () => {
         element.setAttribute('theme', `${variant}`);
         await new Promise((resolve) => {
           element.addEventListener('transitionend', resolve, { once: true });
-          sendMouseToElement(element);
+          sendMouseToElement({ type: 'move', element });
         });
         await visualDiff(div, `theme-${variant}-hover`);
       });

@@ -67,7 +67,7 @@ describe('button', () => {
 
     it('primary hover', async () => {
       element.setAttribute('theme', 'primary');
-      await sendMouseToElement(element);
+      await sendMouseToElement({ type: 'move', element });
       await visualDiff(div, 'theme-primary-hover');
     });
 
@@ -90,7 +90,7 @@ describe('button', () => {
 
     it('secondary hover', async () => {
       element.setAttribute('theme', 'secondary');
-      await sendMouseToElement(element);
+      await sendMouseToElement({ type: 'move', element });
       await visualDiff(div, 'theme-secondary-hover');
     });
 
@@ -107,7 +107,7 @@ describe('button', () => {
 
     it('tertiary hover', async () => {
       element.setAttribute('theme', 'tertiary');
-      await sendMouseToElement(element);
+      await sendMouseToElement({ type: 'move', element });
       await visualDiff(div, 'theme-tertiary-hover');
     });
 
