@@ -43,8 +43,4 @@ export const horizontalLayoutStyles = css`
   :host([has-start]:not([has-middle])) ::slotted([first-end-child]) {
     margin-inline-start: auto;
   }
-
-  ::slotted([slot='end'][first-in-row]) {
-    margin-inline-start: auto;
-  }
 `;

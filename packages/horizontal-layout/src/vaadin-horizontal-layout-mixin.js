@@ -4,15 +4,13 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { isEmptyTextNode } from '@vaadin/component-base/src/dom-utils.js';
-import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
 import { SlotObserver } from '@vaadin/component-base/src/slot-observer.js';
 
 /**
  * @polymerMixin
- * @mixes ResizeMixin
  */
 export const HorizontalLayoutMixin = (superClass) =>
-  class extends ResizeMixin(superClass) {
+  class extends superClass {
     /** @protected */
     ready() {
       super.ready();
@@ -21,7 +19,6 @@ export const HorizontalLayoutMixin = (superClass) =>
       this.__startSlotObserver = new SlotObserver(startSlot, ({ currentNodes, removedNodes }) => {
         if (removedNodes.length) {
           this.__clearAttribute(removedNodes, 'last-start-child');
-          this.__clearAttribute(removedNodes, 'first-in-row');
         }
 
         const children = currentNodes.filter((node) => node.nodeType === Node.ELEMENT_NODE);
@@ -29,22 +26,17 @@ export const HorizontalLayoutMixin = (superClass) =>
 
         const nodes = currentNodes.filter((node) => !isEmptyTextNode(node));
         this.toggleAttribute('has-start', nodes.length > 0);
-
-        this.__updateRowState();
       });
 
       const endSlot = this.shadowRoot.querySelector('[name="end"]');
       this.__endSlotObserver = new SlotObserver(endSlot, ({ currentNodes, removedNodes }) => {
         if (removedNodes.length) {
           this.__clearAttribute(removedNodes, 'first-end-child');
-          this.__clearAttribute(removedNodes, 'first-in-row');
         }
 
         this.__updateAttributes(currentNodes, 'end', true, false);
 
         this.toggleAttribute('has-end', currentNodes.length > 0);
-
-        this.__updateRowState();
       });
 
       const middleSlot = this.shadowRoot.querySelector('[name="middle"]');
@@ -52,23 +44,12 @@ export const HorizontalLayoutMixin = (superClass) =>
         if (removedNodes.length) {
           this.__clearAttribute(removedNodes, 'first-middle-child');
           this.__clearAttribute(removedNodes, 'last-middle-child');
-          this.__clearAttribute(removedNodes, 'first-in-row');
         }
 
         this.__updateAttributes(currentNodes, 'middle', true, true);
 
         this.toggleAttribute('has-middle', currentNodes.length > 0);
-
-        this.__updateRowState();
       });
-    }
-
-    /**
-     * @protected
-     * @override
-     */
-    _onResize() {
-      this.__updateRowState();
     }
 
     /** @private */
@@ -100,18 +81,5 @@ export const HorizontalLayoutMixin = (superClass) =>
           }
         }
       });
-    }
-
-    /** @private */
-    __updateRowState() {
-      let offset = 0;
-      for (const child of this.children) {
-        if (child.offsetTop > offset) {
-          offset = child.offsetTop;
-          child.setAttribute('first-in-row', '');
-        } else {
-          child.removeAttribute('first-in-row');
-        }
-      }
     }
   };
