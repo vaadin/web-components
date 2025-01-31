@@ -122,7 +122,12 @@ export const FormLayoutMixin = (superClass) =>
       // Ensure there is a child text node in the style element
       this._styleElement.textContent = ' ';
 
-      this.__intersectionObserver = new IntersectionObserver(([entry]) => {
+      this.__intersectionObserver = new IntersectionObserver((entries) => {
+        // If the browser is busy (e.g. due to slow rendering), multiple entries can
+        // be queued and then passed to the callback invocation at once. Make sure we
+        // use the most recent entry to detect whether the layout is visible or not.
+        // See https://github.com/vaadin/web-components/issues/8564
+        const entry = [...entries].pop();
         if (!entry.isIntersecting) {
           // Prevent possible jump when layout becomes visible
           this.$.layout.style.opacity = 0;
