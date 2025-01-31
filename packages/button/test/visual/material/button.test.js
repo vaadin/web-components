@@ -1,10 +1,9 @@
-import { sendKeys } from '@vaadin/test-runner-commands';
+import { resetMouse, sendKeys, sendMouseToElement } from '@vaadin/test-runner-commands';
 import { fixtureSync } from '@vaadin/testing-helpers/dist/fixture.js';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '@vaadin/icon/theme/material/vaadin-icon.js';
 import '@vaadin/vaadin-lumo-styles/vaadin-iconset.js';
 import '../../../theme/material/vaadin-button.js';
-import { hover, resetHover } from '../helpers.js';
 
 describe('button', () => {
   let div, element;
@@ -17,7 +16,7 @@ describe('button', () => {
   });
 
   afterEach(async () => {
-    await resetHover();
+    await resetMouse();
   });
 
   describe('basic', () => {
@@ -66,7 +65,7 @@ describe('button', () => {
         element.setAttribute('theme', `${variant}`);
         await new Promise((resolve) => {
           element.addEventListener('transitionend', resolve, { once: true });
-          hover(element);
+          sendMouseToElement({ type: 'move', element });
         });
         await visualDiff(div, `theme-${variant}-hover`);
       });

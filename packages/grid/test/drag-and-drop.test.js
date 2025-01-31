@@ -1,9 +1,8 @@
 import { expect } from '@vaadin/chai-plugins';
-import { resetMouse, sendMouse } from '@vaadin/test-runner-commands';
+import { resetMouse, sendMouse, sendMouseToElement } from '@vaadin/test-runner-commands';
 import { aTimeout, fixtureSync, listenOnce, nextFrame, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../vaadin-grid.js';
-import { hover } from '@vaadin/button/test/visual/helpers.js';
 import { flushGrid, getBodyCellContent, getFirstCell, getRowBodyCells, getRows } from './helpers.js';
 
 describe('drag and drop', () => {
@@ -1129,7 +1128,7 @@ describe('drag and drop', () => {
 
     async function dragElement(element) {
       await resetMouse();
-      await hover(element);
+      await sendMouseToElement({ type: 'move', element });
       await sendMouse({ type: 'down' });
       await sendMouse({ type: 'move', position: [100, 100] });
       await sendMouse({ type: 'up' });

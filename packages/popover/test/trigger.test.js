@@ -1,11 +1,10 @@
 import { expect } from '@vaadin/chai-plugins';
-import { resetMouse, sendKeys, sendMouse } from '@vaadin/test-runner-commands';
+import { resetMouse, sendKeys, sendMouseToElement } from '@vaadin/test-runner-commands';
 import {
   esc,
   fixtureSync,
   focusin,
   focusout,
-  middleOfNode,
   mousedown,
   nextRender,
   nextUpdate,
@@ -274,8 +273,7 @@ describe('trigger', () => {
       });
 
       it('should not close on overlay mousedown when target has focus', async () => {
-        const { x, y } = middleOfNode(overlay.querySelector('div'));
-        await sendMouse({ type: 'click', position: [Math.round(x), Math.round(y)] });
+        await sendMouseToElement({ type: 'click', element: overlay.querySelector('div') });
         await nextUpdate();
 
         expect(overlay.opened).to.be.true;
@@ -284,8 +282,7 @@ describe('trigger', () => {
       it('should not close on overlay mousedown when overlay has focus', async () => {
         overlay.querySelector('input').focus();
 
-        const { x, y } = middleOfNode(overlay.querySelector('div'));
-        await sendMouse({ type: 'click', position: [Math.round(x), Math.round(y)] });
+        await sendMouseToElement({ type: 'click', element: overlay.querySelector('div') });
         await nextUpdate();
 
         expect(overlay.opened).to.be.true;
@@ -295,8 +292,7 @@ describe('trigger', () => {
         // Remove the input so that first Tab would leave popover
         overlay.querySelector('input').remove();
 
-        const { x, y } = middleOfNode(overlay.querySelector('div'));
-        await sendMouse({ type: 'click', position: [Math.round(x), Math.round(y)] });
+        await sendMouseToElement({ type: 'click', element: overlay.querySelector('div') });
         await nextUpdate();
 
         // Tab to focus input next to the target
@@ -309,8 +305,7 @@ describe('trigger', () => {
       it('should only cancel one overlay focusout after the overlay mousedown', async () => {
         overlay.querySelector('input').focus();
 
-        const { x, y } = middleOfNode(overlay.querySelector('div'));
-        await sendMouse({ type: 'click', position: [Math.round(x), Math.round(y)] });
+        await sendMouseToElement({ type: 'click', element: overlay.querySelector('div') });
         await nextUpdate();
 
         // Tab to focus input inside the popover

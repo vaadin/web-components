@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { sendMouse } from '@vaadin/test-runner-commands';
+import { resetMouse, sendMouseToElement } from '@vaadin/test-runner-commands';
 import { enter, esc, fixtureSync, focusout, nextFrame, space } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../theme/lumo/vaadin-grid-pro.js';
@@ -159,6 +159,10 @@ describe('edit column renderer', () => {
       cell = getContainerCell(grid.$.items, 0, 0);
     });
 
+    afterEach(async () => {
+      await resetMouse();
+    });
+
     it('should call the edit mode renderer to cell when entering edit mode', () => {
       column.editModeRenderer = function (root) {
         root.innerHTML = '<input>';
@@ -265,8 +269,7 @@ describe('edit column renderer', () => {
       await nextFrame();
       editor = getCellEditor(cell);
 
-      const { x, y } = editor.$.clearButton.getBoundingClientRect();
-      await sendMouse({ type: 'click', position: [Math.floor(x + 10), Math.floor(y + 10)] });
+      await sendMouseToElement({ type: 'click', element: editor.$.clearButton });
       await nextFrame();
       expect(getCellEditor(cell)).to.be.ok;
     });
