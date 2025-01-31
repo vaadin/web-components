@@ -40,6 +40,7 @@ export const ListMixin = (superClass) =>
           type: Number,
           reflectToAttribute: true,
           notify: true,
+          sync: true,
         },
 
         /**
