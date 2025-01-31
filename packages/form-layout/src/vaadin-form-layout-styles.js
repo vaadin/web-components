@@ -10,6 +10,8 @@ export const formLayoutStyles = css`
     display: block;
     max-width: 100%;
     animation: 1ms vaadin-form-layout-appear;
+    /* Number of cols, defined by breakpoints. Default value is probably pointless. */
+    --_grid-cols: 10;
     /* CSS API for host */
     --vaadin-form-item-label-width: 8em;
     --vaadin-form-item-label-spacing: 1em;
@@ -29,21 +31,14 @@ export const formLayoutStyles = css`
   }
 
   #layout {
-    display: flex;
-
+    display: grid;
+    grid-template-columns: repeat(var(--_grid-cols), 1fr);
+    gap: var(--vaadin-form-item-row-spacing) var(--vaadin-form-layout-column-spacing);
     align-items: baseline; /* default \`stretch\` is not appropriate */
-
-    flex-wrap: wrap; /* the items should wrap */
   }
 
   #layout ::slotted(*) {
-    /* Items should neither grow nor shrink. */
-    flex-grow: 0;
-    flex-shrink: 0;
-
-    /* Margins make spacing between the columns */
-    margin-left: calc(0.5 * var(--vaadin-form-layout-column-spacing));
-    margin-right: calc(0.5 * var(--vaadin-form-layout-column-spacing));
+    grid-column: var(--_grid-colstart, auto) / span min(var(--_grid-colspan, 1), var(--_grid-cols));
   }
 
   #layout ::slotted(br) {
@@ -56,7 +51,6 @@ export const formItemStyles = css`
     display: inline-flex;
     flex-direction: row;
     align-items: baseline;
-    margin: calc(0.5 * var(--vaadin-form-item-row-spacing, 1em)) 0;
   }
 
   :host([label-position='top']) {
