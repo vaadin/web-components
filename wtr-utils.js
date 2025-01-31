@@ -210,8 +210,8 @@ const getScreenshotFileName = ({ name, testFile }, type, diff) => {
   } else if (testFile.includes('icons')) {
     folder = 'icons/test/visual/screenshots';
   } else {
-    const match = testFile.match(/\/packages\/(.+)\.test\.(js|ts)/u);
-    folder = match[1].replace(/(lumo|material)/u, '$1/screenshots');
+    const match = testFile.match(/\/(packages|test)\/(.+)\.test\.(js|ts)/u);
+    folder = match[2].replace(/(lumo|material)/u, '$1/screenshots');
   }
   return path.join(folder, type, diff ? `${name}-diff` : name);
 };
@@ -382,9 +382,63 @@ const createIntegrationTestsConfig = (config) => {
   };
 };
 
+const createIntegrationVisualTestsConfig = (theme, browserVersion) => {
+  const sauceLabsLauncher = createSauceLabsLauncher(
+    {
+      user: process.env.SAUCE_USERNAME,
+      key: process.env.SAUCE_ACCESS_KEY,
+    },
+    {
+      name: `${theme[0].toUpperCase()}${theme.slice(1)} visual tests`,
+      build: `${process.env.GITHUB_REF || 'local'} build ${process.env.GITHUB_RUN_NUMBER || ''}`,
+      recordScreenshots: false,
+      recordVideo: false,
+    },
+  );
+
+  return {
+    concurrency: 1,
+    nodeResolve: true,
+    testFramework: {
+      config: {
+        timeout: '20000', // Default 2000
+      },
+    },
+    browsers: [
+      sauceLabsLauncher({
+        browserName: 'chrome',
+        platformName: 'Windows 10',
+        browserVersion,
+      }),
+    ],
+    plugins: [
+      esbuildPlugin({ ts: true }),
+      setWindowHeightPlugin(),
+      visualRegressionPlugin({
+        baseDir: 'test',
+        getBaselineName: getBaselineScreenshotName,
+        getDiffName: getDiffScreenshotName,
+        getFailedName: getFailedScreenshotName,
+        failureThreshold: 0.05,
+        failureThresholdType: 'percent',
+        update: process.env.TEST_ENV === 'update',
+      }),
+    ],
+    groups: [
+      {
+        name: 'integration',
+        files: `test/integration/visual/${theme}/*.test.{js,ts}`,
+      },
+    ],
+    testRunnerHtml: getTestRunnerHtml(theme),
+    filterBrowserLogs,
+  };
+};
+
 module.exports = {
   createSnapshotTestsConfig,
   createUnitTestsConfig,
   createVisualTestsConfig,
   createIntegrationTestsConfig,
+  createIntegrationVisualTestsConfig,
 };
