@@ -272,13 +272,10 @@ describe('form layout', () => {
       });
 
       function estimateEffectiveColumnCount(layout) {
-        const columns = new Set();
-
-        [...layout.children]
-          .filter((child) => getComputedStyle(child).display !== 'none' && child.localName !== 'br')
-          .forEach((child) => columns.add(child.offsetLeft));
-
-        return columns.size;
+        const offsets = [...layout.children]
+          .filter((child) => getComputedStyle(child).display !== 'none')
+          .map((child) => child.offsetLeft);
+        return new Set(offsets).size;
       }
 
       it('should be responsive by default', async () => {
