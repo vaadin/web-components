@@ -35,6 +35,7 @@
     "polymer"
   ],
   "dependencies": {
+    "@open-wc/dedupe-mixin": "^1.3.0",
     "@polymer/polymer": "^3.0.0",
     "@vaadin/component-base": "24.7.0-alpha7",
     "@vaadin/vaadin-lumo-styles": "24.7.0-alpha7",
