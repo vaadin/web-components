@@ -5,7 +5,7 @@
  */
 import { css } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
-export const verticalLayoutStyles = css`
+export const baseStyles = css`
   :host {
     display: flex;
     flex-direction: column;
@@ -30,3 +30,21 @@ export const verticalLayoutStyles = css`
     gap: 1em;
   }
 `;
+
+// Layout improvements are part of a feature for Flow users where children that have been configured to use full size
+// using `HasSize.setSizeFull()` and others, get additional styles so that they effectively take the remaining space in
+// the layout, rather than explicitly use 100% width/height. The respective data attributes are set by Flow's `HasSize`
+// class.
+const enableLayoutImprovements = window.Vaadin.featureFlags.layoutComponentImprovements;
+const layoutImprovementStyles = css`
+  ::slotted([data-height-full]) {
+    flex: 1;
+  }
+
+  ::slotted(vaadin-horizontal-layout[data-height-full]),
+  ::slotted(vaadin-vertical-layout[data-height-full]) {
+    min-height: 0;
+  }
+`;
+
+export const verticalLayoutStyles = enableLayoutImprovements ? [baseStyles, layoutImprovementStyles] : [baseStyles];

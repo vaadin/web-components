@@ -111,4 +111,52 @@ describe('vaadin-vertical-layout', () => {
       expect(wrapper.scrollHeight).to.equal(200);
     });
   });
+
+  describe('layout improvements disabled', () => {
+    let layout, children;
+
+    describe('flex', () => {
+      beforeEach(async () => {
+        layout = fixtureSync(`
+          <vaadin-vertical-layout>
+            <div></div>
+            <div data-height-full></div>
+          </vaadin-vertical-layout>
+        `);
+        children = Array.from(layout.children);
+        await nextFrame();
+      });
+
+      it('should not set flex on any children', () => {
+        children.forEach((child) => {
+          expect(getComputedStyle(child).flex).to.equal('0 1 auto');
+        });
+      });
+    });
+
+    describe('min-height', () => {
+      beforeEach(async () => {
+        layout = fixtureSync(`
+          <vaadin-vertical-layout>
+            <div></div>
+            <div data-height-full></div>
+            <vaadin-button></vaadin-button>
+            <vaadin-button data-height-full></vaadin-button>
+            <vaadin-horizontal-layout></vaadin-horizontal-layout>
+            <vaadin-horizontal-layout data-height-full></vaadin-horizontal-layout>
+            <vaadin-vertical-layout></vaadin-vertical-layout>
+            <vaadin-vertical-layout data-height-full></vaadin-vertical-layout>
+          </vaadin-vertical-layout>
+        `);
+        children = Array.from(layout.children);
+        await nextFrame();
+      });
+
+      it('should not set min-height on any children', () => {
+        children.forEach((child) => {
+          expect(getComputedStyle(child).minHeight).to.equal('auto');
+        });
+      });
+    });
+  });
 });
