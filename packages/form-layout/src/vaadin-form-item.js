@@ -49,8 +49,8 @@ registerStyles('vaadin-form-item', formItemStyles, { moduleId: 'vaadin-form-item
  * `<vaadin-form-layout>`, depending on its width and responsive behavior.
  *
  * **Deprecation note:** The `label-position` attribute is getting deprecated since
- * V24.7 and will be removed in V25, when a new method for setting the label position
- * will be introduced.
+ * 24.7 and will be removed in Vaddin 25, when a new approach for setting the label
+ * position will be introduced.
  *
  * ### Input Width
  *
@@ -76,8 +76,8 @@ registerStyles('vaadin-form-item', formItemStyles, { moduleId: 'vaadin-form-item
  * ```
  *
  * **Deprecation note:** The `label-position` attribute is getting deprecated since
- * V24.7 and will be removed in V25, when a new method for styling the form-item based
- * on the label position will be introduced.
+ * 24.7 and will be removed in Vaadin 25, when a new approach to styling the form-item
+ * based on the label position will be introduced.
  *
  * The following shadow DOM parts are available for styling:
  *
