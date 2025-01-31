@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { resetMouse, sendKeys, sendMouse, sendMouseToElement } from '@vaadin/test-runner-commands';
+import { resetMouse, sendKeys, sendMouse } from '@vaadin/test-runner-commands';
 import {
   aTimeout,
   click,
@@ -224,7 +224,8 @@ describe('interactions', () => {
       it('should keep focus in the input on toggle button click', async () => {
         comboBox.focus();
         comboBox.open();
-        await sendMouseToElement({ type: 'click', element: comboBox._toggleElement });
+        const rect = comboBox._toggleElement.getBoundingClientRect();
+        await sendMouse({ type: 'click', position: [rect.x, rect.y] });
         expect(document.activeElement).to.equal(input);
       });
 
