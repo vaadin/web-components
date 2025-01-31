@@ -42,6 +42,16 @@ export const FormItemMixin = (superClass) =>
       this.__fieldNode = null;
     }
 
+    connectedCallback() {
+      super.connectedCallback();
+      const spacing = getComputedStyle(this).getPropertyValue('--vaadin-form-item-row-spacing');
+      if (spacing !== '' && parseInt(spacing) !== 0) {
+        console.warn(
+          '`--vaadin-form-item-row-spacing` is deprecated since 24.7. Use `--vaadin-form-layout-row-spacing` instead.',
+        );
+      }
+    }
+
     /**
      * Returns a target element to add ARIA attributes to for a field.
      *
