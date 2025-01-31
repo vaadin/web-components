@@ -35,8 +35,6 @@ export const formLayoutStyles = css`
     grid-template-columns: repeat(var(--_grid-cols), 1fr);
     gap: var(--vaadin-form-item-row-spacing) var(--vaadin-form-layout-column-spacing);
     align-items: baseline; /* default \`stretch\` is not appropriate */
-    justify-content: stretch;
-    min-width: min-content;
   }
 
   #layout ::slotted(*) {
