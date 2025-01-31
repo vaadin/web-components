@@ -757,7 +757,6 @@ describe('vaadin-select', () => {
 
     beforeEach(async () => {
       select = fixtureSync(`<vaadin-select value="v2"></vaadin-select>`);
-      await nextRender();
       select.renderer = (root) => {
         render(
           html`
@@ -769,8 +768,8 @@ describe('vaadin-select', () => {
           root,
         );
       };
+      await nextRender();
       valueButton = select.querySelector('vaadin-select-value-button');
-      await nextUpdate(select);
       menu = select._menuElement;
     });
 
