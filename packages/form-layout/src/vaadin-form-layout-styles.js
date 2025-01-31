@@ -10,8 +10,6 @@ export const formLayoutStyles = css`
     display: block;
     max-width: 100%;
     animation: 1ms vaadin-form-layout-appear;
-    container-type: inline-size;
-    container-name: form-grid;
     /* Number of cols, defined by breakpoints. Default value is probably pointless. */
     --_grid-cols: 10;
     /* CSS API for host */
