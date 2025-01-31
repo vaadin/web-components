@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
+import { sendKeys } from '@vaadin/test-runner-commands';
 import { click, fixtureSync, keyboardEventFor, nextRender, oneEvent, tap } from '@vaadin/testing-helpers';
-import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import { parseDate } from '../src/vaadin-date-picker-helper.js';
 import { open, touchTap, waitForOverlayRender } from './helpers.js';

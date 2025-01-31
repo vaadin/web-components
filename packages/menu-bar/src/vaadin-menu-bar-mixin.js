@@ -80,18 +80,21 @@ export const MenuBarMixin = (superClass) =>
          *
          * #### Disabled buttons
          *
-         * When a root-level item (menu bar button) is disabled, it prevents all user
-         * interactions with it, such as focusing, clicking, opening a sub-menu, etc.
-         * The button is also removed from tab order, which makes it unreachable via
-         * the keyboard navigation.
+         * When disabled, menu bar buttons (root-level items) are rendered
+         * as "dimmed" and prevent all user interactions (mouse and keyboard).
          *
-         * While the default behavior effectively prevents accidental interactions,
-         * it has an accessibility drawback: screen readers skip disabled buttons
-         * entirely, and users can't see tooltips that might explain why the button
-         * is disabled. To address this, an experimental enhancement allows disabled
-         * menu bar buttons to receive focus and show tooltips, while still preventing
-         * other interactions. This feature can be enabled with the following feature
-         * flag:
+         * Since disabled buttons are not focusable and cannot react to hover
+         * events by default, it can cause accessibility issues by making them
+         * entirely invisible to assistive technologies, and prevents the use
+         * of Tooltips to explain why the action is not available. This can be
+         * addressed by enabling the feature flag `accessibleDisabledButtons`,
+         * which makes disabled buttons focusable and hoverable, while still
+         * preventing them from being triggered:
+         *
+         * ```
+         * // Set before any menu bar is attached to the DOM.
+         * window.Vaadin.featureFlags.accessibleDisabledButtons = true;
+         * ```
          *
          * ```
          * // Set before any menu bar is attached to the DOM.

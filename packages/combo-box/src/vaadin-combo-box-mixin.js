@@ -1416,8 +1416,7 @@ export const ComboBoxMixin = (subclass) =>
      */
 
     /**
-     * Fired when value changes.
-     * To comply with https://developer.mozilla.org/en-US/docs/Web/Events/change
+     * Fired when the user commits a value change.
      * @event change
      */
 

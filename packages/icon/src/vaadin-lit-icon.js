@@ -3,7 +3,7 @@
  * Copyright (c) 2021 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import './vaadin-lit-iconset.js';
+import './vaadin-iconset.js';
 import { html, LitElement } from 'lit';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
@@ -26,6 +26,7 @@ import { iconStyles } from './vaadin-icon-styles.js';
 class Icon extends IconMixin(ControllerMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElement))))) {
   static styles = iconStyles;
 
+  /** @protected */
   render() {
     return html`
       <svg

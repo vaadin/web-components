@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
+import { sendKeys } from '@vaadin/test-runner-commands';
 import { fixtureSync, nextFrame, nextRender, nextUpdate } from '@vaadin/testing-helpers';
-import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 
 describe('radio-group', () => {
@@ -248,9 +248,7 @@ describe('radio-group', () => {
       await sendKeys({ press: 'Tab' });
 
       // Move focus out of the group.
-      await sendKeys({ down: 'Shift' });
-      await sendKeys({ press: 'Tab' });
-      await sendKeys({ up: 'Shift' });
+      await sendKeys({ press: 'Shift+Tab' });
 
       expect(buttons[0].hasAttribute('focused')).to.be.false;
       expect(group.hasAttribute('focused')).to.be.false;

@@ -3,7 +3,7 @@
  * Copyright (c) 2016 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import '@vaadin/button/src/vaadin-button.js';
+import '@vaadin/button/src/vaadin-lit-button.js';
 import './vaadin-lit-upload-icon.js';
 import './vaadin-upload-icons.js';
 import './vaadin-lit-upload-file-list.js';

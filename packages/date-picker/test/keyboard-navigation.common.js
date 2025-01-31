@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
+import { sendKeys } from '@vaadin/test-runner-commands';
 import { aTimeout, fixtureSync, nextRender } from '@vaadin/testing-helpers';
-import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import {
   getDefaultI18n,
@@ -342,17 +342,13 @@ describe('keyboard navigation', () => {
     });
 
     it('should focus next year with shift and pagedown', async () => {
-      await sendKeys({ down: 'Shift' });
-      await sendKeys({ press: 'PageDown' });
-      await sendKeys({ up: 'Shift' });
+      await sendKeys({ press: 'Shift+PageDown' });
       await waitForScrollToFinish(overlay);
       expect(overlay.focusedDate).to.eql(new Date(2001, 0, 1));
     });
 
     it('should focus previous year with shift and pageup', async () => {
-      await sendKeys({ down: 'Shift' });
-      await sendKeys({ press: 'PageUp' });
-      await sendKeys({ up: 'Shift' });
+      await sendKeys({ press: 'Shift+PageUp' });
       await waitForScrollToFinish(overlay);
       expect(overlay.focusedDate).to.eql(new Date(1999, 0, 1));
     });
@@ -361,9 +357,7 @@ describe('keyboard navigation', () => {
       const spy = sinon.spy();
       overlay.addEventListener('scroll-animation-finished', spy);
 
-      await sendKeys({ down: 'Shift' });
-      await sendKeys({ press: 'PageUp' });
-      await sendKeys({ up: 'Shift' });
+      await sendKeys({ press: 'Shift+PageUp' });
 
       await waitForScrollToFinish(overlay);
       const e = spy.firstCall.args[0];
@@ -382,9 +376,7 @@ describe('keyboard navigation', () => {
       const spy = sinon.spy();
       overlay.addEventListener('scroll-animation-finished', spy);
 
-      await sendKeys({ down: 'Shift' });
-      await sendKeys({ press: 'PageDown' });
-      await sendKeys({ up: 'Shift' });
+      await sendKeys({ press: 'Shift+PageDown' });
 
       await waitForScrollToFinish(overlay);
       const e = spy.firstCall.args[0];
@@ -455,9 +447,7 @@ describe('keyboard navigation', () => {
     it('should focus max date with shift and pagedown', async () => {
       overlay.maxDate = new Date(2000, 11, 28);
 
-      await sendKeys({ down: 'Shift' });
-      await sendKeys({ press: 'PageDown' });
-      await sendKeys({ up: 'Shift' });
+      await sendKeys({ press: 'Shift+PageDown' });
 
       await waitForScrollToFinish(overlay);
       const cell = getFocusedCell(overlay);
@@ -467,9 +457,7 @@ describe('keyboard navigation', () => {
     it('should focus min date with shift and pageup', async () => {
       overlay.minDate = new Date(1999, 5, 3);
 
-      await sendKeys({ down: 'Shift' });
-      await sendKeys({ press: 'PageUp' });
-      await sendKeys({ up: 'Shift' });
+      await sendKeys({ press: 'Shift+PageUp' });
 
       await waitForScrollToFinish(overlay);
       const cell = getFocusedCell(overlay);
@@ -501,9 +489,7 @@ describe('keyboard navigation', () => {
       overlay.minDate = new Date(1999, 11, 25);
       await nextRender(overlay);
 
-      await sendKeys({ down: 'Shift' });
-      await sendKeys({ press: 'PageUp' });
-      await sendKeys({ up: 'Shift' });
+      await sendKeys({ press: 'Shift+PageUp' });
 
       await waitForScrollToFinish(overlay);
       const cell = getFocusedCell(overlay);
@@ -515,9 +501,7 @@ describe('keyboard navigation', () => {
       overlay.maxDate = new Date(1999, 11, 25);
       await nextRender(overlay);
 
-      await sendKeys({ down: 'Shift' });
-      await sendKeys({ press: 'PageDown' });
-      await sendKeys({ up: 'Shift' });
+      await sendKeys({ press: 'Shift+PageDown' });
 
       await waitForScrollToFinish(overlay);
       const cell = getFocusedCell(overlay);

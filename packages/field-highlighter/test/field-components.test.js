@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
+import { sendKeys } from '@vaadin/test-runner-commands';
 import { arrowDown, fixtureSync, nextFrame, nextRender, oneEvent, outsideClick } from '@vaadin/testing-helpers';
-import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import '@vaadin/checkbox-group';
 import '@vaadin/date-picker';
@@ -453,18 +453,14 @@ describe('field components', () => {
 
     it('should dispatch vaadin-highlight-hide event on Shift Tab to date picker', async () => {
       time.focus();
-      await sendKeys({ down: 'Shift' });
-      await sendKeys({ press: 'Tab' });
-      await sendKeys({ up: 'Shift' });
+      await sendKeys({ press: 'Shift+Tab' });
       expect(hideSpy.callCount).to.equal(1);
       expect(hideSpy.firstCall.args[0].detail.fieldIndex).to.equal(1);
     });
 
     it('should dispatch second vaadin-highlight-show event on Shift Tab to date picker', async () => {
       time.focus();
-      await sendKeys({ down: 'Shift' });
-      await sendKeys({ press: 'Tab' });
-      await sendKeys({ up: 'Shift' });
+      await sendKeys({ press: 'Shift+Tab' });
       expect(showSpy.callCount).to.equal(2);
       expect(showSpy.getCalls()[1].args[0].detail.fieldIndex).to.equal(0);
     });

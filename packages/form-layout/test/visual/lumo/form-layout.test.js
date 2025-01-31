@@ -246,4 +246,56 @@ describe('form-layout', () => {
       await visualDiff(element, 'required-indicator-labels-on-top');
     });
   });
+
+  ['ltr', 'rtl'].forEach((dir) => {
+    describe(dir, () => {
+      before(() => {
+        document.documentElement.setAttribute('dir', dir);
+      });
+
+      after(() => {
+        document.documentElement.removeAttribute('dir');
+      });
+
+      describe('container overflow', () => {
+        beforeEach(() => {
+          element = fixtureSync(`
+            <div style="display: inline-block; padding: 10px">
+              <style>
+                vaadin-form-layout > div:nth-child(even) {
+                  background: var(--lumo-contrast-10pct);
+                }
+
+                vaadin-form-layout > div:nth-child(odd) {
+                  background: var(--lumo-contrast-50pct);
+                }
+              </style>
+
+              <div style="width: 300px; overflow: auto; border: 1px solid;">
+                <vaadin-form-layout responsive-steps='[{"columns": 3}]'>
+                  <div>1/3</div>
+                  <div>1/3</div>
+                  <div>1/3</div>
+                  <br>
+                  <div style="display: none;">hidden</div>
+                  <div colspan="2">2/3</div>
+                  <div style="display: none;">hidden</div>
+                  <br>
+                  <div>1/3</div>
+                  <div colspan="2">2/3</div>
+                  <div colspan="2">2/3</div>
+                  <div>1/3</div>
+                  <div colspan="3">3/3</div>
+                </vaadin-form-layout>
+              </div>
+            </div>
+          `);
+        });
+
+        it('basic', async () => {
+          await visualDiff(element, `${dir}-container-overflow`);
+        });
+      });
+    });
+  });
 });

@@ -1,4 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
+import { sendKeys } from '@vaadin/test-runner-commands';
 import {
   arrowLeft,
   arrowRight,
@@ -9,7 +10,6 @@ import {
   nextRender,
   nextUpdate,
 } from '@vaadin/testing-helpers';
-import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 
 describe('custom element definition', () => {
@@ -243,9 +243,7 @@ describe('root menu layout', () => {
 
     it('should move focus to prev button on Shift Tab keydown', async () => {
       buttons[1].focus();
-      await sendKeys({ down: 'Shift' });
-      await sendKeys({ press: 'Tab' });
-      await sendKeys({ up: 'Shift' });
+      await sendKeys({ press: 'Shift+Tab' });
       expect(buttons[0].hasAttribute('focused')).to.be.true;
     });
 

@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
+import { sendKeys } from '@vaadin/test-runner-commands';
 import { fixtureSync, nextFrame, nextRender, nextUpdate } from '@vaadin/testing-helpers';
-import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 
 describe('validation', () => {
@@ -82,9 +82,7 @@ describe('validation', () => {
       expect(validateSpy.called).to.be.false;
 
       // Move focus out of the checkbox group.
-      await sendKeys({ down: 'Shift' });
-      await sendKeys({ press: 'Tab' });
-      await sendKeys({ up: 'Shift' });
+      await sendKeys({ press: 'Shift+Tab' });
       expect(validateSpy.calledOnce).to.be.true;
     });
 
@@ -132,9 +130,7 @@ describe('validation', () => {
         await sendKeys({ press: 'Tab' });
 
         // Move focus out of the checkbox group.
-        await sendKeys({ down: 'Shift' });
-        await sendKeys({ press: 'Tab' });
-        await sendKeys({ up: 'Shift' });
+        await sendKeys({ press: 'Shift+Tab' });
 
         expect(validateSpy.called).to.be.false;
       });

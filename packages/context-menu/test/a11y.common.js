@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
+import { sendKeys } from '@vaadin/test-runner-commands';
 import { fixtureSync, nextRender, outsideClick } from '@vaadin/testing-helpers';
-import { sendKeys } from '@web/test-runner-commands';
 import { getDeepActiveElement } from '@vaadin/a11y-base/src/focus-utils.js';
 import { getMenuItems } from './helpers.js';
 
@@ -79,9 +79,7 @@ describe('a11y', () => {
     it('should move focus to the prev element outside the menu on Shift+Tab pressed inside', async () => {
       contextMenuButton.click();
       await nextRender();
-      await sendKeys({ down: 'Shift' });
-      await sendKeys({ press: 'Tab' });
-      await sendKeys({ up: 'Shift' });
+      await sendKeys({ press: 'Shift+Tab' });
       expect(getDeepActiveElement()).to.equal(firstGlobalFocusable);
     });
 

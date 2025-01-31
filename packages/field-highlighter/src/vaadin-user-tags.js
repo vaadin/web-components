@@ -5,10 +5,11 @@
  */
 import './vaadin-user-tag.js';
 import './vaadin-user-tags-overlay.js';
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { css, html, LitElement } from 'lit';
 import { timeOut } from '@vaadin/component-base/src/async.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
+import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 
 const listenOnce = (elem, type) => {
   return new Promise((resolve) => {
@@ -27,24 +28,28 @@ const listenOnce = (elem, type) => {
  * @extends HTMLElement
  * @private
  */
-export class UserTags extends PolymerElement {
+export class UserTags extends PolylitMixin(LitElement) {
   static get is() {
     return 'vaadin-user-tags';
   }
 
-  static get template() {
+  static get styles() {
+    return css`
+      :host {
+        position: absolute;
+      }
+    `;
+  }
+
+  /** @protected */
+  render() {
     return html`
-      <style>
-        :host {
-          position: absolute;
-        }
-      </style>
       <vaadin-user-tags-overlay
         id="overlay"
         modeless
-        opened="[[opened]]"
+        .opened="${this.opened}"
         no-vertical-overlap
-        on-vaadin-overlay-open="_onOverlayOpen"
+        @vaadin-overlay-open="${this._onOverlayOpen}"
       ></vaadin-user-tags-overlay>
     `;
   }
@@ -67,6 +72,7 @@ export class UserTags extends PolymerElement {
       opened: {
         type: Boolean,
         value: false,
+        sync: true,
       },
 
       /**
@@ -288,7 +294,7 @@ export class UserTags extends PolymerElement {
 
         this.__flashQueue.forEach((tags) => {
           if (tags.some((tag) => tag.uid === user.id)) {
-            this.splice('__flashQueue', i, 1);
+            this.__flashQueue = this.__flashQueue.filter((_, index) => index !== i);
           }
         });
       });
@@ -311,7 +317,7 @@ export class UserTags extends PolymerElement {
 
       if (this.flashing || !this.__isTargetVisible) {
         // Schedule next flash later
-        this.push('__flashQueue', addedTags);
+        this.__flashQueue = [...this.__flashQueue, addedTags];
       } else {
         this.flashTags(addedTags);
       }
@@ -382,7 +388,7 @@ export class UserTags extends PolymerElement {
     }).then(() => {
       if (this.__flashQueue.length > 0) {
         const tags = this.__flashQueue[0];
-        this.splice('__flashQueue', 0, 1);
+        this.__flashQueue = [...this.__flashQueue].slice(1);
         this.flashTags(tags);
       }
     });
@@ -404,7 +410,7 @@ export class UserTags extends PolymerElement {
     this.applyTagsStart(changed);
 
     this._debounceRender = Debouncer.debounce(this._debounceRender, timeOut.after(this.duration), () => {
-      this.set('users', users);
+      this.users = users;
 
       this.applyTagsEnd(changed);
 
@@ -416,7 +422,7 @@ export class UserTags extends PolymerElement {
 
   updateTagsSync(users, changed) {
     this.applyTagsStart(changed);
-    this.set('users', users);
+    this.users = users;
     this.applyTagsEnd(changed);
   }
 

@@ -1,4 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
+import { sendKeys } from '@vaadin/test-runner-commands';
 import {
   down,
   fixtureSync,
@@ -8,7 +9,6 @@ import {
   nextRender,
   nextUpdate,
 } from '@vaadin/testing-helpers';
-import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import { getDeepActiveElement } from '@vaadin/a11y-base/src/focus-utils.js';
 
@@ -247,9 +247,7 @@ describe('accessibility', () => {
 
     it('should move focus to the first toolbar button after esc followed by shift-tab are pressed', async () => {
       await sendKeys({ press: 'Escape' });
-      await sendKeys({ down: 'Shift' });
-      await sendKeys({ press: 'Tab' });
-      await sendKeys({ up: 'Shift' });
+      await sendKeys({ press: 'Shift+Tab' });
       expect(getDeepActiveElement()).to.equal(buttons[0]);
     });
 

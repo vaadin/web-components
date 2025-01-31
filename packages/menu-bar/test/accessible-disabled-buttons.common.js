@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
+import { resetMouse, sendKeys, sendMouse } from '@vaadin/test-runner-commands';
 import { fixtureSync, middleOfNode, nextRender } from '@vaadin/testing-helpers';
-import { resetMouse, sendKeys, sendMouse } from '@web/test-runner-commands';
 
 describe('accessible disabled buttons', () => {
   let menuBar, buttons;
@@ -71,14 +71,10 @@ describe('accessible disabled buttons', () => {
     await sendKeys({ press: 'Tab' });
     expect(document.activeElement).to.equal(buttons[2]);
 
-    await sendKeys({ down: 'Shift' });
-    await sendKeys({ press: 'Tab' });
-    await sendKeys({ up: 'Shift' });
+    await sendKeys({ press: 'Shift+Tab' });
     expect(document.activeElement).to.equal(buttons[1]);
 
-    await sendKeys({ down: 'Shift' });
-    await sendKeys({ press: 'Tab' });
-    await sendKeys({ up: 'Shift' });
+    await sendKeys({ press: 'Shift+Tab' });
     expect(document.activeElement).to.equal(buttons[0]);
   });
 });

@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
+import { sendKeys } from '@vaadin/test-runner-commands';
 import { fire, fixtureSync, focusout, mousedown, nextRender, nextUpdate } from '@vaadin/testing-helpers';
-import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 
 describe('password-field', () => {
@@ -153,9 +153,7 @@ describe('password-field', () => {
       });
 
       it('should not set focus-ring attribute when focusing reveal button with Shift Tab', async () => {
-        await sendKeys({ down: 'Shift' });
-        await sendKeys({ press: 'Tab' });
-        await sendKeys({ up: 'Shift' });
+        await sendKeys({ press: 'Shift+Tab' });
 
         expect(passwordField.hasAttribute('focus-ring')).to.be.false;
       });
@@ -165,9 +163,7 @@ describe('password-field', () => {
         revealButton.focus();
 
         // Shift+Tab to the input element
-        await sendKeys({ down: 'Shift' });
-        await sendKeys({ press: 'Tab' });
-        await sendKeys({ up: 'Shift' });
+        await sendKeys({ press: 'Shift+Tab' });
 
         expect(passwordField.hasAttribute('focus-ring')).to.be.true;
       });
@@ -238,9 +234,7 @@ describe('disabled', () => {
     let focusInput;
 
     async function shiftTab() {
-      await sendKeys({ down: 'Shift' });
-      await sendKeys({ press: 'Tab' });
-      await sendKeys({ up: 'Shift' });
+      await sendKeys({ press: 'Shift+Tab' });
     }
 
     beforeEach(() => {

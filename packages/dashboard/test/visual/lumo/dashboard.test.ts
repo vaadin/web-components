@@ -1,5 +1,5 @@
+import { sendKeys } from '@vaadin/test-runner-commands';
 import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
-import { sendKeys } from '@web/test-runner-commands';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '../../../theme/lumo/vaadin-dashboard.js';
 import { html, render } from 'lit';
@@ -25,7 +25,7 @@ describe('dashboard', () => {
     fixtureSync(`
       <style>
         .content {
-          display: flex; 
+          display: flex;
           justify-content: center;
           align-items: center;
           border: 1px solid #ddd;

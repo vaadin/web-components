@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
+import { sendKeys } from '@vaadin/test-runner-commands';
 import { aTimeout, fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
-import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import { waitForOverlayRender } from '@vaadin/date-picker/test/helpers.js';
 
@@ -101,9 +101,7 @@ const fixtures = {
       await aTimeout(1);
 
       // Move focus to date-picker
-      await sendKeys({ down: 'Shift' });
-      await sendKeys({ press: 'Tab' });
-      await sendKeys({ up: 'Shift' });
+      await sendKeys({ press: 'Shift+Tab' });
       expect(validateSpy.called).to.be.false;
     });
 

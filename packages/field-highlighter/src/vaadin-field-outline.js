@@ -3,9 +3,10 @@
  * Copyright (c) 2021 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
+import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { fieldOutlineStyles } from './vaadin-field-highlighter-styles.js';
 
@@ -19,13 +20,9 @@ registerStyles('vaadin-field-outline', fieldOutlineStyles, { moduleId: 'vaadin-f
  * @mixes ThemableMixin
  * @private
  */
-export class FieldOutline extends ThemableMixin(DirMixin(PolymerElement)) {
+export class FieldOutline extends ThemableMixin(DirMixin(PolylitMixin(LitElement))) {
   static get is() {
     return 'vaadin-field-outline';
-  }
-
-  static get template() {
-    return html``;
   }
 
   static get properties() {
@@ -37,8 +34,14 @@ export class FieldOutline extends ThemableMixin(DirMixin(PolymerElement)) {
         type: Object,
         value: null,
         observer: '_userChanged',
+        sync: true,
       },
     };
+  }
+
+  /** @protected */
+  render() {
+    return html``;
   }
 
   /** @protected */

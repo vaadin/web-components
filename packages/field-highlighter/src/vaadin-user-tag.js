@@ -3,13 +3,12 @@
  * Copyright (c) 2021 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
-import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
+import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { userTagStyles } from './vaadin-field-highlighter-styles.js';
-
-registerStyles('vaadin-user-tag', userTagStyles, { moduleId: 'vaadin-user-tag-styles' });
 
 /**
  * An element used internally by `<vaadin-field-highlighter>`. Not intended to be used separately.
@@ -20,13 +19,18 @@ registerStyles('vaadin-user-tag', userTagStyles, { moduleId: 'vaadin-user-tag-st
  * @mixes ThemableMixin
  * @private
  */
-export class UserTag extends ThemableMixin(DirMixin(PolymerElement)) {
+export class UserTag extends ThemableMixin(DirMixin(PolylitMixin(LitElement))) {
   static get is() {
     return 'vaadin-user-tag';
   }
 
-  static get template() {
-    return html`<div part="name">[[name]]</div>`;
+  static get styles() {
+    return userTagStyles;
+  }
+
+  /** @protected */
+  render() {
+    return html`<div part="name">${this.name}</div>`;
   }
 
   static get properties() {

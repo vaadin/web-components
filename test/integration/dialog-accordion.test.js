@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
+import { sendKeys } from '@vaadin/test-runner-commands';
 import { fixtureSync, nextRender, oneEvent } from '@vaadin/testing-helpers';
-import { sendKeys } from '@web/test-runner-commands';
 import './not-animated-styles.js';
 import '@vaadin/accordion';
 import '@vaadin/dialog';
@@ -49,9 +49,7 @@ describe('accordion in dialog', () => {
     panels[0].querySelector('input').focus();
 
     // Move focus back to heading
-    await sendKeys({ down: 'Shift' });
-    await sendKeys({ press: 'Tab' });
-    await sendKeys({ up: 'Shift' });
+    await sendKeys({ press: 'Shift+Tab' });
 
     expect(document.activeElement).to.equal(panels[0].focusElement);
   });
@@ -75,9 +73,7 @@ describe('accordion in dialog', () => {
     panels[1].focus();
 
     // Move focus back to first panel
-    await sendKeys({ down: 'Shift' });
-    await sendKeys({ press: 'Tab' });
-    await sendKeys({ up: 'Shift' });
+    await sendKeys({ press: 'Shift+Tab' });
 
     expect(document.activeElement).to.equal(panels[0].focusElement);
   });

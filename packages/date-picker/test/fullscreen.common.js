@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
+import { sendKeys, setViewport } from '@vaadin/test-runner-commands';
 import { aTimeout, fixtureSync, nextRender, outsideClick, tabKeyDown, tap } from '@vaadin/testing-helpers';
-import { sendKeys, setViewport } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import { getFocusableCell, open, touchTap, waitForOverlayRender } from './helpers.js';
 
@@ -157,9 +157,7 @@ describe('fullscreen mode', () => {
     it('should move focus to Cancel button on date cell Shift Tab', async () => {
       const spy = sinon.spy(overlayContent._cancelButton, 'focus');
 
-      await sendKeys({ down: 'Shift' });
-      await sendKeys({ press: 'Tab' });
-      await sendKeys({ up: 'Shift' });
+      await sendKeys({ press: 'Shift+Tab' });
 
       expect(spy.calledOnce).to.be.true;
     });
@@ -169,9 +167,7 @@ describe('fullscreen mode', () => {
       const spy = sinon.spy(cell, 'focus');
 
       // Move focus to Cancel button
-      await sendKeys({ down: 'Shift' });
-      await sendKeys({ press: 'Tab' });
-      await sendKeys({ up: 'Shift' });
+      await sendKeys({ press: 'Shift+Tab' });
 
       await sendKeys({ press: 'Tab' });
 

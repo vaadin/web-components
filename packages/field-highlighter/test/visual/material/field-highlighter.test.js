@@ -1,5 +1,5 @@
+import { sendKeys } from '@vaadin/test-runner-commands';
 import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
-import { sendKeys } from '@web/test-runner-commands';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '@vaadin/checkbox/theme/material/vaadin-checkbox.js';
 import '@vaadin/checkbox-group/theme/material/vaadin-checkbox-group.js';
@@ -9,8 +9,8 @@ import '@vaadin/list-box/theme/material/vaadin-list-box.js';
 import '@vaadin/radio-group/theme/material/vaadin-radio-group.js';
 import '@vaadin/text-area/theme/material/vaadin-text-area.js';
 import '@vaadin/text-field/theme/material/vaadin-text-field.js';
-import '../../../theme/material/vaadin-field-highlighter.js';
 import '../common.js';
+import '../../../theme/material/vaadin-field-highlighter.js';
 import { setUsers } from '../helpers.js';
 
 describe('field-highlighter', () => {

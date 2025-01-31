@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
+import { resetMouse, sendMouse } from '@vaadin/test-runner-commands';
 import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
-import { resetMouse, sendMouse } from '@web/test-runner-commands';
 import { hover } from '@vaadin/button/test/visual/helpers.js';
 
 describe('drag and drop', () => {
