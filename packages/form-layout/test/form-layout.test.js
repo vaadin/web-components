@@ -263,7 +263,7 @@ describe('form layout', () => {
             <vaadin-form-item></vaadin-form-item>
           </vaadin-form-layout>
         `);
-        await nextFrame();
+        await nextRender();
       });
 
       afterEach(() => {
