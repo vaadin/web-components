@@ -1,3 +1,3 @@
 window.Vaadin ??= {};
 window.Vaadin.featureFlags ??= {};
-window.Vaadin.featureFlags.layoutImprovements = true;
+window.Vaadin.featureFlags.layoutComponentImprovements = true;

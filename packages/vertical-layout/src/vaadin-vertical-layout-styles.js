@@ -35,7 +35,7 @@ export const baseStyles = css`
 // using `HasSize.setSizeFull()` and others, get additional styles so that they effectively take the remaining space in
 // the layout, rather than explicitly use 100% width/height. The respective data attributes are set by Flow's `HasSize`
 // class.
-const enableLayoutImprovements = window.Vaadin.featureFlags.layoutImprovements;
+const enableLayoutImprovements = window.Vaadin.featureFlags.layoutComponentImprovements;
 const layoutImprovementStyles = css`
   ::slotted([data-height-full]) {
     flex: 1;
