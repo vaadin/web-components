@@ -14,8 +14,6 @@ import {
   tab,
 } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import '@vaadin/item/vaadin-item.js';
-import '@vaadin/list-box/vaadin-list-box.js';
 import { html, render } from 'lit';
 
 describe('vaadin-select', () => {
