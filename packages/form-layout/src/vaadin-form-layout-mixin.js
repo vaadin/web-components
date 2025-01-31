@@ -374,6 +374,8 @@ export const FormLayoutMixin = (superClass) =>
           if (resetColumn) {
             child.style.setProperty('--_grid-colstart', 1);
             resetColumn = false;
+          } else {
+            child.style.removeProperty('--_grid-colstart');
           }
         });
     }

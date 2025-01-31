@@ -519,14 +519,14 @@ describe('form layout', () => {
 
     it('should update grid-column-start after adding <br>', async () => {
       const br = document.createElement('br');
-      items[0].after(br);
+      layout.insertBefore(br, items[1]);
       await nextRender(layout);
       expect(getComputedStyle(items[1]).gridColumnStart).to.equal('1');
     });
 
     it('should update grid-column-start after removing <br>', async () => {
       const br = document.createElement('br');
-      items[0].after(br);
+      layout.insertBefore(br, items[1]);
       await nextRender(layout);
 
       br.remove();
