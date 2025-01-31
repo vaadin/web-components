@@ -14,8 +14,6 @@ import {
   tab,
 } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import '@vaadin/item/vaadin-item.js';
-import '@vaadin/list-box/vaadin-list-box.js';
 import { html, render } from 'lit';
 
 describe('vaadin-select', () => {
@@ -755,7 +753,6 @@ describe('vaadin-select', () => {
 
     beforeEach(async () => {
       select = fixtureSync(`<vaadin-select value="v2"></vaadin-select>`);
-      await nextRender();
       select.renderer = (root) => {
         render(
           html`
@@ -767,8 +764,8 @@ describe('vaadin-select', () => {
           root,
         );
       };
+      await nextRender();
       valueButton = select.querySelector('vaadin-select-value-button');
-      await nextUpdate(select);
       menu = select._menuElement;
     });
 
