@@ -63,16 +63,12 @@ describe('edit column', () => {
       await nextFrame();
 
       // Press Shift + Tab to edit the select cell
-      await sendKeys({ down: 'Shift' });
-      await sendKeys({ press: 'Tab' });
-      await sendKeys({ up: 'Shift' });
+      await sendKeys({ press: 'Shift+Tab' });
       expect(getCellEditor(selectCell)).to.be.ok;
       await nextFrame();
 
       // Press Shift + Tab to edit the text cell
-      await sendKeys({ down: 'Shift' });
-      await sendKeys({ press: 'Tab' });
-      await sendKeys({ up: 'Shift' });
+      await sendKeys({ press: 'Shift+Tab' });
       expect(getCellEditor(textCell)).to.be.ok;
     });
   });
@@ -148,9 +144,7 @@ describe('edit column', () => {
       const firstCell = getContainerCell(grid.$.items, 1, 1);
       dblclick(firstCell._content);
 
-      await sendKeys({ down: 'Shift' });
-      await sendKeys({ press: 'Tab' });
-      await sendKeys({ up: 'Shift' });
+      await sendKeys({ press: 'Shift+Tab' });
 
       expect(grid.$.table.scrollLeft).to.closeTo(1, 1);
     });
@@ -458,22 +452,16 @@ describe('edit column', () => {
           await sendKeys({ press: 'Enter' });
           expect(getCellEditor(cell)).to.be.ok;
 
-          await sendKeys({ down: 'Shift' });
-          await sendKeys({ press: 'Tab' });
-          await sendKeys({ up: 'Shift' });
+          await sendKeys({ press: 'Shift+Tab' });
           cell = getContainerCell(grid.$.items, 3, 1);
           expect(getCellEditor(cell)).to.be.ok;
 
           // Should skip non-editable rows
-          await sendKeys({ down: 'Shift' });
-          await sendKeys({ press: 'Tab' });
-          await sendKeys({ up: 'Shift' });
+          await sendKeys({ press: 'Shift+Tab' });
           cell = getContainerCell(grid.$.items, 1, 3);
           expect(getCellEditor(cell)).to.be.ok;
 
-          await sendKeys({ down: 'Shift' });
-          await sendKeys({ press: 'Tab' });
-          await sendKeys({ up: 'Shift' });
+          await sendKeys({ press: 'Shift+Tab' });
           cell = getContainerCell(grid.$.items, 1, 2);
           expect(getCellEditor(cell)).to.be.ok;
         });
@@ -514,9 +502,7 @@ describe('edit column', () => {
           expect(getCellEditor(cell)).to.be.ok;
           expect(grid.querySelector('vaadin-grid-pro-edit-text-field')).to.be.ok;
 
-          await sendKeys({ down: 'Shift' });
-          await sendKeys({ press: 'Tab' });
-          await sendKeys({ up: 'Shift' });
+          await sendKeys({ press: 'Shift+Tab' });
           expect(grid.querySelector('vaadin-grid-pro-edit-text-field')).to.not.be.ok;
           const target = cell._focusButton || cell;
           expect(grid.shadowRoot.activeElement).to.equal(target);
@@ -546,9 +532,7 @@ describe('edit column', () => {
           await sendKeys({ press: 'Enter' });
           expect(getCellEditor(cell)).to.be.ok;
 
-          await sendKeys({ down: 'Shift' });
-          await sendKeys({ press: 'Enter' });
-          await sendKeys({ up: 'Shift' });
+          await sendKeys({ press: 'Shift+Enter' });
           cell = getContainerCell(grid.$.items, 1, 1);
           expect(getCellEditor(cell)).to.be.ok;
         });
@@ -574,9 +558,7 @@ describe('edit column', () => {
           expect(getCellEditor(cell)).to.be.ok;
           expect(grid.querySelector('vaadin-grid-pro-edit-text-field')).to.be.ok;
 
-          await sendKeys({ down: 'Shift' });
-          await sendKeys({ press: 'Enter' });
-          await sendKeys({ up: 'Shift' });
+          await sendKeys({ press: 'Shift+Enter' });
           expect(grid.querySelector('vaadin-grid-pro-edit-text-field')).to.not.be.ok;
           const target = cell._focusButton || cell;
           expect(grid.shadowRoot.activeElement).to.equal(target);

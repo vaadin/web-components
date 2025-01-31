@@ -224,9 +224,7 @@ describe('radio-group', () => {
       await sendKeys({ press: 'Tab' });
 
       // Move focus out of the group.
-      await sendKeys({ down: 'Shift' });
-      await sendKeys({ press: 'Tab' });
-      await sendKeys({ up: 'Shift' });
+      await sendKeys({ press: 'Shift+Tab' });
 
       expect(buttons[0].hasAttribute('focused')).to.be.false;
       expect(group.hasAttribute('focused')).to.be.false;
