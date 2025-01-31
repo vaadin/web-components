@@ -143,7 +143,10 @@ describe('dashboard - widget reordering', () => {
       dashboard.addEventListener('dashboard-item-selected-changed', spy);
       await resetMouse();
       // Hover over the widget drag handle
-      await sendMouseToElement(getDraggable(getElementFromCell(dashboard, 0, 0)!));
+      await sendMouseToElement({
+        type: 'move',
+        element: getDraggable(getElementFromCell(dashboard, 0, 0)!),
+      });
       // Press down the left mouse button
       await sendMouse({
         type: 'down',
