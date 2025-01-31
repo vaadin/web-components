@@ -8,7 +8,7 @@ import '@vaadin/form-layout/vaadin-form-item.js';
 import '@vaadin/dialog';
 
 describe('form-layout in dialog', () => {
-  let dialog, formLayout;
+  let dialog, formItems;
 
   before(async () => {
     await setViewport({ width: 1024, height: 768 });
@@ -40,7 +40,7 @@ describe('form-layout in dialog', () => {
     };
     dialog.opened = true;
     await nextRender();
-    formLayout = dialog.$.overlay.querySelector('vaadin-form-layout');
+    formItems = [...dialog.$.overlay.querySelectorAll('vaadin-form-item')];
   });
 
   afterEach(async () => {
@@ -49,15 +49,7 @@ describe('form-layout in dialog', () => {
   });
 
   it('should arrange form items in two columns', () => {
-    const formItems = [...formLayout.querySelectorAll('vaadin-form-item')];
-
-    // Assert that 1st and 2nd form items are on the same row
-    expect(formItems[0].offsetTop).to.equal(formItems[1].offsetTop);
-
-    // Assert that 3rd and 4th form items are on the same row
-    expect(formItems[2].offsetTop).to.equal(formItems[3].offsetTop);
-
-    // Assert that 3rd form item is on a row below 1st form item
-    expect(formItems[2].offsetTop).to.be.greaterThan(formItems[0].offsetTop);
+    const columns = new Set(formItems.map((child) => child.offsetLeft));
+    expect(columns.size).to.equal(2);
   });
 });
