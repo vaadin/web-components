@@ -69,14 +69,10 @@ describe('accessible disabled buttons', () => {
     await sendKeys({ press: 'Tab' });
     expect(document.activeElement).to.equal(buttons[2]);
 
-    await sendKeys({ down: 'Shift' });
-    await sendKeys({ press: 'Tab' });
-    await sendKeys({ up: 'Shift' });
+    await sendKeys({ press: 'Shift+Tab' });
     expect(document.activeElement).to.equal(buttons[1]);
 
-    await sendKeys({ down: 'Shift' });
-    await sendKeys({ press: 'Tab' });
-    await sendKeys({ up: 'Shift' });
+    await sendKeys({ press: 'Shift+Tab' });
     expect(document.activeElement).to.equal(buttons[0]);
   });
 });

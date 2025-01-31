@@ -418,9 +418,7 @@ describe('menu-bar with tooltip', () => {
       await sendKeys({ press: 'Tab' });
       expect(getTooltipText()).to.equal('Copy tooltip');
 
-      await sendKeys({ down: 'Shift' });
-      await sendKeys({ press: 'Tab' });
-      await sendKeys({ up: 'Shift' });
+      await sendKeys({ press: 'Shift+Tab' });
       expect(getTooltipText()).to.be.null;
     });
   });

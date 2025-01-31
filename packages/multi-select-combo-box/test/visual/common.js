@@ -4,7 +4,8 @@ registerStyles(
   'vaadin-multi-select-combo-box',
   css`
     /* Hide caret */
-    :host([focused]) ::slotted(input) {
+    :host([focused]:not([has-value])) ::slotted(input),
+    :host([focused][has-value]) ::slotted(input) {
       caret-color: transparent !important;
     }
 
