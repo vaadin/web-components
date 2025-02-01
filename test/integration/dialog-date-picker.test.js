@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
+import { sendKeys } from '@vaadin/test-runner-commands';
 import { fixtureSync, nextFrame, nextRender, touchstart } from '@vaadin/testing-helpers';
-import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import './not-animated-styles.js';
 import '@vaadin/date-picker';
@@ -51,9 +51,7 @@ describe('date-picker in dialog', () => {
 
     it('should focus the Cancel button on Shift + Tab when inside a dialog', async () => {
       // Focus the Cancel button
-      await sendKeys({ down: 'Shift' });
-      await sendKeys({ press: 'Tab' });
-      await sendKeys({ up: 'Shift' });
+      await sendKeys({ press: 'Shift+Tab' });
 
       expect(overlayContent._cancelButton.hasAttribute('focused')).to.be.true;
     });
@@ -67,9 +65,7 @@ describe('date-picker in dialog', () => {
 
       const spy = sinon.spy(datePicker.inputElement, 'focus');
 
-      await sendKeys({ down: 'Shift' });
-      await sendKeys({ press: 'Tab' });
-      await sendKeys({ up: 'Shift' });
+      await sendKeys({ press: 'Shift+Tab' });
 
       expect(spy.calledOnce).to.be.true;
     });
@@ -114,9 +110,7 @@ describe('date-picker in dialog', () => {
 
     it('should not close the dialog when closing date-picker on Cancel button Escape', async () => {
       // Focus the Cancel button
-      await sendKeys({ down: 'Shift' });
-      await sendKeys({ press: 'Tab' });
-      await sendKeys({ up: 'Shift' });
+      await sendKeys({ press: 'Shift+Tab' });
 
       await sendKeys({ press: 'Escape' });
 

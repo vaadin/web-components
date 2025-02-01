@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
+import { sendKeys } from '@vaadin/test-runner-commands';
 import { fixtureSync, mousedown, mouseup, nextFrame } from '@vaadin/testing-helpers';
-import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import { Virtualizer } from '../src/virtualizer.js';
 
@@ -152,9 +152,7 @@ describe('reorder elements', () => {
       // Tab upwards
       for (let i = tabToIndex - 1; i >= 0; i--) {
         await nextFrame();
-        await sendKeys({ down: 'Shift' });
-        await sendKeys({ press: 'Tab' });
-        await sendKeys({ up: 'Shift' });
+        await sendKeys({ press: 'Shift+Tab' });
         await nextFrame();
         expect(document.activeElement.id).to.equal(`item-${i}`);
       }

@@ -1,4 +1,4 @@
-import { sendKeys } from '@web/test-runner-commands';
+import { sendKeys } from '@vaadin/test-runner-commands';
 
 export async function esc() {
   await sendKeys({ press: 'Escape' });
@@ -9,7 +9,5 @@ export async function tab() {
 }
 
 export async function shiftTab() {
-  await sendKeys({ down: 'Shift' });
-  await sendKeys({ press: 'Tab' });
-  await sendKeys({ up: 'Shift' });
+  await sendKeys({ press: 'Shift+Tab' });
 }

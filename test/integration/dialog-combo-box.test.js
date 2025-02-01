@@ -1,4 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
+import { sendKeys } from '@vaadin/test-runner-commands';
 import {
   fixtureSync,
   mousedown,
@@ -8,7 +9,6 @@ import {
   outsideClick,
   touchstart,
 } from '@vaadin/testing-helpers';
-import { sendKeys } from '@web/test-runner-commands';
 import './not-animated-styles.js';
 import '@vaadin/combo-box';
 import '@vaadin/dialog';

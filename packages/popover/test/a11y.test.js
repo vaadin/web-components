@@ -1,4 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
+import { sendKeys } from '@vaadin/test-runner-commands';
 import {
   esc,
   fixtureSync,
@@ -9,7 +10,6 @@ import {
   outsideClick,
   tab,
 } from '@vaadin/testing-helpers';
-import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import './not-animated-styles.js';
 import { getDeepActiveElement } from '@vaadin/a11y-base/src/focus-utils.js';
@@ -371,9 +371,7 @@ describe('a11y', () => {
       const spy = sinon.spy(target, 'focus');
 
       // Move focus back to the target
-      await sendKeys({ down: 'Shift' });
-      await sendKeys({ press: 'Tab' });
-      await sendKeys({ up: 'Shift' });
+      await sendKeys({ press: 'Shift+Tab' });
 
       expect(spy).to.be.calledOnce;
     });
@@ -401,9 +399,7 @@ describe('a11y', () => {
       const focusable = overlay.querySelector('input');
       const spy = sinon.spy(focusable, 'focus');
 
-      await sendKeys({ down: 'Shift' });
-      await sendKeys({ press: 'Tab' });
-      await sendKeys({ up: 'Shift' });
+      await sendKeys({ press: 'Shift+Tab' });
 
       expect(spy).to.be.calledOnce;
     });
@@ -429,9 +425,7 @@ describe('a11y', () => {
       await nextRender();
 
       // Move focus back from the target
-      await sendKeys({ down: 'Shift' });
-      await sendKeys({ press: 'Tab' });
-      await sendKeys({ up: 'Shift' });
+      await sendKeys({ press: 'Shift+Tab' });
       await nextRender();
 
       const activeElement = getDeepActiveElement();

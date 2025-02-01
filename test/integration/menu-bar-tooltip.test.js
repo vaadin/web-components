@@ -1,4 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
+import { resetMouse, sendKeys, sendMouse } from '@vaadin/test-runner-commands';
 import {
   arrowDown,
   arrowRight,
@@ -12,7 +13,6 @@ import {
   nextRender,
   tabKeyDown,
 } from '@vaadin/testing-helpers';
-import { resetMouse, sendKeys, sendMouse } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import './not-animated-styles.js';
 import '@vaadin/menu-bar';
@@ -420,9 +420,7 @@ describe('menu-bar with tooltip', () => {
       await sendKeys({ press: 'Tab' });
       expect(getTooltipText()).to.equal('Copy tooltip');
 
-      await sendKeys({ down: 'Shift' });
-      await sendKeys({ press: 'Tab' });
-      await sendKeys({ up: 'Shift' });
+      await sendKeys({ press: 'Shift+Tab' });
       expect(getTooltipText()).to.be.null;
     });
   });

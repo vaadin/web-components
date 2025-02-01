@@ -1,7 +1,7 @@
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 registerStyles(
-  'vaadin-date-picker',
+  'vaadin-*-picker',
   css`
     /* Hide caret */
     :host([focused]) ::slotted(input) {
