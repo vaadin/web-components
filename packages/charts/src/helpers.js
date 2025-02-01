@@ -26,3 +26,23 @@ export function inflateFunctions(config) {
     }
   });
 }
+
+export function deepMerge(target, source) {
+  const isObject = (item) => item && typeof item === 'object' && !Array.isArray(item);
+
+  if (isObject(source) && isObject(target)) {
+    Object.keys(source).forEach((key) => {
+      if (isObject(source[key])) {
+        if (!target[key]) {
+          Object.assign(target, { [key]: {} });
+        }
+
+        deepMerge(target[key], source[key]);
+      } else {
+        Object.assign(target, { [key]: source[key] });
+      }
+    });
+  }
+
+  return target;
+}

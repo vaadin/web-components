@@ -8,7 +8,6 @@
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
-import './vaadin-chart.js';
 import { PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ChartSeriesMixin } from './vaadin-chart-series-mixin.js';

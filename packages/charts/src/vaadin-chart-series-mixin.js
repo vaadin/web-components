@@ -8,8 +8,7 @@
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
-
-import { deepMerge } from './vaadin-chart-mixin.js';
+import { deepMerge } from './helpers.js';
 
 /**
  * @polymerMixin
