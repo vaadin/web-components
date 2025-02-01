@@ -8,26 +8,6 @@
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
-import 'highcharts/es-modules/masters/highstock.src.js';
-import 'highcharts/es-modules/masters/modules/accessibility.src.js';
-import 'highcharts/es-modules/masters/modules/annotations.src.js';
-import 'highcharts/es-modules/masters/highcharts-more.src.js';
-import 'highcharts/es-modules/masters/highcharts-3d.src.js';
-import 'highcharts/es-modules/masters/modules/data.src.js';
-import 'highcharts/es-modules/masters/modules/drilldown.src.js';
-import 'highcharts/es-modules/masters/modules/exporting.src.js';
-import 'highcharts/es-modules/masters/modules/funnel.src.js';
-import 'highcharts/es-modules/masters/modules/heatmap.src.js';
-import 'highcharts/es-modules/masters/modules/solid-gauge.src.js';
-import 'highcharts/es-modules/masters/modules/treemap.src.js';
-import 'highcharts/es-modules/masters/modules/no-data-to-display.src.js';
-import 'highcharts/es-modules/masters/modules/sankey.src.js';
-import 'highcharts/es-modules/masters/modules/timeline.src.js';
-import 'highcharts/es-modules/masters/modules/organization.src.js';
-import 'highcharts/es-modules/masters/modules/xrange.src.js';
-import 'highcharts/es-modules/masters/modules/bullet.src.js';
-import 'highcharts/es-modules/masters/modules/gantt.src.js';
-import 'highcharts/es-modules/masters/modules/draggable-points.src.js';
 import './vaadin-chart-series.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
