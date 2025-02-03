@@ -18,6 +18,11 @@ const HIDDEN_WARNINGS = [
 const filterBrowserLogs = (log) => {
   const message = log.args[0];
 
+  // Filter out webdriver debug output
+  if (log.type === 'debug' && message.startsWith('[WDIO]')) {
+    return false;
+  }
+
   const isHidden = HIDDEN_WARNINGS.some((warning) => {
     if (warning instanceof RegExp && warning.test(message)) {
       return true;
@@ -288,6 +293,7 @@ const createVisualTestsConfig = (theme, browserVersion) => {
         browserName: 'chrome',
         platformName: 'Windows 10',
         browserVersion,
+        'wdio:enforceWebDriverClassic': true,
       }),
     ],
     plugins: [
