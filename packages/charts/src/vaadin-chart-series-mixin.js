@@ -34,6 +34,7 @@ export const ChartSeriesMixin = (superClass) =>
         values: {
           type: Array,
           value: () => [],
+          sync: true,
         },
 
         /**
@@ -46,6 +47,7 @@ export const ChartSeriesMixin = (superClass) =>
         valueMin: {
           type: Number,
           reflectToAttribute: true,
+          sync: true,
         },
 
         /**
@@ -56,6 +58,7 @@ export const ChartSeriesMixin = (superClass) =>
         valueMax: {
           type: Number,
           reflectToAttribute: true,
+          sync: true,
         },
 
         /**
@@ -66,6 +69,7 @@ export const ChartSeriesMixin = (superClass) =>
         type: {
           type: String,
           reflectToAttribute: true,
+          sync: true,
         },
 
         /**
@@ -75,6 +79,7 @@ export const ChartSeriesMixin = (superClass) =>
         title: {
           type: String,
           reflectToAttribute: true,
+          sync: true,
         },
 
         /**
@@ -88,6 +93,7 @@ export const ChartSeriesMixin = (superClass) =>
         markers: {
           type: String,
           reflectToAttribute: true,
+          sync: true,
         },
 
         /**
@@ -98,6 +104,7 @@ export const ChartSeriesMixin = (superClass) =>
         unit: {
           type: String,
           reflectToAttribute: true,
+          sync: true,
         },
 
         /**
@@ -109,6 +116,7 @@ export const ChartSeriesMixin = (superClass) =>
         stack: {
           type: String,
           reflectToAttribute: true,
+          sync: true,
         },
 
         /**
@@ -121,6 +129,7 @@ export const ChartSeriesMixin = (superClass) =>
         neckPosition: {
           type: String,
           reflectToAttribute: true,
+          sync: true,
         },
 
         /**
@@ -133,6 +142,7 @@ export const ChartSeriesMixin = (superClass) =>
         neckWidth: {
           type: String,
           reflectToAttribute: true,
+          sync: true,
         },
 
         /**
@@ -142,6 +152,7 @@ export const ChartSeriesMixin = (superClass) =>
          */
         options: {
           type: Object,
+          sync: true,
         },
 
         /**
@@ -151,6 +162,7 @@ export const ChartSeriesMixin = (superClass) =>
         additionalOptions: {
           type: Object,
           reflectToAttribute: true,
+          sync: true,
         },
 
         /**
@@ -159,13 +171,14 @@ export const ChartSeriesMixin = (superClass) =>
          */
         _series: {
           type: Object,
+          sync: true,
         },
       };
     }
 
     static get observers() {
       return [
-        '__additionalOptionsObserver(additionalOptions.*, _series)',
+        '__additionalOptionsObserver(additionalOptions, _series)',
         '__markersObserver(markers, _series)',
         '__neckPositionObserver(neckPosition, _series)',
         '__neckWidthObserver(neckWidth, _series)',
@@ -175,7 +188,7 @@ export const ChartSeriesMixin = (superClass) =>
         '__unitObserver(unit, valueMin, valueMax, _series)',
         '__valueMinObserver(valueMin, _series)',
         '__valueMaxObserver(valueMax, _series)',
-        '__valuesObserver(values.splices, _series)',
+        '__valuesObserver(values, _series)',
       ];
     }
 
@@ -256,16 +269,16 @@ export const ChartSeriesMixin = (superClass) =>
     }
 
     /** @private */
-    __valuesObserver(_splices, series) {
+    __valuesObserver(values, series) {
       if (series) {
-        series.setData(this.values);
+        series.setData(values);
       }
     }
 
     /** @private */
     __additionalOptionsObserver(additionalOptions, series) {
-      if (series && additionalOptions.base) {
-        series.update(additionalOptions.base);
+      if (series && additionalOptions) {
+        series.update(additionalOptions);
       }
     }
 

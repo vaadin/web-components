@@ -64,7 +64,7 @@ describe('vaadin-chart exporting', () => {
   beforeEach(async () => {
     wrapper = fixtureSync('<chart-exporting></chart-exporting>');
     chart = wrapper.$.chart;
-    chart.set('additionalOptions', { exporting: { enabled: true } });
+    chart.additionalOptions = { exporting: { enabled: true } };
     await oneEvent(chart, 'chart-add-series');
     chartContainer = chart.$.chart;
   });
