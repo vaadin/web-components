@@ -1,4 +1,4 @@
-import { executeServerCommand, sendKeys } from '@vaadin/test-runner-commands';
+import { sendKeys } from '@vaadin/test-runner-commands';
 import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '@vaadin/button/theme/lumo/vaadin-button.js';
@@ -7,10 +7,6 @@ import '../../../theme/lumo/vaadin-notification.js';
 
 describe('notification', () => {
   let element;
-
-  before(async () => {
-    await executeServerCommand('set-window-height', { height: 610 });
-  });
 
   beforeEach(() => {
     element = fixtureSync('<vaadin-notification duration="0"></vaadin-notification>');
