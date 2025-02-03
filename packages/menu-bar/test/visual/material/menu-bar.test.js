@@ -1,4 +1,3 @@
-import { executeServerCommand } from '@vaadin/test-runner-commands';
 import { arrowDown, fixtureSync, nextRender, oneEvent } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '@vaadin/icon/theme/material/vaadin-icon.js';
@@ -8,10 +7,6 @@ import '../../not-animated-styles.js';
 
 describe('menu-bar', () => {
   let div, element;
-
-  before(async () => {
-    await executeServerCommand('set-window-height', { height: 610 });
-  });
 
   // FIXME: overflow doesn't work correctly in RTL in older Chrome version
   // See comments under https://github.com/vaadin/web-components/pull/7347
