@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { resetMouse, sendKeys, sendMouse } from '@vaadin/test-runner-commands';
+import { resetMouse, sendKeys, sendMouseToElement } from '@vaadin/test-runner-commands';
 import { aTimeout, fixtureSync, focusin, focusout, nextFrame, nextRender, outsideClick } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-date-time-picker.js';
@@ -40,13 +40,6 @@ describe('Basic features', () => {
   let dateTimePicker;
   let datePicker;
   let timePicker;
-
-  async function click(element) {
-    const rect = element.inputElement.getBoundingClientRect();
-    const x = Math.floor(rect.x + rect.width / 2);
-    const y = Math.floor(rect.y + rect.height / 2);
-    await sendMouse({ type: 'click', position: [x, y] });
-  }
 
   beforeEach(() => {
     dateTimePicker = fixtureSync('<vaadin-date-time-picker></vaadin-date-time-picker>');
@@ -200,11 +193,11 @@ describe('Basic features', () => {
 
   describe('date-picker focused', () => {
     it('should remove focused attribute on time-picker click', async () => {
-      await click(datePicker);
+      await sendMouseToElement({ type: 'click', element: datePicker.inputElement });
       await nextRender();
       expect(datePicker.hasAttribute('focused')).to.be.true;
 
-      await click(timePicker);
+      await sendMouseToElement({ type: 'click', element: timePicker.inputElement });
       expect(datePicker.hasAttribute('focused')).to.be.false;
     });
 
@@ -216,7 +209,7 @@ describe('Basic features', () => {
       await nextRender();
       expect(datePicker.hasAttribute('focus-ring')).to.be.true;
 
-      await click(timePicker);
+      await sendMouseToElement({ type: 'click', element: timePicker.inputElement });
       expect(datePicker.hasAttribute('focus-ring')).to.be.false;
     });
   });
@@ -229,13 +222,13 @@ describe('Basic features', () => {
     });
 
     it('should remove focused attribute on date-picker click', async () => {
-      await click(timePicker);
+      await sendMouseToElement({ type: 'click', element: timePicker.inputElement });
       // Open the overlay with the keyboard
       await sendKeys({ press: 'ArrowDown' });
       await nextRender();
       expect(timePicker.hasAttribute('focused')).to.be.true;
 
-      await click(datePicker);
+      await sendMouseToElement({ type: 'click', element: datePicker.inputElement });
       expect(timePicker.hasAttribute('focused')).to.be.false;
     });
 
@@ -248,7 +241,7 @@ describe('Basic features', () => {
       await nextRender();
       expect(timePicker.hasAttribute('focus-ring')).to.be.true;
 
-      await click(datePicker);
+      await sendMouseToElement({ type: 'click', element: datePicker.inputElement });
       expect(timePicker.hasAttribute('focus-ring')).to.be.false;
     });
   });
