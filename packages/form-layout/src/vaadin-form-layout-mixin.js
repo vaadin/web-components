@@ -172,6 +172,8 @@ export const FormLayoutMixin = (superClass) =>
     disconnectedCallback() {
       super.disconnectedCallback();
 
+      this.__childrenObserver.disconnect();
+      this.__childrenAttributesObserver.disconnect();
       this.__intersectionObserver.disconnect();
     }
 
