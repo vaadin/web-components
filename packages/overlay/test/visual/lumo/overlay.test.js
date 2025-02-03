@@ -1,14 +1,9 @@
-import { executeServerCommand } from '@vaadin/test-runner-commands';
 import { fixtureSync } from '@vaadin/testing-helpers/dist/fixture.js';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '../../../theme/lumo/vaadin-overlay.js';
 
 describe('overlay', () => {
   let div, element;
-
-  before(async () => {
-    await executeServerCommand('set-window-height', { height: 610 });
-  });
 
   beforeEach(() => {
     div = document.createElement('div');
