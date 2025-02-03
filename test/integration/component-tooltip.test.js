@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
-import { resetMouse, sendKeys, sendMouse } from '@vaadin/test-runner-commands';
-import { fixtureSync, middleOfNode, nextRender, tabKeyDown } from '@vaadin/testing-helpers';
+import { resetMouse, sendKeys, sendMouseToElement } from '@vaadin/test-runner-commands';
+import { fixtureSync, nextRender, tabKeyDown } from '@vaadin/testing-helpers';
 import './not-animated-styles.js';
 import { Button } from '@vaadin/button';
 import { Checkbox } from '@vaadin/checkbox';
@@ -233,11 +233,10 @@ describe('accessible disabled button', () => {
   });
 
   it('should toggle tooltip on hover when button is disabled', async () => {
-    const { x, y } = middleOfNode(button);
-    await sendMouse({ type: 'move', position: [Math.floor(x), Math.floor(y)] });
+    await sendMouseToElement({ type: 'move', element: button });
     expect(tooltip._overlayElement.opened).to.be.true;
 
-    await sendMouse({ type: 'move', position: [0, 0] });
+    await resetMouse();
     expect(tooltip._overlayElement.opened).to.be.false;
   });
 

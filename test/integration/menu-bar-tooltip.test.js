@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { resetMouse, sendKeys, sendMouse } from '@vaadin/test-runner-commands';
+import { resetMouse, sendKeys, sendMouseToElement } from '@vaadin/test-runner-commands';
 import {
   arrowDown,
   arrowRight,
@@ -8,7 +8,6 @@ import {
   fixtureSync,
   focusin,
   focusout,
-  middleOfNode,
   mousedown,
   nextRender,
   tabKeyDown,
@@ -392,11 +391,10 @@ describe('menu-bar with tooltip', () => {
     });
 
     it('should toggle tooltip on disabled button hover', async () => {
-      const { x, y } = middleOfNode(buttons[1]);
-      await sendMouse({ type: 'move', position: [Math.floor(x), Math.floor(y)] });
+      await sendMouseToElement({ type: 'move', element: buttons[1] });
       expect(getTooltipText()).to.equal('Copy tooltip');
 
-      await sendMouse({ type: 'move', position: [0, 0] });
+      await resetMouse();
       expect(getTooltipText()).to.be.null;
     });
 
