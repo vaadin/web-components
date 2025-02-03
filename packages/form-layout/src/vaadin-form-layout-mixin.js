@@ -146,10 +146,25 @@ export const FormLayoutMixin = (superClass) =>
     connectedCallback() {
       super.connectedCallback();
 
+      // Set up an observer to update layout when new children are added or removed.
+      this.__childrenObserver = new MutationObserver(() => this._updateLayout());
+      this.__childrenObserver.observe(this, { childList: true });
+
+      // Set up an observer to update layout when children's attributes change.
+      this.__childrenAttributesObserver = new MutationObserver((mutations) => {
+        if (mutations.some((mutation) => mutation.target.parentElement === this)) {
+          this._updateLayout();
+        }
+      });
+      this.__childrenAttributesObserver.observe(this, {
+        subtree: true,
+        attributes: true,
+        attributeFilter: ['colspan', 'data-colspan', 'hidden'],
+      });
+
       requestAnimationFrame(() => this._selectResponsiveStep());
       requestAnimationFrame(() => this._updateLayout());
 
-      this._observeChildrenColspanChange();
       this.__intersectionObserver.observe(this.$.layout);
     }
 
@@ -157,62 +172,7 @@ export const FormLayoutMixin = (superClass) =>
     disconnectedCallback() {
       super.disconnectedCallback();
 
-      this.__mutationObserver.disconnect();
-      this.__childObserver.disconnect();
       this.__intersectionObserver.disconnect();
-    }
-
-    /** @private */
-    _observeChildrenColspanChange() {
-      // Observe changes in form items' `colspan` attribute and update styles
-      const mutationObserverConfig = { attributes: true };
-
-      this.__mutationObserver = new MutationObserver((mutationRecord) => {
-        mutationRecord.forEach((mutation) => {
-          if (
-            mutation.type === 'attributes' &&
-            (mutation.attributeName === 'colspan' ||
-              mutation.attributeName === 'data-colspan' ||
-              mutation.attributeName === 'hidden')
-          ) {
-            this._updateLayout();
-          }
-        });
-      });
-
-      // Observe changes to initial children
-      [...this.children].forEach((child) => {
-        this.__mutationObserver.observe(child, mutationObserverConfig);
-      });
-
-      // Observe changes to lazily added nodes
-      this.__childObserver = new MutationObserver((mutations) => {
-        const addedNodes = [];
-        const removedNodes = [];
-
-        mutations.forEach((mutation) => {
-          addedNodes.push(...this._getObservableNodes(mutation.addedNodes));
-          removedNodes.push(...this._getObservableNodes(mutation.removedNodes));
-        });
-
-        addedNodes.forEach((child) => {
-          this.__mutationObserver.observe(child, mutationObserverConfig);
-        });
-
-        if (addedNodes.length > 0 || removedNodes.length > 0) {
-          this._updateLayout();
-        }
-      });
-
-      this.__childObserver.observe(this, { childList: true });
-    }
-
-    /** @private */
-    _getObservableNodes(nodeList) {
-      const ignore = ['template', 'style', 'dom-repeat', 'dom-if'];
-      return Array.from(nodeList).filter(
-        (node) => node.nodeType === Node.ELEMENT_NODE && ignore.indexOf(node.localName.toLowerCase()) === -1,
-      );
     }
 
     /** @private */

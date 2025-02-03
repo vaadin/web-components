@@ -5,42 +5,6 @@ import '@vaadin/text-field/vaadin-text-field.js';
 import '../vaadin-form-layout.js';
 import '../vaadin-form-item.js';
 import '@polymer/polymer/lib/elements/dom-repeat.js';
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
-
-customElements.define(
-  'mutable-layout',
-  class extends PolymerElement {
-    static get template() {
-      return html`
-        <vaadin-form-layout>
-          <vaadin-form-item>
-            <label slot="label">Address</label>
-            <input class="full-width" />
-          </vaadin-form-item>
-          <vaadin-form-item>
-            <label slot="label">First Name</label>
-            <input class="full-width" value="Jane" />
-          </vaadin-form-item>
-          <template is="dom-repeat" items="[[items]]">
-            <vaadin-form-item colspan$="[[item.colspan]]">
-              <label slot="label">[[item.label]]</label>
-              <input class="full-width" />
-            </vaadin-form-item>
-          </template>
-        </vaadin-form-layout>
-      `;
-    }
-
-    static get properties() {
-      return {
-        items: {
-          type: Array,
-          value: () => [],
-        },
-      };
-    }
-  },
-);
 
 function getParsedWidth(el) {
   const width = el.style.getPropertyValue('width');
@@ -547,11 +511,30 @@ describe('form layout', () => {
   });
 
   describe('mutations', () => {
-    let container, layout;
+    let container, layout, items;
 
     beforeEach(async () => {
-      container = fixtureSync('<mutable-layout></mutable-layout>');
-      layout = container.shadowRoot.querySelector('vaadin-form-layout');
+      container = fixtureSync(`
+        <div>
+          <vaadin-form-layout>
+            <vaadin-form-item>
+              <label slot="label">Field</label>
+              <input />
+            </vaadin-form-item>
+            <vaadin-form-item>
+              <label slot="label">Field</label>
+              <input />
+            </vaadin-form-item>
+            <vaadin-form-item>
+              <label slot="label">Field</label>
+              <input />
+            </vaadin-form-item>
+          </vaadin-form-layout>
+        </div>
+      `);
+      layout = container.firstElementChild;
+      layout.responsiveSteps = [{ columns: 2 }];
+      items = [...layout.querySelectorAll('vaadin-form-item')];
       await nextRender(container);
     });
 
@@ -598,32 +581,25 @@ describe('form layout', () => {
       expect(unhiddenItemWidth).to.equal(itemWidth);
     });
 
-    it('should update layout after updating a colspan attribute on the lazily stamped node', async () => {
-      container.push('items', { label: 'Email', colspan: 1 });
-      await nextRender(container);
-      const item = layout.querySelectorAll('vaadin-form-item')[2];
-      expect(estimateEffectiveColspan(item)).to.be.closeTo(1, 0.1);
-
-      container.set('items.0.colspan', 2);
-      await nextRender(container);
-      expect(estimateEffectiveColspan(item)).to.be.closeTo(2, 0.1);
-    });
-
     it('should update layout after a new item is added', async () => {
       const newFormItem = document.createElement('vaadin-form-item');
-      newFormItem.innerHTML = '<label slot="label">Age</label><input class="full-width">';
-      layout.appendChild(newFormItem);
+      newFormItem.innerHTML = '<label slot="label">Field</label><input />';
+      layout.insertBefore(newFormItem, items[0]);
       await nextRender(container);
       expect(getComputedStyle(newFormItem).marginLeft).to.be.equal('0px');
     });
 
     it('should update layout after an item is removed', async () => {
-      const itemsList = layout.querySelectorAll('vaadin-form-item');
-      expect(getComputedStyle(itemsList[1]).marginLeft).to.not.be.equal('0px');
-
-      layout.removeChild(itemsList[0]);
+      const newFormItem = document.createElement('vaadin-form-item');
+      newFormItem.innerHTML = '<label slot="label">Field</label><input />';
+      layout.insertBefore(newFormItem, items[0]);
       await nextRender(container);
-      expect(getComputedStyle(itemsList[1]).marginLeft).to.be.equal('0px');
+
+      expect(getComputedStyle(items[0]).marginLeft).to.not.be.equal('0px');
+
+      newFormItem.remove();
+      await nextRender(container);
+      expect(getComputedStyle(items[0]).marginLeft).to.be.equal('0px');
     });
 
     it('should not update layout when setting hidden to true', async () => {
