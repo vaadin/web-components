@@ -378,10 +378,7 @@ export const FormLayoutMixin = (superClass) =>
           colspan = Math.min(colspan, this._columnCount);
 
           const childRatio = colspan / this._columnCount;
-
-          // Note: using 99.9% for 100% fixes rounding errors in MS Edge
-          // (< v16), otherwise the items might wrap, resizing is wobbly.
-          child.style.width = `calc(${childRatio * 99.9}% - ${1 - childRatio} * ${columnSpacing})`;
+          child.style.width = `calc(${childRatio * 100}% - ${1 - childRatio} * ${columnSpacing})`;
 
           if (col + colspan > this._columnCount) {
             // Too big to fit on this row, let's wrap it
