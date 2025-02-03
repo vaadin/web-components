@@ -6,9 +6,14 @@ import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themab
 const comboBoxOverlay = css`
   [part='overlay'] {
     position: relative;
-    overflow: visible;
     border-top-left-radius: 0;
     border-top-right-radius: 0;
+  }
+
+  /* Overflow needs to be auto by default to make overlay sizing logic work */
+  /* When loading, overflow needs to be visible to make loading indicator visible */
+  :host([loading]) [part='overlay'] {
+    overflow: visible;
   }
 
   [part='content'] {
