@@ -35,14 +35,14 @@
     "polymer"
   ],
   "dependencies": {
-    "lit": "^3.0.0",
     "@open-wc/dedupe-mixin": "^1.3.0",
     "@polymer/polymer": "^3.0.0",
     "@vaadin/component-base": "24.7.0-alpha7",
     "@vaadin/vaadin-lumo-styles": "24.7.0-alpha7",
     "@vaadin/vaadin-material-styles": "24.7.0-alpha7",
     "@vaadin/vaadin-themable-mixin": "24.7.0-alpha7",
-    "highcharts": "9.2.2"
+    "highcharts": "9.2.2",
+    "lit": "^3.0.0"
   },
   "devDependencies": {
     "@vaadin/chai-plugins": "24.7.0-alpha7",
