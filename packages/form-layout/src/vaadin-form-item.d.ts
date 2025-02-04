@@ -89,7 +89,7 @@ import { FormItemMixin } from './vaadin-form-item-mixin.js';
  * ---|---|---
  * `--vaadin-form-item-label-width` | Width of the label column when the labels are aside | `8em`
  * `--vaadin-form-item-label-spacing` | Spacing between the label column and the input column when the labels are aside | `1em`
- * `--vaadin-form-item-row-spacing` | Height of the spacing between the form item elements | `1em`
+ * `--vaadin-form-item-row-spacing` | (DEPRECATED) Height of the spacing between the form item elements | `1em`
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  */
