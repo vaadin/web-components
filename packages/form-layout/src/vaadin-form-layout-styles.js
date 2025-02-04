@@ -14,7 +14,7 @@ export const formLayoutStyles = css`
     /* CSS API for host */
     --vaadin-form-item-label-width: 8em;
     --vaadin-form-item-label-spacing: 1em;
-    --vaadin-form-item-row-spacing: 1em;
+    --vaadin-form-layout-row-spacing: 1em;
     --vaadin-form-layout-column-spacing: 2em; /* (default) */
     align-self: stretch;
   }
@@ -44,7 +44,7 @@ export const formItemStyles = css`
     display: inline-flex;
     flex-direction: row;
     align-items: baseline;
-    margin: calc(0.5 * var(--vaadin-form-item-row-spacing, 1em)) 0;
+    margin: calc(0.5 * var(--vaadin-form-item-row-spacing, var(--vaadin-form-layout-row-spacing, 1em))) 0;
   }
 
   :host([label-position='top']) {
