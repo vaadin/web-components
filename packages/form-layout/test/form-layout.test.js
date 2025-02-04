@@ -122,9 +122,23 @@ describe('form layout', () => {
     });
 
     it('should not have default row-spacing', () => {
-      expect(getComputedStyle(item).getPropertyValue('--vaadin-form-item-row-spacing').trim()).to.equal('0');
+      expect(getComputedStyle(item).getPropertyValue('--vaadin-form-layout-row-spacing').trim()).to.equal('0');
       expect(parseFloat(getComputedStyle(item).marginTop)).to.equal(0);
       expect(parseFloat(getComputedStyle(item).marginBottom)).to.equal(0);
+    });
+
+    it('should apply row-spacing', () => {
+      const spacing = 8;
+      item.style.setProperty('--vaadin-form-layout-row-spacing', `${spacing}px`);
+      expect(parseFloat(getComputedStyle(item).marginTop)).to.equal(spacing / 2);
+      expect(parseFloat(getComputedStyle(item).marginBottom)).to.equal(spacing / 2);
+    });
+
+    it('should apply row-spacing on item', () => {
+      const spacing = 8;
+      item.style.setProperty('--vaadin-form-item-row-spacing', `${spacing}px`);
+      expect(parseFloat(getComputedStyle(item).marginTop)).to.equal(spacing / 2);
+      expect(parseFloat(getComputedStyle(item).marginBottom)).to.equal(spacing / 2);
     });
 
     it('should apply default column-spacing', async () => {
