@@ -26,7 +26,7 @@ export const formLayoutStyles = css`
   #layout {
     display: grid;
     grid-template-columns: repeat(var(--_grid-cols), 1fr);
-    gap: var(--vaadin-form-item-row-spacing) var(--vaadin-form-layout-column-spacing);
+    gap: var(--vaadin-form-layout-row-spacing) var(--vaadin-form-layout-column-spacing);
     align-items: baseline; /* default \`stretch\` is not appropriate */
   }
 
@@ -44,6 +44,7 @@ export const formItemStyles = css`
     display: inline-flex;
     flex-direction: row;
     align-items: baseline;
+    margin: calc(0.5 * var(--vaadin-form-item-row-spacing, 1em)) 0;
   }
 
   :host([label-position='top']) {
