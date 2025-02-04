@@ -6,6 +6,8 @@
 import { addValueToAttribute, removeValueFromAttribute } from '@vaadin/component-base/src/dom-utils.js';
 import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 
+let itemRowSpacingDeprecationNotified = false;
+
 /**
  * @polymerMixin
  */
@@ -44,11 +46,14 @@ export const FormItemMixin = (superClass) =>
 
     connectedCallback() {
       super.connectedCallback();
-      const spacing = getComputedStyle(this).getPropertyValue('--vaadin-form-item-row-spacing');
-      if (spacing !== '' && parseInt(spacing) !== 0) {
-        console.warn(
-          '`--vaadin-form-item-row-spacing` is deprecated since 24.7. Use `--vaadin-form-layout-row-spacing` instead.',
-        );
+      if (!itemRowSpacingDeprecationNotified) {
+        const spacing = getComputedStyle(this).getPropertyValue('--vaadin-form-item-row-spacing');
+        if (spacing !== '' && parseInt(spacing) !== 0) {
+          console.warn(
+            '`--vaadin-form-item-row-spacing` is deprecated since 24.7. Use `--vaadin-form-layout-row-spacing` instead.',
+          );
+          itemRowSpacingDeprecationNotified = true;
+        }
       }
     }
 
