@@ -6,6 +6,13 @@ import '../vaadin-form-layout.js';
 import '../vaadin-form-item.js';
 import '@polymer/polymer/lib/elements/dom-repeat.js';
 
+function estimateEffectiveColumnCount(layout) {
+  const offsets = [...layout.children]
+    .filter((child) => getComputedStyle(child).display !== 'none')
+    .map((child) => child.offsetLeft);
+  return new Set(offsets).size;
+}
+
 function getParsedWidth(el) {
   const width = el.style.getPropertyValue('width');
   const components = width.replace(/^calc\((.*)\)$/u, '$1').split(/ [+-] /u);
@@ -235,13 +242,6 @@ describe('form layout', () => {
         document.body.style.removeProperty('min-width');
       });
 
-      function estimateEffectiveColumnCount(layout) {
-        const offsets = [...layout.children]
-          .filter((child) => getComputedStyle(child).display !== 'none')
-          .map((child) => child.offsetLeft);
-        return new Set(offsets).size;
-      }
-
       it('should be responsive by default', async () => {
         document.body.style.width = '10em';
         await nextResize(layout);
@@ -437,8 +437,7 @@ describe('form layout', () => {
       container.hidden = false;
       await nextResize(layout);
 
-      expect(parseFloat(getParsedWidth(layout.children[0]).percentage)).to.be.closeTo(100, 0.1);
-      expect(parseFloat(getParsedWidth(layout.children[1]).percentage)).to.be.closeTo(100, 0.1);
+      expect(estimateEffectiveColumnCount(layout)).to.equal(1);
     });
 
     it('should change layout opacity when its parent becomes visible', async () => {
