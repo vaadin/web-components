@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { aTimeout, fixtureSync, nextFrame, nextRender, nextResize } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, nextRender, nextResize } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '@vaadin/text-field/vaadin-text-field.js';
 import '../vaadin-form-layout.js';
@@ -355,7 +355,7 @@ describe('form layout', () => {
   describe('hidden', () => {
     let container, layout;
 
-    beforeEach(() => {
+    beforeEach(async () => {
       container = fixtureSync(`
         <div hidden>
           <vaadin-form-layout>
@@ -365,28 +365,14 @@ describe('form layout', () => {
         </div>
       `);
       layout = container.querySelector('vaadin-form-layout');
+      await nextResize(layout);
     });
 
-    it('should update steps on show after hidden', (done) => {
+    it('should update steps on show after hidden', async () => {
       const spy = sinon.spy(layout, '_selectResponsiveStep');
-      layout.addEventListener('animationend', () => {
-        expect(spy.called).to.be.true;
-        done();
-      });
-
+      await nextResize(layout);
       container.hidden = false;
-    });
-
-    it('should not update steps on custom animation name', (done) => {
-      const spy = sinon.spy(layout, '_selectResponsiveStep');
-      layout.addEventListener('animationend', () => {
-        expect(spy.called).to.be.false;
-        done();
-      });
-
-      const ev = new Event('animationend');
-      ev.animationName = 'foo';
-      layout.dispatchEvent(ev);
+      expect(spy).to.be.calledOnce;
     });
 
     it('should update layout when its parent becomes visible', async () => {
@@ -394,63 +380,17 @@ describe('form layout', () => {
       await nextRender();
 
       container.hidden = false;
-
-      // Wait for intersection observer
-      await nextFrame();
-      await nextFrame();
+      await nextResize(layout);
 
       expect(parseFloat(getParsedWidth(layout.children[0]).percentage)).to.be.closeTo(100, 0.1);
       expect(parseFloat(getParsedWidth(layout.children[1]).percentage)).to.be.closeTo(100, 0.1);
     });
 
     it('should change layout opacity when its parent becomes visible', async () => {
-      // Wait for intersection observer
-      await nextFrame();
-      await nextFrame();
       expect(layout.$.layout.style.opacity).to.equal('0');
 
       container.hidden = false;
-
-      // Wait for intersection observer
-      await nextFrame();
-      await nextFrame();
-
-      expect(layout.$.layout.style.opacity).to.equal('');
-    });
-  });
-
-  describe('fixed size parent', () => {
-    let container, layout;
-
-    beforeEach(async () => {
-      container = fixtureSync(`
-        <div style="height: 100px; overflow: auto">
-          <div style="height: 25px">
-            <vaadin-form-layout style="height: 100%">
-              <div>1</div>
-              <div>2</div>
-              <div>3</div>
-              <div>4</div>
-              <div>5</div>
-              <div>6</div>
-              <div>7</div>
-              <div>8</div>
-              <div>9</div>
-              <div>10</div>
-            </vaadin-form-layout>
-          </div>
-        </div>
-      `);
-      layout = container.querySelector('vaadin-form-layout');
-      layout.responsiveSteps = [{ columns: 1 }];
-      await nextRender();
-    });
-
-    it('should not set opacity to 0 when host is scrolled out due to fixed height', async () => {
-      container.scrollTop = container.scrollHeight;
-      // Wait for intersection observer
-      await nextFrame();
-      await nextFrame();
+      await nextResize(layout);
       expect(layout.$.layout.style.opacity).to.equal('');
     });
   });
@@ -463,18 +403,23 @@ describe('form layout', () => {
         <div>
           <vaadin-form-layout>
             <vaadin-form-item>
-              <label slot="label">Address</label>
-              <input class="full-width" />
+              <label slot="label">Field</label>
+              <input />
             </vaadin-form-item>
             <vaadin-form-item>
-              <label slot="label">First Name</label>
-              <input class="full-width" value="Jane" />
+              <label slot="label">Field</label>
+              <input />
+            </vaadin-form-item>
+            <vaadin-form-item>
+              <label slot="label">Field</label>
+              <input />
             </vaadin-form-item>
           </vaadin-form-layout>
         </div>
       `);
-      layout = container.querySelector('vaadin-form-layout');
-      items = layout.querySelectorAll('vaadin-form-item');
+      layout = container.firstElementChild;
+      layout.responsiveSteps = [{ columns: 2 }];
+      items = [...layout.querySelectorAll('vaadin-form-item')];
       await nextRender(container);
     });
 

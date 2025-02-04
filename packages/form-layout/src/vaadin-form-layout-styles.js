@@ -9,7 +9,6 @@ export const formLayoutStyles = css`
   :host {
     display: block;
     max-width: 100%;
-    animation: 1ms vaadin-form-layout-appear;
     /* Number of cols, defined by breakpoints. Default value is probably pointless. */
     --_grid-cols: 10;
     /* CSS API for host */
@@ -18,12 +17,6 @@ export const formLayoutStyles = css`
     --vaadin-form-item-row-spacing: 1em;
     --vaadin-form-layout-column-spacing: 2em; /* (default) */
     align-self: stretch;
-  }
-
-  @keyframes vaadin-form-layout-appear {
-    to {
-      opacity: 1 !important; /* stylelint-disable-line keyframe-declaration-no-important */
-    }
   }
 
   :host([hidden]) {
