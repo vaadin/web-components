@@ -14,6 +14,7 @@ export const formLayoutStyles = css`
     /* CSS API for host */
     --vaadin-form-item-label-width: 8em;
     --vaadin-form-item-label-spacing: 1em;
+    --vaadin-form-item-row-spacing: 0;
     --vaadin-form-layout-row-spacing: 1em;
     --vaadin-form-layout-column-spacing: 2em; /* (default) */
     align-self: stretch;
