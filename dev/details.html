@@ -1,31 +1,39 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Details</title>
-    <script type="module" src="./common.js"></script>
+<vaadin-accordion>
+  <vaadin-accordion-panel>
+    <vaadin-accordion-heading slot="summary">Panel 1</vaadin-accordion-heading>
+    <div>Panel 1 content</div>
+  </vaadin-accordion-panel>
+  <vaadin-accordion-panel>
+    <vaadin-accordion-heading slot="summary">Panel 2</vaadin-accordion-heading>
+    <vaadin-form-layout>
+      <vaadin-form-item>
+        <label slot="label">Label 1</label>
+        <input />
+      </vaadin-form-item>
 
-    <script type="module">
-      import '@vaadin/details';
-      import '@vaadin/tooltip';
-      // import '@vaadin/details/theme/material/vaadin-details.js';
-      // import '@vaadin/tooltip/theme/material/vaadin-tooltip.js';
-    </script>
-  </head>
+      <vaadin-form-item>
+        <label slot="label">Label 2</label>
+        <input />
+      </vaadin-form-item>
 
-  <body>
-    <vaadin-details summary="Expandable Details">
-      <div>Toggle using mouse, Enter and Space keys.</div>
-    </vaadin-details>
+      <vaadin-form-item>
+        <label slot="label">Label 2</label>
+        <input />
+      </vaadin-form-item>
 
-    <!--
-    <vaadin-details>
-      <vaadin-details-summary slot="summary">Expandable Details</vaadin-details-summary>
-      <div>Toggle using mouse, Enter and Space keys.</div>
-      <vaadin-tooltip slot="tooltip" text="Click to toggle"></vaadin-tooltip>
-    </vaadin-details>
-    -->
-  </body>
-</html>
+      <vaadin-form-item>
+        <label slot="label">Label 2</label>
+        <input />
+      </vaadin-form-item>
+    </vaadin-form-layout>
+  </vaadin-accordion-panel>
+
+  Lorem ipsum dolor sit amet consectetur, adipisicing elit. Voluptate adipisci impedit consectetur pariatur tenetur eligendi est incidunt tempora velit praesentium ab accusamus doloremque debitis vitae accusantium ut, nostrum cumque sequi!
+</vaadin-accordion>
+
+<script type="module">
+  import '@vaadin/accordion';
+  import '@vaadin/form-layout';
+
+  document.querySelector('vaadin-form-layout').responsiveSteps = [{ columns: 1 }];
+</script>

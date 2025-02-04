@@ -312,11 +312,15 @@ export const FormLayoutMixin = (superClass) =>
      * Update the layout.
      * @protected
      */
-    _updateLayout() {
+    async _updateLayout() {
       // Do not update layout when invisible
       if (isElementHidden(this)) {
         return;
       }
+
+      await new Promise((resolve) => {
+        setTimeout(resolve, 1000);
+      });
 
       /*
         The item width formula:
@@ -405,14 +409,14 @@ export const FormLayoutMixin = (superClass) =>
      * @protected
      * @override
      */
-    _onResize(contentRect) {
+    async _onResize(contentRect) {
       if (contentRect.width === 0 && contentRect.height === 0) {
         this.$.layout.style.opacity = '0';
         return;
       }
 
       this._selectResponsiveStep();
-      this._updateLayout();
+      await this._updateLayout();
 
       this.$.layout.style.opacity = '';
     }
