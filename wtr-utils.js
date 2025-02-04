@@ -288,6 +288,7 @@ const createVisualTestsConfig = (theme) => {
         browserName: 'chrome',
         platformName: 'Windows 10',
         browserVersion: '88',
+        'wdio:enforceWebDriverClassic': true,
       }),
     ],
     plugins: [
