@@ -127,14 +127,14 @@ describe('form layout', () => {
       expect(parseFloat(getComputedStyle(item).marginBottom)).to.equal(0);
     });
 
-    it('should apply row-spacing', () => {
+    it('should apply form layout row spacing', () => {
       const spacing = 8;
       item.style.setProperty('--vaadin-form-layout-row-spacing', `${spacing}px`);
       expect(parseFloat(getComputedStyle(item).marginTop)).to.equal(spacing / 2);
       expect(parseFloat(getComputedStyle(item).marginBottom)).to.equal(spacing / 2);
     });
 
-    it('should apply row-spacing on item', () => {
+    it('should apply form item row spacing', () => {
       const spacing = 8;
       item.style.setProperty('--vaadin-form-item-row-spacing', `${spacing}px`);
       expect(parseFloat(getComputedStyle(item).marginTop)).to.equal(spacing / 2);

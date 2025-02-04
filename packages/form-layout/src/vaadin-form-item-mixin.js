@@ -50,7 +50,7 @@ export const FormItemMixin = (superClass) =>
         const spacing = getComputedStyle(this).getPropertyValue('--vaadin-form-item-row-spacing');
         if (spacing !== '' && parseInt(spacing) !== 0) {
           console.warn(
-            '`--vaadin-form-item-row-spacing` is deprecated since 24.7. Use `--vaadin-form-layout-row-spacing` instead.',
+            '`--vaadin-form-item-row-spacing` is deprecated since 24.7. Use `--vaadin-form-layout-row-spacing` on <vaadin-form-layout> instead.',
           );
           itemRowSpacingDeprecationNotified = true;
         }
