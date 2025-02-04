@@ -9,19 +9,12 @@ export const formLayoutStyles = css`
   :host {
     display: block;
     max-width: 100%;
-    animation: 1ms vaadin-form-layout-appear;
     /* CSS API for host */
     --vaadin-form-item-label-width: 8em;
     --vaadin-form-item-label-spacing: 1em;
     --vaadin-form-item-row-spacing: 1em;
     --vaadin-form-layout-column-spacing: 2em; /* (default) */
     align-self: stretch;
-  }
-
-  @keyframes vaadin-form-layout-appear {
-    to {
-      opacity: 1 !important; /* stylelint-disable-line keyframe-declaration-no-important */
-    }
   }
 
   :host([hidden]) {

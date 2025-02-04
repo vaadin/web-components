@@ -458,26 +458,11 @@ describe('form layout', () => {
       layout = container.querySelector('vaadin-form-layout');
     });
 
-    it('should update steps on show after hidden', (done) => {
+    it('should update steps on show after hidden', async () => {
       const spy = sinon.spy(layout, '_selectResponsiveStep');
-      layout.addEventListener('animationend', () => {
-        expect(spy.called).to.be.true;
-        done();
-      });
-
+      await nextResize(layout);
       container.hidden = false;
-    });
-
-    it('should not update steps on custom animation name', (done) => {
-      const spy = sinon.spy(layout, '_selectResponsiveStep');
-      layout.addEventListener('animationend', () => {
-        expect(spy.called).to.be.false;
-        done();
-      });
-
-      const ev = new Event('animationend');
-      ev.animationName = 'foo';
-      layout.dispatchEvent(ev);
+      expect(spy).to.be.calledOnce;
     });
 
     it('should update layout when its parent becomes visible', async () => {

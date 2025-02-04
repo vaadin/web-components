@@ -108,8 +108,6 @@ export const FormLayoutMixin = (superClass) =>
       this.appendChild(this._styleElement);
 
       super.ready();
-
-      this.addEventListener('animationend', this.__onAnimationEnd);
     }
 
     constructor() {
@@ -268,13 +266,6 @@ export const FormLayoutMixin = (superClass) =>
       }
 
       this._selectResponsiveStep();
-    }
-
-    /** @private */
-    __onAnimationEnd(e) {
-      if (e.animationName.indexOf('vaadin-form-layout-appear') === 0) {
-        this._selectResponsiveStep();
-      }
     }
 
     /** @private */
