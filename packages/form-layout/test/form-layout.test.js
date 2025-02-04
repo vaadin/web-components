@@ -1,46 +1,17 @@
 import { expect } from '@vaadin/chai-plugins';
-import { aTimeout, fixtureSync, nextFrame, nextRender, nextResize } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, nextRender, nextResize } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '@vaadin/text-field/vaadin-text-field.js';
 import '../vaadin-form-layout.js';
 import '../vaadin-form-item.js';
 import '@polymer/polymer/lib/elements/dom-repeat.js';
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 
-customElements.define(
-  'mutable-layout',
-  class extends PolymerElement {
-    static get template() {
-      return html`
-        <vaadin-form-layout>
-          <vaadin-form-item>
-            <label slot="label">Address</label>
-            <input class="full-width" />
-          </vaadin-form-item>
-          <vaadin-form-item>
-            <label slot="label">First Name</label>
-            <input class="full-width" value="Jane" />
-          </vaadin-form-item>
-          <template is="dom-repeat" items="[[items]]">
-            <vaadin-form-item colspan$="[[item.colspan]]">
-              <label slot="label">[[item.label]]</label>
-              <input class="full-width" />
-            </vaadin-form-item>
-          </template>
-        </vaadin-form-layout>
-      `;
-    }
-
-    static get properties() {
-      return {
-        items: {
-          type: Array,
-          value: () => [],
-        },
-      };
-    }
-  },
-);
+function estimateEffectiveColumnCount(layout) {
+  const offsets = [...layout.children]
+    .filter((child) => getComputedStyle(child).display !== 'none')
+    .map((child) => child.offsetLeft);
+  return new Set(offsets).size;
+}
 
 function getParsedWidth(el) {
   const width = el.style.getPropertyValue('width');
@@ -188,55 +159,62 @@ describe('form layout', () => {
     });
   });
 
-  describe('responsiveSteps property', () => {
+  describe('responsiveSteps', () => {
     let layout;
 
-    beforeEach(async () => {
-      layout = fixtureSync(`
-        <vaadin-form-layout>
-          <vaadin-text-field></vaadin-text-field>
-          <vaadin-text-field></vaadin-text-field>
-          <vaadin-form-item></vaadin-form-item>
-        </vaadin-form-layout>
-      `);
-      await aTimeout(100);
-    });
+    describe('basic', () => {
+      beforeEach(async () => {
+        layout = fixtureSync(`
+          <vaadin-form-layout>
+            <vaadin-text-field></vaadin-text-field>
+            <vaadin-text-field></vaadin-text-field>
+            <vaadin-form-item></vaadin-form-item>
+          </vaadin-form-layout>
+        `);
+        await nextRender();
+      });
 
-    it('should have default value', () => {
-      expect(layout.responsiveSteps).to.deep.equal([
-        { minWidth: 0, columns: 1, labelsPosition: 'top' },
-        { minWidth: '20em', columns: 1 },
-        { minWidth: '40em', columns: 2 },
-      ]);
-    });
+      it('should have default value', () => {
+        expect(layout.responsiveSteps).to.deep.equal([
+          { minWidth: 0, columns: 1, labelsPosition: 'top' },
+          { minWidth: '20em', columns: 1 },
+          { minWidth: '40em', columns: 2 },
+        ]);
+      });
 
-    it('should assign width inline style on items', () => {
-      layout.responsiveSteps = [{ columns: 3 }];
+      it('should assign width inline style on items', () => {
+        layout.responsiveSteps = [{ columns: 3 }];
 
-      const parsedWidth = getParsedWidth(layout.firstElementChild);
-      expect(parsedWidth.percentage).to.match(/%$/u);
-      expect(parseFloat(parsedWidth.percentage)).to.be.closeTo(33, 0.5);
-    });
+        const parsedWidth = getParsedWidth(layout.firstElementChild);
+        expect(parsedWidth.percentage).to.match(/%$/u);
+        expect(parseFloat(parsedWidth.percentage)).to.be.closeTo(33, 0.5);
+      });
 
-    it('should set label-position attribute to child form-item elements', () => {
-      layout.responsiveSteps = [{ columns: 1 }];
+      it('should set label-position attribute to child form-item elements', () => {
+        layout.responsiveSteps = [{ columns: 1 }];
 
-      expect(layout.children[0].getAttribute('label-position')).to.be.null;
-      expect(layout.children[1].getAttribute('label-position')).to.be.null;
-      expect(layout.children[2].getAttribute('label-position')).to.be.null;
+        expect(layout.children[0].getAttribute('label-position')).to.be.null;
+        expect(layout.children[1].getAttribute('label-position')).to.be.null;
+        expect(layout.children[2].getAttribute('label-position')).to.be.null;
 
-      layout.responsiveSteps = [{ columns: 1, labelsPosition: 'top' }];
+        layout.responsiveSteps = [{ columns: 1, labelsPosition: 'top' }];
 
-      expect(layout.children[0].getAttribute('label-position')).to.be.null;
-      expect(layout.children[1].getAttribute('label-position')).to.be.null;
-      expect(layout.children[2].getAttribute('label-position')).to.equal('top');
+        expect(layout.children[0].getAttribute('label-position')).to.be.null;
+        expect(layout.children[1].getAttribute('label-position')).to.be.null;
+        expect(layout.children[2].getAttribute('label-position')).to.equal('top');
+      });
     });
 
     describe('custom label-position', () => {
       beforeEach(async () => {
-        const item = document.createElement('vaadin-form-item');
-        item.setAttribute('label-position', 'top');
-        layout.insertBefore(item, layout.lastElementChild);
+        layout = fixtureSync(`
+          <vaadin-form-layout>
+            <vaadin-text-field></vaadin-text-field>
+            <vaadin-text-field></vaadin-text-field>
+            <vaadin-form-item></vaadin-form-item>
+            <vaadin-form-item label-position="top"></vaadin-form-item>
+          </vaadin-form-layout>
+        `);
         await nextRender();
       });
 
@@ -257,19 +235,26 @@ describe('form layout', () => {
       });
     });
 
-    describe('responsive', () => {
-      beforeEach(() => {
+    describe('responsiveness', () => {
+      beforeEach(async () => {
         document.body.style.minWidth = '0';
+
+        layout = fixtureSync(`
+          <vaadin-form-layout>
+            <vaadin-text-field></vaadin-text-field>
+            <vaadin-text-field></vaadin-text-field>
+            <vaadin-form-item></vaadin-form-item>
+            <vaadin-form-item></vaadin-form-item>
+            <vaadin-form-item></vaadin-form-item>
+          </vaadin-form-layout>
+        `);
+        await nextRender();
       });
 
       afterEach(() => {
         document.body.style.removeProperty('width');
         document.body.style.removeProperty('min-width');
       });
-
-      function estimateEffectiveColumnCount(layout) {
-        return 100 / parseFloat(getParsedWidth(layout.firstElementChild).percentage);
-      }
 
       it('should be responsive by default', async () => {
         document.body.style.width = '10em';
@@ -332,7 +317,10 @@ describe('form layout', () => {
     });
 
     describe('value validation', () => {
-      beforeEach(() => {
+      beforeEach(async () => {
+        layout = fixtureSync(`<vaadin-form-layout></vaadin-form-layout>`);
+        await nextRender();
+
         sinon.stub(console, 'warn');
       });
 
@@ -436,7 +424,7 @@ describe('form layout', () => {
   describe('hidden', () => {
     let container, layout;
 
-    beforeEach(() => {
+    beforeEach(async () => {
       container = fixtureSync(`
         <div hidden>
           <vaadin-form-layout>
@@ -446,28 +434,15 @@ describe('form layout', () => {
         </div>
       `);
       layout = container.querySelector('vaadin-form-layout');
+      await nextResize(layout);
     });
 
-    it('should update steps on show after hidden', (done) => {
+    it('should update steps on show after hidden', async () => {
       const spy = sinon.spy(layout, '_selectResponsiveStep');
-      layout.addEventListener('animationend', () => {
-        expect(spy.called).to.be.true;
-        done();
-      });
-
+      await nextResize(layout);
       container.hidden = false;
-    });
-
-    it('should not update steps on custom animation name', (done) => {
-      const spy = sinon.spy(layout, '_selectResponsiveStep');
-      layout.addEventListener('animationend', () => {
-        expect(spy.called).to.be.false;
-        done();
-      });
-
-      const ev = new Event('animationend');
-      ev.animationName = 'foo';
-      layout.dispatchEvent(ev);
+      await nextResize(layout);
+      expect(spy).to.be.calledOnce;
     });
 
     it('should update layout when its parent becomes visible', async () => {
@@ -475,73 +450,45 @@ describe('form layout', () => {
       await nextRender();
 
       container.hidden = false;
+      await nextResize(layout);
 
-      // Wait for intersection observer
-      await nextFrame();
-      await nextFrame();
-
-      expect(parseFloat(getParsedWidth(layout.children[0]).percentage)).to.be.closeTo(100, 0.1);
-      expect(parseFloat(getParsedWidth(layout.children[1]).percentage)).to.be.closeTo(100, 0.1);
+      expect(estimateEffectiveColumnCount(layout)).to.equal(1);
     });
 
     it('should change layout opacity when its parent becomes visible', async () => {
-      // Wait for intersection observer
-      await nextFrame();
-      await nextFrame();
       expect(layout.$.layout.style.opacity).to.equal('0');
 
       container.hidden = false;
-
-      // Wait for intersection observer
-      await nextFrame();
-      await nextFrame();
-
-      expect(layout.$.layout.style.opacity).to.equal('');
-    });
-  });
-
-  describe('fixed size parent', () => {
-    let container, layout;
-
-    beforeEach(async () => {
-      container = fixtureSync(`
-        <div style="height: 100px; overflow: auto">
-          <div style="height: 25px">
-            <vaadin-form-layout style="height: 100%">
-              <div>1</div>
-              <div>2</div>
-              <div>3</div>
-              <div>4</div>
-              <div>5</div>
-              <div>6</div>
-              <div>7</div>
-              <div>8</div>
-              <div>9</div>
-              <div>10</div>
-            </vaadin-form-layout>
-          </div>
-        </div>
-      `);
-      layout = container.querySelector('vaadin-form-layout');
-      layout.responsiveSteps = [{ columns: 1 }];
-      await nextRender();
-    });
-
-    it('should not set opacity to 0 when host is scrolled out due to fixed height', async () => {
-      container.scrollTop = container.scrollHeight;
-      // Wait for intersection observer
-      await nextFrame();
-      await nextFrame();
+      await nextResize(layout);
       expect(layout.$.layout.style.opacity).to.equal('');
     });
   });
 
   describe('mutations', () => {
-    let container, layout;
+    let container, layout, items;
 
     beforeEach(async () => {
-      container = fixtureSync('<mutable-layout></mutable-layout>');
-      layout = container.shadowRoot.querySelector('vaadin-form-layout');
+      container = fixtureSync(`
+        <div>
+          <vaadin-form-layout>
+            <vaadin-form-item>
+              <label slot="label">Field</label>
+              <input />
+            </vaadin-form-item>
+            <vaadin-form-item>
+              <label slot="label">Field</label>
+              <input />
+            </vaadin-form-item>
+            <vaadin-form-item>
+              <label slot="label">Field</label>
+              <input />
+            </vaadin-form-item>
+          </vaadin-form-layout>
+        </div>
+      `);
+      layout = container.firstElementChild;
+      layout.responsiveSteps = [{ columns: 2 }];
+      items = [...layout.querySelectorAll('vaadin-form-item')];
       await nextRender(container);
     });
 
@@ -588,32 +535,25 @@ describe('form layout', () => {
       expect(unhiddenItemWidth).to.equal(itemWidth);
     });
 
-    it('should update layout after updating a colspan attribute on the lazily stamped node', async () => {
-      container.push('items', { label: 'Email', colspan: 1 });
-      await nextRender(container);
-      const item = layout.querySelectorAll('vaadin-form-item')[2];
-      expect(estimateEffectiveColspan(item)).to.be.closeTo(1, 0.1);
-
-      container.set('items.0.colspan', 2);
-      await nextRender(container);
-      expect(estimateEffectiveColspan(item)).to.be.closeTo(2, 0.1);
-    });
-
     it('should update layout after a new item is added', async () => {
       const newFormItem = document.createElement('vaadin-form-item');
-      newFormItem.innerHTML = '<label slot="label">Age</label><input class="full-width">';
-      layout.appendChild(newFormItem);
+      newFormItem.innerHTML = '<label slot="label">Field</label><input />';
+      layout.insertBefore(newFormItem, items[0]);
       await nextRender(container);
       expect(getComputedStyle(newFormItem).marginLeft).to.be.equal('0px');
     });
 
     it('should update layout after an item is removed', async () => {
-      const itemsList = layout.querySelectorAll('vaadin-form-item');
-      expect(getComputedStyle(itemsList[1]).marginLeft).to.not.be.equal('0px');
-
-      layout.removeChild(itemsList[0]);
+      const newFormItem = document.createElement('vaadin-form-item');
+      newFormItem.innerHTML = '<label slot="label">Field</label><input />';
+      layout.insertBefore(newFormItem, items[0]);
       await nextRender(container);
-      expect(getComputedStyle(itemsList[1]).marginLeft).to.be.equal('0px');
+
+      expect(getComputedStyle(items[0]).marginLeft).to.not.be.equal('0px');
+
+      newFormItem.remove();
+      await nextRender(container);
+      expect(getComputedStyle(items[0]).marginLeft).to.be.equal('0px');
     });
 
     it('should not update layout when setting hidden to true', async () => {

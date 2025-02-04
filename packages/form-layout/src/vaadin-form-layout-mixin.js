@@ -91,11 +91,6 @@ export const FormLayoutMixin = (superClass) =>
           type: Boolean,
           sync: true,
         },
-
-        /** @private */
-        __isVisible: {
-          type: Boolean,
-        },
       };
     }
 
@@ -113,8 +108,6 @@ export const FormLayoutMixin = (superClass) =>
       this.appendChild(this._styleElement);
 
       super.ready();
-
-      this.addEventListener('animationend', this.__onAnimationEnd);
     }
 
     constructor() {
@@ -123,96 +116,38 @@ export const FormLayoutMixin = (superClass) =>
       this._styleElement = document.createElement('style');
       // Ensure there is a child text node in the style element
       this._styleElement.textContent = ' ';
-
-      this.__intersectionObserver = new IntersectionObserver((entries) => {
-        // If the browser is busy (e.g. due to slow rendering), multiple entries can
-        // be queued and then passed to the callback invocation at once. Make sure we
-        // use the most recent entry to detect whether the layout is visible or not.
-        // See https://github.com/vaadin/web-components/issues/8564
-        const entry = [...entries].pop();
-        if (!entry.isIntersecting) {
-          // Prevent possible jump when layout becomes visible
-          this.$.layout.style.opacity = 0;
-        }
-        if (!this.__isVisible && entry.isIntersecting) {
-          this._updateLayout();
-          this.$.layout.style.opacity = '';
-        }
-        this.__isVisible = entry.isIntersecting;
-      });
     }
 
     /** @protected */
     connectedCallback() {
       super.connectedCallback();
 
+      // Set up an observer to update layout when new children are added or removed.
+      this.__childrenObserver = new MutationObserver(() => this._updateLayout());
+      this.__childrenObserver.observe(this, { childList: true });
+
+      // Set up an observer to update layout when children's attributes change.
+      this.__childrenAttributesObserver = new MutationObserver((mutations) => {
+        if (mutations.some((mutation) => mutation.target.parentElement === this)) {
+          this._updateLayout();
+        }
+      });
+      this.__childrenAttributesObserver.observe(this, {
+        subtree: true,
+        attributes: true,
+        attributeFilter: ['colspan', 'data-colspan', 'hidden'],
+      });
+
       requestAnimationFrame(() => this._selectResponsiveStep());
       requestAnimationFrame(() => this._updateLayout());
-
-      this._observeChildrenColspanChange();
-      this.__intersectionObserver.observe(this.$.layout);
     }
 
     /** @protected */
     disconnectedCallback() {
       super.disconnectedCallback();
 
-      this.__mutationObserver.disconnect();
-      this.__childObserver.disconnect();
-      this.__intersectionObserver.disconnect();
-    }
-
-    /** @private */
-    _observeChildrenColspanChange() {
-      // Observe changes in form items' `colspan` attribute and update styles
-      const mutationObserverConfig = { attributes: true };
-
-      this.__mutationObserver = new MutationObserver((mutationRecord) => {
-        mutationRecord.forEach((mutation) => {
-          if (
-            mutation.type === 'attributes' &&
-            (mutation.attributeName === 'colspan' ||
-              mutation.attributeName === 'data-colspan' ||
-              mutation.attributeName === 'hidden')
-          ) {
-            this._updateLayout();
-          }
-        });
-      });
-
-      // Observe changes to initial children
-      [...this.children].forEach((child) => {
-        this.__mutationObserver.observe(child, mutationObserverConfig);
-      });
-
-      // Observe changes to lazily added nodes
-      this.__childObserver = new MutationObserver((mutations) => {
-        const addedNodes = [];
-        const removedNodes = [];
-
-        mutations.forEach((mutation) => {
-          addedNodes.push(...this._getObservableNodes(mutation.addedNodes));
-          removedNodes.push(...this._getObservableNodes(mutation.removedNodes));
-        });
-
-        addedNodes.forEach((child) => {
-          this.__mutationObserver.observe(child, mutationObserverConfig);
-        });
-
-        if (addedNodes.length > 0 || removedNodes.length > 0) {
-          this._updateLayout();
-        }
-      });
-
-      this.__childObserver.observe(this, { childList: true });
-    }
-
-    /** @private */
-    _getObservableNodes(nodeList) {
-      const ignore = ['template', 'style', 'dom-repeat', 'dom-if'];
-      return Array.from(nodeList).filter(
-        (node) => node.nodeType === Node.ELEMENT_NODE && ignore.indexOf(node.localName.toLowerCase()) === -1,
-      );
+      this.__childrenObserver.disconnect();
+      this.__childrenAttributesObserver.disconnect();
     }
 
     /** @private */
@@ -295,13 +230,6 @@ export const FormLayoutMixin = (superClass) =>
     }
 
     /** @private */
-    __onAnimationEnd(e) {
-      if (e.animationName.indexOf('vaadin-form-layout-appear') === 0) {
-        this._selectResponsiveStep();
-      }
-    }
-
-    /** @private */
     _selectResponsiveStep() {
       // Iterate through responsiveSteps and choose the step
       let selectedStep;
@@ -378,10 +306,7 @@ export const FormLayoutMixin = (superClass) =>
           colspan = Math.min(colspan, this._columnCount);
 
           const childRatio = colspan / this._columnCount;
-
-          // Note: using 99.9% for 100% fixes rounding errors in MS Edge
-          // (< v16), otherwise the items might wrap, resizing is wobbly.
-          child.style.width = `calc(${childRatio * 99.9}% - ${1 - childRatio} * ${columnSpacing})`;
+          child.style.width = `calc(${childRatio * 100}% - ${1 - childRatio} * ${columnSpacing})`;
 
           if (col + colspan > this._columnCount) {
             // Too big to fit on this row, let's wrap it
@@ -432,7 +357,15 @@ export const FormLayoutMixin = (superClass) =>
      * @protected
      * @override
      */
-    _onResize() {
+    _onResize(contentRect) {
+      if (contentRect.width === 0 && contentRect.height === 0) {
+        this.$.layout.style.opacity = '0';
+        return;
+      }
+
       this._selectResponsiveStep();
+      this._updateLayout();
+
+      this.$.layout.style.opacity = '';
     }
   };

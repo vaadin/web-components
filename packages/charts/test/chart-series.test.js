@@ -256,7 +256,8 @@ describe('vaadin-chart-series', () => {
     });
 
     it('should react to additionalOptions sub property change', () => {
-      series.set('additionalOptions.type', 'line');
+      series.additionalOptions.type = 'line';
+      series.additionalOptions = { ...series.additionalOptions };
       expect(chart.configuration.series[0].type).to.be.equal('line');
     });
   });

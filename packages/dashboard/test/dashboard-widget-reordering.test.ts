@@ -1,9 +1,8 @@
 import { expect } from '@vaadin/chai-plugins';
-import { resetMouse, sendMouse } from '@vaadin/test-runner-commands';
+import { resetMouse, sendMouse, sendMouseToElement } from '@vaadin/test-runner-commands';
 import { fixtureSync, isFirefox, nextFrame, nextResize } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../vaadin-dashboard.js';
-import { hover } from '../../button/test/visual/helpers.js';
 import type { Dashboard, DashboardItem, DashboardSectionItem } from '../vaadin-dashboard.js';
 import {
   createDragEvent,
@@ -144,7 +143,10 @@ describe('dashboard - widget reordering', () => {
       dashboard.addEventListener('dashboard-item-selected-changed', spy);
       await resetMouse();
       // Hover over the widget drag handle
-      await hover(getDraggable(getElementFromCell(dashboard, 0, 0)!));
+      await sendMouseToElement({
+        type: 'move',
+        element: getDraggable(getElementFromCell(dashboard, 0, 0)!),
+      });
       // Press down the left mouse button
       await sendMouse({
         type: 'down',
