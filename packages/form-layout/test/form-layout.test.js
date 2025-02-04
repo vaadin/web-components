@@ -427,6 +427,7 @@ describe('form layout', () => {
       const spy = sinon.spy(layout, '_selectResponsiveStep');
       await nextResize(layout);
       container.hidden = false;
+      await nextResize(layout);
       expect(spy).to.be.calledOnce;
     });
 
