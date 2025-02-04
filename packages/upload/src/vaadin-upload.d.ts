@@ -10,47 +10,49 @@ import { type UploadFile, UploadMixin } from './vaadin-upload-mixin.js';
 
 export { UploadFile, UploadI18n, UploadMethod } from './vaadin-upload-mixin.js';
 
+type UploadEvent<T> = CustomEvent<T> & { target: Upload };
+
 /**
  * Fired when a file cannot be added to the queue due to a constrain:
  * file-size, file-type or maxFiles
  */
-export type UploadFileRejectEvent = CustomEvent<{ file: UploadFile; error: string }>;
+export type UploadFileRejectEvent = UploadEvent<{ file: UploadFile; error: string }>;
 
 /**
  * Fired when the `files` property changes.
  */
-export type UploadFilesChangedEvent = CustomEvent<{ value: UploadFile[] }>;
+export type UploadFilesChangedEvent = UploadEvent<{ value: UploadFile[] }>;
 
 /**
  * Fired when the `max-files-reached` property changes.
  */
-export type UploadMaxFilesReachedChangedEvent = CustomEvent<{ value: boolean }>;
+export type UploadMaxFilesReachedChangedEvent = UploadEvent<{ value: boolean }>;
 
 /**
  * Fired before the XHR is opened. Could be used for changing the request
  * URL. If the default is prevented, then XHR would not be opened.
  */
-export type UploadBeforeEvent = CustomEvent<{ xhr: XMLHttpRequest; file: UploadFile }>;
+export type UploadBeforeEvent = UploadEvent<{ xhr: XMLHttpRequest; file: UploadFile }>;
 
 /**
  * Fired when the XHR is sent.
  */
-export type UploadStartEvent = CustomEvent<{ xhr: XMLHttpRequest; file: UploadFile }>;
+export type UploadStartEvent = UploadEvent<{ xhr: XMLHttpRequest; file: UploadFile }>;
 
 /**
  * Fired as many times as the progress is updated.
  */
-export type UploadProgressEvent = CustomEvent<{ xhr: XMLHttpRequest; file: UploadFile }>;
+export type UploadProgressEvent = UploadEvent<{ xhr: XMLHttpRequest; file: UploadFile }>;
 
 /**
  * Fired in case the upload process succeeded.
  */
-export type UploadSuccessEvent = CustomEvent<{ xhr: XMLHttpRequest; file: UploadFile }>;
+export type UploadSuccessEvent = UploadEvent<{ xhr: XMLHttpRequest; file: UploadFile }>;
 
 /**
  * Fired in case the upload process failed.
  */
-export type UploadErrorEvent = CustomEvent<{ xhr: XMLHttpRequest; file: UploadFile }>;
+export type UploadErrorEvent = UploadEvent<{ xhr: XMLHttpRequest; file: UploadFile }>;
 
 /**
  * Fired when we have the actual server response, and before the component
@@ -62,19 +64,19 @@ export type UploadErrorEvent = CustomEvent<{ xhr: XMLHttpRequest; file: UploadFi
  * with the normal workflow checking the `xhr.status` and `file.error`
  * which also might be modified by the user to force a customized response,
  */
-export type UploadResponseEvent = CustomEvent<{ xhr: XMLHttpRequest; file: UploadFile }>;
+export type UploadResponseEvent = UploadEvent<{ xhr: XMLHttpRequest; file: UploadFile }>;
 
 /**
  * Fired when retry upload is requested. If the default is prevented, then
  * retry would not be performed.
  */
-export type UploadRetryEvent = CustomEvent<{ xhr: XMLHttpRequest; file: UploadFile }>;
+export type UploadRetryEvent = UploadEvent<{ xhr: XMLHttpRequest; file: UploadFile }>;
 
 /**
  * Fired when upload abort is requested. If the default is prevented, then the
  * file upload would not be aborted.
  */
-export type UploadAbortEvent = CustomEvent<{ xhr: XMLHttpRequest; file: UploadFile }>;
+export type UploadAbortEvent = UploadEvent<{ xhr: XMLHttpRequest; file: UploadFile }>;
 
 /**
  * Fired when the XHR has been opened but not sent yet. Useful for appending
@@ -82,7 +84,7 @@ export type UploadAbortEvent = CustomEvent<{ xhr: XMLHttpRequest; file: UploadFi
  * headers, etc. If the event is defaultPrevented, `vaadin-upload` will not
  * send the request allowing the user to do something on his own.
  */
-export type UploadRequestEvent = CustomEvent<{ xhr: XMLHttpRequest; file: UploadFile; formData: FormData }>;
+export type UploadRequestEvent = UploadEvent<{ xhr: XMLHttpRequest; file: UploadFile; formData: FormData }>;
 
 export interface UploadCustomEventMap {
   'file-reject': UploadFileRejectEvent;

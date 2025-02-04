@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { resetMouse, sendKeys, sendMouse } from '@vaadin/test-runner-commands';
+import { resetMouse, sendKeys, sendMouseToElement } from '@vaadin/test-runner-commands';
 import { fire, fixtureSync, mousedown, mouseup, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-radio-button.js';
@@ -103,10 +103,7 @@ describe('radio-button', () => {
     });
 
     it('should focus on input click if not focused', async () => {
-      const rect = input.getBoundingClientRect();
-      const middleX = Math.floor(rect.x + rect.width / 2);
-      const middleY = Math.floor(rect.y + rect.height / 2);
-      await sendMouse({ type: 'click', position: [middleX, middleY] });
+      await sendMouseToElement({ type: 'click', element: input });
       expect(radio.hasAttribute('focused')).to.be.true;
     });
   });
@@ -252,15 +249,10 @@ describe('radio-button', () => {
   });
 
   describe('focus', () => {
-    let inputX, inputY;
-
     beforeEach(async () => {
       radio = fixtureSync('<vaadin-radio-button></vaadin-radio-button>');
       await nextRender();
       input = radio.querySelector('[slot=input]');
-      const rect = input.getBoundingClientRect();
-      inputX = Math.floor(rect.x + rect.width / 2);
-      inputY = Math.floor(rect.y + rect.height / 2);
     });
 
     afterEach(async () => {
@@ -268,7 +260,7 @@ describe('radio-button', () => {
     });
 
     it('should focus on input click when not focused yet', async () => {
-      await sendMouse({ type: 'click', position: [inputX, inputY] });
+      await sendMouseToElement({ type: 'click', element: input });
       expect(radio.hasAttribute('focused')).to.be.true;
     });
 
@@ -276,7 +268,7 @@ describe('radio-button', () => {
       const spy = sinon.spy();
       radio.addEventListener('focusout', spy);
       input.focus();
-      await sendMouse({ type: 'click', position: [inputX, inputY] });
+      await sendMouseToElement({ type: 'click', element: input });
       expect(spy).to.be.not.called;
     });
   });

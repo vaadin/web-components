@@ -1,11 +1,10 @@
 import { expect } from '@vaadin/chai-plugins';
-import { resetMouse, sendMouse } from '@vaadin/test-runner-commands';
+import { resetMouse, sendMouseToElement } from '@vaadin/test-runner-commands';
 import {
   click,
   enterKeyDown,
   escKeyDown,
   fixtureSync,
-  middleOfNode,
   mousedown,
   mouseup,
   nextRender,
@@ -304,10 +303,7 @@ describe('interactions', () => {
       });
 
       it('should focus overlay part on clicking the content element', async () => {
-        const div = overlay.querySelector('div');
-        const { x, y } = middleOfNode(div);
-
-        await sendMouse({ type: 'click', position: [Math.floor(x), Math.floor(y)] });
+        await sendMouseToElement({ type: 'click', element: overlay.querySelector('div') });
         await nextRender();
 
         expect(document.activeElement).to.be.equal(overlay);
@@ -316,10 +312,7 @@ describe('interactions', () => {
       it('should not focus overlay part if tabindex attribute removed', async () => {
         overlay.$.overlay.removeAttribute('tabindex');
 
-        const div = overlay.querySelector('div');
-        const { x, y } = middleOfNode(div);
-
-        await sendMouse({ type: 'click', position: [Math.floor(x), Math.floor(y)] });
+        await sendMouseToElement({ type: 'click', element: overlay.querySelector('div') });
         await nextRender();
 
         expect(document.activeElement).to.be.equal(document.body);

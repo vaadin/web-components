@@ -1,5 +1,6 @@
 import '../../vaadin-upload.js';
 import type {
+  Upload,
   UploadAbortEvent,
   UploadBeforeEvent,
   UploadErrorEvent,
@@ -42,70 +43,82 @@ assertType<UploadI18n>(upload.i18n);
 // Events
 upload.addEventListener('max-files-reached-changed', (event) => {
   assertType<UploadMaxFilesReachedChangedEvent>(event);
+  assertType<Upload>(event.target);
   assertType<boolean>(event.detail.value);
 });
 
 upload.addEventListener('file-reject', (event) => {
   assertType<UploadFileRejectEvent>(event);
+  assertType<Upload>(event.target);
   assertType<UploadFile>(event.detail.file);
   assertType<string>(event.detail.error);
 });
 
 upload.addEventListener('files-changed', (event) => {
   assertType<UploadFilesChangedEvent>(event);
+  assertType<Upload>(event.target);
   assertType<UploadFile[]>(event.detail.value);
 });
 
 upload.addEventListener('upload-before', (event) => {
   assertType<UploadBeforeEvent>(event);
+  assertType<Upload>(event.target);
   assertType<UploadFile>(event.detail.file);
   assertType<XMLHttpRequest>(event.detail.xhr);
 });
 
 upload.addEventListener('upload-start', (event) => {
   assertType<UploadStartEvent>(event);
+  assertType<Upload>(event.target);
   assertType<UploadFile>(event.detail.file);
   assertType<XMLHttpRequest>(event.detail.xhr);
 });
 
 upload.addEventListener('upload-progress', (event) => {
   assertType<UploadProgressEvent>(event);
+  assertType<Upload>(event.target);
   assertType<UploadFile>(event.detail.file);
   assertType<XMLHttpRequest>(event.detail.xhr);
 });
 
 upload.addEventListener('upload-response', (event) => {
   assertType<UploadResponseEvent>(event);
+  assertType<Upload>(event.target);
   assertType<UploadFile>(event.detail.file);
   assertType<XMLHttpRequest>(event.detail.xhr);
 });
 
 upload.addEventListener('upload-success', (event) => {
   assertType<UploadSuccessEvent>(event);
+  assertType<Upload>(event.target);
   assertType<UploadFile>(event.detail.file);
   assertType<XMLHttpRequest>(event.detail.xhr);
 });
 
 upload.addEventListener('upload-error', (event) => {
   assertType<UploadErrorEvent>(event);
+  assertType<Upload>(event.target);
   assertType<UploadFile>(event.detail.file);
   assertType<XMLHttpRequest>(event.detail.xhr);
 });
 
 upload.addEventListener('upload-retry', (event) => {
   assertType<UploadRetryEvent>(event);
+  assertType<Upload>(event.target);
   assertType<UploadFile>(event.detail.file);
   assertType<XMLHttpRequest>(event.detail.xhr);
 });
 
 upload.addEventListener('upload-abort', (event) => {
   assertType<UploadAbortEvent>(event);
+  assertType<Upload>(event.target);
   assertType<UploadFile>(event.detail.file);
   assertType<XMLHttpRequest>(event.detail.xhr);
 });
 
 upload.addEventListener('upload-request', (event) => {
   assertType<UploadRequestEvent>(event);
+  assertType<Upload>(event.target);
   assertType<UploadFile>(event.detail.file);
   assertType<FormData>(event.detail.formData);
 });

@@ -93,11 +93,6 @@ export const FormLayoutMixin = (superClass) =>
           sync: true,
           observer: '__labelsOnTopChanged',
         },
-
-        /** @private */
-        __isVisible: {
-          type: Boolean,
-        },
       };
     }
 
@@ -121,23 +116,6 @@ export const FormLayoutMixin = (superClass) =>
       this._styleElement = document.createElement('style');
       // Ensure there is a child text node in the style element
       this._styleElement.textContent = ' ';
-
-      this.__intersectionObserver = new IntersectionObserver((entries) => {
-        // If the browser is busy (e.g. due to slow rendering), multiple entries can
-        // be queued and then passed to the callback invocation at once. Make sure we
-        // use the most recent entry to detect whether the layout is visible or not.
-        // See https://github.com/vaadin/web-components/issues/8564
-        const entry = [...entries].pop();
-        if (!entry.isIntersecting) {
-          // Prevent possible jump when layout becomes visible
-          this.$.layout.style.opacity = 0;
-        }
-        if (!this.__isVisible && entry.isIntersecting) {
-          this._updateLayout();
-          this.$.layout.style.opacity = '';
-        }
-        this.__isVisible = entry.isIntersecting;
-      });
     }
 
     /** @protected */
@@ -148,7 +126,6 @@ export const FormLayoutMixin = (superClass) =>
       requestAnimationFrame(() => this._updateLayout());
 
       this._observeChildrenColspanChange();
-      this.__intersectionObserver.observe(this.$.layout);
     }
 
     /** @protected */
@@ -157,7 +134,6 @@ export const FormLayoutMixin = (superClass) =>
 
       this.__mutationObserver.disconnect();
       this.__childObserver.disconnect();
-      this.__intersectionObserver.disconnect();
     }
 
     /** @private */
@@ -384,7 +360,15 @@ export const FormLayoutMixin = (superClass) =>
      * @protected
      * @override
      */
-    _onResize() {
+    _onResize(contentRect) {
+      if (contentRect.width === 0 && contentRect.height === 0) {
+        this.$.layout.style.opacity = '0';
+        return;
+      }
+
       this._selectResponsiveStep();
+      this._updateLayout();
+
+      this.$.layout.style.opacity = '';
     }
   };
