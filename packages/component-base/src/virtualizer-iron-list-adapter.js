@@ -52,6 +52,18 @@ export class IronListAdapter {
     this.__resizeObserver.observe(this.scrollTarget);
     this.scrollTarget.addEventListener('scroll', () => this._scrollHandler());
 
+    const attachObserver = new ResizeObserver(([{ contentRect }]) => {
+      const isHidden = contentRect.width === 0 && contentRect.height === 0;
+      if (!isHidden && this.__scrollTargetHidden && this.scrollTarget.scrollTop !== this._scrollPosition) {
+        // Adjust scroll position after moving the element within DOM
+        // while also making it visible (e.g. inside of the dialog).
+        this.scrollTarget.scrollTop = this._scrollPosition;
+      }
+
+      this.__scrollTargetHidden = isHidden;
+    });
+    attachObserver.observe(this.scrollTarget);
+
     this._scrollLineHeight = this._getScrollLineHeight();
     this.scrollTarget.addEventListener('wheel', (e) => this.__onWheel(e));
 
