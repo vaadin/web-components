@@ -103,11 +103,11 @@ describe('form layout', () => {
       expect(getComputedStyle(layout.$.layout).rowGap).to.equal('8px');
     });
 
-    it('should apply form item row spacing', () => {
-      const spacing = 8;
-      item.style.setProperty('--vaadin-form-item-row-spacing', `${spacing}px`);
-      expect(getComputedStyle(item).marginTop).to.equal(`${spacing / 2}px`);
-      expect(getComputedStyle(item).marginBottom).to.equal(`${spacing / 2}px`);
+    it('should apply form item row spacing minus default form layout row spacing', () => {
+      layout.style.setProperty('--vaadin-form-layout-row-spacing', '8px');
+      item.style.setProperty('--vaadin-form-item-row-spacing', '12px');
+      expect(getComputedStyle(item).marginTop).to.equal(`${(12 - 8) / 2}px`);
+      expect(getComputedStyle(item).marginBottom).to.equal(`${(12 - 8) / 2}px`);
     });
 
     it('should apply default column-spacing', async () => {
