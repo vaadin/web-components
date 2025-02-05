@@ -350,6 +350,8 @@ describe('drag and drop', () => {
       beforeEach(() => {
         dragEndSpy = sinon.spy();
         listenOnce(grid, 'grid-dragend', dragEndSpy);
+        grid.selectedItems = grid.items;
+        fireDragStart();
       });
 
       it('should stop the native event', () => {
@@ -359,8 +361,16 @@ describe('drag and drop', () => {
         expect(spy.called).to.be.false;
       });
 
+      it('should not stop the native event on grid itself', () => {
+        fireDragEnd();
+
+        const spy = sinon.spy();
+        listenOnce(grid, 'dragend', spy);
+        fireDragEnd(grid);
+        expect(spy.called).to.be.true;
+      });
+
       it('should remove dragging state attribute', () => {
-        fireDragStart();
         fireDragEnd();
         expect(grid.hasAttribute('dragging-rows')).to.be.false;
       });
@@ -511,13 +521,21 @@ describe('drag and drop', () => {
 
     describe('dragleave', () => {
       it('should stop the native event', () => {
+        grid.dropMode = 'on-grid';
         const spy = sinon.spy();
         listenOnce(grid, 'dragleave', spy);
         fireDragLeave();
         expect(spy.called).to.be.false;
       });
 
-      it('should clear the grid drag styles', () => {
+      it('should not stop the native event if grid has no drop mode', () => {
+        const spy = sinon.spy();
+        listenOnce(grid, 'dragleave', spy);
+        fireDragLeave();
+        expect(spy.called).to.be.true;
+      });
+
+      it('should clear the grid dragover attribute', () => {
         grid.dropMode = 'on-grid';
         fireDragOver();
         expect(grid.hasAttribute('dragover')).to.be.true;
