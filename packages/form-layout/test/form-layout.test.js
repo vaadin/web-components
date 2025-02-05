@@ -94,31 +94,27 @@ describe('form layout', () => {
 
     it('should not have default row-spacing', () => {
       expect(getComputedStyle(item).getPropertyValue('--vaadin-form-layout-row-spacing').trim()).to.equal('0');
-      expect(parseFloat(getComputedStyle(item).marginTop)).to.equal(0);
-      expect(parseFloat(getComputedStyle(item).marginBottom)).to.equal(0);
+      expect(getComputedStyle(item).marginTop).to.equal('0px');
+      expect(getComputedStyle(item).marginBottom).to.equal('0px');
     });
 
     it('should apply form layout row spacing', () => {
-      const spacing = 8;
-      item.style.setProperty('--vaadin-form-layout-row-spacing', `${spacing}px`);
-      expect(parseFloat(getComputedStyle(item).marginTop)).to.equal(spacing / 2);
-      expect(parseFloat(getComputedStyle(item).marginBottom)).to.equal(spacing / 2);
+      layout.style.setProperty('--vaadin-form-layout-row-spacing', `8px`);
+      expect(getComputedStyle(layout.$.layout).rowGap).to.equal('8px');
     });
 
     it('should apply form item row spacing', () => {
       const spacing = 8;
       item.style.setProperty('--vaadin-form-item-row-spacing', `${spacing}px`);
-      expect(parseFloat(getComputedStyle(item).marginTop)).to.equal(spacing / 2);
-      expect(parseFloat(getComputedStyle(item).marginBottom)).to.equal(spacing / 2);
+      expect(getComputedStyle(item).marginTop).to.equal(`${spacing / 2}px`);
+      expect(getComputedStyle(item).marginBottom).to.equal(`${spacing / 2}px`);
     });
 
     it('should apply default column-spacing', async () => {
       // Override to not depend on the theme changes
-      layout.style.setProperty('--lumo-space-l', '2rem');
+      layout.style.setProperty('--lumo-space-l', '8px');
       await nextResize(layout);
-      expect(getParsedWidth(layout.firstElementChild).spacing).to.equal('1rem');
-      expect(getComputedStyle(layout.firstElementChild).getPropertyValue('margin-left')).to.equal('0px'); // Zero because it's first
-      expect(getComputedStyle(layout.firstElementChild).getPropertyValue('margin-right')).to.equal('16px'); // 0.5 * 2rem in px
+      expect(getComputedStyle(layout.$.layout).columnGap).to.equal('8px');
     });
   });
 
@@ -531,29 +527,24 @@ describe('form layout', () => {
 
       newFormItem.hidden = false;
       await nextRender(container);
-      const unhiddenItemWidth = newFormItem.getBoundingClientRect().width;
-      expect(unhiddenItemWidth).to.equal(itemWidth);
+      expect(newFormItem.getBoundingClientRect().width).to.equal(itemWidth);
     });
 
-    it('should update layout after a new item is added', async () => {
-      const newFormItem = document.createElement('vaadin-form-item');
-      newFormItem.innerHTML = '<label slot="label">Field</label><input />';
-      layout.insertBefore(newFormItem, items[0]);
-      await nextRender(container);
-      expect(getComputedStyle(newFormItem).marginLeft).to.be.equal('0px');
+    it('should update margin-inline-end after adding <br>', async () => {
+      const br = document.createElement('br');
+      layout.insertBefore(br, items[1]);
+      await nextRender(layout);
+      expect(getComputedStyle(items[0]).marginInlineEnd).to.not.equal('0px');
     });
 
-    it('should update layout after an item is removed', async () => {
-      const newFormItem = document.createElement('vaadin-form-item');
-      newFormItem.innerHTML = '<label slot="label">Field</label><input />';
-      layout.insertBefore(newFormItem, items[0]);
-      await nextRender(container);
+    it('should update margin-inline-end after removing <br>', async () => {
+      const br = document.createElement('br');
+      layout.insertBefore(br, items[1]);
+      await nextRender(layout);
 
-      expect(getComputedStyle(items[0]).marginLeft).to.not.be.equal('0px');
-
-      newFormItem.remove();
-      await nextRender(container);
-      expect(getComputedStyle(items[0]).marginLeft).to.be.equal('0px');
+      br.remove();
+      await nextRender(layout);
+      expect(getComputedStyle(items[0]).marginInlineEnd).to.equal('0px');
     });
 
     it('should not update layout when setting hidden to true', async () => {

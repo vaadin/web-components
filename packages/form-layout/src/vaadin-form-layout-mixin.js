@@ -314,12 +314,9 @@ export const FormLayoutMixin = (superClass) =>
 
           if (nextLineBreak) {
             const colspanRatio = (this._columnCount - col - colspan) / this._columnCount;
-            child.style.setProperty(
-              'margin-inline-end',
-              `calc(${colspanRatio * containerWidth}px + ${colspanRatio} * ${columnSpacing})`,
-            );
+            child.style.marginInlineEnd = `calc(${colspanRatio * containerWidth}px + ${colspanRatio} * ${columnSpacing})`;
           } else {
-            child.style.removeProperty('margin-inline-end');
+            child.style.marginInlineEnd = '';
           }
 
           // Move the column counter
