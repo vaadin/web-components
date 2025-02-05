@@ -98,6 +98,7 @@ export * from './vaadin-form-layout-mixin.js';
  * Custom CSS property | Description | Default
  * ---|---|---
  * `--vaadin-form-layout-column-spacing` | Length of the spacing between columns | `2em`
+ * `--vaadin-form-layout-row-spacing` | Length of the spacing between rows | `1em`
  */
 declare class FormLayout extends FormLayoutMixin(ElementMixin(ThemableMixin(HTMLElement))) {}
 
