@@ -282,10 +282,6 @@ export const FormLayoutMixin = (superClass) =>
       const style = getComputedStyle(this);
       const columnSpacing = style.getPropertyValue('--vaadin-form-layout-column-spacing');
 
-      const direction = style.direction;
-      const marginStartProp = `margin-${direction === 'ltr' ? 'left' : 'right'}`;
-      const marginEndProp = `margin-${direction === 'ltr' ? 'right' : 'left'}`;
-
       const containerWidth = this.offsetWidth;
 
       let col = 0;
@@ -313,27 +309,17 @@ export const FormLayoutMixin = (superClass) =>
             col = 0;
           }
 
-          // At the start edge
-          if (col === 0) {
-            child.style.setProperty(marginStartProp, '0px');
-          } else {
-            child.style.removeProperty(marginStartProp);
-          }
-
           const nextIndex = index + 1;
           const nextLineBreak = nextIndex < children.length && children[nextIndex].localName === 'br';
 
-          // At the end edge
-          if (col + colspan === this._columnCount) {
-            child.style.setProperty(marginEndProp, '0px');
-          } else if (nextLineBreak) {
+          if (nextLineBreak) {
             const colspanRatio = (this._columnCount - col - colspan) / this._columnCount;
             child.style.setProperty(
-              marginEndProp,
+              'margin-inline-end',
               `calc(${colspanRatio * containerWidth}px + ${colspanRatio} * ${columnSpacing})`,
             );
           } else {
-            child.style.removeProperty(marginEndProp);
+            child.style.removeProperty('margin-inline-end');
           }
 
           // Move the column counter

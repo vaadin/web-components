@@ -27,16 +27,14 @@ export const formLayoutStyles = css`
     align-items: baseline; /* default \`stretch\` is not appropriate */
 
     flex-wrap: wrap; /* the items should wrap */
+
+    gap: var(--vaadin-form-layout-row-spacing) var(--vaadin-form-layout-column-spacing);
   }
 
   #layout ::slotted(*) {
     /* Items should neither grow nor shrink. */
     flex-grow: 0;
     flex-shrink: 0;
-
-    /* Margins make spacing between the columns */
-    margin-left: calc(0.5 * var(--vaadin-form-layout-column-spacing));
-    margin-right: calc(0.5 * var(--vaadin-form-layout-column-spacing));
   }
 
   #layout ::slotted(br) {
@@ -49,7 +47,12 @@ export const formItemStyles = css`
     display: inline-flex;
     flex-direction: row;
     align-items: baseline;
-    margin: calc(0.5 * var(--vaadin-form-item-row-spacing, var(--vaadin-form-layout-row-spacing, 1em))) 0;
+    /*
+      WARNING: --vaadin-form-item-row-spacing is deprecated since 24.7. Instead you should now:
+      1. Use --vaadin-form-layout-row-spacing on the <vaadin-form-layout> component to control the gap between rows.
+      2. Use standard CSS margin on <vaadin-form-layout> to control the spacing around the form layout itself.
+    */
+    margin: calc(0.5 * var(--vaadin-form-item-row-spacing)) 0;
   }
 
   :host([label-position='top']) {
