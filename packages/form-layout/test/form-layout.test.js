@@ -99,15 +99,22 @@ describe('form layout', () => {
     });
 
     it('should apply form layout row spacing', () => {
-      layout.style.setProperty('--vaadin-form-layout-row-spacing', `8px`);
+      layout.style.setProperty('--vaadin-form-layout-row-spacing', '8px');
       expect(getComputedStyle(layout.$.layout).rowGap).to.equal('8px');
     });
 
-    it('should apply form item row spacing minus default form layout row spacing', () => {
+    it('should apply form item row', () => {
+      const spacing = 8;
+      item.style.setProperty('--vaadin-form-item-row-spacing', `${spacing}px`);
+      expect(getComputedStyle(item).marginTop).to.equal(`${spacing / 2}px`);
+      expect(getComputedStyle(item).marginBottom).to.equal(`${spacing / 2}px`);
+    });
+
+    it('should not apply form item row when form layout row spacing is non-zero', () => {
       layout.style.setProperty('--vaadin-form-layout-row-spacing', '8px');
-      item.style.setProperty('--vaadin-form-item-row-spacing', '12px');
-      expect(getComputedStyle(item).marginTop).to.equal(`${(12 - 8) / 2}px`);
-      expect(getComputedStyle(item).marginBottom).to.equal(`${(12 - 8) / 2}px`);
+      item.style.setProperty('--vaadin-form-item-row-spacing', `8px`);
+      expect(getComputedStyle(item).marginTop).to.equal('0px');
+      expect(getComputedStyle(item).marginBottom).to.equal('0px');
     });
 
     it('should apply default column-spacing', async () => {
