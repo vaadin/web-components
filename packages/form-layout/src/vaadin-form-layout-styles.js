@@ -15,7 +15,6 @@ export const formLayoutStyles = css`
     --vaadin-form-layout-row-spacing: 1em;
     --vaadin-form-layout-column-spacing: 2em; /* (default) */
     align-self: stretch;
-    padding-block: calc(var(--vaadin-form-layout-row-spacing) / 2);
   }
 
   :host([hidden]) {
@@ -24,11 +23,8 @@ export const formLayoutStyles = css`
 
   #layout {
     display: flex;
-
     align-items: baseline; /* default \`stretch\` is not appropriate */
-
     flex-wrap: wrap; /* the items should wrap */
-
     gap: var(--vaadin-form-layout-row-spacing) var(--vaadin-form-layout-column-spacing);
   }
 
@@ -53,7 +49,11 @@ export const formItemStyles = css`
       1. Use --vaadin-form-layout-row-spacing on the <vaadin-form-layout> component to control the gap between rows.
       2. Use standard CSS margin on <vaadin-form-layout> to control the spacing around the form layout itself.
     */
-    margin: calc((var(--vaadin-form-item-row-spacing) - var(--vaadin-form-layout-row-spacing)) / 2) 0;
+    --_vaadin-form-item-top-compensator: var(--vaadin-form-layout-row-spacing);
+    --_vaadin-form-item-bottom-compensator: var(--vaadin-form-layout-row-spacing);
+    margin-block: calc((var(--vaadin-form-item-row-spacing) - var(--_vaadin-form-item-top-compensator)) / 2)
+      calc((var(--vaadin-form-item-row-spacing) - var(--_vaadin-form-item-bottom-compensator)) / 2);
+    margin-inline: 0;
   }
 
   :host([label-position='top']) {
