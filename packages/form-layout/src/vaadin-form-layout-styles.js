@@ -44,15 +44,14 @@ export const formItemStyles = css`
     display: inline-flex;
     flex-direction: row;
     align-items: baseline;
+
     /*
-      WARNING: --vaadin-form-item-row-spacing is deprecated since 24.7. Instead you should now:
-      1. Use --vaadin-form-layout-row-spacing on the <vaadin-form-layout> component to control the gap between rows.
-      2. Use standard CSS margin on <vaadin-form-layout> to control the spacing around the form layout itself.
+      Since 24.7, --vaadin-form-item-row-spacing is deprecated and is replaced
+      by --vaadin-form-layout-row-spacing, which will become the exclusive way
+      to define row spacing between items in Vaadin 25. This calculation maintains
+      backwards compatibility until then.
     */
-    --_vaadin-form-item-top-compensator: var(--vaadin-form-layout-row-spacing);
-    --_vaadin-form-item-bottom-compensator: var(--vaadin-form-layout-row-spacing);
-    margin-block: calc((var(--vaadin-form-item-row-spacing) - var(--_vaadin-form-item-top-compensator)) / 2)
-      calc((var(--vaadin-form-item-row-spacing) - var(--_vaadin-form-item-bottom-compensator)) / 2);
+    margin-block: calc((var(--vaadin-form-item-row-spacing) - var(--vaadin-form-layout-row-spacing)) / 2);
     margin-inline: 0;
   }
 

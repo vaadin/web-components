@@ -333,17 +333,6 @@ export const FormLayoutMixin = (superClass) =>
               child.removeAttribute('label-position');
             }
           }
-
-          // TODO: Remove in Vaadin 25 when --vaadin-form-item-row-spacing is removed.
-          child.style.removeProperty('--_vaadin-form-item-top-compensator');
-          child.style.removeProperty('--_vaadin-form-item-bottom-compensator');
-          if (index === 0) {
-            // First visible child
-            child.style.setProperty('--_vaadin-form-item-top-compensator', '0px');
-          } else if (index === children.length - 1) {
-            // Last visible child
-            child.style.setProperty('--_vaadin-form-item-bottom-compensator', '0px');
-          }
         });
     }
 
