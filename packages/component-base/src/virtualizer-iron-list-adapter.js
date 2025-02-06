@@ -55,8 +55,10 @@ export class IronListAdapter {
     const attachObserver = new ResizeObserver(([{ contentRect }]) => {
       const isHidden = contentRect.width === 0 && contentRect.height === 0;
       if (!isHidden && this.__scrollTargetHidden && this.scrollTarget.scrollTop !== this._scrollPosition) {
-        // Adjust scroll position after moving the element within DOM
-        // while also making it visible (e.g. inside of the dialog).
+        // When removing element from DOM, its scroll position is lost and
+        // virtualizer doesn't re-render when adding it to the DOM again.
+        // Restore scroll position when the scroll target becomes visible,
+        // which is the case e.g. when virtualizer is used inside a dialog.
         this.scrollTarget.scrollTop = this._scrollPosition;
       }
 
