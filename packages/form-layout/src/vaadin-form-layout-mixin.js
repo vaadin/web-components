@@ -7,20 +7,10 @@ import { isElementHidden } from '@vaadin/a11y-base/src/focus-utils.js';
 import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
 
 function isValidCSSLength(value) {
-  // Let us choose a CSS property for validating CSS <length> values:
-  // - `border-spacing` accepts `<length> | inherit`, it's the best! But
-  //   it does not disallow invalid values at all in MSIE :-(
-  // - `letter-spacing` and `word-spacing` accept
-  //   `<length> | normal | inherit`, and disallows everything else, like
-  //   `<percentage>`, `auto` and such, good enough.
-  // - `word-spacing` is used since its shorter.
-
-  // Disallow known keywords allowed as the `word-spacing` value
-  if (['inherit', 'normal'].includes(value)) {
-    return false;
-  }
-
-  return CSS.supports('word-spacing', value);
+  // Check if the value is a valid CSS length and not `inherit` or `normal`,
+  // which are also valid values for `word-spacing`, see:
+  // https://drafts.csswg.org/css-text-3/#word-spacing-property
+  return CSS.supports('word-spacing', value) && !['inherit', 'normal'].includes(value);
 }
 
 /**
