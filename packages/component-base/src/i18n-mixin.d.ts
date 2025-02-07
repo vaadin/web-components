@@ -19,9 +19,9 @@ export type PartialI18n<T> = T extends object
 /**
  * A mixin that allows to set partial I18N properties.
  */
-export declare function I18nMixin<T extends Constructor<HTMLElement>, I>(
-  superclass: T,
+export declare function I18nMixin<I, T extends Constructor<HTMLElement>>(
   defaultI18n: I,
+  superclass: T,
 ): Constructor<I18nMixinClass<I>> & T;
 
 export declare class I18nMixinClass<I> {

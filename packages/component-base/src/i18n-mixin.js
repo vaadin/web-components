@@ -37,7 +37,7 @@ function deepMerge(target, ...sources) {
  *
  * @polymerMixin
  */
-export const I18nMixin = (superClass, defaultI18n) =>
+export const I18nMixin = (defaultI18n, superClass) =>
   class I18nMixinClass extends superClass {
     static get properties() {
       return {
