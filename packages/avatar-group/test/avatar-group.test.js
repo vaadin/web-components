@@ -505,9 +505,9 @@ describe('avatar-group', () => {
     it('should pass i18n property to avatars', () => {
       group.i18n = customI18n;
       const items = group.querySelectorAll('vaadin-avatar');
-      expect(items[0].i18n).to.deep.equal(customI18n);
-      expect(items[1].i18n).to.deep.equal(customI18n);
-      expect(items[2].i18n).to.deep.equal(customI18n);
+      expect(items[0].i18n).to.deep.equal(group.__effectiveI18n);
+      expect(items[1].i18n).to.deep.equal(group.__effectiveI18n);
+      expect(items[2].i18n).to.deep.equal(group.__effectiveI18n);
     });
 
     it('should pass i18n property to overlay avatars', async () => {
@@ -518,8 +518,8 @@ describe('avatar-group', () => {
       await oneEvent(overlay, 'vaadin-overlay-open');
 
       const avatars = overlay.querySelectorAll('vaadin-avatar');
-      expect(avatars[0].i18n).to.deep.equal(customI18n);
-      expect(avatars[1].i18n).to.deep.equal(customI18n);
+      expect(avatars[0].i18n).to.deep.equal(group.__effectiveI18n);
+      expect(avatars[1].i18n).to.deep.equal(group.__effectiveI18n);
     });
   });
 

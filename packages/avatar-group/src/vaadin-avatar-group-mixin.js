@@ -7,11 +7,22 @@ import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import { html, render } from 'lit';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import { announce } from '@vaadin/a11y-base/src/announce.js';
+import { I18nMixin } from '@vaadin/component-base/src/i18n-mixin.js';
 import { OverlayClassMixin } from '@vaadin/component-base/src/overlay-class-mixin.js';
 import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 
 const MINIMUM_DISPLAYED_AVATARS = 2;
+
+const DEFAULT_I18N = {
+  anonymous: 'anonymous',
+  activeUsers: {
+    one: 'Currently one active user',
+    many: 'Currently {count} active users',
+  },
+  joined: '{user} joined',
+  left: '{user} left',
+};
 
 /**
  * A mixin providing common avatar group functionality.
@@ -21,7 +32,7 @@ const MINIMUM_DISPLAYED_AVATARS = 2;
  * @mixes OverlayClassMixin
  */
 export const AvatarGroupMixin = (superClass) =>
-  class AvatarGroupMixinClass extends ResizeMixin(OverlayClassMixin(superClass)) {
+  class AvatarGroupMixinClass extends I18nMixin(ResizeMixin(OverlayClassMixin(superClass)), DEFAULT_I18N) {
     static get properties() {
       return {
         /**
@@ -68,51 +79,6 @@ export const AvatarGroupMixin = (superClass) =>
           sync: true,
         },
 
-        /**
-         * The object used to localize this component.
-         * To change the default localization, replace the entire
-         * _i18n_ object or just the property you want to modify.
-         *
-         * The object has the following JSON structure and default values:
-         * ```
-         * {
-         *   // Translation of the anonymous user avatar tooltip.
-         *   anonymous: 'anonymous',
-         *   // Translation of the avatar group accessible label.
-         *   // {count} is replaced with the actual count of users.
-         *   activeUsers: {
-         *     one: 'Currently one active user',
-         *     many: 'Currently {count} active users'
-         *   },
-         *   // Screen reader announcement when user joins group.
-         *   // {user} is replaced with the name or abbreviation.
-         *   // When neither is set, "anonymous" is used instead.
-         *   joined: '{user} joined',
-         *   // Screen reader announcement when user leaves group.
-         *   // {user} is replaced with the name or abbreviation.
-         *   // When neither is set, "anonymous" is used instead.
-         *   left: '{user} left'
-         * }
-         * ```
-         * @type {!AvatarGroupI18n}
-         * @default {English/US}
-         */
-        i18n: {
-          type: Object,
-          sync: true,
-          value: () => {
-            return {
-              anonymous: 'anonymous',
-              activeUsers: {
-                one: 'Currently one active user',
-                many: 'Currently {count} active users',
-              },
-              joined: '{user} joined',
-              left: '{user} left',
-            };
-          },
-        },
-
         /** @private */
         _avatars: {
           type: Array,
@@ -156,13 +122,50 @@ export const AvatarGroupMixin = (superClass) =>
 
     static get observers() {
       return [
-        '__i18nItemsChanged(i18n, items)',
+        '__i18nItemsChanged(__effectiveI18n, items)',
         '__openedChanged(_opened, _overflow)',
         '__updateAvatarsTheme(_overflow, _avatars, _theme)',
-        '__updateAvatars(items, __itemsInView, maxItemsVisible, _overflow, i18n)',
+        '__updateAvatars(items, __itemsInView, maxItemsVisible, _overflow, __effectiveI18n)',
         '__updateOverflowAvatar(_overflow, items, __itemsInView, maxItemsVisible)',
         '__updateOverflowTooltip(_overflowTooltip, items, __itemsInView, maxItemsVisible)',
       ];
+    }
+
+    /**
+     * The object used to localize this component. To change the default
+     * localization, replace this with an object that provides all properties, or
+     * just the individual properties you want to change.
+     *
+     * The object has the following JSON structure and default values:
+     * ```
+     * {
+     *   // Translation of the anonymous user avatar tooltip.
+     *   anonymous: 'anonymous',
+     *   // Translation of the avatar group accessible label.
+     *   // {count} is replaced with the actual count of users.
+     *   activeUsers: {
+     *     one: 'Currently one active user',
+     *     many: 'Currently {count} active users'
+     *   },
+     *   // Screen reader announcement when user joins group.
+     *   // {user} is replaced with the name or abbreviation.
+     *   // When neither is set, "anonymous" is used instead.
+     *   joined: '{user} joined',
+     *   // Screen reader announcement when user leaves group.
+     *   // {user} is replaced with the name or abbreviation.
+     *   // When neither is set, "anonymous" is used instead.
+     *   left: '{user} left'
+     * }
+     * ```
+     * @type {!AvatarGroupI18n}
+     * @default {English/US}
+     */
+    get i18n() {
+      return super.i18n;
+    }
+
+    set i18n(value) {
+      super.i18n = value;
     }
 
     /** @protected */
@@ -205,7 +208,7 @@ export const AvatarGroupMixin = (superClass) =>
 
     /** @private */
     __getMessage(user, action) {
-      return action.replace('{user}', user.name || user.abbr || this.i18n.anonymous);
+      return action.replace('{user}', user.name || user.abbr || this.__effectiveI18n.anonymous);
     }
 
     /**
@@ -242,7 +245,7 @@ export const AvatarGroupMixin = (superClass) =>
 
       avatar.setAttribute('aria-hidden', 'true');
       avatar.setAttribute('tabindex', '-1');
-      avatar.i18n = this.i18n;
+      avatar.i18n = this.__effectiveI18n;
 
       if (this._theme) {
         avatar.setAttribute('theme', this._theme);
@@ -324,7 +327,7 @@ export const AvatarGroupMixin = (superClass) =>
                 .abbr="${item.abbr}"
                 .img="${item.img}"
                 .colorIndex="${item.colorIndex}"
-                .i18n="${this.i18n}"
+                .i18n="${this.__effectiveI18n}"
                 class="${ifDefined(item.className)}"
                 with-tooltip
               ></vaadin-avatar>
@@ -447,11 +450,11 @@ export const AvatarGroupMixin = (superClass) =>
       let addedMsg = [];
       let removedMsg = [];
       if (added) {
-        addedMsg = added.map((user) => this.__getMessage(user, this.i18n.joined || '{user} joined'));
+        addedMsg = added.map((user) => this.__getMessage(user, this.__effectiveI18n.joined || '{user} joined'));
       }
 
       if (removed) {
-        removedMsg = removed.map((user) => this.__getMessage(user, this.i18n.left || '{user} left'));
+        removedMsg = removed.map((user) => this.__getMessage(user, this.__effectiveI18n.left || '{user} left'));
       }
 
       const messages = removedMsg.concat(addedMsg);
