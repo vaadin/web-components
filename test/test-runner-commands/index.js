@@ -31,6 +31,19 @@ export async function sendMouseToElement(payload) {
 }
 
 /**
+ * Resets the mouse position and releases mouse buttons.
+ */
+export async function resetMouse() {
+  await executeServerCommand('reset-mouse');
+  // 'reset-mouse' moves mouse to [0,0], which can interfere with following tests that
+  // depend on mouse events by causing unwanted `mouseenter` events with Puppeteer.
+  // Instead move it to the bottom right to make it less likely to affect other tests.
+  if (/Chrome/u.test(navigator.userAgent) && /Google Inc/u.test(navigator.vendor)) {
+    await executeServerCommand('send-mouse', { type: 'move', position: [window.innerWidth, window.innerHeight] });
+  }
+}
+
+/**
  * Extends the `sendKeys` command to support pressing multiple keys
  * simultaneously when provided in the format "Shift+Tab". This format
  * is natively supported by Playwright but not by Puppeteer. This wrapper
