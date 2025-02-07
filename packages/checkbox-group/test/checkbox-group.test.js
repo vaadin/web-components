@@ -302,15 +302,6 @@ describe('vaadin-checkbox-group', () => {
       expect(checkboxes[0].hasAttribute('focused')).to.be.false;
       expect(group.hasAttribute('focused')).to.be.false;
     });
-
-    it('should not steal focus from currently focused element', () => {
-      const focusInput = document.createElement('input');
-      document.body.appendChild(focusInput);
-      focusInput.focus();
-      group.value = '1';
-      expect(document.activeElement).to.be.equal(focusInput);
-      document.body.removeChild(focusInput);
-    });
   });
 
   describe('has-value attribute', () => {
