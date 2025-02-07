@@ -46,7 +46,7 @@ describe('crud buttons', () => {
           });
 
           it('should update the label of the delete button on i18n property change', () => {
-            crud.i18n = { ...crud.i18n, deleteItem: 'Custom' };
+            crud.i18n = { deleteItem: 'Custom' };
             expect(deleteButton.textContent).to.equal('Custom');
           });
 
@@ -55,7 +55,7 @@ describe('crud buttons', () => {
           });
 
           it('should update the label of the save button on i18n property change', () => {
-            crud.i18n = { ...crud.i18n, saveItem: 'Custom' };
+            crud.i18n = { saveItem: 'Custom' };
             expect(saveButton.textContent).to.equal('Custom');
           });
 
@@ -64,7 +64,7 @@ describe('crud buttons', () => {
           });
 
           it('should update the label of the cancel button on i18n property change', () => {
-            crud.i18n = { ...crud.i18n, cancel: 'Custom' };
+            crud.i18n = { cancel: 'Custom' };
             expect(cancelButton.textContent).to.equal('Custom');
           });
         });
@@ -734,7 +734,7 @@ describe('crud buttons', () => {
         crud.appendChild(button);
         await nextRender();
 
-        crud.i18n = { ...crud.i18n, newItem: 'Add user' };
+        crud.i18n = { newItem: 'Add user' };
         await nextRender();
 
         expect(button.textContent).to.equal('Add user');
@@ -789,7 +789,7 @@ describe('crud buttons', () => {
         crud.appendChild(button);
         await nextRender();
 
-        crud.i18n = { ...crud.i18n, deleteItem: 'Drop user' };
+        crud.i18n = { deleteItem: 'Drop user' };
         await nextRender();
 
         expect(button.textContent).to.equal('Drop user');
@@ -844,7 +844,7 @@ describe('crud buttons', () => {
         crud.appendChild(button);
         await nextRender();
 
-        crud.i18n = { ...crud.i18n, saveItem: 'Save user' };
+        crud.i18n = { saveItem: 'Save user' };
         await nextRender();
 
         expect(button.textContent).to.equal('Save user');
