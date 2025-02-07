@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { sendKeys, sendMouse } from '@vaadin/test-runner-commands';
+import { resetMouse, sendKeys, sendMouse } from '@vaadin/test-runner-commands';
 import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import '../vaadin-grid.js';
 import { flushGrid, getContainerCell, getLastVisibleItem, getPhysicalItems } from './helpers.js';
@@ -46,6 +46,10 @@ describe('scroll into view', () => {
     firstCell = getContainerCell(grid.$.items, 0, 0);
     secondCell = getContainerCell(grid.$.items, 1, 0);
     secondDetailsCell = getLastVisibleItem(grid).querySelector('[part~="details-cell"]');
+  });
+
+  afterEach(async () => {
+    await resetMouse();
   });
 
   it('should scroll row into view when focusing programmatically', () => {
