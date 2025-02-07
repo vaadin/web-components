@@ -6,52 +6,24 @@
 import { afterNextRender, beforeNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import { AriaModalController } from '@vaadin/a11y-base/src/aria-modal-controller.js';
 import { FocusTrapController } from '@vaadin/a11y-base/src/focus-trap-controller.js';
+import { I18nMixin } from '@vaadin/component-base/src/i18n-mixin.js';
 
 /**
  * @typedef {import('./vaadin-app-layout.js').AppLayoutI18n} AppLayoutI18n
  */
 
+const DEFAULT_I18N = {
+  drawer: 'Drawer',
+};
+
 /**
  * @polymerMixin
+ * @mixes I18nMixin
  */
 export const AppLayoutMixin = (superclass) =>
-  class AppLayoutMixinClass extends superclass {
+  class AppLayoutMixinClass extends I18nMixin(DEFAULT_I18N, superclass) {
     static get properties() {
       return {
-        /**
-         * The object used to localize this component.
-         * To change the default localization, replace the entire
-         * `i18n` object with a custom one.
-         *
-         * To update individual properties, extend the existing i18n object as follows:
-         * ```js
-         * appLayout.i18n = {
-         *   ...appLayout.i18n,
-         *   drawer: 'Drawer'
-         * }
-         * ```
-         *
-         * The object has the following structure and default values:
-         * ```
-         * {
-         *   drawer: 'Drawer'
-         * }
-         * ```
-         *
-         * @type {AppLayoutI18n}
-         * @default {English/US}
-         */
-        i18n: {
-          type: Object,
-          observer: '__i18nChanged',
-          sync: true,
-          value: () => {
-            return {
-              drawer: 'Drawer',
-            };
-          },
-        },
-
         /**
          * Defines whether navbar or drawer will come first visually.
          * - By default (`primary-section="navbar"`), the navbar takes the full available width and moves the drawer down.
@@ -114,11 +86,36 @@ export const AppLayoutMixin = (superclass) =>
       };
     }
 
+    static get observers() {
+      return ['__i18nChanged(__effectiveI18n)'];
+    }
+
     /**
      * Helper static method that dispatches a `close-overlay-drawer` event
      */
     static dispatchCloseOverlayDrawerEvent() {
       window.dispatchEvent(new CustomEvent('close-overlay-drawer'));
+    }
+
+    /**
+     * The object used to localize this component. To change the default
+     * localization, replace this with an object that provides all properties, or
+     * just the individual properties you want to change.
+     *
+     * The object has the following structure and default values:
+     * ```
+     * {
+     *   drawer: 'Drawer'
+     * }
+     * ```
+     * @return {!AppLayoutI18n}
+     */
+    get i18n() {
+      return super.i18n;
+    }
+
+    set i18n(value) {
+      super.i18n = value;
     }
 
     constructor() {
@@ -357,7 +354,7 @@ export const AppLayoutMixin = (superclass) =>
       if (this.overlay) {
         drawer.setAttribute('role', 'dialog');
         drawer.setAttribute('aria-modal', 'true');
-        drawer.setAttribute('aria-label', this.i18n.drawer);
+        drawer.setAttribute('aria-label', this.__effectiveI18n.drawer);
       } else {
         drawer.removeAttribute('role');
         drawer.removeAttribute('aria-modal');
