@@ -5,7 +5,7 @@ import '../vaadin-dashboard.js';
 import type { CustomElementType } from '@vaadin/component-base/src/define.js';
 import type { DashboardSection } from '../src/vaadin-dashboard-section.js';
 import type { DashboardWidget } from '../src/vaadin-dashboard-widget.js';
-import type { Dashboard, DashboardItem, DashboardSectionItem } from '../vaadin-dashboard.js';
+import type { Dashboard, DashboardI18n, DashboardItem, DashboardSectionItem } from '../vaadin-dashboard.js';
 import {
   expectLayout,
   getColumnWidths,
@@ -25,7 +25,7 @@ import {
 type TestDashboardItem = DashboardItem & { id: string; component?: Element | string };
 
 describe('dashboard', () => {
-  let dashboard: Dashboard<TestDashboardItem>;
+  let dashboard: Dashboard<TestDashboardItem> & { __effectiveI18n: DashboardI18n };
   const columnWidth = 200;
 
   beforeEach(async () => {
@@ -199,7 +199,6 @@ describe('dashboard', () => {
 
     it('should localize widget', async () => {
       dashboard.i18n = {
-        ...dashboard.i18n,
         selectWidget: 'foo',
       };
 
@@ -207,7 +206,7 @@ describe('dashboard', () => {
 
       const widget = getElementFromCell(dashboard, 0, 0) as DashboardWidget & { __i18n: { [key: string]: string } };
       expect(widget.__i18n.selectWidget).to.equal('foo');
-      expect(widget.__i18n).to.eql(dashboard.i18n);
+      expect(widget.__i18n).to.eql(dashboard.__effectiveI18n);
     });
 
     it('should localize focused widget', async () => {
@@ -229,7 +228,6 @@ describe('dashboard', () => {
       widget.focus();
 
       dashboard.i18n = {
-        ...dashboard.i18n,
         selectWidget: 'foo',
       };
       await updateComplete(dashboard);
@@ -249,7 +247,6 @@ describe('dashboard', () => {
       await updateComplete(dashboard);
 
       dashboard.i18n = {
-        ...dashboard.i18n,
         selectWidget: 'foo',
       };
       await updateComplete(dashboard);
@@ -399,7 +396,6 @@ describe('dashboard', () => {
       describe('i18n', () => {
         it('should localize section', async () => {
           dashboard.i18n = {
-            ...dashboard.i18n,
             selectSection: 'foo',
           };
 
@@ -410,7 +406,7 @@ describe('dashboard', () => {
             __i18n: { [key: string]: string };
           };
           expect(section.__i18n.selectSection).to.equal('foo');
-          expect(section.__i18n).to.eql(dashboard.i18n);
+          expect(section.__i18n).to.eql(dashboard.__effectiveI18n);
         });
       });
     });

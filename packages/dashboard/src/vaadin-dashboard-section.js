@@ -151,15 +151,7 @@ class DashboardSection extends DashboardItemMixin(ElementMixin(ThemableMixin(Pol
       __i18n: {
         type: Object,
         value: () => {
-          const i18n = getDefaultI18n();
-          return {
-            selectSection: i18n.selectSection,
-            remove: i18n.remove,
-            move: i18n.move,
-            moveApply: i18n.moveApply,
-            moveForward: i18n.moveForward,
-            moveBackward: i18n.moveBackward,
-          };
+          return getDefaultI18n();
         },
       },
 
