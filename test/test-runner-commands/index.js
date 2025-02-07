@@ -38,7 +38,9 @@ export async function resetMouse() {
   // 'reset-mouse' moves mouse to [0,0], which can interfere with following tests that
   // depend on mouse events by causing unwanted `mouseenter` events with Puppeteer.
   // Instead move it to the bottom right to make it less likely to affect other tests.
-  await executeServerCommand('send-mouse', { type: 'move', position: [window.innerWidth, window.innerHeight] });
+  if (/Chrome/u.test(navigator.userAgent) && /Google Inc/u.test(navigator.vendor)) {
+    await executeServerCommand('send-mouse', { type: 'move', position: [window.innerWidth, window.innerHeight] });
+  }
 }
 
 /**
