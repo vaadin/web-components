@@ -9,6 +9,7 @@
  * license.
  */
 import type { Constructor } from '@open-wc/dedupe-mixin';
+import type { I18nMixinClass, PartialI18n } from '@vaadin/component-base/src/i18n-mixin.js';
 import type { GridFilterDefinition, GridSorterDefinition } from '@vaadin/grid/src/vaadin-grid.js';
 
 export type CrudDataProviderCallback<T> = (items: T[], size?: number) => void;
@@ -24,7 +25,7 @@ export type CrudDataProvider<T> = (params: CrudDataProviderParams, callback: Cru
 
 export type CrudEditorPosition = '' | 'aside' | 'bottom';
 
-export interface CrudI18n {
+export type CrudI18n = PartialI18n<{
   newItem: string;
   editItem: string;
   saveItem: string;
@@ -49,7 +50,7 @@ export interface CrudI18n {
       };
     };
   };
-}
+}>;
 
 /**
  * Fired when the `editorOpened` property changes.
@@ -123,7 +124,7 @@ export type CrudEventMap<T> = CrudCustomEventMap<T> & HTMLElementEventMap;
  */
 export declare function CrudMixin<Item, T extends Constructor<HTMLElement> = Constructor<HTMLElement>>(
   base: T,
-): Constructor<CrudMixinClass<Item>> & T;
+): Constructor<CrudMixinClass<Item>> & Constructor<I18nMixinClass<CrudI18n>> & T;
 
 export declare class CrudMixinClass<Item> {
   /**
@@ -225,9 +226,9 @@ export declare class CrudMixinClass<Item> {
   noToolbar: boolean;
 
   /**
-   * The object used to localize this component.
-   * For changing the default localization, change the entire
-   * _i18n_ object or just the property you want to modify.
+   * The object used to localize this component. To change the default
+   * localization, replace this with an object that provides all properties, or
+   * just the individual properties you want to change.
    *
    * The object has the following JSON structure and default values:
    *

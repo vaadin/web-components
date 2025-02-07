@@ -6,6 +6,7 @@ import type {
   CrudEditedItemChangedEvent,
   CrudEditEvent,
   CrudEditorOpenedChangedEvent,
+  CrudI18n,
   CrudItemsChangedEvent,
   CrudNewEvent,
   CrudSaveEvent,
@@ -80,3 +81,8 @@ assertType<boolean>(edit.disabled);
 
 const column: CrudEditColumn = document.createElement('vaadin-crud-edit-column');
 assertType<string>(column.ariaLabel);
+
+// I18n
+assertType<CrudI18n>({});
+assertType<CrudI18n>({ cancel: 'cancel' });
+assertType<CrudI18n>({ confirm: { cancel: { title: 'title' } } });

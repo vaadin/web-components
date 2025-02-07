@@ -223,10 +223,10 @@ class Crud extends CrudMixin(ControllerMixin(ElementMixin(ThemableMixin(PolymerE
         id="confirmCancel"
         on-confirm="__confirmCancel"
         cancel-button-visible
-        confirm-text="[[i18n.confirm.cancel.button.confirm]]"
-        cancel-text="[[i18n.confirm.cancel.button.dismiss]]"
-        header="[[i18n.confirm.cancel.title]]"
-        message="[[i18n.confirm.cancel.content]]"
+        confirm-text="[[__effectiveI18n.confirm.cancel.button.confirm]]"
+        cancel-text="[[__effectiveI18n.confirm.cancel.button.dismiss]]"
+        header="[[__effectiveI18n.confirm.cancel.title]]"
+        message="[[__effectiveI18n.confirm.cancel.content]]"
         confirm-theme="primary"
       ></vaadin-confirm-dialog>
 
@@ -235,10 +235,10 @@ class Crud extends CrudMixin(ControllerMixin(ElementMixin(ThemableMixin(PolymerE
         id="confirmDelete"
         on-confirm="__confirmDelete"
         cancel-button-visible
-        confirm-text="[[i18n.confirm.delete.button.confirm]]"
-        cancel-text="[[i18n.confirm.delete.button.dismiss]]"
-        header="[[i18n.confirm.delete.title]]"
-        message="[[i18n.confirm.delete.content]]"
+        confirm-text="[[__effectiveI18n.confirm.delete.button.confirm]]"
+        cancel-text="[[__effectiveI18n.confirm.delete.button.dismiss]]"
+        header="[[__effectiveI18n.confirm.delete.title]]"
+        message="[[__effectiveI18n.confirm.delete.content]]"
         confirm-theme="primary error"
       ></vaadin-confirm-dialog>
     `;
