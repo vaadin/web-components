@@ -464,16 +464,16 @@ export const AvatarGroupMixin = (superClass) =>
     }
 
     /** @private */
-    __i18nItemsChanged(i18n, items) {
-      if (i18n && i18n.activeUsers) {
+    __i18nItemsChanged(effectiveI18n, items) {
+      if (effectiveI18n && effectiveI18n.activeUsers) {
         const count = Array.isArray(items) ? items.length : 0;
         const field = count === 1 ? 'one' : 'many';
-        if (i18n.activeUsers[field]) {
-          this.setAttribute('aria-label', i18n.activeUsers[field].replace('{count}', count || 0));
+        if (effectiveI18n.activeUsers[field]) {
+          this.setAttribute('aria-label', effectiveI18n.activeUsers[field].replace('{count}', count || 0));
         }
 
         this._avatars.forEach((avatar) => {
-          avatar.i18n = i18n;
+          avatar.i18n = effectiveI18n;
         });
       }
     }
