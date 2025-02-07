@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/board",
-  "version": "24.6.3",
+  "version": "24.6.4",
   "publishConfig": {
     "access": "public"
   },
@@ -39,12 +39,12 @@
   ],
   "dependencies": {
     "@polymer/polymer": "^3.0.0",
-    "@vaadin/a11y-base": "~24.6.3",
-    "@vaadin/component-base": "~24.6.3"
+    "@vaadin/a11y-base": "~24.6.4",
+    "@vaadin/component-base": "~24.6.4"
   },
   "devDependencies": {
-    "@vaadin/chai-plugins": "~24.6.3",
-    "@vaadin/test-runner-commands": "~24.6.3",
+    "@vaadin/chai-plugins": "~24.6.4",
+    "@vaadin/test-runner-commands": "~24.6.4",
     "@vaadin/testing-helpers": "^1.1.0",
     "sinon": "^18.0.0"
   },
