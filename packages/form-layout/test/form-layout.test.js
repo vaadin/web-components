@@ -103,7 +103,7 @@ describe('form layout', () => {
       expect(getComputedStyle(layout.$.layout).rowGap).to.equal('8px');
     });
 
-    it('should apply form item row', () => {
+    it('should apply form item row spacing', () => {
       const spacing = 8;
       item.style.setProperty('--vaadin-form-item-row-spacing', `${spacing}px`);
       expect(getComputedStyle(item).marginTop).to.equal(`${spacing / 2}px`);
