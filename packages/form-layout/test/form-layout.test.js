@@ -110,7 +110,7 @@ describe('form layout', () => {
       expect(getComputedStyle(item).marginBottom).to.equal(`${spacing / 2}px`);
     });
 
-    it('should not apply form item row when form layout row spacing is non-zero', () => {
+    it('should not apply form item row spacing when form layout spacing is non-zero', () => {
       layout.style.setProperty('--vaadin-form-layout-row-spacing', '8px');
       item.style.setProperty('--vaadin-form-item-row-spacing', `8px`);
       expect(getComputedStyle(item).marginTop).to.equal('0px');
