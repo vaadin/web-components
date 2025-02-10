@@ -10,7 +10,12 @@ describe('toggling dropdown', () => {
   let comboBox, overlay, input;
 
   beforeEach(() => {
-    comboBox = fixtureSync('<vaadin-combo-box label="Label" items="[1, 2]"></vaadin-combo-box>');
+    comboBox = fixtureSync(
+      `<div>
+        <vaadin-combo-box label="Label" items="[1, 2]"></vaadin-combo-box>
+        <input id="last-global-focusable" />
+      </div>`,
+    ).firstElementChild;
     input = comboBox.inputElement;
     overlay = comboBox.$.overlay;
   });

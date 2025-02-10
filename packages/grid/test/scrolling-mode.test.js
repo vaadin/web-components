@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, isDesktopSafari, isFirefox, listenOnce, nextFrame } from '@vaadin/testing-helpers';
+import { fixtureSync, listenOnce, nextFrame } from '@vaadin/testing-helpers';
 import '@vaadin/polymer-legacy-adapter/template-renderer.js';
 import '../vaadin-grid.js';
 import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
@@ -94,11 +94,7 @@ describe('scrolling mode', () => {
       expect(grid.getAttribute('overflow')).to.equal('top start left');
     });
 
-    // This test constantly fails in WebKit when the test is running on CI.
-    // It perhaps has something to do with the specific version of WebKit
-    // Playwright uses on CI. It sometimes fails also in Firefox on CI,
-    // but not as often as in WebKit.
-    (isDesktopSafari || isFirefox ? it.skip : it)('update on resize', async () => {
+    it('update on resize', async () => {
       grid.style.width = '200px';
       await onceResized(grid);
       await nextFrame();

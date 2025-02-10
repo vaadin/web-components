@@ -70,7 +70,8 @@
     "typescript": "^4.8.4"
   },
   "resolutions": {
-    "@open-wc/semantic-dom-diff": "^0.20.1"
+    "@open-wc/semantic-dom-diff": "^0.20.1",
+    "playwright": "^1.48.2"
   },
   "lint-staged": {
     "*.{js,ts}": [
