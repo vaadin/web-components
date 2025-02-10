@@ -4,6 +4,11 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { FocusMixin } from '@vaadin/a11y-base/src/focus-mixin.js';
+import { I18nMixin } from '@vaadin/component-base/src/i18n-mixin.js';
+
+const DEFAULT_I18N = {
+  anonymous: 'anonymous',
+};
 
 /**
  * A mixin providing common avatar functionality.
@@ -12,7 +17,7 @@ import { FocusMixin } from '@vaadin/a11y-base/src/focus-mixin.js';
  * @mixes FocusMixin
  */
 export const AvatarMixin = (superClass) =>
-  class AvatarMixinClass extends FocusMixin(superClass) {
+  class AvatarMixinClass extends I18nMixin(DEFAULT_I18N, FocusMixin(superClass)) {
     static get properties() {
       return {
         /**
@@ -52,32 +57,6 @@ export const AvatarMixin = (superClass) =>
         },
 
         /**
-         * The object used to localize this component.
-         * To change the default localization, replace the entire
-         * _i18n_ object or just the property you want to modify.
-         *
-         * The object has the following JSON structure and default values:
-         *
-         * ```
-         * {
-         *   // Translation of the anonymous user avatar tooltip.
-         *   anonymous: 'anonymous'
-         * }
-         * ```
-         *
-         * @type {!AvatarI18n}
-         * @default {English/US}
-         */
-        i18n: {
-          type: Object,
-          value: () => {
-            return {
-              anonymous: 'anonymous',
-            };
-          },
-        },
-
-        /**
          * When true, the avatar has tooltip shown on hover and focus.
          * The tooltip text is based on the `name` and `abbr` properties.
          * When neither is provided, `i18n.anonymous` is used instead.
@@ -106,9 +85,31 @@ export const AvatarMixin = (superClass) =>
     static get observers() {
       return [
         '__imgOrAbbrOrNameChanged(img, abbr, name)',
-        '__i18nChanged(i18n)',
+        '__i18nChanged(__effectiveI18n)',
         '__tooltipChanged(__tooltipNode, name, abbr)',
       ];
+    }
+
+    /**
+     * The object used to localize this component. To change the default
+     * localization, replace this with an object that provides all properties, or
+     * just the individual properties you want to change.
+     *
+     * The object has the following JSON structure and default values:
+     * ```
+     * {
+     *   // Translation of the anonymous user avatar tooltip.
+     *   anonymous: 'anonymous'
+     * }
+     * ```
+     * @return {!AvatarI18n}
+     */
+    get i18n() {
+      return super.i18n;
+    }
+
+    set i18n(value) {
+      super.i18n = value;
     }
 
     /** @protected */
@@ -212,13 +213,13 @@ export const AvatarMixin = (superClass) =>
     }
 
     /** @private */
-    __i18nChanged(i18n) {
-      if (i18n && i18n.anonymous) {
+    __i18nChanged(effectiveI18n) {
+      if (effectiveI18n && effectiveI18n.anonymous) {
         if (this.__oldAnonymous && this.__tooltipNode && this.__tooltipNode.text === this.__oldAnonymous) {
           this.__setTooltip();
         }
 
-        this.__oldAnonymous = i18n.anonymous;
+        this.__oldAnonymous = effectiveI18n.anonymous;
       }
     }
 
@@ -233,7 +234,7 @@ export const AvatarMixin = (superClass) =>
     __setTooltip(tooltip) {
       const tooltipNode = this.__tooltipNode;
       if (tooltipNode) {
-        tooltipNode.text = tooltip || this.i18n.anonymous;
+        tooltipNode.text = tooltip || this.__effectiveI18n.anonymous;
       }
     }
 

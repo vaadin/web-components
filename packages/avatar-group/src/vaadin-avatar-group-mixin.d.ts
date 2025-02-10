@@ -76,9 +76,9 @@ export declare class AvatarGroupMixinClass {
   maxItemsVisible: number | null | undefined;
 
   /**
-   * The object used to localize this component.
-   * To change the default localization, replace the entire
-   * _i18n_ object or just the property you want to modify.
+   * The object used to localize this component. To change the default
+   * localization, replace this with an object that provides all properties, or
+   * just the individual properties you want to change.
    *
    * The object has the following JSON structure and default values:
    * ```
