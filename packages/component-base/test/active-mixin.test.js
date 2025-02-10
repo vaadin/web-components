@@ -61,6 +61,12 @@ describe('active-mixin', () => {
   });
 
   describe('keyboard', () => {
+    afterEach(async () => {
+      for (const key of ['Space', 'Enter']) {
+        await sendKeys({ up: key });
+      }
+    });
+
     it('should set active attribute when Space is pressed', async () => {
       await sendKeys({ down: 'Space' });
       expect(element.hasAttribute('active')).to.be.true;
