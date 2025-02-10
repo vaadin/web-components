@@ -1,12 +1,14 @@
 /* eslint-env node */
-const { puppeteerLauncher } = require('@web/test-runner-puppeteer');
+const { playwrightLauncher } = require('@web/test-runner-playwright');
 const { createSnapshotTestsConfig } = require('./wtr-utils.js');
 
 module.exports = createSnapshotTestsConfig({
   browsers: [
-    puppeteerLauncher({
+    playwrightLauncher({
+      product: 'chromium',
       launchOptions: {
-        headless: 'shell',
+        channel: 'chrome',
+        headless: true,
       },
     }),
   ],

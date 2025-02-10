@@ -1,13 +1,15 @@
 /* eslint-env node */
-const { puppeteerLauncher } = require('@web/test-runner-puppeteer');
 const { createIntegrationTestsConfig } = require('./wtr-utils.js');
 const devServerConfig = require('./web-dev-server.config.js');
+const { playwrightLauncher } = require('@web/test-runner-playwright');
 
 const unitTestsConfig = createIntegrationTestsConfig({
   browsers: [
-    puppeteerLauncher({
+    playwrightLauncher({
+      product: 'chromium',
       launchOptions: {
-        headless: 'shell',
+        channel: 'chrome',
+        headless: true,
       },
     }),
   ],
