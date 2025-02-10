@@ -43,19 +43,31 @@ export const formLayoutStyles = css`
     display: none;
   }
 
+  :host([auto-responsive]) {
+    --vaadin-form-layout-column-max-width: var(--vaadin-form-layout-column-width);
+  }
+
   :host([auto-responsive]) #layout {
-    /**
-   * Calculated values.
-   */
-    --gap-count: calc(var(--vaadin-form-layout-max-columns) - 1);
-    --total-gap-width: calc(var(--gap-count) * var(--vaadin-form-layout-column-spacing));
-    --grid-item--max-width: calc((100% - var(--total-gap-width)) / var(--vaadin-form-layout-max-columns));
+    --_max-columns: var(--vaadin-form-layout-max-columns);
+    --_column-width: var(--vaadin-form-layout-column-width);
+
+    --_total-gap-width: calc((var(--_max-columns) - 1) * var(--vaadin-form-layout-column-spacing));
+    --_total-col-width: calc(var(--_max-columns) * var(--_column-width));
+
+    --_column-max-width: var(--vaadin-form-layout-column-max-width);
+    --_column-min-width: max(var(--_column-width), calc((100% - var(--_total-gap-width)) / var(--_max-columns)));
+
     display: grid;
-    grid-template-columns: repeat(
-      auto-fill,
-      minmax(max(var(--vaadin-form-layout-column-width), var(--grid-item--max-width)), 1fr)
-    );
+    grid-template-columns: repeat(auto-fill, minmax(var(--_column-min-width), var(--_column-max-width)));
     gap: var(--vaadin-form-layout-row-spacing) var(--vaadin-form-layout-column-spacing);
+  }
+
+  :host([auto-responsive]:not([expand-columns])) #layout {
+    max-width: calc(var(--_total-col-width) + var(--_total-gap-width));
+  }
+
+  :host([auto-responsive][expand-columns='always']) {
+    --vaadin-form-layout-column-max-width: 1fr;
   }
 `;
 

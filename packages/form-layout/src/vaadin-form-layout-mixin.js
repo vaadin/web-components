@@ -116,6 +116,12 @@ export const FormLayoutMixin = (superClass) =>
           value: 10,
           observer: '_maxColumnsChanged',
         },
+
+        expandColumns: {
+          type: String,
+          value: false,
+          reflectToAttribute: true,
+        },
       };
     }
 
