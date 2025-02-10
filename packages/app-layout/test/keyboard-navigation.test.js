@@ -5,7 +5,7 @@ import '../vaadin-app-layout.js';
 import '../vaadin-drawer-toggle.js';
 
 describe('keyboard navigation', () => {
-  let layout, toggle, drawer, drawerLink, contentLink;
+  let layout, toggle, drawer, drawerLink, contentLink, outerInput;
 
   async function tab() {
     await sendKeys({ press: 'Tab' });
@@ -20,17 +20,21 @@ describe('keyboard navigation', () => {
   async function fixtureLayout(layoutMode) {
     const overlayMode = String(layoutMode === 'mobile');
 
-    layout = fixtureSync(`
-      <vaadin-app-layout style="--vaadin-app-layout-drawer-overlay: ${overlayMode}; --vaadin-app-layout-transition: none;">
-        <vaadin-drawer-toggle slot="navbar"></vaadin-drawer-toggle>
-        <section slot="drawer">
-          <a href="#">Drawer Link</a>
-        </section>
-        <main>
-          <a href="#">Content Link</a>
-        </main>
-      </vaadin-app-layout>
+    const wrapper = fixtureSync(`
+      <div>
+        <vaadin-app-layout style="--vaadin-app-layout-drawer-overlay: ${overlayMode}; --vaadin-app-layout-transition: none;">
+          <vaadin-drawer-toggle slot="navbar"></vaadin-drawer-toggle>
+          <section slot="drawer">
+            <a href="#">Drawer Link</a>
+          </section>
+          <main>
+            <a href="#">Content Link</a>
+          </main>
+        </vaadin-app-layout>
+        <input placeholder="Outer input" />
+      </div>
     `);
+    [layout, outerInput] = wrapper.children;
     await nextRender();
     toggle = layout.querySelector(':scope > [slot=navbar]');
     drawer = layout.shadowRoot.querySelector('[part=drawer]');
@@ -67,7 +71,7 @@ describe('keyboard navigation', () => {
     it('should move focus from the layout content to outside the layout on Tab', async () => {
       contentLink.focus();
       await tab();
-      expect(layout.contains(document.activeElement)).to.be.false;
+      expect(document.activeElement).to.equal(outerInput);
     });
 
     describe('drawer is closed', () => {
@@ -108,7 +112,7 @@ describe('keyboard navigation', () => {
     it('should move focus from the layout content to outside the layout on Tab', async () => {
       contentLink.focus();
       await tab();
-      expect(layout.contains(document.activeElement)).to.be.false;
+      expect(document.activeElement).to.equal(outerInput);
     });
 
     it('should keep the drawer content not focusable even if there is an element with [tabindex] = 0', async () => {
