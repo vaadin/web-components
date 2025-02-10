@@ -61,21 +61,21 @@ export async function sendMouseToElement(payload) {
  * // Do something while holding Shift
  * await sendKeys({ up: 'Shift' });
  */
-export async function sendKeys(payload) {
-  const { press } = payload;
-  if (press && press.includes('+')) {
-    const keys = press.split('+').map((key) => key.trim());
+// export async function sendKeys(payload) {
+//   const { press } = payload;
+//   if (press && press.includes('+')) {
+//     const keys = press.split('+').map((key) => key.trim());
 
-    for (const key of keys) {
-      await executeServerCommand('send-keys', { down: key });
-    }
+//     for (const key of keys) {
+//       await executeServerCommand('send-keys', { down: key });
+//     }
 
-    for (const key of keys.reverse()) {
-      await executeServerCommand('send-keys', { up: key });
-    }
+//     for (const key of keys.reverse()) {
+//       await executeServerCommand('send-keys', { up: key });
+//     }
 
-    return;
-  }
+//     return;
+//   }
 
-  await executeServerCommand('send-keys', payload);
-}
+//   await executeServerCommand('send-keys', payload);
+// }
