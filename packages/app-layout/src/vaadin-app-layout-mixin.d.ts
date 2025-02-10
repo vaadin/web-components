@@ -4,28 +4,21 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import type { Constructor } from '@open-wc/dedupe-mixin';
+import type { I18nMixinClass, PartialI18n } from '@vaadin/component-base/src/i18n-mixin.js';
 
-export interface AppLayoutI18n {
+export type AppLayoutI18n = PartialI18n<{
   drawer: string;
-}
+}>;
 
 export declare function AppLayoutMixin<T extends Constructor<HTMLElement>>(
   base: T,
-): Constructor<AppLayoutMixinClass> & T;
+): Constructor<AppLayoutMixinClass> & Constructor<I18nMixinClass<AppLayoutI18n>> & T;
 
 export declare class AppLayoutMixinClass {
   /**
-   * The object used to localize this component.
-   * To change the default localization, replace the entire
-   * `i18n` object with a custom one.
-   *
-   * To update individual properties, extend the existing i18n object as follows:
-   * ```js
-   * appLayout.i18n = {
-   *   ...appLayout.i18n,
-   *   drawer: 'Drawer'
-   * }
-   * ```
+   * The object used to localize this component. To change the default
+   * localization, replace this with an object that provides all properties, or
+   * just the individual properties you want to change.
    *
    * The object has the following structure and default values:
    * ```

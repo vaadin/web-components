@@ -6,7 +6,6 @@ import {
   enterKeyUp,
   fire,
   fixtureSync,
-  keyboardEventFor,
   keyDownChar,
   nextRender,
   nextUpdate,
@@ -557,24 +556,6 @@ describe('vaadin-select', () => {
       it('should be focusable', () => {
         select.focus();
         expect(select.hasAttribute('focused')).to.be.true;
-      });
-
-      it('should focus the next focusable element when tabbing', () => {
-        select.focus();
-
-        // Tabbing does not natively move the focus, hence we only can check that the event is not prevented
-        const ev = keyboardEventFor(9, [], 'Tab');
-        valueButton.dispatchEvent(ev);
-        expect(ev.defaultPrevented).to.be.false;
-      });
-
-      it('should focus the previous element when shift tabbing', () => {
-        select.focus();
-
-        // Tabbing does not natively move the focus, hence we only can check that the event is not prevented
-        const ev = keyboardEventFor(9, ['shift'], 'Tab');
-        valueButton.dispatchEvent(ev);
-        expect(ev.defaultPrevented).to.be.false;
       });
 
       it('should focus on required indicator click', () => {

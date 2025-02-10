@@ -13,7 +13,7 @@ const DEFAULT_I18N = {
   qux: ['q', 'u', 'x'],
 };
 
-class I18nMixinPolymerElement extends I18nMixin(PolymerElement, DEFAULT_I18N) {
+class I18nMixinPolymerElement extends I18nMixin(DEFAULT_I18N, PolymerElement) {
   static get is() {
     return 'i18n-mixin-polymer-element';
   }
@@ -21,7 +21,7 @@ class I18nMixinPolymerElement extends I18nMixin(PolymerElement, DEFAULT_I18N) {
 
 customElements.define(I18nMixinPolymerElement.is, I18nMixinPolymerElement);
 
-class I18nMixinLitElement extends I18nMixin(PolylitMixin(LitElement), DEFAULT_I18N) {
+class I18nMixinLitElement extends I18nMixin(DEFAULT_I18N, PolylitMixin(LitElement)) {
   static get is() {
     return 'i18n-mixin-lit-element';
   }
