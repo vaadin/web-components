@@ -21,7 +21,7 @@ export const formLayoutStyles = css`
     display: none !important;
   }
 
-  #layout {
+  :host(:not([auto-responsive])) #layout {
     display: flex;
 
     align-items: baseline; /* default \`stretch\` is not appropriate */
@@ -29,7 +29,7 @@ export const formLayoutStyles = css`
     flex-wrap: wrap; /* the items should wrap */
   }
 
-  #layout ::slotted(*) {
+  :host(:not([auto-responsive])) #layout ::slotted(*) {
     /* Items should neither grow nor shrink. */
     flex-grow: 0;
     flex-shrink: 0;
@@ -41,6 +41,21 @@ export const formLayoutStyles = css`
 
   #layout ::slotted(br) {
     display: none;
+  }
+
+  :host([auto-responsive]) #layout {
+    /**
+   * Calculated values.
+   */
+    --gap-count: calc(var(--vaadin-form-layout-max-columns) - 1);
+    --total-gap-width: calc(var(--gap-count) * var(--vaadin-form-layout-column-spacing));
+    --grid-item--max-width: calc((100% - var(--total-gap-width)) / var(--vaadin-form-layout-max-columns));
+    display: grid;
+    grid-template-columns: repeat(
+      auto-fill,
+      minmax(max(var(--vaadin-form-layout-column-width), var(--grid-item--max-width)), 1fr)
+    );
+    gap: var(--vaadin-form-layout-row-spacing) var(--vaadin-form-layout-column-spacing);
   }
 `;
 

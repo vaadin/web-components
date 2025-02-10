@@ -98,11 +98,29 @@ export const FormLayoutMixin = (superClass) =>
           type: Boolean,
           sync: true,
         },
+
+        autoResponsive: {
+          type: Boolean,
+          value: false,
+          reflectToAttribute: true,
+        },
+
+        columnWidth: {
+          type: String,
+          value: '13em',
+          observer: '_columnWidthChanged',
+        },
+
+        maxColumns: {
+          type: Number,
+          value: 10,
+          observer: '_maxColumnsChanged',
+        },
       };
     }
 
     static get observers() {
-      return ['_invokeUpdateLayout(_columnCount, _labelsOnTop)'];
+      return ['_invokeUpdateLayout(_columnCount, _labelsOnTop, autoResponsive)'];
     }
 
     /** @protected */
@@ -225,7 +243,7 @@ export const FormLayoutMixin = (superClass) =>
      */
     _updateLayout() {
       // Do not update layout when invisible
-      if (isElementHidden(this)) {
+      if (isElementHidden(this) || this.autoResponsive) {
         return;
       }
 
@@ -310,6 +328,15 @@ export const FormLayoutMixin = (superClass) =>
             }
           }
         });
+    }
+
+    /**@private */
+    _columnWidthChanged(columnWidth) {
+      this.style.setProperty('--vaadin-form-layout-column-width', columnWidth);
+    }
+
+    _maxColumnsChanged(maxColumns) {
+      this.style.setProperty('--vaadin-form-layout-max-columns', maxColumns);
     }
 
     /**
