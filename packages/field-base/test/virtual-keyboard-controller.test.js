@@ -37,7 +37,12 @@ describe('virtual-keyboard-controller', () => {
   let element, input;
 
   beforeEach(() => {
-    element = fixtureSync('<virtual-keyboard-controller-element></virtual-keyboard-controller-element>');
+    element = fixtureSync(
+      `<div>
+        <virtual-keyboard-controller-element></virtual-keyboard-controller-element>
+        <input id="last-global-focusable" />
+      </div>`,
+    ).firstElementChild;
     input = element.inputElement;
   });
 

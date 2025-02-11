@@ -183,13 +183,19 @@ describe('radio-group', () => {
   });
 
   describe('focused state', () => {
+    let firstGlobalFocusable;
+
     beforeEach(async () => {
-      group = fixtureSync(`
-        <vaadin-radio-group>
-          <vaadin-radio-button label="Button 1"></vaadin-radio-button>
-          <vaadin-radio-button label="Button 2"></vaadin-radio-button>
-        </vaadin-radio-group>
-      `);
+      [firstGlobalFocusable, group] = fixtureSync(
+        `<div>
+          <input id="first-global-focusable" />
+          <vaadin-radio-group>
+            <vaadin-radio-button label="Button 1"></vaadin-radio-button>
+            <vaadin-radio-button label="Button 2"></vaadin-radio-button>
+          </vaadin-radio-group>
+        </div>`,
+      ).children;
+      firstGlobalFocusable.focus();
       await nextFrame();
       buttons = [...group.querySelectorAll('vaadin-radio-button')];
     });

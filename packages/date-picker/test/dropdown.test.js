@@ -9,7 +9,12 @@ describe('dropdown', () => {
   let datePicker, input, overlay;
 
   beforeEach(() => {
-    datePicker = fixtureSync(`<vaadin-date-picker></vaadin-date-picker>`);
+    datePicker = fixtureSync(
+      `<div>
+        <vaadin-date-picker></vaadin-date-picker>
+        <input id="last-global-focusable" />
+      </div>`,
+    ).firstElementChild;
     input = datePicker.inputElement;
     overlay = datePicker.$.overlay;
   });
