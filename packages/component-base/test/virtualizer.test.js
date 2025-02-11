@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { aTimeout, fixtureSync, nextFrame, oneEvent } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, nextFrame, nextResize, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import { Virtualizer } from '../src/virtualizer.js';
 
@@ -348,6 +348,22 @@ describe('virtualizer', () => {
     const itemHeight = elementsContainer.querySelector('#item-0').offsetHeight;
     const expectedCount = Math.ceil((viewportHeight / itemHeight) * 1.3) + 1;
     expect(initialCount).not.to.be.above(expectedCount);
+  });
+
+  it('should preserve scroll position when moving within DOM and changing visibility', async () => {
+    scrollTarget.scrollTop = 100;
+    await oneEvent(scrollTarget, 'scroll');
+
+    scrollTarget.hidden = true;
+    await nextResize(scrollTarget);
+
+    const wrapper = fixtureSync('<div></div>');
+    wrapper.appendChild(scrollTarget);
+
+    scrollTarget.hidden = false;
+    await nextResize(scrollTarget);
+
+    expect(scrollTarget.scrollTop).to.equal(100);
   });
 
   describe('lazy rendering', () => {
