@@ -249,7 +249,12 @@ export const FormLayoutMixin = (superClass) =>
      */
     _updateLayout() {
       // Do not update layout when invisible
-      if (isElementHidden(this) || this.autoResponsive) {
+      if (isElementHidden(this)) {
+        return;
+      }
+
+      if (this.autoResponsive) {
+        this._updateCSSGridLayout();
         return;
       }
 
@@ -333,6 +338,36 @@ export const FormLayoutMixin = (superClass) =>
               child.removeAttribute('label-position');
             }
           }
+        });
+    }
+
+    /** @private */
+    _updateCSSGridLayout() {
+      const computedColumnWidths = getComputedStyle(this.$.layout).gridTemplateColumns.split(' ');
+
+      const columnCount = computedColumnWidths.filter((width) => width !== '0px').length;
+      this.$.layout.style.setProperty('--_column-count', columnCount);
+
+      // let resetColumn = false;
+      [...this.children]
+        .filter((child) => getComputedStyle(child).display !== 'none' || child.localName === 'br')
+        .forEach((child) => {
+          if (child.localName === 'br') {
+            // resetColumn = true;
+            return;
+          }
+
+          const colspan = child.getAttribute('colspan') || child.getAttribute('data-colspan');
+          if (colspan) {
+            child.style.setProperty('--_colspan', colspan);
+          }
+
+          // if (resetColumn) {
+          //   child.style.setProperty('--_grid-colstart', 1);
+          //   resetColumn = false;
+          // } else {
+          //   child.style.removeProperty('--_grid-colstart');
+          // }
         });
     }
 
