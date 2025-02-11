@@ -64,7 +64,7 @@ describe('crud', () => {
 
     it('should be able to internationalize via `i18n` property', async () => {
       expect(crud._newButton.textContent).to.be.equal('New item');
-      crud.i18n = { ...crud.i18n, newItem: 'Nueva entidad', editLabel: 'Editar entidad' };
+      crud.i18n = { newItem: 'Nueva entidad', editLabel: 'Editar entidad' };
       await nextRender(crud._grid);
       expect(crud._newButton.textContent).to.be.equal('Nueva entidad');
       expect(crud._grid.querySelector('vaadin-crud-edit-column').ariaLabel).to.be.equal('Editar entidad');

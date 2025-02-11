@@ -87,10 +87,10 @@ class Crud extends ControllerMixin(ElementMixin(ThemableMixin(CrudMixin(PolylitM
         id="confirmCancel"
         @confirm="${this.__confirmCancel}"
         cancel-button-visible
-        .confirmText="${this.i18n.confirm.cancel.button.confirm}"
-        .cancelText="${this.i18n.confirm.cancel.button.dismiss}"
-        .header="${this.i18n.confirm.cancel.title}"
-        .message="${this.i18n.confirm.cancel.content}"
+        .confirmText="${this.__effectiveI18n.confirm.cancel.button.confirm}"
+        .cancelText="${this.__effectiveI18n.confirm.cancel.button.dismiss}"
+        .header="${this.__effectiveI18n.confirm.cancel.title}"
+        .message="${this.__effectiveI18n.confirm.cancel.content}"
         confirm-theme="primary"
       ></vaadin-confirm-dialog>
 
@@ -99,10 +99,10 @@ class Crud extends ControllerMixin(ElementMixin(ThemableMixin(CrudMixin(PolylitM
         id="confirmDelete"
         @confirm="${this.__confirmDelete}"
         cancel-button-visible
-        .confirmText="${this.i18n.confirm.delete.button.confirm}"
-        .cancelText="${this.i18n.confirm.delete.button.dismiss}"
-        .header="${this.i18n.confirm.delete.title}"
-        .message="${this.i18n.confirm.delete.content}"
+        .confirmText="${this.__effectiveI18n.confirm.delete.button.confirm}"
+        .cancelText="${this.__effectiveI18n.confirm.delete.button.dismiss}"
+        .header="${this.__effectiveI18n.confirm.delete.title}"
+        .message="${this.__effectiveI18n.confirm.delete.content}"
         confirm-theme="primary error"
       ></vaadin-confirm-dialog>
     `;

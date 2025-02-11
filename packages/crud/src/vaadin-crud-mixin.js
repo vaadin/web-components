@@ -10,18 +10,47 @@
  */
 import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import { FocusRestorationController } from '@vaadin/a11y-base/src/focus-restoration-controller.js';
+import { I18nMixin } from '@vaadin/component-base/src/i18n-mixin.js';
 import { MediaQueryController } from '@vaadin/component-base/src/media-query-controller.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 import { ButtonSlotController, FormSlotController, GridSlotController } from './vaadin-crud-controllers.js';
 import { getProperty, isValidEditorPosition, setProperty } from './vaadin-crud-helpers.js';
 
+const DEFAULT_I18N = {
+  newItem: 'New item',
+  editItem: 'Edit item',
+  saveItem: 'Save',
+  cancel: 'Cancel',
+  deleteItem: 'Delete...',
+  editLabel: 'Edit',
+  confirm: {
+    delete: {
+      title: 'Delete item',
+      content: 'Are you sure you want to delete this item? This action cannot be undone.',
+      button: {
+        confirm: 'Delete',
+        dismiss: 'Cancel',
+      },
+    },
+    cancel: {
+      title: 'Discard changes',
+      content: 'There are unsaved changes to this item.',
+      button: {
+        confirm: 'Discard',
+        dismiss: 'Cancel',
+      },
+    },
+  },
+};
+
 /**
  * A mixin providing common crud functionality.
  *
  * @polymerMixin
+ * @mixes I18nMixin
  */
 export const CrudMixin = (superClass) =>
-  class extends superClass {
+  class extends I18nMixin(DEFAULT_I18N, superClass) {
     static get properties() {
       return {
         /**
@@ -225,78 +254,6 @@ export const CrudMixin = (superClass) =>
           sync: true,
         },
 
-        /**
-         * The object used to localize this component.
-         * For changing the default localization, change the entire
-         * _i18n_ object or just the property you want to modify.
-         *
-         * The object has the following JSON structure and default values:
-         *
-         * ```
-         * {
-         *   newItem: 'New item',
-         *   editItem: 'Edit item',
-         *   saveItem: 'Save',
-         *   cancel: 'Cancel',
-         *   deleteItem: 'Delete...',
-         *   editLabel: 'Edit',
-         *   confirm: {
-         *     delete: {
-         *       title: 'Confirm delete',
-         *       content: 'Are you sure you want to delete the selected item? This action cannot be undone.',
-         *       button: {
-         *         confirm: 'Delete',
-         *         dismiss: 'Cancel'
-         *       }
-         *     },
-         *     cancel: {
-         *       title: 'Unsaved changes',
-         *       content: 'There are unsaved modifications to the item.',
-         *       button: {
-         *         confirm: 'Discard',
-         *         dismiss: 'Continue editing'
-         *       }
-         *     }
-         *   }
-         * }
-         * ```
-         *
-         * @type {!CrudI18n}
-         * @default {English/US}
-         */
-        i18n: {
-          type: Object,
-          sync: true,
-          value() {
-            return {
-              newItem: 'New item',
-              editItem: 'Edit item',
-              saveItem: 'Save',
-              cancel: 'Cancel',
-              deleteItem: 'Delete...',
-              editLabel: 'Edit',
-              confirm: {
-                delete: {
-                  title: 'Delete item',
-                  content: 'Are you sure you want to delete this item? This action cannot be undone.',
-                  button: {
-                    confirm: 'Delete',
-                    dismiss: 'Cancel',
-                  },
-                },
-                cancel: {
-                  title: 'Discard changes',
-                  content: 'There are unsaved changes to this item.',
-                  button: {
-                    confirm: 'Discard',
-                    dismiss: 'Cancel',
-                  },
-                },
-              },
-            };
-          },
-        },
-
         /** @private */
         __dialogAriaLabel: String,
 
@@ -331,16 +288,61 @@ export const CrudMixin = (superClass) =>
 
     static get observers() {
       return [
-        '__headerPropsChanged(_defaultHeader, __isNew, i18n)',
+        '__headerPropsChanged(_defaultHeader, __isNew, __effectiveI18n)',
         '__formPropsChanged(_form, _theme, include, exclude)',
         '__gridPropsChanged(_grid, _theme, include, exclude, noFilter, noHead, noSort, items)',
-        '__i18nChanged(i18n, _grid)',
+        '__i18nChanged(__effectiveI18n, _grid)',
         '__editOnClickChanged(editOnClick, _grid)',
-        '__saveButtonPropsChanged(_saveButton, i18n, __isDirty)',
-        '__cancelButtonPropsChanged(_cancelButton, i18n)',
-        '__deleteButtonPropsChanged(_deleteButton, i18n, __isNew)',
-        '__newButtonPropsChanged(_newButton, i18n)',
+        '__saveButtonPropsChanged(_saveButton, __effectiveI18n, __isDirty)',
+        '__cancelButtonPropsChanged(_cancelButton, __effectiveI18n)',
+        '__deleteButtonPropsChanged(_deleteButton, __effectiveI18n, __isNew)',
+        '__newButtonPropsChanged(_newButton, __effectiveI18n)',
       ];
+    }
+
+    /**
+     * The object used to localize this component. To change the default
+     * localization, replace this with an object that provides all properties, or
+     * just the individual properties you want to change.
+     *
+     * The object has the following JSON structure and default values:
+     *
+     * ```
+     * {
+     *   newItem: 'New item',
+     *   editItem: 'Edit item',
+     *   saveItem: 'Save',
+     *   cancel: 'Cancel',
+     *   deleteItem: 'Delete...',
+     *   editLabel: 'Edit',
+     *   confirm: {
+     *     delete: {
+     *       title: 'Confirm delete',
+     *       content: 'Are you sure you want to delete the selected item? This action cannot be undone.',
+     *       button: {
+     *         confirm: 'Delete',
+     *         dismiss: 'Cancel'
+     *       }
+     *     },
+     *     cancel: {
+     *       title: 'Unsaved changes',
+     *       content: 'There are unsaved modifications to the item.',
+     *       button: {
+     *         confirm: 'Discard',
+     *         dismiss: 'Continue editing'
+     *       }
+     *     }
+     *   }
+     * }
+     * ```
+     * @return {!CrudI18n}
+     */
+    get i18n() {
+      return super.i18n;
+    }
+
+    set i18n(value) {
+      super.i18n = value;
     }
 
     constructor() {
@@ -429,29 +431,28 @@ export const CrudMixin = (superClass) =>
     /**
      * @param {HTMLElement | undefined} headerNode
      * @param {boolean} isNew
-     * @param {string} i18nNewItem
-     * @param {string} i18nEditItem
+     * @param {CrudI18n} effectiveI18n
      * @private
      */
-    __headerPropsChanged(headerNode, isNew, i18n) {
+    __headerPropsChanged(headerNode, isNew, effectiveI18n) {
       if (headerNode) {
-        headerNode.textContent = isNew ? i18n.newItem : i18n.editItem;
+        headerNode.textContent = isNew ? effectiveI18n.newItem : effectiveI18n.editItem;
       }
     }
 
     /**
-     * @param {CrudI18n} i18n
+     * @param {CrudI18n} effectiveI18n
      * @param {CrudGrid | Grid} grid
      * @private
      */
-    __i18nChanged(i18n, grid) {
+    __i18nChanged(effectiveI18n, grid) {
       if (!grid) {
         return;
       }
 
       afterNextRender(grid, () => {
         Array.from(grid.querySelectorAll('vaadin-crud-edit-column')).forEach((column) => {
-          column.ariaLabel = i18n.editLabel;
+          column.ariaLabel = effectiveI18n.editLabel;
         });
       });
     }
@@ -684,55 +685,55 @@ export const CrudMixin = (superClass) =>
 
     /**
      * @param {HTMLElement | undefined} saveButton
-     * @param {string} i18nLabel
+     * @param {CrudI18n} effectiveI18n
      * @param {boolean} isDirty
      * @private
      */
-    __saveButtonPropsChanged(saveButton, i18n, isDirty) {
+    __saveButtonPropsChanged(saveButton, effectiveI18n, isDirty) {
       if (saveButton) {
         saveButton.toggleAttribute('disabled', this.__isSaveBtnDisabled(isDirty));
 
         if (saveButton === this._saveButtonController.defaultNode) {
-          saveButton.textContent = i18n.saveItem;
+          saveButton.textContent = effectiveI18n.saveItem;
         }
       }
     }
 
     /**
      * @param {HTMLElement | undefined} deleteButton
-     * @param {string} i18nLabel
+     * @param {CrudI18n} effectiveI18n
      * @param {boolean} isNew
      * @private
      */
-    __deleteButtonPropsChanged(deleteButton, i18n, isNew) {
+    __deleteButtonPropsChanged(deleteButton, effectiveI18n, isNew) {
       if (deleteButton) {
         deleteButton.toggleAttribute('hidden', isNew);
 
         if (deleteButton === this._deleteButtonController.defaultNode) {
-          deleteButton.textContent = i18n.deleteItem;
+          deleteButton.textContent = effectiveI18n.deleteItem;
         }
       }
     }
 
     /**
      * @param {HTMLElement | undefined} cancelButton
-     * @param {string} i18nLabel
+     * @param {CrudI18n} effectiveI18n
      * @private
      */
-    __cancelButtonPropsChanged(cancelButton, i18n) {
+    __cancelButtonPropsChanged(cancelButton, effectiveI18n) {
       if (cancelButton && cancelButton === this._cancelButtonController.defaultNode) {
-        cancelButton.textContent = i18n.cancel;
+        cancelButton.textContent = effectiveI18n.cancel;
       }
     }
 
     /**
      * @param {HTMLElement | undefined} newButton
-     * @param {string} i18nNewItem
+     * @param {CrudI18n} effectiveI18n
      * @private
      */
-    __newButtonPropsChanged(newButton, i18n) {
+    __newButtonPropsChanged(newButton, effectiveI18n) {
       if (newButton && newButton === this._newButtonController.defaultNode) {
-        newButton.textContent = i18n.newItem;
+        newButton.textContent = effectiveI18n.newItem;
       }
     }
 
