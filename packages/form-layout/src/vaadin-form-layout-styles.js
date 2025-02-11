@@ -54,7 +54,8 @@ export const formLayoutStyles = css`
       var(--_column-width),
       calc((100% - var(--_max-total-gap-width)) / var(--_column-max-count))
     );
-    --_column-max-width: 1fr;
+    /* Using the same value as min-width for now. Should be conditionally changed based on the expandColumn value */
+    --_column-max-width: var(--_column-min-width);
 
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(var(--_column-min-width), var(--_column-max-width)));
