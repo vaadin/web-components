@@ -344,9 +344,9 @@ export const FormLayoutMixin = (superClass) =>
     /** @private */
     _updateCSSGridLayout() {
       const computedColumnWidths = getComputedStyle(this.$.layout).gridTemplateColumns.split(' ');
-
-      const columnCount = computedColumnWidths.filter((width) => width !== '0px').length;
-      this.$.layout.style.setProperty('--_column-count', columnCount);
+      const computedAutoColumnWidths = computedColumnWidths.filter((width) => width === '0px');
+      const computedColumnCount = computedColumnWidths.length - computedAutoColumnWidths.length;
+      this.$.layout.style.setProperty('--_js-computed-column-count', computedColumnCount);
 
       // let resetColumn = false;
       [...this.children]

@@ -50,25 +50,35 @@ export const formLayoutStyles = css`
     --_max-total-gap-width: calc((var(--_column-max-count) - 1) * var(--vaadin-form-layout-column-spacing));
     --_max-total-col-width: calc(var(--_column-max-count) * var(--_column-width));
 
+    --_column-min-width: var(--_column-width);
+    --_column-max-width: var(--_column-width);
+
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(var(--_column-min-width), var(--_column-max-width)));
+    /*
+      Auto-columns can be created when an item's colspan exceeds the available column count.
+      By setting auto-columns to 0, we exclude these columns from --_js-computed-column-count,
+      which is then used to cap the colspan.
+    */
+    grid-auto-columns: 0;
+    gap: var(--vaadin-form-layout-row-spacing) var(--vaadin-form-layout-column-spacing);
+    min-width: var(--_column-width);
+    max-width: calc(var(--_max-total-col-width) + var(--_max-total-gap-width));
+  }
+
+  :host([auto-responsive]) #layout ::slotted(*) {
+    /* The column count is calculated in JS using getComputedStyle(this.$.layout).gridTemplateColumns */
+    grid-column-end: span min(var(--_colspan), var(--_js-computed-column-count));
+  }
+
+  :host([auto-responsive][expand-columns]) #layout {
     --_column-min-width: max(
       var(--_column-width),
       calc((100% - var(--_max-total-gap-width)) / var(--_column-max-count))
     );
-    /* Using the same value as min-width for now. Should be conditionally changed based on the expandColumn value */
-    --_column-max-width: var(--_column-min-width);
+    --_column-max-width: 1fr;
 
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(var(--_column-min-width), var(--_column-max-width)));
-    grid-auto-columns: 0;
-    gap: var(--vaadin-form-layout-row-spacing) var(--vaadin-form-layout-column-spacing);
-  }
-
-  :host([auto-responsive]) #layout ::slotted(*) {
-    grid-column-end: span min(var(--_colspan), var(--_column-count));
-  }
-
-  :host([auto-responsive]:not([expand-columns])) #layout {
-    max-width: calc(var(--_max-total-col-width) + var(--_max-total-gap-width));
+    max-width: initial;
   }
 `;
 
