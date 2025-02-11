@@ -180,9 +180,7 @@ class DashboardWidget extends DashboardItemMixin(ElementMixin(ThemableMixin(Poly
       __i18n: {
         type: Object,
         value: () => {
-          const i18n = getDefaultI18n();
-          delete i18n.selectSection;
-          return i18n;
+          return getDefaultI18n();
         },
       },
 

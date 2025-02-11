@@ -11,6 +11,7 @@
 import './vaadin-dashboard-widget.js';
 import './vaadin-dashboard-section.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import type { I18nMixin, PartialI18n } from '@vaadin/component-base/src/i18n-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin';
 import { DashboardLayoutMixin } from './vaadin-dashboard-layout-mixin.js';
 
@@ -133,7 +134,7 @@ export interface DashboardCustomEventMap<TItem extends DashboardItem> {
 
 export type DashboardEventMap<TItem extends DashboardItem> = DashboardCustomEventMap<TItem> & HTMLElementEventMap;
 
-export interface DashboardI18n {
+export type DashboardI18n = PartialI18n<{
   selectWidget: string;
   selectSection: string;
   remove: string;
@@ -147,7 +148,7 @@ export interface DashboardI18n {
   moveApply: string;
   moveForward: string;
   moveBackward: string;
-}
+}>;
 
 /**
  * A responsive, grid-based dashboard layout component
@@ -217,7 +218,7 @@ export interface DashboardI18n {
  * @fires {CustomEvent} dashboard-item-resize-mode-changed - Fired when an item resize mode changed
  */
 declare class Dashboard<TItem extends DashboardItem = DashboardItem> extends DashboardLayoutMixin(
-  ElementMixin(ThemableMixin(HTMLElement)),
+  I18nMixin({} as DashboardI18n, ElementMixin(ThemableMixin(HTMLElement))),
 ) {
   /**
    * An array containing the items of the dashboard
@@ -243,10 +244,9 @@ declare class Dashboard<TItem extends DashboardItem = DashboardItem> extends Das
   editable: boolean;
 
   /**
-   * The object used to localize this component.
-   *
-   * To change the default localization, replace the entire
-   * `i18n` object with a custom one.
+   * The object used to localize this component. To change the default
+   * localization, replace this with an object that provides all properties, or
+   * just the individual properties you want to change.
    *
    * The object has the following structure and default values:
    * ```

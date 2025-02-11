@@ -1,7 +1,9 @@
 import type { ElementMixinClass } from '@vaadin/component-base/src/element-mixin.js';
+import type { I18nMixinClass } from '@vaadin/component-base/src/i18n-mixin.js';
 import type { DashboardLayoutMixinClass } from '../../src/vaadin-dashboard-layout-mixin.js';
 import type {
   Dashboard,
+  DashboardI18n,
   DashboardItem,
   DashboardItemMovedEvent,
   DashboardItemMoveModeChangedEvent,
@@ -32,25 +34,26 @@ assertType<{ items: DashboardItem[]; title?: string }>(
 );
 
 assertType<ElementMixinClass>(genericDashboard);
+assertType<I18nMixinClass<DashboardI18n>>(genericDashboard);
 assertType<DashboardLayoutMixinClass>(genericDashboard);
 assertType<Array<DashboardItem | DashboardSectionItem<DashboardItem>> | null | undefined>(genericDashboard.items);
 assertType<boolean>(genericDashboard.editable);
 assertType<boolean>(genericDashboard.denseLayout);
 
 assertType<{
-  selectWidget: string;
-  selectSection: string;
-  remove: string;
-  resize: string;
-  move: string;
-  resizeApply: string;
-  resizeShrinkWidth: string;
-  resizeGrowWidth: string;
-  resizeShrinkHeight: string;
-  resizeGrowHeight: string;
-  moveApply: string;
-  moveForward: string;
-  moveBackward: string;
+  selectWidget?: string;
+  selectSection?: string;
+  remove?: string;
+  resize?: string;
+  move?: string;
+  resizeApply?: string;
+  resizeShrinkWidth?: string;
+  resizeGrowWidth?: string;
+  resizeShrinkHeight?: string;
+  resizeGrowHeight?: string;
+  moveApply?: string;
+  moveForward?: string;
+  moveBackward?: string;
 }>(genericDashboard.i18n);
 
 const narrowedDashboard = document.createElement('vaadin-dashboard') as unknown as Dashboard<TestDashboardItem>;
