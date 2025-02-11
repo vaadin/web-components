@@ -76,7 +76,7 @@ async function getBranchInfo(branch) {
         }
         branchInfo.releaseCommit = commit;
         branchInfo.currentVersion = version;
-        branchInfo.nextPatchVersion = determineNextPatchVersion(commit.commit.message);
+        branchInfo.nextPatchVersion = determineNextPatchVersion(version);
         return branchInfo;
       }
       branchInfo.commits.push(commit);
