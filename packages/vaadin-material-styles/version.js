@@ -19,6 +19,6 @@ class Material extends HTMLElement {
 
 defineCustomElement(Material);
 
-console.warn('Material theme is deprecated and will be removed in Vaadin 25.');
+console.warn('The Material theme is deprecated and will be removed in Vaadin 25.');
 
 export { Material };
