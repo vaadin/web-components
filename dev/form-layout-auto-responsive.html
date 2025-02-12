@@ -28,7 +28,7 @@
       import '@vaadin/form-layout';
       import '@vaadin/text-field';
       import '@vaadin/password-field';
-      import '@vaadin/vertical-layout';
+      import '@vaadin/horizontal-layout';
       import { render, html, LitElement } from 'lit';
       import { dialogRenderer } from '@vaadin/dialog/lit.js';
 
@@ -56,10 +56,10 @@
             </vaadin-form-layout>
 
             <div>
-              <h1>autoResponsive + maxColumns=2 inside HorizontalLayout</h1>
+              <h1>autoResponsive + maxColumns=2 + flex:1 inside HorizontalLayout</h1>
 
-              <vaadin-horizontal-layout>
-                <vaadin-form-layout auto-responsive max-columns="3">
+              <vaadin-horizontal-layout theme="spacing">
+                <vaadin-form-layout auto-responsive max-columns="2" style="flex: 1;">
                   <vaadin-text-field label="First name"></vaadin-text-field>
                   <vaadin-text-field label="Last name"></vaadin-text-field>
                   <vaadin-text-field label="Username" colspan="2"></vaadin-text-field>
@@ -67,7 +67,29 @@
                   <vaadin-password-field label="Confirm"></vaadin-password-field>
                 </vaadin-form-layout>
 
-                <vaadin-form-layout auto-responsive max-columns="3">
+                <vaadin-form-layout auto-responsive max-columns="2" style="flex: 1;">
+                  <vaadin-text-field label="First name"></vaadin-text-field>
+                  <vaadin-text-field label="Last name"></vaadin-text-field>
+                  <vaadin-text-field label="Username" colspan="2"></vaadin-text-field>
+                  <vaadin-password-field label="Password"></vaadin-password-field>
+                  <vaadin-password-field label="Confirm"></vaadin-password-field>
+                </vaadin-form-layout>
+              </vaadin-horizontal-layout>
+            </div>
+
+            <div>
+              <h1>autoResponsive + maxColumns=2 + expandColumns + flex:1 inside HorizontalLayout</h1>
+
+              <vaadin-horizontal-layout theme="spacing">
+                <vaadin-form-layout auto-responsive max-columns="2" expand-columns style="flex: 1;">
+                  <vaadin-text-field label="First name"></vaadin-text-field>
+                  <vaadin-text-field label="Last name"></vaadin-text-field>
+                  <vaadin-text-field label="Username" colspan="2"></vaadin-text-field>
+                  <vaadin-password-field label="Password"></vaadin-password-field>
+                  <vaadin-password-field label="Confirm"></vaadin-password-field>
+                </vaadin-form-layout>
+
+                <vaadin-form-layout auto-responsive max-columns="2" expand-columns style="flex: 1;">
                   <vaadin-text-field label="First name"></vaadin-text-field>
                   <vaadin-text-field label="Last name"></vaadin-text-field>
                   <vaadin-text-field label="Username" colspan="2"></vaadin-text-field>
