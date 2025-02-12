@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -7,16 +7,7 @@
     <title>Form Layout</title>
     <script type="module" src="./common.js"></script>
 
-    <script type="module">
-      import '@vaadin/form-layout/vaadin-form-layout.js';
-      import '@vaadin/form-layout/vaadin-form-item.js';
-      import '@vaadin/text-field';
-      import '@vaadin/password-field';
-      import '@vaadin/horizontal-layout';
-    </script>
-
     <style>
-
       h1 {
         width: 100%;
         margin-top: 2em;
@@ -29,191 +20,168 @@
   </head>
 
   <body>
-    <h1>autoResponsive + maxColumns=2</h1>
+    <examples-view></examples-view>
 
-    <vaadin-form-layout auto-responsive max-columns="2">
-      <vaadin-text-field label="First name"></vaadin-text-field>
-      <vaadin-text-field label="Last name"></vaadin-text-field>
-      <vaadin-text-field label="Username" colspan="2"></vaadin-text-field>
-      <vaadin-password-field label="Password"></vaadin-password-field>
-      <vaadin-password-field label="Confirm"></vaadin-password-field>
-    </vaadin-form-layout>
+    <script type="module">
+      import '@vaadin/dialog';
+      import '@vaadin/button';
+      import '@vaadin/form-layout';
+      import '@vaadin/text-field';
+      import '@vaadin/password-field';
+      import '@vaadin/vertical-layout';
+      import { render, html, LitElement } from 'lit';
+      import { dialogRenderer } from '@vaadin/dialog/lit.js';
 
-    <h1>autoResponsive + maxColumns=2 + expandColumns</h1>
+      class ExamplesView extends LitElement {
+        render() {
+          return html`
+            <h1>autoResponsive + maxColumns=2</h1>
 
-    <vaadin-form-layout auto-responsive max-columns="2" expand-columns>
-      <vaadin-text-field label="First name"></vaadin-text-field>
-      <vaadin-text-field label="Last name"></vaadin-text-field>
-      <vaadin-text-field label="Username" colspan="2"></vaadin-text-field>
-      <vaadin-password-field label="Password"></vaadin-password-field>
-      <vaadin-password-field label="Confirm"></vaadin-password-field>
-    </vaadin-form-layout>
+            <vaadin-form-layout auto-responsive max-columns="2">
+              <vaadin-text-field label="First name"></vaadin-text-field>
+              <vaadin-text-field label="Last name"></vaadin-text-field>
+              <vaadin-text-field label="Username" colspan="2"></vaadin-text-field>
+              <vaadin-password-field label="Password"></vaadin-password-field>
+              <vaadin-password-field label="Confirm"></vaadin-password-field>
+            </vaadin-form-layout>
 
-    <h1>autoResponsive + maxColumns=2 inside HorizontalLayout</h1>
+            <h1>autoResponsive + maxColumns=2 + expandColumns</h1>
 
-    <vaadin-horizontal-layout>
-      <vaadin-form-layout>
-        <vaadin-text-field label="First name"></vaadin-text-field>
-        <vaadin-text-field label="Last name"></vaadin-text-field>
-      </vaadin-form-layout>
+            <vaadin-form-layout auto-responsive max-columns="2" expand-columns>
+              <vaadin-text-field label="First name"></vaadin-text-field>
+              <vaadin-text-field label="Last name"></vaadin-text-field>
+              <vaadin-text-field label="Username" colspan="2"></vaadin-text-field>
+              <vaadin-password-field label="Password"></vaadin-password-field>
+              <vaadin-password-field label="Confirm"></vaadin-password-field>
+            </vaadin-form-layout>
 
-      <vaadin-form-layout>
-        <vaadin-text-field label="First name"></vaadin-text-field>
-        <vaadin-text-field label="Last name"></vaadin-text-field>
-      </vaadin-form-layout>
-    </vaadin-horizontal-layout>
+            <div>
+              <h1>autoResponsive + maxColumns=2 inside HorizontalLayout</h1>
 
+              <vaadin-horizontal-layout>
+                <vaadin-form-layout auto-responsive max-columns="3">
+                  <vaadin-text-field label="First name"></vaadin-text-field>
+                  <vaadin-text-field label="Last name"></vaadin-text-field>
+                  <vaadin-text-field label="Username" colspan="2"></vaadin-text-field>
+                  <vaadin-password-field label="Password"></vaadin-password-field>
+                  <vaadin-password-field label="Confirm"></vaadin-password-field>
+                </vaadin-form-layout>
 
-    <!-- <h1>autoResponsive + explicit rows</h1>
+                <vaadin-form-layout auto-responsive max-columns="3">
+                  <vaadin-text-field label="First name"></vaadin-text-field>
+                  <vaadin-text-field label="Last name"></vaadin-text-field>
+                  <vaadin-text-field label="Username" colspan="2"></vaadin-text-field>
+                  <vaadin-password-field label="Password"></vaadin-password-field>
+                  <vaadin-password-field label="Confirm"></vaadin-password-field>
+                </vaadin-form-layout>
+              </vaadin-horizontal-layout>
+            </div>
 
-    <vaadin-form-layout auto-responsive>
+            <div>
+              <h1>autoResponsive + maxColumns=2 inside Dialog</h1>
 
-      <vaadin-form-row>
+              <vaadin-dialog
+                id="dialog-0"
+                ${dialogRenderer((dialog) => html`
+                  <vaadin-form-layout auto-responsive max-columns="2">
+                    <vaadin-text-field label="First name"></vaadin-text-field>
+                    <vaadin-text-field label="Last name"></vaadin-text-field>
+                    <vaadin-text-field label="Username" colspan="2"></vaadin-text-field>
+                    <vaadin-password-field label="Password"></vaadin-password-field>
+                    <vaadin-password-field label="Confirm"></vaadin-password-field>
+                  </vaadin-form-layout>
+                `)}
+              ></vaadin-dialog>
 
-        <vaadin-form-item>
-          <label slot="label">First name</label>
-          <vaadin-text-field></vaadin-text-field>
-        </vaadin-form-item>
+              <vaadin-button
+                @click="${() => {
+                  this.shadowRoot.querySelector('#dialog-0').opened = true
+                }}"
+              >
+                Open
+              </vaadin-button>
+            </div>
 
-        <vaadin-form-item>
-          <label slot="label">Last name</label>
-          <vaadin-text-field></vaadin-text-field>
-        </vaadin-form-item>
+            <div>
+              <h1>autoResponsive + maxColumns=2 + expandColumns inside Dialog</h1>
 
-      </vaadin-form-row>
+              <vaadin-dialog
+                id="dialog-1"
+                ${dialogRenderer((dialog) => html`
+                  <vaadin-form-layout auto-responsive max-columns="2" expand-columns>
+                    <vaadin-text-field label="First name"></vaadin-text-field>
+                    <vaadin-text-field label="Last name"></vaadin-text-field>
+                    <vaadin-text-field label="Username" colspan="2"></vaadin-text-field>
+                    <vaadin-password-field label="Password"></vaadin-password-field>
+                    <vaadin-password-field label="Confirm"></vaadin-password-field>
+                  </vaadin-form-layout>
+                `)}
+              ></vaadin-dialog>
 
-      <vaadin-form-item colspan="2">
-        <label slot="label">Username</label>
-        <vaadin-text-field required></vaadin-text-field>
-      </vaadin-form-item>
+              <vaadin-button
+                @click="${() => {
+                  this.shadowRoot.querySelector('#dialog-1').opened = true
+                }}"
+              >
+                Open
+              </vaadin-button>
+            </div>
 
-      <vaadin-form-row>
+            <div>
+              <h1>autoResponsive + maxColumns=2 inside Dialog 80%</h1>
 
-        <vaadin-form-item>
-          <label slot="label">Password</label>
-          <vaadin-password-field></vaadin-password-field>
-        </vaadin-form-item>
+              <vaadin-dialog
+                id="dialog-2"
+                width="80%"
+                ${dialogRenderer((dialog) => html`
+                  <vaadin-form-layout auto-responsive max-columns="2">
+                    <vaadin-text-field label="First name"></vaadin-text-field>
+                    <vaadin-text-field label="Last name"></vaadin-text-field>
+                    <vaadin-text-field label="Username" colspan="2"></vaadin-text-field>
+                    <vaadin-password-field label="Password"></vaadin-password-field>
+                    <vaadin-password-field label="Confirm"></vaadin-password-field>
+                  </vaadin-form-layout>
+                `)}
+              ></vaadin-dialog>
 
-        <vaadin-form-item>
-          <label slot="label">Confirm</label>
-          <vaadin-password-field></vaadin-password-field>
-        </vaadin-form-item>
+              <vaadin-button
+                @click="${() => {
+                  this.shadowRoot.querySelector('#dialog-2').opened = true
+                }}"
+              >
+                Open
+              </vaadin-button>
+            </div>
 
-      </vaadin-form-row>
+            <div>
+              <h1>autoResponsive + maxColumns=2 + expandColumns inside Dialog 80%</h1>
 
-    </vaadin-form-layout>
+              <vaadin-dialog
+                id="dialog-3"
+                width="80%"
+                ${dialogRenderer((dialog) => html`
+                  <vaadin-form-layout auto-responsive max-columns="2" expand-columns>
+                    <vaadin-text-field label="First name"></vaadin-text-field>
+                    <vaadin-text-field label="Last name"></vaadin-text-field>
+                    <vaadin-text-field label="Username" colspan="2"></vaadin-text-field>
+                    <vaadin-password-field label="Password"></vaadin-password-field>
+                    <vaadin-password-field label="Confirm"></vaadin-password-field>
+                  </vaadin-form-layout>
+                `)}
+              ></vaadin-dialog>
 
-
-    <h1>autoResponsive + explicit rows + expandColumns=never</h1>
-
-    <vaadin-form-layout auto-responsive expand-columns="never">
-
-      <vaadin-form-row>
-
-        <vaadin-form-item>
-          <label slot="label">First name</label>
-          <vaadin-text-field></vaadin-text-field>
-        </vaadin-form-item>
-
-        <vaadin-form-item>
-          <label slot="label">Last name</label>
-          <vaadin-text-field></vaadin-text-field>
-        </vaadin-form-item>
-
-      </vaadin-form-row>
-
-      <vaadin-form-item colspan="2">
-        <label slot="label">Username</label>
-        <vaadin-text-field required></vaadin-text-field>
-      </vaadin-form-item>
-
-      <vaadin-form-row>
-
-        <vaadin-form-item>
-          <label slot="label">Password</label>
-          <vaadin-password-field></vaadin-password-field>
-        </vaadin-form-item>
-
-        <vaadin-form-item>
-          <label slot="label">Confirm</label>
-          <vaadin-password-field></vaadin-password-field>
-        </vaadin-form-item>
-
-      </vaadin-form-row>
-
-    </vaadin-form-layout> -->
-
-
-    <!-- <h1>autoResponsive + autoRows</h1>
-
-    <vaadin-form-layout auto-responsive auto-rows>
-
-      <vaadin-form-item>
-        <label slot="label">First name</label>
-        <vaadin-text-field></vaadin-text-field>
-      </vaadin-form-item>
-
-      <vaadin-form-item>
-        <label slot="label">Last name</label>
-        <vaadin-text-field></vaadin-text-field>
-      </vaadin-form-item>
-
-      <vaadin-form-item colspan="2">
-        <label slot="label">Username</label>
-        <vaadin-text-field required></vaadin-text-field>
-      </vaadin-form-item>
-
-      <vaadin-form-item>
-        <label slot="label">Password</label>
-        <vaadin-password-field></vaadin-password-field>
-      </vaadin-form-item>
-
-      <vaadin-form-item>
-        <label slot="label">Confirm</label>
-        <vaadin-password-field></vaadin-password-field>
-      </vaadin-form-item>
-
-    </vaadin-form-layout> -->
-
-
-    <!-- <h1>autoResponsive + labelsAside</h1>
-
-    <vaadin-form-layout auto-responsive labels-aside>
-
-      <vaadin-form-row>
-
-        <vaadin-form-item>
-          <label slot="label">First name</label>
-          <vaadin-text-field></vaadin-text-field>
-        </vaadin-form-item>
-
-        <vaadin-form-item>
-          <label slot="label">Last name</label>
-          <vaadin-text-field></vaadin-text-field>
-        </vaadin-form-item>
-
-      </vaadin-form-row>
-
-      <vaadin-form-item colspan="2">
-        <label slot="label">Username</label>
-        <vaadin-text-field required></vaadin-text-field>
-      </vaadin-form-item>
-
-      <vaadin-form-row>
-
-        <vaadin-form-item>
-          <label slot="label">Password</label>
-          <vaadin-password-field></vaadin-password-field>
-        </vaadin-form-item>
-
-        <vaadin-form-item>
-          <label slot="label">Confirm</label>
-          <vaadin-password-field></vaadin-password-field>
-        </vaadin-form-item>
-
-      </vaadin-form-row>
-
-    </vaadin-form-layout>
- -->
+              <vaadin-button
+                @click="${() => {
+                  this.shadowRoot.querySelector('#dialog-3').opened = true
+                }}"
+              >
+                Open
+              </vaadin-button>
+            </div>
+          `;
+        }
+      }
+      customElements.define('examples-view', ExamplesView)
+    </script>
   </body>
 </html>

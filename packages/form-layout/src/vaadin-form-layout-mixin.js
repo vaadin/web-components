@@ -73,7 +73,7 @@ export const FormLayoutMixin = (superClass) =>
           value() {
             return [
               { minWidth: 0, columns: 1, labelsPosition: 'top' },
-              { minWidth: '20em', columns: 1 },
+              { minWidth: '20em', columns: 2 },
               { minWidth: '40em', columns: 2 },
             ];
           },
