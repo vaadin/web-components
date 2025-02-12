@@ -61,9 +61,6 @@ export const formLayoutStyles = css`
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(var(--_column-min-width), var(--_column-max-width)));
     gap: var(--vaadin-form-layout-row-spacing) var(--vaadin-form-layout-column-spacing);
-    width: calc(var(--_max-total-col-width) + var(--_max-total-gap-width));
-    flex-grow: 0;
-    flex-shrink: 1;
 
     /*
       Auto-columns can be created when an item's colspan exceeds the available column count.
@@ -71,6 +68,21 @@ export const formLayoutStyles = css`
       which is then used to cap the colspan.
     */
     grid-auto-columns: 0;
+
+    /*
+      A max width needs to be set to prevent the layout from expanding to more columns than
+      allowed by the --_column-max-count property.
+
+      1. "width" + "flex-grow" are used instead of "max-width" to allow the layout to properly
+      shrink to its minimum width in <vaadin-horizontal-layout>.
+
+      2. "width" is used instead of "flex-basis" to enable the layout to expand to the maximum
+      number of columns in <vaadin-overlay> which by default creates a stacking context without
+      an explicit width.
+    */
+    width: calc(var(--_max-total-col-width) + var(--_max-total-gap-width));
+    flex-grow: 0;
+    flex-shrink: 1;
 
     /*
       Firefox requires min-width on both :host and #layout to allow the layout
@@ -95,6 +107,9 @@ export const formLayoutStyles = css`
   }
 
   :host([auto-responsive][expand-columns]) #layout {
+    /*
+      Allow the layout to grow beyond the width of the maximum number of columns and gaps.
+    */
     flex-grow: 1;
   }
 `;
