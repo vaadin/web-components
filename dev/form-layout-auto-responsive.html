@@ -12,6 +12,7 @@
       import '@vaadin/form-layout/vaadin-form-item.js';
       import '@vaadin/text-field';
       import '@vaadin/password-field';
+      import '@vaadin/horizontal-layout';
     </script>
 
     <style>
@@ -47,6 +48,20 @@
       <vaadin-password-field label="Password"></vaadin-password-field>
       <vaadin-password-field label="Confirm"></vaadin-password-field>
     </vaadin-form-layout>
+
+    <h1>autoResponsive + maxColumns=2 inside HorizontalLayout</h1>
+
+    <vaadin-horizontal-layout>
+      <vaadin-form-layout>
+        <vaadin-text-field label="First name"></vaadin-text-field>
+        <vaadin-text-field label="Last name"></vaadin-text-field>
+      </vaadin-form-layout>
+
+      <vaadin-form-layout>
+        <vaadin-text-field label="First name"></vaadin-text-field>
+        <vaadin-text-field label="Last name"></vaadin-text-field>
+      </vaadin-form-layout>
+    </vaadin-horizontal-layout>
 
 
     <!-- <h1>autoResponsive + explicit rows</h1>
