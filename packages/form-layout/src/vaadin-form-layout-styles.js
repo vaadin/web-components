@@ -59,7 +59,7 @@ export const formLayoutStyles = css`
     --_column-max-width: var(--_column-width);
 
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(var(--_column-min-width), var(--_column-max-width)));
+    grid-template-columns: repeat(auto-fit, minmax(var(--_column-min-width), var(--_column-max-width)));
     gap: var(--vaadin-form-layout-row-spacing) var(--vaadin-form-layout-column-spacing);
 
     /*
