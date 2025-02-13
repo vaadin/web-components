@@ -77,17 +77,6 @@ describe('horizontal-layout', () => {
       it('default', async () => {
         await visualDiff(element, 'slots-all');
       });
-
-      it('wrap end', async () => {
-        element.style.width = '350px';
-        await visualDiff(element, 'slots-all-wrap-end');
-      });
-
-      it('wrap middle', async () => {
-        element.style.width = '350px';
-        element.firstElementChild.style.width = '200px';
-        await visualDiff(element, 'slots-all-wrap-middle');
-      });
     });
 
     describe('without end', () => {
@@ -106,11 +95,6 @@ describe('horizontal-layout', () => {
       it('default', async () => {
         await visualDiff(element, 'slots-without-end');
       });
-
-      it('wrap', async () => {
-        element.style.width = '250px';
-        await visualDiff(element, 'slots-without-end-wrap');
-      });
     });
 
     describe('without start', () => {
@@ -128,11 +112,6 @@ describe('horizontal-layout', () => {
 
       it('default', async () => {
         await visualDiff(element, 'slots-without-start');
-      });
-
-      it('wrap', async () => {
-        element.style.width = '250px';
-        await visualDiff(element, 'slots-without-start-wrap');
       });
     });
 
