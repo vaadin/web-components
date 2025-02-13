@@ -214,6 +214,10 @@ export const FormLayoutMixin = (superClass) =>
 
     /** @private */
     _selectResponsiveStep() {
+      if (this.autoResponsive) {
+        return;
+      }
+
       // Iterate through responsiveSteps and choose the step
       let selectedStep;
       const tmpStyleProp = 'background-position';
@@ -343,17 +347,18 @@ export const FormLayoutMixin = (superClass) =>
 
     /** @private */
     _updateCSSGridLayout() {
-      const computedColumnWidths = getComputedStyle(this.$.layout).gridTemplateColumns.split(' ');
-      const computedAutoColumnWidths = computedColumnWidths.filter((width) => width === '0px');
-      const computedColumnCount = computedColumnWidths.length - computedAutoColumnWidths.length;
-      this.$.layout.style.setProperty('--_js-computed-column-count', computedColumnCount);
+      const { gridTemplateColumns } = getComputedStyle(this.$.layout);
 
-      // let resetColumn = false;
+      // Calculate the number of rendered columns, excluding CSS grid auto columns (0px)
+      const renderedColumnCount = gridTemplateColumns.split(' ').filter((width) => width !== '0px').length;
+      this.$.layout.style.setProperty('--_rendered-column-count', renderedColumnCount);
+
+      let resetColumn = false;
       [...this.children]
         .filter((child) => getComputedStyle(child).display !== 'none' || child.localName === 'br')
         .forEach((child) => {
           if (child.localName === 'br') {
-            // resetColumn = true;
+            resetColumn = true;
             return;
           }
 
@@ -362,12 +367,12 @@ export const FormLayoutMixin = (superClass) =>
             child.style.setProperty('--_colspan', colspan);
           }
 
-          // if (resetColumn) {
-          //   child.style.setProperty('--_grid-colstart', 1);
-          //   resetColumn = false;
-          // } else {
-          //   child.style.removeProperty('--_grid-colstart');
-          // }
+          if (resetColumn) {
+            child.style.setProperty('--_colstart', 1);
+            resetColumn = false;
+          } else {
+            child.style.removeProperty('--_colstart');
+          }
         });
     }
 

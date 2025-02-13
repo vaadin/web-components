@@ -58,13 +58,19 @@ export const formLayoutStyles = css`
     --_column-min-width: var(--_column-width);
     --_column-max-width: var(--_column-width);
 
+    /*
+      The column count is calculated in JS using getComputedStyle(this.$.layout).gridTemplateColumns
+      after the layout is rendered.
+    */
+    --_rendered-column-count: 1;
+
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(var(--_column-min-width), var(--_column-max-width)));
     gap: var(--vaadin-form-layout-row-spacing) var(--vaadin-form-layout-column-spacing);
 
     /*
-      Auto-columns can be created when an item's colspan exceeds the available column count.
-      By setting auto-columns to 0, we exclude these columns from --_js-computed-column-count,
+      Auto-columns can be created when an item's colspan exceeds the rendered column count.
+      By setting auto-columns to 0, we exclude these columns from --_rendered-column-count,
       which is then used to cap the colspan.
     */
     grid-auto-columns: 0;
@@ -92,10 +98,7 @@ export const formLayoutStyles = css`
   }
 
   :host([auto-responsive]) #layout ::slotted(*) {
-    /*
-      The column count is calculated in JS using getComputedStyle(this.$.layout).gridTemplateColumns
-    */
-    grid-column-end: span min(var(--_colspan), var(--_js-computed-column-count));
+    grid-column: var(--_colstart, auto) / span min(var(--_colspan), var(--_rendered-column-count));
   }
 
   :host([auto-responsive][expand-columns]) #layout {
@@ -120,7 +123,7 @@ export const formLayoutStyles = css`
     --_column-max-width: 1fr;
 
     /*
-      Allow the layout to take full available width of the parent element.
+      Allow the layout to take up full available width of the parent element.
     */
     flex-grow: 1;
   }
