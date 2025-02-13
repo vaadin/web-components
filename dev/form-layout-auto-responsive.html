@@ -1,43 +1,42 @@
 <!doctype html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Form Layout</title>
+    <script type="module" src="./common.js"></script>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Form Layout</title>
-  <script type="module" src="./common.js"></script>
+    <style>
+      h1 {
+        width: 100%;
+        margin-top: 2em;
+        margin-bottom: 0.5em;
 
-  <style>
-    h1 {
-      width: 100%;
-      margin-top: 2em;
-      margin-bottom: 0.5em;
-
-      &:first-child {
-        margin-top: 0;
+        &:first-child {
+          margin-top: 0;
+        }
       }
-    }
-  </style>
-</head>
+    </style>
+  </head>
 
-<body>
-  <examples-view></examples-view>
+  <body>
+    <examples-view></examples-view>
 
-  <script type="module">
-    import '@vaadin/dialog';
-    import '@vaadin/button';
-    import '@vaadin/form-layout';
-    import '@vaadin/form-layout/vaadin-form-item.js';
-    import '@vaadin/text-field';
-    import '@vaadin/password-field';
-    import '@vaadin/horizontal-layout';
-    import {render, html, LitElement} from 'lit';
-    import {dialogRenderer} from '@vaadin/dialog/lit.js';
+    <script type="module">
+      import '@vaadin/dialog';
+      import '@vaadin/button';
+      import '@vaadin/form-layout';
+      import '@vaadin/form-layout/vaadin-form-item.js';
+      import '@vaadin/text-field';
+      import '@vaadin/password-field';
+      import '@vaadin/horizontal-layout';
+      import { render, html, LitElement } from 'lit';
+      import { dialogRenderer } from '@vaadin/dialog/lit.js';
 
-    class ExamplesView extends LitElement {
-      render() {
-        return html`
+      class ExamplesView extends LitElement {
+        render() {
+          return html`
             <h1>autoResponsive</h1>
 
             <vaadin-form-layout auto-responsive max-columns="2">
@@ -125,7 +124,7 @@
               <vaadin-dialog
                 id="dialog-0"
                 ${dialogRenderer(
-          (dialog) => html`
+                  (dialog) => html`
                     <vaadin-form-layout auto-responsive max-columns="2">
                       <vaadin-text-field label="First name"></vaadin-text-field>
                       <vaadin-text-field label="Last name"></vaadin-text-field>
@@ -134,13 +133,13 @@
                       <vaadin-password-field label="Confirm"></vaadin-password-field>
                     </vaadin-form-layout>
                   `,
-        )}
+                )}
               ></vaadin-dialog>
 
               <vaadin-button
                 @click="${() => {
-            this.shadowRoot.querySelector('#dialog-0').opened = true;
-          }}"
+                  this.shadowRoot.querySelector('#dialog-0').opened = true;
+                }}"
               >
                 Open
               </vaadin-button>
@@ -152,7 +151,7 @@
               <vaadin-dialog
                 id="dialog-1"
                 ${dialogRenderer(
-            (dialog) => html`
+                  (dialog) => html`
                     <vaadin-form-layout auto-responsive max-columns="2" expand-columns>
                       <vaadin-text-field label="First name"></vaadin-text-field>
                       <vaadin-text-field label="Last name"></vaadin-text-field>
@@ -161,13 +160,13 @@
                       <vaadin-password-field label="Confirm"></vaadin-password-field>
                     </vaadin-form-layout>
                   `,
-          )}
+                )}
               ></vaadin-dialog>
 
               <vaadin-button
                 @click="${() => {
-            this.shadowRoot.querySelector('#dialog-1').opened = true;
-          }}"
+                  this.shadowRoot.querySelector('#dialog-1').opened = true;
+                }}"
               >
                 Open
               </vaadin-button>
@@ -180,7 +179,7 @@
                 id="dialog-2"
                 width="80%"
                 ${dialogRenderer(
-            (dialog) => html`
+                  (dialog) => html`
                     <vaadin-form-layout auto-responsive max-columns="2">
                       <vaadin-text-field label="First name"></vaadin-text-field>
                       <vaadin-text-field label="Last name"></vaadin-text-field>
@@ -189,13 +188,13 @@
                       <vaadin-password-field label="Confirm"></vaadin-password-field>
                     </vaadin-form-layout>
                   `,
-          )}
+                )}
               ></vaadin-dialog>
 
               <vaadin-button
                 @click="${() => {
-            this.shadowRoot.querySelector('#dialog-2').opened = true;
-          }}"
+                  this.shadowRoot.querySelector('#dialog-2').opened = true;
+                }}"
               >
                 Open
               </vaadin-button>
@@ -208,7 +207,7 @@
                 id="dialog-3"
                 width="80%"
                 ${dialogRenderer(
-            (dialog) => html`
+                  (dialog) => html`
                     <vaadin-form-layout auto-responsive max-columns="2" expand-columns>
                       <vaadin-text-field label="First name"></vaadin-text-field>
                       <vaadin-text-field label="Last name"></vaadin-text-field>
@@ -217,13 +216,13 @@
                       <vaadin-password-field label="Confirm"></vaadin-password-field>
                     </vaadin-form-layout>
                   `,
-          )}
+                )}
               ></vaadin-dialog>
 
               <vaadin-button
                 @click="${() => {
-            this.shadowRoot.querySelector('#dialog-3').opened = true;
-          }}"
+                  this.shadowRoot.querySelector('#dialog-3').opened = true;
+                }}"
               >
                 Open
               </vaadin-button>
@@ -235,7 +234,7 @@
               <vaadin-dialog
                 id="dialog-4"
                 ${dialogRenderer(
-            (dialog) => html`
+                  (dialog) => html`
                     <vaadin-horizontal-layout theme="spacing">
                       <vaadin-form-layout auto-responsive max-columns="2" style="flex: 1;">
                         <vaadin-text-field label="First name"></vaadin-text-field>
@@ -254,22 +253,21 @@
                       </vaadin-form-layout>
                     </vaadin-horizontal-layout>
                   `,
-          )}
+                )}
               ></vaadin-dialog>
 
               <vaadin-button
                 @click="${() => {
-            this.shadowRoot.querySelector('#dialog-4').opened = true;
-          }}"
+                  this.shadowRoot.querySelector('#dialog-4').opened = true;
+                }}"
               >
                 Open
               </vaadin-button>
             </div>
           `;
+        }
       }
-    }
-    customElements.define('examples-view', ExamplesView);
-  </script>
-</body>
-
+      customElements.define('examples-view', ExamplesView);
+    </script>
+  </body>
 </html>
