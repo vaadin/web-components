@@ -57,6 +57,8 @@ export const formLayoutStyles = css`
 
     --_column-min-width: var(--_column-width);
     --_column-max-width: var(--_column-width);
+    --_colstart: auto;
+    --_colspan: 1;
 
     /*
       The column count is calculated in JS using getComputedStyle(this.$.layout).gridTemplateColumns
@@ -98,7 +100,7 @@ export const formLayoutStyles = css`
   }
 
   :host([auto-responsive]) #layout ::slotted(*) {
-    grid-column: var(--_colstart, auto) / span min(var(--_colspan), var(--_rendered-column-count));
+    grid-column: var(--_colstart) / span min(var(--_colspan), var(--_rendered-column-count));
   }
 
   :host([auto-responsive][expand-columns]) #layout {
