@@ -4,7 +4,6 @@ import sinon from 'sinon';
 import '@vaadin/text-field/vaadin-text-field.js';
 import '../vaadin-form-layout.js';
 import '../vaadin-form-item.js';
-import '@polymer/polymer/lib/elements/dom-repeat.js';
 
 function estimateEffectiveColumnCount(layout) {
   const offsets = [...layout.children]
@@ -92,17 +91,15 @@ describe('form layout', () => {
       expect(getComputedStyle(item.$.spacing).width).to.equal('8px');
     });
 
-    it('should not have default row-spacing', () => {
-      expect(getComputedStyle(item).getPropertyValue('--vaadin-form-layout-row-spacing').trim()).to.equal('0');
-      expect(parseFloat(getComputedStyle(item).marginTop)).to.equal(0);
-      expect(parseFloat(getComputedStyle(item).marginBottom)).to.equal(0);
+    it('should not have default form layout row spacing', () => {
+      expect(getComputedStyle(layout.$.layout).rowGap).to.equal('0px');
+      expect(getComputedStyle(item).marginTop).to.equal('0px');
+      expect(getComputedStyle(item).marginBottom).to.equal('0px');
     });
 
     it('should apply form layout row spacing', () => {
-      const spacing = 8;
-      item.style.setProperty('--vaadin-form-layout-row-spacing', `${spacing}px`);
-      expect(parseFloat(getComputedStyle(item).marginTop)).to.equal(spacing / 2);
-      expect(parseFloat(getComputedStyle(item).marginBottom)).to.equal(spacing / 2);
+      layout.style.setProperty('--vaadin-form-layout-row-spacing', '8px');
+      expect(getComputedStyle(layout.$.layout).rowGap).to.equal('8px');
     });
 
     it('should apply form item row spacing', () => {
@@ -114,48 +111,9 @@ describe('form layout', () => {
 
     it('should apply default column-spacing', async () => {
       // Override to not depend on the theme changes
-      layout.style.setProperty('--lumo-space-l', '2rem');
+      layout.style.setProperty('--lumo-space-l', '8px');
       await nextResize(layout);
-      expect(getParsedWidth(layout.firstElementChild).spacing).to.equal('1rem');
-      expect(getComputedStyle(layout.firstElementChild).getPropertyValue('margin-left')).to.equal('0px'); // Zero because it's first
-      expect(getComputedStyle(layout.firstElementChild).getPropertyValue('margin-right')).to.equal('16px'); // 0.5 * 2rem in px
-    });
-  });
-
-  describe('colspan', () => {
-    let layout;
-
-    beforeEach(() => {
-      layout = fixtureSync(`
-        <vaadin-form-layout responsive-steps='[{"columns": 3}]'>
-          <vaadin-text-field></vaadin-text-field>
-          <vaadin-text-field colspan="1"></vaadin-text-field>
-          <vaadin-text-field colspan="2"></vaadin-text-field>
-          <vaadin-text-field colspan="3"></vaadin-text-field>
-          <vaadin-text-field colspan="4"></vaadin-text-field>
-          <vaadin-text-field colspan="non-number"></vaadin-text-field>
-        </vaadin-form-layout>
-      `);
-    });
-
-    function estimateEffectiveColspan(el) {
-      return parseFloat(getParsedWidth(el).percentage) / (100 / 3);
-    }
-
-    it('should span children correctly', () => {
-      // Empty means 1
-      expect(estimateEffectiveColspan(layout.children[0])).to.be.closeTo(1, 0.1);
-
-      // Correct values
-      expect(estimateEffectiveColspan(layout.children[1])).to.be.closeTo(1, 0.1);
-      expect(estimateEffectiveColspan(layout.children[2])).to.be.closeTo(2, 0.1);
-      expect(estimateEffectiveColspan(layout.children[3])).to.be.closeTo(3, 0.1);
-
-      // If more then a number of columns, use number of columns
-      expect(estimateEffectiveColspan(layout.children[4])).to.be.closeTo(3, 0.1);
-
-      // Invalid means 1
-      expect(estimateEffectiveColspan(layout.children[5])).to.be.closeTo(1, 0.1);
+      expect(getComputedStyle(layout.$.layout).columnGap).to.equal('8px');
     });
   });
 
@@ -180,14 +138,6 @@ describe('form layout', () => {
           { minWidth: '20em', columns: 1 },
           { minWidth: '40em', columns: 2 },
         ]);
-      });
-
-      it('should assign width inline style on items', () => {
-        layout.responsiveSteps = [{ columns: 3 }];
-
-        const parsedWidth = getParsedWidth(layout.firstElementChild);
-        expect(parsedWidth.percentage).to.match(/%$/u);
-        expect(parseFloat(parsedWidth.percentage)).to.be.closeTo(33, 0.5);
       });
 
       it('should set label-position attribute to child form-item elements', () => {
@@ -492,35 +442,31 @@ describe('form layout', () => {
       await nextRender(container);
     });
 
-    function estimateEffectiveColspan(el) {
-      return parseFloat(getParsedWidth(el).percentage) / (100 / 2);
-    }
+    it('should update grid-column-end after updating a colspan attribute', async () => {
+      expect(getComputedStyle(items[0]).gridColumnEnd).to.equal('span 1');
 
-    it('should update layout after updating a colspan attribute', async () => {
-      expect(estimateEffectiveColspan(layout.children[0])).to.be.closeTo(1, 0.1);
-
-      layout.children[0].setAttribute('colspan', 2);
-      await nextRender(container);
-      expect(estimateEffectiveColspan(layout.children[0])).to.be.closeTo(2, 0.1);
+      items[0].setAttribute('colspan', 2);
+      await nextRender(layout);
+      expect(getComputedStyle(items[0]).gridColumnEnd).to.equal('span 2');
     });
 
-    it('should update layout after updating a data-colspan attribute', async () => {
-      expect(estimateEffectiveColspan(layout.children[0])).to.be.closeTo(1, 0.1);
+    it('should update grid-column-end after updating a data-colspan attribute', async () => {
+      expect(getComputedStyle(items[0]).gridColumnEnd).to.equal('span 1');
 
-      layout.children[0].setAttribute('data-colspan', 2);
-      await nextRender(container);
-      expect(estimateEffectiveColspan(layout.children[0])).to.be.closeTo(2, 0.1);
+      items[0].setAttribute('data-colspan', 2);
+      await nextRender(layout);
+      expect(getComputedStyle(items[0]).gridColumnEnd).to.equal('span 2');
     });
 
     it('should prefer colspan attribute over data-colspan when both are set', async () => {
-      layout.children[0].setAttribute('colspan', 2);
-      layout.children[0].setAttribute('data-colspan', 1);
-      await nextRender(container);
-      expect(estimateEffectiveColspan(layout.children[0])).to.be.closeTo(2, 0.1);
+      items[0].setAttribute('colspan', 2);
+      items[0].setAttribute('data-colspan', 1);
+      await nextRender(layout);
+      expect(getComputedStyle(items[0]).gridColumnEnd).to.equal('span 2');
     });
 
     it('should update style if hidden property of layout-item is changed and the element has not had style yet', async () => {
-      const itemWidth = layout.children[0].getBoundingClientRect().width;
+      const itemWidth = items[0].getBoundingClientRect().width;
       expect(itemWidth).to.be.above(0);
 
       const newFormItem = document.createElement('vaadin-form-item');
@@ -535,25 +481,21 @@ describe('form layout', () => {
       expect(unhiddenItemWidth).to.equal(itemWidth);
     });
 
-    it('should update layout after a new item is added', async () => {
-      const newFormItem = document.createElement('vaadin-form-item');
-      newFormItem.innerHTML = '<label slot="label">Field</label><input />';
-      layout.insertBefore(newFormItem, items[0]);
-      await nextRender(container);
-      expect(getComputedStyle(newFormItem).marginLeft).to.be.equal('0px');
+    it('should update grid-column-start after adding <br>', async () => {
+      const br = document.createElement('br');
+      layout.insertBefore(br, items[1]);
+      await nextRender(layout);
+      expect(getComputedStyle(items[1]).gridColumnStart).to.equal('1');
     });
 
-    it('should update layout after an item is removed', async () => {
-      const newFormItem = document.createElement('vaadin-form-item');
-      newFormItem.innerHTML = '<label slot="label">Field</label><input />';
-      layout.insertBefore(newFormItem, items[0]);
-      await nextRender(container);
+    it('should update grid-column-start after removing <br>', async () => {
+      const br = document.createElement('br');
+      layout.insertBefore(br, items[1]);
+      await nextRender(layout);
 
-      expect(getComputedStyle(items[0]).marginLeft).to.not.be.equal('0px');
-
-      newFormItem.remove();
-      await nextRender(container);
-      expect(getComputedStyle(items[0]).marginLeft).to.be.equal('0px');
+      br.remove();
+      await nextRender(layout);
+      expect(getComputedStyle(items[1]).gridColumnStart).to.equal('auto');
     });
 
     it('should not update layout when setting hidden to true', async () => {

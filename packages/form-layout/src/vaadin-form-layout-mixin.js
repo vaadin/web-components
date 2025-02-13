@@ -88,6 +88,7 @@ export const FormLayoutMixin = (superClass) =>
         _columnCount: {
           type: Number,
           sync: true,
+          observer: '__columnCountChanged',
         },
 
         /**
@@ -97,12 +98,9 @@ export const FormLayoutMixin = (superClass) =>
         _labelsOnTop: {
           type: Boolean,
           sync: true,
+          observer: '__labelsOnTopChanged',
         },
       };
-    }
-
-    static get observers() {
-      return ['_invokeUpdateLayout(_columnCount, _labelsOnTop)'];
     }
 
     /** @protected */
@@ -215,7 +213,12 @@ export const FormLayoutMixin = (superClass) =>
     }
 
     /** @private */
-    _invokeUpdateLayout() {
+    __columnCountChanged(columnCount) {
+      this.$.layout.style.setProperty('--_grid-cols', columnCount);
+    }
+
+    /** @private */
+    __labelsOnTopChanged() {
       this._updateLayout();
     }
 
@@ -229,74 +232,14 @@ export const FormLayoutMixin = (superClass) =>
         return;
       }
 
-      /*
-        The item width formula:
-
-            itemWidth = colspan / columnCount * 100% - columnSpacing
-
-        We have to subtract columnSpacing, because the column spacing space is taken
-        by item margins of 1/2 * spacing on both sides
-      */
-
-      const style = getComputedStyle(this);
-      const columnSpacing = style.getPropertyValue('--vaadin-form-layout-column-spacing');
-
-      const direction = style.direction;
-      const marginStartProp = `margin-${direction === 'ltr' ? 'left' : 'right'}`;
-      const marginEndProp = `margin-${direction === 'ltr' ? 'right' : 'left'}`;
-
-      const containerWidth = this.offsetWidth;
-
-      let col = 0;
-      Array.from(this.children)
-        .filter((child) => child.localName === 'br' || getComputedStyle(child).display !== 'none')
-        .forEach((child, index, children) => {
+      let resetColumn = false;
+      [...this.children]
+        .filter((child) => getComputedStyle(child).display !== 'none' || child.localName === 'br')
+        .forEach((child) => {
           if (child.localName === 'br') {
-            // Reset column count on line break
-            col = 0;
+            resetColumn = true;
             return;
           }
-
-          const attrColspan = child.getAttribute('colspan') || child.getAttribute('data-colspan');
-          let colspan;
-          colspan = this._naturalNumberOrOne(parseFloat(attrColspan));
-
-          // Never span further than the number of columns
-          colspan = Math.min(colspan, this._columnCount);
-
-          const childRatio = colspan / this._columnCount;
-          child.style.width = `calc(${childRatio * 100}% - ${1 - childRatio} * ${columnSpacing})`;
-
-          if (col + colspan > this._columnCount) {
-            // Too big to fit on this row, let's wrap it
-            col = 0;
-          }
-
-          // At the start edge
-          if (col === 0) {
-            child.style.setProperty(marginStartProp, '0px');
-          } else {
-            child.style.removeProperty(marginStartProp);
-          }
-
-          const nextIndex = index + 1;
-          const nextLineBreak = nextIndex < children.length && children[nextIndex].localName === 'br';
-
-          // At the end edge
-          if (col + colspan === this._columnCount) {
-            child.style.setProperty(marginEndProp, '0px');
-          } else if (nextLineBreak) {
-            const colspanRatio = (this._columnCount - col - colspan) / this._columnCount;
-            child.style.setProperty(
-              marginEndProp,
-              `calc(${colspanRatio * containerWidth}px + ${colspanRatio} * ${columnSpacing})`,
-            );
-          } else {
-            child.style.removeProperty(marginEndProp);
-          }
-
-          // Move the column counter
-          col = (col + colspan) % this._columnCount;
 
           if (child.localName === 'vaadin-form-item') {
             if (this._labelsOnTop) {
@@ -308,6 +251,18 @@ export const FormLayoutMixin = (superClass) =>
               delete child.__useLayoutLabelPosition;
               child.removeAttribute('label-position');
             }
+          }
+
+          const colspan = child.getAttribute('colspan') || child.getAttribute('data-colspan');
+          if (colspan) {
+            child.style.setProperty('--_grid-colspan', colspan);
+          }
+
+          if (resetColumn) {
+            child.style.setProperty('--_grid-colstart', 1);
+            resetColumn = false;
+          } else {
+            child.style.removeProperty('--_grid-colstart');
           }
         });
     }
