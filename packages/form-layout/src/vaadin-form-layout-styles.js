@@ -47,17 +47,17 @@ export const formLayoutStyles = css`
     --_column-width: var(--vaadin-form-layout-column-width);
     --_column-max-count: var(--vaadin-form-layout-max-columns);
 
+    display: flex;
+    min-width: var(--_column-width);
+  }
+
+  :host([auto-responsive]) #layout {
     --_max-total-gap-width: calc((var(--_column-max-count) - 1) * var(--vaadin-form-layout-column-spacing));
     --_max-total-col-width: calc(var(--_column-max-count) * var(--_column-width));
 
     --_column-min-width: var(--_column-width);
     --_column-max-width: var(--_column-width);
 
-    display: flex;
-    min-width: var(--_column-width);
-  }
-
-  :host([auto-responsive]) #layout {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(var(--_column-min-width), var(--_column-max-width)));
     gap: var(--vaadin-form-layout-row-spacing) var(--vaadin-form-layout-column-spacing);
@@ -70,15 +70,15 @@ export const formLayoutStyles = css`
     grid-auto-columns: 0;
 
     /*
-      A max width needs to be set to prevent the layout from expanding to more columns than
-      allowed by the --_column-max-count property.
+      A max width needs to be defined to prevent the layout from expanding to more columns
+      than allowed by the --_column-max-count property:
 
-      1. "width" + "flex-grow" are used instead of "max-width" to allow the layout to properly
-      shrink to its minimum width in <vaadin-horizontal-layout>.
+      1. "width" + "flex-grow" are used instead of "max-width" for the layout to be able to
+      shrink to its minimum width in <vaadin-horizontal-layout>, which doesn't work otherwise.
 
-      2. "width" is used instead of "flex-basis" to enable the layout to expand to the maximum
-      number of columns in <vaadin-overlay> which by default creates a stacking context without
-      an explicit width.
+      2. "width" is used instead of "flex-basis" to make the layout expand to the maximum
+      number of columns in <vaadin-overlay> which creates a new stacking context without
+      an explicit default width.
     */
     width: calc(var(--_max-total-col-width) + var(--_max-total-gap-width));
     flex-grow: 0;
@@ -98,17 +98,29 @@ export const formLayoutStyles = css`
     grid-column-end: span min(var(--_colspan), var(--_js-computed-column-count));
   }
 
-  :host([auto-responsive][expand-columns]) {
+  :host([auto-responsive][expand-columns]) #layout {
+    /*
+      This construction makes the CSS grid columns switch from a fixed width
+      to the same width expressed as a percentage of the total width of the
+      maximum number of columns and gaps when the layout reaches that width.
+      This prevents the CSS grid from creating new columns and instead causes
+      it to keep the existing columns expanding evenly to fill available space
+      when --_column-max-count is reached.
+    */
     --_column-min-width: max(
       var(--_column-width),
       calc((100% - var(--_max-total-gap-width)) / var(--_column-max-count))
     );
-    --_column-max-width: 1fr;
-  }
 
-  :host([auto-responsive][expand-columns]) #layout {
     /*
-      Allow the layout to grow beyond the width of the maximum number of columns and gaps.
+      Set the max column width to 1fr to allow CSS grid columns to expand
+      and evenly distribute any unused space that remains when there isn't
+      enough room for a new column.
+    */
+    --_column-max-width: 1fr;
+
+    /*
+      Allow the layout to take full available width of the parent element.
     */
     flex-grow: 1;
   }
