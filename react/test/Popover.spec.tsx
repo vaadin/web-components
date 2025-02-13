@@ -15,6 +15,7 @@ describe('Popover', () => {
 
   async function assert() {
     await new Promise((r) => requestAnimationFrame(r));
+    await new Promise((r) => requestAnimationFrame(r));
 
     const overlay = document.querySelector(overlayTag);
     expect(overlay).to.exist;

@@ -25,7 +25,7 @@ export default function Row1() {
           <div>Accordion content 2</div>
         </AccordionPanel>
       </Accordion>
-      <AvatarGroup prefix="Users: " items={[{ name: 'Jane Roe', abbr: 'JD' }]}></AvatarGroup>
+      <AvatarGroup items={[{ name: 'Jane Roe', abbr: 'JD' }]}></AvatarGroup>
       <Chart title="Chart" style={{ height: '300px' }}>
         <ChartSeries title="Items" type="bar" values={[10, 20, 30]}></ChartSeries>
       </Chart>
