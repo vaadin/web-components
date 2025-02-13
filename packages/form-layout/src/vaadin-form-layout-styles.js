@@ -46,14 +46,17 @@ export const formLayoutStyles = css`
   :host([auto-responsive]) {
     --_column-width: var(--vaadin-form-layout-column-width);
     --_column-max-count: var(--vaadin-form-layout-max-columns);
+    /* --vaadin-form-layout-column-spacing: 0px; */
+    --_column-label-width: var(--vaadin-form-item-label-width);
 
     display: flex;
-    min-width: var(--_column-width);
+    min-width: calc(var(--_column-width) + var(--_column-label-width));
   }
 
   :host([auto-responsive]) #layout {
-    --_max-total-gap-width: calc((var(--_column-max-count) - 1) * var(--vaadin-form-layout-column-spacing));
+    --_max-total-gap-width: calc((var(--_column-max-count) * 2 - 1) * var(--vaadin-form-layout-column-spacing));
     --_max-total-col-width: calc(var(--_column-max-count) * var(--_column-width));
+    --_max-total-col-label-width: calc(var(--_column-max-count) * var(--_column-label-width));
 
     --_column-min-width: var(--_column-width);
     --_column-max-width: var(--_column-width);
@@ -67,7 +70,10 @@ export const formLayoutStyles = css`
     --_rendered-column-count: 1;
 
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(var(--_column-min-width), var(--_column-max-width)));
+    grid-template-columns: repeat(
+      auto-fit,
+      var(--_column-label-width) minmax(var(--_column-min-width), var(--_column-max-width))
+    );
     gap: var(--vaadin-form-layout-row-spacing) var(--vaadin-form-layout-column-spacing);
 
     /*
@@ -88,7 +94,7 @@ export const formLayoutStyles = css`
       number of columns in <vaadin-overlay> which creates a new stacking context without
       an explicit default width.
     */
-    width: calc(var(--_max-total-col-width) + var(--_max-total-gap-width));
+    width: calc(var(--_max-total-col-width) + var(--_max-total-gap-width) + var(--_max-total-col-label-width));
     flex-grow: 0;
     flex-shrink: 1;
 
@@ -100,7 +106,7 @@ export const formLayoutStyles = css`
   }
 
   :host([auto-responsive]) #layout ::slotted(*) {
-    grid-column: var(--_colstart) / span min(var(--_colspan), var(--_rendered-column-count));
+    grid-column: var(--_colstart) / span min(calc(var(--_colspan) * 2), var(--_rendered-column-count));
   }
 
   :host([auto-responsive][expand-columns]) #layout {
@@ -133,7 +139,9 @@ export const formLayoutStyles = css`
 
 export const formItemStyles = css`
   :host {
-    display: inline-flex;
+    display: grid;
+    grid-template-columns: subgrid;
+    gap: 3em;
     flex-direction: row;
     align-items: baseline;
     margin: calc(0.5 * var(--vaadin-form-item-row-spacing, var(--vaadin-form-layout-row-spacing, 1em))) 0;
@@ -158,6 +166,7 @@ export const formItemStyles = css`
   }
 
   #spacing {
+    display: none;
     width: var(--vaadin-form-item-label-spacing, 1em);
     flex: 0 0 auto;
   }
