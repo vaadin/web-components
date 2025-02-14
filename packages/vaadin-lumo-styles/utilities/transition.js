@@ -6,42 +6,44 @@
 import { css } from '@vaadin/vaadin-themable-mixin/register-styles.js';
 
 export const transition = css`
-  .transition-none {
-    transition: none;
-  }
-  .transition-all {
-    transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
-  }
   .transition {
-    transition:
-      color,
-      background-color,
-      border-color,
-      text-decoration-color,
-      fill,
-      stroke,
-      opacity,
-      box-shadow,
-      transform,
-      filter,
-      backdrop-filter 150ms cubic-bezier(0.4, 0, 0.2, 1);
+    transition-property: -webkit-backdrop-filter, backdrop-filter, background-color, border-color, box-shadow, color, fill, filter, opacity, rotate, scale, stroke, text-decoration-color, transform, translate;
+    transition-timing-function: var(--lumo-utility-transition-timing-function, cubic-bezier(0.4, 0, 0.2, 1));
+    transition-duration: var(--lumo-utility-transition-duration, 150ms);
   }
+
+  .transition-all {
+    transition-property: all;
+    transition-timing-function: var(--lumo-utility-transition-timing-function, cubic-bezier(0.4, 0, 0.2, 1));
+    transition-duration: var(--lumo-utility-transition-duration, 150ms);
+  }
+
   .transition-colors {
-    transition:
-      color,
-      background-color,
-      border-color,
-      text-decoration-color,
-      fill,
-      stroke 150ms cubic-bezier(0.4, 0, 0.2, 1);
+    transition-property: background-color, border-color, color, fill, stroke, text-decoration-color;
+    transition-timing-function: var(--lumo-utility-transition-timing-function, cubic-bezier(0.4, 0, 0.2, 1));
+    transition-duration: var(--lumo-utility-transition-duration, 150ms);
   }
+
   .transition-opacity {
-    transition: opacity 150ms cubic-bezier(0.4, 0, 0.2, 1);
+    transition-property: opacity;
+    transition-timing-function: var(--lumo-utility-transition-timing-function, cubic-bezier(0.4, 0, 0.2, 1));
+    transition-duration: var(--lumo-utility-transition-duration, 150ms);
   }
+
   .transition-shadow {
-    transition: box-shadow 150ms cubic-bezier(0.4, 0, 0.2, 1);
+    transition-property: box-shadow;
+    transition-timing-function: var(--lumo-utility-transition-timing-function, cubic-bezier(0.4, 0, 0.2, 1));
+    transition-duration: var(--lumo-utility-transition-duration, 150ms);
   }
+
   .transition-transform {
-    transition: transform 150ms cubic-bezier(0.4, 0, 0.2, 1);
+    transition-property: rotate, scale, transform, translate;
+    transition-timing-function: var(--lumo-utility-transition-timing-function, cubic-bezier(0.4, 0, 0.2, 1));
+    transition-duration: var(--lumo-utility-transition-duration, 150ms);
   }
+
+  .transition-none {
+    transition-property: none;
+  }
+
 `;
