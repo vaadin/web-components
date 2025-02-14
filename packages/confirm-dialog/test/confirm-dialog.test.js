@@ -654,6 +654,14 @@ describe('vaadin-confirm-dialog', () => {
         await nextFrame();
         expect(overlay.getAttribute('style')).to.be.not.ok;
       });
+
+      it('should place footer part at the bottom of the overlay', async () => {
+        confirm._contentHeight = '500px';
+        await nextFrame();
+        const footer = overlay.$.overlay.querySelector('[part="footer"]');
+        const overlayRect = overlay.$.overlay.getBoundingClientRect();
+        expect(footer.getBoundingClientRect().bottom).to.be.closeTo(overlayRect.bottom, 0.1);
+      });
     });
 
     describe('before attach', () => {
