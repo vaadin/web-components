@@ -16,6 +16,10 @@ export const confirmDialogOverlay = css`
     height: var(--_vaadin-confirm-dialog-content-height);
   }
 
+  #resizerContainer {
+    height: 100%;
+  }
+
   ::slotted([slot='header']) {
     pointer-events: auto;
   }
