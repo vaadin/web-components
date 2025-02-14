@@ -156,7 +156,9 @@
                 <li>Confirm if a dialog asks about using an auto-generated branch name</li>
                 <li
                   >Wait for the build to finish, then check that new versions have appeared on NPM (e.g.
-                  <a href="https://www.npmjs.com/package/@vaadin/grid">https://www.npmjs.com/package/@vaadin/grid</a>)
+                  <a href="https://www.npmjs.com/package/@vaadin/grid/v/${this.branch.nextPatchVersion}" target="_blank"
+                    ><code>@vaadin/grid@${this.branch.nextPatchVersion}</code></a
+                  >)
                 </li>
               </ul>
             </section>
@@ -205,11 +207,9 @@
               <h3>Step 3: Publish GitHub Release</h3>
               <ul>
                 <li>
-                  <a
-                    href="https://github.com/vaadin/web-components/releases/edit/v${this.branch.nextPatchVersion}"
-                    target="_blank"
-                    >Edit the GitHub release created in Step 1</a
-                  >
+                  <a href="https://github.com/vaadin/web-components/releases" target="_blank"
+                    >Open the GitHub releases and edit the <code>v${this.branch.nextPatchVersion}</code> draft release
+                  </a>
                 </li>
                 <li>Check that the documentation link works</li>
                 <li>Check that the contents are correct</li>
