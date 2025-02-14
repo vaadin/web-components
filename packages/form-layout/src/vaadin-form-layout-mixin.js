@@ -122,6 +122,12 @@ export const FormLayoutMixin = (superClass) =>
           value: false,
           reflectToAttribute: true,
         },
+
+        labelsAside: {
+          type: Boolean,
+          value: false,
+          reflectToAttribute: true,
+        },
       };
     }
 
@@ -347,11 +353,14 @@ export const FormLayoutMixin = (superClass) =>
 
     /** @private */
     _updateCSSGridLayout() {
-      const { gridTemplateColumns } = getComputedStyle(this.$.layout);
+      const layoutComputedStyle = getComputedStyle(this.$.layout);
 
       // Calculate the number of rendered columns, excluding CSS grid auto columns (0px)
+      const { gridTemplateColumns } = layoutComputedStyle;
       const renderedColumnCount = gridTemplateColumns.split(' ').filter((width) => width !== '0px').length;
+
       this.$.layout.style.setProperty('--_rendered-column-count', renderedColumnCount);
+      // this.$.layout.style.setProperty('--_rendered-layout-width', `${this.offsetWidth}px`);
 
       let resetColumn = false;
       [...this.children]
@@ -365,6 +374,8 @@ export const FormLayoutMixin = (superClass) =>
           const colspan = child.getAttribute('colspan') || child.getAttribute('data-colspan');
           if (colspan) {
             child.style.setProperty('--_colspan', colspan);
+          } else {
+            child.style.removeProperty('--_colspan');
           }
 
           if (resetColumn) {

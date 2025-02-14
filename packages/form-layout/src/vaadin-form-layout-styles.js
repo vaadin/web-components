@@ -44,31 +44,32 @@ export const formLayoutStyles = css`
   }
 
   :host([auto-responsive]) {
-    --_column-width: var(--vaadin-form-layout-column-width);
-    --_column-max-count: var(--vaadin-form-layout-max-columns);
-
     display: flex;
-    min-width: var(--_column-width);
+    min-width: var(--vaadin-form-layout-column-width);
   }
 
   :host([auto-responsive]) #layout {
-    --_max-total-gap-width: calc((var(--_column-max-count) - 1) * var(--vaadin-form-layout-column-spacing));
-    --_max-total-col-width: calc(var(--_column-max-count) * var(--_column-width));
+    --_column-width-with-label-top: var(--vaadin-form-layout-column-width);
 
+    /* prettier-ignore */
+    --_column-width-with-label-aside: calc(
+      var(--vaadin-form-item-label-width) +
+      var(--vaadin-form-item-label-spacing) +
+      var(--vaadin-form-layout-column-width)
+    );
+
+    --_column-gap: var(--vaadin-form-layout-column-spacing);
+    --_column-width: var(--_column-width-with-label-top);
     --_column-min-width: var(--_column-width);
     --_column-max-width: var(--_column-width);
-    --_colstart: auto;
-    --_colspan: 1;
+    --_column-max-count: var(--vaadin-form-layout-max-columns);
 
-    /*
-      The column count is calculated in JS using getComputedStyle(this.$.layout).gridTemplateColumns
-      after the layout is rendered.
-    */
-    --_rendered-column-count: 1;
+    --_max-total-gap-width: calc((var(--_column-max-count) - 1) * var(--_column-gap));
+    --_max-total-col-width: calc(var(--_column-max-count) * var(--_column-width));
 
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(var(--_column-min-width), var(--_column-max-width)));
-    gap: var(--vaadin-form-layout-row-spacing) var(--vaadin-form-layout-column-spacing);
+    gap: var(--vaadin-form-layout-row-spacing) var(--_column-gap);
 
     /*
       Auto-columns can be created when an item's colspan exceeds the rendered column count.
@@ -100,7 +101,16 @@ export const formLayoutStyles = css`
   }
 
   :host([auto-responsive]) #layout ::slotted(*) {
-    grid-column: var(--_colstart) / span min(var(--_colspan), var(--_rendered-column-count));
+    /*
+      The column count (--_rendered-column-count) is calculated in JS
+      using getComputedStyle(this.$.layout).gridTemplateColumns after
+      the layout is rendered.
+    */
+    grid-column: var(--_colstart, auto) / span min(var(--_colspan, 1), var(--_rendered-column-count));
+  }
+
+  :host([auto-responsive][labels-aside]) #layout {
+    --_column-width: var(--_column-width-with-label-aside);
   }
 
   :host([auto-responsive][expand-columns]) #layout {
