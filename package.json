@@ -40,7 +40,7 @@
     "@web/dev-server": "^0.4.3",
     "@web/dev-server-esbuild": "^1.0.2",
     "@web/rollup-plugin-html": "^2.0.0",
-    "@web/test-runner": "^0.19.0" ,
+    "@web/test-runner": "^0.19.0",
     "@web/test-runner-playwright": "^0.11.0",
     "@web/test-runner-saucelabs": "^0.13.0",
     "@web/test-runner-visual-regression": "^0.10.0",
@@ -66,7 +66,7 @@
     "rollup": "^4.4.0",
     "stylelint": "^16.10.0",
     "stylelint-config-vaadin": "^1.0.0-alpha.2",
-    "typescript": "^5.5.2"
+    "typescript": "^5.7.3"
   },
   "resolutions": {
     "playwright": "^1.50.1"
