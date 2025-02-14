@@ -126,7 +126,6 @@ export const FormLayoutMixin = (superClass) =>
         labelsAside: {
           type: Boolean,
           value: false,
-          reflectToAttribute: true,
         },
       };
     }
@@ -354,6 +353,11 @@ export const FormLayoutMixin = (superClass) =>
     /** @private */
     _updateCSSGridLayout() {
       const layoutComputedStyle = getComputedStyle(this.$.layout);
+      const styleComputeStyle = getComputedStyle(this.$.style);
+
+      const columnWidthWithLabelAside = styleComputeStyle.backgroundPositionX;
+      const isLabelAside = this.offsetWidth >= parseFloat(columnWidthWithLabelAside);
+      this.toggleAttribute('labels-aside', isLabelAside);
 
       // Calculate the number of rendered columns, excluding CSS grid auto columns (0px)
       const { gridTemplateColumns } = layoutComputedStyle;

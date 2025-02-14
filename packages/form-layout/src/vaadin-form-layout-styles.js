@@ -53,10 +53,19 @@ export const formLayoutStyles = css`
       var(--vaadin-form-layout-column-width)
     );
 
-    --_is-label-aside: clamp(0px, calc(100% - var(--_column-width-with-label-aside)), 1px);
+    --_vaadin-form-layout-label-position: initial;
 
     display: flex;
     min-width: var(--_column-width-with-label-top);
+    background-position-x: var(--_is-label-aside);
+  }
+
+  :host([auto-responsive][labels-aside]) {
+    --_vaadin-form-layout-label-position: ' ';
+  }
+
+  :host([auto-responsive][labels-aside]) #layout {
+    --_column-width: var(--_column-width-with-label-aside);
   }
 
   :host([auto-responsive]) #style {
@@ -115,10 +124,6 @@ export const formLayoutStyles = css`
     grid-column: var(--_colstart, auto) / span min(var(--_colspan, 1), var(--_rendered-column-count));
   }
 
-  :host([auto-responsive][labels-aside]) #layout {
-    --_column-width: var(--_column-width-with-label-aside);
-  }
-
   :host([auto-responsive][expand-columns]) #layout {
     /*
       When the layout reaches the maximum number of columns, this expression
@@ -148,8 +153,12 @@ export const formLayoutStyles = css`
 export const formItemStyles = css`
   :host {
     display: inline-flex;
-    flex-direction: row;
-    align-items: baseline;
+    /* This is a bit convoluted, but the end result is that
+    LABELS ABOVE => align-items: stretch; justify-content: normal;
+    LABELS ASIDE => align-items: stretch; justify-content: baseline; */
+    flex-flow: var(--_vaadin-form-layout-label-position, column) nowrap;
+    place-items: var(--_vaadin-form-layout-label-position, stretch) baseline;
+    justify-content: normal;
     margin: calc(0.5 * var(--vaadin-form-item-row-spacing, var(--vaadin-form-layout-row-spacing, 1em))) 0;
   }
 
