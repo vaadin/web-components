@@ -98,11 +98,40 @@ export const FormLayoutMixin = (superClass) =>
           type: Boolean,
           sync: true,
         },
+
+        autoResponsive: {
+          type: Boolean,
+          value: false,
+          reflectToAttribute: true,
+        },
+
+        columnWidth: {
+          type: String,
+          value: '13em',
+          observer: '_columnWidthChanged',
+        },
+
+        maxColumns: {
+          type: Number,
+          value: 10,
+          observer: '_maxColumnsChanged',
+        },
+
+        expandColumns: {
+          type: String,
+          value: false,
+          reflectToAttribute: true,
+        },
+
+        labelsAside: {
+          type: Boolean,
+          value: false,
+        },
       };
     }
 
     static get observers() {
-      return ['_invokeUpdateLayout(_columnCount, _labelsOnTop)'];
+      return ['_invokeUpdateLayout(_columnCount, _labelsOnTop, autoResponsive)'];
     }
 
     /** @protected */
@@ -190,6 +219,10 @@ export const FormLayoutMixin = (superClass) =>
 
     /** @private */
     _selectResponsiveStep() {
+      if (this.autoResponsive) {
+        return;
+      }
+
       // Iterate through responsiveSteps and choose the step
       let selectedStep;
       const tmpStyleProp = 'background-position';
@@ -226,6 +259,11 @@ export const FormLayoutMixin = (superClass) =>
     _updateLayout() {
       // Do not update layout when invisible
       if (isElementHidden(this)) {
+        return;
+      }
+
+      if (this.autoResponsive) {
+        this._updateCSSGridLayout();
         return;
       }
 
@@ -310,6 +348,56 @@ export const FormLayoutMixin = (superClass) =>
             }
           }
         });
+    }
+
+    /** @private */
+    _updateCSSGridLayout() {
+      const layoutComputedStyle = getComputedStyle(this.$.layout);
+      const styleComputeStyle = getComputedStyle(this.$.style);
+
+      const columnWidthWithLabelAside = styleComputeStyle.backgroundPositionX;
+      const isLabelAside = this.offsetWidth >= parseFloat(columnWidthWithLabelAside);
+      this.toggleAttribute('labels-aside', isLabelAside);
+
+      // Calculate the number of rendered columns, excluding CSS grid auto columns (0px)
+      const { gridTemplateColumns } = layoutComputedStyle;
+      const renderedColumnCount = gridTemplateColumns.split(' ').filter((width) => width !== '0px').length;
+
+      this.$.layout.style.setProperty('--_rendered-column-count', renderedColumnCount);
+      // this.$.layout.style.setProperty('--_rendered-layout-width', `${this.offsetWidth}px`);
+
+      let resetColumn = false;
+      [...this.children]
+        .filter((child) => getComputedStyle(child).display !== 'none' || child.localName === 'br')
+        .forEach((child) => {
+          if (child.localName === 'br') {
+            resetColumn = true;
+            return;
+          }
+
+          const colspan = child.getAttribute('colspan') || child.getAttribute('data-colspan');
+          if (colspan) {
+            child.style.setProperty('--_colspan', colspan);
+          } else {
+            child.style.removeProperty('--_colspan');
+          }
+
+          if (resetColumn) {
+            child.style.setProperty('--_colstart', 1);
+            resetColumn = false;
+          } else {
+            child.style.removeProperty('--_colstart');
+          }
+        });
+    }
+
+    /**@private */
+    _columnWidthChanged(columnWidth) {
+      this.style.setProperty('--vaadin-form-layout-column-width', columnWidth);
+    }
+
+    _maxColumnsChanged(maxColumns) {
+      this.style.setProperty('--vaadin-form-layout-max-columns', maxColumns);
     }
 
     /**
