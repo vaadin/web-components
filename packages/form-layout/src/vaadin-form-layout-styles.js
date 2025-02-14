@@ -44,11 +44,6 @@ export const formLayoutStyles = css`
   }
 
   :host([auto-responsive]) {
-    display: flex;
-    min-width: var(--vaadin-form-layout-column-width);
-  }
-
-  :host([auto-responsive]) #layout {
     --_column-width-with-label-top: var(--vaadin-form-layout-column-width);
 
     /* prettier-ignore */
@@ -58,6 +53,19 @@ export const formLayoutStyles = css`
       var(--vaadin-form-layout-column-width)
     );
 
+    --_is-label-aside: clamp(0px, calc(100% - var(--_column-width-with-label-aside)), 1px);
+    transform: translateX(calc(var(--_is-label-aside) * 100));
+
+    display: flex;
+    min-width: var(--_column-width-with-label-top);
+  }
+
+  /* :host([auto-responsive]) #style {
+    background-position-x: var(--_column-width-with-label-top);
+    background-position-y: var(--_column-width-with-label-aside);
+  } */
+
+  :host([auto-responsive]) #layout {
     --_column-gap: var(--vaadin-form-layout-column-spacing);
     --_column-width: var(--_column-width-with-label-top);
     --_column-min-width: var(--_column-width);
