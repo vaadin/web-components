@@ -50,7 +50,13 @@ export const FormItemMixin = (superClass) =>
         const spacing = getComputedStyle(this).getPropertyValue('--vaadin-form-item-row-spacing');
         if (spacing !== '' && parseInt(spacing) !== 0) {
           console.warn(
-            '`--vaadin-form-item-row-spacing` is deprecated since 24.7. Use `--vaadin-form-layout-row-spacing` on <vaadin-form-layout> instead.',
+            `
+              --vaadin-form-item-row-spacing is deprecated since 24.7. Instead you should now:
+              1. Use --vaadin-form-layout-row-spacing on the <vaadin-form-layout> component to control the gap between rows
+              2. Use standard CSS margin on <vaadin-form-layout> to control the spacing around the form layout itself
+            `
+              .trim()
+              .replace(/\s{2,}/gu, '\n'),
           );
           itemRowSpacingDeprecationNotified = true;
         }
