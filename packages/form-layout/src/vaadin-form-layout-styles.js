@@ -78,8 +78,8 @@ export const formLayoutStyles = css`
     grid-auto-columns: 0;
 
     /*
-      A max width needs to be defined to prevent the layout from expanding to more columns
-      than allowed by the --_column-max-count property:
+      The layout's width needs to be capped to prevent it from expanding to more columns
+      than defined by --_column-max-count:
 
       1. "width" + "flex-grow" are used instead of "max-width" for the layout to be able to
       shrink to its minimum width in <vaadin-horizontal-layout>, which doesn't work otherwise.
@@ -105,12 +105,10 @@ export const formLayoutStyles = css`
 
   :host([auto-responsive][expand-columns]) #layout {
     /*
-      This construction makes the CSS grid columns switch from a fixed width
-      to the same width expressed as a percentage of the total width of the
-      maximum number of columns and gaps when the layout reaches that width.
-      This prevents the CSS grid from creating new columns and instead causes
-      it to keep the existing columns expanding evenly to fill available space
-      when --_column-max-count is reached.
+      When the layout reaches the maximum number of columns, this expression
+      switches from fixed width to percentage-based width. As a result, the
+      grid stops adding new columns and instead evenly expands the existing
+      columns to fill the available space
     */
     --_column-min-width: max(
       var(--_column-width),
