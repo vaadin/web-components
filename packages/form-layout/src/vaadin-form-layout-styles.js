@@ -54,16 +54,14 @@ export const formLayoutStyles = css`
     );
 
     --_is-label-aside: clamp(0px, calc(100% - var(--_column-width-with-label-aside)), 1px);
-    transform: translateX(calc(var(--_is-label-aside) * 100));
 
     display: flex;
     min-width: var(--_column-width-with-label-top);
   }
 
-  /* :host([auto-responsive]) #style {
-    background-position-x: var(--_column-width-with-label-top);
-    background-position-y: var(--_column-width-with-label-aside);
-  } */
+  :host([auto-responsive]) #style {
+    background-position-x: var(--_column-width-with-label-aside);
+  }
 
   :host([auto-responsive]) #layout {
     --_column-gap: var(--vaadin-form-layout-column-spacing);
