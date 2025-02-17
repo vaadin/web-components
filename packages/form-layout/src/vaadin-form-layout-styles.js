@@ -21,7 +21,7 @@ export const formLayoutStyles = css`
     display: none !important;
   }
 
-  #layout {
+  :host(:not([auto-responsive])) #layout {
     display: flex;
 
     align-items: baseline; /* default \`stretch\` is not appropriate */
@@ -29,7 +29,7 @@ export const formLayoutStyles = css`
     flex-wrap: wrap; /* the items should wrap */
   }
 
-  #layout ::slotted(*) {
+  :host(:not([auto-responsive])) #layout ::slotted(*) {
     /* Items should neither grow nor shrink. */
     flex-grow: 0;
     flex-shrink: 0;
@@ -41,6 +41,44 @@ export const formLayoutStyles = css`
 
   #layout ::slotted(br) {
     display: none;
+  }
+
+  :host([auto-responsive]) {
+    display: flex;
+    min-width: var(--vaadin-form-layout-column-width);
+  }
+
+  :host([auto-responsive]) #layout {
+    --_column-gap: var(--vaadin-form-layout-column-spacing);
+    --_column-width: var(--vaadin-form-layout-column-width);
+    --_column-max-count: var(--vaadin-form-layout-max-columns);
+    --_max-total-gap-width: calc((var(--_column-max-count) - 1) * var(--_column-gap));
+    --_max-total-col-width: calc(var(--_column-max-count) * var(--_column-width));
+
+    display: grid;
+    grid-template-columns: repeat(auto-fit, var(--_column-width));
+    gap: var(--vaadin-form-layout-row-spacing) var(--_column-gap);
+
+    /*
+      The layout's width needs to be capped to prevent it from expanding to more columns
+      than defined by --_column-max-count:
+
+      1. "width" + "flex-grow" are used instead of "max-width" for the layout to be able to
+      shrink to its minimum width in <vaadin-horizontal-layout>, which doesn't work otherwise.
+
+      2. "width" is used instead of "flex-basis" to make the layout expand to the maximum
+      number of columns in <vaadin-overlay> which creates a new stacking context without
+      an explicit default width.
+    */
+    width: calc(var(--_max-total-col-width) + var(--_max-total-gap-width));
+    flex-grow: 0;
+    flex-shrink: 1;
+
+    /*
+      Firefox requires min-width on both :host and #layout to allow the layout
+      to shrink below the value specified in the CSS width property above.
+    */
+    min-width: inherit;
   }
 `;
 

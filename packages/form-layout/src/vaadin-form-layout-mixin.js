@@ -230,6 +230,10 @@ export const FormLayoutMixin = (superClass) =>
 
     /** @private */
     _selectResponsiveStep() {
+      if (this.autoResponsive) {
+        return;
+      }
+
       // Iterate through responsiveSteps and choose the step
       let selectedStep;
       const tmpStyleProp = 'background-position';
@@ -266,6 +270,10 @@ export const FormLayoutMixin = (superClass) =>
     _updateLayout() {
       // Do not update layout when invisible
       if (isElementHidden(this)) {
+        return;
+      }
+
+      if (this.autoResponsive) {
         return;
       }
 
@@ -366,5 +374,15 @@ export const FormLayoutMixin = (superClass) =>
       this._updateLayout();
 
       this.$.layout.style.opacity = '';
+    }
+
+    /** @private */
+    __columnWidthChanged(columnWidth) {
+      this.style.setProperty('--vaadin-form-layout-column-width', columnWidth);
+    }
+
+    /** @private */
+    __maxColumnsChanged(maxColumns) {
+      this.style.setProperty('--vaadin-form-layout-max-columns', maxColumns);
     }
   };
