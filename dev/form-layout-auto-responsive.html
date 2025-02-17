@@ -26,6 +26,7 @@
     <script type="module">
       import '@vaadin/dialog';
       import '@vaadin/button';
+      import '@vaadin/tabsheet';
       import '@vaadin/form-layout';
       import '@vaadin/form-layout/vaadin-form-item.js';
       import '@vaadin/text-field';
@@ -65,7 +66,6 @@
               <vaadin-text-field label="Last name"></vaadin-text-field>
               <vaadin-text-field label="Username" colspan="2"></vaadin-text-field>
               <vaadin-password-field label="Password"></vaadin-password-field>
-              <br />
               <vaadin-password-field label="Confirm"></vaadin-password-field>
             </vaadin-form-layout>
 
@@ -259,6 +259,48 @@
               <vaadin-button
                 @click="${() => {
                   this.shadowRoot.querySelector('#dialog-4').opened = true;
+                }}"
+              >
+                Open
+              </vaadin-button>
+            </div>
+
+            <div>
+              <h1>autoResponsive inside Tabsheet inside Dialog</h1>
+
+              <vaadin-dialog
+                id="dialog-5"
+                ${dialogRenderer(
+                  (dialog) => html`
+                    <vaadin-tabsheet>
+                      <vaadin-tabs slot="tabs">
+                        <vaadin-tab id="tab-0">Tab 0</vaadin-tab>
+                        <vaadin-tab id="tab-1">Tab 1</vaadin-tab>
+                      </vaadin-tabs>
+
+                      <vaadin-form-layout tab="tab-0" auto-responsive max-columns="2">
+                        <vaadin-text-field label="First name"></vaadin-text-field>
+                        <vaadin-text-field label="Last name"></vaadin-text-field>
+                        <vaadin-text-field label="Username" colspan="2"></vaadin-text-field>
+                        <vaadin-password-field label="Password"></vaadin-password-field>
+                        <vaadin-password-field label="Confirm"></vaadin-password-field>
+                      </vaadin-form-layout>
+
+                      <vaadin-form-layout tab="tab-1" auto-responsive max-columns="2" expand-columns>
+                        <vaadin-text-field label="First name"></vaadin-text-field>
+                        <vaadin-text-field label="Last name"></vaadin-text-field>
+                        <vaadin-text-field label="Username" colspan="2"></vaadin-text-field>
+                        <vaadin-password-field label="Password"></vaadin-password-field>
+                        <vaadin-password-field label="Confirm"></vaadin-password-field>
+                      </vaadin-form-layout>
+                    </vaadin-tabsheet>
+                  `,
+                )}
+              ></vaadin-dialog>
+
+              <vaadin-button
+                @click="${() => {
+                  this.shadowRoot.querySelector('#dialog-5').opened = true;
                 }}"
               >
                 Open
