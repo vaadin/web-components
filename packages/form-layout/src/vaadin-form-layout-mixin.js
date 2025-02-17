@@ -126,6 +126,7 @@ export const FormLayoutMixin = (superClass) =>
         labelsAside: {
           type: Boolean,
           value: false,
+          reflectToAttribute: true,
         },
       };
     }
@@ -352,19 +353,10 @@ export const FormLayoutMixin = (superClass) =>
 
     /** @private */
     _updateCSSGridLayout() {
-      const layoutComputedStyle = getComputedStyle(this.$.layout);
-      const styleComputeStyle = getComputedStyle(this.$.style);
+      const fitsLabelsAside = this.offsetWidth >= this._columnWidthWithLabelsAside;
+      this.$.layout.toggleAttribute('fits-labels-aside', this.labelsAside && fitsLabelsAside);
 
-      const columnWidthWithLabelAside = styleComputeStyle.backgroundPositionX;
-      const isLabelAside = this.offsetWidth >= parseFloat(columnWidthWithLabelAside);
-      this.toggleAttribute('labels-aside', isLabelAside);
-
-      // Calculate the number of rendered columns, excluding CSS grid auto columns (0px)
-      const { gridTemplateColumns } = layoutComputedStyle;
-      const renderedColumnCount = gridTemplateColumns.split(' ').filter((width) => width !== '0px').length;
-
-      this.$.layout.style.setProperty('--_rendered-column-count', renderedColumnCount);
-      // this.$.layout.style.setProperty('--_rendered-layout-width', `${this.offsetWidth}px`);
+      this.$.layout.style.setProperty('--_rendered-column-count', this._renderedColumnCount);
 
       let resetColumn = false;
       [...this.children]
@@ -414,5 +406,21 @@ export const FormLayoutMixin = (superClass) =>
       this._updateLayout();
 
       this.$.layout.style.opacity = '';
+    }
+
+    get _columnWidthWithLabelsAbove() {
+      const { backgroundPositionX } = getComputedStyle(this.$.layout, '::before');
+      return parseFloat(backgroundPositionX);
+    }
+
+    get _columnWidthWithLabelsAside() {
+      const { backgroundPositionY } = getComputedStyle(this.$.layout, '::before');
+      return parseFloat(backgroundPositionY);
+    }
+
+    get _renderedColumnCount() {
+      // Calculate the number of rendered columns, excluding CSS grid auto columns (0px)
+      const { gridTemplateColumns } = getComputedStyle(this.$.layout);
+      return gridTemplateColumns.split(' ').filter((width) => width !== '0px').length;
     }
   };

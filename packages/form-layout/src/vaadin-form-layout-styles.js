@@ -44,41 +44,29 @@ export const formLayoutStyles = css`
   }
 
   :host([auto-responsive]) {
-    --_column-width-with-label-top: var(--vaadin-form-layout-column-width);
-
+    --_column-width-with-labels-above: var(--vaadin-form-layout-column-width);
     /* prettier-ignore */
-    --_column-width-with-label-aside: calc(
+    --_column-width-with-labels-aside: calc(
       var(--vaadin-form-item-label-width) +
       var(--vaadin-form-item-label-spacing) +
       var(--vaadin-form-layout-column-width)
     );
 
-    --_vaadin-form-layout-label-position: initial;
-
     display: flex;
-    min-width: var(--_column-width-with-label-top);
-    background-position-x: var(--_is-label-aside);
+    min-width: var(--_column-width-with-labels-above);
   }
 
-  :host([auto-responsive][labels-aside]) {
-    --_vaadin-form-layout-label-position: ' ';
-  }
-
-  :host([auto-responsive][labels-aside]) #layout {
-    --_column-width: var(--_column-width-with-label-aside);
-  }
-
-  :host([auto-responsive]) #style {
-    background-position-x: var(--_column-width-with-label-aside);
+  :host([auto-responsive]) #layout::before {
+    background-position-x: var(--_column-width-with-labels-above);
+    background-position-y: var(--_column-width-with-labels-aside);
   }
 
   :host([auto-responsive]) #layout {
     --_column-gap: var(--vaadin-form-layout-column-spacing);
-    --_column-width: var(--_column-width-with-label-top);
+    --_column-width: var(--_column-width-with-labels-above);
     --_column-min-width: var(--_column-width);
     --_column-max-width: var(--_column-width);
     --_column-max-count: var(--vaadin-form-layout-max-columns);
-
     --_max-total-gap-width: calc((var(--_column-max-count) - 1) * var(--_column-gap));
     --_max-total-col-width: calc(var(--_column-max-count) * var(--_column-width));
 
@@ -148,23 +136,32 @@ export const formLayoutStyles = css`
     */
     flex-grow: 1;
   }
+
+  :host([auto-responsive][labels-aside]) #layout[fits-labels-aside] {
+    --_column-width: var(--_column-width-with-labels-aside);
+  }
+
+  :host([auto-responsive][labels-aside]) #layout[fits-labels-aside] ::slotted(*) {
+    --_label-position: ' ';
+  }
 `;
 
 export const formItemStyles = css`
   :host {
+    --_label-position: initial;
+
     display: inline-flex;
     /* This is a bit convoluted, but the end result is that
     LABELS ABOVE => align-items: stretch; justify-content: normal;
     LABELS ASIDE => align-items: stretch; justify-content: baseline; */
-    flex-flow: var(--_vaadin-form-layout-label-position, column) nowrap;
-    place-items: var(--_vaadin-form-layout-label-position, stretch) baseline;
+    flex-flow: var(--_label-position, column) nowrap;
+    place-items: var(--_label-position, stretch) baseline;
     justify-content: normal;
     margin: calc(0.5 * var(--vaadin-form-item-row-spacing, var(--vaadin-form-layout-row-spacing, 1em))) 0;
   }
 
   :host([label-position='top']) {
-    flex-direction: column;
-    align-items: stretch;
+    --_label-position: ' ';
   }
 
   :host([hidden]) {
