@@ -82,6 +82,46 @@ export const FormLayoutMixin = (superClass) =>
         },
 
         /**
+         * When enabled, makes the layout automatically create and adjust its columns based on
+         * the container width. The layout creates columns of fixed width (defined by `columnWidth`),
+         * up to the limit set by `maxColumns`. The number of columns adjusts dynamically as
+         * the container size changes.
+         *
+         * NOTE: This property overrides any `responsiveSteps` configuration.
+         *
+         * @attr {boolean} auto-responsive
+         */
+        autoResponsive: {
+          type: Boolean,
+          value: false,
+          reflectToAttribute: true,
+        },
+
+        /**
+         * When `autoResponsive` is enabled, defines the width of each column.
+         * Must be specified in CSS length units, e.g. `100px`. The default value is `13em`.
+         *
+         * @attr {string} column-width
+         */
+        columnWidth: {
+          type: String,
+          value: '13em',
+          observer: '__columnWidthChanged',
+        },
+
+        /**
+         * When `autoResponsive` is enabled, defines the maximum number of columns the layout can create.
+         * The layout will create columns up to this limit, based on the available container width.
+         *
+         * @attr {number} max-columns
+         */
+        maxColumns: {
+          type: Number,
+          value: 10,
+          observer: '__maxColumnsChanged',
+        },
+
+        /**
          * Current number of columns in the layout
          * @private
          */

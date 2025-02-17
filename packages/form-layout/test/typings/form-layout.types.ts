@@ -11,6 +11,10 @@ const responsiveSteps = layout.responsiveSteps[0];
 const labelsPosition = responsiveSteps.labelsPosition;
 
 // Properties
+assertType<boolean>(layout.autoResponsive);
+assertType<string>(layout.columnWidth);
+assertType<number>(layout.maxColumns);
+
 assertType<string | 0 | undefined>(responsiveSteps.minWidth);
 assertType<number | undefined>(responsiveSteps.columns);
 assertType<'aside' | 'top' | undefined>(labelsPosition);

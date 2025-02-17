@@ -62,6 +62,28 @@ export declare class FormLayoutMixinClass {
   responsiveSteps: FormLayoutResponsiveStep[];
 
   /**
+   * When enabled, makes the layout automatically create and adjust its columns based on
+   * the container width. The layout creates columns of fixed width (defined by `columnWidth`),
+   * up to the limit set by `maxColumns`. The number of columns adjusts dynamically as
+   * the container size changes.
+   *
+   * NOTE: This property overrides any `responsiveSteps` configuration.
+   */
+  autoResponsive: boolean;
+
+  /**
+   * When `autoResponsive` is enabled, defines the width of each column.
+   * Must be specified in CSS length units, e.g. `100px`. The default value is `13em`.
+   */
+  columnWidth: string;
+
+  /**
+   * When `autoResponsive` is enabled, defines the maximum number of columns the layout can create.
+   * The layout will create columns up to this limit, based on the available container width.
+   */
+  maxColumns: number;
+
+  /**
    * Update the layout.
    */
   protected _updateLayout(): void;
