@@ -46,6 +46,7 @@
               <vaadin-text-field label="Username" colspan="2"></vaadin-text-field>
               <vaadin-password-field label="Password"></vaadin-password-field>
               <vaadin-password-field label="Confirm"></vaadin-password-field>
+              <vaadin-button>Register</vaadin-button>
             </vaadin-form-layout>
 
             <h1>autoResponsive + expandColumns</h1>
@@ -56,6 +57,7 @@
               <vaadin-text-field label="Username" colspan="2"></vaadin-text-field>
               <vaadin-password-field label="Password"></vaadin-password-field>
               <vaadin-password-field label="Confirm"></vaadin-password-field>
+              <vaadin-button>Register</vaadin-button>
             </vaadin-form-layout>
 
             <h1>autoResponsive + br</h1>
@@ -70,37 +72,10 @@
             </vaadin-form-layout>
 
             <div>
-              <h1>autoResponsive + label aside</h1>
-
-              <vaadin-form-layout auto-responsive max-columns="2" labels-aside>
-                <vaadin-form-item>
-                  <label slot="label"> First name </label>
-                  <vaadin-text-field></vaadin-text-field>
-                </vaadin-form-item>
-                <vaadin-form-item>
-                  <label slot="label"> Last name </label>
-                  <vaadin-text-field></vaadin-text-field>
-                </vaadin-form-item>
-                <vaadin-form-item colspan="2">
-                  <label slot="label"> Username </label>
-                  <vaadin-text-field colspan="2"></vaadin-text-field>
-                </vaadin-form-item>
-                <vaadin-form-item>
-                  <label slot="label"> Password </label>
-                  <vaadin-password-field></vaadin-password-field>
-                </vaadin-form-item>
-                <vaadin-form-item>
-                  <label slot="label"> Confirm </label>
-                  <vaadin-password-field></vaadin-password-field>
-                </vaadin-form-item>
-              </vaadin-form-layout>
-            </div>
-
-            <div>
               <h1>autoResponsive inside HorizontalLayout + flex:1</h1>
 
               <vaadin-horizontal-layout theme="spacing">
-                <vaadin-form-layout auto-responsive max-columns="2" style="flex: 1;">
+                <vaadin-form-layout style="flex: 1;" auto-responsive max-columns="2">
                   <vaadin-text-field label="First name"></vaadin-text-field>
                   <vaadin-text-field label="Last name"></vaadin-text-field>
                   <vaadin-text-field label="Username" colspan="2"></vaadin-text-field>
@@ -108,12 +83,64 @@
                   <vaadin-password-field label="Confirm"></vaadin-password-field>
                 </vaadin-form-layout>
 
-                <vaadin-form-layout auto-responsive max-columns="2" style="flex: 1;" expand-columns>
+                <vaadin-form-layout style="flex: 1;" auto-responsive max-columns="2" expand-columns>
                   <vaadin-text-field label="First name"></vaadin-text-field>
                   <vaadin-text-field label="Last name"></vaadin-text-field>
                   <vaadin-text-field label="Username" colspan="2"></vaadin-text-field>
                   <vaadin-password-field label="Password"></vaadin-password-field>
                   <vaadin-password-field label="Confirm"></vaadin-password-field>
+                </vaadin-form-layout>
+              </vaadin-horizontal-layout>
+            </div>
+
+            <div>
+              <h1>autoResponsive inside HorizontalLayout + labels aside</h1>
+
+              <vaadin-horizontal-layout theme="spacing">
+                <vaadin-form-layout style="flex: 1;" auto-responsive max-columns="2" labels-aside>
+                  <vaadin-form-item>
+                    <label slot="label"> First name </label>
+                    <vaadin-text-field></vaadin-text-field>
+                  </vaadin-form-item>
+                  <vaadin-form-item>
+                    <label slot="label"> Last name </label>
+                    <vaadin-text-field></vaadin-text-field>
+                  </vaadin-form-item>
+                  <vaadin-form-item colspan="2">
+                    <label slot="label"> Username </label>
+                    <vaadin-text-field colspan="2"></vaadin-text-field>
+                  </vaadin-form-item>
+                  <vaadin-form-item>
+                    <label slot="label"> Password </label>
+                    <vaadin-password-field></vaadin-password-field>
+                  </vaadin-form-item>
+                  <vaadin-form-item>
+                    <label slot="label"> Confirm </label>
+                    <vaadin-password-field></vaadin-password-field>
+                  </vaadin-form-item>
+                </vaadin-form-layout>
+
+                <vaadin-form-layout style="flex: 1;" auto-responsive max-columns="2" labels-aside expand-columns>
+                  <vaadin-form-item>
+                    <label slot="label"> First name </label>
+                    <vaadin-text-field class="full-width"></vaadin-text-field>
+                  </vaadin-form-item>
+                  <vaadin-form-item>
+                    <label slot="label"> Last name </label>
+                    <vaadin-text-field class="full-width"></vaadin-text-field>
+                  </vaadin-form-item>
+                  <vaadin-form-item colspan="2">
+                    <label slot="label"> Username </label>
+                    <vaadin-text-field class="full-width" colspan="2"></vaadin-text-field>
+                  </vaadin-form-item>
+                  <vaadin-form-item>
+                    <label slot="label"> Password </label>
+                    <vaadin-password-field class="full-width"></vaadin-password-field>
+                  </vaadin-form-item>
+                  <vaadin-form-item>
+                    <label slot="label"> Confirm </label>
+                    <vaadin-password-field class="full-width"></vaadin-password-field>
+                  </vaadin-form-item>
                 </vaadin-form-layout>
               </vaadin-horizontal-layout>
             </div>
