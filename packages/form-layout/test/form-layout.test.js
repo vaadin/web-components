@@ -2,8 +2,8 @@ import { expect } from '@vaadin/chai-plugins';
 import { aTimeout, fixtureSync, nextRender, nextResize } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '@vaadin/text-field/vaadin-text-field.js';
-import '../vaadin-form-layout.js';
-import '../vaadin-form-item.js';
+import '../src/vaadin-form-layout.js';
+import '../src/vaadin-form-item.js';
 import '@polymer/polymer/lib/elements/dom-repeat.js';
 
 function estimateEffectiveColumnCount(layout) {
@@ -57,68 +57,141 @@ describe('form layout', () => {
 
     beforeEach(() => {
       layout = fixtureSync(`
-        <vaadin-form-layout>
-          <vaadin-text-field></vaadin-text-field>
+        <vaadin-form-layout style="font-size: 16px;">
+          <input />
           <vaadin-form-item></vaadin-form-item>
+          <input />
         </vaadin-form-layout>
       `);
+      layout.responsiveSteps = [{ columns: 3 }];
       item = layout.querySelector('vaadin-form-item');
     });
 
-    it('should have default label-width', () => {
-      expect(getComputedStyle(item).getPropertyValue('--vaadin-form-item-label-width').trim()).to.equal('8em');
-      const labelFontSize = parseFloat(getComputedStyle(item.$.label).fontSize);
-      expect(parseFloat(getComputedStyle(item.$.label).width)).to.be.closeTo(8 * labelFontSize, 0.5);
+    it('should apply default --vaadin-form-layout-label-width', () => {
+      expect(getComputedStyle(layout).getPropertyValue('--vaadin-form-layout-label-width')).to.equal('8em');
+      expect(getComputedStyle(item.$.label).width).to.equal('128px');
     });
 
-    it('should apply label-width', () => {
-      item.style.setProperty('--vaadin-form-item-label-width', '100px');
+    it('should apply default --vaadin-form-layout-label-spacing', () => {
+      expect(getComputedStyle(layout).getPropertyValue('--vaadin-form-layout-label-spacing')).to.equal('1em');
+      expect(getComputedStyle(item.$.spacing).width).to.equal('16px');
+    });
+
+    it('should apply default --vaadin-form-layout-row-spacing', () => {
+      expect(getComputedStyle(layout).getPropertyValue('--vaadin-form-layout-row-spacing')).to.equal('1em');
+      expect(getComputedStyle(item).marginTop).to.equal('8px');
+      expect(getComputedStyle(item).marginBottom).to.equal('8px');
+    });
+
+    it('should apply default --vaadin-form-layout-column-spacing', () => {
+      expect(getComputedStyle(layout).getPropertyValue('--vaadin-form-layout-column-spacing')).to.equal('2em');
+      expect(getComputedStyle(item).marginLeft).to.equal('16px');
+      expect(getComputedStyle(item).marginRight).to.equal('16px');
+    });
+
+    it('should ignore --vaadin-form-layout-label-width when label-position is top', () => {
+      item.setAttribute('label-position', 'top');
+      expect(getComputedStyle(item.$.label).width).to.not.equal('128px');
+    });
+
+    it('should apply custom --vaadin-form-layout-label-width when set', () => {
+      layout.style.setProperty('--vaadin-form-layout-label-width', '100px');
+      expect(getComputedStyle(layout).getPropertyValue('--vaadin-form-layout-label-width')).to.equal('100px');
       expect(getComputedStyle(item.$.label).width).to.equal('100px');
     });
 
-    it('should not apply label-width when label-position="top" attribute is set', () => {
-      item.setAttribute('label-position', 'top');
+    it('should apply custom --vaadin-form-layout-label-spacing when set', () => {
+      layout.style.setProperty('--vaadin-form-layout-label-spacing', '8px');
+      expect(getComputedStyle(layout).getPropertyValue('--vaadin-form-layout-label-spacing')).to.equal('8px');
+      expect(getComputedStyle(item.$.spacing).width).to.equal('8px');
+    });
+
+    it('should apply custom --vaadin-form-layout-row-spacing when set', () => {
+      layout.style.setProperty('--vaadin-form-layout-row-spacing', '8px');
+      expect(getComputedStyle(layout).getPropertyValue('--vaadin-form-layout-row-spacing')).to.equal('8px');
+      expect(getComputedStyle(item).marginTop).to.equal('4px');
+      expect(getComputedStyle(item).marginBottom).to.equal('4px');
+    });
+
+    it('should apply custom --vaadin-form-layout-column-spacing when set', () => {
+      layout.style.setProperty('--vaadin-form-layout-column-spacing', '8px');
+      expect(getComputedStyle(layout).getPropertyValue('--vaadin-form-layout-column-spacing')).to.equal('8px');
+      expect(getComputedStyle(item).marginLeft).to.equal('4px');
+      expect(getComputedStyle(item).marginRight).to.equal('4px');
+    });
+  });
+
+  describe('deprecated CSS properties', () => {
+    let layout, item;
+
+    beforeEach(() => {
+      sinon.stub(console, 'warn');
+
+      layout = fixtureSync(`
+        <vaadin-form-layout style="font-size: 16px;">
+          <input />
+          <vaadin-form-item></vaadin-form-item>
+          <input />
+        </vaadin-form-layout>
+      `);
+      layout.responsiveSteps = [{ columns: 3 }];
+      item = layout.querySelector('vaadin-form-item');
+    });
+
+    afterEach(() => {
+      console.warn.restore();
+    });
+
+    it('should not have deprecated --vaadin-form-item-label-width by default', () => {
+      expect(getComputedStyle(item).getPropertyValue('--vaadin-form-item-label-width')).to.be.empty;
+    });
+
+    it('should not have deprecated --vaadin-form-item-label-spacing by default', () => {
+      expect(getComputedStyle(item).getPropertyValue('--vaadin-form-item-label-spacing')).to.be.empty;
+    });
+
+    it('should not have deprecated --vaadin-form-item-row-spacing by default', () => {
+      expect(getComputedStyle(item).getPropertyValue('--vaadin-form-item-row-spacing')).to.be.empty;
+    });
+
+    it('should warn when adding form-item with deprecated --vaadin-form-item-label-width', () => {
+      const item = document.createElement('vaadin-form-item');
       item.style.setProperty('--vaadin-form-item-label-width', '100px');
-      expect(getComputedStyle(item.$.label).width).to.not.equal('100px');
+      layout.appendChild(item);
+      expect(console.warn.calledOnce).to.be.true;
+      expect(console.warn.args[0][0]).to.contain('`--vaadin-form-item-label-width` is deprecated');
     });
 
-    it('should have default label-spacing', () => {
-      expect(getComputedStyle(item).getPropertyValue('--vaadin-form-item-label-spacing').trim()).to.equal('1em');
-      expect(getComputedStyle(item.$.spacing).width).to.equal('16px'); // 1em in px
+    it('should warn when adding form-item with deprecated --vaadin-form-item-label-spacing', () => {
+      const item = document.createElement('vaadin-form-item');
+      item.style.setProperty('--vaadin-form-item-label-spacing', '8px');
+      layout.appendChild(item);
+      expect(console.warn.calledOnce).to.be.true;
+      expect(console.warn.args[0][0]).to.contain('`--vaadin-form-item-label-spacing` is deprecated');
     });
 
-    it('should apply label-spacing', () => {
+    it('should warn when adding form-item with deprecated --vaadin-form-item-row-spacing', () => {
+      const item = document.createElement('vaadin-form-item');
+      item.style.setProperty('--vaadin-form-item-row-spacing', '8px');
+      layout.appendChild(item);
+      expect(console.warn.calledOnce).to.be.true;
+      expect(console.warn.args[0][0]).to.contain('`--vaadin-form-item-row-spacing` is deprecated');
+    });
+
+    it('should apply deprecated --vaadin-form-item-label-spacing when set', () => {
       item.style.setProperty('--vaadin-form-item-label-spacing', '8px');
       expect(getComputedStyle(item.$.spacing).width).to.equal('8px');
     });
 
-    it('should not have default row-spacing', () => {
-      expect(getComputedStyle(item).getPropertyValue('--vaadin-form-layout-row-spacing').trim()).to.equal('0');
-      expect(parseFloat(getComputedStyle(item).marginTop)).to.equal(0);
-      expect(parseFloat(getComputedStyle(item).marginBottom)).to.equal(0);
+    it('should apply deprecated --vaadin-form-item-label-width when set', () => {
+      item.style.setProperty('--vaadin-form-item-label-width', '100px');
+      expect(getComputedStyle(item.$.label).width).to.equal('100px');
     });
 
-    it('should apply form layout row spacing', () => {
-      const spacing = 8;
-      item.style.setProperty('--vaadin-form-layout-row-spacing', `${spacing}px`);
-      expect(parseFloat(getComputedStyle(item).marginTop)).to.equal(spacing / 2);
-      expect(parseFloat(getComputedStyle(item).marginBottom)).to.equal(spacing / 2);
-    });
-
-    it('should apply form item row spacing', () => {
-      const spacing = 8;
-      item.style.setProperty('--vaadin-form-item-row-spacing', `${spacing}px`);
-      expect(parseFloat(getComputedStyle(item).marginTop)).to.equal(spacing / 2);
-      expect(parseFloat(getComputedStyle(item).marginBottom)).to.equal(spacing / 2);
-    });
-
-    it('should apply default column-spacing', async () => {
-      // Override to not depend on the theme changes
-      layout.style.setProperty('--lumo-space-l', '2rem');
-      await nextResize(layout);
-      expect(getParsedWidth(layout.firstElementChild).spacing).to.equal('1rem');
-      expect(getComputedStyle(layout.firstElementChild).getPropertyValue('margin-left')).to.equal('0px'); // Zero because it's first
-      expect(getComputedStyle(layout.firstElementChild).getPropertyValue('margin-right')).to.equal('16px'); // 0.5 * 2rem in px
+    it('should apply deprecated --vaadin-form-item-row-spacing when set', () => {
+      item.style.setProperty('--vaadin-form-item-row-spacing', '8px');
+      expect(getComputedStyle(item).marginTop).to.equal('4px');
+      expect(getComputedStyle(item).marginBottom).to.equal('4px');
     });
   });
 

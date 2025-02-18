@@ -101,7 +101,9 @@ registerStyles('vaadin-form-layout', formLayoutStyles, { moduleId: 'vaadin-form-
  * Custom CSS property | Description | Default
  * ---|---|---
  * `--vaadin-form-layout-column-spacing` | Length of the spacing between columns | `2em`
- * `--vaadin-form-layout-row-spacing` | Length of the spacing between rows | 1em`
+ * `--vaadin-form-layout-row-spacing` | Length of the spacing between rows | `1em`
+ * `--vaadin-form-layout-label-width` | Width of the label when labels are displayed aside | `8em`
+ * `--vaadin-form-layout-label-spacing` | Length of the spacing between the label and the input when labels are displayed aside | `1em`
  *
  * @customElement
  * @extends HTMLElement
