@@ -42,6 +42,7 @@ export const FormItemMixin = (superClass) =>
       this.__fieldNode = null;
     }
 
+    /** @protected */
     ready() {
       super.ready();
 
