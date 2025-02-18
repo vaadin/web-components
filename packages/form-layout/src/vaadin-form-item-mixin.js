@@ -46,27 +46,32 @@ export const FormItemMixin = (superClass) =>
     ready() {
       super.ready();
 
-      const computedStyle = getComputedStyle(this);
+      if (!this.constructor.__isDeprecationWarningShown) {
+        const computedStyle = getComputedStyle(this);
 
-      const spacing = computedStyle.getPropertyValue('--vaadin-form-item-row-spacing');
-      if (spacing !== '' && parseInt(spacing) !== 0) {
-        console.warn(
-          '`--vaadin-form-item-row-spacing` is deprecated since 24.7. Use `--vaadin-form-layout-row-spacing` on <vaadin-form-layout> instead.',
-        );
-      }
+        const spacing = computedStyle.getPropertyValue('--vaadin-form-item-row-spacing');
+        if (spacing !== '' && parseInt(spacing) !== 0) {
+          console.warn(
+            '`--vaadin-form-item-row-spacing` is deprecated since 24.7. Use `--vaadin-form-layout-row-spacing` on <vaadin-form-layout> instead.',
+          );
+          this.constructor.__isDeprecationWarningShown = true;
+        }
 
-      const labelWidth = computedStyle.getPropertyValue('--vaadin-form-item-label-width');
-      if (labelWidth !== '' && parseInt(labelWidth) !== 0) {
-        console.warn(
-          '`--vaadin-form-item-label-width` is deprecated since 24.7. Use `--vaadin-form-layout-label-width` on <vaadin-form-layout> instead.',
-        );
-      }
+        const labelWidth = computedStyle.getPropertyValue('--vaadin-form-item-label-width');
+        if (labelWidth !== '' && parseInt(labelWidth) !== 0) {
+          console.warn(
+            '`--vaadin-form-item-label-width` is deprecated since 24.7. Use `--vaadin-form-layout-label-width` on <vaadin-form-layout> instead.',
+          );
+          this.constructor.__isDeprecationWarningShown = true;
+        }
 
-      const labelSpacing = computedStyle.getPropertyValue('--vaadin-form-item-label-spacing');
-      if (labelSpacing !== '' && parseInt(labelSpacing) !== 0) {
-        console.warn(
-          '`--vaadin-form-item-label-spacing` is deprecated since 24.7. Use `--vaadin-form-layout-label-spacing` on <vaadin-form-layout> instead.',
-        );
+        const labelSpacing = computedStyle.getPropertyValue('--vaadin-form-item-label-spacing');
+        if (labelSpacing !== '' && parseInt(labelSpacing) !== 0) {
+          console.warn(
+            '`--vaadin-form-item-label-spacing` is deprecated since 24.7. Use `--vaadin-form-layout-label-spacing` on <vaadin-form-layout> instead.',
+          );
+          this.constructor.__isDeprecationWarningShown = true;
+        }
       }
     }
 

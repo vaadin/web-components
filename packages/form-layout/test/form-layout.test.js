@@ -4,7 +4,7 @@ import sinon from 'sinon';
 import '@vaadin/text-field/vaadin-text-field.js';
 import '../src/vaadin-form-layout.js';
 import '../src/vaadin-form-item.js';
-import '@polymer/polymer/lib/elements/dom-repeat.js';
+import { FormItem } from '../src/vaadin-form-item.js';
 
 function estimateEffectiveColumnCount(layout) {
   const offsets = [...layout.children]
@@ -139,6 +139,7 @@ describe('form layout', () => {
     });
 
     afterEach(() => {
+      FormItem.__isDeprecationWarningShown = false;
       console.warn.restore();
     });
 
@@ -154,27 +155,36 @@ describe('form layout', () => {
       expect(getComputedStyle(item).getPropertyValue('--vaadin-form-item-row-spacing')).to.be.empty;
     });
 
-    it('should warn when adding form-item with deprecated --vaadin-form-item-label-width', () => {
-      const item = document.createElement('vaadin-form-item');
-      item.style.setProperty('--vaadin-form-item-label-width', '100px');
-      layout.appendChild(item);
-      expect(console.warn.calledOnce).to.be.true;
+    it('should warn once when adding form items with deprecated --vaadin-form-item-label-width', () => {
+      for (let i = 0; i < 2; i++) {
+        const item = document.createElement('vaadin-form-item');
+        item.style.setProperty('--vaadin-form-item-label-width', '100px');
+        layout.appendChild(item);
+      }
+
+      expect(console.warn).to.be.calledOnce;
       expect(console.warn.args[0][0]).to.contain('`--vaadin-form-item-label-width` is deprecated');
     });
 
-    it('should warn when adding form-item with deprecated --vaadin-form-item-label-spacing', () => {
-      const item = document.createElement('vaadin-form-item');
-      item.style.setProperty('--vaadin-form-item-label-spacing', '8px');
-      layout.appendChild(item);
-      expect(console.warn.calledOnce).to.be.true;
+    it('should warn once when adding form items with deprecated --vaadin-form-item-label-spacing', () => {
+      for (let i = 0; i < 2; i++) {
+        const item = document.createElement('vaadin-form-item');
+        item.style.setProperty('--vaadin-form-item-label-spacing', '8px');
+        layout.appendChild(item);
+      }
+
+      expect(console.warn).to.be.calledOnce;
       expect(console.warn.args[0][0]).to.contain('`--vaadin-form-item-label-spacing` is deprecated');
     });
 
-    it('should warn when adding form-item with deprecated --vaadin-form-item-row-spacing', () => {
-      const item = document.createElement('vaadin-form-item');
-      item.style.setProperty('--vaadin-form-item-row-spacing', '8px');
-      layout.appendChild(item);
-      expect(console.warn.calledOnce).to.be.true;
+    it('should warn when adding form items with deprecated --vaadin-form-item-row-spacing', () => {
+      for (let i = 0; i < 2; i++) {
+        const item = document.createElement('vaadin-form-item');
+        item.style.setProperty('--vaadin-form-item-row-spacing', '8px');
+        layout.appendChild(item);
+      }
+
+      expect(console.warn).to.be.calledOnce;
       expect(console.warn.args[0][0]).to.contain('`--vaadin-form-item-row-spacing` is deprecated');
     });
 
