@@ -87,12 +87,18 @@ export const FormLayoutMixin = (superClass) =>
          * up to the limit set by `maxColumns`. The number of columns adjusts dynamically as
          * the container size changes.
          *
+         * By default, each field is placed on a new row. To group fields on the same row,
+         * wrap them into <vaadin-form-row> or enable the `autoRows` property to make
+         * the layout try to fit as many fields as possible on the same row before moving
+         * to the new row.
+         *
          * NOTE: This property overrides any `responsiveSteps` configuration.
          *
          * @attr {boolean} auto-responsive
          */
         autoResponsive: {
           type: Boolean,
+          sync: true,
           value: false,
           reflectToAttribute: true,
         },
@@ -105,6 +111,7 @@ export const FormLayoutMixin = (superClass) =>
          */
         columnWidth: {
           type: String,
+          sync: true,
           value: '13em',
           observer: '__columnWidthChanged',
         },
@@ -117,8 +124,22 @@ export const FormLayoutMixin = (superClass) =>
          */
         maxColumns: {
           type: Number,
+          sync: true,
           value: 10,
           observer: '__maxColumnsChanged',
+        },
+
+        /**
+         * When enabled with `autoResponsive`, automatically places each field into the next available column
+         * until the row is filled. Then the layout moves to the next row.
+         *
+         * @attr {boolean} auto-rows
+         */
+        autoRows: {
+          type: Boolean,
+          sync: true,
+          value: false,
+          reflectToAttribute: true,
         },
 
         /**

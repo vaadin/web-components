@@ -67,7 +67,14 @@ export declare class FormLayoutMixinClass {
    * up to the limit set by `maxColumns`. The number of columns adjusts dynamically as
    * the container size changes.
    *
+   * By default, each field is placed on a new row. To group fields on the same row,
+   * wrap them into <vaadin-form-row> or enable the `autoRows` property to make
+   * the layout try to fit as many fields as possible on the same row before moving
+   * to the new row.
+   *
    * NOTE: This property overrides any `responsiveSteps` configuration.
+   *
+   * @attr {boolean} auto-responsive
    */
   autoResponsive: boolean;
 
@@ -82,6 +89,12 @@ export declare class FormLayoutMixinClass {
    * The layout will create columns up to this limit, based on the available container width.
    */
   maxColumns: number;
+
+  /**
+   * When enabled with `autoResponsive`, automatically places each field into the next available column
+   * until the row is filled. Then the layout moves to the next row.
+   */
+  autoRows: boolean;
 
   /**
    * Update the layout.

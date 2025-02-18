@@ -57,6 +57,7 @@ export const formLayoutStyles = css`
 
     display: grid;
     grid-template-columns: repeat(auto-fit, var(--_column-width));
+    justify-items: start;
     gap: var(--vaadin-form-layout-row-spacing) var(--_column-gap);
 
     /*
@@ -79,6 +80,14 @@ export const formLayoutStyles = css`
       to shrink below the value specified in the CSS width property above.
     */
     min-width: inherit;
+  }
+
+  :host([auto-responsive]) #layout ::slotted(*) {
+    grid-column-start: 1;
+  }
+
+  :host([auto-responsive][auto-rows]) #layout ::slotted(*) {
+    grid-column-start: auto;
   }
 `;
 
