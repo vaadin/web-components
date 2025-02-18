@@ -4,7 +4,6 @@ import sinon from 'sinon';
 import '@vaadin/text-field/vaadin-text-field.js';
 import '../src/vaadin-form-layout.js';
 import '../src/vaadin-form-item.js';
-import { FormItem } from '../src/vaadin-form-item.js';
 
 function estimateEffectiveColumnCount(layout) {
   const offsets = [...layout.children]
@@ -139,7 +138,6 @@ describe('form layout', () => {
     });
 
     afterEach(() => {
-      FormItem.__isDeprecationWarningShown = false;
       console.warn.restore();
     });
 
