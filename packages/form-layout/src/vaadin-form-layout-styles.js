@@ -44,24 +44,22 @@ export const formLayoutStyles = css`
   }
 
   :host([auto-responsive]) {
+    --_column-gap: var(--vaadin-form-layout-column-spacing);
+    --_max-total-gap-width: calc((var(--_max-columns) - 1) * var(--_column-gap));
+    --_max-total-col-width: calc(var(--_max-columns) * var(--_column-width));
+
     display: flex;
-    min-width: var(--vaadin-form-layout-column-width);
+    min-width: var(--_column-width);
   }
 
   :host([auto-responsive]) #layout {
-    --_column-gap: var(--vaadin-form-layout-column-spacing);
-    --_column-width: var(--vaadin-form-layout-column-width);
-    --_column-max-count: var(--vaadin-form-layout-max-columns);
-    --_max-total-gap-width: calc((var(--_column-max-count) - 1) * var(--_column-gap));
-    --_max-total-col-width: calc(var(--_column-max-count) * var(--_column-width));
-
     display: grid;
     grid-template-columns: repeat(auto-fit, var(--_column-width));
     justify-items: start;
     gap: var(--vaadin-form-layout-row-spacing) var(--_column-gap);
 
     /*
-      To prevent the layout from exceeding the column limit defined by --_column-max-count,
+      To prevent the layout from exceeding the column limit defined by --_max-columns,
       its width needs to be constrained:
 
       1. "width" is used instead of "max-width" because, together with the default "flex: 0 1 auto",

@@ -402,18 +402,18 @@ export const FormLayoutMixin = (superClass) =>
     /** @private */
     __columnWidthChanged(columnWidth, autoResponsive) {
       if (autoResponsive) {
-        this.style.setProperty('--vaadin-form-layout-column-width', columnWidth);
+        this.style.setProperty('--_column-width', columnWidth);
       } else {
-        this.style.removeProperty('--vaadin-form-layout-column-width');
+        this.style.removeProperty('--_column-width');
       }
     }
 
     /** @private */
     __maxColumnsChanged(maxColumns, autoResponsive) {
       if (autoResponsive) {
-        this.style.setProperty('--vaadin-form-layout-max-columns', maxColumns);
+        this.style.setProperty('--_max-columns', maxColumns);
       } else {
-        this.style.removeProperty('--vaadin-form-layout-max-columns');
+        this.style.removeProperty('--_max-columns');
       }
     }
   };
