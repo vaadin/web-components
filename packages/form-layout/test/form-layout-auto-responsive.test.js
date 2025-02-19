@@ -2,18 +2,10 @@ import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import '../src/vaadin-form-layout.js';
 
-function getEffectiveColumnCount(layout) {
-  const offsets = [...layout.children]
-    .filter((child) => getComputedStyle(child).display !== 'none')
-    .map((child) => child.offsetLeft);
-  return new Set(offsets).size;
-}
-
-function getEffectiveRowCount(layout) {
-  const offsets = [...layout.children]
-    .filter((child) => getComputedStyle(child).display !== 'none')
-    .map((child) => child.offsetTop);
-  return new Set(offsets).size;
+function assertFormLayoutGrid(layout, { columns, rows }) {
+  const children = [...layout.children];
+  expect(new Set(children.map((child) => child.offsetLeft)).size).to.equal(columns);
+  expect(new Set(children.map((child) => child.offsetTop)).size).to.equal(rows);
 }
 
 describe('form-layout auto responsive', () => {
@@ -61,7 +53,13 @@ describe('form-layout auto responsive', () => {
     beforeEach(async () => {
       container = fixtureSync(`
         <div style="width: 500px;">
-          <vaadin-form-layout auto-responsive auto-rows max-columns="3" column-width="100px" style="--vaadin-form-layout-column-spacing: 0px;">
+          <vaadin-form-layout
+            auto-responsive
+            auto-rows
+            max-columns="3"
+            column-width="100px"
+            style="--vaadin-form-layout-column-spacing: 0px;"
+          >
             <input placeholder="First name">
             <input placeholder="Last Name">
             <input placeholder="Email">
@@ -72,31 +70,28 @@ describe('form-layout auto responsive', () => {
       await nextFrame();
     });
 
-    it('should have 3 columns and 2 rows', () => {
-      expect(getEffectiveColumnCount(layout)).to.equal(3);
-      expect(getEffectiveRowCount(layout)).to.equal(2);
+    it('should start with max number of columns', () => {
+      assertFormLayoutGrid(layout, { columns: 3, rows: 2 });
     });
 
-    it('should adjust number of columns and rows on container resize', () => {
+    it('should adjust number of columns based on container width', () => {
+      container.style.width = '300px';
+      assertFormLayoutGrid(layout, { columns: 3, rows: 2 });
+
       container.style.width = '200px';
-      expect(getEffectiveColumnCount(layout)).to.equal(2);
-      expect(getEffectiveRowCount(layout)).to.equal(2);
+      assertFormLayoutGrid(layout, { columns: 2, rows: 2 });
 
       container.style.width = '100px';
-      expect(getEffectiveColumnCount(layout)).to.equal(1);
-      expect(getEffectiveRowCount(layout)).to.equal(4);
+      assertFormLayoutGrid(layout, { columns: 1, rows: 4 });
 
       container.style.width = '50px';
-      expect(getEffectiveColumnCount(layout)).to.equal(1);
-      expect(getEffectiveRowCount(layout)).to.equal(4);
+      assertFormLayoutGrid(layout, { columns: 1, rows: 4 });
 
       container.style.width = '200px';
-      expect(getEffectiveColumnCount(layout)).to.equal(2);
-      expect(getEffectiveRowCount(layout)).to.equal(2);
+      assertFormLayoutGrid(layout, { columns: 2, rows: 2 });
 
       container.style.width = '300px';
-      expect(getEffectiveColumnCount(layout)).to.equal(3);
-      expect(getEffectiveRowCount(layout)).to.equal(2);
+      assertFormLayoutGrid(layout, { columns: 3, rows: 2 });
     });
   });
 });

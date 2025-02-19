@@ -61,19 +61,18 @@ export const formLayoutStyles = css`
     gap: var(--vaadin-form-layout-row-spacing) var(--_column-gap);
 
     /*
-      The layout's width needs to be capped to prevent it from expanding to more columns
-      than defined by --_column-max-count:
+      To prevent the layout from exceeding the column limit defined by --_column-max-count,
+      its width needs to be constrained:
 
-      1. "width" + "flex-grow" are used instead of "max-width" for the layout to be able to
-      shrink to its minimum width in <vaadin-horizontal-layout>, which doesn't work otherwise.
+      1. "width" is used instead of "max-width" because, together with the default "flex: 0 1 auto",
+      it allows the layout to shrink to its minimum width inside <vaadin-horizontal-layout>, which
+      wouldn't work otherwise.
 
       2. "width" is used instead of "flex-basis" to make the layout expand to the maximum
-      number of columns in <vaadin-overlay> which creates a new stacking context without
-      an explicit default width.
+      number of columns inside <vaadin-overlay>, which creates a new stacking context
+      without a predefined width.
     */
     width: calc(var(--_max-total-col-width) + var(--_max-total-gap-width));
-    flex-grow: 0;
-    flex-shrink: 1;
 
     /*
       Firefox requires min-width on both :host and #layout to allow the layout
