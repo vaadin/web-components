@@ -7,13 +7,14 @@ import { css } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 export const formLayoutStyles = css`
   :host {
+    /* Default values */
+    --vaadin-form-layout-row-spacing: 1em;
+    --vaadin-form-layout-column-spacing: 2em;
+    --vaadin-form-layout-label-width: 8em;
+    --vaadin-form-layout-label-spacing: 1em;
+
     display: block;
     max-width: 100%;
-    /* CSS API for host */
-    --vaadin-form-item-label-width: 8em;
-    --vaadin-form-item-label-spacing: 1em;
-    --vaadin-form-layout-row-spacing: 1em;
-    --vaadin-form-layout-column-spacing: 2em; /* (default) */
     align-self: stretch;
   }
 
@@ -62,7 +63,7 @@ export const formItemStyles = css`
   }
 
   #label {
-    width: var(--vaadin-form-item-label-width, 8em);
+    width: var(--vaadin-form-item-label-width, var(--vaadin-form-layout-label-width, 8em));
     flex: 0 0 auto;
   }
 
@@ -71,7 +72,7 @@ export const formItemStyles = css`
   }
 
   #spacing {
-    width: var(--vaadin-form-item-label-spacing, 1em);
+    width: var(--vaadin-form-item-label-spacing, var(--vaadin-form-layout-label-spacing, 1em));
     flex: 0 0 auto;
   }
 
