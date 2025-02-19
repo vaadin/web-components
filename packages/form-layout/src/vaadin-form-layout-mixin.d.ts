@@ -62,37 +62,37 @@ export declare class FormLayoutMixinClass {
   responsiveSteps: FormLayoutResponsiveStep[];
 
   /**
-   * When enabled, makes the layout automatically create and adjust its columns based on
-   * the container width. The layout creates columns of fixed width (defined by `columnWidth`),
-   * up to the limit set by `maxColumns`. The number of columns adjusts dynamically as
-   * the container size changes.
+   * When enabled, the layout automatically creates and adjusts columns based on
+   * the container's width. Columns have a fixed width defined by `columnWidth`
+   * and their number increases up to the limit set by `maxColumns`. The layout
+   * dynamically adjusts the number of columns as the container size changes.
    *
-   * By default, each field is placed on a new row. To group fields on the same row,
-   * wrap them into <vaadin-form-row> or enable the `autoRows` property to make
-   * the layout try to fit as many fields as possible on the same row before moving
-   * to the new row.
+   * By default, each field is placed on a new row. To group fields in the same row,
+   * wrap them in `<vaadin-form-row>` or enable the `autoRows` property, which allows
+   * the layout to fit as many fields as possible in a row before wrapping.
    *
-   * NOTE: This property overrides any `responsiveSteps` configuration.
-   *
-   * @attr {boolean} auto-responsive
+   * NOTE: In this mode, `responsiveSteps` are ignored.
    */
   autoResponsive: boolean;
 
   /**
    * When `autoResponsive` is enabled, defines the width of each column.
-   * Must be specified in CSS length units, e.g. `100px`. The default value is `13em`.
+   * The value must be defined in CSS length units, e.g., `100px` or `13em`.
+   * The default value is `13em`.
    */
   columnWidth: string;
 
   /**
-   * When `autoResponsive` is enabled, defines the maximum number of columns the layout can create.
-   * The layout will create columns up to this limit, based on the available container width.
+   * When `autoResponsive` is enabled, defines the maximum number of columns
+   * that the layout can create. The layout will create columns up to this
+   * limit based on the available container width.
    */
   maxColumns: number;
 
   /**
-   * When enabled with `autoResponsive`, automatically places each field into the next available column
-   * until the row is filled. Then the layout moves to the next row.
+   * When enabled with `autoResponsive`, distributes fields across columns
+   * by placing each field in the next available column and wrapping to
+   * the next row when the current row is full.
    */
   autoRows: boolean;
 
