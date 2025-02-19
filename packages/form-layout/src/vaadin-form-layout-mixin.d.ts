@@ -72,6 +72,8 @@ export declare class FormLayoutMixinClass {
    * the layout to fit as many fields as possible in a row before wrapping.
    *
    * NOTE: In this mode, `responsiveSteps` are ignored.
+   *
+   * @attr {boolean} auto-responsive
    */
   autoResponsive: boolean;
 
@@ -79,6 +81,8 @@ export declare class FormLayoutMixinClass {
    * When `autoResponsive` is enabled, defines the width of each column.
    * The value must be defined in CSS length units, e.g., `100px` or `13em`.
    * The default value is `13em`.
+   *
+   * @attr {string} column-width
    */
   columnWidth: string;
 
@@ -86,6 +90,8 @@ export declare class FormLayoutMixinClass {
    * When `autoResponsive` is enabled, defines the maximum number of columns
    * that the layout can create. The layout will create columns up to this
    * limit based on the available container width.
+   *
+   * @attr {number} max-columns
    */
   maxColumns: number;
 
@@ -93,6 +99,8 @@ export declare class FormLayoutMixinClass {
    * When enabled with `autoResponsive`, distributes fields across columns
    * by placing each field in the next available column and wrapping to
    * the next row when the current row is full.
+   *
+   * @attr {boolean} auto-rows
    */
   autoRows: boolean;
 

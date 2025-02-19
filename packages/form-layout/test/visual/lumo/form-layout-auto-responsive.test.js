@@ -3,16 +3,6 @@ import { fixtureSync } from '@vaadin/testing-helpers/dist/fixture.js';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '../../../theme/lumo/vaadin-form-layout.js';
 import '../../../theme/lumo/vaadin-form-item.js';
-import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-
-registerStyles(
-  'vaadin-form-layout',
-  css`
-    :host {
-      border: 1px solid red;
-    }
-  `,
-);
 
 describe('form-layout auto responsive', () => {
   let div, element;
@@ -29,7 +19,7 @@ describe('form-layout auto responsive', () => {
     beforeEach(async () => {
       element = fixtureSync(
         `
-        <vaadin-form-layout auto-responsive>
+        <vaadin-form-layout auto-responsive style="border: 1px solid red;">
           <input placeholder="First name" />
           <input placeholder="Last Name" />
           <input placeholder="Email" />
@@ -71,6 +61,7 @@ describe('form-layout auto responsive', () => {
           <div>
             <style>
               vaadin-form-layout {
+                border: 1px solid red;
                 --vaadin-form-layout-row-spacing: 4em;
                 --vaadin-form-layout-column-spacing: 4em;
               }
