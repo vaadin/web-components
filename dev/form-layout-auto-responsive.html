@@ -35,6 +35,11 @@
       import { dialogRenderer } from '@vaadin/dialog/lit.js';
 
       class FormLayoutExamples extends LitElement {
+        constructor() {
+          super();
+          this.openPrevSiblingDialog = this.openPrevSiblingDialog.bind(this);
+        }
+
         createRenderRoot() {
           return this;
         }
@@ -139,7 +144,6 @@
 
             <h1>autoResponsive inside Dialog</h1>
             <vaadin-dialog
-              id="dialog-0"
               ${dialogRenderer(
                 (dialog) => html`
                   <vaadin-form-layout auto-responsive max-columns="2">
@@ -152,11 +156,10 @@
                 `,
               )}
             ></vaadin-dialog>
-            <vaadin-button @click="${() => this.openDialog('#dialog-0')}">Open</vaadin-button>
+            <vaadin-button @click="${this.openPrevSiblingDialog}">Open</vaadin-button>
 
             <h1>autoResponsive inside Dialog + expandColumns</h1>
             <vaadin-dialog
-              id="dialog-1"
               ${dialogRenderer(
                 (dialog) => html`
                   <vaadin-form-layout auto-responsive max-columns="2" expand-columns>
@@ -169,11 +172,10 @@
                 `,
               )}
             ></vaadin-dialog>
-            <vaadin-button @click="${() => this.openDialog('#dialog-1')}">Open</vaadin-button>
+            <vaadin-button @click="${this.openPrevSiblingDialog}">Open</vaadin-button>
 
             <h1>autoResponsive inside Dialog 80%</h1>
             <vaadin-dialog
-              id="dialog-2"
               width="80%"
               ${dialogRenderer(
                 (dialog) => html`
@@ -187,11 +189,10 @@
                 `,
               )}
             ></vaadin-dialog>
-            <vaadin-button @click="${() => this.openDialog('#dialog-2')}">Open</vaadin-button>
+            <vaadin-button @click="${this.openPrevSiblingDialog}">Open</vaadin-button>
 
             <h1>autoResponsive inside Dialog 80% + expandColumns</h1>
             <vaadin-dialog
-              id="dialog-3"
               width="80%"
               ${dialogRenderer(
                 (dialog) => html`
@@ -205,11 +206,10 @@
                 `,
               )}
             ></vaadin-dialog>
-            <vaadin-button @click="${() => this.openDialog('#dialog-3')}">Open</vaadin-button>
+            <vaadin-button @click="${this.openPrevSiblingDialog}">Open</vaadin-button>
 
             <h1>autoResponsive inside HorizontalLayout inside Dialog + flex: 1</h1>
             <vaadin-dialog
-              id="dialog-4"
               ${dialogRenderer(
                 (dialog) => html`
                   <vaadin-horizontal-layout theme="spacing">
@@ -231,11 +231,10 @@
                 `,
               )}
             ></vaadin-dialog>
-            <vaadin-button @click="${() => this.openDialog('#dialog-4')}">Open</vaadin-button>
+            <vaadin-button @click="${this.openPrevSiblingDialog}">Open</vaadin-button>
 
             <h1>autoResponsive inside Tabsheet inside Dialog</h1>
             <vaadin-dialog
-              id="dialog-5"
               ${dialogRenderer(
                 (dialog) => html`
                   <vaadin-tabsheet>
@@ -261,12 +260,16 @@
                 `,
               )}
             ></vaadin-dialog>
-            <vaadin-button @click="${() => this.openDialog('#dialog-5')}">Open</vaadin-button>
+            <vaadin-button @click="${this.openPrevSiblingDialog}">Open</vaadin-button>
           `;
         }
 
-        openDialog(id) {
-          this.querySelector(id).opened = true;
+        openPrevSiblingDialog(event) {
+          let dialog = event.target;
+          while (dialog && dialog.localName !== 'vaadin-dialog') {
+            dialog = dialog.previousSibling;
+          }
+          dialog.opened = true;
         }
       }
       customElements.define('form-layout-examples', FormLayoutExamples);
