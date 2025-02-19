@@ -3,23 +3,25 @@
  * Copyright (c) 2019 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { DisabledMixin } from '@vaadin/a11y-base/src/disabled-mixin.js';
-import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
-import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { type MenuBarItem, MenuBarMixin } from './vaadin-menu-bar-mixin.js';
+import type { DisabledMixinClass } from '@vaadin/a11y-base/src/disabled-mixin.js';
+import type { ElementMixinClass } from '@vaadin/component-base/src/element-mixin.js';
+import type { ThemableMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import type { MenuBarItem, MenuBarMixinClass } from './vaadin-menu-bar-mixin.js';
 
 export { MenuBarItem, MenuBarI18n, SubMenuItem } from './vaadin-menu-bar-mixin.js';
 
 /**
  * Fired when a submenu item or menu bar button without children is clicked.
  */
-export type MenuBarItemSelectedEvent = CustomEvent<{ value: MenuBarItem }>;
+export type MenuBarItemSelectedEvent<TItem extends MenuBarItem = MenuBarItem> = CustomEvent<{ value: TItem }>;
 
-export interface MenuBarCustomEventMap {
-  'item-selected': MenuBarItemSelectedEvent;
+export interface MenuBarCustomEventMap<TItem extends MenuBarItem = MenuBarItem> {
+  'item-selected': MenuBarItemSelectedEvent<TItem>;
 }
 
-export interface MenuBarEventMap extends HTMLElementEventMap, MenuBarCustomEventMap {}
+export interface MenuBarEventMap<TItem extends MenuBarItem = MenuBarItem>
+  extends HTMLElementEventMap,
+    MenuBarCustomEventMap<TItem> {}
 
 /**
  * `<vaadin-menu-bar>` is a Web Component providing a set of horizontally stacked buttons offering
@@ -77,19 +79,25 @@ export interface MenuBarEventMap extends HTMLElementEventMap, MenuBarCustomEvent
  *
  * @fires {CustomEvent} item-selected - Fired when a submenu item or menu bar button without children is clicked.
  */
-declare class MenuBar extends MenuBarMixin(DisabledMixin(ElementMixin(ThemableMixin(HTMLElement)))) {
-  addEventListener<K extends keyof MenuBarEventMap>(
+declare class MenuBar<TItem extends MenuBarItem = MenuBarItem> extends HTMLElement {
+  addEventListener<K extends keyof MenuBarEventMap<TItem>>(
     type: K,
-    listener: (this: MenuBar, ev: MenuBarEventMap[K]) => void,
+    listener: (this: MenuBar, ev: MenuBarEventMap<TItem>[K]) => void,
     options?: AddEventListenerOptions | boolean,
   ): void;
 
-  removeEventListener<K extends keyof MenuBarEventMap>(
+  removeEventListener<K extends keyof MenuBarEventMap<TItem>>(
     type: K,
-    listener: (this: MenuBar, ev: MenuBarEventMap[K]) => void,
+    listener: (this: MenuBar, ev: MenuBarEventMap<TItem>[K]) => void,
     options?: EventListenerOptions | boolean,
   ): void;
 }
+
+interface MenuBar<TItem extends MenuBarItem = MenuBarItem>
+  extends MenuBarMixinClass<TItem>,
+    DisabledMixinClass,
+    ElementMixinClass,
+    ThemableMixinClass {}
 
 declare global {
   interface HTMLElementTagNameMap {
