@@ -3,6 +3,7 @@ import { fixtureSync } from '@vaadin/testing-helpers/dist/fixture.js';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '../../../theme/lumo/vaadin-form-layout.js';
 import '../../../theme/lumo/vaadin-form-item.js';
+import '../../../theme/lumo/vaadin-form-row.js';
 
 describe('form-layout auto responsive', () => {
   let div, element;
@@ -35,11 +36,6 @@ describe('form-layout auto responsive', () => {
       await visualDiff(div, 'basic');
     });
 
-    it('autoRows', async () => {
-      element.autoRows = true;
-      await visualDiff(div, 'auto-rows');
-    });
-
     it('maxColumns', async () => {
       element.autoRows = true;
       element.maxColumns = 3;
@@ -58,34 +54,93 @@ describe('form-layout auto responsive', () => {
     beforeEach(async () => {
       element = fixtureSync(
         `
-          <div>
-            <style>
-              vaadin-form-layout {
-                border: 1px solid red;
-                --vaadin-form-layout-row-spacing: 4em;
-                --vaadin-form-layout-column-spacing: 4em;
-              }
+          <vaadin-form-layout auto-responsive auto-rows max-columns="2">
+            <input placeholder="First name" />
+            <input placeholder="Last Name" />
+            <input placeholder="Email" />
+            <input placeholder="Phone" />
+          </vaadin-form-layout>
 
-              input {
-                justify-self: stretch;
-              }
-            </style>
+          <style>
+            vaadin-form-layout {
+              border: 1px solid red;
+              --vaadin-form-layout-row-spacing: 4em;
+              --vaadin-form-layout-column-spacing: 4em;
+            }
 
-            <vaadin-form-layout auto-responsive auto-rows max-columns="2">
-              <input placeholder="First name" />
-              <input placeholder="Last Name" />
-              <input placeholder="Email" />
-              <input placeholder="Phone" />
-            </vaadin-form-layout>
-          </div>
+            input {
+              justify-self: stretch;
+            }
+          </style>
         `,
         div,
-      ).lastChild;
+      );
       await nextFrame();
     });
 
-    it('basic', async () => {
+    it('default', async () => {
       await visualDiff(div, 'custom-css-properties-spacing');
+    });
+  });
+
+  describe('explicit rows', () => {
+    beforeEach(async () => {
+      element = fixtureSync(
+        `
+          <vaadin-form-layout auto-responsive>
+            <vaadin-form-row>
+              <input placeholder="First name" />
+              <input placeholder="Last Name" />
+            </vaadin-form-row>
+            <vaadin-form-row>
+              <input placeholder="Address" hidden />
+            </vaadin-form-row>
+            <vaadin-form-row>
+              <input placeholder="Email" />
+              <input placeholder="Phone" />
+            </vaadin-form-row>
+          </vaadin-form-layout>
+
+          <style>
+            vaadin-form-layout {
+              border: 1px solid red;
+            }
+
+            input {
+              justify-self: stretch;
+            }
+          </style>
+        `,
+        div,
+      );
+      await nextFrame();
+    });
+
+    it('default', async () => {
+      await visualDiff(div, 'explicit-rows');
+    });
+  });
+
+  describe('auto rows', () => {
+    beforeEach(async () => {
+      element = fixtureSync(
+        `
+        <vaadin-form-layout auto-responsive auto-rows style="border: 1px solid red;">
+          <input placeholder="First name" />
+          <input placeholder="Last Name" />
+          <br />
+          <input placeholder="Address" hidden />
+          <input placeholder="Email" />
+          <input placeholder="Phone" />
+        </vaadin-form-layout>
+      `,
+        div,
+      );
+      await nextFrame();
+    });
+
+    it('default', async () => {
+      await visualDiff(div, 'auto-rows');
     });
   });
 });

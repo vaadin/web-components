@@ -85,7 +85,21 @@ export const formLayoutStyles = css`
   }
 
   :host([auto-responsive][auto-rows]) #layout ::slotted(*) {
+    grid-column-start: var(--_column-start, auto);
+  }
+`;
+
+export const formRowStyles = css`
+  :host {
+    display: contents;
+  }
+
+  ::slotted(*) {
     grid-column-start: auto;
+  }
+
+  ::slotted(:first-child) {
+    grid-column-start: 1;
   }
 `;
 

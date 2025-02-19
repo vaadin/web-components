@@ -62,16 +62,19 @@ export declare class FormLayoutMixinClass {
   responsiveSteps: FormLayoutResponsiveStep[];
 
   /**
-   * When enabled, the layout automatically creates and adjusts columns based on
-   * the container's width. Columns have a fixed width defined by `columnWidth`
-   * and their number increases up to the limit set by `maxColumns`. The layout
-   * dynamically adjusts the number of columns as the container size changes.
+   * Enables the auto responsive mode where the component automatically creates and adjusts
+   * columns based on the container's width. Columns have a fixed width defined by `columnWidth`
+   * and their number increases up to the limit set by `maxColumns`. The component dynamically
+   * adjusts the number of columns as the container size changes. When this mode is enabled,
+   * the `responsiveSteps` are ignored.
    *
-   * By default, each field is placed on a new row. To group fields in the same row,
-   * wrap them in `<vaadin-form-row>` or enable the `autoRows` property, which allows
-   * the layout to fit as many fields as possible in a row before wrapping.
+   * By default, each field is placed on a new row. To organize fields into rows, there are
+   * two options:
    *
-   * NOTE: In this mode, `responsiveSteps` are ignored.
+   * 1. Use `<vaadin-form-row>` to explicitly group fields into distinct rows.
+   *
+   * 2. Enable the `autoRows` property to automatically arrange fields in available columns,
+   *    wrapping to a new row when necessary. `<br>` elements can be used to force a new row.
    *
    * @attr {boolean} auto-responsive
    */
@@ -89,7 +92,7 @@ export declare class FormLayoutMixinClass {
   /**
    * When `autoResponsive` is enabled, defines the maximum number of columns
    * that the layout can create. The layout will create columns up to this
-   * limit based on the available container width.
+   * limit based on the available container width. The default value is `10`.
    *
    * @attr {number} max-columns
    */
@@ -98,7 +101,8 @@ export declare class FormLayoutMixinClass {
   /**
    * When enabled with `autoResponsive`, distributes fields across columns
    * by placing each field in the next available column and wrapping to
-   * the next row when the current row is full.
+   * the next row when the current row is full. `<br>` elements can be
+   * used to force a new row.
    *
    * @attr {boolean} auto-rows
    */

@@ -9,9 +9,57 @@ function assertFormLayoutGrid(layout, { columns, rows }) {
 }
 
 describe('form-layout auto responsive', () => {
-  describe('responsiveness', () => {
-    let container, layout;
+  let container, layout, fields;
 
+  describe('auto rows', () => {
+    beforeEach(async () => {
+      layout = fixtureSync(`
+        <vaadin-form-layout auto-responsive auto-rows>
+          <input placeholder="First name">
+          <input placeholder="Last Name">
+          <input placeholder="Address" hidden>
+          <input placeholder="Email">
+          <input placeholder="Phone">
+        </vaadin-form-layout>
+      `);
+      await nextFrame();
+      fields = [...layout.children];
+    });
+
+    it('should add --_column-start: 1 to next visible field when <br> is inserted', async () => {
+      const br = document.createElement('br');
+      layout.insertBefore(br, fields[2]); // Insert before hidden Address field
+      await nextFrame();
+      expect(fields[3].style.getPropertyValue('--_column-start')).to.equal('1');
+    });
+
+    it('should remove --_column-start: 1 from next visible field when <br> is removed', async () => {
+      const br = document.createElement('br');
+      layout.insertBefore(br, fields[2]); // Insert before hidden Address field
+      await nextFrame();
+      layout.removeChild(br);
+      await nextFrame();
+      expect(fields[3].style.getPropertyValue('--_column-start')).to.be.empty;
+    });
+
+    it('should update --_column-start on fields when their visibility changes', async () => {
+      const br = document.createElement('br');
+      layout.insertBefore(br, fields[2]);
+      await nextFrame();
+
+      fields[2].hidden = false;
+      await nextFrame();
+      expect(fields[2].style.getPropertyValue('--_column-start')).to.equal('1');
+      expect(fields[3].style.getPropertyValue('--_column-start')).to.be.empty;
+
+      fields[2].hidden = true;
+      await nextFrame();
+      expect(fields[2].style.getPropertyValue('--_column-start')).to.be.empty;
+      expect(fields[3].style.getPropertyValue('--_column-start')).to.equal('1');
+    });
+  });
+
+  describe('responsiveness', () => {
     beforeEach(async () => {
       container = fixtureSync(`
         <div style="width: 500px;">
