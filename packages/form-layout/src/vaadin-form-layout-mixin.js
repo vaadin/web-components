@@ -82,6 +82,67 @@ export const FormLayoutMixin = (superClass) =>
         },
 
         /**
+         * When enabled, the layout automatically creates and adjusts columns based on
+         * the container's width. Columns have a fixed width defined by `columnWidth`
+         * and their number increases up to the limit set by `maxColumns`. The layout
+         * dynamically adjusts the number of columns as the container size changes.
+         *
+         * By default, each field is placed on a new row. To group fields in the same row,
+         * wrap them in `<vaadin-form-row>` or enable the `autoRows` property, which allows
+         * the layout to fit as many fields as possible in a row before wrapping.
+         *
+         * NOTE: In this mode, `responsiveSteps` are ignored.
+         *
+         * @attr {boolean} auto-responsive
+         */
+        autoResponsive: {
+          type: Boolean,
+          sync: true,
+          value: false,
+          reflectToAttribute: true,
+        },
+
+        /**
+         * When `autoResponsive` is enabled, defines the width of each column.
+         * The value must be defined in CSS length units, e.g., `100px` or `13em`.
+         * The default value is `13em`.
+         *
+         * @attr {string} column-width
+         */
+        columnWidth: {
+          type: String,
+          sync: true,
+          value: '13em',
+        },
+
+        /**
+         * When `autoResponsive` is enabled, defines the maximum number of columns
+         * that the layout can create. The layout will create columns up to this
+         * limit based on the available container width.
+         *
+         * @attr {number} max-columns
+         */
+        maxColumns: {
+          type: Number,
+          sync: true,
+          value: 10,
+        },
+
+        /**
+         * When enabled with `autoResponsive`, distributes fields across columns
+         * by placing each field in the next available column and wrapping to
+         * the next row when the current row is full.
+         *
+         * @attr {boolean} auto-rows
+         */
+        autoRows: {
+          type: Boolean,
+          sync: true,
+          value: false,
+          reflectToAttribute: true,
+        },
+
+        /**
          * Current number of columns in the layout
          * @private
          */
@@ -102,7 +163,11 @@ export const FormLayoutMixin = (superClass) =>
     }
 
     static get observers() {
-      return ['_invokeUpdateLayout(_columnCount, _labelsOnTop)'];
+      return [
+        '_invokeUpdateLayout(_columnCount, _labelsOnTop)',
+        '__columnWidthChanged(columnWidth, autoResponsive)',
+        '__maxColumnsChanged(maxColumns, autoResponsive)',
+      ];
     }
 
     /** @protected */
@@ -190,6 +255,10 @@ export const FormLayoutMixin = (superClass) =>
 
     /** @private */
     _selectResponsiveStep() {
+      if (this.autoResponsive) {
+        return;
+      }
+
       // Iterate through responsiveSteps and choose the step
       let selectedStep;
       const tmpStyleProp = 'background-position';
@@ -226,6 +295,10 @@ export const FormLayoutMixin = (superClass) =>
     _updateLayout() {
       // Do not update layout when invisible
       if (isElementHidden(this)) {
+        return;
+      }
+
+      if (this.autoResponsive) {
         return;
       }
 
@@ -326,5 +399,23 @@ export const FormLayoutMixin = (superClass) =>
       this._updateLayout();
 
       this.$.layout.style.opacity = '';
+    }
+
+    /** @private */
+    __columnWidthChanged(columnWidth, autoResponsive) {
+      if (autoResponsive) {
+        this.style.setProperty('--_column-width', columnWidth);
+      } else {
+        this.style.removeProperty('--_column-width');
+      }
+    }
+
+    /** @private */
+    __maxColumnsChanged(maxColumns, autoResponsive) {
+      if (autoResponsive) {
+        this.style.setProperty('--_max-columns', maxColumns);
+      } else {
+        this.style.removeProperty('--_max-columns');
+      }
     }
   };

@@ -62,6 +62,49 @@ export declare class FormLayoutMixinClass {
   responsiveSteps: FormLayoutResponsiveStep[];
 
   /**
+   * When enabled, the layout automatically creates and adjusts columns based on
+   * the container's width. Columns have a fixed width defined by `columnWidth`
+   * and their number increases up to the limit set by `maxColumns`. The layout
+   * dynamically adjusts the number of columns as the container size changes.
+   *
+   * By default, each field is placed on a new row. To group fields in the same row,
+   * wrap them in `<vaadin-form-row>` or enable the `autoRows` property, which allows
+   * the layout to fit as many fields as possible in a row before wrapping.
+   *
+   * NOTE: In this mode, `responsiveSteps` are ignored.
+   *
+   * @attr {boolean} auto-responsive
+   */
+  autoResponsive: boolean;
+
+  /**
+   * When `autoResponsive` is enabled, defines the width of each column.
+   * The value must be defined in CSS length units, e.g., `100px` or `13em`.
+   * The default value is `13em`.
+   *
+   * @attr {string} column-width
+   */
+  columnWidth: string;
+
+  /**
+   * When `autoResponsive` is enabled, defines the maximum number of columns
+   * that the layout can create. The layout will create columns up to this
+   * limit based on the available container width.
+   *
+   * @attr {number} max-columns
+   */
+  maxColumns: number;
+
+  /**
+   * When enabled with `autoResponsive`, distributes fields across columns
+   * by placing each field in the next available column and wrapping to
+   * the next row when the current row is full.
+   *
+   * @attr {boolean} auto-rows
+   */
+  autoRows: boolean;
+
+  /**
    * Update the layout.
    */
   protected _updateLayout(): void;
