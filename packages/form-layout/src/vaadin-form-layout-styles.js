@@ -68,7 +68,7 @@ export const formLayoutStyles = css`
     --_column-max-width: var(--_column-width);
     --_column-max-count: var(--vaadin-form-layout-max-columns);
     --_max-total-gap-width: calc((var(--_column-max-count) - 1) * var(--_column-gap));
-    --_max-total-col-width: calc(var(--_column-max-count) * var(--_column-width));
+    --_max-total-col-width: calc(var(--_column-max-count) * var(--_column-width-with-labels-above));
 
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(var(--_column-min-width), var(--_column-max-width)));
@@ -135,6 +135,10 @@ export const formLayoutStyles = css`
       Allow the layout to take up full available width of the parent element.
     */
     flex-grow: 1;
+  }
+
+  :host([auto-responsive][labels-aside]) #layout {
+    --_max-total-col-width: calc(var(--_column-max-count) * var(--_column-width-with-labels-aside));
   }
 
   :host([auto-responsive][labels-aside]) #layout[fits-labels-aside] {
