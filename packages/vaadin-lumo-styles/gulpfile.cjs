@@ -21,7 +21,7 @@ const svgmin = require('gulp-svgmin');
  * @see http://support.ecisolutions.com/doc-ddms/help/reportsmenu/ascii_sort_order_chart.htm
  */
 function sortIconFilesNormalized(file1, file2) {
-  return file1.replace(/-/g, '~').localeCompare(file2.replace(/-/g, '~'), 'en-US');
+  return file1.replace(/-/gu, '~').localeCompare(file2.replace(/-/gu, '~'), 'en-US');
 }
 
 function createCopyright() {
@@ -41,13 +41,13 @@ function createIconset(folder, filenames, idPrefix = '') {
     }
 
     const content = fs.readFileSync(folder + filename, 'utf-8');
-    const path = content.match(/<path( fill-rule="evenodd" clip-rule="evenodd")* d="([^"]*)"/);
+    const path = content.match(/<path( fill-rule="evenodd" clip-rule="evenodd")* d="([^"]*)"/u);
     if (path) {
       const newPath = new svgpath(path[2])
         .scale(1000 / 24, 1000 / 24)
         .round(0)
         .toString();
-      const name = filename.replace('.svg', '').replace(/\s/g, '-').toLowerCase();
+      const name = filename.replace('.svg', '').replace(/\s/gu, '-').toLowerCase();
       const attrs = path[1] !== undefined ? path[1] : '';
       output += `<g id="${idPrefix}${name}"><path d="${newPath}"${attrs}></path></g>\n`;
     } else {
@@ -166,7 +166,7 @@ const fontIcons = css\`
   html {
 `;
           glyphs.forEach((g) => {
-            const name = g.name.replace(/\s/g, '-').toLowerCase();
+            const name = g.name.replace(/\s/gu, '-').toLowerCase();
             const unicode = `\\\\${g.unicode[0].charCodeAt(0).toString(16)}`;
             output += `    --lumo-icons-${name}: '${unicode}';\n`;
           });

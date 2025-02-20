@@ -16,12 +16,12 @@ function createCopyright() {
 
 function iconFileModifier(prefix) {
   return function (file, contents) {
-    const id = file.path.replace(/.*\/(.*).svg/, '$1');
+    const id = file.path.replace(/.*\/(.*).svg/u, '$1');
     const svg = cheerio.load(contents, { xmlMode: true })('svg');
     // Remove fill attributes.
     svg.children('[fill]').removeAttr('fill');
     // Add closing tags instead of self-closing.
-    const content = svg.children().toString().replace(/"\/>/g, '"></path>');
+    const content = svg.children().toString().replace(/"\/>/gu, '"></path>');
     // Output the "meat" of the SVG as group element.
     return `<g id="${prefix}${id}">${content}</g>`;
   };
@@ -38,7 +38,7 @@ gulp.task('icons', () => {
     .pipe(concat('vaadin-iconset.js'))
     .pipe(
       modify({
-        fileModifier(file, contents) {
+        fileModifier(_file, contents) {
           // Enclose all icons in a vaadin-iconset
           return `${createCopyright()}
 import { Iconset } from '@vaadin/icon/vaadin-iconset.js';
