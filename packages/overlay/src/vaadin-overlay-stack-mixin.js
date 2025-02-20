@@ -28,6 +28,23 @@ const getOverlayInstances = () => getAttachedInstances().filter((el) => el.$.ove
  */
 export const isLastOverlay = (overlay) => overlay === getOverlayInstances().pop();
 
+const overlayMap = new WeakMap();
+
+/**
+ * Stores the reference to the nested overlay for given parent,
+ * or removes it when the nested overlay is null.
+ * @param {HTMLElement} parent
+ * @param {HTMLElement} nested
+ * @protected
+ */
+export const setNestedOverlay = (parent, nested) => {
+  if (nested != null) {
+    overlayMap.set(parent, nested);
+  } else {
+    overlayMap.delete(parent);
+  }
+};
+
 /**
  * @polymerMixin
  */
@@ -63,6 +80,11 @@ export const OverlayStackMixin = (superClass) =>
       }
       this.style.zIndex = zIndex;
       this.__zIndex = zIndex || parseFloat(getComputedStyle(this).zIndex);
+
+      // If there is a nested overlay, call `bringToFront()` for it as well.
+      if (overlayMap.has(this)) {
+        overlayMap.get(this).bringToFront();
+      }
     }
 
     /** @protected */
