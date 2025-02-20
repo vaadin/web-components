@@ -1,0 +1,59 @@
+<vaadin-dialog></vaadin-dialog>
+
+<style>
+  vaadin-text-field,
+  vaadin-text-area,
+  vaadin-password-field {
+    width: 100%;
+  }
+</style>
+
+<script type="module">
+  import '@vaadin/form-layout';
+  import '@vaadin/form-layout/vaadin-form-item.js';
+  import '@vaadin/text-field';
+  import '@vaadin/text-area';
+  import '@vaadin/dialog';
+  import '@vaadin/button';
+  import '@vaadin/password-field';
+  import { render, html } from 'lit';
+
+  const dialog = document.querySelector('vaadin-dialog');
+  dialog.headerTitle = 'Application Form';
+  dialog.renderer = (root) => {
+    render(
+      html`
+        <vaadin-form-layout auto-responsive auto-rows column-width="13em" max-columns="1">
+          <vaadin-form-item>
+            <label slot="label">First name</label>
+            <vaadin-text-field></vaadin-text-field>
+          </vaadin-form-item>
+          <vaadin-form-item>
+            <label slot="label">Last name</label>
+            <vaadin-text-field></vaadin-text-field>
+          </vaadin-form-item>
+          <vaadin-form-item>
+            <label slot="label">Password</label>
+            <vaadin-password-field></vaadin-password-field>
+          </vaadin-form-item>
+          <vaadin-form-item>
+            <label slot="label">Confirm</label>
+            <vaadin-password-field></vaadin-password-field>
+          </vaadin-form-item>
+          <vaadin-form-item colspan="2">
+            <label slot="label">Comment</label>
+            <vaadin-text-area></vaadin-text-area>
+          </vaadin-form-item>
+        </vaadin-form-layout>
+      `,
+      root,
+    );
+  };
+  dialog.footerRenderer = (root) => {
+    render(
+      html`<vaadin-button>Register</vaadin-button>`,
+      root,
+    );
+  };
+  dialog.opened = true;
+</script>
