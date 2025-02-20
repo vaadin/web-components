@@ -21,7 +21,7 @@ export const formLayoutStyles = css`
     display: none !important;
   }
 
-  #layout {
+  :host(:not([auto-responsive])) #layout {
     display: flex;
 
     align-items: baseline; /* default \`stretch\` is not appropriate */
@@ -29,7 +29,7 @@ export const formLayoutStyles = css`
     flex-wrap: wrap; /* the items should wrap */
   }
 
-  #layout ::slotted(*) {
+  :host(:not([auto-responsive])) #layout ::slotted(*) {
     /* Items should neither grow nor shrink. */
     flex-grow: 0;
     flex-shrink: 0;
@@ -41,6 +41,50 @@ export const formLayoutStyles = css`
 
   #layout ::slotted(br) {
     display: none;
+  }
+
+  :host([auto-responsive]) {
+    --_column-gap: var(--vaadin-form-layout-column-spacing);
+    --_max-total-gap-width: calc((var(--_max-columns) - 1) * var(--_column-gap));
+    --_max-total-col-width: calc(var(--_max-columns) * var(--_column-width));
+
+    display: flex;
+    min-width: var(--_column-width);
+  }
+
+  :host([auto-responsive]) #layout {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, var(--_column-width));
+    justify-items: start;
+    gap: var(--vaadin-form-layout-row-spacing) var(--_column-gap);
+
+    /*
+      To prevent the layout from exceeding the column limit defined by --_max-columns,
+      its width needs to be constrained:
+
+      1. "width" is used instead of "max-width" because, together with the default "flex: 0 1 auto",
+      it allows the layout to shrink to its minimum width inside <vaadin-horizontal-layout>, which
+      wouldn't work otherwise.
+
+      2. "width" is used instead of "flex-basis" to make the layout expand to the maximum
+      number of columns inside <vaadin-overlay>, which creates a new stacking context
+      without a predefined width.
+    */
+    width: calc(var(--_max-total-col-width) + var(--_max-total-gap-width));
+
+    /*
+      Firefox requires min-width on both :host and #layout to allow the layout
+      to shrink below the value specified in the CSS width property above.
+    */
+    min-width: inherit;
+  }
+
+  :host([auto-responsive]) #layout ::slotted(*) {
+    grid-column-start: 1;
+  }
+
+  :host([auto-responsive][auto-rows]) #layout ::slotted(*) {
+    grid-column-start: auto;
   }
 `;
 
