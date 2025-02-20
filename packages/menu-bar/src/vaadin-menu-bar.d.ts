@@ -82,13 +82,13 @@ export interface MenuBarEventMap<TItem extends MenuBarItem = MenuBarItem>
 declare class MenuBar<TItem extends MenuBarItem = MenuBarItem> extends HTMLElement {
   addEventListener<K extends keyof MenuBarEventMap<TItem>>(
     type: K,
-    listener: (this: MenuBar, ev: MenuBarEventMap<TItem>[K]) => void,
+    listener: (this: MenuBar<TItem>, ev: MenuBarEventMap<TItem>[K]) => void,
     options?: AddEventListenerOptions | boolean,
   ): void;
 
   removeEventListener<K extends keyof MenuBarEventMap<TItem>>(
     type: K,
-    listener: (this: MenuBar, ev: MenuBarEventMap<TItem>[K]) => void,
+    listener: (this: MenuBar<TItem>, ev: MenuBarEventMap<TItem>[K]) => void,
     options?: EventListenerOptions | boolean,
   ): void;
 }
