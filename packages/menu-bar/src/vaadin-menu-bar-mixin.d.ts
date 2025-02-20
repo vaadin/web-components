@@ -11,7 +11,7 @@ import type { KeyboardMixinClass } from '@vaadin/a11y-base/src/keyboard-mixin.js
 import type { ControllerMixinClass } from '@vaadin/component-base/src/controller-mixin.js';
 import type { ResizeMixinClass } from '@vaadin/component-base/src/resize-mixin.js';
 
-export interface MenuBarItem {
+export type MenuBarItem<TItemData extends object = object> = {
   /**
    * Text to be set as the menu button component's textContent.
    */
@@ -37,40 +37,40 @@ export interface MenuBarItem {
   /**
    * Array of submenu items.
    */
-  children?: SubMenuItem[];
+  children?: Array<SubMenuItem<TItemData>>;
 
   /**
    * Class/classes to be set to the class attribute of the button.
    */
   className?: string;
-}
+} & TItemData;
 
-export interface SubMenuItem {
+export type SubMenuItem<TItemData extends object = object> = {
   text?: string;
   component?: HTMLElement | string;
   disabled?: boolean;
   theme?: string[] | string;
   checked?: boolean;
   className?: string;
-  children?: SubMenuItem[];
-}
+  children?: Array<SubMenuItem<TItemData>>;
+} & TItemData;
 
 export interface MenuBarI18n {
   moreOptions: string;
 }
 
-export declare function MenuBarMixin<T extends Constructor<HTMLElement>>(
+export declare function MenuBarMixin<T extends Constructor<HTMLElement>, TItem extends MenuBarItem = MenuBarItem>(
   base: T,
 ): Constructor<ControllerMixinClass> &
   Constructor<DisabledMixinClass> &
   Constructor<FocusMixinClass> &
   Constructor<KeyboardDirectionMixinClass> &
   Constructor<KeyboardMixinClass> &
-  Constructor<MenuBarMixinClass> &
+  Constructor<MenuBarMixinClass<TItem>> &
   Constructor<ResizeMixinClass> &
   T;
 
-export declare class MenuBarMixinClass {
+export declare class MenuBarMixinClass<TItem extends MenuBarItem = MenuBarItem> {
   /**
    * Defines a hierarchical structure, where root level items represent menu bar buttons,
    * and `children` property configures a submenu with items to be opened below
@@ -118,7 +118,7 @@ export declare class MenuBarMixinClass {
    * window.Vaadin.featureFlags.accessibleDisabledButtons = true;
    * ```
    */
-  items: MenuBarItem[];
+  items: TItem[];
 
   /**
    * The object used to localize this component.
@@ -183,3 +183,11 @@ export declare class MenuBarMixinClass {
 
   protected _hasOverflow: boolean;
 }
+
+export declare interface MenuBarMixinClass
+  extends ControllerMixinClass,
+    DisabledMixinClass,
+    FocusMixinClass,
+    KeyboardDirectionMixinClass,
+    KeyboardMixinClass,
+    ResizeMixinClass {}
