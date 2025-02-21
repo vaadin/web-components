@@ -6,10 +6,6 @@
 import { css } from 'lit';
 
 export const textAreaStyles = css`
-  :host {
-    animation: 1ms vaadin-text-area-appear;
-  }
-
   .vaadin-text-area-container {
     flex: auto;
   }
@@ -64,11 +60,5 @@ export const textAreaStyles = css`
   /* Workaround https://bugzilla.mozilla.org/show_bug.cgi?id=1739079 */
   :host([disabled]) ::slotted(textarea) {
     user-select: none;
-  }
-
-  @keyframes vaadin-text-area-appear {
-    to {
-      opacity: 1;
-    }
   }
 `;
