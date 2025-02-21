@@ -11,8 +11,8 @@ import { formRowStyles } from './vaadin-form-layout-styles.js';
 registerStyles('vaadin-form-row', formRowStyles, { moduleId: 'vaadin-form-row-styles' });
 
 /**
- * `<vaadin-form-row>` is a web component for grouping multiple fields into
- * rows within a `<vaadin-form-layout>` that has autoResponsive mode enabled.
+ * `<vaadin-form-row>` is a web component for arranging fields into rows
+ * inside a `<vaadin-form-layout>` that is set to autoResponsive mode.
  *
  * Each `<vaadin-form-row>` always starts on a new row. Fields that exceed
  * the available columns wrap to a new row, which then remains reserved

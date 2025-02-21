@@ -91,7 +91,7 @@ export const FormLayoutMixin = (superClass) =>
          * By default, each field is placed on a new row. To organize fields into rows, there are
          * two options:
          *
-         * 1. Use `<vaadin-form-row>` to explicitly group fields into distinct rows.
+         * 1. Use `<vaadin-form-row>` to explicitly group fields into rows.
          *
          * 2. Enable the `autoRows` property to automatically arrange fields in available columns,
          *    wrapping to a new row when necessary. `<br>` elements can be used to force a new row.
