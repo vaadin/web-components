@@ -39,8 +39,8 @@ class ThemeSwitcher extends PolymerElement {
   // Crappy theme switcher that doesn't clear the previous theme
   changeTheme(theme) {
     const charts = document.getElementsByTagName('vaadin-chart');
-    for (let i = 0; i < charts.length; i++) {
-      charts[i].setAttribute('theme', theme);
+    for (const chart of charts) {
+      chart.setAttribute('theme', theme);
     }
   }
 }

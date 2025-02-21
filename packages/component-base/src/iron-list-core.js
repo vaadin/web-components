@@ -347,7 +347,6 @@ export const ironList = {
       ith = this._physicalEnd;
       offsetContent = bottom - scrollBottom;
     }
-    // eslint-disable-next-line no-constant-condition
     while (true) {
       physicalItemHeight = this._getPhysicalSizeIncrement(ith);
       offsetContent -= physicalItemHeight;
