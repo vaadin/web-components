@@ -44,6 +44,18 @@ describe('text-area', () => {
         expect(textArea.focusElement).to.equal(textArea.inputElement);
       });
     });
+
+    describe('required', () => {
+      beforeEach(async () => {
+        textArea.required = true;
+        await nextUpdate(textArea);
+      });
+
+      it('should focus on required indicator click', () => {
+        textArea.shadowRoot.querySelector('[part="required-indicator"]').click();
+        expect(textArea.hasAttribute('focused')).to.be.true;
+      });
+    });
   });
 
   describe('multi-line', () => {
