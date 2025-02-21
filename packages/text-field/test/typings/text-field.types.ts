@@ -14,7 +14,6 @@ import type { InputControlMixinClass } from '@vaadin/field-base/src/input-contro
 import type { InputFieldMixinClass } from '@vaadin/field-base/src/input-field-mixin.js';
 import type { InputMixinClass } from '@vaadin/field-base/src/input-mixin.js';
 import type { LabelMixinClass } from '@vaadin/field-base/src/label-mixin.js';
-import type { PatternMixinClass } from '@vaadin/field-base/src/pattern-mixin.js';
 import type { ValidateMixinClass } from '@vaadin/field-base/src/validate-mixin.js';
 import type { ThemableMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import type {
@@ -44,7 +43,6 @@ assertType<InputFieldMixinClass>(field);
 assertType<InputMixinClass>(field);
 assertType<KeyboardMixinClass>(field);
 assertType<LabelMixinClass>(field);
-assertType<PatternMixinClass>(field);
 assertType<SlotStylesMixinClass>(field);
 assertType<ValidateMixinClass>(field);
 assertType<ThemableMixinClass>(field);
