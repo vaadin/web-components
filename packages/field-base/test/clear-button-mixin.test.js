@@ -113,6 +113,10 @@ const runTests = (defineHelper, baseMixin) => {
       expect(event.defaultPrevented).to.be.true;
     });
 
+    it('should set clearButtonVisible to false by default', () => {
+      expect(element.clearButtonVisible).to.be.false;
+    });
+
     it('should reflect clearButtonVisible property to attribute', async () => {
       element.clearButtonVisible = true;
       await nextUpdate(element);
