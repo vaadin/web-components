@@ -3,7 +3,6 @@ import type { ControllerMixinClass } from '@vaadin/component-base/src/controller
 import type { ElementMixinClass } from '@vaadin/component-base/src/element-mixin.js';
 import type { ClearButtonMixinClass } from '@vaadin/field-base/src/clear-button-mixin.js';
 import type { InputFieldMixinClass } from '@vaadin/field-base/src/input-field-mixin.js';
-import type { PatternMixinClass } from '@vaadin/field-base/src/pattern-mixin.js';
 import type { ThemableMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import type {
   TextArea,
@@ -22,7 +21,6 @@ assertType<ClearButtonMixinClass>(area);
 assertType<ControllerMixinClass>(area);
 assertType<ElementMixinClass>(area);
 assertType<InputFieldMixinClass>(area);
-assertType<PatternMixinClass>(area);
 assertType<ThemableMixinClass>(area);
 
 // Events
