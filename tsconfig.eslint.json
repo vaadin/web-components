@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "target": "esnext",
+    "module": "esnext",
+    "allowJs": true,
+    "moduleResolution": "node",
+    "lib": [ "esnext", "es2018", "dom" ],
+    "noEmit": true,
+    "strict": true,
+  },
+  "include": [
+    "dev/**/*.js",
+    "packages/**/*.ts",
+    "packages/**/*.js",
+    "packages/**/*.cjs",
+    "test/**/*.js",
+    "scripts/*.js",
+    "*.mjs",
+    "*.js"
+  ]
+}

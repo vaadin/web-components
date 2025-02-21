@@ -4,6 +4,8 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 
+/* eslint-disable es-x/no-optional-chaining */
+
 // Based on https://github.com/jouni/j-elements/blob/main/test/old-components/Stylable.js
 const mediaRulesCache = new WeakMap();
 
