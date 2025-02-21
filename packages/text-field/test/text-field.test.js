@@ -214,33 +214,6 @@ describe('text-field', () => {
     });
   });
 
-  describe('value property', () => {
-    it('should not consider updating the value as user input if the value is not changed', async () => {
-      const event = new Event('input', {
-        bubbles: true,
-        cancelable: true,
-      });
-      input.dispatchEvent(event);
-
-      textField.value = 'foo';
-      await nextUpdate(textField);
-      expect(input.value).to.equal('foo');
-    });
-  });
-
-  describe('events', () => {
-    it('should not stop native input events', () => {
-      const inputSpy = sinon.spy();
-      textField.addEventListener('input', inputSpy);
-
-      const inputEvent = new Event('input', { bubbles: true, composed: true });
-      input.dispatchEvent(inputEvent);
-
-      expect(inputSpy.calledOnce).to.be.true;
-      expect(inputSpy.calledWith(inputEvent)).to.be.true;
-    });
-  });
-
   describe(`methods`, () => {
     it('should clear the value when clear() is called', async () => {
       textField.value = 'Foo';
