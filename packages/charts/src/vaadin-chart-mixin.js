@@ -44,7 +44,7 @@ import { deepMerge, inflateFunctions } from './helpers.js';
     Highcharts.fireEvent(this, 'afterExport');
     return result;
   });
-  /* eslint-enable no-invalid-this */
+  /* eslint-enable @typescript-eslint/no-invalid-this, prefer-arrow-callback */
 });
 
 // Monkeypatch the onDocumentMouseMove method to fix the check for the source of the event

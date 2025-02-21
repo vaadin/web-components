@@ -3,8 +3,6 @@
  * Copyright (c) 2021 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-/* eslint-disable @typescript-eslint/member-ordering */
-// https://github.com/vaadin/eslint-config-vaadin/issues/33
 import { animationFrame, microTask, timeOut } from './async.js';
 import { isSafari } from './browser-utils.js';
 import { Debouncer, flush } from './debounce.js';
