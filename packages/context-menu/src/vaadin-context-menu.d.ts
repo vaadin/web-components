@@ -3,11 +3,11 @@
  * Copyright (c) 2016 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
-import { OverlayClassMixin } from '@vaadin/component-base/src/overlay-class-mixin.js';
-import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
-import { ContextMenuMixin } from './vaadin-context-menu-mixin.js';
-import { ContextMenuItem } from './vaadin-contextmenu-items-mixin.js';
+import type { ElementMixinClass } from '@vaadin/component-base/src/element-mixin.js';
+import type { OverlayClassMixinClass } from '@vaadin/component-base/src/overlay-class-mixin.js';
+import type { ThemePropertyMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
+import type { ContextMenuMixinClass } from './vaadin-context-menu-mixin.js';
+import type { ContextMenuItem } from './vaadin-contextmenu-items-mixin.js';
 
 export { ContextMenuItem };
 
@@ -30,19 +30,23 @@ export type ContextMenuOpenedChangedEvent = CustomEvent<{ value: boolean }>;
 /**
  * Fired when an item is selected when the context menu is populated using the `items` API.
  */
-export type ContextMenuItemSelectedEvent = CustomEvent<{ value: ContextMenuItem }>;
+export type ContextMenuItemSelectedEvent<TItem extends ContextMenuItem = ContextMenuItem> = CustomEvent<{
+  value: TItem;
+}>;
 
-export interface ContextMenuCustomEventMap {
+export interface ContextMenuCustomEventMap<TItem extends ContextMenuItem = ContextMenuItem> {
   'opened-changed': ContextMenuOpenedChangedEvent;
 
-  'item-selected': ContextMenuItemSelectedEvent;
+  'item-selected': ContextMenuItemSelectedEvent<TItem>;
 
   'close-all-menus': Event;
 
   'items-outside-click': Event;
 }
 
-export interface ContextMenuEventMap extends HTMLElementEventMap, ContextMenuCustomEventMap {}
+export interface ContextMenuEventMap<TItem extends ContextMenuItem = ContextMenuItem>
+  extends HTMLElementEventMap,
+    ContextMenuCustomEventMap<TItem> {}
 
 /**
  * `<vaadin-context-menu>` is a Web Component for creating context menus.
@@ -233,19 +237,25 @@ export interface ContextMenuEventMap extends HTMLElementEventMap, ContextMenuCus
  * @fires {CustomEvent} opened-changed - Fired when the `opened` property changes.
  * @fires {CustomEvent} item-selected - Fired when an item is selected when the context menu is populated using the `items` API.
  */
-declare class ContextMenu extends ContextMenuMixin(OverlayClassMixin(ElementMixin(ThemePropertyMixin(HTMLElement)))) {
+declare class ContextMenu<TItem extends ContextMenuItem = ContextMenuItem> extends HTMLElement {
   addEventListener<K extends keyof ContextMenuEventMap>(
     type: K,
-    listener: (this: ContextMenu, ev: ContextMenuEventMap[K]) => void,
+    listener: (this: ContextMenu<TItem>, ev: ContextMenuEventMap<TItem>[K]) => void,
     options?: AddEventListenerOptions | boolean,
   ): void;
 
   removeEventListener<K extends keyof ContextMenuEventMap>(
     type: K,
-    listener: (this: ContextMenu, ev: ContextMenuEventMap[K]) => void,
+    listener: (this: ContextMenu<TItem>, ev: ContextMenuEventMap<TItem>[K]) => void,
     options?: EventListenerOptions | boolean,
   ): void;
 }
+
+interface ContextMenu<TItem extends ContextMenuItem = ContextMenuItem>
+  extends ContextMenuMixinClass<TItem>,
+    OverlayClassMixinClass,
+    ElementMixinClass,
+    ThemePropertyMixinClass {}
 
 declare global {
   interface HTMLElementTagNameMap {

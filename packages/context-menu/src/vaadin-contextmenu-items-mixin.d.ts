@@ -7,7 +7,7 @@ import './vaadin-context-menu-item.js';
 import './vaadin-context-menu-list-box.js';
 import type { Constructor } from '@open-wc/dedupe-mixin';
 
-export interface ContextMenuItem {
+export type ContextMenuItem<TItemData extends object = object> = {
   text?: string;
   component?: HTMLElement | string;
   disabled?: boolean;
@@ -15,12 +15,12 @@ export interface ContextMenuItem {
   keepOpen?: boolean;
   theme?: string[] | string;
   className?: string;
-  children?: ContextMenuItem[];
-}
+  children?: Array<ContextMenuItem<TItemData>>;
+} & TItemData;
 
 export declare function ItemsMixin<T extends Constructor<HTMLElement>>(base: T): Constructor<ItemsMixinClass> & T;
 
-export declare class ItemsMixinClass {
+export declare class ItemsMixinClass<TItem extends ContextMenuItem = ContextMenuItem> {
   /**
    * Defines a (hierarchical) menu structure for the component.
    * If a menu item has a non-empty `children` set, a sub-menu with the child items is opened
@@ -49,7 +49,7 @@ export declare class ItemsMixinClass {
    * ];
    * ```
    */
-  items: ContextMenuItem[] | undefined;
+  items: TItem[] | undefined;
 
   /**
    * Tag name prefix used by overlay, list-box and items.

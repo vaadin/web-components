@@ -45,6 +45,22 @@ const renderer: ContextMenuRenderer = (root, contextMenu, context) => {
 
 menu.renderer = renderer;
 
+// Custom item data
+interface ItemData {
+  type: 'copy' | 'cut' | 'paste';
+  value: string;
+}
+
+const narrowedMenu = menu as ContextMenu<MenuItem<ItemData>>;
+
+assertType<ItemData>(narrowedMenu.items![0]);
+assertType<ItemData>(narrowedMenu.items![0].children![0]);
+assertType<ItemData>(narrowedMenu.items![0].children![0].children![0]);
+
+narrowedMenu.addEventListener('item-selected', (event) => {
+  assertType<ItemData>(event.detail.value);
+});
+
 // Item
 const item = document.createElement('vaadin-context-menu-item');
 
