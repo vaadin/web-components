@@ -583,7 +583,6 @@ register({
       return;
     }
     const t = _findOriginalTarget(e);
-    // eslint-disable-next-line @typescript-eslint/no-this-alias
     const self = this;
     const movefn = (e) => {
       if (!hasLeftMouseButton(e)) {
@@ -694,7 +693,6 @@ register({
       return;
     }
     const t = _findOriginalTarget(e);
-    // eslint-disable-next-line @typescript-eslint/no-this-alias
     const self = this;
     const movefn = (e) => {
       const x = e.clientX,
