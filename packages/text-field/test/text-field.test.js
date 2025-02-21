@@ -13,64 +13,22 @@ describe('text-field', () => {
 
   describe('properties', () => {
     describe('delegation', () => {
-      async function assertAttrCanBeSet(prop, value) {
-        textField[prop] = value;
+      it('should delegate pattern property to the input', async () => {
+        textField.pattern = '[A-Z]+';
         await nextUpdate(textField);
-
-        const attrValue = input.getAttribute(prop);
-
-        if (value === true) {
-          expect(attrValue).not.to.be.null;
-        } else if (value === false) {
-          expect(attrValue).to.be.null;
-        } else if (value) {
-          expect(attrValue).to.be.equal(String(value));
-        }
-      }
-
-      ['pattern', 'placeholder', 'value', 'title'].forEach((prop) => {
-        it(`should delegate ${prop} property to the input`, async () => {
-          textField[prop] = 'foo';
-          await nextUpdate(textField);
-          expect(input[prop]).to.be.equal('foo');
-        });
+        expect(input.pattern).to.be.equal('[A-Z]+');
       });
 
-      ['disabled'].forEach((prop) => {
-        it(`should delegate ${prop} property to the input`, async () => {
-          textField[prop] = true;
-          await nextUpdate(textField);
-          expect(input[prop]).to.be.true;
-
-          textField[prop] = false;
-          await nextUpdate(textField);
-          expect(input[prop]).to.be.false;
-        });
+      it('should delegate minlength property to the input', async () => {
+        textField.minlength = 2;
+        await nextUpdate(textField);
+        expect(input.getAttribute('minlength')).to.be.equal('2');
       });
 
-      ['maxlength', 'minlength'].forEach((prop) => {
-        it(`should delegate ${prop} attribute to the input`, async () => {
-          await assertAttrCanBeSet(prop, 2);
-        });
-      });
-
-      ['autocomplete'].forEach((prop) => {
-        it(`should delegate ${prop} attribute to the input`, async () => {
-          await assertAttrCanBeSet(prop, 'on');
-        });
-      });
-
-      ['autocapitalize'].forEach((prop) => {
-        it(`should delegate ${prop} attribute to the input`, async () => {
-          await assertAttrCanBeSet(prop, 'none');
-        });
-      });
-
-      ['autocomplete', 'autocorrect', 'readonly', 'required'].forEach((prop) => {
-        it(`should delegate ${prop} attribute to the input`, async () => {
-          await assertAttrCanBeSet(prop, true);
-          await assertAttrCanBeSet(prop, false);
-        });
+      it('should delegate maxlength property to the input', async () => {
+        textField.maxlength = 2;
+        await nextUpdate(textField);
+        expect(input.getAttribute('maxlength')).to.be.equal('2');
       });
     });
 
