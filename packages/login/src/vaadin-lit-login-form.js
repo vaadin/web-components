@@ -49,15 +49,15 @@ class LoginForm extends LoginFormMixin(ElementMixin(ThemableMixin(PolylitMixin(L
         id="vaadinLoginFormWrapper"
         theme="${ifDefined(this._theme)}"
         .error="${this.error}"
-        .i18n="${this.i18n}"
+        .i18n="${this.__effectiveI18n}"
         .headingLevel="${this.headingLevel}"
       >
         <form method="POST" action="${ifDefined(this.action)}" @formdata="${this._onFormData}" slot="form">
           <input id="csrf" type="hidden" />
           <vaadin-text-field
             name="username"
-            .label="${this.i18n.form.username}"
-            .errorMessage="${this.i18n.errorMessage.username}"
+            .label="${this.__effectiveI18n.form.username}"
+            .errorMessage="${this.__effectiveI18n.errorMessage.username}"
             id="vaadinLoginUsername"
             required
             @keydown="${this._handleInputKeydown}"
@@ -72,8 +72,8 @@ class LoginForm extends LoginFormMixin(ElementMixin(ThemableMixin(PolylitMixin(L
 
           <vaadin-password-field
             name="password"
-            .label="${this.i18n.form.password}"
-            .errorMessage="${this.i18n.errorMessage.password}"
+            .label="${this.__effectiveI18n.form.password}"
+            .errorMessage="${this.__effectiveI18n.errorMessage.password}"
             id="vaadinLoginPassword"
             required
             @keydown="${this._handleInputKeydown}"
@@ -91,7 +91,7 @@ class LoginForm extends LoginFormMixin(ElementMixin(ThemableMixin(PolylitMixin(L
           @click="${this.submit}"
           .disabled="${this.disabled}"
         >
-          ${this.i18n.form.submit}
+          ${this.__effectiveI18n.form.submit}
         </vaadin-button>
 
         <vaadin-button
@@ -100,7 +100,7 @@ class LoginForm extends LoginFormMixin(ElementMixin(ThemableMixin(PolylitMixin(L
           @click="${this._onForgotPasswordClick}"
           ?hidden="${this.noForgotPassword}"
         >
-          ${this.i18n.form.forgotPassword}
+          ${this.__effectiveI18n.form.forgotPassword}
         </vaadin-button>
       </vaadin-login-form-wrapper>
     `;

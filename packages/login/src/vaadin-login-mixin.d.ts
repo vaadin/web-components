@@ -4,8 +4,9 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import type { Constructor } from '@open-wc/dedupe-mixin';
+import type { PartialI18n } from '@vaadin/component-base/src/i18n-mixin.js';
 
-export interface LoginI18n {
+export type LoginI18n = PartialI18n<{
   form: {
     title: string;
     username: string;
@@ -24,7 +25,7 @@ export interface LoginI18n {
     description?: string;
   };
   additionalInformation?: string;
-}
+}>;
 
 export declare function LoginMixin<T extends Constructor<HTMLElement>>(base: T): Constructor<LoginMixinClass> & T;
 
@@ -61,9 +62,9 @@ export declare class LoginMixinClass {
   noAutofocus: boolean;
 
   /**
-   * The object used to localize this component.
-   * For changing the default localization, change the entire
-   * _i18n_ object or just the property you want to modify.
+   * The object used to localize this component. To change the default
+   * localization, replace this with an object that provides all properties, or
+   * just the individual properties you want to change.
    *
    * The object has the following JSON structure (by default it doesn't include `additionalInformation`
    * and `header` sections, `header` can be added to override `title` and `description` properties

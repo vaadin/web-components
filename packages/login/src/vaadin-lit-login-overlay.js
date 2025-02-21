@@ -53,7 +53,7 @@ class LoginOverlay extends LoginOverlayMixin(ElementMixin(ThemableMixin(PolylitM
           .noAutofocus="${this.noAutofocus}"
           .noForgotPassword="${this.noForgotPassword}"
           .headingLevel="${this.__computeHeadingLevel(this.headingLevel)}"
-          .i18n="${this.i18n}"
+          .i18n="${this.__effectiveI18n}"
           @login="${this._retargetEvent}"
           @forgot-password="${this._retargetEvent}"
           @disabled-changed="${this._onDisabledChanged}"

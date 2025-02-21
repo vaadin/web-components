@@ -65,15 +65,15 @@ class LoginForm extends LoginFormMixin(ElementMixin(ThemableMixin(PolymerElement
         id="vaadinLoginFormWrapper"
         theme$="[[_theme]]"
         error="[[error]]"
-        i18n="[[i18n]]"
+        i18n="[[__effectiveI18n]]"
         heading-level="[[headingLevel]]"
       >
         <form method="POST" action$="[[action]]" on-formdata="_onFormData" slot="form">
           <input id="csrf" type="hidden" />
           <vaadin-text-field
             name="username"
-            label="[[i18n.form.username]]"
-            error-message="[[i18n.errorMessage.username]]"
+            label="[[__effectiveI18n.form.username]]"
+            error-message="[[__effectiveI18n.errorMessage.username]]"
             id="vaadinLoginUsername"
             required
             on-keydown="_handleInputKeydown"
@@ -88,8 +88,8 @@ class LoginForm extends LoginFormMixin(ElementMixin(ThemableMixin(PolymerElement
 
           <vaadin-password-field
             name="password"
-            label="[[i18n.form.password]]"
-            error-message="[[i18n.errorMessage.password]]"
+            label="[[__effectiveI18n.form.password]]"
+            error-message="[[__effectiveI18n.errorMessage.password]]"
             id="vaadinLoginPassword"
             required
             on-keydown="_handleInputKeydown"
@@ -102,7 +102,7 @@ class LoginForm extends LoginFormMixin(ElementMixin(ThemableMixin(PolymerElement
         </form>
 
         <vaadin-button slot="submit" theme="primary contained submit" on-click="submit" disabled$="[[disabled]]">
-          [[i18n.form.submit]]
+          [[__effectiveI18n.form.submit]]
         </vaadin-button>
 
         <vaadin-button
@@ -111,7 +111,7 @@ class LoginForm extends LoginFormMixin(ElementMixin(ThemableMixin(PolymerElement
           on-click="_onForgotPasswordClick"
           hidden$="[[noForgotPassword]]"
         >
-          [[i18n.form.forgotPassword]]
+          [[__effectiveI18n.form.forgotPassword]]
         </vaadin-button>
       </vaadin-login-form-wrapper>
     `;
