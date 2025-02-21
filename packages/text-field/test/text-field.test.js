@@ -1,6 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { aTimeout, fire, fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
-import sinon from 'sinon';
+import { fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import '../src/vaadin-text-field.js';
 
 describe('text-field', () => {
@@ -13,138 +12,37 @@ describe('text-field', () => {
   });
 
   describe('properties', () => {
-    describe('native', () => {
-      async function assertAttrCanBeSet(prop, value) {
-        textField[prop] = value;
+    describe('delegation', () => {
+      it('should delegate pattern property to the input', async () => {
+        textField.pattern = '[A-Z]+';
         await nextUpdate(textField);
-
-        const attrValue = input.getAttribute(prop);
-
-        if (value === true) {
-          expect(attrValue).not.to.be.null;
-        } else if (value === false) {
-          expect(attrValue).to.be.null;
-        } else if (value) {
-          expect(attrValue).to.be.equal(String(value));
-        }
-      }
-
-      ['pattern', 'placeholder', 'value', 'title'].forEach((prop) => {
-        it(`should set string property ${prop}`, async () => {
-          textField[prop] = 'foo';
-          await nextUpdate(textField);
-          expect(input[prop]).to.be.equal('foo');
-        });
+        expect(input.pattern).to.be.equal('[A-Z]+');
       });
 
-      ['disabled'].forEach((prop) => {
-        it(`should set boolean property ${prop}`, async () => {
-          textField[prop] = true;
-          await nextUpdate(textField);
-          expect(input[prop]).to.be.true;
-
-          textField[prop] = false;
-          await nextUpdate(textField);
-          expect(input[prop]).to.be.false;
-        });
+      it('should delegate minlength property to the input', async () => {
+        textField.minlength = 2;
+        await nextUpdate(textField);
+        expect(input.getAttribute('minlength')).to.be.equal('2');
       });
 
-      ['maxlength', 'minlength'].forEach((prop) => {
-        it(`should set numeric attribute ${prop}`, async () => {
-          await assertAttrCanBeSet(prop, 2);
-        });
-      });
-
-      ['autocomplete'].forEach((prop) => {
-        it(`should set boolean attribute ${prop}`, async () => {
-          await assertAttrCanBeSet(prop, 'on');
-        });
-      });
-
-      ['autocapitalize'].forEach((prop) => {
-        it(`should set boolean attribute ${prop}`, async () => {
-          await assertAttrCanBeSet(prop, 'none');
-        });
-      });
-
-      ['autocomplete', 'autocorrect', 'readonly', 'required'].forEach((prop) => {
-        it(`should set boolean attribute ${prop}`, async () => {
-          await assertAttrCanBeSet(prop, true);
-          await assertAttrCanBeSet(prop, false);
-        });
+      it('should delegate maxlength property to the input', async () => {
+        textField.maxlength = 2;
+        await nextUpdate(textField);
+        expect(input.getAttribute('maxlength')).to.be.equal('2');
       });
     });
 
-    describe('clear button', () => {
-      it('should set clearButtonVisible to false by default', () => {
-        expect(textField.clearButtonVisible).to.be.false;
+    describe('internal', () => {
+      it('should store reference to the clear button element', () => {
+        expect(textField.clearElement).to.equal(textField.$.clearButton);
       });
 
-      it('should clear the value when clear button is clicked', async () => {
-        textField.clearButtonVisible = true;
-        textField.value = 'Foo';
-        await nextUpdate(textField);
-        textField.$.clearButton.click();
-        expect(textField.value).not.to.be.ok;
+      it('should set ariaTarget property to the input element', () => {
+        expect(textField.ariaTarget).to.equal(textField.inputElement);
       });
 
-      it('should clear the native input value when clear button is clicked', async () => {
-        textField.clearButtonVisible = true;
-        textField.value = 'Foo';
-        await nextUpdate(textField);
-        textField.$.clearButton.click();
-        expect(input.value).to.equal('');
-      });
-
-      it('should dispatch input event when clear button is clicked', async () => {
-        const inputSpy = sinon.spy();
-        textField.addEventListener('input', inputSpy);
-
-        textField.clearButtonVisible = true;
-        textField.value = 'Foo';
-        await nextUpdate(textField);
-
-        textField.$.clearButton.click();
-        expect(inputSpy.calledOnce).to.be.true;
-      });
-
-      it('should dispatch change event when clear button is clicked', async () => {
-        const changeSpy = sinon.spy();
-        textField.addEventListener('change', changeSpy);
-
-        textField.clearButtonVisible = true;
-        textField.value = 'Foo';
-        await nextUpdate(textField);
-
-        textField.$.clearButton.click();
-        expect(changeSpy.calledOnce).to.be.true;
-      });
-
-      it('should prevent default on clear button click', () => {
-        const event = new Event('click', { cancelable: true });
-        textField.$.clearButton.dispatchEvent(event);
-        expect(event.defaultPrevented).to.be.true;
-      });
-    });
-
-    describe('binding', () => {
-      it('default value should be empty string', () => {
-        expect(textField.value).to.be.equal('');
-      });
-
-      it('setting input value updates value', () => {
-        input.value = 'foo';
-        fire(input, 'input');
-        expect(textField.value).to.be.equal('foo');
-      });
-
-      it('setting value to undefined should clear the native input value', async () => {
-        textField.value = 'foo';
-        await nextUpdate(textField);
-
-        textField.value = undefined;
-        await nextUpdate(textField);
-        expect(input.value).to.equal('');
+      it('should set focusElement property to the input element', () => {
+        expect(textField.focusElement).to.equal(textField.inputElement);
       });
     });
 
@@ -158,75 +56,6 @@ describe('text-field', () => {
         textField.shadowRoot.querySelector('[part="required-indicator"]').click();
         expect(textField.hasAttribute('focused')).to.be.true;
       });
-    });
-
-    describe('autoselect', () => {
-      it('default value of autoselect should be false', () => {
-        expect(textField.autoselect).to.be.false;
-      });
-
-      it('should not select content on focus when autoselect is false', async () => {
-        textField.value = '123';
-        input.dispatchEvent(new CustomEvent('focus', { bubbles: false }));
-        await aTimeout(1);
-        expect(input.selectionEnd - input.selectionStart).to.equal(0);
-      });
-
-      it('should select content on focus when autoselect is true', async () => {
-        textField.value = '123';
-        textField.autoselect = true;
-        await nextUpdate(textField);
-        input.dispatchEvent(new CustomEvent('focus', { bubbles: false }));
-        await aTimeout(1);
-        expect(input.selectionEnd - input.selectionStart).to.equal(3);
-      });
-    });
-  });
-
-  describe('has-value attribute', () => {
-    it('should toggle the attribute on value change', async () => {
-      textField.value = 'foo';
-      await nextUpdate(textField);
-      expect(textField.hasAttribute('has-value')).to.be.true;
-
-      textField.value = undefined;
-      await nextUpdate(textField);
-      expect(textField.hasAttribute('has-value')).to.be.false;
-    });
-
-    it('should not add the attribute when the value is an empty string', async () => {
-      textField.value = '';
-      await nextUpdate(textField);
-      expect(textField.hasAttribute('has-value')).to.be.false;
-    });
-
-    // User could accidentally set a 0 or false value
-    it('should add the attribute when the value is a number', async () => {
-      textField.value = 0;
-      await nextUpdate(textField);
-      expect(textField.hasAttribute('has-value')).to.be.true;
-    });
-
-    it('should add the attribute when the value is a boolean', async () => {
-      textField.value = false;
-      await nextUpdate(textField);
-      expect(textField.hasAttribute('has-value')).to.be.true;
-    });
-  });
-
-  describe(`methods`, () => {
-    it('should clear the value when clear() is called', async () => {
-      textField.value = 'Foo';
-      await nextUpdate(textField);
-      textField.clear();
-      expect(textField.value).not.to.be.ok;
-    });
-
-    it('should clear the value of native input when clear() is called', async () => {
-      textField.value = 'Foo';
-      await nextUpdate(textField);
-      textField.clear();
-      expect(input.value).to.equal('');
     });
   });
 });

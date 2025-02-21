@@ -60,6 +60,19 @@ const runTests = (defineHelper, baseMixin) => {
       expect(element.hasAttribute('has-value')).to.be.true;
     });
 
+    // User could accidentally set a 0 or false value
+    it('should set has-value attribute when the value is a number', async () => {
+      element.value = 0;
+      await nextUpdate(element);
+      expect(element.hasAttribute('has-value')).to.be.true;
+    });
+
+    it('should set has-value attribute when the value is a boolean', async () => {
+      element.value = false;
+      await nextUpdate(element);
+      expect(element.hasAttribute('has-value')).to.be.true;
+    });
+
     it('should remove has-value attribute when value is removed', async () => {
       element.value = 'foo';
       await nextUpdate(element);
