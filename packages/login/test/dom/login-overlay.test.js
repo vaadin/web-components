@@ -42,6 +42,11 @@ describe('vaadin-login-overlay', () => {
       await expect(wrapper).dom.to.equalSnapshot();
     });
 
+    it('i18n-partial', async () => {
+      overlay.i18n = { form: { forgotPassword: 'Custom forgot password' } };
+      await expect(wrapper).dom.to.equalSnapshot();
+    });
+
     it('overlay class', async () => {
       overlay.overlayClass = 'custom login-overlay';
       await expect(wrapper).dom.to.equalSnapshot();

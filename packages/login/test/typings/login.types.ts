@@ -5,6 +5,7 @@ import type {
   LoginFormDisabledChangedEvent,
   LoginFormErrorChangedEvent,
   LoginFormLoginEvent,
+  LoginI18n,
 } from '../../vaadin-login-form.js';
 import type {
   LoginOverlayDescriptionChangedEvent,
@@ -21,6 +22,7 @@ assertType<ElementMixinClass>(overlay);
 assertType<OverlayClassMixinClass>(overlay);
 
 assertType<number>(overlay.headingLevel);
+assertType<LoginI18n>(overlay.i18n);
 
 overlay.addEventListener('login', (event) => {
   assertType<LoginOverlayLoginEvent>(event);
@@ -47,6 +49,7 @@ overlay.addEventListener('description-changed', (event) => {
 const form = document.createElement('vaadin-login-form');
 
 assertType<number>(form.headingLevel);
+assertType<LoginI18n>(form.i18n);
 
 form.addEventListener('login', (event) => {
   assertType<LoginFormLoginEvent>(event);
@@ -63,3 +66,8 @@ form.addEventListener('disabled-changed', (event) => {
   assertType<LoginFormDisabledChangedEvent>(event);
   assertType<boolean>(event.detail.value);
 });
+
+// I18n
+assertType<LoginI18n>({});
+assertType<LoginI18n>({ additionalInformation: 'additionalInformation' });
+assertType<LoginI18n>({ form: { title: 'formTitle' } });

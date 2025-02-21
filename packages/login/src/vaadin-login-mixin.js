@@ -3,12 +3,30 @@
  * Copyright (c) 2018 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { I18nMixin } from '@vaadin/component-base/src/i18n-mixin.js';
+
+const DEFAULT_I18N = {
+  form: {
+    title: 'Log in',
+    username: 'Username',
+    password: 'Password',
+    submit: 'Log in',
+    forgotPassword: 'Forgot password',
+  },
+  errorMessage: {
+    title: 'Incorrect username or password',
+    message: 'Check that you have entered the correct username and password and try again.',
+    username: 'Username is required',
+    password: 'Password is required',
+  },
+};
 
 /**
+ * @mixes LoginMixin
  * @polymerMixin
  */
 export const LoginMixin = (superClass) =>
-  class LoginMixin extends superClass {
+  class LoginMixin extends I18nMixin(DEFAULT_I18N, superClass) {
     /**
      * Fired when user clicks on the "Forgot password" button.
      *
@@ -79,62 +97,6 @@ export const LoginMixin = (superClass) =>
         },
 
         /**
-         * The object used to localize this component.
-         * For changing the default localization, change the entire
-         * _i18n_ object or just the property you want to modify.
-         *
-         * The object has the following JSON structure (by default it doesn't include `additionalInformation`
-         * and `header` sections, `header` can be added to override `title` and `description` properties
-         * in `vaadin-login-overlay`):
-         *
-         * ```
-         * {
-         *   header: {
-         *     title: 'App name',
-         *     description: 'Inspiring application description'
-         *   },
-         *   form: {
-         *     title: 'Log in',
-         *     username: 'Username',
-         *     password: 'Password',
-         *     submit: 'Log in',
-         *     forgotPassword: 'Forgot password'
-         *   },
-         *   errorMessage: {
-         *     title: 'Incorrect username or password',
-         *     message: 'Check that you have entered the correct username and password and try again.',
-         *     username: 'Username is required',
-         *     password: 'Password is required'
-         *   },
-         *   additionalInformation: 'In case you need to provide some additional info for the user.'
-         * }
-         * ```
-         *
-         * @type {!LoginI18n}
-         * @default {English/US}
-         */
-        i18n: {
-          type: Object,
-          value() {
-            return {
-              form: {
-                title: 'Log in',
-                username: 'Username',
-                password: 'Password',
-                submit: 'Log in',
-                forgotPassword: 'Forgot password',
-              },
-              errorMessage: {
-                title: 'Incorrect username or password',
-                message: 'Check that you have entered the correct username and password and try again.',
-                username: 'Username is required',
-                password: 'Password is required',
-              },
-            };
-          },
-        },
-
-        /**
          * Sets the root heading level (`aria-level`) for the heading hierarchy. Default value: 1.
          * Child headings automatically increment from this base level i.e. standalone login form
          * renders its title as `<h1>`, whereas the form in the overlay uses `<h2>`, as the `<h1>`
@@ -156,5 +118,46 @@ export const LoginMixin = (superClass) =>
           value: false,
         },
       };
+    }
+
+    /**
+     * The object used to localize this component. To change the default
+     * localization, replace this with an object that provides all properties, or
+     * just the individual properties you want to change.
+     *
+     * The object has the following JSON structure (by default it doesn't include `additionalInformation`
+     * and `header` sections, `header` can be added to override `title` and `description` properties
+     * in `vaadin-login-overlay`):
+     *
+     * ```
+     * {
+     *   header: {
+     *     title: 'App name',
+     *     description: 'Inspiring application description'
+     *   },
+     *   form: {
+     *     title: 'Log in',
+     *     username: 'Username',
+     *     password: 'Password',
+     *     submit: 'Log in',
+     *     forgotPassword: 'Forgot password'
+     *   },
+     *   errorMessage: {
+     *     title: 'Incorrect username or password',
+     *     message: 'Check that you have entered the correct username and password and try again.',
+     *     username: 'Username is required',
+     *     password: 'Password is required'
+     *   },
+     *   additionalInformation: 'In case you need to provide some additional info for the user.'
+     * }
+     * ```
+     * @return {!LoginI18n}
+     */
+    get i18n() {
+      return super.i18n;
+    }
+
+    set i18n(value) {
+      super.i18n = value;
     }
   };
