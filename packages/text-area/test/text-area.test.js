@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fire, fixtureSync, nextFrame, nextRender, nextResize, nextUpdate, oneEvent } from '@vaadin/testing-helpers';
+import { fire, fixtureSync, nextFrame, nextRender, nextResize, nextUpdate } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-text-area.js';
 
@@ -43,26 +43,6 @@ describe('text-area', () => {
       it('should set focusElement property to the textarea element', () => {
         expect(textArea.focusElement).to.equal(textArea.inputElement);
       });
-    });
-  });
-
-  describe('vaadin-text-area-appear', () => {
-    it('should update height on show after hidden', async () => {
-      const savedHeight = textArea.clientHeight;
-      textArea.style.display = 'none';
-      // Three new lines will expand initial height
-      setInputValue(textArea, '\n\n\n');
-      textArea.style.display = 'block';
-      await oneEvent(textArea, 'animationend');
-      expect(textArea.clientHeight).to.be.above(savedHeight);
-    });
-
-    it('should not update height on custom animation name', () => {
-      const spy = sinon.spy(textArea, '_updateHeight');
-      const ev = new Event('animationend');
-      ev.animationName = 'foo';
-      textArea.dispatchEvent(ev);
-      expect(spy.called).to.be.false;
     });
   });
 
@@ -205,6 +185,21 @@ describe('text-area', () => {
       await nextResize(textArea);
 
       // Expect the height to have increased
+      expect(textArea.offsetHeight).to.be.above(height);
+    });
+
+    it('should update height on show after hidden', async () => {
+      const height = textArea.offsetHeight;
+      textArea.setAttribute('hidden', '');
+      await nextResize(textArea);
+
+      // Three new lines will expand initial height
+      setInputValue(textArea, '\n\n\n');
+      await nextUpdate(textArea);
+
+      textArea.removeAttribute('hidden');
+      await nextResize(textArea);
+
       expect(textArea.offsetHeight).to.be.above(height);
     });
 

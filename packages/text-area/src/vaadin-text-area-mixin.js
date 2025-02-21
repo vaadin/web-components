@@ -113,8 +113,6 @@ export const TextAreaMixin = (superClass) =>
       this.addController(this.__textAreaController);
       this.addController(new LabelledInputController(this.inputElement, this._labelController));
 
-      this.addEventListener('animationend', this._onAnimationEnd);
-
       this._inputField = this.shadowRoot.querySelector('[part=input-field]');
 
       // Wheel scrolling results in async scroll events. Preventing the wheel
@@ -138,13 +136,6 @@ export const TextAreaMixin = (superClass) =>
     __scrollPositionUpdated() {
       this._inputField.style.setProperty('--_text-area-vertical-scroll-position', '0px');
       this._inputField.style.setProperty('--_text-area-vertical-scroll-position', `${this._inputField.scrollTop}px`);
-    }
-
-    /** @private */
-    _onAnimationEnd(e) {
-      if (e.animationName.indexOf('vaadin-text-area-appear') === 0) {
-        this._updateHeight();
-      }
     }
 
     /**
