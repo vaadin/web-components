@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { resetMouse, sendKeys, sendMouse } from '@vaadin/test-runner-commands';
-import { fixtureSync, nextFrame, nextRender, nextUpdate } from '@vaadin/testing-helpers';
+import { fixtureSync, mousedown, nextFrame, nextRender, nextUpdate, touchstart } from '@vaadin/testing-helpers';
 import './not-animated-styles.js';
 import '@vaadin/dialog';
 import '@vaadin/popover';
@@ -82,6 +82,33 @@ describe('popover in dialog', () => {
 
         expect(overlay.opened).to.be.false;
         expect(dialog.opened).to.be.true;
+      });
+    });
+
+    describe('modeless dialog', () => {
+      beforeEach(async () => {
+        dialog.modeless = true;
+
+        button.click();
+        await nextRender();
+      });
+
+      it('should bring popover overlay to front on dialog overlay mousedown', () => {
+        mousedown(dialog.$.overlay);
+
+        const dialogZIndex = parseInt(getComputedStyle(dialog.$.overlay).zIndex);
+        const popoverZIndex = parseInt(getComputedStyle(overlay).zIndex);
+
+        expect(popoverZIndex).to.equal(dialogZIndex + 1);
+      });
+
+      it('should bring popover overlay to front on dialog overlay touchstart', () => {
+        touchstart(dialog.$.overlay);
+
+        const dialogZIndex = parseInt(getComputedStyle(dialog.$.overlay).zIndex);
+        const popoverZIndex = parseInt(getComputedStyle(overlay).zIndex);
+
+        expect(popoverZIndex).to.equal(dialogZIndex + 1);
       });
     });
   });
