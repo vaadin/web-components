@@ -173,4 +173,83 @@ describe('form-layout auto responsive', () => {
       await visualDiff(div, 'auto-rows-with-explicit-rows');
     });
   });
+
+  describe('form items', () => {
+    beforeEach(async () => {
+      element = fixtureSync(
+        `
+          <vaadin-form-layout auto-responsive auto-rows max-columns="2" style="border: 1px solid red;">
+            <vaadin-form-item>
+              <label slot="label">First name</label>
+              <input class="full-width" />
+            </vaadin-form-item>
+            <vaadin-form-item>
+              <label slot="label">Last name</label>
+              <input class="full-width" />
+            </vaadin-form-item>
+            <vaadin-form-item>
+              <label slot="label">Email</label>
+              <input class="full-width" />
+            </vaadin-form-item>
+            <vaadin-form-item>
+              <label slot="label">Phone</label>
+              <input class="full-width" />
+            </vaadin-form-item>
+          </vaadin-form-layout>
+        `,
+        div,
+      );
+      await nextFrame();
+    });
+
+    it('default', async () => {
+      await visualDiff(div, 'form-items');
+    });
+
+    it('labelsAside', async () => {
+      element.labelsAside = true;
+      await visualDiff(div, 'form-items-labels-aside');
+    });
+  });
+
+  describe('custom CSS properties - label', () => {
+    beforeEach(async () => {
+      element = fixtureSync(
+        `
+          <vaadin-form-layout auto-responsive auto-rows max-columns="2" labels-aside>
+            <vaadin-form-item>
+              <label slot="label">First name</label>
+              <input class="full-width" />
+            </vaadin-form-item>
+            <vaadin-form-item>
+              <label slot="label">Last name</label>
+              <input class="full-width" />
+            </vaadin-form-item>
+            <vaadin-form-item>
+              <label slot="label">Email</label>
+              <input class="full-width" />
+            </vaadin-form-item>
+            <vaadin-form-item>
+              <label slot="label">Phone</label>
+              <input class="full-width" />
+            </vaadin-form-item>
+          </vaadin-form-layout>
+
+          <style>
+            vaadin-form-layout {
+              border: 1px solid red;
+              --vaadin-form-layout-label-width: 10em;
+              --vaadin-form-layout-label-spacing: 2em;
+            }
+          </style>
+        `,
+        div,
+      );
+      await nextFrame();
+    });
+
+    it('default', async () => {
+      await visualDiff(div, 'custom-css-properties-label');
+    });
+  });
 });
