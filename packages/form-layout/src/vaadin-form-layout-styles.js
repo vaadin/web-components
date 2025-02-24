@@ -142,6 +142,7 @@ export const formItemStyles = css`
     flex-wrap: nowrap;
     align-items: var(--_label-position-aside, baseline);
     flex-direction: var(--_label-position-above, column);
+    justify-self: stretch;
     margin: calc(0.5 * var(--vaadin-form-item-row-spacing, var(--vaadin-form-layout-row-spacing, 1em))) 0;
   }
 

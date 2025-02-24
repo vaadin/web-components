@@ -178,7 +178,7 @@ describe('form-layout auto responsive', () => {
     beforeEach(async () => {
       element = fixtureSync(
         `
-          <vaadin-form-layout auto-responsive auto-rows max-columns="2" style="border: 1px solid red;">
+          <vaadin-form-layout auto-responsive auto-rows max-columns="2">
             <vaadin-form-item>
               <label slot="label">First name</label>
               <input class="full-width" />
@@ -192,7 +192,7 @@ describe('form-layout auto responsive', () => {
               <input class="full-width" />
             </vaadin-form-item>
             <vaadin-form-item>
-              <label slot="label">Phone</label>
+              <label slot="label">A long label that wraps across multiple lines</label>
               <input class="full-width" />
             </vaadin-form-item>
           </vaadin-form-layout>
@@ -230,16 +230,15 @@ describe('form-layout auto responsive', () => {
               <input class="full-width" />
             </vaadin-form-item>
             <vaadin-form-item>
-              <label slot="label">Phone</label>
+              <label slot="label">A long label that wraps across multiple lines</label>
               <input class="full-width" />
             </vaadin-form-item>
           </vaadin-form-layout>
 
           <style>
             vaadin-form-layout {
-              border: 1px solid red;
-              --vaadin-form-layout-label-width: 10em;
-              --vaadin-form-layout-label-spacing: 2em;
+              --vaadin-form-layout-label-width: 200px;
+              --vaadin-form-layout-label-spacing: 50px;
             }
           </style>
         `,
