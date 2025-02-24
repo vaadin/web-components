@@ -94,6 +94,10 @@ export const formRowStyles = css`
     display: contents;
   }
 
+  :host([hidden]) {
+    display: none !important;
+  }
+
   ::slotted(*) {
     grid-column-start: auto;
   }
