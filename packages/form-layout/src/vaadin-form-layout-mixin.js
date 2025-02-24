@@ -396,7 +396,7 @@ export const FormLayoutMixin = (superClass) =>
 
       [...this.children]
         .flatMap((child) => {
-          return child.localName === 'vaadin-form-row' ? [...child.children] : [child];
+          return child.localName === 'vaadin-form-row' ? [...child.children] : child;
         })
         .forEach((child) => {
           if (child.localName === 'br') {
