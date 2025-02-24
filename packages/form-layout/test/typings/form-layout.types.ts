@@ -1,8 +1,10 @@
 import '../../vaadin-form-layout.js';
 import '../../vaadin-form-item.js';
+import '../../vaadin-form-row.js';
 import type { ElementMixinClass } from '@vaadin/component-base/src/element-mixin.js';
 import type { ResizeMixinClass } from '@vaadin/component-base/src/resize-mixin.js';
 import type { ThemableMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import type { FormRow } from '../../vaadin-form-row.js';
 
 const assertType = <TExpected>(value: TExpected) => value;
 
@@ -24,3 +26,6 @@ assertType<'aside' | 'top' | undefined>(labelsPosition);
 assertType<ResizeMixinClass>(layout);
 assertType<ElementMixinClass>(layout);
 assertType<ThemableMixinClass>(layout);
+
+const row = document.createElement('vaadin-form-row');
+assertType<FormRow>(row);
