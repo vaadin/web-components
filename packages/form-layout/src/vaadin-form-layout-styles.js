@@ -139,9 +139,8 @@ export const formItemStyles = css`
     --_label-position-aside: initial;
 
     display: inline-flex;
-    flex-wrap: nowrap;
     align-items: var(--_label-position-aside, baseline);
-    flex-direction: var(--_label-position-above, column);
+    flex-flow: var(--_label-position-above, column) nowrap;
     justify-self: stretch;
     margin: calc(0.5 * var(--vaadin-form-item-row-spacing, var(--vaadin-form-layout-row-spacing, 1em))) 0;
   }
