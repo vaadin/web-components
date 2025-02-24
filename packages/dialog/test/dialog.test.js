@@ -332,5 +332,15 @@ describe('vaadin-dialog', () => {
       expect(overlay.style.width).to.be.equal('100px');
       expect(overlay.style.height).to.be.equal('200px');
     });
+
+    it('should not change position and max-width when only width and height are set', async () => {
+      dialog.opened = true;
+      await nextRender();
+      dialog.width = 300;
+      dialog.height = 400;
+      await nextRender();
+      expect(getComputedStyle(overlay.$.overlay).position).to.equal('relative');
+      expect(getComputedStyle(overlay.$.overlay).maxWidth).to.equal('100%');
+    });
   });
 });
