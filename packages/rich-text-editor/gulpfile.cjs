@@ -59,7 +59,7 @@ template.innerHTML = \`
     html {
 `;
       glyphs.forEach((g) => {
-        const name = g.name.replace(/\s/g, '-').toLowerCase();
+        const name = g.name.replace(/\s/gu, '-').toLowerCase();
         const unicode = `\\\\${g.unicode[0].charCodeAt(0).toString(16)}`;
         output += `      --${fontName}-${name}: "${unicode}";\n`;
       });
@@ -71,7 +71,7 @@ document.head.appendChild(template.content);
 
 export const iconsStyles = css\`\n`;
       glyphs.forEach((g, index) => {
-        const name = g.name.replace(/\s/g, '-').toLowerCase();
+        const name = g.name.replace(/\s/gu, '-').toLowerCase();
         output += `  [part~='toolbar-button-${name}']::before {
     content: var(--${fontName}-${name});
   }\n`;

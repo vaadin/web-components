@@ -9,7 +9,7 @@ import type { ThemableMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-th
 import type { MenuBarItem } from '../../src/vaadin-menu-bar-item.js';
 import type { MenuBarListBox } from '../../src/vaadin-menu-bar-list-box.js';
 import type { MenuBarMixinClass } from '../../src/vaadin-menu-bar-mixin.js';
-import type { MenuBarItem as MenuItem, MenuBarItemSelectedEvent } from '../../vaadin-menu-bar.js';
+import type { MenuBar, MenuBarItem as MenuItem, MenuBarItemSelectedEvent } from '../../vaadin-menu-bar.js';
 
 const menu = document.createElement('vaadin-menu-bar');
 
@@ -38,6 +38,22 @@ assertType<boolean | undefined>(menuItem.disabled);
 assertType<string[] | string | undefined>(menuItem.theme);
 assertType<MenuItem[] | undefined>(menuItem.children);
 assertType<HTMLElement | string | undefined>(menuItem.component);
+
+// Custom item data
+interface ItemData {
+  type: 'copy' | 'cut' | 'paste';
+  value: string;
+}
+
+const narrowedMenu = menu as MenuBar<MenuItem<ItemData>>;
+
+assertType<ItemData>(narrowedMenu.items[0]);
+assertType<ItemData>(narrowedMenu.items[0].children![0]);
+assertType<ItemData>(narrowedMenu.items[0].children![0].children![0]);
+
+narrowedMenu.addEventListener('item-selected', (event) => {
+  assertType<ItemData>(event.detail.value);
+});
 
 // Item
 const item = document.createElement('vaadin-menu-bar-item');

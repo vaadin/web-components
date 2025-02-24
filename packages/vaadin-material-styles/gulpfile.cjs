@@ -20,7 +20,7 @@ const sort = require('gulp-sort');
  * @see http://support.ecisolutions.com/doc-ddms/help/reportsmenu/ascii_sort_order_chart.htm
  */
 function sortIconFilesNormalized(file1, file2) {
-  return file1.replace(/-/g, '~').localeCompare(file2.replace(/-/g, '~'), 'en-US');
+  return file1.replace(/-/gu, '~').localeCompare(file2.replace(/-/gu, '~'), 'en-US');
 }
 
 gulp.task('icons', (done) => {
@@ -104,7 +104,7 @@ const fontIcons = css\`
   html {
 `;
           glyphs.forEach((g) => {
-            const name = g.name.replace(/\s/g, '-').toLowerCase();
+            const name = g.name.replace(/\s/gu, '-').toLowerCase();
             const unicode = `\\\\${g.unicode[0].charCodeAt(0).toString(16)}`;
             output += `    --material-icons-${name}: '${unicode}';\n`;
           });

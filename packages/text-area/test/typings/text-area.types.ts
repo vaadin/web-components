@@ -1,9 +1,20 @@
 import '../../vaadin-text-area.js';
+import type { DelegateFocusMixinClass } from '@vaadin/a11y-base/src/delegate-focus-mixin.js';
+import type { DisabledMixinClass } from '@vaadin/a11y-base/src/disabled-mixin.js';
+import type { FocusMixinClass } from '@vaadin/a11y-base/src/focus-mixin.js';
+import type { KeyboardMixinClass } from '@vaadin/a11y-base/src/keyboard-mixin.js';
 import type { ControllerMixinClass } from '@vaadin/component-base/src/controller-mixin.js';
+import type { DelegateStateMixinClass } from '@vaadin/component-base/src/delegate-state-mixin.js';
 import type { ElementMixinClass } from '@vaadin/component-base/src/element-mixin.js';
+import type { SlotStylesMixinClass } from '@vaadin/component-base/src/slot-styles-mixin.js';
 import type { ClearButtonMixinClass } from '@vaadin/field-base/src/clear-button-mixin.js';
+import type { FieldMixinClass } from '@vaadin/field-base/src/field-mixin.js';
+import type { InputConstraintsMixinClass } from '@vaadin/field-base/src/input-constraints-mixin.js';
+import type { InputControlMixinClass } from '@vaadin/field-base/src/input-control-mixin.js';
 import type { InputFieldMixinClass } from '@vaadin/field-base/src/input-field-mixin.js';
-import type { PatternMixinClass } from '@vaadin/field-base/src/pattern-mixin.js';
+import type { InputMixinClass } from '@vaadin/field-base/src/input-mixin.js';
+import type { LabelMixinClass } from '@vaadin/field-base/src/label-mixin.js';
+import type { ValidateMixinClass } from '@vaadin/field-base/src/validate-mixin.js';
 import type { ThemableMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import type {
   TextArea,
@@ -20,9 +31,20 @@ const area = document.createElement('vaadin-text-area');
 // Mixins
 assertType<ClearButtonMixinClass>(area);
 assertType<ControllerMixinClass>(area);
+assertType<DelegateFocusMixinClass>(area);
+assertType<DelegateStateMixinClass>(area);
+assertType<DisabledMixinClass>(area);
 assertType<ElementMixinClass>(area);
+assertType<FieldMixinClass>(area);
+assertType<FocusMixinClass>(area);
+assertType<InputConstraintsMixinClass>(area);
+assertType<InputControlMixinClass>(area);
 assertType<InputFieldMixinClass>(area);
-assertType<PatternMixinClass>(area);
+assertType<InputMixinClass>(area);
+assertType<KeyboardMixinClass>(area);
+assertType<LabelMixinClass>(area);
+assertType<SlotStylesMixinClass>(area);
+assertType<ValidateMixinClass>(area);
 assertType<ThemableMixinClass>(area);
 
 // Events
