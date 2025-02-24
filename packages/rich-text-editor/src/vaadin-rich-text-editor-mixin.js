@@ -428,7 +428,6 @@ export const RichTextEditorMixin = (superClass) =>
     /** @private */
     _prepareToolbar() {
       const clean = Quill.imports['modules/toolbar'].DEFAULTS.handlers.clean;
-      // eslint-disable-next-line @typescript-eslint/no-this-alias
       const self = this;
 
       const toolbar = {

@@ -145,6 +145,13 @@ function sortElementsByTabIndex(elements) {
  * @return {boolean}
  */
 export function isElementHidden(element) {
+  if (element.checkVisibility) {
+    return !element.checkVisibility({ visibilityProperty: true });
+  }
+
+  // TODO: checkVisibility is supported only from Safari 17.4, so we still need to
+  // keep the custom implementation as a fallback for older versions until Vaadin 25:
+
   // `offsetParent` is `null` when the element itself
   // or one of its ancestors is hidden with `display: none`.
   // https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/offsetParent

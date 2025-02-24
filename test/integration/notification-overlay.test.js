@@ -75,8 +75,8 @@ describe('notification and overlays', () => {
       dialog1.renderer = (root) => {
         if (!root.firstChild) {
           notification = document.createElement('vaadin-notification');
-          notification.renderer = (root) => {
-            root.textContent = 'Hello!';
+          notification.renderer = (root2) => {
+            root2.textContent = 'Hello!';
           };
 
           dialog2 = document.createElement('vaadin-dialog');

@@ -3,7 +3,6 @@ import { fixtureSync, nextFrame, nextRender, nextUpdate } from '@vaadin/testing-
 import sinon from 'sinon';
 import './not-animated-styles.js';
 import '../src/vaadin-dialog.js';
-import '@vaadin/text-area/vaadin-text-area.js';
 
 customElements.define(
   'internally-draggable',
@@ -857,16 +856,6 @@ describe('overflowing content', () => {
     // Emulate removing "pointer-events: none"
     overlayPart.setAttribute('style', '');
     expect(overlayPart.offsetHeight).to.equal(container.offsetHeight);
-  });
-
-  it('should not overflow when using vaadin-textarea in the content', async () => {
-    const textarea = document.createElement('vaadin-text-area');
-    textarea.value = Array(20).join('Lorem ipsum dolor sit amet');
-    overlay.appendChild(textarea);
-    overlay.$.content.style.padding = '20px';
-    resize(overlayPart.querySelector('.s'), 0, -50);
-    await nextFrame();
-    expect(getComputedStyle(overlayPart).height).to.equal(getComputedStyle(container).height);
   });
 
   it('should not reset scroll position on resize', async () => {

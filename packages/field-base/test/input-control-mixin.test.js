@@ -298,11 +298,21 @@ const runTests = (defineHelper, baseMixin) => {
       input = element.querySelector('[slot=input]');
     });
 
-    it('should select the input content when autoselect is set', () => {
+    it('should set autoselect to false by default', () => {
+      expect(element.autoselect).to.be.false;
+    });
+
+    it('should select the input content on focus when autoselect is true', () => {
       const spy = sinon.spy(input, 'select');
       element.autoselect = true;
       input.focus();
       expect(spy.calledOnce).to.be.true;
+    });
+
+    it('should not select the input content on focus when autoselect is false', () => {
+      const spy = sinon.spy(input, 'select');
+      input.focus();
+      expect(spy).to.be.not.called;
     });
   });
 

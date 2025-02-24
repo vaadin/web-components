@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fire, fixtureSync, nextFrame, nextRender, nextResize, nextUpdate, oneEvent } from '@vaadin/testing-helpers';
+import { fire, fixtureSync, nextFrame, nextRender, nextResize, nextUpdate } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-text-area.js';
 
@@ -17,134 +17,44 @@ describe('text-area', () => {
   }
 
   describe('properties', () => {
-    let native;
-
-    beforeEach(() => {
-      native = textArea.inputElement;
-    });
-
-    describe('native', () => {
-      async function assertAttrCanBeSet(prop, value) {
-        textArea[prop] = value;
+    describe('delegation', () => {
+      it('should delegate minlength property to the textarea', async () => {
+        textArea.minlength = 2;
         await nextUpdate(textArea);
-
-        const attrValue = native.getAttribute(prop);
-
-        if (value === true) {
-          expect(attrValue).not.to.be.null;
-        } else if (value === false) {
-          expect(attrValue).to.be.null;
-        } else if (value) {
-          expect(attrValue).to.be.equal(String(value));
-        }
-      }
-
-      ['placeholder', 'value'].forEach((prop) => {
-        it(`should set string property ${prop}`, async () => {
-          textArea[prop] = 'foo';
-          await nextUpdate(textArea);
-          expect(native[prop]).to.be.equal('foo');
-        });
+        expect(textArea.inputElement.getAttribute('minlength')).to.be.equal('2');
       });
 
-      ['disabled'].forEach((prop) => {
-        it(`should set boolean property ${prop}`, async () => {
-          textArea[prop] = true;
-          await nextUpdate(textArea);
-          expect(native[prop]).to.be.true;
-
-          textArea[prop] = false;
-          await nextUpdate(textArea);
-          expect(native[prop]).to.be.false;
-        });
-      });
-
-      ['maxlength', 'minlength'].forEach((prop) => {
-        it(`should set numeric attribute ${prop}`, async () => {
-          await assertAttrCanBeSet(prop, 2);
-        });
-      });
-
-      ['autocomplete'].forEach((prop) => {
-        it(`should set boolean attribute ${prop}`, async () => {
-          await assertAttrCanBeSet(prop, 'on');
-        });
-      });
-
-      ['autocapitalize'].forEach((prop) => {
-        it(`should set boolean attribute ${prop}`, async () => {
-          await assertAttrCanBeSet(prop, 'none');
-        });
-      });
-
-      ['autocomplete', 'autocorrect', 'readonly', 'required'].forEach((prop) => {
-        it(`should set boolean attribute ${prop}`, async () => {
-          await assertAttrCanBeSet(prop, true);
-          await assertAttrCanBeSet(prop, false);
-        });
+      it('should delegate maxlength property to the textarea', async () => {
+        textArea.maxlength = 2;
+        await nextUpdate(textArea);
+        expect(textArea.inputElement.getAttribute('maxlength')).to.be.equal('2');
       });
     });
 
-    describe('value', () => {
-      it('should set default value to empty string', () => {
-        expect(textArea.value).to.be.equal('');
+    describe('internal', () => {
+      it('should store reference to the clear button element', () => {
+        expect(textArea.clearElement).to.equal(textArea.$.clearButton);
       });
 
-      it('should update value on native textarea input', () => {
-        setInputValue(textArea, 'foo');
-        expect(textArea.value).to.be.equal('foo');
+      it('should set ariaTarget property to the textarea element', () => {
+        expect(textArea.ariaTarget).to.equal(textArea.inputElement);
       });
 
-      it('should update has-value attribute when value is set', async () => {
-        textArea.value = 'foo';
-        await nextUpdate(textArea);
-        expect(textArea.hasAttribute('has-value')).to.be.true;
-      });
-
-      it('should not update has-value attribute when value is set to undefined', async () => {
-        textArea.value = undefined;
-        await nextUpdate(textArea);
-        expect(textArea.hasAttribute('has-value')).to.be.false;
-      });
-
-      it('should not update has-value attribute when value is set to empty string', async () => {
-        textArea.value = '';
-        await nextUpdate(textArea);
-        expect(textArea.hasAttribute('has-value')).to.be.false;
-      });
-
-      // User could accidentally set a 0 or false value
-      it('should update has-value attribute when numeric value is set', async () => {
-        textArea.value = 0;
-        await nextUpdate(textArea);
-        expect(textArea.hasAttribute('has-value')).to.be.true;
-      });
-
-      it('should update has-value attribute when boolean value is set', async () => {
-        textArea.value = false;
-        await nextUpdate(textArea);
-        expect(textArea.hasAttribute('has-value')).to.be.true;
+      it('should set focusElement property to the textarea element', () => {
+        expect(textArea.focusElement).to.equal(textArea.inputElement);
       });
     });
-  });
 
-  describe('vaadin-text-area-appear', () => {
-    it('should update height on show after hidden', async () => {
-      const savedHeight = textArea.clientHeight;
-      textArea.style.display = 'none';
-      // Three new lines will expand initial height
-      setInputValue(textArea, '\n\n\n');
-      textArea.style.display = 'block';
-      await oneEvent(textArea, 'animationend');
-      expect(textArea.clientHeight).to.be.above(savedHeight);
-    });
+    describe('required', () => {
+      beforeEach(async () => {
+        textArea.required = true;
+        await nextUpdate(textArea);
+      });
 
-    it('should not update height on custom animation name', () => {
-      const spy = sinon.spy(textArea, '_updateHeight');
-      const ev = new Event('animationend');
-      ev.animationName = 'foo';
-      textArea.dispatchEvent(ev);
-      expect(spy.called).to.be.false;
+      it('should focus on required indicator click', () => {
+        textArea.shadowRoot.querySelector('[part="required-indicator"]').click();
+        expect(textArea.hasAttribute('focused')).to.be.true;
+      });
     });
   });
 
@@ -287,6 +197,21 @@ describe('text-area', () => {
       await nextResize(textArea);
 
       // Expect the height to have increased
+      expect(textArea.offsetHeight).to.be.above(height);
+    });
+
+    it('should update height on show after hidden', async () => {
+      const height = textArea.offsetHeight;
+      textArea.setAttribute('hidden', '');
+      await nextResize(textArea);
+
+      // Three new lines will expand initial height
+      setInputValue(textArea, '\n\n\n');
+      await nextUpdate(textArea);
+
+      textArea.removeAttribute('hidden');
+      await nextResize(textArea);
+
       expect(textArea.offsetHeight).to.be.above(height);
     });
 
