@@ -409,8 +409,7 @@ class Popover extends PopoverPositionMixin(
     return [
       '__updateContentHeight(contentHeight, _overlayElement)',
       '__updateContentWidth(contentWidth, _overlayElement)',
-      '__openedOrTargetChanged(opened, target)',
-      '__overlayRoleOrTargetChanged(overlayRole, target)',
+      '__updateAriaAttributes(opened, overlayRole, target)',
     ];
   }
 
@@ -578,27 +577,32 @@ class Popover extends PopoverPositionMixin(
   }
 
   /** @private */
-  __openedOrTargetChanged(opened, target) {
-    if (target) {
-      target.setAttribute('aria-expanded', opened ? 'true' : 'false');
-
-      if (opened) {
-        target.setAttribute('aria-controls', this.__overlayId);
-      } else {
-        target.removeAttribute('aria-controls');
-      }
-    }
+  __computeEffectiveTarget(target, ariaTarget) {
+    return ariaTarget || target;
   }
 
   /** @private */
-  __overlayRoleOrTargetChanged(overlayRole, target) {
+  __updateAriaAttributes(opened, overlayRole, target) {
     if (this.__oldTarget) {
-      this.__oldTarget.removeAttribute('aria-haspopup');
+      const oldEffectiveTarget = this.__oldTarget.ariaTarget || this.__oldTarget;
+      oldEffectiveTarget.removeAttribute('aria-haspopup');
+      oldEffectiveTarget.removeAttribute('aria-expanded');
+      oldEffectiveTarget.removeAttribute('aria-controls');
     }
 
     if (target) {
+      const effectiveTarget = target.ariaTarget || target;
+
       const isDialog = overlayRole === 'dialog' || overlayRole === 'alertdialog';
-      target.setAttribute('aria-haspopup', isDialog ? 'dialog' : 'true');
+      effectiveTarget.setAttribute('aria-haspopup', isDialog ? 'dialog' : 'true');
+
+      effectiveTarget.setAttribute('aria-expanded', opened ? 'true' : 'false');
+
+      if (opened) {
+        effectiveTarget.setAttribute('aria-controls', this.__overlayId);
+      } else {
+        effectiveTarget.removeAttribute('aria-controls');
+      }
 
       this.__oldTarget = target;
     }
