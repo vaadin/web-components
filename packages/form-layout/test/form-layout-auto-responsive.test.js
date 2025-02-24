@@ -1,6 +1,7 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import '../src/vaadin-form-layout.js';
+import '../src/vaadin-form-row.js';
 
 function assertFormLayoutGrid(layout, { columns, rows }) {
   const children = [...layout.children];
@@ -26,14 +27,25 @@ describe('form-layout auto responsive', () => {
       fields = [...layout.children];
     });
 
-    it('should add --_column-start: 1 to next visible field when <br> is inserted', async () => {
+    it('should add line break after inserted <br>', async () => {
       const br = document.createElement('br');
       layout.insertBefore(br, fields[2]); // Insert before hidden Address field
       await nextFrame();
       expect(fields[3].style.getPropertyValue('--_column-start')).to.equal('1');
     });
 
-    it('should remove --_column-start: 1 from next visible field when <br> is removed', async () => {
+    it('should add line break after inserted <vaadin-form-row>', async () => {
+      const row = document.createElement('vaadin-form-row');
+      row.innerHTML = `
+        <input placeholder="Country">
+        <input placeholder="City">
+      `;
+      layout.insertBefore(row, fields[2]); // Insert before hidden Address field
+      await nextFrame();
+      expect(fields[3].style.getPropertyValue('--_column-start')).to.equal('1');
+    });
+
+    it('should remove line break after removed <br>', async () => {
       const br = document.createElement('br');
       layout.insertBefore(br, fields[2]); // Insert before hidden Address field
       await nextFrame();
@@ -42,9 +54,42 @@ describe('form-layout auto responsive', () => {
       expect(fields[3].style.getPropertyValue('--_column-start')).to.be.empty;
     });
 
-    it('should update --_column-start on fields when their visibility changes', async () => {
+    it('should remove line break after removed <vaadin-form-row>', async () => {
+      const row = document.createElement('vaadin-form-row');
+      row.innerHTML = `
+        <input placeholder="Country">
+        <input placeholder="City">
+      `;
+      layout.insertBefore(row, fields[2]); // Insert before hidden Address field
+      await nextFrame();
+      layout.removeChild(row);
+      await nextFrame();
+      expect(fields[3].style.getPropertyValue('--_column-start')).to.be.empty;
+    });
+
+    it('should maintain line break after <br> when fields visibility changes', async () => {
       const br = document.createElement('br');
       layout.insertBefore(br, fields[2]);
+      await nextFrame();
+
+      fields[2].hidden = false;
+      await nextFrame();
+      expect(fields[2].style.getPropertyValue('--_column-start')).to.equal('1');
+      expect(fields[3].style.getPropertyValue('--_column-start')).to.be.empty;
+
+      fields[2].hidden = true;
+      await nextFrame();
+      expect(fields[2].style.getPropertyValue('--_column-start')).to.be.empty;
+      expect(fields[3].style.getPropertyValue('--_column-start')).to.equal('1');
+    });
+
+    it('should maintain line break after <vaadin-form-row> when fields visibility changes', async () => {
+      const row = document.createElement('vaadin-form-row');
+      row.innerHTML = `
+        <input placeholder="Country">
+        <input placeholder="City">
+      `;
+      layout.insertBefore(row, fields[2]);
       await nextFrame();
 
       fields[2].hidden = false;

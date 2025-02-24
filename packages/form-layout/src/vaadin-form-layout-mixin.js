@@ -399,12 +399,14 @@ export const FormLayoutMixin = (superClass) =>
           return child.localName === 'vaadin-form-row' ? [...child.children] : child;
         })
         .forEach((child) => {
-          if (child.localName === 'br') {
+          const { parentElement } = child;
+
+          if (child.localName === 'br' || parentElement.localName === 'vaadin-form-row') {
             resetColumn = true;
             return;
           }
 
-          if (resetColumn && !isElementHidden(child)) {
+          if (resetColumn && !isElementHidden(child) && parentElement.localName !== 'vaadin-form-row') {
             child.style.setProperty('--_column-start', 1);
             resetColumn = false;
           } else {

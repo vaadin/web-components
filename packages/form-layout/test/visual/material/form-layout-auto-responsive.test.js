@@ -143,4 +143,27 @@ describe('form-layout auto responsive', () => {
       await visualDiff(div, 'auto-rows');
     });
   });
+
+  describe('auto rows with explicit rows', () => {
+    beforeEach(async () => {
+      element = fixtureSync(
+        `
+        <vaadin-form-layout auto-responsive auto-rows max-columns="3" style="border: 1px solid red;">
+          <vaadin-form-row>
+            <input placeholder="First name" />
+            <input placeholder="Last Name" />
+          </vaadin-form-row>
+
+          <input placeholder="Address" />
+        </vaadin-form-layout>
+      `,
+        div,
+      );
+      await nextFrame();
+    });
+
+    it('default', async () => {
+      await visualDiff(div, 'auto-rows-with-explicit-rows');
+    });
+  });
 });
