@@ -52,5 +52,5 @@ export declare class DialogOverlayMixinClass {
   /**
    * Updates the coordinates of the overlay.
    */
-  setBounds(bounds: DialogOverlayBoundsParam): void;
+  setBounds(bounds: DialogOverlayBoundsParam, absolute: boolean): void;
 }
