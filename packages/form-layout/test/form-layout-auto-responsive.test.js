@@ -31,7 +31,7 @@ describe('form-layout auto responsive', () => {
       const br = document.createElement('br');
       layout.insertBefore(br, fields[2]); // Insert before hidden Address field
       await nextFrame();
-      expect(fields[3].style.getPropertyValue('--_column-start')).to.equal('1');
+      expect(getComputedStyle(fields[3]).gridColumnStart).to.equal('1');
     });
 
     it('should add line break after inserted <vaadin-form-row>', async () => {
@@ -42,7 +42,7 @@ describe('form-layout auto responsive', () => {
       `;
       layout.insertBefore(row, fields[2]); // Insert before hidden Address field
       await nextFrame();
-      expect(fields[3].style.getPropertyValue('--_column-start')).to.equal('1');
+      expect(getComputedStyle(fields[3]).gridColumnStart).to.equal('1');
     });
 
     it('should remove line break after removed <br>', async () => {
@@ -51,7 +51,7 @@ describe('form-layout auto responsive', () => {
       await nextFrame();
       layout.removeChild(br);
       await nextFrame();
-      expect(fields[3].style.getPropertyValue('--_column-start')).to.be.empty;
+      expect(getComputedStyle(fields[3]).gridColumnStart).to.equal('auto');
     });
 
     it('should remove line break after removed <vaadin-form-row>', async () => {
@@ -64,7 +64,7 @@ describe('form-layout auto responsive', () => {
       await nextFrame();
       layout.removeChild(row);
       await nextFrame();
-      expect(fields[3].style.getPropertyValue('--_column-start')).to.be.empty;
+      expect(getComputedStyle(fields[3]).gridColumnStart).to.equal('auto');
     });
 
     it('should maintain line break after <br> when fields visibility changes', async () => {
@@ -74,13 +74,13 @@ describe('form-layout auto responsive', () => {
 
       fields[2].hidden = false;
       await nextFrame();
-      expect(fields[2].style.getPropertyValue('--_column-start')).to.equal('1');
-      expect(fields[3].style.getPropertyValue('--_column-start')).to.be.empty;
+      expect(getComputedStyle(fields[2]).gridColumnStart).to.equal('1');
+      expect(getComputedStyle(fields[3]).gridColumnStart).to.equal('auto');
 
       fields[2].hidden = true;
       await nextFrame();
-      expect(fields[2].style.getPropertyValue('--_column-start')).to.be.empty;
-      expect(fields[3].style.getPropertyValue('--_column-start')).to.equal('1');
+      expect(getComputedStyle(fields[2]).gridColumnStart).to.equal('auto');
+      expect(getComputedStyle(fields[3]).gridColumnStart).to.equal('1');
     });
 
     it('should maintain line break after <vaadin-form-row> when fields visibility changes', async () => {
@@ -94,13 +94,13 @@ describe('form-layout auto responsive', () => {
 
       fields[2].hidden = false;
       await nextFrame();
-      expect(fields[2].style.getPropertyValue('--_column-start')).to.equal('1');
-      expect(fields[3].style.getPropertyValue('--_column-start')).to.be.empty;
+      expect(getComputedStyle(fields[2]).gridColumnStart).to.equal('1');
+      expect(getComputedStyle(fields[3]).gridColumnStart).to.equal('auto');
 
       fields[2].hidden = true;
       await nextFrame();
-      expect(fields[2].style.getPropertyValue('--_column-start')).to.be.empty;
-      expect(fields[3].style.getPropertyValue('--_column-start')).to.equal('1');
+      expect(getComputedStyle(fields[2]).gridColumnStart).to.equal('auto');
+      expect(getComputedStyle(fields[3]).gridColumnStart).to.equal('1');
     });
   });
 
