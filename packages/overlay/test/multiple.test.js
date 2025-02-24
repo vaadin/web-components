@@ -2,6 +2,7 @@ import { expect } from '@vaadin/chai-plugins';
 import { click, escKeyDown, fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../vaadin-overlay.js';
+import { setNestedOverlay } from '@vaadin/overlay/src/vaadin-overlay-stack-mixin.js';
 import { createOverlay } from './helpers.js';
 
 describe('multiple overlays', () => {
@@ -315,6 +316,57 @@ describe('multiple overlays', () => {
 
       escKeyDown(input);
       expect(spy.called).to.be.false;
+    });
+  });
+
+  describe('setNestedOverlay', () => {
+    let overlays;
+
+    beforeEach(() => {
+      overlays = Array.from(
+        fixtureSync(`
+        <div id="parent">
+          <vaadin-overlay modeless></vaadin-overlay>
+          <vaadin-overlay modeless></vaadin-overlay>
+          <vaadin-overlay modeless></vaadin-overlay>
+        </div>
+      `).children,
+      );
+      overlays.forEach((el, idx) => {
+        el.renderer = (root) => {
+          if (!root.firstChild) {
+            const btn = document.createElement('button');
+            btn.textContent = `Overlay ${idx}`;
+            root.appendChild(btn);
+          }
+        };
+      });
+    });
+
+    it('should bring nested overlays to front recursively', () => {
+      setNestedOverlay(overlays[0], overlays[1]);
+      setNestedOverlay(overlays[1], overlays[2]);
+
+      const bringToFrontSpy1 = sinon.spy(overlays[1], 'bringToFront');
+      const bringToFrontSpy2 = sinon.spy(overlays[2], 'bringToFront');
+
+      overlays[0].bringToFront();
+
+      expect(bringToFrontSpy1).to.be.calledOnce;
+      expect(bringToFrontSpy2).to.be.calledOnce;
+      expect(bringToFrontSpy2).to.be.calledAfter(bringToFrontSpy1);
+    });
+
+    it('should not bring nested overlay to front when resetting', () => {
+      setNestedOverlay(overlays[0], overlays[1]);
+
+      setNestedOverlay(overlays[0], null);
+
+      const bringToFrontSpy = sinon.spy(overlays[1], 'bringToFront');
+
+      overlays[0].bringToFront();
+
+      expect(bringToFrontSpy).to.be.not.called;
     });
   });
 });
