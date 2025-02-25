@@ -1,15 +1,9 @@
-import { expect } from '@vaadin/chai-plugins';
 import { setViewport } from '@vaadin/test-runner-commands';
 import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import './not-animated-styles.js';
 import '@vaadin/form-layout';
 import '@vaadin/horizontal-layout';
-
-function assertFormLayoutGrid(layout, { columns, rows }) {
-  const children = [...layout.children];
-  expect(new Set(children.map((child) => child.offsetLeft)).size).to.equal(columns);
-  expect(new Set(children.map((child) => child.offsetTop)).size).to.equal(rows);
-}
+import { assertFormLayoutGrid } from '@vaadin/form-layout/test/helpers.js';
 
 describe('form-layouts in horizontal-layout', () => {
   let horizontalLayout, formLayouts;

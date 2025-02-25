@@ -2,12 +2,7 @@ import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import '../src/vaadin-form-layout.js';
 import '../src/vaadin-form-row.js';
-
-function assertFormLayoutGrid(layout, { columns, rows }) {
-  const children = [...layout.children];
-  expect(new Set(children.map((child) => child.offsetLeft)).size).to.equal(columns);
-  expect(new Set(children.map((child) => child.offsetTop)).size).to.equal(rows);
-}
+import { assertFormLayoutGrid } from './helpers.js';
 
 describe('form-layout auto responsive', () => {
   let container, layout, fields;
