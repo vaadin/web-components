@@ -1,4 +1,4 @@
-import { type ComponentType, type ForwardedRef, forwardRef, type ReactElement } from 'react';
+import { type ComponentType, type ForwardedRef, forwardRef, type ReactElement, type RefAttributes } from 'react';
 import {
   ContextMenu as _ContextMenu,
   type ContextMenuRendererContext,
@@ -13,27 +13,37 @@ export * from './generated/ContextMenu.js';
 
 export type ContextMenuReactRendererProps = ReactContextRendererProps<ContextMenuRendererContext, ContextMenuElement>;
 
-export type ContextMenuItem = Omit<_ContextMenuItem, 'component' | 'children'> & {
+export type ContextMenuItem<TItemData extends object = object> = Omit<
+  _ContextMenuItem<TItemData>,
+  'component' | 'children'
+> & {
   component?: ReactElement | string;
 
-  children?: Array<ContextMenuItem>;
+  children?: Array<ContextMenuItem<TItemData>>;
 };
 
-export type ContextMenuItemSelectedEvent = CustomEvent<{ value: ContextMenuItem }>;
+export type ContextMenuItemSelectedEvent<TItem extends ContextMenuItem = ContextMenuItem> = CustomEvent<{
+  value: TItem;
+}>;
 
 // The 'opened' property is omitted because it is readonly in the web component.
 // So you cannot set it up manually, only read from the component.
 // For changing the property, use specific methods of the component.
-export type ContextMenuProps = Partial<Omit<_ContextMenuProps, 'opened' | 'renderer' | 'items' | 'onItemSelected'>> &
+export type ContextMenuProps<TItem extends ContextMenuItem = ContextMenuItem> = Partial<
+  Omit<_ContextMenuProps, 'opened' | 'renderer' | 'items' | 'onItemSelected'>
+> &
   Readonly<{
     renderer?: ComponentType<ContextMenuReactRendererProps> | null;
 
-    items?: Array<ContextMenuItem>;
+    items?: Array<TItem>;
 
-    onItemSelected?: (event: ContextMenuItemSelectedEvent) => void;
+    onItemSelected?: (event: ContextMenuItemSelectedEvent<TItem>) => void;
   }>;
 
-function ContextMenu(props: ContextMenuProps, ref: ForwardedRef<ContextMenuElement>): ReactElement | null {
+function ContextMenu<TItem extends ContextMenuItem = ContextMenuItem>(
+  props: ContextMenuProps<TItem>,
+  ref: ForwardedRef<ContextMenuElement>,
+): ReactElement | null {
   const [portals, renderer] = useContextRenderer(props.renderer);
   const [itemPortals, webComponentItems] = mapItemsWithComponents(props.items, 'vaadin-context-menu-item');
 
@@ -45,7 +55,7 @@ function ContextMenu(props: ContextMenuProps, ref: ForwardedRef<ContextMenuEleme
           value: getOriginalItem(event.detail.value),
         });
 
-        onItemSelected(event as CustomEvent<{ value: ContextMenuItem }>);
+        onItemSelected(event as ContextMenuItemSelectedEvent<TItem>);
       }
     : undefined;
   return (
@@ -63,6 +73,8 @@ function ContextMenu(props: ContextMenuProps, ref: ForwardedRef<ContextMenuEleme
   );
 }
 
-const ForwardedContextMenu = forwardRef(ContextMenu);
+const ForwardedContextMenu = forwardRef(ContextMenu) as <TItem extends ContextMenuItem = ContextMenuItem>(
+  props: ContextMenuProps<TItem> & RefAttributes<ContextMenuElement>,
+) => ReactElement | null;
 
 export { ForwardedContextMenu as ContextMenu };
