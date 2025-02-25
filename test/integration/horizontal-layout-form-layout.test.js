@@ -41,54 +41,31 @@ describe('form-layouts in horizontal-layout', () => {
         await nextFrame();
       });
 
-      it('should start with max number of columns', () => {
+      it('should start with max number of form layout columns', () => {
         formLayouts.forEach((layout) => {
           assertFormLayoutGrid(layout, { columns: 3, rows: 2 });
         });
       });
 
-      it('should adjust number of columns based on horizontal layout width', async () => {
-        await setViewport({ width: 600, height: 768 });
-        await nextResize(horizontalLayout);
-        formLayouts.forEach((layout) => {
-          assertFormLayoutGrid(layout, { columns: 3, rows: 2 });
-        });
+      it('should adjust number of form layout columns based on horizontal layout width', async () => {
+        const breakpoints = [
+          { width: 600, columns: 3, rows: 2 },
+          { width: 400, columns: 2, rows: 2 },
+          { width: 200, columns: 1, rows: 4 },
+          { width: 50, columns: 1, rows: 4 },
+          { width: 200, columns: 1, rows: 4 },
+          { width: 400, columns: 2, rows: 2 },
+          { width: 600, columns: 3, rows: 2 },
+        ];
 
-        await setViewport({ width: 400, height: 768 });
-        await nextResize(horizontalLayout);
-        formLayouts.forEach((layout) => {
-          assertFormLayoutGrid(layout, { columns: 2, rows: 2 });
-        });
+        for (const { width, columns, rows } of breakpoints) {
+          await setViewport({ width, height: 768 });
+          await nextResize(horizontalLayout);
 
-        await setViewport({ width: 200, height: 768 });
-        await nextResize(horizontalLayout);
-        formLayouts.forEach((layout) => {
-          assertFormLayoutGrid(layout, { columns: 1, rows: 4 });
-        });
-
-        await setViewport({ width: 50, height: 768 });
-        await nextResize(horizontalLayout);
-        formLayouts.forEach((layout) => {
-          assertFormLayoutGrid(layout, { columns: 1, rows: 4 });
-        });
-
-        await setViewport({ width: 200, height: 768 });
-        await nextResize(horizontalLayout);
-        formLayouts.forEach((layout) => {
-          assertFormLayoutGrid(layout, { columns: 1, rows: 4 });
-        });
-
-        await setViewport({ width: 400, height: 768 });
-        await nextResize(horizontalLayout);
-        formLayouts.forEach((layout) => {
-          assertFormLayoutGrid(layout, { columns: 2, rows: 2 });
-        });
-
-        await setViewport({ width: 600, height: 768 });
-        await nextResize(horizontalLayout);
-        formLayouts.forEach((layout) => {
-          assertFormLayoutGrid(layout, { columns: 3, rows: 2 });
-        });
+          formLayouts.forEach((layout) => {
+            assertFormLayoutGrid(layout, { columns, rows });
+          });
+        }
       });
     });
 
@@ -144,54 +121,25 @@ describe('form-layouts in horizontal-layout', () => {
       });
 
       it('should adjust number of columns and label position based on horizontal layout width', async () => {
-        await setViewport({ width: 1000, height: 768 });
-        await nextResize(horizontalLayout);
-        formLayouts.forEach((layout) => {
-          assertFormLayoutGrid(layout, { columns: 2, rows: 2 });
-          assertFormLayoutLabelPosition(layout, { position: 'aside' });
-        });
+        const breakpoints = [
+          { width: 1000, columns: 2, rows: 2, labelPosition: 'aside' },
+          { width: 500, columns: 1, rows: 4, labelPosition: 'aside' },
+          { width: 400, columns: 2, rows: 2, labelPosition: 'above' },
+          { width: 200, columns: 1, rows: 4, labelPosition: 'above' },
+          { width: 400, columns: 2, rows: 2, labelPosition: 'above' },
+          { width: 500, columns: 1, rows: 4, labelPosition: 'aside' },
+          { width: 1000, columns: 2, rows: 2, labelPosition: 'aside' },
+        ];
 
-        await setViewport({ width: 500, height: 768 });
-        await nextResize(horizontalLayout);
-        formLayouts.forEach((layout) => {
-          assertFormLayoutGrid(layout, { columns: 1, rows: 4 });
-          assertFormLayoutLabelPosition(layout, { position: 'aside' });
-        });
+        for (const { width, columns, rows, labelPosition } of breakpoints) {
+          await setViewport({ width, height: 768 });
+          await nextResize(horizontalLayout);
 
-        await setViewport({ width: 400, height: 768 });
-        await nextResize(horizontalLayout);
-        formLayouts.forEach((layout) => {
-          assertFormLayoutGrid(layout, { columns: 2, rows: 2 });
-          assertFormLayoutLabelPosition(layout, { position: 'above' });
-        });
-
-        await setViewport({ width: 200, height: 768 });
-        await nextResize(horizontalLayout);
-        formLayouts.forEach((layout) => {
-          assertFormLayoutGrid(layout, { columns: 1, rows: 4 });
-          assertFormLayoutLabelPosition(layout, { position: 'above' });
-        });
-
-        await setViewport({ width: 400, height: 768 });
-        await nextResize(horizontalLayout);
-        formLayouts.forEach((layout) => {
-          assertFormLayoutGrid(layout, { columns: 2, rows: 2 });
-          assertFormLayoutLabelPosition(layout, { position: 'above' });
-        });
-
-        await setViewport({ width: 500, height: 768 });
-        await nextResize(horizontalLayout);
-        formLayouts.forEach((layout) => {
-          assertFormLayoutGrid(layout, { columns: 1, rows: 4 });
-          assertFormLayoutLabelPosition(layout, { position: 'aside' });
-        });
-
-        await setViewport({ width: 1000, height: 768 });
-        await nextResize(horizontalLayout);
-        formLayouts.forEach((layout) => {
-          assertFormLayoutGrid(layout, { columns: 2, rows: 2 });
-          assertFormLayoutLabelPosition(layout, { position: 'aside' });
-        });
+          formLayouts.forEach((layout) => {
+            assertFormLayoutGrid(layout, { columns, rows });
+            assertFormLayoutLabelPosition(layout, { position: labelPosition });
+          });
+        }
       });
     });
   });

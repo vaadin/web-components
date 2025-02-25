@@ -55,7 +55,7 @@ describe('form-layout in dialog', () => {
 
   describe('auto-responsive', () => {
     // Dialog adds a total gap of 80px between the layout and the viewport
-    const DIALOG_PADDING = 80;
+    const DIALOG_GAP = 80;
 
     describe('basic', () => {
       beforeEach(async () => {
@@ -91,29 +91,21 @@ describe('form-layout in dialog', () => {
       });
 
       it('should adjust number of columns based on dialog width', async () => {
-        await setViewport({ width: 300 + DIALOG_PADDING, height: 768 });
-        await nextResize(layout);
-        assertFormLayoutGrid(layout, { columns: 3, rows: 2 });
+        const breakpoints = [
+          { width: 300, columns: 3, rows: 2 },
+          { width: 200, columns: 2, rows: 2 },
+          { width: 100, columns: 1, rows: 4 },
+          { width: 50, columns: 1, rows: 4 },
+          { width: 100, columns: 1, rows: 4 },
+          { width: 200, columns: 2, rows: 2 },
+          { width: 300, columns: 3, rows: 2 },
+        ];
 
-        await setViewport({ width: 200 + DIALOG_PADDING, height: 768 });
-        await nextResize(layout);
-        assertFormLayoutGrid(layout, { columns: 2, rows: 2 });
-
-        await setViewport({ width: 100 + DIALOG_PADDING, height: 768 });
-        await nextResize(layout);
-        assertFormLayoutGrid(layout, { columns: 1, rows: 4 });
-
-        await setViewport({ width: 50 + DIALOG_PADDING, height: 768 });
-        await nextResize(layout);
-        assertFormLayoutGrid(layout, { columns: 1, rows: 4 });
-
-        await setViewport({ width: 200 + DIALOG_PADDING, height: 768 });
-        await nextResize(layout);
-        assertFormLayoutGrid(layout, { columns: 2, rows: 2 });
-
-        await setViewport({ width: 300 + DIALOG_PADDING, height: 768 });
-        await nextResize(layout);
-        assertFormLayoutGrid(layout, { columns: 3, rows: 2 });
+        for (const { width, columns, rows } of breakpoints) {
+          await setViewport({ width: width + DIALOG_GAP, height: 768 });
+          await nextResize(layout);
+          assertFormLayoutGrid(layout, { columns, rows });
+        }
       });
     });
 
@@ -169,40 +161,22 @@ describe('form-layout in dialog', () => {
       });
 
       it('should adjust number of columns and label position based on dialog width', async () => {
-        await setViewport({ width: 500 + DIALOG_PADDING, height: 768 });
-        await nextResize(layout);
-        assertFormLayoutGrid(layout, { columns: 2, rows: 2 });
-        assertFormLayoutLabelPosition(layout, { position: 'aside' });
+        const breakpoints = [
+          { width: 500, columns: 2, rows: 2, labelPosition: 'aside' },
+          { width: 250, columns: 1, rows: 4, labelPosition: 'aside' },
+          { width: 200, columns: 2, rows: 2, labelPosition: 'above' },
+          { width: 100, columns: 1, rows: 4, labelPosition: 'above' },
+          { width: 200, columns: 2, rows: 2, labelPosition: 'above' },
+          { width: 250, columns: 1, rows: 4, labelPosition: 'aside' },
+          { width: 500, columns: 2, rows: 2, labelPosition: 'aside' },
+        ];
 
-        await setViewport({ width: 250 + DIALOG_PADDING, height: 768 });
-        await nextResize(layout);
-        assertFormLayoutGrid(layout, { columns: 1, rows: 4 });
-        assertFormLayoutLabelPosition(layout, { position: 'aside' });
-
-        await setViewport({ width: 200 + DIALOG_PADDING, height: 768 });
-        await nextResize(layout);
-        assertFormLayoutGrid(layout, { columns: 2, rows: 2 });
-        assertFormLayoutLabelPosition(layout, { position: 'above' });
-
-        await setViewport({ width: 100 + DIALOG_PADDING, height: 768 });
-        await nextResize(layout);
-        assertFormLayoutGrid(layout, { columns: 1, rows: 4 });
-        assertFormLayoutLabelPosition(layout, { position: 'above' });
-
-        await setViewport({ width: 200 + DIALOG_PADDING, height: 768 });
-        await nextResize(layout);
-        assertFormLayoutGrid(layout, { columns: 2, rows: 2 });
-        assertFormLayoutLabelPosition(layout, { position: 'above' });
-
-        await setViewport({ width: 250 + DIALOG_PADDING, height: 768 });
-        await nextResize(layout);
-        assertFormLayoutGrid(layout, { columns: 1, rows: 4 });
-        assertFormLayoutLabelPosition(layout, { position: 'aside' });
-
-        await setViewport({ width: 500 + DIALOG_PADDING, height: 768 });
-        await nextResize(layout);
-        assertFormLayoutGrid(layout, { columns: 2, rows: 2 });
-        assertFormLayoutLabelPosition(layout, { position: 'aside' });
+        for (const { width, columns, rows, labelPosition } of breakpoints) {
+          await setViewport({ width: width + DIALOG_GAP, height: 768 });
+          await nextResize(layout);
+          assertFormLayoutGrid(layout, { columns, rows });
+          assertFormLayoutLabelPosition(layout, { position: labelPosition });
+        }
       });
     });
   });

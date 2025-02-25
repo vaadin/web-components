@@ -125,29 +125,19 @@ describe('form-layout auto responsive', () => {
     });
 
     it('should adjust number of columns based on container width', async () => {
-      container.style.width = '300px';
-      await nextResize(layout);
-      assertFormLayoutGrid(layout, { columns: 3, rows: 2 });
+      const breakpoints = [
+        { width: '300px', columns: 3, rows: 2 },
+        { width: '200px', columns: 2, rows: 2 },
+        { width: '100px', columns: 1, rows: 4 },
+        { width: '200px', columns: 2, rows: 2 },
+        { width: '300px', columns: 3, rows: 2 },
+      ];
 
-      container.style.width = '200px';
-      await nextResize(layout);
-      assertFormLayoutGrid(layout, { columns: 2, rows: 2 });
-
-      container.style.width = '100px';
-      await nextResize(layout);
-      assertFormLayoutGrid(layout, { columns: 1, rows: 4 });
-
-      container.style.width = '50px';
-      await nextResize(layout);
-      assertFormLayoutGrid(layout, { columns: 1, rows: 4 });
-
-      container.style.width = '200px';
-      await nextResize(layout);
-      assertFormLayoutGrid(layout, { columns: 2, rows: 2 });
-
-      container.style.width = '300px';
-      await nextResize(layout);
-      assertFormLayoutGrid(layout, { columns: 3, rows: 2 });
+      for (const { width, columns, rows } of breakpoints) {
+        container.style.width = width;
+        await nextResize(layout);
+        assertFormLayoutGrid(layout, { columns, rows });
+      }
     });
   });
 
@@ -194,40 +184,22 @@ describe('form-layout auto responsive', () => {
     });
 
     it('should adjust number of columns and label position based on container width', async () => {
-      container.style.width = '500px';
-      await nextResize(layout);
-      assertFormLayoutGrid(layout, { columns: 2, rows: 2 });
-      assertFormLayoutLabelPosition(layout, { position: 'aside' });
+      const breakpoints = [
+        { width: '500px', columns: 2, rows: 2, labelPosition: 'aside' },
+        { width: '250px', columns: 1, rows: 4, labelPosition: 'aside' },
+        { width: '200px', columns: 2, rows: 2, labelPosition: 'above' },
+        { width: '100px', columns: 1, rows: 4, labelPosition: 'above' },
+        { width: '200px', columns: 2, rows: 2, labelPosition: 'above' },
+        { width: '250px', columns: 1, rows: 4, labelPosition: 'aside' },
+        { width: '500px', columns: 2, rows: 2, labelPosition: 'aside' },
+      ];
 
-      container.style.width = '250px';
-      await nextResize(layout);
-      assertFormLayoutGrid(layout, { columns: 1, rows: 4 });
-      assertFormLayoutLabelPosition(layout, { position: 'aside' });
-
-      container.style.width = '200px';
-      await nextResize(layout);
-      assertFormLayoutGrid(layout, { columns: 2, rows: 2 });
-      assertFormLayoutLabelPosition(layout, { position: 'above' });
-
-      container.style.width = '100px';
-      await nextResize(layout);
-      assertFormLayoutGrid(layout, { columns: 1, rows: 4 });
-      assertFormLayoutLabelPosition(layout, { position: 'above' });
-
-      container.style.width = '200px';
-      await nextResize(layout);
-      assertFormLayoutGrid(layout, { columns: 2, rows: 2 });
-      assertFormLayoutLabelPosition(layout, { position: 'above' });
-
-      container.style.width = '250px';
-      await nextResize(layout);
-      assertFormLayoutGrid(layout, { columns: 1, rows: 4 });
-      assertFormLayoutLabelPosition(layout, { position: 'aside' });
-
-      container.style.width = '500px';
-      await nextResize(layout);
-      assertFormLayoutGrid(layout, { columns: 2, rows: 2 });
-      assertFormLayoutLabelPosition(layout, { position: 'aside' });
+      for (const { width, columns, rows, labelPosition } of breakpoints) {
+        container.style.width = width;
+        await nextResize(layout);
+        assertFormLayoutGrid(layout, { columns, rows });
+        assertFormLayoutLabelPosition(layout, { position: labelPosition });
+      }
     });
   });
 });
