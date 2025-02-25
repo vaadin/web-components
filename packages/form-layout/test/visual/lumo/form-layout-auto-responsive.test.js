@@ -11,7 +11,7 @@ describe('form-layout auto responsive', () => {
   beforeEach(() => {
     div = document.createElement('div');
     div.style.display = 'inline-block';
-    div.style.padding = '10px';
+    div.style.border = '10px solid #f3f3f3';
     div.style.maxWidth = '100%';
     div.style.boxSizing = 'border-box';
   });
@@ -20,13 +20,13 @@ describe('form-layout auto responsive', () => {
     beforeEach(async () => {
       element = fixtureSync(
         `
-        <vaadin-form-layout auto-responsive style="border: 1px solid red;">
-          <input placeholder="First name" />
-          <input placeholder="Last Name" />
-          <input placeholder="Email" />
-          <input placeholder="Phone" />
-        </vaadin-form-layout>
-      `,
+          <vaadin-form-layout auto-responsive>
+            <input placeholder="First name" />
+            <input placeholder="Last Name" />
+            <input placeholder="Email" />
+            <input placeholder="Phone" />
+          </vaadin-form-layout>
+        `,
         div,
       );
       await nextFrame();
@@ -45,7 +45,7 @@ describe('form-layout auto responsive', () => {
     it('columnWidth', async () => {
       element.autoRows = true;
       element.maxColumns = 2;
-      element.columnWidth = '15em';
+      element.columnWidth = '20em';
       await visualDiff(div, 'column-width');
     });
   });
@@ -63,7 +63,6 @@ describe('form-layout auto responsive', () => {
 
           <style>
             vaadin-form-layout {
-              border: 1px solid red;
               --vaadin-form-layout-row-spacing: 4em;
               --vaadin-form-layout-column-spacing: 4em;
             }
@@ -102,10 +101,6 @@ describe('form-layout auto responsive', () => {
           </vaadin-form-layout>
 
           <style>
-            vaadin-form-layout {
-              border: 1px solid red;
-            }
-
             input {
               justify-self: stretch;
             }
@@ -125,15 +120,21 @@ describe('form-layout auto responsive', () => {
     beforeEach(async () => {
       element = fixtureSync(
         `
-        <vaadin-form-layout auto-responsive auto-rows style="border: 1px solid red;">
-          <input placeholder="First name" />
-          <input placeholder="Last Name" />
-          <br />
-          <input placeholder="Address" hidden />
-          <input placeholder="Email" />
-          <input placeholder="Phone" />
-        </vaadin-form-layout>
-      `,
+          <vaadin-form-layout auto-responsive auto-rows>
+            <input placeholder="First name" />
+            <input placeholder="Last Name" />
+            <br />
+            <input placeholder="Address" hidden />
+            <input placeholder="Email" />
+            <input placeholder="Phone" />
+          </vaadin-form-layout>
+
+          <style>
+            input {
+              justify-self: stretch;
+            }
+          </style>
+        `,
         div,
       );
       await nextFrame();
@@ -148,15 +149,21 @@ describe('form-layout auto responsive', () => {
     beforeEach(async () => {
       element = fixtureSync(
         `
-        <vaadin-form-layout auto-responsive auto-rows max-columns="3" style="border: 1px solid red;">
-          <vaadin-form-row>
-            <input placeholder="First name" />
-            <input placeholder="Last Name" />
-          </vaadin-form-row>
+          <vaadin-form-layout auto-responsive auto-rows>
+            <vaadin-form-row>
+              <input placeholder="First name" />
+              <input placeholder="Last Name" />
+            </vaadin-form-row>
 
-          <input placeholder="Address" />
-        </vaadin-form-layout>
-      `,
+            <input placeholder="Address" />
+          </vaadin-form-layout>
+
+          <style>
+            input {
+              justify-self: stretch;
+            }
+          </style>
+        `,
         div,
       );
       await nextFrame();

@@ -1,13 +1,8 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame, nextResize } from '@vaadin/testing-helpers';
 import '../src/vaadin-form-layout.js';
 import '../src/vaadin-form-row.js';
-
-function assertFormLayoutGrid(layout, { columns, rows }) {
-  const children = [...layout.children];
-  expect(new Set(children.map((child) => child.offsetLeft)).size).to.equal(columns);
-  expect(new Set(children.map((child) => child.offsetTop)).size).to.equal(rows);
-}
+import { assertFormLayoutGrid } from './helpers.js';
 
 describe('form-layout auto responsive', () => {
   let container, layout, fields;
@@ -129,24 +124,20 @@ describe('form-layout auto responsive', () => {
       assertFormLayoutGrid(layout, { columns: 3, rows: 2 });
     });
 
-    it('should adjust number of columns based on container width', () => {
-      container.style.width = '300px';
-      assertFormLayoutGrid(layout, { columns: 3, rows: 2 });
+    it('should adjust number of columns based on container width', async () => {
+      const breakpoints = [
+        { width: '300px', columns: 3, rows: 2 },
+        { width: '200px', columns: 2, rows: 2 },
+        { width: '100px', columns: 1, rows: 4 },
+        { width: '200px', columns: 2, rows: 2 },
+        { width: '300px', columns: 3, rows: 2 },
+      ];
 
-      container.style.width = '200px';
-      assertFormLayoutGrid(layout, { columns: 2, rows: 2 });
-
-      container.style.width = '100px';
-      assertFormLayoutGrid(layout, { columns: 1, rows: 4 });
-
-      container.style.width = '50px';
-      assertFormLayoutGrid(layout, { columns: 1, rows: 4 });
-
-      container.style.width = '200px';
-      assertFormLayoutGrid(layout, { columns: 2, rows: 2 });
-
-      container.style.width = '300px';
-      assertFormLayoutGrid(layout, { columns: 3, rows: 2 });
+      for (const { width, columns, rows } of breakpoints) {
+        container.style.width = width;
+        await nextResize(layout);
+        assertFormLayoutGrid(layout, { columns, rows });
+      }
     });
   });
 });
