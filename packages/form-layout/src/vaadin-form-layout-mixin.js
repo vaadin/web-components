@@ -393,6 +393,7 @@ export const FormLayoutMixin = (superClass) =>
     /** @private */
     __updateCSSGridLayout() {
       let resetColumn = false;
+      const columnsCountMap = new Map();
 
       this.$.layout.style.setProperty('--_rendered-column-count', this._renderedColumnCount);
 
@@ -403,16 +404,30 @@ export const FormLayoutMixin = (superClass) =>
         .forEach((child) => {
           const { parentElement } = child;
 
-          if (child.localName === 'br' || parentElement.localName === 'vaadin-form-row') {
-            resetColumn = true;
-            return;
-          }
-
           const colspan = child.getAttribute('colspan') || child.getAttribute('data-colspan');
           if (colspan) {
             child.style.setProperty('--_colspan', colspan);
           } else {
             child.style.removeProperty('--_colspan');
+          }
+
+          // Calculate the number of columns in the row
+          if (!columnsCountMap.has(parentElement)) {
+            columnsCountMap.set(parentElement, 0);
+          }
+
+          const maxRowColumns = columnsCountMap.get(parentElement);
+          const colspanValue = colspan ? parseInt(colspan) : 1;
+
+          if (parentElement.localName === 'vaadin-form-row') {
+            columnsCountMap.set(parentElement, maxRowColumns + colspanValue);
+          } else {
+            columnsCountMap.set(parentElement, Math.max(maxRowColumns, colspanValue));
+          }
+
+          if (child.localName === 'br' || parentElement.localName === 'vaadin-form-row') {
+            resetColumn = true;
+            return;
           }
 
           if (resetColumn && !isElementHidden(child) && parentElement.localName !== 'vaadin-form-row') {
@@ -422,14 +437,18 @@ export const FormLayoutMixin = (superClass) =>
             child.style.removeProperty('--_column-start');
           }
         });
+
+      const maxColumns = [...columnsCountMap.values()].reduce(
+        (columnCount, maxColumnCount) => Math.max(columnCount, maxColumnCount),
+        0,
+      );
+      this.style.setProperty('--_max-columns', Math.min(maxColumns, this.maxColumns));
     }
 
     get _renderedColumnCount() {
       // Calculate the number of rendered columns, excluding CSS grid auto columns (0px)
       const { gridTemplateColumns } = getComputedStyle(this.$.layout);
-      const columns = gridTemplateColumns.split(' ');
-      const firstColumnSize = columns[0];
-      return columns.filter((width) => width === firstColumnSize).length;
+      return gridTemplateColumns.split(' ').filter((width) => width !== '0px').length;
     }
     /**
      * @protected
