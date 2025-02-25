@@ -6,6 +6,7 @@ import type { DirMixinClass } from '@vaadin/component-base/src/dir-mixin.js';
 import type { ResizeMixinClass } from '@vaadin/component-base/src/resize-mixin.js';
 import type { ItemMixinClass } from '@vaadin/item/src/vaadin-item-mixin.js';
 import type { ThemableMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import type { ThemePropertyMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
 import type { MenuBarItem } from '../../src/vaadin-menu-bar-item.js';
 import type { MenuBarListBox } from '../../src/vaadin-menu-bar-list-box.js';
 import type { MenuBarMixinClass } from '../../src/vaadin-menu-bar-mixin.js';
@@ -24,6 +25,8 @@ assertType<ResizeMixinClass>(menu);
 assertType<ControllerMixinClass>(menu);
 assertType<FocusMixinClass>(menu);
 assertType<MenuBarMixinClass>(menu);
+assertType<ThemableMixinClass>(menu);
+assertType<ThemePropertyMixinClass>(menu);
 
 menu.addEventListener('item-selected', (event) => {
   assertType<MenuBarItemSelectedEvent>(event);

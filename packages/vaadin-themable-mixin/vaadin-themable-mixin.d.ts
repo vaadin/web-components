@@ -20,6 +20,9 @@ export declare class ThemableMixinClass {
   protected static finalizeStyles(styles?: CSSResultGroup): CSSResult[];
 }
 
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
+export declare interface ThemableMixinClass extends ThemePropertyMixinClass {}
+
 /**
  * Registers CSS styles for a component type. Make sure to register the styles before
  * the first instance of a component of the type is attached to DOM.
