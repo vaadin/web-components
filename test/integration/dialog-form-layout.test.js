@@ -1,16 +1,10 @@
-import { expect } from '@vaadin/chai-plugins';
 import { setViewport } from '@vaadin/test-runner-commands';
 import { fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
 import './not-animated-styles.js';
 import '@vaadin/form-layout';
 import '@vaadin/form-layout/vaadin-form-item.js';
 import '@vaadin/dialog';
-
-function assertFormLayoutGrid(layout, { columns, rows }) {
-  const children = [...layout.children];
-  expect(new Set(children.map((child) => child.offsetLeft)).size).to.equal(columns);
-  expect(new Set(children.map((child) => child.offsetTop)).size).to.equal(rows);
-}
+import { assertFormLayoutGrid } from '@vaadin/form-layout/test/helpers.js';
 
 describe('form-layout in dialog', () => {
   let dialog, layout;
