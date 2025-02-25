@@ -56,6 +56,7 @@ export const formLayoutStyles = css`
   :host([auto-responsive]) #layout {
     display: grid;
     grid-template-columns: repeat(auto-fit, var(--_column-width));
+    grid-auto-columns: 0;
     justify-items: start;
     gap: var(--vaadin-form-layout-row-spacing) var(--_column-gap);
 
@@ -101,6 +102,7 @@ export const formRowStyles = css`
 
   ::slotted(*) {
     grid-column-start: auto;
+    grid-column-end: span min(var(--_colspan, 1), var(--_rendered-column-count));
   }
 
   ::slotted(:first-child) {
