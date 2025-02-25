@@ -1,34 +1,10 @@
-import { expect } from '@vaadin/chai-plugins';
 import { setViewport } from '@vaadin/test-runner-commands';
 import { fixtureSync, nextFrame, nextRender, nextResize } from '@vaadin/testing-helpers';
 import './not-animated-styles.js';
 import '@vaadin/form-layout';
 import '@vaadin/form-layout/vaadin-form-item.js';
 import '@vaadin/dialog';
-
-function assertFormLayoutGrid(layout, { columns, rows }) {
-  const children = [...layout.children];
-  expect(new Set(children.map((child) => child.offsetLeft)).size).to.equal(columns, `expected ${columns} columns`);
-  expect(new Set(children.map((child) => child.offsetTop)).size).to.equal(rows, `expected ${rows} rows`);
-}
-
-function assertFormLayoutLabelPosition(layout, { position }) {
-  const columnWidth = parseFloat(layout.columnWidth);
-  const labelWidth = parseFloat(getComputedStyle(layout).getPropertyValue('--vaadin-form-layout-label-width'));
-  const labelSpacing = parseFloat(getComputedStyle(layout).getPropertyValue('--vaadin-form-layout-label-spacing'));
-
-  [...layout.children].forEach((child) => {
-    if (child.localName !== 'vaadin-form-item') {
-      return;
-    }
-
-    if (position === 'aside') {
-      expect(child.offsetWidth).to.equal(columnWidth + labelWidth + labelSpacing, 'expected labels to be aside');
-    } else {
-      expect(child.offsetWidth).to.equal(columnWidth, 'expected labels to be above');
-    }
-  });
-}
+import { assertFormLayoutGrid, assertFormLayoutLabelPosition } from '@vaadin/form-layout/test/helpers.js';
 
 describe('form-layout in dialog', () => {
   let dialog, layout;
