@@ -166,4 +166,54 @@ describe('form-layout auto responsive', () => {
       await visualDiff(div, 'auto-rows-with-explicit-rows');
     });
   });
+
+  describe('colspan', () => {
+    beforeEach(async () => {
+      element = fixtureSync(
+        `
+        <vaadin-form-layout auto-responsive auto-rows style="border: 1px solid red;">
+          <input placeholder="First name" />
+          <input placeholder="Last Name" />
+          <input placeholder="Email" />
+          <input placeholder="Phone" />
+          <input placeholder="Address" colspan="2" style="width: 100%" />
+        </vaadin-form-layout>
+      `,
+        div,
+      );
+      await nextFrame();
+    });
+
+    it('default', async () => {
+      await visualDiff(div, 'colspan');
+    });
+  });
+
+  describe('colspan with explicit rows', () => {
+    beforeEach(async () => {
+      element = fixtureSync(
+        `
+        <vaadin-form-layout auto-responsive auto-rows style="border: 1px solid red;">
+          <vaadin-form-row>
+            <input placeholder="First name" />
+            <input placeholder="Last Name" />
+          </vaadin-form-row>
+          <vaadin-form-row>
+            <input placeholder="Email" />
+            <input placeholder="Phone" />
+          </vaadin-form-row>
+          <vaadin-form-row>
+            <input placeholder="Address" colspan="2" style="width: 100%" />
+          </vaadin-form-row>
+        </vaadin-form-layout>
+      `,
+        div,
+      );
+      await nextFrame();
+    });
+
+    it('default', async () => {
+      await visualDiff(div, 'colspan-with-explicit-rows');
+    });
+  });
 });
