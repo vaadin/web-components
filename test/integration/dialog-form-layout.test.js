@@ -198,7 +198,6 @@ describe('form-layout in dialog', () => {
         await nextResize(layout);
         assertFormLayoutGrid(layout, { columns: 1, rows: 4 });
         assertFormLayoutLabelPosition(layout, { position: 'aside' });
-        assertFormLayoutLabelPosition(layout, { position: 'aside' });
 
         await setViewport({ width: 500 + DIALOG_PADDING, height: 768 });
         await nextResize(layout);
