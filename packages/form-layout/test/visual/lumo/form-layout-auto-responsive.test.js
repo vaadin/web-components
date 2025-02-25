@@ -1,4 +1,4 @@
-import { nextFrame } from '@vaadin/testing-helpers';
+import { nextFrame, nextResize } from '@vaadin/testing-helpers';
 import { fixtureSync } from '@vaadin/testing-helpers/dist/fixture.js';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '../../../theme/lumo/vaadin-form-layout.js';
@@ -171,6 +171,92 @@ describe('form-layout auto responsive', () => {
 
     it('default', async () => {
       await visualDiff(div, 'auto-rows-with-explicit-rows');
+    });
+  });
+
+  describe('form items', () => {
+    beforeEach(async () => {
+      element = fixtureSync(
+        `
+          <vaadin-form-layout auto-responsive auto-rows max-columns="2">
+            <vaadin-form-item>
+              <label slot="label">First name</label>
+              <input class="full-width" />
+            </vaadin-form-item>
+            <vaadin-form-item>
+              <label slot="label">Last name</label>
+              <input class="full-width" />
+            </vaadin-form-item>
+            <vaadin-form-item>
+              <label slot="label">Email</label>
+              <input class="full-width" />
+            </vaadin-form-item>
+            <vaadin-form-item>
+              <label slot="label">A long label that wraps across multiple lines</label>
+              <input class="full-width" />
+            </vaadin-form-item>
+          </vaadin-form-layout>
+        `,
+        div,
+      );
+      await nextFrame();
+    });
+
+    it('default', async () => {
+      await visualDiff(div, 'form-items');
+    });
+
+    it('labelsAside', async () => {
+      element.labelsAside = true;
+      await nextResize(element);
+      await visualDiff(div, 'form-items-labels-aside');
+    });
+
+    it('labelsAside with too narrow layout', async () => {
+      element.style.width = '8em';
+      element.labelsAside = true;
+      await nextResize(element);
+      await visualDiff(div, 'form-items-labels-aside-with-too-narrow-layout');
+    });
+  });
+
+  describe('custom CSS properties - label', () => {
+    beforeEach(async () => {
+      element = fixtureSync(
+        `
+          <vaadin-form-layout auto-responsive auto-rows max-columns="2" labels-aside>
+            <vaadin-form-item>
+              <label slot="label">First name</label>
+              <input class="full-width" />
+            </vaadin-form-item>
+            <vaadin-form-item>
+              <label slot="label">Last name</label>
+              <input class="full-width" />
+            </vaadin-form-item>
+            <vaadin-form-item>
+              <label slot="label">Email</label>
+              <input class="full-width" />
+            </vaadin-form-item>
+            <vaadin-form-item>
+              <label slot="label">A long label that wraps across multiple lines</label>
+              <input class="full-width" />
+            </vaadin-form-item>
+          </vaadin-form-layout>
+
+          <style>
+            vaadin-form-layout {
+              --vaadin-form-layout-label-width: 200px;
+              --vaadin-form-layout-label-spacing: 50px;
+            }
+          </style>
+        `,
+        div,
+      );
+      await nextFrame();
+    });
+
+    it('default', async () => {
+      await visualDiff(div, 'custom-css-properties-label');
     });
   });
 });

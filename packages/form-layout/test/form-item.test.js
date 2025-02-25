@@ -75,7 +75,7 @@ describe('form-item', () => {
       item.setAttribute('label-position', 'top');
 
       expect(getComputedStyle(item).getPropertyValue('flex-direction')).to.equal('column');
-      expect(getComputedStyle(item).getPropertyValue('align-items')).to.equal('stretch');
+      expect(getComputedStyle(item).getPropertyValue('align-items')).to.equal('normal');
     });
   });
 
