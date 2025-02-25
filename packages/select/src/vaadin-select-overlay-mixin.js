@@ -26,6 +26,18 @@ export const SelectOverlayMixin = (superClass) =>
       this.restoreFocusOnClose = true;
     }
 
+    /**
+     * Override method inherited from `Overlay` to always close on outside click,
+     * in order to avoid problem when using inside of the modeless dialog.
+     *
+     * @param {Event} event
+     * @return {boolean}
+     * @protected
+     */
+    _shouldCloseOnOutsideClick(_event) {
+      return true;
+    }
+
     /** @protected */
     _getMenuElement() {
       return Array.from(this.children).find((el) => el.localName !== 'style');
