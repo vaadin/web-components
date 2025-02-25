@@ -1,12 +1,31 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame, nextResize } from '@vaadin/testing-helpers';
 import '../src/vaadin-form-layout.js';
+import '../src/vaadin-form-item.js';
 import '../src/vaadin-form-row.js';
 
 function assertFormLayoutGrid(layout, { columns, rows }) {
   const children = [...layout.children];
-  expect(new Set(children.map((child) => child.offsetLeft)).size).to.equal(columns);
-  expect(new Set(children.map((child) => child.offsetTop)).size).to.equal(rows);
+  expect(new Set(children.map((child) => child.offsetLeft)).size).to.equal(columns, `expected ${columns} columns`);
+  expect(new Set(children.map((child) => child.offsetTop)).size).to.equal(rows, `expected ${rows} rows`);
+}
+
+function assertFormLayoutLabelPosition(layout, { position }) {
+  const columnWidth = parseFloat(layout.columnWidth);
+  const labelWidth = parseFloat(getComputedStyle(layout).getPropertyValue('--vaadin-form-layout-label-width'));
+  const labelSpacing = parseFloat(getComputedStyle(layout).getPropertyValue('--vaadin-form-layout-label-spacing'));
+
+  [...layout.children].forEach((child) => {
+    if (child.localName !== 'vaadin-form-item') {
+      return;
+    }
+
+    if (position === 'aside') {
+      expect(child.offsetWidth).to.equal(columnWidth + labelWidth + labelSpacing, 'expected labels to be aside');
+    } else {
+      expect(child.offsetWidth).to.equal(columnWidth, 'expected labels to be above');
+    }
+  });
 }
 
 describe('form-layout auto responsive', () => {
@@ -104,14 +123,13 @@ describe('form-layout auto responsive', () => {
     });
   });
 
-  describe('responsiveness', () => {
+  describe('auto rows responsiveness', () => {
     beforeEach(async () => {
       container = fixtureSync(`
-        <div style="width: 500px;">
+        <div style="width: 350px;">
           <vaadin-form-layout
             auto-responsive
             auto-rows
-            max-columns="3"
             column-width="100px"
             style="--vaadin-form-layout-column-spacing: 0px;"
           >
@@ -129,24 +147,110 @@ describe('form-layout auto responsive', () => {
       assertFormLayoutGrid(layout, { columns: 3, rows: 2 });
     });
 
-    it('should adjust number of columns based on container width', () => {
+    it('should adjust number of columns based on container width', async () => {
       container.style.width = '300px';
+      await nextResize(layout);
       assertFormLayoutGrid(layout, { columns: 3, rows: 2 });
 
       container.style.width = '200px';
+      await nextResize(layout);
       assertFormLayoutGrid(layout, { columns: 2, rows: 2 });
 
       container.style.width = '100px';
+      await nextResize(layout);
       assertFormLayoutGrid(layout, { columns: 1, rows: 4 });
 
       container.style.width = '50px';
+      await nextResize(layout);
       assertFormLayoutGrid(layout, { columns: 1, rows: 4 });
 
       container.style.width = '200px';
+      await nextResize(layout);
       assertFormLayoutGrid(layout, { columns: 2, rows: 2 });
 
       container.style.width = '300px';
+      await nextResize(layout);
       assertFormLayoutGrid(layout, { columns: 3, rows: 2 });
+    });
+  });
+
+  describe('labels aside responsiveness', () => {
+    beforeEach(async () => {
+      container = fixtureSync(`
+        <div style="width: 600px;">
+          <vaadin-form-layout
+            auto-responsive
+            auto-rows
+            labels-aside
+            column-width="100px"
+            style="
+              --vaadin-form-layout-label-width: 100px;
+              --vaadin-form-layout-label-spacing: 50px;
+              --vaadin-form-layout-column-spacing: 0px;
+            "
+          >
+            <vaadin-form-item>
+              <label slot="label">First name</label>
+              <input />
+            </vaadin-form-item>
+            <vaadin-form-item>
+              <label slot="label">Last Name</label>
+              <input />
+            </vaadin-form-item>
+            <vaadin-form-item>
+              <label slot="label">Email</label>
+              <input />
+            </vaadin-form-item>
+            <vaadin-form-item>
+              <label slot="label">Phone</label>
+              <input />
+            </vaadin-form-item>
+          </vaadin-form-layout>
+        </div>`);
+      layout = container.firstElementChild;
+      await nextFrame();
+    });
+
+    it('should start with max number of columns and labels positioned aside', () => {
+      assertFormLayoutGrid(layout, { columns: 2, rows: 2 });
+      assertFormLayoutLabelPosition(layout, { position: 'aside' });
+    });
+
+    it('should adjust number of columns and label position based on container width', async () => {
+      container.style.width = '500px';
+      await nextResize(layout);
+      assertFormLayoutGrid(layout, { columns: 2, rows: 2 });
+      assertFormLayoutLabelPosition(layout, { position: 'aside' });
+
+      container.style.width = '250px';
+      await nextResize(layout);
+      assertFormLayoutGrid(layout, { columns: 1, rows: 4 });
+      assertFormLayoutLabelPosition(layout, { position: 'aside' });
+
+      container.style.width = '200px';
+      await nextResize(layout);
+      assertFormLayoutGrid(layout, { columns: 2, rows: 2 });
+      assertFormLayoutLabelPosition(layout, { position: 'above' });
+
+      container.style.width = '100px';
+      await nextResize(layout);
+      assertFormLayoutGrid(layout, { columns: 1, rows: 4 });
+      assertFormLayoutLabelPosition(layout, { position: 'above' });
+
+      container.style.width = '200px';
+      await nextResize(layout);
+      assertFormLayoutGrid(layout, { columns: 2, rows: 2 });
+      assertFormLayoutLabelPosition(layout, { position: 'above' });
+
+      container.style.width = '250px';
+      await nextResize(layout);
+      assertFormLayoutGrid(layout, { columns: 1, rows: 4 });
+      assertFormLayoutLabelPosition(layout, { position: 'aside' });
+
+      container.style.width = '500px';
+      await nextResize(layout);
+      assertFormLayoutGrid(layout, { columns: 2, rows: 2 });
+      assertFormLayoutLabelPosition(layout, { position: 'aside' });
     });
   });
 });

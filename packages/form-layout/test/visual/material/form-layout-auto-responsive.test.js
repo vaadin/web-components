@@ -1,4 +1,4 @@
-import { nextFrame } from '@vaadin/testing-helpers';
+import { nextFrame, nextResize } from '@vaadin/testing-helpers';
 import { fixtureSync } from '@vaadin/testing-helpers/dist/fixture.js';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '../../../theme/material/vaadin-form-layout.js';
@@ -208,7 +208,15 @@ describe('form-layout auto responsive', () => {
 
     it('labelsAside', async () => {
       element.labelsAside = true;
+      await nextResize(element);
       await visualDiff(div, 'form-items-labels-aside');
+    });
+
+    it('labelsAside with too narrow layout', async () => {
+      element.style.width = '8em';
+      element.labelsAside = true;
+      await nextResize(element);
+      await visualDiff(div, 'form-items-labels-aside-with-too-narrow-layout');
     });
   });
 
