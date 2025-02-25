@@ -49,57 +49,84 @@ describe('a11y', () => {
       expect(overlay.getAttribute('role')).to.equal('alertdialog');
     });
 
-    it('should set aria-haspopup attribute on the target', () => {
-      expect(target.getAttribute('aria-haspopup')).to.equal('dialog');
-    });
+    ['target', 'ariaTarget'].forEach((prop) => {
+      describe(prop, () => {
+        let element;
 
-    it('should keep aria-haspopup attribute when overlayRole is set to alertdialog', async () => {
-      popover.overlayRole = 'alertdialog';
-      await nextUpdate(popover);
-      expect(target.getAttribute('aria-haspopup')).to.equal('dialog');
-    });
+        beforeEach(async () => {
+          if (prop === 'ariaTarget') {
+            target = fixtureSync('<div><input></div>');
+            popover.target = target;
+            element = target.firstElementChild;
+            target.ariaTarget = element;
+            await nextUpdate(popover);
+          } else {
+            element = target;
+          }
+        });
 
-    it('should update aria-haspopup attribute when overlayRole is set to different value', async () => {
-      popover.overlayRole = 'menu';
-      await nextUpdate(popover);
-      expect(target.getAttribute('aria-haspopup')).to.equal('true');
-    });
+        it(`should set aria-haspopup attribute on the ${prop}`, () => {
+          expect(element.getAttribute('aria-haspopup')).to.equal('dialog');
+        });
 
-    it('should remove aria-haspopup attribute when target is cleared', async () => {
-      popover.target = null;
-      await nextUpdate(popover);
-      expect(target.hasAttribute('aria-haspopup')).to.be.false;
-    });
+        it(`should keep aria-haspopup attribute on the ${prop} when overlayRole is set to alertdialog`, async () => {
+          popover.overlayRole = 'alertdialog';
+          await nextUpdate(popover);
+          expect(element.getAttribute('aria-haspopup')).to.equal('dialog');
+        });
 
-    it('should remove aria-controls attribute when target is cleared', async () => {
-      popover.target = null;
-      await nextUpdate(popover);
-      expect(target.hasAttribute('aria-haspopup')).to.be.false;
-    });
+        it(`should update aria-haspopup attribute on the ${prop} when overlayRole is set to different value`, async () => {
+          popover.overlayRole = 'menu';
+          await nextUpdate(popover);
+          expect(element.getAttribute('aria-haspopup')).to.equal('true');
+        });
 
-    it('should set aria-expanded attribute on the target when closed', () => {
-      expect(target.getAttribute('aria-expanded')).to.equal('false');
-    });
+        it(`should set aria-expanded attribute on the ${prop} when closed`, () => {
+          expect(element.getAttribute('aria-expanded')).to.equal('false');
+        });
 
-    it('should set aria-expanded attribute on the target when opened', async () => {
-      popover.opened = true;
-      await nextRender();
-      expect(target.getAttribute('aria-expanded')).to.equal('true');
-    });
+        it(`should set aria-expanded attribute on the ${prop} when opened`, async () => {
+          popover.opened = true;
+          await nextRender();
+          expect(element.getAttribute('aria-expanded')).to.equal('true');
+        });
 
-    it('should set aria-controls attribute on the target when opened', async () => {
-      popover.opened = true;
-      await nextRender();
-      expect(target.getAttribute('aria-controls')).to.equal(overlay.id);
-    });
+        it(`should set aria-controls attribute on the ${prop} when opened`, async () => {
+          popover.opened = true;
+          await nextRender();
+          expect(element.getAttribute('aria-controls')).to.equal(overlay.id);
+        });
 
-    it('should remove aria-controls attribute from the target when closed', async () => {
-      popover.opened = true;
-      await nextRender();
+        it(`should remove aria-controls attribute from the ${prop} when closed`, async () => {
+          popover.opened = true;
+          await nextRender();
 
-      popover.opened = false;
-      await nextUpdate(popover);
-      expect(target.hasAttribute('aria-controls')).to.be.false;
+          popover.opened = false;
+          await nextUpdate(popover);
+          expect(element.hasAttribute('aria-controls')).to.be.false;
+        });
+
+        it(`should remove aria-haspopup attribute from ${prop} when target is cleared`, async () => {
+          popover.target = null;
+          await nextUpdate(popover);
+          expect(element.hasAttribute('aria-haspopup')).to.be.false;
+        });
+
+        it(`should remove aria-controls attribute from ${prop} when target is cleared`, async () => {
+          popover.opened = true;
+          await nextRender();
+
+          popover.target = null;
+          await nextUpdate(popover);
+          expect(element.hasAttribute('aria-controls')).to.be.false;
+        });
+
+        it(`should remove aria-expanded attribute from ${prop} when target is cleared`, async () => {
+          popover.target = null;
+          await nextUpdate(popover);
+          expect(element.hasAttribute('aria-expanded')).to.be.false;
+        });
+      });
     });
   });
 
