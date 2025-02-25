@@ -242,6 +242,17 @@ const menuBarOnItemSelected: typeof menuBarProps.onItemSelected = (event) => {
 };
 assertType<typeof menuBarProps.onItemSelected>(menuBarOnItemSelected);
 
+type CustomMenuBarItem = MenuBarItem<{ value: string }>;
+
+const narrowedMenuBarProps = React.createElement(MenuBar<CustomMenuBarItem>, {}).props;
+assertType<CustomMenuBarItem[] | undefined>(narrowedMenuBarProps.items);
+assertType<CustomMenuBarItem[] | undefined>(narrowedMenuBarProps.items![0].children);
+
+const narrowedContextMenuOnItemSelected: typeof narrowedMenuBarProps.onItemSelected = (event) => {
+  assertType<CustomMenuBarItem>(event.detail.value);
+};
+assertType<typeof narrowedMenuBarProps.onItemSelected>(narrowedContextMenuOnItemSelected);
+
 const popoverProps = React.createElement(Popover, {}).props;
 type PopoverProps = typeof popoverProps;
 

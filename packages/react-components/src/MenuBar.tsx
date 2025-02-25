@@ -1,4 +1,4 @@
-import { type ForwardedRef, forwardRef, type ReactElement } from 'react';
+import { type ForwardedRef, forwardRef, type ReactElement, type RefAttributes } from 'react';
 import {
   MenuBar as _MenuBar,
   type MenuBarElement,
@@ -10,28 +10,28 @@ import { getOriginalItem, mapItemsWithComponents } from './utils/mapItemsWithCom
 
 export * from './generated/MenuBar.js';
 
-export type SubMenuItem = Omit<_SubMenuItem, 'component' | 'children'> & {
+export type SubMenuItem<TItemData extends object = object> = Omit<_SubMenuItem<TItemData>, 'component' | 'children'> & {
   component?: ReactElement | string;
 
-  children?: Array<SubMenuItem>;
+  children?: Array<SubMenuItem<TItemData>>;
 };
 
-export type MenuBarItem = Omit<_MenuBarItem, 'component' | 'children'> & {
+export type MenuBarItem<TItemData extends object = object> = Omit<_MenuBarItem<TItemData>, 'component' | 'children'> & {
   component?: ReactElement | string;
 
-  children?: Array<SubMenuItem>;
+  children?: Array<SubMenuItem<TItemData>>;
 };
 
-export type MenuBarItemSelectedEvent = CustomEvent<{ value: MenuBarItem }>;
+export type MenuBarItemSelectedEvent<TItem extends MenuBarItem = MenuBarItem> = CustomEvent<{ value: TItem }>;
 
-export type MenuBarProps = Partial<Omit<_MenuBarProps, 'items' | 'onItemSelected'>> &
+export type MenuBarProps<TItem extends MenuBarItem = MenuBarItem> = Partial<Omit<_MenuBarProps, 'items' | 'onItemSelected'>> &
   Readonly<{
-    items?: Array<MenuBarItem>;
+    items?: Array<TItem>;
 
-    onItemSelected?: (event: MenuBarItemSelectedEvent) => void;
+    onItemSelected?: (event: MenuBarItemSelectedEvent<TItem>) => void;
   }>;
 
-function MenuBar(props: MenuBarProps, ref: ForwardedRef<MenuBarElement>): ReactElement | null {
+function MenuBar<TItem extends MenuBarItem = MenuBarItem>(props: MenuBarProps<TItem>, ref: ForwardedRef<MenuBarElement>): ReactElement | null {
   const [itemPortals, webComponentItems] = mapItemsWithComponents(props.items, 'vaadin-menu-bar-item');
 
   const onItemSelected = props.onItemSelected;
@@ -42,7 +42,7 @@ function MenuBar(props: MenuBarProps, ref: ForwardedRef<MenuBarElement>): ReactE
           value: getOriginalItem(event.detail.value),
         });
 
-        onItemSelected(event as CustomEvent<{ value: MenuBarItem }>);
+        onItemSelected(event as MenuBarItemSelectedEvent<TItem>);
       }
     : undefined;
 
@@ -54,6 +54,8 @@ function MenuBar(props: MenuBarProps, ref: ForwardedRef<MenuBarElement>): ReactE
   );
 }
 
-const ForwardedMenuBar = forwardRef(MenuBar);
+const ForwardedMenuBar = forwardRef(MenuBar) as <TItem extends MenuBarItem = MenuBarItem>(
+  props: MenuBarProps<TItem> & RefAttributes<MenuBarElement>,
+) => ReactElement | null;
 
 export { ForwardedMenuBar as MenuBar };
