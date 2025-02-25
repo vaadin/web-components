@@ -9,6 +9,7 @@ import { isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
 import { KeyboardMixin } from '@vaadin/a11y-base/src/keyboard-mixin.js';
 import { isIOS } from '@vaadin/component-base/src/browser-utils.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
+import { I18nMixin } from '@vaadin/component-base/src/i18n-mixin.js';
 import { MediaQueryController } from '@vaadin/component-base/src/media-query-controller.js';
 import { OverlayClassMixin } from '@vaadin/component-base/src/overlay-class-mixin.js';
 import { InputConstraintsMixin } from '@vaadin/field-base/src/input-constraints-mixin.js';
@@ -83,14 +84,16 @@ export const datePickerI18nDefaults = Object.freeze({
  * @polymerMixin
  * @mixes ControllerMixin
  * @mixes DelegateFocusMixin
+ * @mixes I18nMixin
  * @mixes InputConstraintsMixin
  * @mixes KeyboardMixin
  * @mixes OverlayClassMixin
  * @param {function(new:HTMLElement)} subclass
  */
 export const DatePickerMixin = (subclass) =>
-  class DatePickerMixinClass extends OverlayClassMixin(
-    ControllerMixin(DelegateFocusMixin(InputConstraintsMixin(KeyboardMixin(subclass)))),
+  class DatePickerMixinClass extends I18nMixin(
+    datePickerI18nDefaults,
+    OverlayClassMixin(ControllerMixin(DelegateFocusMixin(InputConstraintsMixin(KeyboardMixin(subclass))))),
   ) {
     static get properties() {
       return {
@@ -188,98 +191,6 @@ export const DatePickerMixin = (subclass) =>
         },
 
         /**
-         * The object used to localize this component.
-         * To change the default localization, replace the entire
-         * `i18n` object with a custom one.
-         *
-         * To update individual properties, extend the existing i18n object like so:
-         * ```
-         * datePicker.i18n = { ...datePicker.i18n, {
-         *   formatDate: date => { ... },
-         *   parseDate: value => { ... },
-         * }};
-         * ```
-         *
-         * The object has the following JSON structure and default values:
-         *
-         * ```
-         * {
-         *   // An array with the full names of months starting
-         *   // with January.
-         *   monthNames: [
-         *     'January', 'February', 'March', 'April', 'May',
-         *     'June', 'July', 'August', 'September',
-         *     'October', 'November', 'December'
-         *   ],
-         *
-         *   // An array of weekday names starting with Sunday. Used
-         *   // in screen reader announcements.
-         *   weekdays: [
-         *     'Sunday', 'Monday', 'Tuesday', 'Wednesday',
-         *     'Thursday', 'Friday', 'Saturday'
-         *   ],
-         *
-         *   // An array of short weekday names starting with Sunday.
-         *   // Displayed in the calendar.
-         *   weekdaysShort: [
-         *     'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'
-         *   ],
-         *
-         *   // An integer indicating the first day of the week
-         *   // (0 = Sunday, 1 = Monday, etc.).
-         *   firstDayOfWeek: 0,
-         *
-         *   // Translation of the Today shortcut button text.
-         *   today: 'Today',
-         *
-         *   // Translation of the Cancel button text.
-         *   cancel: 'Cancel',
-         *
-         *   // Used for adjusting the year value when parsing dates with short years.
-         *   // The year values between 0 and 99 are evaluated and adjusted.
-         *   // Example: for a referenceDate of 1970-10-30;
-         *   //   dateToBeParsed: 40-10-30, result: 1940-10-30
-         *   //   dateToBeParsed: 80-10-30, result: 1980-10-30
-         *   //   dateToBeParsed: 10-10-30, result: 2010-10-30
-         *   // Supported date format: ISO 8601 `"YYYY-MM-DD"` (default)
-         *   // The default value is the current date.
-         *   referenceDate: '',
-         *
-         *   // A function to format given `Object` as
-         *   // date string. Object is in the format `{ day: ..., month: ..., year: ... }`
-         *   // Note: The argument month is 0-based. This means that January = 0 and December = 11.
-         *   formatDate: d => {
-         *     // returns a string representation of the given
-         *     // object in 'MM/DD/YYYY' -format
-         *   },
-         *
-         *   // A function to parse the given text to an `Object` in the format `{ day: ..., month: ..., year: ... }`.
-         *   // Must properly parse (at least) text formatted by `formatDate`.
-         *   // Setting the property to null will disable keyboard input feature.
-         *   // Note: The argument month is 0-based. This means that January = 0 and December = 11.
-         *   parseDate: text => {
-         *     // Parses a string in 'MM/DD/YY', 'MM/DD' or 'DD' -format to
-         *     // an `Object` in the format `{ day: ..., month: ..., year: ... }`.
-         *   }
-         *
-         *   // A function to format given `monthName` and
-         *   // `fullYear` integer as calendar title string.
-         *   formatTitle: (monthName, fullYear) => {
-         *     return monthName + ' ' + fullYear;
-         *   }
-         * }
-         * ```
-         *
-         * @type {!DatePickerI18n}
-         * @default {English/US}
-         */
-        i18n: {
-          type: Object,
-          sync: true,
-          value: () => ({ ...datePickerI18nDefaults }),
-        },
-
-        /**
          * The earliest date that can be selected. All earlier dates will be disabled.
          *
          * Supported date formats:
@@ -341,7 +252,7 @@ export const DatePickerMixin = (subclass) =>
         /** @private */
         _noInput: {
           type: Boolean,
-          computed: '_isNoInput(inputElement, _fullscreen, _ios, i18n, opened, autoOpenDisabled)',
+          computed: '_isNoInput(inputElement, _fullscreen, _ios, __effectiveI18n, opened, autoOpenDisabled)',
         },
 
         /** @private */
@@ -369,9 +280,9 @@ export const DatePickerMixin = (subclass) =>
 
     static get observers() {
       return [
-        '_selectedDateChanged(_selectedDate, i18n)',
-        '_focusedDateChanged(_focusedDate, i18n)',
-        '__updateOverlayContent(_overlayContent, i18n, label, _minDate, _maxDate, _focusedDate, _selectedDate, showWeekNumbers, isDateDisabled, __enteredDate)',
+        '_selectedDateChanged(_selectedDate, __effectiveI18n)',
+        '_focusedDateChanged(_focusedDate, __effectiveI18n)',
+        '__updateOverlayContent(_overlayContent, __effectiveI18n, label, _minDate, _maxDate, _focusedDate, _selectedDate, showWeekNumbers, isDateDisabled, __enteredDate)',
         '__updateOverlayContentTheme(_overlayContent, _theme)',
         '__updateOverlayContentFullScreen(_overlayContent, _fullscreen)',
       ];
@@ -387,6 +298,90 @@ export const DatePickerMixin = (subclass) =>
       this._boundOnClick = this._onClick.bind(this);
       this._boundOnScroll = this._onScroll.bind(this);
       this._boundOverlayRenderer = this._overlayRenderer.bind(this);
+    }
+
+    /**
+     * The object used to localize this component. To change the default
+     * localization, replace this with an object that provides all properties, or
+     * just the individual properties you want to change.
+     *
+     * The object has the following JSON structure and default values:
+     *
+     * ```
+     * {
+     *   // An array with the full names of months starting
+     *   // with January.
+     *   monthNames: [
+     *     'January', 'February', 'March', 'April', 'May',
+     *     'June', 'July', 'August', 'September',
+     *     'October', 'November', 'December'
+     *   ],
+     *
+     *   // An array of weekday names starting with Sunday. Used
+     *   // in screen reader announcements.
+     *   weekdays: [
+     *     'Sunday', 'Monday', 'Tuesday', 'Wednesday',
+     *     'Thursday', 'Friday', 'Saturday'
+     *   ],
+     *
+     *   // An array of short weekday names starting with Sunday.
+     *   // Displayed in the calendar.
+     *   weekdaysShort: [
+     *     'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'
+     *   ],
+     *
+     *   // An integer indicating the first day of the week
+     *   // (0 = Sunday, 1 = Monday, etc.).
+     *   firstDayOfWeek: 0,
+     *
+     *   // Translation of the Today shortcut button text.
+     *   today: 'Today',
+     *
+     *   // Translation of the Cancel button text.
+     *   cancel: 'Cancel',
+     *
+     *   // Used for adjusting the year value when parsing dates with short years.
+     *   // The year values between 0 and 99 are evaluated and adjusted.
+     *   // Example: for a referenceDate of 1970-10-30;
+     *   //   dateToBeParsed: 40-10-30, result: 1940-10-30
+     *   //   dateToBeParsed: 80-10-30, result: 1980-10-30
+     *   //   dateToBeParsed: 10-10-30, result: 2010-10-30
+     *   // Supported date format: ISO 8601 `"YYYY-MM-DD"` (default)
+     *   // The default value is the current date.
+     *   referenceDate: '',
+     *
+     *   // A function to format given `Object` as
+     *   // date string. Object is in the format `{ day: ..., month: ..., year: ... }`
+     *   // Note: The argument month is 0-based. This means that January = 0 and December = 11.
+     *   formatDate: d => {
+     *     // returns a string representation of the given
+     *     // object in 'MM/DD/YYYY' -format
+     *   },
+     *
+     *   // A function to parse the given text to an `Object` in the format `{ day: ..., month: ..., year: ... }`.
+     *   // Must properly parse (at least) text formatted by `formatDate`.
+     *   // Setting the property to null will disable keyboard input feature.
+     *   // Note: The argument month is 0-based. This means that January = 0 and December = 11.
+     *   parseDate: text => {
+     *     // Parses a string in 'MM/DD/YY', 'MM/DD' or 'DD' -format to
+     *     // an `Object` in the format `{ day: ..., month: ..., year: ... }`.
+     *   }
+     *
+     *   // A function to format given `monthName` and
+     *   // `fullYear` integer as calendar title string.
+     *   formatTitle: (monthName, fullYear) => {
+     *     return monthName + ' ' + fullYear;
+     *   }
+     * }
+     * ```
+     * @return {!DatePickerI18n}
+     */
+    get i18n() {
+      return super.i18n;
+    }
+
+    set i18n(value) {
+      super.i18n = value;
     }
 
     /** @override */
@@ -569,11 +564,11 @@ export const DatePickerMixin = (subclass) =>
      * @private
      */
     __parseDate(dateString) {
-      if (!this.i18n.parseDate) {
+      if (!this.__effectiveI18n.parseDate) {
         return;
       }
 
-      let dateObject = this.i18n.parseDate(dateString);
+      let dateObject = this.__effectiveI18n.parseDate(dateString);
       if (dateObject) {
         dateObject = parseDate(`${dateObject.year}-${dateObject.month + 1}-${dateObject.day}`);
       }
@@ -587,8 +582,8 @@ export const DatePickerMixin = (subclass) =>
      * @private
      */
     __formatDate(dateObject) {
-      if (this.i18n.formatDate) {
-        return this.i18n.formatDate(extractDateParts(dateObject));
+      if (this.__effectiveI18n.formatDate) {
+        return this.__effectiveI18n.formatDate(extractDateParts(dateObject));
       }
     }
 
@@ -736,7 +731,7 @@ export const DatePickerMixin = (subclass) =>
 
     /** @private */
     // eslint-disable-next-line @typescript-eslint/max-params
-    _isNoInput(inputElement, fullscreen, ios, i18n, opened, autoOpenDisabled) {
+    _isNoInput(inputElement, fullscreen, ios, effectiveI18n, opened, autoOpenDisabled) {
       // On fullscreen mode, text input is disabled if auto-open isn't disabled or
       // whenever the dropdown is opened
       const noInputOnFullscreenMode = fullscreen && (!autoOpenDisabled || opened);
@@ -745,7 +740,7 @@ export const DatePickerMixin = (subclass) =>
       // dropdown could get covered by the keyboard.
       const noInputOnIos = ios && opened;
 
-      return !inputElement || noInputOnFullscreenMode || noInputOnIos || !i18n.parseDate;
+      return !inputElement || noInputOnFullscreenMode || noInputOnIos || !effectiveI18n.parseDate;
     }
 
     /** @private */
@@ -773,8 +768,8 @@ export const DatePickerMixin = (subclass) =>
     }
 
     /** @private */
-    _selectedDateChanged(selectedDate, i18n) {
-      if (selectedDate === undefined || i18n === undefined) {
+    _selectedDateChanged(selectedDate, effectiveI18n) {
+      if (selectedDate === undefined || effectiveI18n === undefined) {
         return;
       }
 
@@ -789,8 +784,8 @@ export const DatePickerMixin = (subclass) =>
     }
 
     /** @private */
-    _focusedDateChanged(focusedDate, i18n) {
-      if (focusedDate === undefined || i18n === undefined) {
+    _focusedDateChanged(focusedDate, effectiveI18n) {
+      if (focusedDate === undefined || effectiveI18n === undefined) {
         return;
       }
       if (!this._ignoreFocusedDateChange && !this._noInput) {
@@ -845,7 +840,7 @@ export const DatePickerMixin = (subclass) =>
     // eslint-disable-next-line @typescript-eslint/max-params
     __updateOverlayContent(
       overlayContent,
-      i18n,
+      effectiveI18n,
       label,
       minDate,
       maxDate,
@@ -856,7 +851,7 @@ export const DatePickerMixin = (subclass) =>
       enteredDate,
     ) {
       if (overlayContent) {
-        overlayContent.i18n = i18n;
+        overlayContent.i18n = effectiveI18n;
         overlayContent.label = label;
         overlayContent.minDate = minDate;
         overlayContent.maxDate = maxDate;
@@ -956,7 +951,7 @@ export const DatePickerMixin = (subclass) =>
     __commitParsedOrFocusedDate() {
       // Select the parsed input or focused date
       this._ignoreFocusedDateChange = true;
-      if (this.i18n.parseDate) {
+      if (this.__effectiveI18n.parseDate) {
         const inputValue = this._inputElementValue || '';
         const parsedDate = this.__parseDate(inputValue);
 

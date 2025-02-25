@@ -8,6 +8,7 @@ import type { DelegateFocusMixinClass } from '@vaadin/a11y-base/src/delegate-foc
 import type { DisabledMixinClass } from '@vaadin/a11y-base/src/disabled-mixin.js';
 import type { FocusMixinClass } from '@vaadin/a11y-base/src/focus-mixin.js';
 import type { KeyboardMixinClass } from '@vaadin/a11y-base/src/keyboard-mixin.js';
+import type { I18nMixinClass, PartialI18n } from '@vaadin/component-base/src/i18n-mixin.js';
 import type { OverlayClassMixinClass } from '@vaadin/component-base/src/overlay-class-mixin.js';
 import type { InputConstraintsMixinClass } from '@vaadin/field-base/src/input-constraints-mixin.js';
 import type { InputMixinClass } from '@vaadin/field-base/src/input-mixin.js';
@@ -18,7 +19,7 @@ export interface DatePickerDate {
   year: number;
 }
 
-export interface DatePickerI18n {
+export type DatePickerI18n = PartialI18n<{
   /**
    * An array with the full names of months starting
    * with January.
@@ -83,7 +84,7 @@ export interface DatePickerI18n {
    * @param fullYear
    */
   formatTitle(monthName: string, fullYear: number): string;
-}
+}>;
 
 export declare function DatePickerMixin<T extends Constructor<HTMLElement>>(
   base: T,
@@ -91,6 +92,7 @@ export declare function DatePickerMixin<T extends Constructor<HTMLElement>>(
   Constructor<DelegateFocusMixinClass> &
   Constructor<DisabledMixinClass> &
   Constructor<FocusMixinClass> &
+  Constructor<I18nMixinClass<DatePickerI18n>> &
   Constructor<InputConstraintsMixinClass> &
   Constructor<InputMixinClass> &
   Constructor<KeyboardMixinClass> &
@@ -135,17 +137,9 @@ export declare class DatePickerMixinClass {
   showWeekNumbers: boolean | null | undefined;
 
   /**
-   * The object used to localize this component.
-   * To change the default localization, replace the entire
-   * `i18n` object with a custom one.
-   *
-   * To update individual properties, extend the existing i18n object like so:
-   * ```
-   * datePicker.i18n = { ...datePicker.i18n, {
-   *   formatDate: date => { ... },
-   *   parseDate: value => { ... },
-   * }};
-   * ```
+   * The object used to localize this component. To change the default
+   * localization, replace this with an object that provides all properties, or
+   * just the individual properties you want to change.
    *
    * The object has the following JSON structure and default values:
    *

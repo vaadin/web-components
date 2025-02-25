@@ -116,7 +116,7 @@ describe('date-picker', () => {
         it('week numbers', async () => {
           element.value = '2000-01-01';
           element.showWeekNumbers = true;
-          element.i18n.firstDayOfWeek = 1;
+          element.i18n = { firstDayOfWeek: 1 };
           openOverlay();
           await visualDiff(div, `${dir}-week-numbers`);
         });

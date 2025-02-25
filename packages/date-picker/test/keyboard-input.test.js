@@ -129,32 +129,6 @@ describe('keyboard', () => {
     });
   });
 
-  describe('no parseDate', () => {
-    beforeEach(() => {
-      datePicker.i18n = {
-        ...datePicker.i18n,
-        parseDate: null,
-      };
-    });
-
-    it('should prevent key input', () => {
-      const e = new CustomEvent('keydown', {
-        bubbles: true,
-        composed: true,
-      });
-
-      const spy = sinon.spy(e, 'preventDefault');
-      input.dispatchEvent(e);
-      expect(spy.called).to.be.true;
-    });
-
-    it('should select focused date on close', async () => {
-      await open(datePicker);
-      datePicker.close();
-      expect(datePicker._selectedDate).to.equal(datePicker._focusedDate);
-    });
-  });
-
   describe('open overlay', () => {
     it('should open the overlay on input', async () => {
       await sendKeys({ type: 'j' });
