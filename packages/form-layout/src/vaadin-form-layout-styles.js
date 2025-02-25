@@ -82,6 +82,7 @@ export const formLayoutStyles = css`
 
   :host([auto-responsive]) #layout ::slotted(*) {
     grid-column-start: 1;
+    grid-column-end: span min(var(--_colspan, 1), var(--_rendered-column-count));
   }
 
   :host([auto-responsive][auto-rows]) #layout ::slotted(*) {

@@ -394,6 +394,8 @@ export const FormLayoutMixin = (superClass) =>
     __updateCSSGridLayout() {
       let resetColumn = false;
 
+      this.$.layout.style.setProperty('--_rendered-column-count', this._renderedColumnCount);
+
       [...this.children]
         .flatMap((child) => {
           return child.localName === 'vaadin-form-row' ? [...child.children] : child;
@@ -406,6 +408,13 @@ export const FormLayoutMixin = (superClass) =>
             return;
           }
 
+          const colspan = child.getAttribute('colspan') || child.getAttribute('data-colspan');
+          if (colspan) {
+            child.style.setProperty('--_colspan', colspan);
+          } else {
+            child.style.removeProperty('--_colspan');
+          }
+
           if (resetColumn && !isElementHidden(child) && parentElement.localName !== 'vaadin-form-row') {
             child.style.setProperty('--_column-start', 1);
             resetColumn = false;
@@ -415,6 +424,13 @@ export const FormLayoutMixin = (superClass) =>
         });
     }
 
+    get _renderedColumnCount() {
+      // Calculate the number of rendered columns, excluding CSS grid auto columns (0px)
+      const { gridTemplateColumns } = getComputedStyle(this.$.layout);
+      const columns = gridTemplateColumns.split(' ');
+      const firstColumnSize = columns[0];
+      return columns.filter((width) => width === firstColumnSize).length;
+    }
     /**
      * @protected
      * @override
