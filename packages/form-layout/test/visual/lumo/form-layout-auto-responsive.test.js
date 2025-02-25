@@ -178,13 +178,19 @@ describe('form-layout auto responsive', () => {
     beforeEach(async () => {
       element = fixtureSync(
         `
-        <vaadin-form-layout auto-responsive auto-rows style="border: 1px solid red;">
-          <input placeholder="First name" />
-          <input placeholder="Last Name" />
-          <input placeholder="Email" />
-          <input placeholder="Phone" />
-          <input placeholder="Address" colspan="2" style="width: 100%" />
-        </vaadin-form-layout>
+          <vaadin-form-layout auto-responsive auto-rows >
+            <input placeholder="First name" />
+            <input placeholder="Last Name" />
+            <input placeholder="Email" />
+            <input placeholder="Phone" />
+            <input placeholder="Address" colspan="2" />
+          </vaadin-form-layout>
+
+          <style>
+            input {
+              justify-self: stretch;
+            }
+          </style>
       `,
         div,
       );
@@ -200,19 +206,25 @@ describe('form-layout auto responsive', () => {
     beforeEach(async () => {
       element = fixtureSync(
         `
-        <vaadin-form-layout auto-responsive auto-rows style="border: 1px solid red;">
-          <vaadin-form-row>
-            <input placeholder="First name" />
-            <input placeholder="Last Name" />
-          </vaadin-form-row>
-          <vaadin-form-row>
-            <input placeholder="Email" />
-            <input placeholder="Phone" />
-          </vaadin-form-row>
-          <vaadin-form-row>
-            <input placeholder="Address" colspan="2" style="width: 100%" />
-          </vaadin-form-row>
-        </vaadin-form-layout>
+          <vaadin-form-layout auto-responsive auto-rows >
+            <vaadin-form-row>
+              <input placeholder="First name" />
+              <input placeholder="Last Name" />
+            </vaadin-form-row>
+            <vaadin-form-row>
+              <input placeholder="Email" />
+              <input placeholder="Phone" />
+            </vaadin-form-row>
+            <vaadin-form-row>
+              <input placeholder="Address" colspan="2"  />
+            </vaadin-form-row>
+          </vaadin-form-layout>
+
+          <style>
+            input {
+              justify-self: stretch;
+            }
+          </style>
       `,
         div,
       );
