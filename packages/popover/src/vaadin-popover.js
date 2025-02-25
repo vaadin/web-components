@@ -577,11 +577,6 @@ class Popover extends PopoverPositionMixin(
   }
 
   /** @private */
-  __computeEffectiveTarget(target, ariaTarget) {
-    return ariaTarget || target;
-  }
-
-  /** @private */
   __updateAriaAttributes(opened, overlayRole, target) {
     if (this.__oldTarget) {
       const oldEffectiveTarget = this.__oldTarget.ariaTarget || this.__oldTarget;
