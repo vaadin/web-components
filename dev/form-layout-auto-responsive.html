@@ -68,6 +68,16 @@
               <vaadin-button>Register</vaadin-button>
             </vaadin-form-layout>
 
+            <h1>autoResponsive + expandColumns + expandFields</h1>
+            <vaadin-form-layout auto-responsive auto-rows max-columns="2" expand-columns expand-fields>
+              <vaadin-text-field label="First name"></vaadin-text-field>
+              <vaadin-text-field label="Last name"></vaadin-text-field>
+              <vaadin-text-area label="Address" colspan="2"></vaadin-text-area>
+              <vaadin-password-field label="Password"></vaadin-password-field>
+              <vaadin-password-field label="Confirm"></vaadin-password-field>
+              <vaadin-button>Register</vaadin-button>
+            </vaadin-form-layout>
+
             <h1>autoResponsive + br</h1>
             <vaadin-form-layout auto-responsive auto-rows max-columns="2">
               <vaadin-text-field label="First name"></vaadin-text-field>
@@ -91,6 +101,30 @@
                 <vaadin-password-field label="Password"></vaadin-password-field>
                 <vaadin-password-field label="Confirm"></vaadin-password-field>
               </vaadin-form-row>
+            </vaadin-form-layout>
+
+            <h1>autoResponsive + FormItem + expandFields</h1>
+            <vaadin-form-layout auto-responsive auto-rows max-columns="2" expand-fields>
+              <vaadin-form-item>
+                <label slot="label"> First name </label>
+                <vaadin-text-field></vaadin-text-field>
+              </vaadin-form-item>
+              <vaadin-form-item>
+                <label slot="label"> Last name </label>
+                <vaadin-text-field></vaadin-text-field>
+              </vaadin-form-item>
+              <vaadin-form-item colspan="2">
+                <label slot="label"> Address </label>
+                <vaadin-text-area></vaadin-text-area>
+              </vaadin-form-item>
+              <vaadin-form-item>
+                <label slot="label"> Password </label>
+                <vaadin-password-field></vaadin-password-field>
+              </vaadin-form-item>
+              <vaadin-form-item>
+                <label slot="label"> Confirm </label>
+                <vaadin-password-field></vaadin-password-field>
+              </vaadin-form-item>
             </vaadin-form-layout>
 
             <h1>autoResponsive inside HorizontalLayout + flex:1</h1>
@@ -135,26 +169,26 @@
                   <vaadin-password-field></vaadin-password-field>
                 </vaadin-form-item>
               </vaadin-form-layout>
-              <vaadin-form-layout style="flex: 1;" auto-responsive auto-rows max-columns="2" labels-aside expand-columns>
+              <vaadin-form-layout style="flex: 1;" auto-responsive auto-rows max-columns="2" labels-aside expand-columns expand-fields>
                 <vaadin-form-item>
                   <label slot="label"> First name </label>
-                  <vaadin-text-field class="full-width"></vaadin-text-field>
+                  <vaadin-text-field></vaadin-text-field>
                 </vaadin-form-item>
                 <vaadin-form-item>
                   <label slot="label"> Last name </label>
-                  <vaadin-text-field class="full-width"></vaadin-text-field>
+                  <vaadin-text-field></vaadin-text-field>
                 </vaadin-form-item>
                 <vaadin-form-item colspan="2">
                   <label slot="label"> Username </label>
-                  <vaadin-text-field class="full-width" colspan="2"></vaadin-text-field>
+                  <vaadin-text-field colspan="2"></vaadin-text-field>
                 </vaadin-form-item>
                 <vaadin-form-item>
                   <label slot="label"> Password </label>
-                  <vaadin-password-field class="full-width"></vaadin-password-field>
+                  <vaadin-password-field></vaadin-password-field>
                 </vaadin-form-item>
                 <vaadin-form-item>
                   <label slot="label"> Confirm </label>
-                  <vaadin-password-field class="full-width"></vaadin-password-field>
+                  <vaadin-password-field></vaadin-password-field>
                 </vaadin-form-item>
               </vaadin-form-layout>
             </vaadin-horizontal-layout>
@@ -175,11 +209,11 @@
             ></vaadin-dialog>
             <vaadin-button @click="${this.openPrevSiblingDialog}">Open</vaadin-button>
 
-            <h1>autoResponsive inside Dialog + expandColumns</h1>
+            <h1>autoResponsive inside Dialog + expandColumns + expandFields</h1>
             <vaadin-dialog
               ${dialogRenderer(
                 (dialog) => html`
-                  <vaadin-form-layout auto-responsive auto-rows max-columns="2" expand-columns>
+                  <vaadin-form-layout auto-responsive auto-rows max-columns="2" expand-columns expand-fields>
                     <vaadin-text-field label="First name"></vaadin-text-field>
                     <vaadin-text-field label="Last name"></vaadin-text-field>
                     <vaadin-text-area label="Address" colspan="2"></vaadin-text-area>
@@ -239,12 +273,12 @@
             ></vaadin-dialog>
             <vaadin-button @click="${this.openPrevSiblingDialog}">Open</vaadin-button>
 
-            <h1>autoResponsive inside Dialog 80% + expandColumns</h1>
+            <h1>autoResponsive inside Dialog 80% + expandColumns + expandFields</h1>
             <vaadin-dialog
               width="80%"
               ${dialogRenderer(
                 (dialog) => html`
-                  <vaadin-form-layout auto-responsive auto-rows max-columns="2" expand-columns>
+                  <vaadin-form-layout auto-responsive auto-rows max-columns="2" expand-columns expand-fields>
                     <vaadin-text-field label="First name"></vaadin-text-field>
                     <vaadin-text-field label="Last name"></vaadin-text-field>
                     <vaadin-text-area label="Address" colspan="2"></vaadin-text-area>
@@ -268,7 +302,7 @@
                       <vaadin-password-field label="Password"></vaadin-password-field>
                       <vaadin-password-field label="Confirm"></vaadin-password-field>
                     </vaadin-form-layout>
-                    <vaadin-form-layout auto-responsive auto-rows max-columns="2" style="flex: 1;" expand-columns>
+                    <vaadin-form-layout auto-responsive auto-rows max-columns="2" style="flex: 1;" expand-columns expand-fields>
                       <vaadin-text-field label="First name"></vaadin-text-field>
                       <vaadin-text-field label="Last name"></vaadin-text-field>
                       <vaadin-text-area label="Address" colspan="2"></vaadin-text-area>
@@ -297,7 +331,7 @@
                       <vaadin-password-field label="Password"></vaadin-password-field>
                       <vaadin-password-field label="Confirm"></vaadin-password-field>
                     </vaadin-form-layout>
-                    <vaadin-form-layout tab="tab-1" auto-responsive auto-rows max-columns="2" expand-columns>
+                    <vaadin-form-layout tab="tab-1" auto-responsive auto-rows max-columns="2" expand-columns expand-fields>
                       <vaadin-text-field label="First name"></vaadin-text-field>
                       <vaadin-text-field label="Last name"></vaadin-text-field>
                       <vaadin-text-area label="Address" colspan="2"></vaadin-text-area>
