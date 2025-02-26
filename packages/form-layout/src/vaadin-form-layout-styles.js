@@ -82,8 +82,7 @@ export const formLayoutStyles = css`
   }
 
   :host([auto-responsive]) #layout ::slotted(*) {
-    grid-column-start: 1;
-    grid-column-end: span min(var(--_colspan, 1), var(--_rendered-column-count));
+    grid-column: 1 / span min(var(--_colspan, 1), var(--_rendered-column-count));
   }
 
   :host([auto-responsive][auto-rows]) #layout ::slotted(*) {
@@ -101,8 +100,7 @@ export const formRowStyles = css`
   }
 
   ::slotted(*) {
-    grid-column-start: auto;
-    grid-column-end: span min(var(--_colspan, 1), var(--_rendered-column-count));
+    grid-column: auto / span min(var(--_colspan, 1), var(--_rendered-column-count));
   }
 
   ::slotted(:first-child) {
