@@ -759,7 +759,7 @@ class Popover extends PopoverPositionMixin(
     // Do not close the popover on overlay focusout if it's not the last one.
     // This covers the case when focus moves to the nested popover opened
     // without focusing parent popover overlay (e.g. using hover trigger).
-    if (!isLastOverlay(this._overlayElement)) {
+    if (this._overlayElement.opened && !isLastOverlay(this._overlayElement)) {
       return;
     }
 
