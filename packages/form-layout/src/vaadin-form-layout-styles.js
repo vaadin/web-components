@@ -45,25 +45,25 @@ export const formLayoutStyles = css`
   }
 
   :host([auto-responsive]) {
-    --_column-gap: var(--vaadin-form-layout-column-spacing);
-    --_column-width-with-labels-above: var(--_column-width);
-    --_column-width-with-labels-aside: calc(
+    --_column-width-labels-above: var(--_column-width);
+    --_column-width-labels-aside: calc(
       var(--_column-width) + var(--vaadin-form-layout-label-width) + var(--vaadin-form-layout-label-spacing)
     );
-    --_max-total-gap-width: calc((var(--_max-columns) - 1) * var(--_column-gap));
-    --_max-total-column-width: calc(var(--_max-columns) * var(--_column-width-with-labels-above));
 
     display: flex;
-    min-width: var(--_column-width-with-labels-above);
+    min-width: var(--_column-width-labels-above);
   }
 
   :host([auto-responsive]) #layout {
-    --_effective-column-width: var(--_column-width-with-labels-above);
+    --_grid-column-gap: var(--vaadin-form-layout-column-spacing);
+    --_grid-column-width: var(--_column-width-labels-above);
+    --_grid-column-max-total-gap: calc((var(--_max-columns) - 1) * var(--_grid-column-gap));
+    --_grid-column-max-total-width: calc(var(--_max-columns) * var(--_grid-column-width));
 
     display: grid;
-    grid-template-columns: repeat(auto-fit, var(--_effective-column-width));
+    grid-template-columns: repeat(auto-fit, var(--_grid-column-width));
     justify-items: start;
-    gap: var(--vaadin-form-layout-row-spacing) var(--_column-gap);
+    gap: var(--vaadin-form-layout-row-spacing) var(--_grid-column-gap);
 
     /*
       To prevent the layout from exceeding the column limit defined by --_max-columns,
@@ -77,7 +77,7 @@ export const formLayoutStyles = css`
       number of columns inside <vaadin-overlay>, which creates a new stacking context
       without a predefined width.
     */
-    width: calc(var(--_max-total-column-width) + var(--_max-total-gap-width));
+    width: calc(var(--_grid-column-max-total-width) + var(--_grid-column-max-total-gap));
 
     /*
       Firefox requires min-width on both :host and #layout to allow the layout
@@ -87,7 +87,7 @@ export const formLayoutStyles = css`
   }
 
   :host([auto-responsive]) #layout::before {
-    background-position-y: var(--_column-width-with-labels-aside);
+    background-position-y: var(--_column-width-labels-aside);
   }
 
   :host([auto-responsive]) #layout ::slotted(*) {
@@ -101,12 +101,8 @@ export const formLayoutStyles = css`
     grid-column-start: var(--_column-start, auto);
   }
 
-  :host([auto-responsive][labels-aside]) {
-    --_max-total-column-width: calc(var(--_max-columns) * var(--_column-width-with-labels-aside));
-  }
-
   :host([auto-responsive][labels-aside]) #layout[fits-labels-aside] {
-    --_effective-column-width: var(--_column-width-with-labels-aside);
+    --_grid-column-width: var(--_column-width-labels-aside);
   }
 
   :host([auto-responsive][labels-aside]) #layout[fits-labels-aside] ::slotted(*) {
