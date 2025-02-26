@@ -395,7 +395,7 @@ export const FormLayoutMixin = (superClass) =>
       let resetColumn = false;
       let columnCount = 0;
       let maxColumns = 0;
-      const formRowParent = null;
+      let formRowParent = null;
 
       this.$.layout.style.setProperty('--_rendered-column-count', this._renderedColumnCount);
 
@@ -420,6 +420,9 @@ export const FormLayoutMixin = (superClass) =>
           if ((isParentFormRow && formRowParent !== parentElement) || (!isParentFormRow && resetColumn)) {
             maxColumns = Math.max(maxColumns, columnCount);
             columnCount = 0;
+            if (isParentFormRow) {
+              formRowParent = parentElement;
+            }
           }
 
           // Do not count break lines and hidden elements
