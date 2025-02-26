@@ -178,7 +178,7 @@ describe('form-layout auto responsive', () => {
     beforeEach(async () => {
       element = fixtureSync(
         `
-          <vaadin-form-layout auto-responsive auto-rows >
+          <vaadin-form-layout auto-responsive auto-rows max-columns="2">
             <input placeholder="First name" />
             <input placeholder="Last Name" />
             <input placeholder="Email" />
@@ -206,7 +206,7 @@ describe('form-layout auto responsive', () => {
     beforeEach(async () => {
       element = fixtureSync(
         `
-          <vaadin-form-layout auto-responsive auto-rows >
+          <vaadin-form-layout auto-responsive auto-rows max-columns="2">
             <vaadin-form-row>
               <input placeholder="First name" />
               <input placeholder="Last Name" />
