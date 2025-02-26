@@ -451,6 +451,7 @@ export const FormLayoutMixin = (superClass) =>
       const { gridTemplateColumns } = getComputedStyle(this.$.layout);
       return gridTemplateColumns.split(' ').filter((width) => width !== '0px').length;
     }
+
     /**
      * @protected
      * @override

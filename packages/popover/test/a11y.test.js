@@ -49,57 +49,84 @@ describe('a11y', () => {
       expect(overlay.getAttribute('role')).to.equal('alertdialog');
     });
 
-    it('should set aria-haspopup attribute on the target', () => {
-      expect(target.getAttribute('aria-haspopup')).to.equal('dialog');
-    });
+    ['target', 'ariaTarget'].forEach((prop) => {
+      describe(prop, () => {
+        let element;
 
-    it('should keep aria-haspopup attribute when overlayRole is set to alertdialog', async () => {
-      popover.overlayRole = 'alertdialog';
-      await nextUpdate(popover);
-      expect(target.getAttribute('aria-haspopup')).to.equal('dialog');
-    });
+        beforeEach(async () => {
+          if (prop === 'ariaTarget') {
+            target = fixtureSync('<div><input></div>');
+            popover.target = target;
+            element = target.firstElementChild;
+            target.ariaTarget = element;
+            await nextUpdate(popover);
+          } else {
+            element = target;
+          }
+        });
 
-    it('should update aria-haspopup attribute when overlayRole is set to different value', async () => {
-      popover.overlayRole = 'menu';
-      await nextUpdate(popover);
-      expect(target.getAttribute('aria-haspopup')).to.equal('true');
-    });
+        it(`should set aria-haspopup attribute on the ${prop}`, () => {
+          expect(element.getAttribute('aria-haspopup')).to.equal('dialog');
+        });
 
-    it('should remove aria-haspopup attribute when target is cleared', async () => {
-      popover.target = null;
-      await nextUpdate(popover);
-      expect(target.hasAttribute('aria-haspopup')).to.be.false;
-    });
+        it(`should keep aria-haspopup attribute on the ${prop} when overlayRole is set to alertdialog`, async () => {
+          popover.overlayRole = 'alertdialog';
+          await nextUpdate(popover);
+          expect(element.getAttribute('aria-haspopup')).to.equal('dialog');
+        });
 
-    it('should remove aria-controls attribute when target is cleared', async () => {
-      popover.target = null;
-      await nextUpdate(popover);
-      expect(target.hasAttribute('aria-haspopup')).to.be.false;
-    });
+        it(`should update aria-haspopup attribute on the ${prop} when overlayRole is set to different value`, async () => {
+          popover.overlayRole = 'menu';
+          await nextUpdate(popover);
+          expect(element.getAttribute('aria-haspopup')).to.equal('true');
+        });
 
-    it('should set aria-expanded attribute on the target when closed', () => {
-      expect(target.getAttribute('aria-expanded')).to.equal('false');
-    });
+        it(`should set aria-expanded attribute on the ${prop} when closed`, () => {
+          expect(element.getAttribute('aria-expanded')).to.equal('false');
+        });
 
-    it('should set aria-expanded attribute on the target when opened', async () => {
-      popover.opened = true;
-      await nextRender();
-      expect(target.getAttribute('aria-expanded')).to.equal('true');
-    });
+        it(`should set aria-expanded attribute on the ${prop} when opened`, async () => {
+          popover.opened = true;
+          await nextRender();
+          expect(element.getAttribute('aria-expanded')).to.equal('true');
+        });
 
-    it('should set aria-controls attribute on the target when opened', async () => {
-      popover.opened = true;
-      await nextRender();
-      expect(target.getAttribute('aria-controls')).to.equal(overlay.id);
-    });
+        it(`should set aria-controls attribute on the ${prop} when opened`, async () => {
+          popover.opened = true;
+          await nextRender();
+          expect(element.getAttribute('aria-controls')).to.equal(overlay.id);
+        });
 
-    it('should remove aria-controls attribute from the target when closed', async () => {
-      popover.opened = true;
-      await nextRender();
+        it(`should remove aria-controls attribute from the ${prop} when closed`, async () => {
+          popover.opened = true;
+          await nextRender();
 
-      popover.opened = false;
-      await nextUpdate(popover);
-      expect(target.hasAttribute('aria-controls')).to.be.false;
+          popover.opened = false;
+          await nextUpdate(popover);
+          expect(element.hasAttribute('aria-controls')).to.be.false;
+        });
+
+        it(`should remove aria-haspopup attribute from ${prop} when target is cleared`, async () => {
+          popover.target = null;
+          await nextUpdate(popover);
+          expect(element.hasAttribute('aria-haspopup')).to.be.false;
+        });
+
+        it(`should remove aria-controls attribute from ${prop} when target is cleared`, async () => {
+          popover.opened = true;
+          await nextRender();
+
+          popover.target = null;
+          await nextUpdate(popover);
+          expect(element.hasAttribute('aria-controls')).to.be.false;
+        });
+
+        it(`should remove aria-expanded attribute from ${prop} when target is cleared`, async () => {
+          popover.target = null;
+          await nextUpdate(popover);
+          expect(element.hasAttribute('aria-expanded')).to.be.false;
+        });
+      });
     });
   });
 
@@ -342,94 +369,107 @@ describe('a11y', () => {
   });
 
   describe('Tab order', () => {
-    let input;
+    ['default', 'focusElement'].forEach((suite) => {
+      describe(suite, () => {
+        let input;
 
-    beforeEach(async () => {
-      input = document.createElement('input');
-      target.parentElement.appendChild(input);
+        beforeEach(async () => {
+          input = document.createElement('input');
+          target.parentElement.appendChild(input);
 
-      popover.trigger = [];
-      popover.opened = true;
-      await nextRender();
-    });
+          popover.trigger = [];
+          popover.opened = true;
 
-    it('should focus the overlay content part on target Tab', async () => {
-      target.focus();
+          if (suite === 'focusElement') {
+            const wrapper = document.createElement('div');
+            target.parentElement.insertBefore(wrapper, target);
+            wrapper.focusElement = target;
+            wrapper.appendChild(target);
 
-      const spy = sinon.spy(overlay.$.overlay, 'focus');
-      await sendKeys({ press: 'Tab' });
+            popover.target = wrapper;
+          }
+          await nextRender();
+        });
 
-      expect(spy).to.be.calledOnce;
-    });
+        it('should focus the overlay content part on target Tab', async () => {
+          target.focus();
 
-    it('should focus the target on overlay content part Shift Tab', async () => {
-      target.focus();
+          const spy = sinon.spy(overlay.$.overlay, 'focus');
+          await sendKeys({ press: 'Tab' });
 
-      // Move focus to the overlay
-      await sendKeys({ press: 'Tab' });
+          expect(spy).to.be.calledOnce;
+        });
 
-      const spy = sinon.spy(target, 'focus');
+        it('should focus the target on overlay content part Shift Tab', async () => {
+          target.focus();
 
-      // Move focus back to the target
-      await sendKeys({ press: 'Shift+Tab' });
+          // Move focus to the overlay
+          await sendKeys({ press: 'Tab' });
 
-      expect(spy).to.be.calledOnce;
-    });
+          const spy = sinon.spy(target, 'focus');
 
-    it('should focus the next element after target on last overlay child Tab', async () => {
-      target.focus();
+          // Move focus back to the target
+          await sendKeys({ press: 'Shift+Tab' });
 
-      // Move focus to the overlay
-      await sendKeys({ press: 'Tab' });
+          expect(spy).to.be.calledOnce;
+        });
 
-      // Move focus to the input inside the overlay
-      await sendKeys({ press: 'Tab' });
+        it('should focus the next element after target on last overlay child Tab', async () => {
+          target.focus();
 
-      const spy = sinon.spy(input, 'focus');
+          // Move focus to the overlay
+          await sendKeys({ press: 'Tab' });
 
-      // Move focus to the input after the overlay
-      await sendKeys({ press: 'Tab' });
+          // Move focus to the input inside the overlay
+          await sendKeys({ press: 'Tab' });
 
-      expect(spy).to.be.calledOnce;
-    });
+          const spy = sinon.spy(input, 'focus');
 
-    it('should focus the last overlay child on the next element Shift Tab', async () => {
-      input.focus();
+          // Move focus to the input after the overlay
+          await sendKeys({ press: 'Tab' });
 
-      const focusable = overlay.querySelector('input');
-      const spy = sinon.spy(focusable, 'focus');
+          expect(spy).to.be.calledOnce;
+        });
 
-      await sendKeys({ press: 'Shift+Tab' });
+        it('should focus the last overlay child on the next element Shift Tab', async () => {
+          input.focus();
 
-      expect(spy).to.be.calledOnce;
-    });
+          const focusable = overlay.querySelector('input');
+          const spy = sinon.spy(focusable, 'focus');
 
-    it('should not focus the overlay part on the next element Tab', async () => {
-      input.focus();
+          await sendKeys({ press: 'Shift+Tab' });
 
-      await sendKeys({ press: 'Tab' });
+          expect(spy).to.be.calledOnce;
+        });
 
-      const activeElement = getDeepActiveElement();
-      expect(activeElement).to.not.equal(overlay.$.overlay);
-    });
+        it('should not focus the overlay part on the next element Tab', async () => {
+          input.focus();
 
-    it('should focus previous element on target Shift Tab while opened', async () => {
-      target.parentElement.insertBefore(input, target);
+          await sendKeys({ press: 'Tab' });
 
-      // Make popover open on focus
-      popover.opened = false;
-      popover.trigger = ['focus'];
-      await nextUpdate(popover);
+          const activeElement = getDeepActiveElement();
+          expect(activeElement).to.not.equal(overlay.$.overlay);
+        });
 
-      target.focus();
-      await nextRender();
+        it('should focus previous element on target Shift Tab while opened', async () => {
+          target.parentElement.insertBefore(input, target);
 
-      // Move focus back from the target
-      await sendKeys({ press: 'Shift+Tab' });
-      await nextRender();
+          // Make popover open on focus
+          popover.opened = false;
+          popover.trigger = ['focus'];
+          await nextUpdate(popover);
 
-      const activeElement = getDeepActiveElement();
-      expect(activeElement).to.equal(input);
+          target.focus();
+          await nextRender();
+
+          // Move focus back from the target
+          await sendKeys({ press: 'Shift+Tab' });
+          await nextRender();
+
+          const activeElement = getDeepActiveElement();
+          expect(activeElement).to.equal(input);
+        });
+      });
     });
   });
 });

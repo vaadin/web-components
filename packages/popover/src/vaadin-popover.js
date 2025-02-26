@@ -409,8 +409,7 @@ class Popover extends PopoverPositionMixin(
     return [
       '__updateContentHeight(contentHeight, _overlayElement)',
       '__updateContentWidth(contentWidth, _overlayElement)',
-      '__openedOrTargetChanged(opened, target)',
-      '__overlayRoleOrTargetChanged(overlayRole, target)',
+      '__updateAriaAttributes(opened, overlayRole, target)',
     ];
   }
 
@@ -578,27 +577,27 @@ class Popover extends PopoverPositionMixin(
   }
 
   /** @private */
-  __openedOrTargetChanged(opened, target) {
+  __updateAriaAttributes(opened, overlayRole, target) {
+    if (this.__oldTarget) {
+      const oldEffectiveTarget = this.__oldTarget.ariaTarget || this.__oldTarget;
+      oldEffectiveTarget.removeAttribute('aria-haspopup');
+      oldEffectiveTarget.removeAttribute('aria-expanded');
+      oldEffectiveTarget.removeAttribute('aria-controls');
+    }
+
     if (target) {
-      target.setAttribute('aria-expanded', opened ? 'true' : 'false');
+      const effectiveTarget = target.ariaTarget || target;
+
+      const isDialog = overlayRole === 'dialog' || overlayRole === 'alertdialog';
+      effectiveTarget.setAttribute('aria-haspopup', isDialog ? 'dialog' : 'true');
+
+      effectiveTarget.setAttribute('aria-expanded', opened ? 'true' : 'false');
 
       if (opened) {
-        target.setAttribute('aria-controls', this.__overlayId);
+        effectiveTarget.setAttribute('aria-controls', this.__overlayId);
       } else {
-        target.removeAttribute('aria-controls');
+        effectiveTarget.removeAttribute('aria-controls');
       }
-    }
-  }
-
-  /** @private */
-  __overlayRoleOrTargetChanged(overlayRole, target) {
-    if (this.__oldTarget) {
-      this.__oldTarget.removeAttribute('aria-haspopup');
-    }
-
-    if (target) {
-      const isDialog = overlayRole === 'dialog' || overlayRole === 'alertdialog';
-      target.setAttribute('aria-haspopup', isDialog ? 'dialog' : 'true');
 
       this.__oldTarget = target;
     }
@@ -667,7 +666,7 @@ class Popover extends PopoverPositionMixin(
     const overlayPart = this._overlayElement.$.overlay;
 
     // Move focus to the popover content on target element Tab
-    if (this.target && isElementFocused(this.target)) {
+    if (this.target && isElementFocused(this.__getTargetFocusable())) {
       event.preventDefault();
       overlayPart.focus();
       return;
@@ -676,7 +675,7 @@ class Popover extends PopoverPositionMixin(
     // Move focus to the next element after target on content Tab
     const lastFocusable = this.__getLastFocusable(overlayPart);
     if (lastFocusable && isElementFocused(lastFocusable)) {
-      const focusable = this.__getNextBodyFocusable(this.target);
+      const focusable = this.__getNextBodyFocusable(this.__getTargetFocusable());
       if (focusable && focusable !== overlayPart) {
         event.preventDefault();
         focusable.focus();
@@ -699,7 +698,7 @@ class Popover extends PopoverPositionMixin(
     const overlayPart = this._overlayElement.$.overlay;
 
     // Prevent restoring focus after target blur on Shift + Tab
-    if (this.target && isElementFocused(this.target) && this.__shouldRestoreFocus) {
+    if (this.target && isElementFocused(this.__getTargetFocusable()) && this.__shouldRestoreFocus) {
       this.__shouldRestoreFocus = false;
       return;
     }
@@ -707,12 +706,12 @@ class Popover extends PopoverPositionMixin(
     // Move focus back to the target on overlay content Shift + Tab
     if (this.target && isElementFocused(overlayPart)) {
       event.preventDefault();
-      this.target.focus();
+      this.__getTargetFocusable().focus();
       return;
     }
 
     // Move focus back to the popover on next element Shift + Tab
-    const nextFocusable = this.__getNextBodyFocusable(this.target);
+    const nextFocusable = this.__getNextBodyFocusable(this.__getTargetFocusable());
     if (nextFocusable && isElementFocused(nextFocusable)) {
       const lastFocusable = this.__getLastFocusable(overlayPart);
       if (lastFocusable) {
@@ -733,6 +732,16 @@ class Popover extends PopoverPositionMixin(
   __getLastFocusable(container) {
     const focusables = getFocusableElements(container);
     return focusables.pop();
+  }
+
+  /** @private */
+  __getTargetFocusable() {
+    if (!this.target) {
+      return null;
+    }
+
+    // If target has `focusElement`, check if that one is focused.
+    return this.target.focusElement || this.target;
   }
 
   /** @private */
