@@ -18,23 +18,20 @@ describe('form-layouts in horizontal-layout', () => {
       beforeEach(async () => {
         horizontalLayout = fixtureSync(`
           <vaadin-horizontal-layout>
-            ${Array.from(
-              { length: 2 },
-              () => `
-                <vaadin-form-layout
-                  auto-responsive
-                  auto-rows
-                  max-columns="3"
-                  column-width="100px"
-                  style="--vaadin-form-layout-column-spacing: 0px;"
-                >
-                  <input placeholder="First name">
-                  <input placeholder="Last name">
-                  <input placeholder="Email">
-                  <input placeholder="Phone">
-                </vaadin-form-layout>
-              `,
-            ).join('')}
+            ${`
+              <vaadin-form-layout
+                auto-responsive
+                auto-rows
+                max-columns="3"
+                column-width="100px"
+                style="--vaadin-form-layout-column-spacing: 0px;"
+              >
+                <input placeholder="First name">
+                <input placeholder="Last name">
+                <input placeholder="Email">
+                <input placeholder="Phone">
+              </vaadin-form-layout>
+            `.repeat(2)}
           </vaadin-horizontal-layout>
         `);
         formLayouts = [...horizontalLayout.querySelectorAll('vaadin-form-layout')];
@@ -73,40 +70,37 @@ describe('form-layouts in horizontal-layout', () => {
       beforeEach(async () => {
         horizontalLayout = fixtureSync(`
           <vaadin-horizontal-layout>
-            ${Array.from(
-              { length: 2 },
-              () => `
-                <vaadin-form-layout
-                  auto-responsive
-                  auto-rows
-                  max-columns="2"
-                  column-width="100px"
-                  labels-aside
-                  style="
-                    --vaadin-form-layout-column-spacing: 0px;
-                    --vaadin-form-layout-label-width: 100px;
-                    --vaadin-form-layout-label-spacing: 50px;
-                  "
-                >
-                  <vaadin-form-item>
-                    <label slot="label">First name</label>
-                    <input />
-                  </vaadin-form-item>
-                  <vaadin-form-item>
-                    <label slot="label">Last Name</label>
-                    <input />
-                  </vaadin-form-item>
-                  <vaadin-form-item>
-                    <label slot="label">Email</label>
-                    <input />
-                  </vaadin-form-item>
-                  <vaadin-form-item>
-                    <label slot="label">Phone</label>
-                    <input />
-                  </vaadin-form-item>
-                </vaadin-form-layout>
-              `,
-            ).join('')}
+            ${`
+              <vaadin-form-layout
+                auto-responsive
+                auto-rows
+                max-columns="2"
+                column-width="100px"
+                labels-aside
+                style="
+                  --vaadin-form-layout-column-spacing: 0px;
+                  --vaadin-form-layout-label-width: 100px;
+                  --vaadin-form-layout-label-spacing: 50px;
+                "
+              >
+                <vaadin-form-item>
+                  <label slot="label">First name</label>
+                  <input />
+                </vaadin-form-item>
+                <vaadin-form-item>
+                  <label slot="label">Last Name</label>
+                  <input />
+                </vaadin-form-item>
+                <vaadin-form-item>
+                  <label slot="label">Email</label>
+                  <input />
+                </vaadin-form-item>
+                <vaadin-form-item>
+                  <label slot="label">Phone</label>
+                  <input />
+                </vaadin-form-item>
+              </vaadin-form-layout>
+            `.repeat(2)}
           </vaadin-horizontal-layout>
         `);
         formLayouts = [...horizontalLayout.querySelectorAll('vaadin-form-layout')];

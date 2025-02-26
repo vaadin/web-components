@@ -58,7 +58,7 @@ export const formLayoutStyles = css`
     --_grid-column-gap: var(--vaadin-form-layout-column-spacing);
     --_grid-column-width: var(--_column-width-labels-above);
     --_grid-column-max-total-gap: calc((var(--_max-columns) - 1) * var(--_grid-column-gap));
-    --_grid-column-max-total-width: calc(var(--_max-columns) * var(--_grid-column-width));
+    --_grid-column-max-total-width: calc(var(--_max-columns) * var(--_column-width-labels-above));
 
     display: grid;
     grid-template-columns: repeat(auto-fit, var(--_grid-column-width));
@@ -99,6 +99,10 @@ export const formLayoutStyles = css`
 
   :host([auto-responsive][auto-rows]) #layout ::slotted(*) {
     grid-column-start: var(--_column-start, auto);
+  }
+
+  :host([auto-responsive][labels-aside]) #layout {
+    --_grid-column-max-total-width: calc(var(--_max-columns) * var(--_column-width-labels-aside));
   }
 
   :host([auto-responsive][labels-aside]) #layout[fits-labels-aside] {
