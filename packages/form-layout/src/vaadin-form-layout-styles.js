@@ -91,8 +91,8 @@ export const formLayoutStyles = css`
   }
 
   :host([auto-responsive]) #layout ::slotted(*) {
-    --_label-position-above: initial;
-    --_label-position-aside: ' ';
+    --_form-item-labels-above: initial; /* true */
+    --_form-item-labels-aside: ' '; /* false */
 
     grid-column-start: 1;
   }
@@ -106,8 +106,8 @@ export const formLayoutStyles = css`
   }
 
   :host([auto-responsive][labels-aside]) #layout[fits-labels-aside] ::slotted(*) {
-    --_label-position-above: ' ';
-    --_label-position-aside: initial;
+    --_form-item-labels-above: ' '; /* false */
+    --_form-item-labels-aside: initial; /* true */
   }
 `;
 
@@ -131,19 +131,19 @@ export const formRowStyles = css`
 
 export const formItemStyles = css`
   :host {
-    --_label-position-above: ' ';
-    --_label-position-aside: initial;
+    --_form-item-labels-above: ' '; /* false */
+    --_form-item-labels-aside: initial; /* true */
 
     display: inline-flex;
-    align-items: var(--_label-position-aside, baseline);
-    flex-flow: var(--_label-position-above, column) nowrap;
+    align-items: var(--_form-item-labels-aside, baseline);
+    flex-flow: var(--_form-item-labels-above, column) nowrap;
     justify-self: stretch;
     margin: calc(0.5 * var(--vaadin-form-item-row-spacing, var(--vaadin-form-layout-row-spacing, 1em))) 0;
   }
 
   :host([label-position='top']) {
-    --_label-position-above: initial;
-    --_label-position-aside: ' ';
+    --_form-item-labels-above: initial; /* true */
+    --_form-item-labels-aside: ' '; /* false */
   }
 
   :host([hidden]) {
@@ -152,7 +152,7 @@ export const formItemStyles = css`
 
   #label {
     width: var(
-      --_label-position-aside,
+      --_form-item-labels-aside,
       var(--vaadin-form-item-label-width, var(--vaadin-form-layout-label-width, 8em))
     );
     flex: 0 0 auto;
