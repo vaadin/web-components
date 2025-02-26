@@ -22,10 +22,18 @@ export function assertFormLayoutLabelPosition(layout, { position }) {
       return;
     }
 
+    const label = child.querySelector('[slot=label]');
+    const input = child.querySelector(':not([slot])');
+
     if (position === 'aside') {
-      expect(child.offsetWidth).to.equal(columnWidth + labelWidth + labelSpacing, 'expected labels to be aside');
+      expect(child.offsetWidth).to.equal(
+        columnWidth + labelWidth + labelSpacing,
+        'expected column to have width equal to columnWidth + labelWidth + labelSpacing',
+      );
+      expect(label.offsetLeft).to.be.below(input.offsetLeft, 'expected label to be displayed aside input');
     } else {
-      expect(child.offsetWidth).to.equal(columnWidth, 'expected labels to be above');
+      expect(child.offsetWidth).to.equal(columnWidth, 'expected column to have width equal to columnWidth');
+      expect(label.offsetTop).to.be.below(input.offsetTop, 'expected label to be displayed above input');
     }
   });
 }
