@@ -666,7 +666,7 @@ class Popover extends PopoverPositionMixin(
     const overlayPart = this._overlayElement.$.overlay;
 
     // Move focus to the popover content on target element Tab
-    if (this.target && isElementFocused(this.target)) {
+    if (this.target && isElementFocused(this.__getTargetFocusable())) {
       event.preventDefault();
       overlayPart.focus();
       return;
@@ -675,7 +675,7 @@ class Popover extends PopoverPositionMixin(
     // Move focus to the next element after target on content Tab
     const lastFocusable = this.__getLastFocusable(overlayPart);
     if (lastFocusable && isElementFocused(lastFocusable)) {
-      const focusable = this.__getNextBodyFocusable(this.target);
+      const focusable = this.__getNextBodyFocusable(this.__getTargetFocusable());
       if (focusable && focusable !== overlayPart) {
         event.preventDefault();
         focusable.focus();
@@ -698,7 +698,7 @@ class Popover extends PopoverPositionMixin(
     const overlayPart = this._overlayElement.$.overlay;
 
     // Prevent restoring focus after target blur on Shift + Tab
-    if (this.target && isElementFocused(this.target) && this.__shouldRestoreFocus) {
+    if (this.target && isElementFocused(this.__getTargetFocusable()) && this.__shouldRestoreFocus) {
       this.__shouldRestoreFocus = false;
       return;
     }
@@ -706,12 +706,12 @@ class Popover extends PopoverPositionMixin(
     // Move focus back to the target on overlay content Shift + Tab
     if (this.target && isElementFocused(overlayPart)) {
       event.preventDefault();
-      this.target.focus();
+      this.__getTargetFocusable().focus();
       return;
     }
 
     // Move focus back to the popover on next element Shift + Tab
-    const nextFocusable = this.__getNextBodyFocusable(this.target);
+    const nextFocusable = this.__getNextBodyFocusable(this.__getTargetFocusable());
     if (nextFocusable && isElementFocused(nextFocusable)) {
       const lastFocusable = this.__getLastFocusable(overlayPart);
       if (lastFocusable) {
@@ -732,6 +732,16 @@ class Popover extends PopoverPositionMixin(
   __getLastFocusable(container) {
     const focusables = getFocusableElements(container);
     return focusables.pop();
+  }
+
+  /** @private */
+  __getTargetFocusable() {
+    if (!this.target) {
+      return null;
+    }
+
+    // If target has `focusElement`, check if that one is focused.
+    return this.target.focusElement || this.target;
   }
 
   /** @private */
