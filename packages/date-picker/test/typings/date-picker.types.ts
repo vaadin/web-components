@@ -13,7 +13,7 @@ import type { InputMixinClass } from '@vaadin/field-base/src/input-mixin.js';
 import type { LabelMixinClass } from '@vaadin/field-base/src/label-mixin.js';
 import type { ValidateMixinClass } from '@vaadin/field-base/src/validate-mixin.js';
 import type { ThemableMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import type { DatePickerDate, DatePickerMixinClass } from '../../src/vaadin-date-picker-mixin.js';
+import type { DatePickerDate, DatePickerI18n, DatePickerMixinClass } from '../../src/vaadin-date-picker-mixin.js';
 import type {
   DatePicker,
   DatePickerChangeEvent,
@@ -82,12 +82,17 @@ assertType<string>(datePicker.placeholder);
 assertType<string | null | undefined>(datePicker.helperText);
 assertType<boolean>(datePicker.readonly);
 assertType<string | null | undefined>(datePicker.label);
+assertType<DatePickerI18n>(datePicker.i18n);
 assertType<string>(datePicker.value);
 assertType<boolean>(datePicker.required);
 assertType<string>(datePicker.name);
 assertType<string>(datePicker.allowedCharPattern);
 assertType<string | null | undefined>(datePicker.initialPosition);
 assertType<string>(datePicker.overlayClass);
+
+// I18n
+assertType<DatePickerI18n>({});
+assertType<DatePickerI18n>({ cancel: 'cancel' });
 
 // DatePicker mixins
 assertType<ControllerMixinClass>(datePicker);
