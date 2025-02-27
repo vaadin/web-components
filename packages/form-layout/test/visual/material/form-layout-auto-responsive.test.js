@@ -12,8 +12,7 @@ describe('form-layout auto responsive', () => {
     div = document.createElement('div');
     div.style.display = 'inline-block';
     div.style.border = '10px solid #f3f3f3';
-    div.style.maxWidth = '100%';
-    div.style.boxSizing = 'border-box';
+    div.style.maxWidth = 'calc(100% - 20px)';
   });
 
   describe('basic', () => {
@@ -181,19 +180,19 @@ describe('form-layout auto responsive', () => {
           <vaadin-form-layout auto-responsive auto-rows max-columns="2">
             <vaadin-form-item>
               <label slot="label">First name</label>
-              <input class="full-width" />
+              <input />
             </vaadin-form-item>
             <vaadin-form-item>
               <label slot="label">Last name</label>
-              <input class="full-width" />
+              <input />
             </vaadin-form-item>
             <vaadin-form-item>
               <label slot="label">Email</label>
-              <input class="full-width" />
+              <input />
             </vaadin-form-item>
             <vaadin-form-item>
               <label slot="label">A long label that wraps across multiple lines</label>
-              <input class="full-width" />
+              <input />
             </vaadin-form-item>
           </vaadin-form-layout>
         `,
@@ -212,51 +211,19 @@ describe('form-layout auto responsive', () => {
       await visualDiff(div, 'form-items-labels-aside');
     });
 
-    it('labelsAside with too narrow layout', async () => {
-      element.style.width = '8em';
+    it('labelsAside in very narrow container', async () => {
+      div.style.width = element.columnWidth;
       element.labelsAside = true;
       await nextResize(element);
-      await visualDiff(div, 'form-items-labels-aside-with-too-narrow-layout');
-    });
-  });
-
-  describe('custom CSS properties - label', () => {
-    beforeEach(async () => {
-      element = fixtureSync(
-        `
-          <vaadin-form-layout auto-responsive auto-rows max-columns="2" labels-aside>
-            <vaadin-form-item>
-              <label slot="label">First name</label>
-              <input class="full-width" />
-            </vaadin-form-item>
-            <vaadin-form-item>
-              <label slot="label">Last name</label>
-              <input class="full-width" />
-            </vaadin-form-item>
-            <vaadin-form-item>
-              <label slot="label">Email</label>
-              <input class="full-width" />
-            </vaadin-form-item>
-            <vaadin-form-item>
-              <label slot="label">A long label that wraps across multiple lines</label>
-              <input class="full-width" />
-            </vaadin-form-item>
-          </vaadin-form-layout>
-
-          <style>
-            vaadin-form-layout {
-              --vaadin-form-layout-label-width: 200px;
-              --vaadin-form-layout-label-spacing: 50px;
-            }
-          </style>
-        `,
-        div,
-      );
-      await nextFrame();
+      await visualDiff(div, 'form-items-labels-aside-narrow-container');
     });
 
-    it('default', async () => {
-      await visualDiff(div, 'custom-css-properties-label');
+    it('custom CSS properties', async () => {
+      element.labelsAside = true;
+      element.style.setProperty('--vaadin-form-layout-label-width', '200px');
+      element.style.setProperty('--vaadin-form-layout-label-spacing', '50px');
+      await nextResize(element);
+      await visualDiff(div, 'form-items-custom-css-properties');
     });
   });
 });
