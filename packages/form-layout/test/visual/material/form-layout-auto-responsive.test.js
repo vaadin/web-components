@@ -1,19 +1,19 @@
-import { nextFrame } from '@vaadin/testing-helpers';
-import { fixtureSync } from '@vaadin/testing-helpers/dist/fixture.js';
+import { nextFrame, nextResize } from '@vaadin/testing-helpers';
+import { fixtureSync } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '../../../theme/material/vaadin-form-layout.js';
 import '../../../theme/material/vaadin-form-item.js';
 import '../../../theme/material/vaadin-form-row.js';
 
 describe('form-layout auto responsive', () => {
-  let div, element;
+  let container, element;
 
   beforeEach(() => {
-    div = document.createElement('div');
-    div.style.display = 'inline-block';
-    div.style.border = '10px solid #f3f3f3';
-    div.style.maxWidth = '100%';
-    div.style.boxSizing = 'border-box';
+    container = document.createElement('div');
+    container.style.display = 'inline-block';
+    container.style.border = '10px solid #f3f3f3';
+    container.style.maxWidth = '100%';
+    container.style.boxSizing = 'border-box';
   });
 
   describe('basic', () => {
@@ -27,58 +27,37 @@ describe('form-layout auto responsive', () => {
             <input placeholder="Phone" />
           </vaadin-form-layout>
         `,
-        div,
+        container,
       );
       await nextFrame();
     });
 
     it('basic', async () => {
-      await visualDiff(div, 'basic');
+      await visualDiff(container, 'basic');
     });
 
     it('maxColumns', async () => {
       element.autoRows = true;
-      element.maxColumns = 3;
-      await visualDiff(div, 'max-columns');
+      element.maxColumns = 2;
+      await nextResize(element);
+      await visualDiff(container, 'max-columns');
     });
 
     it('columnWidth', async () => {
       element.autoRows = true;
       element.maxColumns = 2;
-      element.columnWidth = '20em';
-      await visualDiff(div, 'column-width');
-    });
-  });
-
-  describe('custom CSS properties - spacing', () => {
-    beforeEach(async () => {
-      element = fixtureSync(
-        `
-          <vaadin-form-layout auto-responsive auto-rows max-columns="2">
-            <input placeholder="First name" />
-            <input placeholder="Last Name" />
-            <input placeholder="Email" />
-            <input placeholder="Phone" />
-          </vaadin-form-layout>
-
-          <style>
-            vaadin-form-layout {
-              --vaadin-form-layout-row-spacing: 4em;
-              --vaadin-form-layout-column-spacing: 4em;
-            }
-
-            input {
-              justify-self: stretch;
-            }
-          </style>
-        `,
-        div,
-      );
-      await nextFrame();
+      element.columnWidth = '320px';
+      await nextResize(element);
+      await visualDiff(container, 'column-width');
     });
 
-    it('default', async () => {
-      await visualDiff(div, 'custom-css-properties-spacing');
+    it('custom CSS properties', async () => {
+      element.autoRows = true;
+      element.maxColumns = 2;
+      element.style.setProperty('--vaadin-form-layout-row-spacing', '64px');
+      element.style.setProperty('--vaadin-form-layout-column-spacing', '64px');
+      await nextResize(element);
+      await visualDiff(container, 'custom-css-properties');
     });
   });
 
@@ -106,17 +85,17 @@ describe('form-layout auto responsive', () => {
             }
           </style>
         `,
-        div,
+        container,
       );
       await nextFrame();
     });
 
     it('default', async () => {
-      await visualDiff(div, 'explicit-rows');
+      await visualDiff(container, 'explicit-rows');
     });
   });
 
-  describe('auto rows', () => {
+  describe('autoRows', () => {
     beforeEach(async () => {
       element = fixtureSync(
         `
@@ -135,17 +114,17 @@ describe('form-layout auto responsive', () => {
             }
           </style>
         `,
-        div,
+        container,
       );
       await nextFrame();
     });
 
     it('default', async () => {
-      await visualDiff(div, 'auto-rows');
+      await visualDiff(container, 'auto-rows');
     });
   });
 
-  describe('auto rows with explicit rows', () => {
+  describe('autoRows with explicit rows', () => {
     beforeEach(async () => {
       element = fixtureSync(
         `
@@ -164,13 +143,13 @@ describe('form-layout auto responsive', () => {
             }
           </style>
         `,
-        div,
+        container,
       );
       await nextFrame();
     });
 
     it('default', async () => {
-      await visualDiff(div, 'auto-rows-with-explicit-rows');
+      await visualDiff(container, 'auto-rows-with-explicit-rows');
     });
   });
 

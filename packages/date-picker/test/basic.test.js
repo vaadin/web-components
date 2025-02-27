@@ -200,7 +200,6 @@ describe('basic features', () => {
 
     beforeEach(async () => {
       datePicker.i18n = {
-        ...datePicker.i18n,
         weekdays: ['sunnuntai', 'maanantai', 'tiistai', 'keskiviikko', 'torstai', 'perjantai', 'lauantai'],
         weekdaysShort: ['su', 'ma', 'ti', 'ke', 'to', 'pe', 'la'],
         firstDayOfWeek: 1,
