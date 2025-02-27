@@ -56,6 +56,35 @@ snapshots["vaadin-email-field host helper"] =
 `;
 /* end snapshot vaadin-email-field host helper */
 
+snapshots["vaadin-email-field host error"] = 
+`<vaadin-email-field
+  has-error-message=""
+  invalid=""
+>
+  <label
+    for="input-vaadin-email-field-3"
+    id="label-vaadin-email-field-0"
+    slot="label"
+  >
+  </label>
+  <div
+    id="error-message-vaadin-email-field-2"
+    slot="error-message"
+  >
+    Error
+  </div>
+  <input
+    aria-describedby="error-message-vaadin-email-field-2"
+    aria-invalid="true"
+    id="input-vaadin-email-field-3"
+    invalid=""
+    slot="input"
+    type="email"
+  >
+</vaadin-email-field>
+`;
+/* end snapshot vaadin-email-field host error */
+
 snapshots["vaadin-email-field shadow default"] = 
 `<div class="vaadin-field-container">
   <div part="label">
@@ -297,33 +326,4 @@ snapshots["vaadin-email-field shadow theme"] =
 </slot>
 `;
 /* end snapshot vaadin-email-field shadow theme */
-
-snapshots["vaadin-email-field host error"] = 
-`<vaadin-email-field
-  has-error-message=""
-  invalid=""
->
-  <label
-    for="input-vaadin-email-field-3"
-    id="label-vaadin-email-field-0"
-    slot="label"
-  >
-  </label>
-  <div
-    id="error-message-vaadin-email-field-2"
-    slot="error-message"
-  >
-    Error
-  </div>
-  <input
-    aria-describedby="error-message-vaadin-email-field-2"
-    aria-invalid="true"
-    id="input-vaadin-email-field-3"
-    invalid=""
-    slot="input"
-    type="email"
-  >
-</vaadin-email-field>
-`;
-/* end snapshot vaadin-email-field host error */
 

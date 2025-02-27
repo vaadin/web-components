@@ -46,6 +46,11 @@ describe('vaadin-login-form', () => {
       await expect(form).dom.to.equalSnapshot();
     });
 
+    it('i18n-partial', async () => {
+      form.i18n = { form: { forgotPassword: 'Custom forgot password' } };
+      await expect(form).dom.to.equalSnapshot();
+    });
+
     it('i18n-required', async () => {
       form.i18n = I18N_FINNISH;
       form.querySelectorAll('[required]').forEach((el) => {

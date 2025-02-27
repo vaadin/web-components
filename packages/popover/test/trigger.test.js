@@ -187,6 +187,13 @@ describe('trigger', () => {
       expect(overlay.opened).to.be.false;
     });
 
+    it('should not open on target focusout after focusin', async () => {
+      focusin(target);
+      focusout(target);
+      await nextRender();
+      expect(overlay.opened).to.be.false;
+    });
+
     it('should not close on target focusout to the overlay', async () => {
       focusin(target);
       await nextRender();

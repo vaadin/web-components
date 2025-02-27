@@ -127,35 +127,6 @@ snapshots["vaadin-upload host max files"] =
 `;
 /* end snapshot vaadin-upload host max files */
 
-snapshots["vaadin-upload shadow default"] = 
-`<div part="primary-buttons">
-  <slot name="add-button">
-  </slot>
-  <div
-    aria-hidden="true"
-    id="dropLabelContainer"
-    part="drop-label"
-  >
-    <slot name="drop-label-icon">
-    </slot>
-    <slot name="drop-label">
-    </slot>
-  </div>
-</div>
-<slot name="file-list">
-</slot>
-<slot>
-</slot>
-<input
-  accept=""
-  hidden=""
-  id="fileInput"
-  multiple=""
-  type="file"
->
-`;
-/* end snapshot vaadin-upload shadow default */
-
 snapshots["vaadin-upload host disabled"] = 
 `<vaadin-upload disabled="">
   <vaadin-button
@@ -222,4 +193,33 @@ snapshots["vaadin-upload host disabled"] =
 </vaadin-upload>
 `;
 /* end snapshot vaadin-upload host disabled */
+
+snapshots["vaadin-upload shadow default"] = 
+`<div part="primary-buttons">
+  <slot name="add-button">
+  </slot>
+  <div
+    aria-hidden="true"
+    id="dropLabelContainer"
+    part="drop-label"
+  >
+    <slot name="drop-label-icon">
+    </slot>
+    <slot name="drop-label">
+    </slot>
+  </div>
+</div>
+<slot name="file-list">
+</slot>
+<slot>
+</slot>
+<input
+  accept=""
+  hidden=""
+  id="fileInput"
+  multiple=""
+  type="file"
+>
+`;
+/* end snapshot vaadin-upload shadow default */
 
