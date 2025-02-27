@@ -408,6 +408,7 @@ export const FormLayoutMixin = (superClass) =>
           const isParentFormRow = parentElement.localName === 'vaadin-form-row';
           const isBreakLine = child.localName === 'br';
           const isHidden = isElementHidden(child);
+          const isFirstColumn = getComputedStyle(child).gridColumnStart === '1';
 
           const colspan = child.getAttribute('colspan') || child.getAttribute('data-colspan');
           if (colspan) {
@@ -417,7 +418,11 @@ export const FormLayoutMixin = (superClass) =>
           }
 
           // Calculate the number of columns in the row
-          if ((isParentFormRow && formRowParent !== parentElement) || (!isParentFormRow && resetColumn)) {
+          if (
+            (isParentFormRow && formRowParent !== parentElement) ||
+            (!isParentFormRow && resetColumn) ||
+            isFirstColumn
+          ) {
             maxColumns = Math.max(maxColumns, columnCount);
             columnCount = 0;
             if (isParentFormRow) {
