@@ -159,15 +159,7 @@ describe('form-layout auto responsive', () => {
         `
           <vaadin-form-layout auto-responsive auto-rows max-columns="2">
             <vaadin-form-item>
-              <label slot="label">First name</label>
-              <input />
-            </vaadin-form-item>
-            <vaadin-form-item>
-              <label slot="label">Last name</label>
-              <input />
-            </vaadin-form-item>
-            <vaadin-form-item>
-              <label slot="label">Email</label>
+              <label slot="label">A short label</label>
               <input />
             </vaadin-form-item>
             <vaadin-form-item>
@@ -175,6 +167,13 @@ describe('form-layout auto responsive', () => {
               <input />
             </vaadin-form-item>
           </vaadin-form-layout>
+
+          <style>
+            input {
+              width: 100%;
+              box-sizing: border-box;
+            }
+          </style>
         `,
         container,
       );
@@ -185,25 +184,26 @@ describe('form-layout auto responsive', () => {
       await visualDiff(container, 'form-items');
     });
 
-    it('labelsAside', async () => {
-      element.labelsAside = true;
-      await nextResize(element);
-      await visualDiff(container, 'form-items-labels-aside');
-    });
-
-    it('labelsAside in very narrow container', async () => {
-      container.style.width = `calc(${element.columnWidth} + 20px)`;
+    it('labelsAside in narrow container', async () => {
+      container.style.width = `calc(${element.columnWidth} + 6em)`;
       element.labelsAside = true;
       await nextResize(element);
       await visualDiff(container, 'form-items-labels-aside-narrow-container');
     });
 
-    it('custom CSS properties', async () => {
+    it('labelsAside in wide container', async () => {
+      container.style.width = '50em';
+      element.labelsAside = true;
+      await nextResize(element);
+      await visualDiff(container, 'form-items-labels-aside-wide-container');
+    });
+
+    it('labelsAside + custom CSS properties', async () => {
       element.labelsAside = true;
       element.style.setProperty('--vaadin-form-layout-label-width', '200px');
-      element.style.setProperty('--vaadin-form-layout-label-spacing', '50px');
+      element.style.setProperty('--vaadin-form-layout-label-spacing', '60px');
       await nextResize(element);
-      await visualDiff(container, 'form-items-custom-css-properties');
+      await visualDiff(container, 'form-items-labels-aside-custom-css-properties');
     });
   });
 });
