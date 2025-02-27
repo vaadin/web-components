@@ -171,13 +171,13 @@ describe('form-layout auto responsive', () => {
             }
           </style>
       `,
-        div,
+        container,
       );
       await nextFrame();
     });
 
     it('default', async () => {
-      await visualDiff(div, 'colspan');
+      await visualDiff(container, 'colspan');
     });
   });
 
@@ -205,13 +205,13 @@ describe('form-layout auto responsive', () => {
             }
           </style>
       `,
-        div,
+        container,
       );
       await nextFrame();
     });
 
     it('default', async () => {
-      await visualDiff(div, 'colspan-with-explicit-rows');
+      await visualDiff(container, 'colspan-with-explicit-rows');
     });
   });
 });
