@@ -47,7 +47,7 @@ export const LoginOverlayMixin = (superClass) =>
     }
 
     static get observers() {
-      return ['__i18nChanged(i18n)'];
+      return ['__i18nChanged(__effectiveI18n)'];
     }
 
     /** @protected */
@@ -77,8 +77,8 @@ export const LoginOverlayMixin = (superClass) =>
     }
 
     /** @private */
-    __i18nChanged(i18n) {
-      const header = i18n && i18n.header;
+    __i18nChanged(effectiveI18n) {
+      const header = effectiveI18n && effectiveI18n.header;
       if (!header) {
         return;
       }
