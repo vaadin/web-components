@@ -4,7 +4,7 @@ export const snapshots = {};
 snapshots["vaadin-form-layout auto-responsive basic host default"] = 
 `<vaadin-form-layout
   auto-responsive=""
-  style="--_column-width: 13em; --_max-columns: 4;"
+  style="--_column-width: 13em; --_max-columns: 1;"
 >
   <input placeholder="First name">
   <input placeholder="Last name">
@@ -30,7 +30,7 @@ snapshots["vaadin-form-layout auto-responsive basic host maxColumns"] =
 snapshots["vaadin-form-layout auto-responsive basic host columnWidth"] = 
 `<vaadin-form-layout
   auto-responsive=""
-  style="--_column-width: 15em; --_max-columns: 4;"
+  style="--_column-width: 15em; --_max-columns: 1;"
 >
   <input placeholder="First name">
   <input placeholder="Last name">
