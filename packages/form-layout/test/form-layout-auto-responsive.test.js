@@ -214,7 +214,7 @@ describe('form-layout auto responsive', () => {
             auto-responsive
             max-columns="2"
             column-width="10em" 
-            style="--vaadin-form-layout-column-spacing: 0px;
+            style="--vaadin-form-layout-column-spacing: 0px;"
           >
             <vaadin-form-row>
               <input placeholder="First name">
@@ -242,7 +242,7 @@ describe('form-layout auto responsive', () => {
       it('should calculate max columns based on explicit rows', async () => {
         layout.maxColumns = 10;
         await nextFrame();
-        assertFormLayoutGrid(layout, { columns: 3, rows: 2 });
+        expect(getComputedStyle(layout.$.layout).getPropertyValue('--_max-columns')).to.equal('3');
       });
 
       it('should account for line-breaks when calculating max columns', async () => {
