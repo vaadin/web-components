@@ -454,7 +454,8 @@ export const FormLayoutMixin = (superClass) =>
       this.style.setProperty('--_max-columns', Math.min(maxColumns, this.maxColumns));
     }
 
-    get _renderedColumnCount() {
+    /** @private */
+    get __renderedColumnCount() {
       // Calculate the number of rendered columns, excluding CSS grid auto columns (0px)
       const { gridTemplateColumns } = getComputedStyle(this.$.layout);
       return gridTemplateColumns.split(' ').filter((width) => width !== '0px').length;

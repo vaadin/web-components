@@ -163,7 +163,7 @@ describe('form-layout auto responsive', () => {
       expect(getComputedStyle(layout.children[4]).gridColumnEnd).to.equal('span 2');
     });
 
-    it('should cap colspan if the layout get smaller', async () => {
+    it('should adjust colspan when container size changes, async () => {
       container.style.width = '100px';
       await nextResize(layout);
       expect(getComputedStyle(layout.children[4]).gridColumnEnd).to.equal('span 1');
@@ -207,7 +207,7 @@ describe('form-layout auto responsive', () => {
       });
     });
 
-    describe('explicity rows', () => {
+    describe('explicit rows', () => {
       beforeEach(async () => {
         layout = fixtureSync(`
           <vaadin-form-layout
