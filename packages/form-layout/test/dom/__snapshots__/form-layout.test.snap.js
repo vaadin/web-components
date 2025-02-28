@@ -62,7 +62,15 @@ snapshots["vaadin-form-layout auto-responsive basic shadow default"] =
 `;
 /* end snapshot vaadin-form-layout auto-responsive basic shadow default */
 
-snapshots["vaadin-form-layout auto-responsive basic shadow labelsAside"] = 
+snapshots["vaadin-form-layout auto-responsive basic shadow labelsAside in narrow container"] = 
+`<div id="layout">
+  <slot id="slot">
+  </slot>
+</div>
+`;
+/* end snapshot vaadin-form-layout auto-responsive basic shadow labelsAside in narrow container */
+
+snapshots["vaadin-form-layout auto-responsive basic shadow labelsAside in wide container"] = 
 `<div
   fits-labels-aside=""
   id="layout"
@@ -71,15 +79,7 @@ snapshots["vaadin-form-layout auto-responsive basic shadow labelsAside"] =
   </slot>
 </div>
 `;
-/* end snapshot vaadin-form-layout auto-responsive basic shadow labelsAside */
-
-snapshots["vaadin-form-layout auto-responsive basic shadow labelsAside with too narrow layout"] = 
-`<div id="layout">
-  <slot id="slot">
-  </slot>
-</div>
-`;
-/* end snapshot vaadin-form-layout auto-responsive basic shadow labelsAside with too narrow layout */
+/* end snapshot vaadin-form-layout auto-responsive basic shadow labelsAside in wide container */
 
 snapshots["vaadin-form-layout auto-responsive autoRows default"] = 
 `<vaadin-form-layout
