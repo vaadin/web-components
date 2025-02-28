@@ -245,7 +245,6 @@ describe('form-layout auto responsive', () => {
             auto-responsive
             auto-rows
             column-width="10em"
-            style="--vaadin-form-layout-column-spacing: 0px;"
           >
             <input placeholder="First name">
             <input placeholder="Last Name">
@@ -275,7 +274,6 @@ describe('form-layout auto responsive', () => {
             auto-responsive
             max-columns="2"
             column-width="10em" 
-            style="--vaadin-form-layout-column-spacing: 0px;"
           >
             <vaadin-form-row>
               <input placeholder="First name">
