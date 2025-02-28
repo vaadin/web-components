@@ -153,6 +153,60 @@ describe('form-layout auto responsive', () => {
     });
   });
 
+  describe('form items', () => {
+    beforeEach(async () => {
+      element = fixtureSync(
+        `
+          <vaadin-form-layout auto-responsive auto-rows max-columns="2">
+            <vaadin-form-item>
+              <label slot="label">A short label</label>
+              <input />
+            </vaadin-form-item>
+            <vaadin-form-item>
+              <label slot="label">A long label that wraps across multiple lines</label>
+              <input />
+            </vaadin-form-item>
+          </vaadin-form-layout>
+
+          <style>
+            input {
+              width: 100%;
+              box-sizing: border-box;
+            }
+          </style>
+        `,
+        container,
+      );
+      await nextFrame();
+    });
+
+    it('default', async () => {
+      await visualDiff(container, 'form-items');
+    });
+
+    it('labelsAside in narrow container', async () => {
+      container.style.width = `calc(${element.columnWidth} + 6em)`;
+      element.labelsAside = true;
+      await nextResize(element);
+      await visualDiff(container, 'form-items-labels-aside-narrow-container');
+    });
+
+    it('labelsAside in wide container', async () => {
+      container.style.width = '50em';
+      element.labelsAside = true;
+      await nextResize(element);
+      await visualDiff(container, 'form-items-labels-aside-wide-container');
+    });
+
+    it('labelsAside + custom CSS properties', async () => {
+      element.labelsAside = true;
+      element.style.setProperty('--vaadin-form-layout-label-width', '200px');
+      element.style.setProperty('--vaadin-form-layout-label-spacing', '60px');
+      await nextResize(element);
+      await visualDiff(container, 'form-items-labels-aside-custom-css-properties');
+    });
+  });
+
   describe('colspan', () => {
     beforeEach(async () => {
       element = fixtureSync(
@@ -170,7 +224,7 @@ describe('form-layout auto responsive', () => {
               justify-self: stretch;
             }
           </style>
-      `,
+        `,
         container,
       );
       await nextFrame();
