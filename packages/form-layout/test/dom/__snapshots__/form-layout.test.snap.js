@@ -96,7 +96,7 @@ snapshots["vaadin-form-layout auto-responsive autoRows default"] =
   >
   <input
     placeholder="Email"
-    style="--_column-start: 1;"
+    style="--_grid-colstart: 1;"
   >
   <input placeholder="Phone">
 </vaadin-form-layout>

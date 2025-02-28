@@ -429,10 +429,10 @@ export const FormLayoutMixin = (superClass) =>
           }
 
           if (resetColumn && !isElementHidden(child) && parentElement.localName !== 'vaadin-form-row') {
-            child.style.setProperty('--_column-start', 1);
+            child.style.setProperty('--_grid-colstart', 1);
             resetColumn = false;
           } else {
-            child.style.removeProperty('--_column-start');
+            child.style.removeProperty('--_grid-colstart');
           }
         });
     }

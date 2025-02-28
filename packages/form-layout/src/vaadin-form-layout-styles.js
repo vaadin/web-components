@@ -98,7 +98,7 @@ export const formLayoutStyles = css`
   }
 
   :host([auto-responsive][auto-rows]) #layout ::slotted(*) {
-    grid-column-start: var(--_column-start, auto);
+    grid-column-start: var(--_grid-colstart, auto);
   }
 
   :host([auto-responsive][labels-aside]) #layout {
