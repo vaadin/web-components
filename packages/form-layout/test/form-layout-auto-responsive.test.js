@@ -229,6 +229,9 @@ describe('form-layout auto responsive', () => {
       container.style.width = '100px';
       await nextResize(layout);
       expect(getComputedStyle(layout.children[4]).gridColumnEnd).to.equal('span 1');
+      container.style.width = '500px';
+      await nextResize(layout);
+      expect(getComputedStyle(layout.children[4]).gridColumnEnd).to.equal('span 2');
     });
 
     it('should be able to define colspan with data-colspan attribute', async () => {
