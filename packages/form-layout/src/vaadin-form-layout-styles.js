@@ -133,6 +133,14 @@ export const formLayoutStyles = css`
     /* Allow the layout to take up full available width of the parent element. */
     flex-grow: 1;
   }
+
+  :host([auto-responsive][fit-fields]) #layout {
+    justify-items: stretch;
+  }
+
+  :host([auto-responsive][fit-fields]) #layout ::slotted(*) {
+    --_form-item-fit-fields: 1;
+  }
 `;
 
 export const formRowStyles = css`
@@ -191,9 +199,15 @@ export const formItemStyles = css`
     flex: 1 1 auto;
   }
 
-  #content ::slotted(.full-width) {
+  #content ::slotted(*) {
     box-sizing: border-box;
-    width: 100%;
-    min-width: 0;
+    /* Sets width to 100% if fit-fields is on */
+    width: calc(100% * var(--_form-item-fit-fields));
+    /* Sets min-width to 0 if fit-fields is on */
+    min-width: calc(1 - var(--_form-item-fit-fields));
+  }
+
+  #content ::slotted(.full-width) {
+    --_form-item-fit-fields: 1;
   }
 `;

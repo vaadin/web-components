@@ -182,6 +182,20 @@ export const FormLayoutMixin = (superClass) =>
         },
 
         /**
+         * When `autoResponsive` is enabled, specifies whether fields should stretch
+         * to fill up the available space within a column. This setting also applies
+         * to fields inside `<vaadin-form-item>` elements. The default value is `false`.
+         *
+         * @attr {boolean} fit-fields
+         */
+        fitFields: {
+          type: Boolean,
+          sync: true,
+          value: false,
+          reflectToAttribute: true,
+        },
+
+        /**
          * Current number of columns in the layout
          * @private
          */
