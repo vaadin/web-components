@@ -233,6 +233,18 @@ describe('form-layout auto responsive', () => {
     it('default', async () => {
       await visualDiff(container, 'colspan');
     });
+
+    it('colspan in narrow container', async () => {
+      container.style.width = `calc(${element.columnWidth} + 6em)`;
+      await nextResize(element);
+      await visualDiff(container, 'colspan-narrow-container');
+    });
+
+    it('colspan in wide container', async () => {
+      container.style.width = '50em';
+      await nextResize(element);
+      await visualDiff(container, 'colspan-wide-container');
+    });
   });
 
   describe('colspan with explicit rows', () => {
