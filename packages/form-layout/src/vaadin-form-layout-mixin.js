@@ -172,7 +172,7 @@ export const FormLayoutMixin = (superClass) =>
          * many fixed-width (`columnWidth`) columns as possible within the `maxColumns`
          * limit. The default value is `false`.
          *
-         * @attr {string} expand-columns
+         * @attr {boolean} expand-columns
          */
         expandColumns: {
           type: Boolean,
