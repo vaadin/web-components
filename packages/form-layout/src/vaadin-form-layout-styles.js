@@ -61,7 +61,8 @@ export const formLayoutStyles = css`
     --_grid-column-max-total-width: calc(var(--_max-columns) * var(--_column-width-labels-above));
 
     display: grid;
-    grid-template-columns: repeat(auto-fit, var(--_grid-column-width));
+    grid-template-columns: repeat(auto-fill, var(--_grid-column-width));
+    grid-auto-columns: 0;
     justify-items: start;
     gap: var(--vaadin-form-layout-row-spacing) var(--_grid-column-gap);
 
@@ -94,8 +95,6 @@ export const formLayoutStyles = css`
     grid-column: 1 / span min(var(--_colspan, 1), var(--_rendered-column-count));
     --_form-item-labels-above: initial; /* true */
     --_form-item-labels-aside: ' '; /* false */
-
-    grid-column-start: 1;
   }
 
   :host([auto-responsive][auto-rows]) #layout ::slotted(*) {

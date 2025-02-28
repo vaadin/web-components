@@ -14,6 +14,15 @@ function isValidCSSLength(value) {
 }
 
 /**
+ * Check if the node is a line break element.
+ * @param {HTMLElement} el
+ * @return {boolean}
+ */
+function isBreakLine(el) {
+  return el.localName === 'br';
+}
+
+/**
  * @polymerMixin
  * @mixes ResizeMixin
  */
@@ -412,68 +421,60 @@ export const FormLayoutMixin = (superClass) =>
 
     /** @private */
     __updateCSSGridLayout() {
-      let resetColumn = false;
       let columnCount = 0;
       let maxColumns = 0;
-      let formRowParent = null;
 
-      this.$.layout.style.setProperty('--_rendered-column-count', this._renderedColumnCount);
+      this.$.layout.style.setProperty('--_rendered-column-count', this.__renderedColumnCount);
       const fitsLabelsAside = this.offsetWidth >= this.__columnWidthWithLabelsAside;
       this.$.layout.toggleAttribute('fits-labels-aside', this.labelsAside && fitsLabelsAside);
 
-      [...this.children]
-        .flatMap((child) => {
-          return child.localName === 'vaadin-form-row' ? [...child.children] : child;
-        })
-        .forEach((child) => {
-          const { parentElement } = child;
-          const isParentFormRow = parentElement.localName === 'vaadin-form-row';
-          const isBreakLine = child.localName === 'br';
-          const isHidden = isElementHidden(child);
-          const isFirstColumn = getComputedStyle(child).gridColumnStart === '1';
+      this.__children
+        .filter((child) => isBreakLine(child) || !isElementHidden(child))
+        .forEach((child, index, children) => {
+          const prevChild = children[index - 1];
 
-          const colspan = child.getAttribute('colspan') || child.getAttribute('data-colspan');
-          if (colspan) {
-            child.style.setProperty('--_colspan', colspan);
-          } else {
-            child.style.removeProperty('--_colspan');
-          }
-
-          // Calculate the number of columns in the row
-          if (
-            (isParentFormRow && formRowParent !== parentElement) ||
-            (!isParentFormRow && resetColumn) ||
-            isFirstColumn
-          ) {
-            maxColumns = Math.max(maxColumns, columnCount);
+          if (isBreakLine(child)) {
             columnCount = 0;
-            if (isParentFormRow) {
-              formRowParent = parentElement;
-            }
-          }
-
-          // Do not count break lines and hidden elements
-          if (!isBreakLine && !isHidden) {
-            const colspanValue = colspan ? parseInt(colspan) : 1;
-            columnCount += colspanValue;
-          }
-
-          if (isBreakLine || isParentFormRow) {
-            resetColumn = true;
             return;
           }
 
-          if (resetColumn && !isElementHidden(child) && parentElement.localName !== 'vaadin-form-row') {
+          if (
+            (prevChild && prevChild.parentElement !== child.parentElement) ||
+            (!this.autoRows && child.parentElement === this)
+          ) {
+            columnCount = 0;
+          }
+
+          if (columnCount === 0) {
             child.style.setProperty('--_grid-colstart', 1);
-            resetColumn = false;
           } else {
             child.style.removeProperty('--_grid-colstart');
           }
+
+          const colspan = child.getAttribute('colspan') || child.getAttribute('data-colspan');
+          if (colspan) {
+            columnCount += parseInt(colspan);
+            child.style.setProperty('--_colspan', colspan);
+          } else {
+            columnCount += 1;
+            child.style.removeProperty('--_colspan');
+          }
+
+          maxColumns = Math.max(maxColumns, columnCount);
         });
 
-      maxColumns = Math.max(maxColumns, columnCount);
+      this.__children.filter(isElementHidden).forEach((child) => {
+        child.style.removeProperty('--_grid-colstart');
+      });
 
       this.style.setProperty('--_max-columns', Math.min(maxColumns, this.maxColumns));
+    }
+
+    /** @private */
+    get __children() {
+      return [...this.children].flatMap((child) => {
+        return child.localName === 'vaadin-form-row' ? [...child.children] : child;
+      });
     }
 
     /** @private */
