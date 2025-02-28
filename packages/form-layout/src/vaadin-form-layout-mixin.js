@@ -445,7 +445,7 @@ export const FormLayoutMixin = (superClass) =>
             columnCount = 0;
           }
 
-          if (columnCount === 0) {
+          if (this.autoRows && columnCount === 0) {
             child.style.setProperty('--_grid-colstart', 1);
           } else {
             child.style.removeProperty('--_grid-colstart');
