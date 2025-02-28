@@ -90,4 +90,31 @@ describe('grid in context-menu', () => {
       expect(focusSpy.called).to.be.false;
     });
   });
+
+  describe('using keyboard', () => {
+    it('should position the context menu to the bottom left of the cell where the context menu was triggered', async () => {
+      // Ensure isKeyboardActive() returns true
+      fire(window, 'keydown', { key: 'Enter', keyCode: 13 });
+
+      // Fire contextmenu event on a cell, with intentionally wrong coordinates
+      // Reproduces an issue in Firefox, which reports wrong coordinates when
+      // contextmenu is triggered through keyboard when a cell is focused
+      const cell = getCell(grid, 1, 1);
+      fire(cell, 'contextmenu', undefined, {
+        composed: true,
+        bubbles: true,
+        clientX: 0,
+        clientY: 0,
+      });
+      await overlayOpened(contextMenu);
+
+      // Actual position should be close to the center of the cell
+      const cellRect = cell.getBoundingClientRect();
+      const overlay = contextMenu._overlayElement;
+      const overlayRect = overlay.getBoundingClientRect();
+
+      expect(overlayRect.left).to.closeTo(cellRect.left, 5);
+      expect(overlayRect.top).to.closeTo(cellRect.bottom, 5);
+    });
+  });
 });
