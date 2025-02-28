@@ -59,9 +59,10 @@ export const formLayoutStyles = css`
     --_grid-column-width: var(--_column-width-labels-above);
     --_grid-column-max-total-gap: calc((var(--_max-columns) - 1) * var(--_grid-column-gap));
     --_grid-column-max-total-width: calc(var(--_max-columns) * var(--_column-width-labels-above));
+    --_grid-repeat: var(--_grid-column-width);
 
     display: grid;
-    grid-template-columns: repeat(auto-fit, var(--_grid-column-width));
+    grid-template-columns: repeat(auto-fit, var(--_grid-repeat));
     justify-items: start;
     gap: var(--vaadin-form-layout-row-spacing) var(--_grid-column-gap);
 
@@ -94,6 +95,7 @@ export const formLayoutStyles = css`
     --_form-item-labels-above: initial; /* true */
     --_form-item-labels-aside: ' '; /* false */
 
+    /* By default, place each child on a new row */
     grid-column-start: 1;
   }
 
@@ -112,6 +114,24 @@ export const formLayoutStyles = css`
   :host([auto-responsive][labels-aside]) #layout[fits-labels-aside] ::slotted(*) {
     --_form-item-labels-above: ' '; /* false */
     --_form-item-labels-aside: initial; /* true */
+  }
+
+  :host([auto-responsive][expand-columns]) #layout {
+    /*
+      The "min" value in minmax ensures that once "maxColumns" is reached, the grid stops adding
+      new columns and instead expands the existing ones evenly to fill the available space.
+
+      The "max" value in minmax allows CSS grid columns to grow and evenly distribute any space
+      that remains when there isn't room for an additional column and "maxColumns" hasn't been
+      reached yet.
+    */
+    --_grid-repeat: minmax(
+      max(var(--_grid-column-width), calc((100% - var(--_grid-column-max-total-gap)) / var(--_max-columns))),
+      1fr
+    );
+
+    /* Allow the layout to take up full available width of the parent element. */
+    flex-grow: 1;
   }
 `;
 
