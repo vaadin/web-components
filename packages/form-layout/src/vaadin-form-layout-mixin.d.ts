@@ -109,6 +109,21 @@ export declare class FormLayoutMixinClass {
   autoRows: boolean;
 
   /**
+   * When enabled with `autoResponsive`, `<vaadin-form-item>` prefers positioning
+   * labels beside the fields. If the layout is too narrow to fit a single column
+   * with side labels, they revert to their default position above the fields.
+   *
+   * To customize the label width and the gap between the label and the field,
+   * use the following CSS properties:
+   *
+   * - `--vaadin-form-layout-label-width`
+   * - `--vaadin-form-layout-label-spacing`
+   *
+   * @attr {boolean} labels-aside
+   */
+  labelsAside: boolean;
+
+  /**
    * Update the layout.
    */
   protected _updateLayout(): void;

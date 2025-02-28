@@ -147,6 +147,26 @@ export const FormLayoutMixin = (superClass) =>
         },
 
         /**
+         * When enabled with `autoResponsive`, `<vaadin-form-item>` prefers positioning
+         * labels beside the fields. If the layout is too narrow to fit a single column
+         * with side labels, they revert to their default position above the fields.
+         *
+         * To customize the label width and the gap between the label and the field,
+         * use the following CSS properties:
+         *
+         * - `--vaadin-form-layout-label-width`
+         * - `--vaadin-form-layout-label-spacing`
+         *
+         * @attr {boolean} labels-aside
+         */
+        labelsAside: {
+          type: Boolean,
+          sync: true,
+          value: false,
+          reflectToAttribute: true,
+        },
+
+        /**
          * Current number of columns in the layout
          * @private
          */
@@ -392,8 +412,10 @@ export const FormLayoutMixin = (superClass) =>
 
     /** @private */
     __updateCSSGridLayout() {
-      let resetColumn = false;
+      const fitsLabelsAside = this.offsetWidth >= this.__columnWidthWithLabelsAside;
+      this.$.layout.toggleAttribute('fits-labels-aside', this.labelsAside && fitsLabelsAside);
 
+      let resetColumn = false;
       [...this.children]
         .flatMap((child) => {
           return child.localName === 'vaadin-form-row' ? [...child.children] : child;
@@ -447,5 +469,11 @@ export const FormLayoutMixin = (superClass) =>
       } else {
         this.style.removeProperty('--_max-columns');
       }
+    }
+
+    /** @private */
+    get __columnWidthWithLabelsAside() {
+      const { backgroundPositionY } = getComputedStyle(this.$.layout, '::before');
+      return parseFloat(backgroundPositionY);
     }
   };
