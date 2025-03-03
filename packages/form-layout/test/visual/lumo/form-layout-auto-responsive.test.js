@@ -145,7 +145,7 @@ describe('form-layout auto responsive', () => {
     beforeEach(async () => {
       element = fixtureSync(
         `
-          <vaadin-form-layout auto-responsive auto-rows max-columns="2">
+          <vaadin-form-layout auto-responsive auto-rows>
             <vaadin-form-item>
               <label slot="label">A short label</label>
               <input />
