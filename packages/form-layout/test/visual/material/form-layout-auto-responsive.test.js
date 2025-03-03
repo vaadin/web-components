@@ -184,6 +184,20 @@ describe('form-layout auto responsive', () => {
       await visualDiff(container, 'form-items');
     });
 
+    it('expandColumns in narrow container', async () => {
+      container.style.width = `calc(${element.columnWidth} + 6em)`;
+      element.expandColumns = true;
+      await nextResize(element);
+      await visualDiff(container, 'form-items-expand-columns-narrow-container');
+    });
+
+    it('expandColumns in wide container', async () => {
+      container.style.width = '50em';
+      element.expandColumns = true;
+      await nextResize(element);
+      await visualDiff(container, 'form-items-expand-columns-wide-container');
+    });
+
     it('labelsAside in narrow container', async () => {
       container.style.width = `calc(${element.columnWidth} + 6em)`;
       element.labelsAside = true;
@@ -196,6 +210,22 @@ describe('form-layout auto responsive', () => {
       element.labelsAside = true;
       await nextResize(element);
       await visualDiff(container, 'form-items-labels-aside-wide-container');
+    });
+
+    it('labelsAside + expandColumns in narrow container', async () => {
+      container.style.width = `calc(${element.columnWidth} + 6em)`;
+      element.labelsAside = true;
+      element.expandColumns = true;
+      await nextResize(element);
+      await visualDiff(container, 'form-items-labels-aside-expand-columns-narrow-container');
+    });
+
+    it('labelsAside + expandColumns in wide container', async () => {
+      container.style.width = '50em';
+      element.labelsAside = true;
+      element.expandColumns = true;
+      await nextResize(element);
+      await visualDiff(container, 'form-items-labels-aside-expand-columns-wide-container');
     });
 
     it('labelsAside + custom CSS properties', async () => {

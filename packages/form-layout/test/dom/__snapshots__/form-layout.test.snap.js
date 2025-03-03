@@ -54,6 +54,20 @@ snapshots["vaadin-form-layout auto-responsive basic host labelsAside"] =
 `;
 /* end snapshot vaadin-form-layout auto-responsive basic host labelsAside */
 
+snapshots["vaadin-form-layout auto-responsive basic host expandColumns"] = 
+`<vaadin-form-layout
+  auto-responsive=""
+  expand-columns=""
+  style="--_column-width: 13em; --_max-columns: 10;"
+>
+  <input placeholder="First name">
+  <input placeholder="Last name">
+  <input placeholder="Email">
+  <input placeholder="Phone">
+</vaadin-form-layout>
+`;
+/* end snapshot vaadin-form-layout auto-responsive basic host expandColumns */
+
 snapshots["vaadin-form-layout auto-responsive basic shadow default"] = 
 `<div
   id="layout"
