@@ -95,10 +95,11 @@ registerStyles('vaadin-form-layout', formLayoutStyles, { moduleId: 'vaadin-form-
  *
  * ### Auto Responsive Mode
  *
- * To avoid manually dealing with responsive breakpoints, FormLayout provides an auto-responsive mode
+ * To avoid manually dealing with responsive breakpoints, Form Layout provides an auto-responsive mode
  * that automatically creates and adjusts fixed-width columns based on the container's available space.
- * The {@link columnWidth} and {@link maxColumns} properties can be used to configure the desired column
- * width (13em by default) and the maximum number of columns (10 by default).
+ * The [`columnWidth`](#/elements/vaadin-form-layout#property-columnWidth) and
+ * [`maxColumns`](#/elements/vaadin-form-layout#property-maxColumns) properties control the column width
+ * (13em by default) and the maximum number of columns (10 by default) that the Form Layout can create.
  *
  * ```html
  * <vaadin-form-layout auto-responsive>
@@ -108,14 +109,15 @@ registerStyles('vaadin-form-layout', formLayoutStyles, { moduleId: 'vaadin-form-
  * </vaadin-form-layout>
  * ```
  *
- * #### Organizing rows
+ * #### Organizing Fields into Rows
  *
  * By default, each field is placed on a new row. To organize fields into rows, you can either:
  *
- * 1. Manually wrap fields into `<vaadin-form-row>` elements.
+ * 1. Manually wrap fields into [`<vaadin-form-row>`](#/elements/vaadin-form-row) elements.
  *
- * 2. Enable the {@link autoRows} property to automatically arrange fields in available columns,
- *    wrapping to a new row when necessary. `<br>` elements can be used to force a new row.
+ * 2. Enable the [`autoRows`](#/elements/vaadin-form-layout#property-autoRows) property to
+ *    let Form Layout automatically arrange fields in available columns, wrapping to a new
+ *    row when necessary. `<br>` elements can be used to force a new row.
  *
  * Here is an example of using `<vaadin-form-row>`:
  *
@@ -131,21 +133,23 @@ registerStyles('vaadin-form-layout', formLayoutStyles, { moduleId: 'vaadin-form-
  * </vaadin-form-layout>
  * ```
  *
- * #### Expanding columns
+ * #### Expanding Columns and Fields
  *
- * FormLayout can be configured to evenly expand columns to fill any remaining space after all
- * columns have been created. To enable this, set the {@link expandColumns} property to `true`.
+ * You can configure Form Layout to expand columns to evenly fill any remaining space after
+ * all fixed-width columns have been created.
+ * To enable this, set the [`expandColumns`](#/elements/vaadin-form-layout#property-expandColumns)
+ * property to `true`.
  *
- * #### Fitting fields
+ * Also, Form Layout can stretch fields to make them take up all available space within columns.
+ * To enable this, set the [`expandFields`](#/elements/vaadin-form-layout#property-expandFields)
+ * property to `true`.
  *
- * FormLayout can stretch fields to fit the width of the column. To enable this behavior, set the
- * {@link fitFields} property to `true`.
+ * #### Customizing Label Position
  *
- * #### Label position
- *
- * By default, FormLayout displays labels above the fields. To position labels beside fields, you
- * need to wrap each field in `<vaadin-form-item>` elements and define its labels on the wrapper.
- * Then, you can enable the {@link labelsAside} property:
+ * By default, Form Layout displays labels above the fields. To position labels beside fields, you
+ * need to wrap each field in a `<vaadin-form-item>` element and define its labels on the wrapper.
+ * Then, you can enable the [`labelsAside`](#/elements/vaadin-form-layout#property-labelsAside)
+ * property:
  *
  * ```html
  * <vaadin-form-layout auto-responsive labels-aside>
@@ -168,7 +172,7 @@ registerStyles('vaadin-form-layout', formLayoutStyles, { moduleId: 'vaadin-form-
  * </vaadin-form-layout>
  * ```
  *
- * With this setup, FormLayout will display labels beside fields, falling back to
+ * With this, FormLayout will display labels beside fields, falling back to
  * the default position above the fields only when there isn't enough space.
  *
  * ### CSS Properties Reference
