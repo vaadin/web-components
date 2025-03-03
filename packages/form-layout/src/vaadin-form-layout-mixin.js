@@ -424,7 +424,7 @@ export const FormLayoutMixin = (superClass) =>
       let columnCount = 0;
       let maxColumns = 0;
 
-      this.$.layout.style.setProperty('--_rendered-column-count', this.__renderedColumnCount);
+      this.$.layout.style.setProperty('--_grid-rendered-column-count', this.__renderedColumnCount);
       const fitsLabelsAside = this.offsetWidth >= this.__columnWidthWithLabelsAside;
       this.$.layout.toggleAttribute('fits-labels-aside', this.labelsAside && fitsLabelsAside);
 
@@ -454,10 +454,10 @@ export const FormLayoutMixin = (superClass) =>
           const colspan = child.getAttribute('colspan') || child.getAttribute('data-colspan');
           if (colspan) {
             columnCount += parseInt(colspan);
-            child.style.setProperty('--_colspan', colspan);
+            child.style.setProperty('--_grid-colspan', colspan);
           } else {
             columnCount += 1;
-            child.style.removeProperty('--_colspan');
+            child.style.removeProperty('--_grid-colspan');
           }
 
           maxColumns = Math.max(maxColumns, columnCount);
