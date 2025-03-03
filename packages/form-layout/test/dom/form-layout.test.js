@@ -45,8 +45,8 @@ describe('vaadin-form-layout', () => {
           await expect(layout).dom.to.equalSnapshot();
         });
 
-        it('fitFields', async () => {
-          layout.fitFields = true;
+        it('expandFields', async () => {
+          layout.expandFields = true;
           await expect(layout).dom.to.equalSnapshot();
         });
       });

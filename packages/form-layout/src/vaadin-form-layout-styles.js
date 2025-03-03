@@ -101,6 +101,7 @@ export const formLayoutStyles = css`
 
   :host([auto-responsive][auto-rows]) #layout ::slotted(*) {
     grid-column-start: var(--_grid-colstart, auto);
+    max-width: 100%;
   }
 
   :host([auto-responsive][labels-aside]) #layout {
@@ -134,12 +135,12 @@ export const formLayoutStyles = css`
     flex-grow: 1;
   }
 
-  :host([auto-responsive][fit-fields]) #layout {
+  :host([auto-responsive][expand-fields]) #layout {
     justify-items: stretch;
   }
 
-  :host([auto-responsive][fit-fields]) #layout ::slotted(*) {
-    --_form-item-fit-fields: 1;
+  :host([auto-responsive][expand-fields]) #layout ::slotted(*) {
+    --_form-item-expand-fields: 1;
   }
 `;
 
@@ -201,13 +202,13 @@ export const formItemStyles = css`
 
   #content ::slotted(*) {
     box-sizing: border-box;
-    /* Sets width to 100% if fit-fields is on */
-    width: calc(100% * var(--_form-item-fit-fields));
-    /* Sets min-width to 0 if fit-fields is on */
-    min-width: calc(1 - var(--_form-item-fit-fields));
+    /* Sets width to 100% if expand-fields is on */
+    width: calc(100% * var(--_form-item-expand-fields));
+    /* Sets min-width to 0 if expand-fields is on */
+    min-width: calc(1 - var(--_form-item-expand-fields));
   }
 
   #content ::slotted(.full-width) {
-    --_form-item-fit-fields: 1;
+    --_form-item-expand-fields: 1;
   }
 `;

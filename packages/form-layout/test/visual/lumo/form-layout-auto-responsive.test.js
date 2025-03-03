@@ -51,10 +51,10 @@ describe('form-layout auto responsive', () => {
       await visualDiff(container, 'column-width');
     });
 
-    it('fitFields', async () => {
-      element.fitFields = true;
+    it('expandFields', async () => {
+      element.expandFields = true;
       await nextResize(element);
-      await visualDiff(container, 'fit-fields');
+      await visualDiff(container, 'expand-fields');
     });
 
     it('custom CSS properties', async () => {
@@ -71,7 +71,7 @@ describe('form-layout auto responsive', () => {
     beforeEach(async () => {
       element = fixtureSync(
         `
-          <vaadin-form-layout auto-responsive fit-fields>
+          <vaadin-form-layout auto-responsive expand-fields>
             <vaadin-form-row>
               <input placeholder="First name" />
               <input placeholder="Last Name" />
@@ -99,7 +99,7 @@ describe('form-layout auto responsive', () => {
     beforeEach(async () => {
       element = fixtureSync(
         `
-          <vaadin-form-layout auto-responsive auto-rows fit-fields>
+          <vaadin-form-layout auto-responsive auto-rows expand-fields>
             <input placeholder="First name" />
             <input placeholder="Last Name" />
             <br />
@@ -122,7 +122,7 @@ describe('form-layout auto responsive', () => {
     beforeEach(async () => {
       element = fixtureSync(
         `
-          <vaadin-form-layout auto-responsive auto-rows fit-fields>
+          <vaadin-form-layout auto-responsive auto-rows expand-fields>
             <vaadin-form-row>
               <input placeholder="First name" />
               <input placeholder="Last Name" />
@@ -165,15 +165,15 @@ describe('form-layout auto responsive', () => {
       await visualDiff(container, 'form-items');
     });
 
-    it('fitFields', async () => {
-      element.fitFields = true;
+    it('expandFields', async () => {
+      element.expandFields = true;
       await nextResize(element);
-      await visualDiff(container, 'form-items-fit-fields');
+      await visualDiff(container, 'form-items-expand-fields');
     });
 
     it('expandColumns in narrow container', async () => {
       container.style.width = `calc(${element.columnWidth} + 6em)`;
-      element.fitFields = true;
+      element.expandFields = true;
       element.expandColumns = true;
       await nextResize(element);
       await visualDiff(container, 'form-items-expand-columns-narrow-container');
@@ -181,7 +181,7 @@ describe('form-layout auto responsive', () => {
 
     it('expandColumns in wide container', async () => {
       container.style.width = '50em';
-      element.fitFields = true;
+      element.expandFields = true;
       element.expandColumns = true;
       await nextResize(element);
       await visualDiff(container, 'form-items-expand-columns-wide-container');
@@ -189,7 +189,7 @@ describe('form-layout auto responsive', () => {
 
     it('labelsAside in narrow container', async () => {
       container.style.width = `calc(${element.columnWidth} + 6em)`;
-      element.fitFields = true;
+      element.expandFields = true;
       element.labelsAside = true;
       await nextResize(element);
       await visualDiff(container, 'form-items-labels-aside-narrow-container');
@@ -197,7 +197,7 @@ describe('form-layout auto responsive', () => {
 
     it('labelsAside in wide container', async () => {
       container.style.width = '50em';
-      element.fitFields = true;
+      element.expandFields = true;
       element.labelsAside = true;
       await nextResize(element);
       await visualDiff(container, 'form-items-labels-aside-wide-container');
@@ -205,7 +205,7 @@ describe('form-layout auto responsive', () => {
 
     it('labelsAside + expandColumns in narrow container', async () => {
       container.style.width = `calc(${element.columnWidth} + 6em)`;
-      element.fitFields = true;
+      element.expandFields = true;
       element.labelsAside = true;
       element.expandColumns = true;
       await nextResize(element);
@@ -214,7 +214,7 @@ describe('form-layout auto responsive', () => {
 
     it('labelsAside + expandColumns in wide container', async () => {
       container.style.width = '50em';
-      element.fitFields = true;
+      element.expandFields = true;
       element.labelsAside = true;
       element.expandColumns = true;
       await nextResize(element);
@@ -222,7 +222,7 @@ describe('form-layout auto responsive', () => {
     });
 
     it('labelsAside + custom CSS properties', async () => {
-      element.fitFields = true;
+      element.expandFields = true;
       element.labelsAside = true;
       element.style.setProperty('--vaadin-form-layout-label-width', '200px');
       element.style.setProperty('--vaadin-form-layout-label-spacing', '60px');

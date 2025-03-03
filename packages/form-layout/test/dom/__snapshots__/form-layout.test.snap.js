@@ -1,7 +1,7 @@
 /* @web/test-runner snapshot v1 */
 export const snapshots = {};
 
-snapshots["vaadin-form-layout auto-responsive basic host default"] = 
+snapshots["vaadin-form-layout auto-responsive basic host default"] =
 `<vaadin-form-layout
   auto-responsive=""
   style="--_column-width: 13em; --_max-columns: 10;"
@@ -14,7 +14,7 @@ snapshots["vaadin-form-layout auto-responsive basic host default"] =
 `;
 /* end snapshot vaadin-form-layout auto-responsive basic host default */
 
-snapshots["vaadin-form-layout auto-responsive basic host maxColumns"] = 
+snapshots["vaadin-form-layout auto-responsive basic host maxColumns"] =
 `<vaadin-form-layout
   auto-responsive=""
   style="--_column-width: 13em; --_max-columns: 3;"
@@ -27,7 +27,7 @@ snapshots["vaadin-form-layout auto-responsive basic host maxColumns"] =
 `;
 /* end snapshot vaadin-form-layout auto-responsive basic host maxColumns */
 
-snapshots["vaadin-form-layout auto-responsive basic host columnWidth"] = 
+snapshots["vaadin-form-layout auto-responsive basic host columnWidth"] =
 `<vaadin-form-layout
   auto-responsive=""
   style="--_column-width: 15em; --_max-columns: 10;"
@@ -40,7 +40,7 @@ snapshots["vaadin-form-layout auto-responsive basic host columnWidth"] =
 `;
 /* end snapshot vaadin-form-layout auto-responsive basic host columnWidth */
 
-snapshots["vaadin-form-layout auto-responsive basic host labelsAside"] = 
+snapshots["vaadin-form-layout auto-responsive basic host labelsAside"] =
 `<vaadin-form-layout
   auto-responsive=""
   labels-aside=""
@@ -54,7 +54,7 @@ snapshots["vaadin-form-layout auto-responsive basic host labelsAside"] =
 `;
 /* end snapshot vaadin-form-layout auto-responsive basic host labelsAside */
 
-snapshots["vaadin-form-layout auto-responsive basic host expandColumns"] = 
+snapshots["vaadin-form-layout auto-responsive basic host expandColumns"] =
 `<vaadin-form-layout
   auto-responsive=""
   expand-columns=""
@@ -68,10 +68,10 @@ snapshots["vaadin-form-layout auto-responsive basic host expandColumns"] =
 `;
 /* end snapshot vaadin-form-layout auto-responsive basic host expandColumns */
 
-snapshots["vaadin-form-layout auto-responsive basic host fitFields"] = 
+snapshots["vaadin-form-layout auto-responsive basic host expandFields"] =
 `<vaadin-form-layout
   auto-responsive=""
-  fit-fields=""
+  expand-fields=""
   style="--_column-width: 13em; --_max-columns: 10;"
 >
   <input placeholder="First name">
@@ -80,9 +80,9 @@ snapshots["vaadin-form-layout auto-responsive basic host fitFields"] =
   <input placeholder="Phone">
 </vaadin-form-layout>
 `;
-/* end snapshot vaadin-form-layout auto-responsive basic host fitFields */
+/* end snapshot vaadin-form-layout auto-responsive basic host expandFields */
 
-snapshots["vaadin-form-layout auto-responsive basic shadow default"] = 
+snapshots["vaadin-form-layout auto-responsive basic shadow default"] =
 `<div id="layout">
   <slot id="slot">
   </slot>
@@ -90,7 +90,7 @@ snapshots["vaadin-form-layout auto-responsive basic shadow default"] =
 `;
 /* end snapshot vaadin-form-layout auto-responsive basic shadow default */
 
-snapshots["vaadin-form-layout auto-responsive basic shadow labelsAside in narrow container"] = 
+snapshots["vaadin-form-layout auto-responsive basic shadow labelsAside in narrow container"] =
 `<div id="layout">
   <slot id="slot">
   </slot>
@@ -98,7 +98,7 @@ snapshots["vaadin-form-layout auto-responsive basic shadow labelsAside in narrow
 `;
 /* end snapshot vaadin-form-layout auto-responsive basic shadow labelsAside in narrow container */
 
-snapshots["vaadin-form-layout auto-responsive basic shadow labelsAside in wide container"] = 
+snapshots["vaadin-form-layout auto-responsive basic shadow labelsAside in wide container"] =
 `<div
   fits-labels-aside=""
   id="layout"
@@ -109,7 +109,7 @@ snapshots["vaadin-form-layout auto-responsive basic shadow labelsAside in wide c
 `;
 /* end snapshot vaadin-form-layout auto-responsive basic shadow labelsAside in wide container */
 
-snapshots["vaadin-form-layout auto-responsive autoRows default"] = 
+snapshots["vaadin-form-layout auto-responsive autoRows default"] =
 `<vaadin-form-layout
   auto-responsive=""
   auto-rows=""
