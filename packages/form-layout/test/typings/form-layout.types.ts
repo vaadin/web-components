@@ -17,6 +17,7 @@ assertType<boolean>(layout.autoResponsive);
 assertType<string>(layout.columnWidth);
 assertType<number>(layout.maxColumns);
 assertType<boolean>(layout.autoRows);
+assertType<boolean>(layout.expandColumns);
 
 assertType<string | 0 | undefined>(responsiveSteps.minWidth);
 assertType<number | undefined>(responsiveSteps.columns);

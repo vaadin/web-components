@@ -184,6 +184,20 @@ describe('form-layout auto responsive', () => {
       await visualDiff(container, 'form-items');
     });
 
+    it('expandColumns in narrow container', async () => {
+      container.style.width = `calc(${element.columnWidth} + 6em)`;
+      element.expandColumns = true;
+      await nextResize(element);
+      await visualDiff(container, 'form-items-expand-columns-narrow-container');
+    });
+
+    it('expandColumns in wide container', async () => {
+      container.style.width = '50em';
+      element.expandColumns = true;
+      await nextResize(element);
+      await visualDiff(container, 'form-items-expand-columns-wide-container');
+    });
+
     it('labelsAside in narrow container', async () => {
       container.style.width = `calc(${element.columnWidth} + 6em)`;
       element.labelsAside = true;
@@ -198,12 +212,102 @@ describe('form-layout auto responsive', () => {
       await visualDiff(container, 'form-items-labels-aside-wide-container');
     });
 
+    it('labelsAside + expandColumns in narrow container', async () => {
+      container.style.width = `calc(${element.columnWidth} + 6em)`;
+      element.labelsAside = true;
+      element.expandColumns = true;
+      await nextResize(element);
+      await visualDiff(container, 'form-items-labels-aside-expand-columns-narrow-container');
+    });
+
+    it('labelsAside + expandColumns in wide container', async () => {
+      container.style.width = '50em';
+      element.labelsAside = true;
+      element.expandColumns = true;
+      await nextResize(element);
+      await visualDiff(container, 'form-items-labels-aside-expand-columns-wide-container');
+    });
+
     it('labelsAside + custom CSS properties', async () => {
       element.labelsAside = true;
       element.style.setProperty('--vaadin-form-layout-label-width', '200px');
       element.style.setProperty('--vaadin-form-layout-label-spacing', '60px');
       await nextResize(element);
       await visualDiff(container, 'form-items-labels-aside-custom-css-properties');
+    });
+  });
+
+  describe('colspan', () => {
+    beforeEach(async () => {
+      element = fixtureSync(
+        `
+          <vaadin-form-layout auto-responsive auto-rows max-columns="2">
+            <input placeholder="First name" />
+            <input placeholder="Last Name" />
+            <input placeholder="Email" />
+            <input placeholder="Phone" />
+            <input placeholder="Address" colspan="2" />
+          </vaadin-form-layout>
+
+          <style>
+            input {
+              justify-self: stretch;
+            }
+          </style>
+        `,
+        container,
+      );
+      await nextFrame();
+    });
+
+    it('default', async () => {
+      await visualDiff(container, 'colspan');
+    });
+
+    it('colspan in narrow container', async () => {
+      container.style.width = `calc(${element.columnWidth} + 6em)`;
+      await nextResize(element);
+      await visualDiff(container, 'colspan-narrow-container');
+    });
+
+    it('colspan in wide container', async () => {
+      container.style.width = '50em';
+      await nextResize(element);
+      await visualDiff(container, 'colspan-wide-container');
+    });
+  });
+
+  describe('colspan with explicit rows', () => {
+    beforeEach(async () => {
+      element = fixtureSync(
+        `
+          <vaadin-form-layout auto-responsive auto-rows max-columns="2">
+            <vaadin-form-row>
+              <input placeholder="First name" />
+              <input placeholder="Last Name" />
+            </vaadin-form-row>
+            <vaadin-form-row>
+              <input placeholder="Email" />
+              <input placeholder="Phone" />
+            </vaadin-form-row>
+            <vaadin-form-row>
+              <input placeholder="Address" colspan="2"  />
+            </vaadin-form-row>
+          </vaadin-form-layout>
+
+          <style>
+            input {
+              justify-self: stretch;
+            }
+          </style>
+      `,
+        container,
+      );
+      await nextFrame();
+    });
+
+    it('default', async () => {
+      await visualDiff(container, 'colspan-with-explicit-rows');
     });
   });
 });
