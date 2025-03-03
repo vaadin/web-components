@@ -167,6 +167,21 @@ export const FormLayoutMixin = (superClass) =>
         },
 
         /**
+         * When `autoResponsive` is enabled, specifies whether the columns should expand
+         * in width to evenly fill any remaining space after the layout has created as
+         * many fixed-width (`columnWidth`) columns as possible within the `maxColumns`
+         * limit. The default value is `false`.
+         *
+         * @attr {boolean} expand-columns
+         */
+        expandColumns: {
+          type: Boolean,
+          sync: true,
+          value: false,
+          reflectToAttribute: true,
+        },
+
+        /**
          * Current number of columns in the layout
          * @private
          */

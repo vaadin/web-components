@@ -124,6 +124,16 @@ export declare class FormLayoutMixinClass {
   labelsAside: boolean;
 
   /**
+   * When `autoResponsive` is enabled, specifies whether the columns should expand
+   * in width to evenly fill any remaining space after the layout has created as
+   * many fixed-width (`columnWidth`) columns as possible within the `maxColumns`
+   * limit. The default value is `false`.
+   *
+   * @attr {boolean} expand-columns
+   */
+  expandColumns: boolean;
+
+  /**
    * Update the layout.
    */
   protected _updateLayout(): void;
