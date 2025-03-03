@@ -202,6 +202,5 @@ export const formItemStyles = css`
   #content ::slotted(.full-width) {
     box-sizing: border-box;
     width: 100%;
-    min-width: 0;
   }
 `;
