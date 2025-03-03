@@ -236,4 +236,78 @@ describe('form-layout auto responsive', () => {
       await visualDiff(container, 'form-items-labels-aside-custom-css-properties');
     });
   });
+
+  describe('colspan', () => {
+    beforeEach(async () => {
+      element = fixtureSync(
+        `
+          <vaadin-form-layout auto-responsive auto-rows max-columns="2">
+            <input placeholder="First name" />
+            <input placeholder="Last Name" />
+            <input placeholder="Email" />
+            <input placeholder="Phone" />
+            <input placeholder="Address" colspan="2" />
+          </vaadin-form-layout>
+
+          <style>
+            input {
+              justify-self: stretch;
+            }
+          </style>
+        `,
+        container,
+      );
+      await nextFrame();
+    });
+
+    it('default', async () => {
+      await visualDiff(container, 'colspan');
+    });
+
+    it('colspan in narrow container', async () => {
+      container.style.width = `calc(${element.columnWidth} + 6em)`;
+      await nextResize(element);
+      await visualDiff(container, 'colspan-narrow-container');
+    });
+
+    it('colspan in wide container', async () => {
+      container.style.width = '50em';
+      await nextResize(element);
+      await visualDiff(container, 'colspan-wide-container');
+    });
+  });
+
+  describe('colspan with explicit rows', () => {
+    beforeEach(async () => {
+      element = fixtureSync(
+        `
+          <vaadin-form-layout auto-responsive auto-rows max-columns="2">
+            <vaadin-form-row>
+              <input placeholder="First name" />
+              <input placeholder="Last Name" />
+            </vaadin-form-row>
+            <vaadin-form-row>
+              <input placeholder="Email" />
+              <input placeholder="Phone" />
+            </vaadin-form-row>
+            <vaadin-form-row>
+              <input placeholder="Address" colspan="2"  />
+            </vaadin-form-row>
+          </vaadin-form-layout>
+
+          <style>
+            input {
+              justify-self: stretch;
+            }
+          </style>
+      `,
+        container,
+      );
+      await nextFrame();
+    });
+
+    it('default', async () => {
+      await visualDiff(container, 'colspan-with-explicit-rows');
+    });
+  });
 });

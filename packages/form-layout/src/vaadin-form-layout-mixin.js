@@ -14,6 +14,15 @@ function isValidCSSLength(value) {
 }
 
 /**
+ * Check if the node is a line break element.
+ * @param {HTMLElement} el
+ * @return {boolean}
+ */
+function isBreakLine(el) {
+  return el.localName === 'br';
+}
+
+/**
  * @polymerMixin
  * @mixes ResizeMixin
  */
@@ -427,29 +436,67 @@ export const FormLayoutMixin = (superClass) =>
 
     /** @private */
     __updateCSSGridLayout() {
+      let columnCount = 0;
+      let maxColumns = 0;
+
+      this.$.layout.style.setProperty('--_grid-rendered-column-count', this.__renderedColumnCount);
       const fitsLabelsAside = this.offsetWidth >= this.__columnWidthWithLabelsAside;
       this.$.layout.toggleAttribute('fits-labels-aside', this.labelsAside && fitsLabelsAside);
 
-      let resetColumn = false;
-      [...this.children]
-        .flatMap((child) => {
-          return child.localName === 'vaadin-form-row' ? [...child.children] : child;
-        })
-        .forEach((child) => {
-          const { parentElement } = child;
+      this.__children
+        .filter((child) => isBreakLine(child) || !isElementHidden(child))
+        .forEach((child, index, children) => {
+          const prevChild = children[index - 1];
 
-          if (child.localName === 'br' || parentElement.localName === 'vaadin-form-row') {
-            resetColumn = true;
+          if (isBreakLine(child)) {
+            columnCount = 0;
             return;
           }
 
-          if (resetColumn && !isElementHidden(child) && parentElement.localName !== 'vaadin-form-row') {
+          if (
+            (prevChild && prevChild.parentElement !== child.parentElement) ||
+            (!this.autoRows && child.parentElement === this)
+          ) {
+            columnCount = 0;
+          }
+
+          if (this.autoRows && columnCount === 0) {
             child.style.setProperty('--_grid-colstart', 1);
-            resetColumn = false;
           } else {
             child.style.removeProperty('--_grid-colstart');
           }
+
+          const colspan = child.getAttribute('colspan') || child.getAttribute('data-colspan');
+          if (colspan) {
+            columnCount += parseInt(colspan);
+            child.style.setProperty('--_grid-colspan', colspan);
+          } else {
+            columnCount += 1;
+            child.style.removeProperty('--_grid-colspan');
+          }
+
+          maxColumns = Math.max(maxColumns, columnCount);
         });
+
+      this.__children.filter(isElementHidden).forEach((child) => {
+        child.style.removeProperty('--_grid-colstart');
+      });
+
+      this.style.setProperty('--_max-columns', Math.min(maxColumns, this.maxColumns));
+    }
+
+    /** @private */
+    get __children() {
+      return [...this.children].flatMap((child) => {
+        return child.localName === 'vaadin-form-row' ? [...child.children] : child;
+      });
+    }
+
+    /** @private */
+    get __renderedColumnCount() {
+      // Calculate the number of rendered columns, excluding CSS grid auto columns (0px)
+      const { gridTemplateColumns } = getComputedStyle(this.$.layout);
+      return gridTemplateColumns.split(' ').filter((width) => width !== '0px').length;
     }
 
     /**

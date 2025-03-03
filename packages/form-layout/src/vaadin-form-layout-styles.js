@@ -62,7 +62,15 @@ export const formLayoutStyles = css`
     --_grid-repeat: var(--_grid-column-width);
 
     display: grid;
-    grid-template-columns: repeat(auto-fit, var(--_grid-repeat));
+    grid-template-columns: repeat(auto-fill, var(--_grid-repeat));
+
+    /*
+      Auto-columns can be created when an item's colspan exceeds the rendered column count.
+      By setting auto-columns to 0, we exclude these columns from --_grid-rendered-column-count,
+      which is then used to cap the colspan.
+    */
+    grid-auto-columns: 0;
+
     justify-items: start;
     gap: var(--vaadin-form-layout-row-spacing) var(--_grid-column-gap);
 
@@ -96,7 +104,7 @@ export const formLayoutStyles = css`
     --_form-item-labels-aside: ' '; /* false */
 
     /* By default, place each child on a new row */
-    grid-column-start: 1;
+    grid-column: 1 / span min(var(--_grid-colspan, 1), var(--_grid-rendered-column-count));
   }
 
   :host([auto-responsive][auto-rows]) #layout ::slotted(*) {
@@ -145,7 +153,7 @@ export const formRowStyles = css`
   }
 
   ::slotted(*) {
-    grid-column-start: auto;
+    grid-column: auto / span min(var(--_grid-colspan, 1), var(--_grid-rendered-column-count));
   }
 
   ::slotted(:first-child) {
