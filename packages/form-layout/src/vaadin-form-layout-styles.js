@@ -102,7 +102,7 @@ export const formLayoutStyles = css`
   :host([auto-responsive]) #layout ::slotted(*) {
     --_form-item-labels-above: initial; /* true */
     --_form-item-labels-aside: ' '; /* false */
-        
+
     /* By default, place each child on a new row */
     grid-column: 1 / span min(var(--_grid-colspan, 1), var(--_grid-rendered-column-count));
   }

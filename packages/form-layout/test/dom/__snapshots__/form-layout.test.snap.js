@@ -58,7 +58,7 @@ snapshots["vaadin-form-layout auto-responsive basic host expandColumns"] =
 `<vaadin-form-layout
   auto-responsive=""
   expand-columns=""
-  style="--_column-width: 13em; --_max-columns: 10;"
+  style="--_column-width: 13em; --_max-columns: 1;"
 >
   <input placeholder="First name">
   <input placeholder="Last name">
@@ -71,7 +71,7 @@ snapshots["vaadin-form-layout auto-responsive basic host expandColumns"] =
 snapshots["vaadin-form-layout auto-responsive basic shadow default"] = 
 `<div
   id="layout"
-  style="--_rendered-column-count: 3;"
+  style="--_grid-rendered-column-count: 3;"
 >
   <slot id="slot">
   </slot>
@@ -82,7 +82,7 @@ snapshots["vaadin-form-layout auto-responsive basic shadow default"] =
 snapshots["vaadin-form-layout auto-responsive basic shadow labelsAside in narrow container"] = 
 `<div
   id="layout"
-  style="--_rendered-column-count: 1;"
+  style="--_grid-rendered-column-count: 1;"
 >
   <slot id="slot">
   </slot>
@@ -94,7 +94,7 @@ snapshots["vaadin-form-layout auto-responsive basic shadow labelsAside in wide c
 `<div
   fits-labels-aside=""
   id="layout"
-  style="--_rendered-column-count: 1;"
+  style="--_grid-rendered-column-count: 1;"
 >
   <slot id="slot">
   </slot>
