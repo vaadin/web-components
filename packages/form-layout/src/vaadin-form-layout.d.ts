@@ -90,6 +90,84 @@ export * from './vaadin-form-layout-mixin.js';
  * </vaadin-form-layout>
  * ```
  *
+ * ### Auto Responsive Mode
+ *
+ * To avoid manually dealing with responsive breakpoints, FormLayout provides an auto-responsive mode
+ * that automatically creates and adjusts fixed-width columns based on the container's available space.
+ * The {@link columnWidth} and {@link maxColumns} properties can be used to configure the desired column
+ * width (13em by default) and the maximum number of columns (10 by default).
+ *
+ * ```html
+ * <vaadin-form-layout auto-responsive>
+ *   <vaadin-text-field label="First Name"></vaadin-text-field>
+ *   <vaadin-text-field label="Last Name"></vaadin-text-field>
+ *   <vaadin-text-area label="Address" colspan="2"></vaadin-text-area>
+ * </vaadin-form-layout>
+ * ```
+ *
+ * #### Organizing rows
+ *
+ * By default, each field is placed on a new row. To organize fields into rows, you can either:
+ *
+ * 1. Manually wrap fields into `<vaadin-form-row>` elements.
+ *
+ * 2. Enable the {@link autoRows} property to automatically arrange fields in available columns,
+ *    wrapping to a new row when necessary. `<br>` elements can be used to force a new row.
+ *
+ * Here is an example of using `<vaadin-form-row>`:
+ *
+ * ```html
+ * <vaadin-form-layout auto-responsive>
+ *   <vaadin-form-row>
+ *     <vaadin-text-field label="First Name"></vaadin-text-field>
+ *     <vaadin-text-field label="Last Name"></vaadin-text-field>
+ *   </vaadin-form-row>
+ *   <vaadin-form-row>
+ *     <vaadin-text-area label="Address" colspan="2"></vaadin-text-area>
+ *   </vaadin-form-row>
+ * </vaadin-form-layout>
+ * ```
+ *
+ * #### Expanding columns
+ *
+ * FormLayout can be configured to evenly expand columns to fill any remaining space after all
+ * columns have been created. To enable this, set the {@link expandColumns} property to `true`.
+ *
+ * #### Fitting fields
+ *
+ * FormLayout can stretch fields to fit the width of the column. To enable this behavior, set the
+ * {@link fitFields} property to `true`.
+ *
+ * #### Label position
+ *
+ * By default, FormLayout displays labels above the fields. To position labels beside fields, you
+ * need to wrap each field in `<vaadin-form-item>` elements and define its labels on the wrapper.
+ * Then, you can enable the {@link labelsAside} property:
+ *
+ * ```html
+ * <vaadin-form-layout auto-responsive labels-aside>
+ *   <vaadin-form-row>
+ *     <vaadin-form-item>
+ *       <label slot="label">First Name</label>
+ *       <vaadin-text-field></vaadin-text-field>
+ *    </vaadin-form-item>
+ *    <vaadin-form-item>
+ *      <label slot="label">Last Name</label>
+ *       <vaadin-text-field></vaadin-text-field>
+ *     </vaadin-form-item>
+ *   </vaadin-form-row>
+ *   <vaadin-form-row>
+ *     <vaadin-form-item colspan="2">
+ *       <label slot="label">Address</label>
+ *       <vaadin-text-area></vaadin-text-area>
+ *     </vaadin-form-item>
+ *   </vaadin-form-row>
+ * </vaadin-form-layout>
+ * ```
+ *
+ * With this setup, FormLayout will display labels beside fields, falling back to
+ * the default position above the fields only when there isn't enough space.
+ *
  * ### CSS Properties Reference
  *
  * The following custom CSS properties are available on the `<vaadin-form-layout>`
