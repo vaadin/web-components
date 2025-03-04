@@ -56,8 +56,8 @@ export const formLayoutStyles = css`
 
   :host([auto-responsive]) #layout {
     /* By default, labels should be displayed above the fields */
-    --_layout-labels-above: initial; /* true */
-    --_layout-labels-aside: ' '; /* false */
+    --_form-item-labels-above: initial; /* true */
+    --_form-item-labels-aside: ' '; /* false */
 
     /* CSS grid related properties */
     --_grid-column-gap: var(--vaadin-form-layout-column-spacing);
@@ -105,14 +105,12 @@ export const formLayoutStyles = css`
   }
 
   :host([auto-responsive]) #layout ::slotted(*) {
+    /* Make form items inherit label position from the layout */
+    --_form-item-labels-above: unset;
+    --_form-item-labels-aside: unset;
+
     /* By default, place each child on a new row */
     grid-column: 1 / span min(var(--_grid-colspan, 1), var(--_grid-rendered-column-count));
-  }
-
-  :host([auto-responsive]) #layout ::slotted(vaadin-form-item) {
-    /* Propagate the label position to the form item */
-    --_form-item-labels-above: var(--_layout-labels-above);
-    --_form-item-labels-aside: var(--_layout-labels-aside);
   }
 
   :host([auto-responsive][auto-rows]) #layout ::slotted(*) {
@@ -124,8 +122,8 @@ export const formLayoutStyles = css`
   }
 
   :host([auto-responsive][labels-aside]) #layout[fits-labels-aside] {
-    --_layout-labels-above: ' '; /* false */
-    --_layout-labels-aside: initial; /* true */
+    --_form-item-labels-above: ' '; /* false */
+    --_form-item-labels-aside: initial; /* true */
     --_grid-column-width: var(--_column-width-labels-aside);
   }
 
@@ -158,17 +156,15 @@ export const formRowStyles = css`
   }
 
   ::slotted(*) {
+    /* Make form items inherit label position from the layout */
+    --_form-item-labels-above: unset;
+    --_form-item-labels-aside: unset;
+
     grid-column: auto / span min(var(--_grid-colspan, 1), var(--_grid-rendered-column-count));
   }
 
   ::slotted(:first-child) {
     grid-column-start: 1;
-  }
-
-  ::slotted(vaadin-form-item) {
-    /* Propagate the label position to the form item */
-    --_form-item-labels-above: var(--_layout-labels-above);
-    --_form-item-labels-aside: var(--_layout-labels-aside);
   }
 `;
 
