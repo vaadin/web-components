@@ -475,6 +475,10 @@ export const FormLayoutMixin = (superClass) =>
             child.style.removeProperty('--_grid-colspan');
           }
 
+          if (child.localName === 'vaadin-form-item' && child.$) {
+            child.$.content.setAttribute('auto-responsive', '');
+          }
+
           maxColumns = Math.max(maxColumns, columnCount);
         });
 
