@@ -237,6 +237,50 @@ describe('form-layout auto responsive', () => {
     });
   });
 
+  describe('form items with explicit rows', () => {
+    beforeEach(async () => {
+      element = fixtureSync(
+        `
+          <vaadin-form-layout auto-responsive>
+            <vaadin-form-row>
+              <vaadin-form-item>
+                <label slot="label">First name</label>
+                <input />
+              </vaadin-form-item>
+              <vaadin-form-item>
+                <label slot="label">Last name</label>
+                <input />
+              </vaadin-form-item>
+            </vaadin-form-row>
+
+            <vaadin-form-row>
+              <vaadin-form-item>
+                <label slot="label">Email</label>
+                <input />
+              </vaadin-form-item>
+              <vaadin-form-item>
+                <label slot="label">Phone</label>
+                <input />
+              </vaadin-form-item>
+            </vaadin-form-row>
+          </vaadin-form-layout>
+        `,
+        container,
+      );
+      await nextFrame();
+    });
+
+    it('default', async () => {
+      await visualDiff(container, 'form-items-with-explicit-rows');
+    });
+
+    it('labelsAside', async () => {
+      element.labelsAside = true;
+      await nextResize(element);
+      await visualDiff(container, 'form-items-with-explicit-rows-labels-aside');
+    });
+  });
+
   describe('colspan', () => {
     beforeEach(async () => {
       element = fixtureSync(
