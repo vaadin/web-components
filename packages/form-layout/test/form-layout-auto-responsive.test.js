@@ -268,6 +268,48 @@ describe('form-layout auto responsive', () => {
           await nextFrame();
           assertFormLayoutGrid(layout, { columns: 2, rows: 2 });
         });
+
+        it('should account for calculated max column on maxColumns change', async () => {
+          function getRenderedColumns(layout) {
+            const { gridTemplateColumns } = getComputedStyle(layout.$.layout);
+            const renderedColumnsSize = gridTemplateColumns.split(' ').length;
+            return renderedColumnsSize;
+          }
+
+          // Setting a smaller maxColumns in autoRows should affect the number of columns
+          layout = fixtureSync(`
+            <vaadin-form-layout
+              auto-responsive
+              auto-rows
+              column-width="10em"
+              max-columns="2"
+            >
+              <input placeholder="First name">
+              <input placeholder="Last Name">
+              <input placeholder="Email" colspan="2">
+            </vaadin-form-layout>
+          `);
+          await nextFrame();
+          layout.maxColumns = 1;
+          await nextFrame();
+          expect(getRenderedColumns(layout)).to.equal(1);
+
+          // Setting a higher maxColumns than the calculated max column should not affect the number of columns
+          layout = fixtureSync(`
+            <vaadin-form-layout
+              auto-responsive
+              column-width="10em"
+            >
+              <input placeholder="First name">
+              <input placeholder="Last Name">
+              <input placeholder="Email" colspan="2">
+            </vaadin-form-layout>
+          `);
+          await nextFrame();
+          layout.maxColumns = 8;
+          await nextFrame();
+          expect(getRenderedColumns(layout)).to.equal(2);
+        });
       });
 
       describe('explicit rows', () => {

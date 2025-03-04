@@ -528,6 +528,7 @@ export const FormLayoutMixin = (superClass) =>
     __maxColumnsChanged(maxColumns, autoResponsive) {
       if (autoResponsive) {
         this.style.setProperty('--_max-columns', maxColumns);
+        this.__updateCSSGridLayout();
       } else {
         this.style.removeProperty('--_max-columns');
       }
