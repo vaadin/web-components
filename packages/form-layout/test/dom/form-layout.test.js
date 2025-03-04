@@ -50,6 +50,11 @@ describe('vaadin-form-layout', () => {
           layout.expandColumns = true;
           await expect(layout).dom.to.equalSnapshot();
         });
+
+        it('expandFields', async () => {
+          layout.expandFields = true;
+          await expect(layout).dom.to.equalSnapshot();
+        });
       });
 
       describe('shadow', () => {

@@ -191,6 +191,21 @@ export const FormLayoutMixin = (superClass) =>
         },
 
         /**
+         * When `autoResponsive` is enabled, specifies whether fields should stretch
+         * to take up all available space within columns. This setting also applies
+         * to fields inside `<vaadin-form-item>` elements. The default value is `false`.
+         *
+         * @attr {boolean} expand-fields
+         */
+        expandFields: {
+          type: Boolean,
+          sync: true,
+          value: false,
+          reflectToAttribute: true,
+          observer: '__expandFieldsChanged',
+        },
+
+        /**
          * Current number of columns in the layout
          * @private
          */
@@ -475,6 +490,10 @@ export const FormLayoutMixin = (superClass) =>
             child.style.removeProperty('--_grid-colspan');
           }
 
+          if (child.localName === 'vaadin-form-item' && child.$) {
+            child.$.content.toggleAttribute('expand-fields', this.expandFields);
+          }
+
           maxColumns = Math.max(maxColumns, columnCount);
         });
 
@@ -533,6 +552,11 @@ export const FormLayoutMixin = (superClass) =>
       } else {
         this.style.removeProperty('--_max-columns');
       }
+    }
+
+    /** @private */
+    __expandFieldsChanged() {
+      this._updateLayout();
     }
 
     /** @private */

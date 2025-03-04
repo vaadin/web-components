@@ -144,6 +144,10 @@ export const formLayoutStyles = css`
     /* Allow the layout to take up full available width of the parent element. */
     flex-grow: 1;
   }
+
+  :host([auto-responsive][expand-fields]) #layout {
+    justify-items: stretch;
+  }
 `;
 
 export const formRowStyles = css`
@@ -207,7 +211,8 @@ export const formItemStyles = css`
     flex: 1 1 auto;
   }
 
-  #content ::slotted(.full-width) {
+  #content ::slotted(.full-width),
+  #content[expand-fields] ::slotted(*) {
     box-sizing: border-box;
     width: 100%;
     min-width: 0;
