@@ -111,6 +111,8 @@ export const formLayoutStyles = css`
 
     /* By default, place each child on a new row */
     grid-column: 1 / span min(var(--_grid-colspan, 1), var(--_grid-rendered-column-count));
+    box-sizing: border-box;
+    max-width: 100%;
   }
 
   :host([auto-responsive][auto-rows]) #layout ::slotted(*) {
@@ -146,6 +148,14 @@ export const formLayoutStyles = css`
   }
 `;
 
+export const formLayoutSlotStyles = css`
+  /* Using :where to ensure user styles always take precedence */
+  :where(vaadin-form-layout[auto-responsive] vaadin-form-item > *) {
+    box-sizing: border-box;
+    max-width: 100%;
+  }
+`;
+
 export const formRowStyles = css`
   :host {
     display: contents;
@@ -161,6 +171,8 @@ export const formRowStyles = css`
     --_form-item-labels-aside: inherit;
 
     grid-column: auto / span min(var(--_grid-colspan, 1), var(--_grid-rendered-column-count));
+    box-sizing: border-box;
+    max-width: 100%;
   }
 
   ::slotted(:first-child) {
