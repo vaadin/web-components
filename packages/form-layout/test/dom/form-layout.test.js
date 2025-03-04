@@ -24,8 +24,14 @@ describe('vaadin-form-layout', () => {
           await expect(layout).dom.to.equalSnapshot();
         });
 
-        it('maxColumns', async () => {
+        it('maxColumns < number of columns', async () => {
           layout.maxColumns = 3;
+          await expect(layout).dom.to.equalSnapshot();
+        });
+
+        it('maxColumns > number of columns', async () => {
+          layout.autoRows = true;
+          layout.maxColumns = 5;
           await expect(layout).dom.to.equalSnapshot();
         });
 
