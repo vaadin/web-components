@@ -106,8 +106,8 @@ export const formLayoutStyles = css`
 
   :host([auto-responsive]) #layout ::slotted(*) {
     /* Make form items inherit label position from the layout */
-    --_form-item-labels-above: unset;
-    --_form-item-labels-aside: unset;
+    --_form-item-labels-above: inherit;
+    --_form-item-labels-aside: inherit;
 
     /* By default, place each child on a new row */
     grid-column: 1 / span min(var(--_grid-colspan, 1), var(--_grid-rendered-column-count));
@@ -157,8 +157,8 @@ export const formRowStyles = css`
 
   ::slotted(*) {
     /* Make form items inherit label position from the layout */
-    --_form-item-labels-above: unset;
-    --_form-item-labels-aside: unset;
+    --_form-item-labels-above: inherit;
+    --_form-item-labels-aside: inherit;
 
     grid-column: auto / span min(var(--_grid-colspan, 1), var(--_grid-rendered-column-count));
   }
