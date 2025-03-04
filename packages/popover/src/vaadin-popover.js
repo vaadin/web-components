@@ -71,6 +71,7 @@ class PopoverOpenedStateController {
     const shouldDelayHover = trigger === 'hover' && this.__hoverDelay > 0;
     const shouldDelayFocus = trigger === 'focus' && this.__focusDelay > 0;
 
+    this.host.__lastOpenedTrigger = trigger;
     if (!immediate && (shouldDelayHover || shouldDelayFocus) && !this.__closeTimeout) {
       this.__scheduleOpen(trigger);
     } else {
@@ -95,6 +96,13 @@ class PopoverOpenedStateController {
 
   /** @private */
   __setOpened(opened) {
+    if (opened) {
+      if (this.host.__lastOpenedTrigger === 'hover') {
+        this.host.dispatchEvent(new CustomEvent('popover-opened-on-hover', { composed: true, bubbles: true }));
+      } else if (this.host.__lastOpenedTrigger === 'focus') {
+        this.host.dispatchEvent(new CustomEvent('popover-opened-on-focus', { composed: true, bubbles: true }));
+      }
+    }
     this.host.opened = opened;
   }
 
@@ -455,6 +463,8 @@ class Popover extends PopoverPositionMixin(
     this.__onTargetFocusOut = this.__onTargetFocusOut.bind(this);
     this.__onTargetMouseEnter = this.__onTargetMouseEnter.bind(this);
     this.__onTargetMouseLeave = this.__onTargetMouseLeave.bind(this);
+    this.__onPopoverOpenedOnHover = this.__onPopoverOpenedOnHover.bind(this);
+    this.__onPopoverOpenedOnFocus = this.__onPopoverOpenedOnFocus.bind(this);
 
     this._openedStateController = new PopoverOpenedStateController(this);
   }
@@ -571,8 +581,17 @@ class Popover extends PopoverPositionMixin(
   __openedChanged(opened, oldOpened) {
     if (opened) {
       document.addEventListener('keydown', this.__onGlobalKeyDown, true);
+      // Closes the popover if the trigger matches the trigger that caused another popover the open.
+      // This way, only a single popover opened with the same trigger can stay open at the same time.
+      if (this.__lastOpenedTrigger === 'hover') {
+        document.addEventListener('popover-opened-on-hover', this.__onPopoverOpenedOnHover, true);
+      } else if (this.__lastOpenedTrigger === 'focus') {
+        document.addEventListener('popover-opened-on-focus', this.__onPopoverOpenedOnFocus, true);
+      }
     } else if (oldOpened) {
       document.removeEventListener('keydown', this.__onGlobalKeyDown, true);
+      document.removeEventListener('popover-opened-on-hover', this.__onPopoverOpenedOnHover, true);
+      document.removeEventListener('popover-opened-on-focus', this.__onPopoverOpenedOnFocus, true);
     }
   }
 
@@ -718,6 +737,18 @@ class Popover extends PopoverPositionMixin(
         event.preventDefault();
         lastFocusable.focus();
       }
+    }
+  }
+
+  __onPopoverOpenedOnHover() {
+    if (this.opened) {
+      this._openedStateController.close(true);
+    }
+  }
+
+  __onPopoverOpenedOnFocus() {
+    if (this.opened) {
+      this._openedStateController.close(true);
     }
   }
 

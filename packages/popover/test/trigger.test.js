@@ -417,6 +417,60 @@ describe('trigger', () => {
       await nextUpdate(popover);
       expect(overlay.opened).to.be.true;
     });
+
+    describe('single open popover per trigger', () => {
+      let target1, target2, overlay1, overlay2;
+
+      beforeEach(async () => {
+        const popover1 = fixtureSync('<vaadin-popover></vaadin-popover>');
+        target1 = fixtureSync('<button>Target 1</button>');
+        popover1.target = target1;
+        popover1.trigger = ['hover', 'focus'];
+        popover1.renderer = (root) => {
+          if (!root.firstChild) {
+            root.textContent = 'First popover';
+          }
+        };
+
+        const popover2 = fixtureSync('<vaadin-popover></vaadin-popover>');
+        target2 = fixtureSync('<button>Target 2</button>');
+        popover2.target = target2;
+        popover2.trigger = ['hover', 'focus'];
+        popover2.renderer = (root) => {
+          if (!root.firstChild) {
+            root.textContent = 'Second popover';
+          }
+        };
+
+        await nextRender();
+
+        overlay1 = popover1.shadowRoot.querySelector('vaadin-popover-overlay');
+        overlay2 = popover2.shadowRoot.querySelector('vaadin-popover-overlay');
+      });
+
+      it('should close first hovered popover when second popover is hovered', async () => {
+        mouseenter(target1);
+        await nextRender();
+        expect(overlay1.opened).to.be.true;
+
+        mouseenter(target2);
+        await nextRender();
+
+        expect(overlay2.opened).to.be.true;
+        expect(overlay1.opened).to.be.false;
+      });
+
+      it('should close first focused popover when second popover is focused', async () => {
+        focusin(target1);
+        await nextRender();
+        expect(overlay1.opened).to.be.true;
+
+        focusin(target2);
+        await nextRender();
+        expect(overlay2.opened).to.be.true;
+        expect(overlay1.opened).to.be.false;
+      });
+    });
   });
 
   describe('focus and click', () => {
