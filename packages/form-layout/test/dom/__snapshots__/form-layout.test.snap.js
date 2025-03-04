@@ -14,10 +14,10 @@ snapshots["vaadin-form-layout auto-responsive basic host default"] =
 `;
 /* end snapshot vaadin-form-layout auto-responsive basic host default */
 
-snapshots["vaadin-form-layout auto-responsive basic host maxColumns"] = 
+snapshots["vaadin-form-layout auto-responsive basic host maxColumns < number of columns"] = 
 `<vaadin-form-layout
   auto-responsive=""
-  style="--_column-width: 13em; --_max-columns: 3;"
+  style="--_column-width: 13em; --_max-columns: 1;"
 >
   <input placeholder="First name">
   <input placeholder="Last name">
@@ -25,7 +25,24 @@ snapshots["vaadin-form-layout auto-responsive basic host maxColumns"] =
   <input placeholder="Phone">
 </vaadin-form-layout>
 `;
-/* end snapshot vaadin-form-layout auto-responsive basic host maxColumns */
+/* end snapshot vaadin-form-layout auto-responsive basic host maxColumns < number of columns */
+
+snapshots["vaadin-form-layout auto-responsive basic host maxColumns > number of columns"] = 
+`<vaadin-form-layout
+  auto-responsive=""
+  auto-rows=""
+  style="--_column-width: 13em; --_max-columns: 4;"
+>
+  <input
+    placeholder="First name"
+    style="--_grid-colstart: 1;"
+  >
+  <input placeholder="Last name">
+  <input placeholder="Email">
+  <input placeholder="Phone">
+</vaadin-form-layout>
+`;
+/* end snapshot vaadin-form-layout auto-responsive basic host maxColumns > number of columns */
 
 snapshots["vaadin-form-layout auto-responsive basic host columnWidth"] = 
 `<vaadin-form-layout
@@ -71,7 +88,7 @@ snapshots["vaadin-form-layout auto-responsive basic host expandColumns"] =
 snapshots["vaadin-form-layout auto-responsive basic shadow default"] = 
 `<div
   id="layout"
-  style="--_grid-rendered-column-count: 3;"
+  style="--_grid-rendered-column-count: 1;"
 >
   <slot id="slot">
   </slot>
