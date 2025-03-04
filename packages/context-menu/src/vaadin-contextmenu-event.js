@@ -3,6 +3,7 @@
  * Copyright (c) 2016 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { isKeyboardActive } from '@vaadin/a11y-base';
 import { isIOS } from '@vaadin/component-base/src/browser-utils.js';
 import { prevent, register } from '@vaadin/component-base/src/gestures.js';
 
@@ -93,7 +94,18 @@ register({
   contextmenu(e) {
     if (!e.shiftKey) {
       this._setSourceEvent(e);
-      this.fire(e.target, e.clientX, e.clientY);
+      // When context menu is triggered by keyboard, position the context menu
+      // in the center of the target
+      if (isKeyboardActive()) {
+        // Need to use composed path here as the target for synthetic
+        // contextmenu events seems to be the host element
+        const keyboardTarget = e.composedPath()[0];
+        const targetRect = keyboardTarget.getBoundingClientRect();
+        this.fire(keyboardTarget, targetRect.left, targetRect.bottom);
+      } else {
+        // Otherwise use mouse coordinates reported in pointer event
+        this.fire(e.target, e.clientX, e.clientY);
+      }
       prevent('tap');
     }
   },
