@@ -5,6 +5,7 @@
  */
 import type { Constructor } from '@open-wc/dedupe-mixin';
 import type { ResizeMixinClass } from '@vaadin/component-base/src/resize-mixin.js';
+import type { SlotStylesMixinClass } from '@vaadin/component-base/src/slot-styles-mixin.js';
 
 export type FormLayoutLabelsPosition = 'aside' | 'top';
 
@@ -19,7 +20,7 @@ export type FormLayoutResponsiveStep = {
  */
 export declare function FormLayoutMixin<T extends Constructor<HTMLElement>>(
   base: T,
-): Constructor<ResizeMixinClass> & Constructor<FormLayoutMixinClass> & T;
+): Constructor<ResizeMixinClass> & Constructor<FormLayoutMixinClass> & Constructor<SlotStylesMixinClass> & T;
 
 export declare class FormLayoutMixinClass {
   /**

@@ -297,19 +297,19 @@ describe('form-layout auto responsive', () => {
     beforeEach(async () => {
       element = fixtureSync(
         `
-          <vaadin-form-layout auto-responsive column-width="200px">
+          <vaadin-form-layout auto-responsive column-width="15em">
             <vaadin-form-row>
-              <input placeholder="First name" style="width: 100px" />
-              <input placeholder="Last Name" style="width: 300px" />
+              <input placeholder="First name" style="width: 10em" />
+              <input placeholder="Last Name" style="width: 20em" />
             </vaadin-form-row>
             <vaadin-form-row>
               <vaadin-form-item>
                 <label slot="label">Phone</label>
-                <input style="width: 100px" />
+                <input style="width: 10em" />
               </vaadin-form-item>
               <vaadin-form-item>
                 <label slot="label">Email</label>
-                <input style="width: 300px" />
+                <input style="width: 20em" />
               </vaadin-form-item>
             </vaadin-form-row>
           </vaadin-form-layout>
