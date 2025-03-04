@@ -440,6 +440,7 @@ export const FormLayoutMixin = (superClass) =>
       let maxColumns = 0;
 
       const fitsLabelsAside = this.offsetWidth >= this.__columnWidthWithLabelsAside;
+      const renderedColumnCount = this.__renderedColumnCount;
       this.$.layout.toggleAttribute('fits-labels-aside', this.labelsAside && fitsLabelsAside);
 
       this.__children
@@ -481,8 +482,9 @@ export const FormLayoutMixin = (superClass) =>
         child.style.removeProperty('--_grid-colstart');
       });
 
-      this.style.setProperty('--_max-columns', Math.min(maxColumns, this.maxColumns));
-      this.$.layout.style.setProperty('--_grid-rendered-column-count', this.__renderedColumnCount);
+      maxColumns = Math.min(maxColumns, this.maxColumns);
+      this.style.setProperty('--_max-columns', maxColumns);
+      this.$.layout.style.setProperty('--_grid-rendered-column-count', Math.min(renderedColumnCount, maxColumns));
     }
 
     /** @private */
