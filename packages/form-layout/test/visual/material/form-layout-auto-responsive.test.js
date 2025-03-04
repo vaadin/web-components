@@ -235,19 +235,13 @@ describe('form-layout auto responsive', () => {
     beforeEach(async () => {
       element = fixtureSync(
         `
-          <vaadin-form-layout auto-responsive auto-rows max-columns="2">
+          <vaadin-form-layout auto-responsive auto-rows max-columns="2" expand-fields>
             <input placeholder="First name" />
             <input placeholder="Last Name" />
             <input placeholder="Email" />
             <input placeholder="Phone" />
             <input placeholder="Address" colspan="2" />
           </vaadin-form-layout>
-
-          <style>
-            input {
-              justify-self: stretch;
-            }
-          </style>
         `,
         container,
       );
@@ -275,7 +269,7 @@ describe('form-layout auto responsive', () => {
     beforeEach(async () => {
       element = fixtureSync(
         `
-          <vaadin-form-layout auto-responsive auto-rows max-columns="2">
+          <vaadin-form-layout auto-responsive auto-rows max-columns="2" expand-fields>
             <vaadin-form-row>
               <input placeholder="First name" />
               <input placeholder="Last Name" />
@@ -288,12 +282,6 @@ describe('form-layout auto responsive', () => {
               <input placeholder="Address" colspan="2"  />
             </vaadin-form-row>
           </vaadin-form-layout>
-
-          <style>
-            input {
-              justify-self: stretch;
-            }
-          </style>
       `,
         container,
       );
@@ -302,6 +290,43 @@ describe('form-layout auto responsive', () => {
 
     it('default', async () => {
       await visualDiff(container, 'colspan-with-explicit-rows');
+    });
+  });
+
+  describe('fields with explicit width', () => {
+    beforeEach(async () => {
+      element = fixtureSync(
+        `
+          <vaadin-form-layout auto-responsive column-width="200px">
+            <vaadin-form-row>
+              <input placeholder="First name" style="width: 100px" />
+              <input placeholder="Last Name" style="width: 300px" />
+            </vaadin-form-row>
+            <vaadin-form-row>
+              <vaadin-form-item>
+                <label slot="label">Phone</label>
+                <input style="width: 100px" />
+              </vaadin-form-item>
+              <vaadin-form-item>
+                <label slot="label">Email</label>
+                <input style="width: 300px" />
+              </vaadin-form-item>
+            </vaadin-form-row>
+          </vaadin-form-layout>
+        `,
+        container,
+      );
+      await nextFrame();
+    });
+
+    it('default', async () => {
+      await visualDiff(container, 'fields-with-explicit-width');
+    });
+
+    it('expandFields', async () => {
+      element.expandFields = true;
+      await nextResize(element);
+      await visualDiff(container, 'fields-with-explicit-width-expand-fields');
     });
   });
 });

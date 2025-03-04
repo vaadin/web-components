@@ -145,10 +145,6 @@ export const formLayoutStyles = css`
   :host([auto-responsive][expand-fields]) #layout {
     justify-items: stretch;
   }
-
-  :host([auto-responsive][expand-fields]) #layout ::slotted(*) {
-    --_form-item-expand-fields: 1;
-  }
 `;
 
 export const formRowStyles = css`
@@ -207,15 +203,10 @@ export const formItemStyles = css`
     flex: 1 1 auto;
   }
 
-  #content ::slotted(*) {
+  #content ::slotted(.full-width),
+  #content[expand-fields] ::slotted(*) {
     box-sizing: border-box;
-    /* Sets width to 100% if expand-fields is on */
-    width: calc(100% * var(--_form-item-expand-fields));
-    /* Sets min-width to 0 if expand-fields is on */
-    min-width: calc(1 - var(--_form-item-expand-fields));
-  }
-
-  #content ::slotted(.full-width) {
-    --_form-item-expand-fields: 1;
+    width: 100%;
+    min-width: 0;
   }
 `;

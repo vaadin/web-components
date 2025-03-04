@@ -202,6 +202,7 @@ export const FormLayoutMixin = (superClass) =>
           sync: true,
           value: false,
           reflectToAttribute: true,
+          observer: '__expandFieldsChanged',
         },
 
         /**
@@ -489,6 +490,10 @@ export const FormLayoutMixin = (superClass) =>
             child.style.removeProperty('--_grid-colspan');
           }
 
+          if (child.localName === 'vaadin-form-item' && child.$) {
+            child.$.content.toggleAttribute('expand-fields', this.expandFields);
+          }
+
           maxColumns = Math.max(maxColumns, columnCount);
         });
 
@@ -545,6 +550,11 @@ export const FormLayoutMixin = (superClass) =>
       } else {
         this.style.removeProperty('--_max-columns');
       }
+    }
+
+    /** @private */
+    __expandFieldsChanged() {
+      this._updateLayout();
     }
 
     /** @private */
