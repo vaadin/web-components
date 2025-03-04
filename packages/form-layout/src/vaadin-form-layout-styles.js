@@ -111,6 +111,8 @@ export const formLayoutStyles = css`
 
     /* By default, place each child on a new row */
     grid-column: 1 / span min(var(--_grid-colspan, 1), var(--_grid-rendered-column-count));
+    box-sizing: border-box;
+    max-width: 100%;
   }
 
   :host([auto-responsive][auto-rows]) #layout ::slotted(*) {
@@ -161,6 +163,8 @@ export const formRowStyles = css`
     --_form-item-labels-aside: inherit;
 
     grid-column: auto / span min(var(--_grid-colspan, 1), var(--_grid-rendered-column-count));
+    box-sizing: border-box;
+    max-width: 100%;
   }
 
   ::slotted(:first-child) {
@@ -205,6 +209,11 @@ export const formItemStyles = css`
 
   #content {
     flex: 1 1 auto;
+  }
+
+  #content[auto-responsive] ::slotted(*) {
+    box-sizing: border-box;
+    max-width: 100%;
   }
 
   #content ::slotted(.full-width) {
