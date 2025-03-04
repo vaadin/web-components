@@ -55,6 +55,11 @@ export const formLayoutStyles = css`
   }
 
   :host([auto-responsive]) #layout {
+    /* By default, labels should be displayed above the fields */
+    --_layout-labels-above: initial; /* true */
+    --_layout-labels-aside: ' '; /* false */
+
+    /* CSS grid related properties */
     --_grid-column-gap: var(--vaadin-form-layout-column-spacing);
     --_grid-column-width: var(--_column-width-labels-above);
     --_grid-column-max-total-gap: calc((var(--_max-columns) - 1) * var(--_grid-column-gap));
@@ -100,11 +105,14 @@ export const formLayoutStyles = css`
   }
 
   :host([auto-responsive]) #layout ::slotted(*) {
-    --_form-item-labels-above: initial; /* true */
-    --_form-item-labels-aside: ' '; /* false */
-
     /* By default, place each child on a new row */
     grid-column: 1 / span min(var(--_grid-colspan, 1), var(--_grid-rendered-column-count));
+  }
+
+  :host([auto-responsive]) #layout ::slotted(vaadin-form-item) {
+    /* Propagate the label position to the form item */
+    --_form-item-labels-above: var(--_layout-labels-above);
+    --_form-item-labels-aside: var(--_layout-labels-aside);
   }
 
   :host([auto-responsive][auto-rows]) #layout ::slotted(*) {
@@ -116,12 +124,9 @@ export const formLayoutStyles = css`
   }
 
   :host([auto-responsive][labels-aside]) #layout[fits-labels-aside] {
+    --_layout-labels-above: ' '; /* false */
+    --_layout-labels-aside: initial; /* true */
     --_grid-column-width: var(--_column-width-labels-aside);
-  }
-
-  :host([auto-responsive][labels-aside]) #layout[fits-labels-aside] ::slotted(*) {
-    --_form-item-labels-above: ' '; /* false */
-    --_form-item-labels-aside: initial; /* true */
   }
 
   :host([auto-responsive][expand-columns]) #layout {
@@ -159,10 +164,17 @@ export const formRowStyles = css`
   ::slotted(:first-child) {
     grid-column-start: 1;
   }
+
+  ::slotted(vaadin-form-item) {
+    /* Propagate the label position to the form item */
+    --_form-item-labels-above: var(--_layout-labels-above);
+    --_form-item-labels-aside: var(--_layout-labels-aside);
+  }
 `;
 
 export const formItemStyles = css`
   :host {
+    /* By default, when auto-responsive mode is disabled, labels should be displayed beside the fields. */
     --_form-item-labels-above: ' '; /* false */
     --_form-item-labels-aside: initial; /* true */
 
