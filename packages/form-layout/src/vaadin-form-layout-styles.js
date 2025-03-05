@@ -162,7 +162,7 @@ export const formLayoutSlotStyles = css`
       vaadin-form-layout[auto-responsive][expand-fields] vaadin-form-row > *,
       vaadin-form-layout[auto-responsive][expand-fields] vaadin-form-item > *
     ) {
-    width: 100%;
+    min-width: 100%;
   }
 `;
 
