@@ -5,6 +5,8 @@
  */
 import { isElementHidden } from '@vaadin/a11y-base/src/focus-utils.js';
 import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
+import { SlotStylesMixin } from '@vaadin/component-base/src/slot-styles-mixin.js';
+import { formLayoutSlotStyles } from './vaadin-form-layout-styles.js';
 
 function isValidCSSLength(value) {
   // Check if the value is a valid CSS length and not `inherit` or `normal`,
@@ -27,7 +29,7 @@ function isBreakLine(el) {
  * @mixes ResizeMixin
  */
 export const FormLayoutMixin = (superClass) =>
-  class extends ResizeMixin(superClass) {
+  class extends SlotStylesMixin(ResizeMixin(superClass)) {
     static get properties() {
       return {
         /**
@@ -248,6 +250,14 @@ export const FormLayoutMixin = (superClass) =>
 
       this.__childrenObserver.disconnect();
       this.__childrenAttributesObserver.disconnect();
+    }
+
+    /**
+     * @override
+     * @protected
+     */
+    get slotStyles() {
+      return [`${formLayoutSlotStyles}`.replace('vaadin-form-layout', this.localName)];
     }
 
     /** @private */
