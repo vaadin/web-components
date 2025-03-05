@@ -343,30 +343,20 @@ describe('form-layout auto responsive', () => {
         `
           <vaadin-form-layout auto-responsive column-width="15em">
             <vaadin-form-row>
-              <input placeholder="First name" class="small-input" />
-              <input placeholder="Last Name" class="large-input" />
+              <input placeholder="First name" style="width: 10em" />
+              <input placeholder="Last Name" style="width: 20em" />
             </vaadin-form-row>
             <vaadin-form-row>
               <vaadin-form-item>
                 <label slot="label">Phone</label>
-                <input class="small-input" />
+                <input style="width: 10em" />
               </vaadin-form-item>
               <vaadin-form-item>
                 <label slot="label">Email</label>
-                <input class="large-input" />
+                <input style="width: 20em" />
               </vaadin-form-item>
             </vaadin-form-row>
           </vaadin-form-layout>
-
-          <style>
-            .small-input {
-              width: 10em;
-            }
-
-            .large-input {
-              width: 20em;
-            }
-          </style>
         `,
         container,
       );
