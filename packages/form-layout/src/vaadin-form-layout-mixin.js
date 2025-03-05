@@ -500,10 +500,6 @@ export const FormLayoutMixin = (superClass) =>
             child.style.removeProperty('--_grid-colspan');
           }
 
-          if (child.localName === 'vaadin-form-item' && child.$) {
-            child.$.content.toggleAttribute('expand-fields', this.expandFields);
-          }
-
           maxColumns = Math.max(maxColumns, columnCount);
         });
 
