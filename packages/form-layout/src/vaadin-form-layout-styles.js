@@ -160,6 +160,14 @@ export const formLayoutSlotStyles = css`
   }
 `;
 
+export const formLayoutSlotStyles = css`
+  /* Using :where to ensure user styles always take precedence */
+  :where(vaadin-form-layout[auto-responsive] vaadin-form-item > *) {
+    box-sizing: border-box;
+    max-width: 100%;
+  }
+`;
+
 export const formRowStyles = css`
   :host {
     display: contents;
