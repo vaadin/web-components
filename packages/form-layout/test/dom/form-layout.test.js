@@ -24,17 +24,6 @@ describe('vaadin-form-layout', () => {
           await expect(layout).dom.to.equalSnapshot();
         });
 
-        it('maxColumns < number of columns', async () => {
-          layout.maxColumns = 3;
-          await expect(layout).dom.to.equalSnapshot();
-        });
-
-        it('maxColumns > number of columns', async () => {
-          layout.autoRows = true;
-          layout.maxColumns = 5;
-          await expect(layout).dom.to.equalSnapshot();
-        });
-
         it('columnWidth', async () => {
           layout.columnWidth = '15em';
           await expect(layout).dom.to.equalSnapshot();
@@ -73,23 +62,70 @@ describe('vaadin-form-layout', () => {
       });
     });
 
-    describe('autoRows', () => {
-      beforeEach(async () => {
-        layout = fixtureSync(`
-          <vaadin-form-layout auto-responsive auto-rows>
-            <input placeholder="First name" />
-            <input placeholder="Last name" />
-            <br>
-            <input placeholder="Address" hidden />
-            <input placeholder="Email" />
-            <input placeholder="Phone" />
-          </vaadin-form-layout>
-        `);
-        await nextFrame();
-      });
+    ['host', 'shadow'].forEach((name) => {
+      describe(name, () => {
+        const domType = name === 'host' ? 'dom' : 'shadowDom';
 
-      it('default', async () => {
-        await expect(layout).dom.to.equalSnapshot();
+        describe('autoRows', () => {
+          beforeEach(async () => {
+            layout = fixtureSync(`
+              <vaadin-form-layout auto-responsive auto-rows>
+                <input placeholder="First name" />
+                <input placeholder="Last name" />
+                <br>
+                <input hidden />
+                <input placeholder="Address" colspan="2"/>
+              </vaadin-form-layout>
+            `);
+            await nextFrame();
+          });
+
+          it('default', async () => {
+            await expect(layout)[domType].to.equalSnapshot();
+          });
+
+          it('maxColumns < number of columns', async () => {
+            layout.maxColumns = 1;
+            await expect(layout)[domType].to.equalSnapshot();
+          });
+
+          it('maxColumns > number of columns', async () => {
+            layout.maxColumns = 20;
+            await expect(layout)[domType].to.equalSnapshot();
+          });
+        });
+
+        describe('explicit rows', () => {
+          beforeEach(async () => {
+            layout = fixtureSync(`
+              <vaadin-form-layout auto-responsive>
+                <vaadin-form-row>
+                  <input placeholder="First name" />
+                  <input placeholder="Last name" />
+                </vaadin-form-row>
+                <vaadin-form-row>
+                  <input hidden />
+                  <input placeholder="Address" colspan="2"/>
+                </vaadin-form-row>
+              </vaadin-form-layout>
+            `);
+            await nextFrame();
+          });
+
+          it('default', async () => {
+            await expect(layout)[domType].to.equalSnapshot();
+          });
+
+          it('maxColumns < number of columns', async () => {
+            layout.maxColumns = 1;
+            await expect(layout)[domType].to.equalSnapshot();
+          });
+
+          it('maxColumns > number of columns', async () => {
+            layout.maxColumns = 20;
+            await expect(layout)[domType].to.equalSnapshot();
+          });
+        });
       });
     });
   });
