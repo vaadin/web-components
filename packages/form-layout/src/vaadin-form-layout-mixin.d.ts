@@ -135,6 +135,15 @@ export declare class FormLayoutMixinClass {
   expandColumns: boolean;
 
   /**
+   * When `autoResponsive` is enabled, specifies whether fields should stretch
+   * to take up all available space within columns. This setting also applies
+   * to fields inside `<vaadin-form-item>` elements. The default value is `false`.
+   *
+   * @attr {boolean} expand-fields
+   */
+  expandFields: boolean;
+
+  /**
    * Update the layout.
    */
   protected _updateLayout(): void;
