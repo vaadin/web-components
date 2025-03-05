@@ -4,8 +4,10 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { isElementHidden } from '@vaadin/a11y-base/src/focus-utils.js';
+import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
 import { SlotStylesMixin } from '@vaadin/component-base/src/slot-styles-mixin.js';
+import { AutoResponsiveController } from './auto-responsive-controller.js';
 import { formLayoutSlotStyles } from './vaadin-form-layout-styles.js';
 
 function isValidCSSLength(value) {
@@ -16,20 +18,11 @@ function isValidCSSLength(value) {
 }
 
 /**
- * Check if the node is a line break element.
- * @param {HTMLElement} el
- * @return {boolean}
- */
-function isBreakLine(el) {
-  return el.localName === 'br';
-}
-
-/**
  * @polymerMixin
  * @mixes ResizeMixin
  */
 export const FormLayoutMixin = (superClass) =>
-  class extends SlotStylesMixin(ResizeMixin(superClass)) {
+  class extends SlotStylesMixin(ResizeMixin(ControllerMixin(superClass))) {
     static get properties() {
       return {
         /**
@@ -229,9 +222,13 @@ export const FormLayoutMixin = (superClass) =>
     static get observers() {
       return [
         '_invokeUpdateLayout(_columnCount, _labelsOnTop)',
-        '__columnWidthChanged(columnWidth, autoResponsive)',
-        '__maxColumnsChanged(maxColumns, autoResponsive)',
+        '__autoResponsiveControllerPropsChanged(autoResponsive, columnWidth, maxColumns, autoRows, labelsAside, expandColumns)',
       ];
+    }
+
+    constructor() {
+      super();
+      this.__autoResponsiveController = new AutoResponsiveController(this);
     }
 
     /** @protected */
@@ -245,7 +242,7 @@ export const FormLayoutMixin = (superClass) =>
           );
         });
         if (shouldUpdateLayout) {
-          this._updateLayout();
+          this.__updateResponsiveStepLayout();
         }
       });
       this.__childrenObserver.observe(this, {
@@ -255,14 +252,19 @@ export const FormLayoutMixin = (superClass) =>
         attributeFilter: ['colspan', 'data-colspan', 'hidden'],
       });
 
-      requestAnimationFrame(() => this._selectResponsiveStep());
-      requestAnimationFrame(() => this._updateLayout());
+      requestAnimationFrame(() => this.__selectResponsiveStep());
+      requestAnimationFrame(() => this.__updateResponsiveStepLayout());
+
+      if (this.autoResponsive) {
+        this.__autoResponsiveController.connect();
+      }
     }
 
     /** @protected */
     disconnectedCallback() {
       super.disconnectedCallback();
       this.__childrenObserver.disconnect();
+      this.__autoResponsiveController.disconnect();
     }
 
     /**
@@ -321,11 +323,11 @@ export const FormLayoutMixin = (superClass) =>
         }
       }
 
-      this._selectResponsiveStep();
+      this.__selectResponsiveStep();
     }
 
     /** @private */
-    _selectResponsiveStep() {
+    __selectResponsiveStep() {
       if (this.autoResponsive) {
         return;
       }
@@ -356,21 +358,20 @@ export const FormLayoutMixin = (superClass) =>
 
     /** @private */
     _invokeUpdateLayout() {
-      this._updateLayout();
+      this.__updateResponsiveStepLayout();
     }
 
     /**
      * Update the layout.
-     * @protected
+     * @private
      */
-    _updateLayout() {
-      // Do not update layout when invisible
-      if (isElementHidden(this)) {
+    __updateResponsiveStepLayout() {
+      if (this.autoResponsive) {
         return;
       }
 
-      if (this.autoResponsive) {
-        this.__updateCSSGridLayout();
+      // Do not update layout when invisible
+      if (isElementHidden(this)) {
         return;
       }
 
@@ -457,71 +458,13 @@ export const FormLayoutMixin = (superClass) =>
         });
     }
 
-    /** @private */
-    __updateCSSGridLayout() {
-      let columnCount = 0;
-      let maxColumns = 0;
-
-      const fitsLabelsAside = this.offsetWidth >= this.__columnWidthWithLabelsAside;
-      const renderedColumnCount = this.__renderedColumnCount;
-      this.$.layout.toggleAttribute('fits-labels-aside', this.labelsAside && fitsLabelsAside);
-
-      this.__children
-        .filter((child) => isBreakLine(child) || !isElementHidden(child))
-        .forEach((child, index, children) => {
-          const prevChild = children[index - 1];
-
-          if (isBreakLine(child)) {
-            columnCount = 0;
-            return;
-          }
-
-          if (
-            (prevChild && prevChild.parentElement !== child.parentElement) ||
-            (!this.autoRows && child.parentElement === this)
-          ) {
-            columnCount = 0;
-          }
-
-          if (this.autoRows && columnCount === 0) {
-            child.style.setProperty('--_grid-colstart', 1);
-          } else {
-            child.style.removeProperty('--_grid-colstart');
-          }
-
-          const colspan = child.getAttribute('colspan') || child.getAttribute('data-colspan');
-          if (colspan) {
-            columnCount += parseInt(colspan);
-            child.style.setProperty('--_grid-colspan', colspan);
-          } else {
-            columnCount += 1;
-            child.style.removeProperty('--_grid-colspan');
-          }
-
-          maxColumns = Math.max(maxColumns, columnCount);
-        });
-
-      this.__children.filter(isElementHidden).forEach((child) => {
-        child.style.removeProperty('--_grid-colstart');
-      });
-
-      maxColumns = Math.min(maxColumns, this.maxColumns);
-      this.style.setProperty('--_max-columns', maxColumns);
-      this.$.layout.style.setProperty('--_grid-rendered-column-count', Math.min(renderedColumnCount, maxColumns));
-    }
-
-    /** @private */
-    get __children() {
-      return [...this.children].flatMap((child) => {
-        return child.localName === 'vaadin-form-row' ? [...child.children] : child;
-      });
-    }
-
-    /** @private */
-    get __renderedColumnCount() {
-      // Calculate the number of rendered columns, excluding CSS grid auto columns (0px)
-      const { gridTemplateColumns } = getComputedStyle(this.$.layout);
-      return gridTemplateColumns.split(' ').filter((width) => width !== '0px').length;
+    /** @protected */
+    _updateLayout() {
+      if (this.autoResponsive) {
+        this.__autoResponsiveController.updateLayout();
+      } else {
+        this.__updateResponsiveStepLayout();
+      }
     }
 
     /**
@@ -529,38 +472,43 @@ export const FormLayoutMixin = (superClass) =>
      * @override
      */
     _onResize(contentRect) {
+      if (this.autoResponsive) {
+        return;
+      }
+
       if (contentRect.width === 0 && contentRect.height === 0) {
         this.$.layout.style.opacity = '0';
         return;
       }
 
-      this._selectResponsiveStep();
-      this._updateLayout();
+      this.__selectResponsiveStep();
+      this.__updateResponsiveStepLayout();
 
       this.$.layout.style.opacity = '';
     }
 
     /** @private */
-    __columnWidthChanged(columnWidth, autoResponsive) {
-      if (autoResponsive) {
-        this.style.setProperty('--_column-width', columnWidth);
-      } else {
-        this.style.removeProperty('--_column-width');
-      }
-    }
+    // eslint-disable-next-line @typescript-eslint/max-params
+    __autoResponsiveControllerPropsChanged(
+      autoResponsive,
+      columnWidth,
+      maxColumns,
+      autoRows,
+      labelsAside,
+      expandColumns,
+    ) {
+      this.__autoResponsiveController.setProps({
+        columnWidth,
+        maxColumns,
+        autoRows,
+        labelsAside,
+        expandColumns,
+      });
 
-    /** @private */
-    __maxColumnsChanged(_maxColumns, autoResponsive) {
       if (autoResponsive) {
-        this._updateLayout();
+        this.__autoResponsiveController.connect();
       } else {
-        this.style.removeProperty('--_max-columns');
+        this.__autoResponsiveController.disconnect();
       }
-    }
-
-    /** @private */
-    get __columnWidthWithLabelsAside() {
-      const { backgroundPositionY } = getComputedStyle(this.$.layout, '::before');
-      return parseFloat(backgroundPositionY);
     }
   };
