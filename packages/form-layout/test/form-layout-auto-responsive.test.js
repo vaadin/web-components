@@ -240,4 +240,47 @@ describe('form-layout auto responsive', () => {
       expect(getComputedStyle(layout.children[2]).gridColumnEnd).to.equal('span 3');
     });
   });
+
+  describe('explicit rows', () => {
+    let rows;
+
+    beforeEach(async () => {
+      layout = fixtureSync(`
+        <vaadin-form-layout auto-responsive style="width: 1024px; height: 768px;">
+          <vaadin-form-row>
+            <input placeholder="First name" />
+            <input placeholder="Last name" />
+          </vaadin-form-row>
+          <vaadin-form-row>
+            <input placeholder="Address" />
+          </vaadin-form-row>
+        </vaadin-form-layout>
+      `);
+      await nextResize(layout);
+      await nextFrame();
+      rows = [...layout.children];
+    });
+
+    it('should update layout after adding a field to a row', async () => {
+      const newField = document.createElement('input');
+      rows[0].appendChild(newField);
+      await nextFrame();
+      assertFormLayoutGrid(layout, { columns: 3, rows: 2 });
+    });
+
+    it('should update layout after removing a field from a row', async () => {
+      const newField = document.createElement('input');
+      rows[0].appendChild(newField);
+      await nextFrame();
+      rows[0].removeChild(newField);
+      await nextFrame();
+      assertFormLayoutGrid(layout, { columns: 2, rows: 2 });
+    });
+
+    it('should update layout after adding colspan on a field', async () => {
+      rows[1].children[0].setAttribute('colspan', '2');
+      await nextFrame();
+      expect(getComputedStyle(rows[1].children[0]).gridColumnEnd).to.equal('span 2');
+    });
+  });
 });

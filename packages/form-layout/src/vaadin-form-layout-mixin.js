@@ -224,18 +224,19 @@ export const FormLayoutMixin = (superClass) =>
     connectedCallback() {
       super.connectedCallback();
 
-      // Set up an observer to update layout when new children are added or removed.
-      this.__childrenObserver = new MutationObserver(() => this._updateLayout());
-      this.__childrenObserver.observe(this, { childList: true });
-
-      // Set up an observer to update layout when children's attributes change.
-      this.__childrenAttributesObserver = new MutationObserver((mutations) => {
-        if (mutations.some((mutation) => mutation.target.parentElement === this)) {
+      this.__childrenObserver = new MutationObserver((mutations) => {
+        const shouldUpdateLayout = mutations.some(({ target }) => {
+          return (
+            target === this || target.parentElement === this || target.parentElement.localName === 'vaadin-form-row'
+          );
+        });
+        if (shouldUpdateLayout) {
           this._updateLayout();
         }
       });
-      this.__childrenAttributesObserver.observe(this, {
+      this.__childrenObserver.observe(this, {
         subtree: true,
+        childList: true,
         attributes: true,
         attributeFilter: ['colspan', 'data-colspan', 'hidden'],
       });
@@ -247,9 +248,7 @@ export const FormLayoutMixin = (superClass) =>
     /** @protected */
     disconnectedCallback() {
       super.disconnectedCallback();
-
       this.__childrenObserver.disconnect();
-      this.__childrenAttributesObserver.disconnect();
     }
 
     /**
