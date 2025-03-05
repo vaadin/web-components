@@ -19,7 +19,7 @@ describe('form-layout auto responsive', () => {
           <input placeholder="Phone">
         </vaadin-form-layout>
       `);
-      await nextFrame();
+      await nextResize(layout);
       fields = [...layout.children];
     });
 
@@ -117,7 +117,7 @@ describe('form-layout auto responsive', () => {
           </vaadin-form-layout>
         </div>`);
       layout = container.firstElementChild;
-      await nextFrame();
+      await nextResize(layout);
     });
 
     it('should start with max number of columns', () => {
@@ -175,7 +175,7 @@ describe('form-layout auto responsive', () => {
           </vaadin-form-layout>
         </div>`);
       layout = container.firstElementChild;
-      await nextFrame();
+      await nextResize(layout);
     });
 
     it('should start with max number of columns and labels positioned aside', () => {
@@ -218,7 +218,7 @@ describe('form-layout auto responsive', () => {
         </div>
       `);
       layout = container.firstElementChild;
-      await nextFrame();
+      await nextResize(layout);
     });
 
     it('should make element with colspan take the right amount of columns', () => {
@@ -257,7 +257,6 @@ describe('form-layout auto responsive', () => {
         </vaadin-form-layout>
       `);
       await nextResize(layout);
-      await nextFrame();
       rows = [...layout.children];
     });
 

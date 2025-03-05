@@ -1,4 +1,4 @@
-import { nextFrame, nextResize } from '@vaadin/testing-helpers';
+import { nextResize } from '@vaadin/testing-helpers';
 import { fixtureSync } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '../../../theme/material/vaadin-form-layout.js';
@@ -29,7 +29,7 @@ describe('form-layout auto responsive', () => {
         `,
         container,
       );
-      await nextFrame();
+      await nextResize();
     });
 
     it('basic', async () => {
@@ -87,7 +87,7 @@ describe('form-layout auto responsive', () => {
         `,
         container,
       );
-      await nextFrame();
+      await nextResize();
     });
 
     it('default', async () => {
@@ -116,7 +116,7 @@ describe('form-layout auto responsive', () => {
         `,
         container,
       );
-      await nextFrame();
+      await nextResize();
     });
 
     it('default', async () => {
@@ -145,7 +145,7 @@ describe('form-layout auto responsive', () => {
         `,
         container,
       );
-      await nextFrame();
+      await nextResize();
     });
 
     it('default', async () => {
@@ -177,7 +177,7 @@ describe('form-layout auto responsive', () => {
         `,
         container,
       );
-      await nextFrame();
+      await nextResize();
     });
 
     it('default', async () => {
@@ -267,7 +267,7 @@ describe('form-layout auto responsive', () => {
         `,
         container,
       );
-      await nextFrame();
+      await nextResize();
     });
 
     it('default', async () => {
@@ -301,7 +301,7 @@ describe('form-layout auto responsive', () => {
         `,
         container,
       );
-      await nextFrame();
+      await nextResize();
     });
 
     it('default', async () => {
@@ -347,7 +347,7 @@ describe('form-layout auto responsive', () => {
       `,
         container,
       );
-      await nextFrame();
+      await nextResize();
     });
 
     it('default', async () => {
@@ -378,7 +378,7 @@ describe('form-layout auto responsive', () => {
         `,
         container,
       );
-      await nextFrame();
+      await nextResize();
     });
 
     it('default', async () => {
