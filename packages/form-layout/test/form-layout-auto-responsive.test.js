@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, nextFrame, nextRender, nextResize } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame, nextResize } from '@vaadin/testing-helpers';
 import '../src/vaadin-form-layout.js';
 import '../src/vaadin-form-item.js';
 import '../src/vaadin-form-row.js';
@@ -246,42 +246,41 @@ describe('form-layout auto responsive', () => {
 
     beforeEach(async () => {
       layout = fixtureSync(`
-        <vaadin-form-layout auto-responsive style="width: 800px">
+        <vaadin-form-layout auto-responsive style="width: 1024px; height: 768px;">
           <vaadin-form-row>
             <input placeholder="First name" />
             <input placeholder="Last name" />
           </vaadin-form-row>
           <vaadin-form-row>
-            <input placeholder="Email" />
-            <input placeholder="Phone" />
+            <input placeholder="Address" />
           </vaadin-form-row>
         </vaadin-form-layout>
       `);
+      await nextResize(layout);
       await nextFrame();
-
       rows = [...layout.children];
     });
 
     it('should update layout after adding a field to a row', async () => {
       const newField = document.createElement('input');
-      rows[1].appendChild(newField);
-      await nextRender(layout);
+      rows[0].appendChild(newField);
+      await nextFrame();
       assertFormLayoutGrid(layout, { columns: 3, rows: 2 });
     });
 
     it('should update layout after removing a field from a row', async () => {
       const newField = document.createElement('input');
-      rows[1].appendChild(newField);
-      await nextRender(layout);
-      rows[1].removeChild(newField);
-      await nextRender(layout);
+      rows[0].appendChild(newField);
+      await nextFrame();
+      rows[0].removeChild(newField);
+      await nextFrame();
       assertFormLayoutGrid(layout, { columns: 2, rows: 2 });
     });
 
     it('should update layout after adding colspan on a field', async () => {
-      rows[0].children[1].setAttribute('colspan', '2');
-      await nextRender(layout);
-      expect(getComputedStyle(rows[0].children[1]).gridColumnEnd).to.equal('span 2');
+      rows[1].children[0].setAttribute('colspan', '2');
+      await nextFrame();
+      expect(getComputedStyle(rows[1].children[0]).gridColumnEnd).to.equal('span 2');
     });
   });
 });

@@ -225,7 +225,11 @@ export const FormLayoutMixin = (superClass) =>
       super.connectedCallback();
 
       this.__childrenObserver = new MutationObserver((mutations) => {
-        const shouldUpdateLayout = mutations.some(({ target }) => target === this || target.parentElement === this);
+        const shouldUpdateLayout = mutations.some(({ target }) => {
+          return (
+            target === this || target.parentElement === this || target.parentElement.localName === 'vaadin-form-row'
+          );
+        });
         if (shouldUpdateLayout) {
           this._updateLayout();
         }
