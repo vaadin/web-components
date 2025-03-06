@@ -63,7 +63,7 @@ export declare class FormLayoutMixinClass {
   responsiveSteps: FormLayoutResponsiveStep[];
 
   /**
-   * Enables the auto responsive mode where the component automatically creates and adjusts
+   * Enables the auto responsive mode in which the component automatically creates and adjusts
    * columns based on the container's width. Columns have a fixed width defined by `columnWidth`
    * and their number increases up to the limit set by `maxColumns`. The component dynamically
    * adjusts the number of columns as the container size changes. When this mode is enabled,
