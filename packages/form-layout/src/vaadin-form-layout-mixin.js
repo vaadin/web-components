@@ -194,8 +194,8 @@ export const FormLayoutMixin = (superClass) =>
 
     static get observers() {
       return [
-        '__autoResponsiveChanged(autoResponsive)',
         '__autoResponsiveLayoutControllerPropsChanged(columnWidth, maxColumns, autoRows, labelsAside, expandColumns, expandFields)',
+        '__autoResponsiveChanged(autoResponsive)',
       ];
     }
 

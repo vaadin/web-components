@@ -2,7 +2,6 @@ import '../../vaadin-form-layout.js';
 import '../../vaadin-form-item.js';
 import '../../vaadin-form-row.js';
 import type { ElementMixinClass } from '@vaadin/component-base/src/element-mixin.js';
-import type { ResizeMixinClass } from '@vaadin/component-base/src/resize-mixin.js';
 import type { ThemableMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import type { FormRow } from '../../vaadin-form-row.js';
 
@@ -25,7 +24,6 @@ assertType<number | undefined>(responsiveSteps.columns);
 assertType<'aside' | 'top' | undefined>(labelsPosition);
 
 // Mixins
-assertType<ResizeMixinClass>(layout);
 assertType<ElementMixinClass>(layout);
 assertType<ThemableMixinClass>(layout);
 
