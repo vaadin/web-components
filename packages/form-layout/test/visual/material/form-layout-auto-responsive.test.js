@@ -29,7 +29,7 @@ describe('form-layout auto responsive', () => {
         `,
         container,
       );
-      await nextResize();
+      await nextResize(element);
     });
 
     it('basic', async () => {
@@ -87,7 +87,7 @@ describe('form-layout auto responsive', () => {
         `,
         container,
       );
-      await nextResize();
+      await nextResize(element);
     });
 
     it('default', async () => {
@@ -110,7 +110,7 @@ describe('form-layout auto responsive', () => {
         `,
         container,
       );
-      await nextResize();
+      await nextResize(element);
     });
 
     it('default', async () => {
@@ -133,7 +133,7 @@ describe('form-layout auto responsive', () => {
         `,
         container,
       );
-      await nextResize();
+      await nextResize(element);
     });
 
     it('default', async () => {
@@ -158,7 +158,7 @@ describe('form-layout auto responsive', () => {
         `,
         container,
       );
-      await nextResize();
+      await nextResize(element);
     });
 
     it('default', async () => {
@@ -261,7 +261,7 @@ describe('form-layout auto responsive', () => {
         `,
         container,
       );
-      await nextResize();
+      await nextResize(element);
     });
 
     it('default', async () => {
@@ -289,7 +289,7 @@ describe('form-layout auto responsive', () => {
         `,
         container,
       );
-      await nextResize();
+      await nextResize(element);
     });
 
     it('default', async () => {
@@ -329,7 +329,7 @@ describe('form-layout auto responsive', () => {
       `,
         container,
       );
-      await nextResize();
+      await nextResize(element);
     });
 
     it('default', async () => {
@@ -360,7 +360,7 @@ describe('form-layout auto responsive', () => {
         `,
         container,
       );
-      await nextResize();
+      await nextResize(element);
     });
 
     it('default', async () => {
