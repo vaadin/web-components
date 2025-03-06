@@ -4,6 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { isElementHidden } from '@vaadin/a11y-base/src/focus-utils';
+import { AbstractLayoutController } from './abstract-layout-controller.js';
 
 /**
  * Check if the node is a line break element.
@@ -17,30 +18,22 @@ function isBreakLine(el) {
 
 /**
  * A controller that implements the auto-responsive layout algorithm.
+ *
+ * @private
  */
-export class AutoResponsiveController {
-  constructor(host) {
-    /** @type {HTMLElement} */
-    this.host = host;
-
-    /** @type {{ columnWidth?: string, maxColumns?: number, autoRows?: boolean, labelsAside?: boolean, expandColumns?: boolean }} */
-    this.props = {};
-
-    this.__resizeObserver = new ResizeObserver((entries) => setTimeout(() => this.__onResize(entries)));
-    this.__mutationObserver = new MutationObserver((entries) => this.__onMutation(entries));
-  }
-
+export class AutoResponsiveLayoutController extends AbstractLayoutController {
   /**
-   * Connects the controller to the host element.
+   * Connects the layout to the host element.
    */
   connect() {
-    if (this.__isConnected) {
+    if (this.isConnected) {
       return;
     }
 
-    this.__isConnected = true;
-    this.__resizeObserver.observe(this.host);
-    this.__mutationObserver.observe(this.host, {
+    super.connect();
+
+    this._resizeObserver.observe(this.host);
+    this._mutationObserver.observe(this.host, {
       subtree: true,
       childList: true,
       attributes: true,
@@ -51,16 +44,17 @@ export class AutoResponsiveController {
   }
 
   /**
-   * Disconnects the controller from the host element.
+   * Disconnects the layout from the host element.
    */
   disconnect() {
-    if (!this.__isConnected) {
+    if (!this.isConnected) {
       return;
     }
 
-    this.__isConnected = false;
-    this.__resizeObserver.disconnect();
-    this.__mutationObserver.disconnect();
+    super.disconnect();
+
+    this._resizeObserver.disconnect();
+    this._mutationObserver.disconnect();
 
     const { host } = this;
     host.style.removeProperty('--_column-width');
@@ -78,9 +72,9 @@ export class AutoResponsiveController {
    * Sets the controller's properties and updates the layout.
    */
   setProps(props) {
-    this.props = props;
+    super.setProps(props);
 
-    if (this.__isConnected) {
+    if (this.isConnected) {
       this.updateLayout();
     }
   }
@@ -90,7 +84,7 @@ export class AutoResponsiveController {
    */
   updateLayout() {
     const { host, props } = this;
-    if (!this.__isConnected || isElementHidden(host)) {
+    if (!this.isConnected || isElementHidden(host)) {
       return;
     }
 
@@ -144,13 +138,13 @@ export class AutoResponsiveController {
     host.$.layout.style.setProperty('--_grid-rendered-column-count', this.__renderedColumnCount);
   }
 
-  /** @private */
-  __onResize() {
+  /** @protected */
+  _onResize() {
     this.updateLayout();
   }
 
-  /** @private */
-  __onMutation(entries) {
+  /** @protected */
+  _onMutation(entries) {
     const shouldUpdateLayout = entries.some(({ target }) => {
       return (
         target === this.host ||

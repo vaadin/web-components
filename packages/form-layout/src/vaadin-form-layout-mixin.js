@@ -3,26 +3,17 @@
  * Copyright (c) 2017 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { isElementHidden } from '@vaadin/a11y-base/src/focus-utils.js';
-import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
-import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
 import { SlotStylesMixin } from '@vaadin/component-base/src/slot-styles-mixin.js';
-import { AutoResponsiveController } from './auto-responsive-controller.js';
+import { AutoResponsiveLayoutController } from './layouts/auto-responsive-layout-controller.js';
+import { ResponsiveStepsLayoutController } from './layouts/responsive-steps-layout-controller.js';
 import { formLayoutSlotStyles } from './vaadin-form-layout-styles.js';
-
-function isValidCSSLength(value) {
-  // Check if the value is a valid CSS length and not `inherit` or `normal`,
-  // which are also valid values for `word-spacing`, see:
-  // https://drafts.csswg.org/css-text-3/#word-spacing-property
-  return CSS.supports('word-spacing', value) && !['inherit', 'normal'].includes(value);
-}
 
 /**
  * @polymerMixin
- * @mixes ResizeMixin
+ * @mixes SlotStylesMixin
  */
 export const FormLayoutMixin = (superClass) =>
-  class extends SlotStylesMixin(ResizeMixin(ControllerMixin(superClass))) {
+  class extends SlotStylesMixin(superClass) {
     static get properties() {
       return {
         /**
@@ -81,7 +72,7 @@ export const FormLayoutMixin = (superClass) =>
               { minWidth: '40em', columns: 2 },
             ];
           },
-          observer: '_responsiveStepsChanged',
+          observer: '__responsiveStepsChanged',
           sync: true,
         },
 
@@ -198,73 +189,32 @@ export const FormLayoutMixin = (superClass) =>
           value: false,
           reflectToAttribute: true,
         },
-
-        /**
-         * Current number of columns in the layout
-         * @private
-         */
-        _columnCount: {
-          type: Number,
-          sync: true,
-        },
-
-        /**
-         * Indicates that labels are on top
-         * @private
-         */
-        _labelsOnTop: {
-          type: Boolean,
-          sync: true,
-        },
       };
     }
 
     static get observers() {
       return [
-        '_invokeUpdateLayout(_columnCount, _labelsOnTop)',
-        '__autoResponsiveControllerPropsChanged(autoResponsive, columnWidth, maxColumns, autoRows, labelsAside, expandColumns)',
+        '__autoResponsiveChanged(autoResponsive)',
+        '__autoResponsiveLayoutControllerPropsChanged(columnWidth, maxColumns, autoRows, labelsAside, expandColumns, expandFields)',
       ];
     }
 
     constructor() {
       super();
-      this.__autoResponsiveController = new AutoResponsiveController(this);
+      this.__autoResponsiveLayoutController = new AutoResponsiveLayoutController(this);
+      this.__responsiveStepsLayoutController = new ResponsiveStepsLayoutController(this);
     }
 
     /** @protected */
     connectedCallback() {
       super.connectedCallback();
-
-      this.__childrenObserver = new MutationObserver((mutations) => {
-        const shouldUpdateLayout = mutations.some(({ target }) => {
-          return (
-            target === this || target.parentElement === this || target.parentElement.localName === 'vaadin-form-row'
-          );
-        });
-        if (shouldUpdateLayout) {
-          this.__updateResponsiveStepLayout();
-        }
-      });
-      this.__childrenObserver.observe(this, {
-        subtree: true,
-        childList: true,
-        attributes: true,
-        attributeFilter: ['colspan', 'data-colspan', 'hidden'],
-      });
-
-      requestAnimationFrame(() => this.__selectResponsiveStep());
-      requestAnimationFrame(() => this.__updateResponsiveStepLayout());
-
-      if (this.autoResponsive) {
-        this.__autoResponsiveController.connect();
-      }
+      this.__layoutController.connect();
     }
 
     /** @protected */
     disconnectedCallback() {
       super.disconnectedCallback();
-      this.__childrenObserver.disconnect();
-      this.__autoResponsiveController.disconnect();
+      this.__layoutController.disconnect();
     }
 
     /**
@@ -275,40 +225,15 @@ export const FormLayoutMixin = (superClass) =>
       return [`${formLayoutSlotStyles}`.replace('vaadin-form-layout', this.localName)];
     }
 
-    /** @private */
-    _naturalNumberOrOne(n) {
-      if (typeof n === 'number' && n >= 1 && n < Infinity) {
-        return Math.floor(n);
-      }
-      return 1;
+    /** @protected */
+    _updateLayout() {
+      this.__layoutController.updateLayout();
     }
 
     /** @private */
-    _responsiveStepsChanged(responsiveSteps, oldResponsiveSteps) {
+    __responsiveStepsChanged(responsiveSteps, oldResponsiveSteps) {
       try {
-        if (!Array.isArray(responsiveSteps)) {
-          throw new Error('Invalid "responsiveSteps" type, an Array is required.');
-        }
-
-        if (responsiveSteps.length < 1) {
-          throw new Error('Invalid empty "responsiveSteps" array, at least one item is required.');
-        }
-
-        responsiveSteps.forEach((step) => {
-          if (this._naturalNumberOrOne(step.columns) !== step.columns) {
-            throw new Error(`Invalid 'columns' value of ${step.columns}, a natural number is required.`);
-          }
-
-          if (step.minWidth !== undefined && !isValidCSSLength(step.minWidth)) {
-            throw new Error(`Invalid 'minWidth' value of ${step.minWidth}, a valid CSS length required.`);
-          }
-
-          if (step.labelsPosition !== undefined && ['aside', 'top'].indexOf(step.labelsPosition) === -1) {
-            throw new Error(
-              `Invalid 'labelsPosition' value of ${step.labelsPosition}, 'aside' or 'top' string is required.`,
-            );
-          }
-        });
+        this.__responsiveStepsLayoutController.setProps({ responsiveSteps });
       } catch (e) {
         if (oldResponsiveSteps && oldResponsiveSteps !== responsiveSteps) {
           console.warn(`${e.message} Using previously set 'responsiveSteps' instead.`);
@@ -322,193 +247,40 @@ export const FormLayoutMixin = (superClass) =>
           ];
         }
       }
-
-      this.__selectResponsiveStep();
-    }
-
-    /** @private */
-    __selectResponsiveStep() {
-      if (this.autoResponsive) {
-        return;
-      }
-
-      // Iterate through responsiveSteps and choose the step
-      let selectedStep;
-      const tmpStyleProp = 'background-position';
-      this.responsiveSteps.forEach((step) => {
-        // Convert minWidth to px units for comparison
-        this.$.layout.style.setProperty(tmpStyleProp, step.minWidth);
-        const stepMinWidthPx = parseFloat(getComputedStyle(this.$.layout).getPropertyValue(tmpStyleProp));
-
-        // Compare step min-width with the host width, select the passed step
-        if (stepMinWidthPx <= this.offsetWidth) {
-          selectedStep = step;
-        }
-      });
-      this.$.layout.style.removeProperty(tmpStyleProp);
-
-      // Sometimes converting units is not possible, e.g, when element is
-      // not connected. Then the `selectedStep` stays `undefined`.
-      if (selectedStep) {
-        // Apply the chosen responsive step's properties
-        this._columnCount = selectedStep.columns;
-        this._labelsOnTop = selectedStep.labelsPosition === 'top';
-      }
-    }
-
-    /** @private */
-    _invokeUpdateLayout() {
-      this.__updateResponsiveStepLayout();
-    }
-
-    /**
-     * Update the layout.
-     * @private
-     */
-    __updateResponsiveStepLayout() {
-      if (this.autoResponsive) {
-        return;
-      }
-
-      // Do not update layout when invisible
-      if (isElementHidden(this)) {
-        return;
-      }
-
-      /*
-        The item width formula:
-
-            itemWidth = colspan / columnCount * 100% - columnSpacing
-
-        We have to subtract columnSpacing, because the column spacing space is taken
-        by item margins of 1/2 * spacing on both sides
-      */
-
-      const style = getComputedStyle(this);
-      const columnSpacing = style.getPropertyValue('--vaadin-form-layout-column-spacing');
-
-      const direction = style.direction;
-      const marginStartProp = `margin-${direction === 'ltr' ? 'left' : 'right'}`;
-      const marginEndProp = `margin-${direction === 'ltr' ? 'right' : 'left'}`;
-
-      const containerWidth = this.offsetWidth;
-
-      let col = 0;
-      Array.from(this.children)
-        .filter((child) => child.localName === 'br' || getComputedStyle(child).display !== 'none')
-        .forEach((child, index, children) => {
-          if (child.localName === 'br') {
-            // Reset column count on line break
-            col = 0;
-            return;
-          }
-
-          const attrColspan = child.getAttribute('colspan') || child.getAttribute('data-colspan');
-          let colspan;
-          colspan = this._naturalNumberOrOne(parseFloat(attrColspan));
-
-          // Never span further than the number of columns
-          colspan = Math.min(colspan, this._columnCount);
-
-          const childRatio = colspan / this._columnCount;
-          child.style.width = `calc(${childRatio * 100}% - ${1 - childRatio} * ${columnSpacing})`;
-
-          if (col + colspan > this._columnCount) {
-            // Too big to fit on this row, let's wrap it
-            col = 0;
-          }
-
-          // At the start edge
-          if (col === 0) {
-            child.style.setProperty(marginStartProp, '0px');
-          } else {
-            child.style.removeProperty(marginStartProp);
-          }
-
-          const nextIndex = index + 1;
-          const nextLineBreak = nextIndex < children.length && children[nextIndex].localName === 'br';
-
-          // At the end edge
-          if (col + colspan === this._columnCount) {
-            child.style.setProperty(marginEndProp, '0px');
-          } else if (nextLineBreak) {
-            const colspanRatio = (this._columnCount - col - colspan) / this._columnCount;
-            child.style.setProperty(
-              marginEndProp,
-              `calc(${colspanRatio * containerWidth}px + ${colspanRatio} * ${columnSpacing})`,
-            );
-          } else {
-            child.style.removeProperty(marginEndProp);
-          }
-
-          // Move the column counter
-          col = (col + colspan) % this._columnCount;
-
-          if (child.localName === 'vaadin-form-item') {
-            if (this._labelsOnTop) {
-              if (child.getAttribute('label-position') !== 'top') {
-                child.__useLayoutLabelPosition = true;
-                child.setAttribute('label-position', 'top');
-              }
-            } else if (child.__useLayoutLabelPosition) {
-              delete child.__useLayoutLabelPosition;
-              child.removeAttribute('label-position');
-            }
-          }
-        });
-    }
-
-    /** @protected */
-    _updateLayout() {
-      if (this.autoResponsive) {
-        this.__autoResponsiveController.updateLayout();
-      } else {
-        this.__updateResponsiveStepLayout();
-      }
-    }
-
-    /**
-     * @protected
-     * @override
-     */
-    _onResize(contentRect) {
-      if (this.autoResponsive) {
-        return;
-      }
-
-      if (contentRect.width === 0 && contentRect.height === 0) {
-        this.$.layout.style.opacity = '0';
-        return;
-      }
-
-      this.__selectResponsiveStep();
-      this.__updateResponsiveStepLayout();
-
-      this.$.layout.style.opacity = '';
     }
 
     /** @private */
     // eslint-disable-next-line @typescript-eslint/max-params
-    __autoResponsiveControllerPropsChanged(
-      autoResponsive,
+    __autoResponsiveLayoutControllerPropsChanged(
       columnWidth,
       maxColumns,
       autoRows,
       labelsAside,
       expandColumns,
+      expandFields,
     ) {
-      this.__autoResponsiveController.setProps({
+      this.__autoResponsiveLayoutController.setProps({
         columnWidth,
         maxColumns,
         autoRows,
         labelsAside,
         expandColumns,
+        expandFields,
       });
+    }
+
+    /** @private */
+    __autoResponsiveChanged(autoResponsive) {
+      if (this.__layoutController) {
+        this.__layoutController.disconnect();
+      }
 
       if (autoResponsive) {
-        this.__autoResponsiveController.connect();
+        this.__layoutController = this.__autoResponsiveLayoutController;
       } else {
-        this.__autoResponsiveController.disconnect();
+        this.__layoutController = this.__responsiveStepsLayoutController;
       }
+
+      this.__layoutController.connect();
     }
   };
