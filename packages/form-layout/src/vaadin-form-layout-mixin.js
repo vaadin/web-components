@@ -273,14 +273,6 @@ export const FormLayoutMixin = (superClass) =>
       return [`${formLayoutSlotStyles}`.replace('vaadin-form-layout', this.localName)];
     }
 
-    /**
-     * @override
-     * @protected
-     */
-    get slotStyles() {
-      return [`${formLayoutSlotStyles}`.replace('vaadin-form-layout', this.localName)];
-    }
-
     /** @private */
     _naturalNumberOrOne(n) {
       if (typeof n === 'number' && n >= 1 && n < Infinity) {
