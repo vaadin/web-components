@@ -3,11 +3,11 @@
  * Copyright (c) 2021 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-
 import { isElementHidden } from '@vaadin/a11y-base/src/focus-utils';
 
 /**
  * Check if the node is a line break element.
+ *
  * @param {HTMLElement} el
  * @return {boolean}
  */
@@ -15,15 +15,24 @@ function isBreakLine(el) {
   return el.localName === 'br';
 }
 
+/**
+ * A controller that implements the auto-responsive layout algorithm.
+ */
 export class AutoResponsiveController {
   constructor(host) {
+    /** @type {HTMLElement} */
     this.host = host;
+
+    /** @type {{ columnWidth?: string, maxColumns?: number, autoRows?: boolean, labelsAside?: boolean, expandColumns?: boolean }} */
     this.props = {};
 
     this.__resizeObserver = new ResizeObserver((entries) => setTimeout(() => this.__onResize(entries)));
     this.__mutationObserver = new MutationObserver((entries) => this.__onMutation(entries));
   }
 
+  /**
+   * Connects the controller to the host element.
+   */
   connect() {
     if (this.__isConnected) {
       return;
@@ -41,6 +50,9 @@ export class AutoResponsiveController {
     this.updateLayout();
   }
 
+  /**
+   * Disconnects the controller from the host element.
+   */
   disconnect() {
     if (!this.__isConnected) {
       return;
@@ -62,6 +74,9 @@ export class AutoResponsiveController {
     });
   }
 
+  /**
+   * Sets the controller's properties and updates the layout.
+   */
   setProps(props) {
     this.props = props;
 
@@ -70,6 +85,9 @@ export class AutoResponsiveController {
     }
   }
 
+  /**
+   * Updates the layout based on the current properties.
+   */
   updateLayout() {
     const { host, props } = this;
     if (!this.__isConnected || isElementHidden(host)) {
