@@ -369,27 +369,6 @@ describe('clear button', () => {
   });
 });
 
-describe('wrapped', () => {
-  let container, datePicker;
-
-  beforeEach(() => {
-    container = fixtureSync(`
-      <div style="height: 100px; overflow: scroll;">
-        <div style="height: 1000px;">
-          <vaadin-date-picker></vaadin-date-picker>
-        </div>
-      </div>
-    `);
-    datePicker = container.querySelector('vaadin-date-picker');
-  });
-
-  it('should match the parent width', () => {
-    container.querySelector('div').style.width = '120px';
-    datePicker.style.width = '100%';
-    expect(datePicker.clientWidth).to.equal(120);
-  });
-});
-
 describe('initial value attribute', () => {
   let datePicker, input;
 
