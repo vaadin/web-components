@@ -195,8 +195,8 @@ export class ResponsiveStepsLayout extends AbstractLayout {
   }
 
   /** @override */
-  _onMutation(mutations) {
-    const shouldUpdateLayout = mutations.some(({ target }) => {
+  _onMutation(records) {
+    const shouldUpdateLayout = records.some(({ target }) => {
       return target === this.host || target.parentElement === this.host;
     });
     if (shouldUpdateLayout) {

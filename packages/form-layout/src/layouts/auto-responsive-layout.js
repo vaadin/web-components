@@ -137,8 +137,8 @@ export class AutoResponsiveLayout extends AbstractLayout {
   }
 
   /** @override */
-  _onMutation(entries) {
-    const shouldUpdateLayout = entries.some(({ target }) => {
+  _onMutation(records) {
+    const shouldUpdateLayout = records.some(({ target }) => {
       return (
         target === this.host ||
         target.parentElement === this.host ||

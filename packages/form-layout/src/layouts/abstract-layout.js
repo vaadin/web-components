@@ -10,6 +10,10 @@
  * @private
  */
 export class AbstractLayout {
+  /**
+   * @param {HTMLElement} host
+   * @param {{ mutationObserverOptions: MutationObserverInit }} config
+   */
   constructor(host, config) {
     this.host = host;
     this.props = {};
@@ -20,7 +24,7 @@ export class AbstractLayout {
     this.__resizeObserver = new ResizeObserver((entries) => setTimeout(() => this._onResize(entries)));
 
     /** @private */
-    this.__mutationObserver = new MutationObserver((entries) => this._onMutation(entries));
+    this.__mutationObserver = new MutationObserver((records) => this._onMutation(records));
   }
 
   /**
@@ -63,13 +67,19 @@ export class AbstractLayout {
     // To be implemented
   }
 
-  /** @protected */
+  /**
+   * @param {ResizeObserverEntry[]} _entries
+   * @protected
+   */
   _onResize(_entries) {
     // To be implemented
   }
 
-  /** @protected */
-  _onMutation(_entries) {
+  /**
+   * @param {MutationRecord[]} _records
+   * @protected
+   */
+  _onMutation(_records) {
     // To be implemented
   }
 }
