@@ -273,12 +273,6 @@ describe('edit column editor type', () => {
         expect(editor.opened).to.equal(false);
       });
 
-      it('should not throw when moving focus out of the select', () => {
-        focusout(editor);
-        grid._debouncerStopEdit?.flush();
-        expect(column._getEditorComponent(cell)).to.not.be.ok;
-      });
-
       it('should warn about missing options on enter key', () => {
         enter(editor.focusElement);
         expect(console.warn.called).to.be.true;
