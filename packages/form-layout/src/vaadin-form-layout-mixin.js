@@ -4,8 +4,8 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { SlotStylesMixin } from '@vaadin/component-base/src/slot-styles-mixin.js';
-import { AutoResponsiveLayoutController } from './layouts/auto-responsive-layout-controller.js';
-import { ResponsiveStepsLayoutController } from './layouts/responsive-steps-layout-controller.js';
+import { AutoResponsiveLayout } from './layouts/auto-responsive-layout.js';
+import { ResponsiveStepsLayout } from './layouts/responsive-steps-layout.js';
 import { formLayoutSlotStyles } from './vaadin-form-layout-styles.js';
 
 /**
@@ -194,27 +194,31 @@ export const FormLayoutMixin = (superClass) =>
 
     static get observers() {
       return [
-        '__autoResponsiveLayoutControllerPropsChanged(columnWidth, maxColumns, autoRows, labelsAside, expandColumns, expandFields)',
+        '__autoResponsiveLayoutPropsChanged(columnWidth, maxColumns, autoRows, labelsAside, expandColumns, expandFields)',
         '__autoResponsiveChanged(autoResponsive)',
       ];
     }
 
     constructor() {
       super();
-      this.__autoResponsiveLayoutController = new AutoResponsiveLayoutController(this);
-      this.__responsiveStepsLayoutController = new ResponsiveStepsLayoutController(this);
+
+      /** @type {import('./layouts/abstract-layout.js').AbstractLayout} */
+      this.__currentLayout;
+
+      this.__autoResponsiveLayout = new AutoResponsiveLayout(this);
+      this.__responsiveStepsLayout = new ResponsiveStepsLayout(this);
     }
 
     /** @protected */
     connectedCallback() {
       super.connectedCallback();
-      this.__layoutController.connect();
+      this.__currentLayout.connect();
     }
 
     /** @protected */
     disconnectedCallback() {
       super.disconnectedCallback();
-      this.__layoutController.disconnect();
+      this.__currentLayout.disconnect();
     }
 
     /** @override */
@@ -224,13 +228,13 @@ export const FormLayoutMixin = (superClass) =>
 
     /** @protected */
     _updateLayout() {
-      this.__layoutController.updateLayout();
+      this.__currentLayout.updateLayout();
     }
 
     /** @private */
     __responsiveStepsChanged(responsiveSteps, oldResponsiveSteps) {
       try {
-        this.__responsiveStepsLayoutController.setProps({ responsiveSteps });
+        this.__responsiveStepsLayout.setProps({ responsiveSteps });
       } catch (e) {
         if (oldResponsiveSteps && oldResponsiveSteps !== responsiveSteps) {
           console.warn(`${e.message} Using previously set 'responsiveSteps' instead.`);
@@ -248,15 +252,8 @@ export const FormLayoutMixin = (superClass) =>
 
     /** @private */
     // eslint-disable-next-line @typescript-eslint/max-params
-    __autoResponsiveLayoutControllerPropsChanged(
-      columnWidth,
-      maxColumns,
-      autoRows,
-      labelsAside,
-      expandColumns,
-      expandFields,
-    ) {
-      this.__autoResponsiveLayoutController.setProps({
+    __autoResponsiveLayoutPropsChanged(columnWidth, maxColumns, autoRows, labelsAside, expandColumns, expandFields) {
+      this.__autoResponsiveLayout.setProps({
         columnWidth,
         maxColumns,
         autoRows,
@@ -268,16 +265,16 @@ export const FormLayoutMixin = (superClass) =>
 
     /** @private */
     __autoResponsiveChanged(autoResponsive) {
-      if (this.__layoutController) {
-        this.__layoutController.disconnect();
+      if (this.__currentLayout) {
+        this.__currentLayout.disconnect();
       }
 
       if (autoResponsive) {
-        this.__layoutController = this.__autoResponsiveLayoutController;
+        this.__currentLayout = this.__autoResponsiveLayout;
       } else {
-        this.__layoutController = this.__responsiveStepsLayoutController;
+        this.__currentLayout = this.__responsiveStepsLayout;
       }
 
-      this.__layoutController.connect();
+      this.__currentLayout.connect();
     }
   };

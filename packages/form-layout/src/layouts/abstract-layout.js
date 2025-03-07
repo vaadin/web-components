@@ -5,11 +5,11 @@
  */
 
 /**
- * An abstract class for layout controllers. Not intended for public use.
+ * An abstract class for layout implementation. Not intended for public use.
  *
  * @private
  */
-export class AbstractLayoutController {
+export class AbstractLayout {
   constructor(host, config) {
     this.host = host;
     this.props = {};

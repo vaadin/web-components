@@ -4,7 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { isElementHidden } from '@vaadin/a11y-base/src/focus-utils';
-import { AbstractLayoutController } from './abstract-layout-controller.js';
+import { AbstractLayout } from './abstract-layout.js';
 
 /**
  * Check if the node is a line break element.
@@ -17,12 +17,12 @@ function isBreakLine(el) {
 }
 
 /**
- * A controller that implements the auto-responsive layout algorithm.
+ * A class that implements the auto-responsive layout algorithm.
  * Not intended for public use.
  *
  * @private
  */
-export class AutoResponsiveLayoutController extends AbstractLayoutController {
+export class AutoResponsiveLayout extends AbstractLayout {
   constructor(host) {
     super(host, {
       mutationObserverOptions: {

@@ -4,7 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { isElementHidden } from '@vaadin/a11y-base/src/focus-utils';
-import { AbstractLayoutController } from './abstract-layout-controller.js';
+import { AbstractLayout } from './abstract-layout.js';
 
 function isValidCSSLength(value) {
   // Check if the value is a valid CSS length and not `inherit` or `normal`,
@@ -21,12 +21,12 @@ function naturalNumberOrOne(n) {
 }
 
 /**
- * A controller that implements the layout algorithm based on responsive steps.
+ * A class that implements the layout algorithm based on responsive steps.
  * Not intended for public use.
  *
  * @private
  */
-export class ResponsiveStepsLayoutController extends AbstractLayoutController {
+export class ResponsiveStepsLayout extends AbstractLayout {
   constructor(host) {
     super(host, {
       mutationObserverOptions: {
