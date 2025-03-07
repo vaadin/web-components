@@ -217,10 +217,7 @@ export const FormLayoutMixin = (superClass) =>
       this.__layoutController.disconnect();
     }
 
-    /**
-     * @override
-     * @protected
-     */
+    /** @override */
     get slotStyles() {
       return [`${formLayoutSlotStyles}`.replace('vaadin-form-layout', this.localName)];
     }

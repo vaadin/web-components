@@ -22,27 +22,29 @@ function naturalNumberOrOne(n) {
 
 /**
  * A controller that implements the layout algorithm based on responsive steps.
+ * Not intended for public use.
  *
  * @private
  */
 export class ResponsiveStepsLayoutController extends AbstractLayoutController {
-  /**
-   * Connects the layout to the host element.
-   */
+  constructor(host) {
+    super(host, {
+      mutationObserverOptions: {
+        subtree: true,
+        childList: true,
+        attributes: true,
+        attributeFilter: ['colspan', 'data-colspan', 'hidden'],
+      },
+    });
+  }
+
+  /** @override */
   connect() {
     if (this.isConnected) {
       return;
     }
 
     super.connect();
-
-    this._resizeObserver.observe(this.host);
-    this._mutationObserver.observe(this.host, {
-      subtree: true,
-      childList: true,
-      attributes: true,
-      attributeFilter: ['colspan', 'data-colspan', 'hidden'],
-    });
 
     this.__selectResponsiveStep();
     this.updateLayout();
@@ -51,23 +53,7 @@ export class ResponsiveStepsLayoutController extends AbstractLayoutController {
     requestAnimationFrame(() => this.updateLayout());
   }
 
-  /**
-   * Disconnects the layout from the host element.
-   */
-  disconnect() {
-    if (!this.isConnected) {
-      return;
-    }
-
-    super.disconnect();
-
-    this._resizeObserver.disconnect();
-    this._mutationObserver.disconnect();
-  }
-
-  /**
-   * Sets the controller's properties and updates the layout.
-   */
+  /** @override */
   setProps(props) {
     const { responsiveSteps } = props;
     if (!Array.isArray(responsiveSteps)) {
@@ -102,9 +88,7 @@ export class ResponsiveStepsLayoutController extends AbstractLayoutController {
     }
   }
 
-  /**
-   * Updates the layout based on the current properties.
-   */
+  /** @override */
   updateLayout() {
     const { host } = this;
 
@@ -196,6 +180,30 @@ export class ResponsiveStepsLayoutController extends AbstractLayoutController {
       });
   }
 
+  /** @override */
+  _onResize() {
+    const { host } = this;
+    if (isElementHidden(host)) {
+      host.$.layout.style.opacity = '0';
+      return;
+    }
+
+    this.__selectResponsiveStep();
+    this.updateLayout();
+
+    host.$.layout.style.opacity = '';
+  }
+
+  /** @override */
+  _onMutation(mutations) {
+    const shouldUpdateLayout = mutations.some(({ target }) => {
+      return target === this.host || target.parentElement === this.host;
+    });
+    if (shouldUpdateLayout) {
+      this.updateLayout();
+    }
+  }
+
   /** @private */
   __selectResponsiveStep() {
     const { host, props } = this;
@@ -220,30 +228,6 @@ export class ResponsiveStepsLayoutController extends AbstractLayoutController {
       // Apply the chosen responsive step's properties
       this.__columnCount = selectedStep.columns;
       this.__labelsOnTop = selectedStep.labelsPosition === 'top';
-    }
-  }
-
-  /** @protected */
-  _onResize() {
-    const { host } = this;
-    if (isElementHidden(host)) {
-      host.$.layout.style.opacity = '0';
-      return;
-    }
-
-    this.__selectResponsiveStep();
-    this.updateLayout();
-
-    host.$.layout.style.opacity = '';
-  }
-
-  /** @protected */
-  _onMutation(mutations) {
-    const shouldUpdateLayout = mutations.some(({ target }) => {
-      return target === this.host || target.parentElement === this.host;
-    });
-    if (shouldUpdateLayout) {
-      this.updateLayout();
     }
   }
 }

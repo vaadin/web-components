@@ -18,13 +18,23 @@ function isBreakLine(el) {
 
 /**
  * A controller that implements the auto-responsive layout algorithm.
+ * Not intended for public use.
  *
  * @private
  */
 export class AutoResponsiveLayoutController extends AbstractLayoutController {
-  /**
-   * Connects the layout to the host element.
-   */
+  constructor(host) {
+    super(host, {
+      mutationObserverOptions: {
+        subtree: true,
+        childList: true,
+        attributes: true,
+        attributeFilter: ['colspan', 'data-colspan', 'hidden'],
+      },
+    });
+  }
+
+  /** @override */
   connect() {
     if (this.isConnected) {
       return;
@@ -32,29 +42,16 @@ export class AutoResponsiveLayoutController extends AbstractLayoutController {
 
     super.connect();
 
-    this._resizeObserver.observe(this.host);
-    this._mutationObserver.observe(this.host, {
-      subtree: true,
-      childList: true,
-      attributes: true,
-      attributeFilter: ['colspan', 'data-colspan', 'hidden'],
-    });
-
     this.updateLayout();
   }
 
-  /**
-   * Disconnects the layout from the host element.
-   */
+  /** @override */
   disconnect() {
     if (!this.isConnected) {
       return;
     }
 
     super.disconnect();
-
-    this._resizeObserver.disconnect();
-    this._mutationObserver.disconnect();
 
     const { host } = this;
     host.style.removeProperty('--_column-width');
@@ -68,9 +65,7 @@ export class AutoResponsiveLayoutController extends AbstractLayoutController {
     });
   }
 
-  /**
-   * Sets the controller's properties and updates the layout.
-   */
+  /** @override */
   setProps(props) {
     super.setProps(props);
 
@@ -79,9 +74,7 @@ export class AutoResponsiveLayoutController extends AbstractLayoutController {
     }
   }
 
-  /**
-   * Updates the layout based on the current properties.
-   */
+  /** @override */
   updateLayout() {
     const { host, props } = this;
     if (!this.isConnected || isElementHidden(host)) {
@@ -138,12 +131,12 @@ export class AutoResponsiveLayoutController extends AbstractLayoutController {
     host.$.layout.style.setProperty('--_grid-rendered-column-count', this.__renderedColumnCount);
   }
 
-  /** @protected */
+  /** @override */
   _onResize() {
     this.updateLayout();
   }
 
-  /** @protected */
+  /** @override */
   _onMutation(entries) {
     const shouldUpdateLayout = entries.some(({ target }) => {
       return (
