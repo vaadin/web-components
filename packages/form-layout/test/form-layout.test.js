@@ -519,7 +519,7 @@ describe('form layout', () => {
     });
 
     it('should update steps on show after hidden', async () => {
-      const spy = sinon.spy(layout, '_selectResponsiveStep');
+      const spy = sinon.spy(layout.__currentLayout, '__selectResponsiveStep');
       await nextResize(layout);
       container.hidden = false;
       await nextResize(layout);
