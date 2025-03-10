@@ -7,6 +7,7 @@ import { css, html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
+import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 /**
@@ -18,8 +19,9 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * @extends HTMLElement
  * @mixes ThemableMixin
  * @mixes ElementMixin
+ * @mixes ResizeMixin
  */
-class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
+class MasterDetailLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElement)))) {
   static get is() {
     return 'vaadin-master-detail-layout';
   }
@@ -27,11 +29,44 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
   static get styles() {
     return css`
       :host {
-        display: block;
+        display: grid;
+        box-sizing: border-box;
+        height: 100%;
+        --_master-min-size: 20em;
+        --_detail-min-size: 20em;
       }
 
       :host([hidden]) {
         display: none !important;
+      }
+
+      :host([has-detail]) {
+        grid-template-columns: minmax(var(--_master-min-size), auto) minmax(var(--_detail-min-size), auto);
+      }
+
+      :host(:not([has-detail])) [part='detail'] {
+        display: none;
+      }
+
+      :host([overlay][has-detail]) {
+        position: relative;
+        grid-template-columns: minmax(var(--_master-min-size), auto);
+      }
+
+      :host([overlay]) [part='detail'] {
+        position: absolute;
+        inset-inline-end: 0;
+        min-width: var(--_detail-min-size);
+        height: 100%;
+      }
+
+      :host([stack][has-detail]) [part='master'] {
+        display: none;
+      }
+
+      ::slotted(*) {
+        box-sizing: border-box;
+        height: 100%;
       }
     `;
   }
@@ -42,10 +77,48 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
       <div part="master">
         <slot></slot>
       </div>
-      <div part="detail">
+      <div part="detail" @slotchange="${this.__onDetailSlotChange}">
         <slot name="detail"></slot>
       </div>
     `;
+  }
+
+  /**
+   * @protected
+   * @override
+   */
+  _onResize(contentRect) {
+    const masterMinSize = this.__getMinSizePx('master');
+    const detailMinSize = this.__getMinSizePx('detail');
+
+    // If the combined minimum size of both the master and the detail content
+    // exceeds the size of the layout, the layout changes to the overlay mode.
+    if (contentRect.width < masterMinSize + detailMinSize && contentRect.width > detailMinSize) {
+      this.setAttribute('overlay', '');
+    } else {
+      this.removeAttribute('overlay');
+    }
+
+    if (contentRect.width <= detailMinSize) {
+      this.setAttribute('stack', '');
+    } else {
+      this.removeAttribute('stack');
+    }
+  }
+
+  /** @private */
+  __getMinSizePx(prop) {
+    const tmpStyleProp = 'background-position';
+    // Convert em size to px units for comparison
+    this.style.setProperty(tmpStyleProp, `var(--_${prop}-min-size)`);
+    const minSizePx = parseFloat(getComputedStyle(this).getPropertyValue(tmpStyleProp));
+    this.style.removeProperty(tmpStyleProp);
+    return minSizePx;
+  }
+
+  /** @private */
+  __onDetailSlotChange(e) {
+    this.toggleAttribute('has-detail', e.target.assignedNodes().length > 0);
   }
 }
 

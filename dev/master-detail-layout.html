@@ -13,6 +13,34 @@
   </head>
 
   <body>
+    <style>
+      html,
+      body {
+        height: 100%;
+      }
+
+      body {
+        margin: 0;
+      }
+
+      vaadin-master-detail-layout {
+        border: solid 1px #ccc;
+      }
+
+      vaadin-master-detail-layout > div {
+        padding: 1rem;
+      }
+
+      vaadin-master-detail-layout[overlay][has-detail]::part(master) {
+        background-color: var(--lumo-shade-20pct);
+      }
+
+      vaadin-master-detail-layout[overlay]::part(detail) {
+        background: #fff;
+        border-left: solid 1px #ccc;
+      }
+    </style>
+
     <vaadin-master-detail-layout>
       <div>Master content</div>
       <div slot="detail">Detail content</div>
