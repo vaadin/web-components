@@ -344,6 +344,10 @@ export const ChartMixin = (superClass) =>
         beta: 15,
         depth: 50,
       };
+
+      // Threshold for the number of "addPoint" calls to detach and re-attach the chart.
+      this.__addPointThreshold = 200;
+      this.__addPointCounter = 0;
     }
 
     /**
@@ -951,6 +955,30 @@ export const ChartMixin = (superClass) =>
       const initialOptions = { ...this.options, ...this._jsonConfigurationBuffer };
       this.__initChart(initialOptions);
       this._jsonConfigurationBuffer = null;
+    }
+
+    /**
+     * Detaches and re-attaches the chart. This process destroys and recreates the configuration, which prevents the listeners from piling up. This is a workaround for HighCharts memory leak bug on addPoint calls. Should be removed after the underlying issue is resolved.
+     * @private
+     */
+    __detachReattachChart() {
+      const parent = this.parentElement;
+      let index;
+      if (parent) {
+        index = Array.prototype.indexOf.call(parent.children, this);
+        parent.removeChild(this);
+      }
+      queueMicrotask(() => {
+        if (!parent || index == null) {
+          return;
+        }
+        if (index === parent.children.length) {
+          parent.appendChild(this);
+        } else {
+          parent.insertBefore(this, parent.children[index]);
+        }
+      });
+      this.__addPointCounter = 0;
     }
 
     /**
@@ -1578,8 +1606,14 @@ export const ChartMixin = (superClass) =>
         const series = this.configuration.series[seriesIndex];
         const functionToCall = series[functionName];
         if (functionToCall && typeof functionToCall === 'function') {
+          if (functionName === 'addPoint') {
+            this.__addPointCounter += 1;
+          }
           args.forEach((arg) => inflateFunctions(arg));
           functionToCall.apply(series, args);
+          if (functionName === 'addPoint' && this.__addPointCounter >= this.__addPointThreshold) {
+            this.__detachReattachChart();
+          }
         }
       }
     }
