@@ -11,7 +11,37 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * (or primary) area and a detail (or secondary) area that is displayed next to, or
  * overlaid on top of, the master area, depending on configuration and viewport size.
  */
-declare class MasterDetailLayout extends ThemableMixin(ElementMixin(HTMLElement)) {}
+declare class MasterDetailLayout extends ThemableMixin(ElementMixin(HTMLElement)) {
+  /**
+   * Fixed size (in CSS length units) to be set on the detail pane.
+   * When specified, it prevents the detail pane from growing.
+   *
+   * @attr {string} detail-size
+   */
+  detailSize: string | null | undefined;
+
+  /**
+   * Minimum size (in CSS length units) to be set on the detail pane.
+   *
+   * @attr {string} detail-min-size
+   */
+  detailMinSize: string | null | undefined;
+
+  /**
+   * Fixed size (in CSS length units) to be set on the master pane.
+   * When specified, it prevents the master pane from growing.
+   *
+   * @attr {string} master-size
+   */
+  masterSize: string | null | undefined;
+
+  /**
+   * Minimum size (in CSS length units) to be set on the master pane.
+   *
+   * @attr {string} master-min-size
+   */
+  masterMinSize: string | null | undefined;
+}
 
 declare global {
   interface HTMLElementTagNameMap {
