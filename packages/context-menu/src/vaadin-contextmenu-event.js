@@ -4,7 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { isKeyboardActive } from '@vaadin/a11y-base';
-import { isIOS } from '@vaadin/component-base/src/browser-utils.js';
+import { isFirefox, isIOS } from '@vaadin/component-base/src/browser-utils.js';
 import { prevent, register } from '@vaadin/component-base/src/gestures.js';
 
 register({
@@ -94,11 +94,13 @@ register({
   contextmenu(e) {
     if (!e.shiftKey) {
       this._setSourceEvent(e);
-      // When context menu is triggered by keyboard, position the context menu
-      // in the center of the target
-      if (isKeyboardActive()) {
-        // Need to use composed path here as the target for synthetic
-        // contextmenu events seems to be the host element
+      if (isFirefox && isKeyboardActive()) {
+        // When using the context menu key on the keyboard in Windows, Firefox
+        // does not always return the correct coordinates for the focused
+        // element. Instead, calculate the coordinates manually based on the
+        // context menu target. Need to use composed path here as the target for
+        // synthetic contextmenu events seems to be the host element.
+        // See https://github.com/vaadin/flow-components/issues/7153
         const keyboardTarget = e.composedPath()[0];
         const targetRect = keyboardTarget.getBoundingClientRect();
         this.fire(keyboardTarget, targetRect.left, targetRect.bottom);

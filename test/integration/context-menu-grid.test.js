@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { esc, fire, fixtureSync, nextFrame, oneEvent } from '@vaadin/testing-helpers';
+import { esc, fire, fixtureSync, isFirefox, nextFrame, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '@vaadin/grid';
 import '@vaadin/context-menu';
@@ -91,7 +91,7 @@ describe('grid in context-menu', () => {
     });
   });
 
-  describe('using keyboard', () => {
+  (isFirefox ? describe : describe.skip)('trigger context menu using the keyboard', () => {
     it('should position the context menu to the bottom left of the cell where the context menu was triggered', async () => {
       // Ensure isKeyboardActive() returns true
       fire(window, 'keydown', { key: 'Enter', keyCode: 13 });
