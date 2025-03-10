@@ -220,6 +220,10 @@
       "types": "./FormLayout.d.ts",
       "default": "./FormLayout.js"
     },
+    "./FormRow.js": {
+      "types": "./FormRow.d.ts",
+      "default": "./FormRow.js"
+    },
     "./Grid.js": {
       "types": "./Grid.d.ts",
       "default": "./Grid.js"
@@ -425,6 +429,7 @@
     "./EmailField": "./EmailField.js",
     "./FormItem": "./FormItem.js",
     "./FormLayout": "./FormLayout.js",
+    "./FormRow": "./FormRow.js",
     "./Grid": "./Grid.js",
     "./GridColumn": "./GridColumn.js",
     "./GridColumnGroup": "./GridColumnGroup.js",
