@@ -101,12 +101,22 @@ registerStyles('vaadin-form-layout', formLayoutStyles, { moduleId: 'vaadin-form-
  * [`maxColumns`](#/elements/vaadin-form-layout#property-maxColumns) properties control the column width
  * (13em by default) and the maximum number of columns (10 by default) that the Form Layout can create.
  *
+ * The auto-responsive mode is disabled by default. To enable it for an individual instance, set the
+ * `auto-responsive` attribute:
+ *
  * ```html
  * <vaadin-form-layout auto-responsive>
  *   <vaadin-text-field label="First Name"></vaadin-text-field>
  *   <vaadin-text-field label="Last Name"></vaadin-text-field>
  *   <vaadin-text-area label="Address" colspan="2"></vaadin-text-area>
  * </vaadin-form-layout>
+ * ```
+ *
+ * You can also enable it for all instances by activating the `defaultAutoResponsiveFormLayout`
+ * feature flag before `<vaadin-form-layout>` elements are added to the DOM:
+ *
+ * ```js
+ * window.Vaadin.featureFlags.defaultAutoResponsiveFormLayout = true;
  * ```
  *
  * #### Organizing Fields into Rows
