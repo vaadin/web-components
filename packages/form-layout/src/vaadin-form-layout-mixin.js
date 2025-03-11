@@ -104,7 +104,17 @@ export const FormLayoutMixin = (superClass) =>
         autoResponsive: {
           type: Boolean,
           sync: true,
-          value: false,
+          value: () => {
+            if (
+              window.Vaadin &&
+              window.Vaadin.featureFlags &&
+              window.Vaadin.featureFlags.defaultAutoResponsiveFormLayout
+            ) {
+              return true;
+            }
+
+            return false;
+          },
           reflectToAttribute: true,
         },
 
