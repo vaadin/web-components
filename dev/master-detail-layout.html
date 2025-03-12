@@ -14,6 +14,15 @@
       vaadin-master-detail-layout {
         border: solid 1px #ccc;
       }
+
+      vaadin-master-detail-layout[overlay]::part(master) {
+        background-color: var(--lumo-shade-20pct);
+      }
+
+      vaadin-master-detail-layout[overlay]::part(detail) {
+        background: #fff;
+        border-left: solid 1px #ccc;
+      }
     </style>
 
     <p>

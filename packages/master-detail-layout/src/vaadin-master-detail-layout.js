@@ -7,6 +7,7 @@ import { css, html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
+import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 /**
@@ -18,8 +19,9 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * @extends HTMLElement
  * @mixes ThemableMixin
  * @mixes ElementMixin
+ * @mixes ResizeMixin
  */
-class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
+class MasterDetailLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElement)))) {
   static get is() {
     return 'vaadin-master-detail-layout';
   }
@@ -38,6 +40,18 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
 
       :host(:not([has-detail])) [part='detail'] {
         display: none;
+      }
+
+      /* Overlay mode */
+      :host([overlay][has-detail]) {
+        position: relative;
+      }
+
+      :host([overlay]) [part='detail'] {
+        position: absolute;
+        inset-inline-end: 0;
+        height: 100%;
+        width: var(--_detail-min-size, min-content);
       }
 
       /* No fixed size */
@@ -130,10 +144,10 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
   /** @protected */
   render() {
     return html`
-      <div part="master">
+      <div id="master" part="master">
         <slot></slot>
       </div>
-      <div part="detail">
+      <div id="detail" part="detail">
         <slot name="detail" @slotchange="${this.__onDetailSlotChange}"></slot>
       </div>
     `;
@@ -142,6 +156,14 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
   /** @private */
   __onDetailSlotChange(e) {
     this.toggleAttribute('has-detail', e.target.assignedNodes().length > 0);
+  }
+
+  /**
+   * @protected
+   * @override
+   */
+  _onResize() {
+    this.__detectLayoutMode();
   }
 
   /** @private */
@@ -177,6 +199,33 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
     }
 
     this.toggleAttribute(`has-${prop}`, !!size);
+  }
+
+  /** @private */
+  __detectLayoutMode() {
+    const detailWidth = this.$.detail.offsetWidth;
+
+    // Detect minimum width needed by master content. Use max-width to ensure
+    // the layout can switch back to split mode once there is enough space.
+    this.$.master.style.maxWidth = 'min-content';
+    const masterWidth = this.$.master.offsetWidth;
+    this.$.master.style.maxWidth = '';
+
+    // If the combined minimum size of both the master and the detail content
+    // exceeds the size of the layout, the layout changes to the overlay mode.
+    if (this.offsetWidth < masterWidth + detailWidth) {
+      this.setAttribute('overlay', '');
+    } else {
+      this.removeAttribute('overlay');
+    }
+
+    // Toggling the overlay resizes master content, which can cause document
+    // scroll bar to appear or disappear, and trigger another resize of the
+    // layout which can affect previous measurements and end up in horizontal
+    // scroll. Check if that is the case and if so, preserve the overlay mode.
+    if (this.offsetWidth < this.scrollWidth) {
+      this.setAttribute('overlay', '');
+    }
   }
 }
 

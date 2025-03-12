@@ -1,5 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
+import { setViewport } from '@vaadin/test-runner-commands';
+import { fixtureSync, nextRender, nextResize } from '@vaadin/testing-helpers';
 import '../vaadin-master-detail-layout.js';
 import './helpers/master-content.js';
 import './helpers/detail-content.js';
@@ -87,6 +88,60 @@ describe('vaadin-master-detail-layout', () => {
       expect(getComputedStyle(master).flexGrow).to.equal('1');
       expect(getComputedStyle(detail).flexBasis).to.equal('300px');
       expect(getComputedStyle(detail).flexGrow).to.equal('1');
+    });
+  });
+
+  describe('overlay', () => {
+    let width, height;
+
+    before(() => {
+      width = window.innerWidth;
+      height = window.innerHeight;
+    });
+
+    afterEach(async () => {
+      await setViewport({ width, height });
+    });
+
+    it('should switch to the overlay when there is not enough space for both panes', async () => {
+      // Use the threshold at which the overlay mode is on by default.
+      await setViewport({ width: 350, height });
+      await nextResize(layout);
+
+      expect(layout.hasAttribute('overlay')).to.be.true;
+      expect(getComputedStyle(detail).position).to.equal('absolute');
+    });
+
+    it('should set detail pane width in overlay mode when detailSize is set', async () => {
+      // Use the threshold at which the overlay mode isn't on by default,
+      // but will be on after setting fixed size on the detail pane.
+      await setViewport({ width: 500, height });
+      await nextResize(layout);
+
+      expect(layout.hasAttribute('overlay')).to.be.false;
+
+      layout.detailSize = '300px';
+      await nextResize(layout);
+
+      expect(layout.hasAttribute('overlay')).to.be.true;
+      expect(getComputedStyle(detail).position).to.equal('absolute');
+      expect(getComputedStyle(detail).width).to.equal('300px');
+    });
+
+    it('should set detail pane width in overlay mode when detailMinSize is set', async () => {
+      // Use the threshold at which the overlay mode isn't on by default,
+      // but will be on after setting min size on the detail pane.
+      await setViewport({ width: 500, height });
+      await nextResize(layout);
+
+      expect(layout.hasAttribute('overlay')).to.be.false;
+
+      layout.detailMinSize = '300px';
+      await nextResize(layout);
+
+      expect(layout.hasAttribute('overlay')).to.be.true;
+      expect(getComputedStyle(detail).position).to.equal('absolute');
+      expect(getComputedStyle(detail).width).to.equal('300px');
     });
   });
 });

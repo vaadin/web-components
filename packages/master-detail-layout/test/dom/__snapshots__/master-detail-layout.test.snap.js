@@ -2,11 +2,17 @@
 export const snapshots = {};
 
 snapshots["vaadin-master-detail-layout shadow default"] = 
-`<div part="master">
+`<div
+  id="master"
+  part="master"
+>
   <slot>
   </slot>
 </div>
-<div part="detail">
+<div
+  id="detail"
+  part="detail"
+>
   <slot name="detail">
   </slot>
 </div>
