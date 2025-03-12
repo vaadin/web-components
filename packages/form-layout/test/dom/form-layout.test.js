@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, nextFrame, nextResize } from '@vaadin/testing-helpers';
+import { fixtureSync, nextResize } from '@vaadin/testing-helpers';
 import '../../src/vaadin-form-layout.js';
 
 describe('vaadin-form-layout', () => {
@@ -16,7 +16,7 @@ describe('vaadin-form-layout', () => {
             <input placeholder="Phone" />
           </vaadin-form-layout>
         `);
-        await nextFrame();
+        await nextResize(layout);
       });
 
       describe('host', () => {
@@ -82,7 +82,7 @@ describe('vaadin-form-layout', () => {
                 <input placeholder="Address" colspan="2"/>
               </vaadin-form-layout>
             `);
-            await nextFrame();
+            await nextResize(layout);
           });
 
           it('default', async () => {
@@ -114,7 +114,7 @@ describe('vaadin-form-layout', () => {
                 </vaadin-form-row>
               </vaadin-form-layout>
             `);
-            await nextFrame();
+            await nextResize(layout);
           });
 
           it('default', async () => {
@@ -132,6 +132,31 @@ describe('vaadin-form-layout', () => {
           });
         });
       });
+    });
+  });
+
+  describe('defaultAutoResponsiveFormLayout feature flag', () => {
+    before(() => {
+      window.Vaadin ??= {};
+      window.Vaadin.featureFlags ??= {};
+      window.Vaadin.featureFlags.defaultAutoResponsiveFormLayout = true;
+    });
+
+    after(() => {
+      window.Vaadin.featureFlags.defaultAutoResponsiveFormLayout = false;
+    });
+
+    beforeEach(async () => {
+      layout = fixtureSync(`
+        <vaadin-form-layout>
+          <input placeholder="First name" />
+        </vaadin-form-layout>
+      `);
+      await nextResize(layout);
+    });
+
+    it('default', async () => {
+      await expect(layout).dom.to.equalSnapshot();
     });
   });
 });

@@ -298,3 +298,13 @@ snapshots["vaadin-form-layout auto-responsive shadow explicit rows maxColumns > 
 `;
 /* end snapshot vaadin-form-layout auto-responsive shadow explicit rows maxColumns > number of columns */
 
+snapshots["vaadin-form-layout defaultAutoResponsiveFormLayout feature flag default"] = 
+`<vaadin-form-layout
+  auto-responsive=""
+  style="--_column-width: 13em; --_max-columns: 1;"
+>
+  <input placeholder="First name">
+</vaadin-form-layout>
+`;
+/* end snapshot vaadin-form-layout defaultAutoResponsiveFormLayout feature flag default */
+

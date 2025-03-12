@@ -98,12 +98,22 @@ export * from './vaadin-form-layout-mixin.js';
  * [`maxColumns`](#/elements/vaadin-form-layout#property-maxColumns) properties control the column width
  * (13em by default) and the maximum number of columns (10 by default) that the Form Layout can create.
  *
+ * The auto-responsive mode is disabled by default. To enable it for an individual instance, set the
+ * `auto-responsive` attribute:
+ *
  * ```html
  * <vaadin-form-layout auto-responsive>
  *   <vaadin-text-field label="First Name"></vaadin-text-field>
  *   <vaadin-text-field label="Last Name"></vaadin-text-field>
  *   <vaadin-text-area label="Address" colspan="2"></vaadin-text-area>
  * </vaadin-form-layout>
+ * ```
+ *
+ * You can also enable it for all instances by enabling the following feature flag
+ * before `<vaadin-form-layout>` elements are added to the DOM:
+ *
+ * ```js
+ * window.Vaadin.featureFlags.defaultAutoResponsiveFormLayout = true;
  * ```
  *
  * #### Organizing Fields into Rows
@@ -181,6 +191,8 @@ export * from './vaadin-form-layout-mixin.js';
  * ---|---|---
  * `--vaadin-form-layout-column-spacing` | Length of the spacing between columns | `2em`
  * `--vaadin-form-layout-row-spacing` | Length of the spacing between rows | `1em`
+ * `--vaadin-form-layout-label-width` | Width of the label when labels are displayed aside | `8em`
+ * `--vaadin-form-layout-label-spacing` | Length of the spacing between the label and the input when labels are displayed aside | `1em`
  */
 declare class FormLayout extends FormLayoutMixin(ElementMixin(ThemableMixin(HTMLElement))) {}
 
