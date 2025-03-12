@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Master Detail Layout</title>
+    <script type="module" src="./common.js"></script>
+
+    <script type="module">
+      import '@vaadin/master-detail-layout';
+    </script>
+  </head>
+
+  <body>
+    <vaadin-master-detail-layout>
+      <div>Master content</div>
+      <div slot="detail">Detail content</div>
+    </vaadin-master-detail-layout>
+  </body>
+</html>
