@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { esc, fire, fixtureSync, nextFrame, oneEvent } from '@vaadin/testing-helpers';
+import { esc, fire, fixtureSync, isFirefox, nextFrame, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '@vaadin/grid';
 import '@vaadin/context-menu';
@@ -88,6 +88,33 @@ describe('grid in context-menu', () => {
 
       // Expect cell B not to have been focused in between context menus
       expect(focusSpy.called).to.be.false;
+    });
+  });
+
+  (isFirefox ? describe : describe.skip)('trigger context menu using the keyboard', () => {
+    it('should position the context menu to the bottom left of the cell where the context menu was triggered', async () => {
+      // Ensure isKeyboardActive() returns true
+      fire(window, 'keydown', { key: 'Enter', keyCode: 13 });
+
+      // Fire contextmenu event on a cell, with intentionally wrong coordinates
+      // Reproduces an issue in Firefox, which reports wrong coordinates when
+      // contextmenu is triggered through keyboard when a cell is focused
+      const cell = getCell(grid, 1, 1);
+      fire(cell, 'contextmenu', undefined, {
+        composed: true,
+        bubbles: true,
+        clientX: 0,
+        clientY: 0,
+      });
+      await overlayOpened(contextMenu);
+
+      // Actual position should be close to the center of the cell
+      const cellRect = cell.getBoundingClientRect();
+      const overlay = contextMenu._overlayElement;
+      const overlayRect = overlay.getBoundingClientRect();
+
+      expect(overlayRect.left).to.closeTo(cellRect.left, 5);
+      expect(overlayRect.top).to.closeTo(cellRect.bottom, 5);
     });
   });
 });
