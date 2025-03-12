@@ -3,7 +3,8 @@
  * Copyright (c) 2016 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { isIOS } from '@vaadin/component-base/src/browser-utils.js';
+import { isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
+import { isFirefox, isIOS } from '@vaadin/component-base/src/browser-utils.js';
 import { prevent, register } from '@vaadin/component-base/src/gestures.js';
 
 register({
@@ -93,7 +94,20 @@ register({
   contextmenu(e) {
     if (!e.shiftKey) {
       this._setSourceEvent(e);
-      this.fire(e.target, e.clientX, e.clientY);
+      if (isFirefox && isKeyboardActive()) {
+        // When using the context menu key on the keyboard in Windows, Firefox
+        // does not always return the correct coordinates for the focused
+        // element. Instead, calculate the coordinates manually based on the
+        // context menu target. Need to use composed path here as the target for
+        // synthetic contextmenu events seems to be the host element.
+        // See https://github.com/vaadin/flow-components/issues/7153
+        const keyboardTarget = e.composedPath()[0];
+        const targetRect = keyboardTarget.getBoundingClientRect();
+        this.fire(keyboardTarget, targetRect.left, targetRect.bottom);
+      } else {
+        // Otherwise use mouse coordinates reported in pointer event
+        this.fire(e.target, e.clientX, e.clientY);
+      }
       prevent('tap');
     }
   },
