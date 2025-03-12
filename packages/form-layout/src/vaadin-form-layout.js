@@ -112,8 +112,8 @@ registerStyles('vaadin-form-layout', formLayoutStyles, { moduleId: 'vaadin-form-
  * </vaadin-form-layout>
  * ```
  *
- * You can also enable it for all instances by activating the `defaultAutoResponsiveFormLayout`
- * feature flag before `<vaadin-form-layout>` elements are added to the DOM:
+ * You can also enable it for all instances by enabling the following feature flag
+ * before `<vaadin-form-layout>` elements are added to the DOM:
  *
  * ```js
  * window.Vaadin.featureFlags.defaultAutoResponsiveFormLayout = true;

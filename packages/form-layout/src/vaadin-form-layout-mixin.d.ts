@@ -30,6 +30,14 @@ export declare class FormLayoutMixinClass {
    * with `minWidth` CSS length, `columns` number, and optional
    * `labelsPosition` string of `"aside"` or `"top"`. At least one item is required.
    *
+   * NOTE: Responsive steps are ignored in auto-responsive mode, which may be
+   * enabled explicitly via the `autoResponsive` property or implicitly
+   * if the following feature flag is set:
+   *
+   * ```
+   * window.Vaadin.featureFlags.defaultAutoResponsiveFormLayout = true
+   * ```
+   *
    * #### Examples
    *
    * ```javascript
@@ -65,7 +73,8 @@ export declare class FormLayoutMixinClass {
    * When set to `true`, the component automatically creates and adjusts columns based on
    * the container's width. Columns have a fixed width defined by `columnWidth` and their
    * number increases up to the limit set by `maxColumns`. The component dynamically adjusts
-   * the number of columns as the container size changes.
+   * the number of columns as the container size changes. When this mode is enabled,
+   * `responsiveSteps` are ignored.
    *
    * By default, each field is placed on a new row. To organize fields into rows, there are
    * two options:
@@ -77,7 +86,7 @@ export declare class FormLayoutMixinClass {
    *
    * The auto-responsive mode is disabled by default. To enable it for an individual instance,
    * use this property. Alternatively, if you want it to be enabled for all instances by default,
-   * activate the `defaultAutoResponsiveFormLayout` feature flag before `<vaadin-form-layout>`
+   * enable the `defaultAutoResponsiveFormLayout` feature flag before `<vaadin-form-layout>`
    * elements are added to the DOM:
    *
    * ```js

@@ -109,8 +109,8 @@ export * from './vaadin-form-layout-mixin.js';
  * </vaadin-form-layout>
  * ```
  *
- * You can also enable it for all instances by activating the `defaultAutoResponsiveFormLayout`
- * feature flag before `<vaadin-form-layout>` elements are added to the DOM:
+ * You can also enable it for all instances by enabling the following feature flag
+ * before `<vaadin-form-layout>` elements are added to the DOM:
  *
  * ```js
  * window.Vaadin.featureFlags.defaultAutoResponsiveFormLayout = true;
@@ -191,6 +191,8 @@ export * from './vaadin-form-layout-mixin.js';
  * ---|---|---
  * `--vaadin-form-layout-column-spacing` | Length of the spacing between columns | `2em`
  * `--vaadin-form-layout-row-spacing` | Length of the spacing between rows | `1em`
+ * `--vaadin-form-layout-label-width` | Width of the label when labels are displayed aside | `8em`
+ * `--vaadin-form-layout-label-spacing` | Length of the spacing between the label and the input when labels are displayed aside | `1em`
  */
 declare class FormLayout extends FormLayoutMixin(ElementMixin(ThemableMixin(HTMLElement))) {}
 
