@@ -6,7 +6,7 @@ import './helpers/master-content.js';
 import './helpers/detail-content.js';
 
 describe('vaadin-master-detail-layout', () => {
-  let layout, master, detail;
+  let layout, master, detail, detailContent;
 
   beforeEach(async () => {
     layout = fixtureSync(`
@@ -18,6 +18,7 @@ describe('vaadin-master-detail-layout', () => {
     await nextRender();
     master = layout.shadowRoot.querySelector('[part="master"]');
     detail = layout.shadowRoot.querySelector('[part="detail"]');
+    detailContent = layout.querySelector('[slot="detail"]');
   });
 
   describe('custom element definition', () => {
@@ -48,7 +49,7 @@ describe('vaadin-master-detail-layout', () => {
     });
 
     it('should hide the detail part after the detail child is removed', async () => {
-      layout.querySelector('[slot="detail"]').remove();
+      detailContent.remove();
       await nextRender();
       expect(getComputedStyle(detail).display).to.equal('none');
     });
@@ -224,6 +225,33 @@ describe('vaadin-master-detail-layout', () => {
       expect(layout.hasAttribute('overlay')).to.be.true;
       expect(getComputedStyle(master).width).to.equal(`${layout.offsetWidth}px`);
       expect(getComputedStyle(detail).maxWidth).to.equal('100%');
+    });
+
+    it('should update overlay mode when adding and removing details', async () => {
+      // Start without details
+      detailContent.remove();
+      await nextRender();
+
+      // Shrink viewport
+      layout.detailMinSize = '300px';
+      await setViewport({ width: 500, height });
+      await nextResize(layout);
+
+      expect(layout.hasAttribute('overlay')).to.be.false;
+
+      // Add details
+      layout.appendChild(detailContent);
+      await nextRender();
+
+      expect(layout.hasAttribute('overlay')).to.be.true;
+      expect(getComputedStyle(detail).position).to.equal('absolute');
+      expect(getComputedStyle(detail).width).to.equal('300px');
+
+      // Remove details
+      detailContent.remove();
+      await nextRender();
+
+      expect(layout.hasAttribute('overlay')).to.be.false;
     });
   });
 });

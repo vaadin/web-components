@@ -180,6 +180,7 @@ class MasterDetailLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolylitM
   /** @private */
   __onDetailSlotChange(e) {
     this.toggleAttribute('has-detail', e.target.assignedNodes().length > 0);
+    this.__detectLayoutMode();
   }
 
   /**
@@ -227,6 +228,11 @@ class MasterDetailLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolylitM
 
   /** @private */
   __detectLayoutMode() {
+    if (!this.hasAttribute('has-detail')) {
+      this.removeAttribute('overlay');
+      return;
+    }
+
     const detailWidth = this.$.detail.offsetWidth;
 
     // Detect minimum width needed by master content. Use max-width to ensure
