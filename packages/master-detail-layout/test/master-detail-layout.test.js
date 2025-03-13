@@ -79,5 +79,14 @@ describe('vaadin-master-detail-layout', () => {
       expect(getComputedStyle(detail).flexGrow).to.equal('0');
       expect(getComputedStyle(detail).flexShrink).to.equal('0');
     });
+
+    it('should use size as flex-basis when both masterSize and detailSize are set', () => {
+      layout.masterSize = '300px';
+      layout.detailSize = '300px';
+      expect(getComputedStyle(master).flexBasis).to.equal('300px');
+      expect(getComputedStyle(master).flexGrow).to.equal('1');
+      expect(getComputedStyle(detail).flexBasis).to.equal('300px');
+      expect(getComputedStyle(detail).flexGrow).to.equal('1');
+    });
   });
 });

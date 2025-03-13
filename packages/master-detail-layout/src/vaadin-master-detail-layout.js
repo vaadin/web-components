@@ -41,11 +41,7 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
       }
 
       /* No fixed size */
-      :host(:not([has-master-size])) [part='master'] {
-        flex-grow: 1;
-        flex-basis: 50%;
-      }
-
+      :host(:not([has-master-size])) [part='master'],
       :host(:not([has-detail-size])) [part='detail'] {
         flex-grow: 1;
         flex-basis: 50%;
@@ -60,6 +56,16 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
       :host([has-detail-size]) [part='detail'] {
         width: var(--_detail-size);
         flex-shrink: 0;
+      }
+
+      :host([has-master-size][has-detail-size]) [part='master'] {
+        flex-grow: 1;
+        flex-basis: var(--_master-size);
+      }
+
+      :host([has-master-size][has-detail-size]) [part='detail'] {
+        flex-grow: 1;
+        flex-basis: var(--_detail-size);
       }
     `;
   }
