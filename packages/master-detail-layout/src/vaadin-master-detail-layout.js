@@ -207,7 +207,9 @@ class MasterDetailLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolylitM
 
     // Detect minimum width needed by master content. Use max-width to ensure
     // the layout can switch back to split mode once there is enough space.
-    this.$.master.style.maxWidth = 'min-content';
+    // If there is master  size or min-size set, use that instead to force the
+    // overlay mode by setting `masterSize` / `masterMinSize` to 100%/
+    this.$.master.style.maxWidth = this.masterSize || this.masterMinSize || 'min-content';
     const masterWidth = this.$.master.offsetWidth;
     this.$.master.style.maxWidth = '';
 
