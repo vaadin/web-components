@@ -21,26 +21,12 @@ declare class MasterDetailLayout extends ThemableMixin(ElementMixin(HTMLElement)
   detailSize: string | null | undefined;
 
   /**
-   * Minimum size (in CSS length units) to be set on the detail pane.
-   *
-   * @attr {string} detail-min-size
-   */
-  detailMinSize: string | null | undefined;
-
-  /**
    * Fixed size (in CSS length units) to be set on the master pane.
    * When specified, it prevents the master pane from growing.
    *
    * @attr {string} master-size
    */
   masterSize: string | null | undefined;
-
-  /**
-   * Minimum size (in CSS length units) to be set on the master pane.
-   *
-   * @attr {string} master-min-size
-   */
-  masterMinSize: string | null | undefined;
 }
 
 declare global {

@@ -18,10 +18,7 @@
 
     <p>
       <vaadin-checkbox id="detailSize" label="Set detail size"></vaadin-checkbox>
-      <vaadin-checkbox id="detailMinSize" label="Set detail min size"></vaadin-checkbox>
       <vaadin-checkbox id="masterSize" label="Set master size"></vaadin-checkbox>
-      <vaadin-checkbox id="masterMinSize" label="Set master min size"></vaadin-checkbox>
-
     </p>
 
     <vaadin-master-detail-layout>
@@ -41,16 +38,8 @@
         layout.detailSize = e.target.checked ? '300px' : null;
       });
 
-      document.querySelector('#detailMinSize').addEventListener('change', (e) => {
-        layout.detailMinSize = e.target.checked ? '300px' : null;
-      });
-
       document.querySelector('#masterSize').addEventListener('change', (e) => {
         layout.masterSize = e.target.checked ? '300px' : null;
-      });
-
-      document.querySelector('#masterMinSize').addEventListener('change', (e) => {
-        layout.masterMinSize = e.target.checked ? '300px' : null;
       });
     </script>
   </body>

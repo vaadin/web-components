@@ -64,16 +64,6 @@ describe('vaadin-master-detail-layout', () => {
       expect(getComputedStyle(detail).flexGrow).to.equal('1');
     });
 
-    it('should update flex-basis on the master pane when masterMinSize is set', () => {
-      layout.masterMinSize = '300px';
-      expect(getComputedStyle(master).flexBasis).to.equal('300px');
-    });
-
-    it('should update flex-basis on the detail pane when detailMinSize is set', () => {
-      layout.detailMinSize = '300px';
-      expect(getComputedStyle(detail).flexBasis).to.equal('300px');
-    });
-
     it('should set fixed width on the master pane when masterSize is set', () => {
       layout.masterSize = '300px';
       expect(getComputedStyle(master).width).to.equal('300px');

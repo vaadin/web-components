@@ -43,12 +43,12 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
       /* No fixed size */
       :host(:not([has-master-size])) [part='master'] {
         flex-grow: 1;
-        flex-basis: var(--_master-min-size, 50%);
+        flex-basis: 50%;
       }
 
       :host(:not([has-detail-size])) [part='detail'] {
         flex-grow: 1;
-        flex-basis: var(--_detail-min-size, 50%);
+        flex-basis: 50%;
       }
 
       /* Fixed size */
@@ -79,17 +79,6 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
       },
 
       /**
-       * Minimum size (in CSS length units) to be set on the detail pane.
-       *
-       * @attr {string} detail-min-size
-       */
-      detailMinSize: {
-        type: String,
-        sync: true,
-        observer: '__detailMinSizeChanged',
-      },
-
-      /**
        * Fixed size (in CSS length units) to be set on the master pane.
        * When specified, it prevents the master pane from growing.
        *
@@ -99,17 +88,6 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
         type: String,
         sync: true,
         observer: '__masterSizeChanged',
-      },
-
-      /**
-       * Minimum size (in CSS length units) to be set on the master pane.
-       *
-       * @attr {string} master-min-size
-       */
-      masterMinSize: {
-        type: String,
-        sync: true,
-        observer: '__masterMinSizeChanged',
       },
     };
   }
@@ -138,19 +116,9 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
   }
 
   /** @private */
-  __detailMinSizeChanged(size, oldSize) {
-    this.__updateStyleProperty('detail-min-size', size, oldSize);
-  }
-
-  /** @private */
   __masterSizeChanged(size, oldSize) {
     this.toggleAttribute('has-master-size', !!size);
     this.__updateStyleProperty('master-size', size, oldSize);
-  }
-
-  /** @private */
-  __masterMinSizeChanged(size, oldSize) {
-    this.__updateStyleProperty('master-min-size', size, oldSize);
   }
 
   /** @private */
