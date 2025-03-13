@@ -7,15 +7,40 @@
     <title>Master Detail Layout</title>
     <script type="module" src="./common.js"></script>
 
-    <script type="module">
-      import '@vaadin/master-detail-layout';
-    </script>
   </head>
 
   <body>
+    <style>
+      vaadin-master-detail-layout {
+        border: solid 1px #ccc;
+      }
+    </style>
+
+    <p>
+      <vaadin-checkbox id="detailSize" label="Set detail size"></vaadin-checkbox>
+      <vaadin-checkbox id="masterSize" label="Set master size"></vaadin-checkbox>
+    </p>
+
     <vaadin-master-detail-layout>
-      <div>Master content</div>
-      <div slot="detail">Detail content</div>
+      <master-content></master-content>
+      <detail-content slot="detail"></detail-content>
     </vaadin-master-detail-layout>
+
+    <script type="module">
+      import '@vaadin/checkbox';
+      import '@vaadin/master-detail-layout';
+      import '@vaadin/master-detail-layout/test/helpers/master-content.js';
+      import '@vaadin/master-detail-layout/test/helpers/detail-content.js';
+
+      const layout = document.querySelector('vaadin-master-detail-layout');
+
+      document.querySelector('#detailSize').addEventListener('change', (e) => {
+        layout.detailSize = e.target.checked ? '300px' : null;
+      });
+
+      document.querySelector('#masterSize').addEventListener('change', (e) => {
+        layout.masterSize = e.target.checked ? '300px' : null;
+      });
+    </script>
   </body>
 </html>
