@@ -117,7 +117,7 @@ class MasterDetailLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolylitM
 
       /**
        * Minimum size (in CSS length units) to be set on the detail area.
-       * When specified, it prevents the master area from shrinking below
+       * When specified, it prevents the detail area from shrinking below
        * this size. If there is not enough space to show master and detail
        * areas next to each other, the layout switches to the overlay mode.
        *
