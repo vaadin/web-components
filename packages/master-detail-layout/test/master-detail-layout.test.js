@@ -127,7 +127,7 @@ describe('vaadin-master-detail-layout', () => {
     it('should switch to the overlay mode if not enough space when masterSize is set', async () => {
       // Use the threshold at which the overlay mode isn't on by default,
       // but will be on after setting fixed size on the master area.
-      await setViewport({ width: 450, height });
+      await setViewport({ width: 400, height });
       await nextResize(layout);
 
       expect(layout.hasAttribute('overlay')).to.be.false;
@@ -142,7 +142,7 @@ describe('vaadin-master-detail-layout', () => {
     it('should switch to the overlay mode if not enough space when masterMinSize is set', async () => {
       // Use the threshold at which the overlay mode isn't on by default,
       // but will be on after setting fixed size on the master area.
-      await setViewport({ width: 450, height });
+      await setViewport({ width: 400, height });
       await nextResize(layout);
 
       expect(layout.hasAttribute('overlay')).to.be.false;
