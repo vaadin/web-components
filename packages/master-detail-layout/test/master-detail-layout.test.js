@@ -115,7 +115,7 @@ describe('vaadin-master-detail-layout', () => {
       await setViewport({ width, height });
     });
 
-    it('should switch to the overlay when there is not enough space for both panes', async () => {
+    it('should switch to the overlay when there is not enough space for both areas', async () => {
       // Use the threshold at which the overlay mode is on by default.
       await setViewport({ width: 350, height });
       await nextResize(layout);
@@ -126,7 +126,7 @@ describe('vaadin-master-detail-layout', () => {
 
     it('should switch to the overlay mode if not enough space when masterSize is set', async () => {
       // Use the threshold at which the overlay mode isn't on by default,
-      // but will be on after setting fixed size on the master pane.
+      // but will be on after setting fixed size on the master area.
       await setViewport({ width: 450, height });
       await nextResize(layout);
 
@@ -141,7 +141,7 @@ describe('vaadin-master-detail-layout', () => {
 
     it('should switch to the overlay mode if not enough space when masterMinSize is set', async () => {
       // Use the threshold at which the overlay mode isn't on by default,
-      // but will be on after setting fixed size on the master pane.
+      // but will be on after setting fixed size on the master area.
       await setViewport({ width: 450, height });
       await nextResize(layout);
 
@@ -154,9 +154,9 @@ describe('vaadin-master-detail-layout', () => {
       expect(getComputedStyle(detail).position).to.equal('absolute');
     });
 
-    it('should set detail pane width in overlay mode when detailSize is set', async () => {
+    it('should set detail area width in overlay mode when detailSize is set', async () => {
       // Use the threshold at which the overlay mode isn't on by default,
-      // but will be on after setting fixed size on the detail pane.
+      // but will be on after setting fixed size on the detail area.
       await setViewport({ width: 500, height });
       await nextResize(layout);
 
@@ -170,9 +170,9 @@ describe('vaadin-master-detail-layout', () => {
       expect(getComputedStyle(detail).width).to.equal('300px');
     });
 
-    it('should set detail pane width in overlay mode when detailMinSize is set', async () => {
+    it('should set detail area width in overlay mode when detailMinSize is set', async () => {
       // Use the threshold at which the overlay mode isn't on by default,
-      // but will be on after setting min size on the detail pane.
+      // but will be on after setting min size on the detail area.
       await setViewport({ width: 500, height });
       await nextResize(layout);
 
