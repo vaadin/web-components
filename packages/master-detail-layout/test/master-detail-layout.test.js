@@ -124,6 +124,36 @@ describe('vaadin-master-detail-layout', () => {
       expect(getComputedStyle(detail).position).to.equal('absolute');
     });
 
+    it('should switch to the overlay mode if not enough space when masterSize is set', async () => {
+      // Use the threshold at which the overlay mode isn't on by default,
+      // but will be on after setting fixed size on the master pane.
+      await setViewport({ width: 450, height });
+      await nextResize(layout);
+
+      expect(layout.hasAttribute('overlay')).to.be.false;
+
+      layout.masterSize = '300px';
+      await nextResize(layout);
+
+      expect(layout.hasAttribute('overlay')).to.be.true;
+      expect(getComputedStyle(detail).position).to.equal('absolute');
+    });
+
+    it('should switch to the overlay mode if not enough space when masterMinSize is set', async () => {
+      // Use the threshold at which the overlay mode isn't on by default,
+      // but will be on after setting fixed size on the master pane.
+      await setViewport({ width: 450, height });
+      await nextResize(layout);
+
+      expect(layout.hasAttribute('overlay')).to.be.false;
+
+      layout.masterMinSize = '300px';
+      await nextResize(layout);
+
+      expect(layout.hasAttribute('overlay')).to.be.true;
+      expect(getComputedStyle(detail).position).to.equal('absolute');
+    });
+
     it('should set detail pane width in overlay mode when detailSize is set', async () => {
       // Use the threshold at which the overlay mode isn't on by default,
       // but will be on after setting fixed size on the detail pane.
