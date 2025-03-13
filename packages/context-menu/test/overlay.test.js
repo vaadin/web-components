@@ -43,6 +43,23 @@ describe('overlay', () => {
     return e;
   }
 
+  describe('initialization', () => {
+    beforeEach(() => {
+      menu = document.createElement('vaadin-context-menu');
+    });
+
+    afterEach(() => {
+      menu.remove();
+    });
+
+    it('should not clear selected ranges on initialization', () => {
+      const input = fixtureSync('<input value="foo">');
+      input.select();
+      document.body.appendChild(menu);
+      expect(window.getSelection().rangeCount).to.equal(1);
+    });
+  });
+
   describe('opening', () => {
     it('should be invisible before open', async () => {
       menu.openOn = 'foobar';
