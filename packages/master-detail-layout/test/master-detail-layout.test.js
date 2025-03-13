@@ -89,6 +89,18 @@ describe('vaadin-master-detail-layout', () => {
       expect(getComputedStyle(detail).flexBasis).to.equal('300px');
       expect(getComputedStyle(detail).flexGrow).to.equal('1');
     });
+
+    it('should use masterMinSize as min-width and disable flex-shrink', () => {
+      layout.masterMinSize = '300px';
+      expect(getComputedStyle(master).minWidth).to.equal('300px');
+      expect(getComputedStyle(master).flexShrink).to.equal('0');
+    });
+
+    it('should use detailMinSize as min-width and disable flex-shrink', () => {
+      layout.detailMinSize = '300px';
+      expect(getComputedStyle(detail).minWidth).to.equal('300px');
+      expect(getComputedStyle(detail).flexShrink).to.equal('0');
+    });
   });
 
   describe('overlay', () => {
