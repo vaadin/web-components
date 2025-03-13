@@ -8,7 +8,7 @@ import type { DelegateFocusMixinClass } from '@vaadin/a11y-base/src/delegate-foc
 import type { DisabledMixinClass } from '@vaadin/a11y-base/src/disabled-mixin.js';
 import type { FocusMixinClass } from '@vaadin/a11y-base/src/focus-mixin.js';
 import type { KeyboardMixinClass } from '@vaadin/a11y-base/src/keyboard-mixin.js';
-import type { I18nMixinClass, PartialI18n } from '@vaadin/component-base/src/i18n-mixin.js';
+import type { I18nMixinClass } from '@vaadin/component-base/src/i18n-mixin.js';
 import type { OverlayClassMixinClass } from '@vaadin/component-base/src/overlay-class-mixin.js';
 import type { InputConstraintsMixinClass } from '@vaadin/field-base/src/input-constraints-mixin.js';
 import type { InputMixinClass } from '@vaadin/field-base/src/input-mixin.js';
@@ -19,35 +19,35 @@ export interface DatePickerDate {
   year: number;
 }
 
-export type DatePickerI18n = PartialI18n<{
+export interface DatePickerI18n {
   /**
    * An array with the full names of months starting
    * with January.
    */
-  monthNames: string[];
+  monthNames?: string[];
   /**
    * An array of weekday names starting with Sunday. Used
    * in screen reader announcements.
    */
-  weekdays: string[];
+  weekdays?: string[];
   /**
    * An array of short weekday names starting with Sunday.
    * Displayed in the calendar.
    */
-  weekdaysShort: string[];
+  weekdaysShort?: string[];
   /**
    * An integer indicating the first day of the week
    * (0 = Sunday, 1 = Monday, etc.).
    */
-  firstDayOfWeek: number;
+  firstDayOfWeek?: number;
   /**
    * Translation of the Today shortcut button text.
    */
-  today: string;
+  today?: string;
   /**
    * Translation of the Cancel button text.
    */
-  cancel: string;
+  cancel?: string;
   /**
    * Used for adjusting the year value when parsing dates with short years.
    * The year values between 0 and 99 are evaluated and adjusted.
@@ -58,7 +58,7 @@ export type DatePickerI18n = PartialI18n<{
    * Supported date format: ISO 8601 `"YYYY-MM-DD"` (default)
    * The default value is the current date.
    */
-  referenceDate: string;
+  referenceDate?: string;
 
   /**
    * A function to parse the given text to an `Object` in the format `{ day: ..., month: ..., year: ... }`.
@@ -67,7 +67,7 @@ export type DatePickerI18n = PartialI18n<{
    * Note: The argument month is 0-based. This means that January = 0 and December = 11.
    * @param date
    */
-  parseDate(date: string): DatePickerDate | undefined;
+  parseDate?(date: string): DatePickerDate | undefined;
 
   /**
    * A function to format given `Object` as
@@ -75,7 +75,7 @@ export type DatePickerI18n = PartialI18n<{
    * Note: The argument month is 0-based. This means that January = 0 and December = 11.
    * @param date
    */
-  formatDate(date: DatePickerDate): string;
+  formatDate?(date: DatePickerDate): string;
 
   /**
    * A function to format given `monthName` and
@@ -83,8 +83,8 @@ export type DatePickerI18n = PartialI18n<{
    * @param monthName
    * @param fullYear
    */
-  formatTitle(monthName: string, fullYear: number): string;
-}>;
+  formatTitle?(monthName: string, fullYear: number): string;
+}
 
 export declare function DatePickerMixin<T extends Constructor<HTMLElement>>(
   base: T,

@@ -4,19 +4,18 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import type { Constructor } from '@open-wc/dedupe-mixin';
-import type { PartialI18n } from '@vaadin/component-base/src/i18n-mixin.js';
 
-export type LoginI18n = PartialI18n<{
-  form: {
-    title: string;
-    username: string;
-    password: string;
-    submit: string;
-    forgotPassword: string;
+export interface LoginI18n {
+  form?: {
+    title?: string;
+    username?: string;
+    password?: string;
+    submit?: string;
+    forgotPassword?: string;
   };
-  errorMessage: {
-    title: string;
-    message: string;
+  errorMessage?: {
+    title?: string;
+    message?: string;
     username?: string;
     password?: string;
   };
@@ -25,7 +24,7 @@ export type LoginI18n = PartialI18n<{
     description?: string;
   };
   additionalInformation?: string;
-}>;
+}
 
 export declare function LoginMixin<T extends Constructor<HTMLElement>>(base: T): Constructor<LoginMixinClass> & T;
 

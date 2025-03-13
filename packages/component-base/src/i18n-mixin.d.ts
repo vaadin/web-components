@@ -6,17 +6,6 @@
 import type { Constructor } from '@open-wc/dedupe-mixin';
 
 /**
- * Recursively makes all properties of an i18n object optional.
- *
- * For internal use only.
- */
-export type PartialI18n<T> = T extends object
-  ? {
-      [P in keyof T]?: PartialI18n<T[P]>;
-    }
-  : T;
-
-/**
  * A mixin that allows to set partial I18N properties.
  */
 export declare function I18nMixin<I, T extends Constructor<HTMLElement>>(

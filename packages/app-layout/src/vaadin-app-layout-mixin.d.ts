@@ -4,11 +4,11 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import type { Constructor } from '@open-wc/dedupe-mixin';
-import type { I18nMixinClass, PartialI18n } from '@vaadin/component-base/src/i18n-mixin.js';
+import type { I18nMixinClass } from '@vaadin/component-base/src/i18n-mixin.js';
 
-export type AppLayoutI18n = PartialI18n<{
-  drawer: string;
-}>;
+export interface AppLayoutI18n {
+  drawer?: string;
+}
 
 export declare function AppLayoutMixin<T extends Constructor<HTMLElement>>(
   base: T,
