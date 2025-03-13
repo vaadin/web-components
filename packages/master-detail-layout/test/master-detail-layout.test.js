@@ -42,7 +42,7 @@ describe('vaadin-master-detail-layout', () => {
       expect(getComputedStyle(detail).height).to.equal('1000px');
     });
 
-    it('should show the detail part with the detail child is provided', () => {
+    it('should show the detail part with the detail child if provided', () => {
       expect(getComputedStyle(detail).display).to.equal('block');
     });
 
@@ -59,7 +59,7 @@ describe('vaadin-master-detail-layout', () => {
       expect(getComputedStyle(detail).flexBasis).to.equal('50%');
     });
 
-    it('should set flex-grow to 1% on the master and detail by default', () => {
+    it('should set flex-grow to 1 on the master and detail by default', () => {
       expect(getComputedStyle(master).flexGrow).to.equal('1');
       expect(getComputedStyle(detail).flexGrow).to.equal('1');
     });
