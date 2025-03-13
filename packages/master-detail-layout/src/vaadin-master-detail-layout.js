@@ -83,6 +83,14 @@ class MasterDetailLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolylitM
       }
 
       /* Min size */
+      :host([has-master-min-size]) [part='master'] {
+        min-width: var(--_master-min-size);
+      }
+
+      :host([has-detail-min-size]) [part='detail'] {
+        min-width: var(--_detail-min-size);
+      }
+
       :host([has-master-min-size]) [part='master'],
       :host([has-detail-min-size]) [part='detail'] {
         flex-shrink: 0;
