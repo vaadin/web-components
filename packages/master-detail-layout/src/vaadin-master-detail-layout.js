@@ -67,6 +67,12 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
         flex-grow: 1;
         flex-basis: var(--_detail-size);
       }
+
+      /* Min size */
+      :host([has-master-min-size]) [part='master'],
+      :host([has-detail-min-size]) [part='detail'] {
+        flex-shrink: 0;
+      }
     `;
   }
 
@@ -88,12 +94,35 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
        * Fixed size (in CSS length units) to be set on the master area.
        * When specified, it prevents the master area from growing.
        *
+       * @attr {string} detail-min-size
+       */
+      detailMinSize: {
+        type: String,
+        sync: true,
+        observer: '__detailMinSizeChanged',
+      },
+
+      /**
+       * Fixed size (in CSS length units) to be set on the master area.
+       * When specified, it prevents the master area from growing.
+       *
        * @attr {string} master-size
        */
       masterSize: {
         type: String,
         sync: true,
         observer: '__masterSizeChanged',
+      },
+
+      /**
+       * Minimum size (in CSS length units) to be set on the master area.
+       *
+       * @attr {string} master-min-size
+       */
+      masterMinSize: {
+        type: String,
+        sync: true,
+        observer: '__masterMinSizeChanged',
       },
     };
   }
@@ -117,14 +146,26 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
 
   /** @private */
   __detailSizeChanged(size, oldSize) {
-    this.toggleAttribute('has-detail-size', !!size);
     this.__updateStyleProperty('detail-size', size, oldSize);
+    this.__detectLayoutMode();
+  }
+
+  /** @private */
+  __detailMinSizeChanged(size, oldSize) {
+    this.__updateStyleProperty('detail-min-size', size, oldSize);
+    this.__detectLayoutMode();
   }
 
   /** @private */
   __masterSizeChanged(size, oldSize) {
-    this.toggleAttribute('has-master-size', !!size);
     this.__updateStyleProperty('master-size', size, oldSize);
+    this.__detectLayoutMode();
+  }
+
+  /** @private */
+  __masterMinSizeChanged(size, oldSize) {
+    this.__updateStyleProperty('master-min-size', size, oldSize);
+    this.__detectLayoutMode();
   }
 
   /** @private */
@@ -134,6 +175,8 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
     } else if (oldSize) {
       this.style.removeProperty(`--_${prop}`);
     }
+
+    this.toggleAttribute(`has-${prop}`, !!size);
   }
 }
 

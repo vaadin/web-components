@@ -24,9 +24,24 @@ declare class MasterDetailLayout extends ThemableMixin(ElementMixin(HTMLElement)
    * Fixed size (in CSS length units) to be set on the master area.
    * When specified, it prevents the master area from growing.
    *
+   * @attr {string} detail-min-size
+   */
+  detailMinSize: string | null | undefined;
+
+  /**
+   * Fixed size (in CSS length units) to be set on the master area.
+   * When specified, it prevents the master area from growing.
+   *
    * @attr {string} master-size
    */
   masterSize: string | null | undefined;
+
+  /**
+   * Minimum size (in CSS length units) to be set on the master area.
+   *
+   * @attr {string} master-min-size
+   */
+  masterMinSize: string | null | undefined;
 }
 
 declare global {
