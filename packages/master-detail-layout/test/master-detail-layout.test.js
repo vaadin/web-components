@@ -212,5 +212,18 @@ describe('vaadin-master-detail-layout', () => {
       expect(getComputedStyle(detail).width).to.equal(`${layout.offsetWidth}px`);
       expect(getComputedStyle(detail).maxWidth).to.equal('100%');
     });
+
+    it('should not overflow in the overlay mode when masterMinSize is set', async () => {
+      layout.masterMinSize = '500px';
+      await nextResize(layout);
+
+      // Resize so that min size is bigger than layout size.
+      await setViewport({ width: 480, height });
+      await nextResize(layout);
+
+      expect(layout.hasAttribute('overlay')).to.be.true;
+      expect(getComputedStyle(master).width).to.equal(`${layout.offsetWidth}px`);
+      expect(getComputedStyle(detail).maxWidth).to.equal('100%');
+    });
   });
 });

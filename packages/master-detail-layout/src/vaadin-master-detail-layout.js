@@ -55,6 +55,10 @@ class MasterDetailLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolylitM
         max-width: 100%;
       }
 
+      :host([overlay]) [part='master'] {
+        max-width: 100%;
+      }
+
       /* No fixed size */
       :host(:not([has-master-size])) [part='master'],
       :host(:not([has-detail-size])) [part='detail'] {
@@ -84,7 +88,7 @@ class MasterDetailLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolylitM
       }
 
       /* Min size */
-      :host([has-master-min-size]) [part='master'] {
+      :host([has-master-min-size]:not([overlay])) [part='master'] {
         min-width: var(--_master-min-size);
       }
 
