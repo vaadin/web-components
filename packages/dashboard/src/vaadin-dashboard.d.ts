@@ -11,7 +11,7 @@
 import './vaadin-dashboard-widget.js';
 import './vaadin-dashboard-section.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
-import type { I18nMixin, PartialI18n } from '@vaadin/component-base/src/i18n-mixin.js';
+import type { I18nMixin } from '@vaadin/component-base/src/i18n-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin';
 import { DashboardLayoutMixin } from './vaadin-dashboard-layout-mixin.js';
 
@@ -134,21 +134,21 @@ export interface DashboardCustomEventMap<TItem extends DashboardItem> {
 
 export type DashboardEventMap<TItem extends DashboardItem> = DashboardCustomEventMap<TItem> & HTMLElementEventMap;
 
-export type DashboardI18n = PartialI18n<{
-  selectWidget: string;
-  selectSection: string;
-  remove: string;
-  resize: string;
-  resizeApply: string;
-  resizeShrinkWidth: string;
-  resizeGrowWidth: string;
-  resizeShrinkHeight: string;
-  resizeGrowHeight: string;
-  move: string;
-  moveApply: string;
-  moveForward: string;
-  moveBackward: string;
-}>;
+export interface DashboardI18n {
+  selectWidget?: string;
+  selectSection?: string;
+  remove?: string;
+  resize?: string;
+  resizeApply?: string;
+  resizeShrinkWidth?: string;
+  resizeGrowWidth?: string;
+  resizeShrinkHeight?: string;
+  resizeGrowHeight?: string;
+  move?: string;
+  moveApply?: string;
+  moveForward?: string;
+  moveBackward?: string;
+}
 
 /**
  * A responsive, grid-based dashboard layout component
