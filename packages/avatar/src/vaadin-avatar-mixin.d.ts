@@ -5,11 +5,11 @@
  */
 import type { Constructor } from '@open-wc/dedupe-mixin';
 import type { FocusMixinClass } from '@vaadin/a11y-base/src/focus-mixin.js';
-import type { I18nMixinClass, PartialI18n } from '@vaadin/component-base/src/i18n-mixin.js';
+import type { I18nMixinClass } from '@vaadin/component-base/src/i18n-mixin.js';
 
-export type AvatarI18n = PartialI18n<{
-  anonymous: string;
-}>;
+export interface AvatarI18n {
+  anonymous?: string;
+}
 
 /**
  * A mixin providing common avatar functionality.

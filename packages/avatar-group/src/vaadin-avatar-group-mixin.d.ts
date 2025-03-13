@@ -5,20 +5,18 @@
  */
 import type { Constructor } from '@open-wc/dedupe-mixin';
 import type { AvatarI18n } from '@vaadin/avatar/src/vaadin-avatar.js';
-import type { I18nMixinClass, PartialI18n } from '@vaadin/component-base/src/i18n-mixin.js';
+import type { I18nMixinClass } from '@vaadin/component-base/src/i18n-mixin.js';
 import type { OverlayClassMixinClass } from '@vaadin/component-base/src/overlay-class-mixin.js';
 import type { ResizeMixinClass } from '@vaadin/component-base/src/resize-mixin.js';
 
-export type AvatarGroupI18n = PartialI18n<
-  {
-    activeUsers: {
-      one: string;
-      many: string;
-    };
-    joined: string;
-    left: string;
-  } & AvatarI18n
->;
+export interface AvatarGroupI18n extends AvatarI18n {
+  activeUsers?: {
+    one?: string;
+    many?: string;
+  };
+  joined?: string;
+  left?: string;
+}
 
 export interface AvatarGroupItem {
   name?: string;

@@ -9,7 +9,7 @@
  * license.
  */
 import type { Constructor } from '@open-wc/dedupe-mixin';
-import type { I18nMixinClass, PartialI18n } from '@vaadin/component-base/src/i18n-mixin.js';
+import type { I18nMixinClass } from '@vaadin/component-base/src/i18n-mixin.js';
 import type { GridFilterDefinition, GridSorterDefinition } from '@vaadin/grid/src/vaadin-grid.js';
 
 export type CrudDataProviderCallback<T> = (items: T[], size?: number) => void;
@@ -25,32 +25,32 @@ export type CrudDataProvider<T> = (params: CrudDataProviderParams, callback: Cru
 
 export type CrudEditorPosition = '' | 'aside' | 'bottom';
 
-export type CrudI18n = PartialI18n<{
-  newItem: string;
-  editItem: string;
-  saveItem: string;
-  cancel: string;
-  deleteItem: string;
-  editLabel: string;
-  confirm: {
-    delete: {
-      title: string;
-      content: string;
-      button: {
-        confirm: string;
-        dismiss: string;
+export interface CrudI18n {
+  newItem?: string;
+  editItem?: string;
+  saveItem?: string;
+  cancel?: string;
+  deleteItem?: string;
+  editLabel?: string;
+  confirm?: {
+    delete?: {
+      title?: string;
+      content?: string;
+      button?: {
+        confirm?: string;
+        dismiss?: string;
       };
     };
-    cancel: {
-      title: string;
-      content: string;
-      button: {
-        confirm: string;
-        dismiss: string;
+    cancel?: {
+      title?: string;
+      content?: string;
+      button?: {
+        confirm?: string;
+        dismiss?: string;
       };
     };
   };
-}>;
+}
 
 /**
  * Fired when the `editorOpened` property changes.
