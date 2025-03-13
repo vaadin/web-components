@@ -42,12 +42,12 @@ class MasterDetailLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolylitM
         display: none;
       }
 
-      /* Overlay mode */
-      :host([overlay][has-detail]) {
+      /* Overlay / stack mode */
+      :host(:is([overlay], [stack])) {
         position: relative;
       }
 
-      :host([overlay]) [part='detail'] {
+      :host(:is([overlay], [stack])) [part='detail'] {
         position: absolute;
         inset-inline-end: 0;
         height: 100%;
@@ -55,7 +55,7 @@ class MasterDetailLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolylitM
         max-width: 100%;
       }
 
-      :host([overlay]) [part='master'] {
+      :host(:is([overlay], [stack])) [part='master'] {
         max-width: 100%;
       }
 
@@ -88,11 +88,11 @@ class MasterDetailLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolylitM
       }
 
       /* Min size */
-      :host([has-master-min-size]:not([overlay])) [part='master'] {
+      :host([has-master-min-size]:not([overlay]):not([stack])) [part='master'] {
         min-width: var(--_master-min-size);
       }
 
-      :host([has-detail-min-size]:not([overlay])) [part='detail'] {
+      :host([has-detail-min-size]:not([overlay]):not([stack])) [part='detail'] {
         min-width: var(--_detail-min-size);
       }
 
@@ -257,6 +257,13 @@ class MasterDetailLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolylitM
     // scroll. Check if that is the case and if so, preserve the overlay mode.
     if (this.offsetWidth < this.scrollWidth) {
       this.setAttribute('overlay', '');
+    }
+
+    // Switch to the stack mode if the detail area fully covers the layout.
+    const stackReached = this.$.detail.clientWidth === this.clientWidth;
+    this.toggleAttribute('stack', stackReached);
+    if (stackReached) {
+      this.removeAttribute('overlay');
     }
   }
 }

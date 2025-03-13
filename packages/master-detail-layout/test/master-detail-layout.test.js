@@ -199,10 +199,8 @@ describe('vaadin-master-detail-layout', () => {
       expect(layout.hasAttribute('overlay')).to.be.true;
     });
 
-    it('should not overflow in the overlay mode when detailMinSize is set', async () => {
+    it('should not overflow in the overlay mode when masterSize is set', async () => {
       layout.masterSize = '500px';
-      layout.detailMinSize = '500px';
-
       await nextResize(layout);
 
       // Resize so that min size is bigger than layout size.
@@ -210,7 +208,7 @@ describe('vaadin-master-detail-layout', () => {
       await nextResize(layout);
 
       expect(layout.hasAttribute('overlay')).to.be.true;
-      expect(getComputedStyle(detail).width).to.equal(`${layout.offsetWidth}px`);
+      expect(getComputedStyle(master).width).to.equal(`${layout.offsetWidth}px`);
       expect(getComputedStyle(detail).maxWidth).to.equal('100%');
     });
 
@@ -252,6 +250,91 @@ describe('vaadin-master-detail-layout', () => {
       await nextRender();
 
       expect(layout.hasAttribute('overlay')).to.be.false;
+    });
+  });
+
+  describe('stack', () => {
+    let width, height;
+
+    before(() => {
+      width = window.innerWidth;
+      height = window.innerHeight;
+    });
+
+    afterEach(async () => {
+      await setViewport({ width, height });
+    });
+
+    it('should switch to the stack mode when detailSize is set to 100%', async () => {
+      layout.detailSize = '100%';
+      await nextResize(layout);
+      expect(layout.hasAttribute('overlay')).to.be.false;
+      expect(layout.hasAttribute('stack')).to.be.true;
+    });
+
+    it('should switch to the stack mode when detailMinSize is set to 100%', async () => {
+      layout.detailMinSize = '100%';
+      await nextResize(layout);
+      expect(layout.hasAttribute('overlay')).to.be.false;
+      expect(layout.hasAttribute('stack')).to.be.true;
+    });
+
+    it('should not overflow in the stack mode when detailSize is set', async () => {
+      layout.detailSize = '500px';
+      await nextResize(layout);
+
+      // Resize so that min size is bigger than layout size.
+      await setViewport({ width: 480, height });
+      await nextResize(layout);
+
+      expect(layout.hasAttribute('stack')).to.be.true;
+      expect(getComputedStyle(detail).width).to.equal(`${layout.offsetWidth}px`);
+      expect(getComputedStyle(detail).maxWidth).to.equal('100%');
+    });
+
+    it('should not overflow in the stack mode when detailMinSize is set', async () => {
+      layout.detailMinSize = '500px';
+      await nextResize(layout);
+
+      // Resize so that min size is bigger than layout size.
+      await setViewport({ width: 480, height });
+      await nextResize(layout);
+
+      expect(layout.hasAttribute('stack')).to.be.true;
+      expect(getComputedStyle(detail).width).to.equal(`${layout.offsetWidth}px`);
+      expect(getComputedStyle(detail).maxWidth).to.equal('100%');
+    });
+
+    it('should not overflow in the stack mode when masterSize and detailSize are set', async () => {
+      layout.masterSize = '500px';
+      layout.detailSize = '500px';
+      await nextResize(layout);
+
+      // Resize so that min size is bigger than layout size.
+      await setViewport({ width: 480, height });
+      await nextResize(layout);
+
+      expect(layout.hasAttribute('stack')).to.be.true;
+      expect(getComputedStyle(master).width).to.equal(`${layout.offsetWidth}px`);
+      expect(getComputedStyle(detail).width).to.equal(`${layout.offsetWidth}px`);
+      expect(getComputedStyle(master).maxWidth).to.equal('100%');
+      expect(getComputedStyle(detail).maxWidth).to.equal('100%');
+    });
+
+    it('should not overflow in the stack mode when masterMinSize and detailMinSize are set', async () => {
+      layout.masterMinSize = '500px';
+      layout.detailMinSize = '500px';
+      await nextResize(layout);
+
+      // Resize so that min size is bigger than layout size.
+      await setViewport({ width: 480, height });
+      await nextResize(layout);
+
+      expect(layout.hasAttribute('stack')).to.be.true;
+      expect(getComputedStyle(master).width).to.equal(`${layout.offsetWidth}px`);
+      expect(getComputedStyle(detail).width).to.equal(`${layout.offsetWidth}px`);
+      expect(getComputedStyle(master).maxWidth).to.equal('100%');
+      expect(getComputedStyle(detail).maxWidth).to.equal('100%');
     });
   });
 });
