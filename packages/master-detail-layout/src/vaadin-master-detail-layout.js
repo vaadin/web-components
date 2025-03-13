@@ -73,8 +73,8 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
   static get properties() {
     return {
       /**
-       * Fixed size (in CSS length units) to be set on the detail pane.
-       * When specified, it prevents the detail pane from growing.
+       * Fixed size (in CSS length units) to be set on the detail area.
+       * When specified, it prevents the detail area from growing.
        *
        * @attr {string} detail-size
        */
@@ -85,8 +85,8 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
       },
 
       /**
-       * Fixed size (in CSS length units) to be set on the master pane.
-       * When specified, it prevents the master pane from growing.
+       * Fixed size (in CSS length units) to be set on the master area.
+       * When specified, it prevents the master area from growing.
        *
        * @attr {string} master-size
        */

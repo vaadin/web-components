@@ -64,7 +64,7 @@ describe('vaadin-master-detail-layout', () => {
       expect(getComputedStyle(detail).flexGrow).to.equal('1');
     });
 
-    it('should set fixed width on the master pane when masterSize is set', () => {
+    it('should set fixed width on the master area when masterSize is set', () => {
       layout.masterSize = '300px';
       expect(getComputedStyle(master).width).to.equal('300px');
       expect(getComputedStyle(master).flexBasis).to.equal('auto');
@@ -72,7 +72,7 @@ describe('vaadin-master-detail-layout', () => {
       expect(getComputedStyle(master).flexShrink).to.equal('0');
     });
 
-    it('should set fixed width on the detail pane when detailSize is set', () => {
+    it('should set fixed width on the detail area when detailSize is set', () => {
       layout.detailSize = '300px';
       expect(getComputedStyle(detail).width).to.equal('300px');
       expect(getComputedStyle(detail).flexBasis).to.equal('auto');
