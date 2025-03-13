@@ -279,7 +279,8 @@ export const ContextMenuMixin = (superClass) =>
     }
 
     /** @private */
-    _setListenOnUserSelect(value) {
+    __setListenOnUserSelect(opened) {
+      const value = opened ? 'none' : '';
       // Note: these styles don't seem to work in Firefox on iOS.
       this.listenOn.style.webkitTouchCallout = value;
       this.listenOn.style.webkitUserSelect = value; // Chrome, Safari, Firefox
@@ -288,7 +289,9 @@ export const ContextMenuMixin = (superClass) =>
       // Note: because user-selection is disabled on the overlay
       // before opening the menu the text could be already selected
       // so we need to clear that selection
-      document.getSelection().removeAllRanges();
+      if (opened) {
+        document.getSelection().removeAllRanges();
+      }
     }
 
     /** @private */
@@ -318,11 +321,11 @@ export const ContextMenuMixin = (superClass) =>
     _openedChanged(opened) {
       if (opened) {
         document.documentElement.addEventListener('contextmenu', this._boundOnGlobalContextMenu, true);
-        this._setListenOnUserSelect('none');
       } else {
         document.documentElement.removeEventListener('contextmenu', this._boundOnGlobalContextMenu, true);
-        this._setListenOnUserSelect('');
       }
+
+      this.__setListenOnUserSelect(opened);
 
       // Has to be set after instance has been created
       this._overlayElement.opened = opened;
