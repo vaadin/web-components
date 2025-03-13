@@ -102,7 +102,9 @@ class MasterDetailLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolylitM
     return {
       /**
        * Fixed size (in CSS length units) to be set on the detail area.
-       * When specified, it prevents the detail area from growing.
+       * When specified, it prevents the detail area from growing or
+       * shrinking. If there is not enough space to show master and detail
+       * areas next to each other, the layout switches to the overlay mode.
        *
        * @attr {string} detail-size
        */
@@ -113,8 +115,10 @@ class MasterDetailLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolylitM
       },
 
       /**
-       * Fixed size (in CSS length units) to be set on the master area.
-       * When specified, it prevents the master area from growing.
+       * Minimum size (in CSS length units) to be set on the detail area.
+       * When specified, it prevents the master area from shrinking below
+       * this size. If there is not enough space to show master and detail
+       * areas next to each other, the layout switches to the overlay mode.
        *
        * @attr {string} detail-min-size
        */
@@ -126,7 +130,10 @@ class MasterDetailLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolylitM
 
       /**
        * Fixed size (in CSS length units) to be set on the master area.
-       * When specified, it prevents the master area from growing.
+       * When specified, it prevents the master area from growing or
+       * shrinking. If there is not enough space to show master and detail
+       * areas next to each other, the layout switches to the overlay mode.
+       * Setting `100%` enforces the overlay mode to be used by default.
        *
        * @attr {string} master-size
        */
@@ -138,6 +145,10 @@ class MasterDetailLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolylitM
 
       /**
        * Minimum size (in CSS length units) to be set on the master area.
+       * When specified, it prevents the master area from shrinking below
+       * this size. If there is not enough space to show master and detail
+       * areas next to each other, the layout switches to the overlay mode.
+       * Setting `100%` enforces the overlay mode to be used by default.
        *
        * @attr {string} master-min-size
        */

@@ -15,15 +15,19 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
 declare class MasterDetailLayout extends ResizeMixin(ThemableMixin(ElementMixin(HTMLElement))) {
   /**
    * Fixed size (in CSS length units) to be set on the detail area.
-   * When specified, it prevents the detail area from growing.
+   * When specified, it prevents the detail area from growing or
+   * shrinking. If there is not enough space to show master and detail
+   * areas next to each other, the layout switches to the overlay mode.
    *
    * @attr {string} detail-size
    */
   detailSize: string | null | undefined;
 
   /**
-   * Fixed size (in CSS length units) to be set on the master area.
-   * When specified, it prevents the master area from growing.
+   * Minimum size (in CSS length units) to be set on the detail area.
+   * When specified, it prevents the master area from shrinking below
+   * this size. If there is not enough space to show master and detail
+   * areas next to each other, the layout switches to the overlay mode.
    *
    * @attr {string} detail-min-size
    */
@@ -31,7 +35,10 @@ declare class MasterDetailLayout extends ResizeMixin(ThemableMixin(ElementMixin(
 
   /**
    * Fixed size (in CSS length units) to be set on the master area.
-   * When specified, it prevents the master area from growing.
+   * When specified, it prevents the master area from growing or
+   * shrinking. If there is not enough space to show master and detail
+   * areas next to each other, the layout switches to the overlay mode.
+   * Setting `100%` enforces the overlay mode to be used by default.
    *
    * @attr {string} master-size
    */
@@ -39,6 +46,10 @@ declare class MasterDetailLayout extends ResizeMixin(ThemableMixin(ElementMixin(
 
   /**
    * Minimum size (in CSS length units) to be set on the master area.
+   * When specified, it prevents the master area from shrinking below
+   * this size. If there is not enough space to show master and detail
+   * areas next to each other, the layout switches to the overlay mode.
+   * Setting `100%` enforces the overlay mode to be used by default.
    *
    * @attr {string} master-min-size
    */
