@@ -336,5 +336,26 @@ describe('vaadin-master-detail-layout', () => {
       expect(getComputedStyle(master).maxWidth).to.equal('100%');
       expect(getComputedStyle(detail).maxWidth).to.equal('100%');
     });
+
+    it('should update stack mode when adding and removing details', async () => {
+      layout.detailSize = '500px';
+      await nextResize(layout);
+
+      // Resize so that min size is bigger than layout size.
+      await setViewport({ width: 480, height });
+      await nextResize(layout);
+
+      // Remove details
+      detailContent.remove();
+      await nextRender();
+
+      expect(layout.hasAttribute('stack')).to.be.false;
+
+      // Append details
+      layout.appendChild(detailContent);
+      await nextRender();
+
+      expect(layout.hasAttribute('stack')).to.be.true;
+    });
   });
 });

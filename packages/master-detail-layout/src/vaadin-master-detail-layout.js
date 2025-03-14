@@ -230,6 +230,7 @@ class MasterDetailLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolylitM
   __detectLayoutMode() {
     if (!this.hasAttribute('has-detail')) {
       this.removeAttribute('overlay');
+      this.removeAttribute('stack');
       return;
     }
 
