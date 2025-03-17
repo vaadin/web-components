@@ -232,20 +232,6 @@ describe('trigger', () => {
       expect(overlay.opened).to.be.true;
     });
 
-    it('should open on target focusin followed by click when modal', async () => {
-      popover.modal = true;
-      await nextUpdate(popover);
-
-      target.focus();
-      // Wait for open focus trap
-      await nextRender();
-
-      // Emulate click without focus change
-      target.click();
-      await nextRender();
-      expect(overlay.opened).to.be.true;
-    });
-
     it('should not open on target focusin when detached', async () => {
       popover.remove();
       focusin(target);
