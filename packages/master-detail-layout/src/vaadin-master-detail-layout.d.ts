@@ -38,7 +38,10 @@ declare class MasterDetailLayout extends ResizeMixin(ThemableMixin(ElementMixin(
    * When specified, it prevents the master area from growing or
    * shrinking. If there is not enough space to show master and detail
    * areas next to each other, the layout switches to the overlay mode.
-   * Setting `100%` enforces the overlay mode to be used by default.
+   *
+   * This property can be used to enforce the overlay mode to be used.
+   * In order to do it, set `100%` with default (horizontal) orientation
+   * or `100vh` with vertical orientation.
    *
    * @attr {string} master-size
    */
@@ -49,11 +52,22 @@ declare class MasterDetailLayout extends ResizeMixin(ThemableMixin(ElementMixin(
    * When specified, it prevents the master area from shrinking below
    * this size. If there is not enough space to show master and detail
    * areas next to each other, the layout switches to the overlay mode.
-   * Setting `100%` enforces the overlay mode to be used by default.
+   *
+   * This property can be used to enforce the overlay mode to be used.
+   * In order to do it, set `100%` with default (horizontal) orientation
+   * or `100vh` with vertical orientation.
    *
    * @attr {string} master-min-size
    */
   masterMinSize: string | null | undefined;
+
+  /**
+   * Define how master and detail areas are shown next to each other,
+   * and the way how size and min-size properties are applied to them.
+   * Possible values are: `horizontal` or `vertical`.
+   * When not specified, defaults to horizontal.
+   */
+  orientation: 'horizontal' | 'vertical' | undefined;
 }
 
 declare global {

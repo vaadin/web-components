@@ -15,3 +15,4 @@ assertType<string | null | undefined>(layout.detailSize);
 assertType<string | null | undefined>(layout.detailMinSize);
 assertType<string | null | undefined>(layout.masterSize);
 assertType<string | null | undefined>(layout.masterMinSize);
+assertType<'horizontal' | 'vertical' | undefined>(layout.orientation);

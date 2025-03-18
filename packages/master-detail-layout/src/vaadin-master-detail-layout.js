@@ -49,13 +49,16 @@ class MasterDetailLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolylitM
 
       :host([overlay]) [part='detail'] {
         position: absolute;
+      }
+
+      :host([overlay]:not([orientation='vertical'])) [part='detail'] {
         inset-inline-end: 0;
         height: 100%;
         width: var(--_detail-min-size, min-content);
         max-width: 100%;
       }
 
-      :host([overlay]) [part='master'] {
+      :host([overlay]:not([orientation='vertical'])) [part='master'] {
         max-width: 100%;
       }
 
@@ -67,14 +70,17 @@ class MasterDetailLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolylitM
       }
 
       /* Fixed size */
-      :host([has-master-size]) [part='master'] {
-        width: var(--_master-size);
+      :host([has-master-size]) [part='master'],
+      :host([has-detail-size]) [part='detail'] {
         flex-shrink: 0;
       }
 
-      :host([has-detail-size]) [part='detail'] {
+      :host([has-master-size]:not([orientation='vertical'])) [part='master'] {
+        width: var(--_master-size);
+      }
+
+      :host([has-detail-size]:not([orientation='vertical'])) [part='detail'] {
         width: var(--_detail-size);
-        flex-shrink: 0;
       }
 
       :host([has-master-size][has-detail-size]) [part='master'] {
@@ -88,17 +94,47 @@ class MasterDetailLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolylitM
       }
 
       /* Min size */
-      :host([has-master-min-size]:not([overlay])) [part='master'] {
+      :host([has-master-min-size]:not([overlay]):not([orientation='vertical'])) [part='master'] {
         min-width: var(--_master-min-size);
       }
 
-      :host([has-detail-min-size]:not([overlay])) [part='detail'] {
+      :host([has-detail-min-size]:not([overlay]):not([orientation='vertical'])) [part='detail'] {
         min-width: var(--_detail-min-size);
       }
 
       :host([has-master-min-size]) [part='master'],
       :host([has-detail-min-size]) [part='detail'] {
         flex-shrink: 0;
+      }
+
+      /* Vertical */
+      :host([orientation='vertical']) {
+        flex-direction: column;
+      }
+
+      :host([orientation='vertical'][overlay]) [part='detail'] {
+        inset-block-end: 0;
+        width: 100%;
+        height: var(--_detail-min-size, min-content);
+      }
+
+      /* Fixed size */
+      :host([has-master-size][orientation='vertical']) [part='master'] {
+        height: var(--_master-size);
+      }
+
+      :host([has-detail-size][orientation='vertical']) [part='detail'] {
+        height: var(--_detail-size);
+      }
+
+      /* Min size */
+      :host([has-master-min-size][orientation='vertical']:not([overlay])) [part='master'],
+      :host([has-master-min-size][orientation='vertical'][overlay]) {
+        min-height: var(--_master-min-size);
+      }
+
+      :host([has-detail-min-size][orientation='vertical']:not([overlay])) [part='detail'] {
+        min-height: var(--_detail-min-size);
       }
     `;
   }
@@ -138,7 +174,10 @@ class MasterDetailLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolylitM
        * When specified, it prevents the master area from growing or
        * shrinking. If there is not enough space to show master and detail
        * areas next to each other, the layout switches to the overlay mode.
-       * Setting `100%` enforces the overlay mode to be used by default.
+       *
+       * This property can be used to enforce the overlay mode to be used.
+       * In order to do it, set `100%` with default (horizontal) orientation
+       * or `100vh` with vertical orientation.
        *
        * @attr {string} master-size
        */
@@ -153,7 +192,10 @@ class MasterDetailLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolylitM
        * When specified, it prevents the master area from shrinking below
        * this size. If there is not enough space to show master and detail
        * areas next to each other, the layout switches to the overlay mode.
-       * Setting `100%` enforces the overlay mode to be used by default.
+       *
+       * This property can be used to enforce the overlay mode to be used.
+       * In order to do it, set `100%` with default (horizontal) orientation
+       * or `100vh` with vertical orientation.
        *
        * @attr {string} master-min-size
        */
@@ -162,7 +204,34 @@ class MasterDetailLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolylitM
         sync: true,
         observer: '__masterMinSizeChanged',
       },
+
+      /**
+       * Define how master and detail areas are shown next to each other,
+       * and the way how size and min-size properties are applied to them.
+       * Possible values are: `horizontal` or `vertical`.
+       * When not specified, defaults to horizontal.
+       */
+      orientation: {
+        type: String,
+        reflectToAttribute: true,
+        observer: '__orientationChanged',
+        sync: true,
+      },
     };
+  }
+
+  constructor() {
+    super();
+
+    this.__onWindowResize = this.__onWindowResize.bind(this);
+  }
+
+  /**
+   * @return {boolean}
+   * @protected
+   */
+  get _vertical() {
+    return this.orientation === 'vertical';
   }
 
   /** @protected */
@@ -177,6 +246,13 @@ class MasterDetailLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolylitM
     `;
   }
 
+  /** @protected */
+  ready() {
+    super.ready();
+
+    window.addEventListener('resize', this.__onWindowResize);
+  }
+
   /** @private */
   __onDetailSlotChange(e) {
     this.toggleAttribute('has-detail', e.target.assignedNodes().length > 0);
@@ -189,6 +265,15 @@ class MasterDetailLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolylitM
    */
   _onResize() {
     this.__detectLayoutMode();
+  }
+
+  /** @private */
+  __onWindowResize() {
+    // On window resize, the component does not necessarily get resized
+    // when already in vertical overlay mode, so we have this listener.
+    if (this._vertical) {
+      this.__detectVerticalMode();
+    }
   }
 
   /** @private */
@@ -216,6 +301,13 @@ class MasterDetailLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolylitM
   }
 
   /** @private */
+  __orientationChanged(orientation, oldOrientation) {
+    if (orientation || oldOrientation) {
+      this.__detectLayoutMode();
+    }
+  }
+
+  /** @private */
   __updateStyleProperty(prop, size, oldSize) {
     if (size) {
       this.style.setProperty(`--_${prop}`, size);
@@ -233,6 +325,15 @@ class MasterDetailLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolylitM
       return;
     }
 
+    if (this._vertical) {
+      this.__detectVerticalMode();
+    } else {
+      this.__detectHorizontalMode();
+    }
+  }
+
+  /** @private */
+  __detectHorizontalMode() {
     const detailWidth = this.$.detail.offsetWidth;
 
     // Detect minimum width needed by master content. Use max-width to ensure
@@ -257,6 +358,20 @@ class MasterDetailLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolylitM
     // scroll. Check if that is the case and if so, preserve the overlay mode.
     if (this.offsetWidth < this.scrollWidth) {
       this.setAttribute('overlay', '');
+    }
+  }
+
+  /** @private */
+  __detectVerticalMode() {
+    // Detect potentially available height in the viewport.
+    const maxHeight = window.innerHeight - this.getBoundingClientRect().top;
+
+    // If the combined minimum size of both the master and the detail content
+    // exceeds the available height, the layout changes to the overlay mode.
+    if (maxHeight < this.$.master.offsetHeight + this.$.detail.offsetHeight) {
+      this.setAttribute('overlay', '');
+    } else {
+      this.removeAttribute('overlay');
     }
   }
 }

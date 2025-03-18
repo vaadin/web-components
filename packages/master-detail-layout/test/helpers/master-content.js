@@ -7,6 +7,8 @@ customElements.define(
       return css`
         :host {
           display: block;
+          height: 100%;
+          overflow: auto;
         }
 
         .list {
