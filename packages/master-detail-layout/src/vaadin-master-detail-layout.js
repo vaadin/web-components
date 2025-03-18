@@ -175,9 +175,9 @@ class MasterDetailLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolylitM
        * shrinking. If there is not enough space to show master and detail
        * areas next to each other, the layout switches to the overlay mode.
        *
-       * This property can be used to enforce the overlay mode to be used.
-       * In order to do it, set `100%` with default (horizontal) orientation
-       * or `100vh` with vertical orientation.
+       * This property can be used to enforce overlay mode by setting it
+       * to `100%` with the default (horizontal) orientation, or `100vh`
+       * with vertical orientation.
        *
        * @attr {string} master-size
        */
@@ -193,9 +193,9 @@ class MasterDetailLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolylitM
        * this size. If there is not enough space to show master and detail
        * areas next to each other, the layout switches to the overlay mode.
        *
-       * This property can be used to enforce the overlay mode to be used.
-       * In order to do it, set `100%` with default (horizontal) orientation
-       * or `100vh` with vertical orientation.
+       * This property can be used to enforce overlay mode by setting it
+       * to `100%` with the default (horizontal) orientation, or `100vh`
+       * with vertical orientation.
        *
        * @attr {string} master-min-size
        */
