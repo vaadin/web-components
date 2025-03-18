@@ -306,9 +306,15 @@ class Card extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
     return true;
   }
 
-  constructor() {
-    super();
-    this.setAttribute('role', 'region');
+  /** @protected */
+  ready() {
+    super.ready();
+
+    // By default, if the user hasn't provided a custom role,
+    // the role attribute is set to "region".
+    if (!this.hasAttribute('role')) {
+      this.setAttribute('role', 'region');
+    }
   }
 
   /** @protected */
