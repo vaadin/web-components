@@ -7,15 +7,16 @@ import { css, html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
+import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 /**
  * `<vaadin-card>` is a versatile container for grouping related content and actions.
  * It presents information in a structured and visually appealing manner, with
- * customization options to fit various design requirements.
+ * customization options to fit various design requirements. The default ARIA role is `region`.
  *
  * ```html
- * <vaadin-card theme="outlined cover-media">
+ * <vaadin-card role="region" theme="outlined cover-media">
  *   <img slot="media" width="200" src="..." alt="">
  *   <div slot="title">Lapland</div>
  *   <div slot="subtitle">The Exotic North</div>
@@ -279,8 +280,35 @@ class Card extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
     `;
   }
 
+  static get properties() {
+    return {
+      /**
+       * The title of the card. When set, any custom slotted title is removed and this string-based title is used instead. If this title is used, an `aria-labelledby` attribute that points to the generated title element is set.
+       *
+       * @type {String}
+       */
+      title: {
+        type: String,
+      },
+
+      /**
+       * Sets the heading level (`aria-level`) for the string-based title. Valid values are from 1 through 6. If not set or an invalid value is used, the level defaults to 2.
+       *
+       * @type {Number}
+       */
+      __titleHeadingLevel: {
+        type: Number | null | undefined,
+      },
+    };
+  }
+
   static get experimental() {
     return true;
+  }
+
+  constructor() {
+    super();
+    this.setAttribute('role', 'region');
   }
 
   /** @protected */
@@ -306,6 +334,28 @@ class Card extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
     `;
   }
 
+  get titleHeadingLevel() {
+    return this.__titleHeadingLevel;
+  }
+
+  set titleHeadingLevel(value) {
+    if (value == null) {
+      this.__titleHeadingLevel = null;
+    } else if (value >= 1 && value <= 6) {
+      this.__titleHeadingLevel = value;
+    }
+  }
+
+  updated(props) {
+    super.updated(props);
+    if (props.has('title')) {
+      this.__titleChanged(this.title);
+    }
+    if (props.has('titleHeadingLevel')) {
+      this.__titleHeadingLevelChanged(this.titleHeadingLevel);
+    }
+  }
+
   /** @private */
   _onSlotChange() {
     this.toggleAttribute('_m', this.querySelector(':scope > [slot="media"]'));
@@ -322,6 +372,79 @@ class Card extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
     this.toggleAttribute('_hs', this.querySelector(':scope > [slot="header-suffix"]'));
     this.toggleAttribute('_c', this.querySelector(':scope > :not([slot])'));
     this.toggleAttribute('_f', this.querySelector(':scope > [slot="footer"]'));
+    if (this.__getCustomTitleElement()) {
+      this.__clearStringTitle();
+    }
+  }
+
+  /** @private */
+  __clearStringTitle() {
+    const stringTitleElement = this.__getStringTitleElement();
+    if (stringTitleElement) {
+      this.removeChild(stringTitleElement);
+    }
+    const ariaLabelledby = this.getAttribute('aria-labelledby');
+    if (ariaLabelledby && ariaLabelledby.startsWith('card-title-')) {
+      this.removeAttribute('aria-labelledby');
+    }
+    if (this.title) {
+      this.title = '';
+    }
+  }
+
+  /** @private */
+  __getCustomTitleElement() {
+    return Array.from(this.querySelectorAll('[slot="title"]')).find((el) => {
+      return !el.hasAttribute('card-string-title');
+    });
+  }
+
+  /** @private */
+  __titleChanged(title) {
+    if (!title) {
+      this.__clearStringTitle();
+      return;
+    }
+    const customTitleElement = this.__getCustomTitleElement();
+    if (customTitleElement) {
+      this.removeChild(customTitleElement);
+    }
+    let stringTitleElement = this.__getStringTitleElement();
+    if (!stringTitleElement) {
+      stringTitleElement = this.__createStringTitleElement();
+      this.appendChild(stringTitleElement);
+      this.setAttribute('aria-labelledby', stringTitleElement.id);
+    }
+    stringTitleElement.textContent = title;
+  }
+
+  /** @private */
+  __createStringTitleElement() {
+    const stringTitleElement = document.createElement('div');
+    stringTitleElement.setAttribute('slot', 'title');
+    stringTitleElement.setAttribute('role', 'heading');
+    this.__setTitleHeadingLevel(stringTitleElement, this.titleHeadingLevel);
+    stringTitleElement.setAttribute('card-string-title', '');
+    stringTitleElement.id = `card-title-${generateUniqueId()}`;
+    return stringTitleElement;
+  }
+
+  /** @private */
+  __titleHeadingLevelChanged(titleHeadingLevel) {
+    const stringTitleElement = this.__getStringTitleElement();
+    if (stringTitleElement) {
+      this.__setTitleHeadingLevel(stringTitleElement, titleHeadingLevel);
+    }
+  }
+
+  /** @private */
+  __setTitleHeadingLevel(stringTitleElement, titleHeadingLevel) {
+    stringTitleElement.setAttribute('aria-level', titleHeadingLevel || 2);
+  }
+
+  /** @private */
+  __getStringTitleElement() {
+    return this.querySelector('[slot="title"][card-string-title]');
   }
 
   /**

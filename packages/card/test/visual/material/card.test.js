@@ -61,6 +61,12 @@ describe('card', () => {
       await visualDiff(div, 'slot-title');
     });
 
+    it('string title', async () => {
+      element = cardFixture();
+      element.title = 'Title lorem ipsum';
+      await visualDiff(div, 'string-title');
+    });
+
     it('subtitle', async () => {
       element = cardFixture(subTitle);
       await visualDiff(div, 'slot-subtitle');

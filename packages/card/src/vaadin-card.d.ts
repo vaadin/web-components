@@ -9,10 +9,10 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
 /**
  * `<vaadin-card>` is a versatile container for grouping related content and actions.
  * It presents information in a structured and visually appealing manner, with
- * customization options to fit various design requirements.
+ * customization options to fit various design requirements. The default ARIA role is `region`.
  *
  * ```html
- * <vaadin-card theme="outlined cover-media">
+ * <vaadin-card role="region" theme="outlined cover-media">
  *   <img slot="media" width="200" src="..." alt="">
  *   <div slot="title">Lapland</div>
  *   <div slot="subtitle">The Exotic North</div>
@@ -41,7 +41,17 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  */
-declare class Card extends ElementMixin(ThemableMixin(HTMLElement)) {}
+declare class Card extends ElementMixin(ThemableMixin(HTMLElement)) {
+  /**
+   * The title of the card. When set, any custom slotted title is removed and this string-based title is used instead. If this title is used, an `aria-labelledby` attribute that points to the generated title element is set.
+   */
+  title: string;
+
+  /**
+   * Sets the heading level (`aria-level`) for the string-based title. Valid values are from 1 through 6. If not set or an invalid value is used, the level defaults to 2.
+   */
+  titleHeadingLevel: number | null | undefined;
+}
 
 declare global {
   interface HTMLElementTagNameMap {
