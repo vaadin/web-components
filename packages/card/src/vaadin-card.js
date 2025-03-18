@@ -289,6 +289,7 @@ class Card extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
        */
       title: {
         type: String,
+        observer: '__titleChanged',
       },
 
       /**
@@ -298,6 +299,7 @@ class Card extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
        */
       __titleHeadingLevel: {
         type: Number | null | undefined,
+        observer: '__titleHeadingLevelChanged',
       },
     };
   }
@@ -349,16 +351,6 @@ class Card extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
       this.__titleHeadingLevel = null;
     } else if (value >= 1 && value <= 6) {
       this.__titleHeadingLevel = value;
-    }
-  }
-
-  updated(props) {
-    super.updated(props);
-    if (props.has('title')) {
-      this.__titleChanged(this.title);
-    }
-    if (props.has('titleHeadingLevel')) {
-      this.__titleHeadingLevelChanged(this.titleHeadingLevel);
     }
   }
 
