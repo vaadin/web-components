@@ -67,11 +67,17 @@ class PopoverOpenedStateController {
    * @param {Object} options
    */
   open(options = { immediate: false }) {
+    if (this.isClosing) {
+      // Abort closing on overlay mouseenter.
+      this.__abortClose();
+      return;
+    }
+
     const { immediate, trigger } = options;
     const shouldDelayHover = trigger === 'hover' && this.__hoverDelay > 0;
     const shouldDelayFocus = trigger === 'focus' && this.__focusDelay > 0;
 
-    if (!immediate && (shouldDelayHover || shouldDelayFocus) && !this.__closeTimeout) {
+    if (!immediate && (shouldDelayHover || shouldDelayFocus)) {
       this.__scheduleOpen(trigger);
     } else {
       this.__showPopover();
@@ -83,14 +89,16 @@ class PopoverOpenedStateController {
    * @param {boolean} immediate
    */
   close(immediate) {
-    if (!immediate && this.__hideDelay > 0) {
-      this.__scheduleClose();
-    } else {
+    if (this.__openTimeout != null) {
+      // Close immediately if still opening to not wait for hide delay.
+      this.__abortOpen();
+    } else if (immediate || this.__hideDelay === 0) {
+      // Close immediately e.g. on Esc press or with zero hide delay.
       this.__abortClose();
       this.__setOpened(false);
+    } else {
+      this.__scheduleClose();
     }
-
-    this.__abortOpen();
   }
 
   /** @private */
