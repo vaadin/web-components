@@ -247,10 +247,17 @@ class MasterDetailLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolylitM
   }
 
   /** @protected */
-  ready() {
-    super.ready();
+  connectedCallback() {
+    super.connectedCallback();
 
     window.addEventListener('resize', this.__onWindowResize);
+  }
+
+  /** @protected */
+  disconnectedCallback() {
+    super.disconnectedCallback();
+
+    window.removeEventListener('resize', this.__onWindowResize);
   }
 
   /** @private */
