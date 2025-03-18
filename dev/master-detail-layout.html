@@ -19,7 +19,7 @@
         background-color: var(--lumo-shade-20pct);
       }
 
-      vaadin-master-detail-layout[overlay]::part(detail) {
+      vaadin-master-detail-layout:is([overlay], [stack])::part(detail) {
         background: #fff;
       }
 

@@ -4,6 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { css, html, LitElement } from 'lit';
+import { supportsAdoptingStyleSheets } from '@vaadin/component-base/src/browser-utils.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
@@ -31,6 +32,7 @@ class MasterDetailLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolylitM
       :host {
         display: flex;
         box-sizing: border-box;
+        container-type: inline-size;
         height: 100%;
       }
 
@@ -136,6 +138,16 @@ class MasterDetailLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolylitM
       :host([has-detail-min-size][orientation='vertical']:not([overlay])) [part='detail'] {
         min-height: var(--_detail-min-size);
       }
+
+      /* Stack mode */
+      :host([stack]) {
+        position: relative;
+      }
+
+      :host([stack]) [part='detail'] {
+        position: absolute;
+        inset: 0;
+      }
     `;
   }
 
@@ -217,6 +229,12 @@ class MasterDetailLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolylitM
         observer: '__orientationChanged',
         sync: true,
       },
+
+      // TODO
+      stackBreakpoint: {
+        type: String,
+        observer: '__stackBreakpointChanged',
+      },
     };
   }
 
@@ -232,6 +250,14 @@ class MasterDetailLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolylitM
    */
   get _vertical() {
     return this.orientation === 'vertical';
+  }
+
+  /**
+   * @return {boolean}
+   * @protected
+   */
+  get _stack() {
+    return getComputedStyle(this.$.master).getPropertyValue('--_stack') === 'true';
   }
 
   /** @protected */
@@ -308,6 +334,28 @@ class MasterDetailLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolylitM
   }
 
   /** @private */
+  __stackBreakpointChanged(breakpoint, oldBreakpoint) {
+    if (breakpoint) {
+      // Stack breakpoint requires container queries and constructible stylesheets.
+      // Both are only available in Safari 16+, so in Safari 15 this does nothing.
+      if (!this.__stackStyleSheet && supportsAdoptingStyleSheets) {
+        this.__stackStyleSheet = new CSSStyleSheet();
+        this.shadowRoot.adoptedStyleSheets = [...this.shadowRoot.adoptedStyleSheets, this.__stackStyleSheet];
+      }
+
+      if (this.__stackStyleSheet) {
+        this.__stackStyleSheet.replaceSync(`@container ${breakpoint} { [part='master'] { --_stack: true; }`);
+      }
+
+      this.__detectLayoutMode();
+    } else if (oldBreakpoint && this.__stackStyleSheet) {
+      // Reset stack mode if breakpoint is cleared.
+      this.__stackStyleSheet.replaceSync('');
+      this.__detectLayoutMode();
+    }
+  }
+
+  /** @private */
   __updateStyleProperty(prop, size, oldSize) {
     if (size) {
       this.style.setProperty(`--_${prop}`, size);
@@ -322,7 +370,23 @@ class MasterDetailLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolylitM
   __detectLayoutMode() {
     if (!this.hasAttribute('has-detail')) {
       this.removeAttribute('overlay');
+      this.removeAttribute('stack');
       return;
+    }
+
+    if (this.stackBreakpoint != null) {
+      this.toggleAttribute('stack', this._stack);
+
+      if (!this._stack) {
+        // Toggling the overlay resizes master content, which can cause document
+        // scroll bar to appear or disappear, and trigger another resize of the
+        // layout so that it no longer matches the breakpoint. If that is the case,
+        // remove the attribute to avoid infinite jumpiness of the layout.
+        this.removeAttribute('stack');
+      } else {
+        this.removeAttribute('overlay');
+        return;
+      }
     }
 
     if (this._vertical) {
