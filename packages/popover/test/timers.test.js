@@ -269,6 +269,20 @@ describe('timers', () => {
       await nextUpdate(popover);
       expect(overlay.opened).to.be.false;
     });
+
+    it('should close the overlay immediately on subsequent mouseleave during hover delay', async () => {
+      popover.hoverDelay = 5;
+
+      mouseenter(target);
+      mouseleave(target);
+      await nextUpdate(popover);
+
+      mouseenter(target);
+      mouseleave(target);
+      await nextUpdate(popover);
+
+      expect(overlay.opened).to.be.false;
+    });
   });
 
   describe('setDefaultHoverDelay', () => {
