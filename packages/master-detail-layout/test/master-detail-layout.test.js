@@ -380,7 +380,7 @@ describe('vaadin-master-detail-layout', () => {
 
         expect(layout.hasAttribute('overlay')).to.be.true;
 
-        layout.masterSize = '';
+        layout.masterMinSize = '';
         await nextResize(layout);
         expect(layout.hasAttribute('overlay')).to.be.false;
       });

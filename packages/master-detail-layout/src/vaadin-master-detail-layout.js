@@ -332,7 +332,9 @@ class MasterDetailLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolylitM
   __detectVerticalMode() {
     // Set position to static temporarily to detect if there is enough space
     // for both areas so that layout could switch back to the split mode.
-    this.$.detail.style.position = 'static';
+    if (this.hasAttribute('overlay') && !this.masterMinSize) {
+      this.$.detail.style.position = 'static';
+    }
     const masterHeight = this.$.master.offsetHeight;
     this.$.detail.style.position = '';
 
