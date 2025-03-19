@@ -27,7 +27,7 @@
         background: #fff;
       }
 
-      vaadin-master-detail-layout:not([orientation='vertical'])[overlay]::part(detail) {
+      vaadin-master-detail-layout[orientation='horizontal'][overlay]::part(detail) {
         border-inline-start: solid 1px #ccc;
       }
 
@@ -86,7 +86,7 @@
       });
 
       document.querySelector('#vertical').addEventListener('change', (e) => {
-        layout.orientation = e.target.checked ? 'vertical' : null;
+        layout.orientation = e.target.checked ? 'vertical' : 'horizontal';
       });
 
       document.querySelector('#maxWidth').addEventListener('change', (e) => {
