@@ -289,6 +289,7 @@ class Card extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
        */
       title: {
         type: String,
+        notify: true,
         observer: '__titleChanged',
       },
 
