@@ -56,51 +56,87 @@ describe('vaadin-master-detail-layout', () => {
   });
 
   describe('size properties', () => {
-    it('should set flex-basis to 50% on the master and detail by default', () => {
-      expect(getComputedStyle(master).flexBasis).to.equal('50%');
-      expect(getComputedStyle(detail).flexBasis).to.equal('50%');
+    describe('default', () => {
+      it('should set flex-basis to 50% on the master and detail by default', () => {
+        expect(getComputedStyle(master).flexBasis).to.equal('50%');
+        expect(getComputedStyle(detail).flexBasis).to.equal('50%');
+      });
+
+      it('should set flex-grow to 1 on the master and detail by default', () => {
+        expect(getComputedStyle(master).flexGrow).to.equal('1');
+        expect(getComputedStyle(detail).flexGrow).to.equal('1');
+      });
+
+      it('should set fixed width on the master area when masterSize is set', () => {
+        layout.masterSize = '300px';
+        expect(getComputedStyle(master).width).to.equal('300px');
+        expect(getComputedStyle(master).flexBasis).to.equal('auto');
+        expect(getComputedStyle(master).flexGrow).to.equal('0');
+        expect(getComputedStyle(master).flexShrink).to.equal('0');
+      });
+
+      it('should set fixed width on the detail area when detailSize is set', () => {
+        layout.detailSize = '300px';
+        expect(getComputedStyle(detail).width).to.equal('300px');
+        expect(getComputedStyle(detail).flexBasis).to.equal('auto');
+        expect(getComputedStyle(detail).flexGrow).to.equal('0');
+        expect(getComputedStyle(detail).flexShrink).to.equal('0');
+      });
+
+      it('should use size as flex-basis when both masterSize and detailSize are set', () => {
+        layout.masterSize = '300px';
+        layout.detailSize = '300px';
+        expect(getComputedStyle(master).flexBasis).to.equal('300px');
+        expect(getComputedStyle(master).flexGrow).to.equal('1');
+        expect(getComputedStyle(detail).flexBasis).to.equal('300px');
+        expect(getComputedStyle(detail).flexGrow).to.equal('1');
+      });
+
+      it('should use masterMinSize as min-width and disable flex-shrink', () => {
+        layout.masterMinSize = '300px';
+        expect(getComputedStyle(master).minWidth).to.equal('300px');
+        expect(getComputedStyle(master).flexShrink).to.equal('0');
+      });
+
+      it('should use detailMinSize as min-width and disable flex-shrink', () => {
+        layout.detailMinSize = '300px';
+        expect(getComputedStyle(detail).minWidth).to.equal('300px');
+        expect(getComputedStyle(detail).flexShrink).to.equal('0');
+      });
     });
 
-    it('should set flex-grow to 1 on the master and detail by default', () => {
-      expect(getComputedStyle(master).flexGrow).to.equal('1');
-      expect(getComputedStyle(detail).flexGrow).to.equal('1');
-    });
+    describe('vertical', () => {
+      beforeEach(() => {
+        layout.orientation = 'vertical';
+      });
 
-    it('should set fixed width on the master area when masterSize is set', () => {
-      layout.masterSize = '300px';
-      expect(getComputedStyle(master).width).to.equal('300px');
-      expect(getComputedStyle(master).flexBasis).to.equal('auto');
-      expect(getComputedStyle(master).flexGrow).to.equal('0');
-      expect(getComputedStyle(master).flexShrink).to.equal('0');
-    });
+      it('should set fixed height on the master area when masterSize is set', () => {
+        layout.masterSize = '200px';
+        expect(getComputedStyle(master).height).to.equal('200px');
+        expect(getComputedStyle(master).flexBasis).to.equal('auto');
+        expect(getComputedStyle(master).flexGrow).to.equal('0');
+        expect(getComputedStyle(master).flexShrink).to.equal('0');
+      });
 
-    it('should set fixed width on the detail area when detailSize is set', () => {
-      layout.detailSize = '300px';
-      expect(getComputedStyle(detail).width).to.equal('300px');
-      expect(getComputedStyle(detail).flexBasis).to.equal('auto');
-      expect(getComputedStyle(detail).flexGrow).to.equal('0');
-      expect(getComputedStyle(detail).flexShrink).to.equal('0');
-    });
+      it('should set fixed height on the detail area when detailSize is set', () => {
+        layout.detailSize = '200px';
+        expect(getComputedStyle(detail).height).to.equal('200px');
+        expect(getComputedStyle(detail).flexBasis).to.equal('auto');
+        expect(getComputedStyle(detail).flexGrow).to.equal('0');
+        expect(getComputedStyle(detail).flexShrink).to.equal('0');
+      });
 
-    it('should use size as flex-basis when both masterSize and detailSize are set', () => {
-      layout.masterSize = '300px';
-      layout.detailSize = '300px';
-      expect(getComputedStyle(master).flexBasis).to.equal('300px');
-      expect(getComputedStyle(master).flexGrow).to.equal('1');
-      expect(getComputedStyle(detail).flexBasis).to.equal('300px');
-      expect(getComputedStyle(detail).flexGrow).to.equal('1');
-    });
+      it('should use masterMinSize as min-height and disable flex-shrink', () => {
+        layout.masterMinSize = '200px';
+        expect(getComputedStyle(master).minHeight).to.equal('200px');
+        expect(getComputedStyle(master).flexShrink).to.equal('0');
+      });
 
-    it('should use masterMinSize as min-width and disable flex-shrink', () => {
-      layout.masterMinSize = '300px';
-      expect(getComputedStyle(master).minWidth).to.equal('300px');
-      expect(getComputedStyle(master).flexShrink).to.equal('0');
-    });
-
-    it('should use detailMinSize as min-width and disable flex-shrink', () => {
-      layout.detailMinSize = '300px';
-      expect(getComputedStyle(detail).minWidth).to.equal('300px');
-      expect(getComputedStyle(detail).flexShrink).to.equal('0');
+      it('should use detailMinSize as min-height and disable flex-shrink', () => {
+        layout.detailMinSize = '200px';
+        expect(getComputedStyle(detail).minHeight).to.equal('200px');
+        expect(getComputedStyle(detail).flexShrink).to.equal('0');
+      });
     });
   });
 
@@ -116,142 +152,265 @@ describe('vaadin-master-detail-layout', () => {
       await setViewport({ width, height });
     });
 
-    it('should switch to the overlay when there is not enough space for both areas', async () => {
-      // Use the threshold at which the overlay mode is on by default.
-      await setViewport({ width: 350, height });
-      await nextResize(layout);
+    describe('default', () => {
+      it('should switch to the overlay when there is not enough space for both areas', async () => {
+        // Use the threshold at which the overlay mode is on by default.
+        await setViewport({ width: 350, height });
+        await nextResize(layout);
 
-      expect(layout.hasAttribute('overlay')).to.be.true;
-      expect(getComputedStyle(detail).position).to.equal('absolute');
+        expect(layout.hasAttribute('overlay')).to.be.true;
+        expect(getComputedStyle(detail).position).to.equal('absolute');
+      });
+
+      it('should switch to the overlay mode if not enough space when masterSize is set', async () => {
+        // Use the threshold at which the overlay mode isn't on by default,
+        // but will be on after setting fixed size on the master area.
+        await setViewport({ width: 400, height });
+        await nextResize(layout);
+
+        expect(layout.hasAttribute('overlay')).to.be.false;
+
+        layout.masterSize = '300px';
+        await nextResize(layout);
+
+        expect(layout.hasAttribute('overlay')).to.be.true;
+        expect(getComputedStyle(detail).position).to.equal('absolute');
+      });
+
+      it('should switch to the overlay mode if not enough space when masterMinSize is set', async () => {
+        // Use the threshold at which the overlay mode isn't on by default,
+        // but will be on after setting fixed size on the master area.
+        await setViewport({ width: 400, height });
+        await nextResize(layout);
+
+        expect(layout.hasAttribute('overlay')).to.be.false;
+
+        layout.masterMinSize = '300px';
+        await nextResize(layout);
+
+        expect(layout.hasAttribute('overlay')).to.be.true;
+        expect(getComputedStyle(detail).position).to.equal('absolute');
+      });
+
+      it('should set detail area width in overlay mode when detailSize is set', async () => {
+        // Use the threshold at which the overlay mode isn't on by default,
+        // but will be on after setting fixed size on the detail area.
+        await setViewport({ width: 500, height });
+        await nextResize(layout);
+
+        expect(layout.hasAttribute('overlay')).to.be.false;
+
+        layout.detailSize = '300px';
+        await nextResize(layout);
+
+        expect(layout.hasAttribute('overlay')).to.be.true;
+        expect(getComputedStyle(detail).position).to.equal('absolute');
+        expect(getComputedStyle(detail).width).to.equal('300px');
+      });
+
+      it('should set detail area width in overlay mode when detailMinSize is set', async () => {
+        // Use the threshold at which the overlay mode isn't on by default,
+        // but will be on after setting min size on the detail area.
+        await setViewport({ width: 500, height });
+        await nextResize(layout);
+
+        expect(layout.hasAttribute('overlay')).to.be.false;
+
+        layout.detailMinSize = '300px';
+        await nextResize(layout);
+
+        expect(layout.hasAttribute('overlay')).to.be.true;
+        expect(getComputedStyle(detail).position).to.equal('absolute');
+        expect(getComputedStyle(detail).width).to.equal('300px');
+      });
+
+      it('should switch to the overlay mode when masterSize is set to 100%', async () => {
+        layout.masterSize = '100%';
+        await nextResize(layout);
+        expect(layout.hasAttribute('overlay')).to.be.true;
+      });
+
+      it('should switch to the overlay mode when masterMinSize is set to 100%', async () => {
+        layout.masterMinSize = '100%';
+        await nextResize(layout);
+        expect(layout.hasAttribute('overlay')).to.be.true;
+      });
+
+      it('should not overflow in the overlay mode when detailMinSize is set', async () => {
+        layout.masterSize = '500px';
+        layout.detailMinSize = '500px';
+
+        await nextResize(layout);
+
+        // Resize so that min size is bigger than layout size.
+        await setViewport({ width: 480, height });
+        await nextResize(layout);
+
+        expect(layout.hasAttribute('overlay')).to.be.true;
+        expect(getComputedStyle(detail).width).to.equal(`${layout.offsetWidth}px`);
+        expect(getComputedStyle(detail).maxWidth).to.equal('100%');
+      });
+
+      it('should not overflow in the overlay mode when masterMinSize is set', async () => {
+        layout.masterMinSize = '500px';
+        await nextResize(layout);
+
+        // Resize so that min size is bigger than layout size.
+        await setViewport({ width: 480, height });
+        await nextResize(layout);
+
+        expect(layout.hasAttribute('overlay')).to.be.true;
+        expect(getComputedStyle(master).width).to.equal(`${layout.offsetWidth}px`);
+        expect(getComputedStyle(detail).maxWidth).to.equal('100%');
+      });
+
+      it('should update overlay mode when adding and removing details', async () => {
+        // Start without details
+        detailContent.remove();
+        await nextRender();
+
+        // Shrink viewport
+        layout.detailMinSize = '300px';
+        await setViewport({ width: 500, height });
+        await nextResize(layout);
+
+        expect(layout.hasAttribute('overlay')).to.be.false;
+
+        // Add details
+        layout.appendChild(detailContent);
+        await nextRender();
+
+        expect(layout.hasAttribute('overlay')).to.be.true;
+        expect(getComputedStyle(detail).position).to.equal('absolute');
+        expect(getComputedStyle(detail).width).to.equal('300px');
+
+        // Remove details
+        detailContent.remove();
+        await nextRender();
+
+        expect(layout.hasAttribute('overlay')).to.be.false;
+      });
     });
 
-    it('should switch to the overlay mode if not enough space when masterSize is set', async () => {
-      // Use the threshold at which the overlay mode isn't on by default,
-      // but will be on after setting fixed size on the master area.
-      await setViewport({ width: 400, height });
-      await nextResize(layout);
+    describe('vertical', () => {
+      beforeEach(async () => {
+        layout.orientation = 'vertical';
+        layout.style.maxHeight = '500px';
+        layout.parentElement.style.height = '100%';
+        await nextResize(layout);
+      });
 
-      expect(layout.hasAttribute('overlay')).to.be.false;
+      it('should switch to the overlay when there is not enough space for both areas', async () => {
+        // Use the threshold at which the overlay mode is on by default.
+        await setViewport({ width: 500, height: 400 });
+        await nextResize(layout);
 
-      layout.masterSize = '300px';
-      await nextResize(layout);
+        expect(layout.hasAttribute('overlay')).to.be.true;
+        expect(getComputedStyle(detail).position).to.equal('absolute');
+      });
 
-      expect(layout.hasAttribute('overlay')).to.be.true;
-      expect(getComputedStyle(detail).position).to.equal('absolute');
-    });
+      it('should set detail area height in overlay mode when detailSize is set', async () => {
+        // Use the threshold at which the overlay mode isn't on by default,
+        // but will be on after setting fixed size on the detail area.
+        await setViewport({ width: 700, height: 600 });
+        await nextResize(layout);
 
-    it('should switch to the overlay mode if not enough space when masterMinSize is set', async () => {
-      // Use the threshold at which the overlay mode isn't on by default,
-      // but will be on after setting fixed size on the master area.
-      await setViewport({ width: 400, height });
-      await nextResize(layout);
+        expect(layout.hasAttribute('overlay')).to.be.false;
 
-      expect(layout.hasAttribute('overlay')).to.be.false;
+        layout.detailSize = '250px';
+        await nextResize(layout);
 
-      layout.masterMinSize = '300px';
-      await nextResize(layout);
+        expect(layout.hasAttribute('overlay')).to.be.true;
+        expect(getComputedStyle(detail).position).to.equal('absolute');
+        expect(getComputedStyle(detail).height).to.equal('250px');
 
-      expect(layout.hasAttribute('overlay')).to.be.true;
-      expect(getComputedStyle(detail).position).to.equal('absolute');
-    });
+        layout.detailSize = '';
+        await nextResize(layout);
+        expect(layout.hasAttribute('overlay')).to.be.false;
+      });
 
-    it('should set detail area width in overlay mode when detailSize is set', async () => {
-      // Use the threshold at which the overlay mode isn't on by default,
-      // but will be on after setting fixed size on the detail area.
-      await setViewport({ width: 500, height });
-      await nextResize(layout);
+      it('should set detail area height in overlay mode when detailMinSize is set', async () => {
+        // Use the threshold at which the overlay mode isn't on by default,
+        // but will be on after setting min size on the detail area.
+        await setViewport({ width: 700, height: 600 });
+        await nextResize(layout);
 
-      expect(layout.hasAttribute('overlay')).to.be.false;
+        expect(layout.hasAttribute('overlay')).to.be.false;
 
-      layout.detailSize = '300px';
-      await nextResize(layout);
+        layout.detailMinSize = '250px';
+        await nextResize(layout);
 
-      expect(layout.hasAttribute('overlay')).to.be.true;
-      expect(getComputedStyle(detail).position).to.equal('absolute');
-      expect(getComputedStyle(detail).width).to.equal('300px');
-    });
+        expect(layout.hasAttribute('overlay')).to.be.true;
+        expect(getComputedStyle(detail).position).to.equal('absolute');
+        expect(getComputedStyle(detail).height).to.equal('250px');
 
-    it('should set detail area width in overlay mode when detailMinSize is set', async () => {
-      // Use the threshold at which the overlay mode isn't on by default,
-      // but will be on after setting min size on the detail area.
-      await setViewport({ width: 500, height });
-      await nextResize(layout);
+        layout.detailMinSize = '';
+        await nextResize(layout);
+        expect(layout.hasAttribute('overlay')).to.be.false;
+      });
 
-      expect(layout.hasAttribute('overlay')).to.be.false;
+      it('should switch to the overlay mode when masterSize is set', async () => {
+        // Use the threshold at which the overlay mode isn't on by default,
+        // but will be on after setting fixed size on the master area.
+        await setViewport({ width: 700, height: 600 });
+        await nextResize(layout);
 
-      layout.detailMinSize = '300px';
-      await nextResize(layout);
+        expect(layout.hasAttribute('overlay')).to.be.false;
 
-      expect(layout.hasAttribute('overlay')).to.be.true;
-      expect(getComputedStyle(detail).position).to.equal('absolute');
-      expect(getComputedStyle(detail).width).to.equal('300px');
-    });
+        layout.masterSize = '450px';
+        await nextResize(layout);
 
-    it('should switch to the overlay mode when masterSize is set to 100%', async () => {
-      layout.masterSize = '100%';
-      await nextResize(layout);
-      expect(layout.hasAttribute('overlay')).to.be.true;
-    });
+        expect(layout.hasAttribute('overlay')).to.be.true;
 
-    it('should switch to the overlay mode when masterMinSize is set to 100%', async () => {
-      layout.masterMinSize = '100%';
-      await nextResize(layout);
-      expect(layout.hasAttribute('overlay')).to.be.true;
-    });
+        layout.masterSize = '';
+        await nextResize(layout);
+        expect(layout.hasAttribute('overlay')).to.be.false;
+      });
 
-    it('should not overflow in the overlay mode when detailMinSize is set', async () => {
-      layout.masterSize = '500px';
-      layout.detailMinSize = '500px';
+      it('should switch to the overlay mode when masterMinSize is set', async () => {
+        // Use the threshold at which the overlay mode isn't on by default,
+        // but will be on after setting min size on the master area.
+        await setViewport({ width: 700, height: 600 });
+        await nextResize(layout);
 
-      await nextResize(layout);
+        expect(layout.hasAttribute('overlay')).to.be.false;
 
-      // Resize so that min size is bigger than layout size.
-      await setViewport({ width: 480, height });
-      await nextResize(layout);
+        layout.masterMinSize = '450px';
+        await nextResize(layout);
 
-      expect(layout.hasAttribute('overlay')).to.be.true;
-      expect(getComputedStyle(detail).width).to.equal(`${layout.offsetWidth}px`);
-      expect(getComputedStyle(detail).maxWidth).to.equal('100%');
-    });
+        expect(layout.hasAttribute('overlay')).to.be.true;
 
-    it('should not overflow in the overlay mode when masterMinSize is set', async () => {
-      layout.masterMinSize = '500px';
-      await nextResize(layout);
+        layout.masterMinSize = '';
+        await nextResize(layout);
+        expect(layout.hasAttribute('overlay')).to.be.false;
+      });
 
-      // Resize so that min size is bigger than layout size.
-      await setViewport({ width: 480, height });
-      await nextResize(layout);
+      it('should update switch to the overlay mode when both sizes are set with border', async () => {
+        // Add border to the detail area in the overlay mode.
+        fixtureSync(`
+          <style>
+            vaadin-master-detail-layout[overlay]::part(detail) {
+              border-top: solid 1px #ccc;
+            }
+          </style>
+        `);
 
-      expect(layout.hasAttribute('overlay')).to.be.true;
-      expect(getComputedStyle(master).width).to.equal(`${layout.offsetWidth}px`);
-      expect(getComputedStyle(detail).maxWidth).to.equal('100%');
-    });
+        await setViewport({ width: 800, height: 490 });
+        await nextResize(layout);
 
-    it('should update overlay mode when adding and removing details', async () => {
-      // Start without details
-      detailContent.remove();
-      await nextRender();
+        expect(layout.hasAttribute('overlay')).to.be.false;
 
-      // Shrink viewport
-      layout.detailMinSize = '300px';
-      await setViewport({ width: 500, height });
-      await nextResize(layout);
+        layout.masterSize = '250px';
+        layout.detailMinSize = '250px';
+        await nextResize(layout);
 
-      expect(layout.hasAttribute('overlay')).to.be.false;
+        expect(layout.hasAttribute('overlay')).to.be.true;
 
-      // Add details
-      layout.appendChild(detailContent);
-      await nextRender();
+        await setViewport({ width: 800, height: 600 });
+        await nextResize(layout);
 
-      expect(layout.hasAttribute('overlay')).to.be.true;
-      expect(getComputedStyle(detail).position).to.equal('absolute');
-      expect(getComputedStyle(detail).width).to.equal('300px');
-
-      // Remove details
-      detailContent.remove();
-      await nextRender();
-
-      expect(layout.hasAttribute('overlay')).to.be.false;
+        expect(layout.hasAttribute('overlay')).to.be.false;
+      });
     });
   });
 });

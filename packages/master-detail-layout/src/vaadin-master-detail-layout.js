@@ -49,13 +49,16 @@ class MasterDetailLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolylitM
 
       :host([overlay]) [part='detail'] {
         position: absolute;
+      }
+
+      :host([overlay][orientation='horizontal']) [part='detail'] {
         inset-inline-end: 0;
         height: 100%;
         width: var(--_detail-min-size, min-content);
         max-width: 100%;
       }
 
-      :host([overlay]) [part='master'] {
+      :host([overlay][orientation='horizontal']) [part='master'] {
         max-width: 100%;
       }
 
@@ -67,14 +70,17 @@ class MasterDetailLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolylitM
       }
 
       /* Fixed size */
-      :host([has-master-size]) [part='master'] {
-        width: var(--_master-size);
+      :host([has-master-size]) [part='master'],
+      :host([has-detail-size]) [part='detail'] {
         flex-shrink: 0;
       }
 
-      :host([has-detail-size]) [part='detail'] {
+      :host([has-master-size][orientation='horizontal']) [part='master'] {
+        width: var(--_master-size);
+      }
+
+      :host([has-detail-size][orientation='horizontal']) [part='detail'] {
         width: var(--_detail-size);
-        flex-shrink: 0;
       }
 
       :host([has-master-size][has-detail-size]) [part='master'] {
@@ -88,17 +94,51 @@ class MasterDetailLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolylitM
       }
 
       /* Min size */
-      :host([has-master-min-size]:not([overlay])) [part='master'] {
+      :host([has-master-min-size][orientation='horizontal']:not([overlay])) [part='master'] {
         min-width: var(--_master-min-size);
       }
 
-      :host([has-detail-min-size]:not([overlay])) [part='detail'] {
+      :host([has-detail-min-size][orientation='horizontal']:not([overlay])) [part='detail'] {
         min-width: var(--_detail-min-size);
       }
 
       :host([has-master-min-size]) [part='master'],
       :host([has-detail-min-size]) [part='detail'] {
         flex-shrink: 0;
+      }
+
+      /* Vertical */
+      :host([orientation='vertical']) {
+        flex-direction: column;
+      }
+
+      :host([orientation='vertical'][overlay]) [part='master'] {
+        max-height: 100%;
+      }
+
+      :host([orientation='vertical'][overlay]) [part='detail'] {
+        inset-block-end: 0;
+        width: 100%;
+        height: var(--_detail-min-size, min-content);
+      }
+
+      /* Fixed size */
+      :host([has-master-size][orientation='vertical']) [part='master'] {
+        height: var(--_master-size);
+      }
+
+      :host([has-detail-size][orientation='vertical']) [part='detail'] {
+        height: var(--_detail-size);
+      }
+
+      /* Min size */
+      :host([has-master-min-size][orientation='vertical']:not([overlay])) [part='master'],
+      :host([has-master-min-size][orientation='vertical'][overlay]) {
+        min-height: var(--_master-min-size);
+      }
+
+      :host([has-detail-min-size][orientation='vertical']:not([overlay])) [part='detail'] {
+        min-height: var(--_detail-min-size);
       }
     `;
   }
@@ -138,7 +178,6 @@ class MasterDetailLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolylitM
        * When specified, it prevents the master area from growing or
        * shrinking. If there is not enough space to show master and detail
        * areas next to each other, the layout switches to the overlay mode.
-       * Setting `100%` enforces the overlay mode to be used by default.
        *
        * @attr {string} master-size
        */
@@ -153,7 +192,6 @@ class MasterDetailLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolylitM
        * When specified, it prevents the master area from shrinking below
        * this size. If there is not enough space to show master and detail
        * areas next to each other, the layout switches to the overlay mode.
-       * Setting `100%` enforces the overlay mode to be used by default.
        *
        * @attr {string} master-min-size
        */
@@ -161,6 +199,20 @@ class MasterDetailLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolylitM
         type: String,
         sync: true,
         observer: '__masterMinSizeChanged',
+      },
+
+      /**
+       * Define how master and detail areas are shown next to each other,
+       * and the way how size and min-size properties are applied to them.
+       * Possible values are: `horizontal` or `vertical`.
+       * Defaults to horizontal.
+       */
+      orientation: {
+        type: String,
+        value: 'horizontal',
+        reflectToAttribute: true,
+        observer: '__orientationChanged',
+        sync: true,
       },
     };
   }
@@ -216,6 +268,13 @@ class MasterDetailLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolylitM
   }
 
   /** @private */
+  __orientationChanged(orientation, oldOrientation) {
+    if (orientation || oldOrientation) {
+      this.__detectLayoutMode();
+    }
+  }
+
+  /** @private */
   __updateStyleProperty(prop, size, oldSize) {
     if (size) {
       this.style.setProperty(`--_${prop}`, size);
@@ -233,6 +292,15 @@ class MasterDetailLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolylitM
       return;
     }
 
+    if (this.orientation === 'vertical') {
+      this.__detectVerticalMode();
+    } else {
+      this.__detectHorizontalMode();
+    }
+  }
+
+  /** @private */
+  __detectHorizontalMode() {
     const detailWidth = this.$.detail.offsetWidth;
 
     // Detect minimum width needed by master content. Use max-width to ensure
@@ -256,6 +324,22 @@ class MasterDetailLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolylitM
     // layout which can affect previous measurements and end up in horizontal
     // scroll. Check if that is the case and if so, preserve the overlay mode.
     if (this.offsetWidth < this.scrollWidth) {
+      this.setAttribute('overlay', '');
+    }
+  }
+
+  /** @private */
+  __detectVerticalMode() {
+    // Remove overlay attribute temporarily to detect if there is enough space
+    // for both areas so that layout could switch back to the split mode.
+    if (this.hasAttribute('overlay')) {
+      this.removeAttribute('overlay');
+    }
+    const masterHeight = this.$.master.clientHeight;
+
+    // If the combined minimum size of both the master and the detail content
+    // exceeds the available height, the layout changes to the overlay mode.
+    if (this.offsetHeight < masterHeight + this.$.detail.clientHeight) {
       this.setAttribute('overlay', '');
     }
   }
