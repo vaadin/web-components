@@ -217,14 +217,6 @@ class MasterDetailLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolylitM
     };
   }
 
-  /**
-   * @return {boolean}
-   * @protected
-   */
-  get _vertical() {
-    return this.orientation === 'vertical';
-  }
-
   /** @protected */
   render() {
     return html`
@@ -300,7 +292,7 @@ class MasterDetailLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolylitM
       return;
     }
 
-    if (this._vertical) {
+    if (this.orientation === 'vertical') {
       this.__detectVerticalMode();
     } else {
       this.__detectHorizontalMode();
