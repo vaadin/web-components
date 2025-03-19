@@ -290,6 +290,31 @@ describe('vaadin-master-detail-layout', () => {
 
         expect(layout.hasAttribute('overlay')).to.be.false;
       });
+
+      it('should enforce the overlay mode when forceOverlay is set to true', async () => {
+        layout.forceOverlay = true;
+        await nextRender();
+        expect(layout.hasAttribute('overlay')).to.be.true;
+
+        layout.forceOverlay = false;
+        await nextRender();
+        expect(layout.hasAttribute('overlay')).to.be.false;
+      });
+
+      it('should not set the overlay mode with forceOverlay after removing details', async () => {
+        layout.forceOverlay = true;
+        await nextRender();
+
+        detailContent.remove();
+        await nextRender();
+
+        expect(layout.hasAttribute('overlay')).to.be.false;
+
+        layout.appendChild(detailContent);
+        await nextRender();
+
+        expect(layout.hasAttribute('overlay')).to.be.true;
+      });
     });
 
     describe('vertical', () => {
