@@ -384,6 +384,33 @@ describe('vaadin-master-detail-layout', () => {
         await nextResize(layout);
         expect(layout.hasAttribute('overlay')).to.be.false;
       });
+
+      it('should update switch to the overlay mode when both sizes are set with border', async () => {
+        // Add border to the detail area in the overlay mode.
+        fixtureSync(`
+          <style>
+            vaadin-master-detail-layout[overlay]::part(detail) {
+              border-top: solid 1px #ccc;
+            }
+          </style>
+        `);
+
+        await setViewport({ width: 800, height: 490 });
+        await nextResize(layout);
+
+        expect(layout.hasAttribute('overlay')).to.be.false;
+
+        layout.masterSize = '250px';
+        layout.detailMinSize = '250px';
+        await nextResize(layout);
+
+        expect(layout.hasAttribute('overlay')).to.be.true;
+
+        await setViewport({ width: 800, height: 600 });
+        await nextResize(layout);
+
+        expect(layout.hasAttribute('overlay')).to.be.false;
+      });
     });
   });
 });
