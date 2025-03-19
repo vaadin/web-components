@@ -348,6 +348,42 @@ describe('vaadin-master-detail-layout', () => {
         await nextResize(layout);
         expect(layout.hasAttribute('overlay')).to.be.false;
       });
+
+      it('should switch to the overlay mode when masterSize is set', async () => {
+        // Use the threshold at which the overlay mode isn't on by default,
+        // but will be on after setting fixed size on the master area.
+        await setViewport({ width: 700, height: 600 });
+        await nextResize(layout);
+
+        expect(layout.hasAttribute('overlay')).to.be.false;
+
+        layout.masterSize = '450px';
+        await nextResize(layout);
+
+        expect(layout.hasAttribute('overlay')).to.be.true;
+
+        layout.masterSize = '';
+        await nextResize(layout);
+        expect(layout.hasAttribute('overlay')).to.be.false;
+      });
+
+      it('should switch to the overlay mode when masterMinSize is set', async () => {
+        // Use the threshold at which the overlay mode isn't on by default,
+        // but will be on after setting min size on the master area.
+        await setViewport({ width: 700, height: 600 });
+        await nextResize(layout);
+
+        expect(layout.hasAttribute('overlay')).to.be.false;
+
+        layout.masterMinSize = '450px';
+        await nextResize(layout);
+
+        expect(layout.hasAttribute('overlay')).to.be.true;
+
+        layout.masterSize = '';
+        await nextResize(layout);
+        expect(layout.hasAttribute('overlay')).to.be.false;
+      });
     });
   });
 });
