@@ -217,12 +217,6 @@ class MasterDetailLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolylitM
     };
   }
 
-  constructor() {
-    super();
-
-    this.__onWindowResize = this.__onWindowResize.bind(this);
-  }
-
   /**
    * @return {boolean}
    * @protected
@@ -243,20 +237,6 @@ class MasterDetailLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolylitM
     `;
   }
 
-  /** @protected */
-  connectedCallback() {
-    super.connectedCallback();
-
-    window.addEventListener('resize', this.__onWindowResize);
-  }
-
-  /** @protected */
-  disconnectedCallback() {
-    super.disconnectedCallback();
-
-    window.removeEventListener('resize', this.__onWindowResize);
-  }
-
   /** @private */
   __onDetailSlotChange(e) {
     this.toggleAttribute('has-detail', e.target.assignedNodes().length > 0);
@@ -269,15 +249,6 @@ class MasterDetailLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolylitM
    */
   _onResize() {
     this.__detectLayoutMode();
-  }
-
-  /** @private */
-  __onWindowResize() {
-    // On window resize, the component does not necessarily get resized
-    // when already in vertical overlay mode, so we have this listener.
-    if (this._vertical) {
-      this.__detectVerticalMode();
-    }
   }
 
   /** @private */
