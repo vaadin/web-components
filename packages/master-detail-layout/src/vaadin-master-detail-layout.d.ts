@@ -57,9 +57,9 @@ declare class MasterDetailLayout extends ResizeMixin(ThemableMixin(ElementMixin(
    * Define how master and detail areas are shown next to each other,
    * and the way how size and min-size properties are applied to them.
    * Possible values are: `horizontal` or `vertical`.
-   * When not specified, defaults to horizontal.
+   * Defaults to horizontal.
    */
-  orientation: 'horizontal' | 'vertical' | undefined;
+  orientation: 'horizontal' | 'vertical';
 }
 
 declare global {

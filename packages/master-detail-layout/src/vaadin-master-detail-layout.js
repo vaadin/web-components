@@ -51,14 +51,14 @@ class MasterDetailLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolylitM
         position: absolute;
       }
 
-      :host([overlay]:not([orientation='vertical'])) [part='detail'] {
+      :host([overlay][orientation='horizontal']) [part='detail'] {
         inset-inline-end: 0;
         height: 100%;
         width: var(--_detail-min-size, min-content);
         max-width: 100%;
       }
 
-      :host([overlay]:not([orientation='vertical'])) [part='master'] {
+      :host([overlay][orientation='horizontal']) [part='master'] {
         max-width: 100%;
       }
 
@@ -75,11 +75,11 @@ class MasterDetailLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolylitM
         flex-shrink: 0;
       }
 
-      :host([has-master-size]:not([orientation='vertical'])) [part='master'] {
+      :host([has-master-size][orientation='horizontal']) [part='master'] {
         width: var(--_master-size);
       }
 
-      :host([has-detail-size]:not([orientation='vertical'])) [part='detail'] {
+      :host([has-detail-size][orientation='horizontal']) [part='detail'] {
         width: var(--_detail-size);
       }
 
@@ -94,11 +94,11 @@ class MasterDetailLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolylitM
       }
 
       /* Min size */
-      :host([has-master-min-size]:not([overlay]):not([orientation='vertical'])) [part='master'] {
+      :host([has-master-min-size][orientation='horizontal']:not([overlay])) [part='master'] {
         min-width: var(--_master-min-size);
       }
 
-      :host([has-detail-min-size]:not([overlay]):not([orientation='vertical'])) [part='detail'] {
+      :host([has-detail-min-size][orientation='horizontal']:not([overlay])) [part='detail'] {
         min-width: var(--_detail-min-size);
       }
 
@@ -205,10 +205,11 @@ class MasterDetailLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolylitM
        * Define how master and detail areas are shown next to each other,
        * and the way how size and min-size properties are applied to them.
        * Possible values are: `horizontal` or `vertical`.
-       * When not specified, defaults to horizontal.
+       * Defaults to horizontal.
        */
       orientation: {
         type: String,
+        value: 'horizontal',
         reflectToAttribute: true,
         observer: '__orientationChanged',
         sync: true,
