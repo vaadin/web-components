@@ -335,12 +335,12 @@ class MasterDetailLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolylitM
     if (this.hasAttribute('overlay') && !this.masterMinSize) {
       this.$.detail.style.position = 'static';
     }
-    const masterHeight = this.$.master.offsetHeight;
+    const masterHeight = this.$.master.clientHeight;
     this.$.detail.style.position = '';
 
     // If the combined minimum size of both the master and the detail content
     // exceeds the available height, the layout changes to the overlay mode.
-    if (this.offsetHeight < masterHeight + this.$.detail.offsetHeight) {
+    if (this.offsetHeight < masterHeight + this.$.detail.clientHeight) {
       this.setAttribute('overlay', '');
     } else {
       this.removeAttribute('overlay');
