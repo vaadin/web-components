@@ -112,6 +112,10 @@ class MasterDetailLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolylitM
         flex-direction: column;
       }
 
+      :host([orientation='vertical'][overlay]) [part='master'] {
+        max-height: 100%;
+      }
+
       :host([orientation='vertical'][overlay]) [part='detail'] {
         inset-block-end: 0;
         width: 100%;
@@ -175,10 +179,6 @@ class MasterDetailLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolylitM
        * shrinking. If there is not enough space to show master and detail
        * areas next to each other, the layout switches to the overlay mode.
        *
-       * This property can be used to enforce overlay mode by setting it
-       * to `100%` with the default (horizontal) orientation, or `100vh`
-       * with vertical orientation.
-       *
        * @attr {string} master-size
        */
       masterSize: {
@@ -192,10 +192,6 @@ class MasterDetailLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolylitM
        * When specified, it prevents the master area from shrinking below
        * this size. If there is not enough space to show master and detail
        * areas next to each other, the layout switches to the overlay mode.
-       *
-       * This property can be used to enforce overlay mode by setting it
-       * to `100%` with the default (horizontal) orientation, or `100vh`
-       * with vertical orientation.
        *
        * @attr {string} master-min-size
        */
@@ -370,12 +366,15 @@ class MasterDetailLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolylitM
 
   /** @private */
   __detectVerticalMode() {
-    // Detect potentially available height in the viewport.
-    const maxHeight = window.innerHeight - this.getBoundingClientRect().top;
+    // Set position to static temporarily to detect if there is enough space
+    // for both areas so that layout could switch back to the split mode.
+    this.$.detail.style.position = 'static';
+    const masterHeight = this.$.master.offsetHeight;
+    this.$.detail.style.position = '';
 
     // If the combined minimum size of both the master and the detail content
     // exceeds the available height, the layout changes to the overlay mode.
-    if (maxHeight < this.$.master.offsetHeight + this.$.detail.offsetHeight) {
+    if (this.offsetHeight < masterHeight + this.$.detail.offsetHeight) {
       this.setAttribute('overlay', '');
     } else {
       this.removeAttribute('overlay');

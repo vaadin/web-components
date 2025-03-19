@@ -6,11 +6,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Master Detail Layout</title>
     <script type="module" src="./common.js"></script>
-
   </head>
 
   <body>
     <style>
+      html,
+      body {
+        height: 100%;
+      }
+
       vaadin-master-detail-layout {
         border: solid 1px #ccc;
       }
@@ -40,6 +44,7 @@
       <vaadin-checkbox id="masterMinSize" label="Set master min-size"></vaadin-checkbox>
       <vaadin-checkbox id="vertical" label="Use vertical orientation"></vaadin-checkbox>
       <vaadin-checkbox id="maxWidth" label="Use max-width on the host"></vaadin-checkbox>
+      <vaadin-checkbox id="maxHeight" label="Use max-height on the host"></vaadin-checkbox>
     </p>
 
     <vaadin-master-detail-layout>
@@ -89,6 +94,14 @@
           layout.style.maxWidth = '800px';
         } else {
           layout.style.maxWidth = '';
+        }
+      });
+
+      document.querySelector('#maxHeight').addEventListener('change', (e) => {
+        if (e.target.checked) {
+          layout.style.maxHeight = '600px';
+        } else {
+          layout.style.maxHeight = '';
         }
       });
     </script>
