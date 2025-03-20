@@ -43,15 +43,15 @@ class MasterDetailLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolylitM
       }
 
       /* Overlay mode */
-      :host([overlay][has-detail]) {
+      :host(:is([overlay], [stack])) {
         position: relative;
       }
 
-      :host([overlay][containment='layout']) [part='detail'] {
+      :host(:is([overlay], [stack])[containment='layout']) [part='detail'] {
         position: absolute;
       }
 
-      :host([overlay][containment='viewport']) [part='detail'] {
+      :host(:is([overlay], [stack])[containment='viewport']) [part='detail'] {
         position: fixed;
       }
 
@@ -151,6 +151,15 @@ class MasterDetailLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolylitM
 
       :host([has-detail-min-size][orientation='vertical']:not([overlay])) [part='detail'] {
         min-height: var(--_detail-min-size);
+      }
+
+      /* Stack mode */
+      :host([stack]) [part='master'] {
+        max-height: 100%;
+      }
+
+      :host([stack]) [part='detail'] {
+        inset: 0;
       }
     `;
   }
@@ -253,6 +262,18 @@ class MasterDetailLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolylitM
         reflectToAttribute: true,
         sync: true,
       },
+
+      /**
+       * The threshold (in CSS length units) at which the layout switches to
+       * the "stack" mode, making detail area fully cover the master area.
+       *
+       * @attr {string} stack-threshold
+       */
+      stackThreshold: {
+        type: String,
+        observer: '__stackThresholdChanged',
+        sync: true,
+      },
     };
   }
 
@@ -321,6 +342,13 @@ class MasterDetailLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolylitM
   }
 
   /** @private */
+  __stackThresholdChanged(threshold, oldThreshold) {
+    if (threshold || oldThreshold) {
+      this.__detectLayoutMode();
+    }
+  }
+
+  /** @private */
   __updateStyleProperty(prop, size, oldSize) {
     if (size) {
       this.style.setProperty(`--_${prop}`, size);
@@ -335,12 +363,26 @@ class MasterDetailLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolylitM
   __detectLayoutMode() {
     if (!this.hasAttribute('has-detail')) {
       this.removeAttribute('overlay');
+      this.removeAttribute('stack');
       return;
     }
 
     if (this.forceOverlay) {
+      this.removeAttribute('stack');
       this.setAttribute('overlay', '');
       return;
+    }
+
+    if (this.stackThreshold != null) {
+      this.removeAttribute('stack');
+
+      const threshold = this.__getStackThreshold();
+      const size = this.orientation === 'vertical' ? this.offsetHeight : this.offsetWidth;
+      if (size <= threshold) {
+        this.removeAttribute('overlay');
+        this.setAttribute('stack', '');
+        return;
+      }
     }
 
     if (this.orientation === 'vertical') {
@@ -393,6 +435,16 @@ class MasterDetailLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolylitM
     if (this.offsetHeight < masterHeight + this.$.detail.clientHeight) {
       this.setAttribute('overlay', '');
     }
+  }
+
+  /** @private */
+  __getStackThreshold() {
+    // Use background-position temp inline style for unit conversion
+    const tmpStyleProp = 'background-position';
+    this.style.setProperty(tmpStyleProp, this.stackThreshold);
+    const stackThresholdPx = getComputedStyle(this).getPropertyValue(tmpStyleProp);
+    this.style.removeProperty(tmpStyleProp);
+    return parseFloat(stackThresholdPx);
   }
 }
 
