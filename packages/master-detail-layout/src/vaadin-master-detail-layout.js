@@ -87,7 +87,7 @@ class MasterDetailLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolylitM
         width: var(--_master-size);
       }
 
-      :host([has-detail-size][orientation='horizontal']) [part='detail'] {
+      :host([has-detail-size][orientation='horizontal']:not([stack])) [part='detail'] {
         width: var(--_detail-size);
       }
 
@@ -106,7 +106,7 @@ class MasterDetailLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolylitM
         min-width: var(--_master-min-size);
       }
 
-      :host([has-detail-min-size][orientation='horizontal']:not([overlay])) [part='detail'] {
+      :host([has-detail-min-size][orientation='horizontal']:not([overlay]):not([stack])) [part='detail'] {
         min-width: var(--_detail-min-size);
       }
 
@@ -139,7 +139,7 @@ class MasterDetailLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolylitM
         height: var(--_master-size);
       }
 
-      :host([has-detail-size][orientation='vertical']) [part='detail'] {
+      :host([has-detail-size][orientation='vertical']:not([stack])) [part='detail'] {
         height: var(--_detail-size);
       }
 
@@ -149,7 +149,7 @@ class MasterDetailLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolylitM
         min-height: var(--_master-min-size);
       }
 
-      :host([has-detail-min-size][orientation='vertical']:not([overlay])) [part='detail'] {
+      :host([has-detail-min-size][orientation='vertical']:not([overlay]):not([stack])) [part='detail'] {
         min-height: var(--_detail-min-size);
       }
 

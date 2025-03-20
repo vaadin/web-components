@@ -571,6 +571,30 @@ describe('vaadin-master-detail-layout', () => {
         expect(layout.hasAttribute('overlay')).to.be.true;
       });
 
+      it('should not apply min-width to the detail area in the stack mode', async () => {
+        layout.detailMinSize = '500px';
+        layout.stackThreshold = '500px';
+        await nextRender();
+
+        await setViewport({ width: 450, height });
+        await nextResize(layout);
+
+        expect(layout.hasAttribute('stack')).to.be.true;
+        expect(getComputedStyle(detail).width).to.equal('450px');
+      });
+
+      it('should not apply width to the detail area in the stack mode', async () => {
+        layout.detailSize = '500px';
+        layout.stackThreshold = '500px';
+        await nextRender();
+
+        await setViewport({ width: 450, height });
+        await nextResize(layout);
+
+        expect(layout.hasAttribute('stack')).to.be.true;
+        expect(getComputedStyle(detail).width).to.equal('450px');
+      });
+
       it('should update stack mode when adding and removing details', async () => {
         layout.stackThreshold = '500px';
 
@@ -616,6 +640,30 @@ describe('vaadin-master-detail-layout', () => {
         expect(layout.hasAttribute('stack')).to.be.true;
         expect(getComputedStyle(detail).position).to.equal('absolute');
         expect(getComputedStyle(detail).inset).to.equal('0px');
+      });
+
+      it('should not apply min-height to the detail area in the stack mode', async () => {
+        layout.detailMinSize = '500px';
+        layout.stackThreshold = '500px';
+        await nextRender();
+
+        await setViewport({ width, height: 450 });
+        await nextResize(layout);
+
+        expect(layout.hasAttribute('stack')).to.be.true;
+        expect(getComputedStyle(detail).height).to.equal('450px');
+      });
+
+      it('should not apply height to the detail area in the stack mode', async () => {
+        layout.detailSize = '500px';
+        layout.stackThreshold = '500px';
+        await nextRender();
+
+        await setViewport({ width, height: 450 });
+        await nextResize(layout);
+
+        expect(layout.hasAttribute('stack')).to.be.true;
+        expect(getComputedStyle(detail).height).to.equal('450px');
       });
     });
   });
