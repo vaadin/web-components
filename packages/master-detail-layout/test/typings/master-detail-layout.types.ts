@@ -16,3 +16,4 @@ assertType<string | null | undefined>(layout.detailMinSize);
 assertType<string | null | undefined>(layout.masterSize);
 assertType<string | null | undefined>(layout.masterMinSize);
 assertType<'horizontal' | 'vertical'>(layout.orientation);
+assertType<boolean>(layout.forceOverlay);

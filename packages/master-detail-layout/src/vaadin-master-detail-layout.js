@@ -214,6 +214,20 @@ class MasterDetailLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolylitM
         observer: '__orientationChanged',
         sync: true,
       },
+
+      /**
+       * When specified, forces the layout to use overlay mode, even if
+       * there is enough space for master and detail to be shown next to
+       * each other using the default (split) mode.
+       *
+       * @attr {boolean} force-overlay
+       */
+      forceOverlay: {
+        type: Boolean,
+        value: false,
+        observer: '__forceOverlayChanged',
+        sync: true,
+      },
     };
   }
 
@@ -275,6 +289,13 @@ class MasterDetailLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolylitM
   }
 
   /** @private */
+  __forceOverlayChanged(forceOverlay, oldForceOverlay) {
+    if (forceOverlay || oldForceOverlay) {
+      this.__detectLayoutMode();
+    }
+  }
+
+  /** @private */
   __updateStyleProperty(prop, size, oldSize) {
     if (size) {
       this.style.setProperty(`--_${prop}`, size);
@@ -289,6 +310,11 @@ class MasterDetailLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolylitM
   __detectLayoutMode() {
     if (!this.hasAttribute('has-detail')) {
       this.removeAttribute('overlay');
+      return;
+    }
+
+    if (this.forceOverlay) {
+      this.setAttribute('overlay', '');
       return;
     }
 

@@ -60,6 +60,15 @@ declare class MasterDetailLayout extends ResizeMixin(ThemableMixin(ElementMixin(
    * Defaults to horizontal.
    */
   orientation: 'horizontal' | 'vertical';
+
+  /**
+   * When specified, forces the layout to use overlay mode, even if
+   * there is enough space for master and detail to be shown next to
+   * each other using the default (split) mode.
+   *
+   * @attr {boolean} force-overlay
+   */
+  forceOverlay: boolean;
 }
 
 declare global {

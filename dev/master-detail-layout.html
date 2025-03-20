@@ -45,6 +45,7 @@
       <vaadin-checkbox id="vertical" label="Use vertical orientation"></vaadin-checkbox>
       <vaadin-checkbox id="maxWidth" label="Use max-width on the host"></vaadin-checkbox>
       <vaadin-checkbox id="maxHeight" label="Use max-height on the host"></vaadin-checkbox>
+      <vaadin-checkbox id="forceOverlay" label="Force overlay"></vaadin-checkbox>
     </p>
 
     <vaadin-master-detail-layout>
@@ -103,6 +104,10 @@
         } else {
           layout.style.maxHeight = '';
         }
+      });
+
+      document.querySelector('#forceOverlay').addEventListener('change', (e) => {
+        layout.forceOverlay = e.target.checked;
       });
     </script>
   </body>
