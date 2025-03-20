@@ -3,6 +3,8 @@
  * Copyright (c) 2019 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { html, nothing, render } from 'lit';
+import { ifDefined } from 'lit/directives/if-defined.js';
 import { DisabledMixin } from '@vaadin/a11y-base/src/disabled-mixin.js';
 import { FocusMixin } from '@vaadin/a11y-base/src/focus-mixin.js';
 import { isElementFocused, isElementHidden, isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
@@ -277,8 +279,11 @@ export const MenuBarMixin = (superClass) =>
           dots.innerHTML = '&centerdot;'.repeat(3);
           btn.appendChild(dots);
 
+          btn.setAttribute('aria-haspopup', 'true');
+          btn.setAttribute('aria-expanded', 'false');
+          btn.setAttribute('role', this.tabNavigation ? 'button' : 'menuitem');
+
           this._overflow = btn;
-          this._initButtonAttrs(btn);
         },
       });
       this.addController(this._overflowController);
@@ -359,14 +364,16 @@ export const MenuBarMixin = (superClass) =>
      */
     _themeChanged(theme, overflow, container) {
       if (overflow && container) {
-        this._buttons.forEach((btn) => this._setButtonTheme(btn, theme));
+        this.__renderButtons(this.items);
         this.__detectOverflow();
-      }
 
-      if (theme) {
-        this._subMenu.setAttribute('theme', theme);
-      } else {
-        this._subMenu.removeAttribute('theme');
+        if (theme) {
+          overflow.setAttribute('theme', theme);
+          this._subMenu.setAttribute('theme', theme);
+        } else {
+          overflow.removeAttribute('theme');
+          this._subMenu.removeAttribute('theme');
+        }
       }
     }
 
@@ -418,7 +425,13 @@ export const MenuBarMixin = (superClass) =>
 
       const subMenu = this._subMenu;
       if (subMenu && subMenu.opened) {
-        subMenu.close();
+        const button = subMenu._overlayElement.positionTarget;
+
+        // Close sub-menu if the corresponding button is no longer in the DOM,
+        // or if the item on it has been changed to no longer have children.
+        if (!button.isConnected || !button.item.children) {
+          subMenu.close();
+        }
       }
     }
 
@@ -554,66 +567,17 @@ export const MenuBarMixin = (superClass) =>
         });
     }
 
-    /** @protected */
-    _removeButtons() {
-      this._buttons.forEach((button) => {
-        if (button !== this._overflow) {
-          this.removeChild(button);
-        }
-      });
-    }
-
-    /** @protected */
-    _initButton(item) {
-      const button = document.createElement('vaadin-menu-bar-button');
-
-      const itemCopy = { ...item };
-      button.item = itemCopy;
-
-      if (item.component) {
-        const component = this.__getComponent(itemCopy);
-        itemCopy.component = component;
-        // Save item for overflow menu
-        component.item = itemCopy;
-        button.appendChild(component);
-      } else if (item.text) {
-        button.textContent = item.text;
-      }
-
-      if (item.className) {
-        button.className = item.className;
-      }
-
-      button.disabled = item.disabled;
-
-      return button;
-    }
-
-    /** @protected */
-    _initButtonAttrs(button) {
-      button.setAttribute('role', this.tabNavigation ? 'button' : 'menuitem');
-
-      if (button === this._overflow || (button.item && button.item.children)) {
-        button.setAttribute('aria-haspopup', 'true');
-        button.setAttribute('aria-expanded', 'false');
-      }
-    }
-
-    /** @protected */
-    _setButtonTheme(btn, hostTheme) {
+    /** @private */
+    __getButtonTheme(item, hostTheme) {
       let theme = hostTheme;
 
       // Item theme takes precedence over host theme even if it's empty, as long as it's not undefined or null
-      const itemTheme = btn.item && btn.item.theme;
+      const itemTheme = item && item.theme;
       if (itemTheme != null) {
         theme = Array.isArray(itemTheme) ? itemTheme.join(' ') : itemTheme;
       }
 
-      if (theme) {
-        btn.setAttribute('theme', theme);
-      } else {
-        btn.removeAttribute('theme');
-      }
+      return theme;
     }
 
     /** @private */
@@ -638,19 +602,41 @@ export const MenuBarMixin = (superClass) =>
 
     /** @private */
     __renderButtons(items = []) {
-      this._removeButtons();
+      const renderContent = (item) => {
+        if (item.component) {
+          const component = this.__getComponent(item);
+          item.component = component;
+          // Save item for overflow menu
+          component.item = item;
+          return component;
+        } else if (item.text) {
+          return item.text;
+        }
+      };
 
-      /* Empty array, do nothing */
-      if (items.length === 0) {
-        return;
-      }
+      render(
+        html`
+          ${items.map((item) => {
+            const itemCopy = { ...item };
+            const hasChildren = Boolean(item && item.children);
 
-      items.forEach((item) => {
-        const button = this._initButton(item);
-        this.insertBefore(button, this._overflow);
-        this._initButtonAttrs(button);
-        this._setButtonTheme(button, this._theme);
-      });
+            return html`
+              <vaadin-menu-bar-button
+                .item="${itemCopy}"
+                .disabled="${item.disabled}"
+                role="${this.tabNavigation ? 'button' : 'menuitem'}"
+                aria-haspopup="${ifDefined(hasChildren ? 'true' : nothing)}"
+                aria-expanded="${ifDefined(hasChildren ? 'false' : nothing)}"
+                class="${ifDefined(item.className)}"
+                theme="${ifDefined(this.__getButtonTheme(itemCopy, this._theme) || nothing)}"
+                >${renderContent(itemCopy)}</vaadin-menu-bar-button
+              >
+            `;
+          })}
+        `,
+        this,
+        { renderBefore: this._overflow },
+      );
 
       this.__detectOverflow();
     }
@@ -958,13 +944,6 @@ export const MenuBarMixin = (superClass) =>
       this._expandedButton = button;
 
       requestAnimationFrame(() => {
-        // After changing items, buttons are recreated so the old button is
-        // no longer in the DOM. Reset position target to null to prevent
-        // overlay from closing due to target width / height equal to 0.
-        if (overlay.positionTarget && !overlay.positionTarget.isConnected) {
-          overlay.positionTarget = null;
-        }
-
         button.dispatchEvent(
           new CustomEvent('opensubmenu', {
             detail: {
