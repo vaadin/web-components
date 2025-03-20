@@ -69,6 +69,14 @@ declare class MasterDetailLayout extends ResizeMixin(ThemableMixin(ElementMixin(
    * @attr {boolean} force-overlay
    */
   forceOverlay: boolean;
+
+  /**
+   * Defines the containment of the detail area when the layout is in
+   * overlay mode. When set to `layout`, the overlay is confined to the
+   * layout. When set to `viewport`, the overlay is confined to the
+   * browser's viewport. Defaults to `layout`.
+   */
+  containment: 'layout' | 'viewport';
 }
 
 declare global {

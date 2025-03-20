@@ -437,5 +437,86 @@ describe('vaadin-master-detail-layout', () => {
         expect(layout.hasAttribute('overlay')).to.be.false;
       });
     });
+
+    describe('containment', () => {
+      before(() => {
+        // Apply padding to body to test viewport containment.
+        document.body.style.padding = '20px';
+      });
+
+      after(() => {
+        document.body.style.padding = '';
+      });
+
+      describe('horizontal orientation', () => {
+        beforeEach(async () => {
+          // Use the threshold at which the overlay mode is on by default.
+          await setViewport({ width: 350, height });
+          await nextResize(layout);
+
+          expect(layout.hasAttribute('overlay')).to.be.true;
+        });
+
+        it('should contain overlay to layout by default', () => {
+          const layoutBounds = layout.getBoundingClientRect();
+          const detailBounds = detail.getBoundingClientRect();
+
+          expect(getComputedStyle(detail).position).to.equal('absolute');
+          expect(detailBounds.top).to.equal(layoutBounds.top);
+          expect(detailBounds.bottom).to.equal(layoutBounds.bottom);
+          expect(detailBounds.right).to.equal(layoutBounds.right);
+        });
+
+        it('should contain overlay to viewport when configured', async () => {
+          layout.containment = 'viewport';
+          await nextRender();
+
+          const detailBounds = detail.getBoundingClientRect();
+          const windowBounds = document.documentElement.getBoundingClientRect();
+
+          expect(getComputedStyle(detail).position).to.equal('fixed');
+          expect(detailBounds.top).to.equal(windowBounds.top);
+          expect(detailBounds.bottom).to.equal(windowBounds.bottom);
+          expect(detailBounds.right).to.equal(windowBounds.right);
+        });
+      });
+
+      describe('vertical orientation', () => {
+        beforeEach(async () => {
+          layout.orientation = 'vertical';
+          layout.style.maxHeight = '500px';
+          layout.parentElement.style.height = '100%';
+
+          // Use the threshold at which the overlay mode is on by default.
+          await setViewport({ width: 500, height: 400 });
+          await nextResize(layout);
+
+          expect(layout.hasAttribute('overlay')).to.be.true;
+        });
+
+        it('should contain overlay to layout by default', () => {
+          const layoutBounds = layout.getBoundingClientRect();
+          const detailBounds = detail.getBoundingClientRect();
+
+          expect(getComputedStyle(detail).position).to.equal('absolute');
+          expect(detailBounds.left).to.equal(layoutBounds.left);
+          expect(detailBounds.right).to.equal(layoutBounds.right);
+          expect(detailBounds.bottom).to.equal(layoutBounds.bottom);
+        });
+
+        it('should contain overlay to viewport when configured', async () => {
+          layout.containment = 'viewport';
+          await nextRender();
+
+          const detailBounds = detail.getBoundingClientRect();
+          const windowBounds = document.documentElement.getBoundingClientRect();
+
+          expect(getComputedStyle(detail).position).to.equal('fixed');
+          expect(detailBounds.left).to.equal(windowBounds.left);
+          expect(detailBounds.right).to.equal(windowBounds.right);
+          expect(detailBounds.bottom).to.equal(windowBounds.bottom);
+        });
+      });
+    });
   });
 });

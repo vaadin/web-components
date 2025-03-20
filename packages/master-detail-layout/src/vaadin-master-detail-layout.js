@@ -47,8 +47,12 @@ class MasterDetailLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolylitM
         position: relative;
       }
 
-      :host([overlay]) [part='detail'] {
+      :host([overlay][containment='layout']) [part='detail'] {
         position: absolute;
+      }
+
+      :host([overlay][containment='viewport']) [part='detail'] {
+        position: fixed;
       }
 
       :host([overlay][orientation='horizontal']) [part='detail'] {
@@ -56,6 +60,10 @@ class MasterDetailLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolylitM
         height: 100%;
         width: var(--_detail-min-size, min-content);
         max-width: 100%;
+      }
+
+      :host([overlay][orientation='horizontal'][containment='viewport']) [part='detail'] {
+        inset-block-start: 0;
       }
 
       :host([overlay][orientation='horizontal']) [part='master'] {
@@ -120,6 +128,10 @@ class MasterDetailLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolylitM
         inset-block-end: 0;
         width: 100%;
         height: var(--_detail-min-size, min-content);
+      }
+
+      :host([overlay][orientation='vertical'][containment='viewport']) [part='detail'] {
+        inset-inline-start: 0;
       }
 
       /* Fixed size */
@@ -226,6 +238,19 @@ class MasterDetailLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolylitM
         type: Boolean,
         value: false,
         observer: '__forceOverlayChanged',
+        sync: true,
+      },
+
+      /**
+       * Defines the containment of the detail area when the layout is in
+       * overlay mode. When set to `layout`, the overlay is confined to the
+       * layout. When set to `viewport`, the overlay is confined to the
+       * browser's viewport. Defaults to `layout`.
+       */
+      containment: {
+        type: String,
+        value: 'layout',
+        reflectToAttribute: true,
         sync: true,
       },
     };
