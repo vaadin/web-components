@@ -42,6 +42,7 @@
       <vaadin-checkbox id="detailMinSize" label="Set detail min-size"></vaadin-checkbox>
       <vaadin-checkbox id="masterSize" label="Set master size"></vaadin-checkbox>
       <vaadin-checkbox id="masterMinSize" label="Set master min-size"></vaadin-checkbox>
+      <vaadin-checkbox id="containmentViewport" label="Use viewport containment"></vaadin-checkbox>
       <vaadin-checkbox id="vertical" label="Use vertical orientation"></vaadin-checkbox>
       <vaadin-checkbox id="maxWidth" label="Use max-width on the host"></vaadin-checkbox>
       <vaadin-checkbox id="maxHeight" label="Use max-height on the host"></vaadin-checkbox>
@@ -84,6 +85,10 @@
 
       document.querySelector('#masterMinSize').addEventListener('change', (e) => {
         layout.masterMinSize = e.target.checked ? '300px' : null;
+      });
+
+      document.querySelector('#containmentViewport').addEventListener('change', (e) => {
+        layout.containment = e.target.checked ? 'viewport' : 'layout';
       });
 
       document.querySelector('#vertical').addEventListener('change', (e) => {
