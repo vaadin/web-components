@@ -299,7 +299,7 @@ class Card extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
        * @type {Number}
        */
       __titleHeadingLevel: {
-        type: Number | null | undefined,
+        type: Number,
         observer: '__titleHeadingLevelChanged',
       },
     };
