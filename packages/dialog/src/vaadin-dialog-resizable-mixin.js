@@ -75,6 +75,10 @@ export const DialogResizableMixin = (superClass) =>
         if (this.$.overlay.$.overlay.style.position !== 'absolute' || this.width || this.height) {
           this.$.overlay.setBounds(this._originalBounds);
         }
+
+        if (!this.$.overlay.hasAttribute('has-bounds-set')) {
+          this.$.overlay.setAttribute('has-bounds-set', '');
+        }
       }
     }
 
