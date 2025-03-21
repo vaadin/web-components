@@ -9,35 +9,36 @@
  * license.
  */
 import type { Constructor } from '@open-wc/dedupe-mixin';
+import type { I18nMixinClass } from '@vaadin/component-base/src/i18n-mixin.js';
 
 export interface RichTextEditorI18n {
-  undo: string;
-  redo: string;
-  bold: string;
-  italic: string;
-  underline: string;
-  strike: string;
-  color: string;
-  background: string;
-  h1: string;
-  h2: string;
-  h3: string;
-  subscript: string;
-  superscript: string;
-  listOrdered: string;
-  listBullet: string;
-  alignLeft: string;
-  alignCenter: string;
-  alignRight: string;
-  image: string;
-  link: string;
-  blockquote: string;
-  codeBlock: string;
-  clean: string;
-  linkDialogTitle: string;
-  ok: string;
-  cancel: string;
-  remove: string;
+  undo?: string;
+  redo?: string;
+  bold?: string;
+  italic?: string;
+  underline?: string;
+  strike?: string;
+  color?: string;
+  background?: string;
+  h1?: string;
+  h2?: string;
+  h3?: string;
+  subscript?: string;
+  superscript?: string;
+  listOrdered?: string;
+  listBullet?: string;
+  alignLeft?: string;
+  alignCenter?: string;
+  alignRight?: string;
+  image?: string;
+  link?: string;
+  blockquote?: string;
+  codeBlock?: string;
+  clean?: string;
+  linkDialogTitle?: string;
+  ok?: string;
+  cancel?: string;
+  remove?: string;
 }
 
 /**
@@ -58,7 +59,7 @@ export interface RichTextEditorCustomEventMap {
 
 export declare function RichTextEditorMixin<T extends Constructor<HTMLElement>>(
   base: T,
-): Constructor<RichTextEditorMixinClass> & T;
+): Constructor<RichTextEditorMixinClass> & I18nMixinClass<RichTextEditorI18n> & T;
 
 export declare class RichTextEditorMixinClass {
   /**
@@ -93,8 +94,12 @@ export declare class RichTextEditorMixinClass {
   readonly: boolean;
 
   /**
-   * An object used to localize this component. The properties are used
-   * e.g. as the tooltips for the editor toolbar buttons.
+   * The object used to localize this component. To change the default
+   * localization, replace this with an object that provides all properties, or
+   * just the individual properties you want to change.
+   *
+   * The properties are used e.g. as the tooltips for the editor toolbar
+   * buttons.
    */
   i18n: RichTextEditorI18n;
 
