@@ -514,11 +514,29 @@ describe('sub-menu', () => {
     });
   });
 
-  it('should close sub-menu on items change', async () => {
+  it('should not close sub-menu on items change if item has not changed', async () => {
     buttons[0].click();
     await nextRender(subMenu);
 
     menu.items = [...menu.items, { text: 'Menu Item 1' }];
+    await nextRender(subMenu);
+    expect(subMenu.opened).to.be.true;
+  });
+
+  it('should close sub-menu on items change if item no longer has children', async () => {
+    buttons[0].click();
+    await nextRender(subMenu);
+
+    menu.items = [{ text: 'Menu Item 0' }, ...menu.items];
+    await nextRender(subMenu);
+    expect(subMenu.opened).to.be.false;
+  });
+
+  it('should close sub-menu on items change if item has empty children', async () => {
+    buttons[0].click();
+    await nextRender(subMenu);
+
+    menu.items = [{ text: 'Menu Item 0', children: [] }, ...menu.items];
     await nextRender(subMenu);
     expect(subMenu.opened).to.be.false;
   });
