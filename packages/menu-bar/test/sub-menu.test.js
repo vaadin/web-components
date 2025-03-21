@@ -532,6 +532,15 @@ describe('sub-menu', () => {
     expect(subMenu.opened).to.be.false;
   });
 
+  it('should close sub-menu on items change if item has empty children', async () => {
+    buttons[0].click();
+    await nextRender(subMenu);
+
+    menu.items = [{ text: 'Menu Item 0', children: [] }, ...menu.items];
+    await nextRender(subMenu);
+    expect(subMenu.opened).to.be.false;
+  });
+
   describe('expanded attribute', () => {
     it('should toggle expanded attribute on button with nested items clicked', async () => {
       buttons[0].click();

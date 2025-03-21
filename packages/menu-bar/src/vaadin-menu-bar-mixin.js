@@ -429,7 +429,7 @@ export const MenuBarMixin = (superClass) =>
 
         // Close sub-menu if the corresponding button is no longer in the DOM,
         // or if the item on it has been changed to no longer have children.
-        if (!button.isConnected || !button.item.children) {
+        if (!button.isConnected || !Array.isArray(button.item.children) || button.item.children.length === 0) {
           subMenu.close();
         }
       }
