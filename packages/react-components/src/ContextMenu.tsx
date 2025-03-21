@@ -23,7 +23,7 @@ export type ContextMenuItem<TItemData extends object = object> = Omit<
 };
 
 export type ContextMenuItemSelectedEvent<TItem extends ContextMenuItem = ContextMenuItem> = CustomEvent<{
-  value: TItem;
+  value: ContextMenuItem<TItem>;
 }>;
 
 // The 'opened' property is omitted because it is readonly in the web component.

@@ -22,7 +22,7 @@ export type MenuBarItem<TItemData extends object = object> = Omit<_MenuBarItem<T
   children?: Array<SubMenuItem<TItemData>>;
 };
 
-export type MenuBarItemSelectedEvent<TItem extends MenuBarItem = MenuBarItem> = CustomEvent<{ value: TItem }>;
+export type MenuBarItemSelectedEvent<TItem extends MenuBarItem = MenuBarItem> = CustomEvent<{ value: MenuBarItem<TItem> }>;
 
 export type MenuBarProps<TItem extends MenuBarItem = MenuBarItem> = Partial<Omit<_MenuBarProps, 'items' | 'onItemSelected'>> &
   Readonly<{

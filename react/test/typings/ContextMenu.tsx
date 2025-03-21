@@ -8,10 +8,28 @@ type CustomContextMenuItem = ContextMenuItem<{ value: string }>;
 
 const items: CustomContextMenuItem[] = [{ text: 'View', value: 'view' }];
 
+// With explicit item type
 <ContextMenu
   items={items}
   onItemSelected={(e) => {
-    // Event item type should be inferred from items
-    assertType<CustomContextMenuItem>(e.detail.value);
+    // Base menu item properties should be available
+    assertType<string | undefined>(e.detail.value.text);
+    assertType<boolean | undefined>(e.detail.value.checked);
+    assertType<string | undefined | string[]>(e.detail.value.theme);
+    // Custom properties should be available
+    assertType<string>(e.detail.value.value);
+  }}
+/>;
+
+// With inferred item type
+<ContextMenu
+  items={[{ text: 'View', value: 'view' }]}
+  onItemSelected={(e) => {
+    // Base menu item properties should be available
+    assertType<string | undefined>(e.detail.value.text);
+    assertType<boolean | undefined>(e.detail.value.checked);
+    assertType<string | undefined | string[]>(e.detail.value.theme);
+    // Custom properties should be available
+    assertType<string>(e.detail.value.value);
   }}
 />;
