@@ -492,13 +492,13 @@ describe('overflow', () => {
       await nextUpdate(menu);
       menu.style.width = 'auto';
       await nextResize(menu);
-      const item = buttons[2].firstChild;
+      const item = buttons[2].firstElementChild;
       expect(item).to.equal(buttons[2].item.component);
       expect(item.getAttribute('role')).to.not.equal('menuitem');
     });
 
     it('should restore menu bar item attribute state when moved from sub-menu back to menu bar', async () => {
-      const item = buttons[5].firstChild;
+      const item = buttons[5].firstElementChild;
       const itemAttributes = item.getAttributeNames();
       overflow.click();
       await nextRender(subMenu);
@@ -511,7 +511,7 @@ describe('overflow', () => {
 
     it('should keep the class names when moved to sub-menu and back', async () => {
       // Simulate a custom class name being added through the Flow menu bar item component
-      const item = buttons[5].firstChild;
+      const item = buttons[5].firstElementChild;
       item.classList.add('test-class-1');
       overflow.click();
       await nextRender(subMenu);
