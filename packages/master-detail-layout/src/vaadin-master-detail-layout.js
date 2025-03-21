@@ -161,6 +161,10 @@ class MasterDetailLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolylitM
       :host([stack]) [part='detail'] {
         inset: 0;
       }
+
+      [part='master']::before {
+        background-position-y: var(--_stack-threshold);
+      }
     `;
   }
 
@@ -344,6 +348,12 @@ class MasterDetailLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolylitM
   /** @private */
   __stackThresholdChanged(threshold, oldThreshold) {
     if (threshold || oldThreshold) {
+      if (threshold) {
+        this.$.master.style.setProperty('--_stack-threshold', threshold);
+      } else {
+        this.$.master.style.removeProperty('--_stack-threshold');
+      }
+
       this.__detectLayoutMode();
     }
   }
@@ -376,7 +386,7 @@ class MasterDetailLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolylitM
     if (this.stackThreshold != null) {
       this.removeAttribute('stack');
 
-      const threshold = this.__getStackThreshold();
+      const threshold = this.__getStackThresholdInPixels();
       const size = this.orientation === 'vertical' ? this.offsetHeight : this.offsetWidth;
       if (size <= threshold) {
         this.removeAttribute('overlay');
@@ -438,13 +448,9 @@ class MasterDetailLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolylitM
   }
 
   /** @private */
-  __getStackThreshold() {
-    // Use background-position temp inline style for unit conversion
-    const tmpStyleProp = 'background-position';
-    this.style.setProperty(tmpStyleProp, this.stackThreshold);
-    const stackThresholdPx = getComputedStyle(this).getPropertyValue(tmpStyleProp);
-    this.style.removeProperty(tmpStyleProp);
-    return parseFloat(stackThresholdPx);
+  __getStackThresholdInPixels() {
+    const { backgroundPositionY } = getComputedStyle(this.$.master, '::before');
+    return parseFloat(backgroundPositionY);
   }
 }
 
