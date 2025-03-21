@@ -204,7 +204,6 @@ export const DialogOverlayMixin = (superClass) =>
 
       if (absolute && overlay.style.position !== 'absolute') {
         overlay.style.position = 'absolute';
-        this.setAttribute('has-bounds-set', '');
       }
 
       Object.keys(parsedBounds).forEach((arg) => {
