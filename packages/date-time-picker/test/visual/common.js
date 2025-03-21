@@ -10,6 +10,7 @@ registerStyles(
 
     /* Show error message immediately */
     [part='error-message'] {
+      animation: none !important;
       transition: none !important;
     }
   `,
