@@ -4,15 +4,21 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
+import { I18nMixin } from '@vaadin/component-base/src/i18n-mixin.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
+
+const DEFAULT_I18N = {
+  send: 'Send',
+  message: 'Message',
+};
 
 /**
  * @polymerMixin
  * @mixes ControllerMixin
  */
 export const MessageInputMixin = (superClass) =>
-  class MessageInputMixinClass extends ControllerMixin(superClass) {
+  class MessageInputMixinClass extends I18nMixin(DEFAULT_I18N, ControllerMixin(superClass)) {
     static get properties() {
       return {
         /**
@@ -22,35 +28,6 @@ export const MessageInputMixin = (superClass) =>
           type: String,
           value: '',
           sync: true,
-        },
-
-        /**
-         * The object used to localize this component.
-         * For changing the default localization, change the entire
-         * `i18n` object.
-         *
-         * The object has the following JSON structure and default values:
-         *
-         * ```
-         * {
-         *   // Used as the button label
-         *   send: 'Send',
-         *
-         *   // Used as the input field's placeholder and aria-label
-         *   message: 'Message'
-         * }
-         * ```
-         *
-         * @type {!MessageInputI18n}
-         * @default {English}
-         */
-        i18n: {
-          type: Object,
-          sync: true,
-          value: () => ({
-            send: 'Send',
-            message: 'Message',
-          }),
         },
 
         /**
@@ -80,9 +57,34 @@ export const MessageInputMixin = (superClass) =>
 
     static get observers() {
       return [
-        '__buttonPropsChanged(_button, disabled, i18n)',
-        '__textAreaPropsChanged(_textArea, disabled, i18n, value)',
+        '__buttonPropsChanged(_button, disabled, __effectiveI18n)',
+        '__textAreaPropsChanged(_textArea, disabled, __effectiveI18n, value)',
       ];
+    }
+
+    /**
+     * The object used to localize this component. To change the default
+     * localization, replace this with an object that provides all properties, or
+     * just the individual properties you want to change.
+     *
+     * The object has the following JSON structure and default values:
+     * ```
+     * {
+     *   // Used as the button label
+     *   send: 'Send',
+     *
+     *   // Used as the input field's placeholder and aria-label
+     *   message: 'Message'
+     * }
+     * ```
+     * @return {!MessageInputI18n}
+     */
+    get i18n() {
+      return super.i18n;
+    }
+
+    set i18n(value) {
+      super.i18n = value;
     }
 
     /** @protected */
@@ -134,20 +136,20 @@ export const MessageInputMixin = (superClass) =>
     }
 
     /** @private */
-    __buttonPropsChanged(button, disabled, i18n) {
+    __buttonPropsChanged(button, disabled, effectiveI18n) {
       if (button) {
         button.disabled = disabled;
-        button.textContent = i18n.send;
+        button.textContent = effectiveI18n.send;
       }
     }
 
     /** @private */
-    __textAreaPropsChanged(textArea, disabled, i18n, value) {
+    __textAreaPropsChanged(textArea, disabled, effectiveI18n, value) {
       if (textArea) {
         textArea.disabled = disabled;
         textArea.value = value;
 
-        const message = i18n.message;
+        const message = effectiveI18n.message;
         textArea.placeholder = message;
         textArea.accessibleName = message;
       }
