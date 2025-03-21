@@ -23,9 +23,9 @@ export * from '@web/test-runner-commands';
  * await sendMouseToElement({ type: 'click', element: document.querySelector('#my-element') });
  */
 export async function sendMouseToElement(payload) {
-  const { element } = payload;
+  const { element, type } = payload;
   const rect = element.getBoundingClientRect();
   const x = Math.floor(rect.x + rect.width / 2);
   const y = Math.floor(rect.y + rect.height / 2);
-  await executeServerCommand('send-mouse', { ...payload, position: [x, y] });
+  await executeServerCommand('send-mouse', { type, position: [x, y] });
 }
