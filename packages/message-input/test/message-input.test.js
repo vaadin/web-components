@@ -94,25 +94,25 @@ describe('message-input', () => {
 
   describe('i18n', () => {
     it('should translate button text', () => {
-      messageInput.i18n = { ...messageInput.i18n, send: 'Lähetä' };
+      messageInput.i18n = { send: 'Lähetä' };
       expect(button.innerText).to.be.equal('Lähetä');
     });
 
     it('should translate placeholder', () => {
-      messageInput.i18n = { ...messageInput.i18n, message: 'Viesti' };
+      messageInput.i18n = { message: 'Viesti' };
       expect(textArea.placeholder).to.be.equal('Viesti');
     });
 
     it('should translate aria-label', async () => {
-      messageInput.i18n = { ...messageInput.i18n, message: 'Viesti' };
+      messageInput.i18n = { message: 'Viesti' };
       await nextFrame();
       expect(textArea.inputElement.getAttribute('aria-label')).to.be.equal('Viesti');
     });
 
-    it('should remove aria-label attribute when translation not defined', async () => {
-      messageInput.i18n = {};
-      await nextFrame();
-      expect(textArea.inputElement.hasAttribute('aria-label')).to.equal(false);
+    it('should support partial i18n', () => {
+      messageInput.i18n = { send: 'Lähetä' };
+      expect(button.innerText).to.be.equal('Lähetä');
+      expect(textArea.placeholder).to.be.equal('Message');
     });
   });
 
