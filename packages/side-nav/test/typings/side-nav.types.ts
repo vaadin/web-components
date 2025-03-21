@@ -2,6 +2,7 @@ import '../../vaadin-side-nav.js';
 import '../../vaadin-side-nav-item.js';
 import type { DisabledMixinClass } from '@vaadin/a11y-base/src/disabled-mixin.js';
 import type { ElementMixinClass } from '@vaadin/component-base/src/element-mixin.js';
+import type { I18nMixinClass } from '@vaadin/component-base/src/i18n-mixin.js';
 import type { ThemableMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import type { NavigateEvent, SideNav, SideNavCollapsedChangedEvent, SideNavI18n } from '../../src/vaadin-side-nav';
 import type { SideNavChildrenMixinClass } from '../../src/vaadin-side-nav-children-mixin.js';
@@ -18,6 +19,7 @@ assertType<SideNavI18n>(sideNav.i18n);
 
 // Mixins
 assertType<ElementMixinClass>(sideNav);
+assertType<I18nMixinClass<SideNavI18n>>(sideNav);
 assertType<ThemableMixinClass>(sideNav);
 assertType<SideNavChildrenMixinClass>(sideNav);
 
@@ -62,3 +64,7 @@ sideNavItem.addEventListener('expanded-changed', (event) => {
   assertType<SideNavItemExpandedChangedEvent>(event);
   assertType<boolean>(event.detail.value);
 });
+
+// I18n
+assertType<SideNavI18n>({});
+assertType<SideNavI18n>({ toggle: 'toggle' });
