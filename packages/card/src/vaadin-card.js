@@ -287,10 +287,10 @@ class Card extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
        *
        * @type {String}
        */
-      title: {
+      cardTitle: {
         type: String,
         notify: true,
-        observer: '__titleChanged',
+        observer: '__cardTitleChanged',
       },
 
       /**
@@ -375,8 +375,8 @@ class Card extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
     if (ariaLabelledby && ariaLabelledby.startsWith('card-title-')) {
       this.removeAttribute('aria-labelledby');
     }
-    if (this.title) {
-      this.title = '';
+    if (this.cardTitle) {
+      this.cardTitle = '';
     }
   }
 
@@ -388,7 +388,7 @@ class Card extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
   }
 
   /** @private */
-  __titleChanged(title) {
+  __cardTitleChanged(title) {
     if (!title) {
       this.__clearStringTitle();
       return;

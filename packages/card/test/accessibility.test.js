@@ -25,13 +25,13 @@ describe('accessibility', () => {
     });
 
     it('should have aria-labelledby attribute when title property is set', async () => {
-      card.title = 'Some title';
+      card.cardTitle = 'Some title';
       await nextUpdate(card);
       expect(card.hasAttribute('aria-labelledby')).to.be.true;
     });
 
     it('should remove aria-labelledby attribute when custom title element is set', async () => {
-      card.title = 'Some title';
+      card.cardTitle = 'Some title';
       await nextUpdate(card);
       const customTitleElement = fixtureSync('<span slot="title">Custom title element</span>');
       card.appendChild(customTitleElement);

@@ -62,7 +62,7 @@ describe('card', () => {
 
     it('string title', async () => {
       element = cardFixture();
-      element.title = 'Title lorem ipsum';
+      element.cardTitle = 'Title lorem ipsum';
       await visualDiff(div, 'string-title');
     });
 

@@ -42,7 +42,7 @@ describe('vaadin-card', () => {
 
     it('should create title element with default aria-level when title property is set', async () => {
       const stringTitle = 'Some title';
-      card.title = stringTitle;
+      card.cardTitle = stringTitle;
       await nextRender(card);
       const stringTitleElement = getStringTitleElement();
       expect(stringTitleElement).to.exist;
@@ -51,7 +51,7 @@ describe('vaadin-card', () => {
     });
 
     it('should update aria-level when heading level changes', async () => {
-      card.title = 'Some title';
+      card.cardTitle = 'Some title';
       card.titleHeadingLevel = 3;
       await nextRender(card);
       const stringTitleElement = getStringTitleElement();
@@ -60,26 +60,26 @@ describe('vaadin-card', () => {
 
     it('should use default heading level when set to null', async () => {
       card.titleHeadingLevel = 3;
-      card.title = 'Some title';
+      card.cardTitle = 'Some title';
       card.titleHeadingLevel = null;
       await nextRender(card);
       expect(getStringTitleElement().getAttribute('aria-level')).to.equal('2');
     });
 
     it('should clear string title when custom title element is used', async () => {
-      card.title = 'Some title';
+      card.cardTitle = 'Some title';
       await nextRender(card);
       const customTitleElement = fixtureSync('<span slot="title">Custom title element</span>');
       card.appendChild(customTitleElement);
       await nextRender(card);
-      expect(card.title).to.be.not.ok;
+      expect(card.cardTitle).to.be.not.ok;
       expect(getStringTitleElement()).to.not.exist;
     });
 
     it('should clear string title when empty string title is set', async () => {
-      card.title = 'Some title';
+      card.cardTitle = 'Some title';
       await nextRender(card);
-      card.title = '';
+      card.cardTitle = '';
       await nextRender(card);
       expect(getStringTitleElement()).to.not.exist;
     });
@@ -88,7 +88,7 @@ describe('vaadin-card', () => {
       const customTitleElement = fixtureSync('<span slot="title">Custom title element</span>');
       card.appendChild(customTitleElement);
       await nextRender(card);
-      card.title = 'Some title';
+      card.cardTitle = 'Some title';
       await nextRender(card);
       expect(getCustomTitleElement()).to.not.exist;
     });
@@ -97,7 +97,7 @@ describe('vaadin-card', () => {
       const customTitleElement = fixtureSync('<span slot="title">Custom title element</span>');
       card.appendChild(customTitleElement);
       await nextRender(card);
-      card.title = '';
+      card.cardTitle = '';
       await nextRender(card);
       expect(getCustomTitleElement()).to.exist;
     });
