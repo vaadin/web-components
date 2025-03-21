@@ -12,6 +12,7 @@ import '../vendor/vaadin-quill.js';
 import { timeOut } from '@vaadin/component-base/src/async.js';
 import { isFirefox } from '@vaadin/component-base/src/browser-utils.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
+import { I18nMixin } from '@vaadin/component-base/src/i18n-mixin.js';
 
 const Quill = window.Quill;
 
@@ -71,11 +72,41 @@ const STATE = {
 
 const TAB_KEY = 9;
 
+const DEFAULT_I18N = {
+  undo: 'undo',
+  redo: 'redo',
+  bold: 'bold',
+  italic: 'italic',
+  underline: 'underline',
+  strike: 'strike',
+  color: 'color',
+  background: 'background',
+  h1: 'h1',
+  h2: 'h2',
+  h3: 'h3',
+  subscript: 'subscript',
+  superscript: 'superscript',
+  listOrdered: 'list ordered',
+  listBullet: 'list bullet',
+  alignLeft: 'align left',
+  alignCenter: 'align center',
+  alignRight: 'align right',
+  image: 'image',
+  link: 'link',
+  blockquote: 'blockquote',
+  codeBlock: 'code block',
+  clean: 'clean',
+  linkDialogTitle: 'Link address',
+  ok: 'OK',
+  cancel: 'Cancel',
+  remove: 'Remove',
+};
+
 /**
  * @polymerMixin
  */
 export const RichTextEditorMixin = (superClass) =>
-  class RichTextEditorMixinClass extends superClass {
+  class RichTextEditorMixinClass extends I18nMixin(DEFAULT_I18N, superClass) {
     static get properties() {
       return {
         /**
@@ -127,48 +158,6 @@ export const RichTextEditorMixin = (superClass) =>
           type: Boolean,
           value: false,
           reflectToAttribute: true,
-        },
-
-        /**
-         * An object used to localize this component. The properties are used
-         * e.g. as the tooltips for the editor toolbar buttons.
-         *
-         * @type {!RichTextEditorI18n}
-         * @default {English/US}
-         */
-        i18n: {
-          type: Object,
-          value: () => {
-            return {
-              undo: 'undo',
-              redo: 'redo',
-              bold: 'bold',
-              italic: 'italic',
-              underline: 'underline',
-              strike: 'strike',
-              color: 'color',
-              background: 'background',
-              h1: 'h1',
-              h2: 'h2',
-              h3: 'h3',
-              subscript: 'subscript',
-              superscript: 'superscript',
-              listOrdered: 'list ordered',
-              listBullet: 'list bullet',
-              alignLeft: 'align left',
-              alignCenter: 'align center',
-              alignRight: 'align right',
-              image: 'image',
-              link: 'link',
-              blockquote: 'blockquote',
-              codeBlock: 'code block',
-              clean: 'clean',
-              linkDialogTitle: 'Link address',
-              ok: 'OK',
-              cancel: 'Cancel',
-              remove: 'Remove',
-            };
-          },
         },
 
         /**
@@ -263,6 +252,24 @@ export const RichTextEditorMixin = (superClass) =>
 
     static get observers() {
       return ['_valueChanged(value, _editor)', '_disabledChanged(disabled, readonly, _editor)'];
+    }
+
+    /**
+     * The object used to localize this component. To change the default
+     * localization, replace this with an object that provides all properties, or
+     * just the individual properties you want to change.
+     *
+     * The properties are used e.g. as the tooltips for the editor toolbar
+     * buttons.
+     *
+     * @return {!RichTextEditorI18n}
+     */
+    get i18n() {
+      return super.i18n;
+    }
+
+    set i18n(value) {
+      super.i18n = value;
     }
 
     /** @private */
