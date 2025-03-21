@@ -76,9 +76,7 @@ export const DialogResizableMixin = (superClass) =>
           this.$.overlay.setBounds(this._originalBounds);
         }
 
-        if (!this.$.overlay.hasAttribute('has-bounds-set')) {
-          this.$.overlay.setAttribute('has-bounds-set', '');
-        }
+        this.$.overlay.setAttribute('has-bounds-set', '');
       }
     }
 
