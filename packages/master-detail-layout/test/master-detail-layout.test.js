@@ -642,6 +642,21 @@ describe('vaadin-master-detail-layout', () => {
         expect(getComputedStyle(detail).inset).to.equal('0px');
       });
 
+      it('should use fixed position in the stack mode when viewport containment is used', async () => {
+        layout.containment = 'viewport';
+
+        // Use the threshold at which the overlay mode is on by default.
+        await setViewport({ width: 500, height: 400 });
+        await nextResize(layout);
+
+        layout.stackThreshold = '400px';
+
+        expect(layout.hasAttribute('overlay')).to.be.false;
+        expect(layout.hasAttribute('stack')).to.be.true;
+        expect(getComputedStyle(detail).position).to.equal('fixed');
+        expect(getComputedStyle(detail).inset).to.equal('0px');
+      });
+
       it('should not apply min-height to the detail area in the stack mode', async () => {
         layout.detailMinSize = '500px';
         layout.stackThreshold = '500px';
