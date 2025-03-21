@@ -23,7 +23,7 @@
         background-color: var(--lumo-shade-20pct);
       }
 
-      vaadin-master-detail-layout[overlay]::part(detail) {
+      vaadin-master-detail-layout:is([overlay], [stack])::part(detail) {
         background: #fff;
       }
 
@@ -47,6 +47,7 @@
       <vaadin-checkbox id="maxWidth" label="Use max-width on the host"></vaadin-checkbox>
       <vaadin-checkbox id="maxHeight" label="Use max-height on the host"></vaadin-checkbox>
       <vaadin-checkbox id="forceOverlay" label="Force overlay"></vaadin-checkbox>
+      <vaadin-checkbox id="stack" label="Set stack threshold"></vaadin-checkbox>
     </p>
 
     <vaadin-master-detail-layout>
@@ -113,6 +114,10 @@
 
       document.querySelector('#forceOverlay').addEventListener('change', (e) => {
         layout.forceOverlay = e.target.checked;
+      });
+
+      document.querySelector('#stack').addEventListener('change', (e) => {
+        layout.stackThreshold = e.target.checked ? '30rem' : null;
       });
     </script>
   </body>

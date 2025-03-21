@@ -77,6 +77,14 @@ declare class MasterDetailLayout extends ResizeMixin(ThemableMixin(ElementMixin(
    * browser's viewport. Defaults to `layout`.
    */
   containment: 'layout' | 'viewport';
+
+  /**
+   * The threshold (in CSS length units) at which the layout switches to
+   * the "stack" mode, making detail area fully cover the master area.
+   *
+   * @attr {string} stack-threshold
+   */
+  stackThreshold: string | null | undefined;
 }
 
 declare global {
