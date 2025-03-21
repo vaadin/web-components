@@ -66,12 +66,6 @@ describe('vaadin-card', () => {
       expect(getStringTitleElement().getAttribute('aria-level')).to.equal('2');
     });
 
-    it('should not update heading level when invalid heading level is set', () => {
-      const invalidTitleHeadingLevel = 7;
-      card.titleHeadingLevel = invalidTitleHeadingLevel;
-      expect(card.titleHeadingLevel).to.not.equal(invalidTitleHeadingLevel);
-    });
-
     it('should clear string title when custom title element is used', async () => {
       card.title = 'Some title';
       await nextRender(card);

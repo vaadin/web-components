@@ -294,11 +294,11 @@ class Card extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
       },
 
       /**
-       * Sets the heading level (`aria-level`) for the string-based title. Valid values are from 1 through 6. If not set or an invalid value is used, the level defaults to 2.
+       * Sets the heading level (`aria-level`) for the string-based title. If not set, the level defaults to 2. Setting values outside the range [1, 6] can cause accessibility issues.
        *
        * @type {Number}
        */
-      __titleHeadingLevel: {
+      titleHeadingLevel: {
         type: Number,
         observer: '__titleHeadingLevelChanged',
       },
@@ -341,18 +341,6 @@ class Card extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
         <slot name="footer"></slot>
       </div>
     `;
-  }
-
-  get titleHeadingLevel() {
-    return this.__titleHeadingLevel;
-  }
-
-  set titleHeadingLevel(value) {
-    if (value == null) {
-      this.__titleHeadingLevel = null;
-    } else if (value >= 1 && value <= 6) {
-      this.__titleHeadingLevel = value;
-    }
   }
 
   /** @private */
