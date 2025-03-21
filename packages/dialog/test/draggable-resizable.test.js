@@ -369,6 +369,12 @@ describe('resizable', () => {
     await nextRender();
     expect(parseInt(overlay.style.width)).to.be.equal(bounds.width);
   });
+
+  it('should set overlay max-width to none on resize', async () => {
+    resize(overlayPart.querySelector('.s'), 0, dx);
+    await nextRender();
+    expect(getComputedStyle(dialog.$.overlay.$.overlay).maxWidth).to.equal('none');
+  });
 });
 
 describe('draggable', () => {
@@ -611,6 +617,12 @@ describe('draggable', () => {
     const { detail } = onDragged.args[0][0];
     expect(detail.top).to.be.equal(dialog.top);
     expect(detail.left).to.be.equal(dialog.left);
+  });
+
+  it('should not set overlay max-width to none on drag', async () => {
+    drag(container);
+    await nextRender();
+    expect(getComputedStyle(dialog.$.overlay.$.overlay).maxWidth).to.equal('100%');
   });
 });
 
