@@ -8,20 +8,27 @@ import { FocusMixin } from '@vaadin/a11y-base/src/focus-mixin.js';
 import { isElementFocused, isElementHidden, isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
 import { KeyboardDirectionMixin } from '@vaadin/a11y-base/src/keyboard-direction-mixin.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
+import { I18nMixin } from '@vaadin/component-base/src/i18n-mixin.js';
 import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 
+const DEFAULT_I18N = {
+  moreOptions: 'More options',
+};
+
 /**
  * @polymerMixin
- * @mixes DisabledMixin
  * @mixes ControllerMixin
+ * @mixes DisabledMixin
  * @mixes FocusMixin
+ * @mixes I18nMixin
  * @mixes KeyboardDirectionMixin
  * @mixes ResizeMixin
  */
 export const MenuBarMixin = (superClass) =>
-  class MenuBarMixinClass extends KeyboardDirectionMixin(
-    ResizeMixin(FocusMixin(DisabledMixin(ControllerMixin(superClass)))),
+  class MenuBarMixinClass extends I18nMixin(
+    DEFAULT_I18N,
+    KeyboardDirectionMixin(ResizeMixin(FocusMixin(DisabledMixin(ControllerMixin(superClass))))),
   ) {
     static get properties() {
       return {
@@ -109,38 +116,6 @@ export const MenuBarMixin = (superClass) =>
         },
 
         /**
-         * The object used to localize this component.
-         * To change the default localization, replace the entire
-         * `i18n` object with a custom one.
-         *
-         * To update individual properties, extend the existing i18n object like so:
-         * ```
-         * menuBar.i18n = {
-         *   ...menuBar.i18n,
-         *   moreOptions: 'More options'
-         * }
-         * ```
-         *
-         * The object has the following JSON structure and default values:
-         * ```
-         * {
-         *   moreOptions: 'More options'
-         * }
-         * ```
-         *
-         * @type {!MenuBarI18n}
-         * @default {English/US}
-         */
-        i18n: {
-          type: Object,
-          value: () => {
-            return {
-              moreOptions: 'More options',
-            };
-          },
-        },
-
-        /**
          * A space-delimited list of CSS class names
          * to set on each sub-menu overlay element.
          *
@@ -202,11 +177,32 @@ export const MenuBarMixin = (superClass) =>
       return [
         '_themeChanged(_theme, _overflow, _container)',
         '__hasOverflowChanged(_hasOverflow, _overflow)',
-        '__i18nChanged(i18n, _overflow)',
+        '__i18nChanged(__effectiveI18n, _overflow)',
         '_menuItemsChanged(items, _overflow, _container)',
         '_reverseCollapseChanged(reverseCollapse, _overflow, _container)',
         '_tabNavigationChanged(tabNavigation, _overflow, _container)',
       ];
+    }
+
+    /**
+     * The object used to localize this component. To change the default
+     * localization, replace this with an object that provides all properties, or
+     * just the individual properties you want to change.
+     *
+     * The object has the following JSON structure and default values:
+     * ```
+     * {
+     *   moreOptions: 'More options'
+     * }
+     * ```
+     * @return {!MenuBarI18n}
+     */
+    get i18n() {
+      return super.i18n;
+    }
+
+    set i18n(value) {
+      super.i18n = value;
     }
 
     constructor() {
@@ -423,10 +419,10 @@ export const MenuBarMixin = (superClass) =>
     }
 
     /** @private */
-    __i18nChanged(i18n, overflow) {
-      if (overflow && i18n && i18n.moreOptions !== undefined) {
-        if (i18n.moreOptions) {
-          overflow.setAttribute('aria-label', i18n.moreOptions);
+    __i18nChanged(effectiveI18n, overflow) {
+      if (overflow && effectiveI18n && effectiveI18n.moreOptions !== undefined) {
+        if (effectiveI18n.moreOptions) {
+          overflow.setAttribute('aria-label', effectiveI18n.moreOptions);
         } else {
           overflow.removeAttribute('aria-label');
         }
