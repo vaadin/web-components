@@ -9,6 +9,7 @@ import type { FocusMixinClass } from '@vaadin/a11y-base/src/focus-mixin.js';
 import type { KeyboardDirectionMixinClass } from '@vaadin/a11y-base/src/keyboard-direction-mixin.js';
 import type { KeyboardMixinClass } from '@vaadin/a11y-base/src/keyboard-mixin.js';
 import type { ControllerMixinClass } from '@vaadin/component-base/src/controller-mixin.js';
+import type { I18nMixinClass } from '@vaadin/component-base/src/i18n-mixin.js';
 import type { ResizeMixinClass } from '@vaadin/component-base/src/resize-mixin.js';
 
 export type MenuBarItem<TItemData extends object = object> = {
@@ -56,7 +57,7 @@ export type SubMenuItem<TItemData extends object = object> = {
 } & TItemData;
 
 export interface MenuBarI18n {
-  moreOptions: string;
+  moreOptions?: string;
 }
 
 export declare function MenuBarMixin<T extends Constructor<HTMLElement>, TItem extends MenuBarItem = MenuBarItem>(
@@ -64,6 +65,7 @@ export declare function MenuBarMixin<T extends Constructor<HTMLElement>, TItem e
 ): Constructor<ControllerMixinClass> &
   Constructor<DisabledMixinClass> &
   Constructor<FocusMixinClass> &
+  Constructor<I18nMixinClass<MenuBarI18n>> &
   Constructor<KeyboardDirectionMixinClass> &
   Constructor<KeyboardMixinClass> &
   Constructor<MenuBarMixinClass<TItem>> &
@@ -121,17 +123,9 @@ export declare class MenuBarMixinClass<TItem extends MenuBarItem = MenuBarItem> 
   items: TItem[];
 
   /**
-   * The object used to localize this component.
-   * To change the default localization, replace the entire
-   * `i18n` object with a custom one.
-   *
-   * To update individual properties, extend the existing i18n object like so:
-   * ```
-   * menuBar.i18n = {
-   *   ...menuBar.i18n,
-   *   moreOptions: 'More options'
-   * }
-   * ```
+   * The object used to localize this component. To change the default
+   * localization, replace this with an object that provides all properties, or
+   * just the individual properties you want to change.
    *
    * The object has the following JSON structure and default values:
    * ```
