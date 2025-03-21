@@ -224,7 +224,7 @@ describe('item components', () => {
   });
 
   it('should render the component inside the menu-bar item', () => {
-    const item = buttons[2].firstChild;
+    const item = buttons[2].firstElementChild;
     expect(item).to.equal(buttons[2].item.component);
     expect(item.localName).to.equal('vaadin-menu-bar-item');
     const div = item.firstChild;
@@ -235,10 +235,10 @@ describe('item components', () => {
   });
 
   it('should override the component text when defined on the item', () => {
-    const item = buttons[3].firstChild;
+    const item = buttons[3].firstElementChild;
     expect(item).to.equal(buttons[3].item.component);
     expect(item.localName).to.equal('vaadin-menu-bar-item');
-    const div = item.firstChild;
+    const div = item.firstElementChild;
     expect(div).to.equal(menu.items[3].component);
     expect(div.localName).to.equal('div');
     expect(div.textContent).to.equal('Item 4 text');
@@ -246,7 +246,7 @@ describe('item components', () => {
   });
 
   it('should render provided menu-bar item as a component', () => {
-    expect(buttons[4].firstChild).to.equal(buttons[4].item.component);
+    expect(buttons[4].firstElementChild).to.equal(buttons[4].item.component);
     expect(buttons[4].item.component).to.equal(menu.items[4].component);
     expect(buttons[4].item.component.children.length).to.equal(0);
     expect(buttons[4].item.component.textContent).to.equal('Item 5');
