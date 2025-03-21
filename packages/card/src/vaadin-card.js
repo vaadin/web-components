@@ -300,6 +300,7 @@ class Card extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
        */
       titleHeadingLevel: {
         type: Number,
+        reflectToAttribute: true,
         observer: '__titleHeadingLevelChanged',
       },
     };
