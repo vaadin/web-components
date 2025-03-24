@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { resetMouse, sendKeys, sendMouse } from '@vaadin/test-runner-commands';
+import { resetMouse, sendKeys, sendMouse, sendMouseToElement } from '@vaadin/test-runner-commands';
 import { click, fixtureSync, listenOnce, mousedown, nextFrame, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../all-imports.js';
@@ -899,14 +899,6 @@ describe('multi selection column', () => {
   describe('item-toggle event', () => {
     let itemSelectionSpy, rows, checkboxes;
 
-    async function mouseClick(element) {
-      const { x, y, width, height } = element.getBoundingClientRect();
-      await sendMouse({
-        type: 'click',
-        position: [x + width / 2, y + height / 2].map(Math.floor),
-      });
-    }
-
     function assertEvent(detail) {
       expect(itemSelectionSpy).to.be.calledOnce;
       expect(itemSelectionSpy.args[0][0].detail).to.eql(detail);
@@ -935,21 +927,37 @@ describe('multi selection column', () => {
     });
 
     it('should fire the event when toggling an item with click', async () => {
-      await mouseClick(checkboxes[0]);
+      await sendMouseToElement({ type: 'click', element: checkboxes[0] });
       assertEvent({ item: grid.items[0], selected: true, shiftKey: false });
 
-      await mouseClick(checkboxes[0]);
+      await sendMouseToElement({ type: 'click', element: checkboxes[0] });
       assertEvent({ item: grid.items[0], selected: false, shiftKey: false });
     });
 
     it('should fire the event when toggling an item with Shift + click', async () => {
       await sendKeys({ down: 'Shift' });
-      await mouseClick(checkboxes[0]);
+      await sendMouseToElement({ type: 'click', element: checkboxes[0] });
       await sendKeys({ up: 'Shift' });
       assertEvent({ item: grid.items[0], selected: true, shiftKey: true });
 
       await sendKeys({ down: 'Shift' });
-      await mouseClick(checkboxes[0]);
+      await sendMouseToElement({ type: 'click', element: checkboxes[0] });
+      await sendKeys({ up: 'Shift' });
+      assertEvent({ item: grid.items[0], selected: false, shiftKey: true });
+    });
+
+    it('should fire the event when toggling an item with mousedown + Shift + mouseup', async () => {
+      await sendMouseToElement({ type: 'move', element: checkboxes[0] });
+
+      await sendMouse({ type: 'down' });
+      await sendKeys({ down: 'Shift' });
+      await sendMouse({ type: 'up' });
+      await sendKeys({ up: 'Shift' });
+      assertEvent({ item: grid.items[0], selected: true, shiftKey: true });
+
+      await sendMouse({ type: 'down' });
+      await sendKeys({ down: 'Shift' });
+      await sendMouse({ type: 'up' });
       await sendKeys({ up: 'Shift' });
       assertEvent({ item: grid.items[0], selected: false, shiftKey: true });
     });
@@ -981,21 +989,37 @@ describe('multi selection column', () => {
       });
 
       it('should fire the event when toggling an item with click', async () => {
-        await mouseClick(rows[0]);
+        await sendMouseToElement({ type: 'click', element: rows[0] });
         assertEvent({ item: grid.items[0], selected: true, shiftKey: false });
 
-        await mouseClick(rows[0]);
+        await sendMouseToElement({ type: 'click', element: rows[0] });
         assertEvent({ item: grid.items[0], selected: false, shiftKey: false });
       });
 
       it('should fire the event when toggling an item with Shift + click', async () => {
         await sendKeys({ down: 'Shift' });
-        await mouseClick(rows[0]);
+        await sendMouseToElement({ type: 'click', element: rows[0] });
         await sendKeys({ up: 'Shift' });
         assertEvent({ item: grid.items[0], selected: true, shiftKey: true });
 
         await sendKeys({ down: 'Shift' });
-        await mouseClick(rows[0]);
+        await sendMouseToElement({ type: 'click', element: rows[0] });
+        await sendKeys({ up: 'Shift' });
+        assertEvent({ item: grid.items[0], selected: false, shiftKey: true });
+      });
+
+      it('should fire the event when toggling an item with mousedown + Shift + mouseup', async () => {
+        await sendMouseToElement({ type: 'move', element: rows[0] });
+
+        await sendMouse({ type: 'down' });
+        await sendKeys({ down: 'Shift' });
+        await sendMouse({ type: 'up' });
+        await sendKeys({ up: 'Shift' });
+        assertEvent({ item: grid.items[0], selected: true, shiftKey: true });
+
+        await sendMouse({ type: 'down' });
+        await sendKeys({ down: 'Shift' });
+        await sendMouse({ type: 'up' });
         await sendKeys({ up: 'Shift' });
         assertEvent({ item: grid.items[0], selected: false, shiftKey: true });
       });
@@ -1021,17 +1045,17 @@ describe('multi selection column', () => {
       });
 
       it('should prevent text selection when selecting a range of items with Shift + click', async () => {
-        await mouseClick(rows[0]);
+        await sendMouseToElement({ type: 'click', element: rows[0] });
         await sendKeys({ down: 'Shift' });
-        await mouseClick(rows[1]);
+        await sendMouseToElement({ type: 'click', element: rows[1] });
         await sendKeys({ up: 'Shift' });
         expect(document.getSelection().toString()).to.be.empty;
       });
 
       it('should allow text selection after selecting a range of items with Shift + click', async () => {
-        await mouseClick(rows[0]);
+        await sendMouseToElement({ type: 'click', element: rows[0] });
         await sendKeys({ down: 'Shift' });
-        await mouseClick(rows[1]);
+        await sendMouseToElement({ type: 'click', element: rows[1] });
         await sendKeys({ up: 'Shift' });
 
         const row2CellContent1 = getBodyCellContent(grid, 2, 1);
