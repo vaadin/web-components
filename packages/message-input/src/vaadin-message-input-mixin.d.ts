@@ -5,15 +5,19 @@
  */
 import type { Constructor } from '@open-wc/dedupe-mixin';
 import type { ControllerMixinClass } from '@vaadin/component-base/src/controller-mixin.js';
+import type { I18nMixinClass } from '@vaadin/component-base/src/i18n-mixin.js';
 
 export interface MessageInputI18n {
-  send: string;
-  message: string;
+  send?: string;
+  message?: string;
 }
 
 export declare function MessageInputMixin<T extends Constructor<HTMLElement>>(
   base: T,
-): Constructor<ControllerMixinClass> & Constructor<MessageInputMixinClass> & T;
+): Constructor<ControllerMixinClass> &
+  Constructor<I18nMixinClass<MessageInputI18n>> &
+  Constructor<MessageInputMixinClass> &
+  T;
 
 export declare class MessageInputMixinClass {
   /**
@@ -22,12 +26,11 @@ export declare class MessageInputMixinClass {
   value: string | null | undefined;
 
   /**
-   * The object used to localize this component.
-   * For changing the default localization, change the entire
-   * `i18n` object.
+   * The object used to localize this component. To change the default
+   * localization, replace this with an object that provides all properties, or
+   * just the individual properties you want to change.
    *
    * The object has the following JSON structure and default values:
-   *
    * ```
    * {
    *   // Used as the button label
