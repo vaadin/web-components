@@ -3,7 +3,12 @@
  * Copyright (c) 2023 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { I18nMixin } from '@vaadin/component-base/src/i18n-mixin.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
+
+const DEFAULT_I18N = {
+  toggle: 'Toggle child items',
+};
 
 /**
  * A controller that manages the item content children slot.
@@ -34,34 +39,9 @@ class ChildrenController extends SlotController {
  * @polymerMixin
  */
 export const SideNavChildrenMixin = (superClass) =>
-  class SideNavChildrenMixin extends superClass {
+  class SideNavChildrenMixin extends I18nMixin(DEFAULT_I18N, superClass) {
     static get properties() {
       return {
-        /**
-         * The object used to localize this component.
-         *
-         * To change the default localization, replace the entire
-         * `i18n` object with a custom one.
-         *
-         * The object has the following structure and default values:
-         * ```
-         * {
-         *   toggle: 'Toggle child items'
-         * }
-         * ```
-         *
-         * @type {SideNavI18n}
-         * @default {English/US}
-         */
-        i18n: {
-          type: Object,
-          value: () => {
-            return {
-              toggle: 'Toggle child items',
-            };
-          },
-        },
-
         /**
          * Count of child items.
          * @protected
@@ -77,6 +57,27 @@ export const SideNavChildrenMixin = (superClass) =>
       super();
 
       this._childrenController = new ChildrenController(this, this._itemsSlotName);
+    }
+
+    /**
+     * The object used to localize this component. To change the default
+     * localization, replace this with an object that provides all properties, or
+     * just the individual properties you want to change.
+     *
+     * The object has the following structure and default values:
+     * ```
+     * {
+     *   toggle: 'Toggle child items'
+     * }
+     * ```
+     * @return {!SideNavI18n}
+     */
+    get i18n() {
+      return super.i18n;
+    }
+
+    set i18n(value) {
+      super.i18n = value;
     }
 
     /**
@@ -125,9 +126,9 @@ export const SideNavChildrenMixin = (superClass) =>
       }
 
       // Propagate i18n object to all the child items
-      if (props.has('_itemsCount') || props.has('i18n')) {
+      if (props.has('_itemsCount') || props.has('__effectiveI18n')) {
         this._items.forEach((item) => {
-          item.i18n = this.i18n;
+          item.i18n = this.__effectiveI18n;
         });
       }
     }
