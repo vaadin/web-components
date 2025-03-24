@@ -19,7 +19,7 @@
         border: solid 1px #ccc;
       }
 
-      vaadin-master-detail-layout[overlay]::part(master) {
+      vaadin-master-detail-layout[overlay][has-detail]::part(master) {
         background-color: var(--lumo-shade-20pct);
       }
 
@@ -65,10 +65,6 @@
 
       const layout = document.querySelector('vaadin-master-detail-layout');
       const detailContent = document.querySelector('detail-content');
-
-      // layout.forceOverlay = true;
-      layout.stackThreshold = '3000px';
-      setTimeout(() => layout.setAttribute("stack", ""), 100);
 
       document.querySelector('#showDetail').addEventListener('change', (e) => {
         if (e.target.checked) {
