@@ -206,11 +206,7 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
 
     /** @private */
     __onGridInteraction(e) {
-      if (e instanceof KeyboardEvent) {
-        this._shiftKeyDown = e.key !== 'Shift' && e.shiftKey;
-      } else {
-        this._shiftKeyDown = e.shiftKey;
-      }
+      this._shiftKeyDown = e.shiftKey;
 
       if (this.autoSelect) {
         // Prevent text selection when shift-clicking to select a range of items.
