@@ -26,28 +26,40 @@ addGlobalThemeStyles(
       view-transition-name: stack-horizontal-remove;
     }
 
+    ::view-transition-group(overlay-horizontal-detail) {
+      clip-path: inset(0px);
+    }
+
     ::view-transition-new(overlay-horizontal-detail) {
-      animation: 500ms ease both overlay-horizontal-detail-new;
+      animation: 300ms ease both overlay-horizontal-detail-new;
     }
 
     ::view-transition-old(overlay-horizontal-detail) {
-      animation: 500ms ease both overlay-horizontal-detail-old;
+      animation: 300ms ease both overlay-horizontal-detail-old;
+    }
+
+    ::view-transition-group(stack-horizontal-add) {
+      clip-path: inset(0px);
     }
 
     ::view-transition-new(stack-horizontal-add) {
-      animation: 500ms ease both stack-horizontal-add-new;
+      animation: 300ms ease both stack-horizontal-add-new;
     }
 
     ::view-transition-old(stack-horizontal-add) {
-      animation: 500ms ease both stack-horizontal-add-old;
+      animation: 300ms ease both stack-horizontal-add-old;
+    }
+
+    ::view-transition-group(stack-horizontal-remove) {
+      clip-path: inset(0px);
     }
 
     ::view-transition-new(stack-horizontal-remove) {
-      animation: 500ms ease both stack-horizontal-remove-new;
+      animation: 300ms ease both stack-horizontal-remove-new;
     }
 
     ::view-transition-old(stack-horizontal-remove) {
-      animation: 500ms ease both stack-horizontal-remove-old;
+      animation: 300ms ease both stack-horizontal-remove-old;
     }
 
     @keyframes overlay-horizontal-detail-new {
