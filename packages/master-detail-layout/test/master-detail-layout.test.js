@@ -240,6 +240,25 @@ describe('vaadin-master-detail-layout', () => {
 
         expect(layout.hasAttribute('stack')).to.be.false;
       });
+
+      it('should focus detail content when adding details in the stack mode', async () => {
+        layout.stackThreshold = '500px';
+
+        // Start without details
+        detailContent.remove();
+        await nextRender();
+
+        // Shrink viewport
+        await setViewport({ width: 450, height });
+        await nextResize(layout);
+
+        // Add details
+        layout.appendChild(detailContent);
+        await nextRender();
+
+        const input = detailContent.shadowRoot.querySelector('input');
+        expect(detailContent.shadowRoot.activeElement).to.equal(input);
+      });
     });
 
     describe('vertical orientation', () => {

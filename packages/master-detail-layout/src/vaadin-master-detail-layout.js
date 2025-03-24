@@ -4,6 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { css, html, LitElement } from 'lit';
+import { getFocusableElements } from '@vaadin/a11y-base/src/focus-utils.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
@@ -295,8 +296,19 @@ class MasterDetailLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolylitM
 
   /** @private */
   __onDetailSlotChange(e) {
-    this.toggleAttribute('has-detail', e.target.assignedNodes().length > 0);
+    const children = e.target.assignedNodes();
+
+    this.toggleAttribute('has-detail', children.length > 0);
     this.__detectLayoutMode();
+
+    // Move focus to the detail area when it is added to the DOM,
+    // in case if the layout is using overlay or stack mode.
+    if ((this.hasAttribute('overlay') || this.hasAttribute('stack')) && children.length > 0) {
+      const focusables = getFocusableElements(children[0]);
+      if (focusables.length) {
+        focusables[0].focus();
+      }
+    }
   }
 
   /**
