@@ -596,6 +596,19 @@ class MasterDetailLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolylitM
     return parseFloat(backgroundPositionY);
   }
 
+  /**
+   * Sets the detail element to be displayed in the detail area and starts a
+   * view transition that animates adding, replacing or removing the detail
+   * area. During the view transition, the element is added to the DOM and
+   * assigned to the `detail` slot. Any previous detail element is removed.
+   * When passing null as the element, the current detail element is removed.
+   *
+   * If the browser does not support view transitions, the respective updates
+   * are applied immediately without starting a transition.
+   *
+   * @param element the new detail element, or null to remove the current detail
+   * @returns {Promise<void>}
+   */
   async setDetail(element) {
     // Don't start a transition if detail didn't change
     const currentDetail = this.querySelector('[slot="detail"]') || null;

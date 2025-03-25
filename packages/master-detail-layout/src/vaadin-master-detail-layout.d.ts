@@ -85,6 +85,18 @@ declare class MasterDetailLayout extends ResizeMixin(ThemableMixin(ElementMixin(
    * @attr {string} stack-threshold
    */
   stackThreshold: string | null | undefined;
+
+  /**
+   * Sets the detail element to be displayed in the detail area and starts a
+   * view transition that animates adding, replacing or removing the detail
+   * area. During the view transition, the element is added to the DOM and
+   * assigned to the `detail` slot. Any previous detail element is removed.
+   * When passing null as the element, the current detail element is removed.
+   *
+   * If the browser does not support view transitions, the respective updates
+   * are applied immediately without starting a transition.
+   */
+  setDetail(detail: HTMLElement | null | undefined): Promise<void>;
 }
 
 declare global {
