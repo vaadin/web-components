@@ -311,7 +311,7 @@ class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ElementMixin(Themab
 
   /** @override */
   get slotStyles() {
-    return [transitionStyles.toString()];
+    return [transitionStyles];
   }
 
   /** @protected */
