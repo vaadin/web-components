@@ -8,7 +8,7 @@ export const transitionStyles = css`
   }
 
   ::view-transition-group(vaadin-master-detail-layout-overlay-horizontal-detail-add) {
-    clip-path: inset(0px);
+    clip-path: inset(0);
   }
 
   ::view-transition-new(vaadin-master-detail-layout-overlay-horizontal-detail-add) {
@@ -28,7 +28,7 @@ export const transitionStyles = css`
   }
 
   ::view-transition-group(vaadin-master-detail-layout-overlay-horizontal-detail-remove) {
-    clip-path: inset(0px);
+    clip-path: inset(0);
   }
 
   ::view-transition-old(vaadin-master-detail-layout-overlay-horizontal-detail-remove) {
@@ -48,7 +48,7 @@ export const transitionStyles = css`
   }
 
   ::view-transition-group(vaadin-master-detail-layout-stack-horizontal-add) {
-    clip-path: inset(0px);
+    clip-path: inset(0);
   }
 
   ::view-transition-new(vaadin-master-detail-layout-stack-horizontal-add) {
@@ -80,7 +80,7 @@ export const transitionStyles = css`
   }
 
   ::view-transition-group(vaadin-master-detail-layout-stack-horizontal-remove) {
-    clip-path: inset(0px);
+    clip-path: inset(0);
   }
 
   ::view-transition-new(vaadin-master-detail-layout-stack-horizontal-remove) {
