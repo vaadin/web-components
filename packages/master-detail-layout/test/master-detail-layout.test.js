@@ -215,7 +215,7 @@ describe('vaadin-master-detail-layout', () => {
         expect(getComputedStyle(detail).width).to.equal('450px');
       });
 
-      it('should update stack mode when adding and removing details', async () => {
+      it('should preserve the stack mode when adding and removing details', async () => {
         layout.stackThreshold = '500px';
 
         // Start without details
@@ -226,7 +226,7 @@ describe('vaadin-master-detail-layout', () => {
         await setViewport({ width: 450, height });
         await nextResize(layout);
 
-        expect(layout.hasAttribute('stack')).to.be.false;
+        expect(layout.hasAttribute('stack')).to.be.true;
 
         // Add details
         layout.appendChild(detailContent);
@@ -238,7 +238,7 @@ describe('vaadin-master-detail-layout', () => {
         detailContent.remove();
         await nextRender();
 
-        expect(layout.hasAttribute('stack')).to.be.false;
+        expect(layout.hasAttribute('stack')).to.be.true;
       });
 
       it('should focus detail content when adding details in the stack mode', async () => {

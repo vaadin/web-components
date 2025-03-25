@@ -180,14 +180,14 @@ describe('overlay mode', () => {
       expect(layout.hasAttribute('overlay')).to.be.false;
     });
 
-    it('should not set the overlay mode with forceOverlay after removing details', async () => {
+    it('should preserve the overlay mode with forceOverlay after removing details', async () => {
       layout.forceOverlay = true;
       await nextRender();
 
       detailContent.remove();
       await nextRender();
 
-      expect(layout.hasAttribute('overlay')).to.be.false;
+      expect(layout.hasAttribute('overlay')).to.be.true;
 
       layout.appendChild(detailContent);
       await nextRender();
