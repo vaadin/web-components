@@ -9,7 +9,9 @@ import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
+import { SlotStylesMixin } from '@vaadin/component-base/src/slot-styles-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { transitionStyles } from './vaadin-master-detail-layout-transition-styles.js';
 
 /**
  * `<vaadin-master-detail-layout>` is a web component for building UIs with a master
@@ -21,8 +23,9 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * @mixes ThemableMixin
  * @mixes ElementMixin
  * @mixes ResizeMixin
+ * @mixes SlotStylesMixin
  */
-class MasterDetailLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElement)))) {
+class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElement))))) {
   static get is() {
     return 'vaadin-master-detail-layout';
   }
@@ -306,6 +309,11 @@ class MasterDetailLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolylitM
     };
   }
 
+  /** @override */
+  get slotStyles() {
+    return [transitionStyles];
+  }
+
   /** @protected */
   render() {
     return html`
@@ -484,6 +492,48 @@ class MasterDetailLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolylitM
   __getStackThresholdInPixels() {
     const { backgroundPositionY } = getComputedStyle(this.$.master, '::before');
     return parseFloat(backgroundPositionY);
+  }
+
+  /**
+   * Sets the detail element to be displayed in the detail area and starts a
+   * view transition that animates adding, replacing or removing the detail
+   * area. During the view transition, the element is added to the DOM and
+   * assigned to the `detail` slot. Any previous detail element is removed.
+   * When passing null as the element, the current detail element is removed.
+   *
+   * If the browser does not support view transitions, the respective updates
+   * are applied immediately without starting a transition.
+   *
+   * @param element the new detail element, or null to remove the current detail
+   * @returns {Promise<void>}
+   */
+  async setDetail(element) {
+    // Don't start a transition if detail didn't change
+    const currentDetail = this.querySelector('[slot="detail"]');
+    if ((element || null) === currentDetail) {
+      return;
+    }
+
+    const updateSlot = () => {
+      // Remove old content
+      this.querySelectorAll('[slot="detail"]').forEach((oldElement) => oldElement.remove());
+      // Add new content
+      if (element) {
+        element.setAttribute('slot', 'detail');
+        this.appendChild(element);
+      }
+    };
+
+    if (typeof document.startViewTransition === 'function') {
+      const hasDetail = !!currentDetail;
+      const transitionType = hasDetail && element ? 'replace' : hasDetail ? 'remove' : 'add';
+      this.setAttribute('transition', transitionType);
+      const transition = document.startViewTransition(updateSlot);
+      await transition.finished;
+      this.removeAttribute('transition');
+    } else {
+      updateSlot();
+    }
   }
 }
 
