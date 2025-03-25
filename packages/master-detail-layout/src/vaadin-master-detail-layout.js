@@ -597,6 +597,12 @@ class MasterDetailLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolylitM
   }
 
   async setDetail(element) {
+    // Don't start a transition if detail didn't change
+    const currentDetail = this.querySelector('[slot="detail"]') || null;
+    if ((element || null) === currentDetail) {
+      return;
+    }
+
     const updateSlot = () => {
       // Remove old content
       this.querySelectorAll('[slot="detail"]').forEach((oldElement) => oldElement.remove());
@@ -608,7 +614,7 @@ class MasterDetailLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolylitM
     };
 
     if (document.startViewTransition) {
-      const hasDetail = !!this.querySelector('[slot="detail"]');
+      const hasDetail = !!currentDetail;
       const transitionType = hasDetail && element ? 'replace' : hasDetail ? 'remove' : 'add';
       this.setAttribute('transition', transitionType);
       const transition = document.startViewTransition(updateSlot);

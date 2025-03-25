@@ -1,11 +1,30 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
+import sinon from 'sinon';
 import '../vaadin-master-detail-layout.js';
 import './helpers/master-content.js';
 import './helpers/detail-content.js';
 
 describe('View transitions', () => {
+  const originalStartViewTransition = document.startViewTransition;
+
   let layout;
+  let startViewTransitionSpy;
+
+  beforeEach(() => {
+    startViewTransitionSpy = sinon.spy();
+    document.startViewTransition = (callback) => {
+      callback();
+      startViewTransitionSpy();
+      return {
+        finished: Promise.resolve(),
+      };
+    };
+  });
+
+  after(() => {
+    document.startViewTransition = originalStartViewTransition;
+  });
 
   beforeEach(async () => {
     layout = fixtureSync(`
@@ -17,51 +36,65 @@ describe('View transitions', () => {
   });
 
   ['supported', 'unsupported'].forEach((support) => {
-    describe(support, () => {
+    it(`should update details slot if view transitions are ${support}`, async () => {
       if (support === 'unsupported') {
-        let originalStartViewTransition;
-        before(() => {
-          originalStartViewTransition = document.startViewTransition;
-          document.startViewTransition = undefined;
-        });
-
-        after(() => {
-          document.startViewTransition = originalStartViewTransition;
-        });
+        document.startViewTransition = null;
       }
 
-      it('should update details slot', async () => {
-        // Add details
-        const detail = document.createElement('detail-content');
-        await layout.setDetail(detail);
+      // Add details
+      const detail = document.createElement('detail-content');
+      await layout.setDetail(detail);
 
-        const result = layout.querySelector('[slot="detail"]');
-        expect(result).to.equal(detail);
+      const result = layout.querySelector('[slot="detail"]');
+      expect(result).to.equal(detail);
 
-        // Replace details
-        const newDetail = document.createElement('detail-content');
-        await layout.setDetail(newDetail);
+      // Replace details
+      const newDetail = document.createElement('detail-content');
+      await layout.setDetail(newDetail);
 
-        const newResult = layout.querySelector('[slot="detail"]');
-        expect(newResult).to.equal(newDetail);
-        expect(result.isConnected).to.be.false;
+      const newResult = layout.querySelector('[slot="detail"]');
+      expect(newResult).to.equal(newDetail);
+      expect(result.isConnected).to.be.false;
 
-        // Remove details
-        await layout.setDetail(null);
+      // Remove details
+      await layout.setDetail(null);
 
-        const emptyResult = layout.querySelector('[slot="detail"]');
-        expect(emptyResult).to.be.null;
-        expect(newResult.isConnected).to.be.false;
-      });
+      const emptyResult = layout.querySelector('[slot="detail"]');
+      expect(emptyResult).to.be.null;
+      expect(newResult.isConnected).to.be.false;
     });
   });
 
+  it('should not start a transition if detail element did not change', async () => {
+    // Add initial detail
+    const detail = document.createElement('detail-content');
+    await layout.setDetail(detail);
+
+    expect(startViewTransitionSpy.calledOnce).to.be.true;
+
+    // Try to set the same detail again
+    startViewTransitionSpy.resetHistory();
+    await layout.setDetail(detail);
+
+    expect(startViewTransitionSpy.called).to.be.false;
+
+    // Remove the detail
+    startViewTransitionSpy.resetHistory();
+    await layout.setDetail(null);
+
+    expect(startViewTransitionSpy.calledOnce).to.be.true;
+
+    // Remove the detail again
+    startViewTransitionSpy.resetHistory();
+    await layout.setDetail(null);
+
+    expect(startViewTransitionSpy.called).to.be.false;
+  });
+
   describe('transition types', () => {
-    let originalStartViewTransition;
     let resolveTransition;
 
-    before(() => {
-      originalStartViewTransition = document.startViewTransition;
+    beforeEach(() => {
       document.startViewTransition = (callback) => {
         callback();
         return {
@@ -70,10 +103,6 @@ describe('View transitions', () => {
           }),
         };
       };
-    });
-
-    after(() => {
-      document.startViewTransition = originalStartViewTransition;
     });
 
     it('should use the correct transition type', async () => {
