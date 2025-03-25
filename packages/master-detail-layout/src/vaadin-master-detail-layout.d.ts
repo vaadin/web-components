@@ -11,6 +11,27 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * `<vaadin-master-detail-layout>` is a web component for building UIs with a master
  * (or primary) area and a detail (or secondary) area that is displayed next to, or
  * overlaid on top of, the master area, depending on configuration and viewport size.
+ *
+ * ### Styling
+ *
+ * The following shadow DOM parts are available for styling:
+ *
+ * Part name      | Description
+ * ---------------|----------------------
+ * `master`       | The master area
+ * `detail`       | The detail area
+ *
+ * The following state attributes are available for styling:
+ *
+ * Attribute      | Description
+ * ---------------| -----------
+ * `containment`  | Set to `layout` or `viewport` depending on the containment.
+ * `orientation`  | Set to `horizontal` or `vertical` depending on the orientation.
+ * `has-detail`   | Set when the detail content is provided.
+ * `overlay`      | Set when the layout is using the overlay mode.
+ * `stack`        | Set when the layout is using the stack mode.
+ *
+ * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  */
 declare class MasterDetailLayout extends ResizeMixin(ThemableMixin(ElementMixin(HTMLElement))) {
   /**
