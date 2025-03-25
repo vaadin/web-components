@@ -9,117 +9,9 @@ import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
-import { addGlobalThemeStyles } from '@vaadin/vaadin-themable-mixin/register-styles.js';
+import { SlotStylesMixin } from '@vaadin/component-base/src/slot-styles-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-
-addGlobalThemeStyles(
-  'master-detail-layout-view-transitions',
-  css`
-    /* Overlay - horizontal - add */
-
-    vaadin-master-detail-layout[overlay][orientation='horizontal'][transition='add']::part(detail) {
-      view-transition-name: vaadin-master-detail-layout-overlay-horizontal-detail-add;
-    }
-
-    ::view-transition-group(vaadin-master-detail-layout-overlay-horizontal-detail-add) {
-      clip-path: inset(0px);
-    }
-
-    ::view-transition-new(vaadin-master-detail-layout-overlay-horizontal-detail-add) {
-      animation: 300ms ease both vaadin-master-detail-layout-overlay-horizontal-detail-add;
-    }
-
-    @keyframes vaadin-master-detail-layout-overlay-horizontal-detail-add {
-      from {
-        transform: translateX(100%);
-      }
-    }
-
-    /* Overlay - horizontal - remove */
-
-    vaadin-master-detail-layout[overlay][orientation='horizontal'][transition='remove']::part(detail) {
-      view-transition-name: vaadin-master-detail-layout-overlay-horizontal-detail-remove;
-    }
-
-    ::view-transition-group(vaadin-master-detail-layout-overlay-horizontal-detail-remove) {
-      clip-path: inset(0px);
-    }
-
-    ::view-transition-old(vaadin-master-detail-layout-overlay-horizontal-detail-remove) {
-      animation: 300ms ease both vaadin-master-detail-layout-overlay-horizontal-detail-remove;
-    }
-
-    @keyframes vaadin-master-detail-layout-overlay-horizontal-detail-remove {
-      to {
-        transform: translateX(100%);
-      }
-    }
-
-    /* Stack - horizontal - add */
-
-    vaadin-master-detail-layout[stack][orientation='horizontal'][transition='add'] {
-      view-transition-name: vaadin-master-detail-layout-stack-horizontal-add;
-    }
-
-    ::view-transition-group(vaadin-master-detail-layout-stack-horizontal-add) {
-      clip-path: inset(0px);
-    }
-
-    ::view-transition-new(vaadin-master-detail-layout-stack-horizontal-add) {
-      animation: 300ms ease both vaadin-master-detail-layout-stack-horizontal-add-new;
-    }
-
-    ::view-transition-old(vaadin-master-detail-layout-stack-horizontal-add) {
-      animation: 300ms ease both vaadin-master-detail-layout-stack-horizontal-add-old;
-    }
-
-    @keyframes vaadin-master-detail-layout-stack-horizontal-add-new {
-      from {
-        transform: translateX(100px);
-        opacity: 0;
-      }
-    }
-
-    @keyframes vaadin-master-detail-layout-stack-horizontal-add-old {
-      to {
-        transform: translateX(-100px);
-        opacity: 0;
-      }
-    }
-
-    /* Stack - horizontal - remove */
-
-    vaadin-master-detail-layout[stack][orientation='horizontal'][transition='remove'] {
-      view-transition-name: vaadin-master-detail-layout-stack-horizontal-remove;
-    }
-
-    ::view-transition-group(vaadin-master-detail-layout-stack-horizontal-remove) {
-      clip-path: inset(0px);
-    }
-
-    ::view-transition-new(vaadin-master-detail-layout-stack-horizontal-remove) {
-      animation: 300ms ease both vaadin-master-detail-layout-stack-horizontal-remove-new;
-    }
-
-    ::view-transition-old(vaadin-master-detail-layout-stack-horizontal-remove) {
-      animation: 300ms ease both vaadin-master-detail-layout-stack-horizontal-remove-old;
-    }
-
-    @keyframes vaadin-master-detail-layout-stack-horizontal-remove-new {
-      from {
-        transform: translateX(-100px);
-        opacity: 0;
-      }
-    }
-
-    @keyframes vaadin-master-detail-layout-stack-horizontal-remove-old {
-      to {
-        transform: translateX(100px);
-        opacity: 0;
-      }
-    }
-  `,
-);
+import { transitionStyles } from './vaadin-master-detail-layout-transition-styles.js';
 
 /**
  * `<vaadin-master-detail-layout>` is a web component for building UIs with a master
@@ -131,8 +23,9 @@ addGlobalThemeStyles(
  * @mixes ThemableMixin
  * @mixes ElementMixin
  * @mixes ResizeMixin
+ * @mixes SlotStylesMixin
  */
-class MasterDetailLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElement)))) {
+class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElement))))) {
   static get is() {
     return 'vaadin-master-detail-layout';
   }
@@ -414,6 +307,11 @@ class MasterDetailLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolylitM
         sync: true,
       },
     };
+  }
+
+  /** @override */
+  get slotStyles() {
+    return [transitionStyles.toString()];
   }
 
   /** @protected */
