@@ -103,18 +103,6 @@ describe('overlay mode', () => {
       expect(getComputedStyle(detail).width).to.equal('300px');
     });
 
-    it('should switch to the overlay mode when masterSize is set to 100%', async () => {
-      layout.masterSize = '100%';
-      await nextResize(layout);
-      expect(layout.hasAttribute('overlay')).to.be.true;
-    });
-
-    it('should switch to the overlay mode when masterMinSize is set to 100%', async () => {
-      layout.masterMinSize = '100%';
-      await nextResize(layout);
-      expect(layout.hasAttribute('overlay')).to.be.true;
-    });
-
     it('should not overflow in the overlay mode when detailMinSize is set', async () => {
       layout.masterSize = '500px';
       layout.detailMinSize = '500px';

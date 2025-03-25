@@ -442,15 +442,8 @@ class MasterDetailLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolylitM
 
   /** @private */
   __detectHorizontalMode() {
-    const detailWidth = this.$.detail.offsetWidth;
-
-    // Detect minimum width needed by master content. Use max-width to ensure
-    // the layout can switch back to split mode once there is enough space.
-    // If there is master  size or min-size set, use that instead to force the
-    // overlay mode by setting `masterSize` / `masterMinSize` to 100%/
-    this.$.master.style.maxWidth = this.masterSize || this.masterMinSize || 'min-content';
-    const masterWidth = this.$.master.offsetWidth;
-    this.$.master.style.maxWidth = '';
+    const masterWidth = this.__getSizeInPixels(this.masterSize || this.masterMinSize) || this.$.master.clientWidth;
+    const detailWidth = this.__getSizeInPixels(this.detailSize || this.detailMinSize);
 
     // If the combined minimum size of both the master and the detail content
     // exceeds the size of the layout, the layout changes to the overlay mode.
@@ -483,6 +476,14 @@ class MasterDetailLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolylitM
   /** @private */
   __getStackThresholdInPixels() {
     const { backgroundPositionY } = getComputedStyle(this.$.master, '::before');
+    return parseFloat(backgroundPositionY);
+  }
+
+  /** @private */
+  __getSizeInPixels(size) {
+    this.$.master.style.backgroundPositionY = size;
+    const { backgroundPositionY } = getComputedStyle(this.$.master);
+    this.$.master.style.removeProperty('background-position-y');
     return parseFloat(backgroundPositionY);
   }
 }
