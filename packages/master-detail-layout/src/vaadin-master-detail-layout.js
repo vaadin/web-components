@@ -3,7 +3,7 @@
  * Copyright (c) 2025 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { css, html, LitElement } from 'lit';
+import { css, html, LitElement, nothing } from 'lit';
 import { getFocusableElements } from '@vaadin/a11y-base/src/focus-utils.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
@@ -279,16 +279,45 @@ class MasterDetailLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolylitM
         observer: '__stackThresholdChanged',
         sync: true,
       },
+
+      /**
+       * When true, the component uses the overlay mode. This property is read-only.
+       * In order to enforce the overlay mode, use `forceOverlay` property.
+       * @protected
+       */
+      _overlay: {
+        type: Boolean,
+        attribute: 'overlay',
+        reflectToAttribute: true,
+        sync: true,
+      },
+
+      /**
+       * When true, the component uses the stack mode. This property is read-only.
+       * In order to enforce the stack mode, use `stackThreshold` property.
+       * @protected
+       */
+      _stack: {
+        type: Boolean,
+        attribute: 'stack',
+        reflectToAttribute: true,
+        sync: true,
+      },
     };
   }
 
   /** @protected */
   render() {
     return html`
-      <div id="master" part="master">
+      <div id="master" part="master" ?inert="${this._overlay && this.containment === 'layout'}">
         <slot></slot>
       </div>
-      <div id="detail" part="detail">
+      <div
+        id="detail"
+        part="detail"
+        role="${this._overlay || this._stack ? 'dialog' : nothing}"
+        aria-modal="${this._overlay && this.containment === 'viewport' ? 'true' : nothing}"
+      >
         <slot name="detail" @slotchange="${this.__onDetailSlotChange}"></slot>
       </div>
     `;
@@ -383,11 +412,11 @@ class MasterDetailLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolylitM
 
   /** @private */
   __detectLayoutMode() {
-    this.removeAttribute('overlay');
-    this.removeAttribute('stack');
+    this._overlay = false;
+    this._stack = false;
 
     if (this.forceOverlay) {
-      this.setAttribute('overlay', '');
+      this._overlay = true;
       return;
     }
 
@@ -395,7 +424,7 @@ class MasterDetailLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolylitM
       const threshold = this.__getStackThresholdInPixels();
       const size = this.orientation === 'vertical' ? this.offsetHeight : this.offsetWidth;
       if (size <= threshold) {
-        this.setAttribute('stack', '');
+        this._stack = true;
         return;
       }
     }
@@ -425,18 +454,14 @@ class MasterDetailLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolylitM
 
     // If the combined minimum size of both the master and the detail content
     // exceeds the size of the layout, the layout changes to the overlay mode.
-    if (this.offsetWidth < masterWidth + detailWidth) {
-      this.setAttribute('overlay', '');
-    } else {
-      this.removeAttribute('overlay');
-    }
+    this._overlay = this.offsetWidth < masterWidth + detailWidth;
 
     // Toggling the overlay resizes master content, which can cause document
     // scroll bar to appear or disappear, and trigger another resize of the
     // layout which can affect previous measurements and end up in horizontal
     // scroll. Check if that is the case and if so, preserve the overlay mode.
     if (this.offsetWidth < this.scrollWidth) {
-      this.setAttribute('overlay', '');
+      this._overlay = true;
     }
   }
 
@@ -444,15 +469,14 @@ class MasterDetailLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolylitM
   __detectVerticalMode() {
     // Remove overlay attribute temporarily to detect if there is enough space
     // for both areas so that layout could switch back to the split mode.
-    if (this.hasAttribute('overlay')) {
-      this.removeAttribute('overlay');
-    }
+    this._overlay = false;
+
     const masterHeight = this.$.master.clientHeight;
 
     // If the combined minimum size of both the master and the detail content
     // exceeds the available height, the layout changes to the overlay mode.
     if (this.offsetHeight < masterHeight + this.$.detail.clientHeight) {
-      this.setAttribute('overlay', '');
+      this._overlay = true;
     }
   }
 
