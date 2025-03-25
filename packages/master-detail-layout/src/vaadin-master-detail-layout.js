@@ -509,7 +509,7 @@ class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ElementMixin(Themab
    */
   async setDetail(element) {
     // Don't start a transition if detail didn't change
-    const currentDetail = this.querySelector('[slot="detail"]') || null;
+    const currentDetail = this.querySelector('[slot="detail"]');
     if ((element || null) === currentDetail) {
       return;
     }
