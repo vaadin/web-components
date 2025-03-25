@@ -9,7 +9,109 @@ import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
+import { addGlobalThemeStyles } from '@vaadin/vaadin-themable-mixin/register-styles.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+
+addGlobalThemeStyles(
+  'master-detail-layout-view-transitions',
+  css`
+    vaadin-master-detail-layout[orientation='horizontal'][overlay][transition='add']::part(detail) {
+      view-transition-name: overlay-horizontal-detail-add;
+    }
+
+    vaadin-master-detail-layout[orientation='horizontal'][overlay][transition='remove']::part(detail) {
+      view-transition-name: overlay-horizontal-detail-remove;
+    }
+
+    vaadin-master-detail-layout[orientation='horizontal'][stack][transition='add'] {
+      view-transition-name: stack-horizontal-add;
+    }
+
+    vaadin-master-detail-layout[orientation='horizontal'][stack][transition='remove'] {
+      view-transition-name: stack-horizontal-remove;
+    }
+
+    ::view-transition-group(overlay-horizontal-detail-add) {
+      clip-path: inset(0px);
+    }
+
+    ::view-transition-new(overlay-horizontal-detail-add) {
+      animation: 300ms ease both overlay-horizontal-detail-add;
+    }
+
+    ::view-transition-group(overlay-horizontal-detail-remove) {
+      clip-path: inset(0px);
+    }
+
+    ::view-transition-old(overlay-horizontal-detail-remove) {
+      animation: 300ms ease both overlay-horizontal-detail-remove;
+    }
+
+    ::view-transition-group(stack-horizontal-add) {
+      clip-path: inset(0px);
+    }
+
+    ::view-transition-new(stack-horizontal-add) {
+      animation: 300ms ease both stack-horizontal-add-new;
+    }
+
+    ::view-transition-old(stack-horizontal-add) {
+      animation: 300ms ease both stack-horizontal-add-old;
+    }
+
+    ::view-transition-group(stack-horizontal-remove) {
+      clip-path: inset(0px);
+    }
+
+    ::view-transition-new(stack-horizontal-remove) {
+      animation: 300ms ease both stack-horizontal-remove-new;
+    }
+
+    ::view-transition-old(stack-horizontal-remove) {
+      animation: 300ms ease both stack-horizontal-remove-old;
+    }
+
+    @keyframes overlay-horizontal-detail-add {
+      from {
+        transform: translateX(100%);
+      }
+    }
+
+    @keyframes overlay-horizontal-detail-remove {
+      to {
+        transform: translateX(100%);
+      }
+    }
+
+    @keyframes stack-horizontal-add-new {
+      from {
+        transform: translateX(100px);
+        opacity: 0;
+      }
+    }
+
+    @keyframes stack-horizontal-add-old {
+      to {
+        transform: translateX(-100px);
+        opacity: 0;
+      }
+    }
+
+    @keyframes stack-horizontal-remove-new {
+      from {
+        transform: translateX(-100px);
+        opacity: 0;
+      }
+    }
+
+    @keyframes stack-horizontal-remove-old {
+      to {
+        transform: translateX(100px);
+        opacity: 0;
+      }
+    }
+  `,
+);
 
 /**
  * `<vaadin-master-detail-layout>` is a web component for building UIs with a master
@@ -484,6 +586,29 @@ class MasterDetailLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolylitM
   __getStackThresholdInPixels() {
     const { backgroundPositionY } = getComputedStyle(this.$.master, '::before');
     return parseFloat(backgroundPositionY);
+  }
+
+  async setDetail(element) {
+    const updateSlot = () => {
+      // Remove old content
+      this.querySelectorAll('[slot="detail"]').forEach((oldElement) => oldElement.remove());
+      // Add new content
+      if (element) {
+        element.setAttribute('slot', 'detail');
+        this.appendChild(element);
+      }
+    };
+
+    if (document.startViewTransition) {
+      const hasDetail = !!this.querySelector('[slot="detail"]');
+      const transitionType = hasDetail && element ? 'replace' : hasDetail ? 'remove' : 'add';
+      this.setAttribute('transition', transitionType);
+      const transition = document.startViewTransition(updateSlot);
+      await transition.finished;
+      this.removeAttribute('transition');
+    } else {
+      updateSlot();
+    }
   }
 }
 
