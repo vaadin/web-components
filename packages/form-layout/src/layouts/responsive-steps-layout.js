@@ -46,9 +46,6 @@ export class ResponsiveStepsLayout extends AbstractLayout {
 
     super.connect();
 
-    this.__selectResponsiveStep();
-    this.updateLayout();
-
     requestAnimationFrame(() => this.__selectResponsiveStep());
     requestAnimationFrame(() => this.updateLayout());
   }
@@ -206,6 +203,10 @@ export class ResponsiveStepsLayout extends AbstractLayout {
 
   /** @private */
   __selectResponsiveStep() {
+    if (!this.isConnected) {
+      return;
+    }
+
     const { host, props } = this;
     // Iterate through responsiveSteps and choose the step
     let selectedStep;

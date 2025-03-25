@@ -206,7 +206,7 @@ describe('form layout', () => {
   describe('colspan', () => {
     let layout;
 
-    beforeEach(() => {
+    beforeEach(async () => {
       layout = fixtureSync(`
         <vaadin-form-layout responsive-steps='[{"columns": 3}]'>
           <vaadin-text-field></vaadin-text-field>
@@ -217,6 +217,7 @@ describe('form layout', () => {
           <vaadin-text-field colspan="non-number"></vaadin-text-field>
         </vaadin-form-layout>
       `);
+      await nextRender();
     });
 
     function estimateEffectiveColspan(el) {
