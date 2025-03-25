@@ -34,6 +34,7 @@
     "web-component"
   ],
   "dependencies": {
+    "@vaadin/a11y-base": "24.8.0-alpha3",
     "@vaadin/component-base": "24.8.0-alpha3",
     "@vaadin/vaadin-lumo-styles": "24.8.0-alpha3",
     "@vaadin/vaadin-material-styles": "24.8.0-alpha3",

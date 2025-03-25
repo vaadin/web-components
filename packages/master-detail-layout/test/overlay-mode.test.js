@@ -194,6 +194,21 @@ describe('overlay mode', () => {
 
       expect(layout.hasAttribute('overlay')).to.be.true;
     });
+
+    it('should focus detail content when adding details in the overlay mode', async () => {
+      // Start without details
+      detailContent.remove();
+      await nextRender();
+
+      layout.forceOverlay = true;
+
+      // Add details
+      layout.appendChild(detailContent);
+      await nextRender();
+
+      const input = detailContent.shadowRoot.querySelector('input');
+      expect(detailContent.shadowRoot.activeElement).to.equal(input);
+    });
   });
 
   describe('vertical', () => {
