@@ -383,28 +383,25 @@ class MasterDetailLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolylitM
 
   /** @private */
   __detectLayoutMode() {
-    if (!this.hasAttribute('has-detail')) {
-      this.removeAttribute('overlay');
-      this.removeAttribute('stack');
-      return;
-    }
+    this.removeAttribute('overlay');
+    this.removeAttribute('stack');
 
     if (this.forceOverlay) {
-      this.removeAttribute('stack');
       this.setAttribute('overlay', '');
       return;
     }
 
     if (this.stackThreshold != null) {
-      this.removeAttribute('stack');
-
       const threshold = this.__getStackThresholdInPixels();
       const size = this.orientation === 'vertical' ? this.offsetHeight : this.offsetWidth;
       if (size <= threshold) {
-        this.removeAttribute('overlay');
         this.setAttribute('stack', '');
         return;
       }
+    }
+
+    if (!this.hasAttribute('has-detail')) {
+      return;
     }
 
     if (this.orientation === 'vertical') {
