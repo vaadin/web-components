@@ -524,7 +524,7 @@ class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ElementMixin(Themab
       }
     };
 
-    if (document.startViewTransition) {
+    if (typeof document.startViewTransition === 'function') {
       const hasDetail = !!currentDetail;
       const transitionType = hasDetail && element ? 'replace' : hasDetail ? 'remove' : 'add';
       this.setAttribute('transition', transitionType);
