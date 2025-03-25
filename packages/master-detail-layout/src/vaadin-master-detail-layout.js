@@ -15,96 +15,104 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
 addGlobalThemeStyles(
   'master-detail-layout-view-transitions',
   css`
-    vaadin-master-detail-layout[orientation='horizontal'][overlay][transition='add']::part(detail) {
-      view-transition-name: overlay-horizontal-detail-add;
+    /* Overlay - horizontal - add */
+
+    vaadin-master-detail-layout[overlay][orientation='horizontal'][transition='add']::part(detail) {
+      view-transition-name: vaadin-master-detail-layout-overlay-horizontal-detail-add;
     }
 
-    vaadin-master-detail-layout[orientation='horizontal'][overlay][transition='remove']::part(detail) {
-      view-transition-name: overlay-horizontal-detail-remove;
-    }
-
-    vaadin-master-detail-layout[orientation='horizontal'][stack][transition='add'] {
-      view-transition-name: stack-horizontal-add;
-    }
-
-    vaadin-master-detail-layout[orientation='horizontal'][stack][transition='remove'] {
-      view-transition-name: stack-horizontal-remove;
-    }
-
-    ::view-transition-group(overlay-horizontal-detail-add) {
+    ::view-transition-group(vaadin-master-detail-layout-overlay-horizontal-detail-add) {
       clip-path: inset(0px);
     }
 
-    ::view-transition-new(overlay-horizontal-detail-add) {
-      animation: 300ms ease both overlay-horizontal-detail-add;
+    ::view-transition-new(vaadin-master-detail-layout-overlay-horizontal-detail-add) {
+      animation: 300ms ease both vaadin-master-detail-layout-overlay-horizontal-detail-add;
     }
 
-    ::view-transition-group(overlay-horizontal-detail-remove) {
-      clip-path: inset(0px);
-    }
-
-    ::view-transition-old(overlay-horizontal-detail-remove) {
-      animation: 300ms ease both overlay-horizontal-detail-remove;
-    }
-
-    ::view-transition-group(stack-horizontal-add) {
-      clip-path: inset(0px);
-    }
-
-    ::view-transition-new(stack-horizontal-add) {
-      animation: 300ms ease both stack-horizontal-add-new;
-    }
-
-    ::view-transition-old(stack-horizontal-add) {
-      animation: 300ms ease both stack-horizontal-add-old;
-    }
-
-    ::view-transition-group(stack-horizontal-remove) {
-      clip-path: inset(0px);
-    }
-
-    ::view-transition-new(stack-horizontal-remove) {
-      animation: 300ms ease both stack-horizontal-remove-new;
-    }
-
-    ::view-transition-old(stack-horizontal-remove) {
-      animation: 300ms ease both stack-horizontal-remove-old;
-    }
-
-    @keyframes overlay-horizontal-detail-add {
+    @keyframes vaadin-master-detail-layout-overlay-horizontal-detail-add {
       from {
         transform: translateX(100%);
       }
     }
 
-    @keyframes overlay-horizontal-detail-remove {
+    /* Overlay - horizontal - remove */
+
+    vaadin-master-detail-layout[overlay][orientation='horizontal'][transition='remove']::part(detail) {
+      view-transition-name: vaadin-master-detail-layout-overlay-horizontal-detail-remove;
+    }
+
+    ::view-transition-group(vaadin-master-detail-layout-overlay-horizontal-detail-remove) {
+      clip-path: inset(0px);
+    }
+
+    ::view-transition-old(vaadin-master-detail-layout-overlay-horizontal-detail-remove) {
+      animation: 300ms ease both vaadin-master-detail-layout-overlay-horizontal-detail-remove;
+    }
+
+    @keyframes vaadin-master-detail-layout-overlay-horizontal-detail-remove {
       to {
         transform: translateX(100%);
       }
     }
 
-    @keyframes stack-horizontal-add-new {
+    /* Stack - horizontal - add */
+
+    vaadin-master-detail-layout[stack][orientation='horizontal'][transition='add'] {
+      view-transition-name: vaadin-master-detail-layout-stack-horizontal-add;
+    }
+
+    ::view-transition-group(vaadin-master-detail-layout-stack-horizontal-add) {
+      clip-path: inset(0px);
+    }
+
+    ::view-transition-new(vaadin-master-detail-layout-stack-horizontal-add) {
+      animation: 300ms ease both vaadin-master-detail-layout-stack-horizontal-add-new;
+    }
+
+    ::view-transition-old(vaadin-master-detail-layout-stack-horizontal-add) {
+      animation: 300ms ease both vaadin-master-detail-layout-stack-horizontal-add-old;
+    }
+
+    @keyframes vaadin-master-detail-layout-stack-horizontal-add-new {
       from {
         transform: translateX(100px);
         opacity: 0;
       }
     }
 
-    @keyframes stack-horizontal-add-old {
+    @keyframes vaadin-master-detail-layout-stack-horizontal-add-old {
       to {
         transform: translateX(-100px);
         opacity: 0;
       }
     }
 
-    @keyframes stack-horizontal-remove-new {
+    /* Stack - horizontal - remove */
+
+    vaadin-master-detail-layout[stack][orientation='horizontal'][transition='remove'] {
+      view-transition-name: vaadin-master-detail-layout-stack-horizontal-remove;
+    }
+
+    ::view-transition-group(vaadin-master-detail-layout-stack-horizontal-remove) {
+      clip-path: inset(0px);
+    }
+
+    ::view-transition-new(vaadin-master-detail-layout-stack-horizontal-remove) {
+      animation: 300ms ease both vaadin-master-detail-layout-stack-horizontal-remove-new;
+    }
+
+    ::view-transition-old(vaadin-master-detail-layout-stack-horizontal-remove) {
+      animation: 300ms ease both vaadin-master-detail-layout-stack-horizontal-remove-old;
+    }
+
+    @keyframes vaadin-master-detail-layout-stack-horizontal-remove-new {
       from {
         transform: translateX(-100px);
         opacity: 0;
       }
     }
 
-    @keyframes stack-horizontal-remove-old {
+    @keyframes vaadin-master-detail-layout-stack-horizontal-remove-old {
       to {
         transform: translateX(100px);
         opacity: 0;
