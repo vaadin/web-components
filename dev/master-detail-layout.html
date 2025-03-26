@@ -37,7 +37,6 @@
     </style>
 
     <p>
-      <vaadin-checkbox id="showDetail" label="Show detail" checked></vaadin-checkbox>
       <vaadin-checkbox id="detailSize" label="Set detail size"></vaadin-checkbox>
       <vaadin-checkbox id="detailMinSize" label="Set detail min-size"></vaadin-checkbox>
       <vaadin-checkbox id="masterSize" label="Set master size"></vaadin-checkbox>
@@ -55,7 +54,6 @@
 
     <vaadin-master-detail-layout>
       <master-content></master-content>
-      <detail-content slot="detail"></detail-content>
     </vaadin-master-detail-layout>
 
     <script type="module">
@@ -66,14 +64,6 @@
 
       const layout = document.querySelector('vaadin-master-detail-layout');
       const detailContent = document.querySelector('detail-content');
-
-      document.querySelector('#showDetail').addEventListener('change', (e) => {
-        if (e.target.checked) {
-          layout.append(detailContent);
-        } else {
-          detailContent.remove();
-        }
-      });
 
       document.querySelector('#detailSize').addEventListener('change', (e) => {
         layout.detailSize = e.target.checked ? '300px' : null;
@@ -138,6 +128,10 @@
       document.querySelector('#clear-detail').addEventListener('click', () => {
         layout.setDetail(null);
       });
+
+      // Set initial detail
+      const detail = document.createElement('detail-content');
+      layout.setDetail(detail);
     </script>
   </body>
 </html>

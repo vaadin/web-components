@@ -352,6 +352,17 @@ class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ElementMixin(Themab
     `;
   }
 
+  /** @protected */
+  async connectedCallback() {
+    super.connectedCallback();
+
+    // Do not use a view transition when rendering a view initially.
+    this.__blockAnimation = true;
+
+    await this.updateComplete;
+    this.__blockAnimation = false;
+  }
+
   /** @private */
   __onDetailSlotChange(e) {
     const children = e.target.assignedNodes();
@@ -545,7 +556,7 @@ class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ElementMixin(Themab
       }
     };
 
-    if (typeof document.startViewTransition === 'function') {
+    if (!this.__blockAnimation && typeof document.startViewTransition === 'function') {
       const hasDetail = !!currentDetail;
       const transitionType = hasDetail && element ? 'replace' : hasDetail ? 'remove' : 'add';
       this.setAttribute('transition', transitionType);
