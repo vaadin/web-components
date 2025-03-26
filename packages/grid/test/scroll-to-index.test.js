@@ -567,6 +567,7 @@ describe('scroll to index', () => {
           <vaadin-grid-column></vaadin-grid-column>
         </vaadin-grid>
       `);
+      grid.performUpdate();
       grid.items = Array.from({ length: 100 }, (_, index) => `Item ${index}`);
       grid.scrollToIndex(50);
       await oneEvent(grid, 'animationend');
