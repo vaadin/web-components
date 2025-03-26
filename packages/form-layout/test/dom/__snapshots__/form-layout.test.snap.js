@@ -322,7 +322,7 @@ snapshots["vaadin-form-layout responsive-steps host default"] =
 `;
 /* end snapshot vaadin-form-layout responsive-steps host default */
 
-snapshots["vaadin-form-layout responsive-steps host autoResponsive"] = 
+snapshots["vaadin-form-layout responsive-steps host switching to autoResponsive"] = 
 `<vaadin-form-layout
   auto-responsive=""
   style="--_column-width: 13em; --_max-columns: 1;"
@@ -337,17 +337,20 @@ snapshots["vaadin-form-layout responsive-steps host autoResponsive"] =
   >
 </vaadin-form-layout>
 `;
-/* end snapshot vaadin-form-layout responsive-steps host autoResponsive */
+/* end snapshot vaadin-form-layout responsive-steps host switching to autoResponsive */
 
 snapshots["vaadin-form-layout responsive-steps shadow default"] = 
-`<div id="layout">
+`<div
+  id="layout"
+  style=""
+>
   <slot id="slot">
   </slot>
 </div>
 `;
 /* end snapshot vaadin-form-layout responsive-steps shadow default */
 
-snapshots["vaadin-form-layout responsive-steps shadow autoResponsive"] = 
+snapshots["vaadin-form-layout responsive-steps shadow switching to autoResponsive"] = 
 `<div
   id="layout"
   style="--_grid-rendered-column-count: 1;"
@@ -356,5 +359,5 @@ snapshots["vaadin-form-layout responsive-steps shadow autoResponsive"] =
   </slot>
 </div>
 `;
-/* end snapshot vaadin-form-layout responsive-steps shadow autoResponsive */
+/* end snapshot vaadin-form-layout responsive-steps shadow switching to autoResponsive */
 
