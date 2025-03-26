@@ -308,3 +308,53 @@ snapshots["vaadin-form-layout defaultAutoResponsiveFormLayout feature flag defau
 `;
 /* end snapshot vaadin-form-layout defaultAutoResponsiveFormLayout feature flag default */
 
+snapshots["vaadin-form-layout responsive-steps host default"] = 
+`<vaadin-form-layout>
+  <input
+    placeholder="First name"
+    style="width: calc(50% - 1em); margin-left: 0px;"
+  >
+  <input
+    placeholder="Last name"
+    style="width: calc(50% - 1em); margin-right: 0px;"
+  >
+</vaadin-form-layout>
+`;
+/* end snapshot vaadin-form-layout responsive-steps host default */
+
+snapshots["vaadin-form-layout responsive-steps host autoResponsive"] = 
+`<vaadin-form-layout
+  auto-responsive=""
+  style="--_column-width: 13em; --_max-columns: 1;"
+>
+  <input
+    placeholder="First name"
+    style=""
+  >
+  <input
+    placeholder="Last name"
+    style=""
+  >
+</vaadin-form-layout>
+`;
+/* end snapshot vaadin-form-layout responsive-steps host autoResponsive */
+
+snapshots["vaadin-form-layout responsive-steps shadow default"] = 
+`<div id="layout">
+  <slot id="slot">
+  </slot>
+</div>
+`;
+/* end snapshot vaadin-form-layout responsive-steps shadow default */
+
+snapshots["vaadin-form-layout responsive-steps shadow autoResponsive"] = 
+`<div
+  id="layout"
+  style="--_grid-rendered-column-count: 1;"
+>
+  <slot id="slot">
+  </slot>
+</div>
+`;
+/* end snapshot vaadin-form-layout responsive-steps shadow autoResponsive */
+

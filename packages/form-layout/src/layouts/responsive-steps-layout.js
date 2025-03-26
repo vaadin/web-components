@@ -46,8 +46,29 @@ export class ResponsiveStepsLayout extends AbstractLayout {
 
     super.connect();
 
+    this.__selectResponsiveStep();
+    this.updateLayout();
+
     requestAnimationFrame(() => this.__selectResponsiveStep());
     requestAnimationFrame(() => this.updateLayout());
+  }
+
+  /** @override */
+  disconnect() {
+    if (!this.isConnected) {
+      return;
+    }
+
+    super.disconnect();
+
+    const { host } = this;
+    host.$.layout.style.removeProperty('opacity');
+    [...host.children].forEach((child) => {
+      child.style.removeProperty('width');
+      child.style.removeProperty('margin-left');
+      child.style.removeProperty('margin-right');
+      child.removeAttribute('label-position');
+    });
   }
 
   /** @override */
