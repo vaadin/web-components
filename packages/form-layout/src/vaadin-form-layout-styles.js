@@ -45,6 +45,7 @@ export const formLayoutStyles = css`
   }
 
   :host([auto-responsive]) {
+    --_column-width: var(--vaadin-field-default-width, 12em);
     --_column-width-labels-above: var(--_column-width);
     --_column-width-labels-aside: calc(
       var(--_column-width) + var(--vaadin-form-layout-label-width) + var(--vaadin-form-layout-label-spacing)

@@ -124,7 +124,12 @@ export class AutoResponsiveLayout extends AbstractLayout {
       child.style.removeProperty('--_grid-colstart');
     });
 
-    host.style.setProperty('--_column-width', props.columnWidth);
+    if (props.columnWidth) {
+      host.style.setProperty('--_column-width', props.columnWidth);
+    } else {
+      host.style.removeProperty('--_column-width');
+    }
+
     host.style.setProperty('--_max-columns', Math.min(props.maxColumns, maxColumns));
 
     host.$.layout.toggleAttribute('fits-labels-aside', this.props.labelsAside && this.__fitsLabelsAside);

@@ -2,6 +2,8 @@ import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextResize } from '@vaadin/testing-helpers';
 import '../../src/vaadin-form-layout.js';
 
+const DEFAULT_COLUMN_WIDTH = '12em';
+
 describe('vaadin-form-layout', () => {
   let layout;
 
@@ -52,7 +54,7 @@ describe('vaadin-form-layout', () => {
         });
 
         it('labelsAside in narrow container', async () => {
-          layout.style.width = `calc(${layout.columnWidth} + 6em)`;
+          layout.style.width = `calc(${DEFAULT_COLUMN_WIDTH} + 6em)`;
           layout.labelsAside = true;
           await nextResize(layout);
           await expect(layout).shadowDom.to.equalSnapshot();
