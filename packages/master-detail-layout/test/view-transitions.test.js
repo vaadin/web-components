@@ -136,4 +136,21 @@ describe('View transitions', () => {
       expect(layout.hasAttribute('transition')).to.be.false;
     });
   });
+
+  describe('noAnimation', () => {
+    it('should not start view transition when noAnimation is set to true', async () => {
+      layout.noAnimation = true;
+
+      const detail = document.createElement('detail-content');
+      await layout.setDetail(detail);
+
+      expect(startViewTransitionSpy.called).to.be.false;
+
+      layout.noAnimation = false;
+
+      await layout.setDetail(null);
+
+      expect(startViewTransitionSpy.calledOnce).to.be.true;
+    });
+  });
 });

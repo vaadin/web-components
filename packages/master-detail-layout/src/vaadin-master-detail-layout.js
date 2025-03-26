@@ -305,6 +305,16 @@ class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ElementMixin(Themab
       },
 
       /**
+       * When true, the layout does not use animated transitions for the detail area.
+       *
+       * @attr {boolean} no-animation
+       */
+      noAnimation: {
+        type: Boolean,
+        value: false,
+      },
+
+      /**
        * When true, the component uses the overlay mode. This property is read-only.
        * In order to enforce the overlay mode, use `forceOverlay` property.
        * @protected
@@ -545,7 +555,7 @@ class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ElementMixin(Themab
       }
     };
 
-    if (typeof document.startViewTransition === 'function') {
+    if (typeof document.startViewTransition === 'function' && !this.noAnimation) {
       const hasDetail = !!currentDetail;
       const transitionType = hasDetail && element ? 'replace' : hasDetail ? 'remove' : 'add';
       this.setAttribute('transition', transitionType);
