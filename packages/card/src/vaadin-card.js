@@ -232,6 +232,7 @@ class Card extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
 
       :host(:is([theme~='cover-media'], [theme~='stretch-media']))
         ::slotted([slot='media']:is(img, video, svg, vaadin-icon)) {
+        display: block;
         width: 100%;
         height: auto;
         aspect-ratio: var(--vaadin-card-media-aspect-ratio, 16/9);
