@@ -557,4 +557,24 @@ describe('scroll to index', () => {
       });
     });
   });
+
+  describe('before grid is fully initialized', () => {
+    let grid;
+
+    beforeEach(async () => {
+      grid = fixtureSync(`
+        <vaadin-grid>
+          <vaadin-grid-column></vaadin-grid-column>
+        </vaadin-grid>
+      `);
+      grid.items = Array.from({ length: 100 }, (_, index) => `Item ${index}`);
+      grid.scrollToIndex(50);
+      await oneEvent(grid, 'animationend');
+      await nextFrame();
+    });
+
+    it('should scroll to index after items are rendered', () => {
+      expect(getFirstVisibleItem(grid).index).to.equal(50);
+    });
+  });
 });
