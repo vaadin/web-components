@@ -363,16 +363,22 @@ class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ElementMixin(Themab
   }
 
   /** @private */
-  __onDetailSlotChange(e) {
-    const children = e.target.assignedNodes();
+  __onDetailSlotChange() {
+    this.__updateDetailSlot();
+  }
 
-    this.toggleAttribute('has-detail', children.length > 0);
+  /** @private */
+  __updateDetailSlot() {
+    const detail = this.querySelector('[slot="detail"]');
+    const hasDetail = !!detail;
+
+    this.toggleAttribute('has-detail', hasDetail);
     this.__detectLayoutMode();
 
     // Move focus to the detail area when it is added to the DOM,
     // in case if the layout is using overlay or stack mode.
-    if ((this.hasAttribute('overlay') || this.hasAttribute('stack')) && children.length > 0) {
-      const focusables = getFocusableElements(children[0]);
+    if ((this.hasAttribute('overlay') || this.hasAttribute('stack')) && hasDetail) {
+      const focusables = getFocusableElements(detail);
       if (focusables.length) {
         focusables[0].focus();
       }
@@ -569,5 +575,80 @@ class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ElementMixin(Themab
 }
 
 defineCustomElement(MasterDetailLayout);
+
+const supportViewTransitions = typeof document.startViewTransition === 'function';
+
+class MasterDetailLayoutDetail extends ElementMixin(LitElement) {
+  static get is() {
+    return 'vaadin-master-detail-layout-detail';
+  }
+
+  static get styles() {
+    return css`
+      :host {
+        display: contents;
+      }
+    `;
+  }
+
+  constructor() {
+    super();
+    this.setAttribute('slot', 'detail-hidden');
+    this.__previousChildren = [];
+  }
+
+  /** @protected */
+  render() {
+    return html` <slot @slotchange="${this.__onSlotChange}"></slot>`;
+  }
+
+  /** @private */
+  async __onSlotChange(e) {
+    // TODO: Ignore text nodes?
+    const nextChildren = e.target.assignedNodes();
+    const hasNextChildren = nextChildren.length > 0;
+    const hasPreviousChildren = this.__previousChildren.length > 0;
+    const layout = this.closest('vaadin-master-detail-layout');
+
+    const updateSlot = () => {
+      if (hasNextChildren) {
+        this.setAttribute('slot', 'detail');
+      } else {
+        this.setAttribute('slot', 'detail-hidden');
+      }
+
+      if (layout) {
+        layout.__updateDetailSlot();
+      }
+      this.__previousChildren = nextChildren;
+    };
+
+    if (!layout || !supportViewTransitions || this.__transitioning) {
+      updateSlot();
+      return;
+    }
+
+    this.__transitioning = true;
+
+    // Restore previous DOM state before starting transition
+    nextChildren.forEach((child) => this.removeChild(child));
+    this.__previousChildren.forEach((child) => this.appendChild(child));
+
+    // Start view transition
+    const transitionType = hasPreviousChildren && hasNextChildren ? 'replace' : hasPreviousChildren ? 'remove' : 'add';
+    layout.setAttribute('transition', transitionType);
+    const transition = document.startViewTransition(() => {
+      // Redo DOM changes and update slot
+      nextChildren.forEach((child) => this.appendChild(child));
+      this.__previousChildren.forEach((child) => this.removeChild(child));
+      updateSlot();
+    });
+    await transition.finished;
+    layout.removeAttribute('transition');
+    this.__transitioning = false;
+  }
+}
+
+defineCustomElement(MasterDetailLayoutDetail);
 
 export { MasterDetailLayout };

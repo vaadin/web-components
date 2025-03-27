@@ -35,11 +35,11 @@
         border-block-start: solid 1px #ccc;
       }
 
-      vaadin-master-detail-layout[orientation='horizontal'] > [slot='detail'] {
+      vaadin-master-detail-layout[orientation='horizontal'] detail-content {
         width: var(--detail-size);
       }
 
-      vaadin-master-detail-layout[orientation='vertical'] > [slot='detail'] {
+      vaadin-master-detail-layout[orientation='vertical'] detail-content {
         height: var(--detail-size);
       }
     </style>
@@ -63,7 +63,7 @@
 
     <vaadin-master-detail-layout>
       <master-content></master-content>
-      <detail-content slot="detail"></detail-content>
+      <vaadin-master-detail-layout-detail><detail-content></detail-content></vaadin-master-detail-layout-detail>
     </vaadin-master-detail-layout>
 
     <script type="module">
@@ -73,11 +73,12 @@
       import '@vaadin/master-detail-layout/test/helpers/detail-content.js';
 
       const layout = document.querySelector('vaadin-master-detail-layout');
+      const detailWrapper = document.querySelector('vaadin-master-detail-layout-detail');
       const detailContent = document.querySelector('detail-content');
 
       document.querySelector('#showDetail').addEventListener('change', (e) => {
         if (e.target.checked) {
-          layout.append(detailContent);
+          detailWrapper.append(detailContent);
         } else {
           detailContent.remove();
         }
@@ -134,17 +135,19 @@
       document.querySelector('#set-small-detail').addEventListener('click', () => {
         const detail = document.createElement('detail-content');
         detail.style.setProperty('--detail-size', '200px');
-        layout.setDetail(detail);
+        detailWrapper.innerHTML = '';
+        detailWrapper.append(detail);
       });
 
       document.querySelector('#set-large-detail').addEventListener('click', () => {
         const detail = document.createElement('detail-content');
         detail.style.setProperty('--detail-size', '600px');
-        layout.setDetail(detail);
+        detailWrapper.innerHTML = '';
+        detailWrapper.append(detail);
       });
 
       document.querySelector('#clear-detail').addEventListener('click', () => {
-        layout.setDetail(null);
+        detailWrapper.innerHTML = '';
       });
     </script>
   </body>
