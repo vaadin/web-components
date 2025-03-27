@@ -3,7 +3,8 @@
  * Copyright (c) 2019 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { html, nothing, render } from 'lit';
+import { html, noChange, nothing, render } from 'lit';
+import { Directive, directive } from 'lit/directive.js';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import { DisabledMixin } from '@vaadin/a11y-base/src/disabled-mixin.js';
 import { FocusMixin } from '@vaadin/a11y-base/src/focus-mixin.js';
@@ -13,6 +14,37 @@ import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js'
 import { I18nMixin } from '@vaadin/component-base/src/i18n-mixin.js';
 import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
+
+class ItemComponentDirective extends Directive {
+  update(part, [{ component, text }]) {
+    const { parentNode, startNode } = part;
+
+    const newNode = component || document.createTextNode(text);
+    const oldNode = this.getOldNode(part);
+
+    if (oldNode === newNode) {
+      return noChange;
+    } else if (oldNode && newNode) {
+      parentNode.replaceChild(newNode, oldNode);
+    } else if (oldNode) {
+      parentNode.removeChild(oldNode);
+    } else if (newNode) {
+      startNode.after(newNode);
+    }
+
+    return noChange;
+  }
+
+  getOldNode(part) {
+    const { startNode, endNode } = part;
+    if (startNode.nextSibling === endNode) {
+      return;
+    }
+    return startNode.nextSibling;
+  }
+}
+
+const componentDirective = directive(ItemComponentDirective);
 
 const DEFAULT_I18N = {
   moreOptions: 'More options',
@@ -609,23 +641,17 @@ export const MenuBarMixin = (superClass) =>
 
     /** @private */
     __renderButtons(items = []) {
-      const renderContent = (item) => {
-        if (item.component) {
-          const component = this.__getComponent(item);
-          item.component = component;
-          // Save item for overflow menu
-          component.item = item;
-          return component;
-        } else if (item.text) {
-          return item.text;
-        }
-      };
-
       render(
         html`
           ${items.map((item) => {
             const itemCopy = { ...item };
             const hasChildren = Boolean(item && item.children);
+
+            if (itemCopy.component) {
+              const component = this.__getComponent(itemCopy);
+              itemCopy.component = component;
+              component.item = itemCopy;
+            }
 
             return html`
               <vaadin-menu-bar-button
@@ -635,8 +661,8 @@ export const MenuBarMixin = (superClass) =>
                 aria-haspopup="${ifDefined(hasChildren ? 'true' : nothing)}"
                 aria-expanded="${ifDefined(hasChildren ? 'false' : nothing)}"
                 class="${ifDefined(item.className)}"
-                theme="${ifDefined(this.__getButtonTheme(itemCopy, this._theme) || nothing)}"
-                >${renderContent(itemCopy)}</vaadin-menu-bar-button
+                theme="${ifDefined(this.__getButtonTheme(item, this._theme) || nothing)}"
+                >${componentDirective(itemCopy)}</vaadin-menu-bar-button
               >
             `;
           })}
