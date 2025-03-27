@@ -136,4 +136,30 @@ describe('View transitions', () => {
       expect(layout.hasAttribute('transition')).to.be.false;
     });
   });
+
+  describe('initial rendering', () => {
+    beforeEach(() => {
+      layout = document.createElement('vaadin-master-detail-layout');
+    });
+
+    afterEach(() => {
+      layout.remove();
+    });
+
+    it('should not use view transition during initial rendering', async () => {
+      document.body.appendChild(layout);
+
+      const detail = document.createElement('detail-content');
+      await layout.setDetail(detail);
+
+      expect(startViewTransitionSpy.called).to.be.false;
+
+      // Wait for initial render to complete.
+      await layout.updateComplete;
+
+      await layout.setDetail(null);
+
+      expect(startViewTransitionSpy.calledOnce).to.be.true;
+    });
+  });
 });
