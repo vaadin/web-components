@@ -8,6 +8,24 @@ import { assertFormLayoutGrid, assertFormLayoutLabelPosition } from './helpers.j
 describe('form-layout auto responsive', () => {
   let container, layout, fields;
 
+  describe('column width', () => {
+    beforeEach(() => {
+      layout = fixtureSync(`
+        <vaadin-form-layout auto-responsive>
+          <input placeholder="First name">
+          <input placeholder="Last name">
+        </vaadin-form-layout>
+      `);
+    });
+
+    it('should update --_column-width on columnWidth change', () => {
+      layout.columnWidth = '100px';
+      expect(layout.style.getPropertyValue('--_column-width')).to.equal('100px');
+      layout.columnWidth = null;
+      expect(layout.style.getPropertyValue('--_column-width')).to.equal('');
+    });
+  });
+
   describe('auto rows', () => {
     beforeEach(async () => {
       layout = fixtureSync(`

@@ -94,9 +94,12 @@ export * from './vaadin-form-layout-mixin.js';
  *
  * To avoid manually dealing with responsive breakpoints, Form Layout provides an auto-responsive mode
  * that automatically creates and adjusts fixed-width columns based on the container's available space.
+ *
  * The [`columnWidth`](#/elements/vaadin-form-layout#property-columnWidth) and
- * [`maxColumns`](#/elements/vaadin-form-layout#property-maxColumns) properties control the column width
- * (13em by default) and the maximum number of columns (10 by default) that the Form Layout can create.
+ * [`maxColumns`](#/elements/vaadin-form-layout#property-maxColumns) properties define the width of
+ * each column and the maximum number of columns that the component can create. By default, the component
+ * creates up to 10 columns, each with a width of `12em` or the value of the `--vaadin-field-default-width`
+ * CSS custom property, if defined.
  *
  * The auto-responsive mode is disabled by default. To enable it for an individual instance, set the
  * `auto-responsive` attribute:

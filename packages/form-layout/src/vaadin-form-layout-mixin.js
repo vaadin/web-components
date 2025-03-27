@@ -131,14 +131,14 @@ export const FormLayoutMixin = (superClass) =>
          * When `autoResponsive` is enabled, defines the width of each column.
          * The value must be defined in CSS length units, e.g. `100px`.
          *
-         * The default value is `13em`.
+         * If the column width isn't explicitly set, it defaults to `12em`
+         * or `--vaadin-field-default-width` if that CSS property is defined.
          *
          * @attr {string} column-width
          */
         columnWidth: {
           type: String,
           sync: true,
-          value: '13em',
         },
 
         /**

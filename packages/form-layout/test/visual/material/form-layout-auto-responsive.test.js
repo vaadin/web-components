@@ -5,6 +5,8 @@ import '../../../theme/material/vaadin-form-layout.js';
 import '../../../theme/material/vaadin-form-item.js';
 import '../../../theme/material/vaadin-form-row.js';
 
+const DEFAULT_COLUMN_WIDTH = '12em';
+
 describe('form-layout auto responsive', () => {
   let container, element;
 
@@ -60,6 +62,7 @@ describe('form-layout auto responsive', () => {
     it('custom CSS properties', async () => {
       element.autoRows = true;
       element.maxColumns = 2;
+      element.style.setProperty('--vaadin-field-default-width', '320px');
       element.style.setProperty('--vaadin-form-layout-row-spacing', '64px');
       element.style.setProperty('--vaadin-form-layout-column-spacing', '64px');
       await nextResize(element);
@@ -172,7 +175,7 @@ describe('form-layout auto responsive', () => {
     });
 
     it('expandColumns in narrow container', async () => {
-      container.style.width = `calc(${element.columnWidth} + 6em)`;
+      container.style.width = `calc(${DEFAULT_COLUMN_WIDTH} + 6em)`;
       element.expandFields = true;
       element.expandColumns = true;
       await nextResize(element);
@@ -188,7 +191,7 @@ describe('form-layout auto responsive', () => {
     });
 
     it('labelsAside in narrow container', async () => {
-      container.style.width = `calc(${element.columnWidth} + 6em)`;
+      container.style.width = `calc(${DEFAULT_COLUMN_WIDTH} + 6em)`;
       element.expandFields = true;
       element.labelsAside = true;
       await nextResize(element);
@@ -204,7 +207,7 @@ describe('form-layout auto responsive', () => {
     });
 
     it('labelsAside + expandColumns in narrow container', async () => {
-      container.style.width = `calc(${element.columnWidth} + 6em)`;
+      container.style.width = `calc(${DEFAULT_COLUMN_WIDTH} + 6em)`;
       element.expandFields = true;
       element.labelsAside = true;
       element.expandColumns = true;
@@ -297,7 +300,7 @@ describe('form-layout auto responsive', () => {
     });
 
     it('colspan in narrow container', async () => {
-      container.style.width = `calc(${element.columnWidth} + 6em)`;
+      container.style.width = `calc(${DEFAULT_COLUMN_WIDTH} + 6em)`;
       await nextResize(element);
       await visualDiff(container, 'colspan-narrow-container');
     });
