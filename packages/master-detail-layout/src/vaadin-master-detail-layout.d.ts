@@ -109,6 +109,13 @@ declare class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ThemableMix
   stackThreshold: string | null | undefined;
 
   /**
+   * When true, the layout does not use animated transitions for the detail area.
+   *
+   * @attr {boolean} no-animation
+   */
+  noAnimation: boolean;
+
+  /**
    * Sets the detail element to be displayed in the detail area and starts a
    * view transition that animates adding, replacing or removing the detail
    * area. During the view transition, the element is added to the DOM and
