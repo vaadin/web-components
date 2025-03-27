@@ -34,6 +34,14 @@
       vaadin-master-detail-layout[orientation='vertical'][overlay]::part(detail) {
         border-block-start: solid 1px #ccc;
       }
+
+      vaadin-master-detail-layout[orientation='horizontal'] > [slot='detail'] {
+        width: var(--detail-size);
+      }
+
+      vaadin-master-detail-layout[orientation='vertical'] > [slot='detail'] {
+        height: var(--detail-size);
+      }
     </style>
 
     <p>
@@ -120,18 +128,18 @@
       });
 
       document.querySelector('#stack').addEventListener('change', (e) => {
-        layout.stackThreshold = e.target.checked ? '30rem' : null;
+        layout.stackThreshold = e.target.checked ? '600px' : null;
       });
 
       document.querySelector('#set-small-detail').addEventListener('click', () => {
         const detail = document.createElement('detail-content');
-        detail.style.width = '200px';
+        detail.style.setProperty('--detail-size', '200px');
         layout.setDetail(detail);
       });
 
       document.querySelector('#set-large-detail').addEventListener('click', () => {
         const detail = document.createElement('detail-content');
-        detail.style.width = '600px';
+        detail.style.setProperty('--detail-size', '600px');
         layout.setDetail(detail);
       });
 
