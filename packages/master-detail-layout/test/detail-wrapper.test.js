@@ -2,10 +2,11 @@ import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../vaadin-master-detail-layout.js';
+import '../vaadin-master-detail-layout-detail.js';
 import './helpers/master-content.js';
 import './helpers/detail-content.js';
 
-describe('View transitions', () => {
+describe('Detail wrapper', () => {
   const originalStartViewTransition = document.startViewTransition;
 
   let layout, detailsWrapper;
@@ -38,6 +39,14 @@ describe('View transitions', () => {
 
   after(() => {
     document.startViewTransition = originalStartViewTransition;
+  });
+
+  it('should detect parent layout when connected', () => {
+    expect(detailsWrapper.__layout).to.equal(layout);
+
+    detailsWrapper.remove();
+
+    expect(detailsWrapper.__layout).to.be.null;
   });
 
   ['supported', 'unsupported'].forEach((support) => {
