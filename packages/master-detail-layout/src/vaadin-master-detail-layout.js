@@ -530,48 +530,6 @@ class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ElementMixin(Themab
     const { backgroundPositionY } = getComputedStyle(this.$.master, '::before');
     return parseFloat(backgroundPositionY);
   }
-
-  /**
-   * Sets the detail element to be displayed in the detail area and starts a
-   * view transition that animates adding, replacing or removing the detail
-   * area. During the view transition, the element is added to the DOM and
-   * assigned to the `detail` slot. Any previous detail element is removed.
-   * When passing null as the element, the current detail element is removed.
-   *
-   * If the browser does not support view transitions, the respective updates
-   * are applied immediately without starting a transition.
-   *
-   * @param element the new detail element, or null to remove the current detail
-   * @returns {Promise<void>}
-   */
-  async setDetail(element) {
-    // Don't start a transition if detail didn't change
-    const currentDetail = this.querySelector('[slot="detail"]');
-    if ((element || null) === currentDetail) {
-      return;
-    }
-
-    const updateSlot = () => {
-      // Remove old content
-      this.querySelectorAll('[slot="detail"]').forEach((oldElement) => oldElement.remove());
-      // Add new content
-      if (element) {
-        element.setAttribute('slot', 'detail');
-        this.appendChild(element);
-      }
-    };
-
-    if (typeof document.startViewTransition === 'function' && !this.noAnimation) {
-      const hasDetail = !!currentDetail;
-      const transitionType = hasDetail && element ? 'replace' : hasDetail ? 'remove' : 'add';
-      this.setAttribute('transition', transitionType);
-      const transition = document.startViewTransition(updateSlot);
-      await transition.finished;
-      this.removeAttribute('transition');
-    } else {
-      updateSlot();
-    }
-  }
 }
 
 defineCustomElement(MasterDetailLayout);
