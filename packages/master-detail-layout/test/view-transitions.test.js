@@ -8,31 +8,36 @@ import './helpers/detail-content.js';
 describe('View transitions', () => {
   const originalStartViewTransition = document.startViewTransition;
 
-  let layout;
+  let layout, detailsWrapper;
   let startViewTransitionSpy;
+  let transitionType;
+  let beforeTransitionChildren, afterTransitionChildren;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     startViewTransitionSpy = sinon.spy();
     document.startViewTransition = (callback) => {
+      beforeTransitionChildren = Array.from(detailsWrapper.children);
+      transitionType = layout.getAttribute('transition');
       callback();
+      afterTransitionChildren = Array.from(detailsWrapper.children);
       startViewTransitionSpy();
       return {
         finished: Promise.resolve(),
       };
     };
+
+    layout = fixtureSync(`
+      <vaadin-master-detail-layout>
+        <master-content></master-content>
+        <vaadin-master-detail-layout-detail></vaadin-master-detail-layout-detail>
+      </vaadin-master-detail-layout>
+    `);
+    detailsWrapper = layout.querySelector('vaadin-master-detail-layout-detail');
+    await nextRender();
   });
 
   after(() => {
     document.startViewTransition = originalStartViewTransition;
-  });
-
-  beforeEach(async () => {
-    layout = fixtureSync(`
-      <vaadin-master-detail-layout>
-        <master-content></master-content>
-      </vaadin-master-detail-layout>
-    `);
-    await nextRender();
   });
 
   ['supported', 'unsupported'].forEach((support) => {
@@ -43,98 +48,93 @@ describe('View transitions', () => {
 
       // Add details
       const detail = document.createElement('detail-content');
-      await layout.setDetail(detail);
+      detailsWrapper.append(detail);
+      await nextRender();
 
-      const result = layout.querySelector('[slot="detail"]');
-      expect(result).to.equal(detail);
+      expect(detailsWrapper.getAttribute('slot')).to.equal('detail');
+      expect(layout.hasAttribute('has-detail')).to.be.true;
 
       // Replace details
       const newDetail = document.createElement('detail-content');
-      await layout.setDetail(newDetail);
+      detail.remove();
+      detailsWrapper.append(newDetail);
+      await nextRender();
 
-      const newResult = layout.querySelector('[slot="detail"]');
-      expect(newResult).to.equal(newDetail);
-      expect(result.isConnected).to.be.false;
+      expect(detailsWrapper.getAttribute('slot')).to.equal('detail');
+      expect(layout.hasAttribute('has-detail')).to.be.true;
 
       // Remove details
-      await layout.setDetail(null);
+      newDetail.remove();
+      await nextRender();
 
-      const emptyResult = layout.querySelector('[slot="detail"]');
-      expect(emptyResult).to.be.null;
-      expect(newResult.isConnected).to.be.false;
+      expect(detailsWrapper.getAttribute('slot')).to.equal('detail-hidden');
+      expect(layout.hasAttribute('has-detail')).to.be.false;
     });
   });
 
-  it('should not start a transition if detail element did not change', async () => {
-    // Add initial detail
+  it('should start a transition if details wrapper slotted content changes', async () => {
     const detail = document.createElement('detail-content');
-    await layout.setDetail(detail);
+    detailsWrapper.append(detail);
+    await nextRender();
 
     expect(startViewTransitionSpy.calledOnce).to.be.true;
 
-    // Try to set the same detail again
-    startViewTransitionSpy.resetHistory();
-    await layout.setDetail(detail);
+    detail.remove();
+    await nextRender();
 
-    expect(startViewTransitionSpy.called).to.be.false;
-
-    // Remove the detail
-    startViewTransitionSpy.resetHistory();
-    await layout.setDetail(null);
-
-    expect(startViewTransitionSpy.calledOnce).to.be.true;
-
-    // Remove the detail again
-    startViewTransitionSpy.resetHistory();
-    await layout.setDetail(null);
-
-    expect(startViewTransitionSpy.called).to.be.false;
+    expect(startViewTransitionSpy.calledTwice).to.be.true;
   });
 
-  describe('transition types', () => {
-    let resolveTransition;
+  it('should use the correct transition type', async () => {
+    // "add" transition
+    const addDetail = document.createElement('detail-content');
+    detailsWrapper.append(addDetail);
+    await nextRender();
 
-    beforeEach(() => {
-      document.startViewTransition = (callback) => {
-        callback();
-        return {
-          finished: new Promise((resolve) => {
-            resolveTransition = resolve;
-          }),
-        };
-      };
-    });
+    expect(transitionType).to.equal('add');
+    expect(layout.hasAttribute('transition')).to.be.false;
 
-    it('should use the correct transition type', async () => {
-      // "add" transition
-      const addDetail = document.createElement('detail-content');
-      const addPromise = layout.setDetail(addDetail);
+    // "replace" transition
+    const replaceDetail = document.createElement('detail-content');
+    addDetail.remove();
+    detailsWrapper.append(replaceDetail);
+    await nextRender();
 
-      expect(layout.getAttribute('transition')).to.equal('add');
+    expect(transitionType).to.equal('replace');
+    expect(layout.hasAttribute('transition')).to.be.false;
 
-      resolveTransition();
-      await addPromise;
-      expect(layout.hasAttribute('transition')).to.be.false;
+    // "remove" transition
+    replaceDetail.remove();
+    await nextRender();
 
-      // "replace" transition
-      const replaceDetail = document.createElement('detail-content');
-      const replacePromise = layout.setDetail(replaceDetail);
+    expect(transitionType).to.equal('remove');
+    expect(layout.hasAttribute('transition')).to.be.false;
+  });
 
-      expect(layout.getAttribute('transition')).to.equal('replace');
+  it('should replay DOM operations when starting a transition', async () => {
+    // "add" transition
+    const addDetail = document.createElement('detail-content');
+    detailsWrapper.append(addDetail);
+    await nextRender();
 
-      resolveTransition();
-      await replacePromise;
-      expect(layout.hasAttribute('transition')).to.be.false;
+    expect(beforeTransitionChildren).to.deep.equal([]);
+    expect(afterTransitionChildren).to.deep.equal([addDetail]);
 
-      // "remove" transition
-      const removePromise = layout.setDetail(null);
+    // "replace" transition
+    const replaceDetail = document.createElement('detail-content');
+    addDetail.remove();
+    detailsWrapper.append(replaceDetail);
+    await nextRender();
 
-      expect(layout.getAttribute('transition')).to.equal('remove');
+    expect(beforeTransitionChildren).to.deep.equal([addDetail]);
+    expect(afterTransitionChildren).to.deep.equal([replaceDetail]);
 
-      resolveTransition();
-      await removePromise;
-      expect(layout.hasAttribute('transition')).to.be.false;
-    });
+    // "remove" transition
+    replaceDetail.remove();
+    await nextRender();
+
+    expect(beforeTransitionChildren).to.deep.equal([replaceDetail]);
+    expect(afterTransitionChildren).to.deep.equal([]);
   });
 
   describe('noAnimation', () => {
@@ -142,15 +142,59 @@ describe('View transitions', () => {
       layout.noAnimation = true;
 
       const detail = document.createElement('detail-content');
-      await layout.setDetail(detail);
+      detailsWrapper.append(detail);
+      await nextRender();
 
       expect(startViewTransitionSpy.called).to.be.false;
 
       layout.noAnimation = false;
 
-      await layout.setDetail(null);
+      detail.remove();
+      await nextRender();
 
       expect(startViewTransitionSpy.calledOnce).to.be.true;
+    });
+  });
+
+  describe('skipping transitions', () => {
+    let resolveTransition;
+    let finishedPromise;
+
+    beforeEach(() => {
+      document.startViewTransition = (callback) => {
+        callback();
+        startViewTransitionSpy();
+        finishedPromise = new Promise((resolve) => {
+          resolveTransition = resolve;
+        });
+        return {
+          finished: finishedPromise,
+        };
+      };
+    });
+
+    it('should skip transition if a transition is already in progress', async () => {
+      // Add / remove elements without resolving the first transition
+      const detail = document.createElement('detail-content');
+      detailsWrapper.append(detail);
+      await nextRender();
+
+      const newDetail = document.createElement('detail-content');
+      detailsWrapper.append(newDetail);
+      await nextRender();
+
+      detail.remove();
+      await nextRender();
+
+      resolveTransition();
+      await finishedPromise;
+
+      // Should only start one transition
+      expect(startViewTransitionSpy.calledOnce).to.be.true;
+
+      // Should only have the last detail
+      expect(detailsWrapper.children.length).to.equal(1);
+      expect(detailsWrapper.children[0]).to.equal(newDetail);
     });
   });
 });

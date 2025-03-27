@@ -576,8 +576,6 @@ class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ElementMixin(Themab
 
 defineCustomElement(MasterDetailLayout);
 
-const supportViewTransitions = typeof document.startViewTransition === 'function';
-
 class MasterDetailLayoutDetail extends ElementMixin(LitElement) {
   static get is() {
     return 'vaadin-master-detail-layout-detail';
@@ -605,6 +603,7 @@ class MasterDetailLayoutDetail extends ElementMixin(LitElement) {
   /** @private */
   async __onSlotChange(e) {
     // TODO: Ignore text nodes?
+    const supportViewTransitions = typeof document.startViewTransition === 'function';
     const nextChildren = e.target.assignedNodes();
     const hasNextChildren = nextChildren.length > 0;
     const hasPreviousChildren = this.__previousChildren.length > 0;
@@ -623,7 +622,7 @@ class MasterDetailLayoutDetail extends ElementMixin(LitElement) {
       this.__previousChildren = nextChildren;
     };
 
-    if (!layout || !supportViewTransitions || this.__transitioning) {
+    if (!layout || layout.noAnimation || !supportViewTransitions || this.__transitioning) {
       updateSlot();
       return;
     }
