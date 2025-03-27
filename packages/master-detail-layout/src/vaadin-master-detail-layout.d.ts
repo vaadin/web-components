@@ -111,7 +111,7 @@ declare class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ThemableMix
   /**
    * When true, the layout does not use animated transitions for the detail area.
    *
-   * @attr {boolean} no-animations
+   * @attr {boolean} no-animation
    */
   noAnimation: boolean;
 
