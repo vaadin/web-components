@@ -50,7 +50,7 @@ describe('Detail wrapper', () => {
   });
 
   ['supported', 'unsupported'].forEach((support) => {
-    it(`should update details slot if view transitions are ${support}`, async () => {
+    it(`should update slot name if view transitions are ${support}`, async () => {
       if (support === 'unsupported') {
         document.startViewTransition = null;
       }
@@ -81,7 +81,53 @@ describe('Detail wrapper', () => {
     });
   });
 
-  it('should start a transition if details wrapper slotted content changes', async () => {
+  it('should update slot name when disconnected', async () => {
+    detailsWrapper.remove();
+    const detail = document.createElement('detail-content');
+    detailsWrapper.append(detail);
+    layout.append(detailsWrapper);
+    await nextRender();
+
+    expect(detailsWrapper.getAttribute('slot')).to.equal('detail');
+    expect(detailsWrapper.__previousChildren).to.deep.equal([detail]);
+    expect(layout.hasAttribute('has-detail')).to.be.true;
+
+    detailsWrapper.remove();
+    detail.remove();
+    layout.append(detailsWrapper);
+    await nextRender();
+
+    expect(detailsWrapper.getAttribute('slot')).to.equal('detail-hidden');
+    expect(detailsWrapper.__previousChildren).to.deep.equal([]);
+    expect(layout.hasAttribute('has-detail')).to.be.false;
+  });
+
+  it('should ignore non-element child nodes', async () => {
+    const textNode = document.createTextNode('text');
+    detailsWrapper.append(textNode);
+    await nextRender();
+
+    expect(detailsWrapper.getAttribute('slot')).to.equal('detail-hidden');
+    expect(startViewTransitionSpy.called).to.be.false;
+
+    const commentNode = document.createComment('comment');
+    detailsWrapper.innerHTML = '';
+    detailsWrapper.append(commentNode);
+    await nextRender();
+
+    expect(detailsWrapper.getAttribute('slot')).to.equal('detail-hidden');
+    expect(startViewTransitionSpy.called).to.be.false;
+
+    const detail = document.createElement('detail-content');
+    detailsWrapper.innerHTML = '';
+    detailsWrapper.append(detail);
+    await nextRender();
+
+    expect(detailsWrapper.getAttribute('slot')).to.equal('detail');
+    expect(startViewTransitionSpy.calledOnce).to.be.true;
+  });
+
+  it('should start a transition when slotted content changes', async () => {
     const detail = document.createElement('detail-content');
     detailsWrapper.append(detail);
     await nextRender();
@@ -188,11 +234,11 @@ describe('Detail wrapper', () => {
       detailsWrapper.append(detail);
       await nextRender();
 
-      const newDetail = document.createElement('detail-content');
-      detailsWrapper.append(newDetail);
+      detail.remove();
       await nextRender();
 
-      detail.remove();
+      const newDetail = document.createElement('detail-content');
+      detailsWrapper.append(newDetail);
       await nextRender();
 
       resolveTransition();

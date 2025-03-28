@@ -30,15 +30,17 @@ class MasterDetailLayoutDetail extends ElementMixin(LitElement) {
 
   constructor() {
     super();
-    this.setAttribute('slot', 'detail-hidden');
     this.__previousChildren = [];
   }
 
+  /** @protected */
   connectedCallback() {
     super.connectedCallback();
+    this.__updateSlotName();
     this.__layout = this.closest('vaadin-master-detail-layout');
   }
 
+  /** @protected */
   disconnectedCallback() {
     super.disconnectedCallback();
     this.__layout = null;
@@ -50,26 +52,29 @@ class MasterDetailLayoutDetail extends ElementMixin(LitElement) {
   }
 
   /** @private */
-  async __onSlotChange(e) {
+  __updateSlotName() {
+    const hasChildren = this.children.length > 0;
+    const slotName = hasChildren ? 'detail' : 'detail-hidden';
+    this.setAttribute('slot', slotName);
+  }
+
+  /** @private */
+  async __onSlotChange() {
     const supportViewTransitions = typeof document.startViewTransition === 'function';
-    const nextChildren = e.target.assignedNodes();
+    const nextChildren = Array.from(this.children);
     const hasNextChildren = nextChildren.length > 0;
     const hasPreviousChildren = this.__previousChildren.length > 0;
+    const noChange = !hasNextChildren && !hasPreviousChildren;
 
     const updateSlot = () => {
-      if (hasNextChildren) {
-        this.setAttribute('slot', 'detail');
-      } else {
-        this.setAttribute('slot', 'detail-hidden');
-      }
-
+      this.__updateSlotName();
+      this.__previousChildren = nextChildren;
       if (this.__layout) {
         this.__layout.__updateDetailSlot();
       }
-      this.__previousChildren = nextChildren;
     };
 
-    if (!this.__layout || this.__layout.noAnimation || !supportViewTransitions || this.__transitioning) {
+    if (!this.__layout || noChange || this.__layout.noAnimation || !supportViewTransitions || this.__transitioning) {
       updateSlot();
       return;
     }
