@@ -236,10 +236,7 @@ class Card extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
         height: auto;
         aspect-ratio: var(--vaadin-card-media-aspect-ratio, 16/9);
         object-fit: cover;
-      }
-
-      /* Fixes an issue where an icon overflows the card boundaries on Firefox: https://github.com/vaadin/web-components/issues/8641 */
-      :host(:is([theme~='cover-media'], [theme~='stretch-media'])) ::slotted([slot='media']:is(vaadin-icon)) {
+        /* Fixes an issue where an icon overflows the card boundaries on Firefox: https://github.com/vaadin/web-components/issues/8641 */
         overflow: hidden;
       }
 
