@@ -15,10 +15,10 @@ const requiredField = css`
     color: var(--vaadin-input-field-label-color, var(--lumo-secondary-text-color));
     font-weight: var(--vaadin-input-field-label-font-weight, 500);
     font-size: var(--vaadin-input-field-label-font-size, var(--lumo-font-size-s));
-    margin-left: calc(var(--lumo-border-radius-m) / 4);
     transition: color 0.2s;
     line-height: 1;
     padding-right: 1em;
+    padding-left: calc(var(--lumo-border-radius-m) / 4);
     padding-bottom: 0.5em;
     /* As a workaround for diacritics being cut off, add a top padding and a
     negative margin to compensate */
