@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, nextResize } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame, nextResize } from '@vaadin/testing-helpers';
 import '../../src/vaadin-form-layout.js';
 
 const DEFAULT_COLUMN_WIDTH = '12em';
@@ -159,6 +159,43 @@ describe('vaadin-form-layout', () => {
 
     it('default', async () => {
       await expect(layout).dom.to.equalSnapshot();
+    });
+  });
+
+  describe('responsive-steps', () => {
+    beforeEach(async () => {
+      layout = fixtureSync(`
+        <vaadin-form-layout>
+          <input placeholder="First name" />
+          <input placeholder="Last name" />
+        </vaadin-form-layout>
+      `);
+      layout.responsiveSteps = [{ columns: 2, labelsPosition: 'top' }];
+      await nextFrame();
+    });
+
+    describe('host', () => {
+      it('default', async () => {
+        await expect(layout).dom.to.equalSnapshot();
+      });
+
+      it('switching to autoResponsive', async () => {
+        layout.autoResponsive = true;
+        await nextResize(layout);
+        await expect(layout).dom.to.equalSnapshot();
+      });
+    });
+
+    describe('shadow', () => {
+      it('default', async () => {
+        await expect(layout).shadowDom.to.equalSnapshot();
+      });
+
+      it('switching to autoResponsive', async () => {
+        layout.autoResponsive = true;
+        await nextResize(layout);
+        await expect(layout).shadowDom.to.equalSnapshot();
+      });
     });
   });
 });

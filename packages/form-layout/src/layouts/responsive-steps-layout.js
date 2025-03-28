@@ -54,6 +54,24 @@ export class ResponsiveStepsLayout extends AbstractLayout {
   }
 
   /** @override */
+  disconnect() {
+    if (!this.isConnected) {
+      return;
+    }
+
+    super.disconnect();
+
+    const { host } = this;
+    host.$.layout.style.removeProperty('opacity');
+    [...host.children].forEach((child) => {
+      child.style.removeProperty('width');
+      child.style.removeProperty('margin-left');
+      child.style.removeProperty('margin-right');
+      child.removeAttribute('label-position');
+    });
+  }
+
+  /** @override */
   setProps(props) {
     const { responsiveSteps } = props;
     if (!Array.isArray(responsiveSteps)) {
@@ -206,6 +224,10 @@ export class ResponsiveStepsLayout extends AbstractLayout {
 
   /** @private */
   __selectResponsiveStep() {
+    if (!this.isConnected) {
+      return;
+    }
+
     const { host, props } = this;
     // Iterate through responsiveSteps and choose the step
     let selectedStep;
