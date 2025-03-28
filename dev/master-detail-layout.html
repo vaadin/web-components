@@ -45,7 +45,6 @@
     </style>
 
     <p>
-      <vaadin-checkbox id="showDetail" label="Show detail" checked></vaadin-checkbox>
       <vaadin-checkbox id="detailSize" label="Set detail size"></vaadin-checkbox>
       <vaadin-checkbox id="detailMinSize" label="Set detail min-size"></vaadin-checkbox>
       <vaadin-checkbox id="masterSize" label="Set master size"></vaadin-checkbox>
@@ -54,16 +53,15 @@
       <vaadin-checkbox id="vertical" label="Use vertical orientation"></vaadin-checkbox>
       <vaadin-checkbox id="maxWidth" label="Use max-width on the host"></vaadin-checkbox>
       <vaadin-checkbox id="maxHeight" label="Use max-height on the host"></vaadin-checkbox>
-      <vaadin-checkbox id="forceOverlay" label="Force overlay"></vaadin-checkbox>
+      <vaadin-checkbox id="forceOverlay" label="Force overlay" checked></vaadin-checkbox>
       <vaadin-checkbox id="stack" label="Set stack threshold"></vaadin-checkbox>
       <button id="set-small-detail">Set small detail</button>
       <button id="set-large-detail">Set large detail</button>
       <button id="clear-detail">Clear detail</button>
     </p>
 
-    <vaadin-master-detail-layout>
+    <vaadin-master-detail-layout force-overlay>
       <master-content></master-content>
-      <detail-content slot="detail"></detail-content>
     </vaadin-master-detail-layout>
 
     <script type="module">
@@ -73,15 +71,6 @@
       import '@vaadin/master-detail-layout/test/helpers/detail-content.js';
 
       const layout = document.querySelector('vaadin-master-detail-layout');
-      const detailContent = document.querySelector('detail-content');
-
-      document.querySelector('#showDetail').addEventListener('change', (e) => {
-        if (e.target.checked) {
-          layout.append(detailContent);
-        } else {
-          detailContent.remove();
-        }
-      });
 
       document.querySelector('#detailSize').addEventListener('change', (e) => {
         layout.detailSize = e.target.checked ? '300px' : null;

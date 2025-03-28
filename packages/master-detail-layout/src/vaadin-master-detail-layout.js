@@ -3,15 +3,15 @@
  * Copyright (c) 2025 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { animate } from '@lit-labs/motion';
 import { css, html, LitElement, nothing } from 'lit';
+import { createRef, ref } from 'lit/directives/ref.js';
 import { getFocusableElements } from '@vaadin/a11y-base/src/focus-utils.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
-import { SlotStylesMixin } from '@vaadin/component-base/src/slot-styles-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { transitionStyles } from './vaadin-master-detail-layout-transition-styles.js';
 
 /**
  * `<vaadin-master-detail-layout>` is a web component for building UIs with a master
@@ -44,9 +44,8 @@ import { transitionStyles } from './vaadin-master-detail-layout-transition-style
  * @mixes ThemableMixin
  * @mixes ElementMixin
  * @mixes ResizeMixin
- * @mixes SlotStylesMixin
  */
-class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElement))))) {
+class MasterDetailLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElement)))) {
   static get is() {
     return 'vaadin-master-detail-layout';
   }
@@ -63,13 +62,10 @@ class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ElementMixin(Themab
         display: none !important;
       }
 
-      :host(:not([has-detail])) [part='detail'] {
-        display: none;
-      }
-
       /* Overlay mode */
       :host(:is([overlay], [stack])) {
         position: relative;
+        overflow: hidden;
       }
 
       :host(:is([overlay], [stack])[containment='layout']) [part='detail'] {
@@ -337,12 +333,21 @@ class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ElementMixin(Themab
         reflectToAttribute: true,
         sync: true,
       },
+
+      /** @private */
+      __hasDetail: {
+        type: Boolean,
+        sync: true,
+      },
     };
   }
 
-  /** @override */
-  get slotStyles() {
-    return [transitionStyles];
+  constructor() {
+    super();
+
+    // Use instead of `this.$.detail` since detail is rendered conditionally
+    this.__detailRef = createRef();
+    this.__oldContent = [];
   }
 
   /** @protected */
@@ -351,13 +356,41 @@ class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ElementMixin(Themab
       <div id="master" part="master" ?inert="${this._overlay && this.containment === 'layout'}">
         <slot></slot>
       </div>
-      <div
-        id="detail"
-        part="detail"
-        role="${this._overlay || this._stack ? 'dialog' : nothing}"
-        aria-modal="${this._overlay && this.containment === 'viewport' ? 'true' : nothing}"
-      >
-        <slot name="detail" @slotchange="${this.__onDetailSlotChange}"></slot>
+      ${
+        this.__hasDetail
+          ? html`
+              <div
+                id="detail"
+                part="detail"
+                role="${this._overlay || this._stack ? 'dialog' : nothing}"
+                aria-modal="${this._overlay && this.containment === 'viewport' ? 'true' : nothing}"
+                ${ref(this.__detailRef)}
+                ${animate({
+                  in: this._overlay ? [{ transform: 'translateX(100%)' }] : [],
+                  out: this._overlay ? [{ transform: 'translateX(100%)' }] : [],
+                  guard: () => this.__hasDetail, // Only animate when detail changes
+                  onComplete: () => {
+                    // Remove old elements on animation complete
+                    if (this.__oldContent.length) {
+                      this.__oldContent.forEach((el) => el.remove());
+                      this.__oldContent = [];
+                    }
+
+                    if (this.__newContent) {
+                      // Insert new content and trigger another animation
+                      this.__hasDetail = true;
+                      this.__newContent.setAttribute('slot', 'detail');
+                      this.appendChild(this.__newContent);
+                      this.__newContent = null;
+                    }
+                  },
+                })}
+              >
+                <slot name="detail"></slot>
+              </div>
+            `
+          : nothing
+      }
       </div>
     `;
   }
@@ -468,7 +501,7 @@ class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ElementMixin(Themab
       }
     }
 
-    if (!this.hasAttribute('has-detail')) {
+    if (!this.__hasDetail) {
       return;
     }
 
@@ -481,7 +514,12 @@ class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ElementMixin(Themab
 
   /** @private */
   __detectHorizontalMode() {
-    const detailWidth = this.$.detail.offsetWidth;
+    const detail = this.__detailRef.value;
+    if (!detail) {
+      return;
+    }
+
+    const detailWidth = detail.offsetWidth;
 
     // Detect minimum width needed by master content. Use max-width to ensure
     // the layout can switch back to split mode once there is enough space.
@@ -538,32 +576,33 @@ class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ElementMixin(Themab
    * @param element the new detail element, or null to remove the current detail
    * @returns {Promise<void>}
    */
-  async setDetail(element) {
+  setDetail(element) {
     // Don't start a transition if detail didn't change
     const currentDetail = this.querySelector('[slot="detail"]');
     if ((element || null) === currentDetail) {
       return;
     }
 
-    const updateSlot = () => {
-      // Remove old content
-      this.querySelectorAll('[slot="detail"]').forEach((oldElement) => oldElement.remove());
-      // Add new content
-      if (element) {
+    if (!element) {
+      this.__hasDetail = false;
+    }
+
+    // Remove old content
+    this.querySelectorAll('[slot="detail"]').forEach((oldElement) => {
+      this.__oldContent.push(oldElement);
+    });
+
+    if (element) {
+      if (!currentDetail) {
+        // Add new content
+        this.__hasDetail = true;
         element.setAttribute('slot', 'detail');
         this.appendChild(element);
+      } else {
+        // Replace content
+        this.__newContent = element;
+        this.__hasDetail = false;
       }
-    };
-
-    if (typeof document.startViewTransition === 'function' && !this.noAnimation) {
-      const hasDetail = !!currentDetail;
-      const transitionType = hasDetail && element ? 'replace' : hasDetail ? 'remove' : 'add';
-      this.setAttribute('transition', transitionType);
-      const transition = document.startViewTransition(updateSlot);
-      await transition.finished;
-      this.removeAttribute('transition');
-    } else {
-      updateSlot();
     }
   }
 }

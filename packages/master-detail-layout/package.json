@@ -34,6 +34,7 @@
     "web-component"
   ],
   "dependencies": {
+    "@lit-labs/motion": "^1.0.8",
     "@vaadin/a11y-base": "24.8.0-alpha5",
     "@vaadin/component-base": "24.8.0-alpha5",
     "@vaadin/vaadin-lumo-styles": "24.8.0-alpha5",
