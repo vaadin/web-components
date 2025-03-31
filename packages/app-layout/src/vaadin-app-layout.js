@@ -54,6 +54,7 @@ registerStyles('vaadin-app-layout', appLayoutStyles, { moduleId: 'vaadin-app-lay
  *
  * Part name     | Description
  * --------------|---------------------------------------------------------|
+ * `backdrop`    | Backdrop covering the layout when drawer is open as an overlay
  * `navbar`      | Container for the navigation bar
  * `drawer`      | Container for the drawer area
  *
