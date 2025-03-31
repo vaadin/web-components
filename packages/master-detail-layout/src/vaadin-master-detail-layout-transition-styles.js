@@ -6,6 +6,14 @@
 import { css } from 'lit';
 
 export const transitionStyles = css`
+  html:not([dir='rtl']) {
+    --_vaadin-master-detail-layout-dir-multiplier: 1;
+  }
+
+  html[dir='rtl'] {
+    --_vaadin-master-detail-layout-dir-multiplier: -1;
+  }
+
   /* Overlay - horizontal - add */
 
   vaadin-master-detail-layout[overlay][orientation='horizontal'][transition='add']::part(detail) {
@@ -22,7 +30,7 @@ export const transitionStyles = css`
 
   @keyframes vaadin-master-detail-layout-overlay-horizontal-detail-add {
     from {
-      transform: translateX(100%);
+      transform: translateX(calc(100% * var(--_vaadin-master-detail-layout-dir-multiplier)));
     }
   }
 
@@ -42,7 +50,7 @@ export const transitionStyles = css`
 
   @keyframes vaadin-master-detail-layout-overlay-horizontal-detail-remove {
     to {
-      transform: translateX(100%);
+      transform: translateX(calc(100% * var(--_vaadin-master-detail-layout-dir-multiplier)));
     }
   }
 
@@ -66,14 +74,14 @@ export const transitionStyles = css`
 
   @keyframes vaadin-master-detail-layout-stack-horizontal-add-new {
     from {
-      transform: translateX(100px);
+      transform: translateX(calc(100px * var(--_vaadin-master-detail-layout-dir-multiplier)));
       opacity: 0;
     }
   }
 
   @keyframes vaadin-master-detail-layout-stack-horizontal-add-old {
     to {
-      transform: translateX(-100px);
+      transform: translateX(calc(-100px * var(--_vaadin-master-detail-layout-dir-multiplier)));
       opacity: 0;
     }
   }
@@ -98,14 +106,14 @@ export const transitionStyles = css`
 
   @keyframes vaadin-master-detail-layout-stack-horizontal-remove-new {
     from {
-      transform: translateX(-100px);
+      transform: translateX(calc(-100px * var(--_vaadin-master-detail-layout-dir-multiplier)));
       opacity: 0;
     }
   }
 
   @keyframes vaadin-master-detail-layout-stack-horizontal-remove-old {
     to {
-      transform: translateX(100px);
+      transform: translateX(calc(100px * var(--_vaadin-master-detail-layout-dir-multiplier)));
       opacity: 0;
     }
   }
