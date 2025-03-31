@@ -17,7 +17,6 @@ export const FormItemMixin = (superClass) =>
   class extends superClass {
     constructor() {
       super();
-      this.__updateInvalidState = this.__updateInvalidState.bind(this);
 
       /**
        * An observer for a field node to reflect its `required` and `invalid` attributes to the component.
@@ -25,7 +24,7 @@ export const FormItemMixin = (superClass) =>
        * @type {MutationObserver}
        * @private
        */
-      this.__fieldNodeObserver = new MutationObserver(() => this.__updateRequiredState(this.__fieldNode.required));
+      this.__fieldNodeObserver = new MutationObserver(() => this.__synchronizeAttributes());
 
       /**
        * The first label node in the label slot.
@@ -178,7 +177,6 @@ export const FormItemMixin = (superClass) =>
       if (this.__fieldNode) {
         // Discard the old field
         this.__unlinkLabelFromField(this.__fieldNode);
-        this.__updateRequiredState(false);
         this.__fieldNodeObserver.disconnect();
         this.__fieldNode = null;
       }
@@ -196,32 +194,23 @@ Please wrap fields with a <vaadin-custom-field> instead.`,
       });
       if (newFieldNode) {
         this.__fieldNode = newFieldNode;
-        this.__updateRequiredState(this.__fieldNode.required);
-        this.__fieldNodeObserver.observe(this.__fieldNode, { attributes: true, attributeFilter: ['required'] });
+        this.__fieldNodeObserver.observe(this.__fieldNode, {
+          attributes: true,
+          attributeFilter: ['required', 'invalid'],
+        });
 
         if (this.__labelNode) {
           this.__linkLabelToField(this.__fieldNode);
         }
       }
+
+      this.__synchronizeAttributes();
     }
 
     /** @private */
-    __updateRequiredState(required) {
-      if (required) {
-        this.setAttribute('required', '');
-        this.__fieldNode.addEventListener('blur', this.__updateInvalidState);
-        this.__fieldNode.addEventListener('change', this.__updateInvalidState);
-      } else {
-        this.removeAttribute('invalid');
-        this.removeAttribute('required');
-        this.__fieldNode.removeEventListener('blur', this.__updateInvalidState);
-        this.__fieldNode.removeEventListener('change', this.__updateInvalidState);
-      }
-    }
-
-    /** @private */
-    __updateInvalidState() {
-      const isValid = this.__getValidateFunction(this.__fieldNode).call(this.__fieldNode);
-      this.toggleAttribute('invalid', isValid === false);
+    __synchronizeAttributes() {
+      const field = this.__fieldNode;
+      this.toggleAttribute('invalid', field && field.invalid);
+      this.toggleAttribute('required', field && field.required);
     }
   };
