@@ -19,6 +19,7 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  *
  * Part name      | Description
  * ---------------|----------------------
+ * `backdrop`     | Backdrop covering the master area in the overlay mode
  * `master`       | The master area
  * `detail`       | The detail area
  *

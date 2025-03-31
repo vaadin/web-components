@@ -19,22 +19,6 @@
         border: solid 1px #ccc;
       }
 
-      vaadin-master-detail-layout[overlay]::part(master) {
-        background-color: var(--lumo-shade-20pct);
-      }
-
-      vaadin-master-detail-layout:is([overlay], [stack])::part(detail) {
-        background: #fff;
-      }
-
-      vaadin-master-detail-layout[orientation='horizontal'][overlay]::part(detail) {
-        border-inline-start: solid 1px #ccc;
-      }
-
-      vaadin-master-detail-layout[orientation='vertical'][overlay]::part(detail) {
-        border-block-start: solid 1px #ccc;
-      }
-
       vaadin-master-detail-layout[orientation='horizontal'] > [slot='detail'] {
         width: var(--detail-size);
       }
