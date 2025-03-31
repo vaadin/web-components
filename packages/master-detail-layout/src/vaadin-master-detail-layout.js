@@ -548,14 +548,16 @@ class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ElementMixin(Themab
    * @param element the new detail element, or null to remove the current detail
    * @returns {Promise<void>}
    */
-  async setDetail(element) {
+  setDetail(element) {
     // Don't start a transition if detail didn't change
     const currentDetail = this.querySelector('[slot="detail"]');
     if ((element || null) === currentDetail) {
       return;
     }
 
-    const updateSlot = () => {
+    const hasDetail = !!currentDetail;
+    const transitionType = hasDetail && element ? 'replace' : hasDetail ? 'remove' : 'add';
+    return this._startTransition(transitionType, () => {
       // Remove old content
       this.querySelectorAll('[slot="detail"]').forEach((oldElement) => oldElement.remove());
       // Add new content
@@ -563,18 +565,70 @@ class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ElementMixin(Themab
         element.setAttribute('slot', 'detail');
         this.appendChild(element);
       }
-    };
+      // Finish the transition
+      this._finishTransition();
+    });
+  }
 
-    if (typeof document.startViewTransition === 'function' && !this.noAnimation) {
-      const hasDetail = !!currentDetail;
-      const transitionType = hasDetail && element ? 'replace' : hasDetail ? 'remove' : 'add';
-      this.setAttribute('transition', transitionType);
-      const transition = document.startViewTransition(updateSlot);
-      await transition.finished;
-      this.removeAttribute('transition');
-    } else {
-      updateSlot();
+  /**
+   * Starts a view transition that animates adding, replacing or removing the
+   * detail area. Once the transition is ready and the browser has taken a
+   * snapshot of the current layout, the provided update callback is called.
+   * The callback should update the DOM, which can happen asynchronously.
+   * Once the DOM is updated, the caller must call `__finishTransition`,
+   * which results in the browser taking a snapshot of the new layout and
+   * animating the transition.
+   *
+   * If the browser does not support view transitions, or the `noAnimation`
+   * property is set, the update callback is called immediately without
+   * starting a transition.
+   *
+   * @param transitionType
+   * @param updateCallback
+   * @returns {Promise<void>}
+   * @protected
+   */
+  _startTransition(transitionType, updateCallback) {
+    const useTransition = typeof document.startViewTransition === 'function' && !this.noAnimation;
+    if (!useTransition) {
+      updateCallback();
+      return Promise.resolve();
     }
+
+    this.setAttribute('transition', transitionType);
+    this.__transition = document.startViewTransition(() => {
+      // Return a promise that can be resolved once the DOM is updated
+      return new Promise((resolve) => {
+        this.__resolveUpdateCallback = resolve;
+        // Notify the caller that the transition is ready, so that they can
+        // update the DOM
+        updateCallback();
+      });
+    });
+    return this.__transition.finished;
+  }
+
+  /**
+   * Finishes the current view transition, if any. This method should be called
+   * after the DOM has been updated to finish the transition and animate the
+   * change in the layout.
+   *
+   * @returns {Promise<void>}
+   * @protected
+   */
+  async _finishTransition() {
+    // Detect new layout mode after DOM has been updated
+    this.__detectLayoutMode();
+
+    if (!this.__transition) {
+      return Promise.resolve();
+    }
+    // Resolve the update callback to finish the transition
+    this.__resolveUpdateCallback();
+    await this.__transition.finished;
+    this.removeAttribute('transition');
+    this.__transition = null;
+    this.__resolveUpdateCallback = null;
   }
 }
 

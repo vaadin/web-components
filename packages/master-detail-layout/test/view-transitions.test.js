@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../vaadin-master-detail-layout.js';
 import './helpers/master-content.js';
@@ -14,10 +14,10 @@ describe('View transitions', () => {
   beforeEach(() => {
     startViewTransitionSpy = sinon.spy();
     document.startViewTransition = (callback) => {
-      callback();
       startViewTransitionSpy();
       return {
-        finished: Promise.resolve(),
+        // Timeout to simulate the browser not calling the update callback immediately
+        finished: aTimeout(0).then(callback),
       };
     };
   });
@@ -35,122 +35,175 @@ describe('View transitions', () => {
     await nextRender();
   });
 
-  ['supported', 'unsupported'].forEach((support) => {
-    it(`should update details slot if view transitions are ${support}`, async () => {
-      if (support === 'unsupported') {
-        document.startViewTransition = null;
-      }
+  describe('setDetail', () => {
+    ['supported', 'unsupported'].forEach((support) => {
+      it(`should update details slot if view transitions are ${support}`, async () => {
+        if (support === 'unsupported') {
+          document.startViewTransition = null;
+        }
 
-      // Add details
+        // Add details
+        const detail = document.createElement('detail-content');
+        await layout.setDetail(detail);
+        await aTimeout(0);
+
+        const result = layout.querySelector('[slot="detail"]');
+        expect(result).to.equal(detail);
+
+        // Replace details
+        const newDetail = document.createElement('detail-content');
+        await layout.setDetail(newDetail);
+        await aTimeout(0);
+
+        const newResult = layout.querySelector('[slot="detail"]');
+        expect(newResult).to.equal(newDetail);
+        expect(result.isConnected).to.be.false;
+
+        // Remove details
+        await layout.setDetail(null);
+        await aTimeout(0);
+
+        const emptyResult = layout.querySelector('[slot="detail"]');
+        expect(emptyResult).to.be.null;
+        expect(newResult.isConnected).to.be.false;
+      });
+    });
+
+    it('should not start a transition if detail element did not change', async () => {
+      // Add initial detail
       const detail = document.createElement('detail-content');
       await layout.setDetail(detail);
+      await aTimeout(0);
 
-      const result = layout.querySelector('[slot="detail"]');
-      expect(result).to.equal(detail);
+      expect(startViewTransitionSpy.calledOnce).to.be.true;
 
-      // Replace details
-      const newDetail = document.createElement('detail-content');
-      await layout.setDetail(newDetail);
+      // Try to set the same detail again
+      startViewTransitionSpy.resetHistory();
+      await layout.setDetail(detail);
+      await aTimeout(0);
 
-      const newResult = layout.querySelector('[slot="detail"]');
-      expect(newResult).to.equal(newDetail);
-      expect(result.isConnected).to.be.false;
+      expect(startViewTransitionSpy.called).to.be.false;
 
-      // Remove details
+      // Remove the detail
+      startViewTransitionSpy.resetHistory();
       await layout.setDetail(null);
+      await aTimeout(0);
 
-      const emptyResult = layout.querySelector('[slot="detail"]');
-      expect(emptyResult).to.be.null;
-      expect(newResult.isConnected).to.be.false;
+      expect(startViewTransitionSpy.calledOnce).to.be.true;
+
+      // Remove the detail again
+      startViewTransitionSpy.resetHistory();
+      await layout.setDetail(null);
+      await aTimeout(0);
+
+      expect(startViewTransitionSpy.called).to.be.false;
+    });
+
+    describe('transition types', () => {
+      it('should use the correct transition type', async () => {
+        // "add" transition
+        const addDetail = document.createElement('detail-content');
+        const addPromise = layout.setDetail(addDetail);
+
+        expect(layout.getAttribute('transition')).to.equal('add');
+
+        await addPromise;
+        await aTimeout(0);
+        expect(layout.hasAttribute('transition')).to.be.false;
+
+        // "replace" transition
+        const replaceDetail = document.createElement('detail-content');
+        const replacePromise = layout.setDetail(replaceDetail);
+
+        expect(layout.getAttribute('transition')).to.equal('replace');
+
+        await replacePromise;
+        await aTimeout(0);
+        expect(layout.hasAttribute('transition')).to.be.false;
+
+        // "remove" transition
+        const removePromise = layout.setDetail(null);
+
+        expect(layout.getAttribute('transition')).to.equal('remove');
+
+        await removePromise;
+        await aTimeout(0);
+        expect(layout.hasAttribute('transition')).to.be.false;
+      });
+    });
+
+    describe('noAnimation', () => {
+      it('should not start view transition when noAnimation is set to true', async () => {
+        layout.noAnimation = true;
+
+        const detail = document.createElement('detail-content');
+        await layout.setDetail(detail);
+        await aTimeout(0);
+
+        expect(startViewTransitionSpy.called).to.be.false;
+
+        layout.noAnimation = false;
+
+        await layout.setDetail(null);
+        await aTimeout(0);
+
+        expect(startViewTransitionSpy.calledOnce).to.be.true;
+      });
     });
   });
 
-  it('should not start a transition if detail element did not change', async () => {
-    // Add initial detail
-    const detail = document.createElement('detail-content');
-    await layout.setDetail(detail);
-
-    expect(startViewTransitionSpy.calledOnce).to.be.true;
-
-    // Try to set the same detail again
-    startViewTransitionSpy.resetHistory();
-    await layout.setDetail(detail);
-
-    expect(startViewTransitionSpy.called).to.be.false;
-
-    // Remove the detail
-    startViewTransitionSpy.resetHistory();
-    await layout.setDetail(null);
-
-    expect(startViewTransitionSpy.calledOnce).to.be.true;
-
-    // Remove the detail again
-    startViewTransitionSpy.resetHistory();
-    await layout.setDetail(null);
-
-    expect(startViewTransitionSpy.called).to.be.false;
-  });
-
-  describe('transition types', () => {
-    let resolveTransition;
+  describe('manual transition', () => {
+    let runUpdateCallback;
+    let updateCallbackResolved;
+    let finishedPromise;
+    let detectLayoutModeSpy;
 
     beforeEach(() => {
+      startViewTransitionSpy = sinon.spy();
+      detectLayoutModeSpy = sinon.spy(layout, '__detectLayoutMode');
       document.startViewTransition = (callback) => {
-        callback();
+        updateCallbackResolved = false;
+        startViewTransitionSpy();
+        runUpdateCallback = () => {
+          callback().then(() => {
+            updateCallbackResolved = true;
+          });
+        };
+        finishedPromise = Promise.resolve();
+
         return {
-          finished: new Promise((resolve) => {
-            resolveTransition = resolve;
-          }),
+          finished: finishedPromise,
         };
       };
     });
 
-    it('should use the correct transition type', async () => {
-      // "add" transition
-      const addDetail = document.createElement('detail-content');
-      const addPromise = layout.setDetail(addDetail);
-
-      expect(layout.getAttribute('transition')).to.equal('add');
-
-      resolveTransition();
-      await addPromise;
-      expect(layout.hasAttribute('transition')).to.be.false;
-
-      // "replace" transition
-      const replaceDetail = document.createElement('detail-content');
-      const replacePromise = layout.setDetail(replaceDetail);
-
-      expect(layout.getAttribute('transition')).to.equal('replace');
-
-      resolveTransition();
-      await replacePromise;
-      expect(layout.hasAttribute('transition')).to.be.false;
-
-      // "remove" transition
-      const removePromise = layout.setDetail(null);
-
-      expect(layout.getAttribute('transition')).to.equal('remove');
-
-      resolveTransition();
-      await removePromise;
-      expect(layout.hasAttribute('transition')).to.be.false;
+    afterEach(() => {
+      detectLayoutModeSpy.restore();
     });
-  });
 
-  describe('noAnimation', () => {
-    it('should not start view transition when noAnimation is set to true', async () => {
-      layout.noAnimation = true;
+    it('should allow starting manual transitions', async () => {
+      const updateCallback = sinon.spy();
 
-      const detail = document.createElement('detail-content');
-      await layout.setDetail(detail);
-
-      expect(startViewTransitionSpy.called).to.be.false;
-
-      layout.noAnimation = false;
-
-      await layout.setDetail(null);
-
+      // Start transition
+      const result = layout._startTransition('manual', updateCallback);
+      expect(result).to.equal(finishedPromise);
+      expect(layout.getAttribute('transition')).to.equal('manual');
       expect(startViewTransitionSpy.calledOnce).to.be.true;
+      expect(updateCallback.notCalled).to.be.true;
+
+      // Run update callback
+      runUpdateCallback();
+      expect(layout.getAttribute('transition')).to.equal('manual');
+      expect(startViewTransitionSpy.calledOnce).to.be.true;
+      expect(updateCallback.calledOnce).to.be.true;
+      expect(updateCallbackResolved).to.be.false;
+
+      // Finish transition
+      layout._finishTransition();
+      expect(detectLayoutModeSpy.calledOnce).to.be.true;
+      await aTimeout(0);
+      expect(updateCallbackResolved).to.be.true;
+      expect(layout.hasAttribute('transition')).to.be.false;
     });
   });
 });
