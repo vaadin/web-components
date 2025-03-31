@@ -17,8 +17,8 @@ const requiredField = css`
     font-size: var(--vaadin-input-field-label-font-size, var(--lumo-font-size-s));
     transition: color 0.2s;
     line-height: 1;
-    padding-right: 1em;
-    padding-left: calc(var(--lumo-border-radius-m) / 4);
+    padding-inline-start: calc(var(--lumo-border-radius-m) / 4);
+    padding-inline-end: 1em;
     padding-bottom: 0.5em;
     /* As a workaround for diacritics being cut off, add a top padding and a
     negative margin to compensate */
@@ -101,16 +101,6 @@ const requiredField = css`
   }
 
   /* RTL specific styles */
-
-  :host([dir='rtl']) [part='label'] {
-    margin-left: 0;
-    margin-right: calc(var(--lumo-border-radius-m) / 4);
-  }
-
-  :host([dir='rtl']) [part='label'] {
-    padding-left: 1em;
-    padding-right: 0;
-  }
 
   :host([dir='rtl']) [part='required-indicator']::after {
     right: auto;
