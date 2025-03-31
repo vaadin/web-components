@@ -42,6 +42,11 @@ describe('master-detail-layout', () => {
           await visualDiff(document.body, `${dir}-overlay-viewport`);
         });
 
+        it('no detail', async () => {
+          element.querySelector('[slot="detail"').remove();
+          await visualDiff(document.body, `${dir}-overlay-no-detail`);
+        });
+
         it('dark', async () => {
           document.documentElement.setAttribute('theme', 'dark');
           await visualDiff(element, `${dir}-overlay-dark`);

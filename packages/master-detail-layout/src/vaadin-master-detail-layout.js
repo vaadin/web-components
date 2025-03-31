@@ -64,7 +64,8 @@ class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ElementMixin(Themab
         display: none !important;
       }
 
-      :host(:not([has-detail])) [part='detail'] {
+      :host(:not([has-detail])) [part='detail'],
+      [part='backdrop'] {
         display: none;
       }
 
@@ -83,7 +84,8 @@ class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ElementMixin(Themab
         position: fixed;
       }
 
-      :host([overlay]) [part='backdrop'] {
+      :host([overlay][has-detail]) [part='backdrop'] {
+        display: block;
         inset: 0;
       }
 
