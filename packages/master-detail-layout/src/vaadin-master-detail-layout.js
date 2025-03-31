@@ -24,6 +24,7 @@ import { transitionStyles } from './vaadin-master-detail-layout-transition-style
  *
  * Part name      | Description
  * ---------------|----------------------
+ * `backdrop`     | Backdrop covering the master area in the overlay mode
  * `master`       | The master area
  * `detail`       | The detail area
  *
@@ -72,12 +73,18 @@ class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ElementMixin(Themab
         position: relative;
       }
 
-      :host(:is([overlay], [stack])[containment='layout']) [part='detail'] {
+      :host(:is([overlay], [stack])[containment='layout']) [part='detail'],
+      :host([overlay][containment='layout']) [part='backdrop'] {
         position: absolute;
       }
 
-      :host(:is([overlay], [stack])[containment='viewport']) [part='detail'] {
+      :host(:is([overlay], [stack])[containment='viewport']) [part='detail'],
+      :host([overlay][containment='viewport']) [part='backdrop'] {
         position: fixed;
+      }
+
+      :host([overlay]) [part='backdrop'] {
+        inset: 0;
       }
 
       :host([overlay][orientation='horizontal']) [part='detail'] {
@@ -348,6 +355,7 @@ class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ElementMixin(Themab
   /** @protected */
   render() {
     return html`
+      <div part="backdrop"></div>
       <div id="master" part="master" ?inert="${this._overlay && this.containment === 'layout'}">
         <slot></slot>
       </div>

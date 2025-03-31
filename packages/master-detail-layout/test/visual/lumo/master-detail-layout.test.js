@@ -37,6 +37,11 @@ describe('master-detail-layout', () => {
           await visualDiff(element, `${dir}-overlay-default`);
         });
 
+        it('viewport', async () => {
+          element.containment = 'viewport';
+          await visualDiff(document.body, `${dir}-overlay-viewport`);
+        });
+
         it('dark', async () => {
           document.documentElement.setAttribute('theme', 'dark');
           await visualDiff(element, `${dir}-overlay-dark`);

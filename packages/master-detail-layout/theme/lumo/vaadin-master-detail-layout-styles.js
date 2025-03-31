@@ -20,7 +20,7 @@ registerStyles(
       border-block-start: 1px solid var(--lumo-contrast-10pct);
     }
 
-    :host([overlay]) [part='master'] {
+    :host([overlay]) [part='backdrop'] {
       background-color: var(--lumo-shade-20pct);
     }
   `,

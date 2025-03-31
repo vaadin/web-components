@@ -21,7 +21,7 @@ registerStyles(
       border-block-start: 1px solid var(--material-divider-color);
     }
 
-    :host([overlay]) [part='master'] {
+    :host([overlay]) [part='backdrop'] {
       background-color: var(--material-secondary-background-color);
     }
   `,
