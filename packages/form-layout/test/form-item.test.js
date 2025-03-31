@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
+import { fire, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../vaadin-form-item.js';
 import '@vaadin/custom-field';
@@ -361,6 +361,10 @@ describe('form-item', () => {
       expect(item.hasAttribute('required')).to.be.true;
     });
 
+    it('should not add invalid attribute initially', () => {
+      expect(item.hasAttribute('invalid')).to.be.false;
+    });
+
     it('should not add the required attribute when a removed input is set required', async () => {
       input.required = false;
       input.remove();
@@ -467,6 +471,59 @@ describe('form-item', () => {
         input.dispatchEvent(new CustomEvent(event));
         expect(item.hasAttribute('invalid')).to.be.true;
       });
+    });
+  });
+
+  describe('required field', () => {
+    let field;
+
+    beforeEach(async () => {
+      item = fixtureSync(`
+        <vaadin-form-item>
+          <vaadin-text-field></vaadin-text-field>
+        </vaadin-form-item>
+      `);
+      field = item.querySelector('vaadin-text-field');
+      await nextFrame();
+    });
+
+    it('should synchronize attributes on field required change', async () => {
+      field.required = true;
+      await nextFrame();
+      expect(item.hasAttribute('required')).to.be.true;
+      expect(item.hasAttribute('invalid')).to.be.false;
+
+      field.required = false;
+      await nextFrame();
+      expect(item.hasAttribute('required')).to.be.false;
+      expect(item.hasAttribute('invalid')).to.be.false;
+    });
+
+    it('should synchronize attributes on field invalid change', async () => {
+      field.invalid = true;
+      await nextFrame();
+      expect(item.hasAttribute('invalid')).to.be.true;
+      expect(item.hasAttribute('required')).to.be.false;
+
+      field.invalid = false;
+      await nextFrame();
+      expect(item.hasAttribute('invalid')).to.be.false;
+      expect(item.hasAttribute('required')).to.be.false;
+    });
+
+    it('should add invalid attribute on field change', async () => {
+      field.required = true;
+      fire(field.inputElement, 'change');
+      await nextFrame();
+      expect(item.hasAttribute('invalid')).to.be.true;
+    });
+
+    it('should not add invalid attribute on field change when manual validation is enabled', async () => {
+      field.required = true;
+      field.manualValidation = true;
+      fire(field.inputElement, 'change');
+      await nextFrame();
+      expect(item.hasAttribute('invalid')).to.be.false;
     });
   });
 

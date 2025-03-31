@@ -18,6 +18,8 @@ export const FormItemMixin = (superClass) =>
     constructor() {
       super();
 
+      this.__onFieldInteraction = this.__onFieldInteraction.bind(this);
+
       /**
        * An observer for a field node to reflect its `required` and `invalid` attributes to the component.
        *
@@ -43,6 +45,8 @@ export const FormItemMixin = (superClass) =>
        * @private
        */
       this.__fieldNode = null;
+
+      this.__isFieldDirty = false;
     }
 
     /** @protected */
@@ -121,11 +125,6 @@ export const FormItemMixin = (superClass) =>
       }
     }
 
-    /** @private */
-    __getValidateFunction(field) {
-      return field.validate || field.checkValidity;
-    }
-
     /**
      * A `slotchange` event handler for the label slot.
      *
@@ -178,7 +177,10 @@ export const FormItemMixin = (superClass) =>
         // Discard the old field
         this.__unlinkLabelFromField(this.__fieldNode);
         this.__fieldNodeObserver.disconnect();
+        this.__fieldNode.removeEventListener('blur', this.__onFieldInteraction);
+        this.__fieldNode.removeEventListener('change', this.__onFieldInteraction);
         this.__fieldNode = null;
+        this.__isFieldDirty = false;
       }
 
       const fieldNodes = this.$.contentSlot.assignedElements();
@@ -189,11 +191,11 @@ Please wrap fields with a <vaadin-custom-field> instead.`,
         );
       }
 
-      const newFieldNode = fieldNodes.find((field) => {
-        return !!this.__getValidateFunction(field);
-      });
+      const newFieldNode = fieldNodes.find((field) => field.validate || field.checkValidity);
       if (newFieldNode) {
         this.__fieldNode = newFieldNode;
+        this.__fieldNode.addEventListener('blur', this.__onFieldInteraction);
+        this.__fieldNode.addEventListener('change', this.__onFieldInteraction);
         this.__fieldNodeObserver.observe(this.__fieldNode, {
           attributes: true,
           attributeFilter: ['required', 'invalid'],
@@ -208,9 +210,24 @@ Please wrap fields with a <vaadin-custom-field> instead.`,
     }
 
     /** @private */
+    __onFieldInteraction() {
+      this.__isFieldDirty = true;
+      this.__synchronizeAttributes();
+    }
+
+    /** @private */
     __synchronizeAttributes() {
       const field = this.__fieldNode;
-      this.toggleAttribute('invalid', field && field.invalid);
-      this.toggleAttribute('required', field && field.required);
+      if (!field) {
+        this.removeAttribute('required');
+        this.removeAttribute('invalid');
+        return;
+      }
+
+      this.toggleAttribute('required', field.hasAttribute('required'));
+      this.toggleAttribute(
+        'invalid',
+        field.hasAttribute('invalid') || (field.matches(':invalid') && this.__isFieldDirty),
+      );
     }
   };
