@@ -292,4 +292,24 @@ describe('checkbox', () => {
       expect(input.indeterminate).to.be.false;
     });
   });
+
+  describe('opacity', () => {
+    beforeEach(async () => {
+      checkbox = fixtureSync(`<vaadin-checkbox></vaadin-checkbox>`);
+      await nextRender();
+      input = checkbox.inputElement;
+    });
+
+    it('should apply opacity: 0 on the slotted input', () => {
+      // Emulate CSS normalize styles like used by Tailwind
+      fixtureSync(`
+        <style>
+          input {
+            opacity: 1;
+          }
+        </script>
+      `);
+      expect(getComputedStyle(input).opacity).to.equal('0');
+    });
+  });
 });

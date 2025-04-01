@@ -272,4 +272,24 @@ describe('radio-button', () => {
       expect(spy).to.be.not.called;
     });
   });
+
+  describe('opacity', () => {
+    beforeEach(async () => {
+      radio = fixtureSync('<vaadin-radio-button></vaadin-radio-button>');
+      await nextRender();
+      input = radio.inputElement;
+    });
+
+    it('should apply opacity: 0 on the slotted input', () => {
+      // Emulate CSS normalize styles like used by Tailwind
+      fixtureSync(`
+        <style>
+          input {
+            opacity: 1;
+          }
+        </script>
+      `);
+      expect(getComputedStyle(input).opacity).to.equal('0');
+    });
+  });
 });

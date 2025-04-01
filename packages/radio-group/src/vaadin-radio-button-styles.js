@@ -52,7 +52,6 @@ export const radioButtonStyles = css`
 
   /* visually hidden */
   ::slotted(input) {
-    opacity: 0;
     cursor: inherit;
     margin: 0;
     align-self: stretch;
