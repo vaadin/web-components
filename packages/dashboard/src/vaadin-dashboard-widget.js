@@ -246,13 +246,12 @@ class DashboardWidget extends DashboardItemMixin(ElementMixin(ThemableMixin(Poly
       this.__i18n = wrapper.i18n;
     }
 
+    this.__initRootHeadingLevelChangeListener();
     const undefinedAncestor = this.closest('*:not(:defined)');
     if (undefinedAncestor) {
       customElements
         .whenDefined(undefinedAncestor.localName)
         .then(() => queueMicrotask(() => this.__initRootHeadingLevelChangeListener()));
-    } else {
-      this.__initRootHeadingLevelChangeListener();
     }
   }
 
@@ -302,13 +301,15 @@ class DashboardWidget extends DashboardItemMixin(ElementMixin(ThemableMixin(Poly
 
   /** @private */
   __initRootHeadingLevelChangeListener() {
-    const dashboard = findAncestorInstance(this, Dashboard);
-    if (dashboard) {
-      this.__rootHeadingLevel = dashboard.rootHeadingLevel;
-      this.__rootHeadingLevelChangedHandler = (e) => {
-        this.__rootHeadingLevel = e.detail.value;
-      };
-      dashboard.addEventListener('root-heading-level-changed', this.__rootHeadingLevelChangedHandler);
+    if (!this.__rootHeadingLevelChangedHandler) {
+      const dashboard = findAncestorInstance(this, Dashboard);
+      if (dashboard) {
+        this.__rootHeadingLevel = dashboard.rootHeadingLevel;
+        this.__rootHeadingLevelChangedHandler = (e) => {
+          this.__rootHeadingLevel = e.detail.value;
+        };
+        dashboard.addEventListener('root-heading-level-changed', this.__rootHeadingLevelChangedHandler);
+      }
     }
     this.__updateTitle();
   }
