@@ -575,7 +575,7 @@ class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ElementMixin(Themab
    * detail area. Once the transition is ready and the browser has taken a
    * snapshot of the current layout, the provided update callback is called.
    * The callback should update the DOM, which can happen asynchronously.
-   * Once the DOM is updated, the caller must call `__finishTransition`,
+   * Once the DOM is updated, the caller must call `_finishTransition`,
    * which results in the browser taking a snapshot of the new layout and
    * animating the transition.
    *
