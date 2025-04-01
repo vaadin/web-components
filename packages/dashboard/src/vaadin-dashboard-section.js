@@ -13,6 +13,8 @@ import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { css, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { Dashboard } from './vaadin-dashboard.js';
+import { findAncestorInstance } from './vaadin-dashboard-helpers.js';
 import { DashboardItemMixin } from './vaadin-dashboard-item-mixin.js';
 import { getDefaultI18n } from './vaadin-dashboard-item-mixin.js';
 import { hasWidgetWrappers } from './vaadin-dashboard-styles.js';
@@ -102,7 +104,7 @@ class DashboardSection extends DashboardItemMixin(ElementMixin(ThemableMixin(Pol
         }
 
         ::slotted(*) {
-          --_vaadin-dashboard-title-level: 3;
+          --_vaadin-dashboard-nested-widget: true;
           --_vaadin-dashboard-item-column: span
             min(
               var(--vaadin-dashboard-item-colspan, 1),
@@ -166,6 +168,12 @@ class DashboardSection extends DashboardItemMixin(ElementMixin(ThemableMixin(Pol
         value: '',
       },
 
+      /* @private */
+      __rootHeadingLevel: {
+        type: Number,
+        value: 2,
+      },
+
       /** @private */
       __childCount: {
         type: Number,
@@ -184,7 +192,7 @@ class DashboardSection extends DashboardItemMixin(ElementMixin(ThemableMixin(Pol
 
         <header part="header">
           ${this.__renderDragHandle()}
-          <h2 id="title" part="title">${this.sectionTitle}</h2>
+          <div id="title" aria-level=${this.__rootHeadingLevel || 2} part="title">${this.sectionTitle}</div>
           ${this.__renderRemoveButton()}
         </header>
       </div>
@@ -203,6 +211,32 @@ class DashboardSection extends DashboardItemMixin(ElementMixin(ThemableMixin(Pol
       this.setAttribute('role', 'section');
     }
   }
+
+  connectedCallback() {
+    super.connectedCallback();
+    const dashboard = findAncestorInstance(this, Dashboard);
+    if (dashboard) {
+      this.__rootHeadingLevel = dashboard.rootHeadingLevel;
+      this.__rootHeadingLevelChangedHandler = (e) => {
+        if (this.__rootHeadingLevel !== e.detail.value) {
+          this.__rootHeadingLevel = e.detail.value;
+        }
+      };
+      dashboard.addEventListener('root-heading-level-changed', this.__rootHeadingLevelChangedHandler);
+    }
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    const dashboard = findAncestorInstance(this, Dashboard);
+    if (dashboard && this.__rootHeadingLevelChangedHandler) {
+      dashboard.removeEventListener('root-heading-level-changed', this.__rootHeadingLevelChangedHandler);
+      this.__rootHeadingLevelChangedHandler = null;
+    }
+  }
+
+  /** @private */
+  __renderSectionTitle() {}
 }
 
 defineCustomElement(DashboardSection);

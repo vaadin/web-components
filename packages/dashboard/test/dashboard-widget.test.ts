@@ -1,6 +1,7 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import '../vaadin-dashboard-widget.js';
+import { Dashboard } from '../src/vaadin-dashboard';
 import { DashboardSection } from '../vaadin-dashboard-section.js';
 import { DashboardWidget } from '../vaadin-dashboard-widget.js';
 import {
@@ -152,23 +153,23 @@ describe('dashboard widget', () => {
 });
 
 describe('widget title level', () => {
-  it('should have h2 title by default', async () => {
+  it('should have title heading level 2 by default', async () => {
     const widget = fixtureSync(`<vaadin-dashboard-widget widget-title="foo"></vaadin-dashboard-widget>`);
     await nextFrame();
 
     const title = getTitleElement(widget as DashboardWidget);
-    expect(title?.localName).to.equal('h2');
+    expect(title?.getAttribute('aria-level')).to.equal('2');
   });
 
-  it('should have h2 title by default on the section', async () => {
+  it('should have title heading level 2 by default on the section', async () => {
     const section = fixtureSync(`<vaadin-dashboard-section section-title="foo"></vaadin-dashboard-section>`);
     await nextFrame();
 
     const title = getTitleElement(section as DashboardSection);
-    expect(title?.localName).to.equal('h2');
+    expect(title?.getAttribute('aria-level')).to.equal('2');
   });
 
-  it('should have h3 title when rendered inside a section', async () => {
+  it('should have title heading level 3 when rendered inside a section', async () => {
     const widget = fixtureSync(`
       <vaadin-dashboard-section>
         <vaadin-dashboard-widget widget-title="foo"></vaadin-dashboard-widget>
@@ -177,10 +178,10 @@ describe('widget title level', () => {
     await nextFrame();
 
     const title = getTitleElement(widget);
-    expect(title?.localName).to.equal('h3');
+    expect(title?.getAttribute('aria-level')).to.equal('3');
   });
 
-  it('should have h2 title after moving out of a section', async () => {
+  it('should have title heading level 2 after moving out of a section', async () => {
     const widget = fixtureSync(`
       <div>
         <vaadin-dashboard-section>
@@ -195,10 +196,10 @@ describe('widget title level', () => {
     await nextFrame();
 
     const title = getTitleElement(widget);
-    expect(title?.localName).to.equal('h2');
+    expect(title?.getAttribute('aria-level')).to.equal('2');
   });
 
-  it('should have h3 title after moving into a section', async () => {
+  it('should have title heading level 3 after moving into a section', async () => {
     const widget = fixtureSync(`
       <div>
         <vaadin-dashboard-widget widget-title="foo"></vaadin-dashboard-widget>
@@ -212,10 +213,10 @@ describe('widget title level', () => {
     await nextFrame();
 
     const title = getTitleElement(widget);
-    expect(title?.localName).to.equal('h3');
+    expect(title?.getAttribute('aria-level')).to.equal('3');
   });
 
-  it('should have h3 title after defining parent section', async () => {
+  it('should have title heading level 3 after defining parent section', async () => {
     const widget = fixtureSync(`
       <my-custom-section>
         <vaadin-dashboard-widget widget-title="foo"></vaadin-dashboard-widget>
@@ -228,10 +229,10 @@ describe('widget title level', () => {
     await nextFrame();
 
     const title = getTitleElement(widget);
-    expect(title?.localName).to.equal('h3');
+    expect(title?.getAttribute('aria-level')).to.equal('3');
   });
 
-  it('should have h3 title after defining the widget', async () => {
+  it('should have title heading level 3 after defining the widget', async () => {
     const widget = fixtureSync(`
       <vaadin-dashboard-section>
         <my-custom-widget widget-title="foo"></my-custom-widget>
@@ -244,10 +245,10 @@ describe('widget title level', () => {
     await nextFrame();
 
     const title = getTitleElement(widget as DashboardWidget);
-    expect(title?.localName).to.equal('h3');
+    expect(title?.getAttribute('aria-level')).to.equal('3');
   });
 
-  it('should have h3 title after moving a wrapped widget into a section', async () => {
+  it('should have title heading level 3 after moving a wrapped widget into a section', async () => {
     const widget = fixtureSync(`
       <div>
         <div id="wrapper">
@@ -264,6 +265,79 @@ describe('widget title level', () => {
     await nextFrame();
 
     const title = getTitleElement(widget);
-    expect(title?.localName).to.equal('h3');
+    expect(title?.getAttribute('aria-level')).to.equal('3');
+  });
+
+  it('should use custom title heading level when set on dashboard', async () => {
+    const dashboard = fixtureSync(`
+      <vaadin-dashboard root-heading-level="4">
+        <vaadin-dashboard-section section-title="foo">
+          <vaadin-dashboard-widget widget-title="foo"></vaadin-dashboard-widget>
+        </vaadin-dashboard-section>
+      </vaadin-dashboard>
+    `);
+    await nextFrame();
+
+    const sectionTitle = getTitleElement(dashboard.querySelector('vaadin-dashboard-section')!);
+    expect(sectionTitle?.getAttribute('aria-level')).to.equal('4');
+
+    const widgetTitle = getTitleElement(dashboard.querySelector('vaadin-dashboard-widget')!);
+    expect(widgetTitle?.getAttribute('aria-level')).to.equal('5');
+  });
+
+  it('should update title heading level when set on dashboard', async () => {
+    const dashboard = fixtureSync(`
+      <vaadin-dashboard>
+        <vaadin-dashboard-section section-title="foo">
+          <vaadin-dashboard-widget widget-title="foo"></vaadin-dashboard-widget>
+        </vaadin-dashboard-section>
+      </vaadin-dashboard>
+    `) as Dashboard;
+    await nextFrame();
+
+    dashboard.rootHeadingLevel = 4;
+    await nextFrame();
+
+    const sectionTitle = getTitleElement(dashboard.querySelector('vaadin-dashboard-section')!);
+    expect(sectionTitle?.getAttribute('aria-level')).to.equal('4');
+
+    const widgetTitle = getTitleElement(dashboard.querySelector('vaadin-dashboard-widget')!);
+    expect(widgetTitle?.getAttribute('aria-level')).to.equal('5');
+  });
+
+  it('should use default title heading level when not set on dashboard', async () => {
+    const dashboard = fixtureSync(`
+      <vaadin-dashboard root-heading-level="4">
+        <vaadin-dashboard-section section-title="foo">
+          <vaadin-dashboard-widget widget-title="foo"></vaadin-dashboard-widget>
+        </vaadin-dashboard-section>
+      </vaadin-dashboard>
+    `) as Dashboard;
+    await nextFrame();
+
+    dashboard.rootHeadingLevel = null;
+    await nextFrame();
+
+    const sectionTitle = getTitleElement(dashboard.querySelector('vaadin-dashboard-section')!);
+    expect(sectionTitle?.getAttribute('aria-level')).to.equal('2');
+
+    const widgetTitle = getTitleElement(dashboard.querySelector('vaadin-dashboard-widget')!);
+    expect(widgetTitle?.getAttribute('aria-level')).to.equal('3');
+  });
+
+  it('should have custom title heading level after defining parent dashboard', async () => {
+    const widget = fixtureSync(`
+      <my-custom-dashboard root-heading-level="4">
+        <vaadin-dashboard-widget widget-title="foo"></vaadin-dashboard-widget>
+      </my-custom-dashboard>
+    `).querySelector('vaadin-dashboard-widget')!;
+    await nextFrame();
+
+    class MyCustomDashboard extends Dashboard {}
+    customElements.define('my-custom-dashboard', MyCustomDashboard);
+    await nextFrame();
+
+    const title = getTitleElement(widget);
+    expect(title?.getAttribute('aria-level')).to.equal('4');
   });
 });

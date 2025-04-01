@@ -82,11 +82,12 @@ import { WidgetResizeController } from './widget-resize-controller.js';
  *
  * The following state attributes are available for styling:
  *
- * Attribute      | Description
- * ---------------|-------------
- * `editable`     | Set when the dashboard is editable.
- * `dense-layout` | Set when the dashboard is in dense mode.
- * `item-selected`| Set when an item is selected.
+ * Attribute            | Description
+ * ---------------------|-------------
+ * `editable`           | Set when the dashboard is editable.
+ * `dense-layout`       | Set when the dashboard is in dense mode.
+ * `item-selected`      | Set when an item is selected.
+ * `root-heading-level` | Set root heading level for sections and widgets.
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
@@ -164,6 +165,23 @@ class Dashboard extends DashboardLayoutMixin(
        */
       editable: {
         type: Boolean,
+      },
+
+      /**
+       * Root heading level for sections and widgets. Defaults to 2.
+       *
+       * If changed to e.g. 1:
+       * - sections will render as <h1>
+       * - widgets will render as <h2> if inside sections, <h1> otherwise
+       *
+       * @attr {number} root-heading-level
+       */
+      rootHeadingLevel: {
+        type: Number,
+        value: 2,
+        sync: true,
+        reflectToAttribute: true,
+        observer: '__rootHeadingLevelChanged',
       },
 
       /** @private */
@@ -492,6 +510,11 @@ class Dashboard extends DashboardLayoutMixin(
         }
       });
     }
+  }
+
+  /** @private */
+  __rootHeadingLevelChanged(rootHeadingLevel) {
+    this.dispatchEvent(new CustomEvent('root-heading-level-changed', { detail: { value: rootHeadingLevel } }));
   }
 
   /**
