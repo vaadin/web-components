@@ -17,6 +17,7 @@ import { Dashboard } from './vaadin-dashboard.js';
 import { findAncestorInstance, SYNCHRONIZED_ATTRIBUTES, WRAPPER_LOCAL_NAME } from './vaadin-dashboard-helpers.js';
 import { DashboardItemMixin } from './vaadin-dashboard-item-mixin.js';
 import { getDefaultI18n } from './vaadin-dashboard-item-mixin.js';
+import { DashboardSection } from './vaadin-dashboard-section.js';
 
 /**
  * A Widget component for use with the Dashboard component
@@ -316,7 +317,7 @@ class DashboardWidget extends DashboardItemMixin(ElementMixin(ThemableMixin(Poly
 
   /** @private */
   __updateTitle() {
-    this.__isNestedWidget = !!getComputedStyle(this).getPropertyValue('--_vaadin-dashboard-nested-widget');
+    this.__isNestedWidget = !!findAncestorInstance(this, DashboardSection);
   }
 }
 

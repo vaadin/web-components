@@ -104,7 +104,6 @@ class DashboardSection extends DashboardItemMixin(ElementMixin(ThemableMixin(Pol
         }
 
         ::slotted(*) {
-          --_vaadin-dashboard-nested-widget: true;
           --_vaadin-dashboard-item-column: span
             min(
               var(--vaadin-dashboard-item-colspan, 1),
