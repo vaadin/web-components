@@ -133,7 +133,7 @@ declare class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ThemableMix
    * If the browser does not support view transitions, the respective updates
    * are applied immediately without starting a transition.
    */
-  setDetail(detail: HTMLElement | null): Promise<void>;
+  protected _setDetail(detail: HTMLElement | null): Promise<void>;
 }
 
 declare global {
