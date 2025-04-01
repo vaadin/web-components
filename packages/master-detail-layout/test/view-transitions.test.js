@@ -44,7 +44,7 @@ describe('View transitions', () => {
 
         // Add details
         const detail = document.createElement('detail-content');
-        await layout.setDetail(detail);
+        await layout._setDetail(detail);
         await aTimeout(0);
 
         const result = layout.querySelector('[slot="detail"]');
@@ -52,7 +52,7 @@ describe('View transitions', () => {
 
         // Replace details
         const newDetail = document.createElement('detail-content');
-        await layout.setDetail(newDetail);
+        await layout._setDetail(newDetail);
         await aTimeout(0);
 
         const newResult = layout.querySelector('[slot="detail"]');
@@ -60,7 +60,7 @@ describe('View transitions', () => {
         expect(result.isConnected).to.be.false;
 
         // Remove details
-        await layout.setDetail(null);
+        await layout._setDetail(null);
         await aTimeout(0);
 
         const emptyResult = layout.querySelector('[slot="detail"]');
@@ -72,28 +72,28 @@ describe('View transitions', () => {
     it('should not start a transition if detail element did not change', async () => {
       // Add initial detail
       const detail = document.createElement('detail-content');
-      await layout.setDetail(detail);
+      await layout._setDetail(detail);
       await aTimeout(0);
 
       expect(startViewTransitionSpy.calledOnce).to.be.true;
 
       // Try to set the same detail again
       startViewTransitionSpy.resetHistory();
-      await layout.setDetail(detail);
+      await layout._setDetail(detail);
       await aTimeout(0);
 
       expect(startViewTransitionSpy.called).to.be.false;
 
       // Remove the detail
       startViewTransitionSpy.resetHistory();
-      await layout.setDetail(null);
+      await layout._setDetail(null);
       await aTimeout(0);
 
       expect(startViewTransitionSpy.calledOnce).to.be.true;
 
       // Remove the detail again
       startViewTransitionSpy.resetHistory();
-      await layout.setDetail(null);
+      await layout._setDetail(null);
       await aTimeout(0);
 
       expect(startViewTransitionSpy.called).to.be.false;
@@ -103,7 +103,7 @@ describe('View transitions', () => {
       it('should use the correct transition type', async () => {
         // "add" transition
         const addDetail = document.createElement('detail-content');
-        const addPromise = layout.setDetail(addDetail);
+        const addPromise = layout._setDetail(addDetail);
 
         expect(layout.getAttribute('transition')).to.equal('add');
 
@@ -113,7 +113,7 @@ describe('View transitions', () => {
 
         // "replace" transition
         const replaceDetail = document.createElement('detail-content');
-        const replacePromise = layout.setDetail(replaceDetail);
+        const replacePromise = layout._setDetail(replaceDetail);
 
         expect(layout.getAttribute('transition')).to.equal('replace');
 
@@ -122,7 +122,7 @@ describe('View transitions', () => {
         expect(layout.hasAttribute('transition')).to.be.false;
 
         // "remove" transition
-        const removePromise = layout.setDetail(null);
+        const removePromise = layout._setDetail(null);
 
         expect(layout.getAttribute('transition')).to.equal('remove');
 
@@ -137,14 +137,14 @@ describe('View transitions', () => {
         layout.noAnimation = true;
 
         const detail = document.createElement('detail-content');
-        await layout.setDetail(detail);
+        await layout._setDetail(detail);
         await aTimeout(0);
 
         expect(startViewTransitionSpy.called).to.be.false;
 
         layout.noAnimation = false;
 
-        await layout.setDetail(null);
+        await layout._setDetail(null);
         await aTimeout(0);
 
         expect(startViewTransitionSpy.calledOnce).to.be.true;

@@ -547,8 +547,9 @@ class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ElementMixin(Themab
    *
    * @param element the new detail element, or null to remove the current detail
    * @returns {Promise<void>}
+   * @protected
    */
-  setDetail(element) {
+  _setDetail(element) {
     // Don't start a transition if detail didn't change
     const currentDetail = this.querySelector('[slot="detail"]');
     if ((element || null) === currentDetail) {
