@@ -118,17 +118,17 @@
       document.querySelector('#set-small-detail').addEventListener('click', () => {
         const detail = document.createElement('detail-content');
         detail.style.setProperty('--detail-size', '200px');
-        layout.setDetail(detail);
+        layout._setDetail(detail);
       });
 
       document.querySelector('#set-large-detail').addEventListener('click', () => {
         const detail = document.createElement('detail-content');
         detail.style.setProperty('--detail-size', '600px');
-        layout.setDetail(detail);
+        layout._setDetail(detail);
       });
 
       document.querySelector('#clear-detail').addEventListener('click', () => {
-        layout.setDetail(null);
+        layout._setDetail(null);
       });
     </script>
   </body>
