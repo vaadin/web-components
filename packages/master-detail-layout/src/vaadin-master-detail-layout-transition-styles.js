@@ -14,6 +14,15 @@ export const transitionStyles = css`
     --_vaadin-master-detail-layout-dir-multiplier: -1;
   }
 
+  /* Default cross-fade animation */
+  vaadin-master-detail-layout {
+    view-transition-name: vaadin-master-detail-layout;
+  }
+
+  ::view-transition-group(vaadin-master-detail-layout) {
+    animation-duration: var(--vaadin-master-detail-layout-transition-duration, 300ms);
+
+
   /* Overlay - horizontal - add */
 
   vaadin-master-detail-layout[overlay][orientation='horizontal'][transition='add']::part(detail) {
@@ -25,7 +34,8 @@ export const transitionStyles = css`
   }
 
   ::view-transition-new(vaadin-master-detail-layout-overlay-horizontal-detail-add) {
-    animation: 300ms ease both vaadin-master-detail-layout-overlay-horizontal-detail-add;
+    animation: var(--vaadin-master-detail-layout-transition-duration, 300ms) ease both
+      vaadin-master-detail-layout-overlay-horizontal-detail-add;
   }
 
   @keyframes vaadin-master-detail-layout-overlay-horizontal-detail-add {
@@ -45,7 +55,8 @@ export const transitionStyles = css`
   }
 
   ::view-transition-old(vaadin-master-detail-layout-overlay-horizontal-detail-remove) {
-    animation: 300ms ease both vaadin-master-detail-layout-overlay-horizontal-detail-remove;
+    animation: var(--vaadin-master-detail-layout-transition-duration, 300ms) ease both
+      vaadin-master-detail-layout-overlay-horizontal-detail-remove;
   }
 
   @keyframes vaadin-master-detail-layout-overlay-horizontal-detail-remove {
@@ -65,11 +76,13 @@ export const transitionStyles = css`
   }
 
   ::view-transition-new(vaadin-master-detail-layout-stack-horizontal-add) {
-    animation: 300ms ease both vaadin-master-detail-layout-stack-horizontal-add-new;
+    animation: var(--vaadin-master-detail-layout-transition-duration, 300ms) ease both
+      vaadin-master-detail-layout-stack-horizontal-add-new;
   }
 
   ::view-transition-old(vaadin-master-detail-layout-stack-horizontal-add) {
-    animation: 300ms ease both vaadin-master-detail-layout-stack-horizontal-add-old;
+    animation: var(--vaadin-master-detail-layout-transition-duration, 300ms) ease both
+      vaadin-master-detail-layout-stack-horizontal-add-old;
   }
 
   @keyframes vaadin-master-detail-layout-stack-horizontal-add-new {
@@ -97,11 +110,13 @@ export const transitionStyles = css`
   }
 
   ::view-transition-new(vaadin-master-detail-layout-stack-horizontal-remove) {
-    animation: 300ms ease both vaadin-master-detail-layout-stack-horizontal-remove-new;
+    animation: var(--vaadin-master-detail-layout-transition-duration, 300ms) ease both
+      vaadin-master-detail-layout-stack-horizontal-remove-new;
   }
 
   ::view-transition-old(vaadin-master-detail-layout-stack-horizontal-remove) {
-    animation: 300ms ease both vaadin-master-detail-layout-stack-horizontal-remove-old;
+    animation: var(--vaadin-master-detail-layout-transition-duration, 300ms) ease both
+      vaadin-master-detail-layout-stack-horizontal-remove-old;
   }
 
   @keyframes vaadin-master-detail-layout-stack-horizontal-remove-new {
@@ -129,7 +144,8 @@ export const transitionStyles = css`
   }
 
   ::view-transition-new(vaadin-master-detail-layout-overlay-vertical-detail-add) {
-    animation: 300ms ease both vaadin-master-detail-layout-overlay-vertical-detail-add;
+    animation: var(--vaadin-master-detail-layout-transition-duration, 300ms) ease both
+      vaadin-master-detail-layout-overlay-vertical-detail-add;
   }
 
   @keyframes vaadin-master-detail-layout-overlay-vertical-detail-add {
@@ -149,7 +165,8 @@ export const transitionStyles = css`
   }
 
   ::view-transition-old(vaadin-master-detail-layout-overlay-vertical-detail-remove) {
-    animation: 300ms ease both vaadin-master-detail-layout-overlay-vertical-detail-remove;
+    animation: var(--vaadin-master-detail-layout-transition-duration, 300ms) ease both
+      vaadin-master-detail-layout-overlay-vertical-detail-remove;
   }
 
   @keyframes vaadin-master-detail-layout-overlay-vertical-detail-remove {
@@ -169,11 +186,13 @@ export const transitionStyles = css`
   }
 
   ::view-transition-new(vaadin-master-detail-layout-stack-vertical-add) {
-    animation: 300ms ease both vaadin-master-detail-layout-stack-vertical-add-new;
+    animation: var(--vaadin-master-detail-layout-transition-duration, 300ms) ease both
+      vaadin-master-detail-layout-stack-vertical-add-new;
   }
 
   ::view-transition-old(vaadin-master-detail-layout-stack-vertical-add) {
-    animation: 300ms ease both vaadin-master-detail-layout-stack-vertical-add-old;
+    animation: var(--vaadin-master-detail-layout-transition-duration, 300ms) ease both
+      vaadin-master-detail-layout-stack-vertical-add-old;
   }
 
   @keyframes vaadin-master-detail-layout-stack-vertical-add-new {
@@ -201,11 +220,13 @@ export const transitionStyles = css`
   }
 
   ::view-transition-new(vaadin-master-detail-layout-stack-vertical-remove) {
-    animation: 300ms ease both vaadin-master-detail-layout-stack-vertical-remove-new;
+    animation: var(--vaadin-master-detail-layout-transition-duration, 300ms) ease both
+      vaadin-master-detail-layout-stack-vertical-remove-new;
   }
 
   ::view-transition-old(vaadin-master-detail-layout-stack-vertical-remove) {
-    animation: 300ms ease both vaadin-master-detail-layout-stack-vertical-remove-old;
+    animation: var(--vaadin-master-detail-layout-transition-duration, 300ms) ease both
+      vaadin-master-detail-layout-stack-vertical-remove-old;
   }
 
   @keyframes vaadin-master-detail-layout-stack-vertical-remove-new {

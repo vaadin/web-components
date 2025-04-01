@@ -15,6 +15,13 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  *
  * ### Styling
  *
+ * The following custom CSS property are available for styling (needed to be set
+ * on the `<html>` element since they are used by the global view transitions):
+ *
+ * Custom CSS property                                  | Description         | Default
+ * -----------------------------------------------------|---------------------|--------
+ * `--vaadin-master-detail-layout-transition-duration`  | Transition duration | 300ms
+ *
  * The following shadow DOM parts are available for styling:
  *
  * Part name      | Description
