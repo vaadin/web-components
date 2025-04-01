@@ -550,22 +550,22 @@ class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ElementMixin(Themab
    * When passing null as the element, the current detail element is removed.
    *
    * If the browser does not support view transitions, the respective updates
-   * are applied immediately without starting a transition.
+   * are applied immediately without starting a transition. The transition can
+   * also be skipped using the `skipTransition` parameter.
    *
    * @param element the new detail element, or null to remove the current detail
+   * @param skipTransition whether to skip the transition
    * @returns {Promise<void>}
    * @protected
    */
-  _setDetail(element) {
+  _setDetail(element, skipTransition) {
     // Don't start a transition if detail didn't change
     const currentDetail = this.querySelector('[slot="detail"]');
     if ((element || null) === currentDetail) {
-      return;
+      return Promise.resolve();
     }
 
-    const hasDetail = !!currentDetail;
-    const transitionType = hasDetail && element ? 'replace' : hasDetail ? 'remove' : 'add';
-    return this._startTransition(transitionType, () => {
+    const updateSlot = () => {
       // Remove old content
       this.querySelectorAll('[slot="detail"]').forEach((oldElement) => oldElement.remove());
       // Add new content
@@ -573,6 +573,18 @@ class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ElementMixin(Themab
         element.setAttribute('slot', 'detail');
         this.appendChild(element);
       }
+    };
+
+    if (skipTransition) {
+      updateSlot();
+      return Promise.resolve();
+    }
+
+    const hasDetail = !!currentDetail;
+    const transitionType = hasDetail && element ? 'replace' : hasDetail ? 'remove' : 'add';
+    return this._startTransition(transitionType, () => {
+      // Update the DOM
+      updateSlot();
       // Finish the transition
       this._finishTransition();
     });
