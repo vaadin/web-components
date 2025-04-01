@@ -5,6 +5,7 @@
  */
 import { ActiveMixin } from '@vaadin/a11y-base/src/active-mixin.js';
 import { DelegateFocusMixin } from '@vaadin/a11y-base/src/delegate-focus-mixin.js';
+import { SlotStylesMixin } from '@vaadin/component-base/src/slot-styles-mixin.js';
 import { CheckedMixin } from '@vaadin/field-base/src/checked-mixin.js';
 import { FieldMixin } from '@vaadin/field-base/src/field-mixin.js';
 import { InputController } from '@vaadin/field-base/src/input-controller.js';
@@ -18,9 +19,12 @@ import { LabelledInputController } from '@vaadin/field-base/src/labelled-input-c
  * @mixes CheckedMixin
  * @mixes DelegateFocusMixin
  * @mixes FieldMixin
+ * @mixes SlotStylesMixin
  */
 export const CheckboxMixin = (superclass) =>
-  class CheckboxMixinClass extends FieldMixin(CheckedMixin(DelegateFocusMixin(ActiveMixin(superclass)))) {
+  class CheckboxMixinClass extends SlotStylesMixin(
+    FieldMixin(CheckedMixin(DelegateFocusMixin(ActiveMixin(superclass)))),
+  ) {
     static get properties() {
       return {
         /**
@@ -99,6 +103,21 @@ export const CheckboxMixin = (superclass) =>
       // Set the string "on" as the default value for the checkbox following the HTML specification:
       // https://html.spec.whatwg.org/multipage/input.html#dom-input-value-default-on
       this.value = 'on';
+    }
+
+    /** @protected */
+    get slotStyles() {
+      const tag = this.localName;
+
+      // Needed to override `opacity: 1` set on `input` by Tailwind CSS.
+      // See https://github.com/vaadin/web-components/issues/8881
+      return [
+        `
+          ${tag} > input[slot='input'] {
+            opacity: 0;
+          }
+        `,
+      ];
     }
 
     /** @protected */
