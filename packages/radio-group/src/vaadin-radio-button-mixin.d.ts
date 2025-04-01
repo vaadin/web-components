@@ -10,6 +10,7 @@ import type { DisabledMixinClass } from '@vaadin/a11y-base/src/disabled-mixin.js
 import type { FocusMixinClass } from '@vaadin/a11y-base/src/focus-mixin.js';
 import type { KeyboardMixinClass } from '@vaadin/a11y-base/src/keyboard-mixin.js';
 import type { DelegateStateMixinClass } from '@vaadin/component-base/src/delegate-state-mixin.js';
+import type { SlotStylesMixinClass } from '@vaadin/component-base/src/slot-styles-mixin.js';
 import type { CheckedMixinClass } from '@vaadin/field-base/src/checked-mixin.js';
 import type { InputMixinClass } from '@vaadin/field-base/src/input-mixin.js';
 import type { LabelMixinClass } from '@vaadin/field-base/src/label-mixin.js';
@@ -40,6 +41,7 @@ export declare function RadioButtonMixin<T extends Constructor<HTMLElement>>(
   Constructor<KeyboardMixinClass> &
   Constructor<LabelMixinClass> &
   Constructor<RadioButtonMixinClass> &
+  Constructor<SlotStylesMixinClass> &
   T;
 
 export declare class RadioButtonMixinClass {
