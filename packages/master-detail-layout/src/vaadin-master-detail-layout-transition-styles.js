@@ -25,7 +25,8 @@ export const transitionStyles = css`
   }
 
   ::view-transition-new(vaadin-master-detail-layout-overlay-horizontal-detail-add) {
-    animation: 300ms ease both vaadin-master-detail-layout-overlay-horizontal-detail-add;
+    animation: var(--vaadin-master-detail-layout-transition-duration, 300ms) ease both
+      vaadin-master-detail-layout-overlay-horizontal-detail-add;
   }
 
   @keyframes vaadin-master-detail-layout-overlay-horizontal-detail-add {
