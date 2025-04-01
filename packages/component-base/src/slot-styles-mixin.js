@@ -50,7 +50,7 @@ export const SlotStylesMixin = dedupingMixin(
        * @protected
        */
       get slotStyles() {
-        return {};
+        return [];
       }
 
       /** @protected */
