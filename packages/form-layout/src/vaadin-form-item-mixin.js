@@ -17,7 +17,8 @@ export const FormItemMixin = (superClass) =>
   class extends superClass {
     constructor() {
       super();
-      this.__updateInvalidState = this.__updateInvalidState.bind(this);
+
+      this.__onFieldInteraction = this.__onFieldInteraction.bind(this);
 
       /**
        * An observer for a field node to reflect its `required` and `invalid` attributes to the component.
@@ -25,7 +26,7 @@ export const FormItemMixin = (superClass) =>
        * @type {MutationObserver}
        * @private
        */
-      this.__fieldNodeObserver = new MutationObserver(() => this.__updateRequiredState(this.__fieldNode.required));
+      this.__fieldNodeObserver = new MutationObserver(() => this.__synchronizeAttributes());
 
       /**
        * The first label node in the label slot.
@@ -44,6 +45,8 @@ export const FormItemMixin = (superClass) =>
        * @private
        */
       this.__fieldNode = null;
+
+      this.__isFieldDirty = false;
     }
 
     /** @protected */
@@ -122,11 +125,6 @@ export const FormItemMixin = (superClass) =>
       }
     }
 
-    /** @private */
-    __getValidateFunction(field) {
-      return field.validate || field.checkValidity;
-    }
-
     /**
      * A `slotchange` event handler for the label slot.
      *
@@ -178,9 +176,11 @@ export const FormItemMixin = (superClass) =>
       if (this.__fieldNode) {
         // Discard the old field
         this.__unlinkLabelFromField(this.__fieldNode);
-        this.__updateRequiredState(false);
         this.__fieldNodeObserver.disconnect();
+        this.__fieldNode.removeEventListener('blur', this.__onFieldInteraction);
+        this.__fieldNode.removeEventListener('change', this.__onFieldInteraction);
         this.__fieldNode = null;
+        this.__isFieldDirty = false;
       }
 
       const fieldNodes = this.$.contentSlot.assignedElements();
@@ -191,37 +191,43 @@ Please wrap fields with a <vaadin-custom-field> instead.`,
         );
       }
 
-      const newFieldNode = fieldNodes.find((field) => {
-        return !!this.__getValidateFunction(field);
-      });
+      const newFieldNode = fieldNodes.find((field) => field.validate || field.checkValidity);
       if (newFieldNode) {
         this.__fieldNode = newFieldNode;
-        this.__updateRequiredState(this.__fieldNode.required);
-        this.__fieldNodeObserver.observe(this.__fieldNode, { attributes: true, attributeFilter: ['required'] });
+        this.__fieldNode.addEventListener('blur', this.__onFieldInteraction);
+        this.__fieldNode.addEventListener('change', this.__onFieldInteraction);
+        this.__fieldNodeObserver.observe(this.__fieldNode, {
+          attributes: true,
+          attributeFilter: ['required', 'invalid'],
+        });
 
         if (this.__labelNode) {
           this.__linkLabelToField(this.__fieldNode);
         }
       }
+
+      this.__synchronizeAttributes();
     }
 
     /** @private */
-    __updateRequiredState(required) {
-      if (required) {
-        this.setAttribute('required', '');
-        this.__fieldNode.addEventListener('blur', this.__updateInvalidState);
-        this.__fieldNode.addEventListener('change', this.__updateInvalidState);
-      } else {
-        this.removeAttribute('invalid');
+    __onFieldInteraction() {
+      this.__isFieldDirty = true;
+      this.__synchronizeAttributes();
+    }
+
+    /** @private */
+    __synchronizeAttributes() {
+      const field = this.__fieldNode;
+      if (!field) {
         this.removeAttribute('required');
-        this.__fieldNode.removeEventListener('blur', this.__updateInvalidState);
-        this.__fieldNode.removeEventListener('change', this.__updateInvalidState);
+        this.removeAttribute('invalid');
+        return;
       }
-    }
 
-    /** @private */
-    __updateInvalidState() {
-      const isValid = this.__getValidateFunction(this.__fieldNode).call(this.__fieldNode);
-      this.toggleAttribute('invalid', isValid === false);
+      this.toggleAttribute('required', field.hasAttribute('required'));
+      this.toggleAttribute(
+        'invalid',
+        field.hasAttribute('invalid') || (field.matches(':invalid') && this.__isFieldDirty),
+      );
     }
   };
