@@ -12,7 +12,6 @@ const contextMenuListBox = css`
   /* Normal item */
   [part='items'] ::slotted([role='menuitem']) {
     -webkit-tap-highlight-color: var(--lumo-primary-color-10pct);
-    cursor: default;
     outline: none;
     border-radius: var(--lumo-border-radius-m);
     padding-left: calc(var(--lumo-border-radius-m) / 4);
@@ -21,8 +20,8 @@ const contextMenuListBox = css`
 
   /* Hovered item */
   /* TODO a workaround until we have "focus-follows-mouse". After that, use the hover style for focus-ring as well */
-  [part='items'] ::slotted([role='menuitem']:hover:not([disabled])),
-  [part='items'] ::slotted([role='menuitem'][expanded]:not([disabled])) {
+  [part='items'] ::slotted([role='menuitem']:hover),
+  [part='items'] ::slotted([role='menuitem'][expanded]) {
     background-color: var(--lumo-primary-color-10pct);
   }
 
@@ -34,7 +33,7 @@ const contextMenuListBox = css`
 
   /* Focused item */
   @media (pointer: coarse) {
-    [part='items'] ::slotted([role='menuitem']:hover:not([expanded]):not([disabled])) {
+    [part='items'] ::slotted([role='menuitem']:hover:not([expanded])) {
       background-color: transparent;
     }
   }

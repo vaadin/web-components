@@ -63,18 +63,18 @@ const item = css`
   /* Disabled */
   :host([disabled]) {
     color: var(--lumo-disabled-text-color);
-    cursor: default;
-    pointer-events: none;
+    cursor: not-allowed;
+    pointer-events: var(--_vaadin-item-disabled-pointer-events, none);
   }
 
   /* TODO a workaround until we have "focus-follows-mouse". After that, use the hover style for focus-ring as well */
   @media (any-hover: hover) {
-    :host(:hover:not([disabled])) {
+    :host(:hover) {
       background-color: var(--lumo-primary-color-10pct);
     }
   }
 
-  :host([focus-ring]:not([disabled])) {
+  :host([focus-ring]) {
     box-shadow: inset 0 0 0 var(--_focus-ring-width) var(--_focus-ring-color);
   }
 
