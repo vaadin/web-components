@@ -15,13 +15,13 @@ export const transitionStyles = css`
   }
 
   /* Default cross-fade animation */
-  vaadin-master-detail-layout {
+  vaadin-master-detail-layout[transition] {
     view-transition-name: vaadin-master-detail-layout;
   }
 
   ::view-transition-group(vaadin-master-detail-layout) {
     animation-duration: var(--vaadin-master-detail-layout-transition-duration, 300ms);
-
+  }
 
   /* Overlay - horizontal - add */
 
