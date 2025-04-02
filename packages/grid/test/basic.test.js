@@ -131,6 +131,16 @@ describe('basic features', () => {
     expect(top).to.be.greaterThan(0);
   });
 
+  it('should restore scroll position when moving within DOM', () => {
+    grid.scrollToIndex(99);
+    const top = grid.$.table.scrollTop;
+
+    const wrapper = fixtureSync('<div></div>');
+    wrapper.appendChild(grid);
+
+    expect(grid.$.table.scrollTop).to.eql(top);
+  });
+
   it('reset items', () => {
     grid.size = 100;
 
