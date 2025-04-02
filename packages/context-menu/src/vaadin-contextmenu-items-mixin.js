@@ -360,7 +360,7 @@ export const ItemsMixin = (superClass) =>
 
       const subMenu = this._subMenu;
 
-      if (item) {
+      if (item && !item.disabled) {
         const { children } = item._item;
 
         // Check if the sub-menu was focused before closing it.
