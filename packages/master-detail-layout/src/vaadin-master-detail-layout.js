@@ -94,6 +94,11 @@ class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ElementMixin(Themab
       :host([overlay][has-detail]) [part='backdrop'] {
         display: block;
         inset: 0;
+        z-index: 1;
+      }
+
+      :host([overlay]) [part='detail'] {
+        z-index: 1;
       }
 
       :host([overlay][orientation='horizontal']) [part='detail'] {
