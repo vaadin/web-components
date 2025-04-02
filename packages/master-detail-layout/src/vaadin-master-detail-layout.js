@@ -477,10 +477,15 @@ class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ElementMixin(Themab
     }
 
     if (this.stackThreshold != null) {
+      // Set stack to true to disable masterMinSize and detailMinSize
+      // that would affect size measurements below when in split mode
+      this._stack = true;
+
       const threshold = this.__getStackThresholdInPixels();
       const size = this.orientation === 'vertical' ? this.offsetHeight : this.offsetWidth;
-      if (size <= threshold) {
-        this._stack = true;
+      if (size > threshold) {
+        this._stack = false;
+      } else {
         return;
       }
     }
