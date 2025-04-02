@@ -57,28 +57,6 @@ registerStyles(
       transform: rotate(90deg);
     }
 
-    /* Experimental support for hierarchy connectors, using an unsupported selector */
-    :host([theme~='connectors']) #level-spacer {
-      position: relative;
-      z-index: -1;
-      font-size: 1em;
-      height: 1.5em;
-    }
-
-    :host([theme~='connectors']) #level-spacer::before {
-      display: block;
-      content: '';
-      margin-top: calc(var(--lumo-space-m) * -1);
-      height: calc(var(--lumo-space-m) + 3em);
-      background-image: linear-gradient(
-        to right,
-        transparent calc(var(--vaadin-grid-tree-toggle-level-offset) - 1px),
-        var(--lumo-contrast-10pct) calc(var(--vaadin-grid-tree-toggle-level-offset) - 1px)
-      );
-      background-size: var(--vaadin-grid-tree-toggle-level-offset) var(--vaadin-grid-tree-toggle-level-offset);
-      background-position: calc(var(--vaadin-grid-tree-toggle-level-offset) / 2 - 2px) 0;
-    }
-
     /* RTL specific styles */
 
     :host([dir='rtl']) {
@@ -92,15 +70,6 @@ registerStyles(
 
     :host([dir='rtl'][expanded]) [part='toggle']::before {
       transform: rotate(-90deg);
-    }
-
-    :host([dir='rtl'][theme~='connectors']) #level-spacer::before {
-      background-image: linear-gradient(
-        to left,
-        transparent calc(var(--vaadin-grid-tree-toggle-level-offset) - 1px),
-        var(--lumo-contrast-10pct) calc(var(--vaadin-grid-tree-toggle-level-offset) - 1px)
-      );
-      background-position: calc(100% - (var(--vaadin-grid-tree-toggle-level-offset) / 2 - 2px)) 0;
     }
 
     :host([dir='rtl']:not([expanded])) [part='toggle']::before,
