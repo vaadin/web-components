@@ -22,12 +22,25 @@ export const SplitLayoutMixin = (superClass) =>
           value: 'horizontal',
         },
 
+        flexArea: {
+          type: String,
+          value: 'both',
+        },
+
         /** @private */
         _previousPrimaryPointerEvents: String,
 
         /** @private */
         _previousSecondaryPointerEvents: String,
+
+        _primaryChild: Object,
+
+        _secondaryChild: Object,
       };
+    }
+
+    static get observers() {
+      return ['_flexAreaChanged(flexArea, _primaryChild, _secondaryChild)'];
     }
 
     /** @protected */
@@ -50,6 +63,35 @@ export const SplitLayoutMixin = (superClass) =>
       addListener(splitter, 'track', this._onHandleTrack.bind(this));
       addListener(splitter, 'down', this._setPointerEventsNone.bind(this));
       addListener(splitter, 'up', this._restorePointerEvents.bind(this));
+    }
+
+    _flexAreaChanged(flexArea, primaryChild, secondaryChild) {
+      if (!primaryChild || !secondaryChild) {
+        return;
+      }
+
+      switch (flexArea) {
+        case 'both':
+          primaryChild.style.flexGrow = 1;
+          primaryChild.style.flexShrink = 1;
+          secondaryChild.style.flexGrow = 1;
+          secondaryChild.style.flexShrink = 1;
+          break;
+        case 'primary':
+          primaryChild.style.flexGrow = 1;
+          primaryChild.style.flexShrink = 1;
+          secondaryChild.style.flexGrow = 0;
+          secondaryChild.style.flexShrink = 0;
+          break;
+        case 'secondary':
+          primaryChild.style.flexGrow = 0;
+          primaryChild.style.flexShrink = 0;
+          secondaryChild.style.flexGrow = 1;
+          secondaryChild.style.flexShrink = 1;
+          break;
+        default:
+          break;
+      }
     }
 
     /** @private */
@@ -108,7 +150,7 @@ export const SplitLayoutMixin = (superClass) =>
         // Pure zero does not play well in Safari
         flexBasis = 0.000001;
       }
-      element.style.flex = `1 1 ${flexBasis}px`;
+      element.style.flexBasis = `${flexBasis}px`;
     }
 
     /** @private */
