@@ -86,11 +86,6 @@ class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ElementMixin(Themab
         position: absolute;
       }
 
-      :host([overlay]) [part='detail'],
-      :host([overlay]) [part='backdrop'] {
-        z-index: 1;
-      }
-
       :host(:is([overlay], [stack])[containment='viewport']) [part='detail'],
       :host([overlay][containment='viewport']) [part='backdrop'] {
         position: fixed;
@@ -99,6 +94,11 @@ class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ElementMixin(Themab
       :host([overlay][has-detail]) [part='backdrop'] {
         display: block;
         inset: 0;
+        z-index: 1;
+      }
+
+      :host([overlay]) [part='detail'] {
+        z-index: 1;
       }
 
       :host([overlay][orientation='horizontal']) [part='detail'] {
