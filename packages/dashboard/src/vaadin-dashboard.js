@@ -182,7 +182,6 @@ class Dashboard extends DashboardLayoutMixin(
         value: 2,
         sync: true,
         reflectToAttribute: true,
-        observer: '__rootHeadingLevelChanged',
       },
 
       /** @private */
@@ -194,7 +193,7 @@ class Dashboard extends DashboardLayoutMixin(
   }
 
   static get observers() {
-    return ['__itemsOrRendererChanged(items, renderer, editable, __effectiveI18n)'];
+    return ['__itemsOrRendererChanged(items, renderer, editable, __effectiveI18n, rootHeadingLevel)'];
   }
 
   /**
@@ -280,6 +279,7 @@ class Dashboard extends DashboardLayoutMixin(
           wrapper.firstElementChild.toggleAttribute(attr, !!wrapper[attr]);
         });
         wrapper.firstElementChild.__i18n = this.__effectiveI18n;
+        wrapper.firstElementChild.__rootHeadingLevel = this.rootHeadingLevel;
       }
     });
   }
@@ -323,6 +323,7 @@ class Dashboard extends DashboardLayoutMixin(
 
         SYNCHRONIZED_ATTRIBUTES.forEach((attr) => section.toggleAttribute(attr, !!wrapper[attr]));
         section.__i18n = this.__effectiveI18n;
+        section.__rootHeadingLevel = this.rootHeadingLevel;
 
         // Render the subitems
         section.__childCount = item.items.length;
@@ -447,6 +448,7 @@ class Dashboard extends DashboardLayoutMixin(
     wrapper['first-child'] = item === getItemsArrayOfItem(item, this.items)[0];
     wrapper['last-child'] = item === getItemsArrayOfItem(item, this.items).slice(-1)[0];
     wrapper.i18n = this.__effectiveI18n;
+    wrapper.__rootHeadingLevel = this.rootHeadingLevel;
   }
 
   /** @private */
@@ -511,11 +513,6 @@ class Dashboard extends DashboardLayoutMixin(
         }
       });
     }
-  }
-
-  /** @private */
-  __rootHeadingLevelChanged(rootHeadingLevel) {
-    this.dispatchEvent(new CustomEvent('root-heading-level-changed', { detail: { value: rootHeadingLevel } }));
   }
 
   /**

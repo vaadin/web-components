@@ -13,7 +13,6 @@ import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { css, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { Dashboard } from './vaadin-dashboard.js';
 import { findAncestorInstance, SYNCHRONIZED_ATTRIBUTES, WRAPPER_LOCAL_NAME } from './vaadin-dashboard-helpers.js';
 import { DashboardItemMixin } from './vaadin-dashboard-item-mixin.js';
 import { getDefaultI18n } from './vaadin-dashboard-item-mixin.js';
@@ -245,24 +244,14 @@ class DashboardWidget extends DashboardItemMixin(ElementMixin(ThemableMixin(Poly
         this.toggleAttribute(attr, !!wrapper[attr]);
       });
       this.__i18n = wrapper.i18n;
+      this.__rootHeadingLevel = wrapper.__rootHeadingLevel;
     }
 
-    this.__initRootHeadingLevelChangeListener();
     const undefinedAncestor = this.closest('*:not(:defined)');
     if (undefinedAncestor) {
-      customElements
-        .whenDefined(undefinedAncestor.localName)
-        .then(() => queueMicrotask(() => this.__initRootHeadingLevelChangeListener()));
-    }
-  }
-
-  /** @protected */
-  disconnectedCallback() {
-    super.disconnectedCallback();
-    const dashboard = findAncestorInstance(this, Dashboard);
-    if (dashboard && this.__rootHeadingLevelChangedHandler) {
-      dashboard.removeEventListener('root-heading-level-changed', this.__rootHeadingLevelChangedHandler);
-      this.__rootHeadingLevelChangedHandler = null;
+      customElements.whenDefined(undefinedAncestor.localName).then(() => queueMicrotask(() => this.__updateTitle()));
+    } else {
+      this.__updateTitle();
     }
   }
 
@@ -297,21 +286,6 @@ class DashboardWidget extends DashboardItemMixin(ElementMixin(ThemableMixin(Poly
 
   /** @private */
   __onRootHeadingLevelChanged() {
-    this.__updateTitle();
-  }
-
-  /** @private */
-  __initRootHeadingLevelChangeListener() {
-    if (!this.__rootHeadingLevelChangedHandler) {
-      const dashboard = findAncestorInstance(this, Dashboard);
-      if (dashboard) {
-        this.__rootHeadingLevel = dashboard.rootHeadingLevel;
-        this.__rootHeadingLevelChangedHandler = (e) => {
-          this.__rootHeadingLevel = e.detail.value;
-        };
-        dashboard.addEventListener('root-heading-level-changed', this.__rootHeadingLevelChangedHandler);
-      }
-    }
     this.__updateTitle();
   }
 

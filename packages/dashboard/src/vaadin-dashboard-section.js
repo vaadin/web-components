@@ -13,8 +13,6 @@ import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { css, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { Dashboard } from './vaadin-dashboard.js';
-import { findAncestorInstance } from './vaadin-dashboard-helpers.js';
 import { DashboardItemMixin } from './vaadin-dashboard-item-mixin.js';
 import { getDefaultI18n } from './vaadin-dashboard-item-mixin.js';
 import { hasWidgetWrappers } from './vaadin-dashboard-styles.js';
@@ -210,32 +208,6 @@ class DashboardSection extends DashboardItemMixin(ElementMixin(ThemableMixin(Pol
       this.setAttribute('role', 'section');
     }
   }
-
-  connectedCallback() {
-    super.connectedCallback();
-    const dashboard = findAncestorInstance(this, Dashboard);
-    if (dashboard) {
-      this.__rootHeadingLevel = dashboard.rootHeadingLevel;
-      this.__rootHeadingLevelChangedHandler = (e) => {
-        if (this.__rootHeadingLevel !== e.detail.value) {
-          this.__rootHeadingLevel = e.detail.value;
-        }
-      };
-      dashboard.addEventListener('root-heading-level-changed', this.__rootHeadingLevelChangedHandler);
-    }
-  }
-
-  disconnectedCallback() {
-    super.disconnectedCallback();
-    const dashboard = findAncestorInstance(this, Dashboard);
-    if (dashboard && this.__rootHeadingLevelChangedHandler) {
-      dashboard.removeEventListener('root-heading-level-changed', this.__rootHeadingLevelChangedHandler);
-      this.__rootHeadingLevelChangedHandler = null;
-    }
-  }
-
-  /** @private */
-  __renderSectionTitle() {}
 }
 
 defineCustomElement(DashboardSection);
