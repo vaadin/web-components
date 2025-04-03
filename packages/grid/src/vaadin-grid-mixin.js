@@ -197,6 +197,7 @@ export const GridMixin = (superClass) =>
     connectedCallback() {
       super.connectedCallback();
       this.isAttached = true;
+      this.__virtualizer.hostConnected();
     }
 
     /** @protected */

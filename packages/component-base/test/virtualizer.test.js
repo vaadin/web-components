@@ -366,6 +366,21 @@ describe('virtualizer', () => {
     expect(scrollTarget.scrollTop).to.equal(100);
   });
 
+  it('should restore scroll position on hostConnected after moving within DOM', async () => {
+    scrollTarget.scrollTop = 100;
+    await oneEvent(scrollTarget, 'scroll');
+
+    await nextResize(scrollTarget);
+
+    const wrapper = fixtureSync('<div></div>');
+    wrapper.appendChild(scrollTarget);
+
+    await nextResize(scrollTarget);
+    virtualizer.hostConnected();
+
+    expect(scrollTarget.scrollTop).to.equal(100);
+  });
+
   describe('lazy rendering', () => {
     let render = false;
 
