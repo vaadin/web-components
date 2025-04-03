@@ -180,6 +180,16 @@ export class IronListAdapter {
     }
   }
 
+  hostConnected() {
+    // Restore scroll position, which is reset when host is removed from DOM,
+    // since virtualizer doesn't re-render when adding it to the DOM again.
+    // If the scroll target isn't visible and its `offsetParent` is `null`, wait
+    // for the ResizeObserver to handle this case (hiding -> moving -> showing).
+    if (this.scrollTarget.offsetParent && this.scrollTarget.scrollTop !== this._scrollPosition) {
+      this.scrollTarget.scrollTop = this._scrollPosition;
+    }
+  }
+
   update(startIndex = 0, endIndex = this.size - 1) {
     const updatedElements = [];
     this.__getVisibleElements().forEach((el) => {
