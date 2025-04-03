@@ -91,7 +91,9 @@ export const VirtualListMixin = (superClass) =>
     connectedCallback() {
       super.connectedCallback();
       document.addEventListener('dragstart', this.__onDocumentDragStart, { capture: true });
-      this.__virtualizer.hostConnected();
+      if (this.__virtualizer) {
+        this.__virtualizer.hostConnected();
+      }
     }
 
     /** @protected */
