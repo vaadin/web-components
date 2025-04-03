@@ -133,6 +133,28 @@ export const transitionStyles = css`
     }
   }
 
+  /* Stack - horizontal - viewport - add */
+
+  vaadin-master-detail-layout[stack][orientation='horizontal'][containment='viewport'][transition='add'] {
+    view-transition-name: vaadin-master-detail-layout-stack-horizontal-viewport-add;
+  }
+
+  ::view-transition-new(vaadin-master-detail-layout-stack-horizontal-viewport-add) {
+    animation: var(--vaadin-master-detail-layout-transition-duration, 300ms) ease both
+      vaadin-master-detail-layout-stack-horizontal-add-new;
+  }
+
+  /* Stack - horizontal - viewport - remove */
+
+  vaadin-master-detail-layout[stack][orientation='horizontal'][containment='viewport'][transition='remove'] {
+    view-transition-name: vaadin-master-detail-layout-stack-horizontal-viewport-remove;
+  }
+
+  ::view-transition-old(vaadin-master-detail-layout-stack-horizontal-viewport-remove) {
+    animation: var(--vaadin-master-detail-layout-transition-duration, 300ms) ease both
+      vaadin-master-detail-layout-stack-horizontal-remove-old;
+  }
+
   /* Overlay - vertical - add */
 
   vaadin-master-detail-layout[overlay][orientation='vertical'][transition='add']::part(detail) {
@@ -241,5 +263,27 @@ export const transitionStyles = css`
       transform: translateY(100px);
       opacity: 0;
     }
+  }
+
+  /* Stack - vertical - viewport - add */
+
+  vaadin-master-detail-layout[stack][orientation='vertical'][containment='viewport'][transition='add'] {
+    view-transition-name: vaadin-master-detail-layout-stack-vertical-viewport-add;
+  }
+
+  ::view-transition-new(vaadin-master-detail-layout-stack-vertical-viewport-add) {
+    animation: var(--vaadin-master-detail-layout-transition-duration, 300ms) ease both
+      vaadin-master-detail-layout-stack-vertical-add-new;
+  }
+
+  /* Stack - vertical - viewport - remove */
+
+  vaadin-master-detail-layout[stack][orientation='vertical'][containment='viewport'][transition='remove'] {
+    view-transition-name: vaadin-master-detail-layout-stack-vertical-viewport-remove;
+  }
+
+  ::view-transition-old(vaadin-master-detail-layout-stack-vertical-viewport-remove) {
+    animation: var(--vaadin-master-detail-layout-transition-duration, 300ms) ease both
+      vaadin-master-detail-layout-stack-vertical-remove-old;
   }
 `;
