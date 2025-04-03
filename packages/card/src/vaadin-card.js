@@ -7,15 +7,16 @@ import { css, html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
+import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 /**
  * `<vaadin-card>` is a versatile container for grouping related content and actions.
  * It presents information in a structured and visually appealing manner, with
- * customization options to fit various design requirements.
+ * customization options to fit various design requirements. The default ARIA role is `region`.
  *
  * ```html
- * <vaadin-card theme="outlined cover-media">
+ * <vaadin-card role="region" theme="outlined cover-media">
  *   <img slot="media" width="200" src="..." alt="">
  *   <div slot="title">Lapland</div>
  *   <div slot="subtitle">The Exotic North</div>
@@ -235,6 +236,8 @@ class Card extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
         height: auto;
         aspect-ratio: var(--vaadin-card-media-aspect-ratio, 16/9);
         object-fit: cover;
+        /* Fixes an issue where an icon overflows the card boundaries on Firefox: https://github.com/vaadin/web-components/issues/8641 */
+        overflow: hidden;
       }
 
       :host([theme~='horizontal']:is([theme~='cover-media'], [theme~='stretch-media'])) {
@@ -279,8 +282,44 @@ class Card extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
     `;
   }
 
+  static get properties() {
+    return {
+      /**
+       * The title of the card. When set, any custom slotted title is removed and this string-based title is used instead. If this title is used, an `aria-labelledby` attribute that points to the generated title element is set.
+       *
+       * @attr {string} card-title
+       */
+      cardTitle: {
+        type: String,
+        observer: '__cardTitleChanged',
+      },
+
+      /**
+       * Sets the heading level (`aria-level`) for the string-based title. If not set, the level defaults to 2. Setting values outside the range [1, 6] can cause accessibility issues.
+       *
+       * @attr {number} title-heading-level
+       */
+      titleHeadingLevel: {
+        type: Number,
+        reflectToAttribute: true,
+        observer: '__titleHeadingLevelChanged',
+      },
+    };
+  }
+
   static get experimental() {
     return true;
+  }
+
+  /** @protected */
+  ready() {
+    super.ready();
+
+    // By default, if the user hasn't provided a custom role,
+    // the role attribute is set to "region".
+    if (!this.hasAttribute('role')) {
+      this.setAttribute('role', 'region');
+    }
   }
 
   /** @protected */
@@ -322,6 +361,79 @@ class Card extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
     this.toggleAttribute('_hs', this.querySelector(':scope > [slot="header-suffix"]'));
     this.toggleAttribute('_c', this.querySelector(':scope > :not([slot])'));
     this.toggleAttribute('_f', this.querySelector(':scope > [slot="footer"]'));
+    if (this.__getCustomTitleElement()) {
+      this.__clearStringTitle();
+    }
+  }
+
+  /** @private */
+  __clearStringTitle() {
+    const stringTitleElement = this.__getStringTitleElement();
+    if (stringTitleElement) {
+      this.removeChild(stringTitleElement);
+    }
+    const ariaLabelledby = this.getAttribute('aria-labelledby');
+    if (ariaLabelledby && ariaLabelledby.startsWith('card-title-')) {
+      this.removeAttribute('aria-labelledby');
+    }
+    if (this.cardTitle) {
+      this.cardTitle = '';
+    }
+  }
+
+  /** @private */
+  __getCustomTitleElement() {
+    return Array.from(this.querySelectorAll('[slot="title"]')).find((el) => {
+      return !el.hasAttribute('card-string-title');
+    });
+  }
+
+  /** @private */
+  __cardTitleChanged(title) {
+    if (!title) {
+      this.__clearStringTitle();
+      return;
+    }
+    const customTitleElement = this.__getCustomTitleElement();
+    if (customTitleElement) {
+      this.removeChild(customTitleElement);
+    }
+    let stringTitleElement = this.__getStringTitleElement();
+    if (!stringTitleElement) {
+      stringTitleElement = this.__createStringTitleElement();
+      this.appendChild(stringTitleElement);
+      this.setAttribute('aria-labelledby', stringTitleElement.id);
+    }
+    stringTitleElement.textContent = title;
+  }
+
+  /** @private */
+  __createStringTitleElement() {
+    const stringTitleElement = document.createElement('div');
+    stringTitleElement.setAttribute('slot', 'title');
+    stringTitleElement.setAttribute('role', 'heading');
+    this.__setTitleHeadingLevel(stringTitleElement, this.titleHeadingLevel);
+    stringTitleElement.setAttribute('card-string-title', '');
+    stringTitleElement.id = `card-title-${generateUniqueId()}`;
+    return stringTitleElement;
+  }
+
+  /** @private */
+  __titleHeadingLevelChanged(titleHeadingLevel) {
+    const stringTitleElement = this.__getStringTitleElement();
+    if (stringTitleElement) {
+      this.__setTitleHeadingLevel(stringTitleElement, titleHeadingLevel);
+    }
+  }
+
+  /** @private */
+  __setTitleHeadingLevel(stringTitleElement, titleHeadingLevel) {
+    stringTitleElement.setAttribute('aria-level', titleHeadingLevel || 2);
+  }
+
+  /** @private */
+  __getStringTitleElement() {
+    return this.querySelector('[slot="title"][card-string-title]');
   }
 
   /**
