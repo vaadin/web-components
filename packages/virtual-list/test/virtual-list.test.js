@@ -177,5 +177,17 @@ describe('virtual-list', () => {
         expect(list.getAttribute('overflow')).to.equal('top');
       });
     });
+
+    describe('scroll restoration', () => {
+      it('should restore scroll position when moving within DOM', () => {
+        list.scrollToIndex(50);
+        const top = list.scrollTop;
+
+        const wrapper = fixtureSync('<div></div>');
+        wrapper.appendChild(list);
+
+        expect(list.scrollTop).to.equal(top);
+      });
+    });
   });
 });
