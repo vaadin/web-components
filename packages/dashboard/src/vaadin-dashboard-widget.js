@@ -194,13 +194,11 @@ class DashboardWidget extends DashboardItemMixin(ElementMixin(ThemableMixin(Poly
       widgetTitle: {
         type: String,
         value: '',
-        observer: '__onWidgetTitleChanged',
       },
 
       /* @private */
       __rootHeadingLevel: {
         type: Number,
-        observer: '__onRootHeadingLevelChanged',
       },
 
       /* @private */
@@ -247,11 +245,12 @@ class DashboardWidget extends DashboardItemMixin(ElementMixin(ThemableMixin(Poly
       this.__rootHeadingLevel = wrapper.__rootHeadingLevel;
     }
 
+    this.__updateNestedState();
     const undefinedAncestor = this.closest('*:not(:defined)');
     if (undefinedAncestor) {
-      customElements.whenDefined(undefinedAncestor.localName).then(() => queueMicrotask(() => this.__updateTitle()));
-    } else {
-      this.__updateTitle();
+      customElements.whenDefined(undefinedAncestor.localName).then(() => {
+        queueMicrotask(() => this.__updateNestedState());
+      });
     }
   }
 
@@ -280,17 +279,7 @@ class DashboardWidget extends DashboardItemMixin(ElementMixin(ThemableMixin(Poly
   }
 
   /** @private */
-  __onWidgetTitleChanged() {
-    this.__updateTitle();
-  }
-
-  /** @private */
-  __onRootHeadingLevelChanged() {
-    this.__updateTitle();
-  }
-
-  /** @private */
-  __updateTitle() {
+  __updateNestedState() {
     this.__isNestedWidget = !!findAncestorInstance(this, DashboardSection);
   }
 }
