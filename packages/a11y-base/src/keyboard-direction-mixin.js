@@ -67,7 +67,6 @@ export const KeyboardDirectionMixin = (superclass) =>
         return;
       }
 
-      const { key } = event;
       const items = this._getItems() || [];
       const currentIdx = items.indexOf(this.focused);
 
@@ -77,16 +76,16 @@ export const KeyboardDirectionMixin = (superclass) =>
       const isRTL = !this._vertical && this.getAttribute('dir') === 'rtl';
       const dirIncrement = isRTL ? -1 : 1;
 
-      if (this.__isPrevKey(key)) {
+      if (this.__isPrevKeyPressed(event)) {
         increment = -dirIncrement;
         idx = currentIdx - dirIncrement;
-      } else if (this.__isNextKey(key)) {
+      } else if (this.__isNextKeyPressed(event)) {
         increment = dirIncrement;
         idx = currentIdx + dirIncrement;
-      } else if (key === 'Home') {
+      } else if (event.key === 'Home') {
         increment = 1;
         idx = 0;
-      } else if (key === 'End') {
+      } else if (event.key === 'End') {
         increment = -1;
         idx = items.length - 1;
       }
@@ -100,20 +99,22 @@ export const KeyboardDirectionMixin = (superclass) =>
     }
 
     /**
-     * @param {string} key
+     * @param {KeyboardEvent} event
      * @return {boolean}
-     * @private
+     * @protected
      */
-    __isPrevKey(key) {
+    __isPrevKeyPressed(event) {
+      const { key } = event;
       return this._vertical ? key === 'ArrowUp' : key === 'ArrowLeft';
     }
 
     /**
-     * @param {string} key
+     * @param {KeyboardEvent} event
      * @return {boolean}
      * @private
      */
-    __isNextKey(key) {
+    __isNextKeyPressed(event) {
+      const { key } = event;
       return this._vertical ? key === 'ArrowDown' : key === 'ArrowRight';
     }
 
