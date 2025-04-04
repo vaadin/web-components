@@ -268,8 +268,9 @@ export const ItemsMixin = (superClass) =>
           // Close the menu
           this.close();
           this.listenOn.focus();
-        } else if (key === 'Tab') {
-          // Close all menus
+        } else if (key === 'Tab' && !event.defaultPrevented) {
+          // Close all menus unless the Tab key was handled separately
+          // which is the case e.g. in menu-bar with Tab navigation.
           this.dispatchEvent(new CustomEvent('close-all-menus'));
         }
       });
