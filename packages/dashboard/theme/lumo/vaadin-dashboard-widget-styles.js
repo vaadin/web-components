@@ -155,6 +155,7 @@ const dashboardWidget = css`
     inset: -1px;
     border: var(--_vaadin-dashboard-widget-border-width) solid var(--_vaadin-dashboard-widget-border-color);
     border-radius: inherit;
+    pointer-events: none;
   }
 
   /* Widget states */
