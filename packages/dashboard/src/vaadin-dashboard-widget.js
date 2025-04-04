@@ -273,7 +273,12 @@ class DashboardWidget extends DashboardItemMixin(ElementMixin(ThemableMixin(Poly
     if (this.__isNestedWidget) {
       effectiveHeadingLevel += 1;
     }
-    return html`<div id="title" part="title" aria-level=${effectiveHeadingLevel} .hidden=${!this.widgetTitle}
+    return html`<div
+      id="title"
+      part="title"
+      role="heading"
+      aria-level=${effectiveHeadingLevel}
+      .hidden=${!this.widgetTitle}
       >${this.widgetTitle}</div
     >`;
   }

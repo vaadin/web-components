@@ -189,7 +189,9 @@ class DashboardSection extends DashboardItemMixin(ElementMixin(ThemableMixin(Pol
 
         <header part="header">
           ${this.__renderDragHandle()}
-          <div id="title" aria-level=${this.__rootHeadingLevel || 2} part="title">${this.sectionTitle}</div>
+          <div id="title" role="heading" aria-level=${this.__rootHeadingLevel || 2} part="title"
+            >${this.sectionTitle}</div
+          >
           ${this.__renderRemoveButton()}
         </header>
       </div>
