@@ -57,4 +57,20 @@ describe('ARIA', () => {
     layout.containment = 'viewport';
     expect(master.hasAttribute('inert')).to.be.false;
   });
+
+  it('should not set inert on the master part with the detail removed', async () => {
+    layout.forceOverlay = true;
+    layout.containment = 'layout';
+
+    const detailContent = layout.querySelector('[slot="detail"]');
+    detailContent.remove();
+    await nextRender();
+
+    expect(master.hasAttribute('inert')).to.be.false;
+
+    layout.appendChild(detailContent);
+    await nextRender();
+
+    expect(master.hasAttribute('inert')).to.be.true;
+  });
 });
