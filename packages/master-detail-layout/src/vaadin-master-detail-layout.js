@@ -370,7 +370,11 @@ class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ElementMixin(Themab
   render() {
     return html`
       <div part="backdrop"></div>
-      <div id="master" part="master" ?inert="${this._overlay && this.containment === 'layout'}">
+      <div
+        id="master"
+        part="master"
+        ?inert="${this.querySelector('[slot="detail"]') && this._overlay && this.containment === 'layout'}"
+      >
         <slot></slot>
       </div>
       <div
