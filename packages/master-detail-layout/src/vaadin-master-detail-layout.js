@@ -358,6 +358,17 @@ class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ElementMixin(Themab
         reflectToAttribute: true,
         sync: true,
       },
+
+      /**
+       * When true, the component has the detail content provided.
+       * @protected
+       */
+      _hasDetail: {
+        type: Boolean,
+        attribute: 'has-detail',
+        reflectToAttribute: true,
+        sync: true,
+      },
     };
   }
 
@@ -370,11 +381,7 @@ class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ElementMixin(Themab
   render() {
     return html`
       <div part="backdrop"></div>
-      <div
-        id="master"
-        part="master"
-        ?inert="${this.querySelector('[slot="detail"]') && this._overlay && this.containment === 'layout'}"
-      >
+      <div id="master" part="master" ?inert="${this._hasDetail && this._overlay && this.containment === 'layout'}">
         <slot></slot>
       </div>
       <div
@@ -392,7 +399,7 @@ class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ElementMixin(Themab
   __onDetailSlotChange(e) {
     const children = e.target.assignedNodes();
 
-    this.toggleAttribute('has-detail', children.length > 0);
+    this._hasDetail = children.length > 0;
     this.__detectLayoutMode();
 
     // Move focus to the detail area when it is added to the DOM,
@@ -499,7 +506,7 @@ class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ElementMixin(Themab
       }
     }
 
-    if (!this.hasAttribute('has-detail')) {
+    if (!this._hasDetail) {
       return;
     }
 
