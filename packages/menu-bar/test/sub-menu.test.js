@@ -160,11 +160,10 @@ describe('sub-menu', () => {
 
   it('should focus first sub-menu item when opened on arrow down', async () => {
     arrowDown(buttons[0]);
-    await oneEvent(subMenu, 'opened-changed');
-    expect(subMenu.opened).to.be.true;
+    await nextUpdate(subMenu);
     const item = subMenuOverlay.querySelector('vaadin-menu-bar-item');
     const spy = sinon.spy(item, 'focus');
-    await nextRender(subMenu);
+    await oneEvent(subMenuOverlay, 'vaadin-overlay-open');
     expect(spy.calledOnce).to.be.true;
   });
 
@@ -184,12 +183,11 @@ describe('sub-menu', () => {
 
   it('should open sub-menu and focus last item on arrow up', async () => {
     arrowUp(buttons[0]);
-    await oneEvent(subMenu, 'opened-changed');
-    expect(subMenu.opened).to.be.true;
+    await nextUpdate(subMenu);
     const items = subMenuOverlay.querySelectorAll('vaadin-menu-bar-item');
     const last = items[items.length - 1];
     const spy = sinon.spy(last, 'focus');
-    await nextRender(subMenu);
+    await oneEvent(subMenuOverlay, 'vaadin-overlay-open');
     expect(spy.calledOnce).to.be.true;
   });
 
@@ -228,7 +226,7 @@ describe('sub-menu', () => {
 
   it('should close sub-menu on first item arrow up', async () => {
     arrowDown(buttons[0]);
-    await oneEvent(subMenu, 'opened-changed');
+    await oneEvent(subMenuOverlay, 'vaadin-overlay-open');
     item = subMenuOverlay.querySelector('vaadin-menu-bar-item');
     expect(item).to.be.ok;
     await nextRender(subMenu);
@@ -239,7 +237,7 @@ describe('sub-menu', () => {
 
   it('should switch menubar button with items and open submenu on arrow left', async () => {
     arrowDown(buttons[0]);
-    await oneEvent(subMenu, 'opened-changed');
+    await oneEvent(subMenuOverlay, 'vaadin-overlay-open');
     expect(subMenu.opened).to.be.true;
     await nextRender(subMenu);
     const item = subMenuOverlay.querySelector('vaadin-menu-bar-item');
@@ -251,7 +249,7 @@ describe('sub-menu', () => {
 
   it('should switch menubar button without items and focus it on arrow left', async () => {
     arrowDown(buttons[2]);
-    await oneEvent(subMenu, 'opened-changed');
+    await oneEvent(subMenuOverlay, 'vaadin-overlay-open');
     expect(subMenu.opened).to.be.true;
     await nextRender(subMenu);
     const item = subMenuOverlay.querySelector('vaadin-menu-bar-item');
@@ -264,7 +262,7 @@ describe('sub-menu', () => {
 
   it('should switch menubar button with items and open submenu on arrow right', async () => {
     arrowDown(buttons[2]);
-    await oneEvent(subMenu, 'opened-changed');
+    await oneEvent(subMenuOverlay, 'vaadin-overlay-open');
     expect(subMenu.opened).to.be.true;
     await nextRender(subMenu);
     const item = subMenuOverlay.querySelector('vaadin-menu-bar-item');
@@ -276,7 +274,7 @@ describe('sub-menu', () => {
 
   it('should switch menubar button without items and focus it on arrow right', async () => {
     arrowDown(buttons[0]);
-    await oneEvent(subMenu, 'opened-changed');
+    await oneEvent(subMenuOverlay, 'vaadin-overlay-open');
     expect(subMenu.opened).to.be.true;
     await nextRender(subMenu);
     const item = subMenuOverlay.querySelector('vaadin-menu-bar-item');
@@ -290,11 +288,12 @@ describe('sub-menu', () => {
   it('should switch menubar button with items and open submenu on Tab in tab navigation', async () => {
     menu.tabNavigation = true;
     menu.items = [...menu.items, { text: 'Menu Item 4', children: [{ text: 'Menu Item 4 1' }] }];
-    await nextUpdate(menu);
+    await nextRender();
     buttons = menu._buttons;
     buttons[2].focus();
     arrowDown(buttons[2]);
-    await oneEvent(subMenu, 'opened-changed');
+
+    await oneEvent(subMenuOverlay, 'vaadin-overlay-open');
 
     await sendKeys({ press: 'Tab' });
     await nextRender(subMenu);
@@ -310,7 +309,7 @@ describe('sub-menu', () => {
     buttons = menu._buttons;
     buttons[3].focus();
     arrowDown(buttons[3]);
-    await oneEvent(subMenu, 'opened-changed');
+    await oneEvent(subMenuOverlay, 'vaadin-overlay-open');
 
     await sendKeys({ press: 'Shift+Tab' });
     await nextRender(subMenu);
@@ -321,7 +320,7 @@ describe('sub-menu', () => {
 
   it('should focus first item on arrow down after opened on arrow left', async () => {
     arrowDown(buttons[0]);
-    await oneEvent(subMenu, 'opened-changed');
+    await oneEvent(subMenuOverlay, 'vaadin-overlay-open');
     expect(subMenu.opened).to.be.true;
     let item = subMenuOverlay.querySelector('vaadin-menu-bar-item');
     await nextRender(subMenu);
@@ -335,7 +334,7 @@ describe('sub-menu', () => {
 
   it('should focus last item on arrow up after opened on arrow left', async () => {
     arrowDown(buttons[0]);
-    await oneEvent(subMenu, 'opened-changed');
+    await oneEvent(subMenuOverlay, 'vaadin-overlay-open');
     expect(subMenu.opened).to.be.true;
     const item = subMenuOverlay.querySelector('vaadin-menu-bar-item');
     await nextRender(subMenu);
@@ -371,7 +370,7 @@ describe('sub-menu', () => {
 
   it('should close submenu on Esc after switch on arrow left', async () => {
     arrowDown(buttons[0]);
-    await oneEvent(subMenu, 'opened-changed');
+    await oneEvent(subMenuOverlay, 'vaadin-overlay-open');
     expect(subMenu.opened).to.be.true;
     await nextRender(subMenu);
     const item = subMenuOverlay.querySelector('vaadin-menu-bar-item');
@@ -426,7 +425,7 @@ describe('sub-menu', () => {
 
   it('should not close on parent item click', async () => {
     arrowUp(buttons[0]);
-    await oneEvent(subMenu, 'opened-changed');
+    await oneEvent(subMenuOverlay, 'vaadin-overlay-open');
     const items = subMenuOverlay.querySelectorAll('vaadin-menu-bar-item');
     const last = items[items.length - 1];
     await nextRender(subMenu);
@@ -753,8 +752,7 @@ describe('touch', () => {
 
   (isSafari ? it.skip : it)('should close submenu on mobile when selecting an item in the nested one', async () => {
     arrowDown(buttons[0]);
-    await oneEvent(subMenu, 'opened-changed');
-    await nextRender(subMenu);
+    await oneEvent(subMenuOverlay, 'vaadin-overlay-open');
     const subMenu2 = subMenuOverlay.querySelector('vaadin-menu-bar-submenu');
     items = subMenuOverlay.querySelectorAll('vaadin-menu-bar-item');
     item = items[items.length - 1];
@@ -771,8 +769,7 @@ describe('touch', () => {
 
   it('should not close submenu on mobile when opening the nested submenu', async () => {
     arrowDown(buttons[0]);
-    await oneEvent(subMenu, 'opened-changed');
-    await nextRender(subMenu);
+    await oneEvent(subMenuOverlay, 'vaadin-overlay-open');
     const subMenu2 = subMenuOverlay.querySelector('vaadin-menu-bar-submenu');
     items = subMenuOverlay.querySelectorAll('vaadin-menu-bar-item');
     item = items[items.length - 1];
