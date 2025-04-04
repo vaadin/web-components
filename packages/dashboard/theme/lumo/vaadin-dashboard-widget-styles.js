@@ -60,7 +60,6 @@ const dashboardWidgetAndSection = css`
     align-items: center;
     box-sizing: border-box;
     justify-content: space-between;
-    gap: var(--lumo-space-xs);
   }
 
   [part='title'] {
@@ -110,6 +109,7 @@ const dashboardWidgetAndSection = css`
   [part~='remove-button'] {
     cursor: pointer;
     --icon: var(--lumo-icons-cross);
+    margin-inline-start: var(--lumo-space-xs);
   }
 
   /* Mode controls */
@@ -147,6 +147,7 @@ const dashboardWidget = css`
     --_border-shadow: 0 0 0 var(--_vaadin-dashboard-widget-border-width) var(--_vaadin-dashboard-widget-border-color);
     --_shadow: var(--_vaadin-dashboard-widget-shadow);
     box-shadow: var(--_shadow), var(--_border-shadow);
+    overflow: hidden;
   }
 
   /* Widget states */
@@ -180,7 +181,6 @@ const dashboardWidget = css`
   header {
     min-height: var(--lumo-size-l);
     padding: 0 var(--lumo-space-m);
-    border-bottom: 1px solid var(--lumo-contrast-10pct);
   }
 
   :host([editable]) header {
@@ -194,7 +194,8 @@ const dashboardWidget = css`
 
   #content {
     min-height: var(--lumo-size-m);
-    padding: var(--lumo-space-s);
+    padding: var(--vaadin-dashboard-widget-padding, 0);
+    padding-top: 0;
   }
 
   :host([resize-mode]) #content,
