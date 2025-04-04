@@ -7,6 +7,7 @@ import {
   endKeyDown,
   fixtureSync,
   homeKeyDown,
+  tabKeyDown,
 } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
@@ -32,6 +33,10 @@ customElements.define(
 
     get _vertical() {
       return this.hasAttribute('vertical');
+    }
+
+    get _tabNavigation() {
+      return this.hasAttribute('tab-navigation');
     }
   },
 );
@@ -86,10 +91,21 @@ describe('keyboard-direction-mixin', () => {
           expect(element.focused).to.be.equal(items[1]);
         });
 
-        it('should move focus to prev element on "arrow-right" keydown in LTR', () => {
+        it('should move focus to prev element on "arrow-left" keydown in LTR', () => {
           arrowRightKeyDown(items[0]);
           arrowLeftKeyDown(items[1]);
           expect(element.focused).to.be.equal(items[0]);
+        });
+
+        it('should move focus to last element on first element "arrow-left" keydown', () => {
+          arrowLeftKeyDown(items[0]);
+          expect(element.focused).to.equal(items[5]);
+        });
+
+        it('should move focus to first element on last element "arrow-right" keydown', () => {
+          arrowLeftKeyDown(items[0]);
+          arrowRightKeyDown(items[5]);
+          expect(element.focused).to.equal(items[0]);
         });
       });
 
@@ -107,6 +123,17 @@ describe('keyboard-direction-mixin', () => {
           arrowLeftKeyDown(items[0]);
           arrowRightKeyDown(items[1]);
           expect(element.focused).to.be.equal(items[0]);
+        });
+
+        it('should move focus to last element on first element "arrow-right" keydown', () => {
+          arrowRightKeyDown(items[0]);
+          expect(element.focused).to.equal(items[5]);
+        });
+
+        it('should move focus to first element on last element "arrow-left" keydown', () => {
+          arrowRightKeyDown(items[0]);
+          arrowLeftKeyDown(items[5]);
+          expect(element.focused).to.equal(items[0]);
         });
       });
     });
@@ -187,6 +214,35 @@ describe('keyboard-direction-mixin', () => {
         arrowRightKeyDown(items[0]);
         expect(element.focused).to.be.equal(items[3]);
       });
+    });
+  });
+
+  describe('Tab navigation', () => {
+    beforeEach(() => {
+      element.setAttribute('tab-navigation', '');
+      element.focus();
+    });
+
+    it('should move focus to next element on Tab keydown', () => {
+      tabKeyDown(items[0]);
+      expect(element.focused).to.be.equal(items[1]);
+    });
+
+    it('should move focus to prev element on Shift + Tab keydown', () => {
+      tabKeyDown(items[0]);
+      tabKeyDown(items[1], ['shift']);
+      expect(element.focused).to.be.equal(items[0]);
+    });
+
+    it('should not move focus to last element on first element Shift + Tab keydown', () => {
+      tabKeyDown(items[0], ['shift']);
+      expect(element.focused).to.not.equal(items[5]);
+    });
+
+    it('should not move focus to first element on last element Tab keydown', () => {
+      items[5].focus();
+      tabKeyDown(items[5]);
+      expect(element.focused).to.not.equal(items[0]);
     });
   });
 });
