@@ -152,9 +152,9 @@ const dashboardWidget = css`
     content: '';
     display: block;
     position: absolute;
-    inset: -1px;
+    inset: calc(-1 * var(--_vaadin-dashboard-widget-border-width));
     border: var(--_vaadin-dashboard-widget-border-width) solid var(--_vaadin-dashboard-widget-border-color);
-    border-radius: inherit;
+    border-radius: calc(var(--_vaadin-dashboard-widget-border-radius) + var(--_vaadin-dashboard-widget-border-width));
     pointer-events: none;
   }
 
