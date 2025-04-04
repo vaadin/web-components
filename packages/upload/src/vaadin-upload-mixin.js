@@ -5,7 +5,49 @@
  */
 import { announce } from '@vaadin/a11y-base/src/announce.js';
 import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
+import { I18nMixin } from '@vaadin/component-base/src/i18n-mixin.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
+
+const DEFAULT_I18N = {
+  dropFiles: {
+    one: 'Drop file here',
+    many: 'Drop files here',
+  },
+  addFiles: {
+    one: 'Upload File...',
+    many: 'Upload Files...',
+  },
+  error: {
+    tooManyFiles: 'Too Many Files.',
+    fileIsTooBig: 'File is Too Big.',
+    incorrectFileType: 'Incorrect File Type.',
+  },
+  uploading: {
+    status: {
+      connecting: 'Connecting...',
+      stalled: 'Stalled',
+      processing: 'Processing File...',
+      held: 'Queued',
+    },
+    remainingTime: {
+      prefix: 'remaining time: ',
+      unknown: 'unknown remaining time',
+    },
+    error: {
+      serverUnavailable: 'Upload failed, please try again later',
+      unexpectedServerError: 'Upload failed due to server error',
+      forbidden: 'Upload forbidden',
+    },
+  },
+  file: {
+    retry: 'Retry',
+    start: 'Start',
+    remove: 'Remove',
+  },
+  units: {
+    size: ['B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'],
+  },
+};
 
 class AddButtonController extends SlotController {
   constructor(host) {
@@ -64,7 +106,7 @@ class DropLabelController extends SlotController {
  * @polymerMixin
  */
 export const UploadMixin = (superClass) =>
-  class UploadMixin extends superClass {
+  class UploadMixin extends I18nMixin(DEFAULT_I18N, superClass) {
     static get properties() {
       return {
         /**
@@ -272,112 +314,6 @@ export const UploadMixin = (superClass) =>
          */
         capture: String,
 
-        /**
-         * The object used to localize this component.
-         * For changing the default localization, change the entire
-         * _i18n_ object or just the property you want to modify.
-         *
-         * The object has the following JSON structure and default values:
-         *
-         * ```
-         * {
-         *   dropFiles: {
-         *     one: 'Drop file here',
-         *     many: 'Drop files here'
-         *   },
-         *   addFiles: {
-         *     one: 'Upload File...',
-         *     many: 'Upload Files...'
-         *   },
-         *   error: {
-         *     tooManyFiles: 'Too Many Files.',
-         *     fileIsTooBig: 'File is Too Big.',
-         *     incorrectFileType: 'Incorrect File Type.'
-         *   },
-         *   uploading: {
-         *     status: {
-         *       connecting: 'Connecting...',
-         *       stalled: 'Stalled',
-         *       processing: 'Processing File...',
-         *       held: 'Queued'
-         *     },
-         *     remainingTime: {
-         *       prefix: 'remaining time: ',
-         *       unknown: 'unknown remaining time'
-         *     },
-         *     error: {
-         *       serverUnavailable: 'Upload failed, please try again later',
-         *       unexpectedServerError: 'Upload failed due to server error',
-         *       forbidden: 'Upload forbidden'
-         *     }
-         *   },
-         *   file: {
-         *     retry: 'Retry',
-         *     start: 'Start',
-         *     remove: 'Remove'
-         *   },
-         *   units: {
-         *     size: ['B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'],
-         *     sizeBase: 1000
-         *   },
-         *   formatSize: function(bytes) {
-         *     // returns the size followed by the best suitable unit
-         *   },
-         *   formatTime: function(seconds, [secs, mins, hours]) {
-         *     // returns a 'HH:MM:SS' string
-         *   }
-         * }
-         * ```
-         *
-         * @type {!UploadI18n}
-         * @default {English}
-         */
-        i18n: {
-          type: Object,
-          value() {
-            return {
-              dropFiles: {
-                one: 'Drop file here',
-                many: 'Drop files here',
-              },
-              addFiles: {
-                one: 'Upload File...',
-                many: 'Upload Files...',
-              },
-              error: {
-                tooManyFiles: 'Too Many Files.',
-                fileIsTooBig: 'File is Too Big.',
-                incorrectFileType: 'Incorrect File Type.',
-              },
-              uploading: {
-                status: {
-                  connecting: 'Connecting...',
-                  stalled: 'Stalled',
-                  processing: 'Processing File...',
-                  held: 'Queued',
-                },
-                remainingTime: {
-                  prefix: 'remaining time: ',
-                  unknown: 'unknown remaining time',
-                },
-                error: {
-                  serverUnavailable: 'Upload failed, please try again later',
-                  unexpectedServerError: 'Upload failed due to server error',
-                  forbidden: 'Upload forbidden',
-                },
-              },
-              file: {
-                retry: 'Retry',
-                start: 'Start',
-                remove: 'Remove',
-              },
-              units: {
-                size: ['B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'],
-              },
-            };
-          },
-        },
-
         /** @private */
         _addButton: {
           type: Object,
@@ -402,11 +338,77 @@ export const UploadMixin = (superClass) =>
 
     static get observers() {
       return [
-        '__updateAddButton(_addButton, maxFiles, i18n, maxFilesReached, disabled)',
-        '__updateDropLabel(_dropLabel, maxFiles, i18n)',
-        '__updateFileList(_fileList, files, i18n, disabled)',
+        '__updateAddButton(_addButton, maxFiles, __effectiveI18n, maxFilesReached, disabled)',
+        '__updateDropLabel(_dropLabel, maxFiles, __effectiveI18n)',
+        '__updateFileList(_fileList, files, __effectiveI18n, disabled)',
         '__updateMaxFilesReached(maxFiles, files)',
       ];
+    }
+
+    /**
+     * The object used to localize this component. To change the default
+     * localization, replace this with an object that provides all properties, or
+     * just the individual properties you want to change.
+     *
+     * The object has the following JSON structure and default values:
+     *
+     * ```
+     * {
+     *   dropFiles: {
+     *     one: 'Drop file here',
+     *     many: 'Drop files here'
+     *   },
+     *   addFiles: {
+     *     one: 'Upload File...',
+     *     many: 'Upload Files...'
+     *   },
+     *   error: {
+     *     tooManyFiles: 'Too Many Files.',
+     *     fileIsTooBig: 'File is Too Big.',
+     *     incorrectFileType: 'Incorrect File Type.'
+     *   },
+     *   uploading: {
+     *     status: {
+     *       connecting: 'Connecting...',
+     *       stalled: 'Stalled',
+     *       processing: 'Processing File...',
+     *       held: 'Queued'
+     *     },
+     *     remainingTime: {
+     *       prefix: 'remaining time: ',
+     *       unknown: 'unknown remaining time'
+     *     },
+     *     error: {
+     *       serverUnavailable: 'Upload failed, please try again later',
+     *       unexpectedServerError: 'Upload failed due to server error',
+     *       forbidden: 'Upload forbidden'
+     *     }
+     *   },
+     *   file: {
+     *     retry: 'Retry',
+     *     start: 'Start',
+     *     remove: 'Remove'
+     *   },
+     *   units: {
+     *     size: ['B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'],
+     *     sizeBase: 1000
+     *   },
+     *   formatSize: function(bytes) {
+     *     // returns the size followed by the best suitable unit
+     *   },
+     *   formatTime: function(seconds, [secs, mins, hours]) {
+     *     // returns a 'HH:MM:SS' string
+     *   }
+     * }
+     * ```
+     * @return {!UploadI18n}
+     */
+    get i18n() {
+      return super.i18n;
+    }
+
+    set i18n(value) {
+      super.i18n = value;
     }
 
     /** @private */
@@ -462,16 +464,16 @@ export const UploadMixin = (superClass) =>
 
     /** @private */
     _formatSize(bytes) {
-      if (typeof this.i18n.formatSize === 'function') {
-        return this.i18n.formatSize(bytes);
+      if (typeof this.__effectiveI18n.formatSize === 'function') {
+        return this.__effectiveI18n.formatSize(bytes);
       }
 
       // https://wiki.ubuntu.com/UnitsPolicy
-      const base = this.i18n.units.sizeBase || 1000;
+      const base = this.__effectiveI18n.units.sizeBase || 1000;
       const unit = ~~(Math.log(bytes) / Math.log(base));
       const dec = Math.max(0, Math.min(3, unit - 1));
       const size = parseFloat((bytes / base ** unit).toFixed(dec));
-      return `${size} ${this.i18n.units.size[unit]}`;
+      return `${size} ${this.__effectiveI18n.units.size[unit]}`;
     }
 
     /** @private */
@@ -489,8 +491,8 @@ export const UploadMixin = (superClass) =>
 
     /** @private */
     _formatTime(seconds, split) {
-      if (typeof this.i18n.formatTime === 'function') {
-        return this.i18n.formatTime(seconds, split);
+      if (typeof this.__effectiveI18n.formatTime === 'function') {
+        return this.__effectiveI18n.formatTime(seconds, split);
       }
 
       // Fill HH:MM:SS with leading zeros
@@ -510,8 +512,8 @@ export const UploadMixin = (superClass) =>
     _formatFileProgress(file) {
       const remainingTime =
         file.loaded > 0
-          ? this.i18n.uploading.remainingTime.prefix + file.remainingStr
-          : this.i18n.uploading.remainingTime.unknown;
+          ? this.__effectiveI18n.uploading.remainingTime.prefix + file.remainingStr
+          : this.__effectiveI18n.uploading.remainingTime.unknown;
 
       return `${file.totalStr}: ${file.progress}% (${remainingTime})`;
     }
@@ -522,30 +524,30 @@ export const UploadMixin = (superClass) =>
     }
 
     /** @private */
-    __updateAddButton(addButton, maxFiles, i18n, maxFilesReached, disabled) {
+    __updateAddButton(addButton, maxFiles, effectiveI18n, maxFilesReached, disabled) {
       if (addButton) {
         addButton.disabled = disabled || maxFilesReached;
 
         // Only update text content for the default button element
         if (addButton === this._addButtonController.defaultNode) {
-          addButton.textContent = this._i18nPlural(maxFiles, i18n.addFiles);
+          addButton.textContent = this._i18nPlural(maxFiles, effectiveI18n.addFiles);
         }
       }
     }
 
     /** @private */
-    __updateDropLabel(dropLabel, maxFiles, i18n) {
+    __updateDropLabel(dropLabel, maxFiles, effectiveI18n) {
       // Only update text content for the default label element
       if (dropLabel && dropLabel === this._dropLabelController.defaultNode) {
-        dropLabel.textContent = this._i18nPlural(maxFiles, i18n.dropFiles);
+        dropLabel.textContent = this._i18nPlural(maxFiles, effectiveI18n.dropFiles);
       }
     }
 
     /** @private */
-    __updateFileList(list, files, i18n, disabled) {
+    __updateFileList(list, files, effectiveI18n, disabled) {
       if (list) {
         list.items = [...files];
-        list.i18n = i18n;
+        list.i18n = effectiveI18n;
         list.disabled = disabled;
       }
     }
@@ -691,12 +693,12 @@ export const UploadMixin = (superClass) =>
           if (progress < 100) {
             this._setStatus(file, total, loaded, elapsed);
             stalledId = setTimeout(() => {
-              file.status = this.i18n.uploading.status.stalled;
+              file.status = this.__effectiveI18n.uploading.status.stalled;
               this._renderFileList();
             }, 2000);
           } else {
             file.loadedStr = file.totalStr;
-            file.status = this.i18n.uploading.status.processing;
+            file.status = this.__effectiveI18n.uploading.status.processing;
           }
         }
 
@@ -726,11 +728,11 @@ export const UploadMixin = (superClass) =>
             return;
           }
           if (xhr.status === 0) {
-            file.error = this.i18n.uploading.error.serverUnavailable;
+            file.error = this.__effectiveI18n.uploading.error.serverUnavailable;
           } else if (xhr.status >= 500) {
-            file.error = this.i18n.uploading.error.unexpectedServerError;
+            file.error = this.__effectiveI18n.uploading.error.unexpectedServerError;
           } else if (xhr.status >= 400) {
-            file.error = this.i18n.uploading.error.forbidden;
+            file.error = this.__effectiveI18n.uploading.error.forbidden;
           }
 
           file.complete = !file.error;
@@ -765,7 +767,7 @@ export const UploadMixin = (superClass) =>
       xhr.open(this.method, file.uploadTarget, true);
       this._configureXhr(xhr);
 
-      file.status = this.i18n.uploading.status.connecting;
+      file.status = this.__effectiveI18n.uploading.status.connecting;
       file.uploading = file.indeterminate = true;
       file.complete = file.abort = file.error = file.held = false;
 
@@ -844,7 +846,7 @@ export const UploadMixin = (superClass) =>
       if (this.maxFilesReached) {
         this.dispatchEvent(
           new CustomEvent('file-reject', {
-            detail: { file, error: this.i18n.error.tooManyFiles },
+            detail: { file, error: this.__effectiveI18n.error.tooManyFiles },
           }),
         );
         return;
@@ -852,7 +854,7 @@ export const UploadMixin = (superClass) =>
       if (this.maxFileSize >= 0 && file.size > this.maxFileSize) {
         this.dispatchEvent(
           new CustomEvent('file-reject', {
-            detail: { file, error: this.i18n.error.fileIsTooBig },
+            detail: { file, error: this.__effectiveI18n.error.fileIsTooBig },
           }),
         );
         return;
@@ -861,14 +863,14 @@ export const UploadMixin = (superClass) =>
       if (re && !(re.test(file.type) || re.test(file.name))) {
         this.dispatchEvent(
           new CustomEvent('file-reject', {
-            detail: { file, error: this.i18n.error.incorrectFileType },
+            detail: { file, error: this.__effectiveI18n.error.incorrectFileType },
           }),
         );
         return;
       }
       file.loaded = 0;
       file.held = true;
-      file.status = this.i18n.uploading.status.held;
+      file.status = this.__effectiveI18n.uploading.status.held;
       this.files = [file, ...this.files];
 
       if (!this.noAuto) {
