@@ -59,7 +59,6 @@ snapshots["menu-bar basic"] =
 snapshots["menu-bar overlay"] = 
 `<vaadin-menu-bar-overlay
   opened=""
-  right-aligned=""
   start-aligned=""
   top-aligned=""
 >
@@ -95,7 +94,6 @@ snapshots["menu-bar overlay class"] =
 `<vaadin-menu-bar-overlay
   class="custom menu-bar-overlay"
   opened=""
-  right-aligned=""
   start-aligned=""
   top-aligned=""
 >
