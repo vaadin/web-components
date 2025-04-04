@@ -144,24 +144,32 @@ const dashboardWidget = css`
   :host {
     background: var(--_vaadin-dashboard-widget-background);
     border-radius: var(--_vaadin-dashboard-widget-border-radius);
-    --_border-shadow: 0 0 0 var(--_vaadin-dashboard-widget-border-width) var(--_vaadin-dashboard-widget-border-color);
-    --_shadow: var(--_vaadin-dashboard-widget-shadow);
-    box-shadow: var(--_shadow), var(--_border-shadow);
-    overflow: hidden;
+    box-shadow: var(--_vaadin-dashboard-widget-shadow);
+    position: relative;
+  }
+
+  :host::before {
+    content: '';
+    display: block;
+    position: absolute;
+    inset: -1px;
+    border: var(--_vaadin-dashboard-widget-border-width) solid var(--_vaadin-dashboard-widget-border-color);
+    border-radius: inherit;
   }
 
   /* Widget states */
 
   :host([editable]) {
-    --_shadow: var(--_vaadin-dashboard-widget-editable-shadow);
+    --_vaadin-dashboard-widget-shadow: var(--_vaadin-dashboard-widget-editable-shadow);
   }
 
-  :host([focused]) {
-    --_border-shadow: inset 0 0 0 var(--_focus-ring-width) var(--_focus-ring-color);
+  :host([focused])::before {
+    border-width: var(--_focus-ring-width);
+    border-color: var(--_focus-ring-color);
   }
 
   :host([selected]) {
-    --_shadow: var(--_vaadin-dashboard-widget-selected-shadow);
+    --_vaadin-dashboard-widget-shadow: var(--_vaadin-dashboard-widget-selected-shadow);
     background: var(--lumo-primary-color-10pct);
   }
 
@@ -196,6 +204,10 @@ const dashboardWidget = css`
     min-height: var(--lumo-size-m);
     padding: var(--vaadin-dashboard-widget-padding, 0);
     padding-top: 0;
+    border-radius: inherit;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    overflow: hidden;
   }
 
   :host([resize-mode]) #content,
