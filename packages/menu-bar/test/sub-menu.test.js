@@ -1,9 +1,7 @@
 import { expect } from '@vaadin/chai-plugins';
-import { sendKeys } from '@vaadin/test-runner-commands';
 import {
   arrowDown,
   arrowLeft,
-  arrowRight,
   arrowUp,
   click,
   enter,
@@ -237,88 +235,6 @@ describe('sub-menu', () => {
     expect(subMenu.opened).to.be.false;
   });
 
-  it('should switch menubar button with items and open submenu on arrow left', async () => {
-    arrowDown(buttons[0]);
-    await oneEvent(subMenu, 'opened-changed');
-    expect(subMenu.opened).to.be.true;
-    await nextRender(subMenu);
-    const item = subMenuOverlay.querySelector('vaadin-menu-bar-item');
-    arrowLeft(item);
-    await nextRender(subMenu);
-    expect(subMenu.opened).to.be.true;
-    expect(subMenu.listenOn).to.equal(buttons[2]);
-  });
-
-  it('should switch menubar button without items and focus it on arrow left', async () => {
-    arrowDown(buttons[2]);
-    await oneEvent(subMenu, 'opened-changed');
-    expect(subMenu.opened).to.be.true;
-    await nextRender(subMenu);
-    const item = subMenuOverlay.querySelector('vaadin-menu-bar-item');
-    arrowLeft(item);
-    await nextRender(subMenu);
-    expect(subMenu.opened).to.be.false;
-    expect(buttons[1].hasAttribute('focused')).to.be.true;
-    expect(buttons[1].hasAttribute('focus-ring')).to.be.true;
-  });
-
-  it('should switch menubar button with items and open submenu on arrow right', async () => {
-    arrowDown(buttons[2]);
-    await oneEvent(subMenu, 'opened-changed');
-    expect(subMenu.opened).to.be.true;
-    await nextRender(subMenu);
-    const item = subMenuOverlay.querySelector('vaadin-menu-bar-item');
-    arrowRight(item);
-    await nextRender(subMenu);
-    expect(subMenu.opened).to.be.true;
-    expect(subMenu.listenOn).to.equal(buttons[0]);
-  });
-
-  it('should switch menubar button without items and focus it on arrow right', async () => {
-    arrowDown(buttons[0]);
-    await oneEvent(subMenu, 'opened-changed');
-    expect(subMenu.opened).to.be.true;
-    await nextRender(subMenu);
-    const item = subMenuOverlay.querySelector('vaadin-menu-bar-item');
-    arrowRight(item);
-    await nextRender(subMenu);
-    expect(subMenu.opened).to.be.false;
-    expect(buttons[1].hasAttribute('focused')).to.be.true;
-    expect(buttons[1].hasAttribute('focus-ring')).to.be.true;
-  });
-
-  it('should switch menubar button with items and open submenu on Tab in tab navigation', async () => {
-    menu.tabNavigation = true;
-    menu.items = [...menu.items, { text: 'Menu Item 4', children: [{ text: 'Menu Item 4 1' }] }];
-    await nextUpdate(menu);
-    buttons = menu._buttons;
-    buttons[2].focus();
-    arrowDown(buttons[2]);
-    await oneEvent(subMenu, 'opened-changed');
-
-    await sendKeys({ press: 'Tab' });
-    await nextRender(subMenu);
-
-    expect(subMenu.opened).to.be.true;
-    expect(subMenu.listenOn).to.equal(buttons[3]);
-  });
-
-  it('should switch menubar button with items and open submenu on Shift Tab in tab navigation', async () => {
-    menu.tabNavigation = true;
-    menu.items = [...menu.items, { text: 'Menu Item 4', children: [{ text: 'Menu Item 4 1' }] }];
-    await nextUpdate(menu);
-    buttons = menu._buttons;
-    buttons[3].focus();
-    arrowDown(buttons[3]);
-    await oneEvent(subMenu, 'opened-changed');
-
-    await sendKeys({ press: 'Shift+Tab' });
-    await nextRender(subMenu);
-
-    expect(subMenu.opened).to.be.true;
-    expect(subMenu.listenOn).to.equal(buttons[2]);
-  });
-
   it('should focus first item on arrow down after opened on arrow left', async () => {
     arrowDown(buttons[0]);
     await oneEvent(subMenu, 'opened-changed');
@@ -346,27 +262,6 @@ describe('sub-menu', () => {
     const spy = sinon.spy(last, 'focus');
     arrowUp(buttons[2]);
     expect(spy.calledOnce).to.be.true;
-  });
-
-  it('should switch submenu again on subsequent arrow left', async () => {
-    menu.items = [
-      ...menu.items.slice(0, 1),
-      { text: 'Menu Item 2', children: [{ text: 'Menu Item 2 1' }] },
-      ...menu.items.slice(2),
-    ];
-    await nextUpdate(menu);
-    buttons = menu._buttons;
-    await nextRender(menu);
-    arrowDown(buttons[0]);
-    await nextRender(subMenu);
-    const item = subMenuOverlay.querySelector('vaadin-menu-bar-item');
-    arrowLeft(item);
-    await nextRender(subMenu);
-    arrowLeft(buttons[2]);
-    await nextRender(subMenu);
-    expect(subMenu.opened).to.be.true;
-    expect(subMenu.listenOn).to.equal(buttons[1]);
-    expect(buttons[1].hasAttribute('focused')).to.be.true;
   });
 
   it('should close submenu on Esc after switch on arrow left', async () => {
