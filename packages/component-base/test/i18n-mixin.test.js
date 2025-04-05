@@ -77,6 +77,17 @@ const runTests = (baseClass) => {
     element.i18n = { bar: { baz: null } };
     expect(element.__effectiveI18n).to.deep.equal(DEFAULT_I18N);
   });
+
+  it('should not refresh i18n when setting property to same reference', () => {
+    const customI18n = { foo: 'Custom Foo' };
+    element.i18n = customI18n;
+
+    const effectiveI18n = element.__effectiveI18n;
+
+    element.i18n = customI18n;
+
+    expect(element.__effectiveI18n).to.equal(effectiveI18n);
+  });
 };
 
 describe('I18nMixin + Polymer', () => {
