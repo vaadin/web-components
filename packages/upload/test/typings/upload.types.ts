@@ -122,3 +122,7 @@ upload.addEventListener('upload-request', (event) => {
   assertType<UploadFile>(event.detail.file);
   assertType<FormData>(event.detail.formData);
 });
+
+// I18n
+assertType<UploadI18n>({ addFiles: {} });
+assertType<UploadI18n>({ addFiles: { one: 'one file' } });

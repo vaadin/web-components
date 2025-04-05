@@ -4,6 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import type { Constructor } from '@open-wc/dedupe-mixin';
+import type { I18nMixinClass } from '@vaadin/component-base/src/i18n-mixin.js';
 
 export interface UploadFile extends File {
   uploadTarget: string;
@@ -25,47 +26,51 @@ export interface UploadFile extends File {
 }
 
 export interface UploadI18n {
-  dropFiles: {
-    one: string;
-    many: string;
+  dropFiles?: {
+    one?: string;
+    many?: string;
   };
-  addFiles: {
-    one: string;
-    many: string;
+  addFiles?: {
+    one?: string;
+    many?: string;
   };
-  error: {
-    tooManyFiles: string;
-    fileIsTooBig: string;
-    incorrectFileType: string;
+  error?: {
+    tooManyFiles?: string;
+    fileIsTooBig?: string;
+    incorrectFileType?: string;
   };
-  uploading: {
-    status: {
-      connecting: string;
-      stalled: string;
-      processing: string;
-      held: string;
+  uploading?: {
+    status?: {
+      connecting?: string;
+      stalled?: string;
+      processing?: string;
+      held?: string;
     };
-    remainingTime: {
-      prefix: string;
-      unknown: string;
+    remainingTime?: {
+      prefix?: string;
+      unknown?: string;
     };
-    error: {
-      serverUnavailable: string;
-      unexpectedServerError: string;
-      forbidden: string;
+    error?: {
+      serverUnavailable?: string;
+      unexpectedServerError?: string;
+      forbidden?: string;
     };
   };
-  units: {
-    size: string[];
+  units?: {
+    size?: string[];
     sizeBase?: number;
   };
+
   formatSize?(bytes: number): string;
+
   formatTime?(seconds: number, units: number[]): string;
 }
 
 export type UploadMethod = 'POST' | 'PUT';
 
-export declare function UploadMixin<T extends Constructor<HTMLElement>>(base: T): Constructor<UploadMixinClass> & T;
+export declare function UploadMixin<T extends Constructor<HTMLElement>>(
+  base: T,
+): Constructor<UploadMixinClass> & Constructor<I18nMixinClass<UploadI18n>> & T;
 
 export declare class UploadMixinClass {
   /**
@@ -190,9 +195,9 @@ export declare class UploadMixinClass {
   capture: string | null | undefined;
 
   /**
-   * The object used to localize this component.
-   * For changing the default localization, change the entire
-   * _i18n_ object or just the property you want to modify.
+   * The object used to localize this component. To change the default
+   * localization, replace this with an object that provides all properties, or
+   * just the individual properties you want to change.
    *
    * The object has the following JSON structure and default values:
    *
