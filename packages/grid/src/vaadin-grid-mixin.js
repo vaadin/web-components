@@ -201,6 +201,9 @@ export const GridMixin = (superClass) =>
     connectedCallback() {
       super.connectedCallback();
       this.isAttached = true;
+      if (this.__virtualizer) {
+        this.__virtualizer.hostConnected();
+      }
       this.recalculateColumnWidths();
     }
 

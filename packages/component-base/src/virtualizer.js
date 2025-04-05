@@ -80,4 +80,13 @@ export class Virtualizer {
   flush() {
     this.__adapter.flush();
   }
+
+  /**
+   * Notifies the virtualizer about its host element connected to the DOM.
+   *
+   * @method hostConnected
+   */
+  hostConnected() {
+    this.__adapter.hostConnected();
+  }
 }
