@@ -12,10 +12,11 @@ export const iconStyles = css`
     align-items: center;
     box-sizing: border-box;
     vertical-align: middle;
-    width: 24px;
-    height: 24px;
-    fill: currentColor;
+    width: var(--vaadin-icon-size, calc(1lh - 2px));
+    height: var(--vaadin-icon-size, calc(1lh - 2px));
+    fill: var(--vaadin-icon-color, currentColor);
     container-type: size;
+    contain: layout;
   }
 
   :host::after,
