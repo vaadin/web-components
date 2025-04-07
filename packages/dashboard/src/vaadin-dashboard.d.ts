@@ -207,7 +207,6 @@ export interface DashboardI18n {
  * `editable`           | Set when the dashboard is editable.
  * `dense-layout`       | Set when the dashboard is in dense mode.
  * `item-selected`      | Set when an item is selected.
- * `root-heading-level` | Set root heading level for sections and widgets.
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
