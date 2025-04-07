@@ -16,6 +16,11 @@ export const dashboardLayoutStyles = css`
     --vaadin-dashboard-widget-padding: var(--lumo-space-m);
   }
 
+  :host([theme~='flat-widgets']) {
+    --vaadin-dashboard-widget-background: var(--lumo-contrast-5pct);
+    --vaadin-dashboard-widget-border-color: transparent;
+  }
+
   #grid {
     --_vaadin-dashboard-default-gap: var(--lumo-space-m);
     --_vaadin-dashboard-default-padding: var(--lumo-space-m);
