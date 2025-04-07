@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Style in head</title>
+    <script type="module" src="../common.js"></script>
+    <style>
+      @import url('styles/item.css');
+
+      html {
+        --_lumo-item-selected-icon-display: block;
+      }
+    </style>
+  </head>
+  <body>
+    <vaadin-item tabindex="0">Basic item</vaadin-item>
+    <vaadin-item tabindex="0" focus-ring>Focused item</vaadin-item>
+    <vaadin-item tabindex="0" selected>Selected item</vaadin-item>
+
+    <shadow-host></shadow-host>
+
+    <button>Move to shadow</button>
+
+    <script type="module">
+      import '@vaadin/item/src/vaadin-lit-item.js';
+      import './shadow-host.js';
+
+      document.querySelector('button').addEventListener('click', () => {
+        const shadow = document.querySelector('shadow-host').shadowRoot;
+        shadow.appendChild(document.querySelector('vaadin-item[selected]'));
+      });
+    </script>
+  </body>
+</html>

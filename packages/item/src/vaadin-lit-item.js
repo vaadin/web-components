@@ -4,6 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { css, html, LitElement } from 'lit';
+import { CssInjectionMixin } from '@vaadin/component-base/src/css-injection-mixin.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
@@ -19,7 +20,7 @@ import { ItemMixin } from './vaadin-item-mixin.js';
  * There is no ETA regarding specific Vaadin version where it'll land.
  * Feel free to try this code in your apps as per Apache 2.0 license.
  */
-class Item extends ItemMixin(ThemableMixin(DirMixin(PolylitMixin(LitElement)))) {
+class Item extends ItemMixin(CssInjectionMixin(ThemableMixin(DirMixin(PolylitMixin(LitElement))))) {
   static get is() {
     return 'vaadin-item';
   }
