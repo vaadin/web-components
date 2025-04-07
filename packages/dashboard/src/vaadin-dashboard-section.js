@@ -168,7 +168,6 @@ class DashboardSection extends DashboardItemMixin(ElementMixin(ThemableMixin(Pol
       /* @private */
       __rootHeadingLevel: {
         type: Number,
-        value: 2,
       },
 
       /** @private */
