@@ -5,6 +5,10 @@ import '../vaadin-master-detail-layout.js';
 import './helpers/master-content.js';
 import './helpers/detail-content.js';
 
+window.Vaadin ||= {};
+window.Vaadin.featureFlags ||= {};
+window.Vaadin.featureFlags.masterDetailLayoutComponent = true;
+
 describe('overlay mode', () => {
   let layout, master, detail, detailContent;
   let width, height;

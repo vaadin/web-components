@@ -3,6 +3,10 @@ import { visualDiff } from '@web/test-runner-visual-regression';
 import '@vaadin/vaadin-lumo-styles/color-global.js';
 import '../../../theme/lumo/vaadin-master-detail-layout.js';
 
+window.Vaadin ||= {};
+window.Vaadin.featureFlags ||= {};
+window.Vaadin.featureFlags.masterDetailLayoutComponent = true;
+
 describe('master-detail-layout', () => {
   let element;
 
