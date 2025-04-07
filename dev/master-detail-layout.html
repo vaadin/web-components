@@ -51,6 +51,11 @@
     </vaadin-master-detail-layout>
 
     <script type="module">
+      // Enable feature flag
+      window.Vaadin ||= {};
+      window.Vaadin.featureFlags ||= {};
+      window.Vaadin.featureFlags.masterDetailLayoutComponent = true;
+
       import '@vaadin/checkbox';
       import '@vaadin/master-detail-layout';
       import '@vaadin/master-detail-layout/test/helpers/master-content.js';
