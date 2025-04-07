@@ -162,6 +162,8 @@ const dashboardWidget = css`
 
   :host([editable]) {
     --_vaadin-dashboard-widget-shadow: var(--_vaadin-dashboard-widget-editable-shadow);
+    --_vaadin-dashboard-widget-border-color: var(--lumo-contrast-20pct);
+    --_vaadin-dashboard-widget-border-width: 1px;
   }
 
   :host([focused])::before {
