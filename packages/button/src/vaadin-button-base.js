@@ -3,70 +3,86 @@
  * Copyright (c) 2017 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import '@vaadin/component-base/src/style-props.js';
 import { css } from 'lit';
 
 export const buttonStyles = css`
-  :host {
-    display: inline-block;
-    position: relative;
-    outline: none;
-    white-space: nowrap;
-    -webkit-user-select: none;
-    user-select: none;
-  }
-
-  :host([hidden]) {
-    display: none !important;
-  }
-
-  :host([disabled]) {
-    pointer-events: var(--_vaadin-button-disabled-pointer-events, none);
-    cursor: not-allowed;
-  }
-
-  /* Aligns the button with form fields when placed on the same line.
-  Note, to make it work, the form fields should have the same "::before" pseudo-element. */
-  .vaadin-button-container::before {
-    content: '\\2003';
-    display: inline-block;
-    width: 0;
-    max-height: 100%;
-  }
-
-  .vaadin-button-container {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    width: 100%;
-    height: 100%;
-    min-height: inherit;
-    text-shadow: inherit;
-  }
-
-  [part='prefix'],
-  [part='suffix'] {
-    flex: none;
-  }
-
-  [part='label'] {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  @media (forced-colors: active) {
+  @layer base {
     :host {
-      outline: 1px solid;
-      outline-offset: -1px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      gap: var(--vaadin-button-gap, 0 var(--_vaadin-gap-container));
+
+      white-space: nowrap;
+      -webkit-tap-highlight-color: transparent;
+      -webkit-user-select: none;
+      user-select: none;
+      cursor: pointer;
+      box-sizing: border-box;
+      vertical-align: middle;
+      flex-shrink: 0;
+      height: var(--vaadin-button-height, auto);
+      margin: var(--vaadin-button-margin, 0);
+      padding: var(--vaadin-button-padding, var(--_vaadin-padding-container));
+      font-family: var(--vaadin-button-font-family, inherit);
+      font-size: var(--vaadin-button-font-size, inherit);
+      line-height: var(--vaadin-button-line-height, inherit);
+      font-weight: var(--vaadin-button-font-weight, 500);
+      color: var(--vaadin-button-text-color, var(--_vaadin-color-strong));
+      background: var(--vaadin-button-background, var(--_vaadin-background-container));
+      background-origin: border-box;
+      border: var(
+        --vaadin-button-border,
+        var(--vaadin-button-border-width, 1px) solid var(--vaadin-button-border-color, var(--_vaadin-border-color))
+      );
+      border-radius: var(--vaadin-button-border-radius, var(--_vaadin-radius-m));
     }
 
-    :host([focused]) {
-      outline-width: 2px;
+    :host([hidden]) {
+      display: none !important;
+    }
+
+    .vaadin-button-container,
+    [part='prefix'],
+    [part='suffix'],
+    [part='label'] {
+      display: contents;
+    }
+
+    :host([focus-ring]) {
+      outline: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
+      outline-offset: 1px;
+    }
+
+    :host([theme~='primary']) {
+      --vaadin-button-background: var(--_vaadin-color-strong);
+      --vaadin-button-text-color: var(--_vaadin-background);
+      --vaadin-button-border-color: transparent;
+    }
+
+    :host([theme~='tertiary']) {
+      --vaadin-button-text-color: var(--_vaadin-button-text-color);
+      --vaadin-button-background: transparent;
+      --vaadin-button-border-color: transparent;
     }
 
     :host([disabled]) {
-      outline-color: GrayText;
+      pointer-events: var(--_vaadin-button-disabled-pointer-events, none);
+      cursor: not-allowed;
+      opacity: 0.5;
+    }
+
+    :host([disabled][theme~='primary']) {
+      --vaadin-button-text-color: var(--_vaadin-background-container-strong);
+      --vaadin-button-background: var(--_vaadin-color-subtle);
+    }
+
+    @media (forced-colors: active) {
+      :host {
+        border: 1px solid;
+      }
     }
   }
 `;
