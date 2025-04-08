@@ -4,32 +4,20 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Link in head</title>
-    <!-- <script type="module" src="../common.js"></script> -->
+    <title>Multiple links in head</title>
     <link rel="stylesheet" href="./styles/item.css" />
-    <style>
-      html {
-        --_lumo-item-selected-icon-display: block;
-      }
-    </style>
+    <link rel="stylesheet" href="./styles/button.css" />
   </head>
   <body>
+    <vaadin-button>Button</vaadin-button>
+
     <vaadin-item tabindex="0">Basic item</vaadin-item>
     <vaadin-item tabindex="0" focus-ring>Focused item</vaadin-item>
     <vaadin-item tabindex="0" selected>Selected item</vaadin-item>
 
-    <shadow-host></shadow-host>
-
-    <button>Move to shadow</button>
-
     <script type="module">
       import '@vaadin/item/src/vaadin-lit-item.js';
-      import './shadow-host.js';
-
-      document.querySelector('button').addEventListener('click', () => {
-        const shadow = document.querySelector('shadow-host').shadowRoot;
-        shadow.appendChild(document.querySelector('vaadin-item[selected]'));
-      });
+      import '@vaadin/button/src/vaadin-lit-button.js';
     </script>
   </body>
 </html>
