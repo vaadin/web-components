@@ -160,6 +160,10 @@ export async function gatherMatchingStyleRules(instance) {
   // NOTE: original code used deprecated `performance.timing.loadEventEnd`
   const perfEntries = performance.getEntriesByType('navigation');
 
+  // TODO: also process `document.adoptedStyleSheets` to support importing
+  // CSS files from JS: `import '@vaadin/lumo/lumo.css' with { type: 'css' }`
+  // This would be convenient in some cases e.g. for Lumo visual tests
+
   if (perfEntries[0].loadEventEnd) {
     // Page has already loaded, document.styleSheets is populated
     processSheetsArray(document.styleSheets, instance, matchingStyleRules);
