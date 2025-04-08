@@ -101,10 +101,12 @@ export const CssInjectionMixin = (superClass) =>
 
         // Initialize custom property for this class with 0 as default
         // so that changing it to 1 would inject styles to instances
-        const styleTag = document.createElement('style');
-        styleTag.id = `${this.is}-css-inject-initial`;
-        styleTag.textContent = `:where(html) { --${this.is}-css-inject: 0 }`;
-        document.head.insertAdjacentElement('afterbegin', styleTag);
+        CSS.registerProperty({
+          name: propName,
+          syntax: '<number>',
+          inherits: false,
+          initialValue: '0',
+        });
 
         // Observe custom property that would trigger injection for this class
         observer.observe(document.documentElement, propName);
