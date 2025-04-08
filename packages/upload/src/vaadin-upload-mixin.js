@@ -608,6 +608,15 @@ export const UploadMixin = (superClass) =>
         }
       }
 
+      const containsFolders = Array.from(dropEvent.dataTransfer.items)
+        .filter((item) => !!item)
+        .filter((item) => typeof item.webkitGetAsEntry === 'function')
+        .map((item) => item.webkitGetAsEntry())
+        .some((entry) => !!entry && entry.isDirectory);
+      if (!containsFolders) {
+        return Promise.resolve(dropEvent.dataTransfer.files ? Array.from(dropEvent.dataTransfer.files) : []);
+      }
+
       const filePromises = Array.from(dropEvent.dataTransfer.items)
         .map((item) => item.webkitGetAsEntry())
         .filter((entry) => !!entry)

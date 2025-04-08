@@ -67,7 +67,8 @@ describe('adding files', () => {
           return entry;
         },
       }));
-      e.dataTransfer = { items };
+      const files = entries.filter((entry) => !!entry).map((entry) => entry._file);
+      e.dataTransfer = { items, files };
       return e;
     }
 
@@ -199,6 +200,20 @@ describe('adding files', () => {
 
       expect(upload.files.length).to.equal(1);
       expect(upload.files).to.include(fileEntry._file);
+    });
+
+    it('should handle files that do not correspond to items with entries on drop', async () => {
+      const file1 = createFile(100, 'image/jpeg');
+      const file2 = createFile(200, 'text/plain');
+      const dropEvent = new Event('drop');
+      dropEvent.dataTransfer = { items: [{}, {}], files: [file1, file2] };
+      upload.dispatchEvent(dropEvent);
+      await nextUpdate(upload);
+      await nextFrame();
+
+      expect(upload.files.length).to.equal(2);
+      expect(upload.files).to.include(file1);
+      expect(upload.files).to.include(file2);
     });
 
     it('should handle errors when reading from files or directories on drop', async () => {
