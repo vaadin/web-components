@@ -4,6 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { html, LitElement } from 'lit';
+import { CssInjectionMixin } from '@vaadin/component-base/src/css-injection-mixin.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
@@ -21,7 +22,7 @@ import { ButtonMixin } from './vaadin-button-mixin.js';
  * There is no ETA regarding specific Vaadin version where it'll land.
  * Feel free to try this code in your apps as per Apache 2.0 license.
  */
-class Button extends ButtonMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElement)))) {
+class Button extends ButtonMixin(CssInjectionMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElement))))) {
   static get is() {
     return 'vaadin-button';
   }
