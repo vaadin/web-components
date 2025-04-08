@@ -7,6 +7,7 @@ import { html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
+import { Stylable } from '@vaadin/vaadin-themable-mixin/stylable.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { InputContainerMixin } from './vaadin-input-container-mixin.js';
 import { inputContainerStyles } from './vaadin-input-container-styles.js';
@@ -25,7 +26,7 @@ import { inputContainerStyles } from './vaadin-input-container-styles.js';
  * @mixes DirMixin
  * @mixes InputContainerMixin
  */
-export class InputContainer extends InputContainerMixin(ThemableMixin(DirMixin(PolylitMixin(LitElement)))) {
+export class InputContainer extends InputContainerMixin(Stylable(ThemableMixin(DirMixin(PolylitMixin(LitElement))))) {
   static get is() {
     return 'vaadin-input-container';
   }
