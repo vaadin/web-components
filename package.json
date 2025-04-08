@@ -30,8 +30,7 @@
     "update:material": "TEST_ENV=update yarn test --config web-test-runner-material.config.js",
     "update:snapshots": "yarn test --config web-test-runner-snapshots.config.js --update-snapshots",
     "vite:start": "vite dev",
-    "vite:build": "vite build",
-    "vite:preview": "vite preview"
+    "vite:build": "vite build && vite preview"
   },
   "devDependencies": {
     "@fontsource/roboto": "^4.5.8",
