@@ -1,13 +1,13 @@
 /*
 This file should presumably import files with custom CSS properties;
 - import '@vaadin/vaadin-lumo-styles/font-icons.js';
-- import '@vaadin/vaadin-lumo-styles/sizing.js';
-- import '@vaadin/vaadin-lumo-styles/spacing.js';
-- import '@vaadin/vaadin-lumo-styles/style.js';
-- import '@vaadin/vaadin-lumo-styles/typography.js';
 */
-
+@import '../color.css';
+@import '../font-icons.css';
 @import '../sizing.css';
+@import '../spacing.css';
+@import '../style.css';
+@import '../typography.css';
 
 html {
   --vaadin-item-css-inject: 1;
