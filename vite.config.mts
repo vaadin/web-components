@@ -1,4 +1,5 @@
 /* eslint-env node */
+import { globSync } from 'glob';
 import { defineConfig } from 'vite';
 
 export default defineConfig({
@@ -13,11 +14,7 @@ export default defineConfig({
   },
   build: {
     rollupOptions: {
-      input: [
-        'dev/lumo-injection/link-head.html',
-        'dev/lumo-injection/link-body.html',
-        'dev/lumo-injection/style-head.html',
-      ],
+      input: globSync('dev/lumo-injection/*.html'),
       output: {
         format: 'es',
         dir: 'dist',
