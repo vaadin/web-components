@@ -13,6 +13,7 @@ export default defineConfig({
     noDiscovery: true,
   },
   build: {
+    target: 'esnext',
     rollupOptions: {
       input: globSync('dev/lumo-injection/*.html'),
       output: {
