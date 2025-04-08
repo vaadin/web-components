@@ -5,22 +5,21 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Dynamic loading</title>
-    <style>
-      html {
-        --_lumo-item-selected-icon-display: block;
-      }
-    </style>
+    <!-- <script type="module" src="../common.js"></script> -->
   </head>
   <body>
-    <vaadin-item tabindex="0">Basic item</vaadin-item>
-    <vaadin-item tabindex="0" focus-ring>Focused item</vaadin-item>
-    <vaadin-item tabindex="0" selected>Selected item</vaadin-item>
+    <vaadin-list-box selected="2">
+      <vaadin-item>Basic item</vaadin-item>
+      <vaadin-item focus-ring>Focused item</vaadin-item>
+      <vaadin-item>Selected item</vaadin-item>
+    </vaadin-list-box>
 
     <button id="unload">Unload Lumo</button>
     <button id="load">Load Lumo</button>
 
     <script type="module">
       import '@vaadin/item/src/vaadin-lit-item.js';
+      import '@vaadin/list-box/src/vaadin-lit-list-box.js';
       import './shadow-host.js';
 
       document.querySelector('#unload').addEventListener('click', () => {
@@ -30,7 +29,7 @@
 
       document.querySelector('#load').addEventListener('click', () => {
         const link = document.createElement('link');
-        link.href = './styles/item.css';
+        link.href = './styles/common.css';
         link.rel = 'stylesheet';
         document.head.appendChild(link);
       });
