@@ -10,8 +10,8 @@ const injectedClasses = new Set();
 
 const injectableInstances = new Set();
 
-async function injectInstanceStyles(el) {
-  const rules = await gatherMatchingStyleRules(el);
+function injectInstanceStyles(el) {
+  const rules = gatherMatchingStyleRules(el);
 
   if (rules.length > 0) {
     el.__injectedStyleSheet = new CSSStyleSheet();
@@ -122,14 +122,14 @@ export const CssInjectionMixin = (superClass) =>
     }
 
     /** @protected */
-    async connectedCallback() {
+    connectedCallback() {
       super.connectedCallback();
 
       if (!injectedClasses.has(this.constructor)) {
         return;
       }
 
-      await injectInstanceStyles(this);
+      injectInstanceStyles(this);
     }
 
     /** @protected */
