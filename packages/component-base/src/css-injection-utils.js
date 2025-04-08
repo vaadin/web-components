@@ -95,57 +95,6 @@ function extractMatchingStyleRules(styleSheet, element, collectorFunc) {
   }
 }
 
-function linkOrStylePromise(linkOrStyle) {
-  // <style> without any @imports will not fire a load event so we need to resolve immediately
-  if (linkOrStyle.nodeName === 'STYLE') {
-    // Remove comments and check if there are @imports
-    const hasImports = linkOrStyle.textContent.replace(/\/\*[\s\S]*?(?=\*\/)\*\//gmu, '').indexOf('@import');
-    if (hasImports) {
-      return linkOrStyle.sheet;
-    }
-  }
-
-  return new Promise((resolve) => {
-    const resolveFunc = () => {
-      resolve(linkOrStyle.sheet);
-      window.removeEventListener('load', resolveFunc);
-    };
-
-    linkOrStyle.addEventListener('load', resolveFunc);
-    // Stylesheets with @imports that get 404 will cause them to error. The rest of the stylesheet
-    // is still parsed and applied
-    linkOrStyle.addEventListener('error', resolveFunc);
-
-    // TODO sometimes Chrome does not fire the load event for some of the stylesheets (when the page
-    // loads really fast), so we fall back to full page load event
-    if (linkOrStyle.nodeName === 'LINK') {
-      window.addEventListener('load', resolveFunc);
-    }
-  });
-}
-
-let globalStyleSheetsLoadedPromise;
-let globalStyleSheetCount = 0;
-
-function globalStyleSheetsLoaded() {
-  let linkOrStyleElements = document.querySelectorAll('link[rel="stylesheet"], style');
-
-  // Cache, but account for style sheets inserted dynamically during initial page load
-  if (!globalStyleSheetsLoadedPromise || globalStyleSheetCount < linkOrStyleElements.length) {
-    const promises = [];
-
-    linkOrStyleElements = document.querySelectorAll('link[rel="stylesheet"], style');
-    for (const linkOrStyle of linkOrStyleElements) {
-      promises.push(linkOrStylePromise(linkOrStyle));
-    }
-
-    globalStyleSheetCount = linkOrStyleElements.length;
-    globalStyleSheetsLoadedPromise = Promise.all(promises);
-  }
-
-  return globalStyleSheetsLoadedPromise;
-}
-
 function processSheetsArray(sheets, element, matchingStyleRules) {
   for (const sheet of sheets) {
     extractMatchingStyleRules(sheet, element, (rules) => {
@@ -154,24 +103,15 @@ function processSheetsArray(sheets, element, matchingStyleRules) {
   }
 }
 
-export async function gatherMatchingStyleRules(instance) {
+export function gatherMatchingStyleRules(instance) {
   const matchingStyleRules = [];
-
-  // NOTE: original code used deprecated `performance.timing.loadEventEnd`
-  const perfEntries = performance.getEntriesByType('navigation');
 
   // TODO: also process `document.adoptedStyleSheets` to support importing
   // CSS files from JS: `import '@vaadin/lumo/lumo.css' with { type: 'css' }`
   // This would be convenient in some cases e.g. for Lumo visual tests
 
-  if (perfEntries[0].loadEventEnd) {
-    // Page has already loaded, document.styleSheets is populated
-    processSheetsArray(document.styleSheets, instance, matchingStyleRules);
-  } else {
-    // Need to do jump through hoops to get all global stylesheets since they might still be loading
-    const sheets = await globalStyleSheetsLoaded();
-    processSheetsArray(sheets, instance, matchingStyleRules);
-  }
+  // Page has already loaded, document.styleSheets is populated
+  processSheetsArray(document.styleSheets, instance, matchingStyleRules);
 
   // Scoped stylesheets
 
