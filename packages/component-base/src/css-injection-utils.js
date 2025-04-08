@@ -95,23 +95,25 @@ function extractMatchingStyleRules(styleSheet, element, collectorFunc) {
   }
 }
 
-function processSheetsArray(sheets, element, matchingStyleRules) {
+function processSheetsArray(sheets, element) {
+  const matchingRules = [];
+
   for (const sheet of sheets) {
-    extractMatchingStyleRules(sheet, element, (rules) => {
-      matchingStyleRules.push(rules);
-    });
+    extractMatchingStyleRules(sheet, element, (rules) => matchingRules.push(rules));
   }
+
+  return matchingRules;
 }
 
 export function gatherMatchingStyleRules(instance) {
-  const matchingStyleRules = [];
+  const matchingRules = [];
 
   // TODO: also process `document.adoptedStyleSheets` to support importing
   // CSS files from JS: `import '@vaadin/lumo/lumo.css' with { type: 'css' }`
   // This would be convenient in some cases e.g. for Lumo visual tests
 
   // Page has already loaded, document.styleSheets is populated
-  processSheetsArray(document.styleSheets, instance, matchingStyleRules);
+  matchingRules.push(...processSheetsArray(document.styleSheets, instance));
 
   // Scoped stylesheets
 
@@ -121,10 +123,10 @@ export function gatherMatchingStyleRules(instance) {
   const root = instance.getRootNode();
   if (root !== document) {
     if (root.adoptedStyleSheets) {
-      processSheetsArray(root.adoptedStyleSheets, instance, matchingStyleRules);
+      matchingRules.push(...processSheetsArray(root.adoptedStyleSheets, instance));
     }
-    processSheetsArray(root.styleSheets, instance, matchingStyleRules);
+    matchingRules.push(...processSheetsArray(root.styleSheets, instance));
   }
 
-  return matchingStyleRules;
+  return matchingRules;
 }
