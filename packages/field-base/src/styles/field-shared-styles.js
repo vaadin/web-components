@@ -38,8 +38,16 @@ export const fieldShared = css`
     order: var(--vaadin-input-field-helper-order);
   }
 
-  :host([required]) [part='required-indicator']::after {
+  [part='required-indicator'] {
+    color: var(--vaadin-input-field-required-indicator-color, inherit);
+  }
+
+  [part='required-indicator']::after {
     content: var(--vaadin-input-field-required-indicator, '*');
+  }
+
+  :host(:not([required])) [part='required-indicator'] {
+    display: none;
   }
 
   [part='helper-text'] {
