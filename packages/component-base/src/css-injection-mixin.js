@@ -79,6 +79,20 @@ const observer = new StyleObserver((records) => {
   });
 });
 
+function observeRoot(componentClass, root = document.documentElement) {
+  const { cssInjectPropName } = componentClass;
+
+  // If styles for custom property are already loaded, store this class
+  // in a registry so that evert instance of it would auto-inject styles
+  const value = getComputedStyle(root).getPropertyValue(cssInjectPropName);
+  if (value === '1') {
+    injectedClasses.add(componentClass);
+  }
+
+  // Observe custom property that would trigger injection for this class
+  observer.observe(root, cssInjectPropName);
+}
+
 /**
  * Mixin for internal use only. Do not use it in custom components.
  *
@@ -90,27 +104,21 @@ export const CssInjectionMixin = (superClass) =>
       super.finalize();
 
       if (this.is) {
-        const propName = `--${this.is}-css-inject`;
-
-        // If styles for custom property are already loaded, store this class
-        // in a registry so that evert instance of it would auto-inject styles
-        const value = getComputedStyle(document.documentElement).getPropertyValue(propName);
-        if (value === '1') {
-          injectedClasses.add(this);
-        }
-
         // Initialize custom property for this class with 0 as default
         // so that changing it to 1 would inject styles to instances
         CSS.registerProperty({
-          name: propName,
+          name: this.cssInjectPropName,
           syntax: '<number>',
-          inherits: false,
+          inherits: true,
           initialValue: '0',
         });
 
-        // Observe custom property that would trigger injection for this class
-        observer.observe(document.documentElement, propName);
+        observeRoot(this);
       }
+    }
+
+    static get cssInjectPropName() {
+      return `--${this.is}-css-inject`;
     }
 
     constructor() {
@@ -122,6 +130,11 @@ export const CssInjectionMixin = (superClass) =>
     /** @protected */
     connectedCallback() {
       super.connectedCallback();
+
+      const root = this.getRootNode();
+      if (root !== document) {
+        observeRoot(this.constructor, root.host);
+      }
 
       if (!injectedClasses.has(this.constructor)) {
         return;

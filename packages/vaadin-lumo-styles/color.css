@@ -1,4 +1,4 @@
-:root {
+html, :host {
   /* Base (background) */
   --lumo-base-color: #fff;
 

@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Shadow styles</title>
+    <!-- <script type="module" src="../common.js"></script> -->
+  </head>
+  <body>
+    <vaadin-list-box selected="2">
+      <vaadin-item>Basic item</vaadin-item>
+      <vaadin-item focus-ring>Focused item</vaadin-item>
+      <vaadin-item>Selected item</vaadin-item>
+    </vaadin-list-box>
+
+    <shadow-host></shadow-host>
+
+    <script type="module">
+      import '@vaadin/item/src/vaadin-lit-item.js';
+      import '@vaadin/list-box/src/vaadin-lit-list-box.js';
+      import './shadow-host.js';
+
+      const shadow = document.querySelector('shadow-host').shadowRoot;
+
+      const link = document.createElement('link');
+      link.href = './styles/common.css';
+      link.rel = 'stylesheet';
+      shadow.appendChild(link);
+
+      shadow.appendChild(document.querySelector('vaadin-list-box'));
+    </script>
+  </body>
+</html>

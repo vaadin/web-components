@@ -9,7 +9,7 @@ This file should presumably import files with custom CSS properties;
 @import '../style.css';
 @import '../typography.css';
 
-html {
+html, :host {
   --vaadin-item-css-inject: 1;
 }
 

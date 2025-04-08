@@ -1,4 +1,4 @@
-:root {
+html, :host  {
   /* Border radius */
   --lumo-border-radius-s: 0.25em; /* Checkbox, badge, date-picker year indicator, etc */
   --lumo-border-radius-m: var(--lumo-border-radius, 0.25em); /* Button, text field, menu overlay, etc */

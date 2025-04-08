@@ -2,7 +2,7 @@
 @import '../spacing.css';
 @import '../style.css';
 
-html {
+html, :host {
   --vaadin-list-box-css-inject: 1;
 }
 
