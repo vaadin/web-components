@@ -18,7 +18,7 @@ function injectInstanceStyles(el) {
 
     rules.forEach((ruleList) => {
       for (const rule of ruleList) {
-        el.__injectedStyleSheet.insertRule(rule.cssText);
+        el.__injectedStyleSheet.insertRule(rule.cssText, el.__injectedStyleSheet.cssRules.length);
       }
     });
 
