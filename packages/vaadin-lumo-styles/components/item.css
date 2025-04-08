@@ -9,6 +9,10 @@ This file should presumably import files with custom CSS properties;
 
 @import '../sizing.css';
 
+html {
+  --vaadin-item-css-inject: 1;
+}
+
 @media vaadin-item {
   :host {
     display: flex;

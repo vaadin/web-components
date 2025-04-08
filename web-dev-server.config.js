@@ -26,23 +26,6 @@ function generatedLitTestsPlugin() {
   };
 }
 
-const preventFouc = `
-  <style>
-    body:not(.resolved) {
-      opacity: 0;
-    }
-
-    body {
-      transition: opacity 0.2s;
-    }
-  </style>
-
-  <script type="module">
-    // It's important to use type module for the script so the timing is correct
-    document.body.classList.add('resolved');
-  </script>
-`;
-
 module.exports = {
   plugins: [
     {
@@ -50,9 +33,6 @@ module.exports = {
       transform(context) {
         if (context.response.is('html')) {
           let body = context.body;
-
-          // Fouc prevention
-          body = body.replace(/<\/body>/u, `${preventFouc}\n</body>`);
 
           // Index page listing
           if (['/dev/index.html', '/dev', '/dev/'].includes(context.path)) {
