@@ -5,6 +5,7 @@
   "scripts": {
     "analyze": "polymer analyze packages/**/vaadin-*.js > analysis.json && node scripts/prepareDocs.js && node scripts/buildWebtypes.js && node scripts/generateLumoAutoCompleteCss.js && ./scripts/buildThemeTypings.sh",
     "build:ts": "tsc --build tsconfig.build.json",
+    "build:vite": "vite build",
     "debug": "yarn test --watch",
     "debug:it": "yarn test --watch --config web-test-runner-it.config.js",
     "dist": "rimraf dist && yarn analyze && rollup -c rollup.config.js && cp analysis.json dist",
@@ -18,6 +19,7 @@
     "prepare": "husky",
     "serve:dist": "web-dev-server --app-index dist/index.html --open",
     "start": "web-dev-server --node-resolve --open /dev",
+    "start:vite": "vite dev",
     "check-releases": "node ./scripts/check-releases.js && web-dev-server --node-resolve --open /scripts/check-releases.html",
     "test": "node scripts/generateLitTests.js && web-test-runner",
     "test:firefox": "yarn test --config web-test-runner-firefox.config.js",
@@ -28,7 +30,8 @@
     "test:webkit": "yarn test --config web-test-runner-webkit.config.js",
     "update:lumo": "TEST_ENV=update yarn test --config web-test-runner-lumo.config.js",
     "update:material": "TEST_ENV=update yarn test --config web-test-runner-material.config.js",
-    "update:snapshots": "yarn test --config web-test-runner-snapshots.config.js --update-snapshots"
+    "update:snapshots": "yarn test --config web-test-runner-snapshots.config.js --update-snapshots",
+    "preview:vite": "vite preview"
   },
   "devDependencies": {
     "@fontsource/roboto": "^4.5.8",
