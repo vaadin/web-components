@@ -32,20 +32,16 @@ function cleanupInstanceStyles(el) {
   }
 }
 
-async function injectClassInstanceStyles(componentClass) {
-  const promises = [];
-
+function injectClassInstanceStyles(componentClass) {
   injectableInstances.forEach((ref) => {
     const instance = ref.deref();
     if (instance instanceof componentClass) {
-      promises.push(injectInstanceStyles(instance));
+      injectInstanceStyles(instance);
     } else if (!instance) {
       // Clean up the weak reference to a GC'd instance
       injectableInstances.delete(ref);
     }
   });
-
-  await Promise.all(promises);
 }
 
 function cleanupClassInstanceStyles(componentClass) {
