@@ -38,8 +38,6 @@ addGlobalThemeStyles(
 
         --vaadin-focus-ring-width: 2px;
         --vaadin-focus-ring-color: var(--_vaadin-color);
-
-        --vaadin-icon-size: calc(1lh - 2px); /* Seems too fragile to repeat all over the place */
       }
     }
   `,
