@@ -72,8 +72,6 @@ export const inputContainerStyles = css`
     /* because ::slotted(...)::placeholder does not work in Safari. */
     font: inherit;
     color: inherit;
-    /* Override default opacity in Firefox */
-    /* opacity: 1; */
   }
 
   ::slotted(input:placeholder-shown) {
