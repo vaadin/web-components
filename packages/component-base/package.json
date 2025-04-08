@@ -35,7 +35,8 @@
     "@polymer/polymer": "^3.0.0",
     "@vaadin/vaadin-development-mode-detector": "^2.0.0",
     "@vaadin/vaadin-usage-statistics": "^2.1.0",
-    "lit": "^3.0.0"
+    "lit": "^3.0.0",
+    "style-observer": "^0.0.5"
   },
   "devDependencies": {
     "@vaadin/chai-plugins": "24.8.0-alpha8",
