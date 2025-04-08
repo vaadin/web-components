@@ -13,7 +13,7 @@ export const buttonStyles = css`
       align-items: center;
       justify-content: center;
       text-align: center;
-      gap: var(--vaadin-button-gap, 0 var(--_vaadin-gap-icon));
+      gap: var(--vaadin-button-gap, 0 var(--_vaadin-gap-container));
 
       white-space: nowrap;
       -webkit-tap-highlight-color: transparent;
@@ -25,13 +25,13 @@ export const buttonStyles = css`
       flex-shrink: 0;
       height: var(--vaadin-button-height, auto);
       margin: var(--vaadin-button-margin, 0);
-      padding: var(--vaadin-button-padding, var(--_vaadin-padding-container-text));
+      padding: var(--vaadin-button-padding, var(--_vaadin-padding-container));
       font-family: var(--vaadin-button-font-family, inherit);
       font-size: var(--vaadin-button-font-size, inherit);
       line-height: var(--vaadin-button-line-height, inherit);
       font-weight: var(--vaadin-button-font-weight, 500);
       color: var(--vaadin-button-text-color, var(--_vaadin-color-strong));
-      background: var(--vaadin-button-background, var(--_vaadin-bg-container));
+      background: var(--vaadin-button-background, var(--_vaadin-background-container));
       background-origin: border-box;
       border: var(
         --vaadin-button-border,
@@ -58,7 +58,7 @@ export const buttonStyles = css`
 
     :host([theme~='primary']) {
       --vaadin-button-background: var(--_vaadin-color-strong);
-      --vaadin-button-text-color: var(--_vaadin-bg);
+      --vaadin-button-text-color: var(--_vaadin-background);
       --vaadin-button-border-color: transparent;
     }
 
@@ -75,8 +75,8 @@ export const buttonStyles = css`
     }
 
     :host([disabled][theme~='primary']) {
-      --vaadin-button-text-color: var(--_vaadin-bg-container-strong);
-      --vaadin-button-background: var(--_vaadin-color-weak);
+      --vaadin-button-text-color: var(--_vaadin-background-container-strong);
+      --vaadin-button-background: var(--_vaadin-color-subtle);
     }
 
     @media (forced-colors: active) {
