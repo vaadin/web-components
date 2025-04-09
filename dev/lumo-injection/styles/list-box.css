@@ -1,1 +1,3 @@
 @import '@vaadin/vaadin-lumo-styles/components/list-box.css';
+/* For web-dev-server use the following instead */
+/* @import '../../../packages/vaadin-lumo-styles/components/list-box.css'; */
