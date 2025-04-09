@@ -117,36 +117,36 @@ function processSheetsArray(sheets, element) {
 }
 
 /**
- * @param {HTMLElement} instance
+ * @param {HTMLElement} element
  * @param {DocumentOrShadowRoot} root
  * @return {CSSRuleList[]}
  */
-function getMatchingCssRules(instance, root) {
+function getMatchingCssRules(element, root) {
   const matchingRules = [];
 
   if (root.adoptedStyleSheets) {
-    matchingRules.push(...processSheetsArray(root.adoptedStyleSheets, instance));
+    matchingRules.push(...processSheetsArray(root.adoptedStyleSheets, element));
   }
 
-  matchingRules.push(...processSheetsArray(root.styleSheets, instance));
+  matchingRules.push(...processSheetsArray(root.styleSheets, element));
 
   return matchingRules;
 }
 
 /**
- * @param {HTMLElement} instance
+ * @param {HTMLElement} element
  * @return {CSSRuleList[]}
  */
-export function gatherMatchingStyleRules(instance) {
+export function gatherMatchingStyleRules(element) {
   const matchingRules = [];
 
   // Global stylesheets
-  matchingRules.push(...getMatchingCssRules(instance, document));
+  matchingRules.push(...getMatchingCssRules(element, document));
 
   // Scoped stylesheets
-  const root = instance.getRootNode();
+  const root = element.getRootNode();
   if (root !== document) {
-    matchingRules.push(...getMatchingCssRules(instance, root));
+    matchingRules.push(...getMatchingCssRules(element, root));
   }
 
   return matchingRules;
