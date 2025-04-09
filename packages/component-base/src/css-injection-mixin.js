@@ -10,30 +10,42 @@ const injectedClasses = new Set();
 
 const injectableInstances = new Set();
 
-function injectInstanceStyles(el) {
-  const rules = gatherMatchingStyleRules(el);
+/**
+ * @param {HTMLElement} element
+ */
+function injectInstanceStyles(element) {
+  const rules = gatherMatchingStyleRules(element);
 
   if (rules.length > 0) {
-    el.__injectedStyleSheet = new CSSStyleSheet();
+    element.__injectedStyleSheet = new CSSStyleSheet();
 
     rules.forEach((ruleList) => {
       for (const rule of ruleList) {
-        el.__injectedStyleSheet.insertRule(rule.cssText, el.__injectedStyleSheet.cssRules.length);
+        element.__injectedStyleSheet.insertRule(rule.cssText, element.__injectedStyleSheet.cssRules.length);
       }
     });
 
     // Insert injected stylesheet as the first one to ensure it applies
     // before any custom styles applied with `registerStyles()` API
-    el.shadowRoot.adoptedStyleSheets.unshift(el.__injectedStyleSheet);
+    element.shadowRoot.adoptedStyleSheets.unshift(element.__injectedStyleSheet);
   }
 }
 
-function cleanupInstanceStyles(el) {
-  if (el.__injectedStyleSheet) {
-    el.shadowRoot.adoptedStyleSheets.splice(el.shadowRoot.adoptedStyleSheets.indexOf(el.__injectedStyleSheet, 1));
+/**
+ * @param {HTMLElement} element
+ */
+function cleanupInstanceStyles(element) {
+  if (element.__injectedStyleSheet) {
+    element.shadowRoot.adoptedStyleSheets.splice(
+      element.shadowRoot.adoptedStyleSheets.indexOf(element.__injectedStyleSheet, 1),
+    );
   }
 }
 
+/**
+ * Dynamically injects styles to the instances matching the given component type.
+ * @param {Function} componentClass
+ */
 function injectClassInstanceStyles(componentClass) {
   injectableInstances.forEach((ref) => {
     const instance = ref.deref();
@@ -46,6 +58,10 @@ function injectClassInstanceStyles(componentClass) {
   });
 }
 
+/**
+ * Removes styles from the instances matching the given component type.
+ * @param {Function} componentClass
+ */
 function cleanupClassInstanceStyles(componentClass) {
   injectableInstances.forEach((ref) => {
     const instance = ref.deref();
