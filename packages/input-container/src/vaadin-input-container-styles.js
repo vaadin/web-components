@@ -87,6 +87,11 @@ export const inputContainerStyles = css`
     border-style: dashed;
   }
 
+  :host([readonly]:focus-within) {
+    outline-style: dashed;
+    --vaadin-input-field-border-color: transparent;
+  }
+
   :host([disabled]) {
     --vaadin-input-field-value-color: var(--vaadin-input-field-disabled-text-color, var(--_vaadin-color-subtle));
     --vaadin-input-field-background: var(
