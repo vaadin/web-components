@@ -1,4 +1,4 @@
-:root {
+html {
   /* Base (background) */
   --lumo-base-color: #fff;
 
@@ -78,7 +78,7 @@
 
 /* forced-colors mode adjustments */
 @media (forced-colors: active) {
-  :root {
+  html {
     --lumo-disabled-text-color: GrayText;
   }
 }
