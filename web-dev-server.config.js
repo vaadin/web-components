@@ -2,6 +2,9 @@
 const fs = require('fs');
 const { esbuildPlugin } = require('@web/dev-server-esbuild');
 const path = require('path');
+const { getRequestFilePath } = require('@web/dev-server-core');
+const postcss = require('postcss');
+const atImport = require('postcss-import');
 
 /** @return {import('@web/test-runner').TestRunnerPlugin} */
 function generatedLitTestsPlugin() {
@@ -22,6 +25,26 @@ function generatedLitTestsPlugin() {
         }
       }
       return source;
+    },
+  };
+}
+
+function inlineCssImportsPlugin() {
+  let rootDir;
+
+  return {
+    name: 'inline-css-imports',
+
+    serverStart(args) {
+      ({ rootDir } = args.config);
+    },
+
+    async transform(context) {
+      if (context.response.is('css') && context.body.includes('@import')) {
+        const filePath = getRequestFilePath(context.url, rootDir);
+        const { css } = await postcss([atImport()]).process(context.body, { from: filePath });
+        return { body: css };
+      }
     },
   };
 }
@@ -73,6 +96,7 @@ module.exports = {
         }
       },
     },
+    inlineCssImportsPlugin(),
     esbuildPlugin({ ts: true }),
     generatedLitTestsPlugin(),
   ],
