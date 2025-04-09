@@ -37,7 +37,8 @@ function injectInstanceStyles(element) {
 function cleanupInstanceStyles(element) {
   if (element.__injectedStyleSheet) {
     element.shadowRoot.adoptedStyleSheets.splice(
-      element.shadowRoot.adoptedStyleSheets.indexOf(element.__injectedStyleSheet, 1),
+      element.shadowRoot.adoptedStyleSheets.indexOf(element.__injectedStyleSheet),
+      1,
     );
   }
 }
