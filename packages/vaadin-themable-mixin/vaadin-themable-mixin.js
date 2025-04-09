@@ -120,8 +120,15 @@ function updateInstanceStyles(instance) {
     // Remove them first to avoid duplicates.
     [...instance.shadowRoot.querySelectorAll('style')].forEach((style) => style.remove());
 
+    // There are some styles injected, we need to retain them and place
+    // before any custom styles. Note that `src` styles will end up after
+    // injected ones but those should use `@layer` for lower specificity.
+    const styles = instance.__injectedStyleSheet
+      ? [instance.__injectedStyleSheet, ...componentClass.elementStyles]
+      : componentClass.elementStyles;
+
     // Adopt the updated styles
-    adoptStyles(instance.shadowRoot, componentClass.elementStyles);
+    adoptStyles(instance.shadowRoot, styles);
   } else {
     // PolymerElement
 

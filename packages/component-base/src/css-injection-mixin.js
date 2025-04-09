@@ -22,7 +22,9 @@ function injectInstanceStyles(el) {
       }
     });
 
-    el.shadowRoot.adoptedStyleSheets.push(el.__injectedStyleSheet);
+    // Insert injected stylesheet as the first one to ensure it applies
+    // before any custom styles applied with `registerStyles()` API
+    el.shadowRoot.adoptedStyleSheets.unshift(el.__injectedStyleSheet);
   }
 }
 
