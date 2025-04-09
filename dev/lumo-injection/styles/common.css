@@ -1,2 +1,2 @@
-@import url("item.css");
-@import url("list-box.css");
+@import './item.css';
+@import './list-box.css';
