@@ -1,1 +1,3 @@
 @import '@vaadin/vaadin-lumo-styles/components/item.css';
+/* For web-dev-server use the following instead */
+/* @import '../../../packages/vaadin-lumo-styles/components/item.css'; */
