@@ -6,8 +6,14 @@
 import StyleObserver from 'style-observer';
 import { gatherMatchingStyleRules } from './css-injection-utils.js';
 
-const injectedClasses = new Set();
+/**
+ * @type {string[]}
+ */
+const injectableTagNames = new Set();
 
+/**
+ * @type {WeakRef<HTMLElement>[]}
+ */
 const injectableInstances = new Set();
 
 /**
@@ -85,12 +91,12 @@ const observer = new StyleObserver((records) => {
     if (componentClass) {
       if (value === '1') {
         // Allow future instances inject own styles
-        injectedClasses.add(componentClass);
+        injectableTagNames.add(tagName);
         // Inject styles for already existing instances
         injectClassInstanceStyles(componentClass);
       } else if (oldValue === '1') {
         // Disallow future instances inject own styles
-        injectedClasses.delete(componentClass);
+        injectableTagNames.delete(tagName);
         // Cleanup styles for already existing instances
         cleanupClassInstanceStyles(componentClass);
       }
@@ -115,7 +121,7 @@ export const CssInjectionMixin = (superClass) =>
         // in a registry so that evert instance of it would auto-inject styles
         const value = getComputedStyle(document.documentElement).getPropertyValue(propName);
         if (value === '1') {
-          injectedClasses.add(this);
+          injectableTagNames.add(this.is);
         }
 
         // Initialize custom property for this class with 0 as default
@@ -142,7 +148,7 @@ export const CssInjectionMixin = (superClass) =>
     connectedCallback() {
       super.connectedCallback();
 
-      if (!injectedClasses.has(this.constructor)) {
+      if (!injectableTagNames.has(this.constructor.is)) {
         return;
       }
 
