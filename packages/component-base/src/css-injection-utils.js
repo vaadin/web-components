@@ -108,11 +108,11 @@ function processSheetsArray(sheets, element) {
 export function gatherMatchingStyleRules(instance) {
   const matchingRules = [];
 
-  // TODO: also process `document.adoptedStyleSheets` to support importing
-  // CSS files from JS: `import '@vaadin/lumo/lumo.css' with { type: 'css' }`
-  // This would be convenient in some cases e.g. for Lumo visual tests
+  // Global stylesheets
+  if (document.adoptedStyleSheets) {
+    matchingRules.push(...processSheetsArray(document.adoptedStyleSheets, instance));
+  }
 
-  // Page has already loaded, document.styleSheets is populated
   matchingRules.push(...processSheetsArray(document.styleSheets, instance));
 
   // Scoped stylesheets
