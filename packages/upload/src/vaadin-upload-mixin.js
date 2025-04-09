@@ -608,6 +608,7 @@ export const UploadMixin = (superClass) =>
         }
       }
 
+      // In some cases (like dragging attachments from Outlook on Windows), "webkitGetAsEntry" can return null for "dataTransfer" items. Also, there is no reason to check for "webkitGetAsEntry" when there are no folders. Therefore, "dataTransfer.files" is used to handle such cases.
       const containsFolders = Array.from(dropEvent.dataTransfer.items)
         .filter((item) => !!item)
         .filter((item) => typeof item.webkitGetAsEntry === 'function')
