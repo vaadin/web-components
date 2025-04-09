@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Dynamic loading</title>
+    <title>Import CSS</title>
     <!-- <script type="module" src="../common.js"></script> -->
   </head>
   <body>
@@ -14,23 +14,22 @@
       <vaadin-item>Selected item</vaadin-item>
     </vaadin-list-box>
 
-    <button id="unload">Unload Lumo</button>
-    <button id="load">Load Lumo</button>
+    <shadow-host></shadow-host>
+
+    <button>Move to shadow</button>
 
     <script type="module">
       import '@vaadin/item/src/vaadin-lit-item.js';
       import '@vaadin/list-box/src/vaadin-lit-list-box.js';
+      import './shadow-host.js';
 
-      document.querySelector('#unload').addEventListener('click', () => {
-        const link = document.head.querySelector('link[rel="stylesheet"]');
-        link?.remove();
-      });
+      // Using import attributes (Chrome only)
+      const stylesheet = await import('./styles/common.css', { with: { type: 'css' } });
+      document.adoptedStyleSheets.push(stylesheet.default);
 
-      document.querySelector('#load').addEventListener('click', () => {
-        const link = document.createElement('link');
-        link.href = './styles/common.css';
-        link.rel = 'stylesheet';
-        document.head.appendChild(link);
+      document.querySelector('button').addEventListener('click', () => {
+        const shadow = document.querySelector('shadow-host').shadowRoot;
+        shadow.appendChild(document.querySelector('vaadin-list-box'));
       });
     </script>
   </body>
