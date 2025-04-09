@@ -202,11 +202,21 @@ describe('adding files', () => {
       expect(upload.files).to.include(fileEntry._file);
     });
 
-    it('should handle files that do not correspond to items with entries on drop', async () => {
+    it('should read files from dataTransfer.files if there are no directories', async () => {
+      const fileEntry = createFileSystemFileEntry(100, 'text/plain');
       const file1 = createFile(100, 'image/jpeg');
       const file2 = createFile(200, 'text/plain');
       const dropEvent = new Event('drop');
-      dropEvent.dataTransfer = { items: [{}, {}], files: [file1, file2] };
+      dropEvent.dataTransfer = {
+        items: [
+          {
+            webkitGetAsEntry() {
+              return fileEntry;
+            },
+          },
+        ],
+        files: [file1, file2],
+      };
       upload.dispatchEvent(dropEvent);
       await nextUpdate(upload);
       await nextFrame();
@@ -214,6 +224,30 @@ describe('adding files', () => {
       expect(upload.files.length).to.equal(2);
       expect(upload.files).to.include(file1);
       expect(upload.files).to.include(file2);
+    });
+
+    it('should read files from dataTransfer.items if there are directories', async () => {
+      const fileEntry = createFileSystemFileEntry(100, 'text/plain');
+      const directoryEntry = createFileSystemDirectoryEntry([fileEntry]);
+      const file1 = createFile(100, 'image/jpeg');
+      const file2 = createFile(200, 'text/plain');
+      const dropEvent = new Event('drop');
+      dropEvent.dataTransfer = {
+        items: [
+          {
+            webkitGetAsEntry() {
+              return directoryEntry;
+            },
+          },
+        ],
+        files: [file1, file2],
+      };
+      upload.dispatchEvent(dropEvent);
+      await nextUpdate(upload);
+      await nextFrame();
+
+      expect(upload.files.length).to.equal(1);
+      expect(upload.files).to.include(fileEntry._file);
     });
 
     it('should handle errors when reading from files or directories on drop', async () => {
