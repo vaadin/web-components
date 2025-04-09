@@ -49,7 +49,13 @@ function matchesElement(el, media) {
   return undefined;
 }
 
-// Recursively process a style sheet for matching rules
+/**
+ * Recursively process a style sheet for matching rules
+ *
+ * @param {CSSStyleSheet} styleSheet
+ * @param {HTMLElement} element
+ * @param {Function} collectorFunc
+ */
 function extractMatchingStyleRules(styleSheet, element, collectorFunc) {
   let media = '';
 
@@ -95,6 +101,11 @@ function extractMatchingStyleRules(styleSheet, element, collectorFunc) {
   }
 }
 
+/**
+ * @param {StyleSheetList} sheets
+ * @param {HTMLElement} element
+ * @return {CSSRuleList[]}
+ */
 function processSheetsArray(sheets, element) {
   const matchingRules = [];
 
@@ -105,27 +116,37 @@ function processSheetsArray(sheets, element) {
   return matchingRules;
 }
 
+/**
+ * @param {HTMLElement} instance
+ * @param {DocumentOrShadowRoot} root
+ * @return {CSSRuleList[]}
+ */
+function getMatchingCssRules(instance, root) {
+  const matchingRules = [];
+
+  if (root.adoptedStyleSheets) {
+    matchingRules.push(...processSheetsArray(root.adoptedStyleSheets, instance));
+  }
+
+  matchingRules.push(...processSheetsArray(root.styleSheets, instance));
+
+  return matchingRules;
+}
+
+/**
+ * @param {HTMLElement} instance
+ * @return {CSSRuleList[]}
+ */
 export function gatherMatchingStyleRules(instance) {
   const matchingRules = [];
 
   // Global stylesheets
-  if (document.adoptedStyleSheets) {
-    matchingRules.push(...processSheetsArray(document.adoptedStyleSheets, instance));
-  }
-
-  matchingRules.push(...processSheetsArray(document.styleSheets, instance));
+  matchingRules.push(...getMatchingCssRules(instance, document));
 
   // Scoped stylesheets
-
-  // NOTE: can be needed for embedded components where Lumo will only
-  // be loaded in a shadow root but should not leak to the host page.
-  // See e.g. https://github.com/vaadin/flow/issues/12704
   const root = instance.getRootNode();
   if (root !== document) {
-    if (root.adoptedStyleSheets) {
-      matchingRules.push(...processSheetsArray(root.adoptedStyleSheets, instance));
-    }
-    matchingRules.push(...processSheetsArray(root.styleSheets, instance));
+    matchingRules.push(...getMatchingCssRules(instance, root));
   }
 
   return matchingRules;
