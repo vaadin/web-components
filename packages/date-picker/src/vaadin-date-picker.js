@@ -188,6 +188,7 @@ class DatePicker extends DatePickerMixin(InputControlMixin(ThemableMixin(Element
       <vaadin-date-picker-overlay
         id="overlay"
         fullscreen$="[[_fullscreen]]"
+        week-numbers$="[[showWeekNumbers]]"
         theme$="[[_theme]]"
         opened="{{opened}}"
         on-vaadin-overlay-escape-press="_onOverlayEscapePress"

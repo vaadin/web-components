@@ -18,15 +18,11 @@ template.innerHTML = `
     }
 
     #scroller {
-      position: relative;
       height: 100%;
       overflow: auto;
-      outline: none;
-      margin-right: -40px;
-      -webkit-overflow-scrolling: touch;
-      overflow-x: hidden;
+      position: relative;
     }
-
+    
     #scroller.notouchscroll {
       -webkit-overflow-scrolling: auto;
     }
@@ -36,12 +32,10 @@ template.innerHTML = `
     }
 
     .buffer {
-      position: absolute;
-      width: var(--vaadin-infinite-scroller-buffer-width, 100%);
-      box-sizing: border-box;
-      padding-right: 40px;
-      top: var(--vaadin-infinite-scroller-buffer-offset, 0);
       animation: fadein 0.2s;
+      position: absolute;
+      top: var(--vaadin-infinite-scroller-buffer-offset, 0);
+      width: var(--vaadin-infinite-scroller-buffer-width, 100%);
     }
 
     @keyframes fadein {

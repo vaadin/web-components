@@ -7,18 +7,25 @@ import { css } from 'lit';
 
 export const overlayContentStyles = css`
   :host {
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-areas:
+      'header header'
+      'months years'
+      'toolbar years';
+    grid-template-columns: minmax(0, 1fr) auto;
     height: 100%;
-    width: 100%;
-    outline: none;
+  }
+
+  :has([week-numbers]) {
+    background: red;
   }
 
   [part='overlay-header'] {
+    align-items: center;
     display: flex;
     flex-shrink: 0;
     flex-wrap: nowrap;
-    align-items: center;
+    grid-area: header;
   }
 
   :host(:not([fullscreen])) [part='overlay-header'] {
@@ -38,15 +45,11 @@ export const overlayContentStyles = css`
   }
 
   #scrollers {
-    display: flex;
-    height: 100%;
-    width: 100%;
-    position: relative;
-    overflow: hidden;
+    display: contents;
   }
 
   :host([desktop]) ::slotted([slot='months']) {
-    right: 50px;
+    right: var(--vaadin-date-picker-year-scroller-width, 3rem);
     transform: none !important;
   }
 
@@ -61,8 +64,9 @@ export const overlayContentStyles = css`
 
   [part='toolbar'] {
     display: flex;
+    grid-area: toolbar;
     justify-content: space-between;
+    padding: var(--vaadin-date-picker-toolbar-padding, var(--_vaadin-padding));
     z-index: 2;
-    flex-shrink: 0;
   }
 `;

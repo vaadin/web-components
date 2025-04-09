@@ -10,34 +10,30 @@ const stylesTemplate = document.createElement('template');
 stylesTemplate.innerHTML = `
   <style>
     :host {
-      --vaadin-infinite-scroller-item-height: 80px;
-      width: 50px;
-      display: block;
-      height: 100%;
-      position: absolute;
-      right: 0;
-      transform: translateX(100%);
-      -webkit-tap-highlight-color: transparent;
-      -webkit-user-select: none;
-      user-select: none;
-      /* Center the year scroller position. */
       --vaadin-infinite-scroller-buffer-offset: 50%;
+      --vaadin-infinite-scroller-item-height: 80px;
+      background: var(--vaadin-date-picker-year-scroller-background, var(--_vaadin-background-container));
+      grid-area: years;
+      height: auto;
+      position: relative;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+      -webkit-user-select: none;
+      width: var(--vaadin-date-picker-year-scroller-width, 3rem);
     }
 
     :host::before {
+      border-color: transparent;
+      border-inline-start-color: var(--vaadin-overlay-background, var(--_vaadin-background));
+      border-style: solid;
+      border-width: 6px;
       content: '';
       display: block;
-      background: transparent;
-      width: 0;
       height: 0;
       position: absolute;
-      left: 0;
-      top: 50%;
       transform: translateY(-50%);
-      border-width: 6px;
-      border-style: solid;
-      border-color: transparent;
-      border-left-color: #000;
+      top: 50%;
+      width: 0;
     }
   </style>
 `;

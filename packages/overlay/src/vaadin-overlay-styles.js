@@ -45,15 +45,15 @@ export const overlayStyles = css`
   }
 
   [part='overlay'] {
-    -webkit-overflow-scrolling: touch;
-    overflow: auto;
-    pointer-events: auto;
-
-    /* Prevent overflowing the host */
-    max-width: 100%;
+    background: var(--vaadin-overlay-background, var(--_vaadin-background));
+    border: var(--vaadin-overlay-border, 1px solid var(--_vaadin-border-color));
+    border-radius: var(--vaadin-overlay-border-radius, var(--_vaadin-radius-m));
     box-sizing: border-box;
-
-    -webkit-tap-highlight-color: initial; /* reenable tap highlight inside */
+    max-width: 100%;
+    overflow: auto;
+    overscroll-behavior: contain;
+    pointer-events: auto;
+    -webkit-tap-highlight-color: initial;
   }
 
   [part='backdrop'] {
