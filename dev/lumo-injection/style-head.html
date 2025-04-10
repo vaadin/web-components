@@ -10,36 +10,42 @@
       @import './styles/base.css';
       @import './styles/item.css';
       @import './styles/list-box.css';
+      @import './styles/text-field.css';
     </style>
   </head>
   <body>
-    <vaadin-list-box selected="2">
-      <vaadin-item>Basic item</vaadin-item>
-      <vaadin-item focus-ring>Focused item</vaadin-item>
-      <vaadin-item>Selected item</vaadin-item>
-    </vaadin-list-box>
+    <div>
+      <vaadin-list-box selected="2">
+        <vaadin-item>Basic item</vaadin-item>
+        <vaadin-item focus-ring>Focused item</vaadin-item>
+        <vaadin-item>Selected item</vaadin-item>
+      </vaadin-list-box>
+
+      <vaadin-text-field label="Text field"></vaadin-text-field>
+    </div>
 
     <shadow-host></shadow-host>
 
-    <br />
-
-    <button id="shadow">Move to shadow</button>
-    <button id="global">Move to global</button>
+    <p>
+      <button id="shadow">Move to shadow</button>
+      <button id="global">Move to global</button>
+    </p>
 
     <script type="module">
       import '@vaadin/item/src/vaadin-lit-item.js';
       import '@vaadin/list-box/src/vaadin-lit-list-box.js';
+      import '@vaadin/text-field/src/vaadin-lit-text-field.js';
       import './shadow-host.js';
 
       const host = document.querySelector('shadow-host');
-      const listBox = document.querySelector('vaadin-list-box');
+      const div = document.querySelector('div');
 
       document.querySelector('#shadow').addEventListener('click', () => {
-        host.shadowRoot.appendChild(listBox);
+        host.shadowRoot.appendChild(div);
       });
 
       document.querySelector('#global').addEventListener('click', () => {
-        document.body.insertBefore(listBox, host);
+        document.body.insertBefore(div, host);
       });
     </script>
   </body>
