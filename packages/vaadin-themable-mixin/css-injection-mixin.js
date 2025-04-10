@@ -7,16 +7,15 @@ import StyleObserver from 'style-observer';
 import { gatherMatchingStyleRules } from './css-injection-utils.js';
 
 /**
- * @type {WeakMap<Node, Set<string>>}
+ * @type {WeakMap<HTMLElement, object>}
  */
 const observedHosts = new WeakMap();
 
 /**
- * Gets or creates an object with the stored values for root.
+ * Gets or creates an object with the stored values for given host.
  *
- * @param {HTMLElement} host reference to the document or shadow root host
- *
- * @return {WeakMap<HTMLElement, Set<string>} a weak map with the stored values for the elements being controlled by the helper
+ * @param {HTMLElement} host reference to the `<html>` element or shadow root host
+ * @return {object} an object with tag names and instances for given host
  */
 function getHostMap(host) {
   if (!observedHosts.has(host)) {
