@@ -22,15 +22,15 @@
       import '@vaadin/item/src/vaadin-lit-item.js';
       import '@vaadin/list-box/src/vaadin-lit-list-box.js';
 
+      const link = document.createElement('link');
+      link.href = './styles/components.css';
+      link.rel = 'stylesheet';
+
       document.querySelector('#unload').addEventListener('click', () => {
-        const link = document.head.querySelector('link[rel="stylesheet"]');
-        link?.remove();
+        link.remove();
       });
 
       document.querySelector('#load').addEventListener('click', () => {
-        const link = document.createElement('link');
-        link.href = './styles/components.css';
-        link.rel = 'stylesheet';
         document.head.appendChild(link);
       });
     </script>
