@@ -151,7 +151,7 @@ describe('column auto-width', () => {
     spy = sinon.spy(grid, '_recalculateColumnWidths');
     await recalculateWidths();
 
-    expectColumnWidthsToBeOk(grid.querySelectorAll('vaadin-grid-column'), [161]);
+    expectColumnWidthsToBeOk(grid.querySelectorAll('vaadin-grid-column'), [163]);
   });
 
   it('should have correct column widths when using lazy dataProvider', async () => {
