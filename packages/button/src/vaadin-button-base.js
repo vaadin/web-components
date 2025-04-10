@@ -13,7 +13,7 @@ export const buttonStyles = css`
       align-items: center;
       justify-content: center;
       text-align: center;
-      gap: var(--vaadin-button-gap, 0 var(--_vaadin-gap-container));
+      gap: var(--vaadin-button-gap, 0 var(--_vaadin-gap-container-inline));
 
       white-space: nowrap;
       -webkit-tap-highlight-color: transparent;
