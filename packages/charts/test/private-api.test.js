@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, nextFrame, oneEvent } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame, nextRender, oneEvent } from '@vaadin/testing-helpers';
 import '../vaadin-chart.js';
 import { inflateFunctions } from '../src/helpers.js';
 
@@ -101,6 +101,21 @@ describe('vaadin-chart private API', () => {
       chart.__callSeriesFunction('update', 0, { dataLabels: { _fn_formatter: 'return `foo`;' } });
       const { dataLabels } = chart.configuration.series[0].userOptions;
       expect(dataLabels.formatter).to.be.a('function');
+    });
+
+    it('should destroy and recreate the chart after a large number of addPoint calls', async () => {
+      const initialNumberOfPoints = chart.configuration.series[0].data.length;
+      const oldChartInstance = chart.configuration;
+      // Use internal threshold
+      const numberOfPointsToAdd = chart.__addPointThreshold * 2;
+      for (let i = 0; i < numberOfPointsToAdd; i++) {
+        chart.__callSeriesFunction('addPoint', 0, i);
+        await nextRender(chart);
+      }
+      expect(chart.configuration).to.exist;
+      expect(chart.configuration).to.not.equal(oldChartInstance);
+      expect(chart.configuration.series[0]).to.exist;
+      expect(chart.configuration.series[0].data.length).to.be.greaterThan(initialNumberOfPoints);
     });
   });
 
