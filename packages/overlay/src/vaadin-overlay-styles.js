@@ -57,11 +57,11 @@ export const overlayStyles = css`
   }
 
   [part='backdrop'] {
-    z-index: -1;
-    content: '';
     background: rgba(0, 0, 0, 0.5);
-    position: fixed;
+    content: '';
     inset: 0;
     pointer-events: auto;
+    position: fixed;
+    z-index: -1;
   }
 `;
