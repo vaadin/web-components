@@ -137,14 +137,13 @@ function getMatchingCssRules(element, root) {
  * @param {HTMLElement} element
  * @return {CSSRuleList[]}
  */
-export function gatherMatchingStyleRules(element) {
+export function gatherMatchingStyleRules(element, root = element.getRootNode()) {
   const matchingRules = [];
 
   // Global stylesheets
   matchingRules.push(...getMatchingCssRules(element, document));
 
   // Scoped stylesheets
-  const root = element.getRootNode();
   if (root !== document) {
     matchingRules.push(...getMatchingCssRules(element, root));
   }

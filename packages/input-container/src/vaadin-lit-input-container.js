@@ -37,14 +37,6 @@ export class InputContainer extends CssInjectionMixin(
     return inputContainerStyles;
   }
 
-  /**
-   * Override to indicate that this component should use its parent
-   * root host for detecting style injection custom CSS properties.
-   */
-  static get cssInjectParentRoot() {
-    return true;
-  }
-
   /** @protected */
   render() {
     return html`

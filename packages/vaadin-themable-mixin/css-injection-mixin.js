@@ -28,10 +28,45 @@ function getHostMap(host) {
 }
 
 /**
+ * Find enclosing host to observe for custom CSS property changes, which is either
+ * an `<html>` element or a closest shadow host not implementing this mixin.
+ *
+ * @param {HTMLElement} element
+ * @return {HTMLElement}
+ */
+function findHost(element) {
+  const root = element.getRootNode();
+  const host = root === document ? root.documentElement : root.host;
+
+  // If element is nested in shadow root of another element implementing the mixin,
+  // then use its host. Example: `vaadin-input-container` -> `vaadin-text-field`.
+  return host.constructor.cssInjectPropName ? findHost(host) : host;
+}
+
+/**
+ * Find enclosing root for given element to father style rules from.
+ *
+ * @param {HTMLElement} element
+ * @return {DocumentOrShadowRoot}
+ */
+function findRoot(element) {
+  const root = element.getRootNode();
+  if (root === document) {
+    return root;
+  }
+
+  if (root.host && root.host.constructor.cssInjectPropName) {
+    return findRoot(root.host);
+  }
+
+  return root;
+}
+
+/**
  * @param {HTMLElement} element
  */
 function injectInstanceStyles(element) {
-  const rules = gatherMatchingStyleRules(element);
+  const rules = gatherMatchingStyleRules(element, findRoot(element));
 
   if (rules.length > 0) {
     element.__injectedStyleSheet = new CSSStyleSheet();
@@ -53,10 +88,12 @@ function injectInstanceStyles(element) {
  */
 function cleanupInstanceStyles(element) {
   if (element.__injectedStyleSheet) {
-    element.shadowRoot.adoptedStyleSheets.splice(
-      element.shadowRoot.adoptedStyleSheets.indexOf(element.__injectedStyleSheet),
-      1,
-    );
+    const index = element.shadowRoot.adoptedStyleSheets.indexOf(element.__injectedStyleSheet);
+    if (index > -1) {
+      element.shadowRoot.adoptedStyleSheets.splice(index, 1);
+    }
+
+    element.__injectedStyleSheet = undefined;
   }
 }
 
@@ -129,22 +166,6 @@ function observeHost(componentClass, host) {
 }
 
 /**
- * Detect whether the element should use its own host, or rely on its parent
- * (which is the case for components that are always used in shadow roots).
- *
- * @param {HTMLElement} element
- * @return {HTMLElement}
- */
-function findHost(element) {
-  const root = element.getRootNode();
-  const host = root === document ? root.documentElement : root.host;
-
-  // If this element has flag indicating it should be nested, use its parent
-  // Example: `vaadin-input-container` using its parent `vaadin-text-field`.
-  return element.constructor.cssInjectParentRoot ? findHost(host) : host;
-}
-
-/**
  * Mixin for internal use only. Do not use it in custom components.
  *
  * @polymerMixin
@@ -172,13 +193,6 @@ export const CssInjectionMixin = (superClass) =>
 
     static get cssInjectPropName() {
       return `--${this.is}-css-inject`;
-    }
-
-    /**
-     * Override for components
-     */
-    static get cssInjectParentRoot() {
-      return false;
     }
 
     /** @protected */
