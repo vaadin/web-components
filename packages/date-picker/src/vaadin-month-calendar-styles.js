@@ -22,6 +22,8 @@ export const monthCalendarStyles = css`
 
   table {
     border-collapse: collapse;
+    display: flex;
+    flex-direction: column;
   }
 
   tr {
