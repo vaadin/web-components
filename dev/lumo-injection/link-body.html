@@ -20,16 +20,25 @@
 
     <shadow-host></shadow-host>
 
-    <button>Move to shadow</button>
+    <br />
+
+    <button id="shadow">Move to shadow</button>
+    <button id="global">Move to global</button>
 
     <script type="module">
       import '@vaadin/item/src/vaadin-lit-item.js';
       import '@vaadin/list-box/src/vaadin-lit-list-box.js';
       import './shadow-host.js';
 
-      document.querySelector('button').addEventListener('click', () => {
-        const shadow = document.querySelector('shadow-host').shadowRoot;
-        shadow.appendChild(document.querySelector('vaadin-list-box]'));
+      const host = document.querySelector('shadow-host');
+      const listBox = document.querySelector('vaadin-list-box');
+
+      document.querySelector('#shadow').addEventListener('click', () => {
+        host.shadowRoot.appendChild(listBox);
+      });
+
+      document.querySelector('#global').addEventListener('click', () => {
+        document.body.insertBefore(listBox, host);
       });
     </script>
   </body>
