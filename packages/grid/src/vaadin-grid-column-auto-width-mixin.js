@@ -296,12 +296,17 @@ export const ColumnAutoWidthMixin = (superClass) =>
       const debouncingUpdateFrozenColumn =
         this.__debounceUpdateFrozenColumn && this.__debounceUpdateFrozenColumn.isActive();
 
+      // When using a percentage-based height, the grid's effective height may
+      // be 0 until the resize observer in grid-mixin calculates a min-height.
+      const hasHeight = this.clientHeight > 0;
+
       return (
         !this._dataProviderController.isLoading() &&
         !hasRowsWithUndefinedIndex &&
         !isElementHidden(this) &&
         !debouncingHiddenChanged &&
-        !debouncingUpdateFrozenColumn
+        !debouncingUpdateFrozenColumn &&
+        hasHeight
       );
     }
   };

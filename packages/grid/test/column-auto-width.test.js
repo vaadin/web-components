@@ -141,6 +141,19 @@ describe('column auto-width', () => {
     expectColumnWidthsToBeOk(columns);
   });
 
+  it('should have correct column widths when the grid has an undefined height', async () => {
+    grid = fixtureSync(`
+      <vaadin-grid style="width: 600px; height: 100%;">
+        <vaadin-grid-column auto-width flex-grow="0" path="a"></vaadin-grid-column>
+      </vaadin-grid>
+    `);
+    grid.items = [{ a: 'aaaaaaaaaaaaaaa' }];
+    spy = sinon.spy(grid, '_recalculateColumnWidths');
+    await recalculateWidths();
+
+    expectColumnWidthsToBeOk(grid.querySelectorAll('vaadin-grid-column'), [163]);
+  });
+
   it('should have correct column widths when using lazy dataProvider', async () => {
     grid.dataProvider = (params, callback) => {
       requestAnimationFrame(() => {
