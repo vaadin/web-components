@@ -80,4 +80,10 @@ export const fieldShared = css`
   :host([theme~='helper-above-field']) {
     --vaadin-input-field-helper-order: -1;
   }
+
+  @media (forced-colors: active) {
+    [part='error-message']::before {
+      background: CanvasText;
+    }
+  }
 `;

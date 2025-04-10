@@ -81,7 +81,23 @@ export const buttonStyles = css`
 
     @media (forced-colors: active) {
       :host {
-        border: 1px solid;
+        --vaadin-button-border-width: 1px;
+        --vaadin-button-background: ButtonFace;
+        --vaadin-button-text-color: ButtonText;
+      }
+
+      :host([theme~='primary']) {
+        forced-color-adjust: none;
+        --vaadin-button-background: CanvasText;
+        --vaadin-button-text-color: Canvas;
+        --vaadin-icon-color: Canvas;
+      }
+
+      :host([disabled]) {
+        --vaadin-button-background: transparent !important;
+        --vaadin-button-border-color: GrayText !important;
+        --vaadin-button-text-color: GrayText !important;
+        opacity: 1;
       }
     }
   }

@@ -100,4 +100,17 @@ export const inputContainerStyles = css`
     );
     --vaadin-input-field-border-color: transparent;
   }
+
+  @media (forced-colors: active) {
+    :host {
+      --vaadin-input-field-background: Field;
+      --vaadin-input-field-value-color: FieldText;
+      --vaadin-input-field-placeholder-color: GrayText;
+    }
+
+    :host([disabled]) {
+      --vaadin-input-field-value-color: GrayText;
+      --vaadin-icon-color: GrayText;
+    }
+  }
 `;
