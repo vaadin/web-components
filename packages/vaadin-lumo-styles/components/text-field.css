@@ -1,0 +1,10 @@
+@import './input-container.css';
+
+@import './shared/field-button.css' vaadin-text-field;
+@import './shared/helper.css' vaadin-text-field;
+@import './shared/input-field.css' vaadin-text-field;
+@import './shared/required-field.css' vaadin-text-field;
+
+html, :host {
+  --vaadin-text-field-css-inject: 1;
+}

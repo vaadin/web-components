@@ -129,6 +129,22 @@ function observeHost(componentClass, host) {
 }
 
 /**
+ * Detect whether the element should use its own host, or rely on its parent
+ * (which is the case for components that are always used in shadow roots).
+ *
+ * @param {HTMLElement} element
+ * @return {HTMLElement}
+ */
+function findHost(element) {
+  const root = element.getRootNode();
+  const host = root === document ? root.documentElement : root.host;
+
+  // If this element has flag indicating it should be nested, use its parent
+  // Example: `vaadin-input-container` using its parent `vaadin-text-field`.
+  return element.constructor.cssInjectParentRoot ? findHost(host) : host;
+}
+
+/**
  * Mixin for internal use only. Do not use it in custom components.
  *
  * @polymerMixin
@@ -158,13 +174,19 @@ export const CssInjectionMixin = (superClass) =>
       return `--${this.is}-css-inject`;
     }
 
+    /**
+     * Override for components
+     */
+    static get cssInjectParentRoot() {
+      return false;
+    }
+
     /** @protected */
     connectedCallback() {
       super.connectedCallback();
 
-      // Detect if we are in a document or shadow root
-      const root = this.getRootNode();
-      const host = root === document ? root.documentElement : root.host;
+      // Find proper host element to observe
+      const host = findHost(this);
 
       // Store this instance in the map for given host
       this.__storedHost = host;
