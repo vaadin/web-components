@@ -11978,10 +11978,10 @@ strong-log-transformer@^2.1.0:
     minimist "^1.2.0"
     through "^2.3.4"
 
-style-observer@^0.0.5:
-  version "0.0.5"
-  resolved "https://registry.yarnpkg.com/style-observer/-/style-observer-0.0.5.tgz#2efbac9a6ebb4bf926c18862ef61f1cd0873a1bb"
-  integrity sha512-d5ieqbpC6URZmZlemdYDUcGSh6hCqIODWppBCGUfJDylVprE20hqAo9aHetb43kCrHc/1kNaikrQgbE5+kBWkA==
+style-observer@^0.0.6:
+  version "0.0.6"
+  resolved "https://registry.yarnpkg.com/style-observer/-/style-observer-0.0.6.tgz#a5276994a33b582d7f596f4c25d6c7aeedc07737"
+  integrity sha512-fHEcwwuH2s93YHM1byMCxp7cGakEh1ad/SPJQjcgaLyjANa7QNt/xZgv153OLBoaRGnqJ+b4Vfrf64s8ORExzw==
 
 stylelint-config-vaadin@^1.0.0-alpha.2:
   version "1.0.0-alpha.2"
