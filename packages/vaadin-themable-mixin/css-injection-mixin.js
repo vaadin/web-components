@@ -146,22 +146,6 @@ const observer = new StyleObserver((records) => {
   });
 });
 
-function observeHost(componentClass, host) {
-  const { cssInjectPropName, is } = componentClass;
-
-  const hostMap = getHostMap(host);
-
-  // If styles for custom property are already loaded for this root,
-  // store corresponding tag name so that we can inject styles
-  const value = getComputedStyle(host).getPropertyValue(cssInjectPropName);
-  if (value === '1') {
-    hostMap.tagNames.add(is);
-  }
-
-  // Observe custom property that would trigger injection for this class
-  observer.observe(host, cssInjectPropName);
-}
-
 /**
  * Mixin for internal use only. Do not use it in custom components.
  *
@@ -198,16 +182,26 @@ export const CssInjectionMixin = (superClass) =>
 
       // Find proper host element to observe
       const host = findHost(this);
+      const hostMap = getHostMap(host);
 
       // Store this instance in the map for given host
       this.__storedHost = host;
-      getHostMap(host).instances.add(this);
+      hostMap.instances.add(this);
+
+      const { cssInjectPropName, is } = this.constructor;
+
+      // If styles for custom property are already loaded for the host,
+      // store corresponding tag name so that we can inject styles
+      const value = getComputedStyle(host).getPropertyValue(cssInjectPropName);
+      if (value === '1') {
+        hostMap.tagNames.add(this.constructor.is);
+      }
 
       // Observe host for custom CSS property injection
-      observeHost(this.constructor, host);
+      observer.observe(host, cssInjectPropName);
 
       // If custom CSS property is already set, inject styles
-      if (getHostMap(host).tagNames.has(this.constructor.is)) {
+      if (getHostMap(host).tagNames.has(is)) {
         injectInstanceStyles(this);
       }
     }
