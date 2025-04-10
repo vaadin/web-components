@@ -7,14 +7,26 @@ import StyleObserver from 'style-observer';
 import { gatherMatchingStyleRules } from './css-injection-utils.js';
 
 /**
- * @type {string[]}
+ * @type {WeakMap<Node, Set<string>>}
  */
-const injectableTagNames = new Set();
+const observedHosts = new WeakMap();
 
 /**
- * @type {WeakRef<HTMLElement>[]}
+ * Gets or creates an object with the stored values for root.
+ *
+ * @param {HTMLElement} host reference to the document or shadow root host
+ *
+ * @return {WeakMap<HTMLElement, Set<string>} a weak map with the stored values for the elements being controlled by the helper
  */
-const injectableInstances = new Set();
+function getHostMap(host) {
+  if (!observedHosts.has(host)) {
+    observedHosts.set(host, {
+      tagNames: new Set(),
+      instances: new Set(),
+    });
+  }
+  return observedHosts.get(host);
+}
 
 /**
  * @param {HTMLElement} element
@@ -52,15 +64,12 @@ function cleanupInstanceStyles(element) {
 /**
  * Dynamically injects styles to the instances matching the given component type.
  * @param {Function} componentClass
+ * @param {Set<HTMLElement>} instances
  */
-function injectClassInstanceStyles(componentClass) {
-  injectableInstances.forEach((ref) => {
-    const instance = ref.deref();
+function injectClassInstanceStyles(componentClass, instances) {
+  instances.forEach((instance) => {
     if (instance instanceof componentClass) {
       injectInstanceStyles(instance);
-    } else if (!instance) {
-      // Clean up the weak reference to a GC'd instance
-      injectableInstances.delete(ref);
     }
   });
 }
@@ -68,41 +77,57 @@ function injectClassInstanceStyles(componentClass) {
 /**
  * Removes styles from the instances matching the given component type.
  * @param {Function} componentClass
+ * @param {Set<HTMLElement>} instances
  */
-function cleanupClassInstanceStyles(componentClass) {
-  injectableInstances.forEach((ref) => {
-    const instance = ref.deref();
+function cleanupClassInstanceStyles(componentClass, instances) {
+  instances.forEach((instance) => {
     if (instance instanceof componentClass) {
       cleanupInstanceStyles(instance);
-    } else if (!instance) {
-      // Clean up the weak reference to a GC'd instance
-      injectableInstances.delete(ref);
     }
   });
 }
 
 const observer = new StyleObserver((records) => {
   records.forEach((record) => {
-    const { property, value, oldValue } = record;
+    const { property, value, oldValue, target } = record;
 
     const tagName = property.slice(2).replace('-css-inject', '');
     const componentClass = customElements.get(tagName);
 
     if (componentClass) {
+      // Only apply styles changes to given host
+      const hostMap = getHostMap(target);
+
       if (value === '1') {
         // Allow future instances inject own styles
-        injectableTagNames.add(tagName);
+        hostMap.tagNames.add(tagName);
         // Inject styles for already existing instances
-        injectClassInstanceStyles(componentClass);
+        injectClassInstanceStyles(componentClass, hostMap.instances);
       } else if (oldValue === '1') {
         // Disallow future instances inject own styles
-        injectableTagNames.delete(tagName);
+        hostMap.tagNames.delete(tagName);
         // Cleanup styles for already existing instances
-        cleanupClassInstanceStyles(componentClass);
+        cleanupClassInstanceStyles(componentClass, hostMap.instances);
       }
     }
   });
 });
+
+function observeHost(componentClass, host) {
+  const { cssInjectPropName, is } = componentClass;
+
+  const hostMap = getHostMap(host);
+
+  // If styles for custom property are already loaded for this root,
+  // store corresponding tag name so that we can inject styles
+  const value = getComputedStyle(host).getPropertyValue(cssInjectPropName);
+  if (value === '1') {
+    hostMap.tagNames.add(is);
+  }
+
+  // Observe custom property that would trigger injection for this class
+  observer.observe(host, cssInjectPropName);
+}
 
 /**
  * Mixin for internal use only. Do not use it in custom components.
@@ -115,49 +140,53 @@ export const CssInjectionMixin = (superClass) =>
       super.finalize();
 
       if (this.is) {
-        const propName = `--${this.is}-css-inject`;
-
-        // If styles for custom property are already loaded, store this class
-        // in a registry so that evert instance of it would auto-inject styles
-        const value = getComputedStyle(document.documentElement).getPropertyValue(propName);
-        if (value === '1') {
-          injectableTagNames.add(this.is);
-        }
+        const propName = this.cssInjectPropName;
 
         // Initialize custom property for this class with 0 as default
         // so that changing it to 1 would inject styles to instances
+        // Use `inherits: true` so that property defined on `<html>`
+        // would apply to components instances within shadow roots
         CSS.registerProperty({
           name: propName,
           syntax: '<number>',
-          inherits: false,
+          inherits: true,
           initialValue: '0',
         });
-
-        // Observe custom property that would trigger injection for this class
-        observer.observe(document.documentElement, propName);
       }
     }
 
-    constructor() {
-      super();
-      // Store a weak reference to the instance
-      injectableInstances.add(new WeakRef(this));
+    static get cssInjectPropName() {
+      return `--${this.is}-css-inject`;
     }
 
     /** @protected */
     connectedCallback() {
       super.connectedCallback();
 
-      if (!injectableTagNames.has(this.constructor.is)) {
-        return;
-      }
+      // Detect if we are in a document or shadow root
+      const root = this.getRootNode();
+      const host = root === document ? root.documentElement : root.host;
 
-      injectInstanceStyles(this);
+      // Store this instance in the map for given host
+      this.__storedHost = host;
+      getHostMap(host).instances.add(this);
+
+      // Observe host for custom CSS property injection
+      observeHost(this.constructor, host);
+
+      // If custom CSS property is already set, inject styles
+      if (getHostMap(host).tagNames.has(this.constructor.is)) {
+        injectInstanceStyles(this);
+      }
     }
 
     /** @protected */
     disconnectedCallback() {
       super.disconnectedCallback();
+
+      // Cleanup instance from the previous host
+      getHostMap(this.__storedHost).instances.delete(this);
+      this.__storedHost = undefined;
 
       cleanupInstanceStyles(this);
     }
