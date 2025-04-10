@@ -10,7 +10,7 @@ addGlobalThemeStyles(
       font-size: calc(14 / 16 * 1rem);
       line-height: calc(18 / 16 * 1rem);
       color: var(--_vaadin-color);
-      background: var(--_vaadin-bg);
+      background: var(--_vaadin-background);
       margin: 2rem;
     }
 
