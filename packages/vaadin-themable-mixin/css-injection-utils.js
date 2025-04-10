@@ -24,13 +24,8 @@ function isElementMedia(media) {
  * @param  {String} selector  The selector to match against
  * @return {Boolean}          undefined if the selector is not a valid CSS selector. True|false whether the element matches the selector or not.
  */
-function matches(el, selector) {
-  try {
-    return el.matches(selector);
-  } catch (_) {
-    // Not a valid selector (such as an empty string)
-    return undefined;
-  }
+function matches(tagName, selector) {
+  return tagName === selector;
 }
 
 /**
@@ -39,11 +34,11 @@ function matches(el, selector) {
  * @param  {MediaList} media MediaList object to match against
  * @return {Boolean}         undefined if the media type string is not a valid CSS selector or a standard media features query. True|false whether the element matches the selector or not.
  */
-function matchesElement(el, media) {
+function matchesElement(tagName, media) {
   // Firefox parses the escaping backward slash into a double backward slash: \ -> \\
   media = media.replace(/\\/gmu, '');
   if (isElementMedia(media)) {
-    return matches(el, media);
+    return matches(tagName, media);
   }
 
   return undefined;
@@ -56,7 +51,7 @@ function matchesElement(el, media) {
  * @param {HTMLElement} element
  * @param {Function} collectorFunc
  */
-function extractMatchingStyleRules(styleSheet, element, collectorFunc) {
+function extractMatchingStyleRules(styleSheet, tagName, collectorFunc) {
   let media = '';
 
   if (styleSheet.ownerRule) {
@@ -78,7 +73,7 @@ function extractMatchingStyleRules(styleSheet, element, collectorFunc) {
   // TODO @import sheets should be inserted as the first ones in the results
   // Now they can end up in the middle of other rules and be ignored
 
-  const match = matchesElement(element, media);
+  const match = matchesElement(tagName, media);
   if (match !== undefined) {
     // Not a standard media query (no media features specified, only media type)
     if (match) {
@@ -90,10 +85,10 @@ function extractMatchingStyleRules(styleSheet, element, collectorFunc) {
     for (const rule of styleSheet.cssRules) {
       if (rule.type === 3) {
         // @import
-        extractMatchingStyleRules(rule.styleSheet, element, collectorFunc);
+        extractMatchingStyleRules(rule.styleSheet, tagName, collectorFunc);
       } else if (rule.type === 4) {
         // @media
-        if (matchesElement(element, rule.media.mediaText)) {
+        if (matchesElement(tagName, rule.media.mediaText)) {
           collectorFunc(rule.cssRules);
         }
       }
@@ -106,11 +101,11 @@ function extractMatchingStyleRules(styleSheet, element, collectorFunc) {
  * @param {HTMLElement} element
  * @return {CSSRuleList[]}
  */
-function processSheetsArray(sheets, element) {
+function processSheetsArray(sheets, tagName) {
   const matchingRules = [];
 
   for (const sheet of sheets) {
-    extractMatchingStyleRules(sheet, element, (rules) => matchingRules.push(rules));
+    extractMatchingStyleRules(sheet, tagName, (rules) => matchingRules.push(rules));
   }
 
   return matchingRules;
@@ -121,14 +116,14 @@ function processSheetsArray(sheets, element) {
  * @param {DocumentOrShadowRoot} root
  * @return {CSSRuleList[]}
  */
-function getMatchingCssRules(element, root) {
+function getMatchingCssRules(tagName, root) {
   const matchingRules = [];
 
   if (root.adoptedStyleSheets) {
-    matchingRules.push(...processSheetsArray(root.adoptedStyleSheets, element));
+    matchingRules.push(...processSheetsArray(root.adoptedStyleSheets, tagName));
   }
 
-  matchingRules.push(...processSheetsArray(root.styleSheets, element));
+  matchingRules.push(...processSheetsArray(root.styleSheets, tagName));
 
   return matchingRules;
 }
@@ -137,15 +132,15 @@ function getMatchingCssRules(element, root) {
  * @param {HTMLElement} element
  * @return {CSSRuleList[]}
  */
-export function gatherMatchingStyleRules(element, root = element.getRootNode()) {
+export function gatherMatchingStyleRules(tagName, root) {
   const matchingRules = [];
 
   // Global stylesheets
-  matchingRules.push(...getMatchingCssRules(element, document));
+  matchingRules.push(...getMatchingCssRules(tagName, document));
 
   // Scoped stylesheets
   if (root !== document) {
-    matchingRules.push(...getMatchingCssRules(element, root));
+    matchingRules.push(...getMatchingCssRules(tagName, root));
   }
 
   return matchingRules;
