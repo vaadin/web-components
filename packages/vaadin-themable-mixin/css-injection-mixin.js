@@ -51,9 +51,6 @@ function findHost(element) {
  */
 function findRoot(element) {
   const root = element.getRootNode();
-  if (root === document) {
-    return root;
-  }
 
   if (root.host && root.host.constructor.cssInjectPropName) {
     return findRoot(root.host);
