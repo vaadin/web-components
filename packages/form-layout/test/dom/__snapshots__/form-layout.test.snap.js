@@ -325,7 +325,7 @@ snapshots["vaadin-form-layout responsive-steps host default"] =
 snapshots["vaadin-form-layout responsive-steps host switching to autoResponsive"] = 
 `<vaadin-form-layout
   auto-responsive=""
-  style="--_column-width: 13em; --_max-columns: 1;"
+  style="--_max-columns: 1;"
 >
   <input
     placeholder="First name"
