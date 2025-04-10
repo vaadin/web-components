@@ -1,9 +1,3 @@
-@import '../color.css';
-@import '../font-icons.css';
-@import '../sizing.css';
-@import '../spacing.css';
-@import '../style.css';
-@import '../typography.css';
 @import './shared/item.css' vaadin-item;
 
 html {

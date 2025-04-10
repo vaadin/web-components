@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Dynamic loading</title>
     <!-- <script type="module" src="../common.js"></script> -->
+    <link rel="stylesheet" href="./styles/base.css" />
   </head>
   <body>
     <vaadin-list-box selected="2">
@@ -14,8 +15,8 @@
       <vaadin-item>Selected item</vaadin-item>
     </vaadin-list-box>
 
-    <button id="unload">Unload Lumo</button>
-    <button id="load">Load Lumo</button>
+    <button id="unload">Unload components styles</button>
+    <button id="load">Load components styles</button>
 
     <script type="module">
       import '@vaadin/item/src/vaadin-lit-item.js';
@@ -28,7 +29,7 @@
 
       document.querySelector('#load').addEventListener('click', () => {
         const link = document.createElement('link');
-        link.href = './styles/common.css';
+        link.href = './styles/components.css';
         link.rel = 'stylesheet';
         document.head.appendChild(link);
       });

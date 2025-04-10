@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Import CSS</title>
     <!-- <script type="module" src="../common.js"></script> -->
+    <link rel="stylesheet" href="./styles/base.css" />
   </head>
   <body>
     <vaadin-list-box selected="2">
@@ -24,7 +25,7 @@
       import './shadow-host.js';
 
       // Using import attributes (Chrome only)
-      const stylesheet = await import('./styles/common.css', { with: { type: 'css' } });
+      const stylesheet = await import('./styles/components.css', { with: { type: 'css' } });
       document.adoptedStyleSheets.push(stylesheet.default);
 
       document.querySelector('button').addEventListener('click', () => {
