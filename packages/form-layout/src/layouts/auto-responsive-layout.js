@@ -171,13 +171,13 @@ export class AutoResponsiveLayout extends AbstractLayout {
   }
 
   /** @private */
-  get __columnMinTotalWidthWithLabelsAside() {
+  get __minWidthLabelsAside() {
     const { backgroundPositionY } = getComputedStyle(this.host.$.layout, '::before');
     return parseFloat(backgroundPositionY);
   }
 
   /** @private */
   get __fitsLabelsAside() {
-    return this.host.offsetWidth >= this.__columnMinTotalWidthWithLabelsAside;
+    return this.host.offsetWidth >= this.__minWidthLabelsAside;
   }
 }
