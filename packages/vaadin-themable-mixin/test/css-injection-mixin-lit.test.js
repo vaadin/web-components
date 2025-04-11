@@ -1,10 +1,10 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextRender, oneEvent } from '@vaadin/testing-helpers';
 import { css, html, LitElement } from 'lit';
-import { CssInjectionMixin } from '../css-injection-mixin.js';
+import { CSSInjectionMixin } from '../css-injection-mixin.js';
 import { registerStyles, ThemableMixin } from '../vaadin-themable-mixin.js';
 
-class TestFoo extends CssInjectionMixin(ThemableMixin(LitElement)) {
+class TestFoo extends CSSInjectionMixin(ThemableMixin(LitElement)) {
   static get is() {
     return 'test-foo';
   }
@@ -28,7 +28,7 @@ class TestFoo extends CssInjectionMixin(ThemableMixin(LitElement)) {
 
 customElements.define(TestFoo.is, TestFoo);
 
-class TestBar extends CssInjectionMixin(LitElement) {
+class TestBar extends CSSInjectionMixin(LitElement) {
   static get is() {
     return 'test-bar';
   }
