@@ -58,7 +58,7 @@ export const AccordionPanelMixin = (superClass) =>
     }
 
     /**
-     * @protected 
+     * @protected
      * @override
      */
     __forwardTabIndex(tabindex) {
