@@ -111,7 +111,7 @@ export declare class FormLayoutMixinClass {
   /**
    * When `autoResponsive` is enabled, defines the maximum number of columns
    * that the layout can create. The layout will create columns up to this
-   * limit.
+   * limit based on the available container width.
    *
    * The default value is `10`.
    *
