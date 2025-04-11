@@ -120,7 +120,7 @@ export const formLayoutStyles = css`
     grid-column-start: var(--_grid-colstart, auto);
   }
 
-  :host([auto-responsive][labels-aside]) #layout {
+  :host([auto-responsive][labels-aside]) {
     --_grid-column-max-total-width: calc(var(--_max-columns) * var(--_column-width-labels-aside));
   }
 
