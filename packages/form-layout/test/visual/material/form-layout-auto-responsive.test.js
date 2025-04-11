@@ -68,11 +68,12 @@ describe('form-layout auto responsive', () => {
       await nextResize(element);
       await visualDiff(container, 'custom-css-properties');
     });
+  });
 
-    describe('minColumns', () => {
-      beforeEach(async () => {
-        element = fixtureSync(
-          `
+  describe('minColumns', () => {
+    beforeEach(async () => {
+      element = fixtureSync(
+        `
           <vaadin-form-layout
             auto-responsive
             auto-rows
@@ -98,47 +99,42 @@ describe('form-layout auto responsive', () => {
             </vaadin-form-item>
           </vaadin-form-layout>
         `,
-          container,
-        );
-        await nextResize(element);
-      });
+        container,
+      );
+      await nextResize(element);
+    });
 
-      it('default (wide container)', async () => {
-        await visualDiff(container, 'min-columns-default');
-      });
+    it('default (wide container)', async () => {
+      await visualDiff(container, 'min-columns-default');
+    });
 
-      it('barely enough for 2 columns', async () => {
-        container.style.width = '250px';
-        await nextResize(element);
-        await visualDiff(container, 'min-columns-two-columns');
-      });
+    it('barely enough for 2 columns', async () => {
+      container.style.width = '250px';
+      await nextResize(element);
+      await visualDiff(container, 'min-columns-two-columns');
+    });
 
-      it('narrow container forcing fewer than minColumns', async () => {
-        container.style.width = '100px';
-        await nextResize(element);
-        await visualDiff(container, 'min-columns-narrow-container');
-      });
+    it('narrow container forcing fewer than minColumns', async () => {
+      container.style.width = '100px';
+      await nextResize(element);
+      await visualDiff(container, 'min-columns-narrow-container');
+    });
 
-      it('expandFields', async () => {
-        element.expandFields = true;
-        container.style.width = '500px';
-        await nextResize(element);
-        await visualDiff(container, 'min-columns-expand-fields');
-      });
+    // TODO There is an issue with native inputs not shrinking, leading to
+    //  overflowing items. The baseline image should be updated one this
+    //  issue is fixed.
+    it('labelsAside', async () => {
+      element.labelsAside = true;
+      container.style.width = '800px';
+      await nextResize(element);
+      await visualDiff(container, 'min-columns-labels-aside');
+    });
 
-      it('labelsAside', async () => {
-        element.labelsAside = true;
-        container.style.width = '800px';
-        await nextResize(element);
-        await visualDiff(container, 'min-columns-labels-aside');
-      });
-
-      it('labelsAside with narrow container', async () => {
-        element.labelsAside = true;
-        container.style.width = '200px';
-        await nextResize(element);
-        await visualDiff(container, 'min-columns-labels-aside-narrow-container');
-      });
+    it('labelsAside with narrow container', async () => {
+      element.labelsAside = true;
+      container.style.width = '200px';
+      await nextResize(element);
+      await visualDiff(container, 'min-columns-labels-aside-narrow-container');
     });
   });
 

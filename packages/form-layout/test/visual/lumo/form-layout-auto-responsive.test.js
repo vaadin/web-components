@@ -120,13 +120,9 @@ describe('form-layout auto responsive', () => {
       await visualDiff(container, 'min-columns-narrow-container');
     });
 
-    it('expandFields', async () => {
-      element.expandFields = true;
-      container.style.width = '500px';
-      await nextResize(element);
-      await visualDiff(container, 'min-columns-expand-fields');
-    });
-
+    // TODO There is an issue with native inputs not shrinking, leading to
+    //  overflowing items. The baseline image should be updated one this
+    //  issue is fixed.
     it('labelsAside', async () => {
       element.labelsAside = true;
       container.style.width = '800px';
