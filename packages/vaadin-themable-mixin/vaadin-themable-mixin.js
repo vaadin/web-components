@@ -4,7 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { adoptStyles, css, CSSResult, LitElement, unsafeCSS } from 'lit';
-import { getInjectedStyleSheet } from './src/css-injector.js';
+import { getInjectedStyleSheet } from './src/css-utils.js';
 import { ThemePropertyMixin } from './vaadin-theme-property-mixin.js';
 
 export { css, unsafeCSS };
