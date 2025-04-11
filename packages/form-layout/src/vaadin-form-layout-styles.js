@@ -52,7 +52,7 @@ export const formLayoutStyles = css`
     );
 
     display: flex;
-    min-width: var(--_column-width-labels-above);
+    min-width: calc(var(--_grid-column-min-total-width) + var(--_grid-column-min-total-gap));
   }
 
   :host([auto-responsive]) #layout {
