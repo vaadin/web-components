@@ -29,6 +29,7 @@ export class ComboBoxItem extends ComboBoxItemMixin(ThemableMixin(DirMixin(Polyl
       :host {
         align-items: center;
         box-sizing: border-box;
+        cursor: pointer;
         display: flex;
         gap: var(--vaadin-combo-box-item-gap, 0 var(--_vaadin-gap-container-inline));
         height: var(--vaadin-combo-box-item-height, auto);
