@@ -161,7 +161,7 @@ describe('vaadin-accordion-panel', () => {
         expect(heading.tabIndex).to.be.equal(initialTabIndex);
       });
 
-      it(`should  modify tabIndex attribute to ${type} heading button`, async () => {
+      it(`should modify tabIndex attribute to ${type} heading button`, async () => {
         const button = heading.$.button;
         panel.disabled = true;
         await nextUpdate(panel);
