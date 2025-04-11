@@ -4,6 +4,6 @@ html, :host {
 
 @media test-foo {
   [part='content'] {
-    background: green;
+    background-color: green;
   }
 }

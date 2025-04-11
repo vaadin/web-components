@@ -2,8 +2,9 @@ import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextRender, oneEvent } from '@vaadin/testing-helpers';
 import { css, html, LitElement } from 'lit';
 import { CssInjectionMixin } from '../css-injection-mixin.js';
+import { registerStyles, ThemableMixin } from '../vaadin-themable-mixin.js';
 
-class TestFoo extends CssInjectionMixin(LitElement) {
+class TestFoo extends CssInjectionMixin(ThemableMixin(LitElement)) {
   static get is() {
     return 'test-foo';
   }
@@ -46,7 +47,7 @@ const TEST_FOO_STYLES = `
 
   @media test-foo {
     [part='content'] {
-      background: green;
+      background-color: green;
     }
   }
 `;
@@ -397,6 +398,62 @@ describe('CSS injection', () => {
       host.shadowRoot.appendChild(element);
 
       assertStyleApplies();
+    });
+  });
+
+  describe('registerStyles', () => {
+    let style;
+
+    before(() => {
+      // Suppress console warning
+      Object.assign(window, { Vaadin: { suppressPostFinalizeStylesWarning: true } });
+    });
+
+    beforeEach(async () => {
+      style = document.createElement('style');
+      style.textContent = TEST_FOO_STYLES;
+      document.head.appendChild(style);
+      await nextRender();
+
+      element = fixtureSync('<test-foo></test-foo>');
+      await nextRender();
+      content = element.shadowRoot.querySelector('[part="content"]');
+    });
+
+    afterEach(() => {
+      style.remove();
+    });
+
+    it('should not remove styles from injected stylesheets when calling registerStyles()', () => {
+      assertStyleApplies();
+
+      registerStyles(
+        'test-foo',
+        css`
+          :host {
+            color: white;
+          }
+        `,
+      );
+
+      assertStyleApplies();
+    });
+
+    it('should override styles from injected stylesheets when calling registerStyles()', async () => {
+      assertStyleApplies();
+
+      registerStyles(
+        'test-foo',
+        css`
+          [part='content'] {
+            background-color: initial;
+          }
+        `,
+      );
+
+      await contentTransition();
+
+      assertStyleDoesNotApply();
     });
   });
 });
