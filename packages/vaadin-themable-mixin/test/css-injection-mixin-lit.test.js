@@ -27,6 +27,18 @@ class TestFoo extends CssInjectionMixin(LitElement) {
 
 customElements.define(TestFoo.is, TestFoo);
 
+class TestBar extends CssInjectionMixin(LitElement) {
+  static get is() {
+    return 'test-bar';
+  }
+
+  render() {
+    return html`<test-foo></test-foo>`;
+  }
+}
+
+customElements.define(TestBar.is, TestBar);
+
 const TEST_FOO_STYLES = `
   html, :host {
     --test-foo-css-inject: 1;
@@ -177,17 +189,17 @@ describe('CSS injection', () => {
   });
 
   describe('in shadow scope', () => {
-    let shadowHost;
+    let host;
 
     beforeEach(() => {
-      shadowHost = fixtureSync('<div></div>');
-      shadowHost.attachShadow({ mode: 'open' });
+      host = fixtureSync('<div></div>');
+      host.attachShadow({ mode: 'open' });
       element = document.createElement('test-foo');
     });
 
     describe('styles added after element is connected', () => {
       beforeEach(async () => {
-        shadowHost.shadowRoot.appendChild(element);
+        host.shadowRoot.appendChild(element);
         await nextRender();
         content = element.shadowRoot.querySelector('[part="content"]');
       });
@@ -236,7 +248,7 @@ describe('CSS injection', () => {
       it('should inject matching styles added to enclosing shadow root using style tag', async () => {
         const style = document.createElement('style');
         style.textContent = TEST_FOO_STYLES;
-        shadowHost.shadowRoot.appendChild(style);
+        host.shadowRoot.appendChild(style);
 
         await contentTransition();
         assertStyleApplies();
@@ -249,7 +261,7 @@ describe('CSS injection', () => {
 
       it('should inject matching styles added to enclosing shadow root using link element', async () => {
         const link = createTestFooStyleSheet();
-        shadowHost.shadowRoot.appendChild(link);
+        host.shadowRoot.appendChild(link);
 
         await contentTransition();
         assertStyleApplies();
@@ -263,12 +275,12 @@ describe('CSS injection', () => {
       it('should inject matching styles added to enclosing shadow root using adoptedStyleSheets', async () => {
         const sheet = new CSSStyleSheet();
         sheet.replaceSync(TEST_FOO_STYLES);
-        shadowHost.shadowRoot.adoptedStyleSheets.push(sheet);
+        host.shadowRoot.adoptedStyleSheets.push(sheet);
 
         await contentTransition();
         assertStyleApplies();
 
-        shadowHost.shadowRoot.adoptedStyleSheets.pop();
+        host.shadowRoot.adoptedStyleSheets.pop();
 
         await contentTransition();
         assertStyleDoesNotApply();
@@ -277,7 +289,7 @@ describe('CSS injection', () => {
       it('should not apply styles added to enclosing shadow root after moving to document', async () => {
         const style = document.createElement('style');
         style.textContent = TEST_FOO_STYLES;
-        shadowHost.shadowRoot.appendChild(style);
+        host.shadowRoot.appendChild(style);
 
         await contentTransition();
         assertStyleApplies();
@@ -285,7 +297,7 @@ describe('CSS injection', () => {
         document.body.appendChild(element);
         assertStyleDoesNotApply();
 
-        shadowHost.shadowRoot.appendChild(element);
+        host.shadowRoot.appendChild(element);
         assertStyleApplies();
       });
     });
@@ -294,10 +306,10 @@ describe('CSS injection', () => {
       it('should inject matching styles added to enclosing shadow root using style tag', async () => {
         const style = document.createElement('style');
         style.textContent = TEST_FOO_STYLES;
-        shadowHost.shadowRoot.appendChild(style);
+        host.shadowRoot.appendChild(style);
         await nextRender();
 
-        shadowHost.shadowRoot.appendChild(element);
+        host.shadowRoot.appendChild(element);
         await nextRender();
         content = element.shadowRoot.querySelector('[part="content"]');
 
@@ -311,10 +323,10 @@ describe('CSS injection', () => {
 
       it('should inject matching styles added to enclosing shadow root using link element', async () => {
         const link = createTestFooStyleSheet();
-        shadowHost.shadowRoot.appendChild(link);
+        host.shadowRoot.appendChild(link);
         await nextRender();
 
-        shadowHost.shadowRoot.appendChild(element);
+        host.shadowRoot.appendChild(element);
         await nextRender();
         content = element.shadowRoot.querySelector('[part="content"]');
 
@@ -329,20 +341,62 @@ describe('CSS injection', () => {
       it('should inject matching styles added to enclosing shadow root using adoptedStyleSheets', async () => {
         const sheet = new CSSStyleSheet();
         sheet.replaceSync(TEST_FOO_STYLES);
-        shadowHost.shadowRoot.adoptedStyleSheets.push(sheet);
+        host.shadowRoot.adoptedStyleSheets.push(sheet);
         await nextRender();
 
-        shadowHost.shadowRoot.appendChild(element);
+        host.shadowRoot.appendChild(element);
         await nextRender();
         content = element.shadowRoot.querySelector('[part="content"]');
 
         assertStyleApplies();
 
-        shadowHost.shadowRoot.adoptedStyleSheets.pop();
+        host.shadowRoot.adoptedStyleSheets.pop();
 
         await contentTransition();
         assertStyleDoesNotApply();
       });
+    });
+  });
+
+  describe('nested component', () => {
+    let host, wrapper, style;
+
+    beforeEach(async () => {
+      host = fixtureSync('<div></div>');
+      host.attachShadow({ mode: 'open' });
+
+      style = document.createElement('style');
+      style.textContent = TEST_FOO_STYLES;
+      host.shadowRoot.appendChild(style);
+      await nextRender();
+
+      wrapper = document.createElement('test-bar');
+    });
+
+    it('should inject matching styles added to parent shadow host', async () => {
+      host.shadowRoot.appendChild(wrapper);
+      await nextRender();
+
+      element = wrapper.shadowRoot.querySelector('test-foo');
+      content = element.shadowRoot.querySelector('[part="content"]');
+      assertStyleApplies();
+
+      style.remove();
+
+      await contentTransition();
+      assertStyleDoesNotApply();
+    });
+
+    it('should inject matching styles after moving to parent shadow host', async () => {
+      host.shadowRoot.appendChild(wrapper);
+      await nextRender();
+
+      element = wrapper.shadowRoot.querySelector('test-foo');
+      content = element.shadowRoot.querySelector('[part="content"]');
+
+      host.shadowRoot.appendChild(element);
+
+      assertStyleApplies();
     });
   });
 });
