@@ -68,6 +68,78 @@ describe('form-layout auto responsive', () => {
       await nextResize(element);
       await visualDiff(container, 'custom-css-properties');
     });
+
+    describe('minColumns', () => {
+      beforeEach(async () => {
+        element = fixtureSync(
+          `
+          <vaadin-form-layout
+            auto-responsive
+            auto-rows
+            column-width="100px"
+            min-columns="2"
+            max-columns="3"
+          >
+            <vaadin-form-item>
+              <label slot="label">Field 1</label>
+              <input />
+            </vaadin-form-item>
+            <vaadin-form-item>
+              <label slot="label">Field 2</label>
+              <input />
+            </vaadin-form-item>
+            <vaadin-form-item>
+              <label slot="label">Field 3</label>
+              <input />
+            </vaadin-form-item>
+            <vaadin-form-item>
+              <label slot="label">Field 4</label>
+              <input />
+            </vaadin-form-item>
+          </vaadin-form-layout>
+        `,
+          container,
+        );
+        await nextResize(element);
+      });
+
+      it('default (wide container)', async () => {
+        await visualDiff(container, 'min-columns-default');
+      });
+
+      it('barely enough for 2 columns', async () => {
+        container.style.width = '250px';
+        await nextResize(element);
+        await visualDiff(container, 'min-columns-two-columns');
+      });
+
+      it('narrow container forcing fewer than minColumns', async () => {
+        container.style.width = '100px';
+        await nextResize(element);
+        await visualDiff(container, 'min-columns-narrow-container');
+      });
+
+      it('expandFields', async () => {
+        element.expandFields = true;
+        container.style.width = '500px';
+        await nextResize(element);
+        await visualDiff(container, 'min-columns-expand-fields');
+      });
+
+      it('labelsAside', async () => {
+        element.labelsAside = true;
+        container.style.width = '800px';
+        await nextResize(element);
+        await visualDiff(container, 'min-columns-labels-aside');
+      });
+
+      it('labelsAside with narrow container', async () => {
+        element.labelsAside = true;
+        container.style.width = '200px';
+        await nextResize(element);
+        await visualDiff(container, 'min-columns-labels-aside-narrow-container');
+      });
+    });
   });
 
   describe('explicit rows', () => {
