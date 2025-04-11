@@ -50,7 +50,6 @@ export const formLayoutStyles = css`
     --_column-width-labels-aside: calc(
       var(--_column-width) + var(--vaadin-form-layout-label-width) + var(--vaadin-form-layout-label-spacing)
     );
-
     --_column-gap: var(--vaadin-form-layout-column-spacing);
     --_column-max-total-gap: calc((var(--_max-columns) - 1) * var(--_column-gap));
     --_column-max-total-width: calc(var(--_max-columns) * var(--_column-width-labels-above));
