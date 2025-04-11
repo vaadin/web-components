@@ -52,8 +52,6 @@ function matchesTag(tagName, media) {
  * @param {Function} collectorFunc
  */
 function extractMatchingStyleRules(styleSheet, tagName) {
-  const matchingRules = [];
-
   let media = '';
 
   if (styleSheet.ownerRule) {
@@ -80,19 +78,23 @@ function extractMatchingStyleRules(styleSheet, tagName) {
     // Not a standard media query (no media features specified, only media type)
     if (match) {
       // Media type matches the element
-      matchingRules.push(styleSheet.cssRules);
+      return [...styleSheet.cssRules];
     }
-  } else {
-    // Either no media specified or a standard media query
-    for (const rule of styleSheet.cssRules) {
-      if (rule.type === 3) {
-        // @import
-        matchingRules.push(...extractMatchingStyleRules(rule.styleSheet, tagName));
-      } else if (rule.type === 4) {
-        // @media
-        if (matchesTag(tagName, rule.media.mediaText)) {
-          matchingRules.push(rule.cssRules);
-        }
+
+    return [];
+  }
+
+  const matchingRules = [];
+
+  // Either no media specified or a standard media query
+  for (const rule of styleSheet.cssRules) {
+    if (rule.type === 3) {
+      // @import
+      matchingRules.push(...extractMatchingStyleRules(rule.styleSheet, tagName));
+    } else if (rule.type === 4) {
+      // @media
+      if (matchesTag(tagName, rule.media.mediaText)) {
+        matchingRules.push(...rule.cssRules);
       }
     }
   }
@@ -115,7 +117,7 @@ function extractMatchingStyleRules(styleSheet, tagName) {
  * @return {CSSRule[]}
  */
 export function collectTagScopedCSSRules(root, tagName) {
-  return [...root.adoptedStyleSheets, ...root.styleSheets]
-    .flatMap((sheet) => extractMatchingStyleRules(sheet, tagName))
-    .flatMap((ruleList) => [...ruleList]);
+  return [...root.adoptedStyleSheets, ...root.styleSheets].flatMap((sheet) =>
+    extractMatchingStyleRules(sheet, tagName),
+  );
 }
