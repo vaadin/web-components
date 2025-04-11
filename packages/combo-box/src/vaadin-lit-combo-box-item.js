@@ -27,11 +27,29 @@ export class ComboBoxItem extends ComboBoxItemMixin(ThemableMixin(DirMixin(Polyl
   static get styles() {
     return css`
       :host {
-        display: block;
+        align-items: center;
+        box-sizing: border-box;
+        display: flex;
+        gap: var(--_vaadin-gap-container-inline);
+        padding: var(--_vaadin-padding-container);
       }
 
       :host([hidden]) {
         display: none;
+      }
+
+      [part='checkmark'] {
+        height: var(--vaadin-icon-size, 1lh);
+        mask-image: var(--_vaadin-icon-checkmark);
+        width: var(--vaadin-icon-size, 1lh);
+      }
+
+      :host([selected]) [part='checkmark'] {
+        background: var(--_vaadin-color-subtle);
+      }
+
+      [part='content'] {
+        flex: 1;
       }
     `;
   }
