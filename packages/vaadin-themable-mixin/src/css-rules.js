@@ -44,6 +44,10 @@ function matchesTag(tagName, media) {
   return undefined;
 }
 
+function getRuleType(rule) {
+  return rule.constructor.name;
+}
+
 /**
  * Recursively process a style sheet for matching rules
  *
@@ -55,7 +59,7 @@ function extractMatchingStyleRules(styleSheet, tagName) {
   let media = '';
 
   if (styleSheet.ownerRule) {
-    if (styleSheet.ownerRule.type === 3) {
+    if (getRuleType(styleSheet.ownerRule) === 'CSSImportRule') {
       // @import
       // Need this awkward workaround since Firefox (sometimes?) blocks the access to the MediaList
       // object for some reason in imported stylesheets
@@ -88,11 +92,13 @@ function extractMatchingStyleRules(styleSheet, tagName) {
 
   // Either no media specified or a standard media query
   for (const rule of styleSheet.cssRules) {
-    if (rule.type === 3) {
-      // @import
+    const ruleType = getRuleType(rule);
+
+    if (ruleType === 'CSSImportRule') {
       matchingRules.push(...extractMatchingStyleRules(rule.styleSheet, tagName));
-    } else if (rule.type === 4) {
-      // @media
+    }
+
+    if (ruleType === 'CSSMediaRule') {
       if (matchesTag(tagName, rule.media.mediaText)) {
         matchingRules.push(...rule.cssRules);
       }
