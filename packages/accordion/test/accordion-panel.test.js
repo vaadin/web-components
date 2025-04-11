@@ -150,6 +150,28 @@ describe('vaadin-accordion-panel', () => {
         expect(heading.hasAttribute('disabled')).to.be.false;
       });
 
+      it(`should not modify tabIndex attribute to ${type} heading`, async () => {
+        const initialTabIndex = heading.tabIndex;
+        panel.disabled = true;
+        await nextUpdate(panel);
+        expect(heading.tabIndex).to.be.equal(initialTabIndex);
+
+        panel.disabled = false;
+        await nextUpdate(panel);
+        expect(heading.tabIndex).to.be.equal(initialTabIndex);
+      });
+
+      it(`should  modify tabIndex attribute to ${type} heading button`, async () => {
+        const button = heading.$.button;
+        panel.disabled = true;
+        await nextUpdate(panel);
+        expect(button.tabIndex).to.be.equal(-1);
+
+        panel.disabled = false;
+        await nextUpdate(panel);
+        expect(button.tabIndex).to.be.equal(0);
+      });
+
       it(`should propagate theme attribute to ${type} heading`, async () => {
         panel.setAttribute('theme', 'filled');
         await nextUpdate(panel);
