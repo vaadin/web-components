@@ -7,81 +7,81 @@
 // Based on https://github.com/jouni/j-elements/blob/main/test/old-components/Stylable.js
 
 /**
- * Check if the media query is a non-standard "element scoped selector", i.e. it does not contain any media feature queries, only media type.
- * @param  {MediaList} media
- * @return {Boolean}   True if the media query only contains a media type query
+ * Returns the type of the rule as a string, e.g.
+ * 'CSSImportRule', 'CSSMediaRule', etc.
+ *
+ * @param {CSSRule} rule
+ * @return {string}
  */
-function isElementMedia(media) {
-  // TODO account for the 'and' combinator?
-  // e.g. screen and (orientation: portrait) and (max-width: 400px) and x-foo
-  // x-foo and x-bar
-  return media && media.match(/^[\w]+-[\w.()[\]"'=~*^$]+/u);
-}
-
-/**
- * Check if an element matches a given selector
- * @param  {HTMLElement} el   The element which might match the selector
- * @param  {String} selector  The selector to match against
- * @return {Boolean}          undefined if the selector is not a valid CSS selector. True|false whether the element matches the selector or not.
- */
-function matches(tagName, selector) {
-  return tagName === selector;
-}
-
-/**
- * Check if the media type string matches the given element
- * @param  {HTMLElement} el  The element which might match the given media type string
- * @param  {MediaList} media MediaList object to match against
- * @return {Boolean}         undefined if the media type string is not a valid CSS selector or a standard media features query. True|false whether the element matches the selector or not.
- */
-function matchesTag(tagName, media) {
-  // Firefox parses the escaping backward slash into a double backward slash: \ -> \\
-  media = media.replace(/\\/gmu, '');
-  if (isElementMedia(media)) {
-    return matches(tagName, media);
-  }
-
-  return undefined;
-}
-
-function getRuleType(rule) {
+function getCSSRuleType(rule) {
   return rule.constructor.name;
 }
 
 /**
- * Recursively process a style sheet for matching rules
+ * Returns the media query string for the given stylesheet.
  *
  * @param {CSSStyleSheet} styleSheet
- * @param {HTMLElement} element
- * @param {Function} collectorFunc
+ * @return {string}
  */
-function extractMatchingStyleRules(styleSheet, tagName) {
-  let media = '';
-
+function getCSSStyleSheetMediaText(styleSheet) {
   if (styleSheet.ownerRule) {
-    if (getRuleType(styleSheet.ownerRule) === 'CSSImportRule') {
+    if (getCSSRuleType(styleSheet.ownerRule) === 'CSSImportRule') {
       // @import
       // Need this awkward workaround since Firefox (sometimes?) blocks the access to the MediaList
       // object for some reason in imported stylesheets
       const importRule = styleSheet.ownerRule.cssText.split(' ');
       if (importRule.length > 2) {
-        media = importRule.slice(2).join(' ').replace(';', '');
+        return importRule.slice(2).join(' ').replace(';', '');
       }
     }
   } else if (styleSheet.ownerNode) {
-    media = styleSheet.ownerNode.media;
+    return styleSheet.ownerNode.media;
   } else if (styleSheet.media) {
-    media = styleSheet.media.mediaText;
+    return styleSheet.media.mediaText;
   }
 
+  return '';
+}
+
+/**
+ * Check if the media query is a non-standard "tag scoped selector".
+ *
+ * Examples of such media queries:
+ * - `@media vaadin-text-field { ... }`
+ * - `@import "styles.css" vaadin-text-field`.
+ *
+ * @param {string} media
+ * @return {boolean}
+ */
+function isTagScopedMedia(media) {
+  return /^[\w]+-[\w.()[\]"'=~*^$]+/u.test(media);
+}
+
+/**
+ * Check if the media query string matches the given tag name.
+ *
+ * @param {string} media
+ * @param {string} tagName
+ * @return {boolean}
+ */
+function matchesTagScopedMedia(media, tagName) {
+  // Firefox parses the escaping backward slash into a double backward slash: \ -> \\
+  return media.replace(/\\/gmu, '') === tagName;
+}
+
+/**
+ * Recursively processes a style sheet for matching "tag scoped" rules.
+ *
+ * @param {CSSStyleSheet} styleSheet
+ * @param {string} tagName
+ */
+function collectStyleSheetTagScopedCSSRules(styleSheet, tagName) {
   // TODO @import sheets should be inserted as the first ones in the results
   // Now they can end up in the middle of other rules and be ignored
 
-  const match = matchesTag(tagName, media);
-  if (match !== undefined) {
-    // Not a standard media query (no media features specified, only media type)
-    if (match) {
-      // Media type matches the element
+  const styleSheetMedia = getCSSStyleSheetMediaText(styleSheet);
+  if (isTagScopedMedia(styleSheetMedia)) {
+    if (matchesTagScopedMedia(styleSheetMedia, tagName)) {
       return [...styleSheet.cssRules];
     }
 
@@ -90,18 +90,15 @@ function extractMatchingStyleRules(styleSheet, tagName) {
 
   const matchingRules = [];
 
-  // Either no media specified or a standard media query
   for (const rule of styleSheet.cssRules) {
-    const ruleType = getRuleType(rule);
+    const ruleType = getCSSRuleType(rule);
 
     if (ruleType === 'CSSImportRule') {
-      matchingRules.push(...extractMatchingStyleRules(rule.styleSheet, tagName));
+      matchingRules.push(...collectStyleSheetTagScopedCSSRules(rule.styleSheet, tagName));
     }
 
-    if (ruleType === 'CSSMediaRule') {
-      if (matchesTag(tagName, rule.media.mediaText)) {
-        matchingRules.push(...rule.cssRules);
-      }
+    if (ruleType === 'CSSMediaRule' && matchesTagScopedMedia(rule.media.mediaText, tagName)) {
+      matchingRules.push(...rule.cssRules);
     }
   }
 
@@ -109,12 +106,14 @@ function extractMatchingStyleRules(styleSheet, tagName) {
 }
 
 /**
- * Returns CSS rules from all `@media` and `@import` blocks scoped to the specified tag,
- * found in both `adoptedStyleSheets` and regular `styleSheets` of the given root element.
+ * Recursively processes style sheets of the specified root element, including both
+ * `adoptedStyleSheets` and regular `styleSheets`, and returns all CSS rules from
+ * `@media` and `@import` blocks where the media query is (a) "tag scoped selector",
+ * and (b) matches the specified tag name.
  *
- * Examples of scoped rules:
- * - `@import "styles.css" vaadin-text-field`
+ * Examples of such media queries:
  * - `@media vaadin-text-field { ... }`
+ * - `@import "styles.css" vaadin-text-field`
  *
  * The returned rules are ordered in the same way as they are in the original stylesheet.
  *
@@ -123,7 +122,7 @@ function extractMatchingStyleRules(styleSheet, tagName) {
  * @return {CSSRule[]}
  */
 export function collectTagScopedCSSRules(root, tagName) {
-  return [...root.adoptedStyleSheets, ...root.styleSheets].flatMap((sheet) =>
-    extractMatchingStyleRules(sheet, tagName),
+  return [...root.adoptedStyleSheets, ...root.styleSheets].flatMap((styleSheet) =>
+    collectStyleSheetTagScopedCSSRules(styleSheet, tagName),
   );
 }
