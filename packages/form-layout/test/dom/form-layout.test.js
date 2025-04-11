@@ -100,6 +100,16 @@ describe('vaadin-form-layout', () => {
             layout.maxColumns = 20;
             await expect(layout)[domType].to.equalSnapshot();
           });
+
+          it('minColumns < number of columns', async () => {
+            layout.minColumns = 1;
+            await expect(layout)[domType].to.equalSnapshot();
+          });
+
+          it('minColumns > number of columns', async () => {
+            layout.minColumns = 20;
+            await expect(layout)[domType].to.equalSnapshot();
+          });
         });
 
         describe('explicit rows', () => {
@@ -130,6 +140,16 @@ describe('vaadin-form-layout', () => {
 
           it('maxColumns > number of columns', async () => {
             layout.maxColumns = 20;
+            await expect(layout)[domType].to.equalSnapshot();
+          });
+
+          it('minColumns < number of columns', async () => {
+            layout.minColumns = 1;
+            await expect(layout)[domType].to.equalSnapshot();
+          });
+
+          it('minColumns > number of columns', async () => {
+            layout.minColumns = 20;
             await expect(layout)[domType].to.equalSnapshot();
           });
         });

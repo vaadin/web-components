@@ -157,6 +157,21 @@ export const FormLayoutMixin = (superClass) =>
         },
 
         /**
+         * When `autoResponsive` is enabled, defines the minimum number of columns
+         * that the layout can create. The layout will create columns at least up
+         * to this limit.
+         *
+         * The default value is `1`.
+         *
+         * @attr {number} min-columns
+         */
+        minColumns: {
+          type: Number,
+          sync: true,
+          value: 1,
+        },
+
+        /**
          * When enabled with `autoResponsive`, distributes fields across columns
          * by placing each field in the next available column and wrapping to
          * the next row when the current row is full. `<br>` elements can be
@@ -231,7 +246,7 @@ export const FormLayoutMixin = (superClass) =>
 
     static get observers() {
       return [
-        '__autoResponsiveLayoutPropsChanged(columnWidth, maxColumns, autoRows, labelsAside, expandColumns, expandFields)',
+        '__autoResponsiveLayoutPropsChanged(columnWidth, maxColumns, minColumns, autoRows, labelsAside, expandColumns, expandFields)',
         '__autoResponsiveChanged(autoResponsive)',
       ];
     }
@@ -289,10 +304,19 @@ export const FormLayoutMixin = (superClass) =>
 
     /** @private */
     // eslint-disable-next-line @typescript-eslint/max-params
-    __autoResponsiveLayoutPropsChanged(columnWidth, maxColumns, autoRows, labelsAside, expandColumns, expandFields) {
+    __autoResponsiveLayoutPropsChanged(
+      columnWidth,
+      maxColumns,
+      minColumns,
+      autoRows,
+      labelsAside,
+      expandColumns,
+      expandFields,
+    ) {
       this.__autoResponsiveLayout.setProps({
         columnWidth,
         maxColumns,
+        minColumns,
         autoRows,
         labelsAside,
         expandColumns,
