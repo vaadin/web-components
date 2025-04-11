@@ -1,28 +1,7 @@
 /* eslint-disable es/no-optional-chaining */
 import StyleObserver from 'style-observer';
 import { collectTagScopedCSSRules } from './css-rules.js';
-
-function injectStyleSheet(component, stylesheet) {
-  const adoptedStyleSheets = component.shadowRoot.adoptedStyleSheets.filter(
-    (s) => s !== component.__cssInjectorStyleSheet,
-  );
-
-  component.shadowRoot.adoptedStyleSheets = [stylesheet, ...adoptedStyleSheets];
-  component.__cssInjectorStyleSheet = stylesheet;
-}
-
-function cleanupStyleSheet(component) {
-  const adoptedStyleSheets = component.shadowRoot.adoptedStyleSheets.filter(
-    (s) => s !== component.__cssInjectorStyleSheet,
-  );
-
-  component.shadowRoot.adoptedStyleSheets = adoptedStyleSheets;
-  component.__cssInjectorStyleSheet = undefined;
-}
-
-export function getInjectedStyleSheet(component) {
-  return component.__cssInjectorStyleSheet;
-}
+import { cleanupStyleSheet, injectStyleSheet } from './css-utils.js';
 
 export class CSSInjector {
   /** @type {Document | ShadowRoot} */
