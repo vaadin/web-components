@@ -30,6 +30,7 @@ snapshots["vaadin-form-layout auto-responsive basic host columnWidth"] =
 snapshots["vaadin-form-layout auto-responsive basic host labelsAside"] = 
 `<vaadin-form-layout
   auto-responsive=""
+  fits-labels-aside=""
   labels-aside=""
   style="--_min-columns: 1; --_max-columns: 1;"
 >
