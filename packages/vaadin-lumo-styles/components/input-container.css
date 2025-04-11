@@ -1,0 +1,5 @@
+@import './shared/input-container.css' vaadin-input-container;
+
+html, :host {
+  --vaadin-input-container-css-inject: 1;
+}
