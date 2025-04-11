@@ -130,11 +130,6 @@ export class AutoResponsiveLayout extends AbstractLayout {
       host.style.removeProperty('--_column-width');
     }
 
-    console.warn(`maxColumns: ${maxColumns}`);
-    console.warn(`props.minColumns: ${props.minColumns}`);
-    console.warn(`props.maxColumns: ${props.maxColumns}`);
-    console.warn(`--_min-columns: ${Math.max(props.minColumns, 1)}`);
-    console.warn(`--_max-columns: ${Math.min(Math.max(props.minColumns, props.maxColumns, 1), maxColumns)}`);
     host.style.setProperty('--_min-columns', Math.max(props.minColumns, 1));
     host.style.setProperty('--_max-columns', Math.min(Math.max(props.minColumns, props.maxColumns, 1), maxColumns));
 
