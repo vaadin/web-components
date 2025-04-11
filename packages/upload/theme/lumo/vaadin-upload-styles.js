@@ -123,6 +123,7 @@ const uploadFile = css`
   [part='commands'] {
     display: flex;
     align-items: baseline;
+    align-self: flex-start;
     flex: none;
   }
 
@@ -131,6 +132,7 @@ const uploadFile = css`
     font-size: var(--lumo-icon-size-m);
     font-family: 'lumo-icons';
     line-height: 1;
+    align-self: flex-start;
   }
 
   /* When both icons are hidden, let us keep space for one */
@@ -151,9 +153,10 @@ const uploadFile = css`
     box-shadow: 0 0 0 var(--_focus-ring-width) var(--_focus-ring-color);
   }
 
-  [part$='icon']::before,
-  [part$='button']::before {
-    vertical-align: -0.25em;
+  /* Vertically align icons / buttons with the first line of text */
+  [part$='icon'],
+  [part$='button'] {
+    margin-top: calc((1em * var(--lumo-line-height-m) - var(--lumo-icon-size-m)) / 2);
   }
 
   [part='done-icon']::before {
