@@ -51,23 +51,25 @@ export const formLayoutStyles = css`
       var(--_column-width) + var(--vaadin-form-layout-label-width) + var(--vaadin-form-layout-label-spacing)
     );
 
-    /* CSS grid related properties */
-    --_grid-column-gap: var(--vaadin-form-layout-column-spacing);
-    --_grid-column-width: var(--_column-width-labels-above);
-    --_grid-column-max-total-gap: calc((var(--_max-columns) - 1) * var(--_grid-column-gap));
-    --_grid-column-max-total-width: calc(var(--_max-columns) * var(--_column-width-labels-above));
-    --_grid-column-min-total-gap: calc((var(--_min-columns) - 1) * var(--_grid-column-gap));
-    --_grid-column-min-total-width: calc(var(--_min-columns) * var(--_column-width-labels-above));
-    --_grid-repeat: var(--_grid-column-width);
+    --_column-gap: var(--vaadin-form-layout-column-spacing);
+    --_column-max-total-gap: calc((var(--_max-columns) - 1) * var(--_column-gap));
+    --_column-max-total-width: calc(var(--_max-columns) * var(--_column-width-labels-above));
+    --_column-min-total-gap: calc((var(--_min-columns) - 1) * var(--_column-gap));
+    --_column-min-total-width-labels-above: calc(var(--_min-columns) * var(--_column-width-labels-above));
+    --_column-min-total-width-labels-aside: calc(var(--_min-columns) * var(--_column-width-labels-aside));
 
     display: flex;
-    min-width: calc(var(--_grid-column-min-total-width) + var(--_grid-column-min-total-gap));
+    min-width: calc(var(--_column-min-total-width-labels-above) + var(--_column-min-total-gap));
   }
 
   :host([auto-responsive]) #layout {
     /* By default, labels should be displayed above the fields */
     --_form-item-labels-above: initial; /* true */
     --_form-item-labels-aside: ' '; /* false */
+
+    /* CSS grid related properties */
+    --_grid-column-width: var(--_column-width-labels-above);
+    --_grid-repeat: var(--_grid-column-width);
 
     display: grid;
     grid-template-columns: repeat(auto-fill, var(--_grid-repeat));
@@ -80,7 +82,7 @@ export const formLayoutStyles = css`
     grid-auto-columns: 0;
 
     justify-items: start;
-    gap: var(--vaadin-form-layout-row-spacing) var(--_grid-column-gap);
+    gap: var(--vaadin-form-layout-row-spacing) var(--_column-gap);
 
     /*
       To prevent the layout from exceeding the column limit defined by --_max-columns,
@@ -94,17 +96,17 @@ export const formLayoutStyles = css`
       number of columns inside <vaadin-overlay>, which creates a new stacking context
       without a predefined width.
     */
-    width: calc(var(--_grid-column-max-total-width) + var(--_grid-column-max-total-gap));
+    width: calc(var(--_column-max-total-width) + var(--_column-max-total-gap));
 
     /*
       Firefox requires min-width on both :host and #layout to allow the layout
       to shrink below the value specified in the CSS width property above.
     */
-    min-width: calc(var(--_grid-column-min-total-width) + var(--_grid-column-min-total-gap));
+    min-width: inherit;
   }
 
   :host([auto-responsive]) #layout::before {
-    background-position-y: var(--_column-width-labels-aside);
+    background-position-y: calc(var(--_column-min-total-width-labels-aside) + var(--_column-min-total-gap));
   }
 
   :host([auto-responsive]) #layout ::slotted(*) {
@@ -121,14 +123,11 @@ export const formLayoutStyles = css`
   }
 
   :host([auto-responsive][labels-aside]) {
-    --_grid-column-max-total-width: calc(var(--_max-columns) * var(--_column-width-labels-aside));
-  }
-
-  :host([auto-responsive][labels-aside][fits-labels-aside]) {
-    --_grid-column-width: var(--_column-width-labels-aside);
+    --_column-max-total-width: calc(var(--_max-columns) * var(--_column-width-labels-aside));
   }
 
   :host([auto-responsive][labels-aside]) #layout[fits-labels-aside] {
+    --_grid-column-width: var(--_column-width-labels-aside);
     --_form-item-labels-above: ' '; /* false */
     --_form-item-labels-aside: initial; /* true */
   }
@@ -143,7 +142,7 @@ export const formLayoutStyles = css`
       reached yet.
     */
     --_grid-repeat: minmax(
-      max(var(--_grid-column-width), calc((100% - var(--_grid-column-max-total-gap)) / var(--_max-columns))),
+      max(var(--_grid-column-width), calc((100% - var(--_column-max-total-gap)) / var(--_max-columns))),
       1fr
     );
 

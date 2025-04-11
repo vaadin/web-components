@@ -56,7 +56,6 @@ export class AutoResponsiveLayout extends AbstractLayout {
     const { host } = this;
     host.style.removeProperty('--_column-width');
     host.style.removeProperty('--_max-columns');
-    host.removeAttribute('fits-labels-aside');
     host.$.layout.removeAttribute('fits-labels-aside');
     host.$.layout.style.removeProperty('--_grid-rendered-column-count');
 
@@ -135,7 +134,6 @@ export class AutoResponsiveLayout extends AbstractLayout {
     host.style.setProperty('--_max-columns', Math.min(Math.max(props.minColumns, props.maxColumns, 1), maxColumns));
 
     const fitsLabelAside = this.props.labelsAside && this.__fitsLabelsAside;
-    host.toggleAttribute('fits-labels-aside', fitsLabelAside);
     host.$.layout.toggleAttribute('fits-labels-aside', fitsLabelAside);
     host.$.layout.style.setProperty('--_grid-rendered-column-count', this.__renderedColumnCount);
   }
@@ -174,16 +172,13 @@ export class AutoResponsiveLayout extends AbstractLayout {
   }
 
   /** @private */
-  get __columnWidthWithLabelsAside() {
+  get __columnMinTotalWidthWithLabelsAside() {
     const { backgroundPositionY } = getComputedStyle(this.host.$.layout, '::before');
     return parseFloat(backgroundPositionY);
   }
 
   /** @private */
   get __fitsLabelsAside() {
-    const minColumns = this.host.style.getPropertyValue('--_min-columns') || 1;
-    const totalGap = (minColumns - 1) * this.host.$.layout.style.gap;
-    const totalWidth = this.__columnWidthWithLabelsAside * minColumns + totalGap;
-    return this.host.offsetWidth >= totalWidth;
+    return this.host.offsetWidth >= this.__columnMinTotalWidthWithLabelsAside;
   }
 }
