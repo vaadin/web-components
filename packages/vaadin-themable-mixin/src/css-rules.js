@@ -51,7 +51,9 @@ function matchesTag(tagName, media) {
  * @param {HTMLElement} element
  * @param {Function} collectorFunc
  */
-function extractMatchingStyleRules(styleSheet, tagName, collectorFunc) {
+function extractMatchingStyleRules(styleSheet, tagName) {
+  const matchingRules = [];
+
   let media = '';
 
   if (styleSheet.ownerRule) {
@@ -78,35 +80,42 @@ function extractMatchingStyleRules(styleSheet, tagName, collectorFunc) {
     // Not a standard media query (no media features specified, only media type)
     if (match) {
       // Media type matches the element
-      collectorFunc(styleSheet.cssRules);
+      matchingRules.push(styleSheet.cssRules);
     }
   } else {
     // Either no media specified or a standard media query
     for (const rule of styleSheet.cssRules) {
       if (rule.type === 3) {
         // @import
-        extractMatchingStyleRules(rule.styleSheet, tagName, collectorFunc);
+        matchingRules.push(...extractMatchingStyleRules(rule.styleSheet, tagName));
       } else if (rule.type === 4) {
         // @media
         if (matchesTag(tagName, rule.media.mediaText)) {
-          collectorFunc(rule.cssRules);
+          matchingRules.push(rule.cssRules);
         }
       }
     }
   }
+
+  return matchingRules;
 }
 
 /**
+ * Returns CSS rules from all `@media` and `@import` blocks scoped to the specified tag,
+ * found in both `adoptedStyleSheets` and regular `styleSheets` of the given root element.
+ *
+ * Examples of scoped rules:
+ * - `@import "styles.css" vaadin-text-field`
+ * - `@media vaadin-text-field { ... }`
+ *
+ * The returned rules are ordered in the same way as they are in the original stylesheet.
+ *
  * @param {DocumentOrShadowRoot} root
  * @param {string} tagName
- * @return {CSSRuleList[]}
+ * @return {CSSRule[]}
  */
-export function gatherMatchingCSSRules(root, tagName) {
-  const matchingRules = [];
-
-  [...root.adoptedStyleSheets, ...root.styleSheets].forEach((sheet) => {
-    extractMatchingStyleRules(sheet, tagName, (rules) => matchingRules.push(rules));
-  });
-
-  return matchingRules;
+export function collectTagScopedCSSRules(root, tagName) {
+  return [...root.adoptedStyleSheets, ...root.styleSheets]
+    .flatMap((sheet) => extractMatchingStyleRules(sheet, tagName))
+    .flatMap((ruleList) => [...ruleList]);
 }

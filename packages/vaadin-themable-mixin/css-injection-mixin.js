@@ -3,7 +3,7 @@
  * Copyright (c) 2021 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { CssInjector } from './css-injector.js';
+import { CSSInjector } from './src/css-injector.js';
 
 /**
  * Find enclosing root for given element to father style rules from.
@@ -57,7 +57,7 @@ export const CssInjectionMixin = (superClass) =>
 
       // Find proper host element to observe
       const root = findRoot(this);
-      root.__cssInjector ||= new CssInjector(root);
+      root.__cssInjector ||= new CSSInjector(root);
       this.__cssInjector = root.__cssInjector;
       this.__cssInjector.componentConnected(this);
     }
