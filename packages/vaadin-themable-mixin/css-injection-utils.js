@@ -34,7 +34,7 @@ function matches(tagName, selector) {
  * @param  {MediaList} media MediaList object to match against
  * @return {Boolean}         undefined if the media type string is not a valid CSS selector or a standard media features query. True|false whether the element matches the selector or not.
  */
-function matchesElement(tagName, media) {
+function matchesTag(tagName, media) {
   // Firefox parses the escaping backward slash into a double backward slash: \ -> \\
   media = media.replace(/\\/gmu, '');
   if (isElementMedia(media)) {
@@ -73,7 +73,7 @@ function extractMatchingStyleRules(styleSheet, tagName, collectorFunc) {
   // TODO @import sheets should be inserted as the first ones in the results
   // Now they can end up in the middle of other rules and be ignored
 
-  const match = matchesElement(tagName, media);
+  const match = matchesTag(tagName, media);
   if (match !== undefined) {
     // Not a standard media query (no media features specified, only media type)
     if (match) {
@@ -88,7 +88,7 @@ function extractMatchingStyleRules(styleSheet, tagName, collectorFunc) {
         extractMatchingStyleRules(rule.styleSheet, tagName, collectorFunc);
       } else if (rule.type === 4) {
         // @media
-        if (matchesElement(tagName, rule.media.mediaText)) {
+        if (matchesTag(tagName, rule.media.mediaText)) {
           collectorFunc(rule.cssRules);
         }
       }
@@ -97,51 +97,16 @@ function extractMatchingStyleRules(styleSheet, tagName, collectorFunc) {
 }
 
 /**
- * @param {StyleSheetList} sheets
- * @param {HTMLElement} element
- * @return {CSSRuleList[]}
- */
-function processSheetsArray(sheets, tagName) {
-  const matchingRules = [];
-
-  for (const sheet of sheets) {
-    extractMatchingStyleRules(sheet, tagName, (rules) => matchingRules.push(rules));
-  }
-
-  return matchingRules;
-}
-
-/**
- * @param {HTMLElement} element
  * @param {DocumentOrShadowRoot} root
+ * @param {string} tagName
  * @return {CSSRuleList[]}
  */
-function getMatchingCssRules(tagName, root) {
+export function gatherMatchingCSSRules(root, tagName) {
   const matchingRules = [];
 
-  if (root.adoptedStyleSheets) {
-    matchingRules.push(...processSheetsArray(root.adoptedStyleSheets, tagName));
-  }
-
-  matchingRules.push(...processSheetsArray(root.styleSheets, tagName));
-
-  return matchingRules;
-}
-
-/**
- * @param {HTMLElement} element
- * @return {CSSRuleList[]}
- */
-export function gatherMatchingStyleRules(tagName, root) {
-  const matchingRules = [];
-
-  // Global stylesheets
-  matchingRules.push(...getMatchingCssRules(tagName, document));
-
-  // Scoped stylesheets
-  if (root !== document) {
-    matchingRules.push(...getMatchingCssRules(tagName, root));
-  }
+  [...root.adoptedStyleSheets, ...root.styleSheets].forEach((sheet) => {
+    extractMatchingStyleRules(sheet, tagName, (rules) => matchingRules.push(rules));
+  });
 
   return matchingRules;
 }

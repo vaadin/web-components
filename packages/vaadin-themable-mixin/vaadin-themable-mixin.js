@@ -4,6 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { adoptStyles, css, CSSResult, LitElement, unsafeCSS } from 'lit';
+import { getInjectedStyleSheet } from './css-injector.js';
 import { ThemePropertyMixin } from './vaadin-theme-property-mixin.js';
 
 export { css, unsafeCSS };
@@ -123,9 +124,7 @@ function updateInstanceStyles(instance) {
     // There are some styles injected, we need to retain them and place
     // before any custom styles. Note that `src` styles will end up after
     // injected ones but those should use `@layer` for lower specificity.
-    const styles = instance.__injectedStyleSheet
-      ? [instance.__injectedStyleSheet, ...componentClass.elementStyles]
-      : componentClass.elementStyles;
+    const styles = [getInjectedStyleSheet(instance), ...componentClass.elementStyles].filter(Boolean);
 
     // Adopt the updated styles
     adoptStyles(instance.shadowRoot, styles);

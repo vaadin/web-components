@@ -1,49 +1,54 @@
 import StyleObserver from 'style-observer';
-import { gatherMatchingStyleRules } from './css-injection-utils.js';
+import { gatherMatchingCSSRules } from './css-injection-utils.js';
 
-function injectStyleSheet(element, stylesheet) {
-  const { shadowRoot } = element;
-  if (shadowRoot.adoptedStyleSheets.includes(stylesheet)) {
-    return;
-  }
-  shadowRoot.adoptedStyleSheets.unshift(stylesheet);
+function injectStyleSheet(component, stylesheet) {
+  const adoptedStyleSheets = component.shadowRoot.adoptedStyleSheets.filter(
+    (s) => s !== component.__cssInjectorStyleSheet,
+  );
+
+  component.shadowRoot.adoptedStyleSheets = [stylesheet, ...adoptedStyleSheets];
+  component.__cssInjectorStyleSheet = stylesheet;
 }
 
-function removeStyleSheet(element, stylesheet) {
-  const { shadowRoot } = element;
+function cleanupStyleSheet(component) {
+  const adoptedStyleSheets = component.shadowRoot.adoptedStyleSheets.filter(
+    (s) => s !== component.__cssInjectorStyleSheet,
+  );
 
-  const index = shadowRoot.adoptedStyleSheets.indexOf(stylesheet);
-  if (index !== -1) {
-    shadowRoot.adoptedStyleSheets.splice(index, 1);
-  }
+  component.shadowRoot.adoptedStyleSheets = adoptedStyleSheets;
+  component.__cssInjectorStyleSheet = undefined;
+}
+
+export function getInjectedStyleSheet(component) {
+  return component.__cssInjectorStyleSheet;
 }
 
 export class CssInjector {
   /** @type {Document | ShadowRoot} */
-  root;
+  #root;
 
   /** @type {Map<string, Element[]>} */
-  componentsByTag;
+  #componentsByTag;
 
   /** @type {Map<string, CSSStyleSheet>} */
-  styleSheetsByTag;
+  #styleSheetsByTag;
 
   /** @type {StyleObserver} */
-  styleObserver;
+  #styleObserver;
 
   constructor(root) {
-    this.root = root;
-    this.componentsByTag = new Map();
-    this.styleSheetsByTag = new Map();
+    this.#root = root;
+    this.#componentsByTag = new Map();
+    this.#styleSheetsByTag = new Map();
 
-    this.styleObserver = new StyleObserver((records) => {
+    this.#styleObserver = new StyleObserver((records) => {
       records.forEach((record) => {
         const { property, value, oldValue } = record;
         const tagName = property.slice(2).replace('-css-inject', '');
         if (value === '1') {
-          this.componentStylesAdded(tagName);
+          this.#componentStylesAdded(tagName);
         } else if (oldValue === '1') {
-          this.componentStylesRemoved(tagName);
+          this.#componentStylesRemoved(tagName);
         }
       });
     });
@@ -52,13 +57,13 @@ export class CssInjector {
   componentConnected(component) {
     const { is: tagName, cssInjectPropName } = component.constructor;
 
-    if (this.componentsByTag.has(tagName)) {
-      this.componentsByTag.get(tagName).add(component);
+    if (this.#componentsByTag.has(tagName)) {
+      this.#componentsByTag.get(tagName).add(component);
     } else {
-      this.componentsByTag.set(tagName, new Set([component]));
+      this.#componentsByTag.set(tagName, new Set([component]));
     }
 
-    const stylesheet = this.styleSheetsByTag.get(tagName);
+    const stylesheet = this.#styleSheetsByTag.get(tagName);
     if (stylesheet) {
       injectStyleSheet(component, stylesheet);
       return;
@@ -68,51 +73,57 @@ export class CssInjector {
     // store corresponding tag name so that we can inject styles
     const value = getComputedStyle(this.rootHost).getPropertyValue(cssInjectPropName);
     if (value === '1') {
-      this.componentStylesAdded(tagName);
+      this.#componentStylesAdded(tagName);
     }
 
     // Observe custom property that would trigger injection for this class
-    this.styleObserver.observe(this.rootHost, cssInjectPropName);
+    this.#styleObserver.observe(this.rootHost, cssInjectPropName);
   }
 
   componentDisconnected(component) {
-    const tagName = component.constructor.is;
+    const { is: tagName } = component.constructor;
 
-    const stylesheet = this.styleSheetsByTag.get(tagName);
-    if (stylesheet) {
-      removeStyleSheet(component, stylesheet);
-    }
+    cleanupStyleSheet(component);
 
-    this.componentsByTag.get(tagName)?.delete(component);
+    this.#componentsByTag.get(tagName)?.delete(component);
   }
 
-  componentStylesAdded(tagName) {
-    const stylesheet = this.styleSheetsByTag.get(tagName) || new CSSStyleSheet();
+  #componentStylesAdded(tagName) {
+    const stylesheet = this.#styleSheetsByTag.get(tagName) || new CSSStyleSheet();
 
-    const cssText = gatherMatchingStyleRules(tagName, this.root)
-      .flatMap((ruleList) => [...ruleList])
+    const cssText = this.#gatherComponentCSSRules(tagName)
       .map((rule) => rule.cssText)
       .join('\n');
     stylesheet.replaceSync(cssText);
 
-    this.componentsByTag.get(tagName)?.forEach((component) => {
+    this.#componentsByTag.get(tagName)?.forEach((component) => {
       injectStyleSheet(component, stylesheet);
     });
 
-    this.styleSheetsByTag.set(tagName, stylesheet);
+    this.#styleSheetsByTag.set(tagName, stylesheet);
   }
 
-  componentStylesRemoved(tagName) {
-    const stylesheet = this.styleSheetsByTag.get(tagName);
-    if (stylesheet) {
-      this.componentsByTag.get(tagName)?.forEach((component) => {
-        removeStyleSheet(component, stylesheet);
-      });
+  #componentStylesRemoved(tagName) {
+    this.#componentsByTag.get(tagName)?.forEach((component) => {
+      cleanupStyleSheet(component);
+    });
+
+    this.#styleSheetsByTag.delete(tagName);
+  }
+
+  #gatherComponentCSSRules(tagName) {
+    // Global stylesheets
+    const rules = gatherMatchingCSSRules(document, tagName);
+
+    // Scoped stylesheets
+    if (this.#root !== document) {
+      rules.push(...gatherMatchingCSSRules(this.#root, tagName));
     }
-    this.styleSheetsByTag.delete(tagName);
+
+    return rules.flatMap((ruleList) => [...ruleList]);
   }
 
   get rootHost() {
-    return this.root === document ? this.root.documentElement : this.root.host;
+    return this.#root === document ? this.#root.documentElement : this.#root.host;
   }
 }
