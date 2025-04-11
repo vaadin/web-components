@@ -45,23 +45,23 @@ export const overlayStyles = css`
   }
 
   [part='overlay'] {
-    -webkit-overflow-scrolling: touch;
-    overflow: auto;
-    pointer-events: auto;
-
-    /* Prevent overflowing the host */
-    max-width: 100%;
+    background: var(--vaadin-overlay-background, var(--_vaadin-background));
+    border: var(--vaadin-overlay-border, 1px solid var(--_vaadin-border-color));
+    border-radius: var(--vaadin-overlay-border-radius, var(--_vaadin-radius-m));
     box-sizing: border-box;
-
-    -webkit-tap-highlight-color: initial; /* reenable tap highlight inside */
+    max-width: 100%;
+    overflow: auto;
+    overscroll-behavior: contain;
+    pointer-events: auto;
+    -webkit-tap-highlight-color: initial;
   }
 
   [part='backdrop'] {
-    z-index: -1;
-    content: '';
     background: rgba(0, 0, 0, 0.5);
-    position: fixed;
+    content: '';
     inset: 0;
     pointer-events: auto;
+    position: fixed;
+    z-index: -1;
   }
 `;
