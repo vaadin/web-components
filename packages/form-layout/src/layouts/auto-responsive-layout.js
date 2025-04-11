@@ -178,6 +178,9 @@ export class AutoResponsiveLayout extends AbstractLayout {
 
   /** @private */
   get __fitsLabelsAside() {
-    return this.host.offsetWidth >= this.__columnWidthWithLabelsAside;
+    const minColumns = this.host.style.getPropertyValue('--_min-columns') || 1;
+    const totalGap = (minColumns - 1) * this.host.$.layout.style.gap;
+    const totalWidth = this.__columnWidthWithLabelsAside * minColumns + totalGap;
+    return this.host.offsetWidth >= totalWidth;
   }
 }
