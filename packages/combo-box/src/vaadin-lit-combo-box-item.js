@@ -30,8 +30,9 @@ export class ComboBoxItem extends ComboBoxItemMixin(ThemableMixin(DirMixin(Polyl
         align-items: center;
         box-sizing: border-box;
         display: flex;
-        gap: var(--_vaadin-gap-container-inline);
-        padding: var(--_vaadin-padding-container);
+        gap: var(--vaadin-combo-box-item-gap, 0 var(--_vaadin-gap-container-inline));
+        height: var(--vaadin-combo-box-item-height, auto);
+        padding: var(--vaadin-combo-box-item-padding, var(--_vaadin-padding-container));
       }
 
       :host([hidden]) {
