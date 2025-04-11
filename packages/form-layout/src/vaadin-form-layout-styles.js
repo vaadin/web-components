@@ -51,6 +51,15 @@ export const formLayoutStyles = css`
       var(--_column-width) + var(--vaadin-form-layout-label-width) + var(--vaadin-form-layout-label-spacing)
     );
 
+    /* CSS grid related properties */
+    --_grid-column-gap: var(--vaadin-form-layout-column-spacing);
+    --_grid-column-width: var(--_column-width-labels-above);
+    --_grid-column-max-total-gap: calc((var(--_max-columns) - 1) * var(--_grid-column-gap));
+    --_grid-column-max-total-width: calc(var(--_max-columns) * var(--_column-width-labels-above));
+    --_grid-column-min-total-gap: calc((var(--_min-columns) - 1) * var(--_grid-column-gap));
+    --_grid-column-min-total-width: calc(var(--_min-columns) * var(--_column-width-labels-above));
+    --_grid-repeat: var(--_grid-column-width);
+
     display: flex;
     min-width: calc(var(--_grid-column-min-total-width) + var(--_grid-column-min-total-gap));
   }
@@ -59,15 +68,6 @@ export const formLayoutStyles = css`
     /* By default, labels should be displayed above the fields */
     --_form-item-labels-above: initial; /* true */
     --_form-item-labels-aside: ' '; /* false */
-
-    /* CSS grid related properties */
-    --_grid-column-gap: var(--vaadin-form-layout-column-spacing);
-    --_grid-column-width: var(--_column-width-labels-above);
-    --_grid-column-max-total-gap: calc((var(--_max-columns) - 1) * var(--_grid-column-gap));
-    --_grid-column-max-total-width: calc(var(--_max-columns) * var(--_column-width-labels-above));
-    --_grid-column-min-total-gap: calc((var(--_min-columns) - 1) * var(--_grid-column-gap));
-    --_grid-column-min-total-width: calc(var(--_min-columns) * var(--_grid-column-width));
-    --_grid-repeat: var(--_grid-column-width);
 
     display: grid;
     grid-template-columns: repeat(auto-fill, var(--_grid-repeat));
