@@ -4,6 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { adoptStyles, css, CSSResult, LitElement, unsafeCSS } from 'lit';
+import { getInjectedStyleSheet } from './src/css-utils.js';
 import { ThemePropertyMixin } from './vaadin-theme-property-mixin.js';
 
 export { css, unsafeCSS };
@@ -120,8 +121,13 @@ function updateInstanceStyles(instance) {
     // Remove them first to avoid duplicates.
     [...instance.shadowRoot.querySelectorAll('style')].forEach((style) => style.remove());
 
+    // If there are some styles injected, we should retain them and place
+    // before any custom styles. Note that `src` styles will end up after
+    // injected ones but those should use `@layer` for lower specificity.
+    const styles = [getInjectedStyleSheet(instance), ...componentClass.elementStyles].filter(Boolean);
+
     // Adopt the updated styles
-    adoptStyles(instance.shadowRoot, componentClass.elementStyles);
+    adoptStyles(instance.shadowRoot, styles);
   } else {
     // PolymerElement
 
