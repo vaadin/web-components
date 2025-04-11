@@ -1,5 +1,0 @@
-@import './shared/item.css' vaadin-item;
-
-html, :host {
-  --vaadin-item-css-inject: 1;
-}
