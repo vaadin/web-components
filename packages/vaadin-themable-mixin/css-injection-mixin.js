@@ -26,8 +26,8 @@ function findRoot(element) {
  *
  * @polymerMixin
  */
-export const CssInjectionMixin = (superClass) =>
-  class CssInjectionMixinClass extends superClass {
+export const CSSInjectionMixin = (superClass) =>
+  class CSSInjectionMixinClass extends superClass {
     static finalize() {
       super.finalize();
 
