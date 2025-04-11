@@ -6,7 +6,7 @@
 import { CSSInjector } from './src/css-injector.js';
 
 /**
- * Find enclosing root for given element to father style rules from.
+ * Find enclosing root for given element to gather style rules from.
  *
  * @param {HTMLElement} element
  * @return {DocumentOrShadowRoot}
@@ -55,7 +55,6 @@ export const CSSInjectionMixin = (superClass) =>
     connectedCallback() {
       super.connectedCallback();
 
-      // Find proper host element to observe
       const root = findRoot(this);
       root.__cssInjector ||= new CSSInjector(root);
       this.__cssInjector = root.__cssInjector;

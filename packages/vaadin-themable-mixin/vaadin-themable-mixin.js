@@ -121,7 +121,7 @@ function updateInstanceStyles(instance) {
     // Remove them first to avoid duplicates.
     [...instance.shadowRoot.querySelectorAll('style')].forEach((style) => style.remove());
 
-    // There are some styles injected, we need to retain them and place
+    // If there are some styles injected, we should retain them and place
     // before any custom styles. Note that `src` styles will end up after
     // injected ones but those should use `@layer` for lower specificity.
     const styles = [getInjectedStyleSheet(instance), ...componentClass.elementStyles].filter(Boolean);
