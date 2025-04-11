@@ -65,6 +65,8 @@ export const formLayoutStyles = css`
     --_grid-column-width: var(--_column-width-labels-above);
     --_grid-column-max-total-gap: calc((var(--_max-columns) - 1) * var(--_grid-column-gap));
     --_grid-column-max-total-width: calc(var(--_max-columns) * var(--_column-width-labels-above));
+    --_grid-column-min-total-gap: calc((var(--_min-columns) - 1) * var(--_grid-column-gap));
+    --_grid-column-min-total-width: calc(var(--_min-columns) * var(--_grid-column-width));
     --_grid-repeat: var(--_grid-column-width);
 
     display: grid;
@@ -98,7 +100,7 @@ export const formLayoutStyles = css`
       Firefox requires min-width on both :host and #layout to allow the layout
       to shrink below the value specified in the CSS width property above.
     */
-    min-width: inherit;
+    min-width: calc(var(--_grid-column-min-total-width) + var(--_grid-column-min-total-gap));
   }
 
   :host([auto-responsive]) #layout::before {
