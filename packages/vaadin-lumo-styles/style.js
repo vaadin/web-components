@@ -111,6 +111,11 @@ const globals = css`
     --vaadin-input-field-value-color: var(--lumo-body-text-color);
     --vaadin-input-field-value-font-size: var(--lumo-font-size-m);
     --vaadin-input-field-value-font-weight: 500;
+    /* Combo box */
+    --vaadin-combo-box-item-gap: 0;
+    --vaadin-combo-box-item-height: auto;
+    --vaadin-combo-box-item-padding: 0.5em calc(var(--lumo-space-l) + var(--lumo-border-radius-m) / 4) 0.5em
+      var(--_lumo-list-box-item-padding-left, calc(var(--lumo-border-radius-m) / 4));
   }
 `;
 
