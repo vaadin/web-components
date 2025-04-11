@@ -1,0 +1,40 @@
+/**
+ * Shared styles used by all field components that have icon buttons.
+ * Example: `toggle-button` and `clear-button` parts in combo-box.
+ *
+ * Import this file only with proper media. Example:
+ *
+ * ```
+ * @import './shared/field-button.css' vaadin-text-field;
+ * ```
+ *
+ * NOTE: this file should not import dependencies e.g. `color.css` etc.
+ * Instead these should be loaded from corresponding components files.
+ */
+
+[part$='button'] {
+  flex: none;
+  width: 1em;
+  height: 1em;
+  line-height: 1;
+  font-size: var(--lumo-icon-size-m);
+  text-align: center;
+  color: var(--lumo-contrast-60pct);
+  transition: 0.2s color;
+  cursor: var(--lumo-clickable-cursor);
+}
+
+[part$='button']:hover {
+  color: var(--lumo-contrast-90pct);
+}
+
+:host([disabled]) [part$='button'],
+:host([readonly]) [part$='button'] {
+  color: var(--lumo-contrast-20pct);
+  cursor: default;
+}
+
+[part$='button']::before {
+  font-family: 'lumo-icons';
+  display: block;
+}
