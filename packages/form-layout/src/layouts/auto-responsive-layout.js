@@ -56,6 +56,7 @@ export class AutoResponsiveLayout extends AbstractLayout {
     const { host } = this;
     host.style.removeProperty('--_column-width');
     host.style.removeProperty('--_max-columns');
+    host.removeAttribute('fits-labels-aside');
     host.$.layout.removeAttribute('fits-labels-aside');
     host.$.layout.style.removeProperty('--_grid-rendered-column-count');
 
@@ -133,7 +134,9 @@ export class AutoResponsiveLayout extends AbstractLayout {
     host.style.setProperty('--_min-columns', Math.max(props.minColumns, 1));
     host.style.setProperty('--_max-columns', Math.min(Math.max(props.minColumns, props.maxColumns, 1), maxColumns));
 
-    host.$.layout.toggleAttribute('fits-labels-aside', this.props.labelsAside && this.__fitsLabelsAside);
+    const fitsLabelAside = this.props.labelsAside && this.__fitsLabelsAside;
+    host.toggleAttribute('fits-labels-aside', fitsLabelAside);
+    host.$.layout.toggleAttribute('fits-labels-aside', fitsLabelAside);
     host.$.layout.style.setProperty('--_grid-rendered-column-count', this.__renderedColumnCount);
   }
 
