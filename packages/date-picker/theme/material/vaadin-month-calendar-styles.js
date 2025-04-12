@@ -15,8 +15,8 @@ registerStyles(
     }
 
     [part='month-header'] {
-      padding-top: 20px;
       margin-bottom: 8px;
+      padding-top: 20px;
       font-size: var(--material-h6-font-size);
       line-height: 1;
     }
@@ -38,23 +38,23 @@ registerStyles(
     [part~='date'] {
       position: relative;
       height: 40px;
-      cursor: default;
       font-size: var(--material-body-font-size);
       line-height: 42px;
+      cursor: default;
     }
 
     [part~='date']::after {
+      content: '';
       position: absolute;
       z-index: -4;
       top: 50%;
       left: 50%;
+      box-sizing: border-box;
       width: 38px;
       height: 38px;
-      box-sizing: border-box;
+      transform: translate(-50%, -50%);
       border: 2px solid transparent;
       border-radius: 50%;
-      content: '';
-      transform: translate(-50%, -50%);
     }
 
     /* Today */
@@ -104,8 +104,8 @@ registerStyles(
     [part~='date']:not([part~='disabled']):active::after {
       z-index: -1;
       border-color: var(--material-primary-color);
-      background-color: var(--material-primary-color);
       opacity: 0.7;
+      background-color: var(--material-primary-color);
     }
 
     [part~='date'][part~='disabled'] {

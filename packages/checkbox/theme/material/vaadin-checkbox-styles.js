@@ -14,8 +14,8 @@ registerStyles(
     }
 
     [part='label'] {
-      position: relative;
       display: flex;
+      position: relative;
       max-width: max-content;
     }
 
@@ -27,8 +27,8 @@ registerStyles(
       position: relative;
       width: var(--_checkbox-size);
       height: var(--_checkbox-size);
-      border-radius: 2px;
       margin: 4px;
+      border-radius: 2px;
       background-color: transparent;
       box-shadow: inset 0 0 0 2px var(--material-secondary-text-color);
     }
@@ -37,34 +37,34 @@ registerStyles(
     [part='checkbox']::before {
       width: 100%;
       height: 100%;
-      border-radius: 50%;
-      background-color: var(--material-disabled-text-color);
-      line-height: var(--_checkbox-size);
-      opacity: 0;
-      pointer-events: none;
       transform: scale(0);
       transition:
         transform 0s 0.8s,
         opacity 0.8s;
+      border-radius: 50%;
+      opacity: 0;
+      background-color: var(--material-disabled-text-color);
+      line-height: var(--_checkbox-size);
+      pointer-events: none;
       will-change: transform, opacity;
     }
 
     /* Used for the checkmark */
     [part='checkbox']::after {
+      content: '';
+      display: inline-block;
       position: absolute;
       top: 12px;
       left: 6px;
-      display: inline-block;
+      box-sizing: border-box;
       width: 10px;
       height: 19px;
-      box-sizing: border-box;
-      border: 0 solid var(--material-background-color);
-      border-width: 3px 0 0 3px;
-      content: '';
-      pointer-events: none;
       transform: scale(0) rotate(-135deg);
       transform-origin: 0 0;
       transition: transform 0.2s;
+      border: 0 solid var(--material-background-color);
+      border-width: 3px 0 0 3px;
+      pointer-events: none;
     }
 
     :host([indeterminate]) [part='checkbox'],
@@ -83,10 +83,10 @@ registerStyles(
 
     :host([focus-ring]) [part='checkbox']::before,
     :host([active]) [part='checkbox']::before {
-      opacity: 0.15;
       transform: scale(2.5);
-      transition-delay: 0s, 0s;
       transition-duration: 0.08s, 0.01s;
+      transition-delay: 0s, 0s;
+      opacity: 0.15;
     }
 
     :host([checked]) [part='checkbox']::before {
@@ -99,11 +99,11 @@ registerStyles(
       left: 22%;
       width: auto;
       height: 10%;
-      border: 0;
-      background-color: var(--material-background-color);
-      opacity: 1;
       transform: none;
       transition: opacity 0.4s;
+      border: 0;
+      opacity: 1;
+      background-color: var(--material-background-color);
     }
 
     :host([disabled]) {
@@ -180,9 +180,9 @@ registerStyles(
 
     :host([has-error-message]) [part='error-message']::before,
     :host([has-helper]) [part='helper-text']::before {
+      content: '';
       display: block;
       height: 6px;
-      content: '';
     }
   `,
   { moduleId: 'material-checkbox' },

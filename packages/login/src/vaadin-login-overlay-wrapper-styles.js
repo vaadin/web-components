@@ -12,20 +12,20 @@ export const loginOverlayWrapperStyles = css`
 
   [part='card'] {
     display: flex;
-    overflow: hidden;
-    max-width: 100%;
     box-sizing: border-box;
     flex-direction: column;
+    max-width: 100%;
+    overflow: hidden;
   }
 
   [part='brand'] {
     display: flex;
-    overflow: hidden;
     box-sizing: border-box;
     flex-direction: column;
     flex-grow: 1;
     flex-shrink: 0;
     justify-content: flex-end;
+    overflow: hidden;
   }
 
   [part='title'] {

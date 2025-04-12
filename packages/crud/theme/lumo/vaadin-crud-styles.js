@@ -15,19 +15,19 @@ registerStyles(
       min-width: auto;
       height: var(--lumo-size-s);
       margin: 0;
+      outline: none;
       font-family: 'lumo-icons', var(--lumo-font-family);
       font-size: var(--lumo-icon-size-m);
       line-height: 1;
-      outline: none;
     }
 
     [part='icon']::before {
+      content: var(--lumo-icons-edit);
       position: absolute;
       top: calc((var(--lumo-size-m) - var(--lumo-size-s)) / -2);
       left: calc((var(--lumo-size-m) - var(--lumo-size-s)) / -2);
       width: var(--lumo-size-m);
       height: var(--lumo-size-m);
-      content: var(--lumo-icons-edit);
       line-height: var(--lumo-size-m);
       text-align: center;
     }
@@ -104,11 +104,11 @@ registerStyles(
       }
 
       [part='editor']:focus::before {
+        content: '';
         position: absolute;
         box-shadow: inset 0 0 0 var(--_focus-ring-width) var(--_focus-ring-color);
-        content: '';
-        inset: 0;
         pointer-events: none;
+        inset: 0;
       }
 
       :host(:not([editor-position=''])) [part='editor']:not([hidden]) {

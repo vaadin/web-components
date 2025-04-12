@@ -14,8 +14,8 @@ export const formLayoutStyles = css`
     --vaadin-form-layout-label-spacing: 1em;
 
     display: block;
-    max-width: 100%;
     align-self: stretch;
+    max-width: 100%;
   }
 
   :host([hidden]) {
@@ -27,7 +27,7 @@ export const formLayoutStyles = css`
 
     flex-wrap: wrap; /* the items should wrap */
 
-    align-items: baseline; /* default \\\`stretch\\\` is not appropriate */
+    align-items: baseline; /* default \\\\\\\`stretch\\\\\\\` is not appropriate */
   }
 
   :host(:not([auto-responsive])) #layout ::slotted(*) {
@@ -70,6 +70,14 @@ export const formLayoutStyles = css`
     display: grid;
 
     /*
+      Auto-columns can be created when an item's colspan exceeds the rendered column count.
+      By setting auto-columns to 0, we exclude these columns from --_grid-rendered-column-count,
+      which is then used to cap the colspan.
+    */
+    grid-auto-columns: 0;
+    grid-template-columns: repeat(auto-fill, var(--_grid-repeat));
+
+    /*
       To prevent the layout from exceeding the column limit defined by --_max-columns,
       its width needs to be constrained:
 
@@ -89,14 +97,6 @@ export const formLayoutStyles = css`
     */
     min-width: inherit;
     gap: var(--vaadin-form-layout-row-spacing) var(--_grid-column-gap);
-
-    /*
-      Auto-columns can be created when an item's colspan exceeds the rendered column count.
-      By setting auto-columns to 0, we exclude these columns from --_grid-rendered-column-count,
-      which is then used to cap the colspan.
-    */
-    grid-auto-columns: 0;
-    grid-template-columns: repeat(auto-fill, var(--_grid-repeat));
 
     justify-items: start;
   }
@@ -154,8 +154,8 @@ export const formLayoutSlotStyles = css`
       vaadin-form-layout[auto-responsive] vaadin-form-row > *,
       vaadin-form-layout[auto-responsive] vaadin-form-item > *
     ) {
-    max-width: 100%;
     box-sizing: border-box;
+    max-width: 100%;
   }
 
   :where(
@@ -212,16 +212,16 @@ export const formItemStyles = css`
   }
 
   #label {
+    flex: 0 0 auto;
     width: var(
       --_form-item-labels-aside,
       var(--vaadin-form-item-label-width, var(--vaadin-form-layout-label-width, 8em))
     );
-    flex: 0 0 auto;
   }
 
   #spacing {
-    width: var(--vaadin-form-item-label-spacing, var(--vaadin-form-layout-label-spacing, 1em));
     flex: 0 0 auto;
+    width: var(--vaadin-form-item-label-spacing, var(--vaadin-form-layout-label-spacing, 1em));
   }
 
   #content {
@@ -229,8 +229,8 @@ export const formItemStyles = css`
   }
 
   #content ::slotted(.full-width) {
+    box-sizing: border-box;
     width: 100%;
     min-width: 0;
-    box-sizing: border-box;
   }
 `;

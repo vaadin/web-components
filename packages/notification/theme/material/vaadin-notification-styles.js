@@ -93,29 +93,29 @@ const notificationCard = css`
 
   @keyframes material-notification-enter-slide-down {
     0% {
-      opacity: 0;
       transform: translateY(-200%);
+      opacity: 0;
     }
   }
 
   @keyframes material-notification-exit-slide-up {
     100% {
-      opacity: 0;
       transform: translateY(-200%);
+      opacity: 0;
     }
   }
 
   @keyframes material-notification-enter-slide-up {
     0% {
-      opacity: 0;
       transform: translateY(200%);
+      opacity: 0;
     }
   }
 
   @keyframes material-notification-exit-slide-down {
     100% {
-      opacity: 0;
       transform: translateY(200%);
+      opacity: 0;
     }
   }
 

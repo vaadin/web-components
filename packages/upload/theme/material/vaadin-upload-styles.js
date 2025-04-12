@@ -10,11 +10,11 @@ registerStyles(
   css`
     :host(:not([nodrop])) {
       position: relative;
-      overflow: hidden;
       padding: 8px 16px;
+      overflow: hidden;
+      transition: border-color 0.6s;
       border: 1px dashed var(--material-divider-color);
       border-radius: 4px;
-      transition: border-color 0.6s;
     }
 
     [part='primary-buttons'] {
@@ -37,8 +37,8 @@ registerStyles(
     }
 
     :host([dragover-valid]) {
-      border-color: var(--material-primary-color);
       transition: border-color 0.1s;
+      border-color: var(--material-primary-color);
     }
 
     :host([dragover-valid]) [part='drop-label'] {
@@ -53,28 +53,28 @@ registerStyles(
     /* Ripple */
 
     :host::before {
+      content: '';
       position: absolute;
       top: 50%;
       left: 50%;
       width: 100px;
       height: 100px;
-      border-radius: 50%;
-      background-color: var(--material-primary-color);
-      content: '';
-      opacity: 0;
-      pointer-events: none;
       transform: translate(-50%, -50%) scale(0);
       transition:
         transform 0s cubic-bezier(0.075, 0.82, 0.165, 1),
         opacity 0.4s linear;
       transition-delay: 0.4s, 0s;
+      border-radius: 50%;
+      opacity: 0;
+      background-color: var(--material-primary-color);
+      pointer-events: none;
     }
 
     :host([dragover-valid])::before {
-      opacity: 0.1;
       transform: translate(-50%, -50%) scale(10);
-      transition-delay: 0s, 0s;
       transition-duration: 2s, 0.1s;
+      transition-delay: 0s, 0s;
+      opacity: 0.1;
     }
   `,
   { moduleId: 'material-upload' },
@@ -128,8 +128,8 @@ registerStyles(
     }
 
     [part='meta'] {
-      width: 0.001px;
       flex: 1 1 auto;
+      width: 0.001px;
     }
 
     [part='name'] {
@@ -145,8 +145,8 @@ registerStyles(
     }
 
     [part$='icon'] {
-      padding: 8px;
       margin: -8px 0 -8px -8px;
+      padding: 8px;
       font-family: material-icons;
       font-size: var(--material-icon-font-size);
       line-height: 1;
@@ -160,16 +160,16 @@ registerStyles(
 
     [part$='button'] {
       position: relative;
+      flex: none;
       width: 40px;
       height: 40px;
-      flex: none;
-      padding: 8px;
       margin: -8px 0;
+      padding: 8px;
+      outline: none;
       color: var(--material-secondary-text-color);
       font-family: material-icons;
       font-size: var(--material-icon-font-size);
       line-height: 1;
-      outline: none;
     }
 
     [part='remove-button'] {
@@ -185,13 +185,13 @@ registerStyles(
     }
 
     [part='done-icon']::before {
-      color: var(--material-primary-text-color);
       content: var(--material-icons-check);
+      color: var(--material-primary-text-color);
     }
 
     [part='warning-icon']::before {
-      color: var(--material-error-text-color);
       content: var(--material-icons-error);
+      color: var(--material-error-text-color);
     }
 
     [part='start-button']::before {
@@ -207,19 +207,19 @@ registerStyles(
     }
 
     [part$='button']:not([disabled])::after {
+      content: '';
       position: absolute;
       top: 0;
       left: 0;
       width: 40px;
       height: 40px;
-      border-radius: 50%;
-      background-color: var(--material-body-text-color);
-      content: '';
-      opacity: 0;
       transform: scale(0);
       transition:
         transform 0.08s,
         opacity 0.01s;
+      border-radius: 50%;
+      opacity: 0;
+      background-color: var(--material-body-text-color);
       will-change: transform, opacity;
     }
 

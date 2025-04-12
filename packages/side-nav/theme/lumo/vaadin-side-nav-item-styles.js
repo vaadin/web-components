@@ -17,13 +17,13 @@ export const sideNavItemStyles = css`
     width: 100%;
     min-height: var(--lumo-icon-size-m);
     padding: var(--lumo-space-s);
-    border-radius: var(--lumo-border-radius-m);
-    cursor: var(--lumo-clickable-cursor, default);
-    gap: var(--lumo-space-xs);
     padding-inline-start: calc(var(--lumo-space-s) + var(--_child-indent, 0px));
     transition:
       background-color 140ms,
       color 140ms;
+    border-radius: var(--lumo-border-radius-m);
+    cursor: var(--lumo-clickable-cursor, default);
+    gap: var(--lumo-space-xs);
   }
 
   [part='link'][href] {

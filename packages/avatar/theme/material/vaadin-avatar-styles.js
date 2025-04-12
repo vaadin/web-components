@@ -12,14 +12,14 @@ registerStyles(
   css`
     :host {
       border-radius: 50%;
+      outline: none;
       background-color: var(--material-secondary-background-color);
       color: var(--material-secondary-text-color);
-      cursor: default;
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
-      outline: none;
-      -webkit-tap-highlight-color: transparent;
+      cursor: default;
       user-select: none;
+      -webkit-tap-highlight-color: transparent;
     }
 
     :host([has-color-index]) {

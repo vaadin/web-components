@@ -6,13 +6,14 @@ import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themab
 const button = css`
   :host {
     display: inline-flex;
-    overflow: hidden;
-    min-width: 64px;
     box-sizing: border-box;
     flex-shrink: 0;
     align-items: baseline;
     justify-content: center;
+    min-width: 64px;
     padding: 8px;
+    overflow: hidden;
+    transition: box-shadow 0.2s;
     border-radius: 4px;
     color: var(--material-primary-text-color);
     font-family: var(--material-font-family);
@@ -22,19 +23,18 @@ const button = css`
     font-weight: 500;
     letter-spacing: 0.05em;
     line-height: 20px;
-    -webkit-tap-highlight-color: transparent;
     text-transform: uppercase;
-    transition: box-shadow 0.2s;
     white-space: nowrap;
+    -webkit-tap-highlight-color: transparent;
   }
 
   :host::before,
   :host::after {
+    content: '';
     position: absolute;
     border-radius: inherit;
-    background-color: currentColor;
-    content: '';
     opacity: 0;
+    background-color: currentColor;
     pointer-events: none;
   }
 
@@ -51,9 +51,9 @@ const button = css`
     left: 50%;
     width: 320px;
     height: 320px;
-    border-radius: 50%;
     transform: translate(-50%, -50%);
     transition: all 0.9s;
+    border-radius: 50%;
   }
 
   [part='label'] ::slotted(*) {
@@ -62,24 +62,24 @@ const button = css`
 
   :host(:hover:not([disabled]))::before,
   :host([focus-ring])::before {
-    opacity: 0.08;
     transition-duration: 0.2s;
+    opacity: 0.08;
   }
 
   :host([active])::before {
-    opacity: 0.16;
     transition: opacity 0.4s;
+    opacity: 0.16;
   }
 
   :host([active])::after {
-    opacity: 0.1;
     transform: translate(-50%, -50%) scale(0.0000001); /* animation works weirdly with scale(0) */
     transition: 0s;
+    opacity: 0.1;
   }
 
   :host(:hover:not([active]):not([disabled]))::after {
-    opacity: 0;
     transform: translate(-50%, -50%) scale(1);
+    opacity: 0;
   }
 
   :host([disabled]) {

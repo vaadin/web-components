@@ -40,13 +40,13 @@ registerStyles(
     }
 
     :host(:not([theme~='borderless']))::before {
+      content: '';
       position: absolute;
       z-index: 1;
       border: 1px solid var(--lumo-contrast-10pct);
       border-radius: inherit;
-      content: '';
-      inset: 0;
       pointer-events: none;
+      inset: 0;
     }
 
     :host([focus-ring]) {
@@ -60,11 +60,11 @@ registerStyles(
     }
 
     .ol-control {
-      border-radius: var(--lumo-border-radius-m);
-      -webkit-backdrop-filter: blur(8px);
       transition:
         0.15s box-shadow,
         0.15s background-color;
+      border-radius: var(--lumo-border-radius-m);
+      -webkit-backdrop-filter: blur(8px);
     }
 
     .ol-control:hover {
@@ -87,10 +87,10 @@ registerStyles(
 
     .ol-control button,
     .ol-attribution:not(.ol-uncollapsible) ul {
+      transition: 0.15s opacity;
+      opacity: 0.65;
       background-color: var(--lumo-base-color);
       color: var(--lumo-body-text-color);
-      opacity: 0.65;
-      transition: 0.15s opacity;
     }
 
     .ol-control:hover button,
@@ -109,14 +109,14 @@ registerStyles(
 
     @supports not selector(:focus-visible) {
       .ol-control button:focus {
-        box-shadow: 0 0 0 var(--_focus-ring-width) var(--_focus-ring-color);
         outline: none;
+        box-shadow: 0 0 0 var(--_focus-ring-width) var(--_focus-ring-color);
       }
     }
 
     .ol-control button:focus-visible {
-      box-shadow: 0 0 0 var(--_focus-ring-width) var(--_focus-ring-color);
       outline: none;
+      box-shadow: 0 0 0 var(--_focus-ring-width) var(--_focus-ring-color);
     }
 
     .ol-zoom {
@@ -124,8 +124,8 @@ registerStyles(
     }
 
     button.ol-zoom-in {
-      border-bottom-left-radius: 0;
       border-bottom-right-radius: 0;
+      border-bottom-left-radius: 0;
     }
 
     button.ol-zoom-out {
@@ -140,8 +140,8 @@ registerStyles(
     .ol-attribution ul {
       padding: var(--lumo-space-xs) var(--lumo-space-s);
       color: var(--lumo-secondary-text-color);
-      cursor: default;
       font-size: var(--lumo-font-size-xxs);
+      cursor: default;
     }
 
     .ol-attribution:not(.ol-uncollapsible) ul {
@@ -163,15 +163,15 @@ registerStyles(
 
     .ol-overviewmap:not(.ol-collapsed),
     .ol-overviewmap:not(.ol-collapsed):hover {
+      transition: 0.15s box-shadow;
       background-color: var(--lumo-base-color);
       box-shadow: var(--lumo-box-shadow-s);
-      transition: 0.15s box-shadow;
     }
 
     .ol-overviewmap-map {
+      margin: var(--lumo-space-xs);
       border: 0;
       border-radius: var(--lumo-border-radius-s);
-      margin: var(--lumo-space-xs);
     }
 
     .ol-overviewmap:not(.ol-uncollapsible) .ol-overviewmap-map {

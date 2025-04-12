@@ -27,9 +27,9 @@ const customField = css`
 
   :host::before {
     display: inline-flex;
-    height: var(--lumo-text-field-size);
     box-sizing: border-box;
     align-items: center;
+    height: var(--lumo-text-field-size);
     margin-top: var(--lumo-space-xs);
   }
 

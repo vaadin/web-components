@@ -29,9 +29,9 @@ class DetailsSummary extends ButtonMixin(DirMixin(ThemableMixin(PolylitMixin(Lit
       :host {
         display: block;
         outline: none;
+        white-space: nowrap;
         -webkit-user-select: none;
         user-select: none;
-        white-space: nowrap;
       }
 
       :host([hidden]) {

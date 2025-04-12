@@ -20,10 +20,10 @@ const checkboxGroup = css`
 
   :host::before {
     display: inline-flex;
-    /* Effective height of vaadin-checkbox */
-    height: var(--lumo-size-s);
     box-sizing: border-box;
     align-items: center;
+    /* Effective height of vaadin-checkbox */
+    height: var(--lumo-size-s);
   }
 
   :host([theme~='vertical']) [part='group-field'] {

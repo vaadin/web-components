@@ -16,17 +16,17 @@ const popupOverlay = css`
     --_button-size: 1.25rem;
     --_button-margin: 3px;
     display: flex;
-    max-width: calc(7 * (var(--_button-size) + var(--_button-margin) * 2));
     flex-wrap: wrap;
     justify-content: center;
+    max-width: calc(7 * (var(--_button-size) + var(--_button-margin) * 2));
     padding: var(--lumo-space-xs);
   }
 
   [part='content'] ::slotted(button) {
     width: var(--_button-size);
     height: var(--_button-size);
-    border: none;
     margin: var(--_button-margin);
+    border: none;
   }
 `;
 
@@ -53,19 +53,19 @@ const richTextEditor = css`
   [part~='toolbar-button'] {
     width: var(--lumo-size-m);
     height: var(--lumo-size-m);
-    border-radius: var(--lumo-border-radius-m);
     margin: 2px 1px;
-    color: var(--lumo-contrast-60pct);
-    cursor: var(--lumo-clickable-cursor);
     transition:
       background-color 100ms,
       color 100ms;
+    border-radius: var(--lumo-border-radius-m);
+    color: var(--lumo-contrast-60pct);
+    cursor: var(--lumo-clickable-cursor);
   }
 
   [part~='toolbar-button']:focus,
   [part~='toolbar-button'][aria-expanded='true'] {
-    box-shadow: 0 0 0 var(--_focus-ring-width) var(--_focus-ring-color);
     outline: none;
+    box-shadow: 0 0 0 var(--_focus-ring-width) var(--_focus-ring-color);
   }
 
   [part~='toolbar-button']:hover {
@@ -186,8 +186,8 @@ const richTextEditor = css`
   }
 
   [part~='toolbar-button-code-block']::before {
-    margin-left: -0.25em;
     content: var(--lumo-icons-angle-left) var(--lumo-icons-angle-right);
+    margin-left: -0.25em;
     font-size: var(--lumo-font-size-l);
     font-weight: 600;
     letter-spacing: -0.5em;

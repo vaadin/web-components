@@ -18,23 +18,22 @@ export const textAreaStyles = css`
   }
 
   [part='input-field'] {
-    overflow: auto;
     flex: auto;
+    overflow: auto;
     -webkit-overflow-scrolling: touch;
   }
 
   ::slotted(textarea) {
-    overflow: hidden;
+    flex: auto;
     width: 100%;
     min-width: 0;
     height: 100%;
-    flex: auto;
+    margin: 0;
     padding: 0 0.25em;
+    overflow: hidden;
     border: 0;
     border-radius: 0;
-    margin: 0;
-    -webkit-appearance: none;
-    -moz-appearance: none;
+    outline: none;
     background-color: transparent;
     /* Disable default invalid style in Firefox */
     box-shadow: none;
@@ -42,8 +41,9 @@ export const textAreaStyles = css`
     font: inherit;
     font-size: 1em;
     line-height: normal;
-    outline: none;
     resize: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
   }
 
   /* Override styles from <vaadin-input-container> */

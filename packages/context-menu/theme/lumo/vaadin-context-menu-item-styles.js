@@ -17,15 +17,15 @@ const contextMenuItem = css`
   }
 
   :host([aria-haspopup='true'])::after {
-    color: var(--lumo-tertiary-text-color);
     content: var(--lumo-icons-angle-right);
+    color: var(--lumo-tertiary-text-color);
     font-family: lumo-icons;
     font-size: var(--lumo-icon-size-xs);
   }
 
   :host(:not([dir='rtl'])[aria-haspopup='true'])::after {
-    padding-left: var(--lumo-space-m);
     margin-right: calc(var(--lumo-space-m) * -1);
+    padding-left: var(--lumo-space-m);
   }
 
   :host([expanded]) {
@@ -34,9 +34,9 @@ const contextMenuItem = css`
 
   /* RTL styles */
   :host([dir='rtl'][aria-haspopup='true'])::after {
-    padding-right: var(--lumo-space-m);
-    margin-left: calc(var(--lumo-space-m) * -1);
     content: var(--lumo-icons-angle-left);
+    margin-left: calc(var(--lumo-space-m) * -1);
+    padding-right: var(--lumo-space-m);
   }
 `;
 

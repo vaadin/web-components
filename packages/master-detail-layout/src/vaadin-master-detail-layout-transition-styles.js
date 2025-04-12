@@ -87,15 +87,15 @@ export const transitionStyles = css`
 
   @keyframes vaadin-master-detail-layout-stack-horizontal-add-new {
     from {
-      opacity: 0;
       transform: translateX(calc(100px * var(--_vaadin-master-detail-layout-dir-multiplier)));
+      opacity: 0;
     }
   }
 
   @keyframes vaadin-master-detail-layout-stack-horizontal-add-old {
     to {
-      opacity: 0;
       transform: translateX(calc(-100px * var(--_vaadin-master-detail-layout-dir-multiplier)));
+      opacity: 0;
     }
   }
 
@@ -121,15 +121,15 @@ export const transitionStyles = css`
 
   @keyframes vaadin-master-detail-layout-stack-horizontal-remove-new {
     from {
-      opacity: 0;
       transform: translateX(calc(-100px * var(--_vaadin-master-detail-layout-dir-multiplier)));
+      opacity: 0;
     }
   }
 
   @keyframes vaadin-master-detail-layout-stack-horizontal-remove-old {
     to {
-      opacity: 0;
       transform: translateX(calc(100px * var(--_vaadin-master-detail-layout-dir-multiplier)));
+      opacity: 0;
     }
   }
 
@@ -219,15 +219,15 @@ export const transitionStyles = css`
 
   @keyframes vaadin-master-detail-layout-stack-vertical-add-new {
     from {
-      opacity: 0;
       transform: translateY(100px);
+      opacity: 0;
     }
   }
 
   @keyframes vaadin-master-detail-layout-stack-vertical-add-old {
     to {
-      opacity: 0;
       transform: translateY(-100px);
+      opacity: 0;
     }
   }
 
@@ -253,15 +253,15 @@ export const transitionStyles = css`
 
   @keyframes vaadin-master-detail-layout-stack-vertical-remove-new {
     from {
-      opacity: 0;
       transform: translateY(-100px);
+      opacity: 0;
     }
   }
 
   @keyframes vaadin-master-detail-layout-stack-vertical-remove-old {
     to {
-      opacity: 0;
       transform: translateY(100px);
+      opacity: 0;
     }
   }
 

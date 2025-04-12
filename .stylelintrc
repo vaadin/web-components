@@ -2,7 +2,7 @@
   "customSyntax": "postcss-lit",
   "extends": [
     "stylelint-config-vaadin",
-    "stylelint-config-idiomatic-order"
+    "stylelint-config-property-sort-order-smacss"
   ],
   "rules": {
     "order/order": [

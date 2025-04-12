@@ -21,18 +21,18 @@ export const splitLayoutStyles = css`
   }
 
   :host ::slotted(*) {
-    overflow: auto;
     flex: 1 1 auto;
+    overflow: auto;
     -webkit-overflow-scrolling: touch;
   }
 
   [part='splitter'] {
     position: relative;
     z-index: 1;
-    overflow: visible;
+    flex: none;
     min-width: 8px;
     min-height: 8px;
-    flex: none;
+    overflow: visible;
   }
 
   :host(:not([orientation='vertical'])) > [part='splitter'] {

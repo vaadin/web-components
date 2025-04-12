@@ -14,19 +14,19 @@ registerStyles(
       position: relative;
       /* Background for the year scroller, placed here as we are using a mask image on the actual years part */
       background-image: linear-gradient(var(--lumo-shade-5pct), var(--lumo-shade-5pct));
-      background-position: top right;
       background-repeat: no-repeat;
+      background-position: top right;
       background-size: 57px 100%;
       cursor: default;
     }
 
     ::slotted([slot='months']) {
       /* Month calendar height:
-            header height + margin-bottom
-          + weekdays height + margin-bottom
-          + date cell heights
-          + small margin between month calendars
-      */
+          header height + margin-bottom
+        + weekdays height + margin-bottom
+        + date cell heights
+        + small margin between month calendars
+    */
       /* prettier-ignore */
       --vaadin-infinite-scroller-item-height:
           calc(
@@ -50,8 +50,8 @@ registerStyles(
       width: 57px;
       height: auto;
       box-shadow: inset 2px 0 4px 0 var(--lumo-shade-5pct);
-      cursor: var(--lumo-clickable-cursor);
       font-size: var(--lumo-font-size-s);
+      cursor: var(--lumo-clickable-cursor);
       -webkit-mask-image: linear-gradient(transparent, #000 35%, #000 65%, transparent);
       mask-image: linear-gradient(transparent, #000 35%, #000 65%, transparent);
     }
@@ -62,8 +62,8 @@ registerStyles(
 
     /* TODO unsupported selector */
     #scrollers {
-      position: static;
       display: block;
+      position: static;
     }
 
     /* TODO fix this in vaadin-date-picker that it adapts to the width of the year scroller */
@@ -76,17 +76,17 @@ registerStyles(
       z-index: 1;
       width: 1em;
       height: 1em;
+      transform: translate(-75%, -50%) rotate(45deg);
       border: none;
+      border-top-right-radius: var(--lumo-border-radius-s);
       background-color: var(--lumo-base-color);
       background-image: linear-gradient(var(--lumo-tint-5pct), var(--lumo-tint-5pct));
-      border-top-right-radius: var(--lumo-border-radius-s);
       box-shadow: 2px -2px 6px 0 var(--lumo-shade-5pct);
-      transform: translate(-75%, -50%) rotate(45deg);
     }
 
     [part='toolbar'] {
-      padding: var(--lumo-space-s);
       margin-right: 57px;
+      padding: var(--lumo-space-s);
       border-bottom-left-radius: var(--lumo-border-radius-l);
     }
 
@@ -105,9 +105,9 @@ registerStyles(
       position: absolute;
       right: 0;
       left: 0;
-      height: var(--lumo-size-m);
       justify-content: center;
       order: -2;
+      height: var(--lumo-size-m);
       padding: var(--lumo-space-s);
     }
 
@@ -120,10 +120,10 @@ registerStyles(
     /* Very narrow screen (year scroller initially hidden) */
 
     [part='years-toggle-button'] {
-      z-index: 3;
       display: flex;
-      height: var(--lumo-size-s);
+      z-index: 3;
       align-items: center;
+      height: var(--lumo-size-s);
       padding: 0 0.5em;
       border-radius: var(--lumo-border-radius-m);
       color: var(--lumo-primary-text-color);

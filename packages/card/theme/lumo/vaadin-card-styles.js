@@ -27,12 +27,12 @@ const card = css`
 
   /* Could be an inset outline on the host as well, but rounded outlines only work since Safari 16.4 */
   :host::before {
+    content: '';
     position: absolute;
     border: var(--vaadin-card-border, var(--vaadin-card-border-width) solid var(--vaadin-card-border-color));
     border-radius: inherit;
-    content: '';
-    inset: 0;
     pointer-events: none;
+    inset: 0;
   }
 
   :host([theme~='outlined']) {

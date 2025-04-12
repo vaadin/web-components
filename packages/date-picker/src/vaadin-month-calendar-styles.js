@@ -42,8 +42,8 @@ export const monthCalendarStyles = css`
 
   [part='weekday']:empty,
   [part='week-number'] {
-    width: 12.5%;
     flex-shrink: 0;
+    width: 12.5%;
     padding: 0;
   }
 

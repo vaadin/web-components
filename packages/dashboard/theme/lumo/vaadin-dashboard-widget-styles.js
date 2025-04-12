@@ -37,13 +37,13 @@ const dashboardWidgetAndSection = css`
     --_focus-ring-color: var(--vaadin-focus-ring-color, var(--lumo-primary-color-50pct));
     --_focus-ring-width: var(--vaadin-focus-ring-width, 2px);
     --_icon-color: var(--lumo-contrast-60pct);
+    opacity: var(--_vaadin-dashboard-widget-opacity);
 
     color: var(--lumo-body-text-color);
-    filter: var(--_vaadin-dashboard-widget-filter);
     font-family: var(--lumo-font-family);
     font-size: var(--lumo-font-size-m);
     line-height: var(--lumo-line-height-m);
-    opacity: var(--_vaadin-dashboard-widget-opacity);
+    filter: var(--_vaadin-dashboard-widget-filter);
   }
 
   :host([selected]) {
@@ -64,9 +64,9 @@ const dashboardWidgetAndSection = css`
   }
 
   [part='title'] {
-    overflow: hidden;
     flex: 1;
     margin: 0;
+    overflow: hidden;
     color: var(--lumo-header-text-color);
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -79,16 +79,16 @@ const dashboardWidgetAndSection = css`
   }
 
   vaadin-dashboard-button .icon::before {
-    display: block;
     content: var(--icon);
+    display: block;
   }
 
   /* Common styles for non-mode edit buttons */
   [part='move-button'],
   [part='resize-button'],
   [part='remove-button'] {
-    color: var(--_icon-color);
     padding-inline: 0;
+    color: var(--_icon-color);
   }
   :where([part='move-button'], [part='resize-button'], [part='remove-button']):hover {
     --_icon-color: var(--lumo-primary-text-color);
@@ -122,15 +122,15 @@ const dashboardWidgetAndSection = css`
   :host(:not([dir='rtl'])) [part~='move-backward-button'],
   :host([dir='rtl']) [part~='move-forward-button'] {
     --icon: var(--lumo-icons-angle-left);
-    border-bottom-left-radius: 0;
     border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
   }
 
   :host(:not([dir='rtl'])) [part~='move-forward-button'],
   :host([dir='rtl']) [part~='move-backward-button'] {
     --icon: var(--lumo-icons-angle-right);
-    border-bottom-right-radius: 0;
     border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
   }
 
   [part~='move-apply-button'] {
@@ -253,24 +253,24 @@ const dashboardWidget = css`
 
   :host(:not([dir='rtl'])) [part~='resize-grow-width-button'],
   :host(:not([dir='rtl'])) [part~='resize-shrink-width-button'] {
-    border-bottom-right-radius: 0;
     border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
   }
 
   :host([dir='rtl']) [part~='resize-grow-width-button'],
   :host([dir='rtl']) [part~='resize-shrink-width-button'] {
-    border-bottom-left-radius: 0;
     border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
   }
 
   :host(:not([dir='rtl'])) [part~='resize-shrink-width-button']:not([hidden]) + [part~='resize-grow-width-button'] {
-    border-bottom-left-radius: 0;
     border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
   }
 
   :host([dir='rtl']) [part~='resize-shrink-width-button']:not([hidden]) + [part~='resize-grow-width-button'] {
-    border-bottom-right-radius: 0;
     border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
   }
 
   [part~='resize-grow-height-button'],
@@ -285,8 +285,8 @@ const dashboardWidget = css`
 
   [part~='resize-grow-height-button'],
   [part~='resize-shrink-height-button'] {
-    border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
   }
 
   [part~='resize-shrink-height-button']:not([hidden]) + [part~='resize-grow-height-button'] {

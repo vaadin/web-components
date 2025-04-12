@@ -6,17 +6,17 @@ registerStyles(
   css`
     :host {
       position: relative;
-      overflow: hidden;
       height: 4px;
       margin: 8px 0;
+      overflow: hidden;
     }
 
     :host::before {
+      content: '';
       display: block;
       height: 100%;
-      background-color: var(--material-primary-color);
-      content: '';
       opacity: 0.16;
+      background-color: var(--material-primary-color);
     }
 
     [part='bar'] {
@@ -28,8 +28,8 @@ registerStyles(
     }
 
     [part='value'] {
-      background-color: var(--material-primary-color);
       transform: none;
+      background-color: var(--material-primary-color);
     }
 
     /* Indeterminate */
@@ -49,13 +49,13 @@ registerStyles(
       }
 
       20% {
-        animation-timing-function: cubic-bezier(0.5, 0, 0.701732, 0.495819);
         transform: translateX(0);
+        animation-timing-function: cubic-bezier(0.5, 0, 0.701732, 0.495819);
       }
 
       59.15% {
-        animation-timing-function: cubic-bezier(0.302435, 0.381352, 0.55, 0.956352);
         transform: translateX(83.67142%);
+        animation-timing-function: cubic-bezier(0.302435, 0.381352, 0.55, 0.956352);
       }
 
       100% {
@@ -69,13 +69,13 @@ registerStyles(
       }
 
       36.65% {
-        animation-timing-function: cubic-bezier(0.334731, 0.12482, 0.785844, 1);
         transform: scaleX(0.08);
+        animation-timing-function: cubic-bezier(0.334731, 0.12482, 0.785844, 1);
       }
 
       69.15% {
-        animation-timing-function: cubic-bezier(0.06, 0.11, 0.6, 1);
         transform: scaleX(0.661479);
+        animation-timing-function: cubic-bezier(0.06, 0.11, 0.6, 1);
       }
 
       100% {
@@ -100,13 +100,13 @@ registerStyles(
       }
 
       20% {
-        animation-timing-function: cubic-bezier(0.5, 0, 0.701732, 0.495819);
         transform: translateX(0);
+        animation-timing-function: cubic-bezier(0.5, 0, 0.701732, 0.495819);
       }
 
       59.15% {
-        animation-timing-function: cubic-bezier(0.302435, 0.381352, 0.55, 0.956352);
         transform: translateX(-83.67142%);
+        animation-timing-function: cubic-bezier(0.302435, 0.381352, 0.55, 0.956352);
       }
 
       100% {

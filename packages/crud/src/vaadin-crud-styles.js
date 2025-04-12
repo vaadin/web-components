@@ -20,16 +20,16 @@ export const crudStyles = css`
 
   :host,
   #main {
-    position: relative;
     display: flex;
-    overflow: hidden;
+    position: relative;
     flex-direction: column;
     align-self: stretch;
+    overflow: hidden;
   }
 
   #main {
-    height: 100%;
     flex: 1 1 100%;
+    height: 100%;
   }
 
   :host([hidden]),
@@ -58,10 +58,10 @@ export const crudStyles = css`
   }
 
   [part='editor'] {
-    z-index: 1;
     display: flex;
-    height: 100%;
+    z-index: 1;
     flex-direction: column;
+    height: 100%;
     outline: none;
   }
 
@@ -80,9 +80,9 @@ export const crudStyles = css`
 
   [part='scroller'] {
     display: flex;
-    overflow: auto;
     flex: auto;
     flex-direction: column;
+    overflow: auto;
   }
 
   [part='footer'] {

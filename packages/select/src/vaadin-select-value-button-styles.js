@@ -7,14 +7,14 @@ import { css } from 'lit';
 
 export const valueButton = css`
   :host {
-    position: relative;
     display: inline-block;
+    position: relative;
     width: 0;
     min-width: 0;
     outline: none;
+    white-space: nowrap;
     -webkit-user-select: none;
     user-select: none;
-    white-space: nowrap;
   }
 
   ::slotted(*) {
@@ -30,18 +30,18 @@ export const valueButton = css`
 
   .vaadin-button-container {
     display: inline-flex;
+    align-items: center;
+    justify-content: center;
     width: 100%;
     height: 100%;
     min-height: inherit;
-    align-items: center;
-    justify-content: center;
     text-align: inherit;
     text-shadow: inherit;
   }
 
   [part='label'] {
-    overflow: hidden;
     width: 100%;
+    overflow: hidden;
     line-height: inherit;
     text-overflow: ellipsis;
     white-space: nowrap;

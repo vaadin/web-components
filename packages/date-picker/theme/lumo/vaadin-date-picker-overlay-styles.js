@@ -5,7 +5,7 @@ import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themab
 
 const datePickerOverlay = css`
   [part='overlay'] {
-    overflow: hidden;
+    flex-direction: column;
     /*
   Width:
       date cell widths
@@ -21,14 +21,14 @@ const datePickerOverlay = css`
     );
     height: 100%;
     max-height: calc(var(--lumo-size-m) * 14);
-    flex-direction: column;
+    overflow: hidden;
     -webkit-tap-highlight-color: transparent;
   }
 
   [part='content'] {
-    overflow: hidden;
     height: 100%;
     padding: 0;
+    overflow: hidden;
     -webkit-mask-image: none;
     mask-image: none;
   }

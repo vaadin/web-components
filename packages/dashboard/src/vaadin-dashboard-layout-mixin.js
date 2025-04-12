@@ -23,8 +23,8 @@ export const DashboardLayoutMixin = (superClass) =>
       return css`
         :host {
           display: block;
-          overflow: hidden;
           width: 100%;
+          overflow: hidden;
         }
 
         :host([hidden]) {
@@ -81,11 +81,7 @@ export const DashboardLayoutMixin = (superClass) =>
           --_vaadin-dashboard-row-height: minmax(var(--_vaadin-dashboard-row-min-height, auto), auto);
 
           display: grid;
-          overflow: auto;
-          height: 100%;
           box-sizing: border-box;
-          padding: var(--_vaadin-dashboard-padding);
-          gap: var(--_vaadin-dashboard-gap);
 
           grid-auto-rows: var(--_vaadin-dashboard-row-height);
 
@@ -93,6 +89,10 @@ export const DashboardLayoutMixin = (superClass) =>
             var(--_vaadin-dashboard-effective-col-count, auto-fill),
             minmax(var(--_vaadin-dashboard-col-min-width), var(--_vaadin-dashboard-col-max-width))
           );
+          height: 100%;
+          padding: var(--_vaadin-dashboard-padding);
+          overflow: auto;
+          gap: var(--_vaadin-dashboard-gap);
         }
 
         ::slotted(*) {

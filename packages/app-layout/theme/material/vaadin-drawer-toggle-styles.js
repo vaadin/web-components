@@ -7,9 +7,9 @@ const drawerToggle = css`
     width: 48px;
     min-width: 0 !important;
     height: 48px;
+    margin-inline-end: 1em;
     padding: 0;
     border-radius: 50%;
-    margin-inline-end: 1em;
   }
 
   [part='icon'] {

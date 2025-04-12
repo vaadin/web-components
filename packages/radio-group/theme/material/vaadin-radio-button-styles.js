@@ -21,13 +21,13 @@ registerStyles(
       position: relative;
       width: var(--_radio-button-size);
       height: var(--_radio-button-size);
-      border: 2px solid;
-      border-radius: 50%;
       margin: 4px;
-      background-color: transparent;
       transition:
         transform 0.2s cubic-bezier(0.12, 0.32, 0.54, 2),
         background-color 0.15s;
+      border: 2px solid;
+      border-radius: 50%;
+      background-color: transparent;
       will-change: transform;
     }
 
@@ -35,16 +35,16 @@ registerStyles(
     [part='radio']::before {
       width: 100%;
       height: 100%;
-      border-radius: inherit;
-      background-color: var(--material-primary-color);
-      color: transparent;
-      line-height: var(--_radio-button-size);
-      opacity: 0;
-      pointer-events: none;
       transform: scale(2.5);
       transition:
         transform 0.1s,
         opacity 0.8s;
+      border-radius: inherit;
+      opacity: 0;
+      background-color: var(--material-primary-color);
+      color: transparent;
+      line-height: var(--_radio-button-size);
+      pointer-events: none;
     }
 
     :host([checked]) [part='radio'] {
@@ -53,17 +53,17 @@ registerStyles(
 
     /* Used for the selection dot */
     [part='radio']::after {
+      content: '';
       position: absolute;
       top: 50%;
       left: 50%;
       width: 10px;
       height: 10px;
-      border-radius: 50%;
-      background-color: var(--material-primary-color);
-      content: '';
-      pointer-events: none;
       transform: translate(-50%, -50%) scale(0);
       transition: transform 0.2s;
+      border-radius: 50%;
+      background-color: var(--material-primary-color);
+      pointer-events: none;
     }
 
     :host([checked]) [part='radio']::after {
@@ -76,15 +76,15 @@ registerStyles(
 
     :host([active][checked]) [part='radio']::before,
     :host([active]:not([checked])) [part='radio']::before {
-      opacity: 0.2;
       transform: scale(0);
       transition-duration: 0.01s, 0.01s;
+      opacity: 0.2;
     }
 
     :host([focus-ring]) [part='radio']::before {
-      opacity: 0.15;
       transform: scale(2.5);
       transition-duration: 0s;
+      opacity: 0.15;
     }
 
     :host([disabled]) {

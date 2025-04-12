@@ -108,11 +108,11 @@ class DashboardWidget extends DashboardItemMixin(ElementMixin(ThemableMixin(Poly
     return [
       css`
         :host {
-          position: relative;
           display: flex;
-          flex-direction: column;
+          position: relative;
           grid-column: var(--_vaadin-dashboard-item-column);
           grid-row: var(--_vaadin-dashboard-item-row);
+          flex-direction: column;
         }
 
         :host([hidden]) {
@@ -124,8 +124,8 @@ class DashboardWidget extends DashboardItemMixin(ElementMixin(ThemableMixin(Poly
         }
 
         [part~='content'] {
-          overflow: hidden;
           flex: 1;
+          overflow: hidden;
         }
 
         [part~='resize-button'] {
@@ -137,6 +137,7 @@ class DashboardWidget extends DashboardItemMixin(ElementMixin(ThemableMixin(Poly
         }
 
         :host([resizing])::after {
+          content: '';
           position: absolute;
           z-index: 2;
           top: -1px;
@@ -144,7 +145,6 @@ class DashboardWidget extends DashboardItemMixin(ElementMixin(ThemableMixin(Poly
           height: var(--_vaadin-dashboard-widget-resizer-height, 0);
           border-radius: inherit;
           background: rgba(0, 0, 0, 0.1);
-          content: '';
         }
       `,
       super.styles,

@@ -16,11 +16,11 @@ const chip = css`
     border-radius: var(--lumo-border-radius-s);
     background-color: var(--lumo-contrast-20pct);
     color: var(--lumo-body-text-color);
-    cursor: var(--lumo-clickable-cursor);
     font-size: var(--lumo-font-size-xxs);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     line-height: 1;
+    cursor: var(--lumo-clickable-cursor);
   }
 
   :host([disabled]) {
@@ -39,13 +39,13 @@ const chip = css`
 
   :host([slot='overflow'])::before,
   :host([slot='overflow'])::after {
+    content: '';
     position: absolute;
     width: 100%;
     height: 100%;
-    border-color: var(--lumo-contrast-30pct);
-    border-radius: var(--lumo-border-radius-s);
     border-left: calc(var(--lumo-space-s) / 4) solid;
-    content: '';
+    border-radius: var(--lumo-border-radius-s);
+    border-color: var(--lumo-contrast-30pct);
   }
 
   :host([slot='overflow'])::before {
@@ -80,15 +80,15 @@ const chip = css`
 
   [part='remove-button'] {
     display: flex;
-    width: 1.25em;
-    height: 1.25em;
     align-items: center;
     justify-content: center;
+    width: 1.25em;
+    height: 1.25em;
     margin-top: -0.3125em;
     margin-bottom: -0.3125em;
-    font-size: 1.5em;
     margin-inline-start: auto;
     transition: none;
+    font-size: 1.5em;
   }
 
   [part='remove-button']::before {

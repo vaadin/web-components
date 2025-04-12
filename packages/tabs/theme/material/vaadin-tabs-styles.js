@@ -27,18 +27,18 @@ registerStyles(
 
     [part='forward-button'],
     [part='back-button'] {
-      top: 0;
       display: flex;
-      width: 48px;
-      height: 100%;
+      top: 0;
       flex-grow: 0;
       flex-shrink: 0;
       align-items: center;
       justify-content: center;
+      width: 48px;
+      height: 100%;
+      transition: 0.2s opacity;
       color: var(--material-secondary-text-color);
       font-family: material-icons;
       font-size: 24px;
-      transition: 0.2s opacity;
     }
 
     [part='forward-button']:hover,
@@ -59,10 +59,10 @@ registerStyles(
     }
 
     :host([overflow]) [part='tabs']::after {
-      display: flex;
-      width: 32px;
-      flex-shrink: 0;
       content: '';
+      display: flex;
+      flex-shrink: 0;
+      width: 32px;
     }
 
     /* Fixed width tabs */

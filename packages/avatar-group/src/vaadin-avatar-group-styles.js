@@ -18,10 +18,10 @@ export const avatarGroupStyles = css`
   }
 
   [part='container'] {
-    position: relative;
     display: flex;
-    width: 100%;
+    position: relative;
     flex-wrap: nowrap;
+    width: 100%;
   }
 
   ::slotted(vaadin-avatar:not(:first-child)) {

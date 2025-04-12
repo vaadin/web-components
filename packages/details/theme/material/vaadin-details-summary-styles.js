@@ -5,22 +5,22 @@ import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themab
 
 const detailsSummary = css`
   :host {
-    position: relative;
     display: flex;
-    width: 100%;
-    min-height: 48px;
+    position: relative;
     box-sizing: border-box;
     align-items: center;
     justify-content: space-between;
+    width: 100%;
+    min-height: 48px;
     padding: 0 24px;
+    outline: none;
     background-color: var(--material-background-color);
     color: var(--material-body-text-color);
-    cursor: default;
     font-size: var(--material-small-font-size);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     font-weight: 500;
-    outline: none;
+    cursor: default;
     -webkit-tap-highlight-color: transparent;
   }
 
@@ -37,41 +37,41 @@ const detailsSummary = css`
   [part='toggle'] {
     position: relative;
     right: -8px;
+    order: 1;
     width: 24px;
     height: 24px;
-    order: 1;
-    padding: 4px;
-    color: var(--material-secondary-text-color);
-    line-height: 24px;
     margin-inline-start: auto;
-    text-align: center;
+    padding: 4px;
     transform: rotate(90deg);
     transition: transform 0.1s cubic-bezier(0.4, 0, 0.2, 0.1);
+    color: var(--material-secondary-text-color);
+    line-height: 24px;
+    text-align: center;
   }
 
   [part='toggle']::before {
+    content: var(--material-icons-chevron-right);
     display: inline-block;
     width: 24px;
-    content: var(--material-icons-chevron-right);
     font-family: 'material-icons';
     font-size: 24px;
   }
 
   [part='toggle']::after {
+    content: '';
+    display: inline-block;
     position: absolute;
     top: 0;
     left: 0;
-    display: inline-block;
     width: 100%;
     height: 100%;
-    border-radius: 50%;
-    background-color: var(--material-disabled-text-color);
-    content: '';
-    opacity: 0;
     transform: scale(0);
     transition:
       transform 0s 0.8s,
       opacity 0.8s;
+    border-radius: 50%;
+    opacity: 0;
+    background-color: var(--material-disabled-text-color);
     will-change: transform, opacity;
   }
 
@@ -80,10 +80,10 @@ const detailsSummary = css`
   }
 
   :host([active]:not([disabled])) [part='toggle']::after {
-    opacity: 0.15;
     transform: scale(1.25);
-    transition-delay: 0s, 0s;
     transition-duration: 0.08s, 0.01s;
+    transition-delay: 0s, 0s;
+    opacity: 0.15;
   }
 
   :host([opened]) [part='toggle'] {

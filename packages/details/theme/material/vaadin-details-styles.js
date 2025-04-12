@@ -5,9 +5,9 @@ import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themab
 
 const details = css`
   :host {
+    outline: none;
     box-shadow: var(--material-shadow-elevation-2dp);
     font-family: var(--material-font-family);
-    outline: none;
   }
 
   :host([focus-ring]) ::slotted([slot='summary']) {

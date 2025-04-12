@@ -7,14 +7,14 @@ import { css } from 'lit';
 
 export const notificationContainerStyles = css`
   :host {
+    display: flex;
     position: fixed;
     z-index: 1000;
-    display: flex;
     box-sizing: border-box;
     flex-direction: column;
     align-items: stretch;
-    inset: 0;
     pointer-events: none;
+    inset: 0;
   }
 
   [region-group] {

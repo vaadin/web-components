@@ -18,8 +18,8 @@ const comboBoxOverlayStyles = css`
 
   [part='content'] {
     display: flex;
-    height: 100%;
     flex-direction: column;
+    height: 100%;
   }
 `;
 

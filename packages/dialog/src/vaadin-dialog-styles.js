@@ -9,8 +9,8 @@ export const dialogOverlay = css`
   [part='header'],
   [part='header-content'],
   [part='footer'] {
-    z-index: 1;
     display: flex;
+    z-index: 1;
     flex: none;
     flex-wrap: wrap;
     align-items: center;
@@ -56,13 +56,13 @@ export const dialogOverlay = css`
   @media (min-height: 320px) {
     :host(:is([has-title], [has-header], [has-footer])) .resizer-container {
       display: flex;
-      overflow: hidden;
       flex-direction: column;
+      overflow: hidden;
     }
 
     :host(:is([has-title], [has-header], [has-footer])) [part='content'] {
-      overflow: auto;
       flex: 1;
+      overflow: auto;
     }
   }
 
@@ -87,20 +87,20 @@ export const dialogOverlay = css`
 
 export const resizableOverlay = css`
   [part='overlay'] {
-    position: relative;
     display: flex;
-    overflow: visible;
+    position: relative;
     max-height: 100%;
+    overflow: visible;
   }
 
   [part='content'] {
-    height: 100%;
     box-sizing: border-box;
+    height: 100%;
   }
 
   .resizer-container {
-    overflow: auto;
     flex-grow: 1;
+    overflow: auto;
     border-radius: inherit; /* prevent child elements being drawn outside part=overlay */
   }
 

@@ -25,8 +25,8 @@ const tabsheet = css`
 
   [part='content'] {
     padding: 24px;
-    border-bottom-left-radius: inherit;
     border-bottom-right-radius: inherit;
+    border-bottom-left-radius: inherit;
   }
 
   :host([loading]) [part='content'] {

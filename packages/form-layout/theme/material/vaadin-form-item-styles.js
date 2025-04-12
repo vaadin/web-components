@@ -16,8 +16,8 @@ registerStyles(
     }
 
     :host([required]) [part='required-indicator']::after {
-      color: inherit;
       content: ' *';
+      color: inherit;
     }
 
     :host([invalid]) [part='label'] {

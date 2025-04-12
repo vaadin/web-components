@@ -63,8 +63,8 @@ class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ElementMixin(Themab
     return css`
       :host {
         display: flex;
-        height: 100%;
         box-sizing: border-box;
+        height: 100%;
       }
 
       :host([hidden]) {
@@ -92,8 +92,8 @@ class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ElementMixin(Themab
       }
 
       :host([overlay][has-detail]) [part='backdrop'] {
-        z-index: 1;
         display: block;
+        z-index: 1;
         inset: 0;
       }
 

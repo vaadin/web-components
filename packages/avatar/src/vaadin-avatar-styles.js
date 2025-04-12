@@ -9,13 +9,13 @@ export const avatarStyles = css`
   :host {
     --vaadin-avatar-outline-width: var(--vaadin-focus-ring-width, 2px);
     display: inline-block;
-    overflow: hidden;
+    flex: none;
     width: var(--vaadin-avatar-size, 64px);
     height: var(--vaadin-avatar-size, 64px);
-    flex: none;
+    margin: calc(var(--vaadin-avatar-outline-width) * -1);
+    overflow: hidden;
     border: var(--vaadin-avatar-outline-width) solid transparent;
     border-radius: 50%;
-    margin: calc(var(--vaadin-avatar-outline-width) * -1);
     background-clip: content-box;
   }
 
@@ -51,10 +51,10 @@ export const avatarStyles = css`
   }
 
   :host([has-color-index])::before {
+    content: '';
     position: absolute;
     border-radius: inherit;
     box-shadow: inset 0 0 0 2px var(--vaadin-avatar-user-color);
-    content: '';
     inset: 0;
   }
 `;

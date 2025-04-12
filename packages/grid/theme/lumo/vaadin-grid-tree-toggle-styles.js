@@ -22,14 +22,14 @@ registerStyles(
       display: inline-block;
       width: 1em;
       height: 1em;
+      margin: calc(1em / -3);
       /* Increase touch target area */
       padding: calc(1em / 3);
-      margin: calc(1em / -3);
       color: var(--lumo-contrast-50pct);
-      cursor: var(--lumo-clickable-cursor);
       font-size: 1.5em;
       line-height: 1;
       text-align: center;
+      cursor: var(--lumo-clickable-cursor);
     }
 
     :host(:not([dir='rtl'])) [part='toggle'] {

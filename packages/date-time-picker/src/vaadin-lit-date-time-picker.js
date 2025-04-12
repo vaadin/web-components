@@ -41,13 +41,13 @@ class DateTimePicker extends DateTimePickerMixin(ThemableMixin(ElementMixin(Poly
         }
 
         .slots ::slotted([slot='date-picker']) {
-          min-width: 0;
           flex: 1 1 auto;
+          min-width: 0;
         }
 
         .slots ::slotted([slot='time-picker']) {
-          min-width: 0;
           flex: 1 1.65 auto;
+          min-width: 0;
         }
       `,
     ];

@@ -78,13 +78,13 @@ registerStyles(
     /* Selected row */
 
     [part~='body-cell']::before {
-      position: absolute;
-      background-color: var(--material-primary-color);
       content: '';
-      inset: 0;
-      opacity: 0;
-      pointer-events: none;
+      position: absolute;
       transition: opacity 0.1s cubic-bezier(0.4, 0, 0.2, 0.1);
+      opacity: 0;
+      background-color: var(--material-primary-color);
+      pointer-events: none;
+      inset: 0;
     }
 
     :host(:not([reordering])) [part~='row'][selected] > [part~='body-cell']::before {
@@ -143,12 +143,12 @@ registerStyles(
     }
 
     :host([navigating]) [part~='row']:focus::before {
+      content: '';
       position: absolute;
       z-index: 3;
-      content: '';
-      inset: 0;
-      pointer-events: none;
       transform: translateX(calc(-1 * var(--_grid-horizontal-scroll-position)));
+      pointer-events: none;
+      inset: 0;
     }
 
     /* Empty state */
@@ -159,12 +159,12 @@ registerStyles(
 
     /* Drag and Drop styles */
     :host([dragover])::after {
+      content: '';
       position: absolute;
       z-index: 100;
       box-shadow: inset 0 0 0 2px var(--material-primary-color);
-      content: '';
-      inset: 0;
       pointer-events: none;
+      inset: 0;
     }
 
     [part~='row'][dragover] {
@@ -176,12 +176,12 @@ registerStyles(
     }
 
     [part~='row'][dragover] [part~='cell']::after {
+      content: '';
       position: absolute;
       height: 3px;
       background: var(--material-primary-color);
-      content: '';
-      inset: 0;
       pointer-events: none;
+      inset: 0;
     }
 
     [part~='row'][dragover='below'] [part~='cell']::after {
@@ -221,20 +221,20 @@ registerStyles(
     }
 
     #scroller [part~='row'][dragstart]:not([dragstart=''])::after {
+      content: attr(dragstart);
+      display: block;
       position: absolute;
       z-index: 100;
       top: var(--_grid-drag-start-y);
       left: var(--_grid-drag-start-x);
-      display: block;
-      min-width: 24px;
       box-sizing: border-box;
       align-items: center;
       justify-content: center;
+      min-width: 24px;
       padding: 4px;
       border-radius: 2px;
       background-color: var(--material-error-color);
       color: var(--material-primary-contrast-color);
-      content: attr(dragstart);
       font-size: var(--material-caption-font-size);
       line-height: 1;
       text-align: center;

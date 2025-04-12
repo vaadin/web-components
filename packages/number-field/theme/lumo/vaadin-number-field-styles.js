@@ -24,8 +24,8 @@ const numberField = css`
   [part$='button'] {
     width: 1.6em;
     height: 1.6em;
-    cursor: pointer;
     font-size: var(--lumo-icon-size-s);
+    cursor: pointer;
   }
 
   [part$='button']::before {

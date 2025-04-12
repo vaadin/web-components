@@ -20,8 +20,8 @@ export const checkboxStyles = css`
 
   .vaadin-checkbox-container {
     display: grid;
-    align-items: baseline;
     grid-template-columns: auto 1fr;
+    align-items: baseline;
   }
 
   [part='checkbox'],
@@ -54,20 +54,20 @@ export const checkboxStyles = css`
   }
 
   [part='checkbox']::before {
+    content: '\\\\\\\\202F';
     display: block;
-    contain: paint;
-    content: '\\\\202F';
     line-height: var(--vaadin-checkbox-size, 1em);
+    contain: paint;
   }
 
   /* visually hidden */
   ::slotted(input) {
+    align-self: stretch;
     width: initial;
     height: initial;
-    align-self: stretch;
     margin: 0;
-    -webkit-appearance: none;
     cursor: inherit;
+    -webkit-appearance: none;
   }
 
   @media (forced-colors: active) {

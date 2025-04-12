@@ -6,9 +6,9 @@ const dialogOverlay = css`
   /* Optical centering */
   :host::before,
   :host::after {
+    content: '';
     flex-basis: 0;
     flex-grow: 1;
-    content: '';
   }
 
   :host::after {
@@ -17,11 +17,11 @@ const dialogOverlay = css`
 
   [part='overlay'] {
     border-radius: var(--lumo-border-radius-l);
+    outline: none;
     background-image: none;
     box-shadow:
       0 0 0 1px var(--lumo-shade-5pct),
       var(--lumo-box-shadow-xl);
-    outline: none;
     -webkit-tap-highlight-color: transparent;
   }
 
@@ -53,10 +53,10 @@ const dialogOverlay = css`
   }
 
   [part='title'] {
+    margin-inline-start: calc(var(--lumo-space-l) - var(--lumo-space-m));
     color: var(--lumo-header-text-color);
     font-size: var(--lumo-font-size-xl);
     font-weight: 600;
-    margin-inline-start: calc(var(--lumo-space-l) - var(--lumo-space-m));
   }
 
   /* No padding */
@@ -83,8 +83,8 @@ const dialogOverlay = css`
 
   @keyframes vaadin-dialog-enter {
     0% {
-      opacity: 0;
       transform: scale(0.95);
+      opacity: 0;
     }
   }
 
@@ -98,8 +98,8 @@ const dialogOverlay = css`
 
   @keyframes vaadin-dialog-exit {
     100% {
-      opacity: 0;
       transform: scale(1.02);
+      opacity: 0;
     }
   }
 `;

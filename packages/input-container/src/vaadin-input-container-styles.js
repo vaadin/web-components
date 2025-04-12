@@ -8,7 +8,7 @@ import { css } from 'lit';
 export const inputContainerStyles = css`
   :host {
     --_border-radius: var(--vaadin-input-field-border-radius, 0);
-    --_input-border-width: var(--vaadin-input-field-border-width, 0px);
+    --_input-border-width: var(--vaadin-input-field-border-width, 0);
     --_input-border-color: var(--vaadin-input-field-border-color, transparent);
     display: flex;
     flex: 0 1 auto;
@@ -38,25 +38,25 @@ export const inputContainerStyles = css`
 
   /* Reset the native input styles */
   ::slotted(input) {
-    overflow: hidden;
+    flex: auto;
     width: 100%;
     min-width: 0;
     height: 100%;
-    flex: auto;
+    margin: 0;
     padding: 0;
+    overflow: hidden;
     border: 0;
     border-radius: 0;
-    margin: 0;
-    -webkit-appearance: none;
-    -moz-appearance: none;
+    outline: none;
     background-color: transparent;
     /* Disable default invalid style in Firefox */
     box-shadow: none;
     color: inherit;
     font: inherit;
     line-height: normal;
-    outline: none;
     white-space: nowrap;
+    -webkit-appearance: none;
+    -moz-appearance: none;
   }
 
   ::slotted(*) {
@@ -64,11 +64,11 @@ export const inputContainerStyles = css`
   }
 
   ::slotted(:is(input, textarea))::placeholder {
+    /* Override default opacity in Firefox */
+    opacity: 1;
     color: inherit;
     /* Use ::slotted(input:placeholder-shown) in themes to style the placeholder. */
     /* because ::slotted(...)::placeholder does not work in Safari. */
     font: inherit;
-    /* Override default opacity in Firefox */
-    opacity: 1;
   }
 `;

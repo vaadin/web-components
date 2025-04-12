@@ -8,14 +8,14 @@ import { css } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 export const iconStyles = css`
   :host {
     display: inline-flex;
-    width: 24px;
-    height: 24px;
     box-sizing: border-box;
     align-items: center;
     justify-content: center;
-    container-type: size;
+    width: 24px;
+    height: 24px;
     fill: currentColor;
     vertical-align: middle;
+    container-type: size;
   }
 
   :host::after,
@@ -33,10 +33,10 @@ export const iconStyles = css`
 
   svg {
     display: block;
-    /* prevent overflowing icon from clipping, see https://github.com/vaadin/flow-components/issues/5872 */
-    overflow: visible;
     width: 100%;
     height: 100%;
+    /* prevent overflowing icon from clipping, see https://github.com/vaadin/flow-components/issues/5872 */
+    overflow: visible;
   }
 
   :host(:is([icon-class], [font-icon-content])) svg {

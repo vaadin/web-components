@@ -20,8 +20,8 @@ const passwordField = css`
 
   /* Make it easy to hide the button across the whole app */
   [part='reveal-button'] {
-    position: relative;
     display: var(--lumo-password-field-reveal-button-display, block);
+    position: relative;
   }
 
   [part='reveal-button'][hidden] {

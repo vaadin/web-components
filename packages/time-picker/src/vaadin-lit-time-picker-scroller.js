@@ -24,17 +24,17 @@ export class TimePickerScroller extends ComboBoxScrollerMixin(PolylitMixin(LitEl
     return css`
       :host {
         display: block;
-        overflow: auto;
         min-height: 1px;
+        overflow: auto;
+
+        /* Fixes item background from getting on top of scrollbars on Safari */
+        transform: translate3d(0, 0, 0);
 
         /* Fixes scrollbar disappearing when 'Show scroll bars: Always' enabled in Safari */
         box-shadow: 0 0 0 white;
 
         /* Enable momentum scrolling on iOS */
         -webkit-overflow-scrolling: touch;
-
-        /* Fixes item background from getting on top of scrollbars on Safari */
-        transform: translate3d(0, 0, 0);
       }
 
       #selector {

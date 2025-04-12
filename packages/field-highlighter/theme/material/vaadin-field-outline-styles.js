@@ -26,17 +26,17 @@ registerStyles(
 
     :host([context$='checkbox']),
     :host([context$='radio-button']) {
-      border-radius: 50%;
-      background-color: var(--_active-user-color);
-      opacity: 0.15;
       transform: scale(2.5);
+      border-radius: 50%;
+      opacity: 0.15;
+      background-color: var(--_active-user-color);
     }
 
     :host([context$='item'])::before {
+      content: '';
       display: block;
       height: 100%;
       box-shadow: inset 0 0 0 2px var(--_active-user-color);
-      content: '';
     }
   `,
   { moduleId: 'material-field-outline' },

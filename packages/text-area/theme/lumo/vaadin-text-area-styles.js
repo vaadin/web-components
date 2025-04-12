@@ -13,17 +13,17 @@ import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themab
 const textArea = css`
   [part='input-field'],
   [part='input-field'] ::slotted(textarea) {
+    box-sizing: border-box;
     height: auto;
     min-height: 0;
-    box-sizing: border-box;
   }
 
   [part='input-field'] {
     /* Equal to the implicit padding in vaadin-text-field */
     padding-top: calc((var(--lumo-text-field-size) - 1em * var(--lumo-line-height-s)) / 2);
     padding-bottom: calc((var(--lumo-text-field-size) - 1em * var(--lumo-line-height-s)) / 2);
-    line-height: var(--lumo-line-height-s);
     transition: background-color 0.1s;
+    line-height: var(--lumo-line-height-s);
   }
 
   :host(:not([readonly])) [part='input-field']::after {

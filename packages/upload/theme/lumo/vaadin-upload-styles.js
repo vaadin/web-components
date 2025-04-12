@@ -17,13 +17,13 @@ registerStyles(
     }
 
     :host(:not([nodrop])) {
-      overflow: hidden;
       padding: var(--lumo-space-m);
-      border: 1px dashed var(--lumo-contrast-20pct);
-      border-radius: var(--lumo-border-radius-l);
+      overflow: hidden;
       transition:
         background-color 0.6s,
         border-color 0.6s;
+      border: 1px dashed var(--lumo-contrast-20pct);
+      border-radius: var(--lumo-border-radius-l);
     }
 
     [part='drop-label'] {
@@ -35,11 +35,11 @@ registerStyles(
     }
 
     :host([dragover-valid]) {
-      border-color: var(--lumo-primary-color-50pct);
-      background: var(--lumo-primary-color-10pct);
       transition:
         background-color 0.1s,
         border-color 0.1s;
+      border-color: var(--lumo-primary-color-50pct);
+      background: var(--lumo-primary-color-10pct);
     }
 
     :host([dragover-valid]) [part='drop-label'] {
@@ -110,8 +110,8 @@ const uploadFile = css`
   }
 
   [part='meta'] {
-    width: 0.001px;
     flex: 1 1 auto;
+    width: 0.001px;
   }
 
   [part='name'] {
@@ -147,8 +147,8 @@ const uploadFile = css`
 
   [part$='button']:focus {
     border-radius: var(--lumo-border-radius-s);
-    box-shadow: 0 0 0 var(--_focus-ring-width) var(--_focus-ring-color);
     outline: none;
+    box-shadow: 0 0 0 var(--_focus-ring-width) var(--_focus-ring-color);
   }
 
   [part$='icon']::before,
@@ -157,13 +157,13 @@ const uploadFile = css`
   }
 
   [part='done-icon']::before {
-    color: var(--lumo-primary-text-color);
     content: var(--lumo-icons-checkmark);
+    color: var(--lumo-primary-text-color);
   }
 
   [part='warning-icon']::before {
-    color: var(--lumo-error-text-color);
     content: var(--lumo-icons-error);
+    color: var(--lumo-error-text-color);
   }
 
   [part='start-button']::before {

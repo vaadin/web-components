@@ -8,9 +8,9 @@ import { css } from 'lit';
 export const overlayContentStyles = css`
   :host {
     display: flex;
+    flex-direction: column;
     width: 100%;
     height: 100%;
-    flex-direction: column;
     outline: none;
   }
 
@@ -38,11 +38,11 @@ export const overlayContentStyles = css`
   }
 
   #scrollers {
-    position: relative;
     display: flex;
-    overflow: hidden;
+    position: relative;
     width: 100%;
     height: 100%;
+    overflow: hidden;
   }
 
   :host([desktop]) ::slotted([slot='months']) {
@@ -60,8 +60,8 @@ export const overlayContentStyles = css`
   }
 
   [part='toolbar'] {
-    z-index: 2;
     display: flex;
+    z-index: 2;
     flex-shrink: 0;
     justify-content: space-between;
   }

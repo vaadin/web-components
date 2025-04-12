@@ -7,8 +7,8 @@ const drawerToggle = css`
     width: var(--lumo-size-l);
     min-width: auto;
     height: var(--lumo-size-l);
-    padding: 0;
     margin: 0 var(--lumo-space-s);
+    padding: 0;
     background: transparent;
   }
 

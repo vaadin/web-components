@@ -19,16 +19,16 @@ export const accordionHeading = css`
 
   button {
     display: flex;
-    width: 100%;
     align-items: center;
     justify-content: inherit;
+    width: 100%;
+    margin: 0;
     padding: 0;
     border: initial;
-    margin: 0;
+    outline: none;
     background-color: initial;
     color: inherit;
     font: inherit;
-    outline: none;
     text-align: inherit;
   }
 `;

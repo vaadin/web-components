@@ -17,13 +17,13 @@ const scroller = css`
 
   :host([theme~='overflow-indicators'])::before,
   :host([theme~='overflow-indicators'])::after {
+    content: '';
+    display: none;
     position: sticky;
     z-index: 9999;
-    display: none;
     height: 1px;
     margin-bottom: -1px;
     background: var(--lumo-contrast-10pct);
-    content: '';
     inset: 0;
   }
 

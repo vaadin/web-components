@@ -6,11 +6,11 @@ import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themab
 const item = css`
   :host {
     display: flex;
-    overflow: hidden;
-    min-height: 36px;
     box-sizing: border-box;
     align-items: center;
+    min-height: 36px;
     padding: 8px 32px 8px 10px;
+    overflow: hidden;
     font-family: var(--material-font-family);
     font-size: var(--material-small-font-size);
     line-height: 24px;
@@ -23,12 +23,12 @@ const item = css`
 
   /* Checkmark */
   [part='checkmark']::before {
+    content: '';
     display: var(--_material-item-selected-icon-display, none);
-    width: 24px;
     flex: none;
+    width: 24px;
     margin-right: 10px;
     color: var(--material-secondary-text-color);
-    content: '';
     font-family: material-icons;
     font-size: 24px;
     font-weight: 400;

@@ -9,14 +9,14 @@ import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themab
 
 const textArea = css`
   [part='input-field'] {
-    height: auto;
     box-sizing: border-box;
+    height: auto;
   }
 
   [part='input-field'] ::slotted(textarea) {
+    margin-top: 4px;
     padding-top: 0;
     padding-bottom: 4px;
-    margin-top: 4px;
   }
 
   [part='input-field']::before,

@@ -34,10 +34,10 @@ export const baseStyles = css`
 
   .vaadin-rich-text-editor-container {
     display: flex;
-    min-height: inherit;
-    max-height: inherit;
     flex: auto;
     flex-direction: column;
+    min-height: inherit;
+    max-height: inherit;
   }
 `;
 

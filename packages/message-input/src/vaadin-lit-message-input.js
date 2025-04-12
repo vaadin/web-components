@@ -30,11 +30,11 @@ class MessageInput extends MessageInputMixin(ElementMixin(ThemableMixin(PolylitM
     return css`
       :host {
         display: flex;
-        overflow: hidden;
-        max-height: 50vh;
         box-sizing: border-box;
         flex-shrink: 0;
         align-items: flex-start;
+        max-height: 50vh;
+        overflow: hidden;
       }
 
       :host([hidden]) {

@@ -12,17 +12,17 @@ const popupOverlay = css`
     --_button-size: 1.25rem;
     --_button-margin: 3px;
     display: flex;
-    max-width: calc(7 * (var(--_button-size) + var(--_button-margin) * 2));
     flex-wrap: wrap;
     justify-content: center;
+    max-width: calc(7 * (var(--_button-size) + var(--_button-margin) * 2));
     padding: 0.25rem;
   }
 
   [part='content'] ::slotted(button) {
     width: var(--_button-size);
     height: var(--_button-size);
-    border: none;
     margin: var(--_button-margin);
+    border: none;
   }
 `;
 
@@ -37,15 +37,15 @@ const richTextEditor = css`
   }
 
   [part='toolbar'] {
-    overflow: hidden;
     padding: 0;
+    overflow: hidden;
     border: 0;
     background-color: var(--material-secondary-background-color);
   }
 
   [part~='toolbar-group'] {
-    padding: 0 8px;
     margin: 8px 0;
+    padding: 0 8px;
   }
 
   [part~='toolbar-group'] + [part~='toolbar-group'] {
@@ -53,8 +53,8 @@ const richTextEditor = css`
   }
 
   [part~='toolbar-button'] {
-    border-radius: 3px;
     margin: -4px 2px;
+    border-radius: 3px;
     color: var(--material-secondary-text-color);
     font-family: 'vaadin-rte-icons', var(--material-font-family);
     font-weight: 600;

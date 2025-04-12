@@ -12,12 +12,12 @@ import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themab
 
 export const contentStyles = css`
   [part='content'] {
-    position: relative;
     display: flex;
-    overflow: hidden;
+    position: relative;
     box-sizing: border-box;
     flex: auto;
     flex-direction: column;
+    overflow: hidden;
   }
 
   /*
@@ -33,23 +33,23 @@ export const contentStyles = css`
   }
 
   .ql-clipboard p {
-    padding: 0;
     margin: 0;
+    padding: 0;
   }
 
   .ql-editor {
-    height: 100%;
     box-sizing: border-box;
     flex: 1;
+    height: 100%;
     padding: 0.75em 1em;
-    line-height: 1.42;
-    outline: none;
     overflow-y: auto;
+    outline: none;
+    line-height: 1.42;
+    text-align: left;
+    word-wrap: break-word;
+    white-space: pre-wrap;
     -moz-tab-size: 4;
     tab-size: 4;
-    text-align: left;
-    white-space: pre-wrap;
-    word-wrap: break-word;
   }
 
   .ql-editor > * {
@@ -79,10 +79,10 @@ export const contentStyles = css`
   /* quill core end */
 
   blockquote {
-    padding-left: 1em;
-    border-left: 0.25em solid #ccc;
     margin-top: 0.3125em;
     margin-bottom: 0.3125em;
+    padding-left: 1em;
+    border-left: 0.25em solid #ccc;
   }
 
   code,
@@ -92,9 +92,9 @@ export const contentStyles = css`
   }
 
   pre {
-    padding: 0.3125em 0.625em;
     margin-top: 0.3125em;
     margin-bottom: 0.3125em;
+    padding: 0.3125em 0.625em;
     white-space: pre-wrap;
   }
 

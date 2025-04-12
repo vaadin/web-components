@@ -29,8 +29,8 @@ const tabsheet = css`
 
   [part='content'] {
     padding: var(--lumo-space-s) var(--lumo-space-m);
-    border-bottom-left-radius: inherit;
     border-bottom-right-radius: inherit;
+    border-bottom-left-radius: inherit;
   }
 
   :host([loading]) [part='content'] {

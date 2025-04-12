@@ -14,9 +14,9 @@ const menuBarItem = css`
 
   [part='content'] ::slotted(vaadin-icon[icon^='vaadin:']) {
     display: inline-block;
+    box-sizing: border-box !important;
     width: 18px;
     height: 18px;
-    box-sizing: border-box !important;
   }
 `;
 

@@ -18,8 +18,8 @@ registerStyles(
     }
 
     ::slotted(*) {
-      width: 100%;
       box-sizing: border-box;
+      width: 100%;
     }
   `,
   { moduleId: 'vaadin-grid-filter-styles' },

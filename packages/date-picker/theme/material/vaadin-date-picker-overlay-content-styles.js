@@ -22,8 +22,8 @@ registerStyles(
     }
 
     [part='overlay-header'] {
-      position: relative;
       display: flex;
+      position: relative;
       align-items: baseline;
       padding: 8px;
       border-bottom: 2px solid var(--material-primary-color);
@@ -73,14 +73,14 @@ registerStyles(
     }
 
     [part='years-toggle-button']::after {
+      content: var(--material-icons-play);
       display: inline-block;
       width: 24px;
-      content: var(--material-icons-play);
+      transition: transform 100ms cubic-bezier(0.4, 0, 0.2, 1);
       font-family: 'material-icons';
       font-size: var(--material-icon-font-size);
       line-height: 24px;
       text-align: center;
-      transition: transform 100ms cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     :host([years-visible]) [part='years-toggle-button']::after {
@@ -104,9 +104,9 @@ registerStyles(
     ::slotted([slot='years'])::before {
       width: 8px;
       height: 8px;
+      transform: translateX(-50%) rotate(-45deg);
       border: 0;
       background: var(--material-background-color);
-      transform: translateX(-50%) rotate(-45deg);
     }
 
     [part='toolbar'] {

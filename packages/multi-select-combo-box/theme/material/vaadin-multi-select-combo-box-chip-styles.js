@@ -12,13 +12,13 @@ import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themab
 const chip = css`
   :host {
     height: 1.25rem;
+    margin-inline-end: 0.25rem;
     border-radius: 4px;
     background-color: rgba(0, 0, 0, 0.08);
-    cursor: default;
     font-family: var(--material-font-family);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    margin-inline-end: 0.25rem;
+    cursor: default;
   }
 
   :host([focused]) {
@@ -32,13 +32,13 @@ const chip = css`
 
   :host([slot='overflow'])::before,
   :host([slot='overflow'])::after {
+    content: '';
     position: absolute;
     width: 100%;
     height: 100%;
-    border-color: rgba(0, 0, 0, 0.08);
-    border-radius: 0.25rem;
     border-left: 0.125rem solid;
-    content: '';
+    border-radius: 0.25rem;
+    border-color: rgba(0, 0, 0, 0.08);
   }
 
   :host([slot='overflow'])::before {
@@ -75,15 +75,15 @@ const chip = css`
   /* Override field button */
   [part='remove-button'] {
     display: flex;
-    width: 20px;
-    height: 20px;
     box-sizing: border-box;
     align-items: center;
     justify-content: center;
+    width: 20px;
+    height: 20px;
+    margin-inline-start: auto;
     padding: 0;
     font-size: 0.75em;
     line-height: 20px;
-    margin-inline-start: auto;
   }
 
   [part='remove-button']::before {

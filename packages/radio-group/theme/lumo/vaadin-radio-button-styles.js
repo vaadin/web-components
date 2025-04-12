@@ -13,17 +13,17 @@ registerStyles(
       --_focus-ring-color: var(--vaadin-focus-ring-color, var(--lumo-primary-color-50pct));
       --_focus-ring-width: var(--vaadin-focus-ring-width, 2px);
       --_selection-color: var(--vaadin-selection-color, var(--lumo-primary-color));
+      outline: none;
       color: var(--vaadin-radio-button-label-color, var(--lumo-body-text-color));
-      cursor: default;
       font-family: var(--lumo-font-family);
       font-size: var(--vaadin-radio-button-label-font-size, var(--lumo-font-size-m));
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
       line-height: var(--lumo-line-height-s);
-      outline: none;
-      -webkit-tap-highlight-color: transparent;
+      cursor: default;
       -webkit-user-select: none;
       user-select: none;
+      -webkit-tap-highlight-color: transparent;
     }
 
     :host([has-label]) ::slotted(label) {
@@ -39,13 +39,13 @@ registerStyles(
       position: relative;
       width: var(--_radio-button-size);
       height: var(--_radio-button-size);
-      border-radius: 50%;
       margin: var(--lumo-space-xs);
-      background: var(--vaadin-radio-button-background, var(--lumo-contrast-20pct));
-      cursor: var(--lumo-clickable-cursor);
       transition:
         transform 0.2s cubic-bezier(0.12, 0.32, 0.54, 2),
         background-color 0.15s;
+      border-radius: 50%;
+      background: var(--vaadin-radio-button-background, var(--lumo-contrast-20pct));
+      cursor: var(--lumo-clickable-cursor);
       will-change: transform;
     }
 
@@ -53,34 +53,34 @@ registerStyles(
     [part='radio']::before {
       width: 100%;
       height: 100%;
-      border-radius: inherit;
-      background-color: inherit;
-      color: transparent;
-      line-height: var(--_radio-button-size);
-      opacity: 0;
-      pointer-events: none;
       transform: scale(1.4);
       transition:
         transform 0.1s,
         opacity 0.8s;
+      border-radius: inherit;
+      opacity: 0;
+      background-color: inherit;
+      color: transparent;
+      line-height: var(--_radio-button-size);
+      pointer-events: none;
       will-change: transform, opacity;
     }
 
     /* Used for the dot */
     [part='radio']::after {
+      content: '';
       position: absolute;
       top: 50%;
       left: 50%;
       width: 0;
       height: 0;
+      transform: translate(-50%, -50%) scale(0);
+      transition: 0.25s transform;
       border: var(--vaadin-radio-button-dot-size, 3px) solid
         var(--vaadin-radio-button-dot-color, var(--lumo-primary-contrast-color));
       border-radius: 50%;
       background-clip: content-box;
-      content: '';
       pointer-events: none;
-      transform: translate(-50%, -50%) scale(0);
-      transition: 0.25s transform;
       will-change: transform;
     }
 
@@ -110,9 +110,9 @@ registerStyles(
     }
 
     :host([active]:not([checked])) [part='radio']::before {
-      opacity: 0.4;
       transform: scale(0);
       transition-duration: 0.01s, 0.01s;
+      opacity: 0.4;
     }
 
     :host([focus-ring]) [part='radio'] {

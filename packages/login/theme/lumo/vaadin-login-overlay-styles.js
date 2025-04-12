@@ -43,17 +43,17 @@ const loginOverlayWrapper = css`
 
   [part='content'] {
     display: flex;
-    height: 100%;
     align-items: center;
     justify-content: center;
+    height: 100%;
     padding: 0;
   }
 
   [part='card'] {
     width: calc(var(--lumo-size-m) * 10);
     height: auto;
-    border-radius: var(--lumo-border-radius-l);
     margin: var(--lumo-space-s);
+    border-radius: var(--lumo-border-radius-l);
     background: var(--lumo-base-color) linear-gradient(var(--lumo-tint-5pct), var(--lumo-tint-5pct));
     box-shadow: var(--lumo-box-shadow-s);
   }
@@ -66,16 +66,16 @@ const loginOverlayWrapper = css`
     }
 
     [part='content'] {
-      min-height: 100%;
       align-items: flex-start;
+      min-height: 100%;
       background: var(--lumo-base-color);
     }
 
     [part='card'],
     [part='overlay'] {
       width: 100%;
-      border-radius: 0;
       margin: 0;
+      border-radius: 0;
       box-shadow: none;
     }
 
@@ -88,10 +88,10 @@ const loginOverlayWrapper = css`
   /* Landscape small screen */
   @media only screen and (max-height: 600px) and (min-width: 600px) and (orientation: landscape) {
     [part='card'] {
-      width: 100%;
-      max-width: calc(var(--lumo-size-m) * 16);
       flex-direction: row;
       align-items: stretch;
+      width: 100%;
+      max-width: calc(var(--lumo-size-m) * 16);
     }
 
     [part='brand'],
@@ -106,8 +106,8 @@ const loginOverlayWrapper = css`
     }
 
     [part='form'] {
-      overflow: auto;
       padding: var(--lumo-space-l);
+      overflow: auto;
     }
   }
 
@@ -119,18 +119,18 @@ const loginOverlayWrapper = css`
     }
 
     [part='card'] {
+      flex: auto;
       width: 100%;
       max-width: none;
       height: 100%;
-      flex: auto;
-      border-radius: 0;
       margin: 0;
+      border-radius: 0;
       box-shadow: none;
     }
 
     [part='form'] {
-      overflow: auto;
       height: 100%;
+      overflow: auto;
       -webkit-overflow-scrolling: touch;
     }
   }
@@ -143,8 +143,8 @@ const loginOverlayWrapper = css`
     }
 
     [part='brand'] {
-      padding-left: calc(var(--lumo-space-l) + env(safe-area-inset-left));
       margin-left: calc(env(safe-area-inset-left) * -1);
+      padding-left: calc(var(--lumo-space-l) + env(safe-area-inset-left));
     }
 
     /* RTL styles */
@@ -154,8 +154,8 @@ const loginOverlayWrapper = css`
     }
 
     :host([dir='rtl']) [part='brand'] {
-      padding-right: calc(var(--lumo-space-l) + env(safe-area-inset-left));
       margin-right: calc(env(safe-area-inset-left) * -1);
+      padding-right: calc(var(--lumo-space-l) + env(safe-area-inset-left));
     }
   }
 `;
@@ -167,16 +167,16 @@ registerStyles('vaadin-login-overlay-wrapper', [color, typography, overlay, logi
 const loginFormWrapper = css`
   :host([theme~='with-overlay']) {
     display: flex;
+    justify-content: center;
     max-width: 100%;
     min-height: 100%;
-    justify-content: center;
   }
 
   /* Landscape small screen */
   @media only screen and (max-height: 600px) and (min-width: 600px) and (orientation: landscape) {
     :host([theme~='with-overlay']) [part='form'] {
-      height: 100%;
       flex: 1;
+      height: 100%;
       padding: 2px;
       -webkit-overflow-scrolling: touch;
     }

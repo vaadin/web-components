@@ -26,9 +26,9 @@ export const sideNavItemBaseStyles = css`
 
   [part='link'] {
     display: flex;
-    min-width: 0;
     flex: auto;
     align-items: center;
+    min-width: 0;
     color: inherit;
     font: inherit;
     text-decoration: none;
@@ -37,17 +37,17 @@ export const sideNavItemBaseStyles = css`
   button {
     position: relative;
     flex: none;
+    margin: 0;
     padding: 0;
     border: 0;
-    margin: 0;
+    background: transparent;
     -webkit-appearance: none;
     appearance: none;
-    background: transparent;
   }
 
   [part='children'] {
-    padding: 0;
     margin: 0;
+    padding: 0;
     list-style-type: none;
   }
 
@@ -62,9 +62,9 @@ export const sideNavItemBaseStyles = css`
 
   slot:not([name]) {
     display: block;
-    overflow: hidden;
-    min-width: 0;
     flex: auto;
+    min-width: 0;
+    overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
@@ -81,22 +81,22 @@ export const sideNavBaseStyles = css`
 
   button {
     display: flex;
-    width: 100%;
     align-items: center;
     justify-content: inherit;
+    width: 100%;
+    margin: 0;
     padding: 0;
     border: initial;
-    margin: 0;
+    outline: none;
     background-color: initial;
     color: inherit;
     font: inherit;
-    outline: none;
     text-align: inherit;
   }
 
   [part='children'] {
-    padding: 0;
     margin: 0;
+    padding: 0;
     list-style-type: none;
   }
 `;

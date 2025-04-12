@@ -6,9 +6,9 @@ registerStyles(
   'vaadin-grid-sorter',
   css`
     :host {
-      height: 100%;
       align-items: center;
       justify-content: flex-start;
+      height: 100%;
       -webkit-user-select: none;
       user-select: none;
     }
@@ -24,18 +24,18 @@ registerStyles(
     [part='indicators']::before {
       display: inline-block;
       width: 24px;
-      font-family: 'material-icons';
-      font-size: 18px;
-      line-height: 18px;
-      opacity: 0.5;
       transition:
         0.1s opacity cubic-bezier(0.4, 0, 0.2, 0.1),
         0.1s width cubic-bezier(0.4, 0, 0.2, 0.1);
+      opacity: 0.5;
+      font-family: 'material-icons';
+      font-size: 18px;
+      line-height: 18px;
     }
 
     :host(:not([direction])) [part='indicators']::before {
-      width: 0;
       content: var(--material-icons-arrow-upward);
+      width: 0;
       opacity: 0;
     }
 

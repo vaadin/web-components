@@ -8,32 +8,32 @@ registerStyles(
       position: relative;
       top: -0.2px; /* NOTE(platosha): Adjusts for wrong flex baseline in Chrome & Safari */
       height: 32px;
+      margin: 0;
       padding-right: 0;
       padding-left: 0;
-      margin: 0;
       background-color: transparent;
     }
 
     :host::before,
     :host::after {
+      content: '';
       position: absolute;
       right: 0;
       bottom: 0;
       left: 0;
       height: 1px;
-      background-color: var(--_material-text-field-input-line-background-color, #000);
-      content: '';
-      opacity: var(--_material-text-field-input-line-opacity, 0.42);
       transform-origin: 50% 0%;
+      opacity: var(--_material-text-field-input-line-opacity, 0.42);
+      background-color: var(--_material-text-field-input-line-background-color, #000);
     }
 
     :host::after {
       bottom: 0;
       height: 2px;
-      background-color: var(--material-primary-color);
-      opacity: 0;
       transform: scaleX(0);
       transition: opacity 0.175s;
+      opacity: 0;
+      background-color: var(--material-primary-color);
     }
 
     ::slotted(:not([slot$='fix'])) {
@@ -68,12 +68,12 @@ registerStyles(
 
     /* Invalid */
     :host([invalid])::after {
-      background-color: var(--material-error-color);
-      opacity: 1;
       transform: none;
       transition:
         transform 0.175s,
         opacity 0.175s;
+      opacity: 1;
+      background-color: var(--material-error-color);
     }
   `,
   { moduleId: 'material-input-container' },

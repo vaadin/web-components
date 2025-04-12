@@ -42,9 +42,9 @@ class BoardRow extends BoardRowMixin(ElementMixin(PolylitMixin(LitElement))) {
       }
 
       :host ::slotted(*) {
-        overflow: hidden;
         box-sizing: border-box;
         flex-grow: 1;
+        overflow: hidden;
       }
     `;
   }

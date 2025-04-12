@@ -12,28 +12,28 @@ registerStyles(
       --_focus-ring-width: var(--vaadin-focus-ring-width, 2px);
       --_selection-color: var(--vaadin-selection-color, var(--lumo-primary-color));
       --_selection-color-text: var(--vaadin-selection-color-text, var(--lumo-primary-text-color));
-      position: relative;
       display: flex;
-      overflow: hidden;
-      min-width: var(--lumo-size-m);
+      position: relative;
       box-sizing: border-box;
       flex-shrink: 0;
       align-items: center;
+      min-width: var(--lumo-size-m);
       padding: 0.5rem 0.75rem;
+      overflow: hidden;
+      transform-origin: 50% 100%;
+      transition:
+        0.15s color,
+        0.2s transform;
+      outline: none;
+      opacity: 1;
       color: var(--lumo-secondary-text-color);
-      cursor: var(--lumo-clickable-cursor);
       font-family: var(--lumo-font-family);
       font-size: var(--lumo-font-size-m);
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
       font-weight: 500;
       line-height: var(--lumo-line-height-xs);
-      opacity: 1;
-      outline: none;
-      transform-origin: 50% 100%;
-      transition:
-        0.15s color,
-        0.2s transform;
+      cursor: var(--lumo-clickable-cursor);
       -webkit-user-select: none;
       user-select: none;
     }
@@ -67,29 +67,29 @@ registerStyles(
     }
 
     :host([selected]) {
-      color: var(--_selection-color-text);
       transition: 0.6s color;
+      color: var(--_selection-color-text);
     }
 
     :host([active]:not([selected])) {
-      color: var(--_selection-color-text);
       transition-duration: 0.1s;
+      color: var(--_selection-color-text);
     }
 
     :host::before,
     :host::after {
+      content: '';
+      display: var(--_lumo-tab-marker-display, block);
       position: absolute;
       bottom: 0;
       left: 50%;
-      display: var(--_lumo-tab-marker-display, block);
       width: var(--lumo-size-s);
       height: 2px;
-      border-radius: var(--lumo-border-radius-s) var(--lumo-border-radius-s) 0 0;
-      background-color: var(--lumo-contrast-60pct);
-      content: '';
       transform: translateX(-50%) scale(0);
       transform-origin: 50% 100%;
       transition: 0.14s transform cubic-bezier(0.12, 0.32, 0.54, 1);
+      border-radius: var(--lumo-border-radius-s) var(--lumo-border-radius-s) 0 0;
+      background-color: var(--lumo-contrast-60pct);
       will-change: transform;
     }
 
@@ -99,24 +99,24 @@ registerStyles(
       left: 0;
       width: 2px;
       height: var(--lumo-size-xs);
-      border-radius: 0 var(--lumo-border-radius-s) var(--lumo-border-radius-s) 0;
       transform: translateY(50%) scale(0);
       transform-origin: 100% 50%;
+      border-radius: 0 var(--lumo-border-radius-s) var(--lumo-border-radius-s) 0;
     }
 
     :host::after {
-      box-shadow: 0 0 0 4px var(--_selection-color);
-      opacity: 0.15;
       transition:
         0.15s 0.02s transform,
         0.8s 0.17s opacity;
+      opacity: 0.15;
+      box-shadow: 0 0 0 4px var(--_selection-color);
     }
 
     :host([selected])::before,
     :host([selected])::after {
-      background-color: var(--_selection-color);
       transform: translateX(-50%) scale(1);
       transition-timing-function: cubic-bezier(0.12, 0.32, 0.54, 1.5);
+      background-color: var(--_selection-color);
     }
 
     :host([orientation='vertical'][selected])::before,
@@ -134,18 +134,18 @@ registerStyles(
 
     :host ::slotted(a) {
       display: flex;
+      align-items: center;
       width: 100%;
       height: 100%;
-      align-items: center;
-      padding: 0.5rem 0.75rem;
       margin: -0.5rem -0.75rem;
-      color: inherit !important;
+      padding: 0.5rem 0.75rem;
       outline: none;
+      color: inherit !important;
 
       /*
-        Override the CSS inherited from \\\`lumo-color\\\` and \\\`lumo-typography\\\`.
-        Note: \\\`!important\\\` is needed because of the \\\`:slotted\\\` specificity.
-      */
+      Override the CSS inherited from \\\\\\\`lumo-color\\\\\\\` and \\\\\\\`lumo-typography\\\\\\\`.
+      Note: \\\\\\\`!important\\\\\\\` is needed because of the \\\\\\\`:slotted\\\\\\\` specificity.
+    */
       text-decoration: none !important;
     }
 
@@ -182,8 +182,8 @@ registerStyles(
     :host([theme~='icon-on-top']) ::slotted(a) {
       flex-direction: column;
       align-items: center;
-      padding-top: 0.25rem;
       margin-top: -0.25rem;
+      padding-top: 0.25rem;
     }
 
     :host([theme~='icon-on-top']) ::slotted(vaadin-icon) {
@@ -193,8 +193,8 @@ registerStyles(
     /* Disabled */
 
     :host([disabled]) {
-      color: var(--lumo-disabled-text-color);
       opacity: 1;
+      color: var(--lumo-disabled-text-color);
       pointer-events: none;
     }
 
@@ -235,8 +235,8 @@ registerStyles(
     :host([dir='rtl'][orientation='vertical'])::after {
       right: 0;
       left: auto;
-      border-radius: var(--lumo-border-radius-s) 0 0 var(--lumo-border-radius-s);
       transform-origin: 0% 50%;
+      border-radius: var(--lumo-border-radius-s) 0 0 var(--lumo-border-radius-s);
     }
   `,
   { moduleId: 'lumo-tab' },

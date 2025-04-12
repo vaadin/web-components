@@ -14,8 +14,8 @@ const contextMenuListBox = css`
     padding-right: calc(var(--lumo-space-l) + var(--lumo-border-radius-m) / 4);
     padding-left: calc(var(--lumo-border-radius-m) / 4);
     border-radius: var(--lumo-border-radius-m);
-    cursor: default;
     outline: none;
+    cursor: default;
     -webkit-tap-highlight-color: var(--lumo-primary-color-10pct);
   }
 

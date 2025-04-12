@@ -55,12 +55,12 @@ registerStyles(
 
     [part~='date'],
     [part='week-number'] {
-      position: relative;
       display: inline-flex;
-      height: var(--lumo-size-m);
+      position: relative;
       box-sizing: border-box;
       align-items: center;
       justify-content: center;
+      height: var(--lumo-size-m);
     }
 
     [part~='date'] {
@@ -85,6 +85,7 @@ registerStyles(
     /* Focused date */
 
     [part~='date']::before {
+      content: '';
       position: absolute;
       z-index: -1;
       top: 50%;
@@ -95,9 +96,8 @@ registerStyles(
       height: 80%;
       min-height: 2em;
       max-height: 100%;
-      border-radius: var(--lumo-border-radius-m);
-      content: '';
       transform: translate(-50%, -50%);
+      border-radius: var(--lumo-border-radius-m);
     }
 
     [part~='date'][part~='focused']::before {

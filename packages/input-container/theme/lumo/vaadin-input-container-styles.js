@@ -31,9 +31,9 @@ registerStyles(
         var(--vaadin-input-field-bottom-end-radius, var(--_input-container-radius))
         var(--vaadin-input-field-bottom-start-radius, var(--_input-container-radius));
       background: var(--_background);
-      cursor: text;
       font-weight: var(--vaadin-input-field-value-font-weight, 500);
       line-height: 1;
+      cursor: text;
     }
 
     :host([dir='rtl']) {
@@ -47,17 +47,17 @@ registerStyles(
 
     /* Used for hover and activation effects */
     :host::after {
-      position: absolute;
-      border-radius: inherit;
-      background: var(--_hover-highlight);
       content: '';
-      inset: 0;
-      opacity: 0;
-      pointer-events: none;
+      position: absolute;
       transform-origin: 100% 0;
       transition:
         transform 0.15s,
         opacity 0.2s;
+      border-radius: inherit;
+      opacity: 0;
+      background: var(--_hover-highlight);
+      pointer-events: none;
+      inset: 0;
     }
 
     ::slotted(:not([slot$='fix'])) {
@@ -78,8 +78,8 @@ registerStyles(
 
     :host([readonly])::after {
       border: var(--vaadin-input-field-readonly-border, 1px dashed var(--lumo-contrast-30pct));
-      background-color: transparent;
       opacity: 1;
+      background-color: transparent;
     }
 
     /* Disabled */

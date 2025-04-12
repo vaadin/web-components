@@ -22,22 +22,22 @@ const loginOverlayWrapper = css`
 
   [part='content'] {
     display: flex;
-    min-height: 100%;
     align-items: center;
     justify-content: center;
+    min-height: 100%;
     padding: 0;
   }
 
   [part='card'] {
     display: flex;
-    overflow: hidden;
+    box-sizing: border-box;
+    flex-direction: column;
     min-width: 400px;
     max-width: 100%;
     height: 100%;
-    box-sizing: border-box;
-    flex-direction: column;
-    border-radius: 4px;
     margin: 0.5em;
+    overflow: hidden;
+    border-radius: 4px;
     background: var(--material-secondary-background-color);
     box-shadow:
       0 19px 38px rgba(0, 0, 0, 0.04),
@@ -46,14 +46,14 @@ const loginOverlayWrapper = css`
 
   [part='brand'] {
     display: flex;
-    overflow: hidden;
-    min-height: 225px;
     box-sizing: border-box;
     flex-direction: column;
     flex-grow: 1;
     flex-shrink: 0;
     justify-content: flex-start;
+    min-height: 225px;
     padding: 2.8rem 2.5rem 1.5rem 3.5rem;
+    overflow: hidden;
     background-color: var(--material-primary-color);
     color: var(--material-primary-contrast-color);
   }
@@ -89,8 +89,8 @@ const loginOverlayWrapper = css`
   /* Small screen */
   @media only screen and (max-width: 1023px) {
     [part='brand'] {
-      min-height: 330px;
       justify-content: center;
+      min-height: 330px;
       padding: 0 2.5rem 5.5rem 2rem;
     }
 
@@ -120,29 +120,29 @@ const loginOverlayWrapper = css`
     }
 
     [part='content'] {
-      min-height: 100%;
       align-items: flex-start;
+      min-height: 100%;
       background: var(--material-background-color);
     }
 
     [part='card'] {
-      overflow: auto;
       min-width: unset;
       max-height: none;
+      overflow: auto;
     }
 
     [part='card'],
     [part='overlay'] {
       width: 100%;
-      border-radius: 0;
       margin: 0;
+      border-radius: 0;
       box-shadow: none;
     }
 
     [part='brand'] {
-      min-height: 225px;
       flex-grow: unset;
       justify-content: flex-start;
+      min-height: 225px;
       padding: 2.5rem 2.5rem 1.5rem;
     }
   }
@@ -154,11 +154,11 @@ const loginOverlayWrapper = css`
     }
 
     [part='card'] {
+      flex-direction: row;
       width: 100%;
       height: 100%;
-      flex-direction: row;
-      border-radius: 0;
       margin: 0;
+      border-radius: 0;
     }
 
     [part='brand'] {
@@ -168,16 +168,16 @@ const loginOverlayWrapper = css`
     }
 
     [part='form'] {
-      overflow: auto;
-      height: 100%;
       flex: auto;
       flex-basis: 0;
+      height: 100%;
       margin: 0;
+      overflow: auto;
     }
 
     [part='form'] ::slotted(*) {
-      bottom: 0;
       display: flex;
+      bottom: 0;
       min-height: 100%;
       max-height: none;
       margin: unset;
@@ -187,12 +187,12 @@ const loginOverlayWrapper = css`
   /* Landscape big screen */
   @media only screen and (min-width: 1024px) {
     [part='card'] {
+      flex-direction: row;
+      align-items: stretch;
       width: 100%;
       max-width: 760px;
       height: auto;
       min-height: 0;
-      flex-direction: row;
-      align-items: stretch;
     }
 
     [part='content'] {
@@ -287,14 +287,14 @@ const loginOverlayWrapper = css`
     }
 
     :host(:not([dir='rtl'])) [part='brand'] {
-      padding-left: calc(1.5rem + env(safe-area-inset-bottom));
       margin-left: calc(env(safe-area-inset-bottom) * -1);
+      padding-left: calc(1.5rem + env(safe-area-inset-bottom));
     }
 
     /* RTL styles */
     :host([dir='rtl']) [part='brand'] {
-      padding-right: calc(1.5rem + env(safe-area-inset-bottom));
       margin-right: calc(env(safe-area-inset-bottom) * -1);
+      padding-right: calc(1.5rem + env(safe-area-inset-bottom));
     }
   }
 `;
@@ -306,8 +306,8 @@ registerStyles('vaadin-login-overlay-wrapper', [overlay, typography, loginOverla
 const loginFormWrapper = css`
   :host([theme~='with-overlay']) {
     display: flex;
-    width: 100%;
     justify-content: center;
+    width: 100%;
   }
 
   :host([theme~='with-overlay']) [part='form'] {

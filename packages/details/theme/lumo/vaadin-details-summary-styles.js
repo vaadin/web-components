@@ -9,21 +9,21 @@ import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themab
 const detailsSummary = css`
   :host {
     display: flex;
-    width: 100%;
     box-sizing: border-box;
     align-items: center;
+    width: 100%;
     padding: var(--lumo-space-s) 0;
     border-radius: var(--lumo-border-radius-m);
+    outline: none;
     background-color: inherit;
     color: var(--lumo-secondary-text-color);
-    cursor: var(--lumo-clickable-cursor);
     font-family: var(--lumo-font-family);
     font-size: var(--lumo-font-size-m);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     font-weight: 500;
     line-height: var(--lumo-line-height-xs);
-    outline: none;
+    cursor: var(--lumo-clickable-cursor);
     -webkit-tap-highlight-color: transparent;
   }
 
@@ -47,10 +47,10 @@ const detailsSummary = css`
     margin-right: var(--lumo-space-xs);
     margin-left: calc(var(--lumo-space-xs) * -1);
     color: var(--lumo-contrast-60pct);
-    cursor: var(--lumo-clickable-cursor);
     font-family: 'lumo-icons';
     font-size: var(--lumo-icon-size-s);
     line-height: 1;
+    cursor: var(--lumo-clickable-cursor);
   }
 
   [part='toggle']::before {

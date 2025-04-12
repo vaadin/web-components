@@ -14,10 +14,10 @@ const passwordFieldButton = css`
     width: 100%;
     min-width: auto;
     height: 100%;
-    padding: 0;
     margin: 0;
-    background: transparent;
+    padding: 0;
     outline: none;
+    background: transparent;
   }
 `;
 

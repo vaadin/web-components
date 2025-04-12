@@ -22,9 +22,9 @@ export const buttonsStyles = css`
     position: relative;
     width: 2em;
     height: 2em;
+    margin: 0;
     padding: 0;
     border: none;
-    margin: 0;
     background: transparent;
     font: inherit;
     line-height: 1;
@@ -120,10 +120,10 @@ export const buttonsStyles = css`
 
   [part~='toolbar-button-subscript']::after,
   [part~='toolbar-button-superscript']::after {
+    content: '2';
     position: absolute;
     top: 50%;
     left: 70%;
-    content: '2';
     font-size: 0.625em;
   }
 
@@ -132,8 +132,8 @@ export const buttonsStyles = css`
   }
 
   [part~='toolbar-button-blockquote']::before {
+    content: '\\\\\\\\201D';
     height: 0.6em;
-    content: '\\\\201D';
     font-size: 2em;
   }
 
@@ -149,6 +149,7 @@ export const buttonsStyles = css`
   }
 
   [part~='toolbar-button-color']::after {
+    content: '';
     position: absolute;
     right: 25%;
     bottom: 4px;
@@ -156,7 +157,6 @@ export const buttonsStyles = css`
     width: 50%;
     height: 4px;
     background-color: var(--_color-value, currentColor);
-    content: '';
   }
 
   [part~='toolbar-button-background']::before {
@@ -164,6 +164,7 @@ export const buttonsStyles = css`
   }
 
   [part~='toolbar-button-background']::after {
+    content: '';
     position: absolute;
     background: repeating-linear-gradient(
       135deg,
@@ -172,7 +173,6 @@ export const buttonsStyles = css`
       transparent 1px,
       transparent 2px
     );
-    content: '';
     inset: 20%;
   }
 `;

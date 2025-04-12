@@ -10,31 +10,31 @@ registerStyles(
     [part='splitter'] {
       min-width: var(--lumo-space-s);
       min-height: var(--lumo-space-s);
-      background-color: var(--lumo-contrast-5pct);
       transition: 0.1s background-color;
+      background-color: var(--lumo-contrast-5pct);
     }
 
     [part='handle'] {
       display: flex;
-      width: var(--lumo-size-m);
-      height: var(--lumo-size-m);
       align-items: center;
       justify-content: center;
+      width: var(--lumo-size-m);
+      height: var(--lumo-size-m);
     }
 
     [part='handle']::after {
       --_handle-size: 4px;
+      content: '';
       display: block;
       width: var(--_handle-size);
       max-width: 100%;
       height: 100%;
       max-height: 100%;
-      border-radius: var(--lumo-border-radius-s);
-      background-color: var(--lumo-contrast-30pct);
-      content: '';
       transition:
         0.1s opacity,
         0.1s background-color;
+      border-radius: var(--lumo-border-radius-s);
+      background-color: var(--lumo-contrast-30pct);
     }
 
     :host([orientation='vertical']) [part='handle']::after {
@@ -67,8 +67,8 @@ registerStyles(
     }
 
     :host(:is([theme~='small'], [theme~='minimal'])) > [part='splitter']::after {
-      position: absolute;
       content: '';
+      position: absolute;
       inset: -4px;
     }
 

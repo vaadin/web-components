@@ -18,8 +18,8 @@ const numberField = css`
 
   [part$='decrease-button'] {
     padding-bottom: 0.21em;
-    cursor: pointer;
     font-size: var(--material-body-font-size);
+    cursor: pointer;
   }
 `;
 

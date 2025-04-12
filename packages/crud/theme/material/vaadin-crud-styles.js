@@ -8,12 +8,13 @@ registerStyles(
   'vaadin-crud-edit',
   css`
     :host {
-      position: relative;
       display: block;
+      position: relative;
       width: 2em;
       min-width: auto;
       height: 2em;
       border-radius: 4px;
+      outline: none;
       background-color: var(--material-secondary-background-color);
       color: var(--material-text-color);
       font-size: var(--material-button-font-size);
@@ -22,17 +23,16 @@ registerStyles(
       /* Reset button styles */
       letter-spacing: normal;
       line-height: 1;
-      outline: none;
     }
 
     [part='icon']::before {
+      content: '\\\\\\\\270E';
       position: absolute;
       top: 0;
       left: 0;
       width: 2em;
       height: 2em;
       color: var(--material-primary-text-color);
-      content: '\\\\270E';
       font-family: serif;
       font-size: var(--material-button-font-size);
       line-height: 2em;
@@ -79,11 +79,11 @@ registerStyles(
       }
 
       [part='editor']:focus::before {
+        content: '';
         position: absolute;
         box-shadow: inset 0 0 0 2px var(--material-primary-color);
-        content: '';
-        inset: 0;
         pointer-events: none;
+        inset: 0;
       }
 
       [part='toolbar'] {

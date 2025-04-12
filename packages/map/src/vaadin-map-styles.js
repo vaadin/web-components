@@ -13,10 +13,10 @@ import { css } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 export const mapStyles = css`
   :host {
     display: block;
-    overflow: hidden;
-    height: 400px;
     flex: 1 1 auto;
     align-self: stretch;
+    height: 400px;
+    overflow: hidden;
   }
 
   :host([hidden]) {
@@ -91,7 +91,6 @@ export const mapStyles = css`
     /* stylelint-disable declaration-block-no-redundant-longhand-properties */
     display: grid;
     box-sizing: border-box;
-    padding: var(--vaadin-map-controls-inset, 0.25em);
     grid-template-areas:
       'scale mouse-position fullscreen'
       'overview-map . zoom-extent'
@@ -101,32 +100,33 @@ export const mapStyles = css`
       'overview-map attribution attribution';
     grid-template-columns: min-content 1fr min-content;
     grid-template-rows: min-content 1fr min-content min-content min-content min-content;
+    padding: var(--vaadin-map-controls-inset, 0.25em);
   }
 
   .ol-mouse-position {
+    grid-area: mouse-position;
     align-self: start;
     color: #000;
-    filter: drop-shadow(0 0 1px #fff) drop-shadow(0 0 1px #fff);
     font-size: 0.625em;
-    grid-area: mouse-position;
     text-align: center;
+    filter: drop-shadow(0 0 1px #fff) drop-shadow(0 0 1px #fff);
   }
 
   .ol-scale-line,
   .ol-scale-bar {
     position: relative;
-    color: #000;
     grid-area: scale;
+    color: #000;
     pointer-events: none !important;
   }
 
   .ol-scale-line-inner {
+    transition: all 0.25s;
     border: 1px solid rgba(0, 0, 0, 0.5);
     border-top: none;
-    filter: drop-shadow(0 0 1px #fff) drop-shadow(0 0 1px #fff);
     font-size: 0.625em;
     text-align: center;
-    transition: all 0.25s;
+    filter: drop-shadow(0 0 1px #fff) drop-shadow(0 0 1px #fff);
     will-change: contents, width, filter;
   }
 
@@ -171,13 +171,13 @@ export const mapStyles = css`
   .ol-control button {
     width: 1.5em;
     height: 1.5em;
+    margin: 0;
     padding: 0;
     border: 0;
-    margin: 0;
-    -webkit-appearance: none;
     background: #fff;
     color: inherit;
     font: inherit;
+    -webkit-appearance: none;
   }
 
   .ol-control button::-moz-focus-inner {
@@ -193,8 +193,8 @@ export const mapStyles = css`
 
   .ol-zoom {
     display: flex;
-    flex-direction: column;
     grid-area: zoom;
+    flex-direction: column;
   }
 
   .ol-zoom-in:empty::before {
@@ -202,13 +202,13 @@ export const mapStyles = css`
   }
 
   .ol-zoom-out:empty::before {
-    content: var(--vaadin-map-icon-zoom-out, '\\\\2013');
+    content: var(--vaadin-map-icon-zoom-out, '\\\\\\\\2013');
   }
 
   .ol-attribution {
     display: flex;
-    flex-flow: row-reverse;
     grid-area: attribution;
+    flex-flow: row-reverse;
     margin-inline-start: auto !important;
   }
 
@@ -218,21 +218,21 @@ export const mapStyles = css`
   }
 
   .ol-attribution button span:empty::before {
-    content: var(--vaadin-map-icon-attribution-collapse, '\\\\25B8');
+    content: var(--vaadin-map-icon-attribution-collapse, '\\\\\\\\25B8');
   }
 
   .ol-attribution.ol-collapsed button span:empty::before {
-    content: var(--vaadin-map-icon-attribution-expand, '\\\\2139');
+    content: var(--vaadin-map-icon-attribution-expand, '\\\\\\\\2139');
   }
 
   .ol-attribution ul {
     display: flex;
     align-items: center;
-    padding: 0.25em 0.5em;
     margin: 0;
+    padding: 0.25em 0.5em;
     font-size: 0.8em;
-    gap: 1em;
     list-style: none;
+    gap: 1em;
   }
 
   .ol-attribution.ol-collapsed ul {
@@ -248,7 +248,7 @@ export const mapStyles = css`
   }
 
   .ol-compass:empty::before {
-    content: var(--vaadin-map-icon-compass, '\\\\2191');
+    content: var(--vaadin-map-icon-compass, '\\\\\\\\2191');
   }
 
   .ol-full-screen {
@@ -256,25 +256,25 @@ export const mapStyles = css`
   }
 
   .ol-full-screen button:empty::before {
-    content: var(--vaadin-map-icon-fullscreen, '\\\\2922');
+    content: var(--vaadin-map-icon-fullscreen, '\\\\\\\\2922');
   }
 
   .ol-full-screen .ol-full-screen-true:empty::before {
-    content: var(--vaadin-map-icon-close, '\\\\00D7');
+    content: var(--vaadin-map-icon-close, '\\\\\\\\00D7');
   }
 
   .ol-overviewmap {
-    width: max-content;
-    align-self: end;
     grid-area: overview-map;
+    align-self: end;
+    width: max-content;
   }
 
   .ol-overviewmap button span:empty::before {
-    content: var(--vaadin-map-icon-overview-map-collapse, '\\\\25BE');
+    content: var(--vaadin-map-icon-overview-map-collapse, '\\\\\\\\25BE');
   }
 
   .ol-overviewmap.ol-collapsed button span:empty::before {
-    content: var(--vaadin-map-icon-overview-map-expand, '\\\\25B4');
+    content: var(--vaadin-map-icon-overview-map-expand, '\\\\\\\\25B4');
   }
 
   .ol-overviewmap-map {
@@ -296,19 +296,19 @@ export const mapStyles = css`
   }
 
   .ol-zoomslider {
-    height: 8em;
     grid-area: zoom-slider;
+    height: 8em;
   }
 
   .ol-zoomslider button {
-    position: relative;
     display: block;
+    position: relative;
     height: 0.5em;
     border-radius: inherit;
   }
 
   .ol-zoom-extent {
-    align-self: end;
     grid-area: zoom-extent;
+    align-self: end;
   }
 `;

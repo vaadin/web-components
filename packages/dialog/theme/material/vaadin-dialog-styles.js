@@ -7,8 +7,8 @@ const dialogOverlay = css`
   [part='overlay'] {
     min-width: 280px;
     max-width: 560px;
-    box-shadow: var(--material-shadow-elevation-24dp);
     outline: none;
+    box-shadow: var(--material-shadow-elevation-24dp);
     -webkit-tap-highlight-color: transparent;
   }
 
@@ -32,9 +32,9 @@ const dialogOverlay = css`
   }
 
   [part='title'] {
+    margin-inline-start: 8px;
     font-size: var(--material-h5-font-size);
     font-weight: 500;
-    margin-inline-start: 8px;
   }
 
   [part='footer'] {

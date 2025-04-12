@@ -17,11 +17,11 @@ registerStyles(
     }
 
     [part='handle']::after {
+      content: '';
       display: block;
       width: 2px;
       height: 24px;
       background-color: var(--material-background-color);
-      content: '';
     }
 
     :host([orientation='vertical']) [part='handle']::after {

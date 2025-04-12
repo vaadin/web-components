@@ -22,16 +22,16 @@ const select = css`
 
   /* placeholder styles */
   :host [part='input-field'] ::slotted([slot='value'][placeholder]) {
-    color: var(--material-disabled-text-color);
-    opacity: 1;
     transition: opacity 0.175s 0.1s;
+    opacity: 1;
+    color: var(--material-disabled-text-color);
   }
 
   :host([has-label]:not([focused]):not([invalid]):not([theme='always-float-label']))
     ::slotted([slot='value'][placeholder]) {
-    opacity: 0;
     /* Avoid a flash of the placeholder text on init */
     transition: none;
+    opacity: 0;
   }
 
   :host [part='input-field'] ::slotted([slot='value']) {

@@ -11,19 +11,19 @@ export const sideNavStyles = css`
 
   [part='label'] {
     display: flex;
-    width: 100%;
-    min-height: 40px;
     box-sizing: border-box;
     align-items: center;
+    width: 100%;
+    min-height: 40px;
+    margin: 4px 0;
     padding: 4px 8px;
     border-radius: 4px;
-    margin: 4px 0;
+    outline: none;
     color: var(--material-secondary-text-color);
     font-family: var(--material-font-family);
     font-size: var(--material-small-font-size);
     font-weight: 500;
     line-height: 1;
-    outline: none;
   }
 
   :host([focus-ring]) [part='label'] {
@@ -32,17 +32,17 @@ export const sideNavStyles = css`
 
   [part='toggle-button'] {
     display: inline-flex;
-    width: 24px;
-    height: 24px;
     align-items: center;
     justify-content: center;
+    width: 24px;
+    height: 24px;
+    margin-inline: auto -4px;
     padding: 4px;
+    transform: rotate(90deg);
     color: var(--material-secondary-text-color);
     font-family: 'material-icons';
     font-size: var(--material-icon-font-size);
     line-height: 1;
-    margin-inline: auto -4px;
-    transform: rotate(90deg);
   }
 
   [part='toggle-button']::before {

@@ -20,15 +20,15 @@ export const sideNavStyles = css`
 
   [part='label'] {
     display: flex;
-    width: 100%;
     box-sizing: border-box;
     align-items: center;
+    width: 100%;
     border-radius: var(--lumo-border-radius-m);
+    outline: none;
     font-family: var(--lumo-font-family);
     font-size: var(--lumo-font-size-s);
     font-weight: 500;
     line-height: var(--lumo-line-height-xs);
-    outline: none;
   }
 
   [part='label'] ::slotted([slot='label']) {
@@ -42,16 +42,16 @@ export const sideNavStyles = css`
 
   [part='toggle-button'] {
     display: inline-flex;
-    width: var(--lumo-size-s);
-    height: var(--lumo-size-s);
     align-items: center;
     justify-content: center;
+    width: var(--lumo-size-s);
+    height: var(--lumo-size-s);
+    margin-inline: auto var(--lumo-space-xs);
     color: var(--lumo-contrast-60pct);
-    cursor: var(--lumo-clickable-cursor);
     font-family: 'lumo-icons';
     font-size: var(--lumo-icon-size-m);
     line-height: 1;
-    margin-inline: auto var(--lumo-space-xs);
+    cursor: var(--lumo-clickable-cursor);
   }
 
   [part='toggle-button']::before {

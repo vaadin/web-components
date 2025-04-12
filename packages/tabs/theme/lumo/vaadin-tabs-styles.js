@@ -38,18 +38,18 @@ registerStyles(
 
     [part='forward-button'],
     [part='back-button'] {
+      display: flex;
       position: absolute;
       z-index: 1;
       top: 0;
-      display: flex;
-      width: 1.5em;
-      height: 100%;
       align-items: center;
       justify-content: center;
+      width: 1.5em;
+      height: 100%;
+      transition: 0.2s opacity;
       color: var(--lumo-tertiary-text-color);
       font-family: lumo-icons;
       font-size: var(--lumo-icon-size-m);
-      transition: 0.2s opacity;
     }
 
     [part='forward-button']:hover,

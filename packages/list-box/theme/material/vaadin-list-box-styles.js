@@ -15,9 +15,9 @@ const listBox = css`
   /* Dividers */
   [part='items'] ::slotted(hr) {
     height: 1px;
+    margin: 8px 0;
     padding: 0;
     border: 0;
-    margin: 8px 0;
     background-color: var(--material-divider-color);
   }
 `;

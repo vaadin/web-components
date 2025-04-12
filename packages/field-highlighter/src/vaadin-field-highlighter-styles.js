@@ -8,15 +8,15 @@ import { css } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 export const fieldOutlineStyles = css`
   :host {
     --_active-user-color: transparent;
-    position: absolute;
     display: block;
+    position: absolute;
+    box-sizing: border-box;
     width: 100%;
     height: 100%;
-    box-sizing: border-box;
-    inset: 0;
     opacity: 0;
     pointer-events: none;
     user-select: none;
+    inset: 0;
   }
 
   :host([has-active-user]) {
@@ -28,14 +28,14 @@ export const userTagStyles = css`
   :host {
     --vaadin-user-tag-offset: 4px;
     display: block;
-    height: 1.3rem;
     box-sizing: border-box;
+    height: 1.3rem;
     margin: 0 0 var(--vaadin-user-tag-offset);
+    transition: opacity 0.2s ease-in-out;
+    opacity: 0;
     background-color: var(--vaadin-user-tag-color);
     color: #fff;
     cursor: default;
-    opacity: 0;
-    transition: opacity 0.2s ease-in-out;
     -webkit-user-select: none;
     user-select: none;
   }
@@ -49,10 +49,10 @@ export const userTagStyles = css`
   }
 
   [part='name'] {
-    overflow: hidden;
-    height: 1.3rem;
     box-sizing: border-box;
+    height: 1.3rem;
     padding: 2px 4px;
+    overflow: hidden;
     font-size: 13px;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -68,11 +68,11 @@ export const userTagsOverlayStyles = css`
   :scope [part='overlay'] {
     position: relative;
     left: -4px;
-    overflow: visible;
     padding: 4px;
+    overflow: visible;
+    outline: none;
     background: transparent;
     box-shadow: none;
-    outline: none;
   }
 
   ::slotted([part='tags']) {

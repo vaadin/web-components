@@ -41,8 +41,8 @@ registerStyles(
     }
 
     [part='backdrop'] {
-      background-color: var(--lumo-shade-20pct);
       opacity: 1;
+      background-color: var(--lumo-shade-20pct);
     }
 
     [part] ::slotted(h2),

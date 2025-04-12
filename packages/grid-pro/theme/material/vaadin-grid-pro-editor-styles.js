@@ -4,8 +4,8 @@ const gridProEditor = css`
   :host([theme~='grid-pro-editor']) {
     top: 6px;
     width: 100%;
-    padding: 0;
     margin: -6px 0 0;
+    padding: 0;
     font-size: inherit;
     will-change: transform;
   }

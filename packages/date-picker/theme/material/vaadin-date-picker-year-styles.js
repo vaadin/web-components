@@ -11,17 +11,17 @@ registerStyles(
 
     [part='year-separator'] {
       display: flex;
-      height: calc(100% - 10px);
       align-items: center;
       justify-content: center;
+      height: calc(100% - 10px);
     }
 
     [part='year-separator']::before {
+      content: '';
       width: 4px;
       height: 4px;
       border-radius: 50%;
       background-color: currentColor;
-      content: '';
     }
   `,
   { moduleId: 'material-date-picker-year' },

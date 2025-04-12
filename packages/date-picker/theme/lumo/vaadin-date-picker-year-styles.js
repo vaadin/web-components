@@ -10,22 +10,22 @@ registerStyles(
 
     :host(:not([current])) [part='year-number'],
     [part='year-separator'] {
-      opacity: var(--_lumo-date-picker-year-opacity, 0.7);
       transition: 0.2s opacity;
+      opacity: var(--_lumo-date-picker-year-opacity, 0.7);
     }
 
     [part='year-number'],
     [part='year-separator'] {
       display: flex;
-      height: 50%;
       align-items: center;
       justify-content: center;
+      height: 50%;
       transform: translateY(-50%);
     }
 
     [part='year-separator']::after {
+      content: '\\\\\\\\2022';
       color: var(--lumo-disabled-text-color);
-      content: '\\\\2022';
     }
   `,
   { moduleId: 'lumo-date-picker-year' },

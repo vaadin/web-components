@@ -11,39 +11,39 @@ const item = css`
     --_focus-ring-width: var(--vaadin-focus-ring-width, 2px);
     --_selection-color-text: var(--vaadin-selection-color-text, var(--lumo-primary-text-color));
     display: flex;
-    min-height: var(--lumo-size-m);
     box-sizing: border-box;
     align-items: center;
+    min-height: var(--lumo-size-m);
     padding: 0.5em calc(var(--lumo-space-l) + var(--lumo-border-radius-m) / 4) 0.5em
       var(--_lumo-list-box-item-padding-left, calc(var(--lumo-border-radius-m) / 4));
     border-radius: var(--lumo-border-radius-m);
-    cursor: var(--lumo-clickable-cursor);
+    outline: none;
     font-family: var(--lumo-font-family);
     font-size: var(--lumo-font-size-m);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     line-height: var(--lumo-line-height-xs);
-    outline: none;
+    cursor: var(--lumo-clickable-cursor);
     -webkit-tap-highlight-color: var(--lumo-primary-color-10pct);
   }
 
   /* Checkmark */
   [part='checkmark']::before {
+    content: var(--lumo-icons-checkmark);
     display: var(--_lumo-item-selected-icon-display, none);
+    flex: none;
     width: 1em;
     height: 1em;
-    flex: none;
     margin: calc((1 - var(--lumo-line-height-xs)) * var(--lumo-font-size-m) / 2) 0;
+    transition:
+      transform 0.2s cubic-bezier(0.12, 0.32, 0.54, 2),
+      opacity 0.1s;
+    opacity: 0;
     color: var(--_selection-color-text);
-    content: var(--lumo-icons-checkmark);
     font-family: lumo-icons;
     font-size: var(--lumo-icon-size-m);
     font-weight: normal;
     line-height: 1;
-    opacity: 0;
-    transition:
-      transform 0.2s cubic-bezier(0.12, 0.32, 0.54, 2),
-      opacity 0.1s;
   }
 
   :host([selected]) [part='checkmark']::before {
@@ -51,9 +51,9 @@ const item = css`
   }
 
   :host([active]:not([selected])) [part='checkmark']::before {
-    opacity: 0;
     transform: scale(0.8);
     transition-duration: 0s;
+    opacity: 0;
   }
 
   [part='content'] {

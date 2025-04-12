@@ -34,8 +34,8 @@ class UploadFileList extends UploadFileListMixin(ThemableMixin(PolylitMixin(LitE
       }
 
       [part='list'] {
-        padding: 0;
         margin: 0;
+        padding: 0;
         list-style-type: none;
       }
     `;

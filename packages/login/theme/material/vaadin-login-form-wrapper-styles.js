@@ -39,17 +39,17 @@ const loginFormWrapper = css`
   }
 
   ::slotted([slot='forgot-password']) {
+    margin: 0.5rem auto;
     padding-top: 12px;
     padding-bottom: 12px;
-    margin: 0.5rem auto;
     text-transform: none;
   }
 
   [part='error-message'] {
-    padding: 1rem;
-    border-radius: 0.25em;
     margin-top: 1rem;
     margin-bottom: 0.5rem;
+    padding: 1rem;
+    border-radius: 0.25em;
     background-color: hsla(3, 100%, 60%, 0.1);
     color: var(--material-error-text-color);
   }
@@ -63,10 +63,10 @@ const loginFormWrapper = css`
   }
 
   [part='error-message']::before {
+    content: '!';
     position: absolute;
     width: 2.25rem;
     height: 1em;
-    content: '!';
     font-size: 1.3em;
     font-weight: 500;
     line-height: 1;
@@ -92,9 +92,9 @@ const loginFormWrapper = css`
 
   [part='error-message'] p {
     margin: 0;
+    opacity: 0.9;
     font-size: var(--material-small-font-size);
     line-height: 1.375;
-    opacity: 0.9;
   }
 
   [part='footer'] {

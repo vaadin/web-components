@@ -17,23 +17,23 @@ const button = css`
     --_lumo-button-text-color: var(--vaadin-button-text-color, var(--lumo-primary-text-color));
     --_lumo-button-primary-background: var(--vaadin-button-primary-background, var(--lumo-primary-color));
     --_lumo-button-primary-text-color: var(--vaadin-button-primary-text-color, var(--lumo-primary-contrast-color));
-    min-width: var(--vaadin-button-min-width, calc(var(--_button-size) * 2));
-    height: var(--_button-size);
     box-sizing: border-box;
     flex-shrink: 0;
+    min-width: var(--vaadin-button-min-width, calc(var(--_button-size) * 2));
+    height: var(--_button-size);
+    margin: var(--vaadin-button-margin, var(--lumo-space-xs) 0);
     padding: var(--vaadin-button-padding, 0 calc(var(--_button-size) / 3 + var(--lumo-border-radius-m) / 2));
     border: var(--vaadin-button-border, none);
     border-radius: var(--vaadin-button-border-radius, var(--lumo-border-radius-m));
-    margin: var(--vaadin-button-margin, var(--lumo-space-xs) 0);
     background: var(--_lumo-button-background);
     color: var(--_lumo-button-text-color);
-    cursor: var(--lumo-clickable-cursor);
     /* Style */
     font-family: var(--lumo-font-family);
     font-size: var(--vaadin-button-font-size, var(--lumo-font-size-m));
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     font-weight: var(--vaadin-button-font-weight, 500);
+    cursor: var(--lumo-clickable-cursor);
     -webkit-tap-highlight-color: transparent;
   }
 
@@ -61,15 +61,15 @@ const button = css`
   /* For interaction states */
   :host::before,
   :host::after {
+    content: '';
     /* We rely on the host always being relative */
     position: absolute;
     z-index: 1;
     border-radius: inherit;
-    background-color: currentColor;
-    content: '';
-    inset: 0;
     opacity: 0;
+    background-color: currentColor;
     pointer-events: none;
+    inset: 0;
   }
 
   /* Hover */
@@ -90,14 +90,14 @@ const button = css`
   }
 
   :host([active])::before {
-    opacity: 0.05;
     transition-duration: 0s;
+    opacity: 0.05;
   }
 
   :host([active])::after {
-    opacity: 0.1;
     transform: scale(0);
     transition-duration: 0s, 0s;
+    opacity: 0.1;
   }
 
   /* Keyboard focus */
@@ -134,15 +134,15 @@ const button = css`
 
   :host([theme~='tertiary-inline']) {
     height: auto;
-    padding: 0;
     margin: 0;
+    padding: 0;
     font-size: inherit;
     line-height: inherit;
   }
 
   :host([theme~='tertiary-inline']) [part='label'] {
-    overflow: visible;
     padding: 0;
+    overflow: visible;
     line-height: inherit;
   }
 

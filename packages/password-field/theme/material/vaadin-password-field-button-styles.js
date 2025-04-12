@@ -11,15 +11,15 @@ const passwordFieldButton = css`
     position: absolute;
     top: 0;
     right: 0;
-    overflow: visible;
     width: 100%;
     min-width: auto;
     height: 100%;
-    padding: 0;
-    border-radius: 50%;
     margin: 0;
-    background: transparent;
+    padding: 0;
+    overflow: visible;
+    border-radius: 50%;
     outline: none;
+    background: transparent;
   }
 
   :host::before {

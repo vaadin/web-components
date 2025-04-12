@@ -12,9 +12,9 @@ const listBox = css`
   /* Dividers */
   [part='items'] ::slotted(hr) {
     height: 1px;
+    margin: var(--lumo-space-s) var(--lumo-border-radius-m);
     padding: 0;
     border: 0;
-    margin: var(--lumo-space-s) var(--lumo-border-radius-m);
     background-color: var(--lumo-contrast-10pct);
   }
 `;

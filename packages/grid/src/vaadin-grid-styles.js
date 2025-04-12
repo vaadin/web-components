@@ -13,13 +13,13 @@ export const gridStyles = css`
   }
 
   :host {
-    position: relative;
     display: flex;
-    height: 400px;
-    min-height: var(--_grid-min-height, 0);
+    position: relative;
     flex: 1 1 auto;
     flex-direction: column;
     align-self: stretch;
+    height: 400px;
+    min-height: var(--_grid-min-height, 0);
     animation: 1ms vaadin-grid-appear;
   }
 
@@ -32,22 +32,22 @@ export const gridStyles = css`
   }
 
   #scroller {
-    position: absolute;
     display: flex;
+    position: absolute;
+    flex-direction: column;
     width: auto;
     height: auto;
     min-height: 100%;
-    flex-direction: column;
-    inset: 0;
     transform: translateY(0);
+    inset: 0;
   }
 
   :host([all-rows-visible]) {
+    flex-grow: 0;
+    align-self: flex-start;
     width: 100%;
     height: auto;
     min-height: auto;
-    flex-grow: 0;
-    align-self: flex-start;
   }
 
   :host([all-rows-visible]) #scroller {
@@ -61,26 +61,26 @@ export const gridStyles = css`
   }
 
   #table {
+    display: flex;
     position: relative;
     /* Workaround for a Desktop Safari bug: new stacking context here prevents the scrollbar from getting hidden */
     z-index: 0;
-    display: flex;
-    overflow: auto;
+    flex-direction: column;
     width: 100%;
     height: 100%;
-    flex-direction: column;
+    overflow: auto;
     outline: none;
   }
 
   #header,
   #footer {
+    display: block;
     position: -webkit-sticky;
     position: sticky;
     z-index: 1;
     left: 0;
-    display: block;
-    overflow: visible;
     width: 100%;
+    overflow: visible;
   }
 
   #header {
@@ -101,20 +101,20 @@ export const gridStyles = css`
   }
 
   #items {
+    display: block;
     position: -webkit-sticky;
     position: sticky;
     left: 0;
-    display: block;
-    overflow: visible;
-    width: 100%;
     flex-grow: 1;
     flex-shrink: 0;
+    width: 100%;
+    overflow: visible;
   }
 
   [part~='row'] {
     display: flex;
-    width: 100%;
     box-sizing: border-box;
+    width: 100%;
     margin: 0;
   }
 
@@ -135,13 +135,13 @@ export const gridStyles = css`
   }
 
   [part~='cell']:not([part~='details-cell']) {
-    position: relative;
     display: flex;
-    width: 100%;
+    position: relative;
     box-sizing: border-box;
     flex-grow: 1;
     flex-shrink: 0;
     align-items: center;
+    width: 100%;
     padding: 0;
     white-space: nowrap;
   }
@@ -151,11 +151,11 @@ export const gridStyles = css`
   }
 
   [part~='cell'] > [tabindex] {
-    position: absolute;
     display: flex;
+    position: absolute;
     align-items: inherit;
-    inset: 0;
     outline: none;
+    inset: 0;
   }
 
   /* Switch the focusButtonMode wrapping element to "position: static" temporarily
@@ -167,16 +167,16 @@ export const gridStyles = css`
   [part~='details-cell'] {
     position: absolute;
     bottom: 0;
-    width: 100%;
     box-sizing: border-box;
+    width: 100%;
     padding: 0;
   }
 
   [part~='cell'] ::slotted(vaadin-grid-cell-content) {
     display: block;
-    overflow: hidden;
-    width: 100%;
     box-sizing: border-box;
+    width: 100%;
+    overflow: hidden;
     text-overflow: ellipsis;
   }
 
@@ -203,10 +203,10 @@ export const gridStyles = css`
   }
 
   #emptystatebody {
-    position: sticky;
     display: flex;
-    overflow: hidden;
+    position: sticky;
     flex: 1;
+    overflow: hidden;
     inset: 0;
   }
 
@@ -217,8 +217,8 @@ export const gridStyles = css`
 
   #emptystatecell {
     display: block;
-    overflow: auto;
     flex: 1;
+    overflow: auto;
   }
 
   /* Reordering styles */
@@ -229,6 +229,7 @@ export const gridStyles = css`
   }
 
   [part~='reorder-ghost'] {
+    visibility: hidden;
     position: fixed;
 
     /* Prevent overflowing the grid in Firefox */
@@ -236,7 +237,6 @@ export const gridStyles = css`
     left: 0;
     opacity: 0.5;
     pointer-events: none;
-    visibility: hidden;
   }
 
   :host([reordering]) {
@@ -255,10 +255,10 @@ export const gridStyles = css`
   }
 
   [part~='resize-handle']::before {
+    content: '';
     position: absolute;
     width: 35px;
     height: 100%;
-    content: '';
     transform: translateX(-50%);
   }
 
@@ -301,9 +301,9 @@ export const gridStyles = css`
 
   /* Sizer styles */
   #sizer {
-    position: absolute;
     display: flex;
     visibility: hidden;
+    position: absolute;
   }
 
   #sizer [part~='details-cell'] {
@@ -316,10 +316,10 @@ export const gridStyles = css`
 
   #sizer [part~='cell'] {
     display: block;
+    flex-shrink: 0;
     height: 0 !important;
     min-height: 0 !important;
     max-height: 0 !important;
-    flex-shrink: 0;
     padding: 0 !important;
     border: none !important;
     line-height: 0;
@@ -373,12 +373,12 @@ export const gridStyles = css`
 
   @media (forced-colors: active) {
     [part~='selected-row'] [part~='first-column-cell']::after {
+      content: '';
       position: absolute;
       top: 0;
       bottom: 0;
       left: 0;
       border: 2px solid;
-      content: '';
     }
 
     [part~='focused-cell']::before {

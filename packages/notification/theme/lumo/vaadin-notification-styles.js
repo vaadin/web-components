@@ -84,29 +84,29 @@ registerStyles(
 
     @keyframes lumo-notification-enter-slide-down {
       0% {
-        opacity: 0;
         transform: translateY(-200%);
+        opacity: 0;
       }
     }
 
     @keyframes lumo-notification-exit-slide-up {
       100% {
-        opacity: 0;
         transform: translateY(-200%);
+        opacity: 0;
       }
     }
 
     @keyframes lumo-notification-enter-slide-up {
       0% {
-        opacity: 0;
         transform: translateY(200%);
+        opacity: 0;
       }
     }
 
     @keyframes lumo-notification-exit-slide-down {
       100% {
-        opacity: 0;
         transform: translateY(200%);
+        opacity: 0;
       }
     }
 

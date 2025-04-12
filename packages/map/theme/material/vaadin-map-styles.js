@@ -31,9 +31,9 @@ registerStyles(
     }
 
     .ol-control {
+      transition: 0.1s box-shadow;
       border-radius: 4px;
       box-shadow: var(--material-shadow-elevation-2dp);
-      transition: 0.1s box-shadow;
     }
 
     .ol-control:hover {
@@ -72,14 +72,14 @@ registerStyles(
 
     @supports not selector(:focus-visible) {
       .ol-control button:focus {
-        box-shadow: 0 0 0 2px var(--material-primary-color);
         outline: none;
+        box-shadow: 0 0 0 2px var(--material-primary-color);
       }
     }
 
     .ol-control button:focus-visible {
-      box-shadow: 0 0 0 2px var(--material-primary-color);
       outline: none;
+      box-shadow: 0 0 0 2px var(--material-primary-color);
     }
 
     .ol-zoom {
@@ -87,8 +87,8 @@ registerStyles(
     }
 
     button.ol-zoom-in {
-      border-bottom-left-radius: 0;
       border-bottom-right-radius: 0;
+      border-bottom-left-radius: 0;
     }
 
     button.ol-zoom-out {
@@ -101,8 +101,8 @@ registerStyles(
     }
 
     .ol-attribution ul {
-      cursor: default;
       font-size: var(--material-caption-font-size);
+      cursor: default;
     }
 
     .ol-attribution:not(.ol-uncollapsible) ul {
@@ -128,9 +128,9 @@ registerStyles(
     }
 
     .ol-overviewmap-map {
+      margin: 2px;
       border: 0;
       border-radius: 2px;
-      margin: 2px;
     }
 
     .ol-zoomslider,

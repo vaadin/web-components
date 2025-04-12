@@ -78,11 +78,11 @@ registerStyles(
 
     :host([navigating]) [part~='row']:focus::before,
     :host([navigating]) [part~='focused-cell']:focus::before {
+      content: '';
       position: absolute;
       box-shadow: inset 0 0 0 var(--_focus-ring-width) var(--_focus-ring-color);
-      content: '';
-      inset: 0;
       pointer-events: none;
+      inset: 0;
     }
 
     :host([navigating]) [part~='row']:focus::before {
@@ -98,12 +98,12 @@ registerStyles(
 
     /* Drag and Drop styles */
     :host([dragover])::after {
+      content: '';
       position: absolute;
       z-index: 100;
       box-shadow: inset 0 0 0 var(--_focus-ring-width) var(--_focus-ring-color);
-      content: '';
-      inset: 0;
       pointer-events: none;
+      inset: 0;
     }
 
     [part~='row'][dragover] {
@@ -115,12 +115,12 @@ registerStyles(
     }
 
     [part~='row'][dragover] [part~='cell']::after {
+      content: '';
       position: absolute;
       height: calc(var(--_lumo-grid-border-width) + 2px);
       background: var(--lumo-primary-color-50pct);
-      content: '';
-      inset: 0;
       pointer-events: none;
+      inset: 0;
     }
 
     [part~='row'][dragover] [part~='cell'][last-frozen]::after {
@@ -171,20 +171,20 @@ registerStyles(
     }
 
     #scroller [part~='row'][dragstart]:not([dragstart=''])::after {
+      content: attr(dragstart);
+      display: block;
       position: absolute;
       z-index: 100;
       top: var(--_grid-drag-start-y);
       left: var(--_grid-drag-start-x);
-      display: block;
-      min-width: calc(var(--lumo-size-s) * 0.7);
       box-sizing: border-box;
       align-items: center;
       justify-content: center;
+      min-width: calc(var(--lumo-size-s) * 0.7);
       padding: calc(var(--lumo-space-xs) * 0.8);
       border-radius: var(--lumo-border-radius-m);
       background-color: var(--lumo-error-color);
       color: var(--lumo-error-contrast-color);
-      content: attr(dragstart);
       font-family: var(--lumo-font-family);
       font-size: var(--lumo-font-size-xxs);
       font-weight: 500;
@@ -268,8 +268,8 @@ registerStyles(
     [part~='reorder-ghost'] {
       /* TODO Use the same styles as for the cell element (reorder-ghost copies styles from the cell element) */
       padding: var(--lumo-space-s) var(--lumo-space-m) !important;
-      box-shadow: var(--lumo-box-shadow-s);
       opacity: 0.85;
+      box-shadow: var(--lumo-box-shadow-s);
     }
 
     /* Column resizing */
@@ -277,9 +277,9 @@ registerStyles(
     [part='resize-handle'] {
       --_resize-handle-width: 3px;
       width: var(--_resize-handle-width);
-      background-color: var(--lumo-primary-color-50pct);
-      opacity: 0;
       transition: opacity 0.2s;
+      opacity: 0;
+      background-color: var(--lumo-primary-color-50pct);
     }
 
     [part='resize-handle']::before {
@@ -289,8 +289,8 @@ registerStyles(
 
     :host(:not([reordering])) *:not([column-resizing]) [part~='cell']:hover [part='resize-handle'],
     [part='resize-handle']:active {
-      opacity: 1;
       transition-delay: 0.15s;
+      opacity: 1;
     }
 
     /* Column borders */
