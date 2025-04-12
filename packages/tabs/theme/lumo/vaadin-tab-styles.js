@@ -8,34 +8,34 @@ registerStyles(
   'vaadin-tab',
   css`
     :host {
-      box-sizing: border-box;
-      padding: 0.5rem 0.75rem;
-      font-family: var(--lumo-font-family);
-      font-size: var(--lumo-font-size-m);
-      line-height: var(--lumo-line-height-xs);
-      font-weight: 500;
-      opacity: 1;
-      color: var(--lumo-secondary-text-color);
-      transition:
-        0.15s color,
-        0.2s transform;
-      flex-shrink: 0;
-      display: flex;
-      align-items: center;
-      position: relative;
-      cursor: var(--lumo-clickable-cursor);
-      transform-origin: 50% 100%;
-      outline: none;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-      overflow: hidden;
-      min-width: var(--lumo-size-m);
-      -webkit-user-select: none;
-      user-select: none;
       --_focus-ring-color: var(--vaadin-focus-ring-color, var(--lumo-primary-color-50pct));
       --_focus-ring-width: var(--vaadin-focus-ring-width, 2px);
       --_selection-color: var(--vaadin-selection-color, var(--lumo-primary-color));
       --_selection-color-text: var(--vaadin-selection-color-text, var(--lumo-primary-text-color));
+      position: relative;
+      display: flex;
+      overflow: hidden;
+      min-width: var(--lumo-size-m);
+      box-sizing: border-box;
+      flex-shrink: 0;
+      align-items: center;
+      padding: 0.5rem 0.75rem;
+      color: var(--lumo-secondary-text-color);
+      cursor: var(--lumo-clickable-cursor);
+      font-family: var(--lumo-font-family);
+      font-size: var(--lumo-font-size-m);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      font-weight: 500;
+      line-height: var(--lumo-line-height-xs);
+      opacity: 1;
+      outline: none;
+      transform-origin: 50% 100%;
+      transition:
+        0.15s color,
+        0.2s transform;
+      -webkit-user-select: none;
+      user-select: none;
     }
 
     :host(:not([orientation='vertical'])) {
@@ -43,10 +43,10 @@ registerStyles(
     }
 
     :host([orientation='vertical']) {
-      transform-origin: 0% 50%;
-      padding: 0.25rem 1rem;
-      min-height: var(--lumo-size-m);
       min-width: 0;
+      min-height: var(--lumo-size-m);
+      padding: 0.25rem 1rem;
+      transform-origin: 0% 50%;
     }
 
     @media (forced-colors: active) {
@@ -78,15 +78,15 @@ registerStyles(
 
     :host::before,
     :host::after {
-      content: '';
       position: absolute;
-      display: var(--_lumo-tab-marker-display, block);
       bottom: 0;
       left: 50%;
+      display: var(--_lumo-tab-marker-display, block);
       width: var(--lumo-size-s);
       height: 2px;
-      background-color: var(--lumo-contrast-60pct);
       border-radius: var(--lumo-border-radius-s) var(--lumo-border-radius-s) 0 0;
+      background-color: var(--lumo-contrast-60pct);
+      content: '';
       transform: translateX(-50%) scale(0);
       transform-origin: 50% 100%;
       transition: 0.14s transform cubic-bezier(0.12, 0.32, 0.54, 1);
@@ -95,12 +95,12 @@ registerStyles(
 
     :host([orientation='vertical'])::before,
     :host([orientation='vertical'])::after {
-      left: 0;
       bottom: 50%;
-      transform: translateY(50%) scale(0);
+      left: 0;
       width: 2px;
       height: var(--lumo-size-xs);
       border-radius: 0 var(--lumo-border-radius-s) var(--lumo-border-radius-s) 0;
+      transform: translateY(50%) scale(0);
       transform-origin: 100% 50%;
     }
 
@@ -135,30 +135,30 @@ registerStyles(
     :host ::slotted(a) {
       display: flex;
       width: 100%;
-      align-items: center;
       height: 100%;
-      margin: -0.5rem -0.75rem;
+      align-items: center;
       padding: 0.5rem 0.75rem;
+      margin: -0.5rem -0.75rem;
+      color: inherit !important;
       outline: none;
 
       /*
-          Override the CSS inherited from \`lumo-color\` and \`lumo-typography\`.
-          Note: \`!important\` is needed because of the \`:slotted\` specificity.
-        */
+        Override the CSS inherited from \\\`lumo-color\\\` and \\\`lumo-typography\\\`.
+        Note: \\\`!important\\\` is needed because of the \\\`:slotted\\\` specificity.
+      */
       text-decoration: none !important;
-      color: inherit !important;
     }
 
     :host ::slotted(vaadin-icon) {
-      margin: 0 4px;
       width: var(--lumo-icon-size-m);
       height: var(--lumo-icon-size-m);
+      margin: 0 4px;
     }
 
     /* Vaadin icons are based on a 16x16 grid (unlike Lumo and Material icons with 24x24), so they look too big by default */
     :host ::slotted(vaadin-icon[icon^='vaadin:']) {
-      padding: 0.25rem;
       box-sizing: border-box !important;
+      padding: 0.25rem;
     }
 
     :host(:not([dir='rtl'])) ::slotted(vaadin-icon:first-child) {
@@ -174,16 +174,16 @@ registerStyles(
       flex-direction: column;
       align-items: center;
       justify-content: space-around;
-      text-align: center;
-      padding-bottom: 0.5rem;
       padding-top: 0.25rem;
+      padding-bottom: 0.5rem;
+      text-align: center;
     }
 
     :host([theme~='icon-on-top']) ::slotted(a) {
       flex-direction: column;
       align-items: center;
-      margin-top: -0.25rem;
       padding-top: 0.25rem;
+      margin-top: -0.25rem;
     }
 
     :host([theme~='icon-on-top']) ::slotted(vaadin-icon) {
@@ -193,24 +193,24 @@ registerStyles(
     /* Disabled */
 
     :host([disabled]) {
-      pointer-events: none;
-      opacity: 1;
       color: var(--lumo-disabled-text-color);
+      opacity: 1;
+      pointer-events: none;
     }
 
     /* Focus-ring */
 
     :host([focus-ring]) {
-      box-shadow: inset 0 0 0 var(--_focus-ring-width) var(--_focus-ring-color);
       border-radius: var(--lumo-border-radius-m);
+      box-shadow: inset 0 0 0 var(--_focus-ring-width) var(--_focus-ring-color);
     }
 
     /* RTL specific styles */
 
     :host([dir='rtl'])::before,
     :host([dir='rtl'])::after {
-      left: auto;
       right: 50%;
+      left: auto;
       transform: translateX(50%) scale(0);
     }
 
@@ -233,8 +233,8 @@ registerStyles(
 
     :host([dir='rtl'][orientation='vertical'])::before,
     :host([dir='rtl'][orientation='vertical'])::after {
-      left: auto;
       right: 0;
+      left: auto;
       border-radius: var(--lumo-border-radius-s) 0 0 var(--lumo-border-radius-s);
       transform-origin: 0% 50%;
     }

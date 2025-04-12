@@ -5,10 +5,10 @@ import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themab
 
 const dialogOverlay = css`
   [part='overlay'] {
+    min-width: 280px;
+    max-width: 560px;
     box-shadow: var(--material-shadow-elevation-24dp);
     outline: none;
-    max-width: 560px;
-    min-width: 280px;
     -webkit-tap-highlight-color: transparent;
   }
 

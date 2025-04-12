@@ -6,9 +6,9 @@ registerStyles(
   'vaadin-grid-sorter',
   css`
     :host {
-      justify-content: flex-start;
       height: 100%;
       align-items: center;
+      justify-content: flex-start;
       -webkit-user-select: none;
       user-select: none;
     }
@@ -27,15 +27,15 @@ registerStyles(
       font-family: 'material-icons';
       font-size: 18px;
       line-height: 18px;
+      opacity: 0.5;
       transition:
         0.1s opacity cubic-bezier(0.4, 0, 0.2, 0.1),
         0.1s width cubic-bezier(0.4, 0, 0.2, 0.1);
-      opacity: 0.5;
     }
 
     :host(:not([direction])) [part='indicators']::before {
-      content: var(--material-icons-arrow-upward);
       width: 0;
+      content: var(--material-icons-arrow-upward);
       opacity: 0;
     }
 
@@ -57,16 +57,16 @@ registerStyles(
     }
 
     [part='order'] {
-      right: 4px;
       top: -8px;
+      right: 4px;
       font-size: 10px;
     }
 
     /* RTL specific styles */
 
     :host([dir='rtl']) [part='order'] {
-      left: 4px;
       right: auto;
+      left: 4px;
     }
   `,
   { moduleId: 'material-grid-sorter' },

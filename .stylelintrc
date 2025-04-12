@@ -1,6 +1,13 @@
 {
   "customSyntax": "postcss-lit",
   "extends": [
-    "stylelint-config-vaadin"
-  ]
+    "stylelint-config-vaadin",
+    "stylelint-config-idiomatic-order"
+  ],
+  "rules": {
+    "order/order": [
+			"custom-properties",
+			"declarations"
+		]
+  }
 }

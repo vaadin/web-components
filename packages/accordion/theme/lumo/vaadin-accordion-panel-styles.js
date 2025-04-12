@@ -5,8 +5,8 @@ import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themab
 
 const accordionPanel = css`
   :host {
-    margin: 0;
     border-bottom: solid 1px var(--lumo-contrast-10pct);
+    margin: 0;
   }
 
   :host(:last-child) {

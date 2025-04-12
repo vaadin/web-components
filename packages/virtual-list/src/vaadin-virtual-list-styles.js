@@ -8,8 +8,8 @@ import { css } from 'lit';
 export const virtualListStyles = css`
   :host {
     display: block;
-    height: 400px;
     overflow: auto;
+    height: 400px;
     flex: auto;
     align-self: stretch;
   }

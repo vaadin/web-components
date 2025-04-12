@@ -13,14 +13,14 @@ export const gridStyles = css`
   }
 
   :host {
+    position: relative;
     display: flex;
-    flex-direction: column;
-    animation: 1ms vaadin-grid-appear;
     height: 400px;
     min-height: var(--_grid-min-height, 0);
     flex: 1 1 auto;
+    flex-direction: column;
     align-self: stretch;
-    position: relative;
+    animation: 1ms vaadin-grid-appear;
   }
 
   :host([hidden]) {
@@ -32,28 +32,28 @@ export const gridStyles = css`
   }
 
   #scroller {
+    position: absolute;
     display: flex;
-    flex-direction: column;
-    min-height: 100%;
-    transform: translateY(0);
     width: auto;
     height: auto;
-    position: absolute;
+    min-height: 100%;
+    flex-direction: column;
     inset: 0;
+    transform: translateY(0);
   }
 
   :host([all-rows-visible]) {
+    width: 100%;
     height: auto;
-    align-self: flex-start;
     min-height: auto;
     flex-grow: 0;
-    width: 100%;
+    align-self: flex-start;
   }
 
   :host([all-rows-visible]) #scroller {
+    position: relative;
     width: 100%;
     height: 100%;
-    position: relative;
   }
 
   :host([all-rows-visible]) #items {
@@ -61,26 +61,26 @@ export const gridStyles = css`
   }
 
   #table {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
     position: relative;
-    outline: none;
     /* Workaround for a Desktop Safari bug: new stacking context here prevents the scrollbar from getting hidden */
     z-index: 0;
+    display: flex;
+    overflow: auto;
+    width: 100%;
+    height: 100%;
+    flex-direction: column;
+    outline: none;
   }
 
   #header,
   #footer {
-    display: block;
     position: -webkit-sticky;
     position: sticky;
+    z-index: 1;
     left: 0;
+    display: block;
     overflow: visible;
     width: 100%;
-    z-index: 1;
   }
 
   #header {
@@ -101,14 +101,14 @@ export const gridStyles = css`
   }
 
   #items {
-    flex-grow: 1;
-    flex-shrink: 0;
-    display: block;
     position: -webkit-sticky;
     position: sticky;
-    width: 100%;
     left: 0;
+    display: block;
     overflow: visible;
+    width: 100%;
+    flex-grow: 1;
+    flex-shrink: 0;
   }
 
   [part~='row'] {
@@ -135,12 +135,12 @@ export const gridStyles = css`
   }
 
   [part~='cell']:not([part~='details-cell']) {
-    flex-shrink: 0;
-    flex-grow: 1;
-    box-sizing: border-box;
+    position: relative;
     display: flex;
     width: 100%;
-    position: relative;
+    box-sizing: border-box;
+    flex-grow: 1;
+    flex-shrink: 0;
     align-items: center;
     padding: 0;
     white-space: nowrap;
@@ -151,11 +151,11 @@ export const gridStyles = css`
   }
 
   [part~='cell'] > [tabindex] {
+    position: absolute;
     display: flex;
     align-items: inherit;
-    outline: none;
-    position: absolute;
     inset: 0;
+    outline: none;
   }
 
   /* Switch the focusButtonMode wrapping element to "position: static" temporarily
@@ -174,9 +174,9 @@ export const gridStyles = css`
 
   [part~='cell'] ::slotted(vaadin-grid-cell-content) {
     display: block;
+    overflow: hidden;
     width: 100%;
     box-sizing: border-box;
-    overflow: hidden;
     text-overflow: ellipsis;
   }
 
@@ -203,11 +203,11 @@ export const gridStyles = css`
   }
 
   #emptystatebody {
-    display: flex;
     position: sticky;
-    inset: 0;
-    flex: 1;
+    display: flex;
     overflow: hidden;
+    flex: 1;
+    inset: 0;
   }
 
   #emptystaterow {
@@ -217,8 +217,8 @@ export const gridStyles = css`
 
   #emptystatecell {
     display: block;
-    flex: 1;
     overflow: auto;
+    flex: 1;
   }
 
   /* Reordering styles */
@@ -229,14 +229,14 @@ export const gridStyles = css`
   }
 
   [part~='reorder-ghost'] {
-    visibility: hidden;
     position: fixed;
-    pointer-events: none;
-    opacity: 0.5;
 
     /* Prevent overflowing the grid in Firefox */
     top: 0;
     left: 0;
+    opacity: 0.5;
+    pointer-events: none;
+    visibility: hidden;
   }
 
   :host([reordering]) {
@@ -247,36 +247,36 @@ export const gridStyles = css`
   /* Resizing styles */
   [part~='resize-handle'] {
     position: absolute;
+    z-index: 1;
     top: 0;
     right: 0;
     height: 100%;
     cursor: col-resize;
-    z-index: 1;
   }
 
   [part~='resize-handle']::before {
     position: absolute;
-    content: '';
-    height: 100%;
     width: 35px;
+    height: 100%;
+    content: '';
     transform: translateX(-50%);
   }
 
   [last-column] [part~='resize-handle']::before,
   [last-frozen] [part~='resize-handle']::before {
+    right: 0;
     width: 18px;
     transform: none;
-    right: 0;
   }
 
   [frozen-to-end] [part~='resize-handle'] {
-    left: 0;
     right: auto;
+    left: 0;
   }
 
   [frozen-to-end] [part~='resize-handle']::before {
-    left: 0;
     right: auto;
+    left: 0;
   }
 
   [first-frozen-to-end] [part~='resize-handle']::before {
@@ -301,8 +301,8 @@ export const gridStyles = css`
 
   /* Sizer styles */
   #sizer {
-    display: flex;
     position: absolute;
+    display: flex;
     visibility: hidden;
   }
 
@@ -316,13 +316,13 @@ export const gridStyles = css`
 
   #sizer [part~='cell'] {
     display: block;
-    flex-shrink: 0;
-    line-height: 0;
     height: 0 !important;
     min-height: 0 !important;
     max-height: 0 !important;
+    flex-shrink: 0;
     padding: 0 !important;
     border: none !important;
+    line-height: 0;
   }
 
   #sizer [part~='cell']::before {
@@ -342,13 +342,13 @@ export const gridStyles = css`
   }
 
   :host([dir='rtl']) [part~='reorder-ghost'] {
-    left: auto;
     right: 0;
+    left: auto;
   }
 
   :host([dir='rtl']) [part~='resize-handle'] {
-    left: 0;
     right: auto;
+    left: 0;
   }
 
   :host([dir='rtl']) [part~='resize-handle']::before {
@@ -357,8 +357,8 @@ export const gridStyles = css`
 
   :host([dir='rtl']) [last-column] [part~='resize-handle']::before,
   :host([dir='rtl']) [last-frozen] [part~='resize-handle']::before {
-    left: 0;
     right: auto;
+    left: 0;
   }
 
   :host([dir='rtl']) [frozen-to-end] [part~='resize-handle'] {
@@ -373,12 +373,12 @@ export const gridStyles = css`
 
   @media (forced-colors: active) {
     [part~='selected-row'] [part~='first-column-cell']::after {
-      content: '';
       position: absolute;
       top: 0;
-      left: 0;
       bottom: 0;
+      left: 0;
       border: 2px solid;
+      content: '';
     }
 
     [part~='focused-cell']::before {

@@ -11,17 +11,17 @@ registerStyles(
   'vaadin-field-outline',
   css`
     :host {
-      transition: opacity 0.3s;
       -webkit-mask-image: none !important;
       mask-image: none !important;
+      transition: opacity 0.3s;
     }
 
     :host::before {
-      content: '';
       position: absolute;
-      inset: 0;
-      box-shadow: 0 0 0 2px var(--_active-user-color);
       border-radius: var(--lumo-border-radius-s);
+      box-shadow: 0 0 0 2px var(--_active-user-color);
+      content: '';
+      inset: 0;
       transition: box-shadow 0.3s;
     }
 

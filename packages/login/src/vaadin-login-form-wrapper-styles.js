@@ -7,8 +7,8 @@ import { css } from 'lit';
 
 export const loginFormWrapperStyles = css`
   :host {
-    overflow: hidden;
     display: inline-block;
+    overflow: hidden;
   }
 
   :host([hidden]) {
@@ -16,10 +16,10 @@ export const loginFormWrapperStyles = css`
   }
 
   [part='form'] {
-    flex: 1;
     display: flex;
-    flex-direction: column;
     box-sizing: border-box;
+    flex: 1;
+    flex-direction: column;
   }
 
   [part='form-title'] {

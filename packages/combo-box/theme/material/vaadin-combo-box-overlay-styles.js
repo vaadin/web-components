@@ -26,8 +26,8 @@ const comboBoxLoader = css`
     position: absolute;
     z-index: 1;
     top: -2px;
-    left: 0;
     right: 0;
+    left: 0;
   }
 `;
 

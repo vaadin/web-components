@@ -27,24 +27,24 @@ const notificationCard = css`
   }
 
   [part='overlay'] {
-    background-color: var(--material-background-color);
-    border-radius: 4px;
-    box-shadow: var(--material-shadow-elevation-6dp);
-    padding: 14px 16px;
     justify-content: stretch;
+    padding: 14px 16px;
+    border-radius: 4px;
+    background-color: var(--material-background-color);
+    box-shadow: var(--material-shadow-elevation-6dp);
   }
 
   [part='content'] {
+    display: flex;
+    box-sizing: border-box;
+    align-items: center;
+    justify-content: space-between;
     font-family: var(--material-font-family);
     font-size: var(--material-small-font-size);
     font-weight: 400;
-    line-height: 20px;
     letter-spacing: 0;
+    line-height: 20px;
     text-transform: none;
-    box-sizing: border-box;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
   }
 
   /* NOTE(platosha): Makes the button take exactly 1 line of vertical space */
@@ -93,29 +93,29 @@ const notificationCard = css`
 
   @keyframes material-notification-enter-slide-down {
     0% {
-      transform: translateY(-200%);
       opacity: 0;
+      transform: translateY(-200%);
     }
   }
 
   @keyframes material-notification-exit-slide-up {
     100% {
-      transform: translateY(-200%);
       opacity: 0;
+      transform: translateY(-200%);
     }
   }
 
   @keyframes material-notification-enter-slide-up {
     0% {
-      transform: translateY(200%);
       opacity: 0;
+      transform: translateY(200%);
     }
   }
 
   @keyframes material-notification-exit-slide-down {
     100% {
-      transform: translateY(200%);
       opacity: 0;
+      transform: translateY(200%);
     }
   }
 

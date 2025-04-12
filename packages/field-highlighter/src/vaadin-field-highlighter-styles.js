@@ -7,16 +7,16 @@ import { css } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 export const fieldOutlineStyles = css`
   :host {
-    display: block;
-    box-sizing: border-box;
+    --_active-user-color: transparent;
     position: absolute;
-    inset: 0;
+    display: block;
     width: 100%;
     height: 100%;
+    box-sizing: border-box;
+    inset: 0;
+    opacity: 0;
     pointer-events: none;
     user-select: none;
-    opacity: 0;
-    --_active-user-color: transparent;
   }
 
   :host([has-active-user]) {
@@ -26,18 +26,18 @@ export const fieldOutlineStyles = css`
 
 export const userTagStyles = css`
   :host {
+    --vaadin-user-tag-offset: 4px;
     display: block;
+    height: 1.3rem;
     box-sizing: border-box;
     margin: 0 0 var(--vaadin-user-tag-offset);
-    opacity: 0;
-    height: 1.3rem;
-    transition: opacity 0.2s ease-in-out;
     background-color: var(--vaadin-user-tag-color);
     color: #fff;
     cursor: default;
+    opacity: 0;
+    transition: opacity 0.2s ease-in-out;
     -webkit-user-select: none;
     user-select: none;
-    --vaadin-user-tag-offset: 4px;
   }
 
   :host(.show) {
@@ -50,12 +50,12 @@ export const userTagStyles = css`
 
   [part='name'] {
     overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
+    height: 1.3rem;
     box-sizing: border-box;
     padding: 2px 4px;
-    height: 1.3rem;
     font-size: 13px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 `;
 
@@ -66,13 +66,13 @@ export const userTagsOverlayStyles = css`
   }
 
   :scope [part='overlay'] {
-    box-shadow: none;
-    background: transparent;
     position: relative;
     left: -4px;
-    padding: 4px;
-    outline: none;
     overflow: visible;
+    padding: 4px;
+    background: transparent;
+    box-shadow: none;
+    outline: none;
   }
 
   ::slotted([part='tags']) {
@@ -82,8 +82,8 @@ export const userTagsOverlayStyles = css`
   }
 
   :host([dir='rtl']) [part='overlay'] {
-    left: auto;
     right: -4px;
+    left: auto;
   }
 
   :scope [part='content'] {

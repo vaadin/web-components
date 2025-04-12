@@ -9,12 +9,12 @@ export const dialogOverlay = css`
   [part='header'],
   [part='header-content'],
   [part='footer'] {
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    flex: none;
-    pointer-events: none;
     z-index: 1;
+    display: flex;
+    flex: none;
+    flex-wrap: wrap;
+    align-items: center;
+    pointer-events: none;
   }
 
   [part='header'] {
@@ -55,14 +55,14 @@ export const dialogOverlay = css`
 
   @media (min-height: 320px) {
     :host(:is([has-title], [has-header], [has-footer])) .resizer-container {
-      overflow: hidden;
       display: flex;
+      overflow: hidden;
       flex-direction: column;
     }
 
     :host(:is([has-title], [has-header], [has-footer])) [part='content'] {
-      flex: 1;
       overflow: auto;
+      flex: 1;
     }
   }
 
@@ -88,14 +88,14 @@ export const dialogOverlay = css`
 export const resizableOverlay = css`
   [part='overlay'] {
     position: relative;
+    display: flex;
     overflow: visible;
     max-height: 100%;
-    display: flex;
   }
 
   [part='content'] {
-    box-sizing: border-box;
     height: 100%;
+    box-sizing: border-box;
   }
 
   .resizer-container {
@@ -105,8 +105,8 @@ export const resizableOverlay = css`
   }
 
   [part='overlay'][style] .resizer-container {
-    min-height: 100%;
     width: 100%;
+    min-height: 100%;
   }
 
   :host(:not([resizable])) .resizer {
@@ -121,19 +121,19 @@ export const resizableOverlay = css`
 
   .resizer {
     position: absolute;
-    height: 16px;
     width: 16px;
+    height: 16px;
   }
 
   .resizer.edge {
-    height: 8px;
     width: 8px;
+    height: 8px;
     inset: -4px;
   }
 
   .resizer.edge.n {
-    width: auto;
     bottom: auto;
+    width: auto;
     cursor: ns-resize;
   }
 
@@ -144,20 +144,20 @@ export const resizableOverlay = css`
   }
 
   .resizer.edge.e {
-    height: auto;
     left: auto;
+    height: auto;
     cursor: ew-resize;
   }
 
   .resizer.se {
-    bottom: -4px;
     right: -4px;
+    bottom: -4px;
     cursor: nwse-resize;
   }
 
   .resizer.edge.s {
-    width: auto;
     top: auto;
+    width: auto;
     cursor: ns-resize;
   }
 
@@ -168,8 +168,8 @@ export const resizableOverlay = css`
   }
 
   .resizer.edge.w {
-    height: auto;
     right: auto;
+    height: auto;
     cursor: ew-resize;
   }
 

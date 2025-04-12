@@ -11,9 +11,9 @@ export const checkboxGroupStyles = css`
   }
 
   :host::before {
-    content: '\\2003';
-    width: 0;
     display: inline-block;
+    width: 0;
+    content: '\\\\2003';
   }
 
   :host([hidden]) {
@@ -22,8 +22,8 @@ export const checkboxGroupStyles = css`
 
   .vaadin-group-field-container {
     display: flex;
-    flex-direction: column;
     width: 100%;
+    flex-direction: column;
   }
 
   [part='group-field'] {

@@ -20,8 +20,6 @@ registerStyles(
   'vaadin-map',
   css`
     :host {
-      font-family: var(--lumo-font-family);
-      font-size: var(--lumo-font-size-m);
       --vaadin-map-controls-inset: var(--lumo-space-xs);
       --vaadin-map-icon-zoom-in: var(--lumo-icons-plus);
       --vaadin-map-icon-zoom-out: var(--lumo-icons-minus);
@@ -32,20 +30,22 @@ registerStyles(
       --vaadin-map-icon-attribution-collapse: var(--lumo-icons-angle-right);
       --_focus-ring-color: var(--vaadin-focus-ring-color, var(--lumo-primary-color-50pct));
       --_focus-ring-width: var(--vaadin-focus-ring-width, 2px);
+      font-family: var(--lumo-font-family);
+      font-size: var(--lumo-font-size-m);
     }
 
     :host(:not([theme~='borderless'])) {
-      border-radius: var(--lumo-border-radius-l);
       position: relative;
+      border-radius: var(--lumo-border-radius-l);
     }
 
     :host(:not([theme~='borderless']))::before {
-      content: '';
       position: absolute;
-      inset: 0;
+      z-index: 1;
       border: 1px solid var(--lumo-contrast-10pct);
       border-radius: inherit;
-      z-index: 1;
+      content: '';
+      inset: 0;
       pointer-events: none;
     }
 
@@ -61,10 +61,10 @@ registerStyles(
 
     .ol-control {
       border-radius: var(--lumo-border-radius-m);
+      -webkit-backdrop-filter: blur(8px);
       transition:
         0.15s box-shadow,
         0.15s background-color;
-      -webkit-backdrop-filter: blur(8px);
     }
 
     .ol-control:hover {
@@ -72,8 +72,8 @@ registerStyles(
     }
 
     .ol-control:not(.ol-uncollapsible):hover {
-      box-shadow: var(--lumo-box-shadow-s);
       background-color: var(--lumo-shade-20pct);
+      box-shadow: var(--lumo-box-shadow-s);
     }
 
     .ol-control button {
@@ -87,10 +87,10 @@ registerStyles(
 
     .ol-control button,
     .ol-attribution:not(.ol-uncollapsible) ul {
-      transition: 0.15s opacity;
       background-color: var(--lumo-base-color);
       color: var(--lumo-body-text-color);
       opacity: 0.65;
+      transition: 0.15s opacity;
     }
 
     .ol-control:hover button,
@@ -109,14 +109,14 @@ registerStyles(
 
     @supports not selector(:focus-visible) {
       .ol-control button:focus {
-        outline: none;
         box-shadow: 0 0 0 var(--_focus-ring-width) var(--_focus-ring-color);
+        outline: none;
       }
     }
 
     .ol-control button:focus-visible {
-      outline: none;
       box-shadow: 0 0 0 var(--_focus-ring-width) var(--_focus-ring-color);
+      outline: none;
     }
 
     .ol-zoom {
@@ -138,10 +138,10 @@ registerStyles(
     }
 
     .ol-attribution ul {
-      font-size: var(--lumo-font-size-xxs);
-      color: var(--lumo-secondary-text-color);
       padding: var(--lumo-space-xs) var(--lumo-space-s);
+      color: var(--lumo-secondary-text-color);
       cursor: default;
+      font-size: var(--lumo-font-size-xxs);
     }
 
     .ol-attribution:not(.ol-uncollapsible) ul {
@@ -169,9 +169,9 @@ registerStyles(
     }
 
     .ol-overviewmap-map {
-      margin: var(--lumo-space-xs);
       border: 0;
       border-radius: var(--lumo-border-radius-s);
+      margin: var(--lumo-space-xs);
     }
 
     .ol-overviewmap:not(.ol-uncollapsible) .ol-overviewmap-map {
@@ -179,8 +179,8 @@ registerStyles(
     }
 
     .ol-zoomslider:not(.ol-uncollapsible):hover {
-      box-shadow: none;
       overflow: visible;
+      box-shadow: none;
     }
 
     .ol-zoomslider button {

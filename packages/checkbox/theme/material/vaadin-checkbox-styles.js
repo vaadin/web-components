@@ -5,17 +5,17 @@ registerStyles(
   'vaadin-checkbox',
   css`
     :host {
+      --_checkbox-size: var(--vaadin-checkbox-size, 16px);
       display: inline-block;
-      -webkit-user-select: none;
-      user-select: none;
       outline: none;
       -webkit-tap-highlight-color: transparent;
-      --_checkbox-size: var(--vaadin-checkbox-size, 16px);
+      -webkit-user-select: none;
+      user-select: none;
     }
 
     [part='label'] {
-      display: flex;
       position: relative;
+      display: flex;
       max-width: max-content;
     }
 
@@ -24,25 +24,25 @@ registerStyles(
     }
 
     [part='checkbox'] {
+      position: relative;
       width: var(--_checkbox-size);
       height: var(--_checkbox-size);
-      margin: 4px;
-      position: relative;
       border-radius: 2px;
-      box-shadow: inset 0 0 0 2px var(--material-secondary-text-color);
+      margin: 4px;
       background-color: transparent;
+      box-shadow: inset 0 0 0 2px var(--material-secondary-text-color);
     }
 
     /* Used for the ripple */
     [part='checkbox']::before {
-      pointer-events: none;
       width: 100%;
       height: 100%;
-      line-height: var(--_checkbox-size);
       border-radius: 50%;
       background-color: var(--material-disabled-text-color);
-      transform: scale(0);
+      line-height: var(--_checkbox-size);
       opacity: 0;
+      pointer-events: none;
+      transform: scale(0);
       transition:
         transform 0s 0.8s,
         opacity 0.8s;
@@ -51,19 +51,19 @@ registerStyles(
 
     /* Used for the checkmark */
     [part='checkbox']::after {
-      content: '';
-      pointer-events: none;
-      display: inline-block;
-      width: 10px;
-      height: 19px;
-      border: 0 solid var(--material-background-color);
-      border-width: 3px 0 0 3px;
-      box-sizing: border-box;
-      transform-origin: 0 0;
       position: absolute;
       top: 12px;
       left: 6px;
+      display: inline-block;
+      width: 10px;
+      height: 19px;
+      box-sizing: border-box;
+      border: 0 solid var(--material-background-color);
+      border-width: 3px 0 0 3px;
+      content: '';
+      pointer-events: none;
       transform: scale(0) rotate(-135deg);
+      transform-origin: 0 0;
       transition: transform 0.2s;
     }
 
@@ -83,10 +83,10 @@ registerStyles(
 
     :host([focus-ring]) [part='checkbox']::before,
     :host([active]) [part='checkbox']::before {
-      transition-duration: 0.08s, 0.01s;
-      transition-delay: 0s, 0s;
-      transform: scale(2.5);
       opacity: 0.15;
+      transform: scale(2.5);
+      transition-delay: 0s, 0s;
+      transition-duration: 0.08s, 0.01s;
     }
 
     :host([checked]) [part='checkbox']::before {
@@ -94,21 +94,21 @@ registerStyles(
     }
 
     :host([indeterminate]) [part='checkbox']::after {
-      transform: none;
-      opacity: 1;
       top: 45%;
-      height: 10%;
-      left: 22%;
       right: 22%;
+      left: 22%;
       width: auto;
+      height: 10%;
       border: 0;
       background-color: var(--material-background-color);
+      opacity: 1;
+      transform: none;
       transition: opacity 0.4s;
     }
 
     :host([disabled]) {
-      pointer-events: none;
       color: var(--material-disabled-text-color);
+      pointer-events: none;
     }
 
     :host([disabled]) ::slotted(label) {
@@ -165,9 +165,9 @@ registerStyles(
 
     [part='error-message'],
     [part='helper-text'] {
+      padding-left: 6px;
       font-size: 0.75em;
       line-height: 1;
-      padding-left: 6px;
     }
 
     [part='error-message'] {
@@ -180,9 +180,9 @@ registerStyles(
 
     :host([has-error-message]) [part='error-message']::before,
     :host([has-helper]) [part='helper-text']::before {
-      content: '';
       display: block;
       height: 6px;
+      content: '';
     }
   `,
   { moduleId: 'material-checkbox' },

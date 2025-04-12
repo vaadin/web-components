@@ -4,8 +4,8 @@ import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themab
 
 const listBox = css`
   :host {
-    -webkit-tap-highlight-color: transparent;
     --_material-item-selected-icon-display: block;
+    -webkit-tap-highlight-color: transparent;
   }
 
   [part='items'] ::slotted(*) {
@@ -15,8 +15,8 @@ const listBox = css`
   /* Dividers */
   [part='items'] ::slotted(hr) {
     height: 1px;
-    border: 0;
     padding: 0;
+    border: 0;
     margin: 8px 0;
     background-color: var(--material-divider-color);
   }

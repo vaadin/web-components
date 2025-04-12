@@ -36,20 +36,16 @@ export const DashboardLayoutMixin = (superClass) =>
         }
 
         #grid {
-          box-sizing: border-box;
-
           /* Padding around dashboard edges */
           --_vaadin-dashboard-default-padding: 1rem;
           --_vaadin-dashboard-padding: max(
             0px,
             var(--vaadin-dashboard-padding, var(--_vaadin-dashboard-default-padding))
           );
-          padding: var(--_vaadin-dashboard-padding);
 
           /* Gap between widgets */
           --_vaadin-dashboard-default-gap: 1rem;
           --_vaadin-dashboard-gap: max(0px, var(--vaadin-dashboard-gap, var(--_vaadin-dashboard-default-gap)));
-          gap: var(--_vaadin-dashboard-gap);
 
           /* Default min and max column widths */
           --_vaadin-dashboard-default-col-min-width: 25rem;
@@ -87,13 +83,16 @@ export const DashboardLayoutMixin = (superClass) =>
           display: grid;
           overflow: auto;
           height: 100%;
+          box-sizing: border-box;
+          padding: var(--_vaadin-dashboard-padding);
+          gap: var(--_vaadin-dashboard-gap);
+
+          grid-auto-rows: var(--_vaadin-dashboard-row-height);
 
           grid-template-columns: repeat(
             var(--_vaadin-dashboard-effective-col-count, auto-fill),
             minmax(var(--_vaadin-dashboard-col-min-width), var(--_vaadin-dashboard-col-max-width))
           );
-
-          grid-auto-rows: var(--_vaadin-dashboard-row-height);
         }
 
         ::slotted(*) {
@@ -104,10 +103,10 @@ export const DashboardLayoutMixin = (superClass) =>
               var(--_vaadin-dashboard-effective-col-count, var(--_vaadin-dashboard-col-count))
             );
 
-          grid-column: var(--_vaadin-dashboard-item-column);
-
           /* The grid-row value applied to children */
           --_vaadin-dashboard-item-row: span var(--vaadin-dashboard-item-rowspan, 1);
+
+          grid-column: var(--_vaadin-dashboard-item-column);
           grid-row: var(--_vaadin-dashboard-item-row);
         }
       `;

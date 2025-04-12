@@ -10,28 +10,28 @@ registerStyles(
   'vaadin-checkbox',
   css`
     :host {
-      color: var(--vaadin-checkbox-label-color, var(--lumo-body-text-color));
-      font-size: var(--vaadin-checkbox-label-font-size, var(--lumo-font-size-m));
-      font-family: var(--lumo-font-family);
-      line-height: var(--lumo-line-height-s);
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-      -webkit-tap-highlight-color: transparent;
-      -webkit-user-select: none;
-      user-select: none;
-      cursor: default;
-      outline: none;
       --_checkbox-size: var(--vaadin-checkbox-size, calc(var(--lumo-size-m) / 2));
       --_focus-ring-color: var(--vaadin-focus-ring-color, var(--lumo-primary-color-50pct));
       --_focus-ring-width: var(--vaadin-focus-ring-width, 2px);
       --_selection-color: var(--vaadin-selection-color, var(--lumo-primary-color));
       --_invalid-background: var(--vaadin-input-field-invalid-background, var(--lumo-error-color-10pct));
       --_disabled-checkmark-color: var(--vaadin-checkbox-disabled-checkmark-color, var(--lumo-contrast-30pct));
+      color: var(--vaadin-checkbox-label-color, var(--lumo-body-text-color));
+      cursor: default;
+      font-family: var(--lumo-font-family);
+      font-size: var(--vaadin-checkbox-label-font-size, var(--lumo-font-size-m));
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      line-height: var(--lumo-line-height-s);
+      outline: none;
+      -webkit-tap-highlight-color: transparent;
+      -webkit-user-select: none;
+      user-select: none;
     }
 
     [part='label'] {
-      display: flex;
       position: relative;
+      display: flex;
       max-width: max-content;
     }
 
@@ -51,18 +51,18 @@ registerStyles(
     }
 
     [part='checkbox'] {
+      /* Default field border color */
+      --_input-border-color: var(--vaadin-input-field-border-color, var(--lumo-contrast-50pct));
+      position: relative;
       width: var(--_checkbox-size);
       height: var(--_checkbox-size);
-      margin: var(--lumo-space-xs);
-      position: relative;
       border-radius: var(--vaadin-checkbox-border-radius, var(--lumo-border-radius-s));
+      margin: var(--lumo-space-xs);
       background: var(--vaadin-checkbox-background, var(--lumo-contrast-20pct));
+      cursor: var(--lumo-clickable-cursor);
       transition:
         transform 0.2s cubic-bezier(0.12, 0.32, 0.54, 2),
         background-color 0.15s;
-      cursor: var(--lumo-clickable-cursor);
-      /* Default field border color */
-      --_input-border-color: var(--vaadin-input-field-border-color, var(--lumo-contrast-50pct));
     }
 
     :host([indeterminate]),
@@ -77,17 +77,17 @@ registerStyles(
 
     /* Checkmark */
     [part='checkbox']::after {
-      pointer-events: none;
-      font-family: 'lumo-icons';
-      content: var(--vaadin-checkbox-checkmark-char, var(--lumo-icons-checkmark));
-      color: var(--vaadin-checkbox-checkmark-color, var(--lumo-primary-contrast-color));
-      font-size: var(--vaadin-checkbox-checkmark-size, calc(var(--_checkbox-size) + 2px));
-      line-height: 1;
       position: absolute;
       top: -1px;
       left: -1px;
+      color: var(--vaadin-checkbox-checkmark-color, var(--lumo-primary-contrast-color));
       contain: content;
+      content: var(--vaadin-checkbox-checkmark-char, var(--lumo-icons-checkmark));
+      font-family: 'lumo-icons';
+      font-size: var(--vaadin-checkbox-checkmark-size, calc(var(--_checkbox-size) + 2px));
+      line-height: 1;
       opacity: 0;
+      pointer-events: none;
     }
 
     :host([checked]) [part='checkbox']::after {
@@ -104,28 +104,28 @@ registerStyles(
     }
 
     :host([readonly]:not([checked]):not([indeterminate])) [part='checkbox']::after {
-      content: '';
-      box-sizing: border-box;
-      width: 100%;
-      height: 100%;
-      border-radius: inherit;
       top: 0;
       left: 0;
-      opacity: 1;
+      width: 100%;
+      height: 100%;
+      box-sizing: border-box;
       border: var(--vaadin-input-field-readonly-border, 1px dashed var(--lumo-contrast-50pct));
+      border-radius: inherit;
+      content: '';
+      opacity: 1;
     }
 
     /* Indeterminate checkmark */
     :host([indeterminate]) [part='checkbox']::after {
-      content: var(--vaadin-checkbox-checkmark-char-indeterminate, '');
-      opacity: 1;
       top: 45%;
-      height: 10%;
-      left: 22%;
       right: 22%;
+      left: 22%;
       width: auto;
+      height: 10%;
       border: 0;
       background-color: var(--lumo-primary-contrast-color);
+      content: var(--vaadin-checkbox-checkmark-char-indeterminate, '');
+      opacity: 1;
     }
 
     /* Focus ring */
@@ -144,8 +144,8 @@ registerStyles(
 
     /* Disabled */
     :host([disabled]) {
-      pointer-events: none;
       --vaadin-input-field-border-color: var(--lumo-contrast-20pct);
+      pointer-events: none;
     }
 
     :host([disabled]) ::slotted(label) {
@@ -177,15 +177,15 @@ registerStyles(
 
     /* Used for activation "halo" */
     [part='checkbox']::before {
-      pointer-events: none;
-      color: transparent;
       width: 100%;
       height: 100%;
-      line-height: var(--_checkbox-size);
       border-radius: inherit;
       background-color: inherit;
-      transform: scale(1.4);
+      color: transparent;
+      line-height: var(--_checkbox-size);
       opacity: 0;
+      pointer-events: none;
+      transform: scale(1.4);
       transition:
         transform 0.1s,
         opacity 0.8s;
@@ -215,9 +215,9 @@ registerStyles(
     }
 
     :host([active]:not([checked])) [part='checkbox']::before {
-      transition-duration: 0.01s, 0.01s;
-      transform: scale(0);
       opacity: 0.4;
+      transform: scale(0);
+      transition-duration: 0.01s, 0.01s;
     }
 
     /* Required */
@@ -233,11 +233,11 @@ registerStyles(
     }
 
     :host([required]) [part='required-indicator']::after {
-      content: var(--lumo-required-field-indicator, '\\2022');
-      transition: opacity 0.2s;
-      color: var(--lumo-required-field-indicator-color, var(--lumo-primary-text-color));
       width: 1em;
+      color: var(--lumo-required-field-indicator-color, var(--lumo-primary-text-color));
+      content: var(--lumo-required-field-indicator, '\\\\2022');
       text-align: center;
+      transition: opacity 0.2s;
     }
 
     :host(:not([has-label])) [part='required-indicator'] {
@@ -269,38 +269,38 @@ registerStyles(
 
     /* Error message */
     [part='error-message'] {
-      font-size: var(--vaadin-input-field-error-font-size, var(--lumo-font-size-xs));
-      line-height: var(--lumo-line-height-xs);
-      font-weight: var(--vaadin-input-field-error-font-weight, 400);
-      color: var(--vaadin-input-field-error-color, var(--lumo-error-text-color));
-      will-change: max-height;
-      transition: 0.4s max-height;
       max-height: 5em;
+      color: var(--vaadin-input-field-error-color, var(--lumo-error-text-color));
+      font-size: var(--vaadin-input-field-error-font-size, var(--lumo-font-size-xs));
+      font-weight: var(--vaadin-input-field-error-font-weight, 400);
+      line-height: var(--lumo-line-height-xs);
       padding-inline-start: var(--lumo-space-xs);
+      transition: 0.4s max-height;
+      will-change: max-height;
     }
 
     :host([has-error-message]) [part='error-message']::after,
     :host([has-helper]) [part='helper-text']::after {
-      content: '';
       display: block;
       height: 0.4em;
+      content: '';
     }
 
     :host(:not([invalid])) [part='error-message'] {
-      max-height: 0;
       overflow: hidden;
+      max-height: 0;
     }
 
     /* Helper */
     [part='helper-text'] {
       display: block;
+      margin-left: calc(var(--lumo-border-radius-m) / 4);
       color: var(--vaadin-input-field-helper-color, var(--lumo-secondary-text-color));
       font-size: var(--vaadin-input-field-helper-font-size, var(--lumo-font-size-xs));
-      line-height: var(--lumo-line-height-xs);
       font-weight: var(--vaadin-input-field-helper-font-weight, 400);
-      margin-left: calc(var(--lumo-border-radius-m) / 4);
-      transition: color 0.2s;
+      line-height: var(--lumo-line-height-xs);
       padding-inline-start: var(--lumo-space-xs);
+      transition: color 0.2s;
     }
 
     :host(:hover:not([readonly])) [part='helper-text'] {

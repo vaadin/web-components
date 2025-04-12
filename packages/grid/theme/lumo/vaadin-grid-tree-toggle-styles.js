@@ -9,9 +9,9 @@ registerStyles(
     :host {
       --vaadin-grid-tree-toggle-level-offset: 2em;
       align-items: center;
-      vertical-align: middle;
-      transform: translateX(calc(var(--lumo-space-s) * -1));
       -webkit-tap-highlight-color: transparent;
+      transform: translateX(calc(var(--lumo-space-s) * -1));
+      vertical-align: middle;
     }
 
     :host(:not([leaf])) {
@@ -20,16 +20,16 @@ registerStyles(
 
     [part='toggle'] {
       display: inline-block;
-      font-size: 1.5em;
-      line-height: 1;
       width: 1em;
       height: 1em;
-      text-align: center;
-      color: var(--lumo-contrast-50pct);
-      cursor: var(--lumo-clickable-cursor);
       /* Increase touch target area */
       padding: calc(1em / 3);
       margin: calc(1em / -3);
+      color: var(--lumo-contrast-50pct);
+      cursor: var(--lumo-clickable-cursor);
+      font-size: 1.5em;
+      line-height: 1;
+      text-align: center;
     }
 
     :host(:not([dir='rtl'])) [part='toggle'] {
@@ -43,9 +43,9 @@ registerStyles(
     }
 
     [part='toggle']::before {
-      font-family: 'lumo-icons';
       display: inline-block;
       height: 100%;
+      font-family: 'lumo-icons';
     }
 
     :host(:not([expanded])) [part='toggle']::before {
@@ -60,8 +60,8 @@ registerStyles(
     /* RTL specific styles */
 
     :host([dir='rtl']) {
-      margin-left: 0;
       margin-right: calc(var(--lumo-space-s) * -1);
+      margin-left: 0;
     }
 
     :host([dir='rtl']) [part='toggle'] {

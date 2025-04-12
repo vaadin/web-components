@@ -6,9 +6,9 @@ registerStyles(
   'vaadin-tabs',
   css`
     :host {
-      -webkit-tap-highlight-color: transparent;
       display: flex;
       flex-shrink: 0;
+      -webkit-tap-highlight-color: transparent;
     }
 
     /* Hide scroll buttons when no needed, and on touch devices */
@@ -27,18 +27,18 @@ registerStyles(
 
     [part='forward-button'],
     [part='back-button'] {
-      font-family: material-icons;
-      color: var(--material-secondary-text-color);
-      font-size: 24px;
+      top: 0;
       display: flex;
-      flex-shrink: 0;
-      flex-grow: 0;
-      align-items: center;
-      justify-content: center;
       width: 48px;
       height: 100%;
+      flex-grow: 0;
+      flex-shrink: 0;
+      align-items: center;
+      justify-content: center;
+      color: var(--material-secondary-text-color);
+      font-family: material-icons;
+      font-size: 24px;
       transition: 0.2s opacity;
-      top: 0;
     }
 
     [part='forward-button']:hover,
@@ -59,10 +59,10 @@ registerStyles(
     }
 
     :host([overflow]) [part='tabs']::after {
-      content: '';
       display: flex;
-      flex-shrink: 0;
       width: 32px;
+      flex-shrink: 0;
+      content: '';
     }
 
     /* Fixed width tabs */

@@ -17,15 +17,15 @@ registerStyles(
     [part='year-number'],
     [part='year-separator'] {
       display: flex;
+      height: 50%;
       align-items: center;
       justify-content: center;
-      height: 50%;
       transform: translateY(-50%);
     }
 
     [part='year-separator']::after {
       color: var(--lumo-disabled-text-color);
-      content: '\\2022';
+      content: '\\\\2022';
     }
   `,
   { moduleId: 'lumo-date-picker-year' },

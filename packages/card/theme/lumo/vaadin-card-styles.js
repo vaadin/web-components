@@ -19,20 +19,20 @@ addGlobalThemeStyles('card-props', cardProps);
 
 const card = css`
   :host {
-    background: var(--vaadin-card-background);
-    border-radius: var(--vaadin-card-border-radius);
-    box-shadow: var(--vaadin-card-box-shadow);
     position: relative;
+    border-radius: var(--vaadin-card-border-radius);
+    background: var(--vaadin-card-background);
+    box-shadow: var(--vaadin-card-box-shadow);
   }
 
   /* Could be an inset outline on the host as well, but rounded outlines only work since Safari 16.4 */
   :host::before {
-    content: '';
     position: absolute;
+    border: var(--vaadin-card-border, var(--vaadin-card-border-width) solid var(--vaadin-card-border-color));
+    border-radius: inherit;
+    content: '';
     inset: 0;
     pointer-events: none;
-    border-radius: inherit;
-    border: var(--vaadin-card-border, var(--vaadin-card-border-width) solid var(--vaadin-card-border-color));
   }
 
   :host([theme~='outlined']) {
@@ -58,16 +58,16 @@ const card = css`
   }
 
   ::slotted([slot='title']) {
-    font-size: var(--lumo-font-size-l);
-    line-height: var(--lumo-line-height-xs);
-    font-weight: 600;
     color: var(--lumo-header-text-color);
+    font-size: var(--lumo-font-size-l);
+    font-weight: 600;
+    line-height: var(--lumo-line-height-xs);
   }
 
   ::slotted([slot='subtitle']) {
+    color: var(--lumo-secondary-text-color);
     font-size: var(--lumo-font-size-m);
     line-height: var(--lumo-line-height-xs);
-    color: var(--lumo-secondary-text-color);
   }
 `;
 

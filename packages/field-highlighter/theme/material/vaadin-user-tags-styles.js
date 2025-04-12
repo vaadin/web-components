@@ -17,19 +17,19 @@ registerStyles(
   'vaadin-user-tag',
   css`
     :host {
-      font-family: var(--material-font-family);
-      font-size: 0.75rem;
       border-radius: 0.25rem;
       box-shadow: var(--material-shadow-elevation-2dp);
+      font-family: var(--material-font-family);
+      font-size: 0.75rem;
     }
 
     [part='name'] {
+      min-width: 1.75em;
+      padding: 0.3em;
       background-color: var(--vaadin-user-tag-color);
       color: var(--material-primary-contrast-color);
-      padding: 0.3em;
-      line-height: 1;
       font-weight: 500;
-      min-width: 1.75em;
+      line-height: 1;
     }
   `,
   { moduleId: 'material-user-tag' },

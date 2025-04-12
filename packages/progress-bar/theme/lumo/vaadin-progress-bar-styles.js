@@ -18,13 +18,13 @@ registerStyles(
     }
 
     [part='value'] {
+      width: calc(var(--vaadin-progress-value) * 100%);
       border-radius: var(--lumo-border-radius-m);
       background-color: var(--lumo-primary-color);
       /* Use width instead of transform to preserve border radius */
       transform: none;
-      width: calc(var(--vaadin-progress-value) * 100%);
-      will-change: width;
       transition: 0.1s width linear;
+      will-change: width;
     }
 
     /* Indeterminate mode */
@@ -40,11 +40,11 @@ registerStyles(
         var(--lumo-primary-color)
       );
       width: 100%;
+      animation: vaadin-progress-indeterminate 1.6s infinite cubic-bezier(0.645, 0.045, 0.355, 1);
       background-color: transparent !important;
       background-image: var(--lumo-progress-indeterminate-progress-bar-background);
       opacity: 0.75;
       will-change: transform;
-      animation: vaadin-progress-indeterminate 1.6s infinite cubic-bezier(0.645, 0.045, 0.355, 1);
     }
 
     @keyframes vaadin-progress-indeterminate {
@@ -58,15 +58,15 @@ registerStyles(
       }
 
       50% {
+        background-image: var(--lumo-progress-indeterminate-progress-bar-background);
         transform: scaleX(0.015);
         transform-origin: 100% 0%;
-        background-image: var(--lumo-progress-indeterminate-progress-bar-background);
       }
 
       50.1% {
+        background-image: var(--lumo-progress-indeterminate-progress-bar-background-reverse);
         transform: scaleX(0.015);
         transform-origin: 100% 0%;
-        background-image: var(--lumo-progress-indeterminate-progress-bar-background-reverse);
       }
 
       75% {
@@ -74,22 +74,22 @@ registerStyles(
       }
 
       100% {
+        background-image: var(--lumo-progress-indeterminate-progress-bar-background-reverse);
         transform: scaleX(0.015);
         transform-origin: 0% 0%;
-        background-image: var(--lumo-progress-indeterminate-progress-bar-background-reverse);
       }
     }
 
     :host(:not([aria-valuenow])) [part='value']::before,
     :host([indeterminate]) [part='value']::before {
-      content: '';
       display: block;
       width: 100%;
       height: 100%;
       border-radius: inherit;
-      background-color: var(--lumo-primary-color);
-      will-change: opacity;
       animation: vaadin-progress-pulse3 1.6s infinite cubic-bezier(0.645, 0.045, 0.355, 1);
+      background-color: var(--lumo-primary-color);
+      content: '';
+      will-change: opacity;
     }
 
     @keyframes vaadin-progress-pulse3 {
@@ -129,7 +129,6 @@ registerStyles(
     /* Contrast color */
     :host([theme~='contrast']) [part='value'],
     :host([theme~='contrast']) [part='value']::before {
-      background-color: var(--lumo-contrast-80pct);
       --lumo-progress-indeterminate-progress-bar-background: linear-gradient(
         to right,
         var(--lumo-contrast-5pct) 10%,
@@ -140,12 +139,12 @@ registerStyles(
         var(--lumo-contrast-5pct) 10%,
         var(--lumo-contrast-60pct)
       );
+      background-color: var(--lumo-contrast-80pct);
     }
 
     /* Error color */
     :host([theme~='error']) [part='value'],
     :host([theme~='error']) [part='value']::before {
-      background-color: var(--lumo-error-color);
       --lumo-progress-indeterminate-progress-bar-background: linear-gradient(
         to right,
         var(--lumo-error-color-10pct) 10%,
@@ -156,12 +155,12 @@ registerStyles(
         var(--lumo-error-color-10pct) 10%,
         var(--lumo-error-color)
       );
+      background-color: var(--lumo-error-color);
     }
 
     /* Primary color */
     :host([theme~='success']) [part='value'],
     :host([theme~='success']) [part='value']::before {
-      background-color: var(--lumo-success-color);
       --lumo-progress-indeterminate-progress-bar-background: linear-gradient(
         to right,
         var(--lumo-success-color-10pct) 10%,
@@ -172,6 +171,7 @@ registerStyles(
         var(--lumo-success-color-10pct) 10%,
         var(--lumo-success-color)
       );
+      background-color: var(--lumo-success-color);
     }
 
     /* RTL specific styles */
@@ -205,15 +205,15 @@ registerStyles(
       }
 
       50% {
+        background-image: var(--lumo-progress-indeterminate-progress-bar-background);
         transform: scaleX(0.015);
         transform-origin: 0% 0%;
-        background-image: var(--lumo-progress-indeterminate-progress-bar-background);
       }
 
       50.1% {
+        background-image: var(--lumo-progress-indeterminate-progress-bar-background-reverse);
         transform: scaleX(0.015);
         transform-origin: 0% 0%;
-        background-image: var(--lumo-progress-indeterminate-progress-bar-background-reverse);
       }
 
       75% {
@@ -221,9 +221,9 @@ registerStyles(
       }
 
       100% {
+        background-image: var(--lumo-progress-indeterminate-progress-bar-background-reverse);
         transform: scaleX(0.015);
         transform-origin: 100% 0%;
-        background-image: var(--lumo-progress-indeterminate-progress-bar-background-reverse);
       }
     }
 

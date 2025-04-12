@@ -9,19 +9,19 @@ const popupOverlay = css`
   }
 
   [part='content'] {
-    padding: 0.25rem;
-    max-width: calc(7 * (var(--_button-size) + var(--_button-margin) * 2));
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
     --_button-size: 1.25rem;
     --_button-margin: 3px;
+    display: flex;
+    max-width: calc(7 * (var(--_button-size) + var(--_button-margin) * 2));
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 0.25rem;
   }
 
   [part='content'] ::slotted(button) {
-    border: none;
     width: var(--_button-size);
     height: var(--_button-size);
+    border: none;
     margin: var(--_button-margin);
   }
 `;
@@ -32,20 +32,20 @@ registerStyles('vaadin-rich-text-editor-popup-overlay', [overlay, popupOverlay],
 
 const richTextEditor = css`
   :host {
-    background-color: var(--material-background-color);
     min-height: 288px;
+    background-color: var(--material-background-color);
   }
 
   [part='toolbar'] {
-    background-color: var(--material-secondary-background-color);
+    overflow: hidden;
     padding: 0;
     border: 0;
-    overflow: hidden;
+    background-color: var(--material-secondary-background-color);
   }
 
   [part~='toolbar-group'] {
-    margin: 8px 0;
     padding: 0 8px;
+    margin: 8px 0;
   }
 
   [part~='toolbar-group'] + [part~='toolbar-group'] {
@@ -54,10 +54,10 @@ const richTextEditor = css`
 
   [part~='toolbar-button'] {
     border-radius: 3px;
+    margin: -4px 2px;
     color: var(--material-secondary-text-color);
     font-family: 'vaadin-rte-icons', var(--material-font-family);
     font-weight: 600;
-    margin: -4px 2px;
   }
 
   [part~='toolbar-button']:hover {

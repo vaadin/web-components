@@ -82,19 +82,19 @@ class DashboardSection extends DashboardItemMixin(ElementMixin(ThemableMixin(Pol
     return [
       css`
         :host {
-          display: grid;
-          position: relative;
-          grid-template-columns: subgrid;
           --_vaadin-dashboard-section-column: 1 / calc(var(--_vaadin-dashboard-effective-col-count) + 1);
-          grid-column: var(--_vaadin-dashboard-section-column) !important;
-          gap: var(--_vaadin-dashboard-gap, 1rem);
           /* Dashboard section header height */
           --_vaadin-dashboard-section-header-height: minmax(0, auto);
+          position: relative;
+          display: grid;
+          gap: var(--_vaadin-dashboard-gap, 1rem);
+          grid-auto-rows: var(--_vaadin-dashboard-row-height);
+          grid-column: var(--_vaadin-dashboard-section-column) !important;
+          grid-template-columns: subgrid;
           grid-template-rows: var(--_vaadin-dashboard-section-header-height) repeat(
               auto-fill,
               var(--_vaadin-dashboard-row-height)
             );
-          grid-auto-rows: var(--_vaadin-dashboard-row-height);
         }
 
         :host([hidden]) {
@@ -107,9 +107,9 @@ class DashboardSection extends DashboardItemMixin(ElementMixin(ThemableMixin(Pol
               var(--vaadin-dashboard-item-colspan, 1),
               var(--_vaadin-dashboard-effective-col-count, var(--_vaadin-dashboard-col-count))
             );
+          --_vaadin-dashboard-item-row: span var(--vaadin-dashboard-item-rowspan, 1);
 
           grid-column: var(--_vaadin-dashboard-item-column);
-          --_vaadin-dashboard-item-row: span var(--vaadin-dashboard-item-rowspan, 1);
           grid-row: var(--_vaadin-dashboard-item-row);
         }
 

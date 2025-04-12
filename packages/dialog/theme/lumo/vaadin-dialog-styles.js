@@ -6,9 +6,9 @@ const dialogOverlay = css`
   /* Optical centering */
   :host::before,
   :host::after {
-    content: '';
     flex-basis: 0;
     flex-grow: 1;
+    content: '';
   }
 
   :host::after {
@@ -17,10 +17,10 @@ const dialogOverlay = css`
 
   [part='overlay'] {
     border-radius: var(--lumo-border-radius-l);
+    background-image: none;
     box-shadow:
       0 0 0 1px var(--lumo-shade-5pct),
       var(--lumo-box-shadow-xl);
-    background-image: none;
     outline: none;
     -webkit-tap-highlight-color: transparent;
   }
@@ -42,20 +42,20 @@ const dialogOverlay = css`
 
   [part='header'] {
     padding: var(--lumo-space-m);
-    background-color: var(--lumo-base-color);
     border-radius: var(--lumo-border-radius-l) var(--lumo-border-radius-l) 0 0; /* Needed for Safari */
+    background-color: var(--lumo-base-color);
   }
 
   [part='footer'] {
     padding: var(--lumo-space-s) var(--lumo-space-m);
-    background-color: var(--lumo-contrast-5pct);
     border-radius: 0 0 var(--lumo-border-radius-l) var(--lumo-border-radius-l); /* Needed for Safari */
+    background-color: var(--lumo-contrast-5pct);
   }
 
   [part='title'] {
+    color: var(--lumo-header-text-color);
     font-size: var(--lumo-font-size-xl);
     font-weight: 600;
-    color: var(--lumo-header-text-color);
     margin-inline-start: calc(var(--lumo-space-l) - var(--lumo-space-m));
   }
 

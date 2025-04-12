@@ -4,15 +4,15 @@ import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themab
 
 const accordionHeading = css`
   :host(:not([opened]))::after {
-    content: '';
     position: absolute;
+    z-index: 1;
+    right: 0;
     bottom: -1px;
     left: 0;
-    right: 0;
     height: 1px;
-    opacity: 1;
-    z-index: 1;
     background-color: var(--material-divider-color);
+    content: '';
+    opacity: 1;
   }
 
   :host([opened])::before {

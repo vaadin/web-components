@@ -19,9 +19,9 @@ export const uploadFileStyles = css`
   }
 
   button {
-    background: transparent;
     padding: 0;
     border: none;
+    background: transparent;
     box-shadow: none;
   }
 

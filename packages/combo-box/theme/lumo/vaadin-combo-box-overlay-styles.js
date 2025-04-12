@@ -33,8 +33,8 @@ const comboBoxLoader = css`
   [part~='loader'] {
     position: absolute;
     z-index: 1;
-    inset-inline: var(--lumo-space-s);
     top: var(--lumo-space-s);
+    inset-inline: var(--lumo-space-s);
     margin-inline: auto 0;
   }
 `;

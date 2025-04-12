@@ -5,53 +5,53 @@ import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themab
 
 const button = css`
   :host {
-    padding: 8px;
+    display: inline-flex;
+    overflow: hidden;
     min-width: 64px;
     box-sizing: border-box;
-    display: inline-flex;
+    flex-shrink: 0;
     align-items: baseline;
     justify-content: center;
+    padding: 8px;
     border-radius: 4px;
     color: var(--material-primary-text-color);
     font-family: var(--material-font-family);
-    text-transform: uppercase;
     font-size: var(--material-button-font-size);
-    line-height: 20px;
-    font-weight: 500;
-    letter-spacing: 0.05em;
-    white-space: nowrap;
-    overflow: hidden;
-    transition: box-shadow 0.2s;
-    -webkit-tap-highlight-color: transparent;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    flex-shrink: 0;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    line-height: 20px;
+    -webkit-tap-highlight-color: transparent;
+    text-transform: uppercase;
+    transition: box-shadow 0.2s;
+    white-space: nowrap;
   }
 
   :host::before,
   :host::after {
-    content: '';
-    pointer-events: none;
     position: absolute;
     border-radius: inherit;
-    opacity: 0;
     background-color: currentColor;
+    content: '';
+    opacity: 0;
+    pointer-events: none;
   }
 
   :host::before {
-    width: 100%;
-    height: 100%;
     top: 0;
     left: 0;
+    width: 100%;
+    height: 100%;
     transition: opacity 0.5s;
   }
 
   :host::after {
-    border-radius: 50%;
-    width: 320px;
-    height: 320px;
     top: 50%;
     left: 50%;
+    width: 320px;
+    height: 320px;
+    border-radius: 50%;
     transform: translate(-50%, -50%);
     transition: all 0.9s;
   }
@@ -72,14 +72,14 @@ const button = css`
   }
 
   :host([active])::after {
-    transform: translate(-50%, -50%) scale(0.0000001); /* animation works weirdly with scale(0) */
     opacity: 0.1;
+    transform: translate(-50%, -50%) scale(0.0000001); /* animation works weirdly with scale(0) */
     transition: 0s;
   }
 
   :host(:hover:not([active]):not([disabled]))::after {
-    transform: translate(-50%, -50%) scale(1);
     opacity: 0;
+    transform: translate(-50%, -50%) scale(1);
   }
 
   :host([disabled]) {
@@ -98,8 +98,8 @@ const button = css`
 
   :host([theme~='contained']:not([disabled])) {
     background-color: var(--material-primary-color);
-    color: var(--material-primary-contrast-color);
     box-shadow: var(--material-shadow-elevation-2dp);
+    color: var(--material-primary-contrast-color);
   }
 
   :host([theme~='contained'][disabled]) {
@@ -128,20 +128,20 @@ const button = css`
   }
 
   [part='suffix'] ::slotted(vaadin-icon) {
-    margin-left: 8px;
     margin-right: -4px;
+    margin-left: 8px;
   }
 
   /* RTL specific styles */
 
   :host([dir='rtl'])::before {
-    left: auto;
     right: 0;
+    left: auto;
   }
 
   :host([dir='rtl'])::after {
-    left: auto;
     right: 50%;
+    left: auto;
     transform: translate(50%, -50%);
   }
 
@@ -159,8 +159,8 @@ const button = css`
   }
 
   :host([dir='rtl']) [part='suffix'] ::slotted(vaadin-icon) {
-    margin-left: -4px;
     margin-right: 8px;
+    margin-left: -4px;
   }
 `;
 

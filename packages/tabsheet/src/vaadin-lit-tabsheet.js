@@ -44,15 +44,15 @@ class TabSheet extends TabSheetMixin(ThemableMixin(ElementMixin(PolylitMixin(Lit
       }
 
       ::slotted([slot='tabs']) {
+        min-width: 8em;
         flex: 1;
         align-self: stretch;
-        min-width: 8em;
       }
 
       [part='content'] {
         position: relative;
-        flex: 1;
         box-sizing: border-box;
+        flex: 1;
       }
     `;
   }

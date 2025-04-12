@@ -6,10 +6,10 @@ import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themab
 
 const details = css`
   :host {
-    margin: var(--lumo-space-xs) 0;
-    outline: none;
     --_focus-ring-color: var(--vaadin-focus-ring-color, var(--lumo-primary-color-50pct));
     --_focus-ring-width: var(--vaadin-focus-ring-width, 2px);
+    margin: var(--lumo-space-xs) 0;
+    outline: none;
   }
 
   :host([focus-ring]) ::slotted([slot='summary']) {
@@ -23,13 +23,13 @@ const details = css`
   }
 
   :host([theme~='filled']) {
-    background-color: var(--lumo-contrast-5pct);
     border-radius: var(--lumo-border-radius-m);
+    background-color: var(--lumo-contrast-5pct);
   }
 
   :host([theme~='filled']) [part='content'] {
-    padding-left: var(--lumo-space-m);
     padding-right: var(--lumo-space-m);
+    padding-left: var(--lumo-space-m);
   }
 
   :host([theme~='small']) [part$='content'] {

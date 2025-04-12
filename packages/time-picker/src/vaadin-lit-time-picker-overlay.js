@@ -19,8 +19,8 @@ const timePickerOverlayStyles = css`
 
   [part='content'] {
     display: flex;
-    flex-direction: column;
     height: 100%;
+    flex-direction: column;
   }
 `;
 

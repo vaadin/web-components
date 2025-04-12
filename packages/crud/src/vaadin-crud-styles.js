@@ -12,24 +12,24 @@ import { css } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 export const crudStyles = css`
   :host {
-    width: 100%;
-    height: 400px;
     --vaadin-crud-editor-max-height: 40%;
     --vaadin-crud-editor-max-width: 40%;
+    width: 100%;
+    height: 400px;
   }
 
   :host,
   #main {
+    position: relative;
     display: flex;
+    overflow: hidden;
     flex-direction: column;
     align-self: stretch;
-    position: relative;
-    overflow: hidden;
   }
 
   #main {
-    flex: 1 1 100%;
     height: 100%;
+    flex: 1 1 100%;
   }
 
   :host([hidden]),
@@ -60,8 +60,8 @@ export const crudStyles = css`
   [part='editor'] {
     z-index: 1;
     display: flex;
-    flex-direction: column;
     height: 100%;
+    flex-direction: column;
     outline: none;
   }
 
@@ -80,9 +80,9 @@ export const crudStyles = css`
 
   [part='scroller'] {
     display: flex;
-    flex-direction: column;
     overflow: auto;
     flex: auto;
+    flex-direction: column;
   }
 
   [part='footer'] {
@@ -94,13 +94,13 @@ export const crudStyles = css`
 
 export const crudDialogOverlayStyles = css`
   [part='overlay'] {
-    max-width: 54em;
     min-width: 20em;
+    max-width: 54em;
   }
 
   [part='footer'] {
-    justify-content: flex-start;
     flex-direction: row-reverse;
+    justify-content: flex-start;
   }
 
   /* Make buttons clickable */
@@ -109,13 +109,13 @@ export const crudDialogOverlayStyles = css`
   }
 
   :host([fullscreen]) {
-    inset: 0;
     padding: 0;
+    inset: 0;
   }
 
   :host([fullscreen]) [part='overlay'] {
-    height: 100vh;
     width: 100vw;
+    height: 100vh;
     border-radius: 0 !important;
   }
 

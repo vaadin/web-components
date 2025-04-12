@@ -40,9 +40,9 @@ class MenuBar extends MenuBarMixin(ElementMixin(ThemableMixin(PolylitMixin(LitEl
       [part='container'] {
         position: relative;
         display: flex;
+        overflow: hidden;
         width: 100%;
         flex-wrap: nowrap;
-        overflow: hidden;
       }
     `;
   }

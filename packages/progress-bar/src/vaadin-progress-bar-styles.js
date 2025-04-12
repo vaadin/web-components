@@ -22,8 +22,8 @@ export const progressBarStyles = css`
 
   [part='value'] {
     height: 100%;
-    transform-origin: 0 50%;
     transform: scaleX(var(--vaadin-progress-value));
+    transform-origin: 0 50%;
   }
 
   :host([dir='rtl']) [part='value'] {

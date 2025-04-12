@@ -36,8 +36,8 @@ class DateTimePicker extends DateTimePickerMixin(ThemableMixin(ElementMixin(Poly
         }
 
         .slots {
-          display: flex;
           --vaadin-field-default-width: 12em;
+          display: flex;
         }
 
         .slots ::slotted([slot='date-picker']) {

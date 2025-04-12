@@ -5,25 +5,25 @@ import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themab
 
 export const sideNavStyles = css`
   :host {
-    -webkit-tap-highlight-color: transparent;
     outline: none;
+    -webkit-tap-highlight-color: transparent;
   }
 
   [part='label'] {
     display: flex;
-    align-items: center;
     width: 100%;
     min-height: 40px;
-    margin: 4px 0;
-    padding: 4px 8px;
-    outline: none;
     box-sizing: border-box;
+    align-items: center;
+    padding: 4px 8px;
+    border-radius: 4px;
+    margin: 4px 0;
+    color: var(--material-secondary-text-color);
     font-family: var(--material-font-family);
     font-size: var(--material-small-font-size);
-    color: var(--material-secondary-text-color);
-    line-height: 1;
     font-weight: 500;
-    border-radius: 4px;
+    line-height: 1;
+    outline: none;
   }
 
   :host([focus-ring]) [part='label'] {
@@ -32,16 +32,16 @@ export const sideNavStyles = css`
 
   [part='toggle-button'] {
     display: inline-flex;
-    align-items: center;
-    justify-content: center;
     width: 24px;
     height: 24px;
+    align-items: center;
+    justify-content: center;
     padding: 4px;
-    margin-inline: auto -4px;
-    font-size: var(--material-icon-font-size);
-    line-height: 1;
     color: var(--material-secondary-text-color);
     font-family: 'material-icons';
+    font-size: var(--material-icon-font-size);
+    line-height: 1;
+    margin-inline: auto -4px;
     transform: rotate(90deg);
   }
 

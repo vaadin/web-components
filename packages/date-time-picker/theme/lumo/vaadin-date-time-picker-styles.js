@@ -5,9 +5,9 @@ import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themab
 
 const dateTimePicker = css`
   ::slotted([slot='date-picker']) {
-    margin-inline-end: 2px;
     --vaadin-input-field-top-end-radius: 0;
     --vaadin-input-field-bottom-end-radius: 0;
+    margin-inline-end: 2px;
   }
 
   ::slotted([slot='time-picker']) {

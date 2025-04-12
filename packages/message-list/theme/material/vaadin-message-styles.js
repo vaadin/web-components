@@ -7,13 +7,13 @@ registerStyles(
   'vaadin-message',
   css`
     :host {
+      padding: 0.75rem 1rem;
       color: var(--material-body-text-color);
       font-family: var(--material-font-family);
       font-size: var(--material-body-font-size);
-      line-height: 1.5;
-      padding: 0.75rem 1rem;
       -moz-osx-font-smoothing: grayscale;
       -webkit-font-smoothing: antialiased;
+      line-height: 1.5;
       -webkit-text-size-adjust: 100%;
     }
 
@@ -45,8 +45,8 @@ registerStyles(
     }
 
     :host([dir='rtl']) [part='name'] {
-      margin-left: 0.5rem;
       margin-right: 0;
+      margin-left: 0.5rem;
     }
 
     :host([dir='rtl']) [part='name']:empty {

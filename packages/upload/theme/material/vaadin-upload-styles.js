@@ -9,12 +9,12 @@ registerStyles(
   'vaadin-upload',
   css`
     :host(:not([nodrop])) {
+      position: relative;
       overflow: hidden;
+      padding: 8px 16px;
       border: 1px dashed var(--material-divider-color);
       border-radius: 4px;
-      padding: 8px 16px;
       transition: border-color 0.6s;
-      position: relative;
     }
 
     [part='primary-buttons'] {
@@ -28,12 +28,12 @@ registerStyles(
     }
 
     [part='drop-label'] {
-      text-align: center;
-      white-space: normal;
       padding: 0 24px;
       color: var(--material-secondary-text-color);
       font-family: var(--material-font-family);
       font-size: var(--material-small-font-size);
+      text-align: center;
+      white-space: normal;
     }
 
     :host([dragover-valid]) {
@@ -53,16 +53,16 @@ registerStyles(
     /* Ripple */
 
     :host::before {
-      content: '';
       position: absolute;
+      top: 50%;
+      left: 50%;
       width: 100px;
       height: 100px;
       border-radius: 50%;
-      top: 50%;
-      left: 50%;
-      pointer-events: none;
       background-color: var(--material-primary-color);
+      content: '';
       opacity: 0;
+      pointer-events: none;
       transform: translate(-50%, -50%) scale(0);
       transition:
         transform 0s cubic-bezier(0.075, 0.82, 0.165, 1),
@@ -71,10 +71,10 @@ registerStyles(
     }
 
     :host([dragover-valid])::before {
-      transform: translate(-50%, -50%) scale(10);
       opacity: 0.1;
-      transition-duration: 2s, 0.1s;
+      transform: translate(-50%, -50%) scale(10);
       transition-delay: 0s, 0s;
+      transition-duration: 2s, 0.1s;
     }
   `,
   { moduleId: 'material-upload' },
@@ -123,8 +123,8 @@ registerStyles(
 
     [part='info'] {
       display: flex;
-      align-items: baseline;
       flex: auto;
+      align-items: baseline;
     }
 
     [part='meta'] {
@@ -133,10 +133,10 @@ registerStyles(
     }
 
     [part='name'] {
-      white-space: nowrap;
       overflow: hidden;
-      text-overflow: ellipsis;
       font-size: var(--material-small-font-size);
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
 
     [part='commands'] {
@@ -163,12 +163,12 @@ registerStyles(
       width: 40px;
       height: 40px;
       flex: none;
-      font-family: material-icons;
-      font-size: var(--material-icon-font-size);
-      color: var(--material-secondary-text-color);
-      line-height: 1;
       padding: 8px;
       margin: -8px 0;
+      color: var(--material-secondary-text-color);
+      font-family: material-icons;
+      font-size: var(--material-icon-font-size);
+      line-height: 1;
       outline: none;
     }
 
@@ -185,13 +185,13 @@ registerStyles(
     }
 
     [part='done-icon']::before {
-      content: var(--material-icons-check);
       color: var(--material-primary-text-color);
+      content: var(--material-icons-check);
     }
 
     [part='warning-icon']::before {
-      content: var(--material-icons-error);
       color: var(--material-error-text-color);
+      content: var(--material-icons-error);
     }
 
     [part='start-button']::before {
@@ -208,15 +208,15 @@ registerStyles(
 
     [part$='button']:not([disabled])::after {
       position: absolute;
-      content: '';
       top: 0;
       left: 0;
       width: 40px;
       height: 40px;
       border-radius: 50%;
       background-color: var(--material-body-text-color);
-      transform: scale(0);
+      content: '';
       opacity: 0;
+      transform: scale(0);
       transition:
         transform 0.08s,
         opacity 0.01s;

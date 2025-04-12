@@ -14,9 +14,9 @@ registerStyles(
     }
 
     :host(:not([orientation='vertical'])) {
-      box-shadow: inset 0 -1px 0 0 var(--lumo-contrast-10pct);
       position: relative;
       min-height: var(--lumo-size-l);
+      box-shadow: inset 0 -1px 0 0 var(--lumo-contrast-10pct);
     }
 
     :host([orientation='horizontal']) [part='tabs'] ::slotted(vaadin-tab:not([theme~='icon-on-top'])) {
@@ -40,16 +40,16 @@ registerStyles(
     [part='back-button'] {
       position: absolute;
       z-index: 1;
-      font-family: lumo-icons;
-      color: var(--lumo-tertiary-text-color);
-      font-size: var(--lumo-icon-size-m);
+      top: 0;
       display: flex;
-      align-items: center;
-      justify-content: center;
       width: 1.5em;
       height: 100%;
+      align-items: center;
+      justify-content: center;
+      color: var(--lumo-tertiary-text-color);
+      font-family: lumo-icons;
+      font-size: var(--lumo-icon-size-m);
       transition: 0.2s opacity;
-      top: 0;
     }
 
     [part='forward-button']:hover,
@@ -145,8 +145,8 @@ registerStyles(
     /* Minimal */
 
     :host([theme~='minimal']) {
-      box-shadow: none;
       --_lumo-tab-marker-display: none;
+      box-shadow: none;
     }
 
     /* Hide-scroll-buttons */
@@ -203,8 +203,8 @@ registerStyles(
     }
 
     :host([dir='rtl']) [part='tabs'] ::slotted(:not(vaadin-tab)) {
-      margin-left: 0;
       margin-right: var(--lumo-space-m);
+      margin-left: 0;
     }
 
     /* Both ends overflowing */

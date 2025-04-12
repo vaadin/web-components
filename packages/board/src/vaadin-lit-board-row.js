@@ -30,11 +30,11 @@ class BoardRow extends BoardRowMixin(ElementMixin(PolylitMixin(LitElement))) {
   static get styles() {
     return css`
       :host {
+        --small-size: var(--vaadin-board-width-small, 600px);
+        --medium-size: var(--vaadin-board-width-medium, 960px);
         display: flex;
         flex-flow: row wrap;
         align-items: stretch;
-        --small-size: var(--vaadin-board-width-small, 600px);
-        --medium-size: var(--vaadin-board-width-medium, 960px);
       }
 
       :host([hidden]) {
@@ -42,9 +42,9 @@ class BoardRow extends BoardRowMixin(ElementMixin(PolylitMixin(LitElement))) {
       }
 
       :host ::slotted(*) {
+        overflow: hidden;
         box-sizing: border-box;
         flex-grow: 1;
-        overflow: hidden;
       }
     `;
   }

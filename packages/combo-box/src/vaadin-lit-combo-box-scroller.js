@@ -24,24 +24,24 @@ export class ComboBoxScroller extends ComboBoxScrollerMixin(PolylitMixin(LitElem
     return css`
       :host {
         display: block;
-        min-height: 1px;
         overflow: auto;
+        min-height: 1px;
 
-        /* Fixes item background from getting on top of scrollbars on Safari */
-        transform: translate3d(0, 0, 0);
+        /* Fixes scrollbar disappearing when 'Show scroll bars: Always' enabled in Safari */
+        box-shadow: 0 0 0 white;
 
         /* Enable momentum scrolling on iOS */
         -webkit-overflow-scrolling: touch;
 
-        /* Fixes scrollbar disappearing when 'Show scroll bars: Always' enabled in Safari */
-        box-shadow: 0 0 0 white;
+        /* Fixes item background from getting on top of scrollbars on Safari */
+        transform: translate3d(0, 0, 0);
       }
 
       #selector {
+        position: relative;
         border-width: var(--_vaadin-combo-box-items-container-border-width);
         border-style: var(--_vaadin-combo-box-items-container-border-style);
         border-color: var(--_vaadin-combo-box-items-container-border-color, transparent);
-        position: relative;
       }
     `;
   }

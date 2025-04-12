@@ -7,11 +7,11 @@ registerStyles(
   'vaadin-grid-sorter',
   css`
     :host {
-      justify-content: flex-start;
       align-items: baseline;
+      justify-content: flex-start;
+      cursor: var(--lumo-clickable-cursor);
       -webkit-user-select: none;
       user-select: none;
-      cursor: var(--lumo-clickable-cursor);
     }
 
     [part='content'] {

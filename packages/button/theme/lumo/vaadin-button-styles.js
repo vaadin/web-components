@@ -9,24 +9,6 @@ const button = css`
   :host {
     /* Sizing */
     --lumo-button-size: var(--lumo-size-m);
-    min-width: var(--vaadin-button-min-width, calc(var(--_button-size) * 2));
-    height: var(--_button-size);
-    padding: var(--vaadin-button-padding, 0 calc(var(--_button-size) / 3 + var(--lumo-border-radius-m) / 2));
-    margin: var(--vaadin-button-margin, var(--lumo-space-xs) 0);
-    box-sizing: border-box;
-    /* Style */
-    font-family: var(--lumo-font-family);
-    font-size: var(--vaadin-button-font-size, var(--lumo-font-size-m));
-    font-weight: var(--vaadin-button-font-weight, 500);
-    color: var(--_lumo-button-text-color);
-    background: var(--_lumo-button-background);
-    border: var(--vaadin-button-border, none);
-    border-radius: var(--vaadin-button-border-radius, var(--lumo-border-radius-m));
-    cursor: var(--lumo-clickable-cursor);
-    -webkit-tap-highlight-color: transparent;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    flex-shrink: 0;
     --_button-size: var(--vaadin-button-height, var(--lumo-button-size));
     --_focus-ring-color: var(--vaadin-focus-ring-color, var(--lumo-primary-color-50pct));
     --_focus-ring-width: var(--vaadin-focus-ring-width, 2px);
@@ -35,6 +17,24 @@ const button = css`
     --_lumo-button-text-color: var(--vaadin-button-text-color, var(--lumo-primary-text-color));
     --_lumo-button-primary-background: var(--vaadin-button-primary-background, var(--lumo-primary-color));
     --_lumo-button-primary-text-color: var(--vaadin-button-primary-text-color, var(--lumo-primary-contrast-color));
+    min-width: var(--vaadin-button-min-width, calc(var(--_button-size) * 2));
+    height: var(--_button-size);
+    box-sizing: border-box;
+    flex-shrink: 0;
+    padding: var(--vaadin-button-padding, 0 calc(var(--_button-size) / 3 + var(--lumo-border-radius-m) / 2));
+    border: var(--vaadin-button-border, none);
+    border-radius: var(--vaadin-button-border-radius, var(--lumo-border-radius-m));
+    margin: var(--vaadin-button-margin, var(--lumo-space-xs) 0);
+    background: var(--_lumo-button-background);
+    color: var(--_lumo-button-text-color);
+    cursor: var(--lumo-clickable-cursor);
+    /* Style */
+    font-family: var(--lumo-font-family);
+    font-size: var(--vaadin-button-font-size, var(--lumo-font-size-m));
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-weight: var(--vaadin-button-font-weight, 500);
+    -webkit-tap-highlight-color: transparent;
   }
 
   /* Set only for the internal parts so we don't affect the host vertical alignment */
@@ -49,25 +49,25 @@ const button = css`
   }
 
   :host([theme~='small']) {
-    font-size: var(--lumo-font-size-s);
     --lumo-button-size: var(--lumo-size-s);
+    font-size: var(--lumo-font-size-s);
   }
 
   :host([theme~='large']) {
-    font-size: var(--lumo-font-size-l);
     --lumo-button-size: var(--lumo-size-l);
+    font-size: var(--lumo-font-size-l);
   }
 
   /* For interaction states */
   :host::before,
   :host::after {
-    content: '';
     /* We rely on the host always being relative */
     position: absolute;
     z-index: 1;
-    inset: 0;
-    background-color: currentColor;
     border-radius: inherit;
+    background-color: currentColor;
+    content: '';
+    inset: 0;
     opacity: 0;
     pointer-events: none;
   }
@@ -83,10 +83,10 @@ const button = css`
   /* Active */
 
   :host::after {
+    filter: blur(8px);
     transition:
       opacity 1.4s,
       transform 0.1s;
-    filter: blur(8px);
   }
 
   :host([active])::before {
@@ -96,8 +96,8 @@ const button = css`
 
   :host([active])::after {
     opacity: 0.1;
-    transition-duration: 0s, 0s;
     transform: scale(0);
+    transition-duration: 0s, 0s;
   }
 
   /* Keyboard focus */
@@ -117,15 +117,15 @@ const button = css`
   :host([theme~='tertiary']),
   :host([theme~='tertiary-inline']) {
     --_background: transparent !important;
-    background: var(--vaadin-button-tertiary-background, var(--_background));
     min-width: 0;
+    background: var(--vaadin-button-tertiary-background, var(--_background));
   }
 
   :host([theme~='tertiary']) {
+    padding: var(--vaadin-button-tertiary-padding, 0 calc(var(--_button-size) / 6));
     border: var(--vaadin-button-tertiary-border, none);
     color: var(--vaadin-button-tertiary-text-color, var(--lumo-primary-text-color));
     font-weight: var(--vaadin-button-tertiary-font-weight, 500);
-    padding: var(--vaadin-button-tertiary-padding, 0 calc(var(--_button-size) / 6));
   }
 
   :host([theme~='tertiary-inline'])::before {
@@ -133,25 +133,25 @@ const button = css`
   }
 
   :host([theme~='tertiary-inline']) {
-    margin: 0;
     height: auto;
     padding: 0;
-    line-height: inherit;
+    margin: 0;
     font-size: inherit;
+    line-height: inherit;
   }
 
   :host([theme~='tertiary-inline']) [part='label'] {
-    padding: 0;
     overflow: visible;
+    padding: 0;
     line-height: inherit;
   }
 
   :host([theme~='primary']) {
-    background: var(--_lumo-button-primary-background);
+    min-width: calc(var(--lumo-button-size) * 2.5);
     border: var(--vaadin-button-primary-border, none);
+    background: var(--_lumo-button-primary-background);
     color: var(--_lumo-button-primary-text-color);
     font-weight: var(--vaadin-button-primary-font-weight, 600);
-    min-width: calc(var(--lumo-button-size) * 2.5);
   }
 
   :host([theme~='primary'])::before {
@@ -235,50 +235,50 @@ const button = css`
 
   /* Vaadin icons are based on a 16x16 grid (unlike Lumo and Material icons with 24x24), so they look too big by default */
   [part] ::slotted(vaadin-icon[icon^='vaadin:']) {
-    padding: 0.25em;
     box-sizing: border-box !important;
+    padding: 0.25em;
   }
 
   [part='prefix'] {
-    margin-left: -0.25em;
     margin-right: 0.25em;
+    margin-left: -0.25em;
   }
 
   [part='suffix'] {
-    margin-left: 0.25em;
     margin-right: -0.25em;
+    margin-left: 0.25em;
   }
 
   /* Icon-only */
 
   :host([theme~='icon']:not([theme~='tertiary-inline'])) {
     min-width: var(--lumo-button-size);
-    padding-left: calc(var(--lumo-button-size) / 4);
     padding-right: calc(var(--lumo-button-size) / 4);
+    padding-left: calc(var(--lumo-button-size) / 4);
   }
 
   :host([theme~='icon']) [part='prefix'],
   :host([theme~='icon']) [part='suffix'] {
-    margin-left: 0;
     margin-right: 0;
+    margin-left: 0;
   }
 
   /* RTL specific styles */
 
   :host([dir='rtl']) [part='prefix'] {
-    margin-left: 0.25em;
     margin-right: -0.25em;
+    margin-left: 0.25em;
   }
 
   :host([dir='rtl']) [part='suffix'] {
-    margin-left: -0.25em;
     margin-right: 0.25em;
+    margin-left: -0.25em;
   }
 
   :host([dir='rtl'][theme~='icon']) [part='prefix'],
   :host([dir='rtl'][theme~='icon']) [part='suffix'] {
-    margin-left: 0;
     margin-right: 0;
+    margin-left: 0;
   }
 `;
 

@@ -6,8 +6,8 @@ registerStyles(
   'vaadin-month-calendar',
   css`
     :host {
-      color: var(--material-body-text-color);
       padding: 0 calc(50% / 8 - 0.5em + 8px);
+      color: var(--material-body-text-color);
     }
 
     :host([show-week-numbers]) {
@@ -15,18 +15,18 @@ registerStyles(
     }
 
     [part='month-header'] {
-      font-size: var(--material-h6-font-size);
-      line-height: 1;
       padding-top: 20px;
       margin-bottom: 8px;
+      font-size: var(--material-h6-font-size);
+      line-height: 1;
     }
 
     [part='week-number'],
     [part='weekday'] {
-      font-size: var(--material-caption-font-size);
-      line-height: 44px;
       height: 40px;
       color: var(--material-secondary-text-color);
+      font-size: var(--material-caption-font-size);
+      line-height: 44px;
     }
 
     :host([disabled]),
@@ -37,24 +37,24 @@ registerStyles(
 
     [part~='date'] {
       position: relative;
-      font-size: var(--material-body-font-size);
-      line-height: 42px;
       height: 40px;
       cursor: default;
+      font-size: var(--material-body-font-size);
+      line-height: 42px;
     }
 
     [part~='date']::after {
-      content: '';
       position: absolute;
       z-index: -4;
       top: 50%;
       left: 50%;
-      transform: translate(-50%, -50%);
       width: 38px;
       height: 38px;
       box-sizing: border-box;
-      border-radius: 50%;
       border: 2px solid transparent;
+      border-radius: 50%;
+      content: '';
+      transform: translate(-50%, -50%);
     }
 
     /* Today */
@@ -66,17 +66,17 @@ registerStyles(
     /* Hover */
 
     [part~='date']:not([part~='disabled']):hover::after {
-      background-color: var(--material-secondary-background-color);
-      border-color: var(--material-secondary-background-color);
       z-index: -3;
+      border-color: var(--material-secondary-background-color);
+      background-color: var(--material-secondary-background-color);
     }
 
     /* Hide for touch devices */
     @media (hover: none) {
       [part~='date']:not([part~='disabled']):hover::after {
-        background-color: transparent;
-        border-color: transparent;
         z-index: -4;
+        border-color: transparent;
+        background-color: transparent;
       }
     }
 
@@ -88,9 +88,9 @@ registerStyles(
 
     [part~='date']:not([part~='disabled'])[part~='selected']::after,
     [part~='date'][part~='selected']::after {
-      background-color: transparent;
-      border-color: currentColor;
       z-index: -2;
+      border-color: currentColor;
+      background-color: transparent;
     }
 
     /* Focused */
@@ -102,10 +102,10 @@ registerStyles(
 
     [part~='date']:not([part~='disabled'])[part~='focused']::after,
     [part~='date']:not([part~='disabled']):active::after {
-      opacity: 0.7;
-      background-color: var(--material-primary-color);
-      border-color: var(--material-primary-color);
       z-index: -1;
+      border-color: var(--material-primary-color);
+      background-color: var(--material-primary-color);
+      opacity: 0.7;
     }
 
     [part~='date'][part~='disabled'] {

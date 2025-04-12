@@ -25,17 +25,16 @@ registerStyles(
   'vaadin-grid-tree-toggle',
   css`
     :host {
-      display: inline-flex;
-      align-items: baseline;
-      max-width: 100%;
-
       /* CSS API for :host */
       --vaadin-grid-tree-toggle-level-offset: 1em;
-      --_collapsed-icon: '\\e7be\\00a0';
+      --_collapsed-icon: '\\\\e7be\\\\00a0';
+      display: inline-flex;
+      max-width: 100%;
+      align-items: baseline;
     }
 
     :host([dir='rtl']) {
-      --_collapsed-icon: '\\e7bd\\00a0';
+      --_collapsed-icon: '\\\\e7bd\\\\00a0';
     }
 
     :host([hidden]) {
@@ -66,7 +65,7 @@ registerStyles(
     }
 
     :host([expanded]) [part='toggle']::before {
-      content: '\\e7bc\\00a0'; /* icon glyph + single non-breaking space */
+      content: '\\\\e7bc\\\\00a0'; /* icon glyph + single non-breaking space */
     }
 
     :host([leaf]) [part='toggle'] {

@@ -8,32 +8,32 @@ import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themab
 
 export const sideNavStyles = css`
   :host {
+    --_focus-ring-color: var(--vaadin-focus-ring-color, var(--lumo-primary-color-50pct));
+    --_focus-ring-width: var(--vaadin-focus-ring-width, 2px);
+    color: var(--lumo-body-text-color);
     font-family: var(--lumo-font-family);
     font-size: var(--lumo-font-size-m);
     font-weight: 500;
     line-height: var(--lumo-line-height-xs);
-    color: var(--lumo-body-text-color);
     -webkit-tap-highlight-color: transparent;
-    --_focus-ring-color: var(--vaadin-focus-ring-color, var(--lumo-primary-color-50pct));
-    --_focus-ring-width: var(--vaadin-focus-ring-width, 2px);
   }
 
   [part='label'] {
     display: flex;
-    align-items: center;
     width: 100%;
-    outline: none;
     box-sizing: border-box;
+    align-items: center;
     border-radius: var(--lumo-border-radius-m);
     font-family: var(--lumo-font-family);
     font-size: var(--lumo-font-size-s);
     font-weight: 500;
     line-height: var(--lumo-line-height-xs);
+    outline: none;
   }
 
   [part='label'] ::slotted([slot='label']) {
-    color: var(--lumo-secondary-text-color);
     margin: var(--lumo-space-s);
+    color: var(--lumo-secondary-text-color);
   }
 
   :host([focus-ring]) [part='label'] {
@@ -42,16 +42,16 @@ export const sideNavStyles = css`
 
   [part='toggle-button'] {
     display: inline-flex;
-    align-items: center;
-    justify-content: center;
     width: var(--lumo-size-s);
     height: var(--lumo-size-s);
-    margin-inline: auto var(--lumo-space-xs);
+    align-items: center;
+    justify-content: center;
+    color: var(--lumo-contrast-60pct);
+    cursor: var(--lumo-clickable-cursor);
+    font-family: 'lumo-icons';
     font-size: var(--lumo-icon-size-m);
     line-height: 1;
-    color: var(--lumo-contrast-60pct);
-    font-family: 'lumo-icons';
-    cursor: var(--lumo-clickable-cursor);
+    margin-inline: auto var(--lumo-space-xs);
   }
 
   [part='toggle-button']::before {

@@ -11,15 +11,15 @@ registerStyles(
   'vaadin-avatar',
   css`
     :host {
-      color: var(--material-secondary-text-color);
-      background-color: var(--material-secondary-background-color);
       border-radius: 50%;
+      background-color: var(--material-secondary-background-color);
+      color: var(--material-secondary-text-color);
       cursor: default;
-      outline: none;
-      user-select: none;
-      -webkit-tap-highlight-color: transparent;
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
+      outline: none;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
     }
 
     :host([has-color-index]) {

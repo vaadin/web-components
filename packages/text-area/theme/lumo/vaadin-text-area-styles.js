@@ -14,16 +14,16 @@ const textArea = css`
   [part='input-field'],
   [part='input-field'] ::slotted(textarea) {
     height: auto;
-    box-sizing: border-box;
     min-height: 0;
+    box-sizing: border-box;
   }
 
   [part='input-field'] {
     /* Equal to the implicit padding in vaadin-text-field */
     padding-top: calc((var(--lumo-text-field-size) - 1em * var(--lumo-line-height-s)) / 2);
     padding-bottom: calc((var(--lumo-text-field-size) - 1em * var(--lumo-line-height-s)) / 2);
-    transition: background-color 0.1s;
     line-height: var(--lumo-line-height-s);
+    transition: background-color 0.1s;
   }
 
   :host(:not([readonly])) [part='input-field']::after {
@@ -53,8 +53,8 @@ const textArea = css`
   }
 
   [part='input-field'] ::slotted(textarea) {
-    line-height: inherit;
     --_lumo-text-field-overflow-mask-image: none;
+    line-height: inherit;
   }
 
   /* Use sticky positioning to keep prefix/suffix/clear button visible when scrolling textarea container */

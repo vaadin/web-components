@@ -8,8 +8,8 @@ registerStyles(
   css`
     [part='navbar'],
     [part='drawer'] {
-      background-color: var(--lumo-base-color);
       background-clip: padding-box;
+      background-color: var(--lumo-base-color);
     }
 
     [part='navbar'] {
@@ -18,8 +18,8 @@ registerStyles(
     }
 
     [part='navbar'][bottom] {
-      border-bottom: none;
       border-top: 1px solid var(--lumo-contrast-10pct);
+      border-bottom: none;
     }
 
     [part='drawer'] {

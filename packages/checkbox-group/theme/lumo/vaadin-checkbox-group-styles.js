@@ -9,20 +9,20 @@ import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themab
 
 const checkboxGroup = css`
   :host {
+    padding: var(--lumo-space-xs) 0;
     color: var(--lumo-body-text-color);
-    font-size: var(--lumo-font-size-m);
     font-family: var(--lumo-font-family);
+    font-size: var(--lumo-font-size-m);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     -webkit-tap-highlight-color: transparent;
-    padding: var(--lumo-space-xs) 0;
   }
 
   :host::before {
+    display: inline-flex;
     /* Effective height of vaadin-checkbox */
     height: var(--lumo-size-s);
     box-sizing: border-box;
-    display: inline-flex;
     align-items: center;
   }
 

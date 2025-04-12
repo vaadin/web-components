@@ -13,8 +13,8 @@ registerStyles(
       background: var(--material-background-color);
       font-family: var(--material-font-family);
       font-size: var(--material-body-font-size);
-      -webkit-text-size-adjust: 100%;
       line-height: 1.4;
+      -webkit-text-size-adjust: 100%;
     }
 
     :host([fullscreen]) {
@@ -22,31 +22,31 @@ registerStyles(
     }
 
     [part='overlay-header'] {
+      position: relative;
       display: flex;
       align-items: baseline;
-      position: relative;
-      color: var(--material-body-text-color);
-      background: var(--material-secondary-background-color);
-      border-bottom: 2px solid var(--material-primary-color);
       padding: 8px;
+      border-bottom: 2px solid var(--material-primary-color);
+      background: var(--material-secondary-background-color);
       box-shadow: var(--material-shadow-elevation-4dp);
+      color: var(--material-body-text-color);
     }
 
     [part='label'] {
-      padding: 0 8px;
       flex: auto;
+      padding: 0 8px;
     }
 
     [part='clear-button'],
     [part='toggle-button'] {
+      width: 24px;
+      height: 24px;
+      padding: 8px;
+      color: var(--material-secondary-text-color);
       font-family: 'material-icons';
       font-size: var(--material-icon-font-size);
       line-height: 24px;
-      width: 24px;
-      height: 24px;
       text-align: center;
-      padding: 8px;
-      color: var(--material-secondary-text-color);
     }
 
     [part='clear-button']:hover,
@@ -65,17 +65,17 @@ registerStyles(
 
     [part='years-toggle-button'] {
       padding: 4px 8px;
+      color: var(--material-secondary-text-color);
       font-size: var(--material-body-font-size);
       font-weight: 500;
-      line-height: 24px;
       letter-spacing: 0.05em;
-      color: var(--material-secondary-text-color);
+      line-height: 24px;
     }
 
     [part='years-toggle-button']::after {
-      content: var(--material-icons-play);
       display: inline-block;
       width: 24px;
+      content: var(--material-icons-play);
       font-family: 'material-icons';
       font-size: var(--material-icon-font-size);
       line-height: 24px;
@@ -102,11 +102,11 @@ registerStyles(
     }
 
     ::slotted([slot='years'])::before {
-      border: 0;
       width: 8px;
       height: 8px;
-      transform: translateX(-50%) rotate(-45deg);
+      border: 0;
       background: var(--material-background-color);
+      transform: translateX(-50%) rotate(-45deg);
     }
 
     [part='toolbar'] {

@@ -31,8 +31,8 @@ export const multiSelectComboBox = css`
   }
 
   :host(:is([readonly], [disabled])) ::slotted(input) {
-    flex-grow: 0;
     flex-basis: 0;
+    flex-grow: 0;
     padding: 0;
   }
 
@@ -48,10 +48,10 @@ export const multiSelectComboBox = css`
 export const multiSelectComboBoxChip = css`
   :host {
     display: inline-flex;
+    box-sizing: border-box;
     align-items: center;
     align-self: center;
     white-space: nowrap;
-    box-sizing: border-box;
   }
 
   [part='label'] {

@@ -16,10 +16,10 @@ const section = css`
   }
 
   header {
+    min-height: var(--lumo-size-l);
     margin-bottom: calc(-1 * var(--_section-outline-offset));
     line-height: var(--lumo-line-height-s);
     padding-inline: var(--lumo-space-s);
-    min-height: var(--lumo-size-l);
   }
 
   [part='title'] {
@@ -30,22 +30,22 @@ const section = css`
   /* Section states */
 
   :host([editable]) {
-    outline: 1px solid var(--lumo-contrast-10pct);
-    outline-offset: calc(var(--_section-outline-offset) - 1px);
     background: var(--lumo-contrast-5pct);
     box-shadow: 0 0 0 var(--_section-outline-offset) var(--lumo-contrast-5pct);
+    outline: 1px solid var(--lumo-contrast-10pct);
+    outline-offset: calc(var(--_section-outline-offset) - 1px);
   }
   :host([editable]) header {
     padding-inline: var(--lumo-space-xs);
   }
 
   :host([focused])::after {
-    content: '';
-    display: block;
     position: absolute;
-    inset: 0;
-    border-radius: var(--lumo-border-radius-l);
     z-index: 9;
+    display: block;
+    border-radius: var(--lumo-border-radius-l);
+    content: '';
+    inset: 0;
     outline: var(--_focus-ring-width) solid var(--_focus-ring-color);
     outline-offset: var(--_focus-ring-offset);
   }
@@ -65,8 +65,8 @@ const section = css`
 
   :host([dragging]) {
     background: var(--_vaadin-dashboard-drop-target-background-color);
-    outline: var(--_vaadin-dashboard-drop-target-border);
     box-shadow: 0 0 0 var(--_section-outline-offset) var(--_vaadin-dashboard-drop-target-background-color);
+    outline: var(--_vaadin-dashboard-drop-target-border);
   }
 
   /* Accessible move mode controls */

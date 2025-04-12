@@ -5,10 +5,10 @@ import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themab
 const drawerToggle = css`
   :host {
     width: var(--lumo-size-l);
-    height: var(--lumo-size-l);
     min-width: auto;
-    margin: 0 var(--lumo-space-s);
+    height: var(--lumo-size-l);
     padding: 0;
+    margin: 0 var(--lumo-space-s);
     background: transparent;
   }
 
@@ -16,16 +16,16 @@ const drawerToggle = css`
   [part='icon']::after,
   [part='icon']::before {
     position: inherit;
-    height: auto;
-    width: auto;
-    background: transparent;
     top: auto;
+    width: auto;
+    height: auto;
+    background: transparent;
   }
 
   [part='icon']::before {
+    content: var(--lumo-icons-menu);
     font-family: lumo-icons;
     font-size: var(--lumo-icon-size-m);
-    content: var(--lumo-icons-menu);
   }
 
   :host([slot~='navbar']) {

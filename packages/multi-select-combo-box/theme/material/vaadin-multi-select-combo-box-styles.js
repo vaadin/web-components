@@ -57,8 +57,8 @@ const multiSelectComboBox = css`
   }
 
   :host([auto-expand-vertically]) ::slotted([slot='chip']) {
-    margin-top: 0.25rem;
     align-self: flex-start;
+    margin-top: 0.25rem;
   }
 
   ::slotted([slot='chip']:not([readonly]):not([disabled])) {

@@ -20,14 +20,14 @@ export const tabsStyles = css`
   }
 
   :host([orientation='horizontal']) [part='tabs'] {
-    flex-grow: 1;
     display: flex;
+    flex-grow: 1;
     align-self: stretch;
-    overflow-x: auto;
     -webkit-overflow-scrolling: touch;
+    overflow-x: auto;
   }
 
-  /* This seems more future-proof than \`overflow: -moz-scrollbars-none\` which is marked obsolete
+  /* This seems more future-proof than \\\`overflow: -moz-scrollbars-none\\\` which is marked obsolete
          and is no longer guaranteed to work:
          https://developer.mozilla.org/en-US/docs/Web/CSS/overflow#Mozilla_Extensions */
   @-moz-document url-prefix() {
@@ -42,29 +42,29 @@ export const tabsStyles = css`
 
   :host([orientation='vertical']) [part='tabs'] {
     height: 100%;
-    overflow-y: auto;
     -webkit-overflow-scrolling: touch;
+    overflow-y: auto;
   }
 
   [part='back-button'],
   [part='forward-button'] {
-    pointer-events: none;
-    opacity: 0;
     cursor: default;
+    opacity: 0;
+    pointer-events: none;
   }
 
   :host([overflow~='start']) [part='back-button'],
   :host([overflow~='end']) [part='forward-button'] {
-    pointer-events: auto;
     opacity: 1;
+    pointer-events: auto;
   }
 
   [part='back-button']::after {
-    content: '\\25C0';
+    content: '\\\\25C0';
   }
 
   [part='forward-button']::after {
-    content: '\\25B6';
+    content: '\\\\25B6';
   }
 
   :host([orientation='vertical']) [part='back-button'],
@@ -75,10 +75,10 @@ export const tabsStyles = css`
   /* RTL specific styles */
 
   :host([dir='rtl']) [part='back-button']::after {
-    content: '\\25B6';
+    content: '\\\\25B6';
   }
 
   :host([dir='rtl']) [part='forward-button']::after {
-    content: '\\25C0';
+    content: '\\\\25C0';
   }
 `;

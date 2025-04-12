@@ -9,8 +9,8 @@ registerStyles(
     dialogOverlay,
     css`
       [part='overlay'] {
-        max-width: 100%;
         min-width: 0;
+        max-width: 100%;
       }
 
       [part='content'] {

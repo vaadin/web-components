@@ -7,10 +7,10 @@ import { css } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 export const avatarGroupStyles = css`
   :host {
-    display: block;
-    width: 100%; /* prevent collapsing inside non-stretching column flex */
     --vaadin-avatar-group-overlap: 8px;
     --vaadin-avatar-group-overlap-border: 2px;
+    display: block;
+    width: 100%; /* prevent collapsing inside non-stretching column flex */
   }
 
   :host([hidden]) {
@@ -18,8 +18,8 @@ export const avatarGroupStyles = css`
   }
 
   [part='container'] {
-    display: flex;
     position: relative;
+    display: flex;
     width: 100%;
     flex-wrap: nowrap;
   }

@@ -6,9 +6,9 @@ import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themab
 
 const tabsheet = css`
   :host {
+    font-family: var(--lumo-font-family);
     font-size: var(--lumo-font-size-m);
     line-height: var(--lumo-line-height-m);
-    font-family: var(--lumo-font-family);
   }
 
   :host([theme~='bordered']) {
@@ -17,14 +17,14 @@ const tabsheet = css`
   }
 
   [part='tabs-container'] {
-    box-shadow: inset 0 -1px 0 0 var(--lumo-contrast-10pct);
     padding: var(--lumo-space-xs) var(--lumo-space-s);
+    box-shadow: inset 0 -1px 0 0 var(--lumo-contrast-10pct);
     gap: var(--lumo-space-s);
   }
 
   ::slotted([slot='tabs']) {
-    box-shadow: initial;
     margin: calc(var(--lumo-space-xs) * -1) calc(var(--lumo-space-s) * -1);
+    box-shadow: initial;
   }
 
   [part='content'] {

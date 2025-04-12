@@ -8,27 +8,27 @@ const loginFormWrapper = css`
   }
 
   [part='form'] {
-    padding: 1.5rem;
-    flex: 1;
     display: flex;
-    flex-direction: column;
     box-sizing: border-box;
+    flex: 1;
+    flex-direction: column;
     justify-content: center;
+    padding: 1.5rem;
   }
 
   [part='form-title'] {
     margin-top: calc(var(--material-h3-font-size) - var(--material-h4-font-size));
     font-size: var(--material-h5-font-size);
     font-weight: 300;
-    line-height: 1.1;
     letter-spacing: -0.01em;
+    line-height: 1.1;
     text-indent: -0.07em;
   }
 
   ::slotted([slot='submit']) {
+    flex-grow: 0;
     margin-top: 3em;
     margin-bottom: 2em;
-    flex-grow: 0;
   }
 
   @media only screen and (max-width: 1023px) {
@@ -39,18 +39,18 @@ const loginFormWrapper = css`
   }
 
   ::slotted([slot='forgot-password']) {
-    margin: 0.5rem auto;
-    padding-bottom: 12px;
     padding-top: 12px;
+    padding-bottom: 12px;
+    margin: 0.5rem auto;
     text-transform: none;
   }
 
   [part='error-message'] {
-    background-color: hsla(3, 100%, 60%, 0.1);
     padding: 1rem;
     border-radius: 0.25em;
     margin-top: 1rem;
     margin-bottom: 0.5rem;
+    background-color: hsla(3, 100%, 60%, 0.1);
     color: var(--material-error-text-color);
   }
 
@@ -63,12 +63,12 @@ const loginFormWrapper = css`
   }
 
   [part='error-message']::before {
-    content: '!';
-    font-size: 1.3em;
-    font-weight: 500;
     position: absolute;
     width: 2.25rem;
     height: 1em;
+    content: '!';
+    font-size: 1.3em;
+    font-weight: 500;
     line-height: 1;
     text-align: center;
   }
@@ -91,16 +91,16 @@ const loginFormWrapper = css`
   }
 
   [part='error-message'] p {
+    margin: 0;
     font-size: var(--material-small-font-size);
     line-height: 1.375;
-    margin: 0;
     opacity: 0.9;
   }
 
   [part='footer'] {
+    color: var(--material-secondary-text-color);
     font-size: var(--material-small-font-size);
     line-height: 1.375;
-    color: var(--material-secondary-text-color);
   }
 `;
 

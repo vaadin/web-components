@@ -11,15 +11,15 @@ const contextMenuItem = css`
   }
 
   :host(:not([dir='rtl'])[aria-haspopup='true'])::after {
-    content: var(--material-icons-chevron-right);
     padding-left: 9px;
     margin-right: -9px;
+    content: var(--material-icons-chevron-right);
   }
 
   :host([dir='rtl'][aria-haspopup='true'])::after {
-    content: var(--material-icons-chevron-left);
     padding-right: 9px;
     margin-left: -9px;
+    content: var(--material-icons-chevron-left);
   }
 
   :host([menu-item-checked]) [part='checkmark']::before {

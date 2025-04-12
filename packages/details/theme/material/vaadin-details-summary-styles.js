@@ -5,70 +5,70 @@ import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themab
 
 const detailsSummary = css`
   :host {
+    position: relative;
     display: flex;
+    width: 100%;
+    min-height: 48px;
+    box-sizing: border-box;
     align-items: center;
     justify-content: space-between;
-    width: 100%;
-    position: relative;
-    outline: none;
-    min-height: 48px;
     padding: 0 24px;
-    box-sizing: border-box;
-    font-weight: 500;
-    font-size: var(--material-small-font-size);
     background-color: var(--material-background-color);
     color: var(--material-body-text-color);
     cursor: default;
-    -webkit-tap-highlight-color: transparent;
+    font-size: var(--material-small-font-size);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    font-weight: 500;
+    outline: none;
+    -webkit-tap-highlight-color: transparent;
   }
 
   :host([disabled]) {
-    color: var(--material-disabled-text-color);
     background-color: var(--material-disabled-color);
+    color: var(--material-disabled-text-color);
   }
 
   [part='content'] {
-    margin: 0;
     position: relative;
+    margin: 0;
   }
 
   [part='toggle'] {
     position: relative;
-    order: 1;
-    margin-inline-start: auto;
     right: -8px;
     width: 24px;
     height: 24px;
+    order: 1;
     padding: 4px;
     color: var(--material-secondary-text-color);
     line-height: 24px;
+    margin-inline-start: auto;
     text-align: center;
     transform: rotate(90deg);
     transition: transform 0.1s cubic-bezier(0.4, 0, 0.2, 0.1);
   }
 
   [part='toggle']::before {
+    display: inline-block;
+    width: 24px;
+    content: var(--material-icons-chevron-right);
     font-family: 'material-icons';
     font-size: 24px;
-    width: 24px;
-    display: inline-block;
-    content: var(--material-icons-chevron-right);
   }
 
   [part='toggle']::after {
-    display: inline-block;
-    content: '';
     position: absolute;
     top: 0;
     left: 0;
+    display: inline-block;
     width: 100%;
     height: 100%;
     border-radius: 50%;
     background-color: var(--material-disabled-text-color);
-    transform: scale(0);
+    content: '';
     opacity: 0;
+    transform: scale(0);
     transition:
       transform 0s 0.8s,
       opacity 0.8s;
@@ -80,10 +80,10 @@ const detailsSummary = css`
   }
 
   :host([active]:not([disabled])) [part='toggle']::after {
-    transition-duration: 0.08s, 0.01s;
-    transition-delay: 0s, 0s;
-    transform: scale(1.25);
     opacity: 0.15;
+    transform: scale(1.25);
+    transition-delay: 0s, 0s;
+    transition-duration: 0.08s, 0.01s;
   }
 
   :host([opened]) [part='toggle'] {
@@ -96,8 +96,8 @@ const detailsSummary = css`
   }
 
   :host([dir='rtl']) [part='toggle']::after {
-    left: auto;
     right: 0;
+    left: auto;
   }
 `;
 

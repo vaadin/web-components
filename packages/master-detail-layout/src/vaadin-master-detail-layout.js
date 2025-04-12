@@ -63,8 +63,8 @@ class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ElementMixin(Themab
     return css`
       :host {
         display: flex;
-        box-sizing: border-box;
         height: 100%;
+        box-sizing: border-box;
       }
 
       :host([hidden]) {
@@ -92,9 +92,9 @@ class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ElementMixin(Themab
       }
 
       :host([overlay][has-detail]) [part='backdrop'] {
+        z-index: 1;
         display: block;
         inset: 0;
-        z-index: 1;
       }
 
       :host([overlay]) [part='detail'] {
@@ -102,10 +102,10 @@ class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ElementMixin(Themab
       }
 
       :host([overlay][orientation='horizontal']) [part='detail'] {
-        inset-inline-end: 0;
-        height: 100%;
         width: var(--_detail-min-size, min-content);
         max-width: 100%;
+        height: 100%;
+        inset-inline-end: 0;
       }
 
       :host([overlay][orientation='horizontal'][containment='viewport']) [part='detail'] {
@@ -119,8 +119,8 @@ class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ElementMixin(Themab
       /* No fixed size */
       :host(:not([has-master-size])) [part='master'],
       :host(:not([has-detail-size])) [part='detail'] {
-        flex-grow: 1;
         flex-basis: 50%;
+        flex-grow: 1;
       }
 
       /* Fixed size */
@@ -138,13 +138,13 @@ class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ElementMixin(Themab
       }
 
       :host([has-master-size][has-detail-size]) [part='master'] {
-        flex-grow: 1;
         flex-basis: var(--_master-size);
+        flex-grow: 1;
       }
 
       :host([has-master-size][has-detail-size]) [part='detail'] {
-        flex-grow: 1;
         flex-basis: var(--_detail-size);
+        flex-grow: 1;
       }
 
       /* Min size */
@@ -171,9 +171,9 @@ class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ElementMixin(Themab
       }
 
       :host([orientation='vertical'][overlay]) [part='detail'] {
-        inset-block-end: 0;
         width: 100%;
         height: var(--_detail-min-size, min-content);
+        inset-block-end: 0;
       }
 
       :host([overlay][orientation='vertical'][containment='viewport']) [part='detail'] {

@@ -73,11 +73,11 @@ registerStyles(
   'vaadin-select-value-button',
   css`
     :host {
-      font-family: var(--lumo-font-family);
-      font-size: var(--vaadin-input-field-value-font-size, var(--lumo-font-size-m));
-      padding: 0 0.25em;
       --_lumo-selected-item-height: var(--lumo-size-m);
       --_lumo-selected-item-padding: 0.5em;
+      padding: 0 0.25em;
+      font-family: var(--lumo-font-family);
+      font-size: var(--vaadin-input-field-value-font-size, var(--lumo-font-size-m));
     }
 
     ::slotted(*) {

@@ -7,10 +7,10 @@ registerStyles(
   css`
     :host {
       background-color: var(--material-background-color);
+      color: var(--material-body-text-color);
       font-family: var(--material-font-family);
       font-size: var(--material-small-font-size);
       line-height: 20px;
-      color: var(--material-body-text-color);
     }
 
     :host([disabled]) {
@@ -18,10 +18,10 @@ registerStyles(
     }
 
     [part~='cell'] {
-      min-height: 48px;
-      -webkit-tap-highlight-color: transparent;
       --_cell-padding: var(--vaadin-grid-cell-padding, var(--_cell-default-padding));
       --_cell-default-padding: 8px 16px;
+      min-height: 48px;
+      -webkit-tap-highlight-color: transparent;
     }
 
     [part~='cell'] ::slotted(vaadin-grid-cell-content) {
@@ -78,12 +78,12 @@ registerStyles(
     /* Selected row */
 
     [part~='body-cell']::before {
-      content: '';
-      pointer-events: none;
       position: absolute;
-      inset: 0;
       background-color: var(--material-primary-color);
+      content: '';
+      inset: 0;
       opacity: 0;
+      pointer-events: none;
       transition: opacity 0.1s cubic-bezier(0.4, 0, 0.2, 0.1);
     }
 
@@ -143,12 +143,12 @@ registerStyles(
     }
 
     :host([navigating]) [part~='row']:focus::before {
-      content: '';
       position: absolute;
+      z-index: 3;
+      content: '';
       inset: 0;
       pointer-events: none;
       transform: translateX(calc(-1 * var(--_grid-horizontal-scroll-position)));
-      z-index: 3;
     }
 
     /* Empty state */
@@ -159,12 +159,12 @@ registerStyles(
 
     /* Drag and Drop styles */
     :host([dragover])::after {
-      content: '';
       position: absolute;
       z-index: 100;
+      box-shadow: inset 0 0 0 2px var(--material-primary-color);
+      content: '';
       inset: 0;
       pointer-events: none;
-      box-shadow: inset 0 0 0 2px var(--material-primary-color);
     }
 
     [part~='row'][dragover] {
@@ -176,12 +176,12 @@ registerStyles(
     }
 
     [part~='row'][dragover] [part~='cell']::after {
-      content: '';
       position: absolute;
-      inset: 0;
       height: 3px;
-      pointer-events: none;
       background: var(--material-primary-color);
+      content: '';
+      inset: 0;
+      pointer-events: none;
     }
 
     [part~='row'][dragover='below'] [part~='cell']::after {
@@ -221,23 +221,23 @@ registerStyles(
     }
 
     #scroller [part~='row'][dragstart]:not([dragstart=''])::after {
-      display: block;
       position: absolute;
-      left: var(--_grid-drag-start-x);
-      top: var(--_grid-drag-start-y);
       z-index: 100;
-      content: attr(dragstart);
+      top: var(--_grid-drag-start-y);
+      left: var(--_grid-drag-start-x);
+      display: block;
+      min-width: 24px;
+      box-sizing: border-box;
       align-items: center;
       justify-content: center;
-      box-sizing: border-box;
       padding: 4px;
-      color: var(--material-primary-contrast-color);
-      background-color: var(--material-error-color);
-      min-width: 24px;
       border-radius: 2px;
+      background-color: var(--material-error-color);
+      color: var(--material-primary-contrast-color);
+      content: attr(dragstart);
       font-size: var(--material-caption-font-size);
-      text-align: center;
       line-height: 1;
+      text-align: center;
     }
 
     /* RTL specific styles */
@@ -248,8 +248,8 @@ registerStyles(
     }
 
     :host([dir='rtl']) [part~='cell'][first-frozen-to-end] {
-      border-left: none;
       border-right: 1px solid var(--material-divider-color);
+      border-left: none;
     }
 
     :host([dir='rtl']) [part~='cell']:not([last-frozen]) [part='resize-handle'] {
@@ -258,8 +258,8 @@ registerStyles(
     }
 
     :host([dir='rtl']) #scroller [part~='row'][dragstart]:not([dragstart=''])::after {
-      left: auto;
       right: var(--_grid-drag-start-x);
+      left: auto;
     }
   `,
   { moduleId: 'material-grid' },

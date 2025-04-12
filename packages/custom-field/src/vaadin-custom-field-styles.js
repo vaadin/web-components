@@ -11,9 +11,9 @@ export const customFieldStyles = css`
   }
 
   :host::before {
-    content: '\\2003';
-    width: 0;
     display: inline-block;
+    width: 0;
+    content: '\\\\2003';
     /* Size and position this element on the same vertical position as the input-field element
            to make vertical align for the host element work as expected */
   }
@@ -23,8 +23,8 @@ export const customFieldStyles = css`
   }
 
   .vaadin-custom-field-container {
-    width: 100%;
     display: flex;
+    width: 100%;
     flex-direction: column;
   }
 

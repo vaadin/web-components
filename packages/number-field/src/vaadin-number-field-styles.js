@@ -11,7 +11,7 @@ export const numberFieldStyles = css`
   }
 
   [part='decrease-button']::before {
-    content: '\\2212';
+    content: '\\\\2212';
   }
 
   [part='increase-button']::before {

@@ -2,12 +2,12 @@ import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themab
 
 const gridProEditor = css`
   :host([theme~='grid-pro-editor']) {
-    width: 100%;
-    margin: -6px 0 0;
-    padding: 0;
     top: 6px;
-    will-change: transform;
+    width: 100%;
+    padding: 0;
+    margin: -6px 0 0;
     font-size: inherit;
+    will-change: transform;
   }
 
   :host([theme~='grid-pro-editor']) ::slotted(input) {

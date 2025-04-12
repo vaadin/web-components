@@ -12,20 +12,20 @@ export const sideNavItemStyles = css`
   [part='link'] {
     width: 100%;
     min-height: 32px;
-    margin: 4px 0;
-    gap: 8px;
     padding: 4px 8px;
-    padding-inline-start: calc(8px + var(--_child-indent, 0px));
+    border-radius: 4px;
+    margin: 4px 0;
+    color: var(--material-body-text-color);
+    cursor: default;
     font-family: var(--material-font-family);
     font-size: var(--material-small-font-size);
-    line-height: 1;
     font-weight: 500;
-    color: var(--material-body-text-color);
+    gap: 8px;
+    line-height: 1;
+    padding-inline-start: calc(8px + var(--_child-indent, 0px));
     transition:
       background-color 140ms,
       color 140ms;
-    border-radius: 4px;
-    cursor: default;
   }
 
   [part='link'][href] {
@@ -42,11 +42,11 @@ export const sideNavItemStyles = css`
 
   :host([current]) [part='content']::before {
     position: absolute;
+    border-radius: 4px;
+    background-color: var(--material-primary-color);
     content: '';
     inset: 4px 0;
-    background-color: var(--material-primary-color);
     opacity: 0.12;
-    border-radius: 4px;
   }
 
   [part='toggle-button'] {
@@ -57,25 +57,25 @@ export const sideNavItemStyles = css`
   }
 
   [part='toggle-button']::before {
+    display: inline-block;
+    width: 24px;
+    content: var(--material-icons-chevron-right);
     font-family: 'material-icons';
     font-size: 24px;
-    width: 24px;
-    display: inline-block;
-    content: var(--material-icons-chevron-right);
   }
 
   [part='toggle-button']::after {
-    display: inline-block;
-    content: '';
     position: absolute;
     top: 0;
     left: 0;
+    display: inline-block;
     width: 100%;
     height: 100%;
     border-radius: 50%;
     background-color: var(--material-disabled-text-color);
-    transform: scale(0);
+    content: '';
     opacity: 0;
+    transform: scale(0);
     transition:
       transform 0s 0.8s,
       opacity 0.8s;
@@ -83,10 +83,10 @@ export const sideNavItemStyles = css`
   }
 
   [part='toggle-button']:focus-visible::after {
-    transition-duration: 0.08s, 0.01s;
-    transition-delay: 0s, 0s;
-    transform: scale(1.25);
     opacity: 0.16;
+    transform: scale(1.25);
+    transition-delay: 0s, 0s;
+    transition-duration: 0.08s, 0.01s;
   }
 
   :host([expanded]) [part='toggle-button'] {
@@ -123,10 +123,10 @@ export const sideNavItemStyles = css`
   }
 
   slot[name='prefix']::slotted(:is(vaadin-icon, [class*='icon'])) {
-    padding: 0.1em;
     flex-shrink: 0;
-    margin-inline-end: 24px;
+    padding: 0.1em;
     color: var(--material-secondary-text-color);
+    margin-inline-end: 24px;
   }
 
   :host([disabled]) slot[name='prefix']::slotted(:is(vaadin-icon, [class*='icon'])) {

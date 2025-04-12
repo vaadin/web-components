@@ -22,8 +22,8 @@ registerStyles(
     }
 
     :host(:not([theme~='borderless'])) {
-      border-radius: 4px;
       border: 1px solid var(--material-divider-color);
+      border-radius: 4px;
     }
 
     :host([focus-ring]) {
@@ -32,8 +32,8 @@ registerStyles(
 
     .ol-control {
       border-radius: 4px;
-      transition: 0.1s box-shadow;
       box-shadow: var(--material-shadow-elevation-2dp);
+      transition: 0.1s box-shadow;
     }
 
     .ol-control:hover {
@@ -41,15 +41,15 @@ registerStyles(
     }
 
     .ol-control:not(.ol-uncollapsible):hover {
-      box-shadow: var(--material-shadow-elevation-4dp);
       background-color: rgba(0, 0, 0, 0.2);
+      box-shadow: var(--material-shadow-elevation-4dp);
     }
 
     .ol-control button {
       width: 2em;
       height: 2em;
-      background-color: var(--material-background-color);
       border-radius: inherit;
+      background-color: var(--material-background-color);
     }
 
     .ol-control button,
@@ -72,14 +72,14 @@ registerStyles(
 
     @supports not selector(:focus-visible) {
       .ol-control button:focus {
-        outline: none;
         box-shadow: 0 0 0 2px var(--material-primary-color);
+        outline: none;
       }
     }
 
     .ol-control button:focus-visible {
-      outline: none;
       box-shadow: 0 0 0 2px var(--material-primary-color);
+      outline: none;
     }
 
     .ol-zoom {
@@ -101,8 +101,8 @@ registerStyles(
     }
 
     .ol-attribution ul {
-      font-size: var(--material-caption-font-size);
       cursor: default;
+      font-size: var(--material-caption-font-size);
     }
 
     .ol-attribution:not(.ol-uncollapsible) ul {
@@ -128,15 +128,15 @@ registerStyles(
     }
 
     .ol-overviewmap-map {
-      margin: 2px;
       border: 0;
       border-radius: 2px;
+      margin: 2px;
     }
 
     .ol-zoomslider,
     .ol-zoomslider:not(.ol-uncollapsible):hover {
-      box-shadow: none;
       overflow: visible;
+      box-shadow: none;
     }
 
     .ol-zoomslider button {

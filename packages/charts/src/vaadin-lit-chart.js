@@ -29,8 +29,8 @@ class Chart extends ChartMixin(ThemableMixin(ElementMixin(PolylitMixin(LitElemen
     return css`
       :host {
         display: block;
-        width: 100%;
         overflow: hidden;
+        width: 100%;
       }
 
       :host([hidden]) {

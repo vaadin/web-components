@@ -18,9 +18,9 @@ registerStyles(
 
     :host(:not([nodrop])) {
       overflow: hidden;
+      padding: var(--lumo-space-m);
       border: 1px dashed var(--lumo-contrast-20pct);
       border-radius: var(--lumo-border-radius-l);
-      padding: var(--lumo-space-m);
       transition:
         background-color 0.6s,
         border-color 0.6s;
@@ -28,10 +28,10 @@ registerStyles(
 
     [part='drop-label'] {
       display: inline-block;
-      white-space: normal;
       padding: 0 var(--lumo-space-s);
       color: var(--lumo-secondary-text-color);
       font-family: var(--lumo-font-family);
+      white-space: normal;
     }
 
     :host([dragover-valid]) {
@@ -80,10 +80,10 @@ registerStyles(
 
 const uploadFile = css`
   :host {
-    padding: var(--lumo-space-s) 0;
-    outline: none;
     --_focus-ring-color: var(--vaadin-focus-ring-color, var(--lumo-primary-color-50pct));
     --_focus-ring-width: var(--vaadin-focus-ring-width, 2px);
+    padding: var(--lumo-space-s) 0;
+    outline: none;
   }
 
   :host([focus-ring]) [part='row'] {
@@ -105,8 +105,8 @@ const uploadFile = css`
 
   [part='info'] {
     display: flex;
-    align-items: baseline;
     flex: auto;
+    align-items: baseline;
   }
 
   [part='meta'] {
@@ -115,21 +115,21 @@ const uploadFile = css`
   }
 
   [part='name'] {
-    white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   [part='commands'] {
     display: flex;
-    align-items: baseline;
     flex: none;
+    align-items: baseline;
   }
 
   [part$='icon'] {
     margin-right: var(--lumo-space-xs);
-    font-size: var(--lumo-icon-size-m);
     font-family: 'lumo-icons';
+    font-size: var(--lumo-icon-size-m);
     line-height: 1;
   }
 
@@ -146,9 +146,9 @@ const uploadFile = css`
   }
 
   [part$='button']:focus {
-    outline: none;
     border-radius: var(--lumo-border-radius-s);
     box-shadow: 0 0 0 var(--_focus-ring-width) var(--_focus-ring-color);
+    outline: none;
   }
 
   [part$='icon']::before,
@@ -157,13 +157,13 @@ const uploadFile = css`
   }
 
   [part='done-icon']::before {
-    content: var(--lumo-icons-checkmark);
     color: var(--lumo-primary-text-color);
+    content: var(--lumo-icons-checkmark);
   }
 
   [part='warning-icon']::before {
-    content: var(--lumo-icons-error);
     color: var(--lumo-error-text-color);
+    content: var(--lumo-icons-error);
   }
 
   [part='start-button']::before {
@@ -184,8 +184,8 @@ const uploadFile = css`
 
   ::slotted([slot='progress']) {
     width: auto;
-    margin-left: calc(var(--lumo-icon-size-m) + var(--lumo-space-xs));
     margin-right: calc(var(--lumo-icon-size-m) + var(--lumo-space-xs));
+    margin-left: calc(var(--lumo-icon-size-m) + var(--lumo-space-xs));
   }
 `;
 

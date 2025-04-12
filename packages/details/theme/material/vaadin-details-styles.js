@@ -5,8 +5,8 @@ import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themab
 
 const details = css`
   :host {
-    font-family: var(--material-font-family);
     box-shadow: var(--material-shadow-elevation-2dp);
+    font-family: var(--material-font-family);
     outline: none;
   }
 

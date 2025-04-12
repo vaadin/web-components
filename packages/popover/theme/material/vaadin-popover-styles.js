@@ -31,8 +31,8 @@ const popoverOverlay = css`
   /* top / bottom position */
   :host([theme~='arrow'][position^='top']) [part='arrow'],
   :host([theme~='arrow'][position^='bottom']) [part='arrow'] {
-    border-left: var(--vaadin-popover-arrow-size) solid transparent;
     border-right: var(--vaadin-popover-arrow-size) solid transparent;
+    border-left: var(--vaadin-popover-arrow-size) solid transparent;
   }
 
   :host([theme~='arrow'][position^='bottom'][bottom-aligned]) [part='arrow'],
@@ -51,20 +51,20 @@ const popoverOverlay = css`
 
   :host([theme~='arrow'][position^='bottom'][start-aligned]) [part='arrow'],
   :host([theme~='arrow'][position^='top'][start-aligned]) [part='arrow'] {
-    transform: translateX(-50%);
     inset-inline-start: 1.5rem;
+    transform: translateX(-50%);
   }
 
   :host([theme~='arrow'][position^='bottom'][end-aligned]) [part='arrow'],
   :host([theme~='arrow'][position^='top'][end-aligned]) [part='arrow'] {
-    transform: translateX(50%);
     inset-inline-end: 1.5rem;
+    transform: translateX(50%);
   }
 
   :host([theme~='arrow'][position^='bottom'][arrow-centered]) [part='arrow'],
   :host([theme~='arrow'][position^='top'][arrow-centered]) [part='arrow'] {
-    transform: translateX(-50%);
     inset-inline-start: 50%;
+    transform: translateX(-50%);
   }
 
   /* start / end position */
@@ -76,16 +76,16 @@ const popoverOverlay = css`
 
   :host([theme~='arrow'][position^='start'][start-aligned]) [part='arrow'],
   :host([theme~='arrow'][position^='end'][start-aligned]) [part='arrow'] {
-    inset-inline-start: calc(var(--vaadin-popover-arrow-size) * -1);
     border-right: var(--vaadin-popover-arrow-size) solid var(--material-background-color);
     filter: drop-shadow(-2px 0 1px rgba(0, 0, 0, 0.14));
+    inset-inline-start: calc(var(--vaadin-popover-arrow-size) * -1);
   }
 
   :host([theme~='arrow'][position^='start'][end-aligned]) [part='arrow'],
   :host([theme~='arrow'][position^='end'][end-aligned]) [part='arrow'] {
-    inset-inline-end: calc(var(--vaadin-popover-arrow-size) * -1);
     border-left: var(--vaadin-popover-arrow-size) solid var(--material-background-color);
     filter: drop-shadow(2px 0 1px rgba(0, 0, 0, 0.14));
+    inset-inline-end: calc(var(--vaadin-popover-arrow-size) * -1);
   }
 
   :host([theme~='arrow'][position^='start'][top-aligned]) [part='arrow'],

@@ -25,19 +25,19 @@ export const formLayoutStyles = css`
   :host(:not([auto-responsive])) #layout {
     display: flex;
 
-    align-items: baseline; /* default \`stretch\` is not appropriate */
-
     flex-wrap: wrap; /* the items should wrap */
+
+    align-items: baseline; /* default \\\`stretch\\\` is not appropriate */
   }
 
   :host(:not([auto-responsive])) #layout ::slotted(*) {
     /* Items should neither grow nor shrink. */
     flex-grow: 0;
     flex-shrink: 0;
+    margin-right: calc(0.5 * var(--vaadin-form-layout-column-spacing));
 
     /* Margins make spacing between the columns */
     margin-left: calc(0.5 * var(--vaadin-form-layout-column-spacing));
-    margin-right: calc(0.5 * var(--vaadin-form-layout-column-spacing));
   }
 
   #layout ::slotted(br) {
@@ -68,17 +68,6 @@ export const formLayoutStyles = css`
     --_grid-repeat: var(--_grid-column-width);
 
     display: grid;
-    grid-template-columns: repeat(auto-fill, var(--_grid-repeat));
-
-    /*
-      Auto-columns can be created when an item's colspan exceeds the rendered column count.
-      By setting auto-columns to 0, we exclude these columns from --_grid-rendered-column-count,
-      which is then used to cap the colspan.
-    */
-    grid-auto-columns: 0;
-
-    justify-items: start;
-    gap: var(--vaadin-form-layout-row-spacing) var(--_grid-column-gap);
 
     /*
       To prevent the layout from exceeding the column limit defined by --_max-columns,
@@ -99,6 +88,17 @@ export const formLayoutStyles = css`
       to shrink below the value specified in the CSS width property above.
     */
     min-width: inherit;
+    gap: var(--vaadin-form-layout-row-spacing) var(--_grid-column-gap);
+
+    /*
+      Auto-columns can be created when an item's colspan exceeds the rendered column count.
+      By setting auto-columns to 0, we exclude these columns from --_grid-rendered-column-count,
+      which is then used to cap the colspan.
+    */
+    grid-auto-columns: 0;
+    grid-template-columns: repeat(auto-fill, var(--_grid-repeat));
+
+    justify-items: start;
   }
 
   :host([auto-responsive]) #layout::before {
@@ -154,8 +154,8 @@ export const formLayoutSlotStyles = css`
       vaadin-form-layout[auto-responsive] vaadin-form-row > *,
       vaadin-form-layout[auto-responsive] vaadin-form-item > *
     ) {
-    box-sizing: border-box;
     max-width: 100%;
+    box-sizing: border-box;
   }
 
   :where(
@@ -196,10 +196,10 @@ export const formItemStyles = css`
     --_form-item-labels-aside: initial; /* true */
 
     display: inline-flex;
-    align-items: var(--_form-item-labels-aside, baseline);
     flex-flow: var(--_form-item-labels-above, column) nowrap;
-    justify-self: stretch;
+    align-items: var(--_form-item-labels-aside, baseline);
     margin: calc(0.5 * var(--vaadin-form-item-row-spacing, var(--vaadin-form-layout-row-spacing, 1em))) 0;
+    justify-self: stretch;
   }
 
   :host([label-position='top']) {
@@ -229,8 +229,8 @@ export const formItemStyles = css`
   }
 
   #content ::slotted(.full-width) {
-    box-sizing: border-box;
     width: 100%;
     min-width: 0;
+    box-sizing: border-box;
   }
 `;

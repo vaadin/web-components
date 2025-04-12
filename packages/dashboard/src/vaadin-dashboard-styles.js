@@ -54,15 +54,15 @@ export const dashboardWidgetAndSectionStyles = css`
   }
 
   #focus-button {
-    pointer-events: none;
     padding: 0;
     border: none;
+    pointer-events: none;
   }
 
   .mode-controls {
     position: absolute;
-    inset: 0;
     z-index: 2;
+    inset: 0;
   }
 
   .mode-controls[hidden] {
@@ -107,8 +107,8 @@ export const dashboardWidgetAndSectionStyles = css`
   }
 
   [part~='resize-shrink-width-button'] {
-    inset-inline-end: 0;
     top: 50%;
+    inset-inline-end: 0;
   }
 
   :host(:not([dir='rtl'])) [part~='resize-shrink-width-button'] {
@@ -124,8 +124,8 @@ export const dashboardWidgetAndSectionStyles = css`
   }
 
   [part~='resize-grow-width-button'] {
-    inset-inline-start: 100%;
     top: 50%;
+    inset-inline-start: 100%;
   }
 
   :host(:not([dir='rtl'])) [part~='resize-grow-width-button'] {
@@ -149,8 +149,8 @@ export const dashboardWidgetAndSectionStyles = css`
   }
 
   [part~='resize-apply-button'] {
-    left: 50%;
     top: 50%;
+    left: 50%;
 
     transform: translate(-50%, -50%);
   }

@@ -20,8 +20,8 @@ export const checkboxStyles = css`
 
   .vaadin-checkbox-container {
     display: grid;
-    grid-template-columns: auto 1fr;
     align-items: baseline;
+    grid-template-columns: auto 1fr;
   }
 
   [part='checkbox'],
@@ -46,28 +46,28 @@ export const checkboxStyles = css`
   }
 
   [part='checkbox'] {
-    width: var(--vaadin-checkbox-size, 1em);
-    height: var(--vaadin-checkbox-size, 1em);
     --_input-border-width: var(--vaadin-input-field-border-width, 0);
     --_input-border-color: var(--vaadin-input-field-border-color, transparent);
+    width: var(--vaadin-checkbox-size, 1em);
+    height: var(--vaadin-checkbox-size, 1em);
     box-shadow: inset 0 0 0 var(--_input-border-width, 0) var(--_input-border-color);
   }
 
   [part='checkbox']::before {
     display: block;
-    content: '\\202F';
-    line-height: var(--vaadin-checkbox-size, 1em);
     contain: paint;
+    content: '\\\\202F';
+    line-height: var(--vaadin-checkbox-size, 1em);
   }
 
   /* visually hidden */
   ::slotted(input) {
-    cursor: inherit;
-    margin: 0;
-    align-self: stretch;
-    -webkit-appearance: none;
     width: initial;
     height: initial;
+    align-self: stretch;
+    margin: 0;
+    -webkit-appearance: none;
+    cursor: inherit;
   }
 
   @media (forced-colors: active) {
@@ -82,9 +82,9 @@ export const checkboxStyles = css`
     }
 
     :host(:is([checked], [indeterminate])) [part='checkbox']::after {
+      border-radius: inherit;
       outline: 1px solid;
       outline-offset: -1px;
-      border-radius: inherit;
     }
 
     :host([focused]) [part='checkbox'],

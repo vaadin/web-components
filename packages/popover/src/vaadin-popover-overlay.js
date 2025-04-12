@@ -52,19 +52,19 @@ class PopoverOverlay extends PopoverOverlayMixin(DirMixin(ThemableMixin(PolylitM
 
         [part='content'] {
           overflow: auto;
-          box-sizing: border-box;
-          max-height: 100%;
           width: var(--_vaadin-popover-content-width);
           height: var(--_vaadin-popover-content-height);
+          max-height: 100%;
+          box-sizing: border-box;
         }
 
         /* Increase the area of the popover so the pointer can go from the target directly to it. */
         [part='overlay']::before {
           position: absolute;
+          z-index: -1;
           content: '';
           inset-block: calc(var(--vaadin-popover-offset-top, 0) * -1) calc(var(--vaadin-popover-offset-bottom, 0) * -1);
           inset-inline: calc(var(--vaadin-popover-offset-start, 0) * -1) calc(var(--vaadin-popover-offset-end, 0) * -1);
-          z-index: -1;
           pointer-events: auto;
         }
 
@@ -84,10 +84,10 @@ class PopoverOverlay extends PopoverOverlayMixin(DirMixin(ThemableMixin(PolylitM
         }
 
         [part='arrow'] {
-          display: none;
           position: absolute;
-          height: 0;
+          display: none;
           width: 0;
+          height: 0;
         }
 
         :host([theme~='arrow']) [part='arrow'] {

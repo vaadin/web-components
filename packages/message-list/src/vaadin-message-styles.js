@@ -23,9 +23,9 @@ export const messageStyles = css`
   }
 
   [part='header'] {
-    align-items: baseline;
     display: flex;
     flex-flow: row wrap;
+    align-items: baseline;
   }
 
   [part='name'] {

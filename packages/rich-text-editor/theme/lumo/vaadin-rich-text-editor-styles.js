@@ -13,19 +13,19 @@ const popupOverlay = css`
   }
 
   [part='content'] {
-    padding: var(--lumo-space-xs);
-    max-width: calc(7 * (var(--_button-size) + var(--_button-margin) * 2));
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
     --_button-size: 1.25rem;
     --_button-margin: 3px;
+    display: flex;
+    max-width: calc(7 * (var(--_button-size) + var(--_button-margin) * 2));
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: var(--lumo-space-xs);
   }
 
   [part='content'] ::slotted(button) {
-    border: none;
     width: var(--_button-size);
     height: var(--_button-size);
+    border: none;
     margin: var(--_button-margin);
   }
 `;
@@ -36,14 +36,14 @@ registerStyles('vaadin-rich-text-editor-popup-overlay', [overlay, popupOverlay],
 
 const richTextEditor = css`
   :host {
-    min-height: calc(var(--lumo-size-m) * 8);
     --_focus-ring-color: var(--vaadin-focus-ring-color, var(--lumo-primary-color-50pct));
     --_focus-ring-width: var(--vaadin-focus-ring-width, 2px);
+    min-height: calc(var(--lumo-size-m) * 8);
   }
 
   [part='toolbar'] {
-    background-color: var(--lumo-contrast-5pct);
     padding: calc(var(--lumo-space-s) - 1px) var(--lumo-space-xs);
+    background-color: var(--lumo-contrast-5pct);
   }
 
   [part~='toolbar-group'] {
@@ -54,8 +54,8 @@ const richTextEditor = css`
     width: var(--lumo-size-m);
     height: var(--lumo-size-m);
     border-radius: var(--lumo-border-radius-m);
-    color: var(--lumo-contrast-60pct);
     margin: 2px 1px;
+    color: var(--lumo-contrast-60pct);
     cursor: var(--lumo-clickable-cursor);
     transition:
       background-color 100ms,
@@ -64,8 +64,8 @@ const richTextEditor = css`
 
   [part~='toolbar-button']:focus,
   [part~='toolbar-button'][aria-expanded='true'] {
-    outline: none;
     box-shadow: 0 0 0 var(--_focus-ring-width) var(--_focus-ring-color);
+    outline: none;
   }
 
   [part~='toolbar-button']:hover {
@@ -151,8 +151,8 @@ const richTextEditor = css`
 
   [part~='toolbar-button-subscript']::before,
   [part~='toolbar-button-superscript']::before {
-    font-weight: 600;
     font-size: var(--lumo-font-size-s);
+    font-weight: 600;
   }
 
   [part~='toolbar-button-subscript']::after,
@@ -186,11 +186,11 @@ const richTextEditor = css`
   }
 
   [part~='toolbar-button-code-block']::before {
+    margin-left: -0.25em;
     content: var(--lumo-icons-angle-left) var(--lumo-icons-angle-right);
     font-size: var(--lumo-font-size-l);
-    letter-spacing: -0.5em;
-    margin-left: -0.25em;
     font-weight: 600;
+    letter-spacing: -0.5em;
   }
 
   [part~='toolbar-button-image']::before {

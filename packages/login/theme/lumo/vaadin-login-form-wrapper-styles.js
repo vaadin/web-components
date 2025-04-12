@@ -31,11 +31,11 @@ const loginFormWrapper = css`
   }
 
   [part='error-message'] {
-    background-color: var(--lumo-error-color-10pct);
     padding: var(--lumo-space-m);
     border-radius: var(--lumo-border-radius-m);
     margin-top: var(--lumo-space-m);
     margin-bottom: var(--lumo-space-s);
+    background-color: var(--lumo-error-color-10pct);
     color: var(--lumo-error-text-color);
   }
 
@@ -48,12 +48,12 @@ const loginFormWrapper = css`
   }
 
   [part='error-message']::before {
-    content: var(--lumo-icons-error);
-    font-family: lumo-icons;
-    font-size: var(--lumo-icon-size-m);
     position: absolute;
     width: var(--lumo-size-m);
     height: 1em;
+    content: var(--lumo-icons-error);
+    font-family: lumo-icons;
+    font-size: var(--lumo-icon-size-m);
     line-height: 1;
     text-align: center;
   }
@@ -76,16 +76,16 @@ const loginFormWrapper = css`
   }
 
   [part='error-message-description'] {
+    margin: 0;
     font-size: var(--lumo-font-size-s);
     line-height: var(--lumo-line-height-s);
-    margin: 0;
     opacity: 0.9;
   }
 
   [part='footer'] {
+    color: var(--lumo-secondary-text-color);
     font-size: var(--lumo-font-size-xs);
     line-height: var(--lumo-line-height-s);
-    color: var(--lumo-secondary-text-color);
   }
 `;
 

@@ -8,8 +8,8 @@ import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themab
 const contextMenuItem = css`
   /* :hover needed to workaround https://github.com/vaadin/web-components/issues/3133 */
   :host(:hover) {
-    user-select: none;
     -webkit-user-select: none;
+    user-select: none;
   }
 
   :host([role='menuitem'][menu-item-checked]) [part='checkmark']::before {
@@ -17,15 +17,15 @@ const contextMenuItem = css`
   }
 
   :host([aria-haspopup='true'])::after {
+    color: var(--lumo-tertiary-text-color);
+    content: var(--lumo-icons-angle-right);
     font-family: lumo-icons;
     font-size: var(--lumo-icon-size-xs);
-    content: var(--lumo-icons-angle-right);
-    color: var(--lumo-tertiary-text-color);
   }
 
   :host(:not([dir='rtl'])[aria-haspopup='true'])::after {
-    margin-right: calc(var(--lumo-space-m) * -1);
     padding-left: var(--lumo-space-m);
+    margin-right: calc(var(--lumo-space-m) * -1);
   }
 
   :host([expanded]) {
@@ -34,9 +34,9 @@ const contextMenuItem = css`
 
   /* RTL styles */
   :host([dir='rtl'][aria-haspopup='true'])::after {
-    content: var(--lumo-icons-angle-left);
-    margin-left: calc(var(--lumo-space-m) * -1);
     padding-right: var(--lumo-space-m);
+    margin-left: calc(var(--lumo-space-m) * -1);
+    content: var(--lumo-icons-angle-left);
   }
 `;
 

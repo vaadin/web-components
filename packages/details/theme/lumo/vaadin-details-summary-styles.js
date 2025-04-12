@@ -9,22 +9,22 @@ import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themab
 const detailsSummary = css`
   :host {
     display: flex;
-    align-items: center;
     width: 100%;
-    outline: none;
-    padding: var(--lumo-space-s) 0;
     box-sizing: border-box;
+    align-items: center;
+    padding: var(--lumo-space-s) 0;
+    border-radius: var(--lumo-border-radius-m);
+    background-color: inherit;
+    color: var(--lumo-secondary-text-color);
+    cursor: var(--lumo-clickable-cursor);
     font-family: var(--lumo-font-family);
     font-size: var(--lumo-font-size-m);
-    font-weight: 500;
-    line-height: var(--lumo-line-height-xs);
-    color: var(--lumo-secondary-text-color);
-    background-color: inherit;
-    border-radius: var(--lumo-border-radius-m);
-    cursor: var(--lumo-clickable-cursor);
-    -webkit-tap-highlight-color: transparent;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    font-weight: 500;
+    line-height: var(--lumo-line-height-xs);
+    outline: none;
+    -webkit-tap-highlight-color: transparent;
   }
 
   :host([disabled]),
@@ -44,13 +44,13 @@ const detailsSummary = css`
     display: block;
     width: 1em;
     height: 1em;
-    margin-left: calc(var(--lumo-space-xs) * -1);
     margin-right: var(--lumo-space-xs);
+    margin-left: calc(var(--lumo-space-xs) * -1);
+    color: var(--lumo-contrast-60pct);
+    cursor: var(--lumo-clickable-cursor);
+    font-family: 'lumo-icons';
     font-size: var(--lumo-icon-size-s);
     line-height: 1;
-    color: var(--lumo-contrast-60pct);
-    font-family: 'lumo-icons';
-    cursor: var(--lumo-clickable-cursor);
   }
 
   [part='toggle']::before {
@@ -67,8 +67,8 @@ const detailsSummary = css`
 
   /* RTL styles */
   :host([dir='rtl']) [part='toggle'] {
-    margin-left: var(--lumo-space-xs);
     margin-right: calc(var(--lumo-space-xs) * -1);
+    margin-left: var(--lumo-space-xs);
   }
 
   :host([dir='rtl']) [part='toggle']::before {

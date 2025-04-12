@@ -8,35 +8,35 @@ registerStyles(
   'vaadin-crud-edit',
   css`
     :host {
-      display: block;
-      min-width: auto;
-      font-size: var(--material-button-font-size);
-      line-height: 1;
-      color: var(--material-text-color);
       position: relative;
-      background-color: var(--material-secondary-background-color);
-      border-radius: 4px;
+      display: block;
       width: 2em;
+      min-width: auto;
       height: 2em;
-      outline: none;
-      /* Reset button styles */
-      letter-spacing: normal;
+      border-radius: 4px;
+      background-color: var(--material-secondary-background-color);
+      color: var(--material-text-color);
+      font-size: var(--material-button-font-size);
       -webkit-font-smoothing: auto;
       -moz-font-smoothing: auto;
+      /* Reset button styles */
+      letter-spacing: normal;
+      line-height: 1;
+      outline: none;
     }
 
     [part='icon']::before {
-      font-family: serif;
-      font-size: var(--material-button-font-size);
-      color: var(--material-primary-text-color);
-      content: '\\270E';
-      width: 2em;
-      height: 2em;
-      line-height: 2em;
-      text-align: center;
       position: absolute;
       top: 0;
       left: 0;
+      width: 2em;
+      height: 2em;
+      color: var(--material-primary-text-color);
+      content: '\\\\270E';
+      font-family: serif;
+      font-size: var(--material-button-font-size);
+      line-height: 2em;
+      text-align: center;
     }
   `,
   { moduleId: 'material-crud-grid-edit' },
@@ -80,9 +80,9 @@ registerStyles(
 
       [part='editor']:focus::before {
         position: absolute;
-        inset: 0;
-        content: '';
         box-shadow: inset 0 0 0 2px var(--material-primary-color);
+        content: '';
+        inset: 0;
         pointer-events: none;
       }
 
@@ -96,8 +96,8 @@ registerStyles(
       }
 
       [part='footer'] ::slotted(*) {
-        margin-left: 4px;
         margin-right: 4px;
+        margin-left: 4px;
       }
 
       :host(:not([editor-position=''])) [part='editor']:not([hidden]) {
@@ -124,8 +124,8 @@ registerStyles(
     editorStyles,
     css`
       [part='overlay'] {
-        max-width: 54em;
         min-width: 20em;
+        max-width: 54em;
       }
 
       @keyframes material-overlay-dummy-animation {

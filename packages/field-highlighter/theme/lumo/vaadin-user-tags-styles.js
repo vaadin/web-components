@@ -49,19 +49,19 @@ registerStyles(
   'vaadin-user-tag',
   css`
     :host {
-      font-family: var(--lumo-font-family);
-      font-size: var(--lumo-font-size-xxs);
+      --vaadin-user-tag-offset: var(--lumo-space-xs);
       border-radius: var(--lumo-border-radius-s);
       box-shadow: var(--lumo-box-shadow-xs);
-      --vaadin-user-tag-offset: var(--lumo-space-xs);
+      font-family: var(--lumo-font-family);
+      font-size: var(--lumo-font-size-xxs);
     }
 
     [part='name'] {
-      color: var(--lumo-primary-contrast-color);
-      padding: 0.3em calc(0.3em + var(--lumo-border-radius-s) / 4);
-      line-height: 1;
-      font-weight: 500;
       min-width: calc(var(--lumo-line-height-xs) * 1em + 0.45em);
+      padding: 0.3em calc(0.3em + var(--lumo-border-radius-s) / 4);
+      color: var(--lumo-primary-contrast-color);
+      font-weight: 500;
+      line-height: 1;
     }
   `,
   { moduleId: 'lumo-user-tag' },

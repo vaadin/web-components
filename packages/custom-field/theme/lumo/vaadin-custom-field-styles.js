@@ -14,23 +14,23 @@ import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themab
 const customField = css`
   :host {
     --lumo-text-field-size: var(--lumo-size-m);
+    padding: 0;
     color: var(--lumo-body-text-color);
-    font-size: var(--lumo-font-size-m);
-    /* align with text-field height + vertical paddings */
-    line-height: calc(var(--lumo-text-field-size) + 2 * var(--lumo-space-xs));
     font-family: var(--lumo-font-family);
+    font-size: var(--lumo-font-size-m);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    /* align with text-field height + vertical paddings */
+    line-height: calc(var(--lumo-text-field-size) + 2 * var(--lumo-space-xs));
     -webkit-tap-highlight-color: transparent;
-    padding: 0;
   }
 
   :host::before {
-    margin-top: var(--lumo-space-xs);
+    display: inline-flex;
     height: var(--lumo-text-field-size);
     box-sizing: border-box;
-    display: inline-flex;
     align-items: center;
+    margin-top: var(--lumo-space-xs);
   }
 
   /* align with text-field label */
@@ -72,8 +72,8 @@ const customField = css`
 
   /* Small theme */
   :host([theme~='small']) {
-    font-size: var(--lumo-font-size-s);
     --lumo-text-field-size: var(--lumo-size-s);
+    font-size: var(--lumo-font-size-s);
   }
 
   :host([theme~='small'][has-label]) [part='label'] {

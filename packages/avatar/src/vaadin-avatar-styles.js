@@ -7,21 +7,21 @@ import { css } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 export const avatarStyles = css`
   :host {
+    --vaadin-avatar-outline-width: var(--vaadin-focus-ring-width, 2px);
     display: inline-block;
-    flex: none;
-    border-radius: 50%;
     overflow: hidden;
-    height: var(--vaadin-avatar-size, 64px);
     width: var(--vaadin-avatar-size, 64px);
+    height: var(--vaadin-avatar-size, 64px);
+    flex: none;
     border: var(--vaadin-avatar-outline-width) solid transparent;
+    border-radius: 50%;
     margin: calc(var(--vaadin-avatar-outline-width) * -1);
     background-clip: content-box;
-    --vaadin-avatar-outline-width: var(--vaadin-focus-ring-width, 2px);
   }
 
   img {
-    height: 100%;
     width: 100%;
+    height: 100%;
     object-fit: cover;
   }
 
@@ -52,9 +52,9 @@ export const avatarStyles = css`
 
   :host([has-color-index])::before {
     position: absolute;
-    content: '';
-    inset: 0;
     border-radius: inherit;
     box-shadow: inset 0 0 0 2px var(--vaadin-avatar-user-color);
+    content: '';
+    inset: 0;
   }
 `;

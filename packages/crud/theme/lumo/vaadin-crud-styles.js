@@ -10,26 +10,26 @@ registerStyles(
   'vaadin-crud-edit',
   css`
     :host {
+      position: relative;
+      width: var(--lumo-size-s);
       min-width: auto;
+      height: var(--lumo-size-s);
       margin: 0;
       font-family: 'lumo-icons', var(--lumo-font-family);
       font-size: var(--lumo-icon-size-m);
       line-height: 1;
-      position: relative;
-      width: var(--lumo-size-s);
-      height: var(--lumo-size-s);
       outline: none;
     }
 
     [part='icon']::before {
-      content: var(--lumo-icons-edit);
-      width: var(--lumo-size-m);
-      height: var(--lumo-size-m);
-      line-height: var(--lumo-size-m);
-      text-align: center;
       position: absolute;
       top: calc((var(--lumo-size-m) - var(--lumo-size-s)) / -2);
       left: calc((var(--lumo-size-m) - var(--lumo-size-s)) / -2);
+      width: var(--lumo-size-m);
+      height: var(--lumo-size-m);
+      content: var(--lumo-icons-edit);
+      line-height: var(--lumo-size-m);
+      text-align: center;
     }
   `,
   { moduleId: 'lumo-crud-grid-edit' },
@@ -59,9 +59,9 @@ registerStyles(
     editorStyles,
     css`
       :host {
-        font-family: var(--lumo-font-family);
         --_focus-ring-color: var(--vaadin-focus-ring-color, var(--lumo-primary-color-50pct));
         --_focus-ring-width: var(--vaadin-focus-ring-width, 2px);
+        font-family: var(--lumo-font-family);
       }
 
       [part='scroller'] {
@@ -70,9 +70,9 @@ registerStyles(
 
       [part='toolbar'] {
         padding: var(--lumo-space-s) var(--lumo-space-m);
-        background-color: var(--lumo-contrast-5pct);
         border: 1px solid var(--lumo-contrast-10pct);
         border-top: none;
+        background-color: var(--lumo-contrast-5pct);
       }
 
       :host(:not([dir='rtl'])) [part='toolbar'] ::slotted(*:not(:first-child)) {
@@ -88,26 +88,26 @@ registerStyles(
       }
 
       [part='footer'] {
-        background-color: var(--lumo-contrast-5pct);
         padding: var(--lumo-space-s);
+        background-color: var(--lumo-contrast-5pct);
       }
 
       [part='footer'] ::slotted(*) {
-        margin-left: var(--lumo-space-s);
         margin-right: var(--lumo-space-s);
+        margin-left: var(--lumo-space-s);
       }
 
       [part='editor'] {
-        background: var(--lumo-base-color);
-        box-sizing: border-box;
         position: relative;
+        box-sizing: border-box;
+        background: var(--lumo-base-color);
       }
 
       [part='editor']:focus::before {
         position: absolute;
-        inset: 0;
-        content: '';
         box-shadow: inset 0 0 0 var(--_focus-ring-width) var(--_focus-ring-color);
+        content: '';
+        inset: 0;
         pointer-events: none;
       }
 

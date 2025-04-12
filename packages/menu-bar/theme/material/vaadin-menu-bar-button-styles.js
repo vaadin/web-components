@@ -7,11 +7,11 @@ const menuBarButton = css`
   }
 
   [part='label'] ::slotted(vaadin-menu-bar-item) {
-    line-height: 20px;
-    background-color: transparent;
-    margin: -8px;
-    padding: 8px;
     justify-content: center;
+    padding: 8px;
+    margin: -8px;
+    background-color: transparent;
+    line-height: 20px;
   }
 
   :host([theme~='outlined']),
@@ -21,8 +21,8 @@ const menuBarButton = css`
 
   :host([theme~='contained']) ::slotted(vaadin-menu-bar-item),
   :host([theme~='outlined']) ::slotted(vaadin-menu-bar-item) {
-    margin: -8px -16px;
     padding: 8px 16px;
+    margin: -8px -16px;
   }
 
   :host([expanded])::before {
@@ -31,8 +31,8 @@ const menuBarButton = css`
   }
 
   :host([expanded])::after {
-    transform: translate(-50%, -50%) scale(0.0000001); /* animation works weirdly with scale(0) */
     opacity: 0.1;
+    transform: translate(-50%, -50%) scale(0.0000001); /* animation works weirdly with scale(0) */
     transition: 0s;
   }
 
@@ -41,8 +41,8 @@ const menuBarButton = css`
   }
 
   :host(:hover:not([expanded]))::after {
-    transform: translate(-50%, -50%) scale(1);
     opacity: 0;
+    transform: translate(-50%, -50%) scale(1);
   }
 
   :host([theme~='contained']:not([dir='rtl'])) {
@@ -59,9 +59,9 @@ const menuBarButton = css`
   }
 
   :host([slot='overflow']) {
+    min-width: 36px;
     padding-right: 8px;
     padding-left: 8px;
-    min-width: 36px;
   }
 
   :host([slot='overflow']) ::slotted(*) {

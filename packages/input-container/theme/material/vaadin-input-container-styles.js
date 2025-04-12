@@ -8,30 +8,30 @@ registerStyles(
       position: relative;
       top: -0.2px; /* NOTE(platosha): Adjusts for wrong flex baseline in Chrome & Safari */
       height: 32px;
-      padding-left: 0;
       padding-right: 0;
-      background-color: transparent;
+      padding-left: 0;
       margin: 0;
+      background-color: transparent;
     }
 
     :host::before,
     :host::after {
-      content: '';
       position: absolute;
+      right: 0;
       bottom: 0;
       left: 0;
-      right: 0;
       height: 1px;
-      transform-origin: 50% 0%;
       background-color: var(--_material-text-field-input-line-background-color, #000);
+      content: '';
       opacity: var(--_material-text-field-input-line-opacity, 0.42);
+      transform-origin: 50% 0%;
     }
 
     :host::after {
+      bottom: 0;
+      height: 2px;
       background-color: var(--material-primary-color);
       opacity: 0;
-      height: 2px;
-      bottom: 0;
       transform: scaleX(0);
       transition: opacity 0.175s;
     }
@@ -57,8 +57,8 @@ registerStyles(
         var(--_material-text-field-input-line-background-color, #000) 2px,
         transparent 2px
       );
-      background-size: 4px 1px;
       background-repeat: repeat-x;
+      background-size: 4px 1px;
     }
 
     :host([disabled]) ::slotted(:not([slot$='fix'])) {

@@ -25,23 +25,23 @@ export const sideNavItemBaseStyles = css`
   }
 
   [part='link'] {
-    flex: auto;
-    min-width: 0;
     display: flex;
+    min-width: 0;
+    flex: auto;
     align-items: center;
-    text-decoration: none;
     color: inherit;
     font: inherit;
+    text-decoration: none;
   }
 
   button {
-    -webkit-appearance: none;
-    appearance: none;
-    flex: none;
     position: relative;
-    margin: 0;
+    flex: none;
     padding: 0;
     border: 0;
+    margin: 0;
+    -webkit-appearance: none;
+    appearance: none;
     background: transparent;
   }
 
@@ -62,9 +62,9 @@ export const sideNavItemBaseStyles = css`
 
   slot:not([name]) {
     display: block;
-    flex: auto;
-    min-width: 0;
     overflow: hidden;
+    min-width: 0;
+    flex: auto;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
@@ -81,16 +81,16 @@ export const sideNavBaseStyles = css`
 
   button {
     display: flex;
+    width: 100%;
     align-items: center;
     justify-content: inherit;
-    width: 100%;
-    margin: 0;
     padding: 0;
+    border: initial;
+    margin: 0;
     background-color: initial;
     color: inherit;
-    border: initial;
-    outline: none;
     font: inherit;
+    outline: none;
     text-align: inherit;
   }
 

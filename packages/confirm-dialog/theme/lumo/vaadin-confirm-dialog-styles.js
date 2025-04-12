@@ -23,8 +23,8 @@ registerStyles(
       }
 
       ::slotted([slot$='button'][theme~='tertiary']) {
-        padding-left: var(--lumo-space-s);
         padding-right: var(--lumo-space-s);
+        padding-left: var(--lumo-space-s);
       }
 
       [part='cancel-button'] {

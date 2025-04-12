@@ -9,14 +9,14 @@ const tabsheet = css`
   }
 
   :host([theme~='bordered']) {
-    border-radius: 4px;
     border: 1px solid var(--material-divider-color);
+    border-radius: 4px;
   }
 
   [part='tabs-container'] {
+    padding: 4px 8px;
     box-shadow: inset 0 -1px 0 0 var(--material-divider-color);
     gap: 8px;
-    padding: 4px 8px;
   }
 
   ::slotted([slot='tabs']) {
@@ -37,8 +37,8 @@ const tabsheet = css`
     position: absolute;
     z-index: 1;
     top: 0;
-    left: 0;
     right: 0;
+    left: 0;
     transform: translate(0, -100%);
   }
 `;

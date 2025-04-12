@@ -11,16 +11,16 @@ import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themab
 
 const customField = css`
   :host {
-    display: inline-flex;
     position: relative;
+    display: inline-flex;
     margin-bottom: 8px;
-    outline: none;
     color: var(--material-body-text-color);
-    font-size: var(--material-body-font-size);
     font-family: var(--material-font-family);
-    line-height: 48px;
+    font-size: var(--material-body-font-size);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    line-height: 48px;
+    outline: none;
   }
 
   /* align with text-field label */

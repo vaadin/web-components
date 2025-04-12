@@ -18,39 +18,39 @@ export const textAreaStyles = css`
   }
 
   [part='input-field'] {
-    flex: auto;
     overflow: auto;
+    flex: auto;
     -webkit-overflow-scrolling: touch;
   }
 
   ::slotted(textarea) {
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    flex: auto;
     overflow: hidden;
     width: 100%;
+    min-width: 0;
     height: 100%;
-    outline: none;
-    resize: none;
-    margin: 0;
+    flex: auto;
     padding: 0 0.25em;
     border: 0;
     border-radius: 0;
-    min-width: 0;
-    font: inherit;
-    font-size: 1em;
-    line-height: normal;
-    color: inherit;
+    margin: 0;
+    -webkit-appearance: none;
+    -moz-appearance: none;
     background-color: transparent;
     /* Disable default invalid style in Firefox */
     box-shadow: none;
+    color: inherit;
+    font: inherit;
+    font-size: 1em;
+    line-height: normal;
+    outline: none;
+    resize: none;
   }
 
   /* Override styles from <vaadin-input-container> */
   [part='input-field'] ::slotted(textarea) {
+    box-sizing: border-box;
     align-self: stretch;
     white-space: pre-wrap;
-    box-sizing: border-box;
   }
 
   [part='input-field'] ::slotted(:not(textarea)) {

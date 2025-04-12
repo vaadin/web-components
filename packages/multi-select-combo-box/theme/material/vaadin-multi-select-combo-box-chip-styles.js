@@ -12,13 +12,13 @@ import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themab
 const chip = css`
   :host {
     height: 1.25rem;
-    margin-inline-end: 0.25rem;
     border-radius: 4px;
     background-color: rgba(0, 0, 0, 0.08);
     cursor: default;
     font-family: var(--material-font-family);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    margin-inline-end: 0.25rem;
   }
 
   :host([focused]) {
@@ -33,12 +33,12 @@ const chip = css`
   :host([slot='overflow'])::before,
   :host([slot='overflow'])::after {
     position: absolute;
-    content: '';
     width: 100%;
     height: 100%;
-    border-left: 0.125rem solid;
-    border-radius: 0.25rem;
     border-color: rgba(0, 0, 0, 0.08);
+    border-radius: 0.25rem;
+    border-left: 0.125rem solid;
+    content: '';
   }
 
   :host([slot='overflow'])::before {
@@ -67,23 +67,23 @@ const chip = css`
   }
 
   [part='label'] {
+    color: var(--material-body-text-color);
     font-size: var(--material-caption-font-size);
     line-height: 1;
-    color: var(--material-body-text-color);
   }
 
   /* Override field button */
   [part='remove-button'] {
     display: flex;
-    align-items: center;
-    justify-content: center;
-    box-sizing: border-box;
     width: 20px;
     height: 20px;
-    margin-inline-start: auto;
-    line-height: 20px;
+    box-sizing: border-box;
+    align-items: center;
+    justify-content: center;
     padding: 0;
     font-size: 0.75em;
+    line-height: 20px;
+    margin-inline-start: auto;
   }
 
   [part='remove-button']::before {
@@ -92,8 +92,8 @@ const chip = css`
 
   :host([disabled]) [part='label'] {
     color: var(--material-disabled-text-color);
-    -webkit-text-fill-color: var(--material-disabled-text-color);
     pointer-events: none;
+    -webkit-text-fill-color: var(--material-disabled-text-color);
   }
 `;
 

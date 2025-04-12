@@ -58,11 +58,6 @@ class Card extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
   static get styles() {
     return css`
       :host {
-        display: flex;
-        flex-direction: column;
-        box-sizing: border-box;
-        padding: var(--_padding);
-        gap: var(--_gap);
         --_padding: var(--vaadin-card-padding, 1em);
         --_gap: var(--vaadin-card-gap, 1em);
         --_media: 0;
@@ -73,6 +68,11 @@ class Card extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
         --_header-suffix: 0;
         --_content: 0;
         --_footer: 0;
+        display: flex;
+        box-sizing: border-box;
+        flex-direction: column;
+        padding: var(--_padding);
+        gap: var(--_gap);
       }
 
       :host([hidden]) {
@@ -181,8 +181,8 @@ class Card extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
       /* Horizontal */
       :host([theme~='horizontal']) {
         display: grid;
-        grid-template-columns: repeat(var(--_media), minmax(auto, max-content)) 1fr;
         align-items: start;
+        grid-template-columns: repeat(var(--_media), minmax(auto, max-content)) 1fr;
       }
 
       :host([theme~='horizontal'][_f]) {
@@ -194,10 +194,10 @@ class Card extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
       }
 
       [part='media'] {
-        grid-column: 1;
-        grid-row: 1 / span calc(var(--_header) + var(--_content) + var(--_footer));
         align-self: stretch;
         border-radius: inherit;
+        grid-column: 1;
+        grid-row: 1 / span calc(var(--_header) + var(--_content) + var(--_footer));
       }
 
       [part='header'] {
@@ -206,16 +206,16 @@ class Card extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
       }
 
       [part='content'] {
+        min-height: 0;
+        flex: auto;
         grid-column: calc(1 + var(--_media));
         grid-row: calc(1 + var(--_header));
-        flex: auto;
-        min-height: 0;
       }
 
       [part='footer'] {
+        border-radius: inherit;
         grid-column: calc(1 + var(--_media));
         grid-row: calc(1 + var(--_header) + var(--_content));
-        border-radius: inherit;
       }
 
       :host([theme~='horizontal']) [part='footer'] {
@@ -232,12 +232,12 @@ class Card extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
 
       :host(:is([theme~='cover-media'], [theme~='stretch-media']))
         ::slotted([slot='media']:is(img, video, svg, vaadin-icon)) {
+        /* Fixes an issue where an icon overflows the card boundaries on Firefox: https://github.com/vaadin/web-components/issues/8641 */
+        overflow: hidden;
         width: 100%;
         height: auto;
         aspect-ratio: var(--vaadin-card-media-aspect-ratio, 16/9);
         object-fit: cover;
-        /* Fixes an issue where an icon overflows the card boundaries on Firefox: https://github.com/vaadin/web-components/issues/8641 */
-        overflow: hidden;
       }
 
       :host([theme~='horizontal']:is([theme~='cover-media'], [theme~='stretch-media'])) {
@@ -251,22 +251,22 @@ class Card extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
       }
 
       :host([theme~='cover-media']) ::slotted([slot='media']:is(img, video, svg, vaadin-icon)) {
-        margin-top: calc(var(--_padding) * -1);
-        margin-inline: calc(var(--_padding) * -1);
         width: calc(100% + var(--_padding) * 2);
         max-width: none;
         border-radius: inherit;
+        margin-top: calc(var(--_padding) * -1);
         border-end-end-radius: 0;
         border-end-start-radius: 0;
+        margin-inline: calc(var(--_padding) * -1);
       }
 
       :host([theme~='horizontal'][theme~='cover-media']) ::slotted([slot='media']:is(img, video, svg, vaadin-icon)) {
-        margin-inline-end: 0;
         width: calc(100% + var(--_padding));
         height: calc(100% + var(--_padding) * 2);
         border-radius: inherit;
-        border-start-end-radius: 0;
         border-end-end-radius: 0;
+        border-start-end-radius: 0;
+        margin-inline-end: 0;
       }
 
       /* Scroller in content */

@@ -9,27 +9,27 @@ registerStyles(
   'vaadin-month-calendar',
   css`
     :host {
-      -webkit-user-select: none;
-      -webkit-tap-highlight-color: transparent;
-      user-select: none;
-      font-size: var(--lumo-font-size-m);
-      color: var(--lumo-body-text-color);
-      text-align: center;
-      padding: 0 var(--lumo-space-xs);
       --_focus-ring-color: var(--vaadin-focus-ring-color, var(--lumo-primary-color-50pct));
       --_focus-ring-width: var(--vaadin-focus-ring-width, 2px);
       --_selection-color: var(--vaadin-selection-color, var(--lumo-primary-color));
       --_selection-color-text: var(--vaadin-selection-color-text, var(--lumo-primary-text-color));
+      padding: 0 var(--lumo-space-xs);
+      color: var(--lumo-body-text-color);
+      font-size: var(--lumo-font-size-m);
+      -webkit-tap-highlight-color: transparent;
+      text-align: center;
+      -webkit-user-select: none;
+      user-select: none;
     }
 
     /* Month header */
 
     [part='month-header'] {
+      margin-bottom: var(--lumo-space-m);
       color: var(--lumo-header-text-color);
       font-size: var(--lumo-font-size-l);
-      line-height: 1;
       font-weight: 500;
-      margin-bottom: var(--lumo-space-m);
+      line-height: 1;
     }
 
     /* Week days and numbers */
@@ -37,9 +37,9 @@ registerStyles(
     [part='weekdays'],
     [part='weekday'],
     [part='week-number'] {
+      color: var(--lumo-secondary-text-color);
       font-size: var(--lumo-font-size-xxs);
       line-height: 1;
-      color: var(--lumo-secondary-text-color);
     }
 
     [part='weekdays'] {
@@ -55,12 +55,12 @@ registerStyles(
 
     [part~='date'],
     [part='week-number'] {
-      box-sizing: border-box;
+      position: relative;
       display: inline-flex;
+      height: var(--lumo-size-m);
+      box-sizing: border-box;
       align-items: center;
       justify-content: center;
-      height: var(--lumo-size-m);
-      position: relative;
     }
 
     [part~='date'] {
@@ -85,19 +85,19 @@ registerStyles(
     /* Focused date */
 
     [part~='date']::before {
-      content: '';
       position: absolute;
       z-index: -1;
       top: 50%;
       left: 50%;
-      transform: translate(-50%, -50%);
-      min-width: 2em;
-      min-height: 2em;
       width: 80%;
-      height: 80%;
-      max-height: 100%;
+      min-width: 2em;
       max-width: 100%;
+      height: 80%;
+      min-height: 2em;
+      max-height: 100%;
       border-radius: var(--lumo-border-radius-m);
+      content: '';
+      transform: translate(-50%, -50%);
     }
 
     [part~='date'][part~='focused']::before {

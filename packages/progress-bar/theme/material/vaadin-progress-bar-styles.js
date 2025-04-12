@@ -5,17 +5,17 @@ registerStyles(
   'vaadin-progress-bar',
   css`
     :host {
-      height: 4px;
-      margin: 8px 0;
       position: relative;
       overflow: hidden;
+      height: 4px;
+      margin: 8px 0;
     }
 
     :host::before {
-      content: '';
       display: block;
       height: 100%;
       background-color: var(--material-primary-color);
+      content: '';
       opacity: 0.16;
     }
 
@@ -28,8 +28,8 @@ registerStyles(
     }
 
     [part='value'] {
-      transform: none;
       background-color: var(--material-primary-color);
+      transform: none;
     }
 
     /* Indeterminate */
@@ -89,8 +89,8 @@ registerStyles(
     }
 
     :host([indeterminate][dir='rtl']) [part='bar'] {
-      left: auto;
       right: -100%;
+      left: auto;
       animation: primary-indeterminate-translate-rtl 2s infinite linear;
     }
 

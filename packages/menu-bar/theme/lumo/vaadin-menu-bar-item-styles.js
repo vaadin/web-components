@@ -19,8 +19,8 @@ const menuBarItem = css`
   }
 
   [part='content'] ::slotted(vaadin-icon[icon^='vaadin:']) {
-    padding: var(--lumo-space-xs);
     box-sizing: border-box !important;
+    padding: var(--lumo-space-xs);
   }
 `;
 

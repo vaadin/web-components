@@ -25,8 +25,8 @@ registerStyles(
   css`
     :host {
       display: inline-flex;
-      cursor: pointer;
       max-width: 100%;
+      cursor: pointer;
     }
 
     [part='content'] {
@@ -35,8 +35,8 @@ registerStyles(
 
     [part='indicators'] {
       position: relative;
-      align-self: center;
       flex: none;
+      align-self: center;
     }
 
     [part='order'] {
@@ -45,20 +45,20 @@ registerStyles(
     }
 
     [part='indicators']::before {
-      font-family: 'vaadin-grid-sorter-icons';
       display: inline-block;
+      font-family: 'vaadin-grid-sorter-icons';
     }
 
     :host(:not([direction])) [part='indicators']::before {
-      content: '\\e901';
+      content: '\\\\e901';
     }
 
     :host([direction='asc']) [part='indicators']::before {
-      content: '\\e900';
+      content: '\\\\e900';
     }
 
     :host([direction='desc']) [part='indicators']::before {
-      content: '\\e902';
+      content: '\\\\e902';
     }
   `,
   { moduleId: 'vaadin-grid-sorter-styles' },

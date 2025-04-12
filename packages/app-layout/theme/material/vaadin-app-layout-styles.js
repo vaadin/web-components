@@ -32,9 +32,9 @@ registerStyles(
     [part] ::slotted(h2),
     [part] ::slotted(h3),
     [part] ::slotted(h4) {
-      line-height: 2.5rem;
       margin-top: 0.25rem !important;
       margin-bottom: 0.25rem !important;
+      line-height: 2.5rem;
     }
 
     [part='navbar'][bottom] {

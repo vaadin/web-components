@@ -5,17 +5,17 @@ import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themab
 
 const checkboxGroup = css`
   :host {
-    display: inline-flex;
     position: relative;
+    display: inline-flex;
     padding-top: 8px;
     margin-bottom: 8px;
-    outline: none;
     color: var(--material-body-text-color);
-    font-size: var(--material-body-font-size);
-    line-height: 24px;
     font-family: var(--material-font-family);
+    font-size: var(--material-body-font-size);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    line-height: 24px;
+    outline: none;
   }
 
   :host::before {

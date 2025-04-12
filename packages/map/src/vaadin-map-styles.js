@@ -13,10 +13,10 @@ import { css } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 export const mapStyles = css`
   :host {
     display: block;
+    overflow: hidden;
     height: 400px;
     flex: 1 1 auto;
     align-self: stretch;
-    overflow: hidden;
   }
 
   :host([hidden]) {
@@ -32,8 +32,8 @@ export const mapStyles = css`
   #map,
   .ol-viewport,
   .ol-layers {
-    border-radius: inherit;
     overflow: hidden;
+    border-radius: inherit;
   }
 
   #map:fullscreen {
@@ -48,8 +48,8 @@ export const mapStyles = css`
 
   .ol-box {
     box-sizing: border-box;
-    border-radius: 2px;
     border: 1px solid rgba(0, 0, 0, 0.5);
+    border-radius: 2px;
     background-color: rgba(255, 255, 255, 0.2);
     box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.5);
   }
@@ -60,10 +60,10 @@ export const mapStyles = css`
 
   .ol-viewport,
   .ol-unselectable {
+    -webkit-tap-highlight-color: transparent;
     -webkit-touch-callout: none;
     -webkit-user-select: none;
     user-select: none;
-    -webkit-tap-highlight-color: transparent;
   }
 
   .ol-viewport canvas {
@@ -90,10 +90,8 @@ export const mapStyles = css`
   .ol-overlaycontainer-stopevent {
     /* stylelint-disable declaration-block-no-redundant-longhand-properties */
     display: grid;
-    grid-template-columns: min-content 1fr min-content;
-    grid-template-rows: min-content 1fr min-content min-content min-content min-content;
-    padding: var(--vaadin-map-controls-inset, 0.25em);
     box-sizing: border-box;
+    padding: var(--vaadin-map-controls-inset, 0.25em);
     grid-template-areas:
       'scale mouse-position fullscreen'
       'overview-map . zoom-extent'
@@ -101,39 +99,41 @@ export const mapStyles = css`
       'overview-map . zoom-slider'
       'overview-map . zoom'
       'overview-map attribution attribution';
+    grid-template-columns: min-content 1fr min-content;
+    grid-template-rows: min-content 1fr min-content min-content min-content min-content;
   }
 
   .ol-mouse-position {
-    grid-area: mouse-position;
     align-self: start;
-    text-align: center;
-    font-size: 0.625em;
     color: #000;
     filter: drop-shadow(0 0 1px #fff) drop-shadow(0 0 1px #fff);
+    font-size: 0.625em;
+    grid-area: mouse-position;
+    text-align: center;
   }
 
   .ol-scale-line,
   .ol-scale-bar {
-    grid-area: scale;
     position: relative;
-    pointer-events: none !important;
     color: #000;
+    grid-area: scale;
+    pointer-events: none !important;
   }
 
   .ol-scale-line-inner {
     border: 1px solid rgba(0, 0, 0, 0.5);
     border-top: none;
+    filter: drop-shadow(0 0 1px #fff) drop-shadow(0 0 1px #fff);
     font-size: 0.625em;
     text-align: center;
-    will-change: contents, width, filter;
     transition: all 0.25s;
-    filter: drop-shadow(0 0 1px #fff) drop-shadow(0 0 1px #fff);
+    will-change: contents, width, filter;
   }
 
   .ol-scale-bar-inner {
+    overflow: hidden;
     border: 1px solid rgba(0, 0, 0, 0.5);
     box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.5);
-    overflow: hidden;
   }
 
   .ol-scale-step-marker {
@@ -143,20 +143,20 @@ export const mapStyles = css`
   .ol-scale-step-text {
     position: absolute;
     top: 0.75em;
-    font-size: 0.625em;
+    overflow: hidden;
     color: #000;
     filter: drop-shadow(0 0 1px #fff) drop-shadow(0 0 1px #fff);
+    font-size: 0.625em;
     white-space: nowrap;
-    overflow: hidden;
   }
 
   .ol-scale-text {
     position: absolute;
-    font-size: 0.625em;
     top: 2em;
     color: #000;
-    white-space: nowrap;
     filter: drop-shadow(0 0 1px #fff) drop-shadow(0 0 1px #fff);
+    font-size: 0.625em;
+    white-space: nowrap;
   }
 
   .ol-scale-singlebar {
@@ -169,32 +169,32 @@ export const mapStyles = css`
   }
 
   .ol-control button {
-    -webkit-appearance: none;
-    border: 0;
-    margin: 0;
-    padding: 0;
-    background: #fff;
-    font: inherit;
-    color: inherit;
     width: 1.5em;
     height: 1.5em;
+    padding: 0;
+    border: 0;
+    margin: 0;
+    -webkit-appearance: none;
+    background: #fff;
+    color: inherit;
+    font: inherit;
   }
 
   .ol-control button::-moz-focus-inner {
-    border: none;
     padding: 0;
+    border: none;
   }
 
   .ol-compass {
-    grid-area: compass;
     display: block;
+    grid-area: compass;
     will-change: transform;
   }
 
   .ol-zoom {
-    grid-area: zoom;
     display: flex;
     flex-direction: column;
+    grid-area: zoom;
   }
 
   .ol-zoom-in:empty::before {
@@ -202,37 +202,37 @@ export const mapStyles = css`
   }
 
   .ol-zoom-out:empty::before {
-    content: var(--vaadin-map-icon-zoom-out, '\\2013');
+    content: var(--vaadin-map-icon-zoom-out, '\\\\2013');
   }
 
   .ol-attribution {
-    grid-area: attribution;
-    margin-inline-start: auto !important;
     display: flex;
     flex-flow: row-reverse;
+    grid-area: attribution;
+    margin-inline-start: auto !important;
   }
 
   .ol-attribution.ol-uncollapsible {
-    margin-inline-end: calc(var(--vaadin-map-controls-inset, 0.25em) * -1);
     margin-block-end: calc(var(--vaadin-map-controls-inset, 0.25em) * -1);
+    margin-inline-end: calc(var(--vaadin-map-controls-inset, 0.25em) * -1);
   }
 
   .ol-attribution button span:empty::before {
-    content: var(--vaadin-map-icon-attribution-collapse, '\\25B8');
+    content: var(--vaadin-map-icon-attribution-collapse, '\\\\25B8');
   }
 
   .ol-attribution.ol-collapsed button span:empty::before {
-    content: var(--vaadin-map-icon-attribution-expand, '\\2139');
+    content: var(--vaadin-map-icon-attribution-expand, '\\\\2139');
   }
 
   .ol-attribution ul {
     display: flex;
     align-items: center;
+    padding: 0.25em 0.5em;
+    margin: 0;
+    font-size: 0.8em;
     gap: 1em;
     list-style: none;
-    margin: 0;
-    padding: 0.25em 0.5em;
-    font-size: 0.8em;
   }
 
   .ol-attribution.ol-collapsed ul {
@@ -248,7 +248,7 @@ export const mapStyles = css`
   }
 
   .ol-compass:empty::before {
-    content: var(--vaadin-map-icon-compass, '\\2191');
+    content: var(--vaadin-map-icon-compass, '\\\\2191');
   }
 
   .ol-full-screen {
@@ -256,30 +256,30 @@ export const mapStyles = css`
   }
 
   .ol-full-screen button:empty::before {
-    content: var(--vaadin-map-icon-fullscreen, '\\2922');
+    content: var(--vaadin-map-icon-fullscreen, '\\\\2922');
   }
 
   .ol-full-screen .ol-full-screen-true:empty::before {
-    content: var(--vaadin-map-icon-close, '\\00D7');
+    content: var(--vaadin-map-icon-close, '\\\\00D7');
   }
 
   .ol-overviewmap {
-    grid-area: overview-map;
-    align-self: end;
     width: max-content;
+    align-self: end;
+    grid-area: overview-map;
   }
 
   .ol-overviewmap button span:empty::before {
-    content: var(--vaadin-map-icon-overview-map-collapse, '\\25BE');
+    content: var(--vaadin-map-icon-overview-map-collapse, '\\\\25BE');
   }
 
   .ol-overviewmap.ol-collapsed button span:empty::before {
-    content: var(--vaadin-map-icon-overview-map-expand, '\\25B4');
+    content: var(--vaadin-map-icon-overview-map-expand, '\\\\25B4');
   }
 
   .ol-overviewmap-map {
-    height: 10em;
     width: 10em;
+    height: 10em;
     border: 1px solid rgba(0, 0, 0, 0.5);
   }
 
@@ -290,25 +290,25 @@ export const mapStyles = css`
 
   .ol-overviewmap-box {
     border: 1px dashed rgba(0, 0, 0, 0.5);
+    cursor: move;
     filter: drop-shadow(0 0 1px #fff) drop-shadow(0 0 1px #fff);
     will-change: filter;
-    cursor: move;
   }
 
   .ol-zoomslider {
-    grid-area: zoom-slider;
     height: 8em;
+    grid-area: zoom-slider;
   }
 
   .ol-zoomslider button {
     position: relative;
-    height: 0.5em;
     display: block;
+    height: 0.5em;
     border-radius: inherit;
   }
 
   .ol-zoom-extent {
-    grid-area: zoom-extent;
     align-self: end;
+    grid-area: zoom-extent;
   }
 `;

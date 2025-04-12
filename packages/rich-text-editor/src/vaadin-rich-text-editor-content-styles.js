@@ -12,12 +12,12 @@ import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themab
 
 export const contentStyles = css`
   [part='content'] {
-    box-sizing: border-box;
     position: relative;
-    flex: auto;
     display: flex;
-    flex-direction: column;
     overflow: hidden;
+    box-sizing: border-box;
+    flex: auto;
+    flex-direction: column;
   }
 
   /*
@@ -25,31 +25,31 @@ export const contentStyles = css`
     CSS selectors removed: margin & padding reset, check list, indentation, video, colors, ordered & unordered list, h1-6, anchor
   */
   .ql-clipboard {
+    position: absolute;
+    top: 50%;
     left: -100000px;
     height: 1px;
     overflow-y: hidden;
-    position: absolute;
-    top: 50%;
   }
 
   .ql-clipboard p {
-    margin: 0;
     padding: 0;
+    margin: 0;
   }
 
   .ql-editor {
-    box-sizing: border-box;
-    line-height: 1.42;
     height: 100%;
+    box-sizing: border-box;
+    flex: 1;
+    padding: 0.75em 1em;
+    line-height: 1.42;
     outline: none;
     overflow-y: auto;
-    padding: 0.75em 1em;
     -moz-tab-size: 4;
     tab-size: 4;
     text-align: left;
     white-space: pre-wrap;
     word-wrap: break-word;
-    flex: 1;
   }
 
   .ql-editor > * {
@@ -79,28 +79,28 @@ export const contentStyles = css`
   /* quill core end */
 
   blockquote {
-    border-left: 0.25em solid #ccc;
-    margin-bottom: 0.3125em;
-    margin-top: 0.3125em;
     padding-left: 1em;
+    border-left: 0.25em solid #ccc;
+    margin-top: 0.3125em;
+    margin-bottom: 0.3125em;
   }
 
   code,
   pre {
-    background-color: #f0f0f0;
     border-radius: 0.1875em;
+    background-color: #f0f0f0;
   }
 
   pre {
-    white-space: pre-wrap;
-    margin-bottom: 0.3125em;
-    margin-top: 0.3125em;
     padding: 0.3125em 0.625em;
+    margin-top: 0.3125em;
+    margin-bottom: 0.3125em;
+    white-space: pre-wrap;
   }
 
   code {
-    font-size: 85%;
     padding: 0.125em 0.25em;
+    font-size: 85%;
   }
 
   img {

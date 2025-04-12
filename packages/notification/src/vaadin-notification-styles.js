@@ -9,17 +9,17 @@ export const notificationContainerStyles = css`
   :host {
     position: fixed;
     z-index: 1000;
-    inset: 0;
-    box-sizing: border-box;
     display: flex;
+    box-sizing: border-box;
     flex-direction: column;
     align-items: stretch;
+    inset: 0;
     pointer-events: none;
   }
 
   [region-group] {
-    flex: 1 1 0%;
     display: flex;
+    flex: 1 1 0%;
   }
 
   [region-group='top'] {

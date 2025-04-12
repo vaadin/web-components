@@ -7,20 +7,20 @@ import { css } from 'lit';
 
 export const valueButton = css`
   :host {
-    display: inline-block;
     position: relative;
+    display: inline-block;
+    width: 0;
+    min-width: 0;
     outline: none;
-    white-space: nowrap;
     -webkit-user-select: none;
     user-select: none;
-    min-width: 0;
-    width: 0;
+    white-space: nowrap;
   }
 
   ::slotted(*) {
-    padding-left: 0;
-    padding-right: 0;
     flex: auto;
+    padding-right: 0;
+    padding-left: 0;
   }
 
   /* placeholder styles */
@@ -30,20 +30,20 @@ export const valueButton = css`
 
   .vaadin-button-container {
     display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    text-align: inherit;
     width: 100%;
     height: 100%;
     min-height: inherit;
+    align-items: center;
+    justify-content: center;
+    text-align: inherit;
     text-shadow: inherit;
   }
 
   [part='label'] {
-    white-space: nowrap;
     overflow: hidden;
-    text-overflow: ellipsis;
     width: 100%;
     line-height: inherit;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 `;

@@ -15,15 +15,15 @@ export const sideNavItemStyles = css`
 
   [part='link'] {
     width: 100%;
-    gap: var(--lumo-space-xs);
+    min-height: var(--lumo-icon-size-m);
     padding: var(--lumo-space-s);
-    padding-inline-start: calc(var(--lumo-space-s) + var(--_child-indent, 0px));
     border-radius: var(--lumo-border-radius-m);
+    cursor: var(--lumo-clickable-cursor, default);
+    gap: var(--lumo-space-xs);
+    padding-inline-start: calc(var(--lumo-space-s) + var(--_child-indent, 0px));
     transition:
       background-color 140ms,
       color 140ms;
-    cursor: var(--lumo-clickable-cursor, default);
-    min-height: var(--lumo-icon-size-m);
   }
 
   [part='link'][href] {
@@ -35,9 +35,9 @@ export const sideNavItemStyles = css`
   }
 
   [part='toggle-button'] {
-    margin-inline-end: calc(var(--lumo-space-xs) * -1);
     width: var(--lumo-size-s);
     height: var(--lumo-size-s);
+    margin-inline-end: calc(var(--lumo-space-xs) * -1);
   }
 
   :host([has-children]) [part='content'] {
@@ -94,8 +94,8 @@ export const sideNavItemStyles = css`
   }
 
   slot[name='prefix']::slotted(:is(vaadin-icon, [class*='icon'])) {
-    padding: 0.1em;
     flex-shrink: 0;
+    padding: 0.1em;
     color: var(--lumo-contrast-60pct);
   }
 
@@ -116,9 +116,9 @@ export const sideNavItemStyles = css`
   }
 
   :host([current]) [part='content'] {
+    border-radius: var(--lumo-border-radius-m);
     background-color: var(--lumo-primary-color-10pct);
     color: var(--vaadin-selection-color-text, var(--lumo-primary-text-color));
-    border-radius: var(--lumo-border-radius-m);
   }
 `;
 

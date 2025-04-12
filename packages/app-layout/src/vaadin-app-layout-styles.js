@@ -7,17 +7,17 @@ import { css } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 export const appLayoutStyles = css`
   :host {
-    display: block;
-    box-sizing: border-box;
-    height: 100%;
     --vaadin-app-layout-transition: 200ms;
-    transition: padding var(--vaadin-app-layout-transition);
     --_vaadin-app-layout-drawer-width: var(--vaadin-app-layout-drawer-width, 16em);
     --vaadin-app-layout-touch-optimized: false;
     --vaadin-app-layout-navbar-offset-top: var(--_vaadin-app-layout-navbar-offset-size);
     --vaadin-app-layout-navbar-offset-bottom: var(--_vaadin-app-layout-navbar-offset-size-bottom);
+    display: block;
+    height: 100%;
+    box-sizing: border-box;
     padding-block: var(--vaadin-app-layout-navbar-offset-top) var(--vaadin-app-layout-navbar-offset-bottom);
     padding-inline-start: var(--vaadin-app-layout-navbar-offset-left);
+    transition: padding var(--vaadin-app-layout-transition);
   }
 
   :host([hidden]),
@@ -54,15 +54,15 @@ export const appLayoutStyles = css`
 
   [part='navbar'] {
     position: fixed;
+    z-index: 1;
+    top: 0;
     display: flex;
     align-items: center;
-    top: 0;
+    padding-top: var(--safe-area-inset-top);
+    padding-right: var(--safe-area-inset-right);
+    padding-left: var(--safe-area-inset-left);
     inset-inline: 0;
     transition: inset-inline-start var(--vaadin-app-layout-transition);
-    padding-top: var(--safe-area-inset-top);
-    padding-left: var(--safe-area-inset-left);
-    padding-right: var(--safe-area-inset-right);
-    z-index: 1;
   }
 
   :host([primary-section='drawer'][drawer-opened]:not([overlay])) [part='navbar'] {
@@ -80,31 +80,31 @@ export const appLayoutStyles = css`
   }
 
   [part='drawer'] {
-    overflow: auto;
     position: fixed;
     top: var(--vaadin-app-layout-navbar-offset-top, 0);
     bottom: var(--vaadin-app-layout-navbar-offset-bottom, var(--vaadin-viewport-offset-bottom, 0));
+    display: flex;
+    overflow: auto;
+    width: var(--_vaadin-app-layout-drawer-width);
+    max-width: 90%;
+    box-sizing: border-box;
+    flex-direction: column;
+    padding: var(--safe-area-inset-top) 0 var(--safe-area-inset-bottom) var(--safe-area-inset-left);
     inset-inline: var(--vaadin-app-layout-navbar-offset-left, 0) auto;
+    outline: none;
+    transform: translateX(-100%);
     transition:
       transform var(--vaadin-app-layout-transition),
       visibility var(--vaadin-app-layout-transition);
-    transform: translateX(-100%);
-    max-width: 90%;
-    width: var(--_vaadin-app-layout-drawer-width);
-    box-sizing: border-box;
-    padding: var(--safe-area-inset-top) 0 var(--safe-area-inset-bottom) var(--safe-area-inset-left);
-    outline: none;
     /* The drawer should be inaccessible by the tabbing navigation when it is closed. */
     visibility: hidden;
-    display: flex;
-    flex-direction: column;
   }
 
   :host([drawer-opened]) [part='drawer'] {
+    touch-action: manipulation;
+    transform: translateX(0%);
     /* The drawer should be accessible by the tabbing navigation when it is opened. */
     visibility: visible;
-    transform: translateX(0%);
-    touch-action: manipulation;
   }
 
   [part='backdrop'] {
@@ -120,8 +120,8 @@ export const appLayoutStyles = css`
     position: fixed;
     inset: 0;
     pointer-events: none;
-    transition: opacity var(--vaadin-app-layout-transition);
     -webkit-tap-highlight-color: transparent;
+    transition: opacity var(--vaadin-app-layout-transition);
   }
 
   :host([overlay]) [part='drawer'] {

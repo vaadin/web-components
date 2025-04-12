@@ -14,21 +14,21 @@ import { iconsStyles } from './vaadin-rich-text-editor-icons.js';
 export const buttonsStyles = css`
   [part='toolbar'] {
     display: flex;
-    flex-wrap: wrap;
     flex-shrink: 0;
+    flex-wrap: wrap;
   }
 
   [part~='toolbar-button'] {
+    position: relative;
     width: 2em;
     height: 2em;
-    margin: 0;
     padding: 0;
+    border: none;
+    margin: 0;
+    background: transparent;
     font: inherit;
     line-height: 1;
     text-transform: none;
-    background: transparent;
-    border: none;
-    position: relative;
   }
 
   [part~='toolbar-button']:hover {
@@ -120,10 +120,10 @@ export const buttonsStyles = css`
 
   [part~='toolbar-button-subscript']::after,
   [part~='toolbar-button-superscript']::after {
-    content: '2';
     position: absolute;
     top: 50%;
     left: 70%;
+    content: '2';
     font-size: 0.625em;
   }
 
@@ -132,9 +132,9 @@ export const buttonsStyles = css`
   }
 
   [part~='toolbar-button-blockquote']::before {
-    content: '\\201D';
-    font-size: 2em;
     height: 0.6em;
+    content: '\\\\201D';
+    font-size: 2em;
   }
 
   [part~='toolbar-button-code-block']::before {
@@ -149,14 +149,14 @@ export const buttonsStyles = css`
   }
 
   [part~='toolbar-button-color']::after {
-    content: '';
     position: absolute;
+    right: 25%;
     bottom: 4px;
     left: 25%;
-    right: 25%;
     width: 50%;
     height: 4px;
     background-color: var(--_color-value, currentColor);
+    content: '';
   }
 
   [part~='toolbar-button-background']::before {
@@ -164,9 +164,7 @@ export const buttonsStyles = css`
   }
 
   [part~='toolbar-button-background']::after {
-    content: '';
     position: absolute;
-    inset: 20%;
     background: repeating-linear-gradient(
       135deg,
       var(--_background-value, currentColor),
@@ -174,6 +172,8 @@ export const buttonsStyles = css`
       transparent 1px,
       transparent 2px
     );
+    content: '';
+    inset: 20%;
   }
 `;
 

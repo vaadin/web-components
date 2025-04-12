@@ -13,27 +13,27 @@ registerStyles(
     }
 
     [part='overlay'] {
-      background: var(--lumo-base-color) linear-gradient(var(--lumo-contrast-5pct), var(--lumo-contrast-5pct));
       border-radius: var(--lumo-border-radius-l);
+      background: var(--lumo-base-color) linear-gradient(var(--lumo-contrast-5pct), var(--lumo-contrast-5pct));
       box-shadow:
         0 0 0 1px var(--lumo-contrast-10pct),
         var(--lumo-box-shadow-l);
       font-family: var(--lumo-font-family);
       font-size: var(--lumo-font-size-m);
-      font-weight: 400;
-      line-height: var(--lumo-line-height-s);
-      letter-spacing: 0;
-      text-transform: none;
-      -webkit-text-size-adjust: 100%;
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
+      font-weight: 400;
+      letter-spacing: 0;
+      line-height: var(--lumo-line-height-s);
+      -webkit-text-size-adjust: 100%;
+      text-transform: none;
     }
 
     [part='content'] {
-      padding: var(--lumo-space-wide-l);
       display: flex;
       align-items: center;
       justify-content: space-between;
+      padding: var(--lumo-space-wide-l);
     }
 
     [part='content'] ::slotted(vaadin-button) {
@@ -84,29 +84,29 @@ registerStyles(
 
     @keyframes lumo-notification-enter-slide-down {
       0% {
-        transform: translateY(-200%);
         opacity: 0;
+        transform: translateY(-200%);
       }
     }
 
     @keyframes lumo-notification-exit-slide-up {
       100% {
-        transform: translateY(-200%);
         opacity: 0;
+        transform: translateY(-200%);
       }
     }
 
     @keyframes lumo-notification-enter-slide-up {
       0% {
-        transform: translateY(200%);
         opacity: 0;
+        transform: translateY(200%);
       }
     }
 
     @keyframes lumo-notification-exit-slide-down {
       100% {
-        transform: translateY(200%);
         opacity: 0;
+        transform: translateY(200%);
       }
     }
 
@@ -156,8 +156,8 @@ registerStyles(
 
     :host([theme~='primary']) [part='overlay'] {
       background: var(--lumo-primary-color);
-      color: var(--lumo-primary-contrast-color);
       box-shadow: var(--lumo-box-shadow-l);
+      color: var(--lumo-primary-contrast-color);
     }
 
     :host([theme~='primary']) {
@@ -169,8 +169,8 @@ registerStyles(
 
     :host([theme~='contrast']) [part='overlay'] {
       background: var(--lumo-contrast);
-      color: var(--lumo-base-color);
       box-shadow: var(--lumo-box-shadow-l);
+      color: var(--lumo-base-color);
     }
 
     :host([theme~='contrast']) {
@@ -182,8 +182,8 @@ registerStyles(
 
     :host([theme~='success']) [part='overlay'] {
       background: var(--lumo-success-color);
-      color: var(--lumo-success-contrast-color);
       box-shadow: var(--lumo-box-shadow-l);
+      color: var(--lumo-success-contrast-color);
     }
 
     :host([theme~='success']) {
@@ -195,8 +195,8 @@ registerStyles(
 
     :host([theme~='error']) [part='overlay'] {
       background: var(--lumo-error-color);
-      color: var(--lumo-error-contrast-color);
       box-shadow: var(--lumo-box-shadow-l);
+      color: var(--lumo-error-contrast-color);
     }
 
     :host([theme~='error']) {
@@ -208,10 +208,10 @@ registerStyles(
 
     :host([theme~='warning']) [part='overlay'] {
       background: var(--lumo-warning-color);
-      color: var(--lumo-warning-contrast-color);
       box-shadow:
         inset 0 0 0 1px var(--lumo-contrast-20pct),
         var(--lumo-box-shadow-l);
+      color: var(--lumo-warning-contrast-color);
     }
 
     :host([theme~='warning']) {
