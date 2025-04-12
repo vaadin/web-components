@@ -16,23 +16,23 @@ registerStyles(
       --_selection-color: var(--vaadin-selection-color, var(--lumo-primary-color));
       --_invalid-background: var(--vaadin-input-field-invalid-background, var(--lumo-error-color-10pct));
       --_disabled-checkmark-color: var(--vaadin-checkbox-disabled-checkmark-color, var(--lumo-contrast-30pct));
-      outline: none;
       color: var(--vaadin-checkbox-label-color, var(--lumo-body-text-color));
+      cursor: default;
       font-family: var(--lumo-font-family);
       font-size: var(--vaadin-checkbox-label-font-size, var(--lumo-font-size-m));
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
       line-height: var(--lumo-line-height-s);
-      cursor: default;
+      outline: none;
+      -webkit-tap-highlight-color: transparent;
       -webkit-user-select: none;
       user-select: none;
-      -webkit-tap-highlight-color: transparent;
     }
 
     [part='label'] {
       display: flex;
-      position: relative;
       max-width: max-content;
+      position: relative;
     }
 
     :host([has-label]) ::slotted(label) {
@@ -53,16 +53,16 @@ registerStyles(
     [part='checkbox'] {
       /* Default field border color */
       --_input-border-color: var(--vaadin-input-field-border-color, var(--lumo-contrast-50pct));
-      position: relative;
-      width: var(--_checkbox-size);
+      background: var(--vaadin-checkbox-background, var(--lumo-contrast-20pct));
+      border-radius: var(--vaadin-checkbox-border-radius, var(--lumo-border-radius-s));
+      cursor: var(--lumo-clickable-cursor);
       height: var(--_checkbox-size);
       margin: var(--lumo-space-xs);
+      position: relative;
       transition:
         transform 0.2s cubic-bezier(0.12, 0.32, 0.54, 2),
         background-color 0.15s;
-      border-radius: var(--vaadin-checkbox-border-radius, var(--lumo-border-radius-s));
-      background: var(--vaadin-checkbox-background, var(--lumo-contrast-20pct));
-      cursor: var(--lumo-clickable-cursor);
+      width: var(--_checkbox-size);
     }
 
     :host([indeterminate]),
@@ -77,17 +77,17 @@ registerStyles(
 
     /* Checkmark */
     [part='checkbox']::after {
-      content: var(--vaadin-checkbox-checkmark-char, var(--lumo-icons-checkmark));
-      position: absolute;
-      top: -1px;
-      left: -1px;
-      opacity: 0;
       color: var(--vaadin-checkbox-checkmark-color, var(--lumo-primary-contrast-color));
+      contain: content;
+      content: var(--vaadin-checkbox-checkmark-char, var(--lumo-icons-checkmark));
       font-family: 'lumo-icons';
       font-size: var(--vaadin-checkbox-checkmark-size, calc(var(--_checkbox-size) + 2px));
+      left: -1px;
       line-height: 1;
+      opacity: 0;
       pointer-events: none;
-      contain: content;
+      position: absolute;
+      top: -1px;
     }
 
     :host([checked]) [part='checkbox']::after {
@@ -104,28 +104,28 @@ registerStyles(
     }
 
     :host([readonly]:not([checked]):not([indeterminate])) [part='checkbox']::after {
-      content: '';
-      top: 0;
-      left: 0;
-      box-sizing: border-box;
-      width: 100%;
-      height: 100%;
       border: var(--vaadin-input-field-readonly-border, 1px dashed var(--lumo-contrast-50pct));
       border-radius: inherit;
+      box-sizing: border-box;
+      content: '';
+      height: 100%;
+      left: 0;
       opacity: 1;
+      top: 0;
+      width: 100%;
     }
 
     /* Indeterminate checkmark */
     :host([indeterminate]) [part='checkbox']::after {
-      content: var(--vaadin-checkbox-checkmark-char-indeterminate, '');
-      top: 45%;
-      right: 22%;
-      left: 22%;
-      width: auto;
-      height: 10%;
-      border: 0;
-      opacity: 1;
       background-color: var(--lumo-primary-contrast-color);
+      border: 0;
+      content: var(--vaadin-checkbox-checkmark-char-indeterminate, '');
+      height: 10%;
+      left: 22%;
+      opacity: 1;
+      right: 22%;
+      top: 45%;
+      width: auto;
     }
 
     /* Focus ring */
@@ -177,18 +177,18 @@ registerStyles(
 
     /* Used for activation "halo" */
     [part='checkbox']::before {
-      width: 100%;
+      background-color: inherit;
+      border-radius: inherit;
+      color: transparent;
       height: 100%;
+      line-height: var(--_checkbox-size);
+      opacity: 0;
+      pointer-events: none;
       transform: scale(1.4);
       transition:
         transform 0.1s,
         opacity 0.8s;
-      border-radius: inherit;
-      opacity: 0;
-      background-color: inherit;
-      color: transparent;
-      line-height: var(--_checkbox-size);
-      pointer-events: none;
+      width: 100%;
     }
 
     /* Hover */
@@ -215,29 +215,29 @@ registerStyles(
     }
 
     :host([active]:not([checked])) [part='checkbox']::before {
+      opacity: 0.4;
       transform: scale(0);
       transition-duration: 0.01s, 0.01s;
-      opacity: 0.4;
     }
 
     /* Required */
     :host([required]) [part='required-indicator'] {
       position: absolute;
-      top: var(--lumo-space-xs);
       right: var(--lumo-space-xs);
+      top: var(--lumo-space-xs);
     }
 
     :host([required][dir='rtl']) [part='required-indicator'] {
-      right: auto;
       left: var(--lumo-space-xs);
+      right: auto;
     }
 
     :host([required]) [part='required-indicator']::after {
-      content: var(--lumo-required-field-indicator, '\\\\\\\\2022');
-      width: 1em;
-      transition: opacity 0.2s;
       color: var(--lumo-required-field-indicator-color, var(--lumo-primary-text-color));
+      content: var(--lumo-required-field-indicator, '\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\2022');
       text-align: center;
+      transition: opacity 0.2s;
+      width: 1em;
     }
 
     :host(:not([has-label])) [part='required-indicator'] {
@@ -269,13 +269,13 @@ registerStyles(
 
     /* Error message */
     [part='error-message'] {
-      max-height: 5em;
-      padding-inline-start: var(--lumo-space-xs);
-      transition: 0.4s max-height;
       color: var(--vaadin-input-field-error-color, var(--lumo-error-text-color));
       font-size: var(--vaadin-input-field-error-font-size, var(--lumo-font-size-xs));
       font-weight: var(--vaadin-input-field-error-font-weight, 400);
       line-height: var(--lumo-line-height-xs);
+      max-height: 5em;
+      padding-inline-start: var(--lumo-space-xs);
+      transition: 0.4s max-height;
       will-change: max-height;
     }
 
@@ -293,14 +293,14 @@ registerStyles(
 
     /* Helper */
     [part='helper-text'] {
-      display: block;
-      margin-left: calc(var(--lumo-border-radius-m) / 4);
-      padding-inline-start: var(--lumo-space-xs);
-      transition: color 0.2s;
       color: var(--vaadin-input-field-helper-color, var(--lumo-secondary-text-color));
+      display: block;
       font-size: var(--vaadin-input-field-helper-font-size, var(--lumo-font-size-xs));
       font-weight: var(--vaadin-input-field-helper-font-weight, 400);
       line-height: var(--lumo-line-height-xs);
+      margin-left: calc(var(--lumo-border-radius-m) / 4);
+      padding-inline-start: var(--lumo-space-xs);
+      transition: color 0.2s;
     }
 
     :host(:hover:not([readonly])) [part='helper-text'] {

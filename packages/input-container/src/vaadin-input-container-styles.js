@@ -10,8 +10,6 @@ export const inputContainerStyles = css`
     --_border-radius: var(--vaadin-input-field-border-radius, 0);
     --_input-border-width: var(--vaadin-input-field-border-width, 0);
     --_input-border-color: var(--vaadin-input-field-border-color, transparent);
-    display: flex;
-    flex: 0 1 auto;
     align-items: center;
     border-radius:
             /* See https://developer.mozilla.org/en-US/docs/Web/CSS/border-radius */
@@ -21,6 +19,8 @@ export const inputContainerStyles = css`
       var(--vaadin-input-field-bottom-start-radius, var(--__border-radius));
     /* stylelint-disable-next-line length-zero-no-unit */
     box-shadow: inset 0 0 0 var(--_input-border-width, 0) var(--_input-border-color);
+    display: flex;
+    flex: 0 1 auto;
   }
 
   :host([dir='rtl']) {
@@ -38,25 +38,25 @@ export const inputContainerStyles = css`
 
   /* Reset the native input styles */
   ::slotted(input) {
-    flex: auto;
-    width: 100%;
-    min-width: 0;
-    height: 100%;
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-color: transparent;
     border: 0;
     border-radius: 0;
-    outline: none;
-    background-color: transparent;
     /* Disable default invalid style in Firefox */
     box-shadow: none;
     color: inherit;
+    flex: auto;
     font: inherit;
+    height: 100%;
     line-height: normal;
+    margin: 0;
+    min-width: 0;
+    outline: none;
+    overflow: hidden;
+    padding: 0;
     white-space: nowrap;
-    -webkit-appearance: none;
-    -moz-appearance: none;
+    width: 100%;
   }
 
   ::slotted(*) {
@@ -64,11 +64,11 @@ export const inputContainerStyles = css`
   }
 
   ::slotted(:is(input, textarea))::placeholder {
-    /* Override default opacity in Firefox */
-    opacity: 1;
     color: inherit;
     /* Use ::slotted(input:placeholder-shown) in themes to style the placeholder. */
     /* because ::slotted(...)::placeholder does not work in Safari. */
     font: inherit;
+    /* Override default opacity in Firefox */
+    opacity: 1;
   }
 `;

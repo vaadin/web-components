@@ -7,13 +7,13 @@ registerStyles(
   'vaadin-message',
   css`
     :host {
-      padding: 0.75rem 1rem;
       color: var(--material-body-text-color);
       font-family: var(--material-font-family);
       font-size: var(--material-body-font-size);
       -moz-osx-font-smoothing: grayscale;
       -webkit-font-smoothing: antialiased;
       line-height: 1.5;
+      padding: 0.75rem 1rem;
       -webkit-text-size-adjust: 100%;
     }
 
@@ -45,8 +45,8 @@ registerStyles(
     }
 
     :host([dir='rtl']) [part='name'] {
-      margin-right: 0;
       margin-left: 0.5rem;
+      margin-right: 0;
     }
 
     :host([dir='rtl']) [part='name']:empty {
@@ -61,8 +61,8 @@ registerStyles(
 
     ::slotted([slot='avatar']) {
       --vaadin-avatar-size: 2.5rem;
-      margin-top: 0.25rem;
       margin-inline-end: 1rem;
+      margin-top: 0.25rem;
     }
   `,
   { moduleId: 'material-message' },

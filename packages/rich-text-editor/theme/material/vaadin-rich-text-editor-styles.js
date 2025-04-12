@@ -19,10 +19,10 @@ const popupOverlay = css`
   }
 
   [part='content'] ::slotted(button) {
-    width: var(--_button-size);
+    border: none;
     height: var(--_button-size);
     margin: var(--_button-margin);
-    border: none;
+    width: var(--_button-size);
   }
 `;
 
@@ -32,15 +32,15 @@ registerStyles('vaadin-rich-text-editor-popup-overlay', [overlay, popupOverlay],
 
 const richTextEditor = css`
   :host {
-    min-height: 288px;
     background-color: var(--material-background-color);
+    min-height: 288px;
   }
 
   [part='toolbar'] {
-    padding: 0;
-    overflow: hidden;
-    border: 0;
     background-color: var(--material-secondary-background-color);
+    border: 0;
+    overflow: hidden;
+    padding: 0;
   }
 
   [part~='toolbar-group'] {
@@ -53,11 +53,11 @@ const richTextEditor = css`
   }
 
   [part~='toolbar-button'] {
-    margin: -4px 2px;
     border-radius: 3px;
     color: var(--material-secondary-text-color);
     font-family: 'vaadin-rte-icons', var(--material-font-family);
     font-weight: 600;
+    margin: -4px 2px;
   }
 
   [part~='toolbar-button']:hover {
@@ -113,8 +113,8 @@ const richTextEditor = css`
 
   /* TODO unsupported selector */
   [part='content'] > .ql-editor {
-    padding: 0 16px;
     line-height: inherit;
+    padding: 0 16px;
   }
 
   /* Theme variants */

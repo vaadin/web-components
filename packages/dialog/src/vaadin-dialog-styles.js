@@ -9,12 +9,12 @@ export const dialogOverlay = css`
   [part='header'],
   [part='header-content'],
   [part='footer'] {
+    align-items: center;
     display: flex;
-    z-index: 1;
     flex: none;
     flex-wrap: wrap;
-    align-items: center;
     pointer-events: none;
+    z-index: 1;
   }
 
   [part='header'] {
@@ -88,9 +88,9 @@ export const dialogOverlay = css`
 export const resizableOverlay = css`
   [part='overlay'] {
     display: flex;
-    position: relative;
     max-height: 100%;
     overflow: visible;
+    position: relative;
   }
 
   [part='content'] {
@@ -99,14 +99,14 @@ export const resizableOverlay = css`
   }
 
   .resizer-container {
+    border-radius: inherit; /* prevent child elements being drawn outside part=overlay */
     flex-grow: 1;
     overflow: auto;
-    border-radius: inherit; /* prevent child elements being drawn outside part=overlay */
   }
 
   [part='overlay'][style] .resizer-container {
-    width: 100%;
     min-height: 100%;
+    width: 100%;
   }
 
   :host(:not([resizable])) .resizer {
@@ -120,62 +120,62 @@ export const resizableOverlay = css`
   }
 
   .resizer {
+    height: 16px;
     position: absolute;
     width: 16px;
-    height: 16px;
   }
 
   .resizer.edge {
-    width: 8px;
     height: 8px;
     inset: -4px;
+    width: 8px;
   }
 
   .resizer.edge.n {
     bottom: auto;
-    width: auto;
     cursor: ns-resize;
+    width: auto;
   }
 
   .resizer.ne {
-    top: -4px;
-    right: -4px;
     cursor: nesw-resize;
+    right: -4px;
+    top: -4px;
   }
 
   .resizer.edge.e {
-    left: auto;
-    height: auto;
     cursor: ew-resize;
+    height: auto;
+    left: auto;
   }
 
   .resizer.se {
-    right: -4px;
     bottom: -4px;
     cursor: nwse-resize;
+    right: -4px;
   }
 
   .resizer.edge.s {
+    cursor: ns-resize;
     top: auto;
     width: auto;
-    cursor: ns-resize;
   }
 
   .resizer.sw {
     bottom: -4px;
-    left: -4px;
     cursor: nesw-resize;
+    left: -4px;
   }
 
   .resizer.edge.w {
-    right: auto;
-    height: auto;
     cursor: ew-resize;
+    height: auto;
+    right: auto;
   }
 
   .resizer.nw {
-    top: -4px;
-    left: -4px;
     cursor: nwse-resize;
+    left: -4px;
+    top: -4px;
   }
 `;

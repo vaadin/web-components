@@ -14,15 +14,15 @@ registerStyles(
   'vaadin-avatar',
   css`
     :host {
-      border-radius: 50%;
-      outline: none;
       background-color: var(--lumo-contrast-10pct);
+      border-radius: 50%;
       color: var(--lumo-secondary-text-color);
+      cursor: default;
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
-      cursor: default;
-      user-select: none;
+      outline: none;
       -webkit-tap-highlight-color: transparent;
+      user-select: none;
     }
 
     :host([has-color-index]) {

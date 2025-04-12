@@ -24,9 +24,9 @@ registerStyles(
   'vaadin-grid-sorter',
   css`
     :host {
+      cursor: pointer;
       display: inline-flex;
       max-width: 100%;
-      cursor: pointer;
     }
 
     [part='content'] {
@@ -34,9 +34,9 @@ registerStyles(
     }
 
     [part='indicators'] {
-      position: relative;
-      flex: none;
       align-self: center;
+      flex: none;
+      position: relative;
     }
 
     [part='order'] {
@@ -50,15 +50,15 @@ registerStyles(
     }
 
     :host(:not([direction])) [part='indicators']::before {
-      content: '\\\\\\\\e901';
+      content: '\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\e901';
     }
 
     :host([direction='asc']) [part='indicators']::before {
-      content: '\\\\\\\\e900';
+      content: '\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\e900';
     }
 
     :host([direction='desc']) [part='indicators']::before {
-      content: '\\\\\\\\e902';
+      content: '\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\e902';
     }
   `,
   { moduleId: 'vaadin-grid-sorter-styles' },

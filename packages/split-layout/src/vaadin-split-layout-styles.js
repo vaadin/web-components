@@ -27,12 +27,12 @@ export const splitLayoutStyles = css`
   }
 
   [part='splitter'] {
+    flex: none;
+    min-height: 8px;
+    min-width: 8px;
+    overflow: visible;
     position: relative;
     z-index: 1;
-    flex: none;
-    min-width: 8px;
-    min-height: 8px;
-    overflow: visible;
   }
 
   :host(:not([orientation='vertical'])) > [part='splitter'] {
@@ -44,12 +44,12 @@ export const splitLayoutStyles = css`
   }
 
   [part='handle'] {
+    height: 40px;
+    left: 50%;
     position: absolute;
     top: 50%;
-    left: 50%;
-    width: 40px;
-    height: 40px;
     transform: translate3d(-50%, -50%, 0);
+    width: 40px;
   }
 
   @media (forced-colors: active) {

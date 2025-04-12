@@ -14,17 +14,17 @@ export const crudStyles = css`
   :host {
     --vaadin-crud-editor-max-height: 40%;
     --vaadin-crud-editor-max-width: 40%;
-    width: 100%;
     height: 400px;
+    width: 100%;
   }
 
   :host,
   #main {
-    display: flex;
-    position: relative;
-    flex-direction: column;
     align-self: stretch;
+    display: flex;
+    flex-direction: column;
     overflow: hidden;
+    position: relative;
   }
 
   #main {
@@ -38,9 +38,9 @@ export const crudStyles = css`
   }
 
   [part='toolbar'] {
+    align-items: baseline;
     display: flex;
     flex-shrink: 0;
-    align-items: baseline;
     justify-content: flex-end;
   }
 
@@ -59,10 +59,10 @@ export const crudStyles = css`
 
   [part='editor'] {
     display: flex;
-    z-index: 1;
     flex-direction: column;
     height: 100%;
     outline: none;
+    z-index: 1;
   }
 
   :host(:not([editor-position=''])[editor-opened]:not([fullscreen])) [part='editor'] {
@@ -74,8 +74,8 @@ export const crudStyles = css`
   }
 
   :host([editor-position='aside'][editor-opened]:not([fullscreen])) [part='editor'] {
-    min-width: 300px;
     max-width: var(--vaadin-crud-editor-max-width);
+    min-width: 300px;
   }
 
   [part='scroller'] {
@@ -94,8 +94,8 @@ export const crudStyles = css`
 
 export const crudDialogOverlayStyles = css`
   [part='overlay'] {
-    min-width: 20em;
     max-width: 54em;
+    min-width: 20em;
   }
 
   [part='footer'] {
@@ -109,14 +109,14 @@ export const crudDialogOverlayStyles = css`
   }
 
   :host([fullscreen]) {
-    padding: 0;
     inset: 0;
+    padding: 0;
   }
 
   :host([fullscreen]) [part='overlay'] {
-    width: 100vw;
-    height: 100vh;
     border-radius: 0 !important;
+    height: 100vh;
+    width: 100vw;
   }
 
   :host([fullscreen]) [part='content'] {

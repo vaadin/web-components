@@ -5,23 +5,23 @@ import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themab
 
 const detailsSummary = css`
   :host {
-    display: flex;
-    position: relative;
-    box-sizing: border-box;
     align-items: center;
-    justify-content: space-between;
-    width: 100%;
-    min-height: 48px;
-    padding: 0 24px;
-    outline: none;
     background-color: var(--material-background-color);
+    box-sizing: border-box;
     color: var(--material-body-text-color);
+    cursor: default;
+    display: flex;
     font-size: var(--material-small-font-size);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     font-weight: 500;
-    cursor: default;
+    justify-content: space-between;
+    min-height: 48px;
+    outline: none;
+    padding: 0 24px;
+    position: relative;
     -webkit-tap-highlight-color: transparent;
+    width: 100%;
   }
 
   :host([disabled]) {
@@ -30,48 +30,48 @@ const detailsSummary = css`
   }
 
   [part='content'] {
-    position: relative;
     margin: 0;
+    position: relative;
   }
 
   [part='toggle'] {
+    color: var(--material-secondary-text-color);
+    height: 24px;
+    line-height: 24px;
+    margin-inline-start: auto;
+    order: 1;
+    padding: 4px;
     position: relative;
     right: -8px;
-    order: 1;
-    width: 24px;
-    height: 24px;
-    margin-inline-start: auto;
-    padding: 4px;
+    text-align: center;
     transform: rotate(90deg);
     transition: transform 0.1s cubic-bezier(0.4, 0, 0.2, 0.1);
-    color: var(--material-secondary-text-color);
-    line-height: 24px;
-    text-align: center;
+    width: 24px;
   }
 
   [part='toggle']::before {
     content: var(--material-icons-chevron-right);
     display: inline-block;
-    width: 24px;
     font-family: 'material-icons';
     font-size: 24px;
+    width: 24px;
   }
 
   [part='toggle']::after {
+    background-color: var(--material-disabled-text-color);
+    border-radius: 50%;
     content: '';
     display: inline-block;
+    height: 100%;
+    left: 0;
+    opacity: 0;
     position: absolute;
     top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
     transform: scale(0);
     transition:
       transform 0s 0.8s,
       opacity 0.8s;
-    border-radius: 50%;
-    opacity: 0;
-    background-color: var(--material-disabled-text-color);
+    width: 100%;
     will-change: transform, opacity;
   }
 
@@ -80,10 +80,10 @@ const detailsSummary = css`
   }
 
   :host([active]:not([disabled])) [part='toggle']::after {
-    transform: scale(1.25);
-    transition-duration: 0.08s, 0.01s;
-    transition-delay: 0s, 0s;
     opacity: 0.15;
+    transform: scale(1.25);
+    transition-delay: 0s, 0s;
+    transition-duration: 0.08s, 0.01s;
   }
 
   :host([opened]) [part='toggle'] {
@@ -96,8 +96,8 @@ const detailsSummary = css`
   }
 
   :host([dir='rtl']) [part='toggle']::after {
-    right: 0;
     left: auto;
+    right: 0;
   }
 `;
 

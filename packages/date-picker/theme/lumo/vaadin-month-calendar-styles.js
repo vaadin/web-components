@@ -13,9 +13,9 @@ registerStyles(
       --_focus-ring-width: var(--vaadin-focus-ring-width, 2px);
       --_selection-color: var(--vaadin-selection-color, var(--lumo-primary-color));
       --_selection-color-text: var(--vaadin-selection-color-text, var(--lumo-primary-text-color));
-      padding: 0 var(--lumo-space-xs);
       color: var(--lumo-body-text-color);
       font-size: var(--lumo-font-size-m);
+      padding: 0 var(--lumo-space-xs);
       -webkit-tap-highlight-color: transparent;
       text-align: center;
       -webkit-user-select: none;
@@ -25,11 +25,11 @@ registerStyles(
     /* Month header */
 
     [part='month-header'] {
-      margin-bottom: var(--lumo-space-m);
       color: var(--lumo-header-text-color);
       font-size: var(--lumo-font-size-l);
       font-weight: 500;
       line-height: 1;
+      margin-bottom: var(--lumo-space-m);
     }
 
     /* Week days and numbers */
@@ -55,12 +55,12 @@ registerStyles(
 
     [part~='date'],
     [part='week-number'] {
-      display: inline-flex;
-      position: relative;
-      box-sizing: border-box;
       align-items: center;
-      justify-content: center;
+      box-sizing: border-box;
+      display: inline-flex;
       height: var(--lumo-size-m);
+      justify-content: center;
+      position: relative;
     }
 
     [part~='date'] {
@@ -85,19 +85,19 @@ registerStyles(
     /* Focused date */
 
     [part~='date']::before {
-      content: '';
-      position: absolute;
-      z-index: -1;
-      top: 50%;
-      left: 50%;
-      width: 80%;
-      min-width: 2em;
-      max-width: 100%;
-      height: 80%;
-      min-height: 2em;
-      max-height: 100%;
-      transform: translate(-50%, -50%);
       border-radius: var(--lumo-border-radius-m);
+      content: '';
+      height: 80%;
+      left: 50%;
+      max-height: 100%;
+      max-width: 100%;
+      min-height: 2em;
+      min-width: 2em;
+      position: absolute;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      width: 80%;
+      z-index: -1;
     }
 
     [part~='date'][part~='focused']::before {

@@ -19,16 +19,16 @@ export const buttonsStyles = css`
   }
 
   [part~='toolbar-button'] {
-    position: relative;
-    width: 2em;
+    background: transparent;
+    border: none;
+    font: inherit;
     height: 2em;
+    line-height: 1;
     margin: 0;
     padding: 0;
-    border: none;
-    background: transparent;
-    font: inherit;
-    line-height: 1;
+    position: relative;
     text-transform: none;
+    width: 2em;
   }
 
   [part~='toolbar-button']:hover {
@@ -48,9 +48,9 @@ export const buttonsStyles = css`
   }
 
   [part~='toolbar-button']::before {
+    left: 50%;
     position: absolute;
     top: 50%;
-    left: 50%;
     transform: translate(-50%, -50%);
   }
 
@@ -121,10 +121,10 @@ export const buttonsStyles = css`
   [part~='toolbar-button-subscript']::after,
   [part~='toolbar-button-superscript']::after {
     content: '2';
+    font-size: 0.625em;
+    left: 70%;
     position: absolute;
     top: 50%;
-    left: 70%;
-    font-size: 0.625em;
   }
 
   [part~='toolbar-button-superscript']::after {
@@ -132,9 +132,9 @@ export const buttonsStyles = css`
   }
 
   [part~='toolbar-button-blockquote']::before {
-    content: '\\\\\\\\201D';
-    height: 0.6em;
+    content: '\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\201D';
     font-size: 2em;
+    height: 0.6em;
   }
 
   [part~='toolbar-button-code-block']::before {
@@ -149,14 +149,14 @@ export const buttonsStyles = css`
   }
 
   [part~='toolbar-button-color']::after {
+    background-color: var(--_color-value, currentColor);
+    bottom: 4px;
     content: '';
+    height: 4px;
+    left: 25%;
     position: absolute;
     right: 25%;
-    bottom: 4px;
-    left: 25%;
     width: 50%;
-    height: 4px;
-    background-color: var(--_color-value, currentColor);
   }
 
   [part~='toolbar-button-background']::before {
@@ -164,8 +164,6 @@ export const buttonsStyles = css`
   }
 
   [part~='toolbar-button-background']::after {
-    content: '';
-    position: absolute;
     background: repeating-linear-gradient(
       135deg,
       var(--_background-value, currentColor),
@@ -173,7 +171,9 @@ export const buttonsStyles = css`
       transparent 1px,
       transparent 2px
     );
+    content: '';
     inset: 20%;
+    position: absolute;
   }
 `;
 

@@ -17,29 +17,29 @@ registerStyles(
     }
 
     :host(:not([nodrop])) {
-      padding: var(--lumo-space-m);
+      border: 1px dashed var(--lumo-contrast-20pct);
+      border-radius: var(--lumo-border-radius-l);
       overflow: hidden;
+      padding: var(--lumo-space-m);
       transition:
         background-color 0.6s,
         border-color 0.6s;
-      border: 1px dashed var(--lumo-contrast-20pct);
-      border-radius: var(--lumo-border-radius-l);
     }
 
     [part='drop-label'] {
-      display: inline-block;
-      padding: 0 var(--lumo-space-s);
       color: var(--lumo-secondary-text-color);
+      display: inline-block;
       font-family: var(--lumo-font-family);
+      padding: 0 var(--lumo-space-s);
       white-space: normal;
     }
 
     :host([dragover-valid]) {
+      background: var(--lumo-primary-color-10pct);
+      border-color: var(--lumo-primary-color-50pct);
       transition:
         background-color 0.1s,
         border-color 0.1s;
-      border-color: var(--lumo-primary-color-50pct);
-      background: var(--lumo-primary-color-10pct);
     }
 
     :host([dragover-valid]) [part='drop-label'] {
@@ -82,8 +82,8 @@ const uploadFile = css`
   :host {
     --_focus-ring-color: var(--vaadin-focus-ring-color, var(--lumo-primary-color-50pct));
     --_focus-ring-width: var(--vaadin-focus-ring-width, 2px);
-    padding: var(--lumo-space-s) 0;
     outline: none;
+    padding: var(--lumo-space-s) 0;
   }
 
   :host([focus-ring]) [part='row'] {
@@ -92,8 +92,8 @@ const uploadFile = css`
   }
 
   [part='row'] {
-    display: flex;
     align-items: baseline;
+    display: flex;
     justify-content: space-between;
   }
 
@@ -104,9 +104,9 @@ const uploadFile = css`
   }
 
   [part='info'] {
+    align-items: baseline;
     display: flex;
     flex: auto;
-    align-items: baseline;
   }
 
   [part='meta'] {
@@ -121,16 +121,16 @@ const uploadFile = css`
   }
 
   [part='commands'] {
+    align-items: baseline;
     display: flex;
     flex: none;
-    align-items: baseline;
   }
 
   [part$='icon'] {
-    margin-right: var(--lumo-space-xs);
     font-family: 'lumo-icons';
     font-size: var(--lumo-icon-size-m);
     line-height: 1;
+    margin-right: var(--lumo-space-xs);
   }
 
   /* When both icons are hidden, let us keep space for one */
@@ -140,15 +140,15 @@ const uploadFile = css`
   }
 
   [part$='button'] {
+    cursor: var(--lumo-clickable-cursor);
     flex: none;
     margin-left: var(--lumo-space-xs);
-    cursor: var(--lumo-clickable-cursor);
   }
 
   [part$='button']:focus {
     border-radius: var(--lumo-border-radius-s);
-    outline: none;
     box-shadow: 0 0 0 var(--_focus-ring-width) var(--_focus-ring-color);
+    outline: none;
   }
 
   [part$='icon']::before,
@@ -157,13 +157,13 @@ const uploadFile = css`
   }
 
   [part='done-icon']::before {
-    content: var(--lumo-icons-checkmark);
     color: var(--lumo-primary-text-color);
+    content: var(--lumo-icons-checkmark);
   }
 
   [part='warning-icon']::before {
-    content: var(--lumo-icons-error);
     color: var(--lumo-error-text-color);
+    content: var(--lumo-icons-error);
   }
 
   [part='start-button']::before {
@@ -183,9 +183,9 @@ const uploadFile = css`
   }
 
   ::slotted([slot='progress']) {
-    width: auto;
-    margin-right: calc(var(--lumo-icon-size-m) + var(--lumo-space-xs));
     margin-left: calc(var(--lumo-icon-size-m) + var(--lumo-space-xs));
+    margin-right: calc(var(--lumo-icon-size-m) + var(--lumo-space-xs));
+    width: auto;
   }
 `;
 

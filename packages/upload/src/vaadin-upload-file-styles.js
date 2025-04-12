@@ -19,10 +19,10 @@ export const uploadFileStyles = css`
   }
 
   button {
-    padding: 0;
-    border: none;
     background: transparent;
+    border: none;
     box-shadow: none;
+    padding: 0;
   }
 
   :host([complete]) ::slotted([slot='progress']),

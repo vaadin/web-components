@@ -11,20 +11,20 @@ registerStyles(
     dialogOverlay,
     css`
       [part='header'] ::slotted(h3) {
-        margin-top: 0 !important;
         margin-bottom: 0 !important;
         margin-inline-start: calc(var(--lumo-space-l) - var(--lumo-space-m));
+        margin-top: 0 !important;
       }
 
       [part='message'] {
-        width: 25em;
-        min-width: 100%;
         max-width: 100%;
+        min-width: 100%;
+        width: 25em;
       }
 
       ::slotted([slot$='button'][theme~='tertiary']) {
-        padding-right: var(--lumo-space-s);
         padding-left: var(--lumo-space-s);
+        padding-right: var(--lumo-space-s);
       }
 
       [part='cancel-button'] {
@@ -33,15 +33,15 @@ registerStyles(
 
       @media (max-width: 360px) {
         [part='footer'] {
-          flex-direction: column-reverse;
           align-items: stretch;
-          padding: var(--lumo-space-s) var(--lumo-space-l);
+          flex-direction: column-reverse;
           gap: var(--lumo-space-s);
+          padding: var(--lumo-space-s) var(--lumo-space-l);
         }
 
         ::slotted([slot$='button']) {
-          width: 100%;
           margin: 0;
+          width: 100%;
         }
       }
     `,

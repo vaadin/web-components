@@ -11,16 +11,16 @@ export const loginOverlayWrapperStyles = css`
   }
 
   [part='card'] {
-    display: flex;
     box-sizing: border-box;
+    display: flex;
     flex-direction: column;
     max-width: 100%;
     overflow: hidden;
   }
 
   [part='brand'] {
-    display: flex;
     box-sizing: border-box;
+    display: flex;
     flex-direction: column;
     flex-grow: 1;
     flex-shrink: 0;
@@ -29,7 +29,7 @@ export const loginOverlayWrapperStyles = css`
   }
 
   [part='title'] {
-    margin: 0;
     color: inherit;
+    margin: 0;
   }
 `;

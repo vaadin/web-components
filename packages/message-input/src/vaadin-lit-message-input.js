@@ -29,10 +29,10 @@ class MessageInput extends MessageInputMixin(ElementMixin(ThemableMixin(PolylitM
   static get styles() {
     return css`
       :host {
-        display: flex;
-        box-sizing: border-box;
-        flex-shrink: 0;
         align-items: flex-start;
+        box-sizing: border-box;
+        display: flex;
+        flex-shrink: 0;
         max-height: 50vh;
         overflow: hidden;
       }
@@ -46,8 +46,8 @@ class MessageInput extends MessageInputMixin(ElementMixin(ThemableMixin(PolylitM
       }
 
       ::slotted([slot='textarea']) {
-        flex-grow: 1;
         align-self: stretch;
+        flex-grow: 1;
       }
     `;
   }

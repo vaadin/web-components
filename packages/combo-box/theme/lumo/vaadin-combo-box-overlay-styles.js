@@ -31,11 +31,11 @@ const comboBoxOverlay = css`
 
 const comboBoxLoader = css`
   [part~='loader'] {
-    position: absolute;
-    z-index: 1;
-    top: var(--lumo-space-s);
     inset-inline: var(--lumo-space-s);
     margin-inline: auto 0;
+    position: absolute;
+    top: var(--lumo-space-s);
+    z-index: 1;
   }
 `;
 

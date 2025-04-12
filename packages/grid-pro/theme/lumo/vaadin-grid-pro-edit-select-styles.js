@@ -10,8 +10,8 @@ const gridProEditSelect = css`
 
   :host([theme~='grid-pro-editor']) [part='input-field'] ::slotted([slot='value']) {
     box-sizing: border-box;
-    padding: 0 var(--lumo-space-m);
     font-size: var(--lumo-font-size-m);
+    padding: 0 var(--lumo-space-m);
     /* prevent selection on editor focus */
     -webkit-user-select: none;
     user-select: none;

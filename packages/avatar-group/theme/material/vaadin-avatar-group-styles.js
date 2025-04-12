@@ -61,8 +61,8 @@ registerStyles(
       }
 
       [part='content'] {
-        display: flex;
         align-items: center;
+        display: flex;
       }
 
       [part='checkmark']::before {

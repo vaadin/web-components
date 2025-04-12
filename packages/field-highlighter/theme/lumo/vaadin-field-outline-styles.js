@@ -17,12 +17,12 @@ registerStyles(
     }
 
     :host::before {
-      content: '';
-      position: absolute;
-      transition: box-shadow 0.3s;
       border-radius: var(--lumo-border-radius-s);
       box-shadow: 0 0 0 2px var(--_active-user-color);
+      content: '';
       inset: 0;
+      position: absolute;
+      transition: box-shadow 0.3s;
     }
 
     :host([context$='checkbox'])::before {

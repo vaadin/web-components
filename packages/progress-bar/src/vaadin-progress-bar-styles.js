@@ -8,8 +8,8 @@ import { css } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 export const progressBarStyles = css`
   :host {
     display: block;
-    width: 100%; /* prevent collapsing inside non-stretching column flex */
     height: 8px;
+    width: 100%; /* prevent collapsing inside non-stretching column flex */
   }
 
   :host([hidden]) {

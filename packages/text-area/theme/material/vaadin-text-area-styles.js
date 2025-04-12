@@ -15,8 +15,8 @@ const textArea = css`
 
   [part='input-field'] ::slotted(textarea) {
     margin-top: 4px;
-    padding-top: 0;
     padding-bottom: 4px;
+    padding-top: 0;
   }
 
   [part='input-field']::before,
@@ -27,15 +27,15 @@ const textArea = css`
   /* Use sticky positioning to keep prefix/suffix/clear button visible when scrolling textarea container */
   [part='input-field'] ::slotted([slot$='fix']),
   [part='clear-button'] {
+    align-self: flex-start;
     position: sticky;
     top: 0;
-    align-self: flex-start;
   }
 
   /* Align prefix/suffix icon or text with native textarea */
   [part='input-field'] ::slotted([slot$='fix']) {
-    top: 4px;
     margin-top: 4px;
+    top: 4px;
   }
 `;
 

@@ -78,13 +78,13 @@ registerStyles(
     /* Selected row */
 
     [part~='body-cell']::before {
+      background-color: var(--material-primary-color);
       content: '';
+      inset: 0;
+      opacity: 0;
+      pointer-events: none;
       position: absolute;
       transition: opacity 0.1s cubic-bezier(0.4, 0, 0.2, 0.1);
-      opacity: 0;
-      background-color: var(--material-primary-color);
-      pointer-events: none;
-      inset: 0;
     }
 
     :host(:not([reordering])) [part~='row'][selected] > [part~='body-cell']::before {
@@ -144,27 +144,27 @@ registerStyles(
 
     :host([navigating]) [part~='row']:focus::before {
       content: '';
-      position: absolute;
-      z-index: 3;
-      transform: translateX(calc(-1 * var(--_grid-horizontal-scroll-position)));
-      pointer-events: none;
       inset: 0;
+      pointer-events: none;
+      position: absolute;
+      transform: translateX(calc(-1 * var(--_grid-horizontal-scroll-position)));
+      z-index: 3;
     }
 
     /* Empty state */
     [part~='empty-state'] {
-      padding: 16px;
       color: var(--material-secondary-text-color);
+      padding: 16px;
     }
 
     /* Drag and Drop styles */
     :host([dragover])::after {
+      box-shadow: inset 0 0 0 2px var(--material-primary-color);
       content: '';
+      inset: 0;
+      pointer-events: none;
       position: absolute;
       z-index: 100;
-      box-shadow: inset 0 0 0 2px var(--material-primary-color);
-      pointer-events: none;
-      inset: 0;
     }
 
     [part~='row'][dragover] {
@@ -176,18 +176,18 @@ registerStyles(
     }
 
     [part~='row'][dragover] [part~='cell']::after {
-      content: '';
-      position: absolute;
-      height: 3px;
       background: var(--material-primary-color);
-      pointer-events: none;
+      content: '';
+      height: 3px;
       inset: 0;
+      pointer-events: none;
+      position: absolute;
     }
 
     [part~='row'][dragover='below'] [part~='cell']::after {
-      top: 100%;
       bottom: auto;
       margin-top: -1px;
+      top: 100%;
     }
 
     :host([all-rows-visible]) [part~='last-row'][dragover='below'] [part~='cell']::after {
@@ -195,9 +195,9 @@ registerStyles(
     }
 
     [part~='row'][dragover='above'] [part~='cell']::after {
-      top: auto;
       bottom: 100%;
       margin-bottom: -1px;
+      top: auto;
     }
 
     [part~='row'][details-opened][dragover='below'] [part~='cell']:not([part~='details-cell'])::after,
@@ -211,8 +211,8 @@ registerStyles(
     }
 
     [part~='row'][dragstart] {
-      z-index: 100 !important;
       opacity: 0.9;
+      z-index: 100 !important;
     }
 
     [part~='row'][dragstart] [part~='cell'] {
@@ -221,45 +221,45 @@ registerStyles(
     }
 
     #scroller [part~='row'][dragstart]:not([dragstart=''])::after {
+      align-items: center;
+      background-color: var(--material-error-color);
+      border-radius: 2px;
+      box-sizing: border-box;
+      color: var(--material-primary-contrast-color);
       content: attr(dragstart);
       display: block;
-      position: absolute;
-      z-index: 100;
-      top: var(--_grid-drag-start-y);
-      left: var(--_grid-drag-start-x);
-      box-sizing: border-box;
-      align-items: center;
+      font-size: var(--material-caption-font-size);
       justify-content: center;
+      left: var(--_grid-drag-start-x);
+      line-height: 1;
       min-width: 24px;
       padding: 4px;
-      border-radius: 2px;
-      background-color: var(--material-error-color);
-      color: var(--material-primary-contrast-color);
-      font-size: var(--material-caption-font-size);
-      line-height: 1;
+      position: absolute;
       text-align: center;
+      top: var(--_grid-drag-start-y);
+      z-index: 100;
     }
 
     /* RTL specific styles */
 
     :host([dir='rtl']) [part~='cell'][last-frozen] {
-      border-right: none;
       border-left: 1px solid var(--material-divider-color);
+      border-right: none;
     }
 
     :host([dir='rtl']) [part~='cell'][first-frozen-to-end] {
-      border-right: 1px solid var(--material-divider-color);
       border-left: none;
+      border-right: 1px solid var(--material-divider-color);
     }
 
     :host([dir='rtl']) [part~='cell']:not([last-frozen]) [part='resize-handle'] {
-      border-right: none;
       border-left: 1px solid var(--material-divider-color);
+      border-right: none;
     }
 
     :host([dir='rtl']) #scroller [part~='row'][dragstart]:not([dragstart=''])::after {
-      right: var(--_grid-drag-start-x);
       left: auto;
+      right: var(--_grid-drag-start-x);
     }
   `,
   { moduleId: 'material-grid' },

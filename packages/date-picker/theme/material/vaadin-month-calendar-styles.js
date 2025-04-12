@@ -6,8 +6,8 @@ registerStyles(
   'vaadin-month-calendar',
   css`
     :host {
-      padding: 0 calc(50% / 8 - 0.5em + 8px);
       color: var(--material-body-text-color);
+      padding: 0 calc(50% / 8 - 0.5em + 8px);
     }
 
     :host([show-week-numbers]) {
@@ -15,17 +15,17 @@ registerStyles(
     }
 
     [part='month-header'] {
-      margin-bottom: 8px;
-      padding-top: 20px;
       font-size: var(--material-h6-font-size);
       line-height: 1;
+      margin-bottom: 8px;
+      padding-top: 20px;
     }
 
     [part='week-number'],
     [part='weekday'] {
-      height: 40px;
       color: var(--material-secondary-text-color);
       font-size: var(--material-caption-font-size);
+      height: 40px;
       line-height: 44px;
     }
 
@@ -36,25 +36,25 @@ registerStyles(
     }
 
     [part~='date'] {
-      position: relative;
-      height: 40px;
-      font-size: var(--material-body-font-size);
-      line-height: 42px;
       cursor: default;
+      font-size: var(--material-body-font-size);
+      height: 40px;
+      line-height: 42px;
+      position: relative;
     }
 
     [part~='date']::after {
-      content: '';
-      position: absolute;
-      z-index: -4;
-      top: 50%;
-      left: 50%;
-      box-sizing: border-box;
-      width: 38px;
-      height: 38px;
-      transform: translate(-50%, -50%);
       border: 2px solid transparent;
       border-radius: 50%;
+      box-sizing: border-box;
+      content: '';
+      height: 38px;
+      left: 50%;
+      position: absolute;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      width: 38px;
+      z-index: -4;
     }
 
     /* Today */
@@ -66,17 +66,17 @@ registerStyles(
     /* Hover */
 
     [part~='date']:not([part~='disabled']):hover::after {
-      z-index: -3;
-      border-color: var(--material-secondary-background-color);
       background-color: var(--material-secondary-background-color);
+      border-color: var(--material-secondary-background-color);
+      z-index: -3;
     }
 
     /* Hide for touch devices */
     @media (hover: none) {
       [part~='date']:not([part~='disabled']):hover::after {
-        z-index: -4;
-        border-color: transparent;
         background-color: transparent;
+        border-color: transparent;
+        z-index: -4;
       }
     }
 
@@ -88,9 +88,9 @@ registerStyles(
 
     [part~='date']:not([part~='disabled'])[part~='selected']::after,
     [part~='date'][part~='selected']::after {
-      z-index: -2;
-      border-color: currentColor;
       background-color: transparent;
+      border-color: currentColor;
+      z-index: -2;
     }
 
     /* Focused */
@@ -102,10 +102,10 @@ registerStyles(
 
     [part~='date']:not([part~='disabled'])[part~='focused']::after,
     [part~='date']:not([part~='disabled']):active::after {
-      z-index: -1;
+      background-color: var(--material-primary-color);
       border-color: var(--material-primary-color);
       opacity: 0.7;
-      background-color: var(--material-primary-color);
+      z-index: -1;
     }
 
     [part~='date'][part~='disabled'] {

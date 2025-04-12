@@ -8,13 +8,13 @@ registerStyles(
   'vaadin-notification-card',
   css`
     :host {
-      position: relative;
       margin: var(--lumo-space-s);
+      position: relative;
     }
 
     [part='overlay'] {
-      border-radius: var(--lumo-border-radius-l);
       background: var(--lumo-base-color) linear-gradient(var(--lumo-contrast-5pct), var(--lumo-contrast-5pct));
+      border-radius: var(--lumo-border-radius-l);
       box-shadow:
         0 0 0 1px var(--lumo-contrast-10pct),
         var(--lumo-box-shadow-l);
@@ -30,8 +30,8 @@ registerStyles(
     }
 
     [part='content'] {
-      display: flex;
       align-items: center;
+      display: flex;
       justify-content: space-between;
       padding: var(--lumo-space-wide-l);
     }
@@ -42,8 +42,8 @@ registerStyles(
     }
 
     :host([slot^='middle']) {
-      max-width: 80vw;
       margin: var(--lumo-space-s) auto;
+      max-width: 80vw;
     }
 
     :host([slot$='stretch']) {
@@ -84,29 +84,29 @@ registerStyles(
 
     @keyframes lumo-notification-enter-slide-down {
       0% {
-        transform: translateY(-200%);
         opacity: 0;
+        transform: translateY(-200%);
       }
     }
 
     @keyframes lumo-notification-exit-slide-up {
       100% {
-        transform: translateY(-200%);
         opacity: 0;
+        transform: translateY(-200%);
       }
     }
 
     @keyframes lumo-notification-enter-slide-up {
       0% {
-        transform: translateY(200%);
         opacity: 0;
+        transform: translateY(200%);
       }
     }
 
     @keyframes lumo-notification-exit-slide-down {
       100% {
-        transform: translateY(200%);
         opacity: 0;
+        transform: translateY(200%);
       }
     }
 

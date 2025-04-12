@@ -32,9 +32,9 @@ class Upload extends UploadMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElem
   static get styles() {
     return css`
       :host {
+        box-sizing: border-box;
         display: block;
         position: relative;
-        box-sizing: border-box;
       }
 
       :host([hidden]) {

@@ -12,8 +12,8 @@ export const confirmDialogOverlay = css`
   }
 
   [part='overlay'] {
-    width: var(--_vaadin-confirm-dialog-content-width);
     height: var(--_vaadin-confirm-dialog-content-height);
+    width: var(--_vaadin-confirm-dialog-content-width);
   }
 
   #resizerContainer {

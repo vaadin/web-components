@@ -7,10 +7,10 @@ import { css } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 export const baseStyles = css`
   :host {
-    display: flex;
-    box-sizing: border-box;
-    flex-direction: column;
     align-items: flex-start;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
   }
 
   :host([hidden]) {

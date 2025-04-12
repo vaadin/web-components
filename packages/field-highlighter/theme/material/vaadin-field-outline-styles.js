@@ -18,25 +18,25 @@ registerStyles(
     :host([context$='select']),
     :host([context$='area']),
     :host([context$='field']) {
-      z-index: 1;
-      top: auto;
-      height: 2px;
       background-color: var(--_active-user-color);
+      height: 2px;
+      top: auto;
+      z-index: 1;
     }
 
     :host([context$='checkbox']),
     :host([context$='radio-button']) {
-      transform: scale(2.5);
+      background-color: var(--_active-user-color);
       border-radius: 50%;
       opacity: 0.15;
-      background-color: var(--_active-user-color);
+      transform: scale(2.5);
     }
 
     :host([context$='item'])::before {
+      box-shadow: inset 0 0 0 2px var(--_active-user-color);
       content: '';
       display: block;
       height: 100%;
-      box-shadow: inset 0 0 0 2px var(--_active-user-color);
     }
   `,
   { moduleId: 'material-field-outline' },

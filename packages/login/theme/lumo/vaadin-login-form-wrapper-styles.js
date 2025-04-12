@@ -5,8 +5,8 @@ import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themab
 
 const loginFormWrapper = css`
   :host {
-    max-width: calc(var(--lumo-size-m) * 10);
     background: var(--lumo-base-color) linear-gradient(var(--lumo-tint-5pct), var(--lumo-tint-5pct));
+    max-width: calc(var(--lumo-size-m) * 10);
   }
 
   [part='form'] {
@@ -14,16 +14,16 @@ const loginFormWrapper = css`
   }
 
   [part='form-title'] {
-    margin-top: calc(var(--lumo-font-size-xxxl) - var(--lumo-font-size-xxl));
     color: var(--lumo-header-text-color);
     font-size: var(--lumo-font-size-xxl);
     font-weight: 600;
     line-height: var(--lumo-line-height-xs);
+    margin-top: calc(var(--lumo-font-size-xxxl) - var(--lumo-font-size-xxl));
   }
 
   ::slotted([slot='submit']) {
-    margin-top: var(--lumo-space-l);
     margin-bottom: var(--lumo-space-s);
+    margin-top: var(--lumo-space-l);
   }
 
   ::slotted([slot='forgot-password']) {
@@ -31,12 +31,12 @@ const loginFormWrapper = css`
   }
 
   [part='error-message'] {
-    margin-top: var(--lumo-space-m);
-    margin-bottom: var(--lumo-space-s);
-    padding: var(--lumo-space-m);
-    border-radius: var(--lumo-border-radius-m);
     background-color: var(--lumo-error-color-10pct);
+    border-radius: var(--lumo-border-radius-m);
     color: var(--lumo-error-text-color);
+    margin-bottom: var(--lumo-space-s);
+    margin-top: var(--lumo-space-m);
+    padding: var(--lumo-space-m);
   }
 
   :host(:not([dir='rtl'])) [part='error-message'] {
@@ -49,13 +49,13 @@ const loginFormWrapper = css`
 
   [part='error-message']::before {
     content: var(--lumo-icons-error);
-    position: absolute;
-    width: var(--lumo-size-m);
-    height: 1em;
     font-family: lumo-icons;
     font-size: var(--lumo-icon-size-m);
+    height: 1em;
     line-height: 1;
+    position: absolute;
     text-align: center;
+    width: var(--lumo-size-m);
   }
 
   :host(:not([dir='rtl'])) [part='error-message']::before {
@@ -69,17 +69,17 @@ const loginFormWrapper = css`
   }
 
   [part='error-message-title'] {
-    display: block;
-    margin: 0 0 0.25em;
     color: inherit;
+    display: block;
     line-height: var(--lumo-line-height-xs);
+    margin: 0 0 0.25em;
   }
 
   [part='error-message-description'] {
-    margin: 0;
-    opacity: 0.9;
     font-size: var(--lumo-font-size-s);
     line-height: var(--lumo-line-height-s);
+    margin: 0;
+    opacity: 0.9;
   }
 
   [part='footer'] {

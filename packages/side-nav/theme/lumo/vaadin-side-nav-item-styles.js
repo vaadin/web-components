@@ -14,16 +14,16 @@ export const sideNavItemStyles = css`
   }
 
   [part='link'] {
-    width: 100%;
+    border-radius: var(--lumo-border-radius-m);
+    cursor: var(--lumo-clickable-cursor, default);
+    gap: var(--lumo-space-xs);
     min-height: var(--lumo-icon-size-m);
     padding: var(--lumo-space-s);
     padding-inline-start: calc(var(--lumo-space-s) + var(--_child-indent, 0px));
     transition:
       background-color 140ms,
       color 140ms;
-    border-radius: var(--lumo-border-radius-m);
-    cursor: var(--lumo-clickable-cursor, default);
-    gap: var(--lumo-space-xs);
+    width: 100%;
   }
 
   [part='link'][href] {
@@ -35,9 +35,9 @@ export const sideNavItemStyles = css`
   }
 
   [part='toggle-button'] {
-    width: var(--lumo-size-s);
     height: var(--lumo-size-s);
     margin-inline-end: calc(var(--lumo-space-xs) * -1);
+    width: var(--lumo-size-s);
   }
 
   :host([has-children]) [part='content'] {
@@ -94,9 +94,9 @@ export const sideNavItemStyles = css`
   }
 
   slot[name='prefix']::slotted(:is(vaadin-icon, [class*='icon'])) {
+    color: var(--lumo-contrast-60pct);
     flex-shrink: 0;
     padding: 0.1em;
-    color: var(--lumo-contrast-60pct);
   }
 
   :host([disabled]) slot[name='prefix']::slotted(:is(vaadin-icon, [class*='icon'])) {
@@ -116,8 +116,8 @@ export const sideNavItemStyles = css`
   }
 
   :host([current]) [part='content'] {
-    border-radius: var(--lumo-border-radius-m);
     background-color: var(--lumo-primary-color-10pct);
+    border-radius: var(--lumo-border-radius-m);
     color: var(--vaadin-selection-color-text, var(--lumo-primary-text-color));
   }
 `;

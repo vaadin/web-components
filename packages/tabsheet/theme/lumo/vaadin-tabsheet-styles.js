@@ -17,25 +17,25 @@ const tabsheet = css`
   }
 
   [part='tabs-container'] {
-    padding: var(--lumo-space-xs) var(--lumo-space-s);
     box-shadow: inset 0 -1px 0 0 var(--lumo-contrast-10pct);
     gap: var(--lumo-space-s);
+    padding: var(--lumo-space-xs) var(--lumo-space-s);
   }
 
   ::slotted([slot='tabs']) {
-    margin: calc(var(--lumo-space-xs) * -1) calc(var(--lumo-space-s) * -1);
     box-shadow: initial;
+    margin: calc(var(--lumo-space-xs) * -1) calc(var(--lumo-space-s) * -1);
   }
 
   [part='content'] {
-    padding: var(--lumo-space-s) var(--lumo-space-m);
-    border-bottom-right-radius: inherit;
     border-bottom-left-radius: inherit;
+    border-bottom-right-radius: inherit;
+    padding: var(--lumo-space-s) var(--lumo-space-m);
   }
 
   :host([loading]) [part='content'] {
-    display: flex;
     align-items: center;
+    display: flex;
     justify-content: center;
   }
 

@@ -6,16 +6,16 @@ import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themab
 
 const menuBarItem = css`
   [part='content'] {
-    display: flex;
     /* tweak to inherit centering from menu bar button */
     align-items: inherit;
+    display: flex;
     justify-content: inherit;
   }
 
   [part='content'] ::slotted(vaadin-icon) {
     display: inline-block;
-    width: var(--lumo-icon-size-m);
     height: var(--lumo-icon-size-m);
+    width: var(--lumo-icon-size-m);
   }
 
   [part='content'] ::slotted(vaadin-icon[icon^='vaadin:']) {

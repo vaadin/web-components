@@ -7,9 +7,9 @@ import { css } from 'lit';
 
 export const virtualListStyles = css`
   :host {
+    align-self: stretch;
     display: block;
     flex: auto;
-    align-self: stretch;
     height: 400px;
     overflow: auto;
   }

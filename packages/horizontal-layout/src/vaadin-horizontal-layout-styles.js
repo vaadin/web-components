@@ -7,8 +7,8 @@ import { css } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 export const baseStyles = css`
   :host {
-    display: flex;
     box-sizing: border-box;
+    display: flex;
   }
 
   :host([hidden]) {

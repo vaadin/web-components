@@ -18,17 +18,17 @@ export const accordionHeading = css`
   }
 
   button {
-    display: flex;
     align-items: center;
-    justify-content: inherit;
-    width: 100%;
-    margin: 0;
-    padding: 0;
-    border: initial;
-    outline: none;
     background-color: initial;
+    border: initial;
     color: inherit;
+    display: flex;
     font: inherit;
+    justify-content: inherit;
+    margin: 0;
+    outline: none;
+    padding: 0;
     text-align: inherit;
+    width: 100%;
   }
 `;

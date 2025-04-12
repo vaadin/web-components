@@ -75,16 +75,16 @@ registerStyles(
     :host {
       --_lumo-selected-item-height: var(--lumo-size-m);
       --_lumo-selected-item-padding: 0.5em;
-      padding: 0 0.25em;
       font-family: var(--lumo-font-family);
       font-size: var(--vaadin-input-field-value-font-size, var(--lumo-font-size-m));
+      padding: 0 0.25em;
     }
 
     ::slotted(*) {
-      min-height: var(--_lumo-selected-item-height);
-      padding-top: var(--_lumo-selected-item-padding);
-      padding-bottom: var(--_lumo-selected-item-padding);
       font-size: inherit;
+      min-height: var(--_lumo-selected-item-height);
+      padding-bottom: var(--_lumo-selected-item-padding);
+      padding-top: var(--_lumo-selected-item-padding);
     }
 
     ::slotted(*:hover) {
@@ -101,14 +101,14 @@ const selectOverlay = css`
 
   /* Small viewport adjustment */
   :host([phone]) {
-    /* stylelint-disable declaration-block-no-redundant-longhand-properties */
-    top: 0 !important;
-    right: 0 !important;
-    bottom: var(--vaadin-overlay-viewport-bottom, 0) !important;
-    left: 0 !important;
     /* stylelint-enable declaration-block-no-redundant-longhand-properties */
     align-items: stretch;
+    bottom: var(--vaadin-overlay-viewport-bottom, 0) !important;
     justify-content: flex-end;
+    left: 0 !important;
+    right: 0 !important;
+    /* stylelint-disable declaration-block-no-redundant-longhand-properties */
+    top: 0 !important;
   }
 
   :host([no-vertical-overlap][top-aligned]) [part='overlay'] {

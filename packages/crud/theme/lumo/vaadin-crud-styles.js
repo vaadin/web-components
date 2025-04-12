@@ -10,26 +10,26 @@ registerStyles(
   'vaadin-crud-edit',
   css`
     :host {
-      position: relative;
-      width: var(--lumo-size-s);
-      min-width: auto;
-      height: var(--lumo-size-s);
-      margin: 0;
-      outline: none;
       font-family: 'lumo-icons', var(--lumo-font-family);
       font-size: var(--lumo-icon-size-m);
+      height: var(--lumo-size-s);
       line-height: 1;
+      margin: 0;
+      min-width: auto;
+      outline: none;
+      position: relative;
+      width: var(--lumo-size-s);
     }
 
     [part='icon']::before {
       content: var(--lumo-icons-edit);
-      position: absolute;
-      top: calc((var(--lumo-size-m) - var(--lumo-size-s)) / -2);
-      left: calc((var(--lumo-size-m) - var(--lumo-size-s)) / -2);
-      width: var(--lumo-size-m);
       height: var(--lumo-size-m);
+      left: calc((var(--lumo-size-m) - var(--lumo-size-s)) / -2);
       line-height: var(--lumo-size-m);
+      position: absolute;
       text-align: center;
+      top: calc((var(--lumo-size-m) - var(--lumo-size-s)) / -2);
+      width: var(--lumo-size-m);
     }
   `,
   { moduleId: 'lumo-crud-grid-edit' },
@@ -69,10 +69,10 @@ registerStyles(
       }
 
       [part='toolbar'] {
-        padding: var(--lumo-space-s) var(--lumo-space-m);
+        background-color: var(--lumo-contrast-5pct);
         border: 1px solid var(--lumo-contrast-10pct);
         border-top: none;
-        background-color: var(--lumo-contrast-5pct);
+        padding: var(--lumo-space-s) var(--lumo-space-m);
       }
 
       :host(:not([dir='rtl'])) [part='toolbar'] ::slotted(*:not(:first-child)) {
@@ -88,27 +88,27 @@ registerStyles(
       }
 
       [part='footer'] {
-        padding: var(--lumo-space-s);
         background-color: var(--lumo-contrast-5pct);
+        padding: var(--lumo-space-s);
       }
 
       [part='footer'] ::slotted(*) {
-        margin-right: var(--lumo-space-s);
         margin-left: var(--lumo-space-s);
+        margin-right: var(--lumo-space-s);
       }
 
       [part='editor'] {
-        position: relative;
-        box-sizing: border-box;
         background: var(--lumo-base-color);
+        box-sizing: border-box;
+        position: relative;
       }
 
       [part='editor']:focus::before {
-        content: '';
-        position: absolute;
         box-shadow: inset 0 0 0 var(--_focus-ring-width) var(--_focus-ring-color);
-        pointer-events: none;
+        content: '';
         inset: 0;
+        pointer-events: none;
+        position: absolute;
       }
 
       :host(:not([editor-position=''])) [part='editor']:not([hidden]) {
@@ -143,9 +143,9 @@ registerStyles(
     editorStyles,
     css`
       [part='header'] ::slotted(h3) {
-        margin-top: 0 !important;
         margin-bottom: 0 !important;
         margin-inline-start: var(--lumo-space-s);
+        margin-top: 0 !important;
       }
     `,
   ],

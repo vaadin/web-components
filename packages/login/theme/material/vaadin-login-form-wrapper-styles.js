@@ -8,8 +8,8 @@ const loginFormWrapper = css`
   }
 
   [part='form'] {
-    display: flex;
     box-sizing: border-box;
+    display: flex;
     flex: 1;
     flex-direction: column;
     justify-content: center;
@@ -17,41 +17,41 @@ const loginFormWrapper = css`
   }
 
   [part='form-title'] {
-    margin-top: calc(var(--material-h3-font-size) - var(--material-h4-font-size));
     font-size: var(--material-h5-font-size);
     font-weight: 300;
     letter-spacing: -0.01em;
     line-height: 1.1;
+    margin-top: calc(var(--material-h3-font-size) - var(--material-h4-font-size));
     text-indent: -0.07em;
   }
 
   ::slotted([slot='submit']) {
     flex-grow: 0;
-    margin-top: 3em;
     margin-bottom: 2em;
+    margin-top: 3em;
   }
 
   @media only screen and (max-width: 1023px) {
     ::slotted([slot='submit']) {
-      margin-top: 2.5em;
       margin-bottom: 1em;
+      margin-top: 2.5em;
     }
   }
 
   ::slotted([slot='forgot-password']) {
     margin: 0.5rem auto;
-    padding-top: 12px;
     padding-bottom: 12px;
+    padding-top: 12px;
     text-transform: none;
   }
 
   [part='error-message'] {
-    margin-top: 1rem;
-    margin-bottom: 0.5rem;
-    padding: 1rem;
-    border-radius: 0.25em;
     background-color: hsla(3, 100%, 60%, 0.1);
+    border-radius: 0.25em;
     color: var(--material-error-text-color);
+    margin-bottom: 0.5rem;
+    margin-top: 1rem;
+    padding: 1rem;
   }
 
   :host(:not([dir='rtl'])) [part='error-message'] {
@@ -64,13 +64,13 @@ const loginFormWrapper = css`
 
   [part='error-message']::before {
     content: '!';
-    position: absolute;
-    width: 2.25rem;
-    height: 1em;
     font-size: 1.3em;
     font-weight: 500;
+    height: 1em;
     line-height: 1;
+    position: absolute;
     text-align: center;
+    width: 2.25rem;
   }
 
   /* Visual centering */
@@ -83,18 +83,18 @@ const loginFormWrapper = css`
   }
 
   [part='error-message-title'] {
-    display: block;
-    margin: 0 0 0.25em;
     color: inherit;
+    display: block;
     line-height: 1.1;
+    margin: 0 0 0.25em;
     text-indent: -0.025em;
   }
 
   [part='error-message'] p {
-    margin: 0;
-    opacity: 0.9;
     font-size: var(--material-small-font-size);
     line-height: 1.375;
+    margin: 0;
+    opacity: 0.9;
   }
 
   [part='footer'] {

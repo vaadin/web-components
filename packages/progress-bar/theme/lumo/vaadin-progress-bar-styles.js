@@ -13,17 +13,17 @@ registerStyles(
     }
 
     [part='bar'] {
-      border-radius: var(--lumo-border-radius-m);
       background-color: var(--lumo-contrast-10pct);
+      border-radius: var(--lumo-border-radius-m);
     }
 
     [part='value'] {
-      width: calc(var(--vaadin-progress-value) * 100%);
+      background-color: var(--lumo-primary-color);
+      border-radius: var(--lumo-border-radius-m);
       /* Use width instead of transform to preserve border radius */
       transform: none;
       transition: 0.1s width linear;
-      border-radius: var(--lumo-border-radius-m);
-      background-color: var(--lumo-primary-color);
+      width: calc(var(--vaadin-progress-value) * 100%);
       will-change: width;
     }
 
@@ -39,11 +39,11 @@ registerStyles(
         var(--lumo-primary-color-10pct) 10%,
         var(--lumo-primary-color)
       );
-      width: 100%;
       animation: vaadin-progress-indeterminate 1.6s infinite cubic-bezier(0.645, 0.045, 0.355, 1);
-      opacity: 0.75;
       background-color: transparent !important;
       background-image: var(--lumo-progress-indeterminate-progress-bar-background);
+      opacity: 0.75;
+      width: 100%;
       will-change: transform;
     }
 
@@ -58,15 +58,15 @@ registerStyles(
       }
 
       50% {
+        background-image: var(--lumo-progress-indeterminate-progress-bar-background);
         transform: scaleX(0.015);
         transform-origin: 100% 0%;
-        background-image: var(--lumo-progress-indeterminate-progress-bar-background);
       }
 
       50.1% {
+        background-image: var(--lumo-progress-indeterminate-progress-bar-background-reverse);
         transform: scaleX(0.015);
         transform-origin: 100% 0%;
-        background-image: var(--lumo-progress-indeterminate-progress-bar-background-reverse);
       }
 
       75% {
@@ -74,21 +74,21 @@ registerStyles(
       }
 
       100% {
+        background-image: var(--lumo-progress-indeterminate-progress-bar-background-reverse);
         transform: scaleX(0.015);
         transform-origin: 0% 0%;
-        background-image: var(--lumo-progress-indeterminate-progress-bar-background-reverse);
       }
     }
 
     :host(:not([aria-valuenow])) [part='value']::before,
     :host([indeterminate]) [part='value']::before {
+      animation: vaadin-progress-pulse3 1.6s infinite cubic-bezier(0.645, 0.045, 0.355, 1);
+      background-color: var(--lumo-primary-color);
+      border-radius: inherit;
       content: '';
       display: block;
-      width: 100%;
       height: 100%;
-      animation: vaadin-progress-pulse3 1.6s infinite cubic-bezier(0.645, 0.045, 0.355, 1);
-      border-radius: inherit;
-      background-color: var(--lumo-primary-color);
+      width: 100%;
       will-change: opacity;
     }
 
@@ -205,15 +205,15 @@ registerStyles(
       }
 
       50% {
+        background-image: var(--lumo-progress-indeterminate-progress-bar-background);
         transform: scaleX(0.015);
         transform-origin: 0% 0%;
-        background-image: var(--lumo-progress-indeterminate-progress-bar-background);
       }
 
       50.1% {
+        background-image: var(--lumo-progress-indeterminate-progress-bar-background-reverse);
         transform: scaleX(0.015);
         transform-origin: 0% 0%;
-        background-image: var(--lumo-progress-indeterminate-progress-bar-background-reverse);
       }
 
       75% {
@@ -221,9 +221,9 @@ registerStyles(
       }
 
       100% {
+        background-image: var(--lumo-progress-indeterminate-progress-bar-background-reverse);
         transform: scaleX(0.015);
         transform-origin: 100% 0%;
-        background-image: var(--lumo-progress-indeterminate-progress-bar-background-reverse);
       }
     }
 

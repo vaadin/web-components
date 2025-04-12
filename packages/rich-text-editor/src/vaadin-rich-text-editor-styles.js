@@ -14,8 +14,8 @@ import { toolbarStyles } from './vaadin-rich-text-editor-toolbar-styles.js';
 
 export const baseStyles = css`
   :host {
-    display: flex;
     box-sizing: border-box;
+    display: flex;
     flex-direction: column;
   }
 
@@ -24,8 +24,8 @@ export const baseStyles = css`
   }
 
   .announcer {
-    position: fixed;
     clip: rect(0, 0, 0, 0);
+    position: fixed;
   }
 
   input[type='file'] {
@@ -36,8 +36,8 @@ export const baseStyles = css`
     display: flex;
     flex: auto;
     flex-direction: column;
-    min-height: inherit;
     max-height: inherit;
+    min-height: inherit;
   }
 `;
 

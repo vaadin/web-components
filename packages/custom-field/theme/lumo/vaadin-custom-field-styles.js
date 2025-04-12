@@ -14,7 +14,6 @@ import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themab
 const customField = css`
   :host {
     --lumo-text-field-size: var(--lumo-size-m);
-    padding: 0;
     color: var(--lumo-body-text-color);
     font-family: var(--lumo-font-family);
     font-size: var(--lumo-font-size-m);
@@ -22,13 +21,14 @@ const customField = css`
     -moz-osx-font-smoothing: grayscale;
     /* align with text-field height + vertical paddings */
     line-height: calc(var(--lumo-text-field-size) + 2 * var(--lumo-space-xs));
+    padding: 0;
     -webkit-tap-highlight-color: transparent;
   }
 
   :host::before {
-    display: inline-flex;
-    box-sizing: border-box;
     align-items: center;
+    box-sizing: border-box;
+    display: inline-flex;
     height: var(--lumo-text-field-size);
     margin-top: var(--lumo-space-xs);
   }

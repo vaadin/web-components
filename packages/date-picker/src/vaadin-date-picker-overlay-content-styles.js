@@ -9,16 +9,16 @@ export const overlayContentStyles = css`
   :host {
     display: flex;
     flex-direction: column;
-    width: 100%;
     height: 100%;
     outline: none;
+    width: 100%;
   }
 
   [part='overlay-header'] {
+    align-items: center;
     display: flex;
     flex-shrink: 0;
     flex-wrap: nowrap;
-    align-items: center;
   }
 
   :host(:not([fullscreen])) [part='overlay-header'] {
@@ -39,10 +39,10 @@ export const overlayContentStyles = css`
 
   #scrollers {
     display: flex;
-    position: relative;
-    width: 100%;
     height: 100%;
     overflow: hidden;
+    position: relative;
+    width: 100%;
   }
 
   :host([desktop]) ::slotted([slot='months']) {
@@ -61,8 +61,8 @@ export const overlayContentStyles = css`
 
   [part='toolbar'] {
     display: flex;
-    z-index: 2;
     flex-shrink: 0;
     justify-content: space-between;
+    z-index: 2;
   }
 `;

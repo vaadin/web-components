@@ -24,32 +24,32 @@ export const textAreaStyles = css`
   }
 
   ::slotted(textarea) {
-    flex: auto;
-    width: 100%;
-    min-width: 0;
-    height: 100%;
-    margin: 0;
-    padding: 0 0.25em;
-    overflow: hidden;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-color: transparent;
     border: 0;
     border-radius: 0;
-    outline: none;
-    background-color: transparent;
     /* Disable default invalid style in Firefox */
     box-shadow: none;
     color: inherit;
+    flex: auto;
     font: inherit;
     font-size: 1em;
+    height: 100%;
     line-height: normal;
+    margin: 0;
+    min-width: 0;
+    outline: none;
+    overflow: hidden;
+    padding: 0 0.25em;
     resize: none;
-    -webkit-appearance: none;
-    -moz-appearance: none;
+    width: 100%;
   }
 
   /* Override styles from <vaadin-input-container> */
   [part='input-field'] ::slotted(textarea) {
-    box-sizing: border-box;
     align-self: stretch;
+    box-sizing: border-box;
     white-space: pre-wrap;
   }
 

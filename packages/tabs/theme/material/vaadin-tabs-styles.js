@@ -27,18 +27,18 @@ registerStyles(
 
     [part='forward-button'],
     [part='back-button'] {
+      align-items: center;
+      color: var(--material-secondary-text-color);
       display: flex;
-      top: 0;
       flex-grow: 0;
       flex-shrink: 0;
-      align-items: center;
-      justify-content: center;
-      width: 48px;
-      height: 100%;
-      transition: 0.2s opacity;
-      color: var(--material-secondary-text-color);
       font-family: material-icons;
       font-size: 24px;
+      height: 100%;
+      justify-content: center;
+      top: 0;
+      transition: 0.2s opacity;
+      width: 48px;
     }
 
     [part='forward-button']:hover,

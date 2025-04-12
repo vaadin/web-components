@@ -24,12 +24,12 @@ registerStyles(
     }
 
     [part='name'] {
-      min-width: 1.75em;
-      padding: 0.3em;
       background-color: var(--vaadin-user-tag-color);
       color: var(--material-primary-contrast-color);
       font-weight: 500;
       line-height: 1;
+      min-width: 1.75em;
+      padding: 0.3em;
     }
   `,
   { moduleId: 'material-user-tag' },

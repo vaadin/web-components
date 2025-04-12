@@ -31,9 +31,9 @@ registerStyles(
     }
 
     .ol-control {
-      transition: 0.1s box-shadow;
       border-radius: 4px;
       box-shadow: var(--material-shadow-elevation-2dp);
+      transition: 0.1s box-shadow;
     }
 
     .ol-control:hover {
@@ -46,10 +46,10 @@ registerStyles(
     }
 
     .ol-control button {
-      width: 2em;
-      height: 2em;
-      border-radius: inherit;
       background-color: var(--material-background-color);
+      border-radius: inherit;
+      height: 2em;
+      width: 2em;
     }
 
     .ol-control button,
@@ -72,14 +72,14 @@ registerStyles(
 
     @supports not selector(:focus-visible) {
       .ol-control button:focus {
-        outline: none;
         box-shadow: 0 0 0 2px var(--material-primary-color);
+        outline: none;
       }
     }
 
     .ol-control button:focus-visible {
-      outline: none;
       box-shadow: 0 0 0 2px var(--material-primary-color);
+      outline: none;
     }
 
     .ol-zoom {
@@ -87,8 +87,8 @@ registerStyles(
     }
 
     button.ol-zoom-in {
-      border-bottom-right-radius: 0;
       border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
     }
 
     button.ol-zoom-out {
@@ -101,8 +101,8 @@ registerStyles(
     }
 
     .ol-attribution ul {
-      font-size: var(--material-caption-font-size);
       cursor: default;
+      font-size: var(--material-caption-font-size);
     }
 
     .ol-attribution:not(.ol-uncollapsible) ul {
@@ -128,20 +128,20 @@ registerStyles(
     }
 
     .ol-overviewmap-map {
-      margin: 2px;
       border: 0;
       border-radius: 2px;
+      margin: 2px;
     }
 
     .ol-zoomslider,
     .ol-zoomslider:not(.ol-uncollapsible):hover {
-      overflow: visible;
       box-shadow: none;
+      overflow: visible;
     }
 
     .ol-zoomslider button {
-      height: 16px;
       box-shadow: var(--material-shadow-elevation-2dp);
+      height: 16px;
     }
 
     .ol-zoomslider:hover button {

@@ -7,15 +7,15 @@ import { css } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 export const iconStyles = css`
   :host {
-    display: inline-flex;
-    box-sizing: border-box;
     align-items: center;
-    justify-content: center;
-    width: 24px;
-    height: 24px;
-    fill: currentColor;
-    vertical-align: middle;
+    box-sizing: border-box;
     container-type: size;
+    display: inline-flex;
+    fill: currentColor;
+    height: 24px;
+    justify-content: center;
+    vertical-align: middle;
+    width: 24px;
   }
 
   :host::after,
@@ -33,10 +33,10 @@ export const iconStyles = css`
 
   svg {
     display: block;
-    width: 100%;
     height: 100%;
     /* prevent overflowing icon from clipping, see https://github.com/vaadin/flow-components/issues/5872 */
     overflow: visible;
+    width: 100%;
   }
 
   :host(:is([icon-class], [font-icon-content])) svg {

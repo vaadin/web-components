@@ -11,9 +11,9 @@ registerStyles(
     }
 
     [part='navbar'] {
-      padding: 0.25em 0.5em;
       background: var(--vaadin-app-layout-navbar-background, var(--material-secondary-background-color));
       box-shadow: var(--material-shadow-elevation-8dp);
+      padding: 0.25em 0.5em;
     }
 
     [part='drawer'] {
@@ -32,20 +32,20 @@ registerStyles(
     [part] ::slotted(h2),
     [part] ::slotted(h3),
     [part] ::slotted(h4) {
-      margin-top: 0.25rem !important;
-      margin-bottom: 0.25rem !important;
       line-height: 2.5rem;
+      margin-bottom: 0.25rem !important;
+      margin-top: 0.25rem !important;
     }
 
     [part='navbar'][bottom] {
-      padding: 0 1em;
       box-shadow: var(--material-shadow-elevation-4dp);
+      padding: 0 1em;
     }
 
     @media (min-width: 700px) {
       [part='navbar'] {
-        padding: 0.5em 0.75em;
         box-shadow: var(--material-shadow-elevation-4dp);
+        padding: 0.5em 0.75em;
       }
     }
   `,

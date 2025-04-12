@@ -8,11 +8,11 @@ import { css } from 'lit';
 export const buttonStyles = css`
   :host {
     display: inline-block;
-    position: relative;
     outline: none;
-    white-space: nowrap;
+    position: relative;
     -webkit-user-select: none;
     user-select: none;
+    white-space: nowrap;
   }
 
   :host([hidden]) {
@@ -27,21 +27,21 @@ export const buttonStyles = css`
   /* Aligns the button with form fields when placed on the same line.
   Note, to make it work, the form fields should have the same "::before" pseudo-element. */
   .vaadin-button-container::before {
-    content: '\\\\\\\\2003';
+    content: '\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\2003';
     display: inline-block;
-    width: 0;
     max-height: 100%;
+    width: 0;
   }
 
   .vaadin-button-container {
-    display: inline-flex;
     align-items: center;
-    justify-content: center;
-    width: 100%;
+    display: inline-flex;
     height: 100%;
+    justify-content: center;
     min-height: inherit;
     text-align: center;
     text-shadow: inherit;
+    width: 100%;
   }
 
   [part='prefix'],

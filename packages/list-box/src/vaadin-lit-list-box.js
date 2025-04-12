@@ -36,10 +36,10 @@ class ListBox extends ElementMixin(MultiSelectListMixin(ThemableMixin(PolylitMix
       }
 
       [part='items'] {
-        width: 100%;
         height: 100%;
         -webkit-overflow-scrolling: touch;
         overflow-y: auto;
+        width: 100%;
       }
     `;
   }

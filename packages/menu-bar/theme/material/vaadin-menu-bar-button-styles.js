@@ -7,11 +7,11 @@ const menuBarButton = css`
   }
 
   [part='label'] ::slotted(vaadin-menu-bar-item) {
+    background-color: transparent;
     justify-content: center;
+    line-height: 20px;
     margin: -8px;
     padding: 8px;
-    background-color: transparent;
-    line-height: 20px;
   }
 
   :host([theme~='outlined']),
@@ -26,14 +26,14 @@ const menuBarButton = css`
   }
 
   :host([expanded])::before {
-    transition: opacity 0.4s;
     opacity: 0.08;
+    transition: opacity 0.4s;
   }
 
   :host([expanded])::after {
+    opacity: 0.1;
     transform: translate(-50%, -50%) scale(0.0000001); /* animation works weirdly with scale(0) */
     transition: 0s;
-    opacity: 0.1;
   }
 
   :host([theme~='contained'][expanded]) {
@@ -41,8 +41,8 @@ const menuBarButton = css`
   }
 
   :host(:hover:not([expanded]))::after {
-    transform: translate(-50%, -50%) scale(1);
     opacity: 0;
+    transform: translate(-50%, -50%) scale(1);
   }
 
   :host([theme~='contained']:not([dir='rtl'])) {
@@ -60,8 +60,8 @@ const menuBarButton = css`
 
   :host([slot='overflow']) {
     min-width: 36px;
-    padding-right: 8px;
     padding-left: 8px;
+    padding-right: 8px;
   }
 
   :host([slot='overflow']) ::slotted(*) {

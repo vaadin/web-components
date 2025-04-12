@@ -4,15 +4,15 @@ import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themab
 
 const accordionHeading = css`
   :host(:not([opened]))::after {
-    content: '';
-    position: absolute;
-    z-index: 1;
-    right: 0;
-    bottom: -1px;
-    left: 0;
-    height: 1px;
-    opacity: 1;
     background-color: var(--material-divider-color);
+    bottom: -1px;
+    content: '';
+    height: 1px;
+    left: 0;
+    opacity: 1;
+    position: absolute;
+    right: 0;
+    z-index: 1;
   }
 
   :host([opened])::before {
@@ -24,9 +24,9 @@ const accordionHeading = css`
   }
 
   [part='content'] ::slotted(*) {
+    color: var(--material-body-text-color);
     display: flex;
     margin-right: 16px;
-    color: var(--material-body-text-color);
   }
 
   [part='content'] ::slotted([theme='primary']) {

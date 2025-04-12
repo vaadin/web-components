@@ -7,8 +7,8 @@ import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themab
 const comboBoxItem = css`
   :host {
     --_material-item-selected-icon-display: block;
-    padding: 4px 10px;
     cursor: pointer;
+    padding: 4px 10px;
     -webkit-tap-highlight-color: transparent;
   }
 `;

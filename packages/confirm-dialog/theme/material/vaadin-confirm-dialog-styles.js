@@ -9,8 +9,8 @@ registerStyles(
     dialogOverlay,
     css`
       [part='overlay'] {
-        min-width: 0;
         max-width: 100%;
+        min-width: 0;
       }
 
       [part='content'] {
@@ -18,21 +18,21 @@ registerStyles(
       }
 
       [part='header'] ::slotted(h3) {
-        margin-top: 0 !important;
         margin-bottom: 0 !important;
         margin-inline-start: 8px;
+        margin-top: 0 !important;
       }
 
       [part='message'] {
-        width: 25em;
-        max-width: 100%;
         margin-inline-end: 24px;
+        max-width: 100%;
+        width: 25em;
       }
 
       @media (max-width: 360px) {
         [part='footer'] {
-          flex-direction: column-reverse;
           align-items: flex-end;
+          flex-direction: column-reverse;
         }
       }
     `,

@@ -74,11 +74,11 @@ const multiSelectComboBox = css`
   /* Override input-container styles */
   [part='input-field'] ::slotted([slot='chip']),
   [part='input-field'] ::slotted([slot='overflow']) {
-    min-height: auto;
-    padding: 0.3125em calc(0.5em + var(--lumo-border-radius-s) / 4);
     color: var(--lumo-body-text-color);
     -webkit-mask-image: none;
     mask-image: none;
+    min-height: auto;
+    padding: 0.3125em calc(0.5em + var(--lumo-border-radius-s) / 4);
   }
 
   :host([auto-expand-vertically]) ::slotted([slot='chip']) {

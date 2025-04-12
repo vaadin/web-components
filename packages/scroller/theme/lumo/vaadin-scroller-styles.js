@@ -17,19 +17,19 @@ const scroller = css`
 
   :host([theme~='overflow-indicators'])::before,
   :host([theme~='overflow-indicators'])::after {
+    background: var(--lumo-contrast-10pct);
     content: '';
     display: none;
+    height: 1px;
+    inset: 0;
+    margin-bottom: -1px;
     position: sticky;
     z-index: 9999;
-    height: 1px;
-    margin-bottom: -1px;
-    background: var(--lumo-contrast-10pct);
-    inset: 0;
   }
 
   :host([theme~='overflow-indicators'])::after {
-    margin-top: -1px;
     margin-bottom: 0;
+    margin-top: -1px;
   }
 
   :host([theme~='overflow-indicators'][overflow~='top'])::before,

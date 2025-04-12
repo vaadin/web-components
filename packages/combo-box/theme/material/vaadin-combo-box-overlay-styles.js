@@ -5,9 +5,9 @@ import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themab
 
 const comboBoxOverlay = css`
   [part='overlay'] {
-    position: relative;
     border-top-left-radius: 0;
     border-top-right-radius: 0;
+    position: relative;
   }
 
   /* Overflow needs to be auto by default to make overlay sizing logic work */
@@ -23,11 +23,11 @@ const comboBoxOverlay = css`
 
 const comboBoxLoader = css`
   [part~='loader'] {
-    position: absolute;
-    z-index: 1;
-    top: -2px;
-    right: 0;
     left: 0;
+    position: absolute;
+    right: 0;
+    top: -2px;
+    z-index: 1;
   }
 `;
 

@@ -17,8 +17,8 @@ registerStyles(
       --_lumo-grid-secondary-border-color: var(--lumo-contrast-10pct);
       --_lumo-grid-border-width: 1px;
       --_lumo-grid-selected-row-color: var(--lumo-primary-color-10pct);
-      box-sizing: border-box;
       background-color: var(--lumo-base-color);
+      box-sizing: border-box;
       color: var(--lumo-body-text-color);
       font-family: var(--lumo-font-family);
       font-size: var(--lumo-font-size-m);
@@ -44,14 +44,14 @@ registerStyles(
     [part~='cell'] {
       --_cell-padding: var(--vaadin-grid-cell-padding, var(--_cell-default-padding));
       --_cell-default-padding: var(--lumo-space-xs) var(--lumo-space-m);
-      min-height: var(--lumo-size-m);
       background-color: var(--vaadin-grid-cell-background, var(--lumo-base-color));
       cursor: default;
+      min-height: var(--lumo-size-m);
     }
 
     [part~='cell'] ::slotted(vaadin-grid-cell-content) {
-      padding: var(--_cell-padding);
       cursor: inherit;
+      padding: var(--_cell-padding);
     }
 
     /* Apply row borders by default and introduce the "no-row-borders" variant */
@@ -61,8 +61,8 @@ registerStyles(
 
     /* Hide first body row top border */
     :host(:not([theme~='no-row-borders'])) [part~='first-row'] [part~='cell']:not([part~='details-cell']) {
-      min-height: calc(var(--lumo-size-m) - var(--_lumo-grid-border-width));
       border-top: 0;
+      min-height: calc(var(--lumo-size-m) - var(--_lumo-grid-border-width));
     }
 
     /* Focus-ring */
@@ -78,32 +78,32 @@ registerStyles(
 
     :host([navigating]) [part~='row']:focus::before,
     :host([navigating]) [part~='focused-cell']:focus::before {
-      content: '';
-      position: absolute;
       box-shadow: inset 0 0 0 var(--_focus-ring-width) var(--_focus-ring-color);
-      pointer-events: none;
+      content: '';
       inset: 0;
+      pointer-events: none;
+      position: absolute;
     }
 
     :host([navigating]) [part~='row']:focus::before {
-      z-index: 3;
       transform: translateX(calc(-1 * var(--_grid-horizontal-scroll-position)));
+      z-index: 3;
     }
 
     /* Empty state */
     [part~='empty-state'] {
-      padding: var(--lumo-space-m);
       color: var(--lumo-secondary-text-color);
+      padding: var(--lumo-space-m);
     }
 
     /* Drag and Drop styles */
     :host([dragover])::after {
+      box-shadow: inset 0 0 0 var(--_focus-ring-width) var(--_focus-ring-color);
       content: '';
+      inset: 0;
+      pointer-events: none;
       position: absolute;
       z-index: 100;
-      box-shadow: inset 0 0 0 var(--_focus-ring-width) var(--_focus-ring-color);
-      pointer-events: none;
-      inset: 0;
     }
 
     [part~='row'][dragover] {
@@ -115,12 +115,12 @@ registerStyles(
     }
 
     [part~='row'][dragover] [part~='cell']::after {
-      content: '';
-      position: absolute;
-      height: calc(var(--_lumo-grid-border-width) + 2px);
       background: var(--lumo-primary-color-50pct);
-      pointer-events: none;
+      content: '';
+      height: calc(var(--_lumo-grid-border-width) + 2px);
       inset: 0;
+      pointer-events: none;
+      position: absolute;
     }
 
     [part~='row'][dragover] [part~='cell'][last-frozen]::after {
@@ -132,9 +132,9 @@ registerStyles(
     }
 
     [part~='row'][dragover='below'] [part~='cell']::after {
-      top: 100%;
       bottom: auto;
       margin-top: -1px;
+      top: 100%;
     }
 
     :host([all-rows-visible]) [part~='last-row'][dragover='below'] [part~='cell']::after {
@@ -142,9 +142,9 @@ registerStyles(
     }
 
     [part~='row'][dragover='above'] [part~='cell']::after {
-      top: auto;
       bottom: 100%;
       margin-bottom: -1px;
+      top: auto;
     }
 
     [part~='row'][details-opened][dragover='below'] [part~='cell']:not([part~='details-cell'])::after,
@@ -171,27 +171,27 @@ registerStyles(
     }
 
     #scroller [part~='row'][dragstart]:not([dragstart=''])::after {
+      align-items: center;
+      background-color: var(--lumo-error-color);
+      border-radius: var(--lumo-border-radius-m);
+      box-sizing: border-box;
+      color: var(--lumo-error-contrast-color);
       content: attr(dragstart);
       display: block;
-      position: absolute;
-      z-index: 100;
-      top: var(--_grid-drag-start-y);
-      left: var(--_grid-drag-start-x);
-      box-sizing: border-box;
-      align-items: center;
-      justify-content: center;
-      min-width: calc(var(--lumo-size-s) * 0.7);
-      padding: calc(var(--lumo-space-xs) * 0.8);
-      border-radius: var(--lumo-border-radius-m);
-      background-color: var(--lumo-error-color);
-      color: var(--lumo-error-contrast-color);
       font-family: var(--lumo-font-family);
       font-size: var(--lumo-font-size-xxs);
       font-weight: 500;
+      justify-content: center;
+      left: var(--_grid-drag-start-x);
       letter-spacing: initial;
       line-height: 1;
+      min-width: calc(var(--lumo-size-s) * 0.7);
+      padding: calc(var(--lumo-space-xs) * 0.8);
+      position: absolute;
       text-align: center;
       text-transform: initial;
+      top: var(--_grid-drag-start-y);
+      z-index: 100;
     }
 
     /* Headers and footers */
@@ -266,31 +266,31 @@ registerStyles(
     }
 
     [part~='reorder-ghost'] {
+      box-shadow: var(--lumo-box-shadow-s);
+      opacity: 0.85;
       /* TODO Use the same styles as for the cell element (reorder-ghost copies styles from the cell element) */
       padding: var(--lumo-space-s) var(--lumo-space-m) !important;
-      opacity: 0.85;
-      box-shadow: var(--lumo-box-shadow-s);
     }
 
     /* Column resizing */
 
     [part='resize-handle'] {
       --_resize-handle-width: 3px;
-      width: var(--_resize-handle-width);
-      transition: opacity 0.2s;
-      opacity: 0;
       background-color: var(--lumo-primary-color-50pct);
+      opacity: 0;
+      transition: opacity 0.2s;
+      width: var(--_resize-handle-width);
     }
 
     [part='resize-handle']::before {
-      width: var(--lumo-size-s);
       transform: translateX(calc(-50% + var(--_resize-handle-width) / 2));
+      width: var(--lumo-size-s);
     }
 
     :host(:not([reordering])) *:not([column-resizing]) [part~='cell']:hover [part='resize-handle'],
     [part='resize-handle']:active {
-      transition-delay: 0.15s;
       opacity: 1;
+      transition-delay: 0.15s;
     }
 
     /* Column borders */
@@ -302,8 +302,8 @@ registerStyles(
     /* Frozen columns */
 
     [last-frozen] {
-      overflow: hidden;
       border-right: var(--_lumo-grid-border-width) solid transparent;
+      overflow: hidden;
     }
 
     :host([overflow~='start']) [part~='cell'][last-frozen]:not([part~='details-cell']) {
@@ -379,18 +379,18 @@ registerStyles(
     }
 
     :host([dir='rtl'][theme~='column-borders']) [part~='cell']:not([last-column]):not([part~='details-cell']) {
-      border-right: none;
       border-left: var(--_lumo-grid-border-width) solid var(--_lumo-grid-secondary-border-color);
+      border-right: none;
     }
 
     :host([dir='rtl']) [last-frozen] {
-      border-right: none;
       border-left: var(--_lumo-grid-border-width) solid transparent;
+      border-right: none;
     }
 
     :host([dir='rtl']) [first-frozen-to-end] {
-      border-right: var(--_lumo-grid-border-width) solid transparent;
       border-left: none;
+      border-right: var(--_lumo-grid-border-width) solid transparent;
     }
 
     :host([dir='rtl'][overflow~='start']) [part~='cell'][last-frozen]:not([part~='details-cell']) {

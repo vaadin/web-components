@@ -19,11 +19,11 @@ const textArea = css`
   }
 
   [part='input-field'] {
+    line-height: var(--lumo-line-height-s);
+    padding-bottom: calc((var(--lumo-text-field-size) - 1em * var(--lumo-line-height-s)) / 2);
     /* Equal to the implicit padding in vaadin-text-field */
     padding-top: calc((var(--lumo-text-field-size) - 1em * var(--lumo-line-height-s)) / 2);
-    padding-bottom: calc((var(--lumo-text-field-size) - 1em * var(--lumo-line-height-s)) / 2);
     transition: background-color 0.1s;
-    line-height: var(--lumo-line-height-s);
   }
 
   :host(:not([readonly])) [part='input-field']::after {
@@ -60,18 +60,18 @@ const textArea = css`
   /* Use sticky positioning to keep prefix/suffix/clear button visible when scrolling textarea container */
   [part='input-field'] ::slotted([slot$='fix']),
   [part='clear-button'] {
+    align-self: flex-start;
     position: sticky;
     top: 0;
-    align-self: flex-start;
   }
 
   [part='input-field'] ::slotted(vaadin-icon[slot$='fix']),
   [part='clear-button'] {
-    /* Vertically align icon prefix/suffix/clear button with the first line of text */
-    top: calc((var(--lumo-icon-size-m) - 1em * var(--lumo-line-height-s)) / -2);
-    margin-top: calc((var(--lumo-icon-size-m) - 1em * var(--lumo-line-height-s)) / -2);
     /* Reduce effective height to match line height of native textarea, so icons don't increase component size when using single row */
     margin-bottom: calc((var(--lumo-icon-size-m) - 1em * var(--lumo-line-height-s)) / -2);
+    margin-top: calc((var(--lumo-icon-size-m) - 1em * var(--lumo-line-height-s)) / -2);
+    /* Vertically align icon prefix/suffix/clear button with the first line of text */
+    top: calc((var(--lumo-icon-size-m) - 1em * var(--lumo-line-height-s)) / -2);
   }
 `;
 

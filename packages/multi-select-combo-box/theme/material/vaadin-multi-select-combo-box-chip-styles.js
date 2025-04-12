@@ -11,14 +11,14 @@ import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themab
 
 const chip = css`
   :host {
-    height: 1.25rem;
-    margin-inline-end: 0.25rem;
-    border-radius: 4px;
     background-color: rgba(0, 0, 0, 0.08);
+    border-radius: 4px;
+    cursor: default;
     font-family: var(--material-font-family);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    cursor: default;
+    height: 1.25rem;
+    margin-inline-end: 0.25rem;
   }
 
   :host([focused]) {
@@ -26,19 +26,19 @@ const chip = css`
   }
 
   :host([slot='overflow']) {
-    position: relative;
     margin-inline-start: 0.5rem;
+    position: relative;
   }
 
   :host([slot='overflow'])::before,
   :host([slot='overflow'])::after {
-    content: '';
-    position: absolute;
-    width: 100%;
-    height: 100%;
+    border-color: rgba(0, 0, 0, 0.08);
     border-left: 0.125rem solid;
     border-radius: 0.25rem;
-    border-color: rgba(0, 0, 0, 0.08);
+    content: '';
+    height: 100%;
+    position: absolute;
+    width: 100%;
   }
 
   :host([slot='overflow'])::before {
@@ -74,16 +74,16 @@ const chip = css`
 
   /* Override field button */
   [part='remove-button'] {
-    display: flex;
-    box-sizing: border-box;
     align-items: center;
-    justify-content: center;
-    width: 20px;
+    box-sizing: border-box;
+    display: flex;
+    font-size: 0.75em;
     height: 20px;
+    justify-content: center;
+    line-height: 20px;
     margin-inline-start: auto;
     padding: 0;
-    font-size: 0.75em;
-    line-height: 20px;
+    width: 20px;
   }
 
   [part='remove-button']::before {

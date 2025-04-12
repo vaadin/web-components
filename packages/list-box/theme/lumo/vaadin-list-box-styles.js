@@ -11,11 +11,11 @@ const listBox = css`
 
   /* Dividers */
   [part='items'] ::slotted(hr) {
+    background-color: var(--lumo-contrast-10pct);
+    border: 0;
     height: 1px;
     margin: var(--lumo-space-s) var(--lumo-border-radius-m);
     padding: 0;
-    border: 0;
-    background-color: var(--lumo-contrast-10pct);
   }
 `;
 

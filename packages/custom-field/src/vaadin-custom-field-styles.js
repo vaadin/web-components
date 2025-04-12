@@ -11,7 +11,7 @@ export const customFieldStyles = css`
   }
 
   :host::before {
-    content: '\\\\\\\\2003';
+    content: '\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\2003';
     display: inline-block;
     width: 0;
     /* Size and position this element on the same vertical position as the input-field element

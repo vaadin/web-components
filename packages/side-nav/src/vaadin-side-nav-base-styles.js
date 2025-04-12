@@ -20,35 +20,35 @@ export const sideNavItemBaseStyles = css`
   }
 
   [part='content'] {
-    display: flex;
     align-items: center;
+    display: flex;
   }
 
   [part='link'] {
+    align-items: center;
+    color: inherit;
     display: flex;
     flex: auto;
-    align-items: center;
-    min-width: 0;
-    color: inherit;
     font: inherit;
+    min-width: 0;
     text-decoration: none;
   }
 
   button {
-    position: relative;
+    -webkit-appearance: none;
+    appearance: none;
+    background: transparent;
+    border: 0;
     flex: none;
     margin: 0;
     padding: 0;
-    border: 0;
-    background: transparent;
-    -webkit-appearance: none;
-    appearance: none;
+    position: relative;
   }
 
   [part='children'] {
+    list-style-type: none;
     margin: 0;
     padding: 0;
-    list-style-type: none;
   }
 
   :host(:not([has-children])) button {
@@ -80,23 +80,23 @@ export const sideNavBaseStyles = css`
   }
 
   button {
-    display: flex;
     align-items: center;
-    justify-content: inherit;
-    width: 100%;
-    margin: 0;
-    padding: 0;
-    border: initial;
-    outline: none;
     background-color: initial;
+    border: initial;
     color: inherit;
+    display: flex;
     font: inherit;
+    justify-content: inherit;
+    margin: 0;
+    outline: none;
+    padding: 0;
     text-align: inherit;
+    width: 100%;
   }
 
   [part='children'] {
+    list-style-type: none;
     margin: 0;
     padding: 0;
-    list-style-type: none;
   }
 `;

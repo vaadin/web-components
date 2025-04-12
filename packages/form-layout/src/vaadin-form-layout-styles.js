@@ -12,9 +12,9 @@ export const formLayoutStyles = css`
     --vaadin-form-layout-column-spacing: 2em;
     --vaadin-form-layout-label-width: 8em;
     --vaadin-form-layout-label-spacing: 1em;
+    align-self: stretch;
 
     display: block;
-    align-self: stretch;
     max-width: 100%;
   }
 
@@ -23,21 +23,20 @@ export const formLayoutStyles = css`
   }
 
   :host(:not([auto-responsive])) #layout {
+    align-items: baseline; /* default \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\`stretch\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\` is not appropriate */
     display: flex;
 
     flex-wrap: wrap; /* the items should wrap */
-
-    align-items: baseline; /* default \\\\\\\`stretch\\\\\\\` is not appropriate */
   }
 
   :host(:not([auto-responsive])) #layout ::slotted(*) {
     /* Items should neither grow nor shrink. */
     flex-grow: 0;
     flex-shrink: 0;
-    margin-right: calc(0.5 * var(--vaadin-form-layout-column-spacing));
 
     /* Margins make spacing between the columns */
     margin-left: calc(0.5 * var(--vaadin-form-layout-column-spacing));
+    margin-right: calc(0.5 * var(--vaadin-form-layout-column-spacing));
   }
 
   #layout ::slotted(br) {
@@ -68,6 +67,7 @@ export const formLayoutStyles = css`
     --_grid-repeat: var(--_grid-column-width);
 
     display: grid;
+    gap: var(--vaadin-form-layout-row-spacing) var(--_grid-column-gap);
 
     /*
       Auto-columns can be created when an item's colspan exceeds the rendered column count.
@@ -76,6 +76,14 @@ export const formLayoutStyles = css`
     */
     grid-auto-columns: 0;
     grid-template-columns: repeat(auto-fill, var(--_grid-repeat));
+
+    justify-items: start;
+
+    /*
+      Firefox requires min-width on both :host and #layout to allow the layout
+      to shrink below the value specified in the CSS width property above.
+    */
+    min-width: inherit;
 
     /*
       To prevent the layout from exceeding the column limit defined by --_max-columns,
@@ -90,15 +98,6 @@ export const formLayoutStyles = css`
       without a predefined width.
     */
     width: calc(var(--_grid-column-max-total-width) + var(--_grid-column-max-total-gap));
-
-    /*
-      Firefox requires min-width on both :host and #layout to allow the layout
-      to shrink below the value specified in the CSS width property above.
-    */
-    min-width: inherit;
-    gap: var(--vaadin-form-layout-row-spacing) var(--_grid-column-gap);
-
-    justify-items: start;
   }
 
   :host([auto-responsive]) #layout::before {
@@ -194,12 +193,12 @@ export const formItemStyles = css`
     /* By default, when auto-responsive mode is disabled, labels should be displayed beside the fields. */
     --_form-item-labels-above: ' '; /* false */
     --_form-item-labels-aside: initial; /* true */
+    align-items: var(--_form-item-labels-aside, baseline);
 
     display: inline-flex;
     flex-flow: var(--_form-item-labels-above, column) nowrap;
-    align-items: var(--_form-item-labels-aside, baseline);
-    margin: calc(0.5 * var(--vaadin-form-item-row-spacing, var(--vaadin-form-layout-row-spacing, 1em))) 0;
     justify-self: stretch;
+    margin: calc(0.5 * var(--vaadin-form-item-row-spacing, var(--vaadin-form-layout-row-spacing, 1em))) 0;
   }
 
   :host([label-position='top']) {
@@ -230,7 +229,7 @@ export const formItemStyles = css`
 
   #content ::slotted(.full-width) {
     box-sizing: border-box;
-    width: 100%;
     min-width: 0;
+    width: 100%;
   }
 `;

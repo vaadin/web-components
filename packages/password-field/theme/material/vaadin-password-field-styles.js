@@ -23,8 +23,8 @@ const passwordField = css`
   }
 
   [part='reveal-button'] {
-    position: relative;
     cursor: pointer;
+    position: relative;
   }
 
   [part='reveal-button']:hover {

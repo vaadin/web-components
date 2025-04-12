@@ -36,10 +36,10 @@ class MenuBarListBox extends ListMixin(ThemableMixin(DirMixin(PolylitMixin(LitEl
       }
 
       [part='items'] {
-        width: 100%;
         height: 100%;
         -webkit-overflow-scrolling: touch;
         overflow-y: auto;
+        width: 100%;
       }
     `;
   }

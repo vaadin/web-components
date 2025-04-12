@@ -22,10 +22,10 @@ const numberField = css`
   }
 
   [part$='button'] {
-    width: 1.6em;
-    height: 1.6em;
-    font-size: var(--lumo-icon-size-s);
     cursor: pointer;
+    font-size: var(--lumo-icon-size-s);
+    height: 1.6em;
+    width: 1.6em;
   }
 
   [part$='button']::before {

@@ -12,8 +12,8 @@ export const multiSelectComboBox = css`
   }
 
   #chips {
-    display: flex;
     align-items: center;
+    display: flex;
   }
 
   ::slotted(input) {
@@ -47,10 +47,10 @@ export const multiSelectComboBox = css`
 
 export const multiSelectComboBoxChip = css`
   :host {
-    display: inline-flex;
-    box-sizing: border-box;
     align-items: center;
     align-self: center;
+    box-sizing: border-box;
+    display: inline-flex;
     white-space: nowrap;
   }
 

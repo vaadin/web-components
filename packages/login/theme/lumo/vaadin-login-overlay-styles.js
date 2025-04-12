@@ -15,18 +15,18 @@ const loginOverlayWrapper = css`
   }
 
   [part='overlay'] {
-    width: 100%;
-    height: 100%;
-    border-radius: 0;
     background: none;
+    border-radius: 0;
     box-shadow: none;
+    height: 100%;
+    width: 100%;
   }
 
   [part='brand'] {
-    min-height: calc(var(--lumo-size-m) * 5);
-    padding: var(--lumo-space-l) var(--lumo-space-xl) var(--lumo-space-l) var(--lumo-space-l);
     background-color: var(--lumo-primary-color);
     color: var(--lumo-primary-contrast-color);
+    min-height: calc(var(--lumo-size-m) * 5);
+    padding: var(--lumo-space-l) var(--lumo-space-xl) var(--lumo-space-l) var(--lumo-space-l);
   }
 
   [part='title'] {
@@ -36,26 +36,26 @@ const loginOverlayWrapper = css`
   }
 
   [part='description'] {
-    margin-bottom: 0;
     color: var(--lumo-tint-70pct);
     line-height: var(--lumo-line-height-s);
+    margin-bottom: 0;
   }
 
   [part='content'] {
-    display: flex;
     align-items: center;
-    justify-content: center;
+    display: flex;
     height: 100%;
+    justify-content: center;
     padding: 0;
   }
 
   [part='card'] {
-    width: calc(var(--lumo-size-m) * 10);
+    background: var(--lumo-base-color) linear-gradient(var(--lumo-tint-5pct), var(--lumo-tint-5pct));
+    border-radius: var(--lumo-border-radius-l);
+    box-shadow: var(--lumo-box-shadow-s);
     height: auto;
     margin: var(--lumo-space-s);
-    border-radius: var(--lumo-border-radius-l);
-    background: var(--lumo-base-color) linear-gradient(var(--lumo-tint-5pct), var(--lumo-tint-5pct));
-    box-shadow: var(--lumo-box-shadow-s);
+    width: calc(var(--lumo-size-m) * 10);
   }
 
   /* Small screen */
@@ -67,16 +67,16 @@ const loginOverlayWrapper = css`
 
     [part='content'] {
       align-items: flex-start;
-      min-height: 100%;
       background: var(--lumo-base-color);
+      min-height: 100%;
     }
 
     [part='card'],
     [part='overlay'] {
-      width: 100%;
-      margin: 0;
       border-radius: 0;
       box-shadow: none;
+      margin: 0;
+      width: 100%;
     }
 
     /* RTL styles */
@@ -88,10 +88,10 @@ const loginOverlayWrapper = css`
   /* Landscape small screen */
   @media only screen and (max-height: 600px) and (min-width: 600px) and (orientation: landscape) {
     [part='card'] {
-      flex-direction: row;
       align-items: stretch;
-      width: 100%;
+      flex-direction: row;
       max-width: calc(var(--lumo-size-m) * 16);
+      width: 100%;
     }
 
     [part='brand'],
@@ -106,8 +106,8 @@ const loginOverlayWrapper = css`
     }
 
     [part='form'] {
-      padding: var(--lumo-space-l);
       overflow: auto;
+      padding: var(--lumo-space-l);
     }
   }
 
@@ -119,13 +119,13 @@ const loginOverlayWrapper = css`
     }
 
     [part='card'] {
-      flex: auto;
-      width: 100%;
-      max-width: none;
-      height: 100%;
-      margin: 0;
       border-radius: 0;
       box-shadow: none;
+      flex: auto;
+      height: 100%;
+      margin: 0;
+      max-width: none;
+      width: 100%;
     }
 
     [part='form'] {
@@ -138,8 +138,8 @@ const loginOverlayWrapper = css`
   /* Handle iPhone X notch */
   @media only screen and (device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3) {
     [part='card'] {
-      padding-right: env(safe-area-inset-right);
       padding-left: env(safe-area-inset-left);
+      padding-right: env(safe-area-inset-right);
     }
 
     [part='brand'] {
@@ -149,8 +149,8 @@ const loginOverlayWrapper = css`
 
     /* RTL styles */
     :host([dir='rtl']) [part='card'] {
-      padding-right: env(safe-area-inset-left);
       padding-left: env(safe-area-inset-right);
+      padding-right: env(safe-area-inset-left);
     }
 
     :host([dir='rtl']) [part='brand'] {
@@ -177,8 +177,8 @@ const loginFormWrapper = css`
     :host([theme~='with-overlay']) [part='form'] {
       flex: 1;
       height: 100%;
-      padding: 2px;
       -webkit-overflow-scrolling: touch;
+      padding: 2px;
     }
   }
 `;

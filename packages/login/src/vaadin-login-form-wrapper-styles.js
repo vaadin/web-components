@@ -16,8 +16,8 @@ export const loginFormWrapperStyles = css`
   }
 
   [part='form'] {
-    display: flex;
     box-sizing: border-box;
+    display: flex;
     flex: 1;
     flex-direction: column;
   }

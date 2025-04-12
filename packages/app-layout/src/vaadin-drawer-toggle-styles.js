@@ -7,25 +7,25 @@ import { css } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 export const drawerToggle = css`
   :host {
-    display: inline-flex;
-    position: relative;
     align-items: center;
-    justify-content: center;
-    width: 24px;
-    height: 24px;
-    padding: 4px;
-    outline: none;
     cursor: default;
+    display: inline-flex;
+    height: 24px;
+    justify-content: center;
+    outline: none;
+    padding: 4px;
+    position: relative;
+    width: 24px;
   }
 
   [part='icon'],
   [part='icon']::after,
   [part='icon']::before {
+    background-color: #000;
+    height: 3px;
     position: absolute;
     top: 8px;
     width: 24px;
-    height: 3px;
-    background-color: #000;
   }
 
   [part='icon']::after,

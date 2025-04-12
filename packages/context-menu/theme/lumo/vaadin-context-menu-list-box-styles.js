@@ -11,11 +11,11 @@ const contextMenuListBox = css`
 
   /* Normal item */
   [part='items'] ::slotted([role='menuitem']) {
-    padding-right: calc(var(--lumo-space-l) + var(--lumo-border-radius-m) / 4);
-    padding-left: calc(var(--lumo-border-radius-m) / 4);
     border-radius: var(--lumo-border-radius-m);
-    outline: none;
     cursor: default;
+    outline: none;
+    padding-left: calc(var(--lumo-border-radius-m) / 4);
+    padding-right: calc(var(--lumo-space-l) + var(--lumo-border-radius-m) / 4);
     -webkit-tap-highlight-color: var(--lumo-primary-color-10pct);
   }
 
@@ -28,8 +28,8 @@ const contextMenuListBox = css`
 
   /* RTL styles */
   :host([dir='rtl']) [part='items'] ::slotted([role='menuitem']) {
-    padding-right: calc(var(--lumo-border-radius-m) / 4);
     padding-left: calc(var(--lumo-space-l) + var(--lumo-border-radius-m) / 4);
+    padding-right: calc(var(--lumo-border-radius-m) / 4);
   }
 
   /* Focused item */

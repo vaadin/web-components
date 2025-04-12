@@ -14,9 +14,9 @@ registerStyles(
     }
 
     :host(:not([orientation='vertical'])) {
-      position: relative;
-      min-height: var(--lumo-size-l);
       box-shadow: inset 0 -1px 0 0 var(--lumo-contrast-10pct);
+      min-height: var(--lumo-size-l);
+      position: relative;
     }
 
     :host([orientation='horizontal']) [part='tabs'] ::slotted(vaadin-tab:not([theme~='icon-on-top'])) {
@@ -32,24 +32,24 @@ registerStyles(
     }
 
     :host([orientation='vertical']) [part='tabs'] {
-      width: 100%;
       margin: 0.5rem 0;
+      width: 100%;
     }
 
     [part='forward-button'],
     [part='back-button'] {
-      display: flex;
-      position: absolute;
-      z-index: 1;
-      top: 0;
       align-items: center;
-      justify-content: center;
-      width: 1.5em;
-      height: 100%;
-      transition: 0.2s opacity;
       color: var(--lumo-tertiary-text-color);
+      display: flex;
       font-family: lumo-icons;
       font-size: var(--lumo-icon-size-m);
+      height: 100%;
+      justify-content: center;
+      position: absolute;
+      top: 0;
+      transition: 0.2s opacity;
+      width: 1.5em;
+      z-index: 1;
     }
 
     [part='forward-button']:hover,
@@ -203,8 +203,8 @@ registerStyles(
     }
 
     :host([dir='rtl']) [part='tabs'] ::slotted(:not(vaadin-tab)) {
-      margin-right: var(--lumo-space-m);
       margin-left: 0;
+      margin-right: var(--lumo-space-m);
     }
 
     /* Both ends overflowing */

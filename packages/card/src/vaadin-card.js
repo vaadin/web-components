@@ -68,11 +68,11 @@ class Card extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
         --_header-suffix: 0;
         --_content: 0;
         --_footer: 0;
-        display: flex;
         box-sizing: border-box;
+        display: flex;
         flex-direction: column;
-        padding: var(--_padding);
         gap: var(--_gap);
+        padding: var(--_padding);
       }
 
       :host([hidden]) {
@@ -135,8 +135,8 @@ class Card extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
       }
 
       :host(:is([_h], [_t], [_st], [_hp], [_hs])) [part='header'] {
-        display: grid;
         align-items: center;
+        display: grid;
         gap: var(--_gap);
         row-gap: 0;
       }
@@ -180,9 +180,9 @@ class Card extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
 
       /* Horizontal */
       :host([theme~='horizontal']) {
+        align-items: start;
         display: grid;
         grid-template-columns: repeat(var(--_media), minmax(auto, max-content)) 1fr;
-        align-items: start;
       }
 
       :host([theme~='horizontal'][_f]) {
@@ -194,10 +194,10 @@ class Card extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
       }
 
       [part='media'] {
-        grid-column: 1;
-        grid-row: 1 / span calc(var(--_header) + var(--_content) + var(--_footer));
         align-self: stretch;
         border-radius: inherit;
+        grid-column: 1;
+        grid-row: 1 / span calc(var(--_header) + var(--_content) + var(--_footer));
       }
 
       [part='header'] {
@@ -206,16 +206,16 @@ class Card extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
       }
 
       [part='content'] {
+        flex: auto;
         grid-column: calc(1 + var(--_media));
         grid-row: calc(1 + var(--_header));
-        flex: auto;
         min-height: 0;
       }
 
       [part='footer'] {
+        border-radius: inherit;
         grid-column: calc(1 + var(--_media));
         grid-row: calc(1 + var(--_header) + var(--_content));
-        border-radius: inherit;
       }
 
       :host([theme~='horizontal']) [part='footer'] {
@@ -232,12 +232,12 @@ class Card extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
 
       :host(:is([theme~='cover-media'], [theme~='stretch-media']))
         ::slotted([slot='media']:is(img, video, svg, vaadin-icon)) {
-        width: 100%;
+        aspect-ratio: var(--vaadin-card-media-aspect-ratio, 16/9);
         height: auto;
+        object-fit: cover;
         /* Fixes an issue where an icon overflows the card boundaries on Firefox: https://github.com/vaadin/web-components/issues/8641 */
         overflow: hidden;
-        aspect-ratio: var(--vaadin-card-media-aspect-ratio, 16/9);
-        object-fit: cover;
+        width: 100%;
       }
 
       :host([theme~='horizontal']:is([theme~='cover-media'], [theme~='stretch-media'])) {
@@ -246,27 +246,27 @@ class Card extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
 
       :host([theme~='horizontal']:is([theme~='cover-media'], [theme~='stretch-media']))
         ::slotted([slot='media']:is(img, video, svg, vaadin-icon)) {
-        height: 100%;
         aspect-ratio: auto;
+        height: 100%;
       }
 
       :host([theme~='cover-media']) ::slotted([slot='media']:is(img, video, svg, vaadin-icon)) {
-        width: calc(100% + var(--_padding) * 2);
-        max-width: none;
-        margin-top: calc(var(--_padding) * -1);
-        margin-inline: calc(var(--_padding) * -1);
-        border-radius: inherit;
         border-end-end-radius: 0;
         border-end-start-radius: 0;
+        border-radius: inherit;
+        margin-inline: calc(var(--_padding) * -1);
+        margin-top: calc(var(--_padding) * -1);
+        max-width: none;
+        width: calc(100% + var(--_padding) * 2);
       }
 
       :host([theme~='horizontal'][theme~='cover-media']) ::slotted([slot='media']:is(img, video, svg, vaadin-icon)) {
-        width: calc(100% + var(--_padding));
+        border-end-end-radius: 0;
+        border-radius: inherit;
+        border-start-end-radius: 0;
         height: calc(100% + var(--_padding) * 2);
         margin-inline-end: 0;
-        border-radius: inherit;
-        border-end-end-radius: 0;
-        border-start-end-radius: 0;
+        width: calc(100% + var(--_padding));
       }
 
       /* Scroller in content */

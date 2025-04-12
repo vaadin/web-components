@@ -19,17 +19,17 @@ registerStyles(
     }
 
     [part='toggle'] {
+      color: var(--lumo-contrast-50pct);
+      cursor: var(--lumo-clickable-cursor);
       display: inline-block;
-      width: 1em;
+      font-size: 1.5em;
       height: 1em;
+      line-height: 1;
       margin: calc(1em / -3);
       /* Increase touch target area */
       padding: calc(1em / 3);
-      color: var(--lumo-contrast-50pct);
-      font-size: 1.5em;
-      line-height: 1;
       text-align: center;
-      cursor: var(--lumo-clickable-cursor);
+      width: 1em;
     }
 
     :host(:not([dir='rtl'])) [part='toggle'] {
@@ -44,8 +44,8 @@ registerStyles(
 
     [part='toggle']::before {
       display: inline-block;
-      height: 100%;
       font-family: 'lumo-icons';
+      height: 100%;
     }
 
     :host(:not([expanded])) [part='toggle']::before {
@@ -60,8 +60,8 @@ registerStyles(
     /* RTL specific styles */
 
     :host([dir='rtl']) {
-      margin-right: calc(var(--lumo-space-s) * -1);
       margin-left: 0;
+      margin-right: calc(var(--lumo-space-s) * -1);
     }
 
     :host([dir='rtl']) [part='toggle'] {

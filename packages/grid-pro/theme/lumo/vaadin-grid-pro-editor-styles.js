@@ -6,21 +6,21 @@ import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themab
 const gridProEditor = css`
   :host([theme~='grid-pro-editor']) {
     --lumo-text-field-size: 27px;
-    position: absolute;
-    padding: 0;
     /* outline similar to what grid uses */
     box-shadow: inset 0 0 0 var(--_focus-ring-width) var(--_focus-ring-color);
     font-size: inherit;
     inset: 0;
+    padding: 0;
+    position: absolute;
     will-change: transform;
   }
 
   :host([theme~='grid-pro-editor']) [part='input-field'] {
     --vaadin-input-field-border-color: transparent;
-    flex-grow: 1;
-    padding: 0;
     border-radius: 0;
+    flex-grow: 1;
     font-weight: 400;
+    padding: 0;
   }
 
   /* reset outline inherited from text-field */
@@ -29,8 +29,8 @@ const gridProEditor = css`
   }
 
   :host([theme~='grid-pro-editor']) ::slotted(input) {
-    padding: 0 var(--lumo-space-m);
     font-size: inherit;
+    padding: 0 var(--lumo-space-m);
   }
 `;
 

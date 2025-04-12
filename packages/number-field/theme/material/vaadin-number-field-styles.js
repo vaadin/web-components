@@ -17,9 +17,9 @@ const numberField = css`
   }
 
   [part$='decrease-button'] {
-    padding-bottom: 0.21em;
-    font-size: var(--material-body-font-size);
     cursor: pointer;
+    font-size: var(--material-body-font-size);
+    padding-bottom: 0.21em;
   }
 `;
 

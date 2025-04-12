@@ -13,72 +13,72 @@ const loginOverlayWrapper = css`
   }
 
   [part='overlay'] {
-    width: 100%;
-    height: 100%;
-    border-radius: 0;
     background: var(--material-secondary-background-color);
+    border-radius: 0;
     box-shadow: none;
+    height: 100%;
+    width: 100%;
   }
 
   [part='content'] {
-    display: flex;
     align-items: center;
+    display: flex;
     justify-content: center;
     min-height: 100%;
     padding: 0;
   }
 
   [part='card'] {
-    display: flex;
-    box-sizing: border-box;
-    flex-direction: column;
-    min-width: 400px;
-    max-width: 100%;
-    height: 100%;
-    margin: 0.5em;
-    overflow: hidden;
-    border-radius: 4px;
     background: var(--material-secondary-background-color);
+    border-radius: 4px;
     box-shadow:
       0 19px 38px rgba(0, 0, 0, 0.04),
       0 9px 12px rgba(0, 0, 0, 0.05);
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    margin: 0.5em;
+    max-width: 100%;
+    min-width: 400px;
+    overflow: hidden;
   }
 
   [part='brand'] {
-    display: flex;
+    background-color: var(--material-primary-color);
     box-sizing: border-box;
+    color: var(--material-primary-contrast-color);
+    display: flex;
     flex-direction: column;
     flex-grow: 1;
     flex-shrink: 0;
     justify-content: flex-start;
     min-height: 225px;
-    padding: 2.8rem 2.5rem 1.5rem 3.5rem;
     overflow: hidden;
-    background-color: var(--material-primary-color);
-    color: var(--material-primary-contrast-color);
+    padding: 2.8rem 2.5rem 1.5rem 3.5rem;
   }
 
   [part='title'] {
-    margin: 0;
     color: inherit;
     font-size: 2rem;
     font-weight: 500;
     letter-spacing: -0.015em;
     line-height: 1.1;
+    margin: 0;
     text-indent: -0.07em;
   }
 
   [part='form'] {
-    width: 90%;
+    background-color: var(--material-secondary-background-color);
     margin: auto;
     margin-bottom: -65px;
-    background-color: var(--material-secondary-background-color);
+    width: 90%;
   }
 
   [part='description'] {
-    margin-bottom: 0;
     color: var(--material-secondary-background-color);
     line-height: 1.375;
+    margin-bottom: 0;
   }
 
   /* RTL styles */
@@ -101,8 +101,8 @@ const loginOverlayWrapper = css`
     }
 
     [part='form'] {
-      margin-top: -80px;
       margin-bottom: 20px;
+      margin-top: -80px;
     }
 
     /* RTL styles */
@@ -121,22 +121,22 @@ const loginOverlayWrapper = css`
 
     [part='content'] {
       align-items: flex-start;
-      min-height: 100%;
       background: var(--material-background-color);
+      min-height: 100%;
     }
 
     [part='card'] {
-      min-width: unset;
       max-height: none;
+      min-width: unset;
       overflow: auto;
     }
 
     [part='card'],
     [part='overlay'] {
-      width: 100%;
-      margin: 0;
       border-radius: 0;
       box-shadow: none;
+      margin: 0;
+      width: 100%;
     }
 
     [part='brand'] {
@@ -154,11 +154,11 @@ const loginOverlayWrapper = css`
     }
 
     [part='card'] {
+      border-radius: 0;
       flex-direction: row;
-      width: 100%;
       height: 100%;
       margin: 0;
-      border-radius: 0;
+      width: 100%;
     }
 
     [part='brand'] {
@@ -176,29 +176,29 @@ const loginOverlayWrapper = css`
     }
 
     [part='form'] ::slotted(*) {
-      display: flex;
       bottom: 0;
-      min-height: 100%;
-      max-height: none;
+      display: flex;
       margin: unset;
+      max-height: none;
+      min-height: 100%;
     }
   }
 
   /* Landscape big screen */
   @media only screen and (min-width: 1024px) {
     [part='card'] {
-      flex-direction: row;
       align-items: stretch;
-      width: 100%;
-      max-width: 760px;
+      flex-direction: row;
       height: auto;
+      max-width: 760px;
       min-height: 0;
+      width: 100%;
     }
 
     [part='content'] {
-      max-width: 950px;
       height: 100%;
       margin: auto;
+      max-width: 950px;
     }
 
     [part='brand'] {
@@ -239,8 +239,8 @@ const loginOverlayWrapper = css`
   /* Landscape really big screen */
   @media only screen and (min-width: 1440px) {
     [part='content'] {
-      max-width: none;
       margin: auto;
+      max-width: none;
     }
 
     [part='card'] {
@@ -248,8 +248,8 @@ const loginOverlayWrapper = css`
     }
 
     [part='brand'] {
-      padding-right: 1rem;
       padding-left: 4rem;
+      padding-right: 1rem;
     }
 
     [part='form'] {
@@ -267,8 +267,8 @@ const loginOverlayWrapper = css`
 
     /* RTL styles */
     :host([dir='rtl']) [part='brand'] {
-      padding-right: 4rem;
       padding-left: 1rem;
+      padding-right: 4rem;
     }
 
     :host([dir='rtl']) [part='form'] {

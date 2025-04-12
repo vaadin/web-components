@@ -17,19 +17,19 @@ const details = css`
   }
 
   [part='content'] {
-    padding: var(--lumo-space-xs) 0 var(--lumo-space-s);
     font-size: var(--lumo-font-size-m);
     line-height: var(--lumo-line-height-m);
+    padding: var(--lumo-space-xs) 0 var(--lumo-space-s);
   }
 
   :host([theme~='filled']) {
-    border-radius: var(--lumo-border-radius-m);
     background-color: var(--lumo-contrast-5pct);
+    border-radius: var(--lumo-border-radius-m);
   }
 
   :host([theme~='filled']) [part='content'] {
-    padding-right: var(--lumo-space-m);
     padding-left: var(--lumo-space-m);
+    padding-right: var(--lumo-space-m);
   }
 
   :host([theme~='small']) [part$='content'] {

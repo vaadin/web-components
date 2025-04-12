@@ -18,33 +18,33 @@ registerStyles(
     }
 
     [part='radio'] {
-      position: relative;
-      width: var(--_radio-button-size);
+      background-color: transparent;
+      border: 2px solid;
+      border-radius: 50%;
       height: var(--_radio-button-size);
       margin: 4px;
+      position: relative;
       transition:
         transform 0.2s cubic-bezier(0.12, 0.32, 0.54, 2),
         background-color 0.15s;
-      border: 2px solid;
-      border-radius: 50%;
-      background-color: transparent;
+      width: var(--_radio-button-size);
       will-change: transform;
     }
 
     /* Used for activation "halo" */
     [part='radio']::before {
-      width: 100%;
+      background-color: var(--material-primary-color);
+      border-radius: inherit;
+      color: transparent;
       height: 100%;
+      line-height: var(--_radio-button-size);
+      opacity: 0;
+      pointer-events: none;
       transform: scale(2.5);
       transition:
         transform 0.1s,
         opacity 0.8s;
-      border-radius: inherit;
-      opacity: 0;
-      background-color: var(--material-primary-color);
-      color: transparent;
-      line-height: var(--_radio-button-size);
-      pointer-events: none;
+      width: 100%;
     }
 
     :host([checked]) [part='radio'] {
@@ -53,17 +53,17 @@ registerStyles(
 
     /* Used for the selection dot */
     [part='radio']::after {
+      background-color: var(--material-primary-color);
+      border-radius: 50%;
       content: '';
+      height: 10px;
+      left: 50%;
+      pointer-events: none;
       position: absolute;
       top: 50%;
-      left: 50%;
-      width: 10px;
-      height: 10px;
       transform: translate(-50%, -50%) scale(0);
       transition: transform 0.2s;
-      border-radius: 50%;
-      background-color: var(--material-primary-color);
-      pointer-events: none;
+      width: 10px;
     }
 
     :host([checked]) [part='radio']::after {
@@ -76,15 +76,15 @@ registerStyles(
 
     :host([active][checked]) [part='radio']::before,
     :host([active]:not([checked])) [part='radio']::before {
+      opacity: 0.2;
       transform: scale(0);
       transition-duration: 0.01s, 0.01s;
-      opacity: 0.2;
     }
 
     :host([focus-ring]) [part='radio']::before {
+      opacity: 0.15;
       transform: scale(2.5);
       transition-duration: 0s;
-      opacity: 0.15;
     }
 
     :host([disabled]) {

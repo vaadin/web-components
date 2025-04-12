@@ -17,8 +17,8 @@ const contextMenuItem = css`
   }
 
   :host([aria-haspopup='true'])::after {
-    content: var(--lumo-icons-angle-right);
     color: var(--lumo-tertiary-text-color);
+    content: var(--lumo-icons-angle-right);
     font-family: lumo-icons;
     font-size: var(--lumo-icon-size-xs);
   }

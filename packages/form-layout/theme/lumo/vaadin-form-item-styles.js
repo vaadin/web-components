@@ -9,25 +9,25 @@ registerStyles(
   css`
     /* font-weight, margin-bottom, transition and line-height same as for part label in text-field */
     [part='label'] {
-      margin-top: var(--lumo-space-m);
-      margin-bottom: var(--lumo-space-xs);
-      margin-left: calc(var(--lumo-border-radius-m) / 4);
-      transition: color 0.4s;
       color: var(--lumo-secondary-text-color);
       font-family: var(--lumo-font-family);
       font-size: var(--lumo-font-size-s);
       font-weight: 500;
       line-height: 1.333;
+      margin-bottom: var(--lumo-space-xs);
+      margin-left: calc(var(--lumo-border-radius-m) / 4);
+      margin-top: var(--lumo-space-m);
+      transition: color 0.4s;
     }
 
     [part='required-indicator']::after {
-      content: var(--lumo-required-field-indicator, '\\\\\\\\2022');
-      position: relative;
-      width: 1em;
-      transition: opacity 0.2s;
-      opacity: 0;
       color: var(--lumo-required-field-indicator-color, var(--lumo-primary-text-color));
+      content: var(--lumo-required-field-indicator, '\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\2022');
+      opacity: 0;
+      position: relative;
       text-align: center;
+      transition: opacity 0.2s;
+      width: 1em;
     }
 
     :host([required]) [part='required-indicator']::after {

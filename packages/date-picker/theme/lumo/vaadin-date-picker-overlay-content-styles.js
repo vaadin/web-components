@@ -11,22 +11,22 @@ registerStyles(
   'vaadin-date-picker-overlay-content',
   css`
     :host {
-      position: relative;
       /* Background for the year scroller, placed here as we are using a mask image on the actual years part */
       background-image: linear-gradient(var(--lumo-shade-5pct), var(--lumo-shade-5pct));
-      background-repeat: no-repeat;
       background-position: top right;
+      background-repeat: no-repeat;
       background-size: 57px 100%;
       cursor: default;
+      position: relative;
     }
 
     ::slotted([slot='months']) {
       /* Month calendar height:
-          header height + margin-bottom
-        + weekdays height + margin-bottom
-        + date cell heights
-        + small margin between month calendars
-    */
+      header height + margin-bottom
+    + weekdays height + margin-bottom
+    + date cell heights
+    + small margin between month calendars
+*/
       /* prettier-ignore */
       --vaadin-infinite-scroller-item-height:
           calc(
@@ -36,24 +36,24 @@ registerStyles(
             + var(--lumo-space-s)
           );
       --vaadin-infinite-scroller-buffer-offset: 10%;
-      position: relative;
       margin-right: 57px;
       -webkit-mask-image: linear-gradient(transparent, #000 10%, #000 85%, transparent);
       mask-image: linear-gradient(transparent, #000 10%, #000 85%, transparent);
+      position: relative;
     }
 
     ::slotted([slot='years']) {
       /* TODO get rid of fixed magic number */
       --vaadin-infinite-scroller-buffer-width: 97px;
-      top: 0;
       bottom: 0;
-      width: 57px;
-      height: auto;
       box-shadow: inset 2px 0 4px 0 var(--lumo-shade-5pct);
-      font-size: var(--lumo-font-size-s);
       cursor: var(--lumo-clickable-cursor);
+      font-size: var(--lumo-font-size-s);
+      height: auto;
       -webkit-mask-image: linear-gradient(transparent, #000 35%, #000 65%, transparent);
       mask-image: linear-gradient(transparent, #000 35%, #000 65%, transparent);
+      top: 0;
+      width: 57px;
     }
 
     ::slotted([slot='years']:hover) {
@@ -73,21 +73,21 @@ registerStyles(
 
     /* Year scroller position indicator */
     ::slotted([slot='years'])::before {
-      z-index: 1;
-      width: 1em;
-      height: 1em;
-      transform: translate(-75%, -50%) rotate(45deg);
-      border: none;
-      border-top-right-radius: var(--lumo-border-radius-s);
       background-color: var(--lumo-base-color);
       background-image: linear-gradient(var(--lumo-tint-5pct), var(--lumo-tint-5pct));
+      border: none;
+      border-top-right-radius: var(--lumo-border-radius-s);
       box-shadow: 2px -2px 6px 0 var(--lumo-shade-5pct);
+      height: 1em;
+      transform: translate(-75%, -50%) rotate(45deg);
+      width: 1em;
+      z-index: 1;
     }
 
     [part='toolbar'] {
+      border-bottom-left-radius: var(--lumo-border-radius-l);
       margin-right: 57px;
       padding: var(--lumo-space-s);
-      border-bottom-left-radius: var(--lumo-border-radius-l);
     }
 
     [part='toolbar'] ::slotted(vaadin-button) {
@@ -97,18 +97,18 @@ registerStyles(
     /* Narrow viewport mode (fullscreen) */
 
     :host([fullscreen]) [part='toolbar'] {
-      order: -1;
       background-color: var(--lumo-base-color);
+      order: -1;
     }
 
     :host([fullscreen]) [part='overlay-header'] {
+      height: var(--lumo-size-m);
+      justify-content: center;
+      left: 0;
+      order: -2;
+      padding: var(--lumo-space-s);
       position: absolute;
       right: 0;
-      left: 0;
-      justify-content: center;
-      order: -2;
-      height: var(--lumo-size-m);
-      padding: var(--lumo-space-s);
     }
 
     :host([fullscreen]) [part='toggle-button'],
@@ -120,16 +120,16 @@ registerStyles(
     /* Very narrow screen (year scroller initially hidden) */
 
     [part='years-toggle-button'] {
-      display: flex;
-      z-index: 3;
       align-items: center;
-      height: var(--lumo-size-s);
-      padding: 0 0.5em;
       border-radius: var(--lumo-border-radius-m);
       color: var(--lumo-primary-text-color);
+      display: flex;
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
       font-weight: 500;
+      height: var(--lumo-size-s);
+      padding: 0 0.5em;
+      z-index: 3;
     }
 
     :host([years-visible]) [part='years-toggle-button'] {
@@ -151,8 +151,8 @@ registerStyles(
       /* TODO make date-picker adapt to the width of the years part */
       ::slotted([slot='years']) {
         --vaadin-infinite-scroller-buffer-width: 90px;
-        width: 50px;
         background-color: var(--lumo-shade-5pct);
+        width: 50px;
       }
 
       :host([years-visible]) ::slotted([slot='months']) {

@@ -57,11 +57,11 @@ registerStyles(
     }
 
     [part='name'] {
-      min-width: calc(var(--lumo-line-height-xs) * 1em + 0.45em);
-      padding: 0.3em calc(0.3em + var(--lumo-border-radius-s) / 4);
       color: var(--lumo-primary-contrast-color);
       font-weight: 500;
       line-height: 1;
+      min-width: calc(var(--lumo-line-height-xs) * 1em + 0.45em);
+      padding: 0.3em calc(0.3em + var(--lumo-border-radius-s) / 4);
     }
   `,
   { moduleId: 'lumo-user-tag' },

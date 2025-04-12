@@ -15,8 +15,8 @@ registerStyles(
 
     [part='label'] {
       display: flex;
-      position: relative;
       max-width: max-content;
+      position: relative;
     }
 
     :host([has-label]) ::slotted(label) {
@@ -24,47 +24,47 @@ registerStyles(
     }
 
     [part='checkbox'] {
-      position: relative;
-      width: var(--_checkbox-size);
+      background-color: transparent;
+      border-radius: 2px;
+      box-shadow: inset 0 0 0 2px var(--material-secondary-text-color);
       height: var(--_checkbox-size);
       margin: 4px;
-      border-radius: 2px;
-      background-color: transparent;
-      box-shadow: inset 0 0 0 2px var(--material-secondary-text-color);
+      position: relative;
+      width: var(--_checkbox-size);
     }
 
     /* Used for the ripple */
     [part='checkbox']::before {
-      width: 100%;
+      background-color: var(--material-disabled-text-color);
+      border-radius: 50%;
       height: 100%;
+      line-height: var(--_checkbox-size);
+      opacity: 0;
+      pointer-events: none;
       transform: scale(0);
       transition:
         transform 0s 0.8s,
         opacity 0.8s;
-      border-radius: 50%;
-      opacity: 0;
-      background-color: var(--material-disabled-text-color);
-      line-height: var(--_checkbox-size);
-      pointer-events: none;
+      width: 100%;
       will-change: transform, opacity;
     }
 
     /* Used for the checkmark */
     [part='checkbox']::after {
+      border: 0 solid var(--material-background-color);
+      border-width: 3px 0 0 3px;
+      box-sizing: border-box;
       content: '';
       display: inline-block;
+      height: 19px;
+      left: 6px;
+      pointer-events: none;
       position: absolute;
       top: 12px;
-      left: 6px;
-      box-sizing: border-box;
-      width: 10px;
-      height: 19px;
       transform: scale(0) rotate(-135deg);
       transform-origin: 0 0;
       transition: transform 0.2s;
-      border: 0 solid var(--material-background-color);
-      border-width: 3px 0 0 3px;
-      pointer-events: none;
+      width: 10px;
     }
 
     :host([indeterminate]) [part='checkbox'],
@@ -83,10 +83,10 @@ registerStyles(
 
     :host([focus-ring]) [part='checkbox']::before,
     :host([active]) [part='checkbox']::before {
-      transform: scale(2.5);
-      transition-duration: 0.08s, 0.01s;
-      transition-delay: 0s, 0s;
       opacity: 0.15;
+      transform: scale(2.5);
+      transition-delay: 0s, 0s;
+      transition-duration: 0.08s, 0.01s;
     }
 
     :host([checked]) [part='checkbox']::before {
@@ -94,16 +94,16 @@ registerStyles(
     }
 
     :host([indeterminate]) [part='checkbox']::after {
-      top: 45%;
-      right: 22%;
-      left: 22%;
-      width: auto;
+      background-color: var(--material-background-color);
+      border: 0;
       height: 10%;
+      left: 22%;
+      opacity: 1;
+      right: 22%;
+      top: 45%;
       transform: none;
       transition: opacity 0.4s;
-      border: 0;
-      opacity: 1;
-      background-color: var(--material-background-color);
+      width: auto;
     }
 
     :host([disabled]) {
@@ -138,13 +138,13 @@ registerStyles(
     /* Required */
     :host([required]) [part='required-indicator'] {
       position: absolute;
-      top: 3px;
       right: 2px;
+      top: 3px;
     }
 
     :host([dir='rtl'][required]) [part='required-indicator'] {
-      right: auto;
       left: 2px;
+      right: auto;
     }
 
     :host([required]:not([disabled])) [part='required-indicator'] {
@@ -165,9 +165,9 @@ registerStyles(
 
     [part='error-message'],
     [part='helper-text'] {
-      padding-left: 6px;
       font-size: 0.75em;
       line-height: 1;
+      padding-left: 6px;
     }
 
     [part='error-message'] {

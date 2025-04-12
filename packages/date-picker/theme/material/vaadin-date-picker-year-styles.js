@@ -10,18 +10,18 @@ registerStyles(
     }
 
     [part='year-separator'] {
-      display: flex;
       align-items: center;
-      justify-content: center;
+      display: flex;
       height: calc(100% - 10px);
+      justify-content: center;
     }
 
     [part='year-separator']::before {
-      content: '';
-      width: 4px;
-      height: 4px;
-      border-radius: 50%;
       background-color: currentColor;
+      border-radius: 50%;
+      content: '';
+      height: 4px;
+      width: 4px;
     }
   `,
   { moduleId: 'material-date-picker-year' },

@@ -7,8 +7,8 @@ registerStyles(
   css`
     :host {
       align-items: center;
-      justify-content: flex-start;
       height: 100%;
+      justify-content: flex-start;
       -webkit-user-select: none;
       user-select: none;
     }
@@ -23,20 +23,20 @@ registerStyles(
 
     [part='indicators']::before {
       display: inline-block;
-      width: 24px;
-      transition:
-        0.1s opacity cubic-bezier(0.4, 0, 0.2, 0.1),
-        0.1s width cubic-bezier(0.4, 0, 0.2, 0.1);
-      opacity: 0.5;
       font-family: 'material-icons';
       font-size: 18px;
       line-height: 18px;
+      opacity: 0.5;
+      transition:
+        0.1s opacity cubic-bezier(0.4, 0, 0.2, 0.1),
+        0.1s width cubic-bezier(0.4, 0, 0.2, 0.1);
+      width: 24px;
     }
 
     :host(:not([direction])) [part='indicators']::before {
       content: var(--material-icons-arrow-upward);
-      width: 0;
       opacity: 0;
+      width: 0;
     }
 
     :host([direction]) [part='indicators']::before {
@@ -52,21 +52,21 @@ registerStyles(
     }
 
     :host(:hover) [part='indicators']::before {
-      width: 24px;
       opacity: 1;
+      width: 24px;
     }
 
     [part='order'] {
-      top: -8px;
-      right: 4px;
       font-size: 10px;
+      right: 4px;
+      top: -8px;
     }
 
     /* RTL specific styles */
 
     :host([dir='rtl']) [part='order'] {
-      right: auto;
       left: 4px;
+      right: auto;
     }
   `,
   { moduleId: 'material-grid-sorter' },

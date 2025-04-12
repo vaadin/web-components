@@ -4,22 +4,22 @@ import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themab
 
 const drawerToggle = css`
   :host {
-    width: var(--lumo-size-l);
-    min-width: auto;
+    background: transparent;
     height: var(--lumo-size-l);
     margin: 0 var(--lumo-space-s);
+    min-width: auto;
     padding: 0;
-    background: transparent;
+    width: var(--lumo-size-l);
   }
 
   [part='icon'],
   [part='icon']::after,
   [part='icon']::before {
+    background: transparent;
+    height: auto;
     position: inherit;
     top: auto;
     width: auto;
-    height: auto;
-    background: transparent;
   }
 
   [part='icon']::before {

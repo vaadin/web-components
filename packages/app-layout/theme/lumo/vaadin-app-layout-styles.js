@@ -13,13 +13,13 @@ registerStyles(
     }
 
     [part='navbar'] {
-      min-height: var(--lumo-size-xl);
       border-bottom: 1px solid var(--lumo-contrast-10pct);
+      min-height: var(--lumo-size-xl);
     }
 
     [part='navbar'][bottom] {
-      border-top: 1px solid var(--lumo-contrast-10pct);
       border-bottom: none;
+      border-top: 1px solid var(--lumo-contrast-10pct);
     }
 
     [part='drawer'] {
@@ -32,8 +32,8 @@ registerStyles(
     }
 
     :host([primary-section='navbar']) [part='navbar'] {
-      border: none;
       background-image: linear-gradient(var(--lumo-contrast-5pct), var(--lumo-contrast-5pct));
+      border: none;
     }
 
     :host([primary-section='drawer']:not([overlay])) [part='drawer'] {
@@ -41,15 +41,15 @@ registerStyles(
     }
 
     [part='backdrop'] {
-      opacity: 1;
       background-color: var(--lumo-shade-20pct);
+      opacity: 1;
     }
 
     [part] ::slotted(h2),
     [part] ::slotted(h3),
     [part] ::slotted(h4) {
-      margin-top: var(--lumo-space-xs) !important;
       margin-bottom: var(--lumo-space-xs) !important;
+      margin-top: var(--lumo-space-xs) !important;
     }
   `,
   { moduleId: 'lumo-app-layout' },

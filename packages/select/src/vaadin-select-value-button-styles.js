@@ -8,19 +8,19 @@ import { css } from 'lit';
 export const valueButton = css`
   :host {
     display: inline-block;
-    position: relative;
-    width: 0;
     min-width: 0;
     outline: none;
-    white-space: nowrap;
+    position: relative;
     -webkit-user-select: none;
     user-select: none;
+    white-space: nowrap;
+    width: 0;
   }
 
   ::slotted(*) {
     flex: auto;
-    padding-right: 0;
     padding-left: 0;
+    padding-right: 0;
   }
 
   /* placeholder styles */
@@ -29,21 +29,21 @@ export const valueButton = css`
   }
 
   .vaadin-button-container {
-    display: inline-flex;
     align-items: center;
-    justify-content: center;
-    width: 100%;
+    display: inline-flex;
     height: 100%;
+    justify-content: center;
     min-height: inherit;
     text-align: inherit;
     text-shadow: inherit;
+    width: 100%;
   }
 
   [part='label'] {
-    width: 100%;
-    overflow: hidden;
     line-height: inherit;
+    overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    width: 100%;
   }
 `;

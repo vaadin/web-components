@@ -13,14 +13,14 @@ import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themab
 
 const chip = css`
   :host {
-    border-radius: var(--lumo-border-radius-s);
     background-color: var(--lumo-contrast-20pct);
+    border-radius: var(--lumo-border-radius-s);
     color: var(--lumo-body-text-color);
+    cursor: var(--lumo-clickable-cursor);
     font-size: var(--lumo-font-size-xxs);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     line-height: 1;
-    cursor: var(--lumo-clickable-cursor);
   }
 
   :host([disabled]) {
@@ -32,20 +32,20 @@ const chip = css`
   }
 
   :host([slot='overflow']) {
-    position: relative;
-    min-width: var(--lumo-size-xxs);
     margin-inline-start: var(--lumo-space-s);
+    min-width: var(--lumo-size-xxs);
+    position: relative;
   }
 
   :host([slot='overflow'])::before,
   :host([slot='overflow'])::after {
-    content: '';
-    position: absolute;
-    width: 100%;
-    height: 100%;
+    border-color: var(--lumo-contrast-30pct);
     border-left: calc(var(--lumo-space-s) / 4) solid;
     border-radius: var(--lumo-border-radius-s);
-    border-color: var(--lumo-contrast-30pct);
+    content: '';
+    height: 100%;
+    position: absolute;
+    width: 100%;
   }
 
   :host([slot='overflow'])::before {
@@ -79,16 +79,16 @@ const chip = css`
   }
 
   [part='remove-button'] {
-    display: flex;
     align-items: center;
-    justify-content: center;
-    width: 1.25em;
+    display: flex;
+    font-size: 1.5em;
     height: 1.25em;
-    margin-top: -0.3125em;
+    justify-content: center;
     margin-bottom: -0.3125em;
     margin-inline-start: auto;
+    margin-top: -0.3125em;
     transition: none;
-    font-size: 1.5em;
+    width: 1.25em;
   }
 
   [part='remove-button']::before {

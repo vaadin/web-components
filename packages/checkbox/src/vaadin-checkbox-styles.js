@@ -19,9 +19,9 @@ export const checkboxStyles = css`
   }
 
   .vaadin-checkbox-container {
+    align-items: baseline;
     display: grid;
     grid-template-columns: auto 1fr;
-    align-items: baseline;
   }
 
   [part='checkbox'],
@@ -48,26 +48,26 @@ export const checkboxStyles = css`
   [part='checkbox'] {
     --_input-border-width: var(--vaadin-input-field-border-width, 0);
     --_input-border-color: var(--vaadin-input-field-border-color, transparent);
-    width: var(--vaadin-checkbox-size, 1em);
-    height: var(--vaadin-checkbox-size, 1em);
     box-shadow: inset 0 0 0 var(--_input-border-width, 0) var(--_input-border-color);
+    height: var(--vaadin-checkbox-size, 1em);
+    width: var(--vaadin-checkbox-size, 1em);
   }
 
   [part='checkbox']::before {
-    content: '\\\\\\\\202F';
+    contain: paint;
+    content: '\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\202F';
     display: block;
     line-height: var(--vaadin-checkbox-size, 1em);
-    contain: paint;
   }
 
   /* visually hidden */
   ::slotted(input) {
     align-self: stretch;
-    width: initial;
+    -webkit-appearance: none;
+    cursor: inherit;
     height: initial;
     margin: 0;
-    cursor: inherit;
-    -webkit-appearance: none;
+    width: initial;
   }
 
   @media (forced-colors: active) {

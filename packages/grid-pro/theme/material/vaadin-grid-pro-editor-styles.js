@@ -2,11 +2,11 @@ import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themab
 
 const gridProEditor = css`
   :host([theme~='grid-pro-editor']) {
-    top: 6px;
-    width: 100%;
+    font-size: inherit;
     margin: -6px 0 0;
     padding: 0;
-    font-size: inherit;
+    top: 6px;
+    width: 100%;
     will-change: transform;
   }
 

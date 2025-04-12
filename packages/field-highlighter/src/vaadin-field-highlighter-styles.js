@@ -8,15 +8,15 @@ import { css } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 export const fieldOutlineStyles = css`
   :host {
     --_active-user-color: transparent;
-    display: block;
-    position: absolute;
     box-sizing: border-box;
-    width: 100%;
+    display: block;
     height: 100%;
+    inset: 0;
     opacity: 0;
     pointer-events: none;
+    position: absolute;
     user-select: none;
-    inset: 0;
+    width: 100%;
   }
 
   :host([has-active-user]) {
@@ -27,15 +27,15 @@ export const fieldOutlineStyles = css`
 export const userTagStyles = css`
   :host {
     --vaadin-user-tag-offset: 4px;
-    display: block;
-    box-sizing: border-box;
-    height: 1.3rem;
-    margin: 0 0 var(--vaadin-user-tag-offset);
-    transition: opacity 0.2s ease-in-out;
-    opacity: 0;
     background-color: var(--vaadin-user-tag-color);
+    box-sizing: border-box;
     color: #fff;
     cursor: default;
+    display: block;
+    height: 1.3rem;
+    margin: 0 0 var(--vaadin-user-tag-offset);
+    opacity: 0;
+    transition: opacity 0.2s ease-in-out;
     -webkit-user-select: none;
     user-select: none;
   }
@@ -50,10 +50,10 @@ export const userTagStyles = css`
 
   [part='name'] {
     box-sizing: border-box;
-    height: 1.3rem;
-    padding: 2px 4px;
-    overflow: hidden;
     font-size: 13px;
+    height: 1.3rem;
+    overflow: hidden;
+    padding: 2px 4px;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
@@ -66,24 +66,24 @@ export const userTagsOverlayStyles = css`
   }
 
   :scope [part='overlay'] {
-    position: relative;
-    left: -4px;
-    padding: 4px;
-    overflow: visible;
-    outline: none;
     background: transparent;
     box-shadow: none;
+    left: -4px;
+    outline: none;
+    overflow: visible;
+    padding: 4px;
+    position: relative;
   }
 
   ::slotted([part='tags']) {
+    align-items: flex-start;
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
   }
 
   :host([dir='rtl']) [part='overlay'] {
-    right: -4px;
     left: auto;
+    right: -4px;
   }
 
   :scope [part='content'] {

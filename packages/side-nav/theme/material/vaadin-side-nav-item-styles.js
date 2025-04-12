@@ -10,22 +10,22 @@ export const sideNavItemStyles = css`
   }
 
   [part='link'] {
-    width: 100%;
-    min-height: 32px;
+    border-radius: 4px;
+    color: var(--material-body-text-color);
+    cursor: default;
+    font-family: var(--material-font-family);
+    font-size: var(--material-small-font-size);
+    font-weight: 500;
+    gap: 8px;
+    line-height: 1;
     margin: 4px 0;
+    min-height: 32px;
     padding: 4px 8px;
     padding-inline-start: calc(8px + var(--_child-indent, 0px));
     transition:
       background-color 140ms,
       color 140ms;
-    border-radius: 4px;
-    color: var(--material-body-text-color);
-    font-family: var(--material-font-family);
-    font-size: var(--material-small-font-size);
-    font-weight: 500;
-    line-height: 1;
-    cursor: default;
-    gap: 8px;
+    width: 100%;
   }
 
   [part='link'][href] {
@@ -41,52 +41,52 @@ export const sideNavItemStyles = css`
   }
 
   :host([current]) [part='content']::before {
-    content: '';
-    position: absolute;
-    border-radius: 4px;
-    opacity: 0.12;
     background-color: var(--material-primary-color);
+    border-radius: 4px;
+    content: '';
     inset: 4px 0;
+    opacity: 0.12;
+    position: absolute;
   }
 
   [part='toggle-button'] {
-    width: 32px;
     height: 32px;
     margin-inline-end: -4px;
     transform: rotate(90deg);
+    width: 32px;
   }
 
   [part='toggle-button']::before {
     content: var(--material-icons-chevron-right);
     display: inline-block;
-    width: 24px;
     font-family: 'material-icons';
     font-size: 24px;
+    width: 24px;
   }
 
   [part='toggle-button']::after {
+    background-color: var(--material-disabled-text-color);
+    border-radius: 50%;
     content: '';
     display: inline-block;
+    height: 100%;
+    left: 0;
+    opacity: 0;
     position: absolute;
     top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
     transform: scale(0);
     transition:
       transform 0s 0.8s,
       opacity 0.8s;
-    border-radius: 50%;
-    opacity: 0;
-    background-color: var(--material-disabled-text-color);
+    width: 100%;
     will-change: transform, opacity;
   }
 
   [part='toggle-button']:focus-visible::after {
-    transform: scale(1.25);
-    transition-duration: 0.08s, 0.01s;
-    transition-delay: 0s, 0s;
     opacity: 0.16;
+    transform: scale(1.25);
+    transition-delay: 0s, 0s;
+    transition-duration: 0.08s, 0.01s;
   }
 
   :host([expanded]) [part='toggle-button'] {
@@ -123,10 +123,10 @@ export const sideNavItemStyles = css`
   }
 
   slot[name='prefix']::slotted(:is(vaadin-icon, [class*='icon'])) {
+    color: var(--material-secondary-text-color);
     flex-shrink: 0;
     margin-inline-end: 24px;
     padding: 0.1em;
-    color: var(--material-secondary-text-color);
   }
 
   :host([disabled]) slot[name='prefix']::slotted(:is(vaadin-icon, [class*='icon'])) {

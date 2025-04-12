@@ -34,22 +34,22 @@ const popoverOverlay = css`
   /* top / bottom position */
   :host([theme~='arrow'][position^='top']) [part='arrow'],
   :host([theme~='arrow'][position^='bottom']) [part='arrow'] {
-    border-right: var(--vaadin-popover-arrow-size) solid transparent;
     border-left: var(--vaadin-popover-arrow-size) solid transparent;
+    border-right: var(--vaadin-popover-arrow-size) solid transparent;
   }
 
   :host([theme~='arrow'][position^='bottom'][bottom-aligned]) [part='arrow'],
   :host([theme~='arrow'][position^='top'][bottom-aligned]) [part='arrow'] {
-    bottom: calc(var(--vaadin-popover-arrow-size) * -1);
     border-top: var(--vaadin-popover-arrow-size) solid var(--lumo-base-color);
+    bottom: calc(var(--vaadin-popover-arrow-size) * -1);
     filter: drop-shadow(0 2px 1px var(--lumo-shade-10pct));
   }
 
   :host([theme~='arrow'][position^='bottom'][top-aligned]) [part='arrow'],
   :host([theme~='arrow'][position^='top'][top-aligned]) [part='arrow'] {
-    top: calc(var(--vaadin-popover-arrow-size) * -1);
     border-bottom: var(--vaadin-popover-arrow-size) solid var(--lumo-base-color);
     filter: drop-shadow(0 -2px 1px var(--lumo-shade-10pct));
+    top: calc(var(--vaadin-popover-arrow-size) * -1);
   }
 
   :host([theme~='arrow'][position^='bottom'][start-aligned]) [part='arrow'],
@@ -73,8 +73,8 @@ const popoverOverlay = css`
   /* start / end position */
   :host([theme~='arrow'][position^='start']) [part='arrow'],
   :host([theme~='arrow'][position^='end']) [part='arrow'] {
-    border-top: var(--vaadin-popover-arrow-size) solid transparent;
     border-bottom: var(--vaadin-popover-arrow-size) solid transparent;
+    border-top: var(--vaadin-popover-arrow-size) solid transparent;
   }
 
   :host([theme~='arrow'][position^='start'][start-aligned]) [part='arrow'],

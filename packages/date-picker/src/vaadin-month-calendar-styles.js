@@ -11,8 +11,8 @@ export const monthCalendarStyles = css`
   }
 
   #monthGrid {
-    width: 100%;
     border-collapse: collapse;
+    width: 100%;
   }
 
   #days-container tr,
@@ -35,16 +35,16 @@ export const monthCalendarStyles = css`
 
   [part='weekday'],
   [part~='date'] {
-    width: calc(100% / 7);
-    padding: 0;
     font-weight: normal;
+    padding: 0;
+    width: calc(100% / 7);
   }
 
   [part='weekday']:empty,
   [part='week-number'] {
     flex-shrink: 0;
-    width: 12.5%;
     padding: 0;
+    width: 12.5%;
   }
 
   :host([week-numbers]) [part='weekday']:not(:empty),

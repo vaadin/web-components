@@ -19,21 +19,21 @@ export const sideNavStyles = css`
   }
 
   [part='label'] {
-    display: flex;
-    box-sizing: border-box;
     align-items: center;
-    width: 100%;
     border-radius: var(--lumo-border-radius-m);
-    outline: none;
+    box-sizing: border-box;
+    display: flex;
     font-family: var(--lumo-font-family);
     font-size: var(--lumo-font-size-s);
     font-weight: 500;
     line-height: var(--lumo-line-height-xs);
+    outline: none;
+    width: 100%;
   }
 
   [part='label'] ::slotted([slot='label']) {
-    margin: var(--lumo-space-s);
     color: var(--lumo-secondary-text-color);
+    margin: var(--lumo-space-s);
   }
 
   :host([focus-ring]) [part='label'] {
@@ -41,17 +41,17 @@ export const sideNavStyles = css`
   }
 
   [part='toggle-button'] {
-    display: inline-flex;
     align-items: center;
-    justify-content: center;
-    width: var(--lumo-size-s);
-    height: var(--lumo-size-s);
-    margin-inline: auto var(--lumo-space-xs);
     color: var(--lumo-contrast-60pct);
+    cursor: var(--lumo-clickable-cursor);
+    display: inline-flex;
     font-family: 'lumo-icons';
     font-size: var(--lumo-icon-size-m);
+    height: var(--lumo-size-s);
+    justify-content: center;
     line-height: 1;
-    cursor: var(--lumo-clickable-cursor);
+    margin-inline: auto var(--lumo-space-xs);
+    width: var(--lumo-size-s);
   }
 
   [part='toggle-button']::before {

@@ -8,38 +8,38 @@ registerStyles(
   'vaadin-split-layout',
   css`
     [part='splitter'] {
-      min-width: var(--lumo-space-s);
-      min-height: var(--lumo-space-s);
-      transition: 0.1s background-color;
       background-color: var(--lumo-contrast-5pct);
+      min-height: var(--lumo-space-s);
+      min-width: var(--lumo-space-s);
+      transition: 0.1s background-color;
     }
 
     [part='handle'] {
-      display: flex;
       align-items: center;
+      display: flex;
+      height: var(--lumo-size-m);
       justify-content: center;
       width: var(--lumo-size-m);
-      height: var(--lumo-size-m);
     }
 
     [part='handle']::after {
       --_handle-size: 4px;
+      background-color: var(--lumo-contrast-30pct);
+      border-radius: var(--lumo-border-radius-s);
       content: '';
       display: block;
-      width: var(--_handle-size);
-      max-width: 100%;
       height: 100%;
       max-height: 100%;
+      max-width: 100%;
       transition:
         0.1s opacity,
         0.1s background-color;
-      border-radius: var(--lumo-border-radius-s);
-      background-color: var(--lumo-contrast-30pct);
+      width: var(--_handle-size);
     }
 
     :host([orientation='vertical']) [part='handle']::after {
-      width: 100%;
       height: var(--_handle-size);
+      width: 100%;
     }
 
     /* Hover style */
@@ -56,25 +56,25 @@ registerStyles(
 
     /* Small/minimal */
     :host([theme~='small']) > [part='splitter'] {
-      border-top: 1px solid var(--lumo-contrast-10pct);
       border-left: 1px solid var(--lumo-contrast-10pct);
+      border-top: 1px solid var(--lumo-contrast-10pct);
     }
 
     :host(:is([theme~='small'], [theme~='minimal'])) > [part='splitter'] {
-      min-width: 0;
-      min-height: 0;
       background-color: transparent;
+      min-height: 0;
+      min-width: 0;
     }
 
     :host(:is([theme~='small'], [theme~='minimal'])) > [part='splitter']::after {
       content: '';
-      position: absolute;
       inset: -4px;
+      position: absolute;
     }
 
     :host(:is([theme~='small'], [theme~='minimal'])) > [part='splitter'] > [part='handle'] {
-      top: calc(50% - 0.5px);
       left: calc(50% - 0.5px);
+      top: calc(50% - 0.5px);
     }
 
     :host(:is([theme~='small'], [theme~='minimal'])) > [part='splitter'] > [part='handle']::after {

@@ -11,8 +11,8 @@ const accordionHeading = css`
   }
 
   :host([theme~='filled']) {
-    padding-top: 0;
     padding-bottom: 0;
+    padding-top: 0;
   }
 `;
 

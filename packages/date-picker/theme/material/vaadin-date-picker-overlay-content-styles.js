@@ -22,14 +22,14 @@ registerStyles(
     }
 
     [part='overlay-header'] {
-      display: flex;
-      position: relative;
       align-items: baseline;
-      padding: 8px;
-      border-bottom: 2px solid var(--material-primary-color);
       background: var(--material-secondary-background-color);
+      border-bottom: 2px solid var(--material-primary-color);
       box-shadow: var(--material-shadow-elevation-4dp);
       color: var(--material-body-text-color);
+      display: flex;
+      padding: 8px;
+      position: relative;
     }
 
     [part='label'] {
@@ -39,14 +39,14 @@ registerStyles(
 
     [part='clear-button'],
     [part='toggle-button'] {
-      width: 24px;
-      height: 24px;
-      padding: 8px;
       color: var(--material-secondary-text-color);
       font-family: 'material-icons';
       font-size: var(--material-icon-font-size);
+      height: 24px;
       line-height: 24px;
+      padding: 8px;
       text-align: center;
+      width: 24px;
     }
 
     [part='clear-button']:hover,
@@ -64,23 +64,23 @@ registerStyles(
     }
 
     [part='years-toggle-button'] {
-      padding: 4px 8px;
       color: var(--material-secondary-text-color);
       font-size: var(--material-body-font-size);
       font-weight: 500;
       letter-spacing: 0.05em;
       line-height: 24px;
+      padding: 4px 8px;
     }
 
     [part='years-toggle-button']::after {
       content: var(--material-icons-play);
       display: inline-block;
-      width: 24px;
-      transition: transform 100ms cubic-bezier(0.4, 0, 0.2, 1);
       font-family: 'material-icons';
       font-size: var(--material-icon-font-size);
       line-height: 24px;
       text-align: center;
+      transition: transform 100ms cubic-bezier(0.4, 0, 0.2, 1);
+      width: 24px;
     }
 
     :host([years-visible]) [part='years-toggle-button']::after {
@@ -102,18 +102,18 @@ registerStyles(
     }
 
     ::slotted([slot='years'])::before {
-      width: 8px;
+      background: var(--material-background-color);
+      border: 0;
       height: 8px;
       transform: translateX(-50%) rotate(-45deg);
-      border: 0;
-      background: var(--material-background-color);
+      width: 8px;
     }
 
     [part='toolbar'] {
+      border-top: 1px solid var(--material-divider-color);
       display: flex;
       justify-content: flex-end;
       padding: 8px 4px;
-      border-top: 1px solid var(--material-divider-color);
     }
 
     ::slotted([slot='cancel-button']) {

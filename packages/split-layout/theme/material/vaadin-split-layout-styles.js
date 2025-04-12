@@ -5,23 +5,23 @@ registerStyles(
   'vaadin-split-layout',
   css`
     [part='splitter'] {
-      min-width: 8px;
-      min-height: 8px;
       background-color: var(--_material-split-layout-splitter-background-color, #000);
+      min-height: 8px;
+      min-width: 8px;
     }
 
     [part='handle'] {
-      display: flex;
       align-items: center;
+      display: flex;
       justify-content: center;
     }
 
     [part='handle']::after {
+      background-color: var(--material-background-color);
       content: '';
       display: block;
-      width: 2px;
       height: 24px;
-      background-color: var(--material-background-color);
+      width: 2px;
     }
 
     :host([orientation='vertical']) [part='handle']::after {

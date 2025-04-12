@@ -14,9 +14,9 @@ const tabsheet = css`
   }
 
   [part='tabs-container'] {
-    padding: 4px 8px;
     box-shadow: inset 0 -1px 0 0 var(--material-divider-color);
     gap: 8px;
+    padding: 4px 8px;
   }
 
   ::slotted([slot='tabs']) {
@@ -24,9 +24,9 @@ const tabsheet = css`
   }
 
   [part='content'] {
-    padding: 24px;
-    border-bottom-right-radius: inherit;
     border-bottom-left-radius: inherit;
+    border-bottom-right-radius: inherit;
+    padding: 24px;
   }
 
   :host([loading]) [part='content'] {
@@ -34,12 +34,12 @@ const tabsheet = css`
   }
 
   [part='loader'] {
-    position: absolute;
-    z-index: 1;
-    top: 0;
-    right: 0;
     left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
     transform: translate(0, -100%);
+    z-index: 1;
   }
 `;
 

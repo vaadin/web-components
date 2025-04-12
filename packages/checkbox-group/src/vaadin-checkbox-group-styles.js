@@ -11,7 +11,7 @@ export const checkboxGroupStyles = css`
   }
 
   :host::before {
-    content: '\\\\\\\\2003';
+    content: '\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\2003';
     display: inline-block;
     width: 0;
   }

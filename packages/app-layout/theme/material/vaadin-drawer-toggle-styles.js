@@ -4,25 +4,25 @@ import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themab
 
 const drawerToggle = css`
   :host {
-    width: 48px;
-    min-width: 0 !important;
+    border-radius: 50%;
     height: 48px;
     margin-inline-end: 1em;
+    min-width: 0 !important;
     padding: 0;
-    border-radius: 50%;
+    width: 48px;
   }
 
   [part='icon'] {
-    top: 18px;
     left: 15px;
+    top: 18px;
   }
 
   [part='icon'],
   [part='icon']::after,
   [part='icon']::before {
-    width: 18px;
-    height: 2px;
     background-color: currentColor;
+    height: 2px;
+    width: 18px;
   }
 
   [part='icon']::after {

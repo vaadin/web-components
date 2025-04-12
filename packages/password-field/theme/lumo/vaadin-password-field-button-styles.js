@@ -8,16 +8,16 @@ import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themab
 
 const passwordFieldButton = css`
   :host {
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 100%;
-    min-width: auto;
+    background: transparent;
     height: 100%;
     margin: 0;
-    padding: 0;
+    min-width: auto;
     outline: none;
-    background: transparent;
+    padding: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 100%;
   }
 `;
 

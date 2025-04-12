@@ -5,55 +5,55 @@ import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themab
 
 const button = css`
   :host {
-    display: inline-flex;
-    box-sizing: border-box;
-    flex-shrink: 0;
     align-items: baseline;
-    justify-content: center;
-    min-width: 64px;
-    padding: 8px;
-    overflow: hidden;
-    transition: box-shadow 0.2s;
     border-radius: 4px;
+    box-sizing: border-box;
     color: var(--material-primary-text-color);
+    display: inline-flex;
+    flex-shrink: 0;
     font-family: var(--material-font-family);
     font-size: var(--material-button-font-size);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     font-weight: 500;
+    justify-content: center;
     letter-spacing: 0.05em;
     line-height: 20px;
-    text-transform: uppercase;
-    white-space: nowrap;
+    min-width: 64px;
+    overflow: hidden;
+    padding: 8px;
     -webkit-tap-highlight-color: transparent;
+    text-transform: uppercase;
+    transition: box-shadow 0.2s;
+    white-space: nowrap;
   }
 
   :host::before,
   :host::after {
-    content: '';
-    position: absolute;
-    border-radius: inherit;
-    opacity: 0;
     background-color: currentColor;
+    border-radius: inherit;
+    content: '';
+    opacity: 0;
     pointer-events: none;
+    position: absolute;
   }
 
   :host::before {
-    top: 0;
-    left: 0;
-    width: 100%;
     height: 100%;
+    left: 0;
+    top: 0;
     transition: opacity 0.5s;
+    width: 100%;
   }
 
   :host::after {
-    top: 50%;
-    left: 50%;
-    width: 320px;
+    border-radius: 50%;
     height: 320px;
+    left: 50%;
+    top: 50%;
     transform: translate(-50%, -50%);
     transition: all 0.9s;
-    border-radius: 50%;
+    width: 320px;
   }
 
   [part='label'] ::slotted(*) {
@@ -62,24 +62,24 @@ const button = css`
 
   :host(:hover:not([disabled]))::before,
   :host([focus-ring])::before {
-    transition-duration: 0.2s;
     opacity: 0.08;
+    transition-duration: 0.2s;
   }
 
   :host([active])::before {
-    transition: opacity 0.4s;
     opacity: 0.16;
+    transition: opacity 0.4s;
   }
 
   :host([active])::after {
+    opacity: 0.1;
     transform: translate(-50%, -50%) scale(0.0000001); /* animation works weirdly with scale(0) */
     transition: 0s;
-    opacity: 0.1;
   }
 
   :host(:hover:not([active]):not([disabled]))::after {
-    transform: translate(-50%, -50%) scale(1);
     opacity: 0;
+    transform: translate(-50%, -50%) scale(1);
   }
 
   :host([disabled]) {
@@ -118,30 +118,30 @@ const button = css`
 
   [part] ::slotted(vaadin-icon) {
     display: block;
-    width: 18px;
     height: 18px;
+    width: 18px;
   }
 
   [part='prefix'] ::slotted(vaadin-icon) {
-    margin-right: 8px;
     margin-left: -4px;
+    margin-right: 8px;
   }
 
   [part='suffix'] ::slotted(vaadin-icon) {
-    margin-right: -4px;
     margin-left: 8px;
+    margin-right: -4px;
   }
 
   /* RTL specific styles */
 
   :host([dir='rtl'])::before {
-    right: 0;
     left: auto;
+    right: 0;
   }
 
   :host([dir='rtl'])::after {
-    right: 50%;
     left: auto;
+    right: 50%;
     transform: translate(50%, -50%);
   }
 
@@ -154,13 +154,13 @@ const button = css`
   }
 
   :host([dir='rtl']) [part='prefix'] ::slotted(vaadin-icon) {
-    margin-right: -4px;
     margin-left: 8px;
+    margin-right: -4px;
   }
 
   :host([dir='rtl']) [part='suffix'] ::slotted(vaadin-icon) {
-    margin-right: 8px;
     margin-left: -4px;
+    margin-right: 8px;
   }
 `;
 

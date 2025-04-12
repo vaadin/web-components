@@ -21,19 +21,19 @@ registerStyles(
       --_invalid-hover-highlight: var(--vaadin-input-field-invalid-hover-highlight, var(--lumo-error-color-50pct));
       --_disabled-background: var(--vaadin-input-field-disabled-background, var(--lumo-contrast-5pct));
       --_disabled-value-color: var(--vaadin-input-field-disabled-value-color, var(--lumo-disabled-text-color));
-      position: relative;
-      box-sizing: border-box;
-      padding: 0 calc(0.375em + var(--_input-container-radius) / 4 - 1px);
+      background: var(--_background);
       border-radius:
         /* See https://developer.mozilla.org/en-US/docs/Web/CSS/border-radius#syntax */
         var(--vaadin-input-field-top-start-radius, var(--_input-container-radius))
         var(--vaadin-input-field-top-end-radius, var(--_input-container-radius))
         var(--vaadin-input-field-bottom-end-radius, var(--_input-container-radius))
         var(--vaadin-input-field-bottom-start-radius, var(--_input-container-radius));
-      background: var(--_background);
+      box-sizing: border-box;
+      cursor: text;
       font-weight: var(--vaadin-input-field-value-font-weight, 500);
       line-height: 1;
-      cursor: text;
+      padding: 0 calc(0.375em + var(--_input-container-radius) / 4 - 1px);
+      position: relative;
     }
 
     :host([dir='rtl']) {
@@ -47,26 +47,26 @@ registerStyles(
 
     /* Used for hover and activation effects */
     :host::after {
+      background: var(--_hover-highlight);
+      border-radius: inherit;
       content: '';
+      inset: 0;
+      opacity: 0;
+      pointer-events: none;
       position: absolute;
       transform-origin: 100% 0;
       transition:
         transform 0.15s,
         opacity 0.2s;
-      border-radius: inherit;
-      opacity: 0;
-      background: var(--_hover-highlight);
-      pointer-events: none;
-      inset: 0;
     }
 
     ::slotted(:not([slot$='fix'])) {
       --_lumo-text-field-overflow-mask-image: linear-gradient(to left, transparent, #000 1.25em);
-      min-height: var(--vaadin-input-field-height, var(--_input-height));
-      padding: 0 0.25em;
       cursor: inherit;
       -webkit-mask-image: var(--_lumo-text-field-overflow-mask-image);
       mask-image: var(--_lumo-text-field-overflow-mask-image);
+      min-height: var(--vaadin-input-field-height, var(--_input-height));
+      padding: 0 0.25em;
     }
 
     /* Read-only */
@@ -77,9 +77,9 @@ registerStyles(
     }
 
     :host([readonly])::after {
+      background-color: transparent;
       border: var(--vaadin-input-field-readonly-border, 1px dashed var(--lumo-contrast-30pct));
       opacity: 1;
-      background-color: transparent;
     }
 
     /* Disabled */
@@ -103,9 +103,9 @@ registerStyles(
 
     /* Slotted icons */
     ::slotted(vaadin-icon) {
-      width: var(--_icon-size);
-      height: var(--_icon-size);
       color: var(--_icon-color);
+      height: var(--_icon-size);
+      width: var(--_icon-size);
     }
 
     /* Vaadin icons are based on a 16x16 grid (unlike Lumo and Material icons with 24x24), so they look too big by default */

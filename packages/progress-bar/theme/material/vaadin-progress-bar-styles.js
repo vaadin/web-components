@@ -5,38 +5,38 @@ registerStyles(
   'vaadin-progress-bar',
   css`
     :host {
-      position: relative;
       height: 4px;
       margin: 8px 0;
       overflow: hidden;
+      position: relative;
     }
 
     :host::before {
+      background-color: var(--material-primary-color);
       content: '';
       display: block;
       height: 100%;
       opacity: 0.16;
-      background-color: var(--material-primary-color);
     }
 
     [part='bar'] {
       position: absolute;
       top: 0;
-      width: 100%;
       transform: scaleX(var(--vaadin-progress-value));
       transform-origin: 0 0;
+      width: 100%;
     }
 
     [part='value'] {
-      transform: none;
       background-color: var(--material-primary-color);
+      transform: none;
     }
 
     /* Indeterminate */
 
     :host([indeterminate]) [part='bar'] {
-      left: -100%;
       animation: primary-indeterminate-translate 2s infinite linear;
+      left: -100%;
     }
 
     :host([indeterminate]) [part='value'] {
@@ -49,13 +49,13 @@ registerStyles(
       }
 
       20% {
-        transform: translateX(0);
         animation-timing-function: cubic-bezier(0.5, 0, 0.701732, 0.495819);
+        transform: translateX(0);
       }
 
       59.15% {
-        transform: translateX(83.67142%);
         animation-timing-function: cubic-bezier(0.302435, 0.381352, 0.55, 0.956352);
+        transform: translateX(83.67142%);
       }
 
       100% {
@@ -69,13 +69,13 @@ registerStyles(
       }
 
       36.65% {
-        transform: scaleX(0.08);
         animation-timing-function: cubic-bezier(0.334731, 0.12482, 0.785844, 1);
+        transform: scaleX(0.08);
       }
 
       69.15% {
-        transform: scaleX(0.661479);
         animation-timing-function: cubic-bezier(0.06, 0.11, 0.6, 1);
+        transform: scaleX(0.661479);
       }
 
       100% {
@@ -89,9 +89,9 @@ registerStyles(
     }
 
     :host([indeterminate][dir='rtl']) [part='bar'] {
-      right: -100%;
-      left: auto;
       animation: primary-indeterminate-translate-rtl 2s infinite linear;
+      left: auto;
+      right: -100%;
     }
 
     @keyframes primary-indeterminate-translate-rtl {
@@ -100,13 +100,13 @@ registerStyles(
       }
 
       20% {
-        transform: translateX(0);
         animation-timing-function: cubic-bezier(0.5, 0, 0.701732, 0.495819);
+        transform: translateX(0);
       }
 
       59.15% {
-        transform: translateX(-83.67142%);
         animation-timing-function: cubic-bezier(0.302435, 0.381352, 0.55, 0.956352);
+        transform: translateX(-83.67142%);
       }
 
       100% {

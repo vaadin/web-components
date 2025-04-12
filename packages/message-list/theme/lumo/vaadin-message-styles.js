@@ -12,13 +12,13 @@ registerStyles(
     :host {
       --_focus-ring-color: var(--vaadin-focus-ring-color, var(--lumo-primary-color-50pct));
       --_focus-ring-width: var(--vaadin-focus-ring-width, 2px);
-      padding: var(--lumo-space-s) var(--lumo-space-m);
       color: var(--lumo-body-text-color);
       font-family: var(--lumo-font-family);
       font-size: var(--lumo-font-size-m);
       -moz-osx-font-smoothing: grayscale;
       -webkit-font-smoothing: antialiased;
       line-height: var(--lumo-line-height-m);
+      padding: var(--lumo-space-s) var(--lumo-space-m);
       -webkit-text-size-adjust: 100%;
     }
 
@@ -39,8 +39,8 @@ registerStyles(
     }
 
     :host([dir='rtl']) [part='name'] {
-      margin-right: 0;
       margin-left: var(--lumo-space-s);
+      margin-right: 0;
     }
 
     :host([dir='rtl']) [part='name']:empty {
@@ -54,8 +54,8 @@ registerStyles(
 
     ::slotted([slot='avatar']) {
       --vaadin-avatar-size: var(--lumo-size-m);
-      margin-top: calc(var(--lumo-space-s));
       margin-inline-end: calc(var(--lumo-space-m));
+      margin-top: calc(var(--lumo-space-s));
     }
   `,
   { moduleId: 'lumo-message' },

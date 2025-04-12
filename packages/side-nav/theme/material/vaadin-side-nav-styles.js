@@ -10,20 +10,20 @@ export const sideNavStyles = css`
   }
 
   [part='label'] {
-    display: flex;
-    box-sizing: border-box;
     align-items: center;
-    width: 100%;
-    min-height: 40px;
-    margin: 4px 0;
-    padding: 4px 8px;
     border-radius: 4px;
-    outline: none;
+    box-sizing: border-box;
     color: var(--material-secondary-text-color);
+    display: flex;
     font-family: var(--material-font-family);
     font-size: var(--material-small-font-size);
     font-weight: 500;
     line-height: 1;
+    margin: 4px 0;
+    min-height: 40px;
+    outline: none;
+    padding: 4px 8px;
+    width: 100%;
   }
 
   :host([focus-ring]) [part='label'] {
@@ -31,18 +31,18 @@ export const sideNavStyles = css`
   }
 
   [part='toggle-button'] {
-    display: inline-flex;
     align-items: center;
-    justify-content: center;
-    width: 24px;
+    color: var(--material-secondary-text-color);
+    display: inline-flex;
+    font-family: 'material-icons';
+    font-size: var(--material-icon-font-size);
     height: 24px;
+    justify-content: center;
+    line-height: 1;
     margin-inline: auto -4px;
     padding: 4px;
     transform: rotate(90deg);
-    color: var(--material-secondary-text-color);
-    font-family: 'material-icons';
-    font-size: var(--material-icon-font-size);
-    line-height: 1;
+    width: 24px;
   }
 
   [part='toggle-button']::before {

@@ -6,11 +6,11 @@ registerStyles(
   'vaadin-grid-pro',
   css`
     :host([navigating]) [part~='cell']:active::before {
-      content: '';
-      position: absolute;
       box-shadow: inset 0 0 0 var(--_focus-ring-width) var(--_focus-ring-color);
-      pointer-events: none;
+      content: '';
       inset: 0;
+      pointer-events: none;
+      position: absolute;
     }
 
     [part~='editable-cell'],
@@ -49,13 +49,13 @@ registerStyles(
 
     /* Loading editor cell styles are used by Flow GridPro */
     :host([loading-editor]) [part~='focused-cell']::before {
-      content: '';
-      position: absolute;
       animation: vaadin-grid-pro-loading-editor 1.4s infinite;
-      opacity: 0;
       box-shadow: inset 0 0 0 var(--_focus-ring-width) var(--_focus-ring-color);
-      pointer-events: none;
+      content: '';
       inset: 0;
+      opacity: 0;
+      pointer-events: none;
+      position: absolute;
     }
 
     @keyframes vaadin-grid-pro-loading-editor {
@@ -65,16 +65,16 @@ registerStyles(
     }
 
     [part~='updating-cell']::after {
-      content: '';
-      position: absolute;
-      margin: var(--_focus-ring-width);
       animation: vaadin-grid-pro-updating-cell 1.3s ease-out infinite;
-      border-radius: 4px;
       background-image: linear-gradient(90deg, transparent, var(--lumo-contrast-10pct), transparent);
-      background-repeat: no-repeat;
       background-position: min(-200%, -4em) 0;
+      background-repeat: no-repeat;
       background-size: max(4em, 50%);
+      border-radius: 4px;
+      content: '';
       inset: var(--_cell-padding);
+      margin: var(--_focus-ring-width);
+      position: absolute;
     }
 
     @keyframes vaadin-grid-pro-updating-cell {

@@ -5,8 +5,8 @@ registerStyles(
   'vaadin-icon',
   css`
     :host {
-      width: var(--lumo-icon-size-m);
       height: var(--lumo-icon-size-m);
+      width: var(--lumo-icon-size-m);
     }
   `,
   { moduleId: 'lumo-icon' },

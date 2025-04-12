@@ -23,10 +23,10 @@ const popupOverlay = css`
   }
 
   [part='content'] ::slotted(button) {
-    width: var(--_button-size);
+    border: none;
     height: var(--_button-size);
     margin: var(--_button-margin);
-    border: none;
+    width: var(--_button-size);
   }
 `;
 
@@ -42,8 +42,8 @@ const richTextEditor = css`
   }
 
   [part='toolbar'] {
-    padding: calc(var(--lumo-space-s) - 1px) var(--lumo-space-xs);
     background-color: var(--lumo-contrast-5pct);
+    padding: calc(var(--lumo-space-s) - 1px) var(--lumo-space-xs);
   }
 
   [part~='toolbar-group'] {
@@ -51,21 +51,21 @@ const richTextEditor = css`
   }
 
   [part~='toolbar-button'] {
-    width: var(--lumo-size-m);
+    border-radius: var(--lumo-border-radius-m);
+    color: var(--lumo-contrast-60pct);
+    cursor: var(--lumo-clickable-cursor);
     height: var(--lumo-size-m);
     margin: 2px 1px;
     transition:
       background-color 100ms,
       color 100ms;
-    border-radius: var(--lumo-border-radius-m);
-    color: var(--lumo-contrast-60pct);
-    cursor: var(--lumo-clickable-cursor);
+    width: var(--lumo-size-m);
   }
 
   [part~='toolbar-button']:focus,
   [part~='toolbar-button'][aria-expanded='true'] {
-    outline: none;
     box-shadow: 0 0 0 var(--_focus-ring-width) var(--_focus-ring-color);
+    outline: none;
   }
 
   [part~='toolbar-button']:hover {
@@ -187,10 +187,10 @@ const richTextEditor = css`
 
   [part~='toolbar-button-code-block']::before {
     content: var(--lumo-icons-angle-left) var(--lumo-icons-angle-right);
-    margin-left: -0.25em;
     font-size: var(--lumo-font-size-l);
     font-weight: 600;
     letter-spacing: -0.5em;
+    margin-left: -0.25em;
   }
 
   [part~='toolbar-button-image']::before {
@@ -213,8 +213,8 @@ const richTextEditor = css`
 
   /* TODO unsupported selector */
   [part='content'] > .ql-editor {
-    padding: 0 var(--lumo-space-m);
     line-height: inherit;
+    padding: 0 var(--lumo-space-m);
   }
 
   /* Theme variants */
@@ -229,8 +229,8 @@ const richTextEditor = css`
   }
 
   :host([theme~='no-border']) [part='toolbar'] {
-    padding-top: var(--lumo-space-s);
     padding-bottom: var(--lumo-space-s);
+    padding-top: var(--lumo-space-s);
   }
 
   /* Compact */
@@ -247,8 +247,8 @@ const richTextEditor = css`
   }
 
   :host([theme~='compact']) [part~='toolbar-button'] {
-    width: var(--lumo-size-s);
     height: var(--lumo-size-s);
+    width: var(--lumo-size-s);
   }
 
   :host([theme~='compact']) [part~='toolbar-group'] {

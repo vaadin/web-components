@@ -6,6 +6,10 @@ import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themab
 const datePickerOverlay = css`
   [part='overlay'] {
     flex-direction: column;
+    height: 100%;
+    max-height: calc(var(--lumo-size-m) * 14);
+    overflow: hidden;
+    -webkit-tap-highlight-color: transparent;
     /*
   Width:
       date cell widths
@@ -19,18 +23,14 @@ const datePickerOverlay = css`
       + var(--lumo-space-xs) * 2
       + 57px
     );
-    height: 100%;
-    max-height: calc(var(--lumo-size-m) * 14);
-    overflow: hidden;
-    -webkit-tap-highlight-color: transparent;
   }
 
   [part='content'] {
     height: 100%;
-    padding: 0;
-    overflow: hidden;
     -webkit-mask-image: none;
     mask-image: none;
+    overflow: hidden;
+    padding: 0;
   }
 
   :host([top-aligned]) [part~='overlay'] {
@@ -43,9 +43,9 @@ const datePickerOverlay = css`
 
   @media (max-width: 450px), (max-height: 450px) {
     [part='overlay'] {
-      width: 100vw;
       height: 70vh;
       max-height: 70vh;
+      width: 100vw;
     }
   }
 `;

@@ -5,18 +5,18 @@ import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themab
 
 const menuBarItem = css`
   [part='content'] {
-    display: flex;
     /* tweak to inherit centering from menu bar button */
     align-items: inherit;
-    justify-content: inherit;
+    display: flex;
     font-size: var(--material-button-font-size);
+    justify-content: inherit;
   }
 
   [part='content'] ::slotted(vaadin-icon[icon^='vaadin:']) {
-    display: inline-block;
     box-sizing: border-box !important;
-    width: 18px;
+    display: inline-block;
     height: 18px;
+    width: 18px;
   }
 `;
 

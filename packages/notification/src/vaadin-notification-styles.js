@@ -7,14 +7,14 @@ import { css } from 'lit';
 
 export const notificationContainerStyles = css`
   :host {
+    align-items: stretch;
+    box-sizing: border-box;
     display: flex;
+    flex-direction: column;
+    inset: 0;
+    pointer-events: none;
     position: fixed;
     z-index: 1000;
-    box-sizing: border-box;
-    flex-direction: column;
-    align-items: stretch;
-    pointer-events: none;
-    inset: 0;
   }
 
   [region-group] {
@@ -36,8 +36,8 @@ export const notificationContainerStyles = css`
 
   @media (max-width: 420px) {
     [region-group] {
-      flex-direction: column;
       align-items: stretch;
+      flex-direction: column;
     }
 
     [region-group='top'] {

@@ -22,8 +22,8 @@ registerStyles(
     }
 
     :host([overlay]) [part='backdrop'] {
-      opacity: 0.5;
       background-color: var(--material-secondary-background-color);
+      opacity: 0.5;
     }
   `,
   { moduleId: 'material-master-detail-layout' },

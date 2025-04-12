@@ -32,9 +32,9 @@ class BoardRow extends BoardRowMixin(ElementMixin(PolylitMixin(LitElement))) {
       :host {
         --small-size: var(--vaadin-board-width-small, 600px);
         --medium-size: var(--vaadin-board-width-medium, 960px);
+        align-items: stretch;
         display: flex;
         flex-flow: row wrap;
-        align-items: stretch;
       }
 
       :host([hidden]) {

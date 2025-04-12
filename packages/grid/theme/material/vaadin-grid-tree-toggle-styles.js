@@ -15,18 +15,18 @@ registerStyles(
     }
 
     [part='toggle'] {
-      position: relative;
       align-self: stretch; /* NOTE(platosha): helps to maintain baseline */
+      position: relative;
       width: calc(var(--material-icon-font-size) + 8px);
     }
 
     [part='toggle']::before {
-      position: absolute; /* NOTE(platosha): helps to maintain baseline */
-      width: var(--material-icon-font-size);
-      transform: var(--_material-grid-tree-toggle-collapsed-icon-transform);
-      transition: transform 0.1s cubic-bezier(0.4, 0, 0.2, 0.1);
       font-family: 'material-icons';
       font-size: var(--material-icon-font-size);
+      position: absolute; /* NOTE(platosha): helps to maintain baseline */
+      transform: var(--_material-grid-tree-toggle-collapsed-icon-transform);
+      transition: transform 0.1s cubic-bezier(0.4, 0, 0.2, 0.1);
+      width: var(--material-icon-font-size);
     }
 
     :host(:not([expanded])) [part='toggle']::before,

@@ -6,34 +6,34 @@ registerStyles(
   'vaadin-tab',
   css`
     :host {
-      display: flex;
-      position: relative;
+      align-items: center;
       box-sizing: border-box;
+      color: var(--material-secondary-text-color);
+      cursor: pointer;
+      display: flex;
       flex-direction: column;
       flex-grow: 1;
       flex-shrink: 0;
-      align-items: center;
-      justify-content: center;
-      min-width: 90px;
-      min-height: 48px;
-      padding: 12px 16px;
-      overflow: hidden;
-      transition: box-shadow 0.3s;
-      outline: none;
-      color: var(--material-secondary-text-color);
       font-family: var(--material-font-family);
       font-size: var(--material-button-font-size);
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
       font-weight: 500;
+      justify-content: center;
       letter-spacing: 0.05em;
       line-height: 1.2;
+      min-height: 48px;
+      min-width: 90px;
+      outline: none;
+      overflow: hidden;
+      padding: 12px 16px;
+      position: relative;
       text-align: center;
       text-transform: uppercase;
-      white-space: nowrap;
-      cursor: pointer;
+      transition: box-shadow 0.3s;
       -webkit-user-select: none;
       user-select: none;
+      white-space: nowrap;
     }
 
     /* do not prevent click on slotted links */
@@ -43,12 +43,12 @@ registerStyles(
     }
 
     :host::before {
+      background-color: var(--material-primary-color);
       content: '';
+      inset: 0;
+      opacity: 0;
       position: absolute;
       transition: opacity 0.1s linear;
-      opacity: 0;
-      background-color: var(--material-primary-color);
-      inset: 0;
     }
 
     :host(:hover)::before {
@@ -71,52 +71,52 @@ registerStyles(
     /* Ripple */
 
     :host::after {
+      background-color: var(--material-primary-color);
+      border-radius: 50%;
       content: '';
+      height: 100px;
+      left: 50%;
+      opacity: 0;
       position: absolute;
       top: 50%;
-      left: 50%;
-      width: 100px;
-      height: 100px;
       transform: translate(-50%, -50%) scale(0);
       transition:
         transform 0s cubic-bezier(0.05, 0.8, 0.5, 1),
         opacity 0s linear;
-      border-radius: 50%;
-      opacity: 0;
-      background-color: var(--material-primary-color);
+      width: 100px;
     }
 
     :host([focused]:not([focus-ring]))::after,
     :host([focused][active])::after,
     :host([focus-ring][selected])::after {
+      opacity: 0;
       transform: translate(-50%, -50%) scale(3);
       transition-duration: 2s, 0.6s;
-      opacity: 0;
     }
 
     :host([active]:not([selected]))::after {
-      transition-duration: 2s, 0s;
       opacity: 0.2;
+      transition-duration: 2s, 0s;
     }
 
     /* Disabled */
     :host([disabled]) {
-      opacity: 1;
       color: var(--material-disabled-text-color);
+      opacity: 1;
       pointer-events: none;
     }
 
     :host ::slotted(a) {
-      display: flex;
       align-items: center;
-      justify-content: center;
-      width: 100%;
-      height: 100%;
-      margin: -12px -16px;
-      padding: 12px 16px;
-      outline: none;
       color: inherit;
+      display: flex;
+      height: 100%;
+      justify-content: center;
+      margin: -12px -16px;
+      outline: none;
+      padding: 12px 16px;
       text-decoration: none;
+      width: 100%;
     }
 
     /* Touch device adjustments */

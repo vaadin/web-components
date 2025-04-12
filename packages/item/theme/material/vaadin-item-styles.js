@@ -5,15 +5,15 @@ import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themab
 
 const item = css`
   :host {
-    display: flex;
-    box-sizing: border-box;
     align-items: center;
-    min-height: 36px;
-    padding: 8px 32px 8px 10px;
-    overflow: hidden;
+    box-sizing: border-box;
+    display: flex;
     font-family: var(--material-font-family);
     font-size: var(--material-small-font-size);
     line-height: 24px;
+    min-height: 36px;
+    overflow: hidden;
+    padding: 8px 32px 8px 10px;
   }
 
   /* It's the list-box's responsibility to add the focus style */
@@ -23,17 +23,17 @@ const item = css`
 
   /* Checkmark */
   [part='checkmark']::before {
+    color: var(--material-secondary-text-color);
     content: '';
     display: var(--_material-item-selected-icon-display, none);
     flex: none;
-    width: 24px;
-    margin-right: 10px;
-    color: var(--material-secondary-text-color);
     font-family: material-icons;
     font-size: 24px;
     font-weight: 400;
     line-height: 1;
+    margin-right: 10px;
     text-align: center;
+    width: 24px;
   }
 
   :host([selected]) [part='checkmark']::before {
@@ -63,8 +63,8 @@ const item = css`
   }
 
   :host([dir='rtl']) [part='checkmark']::before {
-    margin-right: 0;
     margin-left: 10px;
+    margin-right: 0;
   }
 `;
 

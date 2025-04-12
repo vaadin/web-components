@@ -8,8 +8,8 @@ registerStyles(
   css`
     :host {
       align-items: baseline;
-      justify-content: flex-start;
       cursor: var(--lumo-clickable-cursor);
+      justify-content: flex-start;
       -webkit-user-select: none;
       user-select: none;
     }
@@ -44,8 +44,8 @@ registerStyles(
     /* RTL specific styles */
 
     :host([dir='rtl']) [part='indicators'] {
-      margin-right: var(--lumo-space-s);
       margin-left: 0;
+      margin-right: var(--lumo-space-s);
     }
   `,
   { moduleId: 'lumo-grid-sorter' },

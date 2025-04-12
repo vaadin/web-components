@@ -36,10 +36,10 @@ class ContextMenuListBox extends ListMixin(ThemableMixin(DirMixin(PolylitMixin(L
       }
 
       [part='items'] {
-        width: 100%;
         height: 100%;
         -webkit-overflow-scrolling: touch;
         overflow-y: auto;
+        width: 100%;
       }
     `;
   }

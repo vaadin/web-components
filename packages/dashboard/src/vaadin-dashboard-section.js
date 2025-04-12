@@ -86,7 +86,7 @@ class DashboardSection extends DashboardItemMixin(ElementMixin(ThemableMixin(Pol
           /* Dashboard section header height */
           --_vaadin-dashboard-section-header-height: minmax(0, auto);
           display: grid;
-          position: relative;
+          gap: var(--_vaadin-dashboard-gap, 1rem);
           grid-auto-rows: var(--_vaadin-dashboard-row-height);
           grid-column: var(--_vaadin-dashboard-section-column) !important;
           grid-template-columns: subgrid;
@@ -94,7 +94,7 @@ class DashboardSection extends DashboardItemMixin(ElementMixin(ThemableMixin(Pol
               auto-fill,
               var(--_vaadin-dashboard-row-height)
             );
-          gap: var(--_vaadin-dashboard-gap, 1rem);
+          position: relative;
         }
 
         :host([hidden]) {

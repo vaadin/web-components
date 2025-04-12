@@ -8,23 +8,23 @@ import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themab
 
 const detailsSummary = css`
   :host {
-    display: flex;
-    box-sizing: border-box;
     align-items: center;
-    width: 100%;
-    padding: var(--lumo-space-s) 0;
-    border-radius: var(--lumo-border-radius-m);
-    outline: none;
     background-color: inherit;
+    border-radius: var(--lumo-border-radius-m);
+    box-sizing: border-box;
     color: var(--lumo-secondary-text-color);
+    cursor: var(--lumo-clickable-cursor);
+    display: flex;
     font-family: var(--lumo-font-family);
     font-size: var(--lumo-font-size-m);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     font-weight: 500;
     line-height: var(--lumo-line-height-xs);
-    cursor: var(--lumo-clickable-cursor);
+    outline: none;
+    padding: var(--lumo-space-s) 0;
     -webkit-tap-highlight-color: transparent;
+    width: 100%;
   }
 
   :host([disabled]),
@@ -41,16 +41,16 @@ const detailsSummary = css`
   }
 
   [part='toggle'] {
-    display: block;
-    width: 1em;
-    height: 1em;
-    margin-right: var(--lumo-space-xs);
-    margin-left: calc(var(--lumo-space-xs) * -1);
     color: var(--lumo-contrast-60pct);
+    cursor: var(--lumo-clickable-cursor);
+    display: block;
     font-family: 'lumo-icons';
     font-size: var(--lumo-icon-size-s);
+    height: 1em;
     line-height: 1;
-    cursor: var(--lumo-clickable-cursor);
+    margin-left: calc(var(--lumo-space-xs) * -1);
+    margin-right: var(--lumo-space-xs);
+    width: 1em;
   }
 
   [part='toggle']::before {
@@ -67,8 +67,8 @@ const detailsSummary = css`
 
   /* RTL styles */
   :host([dir='rtl']) [part='toggle'] {
-    margin-right: calc(var(--lumo-space-xs) * -1);
     margin-left: var(--lumo-space-xs);
+    margin-right: calc(var(--lumo-space-xs) * -1);
   }
 
   :host([dir='rtl']) [part='toggle']::before {
@@ -81,8 +81,8 @@ const detailsSummary = css`
 
   /* Small */
   :host([theme~='small']) {
-    padding-top: var(--lumo-space-xs);
     padding-bottom: var(--lumo-space-xs);
+    padding-top: var(--lumo-space-xs);
   }
 
   :host([theme~='small']) [part='toggle'] {
@@ -104,8 +104,8 @@ const detailsSummary = css`
   }
 
   :host([theme~='reverse']) [part='toggle'] {
-    order: 1;
     margin-right: 0;
+    order: 1;
   }
 
   :host([theme~='reverse'][dir='rtl']) [part='toggle'] {

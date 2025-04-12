@@ -5,10 +5,10 @@ import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themab
 
 const contextMenuListBox = css`
   [part='items'] ::slotted([role='menuitem']) {
-    min-height: 36px;
-    padding: 8px 32px 8px 10px;
     font-size: var(--material-small-font-size);
     line-height: 24px;
+    min-height: 36px;
+    padding: 8px 32px 8px 10px;
   }
 
   :host([dir='rtl']) [part='items'] ::slotted([role='menuitem']) {

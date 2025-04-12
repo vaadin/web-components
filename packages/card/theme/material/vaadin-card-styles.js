@@ -18,20 +18,20 @@ addGlobalThemeStyles('card-props', cardProps);
 
 const card = css`
   :host {
-    position: relative;
-    border-radius: var(--vaadin-card-border-radius);
     background: var(--vaadin-card-background);
+    border-radius: var(--vaadin-card-border-radius);
     box-shadow: var(--vaadin-card-box-shadow);
+    position: relative;
   }
 
   /* Could be an inset outline on the host as well, but rounded outlines only work since Safari 16.4 */
   :host::before {
-    content: '';
-    position: absolute;
     border: var(--vaadin-card-border, var(--vaadin-card-border-width) solid var(--vaadin-card-border-color));
     border-radius: inherit;
-    pointer-events: none;
+    content: '';
     inset: 0;
+    pointer-events: none;
+    position: absolute;
   }
 
   :host([theme~='outlined']) {

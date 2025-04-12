@@ -16,10 +16,10 @@ const section = css`
   }
 
   header {
-    min-height: var(--lumo-size-l);
-    margin-bottom: calc(-1 * var(--_section-outline-offset));
-    padding-inline: var(--lumo-space-s);
     line-height: var(--lumo-line-height-s);
+    margin-bottom: calc(-1 * var(--_section-outline-offset));
+    min-height: var(--lumo-size-l);
+    padding-inline: var(--lumo-space-s);
   }
 
   [part='title'] {
@@ -30,24 +30,24 @@ const section = css`
   /* Section states */
 
   :host([editable]) {
-    outline: 1px solid var(--lumo-contrast-10pct);
-    outline-offset: calc(var(--_section-outline-offset) - 1px);
     background: var(--lumo-contrast-5pct);
     box-shadow: 0 0 0 var(--_section-outline-offset) var(--lumo-contrast-5pct);
+    outline: 1px solid var(--lumo-contrast-10pct);
+    outline-offset: calc(var(--_section-outline-offset) - 1px);
   }
   :host([editable]) header {
     padding-inline: var(--lumo-space-xs);
   }
 
   :host([focused])::after {
+    border-radius: var(--lumo-border-radius-l);
     content: '';
     display: block;
-    position: absolute;
-    z-index: 9;
-    border-radius: var(--lumo-border-radius-l);
+    inset: 0;
     outline: var(--_focus-ring-width) solid var(--_focus-ring-color);
     outline-offset: var(--_focus-ring-offset);
-    inset: 0;
+    position: absolute;
+    z-index: 9;
   }
 
   :host([selected]) {
@@ -64,9 +64,9 @@ const section = css`
   }
 
   :host([dragging]) {
-    outline: var(--_vaadin-dashboard-drop-target-border);
     background: var(--_vaadin-dashboard-drop-target-background-color);
     box-shadow: 0 0 0 var(--_section-outline-offset) var(--_vaadin-dashboard-drop-target-background-color);
+    outline: var(--_vaadin-dashboard-drop-target-border);
   }
 
   /* Accessible move mode controls */

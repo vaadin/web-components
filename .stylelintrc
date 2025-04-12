@@ -1,13 +1,16 @@
 {
   "customSyntax": "postcss-lit",
   "extends": [
-    "stylelint-config-vaadin",
-    "stylelint-config-property-sort-order-smacss"
+    "stylelint-config-vaadin"
+  ],
+  "plugins": [
+    "stylelint-order"
   ],
   "rules": {
     "order/order": [
 			"custom-properties",
 			"declarations"
-		]
+		],
+    "order/properties-alphabetical-order": true
   }
 }

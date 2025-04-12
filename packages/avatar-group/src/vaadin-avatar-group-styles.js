@@ -19,8 +19,8 @@ export const avatarGroupStyles = css`
 
   [part='container'] {
     display: flex;
-    position: relative;
     flex-wrap: nowrap;
+    position: relative;
     width: 100%;
   }
 

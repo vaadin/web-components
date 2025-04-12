@@ -35,10 +35,10 @@ class SelectListBox extends ListMixin(ThemableMixin(DirMixin(PolylitMixin(LitEle
       }
 
       [part='items'] {
-        width: 100%;
         height: 100%;
         -webkit-overflow-scrolling: touch;
         overflow-y: auto;
+        width: 100%;
       }
     `;
   }

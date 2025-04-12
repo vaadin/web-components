@@ -25,8 +25,8 @@ class MultiSelectComboBoxContainer extends InputContainer {
       css`
         #wrapper {
           display: flex;
-          width: 100%;
           min-width: 0;
+          width: 100%;
         }
 
         :host([auto-expand-vertically]) #wrapper {

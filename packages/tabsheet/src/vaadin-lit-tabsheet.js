@@ -38,21 +38,21 @@ class TabSheet extends TabSheetMixin(ThemableMixin(ElementMixin(PolylitMixin(Lit
       }
 
       [part='tabs-container'] {
+        align-items: center;
         display: flex;
         position: relative;
-        align-items: center;
       }
 
       ::slotted([slot='tabs']) {
-        flex: 1;
         align-self: stretch;
+        flex: 1;
         min-width: 8em;
       }
 
       [part='content'] {
-        position: relative;
         box-sizing: border-box;
         flex: 1;
+        position: relative;
       }
     `;
   }

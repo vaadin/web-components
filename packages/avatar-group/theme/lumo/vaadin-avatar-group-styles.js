@@ -69,14 +69,14 @@ registerStyles(
       }
 
       [part='content'] {
-        display: flex;
         align-items: center;
+        display: flex;
       }
 
       [part='content'] ::slotted(vaadin-avatar) {
-        width: var(--lumo-size-xs);
         height: var(--lumo-size-xs);
         margin-inline-end: var(--lumo-space-s);
+        width: var(--lumo-size-xs);
       }
     `,
   ],

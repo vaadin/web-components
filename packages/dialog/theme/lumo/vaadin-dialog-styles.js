@@ -16,12 +16,12 @@ const dialogOverlay = css`
   }
 
   [part='overlay'] {
-    border-radius: var(--lumo-border-radius-l);
-    outline: none;
     background-image: none;
+    border-radius: var(--lumo-border-radius-l);
     box-shadow:
       0 0 0 1px var(--lumo-shade-5pct),
       var(--lumo-box-shadow-xl);
+    outline: none;
     -webkit-tap-highlight-color: transparent;
   }
 
@@ -41,22 +41,22 @@ const dialogOverlay = css`
   }
 
   [part='header'] {
-    padding: var(--lumo-space-m);
-    border-radius: var(--lumo-border-radius-l) var(--lumo-border-radius-l) 0 0; /* Needed for Safari */
     background-color: var(--lumo-base-color);
+    border-radius: var(--lumo-border-radius-l) var(--lumo-border-radius-l) 0 0; /* Needed for Safari */
+    padding: var(--lumo-space-m);
   }
 
   [part='footer'] {
-    padding: var(--lumo-space-s) var(--lumo-space-m);
-    border-radius: 0 0 var(--lumo-border-radius-l) var(--lumo-border-radius-l); /* Needed for Safari */
     background-color: var(--lumo-contrast-5pct);
+    border-radius: 0 0 var(--lumo-border-radius-l) var(--lumo-border-radius-l); /* Needed for Safari */
+    padding: var(--lumo-space-s) var(--lumo-space-m);
   }
 
   [part='title'] {
-    margin-inline-start: calc(var(--lumo-space-l) - var(--lumo-space-m));
     color: var(--lumo-header-text-color);
     font-size: var(--lumo-font-size-xl);
     font-weight: 600;
+    margin-inline-start: calc(var(--lumo-space-l) - var(--lumo-space-m));
   }
 
   /* No padding */
@@ -83,8 +83,8 @@ const dialogOverlay = css`
 
   @keyframes vaadin-dialog-enter {
     0% {
-      transform: scale(0.95);
       opacity: 0;
+      transform: scale(0.95);
     }
   }
 
@@ -98,8 +98,8 @@ const dialogOverlay = css`
 
   @keyframes vaadin-dialog-exit {
     100% {
-      transform: scale(1.02);
       opacity: 0;
+      transform: scale(1.02);
     }
   }
 `;

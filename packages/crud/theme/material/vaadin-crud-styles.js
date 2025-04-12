@@ -8,35 +8,35 @@ registerStyles(
   'vaadin-crud-edit',
   css`
     :host {
-      display: block;
-      position: relative;
-      width: 2em;
-      min-width: auto;
-      height: 2em;
-      border-radius: 4px;
-      outline: none;
       background-color: var(--material-secondary-background-color);
+      border-radius: 4px;
       color: var(--material-text-color);
+      display: block;
       font-size: var(--material-button-font-size);
       -webkit-font-smoothing: auto;
       -moz-font-smoothing: auto;
+      height: 2em;
       /* Reset button styles */
       letter-spacing: normal;
       line-height: 1;
+      min-width: auto;
+      outline: none;
+      position: relative;
+      width: 2em;
     }
 
     [part='icon']::before {
-      content: '\\\\\\\\270E';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 2em;
-      height: 2em;
       color: var(--material-primary-text-color);
+      content: '\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\270E';
       font-family: serif;
       font-size: var(--material-button-font-size);
+      height: 2em;
+      left: 0;
       line-height: 2em;
+      position: absolute;
       text-align: center;
+      top: 0;
+      width: 2em;
     }
   `,
   { moduleId: 'material-crud-grid-edit' },
@@ -70,8 +70,8 @@ registerStyles(
       }
 
       [part='scroller'] {
-        padding: 16px;
         background: var(--material-background-color);
+        padding: 16px;
       }
 
       [part='editor'] {
@@ -79,16 +79,16 @@ registerStyles(
       }
 
       [part='editor']:focus::before {
-        content: '';
-        position: absolute;
         box-shadow: inset 0 0 0 2px var(--material-primary-color);
-        pointer-events: none;
+        content: '';
         inset: 0;
+        pointer-events: none;
+        position: absolute;
       }
 
       [part='toolbar'] {
-        padding: 8px;
         background-color: var(--material-secondary-background-color);
+        padding: 8px;
       }
 
       [part='footer'] {
@@ -96,8 +96,8 @@ registerStyles(
       }
 
       [part='footer'] ::slotted(*) {
-        margin-right: 4px;
         margin-left: 4px;
+        margin-right: 4px;
       }
 
       :host(:not([editor-position=''])) [part='editor']:not([hidden]) {
@@ -124,8 +124,8 @@ registerStyles(
     editorStyles,
     css`
       [part='overlay'] {
-        min-width: 20em;
         max-width: 54em;
+        min-width: 20em;
       }
 
       @keyframes material-overlay-dummy-animation {
@@ -144,8 +144,8 @@ registerStyles(
       }
 
       [part='header'] ::slotted(h3) {
-        margin-top: 0 !important;
         margin-bottom: 0 !important;
+        margin-top: 0 !important;
       }
 
       [part='content'] {
