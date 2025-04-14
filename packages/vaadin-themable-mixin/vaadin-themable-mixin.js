@@ -3,8 +3,8 @@
  * Copyright (c) 2017 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { adoptStyles, css, CSSResult, LitElement, unsafeCSS } from 'lit';
-import { getInjectedStyleSheet } from './src/css-utils.js';
+import { css, CSSResult, LitElement, unsafeCSS } from 'lit';
+import { applyInstanceStyles } from './src/css-utils.js';
 import { ThemePropertyMixin } from './vaadin-theme-property-mixin.js';
 
 export { css, unsafeCSS };
@@ -116,18 +116,7 @@ function updateInstanceStyles(instance) {
 
   if (instance instanceof LitElement) {
     // LitElement
-
-    // The adoptStyles function may fall back to appending style elements to shadow root.
-    // Remove them first to avoid duplicates.
-    [...instance.shadowRoot.querySelectorAll('style')].forEach((style) => style.remove());
-
-    // If there are some styles injected, we should retain them and place
-    // before any custom styles. Note that `src` styles will end up after
-    // injected ones but those should use `@layer` for lower specificity.
-    const styles = [getInjectedStyleSheet(instance), ...componentClass.elementStyles].filter(Boolean);
-
-    // Adopt the updated styles
-    adoptStyles(instance.shadowRoot, styles);
+    applyInstanceStyles(instance);
   } else {
     // PolymerElement
 
@@ -368,11 +357,16 @@ export const ThemableMixin = (superClass) =>
      * @protected
      */
     static finalizeStyles(styles) {
-      // The "styles" object originates from the "static get styles()" function of
-      // a LitElement based component. The theme styles are added after it
-      // so that they can override the component styles.
-      const themeStyles = this.getStylesForThis();
-      return styles ? [...[styles].flat(Infinity), ...themeStyles] : themeStyles;
+      // Preserve the styles the user supplied via the `static get styles()` getter
+      // so that they will always be injected before styles added by `CSSInjector`.
+      this.baseStyles = styles ? [styles].flat(Infinity) : [];
+
+      // Preserve the theme styles the user supplied via the `registerStyles()` API
+      // so that they will always be injected after styles added by `CSSInjector`.
+      this.themeStyles = this.getStylesForThis();
+
+      // Merged styles are stored in `elementStyles` and passed to `adoptStyles()`.
+      return [...this.baseStyles, ...this.themeStyles];
     }
 
     /**
