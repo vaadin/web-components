@@ -65,8 +65,7 @@ function isTagScopedMedia(media) {
  * @return {boolean}
  */
 function matchesTagScopedMedia(media, tagName) {
-  // Firefox parses the escaping backward slash into a double backward slash: \ -> \\
-  return media.replace(/\\/gmu, '') === tagName;
+  return media === tagName;
 }
 
 /**
