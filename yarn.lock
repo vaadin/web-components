@@ -5228,6 +5228,11 @@ es-module-lexer@^1.0.0:
   resolved "https://registry.yarnpkg.com/es-module-lexer/-/es-module-lexer-1.1.0.tgz#bf56a09b5f1c6aea6ba231b0a636a0f60c410b70"
   integrity sha512-fJg+1tiyEeS8figV+fPcPpm8WqJEflG3yPU0NOm5xMvrNkuiy7HzX/Ljng4Y0hAoiw4/3hQTCFYw+ub8+a2pRA==
 
+es-module-shims@^2.0.10:
+  version "2.0.10"
+  resolved "https://registry.yarnpkg.com/es-module-shims/-/es-module-shims-2.0.10.tgz#67ad3849ba137496fdc3129e89e5456c4468bc9d"
+  integrity sha512-Ub1xUe9v97lKsSnTMfCJvnX6dSmJ3nRVWHpH1szP0RqmLliiBGQiUXLPkz1b0uh6LnPjUdTtND1YjBT+VIuozw==
+
 es-object-atoms@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/es-object-atoms/-/es-object-atoms-1.0.0.tgz#ddb55cd47ac2e240701260bc2a8e31ecb643d941"

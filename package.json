@@ -48,6 +48,7 @@
     "@web/test-runner-visual-regression": "^0.10.0",
     "axios": "^1.4.0",
     "dotenv": "^16.0.3",
+    "es-module-shims": "^2.0.10",
     "eslint": "^8.57.0",
     "eslint-config-vaadin": "^1.0.0-alpha.28",
     "eslint-plugin-es": "^4.1.0",
