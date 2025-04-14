@@ -36,20 +36,7 @@ class Select extends SelectBaseMixin(ElementMixin(ThemableMixin(PolylitMixin(Lit
   }
 
   static get styles() {
-    return [
-      fieldShared,
-      inputFieldContainer,
-      screenReaderOnly,
-      css`
-        :host {
-          position: relative;
-        }
-
-        ::slotted([slot='value']) {
-          flex-grow: 1;
-        }
-      `,
-    ];
+    return [fieldShared, inputFieldContainer, screenReaderOnly, css``];
   }
 
   /** @protected */
