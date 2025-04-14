@@ -27,14 +27,12 @@ class Item extends ItemMixin(CSSInjectionMixin(ThemableMixin(DirMixin(PolylitMix
 
   static get styles() {
     return css`
-      @layer base {
-        :host {
-          display: inline-block;
-        }
+      :host {
+        display: inline-block;
+      }
 
-        :host([hidden]) {
-          display: none !important;
-        }
+      :host([hidden]) {
+        display: none !important;
       }
     `;
   }

@@ -28,21 +28,19 @@ class ListBox extends CSSInjectionMixin(ElementMixin(MultiSelectListMixin(Themab
 
   static get styles() {
     return css`
-      @layer base {
-        :host {
-          display: flex;
-        }
+      :host {
+        display: flex;
+      }
 
-        :host([hidden]) {
-          display: none !important;
-        }
+      :host([hidden]) {
+        display: none !important;
+      }
 
-        [part='items'] {
-          height: 100%;
-          width: 100%;
-          overflow-y: auto;
-          -webkit-overflow-scrolling: touch;
-        }
+      [part='items'] {
+        height: 100%;
+        width: 100%;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
       }
     `;
   }
