@@ -104,17 +104,17 @@ describe('form-layout auto responsive', () => {
       await nextResize(element);
     });
 
-    it('default (wide container)', async () => {
-      await visualDiff(container, 'min-columns-default');
+    it('wide container (space for 3 columns)', async () => {
+      await visualDiff(container, 'min-columns-wide-container');
     });
 
-    it('barely enough for 2 columns', async () => {
+    it('medium container (space for 2 columns)', async () => {
       container.style.width = '250px';
       await nextResize(element);
-      await visualDiff(container, 'min-columns-two-columns');
+      await visualDiff(container, 'min-columns-medium-container');
     });
 
-    it('narrow container forcing fewer than minColumns', async () => {
+    it('narrow container (space for 1 column only)', async () => {
       container.style.width = '100px';
       await nextResize(element);
       await visualDiff(container, 'min-columns-narrow-container');
