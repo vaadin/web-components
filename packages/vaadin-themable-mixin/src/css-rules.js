@@ -54,7 +54,7 @@ function getCSSStyleSheetMediaText(styleSheet) {
  * @return {boolean}
  */
 function isTagScopedMedia(media) {
-  return /^[\w]+-[\w.()[\]"'=~*^$]+/u.test(media);
+  return /^\w+(-\w+)+$/u.test(media);
 }
 
 /**
