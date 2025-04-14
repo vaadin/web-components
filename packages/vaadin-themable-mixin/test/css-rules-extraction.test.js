@@ -47,7 +47,7 @@ describe('CSS rules extraction', () => {
     }
   });
 
-  it('should extract rules from tag-scoped @import ', async () => {
+  it('should extract rules from tag-scoped @import', async () => {
     const style = fixtureSync(`
       <style>
         @import '${BASE_PATH}/css-rules-extraction-test-button.css' test-button;
