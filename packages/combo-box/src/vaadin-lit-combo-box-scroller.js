@@ -38,9 +38,9 @@ export class ComboBoxScroller extends ComboBoxScrollerMixin(PolylitMixin(LitElem
       }
 
       #selector {
-        border-width: var(--_vaadin-combo-box-items-container-border-width);
-        border-style: var(--_vaadin-combo-box-items-container-border-style);
         border-color: var(--_vaadin-combo-box-items-container-border-color, transparent);
+        border-style: var(--_vaadin-combo-box-items-container-border-style, solid);
+        border-width: var(--_vaadin-combo-box-items-container-border-width, 4px);
         position: relative;
       }
     `;
