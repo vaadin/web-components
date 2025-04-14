@@ -7,43 +7,6 @@
 // Based on https://github.com/jouni/j-elements/blob/main/test/old-components/Stylable.js
 
 /**
- * Returns the type of the rule as a string, e.g.
- * 'CSSImportRule', 'CSSMediaRule', etc.
- *
- * @param {CSSRule} rule
- * @return {string}
- */
-function getCSSRuleType(rule) {
-  return rule.constructor.name;
-}
-
-/**
- * Returns the media query string for the given stylesheet.
- *
- * @param {CSSStyleSheet} styleSheet
- * @return {string}
- */
-function getCSSStyleSheetMediaText(styleSheet) {
-  if (styleSheet.ownerRule) {
-    if (getCSSRuleType(styleSheet.ownerRule) === 'CSSImportRule') {
-      // @import
-      // Need this awkward workaround since Firefox (sometimes?) blocks the access to the MediaList
-      // object for some reason in imported stylesheets
-      const importRule = styleSheet.ownerRule.cssText.split(' ');
-      if (importRule.length > 2) {
-        return importRule.slice(2).join(' ').replace(';', '');
-      }
-    }
-  } else if (styleSheet.ownerNode) {
-    return styleSheet.ownerNode.media;
-  } else if (styleSheet.media) {
-    return styleSheet.media.mediaText;
-  }
-
-  return '';
-}
-
-/**
  * Check if the media query is a non-standard "tag scoped selector".
  *
  * Examples of such media queries:
@@ -74,30 +37,27 @@ function matchesTagScopedMedia(media, tagName) {
  * @param {CSSStyleSheet} styleSheet
  * @param {string} tagName
  */
-function collectStyleSheetTagScopedCSSRules(styleSheet, tagName) {
-  // TODO @import sheets should be inserted as the first ones in the results
-  // Now they can end up in the middle of other rules and be ignored
-
-  const styleSheetMedia = getCSSStyleSheetMediaText(styleSheet);
-  if (isTagScopedMedia(styleSheetMedia)) {
-    if (matchesTagScopedMedia(styleSheetMedia, tagName)) {
-      return [...styleSheet.cssRules];
-    }
-
-    return [];
-  }
-
+function extractStyleSheetTagScopedCSSRules(styleSheet, tagName) {
   const matchingRules = [];
 
   for (const rule of styleSheet.cssRules) {
-    const ruleType = getCSSRuleType(rule);
+    const ruleType = rule.constructor.name;
 
     if (ruleType === 'CSSImportRule') {
-      matchingRules.push(...collectStyleSheetTagScopedCSSRules(rule.styleSheet, tagName));
+      if (!isTagScopedMedia(rule.media.mediaText)) {
+        matchingRules.push(...extractStyleSheetTagScopedCSSRules(rule.styleSheet, tagName));
+        continue;
+      }
+
+      if (matchesTagScopedMedia(rule.media.mediaText, tagName)) {
+        matchingRules.push(...rule.styleSheet.cssRules);
+      }
     }
 
-    if (ruleType === 'CSSMediaRule' && matchesTagScopedMedia(rule.media.mediaText, tagName)) {
-      matchingRules.push(...rule.cssRules);
+    if (ruleType === 'CSSMediaRule') {
+      if (matchesTagScopedMedia(rule.media.mediaText, tagName)) {
+        matchingRules.push(...rule.cssRules);
+      }
     }
   }
 
@@ -120,8 +80,8 @@ function collectStyleSheetTagScopedCSSRules(styleSheet, tagName) {
  * @param {string} tagName
  * @return {CSSRule[]}
  */
-export function collectTagScopedCSSRules(root, tagName) {
+export function extractTagScopedCSSRules(root, tagName) {
   return [...root.adoptedStyleSheets, ...root.styleSheets].flatMap((styleSheet) =>
-    collectStyleSheetTagScopedCSSRules(styleSheet, tagName),
+    extractStyleSheetTagScopedCSSRules(styleSheet, tagName),
   );
 }
