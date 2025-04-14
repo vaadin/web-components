@@ -36,6 +36,11 @@ export class ComboBoxItem extends ComboBoxItemMixin(ThemableMixin(DirMixin(Polyl
         padding: var(--vaadin-combo-box-item-padding, var(--_vaadin-padding-container));
       }
 
+      :host([focused]) {
+        outline: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
+        outline-offset: calc(var(--vaadin-focus-ring-width) / -1);
+      }
+
       :host([hidden]) {
         display: none;
       }
