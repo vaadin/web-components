@@ -81,7 +81,10 @@ function extractStyleSheetTagScopedCSSRules(styleSheet, tagName) {
  * @return {CSSRule[]}
  */
 export function extractTagScopedCSSRules(root, tagName) {
-  return [...root.adoptedStyleSheets, ...root.styleSheets].flatMap((styleSheet) =>
-    extractStyleSheetTagScopedCSSRules(styleSheet, tagName),
-  );
+  const styleSheets = new Set([...root.styleSheets]);
+  const adoptedStyleSheets = new Set([...root.adoptedStyleSheets]);
+
+  return [...styleSheets.difference(adoptedStyleSheets), ...adoptedStyleSheets].flatMap((styleSheet) => {
+    return extractStyleSheetTagScopedCSSRules(styleSheet, tagName);
+  });
 }
