@@ -6,7 +6,7 @@
 
 /* eslint-disable es/no-optional-chaining */
 import StyleObserver from 'style-observer';
-import { collectTagScopedCSSRules } from './css-rules.js';
+import { extractTagScopedCSSRules } from './css-rules.js';
 import { cleanupStyleSheet, injectStyleSheet } from './css-utils.js';
 
 /**
@@ -116,7 +116,7 @@ export class CSSInjector {
   #componentStylesAdded(tagName) {
     const stylesheet = this.#styleSheetsByTag.get(tagName) || new CSSStyleSheet();
 
-    const cssText = this.#collectComponentScopedCSSRules(tagName)
+    const cssText = this.#extractComponentScopedCSSRules(tagName)
       .map((rule) => rule.cssText)
       .join('\n');
     stylesheet.replaceSync(cssText);
@@ -136,13 +136,13 @@ export class CSSInjector {
     this.#styleSheetsByTag.delete(tagName);
   }
 
-  #collectComponentScopedCSSRules(tagName) {
+  #extractComponentScopedCSSRules(tagName) {
     // Global stylesheets
-    const rules = collectTagScopedCSSRules(document, tagName);
+    const rules = extractTagScopedCSSRules(document, tagName);
 
     // Scoped stylesheets
     if (this.#root !== document) {
-      rules.push(...collectTagScopedCSSRules(this.#root, tagName));
+      rules.push(...extractTagScopedCSSRules(this.#root, tagName));
     }
 
     return rules;
