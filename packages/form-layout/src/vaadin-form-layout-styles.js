@@ -45,14 +45,29 @@ export const formLayoutStyles = css`
   }
 
   :host([auto-responsive]) {
+    /* Column width */
     --_column-width: var(--vaadin-field-default-width, 12em);
     --_column-width-labels-above: var(--_column-width);
     --_column-width-labels-aside: calc(
       var(--_column-width) + var(--vaadin-form-layout-label-width) + var(--vaadin-form-layout-label-spacing)
     );
 
+    /* Column gap */
+    --_min-total-gap: calc((var(--_min-columns) - 1) * var(--vaadin-form-layout-column-spacing));
+    --_max-total-gap: calc((var(--_max-columns) - 1) * var(--vaadin-form-layout-column-spacing));
+
+    /* Minimum form layout width */
+    --_min-width-labels-above: calc(var(--_min-columns) * var(--_column-width-labels-above) + var(--_min-total-gap));
+    --_min-width-labels-aside: calc(var(--_min-columns) * var(--_column-width-labels-aside) + var(--_min-total-gap));
+    --_min-width: var(--_min-width-labels-above);
+
+    /* Maximum form layout width */
+    --_max-width-labels-above: calc(var(--_max-columns) * var(--_column-width-labels-above) + var(--_max-total-gap));
+    --_max-width-labels-aside: calc(var(--_max-columns) * var(--_column-width-labels-aside) + var(--_max-total-gap));
+    --_max-width: var(--_max-width-labels-above);
+
     display: flex;
-    min-width: var(--_column-width-labels-above);
+    min-width: var(--_min-width);
   }
 
   :host([auto-responsive]) #layout {
@@ -61,10 +76,7 @@ export const formLayoutStyles = css`
     --_form-item-labels-aside: ' '; /* false */
 
     /* CSS grid related properties */
-    --_grid-column-gap: var(--vaadin-form-layout-column-spacing);
     --_grid-column-width: var(--_column-width-labels-above);
-    --_grid-column-max-total-gap: calc((var(--_max-columns) - 1) * var(--_grid-column-gap));
-    --_grid-column-max-total-width: calc(var(--_max-columns) * var(--_column-width-labels-above));
     --_grid-repeat: var(--_grid-column-width);
 
     display: grid;
@@ -78,7 +90,7 @@ export const formLayoutStyles = css`
     grid-auto-columns: 0;
 
     justify-items: start;
-    gap: var(--vaadin-form-layout-row-spacing) var(--_grid-column-gap);
+    gap: var(--vaadin-form-layout-row-spacing) var(--vaadin-form-layout-column-spacing);
 
     /*
       To prevent the layout from exceeding the column limit defined by --_max-columns,
@@ -92,17 +104,17 @@ export const formLayoutStyles = css`
       number of columns inside <vaadin-overlay>, which creates a new stacking context
       without a predefined width.
     */
-    width: calc(var(--_grid-column-max-total-width) + var(--_grid-column-max-total-gap));
+    width: var(--_max-width);
 
     /*
       Firefox requires min-width on both :host and #layout to allow the layout
       to shrink below the value specified in the CSS width property above.
     */
-    min-width: inherit;
+    min-width: var(--_min-width);
   }
 
   :host([auto-responsive]) #layout::before {
-    background-position-y: var(--_column-width-labels-aside);
+    background-position-y: var(--_min-width-labels-aside);
   }
 
   :host([auto-responsive]) #layout ::slotted(*) {
@@ -118,8 +130,8 @@ export const formLayoutStyles = css`
     grid-column-start: var(--_grid-colstart, auto);
   }
 
-  :host([auto-responsive][labels-aside]) #layout {
-    --_grid-column-max-total-width: calc(var(--_max-columns) * var(--_column-width-labels-aside));
+  :host([auto-responsive][labels-aside]) {
+    --_max-width: var(--_max-width-labels-aside);
   }
 
   :host([auto-responsive][labels-aside]) #layout[fits-labels-aside] {
@@ -138,7 +150,7 @@ export const formLayoutStyles = css`
       reached yet.
     */
     --_grid-repeat: minmax(
-      max(var(--_grid-column-width), calc((100% - var(--_grid-column-max-total-gap)) / var(--_max-columns))),
+      max(var(--_grid-column-width), calc((100% - var(--_max-total-gap)) / var(--_max-columns))),
       1fr
     );
 
