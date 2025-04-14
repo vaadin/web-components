@@ -97,52 +97,31 @@ describe('CSS rules extraction', () => {
     });
 
     it('should extract rules from tag-scoped @media', () => {
-      const style = new CSSStyleSheet();
-      style.replaceSync(`
+      const style0 = new CSSStyleSheet();
+      style0.replaceSync(`
         @media test-button {
           :host {
             color: black;
           }
         }
       `);
-
-      document.adoptedStyleSheets = [style];
-
-      const rules = extractTagScopedCSSRules(document, 'test-button');
-      expect(rules).to.have.lengthOf(1);
-      expect(rules[0].cssText).to.equal(':host { color: black; }');
-    });
-
-    it('should put adoptedStyleSheet rules after other rules', () => {
-      fixtureSync(`
-        <style>
-          @media test-button {
-            :host {
-              color: black;
-            }
-          }
-        </style>
-      `);
-
-      const style = new CSSStyleSheet();
-      style.replaceSync(`
+      const style1 = new CSSStyleSheet();
+      style1.replaceSync(`
         @media test-button {
           :host {
             color: red;
           }
         }
       `);
-      document.adoptedStyleSheets = [style];
+      document.adoptedStyleSheets = [style0, style1];
 
       const rules = extractTagScopedCSSRules(document, 'test-button');
       expect(rules).to.have.lengthOf(2);
       expect(rules[0].cssText).to.equal(':host { color: black; }');
       expect(rules[1].cssText).to.equal(':host { color: red; }');
     });
-  });
 
-  describe('shadowRoot', () => {
-    it('should extract rules from tag-scoped @media inside shadowRoot', () => {
+    it('should put adoptedStyleSheet rules after other rules', () => {
       const style = new CSSStyleSheet();
       style.replaceSync(`
         @media test-button {
@@ -151,14 +130,58 @@ describe('CSS rules extraction', () => {
           }
         }
       `);
+      document.adoptedStyleSheets = [style];
 
-      const root = document.createElement('div');
+      fixtureSync(`
+        <style>
+          @media test-button {
+            :host {
+              color: red;
+            }
+          }
+        </style>
+      `);
+
+      const rules = extractTagScopedCSSRules(document, 'test-button');
+      expect(rules).to.have.lengthOf(2);
+      expect(rules[0].cssText).to.equal(':host { color: red; }');
+      expect(rules[1].cssText).to.equal(':host { color: black; }');
+    });
+  });
+
+  describe('shadowRoot', () => {
+    let root;
+
+    beforeEach(() => {
+      root = fixtureSync('<div></div>');
       root.attachShadow({ mode: 'open' });
-      root.shadowRoot.adoptedStyleSheets = [style];
+    });
+
+    it('should extract rules from tag-scoped @media inside shadowRoot', () => {
+      const adoptedStyleSheet = new CSSStyleSheet();
+      adoptedStyleSheet.replaceSync(`
+        @media test-button {
+          :host {
+            color: black;
+          }
+        }
+      `);
+      root.shadowRoot.adoptedStyleSheets = [adoptedStyleSheet];
+
+      root.shadowRoot.innerHTML = `
+        <style>
+          @media test-button {
+            :host {
+              color: red;
+            }
+          }
+        </style>
+      `;
 
       const rules = extractTagScopedCSSRules(root.shadowRoot, 'test-button');
-      expect(rules).to.have.lengthOf(1);
-      expect(rules[0].cssText).to.equal(':host { color: black; }');
+      expect(rules).to.have.lengthOf(2);
+      expect(rules[0].cssText).to.equal(':host { color: red; }');
+      expect(rules[1].cssText).to.equal(':host { color: black; }');
     });
   });
 });

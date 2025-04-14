@@ -84,7 +84,7 @@ export function extractTagScopedCSSRules(root, tagName) {
   const styleSheets = new Set([...root.styleSheets]);
   const adoptedStyleSheets = new Set([...root.adoptedStyleSheets]);
 
-  return [...styleSheets.difference(adoptedStyleSheets), ...adoptedStyleSheets].flatMap((styleSheet) => {
+  return [...styleSheets.union(adoptedStyleSheets)].flatMap((styleSheet) => {
     return extractStyleSheetTagScopedCSSRules(styleSheet, tagName);
   });
 }
