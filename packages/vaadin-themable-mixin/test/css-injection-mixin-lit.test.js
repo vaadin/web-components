@@ -41,6 +41,18 @@ class TestBar extends CSSInjectionMixin(LitElement) {
 
 customElements.define(TestBar.is, TestBar);
 
+class TestBaz extends TestFoo {
+  static get is() {
+    return 'test-baz';
+  }
+
+  render() {
+    return html`<div part="content">Baz Content</div>`;
+  }
+}
+
+customElements.define(TestBaz.is, TestBaz);
+
 const TEST_FOO_STYLES = `
   html, :host {
     --test-foo-css-inject: 1;
@@ -406,6 +418,28 @@ describe('CSS injection', () => {
       host.shadowRoot.appendChild(element);
 
       assertInjectedStyle();
+    });
+  });
+
+  describe('extending class', () => {
+    beforeEach(async () => {
+      element = fixtureSync('<test-baz></test-baz>');
+      await nextRender();
+      content = element.shadowRoot.querySelector('[part="content"]');
+    });
+
+    it('should inject matching styles for the extending component', async () => {
+      const style = document.createElement('style');
+      style.textContent = TEST_FOO_STYLES.replaceAll('foo', 'baz');
+      document.head.appendChild(style);
+
+      await contentTransition();
+      assertInjectedStyle();
+
+      style.remove();
+
+      await contentTransition();
+      assertBaseStyle();
     });
   });
 

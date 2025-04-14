@@ -6,6 +6,11 @@
 import { CSSInjector } from './src/css-injector.js';
 
 /**
+ * @type {string[]}
+ */
+const registeredProperties = new Set();
+
+/**
  * Find enclosing root for given element to gather style rules from.
  *
  * @param {HTMLElement} element
@@ -31,8 +36,13 @@ export const CSSInjectionMixin = (superClass) =>
     static finalize() {
       super.finalize();
 
-      if (this.is) {
-        const propName = this.cssInjectPropName;
+      const propName = this.cssInjectPropName;
+
+      // Prevent registering same property twice when a class extends
+      // another class using this mixin, since `finalize()` is called
+      // by LitElement for all superclasses in the prototype chain.
+      if (this.is && !registeredProperties.has(propName)) {
+        registeredProperties.add(propName);
 
         // Initialize custom property for this class with 0 as default
         // so that changing it to 1 would inject styles to instances
