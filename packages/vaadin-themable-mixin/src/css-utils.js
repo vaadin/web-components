@@ -67,15 +67,3 @@ export function cleanupStyleSheet(component) {
   component.shadowRoot.adoptedStyleSheets = adoptedStyleSheets;
   component.__cssInjectorStyleSheet = undefined;
 }
-
-/**
- * Returns the stylesheet injected into the shadow root of the component
- * by the `injectStyleSheet` function, or undefined if no stylesheet was
- * injected.
- *
- * @param {HTMLElement} component
- * @return {CSSStyleSheet | undefined}
- */
-export function getInjectedStyleSheet(component) {
-  return component.__cssInjectorStyleSheet;
-}
