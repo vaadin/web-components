@@ -41,7 +41,7 @@ export class CSSInjector {
   /** @type {Document | ShadowRoot} */
   #root;
 
-  /** @type {Map<string, Element[]>} */
+  /** @type {Map<string, HTMLElement[]>} */
   #componentsByTag = new Map();
 
   /** @type {Map<string, CSSStyleSheet>} */
@@ -89,13 +89,13 @@ export class CSSInjector {
 
     // If styles for custom property are already loaded for this root,
     // store corresponding tag name so that we can inject styles
-    const value = getComputedStyle(this.rootHost).getPropertyValue(cssInjectPropName);
+    const value = getComputedStyle(this.#rootHost).getPropertyValue(cssInjectPropName);
     if (value === '1') {
       this.#componentStylesAdded(tagName);
     }
 
     // Observe custom property that would trigger injection for this class
-    this.#styleObserver.observe(this.rootHost, cssInjectPropName);
+    this.#styleObserver.observe(this.#rootHost, cssInjectPropName);
   }
 
   /**
@@ -116,7 +116,7 @@ export class CSSInjector {
   #componentStylesAdded(tagName) {
     const stylesheet = this.#styleSheetsByTag.get(tagName) || new CSSStyleSheet();
 
-    const cssText = this.#collectComponentCSSRules(tagName)
+    const cssText = this.#collectComponentScopedCSSRules(tagName)
       .map((rule) => rule.cssText)
       .join('\n');
     stylesheet.replaceSync(cssText);
@@ -136,7 +136,7 @@ export class CSSInjector {
     this.#styleSheetsByTag.delete(tagName);
   }
 
-  #collectComponentCSSRules(tagName) {
+  #collectComponentScopedCSSRules(tagName) {
     // Global stylesheets
     const rules = collectTagScopedCSSRules(document, tagName);
 
@@ -148,7 +148,7 @@ export class CSSInjector {
     return rules;
   }
 
-  get rootHost() {
+  get #rootHost() {
     return this.#root === document ? this.#root.documentElement : this.#root.host;
   }
 }
