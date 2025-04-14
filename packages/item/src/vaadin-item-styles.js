@@ -10,6 +10,7 @@ export const itemStyles = css`
   @layer base {
     :host {
       align-items: center;
+      border-radius: var(--vaadin-item-border-radius, var(--_vaadin-radius-m));
       box-sizing: border-box;
       cursor: pointer;
       display: flex;
@@ -18,7 +19,7 @@ export const itemStyles = css`
       padding: var(--vaadin-item-padding, var(--_vaadin-padding-container));
     }
 
-    :host([focused]) {
+    :host([focus-ring]) {
       outline: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
       outline-offset: calc(var(--vaadin-focus-ring-width) / -1);
     }
@@ -33,6 +34,7 @@ export const itemStyles = css`
     }
 
     [part='checkmark'] {
+      display: var(--vaadin-item-checkmark-display, none);
       height: var(--vaadin-icon-size, 1lh);
       mask-image: var(--_vaadin-icon-checkmark);
       width: var(--vaadin-icon-size, 1lh);
