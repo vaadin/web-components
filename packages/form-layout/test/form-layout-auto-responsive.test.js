@@ -132,6 +132,7 @@ describe('form-layout auto responsive', () => {
             <input placeholder="Last Name">
             <input placeholder="Email">
             <input placeholder="Phone">
+            <input placeholder="Address">
           </vaadin-form-layout>
         </div>`);
       layout = container.firstElementChild;
@@ -143,12 +144,18 @@ describe('form-layout auto responsive', () => {
     });
 
     it('should adjust number of columns based on container width', async () => {
+      layout.minColumns = 2;
+      layout.maxColumns = 4;
+      await nextResize(layout);
+
       const breakpoints = [
+        { width: '500px', columns: 4, rows: 2 },
         { width: '300px', columns: 3, rows: 2 },
-        { width: '200px', columns: 2, rows: 2 },
-        { width: '100px', columns: 1, rows: 4 },
-        { width: '200px', columns: 2, rows: 2 },
+        { width: '200px', columns: 2, rows: 3 },
+        { width: '100px', columns: 2, rows: 3 },
+        { width: '200px', columns: 2, rows: 3 },
         { width: '300px', columns: 3, rows: 2 },
+        { width: '500px', columns: 4, rows: 2 },
       ];
 
       for (const { width, columns, rows } of breakpoints) {

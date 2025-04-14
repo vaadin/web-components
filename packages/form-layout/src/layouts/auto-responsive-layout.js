@@ -130,7 +130,8 @@ export class AutoResponsiveLayout extends AbstractLayout {
       host.style.removeProperty('--_column-width');
     }
 
-    host.style.setProperty('--_max-columns', Math.min(props.maxColumns, maxColumns));
+    host.style.setProperty('--_min-columns', props.minColumns);
+    host.style.setProperty('--_max-columns', Math.min(Math.max(props.minColumns, props.maxColumns), maxColumns));
 
     host.$.layout.toggleAttribute('fits-labels-aside', this.props.labelsAside && this.__fitsLabelsAside);
     host.$.layout.style.setProperty('--_grid-rendered-column-count', this.__renderedColumnCount);
@@ -170,13 +171,13 @@ export class AutoResponsiveLayout extends AbstractLayout {
   }
 
   /** @private */
-  get __columnWidthWithLabelsAside() {
+  get __minWidthLabelsAside() {
     const { backgroundPositionY } = getComputedStyle(this.host.$.layout, '::before');
     return parseFloat(backgroundPositionY);
   }
 
   /** @private */
   get __fitsLabelsAside() {
-    return this.host.offsetWidth >= this.__columnWidthWithLabelsAside;
+    return this.host.offsetWidth >= this.__minWidthLabelsAside;
   }
 }
