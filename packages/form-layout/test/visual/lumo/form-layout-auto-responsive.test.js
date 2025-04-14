@@ -114,7 +114,7 @@ describe('form-layout auto responsive', () => {
       await visualDiff(container, 'min-columns-two-columns');
     });
 
-    it('narrow container forcing fewer than minColumns', async () => {
+    it('narrow container (space for 1 column only)', async () => {
       container.style.width = '100px';
       await nextResize(element);
       await visualDiff(container, 'min-columns-narrow-container');
