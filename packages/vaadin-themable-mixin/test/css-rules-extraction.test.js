@@ -89,4 +89,48 @@ describe('CSS rules extraction', () => {
       expect(rules[2].cssText).to.equal('#error-message { color: red; }');
     }
   });
+
+  describe('adoptedStyleSheets', () => {
+    afterEach(() => {
+      document.adoptedStyleSheets = [];
+    });
+
+    it('should extract rules from tag-scoped @media at-rules', () => {
+      const style = new CSSStyleSheet();
+      style.replaceSync(`
+        @media test-button {
+          :host {
+            color: black;
+          }
+        }
+      `);
+
+      document.adoptedStyleSheets = [style];
+
+      const rules = extractTagScopedCSSRules(document, 'test-button');
+      expect(rules).to.have.length(1);
+      expect(rules[0].cssText).to.equal(':host { color: black; }');
+    });
+  });
+
+  describe('shadowRoot', () => {
+    it('should extract rules from tag-scoped @media at-rules inside shadowRoot', () => {
+      const style = new CSSStyleSheet();
+      style.replaceSync(`
+        @media test-button {
+          :host {
+            color: black;
+          }
+        }
+      `);
+
+      const root = document.createElement('div');
+      root.attachShadow({ mode: 'open' });
+      root.shadowRoot.adoptedStyleSheets = [style];
+
+      const rules = extractTagScopedCSSRules(root.shadowRoot, 'test-button');
+      expect(rules).to.have.length(1);
+      expect(rules[0].cssText).to.equal(':host { color: black; }');
+    });
+  });
 });
