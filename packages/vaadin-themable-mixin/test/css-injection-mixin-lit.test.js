@@ -17,6 +17,7 @@ class TestFoo extends CSSInjectionMixin(ThemableMixin(LitElement)) {
 
       [part='content'] {
         transition: background-color 1ms linear;
+        background-color: yellow;
       }
     `;
   }
@@ -69,12 +70,19 @@ describe('CSS injection', () => {
     await oneEvent(content, 'transitionend');
   }
 
-  function assertStyleApplies() {
+  function assertInjectedStyle() {
+    // background-color: green
     expect(getComputedStyle(content).backgroundColor).to.equal('rgb(0, 128, 0)');
   }
 
-  function assertStyleDoesNotApply() {
-    expect(getComputedStyle(content).backgroundColor).to.equal('rgba(0, 0, 0, 0)');
+  function assertBaseStyle() {
+    // background-color: yellow
+    expect(getComputedStyle(content).backgroundColor).to.equal('rgb(255, 255, 0)');
+  }
+
+  function assertThemeStyle() {
+    // background-color: cyan
+    expect(getComputedStyle(content).backgroundColor).to.equal('rgb(0, 255, 255)');
   }
 
   describe('in global scope', () => {
@@ -91,12 +99,12 @@ describe('CSS injection', () => {
         document.head.appendChild(style);
 
         await contentTransition();
-        assertStyleApplies();
+        assertInjectedStyle();
 
         style.remove();
 
         await contentTransition();
-        assertStyleDoesNotApply();
+        assertBaseStyle();
       });
 
       it('should inject matching styles added to document using link element', async () => {
@@ -104,12 +112,12 @@ describe('CSS injection', () => {
         document.head.appendChild(link);
 
         await contentTransition();
-        assertStyleApplies();
+        assertInjectedStyle();
 
         link.remove();
 
         await contentTransition();
-        assertStyleDoesNotApply();
+        assertBaseStyle();
       });
 
       it('should inject matching styles added to document using adoptedStyleSheets', async () => {
@@ -118,12 +126,12 @@ describe('CSS injection', () => {
         document.adoptedStyleSheets.push(sheet);
 
         await contentTransition();
-        assertStyleApplies();
+        assertInjectedStyle();
 
         document.adoptedStyleSheets.pop();
 
         await contentTransition();
-        assertStyleDoesNotApply();
+        assertBaseStyle();
       });
     });
 
@@ -145,12 +153,12 @@ describe('CSS injection', () => {
         document.body.appendChild(element);
         await nextRender();
         content = element.shadowRoot.querySelector('[part="content"]');
-        assertStyleApplies();
+        assertInjectedStyle();
 
         style.remove();
 
         await contentTransition();
-        assertStyleDoesNotApply();
+        assertBaseStyle();
       });
 
       it('should inject matching styles added to document using link element', async () => {
@@ -161,12 +169,12 @@ describe('CSS injection', () => {
         document.body.appendChild(element);
         await nextRender();
         content = element.shadowRoot.querySelector('[part="content"]');
-        assertStyleApplies();
+        assertInjectedStyle();
 
         link.remove();
 
         await contentTransition();
-        assertStyleDoesNotApply();
+        assertBaseStyle();
       });
 
       it('should inject matching styles added to document using adoptedStyleSheets', async () => {
@@ -179,12 +187,12 @@ describe('CSS injection', () => {
         await nextRender();
         content = element.shadowRoot.querySelector('[part="content"]');
 
-        assertStyleApplies();
+        assertInjectedStyle();
 
         document.adoptedStyleSheets.pop();
 
         await contentTransition();
-        assertStyleDoesNotApply();
+        assertBaseStyle();
       });
     });
   });
@@ -211,12 +219,12 @@ describe('CSS injection', () => {
         document.head.appendChild(style);
 
         await contentTransition();
-        assertStyleApplies();
+        assertInjectedStyle();
 
         style.remove();
 
         await contentTransition();
-        assertStyleDoesNotApply();
+        assertBaseStyle();
       });
 
       it('should inject matching styles added to document using link element when in shadow scope', async () => {
@@ -224,12 +232,12 @@ describe('CSS injection', () => {
         document.head.appendChild(link);
 
         await contentTransition();
-        assertStyleApplies();
+        assertInjectedStyle();
 
         link.remove();
 
         await contentTransition();
-        assertStyleDoesNotApply();
+        assertBaseStyle();
       });
 
       it('should inject matching styles added to document using adoptedStyleSheets when in shadow scope', async () => {
@@ -238,12 +246,12 @@ describe('CSS injection', () => {
         document.adoptedStyleSheets.push(sheet);
 
         await contentTransition();
-        assertStyleApplies();
+        assertInjectedStyle();
 
         document.adoptedStyleSheets.pop();
 
         await contentTransition();
-        assertStyleDoesNotApply();
+        assertBaseStyle();
       });
 
       it('should inject matching styles added to enclosing shadow root using style tag', async () => {
@@ -252,12 +260,12 @@ describe('CSS injection', () => {
         host.shadowRoot.appendChild(style);
 
         await contentTransition();
-        assertStyleApplies();
+        assertInjectedStyle();
 
         style.remove();
 
         await contentTransition();
-        assertStyleDoesNotApply();
+        assertBaseStyle();
       });
 
       it('should inject matching styles added to enclosing shadow root using link element', async () => {
@@ -265,12 +273,12 @@ describe('CSS injection', () => {
         host.shadowRoot.appendChild(link);
 
         await contentTransition();
-        assertStyleApplies();
+        assertInjectedStyle();
 
         link.remove();
 
         await contentTransition();
-        assertStyleDoesNotApply();
+        assertBaseStyle();
       });
 
       it('should inject matching styles added to enclosing shadow root using adoptedStyleSheets', async () => {
@@ -279,12 +287,12 @@ describe('CSS injection', () => {
         host.shadowRoot.adoptedStyleSheets.push(sheet);
 
         await contentTransition();
-        assertStyleApplies();
+        assertInjectedStyle();
 
         host.shadowRoot.adoptedStyleSheets.pop();
 
         await contentTransition();
-        assertStyleDoesNotApply();
+        assertBaseStyle();
       });
 
       it('should not apply styles added to enclosing shadow root after moving to document', async () => {
@@ -293,13 +301,13 @@ describe('CSS injection', () => {
         host.shadowRoot.appendChild(style);
 
         await contentTransition();
-        assertStyleApplies();
+        assertInjectedStyle();
 
         document.body.appendChild(element);
-        assertStyleDoesNotApply();
+        assertBaseStyle();
 
         host.shadowRoot.appendChild(element);
-        assertStyleApplies();
+        assertInjectedStyle();
       });
     });
 
@@ -314,12 +322,12 @@ describe('CSS injection', () => {
         await nextRender();
         content = element.shadowRoot.querySelector('[part="content"]');
 
-        assertStyleApplies();
+        assertInjectedStyle();
 
         style.remove();
 
         await contentTransition();
-        assertStyleDoesNotApply();
+        assertBaseStyle();
       });
 
       it('should inject matching styles added to enclosing shadow root using link element', async () => {
@@ -331,12 +339,12 @@ describe('CSS injection', () => {
         await nextRender();
         content = element.shadowRoot.querySelector('[part="content"]');
 
-        assertStyleApplies();
+        assertInjectedStyle();
 
         link.remove();
 
         await contentTransition();
-        assertStyleDoesNotApply();
+        assertBaseStyle();
       });
 
       it('should inject matching styles added to enclosing shadow root using adoptedStyleSheets', async () => {
@@ -349,12 +357,12 @@ describe('CSS injection', () => {
         await nextRender();
         content = element.shadowRoot.querySelector('[part="content"]');
 
-        assertStyleApplies();
+        assertInjectedStyle();
 
         host.shadowRoot.adoptedStyleSheets.pop();
 
         await contentTransition();
-        assertStyleDoesNotApply();
+        assertBaseStyle();
       });
     });
   });
@@ -380,12 +388,12 @@ describe('CSS injection', () => {
 
       element = wrapper.shadowRoot.querySelector('test-foo');
       content = element.shadowRoot.querySelector('[part="content"]');
-      assertStyleApplies();
+      assertInjectedStyle();
 
       style.remove();
 
       await contentTransition();
-      assertStyleDoesNotApply();
+      assertBaseStyle();
     });
 
     it('should inject matching styles after moving to parent shadow host', async () => {
@@ -397,7 +405,7 @@ describe('CSS injection', () => {
 
       host.shadowRoot.appendChild(element);
 
-      assertStyleApplies();
+      assertInjectedStyle();
     });
   });
 
@@ -425,7 +433,7 @@ describe('CSS injection', () => {
     });
 
     it('should not remove styles from injected stylesheets when calling registerStyles()', () => {
-      assertStyleApplies();
+      assertInjectedStyle();
 
       registerStyles(
         'test-foo',
@@ -436,24 +444,24 @@ describe('CSS injection', () => {
         `,
       );
 
-      assertStyleApplies();
+      assertInjectedStyle();
     });
 
     it('should override styles from injected stylesheets when calling registerStyles()', async () => {
-      assertStyleApplies();
+      assertInjectedStyle();
 
       registerStyles(
         'test-foo',
         css`
           [part='content'] {
-            background-color: initial;
+            background-color: cyan;
           }
         `,
       );
 
       await contentTransition();
 
-      assertStyleDoesNotApply();
+      assertThemeStyle();
     });
   });
 });
