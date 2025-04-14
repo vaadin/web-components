@@ -28,17 +28,18 @@ export class ComboBoxItem extends ComboBoxItemMixin(ThemableMixin(DirMixin(Polyl
     return css`
       :host {
         align-items: center;
+        border-radius: var(--vaadin-item-border-radius, var(--_vaadin-radius-m));
         box-sizing: border-box;
         cursor: pointer;
         display: flex;
-        gap: var(--vaadin-combo-box-item-gap, 0 var(--_vaadin-gap-container-inline));
-        height: var(--vaadin-combo-box-item-height, auto);
-        padding: var(--vaadin-combo-box-item-padding, var(--_vaadin-padding-container));
+        gap: var(--vaadin-item-gap, 0 var(--_vaadin-gap-container-inline));
+        height: var(--vaadin-item-height, auto);
+        padding: var(--vaadin-item-padding, var(--_vaadin-padding-container));
       }
 
       :host([focused]) {
         outline: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
-        outline-offset: calc(var(--vaadin-focus-ring-width) / -1);
+        outline-offset: 1px;
       }
 
       :host([hidden]) {
