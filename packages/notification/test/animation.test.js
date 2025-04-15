@@ -1,20 +1,7 @@
 import { expect } from '@vaadin/chai-plugins';
 import { aTimeout, fixtureSync, nextFrame, oneEvent } from '@vaadin/testing-helpers';
 import '../src/vaadin-notification.js';
-import { css, registerStyles } from '@vaadin/vaadin-themable-mixin';
-
-registerStyles(
-  'vaadin-notification-card',
-  css`
-    @keyframes test-animation {
-    }
-
-    :host([opening]),
-    :host([closing]) {
-      animation: test-animation 300ms;
-    }
-  `,
-);
+import './animation-test-styles.js';
 
 describe('animated notifications', () => {
   let wrapper, notifications, container;
