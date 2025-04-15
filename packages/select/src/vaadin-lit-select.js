@@ -41,12 +41,16 @@ class Select extends SelectBaseMixin(ElementMixin(ThemableMixin(PolylitMixin(Lit
       inputFieldContainer,
       screenReaderOnly,
       css`
-        :host {
-          position: relative;
+        ::slotted([slot='value']) {
+          flex: 1;
         }
 
-        ::slotted([slot='value']) {
-          flex-grow: 1;
+        [part='toggle-button'] {
+          cursor: default;
+          background: var(--_vaadin-color-subtle);
+          height: var(--vaadin-icon-size, 1lh);
+          mask-image: var(--_vaadin-icon-chevron-down);
+          width: var(--vaadin-icon-size, 1lh);
         }
       `,
     ];
