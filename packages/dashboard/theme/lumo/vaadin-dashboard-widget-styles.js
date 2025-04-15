@@ -57,7 +57,7 @@ const dashboardWidgetAndSection = css`
 
   header {
     display: flex;
-    align-items: center;
+    align-items: start;
     box-sizing: border-box;
     justify-content: space-between;
   }
@@ -65,10 +65,11 @@ const dashboardWidgetAndSection = css`
   [part='title'] {
     flex: 1;
     color: var(--lumo-header-text-color);
-    margin: 0;
-    white-space: nowrap;
+    white-space: var(--vaadin-dashboard-widget-title-wrap, nowrap);
     text-overflow: ellipsis;
     overflow: hidden;
+    line-height: var(--lumo-line-height-s);
+    align-self: safe center;
   }
 
   vaadin-dashboard-button {
@@ -191,7 +192,7 @@ const dashboardWidget = css`
 
   header {
     min-height: var(--lumo-size-l);
-    padding: 0 var(--lumo-space-m);
+    padding: var(--lumo-space-xs) var(--lumo-space-m);
   }
 
   :host([editable]) header {
@@ -211,6 +212,10 @@ const dashboardWidget = css`
     border-top-left-radius: 0;
     border-top-right-radius: 0;
     overflow: hidden;
+  }
+
+  ::slotted([slot='header-content']) {
+    align-self: center;
   }
 
   :host([resize-mode]) #content,
