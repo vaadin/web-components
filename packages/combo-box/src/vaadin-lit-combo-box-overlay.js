@@ -13,14 +13,45 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
 import { ComboBoxOverlayMixin } from './vaadin-combo-box-overlay-mixin.js';
 
 const comboBoxOverlayStyles = css`
-  #overlay {
+  [part='overlay'] {
+    position: relative;
     width: var(--vaadin-combo-box-overlay-width, var(--_vaadin-combo-box-overlay-default-width, auto));
+  }
+
+  [part~='loader'] {
+    animation: spin 1s linear infinite;
+    border: 2px solid;
+    border-color: var(--_vaadin-background-container-strong) var(--_vaadin-background-container-strong)
+      var(--_vaadin-color-strong) var(--_vaadin-color-strong);
+    border-radius: var(--_vaadin-radius-full);
+    box-sizing: border-box;
+    display: none;
+    height: var(--vaadin-icon-size, 1lh);
+    inset-block-start: calc(var(--vaadin-item-overlay-padding, 4px) + 6px);
+    inset-inline-end: 8px;
+    pointer-events: none;
+    position: absolute;
+    width: var(--vaadin-icon-size, 1lh);
   }
 
   [part='content'] {
     display: flex;
     flex-direction: column;
     height: 100%;
+  }
+
+  :host([loading]) [part~='loader'] {
+    display: block;
+  }
+
+  :host([loading]) [part~='content'] {
+    min-height: calc(var(--vaadin-icon-size, 1lh) + 12px + var(--vaadin-item-overlay-padding, 4px) * 2);
+  }
+
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
   }
 `;
 
