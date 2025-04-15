@@ -1,7 +1,7 @@
 import { expect } from '@vaadin/chai-plugins';
 import { arrowDown, arrowLeft, arrowRight, arrowUp, fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
-import './not-animated-styles.js';
-import '../vaadin-tabs.js';
+import './tabs-test-styles.js';
+import '../src/vaadin-tabs.js';
 
 describe('scrollable tabs', () => {
   let tabs, items, scroller;
@@ -112,7 +112,7 @@ describe('scrollable tabs', () => {
         beforeEach(async () => {
           itemsInViewport = new Set();
           tabs.setAttribute('dir', dir);
-          await nextFrame();
+          await nextRender();
         });
 
         it('should have displayed all the items fully when scrolled forward to the end via button', async () => {

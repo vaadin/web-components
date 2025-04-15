@@ -5,13 +5,13 @@ import {
   enter,
   fixtureSync,
   listenOnce,
-  nextFrame,
   nextRender,
   nextResize,
   space,
 } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import '../vaadin-tabs.js';
+import './tabs-test-styles.js';
+import '../src/vaadin-tabs.js';
 
 describe('tabs', () => {
   let tabs;
@@ -103,7 +103,7 @@ describe('tabs', () => {
               tabs.style.height = '100px';
             }
             await nextResize(tabs);
-            await nextFrame();
+            await nextRender();
           });
 
           afterEach(() => {
@@ -181,7 +181,7 @@ describe('tabs', () => {
 
           it('should update overflow on items change', async () => {
             tabs.items.forEach((item) => item.remove());
-            await nextFrame();
+            await nextRender();
             expect(tabs.hasAttribute('overflow')).to.be.false;
           });
         });
@@ -247,6 +247,7 @@ describe('flex child tabs', () => {
   });
 });
 
+// TODO: should be either covered by base styles or moved to visual tests
 describe('flex equal width tabs', () => {
   let wrapper, tabs;
 
