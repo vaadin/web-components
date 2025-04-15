@@ -6,25 +6,30 @@
 import { css } from 'lit';
 
 export const numberFieldStyles = css`
-  :host([readonly]) [part$='button'] {
-    pointer-events: none;
-  }
-
-  [part='decrease-button']::before {
-    content: '\\2212';
-  }
-
-  [part='increase-button']::before {
-    content: '+';
+  :host([step-buttons-visible]) ::slotted(input) {
+    text-align: center;
   }
 
   [part='decrease-button'],
   [part='increase-button'] {
-    -webkit-user-select: none;
-    user-select: none;
+    background: var(--_vaadin-color-subtle);
+    height: var(--vaadin-icon-size, 1lh);
+    width: var(--vaadin-icon-size, 1lh);
+  }
+
+  [part='decrease-button'] {
+    mask-image: var(--_vaadin-icon-minus);
+  }
+
+  [part='increase-button'] {
+    mask-image: var(--_vaadin-icon-plus);
   }
 
   :host([dir='rtl']) [part='input-field'] {
     direction: ltr;
+  }
+
+  :host([readonly]) [part$='button'] {
+    pointer-events: none;
   }
 `;
