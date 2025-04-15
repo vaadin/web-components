@@ -20,6 +20,7 @@ const section = css`
     line-height: var(--lumo-line-height-s);
     padding-inline: var(--lumo-space-s);
     min-height: var(--lumo-size-l);
+    align-items: center;
   }
 
   [part='title'] {
