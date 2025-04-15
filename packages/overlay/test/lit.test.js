@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync } from '@vaadin/testing-helpers';
-import '../vaadin-overlay.js';
+import '../src/vaadin-overlay.js';
 import { html, render } from 'lit';
 
 describe('lit', () => {

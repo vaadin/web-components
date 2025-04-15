@@ -1,7 +1,7 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import '../vaadin-side-nav.js';
+import '../src/vaadin-side-nav.js';
 
 describe('side-nav', () => {
   let sideNav;

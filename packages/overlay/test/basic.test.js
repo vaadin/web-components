@@ -1,7 +1,7 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, isIOS, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import '../vaadin-overlay.js';
+import '../src/vaadin-overlay.js';
 import { createOverlay } from './helpers.js';
 
 describe('vaadin-overlay', () => {
