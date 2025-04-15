@@ -8,6 +8,7 @@ import { css } from 'lit';
 export const valueButton = css`
   :host {
     min-height: 1lh;
+    outline: none;
     overflow: hidden;
     white-space: nowrap;
     width: 100%;
