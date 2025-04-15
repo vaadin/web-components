@@ -14,9 +14,8 @@ import {
   touchstart,
 } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import './not-animated-styles.js';
-import '../vaadin-combo-box-light.js';
-import '@vaadin/text-field/vaadin-text-field.js';
+import '../src/vaadin-combo-box-light.js';
+import '@vaadin/text-field/src/vaadin-text-field.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
 import { getFirstItem } from './helpers.js';
