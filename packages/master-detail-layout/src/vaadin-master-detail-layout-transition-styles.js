@@ -6,284 +6,115 @@
 import { css } from 'lit';
 
 export const transitionStyles = css`
-  html:not([dir='rtl']) {
-    --_vaadin-master-detail-layout-dir-multiplier: 1;
-  }
-
-  html[dir='rtl'] {
-    --_vaadin-master-detail-layout-dir-multiplier: -1;
-  }
-
-  /* Default cross-fade animation */
-  vaadin-master-detail-layout[transition] {
-    view-transition-name: vaadin-master-detail-layout;
-  }
-
-  ::view-transition-group(vaadin-master-detail-layout) {
-    animation-duration: var(--vaadin-master-detail-layout-transition-duration, 300ms);
-  }
-
-  /* Overlay - horizontal - add */
-
-  vaadin-master-detail-layout[overlay][orientation='horizontal'][transition='add']::part(detail) {
-    view-transition-name: vaadin-master-detail-layout-overlay-horizontal-detail-add;
-  }
-
-  ::view-transition-group(vaadin-master-detail-layout-overlay-horizontal-detail-add) {
-    clip-path: inset(0);
-  }
-
-  ::view-transition-new(vaadin-master-detail-layout-overlay-horizontal-detail-add) {
-    animation: var(--vaadin-master-detail-layout-transition-duration, 300ms) ease both
-      vaadin-master-detail-layout-overlay-horizontal-detail-add;
-  }
-
-  @keyframes vaadin-master-detail-layout-overlay-horizontal-detail-add {
-    from {
-      transform: translateX(calc(100% * var(--_vaadin-master-detail-layout-dir-multiplier)));
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      --_vaadin-mdl-dir-multiplier: 1;
+      --_vaadin-mdl-stack-master-offset: 20%;
+      --_vaadin-mdl-stack-master-clip-path: inset(0 0 0 var(--_vaadin-mdl-stack-master-offset));
     }
-  }
 
-  /* Overlay - horizontal - remove */
-
-  vaadin-master-detail-layout[overlay][orientation='horizontal'][transition='remove']::part(detail) {
-    view-transition-name: vaadin-master-detail-layout-overlay-horizontal-detail-remove;
-  }
-
-  ::view-transition-group(vaadin-master-detail-layout-overlay-horizontal-detail-remove) {
-    clip-path: inset(0);
-  }
-
-  ::view-transition-old(vaadin-master-detail-layout-overlay-horizontal-detail-remove) {
-    animation: var(--vaadin-master-detail-layout-transition-duration, 300ms) ease both
-      vaadin-master-detail-layout-overlay-horizontal-detail-remove;
-  }
-
-  @keyframes vaadin-master-detail-layout-overlay-horizontal-detail-remove {
-    to {
-      transform: translateX(calc(100% * var(--_vaadin-master-detail-layout-dir-multiplier)));
+    html[dir='rtl'] {
+      --_vaadin-mdl-dir-multiplier: -1;
+      --_vaadin-mdl-stack-master-clip-path: inset(0 var(--_vaadin-mdl-stack-master-offset) 0 0);
     }
-  }
 
-  /* Stack - horizontal - add */
+    ::view-transition-group(vaadin-master-detail-layout-master),
+    ::view-transition-group(vaadin-master-detail-layout-detail) {
+      animation-duration: 0.25s;
+    }
 
-  vaadin-master-detail-layout[stack][orientation='horizontal'][transition='add'] {
-    view-transition-name: vaadin-master-detail-layout-stack-horizontal-add;
-  }
+    vaadin-master-detail-layout[transition]:not([transition='replace']):not([overlay], [stack])::part(detail),
+    vaadin-master-detail-layout[transition]:is([overlay], [stack])::part(_detail-internal) {
+      view-transition-name: vaadin-master-detail-layout-detail;
+    }
 
-  ::view-transition-group(vaadin-master-detail-layout-stack-horizontal-add) {
-    clip-path: inset(0);
-  }
+    ::view-transition-group(vaadin-master-detail-layout-detail) {
+      clip-path: inset(0);
+    }
 
-  ::view-transition-new(vaadin-master-detail-layout-stack-horizontal-add) {
-    animation: var(--vaadin-master-detail-layout-transition-duration, 300ms) ease both
-      vaadin-master-detail-layout-stack-horizontal-add-new;
-  }
+    ::view-transition-new(vaadin-master-detail-layout-detail),
+    ::view-transition-old(vaadin-master-detail-layout-detail) {
+      animation-name: vaadin-mdl-detail-slide-in;
+    }
 
-  ::view-transition-old(vaadin-master-detail-layout-stack-horizontal-add) {
-    animation: var(--vaadin-master-detail-layout-transition-duration, 300ms) ease both
-      vaadin-master-detail-layout-stack-horizontal-add-old;
-  }
+    ::view-transition-old(vaadin-master-detail-layout-detail) {
+      animation-direction: reverse;
+    }
 
-  @keyframes vaadin-master-detail-layout-stack-horizontal-add-new {
-    from {
-      transform: translateX(calc(100px * var(--_vaadin-master-detail-layout-dir-multiplier)));
+    @keyframes vaadin-mdl-detail-slide-in {
+      0% {
+        translate: calc((100% + 30px) * var(--_vaadin-mdl-dir-multiplier));
+      }
+    }
+
+    vaadin-master-detail-layout[orientation='horizontal'][stack][has-detail]::part(master) {
+      translate: calc(var(--_vaadin-mdl-stack-master-offset) * var(--_vaadin-mdl-dir-multiplier) * -1);
       opacity: 0;
     }
-  }
 
-  @keyframes vaadin-master-detail-layout-stack-horizontal-add-old {
-    to {
-      transform: translateX(calc(-100px * var(--_vaadin-master-detail-layout-dir-multiplier)));
-      opacity: 0;
+    vaadin-master-detail-layout[transition]::part(master) {
+      view-transition-name: vaadin-master-detail-layout-master;
     }
-  }
 
-  /* Stack - horizontal - remove */
-
-  vaadin-master-detail-layout[stack][orientation='horizontal'][transition='remove'] {
-    view-transition-name: vaadin-master-detail-layout-stack-horizontal-remove;
-  }
-
-  ::view-transition-group(vaadin-master-detail-layout-stack-horizontal-remove) {
-    clip-path: inset(0);
-  }
-
-  ::view-transition-new(vaadin-master-detail-layout-stack-horizontal-remove) {
-    animation: var(--vaadin-master-detail-layout-transition-duration, 300ms) ease both
-      vaadin-master-detail-layout-stack-horizontal-remove-new;
-  }
-
-  ::view-transition-old(vaadin-master-detail-layout-stack-horizontal-remove) {
-    animation: var(--vaadin-master-detail-layout-transition-duration, 300ms) ease both
-      vaadin-master-detail-layout-stack-horizontal-remove-old;
-  }
-
-  @keyframes vaadin-master-detail-layout-stack-horizontal-remove-new {
-    from {
-      transform: translateX(calc(-100px * var(--_vaadin-master-detail-layout-dir-multiplier)));
-      opacity: 0;
+    vaadin-master-detail-layout[orientation='horizontal'][stack][transition='add']::part(master) {
+      view-transition-class: stack-add;
     }
-  }
 
-  @keyframes vaadin-master-detail-layout-stack-horizontal-remove-old {
-    to {
-      transform: translateX(calc(100px * var(--_vaadin-master-detail-layout-dir-multiplier)));
-      opacity: 0;
+    vaadin-master-detail-layout[orientation='horizontal'][stack][transition='remove']::part(master) {
+      view-transition-class: stack-remove;
     }
-  }
 
-  /* Stack - horizontal - viewport - add */
-
-  vaadin-master-detail-layout[stack][orientation='horizontal'][containment='viewport'][transition='add'] {
-    view-transition-name: vaadin-master-detail-layout-stack-horizontal-viewport-add;
-  }
-
-  ::view-transition-new(vaadin-master-detail-layout-stack-horizontal-viewport-add) {
-    animation: var(--vaadin-master-detail-layout-transition-duration, 300ms) ease both
-      vaadin-master-detail-layout-stack-horizontal-add-new;
-  }
-
-  /* Stack - horizontal - viewport - remove */
-
-  vaadin-master-detail-layout[stack][orientation='horizontal'][containment='viewport'][transition='remove'] {
-    view-transition-name: vaadin-master-detail-layout-stack-horizontal-viewport-remove;
-  }
-
-  ::view-transition-old(vaadin-master-detail-layout-stack-horizontal-viewport-remove) {
-    animation: var(--vaadin-master-detail-layout-transition-duration, 300ms) ease both
-      vaadin-master-detail-layout-stack-horizontal-remove-old;
-  }
-
-  /* Overlay - vertical - add */
-
-  vaadin-master-detail-layout[overlay][orientation='vertical'][transition='add']::part(detail) {
-    view-transition-name: vaadin-master-detail-layout-overlay-vertical-detail-add;
-  }
-
-  ::view-transition-group(vaadin-master-detail-layout-overlay-vertical-detail-add) {
-    clip-path: inset(0);
-  }
-
-  ::view-transition-new(vaadin-master-detail-layout-overlay-vertical-detail-add) {
-    animation: var(--vaadin-master-detail-layout-transition-duration, 300ms) ease both
-      vaadin-master-detail-layout-overlay-vertical-detail-add;
-  }
-
-  @keyframes vaadin-master-detail-layout-overlay-vertical-detail-add {
-    from {
-      transform: translateY(100%);
+    ::view-transition-new(vaadin-master-detail-layout-master),
+    ::view-transition-old(vaadin-master-detail-layout-master) {
+      object-fit: none;
+      object-position: 0 0;
     }
-  }
 
-  /* Overlay - vertical - remove */
-
-  vaadin-master-detail-layout[overlay][orientation='vertical'][transition='remove']::part(detail) {
-    view-transition-name: vaadin-master-detail-layout-overlay-vertical-detail-remove;
-  }
-
-  ::view-transition-group(vaadin-master-detail-layout-overlay-vertical-detail-remove) {
-    clip-path: inset(0);
-  }
-
-  ::view-transition-old(vaadin-master-detail-layout-overlay-vertical-detail-remove) {
-    animation: var(--vaadin-master-detail-layout-transition-duration, 300ms) ease both
-      vaadin-master-detail-layout-overlay-vertical-detail-remove;
-  }
-
-  @keyframes vaadin-master-detail-layout-overlay-vertical-detail-remove {
-    to {
-      transform: translateY(100%);
+    ::view-transition-new(vaadin-master-detail-layout-master.stack-remove),
+    ::view-transition-old(vaadin-master-detail-layout-master.stack-remove) {
+      animation-name: vaadin-mdl-master-stack-remove;
+      clip-path: var(--_vaadin-mdl-stack-master-clip-path);
     }
-  }
 
-  /* Stack - vertical - add */
-
-  vaadin-master-detail-layout[stack][orientation='vertical'][transition='add'] {
-    view-transition-name: vaadin-master-detail-layout-stack-vertical-add;
-  }
-
-  ::view-transition-group(vaadin-master-detail-layout-stack-vertical-add) {
-    clip-path: inset(0);
-  }
-
-  ::view-transition-new(vaadin-master-detail-layout-stack-vertical-add) {
-    animation: var(--vaadin-master-detail-layout-transition-duration, 300ms) ease both
-      vaadin-master-detail-layout-stack-vertical-add-new;
-  }
-
-  ::view-transition-old(vaadin-master-detail-layout-stack-vertical-add) {
-    animation: var(--vaadin-master-detail-layout-transition-duration, 300ms) ease both
-      vaadin-master-detail-layout-stack-vertical-add-old;
-  }
-
-  @keyframes vaadin-master-detail-layout-stack-vertical-add-new {
-    from {
-      transform: translateY(100px);
-      opacity: 0;
+    @keyframes vaadin-mdl-master-stack-remove {
+      100% {
+        clip-path: inset(0);
+      }
     }
-  }
 
-  @keyframes vaadin-master-detail-layout-stack-vertical-add-old {
-    to {
-      transform: translateY(-100px);
-      opacity: 0;
+    ::view-transition-new(vaadin-master-detail-layout-master.stack-add),
+    ::view-transition-old(vaadin-master-detail-layout-master.stack-add) {
+      animation-name: vaadin-mdl-master-stack-add;
+      clip-path: inset(0);
     }
-  }
 
-  /* Stack - vertical - remove */
-
-  vaadin-master-detail-layout[stack][orientation='vertical'][transition='remove'] {
-    view-transition-name: vaadin-master-detail-layout-stack-vertical-remove;
-  }
-
-  ::view-transition-group(vaadin-master-detail-layout-stack-vertical-remove) {
-    clip-path: inset(0);
-  }
-
-  ::view-transition-new(vaadin-master-detail-layout-stack-vertical-remove) {
-    animation: var(--vaadin-master-detail-layout-transition-duration, 300ms) ease both
-      vaadin-master-detail-layout-stack-vertical-remove-new;
-  }
-
-  ::view-transition-old(vaadin-master-detail-layout-stack-vertical-remove) {
-    animation: var(--vaadin-master-detail-layout-transition-duration, 300ms) ease both
-      vaadin-master-detail-layout-stack-vertical-remove-old;
-  }
-
-  @keyframes vaadin-master-detail-layout-stack-vertical-remove-new {
-    from {
-      transform: translateY(-100px);
-      opacity: 0;
+    @keyframes vaadin-mdl-master-stack-add {
+      100% {
+        clip-path: var(--_vaadin-mdl-stack-master-clip-path);
+      }
     }
-  }
 
-  @keyframes vaadin-master-detail-layout-stack-vertical-remove-old {
-    to {
-      transform: translateY(100px);
-      opacity: 0;
+    vaadin-master-detail-layout[orientation='vertical']:not([overlay], [stack])[transition]:not(
+        [transition='replace']
+      )::part(detail),
+    vaadin-master-detail-layout[orientation='vertical']:is([overlay], [stack])[transition]::part(_detail-internal) {
+      view-transition-name: vaadin-master-detail-layout-detail;
+      view-transition-class: vertical;
     }
-  }
 
-  /* Stack - vertical - viewport - add */
+    ::view-transition-new(vaadin-master-detail-layout-detail.vertical),
+    ::view-transition-old(vaadin-master-detail-layout-detail.vertical) {
+      animation-name: vaadin-mdl-vertical-detail-slide-in;
+    }
 
-  vaadin-master-detail-layout[stack][orientation='vertical'][containment='viewport'][transition='add'] {
-    view-transition-name: vaadin-master-detail-layout-stack-vertical-viewport-add;
-  }
+    ::view-transition-old(vaadin-master-detail-layout-detail.vertical) {
+      animation-direction: reverse;
+    }
 
-  ::view-transition-new(vaadin-master-detail-layout-stack-vertical-viewport-add) {
-    animation: var(--vaadin-master-detail-layout-transition-duration, 300ms) ease both
-      vaadin-master-detail-layout-stack-vertical-add-new;
-  }
-
-  /* Stack - vertical - viewport - remove */
-
-  vaadin-master-detail-layout[stack][orientation='vertical'][containment='viewport'][transition='remove'] {
-    view-transition-name: vaadin-master-detail-layout-stack-vertical-viewport-remove;
-  }
-
-  ::view-transition-old(vaadin-master-detail-layout-stack-vertical-viewport-remove) {
-    animation: var(--vaadin-master-detail-layout-transition-duration, 300ms) ease both
-      vaadin-master-detail-layout-stack-vertical-remove-old;
+    @keyframes vaadin-mdl-vertical-detail-slide-in {
+      0% {
+        transform: translateY(calc(100% + 30px));
+      }
+    }
   }
 `;

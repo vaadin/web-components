@@ -6,21 +6,16 @@ registerStyles(
   css`
     :host(:is([overlay], [stack])) [part='detail'] {
       background-color: var(--lumo-base-color);
+      box-shadow:
+        0 0 0 1px var(--lumo-shade-5pct),
+        var(--lumo-box-shadow-m);
     }
 
-    :host([overlay]) [part='detail'] {
-      box-shadow: var(--lumo-box-shadow-s);
+    [part='detail'] {
+      border-color: var(--lumo-contrast-10pct);
     }
 
-    :host([overlay][orientation='horizontal']) [part='detail'] {
-      border-inline-start: 1px solid var(--lumo-contrast-10pct);
-    }
-
-    :host([overlay][orientation='vertical']) [part='detail'] {
-      border-block-start: 1px solid var(--lumo-contrast-10pct);
-    }
-
-    :host([overlay]) [part='backdrop'] {
+    [part='backdrop'] {
       background-color: var(--lumo-shade-20pct);
     }
   `,

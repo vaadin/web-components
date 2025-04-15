@@ -23,17 +23,13 @@ import { transitionStyles } from './vaadin-master-detail-layout-transition-style
  * The following custom CSS properties are available for styling (needed to be set
  * on the `<html>` element since they are used by the global view transitions):
  *
- * Custom CSS property                                  | Description         | Default
- * -----------------------------------------------------|---------------------|--------
- * `--vaadin-master-detail-layout-transition-duration`  | Transition duration | 300ms
- *
  * The following shadow DOM parts are available for styling:
  *
  * Part name      | Description
  * ---------------|----------------------
- * `backdrop`     | Backdrop covering the master area in the overlay mode
- * `master`       | The master area
- * `detail`       | The detail area
+ * `backdrop`     | Backdrop covering the master area in the overlay and stack modes.
+ * `master`       | The master area.
+ * `detail`       | The detail area.
  *
  * The following state attributes are available for styling:
  *
@@ -61,217 +57,114 @@ class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ElementMixin(Themab
 
   static get styles() {
     return css`
+      /* Layout and positioning styles */
+
       :host {
         display: flex;
         box-sizing: border-box;
         height: 100%;
+        max-width: 100%;
+        max-height: 100%;
+        position: relative; /* Keep the positioning context stable across all modes */
+        overflow: hidden;
       }
 
       :host([hidden]) {
         display: none !important;
       }
 
-      :host(:not([has-detail])) [part='detail'],
-      [part='backdrop'] {
-        display: none;
-      }
-
-      /* Overlay mode */
-      :host(:is([overlay], [stack])) {
-        position: relative;
-      }
-
-      :host(:is([overlay], [stack])[containment='layout']) [part='detail'],
-      :host([overlay][containment='layout']) [part='backdrop'] {
-        position: absolute;
-      }
-
-      :host(:is([overlay], [stack])[containment='viewport']) [part='detail'],
-      :host([overlay][containment='viewport']) [part='backdrop'] {
-        position: fixed;
-      }
-
-      :host([overlay][has-detail]) [part='backdrop'] {
-        display: block;
-        inset: 0;
-        z-index: 1;
-      }
-
-      :host([overlay]) [part='detail'] {
-        z-index: 1;
-      }
-
-      :host([overlay][orientation='horizontal']) [part='detail'] {
-        inset-inline-end: 0;
-        height: 100%;
-        width: var(--_detail-min-size, min-content);
-        max-width: 100%;
-      }
-
-      :host([overlay][orientation='horizontal'][containment='viewport']) [part='detail'] {
-        inset-block-start: 0;
-      }
-
-      :host([overlay][orientation='horizontal']) [part='master'] {
-        max-width: 100%;
-      }
-
-      /* No fixed size */
-      :host(:not([has-master-size])) [part='master'],
-      :host(:not([has-detail-size])) [part='detail'] {
-        flex-grow: 1;
-        flex-basis: 50%;
-      }
-
-      /* Fixed size */
-      :host([has-master-size]) [part='master'],
-      :host([has-detail-size]) [part='detail'] {
-        flex-shrink: 0;
-      }
-
-      :host([has-master-size][orientation='horizontal']) [part='master'] {
-        width: var(--_master-size);
-      }
-
-      :host([has-detail-size][orientation='horizontal']:not([stack])) [part='detail'] {
-        width: var(--_detail-size);
-      }
-
-      :host([has-master-size][has-detail-size]) [part='master'] {
-        flex-grow: 1;
-        flex-basis: var(--_master-size);
-      }
-
-      :host([has-master-size][has-detail-size]) [part='detail'] {
-        flex-grow: 1;
-        flex-basis: var(--_detail-size);
-      }
-
-      /* Min size */
-      :host([has-master-min-size][orientation='horizontal']:not([overlay])) [part='master'] {
-        min-width: var(--_master-min-size);
-      }
-
-      :host([has-detail-min-size][orientation='horizontal']:not([overlay]):not([stack])) [part='detail'] {
-        min-width: var(--_detail-min-size);
-      }
-
-      :host([has-master-min-size]) [part='master'],
-      :host([has-detail-min-size]) [part='detail'] {
-        flex-shrink: 0;
-      }
-
-      /* Vertical */
       :host([orientation='vertical']) {
         flex-direction: column;
       }
 
-      :host([orientation='vertical'][overlay]) [part='master'] {
-        max-height: 100%;
+      [part='_detail-internal'] {
+        z-index: 1;
+        display: contents;
+        justify-content: end;
       }
 
-      :host([orientation='vertical'][overlay]) [part='detail'] {
-        inset-block-end: 0;
-        width: 100%;
-        height: var(--_detail-min-size, min-content);
+      :host([orientation='vertical']) [part='_detail-internal'] {
+        flex-direction: column;
       }
 
-      :host([overlay][orientation='vertical'][containment='viewport']) [part='detail'] {
-        inset-inline-start: 0;
-      }
-
-      /* Fixed size */
-      :host([has-master-size][orientation='vertical']) [part='master'] {
-        height: var(--_master-size);
-      }
-
-      :host([has-detail-size][orientation='vertical']:not([stack])) [part='detail'] {
-        height: var(--_detail-size);
-      }
-
-      /* Min size */
-      :host([has-master-min-size][orientation='vertical']:not([overlay])) [part='master'],
-      :host([has-master-min-size][orientation='vertical'][overlay]) {
-        min-height: var(--_master-min-size);
-      }
-
-      :host([has-detail-min-size][orientation='vertical']:not([overlay]):not([stack])) [part='detail'] {
-        min-height: var(--_detail-min-size);
-      }
-
-      /* Stack mode */
-      :host([stack]) [part='master'] {
-        max-height: 100%;
-      }
-
-      :host([stack]) [part='detail'] {
+      :host(:is([overlay], [stack])) [part='_detail-internal'],
+      :host(:is([overlay], [stack])[has-detail]) [part='backdrop'] {
+        display: flex;
+        position: absolute;
         inset: 0;
+        overscroll-behavior: contain;
       }
 
-      [part='master']::before {
-        background-position-y: var(--_stack-threshold);
+      :host(:not([has-detail])) [part='_detail-internal'],
+      [part='backdrop'] {
+        display: none;
+      }
+
+      :host([overlay][orientation='horizontal']) [part='detail'] {
+        margin-inline-start: 50px;
+      }
+
+      :host([overlay][orientation='vertical']) [part='detail'] {
+        margin-block-start: 50px;
+      }
+
+      :host(:is([overlay], [stack])[containment='viewport']) :is([part='_detail-internal'], [part='backdrop']) {
+        position: fixed;
+      }
+
+      /* Sizing styles */
+
+      [part] {
+        box-sizing: border-box;
+        max-width: 100%;
+        max-height: 100%;
+      }
+
+      :host(:not([overlay])) [part] {
+        flex: auto;
+      }
+
+      /* [part='detail'] {
+        min-width: min(100%, 15em);
+        min-height: min(100%, 10em);
+      } */
+
+      :host([overlay]) [part='master'],
+      :host([stack]) [part] {
+        width: 100% !important;
+        height: 100% !important;
+        min-width: auto !important;
+        min-height: auto !important;
+        max-width: 100% !important;
+        max-height: 100% !important;
+      }
+
+      /* Decorative/visual styles */
+
+      [part='backdrop'] {
+        background-color: hsl(0 0 0 / 0.2);
+      }
+
+      [part='detail'] {
+        background: #fff;
+      }
+
+      :host(:is([overlay], [stack])) [part='detail'] {
+        box-shadow: 0 0 20px 0 hsl(0 0 0 / 0.3);
+      }
+
+      :host(:not([overlay], [stack])[orientation='horizontal']) [part='detail'] {
+        border-inline-start: 1px solid hsl(0 0 0 / 0.1);
+      }
+
+      :host(:not([overlay], [stack])[orientation='vertical']) [part='detail'] {
+        border-block-start: 1px solid hsl(0 0 0 / 0.1);
       }
     `;
   }
 
   static get properties() {
     return {
-      /**
-       * Fixed size (in CSS length units) to be set on the detail area.
-       * When specified, it prevents the detail area from growing or
-       * shrinking. If there is not enough space to show master and detail
-       * areas next to each other, the layout switches to the overlay mode.
-       *
-       * @attr {string} detail-size
-       */
-      detailSize: {
-        type: String,
-        sync: true,
-        observer: '__detailSizeChanged',
-      },
-
-      /**
-       * Minimum size (in CSS length units) to be set on the detail area.
-       * When specified, it prevents the detail area from shrinking below
-       * this size. If there is not enough space to show master and detail
-       * areas next to each other, the layout switches to the overlay mode.
-       *
-       * @attr {string} detail-min-size
-       */
-      detailMinSize: {
-        type: String,
-        sync: true,
-        observer: '__detailMinSizeChanged',
-      },
-
-      /**
-       * Fixed size (in CSS length units) to be set on the master area.
-       * When specified, it prevents the master area from growing or
-       * shrinking. If there is not enough space to show master and detail
-       * areas next to each other, the layout switches to the overlay mode.
-       *
-       * @attr {string} master-size
-       */
-      masterSize: {
-        type: String,
-        sync: true,
-        observer: '__masterSizeChanged',
-      },
-
-      /**
-       * Minimum size (in CSS length units) to be set on the master area.
-       * When specified, it prevents the master area from shrinking below
-       * this size. If there is not enough space to show master and detail
-       * areas next to each other, the layout switches to the overlay mode.
-       *
-       * @attr {string} master-min-size
-       */
-      masterMinSize: {
-        type: String,
-        sync: true,
-        observer: '__masterMinSizeChanged',
-      },
-
       /**
        * Define how master and detail areas are shown next to each other,
        * and the way how size and min-size properties are applied to them.
@@ -283,20 +176,6 @@ class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ElementMixin(Themab
         value: 'horizontal',
         reflectToAttribute: true,
         observer: '__orientationChanged',
-        sync: true,
-      },
-
-      /**
-       * When specified, forces the layout to use overlay mode, even if
-       * there is enough space for master and detail to be shown next to
-       * each other using the default (split) mode.
-       *
-       * @attr {boolean} force-overlay
-       */
-      forceOverlay: {
-        type: Boolean,
-        value: false,
-        observer: '__forceOverlayChanged',
         sync: true,
       },
 
@@ -314,19 +193,7 @@ class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ElementMixin(Themab
       },
 
       /**
-       * The threshold (in CSS length units) at which the layout switches to
-       * the "stack" mode, making detail area fully cover the master area.
-       *
-       * @attr {string} stack-threshold
-       */
-      stackThreshold: {
-        type: String,
-        observer: '__stackThresholdChanged',
-        sync: true,
-      },
-
-      /**
-       * When true, the layout does not use animated transitions for the detail area.
+       * When true, the layout does not use animated transitions.
        *
        * @attr {boolean} no-animation
        */
@@ -337,7 +204,7 @@ class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ElementMixin(Themab
 
       /**
        * When true, the component uses the overlay mode. This property is read-only.
-       * In order to enforce the overlay mode, use `forceOverlay` property.
+       * In order to enforce the overlay mode, set the master or detail area min size to 100%.
        * @protected
        */
       _overlay: {
@@ -349,7 +216,7 @@ class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ElementMixin(Themab
 
       /**
        * When true, the component uses the stack mode. This property is read-only.
-       * In order to enforce the stack mode, use `stackThreshold` property.
+       * In order to enforce the stack mode, set the layout and detail area min size to 100%.
        * @protected
        */
       _stack: {
@@ -385,16 +252,22 @@ class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ElementMixin(Themab
   render() {
     return html`
       <div part="backdrop"></div>
-      <div id="master" part="master" ?inert="${this._hasDetail && this._overlay && this.containment === 'layout'}">
+      <div
+        id="master"
+        part="master"
+        ?inert="${this._hasDetail && (this._stack || (this._overlay && this.containment === 'layout'))}"
+      >
         <slot></slot>
       </div>
-      <div
-        id="detail"
-        part="detail"
-        role="${this._overlay || this._stack ? 'dialog' : nothing}"
-        aria-modal="${this._overlay && this.containment === 'viewport' ? 'true' : nothing}"
-      >
-        <slot name="detail" @slotchange="${this.__onDetailSlotChange}"></slot>
+      <div part="_detail-internal">
+        <div
+          id="detail"
+          part="detail"
+          role="${this._overlay || this._stack ? 'dialog' : nothing}"
+          aria-modal="${this._overlay && this.containment === 'viewport' ? 'true' : nothing}"
+        >
+          <slot name="detail" @slotchange="${this.__onDetailSlotChange}"></slot>
+        </div>
       </div>
     `;
   }
@@ -404,7 +277,10 @@ class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ElementMixin(Themab
     const children = e.target.assignedNodes();
 
     this._hasDetail = children.length > 0;
-    this.__detectLayoutMode();
+
+    if (this._hasDetail) {
+      this.__detectLayoutMode();
+    }
 
     // Move focus to the detail area when it is added to the DOM,
     // in case if the layout is using overlay or stack mode.
@@ -425,30 +301,6 @@ class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ElementMixin(Themab
   }
 
   /** @private */
-  __detailSizeChanged(size, oldSize) {
-    this.__updateStyleProperty('detail-size', size, oldSize);
-    this.__detectLayoutMode();
-  }
-
-  /** @private */
-  __detailMinSizeChanged(size, oldSize) {
-    this.__updateStyleProperty('detail-min-size', size, oldSize);
-    this.__detectLayoutMode();
-  }
-
-  /** @private */
-  __masterSizeChanged(size, oldSize) {
-    this.__updateStyleProperty('master-size', size, oldSize);
-    this.__detectLayoutMode();
-  }
-
-  /** @private */
-  __masterMinSizeChanged(size, oldSize) {
-    this.__updateStyleProperty('master-min-size', size, oldSize);
-    this.__detectLayoutMode();
-  }
-
-  /** @private */
   __orientationChanged(orientation, oldOrientation) {
     if (orientation || oldOrientation) {
       this.__detectLayoutMode();
@@ -456,115 +308,62 @@ class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ElementMixin(Themab
   }
 
   /** @private */
-  __forceOverlayChanged(forceOverlay, oldForceOverlay) {
-    if (forceOverlay || oldForceOverlay) {
-      this.__detectLayoutMode();
-    }
-  }
-
-  /** @private */
-  __stackThresholdChanged(threshold, oldThreshold) {
-    if (threshold || oldThreshold) {
-      if (threshold) {
-        this.$.master.style.setProperty('--_stack-threshold', threshold);
-      } else {
-        this.$.master.style.removeProperty('--_stack-threshold');
-      }
-
-      this.__detectLayoutMode();
-    }
-  }
-
-  /** @private */
-  __updateStyleProperty(prop, size, oldSize) {
-    if (size) {
-      this.style.setProperty(`--_${prop}`, size);
-    } else if (oldSize) {
-      this.style.removeProperty(`--_${prop}`);
-    }
-
-    this.toggleAttribute(`has-${prop}`, !!size);
-  }
-
-  /** @private */
   __detectLayoutMode() {
+    // Change back to default split mode to detect if there is enough space
+    // for both areas.
     this._overlay = false;
     this._stack = false;
-
-    if (this.forceOverlay) {
-      this._overlay = true;
-      return;
-    }
-
-    if (this.stackThreshold != null) {
-      // Set stack to true to disable masterMinSize and detailMinSize
-      // that would affect size measurements below when in split mode
-      this._stack = true;
-
-      const threshold = this.__getStackThresholdInPixels();
-      const size = this.orientation === 'vertical' ? this.offsetHeight : this.offsetWidth;
-      if (size > threshold) {
-        this._stack = false;
-      } else {
-        return;
-      }
-    }
 
     if (!this._hasDetail) {
       return;
     }
 
+    let layoutSize,
+      layoutScrollSize = 0,
+      masterSize,
+      detailSize,
+      containerSize;
+
     if (this.orientation === 'vertical') {
-      this.__detectVerticalMode();
+      // this.__detectVerticalMode();
+      layoutSize = this.clientHeight;
+      containerSize = document.documentElement.clientHeight;
+      this.style.maxHeight = 'min-content';
+      masterSize = this.$.master.offsetHeight;
+      detailSize = this.$.detail.offsetHeight;
+      this.style.maxHeight = '';
     } else {
-      this.__detectHorizontalMode();
+      // this.__detectHorizontalMode();
+      layoutSize = this.clientWidth;
+      layoutScrollSize = this.scrollWidth;
+      containerSize = document.documentElement.clientWidth;
+      this.style.maxWidth = 'min-content';
+      masterSize = this.$.master.offsetWidth;
+      detailSize = this.$.detail.offsetWidth;
+      this.style.maxWidth = '';
     }
-  }
-
-  /** @private */
-  __detectHorizontalMode() {
-    const detailWidth = this.$.detail.offsetWidth;
-
-    // Detect minimum width needed by master content. Use max-width to ensure
-    // the layout can switch back to split mode once there is enough space.
-    // If there is master  size or min-size set, use that instead to force the
-    // overlay mode by setting `masterSize` / `masterMinSize` to 100%/
-    this.$.master.style.maxWidth = this.masterSize || this.masterMinSize || 'min-content';
-    const masterWidth = this.$.master.offsetWidth;
-    this.$.master.style.maxWidth = '';
 
     // If the combined minimum size of both the master and the detail content
     // exceeds the size of the layout, the layout changes to the overlay mode.
-    this._overlay = this.offsetWidth < masterWidth + detailWidth;
+    // The extra pixels avoid looping between modes with nested layouts.
+    this._overlay = layoutSize < masterSize + detailSize + 7;
 
     // Toggling the overlay resizes master content, which can cause document
     // scroll bar to appear or disappear, and trigger another resize of the
     // layout which can affect previous measurements and end up in horizontal
     // scroll. Check if that is the case and if so, preserve the overlay mode.
-    if (this.offsetWidth < this.scrollWidth) {
+    if (layoutSize < layoutScrollSize) {
       this._overlay = true;
     }
-  }
 
-  /** @private */
-  __detectVerticalMode() {
-    // Remove overlay attribute temporarily to detect if there is enough space
-    // for both areas so that layout could switch back to the split mode.
-    this._overlay = false;
-
-    const masterHeight = this.$.master.clientHeight;
-
-    // If the combined minimum size of both the master and the detail content
-    // exceeds the available height, the layout changes to the overlay mode.
-    if (this.offsetHeight < masterHeight + this.$.detail.clientHeight) {
-      this._overlay = true;
+    // Change to stack mode once the overlay covers the whole layout
+    if (
+      this._overlay &&
+      ((this.containment === 'layout' && detailSize >= layoutSize - 50) || detailSize >= containerSize - 50)
+    ) {
+      this._overlay = false;
+      this._stack = true;
     }
-  }
-
-  /** @private */
-  __getStackThresholdInPixels() {
-    const { backgroundPositionY } = getComputedStyle(this.$.master, '::before');
-    return parseFloat(backgroundPositionY);
   }
 
   /**
@@ -662,8 +461,12 @@ class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ElementMixin(Themab
    * @protected
    */
   async _finishTransition() {
-    // Detect new layout mode after DOM has been updated
-    this.__detectLayoutMode();
+    // Detect new layout mode after DOM has been updated.
+    // Don't update the mode when detail is removed so that correct view transition styles still apply
+    // (e.g. closing details when in stack mode, the master part should still have a dedicated transition).
+    if (this.getAttribute('transition') !== 'remove') {
+      this.__detectLayoutMode();
+    }
 
     if (!this.__transition) {
       return Promise.resolve();
@@ -674,6 +477,12 @@ class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ElementMixin(Themab
     this.removeAttribute('transition');
     this.__transition = null;
     this.__resolveUpdateCallback = null;
+
+    // Clean up layout mode after the view transition if there is no detail element.
+    if (!this._hasDetail) {
+      this._overlay = false;
+      this._stack = false;
+    }
   }
 }
 
