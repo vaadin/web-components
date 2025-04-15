@@ -10,7 +10,8 @@ import {
   nextUpdate,
   outsideClick,
 } from '@vaadin/testing-helpers';
-import { Popover } from '../src/vaadin-popover.js';
+import './not-animated-styles.js';
+import { Popover } from '../vaadin-popover.js';
 import { mouseenter, mouseleave } from './helpers.js';
 
 describe('trigger', () => {

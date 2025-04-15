@@ -1,5 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextRender, nextUpdate, oneEvent } from '@vaadin/testing-helpers';
+import './not-animated-styles.js';
 import '../src/vaadin-popover.js';
 
 describe('position', () => {

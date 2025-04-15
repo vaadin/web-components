@@ -1,7 +1,8 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextFrame, nextUpdate } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import '../src/vaadin-popover.js';
+import './not-animated-styles.js';
+import '../vaadin-popover.js';
 import { html, nothing, render } from 'lit';
 import { popoverRenderer } from '../lit.js';
 
