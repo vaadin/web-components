@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
-import '../vaadin-virtual-list.js';
+import '../src/vaadin-virtual-list.js';
 
 describe('virtual-list', () => {
   let list;
