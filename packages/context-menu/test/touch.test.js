@@ -11,8 +11,8 @@ import {
   touchstart,
 } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import './not-animated-styles.js';
-import '../vaadin-context-menu.js';
+import './context-menu-test-styles.js';
+import '../src/vaadin-context-menu.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { gestures } from '@vaadin/component-base/src/gestures.js';
 

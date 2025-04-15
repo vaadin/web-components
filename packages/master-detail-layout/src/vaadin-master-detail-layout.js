@@ -372,6 +372,10 @@ class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ElementMixin(Themab
     };
   }
 
+  static get experimental() {
+    return true;
+  }
+
   /** @override */
   get slotStyles() {
     return [transitionStyles];

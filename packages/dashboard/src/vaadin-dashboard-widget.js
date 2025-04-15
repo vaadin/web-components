@@ -13,9 +13,10 @@ import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { css, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { SYNCHRONIZED_ATTRIBUTES, WRAPPER_LOCAL_NAME } from './vaadin-dashboard-helpers.js';
+import { findAncestorInstance, SYNCHRONIZED_ATTRIBUTES, WRAPPER_LOCAL_NAME } from './vaadin-dashboard-helpers.js';
 import { DashboardItemMixin } from './vaadin-dashboard-item-mixin.js';
 import { getDefaultI18n } from './vaadin-dashboard-item-mixin.js';
+import { DashboardSection } from './vaadin-dashboard-section.js';
 
 /**
  * A Widget component for use with the Dashboard component
@@ -202,11 +203,15 @@ class DashboardWidget extends DashboardItemMixin(ElementMixin(ThemableMixin(Poly
       widgetTitle: {
         type: String,
         value: '',
-        observer: '__onWidgetTitleChanged',
       },
 
       /* @private */
-      __nestedHeadingLevel: {
+      __rootHeadingLevel: {
+        type: Number,
+      },
+
+      /* @private */
+      __isNestedWidget: {
         type: Boolean,
         value: false,
       },
@@ -222,10 +227,7 @@ class DashboardWidget extends DashboardItemMixin(ElementMixin(ThemableMixin(Poly
         ${this.__renderFocusButton('selectWidget')}
 
         <header part="header">
-          ${this.__renderDragHandle()}
-          ${this.__nestedHeadingLevel
-            ? html`<h3 id="title" part="title" .hidden=${!this.widgetTitle}>${this.widgetTitle}</h3>`
-            : html`<h2 id="title" part="title" .hidden=${!this.widgetTitle}>${this.widgetTitle}</h2>`}
+          ${this.__renderDragHandle()} ${this.__renderWidgetTitle()}
           <slot name="header-content"></slot>
           ${this.__renderRemoveButton()}
         </header>
@@ -249,13 +251,15 @@ class DashboardWidget extends DashboardItemMixin(ElementMixin(ThemableMixin(Poly
         this.toggleAttribute(attr, !!wrapper[attr]);
       });
       this.__i18n = wrapper.i18n;
+      this.__rootHeadingLevel = wrapper.__rootHeadingLevel;
     }
 
+    this.__updateNestedState();
     const undefinedAncestor = this.closest('*:not(:defined)');
     if (undefinedAncestor) {
-      customElements.whenDefined(undefinedAncestor.localName).then(() => queueMicrotask(() => this.__updateTitle()));
-    } else {
-      this.__updateTitle();
+      customElements.whenDefined(undefinedAncestor.localName).then(() => {
+        queueMicrotask(() => this.__updateNestedState());
+      });
     }
   }
 
@@ -268,14 +272,29 @@ class DashboardWidget extends DashboardItemMixin(ElementMixin(ThemableMixin(Poly
   }
 
   /** @private */
-  __onWidgetTitleChanged() {
-    this.__updateTitle();
+  __renderWidgetTitle() {
+    let effectiveHeadingLevel = this.__rootHeadingLevel;
+    // Default to 2 if not defined
+    if (effectiveHeadingLevel == null) {
+      effectiveHeadingLevel = 2;
+    }
+    // Increase level by 1 for widgets in sections
+    if (this.__isNestedWidget) {
+      effectiveHeadingLevel += 1;
+    }
+    return html`<div
+      id="title"
+      part="title"
+      role="heading"
+      aria-level=${effectiveHeadingLevel}
+      .hidden=${!this.widgetTitle}
+      >${this.widgetTitle}</div
+    >`;
   }
 
   /** @private */
-  __updateTitle() {
-    const titleLevel = getComputedStyle(this).getPropertyValue('--_vaadin-dashboard-title-level');
-    this.__nestedHeadingLevel = titleLevel === '3';
+  __updateNestedState() {
+    this.__isNestedWidget = !!findAncestorInstance(this, DashboardSection);
   }
 }
 

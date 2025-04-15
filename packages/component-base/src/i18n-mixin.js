@@ -90,6 +90,9 @@ export const I18nMixin = (defaultI18n, superClass) =>
      * @param {Object} value
      */
     set i18n(value) {
+      if (value === this.__customI18n) {
+        return;
+      }
       this.__customI18n = value;
       this.__effectiveI18n = deepMerge({}, defaultI18n, this.__customI18n);
     }

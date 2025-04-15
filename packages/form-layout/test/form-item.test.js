@@ -1,9 +1,9 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fire, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import '../vaadin-form-item.js';
-import '@vaadin/custom-field';
-import '@vaadin/text-field';
+import '../src/vaadin-form-item.js';
+import '@vaadin/custom-field/src/vaadin-custom-field.js';
+import '@vaadin/text-field/src/vaadin-text-field.js';
 
 describe('form-item', () => {
   let item, label, input;

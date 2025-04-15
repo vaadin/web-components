@@ -11,7 +11,7 @@ import {
   oneEvent,
 } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import '../vaadin-overlay.js';
+import '../src/vaadin-overlay.js';
 import { createOverlay } from './helpers.js';
 
 describe('interactions', () => {

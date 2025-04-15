@@ -1,7 +1,7 @@
 import { expect } from '@vaadin/chai-plugins';
 import { sendKeys } from '@vaadin/test-runner-commands';
 import { fixtureSync } from '@vaadin/testing-helpers';
-import '../vaadin-map.js';
+import '../src/vaadin-map.js';
 import TileLayer from 'ol/layer/Tile';
 import Map from 'ol/Map';
 import OSM from 'ol/source/OSM';

@@ -1,7 +1,7 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import { isValidSvg } from '../src/vaadin-icon-svg.js';
-import { Iconset } from '../vaadin-iconset.js';
+import { Iconset } from '../src/vaadin-iconset.js';
 
 describe('vaadin-iconset', () => {
   let iconset;

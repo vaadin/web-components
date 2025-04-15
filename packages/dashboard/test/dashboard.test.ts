@@ -15,6 +15,7 @@ import {
   getRemoveButton,
   getResizeHandle,
   getScrollingContainer,
+  getTitleElement,
   setMaximumColumnWidth,
   setMinimumColumnWidth,
   setMinimumRowHeight,
@@ -761,6 +762,46 @@ describe('dashboard', () => {
         dashboard.items = dashboard.items.slice(1);
         await renderAndFocusRestore();
       });
+    });
+  });
+
+  describe('root heading level', () => {
+    beforeEach(async () => {
+      dashboard.rootHeadingLevel = 4;
+      await updateComplete(dashboard);
+      dashboard.items = [{ id: '0' }, { title: 'Section', items: [{ id: '1' }] }];
+      await updateComplete(dashboard);
+    });
+
+    function assertHeadingLevels(expectedRootHeadingLevel: number) {
+      const nonNestedWidget = getElementFromCell(dashboard, 0, 0) as DashboardWidget;
+      expect(getTitleElement(nonNestedWidget)?.getAttribute('aria-level')).to.equal(
+        expectedRootHeadingLevel.toString(),
+      );
+
+      const nestedWidget = getElementFromCell(dashboard, 1, 0) as DashboardWidget;
+      expect(getTitleElement(nestedWidget)?.getAttribute('aria-level')).to.equal(
+        (expectedRootHeadingLevel + 1).toString(),
+      );
+
+      const section = nestedWidget?.closest('vaadin-dashboard-section') as DashboardSection;
+      expect(getTitleElement(section)?.getAttribute('aria-level')).to.equal(expectedRootHeadingLevel.toString());
+    }
+
+    it('should use custom title heading level when set on dashboard', () => {
+      assertHeadingLevels(4);
+    });
+
+    it('should update title heading level when set on dashboard', async () => {
+      dashboard.rootHeadingLevel = 1;
+      await updateComplete(dashboard);
+      assertHeadingLevels(1);
+    });
+
+    it('should use default title heading level when not set on dashboard', async () => {
+      dashboard.rootHeadingLevel = null;
+      await updateComplete(dashboard);
+      assertHeadingLevels(2);
     });
   });
 });
