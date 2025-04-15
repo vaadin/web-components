@@ -1,7 +1,8 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextRender, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import '../vaadin-chart.js';
+import '../theme/vaadin-chart-base-theme.js';
+import '../src/vaadin-chart.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import HttpUtilities from 'highcharts/es-modules/Core/HttpUtilities.js';
 import Highcharts from 'highcharts/es-modules/masters/highstock.src.js';
