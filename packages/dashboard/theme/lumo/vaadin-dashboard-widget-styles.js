@@ -69,6 +69,7 @@ const dashboardWidgetAndSection = css`
     text-overflow: ellipsis;
     overflow: hidden;
     line-height: var(--lumo-line-height-s);
+    margin: 0;
     align-self: safe center;
   }
 
