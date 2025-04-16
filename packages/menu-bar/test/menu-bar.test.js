@@ -1,7 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, focusin, nextRender, nextUpdate } from '@vaadin/testing-helpers';
-import './not-animated-styles.js';
-import '../vaadin-menu-bar.js';
+import '../src/vaadin-menu-bar.js';
 
 describe('custom element definition', () => {
   let menu, tagName;
