@@ -1,6 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
-import './not-animated-styles.js';
 import '../src/vaadin-date-picker.js';
 import { open, untilOverlayScrolled } from './helpers.js';
 
