@@ -1,8 +1,7 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fire, fixtureSync, oneEvent, tap } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import './not-animated-styles.js';
-import '../vaadin-date-picker-light.js';
+import '../src/vaadin-date-picker-light.js';
 import { open, setInputValue } from './helpers.js';
 
 describe('custom input', () => {
