@@ -5,6 +5,10 @@ import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themab
 registerStyles(
   'vaadin-grid',
   css`
+    :host {
+      --_lumo-grid-border-width: 0px;
+    }
+
     [part~='cell'] {
       min-height: 2.25rem;
     }

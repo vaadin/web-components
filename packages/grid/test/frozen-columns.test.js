@@ -78,13 +78,15 @@ const frozenGridFixture = (frozen, frozenToEnd) => {
         let containerElement;
         let containerRows;
         let scrollbarWidth;
+        let borderWidth;
         let translateValue;
 
         beforeEach(() => {
           containerElement = grid.shadowRoot.querySelector(container === 'header' ? 'thead' : 'tbody#items');
           containerRows = getRows(containerElement);
           scrollbarWidth = grid.$.table.offsetWidth - grid.$.table.clientWidth;
-          translateValue = isRTL ? -defaultCellWidth : defaultCellWidth;
+          borderWidth = parseInt(getComputedStyle(grid).getPropertyValue('--_lumo-grid-border-width'));
+          translateValue = isRTL ? -(defaultCellWidth + 2 * borderWidth) : defaultCellWidth;
         });
 
         it('should have a frozen cell in a row', () => {
@@ -221,13 +223,15 @@ const frozenGridFixture = (frozen, frozenToEnd) => {
         let containerElement;
         let containerRows;
         let scrollbarWidth;
+        let borderWidth;
         let translateValue;
 
         beforeEach(() => {
           containerElement = grid.shadowRoot.querySelector(container === 'header' ? 'thead' : 'tbody');
           containerRows = getRows(containerElement);
           scrollbarWidth = grid.$.table.offsetWidth - grid.$.table.clientWidth;
-          const offset = defaultCellWidth + scrollbarWidth;
+          borderWidth = parseInt(getComputedStyle(grid).getPropertyValue('--_lumo-grid-border-width'));
+          const offset = defaultCellWidth + scrollbarWidth + 2 * borderWidth;
           translateValue = isRTL ? offset : -offset;
         });
 
