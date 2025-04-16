@@ -2,7 +2,8 @@ import { expect } from '@vaadin/chai-plugins';
 import { resetMouse, sendMouse, sendMouseToElement } from '@vaadin/test-runner-commands';
 import { aTimeout, fixtureSync, listenOnce, nextFrame, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import '../vaadin-grid.js';
+import './grid-test-styles.js';
+import '../src/vaadin-grid.js';
 import { flushGrid, getBodyCellContent, getFirstCell, getRowBodyCells, getRows } from './helpers.js';
 
 describe('drag and drop', () => {

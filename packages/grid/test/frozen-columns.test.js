@@ -2,7 +2,8 @@ import { expect } from '@vaadin/chai-plugins';
 import { resetMouse, sendMouse } from '@vaadin/test-runner-commands';
 import { fixtureSync, listenOnce, nextRender, nextResize } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import '../vaadin-grid.js';
+import './grid-test-styles.js';
+import '../src/vaadin-grid.js';
 import { isElementFocused } from '@vaadin/a11y-base/src/focus-utils.js';
 import { setNormalizedScrollLeft } from '@vaadin/component-base/src/dir-utils.js';
 import { flushGrid, getRowCells, getRows, infiniteDataProvider, isWithinParentConstraints } from './helpers.js';
@@ -77,15 +78,13 @@ const frozenGridFixture = (frozen, frozenToEnd) => {
         let containerElement;
         let containerRows;
         let scrollbarWidth;
-        let borderWidth;
         let translateValue;
 
         beforeEach(() => {
           containerElement = grid.shadowRoot.querySelector(container === 'header' ? 'thead' : 'tbody#items');
           containerRows = getRows(containerElement);
           scrollbarWidth = grid.$.table.offsetWidth - grid.$.table.clientWidth;
-          borderWidth = parseInt(getComputedStyle(grid).getPropertyValue('--_lumo-grid-border-width'));
-          translateValue = isRTL ? -(defaultCellWidth + 2 * borderWidth) : defaultCellWidth;
+          translateValue = isRTL ? -defaultCellWidth : defaultCellWidth;
         });
 
         it('should have a frozen cell in a row', () => {
@@ -222,15 +221,13 @@ const frozenGridFixture = (frozen, frozenToEnd) => {
         let containerElement;
         let containerRows;
         let scrollbarWidth;
-        let borderWidth;
         let translateValue;
 
         beforeEach(() => {
           containerElement = grid.shadowRoot.querySelector(container === 'header' ? 'thead' : 'tbody');
           containerRows = getRows(containerElement);
           scrollbarWidth = grid.$.table.offsetWidth - grid.$.table.clientWidth;
-          borderWidth = parseInt(getComputedStyle(grid).getPropertyValue('--_lumo-grid-border-width'));
-          const offset = defaultCellWidth + scrollbarWidth + 2 * borderWidth;
+          const offset = defaultCellWidth + scrollbarWidth;
           translateValue = isRTL ? offset : -offset;
         });
 

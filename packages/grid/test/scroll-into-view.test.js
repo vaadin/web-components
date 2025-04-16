@@ -1,6 +1,7 @@
 import { expect } from '@vaadin/chai-plugins';
 import { resetMouse, sendKeys, sendMouse } from '@vaadin/test-runner-commands';
 import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
+import './grid-test-styles.js';
 import '../src/vaadin-grid.js';
 import { flushGrid, getContainerCell, getLastVisibleItem, getPhysicalItems } from './helpers.js';
 
@@ -82,7 +83,7 @@ describe('scroll into view', () => {
 
   it('should not change scroll position when focusing details cell with click', async () => {
     // Make details cell partially visible for clicking
-    grid.style.height = '220px';
+    grid.style.height = '240px';
     await nextFrame();
 
     verifyRowNotFullyVisible(grid, 1);
