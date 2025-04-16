@@ -11,6 +11,7 @@ registerStyles(
       margin: 2px;
       padding: 0 14px;
       margin-inline-start: 0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Roboto', 'Segoe UI', Helvetica, Arial, sans-serif;
     }
 
     ::slotted([slot='overflow']) {
@@ -33,6 +34,7 @@ registerStyles(
     :host {
       display: flex;
       min-height: 2.25rem;
+      font-family: -apple-system, BlinkMacSystemFont, 'Roboto', 'Segoe UI', Helvetica, Arial, sans-serif;
     }
 
     [part='checkmark']::before {
