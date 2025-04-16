@@ -1,7 +1,7 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
-import '@vaadin/item/vaadin-item.js';
-import '../vaadin-list-box.js';
+import '@vaadin/item/src/vaadin-item.js';
+import '../src/vaadin-list-box.js';
 
 describe('vaadin-list-box', () => {
   let listBox, tagName;

@@ -3,7 +3,7 @@ import { fire, fixtureSync, oneEvent, tap } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './not-animated-styles.js';
 import '../vaadin-date-picker-light.js';
-import { open, setInputValue, waitForScrollToFinish } from './helpers.js';
+import { open, setInputValue } from './helpers.js';
 
 describe('custom input', () => {
   let datePicker, overlay;
@@ -67,8 +67,7 @@ describe('custom input', () => {
         await open(datePicker);
       });
 
-      it('should propagate theme attribute to month calendar', async () => {
-        await waitForScrollToFinish(datePicker);
+      it('should propagate theme attribute to month calendar', () => {
         const monthCalendar = datePicker._overlayContent.querySelector('vaadin-month-calendar');
         expect(monthCalendar.getAttribute('theme')).to.equal('foo');
       });

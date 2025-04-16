@@ -1,10 +1,9 @@
 import { expect } from '@vaadin/chai-plugins';
 import { aTimeout, fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import './not-animated-styles.js';
-import '@vaadin/text-field/vaadin-text-field.js';
-import '../vaadin-combo-box-light.js';
-import '../vaadin-combo-box.js';
+import '@vaadin/text-field/src/vaadin-text-field.js';
+import '../src/vaadin-combo-box-light.js';
+import '../src/vaadin-combo-box.js';
 import { setInputValue } from './helpers.js';
 
 const TEMPLATES = {

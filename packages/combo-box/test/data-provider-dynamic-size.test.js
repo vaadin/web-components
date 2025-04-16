@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
-import '@vaadin/text-field/vaadin-text-field.js';
+import '@vaadin/text-field/src/vaadin-text-field.js';
 import '../src/vaadin-combo-box.js';
 import '../src/vaadin-combo-box-light.js';
 import { ComboBoxPlaceholder } from '../src/vaadin-combo-box-placeholder.js';

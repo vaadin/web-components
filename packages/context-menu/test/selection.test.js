@@ -1,10 +1,9 @@
 import { expect } from '@vaadin/chai-plugins';
 import { click, enter, fire, fixtureSync, isIOS, nextRender, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import './not-animated-styles.js';
-import '../vaadin-context-menu.js';
-import '@vaadin/item/vaadin-item.js';
-import '@vaadin/list-box/vaadin-list-box.js';
+import '../src/vaadin-context-menu.js';
+import '@vaadin/item/src/vaadin-item.js';
+import '@vaadin/list-box/src/vaadin-list-box.js';
 
 describe('selection', () => {
   let menu, overlay;
