@@ -1,7 +1,7 @@
 import { expect } from '@vaadin/chai-plugins';
 import { setViewport } from '@vaadin/test-runner-commands';
 import { aTimeout, fixtureSync, nextRender } from '@vaadin/testing-helpers';
-import '../vaadin-crud.js';
+import '../src/vaadin-crud.js';
 import { flushGrid } from './helpers.js';
 
 describe('crud editor', () => {
@@ -31,20 +31,23 @@ describe('crud editor', () => {
       await nextRender(crud._grid);
     });
 
-    it('should have new item title', () => {
+    it('should have new item title', async () => {
       crud._newButton.click();
+      await nextRender();
       expect(header.textContent).to.be.equal('New item');
     });
 
-    it('should have edit item title', () => {
+    it('should have edit item title', async () => {
       crud.editedItem = crud.items[0];
+      await nextRender();
       expect(header.textContent).to.be.equal('Edit item');
     });
 
-    it('should change to new item title', () => {
+    it('should change to new item title', async () => {
       crud.editedItem = crud.items[0];
       expect(header.textContent).to.be.equal('Edit item');
       crud._newButton.click();
+      await nextRender();
       expect(header.textContent).to.be.equal('New item');
     });
   });
@@ -76,31 +79,36 @@ describe('crud editor', () => {
         btnCancel = crud.querySelector('[slot="cancel-button"]');
       });
 
-      it(`should move ${type} form to dialog content with default editorPosition`, () => {
+      it(`should move ${type} form to dialog content with default editorPosition`, async () => {
         crud._grid.activeItem = crud.items[0];
+        await nextRender();
         expect(form.parentElement).to.equal(overlay);
       });
 
-      it(`should move ${type} form to crud when editorPosition set to bottom`, () => {
+      it(`should move ${type} form to crud when editorPosition set to bottom`, async () => {
         crud.editorPosition = 'bottom';
         crud._grid.activeItem = crud.items[0];
+        await nextRender();
         expect(form.parentElement).to.equal(crud);
       });
 
-      it(`should move ${type} form to crud when editorPosition set to aside`, () => {
+      it(`should move ${type} form to crud when editorPosition set to aside`, async () => {
         crud.editorPosition = 'aside';
         crud._grid.activeItem = crud.items[0];
+        await nextRender();
         expect(form.parentElement).to.equal(crud);
       });
 
       it(`should move ${type} form when editorPosition changes from default to bottom`, async () => {
         crud._grid.activeItem = crud.items[0];
+        await nextRender();
         btnCancel.click();
 
         crud.editorPosition = 'bottom';
         await nextRender(crud);
 
         crud._grid.activeItem = crud.items[1];
+        await nextRender();
         expect(form.parentElement).to.equal(crud);
       });
 
@@ -109,12 +117,14 @@ describe('crud editor', () => {
         await nextRender(crud);
 
         crud._grid.activeItem = crud.items[0];
+        await nextRender();
         btnCancel.click();
 
         crud.editorPosition = '';
         await nextRender(crud);
 
         crud._grid.activeItem = crud.items[1];
+        await nextRender();
         expect(form.parentElement).to.equal(overlay);
       });
 
