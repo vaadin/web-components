@@ -118,6 +118,20 @@ describe('vaadin-master-detail-layout', () => {
         expect(getComputedStyle(detail).flexShrink).to.equal('0');
       });
 
+      it('should not overflow in split mode when masterSize is set', async () => {
+        layout.masterSize = '500px';
+        detail.remove();
+        await nextResize(layout);
+
+        // Resize so that size is bigger than layout size.
+        await setViewport({ width: 480, height });
+        await nextResize(layout);
+
+        expect(layout.hasAttribute('overlay')).to.be.false;
+        expect(layout.offsetWidth).to.equal(480);
+        expect(master.offsetWidth).to.equal(layout.offsetWidth);
+      });
+
       it('should not overflow in split mode when masterMinSize is set', async () => {
         layout.masterMinSize = '500px';
         detail.remove();

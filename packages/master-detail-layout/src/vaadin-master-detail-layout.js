@@ -76,6 +76,10 @@ class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ElementMixin(Themab
         display: none;
       }
 
+      :host([orientation='horizontal']) [part='master'] {
+        max-width: 100%;
+      }
+
       /* Overlay mode */
       :host(:is([overlay], [stack])) {
         position: relative;
@@ -110,10 +114,6 @@ class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ElementMixin(Themab
 
       :host([overlay][orientation='horizontal'][containment='viewport']) [part='detail'] {
         inset-block-start: 0;
-      }
-
-      :host([overlay][orientation='horizontal']) [part='master'] {
-        max-width: 100%;
       }
 
       /* No fixed size */
