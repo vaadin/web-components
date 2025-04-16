@@ -123,7 +123,7 @@ const uploadFile = css`
   [part='commands'] {
     display: flex;
     align-items: baseline;
-    align-self: flex-start;
+    align-self: start;
     flex: none;
   }
 
@@ -132,7 +132,7 @@ const uploadFile = css`
     font-size: var(--lumo-icon-size-m);
     font-family: 'lumo-icons';
     line-height: 1;
-    align-self: flex-start;
+    align-self: start;
   }
 
   /* When both icons are hidden, let us keep space for one */
