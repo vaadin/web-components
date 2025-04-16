@@ -19,11 +19,20 @@ registerStyles(
       padding-inline-end: 0;
     }
 
+    ::slotted(input) {
+      padding: 0 0.25em;
+    }
+
     [part$='button'] {
       flex: none;
       font-size: 1.5em;
       width: 1em;
       height: 1em;
+    }
+
+    [part$='button']::before {
+      display: block;
+      height: 100%;
     }
   `,
 );
