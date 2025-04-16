@@ -1,8 +1,8 @@
 import { expect, use as useChaiPlugin } from '@esm-bundle/chai';
-import { render, type RenderResult } from '@testing-library/react';
+import { render, type RenderResult, waitFor } from '@testing-library/react';
+import type { ReactNode } from 'react';
 import chaiAsPromised from 'chai-as-promised';
 import chaiDom from 'chai-dom';
-import { waitFor } from '@testing-library/react';
 import sinon from 'sinon';
 import { MasterDetailLayout, MasterDetailLayoutElement } from '../packages/react-components/src/MasterDetailLayout.js';
 
@@ -69,7 +69,7 @@ describe('MasterDetailLayout', () => {
     expect(detail).to.have.text('Detail content');
   });
 
-  it('should toggle visibility of details area based on content', async () => {
+  it('should toggle visibility of details area when child component type changes', async () => {
     // Render without detail content
     result.rerender(
       <MasterDetailLayout>
@@ -113,6 +113,36 @@ describe('MasterDetailLayout', () => {
     );
 
     await assertDetailsHidden();
+  });
+
+  it('should toggle visibility of details area when content of the same type of child component changes', async () => {
+    function Wrapper({ children }: { children?: ReactNode }) {
+      return children;
+    }
+
+    // Render with empty wrapper
+    result.rerender(
+      <MasterDetailLayout>
+        <MasterDetailLayout.Detail>
+          <Wrapper />
+        </MasterDetailLayout.Detail>
+      </MasterDetailLayout>,
+    );
+
+    await assertDetailsHidden();
+
+    // Render wrapper with content
+    result.rerender(
+      <MasterDetailLayout>
+        <MasterDetailLayout.Detail>
+          <Wrapper>
+            <div>Wrapper content</div>
+          </Wrapper>
+        </MasterDetailLayout.Detail>
+      </MasterDetailLayout>,
+    );
+
+    await assertDetailsVisible('Wrapper content');
   });
 
   it('should start view transition when detail component changes', async () => {

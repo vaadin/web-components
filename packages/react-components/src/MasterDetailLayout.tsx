@@ -100,7 +100,7 @@ function Detail({ children }: DetailProps) {
         setState('idle');
       });
     }
-  }, [state]);
+  }, [state, currentChildren]);
 
   useEffect(() => {
     if (state !== 'idle') {
