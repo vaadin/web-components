@@ -2,7 +2,6 @@ import { expect } from '@vaadin/chai-plugins';
 import { sendKeys, setViewport } from '@vaadin/test-runner-commands';
 import { aTimeout, fixtureSync, nextRender, outsideClick, tabKeyDown, tap } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import './not-animated-styles.js';
 import '../src/vaadin-date-picker.js';
 import { getFocusableCell, open, touchTap, untilOverlayRendered } from './helpers.js';
 

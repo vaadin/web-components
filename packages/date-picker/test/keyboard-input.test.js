@@ -2,12 +2,7 @@ import { expect } from '@vaadin/chai-plugins';
 import { sendKeys } from '@vaadin/test-runner-commands';
 import { aTimeout, enter, fixtureSync, nextRender, tap } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import '../theme/lumo/vaadin-date-picker-overlay-content-styles.js';
-import '../theme/lumo/vaadin-date-picker-overlay-styles.js';
-import '../theme/lumo/vaadin-month-calendar-styles.js';
-import '../theme/lumo/vaadin-date-picker-styles.js';
-import './not-animated-styles.js';
-import '../vaadin-date-picker.js';
+import '../src/vaadin-date-picker.js';
 import { formatISODate, getAdjustedYear, parseDate } from '../src/vaadin-date-picker-helper.js';
 import {
   getFocusableCell,
