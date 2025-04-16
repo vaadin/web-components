@@ -10,7 +10,7 @@ window.Vaadin.featureFlags ||= {};
 window.Vaadin.featureFlags.masterDetailLayoutComponent = true;
 
 describe('stack mode', () => {
-  let layout, detail, detailContent;
+  let layout, master, detail, detailContent;
 
   let width, height;
 
@@ -32,6 +32,7 @@ describe('stack mode', () => {
         </vaadin-master-detail-layout>
       `);
       await nextRender();
+      master = layout.shadowRoot.querySelector('[part="master"]');
       detail = layout.shadowRoot.querySelector('[part="detail"]');
       detailContent = layout.querySelector('[slot="detail"]');
     });
@@ -142,6 +143,62 @@ describe('stack mode', () => {
 
         const input = detailContent.shadowRoot.querySelector('input');
         expect(detailContent.shadowRoot.activeElement).to.equal(input);
+      });
+
+      it('should not overflow in stack mode when masterSize is set', async () => {
+        layout.stackThreshold = '500px';
+        layout.masterSize = '500px';
+        await nextResize(layout);
+
+        // Resize so that size is bigger than layout size.
+        await setViewport({ width: 480, height });
+        await nextResize(layout);
+
+        expect(layout.hasAttribute('stack')).to.be.true;
+        expect(layout.offsetWidth).to.equal(480);
+        expect(master.offsetWidth).to.equal(layout.offsetWidth);
+      });
+
+      it('should not overflow in stack mode when masterMinSize is set', async () => {
+        layout.stackThreshold = '500px';
+        layout.masterMinSize = '500px';
+        await nextResize(layout);
+
+        // Resize so that size is bigger than layout size.
+        await setViewport({ width: 480, height });
+        await nextResize(layout);
+
+        expect(layout.hasAttribute('stack')).to.be.true;
+        expect(layout.offsetWidth).to.equal(480);
+        expect(master.offsetWidth).to.equal(layout.offsetWidth);
+      });
+
+      it('should not overflow in stack mode when detailSize is set', async () => {
+        layout.detailSize = '500px';
+        layout.stackThreshold = '500px';
+        await nextRender();
+
+        // Resize so that min size is bigger than layout size
+        await setViewport({ width: 480, height });
+        await nextResize(layout);
+
+        expect(layout.hasAttribute('stack')).to.be.true;
+        expect(layout.offsetWidth).to.equal(480);
+        expect(detail.offsetWidth).to.equal(layout.offsetWidth);
+      });
+
+      it('should not overflow in stack mode when detailMinSize is set', async () => {
+        layout.detailMinSize = '500px';
+        layout.stackThreshold = '500px';
+        await nextRender();
+
+        // Resize so that min size is bigger than layout size
+        await setViewport({ width: 480, height });
+        await nextResize(layout);
+
+        expect(layout.hasAttribute('stack')).to.be.true;
+        expect(layout.offsetWidth).to.equal(480);
+        expect(detail.offsetWidth).to.equal(layout.offsetWidth);
       });
     });
 
