@@ -1,8 +1,7 @@
 import { expect } from '@vaadin/chai-plugins';
 import { sendKeys } from '@vaadin/test-runner-commands';
 import { fixtureSync, nextRender, outsideClick } from '@vaadin/testing-helpers';
-import './not-animated-styles.js';
-import '../vaadin-context-menu.js';
+import '../src/vaadin-context-menu.js';
 import { getDeepActiveElement } from '@vaadin/a11y-base/src/focus-utils.js';
 import { getMenuItems } from './helpers.js';
 

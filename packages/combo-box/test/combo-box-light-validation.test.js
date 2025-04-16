@@ -2,8 +2,7 @@ import { expect } from '@vaadin/chai-plugins';
 import { sendKeys } from '@vaadin/test-runner-commands';
 import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import './not-animated-styles.js';
-import '../vaadin-combo-box-light.js';
+import '../src/vaadin-combo-box-light.js';
 
 describe('vaadin-combo-box-light - validation', () => {
   let comboBox, input;

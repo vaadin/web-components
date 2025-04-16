@@ -120,6 +120,17 @@ export declare class FormLayoutMixinClass {
   maxColumns: number;
 
   /**
+   * When `autoResponsive` is enabled, defines the minimum number of columns
+   * that the layout can create. The layout will create columns at least up
+   * to this limit provided the container width allows it.
+   *
+   * The default value is `1`.
+   *
+   * @attr {number} min-columns
+   */
+  minColumns: number;
+
+  /**
    * When enabled with `autoResponsive`, distributes fields across columns
    * by placing each field in the next available column and wrapping to
    * the next row when the current row is full. `<br>` elements can be

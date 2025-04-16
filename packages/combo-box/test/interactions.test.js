@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { resetMouse, sendKeys, sendMouse } from '@vaadin/test-runner-commands';
+import { resetMouse, sendKeys, sendMouseToElement } from '@vaadin/test-runner-commands';
 import {
   aTimeout,
   click,
@@ -15,8 +15,7 @@ import {
   touchstart,
 } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import './not-animated-styles.js';
-import '../vaadin-combo-box.js';
+import '../src/vaadin-combo-box.js';
 import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
 import { getFirstItem, setInputValue } from './helpers.js';
 
@@ -217,15 +216,14 @@ describe('interactions', () => {
       it('should restore focus to the input on outside click', async () => {
         comboBox.focus();
         comboBox.open();
-        await sendMouse({ type: 'click', position: [200, 200] });
+        await sendMouseToElement({ type: 'click', element: document.body });
         expect(document.activeElement).to.equal(input);
       });
 
       it('should keep focus in the input on toggle button click', async () => {
         comboBox.focus();
         comboBox.open();
-        const rect = comboBox._toggleElement.getBoundingClientRect();
-        await sendMouse({ type: 'click', position: [rect.x, rect.y] });
+        await sendMouseToElement({ type: 'click', element: comboBox._toggleElement });
         expect(document.activeElement).to.equal(input);
       });
 
@@ -233,7 +231,7 @@ describe('interactions', () => {
         comboBox.focus();
         comboBox.setAttribute('focus-ring', '');
         comboBox.open();
-        await sendMouse({ type: 'click', position: [200, 200] });
+        await sendMouseToElement({ type: 'click', element: document.body });
         expect(comboBox.hasAttribute('focus-ring')).to.be.true;
       });
     });

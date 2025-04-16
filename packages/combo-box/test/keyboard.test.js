@@ -12,7 +12,6 @@ import {
   nextRender,
 } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import './not-animated-styles.js';
 import '../src/vaadin-combo-box.js';
 import { getViewportItems, getVisibleItemsCount, scrollToIndex, setInputValue } from './helpers.js';
 
