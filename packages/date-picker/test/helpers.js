@@ -44,20 +44,48 @@ export function getDefaultI18n() {
   };
 }
 
-export async function waitForOverlayRender() {
+/**
+ * Waits until the overlay content finishes scrolling.
+ *
+ * @param {HTMLElement} datePickerOrOverlayContent vaadin-date-picker or vaadin-date-picker-overlay-content
+ * @return {Promise<void>}
+ */
+export async function untilOverlayScrolled(datePickerOrOverlayContent) {
+  const overlayContent = datePickerOrOverlayContent._overlayContent ?? datePickerOrOverlayContent;
+
+  if (overlayContent._revealPromise) {
+    // The overlay content is scrolling.
+    await overlayContent._revealPromise;
+  }
+
+  await nextRender(overlayContent);
+
+  // Flush the ignoreTaps debouncer to make sure taps are not ignored.
+  overlayContent._debouncer?.flush();
+}
+
+/**
+ * Waits until the overlay is rendered.
+ *
+ * @param {HTMLElement} datePicker vaadin-date-picker
+ * @return {Promise<void>}
+ */
+export async function untilOverlayRendered(datePicker) {
   // First, wait for vaadin-overlay-open event
-  await nextRender();
+  await nextRender(datePicker);
 
   // Then wait for scrollers to fully render
-  await nextRender();
+  await nextRender(datePicker);
 
   // Force dom-repeat to render table elements
   flush();
+
+  await untilOverlayScrolled(datePicker);
 }
 
 export async function open(datePicker) {
   datePicker.open();
-  await waitForOverlayRender();
+  await untilOverlayRendered(datePicker);
 }
 
 export function idleCallback() {
@@ -124,22 +152,6 @@ export function getFocusedCell(root) {
   if (focusableCell && isElementFocused(focusableCell)) {
     return focusableCell;
   }
-}
-
-/**
- * Waits for the scroll to finish in the date-picker overlay content.
- *
- * @param {HTMLElement} root vaadin-date-picker or vaadin-date-picker-overlay-content
- */
-export async function waitForScrollToFinish(root) {
-  const overlayContent = root._overlayContent ?? root;
-
-  if (overlayContent._revealPromise) {
-    // The overlay content is scrolling.
-    await overlayContent._revealPromise;
-  }
-
-  await nextRender(overlayContent);
 }
 
 /**
