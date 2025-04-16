@@ -1,8 +1,7 @@
 import { expect } from '@vaadin/chai-plugins';
 import { aTimeout, fixtureSync } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import './not-animated-styles.js';
-import '../vaadin-notification.js';
+import '../src/vaadin-notification.js';
 
 describe('multiple notification', () => {
   let wrapper, notifications, container, regions;

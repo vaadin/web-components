@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { aTimeout, nextFrame } from '@vaadin/testing-helpers';
-import '../vaadin-notification.js';
+import '../src/vaadin-notification.js';
 import { html } from 'lit';
 
 const Notification = customElements.get('vaadin-notification');

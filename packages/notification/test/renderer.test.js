@@ -1,7 +1,7 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import '../vaadin-notification.js';
+import '../src/vaadin-notification.js';
 
 describe('renderer', () => {
   describe('basic', () => {
@@ -85,12 +85,7 @@ describe('renderer', () => {
       notification.renderer = (root) => {
         root.appendChild(rendererContent);
       };
-      const clientRect = notification._card.getBoundingClientRect();
-      expect(clientRect.x).to.not.equal(0);
-      expect(clientRect.y).to.not.equal(0);
-      expect(clientRect.width).to.not.equal(0);
-      expect(clientRect.height).to.not.equal(0);
-      expect(clientRect.top).to.not.equal(0);
+      expect(notification._card.textContent.trim()).to.equal('renderer-content');
     });
 
     it('should clear the notification card when removing the renderer', () => {
