@@ -17,8 +17,8 @@ import {
   touchstart,
 } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import './not-animated-styles.js';
-import '../vaadin-menu-bar.js';
+import './menu-bar-test-styles.js';
+import '../src/vaadin-menu-bar.js';
 import { setCancelSyntheticClickEvents } from '@polymer/polymer/lib/utils/settings.js';
 import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
 

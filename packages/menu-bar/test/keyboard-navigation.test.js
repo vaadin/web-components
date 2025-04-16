@@ -2,8 +2,7 @@ import { expect } from '@vaadin/chai-plugins';
 import { sendKeys } from '@vaadin/test-runner-commands';
 import { fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import './not-animated-styles.js';
-import '../vaadin-menu-bar.js';
+import '../src/vaadin-menu-bar.js';
 
 describe('keyboard navigation', () => {
   let menu, buttons, firstGlobalFocusable, lastGlobalFocusable;
