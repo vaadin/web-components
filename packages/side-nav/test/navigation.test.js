@@ -1,7 +1,7 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
-import '../vaadin-side-nav-item.js';
-import '../vaadin-side-nav.js';
+import '../src/vaadin-side-nav-item.js';
+import '../src/vaadin-side-nav.js';
 
 describe('navigation', () => {
   let sideNav, items;

@@ -1,7 +1,7 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import '../vaadin-list-box.js';
+import '../src/vaadin-list-box.js';
 
 describe('missing import', () => {
   let listBox;
