@@ -11,7 +11,7 @@ import '@vaadin/radio-group';
 import '@vaadin/select';
 import '@vaadin/text-field';
 import { html, render } from 'lit';
-import { waitForOverlayRender } from '@vaadin/date-picker/test/helpers.js';
+import { untilOverlayRendered } from '@vaadin/date-picker/test/helpers.js';
 import { FieldHighlighter } from '../src/vaadin-field-highlighter.js';
 
 async function waitForIntersectionObserver() {
@@ -85,21 +85,21 @@ describe('field components', () => {
       it('should not dispatch vaadin-highlight-hide event on open', async () => {
         field.focus();
         await open(field);
-        await waitForOverlayRender();
+        await untilOverlayRendered(field);
         expect(hideSpy.callCount).to.equal(0);
       });
 
       it('should not dispatch vaadin-highlight-hide event on close without blur', async () => {
         field.focus();
         await open(field);
-        await waitForOverlayRender();
+        await untilOverlayRendered(field);
         field.close();
         expect(hideSpy.callCount).to.equal(0);
       });
 
       it('should not dispatch vaadin-highlight-hide event on close with focus moved to the field', async () => {
         await open(field);
-        await waitForOverlayRender();
+        await untilOverlayRendered(field);
 
         field.focus();
         field.close();
@@ -110,7 +110,7 @@ describe('field components', () => {
       it('should not dispatch vaadin-highlight-hide event on re-focusing field', async () => {
         field.focus();
         await open(field);
-        await waitForOverlayRender();
+        await untilOverlayRendered(field);
 
         await field._overlayContent.focusDateElement();
         field.focus();
@@ -122,7 +122,7 @@ describe('field components', () => {
       it('should not dispatch second vaadin-highlight-show event on re-focusing field', async () => {
         field.focus();
         await open(field);
-        await waitForOverlayRender();
+        await untilOverlayRendered(field);
 
         await field._overlayContent.focusDateElement();
         field.focus();
@@ -134,7 +134,7 @@ describe('field components', () => {
       it('should not dispatch vaadin-highlight-hide event on field blur if opened', async () => {
         field.focus();
         await open(field);
-        await waitForOverlayRender();
+        await untilOverlayRendered(field);
 
         field.blur();
         field.focus();
@@ -146,7 +146,7 @@ describe('field components', () => {
       it('should dispatch vaadin-highlight-hide event on close after blur', async () => {
         field.focus();
         await open(field);
-        await waitForOverlayRender();
+        await untilOverlayRendered(field);
 
         await field._overlayContent.focusDateElement();
         outsideClick();
@@ -169,7 +169,7 @@ describe('field components', () => {
       it('should dispatch vaadin-highlight-show event on open', async () => {
         field.focus();
         field.click();
-        await waitForOverlayRender();
+        await untilOverlayRendered(field);
         expect(showSpy.callCount).to.equal(1);
       });
     });
@@ -468,7 +468,7 @@ describe('field components', () => {
     it('should dispatch vaadin-highlight-hide event on overlay focusout to time picker', async () => {
       date.focus();
       await open(date);
-      await waitForOverlayRender();
+      await untilOverlayRendered(field);
 
       // Focus date element and then time-picker
       await date._overlayContent.focusDateElement();
