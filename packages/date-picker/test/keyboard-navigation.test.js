@@ -2,8 +2,7 @@ import { expect } from '@vaadin/chai-plugins';
 import { sendKeys } from '@vaadin/test-runner-commands';
 import { aTimeout, fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import './not-animated-styles.js';
-import '../vaadin-date-picker.js';
+import '../src/vaadin-date-picker.js';
 import { getDefaultI18n, getFocusedCell, open, untilOverlayRendered, untilOverlayScrolled } from './helpers.js';
 
 describe('keyboard navigation', () => {
