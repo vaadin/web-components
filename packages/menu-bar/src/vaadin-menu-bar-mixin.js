@@ -881,6 +881,14 @@ export const MenuBarMixin = (superClass) =>
           const increment = e.shiftKey ? -1 : 1;
           let idx = currentIdx + increment;
           idx = this._getAvailableIndex(items, idx, increment, (item) => !isElementHidden(item));
+
+          if ((idx > currentIdx && e.shiftKey) || (idx < currentIdx && !e.shiftKey)) {
+            // Prevent "roving tabindex" logic and let the normal Tab behavior if
+            // - currently in the first button submenu and Shift + Tab is pressed,
+            // - currently in the last button submenu and Tab is pressed.
+            return;
+          }
+
           this.__switchSubMenu(items[idx]);
         }
       }
