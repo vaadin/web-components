@@ -76,6 +76,10 @@ class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ElementMixin(Themab
         display: none;
       }
 
+      :host([orientation='horizontal']) [part='master'] {
+        max-width: 100%;
+      }
+
       /* Overlay mode */
       :host(:is([overlay], [stack])) {
         position: relative;
@@ -112,10 +116,6 @@ class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ElementMixin(Themab
         inset-block-start: 0;
       }
 
-      :host([overlay][orientation='horizontal']) [part='master'] {
-        max-width: 100%;
-      }
-
       /* No fixed size */
       :host(:not([has-master-size])) [part='master'],
       :host(:not([has-detail-size])) [part='detail'] {
@@ -148,7 +148,7 @@ class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ElementMixin(Themab
       }
 
       /* Min size */
-      :host([has-master-min-size][orientation='horizontal']:not([overlay])) [part='master'] {
+      :host([has-master-min-size][has-detail][orientation='horizontal']:not([overlay]):not([stack])) [part='master'] {
         min-width: var(--_master-min-size);
       }
 
