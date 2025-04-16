@@ -2,9 +2,8 @@ import { expect } from '@vaadin/chai-plugins';
 import { sendKeys, setViewport } from '@vaadin/test-runner-commands';
 import { aTimeout, fixtureSync, nextRender, outsideClick, tabKeyDown, tap } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import './not-animated-styles.js';
 import '../src/vaadin-date-picker.js';
-import { getFocusableCell, open, touchTap, waitForOverlayRender } from './helpers.js';
+import { getFocusableCell, open, touchTap, untilOverlayRendered } from './helpers.js';
 
 describe('fullscreen mode', () => {
   let datePicker, input, overlay, width, height;
@@ -43,13 +42,13 @@ describe('fullscreen mode', () => {
     describe('default', () => {
       it('should open overlay on input tap', async () => {
         tap(input);
-        await waitForOverlayRender();
+        await untilOverlayRendered(datePicker);
         expect(datePicker.opened).to.be.true;
       });
 
       it('should not focus the input on touch tap', async () => {
         touchTap(input);
-        await waitForOverlayRender();
+        await untilOverlayRendered(datePicker);
         expect(document.activeElement).to.not.equal(input);
       });
 
