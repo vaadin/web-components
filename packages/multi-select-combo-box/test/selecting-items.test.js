@@ -2,8 +2,7 @@ import { expect } from '@vaadin/chai-plugins';
 import { resetMouse, sendKeys, sendMouse } from '@vaadin/test-runner-commands';
 import { fixtureSync, keyboardEventFor, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import './not-animated-styles.js';
-import '../vaadin-multi-select-combo-box.js';
+import '../src/vaadin-multi-select-combo-box.js';
 import { getAllItems, getDataProvider, getFirstItem } from './helpers.js';
 
 describe('selecting items', () => {

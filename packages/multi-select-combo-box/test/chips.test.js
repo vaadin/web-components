@@ -1,8 +1,8 @@
 import { expect } from '@vaadin/chai-plugins';
 import { sendKeys } from '@vaadin/test-runner-commands';
 import { fixtureSync, nextRender, nextResize, nextUpdate } from '@vaadin/testing-helpers';
-import './not-animated-styles.js';
-import '../vaadin-multi-select-combo-box.js';
+import './multi-select-combo-box-test-styles.js';
+import '../src/vaadin-multi-select-combo-box.js';
 
 describe('chips', () => {
   let comboBox, inputElement;
