@@ -148,7 +148,7 @@ class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ElementMixin(Themab
       }
 
       /* Min size */
-      :host([has-master-min-size][orientation='horizontal']:not([overlay])) [part='master'] {
+      :host([has-master-min-size][has-detail][orientation='horizontal']:not([overlay])) [part='master'] {
         min-width: var(--_master-min-size);
       }
 
