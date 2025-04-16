@@ -66,7 +66,8 @@
         // Ban ES2020, ES2021 operators in source component files, as they aren't supported by Polymer analyzer
         "es/no-optional-chaining": "error",
         "es/no-nullish-coalescing-operators": "error",
-        "es/no-logical-assignment-operators": "error"
+        "es/no-logical-assignment-operators": "error",
+        "logical-assignment-operators": "off"
       }
     },
     {
