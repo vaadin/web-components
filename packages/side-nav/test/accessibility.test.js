@@ -1,8 +1,8 @@
 import { expect } from '@vaadin/chai-plugins';
 import { sendKeys } from '@vaadin/test-runner-commands';
 import { fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
-import '../vaadin-side-nav-item.js';
-import '../vaadin-side-nav.js';
+import '../src/vaadin-side-nav-item.js';
+import '../src/vaadin-side-nav.js';
 
 describe('accessibility', () => {
   describe('ARIA roles', () => {

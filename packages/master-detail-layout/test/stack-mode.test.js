@@ -1,9 +1,13 @@
 import { expect } from '@vaadin/chai-plugins';
 import { setViewport } from '@vaadin/test-runner-commands';
 import { fixtureSync, nextRender, nextResize } from '@vaadin/testing-helpers';
-import '../vaadin-master-detail-layout.js';
+import '../src/vaadin-master-detail-layout.js';
 import './helpers/master-content.js';
 import './helpers/detail-content.js';
+
+window.Vaadin ||= {};
+window.Vaadin.featureFlags ||= {};
+window.Vaadin.featureFlags.masterDetailLayoutComponent = true;
 
 describe('stack mode', () => {
   let layout, detail, detailContent;

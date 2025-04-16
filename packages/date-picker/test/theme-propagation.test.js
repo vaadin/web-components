@@ -1,8 +1,7 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
-import './not-animated-styles.js';
 import '../src/vaadin-date-picker.js';
-import { open, waitForScrollToFinish } from './helpers.js';
+import { open, untilOverlayScrolled } from './helpers.js';
 
 describe('theme attribute', () => {
   let datePicker;
@@ -32,7 +31,7 @@ describe('theme attribute', () => {
     });
 
     it('should propagate theme attribute to month calendar', async () => {
-      await waitForScrollToFinish(datePicker);
+      await untilOverlayScrolled(datePicker);
       const monthCalendar = datePicker._overlayContent.querySelector('vaadin-month-calendar');
       expect(monthCalendar.getAttribute('theme')).to.equal('foo');
     });

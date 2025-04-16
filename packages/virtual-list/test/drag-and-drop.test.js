@@ -1,7 +1,7 @@
 import { expect } from '@vaadin/chai-plugins';
 import { resetMouse, sendMouse, sendMouseToElement } from '@vaadin/test-runner-commands';
 import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
-import '../vaadin-virtual-list.js';
+import '../src/vaadin-virtual-list.js';
 
 describe('drag and drop', () => {
   let virtualList;

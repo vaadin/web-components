@@ -102,7 +102,7 @@ export const GridProEditSelectMixin = (superClass) =>
           value: option,
         }));
 
-        this._overlayElement ||= this.shadowRoot.querySelector('vaadin-select-overlay');
+        this._overlayElement = this._overlayElement || this.shadowRoot.querySelector('vaadin-select-overlay');
         this._overlayElement.addEventListener('vaadin-overlay-outside-click', () => {
           this._grid._stopEdit();
         });

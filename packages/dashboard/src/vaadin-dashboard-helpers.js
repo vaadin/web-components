@@ -101,3 +101,31 @@ export function fireResize(element, colspanDelta, rowspanDelta) {
 export function fireRemove(element) {
   element.dispatchEvent(new CustomEvent('item-remove', { bubbles: true }));
 }
+
+/**
+ * Walks up the DOM tree starting from `node`, returning the first ancestor which is an instance of the given `baseClass`.
+ *
+ * @param {Node} node - starting node
+ * @param {Function} baseClass - constructor, e.g. `Dashboard`
+ * @returns {HTMLElement | null}
+ */
+export function findAncestorInstance(node, baseClass) {
+  while (node) {
+    if (node instanceof baseClass) {
+      return node;
+    }
+    if (node instanceof ShadowRoot) {
+      node = node.host;
+    } else {
+      const rootNode = node.getRootNode();
+      if (rootNode instanceof ShadowRoot) {
+        node = rootNode.host;
+      } else if (node.parentNode) {
+        node = node.parentNode;
+      } else {
+        node = null;
+      }
+    }
+  }
+  return null;
+}

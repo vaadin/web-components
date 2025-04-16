@@ -1,8 +1,12 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextRender, nextResize } from '@vaadin/testing-helpers';
-import '../vaadin-master-detail-layout.js';
+import '../src/vaadin-master-detail-layout.js';
 import './helpers/master-content.js';
 import './helpers/detail-content.js';
+
+window.Vaadin ||= {};
+window.Vaadin.featureFlags ||= {};
+window.Vaadin.featureFlags.masterDetailLayoutComponent = true;
 
 describe('ARIA', () => {
   let layout, master, detail;
@@ -56,5 +60,21 @@ describe('ARIA', () => {
 
     layout.containment = 'viewport';
     expect(master.hasAttribute('inert')).to.be.false;
+  });
+
+  it('should not set inert on the master part with the detail removed', async () => {
+    layout.forceOverlay = true;
+    layout.containment = 'layout';
+
+    const detailContent = layout.querySelector('[slot="detail"]');
+    detailContent.remove();
+    await nextRender();
+
+    expect(master.hasAttribute('inert')).to.be.false;
+
+    layout.appendChild(detailContent);
+    await nextRender();
+
+    expect(master.hasAttribute('inert')).to.be.true;
   });
 });

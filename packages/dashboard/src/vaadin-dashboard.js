@@ -82,11 +82,11 @@ import { WidgetResizeController } from './widget-resize-controller.js';
  *
  * The following state attributes are available for styling:
  *
- * Attribute      | Description
- * ---------------|-------------
- * `editable`     | Set when the dashboard is editable.
- * `dense-layout` | Set when the dashboard is in dense mode.
- * `item-selected`| Set when an item is selected.
+ * Attribute            | Description
+ * ---------------------|-------------
+ * `editable`           | Set when the dashboard is editable.
+ * `dense-layout`       | Set when the dashboard is in dense mode.
+ * `item-selected`      | Set when an item is selected.
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
@@ -166,6 +166,20 @@ class Dashboard extends DashboardLayoutMixin(
         type: Boolean,
       },
 
+      /**
+       * Root heading level for sections and widgets. Defaults to 2.
+       *
+       * If changed to e.g. 1:
+       * - sections will have the attribute `aria-level` with value 1
+       * - non-nested widgets will have the attribute `aria-level` with value 1
+       * - nested widgets will have the attribute `aria-level` with value 2
+       */
+      rootHeadingLevel: {
+        type: Number,
+        value: 2,
+        sync: true,
+      },
+
       /** @private */
       __childCount: {
         type: Number,
@@ -175,7 +189,7 @@ class Dashboard extends DashboardLayoutMixin(
   }
 
   static get observers() {
-    return ['__itemsOrRendererChanged(items, renderer, editable, __effectiveI18n)'];
+    return ['__itemsOrRendererChanged(items, renderer, editable, __effectiveI18n, rootHeadingLevel)'];
   }
 
   /**
@@ -261,6 +275,7 @@ class Dashboard extends DashboardLayoutMixin(
           wrapper.firstElementChild.toggleAttribute(attr, !!wrapper[attr]);
         });
         wrapper.firstElementChild.__i18n = this.__effectiveI18n;
+        wrapper.firstElementChild.__rootHeadingLevel = this.rootHeadingLevel;
       }
     });
   }
@@ -304,6 +319,7 @@ class Dashboard extends DashboardLayoutMixin(
 
         SYNCHRONIZED_ATTRIBUTES.forEach((attr) => section.toggleAttribute(attr, !!wrapper[attr]));
         section.__i18n = this.__effectiveI18n;
+        section.__rootHeadingLevel = this.rootHeadingLevel;
 
         // Render the subitems
         section.__childCount = item.items.length;
@@ -428,6 +444,7 @@ class Dashboard extends DashboardLayoutMixin(
     wrapper['first-child'] = item === getItemsArrayOfItem(item, this.items)[0];
     wrapper['last-child'] = item === getItemsArrayOfItem(item, this.items).slice(-1)[0];
     wrapper.i18n = this.__effectiveI18n;
+    wrapper.__rootHeadingLevel = this.rootHeadingLevel;
   }
 
   /** @private */

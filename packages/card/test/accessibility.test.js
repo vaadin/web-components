@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
-import '../vaadin-card.js';
+import '../src/vaadin-card.js';
 
 window.Vaadin.featureFlags ||= {};
 window.Vaadin.featureFlags.cardComponent = true;

@@ -2,6 +2,8 @@
 
 A web component for building UIs with a master (or primary) area and a detail (or secondary) area.
 
+> ⚠️ This component is experimental and the API may change. In order to use it, enable the feature flag by setting `window.Vaadin.featureFlags.masterDetailLayoutComponent = true`.
+
 ```html
 <vaadin-master-detail-layout>
   <div>Master content</div>

@@ -1,9 +1,13 @@
 import { expect } from '@vaadin/chai-plugins';
 import { aTimeout, fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import '../vaadin-master-detail-layout.js';
+import '../src/vaadin-master-detail-layout.js';
 import './helpers/master-content.js';
 import './helpers/detail-content.js';
+
+window.Vaadin ||= {};
+window.Vaadin.featureFlags ||= {};
+window.Vaadin.featureFlags.masterDetailLayoutComponent = true;
 
 describe('View transitions', () => {
   const originalStartViewTransition = document.startViewTransition;
