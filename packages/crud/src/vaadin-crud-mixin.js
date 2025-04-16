@@ -119,6 +119,7 @@ export const CrudMixin = (superClass) =>
           type: Array,
           notify: true,
           observer: '__itemsChanged',
+          sync: true,
         },
 
         /**
