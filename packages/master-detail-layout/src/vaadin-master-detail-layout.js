@@ -101,7 +101,7 @@ class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ElementMixin(Themab
         z-index: 1;
       }
 
-      :host([overlay]) [part='detail'] {
+      :host(:is([overlay], [stack])) [part='detail'] {
         z-index: 1;
       }
 
