@@ -2,7 +2,6 @@ import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, focusin, focusout, mousedown, nextUpdate, oneEvent, tabKeyDown } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-avatar.js';
-import '@vaadin/tooltip/vaadin-tooltip.js';
 import { Tooltip } from '@vaadin/tooltip';
 
 describe('vaadin-avatar', () => {

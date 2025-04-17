@@ -44,6 +44,7 @@
     "@vaadin/item": "24.8.0-alpha12",
     "@vaadin/list-box": "24.8.0-alpha12",
     "@vaadin/overlay": "24.8.0-alpha12",
+    "@vaadin/tooltip": "24.8.0-alpha12",
     "@vaadin/vaadin-lumo-styles": "24.8.0-alpha12",
     "@vaadin/vaadin-material-styles": "24.8.0-alpha12",
     "@vaadin/vaadin-themable-mixin": "24.8.0-alpha12",
