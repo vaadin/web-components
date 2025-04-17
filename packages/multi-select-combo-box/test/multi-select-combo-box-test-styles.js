@@ -66,3 +66,12 @@ registerStyles(
     }
   `,
 );
+
+registerStyles(
+  'vaadin-multi-select-combo-box-item',
+  css`
+    :host {
+      min-height: 2.25rem;
+    }
+  `,
+);
