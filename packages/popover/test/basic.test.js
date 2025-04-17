@@ -495,7 +495,7 @@ describe('popover', () => {
   describe('content overflow', () => {
     beforeEach(async () => {
       popover.renderer = (root) => {
-        root.textContent = new Array(1000).fill('foo').join(' ');
+        root.textContent = new Array(2000).fill('foo').join(' ');
       };
       popover.opened = true;
       await nextRender();
