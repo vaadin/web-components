@@ -1,5 +1,4 @@
-import { css, registerStyles } from '@vaadin/vaadin-themable-mixin';
-import { addGlobalThemeStyles } from '@vaadin/vaadin-themable-mixin/register-styles.js';
+import { addGlobalThemeStyles, css, registerStyles } from '@vaadin/vaadin-themable-mixin/register-styles.js';
 
 registerStyles(
   'vaadin-avatar-group',
