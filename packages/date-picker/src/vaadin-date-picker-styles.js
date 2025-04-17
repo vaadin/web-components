@@ -21,6 +21,11 @@ export const datePickerStyles = css`
 
   [part='toggle-button'] {
     cursor: default;
+  }
+
+  [part='toggle-button']::before {
+    content: '';
+    display: block;
     background: var(--_vaadin-color-subtle);
     height: var(--vaadin-icon-size, 1lh);
     mask-image: var(--_vaadin-icon-calendar);
