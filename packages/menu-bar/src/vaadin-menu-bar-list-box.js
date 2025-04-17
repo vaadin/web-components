@@ -76,6 +76,12 @@ class MenuBarListBox extends ListMixin(ThemableMixin(DirMixin(ControllerMixin(Po
 
     this.setAttribute('role', 'menu');
   }
+
+  _focusItem(item) {
+    super._focusItem(item);
+
+    this.dispatchEvent(new CustomEvent('item-focused', { detail: { item } }));
+  }
 }
 
 defineCustomElement(MenuBarListBox);

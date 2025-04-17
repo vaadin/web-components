@@ -229,6 +229,8 @@ class ContextMenu extends ContextMenuMixin(
       </style>
 
       <slot id="slot"></slot>
+
+      <slot name="tooltip"></slot>
     `;
   }
 

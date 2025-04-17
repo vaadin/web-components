@@ -20,9 +20,10 @@
           children: [
             {
               text: 'On social media',
-              children: [{ text: 'Facebook' }, { text: 'Twitter' }, { text: 'Instagram' }],
+              tooltip: 'Share options',
+              children: [{ text: 'Facebook' }, { text: 'Instagram' }],
             },
-            { text: 'By email' },
+            { text: 'By email', tooltip: 'You cannot share by email', disabled: true },
             { text: 'Get link' },
           ],
         },

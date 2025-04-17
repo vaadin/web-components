@@ -40,6 +40,8 @@ class MenuBarSubmenu extends SubMenuMixin(ControllerMixin(ThemePropertyMixin(Pol
       </style>
 
       <slot id="slot"></slot>
+
+      <slot name="tooltip"></slot>
     `;
   }
 
