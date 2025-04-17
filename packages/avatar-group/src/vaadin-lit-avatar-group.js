@@ -3,8 +3,8 @@
  * Copyright (c) 2020 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import '@vaadin/tooltip/src/vaadin-lit-tooltip.js';
 import '@vaadin/avatar/src/vaadin-lit-avatar.js';
+import '@vaadin/tooltip/src/vaadin-lit-tooltip.js';
 import './vaadin-lit-avatar-group-menu.js';
 import './vaadin-lit-avatar-group-menu-item.js';
 import './vaadin-lit-avatar-group-overlay.js';
