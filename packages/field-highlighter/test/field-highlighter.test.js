@@ -1,7 +1,7 @@
 import { expect } from '@vaadin/chai-plugins';
 import { aTimeout, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import '@vaadin/text-field';
+import '@vaadin/text-field/src/vaadin-text-field.js';
 import { FieldHighlighter } from '../src/vaadin-field-highlighter.js';
 
 async function waitForIntersectionObserver() {
