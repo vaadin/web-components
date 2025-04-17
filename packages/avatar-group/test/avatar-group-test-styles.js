@@ -1,5 +1,5 @@
-import { addLumoGlobalStyles } from '@vaadin/vaadin-lumo-styles/global.js';
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin';
+import { addGlobalThemeStyles } from '@vaadin/vaadin-themable-mixin/register-styles.js';
 
 registerStyles(
   'vaadin-avatar-group',
@@ -10,7 +10,7 @@ registerStyles(
   `,
 );
 
-addLumoGlobalStyles(
+addGlobalThemeStyles(
   '',
   css`
     :host {
