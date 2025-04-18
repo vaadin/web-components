@@ -942,31 +942,21 @@ export const MenuBarMixin = (superClass) =>
       const overlay = subMenu._overlayElement;
       overlay.noVerticalOverlap = true;
 
+      this._hideTooltip(true);
+
       this._expandedButton = button;
-
-      requestAnimationFrame(() => {
-        // After changing items, buttons are recreated so the old button is
-        // no longer in the DOM. Reset position target to null to prevent
-        // overlay from closing due to target width / height equal to 0.
-        if (overlay.positionTarget && !overlay.positionTarget.isConnected) {
-          overlay.positionTarget = null;
-        }
-
-        button.dispatchEvent(
-          new CustomEvent('opensubmenu', {
-            detail: {
-              children: items,
-            },
-          }),
-        );
-        this._hideTooltip(true);
-
-        this._setExpanded(button, true);
-
-        overlay.positionTarget = button;
-      });
+      this._setExpanded(button, true);
 
       this.style.pointerEvents = 'auto';
+      overlay.positionTarget = button;
+
+      button.dispatchEvent(
+        new CustomEvent('opensubmenu', {
+          detail: {
+            children: items,
+          },
+        }),
+      );
 
       overlay.addEventListener(
         'vaadin-overlay-open',
