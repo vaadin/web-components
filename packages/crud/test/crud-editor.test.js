@@ -73,6 +73,7 @@ describe('crud editor', () => {
         flushGrid(crud._grid);
 
         crud.items = [{ foo: 'bar' }, { foo: 'baz' }];
+        await nextRender(crud);
         dialog = crud.$.dialog;
         overlay = dialog.$.overlay;
         form = crud.querySelector('[slot=form]');
