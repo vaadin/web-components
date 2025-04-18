@@ -57,19 +57,20 @@ const dashboardWidgetAndSection = css`
 
   header {
     display: flex;
-    align-items: center;
+    align-items: start;
     box-sizing: border-box;
     justify-content: space-between;
-    gap: var(--lumo-space-xs);
   }
 
   [part='title'] {
     flex: 1;
     color: var(--lumo-header-text-color);
-    margin: 0;
-    white-space: nowrap;
+    white-space: var(--vaadin-dashboard-widget-title-wrap, wrap);
     text-overflow: ellipsis;
     overflow: hidden;
+    line-height: var(--lumo-line-height-s);
+    margin: 0;
+    align-self: safe center;
   }
 
   vaadin-dashboard-button {
@@ -110,6 +111,7 @@ const dashboardWidgetAndSection = css`
   [part~='remove-button'] {
     cursor: pointer;
     --icon: var(--lumo-icons-cross);
+    margin-inline-start: var(--lumo-space-xs);
   }
 
   /* Mode controls */
@@ -144,23 +146,35 @@ const dashboardWidget = css`
   :host {
     background: var(--_vaadin-dashboard-widget-background);
     border-radius: var(--_vaadin-dashboard-widget-border-radius);
-    --_border-shadow: 0 0 0 var(--_vaadin-dashboard-widget-border-width) var(--_vaadin-dashboard-widget-border-color);
-    --_shadow: var(--_vaadin-dashboard-widget-shadow);
-    box-shadow: var(--_shadow), var(--_border-shadow);
+    box-shadow: var(--_vaadin-dashboard-widget-shadow);
+    position: relative;
+  }
+
+  :host::before {
+    content: '';
+    display: block;
+    position: absolute;
+    inset: calc(-1 * var(--_vaadin-dashboard-widget-border-width));
+    border: var(--_vaadin-dashboard-widget-border-width) solid var(--_vaadin-dashboard-widget-border-color);
+    border-radius: calc(var(--_vaadin-dashboard-widget-border-radius) + var(--_vaadin-dashboard-widget-border-width));
+    pointer-events: none;
   }
 
   /* Widget states */
 
   :host([editable]) {
-    --_shadow: var(--_vaadin-dashboard-widget-editable-shadow);
+    --_vaadin-dashboard-widget-shadow: var(--_vaadin-dashboard-widget-editable-shadow);
+    --_vaadin-dashboard-widget-border-color: var(--lumo-contrast-20pct);
+    --_vaadin-dashboard-widget-border-width: 1px;
   }
 
-  :host([focused]) {
-    --_border-shadow: inset 0 0 0 var(--_focus-ring-width) var(--_focus-ring-color);
+  :host([focused])::before {
+    border-width: var(--_focus-ring-width);
+    border-color: var(--_focus-ring-color);
   }
 
   :host([selected]) {
-    --_shadow: var(--_vaadin-dashboard-widget-selected-shadow);
+    --_vaadin-dashboard-widget-shadow: var(--_vaadin-dashboard-widget-selected-shadow);
     background: var(--lumo-primary-color-10pct);
   }
 
@@ -179,8 +193,7 @@ const dashboardWidget = css`
 
   header {
     min-height: var(--lumo-size-l);
-    padding: 0 var(--lumo-space-m);
-    border-bottom: 1px solid var(--lumo-contrast-10pct);
+    padding: var(--lumo-space-xs) var(--lumo-space-m);
   }
 
   :host([editable]) header {
@@ -194,7 +207,16 @@ const dashboardWidget = css`
 
   #content {
     min-height: var(--lumo-size-m);
-    padding: var(--lumo-space-s);
+    padding: var(--vaadin-dashboard-widget-padding, 0);
+    padding-top: 0;
+    border-radius: inherit;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    overflow: hidden;
+  }
+
+  ::slotted([slot='header-content']) {
+    align-self: center;
   }
 
   :host([resize-mode]) #content,
