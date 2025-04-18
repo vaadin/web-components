@@ -6,7 +6,7 @@
 import { CSSInjector } from './src/css-injector.js';
 
 /**
- * @type {string[]}
+ * @type {Set<string>}
  */
 const registeredProperties = new Set();
 
