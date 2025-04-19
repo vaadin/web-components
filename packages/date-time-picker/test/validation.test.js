@@ -4,6 +4,13 @@ import { aTimeout, fixtureSync, nextFrame, nextRender } from '@vaadin/testing-he
 import sinon from 'sinon';
 import '../src/vaadin-date-time-picker.js';
 import { untilOverlayRendered } from '@vaadin/date-picker/test/helpers.js';
+import {
+  changeStateOnFocusedInput,
+  getOtherPickerType,
+  getPicker,
+  individualPickerUpdateTestSetup,
+  initializePickerStates,
+} from './individual-picker-update-helpers.js';
 
 class DateTimePicker2020Element extends customElements.get('vaadin-date-time-picker') {
   checkValidity() {
@@ -60,17 +67,87 @@ const fixtures = {
       expect(dateTimePicker.invalid).to.equal(false);
     });
 
-    it('should validate on date-picker blur', () => {
-      datePicker.focus();
-      datePicker.blur();
-      expect(validateSpy.calledOnce).to.be.true;
-    });
+    individualPickerUpdateTestSetup(
+      (pickerType, pickerInitialState, pickerNewState, otherPickerInitialState, inputChangeTrigger) => {
+        function shouldBeValidated() {
+          if (inputChangeTrigger === 'outside click') {
+            return true;
+          }
+          const isInitiallyInvalid =
+            pickerInitialState === 'unparsable' ||
+            otherPickerInitialState === 'unparsable' ||
+            pickerInitialState !== otherPickerInitialState;
+          const isOnePickerEmptyOtherOneValid =
+            (pickerNewState === 'empty' && otherPickerInitialState === 'parsable') ||
+            (otherPickerInitialState === 'empty' && pickerNewState === 'parsable');
+          return isInitiallyInvalid || !isOnePickerEmptyOtherOneValid;
+        }
 
-    it('should validate on time-picker blur', () => {
-      timePicker.focus();
-      timePicker.blur();
-      expect(validateSpy.calledOnce).to.be.true;
-    });
+        it(`${shouldBeValidated() ? 'should' : 'should not'} validate on ${pickerType} ${inputChangeTrigger} when value is changed from ${pickerInitialState} to ${pickerNewState} when ${getOtherPickerType(pickerType)} value is ${otherPickerInitialState}`, async () => {
+          await initializePickerStates(dateTimePicker, pickerType, pickerInitialState, otherPickerInitialState);
+          validateSpy.resetHistory();
+          getPicker(dateTimePicker, pickerType).focus();
+          await changeStateOnFocusedInput(pickerType, pickerNewState, inputChangeTrigger);
+          expect(validateSpy.called).to.equal(shouldBeValidated());
+        });
+
+        function shouldBeValidatedWhenDateLimitIsSet() {
+          if (inputChangeTrigger === 'outside click') {
+            return true;
+          }
+          const isInitiallyEmpty = pickerInitialState === 'empty' && otherPickerInitialState === 'empty';
+          const validTimeSet = pickerType === 'time-picker' && pickerNewState === 'parsable';
+          return !(isInitiallyEmpty && validTimeSet);
+        }
+
+        it(`${shouldBeValidatedWhenDateLimitIsSet() ? 'should' : 'should not'} validate on ${pickerType} ${inputChangeTrigger} when value is changed from ${pickerInitialState} to ${pickerNewState} when ${getOtherPickerType(pickerType)} value is ${otherPickerInitialState} and min date is set`, async () => {
+          await initializePickerStates(dateTimePicker, pickerType, pickerInitialState, otherPickerInitialState);
+          validateSpy.resetHistory();
+          getPicker(dateTimePicker, pickerType).focus();
+          dateTimePicker.min = '2040-02-02T02:00';
+          await changeStateOnFocusedInput(pickerType, pickerNewState, inputChangeTrigger);
+          expect(validateSpy.called).to.equal(shouldBeValidatedWhenDateLimitIsSet());
+        });
+
+        it(`${shouldBeValidatedWhenDateLimitIsSet() ? 'should' : 'should not'} validate on ${pickerType} ${inputChangeTrigger} when value is changed from ${pickerInitialState} to ${pickerNewState} when ${getOtherPickerType(pickerType)} value is ${otherPickerInitialState} and max date is set`, async () => {
+          await initializePickerStates(dateTimePicker, pickerType, pickerInitialState, otherPickerInitialState);
+          validateSpy.resetHistory();
+          getPicker(dateTimePicker, pickerType).focus();
+          dateTimePicker.max = '1990-02-02T02:00';
+          await changeStateOnFocusedInput(pickerType, pickerNewState, inputChangeTrigger);
+          expect(validateSpy.called).to.equal(shouldBeValidatedWhenDateLimitIsSet());
+        });
+      },
+      true,
+      true,
+    );
+
+    individualPickerUpdateTestSetup(
+      (pickerType, pickerInitialState, otherPickerInitialState) => {
+        it(`should not validate on ${pickerType} if ${pickerInitialState} value is temporarily changed when ${getOtherPickerType(pickerType)} value is ${otherPickerInitialState}`, async () => {
+          await initializePickerStates(dateTimePicker, pickerType, pickerInitialState, otherPickerInitialState);
+          dateTimePicker.max = '1995-02-02T02:00';
+          dateTimePicker.min = '1990-02-02T02:00';
+          validateSpy.resetHistory();
+          getPicker(dateTimePicker, pickerType).focus();
+          await sendKeys({ type: 'a' });
+          await sendKeys({ press: 'Backspace' });
+          await sendKeys({ press: 'Enter' });
+          await nextRender();
+          expect(validateSpy.called).to.be.false;
+        });
+
+        it(`should not validate on ${pickerType} blur if the initial ${pickerInitialState} value is left unchanged when ${getOtherPickerType(pickerType)} value is ${otherPickerInitialState}`, async () => {
+          await initializePickerStates(dateTimePicker, pickerType, pickerInitialState, otherPickerInitialState);
+          validateSpy.resetHistory();
+          getPicker(dateTimePicker, pickerType).focus();
+          getPicker(dateTimePicker, pickerType).blur();
+          expect(validateSpy.called).to.be.false;
+        });
+      },
+      false,
+      false,
+    );
 
     it('should validate before change event on date-picker change', async () => {
       timePicker.value = '12:00';
