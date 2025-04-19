@@ -256,124 +256,74 @@ describe('Basic features', () => {
 
   describe('change event', () => {
     const changeEventType = 'change';
-    let spy;
+    const unparsableChangeEventType = 'unparsable-change';
+    let changeEventSpy;
+    let unparsableChangeEventSpy;
 
     beforeEach(() => {
-      spy = sinon.spy();
-      dateTimePicker.addEventListener(changeEventType, spy);
+      changeEventSpy = sinon.spy();
+      dateTimePicker.addEventListener(changeEventType, changeEventSpy);
+      unparsableChangeEventSpy = sinon.spy();
+      dateTimePicker.addEventListener(unparsableChangeEventType, unparsableChangeEventSpy);
     });
-
-    function shouldFireAnyChangeEvent(pickerInitialState, pickerNewState, otherPickerInitialState, inputChangeTrigger) {
-      if (inputChangeTrigger === 'outside click') {
-        return true;
-      }
-      const isInitiallyInvalid =
-        pickerInitialState === 'unparsable' ||
-        otherPickerInitialState === 'unparsable' ||
-        pickerInitialState !== otherPickerInitialState;
-      const isOnePickerEmptyOtherOneValid =
-        (pickerNewState === 'empty' && otherPickerInitialState === 'parsable') ||
-        (otherPickerInitialState === 'empty' && pickerNewState === 'parsable');
-      return isInitiallyInvalid || !isOnePickerEmptyOtherOneValid;
-    }
-
-    function getChangeEventType(pickerInitialState, pickerNewState, otherPickerInitialState) {
-      const isInitiallyFilledAndValid = pickerInitialState === 'parsable' && otherPickerInitialState === 'parsable';
-      const isValidAfterUpdate = pickerNewState === 'parsable' && otherPickerInitialState === 'parsable';
-      if (isInitiallyFilledAndValid || isValidAfterUpdate) {
-        return 'change';
-      }
-      return 'unparsable-change';
-    }
-
-    function shouldFireChangeEventOfType(
-      eventType,
-      pickerInitialState,
-      pickerNewState,
-      otherPickerInitialState,
-      inputChangeTrigger,
-    ) {
-      const shouldFireAnyEvent = shouldFireAnyChangeEvent(
-        pickerInitialState,
-        pickerNewState,
-        otherPickerInitialState,
-        inputChangeTrigger,
-      );
-      if (!shouldFireAnyEvent) {
-        return false;
-      }
-      return getChangeEventType(pickerInitialState, pickerNewState, otherPickerInitialState) === eventType;
-    }
 
     individualPickerUpdateTestSetup(
       (pickerType, pickerInitialState, pickerNewState, otherPickerInitialState, inputChangeTrigger) => {
-        const shouldFireChangeEvent = shouldFireChangeEventOfType(
-          changeEventType,
-          pickerInitialState,
-          pickerNewState,
-          otherPickerInitialState,
-          inputChangeTrigger,
-        );
-        it(`${shouldFireChangeEvent ? 'should' : 'should not'} fire ${pickerType} on ${changeEventType} ${inputChangeTrigger} when value is changed from ${pickerInitialState} to ${pickerNewState} when ${getOtherPickerType(pickerType)} value is ${otherPickerInitialState}`, async () => {
+        function shouldFireAnyChangeEvent() {
+          if (inputChangeTrigger === 'outside click') {
+            return true;
+          }
+          const isInitiallyInvalid =
+            pickerInitialState === 'unparsable' ||
+            otherPickerInitialState === 'unparsable' ||
+            pickerInitialState !== otherPickerInitialState;
+          const isOnePickerEmptyOtherOneValid =
+            (pickerNewState === 'empty' && otherPickerInitialState === 'parsable') ||
+            (otherPickerInitialState === 'empty' && pickerNewState === 'parsable');
+          return isInitiallyInvalid || !isOnePickerEmptyOtherOneValid;
+        }
+
+        function getExpectedChangeEventType() {
+          const isInitiallyFilledAndValid = pickerInitialState === 'parsable' && otherPickerInitialState === 'parsable';
+          const isValidAfterUpdate = pickerNewState === 'parsable' && otherPickerInitialState === 'parsable';
+          if (isInitiallyFilledAndValid || isValidAfterUpdate) {
+            return changeEventType;
+          }
+          return unparsableChangeEventType;
+        }
+
+        const expectedChangeEventType = shouldFireAnyChangeEvent() ? getExpectedChangeEventType() : null;
+
+        it(`${expectedChangeEventType ? `should fire ${expectedChangeEventType}` : 'should not fire any change events'} on ${pickerType} ${inputChangeTrigger} when value is changed from ${pickerInitialState} to ${pickerNewState} when ${getOtherPickerType(pickerType)} value is ${otherPickerInitialState}`, async () => {
           await initializePickerStates(dateTimePicker, pickerType, pickerInitialState, otherPickerInitialState);
-          spy.resetHistory();
+          changeEventSpy.resetHistory();
+          unparsableChangeEventSpy.resetHistory();
           getPicker(dateTimePicker, pickerType).focus();
           await changeStateOnFocusedInput(pickerType, pickerNewState, inputChangeTrigger);
-          expect(spy.called).to.equal(shouldFireChangeEvent);
+          expect(changeEventSpy.called).to.equal(expectedChangeEventType === changeEventType);
+          expect(unparsableChangeEventSpy.called).to.equal(expectedChangeEventType === unparsableChangeEventType);
         });
       },
-      true,
-      true,
     );
 
     it('should not fire change on programmatic value change', () => {
       dateTimePicker.value = '2020-01-17T16:00';
-      expect(spy.called).to.be.false;
+      expect(changeEventSpy.called).to.be.false;
     });
 
     it('should not fire change on programmatic value change after manual one', () => {
       dateTimePicker.value = '2020-01-17T16:00'; // Init with valid value
       changeInputValue(datePicker, '2020-01-20');
-      spy.resetHistory();
+      changeEventSpy.resetHistory();
       dateTimePicker.value = '2020-01-10T12:00';
-      expect(spy.called).to.be.false;
+      expect(changeEventSpy.called).to.be.false;
     });
 
     it('should not fire change on programmatic value change after partial manual one', () => {
       changeInputValue(datePicker, '2020-01-17');
       // Time picker has no value so date time picker value is still empty
       dateTimePicker.value = '2020-01-17T16:00';
-      expect(spy.called).to.be.false;
-    });
-
-    describe('unparsable change event', () => {
-      const unparsableChangeEventType = 'unparsable-change';
-
-      beforeEach(() => {
-        spy = sinon.spy();
-        dateTimePicker.addEventListener(unparsableChangeEventType, spy);
-      });
-
-      individualPickerUpdateTestSetup(
-        (pickerType, pickerInitialState, pickerNewState, otherPickerInitialState, inputChangeTrigger) => {
-          const shouldFireUnparsableChangeEvent = shouldFireChangeEventOfType(
-            unparsableChangeEventType,
-            pickerInitialState,
-            pickerNewState,
-            otherPickerInitialState,
-            inputChangeTrigger,
-          );
-          it(`${shouldFireUnparsableChangeEvent ? 'should' : 'should not'} fire ${shouldFireUnparsableChangeEvent} on ${inputChangeTrigger} when value is changed from ${pickerInitialState} to ${pickerNewState} when ${getOtherPickerType(pickerType)} value is ${otherPickerInitialState}`, async () => {
-            await initializePickerStates(dateTimePicker, pickerType, pickerInitialState, otherPickerInitialState);
-            spy.resetHistory();
-            getPicker(dateTimePicker, pickerType).focus();
-            await changeStateOnFocusedInput(pickerType, pickerNewState, inputChangeTrigger);
-            expect(spy.called).to.equal(shouldFireUnparsableChangeEvent);
-          });
-        },
-        true,
-        true,
-      );
+      expect(changeEventSpy.called).to.be.false;
     });
   });
 

@@ -71,35 +71,23 @@ export const initializePickerStates = async (
   await initializePickerState(dateTimePicker, getOtherPickerType(pickerType), otherPickerInitialState);
 };
 
-export const individualPickerUpdateTestSetup = (individualPickerTest, withStateUpdate, withInputChangeTriggers) => {
+export const individualPickerUpdateTestSetup = (individualPickerTest) => {
   ['date-picker', 'time-picker'].forEach((pickerType) => {
     const pickerStates = ['empty', 'parsable', 'unparsable'];
     pickerStates.forEach((pickerInitialState) => {
       pickerStates.forEach((otherPickerInitialState) => {
-        if (withStateUpdate) {
-          const newPickerStates = [...pickerStates].filter((state) => state !== pickerInitialState);
-          newPickerStates.forEach((pickerNewState) => {
-            if (withInputChangeTriggers) {
-              inputChangeTriggers.forEach((inputChangeTrigger) => {
-                individualPickerTest(
-                  pickerType,
-                  pickerInitialState,
-                  pickerNewState,
-                  otherPickerInitialState,
-                  inputChangeTrigger,
-                );
-              });
-            } else {
-              individualPickerTest(pickerType, pickerInitialState, pickerNewState, otherPickerInitialState);
-            }
-          });
-        } else if (withInputChangeTriggers) {
+        const newPickerStates = [...pickerStates].filter((state) => state !== pickerInitialState);
+        newPickerStates.forEach((pickerNewState) => {
           inputChangeTriggers.forEach((inputChangeTrigger) => {
-            individualPickerTest(pickerType, pickerInitialState, otherPickerInitialState, inputChangeTrigger);
+            individualPickerTest(
+              pickerType,
+              pickerInitialState,
+              pickerNewState,
+              otherPickerInitialState,
+              inputChangeTrigger,
+            );
           });
-        } else {
-          individualPickerTest(pickerType, pickerInitialState, otherPickerInitialState);
-        }
+        });
       });
     });
   });
