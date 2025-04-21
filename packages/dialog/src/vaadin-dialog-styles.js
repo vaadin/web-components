@@ -66,6 +66,30 @@ export const dialogOverlay = css`
     }
   }
 
+  [part='overlay'] {
+    --_transform: translate(var(--_left), var(--_top));
+
+    width: var(--_width);
+    height: var(--_height);
+    top: 0;
+    left: 0;
+    transform: var(--_transform);
+  }
+
+  :host([fit-viewport]) [part='overlay'],
+  :host([fit-viewport][has-bounds-set]) [part='overlay'] {
+    --_container-width: 100vw - var(--_overlay-left) - var(--_overlay-right);
+    --_container-height: 100vh - var(--_overlay-top) - var(--_overlay-bottom);
+
+    --_transform: translate(
+      clamp(0px, var(--_left), var(--_container-width) - 100% /* overlay width */),
+      clamp(0px, var(--_top), var(--_container-height) - 100% /* overlay height */)
+    );
+
+    width: clamp(0px, var(--_width), var(--_container-width));
+    height: clamp(0px, var(--_height), var(--_container-height));
+  }
+
   /*
       NOTE(platosha): Make some min-width to prevent collapsing of the content
       taking the parent width, e. g., <vaadin-grid> and such.

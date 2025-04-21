@@ -105,8 +105,14 @@ export const DialogDraggableMixin = (superClass) =>
     _drag(e) {
       const event = getMouseOrFirstTouchEvent(e);
       if (eventInWindow(event)) {
-        const top = this._originalBounds.top + (event.pageY - this._originalMouseCoords.top);
-        const left = this._originalBounds.left + (event.pageX - this._originalMouseCoords.left);
+        let top = this._originalBounds.top + (event.pageY - this._originalMouseCoords.top);
+        let left = this._originalBounds.left + (event.pageX - this._originalMouseCoords.left);
+
+        if (this.fitViewport) {
+          top = Math.max(0, Math.min(top, this.$.overlay.clientHeight - this._originalBounds.height));
+          left = Math.max(0, Math.min(left, this.$.overlay.clientWidth - this._originalBounds.width));
+        }
+
         this.top = top;
         this.left = left;
       }

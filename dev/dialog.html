@@ -7,7 +7,7 @@
     <title>Dialog</title>
 
     <script type="module">
-      import './common.js'; // A separate <script type="module"> for this import crashes Safari often
+      // import './common.js'; // A separate <script type="module"> for this import crashes Safari often
       import '@vaadin/dialog';
       import '@vaadin/button';
       import '@vaadin/icon';
@@ -17,96 +17,51 @@
   <body>
     <vaadin-dialog></vaadin-dialog>
 
-    <vaadin-button>Open dialog 1</vaadin-button>
+    <vaadin-button id="set-fit-viewport">Set fit viewport</vaadin-button>
+    <vaadin-button id="set-position">Set position 1000, 1000</vaadin-button>
+    <vaadin-button id="set-size">Set size 1000x1000</vaadin-button>
+
+    <vaadin-button id="open-dialog">Open</vaadin-button>
 
     <script type="module">
-      const dialog1 = document.querySelector('vaadin-dialog');
-      dialog1.headerTitle = 'Title';
-      dialog1.draggable = true;
-      dialog1.resizable = true;
+      const dialog = document.querySelector('vaadin-dialog');
+      dialog.headerTitle = 'Dialog';
+      dialog.draggable = true;
+      dialog.resizable = true;
+      dialog.width = '40em';
+      dialog.height = '40em';
 
-      dialog1.renderer = (root) => {
+      dialog.renderer = (root) => {
         if (root.firstChild) {
           return;
         }
 
-        const container = document.createElement('div');
-        container.style.maxWidth = '40em';
-        container.style.minWidth = '20em';
-        root.appendChild(container);
-
-        // Second dialog
-        const dialog2 = document.createElement('vaadin-dialog');
-        dialog2.renderer = (root2) => {
-          if (root2.firstChild) {
-            return;
-          }
-
-          // Close second dialog
-          const btnClose2 = document.createElement('vaadin-button');
-          btnClose2.textContent = 'Close dialog 2';
-          btnClose2.addEventListener('click', () => {
-            dialog2.opened = false;
-          });
-
-          root2.appendChild(btnClose2);
-        };
-
-        container.appendChild(dialog2);
-
-        // Open second dialog
-        const btnOpen2 = document.createElement('vaadin-button');
-        btnOpen2.textContent = 'Open dialog 2';
-        btnOpen2.addEventListener('click', () => {
-          dialog2.opened = true;
-        });
-
-        const text = document.createElement('p');
-        text.textContent =
-          'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Distinctio laborum optio quo perferendis unde, fuga reprehenderit molestias cum laboriosam ipsa enim voluptatem iusto fugit. Sed, veniam repudiandae consectetur recusandae laudantium.';
-        text.style.marginTop = '0';
-
-        container.append(text, btnOpen2);
-      };
-
-      dialog1.headerRenderer = (root) => {
-        if (root.firstChild) {
-          return;
-        }
-        const button = document.createElement('vaadin-button');
-        button.innerHTML = '<vaadin-icon icon="lumo:cross" aria-label="close dialog"></vaadin-icon>';
-        button.theme = 'tertiary-inline icon';
-        button.addEventListener('click', () => {
-          dialog1.opened = false;
-        });
-
-        const text = document.createElement('span');
-        text.textContent = 'Header content';
-
-        root.append(text, button);
-      };
-
-      dialog1.footerRenderer = (root) => {
-        if (root.firstChild) {
-          return;
-        }
-        const button = document.createElement('vaadin-button');
-        button.textContent = 'Action';
-        button.theme = 'primary';
-
-        const button2 = document.createElement('vaadin-button');
-        button2.textContent = 'Action';
-
-        const text = document.createElement('span');
-        text.textContent = 'Footer content';
-
-        root.append(text, button2, button);
+        root.textContent = 'This is a dialog';
       };
 
       // Open first dialog
-      const btnOpen1 = document.querySelector('vaadin-button');
-      btnOpen1.addEventListener('click', () => {
-        dialog1.opened = true;
+      const openDialog = document.querySelector('#open-dialog');
+      openDialog.addEventListener('click', () => {
+        dialog.opened = true;
+      });
+
+      // Set position
+      const setPosition = document.querySelector('#set-position');
+      setPosition.addEventListener('click', () => {
+        dialog.top = '1000px';
+        dialog.left = '1000px';
+      });
+
+      // Set size
+      const setSize = document.querySelector('#set-size');
+      setSize.addEventListener('click', () => {
+        dialog.width = '1000px';
+        dialog.height = '1000px';
+      });
+
+      const setFitViewport = document.querySelector('#set-fit-viewport');
+      setFitViewport.addEventListener('click', () => {
+        dialog.fitViewport = true;
       });
     </script>
   </body>

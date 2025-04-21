@@ -11,10 +11,10 @@ import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themab
 
 const overlay = css`
   :host {
-    top: var(--lumo-space-m);
-    right: var(--lumo-space-m);
-    bottom: var(--lumo-space-m);
-    left: var(--lumo-space-m);
+    --_overlay-top: var(--lumo-space-m);
+    --_overlay-right: var(--lumo-space-m);
+    --_overlay-bottom: var(--lumo-space-m);
+    --_overlay-left: var(--lumo-space-m);
     /* Workaround for Edge issue (only on Surface), where an overflowing vaadin-list-box inside vaadin-select-overlay makes the overlay transparent */
     /* stylelint-disable-next-line */
     outline: 0px solid transparent;

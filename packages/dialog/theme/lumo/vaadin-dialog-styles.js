@@ -84,7 +84,7 @@ const dialogOverlay = css`
   @keyframes vaadin-dialog-enter {
     0% {
       opacity: 0;
-      transform: scale(0.95);
+      transform: var(--_transform) scale(0.95);
     }
   }
 
@@ -99,7 +99,7 @@ const dialogOverlay = css`
   @keyframes vaadin-dialog-exit {
     100% {
       opacity: 0;
-      transform: scale(1.02);
+      transform: var(--_transform) scale(1.02);
     }
   }
 `;

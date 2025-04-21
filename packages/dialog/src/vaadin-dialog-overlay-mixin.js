@@ -210,9 +210,15 @@ export const DialogOverlayMixin = (superClass) =>
         if (!isNaN(parsedBounds[arg])) {
           parsedBounds[arg] = `${parsedBounds[arg]}px`;
         }
+
+        if (parsedBounds[arg] != null) {
+          overlay.style.setProperty(`--_${arg}`, parsedBounds[arg]);
+        } else {
+          overlay.style.removeProperty(`--_${arg}`);
+        }
       });
 
-      Object.assign(overlay.style, parsedBounds);
+      // Object.assign(overlay.style, parsedBounds);
     }
 
     /**

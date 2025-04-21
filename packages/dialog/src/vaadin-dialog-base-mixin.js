@@ -100,11 +100,16 @@ export const DialogBaseMixin = (superClass) =>
           type: String,
           value: 'dialog',
         },
+
+        fitViewport: {
+          type: Boolean,
+          value: false,
+        },
       };
     }
 
     static get observers() {
-      return ['__positionChanged(top, left)', '__sizeChanged(width, height)'];
+      return ['__positionChanged(top, left)', '__sizeChanged(width, height)', '__fitViewportChanged(fitViewport)'];
     }
 
     /** @protected */
@@ -190,6 +195,10 @@ export const DialogBaseMixin = (superClass) =>
     /** @private */
     __sizeChanged(width, height) {
       requestAnimationFrame(() => this.$.overlay.setBounds({ width, height }, false));
+    }
+
+    __fitViewportChanged(fitViewport) {
+      this.$.overlay.toggleAttribute('fit-viewport', fitViewport);
     }
 
     /**
