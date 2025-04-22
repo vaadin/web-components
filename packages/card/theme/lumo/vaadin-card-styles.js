@@ -12,6 +12,7 @@ const cardProps = css`
     --vaadin-card-border-color: var(--lumo-contrast-20pct);
     --vaadin-card-padding: var(--lumo-space-m);
     --vaadin-card-gap: var(--lumo-space-m);
+    --vaadin-card-shadow: none;
   }
 `;
 
@@ -21,7 +22,7 @@ const card = css`
   :host {
     background: var(--vaadin-card-background);
     border-radius: var(--vaadin-card-border-radius);
-    box-shadow: var(--vaadin-card-box-shadow);
+    box-shadow: var(--vaadin-card-shadow);
     position: relative;
   }
 
@@ -29,10 +30,10 @@ const card = css`
   :host::before {
     content: '';
     position: absolute;
-    inset: 0;
-    pointer-events: none;
-    border-radius: inherit;
+    inset: var(--_card-border-inset, 0);
+    border-radius: var(--_card-border-pseudo-radius, inherit);
     border: var(--vaadin-card-border, var(--vaadin-card-border-width) solid var(--vaadin-card-border-color));
+    pointer-events: none;
   }
 
   :host([theme~='outlined']) {
@@ -41,16 +42,14 @@ const card = css`
   }
 
   :host([theme~='elevated']) {
-    --vaadin-card-background: var(--lumo-tint-10pct);
-    --vaadin-card-box-shadow: var(--lumo-box-shadow-xs);
-    /* TODO I would like to update --lumo-box-shadow-xs to this (30pct instead of 50pct): */
-    --lumo-box-shadow-xs: 0 1px 4px -1px var(--lumo-shade-30pct);
+    --vaadin-card-background: linear-gradient(var(--lumo-tint-5pct), var(--lumo-tint-5pct)) var(--lumo-base-color);
+    --vaadin-card-shadow: var(--lumo-box-shadow-xs);
+    --vaadin-card-border-width: 1px;
+    --_card-border-inset: calc(-1 * var(--vaadin-card-border-width));
+    --_card-border-pseudo-radius: calc(var(--vaadin-card-border-radius) + var(--vaadin-card-border-width));
   }
-
-  :host([theme~='elevated'][theme~='outlined']) {
-    box-shadow:
-      inset 0 -1px 0 0 var(--lumo-shade-10pct),
-      var(--vaadin-card-box-shadow);
+  :host([theme~='elevated']:not([theme~='outlined'])) {
+    --vaadin-card-border-color: var(--lumo-contrast-10pct);
   }
 
   :host(:where([theme~='stretch-media'])) ::slotted([slot='media']:is(img, video, svg, vaadin-icon)) {
