@@ -37,7 +37,7 @@ const card = css`
 
   :host([theme~='outlined']) {
     --vaadin-card-border-width: 1px;
-    --vaadin-card-background: transparent;
+    --vaadin-card-background: var(--lumo-base-color);
   }
 
   :host([theme~='elevated']) {
