@@ -89,7 +89,6 @@ export const monthCalendarStyles = css`
   [disabled] {
     cursor: not-allowed;
     opacity: 0.5;
-    pointer-events: none;
   }
 
   [hidden] {
