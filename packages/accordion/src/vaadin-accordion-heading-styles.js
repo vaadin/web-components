@@ -37,6 +37,11 @@ export const accordionHeading = css`
     width: 100%;
   }
 
+  button:focus {
+    outline: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
+    outline-offset: 1px;
+  }
+
   [part='toggle']::before {
     background: var(--_vaadin-color-subtle);
     content: '';
