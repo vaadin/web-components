@@ -23,17 +23,14 @@ stylesTemplate.innerHTML = `
     }
 
     :host::before {
-      border-color: transparent;
-      border-inline-start-color: var(--vaadin-overlay-background, var(--_vaadin-background));
-      border-style: solid;
-      border-width: 6px;
+      background: var(--vaadin-overlay-background, var(--_vaadin-background));
       content: '';
       display: block;
-      height: 0;
+      height: 1em;
       position: absolute;
-      transform: translateY(-50%);
+      transform: rotate(45deg) translate(-50%);
       top: 50%;
-      width: 0;
+      width: 1em;
     }
   </style>
 `;
