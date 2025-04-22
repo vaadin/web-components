@@ -21,9 +21,10 @@ describe('dropdown', () => {
   });
 
   it('should update position of the overlay after changing opened property', async () => {
+    const inputField = datePicker.shadowRoot.querySelector('[part="input-field"]');
     datePicker.opened = true;
     await oneEvent(overlay, 'vaadin-overlay-open');
-    expect(input.getBoundingClientRect().bottom).to.be.closeTo(overlay.getBoundingClientRect().top, 0.01);
+    expect(inputField.getBoundingClientRect().bottom).to.be.closeTo(overlay.getBoundingClientRect().top, 0.01);
   });
 
   it('should detach overlay on datePicker detach', async () => {
