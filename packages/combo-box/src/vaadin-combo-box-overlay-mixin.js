@@ -64,7 +64,7 @@ export const ComboBoxOverlayMixin = (superClass) =>
     /** @protected */
     _updateOverlayWidth() {
       const propPrefix = this.localName;
-      this.style.setProperty(`--_${propPrefix}-default-width`, `${this.positionTarget.clientWidth}px`);
+      this.style.setProperty(`--_${propPrefix}-default-width`, `${this.positionTarget.offsetWidth}px`);
 
       const customWidth = getComputedStyle(this._comboBox).getPropertyValue(`--${propPrefix}-width`);
 
