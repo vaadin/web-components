@@ -8,12 +8,17 @@ import { css } from 'lit';
 
 export const clearButton = css`
   [part='clear-button'] {
-    display: none;
     cursor: default;
-    mask-image: var(--_vaadin-icon-cross);
+    display: none;
+  }
+
+  [part='clear-button']::before {
     background: var(--_vaadin-color-subtle);
-    width: var(--vaadin-icon-size, 1lh);
+    content: '';
+    display: inherit;
     height: var(--vaadin-icon-size, 1lh);
+    mask-image: var(--_vaadin-icon-cross);
+    width: var(--vaadin-icon-size, 1lh);
   }
 
   :host([clear-button-visible][has-value]:not([disabled]):not([readonly])) [part='clear-button'] {
