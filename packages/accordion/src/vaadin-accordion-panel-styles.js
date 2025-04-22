@@ -15,12 +15,23 @@ export const accordionPanel = css`
   }
 
   [part='content'] {
-    display: none;
-    overflow: hidden;
+    height: 0;
+    interpolate-size: allow-keywords;
+    opacity: 0;
+    transition-duration: 150ms;
+    transition-property: height, opacity;
+    visibility: hidden;
   }
 
   :host([opened]) [part='content'] {
-    display: block;
-    overflow: visible;
+    height: auto;
+    opacity: 1;
+    visibility: visible;
+  }
+
+  @media (prefers-reduced-motion) {
+    [part='content'] {
+      transition-property: none;
+    }
   }
 `;

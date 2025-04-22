@@ -8,8 +8,7 @@
     <script type="module" src="./common.js"></script>
 
     <script type="module">
-      import '@vaadin/accordion';
-      // import '@vaadin/accordion/theme/material/vaadin-accordion.js';
+      import '@vaadin/accordion/src/vaadin-lit-accordion.js';
     </script>
   </head>
 
@@ -18,6 +17,7 @@
       <vaadin-accordion-panel>
         <vaadin-accordion-heading slot="summary">Panel 1</vaadin-accordion-heading>
         <div>Panel 1 content</div>
+        <button>Button!</button>
       </vaadin-accordion-panel>
       <vaadin-accordion-panel>
         <vaadin-accordion-heading slot="summary">Panel 2</vaadin-accordion-heading>
