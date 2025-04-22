@@ -265,7 +265,7 @@ describe('text-area', () => {
     });
 
     describe('min / max rows', () => {
-      let lineHeight;
+      let lineHeight, padding;
       let consoleWarn;
 
       beforeEach(async () => {
@@ -278,6 +278,9 @@ describe('text-area', () => {
               }
               vaadin-text-area::part(input-field) {
                 box-sizing: border-box;
+                /* Override base styles to simplify measurements */
+                border: none;
+                outline: 1px solid black;
               }
             </style>
             <vaadin-text-area></vaadin-text-area>
@@ -286,6 +289,7 @@ describe('text-area', () => {
         textArea = fixture.querySelector('vaadin-text-area');
         await nextUpdate(textArea);
         native = textArea.querySelector('textarea');
+        padding = parseInt(getComputedStyle(inputField).paddingTop) * 2;
 
         consoleWarn = sinon.stub(console, 'warn');
       });
@@ -295,21 +299,21 @@ describe('text-area', () => {
       });
 
       it('should use min-height of two rows by default', () => {
-        expect(textArea.clientHeight).to.equal(lineHeight * 2);
+        expect(textArea.clientHeight).to.equal(lineHeight * 2 + padding);
       });
 
       it('should use min-height based on minimum rows', async () => {
         textArea.minRows = 4;
         await nextUpdate(textArea);
 
-        expect(textArea.clientHeight).to.equal(lineHeight * 4);
+        expect(textArea.clientHeight).to.equal(lineHeight * 4 + padding);
       });
 
       it('should be possible to set min-height to a single row', async () => {
         textArea.minRows = 1;
         await nextUpdate(textArea);
 
-        expect(textArea.clientHeight).to.closeTo(lineHeight, 1);
+        expect(textArea.clientHeight).to.closeTo(lineHeight + padding, 1);
       });
 
       it('should log warning when setting minRows to less than one row', async () => {
@@ -342,7 +346,7 @@ describe('text-area', () => {
         await nextUpdate(textArea);
 
         expect(custom.rows).to.equal(1);
-        expect(textArea.clientHeight).to.closeTo(lineHeight, 1);
+        expect(textArea.clientHeight).to.closeTo(lineHeight + padding, 1);
       });
 
       it('should grow beyond the min-height defined by minimum rows', async () => {
@@ -352,7 +356,7 @@ describe('text-area', () => {
         textArea.value = Array(400).join('400');
         await nextUpdate(textArea);
 
-        expect(textArea.clientHeight).to.be.above(80);
+        expect(textArea.clientHeight).to.be.above(lineHeight * 4 + padding);
       });
 
       it('should use max-height based on maximum rows', async () => {
@@ -360,7 +364,7 @@ describe('text-area', () => {
         textArea.value = Array(400).join('400');
         await nextUpdate(textArea);
 
-        expect(textArea.clientHeight).to.equal(lineHeight * 4);
+        expect(textArea.clientHeight).to.equal(lineHeight * 4 + padding);
       });
 
       it('should include margins and paddings when calculating max-height', async () => {
@@ -385,7 +389,7 @@ describe('text-area', () => {
         textArea.value = 'value';
         await nextUpdate(textArea);
 
-        expect(textArea.clientHeight).to.be.below(lineHeight * 4);
+        expect(textArea.clientHeight).to.be.below(lineHeight * 4 + padding);
       });
 
       it('should update max-height when component is resized', async () => {
@@ -400,7 +404,7 @@ describe('text-area', () => {
         // Trigger a resize event
         textArea._onResize();
 
-        expect(textArea.clientHeight).to.equal(lineHeight * 4);
+        expect(textArea.clientHeight).to.equal(lineHeight * 4 + padding);
       });
 
       it('should update max-height when value changes', async () => {
@@ -415,7 +419,7 @@ describe('text-area', () => {
         // Trigger a value change
         textArea.value += 'change';
 
-        expect(textArea.clientHeight).to.equal(lineHeight * 4);
+        expect(textArea.clientHeight).to.equal(lineHeight * 4 + padding);
       });
     });
 
@@ -437,6 +441,8 @@ describe('text-area', () => {
       beforeEach(async () => {
         textArea.style.height = '100px';
         textArea.value = 'a\nb\nc\nd\ne\nf\ng\nh\ni\nj\nk\nl\nm\nn\no\np\nq\nr\ns\nt\nu\nv\nw\nx\ny\nz';
+        // Override base styles to simplify measurements
+        inputField.style.border = 'none';
         await nextUpdate(textArea);
       });
 
