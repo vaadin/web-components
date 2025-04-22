@@ -10,18 +10,19 @@ export const numberFieldStyles = css`
     text-align: center;
   }
 
-  [part='decrease-button'],
-  [part='increase-button'] {
+  :is([part='decrease-button'], [part='increase-button'])::before {
     background: var(--_vaadin-color-subtle);
+    content: '';
+    display: inherit;
     height: var(--vaadin-icon-size, 1lh);
     width: var(--vaadin-icon-size, 1lh);
   }
 
-  [part='decrease-button'] {
+  [part='decrease-button']::before {
     mask-image: var(--_vaadin-icon-minus);
   }
 
-  [part='increase-button'] {
+  [part='increase-button']::before {
     mask-image: var(--_vaadin-icon-plus);
   }
 
