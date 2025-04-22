@@ -6,7 +6,7 @@ import { addGlobalThemeStyles, css, registerStyles } from '@vaadin/vaadin-themab
 
 const cardProps = css`
   html {
-    --vaadin-card-background: var(--lumo-shade-5pct);
+    --vaadin-card-background: var(--lumo-contrast-5pct);
     --vaadin-card-border-radius: var(--lumo-border-radius-l);
     --vaadin-card-border-width: 0;
     --vaadin-card-border-color: var(--lumo-contrast-20pct);
