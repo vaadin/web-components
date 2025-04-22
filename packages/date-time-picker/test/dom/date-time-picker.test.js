@@ -2,6 +2,7 @@ import { expect } from '@vaadin/chai-plugins';
 import { aTimeout, fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import '../../src/vaadin-date-time-picker.js';
 import { resetUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
+import { open } from '@vaadin/date-picker/test/helpers.js';
 
 describe('vaadin-date-time-picker', () => {
   let dateTimePicker;
@@ -62,8 +63,7 @@ describe('vaadin-date-time-picker', () => {
 
       it('date-picker', async () => {
         const datePicker = dateTimePicker.querySelector('[slot="date-picker"]');
-        datePicker.opened = true;
-        await nextRender();
+        await open(datePicker);
         await expect(datePicker.$.overlay).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
       });
 
