@@ -13,9 +13,9 @@ export const overlayStyles = css`
     /* Despite of what the names say, <vaadin-overlay> is just a container
           for position/sizing/alignment. The actual overlay is the overlay part. */
 
-    /* Default position constraints: the entire viewport. Note: themes can
-          override this to introduce gaps between the overlay and the viewport. */
-    inset: 0;
+    /* Default position constraints. Themes can
+          override this to adjust the gap between the overlay and the viewport. */
+    inset: 8px;
     bottom: var(--vaadin-overlay-viewport-bottom);
 
     /* Use flexbox alignment for the overlay part. */
@@ -35,7 +35,7 @@ export const overlayStyles = css`
     -webkit-tap-highlight-color: transparent;
 
     /* CSS API for host */
-    --vaadin-overlay-viewport-bottom: 0;
+    --vaadin-overlay-viewport-bottom: 8px;
   }
 
   :host([hidden]),
