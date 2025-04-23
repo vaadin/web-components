@@ -45,10 +45,14 @@ class Select extends SelectBaseMixin(ElementMixin(ThemableMixin(PolylitMixin(Lit
           flex: 1;
         }
 
+        [part='toggle-button'] {
+          color: var(--_vaadin-color-subtle);
+        }
+
         [part='toggle-button']::before {
-          background: var(--_vaadin-color-subtle);
+          background: currentColor;
           content: '';
-          display: inherit;
+          display: block;
           height: var(--vaadin-icon-size, 1lh);
           mask-image: var(--_vaadin-icon-chevron-down);
           width: var(--vaadin-icon-size, 1lh);
