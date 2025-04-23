@@ -27,8 +27,6 @@ export const datePickerStyles = css`
     content: '';
     display: block;
     background: currentColor;
-    content: '';
-    display: inherit;
     height: var(--vaadin-icon-size, 1lh);
     mask-image: var(--_vaadin-icon-calendar);
     width: var(--vaadin-icon-size, 1lh);
