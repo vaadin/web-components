@@ -111,28 +111,6 @@ const globals = css`
     --vaadin-input-field-value-color: var(--lumo-body-text-color);
     --vaadin-input-field-value-font-size: var(--lumo-font-size-m);
     --vaadin-input-field-value-font-weight: 500;
-    /* Date picker */
-    --vaadin-date-picker-date-border-radius: var(--lumo-border-radius-m);
-    --vaadin-date-picker-date-height: var(--lumo-size-m);
-    --vaadin-date-picker-date-selected-background: var(--vaadin-selection-color, var(--lumo-primary-color));
-    --vaadin-date-picker-date-selected-color: var(--lumo-primary-contrast-color);
-    --vaadin-date-picker-date-today-color: var(--vaadin-selection-color-text, var(--lumo-primary-text-color));
-    --vaadin-date-picker-date-width: calc(100% / 7);
-    --vaadin-date-picker-month-header-color: var(--lumo-header-text-color);
-    --vaadin-date-picker-month-header-font-size: var(--lumo-font-size-l);
-    --vaadin-date-picker-month-header-font-weight: 500;
-    --vaadin-date-picker-month-padding: 0 var(--lumo-space-xs);
-    --vaadin-date-picker-overlay-max-height: calc(var(--lumo-size-m) * 14);
-    --vaadin-date-picker-overlay-width: calc(var(--lumo-size-m) * 7 + var(--lumo-space-xs) * 2 + 57px);
-    --vaadin-date-picker-toolbar-padding: var(--lumo-space-s);
-    --vaadin-date-picker-week-number-color: var(--lumo-secondary-text-color);
-    --vaadin-date-picker-week-number-font-size: var(--lumo-font-size-xxs);
-    --vaadin-date-picker-week-number-width: var(--lumo-size-xs);
-    --vaadin-date-picker-weekday-color: var(--lumo-secondary-text-color);
-    --vaadin-date-picker-weekday-font-size: var(--lumo-font-size-xxs);
-    --vaadin-date-picker-weekday-font-weight: normal;
-    --vaadin-date-picker-year-scroller-background: linear-gradient(var(--lumo-shade-5pct), var(--lumo-shade-5pct));
-    --vaadin-date-picker-year-scroller-width: 57px;
   }
 `;
 
