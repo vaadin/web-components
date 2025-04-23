@@ -22,7 +22,7 @@ template.innerHTML = `
       overflow: auto;
       position: relative;
     }
-    
+
     #scroller.notouchscroll {
       -webkit-overflow-scrolling: auto;
     }
