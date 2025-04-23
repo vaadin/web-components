@@ -2,8 +2,8 @@ import { expect } from '@vaadin/chai-plugins';
 import { resetMouse, sendMouseToElement } from '@vaadin/test-runner-commands';
 import { fixtureSync, nextRender, oneEvent } from '@vaadin/testing-helpers';
 import './not-animated-styles.js';
-import '@vaadin/dialog';
-import '@vaadin/select';
+import '@vaadin/dialog/src/vaadin-dialog.js';
+import '@vaadin/select/src/vaadin-select.js';
 
 describe('select in dialog', () => {
   let dialog, select;

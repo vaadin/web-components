@@ -1,14 +1,14 @@
 import { expect } from '@vaadin/chai-plugins';
 import { resetMouse, sendKeys, sendMouse, sendMouseToElement } from '@vaadin/test-runner-commands';
 import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
-import '@vaadin/combo-box';
-import '@vaadin/custom-field';
-import '@vaadin/date-picker';
-import '@vaadin/date-time-picker';
-import '@vaadin/grid-pro';
-import '@vaadin/grid-pro/vaadin-grid-pro-edit-column.js';
-import '@vaadin/text-field';
-import '@vaadin/time-picker';
+import '@vaadin/combo-box/src/vaadin-combo-box.js';
+import '@vaadin/custom-field/src/vaadin-custom-field.js';
+import '@vaadin/date-picker/src/vaadin-date-picker.js';
+import '@vaadin/date-time-picker/src/vaadin-date-time-picker.js';
+import '@vaadin/grid-pro/src/vaadin-grid-pro.js';
+import '@vaadin/grid-pro/src/vaadin-grid-pro-edit-column.js';
+import '@vaadin/text-field/src/vaadin-text-field.js';
+import '@vaadin/time-picker/src/vaadin-time-picker.js';
 import { untilOverlayRendered } from '@vaadin/date-picker/test/helpers.js';
 import { flushGrid, getContainerCell } from '@vaadin/grid-pro/test/helpers.js';
 

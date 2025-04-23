@@ -3,8 +3,8 @@ import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '@polymer/polymer/lib/elements/dom-bind.js';
 import '@vaadin/polymer-legacy-adapter/template-renderer.js';
-import '@vaadin/text-field/vaadin-text-field.js';
-import '@vaadin/grid';
+import '@vaadin/text-field/src/vaadin-text-field.js';
+import '@vaadin/grid/src/vaadin-grid.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import {
   flushGrid,

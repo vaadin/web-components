@@ -1,7 +1,7 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextUpdate, oneEvent } from '@vaadin/testing-helpers';
 import '@vaadin/polymer-legacy-adapter/template-renderer.js';
-import '@vaadin/dialog';
+import '@vaadin/dialog/src/vaadin-dialog.js';
 
 describe('vaadin-dialog template', () => {
   let dialog, overlay;

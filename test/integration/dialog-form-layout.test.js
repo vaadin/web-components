@@ -1,9 +1,10 @@
 import { setViewport } from '@vaadin/test-runner-commands';
 import { fixtureSync, nextFrame, nextRender, nextResize } from '@vaadin/testing-helpers';
 import './not-animated-styles.js';
-import '@vaadin/form-layout';
-import '@vaadin/form-layout/vaadin-form-item.js';
-import '@vaadin/dialog';
+import './dialog-form-layout-test-styles.js';
+import '@vaadin/form-layout/src/vaadin-form-layout.js';
+import '@vaadin/form-layout/src/vaadin-form-item.js';
+import '@vaadin/dialog/src/vaadin-dialog.js';
 import { assertFormLayoutGrid, assertFormLayoutLabelPosition } from '@vaadin/form-layout/test/helpers.js';
 
 describe('form-layout in dialog', () => {

@@ -1,7 +1,7 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync } from '@vaadin/testing-helpers';
 import '@vaadin/polymer-legacy-adapter/template-renderer.js';
-import '@vaadin/notification';
+import '@vaadin/notification/src/vaadin-notification.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 
 class XNotification extends PolymerElement {

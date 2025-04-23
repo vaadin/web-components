@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync } from '@vaadin/testing-helpers';
-import '@vaadin/custom-field';
+import '@vaadin/custom-field/src/vaadin-custom-field.js';
 
 describe('custom-field inputs', () => {
   let customField;
@@ -14,7 +14,7 @@ describe('custom-field inputs', () => {
     `);
 
     // Ensure lazy custom element upgrade for slotted inputs.
-    await import('@vaadin/integer-field');
+    await import('@vaadin/integer-field/src/vaadin-integer-field.js');
   });
 
   it('should apply value set using attribute to inputs', () => {

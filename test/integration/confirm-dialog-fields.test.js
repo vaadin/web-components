@@ -1,16 +1,16 @@
 import { expect } from '@vaadin/chai-plugins';
 import { nextRender } from '@vaadin/testing-helpers';
 import './not-animated-styles.js';
-import '@vaadin/checkbox';
-import '@vaadin/combo-box';
-import '@vaadin/confirm-dialog';
-import '@vaadin/date-picker';
-import '@vaadin/multi-select-combo-box';
-import '@vaadin/number-field';
-import '@vaadin/radio-group';
-import '@vaadin/text-area';
-import '@vaadin/text-field';
-import '@vaadin/time-picker';
+import '@vaadin/checkbox/src/vaadin-checkbox.js';
+import '@vaadin/combo-box/src/vaadin-combo-box.js';
+import '@vaadin/confirm-dialog/src/vaadin-confirm-dialog.js';
+import '@vaadin/date-picker/src/vaadin-date-picker.js';
+import '@vaadin/multi-select-combo-box/src/vaadin-multi-select-combo-box.js';
+import '@vaadin/number-field/src/vaadin-number-field.js';
+import '@vaadin/radio-group/src/vaadin-radio-group.js';
+import '@vaadin/text-area/src/vaadin-text-area.js';
+import '@vaadin/text-field/src/vaadin-text-field.js';
+import '@vaadin/time-picker/src/vaadin-time-picker.js';
 
 describe('confirm-dialog with fields', () => {
   let dialog, field;

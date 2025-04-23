@@ -1,10 +1,10 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextRender, oneEvent, tabKeyDown } from '@vaadin/testing-helpers';
 import './not-animated-styles.js';
-import '@vaadin/button/vaadin-button.js';
-import '@vaadin/overlay/vaadin-overlay.js';
-import '@vaadin/radio-group/vaadin-radio-group.js';
-import '@vaadin/text-field/vaadin-text-field.js';
+import '@vaadin/button/src/vaadin-button.js';
+import '@vaadin/overlay/src/vaadin-overlay.js';
+import '@vaadin/radio-group/src/vaadin-radio-group.js';
+import '@vaadin/text-field/src/vaadin-text-field.js';
 import { getFocusableElements, isElementFocused } from '@vaadin/a11y-base/src/focus-utils.js';
 
 describe('focus-trap', () => {

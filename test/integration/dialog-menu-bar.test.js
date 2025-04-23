@@ -1,8 +1,9 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextRender, oneEvent } from '@vaadin/testing-helpers';
 import '@vaadin/dialog';
-import '@vaadin/menu-bar';
-import '@vaadin/vertical-layout';
+import '@vaadin/menu-bar/test/menu-bar-test-styles.js';
+import '@vaadin/menu-bar/src/vaadin-menu-bar.js';
+import '@vaadin/vertical-layout/src/vaadin-vertical-layout.js';
 
 // Do not import `not-animated-styles.js` as the original issue that
 // this test covers was caused by the Lumo dialog opening animation.

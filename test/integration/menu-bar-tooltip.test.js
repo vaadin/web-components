@@ -14,8 +14,9 @@ import {
 } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './not-animated-styles.js';
-import '@vaadin/menu-bar';
-import { Tooltip } from '@vaadin/tooltip';
+import '@vaadin/menu-bar/test/menu-bar-test-styles.js';
+import '@vaadin/menu-bar/src/vaadin-menu-bar.js';
+import { Tooltip } from '@vaadin/tooltip/src/vaadin-tooltip.js';
 import { mouseenter, mouseleave } from '@vaadin/tooltip/test/helpers.js';
 
 export function mouseover(target) {

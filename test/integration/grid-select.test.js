@@ -1,8 +1,8 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import '@vaadin/grid';
-import '@vaadin/select';
+import '@vaadin/grid/src/vaadin-grid.js';
+import '@vaadin/select/src/vaadin-select.js';
 import { flushGrid, getBodyCellContent } from '@vaadin/grid/test/helpers.js';
 
 describe('select in grid', () => {

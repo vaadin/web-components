@@ -1,7 +1,7 @@
 import { expect } from '@vaadin/chai-plugins';
 import sinon from 'sinon';
-import '@vaadin/button';
-import { Button } from '@vaadin/button';
+import '@vaadin/button/src/vaadin-button.js';
+import { Button } from '@vaadin/button/src/vaadin-button.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 
 describe('define', () => {
