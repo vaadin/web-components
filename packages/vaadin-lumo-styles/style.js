@@ -111,6 +111,13 @@ const globals = css`
     --vaadin-input-field-value-color: var(--lumo-body-text-color);
     --vaadin-input-field-value-font-size: var(--lumo-font-size-m);
     --vaadin-input-field-value-font-weight: 500;
+    /* Item */
+    --vaadin-item-border-radius: var(--lumo-border-radius-m);
+    --vaadin-item-gap: 0;
+    --vaadin-item-height: auto;
+    --vaadin-item-overlay-padding: var(--lumo-space-xs);
+    --vaadin-item-padding: 0.5em calc(var(--lumo-space-l) + var(--lumo-border-radius-m) / 4) 0.5em
+      var(--_lumo-list-box-item-padding-left, calc(var(--lumo-border-radius-m) / 4));
   }
 `;
 
