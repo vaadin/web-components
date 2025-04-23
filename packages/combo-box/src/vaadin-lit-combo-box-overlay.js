@@ -18,11 +18,12 @@ const comboBoxOverlayStyles = css`
     width: var(--vaadin-combo-box-overlay-width, var(--_vaadin-combo-box-overlay-default-width, auto));
   }
 
-  [part~='loader'] {
+  [part='loader'] {
     animation: spin 1s linear infinite;
     border: 2px solid;
-    border-color: var(--_vaadin-background-container-strong) var(--_vaadin-background-container-strong)
-      var(--_vaadin-color-strong) var(--_vaadin-color-strong);
+    --_spinner-color: var(--vaadin-combo-box-spinner-color, var(--_vaadin-color-strong));
+    border-color: var(--_spinner-color) var(--_spinner-color) hsl(var(--_spinner-color) h s l / 0.5)
+      hsl(var(--_spinner-color) h s l / 0.5);
     border-radius: var(--_vaadin-radius-full);
     box-sizing: border-box;
     display: none;
@@ -40,17 +41,24 @@ const comboBoxOverlayStyles = css`
     height: 100%;
   }
 
-  :host([loading]) [part~='loader'] {
+  :host([loading]) [part='loader'] {
     display: block;
   }
 
-  :host([loading]) [part~='content'] {
+  :host([loading]) [part='content'] {
     min-height: calc(var(--vaadin-icon-size, 1lh) + 12px + var(--vaadin-item-overlay-padding, 4px) * 2);
   }
 
   @keyframes spin {
     to {
       transform: rotate(360deg);
+    }
+  }
+
+  @media (forced-colors: active) {
+    [part='loader'] {
+      border-color: CanvasText CanvasText transparent transparent;
+      forced-color-adjust: none;
     }
   }
 `;

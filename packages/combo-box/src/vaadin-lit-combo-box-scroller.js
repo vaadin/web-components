@@ -36,6 +36,7 @@ export class ComboBoxScroller extends ComboBoxScrollerMixin(PolylitMixin(LitElem
       #selector {
         border: var(--vaadin-item-overlay-padding, 4px) solid transparent;
         position: relative;
+        forced-color-adjust: none;
       }
     `;
   }
