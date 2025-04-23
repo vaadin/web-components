@@ -323,6 +323,10 @@ describe('resizable', () => {
     });
     resize(overlayPart.querySelector('.w'), -dx, 0);
 
+    // Take the default `inset` set in the overlay base styles into account
+    const insetLeft = parseInt(getComputedStyle(dialog.$.overlay).left);
+    const insetTop = parseInt(getComputedStyle(dialog.$.overlay).top);
+
     const resizedBounds = overlayPart.getBoundingClientRect();
     const contentStyles = getComputedStyle(content);
     const verticalPadding =
@@ -335,8 +339,8 @@ describe('resizable', () => {
     expect(onResize.calledOnce).to.be.true;
     expect(Math.floor(resizedBounds.width)).to.be.eql(parseInt(detail.width));
     expect(Math.floor(resizedBounds.height)).to.be.eql(parseInt(detail.height));
-    expect(Math.floor(resizedBounds.left)).to.be.eql(parseInt(detail.left));
-    expect(Math.floor(resizedBounds.top)).to.be.eql(parseInt(detail.top));
+    expect(Math.floor(resizedBounds.left)).to.be.eql(parseInt(detail.left) + insetLeft);
+    expect(Math.floor(resizedBounds.top)).to.be.eql(parseInt(detail.top) + insetTop);
     expect(parseInt(detail.contentWidth)).to.be.eql(parseInt(contentStyles.width));
     expect(parseInt(detail.contentHeight)).to.be.eql(parseInt(contentStyles.height) - verticalPadding);
   });
@@ -602,8 +606,11 @@ describe('draggable', () => {
     await nextRender();
     const overlay = dialog.$.overlay.$.overlay;
     const bounds = overlay.getBoundingClientRect();
-    expect(dialog.top).to.be.equal(bounds.top);
-    expect(dialog.left).to.be.equal(bounds.left);
+    // Take the default `inset` set in the overlay base styles into account
+    const insetLeft = parseInt(getComputedStyle(dialog.$.overlay).left);
+    const insetTop = parseInt(getComputedStyle(dialog.$.overlay).top);
+    expect(dialog.top).to.be.equal(bounds.top - insetTop);
+    expect(dialog.left).to.be.equal(bounds.left - insetLeft);
   });
 
   it('should fire "dragged" event on drag', async () => {

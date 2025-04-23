@@ -660,7 +660,8 @@ describe('vaadin-confirm-dialog', () => {
         await nextFrame();
         const footer = overlay.$.overlay.querySelector('[part="footer"]');
         const overlayRect = overlay.$.overlay.getBoundingClientRect();
-        expect(footer.getBoundingClientRect().bottom).to.be.closeTo(overlayRect.bottom, 0.1);
+        const borderWidth = parseInt(getComputedStyle(overlay.$.overlay).borderBottomWidth);
+        expect(footer.getBoundingClientRect().bottom).to.be.closeTo(overlayRect.bottom - borderWidth, 0.1);
       });
     });
 
