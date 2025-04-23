@@ -28,7 +28,6 @@ const comboBoxOverlayStyles = css`
     --_spinner-color: var(--vaadin-combo-box-spinner-color, var(--_vaadin-color-strong));
     border-color: var(--_spinner-color) var(--_spinner-color) hsl(from var(--_spinner-color) h s l / 0.2)
       hsl(from var(--_spinner-color) h s l / 0.2);
-    forced-color-adjust: none; /* Retain border color */
     border-radius: var(--_vaadin-radius-full);
     box-sizing: border-box;
     display: none;
@@ -58,6 +57,13 @@ const comboBoxOverlayStyles = css`
   @keyframes spin {
     to {
       rotate: 1turn;
+    }
+  }
+
+  @media (forced-colors: active) {
+    [part='loader'] {
+      forced-color-adjust: none;
+      --vaadin-combo-box-spinner-color: CanvasText;
     }
   }
 `;
