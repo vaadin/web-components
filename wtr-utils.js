@@ -101,6 +101,15 @@ const getAllVisualPackages = () => {
 };
 
 /**
+ * Get all available packages with visual tests for base styles.
+ */
+const getAllBasePackages = () => {
+  return fs
+    .readdirSync('packages')
+    .filter((dir) => fs.statSync(`packages/${dir}`).isDirectory() && fs.existsSync(`packages/${dir}/test/visual/base`));
+};
+
+/**
  * Get packages for running tests.
  */
 const getTestPackages = (allPackages) => {
@@ -163,16 +172,26 @@ const getUnitTestGroups = (packages) => {
  * Get visual test groups based on packages.
  */
 const getVisualTestGroups = (packages, theme) => {
-  return packages
+  const themePackages = packages
     .filter(
-      (pkg) => !pkg.includes('icons') && !pkg.includes(theme) && !pkg.includes(theme === 'lumo' ? 'material' : 'lumo'),
+      (pkg) =>
+        !pkg.includes('icons') &&
+        (theme === 'base'
+          ? !pkg.includes('lumo') && !pkg.includes('material')
+          : !pkg.includes(theme) && !pkg.includes(theme === 'lumo' ? 'material' : 'lumo')),
     )
     .map((pkg) => {
       return {
         name: pkg,
         files: `packages/${pkg}/test/visual/${theme}/*.test.{js,ts}`,
       };
-    })
+    });
+
+  if (theme === 'base') {
+    return themePackages;
+  }
+
+  return themePackages
     .concat({
       name: `vaadin-${theme}-styles`,
       files: `packages/vaadin-${theme}-styles/test/visual/*.test.{js,ts}`,
@@ -268,7 +287,7 @@ const createUnitTestsConfig = (config) => {
 };
 
 const createVisualTestsConfig = (theme, browserVersion) => {
-  const visualPackages = getAllVisualPackages();
+  const visualPackages = theme === 'base' ? getAllBasePackages() : getAllVisualPackages();
   const packages = getTestPackages(visualPackages);
   const groups = getVisualTestGroups(packages, theme);
 
