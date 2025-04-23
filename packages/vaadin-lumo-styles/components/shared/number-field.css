@@ -1,0 +1,47 @@
+/**
+ * Shared styles used by number and integer fields.
+ *
+ * Import this file only with proper media. Example:
+ *
+ * ```
+ * @import './shared/number-field.css' vaadin-number-field;
+ * ```
+ *
+ * NOTE: this file should not import dependencies e.g. `color.css` etc.
+ * Instead these should be loaded from corresponding components files.
+ */
+:host([step-buttons-visible]:not([theme~='align-right'])) ::slotted(input) {
+  text-align: center;
+}
+
+:host(:not([disabled])) [part$='button'][disabled] {
+  opacity: 0.2;
+}
+
+:host([step-buttons-visible]) [part='input-field'] {
+  padding: 0;
+}
+
+[part$='button'] {
+  cursor: pointer;
+  font-size: var(--lumo-icon-size-s);
+  width: 1.6em;
+  height: 1.6em;
+}
+
+[part$='button']::before {
+  margin-top: 0.3em;
+}
+
+[part='decrease-button']::before {
+  content: var(--lumo-icons-minus);
+}
+
+[part='increase-button']::before {
+  content: var(--lumo-icons-plus);
+}
+
+/* RTL specific styles */
+:host([dir='rtl']:not([theme~='align-right'])) ::slotted(input) {
+  --_lumo-text-field-overflow-mask-image: linear-gradient(to left, transparent, #000 1.25em);
+}

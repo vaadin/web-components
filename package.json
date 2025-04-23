@@ -28,7 +28,9 @@
     "test:webkit": "yarn test --config web-test-runner-webkit.config.js",
     "update:lumo": "TEST_ENV=update yarn test --config web-test-runner-lumo.config.js",
     "update:material": "TEST_ENV=update yarn test --config web-test-runner-material.config.js",
-    "update:snapshots": "yarn test --config web-test-runner-snapshots.config.js --update-snapshots"
+    "update:snapshots": "yarn test --config web-test-runner-snapshots.config.js --update-snapshots",
+    "vite:start": "vite dev",
+    "vite:build": "vite build && vite preview"
   },
   "devDependencies": {
     "@fontsource/roboto": "^4.5.8",
@@ -46,18 +48,21 @@
     "@web/test-runner-visual-regression": "^0.10.0",
     "axios": "^1.4.0",
     "dotenv": "^16.0.3",
+    "es-module-shims": "^2.0.10",
     "eslint": "^8.57.0",
     "eslint-config-vaadin": "^1.0.0-alpha.28",
     "eslint-plugin-es": "^4.1.0",
     "eslint-plugin-no-only-tests": "^3.1.0",
     "eslint-plugin-prettier": "^5.1.3",
     "eslint-plugin-simple-import-sort": "^12.0.0",
-    "glob": "^8.0.3",
+    "glob": "^11.0.1",
     "husky": "^9.1.4",
     "lerna": "^4.0.0",
     "lint-staged": "^15.2.9",
     "npm-run-all": "^4.1.5",
     "patch-package": "^7.0.0",
+    "postcss": "^8.5.3",
+    "postcss-import": "^16.1.0",
     "postcss-lit": "^1.1.0",
     "prettier": "^3.1.0",
     "prettier-plugin-package": "^1.3.0",
@@ -66,7 +71,8 @@
     "rollup": "^4.4.0",
     "stylelint": "^16.10.0",
     "stylelint-config-vaadin": "^1.0.0-alpha.2",
-    "typescript": "^5.7.3"
+    "typescript": "^5.7.3",
+    "vite": "^6.2.5"
   },
   "resolutions": {
     "playwright": "^1.52.0"

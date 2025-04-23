@@ -1,0 +1,11 @@
+@import './input-container.css';
+
+@import './shared/field-button.css' vaadin-integer-field;
+@import './shared/helper.css' vaadin-integer-field;
+@import './shared/input-field.css' vaadin-integer-field;
+@import './shared/required-field.css' vaadin-integer-field;
+@import './shared/number-field.css' vaadin-integer-field;
+
+html, :host {
+  --vaadin-integer-field-css-inject: 1;
+}
