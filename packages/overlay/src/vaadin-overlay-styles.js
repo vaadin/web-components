@@ -13,9 +13,9 @@ export const overlayStyles = css`
     /* Despite of what the names say, <vaadin-overlay> is just a container
           for position/sizing/alignment. The actual overlay is the overlay part. */
 
-    /* Default position constraints: the entire viewport. Note: themes can
-          override this to introduce gaps between the overlay and the viewport. */
-    inset: 0;
+    /* Default position constraints. Themes can
+          override this to adjust the gap between the overlay and the viewport. */
+    inset: 8px;
     bottom: var(--vaadin-overlay-viewport-bottom);
 
     /* Use flexbox alignment for the overlay part. */
@@ -35,7 +35,7 @@ export const overlayStyles = css`
     -webkit-tap-highlight-color: transparent;
 
     /* CSS API for host */
-    --vaadin-overlay-viewport-bottom: 0;
+    --vaadin-overlay-viewport-bottom: 8px;
   }
 
   :host([hidden]),
@@ -45,23 +45,24 @@ export const overlayStyles = css`
   }
 
   [part='overlay'] {
-    -webkit-overflow-scrolling: touch;
-    overflow: auto;
-    pointer-events: auto;
-
-    /* Prevent overflowing the host */
-    max-width: 100%;
+    background: var(--vaadin-overlay-background, var(--_vaadin-background));
+    border: var(--vaadin-overlay-border, 1px solid var(--_vaadin-border-color));
+    border-radius: var(--vaadin-overlay-border-radius, var(--_vaadin-radius-m));
+    box-shadow: var(--vaadin-overlay-box-shadow, 0 8px 24px -4px hsl(0 0 0 / 0.3));
     box-sizing: border-box;
-
-    -webkit-tap-highlight-color: initial; /* reenable tap highlight inside */
+    max-width: 100%;
+    overflow: auto;
+    overscroll-behavior: contain;
+    pointer-events: auto;
+    -webkit-tap-highlight-color: initial;
   }
 
   [part='backdrop'] {
-    z-index: -1;
+    background: var(--vaadin-overlay-backdrop-background, rgba(0, 0, 0, 0.5));
     content: '';
-    background: rgba(0, 0, 0, 0.5);
-    position: fixed;
     inset: 0;
     pointer-events: auto;
+    position: fixed;
+    z-index: -1;
   }
 `;
