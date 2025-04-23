@@ -6,6 +6,7 @@
 import { html, render } from 'lit';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import { KeyboardDirectionMixin } from '@vaadin/a11y-base/src/keyboard-direction-mixin.js';
+import { updateMarkdownContent } from '@vaadin/markdown/src/markdown-helpers.js';
 
 /**
  * @polymerMixin
@@ -36,6 +37,13 @@ export const MessageListMixin = (superClass) =>
           value: () => [],
           observer: '_itemsChanged',
           sync: true,
+        },
+
+        /**
+         * When set to `true`, the message text is parsed as Markdown.
+         */
+        markdown: {
+          type: Boolean,
         },
       };
     }
@@ -102,7 +110,9 @@ export const MessageListMixin = (superClass) =>
                 theme="${ifDefined(item.theme)}"
                 class="${ifDefined(item.className)}"
                 @focusin="${this._onMessageFocusIn}"
-                >${item.text}<vaadin-avatar slot="avatar"></vaadin-avatar
+                >${this.markdown
+                  ? html`<div class="markdown-body" .markdown=${item.text}></div>`
+                  : item.text}<vaadin-avatar slot="avatar"></vaadin-avatar
               ></vaadin-message>
             `,
           )}
@@ -110,6 +120,10 @@ export const MessageListMixin = (superClass) =>
         this,
         { host: this },
       );
+
+      this.querySelectorAll('vaadin-message > .markdown-body').forEach((body) => {
+        updateMarkdownContent(body, body.markdown);
+      });
     }
 
     /** @private */

@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Markdown</title>
+    <script type="module" src="./common.js"></script>
+
+    <script type="module">
+      import '@vaadin/markdown';
+      import '@vaadin/charts';
+      import { render, html } from 'lit';
+
+      const markdown = document.querySelector('vaadin-markdown');
+      markdown.markdown = `
+# Markdown
+
+Hello
+
+\`\`\`chart
+{
+  "chartTitle": "Sales Data (from Markdown)",
+  "series": [
+    {
+      "title": "Sales",
+      "type": "column",
+      "values": [150, 250, 200, 350]
+    },
+    {
+      "title": "Trend",
+      "type": "line",
+      "values": [140, 260, 190, 340]
+    }
+  ]
+}
+\`\`\`
+`;
+
+      markdown.renderer = (root, _md, { text }) => {
+        const config = JSON.parse(text);
+
+        render(
+          html`
+            <vaadin-chart type="column" title="${config.chartTitle}" style="height: 300px;">
+              ${config.series.map(
+                (seriesItem) =>
+                  html`<vaadin-chart-series
+                    title="${seriesItem.title}"
+                    type="${seriesItem.type}"
+                    values="${JSON.stringify(seriesItem.values)}"
+                  >
+                  </vaadin-chart-series>`,
+              )}
+            </vaadin-chart>
+          `,
+          root,
+        );
+      };
+    </script>
+  </head>
+
+  <body>
+    <vaadin-markdown></vaadin-markdown>
+  </body>
+</html>
