@@ -33,8 +33,9 @@ const comboBoxOverlayStyles = css`
     box-sizing: border-box;
     display: none;
     height: var(--vaadin-icon-size, 1lh);
-    inset-block-start: calc(var(--vaadin-item-overlay-padding, 4px) + 6px);
-    inset-inline-end: 8px;
+    inset: calc(var(--vaadin-item-overlay-padding, 4px) + 2px);
+    inset-block-end: auto;
+    inset-inline-start: auto;
     pointer-events: none;
     position: absolute;
     width: var(--vaadin-icon-size, 1lh);
@@ -51,7 +52,7 @@ const comboBoxOverlayStyles = css`
   }
 
   :host([loading]) [part='content'] {
-    min-height: calc(var(--vaadin-icon-size, 1lh) + 12px + var(--vaadin-item-overlay-padding, 4px) * 2);
+    --_items-min-height: calc(var(--vaadin-icon-size, 1lh) + 4px);
   }
 
   @keyframes spin {
