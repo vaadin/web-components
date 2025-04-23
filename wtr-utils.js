@@ -223,7 +223,7 @@ const getScreenshotFileName = ({ name, testFile }, type, diff) => {
     folder = 'icons/test/visual/screenshots';
   } else {
     const match = testFile.match(/\/packages\/(.+)\.test\.(js|ts)/u);
-    folder = match[1].replace(/(lumo|material)/u, '$1/screenshots');
+    folder = match[1].replace(/(base|lumo|material)/u, '$1/screenshots');
   }
   return path.join(folder, type, diff ? `${name}-diff` : name);
 };
