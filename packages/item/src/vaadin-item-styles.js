@@ -30,7 +30,7 @@ export const itemStyles = css`
     }
 
     :host([hidden]) {
-      display: none;
+      display: none !important;
     }
 
     [part='checkmark'] {
