@@ -1,6 +1,7 @@
 import { expect } from '@vaadin/chai-plugins';
 import { aTimeout, fixtureSync, nextFrame, oneEvent } from '@vaadin/testing-helpers';
-import '../vaadin-notification.js';
+import './animation-test-styles.js';
+import '../src/vaadin-notification.js';
 
 describe('animated notifications', () => {
   let wrapper, notifications, container;

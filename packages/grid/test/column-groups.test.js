@@ -1,8 +1,8 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextFrame, nextRender, nextResize } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import '../vaadin-grid.js';
-import '../vaadin-grid-column-group.js';
+import '../src/vaadin-grid.js';
+import '../src/vaadin-grid-column-group.js';
 import {
   attributeRenderer,
   flushGrid,

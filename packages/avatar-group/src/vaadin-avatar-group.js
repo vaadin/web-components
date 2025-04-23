@@ -4,6 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import '@vaadin/avatar/src/vaadin-avatar.js';
+import '@vaadin/tooltip/src/vaadin-tooltip.js';
 import './vaadin-avatar-group-menu.js';
 import './vaadin-avatar-group-menu-item.js';
 import './vaadin-avatar-group-overlay.js';

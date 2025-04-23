@@ -5,7 +5,7 @@
  */
 import { DisabledMixin } from '@vaadin/a11y-base/src/disabled-mixin.js';
 import { FocusMixin } from '@vaadin/a11y-base/src/focus-mixin.js';
-import { isElementFocused, isElementHidden, isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
+import { isElementFocused, isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
 import { KeyboardDirectionMixin } from '@vaadin/a11y-base/src/keyboard-direction-mixin.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { I18nMixin } from '@vaadin/component-base/src/i18n-mixin.js';
@@ -233,6 +233,17 @@ export const MenuBarMixin = (superClass) =>
      */
     get _vertical() {
       return false;
+    }
+
+    /**
+     * Override getter from `KeyboardDirectionMixin`.
+     *
+     * @return {boolean}
+     * @protected
+     * @override
+     */
+    get _tabNavigation() {
+      return this.tabNavigation;
     }
 
     /**
@@ -759,12 +770,7 @@ export const MenuBarMixin = (superClass) =>
      */
     _setFocused(focused) {
       if (focused) {
-        let target = this.querySelector('[tabindex="0"]');
-        if (this.tabNavigation) {
-          // Switch submenu on menu button Tab / Shift Tab
-          target = this.querySelector('[focused]');
-          this.__switchSubMenu(target);
-        }
+        const target = this.tabNavigation ? this.querySelector('[focused]') : this.querySelector('[tabindex="0"]');
         if (target) {
           this._buttons.forEach((btn) => {
             this._setTabindex(btn, btn === target);
@@ -883,30 +889,15 @@ export const MenuBarMixin = (superClass) =>
         if (e.keyCode === 38 && item === list.items[0]) {
           this._close(true);
         }
-        // ArrowLeft, or ArrowRight on non-parent submenu item
+        // ArrowLeft, or ArrowRight on non-parent submenu item,
         if (e.keyCode === 37 || (e.keyCode === 39 && !item._item.children)) {
           // Prevent ArrowLeft from being handled in context-menu
           e.stopImmediatePropagation();
           this._onKeyDown(e);
-        } else if (e.keyCode === 9 && this.tabNavigation) {
-          // Switch opened submenu on submenu item Tab / Shift Tab
-          const items = this._getItems() || [];
-          const currentIdx = items.indexOf(this.focused);
-          const increment = e.shiftKey ? -1 : 1;
-          let idx = currentIdx + increment;
-          idx = this._getAvailableIndex(items, idx, increment, (item) => !isElementHidden(item));
-          this.__switchSubMenu(items[idx]);
         }
-      }
-    }
 
-    /** @private */
-    __switchSubMenu(target) {
-      const wasExpanded = this._expandedButton != null && this._expandedButton !== target;
-      if (wasExpanded) {
-        this._close();
-        if (target.item && target.item.children) {
-          this.__openSubMenu(target, true, { keepFocus: true });
+        if (e.key === 'Tab' && this.tabNavigation) {
+          this._onKeyDown(e);
         }
       }
     }
@@ -951,31 +942,21 @@ export const MenuBarMixin = (superClass) =>
       const overlay = subMenu._overlayElement;
       overlay.noVerticalOverlap = true;
 
+      this._hideTooltip(true);
+
       this._expandedButton = button;
-
-      requestAnimationFrame(() => {
-        // After changing items, buttons are recreated so the old button is
-        // no longer in the DOM. Reset position target to null to prevent
-        // overlay from closing due to target width / height equal to 0.
-        if (overlay.positionTarget && !overlay.positionTarget.isConnected) {
-          overlay.positionTarget = null;
-        }
-
-        button.dispatchEvent(
-          new CustomEvent('opensubmenu', {
-            detail: {
-              children: items,
-            },
-          }),
-        );
-        this._hideTooltip(true);
-
-        this._setExpanded(button, true);
-
-        overlay.positionTarget = button;
-      });
+      this._setExpanded(button, true);
 
       this.style.pointerEvents = 'auto';
+      overlay.positionTarget = button;
+
+      button.dispatchEvent(
+        new CustomEvent('opensubmenu', {
+          detail: {
+            children: items,
+          },
+        }),
+      );
 
       overlay.addEventListener(
         'vaadin-overlay-open',

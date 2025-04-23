@@ -11,7 +11,8 @@ import {
   tabKeyDown,
 } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import '../vaadin-avatar-group.js';
+import './avatar-group-test-styles.js';
+import '../src/vaadin-avatar-group.js';
 
 describe('avatar-group', () => {
   let group;

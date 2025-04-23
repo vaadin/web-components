@@ -102,7 +102,6 @@ class DashboardSection extends DashboardItemMixin(ElementMixin(ThemableMixin(Pol
         }
 
         ::slotted(*) {
-          --_vaadin-dashboard-title-level: 3;
           --_vaadin-dashboard-item-column: span
             min(
               var(--vaadin-dashboard-item-colspan, 1),
@@ -166,6 +165,11 @@ class DashboardSection extends DashboardItemMixin(ElementMixin(ThemableMixin(Pol
         value: '',
       },
 
+      /* @private */
+      __rootHeadingLevel: {
+        type: Number,
+      },
+
       /** @private */
       __childCount: {
         type: Number,
@@ -184,7 +188,9 @@ class DashboardSection extends DashboardItemMixin(ElementMixin(ThemableMixin(Pol
 
         <header part="header">
           ${this.__renderDragHandle()}
-          <h2 id="title" part="title">${this.sectionTitle}</h2>
+          <div id="title" role="heading" aria-level=${this.__rootHeadingLevel || 2} part="title"
+            >${this.sectionTitle}</div
+          >
           ${this.__renderRemoveButton()}
         </header>
       </div>

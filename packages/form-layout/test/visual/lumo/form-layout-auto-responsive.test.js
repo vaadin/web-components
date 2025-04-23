@@ -70,6 +70,74 @@ describe('form-layout auto responsive', () => {
     });
   });
 
+  describe('minColumns', () => {
+    beforeEach(async () => {
+      element = fixtureSync(
+        `
+          <vaadin-form-layout
+            auto-responsive
+            auto-rows
+            column-width="100px"
+            min-columns="2"
+            max-columns="3"
+          >
+            <vaadin-form-item>
+              <label slot="label">Field 1</label>
+              <input />
+            </vaadin-form-item>
+            <vaadin-form-item>
+              <label slot="label">Field 2</label>
+              <input />
+            </vaadin-form-item>
+            <vaadin-form-item>
+              <label slot="label">Field 3</label>
+              <input />
+            </vaadin-form-item>
+            <vaadin-form-item>
+              <label slot="label">Field 4</label>
+              <input />
+            </vaadin-form-item>
+          </vaadin-form-layout>
+        `,
+        container,
+      );
+      await nextResize(element);
+    });
+
+    it('wide container (space for 3 columns)', async () => {
+      await visualDiff(container, 'min-columns-wide-container');
+    });
+
+    it('medium container (space for 2 columns)', async () => {
+      container.style.width = '250px';
+      await nextResize(element);
+      await visualDiff(container, 'min-columns-medium-container');
+    });
+
+    it('narrow container (space for 1 column only)', async () => {
+      container.style.width = '100px';
+      await nextResize(element);
+      await visualDiff(container, 'min-columns-narrow-container');
+    });
+
+    // TODO There is an issue with native inputs not shrinking, leading to
+    //  overflowing items. The baseline image should be updated one this
+    //  issue is fixed.
+    it('labelsAside', async () => {
+      element.labelsAside = true;
+      container.style.width = '800px';
+      await nextResize(element);
+      await visualDiff(container, 'min-columns-labels-aside');
+    });
+
+    it('labelsAside with narrow container', async () => {
+      element.labelsAside = true;
+      container.style.width = '200px';
+      await nextResize(element);
+      await visualDiff(container, 'min-columns-labels-aside-narrow-container');
+    });
+  });
+
   describe('explicit rows', () => {
     beforeEach(async () => {
       element = fixtureSync(

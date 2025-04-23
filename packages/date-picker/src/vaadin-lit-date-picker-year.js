@@ -26,6 +26,16 @@ export class DatePickerYear extends ThemableMixin(DatePickerYearMixin(PolylitMix
         display: block;
         height: 100%;
       }
+      [part='year-number'] {
+        align-items: center;
+        display: flex;
+        height: 50%;
+        justify-content: center;
+        transform: translateY(-50%);
+      }
+      :host([current]) [part='year-number'] {
+        color: var(--vaadin-date-picker-year-scroller-current-year-color, var(--_vaadin-color-strong));
+      }
     `;
   }
 

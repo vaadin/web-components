@@ -8,6 +8,6 @@ it('should not throw when grid with items imported lazily after selection column
   `);
 
   // The order of imports matters in this test
-  await import('../vaadin-grid-selection-column.js');
-  await import('../vaadin-grid.js');
+  await import('../src/vaadin-grid-selection-column.js');
+  await import('../src/vaadin-grid.js');
 });

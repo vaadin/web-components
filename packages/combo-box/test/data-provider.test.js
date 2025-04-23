@@ -1,11 +1,10 @@
 import { expect } from '@vaadin/chai-plugins';
 import { arrowDownKeyDown, aTimeout, enterKeyDown, fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import './not-animated-styles.js';
 import './data-provider-styles.js';
-import '@vaadin/text-field/vaadin-text-field.js';
-import '../vaadin-combo-box-light.js';
-import '../vaadin-combo-box.js';
+import '@vaadin/text-field/src/vaadin-text-field.js';
+import '../src/vaadin-combo-box-light.js';
+import '../src/vaadin-combo-box.js';
 import { ComboBoxPlaceholder } from '../src/vaadin-combo-box-placeholder.js';
 import {
   clickItem,

@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
-import '../vaadin-notification.js';
+import '../src/vaadin-notification.js';
 import { html, render } from 'lit';
 
 describe('lit', () => {

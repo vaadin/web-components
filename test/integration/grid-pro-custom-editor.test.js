@@ -9,7 +9,7 @@ import '@vaadin/grid-pro';
 import '@vaadin/grid-pro/vaadin-grid-pro-edit-column.js';
 import '@vaadin/text-field';
 import '@vaadin/time-picker';
-import { waitForOverlayRender } from '@vaadin/date-picker/test/helpers.js';
+import { untilOverlayRendered } from '@vaadin/date-picker/test/helpers.js';
 import { flushGrid, getContainerCell } from '@vaadin/grid-pro/test/helpers.js';
 
 describe('grid-pro custom editor', () => {
@@ -132,7 +132,7 @@ describe('grid-pro custom editor', () => {
     it('should not stop editing when clicking inside the overlay but not on focusable element', async () => {
       // Open the overlay
       await sendKeys({ press: 'ArrowDown' });
-      await waitForOverlayRender();
+      await untilOverlayRendered(cell._content.querySelector('vaadin-date-picker'));
 
       // Click between toolbar buttons
       const overlayContent = document.querySelector('vaadin-date-picker-overlay-content');
@@ -146,7 +146,7 @@ describe('grid-pro custom editor', () => {
     it('should not stop editing and update value when closing on outside click', async () => {
       // Open the overlay
       await sendKeys({ press: 'ArrowDown' });
-      await waitForOverlayRender();
+      await untilOverlayRendered(cell._content.querySelector('vaadin-date-picker'));
 
       // Move focus back to the input
       await sendKeys({ press: 'Shift+Tab' });
@@ -253,7 +253,7 @@ describe('grid-pro custom editor', () => {
 
     it('should not stop editing and update value when closing on date-picker outside click', async () => {
       await sendKeys({ press: 'ArrowDown' });
-      await waitForOverlayRender();
+      await untilOverlayRendered(cell._content.querySelector('vaadin-date-picker'));
 
       // Move focus back to the input
       await sendKeys({ press: 'Shift+Tab' });

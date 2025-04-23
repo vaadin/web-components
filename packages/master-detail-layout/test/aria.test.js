@@ -1,8 +1,12 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextRender, nextResize } from '@vaadin/testing-helpers';
-import '../vaadin-master-detail-layout.js';
+import '../src/vaadin-master-detail-layout.js';
 import './helpers/master-content.js';
 import './helpers/detail-content.js';
+
+window.Vaadin ||= {};
+window.Vaadin.featureFlags ||= {};
+window.Vaadin.featureFlags.masterDetailLayoutComponent = true;
 
 describe('ARIA', () => {
   let layout, master, detail;

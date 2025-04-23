@@ -3,7 +3,7 @@ import { resetMouse, sendKeys, sendMouse } from '@vaadin/test-runner-commands';
 import { aTimeout, fire, fixtureSync, mousedown, nextRender, oneEvent, touchstart } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-date-picker.js';
-import { getFocusableCell, monthsEqual, open, waitForOverlayRender } from './helpers.js';
+import { getFocusableCell, monthsEqual, open, untilOverlayRendered } from './helpers.js';
 
 describe('dropdown', () => {
   let datePicker, input, overlay;
@@ -21,9 +21,10 @@ describe('dropdown', () => {
   });
 
   it('should update position of the overlay after changing opened property', async () => {
+    const inputField = datePicker.shadowRoot.querySelector('[part="input-field"]');
     datePicker.opened = true;
     await oneEvent(overlay, 'vaadin-overlay-open');
-    expect(input.getBoundingClientRect().bottom).to.be.closeTo(overlay.getBoundingClientRect().top, 0.01);
+    expect(inputField.getBoundingClientRect().bottom).to.be.closeTo(overlay.getBoundingClientRect().top, 0.01);
   });
 
   it('should detach overlay on datePicker detach', async () => {
@@ -94,7 +95,7 @@ describe('dropdown', () => {
 
       const spy = sinon.spy(datePicker._overlayContent, 'scrollToDate');
       await oneEvent(overlay, 'vaadin-overlay-open');
-      await waitForOverlayRender();
+      await untilOverlayRendered(datePicker);
 
       const scrolledDate = spy.firstCall.args[0];
       expect(monthsEqual(scrolledDate, new Date())).to.be.true;
@@ -107,7 +108,7 @@ describe('dropdown', () => {
 
       const spy = sinon.spy(datePicker._overlayContent, 'scrollToDate');
       await oneEvent(overlay, 'vaadin-overlay-open');
-      await waitForOverlayRender();
+      await untilOverlayRendered(datePicker);
 
       const scrolledDate = spy.firstCall.args[0];
       expect(scrolledDate).to.be.eql(new Date(2016, 0, 1));
@@ -120,7 +121,7 @@ describe('dropdown', () => {
 
       const spy = sinon.spy(datePicker._overlayContent, 'scrollToDate');
       await oneEvent(overlay, 'vaadin-overlay-open');
-      await waitForOverlayRender();
+      await untilOverlayRendered(datePicker);
 
       const scrolledDate = spy.firstCall.args[0];
       expect(monthsEqual(scrolledDate, new Date(2000, 1, 1))).to.be.true;
@@ -145,7 +146,7 @@ describe('dropdown', () => {
       // scrollTop can be reset while the dropdown is closed.
       const spy = sinon.spy(datePicker._overlayContent, 'scrollToDate');
       await oneEvent(overlay, 'vaadin-overlay-open');
-      await waitForOverlayRender();
+      await untilOverlayRendered(datePicker);
       expect(spy.called).to.be.true;
 
       datePicker.close();
@@ -163,7 +164,7 @@ describe('dropdown', () => {
 
       const spy = sinon.spy(datePicker._overlayContent, 'scrollToDate');
       await oneEvent(overlay, 'vaadin-overlay-open');
-      await waitForOverlayRender();
+      await untilOverlayRendered(datePicker);
 
       const scrolledDate = spy.firstCall.args[0];
       expect(scrolledDate).to.be.eql(new Date(2100, 0, 1));
@@ -176,7 +177,7 @@ describe('dropdown', () => {
 
       const spy = sinon.spy(datePicker._overlayContent, 'scrollToDate');
       await oneEvent(overlay, 'vaadin-overlay-open');
-      await waitForOverlayRender();
+      await untilOverlayRendered(datePicker);
 
       const scrolledDate = spy.firstCall.args[0];
       expect(scrolledDate).to.be.eql(new Date(2000, 0, 1));
@@ -192,7 +193,7 @@ describe('dropdown', () => {
 
       const spy = sinon.spy(datePicker._overlayContent, 'scrollToDate');
       await oneEvent(overlay, 'vaadin-overlay-open');
-      await waitForOverlayRender();
+      await untilOverlayRendered(datePicker);
 
       const scrolledDate = spy.firstCall.args[0];
       expect(scrolledDate).to.be.eql(new Date(2015, 0, 1));

@@ -57,6 +57,21 @@ export const AccordionPanelMixin = (superClass) =>
       this._tooltipController.setPosition('bottom-start');
     }
 
+    /**
+     * @protected
+     * @override
+     */
+    __forwardTabIndex(tabindex) {
+      super.__forwardTabIndex(tabindex);
+      if (tabindex !== undefined && this.focusElement) {
+        // Forward the tabIndex to the button inside the heading
+        // instead of the heading itself
+        this.focusElement.$.button.tabIndex = tabindex;
+        // Revert the tabIndex value of the heading
+        this.focusElement.tabIndex = -1;
+      }
+    }
+
     /** @protected */
     ready() {
       super.ready();

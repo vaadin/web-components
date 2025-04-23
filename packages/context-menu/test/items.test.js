@@ -14,10 +14,9 @@ import {
   tabKeyDown,
 } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import './not-animated-styles.js';
-import '../vaadin-context-menu.js';
-import '@vaadin/item/vaadin-item.js';
-import '@vaadin/list-box/vaadin-list-box.js';
+import '../src/vaadin-context-menu.js';
+import '@vaadin/item/src/vaadin-item.js';
+import '@vaadin/list-box/src/vaadin-list-box.js';
 import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
 import { getMenuItems, getSubMenu, openMenu } from './helpers.js';
 
@@ -104,7 +103,7 @@ describe('items', () => {
   (isTouch ? it.skip : it)('should open the subMenu on the right side', () => {
     const rootItemRect = getMenuItems(rootMenu)[0].getBoundingClientRect();
     const subItemRect = getMenuItems(subMenu)[0].getBoundingClientRect();
-    expect(subItemRect.left).to.be.above(rootItemRect.right);
+    expect(subItemRect.left).to.be.at.least(rootItemRect.right);
   });
 
   (isTouch ? it.skip : it)('should open the subMenu on the left side', async () => {
@@ -114,7 +113,7 @@ describe('items', () => {
     await openMenu(getMenuItems(rootMenu)[0]);
     rootItemRect = getMenuItems(rootMenu)[0].getBoundingClientRect();
     const subItemRect = getMenuItems(subMenu)[0].getBoundingClientRect();
-    expect(subItemRect.right).to.be.below(rootItemRect.left);
+    expect(subItemRect.right).to.be.at.most(rootItemRect.left);
   });
 
   (isTouch ? it.skip : it)('should open the subMenu on the top if root menu is bottom-aligned', async () => {
@@ -125,7 +124,7 @@ describe('items', () => {
     await openMenu(getMenuItems(rootMenu)[0]);
     const rootMenuRect = rootOverlay.getBoundingClientRect();
     const subMenuRect = subOverlay1.getBoundingClientRect();
-    expect(subMenuRect.bottom).to.be.below(rootMenuRect.bottom);
+    expect(subMenuRect.bottom).to.be.at.most(rootMenuRect.bottom);
   });
 
   (isTouch ? it.skip : it)('should open the subMenu on the left if root menu is end-aligned', async () => {

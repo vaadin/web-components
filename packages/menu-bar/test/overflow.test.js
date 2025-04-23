@@ -1,8 +1,7 @@
 import { expect } from '@vaadin/chai-plugins';
 import { arrowRight, fixtureSync, nextFrame, nextRender, nextResize, nextUpdate } from '@vaadin/testing-helpers';
-import './menu-bar-custom-styles.js';
-import './not-animated-styles.js';
-import '../vaadin-menu-bar.js';
+import './menu-bar-test-styles.js';
+import '../src/vaadin-menu-bar.js';
 
 // Utility function to assert a menu item is not visible
 const assertHidden = (elem) => {

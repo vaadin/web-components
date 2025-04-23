@@ -13,7 +13,7 @@ import {
 import sinon from 'sinon';
 import './not-animated-styles.js';
 import { getDeepActiveElement } from '@vaadin/a11y-base/src/focus-utils.js';
-import { Popover } from '../vaadin-popover.js';
+import { Popover } from '../src/vaadin-popover.js';
 import { mouseenter, mouseleave } from './helpers.js';
 
 describe('a11y', () => {

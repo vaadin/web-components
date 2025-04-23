@@ -1,9 +1,8 @@
 import { expect } from '@vaadin/chai-plugins';
 import { enter, fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import './not-animated-styles.js';
 import '../src/vaadin-date-picker.js';
-import { open, setInputValue, waitForOverlayRender } from './helpers.js';
+import { open, setInputValue, untilOverlayRendered } from './helpers.js';
 
 class DatePicker2016 extends customElements.get('vaadin-date-picker') {
   checkValidity() {
@@ -226,7 +225,7 @@ describe('validation', () => {
 
     it('should be valid when committing a valid date', async () => {
       setInputValue(datePicker, '1/1/2022');
-      await waitForOverlayRender();
+      await untilOverlayRendered(datePicker);
       enter(input);
       await nextUpdate(datePicker);
       expect(datePicker.invalid).to.be.false;
@@ -234,7 +233,7 @@ describe('validation', () => {
 
     it('should be invalid when trying to commit an invalid date', async () => {
       setInputValue(datePicker, 'foo');
-      await waitForOverlayRender();
+      await untilOverlayRendered(datePicker);
       enter(input);
       await nextUpdate(datePicker);
       expect(datePicker.invalid).to.be.true;
