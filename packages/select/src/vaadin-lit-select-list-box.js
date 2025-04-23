@@ -43,7 +43,7 @@ class SelectListBox extends ListMixin(ThemableMixin(DirMixin(PolylitMixin(LitEle
 
       [part='items'] ::slotted(hr) {
         border-color: var(--vaadin-divider-color, var(--_vaadin-border-color));
-        border-width: 0 0 1px 0;
+        border-width: 0 0 1px;
         margin: 4px 8px 4px
           calc(var(--vaadin-icon-size, 1lh) + var(--vaadin-item-gap, var(--_vaadin-gap-container-inline)) + 8px);
       }
