@@ -34,12 +34,15 @@ class PasswordFieldButton extends ButtonMixin(DirMixin(ThemableMixin(PolylitMixi
           --vaadin-button-background: transparent;
           --vaadin-button-border: none;
           --vaadin-button-padding: 0;
-          vertical-align: bottom;
+          color: var(--_vaadin-color-subtle);
+          display: block;
+          cursor: default;
         }
 
         :host::before {
-          background: var(--_vaadin-color-subtle);
+          background: currentColor;
           content: '';
+          display: block;
           height: var(--vaadin-icon-size, 1lh);
           mask-image: var(--_vaadin-icon-eye);
           width: var(--vaadin-icon-size, 1lh);
@@ -47,6 +50,12 @@ class PasswordFieldButton extends ButtonMixin(DirMixin(ThemableMixin(PolylitMixi
 
         :host([aria-pressed='true'])::before {
           mask-image: var(--_vaadin-icon-eye-slash);
+        }
+
+        @media (forced-colors: active) {
+          :host::before {
+            background: CanvasText;
+          }
         }
       `,
     ];
