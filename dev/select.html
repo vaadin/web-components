@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -15,52 +15,55 @@
     </script>
   </head>
   <body>
-  <section>
-    <h2>Plain</h2>
-    <vaadin-select value="s"></vaadin-select>
-    <vaadin-select placeholder="Placeholder"></vaadin-select>
-  </section>
+    <section>
+      <h2>Plain</h2>
+      <vaadin-select value="s"></vaadin-select>
+      <vaadin-select placeholder="Placeholder"></vaadin-select>
+    </section>
 
-  <section>
-    <h2>Bells & Whistles</h2>
-    <vaadin-select
-      label="Label"
-      helper-text="Description for this field."
-      value="s"
-      clear-button-visible
-      error-message="You need to write something in this field."
-      required>
-      <vaadin-icon icon="vaadin:search" slot="prefix"></vaadin-icon>
-    </vaadin-select>
-  </section>
+    <section>
+      <h2>Bells & Whistles</h2>
+      <vaadin-select
+        label="Label"
+        helper-text="Description for this field."
+        value="s"
+        clear-button-visible
+        error-message="You need to write something in this field."
+        required
+      >
+        <vaadin-icon icon="vaadin:search" slot="prefix"></vaadin-icon>
+      </vaadin-select>
+    </section>
 
-  <section>
-    <h2>States</h2>
-    <vaadin-select
-      label="Read-only"
-      helper-text="Description for this field."
-      value="s"
-      clear-button-visible
-      error-message="You need to write something in this field."
-      required
-      readonly>
-      <vaadin-icon icon="vaadin:search" slot="prefix"></vaadin-icon>
-    </vaadin-select>
+    <section>
+      <h2>States</h2>
+      <vaadin-select
+        label="Read-only"
+        helper-text="Description for this field."
+        value="s"
+        clear-button-visible
+        error-message="You need to write something in this field."
+        required
+        readonly
+      >
+        <vaadin-icon icon="vaadin:search" slot="prefix"></vaadin-icon>
+      </vaadin-select>
 
-    <vaadin-select
-      label="Disabled"
-      helper-text="Description for this field."
-      value="s"
-      clear-button-visible
-      error-message="You need to write something in this field."
-      required
-      disabled>
-      <vaadin-icon icon="vaadin:search" slot="prefix"></vaadin-icon>
-    </vaadin-select>
-  </section>
+      <vaadin-select
+        label="Disabled"
+        helper-text="Description for this field."
+        value="s"
+        clear-button-visible
+        error-message="You need to write something in this field."
+        required
+        disabled
+      >
+        <vaadin-icon icon="vaadin:search" slot="prefix"></vaadin-icon>
+      </vaadin-select>
+    </section>
 
     <script>
-      document.querySelectorAll('vaadin-select').forEach(select => {
+      document.querySelectorAll('vaadin-select').forEach((select) => {
         select.items = items = [
           { label: 'Show all', value: 'all' },
           { component: 'hr' },
@@ -69,7 +72,7 @@
           { label: 'M', value: 'm' },
           { label: 'L', value: 'l' },
           { label: 'XL', value: 'xl' },
-        ]
+        ];
       });
     </script>
   </body>
