@@ -117,12 +117,22 @@ export const monthCalendarStyles = css`
   }
 
   @media (forced-colors: active) {
-    [part~='date'][part~='focused'] {
-      outline: 1px solid;
+    [part~='week-number']::after {
+      background: CanvasText;
     }
 
-    [part~='date'][part~='selected'] {
-      outline: 3px solid;
+    [part~='today'] {
+      font-weight: 600;
+    }
+
+    [part~='selected'] {
+      forced-color-adjust: none;
+      --vaadin-date-picker-date-selected-color: SelectedItemText;
+      --vaadin-date-picker-date-selected-background: SelectedItem;
+    }
+
+    [disabled] {
+      color: GrayText;
     }
   }
 `;

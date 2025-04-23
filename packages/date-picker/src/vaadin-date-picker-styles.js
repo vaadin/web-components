@@ -33,4 +33,10 @@ export const datePickerStyles = css`
     mask-image: var(--_vaadin-icon-calendar);
     width: var(--vaadin-icon-size, 1lh);
   }
+
+  @media (forced-colors: active) {
+    [part='toggle-button']::before {
+      background: CanvasText;
+    }
+  }
 `;

@@ -8,14 +8,14 @@ import { css } from 'lit';
 
 export const clearButton = css`
   [part='clear-button'] {
-    cursor: default;
     display: none;
+    color: var(--_vaadin-color-subtle);
   }
 
   [part='clear-button']::before {
-    background: var(--_vaadin-color-subtle);
+    background: currentColor;
     content: '';
-    display: inherit;
+    display: block;
     height: var(--vaadin-icon-size, 1lh);
     mask-image: var(--_vaadin-icon-cross);
     width: var(--vaadin-icon-size, 1lh);
@@ -23,5 +23,11 @@ export const clearButton = css`
 
   :host([clear-button-visible][has-value]:not([disabled]):not([readonly])) [part='clear-button'] {
     display: block;
+  }
+
+  @media (forced-colors: active) {
+    [part='clear-button']::before {
+      background: CanvasText;
+    }
   }
 `;

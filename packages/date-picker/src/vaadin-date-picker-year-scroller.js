@@ -35,6 +35,13 @@ stylesTemplate.innerHTML = `
       width: 1em;
       border: 1px solid var(--vaadin-date-picker-year-scroller-border-color, var(--_vaadin-border-color));
     }
+
+    @media (forced-colors: active) {
+      :host {
+        forced-color-adjust: none;
+        background: Canvas;
+      }
+    }
   </style>
 `;
 
