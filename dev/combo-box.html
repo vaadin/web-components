@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -29,7 +29,8 @@
         value="Value"
         clear-button-visible
         error-message="You need to write something in this field."
-        required>
+        required
+      >
         <vaadin-icon icon="vaadin:search" slot="prefix"></vaadin-icon>
       </vaadin-combo-box>
     </section>
@@ -43,7 +44,8 @@
         clear-button-visible
         error-message="You need to write something in this field."
         required
-        readonly>
+        readonly
+      >
         <vaadin-icon icon="vaadin:search" slot="prefix"></vaadin-icon>
       </vaadin-combo-box>
 
@@ -54,13 +56,14 @@
         clear-button-visible
         error-message="You need to write something in this field."
         required
-        disabled>
+        disabled
+      >
         <vaadin-icon icon="vaadin:search" slot="prefix"></vaadin-icon>
       </vaadin-combo-box>
     </section>
 
     <script type="module">
-      document.querySelectorAll('vaadin-combo-box').forEach(comboBox => {
+      document.querySelectorAll('vaadin-combo-box').forEach((comboBox) => {
         comboBox.dataProvider = async (params, callback) => {
           const index = params.page * params.pageSize;
           const response = await fetch(
@@ -73,7 +76,7 @@
               callback(result, size);
             }, 1000);
           }
-        }
+        };
       });
     </script>
   </body>
