@@ -61,6 +61,12 @@ class Select extends SelectBaseMixin(ElementMixin(ThemableMixin(PolylitMixin(Lit
           mask-image: var(--_vaadin-icon-chevron-down);
           width: var(--vaadin-icon-size, 1lh);
         }
+
+        @media (forced-colors: active) {
+          [part='toggle-button']::before {
+            background: CanvasText;
+          }
+        }
       `,
     ];
   }
