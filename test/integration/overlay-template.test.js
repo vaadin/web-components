@@ -1,7 +1,7 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync } from '@vaadin/testing-helpers';
 import '@vaadin/polymer-legacy-adapter/template-renderer.js';
-import '@vaadin/overlay/vaadin-overlay.js';
+import '@vaadin/overlay/src/vaadin-overlay.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 
 customElements.define(

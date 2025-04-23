@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
-import '@vaadin/multi-select-combo-box';
-import '@vaadin/combo-box';
+import '@vaadin/multi-select-combo-box/src/vaadin-multi-select-combo-box.js';
+import '@vaadin/combo-box/src/vaadin-combo-box.js';
 import { html } from '@polymer/polymer';
 import { templatize } from '@polymer/polymer/lib/utils/templatize.js';
 

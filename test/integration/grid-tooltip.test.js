@@ -15,9 +15,9 @@ import {
   tabKeyDown,
 } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import '@vaadin/grid/vaadin-grid.js';
+import '@vaadin/grid/src/vaadin-grid.js';
 import { flushGrid, getCell, getContainerCell } from '@vaadin/grid/test/helpers.js';
-import { Tooltip } from '@vaadin/tooltip';
+import { Tooltip } from '@vaadin/tooltip/src/vaadin-tooltip.js';
 import { mouseenter, mouseleave } from '@vaadin/tooltip/test/helpers.js';
 
 function getHeaderCell(grid, index = 0) {

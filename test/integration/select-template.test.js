@@ -1,10 +1,10 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync } from '@vaadin/testing-helpers';
 import './not-animated-styles.js';
-import '@vaadin/item';
-import '@vaadin/list-box';
+import '@vaadin/item/src/vaadin-item.js';
+import '@vaadin/list-box/src/vaadin-list-box.js';
 import '@vaadin/polymer-legacy-adapter/template-renderer.js';
-import '@vaadin/select';
+import '@vaadin/select/src/vaadin-select.js';
 
 describe('template', () => {
   let select, overlay, listBox;

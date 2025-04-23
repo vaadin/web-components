@@ -2,10 +2,10 @@ import { expect } from '@vaadin/chai-plugins';
 import { sendKeys } from '@vaadin/test-runner-commands';
 import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import './not-animated-styles.js';
-import '@vaadin/dialog';
-import '@vaadin/notification';
-import '@vaadin/popover';
-import '@vaadin/tooltip';
+import '@vaadin/dialog/src/vaadin-dialog.js';
+import '@vaadin/notification/src/vaadin-notification.js';
+import '@vaadin/popover/src/vaadin-popover.js';
+import '@vaadin/tooltip/src/vaadin-tooltip.js';
 
 describe('notification and overlays', () => {
   describe('notification and tooltip', () => {

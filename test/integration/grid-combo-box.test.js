@@ -1,8 +1,8 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import '@vaadin/combo-box';
-import '@vaadin/grid';
+import '@vaadin/combo-box/src/vaadin-combo-box.js';
+import '@vaadin/grid/src/vaadin-grid.js';
 import { flushGrid, getBodyCellContent } from '@vaadin/grid/test/helpers.js';
 
 describe('combo-box in grid', () => {

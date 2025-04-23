@@ -1,5 +1,5 @@
-import '@vaadin/combo-box/vaadin-combo-box-light.js';
-import '@vaadin/text-field/vaadin-text-field.js';
+import '@vaadin/combo-box/src/vaadin-combo-box-light.js';
+import '@vaadin/text-field/src/vaadin-text-field.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 
 class MockComboBoxLightTemplateWrapper extends PolymerElement {
