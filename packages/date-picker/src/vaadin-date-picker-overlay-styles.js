@@ -6,11 +6,6 @@
 import { css } from 'lit';
 
 export const datePickerOverlayStyles = css`
-  :host {
-    container-name: overlay;
-    container-type: inline-size;
-  }
-
   [part='overlay'] {
     display: flex;
     flex: auto;
