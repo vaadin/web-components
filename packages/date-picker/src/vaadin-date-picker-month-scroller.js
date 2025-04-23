@@ -11,7 +11,10 @@ const stylesTemplate = document.createElement('template');
 stylesTemplate.innerHTML = `
   <style>
     :host {
-      --vaadin-infinite-scroller-item-height: 16.5rem;
+      --vaadin-infinite-scroller-item-height: calc(
+          16.5rem +
+          var(--_vaadin-date-picker-week-numbers-visible, 0) * (var(--vaadin-date-picker-week-number-font-size, 0.7rem) * 1.25 * 6)
+        );
       grid-area: months;
       height: auto;
     }

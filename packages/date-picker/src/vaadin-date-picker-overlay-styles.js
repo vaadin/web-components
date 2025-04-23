@@ -10,14 +10,15 @@ export const datePickerOverlayStyles = css`
     display: flex;
     flex: auto;
     max-height: var(--vaadin-date-picker-overlay-max-height, 30rem);
+    box-sizing: content-box;
     width: var(
       --vaadin-date-picker-overlay-width,
       calc(
-        var(--vaadin-date-picker-week-number-width, 1.5rem) * var(--_vaadin-date-picker-week-numbers-visible, 0) +
-          var(--vaadin-date-picker-date-width, 2rem) * 7 + var(--vaadin-date-picker-month-padding, 0.5rem) * 2 +
+        var(--vaadin-date-picker-date-width, 2rem) * 7 + var(--vaadin-date-picker-month-padding, 0.5rem) * 2 +
           var(--vaadin-date-picker-year-scroller-width, 3rem)
       )
     );
+    cursor: default;
   }
 
   :host([fullscreen]) {
@@ -38,10 +39,6 @@ export const datePickerOverlayStyles = css`
 
   :host([week-numbers]) {
     --_vaadin-date-picker-week-numbers-visible: 1;
-  }
-
-  :host([fullscreen][week-numbers]) {
-    --vaadin-date-picker-date-width: calc((100% - var(--vaadin-date-picker-week-number-width, 1.5rem)) / 7);
   }
 
   [part~='content'] {

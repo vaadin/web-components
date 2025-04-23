@@ -28,6 +28,7 @@ export const monthCalendarStyles = css`
 
   tr {
     display: flex;
+    flex-wrap: wrap;
   }
 
   [part~='weekday'] {
@@ -38,15 +39,26 @@ export const monthCalendarStyles = css`
     width: var(--vaadin-date-picker-date-width, 2rem);
   }
 
-  /* Placeholder for week numbers, hence the width change */
+  /* Week numbers are on a separate row, don't reserve space on weekday row. */
   [part~='weekday']:empty {
-    width: var(--vaadin-date-picker-week-number-width, 1.5rem);
+    display: none;
   }
 
   [part~='week-number'] {
     color: var(--vaadin-date-picker-week-number-color, inherit);
-    font-size: var(--vaadin-date-picker-week-number-font-size, 0.75rem);
-    width: var(--vaadin-date-picker-week-number-width, 1.5rem);
+    font-size: var(--vaadin-date-picker-week-number-font-size, 0.7rem);
+    line-height: 1;
+    width: 100%;
+    margin-top: 0.125em;
+    margin-bottom: 0.125em;
+    gap: 0.25em;
+  }
+
+  [part~='week-number']::after {
+    content: '';
+    height: 1px;
+    flex: 1;
+    background: var(--vaadin-date-picker-week-divider-color, var(--_vaadin-background-container-strong));
   }
 
   [part~='weekday'],
@@ -58,15 +70,27 @@ export const monthCalendarStyles = css`
     padding: 0;
   }
 
-  [part~='week-number'],
-  [part~='date'] {
-    height: var(--vaadin-date-picker-date-height, 2rem);
-  }
-
   [part~='date'] {
     border-radius: var(--vaadin-date-picker-date-border-radius, var(--vaadin-radius-m));
     position: relative;
     width: var(--vaadin-date-picker-date-width, 2rem);
+    height: var(--vaadin-date-picker-date-height, 2rem);
+    cursor: pointer;
+    outline: none;
+  }
+
+  [part~='date']::after {
+    border-radius: var(--vaadin-date-picker-date-border-radius, var(--_vaadin-radius-m));
+    content: '';
+    position: absolute;
+    z-index: -1;
+    height: 2em;
+    aspect-ratio: 1;
+  }
+
+  :where([part~='date']:focus)::after {
+    outline: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
+    outline-offset: calc(var(--vaadin-focus-ring-width) * -1);
   }
 
   [part~='today'] {
@@ -79,16 +103,13 @@ export const monthCalendarStyles = css`
 
   [part~='selected']::after {
     background: var(--vaadin-date-picker-date-selected-background, var(--_vaadin-color-strong));
-    border-radius: var(--vaadin-date-picker-date-border-radius, var(--_vaadin-radius-m));
-    content: '';
-    inset: 0;
-    position: absolute;
-    z-index: -1;
+    outline-offset: 1px;
   }
 
   [disabled] {
     cursor: not-allowed;
-    opacity: 0.5;
+    color: var(--vaadin-date-picker-date-disabled-color, var(--_vaadin-color-subtle));
+    opacity: 0.7;
   }
 
   [hidden] {
