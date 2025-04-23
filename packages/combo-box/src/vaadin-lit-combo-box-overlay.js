@@ -56,7 +56,7 @@ const comboBoxOverlayStyles = css`
 
   @keyframes spin {
     to {
-      transform: rotate(360deg);
+      rotate: 1turn;
     }
   }
 `;
