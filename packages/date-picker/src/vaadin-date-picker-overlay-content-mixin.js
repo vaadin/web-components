@@ -736,6 +736,14 @@ export const DatePickerOverlayContentMixin = (superClass) =>
     }
 
     /** @private */
+    _translateXChanged(x) {
+      if (!this._desktopMode) {
+        this._monthScroller.style.transform = `translateX(${x - this._yearScrollerWidth}px)`;
+        this._yearScroller.style.transform = `translateX(${x}px)`;
+      }
+    }
+
+    /** @private */
     _yearAfterXMonths(months) {
       return dateAfterXMonths(months).getFullYear();
     }
