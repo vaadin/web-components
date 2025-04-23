@@ -17,7 +17,7 @@
   <body>
     <section>
       <h2>Plain</h2>
-      <vaadin-combo-box value="Value"></vaadin-combo-box>
+      <vaadin-combo-box></vaadin-combo-box>
       <vaadin-combo-box placeholder="Placeholder"></vaadin-combo-box>
     </section>
 
@@ -26,7 +26,6 @@
       <vaadin-combo-box
         label="Label"
         helper-text="Description for this field."
-        value="Value"
         clear-button-visible
         error-message="You need to write something in this field."
         required
@@ -40,7 +39,6 @@
       <vaadin-combo-box
         label="Read-only"
         helper-text="Description for this field."
-        value="Value"
         clear-button-visible
         error-message="You need to write something in this field."
         required
@@ -52,7 +50,6 @@
       <vaadin-combo-box
         label="Disabled"
         helper-text="Description for this field."
-        value="Value"
         clear-button-visible
         error-message="You need to write something in this field."
         required
@@ -77,6 +74,10 @@
             }, 1000);
           }
         };
+
+        if (!comboBox.placeholder) {
+          comboBox.selectedItem = 'Andorra';
+        }
       });
     </script>
   </body>
