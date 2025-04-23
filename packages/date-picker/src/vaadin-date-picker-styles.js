@@ -20,13 +20,13 @@ export const datePickerStyles = css`
   }
 
   [part='toggle-button'] {
-    cursor: default;
+    color: var(--_vaadin-color-subtle);
   }
 
   [part='toggle-button']::before {
     content: '';
     display: block;
-    background: var(--_vaadin-color-subtle);
+    background: currentColor;
     content: '';
     display: inherit;
     height: var(--vaadin-icon-size, 1lh);
