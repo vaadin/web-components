@@ -27,6 +27,7 @@ class SelectListBox extends ListMixin(ThemableMixin(DirMixin(PolylitMixin(LitEle
   static get styles() {
     return css`
       :host {
+        --vaadin-item-checkmark-display: block;
         display: flex;
       }
 
@@ -36,9 +37,15 @@ class SelectListBox extends ListMixin(ThemableMixin(DirMixin(PolylitMixin(LitEle
 
       [part='items'] {
         height: 100%;
-        width: 100%;
         overflow-y: auto;
-        -webkit-overflow-scrolling: touch;
+        width: 100%;
+      }
+
+      [part='items'] ::slotted(hr) {
+        border-color: var(--vaadin-divider-color, var(--_vaadin-border-color));
+        border-width: 0 0 1px;
+        margin: 4px 8px 4px
+          calc(var(--vaadin-icon-size, 1lh) + var(--vaadin-item-gap, var(--_vaadin-gap-container-inline)) + 8px);
       }
     `;
   }
