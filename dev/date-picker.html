@@ -26,7 +26,8 @@
         firstDayOfWeek: 1,
       };
       picker.isDateDisabled = isDateDisabled;
-      picker.min = '2025-01-01';
+      picker.min = new Date(new Date().setDate(1)).toISOString().split('T')[0];
+      picker.value = new Date().toISOString().split('T')[0];
     </script>
   </head>
 
@@ -41,14 +42,13 @@
       <h2>Bells & Whistles</h2>
       <vaadin-date-picker
         clear-button-visible
-        error-message="You need to write something in this field."
+        error-message="You need to select a date."
         has-error-message
         helper-text="Description for this field."
         id="weekNumbers"
         label="Label"
         required
-        show-week-numbers
-        value="Value">
+        show-week-numbers>
         <vaadin-icon icon="vaadin:search" slot="prefix"></vaadin-icon>
       </vaadin-date-picker>
     </section>
