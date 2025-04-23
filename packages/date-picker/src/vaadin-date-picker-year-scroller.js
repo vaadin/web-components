@@ -29,6 +29,7 @@ stylesTemplate.innerHTML = `
       display: block;
       height: 1em;
       position: absolute;
+      z-index: 1;
       transform: translate(-50%) rotate(45deg);
       top: 50%;
       width: 1em;
