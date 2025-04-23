@@ -13,6 +13,10 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
 import { ComboBoxOverlayMixin } from './vaadin-combo-box-overlay-mixin.js';
 
 const comboBoxOverlayStyles = css`
+  :host {
+    --vaadin-item-checkmark-display: block;
+  }
+
   [part='overlay'] {
     position: relative;
     width: var(--vaadin-combo-box-overlay-width, var(--_vaadin-combo-box-overlay-default-width, auto));

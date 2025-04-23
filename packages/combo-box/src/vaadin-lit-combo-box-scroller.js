@@ -23,7 +23,6 @@ export class ComboBoxScroller extends ComboBoxScrollerMixin(PolylitMixin(LitElem
   static get styles() {
     return css`
       :host {
-        --vaadin-item-checkmark-display: block;
         /* Fixes scrollbar disappearing when 'Show scroll bars: Always' enabled in Safari */
         box-shadow: 0 0 0 white;
         display: block;
