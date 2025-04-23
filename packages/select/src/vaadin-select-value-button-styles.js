@@ -7,43 +7,19 @@ import { css } from 'lit';
 
 export const valueButton = css`
   :host {
-    display: inline-block;
-    position: relative;
+    min-height: 1lh;
     outline: none;
+    overflow: hidden;
     white-space: nowrap;
-    -webkit-user-select: none;
-    user-select: none;
-    min-width: 0;
-    width: 0;
+    width: 100%;
   }
 
   ::slotted(*) {
-    padding-left: 0;
-    padding-right: 0;
-    flex: auto;
+    padding: 0;
   }
 
-  /* placeholder styles */
-  ::slotted(*:not([selected])) {
-    line-height: 1;
-  }
-
-  .vaadin-button-container {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    text-align: inherit;
-    width: 100%;
-    height: 100%;
-    min-height: inherit;
-    text-shadow: inherit;
-  }
-
+  .vaadin-button-container,
   [part='label'] {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    width: 100%;
-    line-height: inherit;
+    display: contents;
   }
 `;
