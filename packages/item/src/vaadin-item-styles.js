@@ -34,14 +34,22 @@ export const itemStyles = css`
     }
 
     [part='checkmark'] {
+      color: var(--vaadin-item-checkmark-color, var(--_vaadin-color-subtle));
       display: var(--vaadin-item-checkmark-display, none);
+      visibility: hidden;
+    }
+
+    [part='checkmark']::before {
+      content: '';
+      display: block;
+      background: currentColor;
       height: var(--vaadin-icon-size, 1lh);
       mask-image: var(--_vaadin-icon-checkmark);
       width: var(--vaadin-icon-size, 1lh);
     }
 
     :host([selected]) [part='checkmark'] {
-      background: var(--_vaadin-color-subtle);
+      visibility: visible;
     }
 
     [part='content'] {
