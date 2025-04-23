@@ -11,13 +11,12 @@ const stylesTemplate = document.createElement('template');
 stylesTemplate.innerHTML = `
   <style>
     :host {
-      --vaadin-infinite-scroller-item-height: 270px;
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      height: 100%;
+      --vaadin-infinite-scroller-item-height: calc(
+          16.5rem +
+          var(--_vaadin-date-picker-week-numbers-visible, 0) * (var(--vaadin-date-picker-week-number-font-size, 0.7rem) * 1.25 * 6)
+        );
+      grid-area: months;
+      height: auto;
     }
   </style>
 `;

@@ -81,7 +81,7 @@ export const DatePickerOverlayContentMixin = (superClass) =>
         },
 
         _yearScrollerWidth: {
-          value: 50,
+          value: 48,
         },
 
         i18n: {
@@ -733,14 +733,6 @@ export const DatePickerOverlayContentMixin = (superClass) =>
     /** @private */
     _isYearScrollerVisible() {
       return this._translateX < this._yearScrollerWidth / 2;
-    }
-
-    /** @private */
-    _translateXChanged(x) {
-      if (!this._desktopMode) {
-        this._monthScroller.style.transform = `translateX(${x - this._yearScrollerWidth}px)`;
-        this._yearScroller.style.transform = `translateX(${x}px)`;
-      }
     }
 
     /** @private */

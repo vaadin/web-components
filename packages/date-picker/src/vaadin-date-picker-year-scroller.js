@@ -10,34 +10,37 @@ const stylesTemplate = document.createElement('template');
 stylesTemplate.innerHTML = `
   <style>
     :host {
-      --vaadin-infinite-scroller-item-height: 80px;
-      width: 50px;
-      display: block;
-      height: 100%;
-      position: absolute;
-      right: 0;
-      transform: translateX(100%);
-      -webkit-tap-highlight-color: transparent;
-      -webkit-user-select: none;
-      user-select: none;
-      /* Center the year scroller position. */
       --vaadin-infinite-scroller-buffer-offset: 50%;
+      --vaadin-infinite-scroller-item-height: 80px;
+      background: var(--vaadin-date-picker-year-scroller-background, var(--_vaadin-background-container));
+      grid-area: years;
+      height: auto;
+      position: relative;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+      -webkit-user-select: none;
+      width: var(--vaadin-date-picker-year-scroller-width, 3rem);
+      box-shadow: inset 1px 0 0 0 var(--vaadin-date-picker-year-scroller-border-color, var(--_vaadin-border-color));
     }
 
     :host::before {
+      background: var(--vaadin-overlay-background, var(--_vaadin-background));
       content: '';
       display: block;
-      background: transparent;
-      width: 0;
-      height: 0;
+      height: 1em;
       position: absolute;
-      left: 0;
+      z-index: 1;
+      transform: translate(-50%) rotate(45deg);
       top: 50%;
-      transform: translateY(-50%);
-      border-width: 6px;
-      border-style: solid;
-      border-color: transparent;
-      border-left-color: #000;
+      width: 1em;
+      border: 1px solid var(--vaadin-date-picker-year-scroller-border-color, var(--_vaadin-border-color));
+    }
+
+    @media (forced-colors: active) {
+      :host {
+        forced-color-adjust: none;
+        background: Canvas;
+      }
     }
   </style>
 `;
