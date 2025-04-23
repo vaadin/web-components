@@ -43,8 +43,11 @@ export const getAllItems = (comboBox) => {
 export const getViewportItems = (comboBox) => {
   const overlayRect = comboBox.$.overlay.$.content.getBoundingClientRect();
 
+  // Take the default 4px border width into account
+  const scrollerTop = parseInt(getComputedStyle(comboBox._scroller.$.selector).borderTopWidth);
+
   // Firefox can produce values like 19.199996948242188
-  const top = Math.round(overlayRect.top);
+  const top = Math.round(overlayRect.top) + scrollerTop;
   const bottom = Math.round(overlayRect.bottom);
 
   return getAllItems(comboBox).filter((item) => {
