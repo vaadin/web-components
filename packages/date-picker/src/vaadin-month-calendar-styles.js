@@ -8,57 +8,131 @@ import { css } from 'lit';
 export const monthCalendarStyles = css`
   :host {
     display: block;
+    padding: var(--vaadin-date-picker-month-padding, 0.5rem);
   }
 
-  #monthGrid {
-    width: 100%;
+  [part='month-header'] {
+    color: var(--vaadin-date-picker-month-header-color, var(--_vaadin-color-strong));
+    font-size: var(--vaadin-date-picker-month-header-font-size, 0.9375rem);
+    font-weight: var(--vaadin-date-picker-month-header-font-weight, 500);
+    line-height: inherit;
+    margin-bottom: 0.75rem;
+    text-align: center;
+  }
+
+  table {
     border-collapse: collapse;
-  }
-
-  #days-container tr,
-  #weekdays-container tr {
     display: flex;
+    flex-direction: column;
   }
 
-  [part~='date'] {
-    outline: none;
+  tr {
+    display: flex;
+    flex-wrap: wrap;
   }
 
-  [part~='disabled'] {
-    pointer-events: none;
+  [part~='weekday'] {
+    color: var(--vaadin-date-picker-weekday-color, inherit);
+    font-size: var(--vaadin-date-picker-weekday-font-size, 0.75rem);
+    font-weight: var(--vaadin-date-picker-weekday-font-weight, 500);
+    margin-bottom: 0.375rem;
+    width: var(--vaadin-date-picker-date-width, 2rem);
   }
 
-  [part='week-number'][hidden],
-  [part='weekday'][hidden] {
+  /* Week numbers are on a separate row, don't reserve space on weekday row. */
+  [part~='weekday']:empty {
     display: none;
   }
 
-  [part='weekday'],
+  [part~='week-number'] {
+    color: var(--vaadin-date-picker-week-number-color, inherit);
+    font-size: var(--vaadin-date-picker-week-number-font-size, 0.7rem);
+    line-height: 1;
+    width: 100%;
+    margin-top: 0.125em;
+    margin-bottom: 0.125em;
+    gap: 0.25em;
+  }
+
+  [part~='week-number']::after {
+    content: '';
+    height: 1px;
+    flex: 1;
+    background: var(--vaadin-date-picker-week-divider-color, var(--_vaadin-background-container-strong));
+  }
+
+  [part~='weekday'],
+  [part~='week-number'],
   [part~='date'] {
-    width: calc(100% / 7);
-    padding: 0;
-    font-weight: normal;
-  }
-
-  [part='weekday']:empty,
-  [part='week-number'] {
-    width: 12.5%;
-    flex-shrink: 0;
+    align-items: center;
+    display: flex;
+    justify-content: center;
     padding: 0;
   }
 
-  :host([week-numbers]) [part='weekday']:not(:empty),
-  :host([week-numbers]) [part~='date'] {
-    width: 12.5%;
+  [part~='date'] {
+    border-radius: var(--vaadin-date-picker-date-border-radius, var(--vaadin-radius-m));
+    position: relative;
+    width: var(--vaadin-date-picker-date-width, 2rem);
+    height: var(--vaadin-date-picker-date-height, 2rem);
+    cursor: pointer;
+    outline: none;
+  }
+
+  [part~='date']::after {
+    border-radius: var(--vaadin-date-picker-date-border-radius, var(--_vaadin-radius-m));
+    content: '';
+    position: absolute;
+    z-index: -1;
+    height: 2em;
+    aspect-ratio: 1;
+  }
+
+  :where([part~='date']:focus)::after {
+    outline: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
+    outline-offset: calc(var(--vaadin-focus-ring-width) * -1);
+  }
+
+  [part~='today'] {
+    color: var(--vaadin-date-picker-date-today-color, var(--_vaadin-color-strong));
+  }
+
+  [part~='selected'] {
+    color: var(--vaadin-date-picker-date-selected-color, var(--_vaadin-background));
+  }
+
+  [part~='selected']::after {
+    background: var(--vaadin-date-picker-date-selected-background, var(--_vaadin-color-strong));
+    outline-offset: 1px;
+  }
+
+  [disabled] {
+    cursor: not-allowed;
+    color: var(--vaadin-date-picker-date-disabled-color, var(--_vaadin-color-subtle));
+    opacity: 0.7;
+  }
+
+  [hidden] {
+    display: none;
   }
 
   @media (forced-colors: active) {
-    [part~='date'][part~='focused'] {
-      outline: 1px solid;
+    [part~='week-number']::after {
+      background: CanvasText;
     }
 
-    [part~='date'][part~='selected'] {
-      outline: 3px solid;
+    [part~='today'] {
+      font-weight: 600;
+    }
+
+    [part~='selected'] {
+      forced-color-adjust: none;
+      --vaadin-date-picker-date-selected-color: SelectedItemText;
+      --vaadin-date-picker-date-selected-background: SelectedItem;
+    }
+
+    [disabled] {
+      color: GrayText;
     }
   }
 `;

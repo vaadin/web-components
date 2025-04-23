@@ -18,4 +18,25 @@ export const datePickerStyles = css`
     direction: rtl;
     text-align: left;
   }
+
+  [part='toggle-button'] {
+    color: var(--_vaadin-color-subtle);
+  }
+
+  [part='toggle-button']::before {
+    content: '';
+    display: block;
+    background: currentColor;
+    content: '';
+    display: inherit;
+    height: var(--vaadin-icon-size, 1lh);
+    mask-image: var(--_vaadin-icon-calendar);
+    width: var(--vaadin-icon-size, 1lh);
+  }
+
+  @media (forced-colors: active) {
+    [part='toggle-button']::before {
+      background: CanvasText;
+    }
+  }
 `;
