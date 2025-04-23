@@ -20,6 +20,7 @@ stylesTemplate.innerHTML = `
       user-select: none;
       -webkit-user-select: none;
       width: var(--vaadin-date-picker-year-scroller-width, 3rem);
+      box-shadow: inset 1px 0 0 0 var(--vaadin-date-picker-year-scroller-border-color, var(--_vaadin-border-color));
     }
 
     :host::before {
@@ -31,6 +32,7 @@ stylesTemplate.innerHTML = `
       transform: translate(-50%) rotate(45deg);
       top: 50%;
       width: 1em;
+      border: 1px solid var(--vaadin-date-picker-year-scroller-border-color, var(--_vaadin-border-color));
     }
   </style>
 `;
