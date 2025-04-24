@@ -39,24 +39,28 @@ export const accordionHeading = css`
     outline-offset: 1px;
   }
 
-  [part='toggle']::before {
-    background: var(--_vaadin-color-subtle);
-    content: '';
-    display: inherit;
-    height: var(--vaadin-icon-size, 1lh);
-    mask-image: var(--_vaadin-icon-chevron-right);
-    transition-duration: 150ms;
-    transition-property: transform;
-    width: var(--vaadin-icon-size, 1lh);
+  [part='toggle'] {
+    color: var(--_vaadin-color-subtle);
   }
 
-  :host([opened]) [part='toggle']::before {
-    transform: rotate(90deg);
-  }
-
-  @media (prefers-reduced-motion) {
-    [part='toggle']::before {
-      transition-property: none;
+  @media (prefers-reduced-motion: no-preference) {
+    [part='toggle'] {
+      transition-property: rotate;
+      transition-duration: 150ms;
     }
+  }
+
+  [part='toggle']::before {
+    background: currentColor;
+    content: '';
+    display: block;
+    height: var(--vaadin-icon-size, 1lh);
+    mask-image: var(--_vaadin-icon-chevron-down);
+    width: var(--vaadin-icon-size, 1lh);
+    rotate: -90deg;
+  }
+
+  :host([opened]) [part='toggle'] {
+    rotate: 90deg;
   }
 `;
