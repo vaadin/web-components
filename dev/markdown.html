@@ -13,25 +13,28 @@
 
       const markdown = document.querySelector('vaadin-markdown');
       markdown.markdown = `
-# Markdown
+# H1 – Main Title
 
-Hello
+## H2 – Section Title
 
-\`\`\`chart
-{
-  "chartTitle": "Sales Data (from Markdown)",
-  "series": [
-    {
-      "title": "Sales",
-      "type": "column",
-      "values": [150, 250, 200, 350]
-    },
-    {
-      "title": "Trend",
-      "type": "line",
-      "values": [140, 260, 190, 340]
-    }
-  ]
+### H3 – Sub-section
+
+Plain paragraph text with **bold**, *italic*, ***bold-italic***, ~~strikethrough~~, and \`inline code\`.
+
+> Blockquote:  
+> This line should render as a quoted paragraph.
+
+1. First ordered item  
+2. Second ordered item  
+   1. Nested ordered item
+
+- Unordered list item  
+  - Nested unordered item
+
+\`\`\`js
+// Fenced code block with syntax highlighting
+function greet(name = "world") {
+  console.log(\`Hello, ${name}!\`);
 }
 \`\`\`
 `;

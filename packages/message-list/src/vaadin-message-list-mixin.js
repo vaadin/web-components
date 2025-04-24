@@ -44,6 +44,7 @@ export const MessageListMixin = (superClass) =>
          */
         markdown: {
           type: Boolean,
+          observer: '__markdownChanged',
         },
       };
     }
@@ -92,6 +93,10 @@ export const MessageListMixin = (superClass) =>
           }
         });
       }
+    }
+
+    __markdownChanged(_markdown) {
+      this._renderMessages(this.items);
     }
 
     /** @private */

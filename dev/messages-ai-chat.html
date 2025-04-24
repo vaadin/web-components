@@ -75,42 +75,37 @@ Need anything else? Just let me know, and I’ll jump right in! ✨`;
         return subscription;
       }
 
-      const list = document.querySelector('vaadin-message-list');
-      list.markdown = true;
-      list.items = [
-        {
-          text: 'Hello! Can you help me with a question?',
+      function createUserMessage(text) {
+        return {
+          text,
           time: 'Just now',
           userName: 'User',
           userColorIndex: 1,
-        },
-        {
-          text: `Of course! I'm here to help. What's your question?`,
+        };
+      }
+
+      function createAssistantMessage(text) {
+        return {
+          text,
           time: 'Just now',
           userName: 'Assistant',
           userColorIndex: 2,
-        },
+        };
+      }
+
+      const list = document.querySelector('vaadin-message-list');
+      list.markdown = true;
+      list.items = [
+        createUserMessage('Hello! Can you help me with a question?'),
+        createAssistantMessage("Of course! I'm here to help. What's your question?"),
       ];
 
       const input = document.querySelector('vaadin-message-input');
       input.addEventListener('submit', async (e) => {
-        const newUserItem = {
-          text: e.detail.value,
-          time: 'Just now',
-          userName: 'User',
-          userColorIndex: 1,
-        };
-
-        list.items = [...list.items, newUserItem];
-
+        list.items = [...list.items, createUserMessage(e.detail.value)];
         input.disabled = true;
 
-        const newAssistantItem = {
-          text: '',
-          time: 'Just now',
-          userName: 'Assistant',
-          userColorIndex: 2,
-        };
+        const newAssistantItem = createAssistantMessage('');
 
         simulateMessageStream()
           .onNext((token) => {
