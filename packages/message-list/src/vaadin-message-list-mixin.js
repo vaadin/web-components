@@ -3,10 +3,10 @@
  * Copyright (c) 2021 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import '@vaadin/markdown/src/vaadin-markdown.js';
 import { html, render } from 'lit';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import { KeyboardDirectionMixin } from '@vaadin/a11y-base/src/keyboard-direction-mixin.js';
-import { updateMarkdownContent } from '@vaadin/markdown/src/markdown-helpers.js';
 
 /**
  * @polymerMixin
@@ -111,7 +111,7 @@ export const MessageListMixin = (superClass) =>
                 class="${ifDefined(item.className)}"
                 @focusin="${this._onMessageFocusIn}"
                 >${this.markdown
-                  ? html`<div class="markdown-body" .markdown=${item.text}></div>`
+                  ? html`<vaadin-markdown .markdown=${item.text}></vaadin-markdown>`
                   : item.text}<vaadin-avatar slot="avatar"></vaadin-avatar
               ></vaadin-message>
             `,
@@ -120,13 +120,6 @@ export const MessageListMixin = (superClass) =>
         this,
         { host: this },
       );
-
-      this.querySelectorAll('vaadin-message > .markdown-body').forEach((body) => {
-        if (body.currentMarkdown !== body.markdown) {
-          updateMarkdownContent(body, body.markdown);
-          body.currentMarkdown = body.markdown;
-        }
-      });
     }
 
     /** @private */
