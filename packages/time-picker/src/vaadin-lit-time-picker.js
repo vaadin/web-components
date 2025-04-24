@@ -33,8 +33,13 @@ class TimePicker extends TimePickerMixin(ThemableMixin(ElementMixin(PolylitMixin
       inputFieldShared,
       css`
         [part='toggle-button'] {
-          cursor: default;
-          background: var(--_vaadin-color-subtle);
+          color: var(--_vaadin-color-subtle);
+        }
+
+        [part='toggle-button']::before {
+          background: currentColor;
+          content: '';
+          display: block;
           height: var(--vaadin-icon-size, 1lh);
           mask-image: var(--_vaadin-icon-clock);
           width: var(--vaadin-icon-size, 1lh);
@@ -48,6 +53,12 @@ class TimePicker extends TimePickerMixin(ThemableMixin(ElementMixin(PolylitMixin
         :host([dir='rtl']) [part='input-field'] ::slotted(input)::placeholder {
           direction: rtl;
           text-align: left;
+        }
+
+        @media (forced-colors: active) {
+          [part='toggle-button']::before {
+            background: CanvasText;
+          }
         }
       `,
     ];
