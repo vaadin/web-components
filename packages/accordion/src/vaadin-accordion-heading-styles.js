@@ -9,8 +9,8 @@ export const accordionHeading = css`
   :host {
     display: block;
     outline: none;
-    user-select: none;
     -webkit-user-select: none;
+    user-select: none;
   }
 
   :host([hidden]) {
