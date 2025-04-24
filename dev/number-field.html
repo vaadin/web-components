@@ -1,21 +1,99 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Number field</title>
+    <title>Number Field</title>
     <script type="module" src="./common.js"></script>
 
     <script type="module">
-      import '@vaadin/number-field';
-      import '@vaadin/tooltip';
+      import '@vaadin/number-field/src/vaadin-lit-number-field.js';
     </script>
   </head>
 
   <body>
-    <vaadin-number-field value="2.1" step="0.1" label="Size (kg)" step-buttons-visible>
-      <vaadin-tooltip slot="tooltip" text="Number field tooltip text"></vaadin-tooltip>
-    </vaadin-number-field>
+    <section>
+      <h2>Plain</h2>
+      <vaadin-number-field value="42"></vaadin-number-field>
+      <vaadin-number-field placeholder="Placeholder"></vaadin-number-field>
+      <br /><br />
+      <vaadin-number-field step-buttons-visible value="42"></vaadin-number-field>
+      <vaadin-number-field placeholder="Placeholder" step-buttons-visible></vaadin-number-field>
+    </section>
+
+    <section>
+      <h2>Bells & Whistles</h2>
+      <vaadin-number-field
+        clear-button-visible
+        error-message="You need to write something in this field."
+        helper-text="Description for this field."
+        label="Label"
+        required
+        value="42"
+      >
+        <span slot="prefix">€</span>
+      </vaadin-number-field>
+      <vaadin-number-field
+        clear-button-visible
+        error-message="You need to write something in this field."
+        helper-text="Description for this field."
+        label="Label"
+        required
+        step-buttons-visible
+        value="42"
+      >
+        <span slot="prefix">€</span>
+      </vaadin-number-field>
+    </section>
+
+    <section>
+      <h2>States</h2>
+      <vaadin-number-field
+        clear-button-visible
+        error-message="You need to write something in this field."
+        helper-text="Description for this field."
+        label="Read-only"
+        readonly
+        required
+        value="42"
+      >
+        <span slot="prefix">€</span>
+      </vaadin-number-field>
+      <vaadin-number-field
+        clear-button-visible
+        disabled
+        error-message="You need to write something in this field."
+        helper-text="Description for this field."
+        label="Disabled"
+        required
+        value="42"
+      >
+        <span slot="prefix">€</span>
+      </vaadin-number-field>
+      <br /><br />
+      <vaadin-number-field
+        clear-button-visible
+        error-message="You need to write something in this field."
+        helper-text="Description for this field."
+        label="Read-only"
+        readonly
+        required
+        step-buttons-visible
+        value="42"
+      >
+      </vaadin-number-field>
+      <vaadin-number-field
+        clear-button-visible
+        disabled
+        error-message="You need to write something in this field."
+        helper-text="Description for this field."
+        label="Disabled"
+        required
+        step-buttons-visible
+        value="42"
+      >
+      </vaadin-number-field>
+    </section>
   </body>
 </html>
