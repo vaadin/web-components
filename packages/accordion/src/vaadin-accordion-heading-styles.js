@@ -60,7 +60,15 @@ export const accordionHeading = css`
     rotate: -90deg;
   }
 
+  :host([dir='rtl']) [part='toggle']::before {
+    scale: -1;
+  }
+
   :host([opened]) [part='toggle'] {
     rotate: 90deg;
+  }
+
+  :host([dir='rtl'][opened]) [part='toggle'] {
+    rotate: -90deg;
   }
 `;
