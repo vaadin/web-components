@@ -42,42 +42,40 @@ code block
 `;
     await nextUpdate(element);
 
-    const body = element.querySelector('div.markdown-body');
-
     // Verify headings
-    expect(body.querySelector('h1').textContent).to.equal('Heading 1');
-    expect(body.querySelector('h2').textContent).to.equal('Heading 2');
-    expect(body.querySelector('h3').textContent).to.equal('Heading 3');
+    expect(element.querySelector('h1').textContent).to.equal('Heading 1');
+    expect(element.querySelector('h2').textContent).to.equal('Heading 2');
+    expect(element.querySelector('h3').textContent).to.equal('Heading 3');
 
     // Verify paragraph with formatting
-    const paragraph = body.querySelector('p');
+    const paragraph = element.querySelector('p');
     expect(paragraph).to.be.ok;
     expect(paragraph.querySelector('strong')).to.be.ok;
     expect(paragraph.querySelector('em')).to.be.ok;
 
     // Verify lists
-    expect(body.querySelector('ul')).to.be.ok;
-    expect(body.querySelectorAll('ul li').length).to.be.at.least(3);
-    expect(body.querySelector('ol')).to.be.ok;
-    expect(body.querySelectorAll('ol li').length).to.equal(2);
+    expect(element.querySelector('ul')).to.be.ok;
+    expect(element.querySelectorAll('ul li').length).to.be.at.least(3);
+    expect(element.querySelector('ol')).to.be.ok;
+    expect(element.querySelectorAll('ol li').length).to.equal(2);
 
     // Verify blockquote
-    expect(body.querySelector('blockquote')).to.be.ok;
+    expect(element.querySelector('blockquote')).to.be.ok;
 
     // Verify link
-    const link = body.querySelector('a');
+    const link = element.querySelector('a');
     expect(link).to.be.ok;
     expect(link.getAttribute('href')).to.equal('https://example.com');
 
     // Verify code elements
-    expect(body.querySelector('pre')).to.be.ok;
-    expect(body.querySelector('code')).to.be.ok;
+    expect(element.querySelector('pre')).to.be.ok;
+    expect(element.querySelector('code')).to.be.ok;
 
     // Verify horizontal rule
-    expect(body.querySelector('hr')).to.be.ok;
+    expect(element.querySelector('hr')).to.be.ok;
 
     // Verify image (though the actual src won't work)
-    const img = body.querySelector('img');
+    const img = element.querySelector('img');
     expect(img).to.be.ok;
     expect(img.getAttribute('alt')).to.equal('Image alt text');
     expect(img.getAttribute('title')).to.equal('Image title');
@@ -88,21 +86,18 @@ code block
     element.markdown = '# Initial heading\n\nParagraph text.';
     await nextUpdate(element);
 
-    let body = element.querySelector('div.markdown-body');
-    const initialHeading = body.querySelector('h1');
+    const heading = element.querySelector('h1');
+    expect(heading.textContent).to.equal('Initial heading');
 
     // Update with similar content (should reuse DOM nodes)
     element.markdown = '# Updated heading\n\nParagraph text.';
     await nextUpdate(element);
 
-    body = element.querySelector('div.markdown-body');
-    const updatedHeading = body.querySelector('h1');
-
     // The content should be updated, but the DOM structure should be similar
-    expect(updatedHeading.textContent).to.equal('Updated heading');
+    expect(heading.textContent).to.equal('Updated heading');
 
     // The paragraphs should remain unchanged
-    const paragraph = body.querySelector('p');
+    const paragraph = element.querySelector('p');
     expect(paragraph.textContent).to.equal('Paragraph text.');
   });
 
@@ -119,20 +114,16 @@ code block
 `;
     await nextUpdate(element);
 
-    const body = element.querySelector('div.markdown-body');
-
     // Script tags should be removed
-    expect(body.querySelector('script')).to.be.null;
+    expect(element.querySelector('script')).to.be.null;
 
     // Event handlers should be removed from elements
-    const img = body.querySelector('img');
-    if (img) {
-      expect(img.hasAttribute('onerror')).to.be.false;
-    }
+    const img = element.querySelector('img');
+    expect(img.hasAttribute('onerror')).to.be.false;
 
     // Safe content should still be there
-    expect(body.querySelector('h1').textContent).to.equal('Safe heading');
-    const link = body.querySelector('a');
+    expect(element.querySelector('h1').textContent).to.equal('Safe heading');
+    const link = element.querySelector('a');
     expect(link).to.be.ok;
     expect(link.getAttribute('href')).to.equal('https://example.com');
   });

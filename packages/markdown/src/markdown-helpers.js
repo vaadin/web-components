@@ -5,25 +5,16 @@ import { marked } from 'marked';
  * Synchronizes the attributes of a target element with those of a source element.
  */
 function synchronizeAttributes(targetElement, sourceElement) {
-  const sourceAttrs = sourceElement.attributes;
-  const targetAttrs = targetElement.attributes;
-
   // Remove attributes from target that are not in source
-  // Iterate backwards because removing items changes the collection
-  for (let i = targetAttrs.length - 1; i >= 0; i--) {
-    const attrName = targetAttrs[i].name;
-    if (!sourceElement.hasAttribute(attrName)) {
-      targetElement.removeAttribute(attrName);
+  for (const { name } of targetElement.attributes) {
+    if (!sourceElement.hasAttribute(name)) {
+      targetElement.removeAttribute(name);
     }
   }
 
   // Add/update attributes from source to target
-  for (const sourceAttr of sourceAttrs) {
-    const attrName = sourceAttr.name;
-    const sourceAttrValue = sourceAttr.value;
-    if (targetElement.getAttribute(attrName) !== sourceAttrValue) {
-      targetElement.setAttribute(attrName, sourceAttrValue);
-    }
+  for (const { name, value } of sourceElement.attributes) {
+    targetElement.setAttribute(name, value);
   }
 }
 
@@ -34,9 +25,7 @@ function synchronizeAttributes(targetElement, sourceElement) {
 function synchronizeNodes(targetNode, sourceNode) {
   const sourceChildren = Array.from(sourceNode.childNodes);
   const targetChildren = Array.from(targetNode.childNodes);
-  const numSourceChildren = sourceChildren.length;
-  const numTargetChildren = targetChildren.length;
-  const maxChildren = Math.max(numSourceChildren, numTargetChildren);
+  const maxChildren = Math.max(sourceChildren.length, targetChildren.length);
 
   for (let i = 0; i < maxChildren; i++) {
     const sourceChild = sourceChildren[i];

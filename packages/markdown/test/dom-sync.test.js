@@ -15,17 +15,16 @@ describe('vaadin-markdown DOM synchronization', () => {
     element.markdown = '# Heading\n\nParagraph 1\n\nParagraph 2';
     await nextUpdate(element);
 
-    const body = element.querySelector('div.markdown-body');
-    const initialHeading = body.querySelector('h1');
-    const [initialP1, initialP2] = body.querySelectorAll('p');
+    const initialHeading = element.querySelector('h1');
+    const [initialP1, initialP2] = element.querySelectorAll('p');
 
     // Update only the heading
     element.markdown = '# Updated Heading\n\nParagraph 1\n\nParagraph 2';
     await nextUpdate(element);
 
     // Get tupdated content
-    const updatedHeading = body.querySelector('h1');
-    const [updatedP1, updatedP2] = body.querySelectorAll('p');
+    const updatedHeading = element.querySelector('h1');
+    const [updatedP1, updatedP2] = element.querySelectorAll('p');
 
     // Heading content should be updated, all nodes should be reused
     expect(updatedHeading.textContent).to.equal('Updated Heading');
@@ -39,8 +38,7 @@ describe('vaadin-markdown DOM synchronization', () => {
     element.markdown = '# Heading\n\n<div id="test" class="sample">Content</div>';
     await nextUpdate(element);
 
-    let body = element.querySelector('div.markdown-body');
-    let testDiv = body.querySelector('#test');
+    const testDiv = element.querySelector('#test');
 
     expect(testDiv).to.be.ok;
     expect(testDiv.getAttribute('class')).to.equal('sample');
@@ -49,9 +47,7 @@ describe('vaadin-markdown DOM synchronization', () => {
     element.markdown = '# Heading\n\n<div id="test" class="updated">Content</div>';
     await nextUpdate(element);
 
-    body = element.querySelector('div.markdown-body');
-    testDiv = body.querySelector('#test');
-
+    expect(testDiv.isConnected).to.be.true;
     expect(testDiv).to.be.ok;
     expect(testDiv.getAttribute('class')).to.equal('updated');
   });
@@ -61,18 +57,17 @@ describe('vaadin-markdown DOM synchronization', () => {
     element.markdown = '# Heading\n\n<div id="test" class="sample" data-test="value">Content</div>';
     await nextUpdate(element);
 
-    let body = element.querySelector('div.markdown-body');
-    let testDiv = body.querySelector('#test');
+    const testDiv = element.querySelector('#test');
 
+    expect(testDiv.getAttribute('class')).to.equal('sample');
     expect(testDiv.hasAttribute('data-test')).to.be.true;
 
     // Remove an attribute
     element.markdown = '# Heading\n\n<div id="test" class="sample">Content</div>';
     await nextUpdate(element);
 
-    body = element.querySelector('div.markdown-body');
-    testDiv = body.querySelector('#test');
-
+    expect(testDiv.isConnected).to.be.true;
+    expect(testDiv.getAttribute('class')).to.equal('sample');
     expect(testDiv.hasAttribute('data-test')).to.be.false;
   });
 
@@ -81,15 +76,13 @@ describe('vaadin-markdown DOM synchronization', () => {
     element.markdown = '# Heading\n\nSingle paragraph';
     await nextUpdate(element);
 
-    let body = element.querySelector('div.markdown-body');
-    expect(body.querySelectorAll('p').length).to.equal(1);
+    expect(element.querySelectorAll('p').length).to.equal(1);
 
     // Add more elements
     element.markdown = '# Heading\n\nFirst paragraph\n\nSecond paragraph\n\nThird paragraph';
     await nextUpdate(element);
 
-    body = element.querySelector('div.markdown-body');
-    expect(body.querySelectorAll('p').length).to.equal(3);
+    expect(element.querySelectorAll('p').length).to.equal(3);
   });
 
   it('should remove elements when needed', async () => {
@@ -97,15 +90,13 @@ describe('vaadin-markdown DOM synchronization', () => {
     element.markdown = '# Heading\n\nParagraph 1\n\nParagraph 2\n\nParagraph 3';
     await nextUpdate(element);
 
-    let body = element.querySelector('div.markdown-body');
-    expect(body.querySelectorAll('p').length).to.equal(3);
+    expect(element.querySelectorAll('p').length).to.equal(3);
 
     // Remove some elements
     element.markdown = '# Heading\n\nOnly paragraph';
     await nextUpdate(element);
 
-    body = element.querySelector('div.markdown-body');
-    expect(body.querySelectorAll('p').length).to.equal(1);
+    expect(element.querySelectorAll('p').length).to.equal(1);
   });
 
   it('should handle text node updates correctly', async () => {
@@ -113,17 +104,15 @@ describe('vaadin-markdown DOM synchronization', () => {
     element.markdown = '# Heading\n\nText content';
     await nextUpdate(element);
 
-    let body = element.querySelector('div.markdown-body');
-    const paragraph = body.querySelector('p');
+    const paragraph = element.querySelector('p');
+    expect(paragraph.textContent).to.equal('Text content');
 
     // Update just the text content
     element.markdown = '# Heading\n\nUpdated text content';
     await nextUpdate(element);
 
-    body = element.querySelector('div.markdown-body');
-    const updatedParagraph = body.querySelector('p');
-
     // The paragraph node should be reused, but text updated
-    expect(updatedParagraph.textContent).to.equal('Updated text content');
+    expect(paragraph.isConnected).to.be.true;
+    expect(paragraph.textContent).to.equal('Updated text content');
   });
 });

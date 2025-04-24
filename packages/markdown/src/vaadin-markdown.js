@@ -46,13 +46,6 @@ class Markdown extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
     };
   }
 
-  constructor() {
-    super();
-    this.__body = document.createElement('div');
-    this.__body.classList.add('markdown-body');
-    this.appendChild(this.__body);
-  }
-
   /** @protected */
   render() {
     return html`<slot></slot>`;
@@ -62,7 +55,7 @@ class Markdown extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
   updated(props) {
     super.updated(props);
 
-    updateMarkdownContent(this.__body, this.markdown);
+    updateMarkdownContent(this, this.markdown);
   }
 }
 

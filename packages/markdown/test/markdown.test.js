@@ -1,6 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
-import sinon from 'sinon';
+import { fixtureSync, nextUpdate } from '@vaadin/testing-helpers';
 import '../src/vaadin-markdown.js';
 
 describe('vaadin-markdown', () => {
@@ -8,7 +7,7 @@ describe('vaadin-markdown', () => {
 
   beforeEach(async () => {
     element = fixtureSync('<vaadin-markdown></vaadin-markdown>');
-    await nextRender(element);
+    await nextUpdate(element);
   });
 
   it('should be defined', () => {
@@ -16,22 +15,15 @@ describe('vaadin-markdown', () => {
     expect(window.customElements.get('vaadin-markdown')).to.be.ok;
   });
 
-  it('should have a markdown-body div inside', () => {
-    const body = element.querySelector('div.markdown-body');
-    expect(body).to.be.ok;
-  });
-
   it('should have default empty content', () => {
-    const body = element.querySelector('div.markdown-body');
-    expect(body.innerHTML.trim()).to.equal('');
+    expect(element.innerHTML.trim()).to.equal('');
   });
 
   it('should render markdown content when markdown property is set', async () => {
     element.markdown = '# Heading';
     await nextUpdate(element);
 
-    const body = element.querySelector('div.markdown-body');
-    const heading = body.querySelector('h1');
+    const heading = element.querySelector('h1');
     expect(heading).to.be.ok;
     expect(heading.textContent).to.equal('Heading');
   });
@@ -40,15 +32,13 @@ describe('vaadin-markdown', () => {
     element.markdown = '# First heading';
     await nextUpdate(element);
 
-    let body = element.querySelector('div.markdown-body');
-    let heading = body.querySelector('h1');
+    let heading = element.querySelector('h1');
     expect(heading.textContent).to.equal('First heading');
 
     element.markdown = '# Updated heading';
     await nextUpdate(element);
 
-    body = element.querySelector('div.markdown-body');
-    heading = body.querySelector('h1');
+    heading = element.querySelector('h1');
     expect(heading.textContent).to.equal('Updated heading');
   });
 
@@ -56,16 +46,21 @@ describe('vaadin-markdown', () => {
     element.markdown = undefined;
     await nextUpdate(element);
 
-    const body = element.querySelector('div.markdown-body');
-    expect(body.innerHTML.trim()).to.equal('');
+    expect(element.innerHTML.trim()).to.equal('');
   });
 
   it('should handle null markdown content', async () => {
     element.markdown = null;
     await nextUpdate(element);
 
-    const body = element.querySelector('div.markdown-body');
-    expect(body.innerHTML.trim()).to.equal('');
+    expect(element.innerHTML.trim()).to.equal('');
+  });
+
+  it('should handle empty string markdown content', async () => {
+    element.markdown = '';
+    await nextUpdate(element);
+
+    expect(element.innerHTML.trim()).to.equal('');
   });
 
   it('should handle very large markdown content', async () => {
@@ -78,8 +73,7 @@ describe('vaadin-markdown', () => {
     element.markdown = largeMarkdown;
     await nextUpdate(element);
 
-    const body = element.querySelector('div.markdown-body');
-    expect(body.querySelectorAll('h2').length).to.equal(50);
+    expect(element.querySelectorAll('h2').length).to.equal(50);
   });
 
   it('should handle markdown with nested HTML structures', async () => {
@@ -96,8 +90,7 @@ More markdown
 `;
     await nextUpdate(element);
 
-    const body = element.querySelector('div.markdown-body');
-    const wrapper = body.querySelector('.wrapper');
+    const wrapper = element.querySelector('.wrapper');
     expect(wrapper).to.be.ok;
 
     const inner = wrapper.querySelector('.inner');
@@ -119,9 +112,8 @@ More markdown
 `;
     await nextUpdate(element);
 
-    let body = element.querySelector('div.markdown-body');
-    expect(body.querySelector('ul')).to.be.ok;
-    expect(body.querySelector('table')).to.be.null;
+    expect(element.querySelector('ul')).to.be.ok;
+    expect(element.querySelector('table')).to.be.null;
 
     // Replace with a completely different structure
     element.markdown = `
@@ -134,39 +126,9 @@ More markdown
 `;
     await nextUpdate(element);
 
-    body = element.querySelector('div.markdown-body');
-    expect(body.querySelector('ul')).to.be.null;
-    expect(body.querySelector('table')).to.be.ok;
-    expect(body.querySelectorAll('td').length).to.equal(4);
-  });
-
-  it('should correctly handle the component lifecycle', async () => {
-    // Spy on updateMarkdownContent calls
-    const updateSpy = sinon.spy(element, 'updated');
-
-    // First update
-    element.markdown = '# Test';
-    await nextUpdate(element);
-
-    expect(updateSpy.callCount).to.be.at.least(1);
-
-    // Second update
-    element.markdown = '# Updated Test';
-    await nextUpdate(element);
-
-    expect(updateSpy.callCount).to.be.at.least(2);
-
-    // Verify the content was updated
-    const body = element.querySelector('div.markdown-body');
-    expect(body.querySelector('h1').textContent).to.equal('Updated Test');
-  });
-
-  it('should work with empty string markdown', async () => {
-    element.markdown = '';
-    await nextUpdate(element);
-
-    const body = element.querySelector('div.markdown-body');
-    expect(body.innerHTML.trim()).to.equal('');
+    expect(element.querySelector('ul')).to.be.null;
+    expect(element.querySelector('table')).to.be.ok;
+    expect(element.querySelectorAll('td').length).to.equal(4);
   });
 
   it('should handle component reattachment to DOM', async () => {
@@ -183,10 +145,8 @@ More markdown
 
     // Reattach to DOM
     parent.appendChild(element);
-    await nextRender(element);
     await nextUpdate(element);
 
-    const body = element.querySelector('div.markdown-body');
-    expect(body.querySelector('h1').textContent).to.equal('Modified Heading');
+    expect(element.querySelector('h1').textContent).to.equal('Modified Heading');
   });
 });
