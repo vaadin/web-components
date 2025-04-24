@@ -34,7 +34,7 @@ export const accordionHeading = css`
     width: 100%;
   }
 
-  button:focus {
+  button:focus-visible {
     outline: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
     outline-offset: 1px;
   }
