@@ -19,7 +19,7 @@ export const itemStyles = css`
       padding: var(--vaadin-item-padding, var(--_vaadin-padding-container));
     }
 
-    :host(:is(:focus-visible, vaadin-combo-box-item[focused])) {
+    :host([focused]) {
       outline: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
       outline-offset: calc(var(--vaadin-focus-ring-width) / -1);
     }
