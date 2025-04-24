@@ -122,7 +122,10 @@ export const MessageListMixin = (superClass) =>
       );
 
       this.querySelectorAll('vaadin-message > .markdown-body').forEach((body) => {
-        updateMarkdownContent(body, body.markdown);
+        if (body.currentMarkdown !== body.markdown) {
+          updateMarkdownContent(body, body.markdown);
+          body.currentMarkdown = body.markdown;
+        }
       });
     }
 
