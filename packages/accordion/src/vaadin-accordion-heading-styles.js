@@ -18,22 +18,19 @@ export const accordionHeading = css`
   }
 
   button {
+    appearance: none;
     background: var(--vaadin-accordion-heading-background, transparent);
     background-origin: border-box;
     border: var(--vaadin-accordion-heading-border, none);
     border-radius: var(--vaadin-accordion-heading-border-radius, var(--_vaadin-radius-m));
-    box-sizing: border-box;
     color: var(--vaadin-accordion-heading-text-color, var(--_vaadin-color-strong));
-    display: inline-flex;
-    font-family: var(--vaadin-accordion-heading-font-family, inherit);
+    display: flex;
+    font: inherit;
     font-size: var(--vaadin-accordion-heading-font-size, inherit);
     font-weight: var(--vaadin-accordion-heading-font-weight, 500);
     gap: var(--vaadin-accordion-heading-gap, 0 var(--_vaadin-gap-container-inline));
     height: var(--vaadin-accordion-heading-height, auto);
-    line-height: var(--vaadin-accordion-heading-line-height, inherit);
-    margin: var(--vaadin-accordion-heading-margin, 0);
     padding: var(--vaadin-accordion-heading-padding, var(--_vaadin-padding-container));
-    text-align: start;
     width: 100%;
   }
 
