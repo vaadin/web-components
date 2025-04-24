@@ -38,15 +38,6 @@ registerStyles(
 );
 
 registerStyles(
-  'vaadin-multi-select-combo-box-container',
-  css`
-    :host {
-      padding: 0 6px;
-    }
-  `,
-);
-
-registerStyles(
   'vaadin-multi-select-combo-box-chip',
   css`
     :host {
