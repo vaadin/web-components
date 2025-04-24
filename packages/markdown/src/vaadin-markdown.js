@@ -32,6 +32,7 @@ class Markdown extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
       :host {
         display: block;
       }
+
       :host([hidden]) {
         display: none;
       }

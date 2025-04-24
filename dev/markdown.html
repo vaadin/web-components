@@ -9,7 +9,6 @@
 
     <script type="module">
       import '@vaadin/markdown';
-      import '@vaadin/charts';
       import { render, html } from 'lit';
 
       const markdown = document.querySelector('vaadin-markdown');
@@ -36,27 +35,6 @@ Hello
 }
 \`\`\`
 `;
-
-      markdown.renderer = (root, _md, { text }) => {
-        const config = JSON.parse(text);
-
-        render(
-          html`
-            <vaadin-chart type="column" title="${config.chartTitle}" style="height: 300px;">
-              ${config.series.map(
-                (seriesItem) =>
-                  html`<vaadin-chart-series
-                    title="${seriesItem.title}"
-                    type="${seriesItem.type}"
-                    values="${JSON.stringify(seriesItem.values)}"
-                  >
-                  </vaadin-chart-series>`,
-              )}
-            </vaadin-chart>
-          `,
-          root,
-        );
-      };
     </script>
   </head>
 
