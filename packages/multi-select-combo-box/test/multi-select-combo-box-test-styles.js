@@ -7,7 +7,7 @@ registerStyles(
   css`
     ::slotted([slot='chip']),
     ::slotted([slot='overflow']) {
-      padding: 0.3125em 0.5625em;
+      padding: 0 0.5625em;
     }
 
     ::slotted([slot='chip']:not(:last-of-type)),
@@ -19,20 +19,17 @@ registerStyles(
       padding-inline-end: 0;
     }
 
-    ::slotted(input) {
-      padding: 0 0.25em;
+    [part='toggle-button'] {
+      color: var(--_vaadin-color-subtle);
     }
 
-    [part$='button'] {
-      flex: none;
-      font-size: 1.5em;
-      width: 1em;
-      height: 1em;
-    }
-
-    [part$='button']::before {
+    [part='toggle-button']::before {
+      background: currentColor;
+      content: '';
       display: block;
-      height: 100%;
+      height: var(--vaadin-icon-size, 1lh);
+      mask-image: var(--_vaadin-icon-chevron-down);
+      width: var(--vaadin-icon-size, 1lh);
     }
   `,
 );
@@ -50,10 +47,17 @@ registerStyles(
     }
 
     [part='remove-button'] {
-      display: flex;
-      width: 1.25em;
-      height: 1.25em;
+      color: var(--_vaadin-color-subtle);
       font-size: 1.5em;
+    }
+
+    [part='remove-button']::before {
+      background: currentColor;
+      content: '';
+      display: block;
+      height: var(--vaadin-icon-size, 1lh);
+      mask-image: var(--_vaadin-icon-cross);
+      width: var(--vaadin-icon-size, 1lh);
     }
   `,
 );
