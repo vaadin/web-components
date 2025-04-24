@@ -15,23 +15,26 @@ export const accordionPanel = css`
   }
 
   [part='content'] {
+    overflow: hidden;
+  }
+
+  :host(:not([opened])) [part='content'] {
+    display: none;
     height: 0;
-    interpolate-size: allow-keywords;
     opacity: 0;
-    transition-duration: 150ms;
-    transition-property: height, opacity;
-    visibility: hidden;
   }
 
-  :host([opened]) [part='content'] {
-    height: auto;
-    opacity: 1;
-    visibility: visible;
-  }
-
-  @media (prefers-reduced-motion) {
+  @media (prefers-reduced-motion: no-preference) {
     [part='content'] {
-      transition-property: none;
+      interpolate-size: allow-keywords;
+      transition-behavior: allow-discrete;
+      transition-duration: 150ms;
+      transition-property: height, opacity, display;
+
+      @starting-style {
+        height: 0;
+        opacity: 0;
+      }
     }
   }
 `;
