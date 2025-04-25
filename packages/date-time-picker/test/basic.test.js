@@ -4,13 +4,6 @@ import { aTimeout, fixtureSync, focusin, focusout, nextRender, outsideClick } fr
 import sinon from 'sinon';
 import '../src/vaadin-date-time-picker.js';
 import { changeInputValue } from './helpers.js';
-import {
-  changeStateOnFocusedInput,
-  getOtherPickerType,
-  getPicker,
-  individualPickerUpdateTestSetup,
-  initializePickerStates,
-} from './individual-picker-update-helpers.js';
 
 const fixtures = {
   'default-inputs': `
@@ -267,44 +260,325 @@ describe('Basic features', () => {
       dateTimePicker.addEventListener(unparsableChangeEventType, unparsableChangeEventSpy);
     });
 
-    individualPickerUpdateTestSetup(
-      (pickerType, pickerInitialState, pickerNewState, otherPickerInitialState, inputChangeTrigger) => {
-        function shouldFireAnyChangeEvent() {
-          if (inputChangeTrigger === 'outside click') {
-            return true;
-          }
-          const isInitiallyInvalid =
-            pickerInitialState === 'unparsable' ||
-            otherPickerInitialState === 'unparsable' ||
-            pickerInitialState !== otherPickerInitialState;
-          const isOnePickerEmptyOtherOneValid =
-            (pickerNewState === 'empty' && otherPickerInitialState === 'parsable') ||
-            (otherPickerInitialState === 'empty' && pickerNewState === 'parsable');
-          return isInitiallyInvalid || !isOnePickerEmptyOtherOneValid;
+    ['date-picker', 'time-picker'].forEach((pickerType) => {
+      function getPicker(pickerType) {
+        return pickerType === 'date-picker' ? datePicker : timePicker;
+      }
+
+      function getOtherPickerType(pickerType) {
+        return pickerType === 'date-picker' ? 'time-picker' : 'date-picker';
+      }
+
+      function getPickerInitialValue(pickerType) {
+        return pickerType === 'date-picker' ? '2/2/2022' : '02:02';
+      }
+
+      function getPickerNewValue(pickerType) {
+        return pickerType === 'date-picker' ? '1/1/2023' : '13:00';
+      }
+
+      async function triggerInputChange(trigger) {
+        if (trigger === 'outside click') {
+          outsideClick();
+        } else {
+          await sendKeys({ press: 'Enter' });
         }
+      }
 
-        function getExpectedChangeEventType() {
-          const isInitiallyFilledAndValid = pickerInitialState === 'parsable' && otherPickerInitialState === 'parsable';
-          const isValidAfterUpdate = pickerNewState === 'parsable' && otherPickerInitialState === 'parsable';
-          if (isInitiallyFilledAndValid || isValidAfterUpdate) {
-            return changeEventType;
-          }
-          return unparsableChangeEventType;
+      async function clearValueOnFocusedInput(trigger) {
+        await sendKeys({ press: 'ControlOrMeta+A' });
+        await sendKeys({ press: 'Backspace' });
+        await triggerInputChange(trigger);
+        await nextRender();
+      }
+
+      async function changeValueOnFocusedInput(newValue, trigger) {
+        await sendKeys({ press: 'ControlOrMeta+A' });
+        await sendKeys({ type: newValue });
+        await triggerInputChange(trigger);
+        await nextRender();
+      }
+
+      async function initializePickerState(pickerType, initialState) {
+        if (initialState === 'empty') {
+          return;
         }
+        const picker = getPicker(pickerType);
+        picker.focus();
+        const value = initialState === 'parsable' ? getPickerInitialValue(pickerType) : 'unparsableInitial';
+        await changeValueOnFocusedInput(value);
+        picker.blur();
+      }
 
-        const expectedChangeEventType = shouldFireAnyChangeEvent() ? getExpectedChangeEventType() : null;
+      async function changeStateOnFocusedInput(pickerType, newPickerState, trigger) {
+        if (newPickerState === 'empty') {
+          await clearValueOnFocusedInput(trigger);
+        } else {
+          const newValue = newPickerState === 'unparsable' ? 'unparsableNew' : getPickerNewValue(pickerType);
+          await changeValueOnFocusedInput(newValue, trigger);
+        }
+      }
 
-        it(`${expectedChangeEventType ? `should fire ${expectedChangeEventType}` : 'should not fire any change events'} on ${pickerType} ${inputChangeTrigger} when value is changed from ${pickerInitialState} to ${pickerNewState} when ${getOtherPickerType(pickerType)} value is ${otherPickerInitialState}`, async () => {
-          await initializePickerStates(dateTimePicker, pickerType, pickerInitialState, otherPickerInitialState);
-          changeEventSpy.resetHistory();
-          unparsableChangeEventSpy.resetHistory();
-          getPicker(dateTimePicker, pickerType).focus();
-          await changeStateOnFocusedInput(pickerType, pickerNewState, inputChangeTrigger);
-          expect(changeEventSpy.called).to.equal(expectedChangeEventType === changeEventType);
-          expect(unparsableChangeEventSpy.called).to.equal(expectedChangeEventType === unparsableChangeEventType);
-        });
-      },
-    );
+      async function initializeAndFocus(pickerType, pickerInitialState, otherPickerInitialState) {
+        await initializePickerState(pickerType, pickerInitialState);
+        await initializePickerState(getOtherPickerType(pickerType), otherPickerInitialState);
+        changeEventSpy.resetHistory();
+        unparsableChangeEventSpy.resetHistory();
+        getPicker(pickerType).focus();
+      }
+
+      it(`should fire change on ${pickerType} outside click when value is changed from empty to parsable when ${getOtherPickerType(pickerType)} value is parsable`, async () => {
+        await initializeAndFocus(pickerType, 'empty', 'parsable');
+        await changeStateOnFocusedInput(pickerType, 'parsable', 'outside click');
+        expect(changeEventSpy.called).to.be.true;
+        expect(unparsableChangeEventSpy.called).to.false;
+      });
+
+      it(`should fire change on ${pickerType} outside click when value is changed from parsable to empty when ${getOtherPickerType(pickerType)} value is parsable`, async () => {
+        await initializeAndFocus(pickerType, 'parsable', 'parsable');
+        await changeStateOnFocusedInput(pickerType, 'empty', 'outside click');
+        expect(changeEventSpy.called).to.be.true;
+        expect(unparsableChangeEventSpy.called).to.false;
+      });
+
+      it(`should fire unparsable-change on ${pickerType} outside click when value is changed from empty to unparsable when ${getOtherPickerType(pickerType)} value is parsable`, async () => {
+        await initializeAndFocus(pickerType, 'empty', 'parsable');
+        await changeStateOnFocusedInput(pickerType, 'unparsable', 'outside click');
+        expect(changeEventSpy.called).to.be.false;
+        expect(unparsableChangeEventSpy.called).to.true;
+      });
+
+      it(`should fire unparsable-change on ${pickerType} outside click when value is changed from unparsable to empty when ${getOtherPickerType(pickerType)} value is parsable`, async () => {
+        await initializeAndFocus(pickerType, 'unparsable', 'parsable');
+        await changeStateOnFocusedInput(pickerType, 'empty', 'outside click');
+        expect(changeEventSpy.called).to.be.false;
+        expect(unparsableChangeEventSpy.called).to.true;
+      });
+
+      it(`should fire change on ${pickerType} outside click when value is changed from parsable to unparsable when ${getOtherPickerType(pickerType)} value is parsable`, async () => {
+        await initializeAndFocus(pickerType, 'parsable', 'parsable');
+        await changeStateOnFocusedInput(pickerType, 'unparsable', 'outside click');
+        expect(changeEventSpy.called).to.be.true;
+        expect(unparsableChangeEventSpy.called).to.false;
+      });
+
+      it(`should fire change on ${pickerType} outside click when value is changed from unparsable to parsable when ${getOtherPickerType(pickerType)} value is parsable`, async () => {
+        await initializeAndFocus(pickerType, 'unparsable', 'parsable');
+        await changeStateOnFocusedInput(pickerType, 'parsable', 'outside click');
+        expect(changeEventSpy.called).to.be.true;
+        expect(unparsableChangeEventSpy.called).to.false;
+      });
+
+      it(`should fire unparsable-change on ${pickerType} outside click when value is changed from empty to parsable when ${getOtherPickerType(pickerType)} value is unparsable`, async () => {
+        await initializeAndFocus(pickerType, 'empty', 'unparsable');
+        await changeStateOnFocusedInput(pickerType, 'parsable', 'outside click');
+        expect(changeEventSpy.called).to.be.false;
+        expect(unparsableChangeEventSpy.called).to.true;
+      });
+
+      it(`should fire unparsable-change on ${pickerType} outside click when value is changed from parsable to empty when ${getOtherPickerType(pickerType)} value is unparsable`, async () => {
+        await initializeAndFocus(pickerType, 'parsable', 'unparsable');
+        await changeStateOnFocusedInput(pickerType, 'empty', 'outside click');
+        expect(changeEventSpy.called).to.be.false;
+        expect(unparsableChangeEventSpy.called).to.true;
+      });
+
+      it(`should fire unparsable-change on ${pickerType} outside click when value is changed from empty to unparsable when ${getOtherPickerType(pickerType)} value is unparsable`, async () => {
+        await initializeAndFocus(pickerType, 'empty', 'unparsable');
+        await changeStateOnFocusedInput(pickerType, 'unparsable', 'outside click');
+        expect(changeEventSpy.called).to.be.false;
+        expect(unparsableChangeEventSpy.called).to.true;
+      });
+
+      it(`should fire unparsable-change on ${pickerType} outside click when value is changed from unparsable to empty when ${getOtherPickerType(pickerType)} value is unparsable`, async () => {
+        await initializeAndFocus(pickerType, 'unparsable', 'unparsable');
+        await changeStateOnFocusedInput(pickerType, 'empty', 'outside click');
+        expect(changeEventSpy.called).to.be.false;
+        expect(unparsableChangeEventSpy.called).to.true;
+      });
+
+      it(`should fire unparsable-change on ${pickerType} outside click when value is changed from parsable to unparsable when ${getOtherPickerType(pickerType)} value is unparsable`, async () => {
+        await initializeAndFocus(pickerType, 'parsable', 'unparsable');
+        await changeStateOnFocusedInput(pickerType, 'unparsable', 'outside click');
+        expect(changeEventSpy.called).to.be.false;
+        expect(unparsableChangeEventSpy.called).to.true;
+      });
+
+      it(`should fire unparsable-change on ${pickerType} outside click when value is changed from unparsable to parsable when ${getOtherPickerType(pickerType)} value is unparsable`, async () => {
+        await initializeAndFocus(pickerType, 'unparsable', 'unparsable');
+        await changeStateOnFocusedInput(pickerType, 'parsable', 'outside click');
+        expect(changeEventSpy.called).to.be.false;
+        expect(unparsableChangeEventSpy.called).to.true;
+      });
+
+      it(`should fire unparsable-change on ${pickerType} outside click when value is changed from empty to parsable when ${getOtherPickerType(pickerType)} value is empty`, async () => {
+        await initializeAndFocus(pickerType, 'empty', 'empty');
+        await changeStateOnFocusedInput(pickerType, 'parsable', 'outside click');
+        expect(changeEventSpy.called).to.be.false;
+        expect(unparsableChangeEventSpy.called).to.true;
+      });
+
+      it(`should fire unparsable-change on ${pickerType} outside click when value is changed from parsable to empty when ${getOtherPickerType(pickerType)} value is empty`, async () => {
+        await initializeAndFocus(pickerType, 'parsable', 'empty');
+        await changeStateOnFocusedInput(pickerType, 'empty', 'outside click');
+        expect(changeEventSpy.called).to.be.false;
+        expect(unparsableChangeEventSpy.called).to.true;
+      });
+
+      it(`should fire unparsable-change on ${pickerType} outside click when value is changed from empty to unparsable when ${getOtherPickerType(pickerType)} value is empty`, async () => {
+        await initializeAndFocus(pickerType, 'empty', 'empty');
+        await changeStateOnFocusedInput(pickerType, 'unparsable', 'outside click');
+        expect(changeEventSpy.called).to.be.false;
+        expect(unparsableChangeEventSpy.called).to.true;
+      });
+
+      it(`should fire unparsable-change on ${pickerType} outside click when value is changed from unparsable to empty when ${getOtherPickerType(pickerType)} value is empty`, async () => {
+        await initializeAndFocus(pickerType, 'unparsable', 'empty');
+        await changeStateOnFocusedInput(pickerType, 'empty', 'outside click');
+        expect(changeEventSpy.called).to.be.false;
+        expect(unparsableChangeEventSpy.called).to.true;
+      });
+
+      it(`should fire unparsable-change on ${pickerType} outside click when value is changed from parsable to unparsable when ${getOtherPickerType(pickerType)} value is empty`, async () => {
+        await initializeAndFocus(pickerType, 'parsable', 'empty');
+        await changeStateOnFocusedInput(pickerType, 'unparsable', 'outside click');
+        expect(changeEventSpy.called).to.be.false;
+        expect(unparsableChangeEventSpy.called).to.true;
+      });
+
+      it(`should fire unparsable-change on ${pickerType} outside click when value is changed from unparsable to parsable when ${getOtherPickerType(pickerType)} value is empty`, async () => {
+        await initializeAndFocus(pickerType, 'unparsable', 'empty');
+        await changeStateOnFocusedInput(pickerType, 'parsable', 'outside click');
+        expect(changeEventSpy.called).to.be.false;
+        expect(unparsableChangeEventSpy.called).to.true;
+      });
+
+      it(`should fire change on ${pickerType} enter when value is changed from empty to parsable when ${getOtherPickerType(pickerType)} value is parsable`, async () => {
+        await initializeAndFocus(pickerType, 'empty', 'parsable');
+        await changeStateOnFocusedInput(pickerType, 'parsable', 'enter');
+        expect(changeEventSpy.called).to.be.true;
+        expect(unparsableChangeEventSpy.called).to.false;
+      });
+
+      it(`should not fire any change events on ${pickerType} enter when value is changed from parsable to empty when ${getOtherPickerType(pickerType)} value is parsable`, async () => {
+        await initializeAndFocus(pickerType, 'parsable', 'parsable');
+        await changeStateOnFocusedInput(pickerType, 'empty', 'enter');
+        expect(changeEventSpy.called).to.be.false;
+        expect(unparsableChangeEventSpy.called).to.false;
+      });
+
+      it(`should fire unparsable-change on ${pickerType} enter when value is changed from empty to unparsable when ${getOtherPickerType(pickerType)} value is parsable`, async () => {
+        await initializeAndFocus(pickerType, 'empty', 'parsable');
+        await changeStateOnFocusedInput(pickerType, 'unparsable', 'enter');
+        expect(changeEventSpy.called).to.be.false;
+        expect(unparsableChangeEventSpy.called).to.true;
+      });
+
+      it(`should fire unparsable-change on ${pickerType} enter when value is changed from unparsable to empty when ${getOtherPickerType(pickerType)} value is parsable`, async () => {
+        await initializeAndFocus(pickerType, 'unparsable', 'parsable');
+        await changeStateOnFocusedInput(pickerType, 'empty', 'enter');
+        expect(changeEventSpy.called).to.be.false;
+        expect(unparsableChangeEventSpy.called).to.true;
+      });
+
+      it(`should fire change on ${pickerType} enter when value is changed from parsable to unparsable when ${getOtherPickerType(pickerType)} value is parsable`, async () => {
+        await initializeAndFocus(pickerType, 'parsable', 'parsable');
+        await changeStateOnFocusedInput(pickerType, 'unparsable', 'enter');
+        expect(changeEventSpy.called).to.be.true;
+        expect(unparsableChangeEventSpy.called).to.false;
+      });
+
+      it(`should fire change on ${pickerType} enter when value is changed from unparsable to parsable when ${getOtherPickerType(pickerType)} value is parsable`, async () => {
+        await initializeAndFocus(pickerType, 'unparsable', 'parsable');
+        await changeStateOnFocusedInput(pickerType, 'parsable', 'enter');
+        expect(changeEventSpy.called).to.be.true;
+        expect(unparsableChangeEventSpy.called).to.false;
+      });
+
+      it(`should fire unparsable-change on ${pickerType} enter when value is changed from empty to parsable when ${getOtherPickerType(pickerType)} value is unparsable`, async () => {
+        await initializeAndFocus(pickerType, 'empty', 'unparsable');
+        await changeStateOnFocusedInput(pickerType, 'parsable', 'enter');
+        expect(changeEventSpy.called).to.be.false;
+        expect(unparsableChangeEventSpy.called).to.true;
+      });
+
+      it(`should fire unparsable-change on ${pickerType} enter when value is changed from parsable to empty when ${getOtherPickerType(pickerType)} value is unparsable`, async () => {
+        await initializeAndFocus(pickerType, 'parsable', 'unparsable');
+        await changeStateOnFocusedInput(pickerType, 'empty', 'enter');
+        expect(changeEventSpy.called).to.be.false;
+        expect(unparsableChangeEventSpy.called).to.true;
+      });
+
+      it(`should fire unparsable-change on ${pickerType} enter when value is changed from empty to unparsable when ${getOtherPickerType(pickerType)} value is unparsable`, async () => {
+        await initializeAndFocus(pickerType, 'empty', 'unparsable');
+        await changeStateOnFocusedInput(pickerType, 'unparsable', 'enter');
+        expect(changeEventSpy.called).to.be.false;
+        expect(unparsableChangeEventSpy.called).to.true;
+      });
+
+      it(`should fire unparsable-change on ${pickerType} enter when value is changed from unparsable to empty when ${getOtherPickerType(pickerType)} value is unparsable`, async () => {
+        await initializeAndFocus(pickerType, 'unparsable', 'unparsable');
+        await changeStateOnFocusedInput(pickerType, 'empty', 'enter');
+        expect(changeEventSpy.called).to.be.false;
+        expect(unparsableChangeEventSpy.called).to.true;
+      });
+
+      it(`should fire unparsable-change on ${pickerType} enter when value is changed from parsable to unparsable when ${getOtherPickerType(pickerType)} value is unparsable`, async () => {
+        await initializeAndFocus(pickerType, 'parsable', 'unparsable');
+        await changeStateOnFocusedInput(pickerType, 'unparsable', 'enter');
+        expect(changeEventSpy.called).to.be.false;
+        expect(unparsableChangeEventSpy.called).to.true;
+      });
+
+      it(`should fire unparsable-change on ${pickerType} enter when value is changed from unparsable to parsable when ${getOtherPickerType(pickerType)} value is unparsable`, async () => {
+        await initializeAndFocus(pickerType, 'unparsable', 'unparsable');
+        await changeStateOnFocusedInput(pickerType, 'parsable', 'enter');
+        expect(changeEventSpy.called).to.be.false;
+        expect(unparsableChangeEventSpy.called).to.true;
+      });
+
+      it(`should not fire any change events on ${pickerType} enter when value is changed from empty to parsable when ${getOtherPickerType(pickerType)} value is empty`, async () => {
+        await initializeAndFocus(pickerType, 'empty', 'empty');
+        await changeStateOnFocusedInput(pickerType, 'parsable', 'enter');
+        expect(changeEventSpy.called).to.be.false;
+        expect(unparsableChangeEventSpy.called).to.false;
+      });
+
+      it(`should fire unparsable-change on ${pickerType} enter when value is changed from parsable to empty when ${getOtherPickerType(pickerType)} value is empty`, async () => {
+        await initializeAndFocus(pickerType, 'parsable', 'empty');
+        await changeStateOnFocusedInput(pickerType, 'empty', 'enter');
+        expect(changeEventSpy.called).to.be.false;
+        expect(unparsableChangeEventSpy.called).to.true;
+      });
+
+      it(`should fire unparsable-change on ${pickerType} enter when value is changed from empty to unparsable when ${getOtherPickerType(pickerType)} value is empty`, async () => {
+        await initializeAndFocus(pickerType, 'empty', 'empty');
+        await changeStateOnFocusedInput(pickerType, 'unparsable', 'enter');
+        expect(changeEventSpy.called).to.be.false;
+        expect(unparsableChangeEventSpy.called).to.true;
+      });
+
+      it(`should fire unparsable-change on ${pickerType} enter when value is changed from unparsable to empty when ${getOtherPickerType(pickerType)} value is empty`, async () => {
+        await initializeAndFocus(pickerType, 'unparsable', 'empty');
+        await changeStateOnFocusedInput(pickerType, 'empty', 'enter');
+        expect(changeEventSpy.called).to.be.false;
+        expect(unparsableChangeEventSpy.called).to.true;
+      });
+
+      it(`should fire unparsable-change on ${pickerType} enter when value is changed from parsable to unparsable when ${getOtherPickerType(pickerType)} value is empty`, async () => {
+        await initializeAndFocus(pickerType, 'parsable', 'empty');
+        await changeStateOnFocusedInput(pickerType, 'unparsable', 'enter');
+        expect(changeEventSpy.called).to.be.false;
+        expect(unparsableChangeEventSpy.called).to.true;
+      });
+
+      it(`should fire unparsable-change on ${pickerType} enter when value is changed from unparsable to parsable when ${getOtherPickerType(pickerType)} value is empty`, async () => {
+        await initializeAndFocus(pickerType, 'unparsable', 'empty');
+        await changeStateOnFocusedInput(pickerType, 'parsable', 'enter');
+        expect(changeEventSpy.called).to.be.false;
+        expect(unparsableChangeEventSpy.called).to.true;
+      });
+    });
 
     it('should not fire change on programmatic value change', () => {
       dateTimePicker.value = '2020-01-17T16:00';
