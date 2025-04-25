@@ -7,21 +7,23 @@ import { css } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 export const checkboxStyles = css`
   :host {
-    display: inline-block;
+    align-items: baseline;
+    display: inline-grid;
+    gap: var(--vaadin-checkbox-gap, 0 var(--_vaadin-gap-container-inline));
+    grid-template-columns: auto 1fr;
   }
 
   :host([hidden]) {
-    display: none !important;
+    display: none;
   }
 
-  :host([disabled]) {
-    -webkit-tap-highlight-color: transparent;
+  :host([focus-ring]) [part='checkbox'] {
+    outline: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
+    outline-offset: 1px;
   }
 
   .vaadin-checkbox-container {
-    display: grid;
-    grid-template-columns: auto 1fr;
-    align-items: baseline;
+    display: contents;
   }
 
   [part='checkbox'],
@@ -46,28 +48,106 @@ export const checkboxStyles = css`
   }
 
   [part='checkbox'] {
-    width: var(--vaadin-checkbox-size, 1em);
+    background-color: var(--vaadin-checkbox-background, transparent);
+    border: var(--vaadin-checkbox-border-width, 1px) solid
+      var(--vaadin-checkbox-border-color, var(--_vaadin-border-color-strong));
+    border-radius: var(--vaadin-checkbox-border-radius, var(--_vaadin-radius-s));
+    color: var(--vaadin-checkbox-color, transparent);
     height: var(--vaadin-checkbox-size, 1em);
-    --_input-border-width: var(--vaadin-input-field-border-width, 0);
-    --_input-border-color: var(--vaadin-input-field-border-color, transparent);
-    box-shadow: inset 0 0 0 var(--_input-border-width, 0) var(--_input-border-color);
+    position: relative;
+    width: var(--vaadin-checkbox-size, 1em);
   }
 
   [part='checkbox']::before {
-    display: block;
-    content: '\\202F';
-    line-height: var(--vaadin-checkbox-size, 1em);
     contain: paint;
+    content: '\\202F';
+    display: block;
+    line-height: var(--vaadin-checkbox-size, 1em);
   }
 
-  /* visually hidden */
+  [part='checkbox']::after {
+    content: '';
+    height: var(--vaadin-checkbox-size, 1em);
+    inset: 0;
+    position: absolute;
+    width: var(--vaadin-checkbox-size, 1em);
+  }
+
+  /* Checked, indeterminate */
+  :host(:is([checked], [indeterminate])) {
+    --vaadin-checkbox-background: var(--_vaadin-color-strong);
+    --vaadin-checkbox-border-color: transparent;
+    --vaadin-checkbox-color: var(--_vaadin-background);
+  }
+
+  :host([checked]) [part='checkbox']::after {
+    background: currentColor;
+    mask-image: var(--_vaadin-icon-checkmark);
+  }
+
+  :host([indeterminate]) [part='checkbox']::after {
+    background: currentColor;
+    mask-image: var(--_vaadin-icon-minus);
+  }
+
+  /* Read-only */
+  :host([readonly]) {
+    --vaadin-checkbox-background: transparent;
+    --vaadin-checkbox-border-color: var(--_vaadin-border-color-strong);
+    --vaadin-checkbox-color: var(--_vaadin-color-strong);
+  }
+
+  :host([readonly]) [part='checkbox'] {
+    border-style: dashed;
+  }
+
+  /* Disabled */
+  :host([disabled]) {
+    --vaadin-checkbox-background: var(
+      --vaadin-input-field-disabled-background,
+      var(--_vaadin-background-container-strong)
+    );
+    --vaadin-checkbox-border-color: transparent;
+    --vaadin-checkbox-color: var(--_vaadin-color-strong);
+    --vaadin-checkbox-label-color: var(--vaadin-input-field-disabled-text-color, var(--_vaadin-color-subtle));
+  }
+
+  /* Visually hidden */
   ::slotted(input) {
-    cursor: inherit;
-    margin: 0;
     align-self: stretch;
-    -webkit-appearance: none;
-    width: initial;
+    appearance: none;
+    cursor: inherit;
     height: initial;
+    margin: 0;
+    width: initial;
+  }
+
+  [part='label'] {
+    color: var(--vaadin-checkbox-label-color, var(--_vaadin-color-strong));
+    display: inline-block;
+    font-size: var(--vaadin-checkbox-label-font-size, inherit);
+    font-weight: var(--vaadin-checkbox-label-font-weight, 400);
+    line-height: var(--vaadin-checkbox-label-line-height, inherit);
+  }
+
+  [part='required-indicator'] {
+    color: var(--vaadin-input-field-required-indicator-color, inherit);
+    display: none;
+  }
+
+  [part='required-indicator']::after {
+    content: var(--vaadin-input-field-required-indicator, '*');
+  }
+
+  :host([required]) [part='required-indicator'] {
+    display: inline-block;
+  }
+
+  [part='helper-text'] {
+    color: var(--vaadin-checkbox-helper-color, var(--_vaadin-color));
+    font-size: var(--vaadin-checkbox-helper-font-size, inherit);
+    font-weight: var(--vaadin-checkbox-helper-font-weight, 400);
+    line-height: var(--vaadin-checkbox-helper-line-height, inherit);
   }
 
   @media (forced-colors: active) {
@@ -82,9 +162,9 @@ export const checkboxStyles = css`
     }
 
     :host(:is([checked], [indeterminate])) [part='checkbox']::after {
+      border-radius: inherit;
       outline: 1px solid;
       outline-offset: -1px;
-      border-radius: inherit;
     }
 
     :host([focused]) [part='checkbox'],

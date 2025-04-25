@@ -8,6 +8,8 @@ import { html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
+import { fieldShared } from '@vaadin/field-base/src/styles/field-shared-styles.js';
+import { inputFieldContainer } from '@vaadin/field-base/src/styles/input-field-container-styles.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { CheckboxGroupMixin } from './vaadin-checkbox-group-mixin.js';
 import { checkboxGroupStyles } from './vaadin-checkbox-group-styles.js';
@@ -27,7 +29,7 @@ class CheckboxGroup extends CheckboxGroupMixin(ElementMixin(ThemableMixin(Polyli
   }
 
   static get styles() {
-    return checkboxGroupStyles;
+    return [fieldShared, inputFieldContainer, checkboxGroupStyles];
   }
 
   /** @protected */

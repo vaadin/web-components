@@ -8,15 +8,76 @@
     <script type="module" src="./common.js"></script>
 
     <script type="module">
-      import '@vaadin/checkbox';
-      import '@vaadin/tooltip';
+      import '@vaadin/checkbox/src/vaadin-lit-checkbox.js';
+      import '@vaadin/checkbox-group/src/vaadin-lit-checkbox-group.js';
     </script>
   </head>
 
   <body>
-    <vaadin-checkbox>
-      <label slot="label">I accept <a href="http://vaadin.com">the terms and conditions</a></label>
-      <vaadin-tooltip slot="tooltip" text="Please read first"></vaadin-tooltip>
-    </vaadin-checkbox>
+    <section>
+      <h2>Plain</h2>
+      <vaadin-checkbox checked label="I accept the terms and conditions"></vaadin-checkbox>
+      <br>
+      <br>
+      <vaadin-checkbox-group label="Export data" theme="vertical">
+        <vaadin-checkbox label="Order ID" value="1"></vaadin-checkbox>
+        <vaadin-checkbox checked label="Product name" value="2"></vaadin-checkbox>
+        <vaadin-checkbox label="Customer" value="3"></vaadin-checkbox>
+        <vaadin-checkbox label="Status" value="4"></vaadin-checkbox>
+      </vaadin-checkbox-group>
+    </section>
+
+    <section>
+      <h2>States</h2>
+      <vaadin-checkbox-group disabled label="Disabled" theme="vertical">
+        <vaadin-checkbox label="Engineering" value="1"></vaadin-checkbox>
+        <vaadin-checkbox checked label="Human Resources" value="2"></vaadin-checkbox>
+        <vaadin-checkbox indeterminate label="Marketing" value="3"></vaadin-checkbox>
+        <vaadin-checkbox label="Operations" value="4"></vaadin-checkbox>
+        <vaadin-checkbox label="Sales" value="5"></vaadin-checkbox>
+      </vaadin-checkbox-group>
+      <br>
+      <br>
+      <vaadin-checkbox-group label="Read-Only" readonly theme="vertical">
+        <vaadin-checkbox label="Order ID" value="1"></vaadin-checkbox>
+        <vaadin-checkbox checked label="Product name" value="2"></vaadin-checkbox>
+        <vaadin-checkbox indeterminate label="Customer" value="3"></vaadin-checkbox>
+        <vaadin-checkbox label="Status" value="4"></vaadin-checkbox>
+      </vaadin-checkbox-group>
+      <br>
+      <br>
+      <vaadin-checkbox error-message="This field is required" invalid label="Grant view permissions" required></vaadin-checkbox>
+      <br>
+      <br>
+      <vaadin-checkbox indeterminate label="Notify users"></vaadin-checkbox>
+    </section>
+
+    <section>
+      <h2>Orientation</h2>
+      <vaadin-checkbox-group label="Permissions">
+        <vaadin-checkbox label="Read" value="1"></vaadin-checkbox>
+        <vaadin-checkbox label="Edit" value="2"></vaadin-checkbox>
+        <vaadin-checkbox label="Delete" value="3"></vaadin-checkbox>
+      </vaadin-checkbox-group>
+    </section>
+
+    <section>
+      <h2>Helper Text</h2>
+      <vaadin-checkbox label="Label" helper-text="Helper text"></vaadin-checkbox>
+      <br>
+      <br>
+      <vaadin-checkbox-group label="Label" helper-text="Helper text">
+        <vaadin-checkbox label="Item 1" value="1"></vaadin-checkbox>
+        <vaadin-checkbox label="Item 2" value="2"></vaadin-checkbox>
+        <vaadin-checkbox label="Item 3" value="3"></vaadin-checkbox>
+      </vaadin-checkbox-group>
+      <br>
+      <br>
+      <vaadin-checkbox-group helper-text="Helper text" label="Label" theme="helper-above-field">
+        <vaadin-checkbox label="Item 1" value="1"></vaadin-checkbox>
+        <vaadin-checkbox label="Item 2" value="2"></vaadin-checkbox>
+        <vaadin-checkbox label="Item 3" value="3"></vaadin-checkbox>
+      </vaadin-checkbox-group>
+    </section>
   </body>
 </html>
