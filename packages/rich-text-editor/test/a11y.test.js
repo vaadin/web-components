@@ -123,14 +123,14 @@ describe('accessibility', () => {
     it('should focus a toolbar button on meta-f10 combo', (done) => {
       sinon.stub(buttons[0], 'focus').callsFake(done);
       editor.focus();
-      const e = keyboardEventFor('keydown', 121, ['alt']);
+      const e = keyboardEventFor('keydown', 121, ['alt'], 'F10');
       content.dispatchEvent(e);
     });
 
     it('should focus a toolbar button on shift-tab combo', (done) => {
       sinon.stub(buttons[0], 'focus').callsFake(done);
       editor.focus();
-      const e = keyboardEventFor('keydown', 9, ['shift']);
+      const e = keyboardEventFor('keydown', 9, ['shift'], 'Tab');
       content.dispatchEvent(e);
     });
 
@@ -141,7 +141,7 @@ describe('accessibility', () => {
         done();
       });
       editor.focus();
-      const e = keyboardEventFor('keydown', 9, ['shift']);
+      const e = keyboardEventFor('keydown', 9, ['shift'], 'Tab');
       content.dispatchEvent(e);
     });
 
@@ -157,6 +157,7 @@ describe('accessibility', () => {
       sinon.stub(editor, 'focus').callsFake(done);
       const e = new CustomEvent('keydown', { bubbles: true });
       e.keyCode = 9;
+      e.key = 'Tab';
       e.shiftKey = false;
       const result = buttons[0].dispatchEvent(e);
       expect(result).to.be.false; // DispatchEvent returns false when preventDefault is called
@@ -170,7 +171,7 @@ describe('accessibility', () => {
       rte.value = '[{"attributes":{"list":"bullet"},"insert":"Foo\\n"}]';
       editor.focus();
       editor.setSelection(0, 2);
-      const e = keyboardEventFor('keydown', 9, ['shift']);
+      const e = keyboardEventFor('keydown', 9, ['shift'], 'Tab');
       content.dispatchEvent(e);
     });
 
@@ -178,7 +179,7 @@ describe('accessibility', () => {
       rte.value = '[{"insert":"  foo"},{"attributes":{"code-block":true},"insert":"\\n"}]';
       editor.focus();
       editor.setSelection(2, 0);
-      const e = keyboardEventFor('keydown', 9, ['shift']);
+      const e = keyboardEventFor('keydown', 9, ['shift'], 'Tab');
       content.dispatchEvent(e);
       flushValueDebouncer();
       expect(rte.value).to.equal('[{"insert":"foo"},{"attributes":{"code-block":true},"insert":"\\n"}]');

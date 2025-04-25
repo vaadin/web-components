@@ -15,34 +15,25 @@ import { I18nMixin } from '@vaadin/component-base/src/i18n-mixin.js';
 
 const Quill = window.Quill;
 
-// Workaround for text disappearing when accepting spellcheck suggestion
-// See https://github.com/quilljs/quill/issues/2096#issuecomment-399576957
-const Inline = Quill.import('blots/inline');
+// Fix to add `spellcheck="false"` on the `<pre>` tag removed by Quill
+// TODO: Quill also removes `<code>` tag from the output, should add it?
+const QuillCodeBlockContainer = Quill.import('formats/code-block-container');
 
-class CustomColor extends Inline {
-  constructor(domNode, value) {
-    super(domNode, value);
-
-    // Map <font> properties
-    domNode.style.color = domNode.color;
-
-    const span = this.replaceWith(new Inline(Inline.create()));
-
-    span.children.forEach((child) => {
-      if (child.attributes) child.attributes.copy(span);
-      if (child.unwrap) child.unwrap();
-    });
-
-    this.remove();
-
-    return span; // eslint-disable-line no-constructor-return
+class CodeBlockContainer extends QuillCodeBlockContainer {
+  html(index, length) {
+    const markup = super.html(index, length);
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = markup;
+    const preTag = tempDiv.querySelector('pre');
+    if (preTag) {
+      preTag.setAttribute('spellcheck', 'false');
+      return preTag.outerHTML;
+    }
+    return markup; // fallback
   }
 }
 
-CustomColor.blotName = 'customColor';
-CustomColor.tagName = 'FONT';
-
-Quill.register(CustomColor, true);
+Quill.register('formats/code-block-container', CodeBlockContainer, true);
 
 const HANDLERS = [
   'bold',
@@ -68,8 +59,6 @@ const STATE = {
   FOCUSED: 1,
   CLICKED: 2,
 };
-
-const TAB_KEY = 9;
 
 const DEFAULT_I18N = {
   undo: 'undo',
@@ -374,23 +363,21 @@ export const RichTextEditorMixin = (superClass) =>
         }
       });
 
-      const TAB_KEY = 9;
-
       editorContent.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') {
           if (!this.__tabBindings) {
-            this.__tabBindings = this._editor.keyboard.bindings[TAB_KEY];
-            this._editor.keyboard.bindings[TAB_KEY] = null;
+            this.__tabBindings = this._editor.keyboard.bindings.Tab;
+            this._editor.keyboard.bindings.Tab = null;
           }
         } else if (this.__tabBindings) {
-          this._editor.keyboard.bindings[TAB_KEY] = this.__tabBindings;
+          this._editor.keyboard.bindings.Tab = this.__tabBindings;
           this.__tabBindings = null;
         }
       });
 
       editorContent.addEventListener('blur', () => {
         if (this.__tabBindings) {
-          this._editor.keyboard.bindings[TAB_KEY] = this.__tabBindings;
+          this._editor.keyboard.bindings.Tab = this.__tabBindings;
           this.__tabBindings = null;
         }
       });
@@ -496,7 +483,7 @@ export const RichTextEditorMixin = (superClass) =>
           buttons[index].focus();
         }
         // Esc and Tab focuses the content
-        if (e.keyCode === 27 || (e.keyCode === TAB_KEY && !e.shiftKey)) {
+        if (e.keyCode === 27 || (e.key === 'Tab' && !e.shiftKey)) {
           e.preventDefault();
           this._editor.focus();
         }
@@ -552,19 +539,19 @@ export const RichTextEditorMixin = (superClass) =>
         this._toolbar.querySelector('button:not([tabindex])').focus();
       };
 
-      const keyboard = this._editor.getModule('keyboard');
-      const bindings = keyboard.bindings[TAB_KEY];
+      const keyboard = this._editor.keyboard;
+      const bindings = keyboard.bindings.Tab;
 
       // Exclude Quill shift-tab bindings, except for code block,
       // as some of those are breaking when on a newline in the list
       // https://github.com/vaadin/vaadin-rich-text-editor/issues/67
       const originalBindings = bindings.filter((b) => !b.shiftKey || (b.format && b.format['code-block']));
-      const moveFocusBinding = { key: TAB_KEY, shiftKey: true, handler: focusToolbar };
+      const moveFocusBinding = { key: 'Tab', shiftKey: true, handler: focusToolbar };
 
-      keyboard.bindings[TAB_KEY] = [...originalBindings, moveFocusBinding];
+      keyboard.bindings.Tab = [...originalBindings, moveFocusBinding];
 
       // Alt-f10 focuses a toolbar button
-      keyboard.addBinding({ key: 121, altKey: true, handler: focusToolbar });
+      keyboard.addBinding({ key: 'F10', altKey: true, handler: focusToolbar });
     }
 
     /** @private */
@@ -603,6 +590,7 @@ export const RichTextEditorMixin = (superClass) =>
     _applyLink(link) {
       if (link) {
         this._markToolbarClicked();
+        this._editor.focus();
         this._editor.format('link', link, SOURCE.USER);
         this._editor.getModule('toolbar').update(this._editor.selection.savedRange);
       }
@@ -686,6 +674,7 @@ export const RichTextEditorMixin = (superClass) =>
       const color = event.detail.color;
       this._colorValue = color === '#000000' ? null : color;
       this._markToolbarClicked();
+      this._editor.focus();
       this._editor.format('color', this._colorValue, SOURCE.USER);
       this._toolbar.style.setProperty('--_color-value', this._colorValue);
       this._colorEditing = false;
@@ -701,6 +690,7 @@ export const RichTextEditorMixin = (superClass) =>
       const color = event.detail.color;
       this._backgroundValue = color === '#ffffff' ? null : color;
       this._markToolbarClicked();
+      this._editor.focus();
       this._editor.format('background', this._backgroundValue, SOURCE.USER);
       this._toolbar.style.setProperty('--_background-value', this._backgroundValue);
       this._backgroundEditing = false;
@@ -708,8 +698,11 @@ export const RichTextEditorMixin = (superClass) =>
 
     /** @private */
     __updateHtmlValue() {
-      const editor = this.shadowRoot.querySelector('.ql-editor');
-      let content = editor.innerHTML;
+      // We have to use this instead of `innerHTML` to get correct tags like `<pre>` etc.
+      let content = this._editor.getSemanticHTML();
+
+      // TODO there are some issues e.g. `spellcheck="false"` not preserved
+      // See https://github.com/slab/quill/issues/4289
 
       // Remove Quill classes, e.g. ql-syntax, except for align
       content = content.replace(/class="([^"]*)"/gu, (_match, group1) => {
@@ -778,7 +771,7 @@ export const RichTextEditorMixin = (superClass) =>
         htmlValue = htmlValue.replaceAll(/>[^<]*</gu, (match) => match.replaceAll(character, replacement)); // NOSONAR
       });
 
-      const deltaFromHtml = this._editor.clipboard.convert(htmlValue);
+      const deltaFromHtml = this._editor.clipboard.convert({ html: htmlValue });
 
       // Restore whitespace characters after the conversion
       Object.entries(whitespaceCharacters).forEach(([character, replacement]) => {
