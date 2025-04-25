@@ -74,6 +74,10 @@ function synchronizeNodes(targetNode, sourceNode) {
  */
 export function updateMarkdownContent(element, markdown) {
   const template = document.createElement('template');
-  template.innerHTML = DOMPurify.sanitize(marked.parse(markdown || ''));
+  template.innerHTML = DOMPurify.sanitize(marked.parse(markdown || ''), {
+    CUSTOM_ELEMENT_HANDLING: {
+      tagNameCheck: (_tagName) => true,
+    },
+  });
   synchronizeNodes(element, template.content);
 }
