@@ -132,8 +132,8 @@ const richTextEditor = css`
     font-weight: 600;
   }
 
-  code,
-  pre {
+  /* Quill converts <pre> to this */
+  .ql-code-block-container {
     background-color: var(--material-secondary-background-color);
   }
 `;
