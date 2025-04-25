@@ -19,11 +19,11 @@
         border: solid 1px #ccc;
       }
 
-      vaadin-master-detail-layout[orientation='horizontal'] > [slot='detail'] {
+      vaadin-master-detail-layout[orientation='horizontal'] detail-content {
         width: var(--detail-size);
       }
 
-      vaadin-master-detail-layout[orientation='vertical'] > [slot='detail'] {
+      vaadin-master-detail-layout[orientation='vertical'] detail-content {
         height: var(--detail-size);
       }
     </style>
@@ -47,7 +47,9 @@
 
     <vaadin-master-detail-layout>
       <master-content></master-content>
-      <detail-content slot="detail"></detail-content>
+      <vaadin-master-detail-layout-transition-wrapper>
+        <detail-content></detail-content>
+      </vaadin-master-detail-layout-transition-wrapper>
     </vaadin-master-detail-layout>
 
     <script type="module">
@@ -58,17 +60,19 @@
 
       import '@vaadin/checkbox';
       import '@vaadin/master-detail-layout';
+      import '@vaadin/master-detail-layout/src/vaadin-master-detail-layout-transition-wrapper.js';
       import '@vaadin/master-detail-layout/test/helpers/master-content.js';
       import '@vaadin/master-detail-layout/test/helpers/detail-content.js';
 
       const layout = document.querySelector('vaadin-master-detail-layout');
+      const wrapper = document.querySelector('vaadin-master-detail-layout-transition-wrapper');
       const detailContent = document.querySelector('detail-content');
 
       document.querySelector('#showDetail').addEventListener('change', (e) => {
         if (e.target.checked) {
-          layout.append(detailContent);
+          wrapper.appendChild(detailContent);
         } else {
-          detailContent.remove();
+          wrapper.removeChild(detailContent);
         }
       });
 
@@ -120,20 +124,28 @@
         layout.stackThreshold = e.target.checked ? '600px' : null;
       });
 
+      function clearWrapper() {
+        while (wrapper.firstChild) {
+          wrapper.removeChild(wrapper.firstChild);
+        }
+      }
+
       document.querySelector('#set-small-detail').addEventListener('click', () => {
+        clearWrapper();
         const detail = document.createElement('detail-content');
         detail.style.setProperty('--detail-size', '200px');
-        layout._setDetail(detail);
+        wrapper.appendChild(detail);
       });
 
       document.querySelector('#set-large-detail').addEventListener('click', () => {
+        clearWrapper();
         const detail = document.createElement('detail-content');
         detail.style.setProperty('--detail-size', '600px');
-        layout._setDetail(detail);
+        wrapper.appendChild(detail);
       });
 
       document.querySelector('#clear-detail').addEventListener('click', () => {
-        layout._setDetail(null);
+        clearWrapper();
       });
     </script>
   </body>
