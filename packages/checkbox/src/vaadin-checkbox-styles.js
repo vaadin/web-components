@@ -9,8 +9,12 @@ export const checkboxStyles = css`
   :host {
     align-items: baseline;
     display: inline-grid;
-    gap: var(--vaadin-checkbox-gap, 0 var(--_vaadin-gap-container-inline));
+    gap: var(--vaadin-checkbox-gap, 0.5em);
     grid-template-columns: auto 1fr;
+  }
+
+  :host::before {
+    content: none;
   }
 
   :host([hidden]) {
@@ -123,31 +127,15 @@ export const checkboxStyles = css`
   }
 
   [part='label'] {
-    color: var(--vaadin-checkbox-label-color, var(--_vaadin-color-strong));
-    display: inline-block;
-    font-size: var(--vaadin-checkbox-label-font-size, inherit);
-    font-weight: var(--vaadin-checkbox-label-font-weight, 400);
-    line-height: var(--vaadin-checkbox-label-line-height, inherit);
+    --vaadin-input-field-label-color: var(--vaadin-checkbox-label-color, var(--_vaadin-color-strong));
+    --vaadin-input-field-label-font-size: var(--vaadin-checkbox-label-font-size, inherit);
+    --vaadin-input-field-label-font-weight: var(--vaadin-checkbox-label-font-weight, 400);
+    --vaadin-input-field-label-line-height: var(--vaadin-checkbox-label-line-height, inherit);
+    padding: var(--vaadin-checkbox-label-padding, 0);
   }
 
   [part='required-indicator'] {
-    color: var(--vaadin-input-field-required-indicator-color, inherit);
-    display: none;
-  }
-
-  [part='required-indicator']::after {
-    content: var(--vaadin-input-field-required-indicator, '*');
-  }
-
-  :host([required]) [part='required-indicator'] {
     display: inline-block;
-  }
-
-  [part='helper-text'] {
-    color: var(--vaadin-checkbox-helper-color, var(--_vaadin-color));
-    font-size: var(--vaadin-checkbox-helper-font-size, inherit);
-    font-weight: var(--vaadin-checkbox-helper-font-weight, 400);
-    line-height: var(--vaadin-checkbox-helper-line-height, inherit);
   }
 
   @media (forced-colors: active) {
