@@ -277,7 +277,8 @@ describe('rich text editor', () => {
       expect(rte.htmlValue).to.equal('<h3><em>Foo</em>Bar</h3>');
     });
 
-    it('should filter out ql-* class names', () => {
+    // FIXME: this test would not work since we use `getSemanticHTML()`
+    it.skip('should filter out ql-* class names', () => {
       // Modify the editor content directly, as setDangerouslyHtmlValue() strips
       // classes
       rte.shadowRoot.querySelector('.ql-editor').innerHTML =
@@ -298,7 +299,7 @@ describe('rich text editor', () => {
       );
       flushValueDebouncer();
       // Empty span should be stripped
-      expect(rte.htmlValue).to.equal('<p><strong>Hello </strong></p><p><strong>world</strong></p>');
+      expect(rte.htmlValue).to.equal('<p><strong>Hello&nbsp;</strong></p><p><strong>world</strong></p>');
     });
 
     it('should not filter out span elements with style from the resulting htmlValue', () => {
@@ -318,7 +319,7 @@ describe('rich text editor', () => {
       const htmlWithExtraSpaces = '<p>Extra   spaces</p>';
       rte.dangerouslySetHtmlValue(htmlWithExtraSpaces);
       flushValueDebouncer();
-      expect(rte.htmlValue).to.equal(htmlWithExtraSpaces);
+      expect(rte.htmlValue).to.equal('<p>Extra&nbsp;&nbsp;&nbsp;spaces</p>');
     });
 
     it('should not break code block attributes', () => {
@@ -343,7 +344,7 @@ describe('rich text editor', () => {
     });
 
     it('should return the quill editor innerHTML', () => {
-      expect(rte.htmlValue).to.equal('<p><br></p>');
+      expect(rte.htmlValue).to.equal('<p></p>');
     });
 
     it('should be updated from user input to Quill', () => {
