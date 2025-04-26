@@ -10,7 +10,7 @@ import {
   outsideClick,
 } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import '../theme/lumo/vaadin-rich-text-editor.js';
+import '../src/vaadin-rich-text-editor.js';
 import { createImage } from './helpers.js';
 
 describe('toolbar controls', () => {

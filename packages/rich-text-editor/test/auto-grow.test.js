@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
-import '../theme/lumo/vaadin-rich-text-editor-styles.js';
+import './rte-test-styles.js';
 import '../src/vaadin-rich-text-editor.js';
 
 describe('rich text editor', () => {
