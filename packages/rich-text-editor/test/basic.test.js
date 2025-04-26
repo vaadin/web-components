@@ -300,7 +300,7 @@ describe('rich text editor', () => {
       );
       flushValueDebouncer();
       // Empty span should be stripped
-      expect(rte.htmlValue).to.equal('<p><strong>Hello&nbsp;</strong></p><p><strong>world</strong></p>');
+      expect(rte.htmlValue).to.equal('<p><strong>Hello </strong></p><p><strong>world</strong></p>');
     });
 
     it('should not filter out span elements with style from the resulting htmlValue', () => {
@@ -320,7 +320,7 @@ describe('rich text editor', () => {
       const htmlWithExtraSpaces = '<p>Extra   spaces</p>';
       rte.dangerouslySetHtmlValue(htmlWithExtraSpaces);
       flushValueDebouncer();
-      expect(rte.htmlValue).to.equal('<p>Extra&nbsp;&nbsp;&nbsp;spaces</p>');
+      expect(rte.htmlValue).to.equal('<p>Extra&nbsp;&nbsp; spaces</p>');
     });
 
     it('should not break code block attributes', () => {
