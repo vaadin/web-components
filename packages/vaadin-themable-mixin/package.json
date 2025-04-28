@@ -20,6 +20,7 @@
   "module": "vaadin-themable-mixin.js",
   "type": "module",
   "files": [
+    "src",
     "*.d.ts",
     "register-styles.js",
     "vaadin-*.js"
