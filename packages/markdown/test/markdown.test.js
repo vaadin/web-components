@@ -14,4 +14,9 @@ describe('vaadin-markdown', () => {
     expect(element.localName).to.equal('vaadin-markdown');
     expect(window.customElements.get('vaadin-markdown')).to.be.ok;
   });
+
+  it('should be hidden', () => {
+    element.hidden = true;
+    expect(getComputedStyle(element).display).to.equal('none');
+  });
 });
