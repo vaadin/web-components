@@ -1,7 +1,7 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import '../theme/lumo/vaadin-grid-pro.js';
+import '../src/vaadin-grid-pro.js';
 import { flushGrid, infiniteDataProvider } from './helpers.js';
 
 describe('custom element definition', () => {
