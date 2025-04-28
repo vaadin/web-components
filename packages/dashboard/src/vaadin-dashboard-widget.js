@@ -81,7 +81,6 @@ import { DashboardSection } from './vaadin-dashboard-section.js';
  * `--vaadin-dashboard-widget-selected-shadow` | selected widget shadow
  * `--vaadin-dashboard-widget-padding`         | padding around widget content
  *
- *
  * The following state attributes are available for styling:
  *
  * Attribute      | Description
