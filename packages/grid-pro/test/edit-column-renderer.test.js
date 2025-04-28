@@ -2,8 +2,8 @@ import { expect } from '@vaadin/chai-plugins';
 import { resetMouse, sendMouseToElement } from '@vaadin/test-runner-commands';
 import { enter, esc, fixtureSync, focusout, nextFrame, space } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import '../theme/lumo/vaadin-grid-pro.js';
-import '../theme/lumo/vaadin-grid-pro-edit-column.js';
+import '../src/vaadin-grid-pro.js';
+import '../src/vaadin-grid-pro-edit-column.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import {
   createItems,
@@ -237,7 +237,7 @@ describe('edit column renderer', () => {
 
     it('should close editor and update value when scrolling edited cell out of view', () => {
       grid.items = null;
-      grid.items = Array.from({ length: 30 }, () => ({ ...createItems()[0] }));
+      grid.items = Array.from({ length: 40 }, () => ({ ...createItems()[0] }));
       flushGrid(grid);
 
       cell = getContainerCell(grid.$.items, 0, 0);
@@ -247,7 +247,7 @@ describe('edit column renderer', () => {
 
       dblclick(cell._content);
       getCellEditor(cell).value = 'Bar';
-      grid.scrollToIndex(29);
+      grid.scrollToIndex(39);
       expect(getCellEditor(cell)).to.be.not.ok;
       expect(grid.items[0].name).to.equal('Bar');
 

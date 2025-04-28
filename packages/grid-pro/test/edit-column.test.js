@@ -3,8 +3,8 @@ import { sendKeys } from '@vaadin/test-runner-commands';
 import { enter, esc, fixtureSync, focusin, focusout, nextFrame } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './not-animated-styles.js';
-import '../theme/lumo/vaadin-grid-pro.js';
-import '../theme/lumo/vaadin-grid-pro-edit-column.js';
+import '../src/vaadin-grid-pro.js';
+import '../src/vaadin-grid-pro-edit-column.js';
 import {
   createItems,
   dblclick,
