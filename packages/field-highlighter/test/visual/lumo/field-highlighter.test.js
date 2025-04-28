@@ -1,4 +1,4 @@
-import { sendKeys, sendMouse } from '@vaadin/test-runner-commands';
+import { sendKeys, sendMouseToElement } from '@vaadin/test-runner-commands';
 import { fixtureSync, mousedown, nextFrame } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '@vaadin/checkbox/theme/lumo/vaadin-checkbox.js';
@@ -216,15 +216,13 @@ describe('field-highlighter', () => {
     });
 
     it('pointer focus-ring disabled', async () => {
-      const bounds = element.getBoundingClientRect();
-      await sendMouse({ type: 'click', position: [bounds.left + 5, bounds.top + 5] });
+      await sendMouseToElement({ type: 'click', element });
       await visualDiff(div, 'text-field-pointer-focus-ring-disabled');
     });
 
     it('pointer focus-ring enabled', async () => {
       element.style.setProperty('--lumo-input-field-pointer-focus-visible', '1');
-      const bounds = element.getBoundingClientRect();
-      await sendMouse({ type: 'click', position: [bounds.left + 5, bounds.top + 5] });
+      await sendMouseToElement({ type: 'click', element });
       await visualDiff(div, 'text-field-pointer-focus-ring-enabled');
     });
   });

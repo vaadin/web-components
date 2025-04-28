@@ -1,4 +1,4 @@
-import { resetMouse, sendKeys, sendMouse, sendMouseToElement } from '@vaadin/test-runner-commands';
+import { resetMouse, sendKeys, sendMouseToElement } from '@vaadin/test-runner-commands';
 import { fixtureSync, mousedown } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '@vaadin/vaadin-lumo-styles/test/autoload.js';
@@ -226,8 +226,7 @@ describe('text-field', () => {
     it('pointer focus-ring enabled, invalid', async () => {
       element.invalid = true;
       element.style.setProperty('--lumo-input-field-pointer-focus-visible', '1');
-      const bounds = element.getBoundingClientRect();
-      await sendMouse({ type: 'click', position: [bounds.left + 5, bounds.top + 5] });
+      await sendMouseToElement({ type: 'click', element });
       await visualDiff(div, 'pointer-focus-ring-enabled-invalid');
     });
   });
