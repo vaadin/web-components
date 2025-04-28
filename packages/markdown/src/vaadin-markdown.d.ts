@@ -18,7 +18,12 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  */
-declare class Markdown extends ElementMixin(ThemableMixin(HTMLElement)) {}
+declare class Markdown extends ElementMixin(ThemableMixin(HTMLElement)) {
+  /**
+   * The Markdown content.
+   */
+  markdown: string | null | undefined;
+}
 
 declare global {
   interface HTMLElementTagNameMap {
