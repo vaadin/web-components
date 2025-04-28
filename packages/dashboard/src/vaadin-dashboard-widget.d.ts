@@ -74,6 +74,7 @@ import { DashboardItemMixin } from './vaadin-dashboard-item-mixin.js';
  * `--vaadin-dashboard-widget-editable-shadow` | widget edit mode shadow
  * `--vaadin-dashboard-widget-selected-shadow` | selected widget shadow
  * `--vaadin-dashboard-widget-padding`         | padding around widget content
+ * `--vaadin-dashboard-widget-title-wrap`      | widget title wrap
  *
  * The following state attributes are available for styling:
  *
