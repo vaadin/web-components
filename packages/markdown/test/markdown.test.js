@@ -19,4 +19,11 @@ describe('vaadin-markdown', () => {
     element.hidden = true;
     expect(getComputedStyle(element).display).to.equal('none');
   });
+
+  it('should be hidden with external display styles in place', () => {
+    fixtureSync('<style>vaadin-markdown { display: block; }</style>');
+
+    element.hidden = true;
+    expect(getComputedStyle(element).display).to.equal('none');
+  });
 });
