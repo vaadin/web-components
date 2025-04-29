@@ -294,7 +294,6 @@ snapshots["vaadin-date-picker host opened overlay"] =
   top-aligned=""
 >
   <vaadin-date-picker-overlay-content
-    class="animate"
     desktop=""
     role="dialog"
   >
@@ -456,7 +455,6 @@ snapshots["vaadin-date-picker host opened overlay class"] =
   top-aligned=""
 >
   <vaadin-date-picker-overlay-content
-    class="animate"
     desktop=""
     role="dialog"
   >
@@ -618,7 +616,6 @@ snapshots["vaadin-date-picker host opened overlay theme"] =
   top-aligned=""
 >
   <vaadin-date-picker-overlay-content
-    class="animate"
     desktop=""
     role="dialog"
     theme="custom"
