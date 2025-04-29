@@ -13,6 +13,8 @@ export const numberFieldStyles = css`
   [part='decrease-button'],
   [part='increase-button'] {
     color: var(--_vaadin-color-subtle);
+    -webkit-user-select: none;
+    user-select: none;
   }
 
   :is([part='decrease-button'], [part='increase-button'])::before {
