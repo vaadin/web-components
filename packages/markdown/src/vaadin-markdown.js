@@ -69,7 +69,9 @@ class Markdown extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
   updated(props) {
     super.updated(props);
 
-    renderMarkdownToElement(this, this.markdown);
+    if (props.has('markdown')) {
+      renderMarkdownToElement(this, this.markdown);
+    }
   }
 }
 
