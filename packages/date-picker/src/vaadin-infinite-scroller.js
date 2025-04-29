@@ -21,6 +21,7 @@ template.innerHTML = `
       height: 100%;
       overflow: auto;
       position: relative;
+      scrollbar-width: none;
     }
 
     #scroller.notouchscroll {
