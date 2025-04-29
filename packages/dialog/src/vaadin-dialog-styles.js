@@ -80,14 +80,20 @@ export const dialogOverlay = css`
   :host([fit-viewport][has-bounds-set]) [part='overlay'] {
     --_container-width: 100vw - var(--_overlay-left) - var(--_overlay-right);
     --_container-height: 100vh - var(--_overlay-top) - var(--_overlay-bottom);
+    --_buffer: 100px;
 
     --_transform: translate(
-      clamp(0px, var(--_left), var(--_container-width) - 100% /* overlay width */),
-      clamp(0px, var(--_top), var(--_container-height) - 100% /* overlay height */)
+      clamp(
+        -100% - var(--_overlay-left) + var(--_buffer),
+        var(--_left),
+        var(--_container-width) + var(--_overlay-right) - var(--_buffer)
+      ),
+      clamp(
+        -100% - var(--_overlay-top) + var(--_buffer),
+        var(--_top),
+        var(--_container-height) + var(--_overlay-bottom) - var(--_buffer)
+      )
     );
-
-    width: clamp(0px, var(--_width), var(--_container-width));
-    height: clamp(0px, var(--_height), var(--_container-height));
   }
 
   /*

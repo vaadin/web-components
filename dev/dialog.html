@@ -17,9 +17,7 @@
   <body>
     <vaadin-dialog></vaadin-dialog>
 
-    <vaadin-button id="set-fit-viewport">Set fit viewport</vaadin-button>
     <vaadin-button id="set-position">Set position 1000, 1000</vaadin-button>
-    <vaadin-button id="set-size">Set size 1000x1000</vaadin-button>
 
     <vaadin-button id="open-dialog">Open</vaadin-button>
 
@@ -30,6 +28,7 @@
       dialog.resizable = true;
       dialog.width = '40em';
       dialog.height = '40em';
+      dialog.fitViewport = true;
 
       dialog.renderer = (root) => {
         if (root.firstChild) {
