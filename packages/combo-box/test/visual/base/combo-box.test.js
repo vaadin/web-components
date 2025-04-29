@@ -88,6 +88,11 @@ describe('combo-box', () => {
         await visualDiff(div, `${dir}-opened`);
       });
 
+      it(`${dir} opened`, async () => {
+        element.value = 'Foo';
+        await visualDiff(div, `${dir}-opened-value`);
+      });
+
       it(`${dir} loading`, async () => {
         element.loading = true;
         await nextFrame();
