@@ -36,6 +36,14 @@ stylesTemplate.innerHTML = `
       border: 1px solid var(--vaadin-date-picker-year-scroller-border-color, var(--_vaadin-border-color));
     }
 
+    :host(:dir(rtl)) {
+      box-shadow: inset -1px 0 0 0 var(--vaadin-date-picker-year-scroller-border-color, var(--_vaadin-border-color));
+    }
+
+    :host(:dir(rtl))::before {
+      transform: translate(50%, -50%) rotate(45deg);
+    }
+
     @media (forced-colors: active) {
       :host {
         forced-color-adjust: none;
