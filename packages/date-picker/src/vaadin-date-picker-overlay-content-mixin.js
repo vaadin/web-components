@@ -7,7 +7,7 @@ import { flush } from '@polymer/polymer/lib/utils/flush.js';
 import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import { timeOut } from '@vaadin/component-base/src/async.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
-import { addListener, setTouchAction } from '@vaadin/component-base/src/gestures.js';
+import { addListener } from '@vaadin/component-base/src/gestures.js';
 import { MediaQueryController } from '@vaadin/component-base/src/media-query-controller.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 import {
@@ -174,8 +174,6 @@ export const DatePickerOverlayContentMixin = (superClass) =>
 
     /** @protected */
     _addListeners() {
-      setTouchAction(this.$.scrollers, 'pan-y');
-
       addListener(this.shadowRoot.querySelector('[part="clear-button"]'), 'tap', this._clear.bind(this));
       addListener(this.shadowRoot.querySelector('[part="toggle-button"]'), 'tap', this._cancel.bind(this));
       addListener(
