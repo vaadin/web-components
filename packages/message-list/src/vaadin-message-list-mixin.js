@@ -37,6 +37,23 @@ export const MessageListMixin = (superClass) =>
           observer: '_itemsChanged',
           sync: true,
         },
+
+        /**
+         * Custom function for rendering the content of every item.
+         * Receives three arguments:
+         *
+         * - `root` The render target element representing one item at a time.
+         * - `messageList` The reference to the `<vaadin-message-list>` element.
+         * - `model` The object with the properties related with the rendered
+         *   item, contains:
+         *   - `model.index` The index of the rendered item.
+         *   - `model.item` The item.
+         * @type {MessageListRenderer | undefined}
+         */
+        renderer: {
+          type: Function,
+          observer: '__rendererChanged',
+        },
       };
     }
 
@@ -86,12 +103,16 @@ export const MessageListMixin = (superClass) =>
       }
     }
 
+    __rendererChanged(_renderer) {
+      this._renderMessages(this.items);
+    }
+
     /** @private */
     _renderMessages(items) {
       render(
         html`
           ${items.map(
-            (item) => html`
+            (item, index) => html`
               <vaadin-message
                 role="listitem"
                 .time="${item.time}"
@@ -102,7 +123,9 @@ export const MessageListMixin = (superClass) =>
                 theme="${ifDefined(item.theme)}"
                 class="${ifDefined(item.className)}"
                 @focusin="${this._onMessageFocusIn}"
-                >${item.text}<vaadin-avatar slot="avatar"></vaadin-avatar
+                >${this.renderer
+                  ? html`<div class="render-root" .__item=${item} .__index=${index}></div>`
+                  : item.text}<vaadin-avatar slot="avatar"></vaadin-avatar
               ></vaadin-message>
             `,
           )}
@@ -110,6 +133,12 @@ export const MessageListMixin = (superClass) =>
         this,
         { host: this },
       );
+
+      if (this.renderer) {
+        this.querySelectorAll(':scope > vaadin-message > .render-root').forEach((root) => {
+          this.renderer(root, this, { item: root.__item, index: root.__index });
+        });
+      }
     }
 
     /** @private */
