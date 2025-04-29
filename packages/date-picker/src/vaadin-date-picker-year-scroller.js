@@ -30,7 +30,7 @@ stylesTemplate.innerHTML = `
       height: 1em;
       position: absolute;
       z-index: 1;
-      transform: translate(-50%) rotate(45deg);
+      transform: translate(-50%, -50%) rotate(45deg);
       top: 50%;
       width: 1em;
       border: 1px solid var(--vaadin-date-picker-year-scroller-border-color, var(--_vaadin-border-color));
