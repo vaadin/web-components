@@ -74,6 +74,16 @@ describe('select', () => {
       await visualDiff(div, 'value-disabled');
     });
 
+    it('opened value', async () => {
+      div.style.height = '200px';
+      div.style.width = '200px';
+      element.value = 'value-1';
+      await sendKeys({ press: 'Tab' });
+      element.opened = true;
+      await nextFrame();
+      await visualDiff(div, 'value-opened');
+    });
+
     it('overflow', async () => {
       element.renderer = (root) => {
         root.innerHTML = `
