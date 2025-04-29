@@ -124,6 +124,14 @@ describe('time-picker', () => {
           element.click();
           await visualDiff(div, `${dir}-opened`);
         });
+
+        it('opened', async () => {
+          div.style.height = '350px';
+          div.style.width = '200px';
+          element.value = '05:00';
+          element.click();
+          await visualDiff(div, `${dir}-opened-value`);
+        });
       });
     });
   });
