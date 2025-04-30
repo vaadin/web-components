@@ -17,21 +17,6 @@ const numberField = css`
     opacity: 0.2;
   }
 
-  :host([step-buttons-visible]) [part='input-field'] {
-    padding: 0;
-  }
-
-  [part$='button'] {
-    cursor: pointer;
-    font-size: var(--lumo-icon-size-s);
-    width: 1.6em;
-    height: 1.6em;
-  }
-
-  [part$='button']::before {
-    margin-top: 0.3em;
-  }
-
   [part='decrease-button']::before {
     content: var(--lumo-icons-minus);
   }
