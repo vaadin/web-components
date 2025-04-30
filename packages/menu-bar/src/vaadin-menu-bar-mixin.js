@@ -15,11 +15,15 @@ import { I18nMixin } from '@vaadin/component-base/src/i18n-mixin.js';
 import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 
+/**
+ * Custom Lit directive for rendering item components
+ * inspired by the `flowComponentDirective` logic.
+ */
 class ItemComponentDirective extends Directive {
   update(part, [{ component, text }]) {
     const { parentNode, startNode } = part;
 
-    const newNode = component || document.createTextNode(text);
+    const newNode = component || (text ? document.createTextNode(text) : null);
     const oldNode = this.getOldNode(part);
 
     if (oldNode === newNode) {
@@ -38,7 +42,7 @@ class ItemComponentDirective extends Directive {
   getOldNode(part) {
     const { startNode, endNode } = part;
     if (startNode.nextSibling === endNode) {
-      return;
+      return null;
     }
     return startNode.nextSibling;
   }
@@ -660,8 +664,9 @@ export const MenuBarMixin = (superClass) =>
                 role="${this.tabNavigation ? 'button' : 'menuitem'}"
                 aria-haspopup="${ifDefined(hasChildren ? 'true' : nothing)}"
                 aria-expanded="${ifDefined(hasChildren ? 'false' : nothing)}"
-                class="${ifDefined(item.className)}"
+                class="${ifDefined(item.className || nothing)}"
                 theme="${ifDefined(this.__getButtonTheme(item, this._theme) || nothing)}"
+                @click="${this.__onRootButtonClick}"
                 >${componentDirective(itemCopy)}</vaadin-menu-bar-button
               >
             `;
@@ -672,6 +677,17 @@ export const MenuBarMixin = (superClass) =>
       );
 
       this.__detectOverflow();
+    }
+
+    /** @private */
+    __onRootButtonClick(event) {
+      const button = event.target;
+      // Propagate click event from button to the item component if it was outside
+      // it e.g. by calling `click()` on the button (used by the Flow counterpart).
+      if (button.item && button.item.component && !event.composedPath().includes(button.item.component)) {
+        event.stopPropagation();
+        button.item.component.click();
+      }
     }
 
     /**
