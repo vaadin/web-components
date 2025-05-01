@@ -821,6 +821,7 @@ export const DateTimePickerMixin = (superClass) =>
       this.__committedUnparsableValue = this.__unparsableValue;
     }
 
+    /** @private */
     get __hasPendingValueChange() {
       return this.__committedValue !== this.value || this.__committedUnparsableValue !== this.__unparsableValue;
     }
