@@ -563,5 +563,19 @@ const fixtures = {
       timePicker.blur();
       expect(validateSpy.calledOnce).to.be.true;
     });
+
+    it('should validate on date-picker overlay closed by outside click', async () => {
+      datePicker.click();
+      await nextRender();
+      outsideClick();
+      expect(validateSpy.calledOnce).to.be.true;
+    });
+
+    it('should validate on time-picker overlay closed by outside click', async () => {
+      timePicker.click();
+      await nextRender();
+      outsideClick();
+      expect(validateSpy.calledOnce).to.be.true;
+    });
   });
 });

@@ -494,7 +494,7 @@ export const DateTimePickerMixin = (superClass) =>
       const opened = this.__datePicker.opened || this.__timePicker.opened;
       this.style.pointerEvents = opened ? 'auto' : '';
 
-      if (!opened && this.__outsideClickInProgress && this.__hasPendingValueChange) {
+      if (!opened && this.__outsideClickInProgress) {
         this._requestValidation();
         this.__commitPendingValueChange();
       }
