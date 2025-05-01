@@ -106,7 +106,6 @@ describe('item components', () => {
       items.forEach(({ value, className }) => {
         if (!components.has(value)) {
           const component = makeItem(value);
-          div.appendChild(component);
           components.set(value, component);
         }
 
