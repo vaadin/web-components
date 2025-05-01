@@ -422,6 +422,7 @@ export const MenuBarMixin = (superClass) =>
         button.disabled = (button.item && button.item.disabled) || this.disabled;
         button.style.visibility = '';
         button.style.position = '';
+        button.style.width = '';
 
         // Teleport item component back from "overflow" sub-menu
         const item = button.item && button.item.component;
