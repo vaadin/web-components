@@ -110,7 +110,7 @@ export interface DateTimePickerEventMap extends DateTimePickerCustomEventMap, HT
  * unparsable => unparsable | unparsable-change
  *
  * @fires {Event} change - Fired when the user commits a value change.
- * @fires {Event} unparsable-change - Fired when the user commits an unparsable value change and there is no change event.
+ * @fires {Event} unparsable-change - Fired when the user commits an unparsable or incomplete value change and there is no change event.
  * @fires {CustomEvent} invalid-changed - Fired when the `invalid` property changes.
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
  * @fires {CustomEvent} validated - Fired whenever the field is validated.
