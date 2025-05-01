@@ -79,9 +79,15 @@ registerStyles('vaadin-date-time-picker', inputFieldShared, { moduleId: 'vaadin-
  * unparsable => empty      | unparsable-change
  * unparsable => parsable   | change
  * unparsable => unparsable | unparsable-change
+ * incomplete => empty      | unparsable-change
+ * incomplete => parsable   | change
+ * incomplete => unparsable | unparsable-change
+ * empty => incomplete      | unparsable-change
+ * parsable => incomplete   | change
+ * unparsable => incomplete | unparsable-change
  *
  * @fires {Event} change - Fired when the user commits a value change.
- * @fires {Event} unparsable-change - Fired when the user commits an unparsable value change and there is no change event.
+ * @fires {Event} unparsable-change - Fired when the user commits an unparsable or incomplete value change and there is no change event.
  * @fires {CustomEvent} invalid-changed - Fired when the `invalid` property changes.
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
  * @fires {CustomEvent} validated - Fired whenever the field is validated.

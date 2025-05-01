@@ -108,6 +108,12 @@ export interface DateTimePickerEventMap extends DateTimePickerCustomEventMap, HT
  * unparsable => empty      | unparsable-change
  * unparsable => parsable   | change
  * unparsable => unparsable | unparsable-change
+ * incomplete => empty      | unparsable-change
+ * incomplete => parsable   | change
+ * incomplete => unparsable | unparsable-change
+ * empty => incomplete      | unparsable-change
+ * parsable => incomplete   | change
+ * unparsable => incomplete | unparsable-change
  *
  * @fires {Event} change - Fired when the user commits a value change.
  * @fires {Event} unparsable-change - Fired when the user commits an unparsable or incomplete value change and there is no change event.
