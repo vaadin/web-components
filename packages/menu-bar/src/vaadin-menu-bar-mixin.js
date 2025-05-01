@@ -408,7 +408,6 @@ export const MenuBarMixin = (superClass) =>
     _themeChanged(theme, overflow, container) {
       if (overflow && container) {
         this.__renderButtons(this.items);
-        this.__detectOverflow();
 
         if (theme) {
           overflow.setAttribute('theme', theme);
