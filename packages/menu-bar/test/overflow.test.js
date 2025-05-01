@@ -150,6 +150,22 @@ describe('overflow', () => {
       expect(overflow.hasAttribute('hidden')).to.be.false;
     });
 
+    it('should reset buttons after moving back from the overflow menu', async () => {
+      menu.style.width = '400px';
+      await nextResize(menu);
+
+      // Set theme to make button hidden
+      menu.setAttribute('theme', 'big');
+      await nextUpdate(menu);
+
+      // Reset width to make button visible
+      menu.style.width = 'auto';
+      await nextResize(menu);
+
+      assertVisible(buttons[3]);
+      expect(buttons[3].offsetWidth).to.equal(100);
+    });
+
     it('should set tabindex on the last remaining button when width decreased', async () => {
       buttons[0].focus();
       arrowRight(buttons[0]);
