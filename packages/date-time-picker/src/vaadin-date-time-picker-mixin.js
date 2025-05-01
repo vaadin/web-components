@@ -316,6 +316,7 @@ export const DateTimePickerMixin = (superClass) =>
       return [this.__datePicker, this.__timePicker];
     }
 
+    /** @private */
     get __filledPickers() {
       return this.__pickers.filter((picker) => picker.value || picker.__unparsableValue);
     }
