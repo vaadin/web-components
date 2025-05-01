@@ -408,6 +408,7 @@ export const MenuBarMixin = (superClass) =>
     _themeChanged(theme, overflow, container) {
       if (overflow && container) {
         this.__renderButtons(this.items);
+        this.__detectOverflow();
 
         if (theme) {
           overflow.setAttribute('theme', theme);
@@ -463,6 +464,7 @@ export const MenuBarMixin = (superClass) =>
       if (items !== this._oldItems) {
         this._oldItems = items;
         this.__renderButtons(items);
+        this.__detectOverflow();
       }
 
       const subMenu = this._subMenu;
@@ -674,8 +676,6 @@ export const MenuBarMixin = (superClass) =>
         this,
         { renderBefore: this._overflow },
       );
-
-      this.__detectOverflow();
     }
 
     /** @private */
