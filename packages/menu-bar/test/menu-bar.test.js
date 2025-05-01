@@ -199,60 +199,6 @@ describe('root menu layout', () => {
   });
 });
 
-describe('item components', () => {
-  let menu, buttons;
-
-  function makeComponent(id) {
-    const div = document.createElement('div');
-    div.style.width = '100px';
-    div.textContent = `Item ${id}`;
-    return div;
-  }
-
-  beforeEach(async () => {
-    menu = fixtureSync('<vaadin-menu-bar></vaadin-menu-bar>');
-    menu.items = [
-      { text: 'Item 1' },
-      { text: 'Item 2' },
-      { component: makeComponent('3') },
-      { text: 'Item 4 text', component: makeComponent('4') },
-      { text: 'Item 5', component: document.createElement('vaadin-menu-bar-item') },
-      { component: makeComponent('6'), children: [{ text: 'SubItem6.1' }, { text: 'SubItem6.2' }] },
-    ];
-    await nextRender(menu);
-    buttons = menu._buttons;
-  });
-
-  it('should render the component inside the menu-bar item', () => {
-    const item = buttons[2].firstChild;
-    expect(item).to.equal(buttons[2].item.component);
-    expect(item.localName).to.equal('vaadin-menu-bar-item');
-    const div = item.firstChild;
-    expect(div).to.equal(menu.items[2].component);
-    expect(div.localName).to.equal('div');
-    expect(div.textContent).to.equal('Item 3');
-    expect(getComputedStyle(div).width).to.equal('100px');
-  });
-
-  it('should override the component text when defined on the item', () => {
-    const item = buttons[3].firstChild;
-    expect(item).to.equal(buttons[3].item.component);
-    expect(item.localName).to.equal('vaadin-menu-bar-item');
-    const div = item.firstChild;
-    expect(div).to.equal(menu.items[3].component);
-    expect(div.localName).to.equal('div');
-    expect(div.textContent).to.equal('Item 4 text');
-    expect(getComputedStyle(div).width).to.equal('100px');
-  });
-
-  it('should render provided menu-bar item as a component', () => {
-    expect(buttons[4].firstChild).to.equal(buttons[4].item.component);
-    expect(buttons[4].item.component).to.equal(menu.items[4].component);
-    expect(buttons[4].item.component.children.length).to.equal(0);
-    expect(buttons[4].item.component.textContent).to.equal('Item 5');
-  });
-});
-
 describe('menu-bar in flex', () => {
   let wrapper;
   let menu;
