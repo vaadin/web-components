@@ -5,6 +5,8 @@
  */
 import { DisabledMixin } from '@vaadin/a11y-base/src/disabled-mixin.js';
 import { FocusMixin } from '@vaadin/a11y-base/src/focus-mixin.js';
+import { microTask } from '@vaadin/component-base/src/async.js';
+import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import {
@@ -429,8 +431,7 @@ export const DateTimePickerMixin = (superClass) =>
       // Do not validate when focusout is caused by document
       // losing focus, which happens on browser tab switch.
       if (!focused && document.hasFocus()) {
-        this._requestValidation();
-        this.__commitPendingValueChange();
+        this.__requestValueCommit();
       }
     }
 
@@ -484,8 +485,7 @@ export const DateTimePickerMixin = (superClass) =>
       }
 
       if (this.__hasPendingValueChange) {
-        this._requestValidation();
-        this.__commitPendingValueChange();
+        this.__requestValueCommit();
       }
     }
 
@@ -495,8 +495,7 @@ export const DateTimePickerMixin = (superClass) =>
       this.style.pointerEvents = opened ? 'auto' : '';
 
       if (!opened && this.__outsideClickInProgress) {
-        this._requestValidation();
-        this.__commitPendingValueChange();
+        this.__requestValueCommit();
       }
     }
 
@@ -514,6 +513,14 @@ export const DateTimePickerMixin = (superClass) =>
       node.removeEventListener('unparsable-change', this.__changeEventHandler);
       node.removeEventListener('value-changed', this.__valueChangedEventHandler);
       node.removeEventListener('opened-changed', this.__openedChangedEventHandler);
+    }
+
+    /** @private */
+    __requestValueCommit() {
+      this.__valueCommitDebouncer = Debouncer.debounce(this.__valueCommitDebouncer, microTask, () => {
+        this._requestValidation();
+        this.__commitPendingValueChange();
+      });
     }
 
     /** @private */
