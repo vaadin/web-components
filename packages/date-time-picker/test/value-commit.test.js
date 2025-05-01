@@ -490,18 +490,6 @@ const fixtures = {
       expect(validateSpy.called).to.be.false;
     });
 
-    it('should not validate on date-picker blur if the initial value is left unchanged', () => {
-      datePicker.focus();
-      datePicker.blur();
-      expect(validateSpy.called).to.be.false;
-    });
-
-    it('should not validate on time-picker blur if the initial value is left unchanged', () => {
-      timePicker.focus();
-      timePicker.blur();
-      expect(validateSpy.called).to.be.false;
-    });
-
     it('should validate before change event on date-picker change', async () => {
       timePicker.value = '12:00';
       datePicker.focus();
@@ -562,6 +550,18 @@ const fixtures = {
       // Time picker has no value so date time picker value is still empty
       dateTimePicker.value = '2020-01-17T16:00';
       expect(changeEventSpy.called).to.be.false;
+    });
+
+    it('should validate on date-picker blur', () => {
+      datePicker.focus();
+      datePicker.blur();
+      expect(validateSpy.calledOnce).to.be.true;
+    });
+
+    it('should validate on time-picker blur', () => {
+      timePicker.focus();
+      timePicker.blur();
+      expect(validateSpy.calledOnce).to.be.true;
     });
   });
 });
