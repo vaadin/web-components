@@ -7,9 +7,8 @@ import '../src/vaadin-menu-bar.js';
 describe('keyboard navigation', () => {
   let menu, buttons, firstGlobalFocusable, lastGlobalFocusable;
 
-  async function updateItemsAndButtons() {
+  function updateItemsAndButtons() {
     menu.items = [...menu.items];
-    await nextUpdate(menu);
     buttons = menu._buttons;
   }
 
@@ -59,7 +58,7 @@ describe('keyboard navigation', () => {
 
         it('should move focus to second button if first is disabled on Home keydown', async () => {
           menu.items[0].disabled = true;
-          await updateItemsAndButtons();
+          updateItemsAndButtons();
           buttons[3].focus();
           const spy = sinon.spy(buttons[1], 'focus');
           await sendKeys({ press: 'Home' });
@@ -77,7 +76,7 @@ describe('keyboard navigation', () => {
 
         it('should move focus to the closest enabled button if last is disabled on End keydown', async () => {
           menu.items[3].disabled = true;
-          await updateItemsAndButtons();
+          updateItemsAndButtons();
           buttons[0].focus();
           const spy = sinon.spy(buttons[1], 'focus');
           await sendKeys({ press: 'End' });
@@ -420,7 +419,7 @@ describe('keyboard navigation', () => {
 
       it('should move focus out of the menu bar on last available submenu item Tab', async () => {
         menu.items[3].disabled = true;
-        await updateItemsAndButtons();
+        updateItemsAndButtons();
 
         buttons[2].focus();
         await sendKeys({ press: 'ArrowDown' });
@@ -439,7 +438,7 @@ describe('keyboard navigation', () => {
       it('should move focus out of the menu bar on first available submenu item Tab', async () => {
         menu.items[0].disabled = true;
         menu.items[1].disabled = true;
-        await updateItemsAndButtons();
+        updateItemsAndButtons();
 
         buttons[2].focus();
         await sendKeys({ press: 'ArrowDown' });

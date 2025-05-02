@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { arrowRight, fixtureSync, nextFrame, nextRender, nextResize, nextUpdate } from '@vaadin/testing-helpers';
+import { arrowRight, fixtureSync, nextRender, nextResize, nextUpdate } from '@vaadin/testing-helpers';
 import './menu-bar-test-styles.js';
 import '../src/vaadin-menu-bar.js';
 
@@ -31,7 +31,6 @@ describe('overflow', () => {
       menu = wrapper.querySelector('vaadin-menu-bar');
       await nextRender(menu);
       menu.items = [{ text: 'Item 1' }, { text: 'Item 2' }, { text: 'Item 3' }, { text: 'Item 4' }, { text: 'Item 5' }];
-      await nextUpdate(menu);
       buttons = menu._buttons;
       overflow = buttons[buttons.length - 1];
     });
@@ -51,9 +50,8 @@ describe('overflow', () => {
       expect(overflow.item.children[2]).to.deep.equal(menu.items[4]);
     });
 
-    it('should show overflow button after assigning the same items', async () => {
+    it('should show overflow button after assigning the same items', () => {
       menu.items = [...menu.items];
-      await nextUpdate(menu);
       expect(overflow.hasAttribute('hidden')).to.be.false;
     });
 
@@ -109,10 +107,9 @@ describe('overflow', () => {
       expect(overflow.item.children.length).to.equal(0);
     });
 
-    it('should hide overflow button and reset its items when all buttons fit after changing items', async () => {
+    it('should hide overflow button and reset its items when all buttons fit after changing items', () => {
       // See https://github.com/vaadin/vaadin-menu-bar/issues/133
       menu.items = [{ text: 'Item 1' }, { text: 'Item 2' }];
-      await nextRender(menu);
       buttons = menu._buttons;
       overflow = buttons[2];
       assertVisible(buttons[1]);
@@ -161,24 +158,21 @@ describe('overflow', () => {
       expect(buttons[0].getAttribute('tabindex')).to.equal('0');
     });
 
-    it('should set the aria-label of the overflow button according to the i18n of the menu bar', async () => {
+    it('should set the aria-label of the overflow button according to the i18n of the menu bar', () => {
       const moreOptionsSv = 'Fler alternativ';
       expect(overflow.getAttribute('aria-label')).to.equal('More options');
       menu.i18n = { ...menu.i18n, moreOptions: moreOptionsSv };
-      await nextUpdate(menu);
       expect(overflow.getAttribute('aria-label')).to.equal(moreOptionsSv);
     });
 
-    it('should remove the aria-label from the overflow button when empty i18n string is set', async () => {
+    it('should remove the aria-label from the overflow button when empty i18n string is set', () => {
       menu.i18n = { ...menu.i18n, moreOptions: '' };
-      await nextUpdate(menu);
       expect(overflow.hasAttribute('aria-label')).to.be.false;
     });
 
     describe('reverse-collapse', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         menu.reverseCollapse = true;
-        await nextUpdate(menu);
       });
 
       it('should show overflow button and hide the buttons which do not fit', () => {
@@ -200,9 +194,8 @@ describe('overflow', () => {
         expect(overflow.item.children[2]).to.deep.equal(menu.items[2]);
       });
 
-      it('should update overflow when reverseCollapse changes', async () => {
+      it('should update overflow when reverseCollapse changes', () => {
         menu.reverseCollapse = false;
-        await nextUpdate(menu);
         assertVisible(buttons[0]);
         assertVisible(buttons[1]);
         assertHidden(buttons[2]);
@@ -258,9 +251,8 @@ describe('overflow', () => {
       expect(menu.hasAttribute('has-single-button')).to.be.true;
     });
 
-    it('should set when changing items to only have one button', async () => {
+    it('should set when changing items to only have one button', () => {
       menu.items = [{ text: 'Actions' }];
-      await nextUpdate(menu);
       expect(menu.hasAttribute('has-single-button')).to.be.true;
     });
 
@@ -269,16 +261,13 @@ describe('overflow', () => {
       await nextResize(menu);
 
       menu.items = [{ text: 'Actions' }];
-      await nextUpdate(menu);
       expect(menu.hasAttribute('has-single-button')).to.be.true;
     });
 
-    it('should remove when changing items to have more than one button', async () => {
+    it('should remove when changing items to have more than one button', () => {
       menu.items = [{ text: 'Actions' }];
-      await nextFrame();
 
       menu.items = [{ text: 'Edit' }, { text: 'Delete' }];
-      await nextUpdate(menu);
       expect(menu.hasAttribute('has-single-button')).to.be.false;
     });
   });
