@@ -216,7 +216,7 @@ export const MenuBarMixin = (superClass) =>
         '_themeChanged(_theme, _overflow, _container)',
         '__hasOverflowChanged(_hasOverflow, _overflow)',
         '__i18nChanged(__effectiveI18n, _overflow)',
-        '_menuItemsChanged(items, _overflow, _container)',
+        '__updateButtons(items, disabled, _overflow, _container)',
         '_reverseCollapseChanged(reverseCollapse, _overflow, _container)',
         '_tabNavigationChanged(tabNavigation, _overflow, _container)',
       ];
@@ -382,23 +382,6 @@ export const MenuBarMixin = (superClass) =>
     }
 
     /**
-     * Override method inherited from `DisabledMixin`
-     * to update the `disabled` property for the buttons
-     * whenever the property changes on the menu bar.
-     *
-     * @param {boolean} newValue the new disabled value
-     * @param {boolean} oldValue the previous disabled value
-     * @override
-     * @protected
-     */
-    _disabledChanged(newValue, oldValue) {
-      super._disabledChanged(newValue, oldValue);
-      if (oldValue !== newValue) {
-        this.__updateButtonsDisabled(newValue);
-      }
-    }
-
-    /**
      * A callback for the `_theme` property observer.
      * It propagates the host theme to the buttons and the sub menu.
      *
@@ -456,7 +439,7 @@ export const MenuBarMixin = (superClass) =>
     }
 
     /** @private */
-    _menuItemsChanged(items, overflow, container) {
+    __updateButtons(items, disabled, overflow, container) {
       if (!overflow || !container) {
         return;
       }
@@ -465,6 +448,12 @@ export const MenuBarMixin = (superClass) =>
         this._oldItems = items;
         this.__renderButtons(items);
         this.__detectOverflow();
+      }
+
+      if (disabled !== this._oldDisabled) {
+        this._oldDisabled = disabled;
+        this.__renderButtons(items);
+        overflow.toggleAttribute('disabled', disabled);
       }
 
       const subMenu = this._subMenu;
@@ -499,7 +488,6 @@ export const MenuBarMixin = (superClass) =>
     /** @private */
     __restoreButtons(buttons) {
       buttons.forEach((button) => {
-        button.disabled = (button.item && button.item.disabled) || this.disabled;
         button.style.visibility = '';
         button.style.position = '';
         button.style.width = '';
@@ -520,14 +508,6 @@ export const MenuBarMixin = (superClass) =>
       item.removeAttribute('aria-expanded');
       item.removeAttribute('aria-haspopup');
       item.removeAttribute('tabindex');
-    }
-
-    /** @private */
-    __updateButtonsDisabled(disabled) {
-      this._buttons.forEach((btn) => {
-        // Disable the button if the entire menu-bar is disabled or the item alone is disabled
-        btn.disabled = disabled || (btn.item && btn.item.disabled);
-      });
     }
 
     /** @private */
@@ -563,7 +543,6 @@ export const MenuBarMixin = (superClass) =>
 
           // Save width for buttons with component
           btn.style.width = getComputedStyle(btn).width;
-          btn.disabled = true;
           btn.style.visibility = 'hidden';
           btn.style.position = 'absolute';
         }
@@ -662,7 +641,7 @@ export const MenuBarMixin = (superClass) =>
             return html`
               <vaadin-menu-bar-button
                 .item="${itemCopy}"
-                .disabled="${item.disabled}"
+                .disabled="${this.disabled || item.disabled}"
                 role="${this.tabNavigation ? 'button' : 'menuitem'}"
                 aria-haspopup="${ifDefined(hasChildren ? 'true' : nothing)}"
                 aria-expanded="${ifDefined(hasChildren ? 'false' : nothing)}"
