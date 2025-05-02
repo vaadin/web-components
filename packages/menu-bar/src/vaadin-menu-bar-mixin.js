@@ -150,6 +150,7 @@ export const MenuBarMixin = (superClass) =>
          */
         items: {
           type: Array,
+          sync: true,
           value: () => [],
         },
 
@@ -178,6 +179,7 @@ export const MenuBarMixin = (superClass) =>
          */
         reverseCollapse: {
           type: Boolean,
+          sync: true,
         },
 
         /**
@@ -187,6 +189,7 @@ export const MenuBarMixin = (superClass) =>
          */
         tabNavigation: {
           type: Boolean,
+          sync: true,
         },
 
         /**
@@ -207,6 +210,7 @@ export const MenuBarMixin = (superClass) =>
         /** @protected */
         _container: {
           type: Object,
+          sync: true,
         },
       };
     }
