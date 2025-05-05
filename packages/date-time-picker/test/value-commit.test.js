@@ -128,7 +128,7 @@ describe('value commit', () => {
       await expectValidationOnly();
     });
 
-    it('should not commit on picker enter if value is temporarily changed', async () => {
+    it('should not commit on picker Enter if value is temporarily changed', async () => {
       await sendKeys({ type: 'a' });
       await sendKeys({ press: 'Backspace' });
       await sendKeys({ press: 'Enter' });
