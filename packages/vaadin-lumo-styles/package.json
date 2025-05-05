@@ -25,6 +25,7 @@
   "files": [
     "*.d.ts",
     "*.js",
+    "src",
     "auto-complete.css",
     "mixins/*.d.ts",
     "mixins/*.js",
@@ -50,6 +51,7 @@
     "gulp-cli": "^2.3.0",
     "gulp-iconfont": "^11.0.0",
     "gulp-sort": "^2.0.0",
-    "gulp-svgmin": "^4.1.0"
+    "gulp-svgmin": "^4.1.0",
+    "@vaadin/button": "24.8.0-alpha15"
   }
 }
