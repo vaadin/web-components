@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { enter, esc, fixtureSync, nextRender, nextUpdate, tap } from '@vaadin/testing-helpers';
+import { enter, esc, fixtureSync, nextRender, nextUpdate, oneEvent, tap } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-login-overlay.js';
 import { fillUsernameAndPassword } from './helpers.js';
@@ -18,7 +18,7 @@ describe('login overlay', () => {
 
   it('should render form wrapper when opened', async () => {
     overlay.opened = true;
-    await nextRender();
+    await oneEvent(overlay.$.vaadinLoginOverlayWrapper, 'vaadin-overlay-open');
     expect(document.querySelector('vaadin-login-form-wrapper')).to.be.ok;
   });
 });
@@ -134,7 +134,7 @@ describe('no autofocus', () => {
 
   it('should not focus the username field', async () => {
     overlay.opened = true;
-    await nextRender();
+    await oneEvent(overlay.$.vaadinLoginOverlayWrapper, 'vaadin-overlay-open');
     // Overlay traps focus and focuses the wrapper by default
     expect(document.activeElement).to.equal(overlay.$.vaadinLoginOverlayWrapper);
   });
@@ -306,7 +306,7 @@ describe('custom-form-area slot', () => {
 
   it('should teleport custom field components to the login form', async () => {
     overlay.opened = true;
-    await nextRender();
+    await oneEvent(overlay.$.vaadinLoginOverlayWrapper, 'vaadin-overlay-open');
 
     const wrapper = form.querySelector('vaadin-login-form-wrapper');
     expect(inputs[0].parentElement).to.equal(wrapper);
@@ -341,7 +341,7 @@ describe('footer slot', () => {
 
   it('should teleport custom field components to the login form', async () => {
     overlay.opened = true;
-    await nextRender();
+    await oneEvent(overlay.$.vaadinLoginOverlayWrapper, 'vaadin-overlay-open');
 
     const wrapper = form.querySelector('vaadin-login-form-wrapper');
     expect(divs[0].parentElement).to.equal(wrapper);
