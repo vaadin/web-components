@@ -305,6 +305,65 @@ describe('value commit', () => {
     });
   });
 
+  describe('initially invalid empty field', () => {
+    beforeEach(() => {
+      dateTimePicker.required = true;
+      dateTimePicker.validate();
+    });
+
+    describeForEachPicker('incomplete input entered', (pickerType) => {
+      let picker, otherPicker;
+
+      beforeEach(() => {
+        [picker, otherPicker] = getPicker(pickerType);
+      });
+
+      it('should commit as unparsable on Enter', async () => {
+        await enterParsableInput(picker);
+        await sendKeys({ press: 'Enter' });
+        await expectUnparsableValueCommit();
+      });
+
+      it('should commit as unparsable on other picker click', async () => {
+        await enterParsableInput(picker);
+        await sendMouseToElement({ type: 'click', element: otherPicker });
+        await expectUnparsableValueCommit();
+      });
+
+      it('should commit as unparsable on date-time-picker outside click', async () => {
+        await enterParsableInput(picker);
+        outsideClick();
+        await expectUnparsableValueCommit();
+      });
+    });
+
+    describeForEachPicker('invalid input entered', (pickerType) => {
+      let picker, otherPicker;
+
+      beforeEach(() => {
+        [picker, otherPicker] = getPicker(pickerType);
+      });
+
+      it('should commit as unparsable on Enter', async () => {
+        await enterUnparsableInput(picker);
+        await sendKeys({ press: 'Enter' });
+        await expectUnparsableValueCommit();
+      });
+
+      it('should commit as unparsable on other picker click', async () => {
+        await enterUnparsableInput(picker);
+        await sendMouseToElement({ type: 'click', element: otherPicker });
+        await expectUnparsableValueCommit();
+      });
+
+      it('should commit as unparsable on date-time-picker outside click', async () => {
+        await enterUnparsableInput(picker);
+        outsideClick();
+        await expectUnparsableValueCommit();
+      });
+    });
+  });
+
   describe('defined range', () => {
     beforeEach(async () => {
       dateTimePicker.min = '1980-02-02T02:00';
@@ -316,7 +375,6 @@ describe('value commit', () => {
     it('should commit on date-picker Enter when value is changed to a date outside the set range', async () => {
       await enterParsableInput(timePicker);
       await enterInput(datePicker, '2/2/2002');
-      resetSpyHistories();
       await sendKeys({ press: 'Enter' });
       await expectValueCommit();
     });
@@ -324,14 +382,12 @@ describe('value commit', () => {
     it('should commit on date-picker outside click when value is changed to a date outside the set range', async () => {
       await enterParsableInput(timePicker);
       await enterInput(datePicker, '2/2/2002');
-      resetSpyHistories();
       outsideClick();
       await expectValueCommit();
     });
 
     it('should commit as unparsable on date-picker outside click when value is changed to a date inside the set range while time-picker is empty', async () => {
       await enterInput(datePicker, '2/2/1985');
-      resetSpyHistories();
       outsideClick();
       await expectUnparsableValueCommit();
     });
@@ -339,14 +395,12 @@ describe('value commit', () => {
     it('should commit on date-picker outside click when value is changed to a date inside the set range while time-picker is filled', async () => {
       await enterParsableInput(timePicker);
       await enterInput(datePicker, '2/2/1985');
-      resetSpyHistories();
       outsideClick();
       await expectValueCommit();
     });
 
     it('should not commit on time-picker Enter when value is changed while date-picker is empty', async () => {
       await enterParsableInput(timePicker);
-      resetSpyHistories();
       await sendKeys({ press: 'Enter' });
       await expectNoValueCommit();
     });
