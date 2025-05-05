@@ -65,32 +65,34 @@ describe('value commit', () => {
   async function expectNoValueCommit() {
     await nextRender();
     expect(validateSpy).to.be.not.called;
-    expect(changeSpy.called).to.be.false;
+    expect(changeSpy).to.be.not.called;
+    expect(unparsableChangeSpy).to.be.not.called;
     resetSpyHistories();
   }
 
   async function expectValueCommit() {
     await nextRender();
-    expect(validateSpy.calledOnce).to.be.true;
-    expect(unparsableChangeSpy.called).to.be.false;
-    expect(changeSpy.calledOnce).to.be.true;
+    expect(validateSpy).to.be.called;
+    expect(unparsableChangeSpy).to.be.not.called;
+    expect(changeSpy).to.be.calledOnce;
     expect(changeSpy.calledAfter(validateSpy)).to.be.true;
     resetSpyHistories();
   }
 
   async function expectUnparsableValueCommit() {
     await nextRender();
-    expect(validateSpy.calledOnce).to.be.true;
-    expect(changeSpy.called).to.be.false;
-    expect(unparsableChangeSpy.calledOnce).to.be.true;
+    expect(validateSpy).to.be.called;
+    expect(changeSpy).to.be.not.called;
+    expect(unparsableChangeSpy).to.be.calledOnce;
     expect(unparsableChangeSpy.calledAfter(validateSpy)).to.be.true;
     resetSpyHistories();
   }
 
   async function expectValidationOnly() {
     await nextRender();
-    expect(validateSpy.calledOnce).to.be.true;
-    expect(changeSpy.called).to.be.false;
+    expect(validateSpy).to.be.called;
+    expect(changeSpy).to.be.not.called;
+    expect(unparsableChangeSpy).to.be.not.called;
     resetSpyHistories();
   }
 
@@ -355,14 +357,14 @@ describe('value commit', () => {
       changeInputValue(datePicker, '2020-01-20');
       resetSpyHistories();
       dateTimePicker.value = '2020-01-10T12:00';
-      expect(changeSpy.called).to.be.false;
+      expect(changeSpy).to.be.not.called;
     });
 
     it('should not fire change on programmatic value change after partial manual one', () => {
       changeInputValue(datePicker, '2020-01-17');
       // Time picker has no value so date time picker value is still empty
       dateTimePicker.value = '2020-01-17T16:00';
-      expect(changeSpy.called).to.be.false;
+      expect(changeSpy).to.be.not.called;
     });
   });
 });
