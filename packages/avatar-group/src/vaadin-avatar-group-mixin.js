@@ -3,7 +3,6 @@
  * Copyright (c) 2020 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import { html, render } from 'lit';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import { announce } from '@vaadin/a11y-base/src/announce.js';
@@ -193,10 +192,6 @@ export const AvatarGroupMixin = (superClass) =>
       const overlay = this.$.overlay;
       overlay.renderer = this.__overlayRenderer.bind(this);
       this._overlayElement = overlay;
-
-      afterNextRender(this, () => {
-        this.__setItemsInView();
-      });
     }
 
     /** @protected */
