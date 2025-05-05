@@ -20,9 +20,7 @@ async function enterInput(picker, input) {
 
 async function enterParsableInput(picker) {
   picker.focus();
-  await sendKeys({ press: 'ControlOrMeta+A' });
-  await sendKeys({ type: picker.matches('[slot=date-picker]') ? '1/1/2001' : '12:00' });
-  await nextRender();
+  await enterInput(picker, picker.matches('[slot=date-picker]') ? '1/1/2001' : '12:00');
 }
 
 async function enterUnparsableInput(picker) {
