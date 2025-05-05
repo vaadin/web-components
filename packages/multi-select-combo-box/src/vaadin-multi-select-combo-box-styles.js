@@ -7,6 +7,7 @@ import { css } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 export const multiSelectComboBox = css`
   :host {
+    max-width: 100%;
     --input-min-width: var(--vaadin-multi-select-combo-box-input-min-width, 4em);
     --_chip-min-width: var(--vaadin-multi-select-combo-box-chip-min-width, 50px);
   }
