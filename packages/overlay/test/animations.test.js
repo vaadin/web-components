@@ -2,7 +2,6 @@ import { expect } from '@vaadin/chai-plugins';
 import { escKeyDown, fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
 import './animated-styles.js';
 import '../src/vaadin-overlay.js';
-import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { createOverlay } from './helpers.js';
 
@@ -89,7 +88,11 @@ function afterOverlayOpeningFinished(overlay, callback) {
 
     if (isOverlayOpened) {
       observer.disconnect();
-      afterNextRender(overlay, callback);
+      requestAnimationFrame(() => {
+        setTimeout(() => {
+          callback();
+        });
+      });
     }
   });
   observer.observe(overlay, { attributes: true, attributeFilter: ['opening'] });
@@ -103,7 +106,11 @@ function afterOverlayClosingFinished(overlay, callback) {
 
     if (isOverlayClosed) {
       observer.disconnect();
-      afterNextRender(overlay, callback);
+      requestAnimationFrame(() => {
+        setTimeout(() => {
+          callback();
+        });
+      });
     }
   });
   observer.observe(overlay, { attributes: true, attributeFilter: ['closing'] });
