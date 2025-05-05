@@ -255,13 +255,11 @@ describe('value commit', () => {
       });
 
       it('should not commit on other picker click', async () => {
-        await clearInput(picker);
         await sendMouseToElement({ type: 'click', element: otherPicker });
         await expectNoValueCommit();
       });
 
       it('should commit on date-time-picker outside click', async () => {
-        await clearInput(picker);
         outsideClick();
         await expectValueCommit();
       });
@@ -281,24 +279,22 @@ describe('value commit', () => {
     describeForEachPicker('value partially cleared (= incomplete value)', (pickerType) => {
       let picker, otherPicker;
 
-      beforeEach(() => {
+      beforeEach(async () => {
         [picker, otherPicker] = getPicker(pickerType);
+        await clearInput(picker);
       });
 
       it('should commit on Enter', async () => {
-        await clearInput(picker);
         await sendKeys({ press: 'Enter' });
         await expectValueCommit();
       });
 
       it('should commit on other picker click', async () => {
-        await clearInput(picker);
         await sendMouseToElement({ type: 'click', element: otherPicker });
         await expectValueCommit();
       });
 
       it('should commit on date-time-picker outside click', async () => {
-        await clearInput(picker);
         outsideClick();
         await expectValueCommit();
       });
@@ -314,24 +310,22 @@ describe('value commit', () => {
     describeForEachPicker('incomplete input entered', (pickerType) => {
       let picker, otherPicker;
 
-      beforeEach(() => {
+      beforeEach(async () => {
         [picker, otherPicker] = getPicker(pickerType);
+        await enterParsableInput(picker);
       });
 
       it('should commit as unparsable on Enter', async () => {
-        await enterParsableInput(picker);
         await sendKeys({ press: 'Enter' });
         await expectUnparsableValueCommit();
       });
 
       it('should commit as unparsable on other picker click', async () => {
-        await enterParsableInput(picker);
         await sendMouseToElement({ type: 'click', element: otherPicker });
         await expectUnparsableValueCommit();
       });
 
       it('should commit as unparsable on date-time-picker outside click', async () => {
-        await enterParsableInput(picker);
         outsideClick();
         await expectUnparsableValueCommit();
       });
@@ -340,24 +334,22 @@ describe('value commit', () => {
     describeForEachPicker('invalid input entered', (pickerType) => {
       let picker, otherPicker;
 
-      beforeEach(() => {
+      beforeEach(async () => {
         [picker, otherPicker] = getPicker(pickerType);
+        await enterUnparsableInput(picker);
       });
 
       it('should commit as unparsable on Enter', async () => {
-        await enterUnparsableInput(picker);
         await sendKeys({ press: 'Enter' });
         await expectUnparsableValueCommit();
       });
 
       it('should commit as unparsable on other picker click', async () => {
-        await enterUnparsableInput(picker);
         await sendMouseToElement({ type: 'click', element: otherPicker });
         await expectUnparsableValueCommit();
       });
 
       it('should commit as unparsable on date-time-picker outside click', async () => {
-        await enterUnparsableInput(picker);
         outsideClick();
         await expectUnparsableValueCommit();
       });
