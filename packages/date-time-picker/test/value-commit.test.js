@@ -67,7 +67,7 @@ describe('value commit', () => {
 
   async function expectNoValueCommit() {
     await nextRender();
-    expect(validateSpy.called).to.be.false;
+    expect(validateSpy).to.be.not.called;
     expect(changeSpy.called).to.be.false;
     resetSpyHistories();
   }
