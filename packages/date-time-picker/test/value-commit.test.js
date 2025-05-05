@@ -340,7 +340,7 @@ describe('value commit', () => {
       await expectValueCommit();
     });
 
-    it('should not commit on time-picker enter when value is changed while date-picker is empty', async () => {
+    it('should not commit on time-picker Enter when value is changed while date-picker is empty', async () => {
       await enterParsableInput(timePicker);
       resetSpyHistories();
       await sendKeys({ press: 'Enter' });
