@@ -1,14 +1,22 @@
-import { fire, nextRender, oneEvent } from '@vaadin/testing-helpers';
+import { fire, oneEvent } from '@vaadin/testing-helpers';
 import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
 
-export async function openMenu(target, event = isTouch ? 'click' : 'mouseover') {
-  const menu = target.closest('vaadin-context-menu');
-  if (menu) {
-    menu.__openListenerActive = true;
-  }
+export function activateItem(target, event = isTouch ? 'click' : 'mouseover') {
   const { right, bottom } = target.getBoundingClientRect();
   fire(target, event, { x: right, y: bottom });
-  await nextRender();
+}
+
+export async function openMenu(target, event = isTouch ? 'click' : 'mouseover') {
+  let menu = target.closest('vaadin-context-menu');
+  if (!menu) {
+    // If the target is a menu item, get reference to the submenu.
+    const overlay = target.closest('vaadin-context-menu-overlay');
+    menu = overlay.querySelector('vaadin-context-menu');
+  }
+  // Disable logic that delays opening submenu
+  menu.__openListenerActive = true;
+  activateItem(target, event);
+  await oneEvent(menu._overlayElement, 'vaadin-overlay-open');
 }
 
 export function getMenuItems(menu) {

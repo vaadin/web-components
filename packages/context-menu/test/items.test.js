@@ -18,7 +18,7 @@ import '../src/vaadin-context-menu.js';
 import '@vaadin/item/src/vaadin-item.js';
 import '@vaadin/list-box/src/vaadin-list-box.js';
 import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
-import { getMenuItems, getSubMenu, openMenu } from './helpers.js';
+import { activateItem, getMenuItems, getSubMenu, openMenu } from './helpers.js';
 
 describe('items', () => {
   let rootMenu, subMenu, target, rootOverlay, subOverlay1;
@@ -183,6 +183,7 @@ describe('items', () => {
 
   it('should clear selections on reopen', async () => {
     getMenuItems(subMenu)[0].click();
+    await openMenu(target);
     await openMenu(getMenuItems(rootMenu)[0]);
     expect(getMenuItems(subMenu)[0].selected).to.be.false;
   });
@@ -249,16 +250,16 @@ describe('items', () => {
     expect(getMenuItems(subMenu)[1].disabled).to.be.true;
   });
 
-  it('should close the submenu', async () => {
-    await openMenu(getMenuItems(rootMenu)[1]);
+  it('should close the submenu on activating non-parent item', () => {
+    activateItem(getMenuItems(rootMenu)[1]);
     expect(subMenu.opened).to.be.false;
   });
 
-  (isTouch ? it.skip : it)('should focus closed parent item when hovering on non-parent item', async () => {
+  (isTouch ? it.skip : it)('should focus closed parent item when hovering on non-parent item', () => {
     const parent = getMenuItems(rootMenu)[0];
     const nonParent = getMenuItems(rootMenu)[1];
     const focusSpy = sinon.spy(parent, 'focus');
-    await openMenu(nonParent);
+    activateItem(nonParent);
     expect(focusSpy.called).to.be.true;
   });
 
@@ -267,14 +268,14 @@ describe('items', () => {
     await openMenu(parent);
     const nonParent = getMenuItems(rootMenu)[1];
     const focusSpy = sinon.spy(rootOverlay.$.overlay, 'focus');
-    await openMenu(nonParent);
+    activateItem(nonParent);
     expect(focusSpy.called).to.be.true;
   });
 
-  (isTouch ? it.skip : it)('should not focus overlay part if the parent menu list-box has focus', async () => {
-    await openMenu(getMenuItems(rootMenu)[1]);
+  (isTouch ? it.skip : it)('should not focus overlay part if the parent menu list-box has focus', () => {
+    activateItem(getMenuItems(rootMenu)[1]);
     const focusSpy = sinon.spy(rootOverlay.$.overlay, 'focus');
-    await openMenu(getMenuItems(rootMenu)[2]);
+    activateItem(getMenuItems(rootMenu)[2]);
     expect(focusSpy.called).to.be.false;
   });
 
