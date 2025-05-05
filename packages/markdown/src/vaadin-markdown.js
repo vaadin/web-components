@@ -53,6 +53,7 @@ class Markdown extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
        */
       content: {
         type: String,
+        sync: true,
       },
     };
   }
