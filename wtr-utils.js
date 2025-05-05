@@ -1,13 +1,17 @@
 /* eslint-env node */
-require('dotenv').config();
-const fs = require('fs');
-const argv = require('minimist')(process.argv.slice(2));
-const path = require('path');
-const glob = require('glob');
-const { execSync } = require('child_process');
-const { createSauceLabsLauncher } = require('@web/test-runner-saucelabs');
-const { visualRegressionPlugin } = require('@web/test-runner-visual-regression/plugin');
-const { esbuildPlugin } = require('@web/dev-server-esbuild');
+import { esbuildPlugin } from '@web/dev-server-esbuild';
+import { createSauceLabsLauncher } from '@web/test-runner-saucelabs';
+import { visualRegressionPlugin } from '@web/test-runner-visual-regression/plugin';
+import dotenv from 'dotenv';
+import { glob } from 'glob';
+import minimist from 'minimist';
+import { execSync } from 'node:child_process';
+import fs from 'node:fs';
+import path from 'node:path';
+
+dotenv.config();
+
+const argv = minimist(process.argv.slice(2));
 
 const HIDDEN_WARNINGS = [
   '<vaadin-crud> Unable to autoconfigure form because the data structure is unknown. Either specify `include` or ensure at least one item is available beforehand.',
@@ -352,9 +356,4 @@ const createIntegrationTestsConfig = (config) => {
   };
 };
 
-module.exports = {
-  createSnapshotTestsConfig,
-  createUnitTestsConfig,
-  createVisualTestsConfig,
-  createIntegrationTestsConfig,
-};
+export { createSnapshotTestsConfig, createUnitTestsConfig, createVisualTestsConfig, createIntegrationTestsConfig };

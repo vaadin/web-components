@@ -1,7 +1,7 @@
 /* eslint-env node */
-const { createIntegrationTestsConfig } = require('./wtr-utils.js');
-const devServerConfig = require('./web-dev-server.config.js');
-const { playwrightLauncher } = require('@web/test-runner-playwright');
+import { playwrightLauncher } from '@web/test-runner-playwright';
+import devServerConfig from './web-dev-server.config.js';
+import { createIntegrationTestsConfig } from './wtr-utils.js';
 
 const unitTestsConfig = createIntegrationTestsConfig({
   browsers: [
@@ -15,7 +15,7 @@ const unitTestsConfig = createIntegrationTestsConfig({
   ],
 });
 
-module.exports = {
+export default {
   ...unitTestsConfig,
   ...devServerConfig,
 };

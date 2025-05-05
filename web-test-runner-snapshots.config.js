@@ -1,8 +1,8 @@
 /* eslint-env node */
-const { playwrightLauncher } = require('@web/test-runner-playwright');
-const { createSnapshotTestsConfig } = require('./wtr-utils.js');
+import { playwrightLauncher } from '@web/test-runner-playwright';
+import { createSnapshotTestsConfig } from './wtr-utils.js';
 
-module.exports = createSnapshotTestsConfig({
+export default createSnapshotTestsConfig({
   browsers: [
     playwrightLauncher({
       product: 'chromium',

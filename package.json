@@ -2,6 +2,7 @@
   "name": "vaadin-web-components",
   "private": true,
   "author": "Vaadin Ltd",
+  "type": "module",
   "scripts": {
     "analyze": "polymer analyze packages/**/vaadin-*.js > analysis.json && node scripts/prepareDocs.js && node scripts/buildWebtypes.js && node scripts/generateLumoAutoCompleteCss.js && ./scripts/buildThemeTypings.sh",
     "build:ts": "tsc --build tsconfig.build.json",

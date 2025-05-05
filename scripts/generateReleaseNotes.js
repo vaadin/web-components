@@ -10,9 +10,12 @@
  * When --from is not given the previous tag is selected.
  * When --compact is set, components are not listed, default is false
  */
+import { exec as execCallback } from 'node:child_process';
+import { promisify } from 'node:util';
+import lerna from '../lerna.json' with { type: 'json' };
 
-const exec = require('util').promisify(require('child_process').exec);
-const version = require('../lerna.json').version;
+const { version } = lerna;
+const exec = promisify(execCallback);
 
 let from, to, compact;
 

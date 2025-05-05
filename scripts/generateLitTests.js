@@ -1,5 +1,5 @@
-const fs = require('fs');
-const glob = require('glob');
+import { glob } from 'glob';
+import fs from 'node:fs';
 
 const packages = fs.readdirSync('packages');
 
