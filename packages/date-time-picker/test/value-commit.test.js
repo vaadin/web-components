@@ -24,10 +24,7 @@ async function enterParsableInput(picker) {
 }
 
 async function enterUnparsableInput(picker) {
-  picker.focus();
-  await sendKeys({ press: 'ControlOrMeta+A' });
-  await sendKeys({ type: 'foo' });
-  await nextRender();
+  await enterInput(picker, 'foo');
 }
 
 async function clearInput(picker) {
