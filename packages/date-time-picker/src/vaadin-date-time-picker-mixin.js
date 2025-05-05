@@ -5,8 +5,6 @@
  */
 import { DisabledMixin } from '@vaadin/a11y-base/src/disabled-mixin.js';
 import { FocusMixin } from '@vaadin/a11y-base/src/focus-mixin.js';
-import { microTask } from '@vaadin/component-base/src/async.js';
-import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import {
@@ -517,10 +515,8 @@ export const DateTimePickerMixin = (superClass) =>
 
     /** @private */
     __requestValueCommit() {
-      this.__valueCommitDebouncer = Debouncer.debounce(this.__valueCommitDebouncer, microTask, () => {
-        this._requestValidation();
-        this.__commitPendingValueChange();
-      });
+      this._requestValidation();
+      this.__commitPendingValueChange();
     }
 
     /** @private */
