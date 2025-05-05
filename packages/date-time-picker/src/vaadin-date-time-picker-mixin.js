@@ -429,7 +429,7 @@ export const DateTimePickerMixin = (superClass) =>
       // Do not validate when focusout is caused by document
       // losing focus, which happens on browser tab switch.
       if (!focused && document.hasFocus()) {
-        this.__requestValueCommit();
+        this.__commitPendingValueChange();
       }
     }
 
@@ -483,7 +483,7 @@ export const DateTimePickerMixin = (superClass) =>
       }
 
       if (this.__hasPendingValueChange) {
-        this.__requestValueCommit();
+        this.__commitPendingValueChange();
       }
     }
 
@@ -493,7 +493,7 @@ export const DateTimePickerMixin = (superClass) =>
       this.style.pointerEvents = opened ? 'auto' : '';
 
       if (!opened && this.__outsideClickInProgress) {
-        this.__requestValueCommit();
+        this.__commitPendingValueChange();
       }
     }
 
@@ -511,12 +511,6 @@ export const DateTimePickerMixin = (superClass) =>
       node.removeEventListener('unparsable-change', this.__changeEventHandler);
       node.removeEventListener('value-changed', this.__valueChangedEventHandler);
       node.removeEventListener('opened-changed', this.__openedChangedEventHandler);
-    }
-
-    /** @private */
-    __requestValueCommit() {
-      this._requestValidation();
-      this.__commitPendingValueChange();
     }
 
     /** @private */
@@ -815,6 +809,7 @@ export const DateTimePickerMixin = (superClass) =>
 
     /** @private */
     __commitPendingValueChange() {
+      this._requestValidation();
       if (this.__committedValue !== this.value) {
         this.dispatchEvent(new CustomEvent('change', { bubbles: true }));
       } else if (this.__committedUnparsableValue !== this.__unparsableValue) {
