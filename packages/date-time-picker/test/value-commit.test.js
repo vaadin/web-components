@@ -309,7 +309,7 @@ describe('value commit', () => {
       resetSpyHistories();
     });
 
-    it('should commit on date-picker enter when value is changed to a date outside the set range', async () => {
+    it('should commit on date-picker Enter when value is changed to a date outside the set range', async () => {
       await enterParsableInput(timePicker);
       await enterInput(datePicker, '2/2/2002');
       resetSpyHistories();
