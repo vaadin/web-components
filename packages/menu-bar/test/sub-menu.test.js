@@ -120,7 +120,7 @@ describe('sub-menu', () => {
   it('should focus the overlay when sub-menu opened on click', async () => {
     const spy = sinon.spy(subMenuOverlay.$.overlay, 'focus');
     buttons[0].click();
-    await nextRender(subMenu);
+    await oneEvent(subMenuOverlay, 'vaadin-overlay-open');
     expect(spy.calledOnce).to.be.true;
     const item = subMenuOverlay.querySelector('vaadin-menu-bar-item');
     expect(item.hasAttribute('focused')).to.be.false;
@@ -167,14 +167,14 @@ describe('sub-menu', () => {
 
   it('should focus the first item on button space', async () => {
     space(buttons[0]);
-    await nextRender(subMenu);
+    await oneEvent(subMenuOverlay, 'vaadin-overlay-open');
     const item = subMenuOverlay.querySelector('vaadin-menu-bar-item');
     expect(item.hasAttribute('focused')).to.be.true;
   });
 
   it('should focus the first item on button enter', async () => {
     enter(buttons[0]);
-    await nextRender(subMenu);
+    await oneEvent(subMenuOverlay, 'vaadin-overlay-open');
     const item = subMenuOverlay.querySelector('vaadin-menu-bar-item');
     expect(item.hasAttribute('focused')).to.be.true;
   });
@@ -191,7 +191,7 @@ describe('sub-menu', () => {
 
   it('should focus first item after re-opening when using components', async () => {
     arrowDown(buttons[2]);
-    await nextRender(subMenu);
+    await oneEvent(subMenuOverlay, 'vaadin-overlay-open');
 
     const items = subMenuOverlay.querySelectorAll('vaadin-menu-bar-item');
     arrowDown(items[0]);
@@ -200,7 +200,7 @@ describe('sub-menu', () => {
     // Close and re-open
     esc(items[1]);
     arrowDown(buttons[2]);
-    await nextRender(subMenu);
+    await oneEvent(subMenuOverlay, 'vaadin-overlay-open');
 
     expect(items[0].hasAttribute('focus-ring')).to.be.true;
   });
@@ -209,7 +209,7 @@ describe('sub-menu', () => {
     menu.items[2].children[0].disabled = true;
 
     arrowDown(buttons[2]);
-    await nextRender(subMenu);
+    await oneEvent(subMenuOverlay, 'vaadin-overlay-open');
 
     const items = subMenuOverlay.querySelectorAll('vaadin-menu-bar-item');
     expect(items[1].hasAttribute('focus-ring')).to.be.true;
@@ -217,7 +217,7 @@ describe('sub-menu', () => {
     // Close and re-open
     esc(items[1]);
     arrowDown(buttons[2]);
-    await nextRender(subMenu);
+    await oneEvent(subMenuOverlay, 'vaadin-overlay-open');
 
     expect(items[1].hasAttribute('focus-ring')).to.be.true;
   });
