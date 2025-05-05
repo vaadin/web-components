@@ -3,7 +3,7 @@ import { esbuildPlugin } from '@web/dev-server-esbuild';
 import { createSauceLabsLauncher } from '@web/test-runner-saucelabs';
 import { visualRegressionPlugin } from '@web/test-runner-visual-regression/plugin';
 import dotenv from 'dotenv';
-import { glob } from 'glob';
+import { globSync } from 'glob';
 import minimist from 'minimist';
 import { execSync } from 'node:child_process';
 import fs from 'node:fs';
@@ -76,7 +76,7 @@ const getAllUnitPackages = () => {
     .readdirSync('packages')
     .filter(
       (dir) =>
-        fs.statSync(`packages/${dir}`).isDirectory() && glob.sync(`packages/${dir}/test/*.test.{js,ts}`).length > 0,
+        fs.statSync(`packages/${dir}`).isDirectory() && globSync(`packages/${dir}/test/*.test.{js,ts}`).length > 0,
     );
 };
 
