@@ -351,7 +351,7 @@ describe('value commit', () => {
   describe('value set programmatically', () => {
     it('should not fire change on programmatic value change', () => {
       dateTimePicker.value = '2020-01-17T16:00';
-      expect(changeSpy.called).to.be.false;
+      expect(changeSpy).to.be.not.called;
     });
 
     it('should not fire change on programmatic value change after manual one', () => {
