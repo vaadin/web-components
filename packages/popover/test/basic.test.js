@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { esc, fixtureSync, nextRender, nextUpdate, outsideClick } from '@vaadin/testing-helpers';
+import { esc, fixtureSync, nextRender, nextUpdate, oneEvent, outsideClick } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-popover.js';
 
@@ -175,13 +175,13 @@ describe('popover', () => {
 
     it('should open overlay on target click by default', async () => {
       target.click();
-      await nextRender();
+      await oneEvent(overlay, 'vaadin-overlay-open');
       expect(overlay.opened).to.be.true;
     });
 
     it('should close overlay on subsequent target click', async () => {
       target.click();
-      await nextRender();
+      await oneEvent(overlay, 'vaadin-overlay-open');
 
       target.click();
       await nextRender();
@@ -190,7 +190,7 @@ describe('popover', () => {
 
     it('should close overlay on outside click by default', async () => {
       target.click();
-      await nextRender();
+      await oneEvent(overlay, 'vaadin-overlay-open');
 
       outsideClick();
       await nextRender();
@@ -202,7 +202,7 @@ describe('popover', () => {
       await nextUpdate(popover);
 
       target.click();
-      await nextRender();
+      await oneEvent(overlay, 'vaadin-overlay-open');
 
       outsideClick();
       await nextRender();
@@ -215,7 +215,7 @@ describe('popover', () => {
       await nextUpdate(popover);
 
       target.click();
-      await nextRender();
+      await oneEvent(overlay, 'vaadin-overlay-open');
 
       outsideClick();
       await nextRender();
@@ -224,7 +224,7 @@ describe('popover', () => {
 
     it('should close overlay when popover is detached', async () => {
       target.click();
-      await nextRender();
+      await oneEvent(overlay, 'vaadin-overlay-open');
 
       popover.remove();
       await nextRender();
@@ -233,7 +233,7 @@ describe('popover', () => {
 
     it('should not close overlay when popover is moved in DOM', async () => {
       target.click();
-      await nextRender();
+      await oneEvent(overlay, 'vaadin-overlay-open');
 
       const parent = popover.parentElement;
       popover.remove();
@@ -253,7 +253,7 @@ describe('popover', () => {
     describe('Escape press', () => {
       beforeEach(async () => {
         target.click();
-        await nextRender();
+        await oneEvent(overlay, 'vaadin-overlay-open');
       });
 
       it('should close overlay on global Escape press by default', async () => {
@@ -308,11 +308,11 @@ describe('popover', () => {
 
         // Open the first popover
         target.click();
-        await nextRender();
+        await oneEvent(overlay, 'vaadin-overlay-open');
 
         // Open the second popover
         secondTarget.click();
-        await nextRender();
+        await oneEvent(secondPopover._overlayElement, 'vaadin-overlay-open');
 
         // Expect both popovers to be opened
         expect(popover.opened).to.be.true;
@@ -452,7 +452,7 @@ describe('popover', () => {
 
     beforeEach(async () => {
       popover.opened = true;
-      await nextRender();
+      await oneEvent(overlay, 'vaadin-overlay-open');
     });
 
     it('should update width after opening the popover', async () => {
@@ -498,7 +498,7 @@ describe('popover', () => {
         root.textContent = new Array(2000).fill('foo').join(' ');
       };
       popover.opened = true;
-      await nextRender();
+      await oneEvent(overlay, 'vaadin-overlay-open');
     });
 
     it('should limit overlay height if content overflows the viewport', () => {
@@ -513,7 +513,7 @@ describe('popover', () => {
   describe('closed event', () => {
     beforeEach(async () => {
       popover.opened = true;
-      await nextRender();
+      await oneEvent(overlay, 'vaadin-overlay-open');
     });
 
     it('should dispatch closed event when closed', async () => {
