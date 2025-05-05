@@ -410,8 +410,7 @@ export const DateTimePickerMixin = (superClass) =>
 
       if (isOutsideClick) {
         this.__outsideClickInProgress = true;
-
-        setTimeout(() => {
+        queueMicrotask(() => {
           this.__outsideClickInProgress = false;
         });
       }
