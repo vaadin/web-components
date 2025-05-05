@@ -379,7 +379,7 @@ export const DateTimePickerMixin = (superClass) =>
     /** @protected */
     connectedCallback() {
       super.connectedCallback();
-      document.documentElement.addEventListener('click', this.__onGlobalClick, true);
+      document.addEventListener('click', this.__onGlobalClick, true);
     }
 
     /** @protected */
