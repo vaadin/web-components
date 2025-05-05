@@ -171,7 +171,7 @@ describe('value commit', () => {
     });
 
     it('should not commit on other picker click', async () => {
-      otherPicker.click();
+      await sendMouseToElement({ type: 'click', element: otherPicker });
       await expectNoValueCommit();
     });
 
@@ -196,7 +196,7 @@ describe('value commit', () => {
     });
 
     it('should commit as unparsable on other picker click', async () => {
-      otherPicker.click();
+      await sendMouseToElement({ type: 'click', element: otherPicker });
       await expectUnparsableValueCommit();
     });
 
@@ -224,7 +224,7 @@ describe('value commit', () => {
     });
 
     it('should commit on other picker click', async () => {
-      otherPicker.click();
+      await sendMouseToElement({ type: 'click', element: otherPicker });
       await expectValueCommit();
     });
 
@@ -256,7 +256,7 @@ describe('value commit', () => {
 
       it('should not commit on other picker click', async () => {
         await clearInput(picker);
-        otherPicker.click();
+        await sendMouseToElement({ type: 'click', element: otherPicker });
         await expectNoValueCommit();
       });
 
@@ -293,7 +293,7 @@ describe('value commit', () => {
 
       it('should commit on other picker click', async () => {
         await clearInput(picker);
-        otherPicker.click();
+        await sendMouseToElement({ type: 'click', element: otherPicker });
         await expectValueCommit();
       });
 
