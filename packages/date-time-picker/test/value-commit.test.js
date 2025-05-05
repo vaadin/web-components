@@ -243,6 +243,7 @@ describe('value commit', () => {
 
       beforeEach(() => {
         [picker, otherPicker] = getPicker(pickerType);
+        await clearInput(picker);
       });
 
       it('should not commit on Enter', async () => {
