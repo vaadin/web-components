@@ -242,7 +242,6 @@ describe('value commit', () => {
       });
 
       it('should not commit on Enter', async () => {
-        await clearInput(picker);
         await sendKeys({ press: 'Enter' });
         await expectNoValueCommit();
       });
