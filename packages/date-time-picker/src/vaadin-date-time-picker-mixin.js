@@ -385,7 +385,7 @@ export const DateTimePickerMixin = (superClass) =>
     /** @protected */
     disconnectedCallback() {
       super.disconnectedCallback();
-      document.documentElement.removeEventListener('click', this.__onGlobalClick, true);
+      document.removeEventListener('click', this.__onGlobalClick, true);
     }
 
     focus() {
