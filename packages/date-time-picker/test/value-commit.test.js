@@ -236,7 +236,7 @@ describe('value commit', () => {
     describeForEachPicker('value partially cleared (= incomplete value)', (pickerType) => {
       let picker, otherPicker;
 
-      beforeEach(() => {
+      beforeEach(async () => {
         [picker, otherPicker] = getPicker(pickerType);
         await clearInput(picker);
       });
