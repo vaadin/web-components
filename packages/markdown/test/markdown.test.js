@@ -32,7 +32,7 @@ describe('vaadin-markdown', () => {
   });
 
   it('should render markdown content when markdown property is set', async () => {
-    element.markdown = '# Heading';
+    element.content = '# Heading';
     await nextUpdate(element);
 
     const heading = element.querySelector('h1');
@@ -41,13 +41,13 @@ describe('vaadin-markdown', () => {
   });
 
   it('should update content when markdown property changes', async () => {
-    element.markdown = '# First heading';
+    element.content = '# First heading';
     await nextUpdate(element);
 
     let heading = element.querySelector('h1');
     expect(heading.textContent).to.equal('First heading');
 
-    element.markdown = '# Updated heading';
+    element.content = '# Updated heading';
     await nextUpdate(element);
 
     heading = element.querySelector('h1');
@@ -55,30 +55,30 @@ describe('vaadin-markdown', () => {
   });
 
   it('should handle undefined markdown content', async () => {
-    element.markdown = '# Heading';
+    element.content = '# Heading';
     await nextUpdate(element);
 
-    element.markdown = undefined;
+    element.content = undefined;
     await nextUpdate(element);
 
     expect(element.innerHTML.trim()).to.equal('');
   });
 
   it('should handle null markdown content', async () => {
-    element.markdown = '# Heading';
+    element.content = '# Heading';
     await nextUpdate(element);
 
-    element.markdown = null;
+    element.content = null;
     await nextUpdate(element);
 
     expect(element.innerHTML.trim()).to.equal('');
   });
 
   it('should handle empty string markdown content', async () => {
-    element.markdown = '# Heading';
+    element.content = '# Heading';
     await nextUpdate(element);
 
-    element.markdown = '';
+    element.content = '';
     await nextUpdate(element);
 
     expect(element.innerHTML.trim()).to.equal('');
@@ -91,14 +91,14 @@ describe('vaadin-markdown', () => {
       largeMarkdown += `## Section ${i}\n\nParagraph with content for section ${i}.\n\n`;
     }
 
-    element.markdown = largeMarkdown;
+    element.content = largeMarkdown;
     await nextUpdate(element);
 
     expect(element.querySelectorAll('h2').length).to.equal(50);
   });
 
   it('should handle markdown with nested HTML structures', async () => {
-    element.markdown = `
+    element.content = `
 # Heading
 
 <div class="wrapper">
@@ -124,7 +124,7 @@ More markdown
 
   it('should handle replacing whole DOM structures', async () => {
     // Start with a list
-    element.markdown = `
+    element.content = `
 # Heading
 
 * Item 1
@@ -137,7 +137,7 @@ More markdown
     expect(element.querySelector('table')).to.be.null;
 
     // Replace with a completely different structure
-    element.markdown = `
+    element.content = `
 # Heading
 
 | Column 1 | Column 2 |
@@ -154,7 +154,7 @@ More markdown
 
   it('should handle component reattachment to DOM', async () => {
     // Initial setup
-    element.markdown = '# Test Heading';
+    element.content = '# Test Heading';
     await nextUpdate(element);
 
     // Detach from DOM
@@ -162,7 +162,7 @@ More markdown
     parent.removeChild(element);
 
     // Modify while detached
-    element.markdown = '# Modified Heading';
+    element.content = '# Modified Heading';
 
     // Reattach to DOM
     parent.appendChild(element);

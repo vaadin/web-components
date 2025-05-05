@@ -12,7 +12,7 @@ describe('vaadin-markdown content rendering', () => {
 
   it('should render all basic markdown elements correctly', async () => {
     // Complex markdown with various elements
-    element.markdown = `
+    element.content = `
 # Heading 1
 ## Heading 2
 ### Heading 3
@@ -83,7 +83,7 @@ code block
 
   it('should sanitize potentially dangerous HTML in markdown', async () => {
     // Markdown with potentially dangerous HTML
-    element.markdown = `
+    element.content = `
 # Safe heading
 
 <script>alert('xss');</script>
@@ -110,7 +110,7 @@ code block
 
   it('should support custom elements in markdown', async () => {
     // Markdown with potentially dangerous HTML
-    element.markdown = `
+    element.content = `
 # Custom element test
 
 <my-custom-element>Custom content</my-custom-element>

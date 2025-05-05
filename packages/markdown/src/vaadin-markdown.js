@@ -51,7 +51,7 @@ class Markdown extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
        *
        * @type {string}
        */
-      markdown: {
+      content: {
         type: String,
       },
     };
@@ -69,8 +69,8 @@ class Markdown extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
   updated(props) {
     super.updated(props);
 
-    if (props.has('markdown')) {
-      renderMarkdownToElement(this, this.markdown);
+    if (props.has('content')) {
+      renderMarkdownToElement(this, this.content);
     }
   }
 }

@@ -22,7 +22,7 @@ declare class Markdown extends ElementMixin(ThemableMixin(HTMLElement)) {
   /**
    * The Markdown content.
    */
-  markdown: string | null | undefined;
+  content: string | null | undefined;
 }
 
 declare global {
