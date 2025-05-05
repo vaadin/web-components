@@ -45,7 +45,13 @@ describe('value commit', () => {
   }
 
   beforeEach(async () => {
-    dateTimePicker = fixtureSync('<vaadin-date-time-picker></vaadin-date-time-picker>');
+    dateTimePicker = fixtureSync(`
+      <div>
+        <input/>
+        <vaadin-date-time-picker></vaadin-date-time-picker>
+        <input/>
+      </div>
+    `).children[1];
     await nextRender();
     [datePicker, timePicker] = getPicker('date-picker');
     validateSpy = sinon.spy();
