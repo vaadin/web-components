@@ -3,7 +3,6 @@
  * Copyright (c) 2021 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { dedupingMixin } from '@polymer/polymer/lib/utils/mixin.js';
 import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { needsFontIconSizingFallback } from './vaadin-icon-helpers.js';
@@ -29,7 +28,7 @@ if (usesFontIconSizingFallback) {
  *
  * @polymerMixin
  */
-export const IconFontSizeMixin = dedupingMixin((superclass) =>
+export const IconFontSizeMixin = (superclass) =>
   !usesFontIconSizingFallback
     ? superclass
     : class extends ResizeMixin(superclass) {
@@ -72,5 +71,4 @@ export const IconFontSizeMixin = dedupingMixin((superclass) =>
             this.style.setProperty('--_vaadin-font-icon-size', `${fontIconSize}px`);
           }
         }
-      },
-);
+      };
