@@ -109,12 +109,12 @@ declare class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ThemableMix
   containment: 'layout' | 'viewport';
 
   /**
-   * The threshold (in CSS length units) at which the layout switches to
-   * the "stack" mode, making detail area fully cover the master area.
+   * When true, the layout in the overlay mode is rendered as a "stack",
+   * making detail area fully cover the master area.
    *
    * @attr {string} stack-threshold
    */
-  stackThreshold: string | null | undefined;
+  stackOverlay: boolean;
 
   /**
    * When true, the layout does not use animated transitions for the detail area.

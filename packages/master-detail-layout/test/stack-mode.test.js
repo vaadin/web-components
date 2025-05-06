@@ -38,12 +38,12 @@ describe('stack mode', () => {
     });
 
     describe('horizontal orientation', () => {
-      it('should switch from overlay to the stack mode when the stack threshold is set', async () => {
+      it('should switch from overlay to the stack mode when the stackOverlay is set', async () => {
         // Use the threshold at which the overlay mode is on by default.
         await setViewport({ width: 350, height });
         await nextResize(layout);
 
-        layout.stackThreshold = '400px';
+        layout.stackOverlay = true;
 
         expect(layout.hasAttribute('overlay')).to.be.false;
         expect(layout.hasAttribute('stack')).to.be.true;
@@ -52,7 +52,7 @@ describe('stack mode', () => {
       });
 
       it('should clear the stack mode when the layout size is bigger than stack threshold', async () => {
-        layout.stackThreshold = '400px';
+        layout.stackOverlay = true;
         await nextRender();
 
         await setViewport({ width: 350, height });
@@ -64,21 +64,21 @@ describe('stack mode', () => {
         expect(layout.hasAttribute('stack')).to.be.false;
       });
 
-      it('should not switch to the stack mode when forceOverlay is set to true', async () => {
+      it('should switch to the stack mode when forceOverlay is set to true', async () => {
         layout.forceOverlay = true;
-        layout.stackThreshold = '500px';
+        layout.stackOverlay = true;
         await nextRender();
 
         await setViewport({ width: 450, height });
         await nextResize(layout);
 
-        expect(layout.hasAttribute('stack')).to.be.false;
-        expect(layout.hasAttribute('overlay')).to.be.true;
+        expect(layout.hasAttribute('stack')).to.be.true;
+        expect(layout.hasAttribute('overlay')).to.be.false;
       });
 
       it('should not apply min-width to the detail area in the stack mode', async () => {
         layout.detailMinSize = '500px';
-        layout.stackThreshold = '500px';
+        layout.stackOverlay = true;
         await nextRender();
 
         await setViewport({ width: 450, height });
@@ -90,7 +90,7 @@ describe('stack mode', () => {
 
       it('should not apply width to the detail area in the stack mode', async () => {
         layout.detailSize = '500px';
-        layout.stackThreshold = '500px';
+        layout.stackOverlay = true;
         await nextRender();
 
         await setViewport({ width: 450, height });
@@ -100,41 +100,43 @@ describe('stack mode', () => {
         expect(getComputedStyle(detail).width).to.equal('450px');
       });
 
-      it('should preserve the stack mode when adding and removing details', async () => {
-        layout.stackThreshold = '500px';
+      it('should update stack mode when adding and removing details', async () => {
+        layout.stackOverlay = true;
 
         // Start without details
         detailContent.remove();
         await nextRender();
 
         // Shrink viewport
-        await setViewport({ width: 450, height });
+        layout.detailMinSize = '300px';
+        await setViewport({ width: 500, height });
         await nextResize(layout);
 
-        expect(layout.hasAttribute('stack')).to.be.true;
+        expect(layout.hasAttribute('stack')).to.be.false;
 
         // Add details
         layout.appendChild(detailContent);
         await nextRender();
 
         expect(layout.hasAttribute('stack')).to.be.true;
+        expect(getComputedStyle(detail).position).to.equal('absolute');
 
         // Remove details
         detailContent.remove();
         await nextRender();
 
-        expect(layout.hasAttribute('stack')).to.be.true;
+        expect(layout.hasAttribute('stack')).to.be.false;
       });
 
       it('should focus detail content when adding details in the stack mode', async () => {
-        layout.stackThreshold = '500px';
+        layout.stackOverlay = true;
 
         // Start without details
         detailContent.remove();
         await nextRender();
 
         // Shrink viewport
-        await setViewport({ width: 450, height });
+        await setViewport({ width: 350, height });
         await nextResize(layout);
 
         // Add details
@@ -146,7 +148,7 @@ describe('stack mode', () => {
       });
 
       it('should not overflow in stack mode when masterSize is set', async () => {
-        layout.stackThreshold = '500px';
+        layout.stackOverlay = true;
         layout.masterSize = '500px';
         await nextResize(layout);
 
@@ -160,7 +162,7 @@ describe('stack mode', () => {
       });
 
       it('should not overflow in stack mode when masterMinSize is set', async () => {
-        layout.stackThreshold = '500px';
+        layout.stackOverlay = true;
         layout.masterMinSize = '500px';
         await nextResize(layout);
 
@@ -174,8 +176,8 @@ describe('stack mode', () => {
       });
 
       it('should not overflow in stack mode when detailSize is set', async () => {
+        layout.stackOverlay = true;
         layout.detailSize = '500px';
-        layout.stackThreshold = '500px';
         await nextRender();
 
         // Resize so that min size is bigger than layout size
@@ -188,8 +190,8 @@ describe('stack mode', () => {
       });
 
       it('should not overflow in stack mode when detailMinSize is set', async () => {
+        layout.stackOverlay = true;
         layout.detailMinSize = '500px';
-        layout.stackThreshold = '500px';
         await nextRender();
 
         // Resize so that min size is bigger than layout size
@@ -214,7 +216,7 @@ describe('stack mode', () => {
         await setViewport({ width: 500, height: 400 });
         await nextResize(layout);
 
-        layout.stackThreshold = '400px';
+        layout.stackOverlay = true;
 
         expect(layout.hasAttribute('overlay')).to.be.false;
         expect(layout.hasAttribute('stack')).to.be.true;
@@ -229,7 +231,7 @@ describe('stack mode', () => {
         await setViewport({ width: 500, height: 400 });
         await nextResize(layout);
 
-        layout.stackThreshold = '400px';
+        layout.stackOverlay = true;
 
         expect(layout.hasAttribute('overlay')).to.be.false;
         expect(layout.hasAttribute('stack')).to.be.true;
@@ -238,8 +240,8 @@ describe('stack mode', () => {
       });
 
       it('should not apply min-height to the detail area in the stack mode', async () => {
+        layout.stackOverlay = true;
         layout.detailMinSize = '500px';
-        layout.stackThreshold = '500px';
         await nextRender();
 
         await setViewport({ width, height: 450 });
@@ -250,8 +252,8 @@ describe('stack mode', () => {
       });
 
       it('should not apply height to the detail area in the stack mode', async () => {
+        layout.stackOverlay = true;
         layout.detailSize = '500px';
-        layout.stackThreshold = '500px';
         await nextRender();
 
         await setViewport({ width, height: 450 });
@@ -274,7 +276,7 @@ describe('stack mode', () => {
             slot="detail"
             master-min-size="300px"
             detail-min-size="200px"
-            stack-threshold="400px"
+            stack-overlay
             containment="viewport"
           >
             <div>Nested master</div>
