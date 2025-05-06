@@ -4,6 +4,5 @@
     "packages/*"
   ],
   "npmClient": "yarn",
-  "useWorkspaces": true,
   "version": "24.8.0-alpha15"
 }
