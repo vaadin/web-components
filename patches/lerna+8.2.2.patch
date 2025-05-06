@@ -1,0 +1,13 @@
+diff --git a/node_modules/lerna/dist/commands/version/command.js b/node_modules/lerna/dist/commands/version/command.js
+index b8a30b5..80e4579 100644
+--- a/node_modules/lerna/dist/commands/version/command.js
++++ b/node_modules/lerna/dist/commands/version/command.js
+@@ -6209,7 +6209,7 @@ var require_src = __commonJS({
+           forceGitTag,
+           overrideMessage
+         };
+-        this.savePrefix = this.options.exact ? "" : "^";
++        this.savePrefix = this.options.exact ? "" : "~";
+       }
+       async initialize() {
+         if (!this.project.isIndependent()) {
