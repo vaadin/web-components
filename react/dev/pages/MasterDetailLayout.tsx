@@ -107,7 +107,6 @@ export default function () {
   const [maxWidth, setMaxWidth] = useState(false);
   const [maxHeight, setMaxHeight] = useState(false);
   const [forceOverlay, setForceOverlay] = useState(false);
-  const [stack, setStack] = useState(false);
   const [detailContent, setDetailContent] = useState<React.ReactNode>(<DetailContent />);
   const [updateCount, setUpdateCount] = useState(0);
 
@@ -158,7 +157,6 @@ export default function () {
         <Checkbox label="Use max-width on the host" checked={maxWidth} onChange={() => setMaxWidth(!maxWidth)} />
         <Checkbox label="Use max-height on the host" checked={maxHeight} onChange={() => setMaxHeight(!maxHeight)} />
         <Checkbox label="Force overlay" checked={forceOverlay} onChange={() => setForceOverlay(!forceOverlay)} />
-        <Checkbox label="Set stack threshold" checked={stack} onChange={() => setStack(!stack)} />
         <button onClick={setSmallDetail}>Set small detail</button>
         <button onClick={setLargeDetail}>Set large detail</button>
         <button onClick={setEmptyDetail}>Set empty detail</button>
@@ -173,7 +171,6 @@ export default function () {
         containment={containmentViewport ? 'viewport' : 'layout'}
         orientation={vertical ? 'vertical' : 'horizontal'}
         forceOverlay={forceOverlay}
-        stackThreshold={stack ? '600px' : undefined}
       >
         <MasterDetailLayout.Master>
           <MasterContent />
