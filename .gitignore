@@ -35,3 +35,6 @@ packages/vaadin-lumo-styles/auto-complete.css
 
 # Generated release check
 scripts/check-releases.html
+
+# TypeScript output
+tsconfig.build.tsbuildinfo
