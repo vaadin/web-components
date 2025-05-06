@@ -51,7 +51,7 @@ describe('stack mode', () => {
         expect(getComputedStyle(detail).inset).to.equal('0px');
       });
 
-      it('should clear the stack mode when the layout size is bigger than stack threshold', async () => {
+      it('should clear the stack mode when there is enough space for both areas to fit', async () => {
         layout.stackOverlay = true;
         await nextRender();
 
@@ -211,7 +211,7 @@ describe('stack mode', () => {
         layout.parentElement.style.height = '100%';
       });
 
-      it('should switch from overlay to the stack mode when the stack threshold is set', async () => {
+      it('should switch from overlay to the stack mode when the stackOverlay is set', async () => {
         // Use the threshold at which the overlay mode is on by default.
         await setViewport({ width: 500, height: 400 });
         await nextResize(layout);

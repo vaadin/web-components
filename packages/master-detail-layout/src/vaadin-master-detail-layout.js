@@ -287,6 +287,9 @@ class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ElementMixin(Themab
        * there is enough space for master and detail to be shown next to
        * each other using the default (split) mode.
        *
+       * In order to enforce the stack mode, use this property together with
+       * `stackOverlay` property and set both to `true`.
+       *
        * @attr {boolean} force-overlay
        */
       forceOverlay: {
@@ -313,6 +316,9 @@ class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ElementMixin(Themab
        * When true, the layout in the overlay mode is rendered as a "stack",
        * making detail area fully cover the master area.
        *
+       * In order to enforce the stack mode, use this property together with
+       * `forceOverlay` property and set both to `true`.
+       *
        * @attr {string} stack-threshold
        */
       stackOverlay: {
@@ -334,7 +340,6 @@ class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ElementMixin(Themab
 
       /**
        * When true, the component uses the overlay mode. This property is read-only.
-       * In order to enforce the overlay mode, use `forceOverlay` property.
        * @protected
        */
       _overlay: {
@@ -346,8 +351,6 @@ class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ElementMixin(Themab
 
       /**
        * When true, the component uses the stack mode. This property is read-only.
-       * In order to enforce the stack mode, set both `forceOverlay` property and
-       * `stackOverlay` properties to `true`.
        * @protected
        */
       _stack: {
