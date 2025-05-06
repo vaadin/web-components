@@ -6,6 +6,10 @@ import chaiDom from 'chai-dom';
 import sinon from 'sinon';
 import { MasterDetailLayout, MasterDetailLayoutElement } from '../packages/react-components/src/MasterDetailLayout.js';
 
+window.Vaadin ||= {};
+window.Vaadin.featureFlags ||= {};
+window.Vaadin.featureFlags.masterDetailLayoutComponent = true;
+
 useChaiPlugin(chaiDom);
 useChaiPlugin(chaiAsPromised);
 

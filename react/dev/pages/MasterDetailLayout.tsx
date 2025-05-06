@@ -3,6 +3,10 @@ import { MasterDetailLayout } from '../../packages/react-components/src/MasterDe
 import { Checkbox } from '../../packages/react-components/src/Checkbox.js';
 import './master-detail-layout-styles.css';
 
+window.Vaadin ||= {};
+window.Vaadin.featureFlags ||= {};
+window.Vaadin.featureFlags.masterDetailLayoutComponent = true;
+
 function MasterContent() {
   const masterContentStyle = {
     height: '100%',
