@@ -207,10 +207,6 @@ class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ElementMixin(Themab
       :host([stack]) [part='detail'] {
         inset: 0;
       }
-
-      [part='master']::before {
-        background-position-y: var(--_stack-threshold);
-      }
     `;
   }
 
@@ -291,6 +287,9 @@ class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ElementMixin(Themab
        * there is enough space for master and detail to be shown next to
        * each other using the default (split) mode.
        *
+       * In order to enforce the stack mode, use this property together with
+       * `stackOverlay` property and set both to `true`.
+       *
        * @attr {boolean} force-overlay
        */
       forceOverlay: {
@@ -314,14 +313,18 @@ class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ElementMixin(Themab
       },
 
       /**
-       * The threshold (in CSS length units) at which the layout switches to
-       * the "stack" mode, making detail area fully cover the master area.
+       * When true, the layout in the overlay mode is rendered as a "stack",
+       * making detail area fully cover the master area.
+       *
+       * In order to enforce the stack mode, use this property together with
+       * `forceOverlay` property and set both to `true`.
        *
        * @attr {string} stack-threshold
        */
-      stackThreshold: {
-        type: String,
-        observer: '__stackThresholdChanged',
+      stackOverlay: {
+        type: Boolean,
+        value: false,
+        observer: '__stackOverlayChanged',
         sync: true,
       },
 
@@ -337,7 +340,6 @@ class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ElementMixin(Themab
 
       /**
        * When true, the component uses the overlay mode. This property is read-only.
-       * In order to enforce the overlay mode, use `forceOverlay` property.
        * @protected
        */
       _overlay: {
@@ -349,7 +351,6 @@ class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ElementMixin(Themab
 
       /**
        * When true, the component uses the stack mode. This property is read-only.
-       * In order to enforce the stack mode, use `stackThreshold` property.
        * @protected
        */
       _stack: {
@@ -463,14 +464,8 @@ class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ElementMixin(Themab
   }
 
   /** @private */
-  __stackThresholdChanged(threshold, oldThreshold) {
-    if (threshold || oldThreshold) {
-      if (threshold) {
-        this.$.master.style.setProperty('--_stack-threshold', threshold);
-      } else {
-        this.$.master.style.removeProperty('--_stack-threshold');
-      }
-
+  __stackOverlayChanged(stackOverlay, oldStackOverlay) {
+    if (stackOverlay || oldStackOverlay) {
       this.__detectLayoutMode();
     }
   }
@@ -487,27 +482,22 @@ class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ElementMixin(Themab
   }
 
   /** @private */
+  __setOverlayMode(value) {
+    if (this.stackOverlay) {
+      this._stack = value;
+    } else {
+      this._overlay = value;
+    }
+  }
+
+  /** @private */
   __detectLayoutMode() {
     this._overlay = false;
     this._stack = false;
 
     if (this.forceOverlay) {
-      this._overlay = true;
+      this.__setOverlayMode(true);
       return;
-    }
-
-    if (this.stackThreshold != null) {
-      // Set stack to true to disable masterMinSize and detailMinSize
-      // that would affect size measurements below when in split mode
-      this._stack = true;
-
-      const threshold = this.__getStackThresholdInPixels();
-      const size = this.orientation === 'vertical' ? this.offsetHeight : this.offsetWidth;
-      if (size > threshold) {
-        this._stack = false;
-      } else {
-        return;
-      }
     }
 
     if (!this._hasDetail) {
@@ -535,36 +525,26 @@ class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ElementMixin(Themab
 
     // If the combined minimum size of both the master and the detail content
     // exceeds the size of the layout, the layout changes to the overlay mode.
-    this._overlay = this.offsetWidth < masterWidth + detailWidth;
+    this.__setOverlayMode(this.offsetWidth < masterWidth + detailWidth);
 
     // Toggling the overlay resizes master content, which can cause document
     // scroll bar to appear or disappear, and trigger another resize of the
     // layout which can affect previous measurements and end up in horizontal
     // scroll. Check if that is the case and if so, preserve the overlay mode.
     if (this.offsetWidth < this.scrollWidth) {
-      this._overlay = true;
+      this.__setOverlayMode(true);
     }
   }
 
   /** @private */
   __detectVerticalMode() {
-    // Remove overlay attribute temporarily to detect if there is enough space
-    // for both areas so that layout could switch back to the split mode.
-    this._overlay = false;
-
     const masterHeight = this.$.master.clientHeight;
 
     // If the combined minimum size of both the master and the detail content
     // exceeds the available height, the layout changes to the overlay mode.
     if (this.offsetHeight < masterHeight + this.$.detail.clientHeight) {
-      this._overlay = true;
+      this.__setOverlayMode(true);
     }
-  }
-
-  /** @private */
-  __getStackThresholdInPixels() {
-    const { backgroundPositionY } = getComputedStyle(this.$.master, '::before');
-    return parseFloat(backgroundPositionY);
   }
 
   /**

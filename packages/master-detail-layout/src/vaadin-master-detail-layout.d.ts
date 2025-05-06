@@ -96,6 +96,9 @@ declare class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ThemableMix
    * there is enough space for master and detail to be shown next to
    * each other using the default (split) mode.
    *
+   * In order to enforce the stack mode, use this property together with
+   * `stackOverlay` property and set both to `true`.
+   *
    * @attr {boolean} force-overlay
    */
   forceOverlay: boolean;
@@ -109,12 +112,15 @@ declare class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ThemableMix
   containment: 'layout' | 'viewport';
 
   /**
-   * The threshold (in CSS length units) at which the layout switches to
-   * the "stack" mode, making detail area fully cover the master area.
+   * When true, the layout in the overlay mode is rendered as a "stack",
+   * making detail area fully cover the master area.
+   *
+   * In order to enforce the stack mode, use this property together with
+   * `forceOverlay` property and set both to `true`.
    *
    * @attr {string} stack-threshold
    */
-  stackThreshold: string | null | undefined;
+  stackOverlay: boolean;
 
   /**
    * When true, the layout does not use animated transitions for the detail area.
