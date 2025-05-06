@@ -3,11 +3,13 @@
  * Copyright (c) 2015 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { dashToCamelCase } from '@polymer/polymer/lib/utils/case-map.js';
-import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import { ValidateMixin } from '@vaadin/field-base/src/validate-mixin.js';
 import { ComboBoxDataProviderMixin } from './vaadin-combo-box-data-provider-mixin.js';
 import { ComboBoxMixin } from './vaadin-combo-box-mixin.js';
+
+function dashToCamelCase(dash) {
+  return dash.replace(/-[a-z]/gu, (m) => m[1].toUpperCase());
+}
 
 /**
  * @polymerMixin
@@ -93,7 +95,7 @@ export const ComboBoxLightMixin = (superClass) =>
       this._toggleElement = this.querySelector('.toggle-button');
 
       // Wait until the slotted input DOM is ready
-      afterNextRender(this, () => {
+      queueMicrotask(() => {
         this._setInputElement(this.querySelector('vaadin-text-field,.input'));
         this._revertInputValue();
       });
