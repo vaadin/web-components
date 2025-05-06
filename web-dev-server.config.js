@@ -4,7 +4,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 /** @return {import('@web/test-runner').TestRunnerPlugin} */
-function cssImportPlugin() {
+export function cssImportPlugin() {
   return {
     name: 'css-import',
     transformImport({ source }) {

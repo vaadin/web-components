@@ -5,16 +5,21 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Button</title>
-    <script type="module" src="./common.js"></script>
+    <!-- <script type="module" src="./common.js"></script> -->
 
     <script type="module">
-      import '@vaadin/button';
-      import '@vaadin/tooltip';
+      // import '@vaadin/button';
+      // import '@vaadin/tooltip';
+
+      import '@vaadin/vaadin-lumo-styles/base.css';
+      import '@vaadin/vaadin-lumo-styles/components/button.css';
+
+      import '@vaadin/button/src/vaadin-lit-button.js';
     </script>
   </head>
 
   <body>
-    <vaadin-button>
+    <vaadin-button theme="tertiary-inline">
       Edit
       <vaadin-tooltip slot="tooltip" text="Click to edit"></vaadin-tooltip>
     </vaadin-button>

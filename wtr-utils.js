@@ -8,6 +8,7 @@ import minimist from 'minimist';
 import { execSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
+import { cssImportPlugin } from './web-dev-server.config.js';
 
 dotenv.config();
 
@@ -306,6 +307,7 @@ const createVisualTestsConfig = (theme, browserVersion) => {
       }),
     ],
     plugins: [
+      cssImportPlugin(),
       esbuildPlugin({ ts: true }),
       visualRegressionPlugin({
         baseDir: 'packages',
