@@ -117,7 +117,7 @@ export const MessageListMixin = (superClass) =>
                 class="${ifDefined(item.className)}"
                 @focusin="${this._onMessageFocusIn}"
                 >${this.markdown
-                  ? html`<vaadin-markdown .markdown=${item.text}></vaadin-markdown>`
+                  ? html`<vaadin-markdown .content=${item.text}></vaadin-markdown>`
                   : item.text}<vaadin-avatar slot="avatar"></vaadin-avatar
               ></vaadin-message>
             `,
