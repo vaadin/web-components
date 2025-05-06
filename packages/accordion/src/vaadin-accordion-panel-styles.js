@@ -44,5 +44,8 @@ export const accordionPanel = css`
       transition-property: content-visibility, opacity;
     }
   }
+
+  :host([focus-ring]) {
+    --_focus-ring: 1;
   }
 `;

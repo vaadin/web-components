@@ -8,8 +8,20 @@ import { css } from 'lit';
 
 export const accordionHeading = css`
   :host {
+    background: var(--vaadin-accordion-heading-background, transparent);
+    background-origin: border-box;
+    border: var(--vaadin-accordion-heading-border, none);
+    border-radius: var(--vaadin-accordion-heading-border-radius, var(--_vaadin-radius-m));
+    box-sizing: border-box;
+    color: var(--vaadin-accordion-heading-text-color, var(--_vaadin-color-strong));
     display: block;
-    outline: none;
+    font-size: var(--vaadin-accordion-heading-font-size, inherit);
+    font-weight: var(--vaadin-accordion-heading-font-weight, 500);
+    gap: var(--vaadin-accordion-heading-gap, 0 var(--_vaadin-gap-container-inline));
+    height: var(--vaadin-accordion-heading-height, auto);
+    outline: calc(var(--vaadin-focus-ring-width) * var(--_focus-ring, 0)) solid var(--vaadin-focus-ring-color);
+    outline-offset: 1px;
+    padding: var(--vaadin-accordion-heading-padding, var(--_vaadin-padding-container));
     -webkit-user-select: none;
     user-select: none;
   }
@@ -19,25 +31,15 @@ export const accordionHeading = css`
   }
 
   button {
+    align-items: center;
     appearance: none;
-    background: var(--vaadin-accordion-heading-background, transparent);
-    background-origin: border-box;
-    border: var(--vaadin-accordion-heading-border, none);
-    border-radius: var(--vaadin-accordion-heading-border-radius, var(--_vaadin-radius-m));
-    color: var(--vaadin-accordion-heading-text-color, var(--_vaadin-color-strong));
+    background: transparent;
+    border: 0;
     display: flex;
     font: inherit;
-    font-size: var(--vaadin-accordion-heading-font-size, inherit);
-    font-weight: var(--vaadin-accordion-heading-font-weight, 500);
-    gap: var(--vaadin-accordion-heading-gap, 0 var(--_vaadin-gap-container-inline));
-    height: var(--vaadin-accordion-heading-height, auto);
-    padding: var(--vaadin-accordion-heading-padding, var(--_vaadin-padding-container));
-    width: 100%;
-  }
-
-  button:focus-visible {
-    outline: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
-    outline-offset: 1px;
+    gap: inherit;
+    outline: none;
+    padding: 0;
   }
 
   [part='toggle'] {
