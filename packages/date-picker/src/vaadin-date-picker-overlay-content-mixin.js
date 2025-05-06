@@ -4,7 +4,6 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { flush } from '@polymer/polymer/lib/utils/flush.js';
-import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import { timeOut } from '@vaadin/component-base/src/async.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { addListener, setTouchAction } from '@vaadin/component-base/src/gestures.js';
@@ -936,10 +935,12 @@ export const DatePickerOverlayContentMixin = (superClass) =>
       // Wait for `vaadin-month-calendar` elements to be rendered
       if (!this.calendars.length) {
         await new Promise((resolve) => {
-          afterNextRender(this, () => {
-            // Force dom-repeat elements to render
-            flush();
-            resolve();
+          requestAnimationFrame(() => {
+            setTimeout(() => {
+              // Force dom-repeat elements to render
+              flush();
+              resolve();
+            });
           });
         });
       }
