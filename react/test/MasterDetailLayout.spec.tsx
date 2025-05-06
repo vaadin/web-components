@@ -308,4 +308,46 @@ describe('MasterDetailLayout', () => {
     expect(finishTransitionSpy.calledOnce).to.be.true;
     expect(startTransitionSpy.calledBefore(finishTransitionSpy)).to.be.true;
   });
+
+  describe('Child validation', () => {
+    it('should throw an error for invalid child component type', () => {
+      const renderWithInvalidChild = () => {
+        render(
+          <MasterDetailLayout>
+            <div>Unexpected div</div>
+            <MasterDetailLayout.Master>Master</MasterDetailLayout.Master>
+          </MasterDetailLayout>,
+        );
+      };
+      expect(renderWithInvalidChild).to.throw(
+        'Invalid child in MasterDetailLayout. Only <MasterDetailLayout.Master> and <MasterDetailLayout.Detail> components are allowed. Check the component docs for proper usage.',
+      );
+
+      const CustomComponent = () => <div>Custom</div>;
+      const renderWithInvalidCustomComponent = () => {
+        render(
+          <MasterDetailLayout>
+            <CustomComponent />
+            <MasterDetailLayout.Master>Master</MasterDetailLayout.Master>
+          </MasterDetailLayout>,
+        );
+      };
+      expect(renderWithInvalidCustomComponent).to.throw(
+        'Invalid child in MasterDetailLayout. Only <MasterDetailLayout.Master> and <MasterDetailLayout.Detail> components are allowed. Check the component docs for proper usage.',
+      );
+    });
+
+    it('should not throw an error when using null, undefined, or text nodes', () => {
+      const renderWithNull = () => {
+        render(
+          <MasterDetailLayout>
+            {null}
+            {undefined}
+            Just a text node
+          </MasterDetailLayout>,
+        );
+      };
+      expect(renderWithNull).to.not.throw();
+    });
+  });
 });

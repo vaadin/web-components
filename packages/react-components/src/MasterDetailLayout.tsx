@@ -26,7 +26,7 @@ function Master({ children }: MasterProps) {
  * @param nextChildren Current children
  * @returns True if the non-text children are meaningfully different, false otherwise
  */
-export function areChildrenDifferent(prevChildren: React.ReactNode, nextChildren: React.ReactNode): boolean {
+function areChildrenDifferent(prevChildren: React.ReactNode, nextChildren: React.ReactNode): boolean {
   // Convert to arrays and filter out text nodes
   const prevArray = React.Children.toArray(prevChildren).filter((child) => React.isValidElement(child));
   const nextArray = React.Children.toArray(nextChildren).filter((child) => React.isValidElement(child));
@@ -127,12 +127,54 @@ function Detail({ children }: DetailProps) {
   );
 }
 
-const MasterDetailLayout = _MasterDetailLayout as React.ComponentType<
-  React.ComponentProps<typeof _MasterDetailLayout>
-> & {
+function validateChildren(children: React.ReactNode) {
+  React.Children.forEach(children, (child) => {
+    // Ignore non-React elements
+    // We especially want to ignore text nodes to allow for whitespace resulting from formatting
+    if (React.isValidElement(child) && child.type !== Master && child.type !== Detail) {
+      throw new Error(
+        'Invalid child in MasterDetailLayout. Only <MasterDetailLayout.Master> and <MasterDetailLayout.Detail> components are allowed. Check the component docs for proper usage.',
+      );
+    }
+  });
+}
+
+const MasterDetailLayoutWithValidation: React.FC<React.ComponentProps<typeof _MasterDetailLayout>> = (props) => {
+  validateChildren(props.children);
+
+  return <_MasterDetailLayout {...props} />;
+};
+
+/**
+ * `MasterDetailLayout` is a React component for building UIs with a master
+ * (or primary) area and a detail (or secondary) area that is displayed next to, or
+ * overlaid on top of, the master area, depending on configuration and viewport size.
+ *
+ * Content for each area should be wrapped into to the respective
+ * `MasterDetailLayout.Master` and `MasterDetailLayout.Detail` wrapper components.
+ * Using any other component as a child will throw an error. To ensure that view
+ * transitions are run properly, details content should be rendered conditionally
+ * into the `MasterDetailLayout.Detail` component.
+ *
+ * @example
+ * ```tsx
+ * const selectedProduct = useSignal<Product | null>(null);
+ *
+ * <MasterDetailLayout>
+ *   <MasterDetailLayout.Master>
+ *     <ProductList onSelect={(product) => { selectedProduct.value = product }} />
+ *   </MasterDetailLayout.Master>
+ *   <MasterDetailLayout.Detail>
+ *     { selectedProduct.value && <ProductDetail product={selectedProduct.value} /> }
+ *   </MasterDetailLayout.Detail>
+ * </MasterDetailLayout>
+ * ```
+ */
+const MasterDetailLayout = MasterDetailLayoutWithValidation as typeof MasterDetailLayoutWithValidation & {
   Master: React.FC<MasterProps>;
   Detail: React.FC<DetailProps>;
 };
+
 MasterDetailLayout.Master = Master;
 MasterDetailLayout.Detail = Detail;
 
