@@ -1,7 +1,9 @@
 #!/usr/bin/env node
-const spawn = require('cross-spawn');
-const replace = require('replace-in-file');
-const oldVersion = require('../lerna.json').version;
+import { spawn } from 'cross-spawn';
+import replace from 'replace-in-file';
+import lerna from '../lerna.json' with { type: 'json' };
+
+const { version: oldVersion } = lerna;
 
 /**
  * Runs the command without opening a new shell.

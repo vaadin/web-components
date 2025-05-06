@@ -1,7 +1,7 @@
 /* eslint-env node */
-const fs = require('fs');
-const { esbuildPlugin } = require('@web/dev-server-esbuild');
-const path = require('path');
+import { esbuildPlugin } from '@web/dev-server-esbuild';
+import fs from 'node:fs';
+import path from 'node:path';
 
 /** @return {import('@web/test-runner').TestRunnerPlugin} */
 function generatedLitTestsPlugin() {
@@ -43,7 +43,7 @@ const preventFouc = `
   </script>
 `;
 
-module.exports = {
+export default {
   plugins: [
     {
       name: 'dev-page-listing',

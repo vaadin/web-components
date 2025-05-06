@@ -1,5 +1,7 @@
-require('dotenv').config();
-const fs = require('fs');
+import dotenv from 'dotenv';
+import fs from 'node:fs';
+
+dotenv.config();
 
 const REPO_OWNER = 'vaadin';
 const REPO_NAME = 'web-components';

@@ -1,14 +1,14 @@
-const fs = require('fs');
-const glob = require('glob');
+import { globSync } from 'glob';
+import fs from 'node:fs';
 
 const packages = fs.readdirSync('packages');
 
 packages
   .filter((pkg) => {
-    return glob.sync(`packages/${pkg}/vaadin-lit-*`).length > 0;
+    return globSync(`packages/${pkg}/vaadin-lit-*`).length > 0;
   })
   .flatMap((pkg) => {
-    return glob.sync(`packages/${pkg}/test/*.test.{js,ts}`);
+    return globSync(`packages/${pkg}/test/*.test.{js,ts}`);
   })
   .filter((testPath) => {
     return !/(-polymer|-lit)(\.generated)?\.test/u.test(testPath);
