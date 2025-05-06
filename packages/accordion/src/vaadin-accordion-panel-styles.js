@@ -19,22 +19,30 @@ export const accordionPanel = css`
   }
 
   :host(:not([opened])) [part='content'] {
-    display: none;
-    height: 0;
+    content-visibility: hidden;
     opacity: 0;
   }
 
   @media (prefers-reduced-motion: no-preference) {
-    [part='content'] {
-      interpolate-size: allow-keywords;
-      transition-behavior: allow-discrete;
+    :host {
+      display: grid;
+      transition-property: grid-template-rows;
       transition-duration: 150ms;
-      transition-property: height, opacity, display;
-
+      grid-template-rows: min-content 0fr;
       @starting-style {
-        height: 0;
-        opacity: 0;
+        grid-template-rows: min-content auto;
       }
     }
+
+    :host([opened]) {
+      grid-template-rows: min-content 1fr;
+    }
+
+    [part='content'] {
+      transition-behavior: allow-discrete;
+      transition-duration: inherit;
+      transition-property: content-visibility, opacity;
+    }
+  }
   }
 `;

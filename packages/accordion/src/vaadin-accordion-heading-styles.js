@@ -48,6 +48,13 @@ export const accordionHeading = css`
     [part='toggle'] {
       transition-property: rotate;
       transition-duration: 150ms;
+      animation: delay-initial-transition 1ms;
+    }
+
+    @keyframes delay-initial-transition {
+      0% {
+        rotate: 0deg;
+      }
     }
   }
 
