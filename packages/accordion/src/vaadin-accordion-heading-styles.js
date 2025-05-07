@@ -22,6 +22,7 @@ export const accordionHeading = css`
     outline: calc(var(--vaadin-focus-ring-width) * var(--_focus-ring, 0)) solid var(--vaadin-focus-ring-color);
     outline-offset: 1px;
     padding: var(--vaadin-accordion-heading-padding, var(--_vaadin-padding-container));
+    -webkit-tap-highlight-color: transparent;
     -webkit-user-select: none;
     user-select: none;
   }
@@ -41,6 +42,7 @@ export const accordionHeading = css`
     gap: inherit;
     outline: none;
     padding: 0;
+    touch-action: manipulation;
   }
 
   [part='toggle'] {
