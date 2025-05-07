@@ -31,7 +31,7 @@ describe('vaadin-markdown', () => {
     expect(element.innerHTML.trim()).to.equal('');
   });
 
-  it('should render markdown content when markdown property is set', async () => {
+  it('should render markdown when content property is set', async () => {
     element.content = '# Heading';
     await nextUpdate(element);
 
