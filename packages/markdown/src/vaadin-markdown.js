@@ -8,6 +8,7 @@ import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { renderMarkdownToElement } from './markdown-helpers.js';
 
 /**
  * `<vaadin-markdown>` is a web component for rendering Markdown content.
@@ -43,9 +44,35 @@ class Markdown extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
     `;
   }
 
+  static get properties() {
+    return {
+      /**
+       * The Markdown content.
+       *
+       * @type {string}
+       */
+      content: {
+        type: String,
+        sync: true,
+      },
+    };
+  }
+
   /** @protected */
   render() {
     return html`<slot></slot>`;
+  }
+
+  /**
+   * @protected
+   * @override
+   */
+  updated(props) {
+    super.updated(props);
+
+    if (props.has('content')) {
+      renderMarkdownToElement(this, this.content);
+    }
   }
 }
 

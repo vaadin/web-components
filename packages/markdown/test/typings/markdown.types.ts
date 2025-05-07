@@ -6,6 +6,9 @@ const assertType = <TExpected>(value: TExpected) => value;
 
 const markdown = document.createElement('vaadin-markdown');
 
+// Properties
+assertType<string | null | undefined>(markdown.content);
+
 // Mixins
 assertType<ElementMixinClass>(markdown);
 assertType<ThemableMixinClass>(markdown);
