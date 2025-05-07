@@ -3,7 +3,7 @@
  * Copyright (c) 2021 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { dedupingMixin } from '@polymer/polymer/lib/utils/mixin.js';
+import { dedupeMixin } from '@open-wc/dedupe-mixin';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { LabelController } from './label-controller.js';
 
@@ -13,7 +13,7 @@ import { LabelController } from './label-controller.js';
  * @polymerMixin
  * @mixes ControllerMixin
  */
-export const LabelMixin = dedupingMixin(
+export const LabelMixin = dedupeMixin(
   (superclass) =>
     class LabelMixinClass extends ControllerMixin(superclass) {
       static get properties() {
