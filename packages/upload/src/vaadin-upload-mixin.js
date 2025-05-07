@@ -839,7 +839,7 @@ export const UploadMixin = (superClass) =>
 
     /** @private */
     _renderFileList() {
-      if (this._fileList) {
+      if (this._fileList && typeof this._fileList.requestContentUpdate === 'function') {
         this._fileList.requestContentUpdate();
       }
     }
