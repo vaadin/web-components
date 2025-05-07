@@ -20,7 +20,8 @@ const avatar = '<vaadin-avatar slot="header-prefix" abbr="A"></vaadin-avatar>';
 const button = '<vaadin-button slot="footer">Button</vaadin-button>';
 const image = '<img slot="media" width="200" src="/packages/card/test/visual/card-image.avif">';
 
-const complexCard = `<vaadin-card>
+const complexCard = `
+<vaadin-card>
   ${image}
   ${title}
   ${subTitle}
