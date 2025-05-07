@@ -8,6 +8,14 @@ import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
 import { SlotStylesMixin } from '@vaadin/component-base/src/slot-styles-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
+export interface MasterDetailLayoutCustomEventMap {
+  'backdrop-click': Event;
+
+  'detail-escape-press': Event;
+}
+
+export interface MasterDetailLayoutEventMap extends HTMLElementEventMap, MasterDetailLayoutCustomEventMap {}
+
 /**
  * `<vaadin-master-detail-layout>` is a web component for building UIs with a master
  * (or primary) area and a detail (or secondary) area that is displayed next to, or
@@ -41,6 +49,9 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * `stack`        | Set when the layout is using the stack mode.
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
+ *
+ * @fires {CustomEvent} backdrop-click - Fired when the user clicks the backdrop in the overlay mode.
+ * @fires {CustomEvent} detail-escape-press - Fired when the user presses Escape in the detail area.
  */
 declare class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ThemableMixin(ElementMixin(HTMLElement)))) {
   /**
@@ -128,6 +139,18 @@ declare class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ThemableMix
    * @attr {boolean} no-animation
    */
   noAnimation: boolean;
+
+  addEventListener<K extends keyof MasterDetailLayoutEventMap>(
+    type: K,
+    listener: (this: MasterDetailLayout, ev: MasterDetailLayoutEventMap[K]) => void,
+    options?: AddEventListenerOptions | boolean,
+  ): void;
+
+  removeEventListener<K extends keyof MasterDetailLayoutEventMap>(
+    type: K,
+    listener: (this: MasterDetailLayout, ev: MasterDetailLayoutEventMap[K]) => void,
+    options?: EventListenerOptions | boolean,
+  ): void;
 }
 
 declare global {
