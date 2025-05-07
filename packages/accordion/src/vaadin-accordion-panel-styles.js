@@ -20,7 +20,21 @@ export const accordionPanel = css`
 
   :host(:not([opened])) [part='content'] {
     content-visibility: hidden;
+    contain-intrinsic-height: auto none;
     opacity: 0;
+  }
+
+  /*
+  Safari doesn't transition content-visibility gracefully,
+  even with 'transition-behavior: allow-discrete'.
+  Let Safari transition display instead.
+  Using 'display: none' breaks the transition in Firefox.
+  */
+  @supports (font: -apple-system-body) {
+    :host(:not([opened])) [part='content'] {
+      content-visibility: initial;
+      display: none;
+    }
   }
 
   @media (prefers-reduced-motion: no-preference) {
@@ -30,7 +44,8 @@ export const accordionPanel = css`
       transition-duration: 150ms;
       grid-template-rows: min-content 0fr;
       @starting-style {
-        grid-template-rows: min-content auto;
+        /* Needed for Safari, which otherwise transitions the initial rendered state */
+        grid-template-rows: min-content 1fr;
       }
     }
 
@@ -41,7 +56,7 @@ export const accordionPanel = css`
     [part='content'] {
       transition-behavior: allow-discrete;
       transition-duration: inherit;
-      transition-property: content-visibility, opacity;
+      transition-property: display, content-visibility, opacity;
     }
   }
 
