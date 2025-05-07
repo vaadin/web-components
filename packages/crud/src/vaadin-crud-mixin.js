@@ -8,7 +8,6 @@
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
-import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import { FocusRestorationController } from '@vaadin/a11y-base/src/focus-restoration-controller.js';
 import { I18nMixin } from '@vaadin/component-base/src/i18n-mixin.js';
 import { MediaQueryController } from '@vaadin/component-base/src/media-query-controller.js';
@@ -451,7 +450,7 @@ export const CrudMixin = (superClass) =>
         return;
       }
 
-      afterNextRender(grid, () => {
+      queueMicrotask(() => {
         Array.from(grid.querySelectorAll('vaadin-crud-edit-column')).forEach((column) => {
           column.ariaLabel = effectiveI18n.editLabel;
         });
