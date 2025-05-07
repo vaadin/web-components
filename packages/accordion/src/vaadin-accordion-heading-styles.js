@@ -35,6 +35,7 @@ export const accordionHeading = css`
     appearance: none;
     background: transparent;
     border: 0;
+    color: inherit;
     display: flex;
     font: inherit;
     gap: inherit;
@@ -68,6 +69,14 @@ export const accordionHeading = css`
     mask-image: var(--_vaadin-icon-chevron-down);
     width: var(--vaadin-icon-size, 1lh);
     rotate: -90deg;
+  }
+
+  :host([disabled]) {
+    color: var(--_vaadin-color-subtle);
+  }
+
+  :host([disabled]) [part='toggle'] {
+    opacity: 0.5;
   }
 
   :host([dir='rtl']) [part='toggle']::before {
