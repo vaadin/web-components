@@ -46,23 +46,8 @@ class ComboBox extends ComboBoxDataProviderMixin(
           pointer-events: auto;
         }
 
-        [part='toggle-button'] {
-          color: var(--_vaadin-color-subtle);
-        }
-
         [part='toggle-button']::before {
-          background: currentColor;
-          content: '';
-          display: block;
-          height: var(--vaadin-icon-size, 1lh);
           mask-image: var(--_vaadin-icon-chevron-down);
-          width: var(--vaadin-icon-size, 1lh);
-        }
-
-        @media (forced-colors: active) {
-          [part='toggle-button']::before {
-            background: CanvasText;
-          }
         }
       `,
     ];

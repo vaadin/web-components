@@ -6,27 +6,38 @@
 import '@vaadin/component-base/src/style-props.js';
 import { css } from 'lit';
 
-export const clearButton = css`
-  [part='clear-button'] {
-    display: none;
+export const button = css`
+  [part*='button'] {
     color: var(--_vaadin-color-subtle);
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-user-select: none;
+    user-select: none;
   }
 
-  [part='clear-button']::before {
+  /* Icon */
+  [part$='button']::before {
     background: currentColor;
     content: '';
     display: block;
     height: var(--vaadin-icon-size, 1lh);
-    mask-image: var(--_vaadin-icon-cross);
     width: var(--vaadin-icon-size, 1lh);
   }
 
-  :host([clear-button-visible][has-value]:not([disabled]):not([readonly])) [part='clear-button'] {
-    display: block;
+  /* [part='clear-button'] {
+    display: none;
+  } */
+
+  :host(:is(:not([clear-button-visible][has-value]), [disabled], [readonly])) [part='clear-button'] {
+    display: none;
+  }
+
+  [part='clear-button']::before {
+    mask-image: var(--_vaadin-icon-cross);
   }
 
   @media (forced-colors: active) {
-    [part='clear-button']::before {
+    [part$='button']::before {
       background: CanvasText;
     }
   }

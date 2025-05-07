@@ -10,21 +10,6 @@ export const numberFieldStyles = css`
     text-align: center;
   }
 
-  [part='decrease-button'],
-  [part='increase-button'] {
-    color: var(--_vaadin-color-subtle);
-    -webkit-user-select: none;
-    user-select: none;
-  }
-
-  :is([part='decrease-button'], [part='increase-button'])::before {
-    background: currentColor;
-    content: '';
-    display: block;
-    height: var(--vaadin-icon-size, 1lh);
-    width: var(--vaadin-icon-size, 1lh);
-  }
-
   [part='decrease-button']::before {
     mask-image: var(--_vaadin-icon-minus);
   }
@@ -39,11 +24,5 @@ export const numberFieldStyles = css`
 
   :host([readonly]) [part$='button'] {
     pointer-events: none;
-  }
-
-  @media (forced-colors: active) {
-    :is([part='decrease-button'], [part='increase-button'])::before {
-      background: CanvasText;
-    }
   }
 `;
