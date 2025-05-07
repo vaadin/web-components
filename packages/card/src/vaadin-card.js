@@ -52,6 +52,7 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  */
 class Card extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
   static get is() {
+    // TRIGGER VISUAL TESTS
     return 'vaadin-card';
   }
 

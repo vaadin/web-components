@@ -214,6 +214,8 @@ const getTestRunnerHtml = (theme) => (testFramework) =>
 `;
 
 const getScreenshotFileName = ({ name, testFile }, type, diff) => {
+  testFile = testFile.replace(/\\/gu, '/'); // Normalize path for Windows
+
   let folder;
   if (testFile.includes('-styles')) {
     const match = testFile.match(/\/packages\/(vaadin-(lumo|material)-styles\/test\/visual\/)(.+)/u);
