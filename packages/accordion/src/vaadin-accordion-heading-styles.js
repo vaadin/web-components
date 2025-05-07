@@ -81,4 +81,10 @@ export const accordionHeading = css`
   :host([dir='rtl'][opened]) [part='toggle'] {
     rotate: -90deg;
   }
+
+  @media (forced-colors: active) {
+    [part='toggle']::before {
+      background: CanvasText;
+    }
+  }
 `;
