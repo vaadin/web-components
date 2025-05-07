@@ -109,14 +109,14 @@ export function setMaximumColumnWidth(dashboard: HTMLElement, width?: number): v
  * Sets the column span of the element
  */
 export function setColspan(element: HTMLElement, colspan?: number): void {
-  element.style.setProperty('--vaadin-dashboard-item-colspan', colspan !== undefined ? `${colspan}` : null);
+  element.style.setProperty('--vaadin-dashboard-widget-colspan', colspan !== undefined ? `${colspan}` : null);
 }
 
 /**
  * Sets the row span of the element
  */
 export function setRowspan(element: HTMLElement, rowspan?: number): void {
-  element.style.setProperty('--vaadin-dashboard-item-rowspan', rowspan !== undefined ? `${rowspan}` : null);
+  element.style.setProperty('--vaadin-dashboard-widget-rowspan', rowspan !== undefined ? `${rowspan}` : null);
 }
 
 /**

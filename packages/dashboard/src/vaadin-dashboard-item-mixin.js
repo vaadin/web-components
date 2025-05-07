@@ -215,8 +215,8 @@ export const DashboardItemMixin = (superClass) =>
       const effectiveColCount = style.getPropertyValue('--_vaadin-dashboard-col-count');
       const maxColCount = style.getPropertyValue('--_vaadin-dashboard-col-max-count');
       const colCount = Math.min(effectiveColCount, maxColCount);
-      const colspan = style.getPropertyValue('--vaadin-dashboard-item-colspan') || 1;
-      const rowspan = style.getPropertyValue('--vaadin-dashboard-item-rowspan') || 1;
+      const colspan = style.getPropertyValue('--vaadin-dashboard-widget-colspan') || 1;
+      const rowspan = style.getPropertyValue('--vaadin-dashboard-widget-rowspan') || 1;
       const canShrinkWidth = colspan > 1;
       const canShrinkHeight = rowspan > 1;
       const canGrowWidth = colspan < colCount;
