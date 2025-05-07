@@ -19,3 +19,12 @@ assertType<'horizontal' | 'vertical'>(layout.orientation);
 assertType<boolean>(layout.forceOverlay);
 assertType<boolean>(layout.stackOverlay);
 assertType<boolean>(layout.noAnimation);
+
+// Events
+layout.addEventListener('backdrop-click', (event) => {
+  assertType<Event>(event);
+});
+
+layout.addEventListener('detail-escape-press', (event) => {
+  assertType<Event>(event);
+});

@@ -47,6 +47,9 @@ import { transitionStyles } from './vaadin-master-detail-layout-transition-style
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
+ * @fires {CustomEvent} backdrop-click - Fired when the user clicks the backdrop in the overlay mode.
+ * @fires {CustomEvent} detail-escape-press - Fired when the user presses Escape in the detail area.
+ *
  * @customElement
  * @extends HTMLElement
  * @mixes ThemableMixin
@@ -385,7 +388,7 @@ class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ElementMixin(Themab
   /** @protected */
   render() {
     return html`
-      <div part="backdrop"></div>
+      <div part="backdrop" @click="${this.__onBackdropClick}"></div>
       <div id="master" part="master" ?inert="${this._hasDetail && this._overlay && this.containment === 'layout'}">
         <slot></slot>
       </div>
@@ -394,6 +397,7 @@ class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ElementMixin(Themab
         part="detail"
         role="${this._overlay || this._stack ? 'dialog' : nothing}"
         aria-modal="${this._overlay && this.containment === 'viewport' ? 'true' : nothing}"
+        @keydown="${this.__onDetailKeydown}"
       >
         <slot name="detail" @slotchange="${this.__onDetailSlotChange}"></slot>
       </div>
@@ -414,6 +418,26 @@ class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ElementMixin(Themab
       if (focusables.length) {
         focusables[0].focus();
       }
+    }
+  }
+
+  /** @private */
+  __onBackdropClick() {
+    this.dispatchEvent(
+      new CustomEvent('backdrop-click', {
+        bubbles: true,
+      }),
+    );
+  }
+
+  /** @private */
+  __onDetailKeydown(event) {
+    if (event.key === 'Escape') {
+      this.dispatchEvent(
+        new CustomEvent('detail-escape-press', {
+          bubbles: true,
+        }),
+      );
     }
   }
 
@@ -655,6 +679,16 @@ class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ElementMixin(Themab
     this.__transition = null;
     this.__resolveUpdateCallback = null;
   }
+
+  /**
+   * @event backdrop-click
+   * Fired when the user clicks the backdrop in the overlay mode.
+   */
+
+  /**
+   * @event detail-escape-press
+   * Fired when the user presses Escape in the detail area.
+   */
 }
 
 defineCustomElement(MasterDetailLayout);
