@@ -3,7 +3,7 @@
  * Copyright (c) 2021 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { dedupingMixin } from '@polymer/polymer/lib/utils/mixin.js';
+import { dedupeMixin } from '@open-wc/dedupe-mixin';
 
 const observer = new ResizeObserver((entries) => {
   setTimeout(() => {
@@ -29,7 +29,7 @@ const observer = new ResizeObserver((entries) => {
  *
  * @polymerMixin
  */
-export const ResizeMixin = dedupingMixin(
+export const ResizeMixin = dedupeMixin(
   (superclass) =>
     class ResizeMixinClass extends superclass {
       /**

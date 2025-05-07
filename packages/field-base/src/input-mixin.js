@@ -3,7 +3,7 @@
  * Copyright (c) 2021 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { dedupingMixin } from '@polymer/polymer/lib/utils/mixin.js';
+import { dedupeMixin } from '@open-wc/dedupe-mixin';
 
 /**
  * A mixin to store the reference to an input element
@@ -11,7 +11,7 @@ import { dedupingMixin } from '@polymer/polymer/lib/utils/mixin.js';
  *
  * @polymerMixin
  */
-export const InputMixin = dedupingMixin(
+export const InputMixin = dedupeMixin(
   (superclass) =>
     class InputMixinClass extends superclass {
       static get properties() {

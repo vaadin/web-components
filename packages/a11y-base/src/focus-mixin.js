@@ -3,7 +3,7 @@
  * Copyright (c) 2021 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { dedupingMixin } from '@polymer/polymer/lib/utils/mixin.js';
+import { dedupeMixin } from '@open-wc/dedupe-mixin';
 import { isKeyboardActive } from './focus-utils.js';
 
 /**
@@ -11,7 +11,7 @@ import { isKeyboardActive } from './focus-utils.js';
  *
  * @polymerMixin
  */
-export const FocusMixin = dedupingMixin(
+export const FocusMixin = dedupeMixin(
   (superclass) =>
     class FocusMixinClass extends superclass {
       /**
