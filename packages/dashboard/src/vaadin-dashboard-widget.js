@@ -77,8 +77,6 @@ import { DashboardSection } from './vaadin-dashboard-section.js';
  * `--vaadin-dashboard-widget-border-width`    | widget border width
  * `--vaadin-dashboard-widget-border-color`    | widget border color
  * `--vaadin-dashboard-widget-shadow`          | widget shadow (non edit mode)
- * `--vaadin-dashboard-widget-editable-shadow` | widget edit mode shadow
- * `--vaadin-dashboard-widget-selected-shadow` | selected widget shadow
  * `--vaadin-dashboard-widget-padding`         | padding around widget content
  * `--vaadin-dashboard-widget-title-wrap`      | widget title wrap
  *

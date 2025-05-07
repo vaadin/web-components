@@ -17,15 +17,9 @@ const dashboardWidgetAndSection = css`
     --_vaadin-dashboard-widget-border-width: var(--vaadin-dashboard-widget-border-width, 1px);
     --_vaadin-dashboard-widget-border-color: var(--vaadin-dashboard-widget-border-color, var(--lumo-contrast-20pct));
     --_vaadin-dashboard-widget-shadow: var(--vaadin-dashboard-widget-shadow, 0 0 0 0 transparent);
-    --_vaadin-dashboard-widget-editable-shadow: var(
-      --vaadin-dashboard-widget-editable-shadow,
-      var(--lumo-box-shadow-s)
-    );
-    --_vaadin-dashboard-widget-selected-shadow: var(
-      --vaadin-dashboard-widget-selected-shadow,
-      0 2px 4px -1px var(--lumo-primary-color-10pct),
-      0 3px 12px -1px var(--lumo-primary-color-50pct)
-    );
+    --_vaadin-dashboard-widget-editable-shadow: var(--lumo-box-shadow-s);
+    --_vaadin-dashboard-widget-selected-shadow: 0 2px 4px -1px var(--lumo-primary-color-10pct),
+      0 3px 12px -1px var(--lumo-primary-color-50pct);
     --_vaadin-dashboard-drop-target-background-color: var(
       --vaadin-dashboard-drop-target-background-color,
       var(--lumo-primary-color-10pct)
@@ -162,7 +156,7 @@ const dashboardWidget = css`
   /* Widget states */
 
   :host([editable]) {
-    --_vaadin-dashboard-widget-shadow: var(--_vaadin-dashboard-widget-editable-shadow);
+    --vaadin-dashboard-widget-shadow: var(--_vaadin-dashboard-widget-editable-shadow);
     --_vaadin-dashboard-widget-border-color: var(--lumo-contrast-20pct);
     --_vaadin-dashboard-widget-border-width: 1px;
   }
@@ -173,7 +167,7 @@ const dashboardWidget = css`
   }
 
   :host([selected]) {
-    --_vaadin-dashboard-widget-shadow: var(--_vaadin-dashboard-widget-selected-shadow);
+    --vaadin-dashboard-widget-shadow: var(--_vaadin-dashboard-widget-selected-shadow);
     background: var(--lumo-primary-color-10pct);
   }
 
