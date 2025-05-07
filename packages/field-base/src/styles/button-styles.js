@@ -24,10 +24,6 @@ export const button = css`
     width: var(--vaadin-icon-size, 1lh);
   }
 
-  /* [part='clear-button'] {
-    display: none;
-  } */
-
   :host(:is(:not([clear-button-visible][has-value]), [disabled], [readonly])) [part='clear-button'] {
     display: none;
   }
