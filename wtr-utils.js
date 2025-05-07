@@ -1,6 +1,7 @@
 /* eslint-env node */
 import { esbuildPlugin } from '@web/dev-server-esbuild';
-import { createSauceLabsLauncher } from '@web/test-runner-saucelabs';
+import { chromeLauncher } from '@web/test-runner';
+// import { createSauceLabsLauncher } from '@web/test-runner-saucelabs';
 import { visualRegressionPlugin } from '@web/test-runner-visual-regression/plugin';
 import dotenv from 'dotenv';
 import { globSync } from 'glob';
@@ -271,23 +272,23 @@ const createUnitTestsConfig = (config) => {
   };
 };
 
-const createVisualTestsConfig = (theme, browserVersion) => {
+const createVisualTestsConfig = (theme /*, browserVersion*/) => {
   const visualPackages = getAllVisualPackages();
   const packages = getTestPackages(visualPackages);
   const groups = getVisualTestGroups(packages, theme);
 
-  const sauceLabsLauncher = createSauceLabsLauncher(
-    {
-      user: process.env.SAUCE_USERNAME,
-      key: process.env.SAUCE_ACCESS_KEY,
-    },
-    {
-      name: `${theme[0].toUpperCase()}${theme.slice(1)} visual tests`,
-      build: `${process.env.GITHUB_REF || 'local'} build ${process.env.GITHUB_RUN_NUMBER || ''}`,
-      recordScreenshots: false,
-      recordVideo: false,
-    },
-  );
+  // const sauceLabsLauncher = createSauceLabsLauncher(
+  //   {
+  //     user: process.env.SAUCE_USERNAME,
+  //     key: process.env.SAUCE_ACCESS_KEY,
+  //   },
+  //   {
+  //     name: `${theme[0].toUpperCase()}${theme.slice(1)} visual tests`,
+  //     build: `${process.env.GITHUB_REF || 'local'} build ${process.env.GITHUB_RUN_NUMBER || ''}`,
+  //     recordScreenshots: false,
+  //     recordVideo: false,
+  //   },
+  // );
 
   return {
     concurrency: 1,
@@ -298,12 +299,13 @@ const createVisualTestsConfig = (theme, browserVersion) => {
       },
     },
     browsers: [
-      sauceLabsLauncher({
-        browserName: 'chrome',
-        platformName: 'Windows 10',
-        browserVersion,
-        'wdio:enforceWebDriverClassic': true,
-      }),
+      chromeLauncher(),
+      // sauceLabsLauncher({
+      //   browserName: 'chrome',
+      //   platformName: 'Windows 10',
+      //   browserVersion,
+      //   'wdio:enforceWebDriverClassic': true,
+      // }),
     ],
     plugins: [
       esbuildPlugin({ ts: true }),

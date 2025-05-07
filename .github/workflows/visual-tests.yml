@@ -8,7 +8,7 @@ permissions:
 jobs:
   lumo:
     name: Lumo
-    runs-on: ubuntu-latest
+    runs-on: windows-11-arm
     if: github.repository_owner == 'vaadin'
 
     steps:
@@ -21,6 +21,11 @@ jobs:
         with:
           node-version: '22'
           cache: 'yarn'
+
+      - name: Setup Chrome
+        uses: browser-actions/setup-chrome@v1
+        with:
+          chrome-version: 130
 
       - name: Install Dependencies
         run: yarn --frozen-lockfile --no-progress --non-interactive
@@ -45,7 +50,7 @@ jobs:
             packages/vaadin-lumo-styles/test/visual/screenshots/failed/*.png
   material:
     name: Material
-    runs-on: ubuntu-latest
+    runs-on: windows-11-arm
     if: github.repository_owner == 'vaadin'
 
     steps:
@@ -58,6 +63,11 @@ jobs:
         with:
           node-version: '22'
           cache: 'yarn'
+
+      - name: Setup Chrome
+        uses: browser-actions/setup-chrome@v1
+        with:
+          chrome-version: 130
 
       - name: Install Dependencies
         run: yarn --frozen-lockfile --no-progress --non-interactive
