@@ -16,7 +16,7 @@ function getCssGrid(element: Element): Element {
  * Returns the scrolling container of the dashboard.
  */
 export function getScrollingContainer(dashboard: Element): Element {
-  return getCssGrid(dashboard);
+  return dashboard;
 }
 
 export function getParentSection(element?: Element | null): DashboardSection | null {

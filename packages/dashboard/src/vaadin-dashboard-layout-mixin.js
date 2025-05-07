@@ -23,7 +23,7 @@ export const DashboardLayoutMixin = (superClass) =>
       return css`
         :host {
           display: block;
-          overflow: hidden;
+          overflow: auto;
           width: 100%;
         }
 
@@ -85,8 +85,8 @@ export const DashboardLayoutMixin = (superClass) =>
           --_vaadin-dashboard-row-height: minmax(var(--_vaadin-dashboard-row-min-height, auto), auto);
 
           display: grid;
-          overflow: auto;
-          height: 100%;
+          overflow: hidden;
+          min-width: calc(var(--_vaadin-dashboard-col-min-width) + var(--_vaadin-dashboard-padding) * 2);
 
           grid-template-columns: repeat(
             var(--_vaadin-dashboard-effective-col-count, auto-fill),
