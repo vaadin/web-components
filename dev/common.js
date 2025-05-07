@@ -7,8 +7,7 @@ addGlobalThemeStyles(
   css`
     body {
       font-family: system-ui, sans-serif;
-      font-size: calc(14 / 16 * 1rem);
-      line-height: calc(18 / 16 * 1rem);
+      line-height: 1.25;
       color: var(--_vaadin-color);
       background: var(--_vaadin-background);
       margin: 2rem;
