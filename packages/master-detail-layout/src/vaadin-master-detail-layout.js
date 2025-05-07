@@ -423,21 +423,15 @@ class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ElementMixin(Themab
 
   /** @private */
   __onBackdropClick() {
-    this.dispatchEvent(
-      new CustomEvent('backdrop-click', {
-        bubbles: true,
-      }),
-    );
+    this.dispatchEvent(new CustomEvent('backdrop-click'));
   }
 
   /** @private */
   __onDetailKeydown(event) {
     if (event.key === 'Escape') {
-      this.dispatchEvent(
-        new CustomEvent('detail-escape-press', {
-          bubbles: true,
-        }),
-      );
+      // Prevent firing on parent layout when using nested layouts
+      event.stopPropagation();
+      this.dispatchEvent(new CustomEvent('detail-escape-press'));
     }
   }
 
