@@ -10,6 +10,13 @@ packages/*/test/visual/screenshots/failed
 packages/*/test/visual/*/screenshots/*/failed
 packages/icons/test/visual/screenshots/failed
 
+packages/*/test/visual/screenshots/local-*
+packages/*/test/visual/*/screenshots/*/local-*
+packages/icons/test/visual/screenshots/local-*
+packages/*/test/visual/screenshots/local-*
+packages/*/test/visual/*/screenshots/*/local-*
+packages/icons/test/visual/screenshots/local-*
+
 # Generated Lit test files
 packages/*/test/*.generated.*
 

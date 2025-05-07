@@ -1,5 +1,6 @@
 /* eslint-env node */
 import { esbuildPlugin } from '@web/dev-server-esbuild';
+import { playwrightLauncher } from '@web/test-runner-playwright';
 import { createSauceLabsLauncher } from '@web/test-runner-saucelabs';
 import { visualRegressionPlugin } from '@web/test-runner-visual-regression/plugin';
 import dotenv from 'dotenv';
@@ -47,6 +48,7 @@ const filterBrowserLogs = (log) => {
   return !isHidden;
 };
 
+const hasLocalParam = process.argv.includes('--local');
 const hasGroupParam = process.argv.includes('--group');
 const hasCoverageParam = process.argv.includes('--coverage');
 const hasAllParam = process.argv.includes('--all');
@@ -226,12 +228,6 @@ const getScreenshotFileName = ({ name, testFile }, type, diff) => {
   return path.join(folder, type, diff ? `${name}-diff` : name);
 };
 
-const getBaselineScreenshotName = (args) => getScreenshotFileName(args, 'baseline');
-
-const getDiffScreenshotName = (args) => getScreenshotFileName(args, 'failed', true);
-
-const getFailedScreenshotName = (args) => getScreenshotFileName(args, 'failed');
-
 const createSnapshotTestsConfig = (config) => {
   const snapshotPackages = getAllSnapshotPackages();
   const packages = getTestPackages(snapshotPackages);
@@ -298,20 +294,34 @@ const createVisualTestsConfig = (theme, browserVersion) => {
       },
     },
     browsers: [
-      sauceLabsLauncher({
-        browserName: 'chrome',
-        platformName: 'Windows 10',
-        browserVersion,
-        'wdio:enforceWebDriverClassic': true,
-      }),
+      hasLocalParam
+        ? playwrightLauncher({
+            product: 'chromium',
+            launchOptions: {
+              channel: 'chrome',
+              headless: true,
+            },
+          })
+        : sauceLabsLauncher({
+            browserName: 'chrome',
+            platformName: 'Windows 10',
+            browserVersion,
+            'wdio:enforceWebDriverClassic': true,
+          }),
     ],
     plugins: [
       esbuildPlugin({ ts: true }),
       visualRegressionPlugin({
         baseDir: 'packages',
-        getBaselineName: getBaselineScreenshotName,
-        getDiffName: getDiffScreenshotName,
-        getFailedName: getFailedScreenshotName,
+        getBaselineName(args) {
+          return getScreenshotFileName(args, `${hasLocalParam ? 'local-' : ''}baseline`);
+        },
+        getDiffName(args) {
+          return getScreenshotFileName(args, `${hasLocalParam ? 'local-' : ''}failed`, true);
+        },
+        getFailedName(args) {
+          return getScreenshotFileName(args, `${hasLocalParam ? 'local-' : ''}failed`);
+        },
         failureThreshold: 0.05,
         failureThresholdType: 'percent',
         update: process.env.TEST_ENV === 'update',
