@@ -40,7 +40,7 @@ describe('vaadin-markdown', () => {
     expect(heading.textContent).to.equal('Heading');
   });
 
-  it('should update content when markdown property changes', async () => {
+  it('should update markdown when content property changes', async () => {
     element.content = '# First heading';
     await nextUpdate(element);
 
