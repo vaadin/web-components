@@ -8,8 +8,21 @@ import { css } from 'lit';
 
 export const accordionHeading = css`
   :host {
+    background: var(--vaadin-accordion-heading-background, transparent);
+    background-origin: border-box;
+    border: var(--vaadin-accordion-heading-border, none);
+    border-radius: var(--vaadin-accordion-heading-border-radius, var(--_vaadin-radius-m));
+    box-sizing: border-box;
+    color: var(--vaadin-accordion-heading-text-color, var(--_vaadin-color-strong));
     display: block;
-    outline: none;
+    font-size: var(--vaadin-accordion-heading-font-size, inherit);
+    font-weight: var(--vaadin-accordion-heading-font-weight, 500);
+    gap: var(--vaadin-accordion-heading-gap, 0 var(--_vaadin-gap-container-inline));
+    height: var(--vaadin-accordion-heading-height, auto);
+    outline: calc(var(--vaadin-focus-ring-width) * var(--_focus-ring, 0)) solid var(--vaadin-focus-ring-color);
+    outline-offset: 1px;
+    padding: var(--vaadin-accordion-heading-padding, var(--_vaadin-padding-container));
+    -webkit-tap-highlight-color: transparent;
     -webkit-user-select: none;
     user-select: none;
   }
@@ -19,25 +32,17 @@ export const accordionHeading = css`
   }
 
   button {
+    align-items: center;
     appearance: none;
-    background: var(--vaadin-accordion-heading-background, transparent);
-    background-origin: border-box;
-    border: var(--vaadin-accordion-heading-border, none);
-    border-radius: var(--vaadin-accordion-heading-border-radius, var(--_vaadin-radius-m));
-    color: var(--vaadin-accordion-heading-text-color, var(--_vaadin-color-strong));
+    background: transparent;
+    border: 0;
+    color: inherit;
     display: flex;
     font: inherit;
-    font-size: var(--vaadin-accordion-heading-font-size, inherit);
-    font-weight: var(--vaadin-accordion-heading-font-weight, 500);
-    gap: var(--vaadin-accordion-heading-gap, 0 var(--_vaadin-gap-container-inline));
-    height: var(--vaadin-accordion-heading-height, auto);
-    padding: var(--vaadin-accordion-heading-padding, var(--_vaadin-padding-container));
-    width: 100%;
-  }
-
-  button:focus-visible {
-    outline: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
-    outline-offset: 1px;
+    gap: inherit;
+    outline: none;
+    padding: 0;
+    touch-action: manipulation;
   }
 
   [part='toggle'] {
@@ -48,6 +53,13 @@ export const accordionHeading = css`
     [part='toggle'] {
       transition-property: rotate;
       transition-duration: 150ms;
+      animation: delay-initial-transition 1ms;
+    }
+
+    @keyframes delay-initial-transition {
+      0% {
+        rotate: 0deg;
+      }
     }
   }
 
@@ -61,6 +73,14 @@ export const accordionHeading = css`
     rotate: -90deg;
   }
 
+  :host([disabled]) {
+    color: var(--_vaadin-color-subtle);
+  }
+
+  :host([disabled]) [part='toggle'] {
+    opacity: 0.5;
+  }
+
   :host([dir='rtl']) [part='toggle']::before {
     scale: -1;
   }
@@ -71,5 +91,11 @@ export const accordionHeading = css`
 
   :host([dir='rtl'][opened]) [part='toggle'] {
     rotate: -90deg;
+  }
+
+  @media (forced-colors: active) {
+    [part='toggle']::before {
+      background: CanvasText;
+    }
   }
 `;
