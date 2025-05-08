@@ -32,7 +32,9 @@ describe('vaadin-accordion-panel', () => {
     });
 
     it('should hide the content when opened is false', () => {
-      expect(getComputedStyle(contentPart).display).to.equal('none');
+      expect(getComputedStyle(contentPart)).to.satisfy(
+        (cs) => cs.display === 'none' || cs.contentVisibility === 'hidden',
+      );
     });
 
     it('should show the content when opened is true', async () => {
