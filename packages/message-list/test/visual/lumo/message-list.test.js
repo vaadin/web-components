@@ -59,6 +59,13 @@ describe('message-list', () => {
           await sendKeys({ press: 'ArrowDown' });
           await visualDiff(div, `${dir}-focused`);
         });
+
+        it('markdown', async () => {
+          element.items[0].text = 'This is a **bold text** in Markdown';
+          element.items = [...element.items];
+          element.markdown = true;
+          await visualDiff(div, `${dir}-markdown`);
+        });
       });
     });
   });

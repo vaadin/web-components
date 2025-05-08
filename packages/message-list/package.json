@@ -42,6 +42,7 @@
     "@vaadin/a11y-base": "24.8.0-alpha15",
     "@vaadin/avatar": "24.8.0-alpha15",
     "@vaadin/component-base": "24.8.0-alpha15",
+    "@vaadin/markdown": "24.8.0-alpha15",
     "@vaadin/vaadin-lumo-styles": "24.8.0-alpha15",
     "@vaadin/vaadin-material-styles": "24.8.0-alpha15",
     "@vaadin/vaadin-themable-mixin": "24.8.0-alpha15",
