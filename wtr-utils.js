@@ -54,12 +54,17 @@ const hasGroupParam = process.argv.includes('--group');
 const hasCoverageParam = process.argv.includes('--coverage');
 const hasAllParam = process.argv.includes('--all');
 
+const getChangedFiles = () => {
+  const log = execSync('git diff --name-only origin/port-lumo-styles-to-css-files HEAD').toString(); // NOSONAR
+  return log.split('\n').filter((line) => line.length > 0);
+};
+
 /**
  * Check if lockfile has changed.
  */
 const isLockfileChanged = () => {
-  const log = execSync('git diff --name-only origin/main HEAD').toString(); // NOSONAR
-  return log.split('\n').some((line) => line.includes('yarn.lock'));
+  const changedFiles = getChangedFiles();
+  return changedFiles.some((file) => file.includes('yarn.lock'));
 };
 
 /**
@@ -67,7 +72,7 @@ const isLockfileChanged = () => {
  */
 const getChangedPackages = () => {
   const pathToLerna = path.normalize('./node_modules/.bin/lerna');
-  const output = execSync(`${pathToLerna} la --since origin/main --json --loglevel silent`); // NOSONAR
+  const output = execSync(`${pathToLerna} la --since origin/port-lumo-styles-to-css-files --json --loglevel silent`); // NOSONAR
   return JSON.parse(output.toString()).map((project) => project.name.replace('@vaadin/', ''));
 };
 
@@ -164,6 +169,8 @@ const getUnitTestGroups = (packages) => {
  * Get visual test groups based on packages.
  */
 const getVisualTestGroups = (packages, theme) => {
+  const changedFiles = getChangedFiles();
+
   return packages
     .filter((pkg) => {
       return !pkg.includes(theme === 'lumo' ? 'material' : 'lumo');
@@ -171,8 +178,30 @@ const getVisualTestGroups = (packages, theme) => {
     .map((pkg) => {
       return {
         name: pkg,
-        files: [`packages/${pkg}/test/visual/*.test.{js,ts}`, `packages/${pkg}/test/visual/${theme}/*.test.{js,ts}`],
+        files: [
+          `packages/${pkg}/test/visual/*.test.{js,ts}`,
+          `packages/${pkg}/test/visual/${theme}/*.test.{js,ts}`,
+        ].flatMap((glob) => {
+          if (pkg === `vaadin-${theme}-styles`) {
+            // In the theme package, run all visual tests
+            return glob;
+          }
+
+          return globSync(glob).filter((file) => {
+            if (changedFiles.includes(file)) {
+              // If the visual test is changed, run the test
+              return true;
+            }
+
+            // Otherwise, only run visual tests that import CSS files
+            const content = fs.readFileSync(file, 'utf-8').toString();
+            return content.includes('.css');
+          });
+        }),
       };
+    })
+    .filter((group) => {
+      return group.files.length > 0;
     });
 };
 
