@@ -1,9 +1,12 @@
 import { resetMouse, sendKeys, sendMouseToElement } from '@vaadin/test-runner-commands';
 import { fixtureSync, mousedown } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
-import '@vaadin/icon/theme/lumo/vaadin-icon.js';
+import '@vaadin/vaadin-lumo-styles/props.css';
+import '@vaadin/vaadin-lumo-styles/components/icon.css';
+import '@vaadin/vaadin-lumo-styles/components/button.css';
 import '@vaadin/vaadin-lumo-styles/vaadin-iconset.js';
-import '../../../theme/lumo/vaadin-button.js';
+import '@vaadin/icon/src/vaadin-lit-icon.js';
+import '../../../src/vaadin-lit-button.js';
 
 describe('button', () => {
   let div, element;
@@ -181,12 +184,12 @@ describe('button', () => {
         await visualDiff(div, 'icon-prefix-default');
       });
 
-      it('default', async () => {
+      it('small', async () => {
         element.setAttribute('theme', 'small');
         await visualDiff(div, 'icon-prefix-small');
       });
 
-      it('default', async () => {
+      it('large', async () => {
         element.setAttribute('theme', 'large');
         await visualDiff(div, 'icon-prefix-large');
       });
@@ -206,12 +209,12 @@ describe('button', () => {
         await visualDiff(div, 'icon-suffix-default');
       });
 
-      it('default', async () => {
+      it('small', async () => {
         element.setAttribute('theme', 'small');
         await visualDiff(div, 'icon-suffix-small');
       });
 
-      it('default', async () => {
+      it('large', async () => {
         element.setAttribute('theme', 'large');
         await visualDiff(div, 'icon-suffix-large');
       });
@@ -233,12 +236,12 @@ describe('button', () => {
         await visualDiff(div, 'icon-only-default');
       });
 
-      it('default', async () => {
+      it('small', async () => {
         element.setAttribute('theme', 'icon small');
         await visualDiff(div, 'icon-only-small');
       });
 
-      it('default', async () => {
+      it('large', async () => {
         element.setAttribute('theme', 'icon large');
         await visualDiff(div, 'icon-only-large');
       });

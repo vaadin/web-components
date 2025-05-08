@@ -10,6 +10,7 @@ import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js'
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
+import { CSSInjectionMixin } from '@vaadin/vaadin-themable-mixin/css-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { IconMixin } from './vaadin-icon-mixin.js';
 import { iconStyles } from './vaadin-icon-styles.js';
@@ -23,7 +24,9 @@ import { iconStyles } from './vaadin-icon-styles.js';
  * There is no ETA regarding specific Vaadin version where it'll land.
  * Feel free to try this code in your apps as per Apache 2.0 license.
  */
-class Icon extends IconMixin(ControllerMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElement))))) {
+class Icon extends IconMixin(
+  ControllerMixin(ElementMixin(CSSInjectionMixin(ThemableMixin(PolylitMixin(LitElement))))),
+) {
   static styles = iconStyles;
 
   /** @protected */
