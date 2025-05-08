@@ -5,14 +5,13 @@ analysis.json
 yarn-error.log
 .env
 
-# Failures from visual tests
+# Failed screenshots from Sauce Labs visual test runs
 packages/*/test/visual/screenshots/failed
 packages/*/test/visual/*/screenshots/*/failed
-packages/icons/test/visual/screenshots/failed
 
+# Screenshots from local visual test runs
 packages/*/test/visual/screenshots/local-*
 packages/*/test/visual/*/screenshots/*/local-*
-packages/icons/test/visual/screenshots/local-*
 
 # Generated Lit test files
 packages/*/test/*.generated.*
