@@ -7,7 +7,7 @@ import '@vaadin/component-base/src/style-props.js';
 import { css } from 'lit';
 
 export const button = css`
-  [part*='button'] {
+  [part$='button'] {
     color: var(--_vaadin-color-subtle);
     touch-action: manipulation;
     -webkit-tap-highlight-color: transparent;
