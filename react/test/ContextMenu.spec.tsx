@@ -1,6 +1,5 @@
-import { expect, use as useChaiPlugin } from '@esm-bundle/chai';
-import { cleanup, render } from '@testing-library/react/pure.js';
-import chaiDom from 'chai-dom';
+import { afterEach, describe, expect, it } from 'vitest';
+import { render } from 'vitest-browser-react';
 import {
   ContextMenu,
   type ContextMenuElement,
@@ -12,8 +11,6 @@ import { ListBox } from '../packages/react-components/src/ListBox.js';
 import catchRender from './utils/catchRender.js';
 import createOverlayCloseCatcher from './utils/createOverlayCloseCatcher.js';
 import sinon from 'sinon';
-
-useChaiPlugin(chaiDom);
 
 const overlayTag = 'vaadin-context-menu-overlay';
 const menuItemTag = 'vaadin-context-menu-item';
@@ -67,7 +64,6 @@ describe('ContextMenu', () => {
     expect(menu).to.have.text('Bar');
   }
 
-  afterEach(cleanup);
   afterEach(catcher);
 
   it('should use children if no renderer property set', async () => {

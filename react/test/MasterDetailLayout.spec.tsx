@@ -1,17 +1,12 @@
-import { expect, use as useChaiPlugin } from '@esm-bundle/chai';
-import { render, type RenderResult, waitFor } from '@testing-library/react';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { render, type RenderResult } from 'vitest-browser-react';
 import type { ReactNode } from 'react';
-import chaiAsPromised from 'chai-as-promised';
-import chaiDom from 'chai-dom';
 import sinon from 'sinon';
 import { MasterDetailLayout, MasterDetailLayoutElement } from '../packages/react-components/src/MasterDetailLayout.js';
 
 window.Vaadin ||= {};
 window.Vaadin.featureFlags ||= {};
 window.Vaadin.featureFlags.masterDetailLayoutComponent = true;
-
-useChaiPlugin(chaiDom);
-useChaiPlugin(chaiAsPromised);
 
 describe('MasterDetailLayout', () => {
   let startTransitionSpy: sinon.SinonSpy;
@@ -20,7 +15,7 @@ describe('MasterDetailLayout', () => {
   let layout: MasterDetailLayoutElement;
 
   async function assertDetailsVisible(text: string) {
-    await waitFor(() => {
+    await vi.waitFor(() => {
       const detail = layout!.querySelector('[slot="detail"]');
       expect(detail).to.exist;
       expect(detail).to.have.text(text);
@@ -28,7 +23,7 @@ describe('MasterDetailLayout', () => {
   }
 
   async function assertDetailsHidden() {
-    await waitFor(() => {
+    await vi.waitFor(() => {
       const detail = layout!.querySelector('[slot="detail-hidden"]');
       expect(detail).to.exist;
     });

@@ -1,10 +1,7 @@
-import { expect, use as useChaiPlugin } from '@esm-bundle/chai';
-import { render } from '@testing-library/react/pure.js';
-import chaiDom from 'chai-dom';
+import { describe, expect, it } from 'vitest';
+import { render } from 'vitest-browser-react';
 import { MenuBar, MenuBarElement } from '../packages/react-components/src/MenuBar.js';
 import sinon from 'sinon';
-
-useChaiPlugin(chaiDom);
 
 const overlayTag = 'vaadin-menu-bar-overlay';
 const menuItemTag = 'vaadin-menu-bar-item';

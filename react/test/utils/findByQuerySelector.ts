@@ -1,4 +1,4 @@
-import { waitFor } from '@testing-library/react';
+import { vi } from 'vitest';
 
 export async function findByQuerySelector<K extends keyof HTMLElementTagNameMap>(
   query: K,
@@ -12,5 +12,5 @@ export async function findByQuerySelector(
   query: string,
   container: Document | HTMLElement = document,
 ): Promise<Element> {
-  return await waitFor(() => container.querySelector(query)!);
+  return await vi.waitFor(() => container.querySelector(query)!);
 }

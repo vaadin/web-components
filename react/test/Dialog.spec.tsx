@@ -1,18 +1,14 @@
-import { expect, use as useChaiPlugin } from '@esm-bundle/chai';
-import { cleanup, render } from '@testing-library/react/pure.js';
-import chaiDom from 'chai-dom';
+import { afterEach, describe, expect, it } from 'vitest';
+import { render } from 'vitest-browser-react';
 import sinon from 'sinon';
-import { Dialog, type DialogElement } from '../packages/react-components/src/Dialog.js';
-import createOverlayCloseCatcher from './utils/createOverlayCloseCatcher.js';
+import { Dialog } from '../packages/react-components/src/Dialog.js';
 import { useState } from 'react';
-
-useChaiPlugin(chaiDom);
 
 describe('Dialog', () => {
   const overlayTag = 'vaadin-dialog-overlay';
 
-  const [ref, catcher] = createOverlayCloseCatcher<DialogElement>(overlayTag, (ref) => {
-    ref.opened = false;
+  afterEach(() => {
+    document.querySelector('vaadin-dialog-overlay')?.remove();
   });
 
   function assert() {
@@ -36,12 +32,9 @@ describe('Dialog', () => {
     expect(body).to.have.text('FooBar');
   }
 
-  afterEach(cleanup);
-  afterEach(catcher);
-
   it('should use children if no renderer property set', async () => {
     render(
-      <Dialog ref={ref} opened header={<>Title</>} footer={<>Footer</>}>
+      <Dialog opened header={<>Title</>} footer={<>Footer</>}>
         FooBar
       </Dialog>,
     );
@@ -51,7 +44,6 @@ describe('Dialog', () => {
   it('should use renderer prop if it is set', async () => {
     render(
       <Dialog
-        ref={ref}
         opened
         headerRenderer={() => <>Title</>}
         footerRenderer={() => <>Footer</>}
@@ -63,7 +55,7 @@ describe('Dialog', () => {
 
   it('should use children as renderer prop', async () => {
     render(
-      <Dialog ref={ref} opened headerRenderer={() => <>Title</>} footerRenderer={() => <>Footer</>}>
+      <Dialog opened headerRenderer={() => <>Title</>} footerRenderer={() => <>Footer</>}>
         {() => <>FooBar</>}
       </Dialog>,
     );

@@ -1,6 +1,5 @@
-import { expect, use as useChaiPlugin } from '@esm-bundle/chai';
-import chaiDom from 'chai-dom';
-import { cleanup, render, waitFor } from '@testing-library/react/pure.js';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { render } from 'vitest-browser-react';
 import { Grid, type GridDataProvider } from '../packages/react-components/src/Grid.js';
 import { GridColumn, GridColumnElement } from '../packages/react-components/src/GridColumn.js';
 import { GridFilterColumn } from '../packages/react-components/src/GridFilterColumn.js';
@@ -14,8 +13,6 @@ import { findByQuerySelector } from './utils/findByQuerySelector.js';
 import { GridPro } from '../packages/react-components-pro/src/GridPro.js';
 import { useEffect, useState } from 'react';
 import sinon from 'sinon';
-
-useChaiPlugin(chaiDom);
 
 async function until<T = boolean>(predicate: () => T) {
   while (!predicate()) {
@@ -58,7 +55,7 @@ describe('Grid', () => {
     columnElementName: string,
     assertions: { expectedColumnCount: number; expectedCellCount: number },
   ) {
-    return waitFor(async () => {
+    return vi.waitFor(async () => {
       const grid = document.querySelector('vaadin-grid, vaadin-grid-pro')!;
       expect(grid).to.exist;
 
@@ -77,8 +74,6 @@ describe('Grid', () => {
       return [columns, cells] as const;
     });
   }
-
-  afterEach(cleanup);
 
   describe('GridColumn', () => {
     it('should render correctly', async () => {

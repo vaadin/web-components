@@ -1,9 +1,6 @@
-import { expect, use as useChaiPlugin } from '@esm-bundle/chai';
-import { cleanup, render } from '@testing-library/react/pure.js';
-import chaiDom from 'chai-dom';
+import { describe, expect, it } from 'vitest';
+import { render } from 'vitest-browser-react';
 import { VirtualList, type VirtualListReactRendererProps } from '../packages/react-components/src/VirtualList.js';
-
-useChaiPlugin(chaiDom);
 
 describe('VirtualList', () => {
   type Item = Readonly<{ value: string; index: number }>;
@@ -22,8 +19,6 @@ describe('VirtualList', () => {
     expect(list).to.exist;
     expect(list).to.have.text('FooBar');
   }
-
-  afterEach(cleanup);
 
   it('should use renderer prop if it is set', async () => {
     render(<VirtualList items={items} renderer={Renderer} />);

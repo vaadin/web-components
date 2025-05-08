@@ -1,10 +1,7 @@
-import { expect, use as useChaiPlugin } from '@esm-bundle/chai';
-import { cleanup, render } from '@testing-library/react/pure.js';
-import chaiDom from 'chai-dom';
+import { afterEach, describe, expect, it } from 'vitest';
+import { render } from 'vitest-browser-react';
 import { Notification, type NotificationElement } from '../packages/react-components/src/Notification.js';
 import createOverlayCloseCatcher from './utils/createOverlayCloseCatcher.js';
-
-useChaiPlugin(chaiDom);
 
 describe('Notification', () => {
   const overlayTag = 'vaadin-notification-container';
@@ -21,7 +18,6 @@ describe('Notification', () => {
     expect(card).to.have.text('FooBar');
   }
 
-  afterEach(cleanup);
   afterEach(catcher);
 
   it('should use children if no renderer property set', () => {

@@ -1,13 +1,8 @@
-import { expect, use as useChaiPlugin } from '@esm-bundle/chai';
-import { cleanup, render } from '@testing-library/react/pure.js';
-import chaiDom from 'chai-dom';
+import { describe, expect, it } from 'vitest';
+import { render } from 'vitest-browser-react';
 import { DateTimePicker } from '../packages/react-components/src/DateTimePicker.js';
 
-useChaiPlugin(chaiDom);
-
 describe('DatePicker', () => {
-  afterEach(cleanup);
-
   it('should apply "value" the last', () => {
     const value = '2022-01-01T15:20:08';
     const { container } = render(<DateTimePicker label="Foo" value={value} step={1} />);

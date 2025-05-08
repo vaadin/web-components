@@ -1,16 +1,11 @@
-import { expect, use as useChaiPlugin } from '@esm-bundle/chai';
-import { render } from '@testing-library/react';
+import { beforeEach, describe, expect, it } from 'vitest';
+import { render } from 'vitest-browser-react';
 import userEvent, { type UserEvent } from '@testing-library/user-event';
-import chaiAsPromised from 'chai-as-promised';
-import chaiDom from 'chai-dom';
 import type { ReactElement } from 'react';
 import { ListBox } from '../packages/react-components/src/ListBox.js';
 import { Item } from '../packages/react-components/src/Item.js';
 import { Select, SelectElement } from '../packages/react-components/src/Select.js';
 import { findByQuerySelector } from './utils/findByQuerySelector.js';
-
-useChaiPlugin(chaiDom);
-useChaiPlugin(chaiAsPromised);
 
 describe('Select', () => {
   const items = [

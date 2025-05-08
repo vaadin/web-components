@@ -1,10 +1,7 @@
-import { expect, use as useChaiPlugin } from '@esm-bundle/chai';
-import { cleanup, render } from '@testing-library/react/pure.js';
-import chaiDom from 'chai-dom';
+import { afterEach, describe, expect, it } from 'vitest';
+import { render } from 'vitest-browser-react';
 import { Popover, type PopoverElement } from '../packages/react-components/src/Popover.js';
 import createOverlayCloseCatcher from './utils/createOverlayCloseCatcher.js';
-
-useChaiPlugin(chaiDom);
 
 describe('Popover', () => {
   const overlayTag = 'vaadin-popover-overlay';
@@ -26,7 +23,6 @@ describe('Popover', () => {
     expect(body).to.have.text('FooBar');
   }
 
-  afterEach(cleanup);
   afterEach(catcher);
 
   it('should use children if no renderer property set', async () => {

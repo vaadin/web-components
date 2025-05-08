@@ -1,6 +1,5 @@
-import { expect } from '@esm-bundle/chai';
-import { cleanup, render } from '@testing-library/react/pure.js';
-
+import { describe, expect, it } from 'vitest';
+import { render } from 'vitest-browser-react';
 import { TabSheet, TabSheetTab, tab } from '../packages/react-components/src/TabSheet.js';
 import type { TabElement } from '../packages/react-components/src/Tab.js';
 import sinon from 'sinon';
@@ -21,8 +20,6 @@ async function until(predicate: () => boolean) {
 }
 
 describe('TabSheet', () => {
-  afterEach(() => cleanup());
-
   it('should render two tabs', async () => {
     render(
       <TabSheet>

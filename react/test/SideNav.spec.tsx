@@ -1,10 +1,7 @@
-import { expect, use as useChaiPlugin } from '@esm-bundle/chai';
-import { render } from '@testing-library/react';
-import chaiDom from 'chai-dom';
+import { describe, expect, it } from 'vitest';
+import { render } from 'vitest-browser-react';
 import { SideNav, SideNavElement } from '../packages/react-components/src/SideNav.js';
 import { findByQuerySelector } from './utils/findByQuerySelector.js';
-
-useChaiPlugin(chaiDom);
 
 describe('SideNav', () => {
   describe('boolean property', () => {
