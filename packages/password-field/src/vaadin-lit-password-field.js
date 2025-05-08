@@ -35,6 +35,11 @@ export class PasswordField extends PasswordFieldMixin(TextField) {
         :host([disabled]) [part='reveal-button'] {
           display: none;
         }
+
+        [part='input-field']:has([part='reveal-button']:focus-within) {
+          outline: none;
+          --vaadin-input-field-border-color: inherit;
+        }
       `,
     ];
   }
