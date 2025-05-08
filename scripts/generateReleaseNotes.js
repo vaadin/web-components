@@ -12,7 +12,7 @@
  */
 import { exec as execCallback } from 'node:child_process';
 import { promisify } from 'node:util';
-import lerna from '../lerna.json' with { type: 'json' };
+import lerna from '../lerna.json' assert { type: 'json' };
 
 const { version } = lerna;
 const exec = promisify(execCallback);

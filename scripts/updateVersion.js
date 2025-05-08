@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import { spawn } from 'cross-spawn';
 import replace from 'replace-in-file';
-import lerna from '../lerna.json' with { type: 'json' };
+import lerna from '../lerna.json' assert { type: 'json' };
 
 const { version: oldVersion } = lerna;
 
