@@ -41,6 +41,7 @@ export const MessageListMixin = (superClass) =>
 
         /**
          * When set to `true`, the message text is parsed as Markdown.
+         * @type {boolean}
          */
         markdown: {
           type: Boolean,
