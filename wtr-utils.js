@@ -165,22 +165,14 @@ const getUnitTestGroups = (packages) => {
  */
 const getVisualTestGroups = (packages, theme) => {
   return packages
-    .filter(
-      (pkg) => !pkg.includes('icons') && !pkg.includes(theme) && !pkg.includes(theme === 'lumo' ? 'material' : 'lumo'),
-    )
+    .filter((pkg) => {
+      return !pkg.includes(theme === 'lumo' ? 'material' : 'lumo');
+    })
     .map((pkg) => {
       return {
         name: pkg,
-        files: `packages/${pkg}/test/visual/${theme}/*.test.{js,ts}`,
+        files: [`packages/${pkg}/test/visual/*.test.{js,ts}`, `packages/${pkg}/test/visual/${theme}/*.test.{js,ts}`],
       };
-    })
-    .concat({
-      name: `vaadin-${theme}-styles`,
-      files: `packages/vaadin-${theme}-styles/test/visual/*.test.{js,ts}`,
-    })
-    .concat({
-      name: `icons`,
-      files: `packages/icons/test/visual/*.test.{js,ts}`,
     });
 };
 
