@@ -24,11 +24,6 @@ describe('accordion in dialog', () => {
             <div>Content 2</div>
           </vaadin-accordion-panel>
         </vaadin-accordion>
-        <style>
-          vaadin-accordion-panel::part(content) {
-            transition: none;
-          }
-        </style>
       `;
     };
     await nextRender();
