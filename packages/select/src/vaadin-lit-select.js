@@ -14,8 +14,7 @@ import { screenReaderOnly } from '@vaadin/a11y-base/src/styles/sr-only-styles.js
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
-import { fieldShared } from '@vaadin/field-base/src/styles/field-shared-styles.js';
-import { inputFieldContainer } from '@vaadin/field-base/src/styles/input-field-container-styles.js';
+import { inputFieldShared } from '@vaadin/field-base/src/styles/input-field-shared-styles.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { SelectBaseMixin } from './vaadin-select-base-mixin.js';
 
@@ -37,8 +36,7 @@ class Select extends SelectBaseMixin(ElementMixin(ThemableMixin(PolylitMixin(Lit
 
   static get styles() {
     return [
-      fieldShared,
-      inputFieldContainer,
+      inputFieldShared,
       screenReaderOnly,
       css`
         :host {
@@ -49,23 +47,8 @@ class Select extends SelectBaseMixin(ElementMixin(ThemableMixin(PolylitMixin(Lit
           flex: 1;
         }
 
-        [part='toggle-button'] {
-          color: var(--_vaadin-color-subtle);
-        }
-
         [part='toggle-button']::before {
-          background: currentColor;
-          content: '';
-          display: block;
-          height: var(--vaadin-icon-size, 1lh);
           mask-image: var(--_vaadin-icon-chevron-down);
-          width: var(--vaadin-icon-size, 1lh);
-        }
-
-        @media (forced-colors: active) {
-          [part='toggle-button']::before {
-            background: CanvasText;
-          }
         }
       `,
     ];

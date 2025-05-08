@@ -4,8 +4,9 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import './vaadin-lit-password-field-button.js';
-import { html } from 'lit';
+import { css, html } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
+import { inputFieldShared } from '@vaadin/field-base/src/styles/input-field-shared-styles.js';
 import { TextField } from '@vaadin/text-field/src/vaadin-lit-text-field.js';
 import { PasswordFieldMixin } from './vaadin-password-field-mixin.js';
 
@@ -21,6 +22,21 @@ import { PasswordFieldMixin } from './vaadin-password-field-mixin.js';
 export class PasswordField extends PasswordFieldMixin(TextField) {
   static get is() {
     return 'vaadin-password-field';
+  }
+
+  static get styles() {
+    return [
+      inputFieldShared,
+      css`
+        [part='reveal-button']::before {
+          display: none;
+        }
+
+        :host([disabled]) [part='reveal-button'] {
+          display: none;
+        }
+      `,
+    ];
   }
 
   /**
