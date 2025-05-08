@@ -6,32 +6,17 @@
 import { css } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 export const checkboxGroupStyles = css`
-  :host {
-    display: inline-flex;
-  }
-
-  :host::before {
-    content: '\\2003';
-    width: 0;
-    display: inline-block;
-  }
-
-  :host([hidden]) {
-    display: none !important;
-  }
-
   .vaadin-group-field-container {
-    display: flex;
-    flex-direction: column;
     width: 100%;
   }
 
   [part='group-field'] {
     display: flex;
     flex-wrap: wrap;
+    gap: var(--vaadin-checkbox-group-gap, 0.5em 1em);
   }
 
-  :host(:not([has-label])) [part='label'] {
-    display: none;
+  :host([theme~='vertical']) [part='group-field'] {
+    flex-direction: column;
   }
 `;
