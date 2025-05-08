@@ -1,0 +1,6 @@
+@import '../src/components/button.css' vaadin-button;
+
+html {
+  --vaadin-button-css-inject: 1;
+}
+
