@@ -28,7 +28,7 @@
     "test:material": "yarn test --config web-test-runner-material.config.js",
     "test:snapshots": "yarn test --config web-test-runner-snapshots.config.js",
     "test:webkit": "yarn test --config web-test-runner-webkit.config.js",
-    "update:local:lumo": "TEST_ENV=update yarn test --config web-test-runner-lumo-local.config.js --local",
+    "update:local:lumo": "TEST_ENV=update yarn test --config web-test-runner-lumo.config.js --local",
     "update:lumo": "TEST_ENV=update yarn test --config web-test-runner-lumo.config.js",
     "update:material": "TEST_ENV=update yarn test --config web-test-runner-material.config.js",
     "update:snapshots": "yarn test --config web-test-runner-snapshots.config.js --update-snapshots"
