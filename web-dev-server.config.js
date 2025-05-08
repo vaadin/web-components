@@ -4,6 +4,38 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 /** @return {import('@web/test-runner').TestRunnerPlugin} */
+export function cssImportPlugin() {
+  return {
+    name: 'css-import',
+    transformImport({ source }) {
+      if (source.endsWith('.css')) {
+        return `${source}?injectCSS`;
+      }
+    },
+    transform(context) {
+      if (context.query.injectCSS !== undefined) {
+        return `
+          const link = document.createElement('link');
+          link.rel = 'stylesheet';
+          link.href = ${JSON.stringify(context.path)};
+          document.head.appendChild(link);
+
+          await new Promise((resolve, reject) => {
+            link.addEventListener('load', resolve);
+            link.addEventListener('error', reject);
+          });
+        `;
+      }
+    },
+    resolveMimeType(context) {
+      if (context.query.injectCSS !== undefined) {
+        return 'text/javascript';
+      }
+    },
+  };
+}
+
+/** @return {import('@web/test-runner').TestRunnerPlugin} */
 function generatedLitTestsPlugin() {
   return {
     name: 'generated-lit-tests',
@@ -75,6 +107,7 @@ export default {
     },
     esbuildPlugin({ ts: true }),
     generatedLitTestsPlugin(),
+    cssImportPlugin(),
   ],
   nodeResolve: {
     // Use Lit in production mode

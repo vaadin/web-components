@@ -25,6 +25,9 @@
   "files": [
     "*.d.ts",
     "*.js",
+    "*.css",
+    "src",
+    "components",
     "auto-complete.css",
     "mixins/*.d.ts",
     "mixins/*.js",
