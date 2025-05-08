@@ -20,7 +20,7 @@
 /* Ensure proper vertical alignment */
 [theme~='badge']::before {
   display: inline-block;
-  content: '\\2003';
+  content: '\2003';
   width: 0;
 }
 
