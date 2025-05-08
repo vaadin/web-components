@@ -39,12 +39,6 @@ class SelectOverlay extends SelectOverlayMixin(ThemableMixin(PolylitMixin(LitEle
         [part='content'] {
           padding: var(--vaadin-item-overlay-padding, 4px);
         }
-
-        @media (forced-colors: active) {
-          [part='overlay'] {
-            outline: 3px solid;
-          }
-        }
       `,
     ];
   }
