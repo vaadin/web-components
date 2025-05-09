@@ -21,10 +21,7 @@ packages
   })
   .forEach((testPath) => {
     const generatedLitTestPath = testPath.replace('.test.', '-lit.generated.test.');
-
-    if (!fs.existsSync(generatedLitTestPath)) {
-      fs.symlinkSync(fs.realpathSync(testPath), generatedLitTestPath);
-    }
+    fs.symlinkSync(fs.realpathSync(testPath), generatedLitTestPath);
   });
 
 // Generate RTL visual test files
@@ -33,12 +30,17 @@ packages
     return globSync(`packages/${pkg}/test/visual/**/*.test.{js,ts}`);
   })
   .filter((testPath) => {
-    return !/(-rtl|-ltr)(\.generated)?\.test/u.test(testPath);
+    if (/(-rtl|-ltr)(\.generated)?\.test/u.test(testPath)) {
+      return false;
+    }
+
+    if (!fs.readFileSync(testPath, 'utf-8').match(/^const DIR = document.dir/mu)) {
+      return false;
+    }
+
+    return true;
   })
   .forEach((testPath) => {
     const generatedRTLTestPath = testPath.replace('.test.', '-rtl.generated.test.');
-
-    if (!fs.existsSync(generatedRTLTestPath)) {
-      fs.symlinkSync(fs.realpathSync(testPath), generatedRTLTestPath);
-    }
+    fs.symlinkSync(fs.realpathSync(testPath), generatedRTLTestPath);
   });

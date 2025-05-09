@@ -5,7 +5,7 @@ import '@vaadin/vaadin-lumo-styles/test/autoload.js';
 import '../common.js';
 import '../../../theme/lumo/vaadin-text-field.js';
 
-const isRTL = document.dir === 'rtl';
+const DIR = document.dir || 'ltr';
 
 describe('text-field', () => {
   let div, element;
@@ -45,12 +45,12 @@ describe('text-field', () => {
   });
 
   it('label', async () => {
-    element.label = isRTL ? 'نام کالا' : 'Label';
+    element.label = 'Label';
     await visualDiff(div, 'label');
   });
 
   it('placeholder', async () => {
-    element.placeholder = isRTL ? 'جایگزین' : 'Placeholder';
+    element.placeholder = 'Placeholder';
     await visualDiff(div, 'placeholder');
   });
 
@@ -60,7 +60,7 @@ describe('text-field', () => {
   });
 
   it('required', async () => {
-    element.label = isRTL ? 'نام کالا' : 'Label';
+    element.label = 'Label';
     element.required = true;
     await visualDiff(div, 'required');
   });
@@ -70,16 +70,16 @@ describe('text-field', () => {
     await visualDiff(div, 'invalid');
   });
 
-  it('error message', async () => {
-    element.label = isRTL ? 'نام کالا' : 'Label';
-    element.errorMessage = 'خطا';
+  it(`${DIR} error message`, async () => {
+    element.label = DIR === 'ltr' ? 'Label' : 'نام کالا';
+    element.errorMessage = DIR === 'ltr' ? 'This field is required' : 'خطا';
     element.required = true;
     element.validate();
-    await visualDiff(div, 'error-message');
+    await visualDiff(div, `${DIR}-error-message`);
   });
 
   it('helper text', async () => {
-    element.helperText = isRTL ? 'متن راهنما' : 'Helper text';
+    element.helperText = 'Helper text';
     await visualDiff(div, 'helper-text');
   });
 
@@ -89,23 +89,23 @@ describe('text-field', () => {
     await visualDiff(div, 'clear-button');
   });
 
-  it('prefix slot', async () => {
+  it(`${DIR} prefix slot`, async () => {
     const span = document.createElement('span');
     span.setAttribute('slot', 'prefix');
     span.textContent = '$';
     element.appendChild(span);
-    await visualDiff(div, 'prefix');
+    await visualDiff(div, `${DIR}-prefix`);
   });
 
-  it('suffix slot', async () => {
+  it(`${DIR} suffix slot`, async () => {
     const span = document.createElement('span');
     span.setAttribute('slot', 'suffix');
-    span.textContent = isRTL ? 'تومان' : '$';
+    span.textContent = '$';
     element.appendChild(span);
-    await visualDiff(div, 'suffix');
+    await visualDiff(div, `${DIR}-suffix`);
   });
 
-  (isRTL ? describe.skip : describe)('alignment', () => {
+  describe('alignment', () => {
     let field;
 
     beforeEach(() => {
@@ -130,7 +130,7 @@ describe('text-field', () => {
     });
   });
 
-  (isRTL ? describe.skip : describe)('borders enabled', () => {
+  describe('borders enabled', () => {
     before(() => {
       document.documentElement.style.setProperty('--vaadin-input-field-border-width', '1px');
     });
@@ -159,7 +159,7 @@ describe('text-field', () => {
     });
   });
 
-  (isRTL ? describe.skip : describe)('focus', () => {
+  describe('focus', () => {
     afterEach(async () => {
       await resetMouse();
     });

@@ -223,7 +223,7 @@ const getScreenshotFileName = ({ name, testFile }, type, diff) => {
     const match = testFile.match(/\/packages\/(.+)\.test\.(js|ts)/u);
     folder = match[1].replace(/(lumo|material)/u, '$1/screenshots');
   }
-  folder = folder.replace('.generated', '');
+  folder = folder.replace('-rtl.generated', '');
 
   return path.join(folder, type, diff ? `${name}-diff` : name);
 };

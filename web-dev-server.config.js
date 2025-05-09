@@ -32,9 +32,12 @@ export function generatedRTLVisualTestsPlugin() {
     name: 'generated-rtl-visual-tests',
     transform(context) {
       if (context.url.includes('-rtl.generated.test.')) {
-        return {
-          body: `document.documentElement.setAttribute('dir', 'rtl');\n${context.body}`,
-        };
+        let { body } = context;
+
+        body = `document.documentElement.setAttribute('dir', 'rtl');\n${body}`;
+        body = body.replace(/it(\(.+DIR)/gu, 'it.only$1');
+
+        return { body };
       }
     },
   };
