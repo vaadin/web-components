@@ -23,7 +23,7 @@ export const DashboardLayoutMixin = (superClass) =>
       return css`
         :host {
           display: block;
-          overflow: hidden;
+          overflow: auto;
           width: 100%;
         }
 
@@ -85,8 +85,8 @@ export const DashboardLayoutMixin = (superClass) =>
           --_vaadin-dashboard-row-height: minmax(var(--_vaadin-dashboard-row-min-height, auto), auto);
 
           display: grid;
-          overflow: auto;
-          height: 100%;
+          overflow: hidden;
+          min-width: calc(var(--_vaadin-dashboard-col-min-width) + var(--_vaadin-dashboard-padding) * 2);
 
           grid-template-columns: repeat(
             var(--_vaadin-dashboard-effective-col-count, auto-fill),
@@ -100,14 +100,14 @@ export const DashboardLayoutMixin = (superClass) =>
           /* The grid-column value applied to children */
           --_vaadin-dashboard-item-column: span
             min(
-              var(--vaadin-dashboard-item-colspan, 1),
+              var(--vaadin-dashboard-widget-colspan, 1),
               var(--_vaadin-dashboard-effective-col-count, var(--_vaadin-dashboard-col-count))
             );
 
           grid-column: var(--_vaadin-dashboard-item-column);
 
           /* The grid-row value applied to children */
-          --_vaadin-dashboard-item-row: span var(--vaadin-dashboard-item-rowspan, 1);
+          --_vaadin-dashboard-item-row: span var(--vaadin-dashboard-widget-rowspan, 1);
           grid-row: var(--_vaadin-dashboard-item-row);
         }
       `;
