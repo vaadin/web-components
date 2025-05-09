@@ -75,6 +75,13 @@ const PolylitMixinImplementation = (superclass) => {
      * @override
      */
     static finalize() {
+      // Suppress warnings about deprecated overriding ReactiveElement methods
+      // as the mixin requires those. See https://github.com/lit/lit/pull/4901
+      if (window.litIssuedWarnings) {
+        window.litIssuedWarnings.add('no-override-create-property');
+        window.litIssuedWarnings.add('no-override-get-property-descriptor');
+      }
+
       super.finalize();
 
       if (Array.isArray(this.observers)) {
