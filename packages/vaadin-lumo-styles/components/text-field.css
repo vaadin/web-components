@@ -1,0 +1,6 @@
+@import './input-container.css';
+@import '../shared/field.css';
+
+html {
+  --vaadin-text-field-css-inject: 1;
+}
