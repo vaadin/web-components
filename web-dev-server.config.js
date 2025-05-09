@@ -26,6 +26,23 @@ function generatedLitTestsPlugin() {
   };
 }
 
+/** @return {import('@web/test-runner').TestRunnerPlugin} */
+export function generatedRTLVisualTestsPlugin() {
+  return {
+    name: 'generated-rtl-visual-tests',
+    transform(context) {
+      if (context.url.includes('-rtl.generated.test.')) {
+        let { body } = context;
+
+        body = `document.documentElement.setAttribute('dir', 'rtl');\n${body}`;
+        body = body.replace(/it(\(.+DIR)/gu, 'it.only$1');
+
+        return { body };
+      }
+    },
+  };
+}
+
 const preventFouc = `
   <style>
     body:not(.resolved) {
@@ -75,5 +92,6 @@ export default {
     },
     esbuildPlugin({ ts: true }),
     generatedLitTestsPlugin(),
+    generatedRTLVisualTestsPlugin(),
   ],
 };

@@ -5,6 +5,8 @@ import '@vaadin/vaadin-lumo-styles/test/autoload.js';
 import '../common.js';
 import '../../../theme/lumo/vaadin-text-field.js';
 
+const DIR = document.dir || 'ltr';
+
 describe('text-field', () => {
   let div, element;
 
@@ -68,12 +70,12 @@ describe('text-field', () => {
     await visualDiff(div, 'invalid');
   });
 
-  it('error message', async () => {
-    element.label = 'Label';
-    element.errorMessage = 'This field is required';
+  it(`${DIR} error message`, async () => {
+    element.label = DIR === 'ltr' ? 'Label' : 'نام کالا';
+    element.errorMessage = DIR === 'ltr' ? 'This field is required' : 'خطا';
     element.required = true;
     element.validate();
-    await visualDiff(div, 'error-message');
+    await visualDiff(div, `${DIR}-error-message`);
   });
 
   it('helper text', async () => {
@@ -87,20 +89,20 @@ describe('text-field', () => {
     await visualDiff(div, 'clear-button');
   });
 
-  it('prefix slot', async () => {
+  it(`${DIR} prefix slot`, async () => {
     const span = document.createElement('span');
     span.setAttribute('slot', 'prefix');
     span.textContent = '$';
     element.appendChild(span);
-    await visualDiff(div, 'prefix');
+    await visualDiff(div, `${DIR}-prefix`);
   });
 
-  it('suffix slot', async () => {
+  it(`${DIR} suffix slot`, async () => {
     const span = document.createElement('span');
     span.setAttribute('slot', 'suffix');
     span.textContent = '$';
     element.appendChild(span);
-    await visualDiff(div, 'suffix');
+    await visualDiff(div, `${DIR}-suffix`);
   });
 
   describe('alignment', () => {
@@ -125,45 +127,6 @@ describe('text-field', () => {
       element.setAttribute('theme', 'small');
       field.setAttribute('theme', 'small');
       await visualDiff(div, 'alignment-small');
-    });
-  });
-
-  describe('RTL', () => {
-    before(() => {
-      document.documentElement.setAttribute('dir', 'rtl');
-    });
-
-    after(() => {
-      document.documentElement.removeAttribute('dir');
-    });
-
-    it('RTL label', async () => {
-      element.label = 'نام کالا';
-      await visualDiff(div, 'rtl-label');
-    });
-
-    it('RTL prefix', async () => {
-      const span = document.createElement('span');
-      span.setAttribute('slot', 'prefix');
-      span.textContent = 'قیمت';
-      element.appendChild(span);
-      await visualDiff(div, 'rtl-prefix');
-    });
-
-    it('RTL suffix', async () => {
-      const span = document.createElement('span');
-      span.setAttribute('slot', 'suffix');
-      span.textContent = 'تومان';
-      element.appendChild(span);
-      await visualDiff(div, 'rtl-suffix');
-    });
-
-    it('RTL error message', async () => {
-      element.label = 'نام کالا';
-      element.errorMessage = 'خطا';
-      element.required = true;
-      element.validate();
-      await visualDiff(div, 'rtl-error-message');
     });
   });
 
