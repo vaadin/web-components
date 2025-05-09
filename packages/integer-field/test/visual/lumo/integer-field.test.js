@@ -21,6 +21,12 @@ describe('integer-field', () => {
     await visualDiff(div, 'value');
   });
 
+  it('clear button', async () => {
+    element.value = 10;
+    element.clearButtonVisible = true;
+    await visualDiff(div, 'clear-button');
+  });
+
   it('step buttons visible', async () => {
     element.stepButtonsVisible = true;
     element.value = 5;
