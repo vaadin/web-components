@@ -1,0 +1,7 @@
+@import './input-container.css';
+@import '../shared/field.css';
+@import '../src/components/email-field.css' vaadin-email-field;
+
+html {
+  --vaadin-email-field-css-inject: 1;
+}

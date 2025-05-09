@@ -1,0 +1,7 @@
+:host([dir='rtl']) [part='input-field'] ::slotted(input) {
+  --_lumo-text-field-overflow-mask-image: linear-gradient(to left, transparent, #000 1.25em);
+}
+
+:host([dir='rtl']) [part='input-field'] ::slotted(input:placeholder-shown) {
+  --_lumo-text-field-overflow-mask-image: none;
+}
