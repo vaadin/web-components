@@ -8,24 +8,25 @@
     <script type="module" src="./common.js"></script>
 
     <script type="module">
-      import '@vaadin/details';
-      import '@vaadin/tooltip';
-      // import '@vaadin/details/theme/material/vaadin-details.js';
-      // import '@vaadin/tooltip/theme/material/vaadin-tooltip.js';
+      import '@vaadin/details/src/vaadin-lit-details.js';
     </script>
   </head>
 
   <body>
-    <vaadin-details summary="Expandable Details">
-      <div>Toggle using mouse, Enter and Space keys.</div>
+    <vaadin-details summary="Panel 1" opened>
+      <div>Panel 1 content.</div>
     </vaadin-details>
 
-    <!--
-    <vaadin-details>
-      <vaadin-details-summary slot="summary">Expandable Details</vaadin-details-summary>
-      <div>Toggle using mouse, Enter and Space keys.</div>
-      <vaadin-tooltip slot="tooltip" text="Click to toggle"></vaadin-tooltip>
+    <vaadin-details summary="Panel 2">
+      <div>Panel 2 content.</div>
     </vaadin-details>
-    -->
+
+    <vaadin-details summary="Panel 3 (disabled)" disabled>
+      <div>Panel 3 content.</div>
+    </vaadin-details>
+
+    <vaadin-details summary="Panel 3 (disabled)" disabled opened>
+      <div>Panel 3 content.</div>
+    </vaadin-details>
   </body>
 </html>
