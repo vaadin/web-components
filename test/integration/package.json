@@ -34,7 +34,6 @@
     "@vaadin/number-field": "25.0.0-alpha0",
     "@vaadin/overlay": "25.0.0-alpha0",
     "@vaadin/password-field": "25.0.0-alpha0",
-    "@vaadin/polymer-legacy-adapter": "25.0.0-alpha0",
     "@vaadin/popover": "25.0.0-alpha0",
     "@vaadin/radio-group": "25.0.0-alpha0",
     "@vaadin/select": "25.0.0-alpha0",
