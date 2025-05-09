@@ -765,6 +765,10 @@ export const MultiSelectComboBoxMixin = (superClass) =>
 
     /** @private */
     __needToSyncTopGroup() {
+      // Only sync for object items
+      if (!this.itemIdPath) {
+        return false;
+      }
       return (
         this._topGroup &&
         this._topGroup.some((item) => {
