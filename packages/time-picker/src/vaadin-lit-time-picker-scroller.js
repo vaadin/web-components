@@ -34,8 +34,13 @@ export class TimePickerScroller extends ComboBoxScrollerMixin(PolylitMixin(LitEl
       }
 
       #selector {
+        forced-color-adjust: none;
         border: var(--vaadin-item-overlay-padding, 4px) solid transparent;
         position: relative;
+      }
+
+      #selector > * {
+        forced-color-adjust: auto;
       }
     `;
   }

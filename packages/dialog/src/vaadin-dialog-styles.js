@@ -77,12 +77,6 @@ export const dialogOverlay = css`
   :host([has-bounds-set]) [part='overlay'] {
     max-width: none;
   }
-
-  @media (forced-colors: active) {
-    [part='overlay'] {
-      outline: 3px solid !important;
-    }
-  }
 `;
 
 export const resizableOverlay = css`

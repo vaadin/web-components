@@ -44,10 +44,4 @@ export const datePickerOverlayStyles = css`
   [part~='content'] {
     flex: auto;
   }
-
-  @media (forced-colors: active) {
-    [part='overlay'] {
-      outline: 3px solid;
-    }
-  }
 `;

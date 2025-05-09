@@ -56,6 +56,10 @@ class PasswordFieldButton extends ButtonMixin(DirMixin(ThemableMixin(PolylitMixi
           :host::before {
             background: CanvasText;
           }
+
+          :host([disabled])::before {
+            background: GrayText;
+          }
         }
       `,
     ];

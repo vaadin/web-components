@@ -36,7 +36,7 @@ export const tooltipOverlayStyles = css`
 
   @media (forced-colors: active) {
     [part='overlay'] {
-      outline: 1px dashed;
+      border: 1px dashed;
     }
   }
 `;

@@ -8,7 +8,7 @@ import { css } from 'lit';
 
 export const button = css`
   [part$='button'] {
-    color: var(--_vaadin-color-subtle);
+    color: var(--_vaadin-color);
     touch-action: manipulation;
     -webkit-tap-highlight-color: transparent;
     -webkit-user-select: none;
@@ -32,9 +32,22 @@ export const button = css`
     mask-image: var(--_vaadin-icon-cross);
   }
 
+  :host(:is([readonly], [disabled])) [part$='button'] {
+    color: var(--_vaadin-color-subtle);
+    cursor: not-allowed;
+  }
+
   @media (forced-colors: active) {
     [part$='button']::before {
       background: CanvasText;
+    }
+
+    :host([disabled]) [part$='button'] {
+      color: GrayText;
+    }
+
+    :host([disabled]) [part$='button']::before {
+      background: GrayText;
     }
   }
 `;

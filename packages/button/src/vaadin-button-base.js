@@ -94,6 +94,10 @@ export const buttonStyles = css`
         --vaadin-icon-color: Canvas;
       }
 
+      ::slotted(*) {
+        forced-color-adjust: auto;
+      }
+
       :host([disabled]) {
         --vaadin-button-background: transparent !important;
         --vaadin-button-border-color: GrayText !important;
