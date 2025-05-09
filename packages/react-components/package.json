@@ -59,6 +59,7 @@
     "@vaadin/list-box": "24.8.0-alpha16",
     "@vaadin/lit-renderer": "24.8.0-alpha16",
     "@vaadin/login": "24.8.0-alpha16",
+    "@vaadin/markdown": "24.8.0-alpha16",
     "@vaadin/master-detail-layout": "24.8.0-alpha16",
     "@vaadin/menu-bar": "24.8.0-alpha16",
     "@vaadin/message-input": "24.8.0-alpha16",
@@ -297,6 +298,10 @@
       "types": "./LoginOverlay.d.ts",
       "default": "./LoginOverlay.js"
     },
+    "./Markdown.js": {
+      "types": "./Markdown.d.ts",
+      "default": "./Markdown.js"
+    },
     "./MasterDetailLayout.js": {
       "types": "./MasterDetailLayout.d.ts",
       "default": "./MasterDetailLayout.js"
@@ -453,6 +458,7 @@
     "./ListBox": "./ListBox.js",
     "./LoginForm": "./LoginForm.js",
     "./LoginOverlay": "./LoginOverlay.js",
+    "./Markdown": "./Markdown.js",
     "./MasterDetailLayout": "./MasterDetailLayout.js",
     "./MenuBar": "./MenuBar.js",
     "./Message": "./Message.js",

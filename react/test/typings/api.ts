@@ -44,6 +44,7 @@ import type { SubMenuItem } from '../../packages/react-components/src/MenuBar.js
 import { Popover, PopoverElement } from '../../packages/react-components/src/Popover.js';
 import { TabSheet, TabSheetElement, TabSheetTab } from '../../packages/react-components/src/TabSheet.js';
 import type { TabElement } from '../../packages/react-components/src/Tab.js';
+import { Markdown, MarkdownElement } from '../../packages/react-components/src/Markdown.js';
 
 const assertType = <TExpected>(value: TExpected) => value;
 const assertOmitted = <C, T>(prop: keyof Omit<C, keyof T>) => prop;
@@ -288,3 +289,8 @@ assertType<string | undefined>(tabSheetTabProps['aria-label']);
 assertType<boolean | undefined>(tabSheetTabProps.disabled);
 assertOmitted<TabElement, TabSheetTabProps>('value');
 assertOmitted<TabElement, TabSheetTabProps>('selected');
+
+const markdownProps = React.createElement(Markdown, {}).props;
+type MarkdownProps = typeof markdownProps;
+assertType<string | null | undefined>(markdownProps.children);
+assertOmitted<MarkdownElement, MarkdownProps>('content');
