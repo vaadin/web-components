@@ -198,6 +198,11 @@ const getTestRunnerHtml = (theme) => (testFramework) =>
         /* Force development mode for element-mixin */
         localStorage.setItem('vaadin.developmentmode.force', true);
       </script>
+      <script type="module">
+        // See https://github.com/modernweb-dev/web/issues/2802#issuecomment-2352116570
+        import structuredClone from '@ungap/structured-clone';
+        window.structuredClone = (value) => structuredClone(value, { lossy: true });
+      </script>
       <script type="module" src="${testFramework}"></script>
     </body>
   </html>
