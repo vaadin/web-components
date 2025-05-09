@@ -17,7 +17,7 @@
  * @return {boolean}
  */
 function isTagScopedMedia(media) {
-  return /^\w+(-\w+)+$/u.test(media);
+  return media.split(',').some((part) => part.trim().match(/^\w+(-\w+)+$/u));
 }
 
 /**
@@ -28,7 +28,7 @@ function isTagScopedMedia(media) {
  * @return {boolean}
  */
 function matchesTagScopedMedia(media, tagName) {
-  return media === tagName;
+  return media.split(',').some((part) => part.trim() === tagName);
 }
 
 /**
