@@ -3,7 +3,6 @@
  * Copyright (c) 2021 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import '@vaadin/markdown/src/vaadin-markdown.js';
 import { html, render } from 'lit';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import { KeyboardDirectionMixin } from '@vaadin/a11y-base/src/keyboard-direction-mixin.js';
@@ -98,12 +97,23 @@ export const MessageListMixin = (superClass) =>
     }
 
     /** @private */
-    __markdownChanged(_markdown) {
+    __markdownChanged(markdown) {
+      if (markdown && !customElements.get('vaadin-message-list-markdown')) {
+        // Dynamically import the markdown component
+        import('./vaadin-message-list-markdown.js')
+          // Wait until the component is defined
+          .then(() => customElements.whenDefined('vaadin-message-list-markdown'))
+          // Render the messages again
+          .then(() => this._renderMessages(this.items));
+      }
       this._renderMessages(this.items);
     }
 
     /** @private */
     _renderMessages(items) {
+      // Check if markdown component is still loading
+      const loadingMarkdown = this.markdown && !customElements.get('vaadin-message-list-markdown');
+
       render(
         html`
           ${items.map(
@@ -118,8 +128,9 @@ export const MessageListMixin = (superClass) =>
                 theme="${ifDefined(item.theme)}"
                 class="${ifDefined(item.className)}"
                 @focusin="${this._onMessageFocusIn}"
+                style="${ifDefined(loadingMarkdown ? 'visibility: hidden' : undefined)}"
                 >${this.markdown
-                  ? html`<vaadin-markdown .content=${item.text}></vaadin-markdown>`
+                  ? html`<vaadin-message-list-markdown .content=${item.text}></vaadin-message-list-markdown>`
                   : item.text}<vaadin-avatar slot="avatar"></vaadin-avatar
               ></vaadin-message>
             `,

@@ -40,8 +40,4 @@ export const messageStyles = css`
     --vaadin-avatar-outline-width: 0;
     flex-shrink: 0;
   }
-
-  ::slotted(vaadin-markdown) {
-    white-space: normal;
-  }
 `;
