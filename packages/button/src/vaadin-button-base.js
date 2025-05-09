@@ -38,6 +38,7 @@ export const buttonStyles = css`
         var(--vaadin-button-border-width, 1px) solid var(--vaadin-button-border-color, var(--_vaadin-border-color))
       );
       border-radius: var(--vaadin-button-border-radius, var(--_vaadin-radius-m));
+      touch-action: manipulation;
     }
 
     :host([hidden]) {
