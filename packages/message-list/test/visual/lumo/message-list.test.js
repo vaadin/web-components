@@ -64,7 +64,7 @@ describe('message-list', () => {
           element.items[0].text = 'This is a **bold text** in Markdown';
           element.items = [...element.items];
           element.markdown = true;
-          await customElements.whenDefined('vaadin-message-list-markdown');
+          await customElements.whenDefined('vaadin-markdown');
           await nextFrame();
           await visualDiff(div, `${dir}-markdown`);
         });

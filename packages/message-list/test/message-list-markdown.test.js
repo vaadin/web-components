@@ -16,7 +16,7 @@ describe('message-list-markdown', () => {
   beforeEach(async () => {
     messageList = fixtureSync('<vaadin-message-list markdown></vaadin-message-list>');
     messageList.items = messages;
-    await customElements.whenDefined('vaadin-message-list-markdown');
+    await customElements.whenDefined('vaadin-markdown');
     await nextFrame();
   });
 
