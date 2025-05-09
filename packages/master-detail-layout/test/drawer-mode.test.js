@@ -9,7 +9,7 @@ window.Vaadin ||= {};
 window.Vaadin.featureFlags ||= {};
 window.Vaadin.featureFlags.masterDetailLayoutComponent = true;
 
-describe('overlay mode', () => {
+describe('drawer mode', () => {
   let layout, master, detail, detailContent;
   let width, height;
 
@@ -36,90 +36,90 @@ describe('overlay mode', () => {
   });
 
   describe('default', () => {
-    it('should switch to the overlay when there is not enough space for both areas', async () => {
-      // Use the threshold at which the overlay mode is on by default.
+    it('should switch to the drawer mode when there is not enough space for both areas', async () => {
+      // Use the threshold at which the drawer mode is on by default.
       await setViewport({ width: 350, height });
       await nextResize(layout);
 
-      expect(layout.hasAttribute('overlay')).to.be.true;
+      expect(layout.hasAttribute('drawer')).to.be.true;
       expect(getComputedStyle(detail).position).to.equal('absolute');
     });
 
-    it('should switch to the overlay mode if not enough space when masterSize is set', async () => {
-      // Use the threshold at which the overlay mode isn't on by default,
+    it('should switch to the drawer mode if not enough space when masterSize is set', async () => {
+      // Use the threshold at which the drawer mode isn't on by default,
       // but will be on after setting fixed size on the master area.
       await setViewport({ width: 400, height });
       await nextResize(layout);
 
-      expect(layout.hasAttribute('overlay')).to.be.false;
+      expect(layout.hasAttribute('drawer')).to.be.false;
 
       layout.masterSize = '300px';
       await nextResize(layout);
 
-      expect(layout.hasAttribute('overlay')).to.be.true;
+      expect(layout.hasAttribute('drawer')).to.be.true;
       expect(getComputedStyle(detail).position).to.equal('absolute');
     });
 
-    it('should switch to the overlay mode if not enough space when masterMinSize is set', async () => {
-      // Use the threshold at which the overlay mode isn't on by default,
+    it('should switch to the drawer mode if not enough space when masterMinSize is set', async () => {
+      // Use the threshold at which the drawer mode isn't on by default,
       // but will be on after setting fixed size on the master area.
       await setViewport({ width: 400, height });
       await nextResize(layout);
 
-      expect(layout.hasAttribute('overlay')).to.be.false;
+      expect(layout.hasAttribute('drawer')).to.be.false;
 
       layout.masterMinSize = '300px';
       await nextResize(layout);
 
-      expect(layout.hasAttribute('overlay')).to.be.true;
+      expect(layout.hasAttribute('drawer')).to.be.true;
       expect(getComputedStyle(detail).position).to.equal('absolute');
     });
 
-    it('should set detail area width in overlay mode when detailSize is set', async () => {
-      // Use the threshold at which the overlay mode isn't on by default,
+    it('should set detail area width in drawer mode when detailSize is set', async () => {
+      // Use the threshold at which the drawer mode isn't on by default,
       // but will be on after setting fixed size on the detail area.
       await setViewport({ width: 500, height });
       await nextResize(layout);
 
-      expect(layout.hasAttribute('overlay')).to.be.false;
+      expect(layout.hasAttribute('drawer')).to.be.false;
 
       layout.detailSize = '300px';
       await nextResize(layout);
 
-      expect(layout.hasAttribute('overlay')).to.be.true;
+      expect(layout.hasAttribute('drawer')).to.be.true;
       expect(getComputedStyle(detail).position).to.equal('absolute');
       expect(getComputedStyle(detail).width).to.equal('300px');
     });
 
-    it('should set detail area width in overlay mode when detailMinSize is set', async () => {
-      // Use the threshold at which the overlay mode isn't on by default,
+    it('should set detail area width in drawer mode when detailMinSize is set', async () => {
+      // Use the threshold at which the drawer mode isn't on by default,
       // but will be on after setting min size on the detail area.
       await setViewport({ width: 500, height });
       await nextResize(layout);
 
-      expect(layout.hasAttribute('overlay')).to.be.false;
+      expect(layout.hasAttribute('drawer')).to.be.false;
 
       layout.detailMinSize = '300px';
       await nextResize(layout);
 
-      expect(layout.hasAttribute('overlay')).to.be.true;
+      expect(layout.hasAttribute('drawer')).to.be.true;
       expect(getComputedStyle(detail).position).to.equal('absolute');
       expect(getComputedStyle(detail).width).to.equal('300px');
     });
 
-    it('should switch to the overlay mode when masterSize is set to 100%', async () => {
+    it('should switch to the drawer mode when masterSize is set to 100%', async () => {
       layout.masterSize = '100%';
       await nextResize(layout);
-      expect(layout.hasAttribute('overlay')).to.be.true;
+      expect(layout.hasAttribute('drawer')).to.be.true;
     });
 
-    it('should switch to the overlay mode when masterMinSize is set to 100%', async () => {
+    it('should switch to the drawer mode when masterMinSize is set to 100%', async () => {
       layout.masterMinSize = '100%';
       await nextResize(layout);
-      expect(layout.hasAttribute('overlay')).to.be.true;
+      expect(layout.hasAttribute('drawer')).to.be.true;
     });
 
-    it('should not overflow in the overlay mode when detailMinSize is set', async () => {
+    it('should not overflow in the drawer mode when detailMinSize is set', async () => {
       layout.masterSize = '500px';
       layout.detailMinSize = '500px';
 
@@ -129,12 +129,12 @@ describe('overlay mode', () => {
       await setViewport({ width: 480, height });
       await nextResize(layout);
 
-      expect(layout.hasAttribute('overlay')).to.be.true;
+      expect(layout.hasAttribute('drawer')).to.be.true;
       expect(getComputedStyle(detail).width).to.equal(`${layout.offsetWidth}px`);
       expect(getComputedStyle(detail).maxWidth).to.equal('100%');
     });
 
-    it('should not overflow in the overlay mode when masterMinSize is set', async () => {
+    it('should not overflow in the drawer mode when masterMinSize is set', async () => {
       layout.masterMinSize = '500px';
       await nextResize(layout);
 
@@ -142,12 +142,12 @@ describe('overlay mode', () => {
       await setViewport({ width: 480, height });
       await nextResize(layout);
 
-      expect(layout.hasAttribute('overlay')).to.be.true;
+      expect(layout.hasAttribute('drawer')).to.be.true;
       expect(getComputedStyle(master).width).to.equal(`${layout.offsetWidth}px`);
       expect(getComputedStyle(detail).maxWidth).to.equal('100%');
     });
 
-    it('should update overlay mode when adding and removing details', async () => {
+    it('should update drawer mode when adding and removing details', async () => {
       // Start without details
       detailContent.remove();
       await nextRender();
@@ -157,13 +157,13 @@ describe('overlay mode', () => {
       await setViewport({ width: 500, height });
       await nextResize(layout);
 
-      expect(layout.hasAttribute('overlay')).to.be.false;
+      expect(layout.hasAttribute('drawer')).to.be.false;
 
       // Add details
       layout.appendChild(detailContent);
       await nextRender();
 
-      expect(layout.hasAttribute('overlay')).to.be.true;
+      expect(layout.hasAttribute('drawer')).to.be.true;
       expect(getComputedStyle(detail).position).to.equal('absolute');
       expect(getComputedStyle(detail).width).to.equal('300px');
 
@@ -171,35 +171,35 @@ describe('overlay mode', () => {
       detailContent.remove();
       await nextRender();
 
-      expect(layout.hasAttribute('overlay')).to.be.false;
+      expect(layout.hasAttribute('drawer')).to.be.false;
     });
 
-    it('should enforce the overlay mode when forceOverlay is set to true', async () => {
+    it('should enforce the drawer mode when forceOverlay is set to true', async () => {
       layout.forceOverlay = true;
       await nextRender();
-      expect(layout.hasAttribute('overlay')).to.be.true;
+      expect(layout.hasAttribute('drawer')).to.be.true;
 
       layout.forceOverlay = false;
       await nextRender();
-      expect(layout.hasAttribute('overlay')).to.be.false;
+      expect(layout.hasAttribute('drawer')).to.be.false;
     });
 
-    it('should preserve the overlay mode with forceOverlay after removing details', async () => {
+    it('should preserve the drawer mode with forceOverlay after removing details', async () => {
       layout.forceOverlay = true;
       await nextRender();
 
       detailContent.remove();
       await nextRender();
 
-      expect(layout.hasAttribute('overlay')).to.be.true;
+      expect(layout.hasAttribute('drawer')).to.be.true;
 
       layout.appendChild(detailContent);
       await nextRender();
 
-      expect(layout.hasAttribute('overlay')).to.be.true;
+      expect(layout.hasAttribute('drawer')).to.be.true;
     });
 
-    it('should focus detail content when adding details in the overlay mode', async () => {
+    it('should focus detail content when adding details in the drawer mode', async () => {
       // Start without details
       detailContent.remove();
       await nextRender();
@@ -223,96 +223,96 @@ describe('overlay mode', () => {
       await nextResize(layout);
     });
 
-    it('should switch to the overlay when there is not enough space for both areas', async () => {
-      // Use the threshold at which the overlay mode is on by default.
+    it('should switch to the drawer mode when there is not enough space for both areas', async () => {
+      // Use the threshold at which the drawer mode is on by default.
       await setViewport({ width: 500, height: 400 });
       await nextResize(layout);
 
-      expect(layout.hasAttribute('overlay')).to.be.true;
+      expect(layout.hasAttribute('drawer')).to.be.true;
       expect(getComputedStyle(detail).position).to.equal('absolute');
     });
 
-    it('should set detail area height in overlay mode when detailSize is set', async () => {
-      // Use the threshold at which the overlay mode isn't on by default,
+    it('should set detail area height in drawer mode when detailSize is set', async () => {
+      // Use the threshold at which the drawer mode isn't on by default,
       // but will be on after setting fixed size on the detail area.
       await setViewport({ width: 700, height: 600 });
       await nextResize(layout);
 
-      expect(layout.hasAttribute('overlay')).to.be.false;
+      expect(layout.hasAttribute('drawer')).to.be.false;
 
       layout.detailSize = '250px';
       await nextResize(layout);
 
-      expect(layout.hasAttribute('overlay')).to.be.true;
+      expect(layout.hasAttribute('drawer')).to.be.true;
       expect(getComputedStyle(detail).position).to.equal('absolute');
       expect(getComputedStyle(detail).height).to.equal('250px');
 
       layout.detailSize = '';
       await nextResize(layout);
-      expect(layout.hasAttribute('overlay')).to.be.false;
+      expect(layout.hasAttribute('drawer')).to.be.false;
     });
 
-    it('should set detail area height in overlay mode when detailMinSize is set', async () => {
-      // Use the threshold at which the overlay mode isn't on by default,
+    it('should set detail area height in drawer mode when detailMinSize is set', async () => {
+      // Use the threshold at which the drawer mode isn't on by default,
       // but will be on after setting min size on the detail area.
       await setViewport({ width: 700, height: 600 });
       await nextResize(layout);
 
-      expect(layout.hasAttribute('overlay')).to.be.false;
+      expect(layout.hasAttribute('drawer')).to.be.false;
 
       layout.detailMinSize = '250px';
       await nextResize(layout);
 
-      expect(layout.hasAttribute('overlay')).to.be.true;
+      expect(layout.hasAttribute('drawer')).to.be.true;
       expect(getComputedStyle(detail).position).to.equal('absolute');
       expect(getComputedStyle(detail).height).to.equal('250px');
 
       layout.detailMinSize = '';
       await nextResize(layout);
-      expect(layout.hasAttribute('overlay')).to.be.false;
+      expect(layout.hasAttribute('drawer')).to.be.false;
     });
 
-    it('should switch to the overlay mode when masterSize is set', async () => {
-      // Use the threshold at which the overlay mode isn't on by default,
+    it('should switch to the drawer mode when masterSize is set', async () => {
+      // Use the threshold at which the drawer mode isn't on by default,
       // but will be on after setting fixed size on the master area.
       await setViewport({ width: 700, height: 600 });
       await nextResize(layout);
 
-      expect(layout.hasAttribute('overlay')).to.be.false;
+      expect(layout.hasAttribute('drawer')).to.be.false;
 
       layout.masterSize = '450px';
       await nextResize(layout);
 
-      expect(layout.hasAttribute('overlay')).to.be.true;
+      expect(layout.hasAttribute('drawer')).to.be.true;
 
       layout.masterSize = '';
       await nextResize(layout);
-      expect(layout.hasAttribute('overlay')).to.be.false;
+      expect(layout.hasAttribute('drawer')).to.be.false;
     });
 
-    it('should switch to the overlay mode when masterMinSize is set', async () => {
-      // Use the threshold at which the overlay mode isn't on by default,
+    it('should switch to the drawer mode when masterMinSize is set', async () => {
+      // Use the threshold at which the drawer mode isn't on by default,
       // but will be on after setting min size on the master area.
       await setViewport({ width: 700, height: 600 });
       await nextResize(layout);
 
-      expect(layout.hasAttribute('overlay')).to.be.false;
+      expect(layout.hasAttribute('drawer')).to.be.false;
 
       layout.masterMinSize = '450px';
       await nextResize(layout);
 
-      expect(layout.hasAttribute('overlay')).to.be.true;
+      expect(layout.hasAttribute('drawer')).to.be.true;
 
       layout.masterMinSize = '';
       await nextResize(layout);
-      expect(layout.hasAttribute('overlay')).to.be.false;
+      expect(layout.hasAttribute('drawer')).to.be.false;
     });
 
-    it('should update switch to the overlay mode when both sizes are set with border', async () => {
-      // Add border to the detail area in the overlay mode.
+    it('should update switch to the drawer mode when both sizes are set with border', async () => {
+      // Add border to the detail area in the drawer mode.
       fixtureSync(`
         <style>
-          vaadin-master-detail-layout[overlay]::part(detail) {
+          vaadin-master-detail-layout[drawer]::part(detail) {
             border-top: solid 1px #ccc;
           }
         </style>
@@ -321,18 +321,18 @@ describe('overlay mode', () => {
       await setViewport({ width: 800, height: 490 });
       await nextResize(layout);
 
-      expect(layout.hasAttribute('overlay')).to.be.false;
+      expect(layout.hasAttribute('drawer')).to.be.false;
 
       layout.masterSize = '250px';
       layout.detailMinSize = '250px';
       await nextResize(layout);
 
-      expect(layout.hasAttribute('overlay')).to.be.true;
+      expect(layout.hasAttribute('drawer')).to.be.true;
 
       await setViewport({ width: 800, height: 600 });
       await nextResize(layout);
 
-      expect(layout.hasAttribute('overlay')).to.be.false;
+      expect(layout.hasAttribute('drawer')).to.be.false;
     });
   });
 
@@ -348,14 +348,14 @@ describe('overlay mode', () => {
 
     describe('horizontal orientation', () => {
       beforeEach(async () => {
-        // Use the threshold at which the overlay mode is on by default.
+        // Use the threshold at which the drawer mode is on by default.
         await setViewport({ width: 350, height });
         await nextResize(layout);
 
-        expect(layout.hasAttribute('overlay')).to.be.true;
+        expect(layout.hasAttribute('drawer')).to.be.true;
       });
 
-      it('should contain overlay to layout by default', () => {
+      it('should contain drawer to layout by default', () => {
         const layoutBounds = layout.getBoundingClientRect();
         const detailBounds = detail.getBoundingClientRect();
 
@@ -365,7 +365,7 @@ describe('overlay mode', () => {
         expect(detailBounds.right).to.equal(layoutBounds.right);
       });
 
-      it('should contain overlay to viewport when configured', async () => {
+      it('should contain drawer to viewport when configured', async () => {
         layout.containment = 'viewport';
         await nextRender();
 
@@ -385,11 +385,11 @@ describe('overlay mode', () => {
         layout.style.maxHeight = '500px';
         layout.parentElement.style.height = '100%';
 
-        // Use the threshold at which the overlay mode is on by default.
+        // Use the threshold at which the drawer mode is on by default.
         await setViewport({ width: 500, height: 400 });
         await nextResize(layout);
 
-        expect(layout.hasAttribute('overlay')).to.be.true;
+        expect(layout.hasAttribute('drawer')).to.be.true;
       });
 
       it('should contain overlay to layout by default', () => {

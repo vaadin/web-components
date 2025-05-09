@@ -29,7 +29,7 @@ describe('events', () => {
         await resetMouse();
       });
 
-      it('should fire backdrop-click event on backdrop click in overlay mode', async () => {
+      it('should fire backdrop-click event on backdrop click in drawer mode', async () => {
         layout.forceOverlay = true;
 
         const spy = sinon.spy();
@@ -60,7 +60,7 @@ describe('events', () => {
         expect(spy).to.be.calledOnce;
       });
 
-      it('should fire detail-escape-press event on pressing Escape in overlay mode', async () => {
+      it('should fire detail-escape-press event on pressing Escape in drawer mode', async () => {
         layout.forceOverlay = true;
 
         const spy = sinon.spy();

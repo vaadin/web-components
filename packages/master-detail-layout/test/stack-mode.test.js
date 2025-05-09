@@ -38,14 +38,14 @@ describe('stack mode', () => {
     });
 
     describe('horizontal orientation', () => {
-      it('should switch from overlay to the stack mode when the stackOverlay is set', async () => {
-        // Use the threshold at which the overlay mode is on by default.
+      it('should switch from drawer to the stack mode when the stackOverlay is set', async () => {
+        // Use the threshold at which the drawer mode is on by default.
         await setViewport({ width: 350, height });
         await nextResize(layout);
 
         layout.stackOverlay = true;
 
-        expect(layout.hasAttribute('overlay')).to.be.false;
+        expect(layout.hasAttribute('drawer')).to.be.false;
         expect(layout.hasAttribute('stack')).to.be.true;
         expect(getComputedStyle(detail).position).to.equal('absolute');
         expect(getComputedStyle(detail).inset).to.equal('0px');
@@ -73,7 +73,7 @@ describe('stack mode', () => {
         await nextResize(layout);
 
         expect(layout.hasAttribute('stack')).to.be.true;
-        expect(layout.hasAttribute('overlay')).to.be.false;
+        expect(layout.hasAttribute('drawer')).to.be.false;
       });
 
       it('should not apply min-width to the detail area in the stack mode', async () => {
@@ -211,14 +211,14 @@ describe('stack mode', () => {
         layout.parentElement.style.height = '100%';
       });
 
-      it('should switch from overlay to the stack mode when the stackOverlay is set', async () => {
-        // Use the threshold at which the overlay mode is on by default.
+      it('should switch from drawer to the stack mode when the stackOverlay is set', async () => {
+        // Use the threshold at which the drawer mode is on by default.
         await setViewport({ width: 500, height: 400 });
         await nextResize(layout);
 
         layout.stackOverlay = true;
 
-        expect(layout.hasAttribute('overlay')).to.be.false;
+        expect(layout.hasAttribute('drawer')).to.be.false;
         expect(layout.hasAttribute('stack')).to.be.true;
         expect(getComputedStyle(detail).position).to.equal('absolute');
         expect(getComputedStyle(detail).inset).to.equal('0px');
@@ -227,13 +227,13 @@ describe('stack mode', () => {
       it('should use fixed position in the stack mode when viewport containment is used', async () => {
         layout.containment = 'viewport';
 
-        // Use the threshold at which the overlay mode is on by default.
+        // Use the threshold at which the drawer mode is on by default.
         await setViewport({ width: 500, height: 400 });
         await nextResize(layout);
 
         layout.stackOverlay = true;
 
-        expect(layout.hasAttribute('overlay')).to.be.false;
+        expect(layout.hasAttribute('drawer')).to.be.false;
         expect(layout.hasAttribute('stack')).to.be.true;
         expect(getComputedStyle(detail).position).to.equal('fixed');
         expect(getComputedStyle(detail).inset).to.equal('0px');
@@ -293,7 +293,7 @@ describe('stack mode', () => {
       await setViewport({ width: 800, height });
       await nextResize(nested);
 
-      expect(nested.hasAttribute('overlay')).to.be.false;
+      expect(nested.hasAttribute('drawer')).to.be.false;
       expect(nested.hasAttribute('stack')).to.be.false;
 
       // Stack mode

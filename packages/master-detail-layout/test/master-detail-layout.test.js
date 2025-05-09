@@ -127,7 +127,7 @@ describe('vaadin-master-detail-layout', () => {
         await setViewport({ width: 480, height });
         await nextResize(layout);
 
-        expect(layout.hasAttribute('overlay')).to.be.false;
+        expect(layout.hasAttribute('drawer')).to.be.false;
         expect(layout.offsetWidth).to.equal(480);
         expect(master.offsetWidth).to.equal(layout.offsetWidth);
       });
@@ -141,7 +141,7 @@ describe('vaadin-master-detail-layout', () => {
         await setViewport({ width: 480, height });
         await nextResize(layout);
 
-        expect(layout.hasAttribute('overlay')).to.be.false;
+        expect(layout.hasAttribute('drawer')).to.be.false;
         expect(layout.offsetWidth).to.equal(480);
         expect(master.offsetWidth).to.equal(layout.offsetWidth);
       });
