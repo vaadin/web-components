@@ -23,43 +23,43 @@ export const transitionStyles = css`
     animation-duration: var(--vaadin-master-detail-layout-transition-duration, 300ms);
   }
 
-  /* Overlay - horizontal - add */
+  /* Drawer - horizontal - add */
 
-  vaadin-master-detail-layout[overlay][orientation='horizontal'][transition='add']::part(detail) {
-    view-transition-name: vaadin-master-detail-layout-overlay-horizontal-detail-add;
+  vaadin-master-detail-layout[drawer][orientation='horizontal'][transition='add']::part(detail) {
+    view-transition-name: vaadin-master-detail-layout-drawer-horizontal-detail-add;
   }
 
-  ::view-transition-group(vaadin-master-detail-layout-overlay-horizontal-detail-add) {
+  ::view-transition-group(vaadin-master-detail-layout-drawer-horizontal-detail-add) {
     clip-path: inset(0);
   }
 
-  ::view-transition-new(vaadin-master-detail-layout-overlay-horizontal-detail-add) {
+  ::view-transition-new(vaadin-master-detail-layout-drawer-horizontal-detail-add) {
     animation: var(--vaadin-master-detail-layout-transition-duration, 300ms) ease both
-      vaadin-master-detail-layout-overlay-horizontal-detail-add;
+      vaadin-master-detail-layout-drawer-horizontal-detail-add;
   }
 
-  @keyframes vaadin-master-detail-layout-overlay-horizontal-detail-add {
+  @keyframes vaadin-master-detail-layout-drawer-horizontal-detail-add {
     from {
       transform: translateX(calc(100% * var(--_vaadin-master-detail-layout-dir-multiplier)));
     }
   }
 
-  /* Overlay - horizontal - remove */
+  /* Drawer - horizontal - remove */
 
-  vaadin-master-detail-layout[overlay][orientation='horizontal'][transition='remove']::part(detail) {
-    view-transition-name: vaadin-master-detail-layout-overlay-horizontal-detail-remove;
+  vaadin-master-detail-layout[drawer][orientation='horizontal'][transition='remove']::part(detail) {
+    view-transition-name: vaadin-master-detail-layout-drawer-horizontal-detail-remove;
   }
 
-  ::view-transition-group(vaadin-master-detail-layout-overlay-horizontal-detail-remove) {
+  ::view-transition-group(vaadin-master-detail-layout-drawer-horizontal-detail-remove) {
     clip-path: inset(0);
   }
 
-  ::view-transition-old(vaadin-master-detail-layout-overlay-horizontal-detail-remove) {
+  ::view-transition-old(vaadin-master-detail-layout-drawer-horizontal-detail-remove) {
     animation: var(--vaadin-master-detail-layout-transition-duration, 300ms) ease both
-      vaadin-master-detail-layout-overlay-horizontal-detail-remove;
+      vaadin-master-detail-layout-drawer-horizontal-detail-remove;
   }
 
-  @keyframes vaadin-master-detail-layout-overlay-horizontal-detail-remove {
+  @keyframes vaadin-master-detail-layout-drawer-horizontal-detail-remove {
     to {
       transform: translateX(calc(100% * var(--_vaadin-master-detail-layout-dir-multiplier)));
     }
@@ -155,43 +155,43 @@ export const transitionStyles = css`
       vaadin-master-detail-layout-stack-horizontal-remove-old;
   }
 
-  /* Overlay - vertical - add */
+  /* Drawer - vertical - add */
 
-  vaadin-master-detail-layout[overlay][orientation='vertical'][transition='add']::part(detail) {
-    view-transition-name: vaadin-master-detail-layout-overlay-vertical-detail-add;
+  vaadin-master-detail-layout[drawer][orientation='vertical'][transition='add']::part(detail) {
+    view-transition-name: vaadin-master-detail-layout-drawer-vertical-detail-add;
   }
 
-  ::view-transition-group(vaadin-master-detail-layout-overlay-vertical-detail-add) {
+  ::view-transition-group(vaadin-master-detail-layout-drawer-vertical-detail-add) {
     clip-path: inset(0);
   }
 
-  ::view-transition-new(vaadin-master-detail-layout-overlay-vertical-detail-add) {
+  ::view-transition-new(vaadin-master-detail-layout-drawer-vertical-detail-add) {
     animation: var(--vaadin-master-detail-layout-transition-duration, 300ms) ease both
-      vaadin-master-detail-layout-overlay-vertical-detail-add;
+      vaadin-master-detail-layout-drawer-vertical-detail-add;
   }
 
-  @keyframes vaadin-master-detail-layout-overlay-vertical-detail-add {
+  @keyframes vaadin-master-detail-layout-drawer-vertical-detail-add {
     from {
       transform: translateY(100%);
     }
   }
 
-  /* Overlay - vertical - remove */
+  /* Drawer - vertical - remove */
 
-  vaadin-master-detail-layout[overlay][orientation='vertical'][transition='remove']::part(detail) {
-    view-transition-name: vaadin-master-detail-layout-overlay-vertical-detail-remove;
+  vaadin-master-detail-layout[drawer][orientation='vertical'][transition='remove']::part(detail) {
+    view-transition-name: vaadin-master-detail-layout-drawer-vertical-detail-remove;
   }
 
-  ::view-transition-group(vaadin-master-detail-layout-overlay-vertical-detail-remove) {
+  ::view-transition-group(vaadin-master-detail-layout-drawer-vertical-detail-remove) {
     clip-path: inset(0);
   }
 
-  ::view-transition-old(vaadin-master-detail-layout-overlay-vertical-detail-remove) {
+  ::view-transition-old(vaadin-master-detail-layout-drawer-vertical-detail-remove) {
     animation: var(--vaadin-master-detail-layout-transition-duration, 300ms) ease both
-      vaadin-master-detail-layout-overlay-vertical-detail-remove;
+      vaadin-master-detail-layout-drawer-vertical-detail-remove;
   }
 
-  @keyframes vaadin-master-detail-layout-overlay-vertical-detail-remove {
+  @keyframes vaadin-master-detail-layout-drawer-vertical-detail-remove {
     to {
       transform: translateY(100%);
     }

@@ -34,7 +34,7 @@ export interface MasterDetailLayoutEventMap extends HTMLElementEventMap, MasterD
  *
  * Part name      | Description
  * ---------------|----------------------
- * `backdrop`     | Backdrop covering the master area in the overlay mode
+ * `backdrop`     | Backdrop covering the master area in the drawer mode
  * `master`       | The master area
  * `detail`       | The detail area
  *
@@ -45,12 +45,12 @@ export interface MasterDetailLayoutEventMap extends HTMLElementEventMap, MasterD
  * `containment`  | Set to `layout` or `viewport` depending on the containment.
  * `orientation`  | Set to `horizontal` or `vertical` depending on the orientation.
  * `has-detail`   | Set when the detail content is provided.
- * `overlay`      | Set when the layout is using the overlay mode.
+ * `drawer`       | Set when the layout is using the drawer mode.
  * `stack`        | Set when the layout is using the stack mode.
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
- * @fires {CustomEvent} backdrop-click - Fired when the user clicks the backdrop in the overlay mode.
+ * @fires {CustomEvent} backdrop-click - Fired when the user clicks the backdrop in the drawer mode.
  * @fires {CustomEvent} detail-escape-press - Fired when the user presses Escape in the detail area.
  */
 declare class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ThemableMixin(ElementMixin(HTMLElement)))) {
@@ -58,7 +58,8 @@ declare class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ThemableMix
    * Fixed size (in CSS length units) to be set on the detail area.
    * When specified, it prevents the detail area from growing or
    * shrinking. If there is not enough space to show master and detail
-   * areas next to each other, the layout switches to the overlay mode.
+   * areas next to each other, the layout switches to the overlay mode:
+   * either drawer or stack, depending on the `stackOverlay` property.
    *
    * @attr {string} detail-size
    */
@@ -68,7 +69,8 @@ declare class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ThemableMix
    * Minimum size (in CSS length units) to be set on the detail area.
    * When specified, it prevents the detail area from shrinking below
    * this size. If there is not enough space to show master and detail
-   * areas next to each other, the layout switches to the overlay mode.
+   * areas next to each other, the layout switches to the overlay mode:
+   * either drawer or stack, depending on the `stackOverlay` property.
    *
    * @attr {string} detail-min-size
    */
@@ -78,7 +80,8 @@ declare class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ThemableMix
    * Fixed size (in CSS length units) to be set on the master area.
    * When specified, it prevents the master area from growing or
    * shrinking. If there is not enough space to show master and detail
-   * areas next to each other, the layout switches to the overlay mode.
+   * areas next to each other, the layout switches to the overlay mode:
+   * either drawer or stack, depending on the `stackOverlay` property.
    *
    * @attr {string} master-size
    */
@@ -88,7 +91,8 @@ declare class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ThemableMix
    * Minimum size (in CSS length units) to be set on the master area.
    * When specified, it prevents the master area from shrinking below
    * this size. If there is not enough space to show master and detail
-   * areas next to each other, the layout switches to the overlay mode.
+   * areas next to each other, the layout switches to the overlay mode:
+   * either drawer or stack, depending on the `stackOverlay` property.
    *
    * @attr {string} master-min-size
    */
@@ -103,8 +107,8 @@ declare class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ThemableMix
   orientation: 'horizontal' | 'vertical';
 
   /**
-   * When specified, forces the layout to use overlay mode, even if
-   * there is enough space for master and detail to be shown next to
+   * When specified, forces the layout to use overlay (either drawer or stack),
+   * even if there is enough space for master and detail to be shown next to
    * each other using the default (split) mode.
    *
    * In order to enforce the stack mode, use this property together with
@@ -124,7 +128,8 @@ declare class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ThemableMix
 
   /**
    * When true, the layout in the overlay mode is rendered as a "stack",
-   * making detail area fully cover the master area.
+   * making detail area fully cover the master area. Otherwise, it is
+   * rendered as a "drawer" and has a visual backdrop.
    *
    * In order to enforce the stack mode, use this property together with
    * `forceOverlay` property and set both to `true`.
