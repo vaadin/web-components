@@ -76,6 +76,37 @@ export const contentStyles = css`
   .ql-align-right {
     text-align: right;
   }
+
+  .ql-code-block-container {
+    font-family: monospace;
+  }
+
+  .ql-editor li {
+    list-style-type: none;
+    position: relative;
+  }
+
+  .ql-editor li > .ql-ui::before {
+    display: inline-block;
+    margin-left: -1.5em;
+    margin-right: 0.3em;
+    text-align: right;
+    white-space: nowrap;
+    width: 1.2em;
+  }
+
+  .ql-editor li[data-list='bullet'] {
+    list-style-type: disc;
+  }
+
+  .ql-editor li[data-list='ordered'] {
+    counter-increment: list-0;
+  }
+
+  .ql-editor li[data-list='ordered'] > .ql-ui::before {
+    content: counter(list-0, decimal) '. ';
+  }
+
   /* quill core end */
 
   blockquote {
@@ -85,22 +116,14 @@ export const contentStyles = css`
     padding-left: 1em;
   }
 
-  code,
-  pre {
-    background-color: #f0f0f0;
-    border-radius: 0.1875em;
-  }
-
-  pre {
+  /* Quill converts <pre> to this */
+  .ql-code-block-container {
     white-space: pre-wrap;
     margin-bottom: 0.3125em;
     margin-top: 0.3125em;
     padding: 0.3125em 0.625em;
-  }
-
-  code {
-    font-size: 85%;
-    padding: 0.125em 0.25em;
+    background-color: #f0f0f0;
+    border-radius: 0.1875em;
   }
 
   img {
