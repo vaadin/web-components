@@ -76,8 +76,4 @@ export default {
     esbuildPlugin({ ts: true }),
     generatedLitTestsPlugin(),
   ],
-  nodeResolve: {
-    // Use Lit in production mode
-    exportConditions: ['default'],
-  },
 };

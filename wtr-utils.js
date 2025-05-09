@@ -22,7 +22,6 @@ const HIDDEN_WARNINGS = [
   /^WARNING: <template> inside <[^>]+> is deprecated and will be removed in Vaadin 25./u,
   /Lit is in dev mode/u,
   /Overriding ReactiveElement/u,
-  /Element .* scheduled an update/u,
 ];
 
 const filterBrowserLogs = (log) => {
