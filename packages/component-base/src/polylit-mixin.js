@@ -45,6 +45,13 @@ function getOrCreateMap(obj, name) {
 
 const PolylitMixinImplementation = (superclass) => {
   class PolylitMixinClass extends superclass {
+    // PolylitMixin, and components using it, force synchronous updates
+    // in connectedCallback and for properties that are configured to
+    // be sync. This causes Lit's `change-in-update` warning to be
+    // logged for almost every component when Lit runs in development
+    // mode. Since we intentionally force updates, disable the warning.
+    static enabledWarnings = [];
+
     static createProperty(name, options) {
       if ([String, Boolean, Number, Array].includes(options)) {
         options = {
