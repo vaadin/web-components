@@ -9,6 +9,7 @@ import minimist from 'minimist';
 import { execSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
+import { generatedRTLVisualTestsPlugin } from './web-dev-server.config.js';
 
 dotenv.config();
 
@@ -222,6 +223,8 @@ const getScreenshotFileName = ({ name, testFile }, type, diff) => {
     const match = testFile.match(/\/packages\/(.+)\.test\.(js|ts)/u);
     folder = match[1].replace(/(lumo|material)/u, '$1/screenshots');
   }
+  folder = folder.replace('.generated', '');
+
   return path.join(folder, type, diff ? `${name}-diff` : name);
 };
 
@@ -308,6 +311,7 @@ const createVisualTestsConfig = (theme, browserVersion) => {
     ],
     plugins: [
       esbuildPlugin({ ts: true }),
+      generatedRTLVisualTestsPlugin(),
       visualRegressionPlugin({
         baseDir: 'packages',
         getBaselineName(args) {
