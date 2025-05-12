@@ -21,15 +21,16 @@ const numberField = css`
     padding: 0;
   }
 
-  [part$='button'] {
+  [part='decrease-button'],
+  [part='increase-button'] {
     cursor: pointer;
-    font-size: var(--lumo-icon-size-s);
-    width: 1.6em;
-    height: 1.6em;
+    width: 1.5em;
+    height: 1.5em;
   }
 
-  [part$='button']::before {
-    margin-top: 0.3em;
+  [part='decrease-button']::before,
+  [part='increase-button']::before {
+    margin-top: 0.25em;
   }
 
   [part='decrease-button']::before {
