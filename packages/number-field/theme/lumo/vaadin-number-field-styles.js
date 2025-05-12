@@ -23,6 +23,7 @@ const numberField = css`
 
   [part='decrease-button'],
   [part='increase-button'] {
+    cursor: pointer;
     width: 1.5em;
     height: 1.5em;
   }
