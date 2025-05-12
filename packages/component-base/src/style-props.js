@@ -68,6 +68,7 @@ addGlobalThemeStyles(
           --_vaadin-color: CanvasText;
           --_vaadin-color-strong: CanvasText;
           --vaadin-icon-color: CanvasText;
+          --vaadin-focus-ring-color: Highlight;
         }
       }
     }

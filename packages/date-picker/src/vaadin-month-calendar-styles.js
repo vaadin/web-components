@@ -71,7 +71,7 @@ export const monthCalendarStyles = css`
   }
 
   [part~='date'] {
-    border-radius: var(--vaadin-date-picker-date-border-radius, var(--vaadin-radius-m));
+    border-radius: var(--vaadin-date-picker-date-border-radius, var(--_vaadin-radius-m));
     position: relative;
     width: var(--vaadin-date-picker-date-width, 2rem);
     height: var(--vaadin-date-picker-date-height, 2rem);
@@ -80,11 +80,11 @@ export const monthCalendarStyles = css`
   }
 
   [part~='date']::after {
-    border-radius: var(--vaadin-date-picker-date-border-radius, var(--_vaadin-radius-m));
+    border-radius: inherit;
     content: '';
     position: absolute;
     z-index: -1;
-    height: 2em;
+    height: inherit;
     aspect-ratio: 1;
   }
 
@@ -128,11 +128,12 @@ export const monthCalendarStyles = css`
     [part~='selected'] {
       forced-color-adjust: none;
       --vaadin-date-picker-date-selected-color: SelectedItemText;
+      color: SelectedItemText !important;
       --vaadin-date-picker-date-selected-background: SelectedItem;
     }
 
     [disabled] {
-      color: GrayText;
+      color: GrayText !important;
     }
   }
 `;

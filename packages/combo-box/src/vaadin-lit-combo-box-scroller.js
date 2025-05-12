@@ -38,6 +38,10 @@ export class ComboBoxScroller extends ComboBoxScrollerMixin(PolylitMixin(LitElem
         forced-color-adjust: none;
         min-height: var(--_items-min-height, auto);
       }
+
+      #selector > * {
+        forced-color-adjust: auto;
+      }
     `;
   }
 

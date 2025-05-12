@@ -65,7 +65,12 @@ export const notificationCardStyles = css`
 
   @media (forced-colors: active) {
     [part='overlay'] {
-      outline: 3px solid;
+      border: 3px solid;
+    }
+
+    [part='overlay']:focus-visible {
+      outline: var(--vaadin-focus-ring-width) solid;
+      outline-offset: 1px;
     }
   }
 `;

@@ -20,35 +20,29 @@ stylesTemplate.innerHTML = `
       user-select: none;
       -webkit-user-select: none;
       width: var(--vaadin-date-picker-year-scroller-width, 3rem);
-      box-shadow: inset 1px 0 0 0 var(--vaadin-date-picker-year-scroller-border-color, var(--_vaadin-border-color));
+      border-inline-start: 1px solid var(--vaadin-date-picker-year-scroller-border-color, var(--_vaadin-border-color));
+      box-sizing: border-box;
+      overflow: visible;
+      min-height: 0;
+      clip-path: inset(0);
     }
 
     :host::before {
       background: var(--vaadin-overlay-background, var(--_vaadin-background));
+      border: 1px solid var(--vaadin-date-picker-year-scroller-border-color, var(--_vaadin-border-color));
       content: '';
       display: block;
       height: 1em;
       position: absolute;
       z-index: 1;
-      transform: translate(-50%, -50%) rotate(45deg);
+      rotate: 45deg;
+      translate: calc(-50% - 1px) -50%;
       top: 50%;
       width: 1em;
-      border: 1px solid var(--vaadin-date-picker-year-scroller-border-color, var(--_vaadin-border-color));
-    }
-
-    :host(:dir(rtl)) {
-      box-shadow: inset -1px 0 0 0 var(--vaadin-date-picker-year-scroller-border-color, var(--_vaadin-border-color));
     }
 
     :host(:dir(rtl))::before {
-      transform: translate(50%, -50%) rotate(45deg);
-    }
-
-    @media (forced-colors: active) {
-      :host {
-        forced-color-adjust: none;
-        background: Canvas;
-      }
+      translate: calc(50% + 1px) -50%;
     }
   </style>
 `;
