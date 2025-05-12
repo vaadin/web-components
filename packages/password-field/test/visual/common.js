@@ -1,8 +1,13 @@
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 registerStyles(
-  'vaadin-checkbox-group',
+  'vaadin-password-field',
   css`
+    /* Hide caret */
+    :host([focused]) ::slotted(input) {
+      caret-color: transparent;
+    }
+
     /* Disable animation */
     [part='label'],
     [part='helper-text'],

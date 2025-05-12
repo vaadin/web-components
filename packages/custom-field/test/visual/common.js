@@ -3,10 +3,17 @@ import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themab
 registerStyles(
   'vaadin-custom-field vaadin-date-picker vaadin-number-field vaadin-text-field',
   css`
-    /* Show error message immediately */
-    [part='error-message'] {
-      animation: none !important;
-      transition: none !important;
+    /* Disable animation */
+    [part='label'],
+    [part='helper-text'],
+    [part='error-message'],
+    [part='required-indicator'] {
+      &,
+      &::before,
+      &::after {
+        animation: none !important;
+        transition: none !important;
+      }
     }
   `,
 );
