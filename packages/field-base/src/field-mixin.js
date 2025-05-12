@@ -48,6 +48,7 @@ export const FieldMixin = (superclass) =>
         helperText: {
           type: String,
           observer: '_helperTextChanged',
+          sync: true,
         },
 
         /**
