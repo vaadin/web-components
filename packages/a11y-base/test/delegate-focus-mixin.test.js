@@ -1,7 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
-import { defineLit, definePolymer, fixtureSync, focusin, focusout, nextFrame } from '@vaadin/testing-helpers';
+import { defineLit, fixtureSync, focusin, focusout, nextFrame } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { DelegateFocusMixin } from '../src/delegate-focus-mixin.js';
 
@@ -307,10 +306,6 @@ const runTests = (defineHelper, baseMixin) => {
     });
   });
 };
-
-describe('DelegateFocusMixin + Polymer', () => {
-  runTests(definePolymer, ControllerMixin);
-});
 
 describe('DelegateFocusMixin + Lit', () => {
   runTests(defineLit, PolylitMixin);
