@@ -1,0 +1,5 @@
+@media vaadin-text-field, vaadin-password-field {
+  [part="error-message"] {
+    color: red;
+  }
+}

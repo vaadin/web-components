@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Reproduction</title>
+    <link rel="stylesheet" href="./password-field.css">
+    <link rel="stylesheet" href="./text-field.css">
+
+    <script type="module">
+      import '@vaadin/password-field/src/vaadin-lit-password-field.js'
+      import '@vaadin/text-field/src/vaadin-lit-text-field.js'
+    </script>
+  </head>
+
+  <body>
+    <vaadin-password-field
+      invalid
+      error-message="Password field error message"
+    ></vaadin-password-field>
+
+    <vaadin-text-field
+      invalid
+      error-message="Text field error message"
+    ></vaadin-text-field>
+  </body>
+</html>

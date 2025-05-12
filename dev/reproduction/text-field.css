@@ -1,0 +1,11 @@
+@import './shared.css';
+
+@media vaadin-text-field {
+  [part="error-message"] {
+    color: blue;
+  }
+}
+
+html {
+  --vaadin-text-field-css-inject: 1;
+}
