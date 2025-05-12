@@ -128,9 +128,9 @@ declare class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ThemableMix
   containment: 'layout' | 'viewport';
 
   /**
-   * When true, the layout in the overlay mode is rendered as a "stack",
+   * When true, the layout in the overlay mode is rendered as a stack,
    * making detail area fully cover the master area. Otherwise, it is
-   * rendered as a "drawer" and has a visual backdrop.
+   * rendered as a drawer and has a visual backdrop.
    *
    * In order to enforce the stack mode, use this property together with
    * `forceOverlay` property and set both to `true`.
