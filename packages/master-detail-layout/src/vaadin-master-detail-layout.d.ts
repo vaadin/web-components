@@ -58,8 +58,8 @@ declare class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ThemableMix
    * Fixed size (in CSS length units) to be set on the detail area.
    * When specified, it prevents the detail area from growing or
    * shrinking. If there is not enough space to show master and detail
-   * areas next to each other, the layout switches to the overlay mode:
-   * either drawer or stack, depending on the `stackOverlay` property.
+   * areas next to each other, the details are shown as an overlay:
+   * either as drawer or stack, depending on the `stackOverlay` property.
    *
    * @attr {string} detail-size
    */
@@ -69,8 +69,8 @@ declare class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ThemableMix
    * Minimum size (in CSS length units) to be set on the detail area.
    * When specified, it prevents the detail area from shrinking below
    * this size. If there is not enough space to show master and detail
-   * areas next to each other, the layout switches to the overlay mode:
-   * either drawer or stack, depending on the `stackOverlay` property.
+   * areas next to each other, the details are shown as an overlay:
+   * either as drawer or stack, depending on the `stackOverlay` property.
    *
    * @attr {string} detail-min-size
    */
@@ -80,8 +80,8 @@ declare class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ThemableMix
    * Fixed size (in CSS length units) to be set on the master area.
    * When specified, it prevents the master area from growing or
    * shrinking. If there is not enough space to show master and detail
-   * areas next to each other, the layout switches to the overlay mode:
-   * either drawer or stack, depending on the `stackOverlay` property.
+   * areas next to each other, the details are shown as an overlay:
+   * either as drawer or stack, depending on the `stackOverlay` property.
    *
    * @attr {string} master-size
    */
@@ -91,8 +91,8 @@ declare class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ThemableMix
    * Minimum size (in CSS length units) to be set on the master area.
    * When specified, it prevents the master area from shrinking below
    * this size. If there is not enough space to show master and detail
-   * areas next to each other, the layout switches to the overlay mode:
-   * either drawer or stack, depending on the `stackOverlay` property.
+   * areas next to each other, the details are shown as an overlay:
+   * either as drawer or stack, depending on the `stackOverlay` property.
    *
    * @attr {string} master-min-size
    */
@@ -107,9 +107,10 @@ declare class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ThemableMix
   orientation: 'horizontal' | 'vertical';
 
   /**
-   * When specified, forces the layout to use overlay (either drawer or stack),
-   * even if there is enough space for master and detail to be shown next to
-   * each other using the default (split) mode.
+   * When specified, forces the details to be shown as an overlay
+   * (either as drawer or stack), even if there is enough space for
+   * master and detail to be shown next to each other using the default
+   * (split) mode.
    *
    * In order to enforce the stack mode, use this property together with
    * `stackOverlay` property and set both to `true`.
