@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, nextUpdate } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame, nextUpdate } from '@vaadin/testing-helpers';
 import '../src/vaadin-message-list.js';
 
 describe('message-list-markdown', () => {
@@ -16,7 +16,8 @@ describe('message-list-markdown', () => {
   beforeEach(async () => {
     messageList = fixtureSync('<vaadin-message-list markdown></vaadin-message-list>');
     messageList.items = messages;
-    await nextUpdate(messageList);
+    await customElements.whenDefined('vaadin-markdown');
+    await nextFrame();
   });
 
   it('should render the message items as markdown', () => {
