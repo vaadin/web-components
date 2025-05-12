@@ -3,7 +3,6 @@ import { aTimeout, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './data-provider.styles.js';
 import '../all-imports.js';
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import {
   flushGrid,
   getBodyCellContent,
@@ -20,59 +19,6 @@ import {
   infiniteDataProvider,
   scrollToEnd,
 } from './helpers.js';
-
-class WrappedGrid extends PolymerElement {
-  static get template() {
-    return html`
-      <style>
-        .item {
-          height: 30px;
-        }
-      </style>
-      <vaadin-grid size="100" id="grid" style="height: 300px;" data-provider="[[dataProvider]]">
-        <vaadin-grid-column id="col"></vaadin-grid-column>
-      </vaadin-grid>
-    `;
-  }
-
-  ready() {
-    super.ready();
-    this.$.col.headerRenderer = (root) => {
-      root.textContent = 'Header';
-    };
-    this.$.col.renderer = (root, _col, model) => {
-      root.textContent = model.item.value;
-    };
-  }
-}
-
-customElements.define('wrapped-grid', WrappedGrid);
-
-class PageSizeGrid extends PolymerElement {
-  static get template() {
-    return html`
-      <vaadin-grid data-provider="[[dataProvider]]" size="[[size]]" id="grid">
-        <vaadin-grid-column header="#" path="value"></vaadin-grid-column>
-      </vaadin-grid>
-    `;
-  }
-
-  static get properties() {
-    return {
-      dataProvider: Object,
-      size: Number,
-    };
-  }
-
-  ready() {
-    super.ready();
-    this.$.grid.pageSize = 10;
-    this.size = 200;
-    this.dataProvider = infiniteDataProvider;
-  }
-}
-
-customElements.define('page-size-grid', PageSizeGrid);
 
 function simulateScrollToStart(grid) {
   // Make sure not over scroll more than the delta threshold limit of 10k.
@@ -752,24 +698,31 @@ describe('unattached', () => {
 
 describe('page size grid', () => {
   it('should render grid rows when setting page-size before size', () => {
-    const container = fixtureSync('<page-size-grid></page-size-grid>');
-    const grid = container.$.grid;
+    const grid = fixtureSync(`
+      <vaadin-grid>
+        <vaadin-grid-column header="#" path="value"></vaadin-grid-column>
+      </vaadin-grid>
+    `);
+    grid.pageSize = 10;
+    grid.size = 200;
+    grid.dataProvider = infiniteDataProvider;
     flushGrid(grid);
     expect(getCellContent(getFirstCell(grid)).textContent.trim()).to.equal('foo0');
   });
 });
 
 describe('wrapped grid', () => {
-  let container, grid;
+  let grid;
 
   describe('initial render', () => {
     it('should not render rows before columns are defined', () => {
-      container = fixtureSync('<wrapped-grid></wrapped-grid>');
-      grid = container.$.grid;
-      container.dataProvider = sinon.spy(infiniteDataProvider);
-      if (grid.$) {
-        expect(grid.$.items.childElementCount).to.equal(0);
-      }
+      grid = fixtureSync(`
+        <vaadin-grid size="100">
+          <vaadin-grid-column></vaadin-grid-column>
+        </vaadin-grid>
+      `);
+      grid.dataProvider = sinon.spy(infiniteDataProvider);
+      expect(grid.$.items.childElementCount).to.equal(0);
     });
   });
 
@@ -782,41 +735,51 @@ describe('wrapped grid', () => {
     }
 
     beforeEach(() => {
-      container = fixtureSync('<wrapped-grid></wrapped-grid>');
-      grid = container.$.grid;
-      container.dataProvider = sinon.spy(infiniteDataProvider);
+      grid = fixtureSync(`
+        <vaadin-grid size="100" style="height: 300px">
+          <vaadin-grid-column></vaadin-grid-column>
+        </vaadin-grid>
+      `);
+      const column = grid.querySelector('vaadin-grid-column');
+      column.headerRenderer = (root) => {
+        root.textContent = 'Header';
+      };
+      column.renderer = (root, _col, model) => {
+        root.textContent = model.item.value;
+      };
+      grid.dataProvider = sinon.spy(infiniteDataProvider);
       flushGrid(grid);
     });
 
     it('should call dataProvider for first page', async () => {
-      container.dataProvider.resetHistory();
+      grid.dataProvider.resetHistory();
       grid.pageSize = 100;
       await aTimeout(loadDebounceTime);
-      expect(container.dataProvider.callCount).to.eql(1);
-      expect(container.dataProvider.firstCall.args[0].page).to.eql(0);
+      expect(grid.dataProvider.callCount).to.eql(1);
+      expect(grid.dataProvider.firstCall.args[0].page).to.eql(0);
     });
 
     it('should call dataProvider multiple times to load all items', async () => {
-      container.dataProvider.resetHistory();
+      grid.dataProvider.resetHistory();
       grid.style.fontSize = '12px';
       grid.pageSize = 5;
       flushGrid(grid);
       await aTimeout(loadDebounceTime);
       // Assuming grid has about 18 items
-      expect(container.dataProvider.callCount).to.be.above(2);
-      for (let i = 0; i < container.dataProvider.callCount; i++) {
-        expect(container.dataProvider.getCall(i).args[0].page).to.eql(i);
+      expect(grid.dataProvider.callCount).to.be.above(2);
+      for (let i = 0; i < grid.dataProvider.callCount; i++) {
+        expect(grid.dataProvider.getCall(i).args[0].page).to.eql(i);
       }
     });
 
     it('should always load visible items', async () => {
       grid.pageSize = 10;
       await aTimeout(loadDebounceTime);
-      container.dataProvider.resetHistory();
+      grid.dataProvider.resetHistory();
       await simulateScrollToEnd(grid);
       await aTimeout(loadDebounceTime);
       // 9 is last page out of 100 items / 10 per page.
-      const pages = container.dataProvider.getCalls().map((call) => call.args[0].page);
+      const pages = grid.dataProvider.getCalls().map((call) => call.args[0].page);
       expect(pages).to.contain.members([7, 8, 9]);
     });
 
@@ -825,28 +788,28 @@ describe('wrapped grid', () => {
       // Wait first to initially load first pages.
       await aTimeout(loadDebounceTime);
       await simulateScrollToEnd(grid);
-      container.dataProvider.resetHistory();
+      grid.dataProvider.resetHistory();
       await simulateScrollToStart(grid);
       await aTimeout(loadDebounceTime);
-      const pages = container.dataProvider.getCalls().map((call) => call.args[0].page);
+      const pages = grid.dataProvider.getCalls().map((call) => call.args[0].page);
       expect(pages).not.to.contain(0);
     });
 
-    it('should bind item to templates', () => {
-      container.dataProvider = infiniteDataProvider;
+    it('should render cell content elements', () => {
+      grid.dataProvider = infiniteDataProvider;
       expect(getCellContent(getFirstCell(grid)).textContent.trim()).to.equal('foo0');
     });
 
     it('should clear item cache', async () => {
-      container.dataProvider = sinon.spy(infiniteDataProvider);
+      grid.dataProvider = sinon.spy(infiniteDataProvider);
       await aTimeout(loadDebounceTime * 2);
-      expect(container.dataProvider.called).to.be.true;
+      expect(grid.dataProvider.called).to.be.true;
       const oldFirstItem = getItemForIndex(0);
       expect(oldFirstItem).to.be.ok;
-      container.dataProvider.resetHistory();
+      grid.dataProvider.resetHistory();
       grid.clearCache();
       await aTimeout(loadDebounceTime * 2);
-      expect(container.dataProvider.called).to.be.true;
+      expect(grid.dataProvider.called).to.be.true;
       expect(getItemForIndex(0)).to.be.ok;
       expect(getItemForIndex(0)).not.to.equal(oldFirstItem);
     });
@@ -854,7 +817,7 @@ describe('wrapped grid', () => {
     it('should update sub properties on clearCache', () => {
       const data = [{ value: 'foo' }];
       grid.size = 1;
-      container.dataProvider = (_, cb) => cb(data);
+      grid.dataProvider = (_, cb) => cb(data);
       expect(getCellContent(getFirstCell(grid)).textContent.trim()).to.equal('foo');
       data[0].value = 'bar';
       grid.clearCache();
@@ -873,14 +836,14 @@ describe('wrapped grid', () => {
     });
 
     it('should be in loading state when dataProvider changes', () => {
-      container.dataProvider = () => {};
+      grid.dataProvider = () => {};
       expect(grid.loading).to.be.true;
     });
 
     it('should be in loading state when fetching new data', (done) => {
       let raf;
 
-      container.dataProvider = (params, callback) => {
+      grid.dataProvider = (params, callback) => {
         expect(grid.loading).to.be.true;
         callback(Array(params.pageSize));
         expect(grid.loading).not.to.be.true;
@@ -900,7 +863,7 @@ describe('wrapped grid', () => {
 
     it('should be in loading state when cache is cleared', () => {
       let cb;
-      container.dataProvider = (_, callback) => {
+      grid.dataProvider = (_, callback) => {
         cb = callback;
       };
       cb(Array(25));
@@ -910,12 +873,12 @@ describe('wrapped grid', () => {
     });
 
     it('should set loading attribute to rows', () => {
-      container.dataProvider = () => {};
+      grid.dataProvider = () => {};
       expect(getRows(grid.$.items)[0].hasAttribute('loading')).to.be.true;
     });
 
     it('should add loading to cells part attribute', () => {
-      container.dataProvider = () => {};
+      grid.dataProvider = () => {};
       const row = getRows(grid.$.items)[0];
       getRowCells(row).forEach((cell) => {
         expect(cell.getAttribute('part')).to.contain('loading-row-cell');
@@ -923,14 +886,14 @@ describe('wrapped grid', () => {
     });
 
     it('should clear loading attribute from rows when data received', () => {
-      container.dataProvider = (_, callback) => {
+      grid.dataProvider = (_, callback) => {
         callback([{}]);
       };
       expect(getRows(grid.$.items)[0].hasAttribute('loading')).to.be.false;
     });
 
     it('should remove loading from cells part attribute when data received', () => {
-      container.dataProvider = (_, callback) => {
+      grid.dataProvider = (_, callback) => {
         callback([{}]);
       };
       const row = getRows(grid.$.items)[0];
@@ -941,7 +904,7 @@ describe('wrapped grid', () => {
 
     it('should clear loading attribute from rows when scrolled to previously loaded rows', () => {
       grid.pageSize = 1;
-      container.dataProvider = (params, callback) => {
+      grid.dataProvider = (params, callback) => {
         if (params.page === 0) {
           callback([{ value: 'loaded' }]);
         }
