@@ -10,6 +10,7 @@ import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { inputFieldShared } from '@vaadin/field-base/src/styles/input-field-shared-styles.js';
+import { CSSInjectionMixin } from '@vaadin/vaadin-themable-mixin/css-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { NumberFieldMixin } from './vaadin-number-field-mixin.js';
 import { numberFieldStyles } from './vaadin-number-field-styles.js';
@@ -23,7 +24,7 @@ import { numberFieldStyles } from './vaadin-number-field-styles.js';
  * There is no ETA regarding specific Vaadin version where it'll land.
  * Feel free to try this code in your apps as per Apache 2.0 license.
  */
-class NumberField extends NumberFieldMixin(ThemableMixin(ElementMixin(PolylitMixin(LitElement)))) {
+class NumberField extends NumberFieldMixin(CSSInjectionMixin(ThemableMixin(ElementMixin(PolylitMixin(LitElement))))) {
   static get is() {
     return 'vaadin-number-field';
   }
