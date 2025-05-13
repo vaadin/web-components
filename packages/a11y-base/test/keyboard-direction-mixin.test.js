@@ -4,56 +4,57 @@ import {
   arrowLeftKeyDown,
   arrowRightKeyDown,
   arrowUpKeyDown,
+  defineLit,
+  definePolymer,
   endKeyDown,
   fixtureSync,
   homeKeyDown,
   tabKeyDown,
 } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
+import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { KeyboardDirectionMixin } from '../src/keyboard-direction-mixin.js';
 
-customElements.define(
-  'keyboard-direction-mixin-element',
-  class extends KeyboardDirectionMixin(PolymerElement) {
-    static get template() {
-      return html`
-        <style>
-          ::slotted(.hidden) {
-            display: none;
-          }
+const runTests = (defineHelper, baseMixin) => {
+  const tag = defineHelper(
+    'keyboard-direction-mixin',
+    `
+      <style>
+        ::slotted(.hidden) {
+          display: none;
+        }
 
-          :host(:not([vertical])) {
-            display: flex;
-          }
-        </style>
-        <slot></slot>
-      `;
-    }
+        :host(:not([vertical])) {
+          display: flex;
+        }
+      </style>
+      <slot></slot>
+    `,
+    (Base) =>
+      class extends KeyboardDirectionMixin(baseMixin(Base)) {
+        get _vertical() {
+          return this.hasAttribute('vertical');
+        }
 
-    get _vertical() {
-      return this.hasAttribute('vertical');
-    }
+        get _tabNavigation() {
+          return this.hasAttribute('tab-navigation');
+        }
+      },
+  );
 
-    get _tabNavigation() {
-      return this.hasAttribute('tab-navigation');
-    }
-  },
-);
-
-describe('keyboard-direction-mixin', () => {
   let element, items;
 
   beforeEach(() => {
     element = fixtureSync(`
-      <keyboard-direction-mixin-element>
+      <${tag}>
         <div tabindex="0">Foo</div>
         <div tabindex="0">Bar</div>
         <div disabled>Baz</div>
         <div tabindex="0">Qux</div>
         <div tabindex="0">Xyz</div>
         <div tabindex="0">Abc</div>
-      </keyboard-direction-mixin-element>
+      </${tag}>
     `);
     items = element.children;
   });
@@ -245,4 +246,12 @@ describe('keyboard-direction-mixin', () => {
       expect(element.focused).to.not.equal(items[0]);
     });
   });
+};
+
+describe('KeyboardDirectionMixin + Polymer', () => {
+  runTests(definePolymer, ControllerMixin);
+});
+
+describe('KeyboardDirectionMixin + Lit', () => {
+  runTests(defineLit, PolylitMixin);
 });
