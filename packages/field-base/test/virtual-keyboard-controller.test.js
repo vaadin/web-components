@@ -1,48 +1,46 @@
 import { expect } from '@vaadin/chai-plugins';
 import { sendKeys } from '@vaadin/test-runner-commands';
-import { fixtureSync, touchstart } from '@vaadin/testing-helpers';
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { defineLit, definePolymer, fixtureSync, touchstart } from '@vaadin/testing-helpers';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
+import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { VirtualKeyboardController } from '../src/virtual-keyboard-controller.js';
 
-customElements.define(
-  'virtual-keyboard-controller-element',
-  class extends ControllerMixin(PolymerElement) {
-    static get template() {
-      return html`<slot></slot>`;
-    }
+const runTests = (defineHelper, baseMixin) => {
+  const tag = defineHelper(
+    'virtual-keyboard-controller',
+    `<slot></slot>`,
+    (Base) =>
+      class extends baseMixin(Base) {
+        constructor() {
+          super();
+          this.inputElement = document.createElement('input');
+          this.appendChild(this.inputElement);
+        }
 
-    constructor() {
-      super();
-      this.inputElement = document.createElement('input');
-      this.appendChild(this.inputElement);
-    }
+        ready() {
+          super.ready();
+          this.addController(new VirtualKeyboardController(this));
+        }
 
-    ready() {
-      super.ready();
-      this.addController(new VirtualKeyboardController(this));
-    }
+        open() {
+          this.dispatchEvent(new CustomEvent('opened-changed', { detail: { value: true } }));
+        }
 
-    open() {
-      this.dispatchEvent(new CustomEvent('opened-changed', { detail: { value: true } }));
-    }
+        close() {
+          this.dispatchEvent(new CustomEvent('opened-changed', { detail: { value: false } }));
+        }
+      },
+  );
 
-    close() {
-      this.dispatchEvent(new CustomEvent('opened-changed', { detail: { value: false } }));
-    }
-  },
-);
-
-describe('virtual-keyboard-controller', () => {
   let element, input;
 
   beforeEach(() => {
-    element = fixtureSync(
-      `<div>
-        <virtual-keyboard-controller-element></virtual-keyboard-controller-element>
+    element = fixtureSync(`
+      <div>
+        <${tag}></${tag}>
         <input id="last-global-focusable" />
-      </div>`,
-    ).firstElementChild;
+      </div>
+    `).firstElementChild;
     input = element.inputElement;
   });
 
@@ -67,4 +65,12 @@ describe('virtual-keyboard-controller', () => {
     await sendKeys({ press: 'Tab' });
     expect(input.inputMode).to.equal('');
   });
+};
+
+describe('VirtualKeyboardController + Polymer', () => {
+  runTests(definePolymer, ControllerMixin);
+});
+
+describe('VirtualKeyboardController + Lit', () => {
+  runTests(defineLit, PolylitMixin);
 });

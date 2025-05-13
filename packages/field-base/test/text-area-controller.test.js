@@ -1,25 +1,22 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync } from '@vaadin/testing-helpers';
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { defineLit, definePolymer, fixtureSync } from '@vaadin/testing-helpers';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
+import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { InputMixin } from '../src/input-mixin.js';
 import { TextAreaController } from '../src/text-area-controller.js';
 
-customElements.define(
-  'textarea-controller-element',
-  class extends InputMixin(ControllerMixin(PolymerElement)) {
-    static get template() {
-      return html`<slot name="textarea"></slot>`;
-    }
-  },
-);
+const runTests = (defineHelper, baseMixin) => {
+  const tag = defineHelper(
+    'input-mixin',
+    `<slot name="textarea"></slot>`,
+    (Base) => class extends InputMixin(baseMixin(Base)) {},
+  );
 
-describe('text-area-controller', () => {
   describe('default', () => {
     let element, controller, textarea;
 
     beforeEach(() => {
-      element = fixtureSync('<textarea-controller-element></textarea-controller-element>');
+      element = fixtureSync(`<${tag}></${tag}>`);
       controller = new TextAreaController(element, (node) => {
         element._setInputElement(node);
       });
@@ -48,7 +45,7 @@ describe('text-area-controller', () => {
     let element, textarea;
 
     beforeEach(() => {
-      element = fixtureSync('<textarea-controller-element name="foo"></textarea-controller-element>');
+      element = fixtureSync(`<${tag} name="foo"></${tag}>`);
     });
 
     it('should forward name attribute to the textarea', () => {
@@ -62,7 +59,7 @@ describe('text-area-controller', () => {
     let element, textarea;
 
     beforeEach(() => {
-      element = fixtureSync('<textarea-controller-element value="foo"></textarea-controller-element>');
+      element = fixtureSync(`<${tag} value="foo"></${tag}>`);
     });
 
     it('should forward value attribute to the textarea', () => {
@@ -75,13 +72,13 @@ describe('text-area-controller', () => {
   describe('unique id', () => {
     let wrapper, elements;
 
-    const ID_REGEX = /^textarea-textarea-controller-element-\d+$/u;
+    const ID_REGEX = new RegExp(`^textarea-${tag}-\\d+$`, 'u');
 
     beforeEach(() => {
       wrapper = fixtureSync(`
         <div>
-          <textarea-controller-element></textarea-controller-element>
-          <textarea-controller-element></textarea-controller-element>
+          <${tag}></${tag}>
+          <${tag}></${tag}>
         </div>
       `);
       elements = wrapper.children;
@@ -97,4 +94,12 @@ describe('text-area-controller', () => {
       expect(textarea1.id).to.not.equal(textarea2.id);
     });
   });
+};
+
+describe('TextAreaController + Polymer', () => {
+  runTests(definePolymer, ControllerMixin);
+});
+
+describe('TextAreaController + Lit', () => {
+  runTests(defineLit, PolylitMixin);
 });

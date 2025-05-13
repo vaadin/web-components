@@ -1,56 +1,10 @@
 import { expect } from '@vaadin/chai-plugins';
 import { sendKeys } from '@vaadin/test-runner-commands';
-import { fixtureSync } from '@vaadin/testing-helpers';
+import { defineLit, definePolymer, fixtureSync } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
+import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { FocusTrapController } from '../src/focus-trap-controller.js';
-
-customElements.define(
-  'focus-trap-wrapper',
-  class FocusTrapWrapper extends ControllerMixin(PolymerElement) {
-    static get template() {
-      return html`<slot></slot>`;
-    }
-
-    ready() {
-      super.ready();
-      this.innerHTML = `
-        <div id="outer-trap">
-          <focus-trap-element></focus-trap-element>
-        </div>
-      `;
-    }
-  },
-);
-
-customElements.define(
-  'focus-trap-element',
-  class FocusTrapElement extends ControllerMixin(PolymerElement) {
-    static get template() {
-      return html`<slot></slot>`;
-    }
-
-    ready() {
-      super.ready();
-      this.innerHTML = `
-        <div id="outside">
-          <input id="outside-input-1" />
-
-          <div id="trap">
-            <input id="trap-input-1" />
-            <input id="trap-input-2" />
-            <div id="parent">
-              <textarea id="trap-input-3"></textarea>
-            </div>
-          </div>
-
-          <input id="outside-input-2" />
-        </div>
-      `;
-    }
-  },
-);
 
 async function tab() {
   await sendKeys({ press: 'Tab' });
@@ -62,12 +16,54 @@ async function shiftTab() {
   return document.activeElement;
 }
 
-describe('focus-trap-controller', () => {
+const runTests = (defineHelper, baseMixin) => {
+  const tag = defineHelper(
+    'focus-trap',
+    '<slot></slot>',
+    (Base) =>
+      class extends baseMixin(Base) {
+        ready() {
+          super.ready();
+          this.innerHTML = `
+            <div id="outside">
+              <input id="outside-input-1" />
+
+              <div id="trap">
+                <input id="trap-input-1" />
+                <input id="trap-input-2" />
+                <div id="parent">
+                  <textarea id="trap-input-3"></textarea>
+                </div>
+              </div>
+
+              <input id="outside-input-2" />
+            </div>
+          `;
+        }
+      },
+  );
+
+  const wrapperTag = defineHelper(
+    'focus-trap-wrapper',
+    '<slot></slot>',
+    (Base) =>
+      class extends baseMixin(Base) {
+        ready() {
+          super.ready();
+          this.innerHTML = `
+            <div id="outer-trap">
+              <${tag}></${tag}>
+            </div>
+          `;
+        }
+      },
+  );
+
   let element, controller, trap;
 
   describe('trapFocus', () => {
     beforeEach(() => {
-      element = fixtureSync(`<focus-trap-element></focus-trap-element>`);
+      element = fixtureSync(`<${tag}></${tag}>`);
       controller = new FocusTrapController(element);
       element.addController(controller);
       trap = element.querySelector('#trap');
@@ -130,7 +126,7 @@ describe('focus-trap-controller', () => {
 
   describe('releaseFocus', () => {
     beforeEach(() => {
-      element = fixtureSync(`<focus-trap-element></focus-trap-element>`);
+      element = fixtureSync(`<${tag}></${tag}>`);
       controller = new FocusTrapController(element);
       element.addController(controller);
       trap = element.querySelector('#trap');
@@ -145,7 +141,7 @@ describe('focus-trap-controller', () => {
     let trapInput1, trapInput2, trapInput3;
 
     beforeEach(() => {
-      element = fixtureSync(`<focus-trap-element></focus-trap-element>`);
+      element = fixtureSync(`<${tag}></${tag}>`);
       controller = new FocusTrapController(element);
       element.addController(controller);
       trap = element.querySelector('#trap');
@@ -313,12 +309,12 @@ describe('focus-trap-controller', () => {
     let wrapper, wrapperController, wrapperTrap, trapInput1, trapInput2, trapInput3;
 
     beforeEach(() => {
-      wrapper = fixtureSync(`<focus-trap-wrapper></focus-trap-wrapper>`);
+      wrapper = fixtureSync(`<${wrapperTag}></${wrapperTag}>`);
       wrapperController = new FocusTrapController(element);
       wrapper.addController(wrapperController);
       wrapperTrap = wrapper.querySelector('#outer-trap');
 
-      element = wrapper.querySelector('focus-trap-element');
+      element = wrapper.querySelector(tag);
       controller = new FocusTrapController(element);
       element.addController(controller);
       trap = element.querySelector('#trap');
@@ -356,4 +352,12 @@ describe('focus-trap-controller', () => {
       expect(document.activeElement).to.equal(trapInput1);
     });
   });
+};
+
+describe('FocusTrapController + Polymer', () => {
+  runTests(definePolymer, ControllerMixin);
+});
+
+describe('FocusTrapController + Lit', () => {
+  runTests(defineLit, PolylitMixin);
 });

@@ -1,26 +1,19 @@
 import { expect } from '@vaadin/chai-plugins';
 import { sendKeys } from '@vaadin/test-runner-commands';
-import { fixtureSync } from '@vaadin/testing-helpers';
+import { defineLit, definePolymer, fixtureSync } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
+import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { KeyboardMixin } from '../src/keyboard-mixin.js';
 
-describe('keyboard-mixin', () => {
+const runTests = (defineHelper, baseMixin) => {
   let element, enterSpy, escapeSpy, keyDownSpy, keyUpSpy;
 
-  before(() => {
-    keyDownSpy = sinon.spy();
-    keyUpSpy = sinon.spy();
-    escapeSpy = sinon.spy();
-    enterSpy = sinon.spy();
-
-    customElements.define(
-      'keyboard-mixin-element',
-      class extends KeyboardMixin(PolymerElement) {
-        static get template() {
-          return html`<div></div>`;
-        }
-
+  const tag = defineHelper(
+    'keyboard-mixin',
+    '<slot></slot>',
+    (Base) =>
+      class extends KeyboardMixin(baseMixin(Base)) {
         _onKeyDown(event) {
           super._onKeyDown(event);
 
@@ -39,12 +32,18 @@ describe('keyboard-mixin', () => {
           enterSpy(event);
         }
       },
-    );
+  );
+
+  before(() => {
+    keyDownSpy = sinon.spy();
+    keyUpSpy = sinon.spy();
+    escapeSpy = sinon.spy();
+    enterSpy = sinon.spy();
   });
 
   beforeEach(() => {
     // Sets tabindex to 0 in order to make the element focusable for the time of testing.
-    element = fixtureSync(`<keyboard-mixin-element tabindex="0"></keyboard-mixin-element>`);
+    element = fixtureSync(`<${tag} tabindex="0"></${tag}>`);
     element.focus();
   });
 
@@ -84,4 +83,12 @@ describe('keyboard-mixin', () => {
     expect(enterSpy.args[0][0]).to.be.an.instanceOf(KeyboardEvent);
     expect(enterSpy.args[0][0].type).to.equal('keydown');
   });
+};
+
+describe('KeyboardMixin + Polymer', () => {
+  runTests(definePolymer, ControllerMixin);
+});
+
+describe('KeyboardMixin + Lit', () => {
+  runTests(defineLit, PolylitMixin);
 });
