@@ -7,6 +7,7 @@ import { css, html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
+import { CSSInjectionMixin } from '@vaadin/vaadin-themable-mixin/css-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { ComboBoxItemMixin } from './vaadin-combo-box-item-mixin.js';
 
@@ -19,7 +20,9 @@ import { ComboBoxItemMixin } from './vaadin-combo-box-item-mixin.js';
  * There is no ETA regarding specific Vaadin version where it'll land.
  * Feel free to try this code in your apps as per Apache 2.0 license.
  */
-export class ComboBoxItem extends ComboBoxItemMixin(ThemableMixin(DirMixin(PolylitMixin(LitElement)))) {
+export class ComboBoxItem extends ComboBoxItemMixin(
+  CSSInjectionMixin(ThemableMixin(DirMixin(PolylitMixin(LitElement)))),
+) {
   static get is() {
     return 'vaadin-combo-box-item';
   }
