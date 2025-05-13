@@ -37,6 +37,16 @@ export const MessageListMixin = (superClass) =>
           observer: '_itemsChanged',
           sync: true,
         },
+
+        /**
+         * When set to `true`, the message text is parsed as Markdown.
+         * @type {boolean}
+         */
+        markdown: {
+          type: Boolean,
+          observer: '__markdownChanged',
+          reflectToAttribute: true,
+        },
       };
     }
 
@@ -87,7 +97,23 @@ export const MessageListMixin = (superClass) =>
     }
 
     /** @private */
+    __markdownChanged(markdown) {
+      if (markdown && !customElements.get('vaadin-markdown')) {
+        // Dynamically import the markdown component
+        import('@vaadin/markdown/src/vaadin-markdown.js')
+          // Wait until the component is defined
+          .then(() => customElements.whenDefined('vaadin-markdown'))
+          // Render the messages again
+          .then(() => this._renderMessages(this.items));
+      }
+      this._renderMessages(this.items);
+    }
+
+    /** @private */
     _renderMessages(items) {
+      // Check if markdown component is still loading
+      const loadingMarkdown = this.markdown && !customElements.get('vaadin-markdown');
+
       render(
         html`
           ${items.map(
@@ -102,7 +128,10 @@ export const MessageListMixin = (superClass) =>
                 theme="${ifDefined(item.theme)}"
                 class="${ifDefined(item.className)}"
                 @focusin="${this._onMessageFocusIn}"
-                >${item.text}<vaadin-avatar slot="avatar"></vaadin-avatar
+                style="${ifDefined(loadingMarkdown ? 'visibility: hidden' : undefined)}"
+                >${this.markdown
+                  ? html`<vaadin-markdown .content=${item.text}></vaadin-markdown>`
+                  : item.text}<vaadin-avatar slot="avatar"></vaadin-avatar
               ></vaadin-message>
             `,
           )}

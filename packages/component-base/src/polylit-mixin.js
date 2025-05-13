@@ -45,6 +45,13 @@ function getOrCreateMap(obj, name) {
 
 const PolylitMixinImplementation = (superclass) => {
   class PolylitMixinClass extends superclass {
+    // PolylitMixin, and components using it, force synchronous updates
+    // in connectedCallback and for properties that are configured to
+    // be sync. This causes Lit's `change-in-update` warning to be
+    // logged for almost every component when Lit runs in development
+    // mode. Since we intentionally force updates, disable the warning.
+    static enabledWarnings = [];
+
     static createProperty(name, options) {
       if ([String, Boolean, Number, Array].includes(options)) {
         options = {
@@ -68,6 +75,13 @@ const PolylitMixinImplementation = (superclass) => {
      * @override
      */
     static finalize() {
+      // Suppress warnings about deprecated overriding ReactiveElement methods
+      // as the mixin requires those. See https://github.com/lit/lit/pull/4901
+      if (window.litIssuedWarnings) {
+        window.litIssuedWarnings.add('no-override-create-property');
+        window.litIssuedWarnings.add('no-override-get-property-descriptor');
+      }
+
       super.finalize();
 
       if (Array.isArray(this.observers)) {

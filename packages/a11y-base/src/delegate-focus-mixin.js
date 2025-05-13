@@ -42,6 +42,7 @@ export const DelegateFocusMixin = dedupeMixin(
             type: Object,
             readOnly: true,
             observer: '_focusElementChanged',
+            sync: true,
           },
 
           /**
@@ -227,6 +228,11 @@ export const DelegateFocusMixin = dedupeMixin(
             this._lastTabIndex = tabindex;
           }
           this.tabindex = undefined;
+        }
+
+        // Lit does not remove attribute when setting property to undefined
+        if (tabindex === undefined && this.hasAttribute('tabindex')) {
+          this.removeAttribute('tabindex');
         }
       }
     },

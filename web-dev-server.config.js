@@ -109,8 +109,4 @@ export default {
     generatedLitTestsPlugin(),
     cssImportPlugin(),
   ],
-  nodeResolve: {
-    // Use Lit in production mode
-    exportConditions: ['default'],
-  },
 };

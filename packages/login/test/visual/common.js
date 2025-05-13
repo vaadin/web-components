@@ -7,5 +7,21 @@ registerStyles(
     ::slotted(input) {
       caret-color: transparent;
     }
+
+    /* Disable animation */
+    [part='label'],
+    [part$='button'],
+    [part='helper-text'],
+    [part='input-field'],
+    [part='error-message'],
+    [part='required-indicator'],
+    ::slotted(:is(input, textarea):placeholder-shown) {
+      &,
+      &::before,
+      &::after {
+        animation: none !important;
+        transition: none !important;
+      }
+    }
   `,
 );
