@@ -31,7 +31,7 @@ customElements.define(
 
     set user(value) {
       this.#user = value;
-      this.shadowRoot.querySelector('input').value = value;
+      this.shadowRoot.querySelector('input').value = value.name;
     }
   },
 );
