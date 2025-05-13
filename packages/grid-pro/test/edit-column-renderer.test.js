@@ -4,7 +4,6 @@ import { enter, esc, fixtureSync, focusout, nextFrame, space } from '@vaadin/tes
 import sinon from 'sinon';
 import '../src/vaadin-grid-pro.js';
 import '../src/vaadin-grid-pro-edit-column.js';
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import {
   createItems,
   dblclick,
@@ -16,20 +15,23 @@ import {
 
 customElements.define(
   'user-editor',
-  class extends PolymerElement {
-    static get template() {
-      return html`<input value="{{user.name::input}}" />`;
+  class extends HTMLElement {
+    #user;
+
+    constructor() {
+      super();
+      this.attachShadow({ mode: 'open' });
+      this.shadowRoot.innerHTML = `<input>`;
+      this.user = { name: null };
     }
 
-    static get properties() {
-      return {
-        user: {
-          type: Object,
-          value: () => {
-            return { name: null };
-          },
-        },
-      };
+    get user() {
+      return this.#user;
+    }
+
+    set user(value) {
+      this.#user = value;
+      this.shadowRoot.querySelector('input').value = value;
     }
   },
 );
@@ -308,7 +310,7 @@ describe('edit column renderer', () => {
     it('should read the updated value based on `editorValuePath` after edit mode exit', () => {
       dblclick(cell._content);
       editor = getCellEditor(cell);
-      editor.set('user.name', 'New');
+      editor.user = { name: 'New' };
       enter(editor);
       expect(cell._content.textContent.trim()).to.equal('New');
       expect(grid.items[0].name).to.equal('New');
