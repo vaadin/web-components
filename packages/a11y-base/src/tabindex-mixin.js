@@ -27,6 +27,7 @@ export const TabindexMixin = (superclass) =>
           type: Number,
           reflectToAttribute: true,
           observer: '_tabindexChanged',
+          sync: true,
         },
 
         /**
@@ -60,9 +61,13 @@ export const TabindexMixin = (superclass) =>
         if (this.tabindex !== undefined) {
           this._lastTabIndex = this.tabindex;
         }
-        this.tabindex = -1;
+        this.setAttribute('tabindex', '-1');
       } else if (oldDisabled) {
-        this.tabindex = this._lastTabIndex;
+        if (this._lastTabIndex !== undefined) {
+          this.setAttribute('tabindex', this._lastTabIndex);
+        } else {
+          this.tabindex = undefined;
+        }
       }
     }
 
@@ -80,7 +85,7 @@ export const TabindexMixin = (superclass) =>
 
       if (this.disabled && tabindex !== -1) {
         this._lastTabIndex = tabindex;
-        this.tabindex = -1;
+        this.setAttribute('tabindex', '-1');
       }
     }
 
