@@ -1,36 +1,35 @@
 import { expect } from '@vaadin/chai-plugins';
-import { aTimeout, fixtureSync, nextFrame, nextResize } from '@vaadin/testing-helpers';
+import { aTimeout, defineLit, definePolymer, fixtureSync, nextFrame, nextResize } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { ControllerMixin } from '../src/controller-mixin.js';
+import { PolylitMixin } from '../src/polylit-mixin.js';
 import { ResizeMixin } from '../src/resize-mixin.js';
 
-describe('resize-mixin', () => {
-  let element, observeParent;
+const runTests = (defineHelper, baseMixin) => {
+  let observeParent;
 
-  before(() => {
-    customElements.define(
-      'resize-mixin-element',
-      class extends ResizeMixin(PolymerElement) {
-        static get template() {
-          return html`
-            <style>
-              :host {
-                display: block;
-              }
-            </style>
-            <div></div>
-          `;
+  const tag = defineHelper(
+    'resize-mixin',
+    `
+      <style>
+        :host {
+          display: block;
         }
-
+      </style>
+      <div></div>
+    `,
+    (Base) =>
+      class extends ResizeMixin(baseMixin(Base)) {
         get _observeParent() {
           return observeParent;
         }
       },
-    );
-  });
+  );
+
+  let element;
 
   beforeEach(async () => {
-    element = fixtureSync(`<resize-mixin-element></resize-mixin-element>`);
+    element = fixtureSync(`<${tag}></${tag}>`);
     // Wait for the initial resize.
     await nextResize(element);
   });
@@ -120,4 +119,12 @@ describe('resize-mixin', () => {
       });
     });
   });
+};
+
+describe('ResizeMixin + Polymer', () => {
+  runTests(definePolymer, ControllerMixin);
+});
+
+describe('ResizeMixin + Lit', () => {
+  runTests(defineLit, PolylitMixin);
 });
