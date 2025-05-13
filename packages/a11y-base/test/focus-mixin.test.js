@@ -1,28 +1,35 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, focusin, focusout, keyDownOn, mousedown } from '@vaadin/testing-helpers';
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import {
+  defineLit,
+  definePolymer,
+  fixtureSync,
+  focusin,
+  focusout,
+  keyDownOn,
+  mousedown,
+} from '@vaadin/testing-helpers';
+import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
+import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { FocusMixin } from '../src/focus-mixin.js';
 
-customElements.define(
-  'focus-mixin-element',
-  class extends FocusMixin(PolymerElement) {
-    static get template() {
-      return html`<slot></slot>`;
-    }
+const runTests = (defineHelper, baseMixin) => {
+  const tag = defineHelper(
+    'focus-mixin',
+    '<slot></slot>',
+    (Base) =>
+      class extends FocusMixin(baseMixin(Base)) {
+        ready() {
+          super.ready();
+          const input = document.createElement('input');
+          this.appendChild(input);
+        }
+      },
+  );
 
-    ready() {
-      super.ready();
-      const input = document.createElement('input');
-      this.appendChild(input);
-    }
-  },
-);
-
-describe('focus-mixin', () => {
   let element, input;
 
   beforeEach(() => {
-    element = fixtureSync(`<focus-mixin-element></focus-mixin-element>`);
+    element = fixtureSync(`<${tag}></${tag}>`);
     input = element.querySelector('input');
   });
 
@@ -58,4 +65,12 @@ describe('focus-mixin', () => {
     focusin(input);
     expect(element.hasAttribute('focus-ring')).to.be.false;
   });
+};
+
+describe('FocusMixin + Polymer', () => {
+  runTests(definePolymer, ControllerMixin);
+});
+
+describe('FocusMixin + Lit', () => {
+  runTests(defineLit, PolylitMixin);
 });
