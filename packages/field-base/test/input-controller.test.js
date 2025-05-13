@@ -1,27 +1,24 @@
 import { expect } from '@vaadin/chai-plugins';
 import { sendKeys } from '@vaadin/test-runner-commands';
-import { fixtureSync } from '@vaadin/testing-helpers';
+import { defineLit, definePolymer, fixtureSync } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
+import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { InputController } from '../src/input-controller.js';
 import { InputMixin } from '../src/input-mixin.js';
 
-customElements.define(
-  'input-controller-element',
-  class extends InputMixin(ControllerMixin(PolymerElement)) {
-    static get template() {
-      return html`<slot name="input"></slot>`;
-    }
-  },
-);
+const runTests = (defineHelper, baseMixin) => {
+  const tag = defineHelper(
+    'input-mixin',
+    `<slot name="input"></slot>`,
+    (Base) => class extends InputMixin(baseMixin(Base)) {},
+  );
 
-describe('input-controller', () => {
   describe('default', () => {
     let element, controller, input;
 
     beforeEach(() => {
-      element = fixtureSync('<input-controller-element></input-controller-element>');
+      element = fixtureSync(`<${tag}></${tag}>`);
       controller = new InputController(element, (node) => {
         element._setInputElement(node);
       });
@@ -50,7 +47,7 @@ describe('input-controller', () => {
     let element, input;
 
     beforeEach(() => {
-      element = fixtureSync('<input-controller-element value="foo"></input-controller-element>');
+      element = fixtureSync(`<${tag} value="foo"></${tag}>`);
     });
 
     it('should forward value attribute to the input', () => {
@@ -64,7 +61,7 @@ describe('input-controller', () => {
     let element, input;
 
     beforeEach(() => {
-      element = fixtureSync('<input-controller-element></input-controller-element>');
+      element = fixtureSync(`<${tag}></${tag}>`);
       element.value = 'foo';
     });
 
@@ -94,7 +91,7 @@ describe('input-controller', () => {
     let element, input;
 
     beforeEach(() => {
-      element = fixtureSync('<input-controller-element value="foo"></input-controller-element>');
+      element = fixtureSync(`<${tag}></${tag}>`);
     });
 
     it('should set input type based on the property', () => {
@@ -108,13 +105,13 @@ describe('input-controller', () => {
   describe('unique id', () => {
     let wrapper, elements;
 
-    const ID_REGEX = /^input-input-controller-element-\d+$/u;
+    const ID_REGEX = new RegExp(`^input-${tag}-\\d+$`, 'u');
 
     beforeEach(() => {
       wrapper = fixtureSync(`
         <div>
-          <input-controller-element></input-controller-element>
-          <input-controller-element></input-controller-element>
+          <${tag}></${tag}>
+          <${tag}></${tag}>
         </div>
       `);
       elements = wrapper.children;
@@ -130,4 +127,12 @@ describe('input-controller', () => {
       expect(input1.id).to.not.equal(input2.id);
     });
   });
+};
+
+describe('InputController + Polymer', () => {
+  runTests(definePolymer, ControllerMixin);
+});
+
+describe('InputController + Lit', () => {
+  runTests(defineLit, PolylitMixin);
 });

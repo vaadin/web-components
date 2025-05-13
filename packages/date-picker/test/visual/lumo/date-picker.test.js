@@ -4,6 +4,7 @@ import { visualDiff } from '@web/test-runner-visual-regression';
 import '../../not-animated-styles.js';
 import '../common.js';
 import '../../../theme/lumo/vaadin-date-picker.js';
+import { untilOverlayRendered } from '../../helpers.js';
 
 describe('date-picker', () => {
   let div, element;
@@ -101,15 +102,16 @@ describe('date-picker', () => {
       });
 
       describe('dropdown', () => {
-        function openOverlay() {
+        async function openOverlay() {
           element.opened = true;
           div.style.height = `${element.offsetHeight + element.$.overlay.$.overlay.offsetHeight}px`;
           div.style.width = `${element.$.overlay.$.overlay.offsetWidth}px`;
+          await untilOverlayRendered(element);
         }
 
         it('default', async () => {
           element.value = '2000-01-01';
-          openOverlay();
+          await openOverlay();
           await visualDiff(div, `${dir}-dropdown`);
         });
 
@@ -117,7 +119,7 @@ describe('date-picker', () => {
           element.value = '2000-01-01';
           element.showWeekNumbers = true;
           element.i18n = { firstDayOfWeek: 1 };
-          openOverlay();
+          await openOverlay();
           await visualDiff(div, `${dir}-week-numbers`);
         });
       });

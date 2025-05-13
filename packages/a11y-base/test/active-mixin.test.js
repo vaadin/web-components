@@ -1,28 +1,30 @@
 import { expect } from '@vaadin/chai-plugins';
 import { sendKeys } from '@vaadin/test-runner-commands';
-import { fixtureSync, isIOS, mousedown, mouseup, touchend, touchstart } from '@vaadin/testing-helpers';
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import {
+  defineLit,
+  definePolymer,
+  fixtureSync,
+  mousedown,
+  mouseup,
+  touchend,
+  touchstart,
+} from '@vaadin/testing-helpers';
+import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
+import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { ActiveMixin } from '../src/active-mixin.js';
 
-customElements.define(
-  'active-mixin-element',
-  class extends ActiveMixin(PolymerElement) {
-    static get template() {
-      return html`<div></div>`;
-    }
-  },
-);
+const runTests = (defineHelper, baseMixin) => {
+  const tag = defineHelper('active-mixin', '<slot></slot>', (Base) => class extends ActiveMixin(baseMixin(Base)) {});
 
-describe('active-mixin', () => {
   let element;
 
   beforeEach(() => {
     // Sets tabindex to 0 in order to make the element focusable for the time of testing.
-    element = fixtureSync(`<active-mixin-element tabindex="0"></active-mixin-element>`);
+    element = fixtureSync(`<${tag} tabindex="0"></{tag}>`);
     element.focus();
   });
 
-  (isIOS ? describe.skip : describe)('mouse', () => {
+  describe('mouse', () => {
     it('should set active attribute on mousedown', () => {
       mousedown(element);
       expect(element.hasAttribute('active')).to.be.true;
@@ -119,4 +121,12 @@ describe('active-mixin', () => {
     element.parentNode.removeChild(element);
     expect(element.hasAttribute('active')).to.be.false;
   });
+};
+
+describe('ActiveMixin + Polymer', () => {
+  runTests(definePolymer, ControllerMixin);
+});
+
+describe('ActiveMixin + Lit', () => {
+  runTests(defineLit, PolylitMixin);
 });

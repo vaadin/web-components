@@ -41,16 +41,6 @@ template.innerHTML = `
       box-sizing: border-box;
       padding-right: 40px;
       top: var(--vaadin-infinite-scroller-buffer-offset, 0);
-      animation: fadein 0.2s;
-    }
-
-    @keyframes fadein {
-      from {
-        opacity: 0;
-      }
-      to {
-        opacity: 1;
-      }
     }
   </style>
 
