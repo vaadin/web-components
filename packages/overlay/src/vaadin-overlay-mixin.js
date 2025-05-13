@@ -265,7 +265,7 @@ export const OverlayMixin = (superClass) =>
 
         this._animatedOpening();
 
-        requestAnimationFrame(() => {
+        this.__scheduledOpen = requestAnimationFrame(() => {
           setTimeout(() => {
             this._trapFocus();
 
@@ -279,6 +279,11 @@ export const OverlayMixin = (superClass) =>
           this._addGlobalListeners();
         }
       } else if (wasOpened) {
+        if (this.__scheduledOpen) {
+          cancelAnimationFrame(this.__scheduledOpen);
+          this.__scheduledOpen = null;
+        }
+
         this._resetFocus();
 
         this._animatedClosing();
