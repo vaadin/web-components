@@ -5,9 +5,12 @@ registerStyles(
   css`
     /* Disable animation */
     [part='label'],
+    [part$='button'],
     [part='helper-text'],
+    [part='input-field'],
     [part='error-message'],
-    [part='required-indicator'] {
+    [part='required-indicator'],
+    ::slotted(:is(input, textarea):placeholder-shown) {
       &,
       &::before,
       &::after {
