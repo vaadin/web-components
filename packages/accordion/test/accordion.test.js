@@ -152,7 +152,7 @@ describe('vaadin-accordion', () => {
       accordion.addEventListener('opened-changed', spy);
       accordion.opened = 1;
       await nextUpdate(accordion);
-      expect(spy.calledOnce).to.be.true;
+      expect(spy).to.be.calledOnce;
     });
 
     it('should open panel when component in summary is clicked', async () => {
