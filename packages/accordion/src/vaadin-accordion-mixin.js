@@ -114,10 +114,12 @@ export const AccordionMixin = (superClass) =>
     /** @private */
     _updateItems(items, opened) {
       if (items) {
+        this.__itemsSync = true;
         const itemToOpen = items[opened];
         items.forEach((item) => {
           item.opened = item === itemToOpen;
         });
+        this.__itemsSync = false;
       }
     }
 
@@ -140,6 +142,11 @@ export const AccordionMixin = (superClass) =>
 
     /** @private */
     _updateOpened(e) {
+      // Item sync applies the current opened index to each item, in which
+      // case we don't need to update the opened index again.
+      if (this.__itemsSync) {
+        return;
+      }
       const target = this._filterItems(e.composedPath())[0];
       const idx = this.items.indexOf(target);
       if (e.detail.value) {
