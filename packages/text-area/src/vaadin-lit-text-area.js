@@ -11,6 +11,7 @@ import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { inputFieldShared } from '@vaadin/field-base/src/styles/input-field-shared-styles.js';
+import { CSSInjectionMixin } from '@vaadin/vaadin-themable-mixin/css-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { TextAreaMixin } from './vaadin-text-area-mixin.js';
 import { textAreaStyles } from './vaadin-text-area-styles.js';
@@ -24,7 +25,7 @@ import { textAreaStyles } from './vaadin-text-area-styles.js';
  * There is no ETA regarding specific Vaadin version where it'll land.
  * Feel free to try this code in your apps as per Apache 2.0 license.
  */
-export class TextArea extends TextAreaMixin(ThemableMixin(ElementMixin(PolylitMixin(LitElement)))) {
+export class TextArea extends TextAreaMixin(CSSInjectionMixin(ThemableMixin(ElementMixin(PolylitMixin(LitElement))))) {
   static get is() {
     return 'vaadin-text-area';
   }
