@@ -2,7 +2,6 @@ import { expect } from '@vaadin/chai-plugins';
 import { aTimeout, fixtureSync, nextFrame, nextResize, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../all-imports.js';
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import {
   flushGrid,
   getContainerCellContent,
@@ -15,44 +14,28 @@ import {
   scrollToEnd,
 } from './helpers.js';
 
-class TestComponent extends PolymerElement {
-  static get template() {
-    return html`
-      <style>
-        :host {
-          display: block;
-        }
-      </style>
-
-      <vaadin-grid id="grid" style="width: 200px; height: 400px;" size="10" hidden>
-        <vaadin-grid-column id="column" header="header"></vaadin-grid-column>
-      </vaadin-grid>
-    `;
-  }
-
-  ready() {
-    super.ready();
-
-    this.$.grid.rowDetailsRenderer = (root, _, model) => {
-      root.textContent = model.index;
-    };
-    this.$.column.renderer = (root, _, model) => {
-      root.textContent = model.index;
-    };
-    this.$.column.footerRenderer = (root) => {
-      root.textContent = 'footer';
-    };
-  }
-}
-
-customElements.define('test-component', TestComponent);
-
 describe('resizing', () => {
-  let component, grid;
+  let component, grid, column;
 
   beforeEach(async () => {
-    component = fixtureSync('<test-component></test-component>');
-    grid = component.$.grid;
+    component = fixtureSync(`
+      <div>
+        <vaadin-grid id="grid" style="width: 200px; height: 400px;" size="10" hidden>
+          <vaadin-grid-column id="column" header="header"></vaadin-grid-column>
+        </vaadin-grid>
+      </div>
+    `);
+    grid = component.firstElementChild;
+    grid.rowDetailsRenderer = (root, _, model) => {
+      root.textContent = model.index;
+    };
+    column = grid.querySelector('vaadin-grid-column');
+    column.renderer = (root, _, model) => {
+      root.textContent = model.index;
+    };
+    column.footerRenderer = (root) => {
+      root.textContent = 'footer';
+    };
     grid.dataProvider = infiniteDataProvider;
     await nextFrame();
     grid.hidden = false;
@@ -120,7 +103,7 @@ describe('resizing', () => {
   it('should have correct layout after column width change', async () => {
     grid.style.height = '';
     grid.allRowsVisible = true;
-    grid.querySelector('vaadin-grid-column').width = '300px';
+    column.width = '300px';
     // Before next render
     await nextFrame();
     // After next render

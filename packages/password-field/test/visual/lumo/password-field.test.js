@@ -1,6 +1,7 @@
 import { sendKeys } from '@vaadin/test-runner-commands';
 import { fixtureSync } from '@vaadin/testing-helpers/dist/fixture.js';
 import { visualDiff } from '@web/test-runner-visual-regression';
+import '../common.js';
 import '../../../theme/lumo/vaadin-password-field.js';
 
 describe('password-field', () => {

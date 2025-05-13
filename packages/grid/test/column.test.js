@@ -2,7 +2,6 @@ import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../all-imports.js';
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import {
   flushGrid,
   getBodyCellContent,
@@ -13,52 +12,30 @@ import {
   infiniteDataProvider,
 } from './helpers.js';
 
-class GridContainer extends PolymerElement {
-  static get template() {
-    return html`
-      <vaadin-grid id="grid" size="10">
-        <vaadin-grid-column-group header="group header1">
-          <vaadin-grid-column
-            header="header1"
-            footerRenderer="[[footerRenderer1]]"
-            renderer="[[cellRenderer]]"
-          ></vaadin-grid-column>
-
-          <vaadin-grid-column
-            header="header2"
-            footerRenderer="[[footerRenderer2]]"
-            renderer="[[cellRenderer]]"
-          ></vaadin-grid-column>
-        </vaadin-grid-column-group>
-
-        <vaadin-grid-column id="emptycolumn"></vaadin-grid-column>
-      </vaadin-grid>
-    `;
-  }
-
-  footerRenderer1(root) {
-    root.textContent = 'footer1';
-  }
-
-  footerRenderer2(root) {
-    root.textContent = 'footer2';
-  }
-
-  cellRenderer(root) {
-    root.textContent = 'cell';
-  }
-}
-
-customElements.define('grid-container', GridContainer);
-
 describe('column', () => {
-  let container, column, grid, emptyColumn;
+  let grid, columns, column, emptyColumn;
 
   beforeEach(() => {
-    container = fixtureSync('<grid-container></grid-container>');
-    grid = container.$.grid;
+    grid = fixtureSync(`
+      <vaadin-grid id="grid" size="10">
+        <vaadin-grid-column-group header="group header1">
+          <vaadin-grid-column header="header1"></vaadin-grid-column>
+          <vaadin-grid-column header="header2"></vaadin-grid-column>
+        </vaadin-grid-column-group>
+        <vaadin-grid-column id="emptycolumn"></vaadin-grid-column>
+      </vaadin-grid>
+    `);
     grid.dataProvider = infiniteDataProvider;
-    column = grid.querySelector('vaadin-grid-column');
+    columns = [...grid.querySelectorAll('vaadin-grid-column[header]')];
+    columns.forEach((col, i) => {
+      col.renderer = (root) => {
+        root.textContent = 'cell';
+      };
+      col.footerRenderer = (root) => {
+        root.textContent = `footer${i + 1}`;
+      };
+    });
+    column = columns[0];
     emptyColumn = grid.querySelector('#emptycolumn');
     flushGrid(grid);
   });

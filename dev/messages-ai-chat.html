@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Messages AI Chat</title>
+    <script type="module" src="./common.js"></script>
+
+    <style>
+      html,
+      body {
+        height: 100%;
+        margin: 0;
+      }
+
+      #chat {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+      }
+
+      vaadin-scroller {
+        flex: 1;
+        scroll-snap-type: y proximity;
+      }
+
+      vaadin-scroller::after {
+        display: block;
+        content: '';
+        scroll-snap-align: end;
+        min-height: 1px;
+      }
+    </style>
+
+    <script type="module">
+      import '@vaadin/message-input';
+      import '@vaadin/message-list';
+      import '@vaadin/scroller';
+
+      /**
+       * Simulates streaming text from an AI model
+       * @returns {Object} Subscription object with onNext and onComplete methods
+       */
+      function simulateMessageStream() {
+        // Sample response to simulate an AI assistant message
+        const answerMarkdown = `
+I can help you with:
+
+1. **Answering questions** – from quick facts to in-depth explanations.  
+2. **Explaining concepts** – breaking down complex ideas into clear, step-by-step logic.  
+3. **Brainstorming & creativity** – generating outlines, stories, code snippets, or design ideas.  
+4. **Guidance & troubleshooting** – walking you through processes or helping debug issues.  
+
+---
+
+### How to get the most out of me 🛠️
+
+| Step | What to do | Why it matters |
+|------|------------|----------------|
+| 1️⃣ | **State your goal clearly.** | A precise prompt yields a precise answer. |
+| 2️⃣ | **Add constraints or context.** <br>*(e.g., audience, length, tone)* | Tailors the response to your needs. |
+| 3️⃣ | **Ask follow-ups.** | We can iterate until you're satisfied. |
+
+---
+
+#### Example
+
+> **You:** "Explain quantum entanglement in simple terms."
+
+> **Me:**  
+> *Imagine two coins spun so perfectly in sync that the moment you look at one and see "heads," the other coin—no matter how far away—will instantly show "tails." In quantum physics, particles can become linked in just that way…*  
+
+---
+
+Need anything else? Just let me know, and I'll jump right in! ✨`;
+
+        let onNextCallback = null;
+        let onCompleteCallback = null;
+
+        // Create subscription interface
+        const subscription = {
+          onNext: (callback) => {
+            onNextCallback = callback;
+
+            // Simulate token-by-token streaming with a small delay
+            const tokenLength = 10;
+
+            setTimeout(async () => {
+              let tokenIndex = 0;
+              while (tokenIndex < answerMarkdown.length) {
+                const token = answerMarkdown.substring(tokenIndex, tokenIndex + tokenLength);
+                tokenIndex += tokenLength;
+                onNextCallback(token);
+                await new Promise((resolve) => setTimeout(resolve, 100));
+              }
+              if (onCompleteCallback) {
+                onCompleteCallback();
+              }
+            }, 1000);
+
+            return subscription;
+          },
+          onComplete: (callback) => {
+            onCompleteCallback = callback;
+            return subscription;
+          },
+        };
+
+        return subscription;
+      }
+
+      function createItem(text, assistant = false) {
+        return {
+          text,
+          time: 'Just now',
+          userName: assistant ? 'Assistant' : 'User',
+          userColorIndex: assistant ? 2 : 1,
+        };
+      }
+
+      const list = document.querySelector('vaadin-message-list');
+      const input = document.querySelector('vaadin-message-input');
+
+      // Set initial messages
+      list.items = [
+        createItem('Hello! Can you help me with a question?'),
+        createItem("Of course! I'm here to help. What's your question?", true),
+      ];
+
+      // Handle new messages from user
+      input.addEventListener('submit', async (e) => {
+        // Add user message to the list
+        list.items = [...list.items, createItem(e.detail.value)];
+        input.disabled = true;
+
+        // Create empty assistant message that will be populated gradually
+        const newAssistantItem = createItem('', true);
+
+        // Simulate AI typing response token by token
+        simulateMessageStream()
+          .onNext((token) => {
+            newAssistantItem.text += token;
+            // Force UI update by creating a new array
+            list.items = list.items.includes(newAssistantItem) ? [...list.items] : [...list.items, newAssistantItem];
+          })
+          .onComplete(() => {
+            input.disabled = false;
+          });
+      });
+    </script>
+  </head>
+
+  <body>
+    <div id="chat">
+      <vaadin-scroller>
+        <vaadin-message-list markdown></vaadin-message-list>
+      </vaadin-scroller>
+      <vaadin-message-input></vaadin-message-input>
+    </div>
+  </body>
+</html>

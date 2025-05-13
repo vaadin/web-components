@@ -1,23 +1,21 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync } from '@vaadin/testing-helpers';
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { defineLit, definePolymer, fixtureSync } from '@vaadin/testing-helpers';
+import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
+import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { TabindexMixin } from '../src/tabindex-mixin.js';
 
-customElements.define(
-  'tabindex-mixin-element',
-  class extends TabindexMixin(PolymerElement) {
-    static get template() {
-      return html`<div></div>`;
-    }
-  },
-);
+const runTests = (defineHelper, baseMixin) => {
+  const tag = defineHelper(
+    'tabindex-mixin',
+    '<slot></slot>',
+    (Base) => class extends TabindexMixin(baseMixin(Base)) {},
+  );
 
-describe('tabindex-mixin', () => {
   let element;
 
   describe('default', () => {
     beforeEach(() => {
-      element = fixtureSync(`<tabindex-mixin-element></tabindex-mixin-element>`);
+      element = fixtureSync(`<${tag}></${tag}>`);
     });
 
     it('should not have tabindex attribute by default', () => {
@@ -84,11 +82,19 @@ describe('tabindex-mixin', () => {
 
   describe('custom', () => {
     beforeEach(() => {
-      element = fixtureSync(`<tabindex-mixin-element tabindex="1"></tabindex-mixin-element>`);
+      element = fixtureSync(`<${tag} tabindex="1"></${tag}>`);
     });
 
     it('should set tabindex property to the custom value', () => {
       expect(element.tabindex).to.equal(1);
     });
   });
+};
+
+describe('TabindexMixin + Polymer', () => {
+  runTests(definePolymer, ControllerMixin);
+});
+
+describe('TabindexMixin + Lit', () => {
+  runTests(defineLit, PolylitMixin);
 });
