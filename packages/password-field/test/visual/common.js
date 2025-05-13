@@ -1,7 +1,7 @@
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 registerStyles(
-  'vaadin-*-picker',
+  'vaadin-password-field',
   css`
     /* Hide caret */
     :host([focused]) ::slotted(input) {
