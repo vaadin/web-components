@@ -32,7 +32,7 @@ describe('details', () => {
     });
 
     it('focus-ring', async () => {
-      element.setAttribute('focus-ring', '');
+      element.querySelector('vaadin-details-summary').setAttribute('focus-ring', '');
       await visualDiff(div, 'focus-ring');
     });
 
