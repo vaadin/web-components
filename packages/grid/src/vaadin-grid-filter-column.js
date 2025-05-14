@@ -14,7 +14,7 @@ import { GridFilterColumnMixin } from './vaadin-grid-filter-column-mixin.js';
  *
  * #### Example:
  * ```html
- * <vaadin-grid items="[[items]]">
+ * <vaadin-grid>
  *  <vaadin-grid-filter-column path="name.first"></vaadin-grid-filter-column>
  *
  *  <vaadin-grid-column>

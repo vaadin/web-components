@@ -15,7 +15,6 @@ import './vaadin-lit-crud-grid.js';
 import './vaadin-lit-crud-form.js';
 import { html, LitElement } from 'lit';
 import { ifDefined } from 'lit/directives/if-defined.js';
-import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
@@ -31,7 +30,7 @@ import { crudStyles } from './vaadin-crud-styles.js';
  * This component is an experiment and not yet a part of Vaadin platform.
  * There is no ETA regarding specific Vaadin version where it'll land.
  */
-class Crud extends ControllerMixin(ElementMixin(ThemableMixin(CrudMixin(PolylitMixin(LitElement))))) {
+class Crud extends CrudMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElement)))) {
   static get styles() {
     return crudStyles;
   }
