@@ -549,14 +549,22 @@ export class IronListAdapter {
     }
 
     this._adjustVirtualIndexOffset(this._scrollTop - (this.__previousScrollTop || 0));
-    const delta = this.scrollTarget.scrollTop - this._scrollPosition;
+    let delta = this.scrollTarget.scrollTop - this._scrollPosition;
 
     super._scrollHandler();
 
-    if (this._physicalCount !== 0) {
-      const isScrollingDown = delta >= 0;
-      const reusables = this._getReusables(!isScrollingDown);
-
+    const isScrollingDown = delta >= 0;
+    const reusables = this._getReusables(isScrollingDown);
+    const lastIndexVisible = this.adjustedLastVisibleIndex === this.size - 1;
+    const needToCreateItemsAbove = reusables.indexes.length === 0 && lastIndexVisible && delta < 0;
+    if (needToCreateItemsAbove) {
+      delta -= this._scrollOffset;
+      const idxAdjustment = Math.round(delta / this._physicalAverage);
+      this._virtualStart += idxAdjustment;
+      this._physicalStart += idxAdjustment;
+      this._physicalTop = Math.min(Math.floor(this._virtualStart) * this._physicalAverage, this._scrollPosition);
+      this._update();
+    } else if (this._physicalCount !== 0) {
       if (reusables.indexes.length) {
         // After running super._scrollHandler, fix internal properties to workaround an iron-list issue.
         // See https://github.com/vaadin/web-components/issues/1691
