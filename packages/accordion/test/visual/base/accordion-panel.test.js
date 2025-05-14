@@ -1,3 +1,4 @@
+import { sendKeys } from '@vaadin/test-runner-commands';
 import { fixtureSync } from '@vaadin/testing-helpers/dist/fixture.js';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '../../../src/vaadin-lit-accordion-panel.js';
@@ -26,6 +27,11 @@ describe('accordion-panel', () => {
   it('opened', async () => {
     element.opened = true;
     await visualDiff(div, 'opened');
+  });
+
+  it('focused', async () => {
+    await sendKeys({ press: 'Tab' });
+    await visualDiff(div, 'focused');
   });
 
   it('disabled', async () => {
