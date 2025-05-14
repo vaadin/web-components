@@ -115,7 +115,8 @@ export const checkboxRadio = (part, propName = part) => css`
   }
 
   :host([readonly][focus-ring]) [part='${unsafeCSS(part)}'] {
-    --vaadin-input-field-border-color: transparent;
+    --vaadin-${unsafeCSS(propName)}-border-color: transparent;
+    outline-offset: calc(var(--_border-width) * -1);
     outline-style: dashed;
   }
 
