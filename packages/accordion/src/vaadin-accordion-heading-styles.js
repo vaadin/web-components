@@ -5,10 +5,10 @@
  */
 import '@vaadin/component-base/src/style-props.js';
 import { css } from 'lit';
-import { summaryStyles } from '../../details/src/vaadin-lit-details-summary';
+import { detailsSummary } from '../../details/src/vaadin-details-summary-styles.js';
 
 export const accordionHeading = [
-  summaryStyles('vaadin-accordion-heading'),
+  detailsSummary('vaadin-accordion-heading'),
   css`
     button {
       align-items: center;
