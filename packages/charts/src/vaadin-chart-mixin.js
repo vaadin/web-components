@@ -1211,6 +1211,12 @@ export const ChartMixin = (superClass) =>
                   effectiveCss += style.textContent;
                 });
 
+                if (self.shadowRoot.adoptedStyleSheets) {
+                  self.shadowRoot.adoptedStyleSheets.forEach((sheet) => {
+                    effectiveCss += [...sheet.cssRules].map((rule) => rule.cssText).join('\n');
+                  });
+                }
+
                 // Strip off host selectors that target individual instances
                 effectiveCss = effectiveCss.replace(/:host\(.+?\)/gu, (match) => {
                   const selector = match.substr(6, match.length - 7);
