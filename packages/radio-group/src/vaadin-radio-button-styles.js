@@ -19,7 +19,6 @@ export const radioButtonStyles = [
       translate: -50% -50%;
       width: var(--vaadin-radio-button-dot-size, 50%);
       height: var(--vaadin-radio-button-dot-size, 50%);
-      background: var(--vaadin-radio-button-dot-color, currentColor);
       border-radius: 50%;
     }
   `,
