@@ -554,9 +554,9 @@ export class IronListAdapter {
     super._scrollHandler();
 
     const isScrollingDown = delta >= 0;
-    const reusables = this._getReusables(isScrollingDown);
+    const reusables = this._physicalCount > 0 && this._getReusables(isScrollingDown);
     const lastIndexVisible = this.adjustedLastVisibleIndex === this.size - 1;
-    const needToCreateItemsAbove = reusables.indexes.length === 0 && lastIndexVisible && delta < 0;
+    const needToCreateItemsAbove = reusables && reusables.indexes.length === 0 && lastIndexVisible && delta < 0;
     if (needToCreateItemsAbove) {
       delta -= this._scrollOffset;
       const idxAdjustment = Math.round(delta / this._physicalAverage);
