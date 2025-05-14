@@ -3,35 +3,30 @@
  * Copyright (c) 2018 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { css } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { css, unsafeCSS } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
-export const checkboxGroupStyles = css`
+export const checkboxGroupStyles = (name = 'checkbox') => css`
   :host {
-    display: inline-flex;
-  }
-
-  :host::before {
-    content: '\\2003';
-    width: 0;
-    display: inline-block;
-  }
-
-  :host([hidden]) {
-    display: none !important;
+    width: fit-content;
   }
 
   .vaadin-group-field-container {
+    display: contents;
+  }
+
+  :host,
+  [part='group-field'] {
     display: flex;
     flex-direction: column;
-    width: 100%;
+    gap: var(--vaadin-${unsafeCSS(name)}-group-gap, var(--_vaadin-gap-container-block));
   }
 
   [part='group-field'] {
-    display: flex;
-    flex-wrap: wrap;
+    gap: 0.5lh 1.5em;
   }
 
-  :host(:not([has-label])) [part='label'] {
-    display: none;
+  :host([theme~='horizontal']) [part='group-field'] {
+    flex-direction: row;
+    flex-wrap: wrap;
   }
 `;

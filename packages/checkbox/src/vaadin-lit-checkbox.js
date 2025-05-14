@@ -8,6 +8,7 @@ import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
+import { fieldShared } from '@vaadin/field-base/src/styles/field-shared-styles.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { CheckboxMixin } from './vaadin-checkbox-mixin.js';
 import { checkboxStyles } from './vaadin-checkbox-styles.js';
@@ -27,7 +28,7 @@ export class Checkbox extends CheckboxMixin(ElementMixin(ThemableMixin(PolylitMi
   }
 
   static get styles() {
-    return checkboxStyles;
+    return [fieldShared, checkboxStyles];
   }
 
   /** @protected */

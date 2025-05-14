@@ -7,6 +7,7 @@ import { html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
+import { fieldShared } from '@vaadin/field-base/src/styles/field-shared-styles.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { RadioButtonMixin } from './vaadin-radio-button-mixin.js';
 import { radioButtonStyles } from './vaadin-radio-button-styles.js';
@@ -26,7 +27,7 @@ class RadioButton extends RadioButtonMixin(ElementMixin(ThemableMixin(PolylitMix
   }
 
   static get styles() {
-    return radioButtonStyles;
+    return [fieldShared, radioButtonStyles];
   }
 
   /** @protected */

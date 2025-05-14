@@ -5,4 +5,4 @@
  */
 import type { CSSResult } from 'lit';
 
-export const checkboxGroupStyles: CSSResult;
+export const checkboxGroupStyles: () => CSSResult;
