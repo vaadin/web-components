@@ -9,7 +9,7 @@ import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { detailsSummary } from './vaadin-lit-details-summary-styles.js';
+import { detailsSummary } from './vaadin-details-summary-styles.js';
 
 /**
  * LitElement based version of `<vaadin-details-summary>` web component.
