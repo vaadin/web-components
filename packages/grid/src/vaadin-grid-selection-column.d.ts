@@ -19,7 +19,7 @@ export * from './vaadin-grid-selection-column-mixin.js';
  *
  * #### Example:
  * ```html
- * <vaadin-grid items="[[items]]">
+ * <vaadin-grid>
  *  <vaadin-grid-selection-column frozen auto-select></vaadin-grid-selection-column>
  *
  *  <vaadin-grid-column>
