@@ -34,15 +34,17 @@ describe('vaadin-chart exporting', () => {
 
   it('should temporarily copy shadow styles to the body before export', async () => {
     let styleCopiedToBody = false;
+    let styleContent;
 
     // Track style movement into the document body
     const observer = new MutationObserver((mutations) => {
-      styleCopiedToBody ||= mutations.some(
-        (mutation) =>
-          Array.from(mutation.addedNodes)
-            .map((node) => node.tagName.toLowerCase())
-            .indexOf('style') >= 0,
-      );
+      mutations.forEach((mutation) => {
+        const styleTag = [...mutation.addedNodes].find((node) => node instanceof HTMLStyleElement);
+        if (styleTag) {
+          styleCopiedToBody = true;
+          styleContent = styleTag.textContent;
+        }
+      });
     });
 
     observer.observe(document.body, { childList: true });
@@ -57,6 +59,7 @@ describe('vaadin-chart exporting', () => {
     expect(fireEventSpy.firstCall.args[1]).to.be.equal('beforeExport');
     await nextRender(chart);
     expect(styleCopiedToBody).to.be.true;
+    expect(styleContent).to.include('.highcharts-color-0');
   });
 
   it('should remove shadow styles from body after export', async () => {
