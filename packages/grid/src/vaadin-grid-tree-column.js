@@ -14,7 +14,7 @@ import { GridTreeColumnMixin } from './vaadin-grid-tree-column-mixin.js';
  *
  * #### Example:
  * ```html
- * <vaadin-grid items="[[items]]">
+ * <vaadin-grid>
  *  <vaadin-grid-tree-column path="name.first"></vaadin-grid-tree-column>
  *
  *  <vaadin-grid-column>
