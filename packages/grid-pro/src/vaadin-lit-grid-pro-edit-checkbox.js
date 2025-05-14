@@ -12,12 +12,11 @@ import { Checkbox } from '@vaadin/checkbox/src/vaadin-lit-checkbox.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 
 /**
- * LitElement based version of `<vaadin-grid-pro-edit-checkbox>` web component.
+ * An element used internally by `<vaadin-grid-pro>`. Not intended to be used separately.
  *
- * ## Disclaimer
- *
- * This component is an experiment and not yet a part of Vaadin platform.
- * There is no ETA regarding specific Vaadin version where it'll land.
+ * @customElement
+ * @extends Checkbox
+ * @private
  */
 class GridProEditCheckbox extends Checkbox {
   static get is() {
