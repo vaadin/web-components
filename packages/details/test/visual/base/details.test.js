@@ -33,7 +33,7 @@ describe('details', () => {
     });
 
     it('focus-ring', async () => {
-      sendKeys({ press: 'Tab' });
+      await sendKeys({ press: 'Tab' });
       await visualDiff(div, 'focus-ring');
     });
 
