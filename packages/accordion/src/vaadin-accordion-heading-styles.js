@@ -5,7 +5,7 @@
  */
 import '@vaadin/component-base/src/style-props.js';
 import { css } from 'lit';
-import { detailsSummary } from '../../details/src/vaadin-details-summary-styles.js';
+import { detailsSummary } from '@vaadin/details/src/vaadin-details-summary-styles.js';
 
 export const accordionHeading = [
   detailsSummary('vaadin-accordion-heading'),
