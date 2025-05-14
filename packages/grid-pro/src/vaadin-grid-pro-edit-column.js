@@ -23,7 +23,7 @@ import { GridProEditColumnMixin } from './vaadin-grid-pro-edit-column-mixin.js';
  *
  * #### Example:
  * ```html
- * <vaadin-grid-pro items="[[items]]">
+ * <vaadin-grid-pro>
  *  <vaadin-grid-pro-edit-column path="name.first"></vaadin-grid-pro-edit-column>
  *
  *  <vaadin-grid-column>
