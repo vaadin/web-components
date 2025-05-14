@@ -5,14 +5,6 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Details</title>
-    <script type="module" src="./common.js"></script>
-
-    <script type="module">
-      import '@vaadin/details';
-      import '@vaadin/tooltip';
-      // import '@vaadin/details/theme/material/vaadin-details.js';
-      // import '@vaadin/tooltip/theme/material/vaadin-tooltip.js';
-    </script>
   </head>
 
   <body>
@@ -20,12 +12,12 @@
       <div>Toggle using mouse, Enter and Space keys.</div>
     </vaadin-details>
 
-    <!--
-    <vaadin-details>
-      <vaadin-details-summary slot="summary">Expandable Details</vaadin-details-summary>
-      <div>Toggle using mouse, Enter and Space keys.</div>
-      <vaadin-tooltip slot="tooltip" text="Click to toggle"></vaadin-tooltip>
-    </vaadin-details>
-    -->
+    <script type="module">
+      if (window.useBaseStyles) {
+        import('@vaadin/details/src/vaadin-details.js');
+      } else {
+        import('@vaadin/details/vaadin-details.js');
+      }
+    </script>
   </body>
 </html>

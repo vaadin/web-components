@@ -7,7 +7,10 @@ import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ButtonMixin } from '@vaadin/button/src/vaadin-button-mixin.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
-import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { detailsSummary } from './vaadin-details-summary-core-styles.js';
+
+registerStyles('vaadin-details-summary', detailsSummary(), { moduleId: 'vaadin-details-summary-styles' });
 
 /**
  * The details summary element.
@@ -46,23 +49,6 @@ class DetailsSummary extends ButtonMixin(DirMixin(ThemableMixin(PolymerElement))
 
   static get template() {
     return html`
-      <style>
-        :host {
-          display: block;
-          outline: none;
-          white-space: nowrap;
-          -webkit-user-select: none;
-          user-select: none;
-        }
-
-        :host([hidden]) {
-          display: none !important;
-        }
-
-        :host([disabled]) {
-          pointer-events: none;
-        }
-      </style>
       <span part="toggle" aria-hidden="true"></span>
       <div part="content"><slot></slot></div>
     `;
