@@ -27,6 +27,18 @@ registerStyles(
   `,
 );
 
+registerStyles(
+  'vaadin-date-picker-overlay-content',
+  css`
+    /* Disable animation */
+    ::slotted([slot='years']),
+    ::slotted([slot='months']) {
+      animation: none !important;
+      transition: none !important;
+    }
+  `,
+);
+
 /* Stop focused day animation */
 registerStyles(
   'vaadin-month-calendar',
