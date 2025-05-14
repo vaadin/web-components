@@ -1207,10 +1207,12 @@ export const ChartMixin = (superClass) =>
               if (!self.tempBodyStyle) {
                 let effectiveCss = '';
 
+                // PolymerElement uses `<style>` tags for adding styles
                 [...self.shadowRoot.querySelectorAll('style')].forEach((style) => {
                   effectiveCss += style.textContent;
                 });
 
+                // LitElement uses `adoptedStyleSheets` for adding styles
                 if (self.shadowRoot.adoptedStyleSheets) {
                   self.shadowRoot.adoptedStyleSheets.forEach((sheet) => {
                     effectiveCss += [...sheet.cssRules].map((rule) => rule.cssText).join('\n');
