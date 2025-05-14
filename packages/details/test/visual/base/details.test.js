@@ -1,3 +1,4 @@
+import { sendKeys } from '@vaadin/test-runner-commands';
 import { fixtureSync } from '@vaadin/testing-helpers/dist/fixture.js';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '../../../src/vaadin-lit-details.js';
@@ -32,7 +33,7 @@ describe('details', () => {
     });
 
     it('focus-ring', async () => {
-      element.querySelector('vaadin-details-summary').setAttribute('focus-ring', '');
+      sendKeys({ press: 'Tab' });
       await visualDiff(div, 'focus-ring');
     });
 
