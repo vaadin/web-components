@@ -5,4 +5,4 @@
  */
 import { checkboxGroupStyles } from '@vaadin/checkbox-group/src/vaadin-checkbox-group-styles.js';
 
-export const radioGroupStyles = checkboxGroupStyles;
+export const radioGroupStyles = checkboxGroupStyles('radio-button');

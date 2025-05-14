@@ -28,7 +28,7 @@ class CheckboxGroup extends CheckboxGroupMixin(ElementMixin(ThemableMixin(Polyli
   }
 
   static get styles() {
-    return [fieldShared, checkboxGroupStyles];
+    return [fieldShared, checkboxGroupStyles()];
   }
 
   /** @protected */

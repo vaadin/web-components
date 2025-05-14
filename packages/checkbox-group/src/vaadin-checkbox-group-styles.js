@@ -3,9 +3,9 @@
  * Copyright (c) 2018 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { css } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { css, unsafeCSS } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
-export const checkboxGroupStyles = css`
+export const checkboxGroupStyles = (name = 'checkbox') => css`
   :host {
     width: fit-content;
   }
@@ -18,7 +18,7 @@ export const checkboxGroupStyles = css`
   [part='group-field'] {
     display: flex;
     flex-direction: column;
-    gap: var(--vaadin-checkbox-group-gap, var(--_vaadin-gap-container-block));
+    gap: var(--vaadin-${unsafeCSS(name)}-group-gap, var(--_vaadin-gap-container-block));
   }
 
   [part='group-field'] {
