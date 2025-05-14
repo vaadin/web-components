@@ -1,7 +1,13 @@
 /* eslint-env node */
+import rollupAlias from '@rollup/plugin-alias';
 import { esbuildPlugin } from '@web/dev-server-esbuild';
+import { fromRollup } from '@web/dev-server-rollup';
 import fs from 'node:fs';
 import path from 'node:path';
+
+const alias = fromRollup(rollupAlias);
+
+const hasBaseParam = process.argv.includes('--base');
 
 /** @return {import('@web/test-runner').TestRunnerPlugin} */
 function generatedLitTestsPlugin() {
@@ -43,6 +49,9 @@ const preventFouc = `
   </script>
 `;
 
+// When passing --base flag to `yarn start` command, load base styles and not Lumo
+const commonStyles = `<script type="module" src="./common${hasBaseParam ? '-base' : ''}.js"></script>`;
+
 export default {
   plugins: [
     {
@@ -50,6 +59,12 @@ export default {
       transform(context) {
         if (context.response.is('html')) {
           let body = context.body;
+
+          // Common styles and a flag to detect which version to import
+          body = body.replace(
+            /<\/head>/u,
+            `${commonStyles}\n<script>window.useBaseStyles = ${hasBaseParam}</script></head>`,
+          );
 
           // Fouc prevention
           body = body.replace(/<\/body>/u, `${preventFouc}\n</body>`);
@@ -73,7 +88,16 @@ export default {
         }
       },
     },
+    hasBaseParam &&
+      alias({
+        entries: [
+          {
+            find: /(.+)-core-styles\.js/u,
+            replacement: '$1-base-styles.js',
+          },
+        ],
+      }),
     esbuildPlugin({ ts: true }),
     generatedLitTestsPlugin(),
-  ],
+  ].filter(Boolean),
 };
