@@ -29,7 +29,7 @@ function generatedLitTestsPlugin() {
 }
 
 /** @return {import('@web/test-runner').TestRunnerPlugin} */
-function enforceBaseStylesPlugin() {
+export function enforceBaseStylesPlugin() {
   return {
     name: 'enforce-base-styles',
     transform(context) {

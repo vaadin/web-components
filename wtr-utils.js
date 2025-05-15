@@ -1,7 +1,5 @@
 /* eslint-env node */
-import rollupAlias from '@rollup/plugin-alias';
 import { esbuildPlugin } from '@web/dev-server-esbuild';
-import { fromRollup } from '@web/dev-server-rollup';
 import { playwrightLauncher } from '@web/test-runner-playwright';
 import { createSauceLabsLauncher } from '@web/test-runner-saucelabs';
 import { visualRegressionPlugin } from '@web/test-runner-visual-regression/plugin';
@@ -11,8 +9,7 @@ import minimist from 'minimist';
 import { execSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
-
-const alias = fromRollup(rollupAlias);
+import { enforceBaseStylesPlugin } from './web-dev-server.config.js';
 
 dotenv.config();
 
@@ -336,15 +333,7 @@ const createVisualTestsConfig = (theme, browserVersion) => {
         failureThresholdType: 'percent',
         update: process.env.TEST_ENV === 'update',
       }),
-      theme === 'base' &&
-        alias({
-          entries: [
-            {
-              find: /(.+)-core-styles\.js/u,
-              replacement: '$1-base-styles.js',
-            },
-          ],
-        }),
+      theme === 'base' && enforceBaseStylesPlugin(),
     ].filter(Boolean),
     groups,
     testRunnerHtml: getTestRunnerHtml(theme),
