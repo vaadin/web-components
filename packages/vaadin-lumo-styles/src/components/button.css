@@ -1,5 +1,6 @@
 :host {
   /* Sizing */
+  position: relative;
   --lumo-button-size: var(--lumo-size-m);
   min-width: var(--vaadin-button-min-width, calc(var(--_button-size) * 2));
   height: var(--_button-size);
