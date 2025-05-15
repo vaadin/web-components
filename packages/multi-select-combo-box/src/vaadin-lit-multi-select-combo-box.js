@@ -12,6 +12,7 @@ import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { inputFieldShared } from '@vaadin/field-base/src/styles/input-field-shared-styles.js';
+import { CSSInjectionMixin } from '@vaadin/vaadin-themable-mixin/css-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { MultiSelectComboBoxMixin } from './vaadin-multi-select-combo-box-mixin.js';
 import { multiSelectComboBox } from './vaadin-multi-select-combo-box-styles.js';
@@ -25,7 +26,9 @@ import { multiSelectComboBox } from './vaadin-multi-select-combo-box-styles.js';
  * There is no ETA regarding specific Vaadin version where it'll land.
  * Feel free to try this code in your apps as per Apache 2.0 license.
  */
-class MultiSelectComboBox extends MultiSelectComboBoxMixin(ThemableMixin(ElementMixin(PolylitMixin(LitElement)))) {
+class MultiSelectComboBox extends MultiSelectComboBoxMixin(
+  CSSInjectionMixin(ThemableMixin(ElementMixin(PolylitMixin(LitElement)))),
+) {
   static get is() {
     return 'vaadin-multi-select-combo-box';
   }
