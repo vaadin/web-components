@@ -305,13 +305,13 @@
 
 @media (forced-colors: active) {
   :host {
-    border-width: var(--vaadin-button-border-width);
-    background: var(--vaadin-button-background);
-    color: var(--vaadin-button-text-color);
+    border: var(--vaadin-button-border-width) solid !important;
+    background: var(--vaadin-button-background) !important;
+    color: var(--vaadin-button-text-color) !important;
   }
 
   /* TODO: focus-ring vs focused */
   :host([focus-ring]) {
-    outline: 2px solid;
+    outline: 2px solid !important;
   }
 }
