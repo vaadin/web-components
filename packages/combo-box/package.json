@@ -54,7 +54,6 @@
     "@vaadin/chai-plugins": "24.8.0-alpha18",
     "@vaadin/test-runner-commands": "24.8.0-alpha18",
     "@vaadin/testing-helpers": "^1.1.0",
-    "@vaadin/text-field": "24.8.0-alpha18",
     "sinon": "^18.0.0"
   },
   "web-types": [
