@@ -8,80 +8,69 @@
     <!-- <script type="module" src="./common.js"></script> -->
 
     <script type="module">
+      import { html, render } from 'lit';
       import '@vaadin/icon/src/vaadin-lit-icon.js';
       import '@vaadin/icons/vaadin-iconset.js';
       import '@vaadin/button/src/vaadin-lit-button.js';
       import '@vaadin/vaadin-lumo-styles/props.css';
       import '@vaadin/vaadin-lumo-styles/components/icon.css';
       import '@vaadin/vaadin-lumo-styles/components/button.css';
+
+      render(
+        html`
+          ${[
+            'primary',
+            'secondary',
+            'tertiary',
+            'tertiary-inline',
+          ].map((variant) => html`
+            <section style="margin-bottom: 40px;">
+              <h2>${variant || 'Default'}</h2>
+              <vaadin-button theme="${variant}">Reply</vaadin-button>
+
+              ${['contrast', 'success', 'error', 'warning'].map(
+                (theme) => html`
+                  <h3>${theme}</h3>
+                  <vaadin-button theme="${variant} ${theme}">Reply</vaadin-button>
+                  <vaadin-button theme="${variant} ${theme}" disabled>Reply</vaadin-button>
+                  <vaadin-button theme="${variant} ${theme}">
+                    <vaadin-icon icon="vaadin:reply" slot="prefix"></vaadin-icon>
+                    Reply
+                  </vaadin-button>
+                  <vaadin-button theme="${variant} ${theme}" aria-label="Reply">
+                    <vaadin-icon icon="vaadin:reply"></vaadin-icon>
+                    <vaadin-tooltip slot="tooltip" text="Reply"></vaadin-tooltip>
+                  </vaadin-button>
+                `
+              )}
+            </section>
+          `)}
+
+          <section>
+            <h2>Custom Layout</h2>
+            <vaadin-button style="width: 150px">Reply</vaadin-button>
+            <vaadin-button style="width: 150px">
+              <vaadin-icon icon="vaadin:reply" slot="prefix"></vaadin-icon>
+              Reply
+            </vaadin-button>
+            <vaadin-button style="width: 150px" aria-label="Reply">
+              <vaadin-icon icon="vaadin:reply"></vaadin-icon>
+            </vaadin-button>
+            <vaadin-button style="width: 150px; justify-content: start">
+              <vaadin-icon icon="vaadin:reply" slot="prefix"></vaadin-icon>
+              Reply
+            </vaadin-button>
+            <vaadin-button style="flex-direction: column">
+              <vaadin-icon icon="vaadin:reply"></vaadin-icon>
+              Reply
+            </vaadin-button>
+          </section>
+        `,
+        document.body
+      )
     </script>
   </head>
 
   <body>
-    <section>
-      <h2>Label & Icon</h2>
-      <vaadin-button>Reply</vaadin-button>
-      <vaadin-button>
-        <vaadin-icon icon="vaadin:reply" slot="prefix"></vaadin-icon>
-        Reply
-      </vaadin-button>
-      <vaadin-button aria-label="Reply">
-        <vaadin-icon icon="vaadin:reply"></vaadin-icon>
-        <vaadin-tooltip slot="tooltip" text="Reply"></vaadin-tooltip>
-      </vaadin-button>
-    </section>
-
-    <section>
-      <h2>Primary</h2>
-      <vaadin-button theme="primary">Reply</vaadin-button>
-      <vaadin-button theme="primary">
-        <vaadin-icon icon="vaadin:reply" slot="prefix"></vaadin-icon>
-        Reply
-      </vaadin-button>
-      <vaadin-button theme="primary" aria-label="Reply">
-        <vaadin-icon icon="vaadin:reply"></vaadin-icon>
-        <vaadin-tooltip slot="tooltip" text="Reply"></vaadin-tooltip>
-      </vaadin-button>
-    </section>
-
-    <section>
-      <h2>Tertiary</h2>
-      <vaadin-button theme="tertiary">Reply</vaadin-button>
-      <vaadin-button theme="tertiary">
-        <vaadin-icon icon="vaadin:reply" slot="prefix"></vaadin-icon>
-        Reply
-      </vaadin-button>
-      <vaadin-button theme="tertiary" aria-label="Reply">
-        <vaadin-icon icon="vaadin:reply"></vaadin-icon>
-        <vaadin-tooltip slot="tooltip" text="Reply"></vaadin-tooltip>
-      </vaadin-button>
-    </section>
-
-    <section>
-      <h2>Disabled</h2>
-      <vaadin-button theme="primary" disabled>Primary</vaadin-button>
-      <vaadin-button disabled>Secondary</vaadin-button>
-      <vaadin-button theme="tertiary" disabled>Tertiary</vaadin-button>
-    </section>
-
-    <section>
-      <h2>Custom Layout</h2>
-      <vaadin-button style="width: 150px">Reply</vaadin-button>
-      <vaadin-button style="width: 150px">
-        <vaadin-icon icon="vaadin:reply" slot="prefix"></vaadin-icon>
-        Reply
-      </vaadin-button>
-      <vaadin-button style="width: 150px" aria-label="Reply">
-        <vaadin-icon icon="vaadin:reply"></vaadin-icon>
-      </vaadin-button>
-      <vaadin-button style="width: 150px; justify-content: start">
-        <vaadin-icon icon="vaadin:reply" slot="prefix"></vaadin-icon>
-        Reply
-      </vaadin-button>
-      <vaadin-button style="flex-direction: column">
-        <vaadin-icon icon="vaadin:reply"></vaadin-icon>
-        Reply
-      </vaadin-button>
-    </section>
   </body>
 </html>

@@ -41,6 +41,10 @@ export const buttonStyles = css`
       touch-action: manipulation;
     }
 
+    :host::before {
+      height: var(--vaadin-button-height);
+    }
+
     :host([hidden]) {
       display: none !important;
     }
