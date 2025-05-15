@@ -1,3 +1,5 @@
+@import './components/accordion-heading.css';
+@import './components/accordion-panel.css';
 @import './components/button.css';
 @import './components/details-summary.css';
 @import './components/details.css';

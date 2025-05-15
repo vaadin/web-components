@@ -1,0 +1,8 @@
+@import './accordion-heading.css';
+
+@import '../src/components/details.css' vaadin-accordion-panel;
+@import '../src/components/accordion-panel.css' vaadin-accordion-panel;
+
+html {
+  --vaadin-accordion-panel-css-inject: 1;
+}
