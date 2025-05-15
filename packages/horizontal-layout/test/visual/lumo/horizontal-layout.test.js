@@ -151,5 +151,37 @@ describe('horizontal-layout', () => {
         await visualDiff(element, 'slots-without-middle');
       });
     });
+
+    describe('only middle', () => {
+      beforeEach(() => {
+        element = fixtureSync(
+          `
+            <vaadin-horizontal-layout style="border: solid 1px blue; width: 400px;" theme="spacing wrap">
+              <div slot="middle" style="background: #ffd700;">Middle</div>
+            </vaadin-horizontal-layout>
+          `,
+        );
+      });
+
+      it('default', async () => {
+        await visualDiff(element, 'slots-only-middle');
+      });
+    });
+
+    describe('only end', () => {
+      beforeEach(() => {
+        element = fixtureSync(
+          `
+            <vaadin-horizontal-layout style="border: solid 1px blue; width: 400px;" theme="spacing wrap">
+              <div slot="end" style="background: #f08080; width: 100px">End</div>
+            </vaadin-horizontal-layout>
+          `,
+        );
+      });
+
+      it('default', async () => {
+        await visualDiff(element, 'slots-only-end');
+      });
+    });
   });
 });
