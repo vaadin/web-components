@@ -1,11 +1,7 @@
 /* eslint-env node */
-import rollupAlias from '@rollup/plugin-alias';
 import { esbuildPlugin } from '@web/dev-server-esbuild';
-import { fromRollup } from '@web/dev-server-rollup';
 import fs from 'node:fs';
 import path from 'node:path';
-
-const alias = fromRollup(rollupAlias);
 
 const hasBaseParam = process.argv.includes('--base');
 
@@ -32,6 +28,23 @@ function generatedLitTestsPlugin() {
   };
 }
 
+/** @return {import('@web/test-runner').TestRunnerPlugin} */
+function enforceBaseStylesPlugin() {
+  return {
+    name: 'enforce-base-styles',
+    transform(context) {
+      if (context.response.is('html')) {
+        return { body: context.body.replace('./common.js', './common-base.js') };
+      }
+    },
+    transformImport({ source }) {
+      source = source.replace('/theme/lumo/', '/src/');
+      source = source.replace(/(.+)-core-styles\.js/u, '$1-base-styles.js');
+      return source;
+    },
+  };
+}
+
 const preventFouc = `
   <style>
     body:not(.resolved) {
@@ -49,9 +62,6 @@ const preventFouc = `
   </script>
 `;
 
-// When passing --base flag to `yarn start` command, load base styles and not Lumo
-const commonStyles = `<script type="module" src="./common${hasBaseParam ? '-base' : ''}.js"></script>`;
-
 export default {
   plugins: [
     {
@@ -59,12 +69,6 @@ export default {
       transform(context) {
         if (context.response.is('html')) {
           let body = context.body;
-
-          // Common styles and a flag to detect which version to import
-          body = body.replace(
-            /<\/head>/u,
-            `${commonStyles}\n<script>window.useBaseStyles = ${hasBaseParam}</script></head>`,
-          );
 
           // Fouc prevention
           body = body.replace(/<\/body>/u, `${preventFouc}\n</body>`);
@@ -88,15 +92,8 @@ export default {
         }
       },
     },
-    hasBaseParam &&
-      alias({
-        entries: [
-          {
-            find: /(.+)-core-styles\.js/u,
-            replacement: '$1-base-styles.js',
-          },
-        ],
-      }),
+    // When passing --base flag to `yarn start` command, load base styles and not Lumo
+    hasBaseParam && enforceBaseStylesPlugin(),
     esbuildPlugin({ ts: true }),
     generatedLitTestsPlugin(),
   ].filter(Boolean),
