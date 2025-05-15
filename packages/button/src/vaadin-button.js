@@ -9,8 +9,8 @@ import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { buttonStyles } from './vaadin-button-core-styles.js';
 import { ButtonMixin } from './vaadin-button-mixin.js';
-import { buttonStyles } from './vaadin-button-styles.js';
 
 registerStyles('vaadin-button', buttonStyles, { moduleId: 'vaadin-button-styles' });
 
