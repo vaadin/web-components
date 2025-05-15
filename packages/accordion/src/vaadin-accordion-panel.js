@@ -8,8 +8,8 @@ import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { accordionPanel } from './vaadin-accordion-panel-core-styles.js';
 import { AccordionPanelMixin } from './vaadin-accordion-panel-mixin.js';
-import { accordionPanel } from './vaadin-accordion-panel-styles.js';
 
 registerStyles('vaadin-accordion-panel', accordionPanel, { moduleId: 'vaadin-accordion-panel-styles' });
 
