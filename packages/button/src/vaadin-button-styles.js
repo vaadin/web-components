@@ -70,18 +70,3 @@ export const buttonStyles = css`
     }
   }
 `;
-
-export const buttonTemplate = (html) => html`
-  <div class="vaadin-button-container">
-    <span part="prefix" aria-hidden="true">
-      <slot name="prefix"></slot>
-    </span>
-    <span part="label">
-      <slot></slot>
-    </span>
-    <span part="suffix" aria-hidden="true">
-      <slot name="suffix"></slot>
-    </span>
-  </div>
-  <slot name="tooltip"></slot>
-`;
