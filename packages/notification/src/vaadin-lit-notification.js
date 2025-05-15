@@ -88,13 +88,56 @@ class NotificationCard extends ElementMixin(ThemableMixin(PolylitMixin(LitElemen
 }
 
 /**
- * LitElement based version of `<vaadin-notification>` web component.
+ * `<vaadin-notification>` is a Web Component providing accessible and customizable notifications (toasts).
  *
- * ## Disclaimer
+ * ### Rendering
  *
- * This component is an experiment and not yet a part of Vaadin platform.
- * There is no ETA regarding specific Vaadin version where it'll land.
- * Feel free to try this code in your apps as per Apache 2.0 license.
+ * The content of the notification can be populated by using the renderer callback function.
+ *
+ * The renderer function provides `root`, `notification` arguments.
+ * Generate DOM content, append it to the `root` element and control the state
+ * of the host element by accessing `notification`. Before generating new content,
+ * users are able to check if there is already content in `root` for reusing it.
+ *
+ * ```html
+ * <vaadin-notification id="notification"></vaadin-notification>
+ * ```
+ * ```js
+ * const notification = document.querySelector('#notification');
+ * notification.renderer = function(root, notification) {
+ *   root.textContent = "Your work has been saved";
+ * };
+ * ```
+ *
+ * Renderer is called on the opening of the notification.
+ * DOM generated during the renderer call can be reused
+ * in the next renderer call and will be provided with the `root` argument.
+ * On first call it will be empty.
+ *
+ * ### Styling
+ *
+ * `<vaadin-notification>` uses `<vaadin-notification-card>` internal
+ * themable component as the actual visible notification cards.
+ *
+ * The following shadow DOM parts of the `<vaadin-notification-card>` are available for styling:
+ *
+ * Part name | Description
+ * ----------------|----------------
+ * `overlay` | The notification container
+ * `content` | The content of the notification
+ *
+ * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
+ *
+ * Note: the `theme` attribute value set on `<vaadin-notification>` is
+ * propagated to the internal `<vaadin-notification-card>`.
+ *
+ * @fires {CustomEvent} opened-changed - Fired when the `opened` property changes.
+ * @fires {CustomEvent} closed - Fired when the notification is closed.
+ *
+ * @customElement
+ * @extends HTMLElement
+ * @mixes NotificationMixin
+ * @mixes ElementMixin
  */
 class Notification extends NotificationMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElement)))) {
   static get styles() {

@@ -16,12 +16,23 @@ import { GridColumn } from '@vaadin/grid/src/vaadin-lit-grid-column.js';
 import { GridProEditColumnMixin } from './vaadin-grid-pro-edit-column-mixin.js';
 
 /**
- * LitElement based version of `<vaadin-grid-pro-edit-column>` web component.
+ * `<vaadin-grid-pro-edit-column>` is a helper element for the `<vaadin-grid-pro>`
+ * that provides default inline editing for the items.
  *
- * ## Disclaimer
+ * __Note that the `path` property must be explicitly specified for edit column.__
  *
- * This component is an experiment and not yet a part of Vaadin platform.
- * There is no ETA regarding specific Vaadin version where it'll land.
+ * #### Example:
+ * ```html
+ * <vaadin-grid-pro>
+ *  <vaadin-grid-pro-edit-column path="name.first"></vaadin-grid-pro-edit-column>
+ *
+ *  <vaadin-grid-column>
+ *    ...
+ * ```
+ *
+ * @customElement
+ * @extends GridColumn
+ * @mixes GridProEditColumnMixin
  */
 class GridProEditColumn extends GridProEditColumnMixin(GridColumn) {
   static get is() {

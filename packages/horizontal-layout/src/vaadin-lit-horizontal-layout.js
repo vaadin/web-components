@@ -12,13 +12,41 @@ import { HorizontalLayoutMixin } from './vaadin-horizontal-layout-mixin.js';
 import { horizontalLayoutStyles } from './vaadin-horizontal-layout-styles.js';
 
 /**
- * LitElement based version of `<vaadin-horizontal-layout>` web component.
+ * `<vaadin-horizontal-layout>` provides a simple way to horizontally align your HTML elements.
  *
- * ## Disclaimer
+ * ```
+ * <vaadin-horizontal-layout>
+ *   <div>Item 1</div>
+ *   <div>Item 2</div>
+ * </vaadin-horizontal-layout>
+ * ```
  *
- * This component is an experiment and not yet a part of Vaadin platform.
- * There is no ETA regarding specific Vaadin version where it'll land.
- * Feel free to try this code in your apps as per Apache 2.0 license.
+ * ### Built-in Theme Variations
+ *
+ * `<vaadin-horizontal-layout>` supports the following theme variations:
+ *
+ * Theme variation | Description
+ * ---|---
+ * `theme="margin"` | Applies the default amount of CSS margin for the host element (specified by the theme)
+ * `theme="padding"` | Applies the default amount of CSS padding for the host element (specified by the theme)
+ * `theme="spacing"` | Applies the default amount of CSS margin between items (specified by the theme)
+ * `theme="wrap"` | Items wrap to the next row when they exceed the layout width
+ *
+ * ### Component's slots
+ *
+ * The following slots are available to be set:
+ *
+ * Slot name          | Description
+ * -------------------|---------------
+ * no name            | Default slot
+ * `middle`           | Slot for the content placed in the middle
+ * `end`              | Slot for the content placed at the end
+ *
+ * @customElement
+ * @extends HTMLElement
+ * @mixes ThemableMixin
+ * @mixes ElementMixin
+ * @mixes HorizontalLayoutMixin
  */
 class HorizontalLayout extends HorizontalLayoutMixin(ThemableMixin(ElementMixin(PolylitMixin(LitElement)))) {
   static get is() {

@@ -15,12 +15,16 @@ import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { css } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 /**
- * LitElement based version of `<vaadin-crud-edit>` web component.
+ * `<vaadin-crud-edit>` is a helper element for `<vaadin-grid-column>` that provides
+ * an easily themable button that fires an `edit` event with the row item as detail
+ * when clicked.
  *
- * ## Disclaimer
+ * Typical usage is in a `<vaadin-grid-column>` of a custom `<vaadin-grid>` inside
+ * a `<vaadin-crud>` to enable editing.
  *
- * This component is an experiment and not yet a part of Vaadin platform.
- * There is no ETA regarding specific Vaadin version where it'll land.
+ * @customElement
+ * @extends HTMLElement
+ * @mixes ThemableMixin
  */
 class CrudEdit extends Button {
   static get is() {

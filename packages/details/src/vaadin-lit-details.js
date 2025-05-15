@@ -12,13 +12,44 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
 import { DetailsBaseMixin } from './vaadin-details-base-mixin.js';
 
 /**
- * LitElement based version of `<vaadin-details>` web component.
+ * `<vaadin-details>` is a Web Component which the creates an
+ * expandable panel similar to `<details>` HTML element.
  *
- * ## Disclaimer
+ * ```
+ * <vaadin-details>
+ *   <vaadin-details-summary slot="summary">Expandable Details</vaadin-details-summary>
+ *   <div>
+ *     Toggle using mouse, Enter and Space keys.
+ *   </div>
+ * </vaadin-details>
+ * ```
  *
- * This component is an experiment and not yet a part of Vaadin platform.
- * There is no ETA regarding specific Vaadin version where it'll land.
- * Feel free to try this code in your apps as per Apache 2.0 license.
+ * ### Styling
+ *
+ * The following shadow DOM parts are exposed for styling:
+ *
+ * Part name        | Description
+ * -----------------|----------------
+ * `content`        | The wrapper for the collapsible details content.
+ *
+ * The following attributes are exposed for styling:
+ *
+ * Attribute    | Description
+ * -------------| -----------
+ * `opened`     | Set when the collapsible content is expanded and visible.
+ * `disabled`   | Set when the element is disabled.
+ * `focus-ring` | Set when the element is focused using the keyboard.
+ * `focused`    | Set when the element is focused.
+ *
+ * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
+ *
+ * @fires {CustomEvent} opened-changed - Fired when the `opened` property changes.
+ *
+ * @customElement
+ * @extends HTMLElement
+ * @mixes DetailsBaseMixin
+ * @mixes ElementMixin
+ * @mixes ThemableMixin
  */
 class Details extends DetailsBaseMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElement)))) {
   static get is() {

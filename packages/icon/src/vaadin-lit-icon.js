@@ -14,13 +14,49 @@ import { IconMixin } from './vaadin-icon-mixin.js';
 import { iconStyles } from './vaadin-icon-styles.js';
 
 /**
- * LitElement based version of `<vaadin-icon>` web component.
+ * `<vaadin-icon>` is a Web Component for displaying SVG icons.
  *
- * ## Disclaimer
+ * ### Icon property
  *
- * This component is an experiment not intended for publishing to npm.
- * There is no ETA regarding specific Vaadin version where it'll land.
- * Feel free to try this code in your apps as per Apache 2.0 license.
+ * The `<vaadin-icon>` component is designed to be used as a drop-in replacement for `<iron-icon>`.
+ * For example, you can use it with `vaadin-icons` like this:
+ *
+ * ```html
+ * <vaadin-icon icon="vaadin:angle-down"></vaadin-icon>
+ * ```
+ *
+ * Alternatively, you can also pick one of the Lumo icons:
+ *
+ * ```html
+ * <vaadin-icon icon="lumo:user"></vaadin-icon>
+ * ```
+ *
+ * ### Custom SVG icon
+ *
+ * Alternatively, instead of selecting an icon from an iconset by name, you can pass any custom `svg`
+ * literal using the [`svg`](#/elements/vaadin-icon#property-svg) property. In this case you can also
+ * define the size of the SVG `viewBox` using the [`size`](#/elements/vaadin-icon#property-size) property:
+ *
+ * ```js
+ * import { html, svg } from 'lit';
+ *
+ * // in your component
+ * render() {
+ *   const svgIcon = svg`<path d="M13 4v2l-5 5-5-5v-2l5 5z"></path>`;
+ *   return html`
+ *     <vaadin-icon
+ *       .svg="${svgIcon}"
+ *       size="16"
+ *     ></vaadin-icon>
+ *   `;
+ * }
+ * ```
+ *
+ * @customElement
+ * @extends HTMLElement
+ * @mixes IconMixin
+ * @mixes ThemableMixin
+ * @mixes ElementMixin
  */
 class Icon extends IconMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElement)))) {
   static styles = iconStyles;

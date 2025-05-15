@@ -14,13 +14,19 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
 import { drawerToggle } from './vaadin-drawer-toggle-styles.js';
 
 /**
- * LitElement based version of `<vaadin-drawer-toggle>` web component.
+ * The Drawer Toggle component controls the drawer in App Layout component.
  *
- * ## Disclaimer
+ * ```
+ * <vaadin-app-layout>
+ *   <vaadin-drawer-toggle slot="navbar">Toggle drawer</vaadin-drawer-toggle>
+ * </vaadin-app-layout>
+ * ```
  *
- * This component is an experiment and not yet a part of Vaadin platform.
- * There is no ETA regarding specific Vaadin version where it'll land.
- * Feel free to try this code in your apps as per Apache 2.0 license.
+ * @customElement
+ * @extends HTMLElement
+ * @mixes ButtonMixin
+ * @mixes DirMixin
+ * @mixes ThemableMixin
  */
 class DrawerToggle extends ButtonMixin(DirMixin(ThemableMixin(PolylitMixin(LitElement)))) {
   static get is() {

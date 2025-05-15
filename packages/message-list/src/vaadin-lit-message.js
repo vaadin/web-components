@@ -13,13 +13,39 @@ import { MessageMixin } from './vaadin-message-mixin.js';
 import { messageStyles } from './vaadin-message-styles.js';
 
 /**
- * LitElement based version of `<vaadin-message>` web component.
+ * `<vaadin-message>` is a Web Component for showing a single message with an author, message and time.
  *
- * ## Disclaimer
+ * ```html
+ * <vaadin-message time="2021-01-28 10:43"
+ *     user-name = "Bob Ross"
+ *     user-abbr = "BR"
+ *     user-img = "/static/img/avatar.jpg">There is no real ending. It's just the place where you stop the story.</vaadin-message>
+ * ```
  *
- * This component is an experiment and not yet a part of Vaadin platform.
- * There is no ETA regarding specific Vaadin version where it'll land.
- * Feel free to try this code in your apps as per Apache 2.0 license.
+ * ### Styling
+ *
+ * The following shadow DOM parts are available for styling:
+ *
+ * Part name | Description
+ * ----------|----------------
+ * `name`    | Author's name
+ * `time`    | When the message was posted
+ * `content` | The message itself as a slotted content
+ *
+ * The following state attributes are available for styling:
+ *
+ * Attribute    | Description
+ * -------------|-------------
+ * `focus-ring` | Set when the message is focused using the keyboard.
+ * `focused`    | Set when the message is focused.
+ *
+ * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
+ *
+ * @customElement
+ * @extends HTMLElement
+ * @mixes MessageMixin
+ * @mixes ThemableMixin
+ * @mixes ElementMixin
  */
 class Message extends MessageMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElement)))) {
   static get is() {

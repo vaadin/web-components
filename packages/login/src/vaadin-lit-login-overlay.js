@@ -14,13 +14,43 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
 import { LoginOverlayMixin } from './vaadin-login-overlay-mixin.js';
 
 /**
- * LitElement based version of `<vaadin-login-overlay>` web component.
+ * `<vaadin-login-overlay>` is a wrapper of the `<vaadin-login-form>` which opens a login form in an overlay and
+ * having an additional `brand` part for application title and description. Using `<vaadin-login-overlay>` allows
+ * password managers to work with login form.
  *
- * ## Disclaimer
+ * ```
+ * <vaadin-login-overlay opened></vaadin-login-overlay>
+ * ```
  *
- * This component is an experiment and not yet a part of Vaadin platform.
- * There is no ETA regarding specific Vaadin version where it'll land.
- * Feel free to try this code in your apps as per Apache 2.0 license.
+ * ### Styling
+ *
+ * The component doesn't have a shadowRoot, so the `<form>` and input fields can be styled from a global scope.
+ * Use `<vaadin-login-overlay-wrapper>` and `<vaadin-login-form-wrapper>` to apply styles.
+ *
+ * The following shadow DOM parts of the `<vaadin-login-overlay-wrapper>` are available for styling:
+ *
+ * Part name       | Description
+ * ----------------|---------------------------------------------------------|
+ * `card`          | Container for the entire component's content
+ * `brand`         | Container for application title and description
+ * `form`          | Container for the `<vaadin-login-form>` component
+ *
+ * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
+ *
+ * See [`<vaadin-login-form>`](#/elements/vaadin-login-form)
+ * documentation for  `<vaadin-login-form-wrapper>` stylable parts.
+ *
+ * @fires {CustomEvent} description-changed - Fired when the `description` property changes.
+ * @fires {CustomEvent} disabled-changed - Fired when the `disabled` property changes.
+ * @fires {CustomEvent} error-changed - Fired when the `error` property changes.
+ * @fires {CustomEvent} forgot-password - Fired when user clicks on the "Forgot password" button.
+ * @fires {CustomEvent} login - Fired when a user submits the login.
+ *
+ * @customElement
+ * @extends HTMLElement
+ * @mixes ElementMixin
+ * @mixes ThemableMixin
+ * @mixes LoginOverlayMixin
  */
 class LoginOverlay extends LoginOverlayMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElement)))) {
   static get is() {

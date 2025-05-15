@@ -8,13 +8,27 @@ import { TextField } from '@vaadin/text-field/src/vaadin-lit-text-field.js';
 import { emailFieldStyles } from './vaadin-email-field-styles.js';
 
 /**
- * LitElement based version of `<vaadin-email-field>` web component.
+ * `<vaadin-email-field>` is a Web Component for email field control in forms.
  *
- * ## Disclaimer
+ * ```html
+ * <vaadin-email-field label="Email"></vaadin-email-field>
+ * ```
  *
- * This component is an experiment and not yet a part of Vaadin platform.
- * There is no ETA regarding specific Vaadin version where it'll land.
- * Feel free to try this code in your apps as per Apache 2.0 license.
+ * ### Styling
+ *
+ * `<vaadin-email-field>` provides the same set of shadow DOM parts and state attributes as `<vaadin-text-field>`.
+ * See [`<vaadin-text-field>`](#/elements/vaadin-text-field) for the styling documentation.
+ *
+ * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
+ *
+ * @fires {Event} input - Fired when the value is changed by the user: on every typing keystroke, and the value is cleared using the clear button.
+ * @fires {Event} change - Fired when the user commits a value change.
+ * @fires {CustomEvent} invalid-changed - Fired when the `invalid` property changes.
+ * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
+ * @fires {CustomEvent} validated - Fired whenever the field is validated.
+ *
+ * @customElement
+ * @extends TextField
  */
 export class EmailField extends TextField {
   static get is() {

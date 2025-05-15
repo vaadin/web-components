@@ -12,13 +12,26 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
 import { ScrollerMixin } from './vaadin-scroller-mixin.js';
 
 /**
- * LitElement based version of `<vaadin-scroller>` web component.
+ * `<vaadin-scroller>` provides a simple way to enable scrolling when its content is overflowing.
  *
- * ## Disclaimer
+ * ```
+ * <vaadin-scroller>
+ *   <div>Content</div>
+ * </vaadin-scroller>
+ * ```
+ * The following attributes are exposed for styling:
  *
- * This component is an experiment and not yet a part of Vaadin platform.
- * There is no ETA regarding specific Vaadin version where it'll land.
- * Feel free to try this code in your apps as per Apache 2.0 license.
+ * Attribute    | Description
+ * -------------| -----------
+ * `focus-ring` | Set when the element is focused using the keyboard.
+ * `focused`    | Set when the element is focused.
+ * `overflow`   | Set to `top`, `bottom`, `start`, `end`, all of them, or none.
+ *
+ * @customElement
+ * @extends HTMLElement
+ * @mixes ElementMixin
+ * @mixes ScrollerMixin
+ * @mixes ThemableMixin
  */
 class Scroller extends ScrollerMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElement)))) {
   static get is() {

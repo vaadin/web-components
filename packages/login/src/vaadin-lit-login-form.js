@@ -16,13 +16,44 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
 import { LoginFormMixin } from './vaadin-login-form-mixin.js';
 
 /**
- * LitElement based version of `<vaadin-login-form>` web component.
+ * `<vaadin-login-form>` is a Web Component providing an easy way to require users
+ * to log in into an application. Note that component has no shadowRoot.
  *
- * ## Disclaimer
+ * ```
+ * <vaadin-login-form></vaadin-login-form>
+ * ```
  *
- * This component is an experiment and not yet a part of Vaadin platform.
- * There is no ETA regarding specific Vaadin version where it'll land.
- * Feel free to try this code in your apps as per Apache 2.0 license.
+ * Component has to be accessible from the `document` layer in order to allow password managers to work properly with form values.
+ * Using `<vaadin-login-overlay>` allows to always attach the component to the document body.
+ *
+ * ### Styling
+ *
+ * The component doesn't have a shadowRoot, so the `<form>` and input fields can be styled from a global scope.
+ * Use `<vaadin-login-form-wrapper>` themable component to apply styles.
+ *
+ * The following shadow DOM parts of the `<vaadin-login-form-wrapper>` are available for styling:
+ *
+ * Part name      | Description
+ * ---------------|---------------------------------------------------------|
+ * `form`         | Container for the entire component's content
+ * `form-title`   | Title of the login form
+ * `error-message`| Container for error message, contains error-message-title and error-message-description parts. Hidden by default.
+ * `error-message-title`       | Container for error message title
+ * `error-message-description` | Container for error message description
+ * `footer`  | Container additional information text from `i18n` object
+ *
+ * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
+ *
+ * @fires {CustomEvent} disabled-changed - Fired when the `disabled` property changes.
+ * @fires {CustomEvent} error-changed - Fired when the `error` property changes.
+ * @fires {CustomEvent} forgot-password - Fired when user clicks on the "Forgot password" button.
+ * @fires {CustomEvent} login - Fired when a user submits the login.
+ *
+ * @customElement
+ * @extends HTMLElement
+ * @mixes ElementMixin
+ * @mixes ThemableMixin
+ * @mixes LoginFormMixin
  */
 class LoginForm extends LoginFormMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElement)))) {
   static get is() {

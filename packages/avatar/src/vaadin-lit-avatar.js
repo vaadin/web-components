@@ -16,13 +16,36 @@ import { AvatarMixin } from './vaadin-avatar-mixin.js';
 import { avatarStyles } from './vaadin-avatar-styles.js';
 
 /**
- * LitElement based version of `<vaadin-avatar>` web component.
+ * `<vaadin-avatar>` is a Web Component providing avatar displaying functionality.
  *
- * ## Disclaimer
+ * ```html
+ * <vaadin-avatar img="avatars/avatar-1.jpg"></vaadin-avatar>
+ * ```
  *
- * This component is an experiment and not yet a part of Vaadin platform.
- * There is no ETA regarding specific Vaadin version where it'll land.
- * Feel free to try this code in your apps as per Apache 2.0 license.
+ * ### Styling
+ *
+ * The following shadow DOM parts are exposed for styling:
+ *
+ * Part name | Description
+ * --------- | ---------------
+ * `abbr`    | The abbreviation element
+ * `icon`    | The icon element
+ *
+ * The following state attributes are available for styling:
+ *
+ * Attribute         | Description
+ * ------------------|-------------
+ * `focus-ring`      | Set when the avatar is focused using the keyboard.
+ * `focused`         | Set when the avatar is focused.
+ * `has-color-index` | Set when the avatar has `colorIndex` and the corresponding custom CSS property exists.
+ *
+ * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
+ *
+ * @customElement
+ * @extends HTMLElement
+ * @mixes AvatarMixin
+ * @mixes ElementMixin
+ * @mixes ThemableMixin
  */
 class Avatar extends AvatarMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElement)))) {
   static get is() {

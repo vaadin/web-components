@@ -12,14 +12,7 @@ import { inputContainerStyles } from './vaadin-input-container-core-styles.js';
 import { InputContainerMixin } from './vaadin-input-container-mixin.js';
 
 /**
- * LitElement based version of `<vaadin-input-container>` web component.
- *
- * ## Disclaimer
- *
- * This component is an experiment and not yet a part of Vaadin platform.
- * There is no ETA regarding specific Vaadin version where it'll land.
- * Feel free to try this code in your apps as per Apache 2.0 license.
- *
+ * @customElement
  * @extends HTMLElement
  * @mixes ThemableMixin
  * @mixes DirMixin

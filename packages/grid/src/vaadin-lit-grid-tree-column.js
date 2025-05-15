@@ -9,13 +9,20 @@ import { GridTreeColumnMixin } from './vaadin-grid-tree-column-mixin.js';
 import { GridColumn } from './vaadin-lit-grid-column.js';
 
 /**
- * LitElement based version of `<vaadin-grid-tree-column>` web component.
+ * `<vaadin-grid-tree-column>` is a helper element for the `<vaadin-grid>`
+ * that provides default renderer and functionality for toggling tree/hierarchical items.
  *
- * ## Disclaimer
+ * #### Example:
+ * ```html
+ * <vaadin-grid>
+ *  <vaadin-grid-tree-column path="name.first"></vaadin-grid-tree-column>
  *
- * This component is an experiment and not yet a part of Vaadin platform.
- * There is no ETA regarding specific Vaadin version where it'll land.
- * Feel free to try this code in your apps as per Apache 2.0 license.
+ *  <vaadin-grid-column>
+ *    ...
+ * ```
+ * @customElement
+ * @extends GridColumn
+ * @mixes GridTreeColumnMixin
  */
 class GridTreeColumn extends GridTreeColumnMixin(GridColumn) {
   static get is() {

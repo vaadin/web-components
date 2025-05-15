@@ -12,13 +12,33 @@ import { accordionPanel } from './vaadin-accordion-panel-core-styles.js';
 import { AccordionPanelMixin } from './vaadin-accordion-panel-mixin.js';
 
 /**
- * LitElement based version of `<vaadin-accordion-panel>` web component.
+ * The accordion panel element.
  *
- * ## Disclaimer
+ * ### Styling
  *
- * This component is an experiment and not yet a part of Vaadin platform.
- * There is no ETA regarding specific Vaadin version where it'll land.
- * Feel free to try this code in your apps as per Apache 2.0 license.
+ * The following shadow DOM parts are exposed for styling:
+ *
+ * Part name        | Description
+ * -----------------|----------------
+ * `content`        | The wrapper for the collapsible panel content.
+ *
+ * The following attributes are exposed for styling:
+ *
+ * Attribute    | Description
+ * -------------| -----------
+ * `opened`     | Set when the collapsible content is expanded and visible.
+ * `disabled`   | Set when the element is disabled.
+ * `focus-ring` | Set when the element is focused using the keyboard.
+ * `focused`    | Set when the element is focused.
+ *
+ * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
+ *
+ * @fires {CustomEvent} opened-changed - Fired when the `opened` property changes.
+ *
+ * @customElement
+ * @extends HTMLElement
+ * @mixes AccordionPanelMixin
+ * @mixes ThemableMixin
  */
 class AccordionPanel extends AccordionPanelMixin(ThemableMixin(PolylitMixin(LitElement))) {
   static get is() {

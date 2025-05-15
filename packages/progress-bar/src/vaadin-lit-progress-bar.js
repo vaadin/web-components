@@ -12,13 +12,41 @@ import { progressBarStyles } from './vaadin-progress-bar-styles.js';
 import { ProgressMixin } from './vaadin-progress-mixin.js';
 
 /**
- * LitElement based version of `<vaadin-progress-bar>` web component.
+ * `<vaadin-progress-bar>` is a Web Component for progress bars.
  *
- * ## Disclaimer
+ * ```html
+ * <vaadin-progress-bar min="0" max="1" value="0.5">
+ * </vaadin-progress-bar>
+ * ```
  *
- * This component is an experiment and not yet a part of Vaadin platform.
- * There is no ETA regarding specific Vaadin version where it'll land.
- * Feel free to try this code in your apps as per Apache 2.0 license.
+ * ### Styling
+ *
+ * The following shadow DOM parts are available for styling:
+ *
+ * Part name | Description
+ * ----------------|----------------
+ * `bar` | Progress-bar's background
+ * `value` | Progress-bar's foreground
+ *
+ * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
+ *
+ * The following custom properties are available:
+ *
+ * Custom property | Description | Default
+ * ----------------|-------------|-------------
+ * `--vaadin-progress-value` | current progress value (between 0 and 1) | 0
+ *
+ * The following state attributes are available for styling:
+ *
+ * Attribute       | Description | Part name
+ * ----------------|-------------|------------
+ * `indeterminate` | Set to an indeterminate progress bar | :host
+ *
+ * @customElement
+ * @extends HTMLElement
+ * @mixes ElementMixin
+ * @mixes ProgressMixin
+ * @mixes ThemableMixin
  */
 class ProgressBar extends ProgressMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElement)))) {
   static get is() {

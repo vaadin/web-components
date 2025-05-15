@@ -9,13 +9,15 @@ import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { GridColumnMixin } from './vaadin-grid-column-mixin.js';
 
 /**
- * LitElement based version of `<vaadin-grid-column>` web component.
+ * A `<vaadin-grid-column>` is used to configure how a column in `<vaadin-grid>`
+ * should look like.
  *
- * ## Disclaimer
+ * See [`<vaadin-grid>`](#/elements/vaadin-grid) documentation for instructions on how
+ * to configure the `<vaadin-grid-column>`.
  *
- * This component is an experiment and not yet a part of Vaadin platform.
- * There is no ETA regarding specific Vaadin version where it'll land.
- * Feel free to try this code in your apps as per Apache 2.0 license.
+ * @customElement
+ * @extends HTMLElement
+ * @mixes GridColumnMixin
  */
 class GridColumn extends GridColumnMixin(PolylitMixin(LitElement)) {
   static get is() {

@@ -14,13 +14,66 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
 import { MenuBarMixin } from './vaadin-menu-bar-mixin.js';
 
 /**
- * LitElement based version of `<vaadin-menu-bar>` web component.
+ * `<vaadin-menu-bar>` is a Web Component providing a set of horizontally stacked buttons offering
+ * the user quick access to a consistent set of commands. Each button can toggle a submenu with
+ * support for additional levels of nested menus.
  *
- * ## Disclaimer
+ * To create the menu bar, first add the component to the page:
  *
- * This component is an experiment and not yet a part of Vaadin platform.
- * There is no ETA regarding specific Vaadin version where it'll land.
- * Feel free to try this code in your apps as per Apache 2.0 license.
+ * ```
+ * <vaadin-menu-bar></vaadin-menu-bar>
+ * ```
+ *
+ * And then use [`items`](#/elements/vaadin-menu-bar#property-items) property to initialize the structure:
+ *
+ * ```
+ * document.querySelector('vaadin-menu-bar').items = [{text: 'File'}, {text: 'Edit'}];
+ * ```
+ *
+ * ### Styling
+ *
+ * The following shadow DOM parts are exposed for styling:
+ *
+ * Part name         | Description
+ * ------------------|----------------
+ * `container`       | The container wrapping menu bar buttons.
+ *
+ * The following state attributes are available for styling:
+ *
+ * Attribute           | Description
+ * --------------------|----------------------------------
+ * `disabled`          | Set when the menu bar is disabled
+ * `has-single-button` | Set when there is only one button visible
+ *
+ * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
+ *
+ * ### Internal components
+ *
+ * In addition to `<vaadin-menu-bar>` itself, the following internal
+ * components are themable:
+ *
+ * - `<vaadin-menu-bar-button>` - has the same API as [`<vaadin-button>`](#/elements/vaadin-button).
+ * - `<vaadin-menu-bar-item>` - has the same API as [`<vaadin-item>`](#/elements/vaadin-item).
+ * - `<vaadin-menu-bar-list-box>` - has the same API as [`<vaadin-list-box>`](#/elements/vaadin-list-box).
+ * - `<vaadin-menu-bar-overlay>` - has the same API as [`<vaadin-overlay>`](#/elements/vaadin-overlay).
+ *
+ * The `<vaadin-menu-bar-item>` sub-menu elements have the following additional state attributes
+ * on top of the built-in `<vaadin-item>` state attributes:
+ *
+ * Attribute  | Description
+ * ---------- |-------------
+ * `expanded` | Expanded parent item.
+ *
+ * Note: the `theme` attribute value set on `<vaadin-menu-bar>` is
+ * propagated to the internal components listed above.
+ *
+ * @fires {CustomEvent<boolean>} item-selected - Fired when a submenu item or menu bar button without children is clicked.
+ *
+ * @customElement
+ * @extends HTMLElement
+ * @mixes ElementMixin
+ * @mixes MenuBarMixin
+ * @mixes ThemableMixin
  */
 class MenuBar extends MenuBarMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElement)))) {
   static get is() {

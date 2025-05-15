@@ -13,13 +13,38 @@ import { buttonStyles } from './vaadin-button-core-styles.js';
 import { ButtonMixin } from './vaadin-button-mixin.js';
 
 /**
- * LitElement based version of `<vaadin-button>` web component.
+ * `<vaadin-button>` is an accessible and customizable button that allows users to perform actions.
  *
- * ## Disclaimer
+ * ```html
+ * <vaadin-button>Press me</vaadin-button>
+ * ```
  *
- * This component is an experiment and not yet a part of Vaadin platform.
- * There is no ETA regarding specific Vaadin version where it'll land.
- * Feel free to try this code in your apps as per Apache 2.0 license.
+ * ### Styling
+ *
+ * The following shadow DOM parts are available for styling:
+ *
+ * Part name | Description
+ * ----------|-------------
+ * `label`   | The label (text) inside the button.
+ * `prefix`  | A slot for content before the label (e.g. an icon).
+ * `suffix`  | A slot for content after the label (e.g. an icon).
+ *
+ * The following attributes are available for styling:
+ *
+ * Attribute    | Description
+ * -------------|-------------
+ * `active`     | Set when the button is pressed down, either with mouse, touch or the keyboard.
+ * `disabled`   | Set when the button is disabled.
+ * `focus-ring` | Set when the button is focused using the keyboard.
+ * `focused`    | Set when the button is focused.
+ *
+ * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
+ *
+ * @customElement
+ * @extends HTMLElement
+ * @mixes ButtonMixin
+ * @mixes ElementMixin
+ * @mixes ThemableMixin
  */
 class Button extends ButtonMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElement)))) {
   static get is() {

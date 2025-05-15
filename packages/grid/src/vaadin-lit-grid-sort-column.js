@@ -9,13 +9,19 @@ import { GridSortColumnMixin } from './vaadin-grid-sort-column-mixin.js';
 import { GridColumn } from './vaadin-lit-grid-column.js';
 
 /**
- * LitElement based version of `<vaadin-grid-sort-column>` web component.
+ * `<vaadin-grid-sort-column>` is a helper element for the `<vaadin-grid>`
+ * that provides default header renderer and functionality for sorting.
  *
- * ## Disclaimer
+ * #### Example:
+ * ```html
+ * <vaadin-grid>
+ *  <vaadin-grid-sort-column path="name.first" direction="asc"></vaadin-grid-sort-column>
  *
- * This component is an experiment and not yet a part of Vaadin platform.
- * There is no ETA regarding specific Vaadin version where it'll land.
- * Feel free to try this code in your apps as per Apache 2.0 license.
+ *  <vaadin-grid-column>
+ *    ...
+ * ```
+ *
+ * @fires {CustomEvent} direction-changed - Fired when the `direction` property changes.
  */
 class GridSortColumn extends GridSortColumnMixin(GridColumn) {
   static get is() {

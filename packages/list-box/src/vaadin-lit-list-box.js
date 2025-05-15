@@ -13,13 +13,36 @@ import { listBoxStyles } from './vaadin-list-box-core-styles.js';
 import { MultiSelectListMixin } from './vaadin-multi-select-list-mixin.js';
 
 /**
- * LitElement based version of `<vaadin-list-box>` web component.
+ * `<vaadin-list-box>` is a Web Component for creating menus.
  *
- * ## Disclaimer
+ * ```
+ *   <vaadin-list-box selected="2">
+ *     <vaadin-item>Item 1</vaadin-item>
+ *     <vaadin-item>Item 2</vaadin-item>
+ *     <vaadin-item>Item 3</vaadin-item>
+ *     <vaadin-item>Item 4</vaadin-item>
+ *   </vaadin-list-box>
+ * ```
  *
- * This component is an experiment and not yet a part of Vaadin platform.
- * There is no ETA regarding specific Vaadin version where it'll land.
- * Feel free to try this code in your apps as per Apache 2.0 license.
+ * ### Styling
+ *
+ * The following shadow DOM parts are available for styling:
+ *
+ * Part name         | Description
+ * ------------------|------------------------
+ * `items`           | The items container
+ *
+ * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
+ *
+ * @fires {CustomEvent} items-changed - Fired when the `items` property changes.
+ * @fires {CustomEvent} selected-changed - Fired when the `selected` property changes.
+ * @fires {CustomEvent} selected-values-changed - Fired when the `selectedValues` property changes.
+ *
+ * @customElement
+ * @extends HTMLElement
+ * @mixes MultiSelectListMixin
+ * @mixes ThemableMixin
+ * @mixes ElementMixin
  */
 class ListBox extends ElementMixin(MultiSelectListMixin(ThemableMixin(PolylitMixin(LitElement)))) {
   static get is() {

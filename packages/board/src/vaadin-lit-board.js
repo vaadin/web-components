@@ -16,12 +16,27 @@ import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { BoardRow } from './vaadin-lit-board-row.js';
 
 /**
- * LitElement based version of `<vaadin-board>` web component.
+ * `<vaadin-board>` is a web component to create flexible responsive layouts
+ * and build nice looking dashboards.
  *
- * ## Disclaimer
+ * A `<vaadin-board>` is built using `<vaadin-board-row>` elements containing your child elements.
+ * Each board row consists of four columns, and can contain up to four elements. Using column spans
+ * you can tune the layout to your liking.
  *
- * This component is an experiment and not yet a part of Vaadin platform.
- * There is no ETA regarding specific Vaadin version where it'll land.
+ * ```html
+ * <vaadin-board>
+ *   <vaadin-board-row>
+ *     <div>This could be chart 1</div>
+ *     <div>This could be chart 2</div>
+ *     <div>This could be chart 3</div>
+ *     <div>This could be chart 4</div>
+ *   </vaadin-board-row>
+ * </vaadin-board>
+ * ```
+ *
+ * @customElement
+ * @extends HTMLElement
+ * @mixes ElementMixin
  */
 class Board extends ElementMixin(PolylitMixin(LitElement)) {
   static get is() {

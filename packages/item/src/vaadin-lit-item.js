@@ -12,13 +12,48 @@ import { itemStyles } from './vaadin-item-core-styles.js';
 import { ItemMixin } from './vaadin-item-mixin.js';
 
 /**
- * LitElement based version of `<vaadin-item>` web component.
+ * `<vaadin-item>` is a Web Component providing layout for items in tabs and menus.
  *
- * ## Disclaimer
+ * ```
+ *   <vaadin-item>
+ *     Item content
+ *   </vaadin-item>
+ * ```
  *
- * This component is an experiment and not yet a part of Vaadin platform.
- * There is no ETA regarding specific Vaadin version where it'll land.
- * Feel free to try this code in your apps as per Apache 2.0 license.
+ * ### Selectable
+ *
+ * `<vaadin-item>` has the `selected` property and the corresponding state attribute.
+ * Currently, the component sets the `selected` to false, when `disabled` property is set to true.
+ * But other than that, the `<vaadin-item>` does not switch selection by itself.
+ * In general, it is the wrapper component, like `<vaadin-list-box>`, which should update
+ * the `selected` property on the items, e. g. on mousedown or when Enter / Spacebar is pressed.
+ *
+ * ### Styling
+ *
+ * The following shadow DOM parts are available for styling:
+ *
+ * Part name    | Description
+ * -------------|----------------
+ * `checkmark`  | The graphical checkmark shown for a selected item
+ * `content`    | The element that wraps the slot
+ *
+ * The following state attributes are available for styling:
+ *
+ * Attribute    | Description
+ * -------------|-------------
+ * `active`     | Set when the item is pressed down, either with mouse, touch or the keyboard.
+ * `disabled`   | Set when the item is disabled.
+ * `focus-ring` | Set when the item is focused using the keyboard.
+ * `focused`    | Set when the item is focused.
+ * `selected`   | Set when the item is selected
+ *
+ * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
+ *
+ * @customElement
+ * @extends HTMLElement
+ * @mixes ItemMixin
+ * @mixes ThemableMixin
+ * @mixes DirMixin
  */
 class Item extends ItemMixin(ThemableMixin(DirMixin(PolylitMixin(LitElement)))) {
   static get is() {

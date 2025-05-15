@@ -14,14 +14,55 @@ import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-p
 import { ConfirmDialogMixin } from './vaadin-confirm-dialog-mixin.js';
 
 /**
- * LitElement based version of `<vaadin-confirm-dialog>` web component.
+ * `<vaadin-confirm-dialog>` is a Web Component for showing alerts and asking for user confirmation.
  *
- * ## Disclaimer
+ * ```
+ * <vaadin-confirm-dialog cancel-button-visible>
+ *   There are unsaved changes. Do you really want to leave?
+ * </vaadin-confirm-dialog>
+ * ```
  *
- * This component is an experiment and not yet a part of Vaadin platform.
- * There is no ETA regarding specific Vaadin version where it'll land.
- * Feel free to try this code in your apps as per Apache 2.0 license.
+ * ### Styling
  *
+ * The `<vaadin-confirm-dialog>` is not themable. Apply styles to `<vaadin-confirm-dialog-overlay>`
+ * component and use its shadow parts for styling.
+ * See [`<vaadin-overlay>`](#/elements/vaadin-overlay) for the overlay styling documentation.
+ *
+ * In addition to `<vaadin-overlay>` parts, the following parts are available for theming:
+ *
+ * Part name        | Description
+ * -----------------|-------------------------------------------
+ * `header`         | The header element wrapper
+ * `message`        | The message element wrapper
+ * `footer`         | The footer element that wraps the buttons
+ * `cancel-button`  | The "Cancel" button wrapper
+ * `confirm-button` | The "Confirm" button wrapper
+ * `reject-button`  | The "Reject" button wrapper
+ *
+ * Use `confirmTheme`, `cancelTheme` and `rejectTheme` properties to customize buttons theme.
+ * Also, the `theme` attribute value set on `<vaadin-confirm-dialog>` is propagated to the
+ * `<vaadin-confirm-dialog-overlay>` component.
+ *
+ * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
+ *
+ * ### Custom content
+ *
+ * The following slots are available for providing custom content:
+ *
+ * Slot name         | Description
+ * ------------------|---------------------------
+ * `header`          | Slot for header element
+ * `cancel-button`   | Slot for "Cancel" button
+ * `confirm-button`  | Slot for "Confirm" button
+ * `reject-button`   | Slot for "Reject" button
+ *
+ * @fires {Event} confirm - Fired when Confirm button was pressed.
+ * @fires {Event} cancel - Fired when Cancel button or Escape key was pressed.
+ * @fires {Event} reject - Fired when Reject button was pressed.
+ * @fires {CustomEvent} opened-changed - Fired when the `opened` property changes.
+ * @fires {CustomEvent} closed - Fired when the confirm dialog is closed.
+ *
+ * @customElement
  * @extends HTMLElement
  * @mixes ConfirmDialogMixin
  * @mixes ElementMixin

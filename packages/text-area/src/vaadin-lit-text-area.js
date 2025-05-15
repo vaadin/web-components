@@ -16,13 +16,50 @@ import { TextAreaMixin } from './vaadin-text-area-mixin.js';
 import { textAreaStyles } from './vaadin-text-area-styles.js';
 
 /**
- * LitElement based version of `<vaadin-text-area>` web component.
+ * `<vaadin-text-area>` is a web component for multi-line text input.
  *
- * ## Disclaimer
+ * ```html
+ * <vaadin-text-area label="Comment"></vaadin-text-area>
+ * ```
  *
- * This component is an experiment and not yet a part of Vaadin platform.
- * There is no ETA regarding specific Vaadin version where it'll land.
- * Feel free to try this code in your apps as per Apache 2.0 license.
+ * ### Prefixes and suffixes
+ *
+ * These are child elements of a `<vaadin-text-area>` that are displayed
+ * inline with the input, before or after.
+ * In order for an element to be considered as a prefix, it must have the slot
+ * attribute set to `prefix` (and similarly for `suffix`).
+ *
+ * ```html
+ * <vaadin-text-area label="Description">
+ *   <div slot="prefix">Details:</div>
+ *   <div slot="suffix">The end!</div>
+ * </vaadin-text-area>
+ * ```
+ *
+ * ### Styling
+ *
+ * The following custom properties are available for styling:
+ *
+ * Custom property                | Description                | Default
+ * -------------------------------|----------------------------|---------
+ * `--vaadin-field-default-width` | Default width of the field | `12em`
+ *
+ * `<vaadin-text-area>` provides the same set of shadow DOM parts and state attributes as `<vaadin-text-field>`.
+ * See [`<vaadin-text-field>`](#/elements/vaadin-text-field) for the styling documentation.
+ *
+ * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
+ *
+ * @fires {Event} input - Fired when the value is changed by the user: on every typing keystroke, and the value is cleared using the clear button.
+ * @fires {Event} change - Fired when the user commits a value change.
+ * @fires {CustomEvent} invalid-changed - Fired when the `invalid` property changes.
+ * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
+ * @fires {CustomEvent} validated - Fired whenever the field is validated.
+ *
+ * @customElement
+ * @extends HTMLElement
+ * @mixes ElementMixin
+ * @mixes TextAreaMixin
+ * @mixes ThemableMixin
  */
 export class TextArea extends TextAreaMixin(ThemableMixin(ElementMixin(PolylitMixin(LitElement)))) {
   static get is() {
