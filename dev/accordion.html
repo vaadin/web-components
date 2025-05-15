@@ -5,12 +5,6 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Accordion</title>
-    <script type="module" src="./common.js"></script>
-
-    <script type="module">
-      import '@vaadin/accordion';
-      // import '@vaadin/accordion/theme/material/vaadin-accordion.js';
-    </script>
   </head>
 
   <body>
@@ -26,6 +20,17 @@
       <vaadin-accordion-panel summary="Panel 3">
         <div>Panel 3 content</div>
       </vaadin-accordion-panel>
+      <vaadin-accordion-panel summary="Panel 4 (disabled)" disabled>
+        <div>Panel 4 content</div>
+      </vaadin-accordion-panel>
     </vaadin-accordion>
+
+    <script type="module">
+      if (window.useBaseStyles) {
+        import('@vaadin/accordion/src/vaadin-accordion.js');
+      } else {
+        import('@vaadin/accordion/vaadin-accordion.js');
+      }
+    </script>
   </body>
 </html>
