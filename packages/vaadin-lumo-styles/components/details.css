@@ -1,0 +1,7 @@
+@import './details-summary.css';
+
+@import '../src/components/details.css' vaadin-details;
+
+html {
+  --vaadin-details-css-inject: 1;
+}

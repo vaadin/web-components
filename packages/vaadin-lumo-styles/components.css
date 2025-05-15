@@ -1,4 +1,6 @@
 @import './components/button.css';
+@import './components/details-summary.css';
+@import './components/details.css';
 @import './components/icon.css';
 @import './components/input-container.css';
 @import './components/text-field.css';
