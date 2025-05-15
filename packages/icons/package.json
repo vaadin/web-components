@@ -40,8 +40,8 @@
   },
   "devDependencies": {
     "cheerio": "^1.0.0-rc.10",
-    "gulp": "^4.0.2",
-    "gulp-cli": "^2.3.0",
+    "gulp": "^5.0.0",
+    "gulp-cli": "^3.0.0",
     "gulp-concat": "^2.6.1",
     "gulp-modify": "^0.1.1"
   }
