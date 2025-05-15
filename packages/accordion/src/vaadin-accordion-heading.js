@@ -8,7 +8,7 @@ import { ActiveMixin } from '@vaadin/a11y-base/src/active-mixin.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { accordionHeading } from './vaadin-accordion-heading-styles.js';
+import { accordionHeading } from './vaadin-accordion-heading-core-styles.js';
 
 registerStyles('vaadin-accordion-heading', accordionHeading, { moduleId: 'vaadin-accordion-heading-styles' });
 
