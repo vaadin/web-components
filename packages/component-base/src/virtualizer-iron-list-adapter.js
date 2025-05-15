@@ -549,7 +549,7 @@ export class IronListAdapter {
     }
 
     this._adjustVirtualIndexOffset(this._scrollTop - (this.__previousScrollTop || 0));
-    let delta = this.scrollTarget.scrollTop - this._scrollPosition;
+    const delta = this.scrollTarget.scrollTop - this._scrollPosition;
 
     const isScrollingDown = delta >= 0;
     const lastIndexVisible = this.adjustedLastVisibleIndex === this.size - 1;
@@ -559,8 +559,7 @@ export class IronListAdapter {
 
     const needToCreateItemsAbove = lastIndexVisible && (delta < 0 || hasEmptySpace);
     if (needToCreateItemsAbove) {
-      delta -= this._scrollOffset;
-      const idxAdjustment = Math.round(delta / this._physicalAverage);
+      const idxAdjustment = Math.round((delta - this._scrollOffset) / this._physicalAverage);
       this._virtualStart = Math.max(0, this._virtualStart + idxAdjustment);
       this._physicalStart = Math.max(0, this._physicalStart + idxAdjustment);
       this._physicalTop = Math.min(Math.floor(this._virtualStart) * this._physicalAverage, this._scrollPosition);
