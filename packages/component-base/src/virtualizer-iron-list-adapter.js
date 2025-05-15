@@ -565,19 +565,22 @@ export class IronListAdapter {
       this._physicalTop = Math.min(Math.floor(this._virtualStart) * this._physicalAverage, this._scrollPosition);
       this._update();
     } else if (this._physicalCount !== 0) {
-      // After running super._scrollHandler, fix internal properties to workaround an iron-list issue.
-      // See https://github.com/vaadin/web-components/issues/1691
-      const reusables = this._getReusables(isScrollingDown);
-      this._physicalTop = reusables.physicalTop;
+      const reusables = this._getReusables(!isScrollingDown);
 
-      if (isScrollingDown) {
-        this._virtualStart -= reusables.indexes.length;
-        this._physicalStart -= reusables.indexes.length;
-      } else {
-        this._virtualStart += reusables.indexes.length;
-        this._physicalStart += reusables.indexes.length;
+      if (reusables.indexes.length) {
+        // After running super._scrollHandler, fix internal properties to workaround an iron-list issue.
+        // See https://github.com/vaadin/web-components/issues/1691
+        this._physicalTop = reusables.physicalTop;
+
+        if (isScrollingDown) {
+          this._virtualStart -= reusables.indexes.length;
+          this._physicalStart -= reusables.indexes.length;
+        } else {
+          this._virtualStart += reusables.indexes.length;
+          this._physicalStart += reusables.indexes.length;
+        }
+        this._resizeHandler();
       }
-      this._resizeHandler();
     }
 
     if (delta) {
