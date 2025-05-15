@@ -9,6 +9,7 @@ import minimist from 'minimist';
 import { execSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
+import { enforceBaseStylesPlugin } from './web-dev-server.config.js';
 
 dotenv.config();
 
@@ -99,6 +100,15 @@ const getAllVisualPackages = () => {
 };
 
 /**
+ * Get all available packages with visual tests for base styles.
+ */
+const getAllBasePackages = () => {
+  return fs
+    .readdirSync('packages')
+    .filter((dir) => fs.statSync(`packages/${dir}`).isDirectory() && fs.existsSync(`packages/${dir}/test/visual/base`));
+};
+
+/**
  * Get packages for running tests.
  */
 const getTestPackages = (allPackages) => {
@@ -163,7 +173,9 @@ const getUnitTestGroups = (packages) => {
 const getVisualTestGroups = (packages, theme) => {
   return packages
     .filter((pkg) => {
-      return !pkg.includes(theme === 'lumo' ? 'material' : 'lumo');
+      return theme === 'base'
+        ? !pkg.includes('lumo') && !pkg.includes('material')
+        : !pkg.includes(theme === 'lumo' ? 'material' : 'lumo');
     })
     .map((pkg) => {
       return {
@@ -218,7 +230,7 @@ const getScreenshotFileName = ({ name, testFile }, type, diff) => {
     folder = 'icons/test/visual/screenshots';
   } else {
     const match = testFile.match(/\/packages\/(.+)\.test\.(js|ts)/u);
-    folder = match[1].replace(/(lumo|material)/u, '$1/screenshots');
+    folder = match[1].replace(/(base|lumo|material)/u, '$1/screenshots');
   }
   return path.join(folder, type, diff ? `${name}-diff` : name);
 };
@@ -263,7 +275,7 @@ const createUnitTestsConfig = (config) => {
 };
 
 const createVisualTestsConfig = (theme, browserVersion) => {
-  const visualPackages = getAllVisualPackages();
+  const visualPackages = theme === 'base' ? getAllBasePackages() : getAllVisualPackages();
   const packages = getTestPackages(visualPackages);
   const groups = getVisualTestGroups(packages, theme);
 
@@ -321,7 +333,8 @@ const createVisualTestsConfig = (theme, browserVersion) => {
         failureThresholdType: 'percent',
         update: process.env.TEST_ENV === 'update',
       }),
-    ],
+      theme === 'base' && enforceBaseStylesPlugin(),
+    ].filter(Boolean),
     groups,
     testRunnerHtml: getTestRunnerHtml(theme),
     filterBrowserLogs,
