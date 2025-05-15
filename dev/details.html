@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -9,23 +9,24 @@
 
     <script type="module">
       import '@vaadin/details';
-      import '@vaadin/tooltip';
-      // import '@vaadin/details/theme/material/vaadin-details.js';
-      // import '@vaadin/tooltip/theme/material/vaadin-tooltip.js';
     </script>
   </head>
 
   <body>
-    <vaadin-details summary="Expandable Details">
-      <div>Toggle using mouse, Enter and Space keys.</div>
+    <vaadin-details summary="Details 1" opened>
+      <div>Details 1 content.</div>
     </vaadin-details>
 
-    <!--
-    <vaadin-details>
-      <vaadin-details-summary slot="summary">Expandable Details</vaadin-details-summary>
-      <div>Toggle using mouse, Enter and Space keys.</div>
-      <vaadin-tooltip slot="tooltip" text="Click to toggle"></vaadin-tooltip>
+    <vaadin-details summary="Details 2">
+      <div>Details 2 content.</div>
     </vaadin-details>
-    -->
+
+    <vaadin-details summary="Details 3 (disabled)" disabled>
+      <div>Details 3 content.</div>
+    </vaadin-details>
+
+    <vaadin-details summary="Details 4 (disabled)" disabled opened>
+      <div>Details 4 content.</div>
+    </vaadin-details>
   </body>
 </html>
