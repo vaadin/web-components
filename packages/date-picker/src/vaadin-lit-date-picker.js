@@ -16,6 +16,7 @@ import { InputControlMixin } from '@vaadin/field-base/src/input-control-mixin.js
 import { InputController } from '@vaadin/field-base/src/input-controller.js';
 import { LabelledInputController } from '@vaadin/field-base/src/labelled-input-controller.js';
 import { inputFieldShared } from '@vaadin/field-base/src/styles/input-field-shared-styles.js';
+import { CSSInjectionMixin } from '@vaadin/vaadin-themable-mixin/css-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { DatePickerMixin } from './vaadin-date-picker-mixin.js';
 import { datePickerStyles } from './vaadin-date-picker-styles.js';
@@ -29,7 +30,9 @@ import { datePickerStyles } from './vaadin-date-picker-styles.js';
  * There is no ETA regarding specific Vaadin version where it'll land.
  * Feel free to try this code in your apps as per Apache 2.0 license.
  */
-class DatePicker extends DatePickerMixin(InputControlMixin(ThemableMixin(ElementMixin(PolylitMixin(LitElement))))) {
+class DatePicker extends DatePickerMixin(
+  InputControlMixin(CSSInjectionMixin(ThemableMixin(ElementMixin(PolylitMixin(LitElement))))),
+) {
   static get is() {
     return 'vaadin-date-picker';
   }
