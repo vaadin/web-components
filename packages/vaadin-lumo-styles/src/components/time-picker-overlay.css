@@ -1,0 +1,4 @@
+:host {
+  --_vaadin-time-picker-items-container-border-width: var(--lumo-space-xs);
+  --_vaadin-time-picker-items-container-border-style: solid;
+}
