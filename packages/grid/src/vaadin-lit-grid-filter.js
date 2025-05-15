@@ -11,13 +11,33 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin';
 import { GridFilterElementMixin } from './vaadin-grid-filter-element-mixin.js';
 
 /**
- * LitElement based version of `<vaadin-grid-filter>` web component.
+ * `<vaadin-grid-filter>` is a helper element for the `<vaadin-grid>` that provides out-of-the-box UI controls,
+ * and handlers for filtering the grid data.
  *
- * ## Disclaimer
+ * #### Example:
+ * ```html
+ * <vaadin-grid-column id="column"></vaadin-grid-column>
+ * ```
+ * ```js
+ * const column = document.querySelector('#column');
+ * column.headerRenderer = (root, column) => {
+ *   let filter = root.firstElementChild;
+ *   if (!filter) {
+ *     filter = document.createElement('vaadin-grid-filter');
+ *     root.appendChild(filter);
+ *   }
+ *   filter.path = 'name.first';
+ * };
+ * column.renderer = (root, column, model) => {
+ *   root.textContent = model.item.name.first;
+ * };
+ * ```
  *
- * This component is an experiment and not yet a part of Vaadin platform.
- * There is no ETA regarding specific Vaadin version where it'll land.
- * Feel free to try this code in your apps as per Apache 2.0 license.
+ * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
+ *
+ * @customElement
+ * @extends HTMLElement
+ * @mixes GridFilterElementMixin
  */
 class GridFilter extends GridFilterElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
   static get is() {

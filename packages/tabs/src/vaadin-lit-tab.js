@@ -13,14 +13,28 @@ import { TabMixin } from './vaadin-tab-mixin.js';
 import { tabStyles } from './vaadin-tab-styles.js';
 
 /**
- * LitElement based version of `<vaadin-tab>` web component.
+ * `<vaadin-tab>` is a Web Component providing an accessible and customizable tab.
  *
- * ## Disclaimer
+ * ```
+ *   <vaadin-tab>
+ *     Tab 1
+ *   </vaadin-tab>
+ * ```
  *
- * This component is an experiment and not yet a part of Vaadin platform.
- * There is no ETA regarding specific Vaadin version where it'll land.
- * Feel free to try this code in your apps as per Apache 2.0 license.
+ * The following state attributes are available for styling:
  *
+ * Attribute  | Description | Part name
+ * -----------|-------------|------------
+ * `disabled` | Set to a disabled tab | :host
+ * `focused` | Set when the element is focused | :host
+ * `focus-ring` | Set when the element is keyboard focused | :host
+ * `selected` | Set when the tab is selected | :host
+ * `active` | Set when mousedown or enter/spacebar pressed | :host
+ * `orientation` | Set to `horizontal` or `vertical` depending on the direction of items  | :host
+ *
+ * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
+ *
+ * @customElement
  * @extends HTMLElement
  * @mixes ElementMixin
  * @mixes TabMixin

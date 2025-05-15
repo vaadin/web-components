@@ -13,13 +13,45 @@ import { UploadFileMixin } from './vaadin-upload-file-mixin.js';
 import { uploadFileStyles } from './vaadin-upload-file-styles.js';
 
 /**
- * LitElement based version of `<vaadin-upload-file>` web component.
+ * `<vaadin-upload-file>` element represents a file in the file list of `<vaadin-upload>`.
  *
- * ## Disclaimer
+ * ### Styling
  *
- * This component is an experiment and not yet a part of Vaadin platform.
- * There is no ETA regarding specific Vaadin version where it'll land.
- * Feel free to try this code in your apps as per Apache 2.0 license.
+ * The following shadow DOM parts are available for styling:
+ *
+ * Part name        | Description
+ * -----------------|-------------
+ * `row`            | File container
+ * `info`           | Container for file status icon, file name, status and error messages
+ * `done-icon`      | File done status icon
+ * `warning-icon`   | File warning status icon
+ * `meta`           | Container for file name, status and error messages
+ * `name`           | File name
+ * `error`          | Error message, shown when error happens
+ * `status`         | Status message
+ * `commands`       | Container for file command buttons
+ * `start-button`   | Start file upload button
+ * `retry-button`   | Retry file upload button
+ * `remove-button`  | Remove file button
+ *
+ * The following state attributes are available for styling:
+ *
+ * Attribute        | Description
+ * -----------------|-------------
+ * `disabled`       | Set when the element is disabled
+ * `focus-ring`     | Set when the element is focused using the keyboard.
+ * `focused`        | Set when the element is focused.
+ * `error`          | An error has happened during uploading.
+ * `indeterminate`  | Uploading is in progress, but the progress value is unknown.
+ * `uploading`      | Uploading is in progress.
+ * `complete`       | Uploading has finished successfully.
+ *
+ * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
+ *
+ * @customElement
+ * @extends HTMLElement
+ * @mixes UploadFileMixin
+ * @mixes ThemableMixin
  */
 class UploadFile extends UploadFileMixin(ThemableMixin(PolylitMixin(LitElement))) {
   static get is() {

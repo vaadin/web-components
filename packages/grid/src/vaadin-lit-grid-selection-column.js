@@ -9,13 +9,31 @@ import { GridSelectionColumnMixin } from './vaadin-grid-selection-column-mixin.j
 import { GridColumn } from './vaadin-lit-grid-column.js';
 
 /**
- * LitElement based version of `<vaadin-grid-selection-column>` web component.
+ * `<vaadin-grid-selection-column>` is a helper element for the `<vaadin-grid>`
+ * that provides default renderers and functionality for item selection.
  *
- * ## Disclaimer
+ * #### Example:
+ * ```html
+ * <vaadin-grid>
+ *  <vaadin-grid-selection-column frozen auto-select></vaadin-grid-selection-column>
  *
- * This component is an experiment and not yet a part of Vaadin platform.
- * There is no ETA regarding specific Vaadin version where it'll land.
- * Feel free to try this code in your apps as per Apache 2.0 license.
+ *  <vaadin-grid-column>
+ *    ...
+ * ```
+ *
+ * By default the selection column displays `<vaadin-checkbox>` elements in the
+ * column cells. The checkboxes in the body rows toggle selection of the corresponding row items.
+ *
+ * When the grid data is provided as an array of [`items`](#/elements/vaadin-grid#property-items),
+ * the column header gets an additional checkbox that can be used for toggling
+ * selection for all the items at once.
+ *
+ * __The default content can also be overridden__
+ *
+ * @customElement
+ * @fires {CustomEvent} select-all-changed - Fired when the `selectAll` property changes.
+ * @extends GridColumn
+ * @mixes GridSelectionColumnMixin
  */
 class GridSelectionColumn extends GridSelectionColumnMixin(GridColumn) {
   static get is() {

@@ -12,13 +12,33 @@ import { VirtualListMixin } from './vaadin-virtual-list-mixin.js';
 import { virtualListStyles } from './vaadin-virtual-list-styles.js';
 
 /**
- * LitElement based version of `<vaadin-virtual-list>` web component.
+ * `<vaadin-virtual-list>` is a Web Component for displaying a virtual/infinite list of items.
  *
- * ## Disclaimer
+ * ```html
+ * <vaadin-virtual-list></vaadin-virtual-list>
+ * ```
  *
- * This component is an experiment and not yet a part of Vaadin platform.
- * There is no ETA regarding specific Vaadin version where it'll land.
- * Feel free to try this code in your apps as per Apache 2.0 license.
+ * ```js
+ * const list = document.querySelector('vaadin-virtual-list');
+ * list.items = items; // An array of data items
+ * list.renderer = (root, list, {item, index}) => {
+ *   root.textContent = `#${index}: ${item.name}`
+ * }
+ * ```
+ *
+ * The following state attributes are available for styling:
+ *
+ * Attribute        | Description
+ * -----------------|--------------------------------------------
+ * `overflow`       | Set to `top`, `bottom`, both, or none.
+ *
+ * See [Virtual List](https://vaadin.com/docs/latest/components/virtual-list) documentation.
+ *
+ * @customElement
+ * @extends HTMLElement
+ * @mixes ElementMixin
+ * @mixes ThemableMixin
+ * @mixes VirtualListMixin
  */
 class VirtualList extends VirtualListMixin(ThemableMixin(ElementMixin(PolylitMixin(LitElement)))) {
   static get is() {

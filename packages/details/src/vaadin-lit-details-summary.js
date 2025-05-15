@@ -12,13 +12,34 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
 import { detailsSummary } from './vaadin-details-summary-core-styles.js';
 
 /**
- * LitElement based version of `<vaadin-details-summary>` web component.
+ * The details summary element.
  *
- * ## Disclaimer
+ * ### Styling
  *
- * This component is an experiment and not yet a part of Vaadin platform.
- * There is no ETA regarding specific Vaadin version where it'll land.
- * Feel free to try this code in your apps as per Apache 2.0 license.
+ * The following shadow DOM parts are exposed for styling:
+ *
+ * Part name  | Description
+ * -----------|-------------------
+ * `toggle`   | The icon element
+ * `content`  | The content wrapper
+ *
+ * The following state attributes are available for styling:
+ *
+ * Attribute    | Description
+ * -------------| -----------
+ * `active`     | Set when the element is pressed down, either with mouse, touch or the keyboard.
+ * `opened`     | Set when the element is expanded and related collapsible content is visible.
+ * `disabled`   | Set when the element is disabled.
+ * `focus-ring` | Set when the element is focused using the keyboard.
+ * `focused`    | Set when the element is focused.
+ *
+ * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
+ *
+ * @customElement
+ * @extends HTMLElement
+ * @mixes ButtonMixin
+ * @mixes DirMixin
+ * @mixes ThemableMixin
  */
 class DetailsSummary extends ButtonMixin(DirMixin(ThemableMixin(PolylitMixin(LitElement)))) {
   static get is() {

@@ -11,13 +11,30 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
 import { verticalLayoutStyles } from './vaadin-vertical-layout-styles.js';
 
 /**
- * LitElement based version of `<vaadin-vertical-layout>` web component.
+ * `<vaadin-vertical-layout>` provides a simple way to vertically align your HTML elements.
  *
- * ## Disclaimer
+ * ```
+ * <vaadin-vertical-layout>
+ *   <div>Item 1</div>
+ *   <div>Item 2</div>
+ * </vaadin-vertical-layout>
+ * ```
  *
- * This component is an experiment and not yet a part of Vaadin platform.
- * There is no ETA regarding specific Vaadin version where it'll land.
- * Feel free to try this code in your apps as per Apache 2.0 license.
+ * ### Built-in Theme Variations
+ *
+ * `<vaadin-vertical-layout>` supports the following theme variations:
+ *
+ * Theme variation | Description
+ * ---|---
+ * `theme="margin"` | Applies the default amount of CSS margin for the host element (specified by the theme)
+ * `theme="padding"` | Applies the default amount of CSS padding for the host element (specified by the theme)
+ * `theme="spacing"` | Applies the default amount of CSS margin between items (specified by the theme)
+ * `theme="wrap"` | Items wrap to the next row when they exceed the layout height
+ *
+ * @customElement
+ * @extends HTMLElement
+ * @mixes ThemableMixin
+ * @mixes ElementMixin
  */
 class VerticalLayout extends ThemableMixin(ElementMixin(PolylitMixin(LitElement))) {
   static get is() {

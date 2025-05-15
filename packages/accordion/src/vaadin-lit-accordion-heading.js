@@ -12,13 +12,43 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
 import { accordionHeading } from './vaadin-accordion-heading-core-styles.js';
 
 /**
- * LitElement based version of `<vaadin-accordion-heading>` web component.
+ * The accordion heading element.
  *
- * ## Disclaimer
+ * `vaadin-accordion-heading` is the element for the headings in the accordion.
+ * As recommended by the WAI ARIA Best Practices, each heading needs to wrap a
+ * `<button>`. This element puts that button in the Shadow DOM, as it is more
+ * convenient to use and doesn't make styling of the heading more problematic.
  *
- * This component is an experiment and not yet a part of Vaadin platform.
- * There is no ETA regarding specific Vaadin version where it'll land.
- * Feel free to try this code in your apps as per Apache 2.0 license.
+ * The WAI ARIA Best Practices also recommend setting `aria-level` depending
+ * on what level the headings are. It is hard to determine the level of a heading
+ * algorithmically, and setting it is not strictly required to have an accessible
+ * accordion. To keep things easier to use, this element does not set `aria-level`
+ * attribute but leaves that to the developer creating an accordion.
+ *
+ * ### Styling
+ *
+ * The following shadow DOM parts are exposed for styling:
+ *
+ * Part name  | Description
+ * -----------|-------------------
+ * `toggle`   | The icon element
+ * `content`  | The content wrapper
+ *
+ * The following state attributes are available for styling:
+ *
+ * Attribute    | Description
+ * -------------| -----------
+ * `active`     | Set when the element is pressed down, either with mouse, touch or the keyboard.
+ * `opened`     | Set when the collapsible content is expanded and visible.
+ * `disabled`   | Set when the element is disabled.
+ *
+ * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
+ *
+ * @customElement
+ * @extends HTMLElement
+ * @mixes ActiveMixin
+ * @mixes DirMixin
+ * @mixes ThemableMixin
  */
 class AccordionHeading extends ActiveMixin(DirMixin(ThemableMixin(PolylitMixin(LitElement)))) {
   static get is() {

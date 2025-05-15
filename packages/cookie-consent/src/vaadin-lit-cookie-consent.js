@@ -15,12 +15,35 @@ import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { CookieConsentMixin } from './vaadin-cookie-consent-mixin.js';
 
 /**
- * LitElement based version of `<vaadin-cookie-consent>` web component.
+ * `<vaadin-cookie-consent>` is used to show a cookie consent banner the first
+ *  time a user visits the application.
  *
- * ## Disclaimer
+ * By default, the banner is shown attached to the top of the screen and with a
+ * predefined text, a link to https://cookiesandyou.com/ describing cookies and a consent button.
  *
- * This component is an experiment and not yet a part of Vaadin platform.
- * There is no ETA regarding specific Vaadin version where it'll land.
+ * The texts, link and position can be configured using attributes/properties, e.g.
+ * ```
+ * <vaadin-cookie-consent learn-more-link="https://mysite.com/cookies.html"></vaadin-cookie-consent>
+ * ```
+ *
+ * ### Styling
+ *
+ * To change the look of the cookie consent banner, a `style` node should be attached
+ * to the document's head with the following style names overridden:
+ *
+ * Style name      | Description
+ * ----------------|-------------------------------------------------------|
+ * `cc-window`     | Banner container
+ * `cc-message`    | Message container
+ * `cc-compliance` | Dismiss cookie button container
+ * `cc-dismiss`    | Dismiss cookie button
+ * `cc-btn`        | Dismiss cookie button
+ * `cc-link`       | Learn more link element
+ *
+ * @customElement
+ * @extends HTMLElement
+ * @mixes ElementMixin
+ * @mixes CookieConsentMixin
  */
 class CookieConsent extends CookieConsentMixin(ElementMixin(PolylitMixin(LitElement))) {
   static get is() {

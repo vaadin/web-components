@@ -9,13 +9,37 @@ import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { GridColumnGroupMixin } from './vaadin-grid-column-group-mixin.js';
 
 /**
- * LitElement based version of `<vaadin-grid-column-group>` web component.
+ * A `<vaadin-grid-column-group>` is used to make groups of columns in `<vaadin-grid>` and
+ * to configure additional headers and footers.
  *
- * ## Disclaimer
+ * Groups can be nested to create complex header and footer configurations.
  *
- * This component is an experiment and not yet a part of Vaadin platform.
- * There is no ETA regarding specific Vaadin version where it'll land.
- * Feel free to try this code in your apps as per Apache 2.0 license.
+ * #### Example:
+ * ```html
+ * <vaadin-grid-column-group resizable id="columnGroup">
+ *   <vaadin-grid-column id="column1"></vaadin-grid-column>
+ *   <vaadin-grid-column id="column2"></vaadin-grid-column>
+ * </vaadin-grid-column-group>
+ * ```
+ *
+ * ```js
+ * const columnGroup = document.querySelector('#columnGroup');
+ * columnGroup.headerRenderer = (root, columnGroup) => {
+ *   root.textContent = 'header';
+ * }
+ *
+ * const column1 = document.querySelector('#column1');
+ * column1.headerRenderer = (root, column) => { ... };
+ * column1.renderer = (root, column, model) => { ... };
+ *
+ * const column2 = document.querySelector('#column2');
+ * column2.headerRenderer = (root, column) => { ... };
+ * column2.renderer = (root, column, model) => { ... };
+ * ```
+ *
+ * @customElement
+ * @extends HTMLElement
+ * @mixes GridColumnGroupMixin
  */
 class GridColumnGroup extends GridColumnGroupMixin(PolylitMixin(LitElement)) {
   static get is() {

@@ -13,14 +13,40 @@ import { TabsMixin } from './vaadin-tabs-mixin.js';
 import { tabsStyles } from './vaadin-tabs-styles.js';
 
 /**
- * LitElement based version of `<vaadin-tabs>` web component.
+ * `<vaadin-tabs>` is a Web Component for organizing and grouping content into sections.
  *
- * ## Disclaimer
+ * ```
+ *   <vaadin-tabs selected="4">
+ *     <vaadin-tab>Page 1</vaadin-tab>
+ *     <vaadin-tab>Page 2</vaadin-tab>
+ *     <vaadin-tab>Page 3</vaadin-tab>
+ *     <vaadin-tab>Page 4</vaadin-tab>
+ *   </vaadin-tabs>
+ * ```
  *
- * This component is an experiment and not yet a part of Vaadin platform.
- * There is no ETA regarding specific Vaadin version where it'll land.
- * Feel free to try this code in your apps as per Apache 2.0 license.
+ * ### Styling
  *
+ * The following shadow DOM parts are available for styling:
+ *
+ * Part name         | Description
+ * ------------------|--------------------------------------
+ * `back-button`     | Button for moving the scroll back
+ * `tabs`            | The tabs container
+ * `forward-button`  | Button for moving the scroll forward
+ *
+ * The following state attributes are available for styling:
+ *
+ * Attribute  | Description | Part name
+ * -----------|-------------|------------
+ * `orientation` | Tabs disposition, valid values are `horizontal` and `vertical`. | :host
+ * `overflow` | It's set to `start`, `end`, none or both. | :host
+ *
+ * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
+ *
+ * @fires {CustomEvent} items-changed - Fired when the `items` property changes.
+ * @fires {CustomEvent} selected-changed - Fired when the `selected` property changes.
+ *
+ * @customElement
  * @extends HTMLElement
  * @mixes ElementMixin
  * @mixes TabsMixin

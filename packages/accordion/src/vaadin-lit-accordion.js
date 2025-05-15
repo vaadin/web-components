@@ -12,13 +12,54 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
 import { AccordionMixin } from './vaadin-accordion-mixin.js';
 
 /**
- * LitElement based version of `<vaadin-accordion>` web component.
+ * `<vaadin-accordion>` is a Web Component implementing accordion widget:
+ * a vertically stacked set of expandable panels. The component should be
+ * used as a wrapper for two or more `<vaadin-accordion-panel>` components.
  *
- * ## Disclaimer
+ * Panel headings function as controls that enable users to open (expand)
+ * or hide (collapse) their associated sections of content. The user can
+ * toggle panels by mouse click, Enter and Space keys.
  *
- * This component is an experiment and not yet a part of Vaadin platform.
- * There is no ETA regarding specific Vaadin version where it'll land.
- * Feel free to try this code in your apps as per Apache 2.0 license.
+ * Only one panel can be opened at a time, opening a new one forces
+ * previous panel to close and hide its content.
+ *
+ * ```
+ * <vaadin-accordion>
+ *   <vaadin-accordion-panel>
+ *     <vaadin-accordion-heading slot="summary">Panel 1</vaadin-accordion-heading>
+ *     <div>This panel is opened, so the text is visible by default.</div>
+ *   </vaadin-accordion-panel>
+ *   <vaadin-accordion-panel>
+ *     <vaadin-accordion-heading slot="summary">Panel 2</vaadin-accordion-heading>
+ *     <div>After opening this panel, the first one becomes closed.</div>
+ *   </vaadin-accordion-panel>
+ * </vaadin-accordion>
+ * ```
+ *
+ * ### Styling
+ *
+ * See the [`<vaadin-accordion-panel>`](#/elements/vaadin-accordion-panel)
+ * documentation for the available state attributes and stylable shadow parts.
+ *
+ * **Note:** You can apply the theme to `<vaadin-accordion>` component itself,
+ * especially by using the following CSS selector:
+ *
+ * ```
+ * :host ::slotted(vaadin-accordion-panel) {
+ *   margin-bottom: 5px;
+ * }
+ * ```
+ *
+ * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
+ *
+ * @fires {CustomEvent} items-changed - Fired when the `items` property changes.
+ * @fires {CustomEvent} opened-changed - Fired when the `opened` property changes.
+ *
+ * @customElement
+ * @extends HTMLElement
+ * @mixes AccordionMixin
+ * @mixes ElementMixin
+ * @mixes ThemableMixin
  */
 class Accordion extends AccordionMixin(ThemableMixin(ElementMixin(PolylitMixin(LitElement)))) {
   static get is() {

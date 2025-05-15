@@ -13,13 +13,22 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
 import { MessageInputMixin } from './vaadin-message-input-mixin.js';
 
 /**
- * LitElement based version of `<vaadin-message-input>` web component.
+ * `<vaadin-message-input>` is a Web Component for sending messages.
+ * It consists of a text area that grows on along with the content, and a send button to send message.
  *
- * ## Disclaimer
+ * The message can be sent by one of the following actions:
+ * - by pressing Enter (use Shift + Enter to add a new line)
+ * - by clicking `submit` button.
  *
- * This component is an experiment and not yet a part of Vaadin platform.
- * There is no ETA regarding specific Vaadin version where it'll land.
- * Feel free to try this code in your apps as per Apache 2.0 license.
+ * ```html
+ * <vaadin-message-input></vaadin-message-input>
+ * ```
+ *
+ * @customElement
+ * @extends HTMLElement
+ * @mixes MessageInputMixin
+ * @mixes ThemableMixin
+ * @mixes ElementMixin
  */
 class MessageInput extends MessageInputMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElement)))) {
   static get is() {

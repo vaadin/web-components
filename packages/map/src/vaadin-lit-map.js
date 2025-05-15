@@ -17,12 +17,44 @@ import { MapMixin } from './vaadin-map-mixin.js';
 import { mapStyles } from './vaadin-map-styles.js';
 
 /**
- * LitElement based version of `<vaadin-map>` web component.
+ * `vaadin-map` is a web component for displaying web maps.
  *
- * ## Disclaimer
+ * The component is a light-weight wrapper around the OpenLayers mapping library.
  *
- * This component is an experiment and not yet a part of Vaadin platform.
- * There is no ETA regarding specific Vaadin version where it'll land.
+ * ### Basic Usage
+ *
+ * Add a `<vaadin-map>` element to your HTML:
+ *
+ * ```html
+ * <vaadin-map></vaadin-map>
+ * ```
+ *
+ * Then use the exposed OpenLayers API to configure it:
+ * ```html
+ * <script type="module">
+ *   import "@vaadin/map";
+ *   import TileLayer from "ol/layer/Tile";
+ *   import OSM from "ol/source/OSM";
+ *   import View from "ol/View";
+ *
+ *   const map = document.querySelector("vaadin-map");
+ *   customElements.whenDefined("vaadin-map").then(() => {
+ *     map.configuration.addLayer(new TileLayer({
+ *       source: new OSM()
+ *     }));
+ *     map.configuration.setView(new View({
+ *       center: [0, 0],
+ *       zoom: 3
+ *     }));
+ *   });
+ * </script>
+ * ```
+ *
+ * @customElement
+ * @extends HTMLElement
+ * @mixes MapMixin
+ * @mixes ThemableMixin
+ * @mixes ElementMixin
  */
 class Map extends MapMixin(ThemableMixin(ElementMixin(PolylitMixin(LitElement)))) {
   static get is() {

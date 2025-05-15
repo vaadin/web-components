@@ -10,13 +10,16 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
 import { formRowStyles } from './vaadin-form-layout-styles.js';
 
 /**
- * LitElement based version of `<vaadin-form-row>` web component.
+ * `<vaadin-form-row>` is a web component for arranging fields into rows
+ * inside a `<vaadin-form-layout>` that is set to autoResponsive mode.
  *
- * ## Disclaimer
+ * Each `<vaadin-form-row>` always starts on a new row. Fields that exceed
+ * the available columns wrap to a new row, which then remains reserved
+ * exclusively for the fields of that `<vaadin-form-row>` element.
  *
- * This component is an experiment and not yet a part of Vaadin platform.
- * There is no ETA regarding specific Vaadin version where it'll land.
- * Feel free to try this code in your apps as per Apache 2.0 license.
+ * @customElement
+ * @extends HTMLElement
+ * @mixes ThemableMixin
  */
 class FormRow extends ThemableMixin(PolylitMixin(LitElement)) {
   static get is() {

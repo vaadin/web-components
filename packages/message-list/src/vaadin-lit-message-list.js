@@ -12,13 +12,43 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
 import { MessageListMixin } from './vaadin-message-list-mixin.js';
 
 /**
- * LitElement based version of `<vaadin-message-list>` web component.
+ * `<vaadin-message-list>` is a Web Component for showing an ordered list of messages. The messages are rendered as <vaadin-message>
  *
- * ## Disclaimer
+ * ### Example
  *
- * This component is an experiment and not yet a part of Vaadin platform.
- * There is no ETA regarding specific Vaadin version where it'll land.
- * Feel free to try this code in your apps as per Apache 2.0 license.
+ * To create a new message list, add the component to the page:
+ *
+ * ```html
+ * <vaadin-message-list></vaadin-message-list>
+ * ```
+ *
+ * Provide the messages to the message list with the [`items`](#/elements/vaadin-message-list#property-items) property.
+ *
+ * ```js
+ * document.querySelector('vaadin-message-list').items = [
+ *   { text: 'Hello list', time: 'yesterday', userName: 'Matt Mambo', userAbbr: 'MM', userColorIndex: 1 },
+ *   { text: 'Another message', time: 'right now', userName: 'Linsey Listy', userAbbr: 'LL', userColorIndex: 2, userImg: '/static/img/avatar.jpg' }
+ * ];
+ * ```
+ *
+ * ### Styling
+ *
+ * The following shadow DOM parts are available for styling:
+ *
+ * Part name | Description
+ * ----------|----------------
+ * `list`    | The container wrapping messages.
+ *
+ * See the [`<vaadin-message>`](#/elements/vaadin-message) documentation for the available
+ * state attributes and stylable shadow parts of message elements.
+ *
+ * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
+ *
+ * @customElement
+ * @extends HTMLElement
+ * @mixes ThemableMixin
+ * @mixes ElementMixin
+ * @mixes MessageListMixin
  */
 class MessageList extends MessageListMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElement)))) {
   static get is() {

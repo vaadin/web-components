@@ -12,13 +12,53 @@ import { CustomFieldMixin } from './vaadin-custom-field-mixin.js';
 import { customFieldStyles } from './vaadin-custom-field-styles.js';
 
 /**
- * LitElement based version of `<vaadin-custom-field>` web component.
+ * `<vaadin-custom-field>` is a web component for wrapping multiple components as a single field.
  *
- * ## Disclaimer
+ * ```
+ * <vaadin-custom-field label="Appointment time">
+ *   <vaadin-date-picker></vaadin-date-picker>
+ *   <vaadin-time-picker></vaadin-time-picker>
+ * </vaadin-custom-field>
+ * ```
  *
- * This component is an experiment and not yet a part of Vaadin platform.
- * There is no ETA regarding specific Vaadin version where it'll land.
- * Feel free to try this code in your apps as per Apache 2.0 license.
+ * ### Styling
+ *
+ * The following shadow DOM parts are available for styling:
+ *
+ * Part name            | Description
+ * ---------------------|----------------
+ * `label`              | The slotted label element wrapper
+ * `helper-text`        | The slotted helper text element wrapper
+ * `error-message`      | The slotted error message element wrapper
+ * `required-indicator` | The `required` state indicator element
+ * `input-fields`       | The slotted input elements wrapper
+ *
+ * The following state attributes are available for styling:
+ *
+ * Attribute           | Description                               | Part name
+ * --------------------|-------------------------------------------|------------
+ * `invalid`           | Set when the element is invalid           | :host
+ * `focused`           | Set when the element is focused           | :host
+ * `has-label`         | Set when the element has a label          | :host
+ * `has-value`         | Set when the element has a value          | :host
+ * `has-helper`        | Set when the element has helper text      | :host
+ * `has-error-message` | Set when the element has an error message | :host
+ *
+ * You may also manually set `disabled` or `readonly` attribute on this component to make the label
+ * part look visually the same as on a `<vaadin-text-field>` when it is disabled or readonly.
+ *
+ * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
+ *
+ * @fires {Event} change - Fired when the user commits a value change for any of the internal inputs.
+ * @fires {CustomEvent} invalid-changed - Fired when the `invalid` property changes.
+ * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
+ * @fires {CustomEvent} validated - Fired whenever the field is validated.
+ *
+ * @customElement
+ * @extends HTMLElement
+ * @mixes CustomFieldMixin
+ * @mixes ElementMixin
+ * @mixes ThemableMixin
  */
 class CustomField extends CustomFieldMixin(ThemableMixin(ElementMixin(PolylitMixin(LitElement)))) {
   static get is() {

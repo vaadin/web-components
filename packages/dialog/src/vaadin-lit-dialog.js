@@ -19,13 +19,67 @@ import { DialogResizableMixin } from './vaadin-dialog-resizable-mixin.js';
 export { DialogOverlay } from './vaadin-lit-dialog-overlay.js';
 
 /**
- * LitElement based version of `<vaadin-dialog>` web component.
+ * `<vaadin-dialog>` is a Web Component for creating customized modal dialogs.
  *
- * ## Disclaimer
+ * ### Rendering
  *
- * This component is an experiment and not yet a part of Vaadin platform.
- * There is no ETA regarding specific Vaadin version where it'll land.
- * Feel free to try this code in your apps as per Apache 2.0 license.
+ * The content of the dialog can be populated by using the renderer callback function.
+ *
+ * The renderer function provides `root`, `dialog` arguments.
+ * Generate DOM content, append it to the `root` element and control the state
+ * of the host element by accessing `dialog`. Before generating new content,
+ * users are able to check if there is already content in `root` for reusing it.
+ *
+ * ```html
+ * <vaadin-dialog id="dialog"></vaadin-dialog>
+ * ```
+ * ```js
+ * const dialog = document.querySelector('#dialog');
+ * dialog.renderer = function(root, dialog) {
+ *   root.textContent = "Sample dialog";
+ * };
+ * ```
+ *
+ * Renderer is called on the opening of the dialog.
+ * DOM generated during the renderer call can be reused
+ * in the next renderer call and will be provided with the `root` argument.
+ * On first call it will be empty.
+ *
+ * ### Styling
+ *
+ * `<vaadin-dialog>` uses `<vaadin-dialog-overlay>` internal
+ * themable component as the actual visible dialog overlay.
+ *
+ * See [`<vaadin-overlay>`](#/elements/vaadin-overlay) documentation.
+ * for `<vaadin-dialog-overlay>` parts.
+ *
+ * In addition to `<vaadin-overlay>` parts, the following parts are available for styling:
+ *
+ * Part name        | Description
+ * -----------------|-------------------------------------------
+ * `header`         | Element wrapping title and header content
+ * `header-content` | Element wrapping the header content slot
+ * `title`          | Element wrapping the title slot
+ * `footer`         | Element wrapping the footer slot
+ *
+ * The following state attributes are available for styling:
+ *
+ * Attribute        | Description
+ * -----------------|--------------------------------------------
+ * `has-title`      | Set when the element has a title
+ * `has-header`     | Set when the element has header renderer
+ * `has-footer`     | Set when the element has footer renderer
+ * `overflow`       | Set to `top`, `bottom`, none or both
+ *
+ * Note: the `theme` attribute value set on `<vaadin-dialog>` is
+ * propagated to the internal `<vaadin-dialog-overlay>` component.
+ *
+ * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
+ *
+ * @fires {CustomEvent} resize - Fired when the dialog resize is finished.
+ * @fires {CustomEvent} dragged - Fired when the dialog drag is finished.
+ * @fires {CustomEvent} opened-changed - Fired when the `opened` property changes.
+ * @fires {CustomEvent} closed - Fired when the dialog is closed.
  *
  * @extends HTMLElement
  * @mixes ElementMixin

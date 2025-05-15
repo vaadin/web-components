@@ -16,13 +16,53 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
 import { UploadMixin } from './vaadin-upload-mixin.js';
 
 /**
- * LitElement based version of `<vaadin-upload>` web component.
+ * `<vaadin-upload>` is a Web Component for uploading multiple files with drag and drop support.
  *
- * ## Disclaimer
+ * Example:
  *
- * This component is an experiment and not yet a part of Vaadin platform.
- * There is no ETA regarding specific Vaadin version where it'll land.
- * Feel free to try this code in your apps as per Apache 2.0 license.
+ * ```
+ * <vaadin-upload></vaadin-upload>
+ * ```
+ *
+ * ### Styling
+ *
+ * The following shadow DOM parts are available for styling:
+ *
+ * Part name          | Description
+ * -------------------|-------------------------------------
+ * `primary-buttons`  | Upload container
+ * `drop-label`       | Element wrapping drop label and icon
+ *
+ * The following state attributes are available for styling:
+ *
+ * Attribute | Description | Part name
+ * ---|---|---
+ * `disabled` | Set when the element is disabled | `:host`
+ * `nodrop` | Set when drag and drop is disabled (e. g., on touch devices) | `:host`
+ * `dragover` | A file is being dragged over the element | `:host`
+ * `dragover-valid` | A dragged file is valid with `maxFiles` and `accept` criteria | `:host`
+ * `max-files-reached` | The maximum number of files that the user is allowed to add to the upload has been reached | `:host`
+ *
+ * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
+ *
+ * @fires {CustomEvent} file-reject - Fired when a file cannot be added to the queue due to a constrain.
+ * @fires {CustomEvent} files-changed - Fired when the `files` property changes.
+ * @fires {CustomEvent} max-files-reached-changed - Fired when the `maxFilesReached` property changes.
+ * @fires {CustomEvent} upload-before - Fired before the XHR is opened.
+ * @fires {CustomEvent} upload-start - Fired when the XHR is sent.
+ * @fires {CustomEvent} upload-progress - Fired as many times as the progress is updated.
+ * @fires {CustomEvent} upload-success - Fired in case the upload process succeeded.
+ * @fires {CustomEvent} upload-error - Fired in case the upload process failed.
+ * @fires {CustomEvent} upload-request - Fired when the XHR has been opened but not sent yet.
+ * @fires {CustomEvent} upload-response - Fired when on the server response before analyzing it.
+ * @fires {CustomEvent} upload-retry - Fired when retry upload is requested.
+ * @fires {CustomEvent} upload-abort - Fired when upload abort is requested.
+ *
+ * @customElement
+ * @extends HTMLElement
+ * @mixes ThemableMixin
+ * @mixes ElementMixin
+ * @mixes UploadMixin
  */
 class Upload extends UploadMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElement)))) {
   static get is() {

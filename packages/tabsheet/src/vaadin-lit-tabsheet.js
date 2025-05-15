@@ -13,13 +13,52 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
 import { TabSheetMixin } from './vaadin-tabsheet-mixin.js';
 
 /**
- * LitElement based version of `<vaadin-tabsheet>` web component.
+ * `<vaadin-tabsheet>` is a Web Component for organizing and grouping content
+ * into scrollable panels. The panels can be switched between by using tabs.
  *
- * ## Disclaimer
+ * ```
+ *  <vaadin-tabsheet>
+ *    <div slot="prefix">Prefix</div>
+ *    <div slot="suffix">Suffix</div>
  *
- * This component is an experiment and not yet a part of Vaadin platform.
- * There is no ETA regarding specific Vaadin version where it'll land.
- * Feel free to try this code in your apps as per Apache 2.0 license.
+ *    <vaadin-tabs slot="tabs">
+ *      <vaadin-tab id="tab-1">Tab 1</vaadin-tab>
+ *      <vaadin-tab id="tab-2">Tab 2</vaadin-tab>
+ *      <vaadin-tab id="tab-3">Tab 3</vaadin-tab>
+ *    </vaadin-tabs>
+ *
+ *    <div tab="tab-1">Panel 1</div>
+ *    <div tab="tab-2">Panel 2</div>
+ *    <div tab="tab-3">Panel 3</div>
+ *  </vaadin-tabsheet>
+ * ```
+ *
+ * ### Styling
+ *
+ * The following shadow DOM parts are exposed for styling:
+ *
+ * Part name | Description
+ * --------- | ---------------
+ * `tabs-container`    | The container for the slotted prefix, tabs and suffix
+ * `content`    | The container for the slotted panels
+ *
+ * The following state attributes are available for styling:
+ *
+ * Attribute         | Description
+ * ------------------|-------------
+ * `loading` | Set when a tab without associated content is selected
+ * `overflow`   | Set to `top`, `bottom`, `start`, `end`, all of them, or none.
+ *
+ * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
+ *
+ * @fires {CustomEvent} items-changed - Fired when the `items` property changes.
+ * @fires {CustomEvent} selected-changed - Fired when the `selected` property changes.
+ *
+ * @customElement
+ * @extends HTMLElement
+ * @mixes ElementMixin
+ * @mixes TabSheetMixin
+ * @mixes ThemableMixin
  */
 class TabSheet extends TabSheetMixin(ThemableMixin(ElementMixin(PolylitMixin(LitElement)))) {
   static get is() {

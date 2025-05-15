@@ -17,13 +17,50 @@ import { AvatarGroupMixin } from './vaadin-avatar-group-mixin.js';
 import { avatarGroupStyles } from './vaadin-avatar-group-styles.js';
 
 /**
- * LitElement based version of `<vaadin-avatar-group>` web component.
+ * `<vaadin-avatar-group>` is a Web Component providing avatar group displaying functionality.
  *
- * ## Disclaimer
+ * To create the avatar group, first add the component to the page:
  *
- * This component is an experiment and not yet a part of Vaadin platform.
- * There is no ETA regarding specific Vaadin version where it'll land.
- * Feel free to try this code in your apps as per Apache 2.0 license.
+ * ```
+ * <vaadin-avatar-group></vaadin-avatar-group>
+ * ```
+ *
+ * And then use [`items`](#/elements/vaadin-avatar-group#property-items) property to initialize the structure:
+ *
+ * ```
+ * document.querySelector('vaadin-avatar-group').items = [
+ *   {name: 'John Doe'},
+ *   {abbr: 'AB'}
+ * ];
+ * ```
+ *
+ * ### Styling
+ *
+ * The following shadow DOM parts are exposed for styling:
+ *
+ * Part name   | Description
+ * ----------- | ---------------
+ * `container` | The container element
+ *
+ * See the [`<vaadin-avatar>`](#/elements/vaadin-avatar) documentation for the available
+ * state attributes and stylable shadow parts of avatar elements.
+ *
+ * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
+ *
+ * ### Internal components
+ *
+ * In addition to `<vaadin-avatar-group>` itself, the following internal
+ * components are themable:
+ *
+ * - `<vaadin-avatar-group-overlay>` - has the same API as [`<vaadin-overlay>`](#/elements/vaadin-overlay).
+ * - `<vaadin-avatar-group-menu>` - has the same API as [`<vaadin-list-box>`](#/elements/vaadin-list-box).
+ * - `<vaadin-avatar-group-menu-item>` - has the same API as [`<vaadin-item>`](#/elements/vaadin-item).
+ *
+ * @customElement
+ * @extends HTMLElement
+ * @mixes ElementMixin
+ * @mixes AvatarGroupMixin
+ * @mixes ThemableMixin
  */
 class AvatarGroup extends AvatarGroupMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElement)))) {
   static get is() {
