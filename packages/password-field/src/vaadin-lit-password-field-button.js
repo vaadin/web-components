@@ -36,7 +36,7 @@ class PasswordFieldButton extends ButtonMixin(DirMixin(ThemableMixin(PolylitMixi
           --vaadin-button-padding: 0;
           color: inherit;
           display: block;
-          cursor: default;
+          cursor: var(--vaadin-clickable-cursor);
         }
 
         :host::before {

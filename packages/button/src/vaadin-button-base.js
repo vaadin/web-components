@@ -19,7 +19,7 @@ export const buttonStyles = css`
       -webkit-tap-highlight-color: transparent;
       -webkit-user-select: none;
       user-select: none;
-      cursor: pointer;
+      cursor: var(--vaadin-clickable-cursor);
       box-sizing: border-box;
       vertical-align: middle;
       flex-shrink: 0;
@@ -71,7 +71,7 @@ export const buttonStyles = css`
 
     :host([disabled]) {
       pointer-events: var(--_vaadin-button-disabled-pointer-events, none);
-      cursor: not-allowed;
+      cursor: var(--vaadin-disabled-cursor);
       opacity: 0.5;
     }
 

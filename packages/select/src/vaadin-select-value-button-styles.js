@@ -16,6 +16,7 @@ export const valueButton = css`
 
   ::slotted(*) {
     padding: 0;
+    cursor: inherit;
   }
 
   .vaadin-button-container,

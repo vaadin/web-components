@@ -47,6 +47,10 @@ class Select extends SelectBaseMixin(ElementMixin(ThemableMixin(PolylitMixin(Lit
           flex: 1;
         }
 
+        [part='input-field'] {
+          cursor: var(--vaadin-clickable-cursor);
+        }
+
         [part='toggle-button']::before {
           mask-image: var(--_vaadin-icon-chevron-down);
         }
