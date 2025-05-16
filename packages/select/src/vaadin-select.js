@@ -13,14 +13,11 @@ import { screenReaderOnly } from '@vaadin/a11y-base/src/styles/sr-only-styles.js
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { processTemplates } from '@vaadin/component-base/src/templates.js';
-import { fieldShared } from '@vaadin/field-base/src/styles/field-shared-styles.js';
-import { inputFieldContainer } from '@vaadin/field-base/src/styles/input-field-container-styles.js';
+import { inputFieldShared } from '@vaadin/field-base/src/styles/input-field-shared-styles.js';
 import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { SelectBaseMixin } from './vaadin-select-base-mixin.js';
 
-registerStyles('vaadin-select', [fieldShared, inputFieldContainer, screenReaderOnly], {
-  moduleId: 'vaadin-select-styles',
-});
+registerStyles('vaadin-select', [inputFieldShared, screenReaderOnly], { moduleId: 'vaadin-select-styles' });
 
 /**
  * `<vaadin-select>` is a Web Component for selecting values from a list of items.
