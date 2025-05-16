@@ -7,7 +7,11 @@ import './vaadin-password-field-button.js';
 import { html } from '@polymer/polymer/lib/utils/html-tag.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { TextField } from '@vaadin/text-field/src/vaadin-text-field.js';
+import { registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { passwordFieldStyles } from './vaadin-password-field-core-styles.js';
 import { PasswordFieldMixin } from './vaadin-password-field-mixin.js';
+
+registerStyles('vaadin-password-field', passwordFieldStyles, { moduleId: 'vaadin-password-field-styles' });
 
 const ownTemplate = html`
   <div part="reveal-button" slot="suffix">
