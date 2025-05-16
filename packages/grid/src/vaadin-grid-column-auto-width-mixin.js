@@ -100,7 +100,7 @@ export const ColumnAutoWidthMixin = (superClass) =>
 
       const columnWidth = Math.max(
         this.__getIntrinsicWidth(col),
-        this.__getDistributedWidth((col.assignedSlot || col).parentElement, col),
+        this.__getDistributedWidth(this.__getParentColumnGroup(col), col),
       );
 
       // We're processing a regular grid-column and not a grid-column-group
@@ -153,13 +153,38 @@ export const ColumnAutoWidthMixin = (superClass) =>
       const lvi = this._lastVisibleIndex;
       this.__viewportRowsCache = this._getRenderedRows().filter((row) => row.index >= fvi && row.index <= lvi);
 
-      // Pre-cache the intrinsic width of each column
+      // Get columns with autoWidth
       const cols = this.__getAutoWidthColumns();
-      this.__calculateAndCacheIntrinsicWidths(cols);
+
+      // Get all ancestor groups of the columns
+      const ancestorColumnGroups = new Set();
+      for (const col of cols) {
+        let parent = this.__getParentColumnGroup(col);
+        while (parent && !ancestorColumnGroups.has(parent)) {
+          ancestorColumnGroups.add(parent);
+          parent = this.__getParentColumnGroup(parent);
+        }
+      }
+
+      // Pre-cache the intrinsic width of each column and ancestor group
+      this.__calculateAndCacheIntrinsicWidths([...cols, ...ancestorColumnGroups]);
 
       cols.forEach((col) => {
         col.width = `${this.__getDistributedWidth(col)}px`;
       });
+
+      // Clear the column-width cache to avoid a memory leak
+      this.__intrinsicWidthCache.clear();
+    }
+
+    /**
+     * Returns the parent column group of the given column.
+     *
+     * @private
+     */
+    __getParentColumnGroup(col) {
+      const parent = (col.assignedSlot || col).parentElement;
+      return parent && parent !== this ? parent : null;
     }
 
     /**
