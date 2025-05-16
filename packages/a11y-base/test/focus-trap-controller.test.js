@@ -90,7 +90,7 @@ const runTests = (defineHelper, baseMixin) => {
     });
 
     it('should keep focus on the element when it is inside the trap node', () => {
-      const input = element.querySelector('#trap-input-1');
+      const input = element.querySelector('#trap-input-2');
       input.focus();
       controller.trapFocus(trap);
       expect(document.activeElement).to.equal(input);
