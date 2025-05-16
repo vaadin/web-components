@@ -7,6 +7,7 @@ import './vaadin-lit-password-field-button.js';
 import { html } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { TextField } from '@vaadin/text-field/src/vaadin-lit-text-field.js';
+import { passwordFieldStyles } from './vaadin-password-field-core-styles.js';
 import { PasswordFieldMixin } from './vaadin-password-field-mixin.js';
 
 /**
@@ -21,6 +22,10 @@ import { PasswordFieldMixin } from './vaadin-password-field-mixin.js';
 export class PasswordField extends PasswordFieldMixin(TextField) {
   static get is() {
     return 'vaadin-password-field';
+  }
+
+  static get styles() {
+    return [...super.styles, passwordFieldStyles];
   }
 
   /**
