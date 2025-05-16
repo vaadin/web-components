@@ -21,6 +21,7 @@ export const inputContainerStyles = css`
     border: var(--vaadin-input-field-border-width, 1px) solid
       var(--vaadin-input-field-border-color, var(--_vaadin-border-color-strong));
     box-sizing: border-box;
+    cursor: text;
     padding: var(--vaadin-input-field-padding, var(--_vaadin-padding-container));
     gap: var(--vaadin-input-field-gap, var(--_vaadin-gap-container-inline));
     background: var(--vaadin-input-field-background, var(--_vaadin-background));
@@ -61,6 +62,7 @@ export const inputContainerStyles = css`
     font: inherit;
     color: inherit;
     background: transparent;
+    cursor: inherit;
   }
 
   ::slotted(*) {

@@ -15,6 +15,7 @@ export const detailsSummary = (partName = 'vaadin-details-summary') => css`
     border-radius: var(--${unsafeCSS(partName)}-border-radius, var(--_vaadin-radius-m));
     box-sizing: border-box;
     color: var(--${unsafeCSS(partName)}-text-color, var(--_vaadin-color-strong));
+    cursor: var(--vaadin-clickable-cursor);
     display: flex;
     font-size: var(--${unsafeCSS(partName)}-font-size, inherit);
     font-weight: var(--${unsafeCSS(partName)}-font-weight, 500);
@@ -66,7 +67,7 @@ export const detailsSummary = (partName = 'vaadin-details-summary') => css`
 
   :host([disabled]) {
     opacity: 0.5;
-    cursor: not-allowed;
+    cursor: var(--vaadin-disabled-cursor);
   }
 
   :host([dir='rtl']) [part='toggle']::before {

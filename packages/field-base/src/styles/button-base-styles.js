@@ -9,6 +9,7 @@ import { css } from 'lit';
 export const button = css`
   [part$='button'] {
     color: var(--_vaadin-color);
+    cursor: var(--vaadin-clickable-cursor);
     touch-action: manipulation;
     -webkit-tap-highlight-color: transparent;
     -webkit-user-select: none;
@@ -34,7 +35,7 @@ export const button = css`
 
   :host(:is([readonly], [disabled])) [part$='button'] {
     color: var(--_vaadin-color-subtle);
-    cursor: not-allowed;
+    cursor: var(--vaadin-disabled-cursor);
   }
 
   @media (forced-colors: active) {
