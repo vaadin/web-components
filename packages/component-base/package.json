@@ -23,7 +23,8 @@
     "custom_typings",
     "index.d.ts",
     "index.js",
-    "src"
+    "src",
+    "!src/style-props.js"
   ],
   "keywords": [
     "Vaadin",
