@@ -3,12 +3,13 @@
  * Copyright (c) 2017 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { css, html, LitElement } from 'lit';
+import { html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { listBoxStyles } from './vaadin-list-box-core-styles.js';
 import { MultiSelectListMixin } from './vaadin-multi-select-list-mixin.js';
 
 /**
@@ -26,22 +27,7 @@ class ListBox extends ElementMixin(MultiSelectListMixin(ThemableMixin(PolylitMix
   }
 
   static get styles() {
-    return css`
-      :host {
-        display: flex;
-      }
-
-      :host([hidden]) {
-        display: none !important;
-      }
-
-      [part='items'] {
-        height: 100%;
-        width: 100%;
-        overflow-y: auto;
-        -webkit-overflow-scrolling: touch;
-      }
-    `;
+    return listBoxStyles;
   }
 
   static get properties() {

@@ -8,8 +8,11 @@ import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js'
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
-import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { listBoxStyles } from './vaadin-list-box-core-styles.js';
 import { MultiSelectListMixin } from './vaadin-multi-select-list-mixin.js';
+
+registerStyles('vaadin-list-box', listBoxStyles, { moduleId: 'vaadin-list-box-styles' });
 
 /**
  * `<vaadin-list-box>` is a Web Component for creating menus.
@@ -47,22 +50,6 @@ import { MultiSelectListMixin } from './vaadin-multi-select-list-mixin.js';
 class ListBox extends ElementMixin(MultiSelectListMixin(ThemableMixin(ControllerMixin(PolymerElement)))) {
   static get template() {
     return html`
-      <style>
-        :host {
-          display: flex;
-        }
-
-        :host([hidden]) {
-          display: none !important;
-        }
-
-        [part='items'] {
-          height: 100%;
-          width: 100%;
-          overflow-y: auto;
-          -webkit-overflow-scrolling: touch;
-        }
-      </style>
       <div part="items">
         <slot></slot>
       </div>
