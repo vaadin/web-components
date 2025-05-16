@@ -9,7 +9,7 @@ import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { buttonStyles, buttonTemplate } from './vaadin-button-base.js';
+import { buttonStyles } from './vaadin-button-core-styles.js';
 import { ButtonMixin } from './vaadin-button-mixin.js';
 
 registerStyles('vaadin-button', buttonStyles, { moduleId: 'vaadin-button-styles' });
@@ -81,7 +81,20 @@ class Button extends ButtonMixin(ElementMixin(ThemableMixin(ControllerMixin(Poly
   }
 
   static get template() {
-    return buttonTemplate(html);
+    return html`
+      <div class="vaadin-button-container">
+        <span part="prefix" aria-hidden="true">
+          <slot name="prefix"></slot>
+        </span>
+        <span part="label">
+          <slot></slot>
+        </span>
+        <span part="suffix" aria-hidden="true">
+          <slot name="suffix"></slot>
+        </span>
+      </div>
+      <slot name="tooltip"></slot>
+    `;
   }
 
   /** @protected */

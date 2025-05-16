@@ -1,0 +1,3 @@
+:host([auto-expand-vertically]) {
+  padding-block: var(--lumo-space-xs);
+}

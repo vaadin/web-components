@@ -10,6 +10,7 @@ import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { OverlayMixin } from '@vaadin/overlay/src/vaadin-overlay-mixin.js';
 import { overlayStyles } from '@vaadin/overlay/src/vaadin-overlay-styles.js';
+import { CSSInjectionMixin } from '@vaadin/vaadin-themable-mixin/css-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 const timePickerOverlayStyles = css`
@@ -35,7 +36,7 @@ const timePickerOverlayStyles = css`
  * @private
  */
 export class TimePickerOverlay extends ComboBoxOverlayMixin(
-  OverlayMixin(DirMixin(ThemableMixin(PolylitMixin(LitElement)))),
+  OverlayMixin(DirMixin(CSSInjectionMixin(ThemableMixin(PolylitMixin(LitElement))))),
 ) {
   static get is() {
     return 'vaadin-time-picker-overlay';

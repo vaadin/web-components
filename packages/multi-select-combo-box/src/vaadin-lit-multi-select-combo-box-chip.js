@@ -6,6 +6,7 @@
 import { html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
+import { CSSInjectionMixin } from '@vaadin/vaadin-themable-mixin/css-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { multiSelectComboBoxChip } from './vaadin-multi-select-combo-box-styles.js';
 
@@ -18,7 +19,7 @@ import { multiSelectComboBoxChip } from './vaadin-multi-select-combo-box-styles.
  * There is no ETA regarding specific Vaadin version where it'll land.
  * Feel free to try this code in your apps as per Apache 2.0 license.
  */
-class MultiSelectComboBoxChip extends ThemableMixin(PolylitMixin(LitElement)) {
+class MultiSelectComboBoxChip extends CSSInjectionMixin(ThemableMixin(PolylitMixin(LitElement))) {
   static get is() {
     return 'vaadin-multi-select-combo-box-chip';
   }

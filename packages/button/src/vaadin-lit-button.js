@@ -10,7 +10,7 @@ import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { CSSInjectionMixin } from '@vaadin/vaadin-themable-mixin/css-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { buttonStyles, buttonTemplate } from './vaadin-button-base.js';
+import { buttonStyles } from './vaadin-button-core-styles.js';
 import { ButtonMixin } from './vaadin-button-mixin.js';
 
 /**
@@ -33,7 +33,20 @@ class Button extends ButtonMixin(ElementMixin(CSSInjectionMixin(ThemableMixin(Po
 
   /** @protected */
   render() {
-    return buttonTemplate(html);
+    return html`
+      <div class="vaadin-button-container">
+        <span part="prefix" aria-hidden="true">
+          <slot name="prefix"></slot>
+        </span>
+        <span part="label">
+          <slot></slot>
+        </span>
+        <span part="suffix" aria-hidden="true">
+          <slot name="suffix"></slot>
+        </span>
+      </div>
+      <slot name="tooltip"></slot>
+    `;
   }
 
   /** @protected */
