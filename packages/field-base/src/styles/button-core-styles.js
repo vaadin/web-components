@@ -5,7 +5,7 @@
  */
 import { css } from 'lit';
 
-export const clearButton = css`
+export const button = css`
   [part='clear-button'] {
     display: none;
     cursor: default;

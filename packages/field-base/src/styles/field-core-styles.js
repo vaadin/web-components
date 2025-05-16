@@ -5,7 +5,7 @@
  */
 import { css } from 'lit';
 
-export const fieldShared = css`
+export const field = css`
   :host {
     display: inline-flex;
     outline: none;

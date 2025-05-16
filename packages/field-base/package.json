@@ -22,7 +22,9 @@
   "files": [
     "index.d.ts",
     "index.js",
-    "src"
+    "src",
+    "!src/styles/*-base.styles.d.ts",
+    "!src/styles/*-base.styles.js"
   ],
   "keywords": [
     "Vaadin",
