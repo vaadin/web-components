@@ -14,7 +14,7 @@ const passwordFieldBase = css`
     --vaadin-button-padding: 0;
     color: inherit;
     display: block;
-    cursor: default;
+    cursor: var(--vaadin-clickable-cursor);
   }
 
   :host::before {
