@@ -34,7 +34,7 @@ export const itemStyles = css`
     }
 
     [part='checkmark'] {
-      color: var(--vaadin-item-checkmark-color, var(--_vaadin-color-subtle));
+      color: var(--vaadin-item-checkmark-color, inherit);
       display: var(--vaadin-item-checkmark-display, none);
       visibility: hidden;
     }
