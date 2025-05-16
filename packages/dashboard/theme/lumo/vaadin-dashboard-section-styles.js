@@ -20,11 +20,14 @@ const section = css`
     line-height: var(--lumo-line-height-s);
     padding-inline: var(--lumo-space-s);
     min-height: var(--lumo-size-l);
+    align-items: center;
   }
 
   [part='title'] {
     font-size: var(--lumo-font-size-xl);
     font-weight: 600;
+    white-space: nowrap;
+    line-height: var(--lumo-line-height-m);
   }
 
   /* Section states */

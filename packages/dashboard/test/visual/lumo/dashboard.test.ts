@@ -127,5 +127,61 @@ describe('dashboard', () => {
       element.editable = false;
       await visualDiff(div, getName('non-editable'));
     });
+
+    describe('long title', () => {
+      beforeEach(async () => {
+        element.items = [
+          { colspan: 1 },
+          { colspan: 1 },
+          {
+            title:
+              'Section long title: Nunc sit amet suscipit tellus, id fermentum massa. Aliquam vel tellus cursus, sodales ligula sed, iaculis justo.',
+            items: [{ colspan: 1, rowspan: 1 }, { colspan: 1 }],
+          },
+        ];
+
+        element.renderer = (wrapper) => {
+          render(
+            html`<vaadin-dashboard-widget
+              widget-title="Long title: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque ultricies lobortis orci, a faucibus tortor blandit at."
+            >
+              <div class="content" slot="header-content">Header content</div>
+              <div class="content">Content</div>
+            </vaadin-dashboard-widget>`,
+            wrapper,
+          );
+        };
+
+        await nextFrame();
+      });
+
+      it('title wrap', async () => {
+        await nextFrame();
+        await visualDiff(div, getName('title-wrap'));
+      });
+
+      it('no title wrap', async () => {
+        element.style.setProperty('--vaadin-dashboard-widget-title-wrap', 'nowrap');
+        await nextFrame();
+        await visualDiff(div, getName('no-title-wrap'));
+      });
+    });
+
+    describe('theme', () => {
+      it('shaded background', async () => {
+        element.setAttribute('theme', 'shaded-background');
+        await visualDiff(div, getName('theme-shaded-background'));
+      });
+
+      it('elevated widgets', async () => {
+        element.setAttribute('theme', 'elevated-widgets');
+        await visualDiff(div, getName('theme-elevated-widgets'));
+      });
+
+      it('flat widgets', async () => {
+        element.setAttribute('theme', 'flat-widgets');
+        await visualDiff(div, getName('theme-flat-widgets'));
+      });
+    });
   });
 });

@@ -433,8 +433,8 @@ class Dashboard extends DashboardLayoutMixin(
   /** @private */
   __updateWrapper(wrapper, item) {
     const style = `
-      ${item.colspan ? `--vaadin-dashboard-item-colspan: ${item.colspan};` : ''}
-      ${item.rowspan ? `--vaadin-dashboard-item-rowspan: ${item.rowspan};` : ''}
+      ${item.colspan ? `--vaadin-dashboard-widget-colspan: ${item.colspan};` : ''}
+      ${item.rowspan ? `--vaadin-dashboard-widget-rowspan: ${item.rowspan};` : ''}
     `.trim();
 
     wrapper.__item = item;
