@@ -7,8 +7,8 @@ import { html, PolymerElement } from '@polymer/polymer';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { inputContainerStyles } from './vaadin-input-container-core-styles.js';
 import { InputContainerMixin } from './vaadin-input-container-mixin.js';
-import { inputContainerStyles } from './vaadin-input-container-styles.js';
 
 registerStyles('vaadin-input-container', inputContainerStyles, { moduleId: 'vaadin-input-container-styles' });
 
