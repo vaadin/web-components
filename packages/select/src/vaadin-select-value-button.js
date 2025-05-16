@@ -7,7 +7,7 @@ import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ButtonMixin } from '@vaadin/button/src/vaadin-button-mixin.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { valueButton } from './vaadin-select-value-button-styles.js';
+import { valueButton } from './vaadin-select-value-button-core-styles.js';
 
 registerStyles('vaadin-select-value-button', valueButton, { moduleId: 'vaadin-select-value-button-styles' });
 

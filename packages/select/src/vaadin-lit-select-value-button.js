@@ -8,7 +8,7 @@ import { ButtonMixin } from '@vaadin/button/src/vaadin-button-mixin.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { valueButton } from './vaadin-select-value-button-styles.js';
+import { valueButton } from './vaadin-select-value-button-core-styles.js';
 
 /**
  * An element used internally by `<vaadin-select>`. Not intended to be used separately.

@@ -6,25 +6,9 @@
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { overlayStyles } from '@vaadin/overlay/src/vaadin-overlay-styles.js';
-import { css, registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { selectOverlayStyles } from './vaadin-select-overlay-core-styles.js';
 import { SelectOverlayMixin } from './vaadin-select-overlay-mixin.js';
-
-const selectOverlayStyles = css`
-  :host {
-    align-items: flex-start;
-    justify-content: flex-start;
-  }
-
-  :host(:not([phone])) [part='overlay'] {
-    min-width: var(--vaadin-select-overlay-width, var(--vaadin-select-text-field-width));
-  }
-
-  @media (forced-colors: active) {
-    [part='overlay'] {
-      outline: 3px solid;
-    }
-  }
-`;
 
 registerStyles('vaadin-select-overlay', [overlayStyles, selectOverlayStyles], {
   moduleId: 'vaadin-select-overlay-styles',

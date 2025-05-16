@@ -8,7 +8,10 @@ import { ListMixin } from '@vaadin/a11y-base/src/list-mixin.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
-import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { listBoxStyles } from '@vaadin/list-box/src/vaadin-list-box-core-styles.js';
+import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+
+registerStyles('vaadin-select-list-box', listBoxStyles, { moduleId: 'vaadin-select-list-box-styles' });
 
 /**
  * An element used internally by `<vaadin-select>`. Not intended to be used separately.
@@ -28,22 +31,6 @@ class SelectListBox extends ListMixin(ThemableMixin(DirMixin(ControllerMixin(Pol
 
   static get template() {
     return html`
-      <style>
-        :host {
-          display: flex;
-        }
-
-        :host([hidden]) {
-          display: none !important;
-        }
-
-        [part='items'] {
-          height: 100%;
-          width: 100%;
-          overflow-y: auto;
-          -webkit-overflow-scrolling: touch;
-        }
-      </style>
       <div part="items">
         <slot></slot>
       </div>
