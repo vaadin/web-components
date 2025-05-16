@@ -217,7 +217,7 @@ describe('chips', () => {
         expect(overflow.hasAttribute('hidden')).to.be.false;
       });
 
-      it('should set show max width on the chip based on CSS property', async () => {
+      it('should set max width on the chip based on the remaining space', async () => {
         comboBox.style.width = 'auto';
         await nextResize(comboBox);
 
