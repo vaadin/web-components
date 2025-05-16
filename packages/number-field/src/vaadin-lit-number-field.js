@@ -11,8 +11,8 @@ import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { inputFieldShared } from '@vaadin/field-base/src/styles/input-field-shared-styles.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { numberFieldStyles } from './vaadin-number-field-core-styles.js';
 import { NumberFieldMixin } from './vaadin-number-field-mixin.js';
-import { numberFieldStyles } from './vaadin-number-field-styles.js';
 
 /**
  * LitElement based version of `<vaadin-number-field>` web component.
