@@ -7,6 +7,7 @@ import './vaadin-lit-accordion-heading.js';
 import { html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
+import { CSSInjectionMixin } from '@vaadin/vaadin-themable-mixin/css-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { accordionPanel } from './vaadin-accordion-panel-core-styles.js';
 import { AccordionPanelMixin } from './vaadin-accordion-panel-mixin.js';
@@ -20,7 +21,7 @@ import { AccordionPanelMixin } from './vaadin-accordion-panel-mixin.js';
  * There is no ETA regarding specific Vaadin version where it'll land.
  * Feel free to try this code in your apps as per Apache 2.0 license.
  */
-class AccordionPanel extends AccordionPanelMixin(ThemableMixin(PolylitMixin(LitElement))) {
+class AccordionPanel extends AccordionPanelMixin(CSSInjectionMixin(ThemableMixin(PolylitMixin(LitElement)))) {
   static get is() {
     return 'vaadin-accordion-panel';
   }

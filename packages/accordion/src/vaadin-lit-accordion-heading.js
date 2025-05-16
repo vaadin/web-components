@@ -8,6 +8,7 @@ import { ActiveMixin } from '@vaadin/a11y-base/src/active-mixin.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
+import { CSSInjectionMixin } from '@vaadin/vaadin-themable-mixin/css-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { accordionHeading } from './vaadin-accordion-heading-core-styles.js';
 
@@ -20,7 +21,7 @@ import { accordionHeading } from './vaadin-accordion-heading-core-styles.js';
  * There is no ETA regarding specific Vaadin version where it'll land.
  * Feel free to try this code in your apps as per Apache 2.0 license.
  */
-class AccordionHeading extends ActiveMixin(DirMixin(ThemableMixin(PolylitMixin(LitElement)))) {
+class AccordionHeading extends ActiveMixin(DirMixin(CSSInjectionMixin(ThemableMixin(PolylitMixin(LitElement))))) {
   static get is() {
     return 'vaadin-accordion-heading';
   }

@@ -1,0 +1,12 @@
+:host {
+  padding: 0;
+}
+
+[part='content'] {
+  padding: var(--lumo-space-s) 0;
+}
+
+:host([theme~='filled']) {
+  padding-top: 0;
+  padding-bottom: 0;
+}
