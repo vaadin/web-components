@@ -9,8 +9,8 @@ import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { inputFieldShared } from '@vaadin/field-base/src/styles/input-field-shared-styles.js';
 import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { numberFieldStyles } from './vaadin-number-field-core-styles.js';
 import { NumberFieldMixin } from './vaadin-number-field-mixin.js';
-import { numberFieldStyles } from './vaadin-number-field-styles.js';
 
 registerStyles('vaadin-number-field', [inputFieldShared, numberFieldStyles], {
   moduleId: 'vaadin-number-field-styles',
