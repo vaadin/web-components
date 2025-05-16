@@ -9,8 +9,8 @@ import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { CSSInjectionMixin } from '@vaadin/vaadin-themable-mixin/css-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { inputContainerStyles } from './vaadin-input-container-core-styles.js';
 import { InputContainerMixin } from './vaadin-input-container-mixin.js';
-import { inputContainerStyles } from './vaadin-input-container-styles.js';
 
 /**
  * LitElement based version of `<vaadin-input-container>` web component.

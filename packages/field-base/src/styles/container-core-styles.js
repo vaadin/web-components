@@ -5,7 +5,7 @@
  */
 import { css } from 'lit';
 
-export const inputFieldContainer = css`
+export const container = css`
   [class$='container'] {
     display: flex;
     flex-direction: column;

@@ -5,4 +5,4 @@
  */
 import type { CSSResult } from 'lit';
 
-export const clearButton: CSSResult;
+export const button: CSSResult;

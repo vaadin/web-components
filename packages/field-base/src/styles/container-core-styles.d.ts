@@ -5,4 +5,4 @@
  */
 import type { CSSResult } from 'lit';
 
-export const inputFieldContainer: CSSResult;
+export const container: CSSResult;
