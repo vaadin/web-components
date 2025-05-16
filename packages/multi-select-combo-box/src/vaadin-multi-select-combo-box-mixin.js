@@ -877,17 +877,20 @@ export const MultiSelectComboBoxMixin = (superClass) =>
         this.insertBefore(chip, refNode);
 
         // When auto expanding vertically, no need to measure remaining width
-        if (!this.autoExpandVertically && this.$.chips.clientWidth > remainingWidth) {
-          // If there is no more space for chips, or if there is at least one
-          // chip already shown, collapse all remaining chips to the overflow
-          if (remainingWidth < chipMinWidth || refNode !== null) {
-            chip.remove();
-            break;
+        if (!this.autoExpandVertically) {
+          if (this.$.chips.clientWidth > remainingWidth) {
+            // If there is no more space for chips, or if there is at least one
+            // chip already shown, collapse all remaining chips to the overflow
+            if (remainingWidth < chipMinWidth || refNode !== null) {
+              chip.remove();
+              break;
+            }
           }
+
+          chip.style.maxWidth = `${remainingWidth}px`;
         }
 
         items.pop();
-        chip.style.maxWidth = `${remainingWidth}px`;
         refNode = chip;
       }
 
