@@ -39,10 +39,6 @@ class Select extends SelectBaseMixin(ElementMixin(ThemableMixin(PolylitMixin(Lit
       inputFieldShared,
       screenReaderOnly,
       css`
-        :host {
-          position: relative;
-        }
-
         ::slotted([slot='value']) {
           flex: 1;
         }
