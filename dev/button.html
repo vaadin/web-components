@@ -13,11 +13,13 @@
       window.Vaadin.featureFlags.accessibleDisabledButtons = true;
     </script>
     <script type="module">
-      import '@vaadin/button';
-      import '@vaadin/icon';
-      import '@vaadin/icons';
-      import '@vaadin/tooltip';
+      import '@vaadin/button/src/vaadin-lit-button.js';
+      import '@vaadin/icon/src/vaadin-lit-icon.js';
+      import '@vaadin/icons/vaadin-icons.js';
       import '@vaadin/vaadin-lumo-styles/vaadin-iconset.js';
+      import '@vaadin/vaadin-lumo-styles/props.css';
+      import '@vaadin/vaadin-lumo-styles/components/button.css';
+      import '@vaadin/vaadin-lumo-styles/components/icon.css';
     </script>
   </head>
 
@@ -56,7 +58,7 @@
         Reply
       </vaadin-button>
       <vaadin-button theme="tertiary" aria-label="Reply">
-        <vaadin-icon icon="vaadin:reply"></vaadin-icon>
+        <vaadin-icon icon="vaadin:reply" slot="prefix"></vaadin-icon>
         <vaadin-tooltip slot="tooltip" text="Reply"></vaadin-tooltip>
       </vaadin-button>
     </section>
@@ -76,14 +78,14 @@
         Reply
       </vaadin-button>
       <vaadin-button style="width: 150px" aria-label="Reply">
-        <vaadin-icon icon="vaadin:reply"></vaadin-icon>
+        <vaadin-icon icon="vaadin:reply" slot="prefix"></vaadin-icon>
       </vaadin-button>
       <vaadin-button style="width: 150px; justify-content: start">
         <vaadin-icon icon="vaadin:reply" slot="prefix"></vaadin-icon>
         Reply
       </vaadin-button>
       <vaadin-button style="flex-direction: column">
-        <vaadin-icon icon="vaadin:reply"></vaadin-icon>
+        <vaadin-icon icon="vaadin:reply" slot="prefix"></vaadin-icon>
         Reply
       </vaadin-button>
     </section>
