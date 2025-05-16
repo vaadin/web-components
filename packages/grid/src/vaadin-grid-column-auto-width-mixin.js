@@ -172,6 +172,9 @@ export const ColumnAutoWidthMixin = (superClass) =>
       cols.forEach((col) => {
         col.width = `${this.__getDistributedWidth(col)}px`;
       });
+
+      // Clear the column-width cache to avoid a memory leak
+      this.__intrinsicWidthCache.clear();
     }
 
     /**
