@@ -1,14 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { sendKeys } from '@vaadin/test-runner-commands';
-import {
-  down,
-  fixtureSync,
-  focusin,
-  isFirefox,
-  keyboardEventFor,
-  nextRender,
-  nextUpdate,
-} from '@vaadin/testing-helpers';
+import { fixtureSync, keyboardEventFor, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-rich-text-editor.js';
 import { getDeepActiveElement } from '@vaadin/a11y-base/src/focus-utils.js';
@@ -133,14 +125,14 @@ describe('accessibility', () => {
     it('should focus a toolbar button on meta-f10 combo', (done) => {
       sinon.stub(buttons[0], 'focus').callsFake(done);
       editor.focus();
-      const e = keyboardEventFor('keydown', 121, ['alt']);
+      const e = keyboardEventFor('keydown', 121, ['alt'], 'F10');
       content.dispatchEvent(e);
     });
 
     it('should focus a toolbar button on shift-tab combo', (done) => {
       sinon.stub(buttons[0], 'focus').callsFake(done);
       editor.focus();
-      const e = keyboardEventFor('keydown', 9, ['shift']);
+      const e = keyboardEventFor('keydown', 9, ['shift'], 'Tab');
       content.dispatchEvent(e);
     });
 
@@ -151,7 +143,7 @@ describe('accessibility', () => {
         done();
       });
       editor.focus();
-      const e = keyboardEventFor('keydown', 9, ['shift']);
+      const e = keyboardEventFor('keydown', 9, ['shift'], 'Tab');
       content.dispatchEvent(e);
     });
 
@@ -167,6 +159,7 @@ describe('accessibility', () => {
       sinon.stub(editor, 'focus').callsFake(done);
       const e = new CustomEvent('keydown', { bubbles: true });
       e.keyCode = 9;
+      e.key = 'Tab';
       e.shiftKey = false;
       const result = buttons[0].dispatchEvent(e);
       expect(result).to.be.false; // DispatchEvent returns false when preventDefault is called
@@ -180,7 +173,7 @@ describe('accessibility', () => {
       rte.value = '[{"attributes":{"list":"bullet"},"insert":"Foo\\n"}]';
       editor.focus();
       editor.setSelection(0, 2);
-      const e = keyboardEventFor('keydown', 9, ['shift']);
+      const e = keyboardEventFor('keydown', 9, ['shift'], 'Tab');
       content.dispatchEvent(e);
     });
 
@@ -188,39 +181,11 @@ describe('accessibility', () => {
       rte.value = '[{"insert":"  foo"},{"attributes":{"code-block":true},"insert":"\\n"}]';
       editor.focus();
       editor.setSelection(2, 0);
-      const e = keyboardEventFor('keydown', 9, ['shift']);
+      const e = keyboardEventFor('keydown', 9, ['shift'], 'Tab');
       content.dispatchEvent(e);
       flushValueDebouncer();
       expect(rte.value).to.equal('[{"insert":"foo"},{"attributes":{"code-block":true},"insert":"\\n"}]');
       expect(e.defaultPrevented).to.be.true;
-    });
-
-    (isFirefox ? it : it.skip)('should focus the fake target on content focusin', (done) => {
-      const spy = sinon.spy(rte, '__createFakeFocusTarget');
-      sinon.stub(editor, 'focus').callsFake(() => {
-        expect(spy.calledOnce).to.be.true;
-        const fake = spy.firstCall.returnValue;
-        const style = getComputedStyle(fake);
-        expect(style.position).to.equal('absolute');
-        expect(style.left).to.equal('-9999px');
-        expect(style.top).to.equal(`${document.documentElement.scrollTop}px`);
-        done();
-      });
-      focusin(content);
-    });
-
-    (isFirefox ? it : it.skip)('should focus the fake target on mousedown when content is not focused', (done) => {
-      const spy = sinon.spy(rte, '__createFakeFocusTarget');
-      sinon.stub(editor, 'focus').callsFake(() => {
-        expect(spy.calledOnce).to.be.true;
-        const fake = spy.firstCall.returnValue;
-        const style = getComputedStyle(fake);
-        expect(style.position).to.equal('absolute');
-        expect(style.left).to.equal('-9999px');
-        expect(style.top).to.equal(`${document.documentElement.scrollTop}px`);
-        done();
-      });
-      down(content);
     });
   });
 

@@ -289,6 +289,12 @@ const contentStyles = css`
   :where(h5) {
     margin-bottom: 0.25em;
   }
+
+  /* Quill converts <pre> to this */
+  .ql-code-block-container {
+    background-color: var(--lumo-contrast-10pct);
+    border-radius: var(--lumo-border-radius-m);
+  }
 `;
 
 registerStyles('vaadin-rich-text-editor', [color, typography, richTextEditor, contentStyles], {
