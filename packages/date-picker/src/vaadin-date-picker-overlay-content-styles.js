@@ -48,7 +48,7 @@ export const overlayContentStyles = css`
     line-height: var(--vaadin-button-line-height, inherit);
     padding: var(--vaadin-button-padding, var(--_vaadin-padding-container));
     z-index: 1;
-    cursor: pointer;
+    cursor: var(--vaadin-clickable-cursor);
   }
 
   :host([years-visible]) [part='years-toggle-button'] {

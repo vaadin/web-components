@@ -12,7 +12,7 @@ export const itemStyles = css`
       align-items: center;
       border-radius: var(--vaadin-item-border-radius, var(--_vaadin-radius-m));
       box-sizing: border-box;
-      cursor: pointer;
+      cursor: var(--vaadin-clickable-cursor);
       display: flex;
       gap: var(--vaadin-item-gap, 0 var(--_vaadin-gap-container-inline));
       height: var(--vaadin-item-height, auto);
@@ -25,7 +25,7 @@ export const itemStyles = css`
     }
 
     :host([disabled]) {
-      cursor: not-allowed;
+      cursor: var(--vaadin-disabled-cursor);
       opacity: 0.5;
     }
 
