@@ -16,8 +16,11 @@ import { processTemplates } from '@vaadin/component-base/src/templates.js';
 import { inputFieldShared } from '@vaadin/field-base/src/styles/input-field-shared-styles.js';
 import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { SelectBaseMixin } from './vaadin-select-base-mixin.js';
+import { selectStyles } from './vaadin-select-core-styles.js';
 
-registerStyles('vaadin-select', [inputFieldShared, screenReaderOnly], { moduleId: 'vaadin-select-styles' });
+registerStyles('vaadin-select', [inputFieldShared, screenReaderOnly, selectStyles], {
+  moduleId: 'vaadin-select-styles',
+});
 
 /**
  * `<vaadin-select>` is a Web Component for selecting values from a list of items.
@@ -138,16 +141,6 @@ class Select extends SelectBaseMixin(ElementMixin(ThemableMixin(PolymerElement))
 
   static get template() {
     return html`
-      <style>
-        :host {
-          position: relative;
-        }
-
-        ::slotted([slot='value']) {
-          flex-grow: 1;
-        }
-      </style>
-
       <div class="vaadin-select-container">
         <div part="label" on-click="_onClick">
           <slot name="label"></slot>
