@@ -51,6 +51,7 @@ export const fieldShared = css`
   }
 
   [part='required-indicator'] {
+    display: inline-block;
     color: var(--vaadin-input-field-required-indicator-color, var(--_vaadin-color));
   }
 
