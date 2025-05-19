@@ -26,7 +26,6 @@ export const checkboxGroupStyles = (name = 'checkbox') => css`
   }
 
   :host([theme~='horizontal']) [part='group-field'] {
-    flex-direction: row;
-    flex-wrap: wrap;
+    flex-flow: row wrap;
   }
 `;
