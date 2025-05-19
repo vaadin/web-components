@@ -1,6 +1,8 @@
 {
-  "customSyntax": "postcss-lit",
   "extends": [
     "stylelint-config-vaadin"
+  ],
+  "overrides": [
+    { "files": ["**/*.js"], "customSyntax": "postcss-lit" }
   ]
 }
