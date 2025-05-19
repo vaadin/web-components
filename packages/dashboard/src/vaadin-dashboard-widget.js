@@ -68,10 +68,17 @@ import { DashboardSection } from './vaadin-dashboard-section.js';
  *
  * The following custom properties are available:
  *
- * Custom Property                   | Description
- * ----------------------------------|-------------
- * `--vaadin-dashboard-item-colspan` | colspan of the widget
- * `--vaadin-dashboard-item-rowspan` | rowspan of the widget
+ * Custom Property                             | Description
+ * --------------------------------------------|----------------------
+ * `--vaadin-dashboard-widget-colspan`         | colspan of the widget
+ * `--vaadin-dashboard-widget-rowspan`         | rowspan of the widget
+ * `--vaadin-dashboard-widget-background`      | widget background
+ * `--vaadin-dashboard-widget-border-radius`   | widget corner radius
+ * `--vaadin-dashboard-widget-border-width`    | widget border width
+ * `--vaadin-dashboard-widget-border-color`    | widget border color
+ * `--vaadin-dashboard-widget-shadow`          | widget shadow (non edit mode)
+ * `--vaadin-dashboard-widget-padding`         | padding around widget content
+ * `--vaadin-dashboard-widget-title-wrap`      | widget title wrap
  *
  * The following state attributes are available for styling:
  *
@@ -110,8 +117,8 @@ class DashboardWidget extends DashboardItemMixin(ElementMixin(ThemableMixin(Poly
         :host {
           display: flex;
           flex-direction: column;
-          grid-column: var(--_vaadin-dashboard-item-column);
-          grid-row: var(--_vaadin-dashboard-item-row);
+          grid-column: var(--_item-column);
+          grid-row: var(--_item-row);
           position: relative;
         }
 
@@ -141,8 +148,8 @@ class DashboardWidget extends DashboardItemMixin(ElementMixin(ThemableMixin(Poly
           z-index: 2;
           position: absolute;
           top: -1px;
-          width: var(--_vaadin-dashboard-widget-resizer-width, 0);
-          height: var(--_vaadin-dashboard-widget-resizer-height, 0);
+          width: var(--_widget-resizer-width, 0);
+          height: var(--_widget-resizer-height, 0);
           background: rgba(0, 0, 0, 0.1);
           border-radius: inherit;
         }
