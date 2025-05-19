@@ -1,4 +1,12 @@
 :host {
+  display: flex;
+  align-items: center;
+  flex: 0 1 auto;
+  --_border-radius: var(--vaadin-input-field-border-radius, 0);
+  /* stylelint-disable-next-line length-zero-no-unit */
+  --_input-border-width: var(--vaadin-input-field-border-width, 0px);
+  /* stylelint-disable-next-line length-zero-no-unit */
+  box-shadow: inset 0 0 0 var(--_input-border-width, 0px) var(--_input-border-color);
   background: var(--_background);
   padding: 0 calc(0.375em + var(--_input-container-radius) / 4 - 1px);
   font-weight: var(--vaadin-input-field-value-font-weight, 500);
@@ -49,6 +57,46 @@
     transform 0.15s,
     opacity 0.2s;
   transform-origin: 100% 0;
+}
+
+:host([hidden]) {
+  display: none !important;
+}
+
+/* Reset the native input styles */
+::slotted(input) {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  flex: auto;
+  white-space: nowrap;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+  outline: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  min-width: 0;
+  font: inherit;
+  line-height: normal;
+  color: inherit;
+  background-color: transparent;
+  /* Disable default invalid style in Firefox */
+  box-shadow: none;
+}
+
+::slotted(*) {
+  flex: none;
+}
+
+::slotted(:is(input, textarea))::placeholder {
+  /* Use ::slotted(input:placeholder-shown) in themes to style the placeholder. */
+  /* because ::slotted(...)::placeholder does not work in Safari. */
+  font: inherit;
+  color: inherit;
+  /* Override default opacity in Firefox */
+  opacity: 1;
 }
 
 ::slotted(:not([slot$='fix'])) {

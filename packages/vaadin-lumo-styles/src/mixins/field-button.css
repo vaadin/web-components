@@ -24,3 +24,16 @@
   font-family: 'lumo-icons';
   display: block;
 }
+
+[part='clear-button'] {
+  display: none;
+  cursor: default;
+}
+
+[part='clear-button']::before {
+  content: '\2715';
+}
+
+:host([clear-button-visible][has-value]:not([disabled]):not([readonly])) [part='clear-button'] {
+  display: block;
+}

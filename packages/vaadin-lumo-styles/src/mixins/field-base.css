@@ -1,4 +1,6 @@
 :host {
+  display: inline-flex;
+  outline: none;
   --lumo-text-field-size: var(--lumo-size-m);
   color: var(--vaadin-input-field-value-color, var(--lumo-body-text-color));
   font-size: var(--vaadin-input-field-value-font-size, var(--lumo-font-size-m));
@@ -14,10 +16,26 @@
 }
 
 :host::before {
+  content: '\2003';
+  width: 0;
+  /* Size and position this element on the same vertical position as the input-field element
+          to make vertical align for the host element work as expected */
   height: var(--_input-height);
   box-sizing: border-box;
   display: inline-flex;
   align-items: center;
+}
+
+[class$='container'] {
+  display: flex;
+  flex-direction: column;
+  min-width: 100%;
+  max-width: 100%;
+  width: var(--vaadin-field-default-width, 12em);
+}
+
+:host([hidden]) {
+  display: none !important;
 }
 
 :host([focused]) [part='input-field'] ::slotted(:is(input, textarea)) {
@@ -117,6 +135,7 @@
   25% {
     transform: translateX(4px);
   }
+
   75% {
     transform: translateX(-4px);
   }
@@ -144,4 +163,19 @@
 
 [part='clear-button']::before {
   content: var(--lumo-icons-cross);
+}
+
+@media (forced-colors: active) {
+  :host(:not([readonly])) [part='input-field'] {
+    outline: 1px solid;
+    outline-offset: -1px;
+  }
+
+  :host([focused]) [part='input-field'] {
+    outline-width: 2px;
+  }
+
+  :host([disabled]) [part='input-field'] {
+    outline-color: GrayText;
+  }
 }
