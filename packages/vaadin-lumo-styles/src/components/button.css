@@ -1,4 +1,10 @@
 :host {
+  display: inline-block;
+  position: relative;
+  outline: none;
+  white-space: nowrap;
+  -webkit-user-select: none;
+  user-select: none;
   /* Sizing */
   --lumo-button-size: var(--lumo-size-m);
   min-width: var(--vaadin-button-min-width, calc(var(--_button-size) * 2));
@@ -29,6 +35,35 @@
   --_lumo-button-primary-text-color: var(--vaadin-button-primary-text-color, var(--lumo-primary-contrast-color));
 }
 
+:host([hidden]) {
+  display: none !important;
+}
+
+.vaadin-button-container {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  width: 100%;
+  height: 100%;
+  min-height: inherit;
+  text-shadow: inherit;
+}
+
+/* Aligns the button with form fields when placed on the same line.
+Note, to make it work, the form fields should have the same "::before" pseudo-element. */
+.vaadin-button-container::before {
+  content: '\2003';
+  display: inline-block;
+  width: 0;
+  max-height: 100%;
+}
+
+[part='prefix'],
+[part='suffix'] {
+  flex: none;
+}
+
 /* Set only for the internal parts so we don't affect the host vertical alignment */
 [part='label'],
 [part='prefix'],
@@ -37,6 +72,9 @@
 }
 
 [part='label'] {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   padding: calc(var(--lumo-button-size) / 6) 0;
 }
 
@@ -206,6 +244,8 @@
 
 :host([disabled]) {
   color: var(--lumo-disabled-text-color);
+  pointer-events: var(--_vaadin-button-disabled-pointer-events, none);
+  cursor: not-allowed;
 }
 
 :host([theme~='primary'][disabled]) {
@@ -271,4 +311,19 @@
 :host([dir='rtl'][theme~='icon']) [part='suffix'] {
   margin-left: 0;
   margin-right: 0;
+}
+
+@media (forced-colors: active) {
+  :host {
+    outline: 1px solid;
+    outline-offset: -1px;
+  }
+
+  :host([focused]) {
+    outline-width: 2px;
+  }
+
+  :host([disabled]) {
+    outline-color: GrayText;
+  }
 }
