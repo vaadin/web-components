@@ -8,9 +8,10 @@
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { css, html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { BoardRowMixin } from './vaadin-board-row-mixin.js';
 
 /**
@@ -52,34 +53,36 @@ import { BoardRowMixin } from './vaadin-board-row-mixin.js';
  * @mixes ElementMixin
  * @mixes BoardRowMixin
  */
-class BoardRow extends BoardRowMixin(ElementMixin(PolymerElement)) {
-  static get template() {
-    return html`
-      <style>
-        :host {
-          display: flex;
-          flex-flow: row wrap;
-          align-items: stretch;
-          --small-size: var(--vaadin-board-width-small, 600px);
-          --medium-size: var(--vaadin-board-width-medium, 960px);
-        }
+class BoardRow extends BoardRowMixin(ElementMixin(PolylitMixin(LitElement))) {
+  static get is() {
+    return 'vaadin-board-row';
+  }
 
-        :host([hidden]) {
-          display: none !important;
-        }
+  static get styles() {
+    return css`
+      :host {
+        display: flex;
+        flex-flow: row wrap;
+        align-items: stretch;
+        --small-size: var(--vaadin-board-width-small, 600px);
+        --medium-size: var(--vaadin-board-width-medium, 960px);
+      }
 
-        :host ::slotted(*) {
-          box-sizing: border-box;
-          flex-grow: 1;
-          overflow: hidden;
-        }
-      </style>
-      <slot id="insertionPoint"></slot>
+      :host([hidden]) {
+        display: none !important;
+      }
+
+      :host ::slotted(*) {
+        box-sizing: border-box;
+        flex-grow: 1;
+        overflow: hidden;
+      }
     `;
   }
 
-  static get is() {
-    return 'vaadin-board-row';
+  /** @protected */
+  render() {
+    return html`<slot id="insertionPoint"></slot>`;
   }
 }
 
