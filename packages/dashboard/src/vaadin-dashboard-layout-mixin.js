@@ -24,6 +24,7 @@ export const DashboardLayoutMixin = (superClass) =>
         :host {
           display: block;
           overflow: auto;
+          box-sizing: border-box;
           width: 100%;
         }
 
