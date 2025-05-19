@@ -20,7 +20,8 @@ export const selectStyles = css`
     --vaadin-input-field-border-color: inherit;
   }
 
-  [part='input-field'] {
+  [part='input-field'],
+  :host(:not([readonly])) ::slotted([slot='value']) {
     cursor: var(--vaadin-clickable-cursor);
   }
 
