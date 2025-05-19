@@ -4,8 +4,9 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import '@vaadin/text-field/src/vaadin-text-field.js';
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
+import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin';
 import { GridFilterElementMixin } from './vaadin-grid-filter-element-mixin.js';
 
@@ -38,13 +39,14 @@ import { GridFilterElementMixin } from './vaadin-grid-filter-element-mixin.js';
  * @extends HTMLElement
  * @mixes GridFilterElementMixin
  */
-class GridFilter extends GridFilterElementMixin(ThemableMixin(PolymerElement)) {
-  static get template() {
-    return html`<slot></slot>`;
-  }
-
+class GridFilter extends GridFilterElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
   static get is() {
     return 'vaadin-grid-filter';
+  }
+
+  /** @protected */
+  render() {
+    return html`<slot></slot>`;
   }
 }
 

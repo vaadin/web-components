@@ -3,10 +3,11 @@
  * Copyright (c) 2016 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
-import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
+import { ThemableMixin } from '@vaadin/vaadin-themable-mixin';
 import { GridSorterMixin } from './vaadin-grid-sorter-mixin.js';
 
 /**
@@ -54,20 +55,21 @@ import { GridSorterMixin } from './vaadin-grid-sorter-mixin.js';
  * @mixes ThemableMixin
  * @mixes DirMixin
  */
-class GridSorter extends GridSorterMixin(ThemableMixin(DirMixin(PolymerElement))) {
-  static get template() {
+class GridSorter extends GridSorterMixin(ThemableMixin(DirMixin(PolylitMixin(LitElement)))) {
+  static get is() {
+    return 'vaadin-grid-sorter';
+  }
+
+  /** @protected */
+  render() {
     return html`
       <div part="content">
         <slot></slot>
       </div>
       <div part="indicators">
-        <span part="order">[[_getDisplayOrder(_order)]]</span>
+        <span part="order">${this._getDisplayOrder(this._order)}</span>
       </div>
     `;
-  }
-
-  static get is() {
-    return 'vaadin-grid-sorter';
   }
 }
 

@@ -4,15 +4,14 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import './vaadin-grid-column.js';
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
-import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
+import { html, LitElement } from 'lit';
+import { ifDefined } from 'lit/directives/if-defined.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
-import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
+import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { GridMixin } from './vaadin-grid-mixin.js';
 import { gridStyles } from './vaadin-grid-styles.js';
-
-registerStyles('vaadin-grid', gridStyles, { moduleId: 'vaadin-grid-styles' });
 
 /**
  * `<vaadin-grid>` is a free, high quality data grid / data table Web Component. The content of the
@@ -261,20 +260,34 @@ registerStyles('vaadin-grid', gridStyles, { moduleId: 'vaadin-grid-styles' });
  * @extends HTMLElement
  * @mixes GridMixin
  * @mixes ThemableMixin
- * @mixes ControllerMixin
  */
-class Grid extends GridMixin(ElementMixin(ThemableMixin(ControllerMixin(PolymerElement)))) {
-  static get template() {
+class Grid extends GridMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElement)))) {
+  static get is() {
+    return 'vaadin-grid';
+  }
+
+  static get styles() {
+    return gridStyles;
+  }
+
+  /** @protected */
+  render() {
     return html`
       <div
         id="scroller"
-        safari$="[[_safari]]"
-        ios$="[[_ios]]"
-        loading$="[[loading]]"
-        column-reordering-allowed$="[[columnReorderingAllowed]]"
-        empty-state$="[[__emptyState]]"
+        ?safari="${this._safari}"
+        ?ios="${this._ios}"
+        ?loading="${this.loading}"
+        ?column-reordering-allowed="${this.columnReorderingAllowed}"
+        ?empty-state="${this.__emptyState}"
       >
-        <table id="table" role="treegrid" aria-multiselectable="true" tabindex="0" aria-label$="[[accessibleName]]">
+        <table
+          id="table"
+          role="treegrid"
+          aria-multiselectable="true"
+          tabindex="0"
+          aria-label="${ifDefined(this.accessibleName)}"
+        >
           <caption id="sizer" part="row"></caption>
           <thead id="header" role="rowgroup"></thead>
           <tbody id="items" role="rowgroup"></tbody>
@@ -295,10 +308,6 @@ class Grid extends GridMixin(ElementMixin(ThemableMixin(ControllerMixin(PolymerE
 
       <div id="focusexit" tabindex="0"></div>
     `;
-  }
-
-  static get is() {
-    return 'vaadin-grid';
   }
 }
 
