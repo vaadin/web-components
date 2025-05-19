@@ -3,13 +3,12 @@
  * Copyright (c) 2017 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
-import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
+import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { FormItemMixin } from './vaadin-form-item-mixin.js';
 import { formItemStyles } from './vaadin-form-layout-styles.js';
-
-registerStyles('vaadin-form-item', formItemStyles, { moduleId: 'vaadin-form-item-styles' });
 
 /**
  * `<vaadin-form-item>` is a Web Component providing labelled form item wrapper
@@ -103,20 +102,25 @@ registerStyles('vaadin-form-item', formItemStyles, { moduleId: 'vaadin-form-item
  * @mixes FormItemMixin
  * @mixes ThemableMixin
  */
-class FormItem extends FormItemMixin(ThemableMixin(PolymerElement)) {
+class FormItem extends FormItemMixin(ThemableMixin(PolylitMixin(LitElement))) {
   static get is() {
     return 'vaadin-form-item';
   }
 
-  static get template() {
+  static get styles() {
+    return formItemStyles;
+  }
+
+  /** @protected */
+  render() {
     return html`
-      <div id="label" part="label" on-click="__onLabelClick">
-        <slot name="label" id="labelSlot" on-slotchange="__onLabelSlotChange"></slot>
+      <div id="label" part="label" @click="${this.__onLabelClick}">
+        <slot name="label" id="labelSlot" @slotchange="${this.__onLabelSlotChange}"></slot>
         <span part="required-indicator" aria-hidden="true"></span>
       </div>
       <div id="spacing"></div>
       <div id="content">
-        <slot id="contentSlot" on-slotchange="__onContentSlotChange"></slot>
+        <slot id="contentSlot" @slotchange="${this.__onContentSlotChange}"></slot>
       </div>
     `;
   }
