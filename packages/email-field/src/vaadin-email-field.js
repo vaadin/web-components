@@ -5,10 +5,7 @@
  */
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { TextField } from '@vaadin/text-field/src/vaadin-text-field.js';
-import { registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { emailFieldStyles } from './vaadin-email-field-styles.js';
-
-registerStyles('vaadin-email-field', emailFieldStyles, { moduleId: 'vaadin-email-field-styles' });
 
 /**
  * `<vaadin-email-field>` is a Web Component for email field control in forms.
@@ -36,6 +33,16 @@ registerStyles('vaadin-email-field', emailFieldStyles, { moduleId: 'vaadin-email
 export class EmailField extends TextField {
   static get is() {
     return 'vaadin-email-field';
+  }
+
+  static get styles() {
+    return [...super.styles, emailFieldStyles];
+  }
+
+  /** @override */
+  static get delegateAttrs() {
+    // Do not delegate autocapitalize as it should be always set to "off"
+    return super.delegateAttrs.filter((attr) => attr !== 'autocapitalize');
   }
 
   constructor() {
