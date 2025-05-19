@@ -64,8 +64,8 @@ import { DashboardItemMixin } from './vaadin-dashboard-item-mixin.js';
  *
  * Custom Property                             | Description
  * --------------------------------------------|----------------------
- * `--vaadin-dashboard-widget-colspan`           | colspan of the widget
- * `--vaadin-dashboard-widget-rowspan`           | rowspan of the widget
+ * `--vaadin-dashboard-widget-colspan`         | colspan of the widget
+ * `--vaadin-dashboard-widget-rowspan`         | rowspan of the widget
  * `--vaadin-dashboard-widget-background`      | widget background
  * `--vaadin-dashboard-widget-border-radius`   | widget corner radius
  * `--vaadin-dashboard-widget-border-width`    | widget border width
