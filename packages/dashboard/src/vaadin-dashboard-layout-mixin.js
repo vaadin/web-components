@@ -23,7 +23,8 @@ export const DashboardLayoutMixin = (superClass) =>
       return css`
         :host {
           display: block;
-          overflow: hidden;
+          overflow: auto;
+          box-sizing: border-box;
           width: 100%;
         }
 
@@ -39,76 +40,58 @@ export const DashboardLayoutMixin = (superClass) =>
           box-sizing: border-box;
 
           /* Padding around dashboard edges */
-          --_vaadin-dashboard-default-padding: 1rem;
-          --_vaadin-dashboard-padding: max(
-            0px,
-            var(--vaadin-dashboard-padding, var(--_vaadin-dashboard-default-padding))
-          );
-          padding: var(--_vaadin-dashboard-padding);
+          --_default-padding: 1rem;
+          --_padding: max(0px, var(--vaadin-dashboard-padding, var(--_default-padding)));
+          padding: var(--_padding);
 
           /* Gap between widgets */
-          --_vaadin-dashboard-default-gap: 1rem;
-          --_vaadin-dashboard-gap: max(0px, var(--vaadin-dashboard-gap, var(--_vaadin-dashboard-default-gap)));
-          gap: var(--_vaadin-dashboard-gap);
+          --_default-gap: 1rem;
+          --_gap: max(0px, var(--vaadin-dashboard-gap, var(--_default-gap)));
+          gap: var(--_gap);
 
           /* Default min and max column widths */
-          --_vaadin-dashboard-default-col-min-width: 25rem;
-          --_vaadin-dashboard-default-col-max-width: 1fr;
+          --_default-col-min-width: 25rem;
+          --_default-col-max-width: 1fr;
 
           /* Effective min and max column widths */
-          --_vaadin-dashboard-col-min-width: var(
-            --vaadin-dashboard-col-min-width,
-            var(--_vaadin-dashboard-default-col-min-width)
-          );
-          --_vaadin-dashboard-col-max-width: var(
-            --vaadin-dashboard-col-max-width,
-            var(--_vaadin-dashboard-default-col-max-width)
-          );
+          --_col-min-width: var(--vaadin-dashboard-col-min-width, var(--_default-col-min-width));
+          --_col-max-width: var(--vaadin-dashboard-col-max-width, var(--_default-col-max-width));
 
           /* Effective max column count */
-          --_vaadin-dashboard-col-max-count: var(--vaadin-dashboard-col-max-count, var(--_vaadin-dashboard-col-count));
+          --_col-max-count: var(--vaadin-dashboard-col-max-count, var(--_col-count));
 
           /* Effective column count */
-          --_vaadin-dashboard-effective-col-count: min(
-            var(--_vaadin-dashboard-col-count),
-            var(--_vaadin-dashboard-col-max-count)
-          );
+          --_effective-col-count: min(var(--_col-count), var(--_col-max-count));
 
           /* Default row min height */
-          --_vaadin-dashboard-default-row-min-height: 12rem;
+          --_default-row-min-height: 12rem;
           /* Effective row min height */
-          --_vaadin-dashboard-row-min-height: var(
-            --vaadin-dashboard-row-min-height,
-            var(--_vaadin-dashboard-default-row-min-height)
-          );
+          --_row-min-height: var(--vaadin-dashboard-row-min-height, var(--_default-row-min-height));
           /* Effective row height */
-          --_vaadin-dashboard-row-height: minmax(var(--_vaadin-dashboard-row-min-height, auto), auto);
+          --_row-height: minmax(var(--_row-min-height, auto), auto);
 
           display: grid;
-          overflow: auto;
-          height: 100%;
+          overflow: hidden;
+          min-width: calc(var(--_col-min-width) + var(--_padding) * 2);
 
           grid-template-columns: repeat(
-            var(--_vaadin-dashboard-effective-col-count, auto-fill),
-            minmax(var(--_vaadin-dashboard-col-min-width), var(--_vaadin-dashboard-col-max-width))
+            var(--_effective-col-count, auto-fill),
+            minmax(var(--_col-min-width), var(--_col-max-width))
           );
 
-          grid-auto-rows: var(--_vaadin-dashboard-row-height);
+          grid-auto-rows: var(--_row-height);
         }
 
         ::slotted(*) {
           /* The grid-column value applied to children */
-          --_vaadin-dashboard-item-column: span
-            min(
-              var(--vaadin-dashboard-item-colspan, 1),
-              var(--_vaadin-dashboard-effective-col-count, var(--_vaadin-dashboard-col-count))
-            );
+          --_item-column: span
+            min(var(--vaadin-dashboard-widget-colspan, 1), var(--_effective-col-count, var(--_col-count)));
 
-          grid-column: var(--_vaadin-dashboard-item-column);
+          grid-column: var(--_item-column);
 
           /* The grid-row value applied to children */
-          --_vaadin-dashboard-item-row: span var(--vaadin-dashboard-item-rowspan, 1);
-          grid-row: var(--_vaadin-dashboard-item-row);
+          --_item-row: span var(--vaadin-dashboard-widget-rowspan, 1);
+          grid-row: var(--_item-row);
         }
       `;
     }
@@ -152,10 +135,10 @@ export const DashboardLayoutMixin = (superClass) =>
      */
     __updateColumnCount() {
       // Clear the previously computed column count
-      this.$.grid.style.removeProperty('--_vaadin-dashboard-col-count');
+      this.$.grid.style.removeProperty('--_col-count');
       // Get the column count (with no colspans etc in effect)...
       const columnCount = getComputedStyle(this.$.grid).gridTemplateColumns.split(' ').length;
       // ...and set it as the new value
-      this.$.grid.style.setProperty('--_vaadin-dashboard-col-count', columnCount);
+      this.$.grid.style.setProperty('--_col-count', columnCount);
     }
   };
