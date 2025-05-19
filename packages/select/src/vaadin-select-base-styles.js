@@ -20,6 +20,10 @@ export const selectStyles = css`
     --vaadin-input-field-border-color: inherit;
   }
 
+  [part='input-field'] {
+    cursor: var(--vaadin-clickable-cursor);
+  }
+
   [part='toggle-button']::before {
     mask-image: var(--_vaadin-icon-chevron-down);
   }
