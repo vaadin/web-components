@@ -1,0 +1,7 @@
+@layer base {
+  :is(:host, *, #id) {
+    &, &::before, &::after {
+      all: revert-layer;
+    }
+  }
+}
