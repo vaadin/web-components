@@ -1,12 +1,12 @@
 import { expect } from '@vaadin/chai-plugins';
-import { aTimeout, fixtureSync } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, nextUpdate } from '@vaadin/testing-helpers';
 import '../../vaadin-checkbox-group.js';
 import { resetUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 
 describe('vaadin-checkbox-group', () => {
   let group;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     resetUniqueId();
     group = fixtureSync(`
       <vaadin-checkbox-group>
@@ -14,6 +14,7 @@ describe('vaadin-checkbox-group', () => {
         <vaadin-checkbox value="2" label="Checkbox 2"></vaadin-checkbox>
       </vaadin-checkbox-group>
     `);
+    await nextUpdate(group);
   });
 
   describe('host', () => {
@@ -23,6 +24,7 @@ describe('vaadin-checkbox-group', () => {
 
     it('label', async () => {
       group.label = 'Label';
+      await nextUpdate(group);
       await expect(group).dom.to.equalSnapshot();
     });
 
@@ -33,6 +35,7 @@ describe('vaadin-checkbox-group', () => {
 
     it('readonly', async () => {
       group.readonly = true;
+      await nextUpdate(group);
       await expect(group).dom.to.equalSnapshot();
     });
 
@@ -43,6 +46,7 @@ describe('vaadin-checkbox-group', () => {
 
     it('helper', async () => {
       group.helperText = 'Helper';
+      await nextUpdate(group);
       await expect(group).dom.to.equalSnapshot();
     });
 
