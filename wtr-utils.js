@@ -9,7 +9,7 @@ import minimist from 'minimist';
 import { execSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
-import { enforceBaseStylesPlugin } from './web-dev-server.config.js';
+import { enforceBaseStylesPlugin, enforceLitVersionsPlugin } from './web-dev-server.config.js';
 
 dotenv.config();
 
@@ -269,6 +269,10 @@ const createUnitTestsConfig = (config) => {
     },
     coverage: hasCoverageParam,
     groups,
+    plugins: [
+      esbuildPlugin({ ts: true }),
+      enforceLitVersionsPlugin((context) => context.url.includes('-lit.generated.test.')),
+    ],
     testRunnerHtml: getTestRunnerHtml(),
     filterBrowserLogs,
   };

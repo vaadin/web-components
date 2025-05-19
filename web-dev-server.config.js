@@ -3,14 +3,15 @@ import { esbuildPlugin } from '@web/dev-server-esbuild';
 import fs from 'node:fs';
 import path from 'node:path';
 
+const hasLitParam = process.argv.includes('--lit');
 const hasBaseParam = process.argv.includes('--base');
 
 /** @return {import('@web/test-runner').TestRunnerPlugin} */
-function generatedLitTestsPlugin() {
+export function enforceLitVersionsPlugin(predicate) {
   return {
-    name: 'generated-lit-tests',
+    name: 'enforce-lit-versions',
     transformImport({ source, context }) {
-      if (context.url.includes('-lit.generated.test.')) {
+      if (!predicate || predicate(context)) {
         const dependencyPath = path.resolve(path.dirname(context.url), source);
 
         const litDependencyPath = dependencyPath
@@ -23,7 +24,6 @@ function generatedLitTestsPlugin() {
           return litDependencyPath;
         }
       }
-      return source;
     },
   };
 }
@@ -92,9 +92,9 @@ export default {
         }
       },
     },
+    hasLitParam && enforceLitVersionsPlugin(),
     // When passing --base flag to `yarn start` command, load base styles and not Lumo
     hasBaseParam && enforceBaseStylesPlugin(),
     esbuildPlugin({ ts: true }),
-    generatedLitTestsPlugin(),
   ].filter(Boolean),
 };
