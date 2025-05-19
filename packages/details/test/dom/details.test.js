@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync } from '@vaadin/testing-helpers';
+import { fixtureSync, nextUpdate } from '@vaadin/testing-helpers';
 import '../../vaadin-details.js';
 import { resetUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 
@@ -23,6 +23,7 @@ describe('vaadin-details', () => {
 
     it('opened', async () => {
       details.opened = true;
+      await nextUpdate(details);
       await expect(details).dom.to.equalSnapshot();
     });
 
@@ -33,6 +34,7 @@ describe('vaadin-details', () => {
 
     it('theme', async () => {
       details.setAttribute('theme', 'filled');
+      await nextUpdate(details);
       await expect(details).dom.to.equalSnapshot();
     });
   });
