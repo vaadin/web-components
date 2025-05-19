@@ -3,7 +3,6 @@
  * Copyright (c) 2018 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
 import { type ConfirmDialogEventMap, ConfirmDialogMixin } from './vaadin-confirm-dialog-mixin.js';
@@ -59,7 +58,7 @@ export * from './vaadin-confirm-dialog-mixin.js';
  * @fires {CustomEvent} opened-changed - Fired when the `opened` property changes.
  * @fires {CustomEvent} closed - Fired when the confirm dialog is closed.
  */
-declare class ConfirmDialog extends ConfirmDialogMixin(ElementMixin(ThemePropertyMixin(ControllerMixin(HTMLElement)))) {
+declare class ConfirmDialog extends ConfirmDialogMixin(ElementMixin(ThemePropertyMixin(HTMLElement))) {
   addEventListener<K extends keyof ConfirmDialogEventMap>(
     type: K,
     listener: (this: ConfirmDialog, ev: ConfirmDialogEventMap[K]) => void,

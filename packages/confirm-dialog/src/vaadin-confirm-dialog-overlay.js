@@ -3,22 +3,20 @@
  * Copyright (c) 2018 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { css, html, LitElement } from 'lit';
+import { ifDefined } from 'lit/directives/if-defined.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { OverlayClassMixin } from '@vaadin/component-base/src/overlay-class-mixin.js';
+import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { DialogBaseMixin } from '@vaadin/dialog/src/vaadin-dialog-base-mixin.js';
 import { dialogOverlay } from '@vaadin/dialog/src/vaadin-dialog-styles.js';
 import { OverlayMixin } from '@vaadin/overlay/src/vaadin-overlay-mixin.js';
 import { overlayStyles } from '@vaadin/overlay/src/vaadin-overlay-styles.js';
-import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
 import { ConfirmDialogBaseMixin } from './vaadin-confirm-dialog-base-mixin.js';
 import { confirmDialogOverlay } from './vaadin-confirm-dialog-overlay-styles.js';
-
-registerStyles('vaadin-confirm-dialog-overlay', [overlayStyles, dialogOverlay, confirmDialogOverlay], {
-  moduleId: 'vaadin-confirm-dialog-overlay-styles',
-});
 
 /**
  * An element used internally by `<vaadin-confirm-dialog>`. Not intended to be used separately.
@@ -30,14 +28,19 @@ registerStyles('vaadin-confirm-dialog-overlay', [overlayStyles, dialogOverlay, c
  * @mixes ThemableMixin
  * @private
  */
-class ConfirmDialogOverlay extends OverlayMixin(DirMixin(ThemableMixin(PolymerElement))) {
+class ConfirmDialogOverlay extends OverlayMixin(DirMixin(ThemableMixin(PolylitMixin(LitElement)))) {
   static get is() {
     return 'vaadin-confirm-dialog-overlay';
   }
 
-  static get template() {
+  static get styles() {
+    return [overlayStyles, dialogOverlay, confirmDialogOverlay];
+  }
+
+  /** @protected */
+  render() {
     return html`
-      <div part="backdrop" id="backdrop" hidden$="[[!withBackdrop]]"></div>
+      <div part="backdrop" id="backdrop" ?hidden="${!this.withBackdrop}"></div>
       <div part="overlay" id="overlay" tabindex="0">
         <section id="resizerContainer" class="resizer-container">
           <header part="header"><slot name="header"></slot></header>
@@ -80,31 +83,35 @@ defineCustomElement(ConfirmDialogOverlay);
  * @private
  */
 class ConfirmDialogDialog extends ConfirmDialogBaseMixin(
-  DialogBaseMixin(OverlayClassMixin(ThemePropertyMixin(PolymerElement))),
+  DialogBaseMixin(OverlayClassMixin(ThemePropertyMixin(PolylitMixin(LitElement)))),
 ) {
   static get is() {
     return 'vaadin-confirm-dialog-dialog';
   }
 
-  static get template() {
-    return html`
-      <style>
-        :host {
-          display: none;
-        }
-      </style>
+  static get styles() {
+    return css`
+      :host {
+        display: none;
+      }
+    `;
+  }
 
+  /** @protected */
+  render() {
+    return html`
       <vaadin-confirm-dialog-overlay
         id="overlay"
-        opened="[[opened]]"
-        on-opened-changed="_onOverlayOpened"
-        on-mousedown="_bringOverlayToFront"
-        on-touchstart="_bringOverlayToFront"
-        theme$="[[_theme]]"
-        modeless="[[modeless]]"
-        with-backdrop="[[!modeless]]"
-        resizable$="[[resizable]]"
-        aria-label$="[[ariaLabel]]"
+        .owner="${this}"
+        .opened="${this.opened}"
+        @opened-changed="${this._onOverlayOpened}"
+        @mousedown="${this._bringOverlayToFront}"
+        @touchstart="${this._bringOverlayToFront}"
+        theme="${ifDefined(this._theme)}"
+        .modeless="${this.modeless}"
+        .withBackdrop="${!this.modeless}"
+        ?resizable="${this.resizable}"
+        aria-label="${this.ariaLabel}"
         restore-focus-on-close
         focus-trap
       ></vaadin-confirm-dialog-overlay>

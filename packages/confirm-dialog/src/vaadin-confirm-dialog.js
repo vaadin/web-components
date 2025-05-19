@@ -5,10 +5,11 @@
  */
 import '@vaadin/button/src/vaadin-button.js';
 import './vaadin-confirm-dialog-overlay.js';
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
-import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
+import { css, html, LitElement } from 'lit';
+import { ifDefined } from 'lit/directives/if-defined.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
 import { ConfirmDialogMixin } from './vaadin-confirm-dialog-mixin.js';
 
@@ -64,30 +65,37 @@ import { ConfirmDialogMixin } from './vaadin-confirm-dialog-mixin.js';
  * @customElement
  * @extends HTMLElement
  * @mixes ConfirmDialogMixin
- * @mixes ControllerMixin
  * @mixes ElementMixin
  * @mixes ThemePropertyMixin
  */
-class ConfirmDialog extends ConfirmDialogMixin(ElementMixin(ThemePropertyMixin(ControllerMixin(PolymerElement)))) {
-  static get template() {
-    return html`
-      <style>
-        :host,
-        [hidden] {
-          display: none !important;
-        }
-      </style>
+class ConfirmDialog extends ConfirmDialogMixin(ElementMixin(ThemePropertyMixin(PolylitMixin(LitElement)))) {
+  static get is() {
+    return 'vaadin-confirm-dialog';
+  }
 
+  static get styles() {
+    return css`
+      :host,
+      [hidden] {
+        display: none !important;
+      }
+    `;
+  }
+
+  /** @protected */
+  render() {
+    return html`
       <vaadin-confirm-dialog-dialog
         id="dialog"
-        opened="{{opened}}"
-        overlay-class="[[overlayClass]]"
-        aria-label="[[_getAriaLabel(header)]]"
-        theme$="[[_theme]]"
+        .opened="${this.opened}"
+        .overlayClass="${this.overlayClass}"
+        aria-label="${this.header || 'confirmation'}"
+        theme="${ifDefined(this._theme)}"
         no-close-on-outside-click
-        no-close-on-esc="[[noCloseOnEsc]]"
-        content-height="[[_contentHeight]]"
-        content-width="[[_contentWidth]]"
+        .noCloseOnEsc="${this.noCloseOnEsc}"
+        .contentHeight="${this._contentHeight}"
+        .contentWidth="${this._contentWidth}"
+        @opened-changed="${this._onOpenedChanged}"
       ></vaadin-confirm-dialog-dialog>
 
       <div hidden>
@@ -100,8 +108,9 @@ class ConfirmDialog extends ConfirmDialogMixin(ElementMixin(ThemePropertyMixin(C
     `;
   }
 
-  static get is() {
-    return 'vaadin-confirm-dialog';
+  /** @private */
+  _onOpenedChanged(event) {
+    this.opened = event.detail.value;
   }
 
   /**
