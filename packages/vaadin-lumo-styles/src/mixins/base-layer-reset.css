@@ -1,5 +1,5 @@
 @layer base {
-  :is(:host, *, #dummy) {
+  :is(:host, *, #id) {
     &, &::before, &::after {
       all: revert-layer;
     }

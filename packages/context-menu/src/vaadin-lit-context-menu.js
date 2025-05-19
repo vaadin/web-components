@@ -12,7 +12,6 @@ import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { OverlayClassMixin } from '@vaadin/component-base/src/overlay-class-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
-import { processTemplates } from '@vaadin/component-base/src/templates.js';
 import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
 import { ContextMenuMixin } from './vaadin-context-menu-mixin.js';
 
@@ -47,13 +46,6 @@ class ContextMenu extends ContextMenuMixin(
   /** @protected */
   render() {
     return html`<slot id="slot"></slot>`;
-  }
-
-  /** @protected */
-  ready() {
-    super.ready();
-
-    processTemplates(this);
   }
 
   /**

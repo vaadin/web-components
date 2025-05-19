@@ -56,9 +56,6 @@ registerStyles('vaadin-date-picker', [inputFieldShared, datePickerStyles], { mod
  * -----------|--------------------------------------------------|-----------
  * `opened`   | Set when the date selector overlay is opened     | :host
  *
- * If you want to replace the default `<input>` and its container with a custom implementation to get full control
- * over the input field, consider using the [`<vaadin-date-picker-light>`](#/elements/vaadin-date-picker-light) element.
- *
  * ### Internal components
  *
  * In addition to `<vaadin-date-picker>` itself, the following internal

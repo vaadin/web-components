@@ -397,17 +397,6 @@ export const DatePickerMixin = (subclass) =>
       this.__setEnteredDate(parsedDate);
     }
 
-    /**
-     * Override a getter from `InputControlMixin` to make it optional
-     * and to prevent warning when a clear button is missing,
-     * for example when using <vaadin-date-picker-light>.
-     * @protected
-     * @return {Element | null | undefined}
-     */
-    get clearElement() {
-      return null;
-    }
-
     /** @private */
     get _nativeInput() {
       if (this.inputElement) {

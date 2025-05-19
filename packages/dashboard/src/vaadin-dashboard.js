@@ -433,8 +433,8 @@ class Dashboard extends DashboardLayoutMixin(
   /** @private */
   __updateWrapper(wrapper, item) {
     const style = `
-      ${item.colspan ? `--vaadin-dashboard-item-colspan: ${item.colspan};` : ''}
-      ${item.rowspan ? `--vaadin-dashboard-item-rowspan: ${item.rowspan};` : ''}
+      ${item.colspan ? `--vaadin-dashboard-widget-colspan: ${item.colspan};` : ''}
+      ${item.rowspan ? `--vaadin-dashboard-widget-rowspan: ${item.rowspan};` : ''}
     `.trim();
 
     wrapper.__item = item;
@@ -498,11 +498,11 @@ class Dashboard extends DashboardLayoutMixin(
    * @private
    */
   __updateColumnCount() {
-    const previousColumnCount = this.$.grid.style.getPropertyValue('--_vaadin-dashboard-col-count');
+    const previousColumnCount = this.$.grid.style.getPropertyValue('--_col-count');
     super.__updateColumnCount();
 
     // Request update for all the widgets if the column count has changed on resize
-    if (previousColumnCount !== this.$.grid.style.getPropertyValue('--_vaadin-dashboard-col-count')) {
+    if (previousColumnCount !== this.$.grid.style.getPropertyValue('--_col-count')) {
       this.querySelectorAll(WRAPPER_LOCAL_NAME).forEach((wrapper) => {
         if (wrapper.firstElementChild && 'requestUpdate' in wrapper.firstElementChild) {
           wrapper.firstElementChild.requestUpdate();

@@ -198,16 +198,12 @@ function hasMatchingStyle(componentClass, styles) {
 export function registerStyles(themeFor, styles, options = {}) {
   styles = flattenStyles(styles);
 
-  if (window.Vaadin && window.Vaadin.styleModules) {
-    window.Vaadin.styleModules.registerStyles(themeFor, styles, options);
-  } else {
-    themeRegistry.push({
-      themeFor,
-      styles,
-      include: options.include,
-      moduleId: options.moduleId,
-    });
-  }
+  themeRegistry.push({
+    themeFor,
+    styles,
+    include: options.include,
+    moduleId: options.moduleId,
+  });
 
   if (themeFor) {
     // Update styles of the component types that match themeFor and have already been finalized
