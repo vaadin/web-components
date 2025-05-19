@@ -51,6 +51,14 @@ class Select extends SelectBaseMixin(ElementMixin(ThemableMixin(PolylitMixin(Lit
           cursor: var(--vaadin-clickable-cursor);
         }
 
+        :host(:not([focus-ring])) [part='input-field'] {
+          outline: none;
+        }
+
+        :host([readonly]:not([focus-ring])) [part='input-field'] {
+          --vaadin-input-field-border-color: inherit;
+        }
+
         [part='toggle-button']::before {
           mask-image: var(--_vaadin-icon-chevron-down);
         }
