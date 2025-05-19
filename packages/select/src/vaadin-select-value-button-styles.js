@@ -14,9 +14,12 @@ export const valueButton = css`
     width: 100%;
   }
 
+  slot {
+    cursor: inherit;
+  }
+
   ::slotted(*) {
     padding: 0;
-    cursor: inherit;
   }
 
   .vaadin-button-container,
