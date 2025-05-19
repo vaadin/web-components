@@ -7,28 +7,30 @@ import '@vaadin/component-base/src/style-props.js';
 import { css } from 'lit';
 
 export const selectStyles = css`
-  :host {
-    position: relative;
-  }
+  @layer base {
+    :host {
+      position: relative;
+    }
 
-  ::slotted([slot='value']) {
-    flex: 1;
-  }
+    ::slotted([slot='value']) {
+      flex: 1;
+    }
 
-  :host(:not([focus-ring])) [part='input-field'] {
-    outline: none;
-  }
+    :host(:not([focus-ring])) [part='input-field'] {
+      outline: none;
+    }
 
-  :host([readonly]:not([focus-ring])) [part='input-field'] {
-    --vaadin-input-field-border-color: inherit;
-  }
+    :host([readonly]:not([focus-ring])) [part='input-field'] {
+      --vaadin-input-field-border-color: inherit;
+    }
 
-  [part='input-field'],
-  :host(:not([readonly])) ::slotted([slot='value']) {
-    cursor: var(--vaadin-clickable-cursor);
-  }
+    [part='input-field'],
+    :host(:not([readonly])) ::slotted([slot='value']) {
+      cursor: var(--vaadin-clickable-cursor);
+    }
 
-  [part='toggle-button']::before {
-    mask-image: var(--_vaadin-icon-chevron-down);
+    [part='toggle-button']::before {
+      mask-image: var(--_vaadin-icon-chevron-down);
+    }
   }
 `;

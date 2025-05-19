@@ -7,48 +7,50 @@ import '@vaadin/component-base/src/style-props.js';
 import { css } from 'lit';
 
 export const button = css`
-  [part$='button'] {
-    color: var(--_vaadin-color);
-    cursor: var(--vaadin-clickable-cursor);
-    touch-action: manipulation;
-    -webkit-tap-highlight-color: transparent;
-    -webkit-user-select: none;
-    user-select: none;
-  }
+  @layer base {
+    [part$='button'] {
+      color: var(--_vaadin-color);
+      cursor: var(--vaadin-clickable-cursor);
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
+      -webkit-user-select: none;
+      user-select: none;
+    }
 
-  /* Icon */
-  [part$='button']::before {
-    background: currentColor;
-    content: '';
-    display: block;
-    height: var(--vaadin-icon-size, 1lh);
-    width: var(--vaadin-icon-size, 1lh);
-  }
-
-  :host(:is(:not([clear-button-visible][has-value]), [disabled], [readonly])) [part='clear-button'] {
-    display: none;
-  }
-
-  [part='clear-button']::before {
-    mask-image: var(--_vaadin-icon-cross);
-  }
-
-  :host(:is([readonly], [disabled])) [part$='button'] {
-    color: var(--_vaadin-color-subtle);
-    cursor: var(--vaadin-disabled-cursor);
-  }
-
-  @media (forced-colors: active) {
+    /* Icon */
     [part$='button']::before {
-      background: CanvasText;
+      background: currentColor;
+      content: '';
+      display: block;
+      height: var(--vaadin-icon-size, 1lh);
+      width: var(--vaadin-icon-size, 1lh);
     }
 
-    :host([disabled]) [part$='button'] {
-      color: GrayText;
+    :host(:is(:not([clear-button-visible][has-value]), [disabled], [readonly])) [part='clear-button'] {
+      display: none;
     }
 
-    :host([disabled]) [part$='button']::before {
-      background: GrayText;
+    [part='clear-button']::before {
+      mask-image: var(--_vaadin-icon-cross);
+    }
+
+    :host(:is([readonly], [disabled])) [part$='button'] {
+      color: var(--_vaadin-color-subtle);
+      cursor: var(--vaadin-disabled-cursor);
+    }
+
+    @media (forced-colors: active) {
+      [part$='button']::before {
+        background: CanvasText;
+      }
+
+      :host([disabled]) [part$='button'] {
+        color: GrayText;
+      }
+
+      :host([disabled]) [part$='button']::before {
+        background: GrayText;
+      }
     }
   }
 `;

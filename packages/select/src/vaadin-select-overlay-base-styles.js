@@ -6,16 +6,18 @@
 import { css } from 'lit';
 
 export const selectOverlayStyles = css`
-  :host {
-    align-items: flex-start;
-    justify-content: flex-start;
-  }
+  @layer base {
+    :host {
+      align-items: flex-start;
+      justify-content: flex-start;
+    }
 
-  :host(:not([phone])) [part='overlay'] {
-    min-width: var(--vaadin-select-overlay-width, var(--vaadin-select-text-field-width));
-  }
+    :host(:not([phone])) [part='overlay'] {
+      min-width: var(--vaadin-select-overlay-width, var(--vaadin-select-text-field-width));
+    }
 
-  [part='content'] {
-    padding: var(--vaadin-item-overlay-padding, 4px);
+    [part='content'] {
+      padding: var(--vaadin-item-overlay-padding, 4px);
+    }
   }
 `;
