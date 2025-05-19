@@ -19,6 +19,10 @@
   --_selection-color-text: var(--vaadin-selection-color-text, var(--lumo-primary-text-color));
 }
 
+:host([hidden]) {
+  display: none !important;
+}
+
 /* Checkmark */
 [part='checkmark']::before {
   display: var(--_lumo-item-selected-icon-display, none);
