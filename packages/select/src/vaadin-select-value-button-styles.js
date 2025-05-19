@@ -23,4 +23,8 @@ export const valueButton = css`
   [part='label'] {
     display: contents;
   }
+
+  :host([disabled]) {
+    pointer-events: none;
+  }
 `;
