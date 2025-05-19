@@ -6,8 +6,11 @@
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
+import { itemStyles } from '@vaadin/item/src/vaadin-item-core-styles.js';
 import { ItemMixin } from '@vaadin/item/src/vaadin-item-mixin.js';
-import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+
+registerStyles('vaadin-select-item', itemStyles, { moduleId: 'vaadin-select-item-styles' });
 
 /**
  * An element used internally by `<vaadin-select>`. Not intended to be used separately.
@@ -26,15 +29,6 @@ class SelectItem extends ItemMixin(ThemableMixin(DirMixin(PolymerElement))) {
 
   static get template() {
     return html`
-      <style>
-        :host {
-          display: inline-block;
-        }
-
-        :host([hidden]) {
-          display: none !important;
-        }
-      </style>
       <span part="checkmark" aria-hidden="true"></span>
       <div part="content">
         <slot></slot>

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -6,27 +6,74 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Select</title>
     <script type="module" src="./common.js"></script>
+
     <script type="module">
+      import '@vaadin/icon';
+      import '@vaadin/icons';
       import '@vaadin/select';
-      import '@vaadin/tooltip';
+      import '@vaadin/vaadin-lumo-styles/vaadin-iconset.js';
     </script>
   </head>
   <body>
-    <vaadin-select label="Size">
-      <vaadin-tooltip slot="tooltip" text="Stock availability may vary"></vaadin-tooltip>
-    </vaadin-select>
+    <section>
+      <h2>Plain</h2>
+      <vaadin-select value="s"></vaadin-select>
+      <vaadin-select placeholder="Placeholder"></vaadin-select>
+    </section>
+
+    <section>
+      <h2>Bells & Whistles</h2>
+      <vaadin-select
+        label="Label"
+        helper-text="Description for this field."
+        value="s"
+        clear-button-visible
+        error-message="You need to write something in this field."
+        required
+      >
+        <vaadin-icon icon="vaadin:search" slot="prefix"></vaadin-icon>
+      </vaadin-select>
+    </section>
+
+    <section>
+      <h2>States</h2>
+      <vaadin-select
+        label="Read-only"
+        helper-text="Description for this field."
+        value="s"
+        clear-button-visible
+        error-message="You need to write something in this field."
+        required
+        readonly
+      >
+        <vaadin-icon icon="vaadin:search" slot="prefix"></vaadin-icon>
+      </vaadin-select>
+
+      <vaadin-select
+        label="Disabled"
+        helper-text="Description for this field."
+        value="s"
+        clear-button-visible
+        error-message="You need to write something in this field."
+        required
+        disabled
+      >
+        <vaadin-icon icon="vaadin:search" slot="prefix"></vaadin-icon>
+      </vaadin-select>
+    </section>
 
     <script>
-      const select = document.querySelector('vaadin-select');
-      select.items = items = [
-        { label: 'Show all', value: 'all' },
-        { component: 'hr' },
-        { label: 'XS (out of stock)', value: 'xs', disabled: true },
-        { label: 'S', value: 's' },
-        { label: 'M', value: 'm' },
-        { label: 'L', value: 'l' },
-        { label: 'XL', value: 'xl' },
-      ];
+      document.querySelectorAll('vaadin-select').forEach((select) => {
+        select.items = items = [
+          { label: 'Show all', value: 'all' },
+          { component: 'hr' },
+          { label: 'XS (out of stock)', value: 'xs', disabled: true },
+          { label: 'S', value: 's' },
+          { label: 'M', value: 'm' },
+          { label: 'L', value: 'l' },
+          { label: 'XL', value: 'xl' },
+        ];
+      });
     </script>
   </body>
 </html>
