@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame, nextUpdate } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../../src/vaadin-month-calendar.js';
 import { resetUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
@@ -55,6 +55,7 @@ describe('vaadin-month-calendar', () => {
         }
         return !!(date.day % 2);
       };
+      await nextUpdate(monthCalendar);
       await expect(monthCalendar).shadowDom.to.equalSnapshot();
     });
   });
