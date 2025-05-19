@@ -17,7 +17,6 @@ const blacklistedPackages = [
   /^icons/u,
   /^input-container/u,
   /^lit-renderer/u,
-  /^polymer-legacy-adapter/u,
 ];
 
 // Additional attributes that will be added to all components

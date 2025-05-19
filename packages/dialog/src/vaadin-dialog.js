@@ -8,7 +8,6 @@ import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { OverlayClassMixin } from '@vaadin/component-base/src/overlay-class-mixin.js';
-import { processTemplates } from '@vaadin/component-base/src/templates.js';
 import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
 import { DialogBaseMixin } from './vaadin-dialog-base-mixin.js';
 import { DialogDraggableMixin } from './vaadin-dialog-draggable-mixin.js';
@@ -144,13 +143,6 @@ class Dialog extends DialogDraggableMixin(
       '_ariaLabelChanged(ariaLabel, headerTitle)',
       '_rendererChanged(renderer, headerRenderer, footerRenderer)',
     ];
-  }
-
-  /** @protected */
-  ready() {
-    super.ready();
-
-    processTemplates(this);
   }
 
   /** @private */

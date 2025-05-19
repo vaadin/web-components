@@ -17,7 +17,6 @@ import {
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { getClosestElement } from '@vaadin/component-base/src/dom-utils.js';
 import { SlotObserver } from '@vaadin/component-base/src/slot-observer.js';
-import { processTemplates } from '@vaadin/component-base/src/templates.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { Virtualizer } from '@vaadin/component-base/src/virtualizer.js';
 import { A11yMixin } from './vaadin-grid-a11y-mixin.js';
@@ -281,8 +280,6 @@ export const GridMixin = (superClass) =>
       minHeightObserver.observe(this.$.header);
       minHeightObserver.observe(this.$.items);
       minHeightObserver.observe(this.$.footer);
-
-      processTemplates(this);
 
       this._tooltipController = new TooltipController(this);
       this.addController(this._tooltipController);
