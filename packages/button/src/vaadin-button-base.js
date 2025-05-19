@@ -53,9 +53,8 @@ export const buttonStyles = css`
     }
 
     :host([focus-ring]) {
-      outline-style: solid;
-      outline-width: var(--vaadin-focus-ring-width, var(--_vaadin-focus-ring-width));
-      outline-color: var(--vaadin-focus-ring-color, var(--_vaadin-focus-ring-color));
+      outline: var(--vaadin-focus-ring-width, var(--_vaadin-focus-ring-width)) solid
+        var(--vaadin-focus-ring-color, var(--_vaadin-focus-ring-color));
       outline-offset: 1px;
     }
 
