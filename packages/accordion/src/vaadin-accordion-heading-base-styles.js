@@ -9,19 +9,21 @@ import { detailsSummary } from '@vaadin/details/src/vaadin-details-summary-base-
 export const accordionHeading = [
   detailsSummary('vaadin-accordion-heading'),
   css`
-    button {
-      align-items: center;
-      appearance: none;
-      background: transparent;
-      border: 0;
-      color: inherit;
-      cursor: inherit;
-      display: flex;
-      font: inherit;
-      gap: inherit;
-      outline: none;
-      padding: 0;
-      touch-action: manipulation;
+    @layer base {
+      button {
+        align-items: center;
+        appearance: none;
+        background: transparent;
+        border: 0;
+        color: inherit;
+        cursor: inherit;
+        display: flex;
+        font: inherit;
+        gap: inherit;
+        outline: none;
+        padding: 0;
+        touch-action: manipulation;
+      }
     }
   `,
 ];
