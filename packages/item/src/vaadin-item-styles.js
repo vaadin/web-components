@@ -20,8 +20,10 @@ export const itemStyles = css`
     }
 
     :host([focused]) {
-      outline: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
-      outline-offset: calc(var(--vaadin-focus-ring-width) / -1);
+      outline-style: solid;
+      outline-width: var(--vaadin-focus-ring-width, var(--_vaadin-focus-ring-width));
+      outline-color: var(--vaadin-focus-ring-color, var(--_vaadin-focus-ring-color));
+      outline-offset: calc(var(--vaadin-focus-ring-width, var(--_vaadin-focus-ring-width)) * -1);
     }
 
     :host([disabled]) {
