@@ -3,14 +3,13 @@
  * Copyright (c) 2019 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
-import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
+import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { CustomFieldMixin } from './vaadin-custom-field-mixin.js';
 import { customFieldStyles } from './vaadin-custom-field-styles.js';
-
-registerStyles('vaadin-custom-field', customFieldStyles, { moduleId: 'vaadin-custom-field-styles' });
 
 /**
  * `<vaadin-custom-field>` is a web component for wrapping multiple components as a single field.
@@ -61,20 +60,25 @@ registerStyles('vaadin-custom-field', customFieldStyles, { moduleId: 'vaadin-cus
  * @mixes ElementMixin
  * @mixes ThemableMixin
  */
-class CustomField extends CustomFieldMixin(ThemableMixin(ElementMixin(PolymerElement))) {
+class CustomField extends CustomFieldMixin(ThemableMixin(ElementMixin(PolylitMixin(LitElement)))) {
   static get is() {
     return 'vaadin-custom-field';
   }
 
-  static get template() {
+  static get styles() {
+    return customFieldStyles;
+  }
+
+  /** @protected */
+  render() {
     return html`
       <div class="vaadin-custom-field-container">
-        <div part="label" on-click="focus">
+        <div part="label" @click="${this.focus}">
           <slot name="label"></slot>
           <span part="required-indicator" aria-hidden="true"></span>
         </div>
 
-        <div class="inputs-wrapper" part="input-fields" on-change="_onInputChange">
+        <div class="inputs-wrapper" part="input-fields" @change="${this._onInputChange}">
           <slot id="slot"></slot>
         </div>
 

@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { aTimeout, fixtureSync } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, nextUpdate } from '@vaadin/testing-helpers';
 import '../../src/vaadin-custom-field.js';
 import { resetUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 
@@ -18,6 +18,7 @@ describe('vaadin-custom-field', () => {
 
     it('label', async () => {
       field.label = 'Label';
+      await nextUpdate(field);
       await expect(field).dom.to.equalSnapshot();
     });
 
@@ -28,6 +29,7 @@ describe('vaadin-custom-field', () => {
 
     it('helper', async () => {
       field.helperText = 'Helper';
+      await nextUpdate(field);
       await expect(field).dom.to.equalSnapshot();
     });
 
