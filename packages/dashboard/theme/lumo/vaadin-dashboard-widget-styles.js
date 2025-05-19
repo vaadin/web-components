@@ -12,22 +12,19 @@ const dashboardWidgetAndSection = css`
   /* stylelint-disable length-zero-no-unit */
 
   :host {
-    --_vaadin-dashboard-widget-background: var(--vaadin-dashboard-widget-background, var(--lumo-base-color));
-    --_vaadin-dashboard-widget-border-radius: var(--vaadin-dashboard-widget-border-radius, var(--lumo-border-radius-l));
-    --_vaadin-dashboard-widget-border-width: var(--vaadin-dashboard-widget-border-width, 1px);
-    --_vaadin-dashboard-widget-border-color: var(--vaadin-dashboard-widget-border-color, var(--lumo-contrast-20pct));
-    --_vaadin-dashboard-widget-shadow: var(--vaadin-dashboard-widget-shadow, 0 0 0 0 transparent);
-    --_vaadin-dashboard-widget-editable-shadow: var(--lumo-box-shadow-s);
-    --_vaadin-dashboard-widget-selected-shadow: 0 2px 4px -1px var(--lumo-primary-color-10pct),
+    --_widget-background: var(--vaadin-dashboard-widget-background, var(--lumo-base-color));
+    --_widget-border-radius: var(--vaadin-dashboard-widget-border-radius, var(--lumo-border-radius-l));
+    --_widget-border-width: var(--vaadin-dashboard-widget-border-width, 1px);
+    --_widget-border-color: var(--vaadin-dashboard-widget-border-color, var(--lumo-contrast-20pct));
+    --_widget-shadow: var(--vaadin-dashboard-widget-shadow, 0 0 0 0 transparent);
+    --_widget-editable-shadow: var(--lumo-box-shadow-s);
+    --_widget-selected-shadow: 0 2px 4px -1px var(--lumo-primary-color-10pct),
       0 3px 12px -1px var(--lumo-primary-color-50pct);
-    --_vaadin-dashboard-drop-target-background-color: var(
+    --_drop-target-background-color: var(
       --vaadin-dashboard-drop-target-background-color,
       var(--lumo-primary-color-10pct)
     );
-    --_vaadin-dashboard-drop-target-border: var(
-      --vaadin-dashboard-drop-target-border,
-      1px dashed var(--lumo-primary-color-50pct)
-    );
+    --_drop-target-border: var(--vaadin-dashboard-drop-target-border, 1px dashed var(--lumo-primary-color-50pct));
 
     color: var(--lumo-body-text-color);
     font-family: var(--lumo-font-family);
@@ -36,8 +33,8 @@ const dashboardWidgetAndSection = css`
     --_focus-ring-color: var(--vaadin-focus-ring-color, var(--lumo-primary-color-50pct));
     --_focus-ring-width: var(--vaadin-focus-ring-width, 2px);
     --_icon-color: var(--lumo-contrast-60pct);
-    opacity: var(--_vaadin-dashboard-widget-opacity);
-    filter: var(--_vaadin-dashboard-widget-filter);
+    opacity: var(--_widget-opacity);
+    filter: var(--_widget-filter);
   }
 
   :host([selected]) {
@@ -138,27 +135,27 @@ const dashboardWidgetAndSection = css`
 /* Widget styles */
 const dashboardWidget = css`
   :host {
-    background: var(--_vaadin-dashboard-widget-background);
-    border-radius: var(--_vaadin-dashboard-widget-border-radius);
-    box-shadow: var(--_vaadin-dashboard-widget-shadow);
+    background: var(--_widget-background);
+    border-radius: var(--_widget-border-radius);
+    box-shadow: var(--_widget-shadow);
     position: relative;
   }
 
   :host::before {
     content: '';
     position: absolute;
-    inset: calc(-1 * var(--_vaadin-dashboard-widget-border-width));
-    border: var(--_vaadin-dashboard-widget-border-width) solid var(--_vaadin-dashboard-widget-border-color);
-    border-radius: calc(var(--_vaadin-dashboard-widget-border-radius) + var(--_vaadin-dashboard-widget-border-width));
+    inset: calc(-1 * var(--_widget-border-width));
+    border: var(--_widget-border-width) solid var(--_widget-border-color);
+    border-radius: calc(var(--_widget-border-radius) + var(--_widget-border-width));
     pointer-events: none;
   }
 
   /* Widget states */
 
   :host([editable]) {
-    --vaadin-dashboard-widget-shadow: var(--_vaadin-dashboard-widget-editable-shadow);
-    --_vaadin-dashboard-widget-border-color: var(--lumo-contrast-20pct);
-    --_vaadin-dashboard-widget-border-width: 1px;
+    --vaadin-dashboard-widget-shadow: var(--_widget-editable-shadow);
+    --_widget-border-color: var(--lumo-contrast-20pct);
+    --_widget-border-width: 1px;
   }
 
   :host([focused])::before {
@@ -167,19 +164,19 @@ const dashboardWidget = css`
   }
 
   :host([selected]) {
-    --vaadin-dashboard-widget-shadow: var(--_vaadin-dashboard-widget-selected-shadow);
+    --vaadin-dashboard-widget-shadow: var(--_widget-selected-shadow);
     background: var(--lumo-primary-color-10pct);
   }
 
   :host([dragging]) {
     box-shadow: none;
-    background: var(--_vaadin-dashboard-drop-target-background-color);
-    border: var(--_vaadin-dashboard-drop-target-border);
+    background: var(--_drop-target-background-color);
+    border: var(--_drop-target-border);
   }
 
   :host([resizing])::after {
-    background: var(--_vaadin-dashboard-drop-target-background-color);
-    border: var(--_vaadin-dashboard-drop-target-border);
+    background: var(--_drop-target-background-color);
+    border: var(--_drop-target-border);
   }
 
   /* Widget parts */
@@ -221,7 +218,7 @@ const dashboardWidget = css`
   /* Resize handle */
 
   [part~='resize-button'] {
-    --_resize-button-offset: min(var(--_vaadin-dashboard-gap), var(--_vaadin-dashboard-padding), var(--lumo-space-xs));
+    --_resize-button-offset: min(var(--_gap), var(--_padding), var(--lumo-space-xs));
     position: absolute;
     bottom: calc(-1 * var(--_resize-button-offset));
     inset-inline-end: calc(-1 * var(--_resize-button-offset));

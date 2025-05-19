@@ -210,10 +210,10 @@ export const DashboardItemMixin = (superClass) =>
     /** @private */
     __renderResizeControls() {
       const style = getComputedStyle(this);
-      const hasMinRowHeight = style.getPropertyValue('--_vaadin-dashboard-row-min-height') !== 'auto';
+      const hasMinRowHeight = style.getPropertyValue('--_row-min-height') !== 'auto';
 
-      const effectiveColCount = style.getPropertyValue('--_vaadin-dashboard-col-count');
-      const maxColCount = style.getPropertyValue('--_vaadin-dashboard-col-max-count');
+      const effectiveColCount = style.getPropertyValue('--_col-count');
+      const maxColCount = style.getPropertyValue('--_col-max-count');
       const colCount = Math.min(effectiveColCount, maxColCount);
       const colspan = style.getPropertyValue('--vaadin-dashboard-widget-colspan') || 1;
       const rowspan = style.getPropertyValue('--vaadin-dashboard-widget-rowspan') || 1;

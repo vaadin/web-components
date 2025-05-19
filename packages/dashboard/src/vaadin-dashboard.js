@@ -498,11 +498,11 @@ class Dashboard extends DashboardLayoutMixin(
    * @private
    */
   __updateColumnCount() {
-    const previousColumnCount = this.$.grid.style.getPropertyValue('--_vaadin-dashboard-col-count');
+    const previousColumnCount = this.$.grid.style.getPropertyValue('--_col-count');
     super.__updateColumnCount();
 
     // Request update for all the widgets if the column count has changed on resize
-    if (previousColumnCount !== this.$.grid.style.getPropertyValue('--_vaadin-dashboard-col-count')) {
+    if (previousColumnCount !== this.$.grid.style.getPropertyValue('--_col-count')) {
       this.querySelectorAll(WRAPPER_LOCAL_NAME).forEach((wrapper) => {
         if (wrapper.firstElementChild && 'requestUpdate' in wrapper.firstElementChild) {
           wrapper.firstElementChild.requestUpdate();

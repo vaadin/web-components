@@ -18,8 +18,8 @@ export const dashboardLayoutStyles = css`
   }
 
   #grid {
-    --_vaadin-dashboard-default-gap: var(--lumo-space-m);
-    --_vaadin-dashboard-default-padding: var(--lumo-space-m);
+    --_default-gap: var(--lumo-space-m);
+    --_default-padding: var(--lumo-space-m);
   }
 `;
 
