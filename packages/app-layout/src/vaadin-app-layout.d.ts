@@ -3,7 +3,6 @@
  * Copyright (c) 2018 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { AppLayoutMixin } from './vaadin-app-layout-mixin.js';
@@ -123,7 +122,7 @@ export type AppLayoutEventMap = AppLayoutCustomEventMap & HTMLElementEventMap;
  * @fires {CustomEvent} overlay-changed - Fired when the `overlay` property changes.
  * @fires {CustomEvent} primary-section-changed - Fired when the `primarySection` property changes.
  */
-declare class AppLayout extends AppLayoutMixin(ElementMixin(ThemableMixin(ControllerMixin(HTMLElement)))) {
+declare class AppLayout extends AppLayoutMixin(ElementMixin(ThemableMixin(HTMLElement))) {
   /**
    * Helper static method that dispatches a `close-overlay-drawer` event
    */
