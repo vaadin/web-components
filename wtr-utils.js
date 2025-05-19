@@ -170,23 +170,19 @@ const getUnitTestGroups = (packages) => {
  * Get visual test groups based on packages.
  */
 const getVisualTestGroups = (packages, theme) => {
-  return packages
-    .filter((pkg) => {
-      return theme === 'base'
-        ? !pkg.includes('lumo') && !pkg.includes('material')
-        : !pkg.includes(theme === 'lumo' ? 'material' : 'lumo');
-    })
-    .map((pkg) => {
-      return {
-        name: pkg,
-        files: [`packages/${pkg}/test/visual/*.test.{js,ts}`, `packages/${pkg}/test/visual/${theme}/*.test.{js,ts}`],
-      };
-    });
+  if (theme === 'base') {
+    packages = packages.filter((pkg) => !pkg.includes('lumo'));
+  }
+
+  return packages.map((pkg) => {
+    return {
+      name: pkg,
+      files: [`packages/${pkg}/test/visual/*.test.{js,ts}`, `packages/${pkg}/test/visual/${theme}/*.test.{js,ts}`],
+    };
+  });
 };
 
-const fontRoboto = '<link rel="stylesheet" href="./node_modules/@fontsource/roboto/latin.css">';
-
-const getTestRunnerHtml = (theme) => (testFramework) =>
+const getTestRunnerHtml = () => (testFramework) =>
   `
   <!DOCTYPE html>
   <html>
@@ -202,11 +198,7 @@ const getTestRunnerHtml = (theme) => (testFramework) =>
           padding: 0;
         }
       </style>
-      ${theme === 'material' ? fontRoboto : ''}
       <script>
-        /* Disable Roboto for Material theme tests */
-        window.polymerSkipLoadingFontRoboto = true;
-
         /* Force development mode for element-mixin */
         localStorage.setItem('vaadin.developmentmode.force', true);
       </script>
@@ -223,13 +215,13 @@ const getTestRunnerHtml = (theme) => (testFramework) =>
 const getScreenshotFileName = ({ name, testFile }, type, diff) => {
   let folder;
   if (testFile.includes('-styles')) {
-    const match = testFile.match(/\/packages\/(vaadin-(lumo|material)-styles\/test\/visual\/)(.+)/u);
+    const match = testFile.match(/\/packages\/(vaadin-lumo-styles\/test\/visual\/)(.+)/u);
     folder = `${match[1]}screenshots`;
   } else if (testFile.includes('icons')) {
     folder = 'icons/test/visual/screenshots';
   } else {
     const match = testFile.match(/\/packages\/(.+)\.test\.(js|ts)/u);
-    folder = match[1].replace(/(base|lumo|material)/u, '$1/screenshots');
+    folder = match[1].replace(/(base|lumo)/u, '$1/screenshots');
   }
   return path.join(folder, type, diff ? `${name}-diff` : name);
 };
@@ -335,7 +327,7 @@ const createVisualTestsConfig = (theme, browserVersion) => {
       theme === 'base' && enforceBaseStylesPlugin(),
     ].filter(Boolean),
     groups,
-    testRunnerHtml: getTestRunnerHtml(theme),
+    testRunnerHtml: getTestRunnerHtml(),
     filterBrowserLogs,
   };
 };

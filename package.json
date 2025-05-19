@@ -27,17 +27,14 @@
     "test:it": "yarn test --config web-test-runner-it.config.js",
     "test:lumo": "yarn test --config web-test-runner-lumo.config.js",
     "test:local:lumo": "yarn test --config web-test-runner-lumo.config.js --local",
-    "test:material": "yarn test --config web-test-runner-material.config.js",
     "test:snapshots": "yarn test --config web-test-runner-snapshots.config.js",
     "test:webkit": "yarn test --config web-test-runner-webkit.config.js",
     "update:base": "TEST_ENV=update yarn test --config web-test-runner-base.config.js",
     "update:local:lumo": "TEST_ENV=update yarn test --config web-test-runner-lumo.config.js --local",
     "update:lumo": "TEST_ENV=update yarn test --config web-test-runner-lumo.config.js",
-    "update:material": "TEST_ENV=update yarn test --config web-test-runner-material.config.js",
     "update:snapshots": "yarn test --config web-test-runner-snapshots.config.js --update-snapshots"
   },
   "devDependencies": {
-    "@fontsource/roboto": "^4.5.8",
     "@polymer/iron-component-page": "^4.0.1",
     "@rollup/plugin-terser": "^0.4.4",
     "@types/mocha": "^10.0.7",
