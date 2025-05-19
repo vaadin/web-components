@@ -8,7 +8,6 @@
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
-import type { ControllerMixinClass } from '@vaadin/component-base/src/controller-mixin.js';
 import type { ElementMixinClass } from '@vaadin/component-base/src/element-mixin.js';
 import type { GridDefaultItem } from '@vaadin/grid/src/vaadin-grid.js';
 import type { ThemableMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
@@ -172,11 +171,7 @@ declare class Crud<Item = GridDefaultItem> extends HTMLElement {
   ): void;
 }
 
-interface Crud<Item = GridDefaultItem>
-  extends ElementMixinClass,
-    ThemableMixinClass,
-    ControllerMixinClass,
-    CrudMixinClass<Item> {}
+interface Crud<Item = GridDefaultItem> extends ElementMixinClass, ThemableMixinClass, CrudMixinClass<Item> {}
 
 declare global {
   interface HTMLElementTagNameMap {

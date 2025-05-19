@@ -8,24 +8,9 @@
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
-import { html } from '@polymer/polymer/polymer-element.js';
+import { css, html } from 'lit';
 import { Button } from '@vaadin/button/src/vaadin-button.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
-import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-
-/**
- * Use registerStyles instead of the `<style>` tag to make sure
- * that this CSS will override core styles of `vaadin-button`.
- */
-registerStyles(
-  'vaadin-crud-edit',
-  css`
-    :host {
-      display: block;
-    }
-  `,
-  { moduleId: 'vaadin-crud-edit-styles' },
-);
 
 /**
  * `<vaadin-crud-edit>` is a helper element for `<vaadin-grid-column>` that provides
@@ -40,15 +25,27 @@ registerStyles(
  * @mixes ThemableMixin
  */
 class CrudEdit extends Button {
-  static get template() {
+  static get is() {
+    return 'vaadin-crud-edit';
+  }
+
+  static get styles() {
+    return [
+      super.styles,
+      css`
+        :host {
+          display: block;
+        }
+      `,
+    ];
+  }
+
+  /** @protected */
+  render() {
     return html`
       <div part="icon"></div>
       <slot name="tooltip"></slot>
     `;
-  }
-
-  static get is() {
-    return 'vaadin-crud-edit';
   }
 
   /** @protected */
