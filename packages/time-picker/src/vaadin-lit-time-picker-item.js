@@ -11,13 +11,31 @@ import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 /**
- * LitElement based version of `<vaadin-time-picker-item>` web component.
+ * An item element used by the `<vaadin-time-picker>` dropdown.
  *
- * ## Disclaimer
+ * ### Styling
  *
- * This component is an experiment and not yet a part of Vaadin platform.
- * There is no ETA regarding specific Vaadin version where it'll land.
- * Feel free to try this code in your apps as per Apache 2.0 license.
+ * The following shadow DOM parts are available for styling:
+ *
+ * Part name   | Description
+ * ------------|--------------
+ * `checkmark` | The graphical checkmark shown for a selected item
+ * `content`   | The element that wraps the item content
+ *
+ * The following state attributes are exposed for styling:
+ *
+ * Attribute    | Description
+ * -------------|-------------
+ * `selected`   | Set when the item is selected
+ * `focused`    | Set when the item is focused
+ *
+ * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
+ *
+ * @customElement
+ * @mixes ComboBoxItemMixin
+ * @mixes ThemableMixin
+ * @mixes DirMixin
+ * @private
  */
 export class TimePickerItem extends ComboBoxItemMixin(ThemableMixin(DirMixin(PolylitMixin(LitElement)))) {
   static get is() {
