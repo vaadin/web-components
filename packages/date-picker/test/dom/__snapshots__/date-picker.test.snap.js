@@ -288,6 +288,7 @@ snapshots["vaadin-date-picker host value"] =
 snapshots["vaadin-date-picker host opened overlay"] = 
 `<vaadin-date-picker-overlay
   id="overlay"
+  no-vertical-overlap=""
   opened=""
   restore-focus-on-close=""
   start-aligned=""
@@ -450,6 +451,7 @@ snapshots["vaadin-date-picker host opened overlay class"] =
 `<vaadin-date-picker-overlay
   class="custom date-picker-overlay"
   id="overlay"
+  no-vertical-overlap=""
   opened=""
   restore-focus-on-close=""
   start-aligned=""
@@ -611,6 +613,7 @@ snapshots["vaadin-date-picker host opened overlay class"] =
 snapshots["vaadin-date-picker host opened overlay theme"] = 
 `<vaadin-date-picker-overlay
   id="overlay"
+  no-vertical-overlap=""
   opened=""
   restore-focus-on-close=""
   start-aligned=""
@@ -833,6 +836,7 @@ snapshots["vaadin-date-picker shadow default"] =
 </div>
 <vaadin-date-picker-overlay
   id="overlay"
+  no-vertical-overlap=""
   restore-focus-on-close=""
 >
 </vaadin-date-picker-overlay>
@@ -888,6 +892,7 @@ snapshots["vaadin-date-picker shadow disabled"] =
 </div>
 <vaadin-date-picker-overlay
   id="overlay"
+  no-vertical-overlap=""
   restore-focus-on-close=""
 >
 </vaadin-date-picker-overlay>
@@ -943,6 +948,7 @@ snapshots["vaadin-date-picker shadow readonly"] =
 </div>
 <vaadin-date-picker-overlay
   id="overlay"
+  no-vertical-overlap=""
   restore-focus-on-close=""
 >
 </vaadin-date-picker-overlay>
@@ -998,6 +1004,7 @@ snapshots["vaadin-date-picker shadow invalid"] =
 </div>
 <vaadin-date-picker-overlay
   id="overlay"
+  no-vertical-overlap=""
   restore-focus-on-close=""
 >
 </vaadin-date-picker-overlay>
@@ -1053,6 +1060,7 @@ snapshots["vaadin-date-picker shadow theme"] =
 </div>
 <vaadin-date-picker-overlay
   id="overlay"
+  no-vertical-overlap=""
   restore-focus-on-close=""
   theme="align-right"
 >

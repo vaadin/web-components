@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { aTimeout, fixtureSync } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, nextUpdate } from '@vaadin/testing-helpers';
 import '../../src/vaadin-date-picker.js';
 import { resetUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 import { open } from '../helpers.js';
@@ -24,11 +24,13 @@ describe('vaadin-date-picker', () => {
 
     it('placeholder', async () => {
       datePicker.placeholder = 'Placeholder';
+      await nextUpdate(datePicker);
       await expect(datePicker).dom.to.equalSnapshot();
     });
 
     it('readonly', async () => {
       datePicker.readonly = true;
+      await nextUpdate(datePicker);
       await expect(datePicker).dom.to.equalSnapshot();
     });
 
@@ -39,11 +41,13 @@ describe('vaadin-date-picker', () => {
 
     it('label', async () => {
       datePicker.label = 'Label';
+      await nextUpdate(datePicker);
       await expect(datePicker).dom.to.equalSnapshot();
     });
 
     it('helper', async () => {
       datePicker.helperText = 'Helper';
+      await nextUpdate(datePicker);
       await expect(datePicker).dom.to.equalSnapshot();
     });
 
@@ -56,6 +60,7 @@ describe('vaadin-date-picker', () => {
 
     it('name', async () => {
       datePicker.name = 'Field Name';
+      await nextUpdate(datePicker);
       await expect(datePicker).dom.to.equalSnapshot();
     });
 
@@ -81,11 +86,13 @@ describe('vaadin-date-picker', () => {
 
       it('overlay class', async () => {
         datePicker.overlayClass = 'custom date-picker-overlay';
+        await nextUpdate(datePicker);
         await expect(datePicker.$.overlay).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
       });
 
       it('overlay theme', async () => {
         datePicker.setAttribute('theme', 'custom');
+        await nextUpdate(datePicker);
         await expect(datePicker.$.overlay).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
       });
     });
@@ -98,21 +105,25 @@ describe('vaadin-date-picker', () => {
 
     it('disabled', async () => {
       datePicker.disabled = true;
+      await nextUpdate(datePicker);
       await expect(datePicker).shadowDom.to.equalSnapshot();
     });
 
     it('readonly', async () => {
       datePicker.readonly = true;
+      await nextUpdate(datePicker);
       await expect(datePicker).shadowDom.to.equalSnapshot();
     });
 
     it('invalid', async () => {
       datePicker.invalid = true;
+      await nextUpdate(datePicker);
       await expect(datePicker).shadowDom.to.equalSnapshot();
     });
 
     it('theme', async () => {
       datePicker.setAttribute('theme', 'align-right');
+      await nextUpdate(datePicker);
       await expect(datePicker).shadowDom.to.equalSnapshot();
     });
   });
