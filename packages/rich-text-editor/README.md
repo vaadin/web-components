@@ -28,29 +28,6 @@ Once installed, import the component in your application:
 import '@vaadin/rich-text-editor';
 ```
 
-## Themes
-
-Vaadin components come with two built-in [themes](https://vaadin.com/docs/latest/styling), Lumo and Material.
-The [main entrypoint](https://github.com/vaadin/web-components/blob/main/packages/rich-text-editor/vaadin-rich-text-editor.js) of the package uses the Lumo theme.
-
-To use the Material theme, import the component from the `theme/material` folder:
-
-```js
-import '@vaadin/rich-text-editor/theme/material/vaadin-rich-text-editor.js';
-```
-
-You can also import the Lumo version of the component explicitly:
-
-```js
-import '@vaadin/rich-text-editor/theme/lumo/vaadin-rich-text-editor.js';
-```
-
-Finally, you can import the un-themed component from the `src` folder to get a minimal starting point:
-
-```js
-import '@vaadin/rich-text-editor/src/vaadin-rich-text-editor.js';
-```
-
 ## Contributing
 
 Read the [contributing guide](https://vaadin.com/docs/latest/contributing) to learn about our development process, how to propose bugfixes and improvements, and how to test your changes to Vaadin components.

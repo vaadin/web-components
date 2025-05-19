@@ -6,7 +6,6 @@
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
-import { processTemplates } from '@vaadin/component-base/src/templates.js';
 import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { OverlayMixin } from './vaadin-overlay-mixin.js';
 import { overlayStyles } from './vaadin-overlay-styles.js';
@@ -92,13 +91,6 @@ class Overlay extends OverlayMixin(ThemableMixin(DirMixin(PolymerElement))) {
 
   static get is() {
     return 'vaadin-overlay';
-  }
-
-  /** @protected */
-  ready() {
-    super.ready();
-
-    processTemplates(this);
   }
 
   /**

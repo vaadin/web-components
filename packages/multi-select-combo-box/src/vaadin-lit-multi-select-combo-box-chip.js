@@ -11,13 +11,22 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
 import { multiSelectComboBoxChip } from './vaadin-multi-select-combo-box-styles.js';
 
 /**
- * LitElement based version of `<vaadin-multi-select-combo-box-chip>` web component.
+ * An element used by `<vaadin-multi-select-combo-box>` to display selected items.
  *
- * ## Disclaimer
+ * ### Styling
  *
- * This component is an experiment and not yet a part of Vaadin platform.
- * There is no ETA regarding specific Vaadin version where it'll land.
- * Feel free to try this code in your apps as per Apache 2.0 license.
+ * The following shadow DOM parts are available for styling:
+ *
+ * Part name        | Description
+ * -----------------|-------------
+ * `label`          | Element containing the label
+ * `remove-button`  | Remove button
+ *
+ * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
+ *
+ * @customElement
+ * @extends HTMLElement
+ * @private
  */
 class MultiSelectComboBoxChip extends CSSInjectionMixin(ThemableMixin(PolylitMixin(LitElement))) {
   static get is() {

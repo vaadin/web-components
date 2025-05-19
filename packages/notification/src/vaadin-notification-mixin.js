@@ -7,7 +7,6 @@ import { render } from 'lit';
 import { isTemplateResult } from 'lit/directive-helpers.js';
 import { isIOS } from '@vaadin/component-base/src/browser-utils.js';
 import { OverlayClassMixin } from '@vaadin/component-base/src/overlay-class-mixin.js';
-import { processTemplates } from '@vaadin/component-base/src/templates.js';
 import { OverlayStackMixin } from '@vaadin/overlay/src/vaadin-overlay-stack-mixin.js';
 import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
 
@@ -246,8 +245,6 @@ export const NotificationMixin = (superClass) =>
       super.ready();
 
       this._overlayElement = this.shadowRoot.querySelector('vaadin-notification-card');
-
-      processTemplates(this);
     }
 
     /** @protected */
