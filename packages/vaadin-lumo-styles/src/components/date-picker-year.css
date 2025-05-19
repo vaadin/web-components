@@ -1,3 +1,8 @@
+:host {
+  display: block;
+  height: 100%;
+}
+
 :host([current]) [part='year-number'] {
   color: var(--lumo-primary-text-color);
 }

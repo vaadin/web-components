@@ -1,5 +1,6 @@
 @import './input-container.css';
 
+@import '../src/mixins/base-layer-reset.css' vaadin-email-field;
 @import '../src/mixins/field-label.css' vaadin-email-field;
 @import '../src/mixins/field-required.css' vaadin-email-field;
 @import '../src/mixins/field-error-message.css' vaadin-email-field;

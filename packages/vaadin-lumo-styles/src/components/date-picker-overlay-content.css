@@ -1,4 +1,9 @@
 :host {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  outline: none;
   position: relative;
   /* Background for the year scroller, placed here as we are using a mask image on the actual years part */
   background-image: linear-gradient(var(--lumo-shade-5pct), var(--lumo-shade-5pct));
@@ -6,6 +11,14 @@
   background-position: top right;
   background-repeat: no-repeat;
   cursor: default;
+}
+
+[part='label'] {
+  flex-grow: 1;
+}
+
+[hidden] {
+  display: none !important;
 }
 
 ::slotted([slot='months']) {
@@ -50,13 +63,26 @@
 
 /* TODO unsupported selector */
 #scrollers {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
   position: static;
   display: block;
 }
 
 /* TODO fix this in vaadin-date-picker that it adapts to the width of the year scroller */
 :host([desktop]) ::slotted([slot='months']) {
+  transform: none !important;
   right: auto;
+}
+
+:host([desktop]) ::slotted([slot='years']) {
+  transform: none !important;
+}
+
+:host(.animate) ::slotted([slot='months']),
+:host(.animate) ::slotted([slot='years']) {
+  transition: all 200ms;
 }
 
 /* Year scroller position indicator */
@@ -73,6 +99,10 @@
 }
 
 [part='toolbar'] {
+  display: flex;
+  justify-content: space-between;
+  z-index: 2;
+  flex-shrink: 0;
   padding: var(--lumo-space-s);
   border-bottom-left-radius: var(--lumo-border-radius-l);
   margin-right: 57px;
@@ -83,6 +113,17 @@
 }
 
 /* Narrow viewport mode (fullscreen) */
+
+[part='overlay-header'] {
+  display: flex;
+  flex-shrink: 0;
+  flex-wrap: nowrap;
+  align-items: center;
+}
+
+:host(:not([fullscreen])) [part='overlay-header'] {
+  display: none;
+}
 
 :host([fullscreen]) [part='toolbar'] {
   order: -1;
