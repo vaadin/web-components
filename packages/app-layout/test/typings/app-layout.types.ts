@@ -1,5 +1,4 @@
 import '../../vaadin-app-layout.js';
-import type { ControllerMixinClass } from '@vaadin/component-base/src/controller-mixin.js';
 import type { ElementMixinClass } from '@vaadin/component-base/src/element-mixin.js';
 import type { I18nMixinClass } from '@vaadin/component-base/src/i18n-mixin.js';
 import type { ThemableMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
@@ -18,7 +17,6 @@ const layout = document.createElement('vaadin-app-layout');
 assertType<ElementMixinClass>(layout);
 assertType<I18nMixinClass<AppLayoutI18n>>(layout);
 assertType<ThemableMixinClass>(layout);
-assertType<ControllerMixinClass>(layout);
 
 // Properties
 assertType<'drawer' | 'navbar'>(layout.primarySection);
