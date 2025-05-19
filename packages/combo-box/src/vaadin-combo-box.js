@@ -7,20 +7,20 @@ import '@vaadin/input-container/src/vaadin-input-container.js';
 import './vaadin-combo-box-item.js';
 import './vaadin-combo-box-overlay.js';
 import './vaadin-combo-box-scroller.js';
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { css, html, LitElement } from 'lit';
+import { ifDefined } from 'lit/directives/if-defined.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { InputControlMixin } from '@vaadin/field-base/src/input-control-mixin.js';
 import { InputController } from '@vaadin/field-base/src/input-controller.js';
 import { LabelledInputController } from '@vaadin/field-base/src/labelled-input-controller.js';
 import { PatternMixin } from '@vaadin/field-base/src/pattern-mixin.js';
 import { inputFieldShared } from '@vaadin/field-base/src/styles/input-field-shared-styles.js';
-import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { ComboBoxDataProviderMixin } from './vaadin-combo-box-data-provider-mixin.js';
 import { ComboBoxMixin } from './vaadin-combo-box-mixin.js';
-
-registerStyles('vaadin-combo-box', inputFieldShared, { moduleId: 'vaadin-combo-box-styles' });
 
 /**
  * `<vaadin-combo-box>` is a web component for choosing a value from a filterable list of options
@@ -121,6 +121,9 @@ registerStyles('vaadin-combo-box', inputFieldShared, { moduleId: 'vaadin-combo-b
  * `opened`  | Set when the combo box dropdown is open | :host
  * `loading` | Set when new items are expected | :host
  *
+ * If you want to replace the default `<input>` and its container with a custom implementation to get full control
+ * over the input field, consider using the [`<vaadin-combo-box-light>`](#/elements/vaadin-combo-box-light) element.
+ *
  * ### Internal components
  *
  * In addition to `<vaadin-combo-box>` itself, the following internal
@@ -154,59 +157,21 @@ registerStyles('vaadin-combo-box', inputFieldShared, { moduleId: 'vaadin-combo-b
  * @mixes ComboBoxMixin
  */
 class ComboBox extends ComboBoxDataProviderMixin(
-  ComboBoxMixin(PatternMixin(InputControlMixin(ThemableMixin(ElementMixin(PolymerElement))))),
+  ComboBoxMixin(PatternMixin(InputControlMixin(ThemableMixin(ElementMixin(PolylitMixin(LitElement)))))),
 ) {
   static get is() {
     return 'vaadin-combo-box';
   }
 
-  static get template() {
-    return html`
-      <style>
+  static get styles() {
+    return [
+      inputFieldShared,
+      css`
         :host([opened]) {
           pointer-events: auto;
         }
-      </style>
-
-      <div class="vaadin-combo-box-container">
-        <div part="label">
-          <slot name="label"></slot>
-          <span part="required-indicator" aria-hidden="true" on-click="focus"></span>
-        </div>
-
-        <vaadin-input-container
-          part="input-field"
-          readonly="[[readonly]]"
-          disabled="[[disabled]]"
-          invalid="[[invalid]]"
-          theme$="[[_theme]]"
-        >
-          <slot name="prefix" slot="prefix"></slot>
-          <slot name="input"></slot>
-          <div id="clearButton" part="clear-button" slot="suffix" aria-hidden="true"></div>
-          <div id="toggleButton" part="toggle-button" slot="suffix" aria-hidden="true"></div>
-        </vaadin-input-container>
-
-        <div part="helper-text">
-          <slot name="helper"></slot>
-        </div>
-
-        <div part="error-message">
-          <slot name="error-message"></slot>
-        </div>
-      </div>
-
-      <vaadin-combo-box-overlay
-        id="overlay"
-        opened="[[_overlayOpened]]"
-        loading$="[[loading]]"
-        theme$="[[_theme]]"
-        position-target="[[_positionTarget]]"
-        no-vertical-overlap
-      ></vaadin-combo-box-overlay>
-
-      <slot name="tooltip"></slot>
-    `;
+      `,
+    ];
   }
 
   static get properties() {
@@ -227,6 +192,50 @@ class ComboBox extends ComboBoxDataProviderMixin(
    */
   get clearElement() {
     return this.$.clearButton;
+  }
+
+  /** @protected */
+  render() {
+    return html`
+      <div class="vaadin-combo-box-container">
+        <div part="label">
+          <slot name="label"></slot>
+          <span part="required-indicator" aria-hidden="true" @click="${this.focus}"></span>
+        </div>
+
+        <vaadin-input-container
+          part="input-field"
+          .readonly="${this.readonly}"
+          .disabled="${this.disabled}"
+          .invalid="${this.invalid}"
+          theme="${ifDefined(this._theme)}"
+        >
+          <slot name="prefix" slot="prefix"></slot>
+          <slot name="input"></slot>
+          <div id="clearButton" part="clear-button" slot="suffix" aria-hidden="true"></div>
+          <div id="toggleButton" part="toggle-button" slot="suffix" aria-hidden="true"></div>
+        </vaadin-input-container>
+
+        <div part="helper-text">
+          <slot name="helper"></slot>
+        </div>
+
+        <div part="error-message">
+          <slot name="error-message"></slot>
+        </div>
+      </div>
+
+      <vaadin-combo-box-overlay
+        id="overlay"
+        .opened="${this._overlayOpened}"
+        ?loading="${this.loading}"
+        theme="${ifDefined(this._theme)}"
+        .positionTarget="${this._positionTarget}"
+        no-vertical-overlap
+      ></vaadin-combo-box-overlay>
+
+      <slot name="tooltip"></slot>
+    `;
   }
 
   /** @protected */
