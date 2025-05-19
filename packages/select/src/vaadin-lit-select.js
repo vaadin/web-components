@@ -8,7 +8,7 @@ import './vaadin-lit-select-item.js';
 import './vaadin-lit-select-list-box.js';
 import './vaadin-lit-select-overlay.js';
 import './vaadin-lit-select-value-button.js';
-import { css, html, LitElement } from 'lit';
+import { html, LitElement } from 'lit';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import { screenReaderOnly } from '@vaadin/a11y-base/src/styles/sr-only-styles.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
@@ -17,6 +17,7 @@ import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { inputFieldShared } from '@vaadin/field-base/src/styles/input-field-shared-styles.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { SelectBaseMixin } from './vaadin-select-base-mixin.js';
+import { selectStyles } from './vaadin-select-core-styles.js';
 
 /**
  * LitElement based version of `<vaadin-select>` web component.
@@ -35,19 +36,7 @@ class Select extends SelectBaseMixin(ElementMixin(ThemableMixin(PolylitMixin(Lit
   }
 
   static get styles() {
-    return [
-      inputFieldShared,
-      screenReaderOnly,
-      css`
-        :host {
-          position: relative;
-        }
-
-        ::slotted([slot='value']) {
-          flex-grow: 1;
-        }
-      `,
-    ];
+    return [inputFieldShared, screenReaderOnly, selectStyles];
   }
 
   /** @protected */
