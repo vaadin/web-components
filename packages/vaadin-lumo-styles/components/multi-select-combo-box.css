@@ -1,7 +1,7 @@
 @import '../src/components/input-container.css' vaadin-multi-select-combo-box-container;
 @import '../src/components/multi-select-combo-box-container.css' vaadin-multi-select-combo-box-container;
 
-@import '../src/mixins/overlay.css' vaadin-multi-select-combo-box-overlay;
+@import '../src/components/overlay.css' vaadin-multi-select-combo-box-overlay;
 @import '../src/mixins/menu-overlay-core.css' vaadin-multi-select-combo-box-overlay;
 @import '../src/mixins/combo-box-overlay.css' vaadin-multi-select-combo-box-overlay;
 @import '../src/mixins/loader.css' vaadin-multi-select-combo-box-overlay;
