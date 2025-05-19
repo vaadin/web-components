@@ -69,6 +69,10 @@ export const inputContainerStyles = css`
     flex: none;
   }
 
+  ::slotted(:not(input)) {
+    cursor: auto;
+  }
+
   ::slotted(:is(input, textarea))::placeholder {
     /* Use ::slotted(input:placeholder-shown) in themes to style the placeholder. */
     /* because ::slotted(...)::placeholder does not work in Safari. */
