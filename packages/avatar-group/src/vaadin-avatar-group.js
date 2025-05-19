@@ -8,15 +8,13 @@ import '@vaadin/tooltip/src/vaadin-tooltip.js';
 import './vaadin-avatar-group-menu.js';
 import './vaadin-avatar-group-menu-item.js';
 import './vaadin-avatar-group-overlay.js';
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
-import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
+import { html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
-import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
+import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { AvatarGroupMixin } from './vaadin-avatar-group-mixin.js';
 import { avatarGroupStyles } from './vaadin-avatar-group-styles.js';
-
-registerStyles('vaadin-avatar-group', avatarGroupStyles, { moduleId: 'vaadin-avatar-group-styles' });
 
 /**
  * `<vaadin-avatar-group>` is a Web Component providing avatar group displaying functionality.
@@ -60,13 +58,21 @@ registerStyles('vaadin-avatar-group', avatarGroupStyles, { moduleId: 'vaadin-ava
  *
  * @customElement
  * @extends HTMLElement
- * @mixes ControllerMixin
  * @mixes ElementMixin
  * @mixes AvatarGroupMixin
  * @mixes ThemableMixin
  */
-class AvatarGroup extends AvatarGroupMixin(ElementMixin(ThemableMixin(ControllerMixin(PolymerElement)))) {
-  static get template() {
+class AvatarGroup extends AvatarGroupMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElement)))) {
+  static get is() {
+    return 'vaadin-avatar-group';
+  }
+
+  static get styles() {
+    return avatarGroupStyles;
+  }
+
+  /** @protected */
+  render() {
     return html`
       <div id="container" part="container">
         <slot></slot>
@@ -74,17 +80,19 @@ class AvatarGroup extends AvatarGroupMixin(ElementMixin(ThemableMixin(Controller
       </div>
       <vaadin-avatar-group-overlay
         id="overlay"
-        opened="{{_opened}}"
-        position-target="[[_overflow]]"
+        .opened="${this._opened}"
+        .positionTarget="${this._overflow}"
         no-vertical-overlap
-        on-vaadin-overlay-close="_onVaadinOverlayClose"
-        on-vaadin-overlay-open="_onVaadinOverlayOpen"
+        @vaadin-overlay-close="${this._onVaadinOverlayClose}"
+        @vaadin-overlay-open="${this._onVaadinOverlayOpen}"
+        @opened-changed="${this._onOpenedChanged}"
       ></vaadin-avatar-group-overlay>
     `;
   }
 
-  static get is() {
-    return 'vaadin-avatar-group';
+  /** @private */
+  _onOpenedChanged(event) {
+    this._opened = event.detail.value;
   }
 }
 
