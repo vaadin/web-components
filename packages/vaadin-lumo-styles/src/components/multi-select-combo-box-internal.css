@@ -1,0 +1,3 @@
+:host([opened]) {
+  pointer-events: auto;
+}
