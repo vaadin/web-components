@@ -75,7 +75,7 @@ export const monthCalendarStyles = css`
     position: relative;
     width: var(--vaadin-date-picker-date-width, 2rem);
     height: var(--vaadin-date-picker-date-height, 2rem);
-    cursor: pointer;
+    cursor: var(--vaadin-clickable-cursor);
     outline: none;
   }
 
@@ -107,7 +107,7 @@ export const monthCalendarStyles = css`
   }
 
   [disabled] {
-    cursor: not-allowed;
+    cursor: var(--vaadin-disabled-cursor);
     color: var(--vaadin-date-picker-date-disabled-color, var(--_vaadin-color-subtle));
     opacity: 0.7;
   }

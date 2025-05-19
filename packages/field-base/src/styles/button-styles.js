@@ -13,6 +13,7 @@ export const button = css`
     -webkit-tap-highlight-color: transparent;
     -webkit-user-select: none;
     user-select: none;
+    cursor: var(--vaadin-clickable-cursor);
   }
 
   /* Icon */
@@ -34,7 +35,7 @@ export const button = css`
 
   :host(:is([readonly], [disabled])) [part$='button'] {
     color: var(--_vaadin-color-subtle);
-    cursor: not-allowed;
+    cursor: var(--vaadin-disabled-cursor);
   }
 
   @media (forced-colors: active) {
