@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync } from '@vaadin/testing-helpers';
+import { fixtureSync, nextUpdate } from '@vaadin/testing-helpers';
 import '../../vaadin-accordion-panel.js';
 import { resetUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 
@@ -23,6 +23,7 @@ describe('vaadin-accordion-panel', () => {
 
     it('opened', async () => {
       panel.opened = true;
+      await nextUpdate(panel);
       await expect(panel).dom.to.equalSnapshot();
     });
 
@@ -33,6 +34,7 @@ describe('vaadin-accordion-panel', () => {
 
     it('theme', async () => {
       panel.setAttribute('theme', 'filled');
+      await nextUpdate(panel);
       await expect(panel).dom.to.equalSnapshot();
     });
   });
