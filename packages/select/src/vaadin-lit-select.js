@@ -46,7 +46,7 @@ class Select extends SelectBaseMixin(ElementMixin(ThemableMixin(PolylitMixin(Lit
         ::slotted([slot='value']) {
           flex: 1;
         }
-        
+
         [part='input-field'] {
           cursor: var(--vaadin-clickable-cursor);
         }
