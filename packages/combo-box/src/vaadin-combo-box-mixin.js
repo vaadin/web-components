@@ -11,7 +11,6 @@ import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { OverlayClassMixin } from '@vaadin/component-base/src/overlay-class-mixin.js';
 import { get } from '@vaadin/component-base/src/path-utils.js';
-import { processTemplates } from '@vaadin/component-base/src/templates.js';
 import { InputMixin } from '@vaadin/field-base/src/input-mixin.js';
 import { ValidateMixin } from '@vaadin/field-base/src/validate-mixin.js';
 import { VirtualKeyboardController } from '@vaadin/field-base/src/virtual-keyboard-controller.js';
@@ -382,8 +381,6 @@ export const ComboBoxMixin = (subclass) =>
 
       this.addEventListener('mousedown', bringToFrontListener);
       this.addEventListener('touchstart', bringToFrontListener);
-
-      processTemplates(this);
 
       this.addController(new VirtualKeyboardController(this));
     }

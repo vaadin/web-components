@@ -6,7 +6,6 @@
 import { isChrome, isSafari } from '@vaadin/component-base/src/browser-utils.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { OverflowController } from '@vaadin/component-base/src/overflow-controller.js';
-import { processTemplates } from '@vaadin/component-base/src/templates.js';
 import { Virtualizer } from '@vaadin/component-base/src/virtualizer.js';
 
 /**
@@ -96,7 +95,6 @@ export const VirtualListMixin = (superClass) =>
       this.__overflowController = new OverflowController(this);
       this.addController(this.__overflowController);
 
-      processTemplates(this);
       this.__updateAria();
     }
 

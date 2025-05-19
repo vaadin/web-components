@@ -19,11 +19,8 @@ export const InputMixin = dedupeMixin(
           /**
            * A reference to the input element controlled by the mixin.
            * Any component implementing this mixin is expected to provide it
-           * by using `this._setInputElement(input)` Polymer API.
-           *
-           * A typical case is using `InputController` that does this automatically.
-           * However, the input element does not have to always be native <input>:
-           * as an example, <vaadin-combo-box-light> accepts other components.
+           * by using `this._setInputElement(input)` API. A typical case is
+           * using `InputController` that does this automatically.
            *
            * @protected
            * @type {!HTMLElement}

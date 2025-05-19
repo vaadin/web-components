@@ -7,12 +7,14 @@ import '@vaadin/component-base/src/style-props.js';
 import { css } from 'lit';
 
 export const container = css`
-  [class$='container'] {
-    display: flex;
-    flex-direction: column;
-    gap: var(--vaadin-input-field-container-gap, var(--_vaadin-gap-container-block));
-    min-width: 100%;
-    max-width: 100%;
-    width: var(--vaadin-field-default-width, 12em);
+  @layer base {
+    [class$='container'] {
+      display: flex;
+      flex-direction: column;
+      gap: var(--vaadin-input-field-container-gap, var(--_vaadin-gap-container-block));
+      min-width: 100%;
+      max-width: 100%;
+      width: var(--vaadin-field-default-width, 12em);
+    }
   }
 `;

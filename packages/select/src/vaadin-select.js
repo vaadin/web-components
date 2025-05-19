@@ -12,7 +12,6 @@ import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { screenReaderOnly } from '@vaadin/a11y-base/src/styles/sr-only-styles.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
-import { processTemplates } from '@vaadin/component-base/src/templates.js';
 import { inputFieldShared } from '@vaadin/field-base/src/styles/input-field-shared-styles.js';
 import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { SelectBaseMixin } from './vaadin-select-base-mixin.js';
@@ -201,13 +200,6 @@ class Select extends SelectBaseMixin(ElementMixin(ThemableMixin(PolymerElement))
 
   static get observers() {
     return ['_rendererChanged(renderer, _overlayElement)'];
-  }
-
-  /** @protected */
-  ready() {
-    super.ready();
-
-    processTemplates(this);
   }
 
   /**
