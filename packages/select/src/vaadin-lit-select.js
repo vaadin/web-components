@@ -47,8 +47,11 @@ class Select extends SelectBaseMixin(ElementMixin(ThemableMixin(PolylitMixin(Lit
           flex: 1;
         }
 
-        :host(:not([focus-ring], [disabled])) [part='input-field'] {
+        :host(:not([focus-ring])) [part='input-field'] {
           outline: none;
+        }
+
+        :host([readonly]:not([focus-ring])) [part='input-field'] {
           --vaadin-input-field-border-color: inherit;
         }
 
