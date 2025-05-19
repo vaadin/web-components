@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { aTimeout, fixtureSync } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, nextUpdate } from '@vaadin/testing-helpers';
 import '../../vaadin-checkbox.js';
 import { resetUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 
@@ -18,11 +18,13 @@ describe('vaadin-checkbox', () => {
 
     it('name', async () => {
       checkbox.name = 'Name';
+      await nextUpdate(checkbox);
       await expect(checkbox).dom.to.equalSnapshot();
     });
 
     it('label', async () => {
       checkbox.label = 'Label';
+      await nextUpdate(checkbox);
       await expect(checkbox).dom.to.equalSnapshot();
     });
 
@@ -33,11 +35,13 @@ describe('vaadin-checkbox', () => {
 
     it('readonly', async () => {
       checkbox.readonly = true;
+      await nextUpdate(checkbox);
       await expect(checkbox).dom.to.equalSnapshot();
     });
 
     it('helper', async () => {
       checkbox.helperText = 'Helper';
+      await nextUpdate(checkbox);
       await expect(checkbox).dom.to.equalSnapshot();
     });
 
