@@ -1,5 +1,4 @@
 import '../../vaadin-avatar-group.js';
-import type { ControllerMixinClass } from '@vaadin/component-base/src/controller-mixin.js';
 import type { ElementMixinClass } from '@vaadin/component-base/src/element-mixin.js';
 import type { I18nMixinClass } from '@vaadin/component-base/src/i18n-mixin.js';
 import type { OverlayClassMixinClass } from '@vaadin/component-base/src/overlay-class-mixin.js';
@@ -32,7 +31,6 @@ assertType<AvatarGroupI18n>({ activeUsers: { one: '1 user' } });
 
 // Mixins
 assertType<AvatarGroupMixinClass>(group);
-assertType<ControllerMixinClass>(group);
 assertType<ElementMixinClass>(group);
 assertType<I18nMixinClass<AvatarGroupI18n>>(group);
 assertType<OverlayClassMixinClass>(group);
