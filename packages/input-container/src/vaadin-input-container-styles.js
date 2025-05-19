@@ -69,7 +69,7 @@ export const inputContainerStyles = css`
     flex: none;
   }
 
-  ::slotted(:not(input)) {
+  slot {
     cursor: auto;
   }
 
