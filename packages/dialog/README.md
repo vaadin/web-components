@@ -33,29 +33,6 @@ Once installed, import the component in your application:
 import '@vaadin/dialog';
 ```
 
-## Themes
-
-Vaadin components come with two built-in [themes](https://vaadin.com/docs/latest/styling), Lumo and Material.
-The [main entrypoint](https://github.com/vaadin/web-components/blob/main/packages/dialog/vaadin-dialog.js) of the package uses the Lumo theme.
-
-To use the Material theme, import the component from the `theme/material` folder:
-
-```js
-import '@vaadin/dialog/theme/material/vaadin-dialog.js';
-```
-
-You can also import the Lumo version of the component explicitly:
-
-```js
-import '@vaadin/dialog/theme/lumo/vaadin-dialog.js';
-```
-
-Finally, you can import the un-themed component from the `src` folder to get a minimal starting point:
-
-```js
-import '@vaadin/dialog/src/vaadin-dialog.js';
-```
-
 ## Contributing
 
 Read the [contributing guide](https://vaadin.com/docs/latest/contributing) to learn about our development process, how to propose bugfixes and improvements, and how to test your changes to Vaadin components.
