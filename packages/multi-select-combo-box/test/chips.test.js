@@ -193,7 +193,7 @@ describe('chips', () => {
         expect(overflow.hasAttribute('hidden')).to.be.true;
       });
 
-      it('should always show at least one chip in addition to overflow', async () => {
+      it('should always show at least one chip in addition to overflow if there is enough space', async () => {
         comboBox.style.width = 'auto';
         await nextResize(comboBox);
 
@@ -205,9 +205,20 @@ describe('chips', () => {
         expect(getChipContent(chips[1])).to.equal('orange');
       });
 
-      it('should set show max width on the chip based on CSS property', async () => {
+      it('should move all chips to the overflow if there is not enough space for a single chip', async () => {
+        comboBox.style.width = '100px';
+        await nextResize(comboBox);
+
+        comboBox.selectedItems = ['apple', 'orange'];
+        await nextRender();
+
+        const chips = getChips(comboBox);
+        expect(chips.length).to.equal(1);
+        expect(overflow.hasAttribute('hidden')).to.be.false;
+      });
+
+      it('should set max width on the chip based on the remaining space', async () => {
         comboBox.style.width = 'auto';
-        comboBox.clearButtonVisible = true;
         await nextResize(comboBox);
 
         comboBox.selectedItems = ['apple', 'orange'];
@@ -216,7 +227,7 @@ describe('chips', () => {
         const chips = getChips(comboBox);
         const minWidth = getComputedStyle(comboBox).getPropertyValue('--_chip-min-width');
         expect(minWidth).to.be.ok;
-        expect(chips[1].style.maxWidth).to.equal(minWidth);
+        expect(parseInt(chips[1].style.maxWidth)).to.be.greaterThan(parseInt(minWidth));
       });
     });
   });
