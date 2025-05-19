@@ -50,6 +50,14 @@ export const fieldShared = css`
     display: none;
   }
 
+  :host([readonly]) [part='input-field'] {
+    cursor: default;
+  }
+
+  :host([disabled]) [part='input-field'] {
+    cursor: var(--vaadin-disabled-cursor);
+  }
+
   [part='helper-text'] {
     font-size: var(--vaadin-input-field-helper-font-size, inherit);
     line-height: var(--vaadin-input-field-helper-line-height, inherit);
