@@ -3,14 +3,13 @@
  * Copyright (c) 2019 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { html, LitElement } from 'lit';
 import { ButtonMixin } from '@vaadin/button/src/vaadin-button-mixin.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
-import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
+import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { detailsSummary } from './vaadin-details-summary-core-styles.js';
-
-registerStyles('vaadin-details-summary', detailsSummary(), { moduleId: 'vaadin-details-summary-styles' });
 
 /**
  * The details summary element.
@@ -42,16 +41,13 @@ registerStyles('vaadin-details-summary', detailsSummary(), { moduleId: 'vaadin-d
  * @mixes DirMixin
  * @mixes ThemableMixin
  */
-class DetailsSummary extends ButtonMixin(DirMixin(ThemableMixin(PolymerElement))) {
+class DetailsSummary extends ButtonMixin(DirMixin(ThemableMixin(PolylitMixin(LitElement)))) {
   static get is() {
     return 'vaadin-details-summary';
   }
 
-  static get template() {
-    return html`
-      <span part="toggle" aria-hidden="true"></span>
-      <div part="content"><slot></slot></div>
-    `;
+  static get styles() {
+    return detailsSummary();
   }
 
   static get properties() {
@@ -64,6 +60,14 @@ class DetailsSummary extends ButtonMixin(DirMixin(ThemableMixin(PolymerElement))
         reflectToAttribute: true,
       },
     };
+  }
+
+  /** @protected */
+  render() {
+    return html`
+      <span part="toggle" aria-hidden="true"></span>
+      <div part="content"><slot></slot></div>
+    `;
   }
 }
 
