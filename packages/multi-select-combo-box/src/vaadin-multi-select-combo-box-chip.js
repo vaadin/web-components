@@ -3,14 +3,11 @@
  * Copyright (c) 2021 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
-import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
+import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { multiSelectComboBoxChip } from './vaadin-multi-select-combo-box-styles.js';
-
-registerStyles('vaadin-multi-select-combo-box-chip', multiSelectComboBoxChip, {
-  moduleId: 'vaadin-multi-select-combo-box-chip',
-});
 
 /**
  * An element used by `<vaadin-multi-select-combo-box>` to display selected items.
@@ -30,9 +27,13 @@ registerStyles('vaadin-multi-select-combo-box-chip', multiSelectComboBoxChip, {
  * @extends HTMLElement
  * @private
  */
-class MultiSelectComboBoxChip extends ThemableMixin(PolymerElement) {
+class MultiSelectComboBoxChip extends ThemableMixin(PolylitMixin(LitElement)) {
   static get is() {
     return 'vaadin-multi-select-combo-box-chip';
+  }
+
+  static get styles() {
+    return multiSelectComboBoxChip;
   }
 
   static get properties() {
@@ -40,15 +41,18 @@ class MultiSelectComboBoxChip extends ThemableMixin(PolymerElement) {
       disabled: {
         type: Boolean,
         reflectToAttribute: true,
+        sync: true,
       },
 
       readonly: {
         type: Boolean,
         reflectToAttribute: true,
+        sync: true,
       },
 
       label: {
         type: String,
+        sync: true,
       },
 
       item: {
@@ -57,10 +61,11 @@ class MultiSelectComboBoxChip extends ThemableMixin(PolymerElement) {
     };
   }
 
-  static get template() {
+  /** @protected */
+  render() {
     return html`
-      <div part="label">[[label]]</div>
-      <div part="remove-button" on-click="_onRemoveClick"></div>
+      <div part="label">${this.label}</div>
+      <div part="remove-button" @click="${this._onRemoveClick}"></div>
     `;
   }
 

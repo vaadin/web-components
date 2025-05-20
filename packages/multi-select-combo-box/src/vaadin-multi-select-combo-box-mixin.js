@@ -270,6 +270,7 @@ export const MultiSelectComboBoxMixin = (superClass) =>
         placeholder: {
           type: String,
           observer: '_placeholderChanged',
+          reflectToAttribute: true,
           sync: true,
         },
 
