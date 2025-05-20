@@ -2,7 +2,7 @@ import { expect } from '@vaadin/chai-plugins';
 import { resetMouse, sendKeys, sendMouseToElement } from '@vaadin/test-runner-commands';
 import { fixtureSync, mousedown, mouseup, nextFrame, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import '../src/vaadin-checkbox.js';
+import '../src/vaadin-lit-checkbox.js';
 
 describe('checkbox', () => {
   let checkbox, input, label, link;
