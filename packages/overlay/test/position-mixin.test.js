@@ -2,7 +2,7 @@ import { expect } from '@vaadin/chai-plugins';
 import { setViewport } from '@vaadin/test-runner-commands';
 import { fixtureSync, nextRender, oneEvent } from '@vaadin/testing-helpers';
 import './position-mixin-styles.js';
-import './position-mixin-polymer.js';
+import './position-mixin-element.js';
 
 describe('position mixin', () => {
   const TOP = 'top';
