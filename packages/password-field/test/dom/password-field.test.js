@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { aTimeout, fixtureSync } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, nextUpdate } from '@vaadin/testing-helpers';
 import '../../src/vaadin-password-field.js';
 import { resetUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 
@@ -18,12 +18,14 @@ describe('vaadin-password-field', () => {
 
     it('helper', async () => {
       field.helperText = 'Helper';
+      await nextUpdate(field);
       await expect(field).dom.to.equalSnapshot();
     });
 
     it('error', async () => {
       field.errorMessage = 'Error';
       field.invalid = true;
+      await nextUpdate(field);
       await aTimeout(0);
       await expect(field).dom.to.equalSnapshot();
     });
@@ -36,21 +38,25 @@ describe('vaadin-password-field', () => {
 
     it('disabled', async () => {
       field.disabled = true;
+      await nextUpdate(field);
       await expect(field).shadowDom.to.equalSnapshot();
     });
 
     it('readonly', async () => {
       field.readonly = true;
+      await nextUpdate(field);
       await expect(field).shadowDom.to.equalSnapshot();
     });
 
     it('invalid', async () => {
       field.invalid = true;
+      await nextUpdate(field);
       await expect(field).shadowDom.to.equalSnapshot();
     });
 
     it('theme', async () => {
       field.setAttribute('theme', 'align-right');
+      await nextUpdate(field);
       await expect(field).shadowDom.to.equalSnapshot();
     });
   });
