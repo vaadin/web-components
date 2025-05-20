@@ -4,14 +4,13 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import './vaadin-radio-button.js';
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
-import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
+import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { RadioGroupMixin } from './vaadin-radio-group-mixin.js';
 import { radioGroupStyles } from './vaadin-radio-group-styles.js';
-
-registerStyles('vaadin-radio-group', radioGroupStyles, { moduleId: 'vaadin-radio-group-styles' });
 
 /**
  * `<vaadin-radio-group>` is a web component that allows the user to choose one item from a group of choices.
@@ -61,12 +60,17 @@ registerStyles('vaadin-radio-group', radioGroupStyles, { moduleId: 'vaadin-radio
  * @mixes ElementMixin
  * @mixes RadioGroupMixin
  */
-class RadioGroup extends RadioGroupMixin(ElementMixin(ThemableMixin(PolymerElement))) {
+class RadioGroup extends RadioGroupMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElement)))) {
   static get is() {
     return 'vaadin-radio-group';
   }
 
-  static get template() {
+  static get styles() {
+    return radioGroupStyles;
+  }
+
+  /** @protected */
+  render() {
     return html`
       <div class="vaadin-group-field-container">
         <div part="label">

@@ -3,15 +3,13 @@
  * Copyright (c) 2017 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
-import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
+import { html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
-import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
+import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { RadioButtonMixin } from './vaadin-radio-button-mixin.js';
 import { radioButtonStyles } from './vaadin-radio-button-styles.js';
-
-registerStyles('vaadin-radio-button', radioButtonStyles, { moduleId: 'vaadin-radio-button-styles' });
 
 /**
  * `<vaadin-radio-button>` is a web component representing a choice in a radio group.
@@ -54,12 +52,17 @@ registerStyles('vaadin-radio-button', radioButtonStyles, { moduleId: 'vaadin-rad
  * @mixes ElementMixin
  * @mixes RadioButtonMixin
  */
-class RadioButton extends RadioButtonMixin(ElementMixin(ThemableMixin(ControllerMixin(PolymerElement)))) {
+class RadioButton extends RadioButtonMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElement)))) {
   static get is() {
     return 'vaadin-radio-button';
   }
 
-  static get template() {
+  static get styles() {
+    return radioButtonStyles;
+  }
+
+  /** @protected */
+  render() {
     return html`
       <div class="vaadin-radio-button-container">
         <div part="radio" aria-hidden="true"></div>
