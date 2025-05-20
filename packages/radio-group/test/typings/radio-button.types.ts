@@ -32,7 +32,6 @@ assertType<string>(radio.name);
 assertType<string>(radio.value);
 
 // Radio mixins
-assertType<ControllerMixinClass>(radio);
 assertType<ActiveMixinClass>(radio);
 assertType<DisabledMixinClass>(radio);
 assertType<ElementMixinClass>(radio);

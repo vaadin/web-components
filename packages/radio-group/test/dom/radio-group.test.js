@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { aTimeout, fixtureSync, nextRender } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import '../../vaadin-radio-group.js';
 import { resetUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 
@@ -24,6 +24,7 @@ describe('vaadin-radio-group', () => {
 
     it('label', async () => {
       group.label = 'Label';
+      await nextUpdate(group);
       await expect(group).dom.to.equalSnapshot();
     });
 
@@ -39,6 +40,7 @@ describe('vaadin-radio-group', () => {
 
     it('helper', async () => {
       group.helperText = 'Helper';
+      await nextUpdate(group);
       await expect(group).dom.to.equalSnapshot();
     });
 
