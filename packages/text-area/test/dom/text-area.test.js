@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { aTimeout, fixtureSync } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, nextUpdate } from '@vaadin/testing-helpers';
 import '../../src/vaadin-text-area.js';
 import { resetUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 
@@ -18,6 +18,7 @@ describe('vaadin-text-area', () => {
 
     it('helper', async () => {
       textArea.helperText = 'Helper';
+      await nextUpdate(textArea);
       await expect(textArea).dom.to.equalSnapshot();
     });
 
@@ -42,21 +43,25 @@ describe('vaadin-text-area', () => {
 
     it('disabled', async () => {
       textArea.disabled = true;
+      await nextUpdate(textArea);
       await expect(textArea).shadowDom.to.equalSnapshot(SNAPSHOT_CONFIG);
     });
 
     it('readonly', async () => {
       textArea.readonly = true;
+      await nextUpdate(textArea);
       await expect(textArea).shadowDom.to.equalSnapshot(SNAPSHOT_CONFIG);
     });
 
     it('invalid', async () => {
       textArea.invalid = true;
+      await nextUpdate(textArea);
       await expect(textArea).shadowDom.to.equalSnapshot(SNAPSHOT_CONFIG);
     });
 
     it('theme', async () => {
       textArea.setAttribute('theme', 'align-right');
+      await nextUpdate(textArea);
       await expect(textArea).shadowDom.to.equalSnapshot(SNAPSHOT_CONFIG);
     });
   });
