@@ -4,22 +4,11 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import './vaadin-password-field-button.js';
-import { html } from '@polymer/polymer/lib/utils/html-tag.js';
+import { html } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { TextField } from '@vaadin/text-field/src/vaadin-text-field.js';
-import { registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { passwordFieldStyles } from './vaadin-password-field-core-styles.js';
 import { PasswordFieldMixin } from './vaadin-password-field-mixin.js';
-
-registerStyles('vaadin-password-field', passwordFieldStyles, { moduleId: 'vaadin-password-field-styles' });
-
-const ownTemplate = html`
-  <div part="reveal-button" slot="suffix">
-    <slot name="reveal"></slot>
-  </div>
-`;
-
-let memoizedTemplate;
 
 /**
  * `<vaadin-password-field>` is an extension of `<vaadin-text-field>` component for entering passwords.
@@ -62,20 +51,21 @@ export class PasswordField extends PasswordFieldMixin(TextField) {
     return 'vaadin-password-field';
   }
 
-  static get template() {
-    if (!memoizedTemplate) {
-      // Clone the superclass template
-      memoizedTemplate = super.template.cloneNode(true);
+  static get styles() {
+    return [...super.styles, passwordFieldStyles];
+  }
 
-      // Retrieve this element's dom-module template
-      const revealButton = ownTemplate.content.querySelector('[part="reveal-button"]');
-
-      // Append reveal-button and styles to the text-field template
-      const inputField = memoizedTemplate.content.querySelector('[part="input-field"]');
-      inputField.appendChild(revealButton);
-    }
-
-    return memoizedTemplate;
+  /**
+   * @protected
+   * @override
+   */
+  _renderSuffix() {
+    return html`
+      ${super._renderSuffix()}
+      <div part="reveal-button" slot="suffix">
+        <slot name="reveal"></slot>
+      </div>
+    `;
   }
 }
 

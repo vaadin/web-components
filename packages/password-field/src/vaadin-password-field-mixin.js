@@ -68,6 +68,12 @@ export const PasswordFieldMixin = (superClass) =>
       return ['__i18nChanged(i18n)'];
     }
 
+    /** @override */
+    static get delegateAttrs() {
+      // Do not delegate autocapitalize as it should be always set to "off"
+      return super.delegateAttrs.filter((attr) => attr !== 'autocapitalize');
+    }
+
     constructor() {
       super();
       this._setType('password');

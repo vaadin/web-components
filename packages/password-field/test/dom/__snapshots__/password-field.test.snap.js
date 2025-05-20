@@ -92,6 +92,7 @@ snapshots["vaadin-password-field host error"] =
   <input
     aria-describedby="error-message-vaadin-password-field-2"
     aria-invalid="true"
+    autocapitalize="off"
     id="input-vaadin-password-field-3"
     invalid=""
     slot="input"
