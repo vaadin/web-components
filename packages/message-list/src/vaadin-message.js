@@ -4,14 +4,13 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import '@vaadin/avatar/src/vaadin-avatar.js';
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
-import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
+import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { MessageMixin } from './vaadin-message-mixin.js';
 import { messageStyles } from './vaadin-message-styles.js';
-
-registerStyles('vaadin-message', messageStyles, { moduleId: 'vaadin-message-styles' });
 
 /**
  * `<vaadin-message>` is a Web Component for showing a single message with an author, message and time.
@@ -48,22 +47,27 @@ registerStyles('vaadin-message', messageStyles, { moduleId: 'vaadin-message-styl
  * @mixes ThemableMixin
  * @mixes ElementMixin
  */
-class Message extends MessageMixin(ElementMixin(ThemableMixin(PolymerElement))) {
-  static get template() {
+class Message extends MessageMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElement)))) {
+  static get is() {
+    return 'vaadin-message';
+  }
+
+  static get styles() {
+    return messageStyles;
+  }
+
+  /** @protected */
+  render() {
     return html`
       <slot name="avatar"></slot>
       <div part="content">
         <div part="header">
-          <span part="name">[[userName]]</span>
-          <span part="time">[[time]]</span>
+          <span part="name">${this.userName}</span>
+          <span part="time">${this.time}</span>
         </div>
         <div part="message"><slot></slot></div>
       </div>
     `;
-  }
-
-  static get is() {
-    return 'vaadin-message';
   }
 }
 
