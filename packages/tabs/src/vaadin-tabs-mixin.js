@@ -33,6 +33,7 @@ export const TabsMixin = (superClass) =>
         selected: {
           value: 0,
           type: Number,
+          reflectToAttribute: true,
         },
       };
     }
