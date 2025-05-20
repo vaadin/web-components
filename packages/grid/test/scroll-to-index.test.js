@@ -577,4 +577,24 @@ describe('scroll to index', () => {
       expect(getFirstVisibleItem(grid).index).to.equal(50);
     });
   });
+
+  describe('before grid is attached', () => {
+    let grid;
+
+    beforeEach(async () => {
+      const container = fixtureSync('<div></div>');
+      grid = document.createElement('vaadin-grid');
+      const column = document.createElement('vaadin-grid-column');
+      grid.appendChild(column);
+      grid.items = Array.from({ length: 100 }, (_, index) => `Item ${index}`);
+      grid.scrollToIndex(50);
+      container.appendChild(grid);
+      await oneEvent(grid, 'animationend');
+      await nextFrame();
+    });
+
+    it('should scroll to index after items are rendered', () => {
+      expect(getFirstVisibleItem(grid).index).to.equal(50);
+    });
+  });
 });
