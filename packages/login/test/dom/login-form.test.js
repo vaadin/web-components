@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
+import { fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import '../../vaadin-login-form.js';
 import { resetUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 
@@ -43,11 +43,13 @@ describe('vaadin-login-form', () => {
 
     it('i18n', async () => {
       form.i18n = I18N_FINNISH;
+      await nextUpdate(form);
       await expect(form).dom.to.equalSnapshot();
     });
 
     it('i18n-partial', async () => {
       form.i18n = { form: { forgotPassword: 'Custom forgot password' } };
+      await nextUpdate(form);
       await expect(form).dom.to.equalSnapshot();
     });
 
@@ -56,11 +58,13 @@ describe('vaadin-login-form', () => {
       form.querySelectorAll('[required]').forEach((el) => {
         el.invalid = true;
       });
+      await nextUpdate(form);
       await expect(form).dom.to.equalSnapshot();
     });
 
     it('noForgotPassword', async () => {
       form.noForgotPassword = true;
+      await nextUpdate(form);
       await expect(form).dom.to.equalSnapshot();
     });
   });
@@ -78,11 +82,13 @@ describe('vaadin-login-form', () => {
 
     it('error', async () => {
       form.error = true;
+      await nextUpdate(form);
       await expect(wrapper).shadowDom.to.equalSnapshot();
     });
 
     it('i18n', async () => {
       form.i18n = I18N_FINNISH;
+      await nextUpdate(form);
       await expect(wrapper).shadowDom.to.equalSnapshot();
     });
   });
