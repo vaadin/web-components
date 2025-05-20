@@ -36,7 +36,13 @@ before(() => {
 [
   { tagName: Button.is },
   { tagName: Checkbox.is, ariaTargetSelector: 'input' },
-  { tagName: CheckboxGroup.is },
+  {
+    tagName: CheckboxGroup.is,
+    children: `
+      <vaadin-checkbox value="foo" label="Foo"></vaadin-checkbox>
+      <vaadin-checkbox value="bar" label="Bar"></vaadin-checkbox>
+    `,
+  },
   {
     tagName: ComboBox.is,
     position: 'top',
