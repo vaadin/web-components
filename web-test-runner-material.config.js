@@ -1,4 +1,0 @@
-/* eslint-env node */
-import { createVisualTestsConfig } from './wtr-utils.js';
-
-export default createVisualTestsConfig('material', '130');
