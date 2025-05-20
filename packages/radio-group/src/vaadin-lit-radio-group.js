@@ -8,6 +8,7 @@ import { html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
+import { fieldShared } from '@vaadin/field-base/src/styles/field-shared-styles.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { RadioGroupMixin } from './vaadin-radio-group-mixin.js';
 import { radioGroupStyles } from './vaadin-radio-group-styles.js';
@@ -27,7 +28,7 @@ class RadioGroup extends RadioGroupMixin(ElementMixin(ThemableMixin(PolylitMixin
   }
 
   static get styles() {
-    return radioGroupStyles;
+    return [fieldShared, radioGroupStyles];
   }
 
   /** @protected */

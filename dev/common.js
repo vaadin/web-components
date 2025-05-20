@@ -26,5 +26,17 @@ addGlobalThemeStyles(
       margin: 2em 0 1.25em;
       text-box: cap alphabetic;
     }
+
+    section {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1lh 1.5lh;
+      margin: 2lh 0;
+    }
+
+    section > :is(h1, h2, h3, h4, h5, h6, p) {
+      width: 100%;
+      margin: 0;
+    }
   `,
 );
