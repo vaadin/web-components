@@ -235,6 +235,8 @@ export const TextAreaMixin = (superClass) =>
           parseFloat(inputStyle.paddingBottom) +
           parseFloat(inputStyle.marginTop) +
           parseFloat(inputStyle.marginBottom) +
+          parseFloat(inputFieldStyle.borderTopWidth) +
+          parseFloat(inputFieldStyle.borderBottomWidth) +
           parseFloat(inputFieldStyle.paddingTop) +
           parseFloat(inputFieldStyle.paddingBottom);
         const maxHeight = Math.ceil(contentHeight + marginsAndPaddings);
