@@ -5,10 +5,10 @@
  */
 import '@vaadin/tabs/src/vaadin-tabs.js';
 import './vaadin-tabsheet-scroller.js';
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
-import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
+import { css, html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { TabSheetMixin } from './vaadin-tabsheet-mixin.js';
 
@@ -59,40 +59,46 @@ import { TabSheetMixin } from './vaadin-tabsheet-mixin.js';
  * @mixes TabSheetMixin
  * @mixes ElementMixin
  * @mixes ThemableMixin
- * @mixes ControllerMixin
  */
-class TabSheet extends TabSheetMixin(ThemableMixin(ElementMixin(ControllerMixin(PolymerElement)))) {
-  static get template() {
+class TabSheet extends TabSheetMixin(ThemableMixin(ElementMixin(PolylitMixin(LitElement)))) {
+  static get is() {
+    return 'vaadin-tabsheet';
+  }
+
+  static get styles() {
+    return css`
+      :host {
+        display: flex;
+        flex-direction: column;
+      }
+
+      :host([hidden]) {
+        display: none !important;
+      }
+
+      [part='tabs-container'] {
+        position: relative;
+        display: flex;
+        align-items: center;
+      }
+
+      ::slotted([slot='tabs']) {
+        flex: 1;
+        align-self: stretch;
+        min-width: 8em;
+      }
+
+      [part='content'] {
+        position: relative;
+        flex: 1;
+        box-sizing: border-box;
+      }
+    `;
+  }
+
+  /** @protected */
+  render() {
     return html`
-      <style>
-        :host([hidden]) {
-          display: none !important;
-        }
-
-        :host {
-          display: flex;
-          flex-direction: column;
-        }
-
-        [part='tabs-container'] {
-          position: relative;
-          display: flex;
-          align-items: center;
-        }
-
-        ::slotted([slot='tabs']) {
-          flex: 1;
-          align-self: stretch;
-          min-width: 8em;
-        }
-
-        [part='content'] {
-          position: relative;
-          flex: 1;
-          box-sizing: border-box;
-        }
-      </style>
-
       <div part="tabs-container">
         <slot name="prefix"></slot>
         <slot name="tabs"></slot>
@@ -104,10 +110,6 @@ class TabSheet extends TabSheetMixin(ThemableMixin(ElementMixin(ControllerMixin(
         <slot id="panel-slot"></slot>
       </vaadin-tabsheet-scroller>
     `;
-  }
-
-  static get is() {
-    return 'vaadin-tabsheet';
   }
 }
 
