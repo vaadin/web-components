@@ -138,22 +138,10 @@ Run tests for Lumo:
 yarn test:lumo
 ```
 
-Run tests for Material:
-
-```sh
-yarn test:material
-```
-
 Update reference screenshots for Lumo:
 
 ```sh
 yarn update:lumo
-```
-
-Update reference screenshots for Material:
-
-```sh
-yarn update:material
 ```
 
 Update screenshots for single package:
