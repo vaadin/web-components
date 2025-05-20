@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, nextRender, oneEvent } from '@vaadin/testing-helpers';
+import { fixtureSync, nextRender, nextUpdate, oneEvent } from '@vaadin/testing-helpers';
 import '../../vaadin-notification.js';
 
 describe('vaadin-notification', () => {
@@ -22,11 +22,13 @@ describe('vaadin-notification', () => {
 
   it('card theme', async () => {
     notification.setAttribute('theme', 'custom');
+    await nextUpdate(notification);
     await expect(card).dom.to.equalSnapshot();
   });
 
   it('card class', async () => {
     notification.overlayClass = 'custom';
+    await nextUpdate(notification);
     await expect(card).dom.to.equalSnapshot();
   });
 
