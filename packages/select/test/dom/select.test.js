@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { aTimeout, fixtureSync, nextFrame, oneEvent } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, nextFrame, nextUpdate, oneEvent } from '@vaadin/testing-helpers';
 import '../../src/vaadin-select.js';
 import { resetUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 
@@ -23,11 +23,13 @@ describe('vaadin-select', () => {
 
     it('label', async () => {
       select.label = 'Label';
+      await nextUpdate(select);
       await expect(select).dom.to.equalSnapshot();
     });
 
     it('placeholder', async () => {
       select.placeholder = 'Placeholder';
+      await nextUpdate(select);
       await expect(select).dom.to.equalSnapshot();
     });
 
@@ -48,6 +50,7 @@ describe('vaadin-select', () => {
 
     it('helper', async () => {
       select.helperText = 'Helper';
+      await nextUpdate(select);
       await expect(select).dom.to.equalSnapshot();
     });
 
@@ -83,6 +86,7 @@ describe('vaadin-select', () => {
 
       it('overlay class', async () => {
         select.overlayClass = 'custom select-overlay';
+        await nextUpdate(select);
         await expect(overlay).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
       });
     });
@@ -95,21 +99,25 @@ describe('vaadin-select', () => {
 
     it('disabled', async () => {
       select.disabled = true;
+      await nextUpdate(select);
       await expect(select).shadowDom.to.equalSnapshot();
     });
 
     it('readonly', async () => {
       select.readonly = true;
+      await nextUpdate(select);
       await expect(select).shadowDom.to.equalSnapshot();
     });
 
     it('invalid', async () => {
       select.invalid = true;
+      await nextUpdate(select);
       await expect(select).shadowDom.to.equalSnapshot();
     });
 
     it('theme', async () => {
       select.setAttribute('theme', 'align-right');
+      await nextUpdate(select);
       await expect(select).shadowDom.to.equalSnapshot();
     });
   });
