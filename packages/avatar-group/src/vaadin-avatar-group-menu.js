@@ -15,7 +15,6 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  *
  * @customElement
  * @extends HTMLElement
- * @mixes ControllerMixin
  * @mixes DirMixin
  * @mixes ListMixin
  * @mixes ThemableMixin

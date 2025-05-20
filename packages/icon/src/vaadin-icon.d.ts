@@ -3,7 +3,6 @@
  * Copyright (c) 2021 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { IconMixin } from './vaadin-icon-mixin.js';
@@ -47,7 +46,7 @@ import { IconMixin } from './vaadin-icon-mixin.js';
  * }
  * ```
  */
-declare class Icon extends ThemableMixin(ElementMixin(ControllerMixin(IconMixin(HTMLElement)))) {}
+declare class Icon extends ThemableMixin(ElementMixin(IconMixin(HTMLElement))) {}
 
 declare global {
   interface HTMLElementTagNameMap {
