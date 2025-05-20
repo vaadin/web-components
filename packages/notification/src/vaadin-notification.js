@@ -3,20 +3,14 @@
  * Copyright (c) 2017 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { css, html, LitElement } from 'lit';
+import { ifDefined } from 'lit/directives/if-defined.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
-import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
+import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { NotificationContainerMixin, NotificationMixin } from './vaadin-notification-mixin.js';
 import { notificationCardStyles, notificationContainerStyles } from './vaadin-notification-styles.js';
-
-registerStyles('vaadin-notification-container', notificationContainerStyles, {
-  moduleId: 'vaadin-notification-container-styles',
-});
-
-registerStyles('vaadin-notification-card', notificationCardStyles, {
-  moduleId: 'vaadin-notification-card-styles',
-});
 
 /**
  * An element used internally by `<vaadin-notification>`. Not intended to be used separately.
@@ -28,8 +22,17 @@ registerStyles('vaadin-notification-card', notificationCardStyles, {
  * @mixes ThemableMixin
  * @private
  */
-class NotificationContainer extends NotificationContainerMixin(ThemableMixin(ElementMixin(PolymerElement))) {
-  static get template() {
+class NotificationContainer extends NotificationContainerMixin(ThemableMixin(ElementMixin(PolylitMixin(LitElement)))) {
+  static get is() {
+    return 'vaadin-notification-container';
+  }
+
+  static get styles() {
+    return notificationContainerStyles;
+  }
+
+  /** @protected */
+  render() {
     return html`
       <div region="top-stretch"><slot name="top-stretch"></slot></div>
       <div region-group="top">
@@ -46,10 +49,6 @@ class NotificationContainer extends NotificationContainerMixin(ThemableMixin(Ele
       <div region="bottom-stretch"><slot name="bottom-stretch"></slot></div>
     `;
   }
-
-  static get is() {
-    return 'vaadin-notification-container';
-  }
 }
 
 /**
@@ -60,8 +59,17 @@ class NotificationContainer extends NotificationContainerMixin(ThemableMixin(Ele
  * @mixes ThemableMixin
  * @private
  */
-class NotificationCard extends ThemableMixin(PolymerElement) {
-  static get template() {
+class NotificationCard extends ThemableMixin(PolylitMixin(LitElement)) {
+  static get is() {
+    return 'vaadin-notification-card';
+  }
+
+  static get styles() {
+    return notificationCardStyles;
+  }
+
+  /** @protected */
+  render() {
     return html`
       <div part="overlay">
         <div part="content">
@@ -69,10 +77,6 @@ class NotificationCard extends ThemableMixin(PolymerElement) {
         </div>
       </div>
     `;
-  }
-
-  static get is() {
-    return 'vaadin-notification-card';
   }
 
   /** @protected */
@@ -134,24 +138,34 @@ class NotificationCard extends ThemableMixin(PolymerElement) {
  * @mixes NotificationMixin
  * @mixes ElementMixin
  */
-class Notification extends NotificationMixin(ElementMixin(PolymerElement)) {
-  static get template() {
+class Notification extends NotificationMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElement)))) {
+  static get is() {
+    return 'vaadin-notification';
+  }
+
+  static get styles() {
+    return css`
+      :host {
+        display: none !important;
+      }
+    `;
+  }
+
+  /** @protected */
+  render() {
     return html`
-      <style>
-        :host {
-          display: none !important;
-        }
-      </style>
       <vaadin-notification-card
-        theme$="[[_theme]]"
-        aria-live$="[[__computeAriaLive(assertive)]]"
+        theme="${ifDefined(this._theme)}"
+        aria-live="${this.__computeAriaLive(this.assertive)}"
       ></vaadin-notification-card>
     `;
   }
 
-  static get is() {
-    return 'vaadin-notification';
-  }
+  /**
+   * Fired when the notification is closed.
+   *
+   * @event closed
+   */
 }
 
 defineCustomElement(NotificationContainer);
