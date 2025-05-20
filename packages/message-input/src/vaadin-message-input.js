@@ -5,9 +5,10 @@
  */
 import '@vaadin/button/src/vaadin-button.js';
 import '@vaadin/text-area/src/vaadin-text-area.js';
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { css, html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { MessageInputMixin } from './vaadin-message-input-mixin.js';
 
@@ -29,42 +30,46 @@ import { MessageInputMixin } from './vaadin-message-input-mixin.js';
  * @mixes ThemableMixin
  * @mixes ElementMixin
  */
-class MessageInput extends MessageInputMixin(ElementMixin(ThemableMixin(PolymerElement))) {
-  static get template() {
+class MessageInput extends MessageInputMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElement)))) {
+  static get is() {
+    return 'vaadin-message-input';
+  }
+
+  static get styles() {
+    return css`
+      :host {
+        align-items: flex-start;
+        box-sizing: border-box;
+        display: flex;
+        max-height: 50vh;
+        overflow: hidden;
+        flex-shrink: 0;
+      }
+
+      :host([hidden]) {
+        display: none !important;
+      }
+
+      ::slotted([slot='button']) {
+        flex-shrink: 0;
+      }
+
+      ::slotted([slot='textarea']) {
+        align-self: stretch;
+        flex-grow: 1;
+      }
+    `;
+  }
+
+  /** @protected */
+  render() {
     return html`
-      <style>
-        :host {
-          align-items: flex-start;
-          box-sizing: border-box;
-          display: flex;
-          max-height: 50vh;
-          overflow: hidden;
-          flex-shrink: 0;
-        }
-
-        :host([hidden]) {
-          display: none !important;
-        }
-
-        ::slotted([slot='button']) {
-          flex-shrink: 0;
-        }
-
-        ::slotted([slot='textarea']) {
-          align-self: stretch;
-          flex-grow: 1;
-        }
-      </style>
       <slot name="textarea"></slot>
 
       <slot name="button"></slot>
 
       <slot name="tooltip"></slot>
     `;
-  }
-
-  static get is() {
-    return 'vaadin-message-input';
   }
 }
 
