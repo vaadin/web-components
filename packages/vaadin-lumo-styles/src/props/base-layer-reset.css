@@ -1,5 +1,5 @@
 @layer vaadin.base {
-  html {
+  :is(html, #id) {
     --vaadin-focus-ring-color: revert-layer;
     --vaadin-focus-ring-width: revert-layer;
   }
