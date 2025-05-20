@@ -4,14 +4,13 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import './vaadin-tab.js';
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
-import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
+import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { TabsMixin } from './vaadin-tabs-mixin.js';
 import { tabsStyles } from './vaadin-tabs-styles.js';
-
-registerStyles('vaadin-tabs', tabsStyles, { moduleId: 'vaadin-tabs-styles' });
 
 /**
  * `<vaadin-tabs>` is a Web Component for organizing and grouping content into sections.
@@ -53,21 +52,26 @@ registerStyles('vaadin-tabs', tabsStyles, { moduleId: 'vaadin-tabs-styles' });
  * @mixes TabsMixin
  * @mixes ThemableMixin
  */
-class Tabs extends TabsMixin(ElementMixin(ThemableMixin(PolymerElement))) {
-  static get template() {
+class Tabs extends TabsMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElement)))) {
+  static get is() {
+    return 'vaadin-tabs';
+  }
+
+  static get styles() {
+    return [tabsStyles];
+  }
+
+  /** @protected */
+  render() {
     return html`
-      <div on-click="_scrollBack" part="back-button" aria-hidden="true"></div>
+      <div @click="${this._scrollBack}" part="back-button" aria-hidden="true"></div>
 
       <div id="scroll" part="tabs">
         <slot></slot>
       </div>
 
-      <div on-click="_scrollForward" part="forward-button" aria-hidden="true"></div>
+      <div @click="${this._scrollForward}" part="forward-button" aria-hidden="true"></div>
     `;
-  }
-
-  static get is() {
-    return 'vaadin-tabs';
   }
 }
 
