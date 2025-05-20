@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, oneEvent } from '@vaadin/testing-helpers';
+import { fixtureSync, nextUpdate, oneEvent } from '@vaadin/testing-helpers';
 import '../../src/vaadin-tooltip.js';
 import { resetUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 
@@ -35,6 +35,7 @@ describe('vaadin-tooltip', () => {
   ].forEach((position) => {
     it(position, async () => {
       tooltip.position = position;
+      await nextUpdate(tooltip);
       await expect(tooltip).shadowDom.to.equalSnapshot();
     });
   });
@@ -55,6 +56,7 @@ describe('vaadin-tooltip', () => {
 
     it('overlay class', async () => {
       tooltip.overlayClass = 'custom tooltip-overlay';
+      await nextUpdate(tooltip);
       await expect(overlay).dom.to.equalSnapshot();
     });
   });
