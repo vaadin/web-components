@@ -3,14 +3,13 @@
  * Copyright (c) 2017 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
-import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
+import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { progressBarStyles } from './vaadin-progress-bar-styles.js';
 import { ProgressMixin } from './vaadin-progress-mixin.js';
-
-registerStyles('vaadin-progress-bar', progressBarStyles, { moduleId: 'vaadin-progress-bar-styles' });
 
 /**
  * `<vaadin-progress-bar>` is a Web Component for progress bars.
@@ -49,12 +48,17 @@ registerStyles('vaadin-progress-bar', progressBarStyles, { moduleId: 'vaadin-pro
  * @mixes ThemableMixin
  * @mixes ElementMixin
  */
-class ProgressBar extends ElementMixin(ThemableMixin(ProgressMixin(PolymerElement))) {
+class ProgressBar extends ProgressMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElement)))) {
   static get is() {
     return 'vaadin-progress-bar';
   }
 
-  static get template() {
+  static get styles() {
+    return progressBarStyles;
+  }
+
+  /** @protected */
+  render() {
     return html`
       <div part="bar">
         <div part="value"></div>
