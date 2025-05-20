@@ -3,14 +3,13 @@
  * Copyright (c) 2021 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
-import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
+import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { VirtualListMixin } from './vaadin-virtual-list-mixin.js';
 import { virtualListStyles } from './vaadin-virtual-list-styles.js';
-
-registerStyles('vaadin-virtual-list', virtualListStyles, { moduleId: 'vaadin-virtual-list-styles' });
 
 /**
  * `<vaadin-virtual-list>` is a Web Component for displaying a virtual/infinite list of items.
@@ -41,17 +40,22 @@ registerStyles('vaadin-virtual-list', virtualListStyles, { moduleId: 'vaadin-vir
  * @mixes ThemableMixin
  * @mixes VirtualListMixin
  */
-class VirtualList extends ElementMixin(ThemableMixin(VirtualListMixin(PolymerElement))) {
-  static get template() {
+class VirtualList extends VirtualListMixin(ThemableMixin(ElementMixin(PolylitMixin(LitElement)))) {
+  static get is() {
+    return 'vaadin-virtual-list';
+  }
+
+  static get styles() {
+    return [virtualListStyles];
+  }
+
+  /** @protected */
+  render() {
     return html`
       <div id="items">
         <slot></slot>
       </div>
     `;
-  }
-
-  static get is() {
-    return 'vaadin-virtual-list';
   }
 }
 
