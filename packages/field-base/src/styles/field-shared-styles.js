@@ -24,6 +24,13 @@ export const fieldShared = css`
     display: none !important;
   }
 
+  /* The label, helper text and the error message should neither grow nor shrink. */
+  [part='label'],
+  [part='helper-text'],
+  [part='error-message'] {
+    flex: none;
+  }
+
   :host(:not([has-label])) [part='label'],
   :host(:not([has-helper])) [part='helper-text'],
   :host(:not([has-error-message])) [part='error-message'] {
@@ -48,6 +55,10 @@ export const fieldShared = css`
 
   :host(:not([required])) [part='required-indicator'] {
     display: none;
+  }
+
+  [part='input-field'] {
+    flex: auto;
   }
 
   :host([readonly]) [part='input-field'] {
