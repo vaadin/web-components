@@ -3,13 +3,12 @@
  * Copyright (c) 2017 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
-import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
+import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { verticalLayoutStyles } from './vaadin-vertical-layout-styles.js';
-
-registerStyles('vaadin-vertical-layout', verticalLayoutStyles, { moduleId: 'vaadin-vertical-layout-styles' });
 
 /**
  * `<vaadin-vertical-layout>` provides a simple way to vertically align your HTML elements.
@@ -37,13 +36,18 @@ registerStyles('vaadin-vertical-layout', verticalLayoutStyles, { moduleId: 'vaad
  * @mixes ThemableMixin
  * @mixes ElementMixin
  */
-class VerticalLayout extends ElementMixin(ThemableMixin(PolymerElement)) {
-  static get template() {
-    return html`<slot></slot>`;
-  }
-
+class VerticalLayout extends ThemableMixin(ElementMixin(PolylitMixin(LitElement))) {
   static get is() {
     return 'vaadin-vertical-layout';
+  }
+
+  static get styles() {
+    return verticalLayoutStyles;
+  }
+
+  /** @protected */
+  render() {
+    return html`<slot></slot>`;
   }
 }
 
