@@ -48,6 +48,7 @@ const card = css`
     --_card-border-inset: calc(-1 * var(--vaadin-card-border-width));
     --_card-border-pseudo-radius: calc(var(--vaadin-card-border-radius) + var(--vaadin-card-border-width));
   }
+
   :host([theme~='elevated']:not([theme~='outlined'])) {
     --vaadin-card-border-color: var(--lumo-contrast-10pct);
   }
