@@ -11,7 +11,6 @@ export const inputContainerStyles = css`
     :host {
       display: flex;
       align-items: center;
-      flex: 0 1 auto;
       --_radius: var(--vaadin-input-field-border-radius, var(--_vaadin-radius-m));
       border-radius:
       /* See https://developer.mozilla.org/en-US/docs/Web/CSS/border-radius */
@@ -47,8 +46,10 @@ export const inputContainerStyles = css`
     }
 
     /* Reset the native input styles */
-    ::slotted(input) {
+    ::slotted(:is(input, textarea)) {
       appearance: none;
+      align-self: stretch;
+      box-sizing: border-box;
       flex: auto;
       white-space: nowrap;
       overflow: hidden;
@@ -61,6 +62,7 @@ export const inputContainerStyles = css`
       border-radius: 0;
       min-width: 0;
       font: inherit;
+      font-size: 1em;
       color: inherit;
       background: transparent;
       cursor: inherit;
@@ -70,18 +72,18 @@ export const inputContainerStyles = css`
       flex: none;
     }
 
-    slot {
+    slot[name$='fix'] {
       cursor: auto;
     }
 
     ::slotted(:is(input, textarea))::placeholder {
-      /* Use ::slotted(input:placeholder-shown) in themes to style the placeholder. */
+      /* Use ::slotted(:is(input, textarea):placeholder-shown) to style the placeholder */
       /* because ::slotted(...)::placeholder does not work in Safari. */
       font: inherit;
       color: inherit;
     }
 
-    ::slotted(input:placeholder-shown) {
+    ::slotted(:is(input, textarea):placeholder-shown) {
       color: var(--vaadin-input-field-placeholder-color, var(--_vaadin-color));
     }
 
