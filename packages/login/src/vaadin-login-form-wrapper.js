@@ -3,14 +3,11 @@
  * Copyright (c) 2018 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
-import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
+import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { loginFormWrapperStyles } from './vaadin-login-form-wrapper-styles.js';
-
-registerStyles('vaadin-login-form-wrapper', loginFormWrapperStyles, {
-  moduleId: 'vaadin-login-form-wrapper-styles',
-});
 
 /**
  * An element used internally by `<vaadin-login-form>`. Not intended to be used separately.
@@ -19,34 +16,13 @@ registerStyles('vaadin-login-form-wrapper', loginFormWrapperStyles, {
  * @mixes ThemableMixin
  * @private
  */
-class LoginFormWrapper extends ThemableMixin(PolymerElement) {
-  static get template() {
-    return html`
-      <section part="form">
-        <div part="form-title" part="form-title" role="heading" aria-level$="[[headingLevel]]">[[i18n.form.title]]</div>
-        <div part="error-message" hidden$="[[!error]]">
-          <strong part="error-message-title">[[i18n.errorMessage.title]]</strong>
-          <p part="error-message-description">[[i18n.errorMessage.message]]</p>
-        </div>
-
-        <slot name="form"></slot>
-
-        <slot name="custom-form-area"></slot>
-
-        <slot name="submit"></slot>
-
-        <slot name="forgot-password"></slot>
-
-        <div part="footer">
-          <slot name="footer"></slot>
-          <p>[[i18n.additionalInformation]]</p>
-        </div>
-      </section>
-    `;
-  }
-
+class LoginFormWrapper extends ThemableMixin(PolylitMixin(LitElement)) {
   static get is() {
     return 'vaadin-login-form-wrapper';
+  }
+
+  static get styles() {
+    return loginFormWrapperStyles;
   }
 
   static get properties() {
@@ -76,6 +52,32 @@ class LoginFormWrapper extends ThemableMixin(PolymerElement) {
         type: Number,
       },
     };
+  }
+
+  /** @protected */
+  render() {
+    return html`
+      <section part="form">
+        <div part="form-title" role="heading" aria-level="${this.headingLevel}">${this.i18n.form.title}</div>
+        <div part="error-message" ?hidden="${!this.error}">
+          <strong part="error-message-title">${this.i18n.errorMessage.title}</strong>
+          <p part="error-message-description">${this.i18n.errorMessage.message}</p>
+        </div>
+
+        <slot name="form"></slot>
+
+        <slot name="custom-form-area"></slot>
+
+        <slot name="submit"></slot>
+
+        <slot name="forgot-password"></slot>
+
+        <div part="footer">
+          <slot name="footer"></slot>
+          <p>${this.i18n.additionalInformation}</p>
+        </div>
+      </section>
+    `;
   }
 }
 

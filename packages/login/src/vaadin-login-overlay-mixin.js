@@ -32,6 +32,7 @@ export const LoginOverlayMixin = (superClass) =>
         opened: {
           type: Boolean,
           value: false,
+          sync: true,
           observer: '_onOpenedChange',
         },
 

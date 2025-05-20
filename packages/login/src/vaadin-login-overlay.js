@@ -5,9 +5,11 @@
  */
 import './vaadin-login-form.js';
 import './vaadin-login-overlay-wrapper.js';
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { html, LitElement } from 'lit';
+import { ifDefined } from 'lit/directives/if-defined.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { LoginOverlayMixin } from './vaadin-login-overlay-mixin.js';
 
@@ -50,34 +52,41 @@ import { LoginOverlayMixin } from './vaadin-login-overlay-mixin.js';
  * @mixes ThemableMixin
  * @mixes LoginOverlayMixin
  */
-class LoginOverlay extends LoginOverlayMixin(ElementMixin(ThemableMixin(PolymerElement))) {
-  static get template() {
+class LoginOverlay extends LoginOverlayMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElement)))) {
+  static get is() {
+    return 'vaadin-login-overlay';
+  }
+
+  /** @protected */
+  render() {
     return html`
       <vaadin-login-overlay-wrapper
         id="vaadinLoginOverlayWrapper"
-        opened="{{opened}}"
+        .opened="${this.opened}"
+        .title="${this.title}"
+        .description="${this.description}"
+        .headingLevel="${this.headingLevel}"
         role="dialog"
         focus-trap
         with-backdrop
-        title="[[title]]"
-        description="[[description]]"
-        heading-level="[[headingLevel]]"
-        theme$="[[_theme]]"
-        on-vaadin-overlay-escape-press="_preventClosingLogin"
-        on-vaadin-overlay-outside-click="_preventClosingLogin"
+        theme="${ifDefined(this._theme)}"
+        @vaadin-overlay-escape-press="${this._preventClosingLogin}"
+        @vaadin-overlay-outside-click="${this._preventClosingLogin}"
+        @opened-changed="${this._onOpenedChanged}"
       >
         <vaadin-login-form
           theme="with-overlay"
           id="vaadinLoginForm"
-          action="[[action]]"
-          disabled="{{disabled}}"
-          error="{{error}}"
-          heading-level="[[__computeHeadingLevel(headingLevel)]]"
-          no-autofocus="[[noAutofocus]]"
-          no-forgot-password="[[noForgotPassword]]"
-          i18n="{{__effectiveI18n}}"
-          on-login="_retargetEvent"
-          on-forgot-password="_retargetEvent"
+          .action="${this.action}"
+          .disabled="${this.disabled}"
+          .error="${this.error}"
+          .noAutofocus="${this.noAutofocus}"
+          .noForgotPassword="${this.noForgotPassword}"
+          .headingLevel="${this.__computeHeadingLevel(this.headingLevel)}"
+          .i18n="${this.__effectiveI18n}"
+          @login="${this._retargetEvent}"
+          @forgot-password="${this._retargetEvent}"
+          @disabled-changed="${this._onDisabledChanged}"
         ></vaadin-login-form>
       </vaadin-login-overlay-wrapper>
 
@@ -88,8 +97,14 @@ class LoginOverlay extends LoginOverlayMixin(ElementMixin(ThemableMixin(PolymerE
     `;
   }
 
-  static get is() {
-    return 'vaadin-login-overlay';
+  /** @private */
+  _onOpenedChanged(event) {
+    this.opened = event.detail.value;
+  }
+
+  /** @private */
+  _onDisabledChanged(event) {
+    this.disabled = event.detail.value;
   }
 }
 
