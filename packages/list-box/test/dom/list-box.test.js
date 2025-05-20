@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync } from '@vaadin/testing-helpers';
+import { fixtureSync, nextUpdate } from '@vaadin/testing-helpers';
 import '../../src/vaadin-list-box.js';
 
 describe('vaadin-list-box', () => {
@@ -16,6 +16,7 @@ describe('vaadin-list-box', () => {
 
     it('multiple', async () => {
       listBox.multiple = true;
+      await nextUpdate(listBox);
       await expect(listBox).dom.to.equalSnapshot();
     });
   });
