@@ -8,14 +8,13 @@
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
-import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
+import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { MapMixin } from './vaadin-map-mixin.js';
 import { mapStyles } from './vaadin-map-styles.js';
-
-registerStyles('vaadin-map', mapStyles, { moduleId: 'vaadin-map-styles' });
 
 /**
  * `vaadin-map` is a web component for displaying web maps.
@@ -57,7 +56,7 @@ registerStyles('vaadin-map', mapStyles, { moduleId: 'vaadin-map-styles' });
  * @mixes ThemableMixin
  * @mixes ElementMixin
  */
-class Map extends MapMixin(ThemableMixin(ElementMixin(PolymerElement))) {
+class Map extends MapMixin(ThemableMixin(ElementMixin(PolylitMixin(LitElement)))) {
   static get is() {
     return 'vaadin-map';
   }
@@ -66,7 +65,12 @@ class Map extends MapMixin(ThemableMixin(ElementMixin(PolymerElement))) {
     return 'vaadin-map';
   }
 
-  static get template() {
+  static get styles() {
+    return mapStyles;
+  }
+
+  /** @protected */
+  render() {
     return html``;
   }
 }
