@@ -37,8 +37,7 @@
     "@polymer/polymer": "^3.0.0",
     "@vaadin/component-base": "25.0.0-alpha0",
     "@vaadin/number-field": "25.0.0-alpha0",
-    "@vaadin/vaadin-lumo-styles": "25.0.0-alpha0",
-    "@vaadin/vaadin-material-styles": "25.0.0-alpha0"
+    "@vaadin/vaadin-lumo-styles": "25.0.0-alpha0"
   },
   "devDependencies": {
     "@vaadin/chai-plugins": "25.0.0-alpha0",
