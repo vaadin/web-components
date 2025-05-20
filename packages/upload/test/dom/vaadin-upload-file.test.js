@@ -1,11 +1,11 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync } from '@vaadin/testing-helpers';
+import { fixtureSync, nextUpdate } from '@vaadin/testing-helpers';
 import '../../src/vaadin-upload-file.js';
 
 describe('vaadin-upload-file', () => {
   let uploadFile;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     uploadFile = fixtureSync('<vaadin-upload-file></vaadin-upload-file>');
 
     const name = 'Workflow.pdf';
@@ -16,6 +16,7 @@ describe('vaadin-upload-file', () => {
     uploadFile.fileName = name;
     uploadFile.progress = progress;
     uploadFile.status = status;
+    await nextUpdate(uploadFile);
   });
 
   describe('shadow', () => {

@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame, nextUpdate } from '@vaadin/testing-helpers';
 import '../../src/vaadin-upload.js';
 
 describe('vaadin-upload', () => {
@@ -32,11 +32,13 @@ describe('vaadin-upload', () => {
 
     it('max files', async () => {
       upload.maxFiles = 1;
+      await nextUpdate(upload);
       await expect(upload).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
     });
 
     it('disabled', async () => {
       upload.disabled = true;
+      await nextUpdate(upload);
       await expect(upload).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
     });
   });

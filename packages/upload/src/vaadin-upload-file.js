@@ -5,14 +5,12 @@
  */
 import '@vaadin/progress-bar/src/vaadin-progress-bar.js';
 import './vaadin-upload-icons.js';
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
-import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
+import { html, LitElement, nothing } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
-import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
+import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { UploadFileMixin } from './vaadin-upload-file-mixin.js';
 import { uploadFileStyles } from './vaadin-upload-file-styles.js';
-
-registerStyles('vaadin-upload-file', uploadFileStyles, { moduleId: 'vaadin-upload-file-styles' });
 
 /**
  * `<vaadin-upload-file>` element represents a file in the file list of `<vaadin-upload>`.
@@ -56,18 +54,27 @@ registerStyles('vaadin-upload-file', uploadFileStyles, { moduleId: 'vaadin-uploa
  * @mixes UploadFileMixin
  * @mixes ThemableMixin
  */
-class UploadFile extends UploadFileMixin(ThemableMixin(ControllerMixin(PolymerElement))) {
-  static get template() {
+class UploadFile extends UploadFileMixin(ThemableMixin(PolylitMixin(LitElement))) {
+  static get is() {
+    return 'vaadin-upload-file';
+  }
+
+  static get styles() {
+    return uploadFileStyles;
+  }
+
+  /** @protected */
+  render() {
     return html`
       <div part="row">
         <div part="info">
-          <div part="done-icon" hidden$="[[!complete]]" aria-hidden="true"></div>
-          <div part="warning-icon" hidden$="[[!errorMessage]]" aria-hidden="true"></div>
+          <div part="done-icon" ?hidden="${!this.complete}" aria-hidden="true"></div>
+          <div part="warning-icon" ?hidden="${!this.errorMessage}" aria-hidden="true"></div>
 
           <div part="meta">
-            <div part="name" id="name">[[fileName]]</div>
-            <div part="status" hidden$="[[!status]]" id="status">[[status]]</div>
-            <div part="error" id="error" hidden$="[[!errorMessage]]">[[errorMessage]]</div>
+            <div part="name" id="name">${this.fileName}</div>
+            <div part="status" ?hidden="${!this.status}" id="status">${this.status}</div>
+            <div part="error" id="error" ?hidden="${!this.errorMessage}">${this.errorMessage}</div>
           </div>
         </div>
         <div part="commands">
@@ -75,29 +82,29 @@ class UploadFile extends UploadFileMixin(ThemableMixin(ControllerMixin(PolymerEl
             type="button"
             part="start-button"
             file-event="file-start"
-            on-click="_fireFileEvent"
-            hidden$="[[!held]]"
-            disabled$="[[disabled]]"
-            aria-label$="[[i18n.file.start]]"
+            @click="${this._fireFileEvent}"
+            ?hidden="${!this.held}"
+            ?disabled="${this.disabled}"
+            aria-label="${this.i18n ? this.i18n.file.start : nothing}"
             aria-describedby="name"
           ></button>
           <button
             type="button"
             part="retry-button"
             file-event="file-retry"
-            on-click="_fireFileEvent"
-            hidden$="[[!errorMessage]]"
-            disabled$="[[disabled]]"
-            aria-label$="[[i18n.file.retry]]"
+            @click="${this._fireFileEvent}"
+            ?hidden="${!this.errorMessage}"
+            ?disabled="${this.disabled}"
+            aria-label="${this.i18n ? this.i18n.file.retry : nothing}"
             aria-describedby="name"
           ></button>
           <button
             type="button"
             part="remove-button"
             file-event="file-abort"
-            on-click="_fireFileEvent"
-            disabled$="[[disabled]]"
-            aria-label$="[[i18n.file.remove]]"
+            @click="${this._fireFileEvent}"
+            ?disabled="${this.disabled}"
+            aria-label="${this.i18n ? this.i18n.file.remove : nothing}"
             aria-describedby="name"
           ></button>
         </div>
@@ -105,10 +112,6 @@ class UploadFile extends UploadFileMixin(ThemableMixin(ControllerMixin(PolymerEl
 
       <slot name="progress"></slot>
     `;
-  }
-
-  static get is() {
-    return 'vaadin-upload-file';
   }
 
   /**
