@@ -4,7 +4,6 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import type { Constructor } from '@open-wc/dedupe-mixin';
-import type { ControllerMixinClass } from '@vaadin/component-base/src/controller-mixin.js';
 
 /**
  * Fired when the `value` property changes.
@@ -19,7 +18,7 @@ export interface GridFilterEventMap extends HTMLElementEventMap, GridFilterCusto
 
 export declare function GridFilterElementMixin<T extends Constructor<HTMLElement>>(
   base: T,
-): Constructor<ControllerMixinClass> & Constructor<GridFilterElementMixinClass> & T;
+): Constructor<GridFilterElementMixinClass> & T;
 
 declare class GridFilterElementMixinClass {
   /**

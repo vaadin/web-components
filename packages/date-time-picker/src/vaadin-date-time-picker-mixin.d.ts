@@ -6,7 +6,6 @@
 import type { Constructor } from '@open-wc/dedupe-mixin';
 import type { DisabledMixinClass } from '@vaadin/a11y-base/src/disabled-mixin.js';
 import type { FocusMixinClass } from '@vaadin/a11y-base/src/focus-mixin.js';
-import type { ControllerMixinClass } from '@vaadin/component-base/src/controller-mixin.js';
 import type { DatePickerI18n } from '@vaadin/date-picker/src/vaadin-date-picker.js';
 import type { FieldMixinClass } from '@vaadin/field-base/src/field-mixin.js';
 import type { LabelMixinClass } from '@vaadin/field-base/src/label-mixin.js';
@@ -36,8 +35,7 @@ export interface DateTimePickerI18n extends DatePickerI18n, TimePickerI18n {
  */
 export declare function DateTimePickerMixin<T extends Constructor<HTMLElement>>(
   base: T,
-): Constructor<ControllerMixinClass> &
-  Constructor<DateTimePickerMixinClass> &
+): Constructor<DateTimePickerMixinClass> &
   Constructor<DisabledMixinClass> &
   Constructor<FieldMixinClass> &
   Constructor<FocusMixinClass> &

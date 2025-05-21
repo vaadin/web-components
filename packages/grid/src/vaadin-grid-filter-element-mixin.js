@@ -4,7 +4,6 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { timeOut } from '@vaadin/component-base/src/async.js';
-import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin';
@@ -27,11 +26,9 @@ registerStyles(
 
 /**
  * @polymerMixin
- *
- * @mixes ControllerMixin
  */
 export const GridFilterElementMixin = (superClass) =>
-  class extends ControllerMixin(superClass) {
+  class extends superClass {
     static get properties() {
       return {
         /**

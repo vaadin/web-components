@@ -4,16 +4,14 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { FocusMixin } from '@vaadin/a11y-base/src/focus-mixin.js';
-import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 
 /**
  * @polymerMixin
- * @mixes ControllerMixin
  * @mixes FocusMixin
  */
 export const MessageMixin = (superClass) =>
-  class MessageMixinClass extends FocusMixin(ControllerMixin(superClass)) {
+  class MessageMixinClass extends FocusMixin(superClass) {
     static get properties() {
       return {
         /**
