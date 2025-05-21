@@ -204,11 +204,6 @@ class DashboardWidget extends DashboardItemMixin(ElementMixin(ThemableMixin(Poly
       },
 
       /* @private */
-      __rootHeadingLevel: {
-        type: Number,
-      },
-
-      /* @private */
       __isNestedWidget: {
         type: Boolean,
         value: false,
@@ -249,7 +244,6 @@ class DashboardWidget extends DashboardItemMixin(ElementMixin(ThemableMixin(Poly
         this.toggleAttribute(attr, !!wrapper[attr]);
       });
       this.__i18n = wrapper.i18n;
-      this.__rootHeadingLevel = wrapper.__rootHeadingLevel;
     }
 
     this.__updateNestedState();
@@ -271,7 +265,7 @@ class DashboardWidget extends DashboardItemMixin(ElementMixin(ThemableMixin(Poly
 
   /** @private */
   __renderWidgetTitle() {
-    let effectiveHeadingLevel = this.__rootHeadingLevel;
+    let effectiveHeadingLevel = this._rootHeadingLevel;
     // Default to 2 if not defined
     if (effectiveHeadingLevel == null) {
       effectiveHeadingLevel = 2;

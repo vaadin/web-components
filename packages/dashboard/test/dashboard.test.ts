@@ -7,6 +7,7 @@ import type { DashboardSection } from '../src/vaadin-dashboard-section.js';
 import type { DashboardWidget } from '../src/vaadin-dashboard-widget.js';
 import type { Dashboard, DashboardI18n, DashboardItem, DashboardSectionItem } from '../vaadin-dashboard.js';
 import {
+  assertHeadingLevel,
   expectLayout,
   getColumnWidths,
   getDraggable,
@@ -15,7 +16,6 @@ import {
   getRemoveButton,
   getResizeHandle,
   getScrollingContainer,
-  getTitleElement,
   setMaximumColumnWidth,
   setMinimumColumnWidth,
   setMinimumRowHeight,
@@ -775,17 +775,13 @@ describe('dashboard', () => {
 
     function assertHeadingLevels(expectedRootHeadingLevel: number) {
       const nonNestedWidget = getElementFromCell(dashboard, 0, 0) as DashboardWidget;
-      expect(getTitleElement(nonNestedWidget)?.getAttribute('aria-level')).to.equal(
-        expectedRootHeadingLevel.toString(),
-      );
+      assertHeadingLevel(nonNestedWidget, expectedRootHeadingLevel);
 
       const nestedWidget = getElementFromCell(dashboard, 1, 0) as DashboardWidget;
-      expect(getTitleElement(nestedWidget)?.getAttribute('aria-level')).to.equal(
-        (expectedRootHeadingLevel + 1).toString(),
-      );
+      assertHeadingLevel(nestedWidget, expectedRootHeadingLevel + 1);
 
       const section = nestedWidget?.closest('vaadin-dashboard-section') as DashboardSection;
-      expect(getTitleElement(section)?.getAttribute('aria-level')).to.equal(expectedRootHeadingLevel.toString());
+      assertHeadingLevel(section, expectedRootHeadingLevel);
     }
 
     it('should use custom title heading level when set on dashboard', () => {
