@@ -1,7 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import {
   defineLit,
-  definePolymer,
   escKeyDown,
   fixtureSync,
   keyboardEventFor,
@@ -11,20 +10,19 @@ import {
 } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
-import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { ClearButtonMixin } from '../src/clear-button-mixin.js';
 import { InputController } from '../src/input-controller.js';
 
-const runTests = (defineHelper, baseMixin) => {
-  const tag = defineHelper(
+describe('ClearButtonMixin', () => {
+  const tag = defineLit(
     'clear-button-mixin',
     `
       <slot name="input"></slot>
       <button id="clearButton">Clear</button>
     `,
     (Base) =>
-      class extends ClearButtonMixin(baseMixin(Base)) {
+      class extends ClearButtonMixin(PolylitMixin(Base)) {
         get clearElement() {
           return this.$.clearButton;
         }
@@ -183,12 +181,4 @@ const runTests = (defineHelper, baseMixin) => {
       expect(spy.called).to.be.false;
     });
   });
-};
-
-describe('ClearButtonMixin + Polymer', () => {
-  runTests(definePolymer, ControllerMixin);
-});
-
-describe('ClearButtonMixin + Lit', () => {
-  runTests(defineLit, PolylitMixin);
 });

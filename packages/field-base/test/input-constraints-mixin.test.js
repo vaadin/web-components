@@ -1,17 +1,16 @@
 import { expect } from '@vaadin/chai-plugins';
-import { defineLit, definePolymer, fire, fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
+import { defineLit, fire, fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { InputConstraintsMixin } from '../src/input-constraints-mixin.js';
 import { InputController } from '../src/input-controller.js';
 
-const runTests = (defineHelper, baseMixin) => {
-  const tag = defineHelper(
+describe('InputConstraintsMixin', () => {
+  const tag = defineLit(
     'input-constraints-mixin',
     '<slot name="input"></slot>',
     (Base) =>
-      class extends InputConstraintsMixin(baseMixin(Base)) {
+      class extends InputConstraintsMixin(PolylitMixin(Base)) {
         static get properties() {
           return {
             minlength: {
@@ -310,12 +309,4 @@ const runTests = (defineHelper, baseMixin) => {
       expect(field.checkValidity()).to.be.false;
     });
   });
-};
-
-describe('InputConstraintsMixin + Polymer', () => {
-  runTests(definePolymer, ControllerMixin);
-});
-
-describe('InputConstraintsMixin + Lit', () => {
-  runTests(defineLit, PolylitMixin);
 });

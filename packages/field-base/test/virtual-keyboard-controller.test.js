@@ -1,16 +1,15 @@
 import { expect } from '@vaadin/chai-plugins';
 import { sendKeys } from '@vaadin/test-runner-commands';
-import { defineLit, definePolymer, fixtureSync, touchstart } from '@vaadin/testing-helpers';
-import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
+import { defineLit, fixtureSync, touchstart } from '@vaadin/testing-helpers';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { VirtualKeyboardController } from '../src/virtual-keyboard-controller.js';
 
-const runTests = (defineHelper, baseMixin) => {
-  const tag = defineHelper(
+describe('VirtualKeyboardController', () => {
+  const tag = defineLit(
     'virtual-keyboard-controller',
     `<slot></slot>`,
     (Base) =>
-      class extends baseMixin(Base) {
+      class extends PolylitMixin(Base) {
         constructor() {
           super();
           this.inputElement = document.createElement('input');
@@ -65,12 +64,4 @@ const runTests = (defineHelper, baseMixin) => {
     await sendKeys({ press: 'Tab' });
     expect(input.inputMode).to.equal('');
   });
-};
-
-describe('VirtualKeyboardController + Polymer', () => {
-  runTests(definePolymer, ControllerMixin);
-});
-
-describe('VirtualKeyboardController + Lit', () => {
-  runTests(defineLit, PolylitMixin);
 });
