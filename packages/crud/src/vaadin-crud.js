@@ -13,15 +13,14 @@ import '@vaadin/confirm-dialog/src/vaadin-confirm-dialog.js';
 import './vaadin-crud-dialog.js';
 import './vaadin-crud-grid.js';
 import './vaadin-crud-form.js';
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
-import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
+import { html, LitElement } from 'lit';
+import { ifDefined } from 'lit/directives/if-defined.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
-import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
+import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { CrudMixin } from './vaadin-crud-mixin.js';
 import { crudStyles } from './vaadin-crud-styles.js';
-
-registerStyles('vaadin-crud', crudStyles, { moduleId: 'vaadin-crud-styles' });
 
 /**
  * `<vaadin-crud>` is a Web Component for [CRUD](https://en.wikipedia.org/wiki/Create,_read,_update_and_delete) operations.
@@ -167,13 +166,17 @@ registerStyles('vaadin-crud', crudStyles, { moduleId: 'vaadin-crud-styles' });
  *
  * @customElement
  * @extends HTMLElement
- * @mixes ControllerMixin
  * @mixes ElementMixin
  * @mixes ThemableMixin
  * @mixes CrudMixin
  */
-class Crud extends CrudMixin(ControllerMixin(ElementMixin(ThemableMixin(PolymerElement)))) {
-  static get template() {
+class Crud extends CrudMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElement)))) {
+  static get styles() {
+    return crudStyles;
+  }
+
+  /** @protected */
+  render() {
     return html`
       <div id="container">
         <div id="main">
@@ -190,7 +193,7 @@ class Crud extends CrudMixin(ControllerMixin(ElementMixin(ThemableMixin(PolymerE
           id="editor"
           role="group"
           aria-labelledby="header"
-          hidden$="[[__computeEditorHidden(editorOpened, _fullscreen, editorPosition)]]"
+          ?hidden="${this.__computeEditorHidden(this.editorOpened, this._fullscreen, this.editorPosition)}"
         >
           <div part="scroller" id="scroller">
             <div part="header" id="header">
@@ -209,36 +212,36 @@ class Crud extends CrudMixin(ControllerMixin(ElementMixin(ThemableMixin(PolymerE
 
       <vaadin-crud-dialog
         id="dialog"
-        opened="[[__computeDialogOpened(editorOpened, _fullscreen, editorPosition)]]"
-        fullscreen="[[_fullscreen]]"
-        aria-label="[[__dialogAriaLabel]]"
-        no-close-on-outside-click="[[__isDirty]]"
-        no-close-on-esc="[[__isDirty]]"
-        theme$="[[_theme]]"
-        on-opened-changed="__onDialogOpened"
+        .opened="${this.__computeDialogOpened(this.editorOpened, this._fullscreen, this.editorPosition)}"
+        .fullscreen="${this._fullscreen}"
+        .ariaLabel="${this.__dialogAriaLabel}"
+        .noCloseOnOutsideClick="${this.__isDirty}"
+        .noCloseOnEsc="${this.__isDirty}"
+        theme="${ifDefined(this._theme)}"
+        @opened-changed="${this.__onDialogOpened}"
       ></vaadin-crud-dialog>
 
       <vaadin-confirm-dialog
-        theme$="[[_theme]]"
+        theme="${ifDefined(this._theme)}"
         id="confirmCancel"
-        on-confirm="__confirmCancel"
+        @confirm="${this.__confirmCancel}"
         cancel-button-visible
-        confirm-text="[[__effectiveI18n.confirm.cancel.button.confirm]]"
-        cancel-text="[[__effectiveI18n.confirm.cancel.button.dismiss]]"
-        header="[[__effectiveI18n.confirm.cancel.title]]"
-        message="[[__effectiveI18n.confirm.cancel.content]]"
+        .confirmText="${this.__effectiveI18n.confirm.cancel.button.confirm}"
+        .cancelText="${this.__effectiveI18n.confirm.cancel.button.dismiss}"
+        .header="${this.__effectiveI18n.confirm.cancel.title}"
+        .message="${this.__effectiveI18n.confirm.cancel.content}"
         confirm-theme="primary"
       ></vaadin-confirm-dialog>
 
       <vaadin-confirm-dialog
-        theme$="[[_theme]]"
+        theme="${ifDefined(this._theme)}"
         id="confirmDelete"
-        on-confirm="__confirmDelete"
+        @confirm="${this.__confirmDelete}"
         cancel-button-visible
-        confirm-text="[[__effectiveI18n.confirm.delete.button.confirm]]"
-        cancel-text="[[__effectiveI18n.confirm.delete.button.dismiss]]"
-        header="[[__effectiveI18n.confirm.delete.title]]"
-        message="[[__effectiveI18n.confirm.delete.content]]"
+        .confirmText="${this.__effectiveI18n.confirm.delete.button.confirm}"
+        .cancelText="${this.__effectiveI18n.confirm.delete.button.dismiss}"
+        .header="${this.__effectiveI18n.confirm.delete.title}"
+        .message="${this.__effectiveI18n.confirm.delete.content}"
         confirm-theme="primary error"
       ></vaadin-confirm-dialog>
     `;

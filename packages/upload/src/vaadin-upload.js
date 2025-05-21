@@ -7,10 +7,11 @@ import '@vaadin/button/src/vaadin-button.js';
 import './vaadin-upload-icon.js';
 import './vaadin-upload-icons.js';
 import './vaadin-upload-file-list.js';
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
-import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
+import { css, html, LitElement } from 'lit';
+import { ifDefined } from 'lit/directives/if-defined.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { UploadMixin } from './vaadin-upload-mixin.js';
 
@@ -59,33 +60,39 @@ import { UploadMixin } from './vaadin-upload-mixin.js';
  *
  * @customElement
  * @extends HTMLElement
- * @mixes ControllerMixin
  * @mixes ThemableMixin
  * @mixes ElementMixin
  * @mixes UploadMixin
  */
-class Upload extends UploadMixin(ElementMixin(ThemableMixin(ControllerMixin(PolymerElement)))) {
-  static get template() {
+class Upload extends UploadMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElement)))) {
+  static get is() {
+    return 'vaadin-upload';
+  }
+
+  static get styles() {
+    return css`
+      :host {
+        display: block;
+        position: relative;
+        box-sizing: border-box;
+      }
+
+      :host([hidden]) {
+        display: none !important;
+      }
+
+      [hidden] {
+        display: none !important;
+      }
+    `;
+  }
+
+  /** @protected */
+  render() {
     return html`
-      <style>
-        :host {
-          display: block;
-          position: relative;
-          box-sizing: border-box;
-        }
-
-        :host([hidden]) {
-          display: none !important;
-        }
-
-        [hidden] {
-          display: none !important;
-        }
-      </style>
-
       <div part="primary-buttons">
         <slot name="add-button"></slot>
-        <div part="drop-label" hidden$="[[nodrop]]" id="dropLabelContainer" aria-hidden="true">
+        <div part="drop-label" ?hidden="${this.nodrop}" id="dropLabelContainer" aria-hidden="true">
           <slot name="drop-label-icon"></slot>
           <slot name="drop-label"></slot>
         </div>
@@ -96,16 +103,12 @@ class Upload extends UploadMixin(ElementMixin(ThemableMixin(ControllerMixin(Poly
         type="file"
         id="fileInput"
         hidden
-        on-change="_onFileInputChange"
-        accept$="{{accept}}"
-        multiple$="[[_isMultiple(maxFiles)]]"
-        capture$="[[capture]]"
+        @change="${this._onFileInputChange}"
+        accept="${this.accept}"
+        ?multiple="${this._isMultiple(this.maxFiles)}"
+        capture="${ifDefined(this.capture)}"
       />
     `;
-  }
-
-  static get is() {
-    return 'vaadin-upload';
   }
 
   /**

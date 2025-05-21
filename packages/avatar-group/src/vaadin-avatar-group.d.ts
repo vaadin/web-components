@@ -4,7 +4,6 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { AvatarI18n } from '@vaadin/avatar/src/vaadin-avatar.js';
-import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { AvatarGroupI18n, AvatarGroupItem, AvatarGroupMixin } from './vaadin-avatar-group-mixin.js';
@@ -51,7 +50,7 @@ export { AvatarGroupI18n, AvatarGroupItem, AvatarI18n };
  * - `<vaadin-avatar-group-menu>` - has the same API as [`<vaadin-list-box>`](#/elements/vaadin-list-box).
  * - `<vaadin-avatar-group-menu-item>` - has the same API as [`<vaadin-item>`](#/elements/vaadin-item).
  */
-declare class AvatarGroup extends AvatarGroupMixin(ElementMixin(ThemableMixin(ControllerMixin(HTMLElement)))) {}
+declare class AvatarGroup extends AvatarGroupMixin(ElementMixin(ThemableMixin(HTMLElement))) {}
 
 declare global {
   interface HTMLElementTagNameMap {

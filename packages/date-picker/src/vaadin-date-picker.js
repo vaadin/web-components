@@ -6,19 +6,19 @@
 import '@vaadin/input-container/src/vaadin-input-container.js';
 import './vaadin-date-picker-overlay.js';
 import './vaadin-date-picker-overlay-content.js';
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { html, LitElement } from 'lit';
+import { ifDefined } from 'lit/directives/if-defined.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { InputControlMixin } from '@vaadin/field-base/src/input-control-mixin.js';
 import { InputController } from '@vaadin/field-base/src/input-controller.js';
 import { LabelledInputController } from '@vaadin/field-base/src/labelled-input-controller.js';
 import { inputFieldShared } from '@vaadin/field-base/src/styles/input-field-shared-styles.js';
-import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { DatePickerMixin } from './vaadin-date-picker-mixin.js';
 import { datePickerStyles } from './vaadin-date-picker-styles.js';
-
-registerStyles('vaadin-date-picker', [inputFieldShared, datePickerStyles], { moduleId: 'vaadin-date-picker-styles' });
 
 /**
  * `<vaadin-date-picker>` is an input field that allows to enter a date by typing or by selecting from a calendar overlay.
@@ -147,30 +147,54 @@ registerStyles('vaadin-date-picker', [inputFieldShared, datePickerStyles], { mod
  * @mixes InputControlMixin
  * @mixes DatePickerMixin
  */
-class DatePicker extends DatePickerMixin(InputControlMixin(ThemableMixin(ElementMixin(PolymerElement)))) {
+class DatePicker extends DatePickerMixin(InputControlMixin(ThemableMixin(ElementMixin(PolylitMixin(LitElement))))) {
   static get is() {
     return 'vaadin-date-picker';
   }
 
-  static get template() {
+  static get styles() {
+    return [inputFieldShared, datePickerStyles];
+  }
+
+  static get properties() {
+    return {
+      /** @private */
+      _positionTarget: {
+        type: Object,
+        sync: true,
+      },
+    };
+  }
+
+  /**
+   * Used by `InputControlMixin` as a reference to the clear button element.
+   * @protected
+   * @return {!HTMLElement}
+   */
+  get clearElement() {
+    return this.$.clearButton;
+  }
+
+  /** @protected */
+  render() {
     return html`
       <div class="vaadin-date-picker-container">
         <div part="label">
           <slot name="label"></slot>
-          <span part="required-indicator" aria-hidden="true" on-click="focus"></span>
+          <span part="required-indicator" aria-hidden="true" @click="${this.focus}"></span>
         </div>
 
         <vaadin-input-container
           part="input-field"
-          readonly="[[readonly]]"
-          disabled="[[disabled]]"
-          invalid="[[invalid]]"
-          theme$="[[_theme]]"
+          .readonly="${this.readonly}"
+          .disabled="${this.disabled}"
+          .invalid="${this.invalid}"
+          theme="${ifDefined(this._theme)}"
         >
           <slot name="prefix" slot="prefix"></slot>
           <slot name="input"></slot>
           <div id="clearButton" part="clear-button" slot="suffix" aria-hidden="true"></div>
-          <div part="toggle-button" slot="suffix" aria-hidden="true" on-click="_toggle"></div>
+          <div part="toggle-button" slot="suffix" aria-hidden="true" @click="${this._toggle}"></div>
         </vaadin-input-container>
 
         <div part="helper-text">
@@ -184,27 +208,22 @@ class DatePicker extends DatePickerMixin(InputControlMixin(ThemableMixin(Element
 
       <vaadin-date-picker-overlay
         id="overlay"
-        fullscreen$="[[_fullscreen]]"
-        theme$="[[_theme]]"
-        opened="{{opened}}"
-        on-vaadin-overlay-escape-press="_onOverlayEscapePress"
-        on-vaadin-overlay-open="_onOverlayOpened"
-        on-vaadin-overlay-closing="_onOverlayClosed"
+        ?fullscreen="${this._fullscreen}"
+        theme="${ifDefined(this._theme)}"
+        .opened="${this.opened}"
+        @opened-changed="${this._onOpenedChanged}"
+        @vaadin-overlay-escape-press="${this._onOverlayEscapePress}"
+        @vaadin-overlay-open="${this._onOverlayOpened}"
+        @vaadin-overlay-close="${this._onVaadinOverlayClose}"
+        @vaadin-overlay-closing="${this._onOverlayClosed}"
         restore-focus-on-close
-        restore-focus-node="[[inputElement]]"
+        no-vertical-overlap
+        .restoreFocusNode="${this.inputElement}"
+        .positionTarget="${this._positionTarget}"
       ></vaadin-date-picker-overlay>
 
       <slot name="tooltip"></slot>
     `;
-  }
-
-  /**
-   * Used by `InputControlMixin` as a reference to the clear button element.
-   * @protected
-   * @return {!HTMLElement}
-   */
-  get clearElement() {
-    return this.$.clearButton;
   }
 
   /** @protected */
@@ -236,10 +255,15 @@ class DatePicker extends DatePickerMixin(InputControlMixin(ThemableMixin(Element
     this._tooltipController.setAriaTarget(this.inputElement);
     this._tooltipController.setShouldShow((target) => !target.opened);
 
+    this._positionTarget = this.shadowRoot.querySelector('[part="input-field"]');
+
     const toggleButton = this.shadowRoot.querySelector('[part="toggle-button"]');
     toggleButton.addEventListener('mousedown', (e) => e.preventDefault());
+  }
 
-    this.$.overlay.addEventListener('vaadin-overlay-close', this._onVaadinOverlayClose.bind(this));
+  /** @private */
+  _onOpenedChanged(event) {
+    this.opened = event.detail.value;
   }
 
   /** @private */
@@ -258,15 +282,6 @@ class DatePicker extends DatePickerMixin(InputControlMixin(ThemableMixin(Element
     } else {
       this.open();
     }
-  }
-
-  // Workaround https://github.com/vaadin/web-components/issues/2855
-  /** @protected */
-  _openedChanged(opened) {
-    super._openedChanged(opened);
-
-    this.$.overlay.positionTarget = this.shadowRoot.querySelector('[part="input-field"]');
-    this.$.overlay.noVerticalOverlap = true;
   }
 }
 

@@ -4,14 +4,13 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import '@vaadin/checkbox/src/vaadin-checkbox.js';
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
-import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
+import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { CheckboxGroupMixin } from './vaadin-checkbox-group-mixin.js';
 import { checkboxGroupStyles } from './vaadin-checkbox-group-styles.js';
-
-registerStyles('vaadin-checkbox-group', checkboxGroupStyles, { moduleId: 'vaadin-checkbox-group-styles' });
 
 /**
  * `<vaadin-checkbox-group>` is a web component that allows the user to choose several items from a group of binary choices.
@@ -62,12 +61,17 @@ registerStyles('vaadin-checkbox-group', checkboxGroupStyles, { moduleId: 'vaadin
  * @mixes ElementMixin
  * @mixes CheckboxGroupMixin
  */
-class CheckboxGroup extends CheckboxGroupMixin(ElementMixin(ThemableMixin(PolymerElement))) {
+class CheckboxGroup extends CheckboxGroupMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElement)))) {
   static get is() {
     return 'vaadin-checkbox-group';
   }
 
-  static get template() {
+  static get styles() {
+    return checkboxGroupStyles;
+  }
+
+  /** @protected */
+  render() {
     return html`
       <div class="vaadin-group-field-container">
         <div part="label">

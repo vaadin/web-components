@@ -119,7 +119,7 @@ snapshots["vaadin-form-layout auto-responsive host autoRows default"] =
   <input
     colspan="2"
     placeholder="Address"
-    style="--_grid-colspan: 2; --_grid-colstart: 1;"
+    style="--_grid-colstart: 1; --_grid-colspan: 2;"
   >
 </vaadin-form-layout>
 `;
@@ -141,7 +141,7 @@ snapshots["vaadin-form-layout auto-responsive host autoRows maxColumns < number 
   <input
     colspan="2"
     placeholder="Address"
-    style="--_grid-colspan: 2; --_grid-colstart: 1;"
+    style="--_grid-colstart: 1; --_grid-colspan: 2;"
   >
 </vaadin-form-layout>
 `;
@@ -163,7 +163,7 @@ snapshots["vaadin-form-layout auto-responsive host autoRows maxColumns > number 
   <input
     colspan="2"
     placeholder="Address"
-    style="--_grid-colspan: 2; --_grid-colstart: 1;"
+    style="--_grid-colstart: 1; --_grid-colspan: 2;"
   >
 </vaadin-form-layout>
 `;
@@ -377,7 +377,7 @@ snapshots["vaadin-form-layout auto-responsive host autoRows minColumns < number 
   <input
     colspan="2"
     placeholder="Address"
-    style="--_grid-colspan: 2; --_grid-colstart: 1;"
+    style="--_grid-colstart: 1; --_grid-colspan: 2;"
   >
 </vaadin-form-layout>
 `;
@@ -399,7 +399,7 @@ snapshots["vaadin-form-layout auto-responsive host autoRows minColumns > number 
   <input
     colspan="2"
     placeholder="Address"
-    style="--_grid-colspan: 2; --_grid-colstart: 1;"
+    style="--_grid-colstart: 1; --_grid-colspan: 2;"
   >
 </vaadin-form-layout>
 `;

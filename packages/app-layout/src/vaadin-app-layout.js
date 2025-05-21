@@ -5,15 +5,13 @@
  */
 import './detect-ios-navbar.js';
 import './safe-area-inset.js';
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
-import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
+import { html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
-import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
+import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { AppLayoutMixin } from './vaadin-app-layout-mixin.js';
 import { appLayoutStyles } from './vaadin-app-layout-styles.js';
-
-registerStyles('vaadin-app-layout', appLayoutStyles, { moduleId: 'vaadin-app-layout-styles' });
 
 /**
  * `<vaadin-app-layout>` is a Web Component providing a quick and easy way to get a common application layout structure done.
@@ -108,17 +106,25 @@ registerStyles('vaadin-app-layout', appLayoutStyles, { moduleId: 'vaadin-app-lay
  * @mixes AppLayoutMixin
  * @mixes ElementMixin
  * @mixes ThemableMixin
- * @mixes ControllerMixin
  */
-class AppLayout extends AppLayoutMixin(ElementMixin(ThemableMixin(ControllerMixin(PolymerElement)))) {
-  static get template() {
+class AppLayout extends AppLayoutMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElement)))) {
+  static get is() {
+    return 'vaadin-app-layout';
+  }
+
+  static get styles() {
+    return appLayoutStyles;
+  }
+
+  /** @protected */
+  render() {
     return html`
       <div part="navbar" id="navbarTop">
-        <slot name="navbar" on-slotchange="_updateTouchOptimizedMode"></slot>
+        <slot name="navbar" @slotchange="${this._updateTouchOptimizedMode}"></slot>
       </div>
-      <div part="backdrop" on-click="_onBackdropClick" on-touchend="_onBackdropTouchend"></div>
+      <div part="backdrop" @click="${this._onBackdropClick}" @touchend="${this._onBackdropTouchend}"></div>
       <div part="drawer" id="drawer">
-        <slot name="drawer" id="drawerSlot" on-slotchange="_updateDrawerSize"></slot>
+        <slot name="drawer" id="drawerSlot" @slotchange="${this._updateDrawerSize}"></slot>
       </div>
       <div content>
         <slot></slot>
@@ -127,13 +133,9 @@ class AppLayout extends AppLayoutMixin(ElementMixin(ThemableMixin(ControllerMixi
         <slot name="navbar-bottom"></slot>
       </div>
       <div hidden>
-        <slot id="touchSlot" name="navbar touch-optimized" on-slotchange="_updateTouchOptimizedMode"></slot>
+        <slot id="touchSlot" name="navbar touch-optimized" @slotchange="${this._updateTouchOptimizedMode}"></slot>
       </div>
     `;
-  }
-
-  static get is() {
-    return 'vaadin-app-layout';
   }
 }
 

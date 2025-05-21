@@ -5,9 +5,10 @@
  */
 import './vaadin-menu-bar-submenu.js';
 import './vaadin-menu-bar-button.js';
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { css, html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { MenuBarMixin } from './vaadin-menu-bar-mixin.js';
@@ -74,39 +75,42 @@ import { MenuBarMixin } from './vaadin-menu-bar-mixin.js';
  * @mixes MenuBarMixin
  * @mixes ThemableMixin
  */
-class MenuBar extends MenuBarMixin(ElementMixin(ThemableMixin(PolymerElement))) {
-  static get template() {
+class MenuBar extends MenuBarMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElement)))) {
+  static get is() {
+    return 'vaadin-menu-bar';
+  }
+
+  static get styles() {
+    return css`
+      :host {
+        display: block;
+      }
+
+      :host([hidden]) {
+        display: none !important;
+      }
+
+      [part='container'] {
+        position: relative;
+        display: flex;
+        width: 100%;
+        flex-wrap: nowrap;
+        overflow: hidden;
+      }
+    `;
+  }
+
+  /** @protected */
+  render() {
     return html`
-      <style>
-        :host {
-          display: block;
-        }
-
-        :host([hidden]) {
-          display: none !important;
-        }
-
-        [part='container'] {
-          position: relative;
-          display: flex;
-          width: 100%;
-          flex-wrap: nowrap;
-          overflow: hidden;
-        }
-      </style>
-
       <div part="container">
         <slot></slot>
         <slot name="overflow"></slot>
       </div>
-      <vaadin-menu-bar-submenu is-root overlay-class="[[overlayClass]]"></vaadin-menu-bar-submenu>
+      <vaadin-menu-bar-submenu is-root .overlayClass="${this.overlayClass}"></vaadin-menu-bar-submenu>
 
       <slot name="tooltip"></slot>
     `;
-  }
-
-  static get is() {
-    return 'vaadin-menu-bar';
   }
 
   /** @protected */

@@ -6,8 +6,10 @@
 import './vaadin-multi-select-combo-box-item.js';
 import './vaadin-multi-select-combo-box-overlay.js';
 import './vaadin-multi-select-combo-box-scroller.js';
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { css, html, LitElement } from 'lit';
+import { ifDefined } from 'lit/directives/if-defined.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
+import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { MultiSelectComboBoxInternalMixin } from './vaadin-multi-select-combo-box-internal-mixin.js';
 
@@ -20,29 +22,32 @@ import { MultiSelectComboBoxInternalMixin } from './vaadin-multi-select-combo-bo
  * @mixes ThemableMixin
  * @private
  */
-class MultiSelectComboBoxInternal extends MultiSelectComboBoxInternalMixin(ThemableMixin(PolymerElement)) {
+class MultiSelectComboBoxInternal extends MultiSelectComboBoxInternalMixin(ThemableMixin(PolylitMixin(LitElement))) {
   static get is() {
     return 'vaadin-multi-select-combo-box-internal';
   }
 
-  static get template() {
-    return html`
-      <style>
-        :host([opened]) {
-          pointer-events: auto;
-        }
-      </style>
+  static get styles() {
+    return css`
+      :host([opened]) {
+        pointer-events: auto;
+      }
+    `;
+  }
 
+  /** @protected */
+  render() {
+    return html`
       <slot></slot>
 
       <vaadin-multi-select-combo-box-overlay
         id="overlay"
-        opened="[[_overlayOpened]]"
-        loading$="[[loading]]"
-        theme$="[[_theme]]"
-        position-target="[[_target]]"
+        .opened="${this._overlayOpened}"
+        ?loading="${this.loading}"
+        theme="${ifDefined(this._theme)}"
+        .positionTarget="${this._target}"
         no-vertical-overlap
-        restore-focus-node="[[inputElement]]"
+        .restoreFocusNode="${this.inputElement}"
       ></vaadin-multi-select-combo-box-overlay>
     `;
   }

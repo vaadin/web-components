@@ -3,7 +3,6 @@
  * Copyright (c) 2022 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import type { Tab } from '@vaadin/tabs/src/vaadin-tab.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
@@ -69,7 +68,7 @@ export interface TabSheetEventMap extends HTMLElementEventMap, TabSheetCustomEve
  * @fires {CustomEvent} items-changed - Fired when the `items` property changes.
  * @fires {CustomEvent} selected-changed - Fired when the `selected` property changes.
  */
-declare class TabSheet extends ThemableMixin(TabSheetMixin<Tab>(ControllerMixin(ElementMixin(HTMLElement)))) {
+declare class TabSheet extends ThemableMixin(TabSheetMixin<Tab>(ElementMixin(HTMLElement))) {
   addEventListener<K extends keyof TabSheetEventMap>(
     type: K,
     listener: (this: TabSheet, ev: TabSheetEventMap[K]) => void,

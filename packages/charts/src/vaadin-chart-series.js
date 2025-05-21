@@ -8,8 +8,9 @@
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
-import { PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
+import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { ChartSeriesMixin } from './vaadin-chart-series-mixin.js';
 
 /**
@@ -59,7 +60,7 @@ import { ChartSeriesMixin } from './vaadin-chart-series-mixin.js';
  * @extends HTMLElement
  * @mixes ChartSeriesMixin
  */
-class ChartSeries extends ChartSeriesMixin(PolymerElement) {
+class ChartSeries extends ChartSeriesMixin(PolylitMixin(LitElement)) {
   static get is() {
     return 'vaadin-chart-series';
   }

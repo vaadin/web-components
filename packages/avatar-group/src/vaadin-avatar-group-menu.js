@@ -3,11 +3,11 @@
  * Copyright (c) 2020 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { css, html, LitElement } from 'lit';
 import { ListMixin } from '@vaadin/a11y-base/src/list-mixin.js';
-import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
+import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 /**
@@ -15,38 +15,32 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  *
  * @customElement
  * @extends HTMLElement
- * @mixes ControllerMixin
  * @mixes DirMixin
  * @mixes ListMixin
  * @mixes ThemableMixin
  * @protected
  */
-class AvatarGroupMenu extends ListMixin(ThemableMixin(DirMixin(ControllerMixin(PolymerElement)))) {
+class AvatarGroupMenu extends ListMixin(ThemableMixin(DirMixin(PolylitMixin(LitElement)))) {
   static get is() {
     return 'vaadin-avatar-group-menu';
   }
 
-  static get template() {
-    return html`
-      <style>
-        :host {
-          display: flex;
-        }
+  static get styles() {
+    return css`
+      :host {
+        display: flex;
+      }
 
-        :host([hidden]) {
-          display: none !important;
-        }
+      :host([hidden]) {
+        display: none !important;
+      }
 
-        [part='items'] {
-          height: 100%;
-          width: 100%;
-          overflow-y: auto;
-          -webkit-overflow-scrolling: touch;
-        }
-      </style>
-      <div part="items">
-        <slot></slot>
-      </div>
+      [part='items'] {
+        height: 100%;
+        width: 100%;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+      }
     `;
   }
 
@@ -68,6 +62,15 @@ class AvatarGroupMenu extends ListMixin(ThemableMixin(DirMixin(ControllerMixin(P
    */
   get _scrollerElement() {
     return this.shadowRoot.querySelector('[part="items"]');
+  }
+
+  /** @protected */
+  render() {
+    return html`
+      <div part="items">
+        <slot></slot>
+      </div>
+    `;
   }
 
   /** @protected */

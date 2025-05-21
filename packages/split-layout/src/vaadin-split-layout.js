@@ -3,14 +3,13 @@
  * Copyright (c) 2016 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
-import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
+import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { SplitLayoutMixin } from './vaadin-split-layout-mixin.js';
 import { splitLayoutStyles } from './vaadin-split-layout-styles.js';
-
-registerStyles('vaadin-split-layout', splitLayoutStyles, { moduleId: 'vaadin-split-layout-styles' });
 
 /**
  * `<vaadin-split-layout>` is a Web Component implementing a split layout for two
@@ -156,8 +155,17 @@ registerStyles('vaadin-split-layout', splitLayoutStyles, { moduleId: 'vaadin-spl
  * @mixes SplitLayoutMixin
  * @mixes ThemableMixin
  */
-class SplitLayout extends SplitLayoutMixin(ElementMixin(ThemableMixin(PolymerElement))) {
-  static get template() {
+class SplitLayout extends SplitLayoutMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElement)))) {
+  static get is() {
+    return 'vaadin-split-layout';
+  }
+
+  static get styles() {
+    return splitLayoutStyles;
+  }
+
+  /** @protected */
+  render() {
     return html`
       <slot id="primary" name="primary"></slot>
       <div part="splitter" id="splitter">
@@ -165,10 +173,6 @@ class SplitLayout extends SplitLayoutMixin(ElementMixin(ThemableMixin(PolymerEle
       </div>
       <slot id="secondary" name="secondary"></slot>
     `;
-  }
-
-  static get is() {
-    return 'vaadin-split-layout';
   }
 
   /**
