@@ -120,14 +120,14 @@ export default {
     },
     esbuildPlugin({ ts: true }),
 
+    // yarn start --theme=base
+    theme === 'base' && enforceBaseStylesPlugin(),
+
     // yarn start --theme=lumo (uses legacy lumo styles defined in js files)
     theme === 'lumo' && !hasPortedParam && enforceLegacyLumoPlugin(),
 
     // yarn start --theme=lumo --ported (uses base styles and lumo styles defined in css files)
     theme === 'lumo' && hasPortedParam && enforceBaseStylesPlugin(),
     theme === 'lumo' && hasPortedParam && cssImportPlugin(),
-
-    // yarn start --theme=base
-    theme === 'base' && enforceBaseStylesPlugin(),
   ].filter(Boolean),
 };

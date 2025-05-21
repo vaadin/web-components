@@ -332,17 +332,6 @@ const createVisualTestsConfig = (theme, browserVersion) => {
     ],
     plugins: [
       esbuildPlugin({ ts: true }),
-
-      // yarn test:lumo (uses legacy lumo styles defined in js files)
-      theme === 'lumo' && !hasPortedParam && enforceLegacyLumoPlugin(),
-
-      // yarn test:lumo --ported (uses base styles and lumo styles defined in css files)
-      theme === 'lumo' && hasPortedParam && enforceBaseStylesPlugin(),
-      theme === 'lumo' && hasPortedParam && cssImportPlugin(),
-
-      // yarn test:base
-      theme === 'base' && enforceBaseStylesPlugin(),
-
       visualRegressionPlugin({
         baseDir: 'packages',
         getBaselineName(args) {
@@ -358,6 +347,16 @@ const createVisualTestsConfig = (theme, browserVersion) => {
         failureThresholdType: 'percent',
         update: process.env.TEST_ENV === 'update',
       }),
+
+      // yarn test:base
+      theme === 'base' && enforceBaseStylesPlugin(),
+
+      // yarn test:lumo (uses legacy lumo styles defined in js files)
+      theme === 'lumo' && !hasPortedParam && enforceLegacyLumoPlugin(),
+
+      // yarn test:lumo --ported (uses base styles and lumo styles defined in css files)
+      theme === 'lumo' && hasPortedParam && enforceBaseStylesPlugin(),
+      theme === 'lumo' && hasPortedParam && cssImportPlugin(),
     ].filter(Boolean),
     groups,
     testRunnerHtml: getTestRunnerHtml(),
