@@ -33,7 +33,7 @@ describe('crud buttons', () => {
           `);
         }
         crud.items = [{ foo: 'bar' }];
-        await nextRender(crud._grid);
+        await nextRender();
         saveButton = crud.querySelector('[slot=save-button]');
         cancelButton = crud.querySelector('[slot=cancel-button]');
         deleteButton = crud.querySelector('[slot=delete-button]');
@@ -376,7 +376,7 @@ describe('crud buttons', () => {
           crud.editedItem = crud.items[0];
           await nextRender();
           cancelButton.click();
-          await nextRender(crud);
+          await nextRender();
           expect(crud.__isNew).not.to.be.true;
         });
 
@@ -418,7 +418,7 @@ describe('crud buttons', () => {
             crud.editOnClick = true;
             confirmCancelDialog = crud.$.confirmCancel;
             confirmCancelOverlay = confirmCancelDialog.$.dialog.$.overlay;
-            await nextRender(crud);
+            await nextRender();
             flushGrid(crud._grid);
             crud.items = [{ foo: 'bar' }, { foo: 'baz' }];
           });
@@ -973,20 +973,20 @@ describe('crud buttons', () => {
       crud = fixtureSync('<vaadin-crud style="width: 300px;"></vaadin-crud>');
       items = [{ foo: 'bar' }];
       crud.dataProvider = (_, callback) => callback(items, items.length);
-      await nextRender(crud._grid);
+      await nextRender();
       saveButton = crud.querySelector('[slot=save-button]');
       deleteButton = crud.querySelector('[slot=delete-button]');
     });
 
     it('should hide delete button on new', async () => {
       crud._newButton.click();
-      await nextRender(crud.$.dialog.$.overlay);
+      await nextRender();
       expect(deleteButton.hasAttribute('hidden')).to.be.true;
     });
 
     it('should show delete button and disable save button on edit', async () => {
       edit(items[0]);
-      await nextRender(crud.$.dialog.$.overlay);
+      await nextRender();
       expect(saveButton.hasAttribute('disabled')).to.be.true;
       expect(deleteButton.hasAttribute('hidden')).not.to.be.true;
     });
