@@ -6,42 +6,42 @@ permissions:
   contents: read
 
 jobs:
-  # base:
-  #   name: Base
-  #   runs-on: ubuntu-22.04
-  #   if: github.repository_owner == 'vaadin'
+  base:
+    name: Base
+    runs-on: ubuntu-22.04
+    if: github.repository_owner == 'vaadin'
 
-  #   steps:
-  #     - uses: actions/checkout@v4
-  #       with:
-  #         fetch-depth: '0'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: '0'
 
-  #     - name: Setup Node
-  #       uses: actions/setup-node@v4
-  #       with:
-  #         node-version: '22'
-  #         cache: 'yarn'
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'yarn'
 
-  #     - name: Install Dependencies
-  #       run: yarn --frozen-lockfile --no-progress --non-interactive
+      - name: Install Dependencies
+        run: yarn --frozen-lockfile --no-progress --non-interactive
 
-  #     - name: Visual tests
-  #       uses: nick-fields/retry@v3
-  #       env:
-  #         SAUCE_USERNAME: ${{ secrets.SAUCE_USERNAME }}
-  #         SAUCE_ACCESS_KEY: ${{ secrets.SAUCE_ACCESS_KEY }}
-  #       with:
-  #         timeout_minutes: 20
-  #         retry_wait_seconds: 60
-  #         max_attempts: 3
-  #         command: yarn test:base
+      - name: Visual tests
+        uses: nick-fields/retry@v3
+        env:
+          SAUCE_USERNAME: ${{ secrets.SAUCE_USERNAME }}
+          SAUCE_ACCESS_KEY: ${{ secrets.SAUCE_ACCESS_KEY }}
+        with:
+          timeout_minutes: 20
+          retry_wait_seconds: 60
+          max_attempts: 3
+          command: yarn test:base
 
-  #     - uses: actions/upload-artifact@v4
-  #       if: ${{ failure() }}
-  #       with:
-  #         name: screenshots
-  #         path: |
-  #           packages/*/test/visual/base/screenshots/*/failed/*.png
+      - uses: actions/upload-artifact@v4
+        if: ${{ failure() }}
+        with:
+          name: screenshots
+          path: |
+            packages/*/test/visual/base/screenshots/*/failed/*.png
   lumo:
     name: Lumo
     runs-on: ubuntu-latest
