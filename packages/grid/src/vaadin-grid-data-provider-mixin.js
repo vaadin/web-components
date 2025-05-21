@@ -483,6 +483,10 @@ export const DataProviderMixin = (superClass) =>
      * @param indexes {...number} Row indexes to scroll to
      */
     scrollToIndex(...indexes) {
+      if (!this.__virtualizer || !this.clientHeight || !this._columnTree) {
+        this.__pendingScrollToIndexes = indexes;
+        return;
+      }
       // Synchronous data provider may cause changes to the cache on scroll without
       // ending up in a loading state. Try scrolling to the index until the target
       // index stabilizes.
@@ -491,7 +495,7 @@ export const DataProviderMixin = (superClass) =>
         this._scrollToFlatIndex(targetIndex);
       }
 
-      if (this._dataProviderController.isLoading() || !this.clientHeight || !this._columnTree) {
+      if (this._dataProviderController.isLoading()) {
         this.__pendingScrollToIndexes = indexes;
       }
     }
