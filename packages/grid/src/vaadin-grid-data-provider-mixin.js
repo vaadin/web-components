@@ -500,8 +500,12 @@ export const DataProviderMixin = (superClass) =>
     }
 
     scrollToIndex(index) {
+      if (!this.__virtualizer || !this.clientHeight || !this._columnTree) {
+        this.__pendingScrollToIndex = index;
+        return;
+      }
       super.scrollToIndex(index);
-      if (!isNaN(index) && (this._cache.isLoading() || !this.clientHeight)) {
+      if (!isNaN(index) && this._cache.isLoading()) {
         this.__pendingScrollToIndex = index;
       }
     }
