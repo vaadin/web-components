@@ -43,7 +43,7 @@ jobs:
           path: |
             packages/*/test/visual/base/screenshots/*/failed/*.png
   lumo:
-    name: Lumo (JS files)
+    name: Lumo
     runs-on: ubuntu-latest
     if: github.repository_owner == 'vaadin'
 
