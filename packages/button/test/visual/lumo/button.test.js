@@ -1,9 +1,11 @@
 import { resetMouse, sendKeys, sendMouseToElement } from '@vaadin/test-runner-commands';
 import { fixtureSync, mousedown } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
-import '@vaadin/icon/theme/lumo/vaadin-icon.js';
+import '@vaadin/vaadin-lumo-styles/props.css';
+import '@vaadin/vaadin-lumo-styles/components/button.css';
 import '@vaadin/vaadin-lumo-styles/vaadin-iconset.js';
-import '../../../theme/lumo/vaadin-button.js';
+import '@vaadin/icon';
+import '../../../vaadin-button.js';
 
 describe('button', () => {
   let div, element;

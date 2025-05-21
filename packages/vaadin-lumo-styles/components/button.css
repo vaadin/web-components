@@ -1,0 +1,7 @@
+@import '../src/mixins/base-layer-reset.css' vaadin-button;
+@import '../src/components/button.css' vaadin-button;
+
+html {
+  --vaadin-button-css-inject: 1;
+}
+

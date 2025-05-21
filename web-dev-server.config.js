@@ -44,8 +44,8 @@ export function enforceLegacyLumoPlugin() {
       if (context.url.includes('.test.')) {
         let { body } = context;
         body = body.replaceAll(
-          `import '@vaadin/vaadin-lumo-styles/global.css';`,
-          `import '@vaadin/vaadin-lumo-styles/test/autoload.js';`,
+          `import '@vaadin/vaadin-lumo-styles/global.css'`,
+          `import '@vaadin/vaadin-lumo-styles/test/autoload.js'`,
         );
         body = body.replaceAll(/^import.+\.css.+$/gmu, '');
         return body;
