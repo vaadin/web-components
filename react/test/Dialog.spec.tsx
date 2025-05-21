@@ -2,6 +2,7 @@ import { afterEach, describe, expect, it } from 'vitest';
 import { render } from 'vitest-browser-react';
 import sinon from 'sinon';
 import { Dialog } from '../packages/react-components/src/Dialog.js';
+import { nextRender } from './utils/nextRender.js';
 import { useState } from 'react';
 
 describe('Dialog', () => {
@@ -38,6 +39,7 @@ describe('Dialog', () => {
         FooBar
       </Dialog>,
     );
+    await nextRender();
     assert();
   });
 
@@ -50,6 +52,7 @@ describe('Dialog', () => {
         renderer={() => <>FooBar</>}
       ></Dialog>,
     );
+    await nextRender();
     assert();
   });
 
@@ -59,6 +62,7 @@ describe('Dialog', () => {
         {() => <>FooBar</>}
       </Dialog>,
     );
+    await nextRender();
     assert();
   });
 
@@ -76,6 +80,7 @@ describe('Dialog', () => {
     }
 
     render(<TestDialog />);
+    await nextRender();
 
     const warn = sinon.stub(console, 'error');
     document.querySelector<HTMLButtonElement>('#open-button')?.click();

@@ -10,6 +10,7 @@ import { Item } from '../packages/react-components/src/Item.js';
 import { ListBox } from '../packages/react-components/src/ListBox.js';
 import catchRender from './utils/catchRender.js';
 import createOverlayCloseCatcher from './utils/createOverlayCloseCatcher.js';
+import { nextRender } from './utils/nextRender.js';
 import sinon from 'sinon';
 
 const overlayTag = 'vaadin-context-menu-overlay';
@@ -29,11 +30,13 @@ async function openContextMenu(target: EventTarget) {
   // Emulate right mouse click
   target.dispatchEvent(new PointerEvent('contextmenu', { bubbles: true }));
   await menuAnimationComplete();
+  await nextRender();
 }
 
 async function openSubMenu(parentItem: EventTarget) {
   parentItem.dispatchEvent(new PointerEvent('mouseover', { bubbles: true }));
   await menuAnimationComplete();
+  await nextRender();
 }
 
 describe('ContextMenu', () => {

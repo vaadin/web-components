@@ -10,6 +10,7 @@ import { GridTreeColumn } from '../packages/react-components/src/GridTreeColumn.
 import type { GridBodyReactRendererProps } from '../packages/react-components/src/renderers/grid.js';
 import { GridColumnGroup } from '../packages/react-components/src/GridColumnGroup.js';
 import { findByQuerySelector } from './utils/findByQuerySelector.js';
+import { nextRender } from './utils/nextRender.js';
 import { GridPro } from '../packages/react-components-pro/src/GridPro.js';
 import { useEffect, useState } from 'react';
 import sinon from 'sinon';
@@ -418,6 +419,7 @@ describe('Grid', () => {
           const cellEditor = await until(() =>
             cellContent.querySelector<HTMLInputElement>('vaadin-grid-pro-edit-text-field'),
           );
+          await nextRender();
           expect(cellContent.textContent?.trim()).to.be.empty;
           cellEditor.blur();
 
@@ -442,6 +444,7 @@ describe('Grid', () => {
         const cellEditor = await until(() =>
           cellContent.querySelector<HTMLInputElement>('vaadin-grid-pro-edit-text-field'),
         );
+        await nextRender();
         // Set a new value
         cellEditor.value = 'foo';
         // Exit edit mode
@@ -589,6 +592,7 @@ describe('Grid', () => {
           const cellEditor = await until(() =>
             cellContent.querySelector<HTMLInputElement>('vaadin-grid-pro-edit-text-field'),
           );
+          await nextRender();
           expect(cellContent.textContent?.trim()).to.be.empty;
           cellEditor.blur();
 
@@ -612,6 +616,7 @@ describe('Grid', () => {
         const cellEditor = await until(() =>
           document.querySelector<HTMLInputElement>('vaadin-grid-pro-edit-text-field'),
         );
+        await nextRender();
         cellEditor.value = 'foo';
         focusOut(cellEditor);
 
@@ -703,6 +708,7 @@ describe('Grid', () => {
 
         // Visit edit mode
         doubleClick(cellContent);
+        await nextRender();
         focusOut(document.querySelector('vaadin-grid-pro-edit-text-field')!);
 
         // Expect the button to still say "Clicked"

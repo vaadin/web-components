@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { render } from 'vitest-browser-react';
 import userEvent, { type UserEvent } from '@testing-library/user-event';
 import type { ReactElement } from 'react';
@@ -26,12 +26,16 @@ describe('Select', () => {
     const select = await findByQuerySelector('vaadin-select');
 
     const valueButton = await findByQuerySelector('vaadin-select-value-button', select);
-    expect(valueButton).to.have.text('Bar');
+    await vi.waitFor(() => {
+      expect(valueButton).to.have.text('Bar');
+    });
 
     await user.click(valueButton);
 
     const overlay = await findByQuerySelector('vaadin-select-overlay');
-    expect(overlay).to.have.text('FooBar');
+    await vi.waitFor(() => {
+      expect(overlay).to.have.text('FooBar');
+    });
   }
 
   let user: ReturnType<UserEvent['setup']>;

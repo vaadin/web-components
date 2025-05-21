@@ -1,4 +1,4 @@
-import { vi } from 'vitest';
+import { expect, vi } from 'vitest';
 
 export async function findByQuerySelector<K extends keyof HTMLElementTagNameMap>(
   query: K,
@@ -12,5 +12,9 @@ export async function findByQuerySelector(
   query: string,
   container: Document | HTMLElement = document,
 ): Promise<Element> {
-  return await vi.waitFor(() => container.querySelector(query)!);
+  return await vi.waitFor(() => {
+    const element = container.querySelector(query);
+    expect(element).to.exist;
+    return element!;
+  });
 }
