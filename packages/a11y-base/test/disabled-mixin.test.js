@@ -1,15 +1,14 @@
 import { expect } from '@vaadin/chai-plugins';
-import { defineLit, definePolymer, fixtureSync, nextRender } from '@vaadin/testing-helpers';
+import { defineLit, fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { DisabledMixin } from '../src/disabled-mixin.js';
 
-const runTests = (defineHelper, baseMixin) => {
-  const tag = defineHelper(
+describe('DisabledMixin', () => {
+  const tag = defineLit(
     'disabled-mixin',
     '<slot></slot>',
-    (Base) => class extends DisabledMixin(baseMixin(Base)) {},
+    (Base) => class extends DisabledMixin(PolylitMixin(Base)) {},
   );
 
   let element;
@@ -46,12 +45,4 @@ const runTests = (defineHelper, baseMixin) => {
     element.click();
     expect(spy.called).to.be.false;
   });
-};
-
-describe('DisabledMixin + Polymer', () => {
-  runTests(definePolymer, ControllerMixin);
-});
-
-describe('DisabledMixin + Lit', () => {
-  runTests(defineLit, PolylitMixin);
 });

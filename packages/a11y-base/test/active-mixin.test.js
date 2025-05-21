@@ -1,20 +1,11 @@
 import { expect } from '@vaadin/chai-plugins';
 import { sendKeys } from '@vaadin/test-runner-commands';
-import {
-  defineLit,
-  definePolymer,
-  fixtureSync,
-  mousedown,
-  mouseup,
-  touchend,
-  touchstart,
-} from '@vaadin/testing-helpers';
-import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
+import { defineLit, fixtureSync, mousedown, mouseup, touchend, touchstart } from '@vaadin/testing-helpers';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { ActiveMixin } from '../src/active-mixin.js';
 
-const runTests = (defineHelper, baseMixin) => {
-  const tag = defineHelper('active-mixin', '<slot></slot>', (Base) => class extends ActiveMixin(baseMixin(Base)) {});
+describe('ActiveMixin', () => {
+  const tag = defineLit('active-mixin', '<slot></slot>', (Base) => class extends ActiveMixin(PolylitMixin(Base)) {});
 
   let element;
 
@@ -121,12 +112,4 @@ const runTests = (defineHelper, baseMixin) => {
     element.parentNode.removeChild(element);
     expect(element.hasAttribute('active')).to.be.false;
   });
-};
-
-describe('ActiveMixin + Polymer', () => {
-  runTests(definePolymer, ControllerMixin);
-});
-
-describe('ActiveMixin + Lit', () => {
-  runTests(defineLit, PolylitMixin);
 });
