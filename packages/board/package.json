@@ -4,7 +4,7 @@
   "publishConfig": {
     "access": "public"
   },
-  "description": "Polymer element to create flexible responsive layouts and build nice looking dashboard.",
+  "description": "Web component to create flexible responsive layouts and build nice looking dashboard.",
   "license": "SEE LICENSE IN LICENSE",
   "repository": {
     "type": "git",
