@@ -5,11 +5,11 @@ import { dirname, posix, relative, resolve, sep } from 'node:path';
 import { createContext, type Module as VmModule, SourceTextModule, SyntheticModule } from 'node:vm';
 import { nodeModulesDir, packageDir, stylePackages } from './utils/config.js';
 
-const themeNameRegex = /^@vaadin\/vaadin-(.+)-styles/;
+const themePackage = '@vaadin/vaadin-lumo-styles';
 
 function getJsPath(moduleId: string): string {
   const jsSpecifier = posix.join(...relative(nodeModulesDir, moduleId).split(sep));
-  return jsSpecifier.replace(themeNameRegex, './$1/');
+  return jsSpecifier.replace(themePackage, './lumo/');
 }
 
 function toCamelCase(dashSeparated: string): string {
@@ -326,7 +326,7 @@ for (const [moduleId, cssResults] of cssLiterals) {
 
 // Emit Theme.css entrypoint files from global references
 for (const stylePackage of stylePackages) {
-  const name = stylePackage.replace(themeNameRegex, '$1');
+  const name = 'lumo';
   const stylePackageDir = resolve(nodeModulesDir, stylePackage);
   const globalCssResults: Set<CSSResult> = new Set();
 
