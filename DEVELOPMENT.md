@@ -114,12 +114,8 @@ Run or debug specific test files filtered by a glob pattern:
 
 ```sh
 yarn test --group combo-box --glob="data-provider*" # all data provider tests
-yarn test --group combo-box --glob="!(*-lit.generated)" # all polymer tests
-yarn test --group combo-box --glob="*-lit.generated" # all lit tests
 
 yarn debug --group combo-box --glob="data-provider*" # all data provider tests
-yarn debug --group combo-box --glob="!(*-lit.generated)" # all polymer tests
-yarn debug --group combo-box --glob="*-lit.generated" # all lit tests
 ```
 
 Run tests with code coverage:
