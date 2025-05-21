@@ -400,7 +400,7 @@ describe('upload', () => {
 
     it('should be in held status', async () => {
       upload._addFile(file);
-      await nextRender(upload);
+      await nextRender();
       expect(file.uploaded).not.to.be.ok;
       expect(file.held).to.be.true;
       expect(file.status).to.be.equal(upload.i18n.uploading.status.held);
