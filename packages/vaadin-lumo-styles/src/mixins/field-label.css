@@ -35,6 +35,10 @@
   }
 }
 
+:host(:not([has-label])) [part='label'] {
+  display: none;
+}
+
 :host([has-label])::before {
   margin-top: calc(var(--lumo-font-size-s) * 1.5);
 }

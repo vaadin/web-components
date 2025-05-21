@@ -1,3 +1,13 @@
+#wrapper {
+  display: flex;
+  width: 100%;
+  min-width: 0;
+}
+
 :host([auto-expand-vertically]) {
   padding-block: var(--lumo-space-xs);
+}
+
+:host([auto-expand-vertically]) #wrapper {
+  flex-wrap: wrap;
 }

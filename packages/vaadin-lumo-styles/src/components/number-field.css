@@ -1,3 +1,7 @@
+:host([readonly]) [part$='button'] {
+  pointer-events: none;
+}
+
 :host([step-buttons-visible]:not([theme~='align-right'])) ::slotted(input) {
   text-align: center;
 }
@@ -15,6 +19,8 @@
   cursor: pointer;
   width: 1.5em;
   height: 1.5em;
+  -webkit-user-select: none;
+  user-select: none;
 }
 
 [part='decrease-button']::before,
@@ -31,6 +37,10 @@
 }
 
 /* RTL specific styles */
+:host([dir='rtl']) [part='input-field'] {
+  direction: ltr;
+}
+
 :host([dir='rtl']:not([theme~='align-right'])) ::slotted(input) {
   --_lumo-text-field-overflow-mask-image: linear-gradient(to left, transparent, #000 1.25em);
 }

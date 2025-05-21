@@ -1,6 +1,7 @@
 @import './button.css';
 @import './input-container.css';
 
+@import '../src/mixins/base-layer-reset.css' vaadin-date-picker;
 @import '../src/mixins/field-label.css' vaadin-date-picker;
 @import '../src/mixins/field-required.css' vaadin-date-picker;
 @import '../src/mixins/field-error-message.css' vaadin-date-picker;
@@ -9,15 +10,19 @@
 @import '../src/mixins/field-base.css' vaadin-date-picker;
 @import '../src/components/date-picker.css' vaadin-date-picker;
 
+@import '../src/mixins/base-layer-reset.css' vaadin-date-picker-year;
 @import '../src/components/date-picker-year.css' vaadin-date-picker-year;
 
-@import '../src/mixins/overlay.css' vaadin-date-picker-overlay;
+@import '../src/mixins/base-layer-reset.css' vaadin-date-picker-overlay;
+@import '../src/components/overlay.css' vaadin-date-picker-overlay;
 @import '../src/mixins/menu-overlay-core.css' vaadin-date-picker-overlay;
 @import '../src/mixins/menu-overlay-ext.css' vaadin-date-picker-overlay;
 @import '../src/components/date-picker-overlay.css' vaadin-date-picker-overlay;
 
+@import '../src/mixins/base-layer-reset.css' vaadin-date-picker-overlay-content;
 @import '../src/components/date-picker-overlay-content.css' vaadin-date-picker-overlay-content;
 
+@import '../src/mixins/base-layer-reset.css' vaadin-month-calendar;
 @import '../src/components/date-picker-month-calendar.css' vaadin-month-calendar;
 
 html {

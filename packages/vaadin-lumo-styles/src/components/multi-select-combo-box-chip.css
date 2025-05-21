@@ -1,4 +1,9 @@
 :host {
+  display: inline-flex;
+  align-items: center;
+  align-self: center;
+  white-space: nowrap;
+  box-sizing: border-box;
   font-size: var(--lumo-font-size-xxs);
   line-height: 1;
   color: var(--lumo-body-text-color);
@@ -7,6 +12,11 @@
   cursor: var(--lumo-clickable-cursor);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+:host([hidden]),
+:host(:is([readonly], [disabled], [slot='overflow'])) [part='remove-button'] {
+  display: none !important;
 }
 
 :host([disabled]) {
@@ -61,6 +71,8 @@
 [part='label'] {
   font-weight: 500;
   line-height: 1.25;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 [part='remove-button'] {
@@ -84,4 +96,11 @@
   color: var(--lumo-disabled-text-color);
   -webkit-text-fill-color: var(--lumo-disabled-text-color);
   pointer-events: none;
+}
+
+@media (forced-colors: active) {
+  :host {
+    outline: 1px solid;
+    outline-offset: -1px;
+  }
 }
