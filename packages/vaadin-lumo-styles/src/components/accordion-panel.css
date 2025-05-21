@@ -1,6 +1,21 @@
 :host {
+  display: block;
   margin: 0;
   border-bottom: solid 1px var(--lumo-contrast-10pct);
+}
+
+:host([hidden]) {
+  display: none !important;
+}
+
+[part='content'] {
+  display: none;
+  overflow: hidden;
+}
+
+:host([opened]) [part='content'] {
+  display: block;
+  overflow: visible;
 }
 
 :host(:last-child) {
