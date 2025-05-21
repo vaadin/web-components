@@ -13,9 +13,6 @@ packages/*/test/visual/*/screenshots/*/failed
 packages/*/test/visual/screenshots/local-*
 packages/*/test/visual/*/screenshots/*/local-*
 
-# Generated Lit test files
-packages/*/test/*.generated.*
-
 # Generated theme folders .ts files
 packages/**/theme/**/*.d.ts
 
