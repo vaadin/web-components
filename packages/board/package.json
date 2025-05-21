@@ -4,7 +4,7 @@
   "publishConfig": {
     "access": "public"
   },
-  "description": "Polymer element to create flexible responsive layouts and build nice looking dashboard.",
+  "description": "Web component to create flexible responsive layouts and build nice looking dashboard.",
   "license": "SEE LICENSE IN LICENSE",
   "repository": {
     "type": "git",
@@ -34,12 +34,10 @@
     "responsive",
     "layout",
     "web-components",
-    "web-component",
-    "polymer"
+    "web-component"
   ],
   "dependencies": {
     "@open-wc/dedupe-mixin": "^1.3.0",
-    "@polymer/polymer": "^3.0.0",
     "@vaadin/a11y-base": "25.0.0-alpha0",
     "@vaadin/component-base": "25.0.0-alpha0",
     "lit": "^3.0.0"

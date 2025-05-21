@@ -38,7 +38,6 @@
     "lit": "^3.0.0"
   },
   "devDependencies": {
-    "@polymer/polymer": "^3.0.0",
     "@vaadin/chai-plugins": "25.0.0-alpha0",
     "@vaadin/test-runner-commands": "25.0.0-alpha0",
     "@vaadin/testing-helpers": "^1.1.0",

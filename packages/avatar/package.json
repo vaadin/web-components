@@ -32,12 +32,10 @@
     "Avatar",
     "vaadin-avatar",
     "web-components",
-    "web-component",
-    "polymer"
+    "web-component"
   ],
   "dependencies": {
     "@open-wc/dedupe-mixin": "^1.3.0",
-    "@polymer/polymer": "^3.0.0",
     "@vaadin/a11y-base": "25.0.0-alpha0",
     "@vaadin/component-base": "25.0.0-alpha0",
     "@vaadin/tooltip": "25.0.0-alpha0",
