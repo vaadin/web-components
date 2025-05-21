@@ -23,7 +23,7 @@ describe('theme', () => {
       `);
     element.items = users;
     flushGrid(element);
-    await nextRender(element);
+    await nextRender();
   });
 
   it('column-borders', async () => {
