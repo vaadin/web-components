@@ -5,7 +5,7 @@ import '@vaadin/vaadin-lumo-styles/props.css';
 import '@vaadin/vaadin-lumo-styles/global.css';
 import '@vaadin/vaadin-lumo-styles/components/text-field.css';
 import '../common.js';
-import '../../../src/vaadin-lit-text-field.js';
+import '../../../src/vaadin-text-field.js';
 
 describe('text-field', () => {
   let div, element;

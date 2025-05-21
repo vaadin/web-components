@@ -4,7 +4,7 @@ import { visualDiff } from '@web/test-runner-visual-regression';
 import '@vaadin/vaadin-lumo-styles/props.css';
 import '@vaadin/vaadin-lumo-styles/components/time-picker.css';
 import '../common.js';
-import '../../../src/vaadin-lit-time-picker.js';
+import '../../../src/vaadin-time-picker.js';
 
 describe('time-picker', () => {
   let div, element;

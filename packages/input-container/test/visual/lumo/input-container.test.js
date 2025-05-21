@@ -6,7 +6,7 @@ import '@vaadin/vaadin-lumo-styles/components/icon.css';
 import '@vaadin/vaadin-lumo-styles/components/input-container.css';
 import '@vaadin/vaadin-lumo-styles/vaadin-iconset.js';
 import '@vaadin/icon/vaadin-lit-icon.js';
-import '../../../src/vaadin-lit-input-container.js';
+import '../../../src/vaadin-input-container.js';
 
 describe('input-container', () => {
   let div, element, input;

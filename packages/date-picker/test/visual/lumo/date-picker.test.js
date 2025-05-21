@@ -5,7 +5,7 @@ import '@vaadin/vaadin-lumo-styles/props.css';
 import '@vaadin/vaadin-lumo-styles/components/date-picker.css';
 import '../../not-animated-styles.js';
 import '../common.js';
-import '../../../src/vaadin-lit-date-picker.js';
+import '../../../src/vaadin-date-picker.js';
 import { untilOverlayRendered } from '../../helpers.js';
 
 describe('date-picker', () => {

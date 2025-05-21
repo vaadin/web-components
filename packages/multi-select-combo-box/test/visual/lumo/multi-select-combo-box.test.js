@@ -5,7 +5,7 @@ import '@vaadin/vaadin-lumo-styles/props.css';
 import '@vaadin/vaadin-lumo-styles/components/multi-select-combo-box.css';
 import '../common.js';
 import '../../not-animated-styles.js';
-import '../../../src/vaadin-lit-multi-select-combo-box.js';
+import '../../../src/vaadin-multi-select-combo-box.js';
 
 describe('multi-select-combo-box', () => {
   let div, element;

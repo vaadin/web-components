@@ -4,7 +4,7 @@ import { visualDiff } from '@web/test-runner-visual-regression';
 import '@vaadin/vaadin-lumo-styles/props.css';
 import '@vaadin/vaadin-lumo-styles/components/password-field.css';
 import '../common.js';
-import '../../../src/vaadin-lit-password-field.js';
+import '../../../src/vaadin-password-field.js';
 
 describe('password-field', () => {
   let div, element;

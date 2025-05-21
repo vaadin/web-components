@@ -5,8 +5,8 @@ import '@vaadin/vaadin-lumo-styles/props.css';
 import '@vaadin/vaadin-lumo-styles/components/icon.css';
 import '@vaadin/vaadin-lumo-styles/components/button.css';
 import '@vaadin/vaadin-lumo-styles/vaadin-iconset.js';
-import '@vaadin/icon/src/vaadin-lit-icon.js';
-import '../../../src/vaadin-lit-button.js';
+import '@vaadin/icon/src/vaadin-icon.js';
+import '../../../src/vaadin-button.js';
 
 describe('button', () => {
   let div, element;
