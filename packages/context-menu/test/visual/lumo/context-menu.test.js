@@ -52,7 +52,7 @@ describe('context-menu', () => {
 
         it('basic', async () => {
           contextmenu(element);
-          await nextRender(element);
+          await nextRender();
           await visualDiff(document.body, `${dir}-basic`);
         });
       });
@@ -79,7 +79,7 @@ describe('context-menu', () => {
 
         it('basic', async () => {
           contextmenu(element);
-          await nextRender(element);
+          await nextRender();
           await visualDiff(document.body, `${dir}-long`);
         });
 
@@ -88,7 +88,7 @@ describe('context-menu', () => {
           element.style.bottom = '50px';
           element.style.right = '50px';
           contextmenu(element);
-          await nextRender(element);
+          await nextRender();
           await visualDiff(document.body, `${dir}-long-bottom`);
         });
       });
@@ -126,7 +126,7 @@ describe('context-menu', () => {
           ];
           contextmenu(element);
           await openSubMenus(element);
-          await nextRender(element);
+          await nextRender();
           await visualDiff(document.body, `${dir}-items`);
         });
       });
