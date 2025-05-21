@@ -63,6 +63,11 @@ async function prepareElementFiles(
 
       const path = await search(element.name, resolve(nodeModulesDir, packageName));
 
+      // Temporarily remove vaadin-date-picker-light and vaadin-combo-box-light until WC dependencies do not include them anymore
+      if (element.name === 'vaadin-date-picker-light' || element.name === 'vaadin-combo-box-light') {
+        return;
+      }
+
       if (path && dependencies.includes(packageName)) {
         elementFilesMap.set(element, {
           packageName,
