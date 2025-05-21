@@ -195,7 +195,7 @@ const getVisualTestGroups = (packages, theme) => {
           return globSync(glob).filter((file) => {
             // Otherwise, only run visual tests that import CSS files
             const content = fs.readFileSync(file, 'utf-8').toString();
-            return content.includes('.css');
+            return /vaadin-lumo-styles\/[^.]+\.css/u.test(content);
           });
         }),
       };
