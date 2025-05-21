@@ -81,7 +81,9 @@ defineCustomElement(CrudDialogOverlay);
  * An element used internally by `<vaadin-crud>`. Not intended to be used separately.
  * @private
  */
-class CrudDialog extends DialogBaseMixin(OverlayClassMixin(ThemePropertyMixin(PolylitMixin(LitElement)))) {
+class CrudDialog extends DialogBaseMixin(
+  OverlayClassMixin(CSSInjectionMixin(ThemePropertyMixin(PolylitMixin(LitElement)))),
+) {
   static get is() {
     return 'vaadin-crud-dialog';
   }
