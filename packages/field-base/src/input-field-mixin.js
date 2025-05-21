@@ -56,15 +56,6 @@ export const InputFieldMixin = (superclass) =>
       return [...super.delegateAttrs, 'autocapitalize', 'autocomplete', 'autocorrect'];
     }
 
-    // Workaround for https://github.com/Polymer/polymer/issues/5259
-    get __data() {
-      return this.__dataValue || {};
-    }
-
-    set __data(value) {
-      this.__dataValue = value;
-    }
-
     /**
      * @param {HTMLElement} input
      * @protected
