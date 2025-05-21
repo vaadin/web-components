@@ -1,21 +1,20 @@
 import { expect } from '@vaadin/chai-plugins';
-import { defineLit, definePolymer, fixtureSync, focusin, focusout, nextFrame } from '@vaadin/testing-helpers';
+import { defineLit, fixtureSync, focusin, focusout, nextFrame } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { DelegateFocusMixin } from '../src/delegate-focus-mixin.js';
 
-const runTests = (defineHelper, baseMixin) => {
+describe('DelegateFocusMixin', () => {
   let setFocusedSpy;
 
-  const tag = defineHelper(
+  const tag = defineLit(
     'delegate-focus-mixin',
     `
       <slot name="input"></slot>
       <slot name="suffix"></slot>
     `,
     (Base) =>
-      class extends DelegateFocusMixin(baseMixin(Base)) {
+      class extends DelegateFocusMixin(PolylitMixin(Base)) {
         ready() {
           super.ready();
           const input = this.querySelector('input');
@@ -306,12 +305,4 @@ const runTests = (defineHelper, baseMixin) => {
       });
     });
   });
-};
-
-describe('DelegateFocusMixin + Polymer', () => {
-  runTests(definePolymer, ControllerMixin);
-});
-
-describe('DelegateFocusMixin + Lit', () => {
-  runTests(defineLit, PolylitMixin);
 });

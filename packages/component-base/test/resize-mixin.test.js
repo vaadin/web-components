@@ -1,14 +1,13 @@
 import { expect } from '@vaadin/chai-plugins';
-import { aTimeout, defineLit, definePolymer, fixtureSync, nextFrame, nextResize } from '@vaadin/testing-helpers';
+import { aTimeout, defineLit, fixtureSync, nextFrame, nextResize } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import { ControllerMixin } from '../src/controller-mixin.js';
 import { PolylitMixin } from '../src/polylit-mixin.js';
 import { ResizeMixin } from '../src/resize-mixin.js';
 
-const runTests = (defineHelper, baseMixin) => {
+describe('ResizeMixin', () => {
   let observeParent;
 
-  const tag = defineHelper(
+  const tag = defineLit(
     'resize-mixin',
     `
       <style>
@@ -19,7 +18,7 @@ const runTests = (defineHelper, baseMixin) => {
       <div></div>
     `,
     (Base) =>
-      class extends ResizeMixin(baseMixin(Base)) {
+      class extends ResizeMixin(PolylitMixin(Base)) {
         get _observeParent() {
           return observeParent;
         }
@@ -119,12 +118,4 @@ const runTests = (defineHelper, baseMixin) => {
       });
     });
   });
-};
-
-describe('ResizeMixin + Polymer', () => {
-  runTests(definePolymer, ControllerMixin);
-});
-
-describe('ResizeMixin + Lit', () => {
-  runTests(defineLit, PolylitMixin);
 });

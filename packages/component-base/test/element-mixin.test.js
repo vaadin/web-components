@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import sinon from 'sinon';
-import { PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { LitElement } from 'lit';
 import { flush } from '../src/debounce.js';
 import { ElementMixin } from '../src/element-mixin.js';
 
@@ -8,7 +8,7 @@ describe('ElementMixin', () => {
   const defineCE = (tagName) => {
     customElements.define(
       tagName,
-      class extends ElementMixin(PolymerElement) {
+      class extends ElementMixin(LitElement) {
         static get is() {
           return tagName;
         }
@@ -103,7 +103,7 @@ describe('ElementMixin', () => {
     });
 
     it('should warn about missing doctype', () => {
-      class ElementQux extends ElementMixin(PolymerElement) {
+      class ElementQux extends ElementMixin(LitElement) {
         static get is() {
           return 'element-qux';
         }

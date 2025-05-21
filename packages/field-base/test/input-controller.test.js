@@ -1,17 +1,16 @@
 import { expect } from '@vaadin/chai-plugins';
 import { sendKeys } from '@vaadin/test-runner-commands';
-import { defineLit, definePolymer, fixtureSync } from '@vaadin/testing-helpers';
+import { defineLit, fixtureSync } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { InputController } from '../src/input-controller.js';
 import { InputMixin } from '../src/input-mixin.js';
 
-const runTests = (defineHelper, baseMixin) => {
-  const tag = defineHelper(
+describe('InputController', () => {
+  const tag = defineLit(
     'input-mixin',
     `<slot name="input"></slot>`,
-    (Base) => class extends InputMixin(baseMixin(Base)) {},
+    (Base) => class extends InputMixin(PolylitMixin(Base)) {},
   );
 
   describe('default', () => {
@@ -127,12 +126,4 @@ const runTests = (defineHelper, baseMixin) => {
       expect(input1.id).to.not.equal(input2.id);
     });
   });
-};
-
-describe('InputController + Polymer', () => {
-  runTests(definePolymer, ControllerMixin);
-});
-
-describe('InputController + Lit', () => {
-  runTests(defineLit, PolylitMixin);
 });

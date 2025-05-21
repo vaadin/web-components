@@ -1,8 +1,7 @@
 import { expect } from '@vaadin/chai-plugins';
 import { sendKeys } from '@vaadin/test-runner-commands';
-import { defineLit, definePolymer, fixtureSync } from '@vaadin/testing-helpers';
+import { defineLit, fixtureSync } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { FocusTrapController } from '../src/focus-trap-controller.js';
 
@@ -16,12 +15,12 @@ async function shiftTab() {
   return document.activeElement;
 }
 
-const runTests = (defineHelper, baseMixin) => {
-  const tag = defineHelper(
+describe('FocusTrapController', () => {
+  const tag = defineLit(
     'focus-trap',
     '<slot></slot>',
     (Base) =>
-      class extends baseMixin(Base) {
+      class extends PolylitMixin(Base) {
         ready() {
           super.ready();
           this.innerHTML = `
@@ -43,11 +42,11 @@ const runTests = (defineHelper, baseMixin) => {
       },
   );
 
-  const wrapperTag = defineHelper(
+  const wrapperTag = defineLit(
     'focus-trap-wrapper',
     '<slot></slot>',
     (Base) =>
-      class extends baseMixin(Base) {
+      class extends PolylitMixin(Base) {
         ready() {
           super.ready();
           this.innerHTML = `
@@ -352,12 +351,4 @@ const runTests = (defineHelper, baseMixin) => {
       expect(document.activeElement).to.equal(trapInput1);
     });
   });
-};
-
-describe('FocusTrapController + Polymer', () => {
-  runTests(definePolymer, ControllerMixin);
-});
-
-describe('FocusTrapController + Lit', () => {
-  runTests(defineLit, PolylitMixin);
 });

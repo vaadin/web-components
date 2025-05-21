@@ -1,19 +1,18 @@
 import { expect } from '@vaadin/chai-plugins';
 import { sendKeys } from '@vaadin/test-runner-commands';
-import { defineLit, definePolymer, fixtureSync } from '@vaadin/testing-helpers';
+import { defineLit, fixtureSync } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { KeyboardMixin } from '../src/keyboard-mixin.js';
 
-const runTests = (defineHelper, baseMixin) => {
+describe('KeyboardMixin', () => {
   let element, enterSpy, escapeSpy, keyDownSpy, keyUpSpy;
 
-  const tag = defineHelper(
+  const tag = defineLit(
     'keyboard-mixin',
     '<slot></slot>',
     (Base) =>
-      class extends KeyboardMixin(baseMixin(Base)) {
+      class extends KeyboardMixin(PolylitMixin(Base)) {
         _onKeyDown(event) {
           super._onKeyDown(event);
 
@@ -83,12 +82,4 @@ const runTests = (defineHelper, baseMixin) => {
     expect(enterSpy.args[0][0]).to.be.an.instanceOf(KeyboardEvent);
     expect(enterSpy.args[0][0].type).to.equal('keydown');
   });
-};
-
-describe('KeyboardMixin + Polymer', () => {
-  runTests(definePolymer, ControllerMixin);
-});
-
-describe('KeyboardMixin + Lit', () => {
-  runTests(defineLit, PolylitMixin);
 });
