@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, listenOnce, nextFrame } from '@vaadin/testing-helpers';
+import { fixtureSync, listenOnce, nextFrame, oneEvent } from '@vaadin/testing-helpers';
 import '@vaadin/polymer-legacy-adapter/template-renderer.js';
 import '../vaadin-grid.js';
 import '../vaadin-grid-tree-column.js';
@@ -279,6 +279,26 @@ describe('scroll to index', () => {
 
       grid.expandedItems = [parents[parents.length - 1]];
       grid.scrollToIndex(14);
+    });
+  });
+
+  describe('before grid is attached', () => {
+    let grid;
+
+    beforeEach(async () => {
+      const container = fixtureSync('<div></div>');
+      grid = document.createElement('vaadin-grid');
+      const column = document.createElement('vaadin-grid-column');
+      grid.appendChild(column);
+      grid.items = Array.from({ length: 100 }, (_, index) => `Item ${index}`);
+      grid.scrollToIndex(50);
+      container.appendChild(grid);
+      await oneEvent(grid, 'animationend');
+      await nextFrame();
+    });
+
+    it('should scroll to index after items are rendered', () => {
+      expect(getFirstVisibleItem(grid).index).to.equal(50);
     });
   });
 });
