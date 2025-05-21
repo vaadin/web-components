@@ -1,11 +1,10 @@
 import { expect } from '@vaadin/chai-plugins';
-import { defineLit, definePolymer, fixtureSync, nextFrame, nextRender, nextResize } from '@vaadin/testing-helpers';
-import { ControllerMixin } from '../src/controller-mixin.js';
+import { defineLit, fixtureSync, nextFrame, nextRender, nextResize } from '@vaadin/testing-helpers';
 import { OverflowController } from '../src/overflow-controller.js';
 import { PolylitMixin } from '../src/polylit-mixin.js';
 
-const runTests = (defineHelper, baseMixin) => {
-  const tag = defineHelper(
+describe('OverflowController', () => {
+  const tag = defineLit(
     'overflow',
     `
       <style>
@@ -25,10 +24,10 @@ const runTests = (defineHelper, baseMixin) => {
       </style>
       <slot></slot>
     `,
-    (Base) => class extends baseMixin(Base) {},
+    (Base) => class extends PolylitMixin(Base) {},
   );
 
-  const wrapperTag = defineHelper(
+  const wrapperTag = defineLit(
     'overflow-wrapper',
     `
       <style>
@@ -55,7 +54,7 @@ const runTests = (defineHelper, baseMixin) => {
         <slot></slot>
       </div>
     `,
-    (Base) => class extends baseMixin(Base) {},
+    (Base) => class extends PolylitMixin(Base) {},
   );
 
   describe('default', () => {
@@ -283,12 +282,4 @@ const runTests = (defineHelper, baseMixin) => {
       });
     });
   });
-};
-
-describe('OverflowController + Polymer', () => {
-  runTests(definePolymer, ControllerMixin);
-});
-
-describe('OverflowController + Lit', () => {
-  runTests(defineLit, PolylitMixin);
 });

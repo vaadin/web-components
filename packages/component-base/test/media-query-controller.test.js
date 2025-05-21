@@ -1,12 +1,11 @@
 import { expect } from '@vaadin/chai-plugins';
-import { defineLit, definePolymer, fixtureSync } from '@vaadin/testing-helpers';
+import { defineLit, fixtureSync } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import { ControllerMixin } from '../src/controller-mixin.js';
 import { MediaQueryController } from '../src/media-query-controller.js';
 import { PolylitMixin } from '../src/polylit-mixin.js';
 
-const runTests = (defineHelper, baseMixin) => {
-  const tag = defineHelper('media-query-controller', `<slot></slot>`, (Base) => class extends baseMixin(Base) {});
+describe('MediaQueryController', () => {
+  const tag = defineLit('media-query-controller', `<slot></slot>`, (Base) => class extends PolylitMixin(Base) {});
 
   let element, controller;
 
@@ -41,12 +40,4 @@ const runTests = (defineHelper, baseMixin) => {
 
     expect(stub.calledTwice).to.be.true;
   });
-};
-
-describe('MediaQueryController + Polymer', () => {
-  runTests(definePolymer, ControllerMixin);
-});
-
-describe('MediaQueryController + Lit', () => {
-  runTests(defineLit, PolylitMixin);
 });
