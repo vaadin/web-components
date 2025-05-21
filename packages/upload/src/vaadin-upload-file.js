@@ -50,7 +50,6 @@ import { uploadFileStyles } from './vaadin-upload-file-styles.js';
  *
  * @customElement
  * @extends HTMLElement
- * @mixes ControllerMixin
  * @mixes UploadFileMixin
  * @mixes ThemableMixin
  */

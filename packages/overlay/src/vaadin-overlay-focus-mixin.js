@@ -7,14 +7,12 @@ import { AriaModalController } from '@vaadin/a11y-base/src/aria-modal-controller
 import { FocusRestorationController } from '@vaadin/a11y-base/src/focus-restoration-controller.js';
 import { FocusTrapController } from '@vaadin/a11y-base/src/focus-trap-controller.js';
 import { getDeepActiveElement, isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
-import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 
 /**
  * @polymerMixin
- * @mixes ControllerMixin
  */
 export const OverlayFocusMixin = (superClass) =>
-  class OverlayFocusMixin extends ControllerMixin(superClass) {
+  class OverlayFocusMixin extends superClass {
     static get properties() {
       return {
         /**

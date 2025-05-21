@@ -5,7 +5,6 @@
  */
 import type { Constructor } from '@open-wc/dedupe-mixin';
 import type { KeyboardMixinClass } from '@vaadin/a11y-base/src/keyboard-mixin.js';
-import type { ControllerMixinClass } from '@vaadin/component-base/src/controller-mixin.js';
 import type { InputMixinClass } from './input-mixin.js';
 
 /**
@@ -13,11 +12,7 @@ import type { InputMixinClass } from './input-mixin.js';
  */
 export declare function ClearButtonMixin<T extends Constructor<HTMLElement>>(
   base: T,
-): Constructor<ClearButtonMixinClass> &
-  Constructor<ControllerMixinClass> &
-  Constructor<InputMixinClass> &
-  Constructor<KeyboardMixinClass> &
-  T;
+): Constructor<ClearButtonMixinClass> & Constructor<InputMixinClass> & Constructor<KeyboardMixinClass> & T;
 
 export declare class ClearButtonMixinClass {
   /**

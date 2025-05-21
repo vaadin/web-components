@@ -8,7 +8,6 @@ import type { DelegateFocusMixinClass } from '@vaadin/a11y-base/src/delegate-foc
 import type { DisabledMixinClass } from '@vaadin/a11y-base/src/disabled-mixin.js';
 import type { FocusMixinClass } from '@vaadin/a11y-base/src/focus-mixin.js';
 import type { KeyboardMixinClass } from '@vaadin/a11y-base/src/keyboard-mixin.js';
-import type { ControllerMixinClass } from '@vaadin/component-base/src/controller-mixin.js';
 import type { DelegateStateMixinClass } from '@vaadin/component-base/src/delegate-state-mixin.js';
 import type { SlotStylesMixinClass } from '@vaadin/component-base/src/slot-styles-mixin.js';
 import type { ClearButtonMixinClass } from './clear-button-mixin.js';
@@ -25,7 +24,6 @@ import type { ValidateMixinClass } from './validate-mixin.js';
 export declare function InputFieldMixin<T extends Constructor<HTMLElement>>(
   base: T,
 ): Constructor<ClearButtonMixinClass> &
-  Constructor<ControllerMixinClass> &
   Constructor<DelegateFocusMixinClass> &
   Constructor<DelegateStateMixinClass> &
   Constructor<DisabledMixinClass> &

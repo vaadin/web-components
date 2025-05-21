@@ -3,7 +3,6 @@
  * Copyright (c) 2021 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { I18nMixin } from '@vaadin/component-base/src/i18n-mixin.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
@@ -15,10 +14,10 @@ const DEFAULT_I18N = {
 
 /**
  * @polymerMixin
- * @mixes ControllerMixin
+ * @mixes I18nMixin
  */
 export const MessageInputMixin = (superClass) =>
-  class MessageInputMixinClass extends I18nMixin(DEFAULT_I18N, ControllerMixin(superClass)) {
+  class MessageInputMixinClass extends I18nMixin(DEFAULT_I18N, superClass) {
     static get properties() {
       return {
         /**

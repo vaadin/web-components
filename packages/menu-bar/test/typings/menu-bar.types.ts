@@ -1,7 +1,6 @@
 import '../../vaadin-menu-bar.js';
 import type { FocusMixinClass } from '@vaadin/a11y-base/src/focus-mixin.js';
 import type { ListMixinClass } from '@vaadin/a11y-base/src/list-mixin.js';
-import type { ControllerMixinClass } from '@vaadin/component-base/src/controller-mixin.js';
 import type { DirMixinClass } from '@vaadin/component-base/src/dir-mixin.js';
 import type { I18nMixinClass } from '@vaadin/component-base/src/i18n-mixin.js';
 import type { ResizeMixinClass } from '@vaadin/component-base/src/resize-mixin.js';
@@ -23,7 +22,6 @@ assertType<MenuItem[]>(menu.items);
 assertType<string>(menu.overlayClass);
 
 assertType<ResizeMixinClass>(menu);
-assertType<ControllerMixinClass>(menu);
 assertType<FocusMixinClass>(menu);
 assertType<I18nMixinClass<MenuBarI18n>>(menu);
 assertType<MenuBarMixinClass>(menu);

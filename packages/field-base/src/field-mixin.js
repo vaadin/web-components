@@ -4,7 +4,6 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { FieldAriaController } from '@vaadin/a11y-base/src/field-aria-controller.js';
-import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { ErrorController } from './error-controller.js';
 import { HelperController } from './helper-controller.js';
 import { LabelMixin } from './label-mixin.js';
@@ -14,12 +13,11 @@ import { ValidateMixin } from './validate-mixin.js';
  * A mixin to provide common field logic: label, error message and helper text.
  *
  * @polymerMixin
- * @mixes ControllerMixin
  * @mixes LabelMixin
  * @mixes ValidateMixin
  */
 export const FieldMixin = (superclass) =>
-  class FieldMixinClass extends ValidateMixin(LabelMixin(ControllerMixin(superclass))) {
+  class FieldMixinClass extends ValidateMixin(LabelMixin(superclass)) {
     static get properties() {
       return {
         /**
