@@ -79,7 +79,7 @@ jobs:
           path: |
             packages/*/test/visual/lumo/screenshots/*/failed/*.png
             packages/vaadin-lumo-styles/test/visual/screenshots/failed/*.png
-  lumo-legacy:
+  lumo-ported:
     name: Lumo (CSS files)
     runs-on: ubuntu-latest
     if: github.repository_owner == 'vaadin'
