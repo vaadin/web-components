@@ -99,15 +99,10 @@ jobs:
         run: yarn --frozen-lockfile --no-progress --non-interactive
 
       - name: Visual tests
-        uses: nick-fields/retry@v3
         env:
           SAUCE_USERNAME: ${{ secrets.SAUCE_USERNAME }}
           SAUCE_ACCESS_KEY: ${{ secrets.SAUCE_ACCESS_KEY }}
-        with:
-          timeout_minutes: 20
-          retry_wait_seconds: 60
-          max_attempts: 3
-          command: yarn test:lumo --ported
+        run: yarn test:lumo --ported
 
       - uses: actions/upload-artifact@v4
         if: ${{ failure() }}
