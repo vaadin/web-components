@@ -38,25 +38,25 @@ describe('vaadin-side-nav-item', () => {
 
     it('expanded', async () => {
       sideNavItem.expanded = true;
-      await nextRender(sideNavItem);
+      await nextRender();
       await expect(sideNavItem).dom.to.equalSnapshot();
     });
 
     it('disabled', async () => {
       sideNavItem.disabled = true;
-      await nextRender(sideNavItem);
+      await nextRender();
       await expect(sideNavItem).dom.to.equalSnapshot();
     });
 
     it('current', async () => {
       sideNavItem.path = '';
-      await nextRender(sideNavItem);
+      await nextRender();
       await expect(sideNavItem).dom.to.equalSnapshot();
     });
 
     it('path', async () => {
       sideNavItem.path = 'path';
-      await nextRender(sideNavItem);
+      await nextRender();
       await expect(sideNavItem).dom.to.equalSnapshot();
     });
   });
@@ -68,25 +68,25 @@ describe('vaadin-side-nav-item', () => {
 
     it('expanded', async () => {
       sideNavItem.expanded = true;
-      await nextRender(sideNavItem);
+      await nextRender();
       await expect(sideNavItem).shadowDom.to.equalSnapshot();
     });
 
     it('current', async () => {
       sideNavItem.path = '';
-      await nextRender(sideNavItem);
+      await nextRender();
       await expect(sideNavItem).shadowDom.to.equalSnapshot();
     });
 
     it('path', async () => {
       sideNavItem.path = 'path';
-      await nextRender(sideNavItem);
+      await nextRender();
       await expect(sideNavItem).shadowDom.to.equalSnapshot();
     });
 
     it('null path', async () => {
       sideNavItem.path = null;
-      await nextRender(sideNavItem);
+      await nextRender();
       await expect(sideNavItem).shadowDom.to.equalSnapshot();
     });
 

@@ -10,7 +10,7 @@ describe('accessibility', () => {
 
     beforeEach(async () => {
       sideNav = fixtureSync('<vaadin-side-nav></vaadin-side-nav>');
-      await nextRender(sideNav);
+      await nextRender();
     });
 
     it('should set "navigation" role by default on side-nav', () => {
@@ -19,7 +19,7 @@ describe('accessibility', () => {
 
     it('should have custom role effective', async () => {
       const sideNavWithCustomRole = fixtureSync('<vaadin-side-nav role="custom role"></vaadin-side-nav>');
-      await nextRender(sideNavWithCustomRole);
+      await nextRender();
       expect(sideNavWithCustomRole.getAttribute('role')).to.equal('custom role');
     });
   });
