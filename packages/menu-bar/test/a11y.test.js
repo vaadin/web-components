@@ -20,7 +20,7 @@ describe('a11y', () => {
           children: [{ text: 'Menu Item 3 1' }, { text: 'Menu Item 3 2' }],
         },
       ];
-      await nextRender(menu);
+      await nextRender();
       subMenu = menu._subMenu;
       buttons = menu._buttons;
       overflow = menu._overflow;
