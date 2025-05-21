@@ -244,16 +244,6 @@ declare class Dashboard<TItem extends DashboardItem = DashboardItem> extends Das
   editable: boolean;
 
   /**
-   * Root heading level for sections and widgets. Defaults to 2.
-   *
-   * If changed to e.g. 1:
-   * - sections will have the attribute `aria-level` with value 1
-   * - non-nested widgets will have the attribute `aria-level` with value 1
-   * - nested widgets will have the attribute `aria-level` with value 2
-   */
-  rootHeadingLevel: number | null | undefined;
-
-  /**
    * The object used to localize this component. To change the default
    * localization, replace this with an object that provides all properties, or
    * just the individual properties you want to change.

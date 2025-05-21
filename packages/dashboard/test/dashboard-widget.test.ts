@@ -4,6 +4,7 @@ import '../src/vaadin-dashboard-widget.js';
 import { DashboardSection } from '../src/vaadin-dashboard-section.js';
 import { DashboardWidget } from '../src/vaadin-dashboard-widget.js';
 import {
+  assertHeadingLevel,
   getDraggable,
   getMoveApplyButton,
   getMoveBackwardButton,
@@ -156,16 +157,14 @@ describe('widget title level', () => {
     const widget = fixtureSync(`<vaadin-dashboard-widget widget-title="foo"></vaadin-dashboard-widget>`);
     await nextFrame();
 
-    const title = getTitleElement(widget as DashboardWidget);
-    expect(title?.getAttribute('aria-level')).to.equal('2');
+    assertHeadingLevel(widget as DashboardWidget, 2);
   });
 
   it('should have title heading level 2 by default on the section', async () => {
     const section = fixtureSync(`<vaadin-dashboard-section section-title="foo"></vaadin-dashboard-section>`);
     await nextFrame();
 
-    const title = getTitleElement(section as DashboardSection);
-    expect(title?.getAttribute('aria-level')).to.equal('2');
+    assertHeadingLevel(section as DashboardSection, 2);
   });
 
   it('should have title heading level 3 when rendered inside a section', async () => {
@@ -176,8 +175,7 @@ describe('widget title level', () => {
     `).querySelector('vaadin-dashboard-widget')!;
     await nextFrame();
 
-    const title = getTitleElement(widget);
-    expect(title?.getAttribute('aria-level')).to.equal('3');
+    assertHeadingLevel(widget, 3);
   });
 
   it('should have title heading level 2 after moving out of a section', async () => {
@@ -194,8 +192,7 @@ describe('widget title level', () => {
     wrapper.appendChild(widget);
     await nextFrame();
 
-    const title = getTitleElement(widget);
-    expect(title?.getAttribute('aria-level')).to.equal('2');
+    assertHeadingLevel(widget, 2);
   });
 
   it('should have title heading level 3 after moving into a section', async () => {
@@ -211,8 +208,7 @@ describe('widget title level', () => {
     section.appendChild(widget);
     await nextFrame();
 
-    const title = getTitleElement(widget);
-    expect(title?.getAttribute('aria-level')).to.equal('3');
+    assertHeadingLevel(widget, 3);
   });
 
   it('should have title heading level 3 after defining parent section', async () => {
@@ -227,8 +223,7 @@ describe('widget title level', () => {
     customElements.define('my-custom-section', MyCustomSection);
     await nextFrame();
 
-    const title = getTitleElement(widget);
-    expect(title?.getAttribute('aria-level')).to.equal('3');
+    assertHeadingLevel(widget, 3);
   });
 
   it('should have title heading level 3 after defining the widget', async () => {
@@ -243,8 +238,7 @@ describe('widget title level', () => {
     customElements.define('my-custom-widget', MyCustomWidget);
     await nextFrame();
 
-    const title = getTitleElement(widget as DashboardWidget);
-    expect(title?.getAttribute('aria-level')).to.equal('3');
+    assertHeadingLevel(widget as DashboardWidget, 3);
   });
 
   it('should have title heading level 3 after moving a wrapped widget into a section', async () => {
@@ -263,7 +257,6 @@ describe('widget title level', () => {
     section.appendChild(wrapper);
     await nextFrame();
 
-    const title = getTitleElement(widget);
-    expect(title?.getAttribute('aria-level')).to.equal('3');
+    assertHeadingLevel(widget, 3);
   });
 });

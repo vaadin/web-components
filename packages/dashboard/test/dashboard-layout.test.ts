@@ -1,10 +1,13 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextFrame, nextResize } from '@vaadin/testing-helpers';
-import '../src/vaadin-dashboard-layout.js';
-import '../src/vaadin-dashboard-section.js';
-import type { DashboardLayout } from '../src/vaadin-dashboard-layout.js';
-import type { DashboardSection } from '../src/vaadin-dashboard-section.js';
+import '../vaadin-dashboard-layout.js';
+import '../vaadin-dashboard-section.js';
+import '../vaadin-dashboard-widget.js';
+import type { DashboardLayout } from '../vaadin-dashboard-layout.js';
+import type { DashboardSection } from '../vaadin-dashboard-section.js';
+import type { DashboardWidget } from '../vaadin-dashboard-widget.js';
 import {
+  assertHeadingLevel,
   expectLayout,
   getColumnWidths,
   getRowHeights,
@@ -614,5 +617,75 @@ describe('dashboard layout', () => {
         [2],
       ]);
     });
+  });
+});
+
+describe('root heading level', () => {
+  let dashboard: DashboardLayout;
+  let section: DashboardSection;
+  let widget: DashboardWidget;
+  let nestedWidget: DashboardWidget;
+
+  beforeEach(async () => {
+    dashboard = fixtureSync(`
+      <vaadin-dashboard-layout>
+        <vaadin-dashboard-widget widget-title="Widget"></vaadin-dashboard-widget>
+        <vaadin-dashboard-section section-title="Section">
+          <vaadin-dashboard-widget widget-title="Nested Widget"></vaadin-dashboard-widget>
+        </vaadin-dashboard-section>
+      </vaadin-dashboard-layout>
+    `);
+    await nextFrame();
+    await nextResize(dashboard);
+    widget = dashboard.querySelector('vaadin-dashboard-widget') as DashboardWidget;
+    section = dashboard.querySelector('vaadin-dashboard-section') as DashboardSection;
+    nestedWidget = section.querySelector('vaadin-dashboard-widget') as DashboardWidget;
+  });
+
+  function assertHeadingLevels(expectedHeadingLevel: number) {
+    assertHeadingLevel(widget, expectedHeadingLevel);
+    assertHeadingLevel(section, expectedHeadingLevel);
+    assertHeadingLevel(nestedWidget, expectedHeadingLevel + 1);
+  }
+
+  it('should use default title heading level (2) when not explicitly set', () => {
+    assertHeadingLevels(2);
+  });
+
+  it('should use custom title heading level when set on dashboard layout', async () => {
+    dashboard.rootHeadingLevel = 4;
+    await nextFrame();
+    assertHeadingLevels(4);
+  });
+
+  it('should update title heading level when changed on dashboard layout', async () => {
+    dashboard.rootHeadingLevel = 3;
+    await nextFrame();
+    dashboard.rootHeadingLevel = 1;
+    await nextFrame();
+    assertHeadingLevels(1);
+  });
+
+  it('should revert to default title heading level (2) when set to null', async () => {
+    dashboard.rootHeadingLevel = 4;
+    await nextFrame();
+    dashboard.rootHeadingLevel = null;
+    await nextFrame();
+    assertHeadingLevels(2);
+  });
+
+  it('should update heading levels for newly added components', async () => {
+    dashboard.rootHeadingLevel = 3;
+    await nextFrame();
+    const newWidget = document.createElement('vaadin-dashboard-widget');
+    dashboard.appendChild(newWidget);
+    const newSection = document.createElement('vaadin-dashboard-section');
+    const nestedInNewSection = document.createElement('vaadin-dashboard-widget');
+    newSection.appendChild(nestedInNewSection);
+    dashboard.appendChild(newSection);
+    await nextFrame();
+    assertHeadingLevel(newWidget, 3);
+    assertHeadingLevel(newSection, 3);
+    assertHeadingLevel(nestedInNewSection, 4);
   });
 });

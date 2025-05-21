@@ -102,16 +102,10 @@ export function fireRemove(element) {
   element.dispatchEvent(new CustomEvent('item-remove', { bubbles: true }));
 }
 
-/**
- * Walks up the DOM tree starting from `node`, returning the first ancestor which is an instance of the given `baseClass`.
- *
- * @param {Node} node - starting node
- * @param {Function} baseClass - constructor, e.g. `Dashboard`
- * @returns {HTMLElement | null}
- */
-export function findAncestorInstance(node, baseClass) {
+/** @private */
+function __findFilteredAncestorInstance(node, elementFilter) {
   while (node) {
-    if (node instanceof baseClass) {
+    if (elementFilter(node)) {
       return node;
     }
     if (node instanceof ShadowRoot) {
@@ -128,4 +122,29 @@ export function findAncestorInstance(node, baseClass) {
     }
   }
   return null;
+}
+
+/**
+ * Walks up the DOM tree starting from `node`, returning the first ancestor which is an instance of the given `baseClass`.
+ *
+ * @param {Node} node - starting node
+ * @param {Function} baseClass - constructor, e.g. `Dashboard`
+ * @returns {HTMLElement | null}
+ */
+export function findAncestorInstance(node, baseClass) {
+  return __findFilteredAncestorInstance(node, (el) => {
+    return el instanceof baseClass;
+  });
+}
+
+/**
+ * Walks up the DOM tree starting from `node`, returning the first ancestor which extends 'DashboardLayoutMixin'.
+ *
+ * @param {Node} node - starting node
+ * @returns {HTMLElement | null}
+ */
+export function getParentLayout(node) {
+  return __findFilteredAncestorInstance(node, (el) => {
+    return el.constructor && el.constructor.toString().includes('DashboardLayoutMixin');
+  });
 }

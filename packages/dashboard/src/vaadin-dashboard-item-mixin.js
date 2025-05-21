@@ -13,7 +13,7 @@ import { html } from 'lit';
 import { FocusTrapController } from '@vaadin/a11y-base/src/focus-trap-controller.js';
 import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
 import { KeyboardController } from './keyboard-controller.js';
-import { fireMove, fireRemove, fireResize } from './vaadin-dashboard-helpers.js';
+import { fireMove, fireRemove, fireResize, getParentLayout } from './vaadin-dashboard-helpers.js';
 
 const DEFAULT_I18N = {
   selectWidget: 'Select widget for editing',
@@ -51,6 +51,11 @@ export const DashboardItemMixin = (superClass) =>
         /** @protected */
         __i18n: {
           type: Object,
+        },
+
+        /** @protected */
+        _rootHeadingLevel: {
+          type: Number,
         },
 
         /** @private */
@@ -292,6 +297,19 @@ export const DashboardItemMixin = (superClass) =>
       this.addController(this.__focusTrapController);
     }
 
+    /** @protected */
+    connectedCallback() {
+      super.connectedCallback();
+      this.__updateRootHeadingLevel();
+      this.__setupHeadingLevelObserver();
+    }
+
+    /** @protected */
+    disconnectedCallback() {
+      super.disconnectedCallback();
+      this.__removeHeadingLevelObserver();
+    }
+
     /** @private */
     __selectedChanged(selected, oldSelected) {
       if (!!selected === !!oldSelected) {
@@ -376,5 +394,34 @@ export const DashboardItemMixin = (superClass) =>
         return;
       }
       this.dispatchEvent(new CustomEvent('item-resize-mode-changed', { bubbles: true, detail: { value: resizeMode } }));
+    }
+
+    /** @private */
+    __setupHeadingLevelObserver() {
+      this.__removeHeadingLevelObserver();
+      const parentLayout = getParentLayout(this);
+      if (parentLayout) {
+        this.__headingLevelObserver = new MutationObserver(() => this.__updateRootHeadingLevel());
+        this.__headingLevelObserver.observe(parentLayout, {
+          attributes: true,
+          attributeFilter: ['root-heading-level'],
+        });
+      }
+    }
+
+    /** @private */
+    __removeHeadingLevelObserver() {
+      if (this.__headingLevelObserver) {
+        this.__headingLevelObserver.disconnect();
+        this.__headingLevelObserver = null;
+      }
+    }
+
+    /** @private */
+    __updateRootHeadingLevel() {
+      const parentLayout = getParentLayout(this);
+      if (parentLayout) {
+        this._rootHeadingLevel = parentLayout.rootHeadingLevel;
+      }
     }
   };
