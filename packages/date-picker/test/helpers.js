@@ -56,7 +56,7 @@ export async function untilOverlayScrolled(datePickerOrOverlayContent) {
     await overlayContent._revealPromise;
   }
 
-  await nextRender(overlayContent);
+  await nextRender();
 
   // Flush the ignoreTaps debouncer to make sure taps are not ignored.
   overlayContent._debouncer?.flush();
@@ -70,10 +70,10 @@ export async function untilOverlayScrolled(datePickerOrOverlayContent) {
  */
 export async function untilOverlayRendered(datePicker) {
   // First, wait for vaadin-overlay-open event
-  await nextRender(datePicker);
+  await nextRender();
 
   // Then wait for scrollers to fully render
-  await nextRender(datePicker);
+  await nextRender();
 
   await untilOverlayScrolled(datePicker);
 }
