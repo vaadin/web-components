@@ -495,7 +495,7 @@ export const DataProviderMixin = (superClass) =>
         this._scrollToFlatIndex(targetIndex);
       }
 
-      if (this._dataProviderController.isLoading() || !this.clientHeight || !this._columnTree) {
+      if (this._dataProviderController.isLoading()) {
         this.__pendingScrollToIndexes = indexes;
       }
     }
