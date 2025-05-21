@@ -3,17 +3,10 @@
  * Copyright (c) 2021 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { setCancelSyntheticClickEvents } from '@polymer/polymer/lib/utils/settings.js';
 import { usageStatistics } from '@vaadin/vaadin-usage-statistics/vaadin-usage-statistics.js';
 import { idlePeriod } from './async.js';
 import { Debouncer, enqueueDebouncer } from './debounce.js';
 import { DirMixin } from './dir-mixin.js';
-
-// This setting affects the legacy Polymer gestures which get activated
-// once you import any iron component e.g iron-icon.
-// It has to be explicitly disabled to prevent click issues in iOS + VoiceOver
-// for buttons that are based on `[role=button]` e.g vaadin-button.
-setCancelSyntheticClickEvents(false);
 
 if (!window.Vaadin) {
   window.Vaadin = {};
