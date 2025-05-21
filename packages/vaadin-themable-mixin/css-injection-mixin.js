@@ -19,7 +19,7 @@ const registeredProperties = new Set();
 function findRoot(element) {
   const root = element.getRootNode();
 
-  if (root.host && root.host.constructor.cssInjectPropName) {
+  if (root.host && root.host.constructor.is && root.host.constructor.is.startsWith('vaadin-')) {
     return findRoot(root.host);
   }
 
