@@ -147,7 +147,33 @@ Iconset.register('lumo', 1000, template);\n`;
           // Generate base64 version of the font
           const lumoIconsWoff = fs.readFileSync('lumo-icons.woff');
 
-          // Write the output to font-icons.js
+          const glyphCSSProperties = glyphs.map((g) => {
+            const name = g.name.replace(/\s/gu, '-').toLowerCase();
+            const unicode = `\\${g.unicode[0].charCodeAt(0).toString(16)}`;
+            return `--lumo-icons-${name}: '${unicode}';`;
+          });
+
+          // Write the output to src/props/icons.css and font-icons.js
+          const outputCSS = `
+@font-face {
+  font-family: 'lumo-icons';
+  src: url(data:application/font-woff;charset=utf-8;base64,${lumoIconsWoff.toString('base64')})
+    format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+html {
+  ${glyphCSSProperties.join('\n  ')}
+}
+`.trimStart();
+
+          fs.writeFile('src/props/icons.css', outputCSS, (err) => {
+            if (err) {
+              return console.error(err);
+            }
+          });
+
           let output = createCopyright();
           output += `
 import './version.js';
@@ -155,26 +181,15 @@ import { css } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { addLumoGlobalStyles } from './global.js';
 
 const fontIcons = css\`
-  @font-face {
-    font-family: 'lumo-icons';
-    src: url(data:application/font-woff;charset=utf-8;base64,${lumoIconsWoff.toString('base64')})
-      format('woff');
-    font-weight: normal;
-    font-style: normal;
-  }
-
-  html {
-`;
-          glyphs.forEach((g) => {
-            const name = g.name.replace(/\s/gu, '-').toLowerCase();
-            const unicode = `\\\\${g.unicode[0].charCodeAt(0).toString(16)}`;
-            output += `    --lumo-icons-${name}: '${unicode}';\n`;
-          });
-          output += `  }
+${outputCSS
+  .trimEnd()
+  .replace(/\\/gu, '\\\\')
+  .replace(/^(?!$)/gmu, '  ')}
 \`;
 
 addLumoGlobalStyles('font-icons', fontIcons);
 `;
+
           fs.writeFile('font-icons.js', output, (err) => {
             if (err) {
               return console.error(err);
