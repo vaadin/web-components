@@ -4,7 +4,6 @@ import type { DisabledMixinClass } from '@vaadin/a11y-base/src/disabled-mixin.js
 import type { FocusMixinClass } from '@vaadin/a11y-base/src/focus-mixin.js';
 import type { KeyboardMixinClass } from '@vaadin/a11y-base/src/keyboard-mixin.js';
 import type { TabindexMixinClass } from '@vaadin/a11y-base/src/tabindex-mixin.js';
-import type { ControllerMixinClass } from '@vaadin/component-base/src/controller-mixin.js';
 import type { ElementMixinClass } from '@vaadin/component-base/src/element-mixin.js';
 import type { ThemableMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
@@ -18,7 +17,6 @@ assertType<boolean>(button.disabled);
 
 // Mixins
 assertType<ActiveMixinClass>(button);
-assertType<ControllerMixinClass>(button);
 assertType<DisabledMixinClass>(button);
 assertType<ElementMixinClass>(button);
 assertType<FocusMixinClass>(button);

@@ -28,8 +28,7 @@
   "keywords": [
     "Vaadin",
     "web-components",
-    "web-component",
-    "polymer"
+    "web-component"
   ],
   "dependencies": {
     "@open-wc/dedupe-mixin": "^1.3.0",

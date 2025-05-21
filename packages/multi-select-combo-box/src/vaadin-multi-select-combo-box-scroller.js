@@ -3,10 +3,12 @@
  * Copyright (c) 2021 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { css, html, LitElement } from 'lit';
 import { ComboBoxPlaceholder } from '@vaadin/combo-box/src/vaadin-combo-box-placeholder.js';
 import { ComboBoxScrollerMixin } from '@vaadin/combo-box/src/vaadin-combo-box-scroller-mixin.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
+import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
+import { CSSInjectionMixin } from '@vaadin/vaadin-themable-mixin/css-injection-mixin.js';
 
 /**
  * An element used internally by `<vaadin-multi-select-combo-box>`. Not intended to be used separately.
@@ -16,36 +18,40 @@ import { defineCustomElement } from '@vaadin/component-base/src/define.js';
  * @mixes ComboBoxScrollerMixin
  * @private
  */
-export class MultiSelectComboBoxScroller extends ComboBoxScrollerMixin(PolymerElement) {
+export class MultiSelectComboBoxScroller extends ComboBoxScrollerMixin(CSSInjectionMixin(PolylitMixin(LitElement))) {
   static get is() {
     return 'vaadin-multi-select-combo-box-scroller';
   }
 
-  static get template() {
+  static get styles() {
+    return css`
+      :host {
+        display: block;
+        min-height: 1px;
+        overflow: auto;
+
+        /* Fixes item background from getting on top of scrollbars on Safari */
+        transform: translate3d(0, 0, 0);
+
+        /* Enable momentum scrolling on iOS */
+        -webkit-overflow-scrolling: touch;
+
+        /* Fixes scrollbar disappearing when 'Show scroll bars: Always' enabled in Safari */
+        box-shadow: 0 0 0 white;
+      }
+
+      #selector {
+        border-width: var(--_vaadin-multi-select-combo-box-items-container-border-width);
+        border-style: var(--_vaadin-multi-select-combo-box-items-container-border-style);
+        border-color: var(--_vaadin-multi-select-combo-box-items-container-border-color, transparent);
+        position: relative;
+      }
+    `;
+  }
+
+  /** @protected */
+  render() {
     return html`
-      <style>
-        :host {
-          display: block;
-          min-height: 1px;
-          overflow: auto;
-
-          /* Fixes item background from getting on top of scrollbars on Safari */
-          transform: translate3d(0, 0, 0);
-
-          /* Enable momentum scrolling on iOS */
-          -webkit-overflow-scrolling: touch;
-
-          /* Fixes scrollbar disappearing when 'Show scroll bars: Always' enabled in Safari */
-          box-shadow: 0 0 0 white;
-        }
-
-        #selector {
-          border-width: var(--_vaadin-multi-select-combo-box-items-container-border-width);
-          border-style: var(--_vaadin-multi-select-combo-box-items-container-border-style);
-          border-color: var(--_vaadin-multi-select-combo-box-items-container-border-color, transparent);
-          position: relative;
-        }
-      </style>
       <div id="selector">
         <slot></slot>
       </div>

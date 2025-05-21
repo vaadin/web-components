@@ -3,7 +3,6 @@ import type { DelegateFocusMixinClass } from '@vaadin/a11y-base/src/delegate-foc
 import type { DisabledMixinClass } from '@vaadin/a11y-base/src/disabled-mixin.js';
 import type { FocusMixinClass } from '@vaadin/a11y-base/src/focus-mixin.js';
 import type { KeyboardMixinClass } from '@vaadin/a11y-base/src/keyboard-mixin.js';
-import type { ControllerMixinClass } from '@vaadin/component-base/src/controller-mixin.js';
 import type { DelegateStateMixinClass } from '@vaadin/component-base/src/delegate-state-mixin.js';
 import type { ElementMixinClass } from '@vaadin/component-base/src/element-mixin.js';
 import type { SlotStylesMixinClass } from '@vaadin/component-base/src/slot-styles-mixin.js';
@@ -30,7 +29,6 @@ const field = document.createElement('vaadin-text-field');
 
 // Mixins
 assertType<ClearButtonMixinClass>(field);
-assertType<ControllerMixinClass>(field);
 assertType<DelegateFocusMixinClass>(field);
 assertType<DelegateStateMixinClass>(field);
 assertType<DisabledMixinClass>(field);

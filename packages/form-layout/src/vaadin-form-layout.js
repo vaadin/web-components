@@ -3,14 +3,13 @@
  * Copyright (c) 2017 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
-import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
+import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { FormLayoutMixin } from './vaadin-form-layout-mixin.js';
 import { formLayoutStyles } from './vaadin-form-layout-styles.js';
-
-registerStyles('vaadin-form-layout', formLayoutStyles, { moduleId: 'vaadin-form-layout-styles' });
 
 /**
  * `<vaadin-form-layout>` is a Web Component providing configurable responsive
@@ -206,12 +205,17 @@ registerStyles('vaadin-form-layout', formLayoutStyles, { moduleId: 'vaadin-form-
  * @mixes ElementMixin
  * @mixes ThemableMixin
  */
-class FormLayout extends FormLayoutMixin(ThemableMixin(ElementMixin(PolymerElement))) {
+class FormLayout extends FormLayoutMixin(ThemableMixin(ElementMixin(PolylitMixin(LitElement)))) {
   static get is() {
     return 'vaadin-form-layout';
   }
 
-  static get template() {
+  static get styles() {
+    return formLayoutStyles;
+  }
+
+  /** @protected */
+  render() {
     return html`
       <div id="layout">
         <slot id="slot"></slot>

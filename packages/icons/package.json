@@ -31,11 +31,9 @@
     "Vaadin",
     "icons",
     "web-components",
-    "web-component",
-    "polymer"
+    "web-component"
   ],
   "dependencies": {
-    "@polymer/polymer": "^3.0.0",
     "@vaadin/icon": "25.0.0-alpha0"
   },
   "devDependencies": {

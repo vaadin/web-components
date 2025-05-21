@@ -4,7 +4,7 @@ import { visualDiff } from '@web/test-runner-visual-regression';
 import '@vaadin/vaadin-lumo-styles/props.css';
 import '@vaadin/vaadin-lumo-styles/components/text-area.css';
 import '../common.js';
-import '../../../src/vaadin-lit-text-area.js';
+import '../../../src/vaadin-text-area.js';
 
 describe('text-area', () => {
   let div, element;

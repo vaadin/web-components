@@ -1,14 +1,13 @@
 import { expect } from '@vaadin/chai-plugins';
-import { defineLit, definePolymer, fixtureSync, nextRender } from '@vaadin/testing-helpers';
-import { ControllerMixin } from '../src/controller-mixin.js';
+import { defineLit, fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import { PolylitMixin } from '../src/polylit-mixin.js';
 import { SlotController } from '../src/slot-controller.js';
 import { SlotStylesMixin } from '../src/slot-styles-mixin.js';
 
-const runTests = (defineHelper, baseMixin) => {
+describe('SlotStylesMixin', () => {
   const COLOR = 'rgb(0, 100, 0)';
 
-  const tag = defineHelper(
+  const tag = defineLit(
     'slot-styles-mixin',
     `
       <style>
@@ -19,7 +18,7 @@ const runTests = (defineHelper, baseMixin) => {
       <slot name="button"></slot>
       `,
     (Base) =>
-      class extends SlotStylesMixin(baseMixin(Base)) {
+      class extends SlotStylesMixin(PolylitMixin(Base)) {
         get slotStyles() {
           return [
             `
@@ -85,12 +84,4 @@ const runTests = (defineHelper, baseMixin) => {
     wrapper.appendChild(element);
     expect(getComputedStyle(button).color).to.equal(COLOR);
   });
-};
-
-describe('SlotStylesMixin + Polymer', () => {
-  runTests(definePolymer, ControllerMixin);
-});
-
-describe('SlotStylesMixin + Lit', () => {
-  runTests(defineLit, PolylitMixin);
 });

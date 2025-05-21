@@ -21,7 +21,7 @@
     "start": "web-dev-server --node-resolve --open /dev",
     "start:base": "web-dev-server --node-resolve --open /dev --base",
     "check-releases": "node ./scripts/check-releases.js && web-dev-server --node-resolve --open /scripts/check-releases.html",
-    "test": "node scripts/generateLitTests.js && web-test-runner",
+    "test": "web-test-runner",
     "test:base": "yarn test --config web-test-runner-base.config.js",
     "test:firefox": "yarn test --config web-test-runner-firefox.config.js",
     "test:it": "yarn test --config web-test-runner-it.config.js",

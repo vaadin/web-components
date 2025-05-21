@@ -3,9 +3,10 @@
  * Copyright (c) 2016 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
+import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin';
 import { GridTreeToggleMixin } from './vaadin-grid-tree-toggle-mixin.js';
 
@@ -63,12 +64,13 @@ import { GridTreeToggleMixin } from './vaadin-grid-tree-toggle-mixin.js';
  * @mixes DirMixin
  * @mixes GridTreeToggleMixin
  */
-class GridTreeToggle extends GridTreeToggleMixin(ThemableMixin(DirMixin(PolymerElement))) {
+class GridTreeToggle extends GridTreeToggleMixin(ThemableMixin(DirMixin(PolylitMixin(LitElement)))) {
   static get is() {
     return 'vaadin-grid-tree-toggle';
   }
 
-  static get template() {
+  /** @protected */
+  render() {
     return html`
       <span id="level-spacer"></span>
       <span part="toggle"></span>

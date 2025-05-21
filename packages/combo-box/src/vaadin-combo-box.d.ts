@@ -7,7 +7,6 @@ import type { DelegateFocusMixinClass } from '@vaadin/a11y-base/src/delegate-foc
 import type { DisabledMixinClass } from '@vaadin/a11y-base/src/disabled-mixin.js';
 import type { FocusMixinClass } from '@vaadin/a11y-base/src/focus-mixin.js';
 import type { KeyboardMixinClass } from '@vaadin/a11y-base/src/keyboard-mixin.js';
-import type { ControllerMixinClass } from '@vaadin/component-base/src/controller-mixin.js';
 import type { DelegateStateMixinClass } from '@vaadin/component-base/src/delegate-state-mixin.js';
 import type { ElementMixinClass } from '@vaadin/component-base/src/element-mixin.js';
 import type { OverlayClassMixinClass } from '@vaadin/component-base/src/overlay-class-mixin.js';
@@ -24,6 +23,7 @@ import type { ThemePropertyMixinClass } from '@vaadin/vaadin-themable-mixin/vaad
 import type { ComboBoxDataProviderMixinClass } from './vaadin-combo-box-data-provider-mixin.js';
 import type { ComboBoxMixinClass } from './vaadin-combo-box-mixin.js';
 import type { ComboBoxDefaultItem } from './vaadin-combo-box-mixin.js';
+
 export {
   ComboBoxDataProvider,
   ComboBoxDataProviderCallback,
@@ -246,8 +246,7 @@ interface ComboBox<TItem = ComboBoxDefaultItem>
     DelegateFocusMixinClass,
     ThemableMixinClass,
     ThemePropertyMixinClass,
-    ElementMixinClass,
-    ControllerMixinClass {}
+    ElementMixinClass {}
 
 declare global {
   interface HTMLElementTagNameMap {

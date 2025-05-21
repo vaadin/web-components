@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { aTimeout, fixtureSync, oneEvent } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, nextUpdate, oneEvent } from '@vaadin/testing-helpers';
 import '../../src/vaadin-time-picker.js';
 import { resetUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 
@@ -19,11 +19,13 @@ describe('vaadin-time-picker', () => {
 
     it('label', async () => {
       timePicker.label = 'Label';
+      await nextUpdate(timePicker);
       await expect(timePicker).dom.to.equalSnapshot();
     });
 
     it('helper', async () => {
       timePicker.helperText = 'Helper';
+      await nextUpdate(timePicker);
       await expect(timePicker).dom.to.equalSnapshot();
     });
 
@@ -46,21 +48,25 @@ describe('vaadin-time-picker', () => {
 
     it('readonly', async () => {
       timePicker.readonly = true;
+      await nextUpdate(timePicker);
       await expect(timePicker).dom.to.equalSnapshot();
     });
 
     it('placeholder', async () => {
       timePicker.placeholder = 'Placeholder';
+      await nextUpdate(timePicker);
       await expect(timePicker).dom.to.equalSnapshot();
     });
 
     it('pattern', async () => {
       timePicker.pattern = '[0-9]*';
+      await nextUpdate(timePicker);
       await expect(timePicker).dom.to.equalSnapshot();
     });
 
     it('name', async () => {
       timePicker.name = 'Field Name';
+      await nextUpdate(timePicker);
       await expect(timePicker).dom.to.equalSnapshot();
     });
 
@@ -86,6 +92,7 @@ describe('vaadin-time-picker', () => {
 
       it('overlay class', async () => {
         timePicker.overlayClass = 'custom time-picker-overlay';
+        await nextUpdate(timePicker);
         await expect(comboBox.$.overlay).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
       });
     });
@@ -98,21 +105,25 @@ describe('vaadin-time-picker', () => {
 
     it('disabled', async () => {
       timePicker.disabled = true;
+      await nextUpdate(timePicker);
       await expect(timePicker).shadowDom.to.equalSnapshot();
     });
 
     it('readonly', async () => {
       timePicker.readonly = true;
+      await nextUpdate(timePicker);
       await expect(timePicker).shadowDom.to.equalSnapshot();
     });
 
     it('invalid', async () => {
       timePicker.invalid = true;
+      await nextUpdate(timePicker);
       await expect(timePicker).shadowDom.to.equalSnapshot();
     });
 
     it('theme', async () => {
       timePicker.setAttribute('theme', 'align-right');
+      await nextUpdate(timePicker);
       await expect(timePicker).shadowDom.to.equalSnapshot();
     });
   });

@@ -7,9 +7,11 @@ import '@vaadin/button/src/vaadin-button.js';
 import '@vaadin/text-field/src/vaadin-text-field.js';
 import '@vaadin/password-field/src/vaadin-password-field.js';
 import './vaadin-login-form-wrapper.js';
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { html, LitElement } from 'lit';
+import { ifDefined } from 'lit/directives/if-defined.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { LoginFormMixin } from './vaadin-login-form-mixin.js';
 
@@ -53,8 +55,21 @@ import { LoginFormMixin } from './vaadin-login-form-mixin.js';
  * @mixes ThemableMixin
  * @mixes LoginFormMixin
  */
-class LoginForm extends LoginFormMixin(ElementMixin(ThemableMixin(PolymerElement))) {
-  static get template() {
+class LoginForm extends LoginFormMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElement)))) {
+  static get is() {
+    return 'vaadin-login-form';
+  }
+
+  /**
+   * @protected
+   * @override
+   */
+  createRenderRoot() {
+    return this;
+  }
+
+  /** @protected */
+  render() {
     return html`
       <style>
         vaadin-login-form-wrapper > form > * {
@@ -63,71 +78,63 @@ class LoginForm extends LoginFormMixin(ElementMixin(ThemableMixin(PolymerElement
       </style>
       <vaadin-login-form-wrapper
         id="vaadinLoginFormWrapper"
-        theme$="[[_theme]]"
-        error="[[error]]"
-        i18n="[[__effectiveI18n]]"
-        heading-level="[[headingLevel]]"
+        theme="${ifDefined(this._theme)}"
+        .error="${this.error}"
+        .i18n="${this.__effectiveI18n}"
+        .headingLevel="${this.headingLevel}"
       >
-        <form method="POST" action$="[[action]]" on-formdata="_onFormData" slot="form">
+        <form method="POST" action="${ifDefined(this.action)}" @formdata="${this._onFormData}" slot="form">
           <input id="csrf" type="hidden" />
           <vaadin-text-field
             name="username"
-            label="[[__effectiveI18n.form.username]]"
-            error-message="[[__effectiveI18n.errorMessage.username]]"
+            .label="${this.__effectiveI18n.form.username}"
+            .errorMessage="${this.__effectiveI18n.errorMessage.username}"
             id="vaadinLoginUsername"
             required
-            on-keydown="_handleInputKeydown"
+            @keydown="${this._handleInputKeydown}"
             autocapitalize="none"
             autocorrect="off"
             spellcheck="false"
             autocomplete="username"
             manual-validation
           >
-            <input type="text" slot="input" on-keyup="_handleInputKeyup" />
+            <input type="text" slot="input" @keyup="${this._handleInputKeyup}" />
           </vaadin-text-field>
 
           <vaadin-password-field
             name="password"
-            label="[[__effectiveI18n.form.password]]"
-            error-message="[[__effectiveI18n.errorMessage.password]]"
+            .label="${this.__effectiveI18n.form.password}"
+            .errorMessage="${this.__effectiveI18n.errorMessage.password}"
             id="vaadinLoginPassword"
             required
-            on-keydown="_handleInputKeydown"
+            @keydown="${this._handleInputKeydown}"
             spellcheck="false"
             autocomplete="current-password"
             manual-validation
           >
-            <input type="password" slot="input" on-keyup="_handleInputKeyup" />
+            <input type="password" slot="input" @keyup="${this._handleInputKeyup}" />
           </vaadin-password-field>
         </form>
 
-        <vaadin-button slot="submit" theme="primary contained submit" on-click="submit" disabled$="[[disabled]]">
-          [[__effectiveI18n.form.submit]]
+        <vaadin-button
+          slot="submit"
+          theme="primary contained submit"
+          @click="${this.submit}"
+          .disabled="${this.disabled}"
+        >
+          ${this.__effectiveI18n.form.submit}
         </vaadin-button>
 
         <vaadin-button
           slot="forgot-password"
           theme="tertiary small"
-          on-click="_onForgotPasswordClick"
-          hidden$="[[noForgotPassword]]"
+          @click="${this._onForgotPasswordClick}"
+          ?hidden="${this.noForgotPassword}"
         >
-          [[__effectiveI18n.form.forgotPassword]]
+          ${this.__effectiveI18n.form.forgotPassword}
         </vaadin-button>
       </vaadin-login-form-wrapper>
     `;
-  }
-
-  static get is() {
-    return 'vaadin-login-form';
-  }
-
-  /**
-   * @param {StampedTemplate} dom
-   * @return {null}
-   * @protected
-   */
-  _attachDom(dom) {
-    this.appendChild(dom);
   }
 }
 

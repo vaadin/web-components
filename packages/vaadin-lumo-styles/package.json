@@ -39,11 +39,9 @@
     "lumo",
     "design-system",
     "web-components",
-    "web-component",
-    "polymer"
+    "web-component"
   ],
   "dependencies": {
-    "@polymer/polymer": "^3.0.0",
     "@vaadin/component-base": "25.0.0-alpha0",
     "@vaadin/icon": "25.0.0-alpha0",
     "@vaadin/vaadin-themable-mixin": "25.0.0-alpha0"

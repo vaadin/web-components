@@ -4,7 +4,7 @@ import { visualDiff } from '@web/test-runner-visual-regression';
 import '@vaadin/vaadin-lumo-styles/props.css';
 import '@vaadin/vaadin-lumo-styles/components/number-field.css';
 import '../common.js';
-import '../../../src/vaadin-lit-number-field.js';
+import '../../../src/vaadin-number-field.js';
 
 describe('number-field', () => {
   let div, element;

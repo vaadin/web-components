@@ -8,17 +8,14 @@ import './vaadin-date-picker-month-scroller.js';
 import './vaadin-date-picker-year-scroller.js';
 import './vaadin-date-picker-year.js';
 import './vaadin-month-calendar.js';
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
-import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
+import { html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
-import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
+import { CSSInjectionMixin } from '@vaadin/vaadin-themable-mixin/css-injection-mixin.js';
+import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { DatePickerOverlayContentMixin } from './vaadin-date-picker-overlay-content-mixin.js';
 import { overlayContentStyles } from './vaadin-date-picker-overlay-content-styles.js';
-
-registerStyles('vaadin-date-picker-overlay-content', overlayContentStyles, {
-  moduleId: 'vaadin-date-picker-overlay-content-styles',
-});
 
 /**
  * @customElement
@@ -26,17 +23,26 @@ registerStyles('vaadin-date-picker-overlay-content', overlayContentStyles, {
  * @private
  */
 class DatePickerOverlayContent extends DatePickerOverlayContentMixin(
-  ControllerMixin(ThemableMixin(DirMixin(PolymerElement))),
+  CSSInjectionMixin(ThemableMixin(DirMixin(PolylitMixin(LitElement)))),
 ) {
-  static get template() {
+  static get is() {
+    return 'vaadin-date-picker-overlay-content';
+  }
+
+  static get styles() {
+    return overlayContentStyles;
+  }
+
+  /** @protected */
+  render() {
     return html`
-      <div part="overlay-header" on-touchend="_preventDefault" aria-hidden="true">
-        <div part="label">[[_formatDisplayed(selectedDate, i18n, label)]]</div>
-        <div part="clear-button" hidden$="[[!selectedDate]]"></div>
+      <div part="overlay-header" @touchend="${this._preventDefault}" aria-hidden="true">
+        <div part="label">${this._formatDisplayed(this.selectedDate, this.i18n, this.label)}</div>
+        <div part="clear-button" ?hidden="${!this.selectedDate}"></div>
         <div part="toggle-button"></div>
 
-        <div part="years-toggle-button" hidden$="[[_desktopMode]]" aria-hidden="true">
-          [[_yearAfterXMonths(_visibleMonthIndex)]]
+        <div part="years-toggle-button" ?hidden="${this._desktopMode}" aria-hidden="true">
+          ${this._yearAfterXMonths(this._visibleMonthIndex)}
         </div>
       </div>
 
@@ -45,20 +51,16 @@ class DatePickerOverlayContent extends DatePickerOverlayContentMixin(
         <slot name="years"></slot>
       </div>
 
-      <div on-touchend="_preventDefault" role="toolbar" part="toolbar">
+      <div @touchend="${this._preventDefault}" role="toolbar" part="toolbar">
         <slot name="today-button"></slot>
         <slot name="cancel-button"></slot>
       </div>
     `;
   }
 
-  static get is() {
-    return 'vaadin-date-picker-overlay-content';
-  }
-
   /** @protected */
-  ready() {
-    super.ready();
+  firstUpdated() {
+    super.firstUpdated();
 
     this.setAttribute('role', 'dialog');
 

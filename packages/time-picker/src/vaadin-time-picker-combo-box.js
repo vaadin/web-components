@@ -6,9 +6,12 @@
 import './vaadin-time-picker-item.js';
 import './vaadin-time-picker-overlay.js';
 import './vaadin-time-picker-scroller.js';
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { css, html, LitElement } from 'lit';
+import { ifDefined } from 'lit/directives/if-defined.js';
 import { ComboBoxMixin } from '@vaadin/combo-box/src/vaadin-combo-box-mixin.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
+import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
+import { CSSInjectionMixin } from '@vaadin/vaadin-themable-mixin/css-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 /**
@@ -20,30 +23,16 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * @mixes ThemableMixin
  * @private
  */
-class TimePickerComboBox extends ComboBoxMixin(ThemableMixin(PolymerElement)) {
+class TimePickerComboBox extends ComboBoxMixin(CSSInjectionMixin(ThemableMixin(PolylitMixin(LitElement)))) {
   static get is() {
     return 'vaadin-time-picker-combo-box';
   }
 
-  static get template() {
-    return html`
-      <style>
-        :host([opened]) {
-          pointer-events: auto;
-        }
-      </style>
-
-      <slot></slot>
-
-      <vaadin-time-picker-overlay
-        id="overlay"
-        opened="[[_overlayOpened]]"
-        loading$="[[loading]]"
-        theme$="[[_theme]]"
-        position-target="[[positionTarget]]"
-        no-vertical-overlap
-        restore-focus-node="[[inputElement]]"
-      ></vaadin-time-picker-overlay>
+  static get styles() {
+    return css`
+      :host([opened]) {
+        pointer-events: auto;
+      }
     `;
   }
 
@@ -73,6 +62,22 @@ class TimePickerComboBox extends ComboBoxMixin(ThemableMixin(PolymerElement)) {
     return this.querySelector('[part="clear-button"]');
   }
 
+  /** @protected */
+  render() {
+    return html`
+      <slot></slot>
+
+      <vaadin-time-picker-overlay
+        id="overlay"
+        .opened="${this._overlayOpened}"
+        ?loading="${this.loading}"
+        theme="${ifDefined(this._theme)}"
+        .positionTarget="${this.positionTarget}"
+        .restoreFocusNode="${this.inputElement}"
+        no-vertical-overlap
+      ></vaadin-time-picker-overlay>
+    `;
+  }
   /** @protected */
   ready() {
     super.ready();

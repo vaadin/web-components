@@ -2,7 +2,7 @@ import { fixtureSync } from '@vaadin/testing-helpers/dist/fixture.js';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '@vaadin/vaadin-lumo-styles/props.css';
 import '@vaadin/vaadin-lumo-styles/components/details.css';
-import '../../../src/vaadin-lit-details.js';
+import '../../../src/vaadin-details.js';
 
 describe('details', () => {
   let div, element;

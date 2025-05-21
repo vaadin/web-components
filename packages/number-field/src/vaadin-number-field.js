@@ -4,17 +4,16 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import '@vaadin/input-container/src/vaadin-input-container.js';
-import { html, PolymerElement } from '@polymer/polymer';
+import { html, LitElement } from 'lit';
+import { ifDefined } from 'lit/directives/if-defined.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { inputFieldShared } from '@vaadin/field-base/src/styles/input-field-shared-styles.js';
-import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { CSSInjectionMixin } from '@vaadin/vaadin-themable-mixin/css-injection-mixin.js';
+import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { numberFieldStyles } from './vaadin-number-field-core-styles.js';
 import { NumberFieldMixin } from './vaadin-number-field-mixin.js';
-
-registerStyles('vaadin-number-field', [inputFieldShared, numberFieldStyles], {
-  moduleId: 'vaadin-number-field-styles',
-});
 
 /**
  * `<vaadin-number-field>` is an input field web component that only accepts numeric input.
@@ -71,32 +70,37 @@ registerStyles('vaadin-number-field', [inputFieldShared, numberFieldStyles], {
  * @mixes ElementMixin
  * @mixes ThemableMixin
  */
-export class NumberField extends NumberFieldMixin(ThemableMixin(ElementMixin(PolymerElement))) {
+class NumberField extends NumberFieldMixin(CSSInjectionMixin(ThemableMixin(ElementMixin(PolylitMixin(LitElement))))) {
   static get is() {
     return 'vaadin-number-field';
   }
 
-  static get template() {
+  static get styles() {
+    return [inputFieldShared, numberFieldStyles];
+  }
+
+  /** @protected */
+  render() {
     return html`
       <div class="vaadin-field-container">
         <div part="label">
           <slot name="label"></slot>
-          <span part="required-indicator" aria-hidden="true" on-click="focus"></span>
+          <span part="required-indicator" aria-hidden="true" @click="${this.focus}"></span>
         </div>
 
         <vaadin-input-container
           part="input-field"
-          readonly="[[readonly]]"
-          disabled="[[disabled]]"
-          invalid="[[invalid]]"
-          theme$="[[_theme]]"
+          .readonly="${this.readonly}"
+          .disabled="${this.disabled}"
+          .invalid="${this.invalid}"
+          theme="${ifDefined(this._theme)}"
         >
           <div
-            disabled$="[[!_isButtonEnabled(-1, value, min, max, step)]]"
             part="decrease-button"
-            on-click="_onDecreaseButtonClick"
-            on-touchend="_onDecreaseButtonTouchend"
-            hidden$="[[!stepButtonsVisible]]"
+            ?disabled="${!this._isButtonEnabled(-1, this.value, this.min, this.max, this.step)}"
+            ?hidden="${!this.stepButtonsVisible}"
+            @click="${this._onDecreaseButtonClick}"
+            @touchend="${this._onDecreaseButtonTouchend}"
             aria-hidden="true"
             slot="prefix"
           ></div>
@@ -105,11 +109,11 @@ export class NumberField extends NumberFieldMixin(ThemableMixin(ElementMixin(Pol
           <slot name="suffix" slot="suffix"></slot>
           <div id="clearButton" part="clear-button" slot="suffix" aria-hidden="true"></div>
           <div
-            disabled$="[[!_isButtonEnabled(1, value, min, max, step)]]"
             part="increase-button"
-            on-click="_onIncreaseButtonClick"
-            on-touchend="_onIncreaseButtonTouchend"
-            hidden$="[[!stepButtonsVisible]]"
+            ?disabled="${!this._isButtonEnabled(1, this.value, this.min, this.max, this.step)}"
+            ?hidden="${!this.stepButtonsVisible}"
+            @click="${this._onIncreaseButtonClick}"
+            @touchend="${this._onIncreaseButtonTouchend}"
             aria-hidden="true"
             slot="suffix"
           ></div>
@@ -130,3 +134,5 @@ export class NumberField extends NumberFieldMixin(ThemableMixin(ElementMixin(Pol
 }
 
 defineCustomElement(NumberField);
+
+export { NumberField };

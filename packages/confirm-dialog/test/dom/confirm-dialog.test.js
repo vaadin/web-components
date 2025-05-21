@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, nextRender, oneEvent } from '@vaadin/testing-helpers';
+import { fixtureSync, nextRender, nextUpdate, oneEvent } from '@vaadin/testing-helpers';
 import '../../src/vaadin-confirm-dialog.js';
 
 describe('vaadin-confirm-dialog', () => {
@@ -29,11 +29,13 @@ describe('vaadin-confirm-dialog', () => {
 
   it('overlay theme', async () => {
     dialog.setAttribute('theme', 'custom');
+    await nextUpdate(dialog);
     await expect(overlay).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
   });
 
   it('overlay class', async () => {
     dialog.overlayClass = 'confirm-dialog-overlay custom';
+    await nextUpdate(dialog);
     await expect(overlay).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
   });
 });

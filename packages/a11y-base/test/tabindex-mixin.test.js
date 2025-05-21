@@ -1,14 +1,13 @@
 import { expect } from '@vaadin/chai-plugins';
-import { defineLit, definePolymer, fixtureSync } from '@vaadin/testing-helpers';
-import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
+import { defineLit, fixtureSync } from '@vaadin/testing-helpers';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { TabindexMixin } from '../src/tabindex-mixin.js';
 
-const runTests = (defineHelper, baseMixin) => {
-  const tag = defineHelper(
+describe('TabindexMixin', () => {
+  const tag = defineLit(
     'tabindex-mixin',
     '<slot></slot>',
-    (Base) => class extends TabindexMixin(baseMixin(Base)) {},
+    (Base) => class extends TabindexMixin(PolylitMixin(Base)) {},
   );
 
   let element;
@@ -89,12 +88,4 @@ const runTests = (defineHelper, baseMixin) => {
       expect(element.tabindex).to.equal(1);
     });
   });
-};
-
-describe('TabindexMixin + Polymer', () => {
-  runTests(definePolymer, ControllerMixin);
-});
-
-describe('TabindexMixin + Lit', () => {
-  runTests(defineLit, PolylitMixin);
 });

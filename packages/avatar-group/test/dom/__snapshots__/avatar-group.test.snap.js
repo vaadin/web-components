@@ -4,10 +4,8 @@ export const snapshots = {};
 snapshots["vaadin-avatar-group default"] = 
 `<vaadin-avatar-group aria-label="Currently 0 active users">
   <vaadin-avatar
-    abbr="+0"
     aria-expanded="false"
     aria-haspopup="menu"
-    aria-label="+0"
     hidden=""
     role="button"
     slot="overflow"

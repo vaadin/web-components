@@ -3,11 +3,11 @@
  * Copyright (c) 2020 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
-import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
+import { css, html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { OverflowController } from '@vaadin/component-base/src/overflow-controller.js';
+import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { ScrollerMixin } from './vaadin-scroller-mixin.js';
 
@@ -30,42 +30,42 @@ import { ScrollerMixin } from './vaadin-scroller-mixin.js';
  * @customElement
  * @extends HTMLElement
  * @mixes ThemableMixin
- * @mixes ControllerMixin
  * @mixes ElementMixin
  * @mixes ScrollerMixin
  */
-class Scroller extends ScrollerMixin(ElementMixin(ControllerMixin(ThemableMixin(PolymerElement)))) {
-  static get template() {
-    return html`
-      <style>
-        :host([hidden]) {
-          display: none !important;
-        }
+class Scroller extends ScrollerMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElement)))) {
+  static get is() {
+    return 'vaadin-scroller';
+  }
 
-        :host {
-          display: block;
-          overflow: auto;
-        }
+  static get styles() {
+    return css`
+      :host {
+        display: block;
+        overflow: auto;
+      }
 
-        :host([scroll-direction='vertical']) {
-          overflow-x: hidden;
-        }
+      :host([hidden]) {
+        display: none !important;
+      }
 
-        :host([scroll-direction='horizontal']) {
-          overflow-y: hidden;
-        }
+      :host([scroll-direction='vertical']) {
+        overflow-x: hidden;
+      }
 
-        :host([scroll-direction='none']) {
-          overflow: hidden;
-        }
-      </style>
+      :host([scroll-direction='horizontal']) {
+        overflow-y: hidden;
+      }
 
-      <slot></slot>
+      :host([scroll-direction='none']) {
+        overflow: hidden;
+      }
     `;
   }
 
-  static get is() {
-    return 'vaadin-scroller';
+  /** @protected */
+  render() {
+    return html`<slot></slot>`;
   }
 
   /** @protected */

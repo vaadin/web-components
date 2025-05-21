@@ -6,9 +6,9 @@
 import './vaadin-menu-bar-item.js';
 import './vaadin-menu-bar-list-box.js';
 import './vaadin-menu-bar-overlay.js';
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
-import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
+import { css, html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
+import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
 import { SubMenuMixin } from './vaadin-menu-bar-submenu-mixin.js';
 
@@ -17,41 +17,38 @@ import { SubMenuMixin } from './vaadin-menu-bar-submenu-mixin.js';
  *
  * @customElement
  * @extends HTMLElement
- * @mixes ControllerMixin
  * @mixes SubMenuMixin
  * @mixes ThemePropertyMixin
  * @protected
  */
-class MenuBarSubmenu extends SubMenuMixin(ControllerMixin(ThemePropertyMixin(PolymerElement))) {
+class MenuBarSubmenu extends SubMenuMixin(ThemePropertyMixin(PolylitMixin(LitElement))) {
   static get is() {
     return 'vaadin-menu-bar-submenu';
   }
 
-  static get template() {
-    return html`
-      <style>
-        :host {
-          display: block;
-        }
+  static get styles() {
+    return css`
+      :host {
+        display: block;
+      }
 
-        :host([hidden]) {
-          display: none !important;
-        }
-      </style>
-
-      <slot id="slot"></slot>
+      :host([hidden]) {
+        display: none !important;
+      }
     `;
   }
 
+  /** @protected */
+  render() {
+    return html`<slot id="slot"></slot>`;
+  }
+
   /**
-   * @param {DocumentFragment} dom
-   * @return {ShadowRoot}
    * @protected
    * @override
    */
-  _attachDom(dom) {
-    const root = this.attachShadow({ mode: 'open' });
-    root.appendChild(dom);
+  createRenderRoot() {
+    const root = super.createRenderRoot();
     root.appendChild(this._overlayElement);
     return root;
   }

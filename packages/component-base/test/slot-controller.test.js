@@ -1,15 +1,14 @@
 import { expect } from '@vaadin/chai-plugins';
-import { defineCE, defineLit, definePolymer, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
+import { defineCE, defineLit, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import { ControllerMixin } from '../src/controller-mixin.js';
 import { PolylitMixin } from '../src/polylit-mixin.js';
 import { SlotController } from '../src/slot-controller.js';
 
-const runTests = (defineHelper, baseMixin) => {
-  const tag = defineHelper(
+describe('SlotController', () => {
+  const tag = defineLit(
     'slot-controller',
     `<slot name="foo"></slot><slot></slot>`,
-    (Base) => class extends baseMixin(Base) {},
+    (Base) => class extends PolylitMixin(Base) {},
   );
 
   let element, child, controller;
@@ -122,11 +121,11 @@ const runTests = (defineHelper, baseMixin) => {
 
       const initializeSpy = sinon.spy();
 
-      const innerTag = defineHelper(
+      const innerTag = defineLit(
         'slot-controller-inner',
         `<slot></slot>`,
         (Base) =>
-          class extends baseMixin(Base) {
+          class extends PolylitMixin(Base) {
             ready() {
               super.ready();
 
@@ -484,12 +483,4 @@ const runTests = (defineHelper, baseMixin) => {
       });
     });
   });
-};
-
-describe('SlotController + Polymer', () => {
-  runTests(definePolymer, ControllerMixin);
-});
-
-describe('SlotController + Lit', () => {
-  runTests(defineLit, PolylitMixin);
 });

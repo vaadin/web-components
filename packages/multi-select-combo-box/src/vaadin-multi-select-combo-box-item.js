@@ -3,10 +3,12 @@
  * Copyright (c) 2021 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { css, html, LitElement } from 'lit';
 import { ComboBoxItemMixin } from '@vaadin/combo-box/src/vaadin-combo-box-item-mixin.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
+import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
+import { CSSInjectionMixin } from '@vaadin/vaadin-themable-mixin/css-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 /**
@@ -36,22 +38,28 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * @mixes DirMixin
  * @private
  */
-export class MultiSelectComboBoxItem extends ComboBoxItemMixin(ThemableMixin(DirMixin(PolymerElement))) {
+export class MultiSelectComboBoxItem extends ComboBoxItemMixin(
+  CSSInjectionMixin(ThemableMixin(DirMixin(PolylitMixin(LitElement)))),
+) {
   static get is() {
     return 'vaadin-multi-select-combo-box-item';
   }
 
-  static get template() {
-    return html`
-      <style>
-        :host {
-          display: block;
-        }
+  static get styles() {
+    return css`
+      :host {
+        display: block;
+      }
 
-        :host([hidden]) {
-          display: none !important;
-        }
-      </style>
+      :host([hidden]) {
+        display: none !important;
+      }
+    `;
+  }
+
+  /** @protected */
+  render() {
+    return html`
       <span part="checkmark" aria-hidden="true"></span>
       <div part="content">
         <slot></slot>
