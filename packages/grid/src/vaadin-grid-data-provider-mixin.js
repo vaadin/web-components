@@ -483,7 +483,7 @@ export const DataProviderMixin = (superClass) =>
      * @param indexes {...number} Row indexes to scroll to
      */
     scrollToIndex(...indexes) {
-      if (!this.__virtualizer) {
+      if (!this.__virtualizer || !this.clientHeight || !this._columnTree) {
         this.__pendingScrollToIndexes = indexes;
         return;
       }
