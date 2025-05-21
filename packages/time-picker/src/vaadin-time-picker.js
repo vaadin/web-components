@@ -5,14 +5,15 @@
  */
 import '@vaadin/input-container/src/vaadin-input-container.js';
 import './vaadin-time-picker-combo-box.js';
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { css, html, LitElement } from 'lit';
+import { ifDefined } from 'lit/directives/if-defined.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { inputFieldShared } from '@vaadin/field-base/src/styles/input-field-shared-styles.js';
-import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { CSSInjectionMixin } from '@vaadin/vaadin-themable-mixin/css-injection-mixin.js';
+import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { TimePickerMixin } from './vaadin-time-picker-mixin.js';
-
-registerStyles('vaadin-time-picker', inputFieldShared, { moduleId: 'vaadin-time-picker-styles' });
 
 /**
  * `<vaadin-time-picker>` is a Web Component providing a time-selection field.
@@ -94,14 +95,15 @@ registerStyles('vaadin-time-picker', inputFieldShared, { moduleId: 'vaadin-time-
  * @mixes ThemableMixin
  * @mixes TimePickerMixin
  */
-class TimePicker extends TimePickerMixin(ThemableMixin(ElementMixin(PolymerElement))) {
+class TimePicker extends TimePickerMixin(CSSInjectionMixin(ThemableMixin(ElementMixin(PolylitMixin(LitElement))))) {
   static get is() {
     return 'vaadin-time-picker';
   }
 
-  static get template() {
-    return html`
-      <style>
+  static get styles() {
+    return [
+      inputFieldShared,
+      css`
         /* See https://github.com/vaadin/vaadin-time-picker/issues/145 */
         :host([dir='rtl']) [part='input-field'] {
           direction: ltr;
@@ -115,34 +117,41 @@ class TimePicker extends TimePickerMixin(ThemableMixin(ElementMixin(PolymerEleme
         [part~='toggle-button'] {
           cursor: pointer;
         }
-      </style>
+      `,
+    ];
+  }
 
+  /** @protected */
+  render() {
+    return html`
       <div class="vaadin-time-picker-container">
         <div part="label">
           <slot name="label"></slot>
-          <span part="required-indicator" aria-hidden="true" on-click="focus"></span>
+          <span part="required-indicator" aria-hidden="true" @click="${this.focus}"></span>
         </div>
 
         <vaadin-time-picker-combo-box
           id="comboBox"
-          filtered-items="[[__dropdownItems]]"
-          value="{{_comboBoxValue}}"
-          opened="{{opened}}"
-          disabled="[[disabled]]"
-          readonly="[[readonly]]"
-          clear-button-visible="[[clearButtonVisible]]"
-          auto-open-disabled="[[autoOpenDisabled]]"
-          overlay-class="[[overlayClass]]"
-          position-target="[[_inputContainer]]"
-          theme$="[[_theme]]"
-          on-change="__onComboBoxChange"
+          .filteredItems="${this.__dropdownItems}"
+          .value="${this._comboBoxValue}"
+          .opened="${this.opened}"
+          .disabled="${this.disabled}"
+          .readonly="${this.readonly}"
+          .clearButtonVisible="${this.clearButtonVisible}"
+          .autoOpenDisabled="${this.autoOpenDisabled}"
+          .overlayClass="${this.overlayClass}"
+          .positionTarget="${this._inputContainer}"
+          theme="${ifDefined(this._theme)}"
+          @value-changed="${this.__onComboBoxValueChanged}"
+          @opened-changed="${this.__onComboBoxOpenedChanged}"
+          @change="${this.__onComboBoxChange}"
         >
           <vaadin-input-container
             part="input-field"
-            readonly="[[readonly]]"
-            disabled="[[disabled]]"
-            invalid="[[invalid]]"
-            theme$="[[_theme]]"
+            .readonly="${this.readonly}"
+            .disabled="${this.disabled}"
+            .invalid="${this.invalid}"
+            theme="${ifDefined(this._theme)}"
           >
             <slot name="prefix" slot="prefix"></slot>
             <slot name="input"></slot>
@@ -161,6 +170,16 @@ class TimePicker extends TimePickerMixin(ThemableMixin(ElementMixin(PolymerEleme
       </div>
       <slot name="tooltip"></slot>
     `;
+  }
+
+  /** @private */
+  __onComboBoxOpenedChanged(event) {
+    this.opened = event.detail.value;
+  }
+
+  /** @private */
+  __onComboBoxValueChanged(event) {
+    this._comboBoxValue = event.detail.value;
   }
 }
 

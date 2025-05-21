@@ -429,25 +429,6 @@ export const ComboBoxMixin = (subclass) =>
     }
 
     /**
-     * Override Polymer lifecycle callback to handle `filter` property change after
-     * the observer for `opened` property is triggered. This is needed when opening
-     * combo-box on user input to ensure the focused index is set correctly.
-     *
-     * @param {!Object} currentProps Current accessor values
-     * @param {?Object} changedProps Properties changed since the last call
-     * @param {?Object} oldProps Previous values for each changed property
-     * @protected
-     * @override
-     */
-    _propertiesChanged(currentProps, changedProps, oldProps) {
-      super._propertiesChanged(currentProps, changedProps, oldProps);
-
-      if (changedProps.filter !== undefined) {
-        this._filterChanged(changedProps.filter);
-      }
-    }
-
-    /**
      * Override LitElement lifecycle callback to handle filter property change.
      * @param {Object} props
      * @protected

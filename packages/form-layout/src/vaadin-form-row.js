@@ -3,12 +3,11 @@
  * Copyright (c) 2017 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
-import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
+import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { formRowStyles } from './vaadin-form-layout-styles.js';
-
-registerStyles('vaadin-form-row', formRowStyles, { moduleId: 'vaadin-form-row-styles' });
 
 /**
  * `<vaadin-form-row>` is a web component for arranging fields into rows
@@ -22,12 +21,17 @@ registerStyles('vaadin-form-row', formRowStyles, { moduleId: 'vaadin-form-row-st
  * @extends HTMLElement
  * @mixes ThemableMixin
  */
-class FormRow extends ThemableMixin(PolymerElement) {
+class FormRow extends ThemableMixin(PolylitMixin(LitElement)) {
   static get is() {
     return 'vaadin-form-row';
   }
 
-  static get template() {
+  static get styles() {
+    return formRowStyles;
+  }
+
+  /** @protected */
+  render() {
     return html`<slot></slot>`;
   }
 }

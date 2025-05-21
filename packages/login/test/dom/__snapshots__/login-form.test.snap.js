@@ -178,6 +178,7 @@ snapshots["vaadin-login-form host required"] =
         <input
           aria-invalid="true"
           aria-labelledby="label-vaadin-password-field-3"
+          autocapitalize="off"
           autocomplete="current-password"
           id="input-vaadin-password-field-7"
           invalid=""
@@ -518,6 +519,7 @@ snapshots["vaadin-login-form host i18n-required"] =
         <input
           aria-invalid="true"
           aria-labelledby="label-vaadin-password-field-3"
+          autocapitalize="off"
           autocomplete="current-password"
           id="input-vaadin-password-field-7"
           invalid=""

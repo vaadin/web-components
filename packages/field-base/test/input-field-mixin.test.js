@@ -1,14 +1,13 @@
 import { expect } from '@vaadin/chai-plugins';
 import { sendKeys } from '@vaadin/test-runner-commands';
-import { defineLit, definePolymer, fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
+import { defineLit, fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { InputController } from '../src/input-controller.js';
 import { InputFieldMixin } from '../src/input-field-mixin.js';
 
-const runTests = (defineHelper, baseMixin) => {
-  const tag = defineHelper(
+describe('InputFieldMixin', () => {
+  const tag = defineLit(
     'input-field-mixin',
     `
       <div part="label">
@@ -22,7 +21,7 @@ const runTests = (defineHelper, baseMixin) => {
       <slot name="helper"></slot>
     `,
     (Base) =>
-      class extends InputFieldMixin(baseMixin(Base)) {
+      class extends InputFieldMixin(PolylitMixin(Base)) {
         get clearElement() {
           return this.$.clearButton;
         }
@@ -247,12 +246,4 @@ const runTests = (defineHelper, baseMixin) => {
       expect(console.warn.called).to.be.false;
     });
   });
-};
-
-describe('InputFieldMixin + Polymer', () => {
-  runTests(definePolymer, ControllerMixin);
-});
-
-describe('InputFieldMixin + Lit', () => {
-  runTests(defineLit, PolylitMixin);
 });

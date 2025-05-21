@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import sinon from 'sinon';
-import { PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { LitElement } from 'lit';
 import { flush } from '../src/debounce.js';
 import { ElementMixin } from '../src/element-mixin.js';
 
@@ -8,7 +8,7 @@ describe('ElementMixin', () => {
   const defineCE = (tagName) => {
     customElements.define(
       tagName,
-      class extends ElementMixin(PolymerElement) {
+      class extends ElementMixin(LitElement) {
         static get is() {
           return tagName;
         }
@@ -32,11 +32,6 @@ describe('ElementMixin', () => {
     it('should collect usage statistics', () => {
       expect(window.Vaadin.developmentModeCallback).to.be.instanceOf(Object);
       expect(window.Vaadin.developmentModeCallback['vaadin-usage-statistics']).to.be.instanceOf(Function);
-    });
-
-    it('should set the Polymer cancelSyntheticClickEvents setting to false', async () => {
-      const { cancelSyntheticClickEvents } = await import('@polymer/polymer/lib/utils/settings.js');
-      expect(cancelSyntheticClickEvents).to.be.false;
     });
   });
 
@@ -108,7 +103,7 @@ describe('ElementMixin', () => {
     });
 
     it('should warn about missing doctype', () => {
-      class ElementQux extends ElementMixin(PolymerElement) {
+      class ElementQux extends ElementMixin(LitElement) {
         static get is() {
           return 'element-qux';
         }

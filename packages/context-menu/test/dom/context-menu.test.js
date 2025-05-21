@@ -1,7 +1,7 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
-import '../../src/vaadin-context-menu.js';
+import { fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import '../not-animated-styles.js';
+import '../../src/vaadin-context-menu.js';
 import { openSubMenus } from '../helpers.js';
 
 function createComponent(textContent, { className }) {
@@ -71,6 +71,7 @@ describe('context-menu', () => {
     menu.items = ITEMS;
 
     contextmenu(menu);
+    await nextUpdate(menu);
     await nextRender();
 
     await expect(overlay).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
@@ -92,6 +93,7 @@ describe('context-menu', () => {
     menu.items = ITEMS;
 
     contextmenu(menu);
+    await nextUpdate(menu);
     await nextRender();
 
     await expect(menu._overlayElement).dom.to.equalSnapshot(SNAPSHOT_CONFIG);

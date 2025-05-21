@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, nextRender, oneEvent } from '@vaadin/testing-helpers';
+import { fixtureSync, nextRender, nextUpdate, oneEvent } from '@vaadin/testing-helpers';
 import '../../src/vaadin-dialog.js';
 
 describe('vaadin-dialog', () => {
@@ -28,21 +28,25 @@ describe('vaadin-dialog', () => {
 
   it('overlay modeless', async () => {
     dialog.modeless = true;
+    await nextUpdate(dialog);
     await expect(overlay).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
   });
 
   it('overlay theme', async () => {
     dialog.setAttribute('theme', 'custom');
+    await nextUpdate(dialog);
     await expect(overlay).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
   });
 
   it('overlay class', async () => {
     dialog.overlayClass = 'custom dialog-overlay';
+    await nextUpdate(dialog);
     await expect(overlay).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
   });
 
   it('overlay role', async () => {
     dialog.overlayRole = 'alertdialog';
+    await nextUpdate(dialog);
     await expect(overlay).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
   });
 });

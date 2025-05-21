@@ -3,13 +3,15 @@
  * Copyright (c) 2018 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { css, html, LitElement } from 'lit';
 import { ComboBoxOverlayMixin } from '@vaadin/combo-box/src/vaadin-combo-box-overlay-mixin.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
+import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { OverlayMixin } from '@vaadin/overlay/src/vaadin-overlay-mixin.js';
 import { overlayStyles } from '@vaadin/overlay/src/vaadin-overlay-styles.js';
-import { css, registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { CSSInjectionMixin } from '@vaadin/vaadin-themable-mixin/css-injection-mixin.js';
+import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 const timePickerOverlayStyles = css`
   #overlay {
@@ -23,10 +25,6 @@ const timePickerOverlayStyles = css`
   }
 `;
 
-registerStyles('vaadin-time-picker-overlay', [overlayStyles, timePickerOverlayStyles], {
-  moduleId: 'vaadin-time-picker-overlay-styles',
-});
-
 /**
  * An element used internally by `<vaadin-time-picker>`. Not intended to be used separately.
  *
@@ -37,12 +35,19 @@ registerStyles('vaadin-time-picker-overlay', [overlayStyles, timePickerOverlaySt
  * @mixes ThemableMixin
  * @private
  */
-export class TimePickerOverlay extends ComboBoxOverlayMixin(OverlayMixin(DirMixin(ThemableMixin(PolymerElement)))) {
+export class TimePickerOverlay extends ComboBoxOverlayMixin(
+  OverlayMixin(DirMixin(CSSInjectionMixin(ThemableMixin(PolylitMixin(LitElement))))),
+) {
   static get is() {
     return 'vaadin-time-picker-overlay';
   }
 
-  static get template() {
+  static get styles() {
+    return [overlayStyles, timePickerOverlayStyles];
+  }
+
+  /** @protected */
+  render() {
     return html`
       <div id="backdrop" part="backdrop" hidden></div>
       <div part="overlay" id="overlay">

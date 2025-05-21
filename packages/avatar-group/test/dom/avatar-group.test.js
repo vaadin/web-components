@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import '../../src/vaadin-avatar-group.js';
 
 describe('vaadin-avatar-group', () => {
@@ -23,6 +23,7 @@ describe('vaadin-avatar-group', () => {
     group.items = [{ abbr: 'YY' }, { name: 'Tomi Virkki' }];
     await nextFrame();
     group.setAttribute('theme', 'small');
+    await nextUpdate(group);
     await expect(group).dom.to.equalSnapshot();
   });
 
@@ -51,6 +52,7 @@ describe('vaadin-avatar-group', () => {
 
     it('overlay class', async () => {
       group.overlayClass = 'avatar-group-overlay custom';
+      await nextUpdate(group);
       await expect(group.$.overlay).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
     });
   });

@@ -9,9 +9,10 @@
  * license.
  */
 import './vaadin-board-row.js';
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { css, html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { BoardRow } from './vaadin-board-row.js';
 
 /**
@@ -37,28 +38,30 @@ import { BoardRow } from './vaadin-board-row.js';
  * @extends HTMLElement
  * @mixes ElementMixin
  */
-class Board extends ElementMixin(PolymerElement) {
-  static get template() {
-    return html`
-      <style>
-        :host {
-          display: block;
-        }
-
-        :host([hidden]) {
-          display: none !important;
-        }
-      </style>
-      <slot></slot>
-    `;
-  }
-
+class Board extends ElementMixin(PolylitMixin(LitElement)) {
   static get is() {
     return 'vaadin-board';
   }
 
   static get cvdlName() {
     return 'vaadin-board';
+  }
+
+  static get styles() {
+    return css`
+      :host {
+        display: block;
+      }
+
+      :host([hidden]) {
+        display: none !important;
+      }
+    `;
+  }
+
+  /** @protected */
+  render() {
+    return html`<slot></slot>`;
   }
 
   /**

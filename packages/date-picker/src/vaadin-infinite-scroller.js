@@ -3,7 +3,6 @@
  * Copyright (c) 2016 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { flush } from '@polymer/polymer/lib/utils/flush.js';
 import { timeOut } from '@vaadin/component-base/src/async.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
@@ -220,8 +219,6 @@ export class InfiniteScroller extends HTMLElement {
       this._updateClones();
       this._debouncerUpdateClones.cancel();
     }
-
-    flush();
   }
 
   /**

@@ -4,9 +4,11 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import './vaadin-accordion-panel.js';
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { css, html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
+import { CSSInjectionMixin } from '@vaadin/vaadin-themable-mixin/css-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { AccordionMixin } from './vaadin-accordion-mixin.js';
 
@@ -60,24 +62,26 @@ import { AccordionMixin } from './vaadin-accordion-mixin.js';
  * @mixes ElementMixin
  * @mixes ThemableMixin
  */
-class Accordion extends AccordionMixin(ThemableMixin(ElementMixin(PolymerElement))) {
-  static get template() {
-    return html`
-      <style>
-        :host {
-          display: block;
-        }
+class Accordion extends AccordionMixin(CSSInjectionMixin(ThemableMixin(ElementMixin(PolylitMixin(LitElement))))) {
+  static get is() {
+    return 'vaadin-accordion';
+  }
 
-        :host([hidden]) {
-          display: none !important;
-        }
-      </style>
-      <slot></slot>
+  static get styles() {
+    return css`
+      :host {
+        display: block;
+      }
+
+      :host([hidden]) {
+        display: none !important;
+      }
     `;
   }
 
-  static get is() {
-    return 'vaadin-accordion';
+  /** @protected */
+  render() {
+    return html`<slot></slot>`;
   }
 }
 

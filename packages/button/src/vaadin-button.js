@@ -3,16 +3,15 @@
  * Copyright (c) 2017 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
-import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
+import { html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
-import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { CSSInjectionMixin } from '@vaadin/vaadin-themable-mixin/css-injection-mixin.js';
+import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { buttonStyles } from './vaadin-button-core-styles.js';
 import { ButtonMixin } from './vaadin-button-mixin.js';
-
-registerStyles('vaadin-button', buttonStyles, { moduleId: 'vaadin-button-styles' });
 
 /**
  * `<vaadin-button>` is an accessible and customizable button that allows users to perform actions.
@@ -45,11 +44,18 @@ registerStyles('vaadin-button', buttonStyles, { moduleId: 'vaadin-button-styles'
  * @customElement
  * @extends HTMLElement
  * @mixes ButtonMixin
- * @mixes ControllerMixin
  * @mixes ElementMixin
  * @mixes ThemableMixin
  */
-class Button extends ButtonMixin(ElementMixin(ThemableMixin(ControllerMixin(PolymerElement)))) {
+class Button extends ButtonMixin(ElementMixin(CSSInjectionMixin(ThemableMixin(PolylitMixin(LitElement))))) {
+  static get is() {
+    return 'vaadin-button';
+  }
+
+  static get styles() {
+    return buttonStyles;
+  }
+
   static get properties() {
     return {
       /**
@@ -72,15 +78,15 @@ class Button extends ButtonMixin(ElementMixin(ThemableMixin(ControllerMixin(Poly
       disabled: {
         type: Boolean,
         value: false,
+        observer: '_disabledChanged',
+        reflectToAttribute: true,
+        sync: true,
       },
     };
   }
 
-  static get is() {
-    return 'vaadin-button';
-  }
-
-  static get template() {
+  /** @protected */
+  render() {
     return html`
       <div class="vaadin-button-container">
         <span part="prefix" aria-hidden="true">

@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { aTimeout, fixtureSync, oneEvent } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, nextUpdate, oneEvent } from '@vaadin/testing-helpers';
 import '../../src/vaadin-combo-box.js';
 import { resetUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 
@@ -23,11 +23,13 @@ describe('vaadin-combo-box', () => {
 
     it('placeholder', async () => {
       comboBox.placeholder = 'Placeholder';
+      await nextUpdate(comboBox);
       await expect(comboBox).dom.to.equalSnapshot();
     });
 
     it('readonly', async () => {
       comboBox.readonly = true;
+      await nextUpdate(comboBox);
       await expect(comboBox).dom.to.equalSnapshot();
     });
 
@@ -38,16 +40,19 @@ describe('vaadin-combo-box', () => {
 
     it('pattern', async () => {
       comboBox.pattern = '[0-9]*';
+      await nextUpdate(comboBox);
       await expect(comboBox).dom.to.equalSnapshot();
     });
 
     it('label', async () => {
       comboBox.label = 'Label';
+      await nextUpdate(comboBox);
       await expect(comboBox).dom.to.equalSnapshot();
     });
 
     it('helper', async () => {
       comboBox.helperText = 'Helper';
+      await nextUpdate(comboBox);
       await expect(comboBox).dom.to.equalSnapshot();
     });
 
@@ -91,11 +96,13 @@ describe('vaadin-combo-box', () => {
 
       it('overlay class', async () => {
         comboBox.overlayClass = 'combo-box-overlay custom';
+        await nextUpdate(comboBox);
         await expect(comboBox.$.overlay).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
       });
 
       it('theme overlay', async () => {
         comboBox.setAttribute('theme', 'align-right');
+        await nextUpdate(comboBox);
         await expect(comboBox.$.overlay).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
       });
     });
@@ -108,21 +115,25 @@ describe('vaadin-combo-box', () => {
 
     it('disabled', async () => {
       comboBox.disabled = true;
+      await nextUpdate(comboBox);
       await expect(comboBox).shadowDom.to.equalSnapshot();
     });
 
     it('readonly', async () => {
       comboBox.readonly = true;
+      await nextUpdate(comboBox);
       await expect(comboBox).shadowDom.to.equalSnapshot();
     });
 
     it('invalid', async () => {
       comboBox.invalid = true;
+      await nextUpdate(comboBox);
       await expect(comboBox).shadowDom.to.equalSnapshot();
     });
 
     it('theme', async () => {
       comboBox.setAttribute('theme', 'align-right');
+      await nextUpdate(comboBox);
       await expect(comboBox).shadowDom.to.equalSnapshot();
     });
   });

@@ -1,15 +1,14 @@
 import { expect } from '@vaadin/chai-plugins';
-import { defineLit, definePolymer, fixtureSync } from '@vaadin/testing-helpers';
-import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
+import { defineLit, fixtureSync } from '@vaadin/testing-helpers';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { InputMixin } from '../src/input-mixin.js';
 import { TextAreaController } from '../src/text-area-controller.js';
 
-const runTests = (defineHelper, baseMixin) => {
-  const tag = defineHelper(
+describe('TextAreaController', () => {
+  const tag = defineLit(
     'input-mixin',
     `<slot name="textarea"></slot>`,
-    (Base) => class extends InputMixin(baseMixin(Base)) {},
+    (Base) => class extends InputMixin(PolylitMixin(Base)) {},
   );
 
   describe('default', () => {
@@ -94,12 +93,4 @@ const runTests = (defineHelper, baseMixin) => {
       expect(textarea1.id).to.not.equal(textarea2.id);
     });
   });
-};
-
-describe('TextAreaController + Polymer', () => {
-  runTests(definePolymer, ControllerMixin);
-});
-
-describe('TextAreaController + Lit', () => {
-  runTests(defineLit, PolylitMixin);
 });
