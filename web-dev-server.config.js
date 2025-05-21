@@ -2,7 +2,57 @@
 import { esbuildPlugin } from '@web/dev-server-esbuild';
 import fs from 'node:fs';
 
-const hasBaseParam = process.argv.includes('--base');
+const theme = process.argv.join(' ').match(/--theme=(\w+)/u)?.[1] ?? 'lumo';
+const hasPortedParam = process.argv.includes('--ported');
+
+/** @return {import('@web/test-runner').TestRunnerPlugin} */
+export function cssImportPlugin() {
+  return {
+    name: 'css-import',
+    transformImport({ source }) {
+      if (source.endsWith('.css')) {
+        return `${source}?injectCSS`;
+      }
+    },
+    transform(context) {
+      if (context.query.injectCSS !== undefined) {
+        return `
+          const link = document.createElement('link');
+          link.rel = 'stylesheet';
+          link.href = ${JSON.stringify(context.path)};
+          document.head.appendChild(link);
+          await new Promise((resolve, reject) => {
+            link.addEventListener('load', resolve);
+            link.addEventListener('error', reject);
+          });
+        `;
+      }
+    },
+    resolveMimeType(context) {
+      if (context.query.injectCSS !== undefined) {
+        return 'text/javascript';
+      }
+    },
+  };
+}
+
+/** @return {import('@web/test-runner').TestRunnerPlugin} */
+export function enforceLegacyLumoPlugin() {
+  return {
+    name: 'enforce-legacy-lumo',
+    transform(context) {
+      if (context.url.includes('.test.')) {
+        let { body } = context;
+        body = body.replaceAll(
+          `import '@vaadin/vaadin-lumo-styles/global.css';`,
+          `import '@vaadin/vaadin-lumo-styles/test/autoload.js';`,
+        );
+        body = body.replaceAll(/^import.+\.css.+$/gmu, '');
+        return body;
+      }
+    },
+  };
+}
 
 /** @return {import('@web/test-runner').TestRunnerPlugin} */
 export function enforceBaseStylesPlugin() {
@@ -68,8 +118,16 @@ export default {
         }
       },
     },
-    // When passing --base flag to `yarn start` command, load base styles and not Lumo
-    hasBaseParam && enforceBaseStylesPlugin(),
     esbuildPlugin({ ts: true }),
+
+    // yarn start --theme=lumo (uses legacy lumo styles defined in js files)
+    theme === 'lumo' && !hasPortedParam && enforceLegacyLumoPlugin(),
+
+    // yarn start --theme=lumo --ported (uses base styles and lumo styles defined in css files)
+    theme === 'lumo' && hasPortedParam && enforceBaseStylesPlugin(),
+    theme === 'lumo' && hasPortedParam && cssImportPlugin(),
+
+    // yarn start --theme=base
+    theme === 'base' && enforceBaseStylesPlugin(),
   ].filter(Boolean),
 };

@@ -9,11 +9,12 @@ import minimist from 'minimist';
 import { execSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
-import { enforceBaseStylesPlugin } from './web-dev-server.config.js';
+import { cssImportPlugin, enforceBaseStylesPlugin, enforceLegacyLumoPlugin } from './web-dev-server.config.js';
 
 dotenv.config();
 
 const argv = minimist(process.argv.slice(2));
+const hasPortedParam = process.argv.includes('--ported');
 
 const HIDDEN_WARNINGS = [
   '<vaadin-crud> Unable to autoconfigure form because the data structure is unknown. Either specify `include` or ensure at least one item is available beforehand.',
@@ -170,16 +171,38 @@ const getUnitTestGroups = (packages) => {
  * Get visual test groups based on packages.
  */
 const getVisualTestGroups = (packages, theme) => {
-  if (theme === 'base') {
-    packages = packages.filter((pkg) => !pkg.includes('lumo'));
-  }
-
-  return packages.map((pkg) => {
+  packages = packages.map((pkg) => {
     return {
       name: pkg,
       files: [`packages/${pkg}/test/visual/*.test.{js,ts}`, `packages/${pkg}/test/visual/${theme}/*.test.{js,ts}`],
     };
   });
+
+  if (theme === 'base') {
+    packages = packages.filter(({ name }) => !name.includes('lumo'));
+  }
+
+  if (theme === 'lumo' && hasPortedParam) {
+    packages = packages.map(({ name, files }) => {
+      return {
+        name,
+        files: files.flatMap((glob) => {
+          if (name.includes('lumo')) {
+            // In the theme package, run all visual tests
+            return glob;
+          }
+
+          return globSync(glob).filter((file) => {
+            // Otherwise, only run visual tests that import CSS files
+            const content = fs.readFileSync(file, 'utf-8').toString();
+            return content.includes('.css');
+          });
+        }),
+      };
+    });
+  }
+
+  return packages.filter((group) => group.files.length > 0);
 };
 
 const getTestRunnerHtml = () => (testFramework) =>
@@ -309,6 +332,17 @@ const createVisualTestsConfig = (theme, browserVersion) => {
     ],
     plugins: [
       esbuildPlugin({ ts: true }),
+
+      // yarn test:lumo (uses legacy lumo styles defined in js files)
+      theme === 'lumo' && !hasPortedParam && enforceLegacyLumoPlugin(),
+
+      // yarn test:lumo --ported (uses base styles and lumo styles defined in css files)
+      theme === 'lumo' && hasPortedParam && enforceBaseStylesPlugin(),
+      theme === 'lumo' && hasPortedParam && cssImportPlugin(),
+
+      // yarn test:base
+      theme === 'base' && enforceBaseStylesPlugin(),
+
       visualRegressionPlugin({
         baseDir: 'packages',
         getBaselineName(args) {
@@ -324,7 +358,6 @@ const createVisualTestsConfig = (theme, browserVersion) => {
         failureThresholdType: 'percent',
         update: process.env.TEST_ENV === 'update',
       }),
-      theme === 'base' && enforceBaseStylesPlugin(),
     ].filter(Boolean),
     groups,
     testRunnerHtml: getTestRunnerHtml(),
