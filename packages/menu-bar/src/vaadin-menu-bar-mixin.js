@@ -10,7 +10,6 @@ import { DisabledMixin } from '@vaadin/a11y-base/src/disabled-mixin.js';
 import { FocusMixin } from '@vaadin/a11y-base/src/focus-mixin.js';
 import { isElementFocused, isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
 import { KeyboardDirectionMixin } from '@vaadin/a11y-base/src/keyboard-direction-mixin.js';
-import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { I18nMixin } from '@vaadin/component-base/src/i18n-mixin.js';
 import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
@@ -56,7 +55,6 @@ const DEFAULT_I18N = {
 
 /**
  * @polymerMixin
- * @mixes ControllerMixin
  * @mixes DisabledMixin
  * @mixes FocusMixin
  * @mixes I18nMixin
@@ -66,7 +64,7 @@ const DEFAULT_I18N = {
 export const MenuBarMixin = (superClass) =>
   class MenuBarMixinClass extends I18nMixin(
     DEFAULT_I18N,
-    KeyboardDirectionMixin(ResizeMixin(FocusMixin(DisabledMixin(ControllerMixin(superClass))))),
+    KeyboardDirectionMixin(ResizeMixin(FocusMixin(DisabledMixin(superClass)))),
   ) {
     static get properties() {
       return {

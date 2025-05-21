@@ -4,7 +4,6 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import type { Constructor } from '@open-wc/dedupe-mixin';
-import type { ControllerMixinClass } from '@vaadin/component-base/src/controller-mixin.js';
 import type { OverlayFocusMixinClass } from './vaadin-overlay-focus-mixin.js';
 import type { OverlayStackMixinClass } from './vaadin-overlay-stack-mixin.js';
 
@@ -12,11 +11,7 @@ export type OverlayRenderer = (root: HTMLElement, owner: HTMLElement, model?: ob
 
 export declare function OverlayMixin<T extends Constructor<HTMLElement>>(
   base: T,
-): Constructor<ControllerMixinClass> &
-  Constructor<OverlayFocusMixinClass> &
-  Constructor<OverlayMixinClass> &
-  Constructor<OverlayStackMixinClass> &
-  T;
+): Constructor<OverlayFocusMixinClass> & Constructor<OverlayMixinClass> & Constructor<OverlayStackMixinClass> & T;
 
 export declare class OverlayMixinClass {
   /**

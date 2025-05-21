@@ -8,7 +8,6 @@ import { FocusMixin } from '@vaadin/a11y-base/src/focus-mixin.js';
 import { isElementFocused, isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
 import { KeyboardMixin } from '@vaadin/a11y-base/src/keyboard-mixin.js';
 import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
-import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { OverlayClassMixin } from '@vaadin/component-base/src/overlay-class-mixin.js';
 import { get } from '@vaadin/component-base/src/path-utils.js';
 import { InputMixin } from '@vaadin/field-base/src/input-mixin.js';
@@ -46,7 +45,6 @@ function findItemIndex(items, callback) {
 
 /**
  * @polymerMixin
- * @mixes ControllerMixin
  * @mixes ValidateMixin
  * @mixes DisabledMixin
  * @mixes InputMixin
@@ -57,7 +55,7 @@ function findItemIndex(items, callback) {
  */
 export const ComboBoxMixin = (subclass) =>
   class ComboBoxMixinClass extends OverlayClassMixin(
-    ControllerMixin(ValidateMixin(FocusMixin(KeyboardMixin(InputMixin(DisabledMixin(subclass)))))),
+    ValidateMixin(FocusMixin(KeyboardMixin(InputMixin(DisabledMixin(subclass))))),
   ) {
     static get properties() {
       return {

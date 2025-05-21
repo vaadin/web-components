@@ -6,7 +6,6 @@ import type {
   ComboBoxItemMixinClass,
   ComboBoxItemRenderer,
 } from '@vaadin/combo-box/src/vaadin-combo-box-item-mixin.js';
-import type { ControllerMixinClass } from '@vaadin/component-base/src/controller-mixin.js';
 import type { DelegateStateMixinClass } from '@vaadin/component-base/src/delegate-state-mixin.js';
 import type { DirMixinClass } from '@vaadin/component-base/src/dir-mixin.js';
 import type { ElementMixinClass } from '@vaadin/component-base/src/element-mixin.js';
@@ -110,7 +109,6 @@ assertType<boolean>(narrowedComboBox.selectedItemsOnTop);
 assertType<boolean>(narrowedComboBox.autoExpandVertically);
 
 // Mixins
-assertType<ControllerMixinClass>(narrowedComboBox);
 assertType<ElementMixinClass>(narrowedComboBox);
 assertType<DelegateFocusMixinClass>(narrowedComboBox);
 assertType<DelegateStateMixinClass>(narrowedComboBox);

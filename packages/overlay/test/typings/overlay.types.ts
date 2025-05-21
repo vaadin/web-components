@@ -1,4 +1,3 @@
-import type { ControllerMixinClass } from '@vaadin/component-base/src/controller-mixin.js';
 import type { DirMixinClass } from '@vaadin/component-base/src/dir-mixin.js';
 import type { ThemableMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import type { PositionMixinClass } from '../../src/vaadin-overlay-position-mixin.js';
@@ -21,7 +20,6 @@ assertType<boolean>(overlay.restoreFocusOnClose);
 assertType<HTMLElement | undefined>(overlay.restoreFocusNode);
 assertType<DirMixinClass>(overlay);
 assertType<ThemableMixinClass>(overlay);
-assertType<ControllerMixinClass>(overlay);
 
 overlay.addEventListener('opened-changed', (event) => {
   assertType<OverlayOpenedChangedEvent>(event);
