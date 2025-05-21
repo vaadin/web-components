@@ -570,7 +570,7 @@ describe('form layout', () => {
       layout = container.firstElementChild;
       layout.responsiveSteps = [{ columns: 2 }];
       items = [...layout.querySelectorAll('vaadin-form-item')];
-      await nextRender(container);
+      await nextRender();
     });
 
     function estimateEffectiveColspan(el) {
@@ -581,7 +581,7 @@ describe('form layout', () => {
       expect(estimateEffectiveColspan(layout.children[0])).to.be.closeTo(1, 0.1);
 
       layout.children[0].setAttribute('colspan', 2);
-      await nextRender(container);
+      await nextRender();
       expect(estimateEffectiveColspan(layout.children[0])).to.be.closeTo(2, 0.1);
     });
 
@@ -589,14 +589,14 @@ describe('form layout', () => {
       expect(estimateEffectiveColspan(layout.children[0])).to.be.closeTo(1, 0.1);
 
       layout.children[0].setAttribute('data-colspan', 2);
-      await nextRender(container);
+      await nextRender();
       expect(estimateEffectiveColspan(layout.children[0])).to.be.closeTo(2, 0.1);
     });
 
     it('should prefer colspan attribute over data-colspan when both are set', async () => {
       layout.children[0].setAttribute('colspan', 2);
       layout.children[0].setAttribute('data-colspan', 1);
-      await nextRender(container);
+      await nextRender();
       expect(estimateEffectiveColspan(layout.children[0])).to.be.closeTo(2, 0.1);
     });
 
@@ -607,11 +607,11 @@ describe('form layout', () => {
       const newFormItem = document.createElement('vaadin-form-item');
       newFormItem.hidden = true;
       layout.appendChild(newFormItem);
-      await nextRender(container);
+      await nextRender();
       expect(newFormItem.getBoundingClientRect().width).to.equal(0);
 
       newFormItem.hidden = false;
-      await nextRender(container);
+      await nextRender();
       const unhiddenItemWidth = newFormItem.getBoundingClientRect().width;
       expect(unhiddenItemWidth).to.equal(itemWidth);
     });
@@ -620,7 +620,7 @@ describe('form layout', () => {
       const newFormItem = document.createElement('vaadin-form-item');
       newFormItem.innerHTML = '<label slot="label">Field</label><input />';
       layout.insertBefore(newFormItem, items[0]);
-      await nextRender(container);
+      await nextRender();
       expect(getComputedStyle(newFormItem).marginLeft).to.be.equal('0px');
     });
 
@@ -628,12 +628,12 @@ describe('form layout', () => {
       const newFormItem = document.createElement('vaadin-form-item');
       newFormItem.innerHTML = '<label slot="label">Field</label><input />';
       layout.insertBefore(newFormItem, items[0]);
-      await nextRender(container);
+      await nextRender();
 
       expect(getComputedStyle(items[0]).marginLeft).to.not.be.equal('0px');
 
       newFormItem.remove();
-      await nextRender(container);
+      await nextRender();
       expect(getComputedStyle(items[0]).marginLeft).to.be.equal('0px');
     });
 
