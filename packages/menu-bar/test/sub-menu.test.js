@@ -19,10 +19,7 @@ import {
 import sinon from 'sinon';
 import './menu-bar-test-styles.js';
 import '../src/vaadin-menu-bar.js';
-import { setCancelSyntheticClickEvents } from '@polymer/polymer/lib/utils/settings.js';
 import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
-
-setCancelSyntheticClickEvents(false);
 
 const menuOpenEvent = isTouch ? 'click' : 'mouseover';
 
