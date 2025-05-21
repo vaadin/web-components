@@ -1,11 +1,12 @@
-import { html, PolymerElement } from '@polymer/polymer';
-
 /**
  * Theme switcher component for the charts examples.
  */
-class ThemeSwitcher extends PolymerElement {
-  static get template() {
-    return html`
+class ThemeSwitcher extends HTMLElement {
+  constructor() {
+    super();
+
+    this.attachShadow({ mode: 'open' });
+    this.shadowRoot.innerHTML = `
       <style>
         .theme-switcher {
           display: flex;
@@ -22,14 +23,7 @@ class ThemeSwitcher extends PolymerElement {
         <button>Monotone theme</button>
       </div>
     `;
-  }
 
-  static get is() {
-    return 'theme-switcher';
-  }
-
-  ready() {
-    super.ready();
     const buttons = this.shadowRoot.querySelectorAll('button');
     buttons[0].addEventListener('click', () => this.changeTheme(''));
     buttons[1].addEventListener('click', () => this.changeTheme('gradient'));
@@ -38,13 +32,10 @@ class ThemeSwitcher extends PolymerElement {
 
   // Crappy theme switcher that doesn't clear the previous theme
   changeTheme(theme) {
-    const charts = document.getElementsByTagName('vaadin-chart');
-    for (let i = 0; i < charts.length; i++) {
-      charts[i].setAttribute('theme', theme);
-    }
+    [...document.getElementsByTagName('vaadin-chart')].forEach((chart) => {
+      chart.setAttribute('theme', theme);
+    });
   }
 }
 
-customElements.define(ThemeSwitcher.is, ThemeSwitcher);
-
-export { ThemeSwitcher };
+customElements.define('theme-switcher', ThemeSwitcher);
