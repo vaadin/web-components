@@ -31,6 +31,21 @@ export const DashboardLayoutMixin = (superClass) =>
           value: false,
           reflectToAttribute: true,
         },
+
+        /**
+         * Root heading level for sections and widgets. Defaults to 2.
+         *
+         * If changed to e.g. 1:
+         * - sections will have the attribute `aria-level` with value 1
+         * - non-nested widgets will have the attribute `aria-level` with value 1
+         * - nested widgets will have the attribute `aria-level` with value 2
+         */
+        rootHeadingLevel: {
+          type: Number,
+          value: 2,
+          sync: true,
+          reflectToAttribute: true,
+        },
       };
     }
 
