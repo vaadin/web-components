@@ -1,13 +1,11 @@
 import { fire, makeSoloTouchEvent, nextRender } from '@vaadin/testing-helpers';
-import { flush } from '@polymer/polymer/lib/utils/flush.js';
-import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import { isElementFocused } from '@vaadin/a11y-base/src/focus-utils.js';
 
 export function activateScroller(scroller) {
   scroller.active = true;
-  // Setting `active` triggers `_finishInit` using afterNextRender
+  // Setting `active` triggers `_finishInit` using requestAnimationFrame
   return new Promise((resolve) => {
-    afterNextRender(scroller, () => {
+    requestAnimationFrame(() => {
       scroller._debouncerUpdateClones.flush();
       resolve();
     });
@@ -76,9 +74,6 @@ export async function untilOverlayRendered(datePicker) {
 
   // Then wait for scrollers to fully render
   await nextRender(datePicker);
-
-  // Force dom-repeat to render table elements
-  flush();
 
   await untilOverlayScrolled(datePicker);
 }
