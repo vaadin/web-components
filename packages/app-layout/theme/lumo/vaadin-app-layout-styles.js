@@ -21,6 +21,8 @@ registerStyles(
 
     :host {
       --_vaadin-app-layout-drawer-width: var(--vaadin-app-layout-drawer-width, 16em);
+      --vaadin-app-layout-transition: 200ms;
+      --vaadin-app-layout-transition-duration: var(--vaadin-app-layout-transition);
     }
 
     [part='navbar'],
