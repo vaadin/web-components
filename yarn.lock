@@ -1297,7 +1297,7 @@
     "@polymer/iron-overlay-behavior" "^3.0.0-pre.27"
     "@polymer/polymer" "^3.0.0"
 
-"@polymer/polymer@^3.0.0", "@polymer/polymer@^3.5.1":
+"@polymer/polymer@^3.0.0":
   version "3.5.1"
   resolved "https://registry.yarnpkg.com/@polymer/polymer/-/polymer-3.5.1.tgz#4b5234e43b8876441022bcb91313ab3c4a29f0c8"
   integrity sha512-JlAHuy+1qIC6hL1ojEUfIVD58fzTpJAoCxFwV5yr0mYTXV1H8bz5zy0+rC963Cgr9iNXQ4T9ncSjC2fkF9BQfw==
@@ -1968,12 +1968,11 @@
   resolved "https://registry.yarnpkg.com/@ungap/structured-clone/-/structured-clone-1.3.0.tgz#d06bbb384ebcf6c505fde1c3d0ed4ddffe0aaff8"
   integrity sha512-WmoN8qaIAo7WTYWbAZuG8PYEhn5fkz7dZrqTBZ7dtt//lL2Gwms1IcnQ5yHqjDfX8Ft5j4YzDM23f87zBfDe9g==
 
-"@vaadin/testing-helpers@^1.1.0":
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/@vaadin/testing-helpers/-/testing-helpers-1.1.0.tgz#8eeac00443cf7d4c130fc136fc7d2c9abee1dbfc"
-  integrity sha512-fbBIsla857GlzQDDd/NPNQxTcV76F0SzFm4U2WaDhH+RouCVta2z1IhAeIIOXz+dc2Ni0VLwlF77QEr9hSzLIQ==
+"@vaadin/testing-helpers@^2.0.0":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@vaadin/testing-helpers/-/testing-helpers-2.0.0.tgz#e53e3443a27e7be3f06dd4e1562a7405dc352043"
+  integrity sha512-/aU11ft4V6HuOKIFoKixHQm8lC9OH/pNed2cWtUrpyb7q27nkHF9eLb6DON+ixCzd/IqJ8sOdRczGSECKYZ1xA==
   dependencies:
-    "@polymer/polymer" "^3.5.1"
     lit "^3.0.0"
 
 "@vaadin/vaadin-development-mode-detector@^2.0.0":

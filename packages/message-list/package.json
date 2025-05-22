@@ -48,7 +48,7 @@
   "devDependencies": {
     "@vaadin/chai-plugins": "25.0.0-alpha1",
     "@vaadin/test-runner-commands": "25.0.0-alpha1",
-    "@vaadin/testing-helpers": "^1.1.0",
+    "@vaadin/testing-helpers": "^2.0.0",
     "sinon": "^18.0.0"
   },
   "web-types": [
