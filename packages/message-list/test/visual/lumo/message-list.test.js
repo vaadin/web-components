@@ -68,6 +68,22 @@ describe('message-list', () => {
           await nextFrame();
           await visualDiff(div, `${dir}-markdown`);
         });
+
+        it('markdown - margin overrides', async () => {
+          // Override the default margins in application styles with a stronger selector
+          fixtureSync(`
+            <style>
+              vaadin-message-list p {
+                margin: 20px;
+              }
+            </style>
+          `);
+
+          element.markdown = true;
+          await customElements.whenDefined('vaadin-markdown');
+          await nextFrame();
+          await visualDiff(div, `${dir}-markdown-margin-overrides`);
+        });
       });
     });
   });

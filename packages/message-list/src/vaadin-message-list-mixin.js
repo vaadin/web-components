@@ -6,13 +6,15 @@
 import { html, render } from 'lit';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import { KeyboardDirectionMixin } from '@vaadin/a11y-base/src/keyboard-direction-mixin.js';
+import { SlotStylesMixin } from '@vaadin/component-base/src/slot-styles-mixin';
 
 /**
  * @polymerMixin
  * @mixes KeyboardDirectionMixin
+ * @mixes SlotStylesMixin
  */
 export const MessageListMixin = (superClass) =>
-  class MessageListMixinClass extends KeyboardDirectionMixin(superClass) {
+  class MessageListMixinClass extends SlotStylesMixin(KeyboardDirectionMixin(superClass)) {
     static get properties() {
       return {
         /**
@@ -62,6 +64,22 @@ export const MessageListMixin = (superClass) =>
       // Make screen readers announce new messages
       this.setAttribute('aria-relevant', 'additions');
       this.setAttribute('role', 'log');
+    }
+
+    /** @protected */
+    get slotStyles() {
+      const tag = this.localName;
+      return [
+        `
+      ${tag} :where(vaadin-markdown > :is(h1, h2, h3, h4, h5, h6, p, ul, ol):first-child) {
+        margin-top: 0;
+      }
+
+      ${tag} :where(vaadin-markdown > :is(h1, h2, h3, h4, h5, h6, p, ul, ol):last-child) {
+        margin-bottom: 0;
+      }
+      `,
+      ];
     }
 
     /**
