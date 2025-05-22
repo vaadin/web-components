@@ -2,7 +2,7 @@ import { expect } from '@vaadin/chai-plugins';
 import { click, escKeyDown, fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-overlay.js';
-import { setNestedOverlay } from '@vaadin/overlay/src/vaadin-overlay-stack-mixin.js';
+import { setNestedOverlay } from '../src/vaadin-overlay-stack-mixin.js';
 import { createOverlay } from './helpers.js';
 
 describe('multiple overlays', () => {
