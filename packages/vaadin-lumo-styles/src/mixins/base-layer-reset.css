@@ -10,7 +10,5 @@
     &::after {
       all: revert-layer;
     }
-      all: revert-layer;
-    }
   }
 }
