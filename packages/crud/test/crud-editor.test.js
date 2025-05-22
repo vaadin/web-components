@@ -86,6 +86,13 @@ describe('crud editor', () => {
         expect(form.parentElement).to.equal(overlay);
       });
 
+      it(`should move ${type} form to crud after dialog closing with default editorPosition`, async () => {
+        crud._grid.activeItem = crud.items[0];
+        await nextRender();
+        btnCancel.click();
+        expect(form.parentElement).to.equal(crud);
+      });
+
       it(`should move ${type} form to crud when editorPosition set to bottom`, async () => {
         crud.editorPosition = 'bottom';
         crud._grid.activeItem = crud.items[0];
