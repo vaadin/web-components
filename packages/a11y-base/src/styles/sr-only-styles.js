@@ -15,7 +15,6 @@ export const screenReaderOnly = css`
   .sr-only {
     border: 0 !important;
     clip: rect(1px, 1px, 1px, 1px) !important;
-    -webkit-clip-path: inset(50%) !important;
     clip-path: inset(50%) !important;
     height: 1px !important;
     margin: -1px !important;

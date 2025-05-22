@@ -33,7 +33,7 @@ describe('notification', () => {
     it(position, async () => {
       element.position = position;
       element.opened = true;
-      await nextRender(element);
+      await nextRender();
       await visualDiff(document.body, `${position}`);
     });
   });

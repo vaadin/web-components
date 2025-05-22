@@ -32,7 +32,7 @@ describe('toolbar controls', () => {
       editor.focus();
       editor.insertText(0, 'Foo', 'user');
       editor.setSelection(0, 3);
-      await nextRender(rte);
+      await nextRender();
     });
 
     ['bold', 'italic', 'underline', 'strike', 'blockquote', 'code-block'].forEach((fmt) => {

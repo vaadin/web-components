@@ -43,7 +43,7 @@ describe('keyboard', () => {
       // Move focus to the calendar
       await sendKeys({ press: 'Tab' });
 
-      await nextRender(datePicker);
+      await nextRender();
 
       await sendKeys({ press: 'ArrowDown' });
       expect(input.value).to.equal('1/8/2000');
@@ -319,7 +319,7 @@ describe('keyboard', () => {
       it('should close the overlay when calendar has focus', async () => {
         // Move focus to the calendar
         await sendKeys({ press: 'ArrowDown' });
-        await nextRender(datePicker);
+        await nextRender();
 
         await sendKeys({ press: 'Escape' });
         expect(datePicker.opened).to.be.false;
@@ -328,7 +328,7 @@ describe('keyboard', () => {
       it('should move focus from the calendar back to input', async () => {
         // Move focus to the calendar
         await sendKeys({ press: 'ArrowDown' });
-        await nextRender(datePicker);
+        await nextRender();
         expect(document.activeElement).to.not.equal(input);
 
         await sendKeys({ press: 'Escape' });

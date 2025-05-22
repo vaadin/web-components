@@ -28,7 +28,7 @@ describe('crud editor', () => {
       crud = fixtureSync('<vaadin-crud style="width: 300px;"></vaadin-crud>');
       crud.items = [{ foo: 'bar' }];
       header = crud.querySelector('[slot=header]');
-      await nextRender(crud._grid);
+      await nextRender();
     });
 
     it('should have new item title', async () => {
@@ -69,11 +69,11 @@ describe('crud editor', () => {
           `);
         }
         crud.editOnClick = true;
-        await nextRender(crud);
+        await nextRender();
         flushGrid(crud._grid);
 
         crud.items = [{ foo: 'bar' }, { foo: 'baz' }];
-        await nextRender(crud);
+        await nextRender();
         dialog = crud.$.dialog;
         overlay = dialog.$.overlay;
         form = crud.querySelector('[slot=form]');
@@ -84,6 +84,13 @@ describe('crud editor', () => {
         crud._grid.activeItem = crud.items[0];
         await nextRender();
         expect(form.parentElement).to.equal(overlay);
+      });
+
+      it(`should move ${type} form to crud after dialog closing with default editorPosition`, async () => {
+        crud._grid.activeItem = crud.items[0];
+        await nextRender();
+        btnCancel.click();
+        expect(form.parentElement).to.equal(crud);
       });
 
       it(`should move ${type} form to crud when editorPosition set to bottom`, async () => {
@@ -106,7 +113,7 @@ describe('crud editor', () => {
         btnCancel.click();
 
         crud.editorPosition = 'bottom';
-        await nextRender(crud);
+        await nextRender();
 
         crud._grid.activeItem = crud.items[1];
         await nextRender();
@@ -115,14 +122,14 @@ describe('crud editor', () => {
 
       it(`should move ${type} form when editorPosition changes from bottom to default`, async () => {
         crud.editorPosition = 'bottom';
-        await nextRender(crud);
+        await nextRender();
 
         crud._grid.activeItem = crud.items[0];
         await nextRender();
         btnCancel.click();
 
         crud.editorPosition = '';
-        await nextRender(crud);
+        await nextRender();
 
         crud._grid.activeItem = crud.items[1];
         await nextRender();
@@ -138,7 +145,7 @@ describe('crud editor', () => {
 
         crud._grid.activeItem = crud.items[0];
         crud.appendChild(newForm);
-        await nextRender(crud);
+        await nextRender();
 
         expect(form.parentElement).to.be.null;
         expect(newForm.parentElement).to.equal(overlay);

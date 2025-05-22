@@ -39,7 +39,7 @@ describe('crud', () => {
       crud = fixtureSync(`
         <vaadin-crud style="width: 300px;" items='[{"foo": "bar"}]' edited-item="{}"></vaadin-crud>
       `);
-      await nextRender(crud);
+      await nextRender();
       flushGrid(crud._grid);
     });
 
@@ -65,7 +65,7 @@ describe('crud', () => {
     it('should be able to internationalize via `i18n` property', async () => {
       expect(crud._newButton.textContent).to.be.equal('New item');
       crud.i18n = { newItem: 'Nueva entidad', editLabel: 'Editar entidad' };
-      await nextRender(crud._grid);
+      await nextRender();
       expect(crud._newButton.textContent).to.be.equal('Nueva entidad');
       expect(crud._grid.querySelector('vaadin-crud-edit-column').ariaLabel).to.be.equal('Editar entidad');
       expect(crud._grid.querySelector('vaadin-crud-edit').getAttribute('aria-label')).to.be.equal('Editar entidad');
@@ -127,7 +127,7 @@ describe('crud', () => {
 
     it('should have an empty form if no item is present', async () => {
       crud.dataProvider = (_, callback) => callback([], 0);
-      await nextRender(crud);
+      await nextRender();
       crud._newButton.click();
       await nextRender();
       expect(crud._form._fields).to.be.not.ok;
@@ -160,7 +160,7 @@ describe('crud', () => {
         // This should initialize the grid and pass the data provider
         document.body.appendChild(crud);
         // Verify item from data provider is rendered
-        await nextRender(crud);
+        await nextRender();
         flushGrid(crud._grid);
         expect(getBodyCellContent(crud._grid, 0, 0).textContent).to.be.equal('bar');
       });
@@ -172,7 +172,7 @@ describe('crud', () => {
         document.body.appendChild(crud);
 
         // Verify item from data provider is rendered
-        await nextRender(crud);
+        await nextRender();
         flushGrid(customGrid);
         expect(getBodyCellContent(customGrid, 0, 0).textContent).to.be.equal('bar');
       });
@@ -184,7 +184,7 @@ describe('crud', () => {
         // Replace default grid with custom one after setting the data provider
         crud.appendChild(customGrid);
         // Verify item from data provider is rendered
-        await nextRender(crud);
+        await nextRender();
         flushGrid(customGrid);
         expect(getBodyCellContent(customGrid, 0, 0).textContent).to.be.equal('bar');
       });
@@ -270,7 +270,7 @@ describe('crud', () => {
       grid.querySelector('vaadin-grid-column').renderer = (root, _, model) => {
         root.textContent = model.item;
       };
-      await nextRender(grid);
+      await nextRender();
     });
 
     afterEach(async () => {
@@ -282,7 +282,7 @@ describe('crud', () => {
       crud.appendChild(grid);
       await nextRender();
       crud.items = [1, 2];
-      await nextRender(crud);
+      await nextRender();
       flushGrid(grid);
       expect(crud._grid).not.to.be.equal(grid);
     });
@@ -292,7 +292,7 @@ describe('crud', () => {
       crud.appendChild(grid);
       await nextRender();
       crud.items = [1, 2];
-      await nextRender(crud);
+      await nextRender();
       flushGrid(grid);
       expect(crud._grid).to.be.equal(grid);
       expect(getBodyCellContent(crud._grid, 0, 0).textContent).to.be.equal('1');
@@ -303,9 +303,9 @@ describe('crud', () => {
       crud.appendChild(form);
       await nextRender();
       crud.items = [{ foo: 1 }];
-      await nextRender(crud);
+      await nextRender();
       edit(crud.items[0]);
-      await nextRender(crud.$.dialog);
+      await nextRender();
       expect(crud._form).not.to.be.equal(form);
     });
 
@@ -357,7 +357,7 @@ describe('crud', () => {
     it('should not propagate theme attribute to a custom grid', async () => {
       crud.setAttribute('theme', 'foo');
       crud.appendChild(grid);
-      await nextRender(crud);
+      await nextRender();
       expect(grid.hasAttribute('theme')).to.be.false;
     });
   });
@@ -378,7 +378,7 @@ describe('crud', () => {
       crud.appendChild(form);
       await nextRender();
       crud.items = [{ foo: 1, bar: 2 }];
-      await nextRender(crud);
+      await nextRender();
     });
 
     afterEach(() => {
@@ -507,7 +507,7 @@ describe('crud', () => {
       crud.editorPosition = 'bottom';
       crud.editOnClick = true;
       crud.items = [{ foo: 'bar' }, { foo: 'baz' }];
-      await nextRender(crud);
+      await nextRender();
       flushGrid(crud._grid);
       confirmCancelDialog = crud.$.confirmCancel;
       confirmCancelOverlay = confirmCancelDialog.$.dialog.$.overlay;

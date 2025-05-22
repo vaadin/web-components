@@ -26,7 +26,7 @@ describe('keyboard navigation', () => {
   describe('root level buttons', () => {
     beforeEach(async () => {
       menu.items = [{ text: 'Item 1' }, { text: 'Item 2' }, { text: 'Item 3', disabled: true }, { text: 'Item 4' }];
-      await nextRender(menu);
+      await nextRender();
       buttons = menu._buttons;
     });
 
@@ -331,7 +331,7 @@ describe('keyboard navigation', () => {
 
         // Tab to next button with submenu
         await sendKeys({ press: 'Tab' });
-        await nextRender(subMenu);
+        await nextRender();
 
         expect(subMenu.opened).to.be.true;
         expect(subMenu.listenOn).to.equal(buttons[3]);
@@ -347,7 +347,7 @@ describe('keyboard navigation', () => {
 
         // Shift Tab to previous button with submenu
         await sendKeys({ press: 'Shift+Tab' });
-        await nextRender(subMenu);
+        await nextRender();
 
         expect(subMenu.opened).to.be.true;
         expect(subMenu.listenOn).to.equal(buttons[2]);
@@ -363,7 +363,7 @@ describe('keyboard navigation', () => {
 
         // Tab to next button without submenu
         await sendKeys({ press: 'Tab' });
-        await nextRender(subMenu);
+        await nextRender();
 
         expect(subMenu.opened).to.be.false;
         expect(document.activeElement).to.equal(buttons[1]);
@@ -379,7 +379,7 @@ describe('keyboard navigation', () => {
 
         // Tab to next button without submenu
         await sendKeys({ press: 'Shift+Tab' });
-        await nextRender(subMenu);
+        await nextRender();
 
         expect(subMenu.opened).to.be.false;
         expect(document.activeElement).to.equal(buttons[1]);
@@ -395,7 +395,7 @@ describe('keyboard navigation', () => {
 
         // Tab outside the menu bar
         await sendKeys({ press: 'Tab' });
-        await nextRender(subMenu);
+        await nextRender();
 
         expect(subMenu.opened).to.be.false;
         expect(document.activeElement).to.equal(lastGlobalFocusable);
@@ -411,7 +411,7 @@ describe('keyboard navigation', () => {
 
         // Shift + Tab outside the menu bar
         await sendKeys({ press: 'Shift+Tab' });
-        await nextRender(subMenu);
+        await nextRender();
 
         expect(subMenu.opened).to.be.false;
         expect(document.activeElement).to.equal(firstGlobalFocusable);
@@ -429,7 +429,7 @@ describe('keyboard navigation', () => {
 
         // Tab outside the menu bar (since next button is disabled)
         await sendKeys({ press: 'Tab' });
-        await nextRender(subMenu);
+        await nextRender();
 
         expect(subMenu.opened).to.be.false;
         expect(document.activeElement).to.equal(lastGlobalFocusable);
@@ -448,7 +448,7 @@ describe('keyboard navigation', () => {
 
         // Tab outside the menu bar (since previous buttons are disabled)
         await sendKeys({ press: 'Shift+Tab' });
-        await nextRender(subMenu);
+        await nextRender();
 
         expect(subMenu.opened).to.be.false;
         expect(document.activeElement).to.equal(firstGlobalFocusable);

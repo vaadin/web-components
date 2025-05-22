@@ -3,9 +3,6 @@ export const snapshots = {};
 
 snapshots["vaadin-crud host default"] = 
 `<vaadin-crud editor-position="">
-  <h3 slot="header">
-    Edit item
-  </h3>
   <vaadin-crud-grid
     slot="grid"
     style="touch-action: none;"
@@ -135,8 +132,6 @@ snapshots["vaadin-crud host default"] =
       </vaadin-crud-edit>
     </vaadin-grid-cell-content>
   </vaadin-crud-grid>
-  <vaadin-crud-form slot="form">
-  </vaadin-crud-form>
   <vaadin-button
     role="button"
     slot="new-button"
@@ -145,6 +140,11 @@ snapshots["vaadin-crud host default"] =
   >
     New item
   </vaadin-button>
+  <h3 slot="header">
+    Edit item
+  </h3>
+  <vaadin-crud-form slot="form">
+  </vaadin-crud-form>
   <vaadin-button
     aria-disabled="true"
     disabled=""

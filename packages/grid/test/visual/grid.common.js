@@ -37,7 +37,7 @@ describe('grid', () => {
 
           element.items = users;
           flushGrid(element);
-          await nextRender(element);
+          await nextRender();
         });
 
         it('header footer', async () => {
@@ -70,7 +70,7 @@ describe('grid', () => {
           };
 
           flushGrid(element);
-          await nextRender(element);
+          await nextRender();
         });
 
         it('column groups', async () => {
@@ -127,7 +127,7 @@ describe('grid', () => {
           };
 
           flushGrid(element);
-          await nextRender(element);
+          await nextRender();
         });
 
         it('row details', async () => {
@@ -154,7 +154,7 @@ describe('grid', () => {
           };
 
           flushGrid(element);
-          await nextRender(element);
+          await nextRender();
           const sorters = [...document.querySelectorAll('vaadin-grid-sorter')];
           firstSorter = sorters.find((sorter) => sorter.textContent === 'First name');
           secondSorter = sorters.find((sorter) => sorter.textContent === 'Last name');
@@ -203,7 +203,7 @@ describe('grid', () => {
             `);
             element.items = users;
             flushGrid(element);
-            await nextRender(element);
+            await nextRender();
             selectionColumn = element.querySelector('vaadin-grid-selection-column');
           });
 
@@ -229,7 +229,7 @@ describe('grid', () => {
             `);
             element.items = users;
             flushGrid(element);
-            await nextRender(element);
+            await nextRender();
             selectionColumn = element.querySelector('vaadin-grid-selection-column');
           });
 
@@ -268,7 +268,7 @@ describe('grid', () => {
           // Tab to body row
           await sendKeys({ press: 'Tab' });
 
-          await nextRender(element);
+          await nextRender();
         });
 
         it('row focus', async () => {
@@ -330,7 +330,7 @@ describe('grid', () => {
       };
       element.items = users;
       flushGrid(element);
-      await nextRender(element);
+      await nextRender();
     });
 
     it('dragover', async () => {
@@ -389,7 +389,7 @@ describe('grid', () => {
       `);
       element.items = users;
       flushGrid(element);
-      await nextRender(element);
+      await nextRender();
     });
 
     it('disabled', async () => {
@@ -422,7 +422,7 @@ describe('grid', () => {
         cb(pageItems, levelSize);
       };
       flushGrid(element);
-      await nextRender(element);
+      await nextRender();
     });
 
     it('default', async () => {
@@ -456,7 +456,7 @@ describe('grid', () => {
       });
 
       flushGrid(element);
-      await nextRender(element);
+      await nextRender();
     });
 
     it('default', async () => {

@@ -287,17 +287,3 @@ describe('integer-field', () => {
     });
   });
 });
-
-describe('mixed', () => {
-  it('should not break when used with text-field and number-field', () => {
-    expect(() =>
-      fixtureSync(`
-        <div>
-          <vaadin-integer-field label="integer fld"></vaadin-integer-field>
-          <vaadin-text-field label="text fld"></vaadin-text-field>
-          <vaadin-number-field label="number fld"></vaadin-number-field>
-        </div>
-      `),
-    ).to.not.throw(Error);
-  });
-});

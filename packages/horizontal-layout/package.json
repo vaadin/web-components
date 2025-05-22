@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/horizontal-layout",
-  "version": "25.0.0-alpha0",
+  "version": "25.0.0-alpha1",
   "publishConfig": {
     "access": "public"
   },
@@ -34,15 +34,15 @@
     "web-component"
   ],
   "dependencies": {
-    "@vaadin/component-base": "25.0.0-alpha0",
-    "@vaadin/vaadin-lumo-styles": "25.0.0-alpha0",
-    "@vaadin/vaadin-themable-mixin": "25.0.0-alpha0",
+    "@vaadin/component-base": "25.0.0-alpha1",
+    "@vaadin/vaadin-lumo-styles": "25.0.0-alpha1",
+    "@vaadin/vaadin-themable-mixin": "25.0.0-alpha1",
     "lit": "^3.0.0"
   },
   "devDependencies": {
-    "@vaadin/chai-plugins": "25.0.0-alpha0",
-    "@vaadin/test-runner-commands": "25.0.0-alpha0",
-    "@vaadin/testing-helpers": "^1.1.0"
+    "@vaadin/chai-plugins": "25.0.0-alpha1",
+    "@vaadin/test-runner-commands": "25.0.0-alpha1",
+    "@vaadin/testing-helpers": "^2.0.0"
   },
   "web-types": [
     "web-types.json",

@@ -65,9 +65,9 @@ describe('avatar-group', () => {
     document.body.style.width = '220px';
     element.maxItemsVisible = 3;
     element.items = [{ name: 'Abc Def' }, { name: 'Ghi Jkl' }, { name: 'Mno Pqr' }, { name: 'Stu Vwx' }];
-    await nextRender(element);
+    await nextRender();
     element._overflow.click();
-    await nextRender(element);
+    await nextRender();
     await visualDiff(document.body, 'opened');
   });
 

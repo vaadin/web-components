@@ -54,7 +54,7 @@ const frozenGridFixture = (frozen, frozenToEnd) => {
       document.documentElement.setAttribute('dir', direction);
 
       flushGrid(grid);
-      await nextRender(grid);
+      await nextRender();
     });
 
     after(() => document.documentElement.removeAttribute('dir'));
@@ -194,7 +194,7 @@ const frozenGridFixture = (frozen, frozenToEnd) => {
       document.documentElement.setAttribute('dir', direction);
 
       flushGrid(grid);
-      await nextRender(grid);
+      await nextRender();
     });
 
     it('should have first frozen to end only when there are frozen columns', () => {

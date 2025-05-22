@@ -32,9 +32,11 @@ export const field = css`
       outline: 1px solid;
       outline-offset: -1px;
     }
+
     :host([focused]) [part='input-field'] {
       outline-width: 2px;
     }
+
     :host([disabled]) [part='input-field'] {
       outline-color: GrayText;
     }

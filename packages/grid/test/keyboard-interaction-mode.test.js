@@ -532,7 +532,7 @@ describe('keyboard interaction mode', () => {
 
     async function rendered() {
       await nextFrame();
-      await nextRender(grid);
+      await nextRender();
       await nextFrame();
     }
 

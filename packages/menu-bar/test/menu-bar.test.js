@@ -30,7 +30,7 @@ describe('root menu layout', () => {
   beforeEach(async () => {
     menu = fixtureSync('<vaadin-menu-bar></vaadin-menu-bar>');
     menu.items = [{ text: 'Item 1' }, { text: 'Item 2' }, { text: 'Item 3', disabled: true }, { text: 'Item 4' }];
-    await nextRender(menu);
+    await nextRender();
     buttons = menu._buttons;
   });
 
