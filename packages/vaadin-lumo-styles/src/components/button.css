@@ -1,3 +1,8 @@
+/**
+ * @license
+ * Copyright (c) 2017 - 2025 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
 :host {
   display: inline-block;
   position: relative;
@@ -265,7 +270,6 @@ Note, to make it work, the form fields should have the same "::before" pseudo-el
   height: var(--lumo-icon-size-m);
 }
 
-/* Vaadin icons are based on a 16x16 grid (unlike Lumo and Material icons with 24x24), so they look too big by default */
 [part] ::slotted(vaadin-icon[icon^='vaadin:']) {
   padding: 0.25em;
   box-sizing: border-box !important;

@@ -166,23 +166,22 @@ Iconset.register('lumo', 1000, template);\n`;
 html {
   ${glyphCSSProperties.join('\n  ')}
 }
-`.trimStart();
+`;
 
-          fs.writeFile('src/props/icons.css', outputCSS, (err) => {
+          fs.writeFile('src/props/icons.css', [createCopyright(), outputCSS.trimStart()].join('\n'), (err) => {
             if (err) {
               return console.error(err);
             }
           });
 
-          let output = createCopyright();
-          output += `
+          const outputJS = `
 import './version.js';
 import { css } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { addLumoGlobalStyles } from './global.js';
 
 const fontIcons = css\`
 ${outputCSS
-  .trimEnd()
+  .trim()
   .replace(/\\/gu, '\\\\')
   .replace(/^(?!$)/gmu, '  ')}
 \`;
@@ -190,7 +189,7 @@ ${outputCSS
 addLumoGlobalStyles('font-icons', fontIcons);
 `;
 
-          fs.writeFile('font-icons.js', output, (err) => {
+          fs.writeFile('font-icons.js', [createCopyright(), outputJS.trimStart()].join('\n'), (err) => {
             if (err) {
               return console.error(err);
             }

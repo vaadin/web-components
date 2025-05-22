@@ -18,7 +18,6 @@ import { DialogBaseMixin } from '@vaadin/dialog/src/vaadin-dialog-base-mixin.js'
 import { dialogOverlay, resizableOverlay } from '@vaadin/dialog/src/vaadin-dialog-styles.js';
 import { OverlayMixin } from '@vaadin/overlay/src/vaadin-overlay-mixin.js';
 import { overlayStyles } from '@vaadin/overlay/src/vaadin-overlay-styles.js';
-import { CSSInjectionMixin } from '@vaadin/vaadin-themable-mixin/css-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
 import { crudDialogOverlayStyles } from './vaadin-crud-styles.js';
@@ -33,7 +32,7 @@ import { crudDialogOverlayStyles } from './vaadin-crud-styles.js';
  * @mixes ThemableMixin
  * @private
  */
-class CrudDialogOverlay extends OverlayMixin(DirMixin(CSSInjectionMixin(ThemableMixin(PolylitMixin(LitElement))))) {
+class CrudDialogOverlay extends OverlayMixin(DirMixin(ThemableMixin(PolylitMixin(LitElement)))) {
   static get is() {
     return 'vaadin-crud-dialog-overlay';
   }
@@ -81,9 +80,7 @@ defineCustomElement(CrudDialogOverlay);
  * An element used internally by `<vaadin-crud>`. Not intended to be used separately.
  * @private
  */
-class CrudDialog extends DialogBaseMixin(
-  OverlayClassMixin(CSSInjectionMixin(ThemePropertyMixin(PolylitMixin(LitElement)))),
-) {
+class CrudDialog extends DialogBaseMixin(OverlayClassMixin(ThemePropertyMixin(PolylitMixin(LitElement)))) {
   static get is() {
     return 'vaadin-crud-dialog';
   }
