@@ -8,6 +8,7 @@ import { css, html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
+import { SlotStylesMixin } from '@vaadin/component-base/src/slot-styles-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { MessageListMixin } from './vaadin-message-list-mixin.js';
 
@@ -49,8 +50,9 @@ import { MessageListMixin } from './vaadin-message-list-mixin.js';
  * @mixes ThemableMixin
  * @mixes ElementMixin
  * @mixes MessageListMixin
+ * @mixes SlotStylesMixin
  */
-class MessageList extends MessageListMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElement)))) {
+class MessageList extends SlotStylesMixin(MessageListMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElement))))) {
   static get is() {
     return 'vaadin-message-list';
   }
@@ -75,6 +77,22 @@ class MessageList extends MessageListMixin(ElementMixin(ThemableMixin(PolylitMix
         <slot></slot>
       </div>
     `;
+  }
+
+  /** @protected */
+  get slotStyles() {
+    const tag = this.localName;
+    return [
+      `
+      ${tag} :where(vaadin-markdown > :is(h1, h2, h3, h4, h5, h6, p, ul, ol):first-child) {
+        margin-top: 0;
+      }
+
+      ${tag} :where(vaadin-markdown > :is(h1, h2, h3, h4, h5, h6, p, ul, ol):last-child) {
+        margin-bottom: 0;
+      }
+      `,
+    ];
   }
 }
 
