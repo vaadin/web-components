@@ -28,7 +28,7 @@ gulp.task('icons', (done) => {
       // Store for later use
       glyphs = glyphData;
     })
-    .pipe(gulp.dest('.'))
+    .pipe(gulp.dest('.', { encoding: false }))
     .on('finish', () => {
       // Generate base64 version of the font
       const iconsWoff = fs.readFileSync('vaadin-rich-text-editor-icons.woff');

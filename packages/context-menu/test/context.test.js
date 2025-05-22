@@ -1,15 +1,15 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fire, fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import './not-animated-styles.js';
-import '../vaadin-context-menu.js';
-import '@vaadin/item/vaadin-item.js';
-import '@vaadin/list-box/vaadin-list-box.js';
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import '../src/vaadin-context-menu.js';
+import '@vaadin/item/src/vaadin-item.js';
+import '@vaadin/list-box/src/vaadin-list-box.js';
 
-class XFoo extends PolymerElement {
-  static get template() {
-    return html`
+class XFoo extends HTMLElement {
+  constructor() {
+    super();
+    this.attachShadow({ mode: 'open' });
+    this.shadowRoot.innerHTML = `
       <div id="wrapper">
         <div id="content"></div>
       </div>
@@ -20,7 +20,7 @@ class XFoo extends PolymerElement {
 customElements.define('x-foo', XFoo);
 
 describe('context', () => {
-  let menu, foo, target, another;
+  let menu, foo, fooContent, target, another;
 
   beforeEach(async () => {
     menu = fixtureSync(`
@@ -41,6 +41,7 @@ describe('context', () => {
     };
     await nextRender();
     foo = document.querySelector('x-foo');
+    fooContent = foo.shadowRoot.querySelector('#content');
     target = document.querySelector('#target');
     another = document.querySelector('#another');
   });
@@ -69,14 +70,14 @@ describe('context', () => {
   });
 
   it('should use local target when targeting inside shadow root', () => {
-    fire(foo.$.content, 'contextmenu');
+    fire(fooContent, 'contextmenu');
 
     expect(menu._context.target).to.eql(foo);
   });
 
   it('should not penetrate shadow root to change context', () => {
     menu.selector = '#content';
-    fire(foo.$.content, 'contextmenu');
+    fire(fooContent, 'contextmenu');
 
     expect(menu._context.target).to.be.undefined;
   });
@@ -90,14 +91,14 @@ describe('context', () => {
 
   it('should not open if no context available', () => {
     menu.selector = 'foobar';
-    fire(foo.$.content, 'contextmenu');
+    fire(fooContent, 'contextmenu');
 
     expect(menu.opened).to.eql(false);
   });
 
   it('should not prevent default if no context available', () => {
     menu.selector = 'foobar';
-    const evt = fire(foo.$.content, 'contextmenu');
+    const evt = fire(fooContent, 'contextmenu');
 
     expect(evt.defaultPrevented).to.eql(false);
   });

@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, nextRender, nextResize } from '@vaadin/testing-helpers';
-import '../vaadin-master-detail-layout.js';
+import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
+import '../src/vaadin-master-detail-layout.js';
 import './helpers/master-content.js';
 import './helpers/detail-content.js';
 
@@ -23,7 +23,7 @@ describe('ARIA', () => {
     detail = layout.shadowRoot.querySelector('[part="detail"]');
   });
 
-  it('should set role to dialog on the detail part in the overlay mode', () => {
+  it('should set role to dialog on the detail part in the drawer mode', () => {
     layout.forceOverlay = true;
     expect(detail.getAttribute('role')).to.equal('dialog');
 
@@ -31,15 +31,12 @@ describe('ARIA', () => {
     expect(detail.hasAttribute('role')).to.be.false;
   });
 
-  it('should set role to dialog on the detail part in the stack mode', async () => {
-    layout.stackThreshold = '500px';
-    layout.style.width = '500px';
-    await nextResize(layout);
-
+  it('should set role to dialog on the detail part in the stack mode', () => {
+    layout.forceOverlay = true;
+    layout.stackOverlay = true;
     expect(detail.getAttribute('role')).to.equal('dialog');
 
-    layout.style.width = '600px';
-    await nextResize(layout);
+    layout.forceOverlay = false;
 
     expect(detail.hasAttribute('role')).to.be.false;
   });

@@ -40,7 +40,7 @@ export const baseStyles = css`
     margin-inline-end: auto;
   }
 
-  :host([has-start]:not([has-middle])) ::slotted([first-end-child]) {
+  :host(:not([has-middle])) ::slotted([first-end-child]) {
     margin-inline-start: auto;
   }
 `;

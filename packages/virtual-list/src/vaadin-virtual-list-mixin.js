@@ -4,17 +4,14 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { isChrome, isSafari } from '@vaadin/component-base/src/browser-utils.js';
-import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { OverflowController } from '@vaadin/component-base/src/overflow-controller.js';
-import { processTemplates } from '@vaadin/component-base/src/templates.js';
 import { Virtualizer } from '@vaadin/component-base/src/virtualizer.js';
 
 /**
  * @polymerMixin
- * @mixes ControllerMixin
  */
 export const VirtualListMixin = (superClass) =>
-  class VirtualListMixinClass extends ControllerMixin(superClass) {
+  class VirtualListMixinClass extends superClass {
     static get properties() {
       return {
         /**
@@ -96,7 +93,6 @@ export const VirtualListMixin = (superClass) =>
       this.__overflowController = new OverflowController(this);
       this.addController(this.__overflowController);
 
-      processTemplates(this);
       this.__updateAria();
     }
 

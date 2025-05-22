@@ -1,32 +1,26 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
+import { defineLit, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
-import { ControllerMixin } from '../src/controller-mixin.js';
+import { PolylitMixin } from '../src/polylit-mixin.js';
 import { TooltipController } from '../src/tooltip-controller.js';
 
-customElements.define(
-  'tooltip-host',
-  class extends ControllerMixin(PolymerElement) {
-    static get template() {
-      return html`
-        <slot></slot>
-        <slot name="tooltip"></slot>
-      `;
-    }
-  },
-);
-
 describe('TooltipController', () => {
+  const tag = defineLit(
+    'tooltip-host',
+    `<slot></slot><slot name="tooltip"></slot>
+    `,
+    (Base) => class extends PolylitMixin(Base) {},
+  );
+
   let host, tooltip, controller;
 
   describe('slotted tooltip', () => {
     beforeEach(() => {
       host = fixtureSync(`
-        <tooltip-host>
+        <${tag}>
           <div>Target</div>
           <vaadin-tooltip slot="tooltip"></vaadin-tooltip>
-        </tooltip-host>
+        </${tag}>
       `);
       tooltip = host.querySelector('vaadin-tooltip');
       controller = new TooltipController(host);
@@ -89,12 +83,12 @@ describe('TooltipController', () => {
     });
   });
 
-  describe('slotted tooltip', () => {
+  describe('lazy tooltip', () => {
     beforeEach(() => {
       host = fixtureSync(`
-        <tooltip-host>
+        <${tag}>
           <div>Target</div>
-        </tooltip-host>
+        </${tag}>
       `);
       controller = new TooltipController(host);
       host.addController(controller);

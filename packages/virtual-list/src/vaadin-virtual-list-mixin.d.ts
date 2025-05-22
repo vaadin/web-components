@@ -4,7 +4,6 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import type { Constructor } from '@open-wc/dedupe-mixin';
-import type { ControllerMixinClass } from '@vaadin/component-base/src/controller-mixin.js';
 import type { VirtualList } from './vaadin-virtual-list.js';
 
 export type VirtualListDefaultItem = any;
@@ -22,7 +21,7 @@ export type VirtualListRenderer<TItem> = (
 
 export declare function VirtualListMixin<TItem, T extends Constructor<HTMLElement>>(
   base: T,
-): Constructor<ControllerMixinClass> & Constructor<VirtualListMixinClass<TItem>> & T;
+): Constructor<VirtualListMixinClass<TItem>> & T;
 
 export declare class VirtualListMixinClass<TItem = VirtualListDefaultItem> {
   /**

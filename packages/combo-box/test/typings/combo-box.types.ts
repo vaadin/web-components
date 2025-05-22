@@ -2,7 +2,6 @@ import type { DelegateFocusMixinClass } from '@vaadin/a11y-base/src/delegate-foc
 import type { DisabledMixinClass } from '@vaadin/a11y-base/src/disabled-mixin.js';
 import type { FocusMixinClass } from '@vaadin/a11y-base/src/focus-mixin.js';
 import type { KeyboardMixinClass } from '@vaadin/a11y-base/src/keyboard-mixin.js';
-import type { ControllerMixinClass } from '@vaadin/component-base/src/controller-mixin.js';
 import type { DelegateStateMixinClass } from '@vaadin/component-base/src/delegate-state-mixin.js';
 import type { DirMixinClass } from '@vaadin/component-base/src/dir-mixin.js';
 import type { ElementMixinClass } from '@vaadin/component-base/src/element-mixin.js';
@@ -19,7 +18,6 @@ import type { ThemableMixinClass } from '@vaadin/vaadin-themable-mixin';
 import type { ComboBoxDataProviderMixinClass } from '../../src/vaadin-combo-box-data-provider-mixin';
 import type { ComboBoxItem } from '../../src/vaadin-combo-box-item';
 import type { ComboBoxItemMixinClass, ComboBoxItemRenderer } from '../../src/vaadin-combo-box-item-mixin';
-import type { ComboBoxLightMixinClass } from '../../src/vaadin-combo-box-light-mixin.js';
 import type { ComboBoxMixinClass } from '../../src/vaadin-combo-box-mixin';
 import type {
   ComboBox,
@@ -33,17 +31,6 @@ import type {
   ComboBoxValidatedEvent,
   ComboBoxValueChangedEvent,
 } from '../../vaadin-combo-box';
-import type {
-  ComboBoxLight,
-  ComboBoxLightChangeEvent,
-  ComboBoxLightCustomValueSetEvent,
-  ComboBoxLightFilterChangedEvent,
-  ComboBoxLightInvalidChangedEvent,
-  ComboBoxLightOpenedChangedEvent,
-  ComboBoxLightSelectedItemChangedEvent,
-  ComboBoxLightValidatedEvent,
-  ComboBoxLightValueChangedEvent,
-} from '../../vaadin-combo-box-light';
 
 interface TestComboBoxItem {
   testProperty: string;
@@ -136,7 +123,6 @@ assertType<string>(narrowedComboBox.allowedCharPattern);
 // ComboBox mixins
 assertType<ComboBoxDataProviderMixinClass<TestComboBoxItem>>(narrowedComboBox);
 assertType<ComboBoxMixinClass<TestComboBoxItem>>(narrowedComboBox);
-assertType<ControllerMixinClass>(narrowedComboBox);
 assertType<ElementMixinClass>(narrowedComboBox);
 assertType<DelegateFocusMixinClass>(narrowedComboBox);
 assertType<DelegateStateMixinClass>(narrowedComboBox);
@@ -153,75 +139,6 @@ assertType<LabelMixinClass>(narrowedComboBox);
 assertType<PatternMixinClass>(narrowedComboBox);
 assertType<ValidateMixinClass>(narrowedComboBox);
 assertType<ThemableMixinClass>(narrowedComboBox);
-
-/* ComboBoxLight */
-const genericComboBoxLight = document.createElement('vaadin-combo-box-light');
-assertType<ComboBoxLight>(genericComboBoxLight);
-
-const narrowedComboBoxLight = genericComboBoxLight as ComboBoxLight<TestComboBoxItem>;
-
-narrowedComboBoxLight.addEventListener('change', (event) => {
-  assertType<ComboBoxLightChangeEvent<TestComboBoxItem>>(event);
-  assertType<ComboBoxLight<TestComboBoxItem>>(event.target);
-});
-
-narrowedComboBoxLight.addEventListener('custom-value-set', (event) => {
-  assertType<ComboBoxLightCustomValueSetEvent>(event);
-  assertType<string>(event.detail);
-});
-
-narrowedComboBoxLight.addEventListener('opened-changed', (event) => {
-  assertType<ComboBoxLightOpenedChangedEvent>(event);
-  assertType<boolean>(event.detail.value);
-});
-
-narrowedComboBoxLight.addEventListener('invalid-changed', (event) => {
-  assertType<ComboBoxLightInvalidChangedEvent>(event);
-  assertType<boolean>(event.detail.value);
-});
-
-narrowedComboBoxLight.addEventListener('value-changed', (event) => {
-  assertType<ComboBoxLightValueChangedEvent>(event);
-  assertType<string>(event.detail.value);
-});
-
-narrowedComboBoxLight.addEventListener('filter-changed', (event) => {
-  assertType<ComboBoxLightFilterChangedEvent>(event);
-  assertType<string>(event.detail.value);
-});
-
-narrowedComboBoxLight.addEventListener('selected-item-changed', (event) => {
-  assertType<ComboBoxLightSelectedItemChangedEvent<TestComboBoxItem>>(event);
-  assertType<TestComboBoxItem | null | undefined>(event.detail.value);
-});
-
-narrowedComboBoxLight.addEventListener('validated', (event) => {
-  assertType<ComboBoxLightValidatedEvent>(event);
-  assertType<boolean>(event.detail.valid);
-});
-
-// ComboBoxLight properties
-assertType<() => boolean>(narrowedComboBoxLight.checkValidity);
-assertType<() => boolean>(narrowedComboBoxLight.validate);
-assertType<() => void>(narrowedComboBoxLight.close);
-assertType<() => void>(narrowedComboBoxLight.open);
-assertType<boolean | null | undefined>(narrowedComboBoxLight.autoOpenDisabled);
-assertType<boolean>(narrowedComboBoxLight.opened);
-assertType<boolean>(narrowedComboBoxLight.invalid);
-assertType<boolean>(narrowedComboBoxLight.disabled);
-assertType<boolean>(narrowedComboBoxLight.readonly);
-assertType<string>(narrowedComboBoxLight.value);
-assertType<string>(narrowedComboBoxLight.attrForValue);
-
-// ComboBoxLight mixins
-assertType<ComboBoxDataProviderMixinClass<TestComboBoxItem>>(narrowedComboBoxLight);
-assertType<ComboBoxLightMixinClass>(narrowedComboBoxLight);
-assertType<ComboBoxMixinClass<TestComboBoxItem>>(narrowedComboBoxLight);
-assertType<DisabledMixinClass>(narrowedComboBoxLight);
-assertType<InputMixinClass>(narrowedComboBoxLight);
-assertType<KeyboardMixinClass>(narrowedComboBoxLight);
-assertType<ThemableMixinClass>(narrowedComboBoxLight);
-assertType<ValidateMixinClass>(narrowedComboBoxLight);
 
 // Item
 const genericItem = document.createElement('vaadin-combo-box-item');

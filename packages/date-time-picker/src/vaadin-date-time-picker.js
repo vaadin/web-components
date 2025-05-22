@@ -5,14 +5,13 @@
  */
 import '@vaadin/date-picker/src/vaadin-date-picker.js';
 import '@vaadin/time-picker/src/vaadin-time-picker.js';
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { css, html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { inputFieldShared } from '@vaadin/field-base/src/styles/input-field-shared-styles.js';
-import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { DateTimePickerMixin } from './vaadin-date-time-picker-mixin.js';
-
-registerStyles('vaadin-date-time-picker', inputFieldShared, { moduleId: 'vaadin-date-time-picker' });
 
 /**
  * `<vaadin-date-time-picker>` is a Web Component providing a date time selection field.
@@ -64,7 +63,30 @@ registerStyles('vaadin-date-time-picker', inputFieldShared, { moduleId: 'vaadin-
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
+ * ### Change events
+ *
+ * Depending on the nature of the value change that the user attempts to commit e.g. by pressing Enter,
+ * the component can fire either a `change` event or an `unparsable-change` event:
+ *
+ * Value change             | Event
+ * :------------------------|:------------------
+ * empty => parsable        | change
+ * empty => unparsable      | unparsable-change
+ * parsable => empty        | change
+ * parsable => parsable     | change
+ * parsable => unparsable   | change
+ * unparsable => empty      | unparsable-change
+ * unparsable => parsable   | change
+ * unparsable => unparsable | unparsable-change
+ * incomplete => empty      | unparsable-change
+ * incomplete => parsable   | change
+ * incomplete => unparsable | unparsable-change
+ * empty => incomplete      | unparsable-change
+ * parsable => incomplete   | change
+ * unparsable => incomplete | unparsable-change
+ *
  * @fires {Event} change - Fired when the user commits a value change.
+ * @fires {Event} unparsable-change - Fired when the user commits an unparsable or incomplete value change and there is no change event.
  * @fires {CustomEvent} invalid-changed - Fired when the `invalid` property changes.
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
  * @fires {CustomEvent} validated - Fired whenever the field is validated.
@@ -75,10 +97,15 @@ registerStyles('vaadin-date-time-picker', inputFieldShared, { moduleId: 'vaadin-
  * @mixes ThemableMixin
  * @mixes DateTimePickerMixin
  */
-class DateTimePicker extends DateTimePickerMixin(ThemableMixin(ElementMixin(PolymerElement))) {
-  static get template() {
-    return html`
-      <style>
+class DateTimePicker extends DateTimePickerMixin(ThemableMixin(ElementMixin(PolylitMixin(LitElement)))) {
+  static get is() {
+    return 'vaadin-date-time-picker';
+  }
+
+  static get styles() {
+    return [
+      inputFieldShared,
+      css`
         .vaadin-date-time-picker-container {
           --vaadin-field-default-width: auto;
         }
@@ -97,10 +124,15 @@ class DateTimePicker extends DateTimePickerMixin(ThemableMixin(ElementMixin(Poly
           min-width: 0;
           flex: 1 1.65 auto;
         }
-      </style>
+      `,
+    ];
+  }
 
+  /** @protected */
+  render() {
+    return html`
       <div class="vaadin-date-time-picker-container">
-        <div part="label" on-click="focus">
+        <div part="label" @click="${this.focus}">
           <slot name="label"></slot>
           <span part="required-indicator" aria-hidden="true"></span>
         </div>
@@ -121,10 +153,6 @@ class DateTimePicker extends DateTimePickerMixin(ThemableMixin(ElementMixin(Poly
 
       <slot name="tooltip"></slot>
     `;
-  }
-
-  static get is() {
-    return 'vaadin-date-time-picker';
   }
 }
 

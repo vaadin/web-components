@@ -1,9 +1,11 @@
-require('dotenv').config();
-const fs = require('fs');
+import dotenv from 'dotenv';
+import fs from 'node:fs';
+
+dotenv.config();
 
 const REPO_OWNER = 'vaadin';
 const REPO_NAME = 'web-components';
-const BRANCHES = ['main', '24.7', '24.6', '24.5', '23.5'];
+const BRANCHES = ['main', '24.8', '24.7', '24.6', '24.5', '23.5'];
 const GITHUB_TOKEN = process.env.GITHUB_API_TOKEN; // Set this in your .env file
 
 if (!GITHUB_TOKEN) {

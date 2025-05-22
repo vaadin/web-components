@@ -14,12 +14,11 @@ import {
   tabKeyDown,
 } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import './not-animated-styles.js';
-import '../vaadin-context-menu.js';
-import '@vaadin/item/vaadin-item.js';
-import '@vaadin/list-box/vaadin-list-box.js';
+import '../src/vaadin-context-menu.js';
+import '@vaadin/item/src/vaadin-item.js';
+import '@vaadin/list-box/src/vaadin-list-box.js';
 import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
-import { getMenuItems, getSubMenu, openMenu } from './helpers.js';
+import { activateItem, getMenuItems, getSubMenu, openMenu } from './helpers.js';
 
 describe('items', () => {
   let rootMenu, subMenu, target, rootOverlay, subOverlay1;
@@ -104,7 +103,7 @@ describe('items', () => {
   (isTouch ? it.skip : it)('should open the subMenu on the right side', () => {
     const rootItemRect = getMenuItems(rootMenu)[0].getBoundingClientRect();
     const subItemRect = getMenuItems(subMenu)[0].getBoundingClientRect();
-    expect(subItemRect.left).to.be.above(rootItemRect.right);
+    expect(subItemRect.left).to.be.at.least(rootItemRect.right);
   });
 
   (isTouch ? it.skip : it)('should open the subMenu on the left side', async () => {
@@ -114,7 +113,7 @@ describe('items', () => {
     await openMenu(getMenuItems(rootMenu)[0]);
     rootItemRect = getMenuItems(rootMenu)[0].getBoundingClientRect();
     const subItemRect = getMenuItems(subMenu)[0].getBoundingClientRect();
-    expect(subItemRect.right).to.be.below(rootItemRect.left);
+    expect(subItemRect.right).to.be.at.most(rootItemRect.left);
   });
 
   (isTouch ? it.skip : it)('should open the subMenu on the top if root menu is bottom-aligned', async () => {
@@ -125,12 +124,12 @@ describe('items', () => {
     await openMenu(getMenuItems(rootMenu)[0]);
     const rootMenuRect = rootOverlay.getBoundingClientRect();
     const subMenuRect = subOverlay1.getBoundingClientRect();
-    expect(subMenuRect.bottom).to.be.below(rootMenuRect.bottom);
+    expect(subMenuRect.bottom).to.be.at.most(rootMenuRect.bottom);
   });
 
   (isTouch ? it.skip : it)('should open the subMenu on the left if root menu is end-aligned', async () => {
     subMenu.close();
-    await nextRender(subMenu);
+    await nextRender();
     const rootItem = getMenuItems(rootMenu)[0];
     const rootItemRect = rootItem.getBoundingClientRect();
     rootOverlay.style.removeProperty('left');
@@ -148,7 +147,7 @@ describe('items', () => {
   it.skip('should open the second subMenu on the right again if not enough space', async () => {
     let padding;
     subMenu.close();
-    await nextRender(subMenu);
+    await nextRender();
     rootMenu.items[0].children[2].text = 'foo-0-2-longer';
 
     const rootItem = getMenuItems(rootMenu)[0];
@@ -184,6 +183,7 @@ describe('items', () => {
 
   it('should clear selections on reopen', async () => {
     getMenuItems(subMenu)[0].click();
+    await openMenu(target);
     await openMenu(getMenuItems(rootMenu)[0]);
     expect(getMenuItems(subMenu)[0].selected).to.be.false;
   });
@@ -250,16 +250,16 @@ describe('items', () => {
     expect(getMenuItems(subMenu)[1].disabled).to.be.true;
   });
 
-  it('should close the submenu', async () => {
-    await openMenu(getMenuItems(rootMenu)[1]);
+  it('should close the submenu on activating non-parent item', () => {
+    activateItem(getMenuItems(rootMenu)[1]);
     expect(subMenu.opened).to.be.false;
   });
 
-  (isTouch ? it.skip : it)('should focus closed parent item when hovering on non-parent item', async () => {
+  (isTouch ? it.skip : it)('should focus closed parent item when hovering on non-parent item', () => {
     const parent = getMenuItems(rootMenu)[0];
     const nonParent = getMenuItems(rootMenu)[1];
     const focusSpy = sinon.spy(parent, 'focus');
-    await openMenu(nonParent);
+    activateItem(nonParent);
     expect(focusSpy.called).to.be.true;
   });
 
@@ -268,14 +268,14 @@ describe('items', () => {
     await openMenu(parent);
     const nonParent = getMenuItems(rootMenu)[1];
     const focusSpy = sinon.spy(rootOverlay.$.overlay, 'focus');
-    await openMenu(nonParent);
+    activateItem(nonParent);
     expect(focusSpy.called).to.be.true;
   });
 
-  (isTouch ? it.skip : it)('should not focus overlay part if the parent menu list-box has focus', async () => {
-    await openMenu(getMenuItems(rootMenu)[1]);
+  (isTouch ? it.skip : it)('should not focus overlay part if the parent menu list-box has focus', () => {
+    activateItem(getMenuItems(rootMenu)[1]);
     const focusSpy = sinon.spy(rootOverlay.$.overlay, 'focus');
-    await openMenu(getMenuItems(rootMenu)[2]);
+    activateItem(getMenuItems(rootMenu)[2]);
     expect(focusSpy.called).to.be.false;
   });
 
@@ -381,7 +381,7 @@ describe('items', () => {
     rootOverlay.focus();
     await openMenu(getMenuItems(rootMenu)[0]);
     expect(subMenu.opened).to.be.true;
-    await nextRender(subMenu);
+    await nextRender();
     expect(getMenuItems(subMenu)[0].hasAttribute('focused')).to.be.false;
   });
 
@@ -565,7 +565,7 @@ describe('items', () => {
       const subBRCTop2 = subOverlay2.getBoundingClientRect().top;
 
       scrollElm.scrollTop = scrollDistance;
-      await nextRender(rootMenu);
+      await nextRender();
       expect(rootOverlay.getBoundingClientRect().top).to.be.closeTo(rootBRCTop - scrollDistance, 1);
       expect(subOverlay1.getBoundingClientRect().top).to.be.closeTo(subBRCTop1 - scrollDistance, 1);
       expect(subOverlay2.getBoundingClientRect().top).to.be.closeTo(subBRCTop2 - scrollDistance, 1);
@@ -580,7 +580,7 @@ describe('items', () => {
       const subBRCLeft2 = subOverlay2.getBoundingClientRect().left;
 
       scrollElm.scrollLeft = scrollDistance;
-      await nextRender(rootMenu);
+      await nextRender();
       expect(rootOverlay.getBoundingClientRect().left).to.be.closeTo(rootBRCLeft - scrollDistance, 1);
       expect(subOverlay1.getBoundingClientRect().left).to.be.closeTo(subBRCLeft1 - scrollDistance, 1);
       expect(subOverlay2.getBoundingClientRect().left).to.be.closeTo(subBRCLeft2 - scrollDistance, 1);

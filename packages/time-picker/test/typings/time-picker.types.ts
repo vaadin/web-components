@@ -3,7 +3,6 @@ import type {
   ComboBoxItemMixinClass,
   ComboBoxItemRenderer,
 } from '@vaadin/combo-box/src/vaadin-combo-box-item-mixin.js';
-import type { ControllerMixinClass } from '@vaadin/component-base/src/controller-mixin.js';
 import type { DirMixinClass } from '@vaadin/component-base/src/dir-mixin.js';
 import type { ElementMixinClass } from '@vaadin/component-base/src/element-mixin.js';
 import type { ClearButtonMixinClass } from '@vaadin/field-base/src/clear-button-mixin.js';
@@ -26,7 +25,6 @@ const assertType = <TExpected>(actual: TExpected) => actual;
 const timePicker = document.createElement('vaadin-time-picker');
 
 // Mixins
-assertType<ControllerMixinClass>(timePicker);
 assertType<ElementMixinClass>(timePicker);
 assertType<InputControlMixinClass>(timePicker);
 assertType<ClearButtonMixinClass>(timePicker);

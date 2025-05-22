@@ -3,10 +3,12 @@
  * Copyright (c) 2017 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
+import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { itemStyles } from './vaadin-item-core-styles.js';
 import { ItemMixin } from './vaadin-item-mixin.js';
 
 /**
@@ -53,27 +55,23 @@ import { ItemMixin } from './vaadin-item-mixin.js';
  * @mixes ThemableMixin
  * @mixes DirMixin
  */
-class Item extends ItemMixin(ThemableMixin(DirMixin(PolymerElement))) {
-  static get template() {
-    return html`
-      <style>
-        :host {
-          display: inline-block;
-        }
+class Item extends ItemMixin(ThemableMixin(DirMixin(PolylitMixin(LitElement)))) {
+  static get is() {
+    return 'vaadin-item';
+  }
 
-        :host([hidden]) {
-          display: none !important;
-        }
-      </style>
+  static get styles() {
+    return itemStyles;
+  }
+
+  /** @protected */
+  render() {
+    return html`
       <span part="checkmark" aria-hidden="true"></span>
       <div part="content">
         <slot></slot>
       </div>
     `;
-  }
-
-  static get is() {
-    return 'vaadin-item';
   }
 
   constructor() {

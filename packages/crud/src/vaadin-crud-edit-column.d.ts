@@ -18,7 +18,7 @@ import { GridColumn } from '@vaadin/grid/src/vaadin-grid-column.js';
  *
  * #### Example:
  * ```html
- * <vaadin-grid items="[[items]]">
+ * <vaadin-grid>
  *  <vaadin-crud-edit-column></vaadin-crud-edit-column>
  *
  *  <vaadin-grid-column>

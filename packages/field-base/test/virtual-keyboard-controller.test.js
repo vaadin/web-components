@@ -1,48 +1,45 @@
 import { expect } from '@vaadin/chai-plugins';
 import { sendKeys } from '@vaadin/test-runner-commands';
-import { fixtureSync, touchstart } from '@vaadin/testing-helpers';
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
-import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
+import { defineLit, fixtureSync, touchstart } from '@vaadin/testing-helpers';
+import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { VirtualKeyboardController } from '../src/virtual-keyboard-controller.js';
 
-customElements.define(
-  'virtual-keyboard-controller-element',
-  class extends ControllerMixin(PolymerElement) {
-    static get template() {
-      return html`<slot></slot>`;
-    }
+describe('VirtualKeyboardController', () => {
+  const tag = defineLit(
+    'virtual-keyboard-controller',
+    `<slot></slot>`,
+    (Base) =>
+      class extends PolylitMixin(Base) {
+        constructor() {
+          super();
+          this.inputElement = document.createElement('input');
+          this.appendChild(this.inputElement);
+        }
 
-    constructor() {
-      super();
-      this.inputElement = document.createElement('input');
-      this.appendChild(this.inputElement);
-    }
+        ready() {
+          super.ready();
+          this.addController(new VirtualKeyboardController(this));
+        }
 
-    ready() {
-      super.ready();
-      this.addController(new VirtualKeyboardController(this));
-    }
+        open() {
+          this.dispatchEvent(new CustomEvent('opened-changed', { detail: { value: true } }));
+        }
 
-    open() {
-      this.dispatchEvent(new CustomEvent('opened-changed', { detail: { value: true } }));
-    }
+        close() {
+          this.dispatchEvent(new CustomEvent('opened-changed', { detail: { value: false } }));
+        }
+      },
+  );
 
-    close() {
-      this.dispatchEvent(new CustomEvent('opened-changed', { detail: { value: false } }));
-    }
-  },
-);
-
-describe('virtual-keyboard-controller', () => {
   let element, input;
 
   beforeEach(() => {
-    element = fixtureSync(
-      `<div>
-        <virtual-keyboard-controller-element></virtual-keyboard-controller-element>
+    element = fixtureSync(`
+      <div>
+        <${tag}></${tag}>
         <input id="last-global-focusable" />
-      </div>`,
-    ).firstElementChild;
+      </div>
+    `).firstElementChild;
     input = element.inputElement;
   });
 

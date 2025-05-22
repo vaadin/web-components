@@ -2,8 +2,8 @@ import { expect } from '@vaadin/chai-plugins';
 import { sendKeys } from '@vaadin/test-runner-commands';
 import { fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
 import './not-animated-styles.js';
-import '@vaadin/dialog';
-import '@vaadin/multi-select-combo-box';
+import '@vaadin/dialog/src/vaadin-dialog.js';
+import '@vaadin/multi-select-combo-box/src/vaadin-multi-select-combo-box.js';
 
 describe('multi-select-combo-box in dialog', () => {
   let dialog, comboBox;

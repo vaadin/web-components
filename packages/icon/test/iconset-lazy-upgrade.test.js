@@ -28,7 +28,7 @@ describe('vaadin-iconset lazy upgrade', () => {
     const icon = fixtureSync('<vaadin-icon icon="vaadin:caret-down"></vaadin-icon>');
 
     // Import vaadin-icon, which also imports vaadin-iconset internally.
-    await import('../vaadin-icon.js');
+    await import('../src/vaadin-icon.js');
 
     const svgElement = icon.shadowRoot.querySelector('svg');
 

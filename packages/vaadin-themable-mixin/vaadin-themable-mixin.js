@@ -3,7 +3,8 @@
  * Copyright (c) 2017 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { adoptStyles, css, CSSResult, LitElement, unsafeCSS } from 'lit';
+import { css, CSSResult, LitElement, unsafeCSS } from 'lit';
+import { applyInstanceStyles } from './src/css-utils.js';
 import { ThemePropertyMixin } from './vaadin-theme-property-mixin.js';
 
 export { css, unsafeCSS };
@@ -115,13 +116,7 @@ function updateInstanceStyles(instance) {
 
   if (instance instanceof LitElement) {
     // LitElement
-
-    // The adoptStyles function may fall back to appending style elements to shadow root.
-    // Remove them first to avoid duplicates.
-    [...instance.shadowRoot.querySelectorAll('style')].forEach((style) => style.remove());
-
-    // Adopt the updated styles
-    adoptStyles(instance.shadowRoot, componentClass.elementStyles);
+    applyInstanceStyles(instance);
   } else {
     // PolymerElement
 
@@ -203,16 +198,12 @@ function hasMatchingStyle(componentClass, styles) {
 export function registerStyles(themeFor, styles, options = {}) {
   styles = flattenStyles(styles);
 
-  if (window.Vaadin && window.Vaadin.styleModules) {
-    window.Vaadin.styleModules.registerStyles(themeFor, styles, options);
-  } else {
-    themeRegistry.push({
-      themeFor,
-      styles,
-      include: options.include,
-      moduleId: options.moduleId,
-    });
-  }
+  themeRegistry.push({
+    themeFor,
+    styles,
+    include: options.include,
+    moduleId: options.moduleId,
+  });
 
   if (themeFor) {
     // Update styles of the component types that match themeFor and have already been finalized
@@ -362,11 +353,16 @@ export const ThemableMixin = (superClass) =>
      * @protected
      */
     static finalizeStyles(styles) {
-      // The "styles" object originates from the "static get styles()" function of
-      // a LitElement based component. The theme styles are added after it
-      // so that they can override the component styles.
-      const themeStyles = this.getStylesForThis();
-      return styles ? [...[styles].flat(Infinity), ...themeStyles] : themeStyles;
+      // Preserve the styles the user supplied via the `static get styles()` getter
+      // so that they will always be injected before styles added by `CSSInjector`.
+      this.baseStyles = styles ? [styles].flat(Infinity) : [];
+
+      // Preserve the theme styles the user supplied via the `registerStyles()` API
+      // so that they will always be injected after styles added by `CSSInjector`.
+      this.themeStyles = this.getStylesForThis();
+
+      // Merged styles are stored in `elementStyles` and passed to `adoptStyles()`.
+      return [...this.baseStyles, ...this.themeStyles];
     }
 
     /**

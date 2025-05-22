@@ -14,7 +14,7 @@ import { GridSelectionColumnMixin } from './vaadin-grid-selection-column-mixin.j
  *
  * #### Example:
  * ```html
- * <vaadin-grid items="[[items]]">
+ * <vaadin-grid>
  *  <vaadin-grid-selection-column frozen auto-select></vaadin-grid-selection-column>
  *
  *  <vaadin-grid-column>

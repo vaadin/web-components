@@ -1,81 +1,74 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, nextFrame, nextRender, nextResize } from '@vaadin/testing-helpers';
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
-import { ControllerMixin } from '../src/controller-mixin.js';
+import { defineLit, fixtureSync, nextFrame, nextRender, nextResize } from '@vaadin/testing-helpers';
 import { OverflowController } from '../src/overflow-controller.js';
+import { PolylitMixin } from '../src/polylit-mixin.js';
 
-customElements.define(
-  'overflow-element',
-  class OverflowElement extends ControllerMixin(PolymerElement) {
-    static get template() {
-      return html`
-        <style>
-          :host {
-            display: flex;
-            overflow: auto;
-          }
+describe('OverflowController', () => {
+  const tag = defineLit(
+    'overflow',
+    `
+      <style>
+        :host {
+          display: flex;
+          overflow: auto;
+        }
 
-          ::slotted(*) {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-width: 40px;
-            height: 40px;
-            flex-shrink: 0;
-          }
-        </style>
+        ::slotted(*) {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          min-width: 40px;
+          height: 40px;
+          flex-shrink: 0;
+        }
+      </style>
+      <slot></slot>
+    `,
+    (Base) => class extends PolylitMixin(Base) {},
+  );
+
+  const wrapperTag = defineLit(
+    'overflow-wrapper',
+    `
+      <style>
+        :host {
+          display: block;
+        }
+
+        #scroller {
+          overflow: auto;
+          width: 100%;
+          height: 100%;
+        }
+
+        ::slotted(*) {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          min-width: 40px;
+          height: 40px;
+          flex-shrink: 0;
+        }
+      </style>
+      <div id="scroller">
         <slot></slot>
-      `;
-    }
-  },
-);
+      </div>
+    `,
+    (Base) => class extends PolylitMixin(Base) {},
+  );
 
-customElements.define(
-  'overflow-wrapper-element',
-  class OverflowWrapperElement extends ControllerMixin(PolymerElement) {
-    static get template() {
-      return html`
-        <style>
-          :host {
-            display: block;
-          }
-
-          #scroller {
-            overflow: auto;
-            width: 100%;
-            height: 100%;
-          }
-
-          ::slotted(*) {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-width: 40px;
-            height: 40px;
-            flex-shrink: 0;
-          }
-        </style>
-        <div id="scroller">
-          <slot></slot>
-        </div>
-      `;
-    }
-  },
-);
-
-describe('overflow-controller', () => {
   describe('default', () => {
     let element, items, controller;
 
     describe('horizontal', () => {
       beforeEach(async () => {
         element = fixtureSync(`
-          <overflow-element>
+          <${tag}>
             <div>1</div>
             <div>2</div>
             <div>3</div>
             <div>4</div>
-          </overflow-element>
+          </${tag}>
         `);
         // Wait for initial update
         await nextRender();
@@ -170,13 +163,13 @@ describe('overflow-controller', () => {
     describe('vertical', () => {
       beforeEach(async () => {
         element = fixtureSync(`
-          <overflow-element style="display: block;">
+          <${tag} style="display: block;">
             <div>1</div>
             <div>2</div>
             <div>3</div>
             <div>4</div>
             <div>5</div>
-          </overflow-element>
+          </${tag}>
         `);
         await nextFrame();
         items = Array.from(element.children);
@@ -246,12 +239,12 @@ describe('overflow-controller', () => {
 
     beforeEach(async () => {
       element = fixtureSync(`
-        <overflow-wrapper-element>
+        <${wrapperTag}>
           <div>1</div>
           <div>2</div>
           <div>3</div>
           <div>4</div>
-        </overflow-wrapper-element>
+        </${wrapperTag}>
       `);
       await nextFrame();
       items = Array.from(element.children);

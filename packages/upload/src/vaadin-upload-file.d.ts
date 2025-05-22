@@ -3,7 +3,6 @@
  * Copyright (c) 2016 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { UploadFileMixin } from './vaadin-upload-file-mixin.js';
 
@@ -70,7 +69,7 @@ export interface UploadFileEventMap extends HTMLElementEventMap, UploadFileCusto
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  */
-declare class UploadFile extends UploadFileMixin(ThemableMixin(ControllerMixin(HTMLElement))) {
+declare class UploadFile extends UploadFileMixin(ThemableMixin(HTMLElement)) {
   addEventListener<K extends keyof UploadFileEventMap>(
     type: K,
     listener: (this: UploadFile, ev: UploadFileEventMap[K]) => void,

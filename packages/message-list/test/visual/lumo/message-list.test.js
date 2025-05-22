@@ -1,5 +1,5 @@
 import { sendKeys } from '@vaadin/test-runner-commands';
-import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '../../../theme/lumo/vaadin-message-list.js';
 
@@ -47,7 +47,7 @@ describe('message-list', () => {
               userColorIndex: 3,
             },
           ];
-          await nextRender(element);
+          await nextRender();
         });
 
         it('basic', async () => {
@@ -58,6 +58,15 @@ describe('message-list', () => {
           element.querySelectorAll('vaadin-message')[0].focus();
           await sendKeys({ press: 'ArrowDown' });
           await visualDiff(div, `${dir}-focused`);
+        });
+
+        it('markdown', async () => {
+          element.items[0].text = 'This is a **bold text** in Markdown';
+          element.items = [...element.items];
+          element.markdown = true;
+          await customElements.whenDefined('vaadin-markdown');
+          await nextFrame();
+          await visualDiff(div, `${dir}-markdown`);
         });
       });
     });

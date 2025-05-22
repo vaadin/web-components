@@ -4,16 +4,20 @@ export const snapshots = {};
 snapshots["vaadin-avatar-group default"] = 
 `<vaadin-avatar-group aria-label="Currently 0 active users">
   <vaadin-avatar
-    abbr="+0"
     aria-expanded="false"
     aria-haspopup="menu"
-    aria-label="+0"
     hidden=""
     role="button"
     slot="overflow"
     tabindex="0"
   >
     <vaadin-tooltip slot="tooltip">
+      <div
+        id="vaadin-tooltip-0"
+        role="tooltip"
+        slot="sr-label"
+      >
+      </div>
     </vaadin-tooltip>
   </vaadin-avatar>
 </vaadin-avatar-group>
@@ -24,16 +28,25 @@ snapshots["vaadin-avatar-group items"] =
 `<vaadin-avatar-group aria-label="Currently 2 active users">
   <vaadin-avatar
     abbr="YY"
+    aria-describedby="vaadin-tooltip-2"
     aria-label="YY"
     role="img"
     tabindex="0"
     with-tooltip=""
   >
     <vaadin-tooltip slot="tooltip">
+      <div
+        id="vaadin-tooltip-2"
+        role="tooltip"
+        slot="sr-label"
+      >
+        YY
+      </div>
     </vaadin-tooltip>
   </vaadin-avatar>
   <vaadin-avatar
     abbr="TV"
+    aria-describedby="vaadin-tooltip-3"
     aria-label="TV"
     name="Tomi Virkki"
     role="img"
@@ -41,10 +54,18 @@ snapshots["vaadin-avatar-group items"] =
     with-tooltip=""
   >
     <vaadin-tooltip slot="tooltip">
+      <div
+        id="vaadin-tooltip-3"
+        role="tooltip"
+        slot="sr-label"
+      >
+        Tomi Virkki
+      </div>
     </vaadin-tooltip>
   </vaadin-avatar>
   <vaadin-avatar
     abbr="+2"
+    aria-describedby="vaadin-tooltip-1"
     aria-expanded="false"
     aria-haspopup="menu"
     aria-label="+2"
@@ -54,6 +75,14 @@ snapshots["vaadin-avatar-group items"] =
     tabindex="0"
   >
     <vaadin-tooltip slot="tooltip">
+      <div
+        id="vaadin-tooltip-1"
+        role="tooltip"
+        slot="sr-label"
+      >
+        YY
+Tomi Virkki
+      </div>
     </vaadin-tooltip>
   </vaadin-avatar>
 </vaadin-avatar-group>
@@ -67,6 +96,7 @@ snapshots["vaadin-avatar-group theme"] =
 >
   <vaadin-avatar
     abbr="YY"
+    aria-describedby="vaadin-tooltip-5"
     aria-label="YY"
     role="img"
     tabindex="0"
@@ -74,10 +104,18 @@ snapshots["vaadin-avatar-group theme"] =
     with-tooltip=""
   >
     <vaadin-tooltip slot="tooltip">
+      <div
+        id="vaadin-tooltip-5"
+        role="tooltip"
+        slot="sr-label"
+      >
+        YY
+      </div>
     </vaadin-tooltip>
   </vaadin-avatar>
   <vaadin-avatar
     abbr="TV"
+    aria-describedby="vaadin-tooltip-6"
     aria-label="TV"
     name="Tomi Virkki"
     role="img"
@@ -86,10 +124,18 @@ snapshots["vaadin-avatar-group theme"] =
     with-tooltip=""
   >
     <vaadin-tooltip slot="tooltip">
+      <div
+        id="vaadin-tooltip-6"
+        role="tooltip"
+        slot="sr-label"
+      >
+        Tomi Virkki
+      </div>
     </vaadin-tooltip>
   </vaadin-avatar>
   <vaadin-avatar
     abbr="+2"
+    aria-describedby="vaadin-tooltip-4"
     aria-expanded="false"
     aria-haspopup="menu"
     aria-label="+2"
@@ -100,6 +146,14 @@ snapshots["vaadin-avatar-group theme"] =
     theme="small"
   >
     <vaadin-tooltip slot="tooltip">
+      <div
+        id="vaadin-tooltip-4"
+        role="tooltip"
+        slot="sr-label"
+      >
+        YY
+Tomi Virkki
+      </div>
     </vaadin-tooltip>
   </vaadin-avatar>
 </vaadin-avatar-group>
@@ -110,6 +164,7 @@ snapshots["vaadin-avatar-group opened default"] =
 `<vaadin-avatar-group aria-label="Currently 4 active users">
   <vaadin-avatar
     abbr="AD"
+    aria-describedby="vaadin-tooltip-8"
     aria-label="AD"
     name="Abc Def"
     role="img"
@@ -117,10 +172,18 @@ snapshots["vaadin-avatar-group opened default"] =
     with-tooltip=""
   >
     <vaadin-tooltip slot="tooltip">
+      <div
+        id="vaadin-tooltip-8"
+        role="tooltip"
+        slot="sr-label"
+      >
+        Abc Def
+      </div>
     </vaadin-tooltip>
   </vaadin-avatar>
   <vaadin-avatar
     abbr="GJ"
+    aria-describedby="vaadin-tooltip-9"
     aria-label="GJ"
     name="Ghi Jkl"
     role="img"
@@ -128,10 +191,18 @@ snapshots["vaadin-avatar-group opened default"] =
     with-tooltip=""
   >
     <vaadin-tooltip slot="tooltip">
+      <div
+        id="vaadin-tooltip-9"
+        role="tooltip"
+        slot="sr-label"
+      >
+        Ghi Jkl
+      </div>
     </vaadin-tooltip>
   </vaadin-avatar>
   <vaadin-avatar
     abbr="+2"
+    aria-describedby="vaadin-tooltip-7"
     aria-expanded="false"
     aria-haspopup="menu"
     aria-label="+2"
@@ -141,6 +212,14 @@ snapshots["vaadin-avatar-group opened default"] =
     tabindex="0"
   >
     <vaadin-tooltip slot="tooltip">
+      <div
+        id="vaadin-tooltip-7"
+        role="tooltip"
+        slot="sr-label"
+      >
+        Mno Pqr
+Stu Vwx
+      </div>
     </vaadin-tooltip>
   </vaadin-avatar>
 </vaadin-avatar-group>

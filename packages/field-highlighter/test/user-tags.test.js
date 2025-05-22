@@ -1,7 +1,8 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextFrame, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import '@vaadin/text-field';
+import './test-styles.test.js';
+import '@vaadin/text-field/src/vaadin-text-field.js';
 import { FieldHighlighter } from '../src/vaadin-field-highlighter.js';
 
 const user1 = { id: 'a', name: 'foo', colorIndex: 0 };

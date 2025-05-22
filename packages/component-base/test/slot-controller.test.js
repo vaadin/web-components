@@ -1,23 +1,16 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
+import { defineCE, defineLit, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import { html as legacyHtml, PolymerElement } from '@polymer/polymer/polymer-element.js';
-import { html, LitElement } from 'lit';
-import { ControllerMixin } from '../src/controller-mixin.js';
+import { PolylitMixin } from '../src/polylit-mixin.js';
 import { SlotController } from '../src/slot-controller.js';
 
-class SlotControllerHost extends ControllerMixin(PolymerElement) {
-  static get template() {
-    return legacyHtml`
-      <slot name="foo"></slot>
-      <slot></slot>
-    `;
-  }
-}
+describe('SlotController', () => {
+  const tag = defineLit(
+    'slot-controller',
+    `<slot name="foo"></slot><slot></slot>`,
+    (Base) => class extends PolylitMixin(Base) {},
+  );
 
-customElements.define('slot-controller-element', SlotControllerHost);
-
-describe('slot-controller', () => {
   let element, child, controller;
 
   describe('named slot', () => {
@@ -25,7 +18,7 @@ describe('slot-controller', () => {
 
     describe('default content', () => {
       beforeEach(() => {
-        element = fixtureSync('<slot-controller-element></slot-controller-element>');
+        element = fixtureSync(`<${tag}></${tag}>`);
         initializeSpy = sinon.stub().callsFake((node) => {
           node.textContent = 'foo';
         });
@@ -57,9 +50,9 @@ describe('slot-controller', () => {
     describe('custom content', () => {
       beforeEach(() => {
         element = fixtureSync(`
-          <slot-controller-element>
+          <${tag}>
             <div slot="foo">bar</div>
-          </slot-controller-element>
+          </${tag}>
         `);
         // Get element reference before adding the controller
         child = element.querySelector('[slot="foo"]');
@@ -94,7 +87,7 @@ describe('slot-controller', () => {
       let initializeSpy;
 
       beforeEach(() => {
-        element = fixtureSync('<slot-controller-element></slot-controller-element>');
+        element = fixtureSync(`<${tag}></${tag}>`);
         initializeSpy = sinon.stub().callsFake((node) => {
           node.textContent = 'bar';
         });
@@ -128,28 +121,31 @@ describe('slot-controller', () => {
 
       const initializeSpy = sinon.spy();
 
-      customElements.define(
-        'default-slot-element',
-        class extends SlotControllerHost {
-          ready() {
-            super.ready();
+      const innerTag = defineLit(
+        'slot-controller-inner',
+        `<slot></slot>`,
+        (Base) =>
+          class extends PolylitMixin(Base) {
+            ready() {
+              super.ready();
 
-            controller = new SlotController(this, '', 'div', { initializer: initializeSpy });
-            this.addController(controller);
-          }
-        },
+              controller = new SlotController(this, '', 'div', { initializer: initializeSpy });
+              this.addController(controller);
+            }
+          },
       );
 
-      customElements.define(
-        'custom-default-wrapper',
-        class extends LitElement {
-          render() {
-            return html`
-              <default-slot-element>
+      const wrapperTag = defineCE(
+        class extends HTMLElement {
+          constructor() {
+            super();
+            this.attachShadow({ mode: 'open' });
+            this.shadowRoot.innerHTML = `
+              <${innerTag}>
                 <!-- Keep this comment and surrounding whitespace text nodes -->
                 <div>baz</div>
                 <!-- Keep this comment and surrounding whitespace text nodes -->
-              </default-slot-element>
+              </${innerTag}>
             `;
           }
         },
@@ -157,9 +153,10 @@ describe('slot-controller', () => {
 
       beforeEach(async () => {
         initializeSpy.resetHistory();
-        wrapper = fixtureSync('<custom-default-wrapper></custom-default-wrapper>');
-        await wrapper.updateComplete;
-        element = wrapper.shadowRoot.querySelector('default-slot-element');
+        wrapper = fixtureSync(`<${wrapperTag}></${wrapperTag}>`);
+        // Wait for initial slotchange event
+        await nextFrame();
+        element = wrapper.shadowRoot.querySelector(innerTag);
         child = element.querySelector(':not([slot])');
       });
 
@@ -187,7 +184,7 @@ describe('slot-controller', () => {
       let initializeSpy;
 
       beforeEach(() => {
-        element = fixtureSync('<slot-controller-element>baz</slot-controller-element>');
+        element = fixtureSync(`<${tag}>baz</${tag}>`);
         initializeSpy = sinon.spy();
         controller = new SlotController(element, '', 'div', { initializer: initializeSpy });
         element.addController(controller);
@@ -217,7 +214,7 @@ describe('slot-controller', () => {
 
     describe('empty text node', () => {
       beforeEach(() => {
-        element = fixtureSync('<slot-controller-element> </slot-controller-element>');
+        element = fixtureSync(`<${tag}> </${tag}>`);
         child = element.firstChild;
       });
 
@@ -237,7 +234,7 @@ describe('slot-controller', () => {
     let defaultNode;
 
     beforeEach(async () => {
-      element = fixtureSync('<slot-controller-element></slot-controller-element>');
+      element = fixtureSync(`<${tag}></${tag}>`);
       controller = new SlotController(element, 'foo', 'div', {
         initializer: (node) => {
           node.textContent = 'bar';
@@ -290,7 +287,7 @@ describe('slot-controller', () => {
     let defaultNode;
 
     beforeEach(async () => {
-      element = fixtureSync('<slot-controller-element></slot-controller-element>');
+      element = fixtureSync(`<${tag}></${tag}>`);
       controller = new SlotController(element, 'foo', 'div', {
         observe: false,
         initializer: (node) => {
@@ -343,7 +340,7 @@ describe('slot-controller', () => {
 
     describe('default', () => {
       beforeEach(async () => {
-        element = fixtureSync('<slot-controller-element></slot-controller-element>');
+        element = fixtureSync(`<${tag}></${tag}>`);
         initializeSpy = sinon.spy();
         controller = new SlotController(element, '', 'button', {
           initializer: initializeSpy,
@@ -411,7 +408,7 @@ describe('slot-controller', () => {
 
     describe('custom', () => {
       beforeEach(async () => {
-        element = fixtureSync('<slot-controller-element><div>foo</div><div>bar</div></slot-controller-element>');
+        element = fixtureSync(`<${tag}><div>foo</div><div>bar</div></${tag}>`);
         initializeSpy = sinon.spy();
         controller = new SlotController(element, '', 'button', {
           initializer: initializeSpy,
@@ -468,7 +465,7 @@ describe('slot-controller', () => {
 
     describe('no tag node', () => {
       beforeEach(async () => {
-        element = fixtureSync('<slot-controller-element></slot-controller-element>');
+        element = fixtureSync(`<${tag}></${tag}>`);
         initializeSpy = sinon.spy();
         controller = new SlotController(element, '', null, {
           multiple: true,

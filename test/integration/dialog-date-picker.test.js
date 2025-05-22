@@ -3,9 +3,9 @@ import { sendKeys } from '@vaadin/test-runner-commands';
 import { fixtureSync, nextFrame, nextRender, touchstart } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './not-animated-styles.js';
-import '@vaadin/date-picker';
-import '@vaadin/dialog';
-import { open, waitForScrollToFinish } from '@vaadin/date-picker/test/helpers.js';
+import '@vaadin/date-picker/src/vaadin-date-picker.js';
+import '@vaadin/dialog/src/vaadin-dialog.js';
+import { open, untilOverlayScrolled } from '@vaadin/date-picker/test/helpers.js';
 
 describe('date-picker in dialog', () => {
   let dialog, datePicker;
@@ -41,7 +41,7 @@ describe('date-picker in dialog', () => {
       await sendKeys({ press: 'Tab' });
 
       await nextRender();
-      await waitForScrollToFinish(datePicker);
+      await untilOverlayScrolled(datePicker);
 
       // Focus the Today button
       await sendKeys({ press: 'Tab' });
@@ -61,7 +61,7 @@ describe('date-picker in dialog', () => {
       await sendKeys({ press: 'Tab' });
 
       await nextRender();
-      await waitForScrollToFinish(datePicker);
+      await untilOverlayScrolled(datePicker);
 
       const spy = sinon.spy(datePicker.inputElement, 'focus');
 

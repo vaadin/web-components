@@ -1,7 +1,8 @@
 import { expect } from '@vaadin/chai-plugins';
-import { aTimeout, fixtureSync, nextRender } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import '../../src/vaadin-date-time-picker.js';
 import { resetUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
+import { open } from '@vaadin/date-picker/test/helpers.js';
 
 describe('vaadin-date-time-picker', () => {
   let dateTimePicker;
@@ -24,6 +25,7 @@ describe('vaadin-date-time-picker', () => {
 
     it('readonly', async () => {
       dateTimePicker.readonly = true;
+      await nextUpdate(dateTimePicker);
       await expect(dateTimePicker).dom.to.equalSnapshot();
     });
 
@@ -34,11 +36,13 @@ describe('vaadin-date-time-picker', () => {
 
     it('label', async () => {
       dateTimePicker.label = 'Label';
+      await nextUpdate(dateTimePicker);
       await expect(dateTimePicker).dom.to.equalSnapshot();
     });
 
     it('helper', async () => {
       dateTimePicker.helperText = 'Helper';
+      await nextUpdate(dateTimePicker);
       await expect(dateTimePicker).dom.to.equalSnapshot();
     });
 
@@ -62,14 +66,14 @@ describe('vaadin-date-time-picker', () => {
 
       it('date-picker', async () => {
         const datePicker = dateTimePicker.querySelector('[slot="date-picker"]');
-        datePicker.opened = true;
-        await nextRender();
+        await open(datePicker);
         await expect(datePicker.$.overlay).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
       });
 
       it('time-picker', async () => {
         const timePicker = dateTimePicker.querySelector('[slot="time-picker"]');
         timePicker.opened = true;
+        await nextUpdate(timePicker);
         await expect(timePicker.$.comboBox.$.overlay).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
       });
     });

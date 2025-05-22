@@ -363,7 +363,7 @@ describe('text-area', () => {
         expect(textArea.clientHeight).to.equal(lineHeight * 4);
       });
 
-      it('should include margins and paddings when calculating max-height', async () => {
+      it('should include margins, paddings and borders when calculating max-height', async () => {
         const native = textArea.querySelector('textarea');
         const inputContainer = textArea.shadowRoot.querySelector('[part="input-field"]');
         native.style.paddingTop = '5px';
@@ -372,12 +372,14 @@ describe('text-area', () => {
         native.style.marginBottom = '20px';
         inputContainer.style.paddingTop = '25px';
         inputContainer.style.paddingBottom = '30px';
+        inputContainer.style.borderTop = 'solid 35px';
+        inputContainer.style.borderBottom = 'solid 40px';
 
         textArea.maxRows = 4;
         textArea.value = Array(400).join('400');
         await nextUpdate(textArea);
 
-        expect(textArea.clientHeight).to.equal(lineHeight * 4 + 5 + 10 + 15 + 20 + 25 + 30);
+        expect(textArea.clientHeight).to.equal(lineHeight * 4 + 5 + 10 + 15 + 20 + 25 + 30 + 35 + 40);
       });
 
       it('should shrink below max-height defined by maximum rows', async () => {

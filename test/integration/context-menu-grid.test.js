@@ -1,8 +1,8 @@
 import { expect } from '@vaadin/chai-plugins';
-import { esc, fire, fixtureSync, isFirefox, nextFrame, oneEvent } from '@vaadin/testing-helpers';
+import { esc, fire, fixtureSync, isFirefox, nextFrame, nextRender, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import '@vaadin/grid';
-import '@vaadin/context-menu';
+import '@vaadin/grid/src/vaadin-grid.js';
+import '@vaadin/context-menu/src/vaadin-context-menu.js';
 import { flushGrid, getCell } from '@vaadin/grid/test/helpers.js';
 
 function contextMenuOnCell(grid, rowIndex, colIndex) {
@@ -20,10 +20,6 @@ function contextMenuOnCell(grid, rowIndex, colIndex) {
 
 async function overlayOpened(contextMenu) {
   await oneEvent(contextMenu._overlayElement, 'vaadin-overlay-open');
-}
-
-async function overlayClosed(contextMenu) {
-  await oneEvent(contextMenu._overlayElement, 'vaadin-overlay-closed');
 }
 
 describe('grid in context-menu', () => {
@@ -63,7 +59,7 @@ describe('grid in context-menu', () => {
 
       // Close the context menu with ESC
       esc(document.body);
-      await overlayClosed(contextMenu);
+      await nextRender();
 
       // Expect the last "context menued" cell to be focused
       expect(getCell(grid, 1, 1)).to.equal(grid.shadowRoot.activeElement);

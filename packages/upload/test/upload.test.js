@@ -2,7 +2,6 @@ import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-upload.js';
-import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import { createFile, createFiles, removeFile, xhrCreator } from './helpers.js';
 
 describe('upload', () => {
@@ -401,7 +400,7 @@ describe('upload', () => {
 
     it('should be in held status', async () => {
       upload._addFile(file);
-      await nextRender(upload);
+      await nextRender();
       expect(file.uploaded).not.to.be.ok;
       expect(file.held).to.be.true;
       expect(file.status).to.be.equal(upload.i18n.uploading.status.held);
@@ -470,26 +469,25 @@ describe('upload', () => {
 
     it('should start a file upload from the file-start event', (done) => {
       upload._addFile(file);
-      afterNextRender(upload, () => {
-        expect(file.uploaded).not.to.be.ok;
-        expect(file.held).to.be.true;
-        expect(file.status).to.be.equal(upload.i18n.uploading.status.held);
 
-        upload.addEventListener('upload-start', (e) => {
-          expect(e.detail.xhr).to.be.ok;
-          expect(e.detail.file).to.be.ok;
-          expect(e.detail.file.uploading).to.be.ok;
+      expect(file.uploaded).not.to.be.ok;
+      expect(file.held).to.be.true;
+      expect(file.status).to.be.equal(upload.i18n.uploading.status.held);
 
-          done();
-        });
+      upload.addEventListener('upload-start', (e) => {
+        expect(e.detail.xhr).to.be.ok;
+        expect(e.detail.file).to.be.ok;
+        expect(e.detail.file.uploading).to.be.ok;
 
-        upload.dispatchEvent(
-          new CustomEvent('file-start', {
-            detail: { file },
-            cancelable: true,
-          }),
-        );
+        done();
       });
+
+      upload.dispatchEvent(
+        new CustomEvent('file-start', {
+          detail: { file },
+          cancelable: true,
+        }),
+      );
     });
   });
 

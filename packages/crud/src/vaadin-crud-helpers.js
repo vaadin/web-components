@@ -8,7 +8,7 @@
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
-import { get, set } from '@polymer/polymer/lib/utils/path.js';
+import { get, set } from '@vaadin/component-base/src/path-utils.js';
 
 /**
  * Convenience utility for capitalizing a string, with
@@ -33,7 +33,7 @@ export function capitalize(path) {
  * @return {*}
  */
 export function getProperty(path, obj) {
-  return get(obj, path);
+  return get(path, obj);
 }
 
 /**
@@ -59,7 +59,7 @@ export function setProperty(path, value, obj) {
         return o[p];
       }, obj);
 
-    set(obj, path, value);
+    set(path, value, obj);
   }
 }
 

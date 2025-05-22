@@ -17,5 +17,14 @@ assertType<string | null | undefined>(layout.masterSize);
 assertType<string | null | undefined>(layout.masterMinSize);
 assertType<'horizontal' | 'vertical'>(layout.orientation);
 assertType<boolean>(layout.forceOverlay);
-assertType<string | null | undefined>(layout.stackThreshold);
+assertType<boolean>(layout.stackOverlay);
 assertType<boolean>(layout.noAnimation);
+
+// Events
+layout.addEventListener('backdrop-click', (event) => {
+  assertType<Event>(event);
+});
+
+layout.addEventListener('detail-escape-press', (event) => {
+  assertType<Event>(event);
+});

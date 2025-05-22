@@ -1,8 +1,7 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import './not-animated-styles.js';
-import '../vaadin-context-menu.js';
+import '../src/vaadin-context-menu.js';
 import { html, nothing, render } from 'lit';
 import { contextMenuRenderer } from '../lit.js';
 

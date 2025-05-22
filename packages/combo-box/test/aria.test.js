@@ -1,6 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
 import { arrowDownKeyDown, escKeyDown, fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
-import './not-animated-styles.js';
 import '../src/vaadin-combo-box.js';
 import { getAllItems } from './helpers.js';
 

@@ -8,10 +8,8 @@ import { FocusMixin } from '@vaadin/a11y-base/src/focus-mixin.js';
 import { isElementFocused, isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
 import { KeyboardMixin } from '@vaadin/a11y-base/src/keyboard-mixin.js';
 import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
-import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { OverlayClassMixin } from '@vaadin/component-base/src/overlay-class-mixin.js';
 import { get } from '@vaadin/component-base/src/path-utils.js';
-import { processTemplates } from '@vaadin/component-base/src/templates.js';
 import { InputMixin } from '@vaadin/field-base/src/input-mixin.js';
 import { ValidateMixin } from '@vaadin/field-base/src/validate-mixin.js';
 import { VirtualKeyboardController } from '@vaadin/field-base/src/virtual-keyboard-controller.js';
@@ -47,7 +45,6 @@ function findItemIndex(items, callback) {
 
 /**
  * @polymerMixin
- * @mixes ControllerMixin
  * @mixes ValidateMixin
  * @mixes DisabledMixin
  * @mixes InputMixin
@@ -58,7 +55,7 @@ function findItemIndex(items, callback) {
  */
 export const ComboBoxMixin = (subclass) =>
   class ComboBoxMixinClass extends OverlayClassMixin(
-    ControllerMixin(ValidateMixin(FocusMixin(KeyboardMixin(InputMixin(DisabledMixin(subclass)))))),
+    ValidateMixin(FocusMixin(KeyboardMixin(InputMixin(DisabledMixin(subclass))))),
   ) {
     static get properties() {
       return {
@@ -383,8 +380,6 @@ export const ComboBoxMixin = (subclass) =>
       this.addEventListener('mousedown', bringToFrontListener);
       this.addEventListener('touchstart', bringToFrontListener);
 
-      processTemplates(this);
-
       this.addController(new VirtualKeyboardController(this));
     }
 
@@ -429,25 +424,6 @@ export const ComboBoxMixin = (subclass) =>
      */
     close() {
       this.opened = false;
-    }
-
-    /**
-     * Override Polymer lifecycle callback to handle `filter` property change after
-     * the observer for `opened` property is triggered. This is needed when opening
-     * combo-box on user input to ensure the focused index is set correctly.
-     *
-     * @param {!Object} currentProps Current accessor values
-     * @param {?Object} changedProps Properties changed since the last call
-     * @param {?Object} oldProps Previous values for each changed property
-     * @protected
-     * @override
-     */
-    _propertiesChanged(currentProps, changedProps, oldProps) {
-      super._propertiesChanged(currentProps, changedProps, oldProps);
-
-      if (changedProps.filter !== undefined) {
-        this._filterChanged(changedProps.filter);
-      }
     }
 
     /**

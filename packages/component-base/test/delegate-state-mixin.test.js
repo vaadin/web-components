@@ -1,15 +1,14 @@
 import { expect } from '@vaadin/chai-plugins';
-import { defineLit, definePolymer, fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
-import { ControllerMixin } from '../src/controller-mixin.js';
+import { defineLit, fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import { DelegateStateMixin } from '../src/delegate-state-mixin.js';
 import { PolylitMixin } from '../src/polylit-mixin.js';
 
-const runTests = (defineHelper, baseMixin) => {
-  const tag = defineHelper(
+describe('DelegateStateMixin + Lit', () => {
+  const tag = defineLit(
     'delegate-state-mixin',
     '<input id="input">',
     (Base) =>
-      class extends DelegateStateMixin(baseMixin(Base)) {
+      class extends DelegateStateMixin(PolylitMixin(Base)) {
         static get properties() {
           return {
             title: {
@@ -146,12 +145,4 @@ const runTests = (defineHelper, baseMixin) => {
       expect(target.indeterminate).to.be.false;
     });
   });
-};
-
-describe('DelegateStateMixin + Polymer', () => {
-  runTests(definePolymer, ControllerMixin);
-});
-
-describe('DelegateStateMixin + Lit', () => {
-  runTests(defineLit, PolylitMixin);
 });

@@ -11,39 +11,24 @@ import {
   touchstart,
 } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import './not-animated-styles.js';
-import '../vaadin-context-menu.js';
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import './context-menu-test-styles.js';
+import '../src/vaadin-context-menu.js';
 import { gestures } from '@vaadin/component-base/src/gestures.js';
-
-class MenuTouchWrapper extends PolymerElement {
-  static get template() {
-    return html`
-      <vaadin-context-menu selector="#target" id="menu" renderer="[[_renderer]]">
-        <div id="target">Target</div>
-      </vaadin-context-menu>
-    `;
-  }
-
-  constructor() {
-    super();
-
-    this._renderer = (root) => {
-      root.innerHTML = '<div>Menu Content</div>';
-    };
-  }
-}
-
-customElements.define('menu-touch-wrapper', MenuTouchWrapper);
 
 describe('mobile support', () => {
   let menu, target;
 
   beforeEach(async () => {
-    const testWrapper = fixtureSync('<menu-touch-wrapper></menu-touch-wrapper>');
+    menu = fixtureSync(`
+      <vaadin-context-menu selector="#target">
+        <div id="target">Target</div>
+      </vaadin-context-menu>
+    `);
     await nextRender();
-    menu = testWrapper.$.menu;
     target = menu.querySelector('#target');
+    menu.renderer = (root) => {
+      root.innerHTML = '<div>Menu Content</div>';
+    };
     menu._phone = true;
   });
 

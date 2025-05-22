@@ -11,10 +11,12 @@
  * - if cherry-pick cannot be done, the original PR will be labelled with need to pick manually
  *
  */
+import axios from 'axios';
+import https from 'https';
+import { exec as execCallback } from 'node:child_process';
+import { promisify } from 'node:util';
 
-const axios = require('axios');
-const https = require('https');
-const exec = require('util').promisify(require('child_process').exec);
+const exec = promisify(execCallback);
 
 const arrPR = [];
 const arrTitle = [];

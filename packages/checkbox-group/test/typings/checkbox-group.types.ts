@@ -1,7 +1,6 @@
 import '../../vaadin-checkbox-group.js';
 import type { DisabledMixinClass } from '@vaadin/a11y-base/src/disabled-mixin.js';
 import type { FocusMixinClass } from '@vaadin/a11y-base/src/focus-mixin.js';
-import type { ControllerMixinClass } from '@vaadin/component-base/src/controller-mixin.js';
 import type { ElementMixinClass } from '@vaadin/component-base/src/element-mixin.js';
 import type { FieldMixinClass } from '@vaadin/field-base/src/field-mixin.js';
 import type { LabelMixinClass } from '@vaadin/field-base/src/label-mixin.js';
@@ -34,7 +33,6 @@ group.addEventListener('validated', (event) => {
 
 // Mixins
 assertType<CheckboxGroupMixinClass>(group);
-assertType<ControllerMixinClass>(group);
 assertType<DisabledMixinClass>(group);
 assertType<ElementMixinClass>(group);
 assertType<FieldMixinClass>(group);

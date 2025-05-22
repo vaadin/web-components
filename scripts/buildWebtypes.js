@@ -1,7 +1,7 @@
-const path = require('path');
-const fs = require('fs');
-const os = require('os');
-const { execSync } = require('child_process');
+import { execSync } from 'node:child_process';
+import fs from 'node:fs';
+import os from 'node:os';
+import path from 'node:path';
 
 const PLAIN_WEB_TYPES_FILE = 'web-types.json';
 const LIT_WEB_TYPES_FILE = 'web-types.lit.json';
@@ -17,7 +17,6 @@ const blacklistedPackages = [
   /^icons/u,
   /^input-container/u,
   /^lit-renderer/u,
-  /^polymer-legacy-adapter/u,
 ];
 
 // Additional attributes that will be added to all components

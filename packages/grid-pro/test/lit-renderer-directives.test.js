@@ -1,8 +1,8 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fire, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import '../theme/lumo/vaadin-grid-pro.js';
-import '../theme/lumo/vaadin-grid-pro-edit-column.js';
+import '../src/vaadin-grid-pro.js';
+import '../src/vaadin-grid-pro-edit-column.js';
 import { html, render } from 'lit';
 import { columnHeaderRenderer } from '@vaadin/grid/lit.js';
 import { columnEditModeRenderer } from '../lit.js';

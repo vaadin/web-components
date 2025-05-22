@@ -1,7 +1,7 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, isIOS, keyDownOn, nextFrame } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import '../vaadin-grid.js';
+import '../src/vaadin-grid.js';
 import { flushGrid, getBodyCellContent, getCell, getContainerCell } from './helpers.js';
 
 function getHeaderCell(grid, index = 0) {

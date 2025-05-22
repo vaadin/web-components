@@ -4,51 +4,55 @@ import {
   arrowLeftKeyDown,
   arrowRightKeyDown,
   arrowUpKeyDown,
+  defineLit,
   endKeyDown,
   fixtureSync,
   homeKeyDown,
+  tabKeyDown,
 } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { KeyboardDirectionMixin } from '../src/keyboard-direction-mixin.js';
 
-customElements.define(
-  'keyboard-direction-mixin-element',
-  class extends KeyboardDirectionMixin(PolymerElement) {
-    static get template() {
-      return html`
-        <style>
-          ::slotted(.hidden) {
-            display: none;
-          }
+describe('KeyboardDirectionMixin', () => {
+  const tag = defineLit(
+    'keyboard-direction-mixin',
+    `
+      <style>
+        ::slotted(.hidden) {
+          display: none;
+        }
 
-          :host(:not([vertical])) {
-            display: flex;
-          }
-        </style>
-        <slot></slot>
-      `;
-    }
+        :host(:not([vertical])) {
+          display: flex;
+        }
+      </style>
+      <slot></slot>
+    `,
+    (Base) =>
+      class extends KeyboardDirectionMixin(PolylitMixin(Base)) {
+        get _vertical() {
+          return this.hasAttribute('vertical');
+        }
 
-    get _vertical() {
-      return this.hasAttribute('vertical');
-    }
-  },
-);
+        get _tabNavigation() {
+          return this.hasAttribute('tab-navigation');
+        }
+      },
+  );
 
-describe('keyboard-direction-mixin', () => {
   let element, items;
 
   beforeEach(() => {
     element = fixtureSync(`
-      <keyboard-direction-mixin-element>
+      <${tag}>
         <div tabindex="0">Foo</div>
         <div tabindex="0">Bar</div>
         <div disabled>Baz</div>
         <div tabindex="0">Qux</div>
         <div tabindex="0">Xyz</div>
         <div tabindex="0">Abc</div>
-      </keyboard-direction-mixin-element>
+      </${tag}>
     `);
     items = element.children;
   });
@@ -86,10 +90,21 @@ describe('keyboard-direction-mixin', () => {
           expect(element.focused).to.be.equal(items[1]);
         });
 
-        it('should move focus to prev element on "arrow-right" keydown in LTR', () => {
+        it('should move focus to prev element on "arrow-left" keydown in LTR', () => {
           arrowRightKeyDown(items[0]);
           arrowLeftKeyDown(items[1]);
           expect(element.focused).to.be.equal(items[0]);
+        });
+
+        it('should move focus to last element on first element "arrow-left" keydown', () => {
+          arrowLeftKeyDown(items[0]);
+          expect(element.focused).to.equal(items[5]);
+        });
+
+        it('should move focus to first element on last element "arrow-right" keydown', () => {
+          arrowLeftKeyDown(items[0]);
+          arrowRightKeyDown(items[5]);
+          expect(element.focused).to.equal(items[0]);
         });
       });
 
@@ -107,6 +122,17 @@ describe('keyboard-direction-mixin', () => {
           arrowLeftKeyDown(items[0]);
           arrowRightKeyDown(items[1]);
           expect(element.focused).to.be.equal(items[0]);
+        });
+
+        it('should move focus to last element on first element "arrow-right" keydown', () => {
+          arrowRightKeyDown(items[0]);
+          expect(element.focused).to.equal(items[5]);
+        });
+
+        it('should move focus to first element on last element "arrow-left" keydown', () => {
+          arrowRightKeyDown(items[0]);
+          arrowLeftKeyDown(items[5]);
+          expect(element.focused).to.equal(items[0]);
         });
       });
     });
@@ -187,6 +213,35 @@ describe('keyboard-direction-mixin', () => {
         arrowRightKeyDown(items[0]);
         expect(element.focused).to.be.equal(items[3]);
       });
+    });
+  });
+
+  describe('Tab navigation', () => {
+    beforeEach(() => {
+      element.setAttribute('tab-navigation', '');
+      element.focus();
+    });
+
+    it('should move focus to next element on Tab keydown', () => {
+      tabKeyDown(items[0]);
+      expect(element.focused).to.be.equal(items[1]);
+    });
+
+    it('should move focus to prev element on Shift + Tab keydown', () => {
+      tabKeyDown(items[0]);
+      tabKeyDown(items[1], ['shift']);
+      expect(element.focused).to.be.equal(items[0]);
+    });
+
+    it('should not move focus to last element on first element Shift + Tab keydown', () => {
+      tabKeyDown(items[0], ['shift']);
+      expect(element.focused).to.not.equal(items[5]);
+    });
+
+    it('should not move focus to first element on last element Tab keydown', () => {
+      items[5].focus();
+      tabKeyDown(items[5]);
+      expect(element.focused).to.not.equal(items[0]);
     });
   });
 });

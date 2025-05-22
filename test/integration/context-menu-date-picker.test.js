@@ -1,7 +1,7 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
-import '@vaadin/context-menu';
-import '@vaadin/date-picker';
+import '@vaadin/context-menu/src/vaadin-context-menu.js';
+import '@vaadin/date-picker/src/vaadin-date-picker.js';
 import { isTouch } from '@vaadin/component-base/src/browser-utils';
 import { getMenuItems, openMenu } from '@vaadin/context-menu/test/helpers';
 import { getFocusableCell, open } from '@vaadin/date-picker/test/helpers';

@@ -1,11 +1,12 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fire, fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
 import '../src/vaadin-custom-field.js';
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 
-class XField extends PolymerElement {
-  static get template() {
-    return html`
+class XField extends HTMLElement {
+  constructor() {
+    super();
+    this.attachShadow({ mode: 'open' });
+    this.shadowRoot.innerHTML = `
       <vaadin-custom-field id="customField">
         <slot></slot>
       </vaadin-custom-field>
@@ -15,9 +16,11 @@ class XField extends PolymerElement {
 
 customElements.define('x-field', XField);
 
-class XField2 extends PolymerElement {
-  static get template() {
-    return html`
+class XField2 extends HTMLElement {
+  constructor() {
+    super();
+    this.attachShadow({ mode: 'open' });
+    this.shadowRoot.innerHTML = `
       <vaadin-custom-field id="customField">
         <div id="wrapper">
           <slot></slot>
@@ -79,10 +82,10 @@ Object.keys(fixtures).forEach((set) => {
       const root = fixtureSync(fixtures[set]);
       if (set === 'nested' || set === 'nested2') {
         parent = root; // <x-field>
-        customField = root.$.customField; // <custom-field>
+        customField = root.shadowRoot.querySelector('vaadin-custom-field');
       } else if (set === 'deep' || set === 'deep2') {
         parent = root.firstElementChild.firstElementChild; // Inner <div>
-        customField = root.$.customField; // <custom-field>
+        customField = root.shadowRoot.querySelector('vaadin-custom-field');
       } else {
         parent = root; // <custom-field>
         customField = root; // <custom-field>

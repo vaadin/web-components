@@ -40,32 +40,6 @@ import '@vaadin/grid-pro';
 import '@vaadin/grid-pro/vaadin-grid-pro-edit-column.js';
 ```
 
-## Themes
-
-Vaadin components come with two built-in [themes](https://vaadin.com/docs/latest/styling), Lumo and Material.
-The [main entrypoint](https://github.com/vaadin/web-components/blob/main/packages/grid-pro/vaadin-grid-pro.js) of the package uses the Lumo theme.
-
-To use the Material theme, import the components from the `theme/material` folder:
-
-```js
-import '@vaadin/grid-pro/theme/material/vaadin-grid-pro.js';
-import '@vaadin/grid-pro/theme/material/vaadin-grid-pro-edit-column.js';
-```
-
-You can also import the Lumo version of the components explicitly:
-
-```js
-import '@vaadin/grid-pro/theme/lumo/vaadin-grid-pro.js';
-import '@vaadin/grid-pro/theme/lumo/vaadin-grid-pro-edit-column.js';
-```
-
-Finally, you can import the un-themed components from the `src` folder to get a minimal starting point:
-
-```js
-import '@vaadin/grid-pro/src/vaadin-grid-pro.js';
-import '@vaadin/grid-pro/src/vaadin-grid-pro-edit-column.js';
-```
-
 ## Contributing
 
 Read the [contributing guide](https://vaadin.com/docs/latest/contributing) to learn about our development process, how to propose bugfixes and improvements, and how to test your changes to Vaadin components.

@@ -1,13 +1,12 @@
 import { expect } from '@vaadin/chai-plugins';
-import { defineLit, definePolymer, fixtureSync, nextRender } from '@vaadin/testing-helpers';
-import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
+import { defineLit, fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { AriaModalController } from '../src/aria-modal-controller.js';
 
-const runTests = (defineHelper, baseMixin) => {
+describe('AriaModalController', () => {
   let wrapper, elements, modal, controller;
 
-  const tag = defineHelper('aria-modal', '<slot></slot>', (Base) => class extends baseMixin(Base) {});
+  const tag = defineLit('aria-modal', '<slot></slot>', (Base) => class extends PolylitMixin(Base) {});
 
   beforeEach(async () => {
     wrapper = fixtureSync(`
@@ -82,12 +81,4 @@ const runTests = (defineHelper, baseMixin) => {
       });
     });
   });
-};
-
-describe('AriaModalController + Polymer', () => {
-  runTests(definePolymer, ControllerMixin);
-});
-
-describe('AriaModalController + Lit', () => {
-  runTests(defineLit, PolylitMixin);
 });

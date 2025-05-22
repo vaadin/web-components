@@ -526,6 +526,7 @@ snapshots["vaadin-date-time-picker host overlay class date-picker"] =
 `<vaadin-date-picker-overlay
   class="custom date-time-picker-overlay"
   id="overlay"
+  no-vertical-overlap=""
   opened=""
   restore-focus-on-close=""
   start-aligned=""
@@ -566,7 +567,7 @@ snapshots["vaadin-date-time-picker host overlay class date-picker"] =
         </vaadin-month-calendar>
       </div>
       <div slot="vaadin-infinite-scroller-item-content-15">
-        <vaadin-month-calendar aria-hidden="true">
+        <vaadin-month-calendar>
         </vaadin-month-calendar>
       </div>
       <div slot="vaadin-infinite-scroller-item-content-16">
@@ -599,55 +600,84 @@ snapshots["vaadin-date-time-picker host overlay class date-picker"] =
         </vaadin-date-picker-year>
       </div>
       <div slot="vaadin-infinite-scroller-item-content-22">
+        <vaadin-date-picker-year>
+        </vaadin-date-picker-year>
       </div>
       <div slot="vaadin-infinite-scroller-item-content-23">
+        <vaadin-date-picker-year>
+        </vaadin-date-picker-year>
       </div>
       <div slot="vaadin-infinite-scroller-item-content-24">
+        <vaadin-date-picker-year>
+        </vaadin-date-picker-year>
       </div>
       <div slot="vaadin-infinite-scroller-item-content-25">
+        <vaadin-date-picker-year>
+        </vaadin-date-picker-year>
       </div>
       <div slot="vaadin-infinite-scroller-item-content-26">
+        <vaadin-date-picker-year>
+        </vaadin-date-picker-year>
       </div>
       <div slot="vaadin-infinite-scroller-item-content-27">
+        <vaadin-date-picker-year>
+        </vaadin-date-picker-year>
       </div>
       <div slot="vaadin-infinite-scroller-item-content-28">
+        <vaadin-date-picker-year>
+        </vaadin-date-picker-year>
       </div>
       <div slot="vaadin-infinite-scroller-item-content-29">
+        <vaadin-date-picker-year>
+        </vaadin-date-picker-year>
       </div>
       <div slot="vaadin-infinite-scroller-item-content-30">
-        <vaadin-date-picker-year
-          current=""
-          selected=""
-        >
+        <vaadin-date-picker-year current="">
         </vaadin-date-picker-year>
       </div>
       <div slot="vaadin-infinite-scroller-item-content-31">
-        <vaadin-date-picker-year selected="">
+        <vaadin-date-picker-year>
         </vaadin-date-picker-year>
       </div>
       <div slot="vaadin-infinite-scroller-item-content-32">
-        <vaadin-date-picker-year selected="">
+        <vaadin-date-picker-year>
         </vaadin-date-picker-year>
       </div>
       <div slot="vaadin-infinite-scroller-item-content-33">
-        <vaadin-date-picker-year selected="">
+        <vaadin-date-picker-year>
         </vaadin-date-picker-year>
       </div>
       <div slot="vaadin-infinite-scroller-item-content-34">
+        <vaadin-date-picker-year>
+        </vaadin-date-picker-year>
       </div>
       <div slot="vaadin-infinite-scroller-item-content-35">
+        <vaadin-date-picker-year>
+        </vaadin-date-picker-year>
       </div>
       <div slot="vaadin-infinite-scroller-item-content-36">
+        <vaadin-date-picker-year>
+        </vaadin-date-picker-year>
       </div>
       <div slot="vaadin-infinite-scroller-item-content-37">
+        <vaadin-date-picker-year>
+        </vaadin-date-picker-year>
       </div>
       <div slot="vaadin-infinite-scroller-item-content-38">
+        <vaadin-date-picker-year>
+        </vaadin-date-picker-year>
       </div>
       <div slot="vaadin-infinite-scroller-item-content-39">
+        <vaadin-date-picker-year>
+        </vaadin-date-picker-year>
       </div>
       <div slot="vaadin-infinite-scroller-item-content-40">
+        <vaadin-date-picker-year>
+        </vaadin-date-picker-year>
       </div>
       <div slot="vaadin-infinite-scroller-item-content-41">
+        <vaadin-date-picker-year>
+        </vaadin-date-picker-year>
       </div>
     </vaadin-date-picker-year-scroller>
   </vaadin-date-picker-overlay-content>

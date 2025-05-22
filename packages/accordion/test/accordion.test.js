@@ -139,12 +139,20 @@ describe('vaadin-accordion', () => {
       expect(accordion.opened).to.equal(0);
     });
 
-    it('should dispatch opened-changed event when opened changes', async () => {
+    it('should dispatch single opened-changed event when opened changes', async () => {
       const spy = sinon.spy();
       accordion.addEventListener('opened-changed', spy);
       getHeading(1).click();
       await nextUpdate(accordion);
       expect(spy.calledOnce).to.be.true;
+    });
+
+    it('should dispatch single opened-changed event when changing opened index property', async () => {
+      const spy = sinon.spy();
+      accordion.addEventListener('opened-changed', spy);
+      accordion.opened = 1;
+      await nextUpdate(accordion);
+      expect(spy).to.be.calledOnce;
     });
 
     it('should open panel when component in summary is clicked', async () => {

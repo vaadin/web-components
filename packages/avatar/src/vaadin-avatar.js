@@ -3,17 +3,17 @@
  * Copyright (c) 2020 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import '@vaadin/tooltip/src/vaadin-tooltip.js';
 import './vaadin-avatar-icons.js';
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
-import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
+import { html, LitElement } from 'lit';
+import { ifDefined } from 'lit/directives/if-defined.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
-import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { AvatarMixin } from './vaadin-avatar-mixin.js';
 import { avatarStyles } from './vaadin-avatar-styles.js';
-
-registerStyles('vaadin-avatar', avatarStyles, { moduleId: 'vaadin-avatar-styles' });
 
 /**
  * `<vaadin-avatar>` is a Web Component providing avatar displaying functionality.
@@ -44,23 +44,31 @@ registerStyles('vaadin-avatar', avatarStyles, { moduleId: 'vaadin-avatar-styles'
  * @customElement
  * @extends HTMLElement
  * @mixes AvatarMixin
- * @mixes ControllerMixin
  * @mixes ElementMixin
  * @mixes ThemableMixin
  */
-class Avatar extends AvatarMixin(ElementMixin(ThemableMixin(ControllerMixin(PolymerElement)))) {
-  static get template() {
+class Avatar extends AvatarMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElement)))) {
+  static get is() {
+    return 'vaadin-avatar';
+  }
+
+  static get styles() {
+    return avatarStyles;
+  }
+
+  /** @protected */
+  render() {
     return html`
       <img
-        hidden$="[[!__imgVisible]]"
-        src$="[[img]]"
+        ?hidden="${!this.__imgVisible}"
+        src="${ifDefined(this.img)}"
         aria-hidden="true"
-        on-error="__onImageLoadError"
+        @error="${this.__onImageLoadError}"
         draggable="false"
       />
       <svg
         part="icon"
-        hidden$="[[!__iconVisible]]"
+        ?hidden="${!this.__iconVisible}"
         id="avatar-icon"
         viewBox="-50 -50 100 100"
         preserveAspectRatio="xMidYMid meet"
@@ -70,21 +78,17 @@ class Avatar extends AvatarMixin(ElementMixin(ThemableMixin(ControllerMixin(Poly
       </svg>
       <svg
         part="abbr"
-        hidden$="[[!__abbrVisible]]"
+        ?hidden="${!this.__abbrVisible}"
         id="avatar-abbr"
         viewBox="-50 -50 100 100"
         preserveAspectRatio="xMidYMid meet"
         aria-hidden="true"
       >
-        <text dy=".35em" text-anchor="middle">[[abbr]]</text>
+        <text dy=".35em" text-anchor="middle">${this.abbr}</text>
       </svg>
 
       <slot name="tooltip"></slot>
     `;
-  }
-
-  static get is() {
-    return 'vaadin-avatar';
   }
 
   /** @protected */

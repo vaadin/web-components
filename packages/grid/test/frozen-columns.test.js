@@ -2,7 +2,8 @@ import { expect } from '@vaadin/chai-plugins';
 import { resetMouse, sendMouse } from '@vaadin/test-runner-commands';
 import { fixtureSync, listenOnce, nextRender, nextResize } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import '../vaadin-grid.js';
+import './grid-test-styles.js';
+import '../src/vaadin-grid.js';
 import { isElementFocused } from '@vaadin/a11y-base/src/focus-utils.js';
 import { setNormalizedScrollLeft } from '@vaadin/component-base/src/dir-utils.js';
 import { flushGrid, getRowCells, getRows, infiniteDataProvider, isWithinParentConstraints } from './helpers.js';
@@ -53,7 +54,7 @@ const frozenGridFixture = (frozen, frozenToEnd) => {
       document.documentElement.setAttribute('dir', direction);
 
       flushGrid(grid);
-      await nextRender(grid);
+      await nextRender();
     });
 
     after(() => document.documentElement.removeAttribute('dir'));
@@ -193,7 +194,7 @@ const frozenGridFixture = (frozen, frozenToEnd) => {
       document.documentElement.setAttribute('dir', direction);
 
       flushGrid(grid);
-      await nextRender(grid);
+      await nextRender();
     });
 
     it('should have first frozen to end only when there are frozen columns', () => {

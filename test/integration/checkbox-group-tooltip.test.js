@@ -1,7 +1,7 @@
 import { expect } from '@vaadin/chai-plugins';
 import { nextRender } from '@vaadin/testing-helpers';
-import '@vaadin/checkbox-group';
-import '@vaadin/tooltip';
+import '@vaadin/checkbox-group/src/vaadin-checkbox-group.js';
+import '@vaadin/tooltip/src/vaadin-tooltip.js';
 
 describe('checkbox-group with tooltip', () => {
   let group, tooltip, checkbox1, checkbox2, label;

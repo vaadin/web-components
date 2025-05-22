@@ -1,9 +1,9 @@
-import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
+import { fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '@vaadin/item/theme/lumo/vaadin-item.js';
 import '@vaadin/list-box/theme/lumo/vaadin-list-box.js';
-import '../../../theme/lumo/vaadin-context-menu.js';
 import '../../not-animated-styles.js';
+import '../../../theme/lumo/vaadin-context-menu.js';
 import { openSubMenus } from '../../helpers.js';
 
 describe('context-menu', () => {
@@ -33,7 +33,7 @@ describe('context-menu', () => {
       });
 
       describe('basic', () => {
-        beforeEach(() => {
+        beforeEach(async () => {
           element = fixtureSync(`
             <vaadin-context-menu>
               <div style="padding: 10px">Target</div>
@@ -47,16 +47,18 @@ describe('context-menu', () => {
               </vaadin-list-box>
             `;
           };
+          await nextUpdate(element);
         });
 
         it('basic', async () => {
           contextmenu(element);
+          await nextRender();
           await visualDiff(document.body, `${dir}-basic`);
         });
       });
 
       describe('long', () => {
-        beforeEach(() => {
+        beforeEach(async () => {
           element = fixtureSync(`
             <vaadin-context-menu>
               <div style="padding: 10px">Target</div>
@@ -72,10 +74,12 @@ describe('context-menu', () => {
               </vaadin-list-box>
             `;
           };
+          await nextUpdate(element);
         });
 
         it('basic', async () => {
           contextmenu(element);
+          await nextRender();
           await visualDiff(document.body, `${dir}-long`);
         });
 
@@ -84,17 +88,19 @@ describe('context-menu', () => {
           element.style.bottom = '50px';
           element.style.right = '50px';
           contextmenu(element);
+          await nextRender();
           await visualDiff(document.body, `${dir}-long-bottom`);
         });
       });
 
       describe('items', () => {
-        beforeEach(() => {
+        beforeEach(async () => {
           element = fixtureSync(`
             <vaadin-context-menu>
               <div style="padding: 10px">Target</div>
             </vaadin-context-menu>
           `);
+          await nextUpdate(element);
         });
 
         it('items', async () => {
@@ -120,7 +126,7 @@ describe('context-menu', () => {
           ];
           contextmenu(element);
           await openSubMenus(element);
-          await nextRender(element);
+          await nextRender();
           await visualDiff(document.body, `${dir}-items`);
         });
       });

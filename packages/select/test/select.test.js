@@ -14,9 +14,10 @@ import {
 } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './not-animated-styles.js';
+import './select-test-styles.test.js';
 import '../src/vaadin-select.js';
-import '@vaadin/item/vaadin-item.js';
-import '@vaadin/list-box/vaadin-list-box.js';
+import '@vaadin/item/src/vaadin-item.js';
+import '@vaadin/list-box/src/vaadin-list-box.js';
 import { html, render } from 'lit';
 
 describe('vaadin-select', () => {

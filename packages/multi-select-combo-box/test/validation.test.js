@@ -2,8 +2,7 @@ import { expect } from '@vaadin/chai-plugins';
 import { sendKeys } from '@vaadin/test-runner-commands';
 import { fixtureSync, nextRender, outsideClick } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import './not-animated-styles.js';
-import '../vaadin-multi-select-combo-box.js';
+import '../src/vaadin-multi-select-combo-box.js';
 
 describe('validation', () => {
   let comboBox, validateSpy, changeSpy, input;

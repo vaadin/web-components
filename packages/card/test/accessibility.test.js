@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
-import '../vaadin-card.js';
+import '../src/vaadin-card.js';
 
 window.Vaadin.featureFlags ||= {};
 window.Vaadin.featureFlags.cardComponent = true;
@@ -10,7 +10,7 @@ describe('accessibility', () => {
 
   beforeEach(async () => {
     card = fixtureSync('<vaadin-card></vaadin-card>');
-    await nextRender(card);
+    await nextRender();
   });
 
   describe('ARIA roles', () => {
@@ -35,7 +35,7 @@ describe('accessibility', () => {
       await nextUpdate(card);
       const customTitleElement = fixtureSync('<span slot="title">Custom title element</span>');
       card.appendChild(customTitleElement);
-      await nextRender(card);
+      await nextRender();
       expect(card.hasAttribute('aria-labelledby')).to.be.false;
     });
   });

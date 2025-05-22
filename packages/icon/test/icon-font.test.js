@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, isChrome, nextFrame, nextResize } from '@vaadin/testing-helpers';
-import '../vaadin-icon.js';
+import '../src/vaadin-icon.js';
 import { needsFontIconSizingFallback, supportsCQUnitsForPseudoElements } from '../src/vaadin-icon-helpers.js';
 import { iconFontCss } from './test-icon-font.js';
 

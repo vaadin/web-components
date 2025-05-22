@@ -7,7 +7,6 @@ import type { DelegateFocusMixinClass } from '@vaadin/a11y-base/src/delegate-foc
 import type { DisabledMixinClass } from '@vaadin/a11y-base/src/disabled-mixin.js';
 import type { FocusMixinClass } from '@vaadin/a11y-base/src/focus-mixin.js';
 import type { KeyboardMixinClass } from '@vaadin/a11y-base/src/keyboard-mixin.js';
-import type { ControllerMixinClass } from '@vaadin/component-base/src/controller-mixin.js';
 import type { DelegateStateMixinClass } from '@vaadin/component-base/src/delegate-state-mixin.js';
 import type { ElementMixinClass } from '@vaadin/component-base/src/element-mixin.js';
 import type { OverlayClassMixinClass } from '@vaadin/component-base/src/overlay-class-mixin.js';
@@ -24,6 +23,7 @@ import type { ThemePropertyMixinClass } from '@vaadin/vaadin-themable-mixin/vaad
 import type { ComboBoxDataProviderMixinClass } from './vaadin-combo-box-data-provider-mixin.js';
 import type { ComboBoxMixinClass } from './vaadin-combo-box-mixin.js';
 import type { ComboBoxDefaultItem } from './vaadin-combo-box-mixin.js';
+
 export {
   ComboBoxDataProvider,
   ComboBoxDataProviderCallback,
@@ -190,9 +190,6 @@ export interface ComboBoxEventMap<TItem> extends HTMLElementEventMap {
  * `opened`  | Set when the combo box dropdown is open | :host
  * `loading` | Set when new items are expected | :host
  *
- * If you want to replace the default `<input>` and its container with a custom implementation to get full control
- * over the input field, consider using the [`<vaadin-combo-box-light>`](#/elements/vaadin-combo-box-light) element.
- *
  * ### Internal components
  *
  * In addition to `<vaadin-combo-box>` itself, the following internal
@@ -249,8 +246,7 @@ interface ComboBox<TItem = ComboBoxDefaultItem>
     DelegateFocusMixinClass,
     ThemableMixinClass,
     ThemePropertyMixinClass,
-    ElementMixinClass,
-    ControllerMixinClass {}
+    ElementMixinClass {}
 
 declare global {
   interface HTMLElementTagNameMap {

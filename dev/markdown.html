@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Markdown</title>
+    <script type="module" src="./common.js"></script>
+
+    <script type="module">
+      import '@vaadin/markdown';
+
+      const markdown = document.querySelector('vaadin-markdown');
+      markdown.content = `
+# H1 – Main Title
+
+## H2 – Section Title
+
+### H3 – Sub-section
+
+Plain paragraph text with **bold**, *italic*, ***bold-italic***, ~~strikethrough~~, and \`inline code\`.
+
+> Blockquote:  
+> This line should render as a quoted paragraph.
+
+1. First ordered item  
+2. Second ordered item  
+   1. Nested ordered item
+
+- Unordered list item  
+  - Nested unordered item
+
+\`\`\`js
+// Fenced code block with syntax highlighting
+function greet(name = "world") {
+  console.log(\`Hello, ${name}!\`);
+}
+\`\`\`
+`;
+    </script>
+  </head>
+
+  <body>
+    <vaadin-markdown></vaadin-markdown>
+  </body>
+</html>

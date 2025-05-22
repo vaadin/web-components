@@ -2,9 +2,8 @@ import { expect } from '@vaadin/chai-plugins';
 import { resetMouse, sendMouseToElement } from '@vaadin/test-runner-commands';
 import { enter, esc, fixtureSync, focusout, nextFrame, space } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import '../theme/lumo/vaadin-grid-pro.js';
-import '../theme/lumo/vaadin-grid-pro-edit-column.js';
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import '../src/vaadin-grid-pro.js';
+import '../src/vaadin-grid-pro-edit-column.js';
 import {
   createItems,
   dblclick,
@@ -16,20 +15,23 @@ import {
 
 customElements.define(
   'user-editor',
-  class extends PolymerElement {
-    static get template() {
-      return html`<input value="{{user.name::input}}" />`;
+  class extends HTMLElement {
+    #user;
+
+    constructor() {
+      super();
+      this.attachShadow({ mode: 'open' });
+      this.shadowRoot.innerHTML = `<input>`;
+      this.user = { name: null };
     }
 
-    static get properties() {
-      return {
-        user: {
-          type: Object,
-          value: () => {
-            return { name: null };
-          },
-        },
-      };
+    get user() {
+      return this.#user;
+    }
+
+    set user(value) {
+      this.#user = value;
+      this.shadowRoot.querySelector('input').value = value.name;
     }
   },
 );
@@ -237,7 +239,7 @@ describe('edit column renderer', () => {
 
     it('should close editor and update value when scrolling edited cell out of view', () => {
       grid.items = null;
-      grid.items = Array.from({ length: 30 }, () => ({ ...createItems()[0] }));
+      grid.items = Array.from({ length: 40 }, () => ({ ...createItems()[0] }));
       flushGrid(grid);
 
       cell = getContainerCell(grid.$.items, 0, 0);
@@ -247,7 +249,7 @@ describe('edit column renderer', () => {
 
       dblclick(cell._content);
       getCellEditor(cell).value = 'Bar';
-      grid.scrollToIndex(29);
+      grid.scrollToIndex(39);
       expect(getCellEditor(cell)).to.be.not.ok;
       expect(grid.items[0].name).to.equal('Bar');
 
@@ -308,7 +310,7 @@ describe('edit column renderer', () => {
     it('should read the updated value based on `editorValuePath` after edit mode exit', () => {
       dblclick(cell._content);
       editor = getCellEditor(cell);
-      editor.set('user.name', 'New');
+      editor.user = { name: 'New' };
       enter(editor);
       expect(cell._content.textContent.trim()).to.equal('New');
       expect(grid.items[0].name).to.equal('New');

@@ -1,8 +1,7 @@
 import { expect } from '@vaadin/chai-plugins';
 import { resetMouse, sendKeys, sendMouseToElement } from '@vaadin/test-runner-commands';
 import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
-import './not-animated-styles.js';
-import '../vaadin-menu-bar.js';
+import '../src/vaadin-menu-bar.js';
 
 describe('accessible disabled buttons', () => {
   let menuBar, buttons;
@@ -23,7 +22,7 @@ describe('accessible disabled buttons', () => {
       { text: 'Item 1', disabled: true, children: [{ text: 'SubItem 0' }] },
       { text: 'Item 2' },
     ];
-    await nextRender(menuBar);
+    await nextRender();
     buttons = menuBar._buttons;
   });
 

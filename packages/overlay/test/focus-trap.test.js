@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextRender, oneEvent, tabKeyDown } from '@vaadin/testing-helpers';
-import '../vaadin-overlay.js';
+import '../src/vaadin-overlay.js';
 import { getFocusableElements, isElementFocused } from '@vaadin/a11y-base/src/focus-utils.js';
 
 describe('focus-trap', () => {

@@ -1,6 +1,7 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextResize } from '@vaadin/testing-helpers';
-import '../vaadin-grid.js';
+import './grid-test-styles.js';
+import '../src/vaadin-grid.js';
 import { flushGrid, infiniteDataProvider } from './helpers.js';
 
 describe('min-height', () => {

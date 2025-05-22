@@ -305,6 +305,7 @@ export const DateTimePickerMixin = (superClass) =>
       // Default value for "max" property of vaadin-time-picker (for removing constraint)
       this.__defaultTimeMaxValue = '23:59:59.999';
 
+      this.__onGlobalClick = this.__onGlobalClick.bind(this);
       this.__changeEventHandler = this.__changeEventHandler.bind(this);
       this.__valueChangedEventHandler = this.__valueChangedEventHandler.bind(this);
       this.__openedChangedEventHandler = this.__openedChangedEventHandler.bind(this);
@@ -316,9 +317,35 @@ export const DateTimePickerMixin = (superClass) =>
     }
 
     /** @private */
+    get __filledPickers() {
+      return this.__pickers.filter((picker) => picker.value || picker.__unparsableValue);
+    }
+
+    /** @private */
     get __formattedValue() {
       const values = this.__pickers.map((picker) => picker.value);
       return values.every(Boolean) ? values.join('T') : '';
+    }
+
+    /**
+     * Values:
+     * - ""
+     * - "fooT"
+     * - "Tbar"
+     * - "fooTbar"
+     * - "T12:00"
+     * - "fooT12:00"
+     * - "2024-01-01T"
+     * - "2024-01-01Tbar"
+     *
+     * @private
+     */
+    get __unparsableValue() {
+      if (this.__filledPickers.length > 0 && !this.__pickers.every((picker) => picker.value)) {
+        return this.__pickers.map((picker) => picker.value || picker.__unparsableValue).join('T');
+      }
+
+      return '';
     }
 
     /** @protected */
@@ -347,9 +374,46 @@ export const DateTimePickerMixin = (superClass) =>
       this.ariaTarget = this;
     }
 
+    /** @protected */
+    connectedCallback() {
+      super.connectedCallback();
+      document.addEventListener('click', this.__onGlobalClick, true);
+    }
+
+    /** @protected */
+    disconnectedCallback() {
+      super.disconnectedCallback();
+      document.removeEventListener('click', this.__onGlobalClick, true);
+    }
+
     focus() {
       if (this.__datePicker) {
         this.__datePicker.focus();
+      }
+    }
+
+    /** @private */
+    __onGlobalClick(event) {
+      const isOpened = this.__datePicker.opened || this.__timePicker.opened;
+      if (!isOpened) {
+        return;
+      }
+
+      const isOutsideClick = event.composedPath().every((node) => {
+        return ![
+          this.__datePicker,
+          this.__datePicker.$.overlay,
+          this.__timePicker,
+          this.__timePicker.$.comboBox.$.overlay,
+        ].includes(node);
+      });
+
+      if (isOutsideClick) {
+        this.__outsideClickInProgress = true;
+
+        setTimeout(() => {
+          this.__outsideClickInProgress = false;
+        });
       }
     }
 
@@ -365,7 +429,7 @@ export const DateTimePickerMixin = (superClass) =>
       // Do not validate when focusout is caused by document
       // losing focus, which happens on browser tab switch.
       if (!focused && document.hasFocus()) {
-        this._requestValidation();
+        this.__commitPendingValueChange();
       }
     }
 
@@ -379,12 +443,12 @@ export const DateTimePickerMixin = (superClass) =>
      */
     _shouldRemoveFocus(event) {
       const target = event.relatedTarget;
-      const overlayContent = this.__datePicker._overlayContent;
 
       if (
+        this.__datePicker.opened ||
+        this.__timePicker.opened ||
         this.__datePicker.contains(target) ||
-        this.__timePicker.contains(target) ||
-        (overlayContent && overlayContent.contains(target))
+        this.__timePicker.contains(target)
       ) {
         return false;
       }
@@ -408,22 +472,35 @@ export const DateTimePickerMixin = (superClass) =>
     __changeEventHandler(event) {
       event.stopPropagation();
 
-      if (this.__dispatchChangeForValue === this.value) {
-        this._requestValidation();
-        this.__dispatchChange();
+      const isAlreadyInvalid = this.invalid;
+      const filledPickers = this.__filledPickers;
+      if (filledPickers.length === 1 && filledPickers[0].checkValidity() && !isAlreadyInvalid) {
+        // Skip if (a) only one picker is filled, (b) its value is valid by itself, and (c) the user
+        // is still interacting with the field. This is to give the user a chance to finish the input
+        // before giving him feedback. However, if the field is already in the invalid state due to
+        // a previous error, proceed to committing the value to get the error message updated.
+        return;
       }
-      this.__dispatchChangeForValue = undefined;
+
+      if (this.__hasPendingValueChange) {
+        this.__commitPendingValueChange();
+      }
     }
 
     /** @private */
     __openedChangedEventHandler() {
       const opened = this.__datePicker.opened || this.__timePicker.opened;
       this.style.pointerEvents = opened ? 'auto' : '';
+
+      if (!opened && this.__outsideClickInProgress) {
+        this.__commitPendingValueChange();
+      }
     }
 
     /** @private */
     __addInputListeners(node) {
       node.addEventListener('change', this.__changeEventHandler);
+      node.addEventListener('unparsable-change', this.__changeEventHandler);
       node.addEventListener('value-changed', this.__valueChangedEventHandler);
       node.addEventListener('opened-changed', this.__openedChangedEventHandler);
     }
@@ -431,6 +508,7 @@ export const DateTimePickerMixin = (superClass) =>
     /** @private */
     __removeInputListeners(node) {
       node.removeEventListener('change', this.__changeEventHandler);
+      node.removeEventListener('unparsable-change', this.__changeEventHandler);
       node.removeEventListener('value-changed', this.__valueChangedEventHandler);
       node.removeEventListener('opened-changed', this.__openedChangedEventHandler);
     }
@@ -724,8 +802,27 @@ export const DateTimePickerMixin = (superClass) =>
      */
     checkValidity() {
       const hasInvalidPickers = this.__pickers.some((picker) => !picker.checkValidity());
+      const hasOnlyOneFilledPicker = this.__filledPickers.length === 1;
       const hasEmptyRequiredPickers = this.required && this.__pickers.some((picker) => !picker.value);
-      return !hasInvalidPickers && !hasEmptyRequiredPickers;
+      return !hasInvalidPickers && !hasEmptyRequiredPickers && !hasOnlyOneFilledPicker;
+    }
+
+    /** @private */
+    __commitPendingValueChange() {
+      this._requestValidation();
+      if (this.__committedValue !== this.value) {
+        this.dispatchEvent(new CustomEvent('change', { bubbles: true }));
+      } else if (this.__committedUnparsableValue !== this.__unparsableValue) {
+        this.dispatchEvent(new CustomEvent('unparsable-change'));
+      }
+
+      this.__committedValue = this.value;
+      this.__committedUnparsableValue = this.__unparsableValue;
+    }
+
+    /** @private */
+    get __hasPendingValueChange() {
+      return this.__committedValue !== this.value || this.__committedUnparsableValue !== this.__unparsableValue;
     }
 
     /**
@@ -769,8 +866,9 @@ export const DateTimePickerMixin = (superClass) =>
     __valueChanged(value, oldValue) {
       this.__handleDateTimeChange('value', '__selectedDateTime', value, oldValue);
 
-      if (oldValue !== undefined) {
-        this.__dispatchChangeForValue = value;
+      if (!this.__keepCommittedValue) {
+        this.__committedValue = value;
+        this.__committedUnparsableValue = '';
       }
 
       this.toggleAttribute('has-value', !!value);
@@ -839,8 +937,12 @@ export const DateTimePickerMixin = (superClass) =>
       }
 
       this.__ignoreInputValueChange = true;
+      this.__keepCommittedValue = true;
+
       this.__updateTimePickerMinMax();
       this.value = this.__formattedValue;
+
+      this.__keepCommittedValue = false;
       this.__ignoreInputValueChange = false;
     }
 

@@ -90,6 +90,12 @@ describe('number-field', () => {
         await visualDiff(div, `${dir}-helper-text`);
       });
 
+      it('clear button', async () => {
+        element.value = 10;
+        element.clearButtonVisible = true;
+        await visualDiff(div, `${dir}-clear-button`);
+      });
+
       it('prefix slot', async () => {
         const span = document.createElement('span');
         span.setAttribute('slot', 'prefix');

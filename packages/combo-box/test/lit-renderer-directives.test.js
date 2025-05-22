@@ -1,8 +1,7 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import './not-animated-styles.js';
-import '../vaadin-combo-box.js';
+import '../src/vaadin-combo-box.js';
 import { html, render } from 'lit';
 import { comboBoxRenderer } from '../lit.js';
 import { flushComboBox, getAllItems } from './helpers.js';

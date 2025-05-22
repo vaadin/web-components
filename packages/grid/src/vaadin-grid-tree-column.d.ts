@@ -13,14 +13,13 @@ import type { GridTreeColumnMixinClass } from './vaadin-grid-tree-column-mixin.j
  *
  * #### Example:
  * ```html
- * <vaadin-grid items="[[items]]">
+ * <vaadin-grid>
  *  <vaadin-grid-tree-column path="name.first"></vaadin-grid-tree-column>
  *
  *  <vaadin-grid-column>
  *    ...
  * ```
  */
-
 declare class GridTreeColumn<TItem = GridDefaultItem> extends HTMLElement {}
 
 interface GridTreeColumn<TItem = GridDefaultItem>

@@ -30,6 +30,14 @@ export const KeyboardDirectionMixin = (superclass) =>
       return true;
     }
 
+    /**
+     * @return {boolean}
+     * @protected
+     */
+    get _tabNavigation() {
+      return false;
+    }
+
     /** @protected */
     focus() {
       const items = this._getItems();
@@ -67,7 +75,7 @@ export const KeyboardDirectionMixin = (superclass) =>
         return;
       }
 
-      const { key } = event;
+      const { key, shiftKey } = event;
       const items = this._getItems() || [];
       const currentIdx = items.indexOf(this.focused);
 
@@ -77,10 +85,10 @@ export const KeyboardDirectionMixin = (superclass) =>
       const isRTL = !this._vertical && this.getAttribute('dir') === 'rtl';
       const dirIncrement = isRTL ? -1 : 1;
 
-      if (this.__isPrevKey(key)) {
+      if (this.__isPrevKeyPressed(key, shiftKey)) {
         increment = -dirIncrement;
         idx = currentIdx - dirIncrement;
-      } else if (this.__isNextKey(key)) {
+      } else if (this.__isNextKeyPressed(key, shiftKey)) {
         increment = dirIncrement;
         idx = currentIdx + dirIncrement;
       } else if (key === 'Home') {
@@ -93,6 +101,17 @@ export const KeyboardDirectionMixin = (superclass) =>
 
       idx = this._getAvailableIndex(items, idx, increment, (item) => !isElementHidden(item));
 
+      if (
+        this._tabNavigation &&
+        key === 'Tab' &&
+        ((idx > currentIdx && event.shiftKey) || (idx < currentIdx && !event.shiftKey))
+      ) {
+        // Prevent "roving tabindex" logic and let the normal Tab behavior if
+        // - currently on the first focusable item and Shift + Tab is pressed,
+        // - currently on the last focusable item and Tab is pressed.
+        return;
+      }
+
       if (idx >= 0) {
         event.preventDefault();
         this._focus(idx, true);
@@ -101,20 +120,30 @@ export const KeyboardDirectionMixin = (superclass) =>
 
     /**
      * @param {string} key
+     * @param {boolean} shiftKey
      * @return {boolean}
      * @private
      */
-    __isPrevKey(key) {
-      return this._vertical ? key === 'ArrowUp' : key === 'ArrowLeft';
+    __isPrevKeyPressed(key, shiftKey) {
+      if (this._vertical) {
+        return key === 'ArrowUp';
+      }
+
+      return key === 'ArrowLeft' || (this._tabNavigation && key === 'Tab' && shiftKey);
     }
 
     /**
      * @param {string} key
+     * @param {boolean} shiftKey
      * @return {boolean}
      * @private
      */
-    __isNextKey(key) {
-      return this._vertical ? key === 'ArrowDown' : key === 'ArrowRight';
+    __isNextKeyPressed(key, shiftKey) {
+      if (this._vertical) {
+        return key === 'ArrowDown';
+      }
+
+      return key === 'ArrowRight' || (this._tabNavigation && key === 'Tab' && !shiftKey);
     }
 
     /**

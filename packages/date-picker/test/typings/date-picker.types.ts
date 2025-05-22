@@ -3,7 +3,6 @@ import type { DelegateFocusMixinClass } from '@vaadin/a11y-base/src/delegate-foc
 import type { DisabledMixinClass } from '@vaadin/a11y-base/src/disabled-mixin.js';
 import type { FocusMixinClass } from '@vaadin/a11y-base/src/focus-mixin.js';
 import type { KeyboardMixinClass } from '@vaadin/a11y-base/src/keyboard-mixin.js';
-import type { ControllerMixinClass } from '@vaadin/component-base/src/controller-mixin.js';
 import type { ElementMixinClass } from '@vaadin/component-base/src/element-mixin.js';
 import type { OverlayClassMixinClass } from '@vaadin/component-base/src/overlay-class-mixin.js';
 import type { ClearButtonMixinClass } from '@vaadin/field-base/src/clear-button-mixin.js';
@@ -22,14 +21,6 @@ import type {
   DatePickerValidatedEvent,
   DatePickerValueChangedEvent,
 } from '../../vaadin-date-picker.js';
-import type {
-  DatePickerLight,
-  DatePickerLightChangeEvent,
-  DatePickerLightInvalidChangedEvent,
-  DatePickerLightOpenedChangedEvent,
-  DatePickerLightValidatedEvent,
-  DatePickerLightValueChangedEvent,
-} from '../../vaadin-date-picker-light.js';
 
 const assertType = <TExpected>(actual: TExpected) => actual;
 
@@ -95,7 +86,6 @@ assertType<DatePickerI18n>({});
 assertType<DatePickerI18n>({ cancel: 'cancel' });
 
 // DatePicker mixins
-assertType<ControllerMixinClass>(datePicker);
 assertType<ElementMixinClass>(datePicker);
 assertType<FocusMixinClass>(datePicker);
 assertType<DisabledMixinClass>(datePicker);
@@ -110,61 +100,3 @@ assertType<ValidateMixinClass>(datePicker);
 assertType<ThemableMixinClass>(datePicker);
 assertType<DatePickerMixinClass>(datePicker);
 assertType<OverlayClassMixinClass>(datePicker);
-
-/* DatePickerLight */
-const datePickerLight = document.createElement('vaadin-date-picker-light');
-
-assertType<DatePickerLight>(datePickerLight);
-assertType<ValidateMixinClass>(datePickerLight);
-
-datePickerLight.addEventListener('opened-changed', (event) => {
-  assertType<DatePickerLightOpenedChangedEvent>(event);
-  assertType<boolean>(event.detail.value);
-});
-
-datePickerLight.addEventListener('invalid-changed', (event) => {
-  assertType<DatePickerLightInvalidChangedEvent>(event);
-  assertType<boolean>(event.detail.value);
-});
-
-datePickerLight.addEventListener('value-changed', (event) => {
-  assertType<DatePickerLightValueChangedEvent>(event);
-  assertType<string>(event.detail.value);
-});
-
-datePickerLight.addEventListener('change', (event) => {
-  assertType<DatePickerLightChangeEvent>(event);
-  assertType<DatePickerLight>(event.target);
-});
-
-datePickerLight.addEventListener('validated', (event) => {
-  assertType<DatePickerLightValidatedEvent>(event);
-  assertType<boolean>(event.detail.valid);
-});
-
-// DatePickerLight properties
-assertType<() => boolean>(datePickerLight.checkValidity);
-assertType<() => boolean>(datePickerLight.validate);
-assertType<() => void>(datePickerLight.close);
-assertType<() => void>(datePickerLight.open);
-assertType<string | undefined>(datePickerLight.max);
-assertType<string | undefined>(datePickerLight.min);
-assertType<boolean | null | undefined>(datePickerLight.showWeekNumbers);
-assertType<boolean | null | undefined>(datePickerLight.autoOpenDisabled);
-assertType<boolean | null | undefined>(datePickerLight.opened);
-assertType<HTMLElement | null | undefined>(datePickerLight.focusElement);
-assertType<boolean>(datePickerLight.disabled);
-assertType<string>(datePickerLight.value);
-assertType<boolean>(datePickerLight.invalid);
-assertType<boolean>(datePickerLight.required);
-assertType<string | null | undefined>(datePickerLight.initialPosition);
-
-// DatePickerLight mixins
-assertType<FocusMixinClass>(datePickerLight);
-assertType<DisabledMixinClass>(datePickerLight);
-assertType<KeyboardMixinClass>(datePickerLight);
-assertType<DelegateFocusMixinClass>(datePickerLight);
-assertType<InputMixinClass>(datePickerLight);
-assertType<InputConstraintsMixinClass>(datePickerLight);
-assertType<ThemableMixinClass>(datePickerLight);
-assertType<DatePickerMixinClass>(datePickerLight);

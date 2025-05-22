@@ -1,7 +1,7 @@
 import { expect } from '@vaadin/chai-plugins';
 import { nextRender } from '@vaadin/testing-helpers';
-import '@vaadin/radio-group';
-import '@vaadin/tooltip';
+import '@vaadin/radio-group/src/vaadin-radio-group.js';
+import '@vaadin/tooltip/src/vaadin-tooltip.js';
 
 describe('radio-group with tooltip', () => {
   let group, tooltip, radio1, radio2, label;

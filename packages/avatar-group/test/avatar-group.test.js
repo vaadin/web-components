@@ -11,7 +11,8 @@ import {
   tabKeyDown,
 } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import '../vaadin-avatar-group.js';
+import './avatar-group-test-styles.js';
+import '../src/vaadin-avatar-group.js';
 
 describe('avatar-group', () => {
   let group;
@@ -39,7 +40,7 @@ describe('avatar-group', () => {
   describe('items property', () => {
     beforeEach(async () => {
       group.items = [{ abbr: 'PM' }, { name: 'Yuriy Yevstihnyeyev' }, { abbr: 'SK' }, { name: 'Jens Jansson' }];
-      await nextRender(group);
+      await nextRender();
     });
 
     it('should render avatar for each item, plus overflow avatar', () => {
@@ -83,7 +84,7 @@ describe('avatar-group', () => {
     beforeEach(async () => {
       group.items = [{ abbr: 'PM' }, { name: 'Yuriy Yevstihnyeyev' }, { name: 'Serhii Kulykov' }, { abbr: 'JJ' }, {}];
       group.maxItemsVisible = 3;
-      await nextRender(group);
+      await nextRender();
     });
 
     it('should render avatar based on maxItemsVisible, including overflow avatar', () => {
@@ -111,14 +112,14 @@ describe('avatar-group', () => {
 
     it('should show at least two avatars if maxItemsVisible is below 2', async () => {
       group.maxItemsVisible = 1;
-      await nextRender(group);
+      await nextRender();
       const items = group.querySelectorAll('vaadin-avatar');
       expect(items.length).to.equal(2);
     });
 
     it('should set abbr property correctly if maxItemsVisible is below 2', async () => {
       group.maxItemsVisible = 1;
-      await nextRender(group);
+      await nextRender();
       const overflow = group._overflow;
       expect(overflow.abbr).to.equal('+4');
     });
@@ -126,28 +127,28 @@ describe('avatar-group', () => {
     it('should show two avatars if maxItemsVisible is below 2', async () => {
       group.items = group.items.slice(0, 2);
       group.maxItemsVisible = 1;
-      await nextRender(group);
+      await nextRender();
       const items = group.querySelectorAll('vaadin-avatar:not([hidden])');
       expect(items.length).to.equal(2);
     });
 
     it('should hide overflow avatar when maxItemsVisible property is set to null', async () => {
       group.maxItemsVisible = null;
-      await nextRender(group);
+      await nextRender();
       expect(group._overflow.hasAttribute('hidden')).to.be.true;
     });
 
     it('should hide overflow avatar when maxItemsVisible property is set to undefined', async () => {
       group.maxItemsVisible = undefined;
-      await nextRender(group);
+      await nextRender();
       expect(group._overflow.hasAttribute('hidden')).to.be.true;
     });
 
     it('should hide overflow avatar when items property is changed', async () => {
       group.maxItemsVisible = 2;
-      await nextRender(group);
+      await nextRender();
       group.items = group.items.slice(0, 2);
-      await nextRender(group);
+      await nextRender();
       expect(group._overflow.hasAttribute('hidden')).to.be.true;
     });
 
@@ -155,11 +156,11 @@ describe('avatar-group', () => {
     it('should show only maxItemsVisible when setting items after being empty', async () => {
       const maxItemsVisible = 3;
       group.maxItemsVisible = maxItemsVisible;
-      await nextRender(group);
+      await nextRender();
       const items = group.items;
       group.items = [];
       group.items = items;
-      await nextRender(group);
+      await nextRender();
       const renderedElements = group.querySelectorAll('vaadin-avatar');
       expect(renderedElements.length).to.equal(maxItemsVisible);
     });
@@ -167,7 +168,7 @@ describe('avatar-group', () => {
     describe('width is set', () => {
       beforeEach(async () => {
         group.maxItemsVisible = 4;
-        await nextRender(group);
+        await nextRender();
       });
 
       it('should consider element width when maxItemsVisible is set', async () => {
@@ -193,7 +194,7 @@ describe('avatar-group', () => {
 
     beforeEach(async () => {
       group.items = [{ abbr: '01' }, { abbr: '02' }, { abbr: '03' }, { abbr: '04' }, { abbr: '05' }];
-      await nextRender(group);
+      await nextRender();
       overlay = group.$.overlay;
       overflow = group._overflow;
     });
@@ -277,7 +278,7 @@ describe('avatar-group', () => {
         { name: 'Jens Jansson' },
       ];
       group.maxItemsVisible = 2;
-      await nextRender(group);
+      await nextRender();
       overlay = group.$.overlay;
       overflow = group._overflow;
     });
@@ -404,7 +405,7 @@ describe('avatar-group', () => {
         { name: 'Yuriy Yevstihnyeyev', colorIndex: 1 },
         { name: 'Serhii Kulykov', colorIndex: 2 },
       ];
-      await nextRender(group);
+      await nextRender();
       overlay = group.$.overlay;
       overflow = group._overflow;
     });
@@ -437,7 +438,7 @@ describe('avatar-group', () => {
         { name: 'Yuriy Yevstihnyeyev', className: 'bar' },
         { name: 'Serhii Kulykov', className: 'baz' },
       ];
-      await nextRender(group);
+      await nextRender();
       overlay = group.$.overlay;
       overflow = group._overflow;
     });
@@ -474,7 +475,7 @@ describe('avatar-group', () => {
 
     beforeEach(async () => {
       group.items = [{ abbr: 'PM' }, { name: 'Yuriy Yevstihnyeyev' }, { name: 'Serhii Kulykov' }];
-      await nextRender(group);
+      await nextRender();
       overlay = group.$.overlay;
       overflow = group._overflow;
     });
@@ -534,7 +535,7 @@ describe('avatar-group', () => {
         { name: 'Jens Jansson' },
       ];
       group.maxItemsVisible = 2;
-      await nextRender(group);
+      await nextRender();
       overlay = group.$.overlay;
       overflow = group._overflow;
     });
@@ -562,7 +563,7 @@ describe('avatar-group', () => {
 
     beforeEach(async () => {
       group.items = [{ name: 'AA' }, { name: 'BB' }, { name: 'CC' }];
-      await nextRender(group);
+      await nextRender();
       clock = sinon.useFakeTimers();
     });
 
@@ -638,7 +639,7 @@ describe('avatar group in column flex', () => {
       { abbr: 'LA' },
       { name: 'Jens Jansson' },
     ];
-    await nextRender(group);
+    await nextRender();
   });
 
   it('should have width of the parent', () => {

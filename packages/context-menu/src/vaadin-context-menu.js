@@ -7,12 +7,11 @@ import './vaadin-contextmenu-event.js';
 import './vaadin-context-menu-item.js';
 import './vaadin-context-menu-list-box.js';
 import './vaadin-context-menu-overlay.js';
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
-import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
+import { css, html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { OverlayClassMixin } from '@vaadin/component-base/src/overlay-class-mixin.js';
-import { processTemplates } from '@vaadin/component-base/src/templates.js';
+import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
 import { ContextMenuMixin } from './vaadin-context-menu-mixin.js';
 
@@ -209,49 +208,39 @@ import { ContextMenuMixin } from './vaadin-context-menu-mixin.js';
  * @extends HTMLElement
  * @mixes ElementMixin
  * @mixes ContextMenuMixin
- * @mixes ControllerMixin
  * @mixes OverlayClassMixin
  * @mixes ThemePropertyMixin
  */
 class ContextMenu extends ContextMenuMixin(
-  OverlayClassMixin(ControllerMixin(ElementMixin(ThemePropertyMixin(PolymerElement)))),
+  OverlayClassMixin(ElementMixin(ThemePropertyMixin(PolylitMixin(LitElement)))),
 ) {
-  static get template() {
-    return html`
-      <style>
-        :host {
-          display: block;
-        }
-
-        :host([hidden]) {
-          display: none !important;
-        }
-      </style>
-
-      <slot id="slot"></slot>
-    `;
-  }
-
   static get is() {
     return 'vaadin-context-menu';
   }
 
-  /** @protected */
-  ready() {
-    super.ready();
+  static get styles() {
+    return css`
+      :host {
+        display: block;
+      }
 
-    processTemplates(this);
+      :host([hidden]) {
+        display: none !important;
+      }
+    `;
+  }
+
+  /** @protected */
+  render() {
+    return html`<slot id="slot"></slot>`;
   }
 
   /**
-   * @param {DocumentFragment} dom
-   * @return {null}
    * @protected
    * @override
    */
-  _attachDom(dom) {
-    const root = this.attachShadow({ mode: 'open' });
-    root.appendChild(dom);
+  createRenderRoot() {
+    const root = super.createRenderRoot();
     root.appendChild(this._overlayElement);
     return root;
   }

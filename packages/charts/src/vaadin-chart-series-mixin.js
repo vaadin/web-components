@@ -26,9 +26,6 @@ export const ChartSeriesMixin = (superClass) =>
          *
          *  See more in [API Site](https://api.highcharts.com/highcharts/series)
          *
-         * Note that you should always use [Polymer API](https://www.polymer-project.org/2.0/docs/devguide/model-data#array-mutation)
-         * to mutate the values array in order to make the component aware of the
-         * change and be able to synchronize it.
          * @type {ChartSeriesValues}
          */
         values: {

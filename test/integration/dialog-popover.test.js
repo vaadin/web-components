@@ -2,8 +2,8 @@ import { expect } from '@vaadin/chai-plugins';
 import { resetMouse, sendKeys, sendMouse } from '@vaadin/test-runner-commands';
 import { fixtureSync, mousedown, nextFrame, nextRender, nextUpdate, touchstart } from '@vaadin/testing-helpers';
 import './not-animated-styles.js';
-import '@vaadin/dialog';
-import '@vaadin/popover';
+import '@vaadin/dialog/src/vaadin-dialog.js';
+import '@vaadin/popover/src/vaadin-popover.js';
 
 describe('popover in dialog', () => {
   let dialog, popover, button, overlay;

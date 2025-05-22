@@ -8,7 +8,6 @@ import type { DisabledMixinClass } from '@vaadin/a11y-base/src/disabled-mixin.js
 import type { FocusMixinClass } from '@vaadin/a11y-base/src/focus-mixin.js';
 import type { KeyboardDirectionMixinClass } from '@vaadin/a11y-base/src/keyboard-direction-mixin.js';
 import type { KeyboardMixinClass } from '@vaadin/a11y-base/src/keyboard-mixin.js';
-import type { ControllerMixinClass } from '@vaadin/component-base/src/controller-mixin.js';
 import type { I18nMixinClass } from '@vaadin/component-base/src/i18n-mixin.js';
 import type { ResizeMixinClass } from '@vaadin/component-base/src/resize-mixin.js';
 
@@ -62,8 +61,7 @@ export interface MenuBarI18n {
 
 export declare function MenuBarMixin<T extends Constructor<HTMLElement>, TItem extends MenuBarItem = MenuBarItem>(
   base: T,
-): Constructor<ControllerMixinClass> &
-  Constructor<DisabledMixinClass> &
+): Constructor<DisabledMixinClass> &
   Constructor<FocusMixinClass> &
   Constructor<I18nMixinClass<MenuBarI18n>> &
   Constructor<KeyboardDirectionMixinClass> &
@@ -179,8 +177,7 @@ export declare class MenuBarMixinClass<TItem extends MenuBarItem = MenuBarItem> 
 }
 
 export declare interface MenuBarMixinClass
-  extends ControllerMixinClass,
-    DisabledMixinClass,
+  extends DisabledMixinClass,
     FocusMixinClass,
     KeyboardDirectionMixinClass,
     KeyboardMixinClass,

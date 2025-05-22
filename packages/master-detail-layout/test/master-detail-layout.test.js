@@ -1,6 +1,7 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
-import '../vaadin-master-detail-layout.js';
+import { setViewport } from '@vaadin/test-runner-commands';
+import { fixtureSync, nextRender, nextResize } from '@vaadin/testing-helpers';
+import '../src/vaadin-master-detail-layout.js';
 import './helpers/master-content.js';
 import './helpers/detail-content.js';
 
@@ -10,6 +11,12 @@ window.Vaadin.featureFlags.masterDetailLayoutComponent = true;
 
 describe('vaadin-master-detail-layout', () => {
   let layout, master, detail, detailContent;
+  let width, height;
+
+  before(() => {
+    width = window.innerWidth;
+    height = window.innerHeight;
+  });
 
   beforeEach(async () => {
     layout = fixtureSync(`
@@ -22,6 +29,10 @@ describe('vaadin-master-detail-layout', () => {
     master = layout.shadowRoot.querySelector('[part="master"]');
     detail = layout.shadowRoot.querySelector('[part="detail"]');
     detailContent = layout.querySelector('[slot="detail"]');
+  });
+
+  afterEach(async () => {
+    await setViewport({ width, height });
   });
 
   describe('custom element definition', () => {
@@ -105,6 +116,34 @@ describe('vaadin-master-detail-layout', () => {
         layout.detailMinSize = '300px';
         expect(getComputedStyle(detail).minWidth).to.equal('300px');
         expect(getComputedStyle(detail).flexShrink).to.equal('0');
+      });
+
+      it('should not overflow in split mode when masterSize is set', async () => {
+        layout.masterSize = '500px';
+        detail.remove();
+        await nextResize(layout);
+
+        // Resize so that size is bigger than layout size.
+        await setViewport({ width: 480, height });
+        await nextResize(layout);
+
+        expect(layout.hasAttribute('drawer')).to.be.false;
+        expect(layout.offsetWidth).to.equal(480);
+        expect(master.offsetWidth).to.equal(layout.offsetWidth);
+      });
+
+      it('should not overflow in split mode when masterMinSize is set', async () => {
+        layout.masterMinSize = '500px';
+        detail.remove();
+        await nextResize(layout);
+
+        // Resize so that min size is bigger than layout size.
+        await setViewport({ width: 480, height });
+        await nextResize(layout);
+
+        expect(layout.hasAttribute('drawer')).to.be.false;
+        expect(layout.offsetWidth).to.equal(480);
+        expect(master.offsetWidth).to.equal(layout.offsetWidth);
       });
     });
 

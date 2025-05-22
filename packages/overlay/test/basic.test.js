@@ -1,10 +1,42 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, isIOS, oneEvent } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, isIOS, nextFrame, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import '../vaadin-overlay.js';
+import '../src/vaadin-overlay.js';
 import { createOverlay } from './helpers.js';
 
 describe('vaadin-overlay', () => {
+  describe('vaadin-overlay-open event', () => {
+    let overlay, spy;
+
+    beforeEach(() => {
+      overlay = fixtureSync('<vaadin-overlay></vaadin-overlay>');
+      overlay.renderer = (root) => {
+        root.textContent = 'overlay content';
+      };
+      spy = sinon.spy();
+      overlay.addEventListener('vaadin-overlay-open', spy);
+    });
+
+    afterEach(() => {
+      overlay.opened = false;
+    });
+
+    it('should fire when after a delay when setting opened property to true', async () => {
+      overlay.opened = true;
+      await nextFrame();
+      await aTimeout(0);
+      expect(spy).to.be.calledOnce;
+    });
+
+    it('should not fire when immediately setting opened property back to false', async () => {
+      overlay.opened = true;
+      overlay.opened = false;
+      await nextFrame();
+      await aTimeout(0);
+      expect(spy).to.not.be.called;
+    });
+  });
+
   describe('moving overlay', () => {
     let parent, overlay;
 

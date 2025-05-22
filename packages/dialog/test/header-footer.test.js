@@ -1,8 +1,7 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextRender, nextResize, nextUpdate } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import './not-animated-styles.js';
-import '../vaadin-dialog.js';
+import '../src/vaadin-dialog.js';
 import { createRenderer } from './helpers.js';
 
 describe('header/footer feature', () => {
@@ -477,7 +476,7 @@ describe('header/footer feature', () => {
   });
 
   describe('overflow attribute', () => {
-    let content;
+    let content, headerHeight, footerHeight, contentHeight;
 
     beforeEach(async () => {
       dialog.headerRenderer = createRenderer('Header');
@@ -488,6 +487,10 @@ describe('header/footer feature', () => {
       await nextRender();
       content = overlay.$.content;
       overlay.style.maxWidth = '300px';
+
+      headerHeight = overlay.shadowRoot.querySelector('[part=header]').offsetHeight;
+      footerHeight = overlay.shadowRoot.querySelector('[part=footer]').offsetHeight;
+      contentHeight = overlay.shadowRoot.querySelector('[part=content]').offsetHeight;
     });
 
     describe('resize', () => {
@@ -496,29 +499,28 @@ describe('header/footer feature', () => {
       });
 
       it('should set overflow attribute when scrollbar appears on resize', async () => {
-        overlay.style.maxHeight = '300px';
+        overlay.style.maxHeight = `${contentHeight}px`;
         await nextResize(overlay);
-
         expect(overlay.getAttribute('overflow')).to.equal('bottom');
       });
 
       it('should remove overflow attribute when header renderer is removed', async () => {
-        overlay.style.maxHeight = '300px';
+        overlay.style.maxHeight = `${contentHeight + footerHeight}px`;
         await nextResize(overlay);
+        expect(overlay.hasAttribute('overflow')).to.be.true;
 
         dialog.headerRenderer = null;
         await nextUpdate(dialog);
-
         expect(overlay.hasAttribute('overflow')).to.be.false;
       });
 
       it('should remove overflow attribute when footer renderer is removed', async () => {
-        overlay.style.maxHeight = '300px';
+        overlay.style.maxHeight = `${contentHeight + headerHeight}px`;
         await nextResize(overlay);
+        expect(overlay.hasAttribute('overflow')).to.be.true;
 
         dialog.footerRenderer = null;
         await nextUpdate(dialog);
-
         expect(overlay.hasAttribute('overflow')).to.be.false;
       });
 
@@ -527,7 +529,7 @@ describe('header/footer feature', () => {
         dialog.footerRenderer = null;
         await nextUpdate(dialog);
 
-        overlay.style.maxHeight = '200px';
+        overlay.style.maxHeight = `${contentHeight}px`;
         await nextResize(overlay);
         expect(overlay.hasAttribute('overflow')).to.be.false;
 
@@ -538,28 +540,28 @@ describe('header/footer feature', () => {
 
       it('should remove overflow attribute when header title is removed', async () => {
         dialog.headerRenderer = null;
+        dialog.footerRenderer = null;
         dialog.headerTitle = 'Title';
         await nextUpdate(dialog);
 
-        overlay.style.maxHeight = '300px';
+        overlay.style.maxHeight = `${contentHeight}px`;
         await nextResize(overlay);
+        expect(overlay.hasAttribute('overflow')).to.be.true;
 
         dialog.headerTitle = null;
         await nextUpdate(dialog);
-
         expect(overlay.hasAttribute('overflow')).to.be.false;
       });
 
       it('should remove overflow attribute if no header, footer or title is set', async () => {
         dialog.headerTitle = 'Title';
-        overlay.style.maxHeight = '200px';
+        overlay.style.maxHeight = `${contentHeight}px`;
         await nextResize(overlay);
 
         dialog.headerRenderer = null;
         dialog.footerRenderer = null;
         dialog.headerTitle = null;
         await nextUpdate(dialog);
-
         expect(overlay.hasAttribute('overflow')).to.be.false;
       });
     });

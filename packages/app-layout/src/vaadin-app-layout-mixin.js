@@ -3,9 +3,10 @@
  * Copyright (c) 2018 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { afterNextRender, beforeNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import { AriaModalController } from '@vaadin/a11y-base/src/aria-modal-controller.js';
 import { FocusTrapController } from '@vaadin/a11y-base/src/focus-trap-controller.js';
+import { animationFrame } from '@vaadin/component-base/src/async.js';
+import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { I18nMixin } from '@vaadin/component-base/src/i18n-mixin.js';
 
 /**
@@ -144,7 +145,9 @@ export const AppLayoutMixin = (superclass) =>
       window.addEventListener('resize', this.__boundResizeListener);
       this.addEventListener('drawer-toggle-click', this.__drawerToggleClickListener);
 
-      beforeNextRender(this, this._afterFirstRender);
+      requestAnimationFrame(() => {
+        this._updateOffsetSize();
+      });
 
       this._updateTouchOptimizedMode();
       this._updateDrawerSize();
@@ -253,12 +256,6 @@ export const AppLayoutMixin = (superclass) =>
      */
     __i18nChanged() {
       this.__updateDrawerAriaAttributes();
-    }
-
-    /** @protected */
-    _afterFirstRender() {
-      this._blockAnimationUntilAfterNextRender();
-      this._updateOffsetSize();
     }
 
     /** @private */
@@ -508,8 +505,11 @@ export const AppLayoutMixin = (superclass) =>
     /** @protected */
     _blockAnimationUntilAfterNextRender() {
       this.setAttribute('no-anim', '');
-      afterNextRender(this, () => {
-        this.removeAttribute('no-anim');
+
+      this.__debounceAnimation = Debouncer.debounce(this.__debounceAnimation, animationFrame, () => {
+        setTimeout(() => {
+          this.removeAttribute('no-anim');
+        });
       });
     }
 

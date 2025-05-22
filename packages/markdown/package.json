@@ -1,0 +1,54 @@
+{
+  "name": "@vaadin/markdown",
+  "version": "25.0.0-alpha1",
+  "publishConfig": {
+    "access": "public"
+  },
+  "description": "vaadin-markdown",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/vaadin/web-components.git",
+    "directory": "packages/markdown"
+  },
+  "author": "Vaadin Ltd",
+  "homepage": "https://vaadin.com/components",
+  "bugs": {
+    "url": "https://github.com/vaadin/web-components/issues"
+  },
+  "main": "vaadin-markdown.js",
+  "module": "vaadin-markdown.js",
+  "type": "module",
+  "files": [
+    "src",
+    "theme",
+    "vaadin-*.d.ts",
+    "vaadin-*.js",
+    "web-types.json",
+    "web-types.lit.json"
+  ],
+  "keywords": [
+    "Vaadin",
+    "markdown",
+    "web-components",
+    "web-component"
+  ],
+  "dependencies": {
+    "@open-wc/dedupe-mixin": "^1.3.0",
+    "@vaadin/component-base": "25.0.0-alpha1",
+    "@vaadin/vaadin-lumo-styles": "25.0.0-alpha1",
+    "@vaadin/vaadin-themable-mixin": "25.0.0-alpha1",
+    "dompurify": "^3.2.5",
+    "lit": "^3.0.0",
+    "marked": "^15.0.11"
+  },
+  "devDependencies": {
+    "@vaadin/chai-plugins": "25.0.0-alpha1",
+    "@vaadin/test-runner-commands": "25.0.0-alpha1",
+    "@vaadin/testing-helpers": "^2.0.0"
+  },
+  "web-types": [
+    "web-types.json",
+    "web-types.lit.json"
+  ]
+}

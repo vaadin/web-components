@@ -4,16 +4,16 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import '@vaadin/input-container/src/vaadin-input-container.js';
-import { html, PolymerElement } from '@polymer/polymer';
+import { html, LitElement } from 'lit';
+import { ifDefined } from 'lit/directives/if-defined.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { inputFieldShared } from '@vaadin/field-base/src/styles/input-field-shared-styles.js';
-import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { textAreaStyles } from './vaadin-text-area-core-styles.js';
 import { TextAreaMixin } from './vaadin-text-area-mixin.js';
-import { textAreaStyles } from './vaadin-text-area-styles.js';
-
-registerStyles('vaadin-text-area', [inputFieldShared, textAreaStyles], { moduleId: 'vaadin-text-area-styles' });
 
 /**
  * `<vaadin-text-area>` is a web component for multi-line text input.
@@ -61,26 +61,31 @@ registerStyles('vaadin-text-area', [inputFieldShared, textAreaStyles], { moduleI
  * @mixes TextAreaMixin
  * @mixes ThemableMixin
  */
-export class TextArea extends TextAreaMixin(ThemableMixin(ElementMixin(PolymerElement))) {
+export class TextArea extends TextAreaMixin(ThemableMixin(ElementMixin(PolylitMixin(LitElement)))) {
   static get is() {
     return 'vaadin-text-area';
   }
 
-  static get template() {
+  static get styles() {
+    return [inputFieldShared, textAreaStyles];
+  }
+
+  /** @protected */
+  render() {
     return html`
       <div class="vaadin-text-area-container">
         <div part="label">
           <slot name="label"></slot>
-          <span part="required-indicator" aria-hidden="true" on-click="focus"></span>
+          <span part="required-indicator" aria-hidden="true" @click="${this.focus}"></span>
         </div>
 
         <vaadin-input-container
           part="input-field"
-          readonly="[[readonly]]"
-          disabled="[[disabled]]"
-          invalid="[[invalid]]"
-          theme$="[[_theme]]"
-          on-scroll="_onScroll"
+          .readonly="${this.readonly}"
+          .disabled="${this.disabled}"
+          .invalid="${this.invalid}"
+          theme="${ifDefined(this._theme)}"
+          @scroll="${this._onScroll}"
         >
           <slot name="prefix" slot="prefix"></slot>
           <slot name="textarea"></slot>

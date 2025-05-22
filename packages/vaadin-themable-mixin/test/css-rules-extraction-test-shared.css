@@ -1,0 +1,8 @@
+@import './css-rules-extraction-test-button.css' test-button;
+@import './css-rules-extraction-test-text-field.css' test-text-field;
+
+@media test-text-field {
+  #error-message {
+    color: red;
+  }
+}

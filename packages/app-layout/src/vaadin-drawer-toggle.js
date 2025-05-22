@@ -3,16 +3,15 @@
  * Copyright (c) 2018 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
-import { buttonStyles } from '@vaadin/button/src/vaadin-button-base.js';
+import { html, LitElement } from 'lit';
+import { buttonStyles } from '@vaadin/button/src/vaadin-button-core-styles.js';
 import { ButtonMixin } from '@vaadin/button/src/vaadin-button-mixin.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { isEmptyTextNode } from '@vaadin/component-base/src/dom-utils.js';
-import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
+import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { drawerToggle } from './vaadin-drawer-toggle-styles.js';
-
-registerStyles('vaadin-drawer-toggle', [buttonStyles, drawerToggle], { moduleId: 'vaadin-drawer-toggle-styles' });
 
 /**
  * The Drawer Toggle component controls the drawer in App Layout component.
@@ -29,18 +28,13 @@ registerStyles('vaadin-drawer-toggle', [buttonStyles, drawerToggle], { moduleId:
  * @mixes DirMixin
  * @mixes ThemableMixin
  */
-class DrawerToggle extends ButtonMixin(DirMixin(ThemableMixin(PolymerElement))) {
-  static get template() {
-    return html`
-      <slot id="slot">
-        <div part="icon"></div>
-      </slot>
-      <div part="icon" hidden$="[[!_showFallbackIcon]]"></div>
-    `;
-  }
-
+class DrawerToggle extends ButtonMixin(DirMixin(ThemableMixin(PolylitMixin(LitElement)))) {
   static get is() {
     return 'vaadin-drawer-toggle';
+  }
+
+  static get styles() {
+    return [buttonStyles, drawerToggle];
   }
 
   static get properties() {
@@ -49,6 +43,7 @@ class DrawerToggle extends ButtonMixin(DirMixin(ThemableMixin(PolymerElement))) 
         type: String,
         value: 'Toggle navigation panel',
         reflectToAttribute: true,
+        sync: true,
       },
 
       /** @private */
@@ -68,14 +63,20 @@ class DrawerToggle extends ButtonMixin(DirMixin(ThemableMixin(PolymerElement))) 
   }
 
   /** @protected */
+  render() {
+    return html`
+      <slot id="slot" @slotchange="${this._toggleFallbackIcon}">
+        <div part="icon"></div>
+      </slot>
+      <div part="icon" ?hidden="${!this._showFallbackIcon}"></div>
+    `;
+  }
+
+  /** @protected */
   ready() {
     super.ready();
 
     this._toggleFallbackIcon();
-
-    this.$.slot.addEventListener('slotchange', () => {
-      this._toggleFallbackIcon();
-    });
   }
 
   /** @private */

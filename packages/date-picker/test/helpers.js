@@ -1,13 +1,11 @@
 import { fire, makeSoloTouchEvent, nextRender } from '@vaadin/testing-helpers';
-import { flush } from '@polymer/polymer/lib/utils/flush.js';
-import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import { isElementFocused } from '@vaadin/a11y-base/src/focus-utils.js';
 
 export function activateScroller(scroller) {
   scroller.active = true;
-  // Setting `active` triggers `_finishInit` using afterNextRender
+  // Setting `active` triggers `_finishInit` using requestAnimationFrame
   return new Promise((resolve) => {
-    afterNextRender(scroller, () => {
+    requestAnimationFrame(() => {
       scroller._debouncerUpdateClones.flush();
       resolve();
     });
@@ -44,20 +42,45 @@ export function getDefaultI18n() {
   };
 }
 
-export async function waitForOverlayRender() {
+/**
+ * Waits until the overlay content finishes scrolling.
+ *
+ * @param {HTMLElement} datePickerOrOverlayContent vaadin-date-picker or vaadin-date-picker-overlay-content
+ * @return {Promise<void>}
+ */
+export async function untilOverlayScrolled(datePickerOrOverlayContent) {
+  const overlayContent = datePickerOrOverlayContent._overlayContent ?? datePickerOrOverlayContent;
+
+  if (overlayContent._revealPromise) {
+    // The overlay content is scrolling.
+    await overlayContent._revealPromise;
+  }
+
+  await nextRender();
+
+  // Flush the ignoreTaps debouncer to make sure taps are not ignored.
+  overlayContent._debouncer?.flush();
+}
+
+/**
+ * Waits until the overlay is rendered.
+ *
+ * @param {HTMLElement} datePicker vaadin-date-picker
+ * @return {Promise<void>}
+ */
+export async function untilOverlayRendered(datePicker) {
   // First, wait for vaadin-overlay-open event
   await nextRender();
 
   // Then wait for scrollers to fully render
   await nextRender();
 
-  // Force dom-repeat to render table elements
-  flush();
+  await untilOverlayScrolled(datePicker);
 }
 
 export async function open(datePicker) {
   datePicker.open();
-  await waitForOverlayRender();
+  await untilOverlayRendered(datePicker);
 }
 
 export function idleCallback() {
@@ -124,22 +147,6 @@ export function getFocusedCell(root) {
   if (focusableCell && isElementFocused(focusableCell)) {
     return focusableCell;
   }
-}
-
-/**
- * Waits for the scroll to finish in the date-picker overlay content.
- *
- * @param {HTMLElement} root vaadin-date-picker or vaadin-date-picker-overlay-content
- */
-export async function waitForScrollToFinish(root) {
-  const overlayContent = root._overlayContent ?? root;
-
-  if (overlayContent._revealPromise) {
-    // The overlay content is scrolling.
-    await overlayContent._revealPromise;
-  }
-
-  await nextRender(overlayContent);
 }
 
 /**

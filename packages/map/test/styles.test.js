@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync } from '@vaadin/testing-helpers';
-import '../vaadin-map.js';
+import '../src/vaadin-map.js';
 
 describe('vaadin-map styles', () => {
   let map;

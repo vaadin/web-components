@@ -5,13 +5,13 @@ analysis.json
 yarn-error.log
 .env
 
-# Failures from visual tests
+# Failed screenshots from Sauce Labs visual test runs
 packages/*/test/visual/screenshots/failed
 packages/*/test/visual/*/screenshots/*/failed
-packages/icons/test/visual/screenshots/failed
 
-# Generated Lit test files
-packages/*/test/*.generated.*
+# Screenshots from local visual test runs
+packages/*/test/visual/screenshots/local-*
+packages/*/test/visual/*/screenshots/*/local-*
 
 # Generated theme folders .ts files
 packages/**/theme/**/*.d.ts
@@ -35,3 +35,6 @@ packages/vaadin-lumo-styles/auto-complete.css
 
 # Generated release check
 scripts/check-releases.html
+
+# TypeScript output
+tsconfig.build.tsbuildinfo

@@ -3,7 +3,7 @@
  * Copyright (c) 2021 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { dedupingMixin } from '@polymer/polymer/lib/utils/mixin.js';
+import { dedupeMixin } from '@open-wc/dedupe-mixin';
 import { FocusMixin } from './focus-mixin.js';
 import { TabindexMixin } from './tabindex-mixin.js';
 
@@ -14,7 +14,7 @@ import { TabindexMixin } from './tabindex-mixin.js';
  * @mixes FocusMixin
  * @mixes TabindexMixin
  */
-export const DelegateFocusMixin = dedupingMixin(
+export const DelegateFocusMixin = dedupeMixin(
   (superclass) =>
     class DelegateFocusMixinClass extends FocusMixin(TabindexMixin(superclass)) {
       static get properties() {
@@ -42,6 +42,7 @@ export const DelegateFocusMixin = dedupingMixin(
             type: Object,
             readOnly: true,
             observer: '_focusElementChanged',
+            sync: true,
           },
 
           /**
@@ -227,6 +228,11 @@ export const DelegateFocusMixin = dedupingMixin(
             this._lastTabIndex = tabindex;
           }
           this.tabindex = undefined;
+        }
+
+        // Lit does not remove attribute when setting property to undefined
+        if (tabindex === undefined && this.hasAttribute('tabindex')) {
+          this.removeAttribute('tabindex');
         }
       }
     },

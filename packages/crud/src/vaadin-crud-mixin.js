@@ -8,7 +8,6 @@
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
-import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import { FocusRestorationController } from '@vaadin/a11y-base/src/focus-restoration-controller.js';
 import { I18nMixin } from '@vaadin/component-base/src/i18n-mixin.js';
 import { MediaQueryController } from '@vaadin/component-base/src/media-query-controller.js';
@@ -119,6 +118,7 @@ export const CrudMixin = (superClass) =>
           type: Array,
           notify: true,
           observer: '__itemsChanged',
+          sync: true,
         },
 
         /**
@@ -384,6 +384,13 @@ export const CrudMixin = (superClass) =>
       this.$.dialog.$.overlay.addEventListener('vaadin-overlay-outside-click', this.__cancel);
       this.$.dialog.$.overlay.addEventListener('vaadin-overlay-escape-press', this.__cancel);
 
+      this._gridController = new GridSlotController(this);
+      this.addController(this._gridController);
+
+      // Init button controllers in `ready()` (not constructor) so that Flow can set `_noDefaultButtons`
+      this._newButtonController = new ButtonSlotController(this, 'new', 'primary', this._noDefaultButtons);
+      this.addController(this._newButtonController);
+
       this._headerController = new SlotController(this, 'header', 'h3', {
         initializer: (node) => {
           this._defaultHeader = node;
@@ -391,18 +398,11 @@ export const CrudMixin = (superClass) =>
       });
       this.addController(this._headerController);
 
-      this._gridController = new GridSlotController(this);
-      this.addController(this._gridController);
-
       this.addController(new FormSlotController(this));
 
-      // Init controllers in `ready()` (not constructor) so that Flow can set `_noDefaultButtons`
-      this._newButtonController = new ButtonSlotController(this, 'new', 'primary', this._noDefaultButtons);
       this._saveButtonController = new ButtonSlotController(this, 'save', 'primary', this._noDefaultButtons);
       this._cancelButtonController = new ButtonSlotController(this, 'cancel', 'tertiary', this._noDefaultButtons);
       this._deleteButtonController = new ButtonSlotController(this, 'delete', 'tertiary error', this._noDefaultButtons);
-
-      this.addController(this._newButtonController);
 
       // NOTE: order in which buttons are added should match the order of slots in template
       this.addController(this._saveButtonController);
@@ -450,7 +450,7 @@ export const CrudMixin = (superClass) =>
         return;
       }
 
-      afterNextRender(grid, () => {
+      queueMicrotask(() => {
         Array.from(grid.querySelectorAll('vaadin-crud-edit-column')).forEach((column) => {
           column.ariaLabel = effectiveI18n.editLabel;
         });
@@ -484,6 +484,9 @@ export const CrudMixin = (superClass) =>
         } else {
           this.$.editor.removeAttribute('tabindex');
         }
+      } else if (oldOpened) {
+        // Teleport form and buttons back to light DOM when closing overlay
+        this.__moveChildNodes(this);
       }
 
       this.__toggleToolbar();
@@ -522,7 +525,10 @@ export const CrudMixin = (superClass) =>
       // Teleport header node, form, and the buttons to corresponding slots.
       // NOTE: order in which buttons are moved matches the order of slots.
       [...nodes, ...buttons].forEach((node) => {
-        target.appendChild(node);
+        // Do not move nodes if the editor position has not changed
+        if (node.parentNode !== target) {
+          target.appendChild(node);
+        }
       });
 
       // Wait to set label until slotted element has been moved.

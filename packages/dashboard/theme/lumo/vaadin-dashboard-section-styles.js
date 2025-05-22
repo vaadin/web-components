@@ -10,7 +10,7 @@ const section = css`
   /* stylelint-disable rule-empty-line-before */
 
   :host {
-    --_section-outline-offset: calc(min(var(--_vaadin-dashboard-gap), var(--_vaadin-dashboard-padding)) / 3);
+    --_section-outline-offset: calc(min(var(--_gap), var(--_padding)) / 3);
     --_focus-ring-offset: calc((var(--_section-outline-offset) - var(--_focus-ring-width)));
     border-radius: var(--lumo-border-radius-l);
   }
@@ -20,11 +20,14 @@ const section = css`
     line-height: var(--lumo-line-height-s);
     padding-inline: var(--lumo-space-s);
     min-height: var(--lumo-size-l);
+    align-items: center;
   }
 
   [part='title'] {
     font-size: var(--lumo-font-size-xl);
     font-weight: 600;
+    white-space: nowrap;
+    line-height: var(--lumo-line-height-m);
   }
 
   /* Section states */
@@ -59,14 +62,14 @@ const section = css`
   }
 
   :host([move-mode]) ::slotted(*) {
-    --_vaadin-dashboard-widget-opacity: 0.3;
-    --_vaadin-dashboard-widget-filter: blur(10px);
+    --_widget-opacity: 0.3;
+    --_widget-filter: blur(10px);
   }
 
   :host([dragging]) {
-    background: var(--_vaadin-dashboard-drop-target-background-color);
-    outline: var(--_vaadin-dashboard-drop-target-border);
-    box-shadow: 0 0 0 var(--_section-outline-offset) var(--_vaadin-dashboard-drop-target-background-color);
+    background: var(--_drop-target-background-color);
+    outline: var(--_drop-target-border);
+    box-shadow: 0 0 0 var(--_section-outline-offset) var(--_drop-target-background-color);
   }
 
   /* Accessible move mode controls */

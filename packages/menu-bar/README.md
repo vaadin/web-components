@@ -38,29 +38,6 @@ Once installed, import the component in your application:
 import '@vaadin/menu-bar';
 ```
 
-## Themes
-
-Vaadin components come with two built-in [themes](https://vaadin.com/docs/latest/styling), Lumo and Material.
-The [main entrypoint](https://github.com/vaadin/web-components/blob/main/packages/menu-bar/vaadin-menu-bar.js) of the package uses the Lumo theme.
-
-To use the Material theme, import the component from the `theme/material` folder:
-
-```js
-import '@vaadin/menu-bar/theme/material/vaadin-menu-bar.js';
-```
-
-You can also import the Lumo version of the component explicitly:
-
-```js
-import '@vaadin/menu-bar/theme/lumo/vaadin-menu-bar.js';
-```
-
-Finally, you can import the un-themed component from the `src` folder to get a minimal starting point:
-
-```js
-import '@vaadin/menu-bar/src/vaadin-menu-bar.js';
-```
-
 ## Contributing
 
 Read the [contributing guide](https://vaadin.com/docs/latest/contributing) to learn about our development process, how to propose bugfixes and improvements, and how to test your changes to Vaadin components.

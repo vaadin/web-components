@@ -1,7 +1,7 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import '../vaadin-overlay.js';
+import '../src/vaadin-overlay.js';
 
 describe('renderer', () => {
   let overlay, content;

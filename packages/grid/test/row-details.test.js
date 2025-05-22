@@ -1,8 +1,7 @@
 import { expect } from '@vaadin/chai-plugins';
 import { aTimeout, click, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import '../vaadin-grid.js';
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import '../src/vaadin-grid.js';
 import {
   buildDataSet,
   flushGrid,
@@ -22,26 +21,6 @@ function simpleDetailsRenderer(root, _, { index }) {
 function indexRenderer(root, _, { index }) {
   root.textContent = index;
 }
-
-class GridDetailsWrapper extends PolymerElement {
-  static get template() {
-    return html`
-      <vaadin-grid id="grid" style="width: 50px; height: 400px" row-details-renderer="[[rowDetailsRenderer]]">
-        <vaadin-grid-column renderer="[[renderer]]"></vaadin-grid-column>
-      </vaadin-grid>
-    `;
-  }
-
-  rowDetailsRenderer(root, _, model) {
-    simpleDetailsRenderer(root, _, model);
-  }
-
-  renderer(root, _, model) {
-    indexRenderer(root, _, model);
-  }
-}
-
-customElements.define('grid-details-wrapper', GridDetailsWrapper);
 
 describe('row details', () => {
   let grid;
@@ -219,31 +198,6 @@ describe('row details', () => {
       grid.renderer.args.forEach(([_root, _owner, model]) => {
         expect(model.detailsOpened).to.be.false;
       });
-    });
-  });
-
-  describe('inside a parent scope', () => {
-    let container;
-
-    beforeEach(() => {
-      container = fixtureSync('<grid-details-wrapper></grid-details-wrapper>');
-      grid = container.$.grid;
-      grid.items = ['foo', 'bar', 'baz'];
-      flushGrid(grid);
-      bodyRows = getRows(grid.$.items);
-    });
-
-    it('should have the correct index on details', () => {
-      // Open details for item 0
-      grid.openItemDetails('foo');
-
-      // Open details for item 1
-      grid.openItemDetails('bar');
-
-      const firstRowCells = getRowCells(bodyRows[0]);
-      const secondRowCells = getRowCells(bodyRows[1]);
-      expect(getCellContent(firstRowCells[1]).textContent.trim()).to.equal('0-details');
-      expect(getCellContent(secondRowCells[1]).textContent.trim()).to.equal('1-details');
     });
   });
 

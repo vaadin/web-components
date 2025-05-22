@@ -215,7 +215,7 @@ export class ColumnObserver {
   __onMutation() {
     // Detect if this is the initial call
     const initialCall = !this.__currentColumns;
-    this.__currentColumns ||= [];
+    this.__currentColumns = this.__currentColumns || [];
 
     // Detect added and removed columns or if the columns order has changed
     const columns = ColumnObserver.getColumns(this.__host);

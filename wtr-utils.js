@@ -1,23 +1,26 @@
 /* eslint-env node */
-require('dotenv').config();
-const fs = require('fs');
-const argv = require('minimist')(process.argv.slice(2));
-const path = require('path');
-const glob = require('glob');
-const { execSync } = require('child_process');
-const { createSauceLabsLauncher } = require('@web/test-runner-saucelabs');
-const { visualRegressionPlugin } = require('@web/test-runner-visual-regression/plugin');
-const { esbuildPlugin } = require('@web/dev-server-esbuild');
+import { esbuildPlugin } from '@web/dev-server-esbuild';
+import { playwrightLauncher } from '@web/test-runner-playwright';
+import { createSauceLabsLauncher } from '@web/test-runner-saucelabs';
+import { visualRegressionPlugin } from '@web/test-runner-visual-regression/plugin';
+import dotenv from 'dotenv';
+import { globSync } from 'glob';
+import minimist from 'minimist';
+import { execSync } from 'node:child_process';
+import fs from 'node:fs';
+import path from 'node:path';
+import { enforceBaseStylesPlugin } from './web-dev-server.config.js';
+
+dotenv.config();
+
+const argv = minimist(process.argv.slice(2));
 
 const HIDDEN_WARNINGS = [
   '<vaadin-crud> Unable to autoconfigure form because the data structure is unknown. Either specify `include` or ensure at least one item is available beforehand.',
   'The <vaadin-grid> needs the total number of items in order to display rows, which you can specify either by setting the `size` property, or by providing it to the second argument of the `dataProvider` function `callback` call.',
   'The Material theme is deprecated and will be removed in Vaadin 25.',
   /^WARNING: Since Vaadin .* is deprecated.*/u,
-  /^WARNING: <template> inside <[^>]+> is deprecated. Use a renderer function instead/u,
   /Lit is in dev mode/u,
-  /Overriding ReactiveElement/u,
-  /Element .* scheduled an update/u,
 ];
 
 const filterBrowserLogs = (log) => {
@@ -43,6 +46,7 @@ const filterBrowserLogs = (log) => {
   return !isHidden;
 };
 
+const hasLocalParam = process.argv.includes('--local');
 const hasGroupParam = process.argv.includes('--group');
 const hasCoverageParam = process.argv.includes('--coverage');
 const hasAllParam = process.argv.includes('--all');
@@ -72,7 +76,7 @@ const getAllUnitPackages = () => {
     .readdirSync('packages')
     .filter(
       (dir) =>
-        fs.statSync(`packages/${dir}`).isDirectory() && glob.sync(`packages/${dir}/test/*.test.{js,ts}`).length > 0,
+        fs.statSync(`packages/${dir}`).isDirectory() && globSync(`packages/${dir}/test/*.test.{js,ts}`).length > 0,
     );
 };
 
@@ -92,6 +96,15 @@ const getAllVisualPackages = () => {
   return fs
     .readdirSync('packages')
     .filter((dir) => fs.statSync(`packages/${dir}`).isDirectory() && fs.existsSync(`packages/${dir}/test/visual`));
+};
+
+/**
+ * Get all available packages with visual tests for base styles.
+ */
+const getAllBasePackages = () => {
+  return fs
+    .readdirSync('packages')
+    .filter((dir) => fs.statSync(`packages/${dir}`).isDirectory() && fs.existsSync(`packages/${dir}/test/visual/base`));
 };
 
 /**
@@ -157,29 +170,19 @@ const getUnitTestGroups = (packages) => {
  * Get visual test groups based on packages.
  */
 const getVisualTestGroups = (packages, theme) => {
-  return packages
-    .filter(
-      (pkg) => !pkg.includes('icons') && !pkg.includes(theme) && !pkg.includes(theme === 'lumo' ? 'material' : 'lumo'),
-    )
-    .map((pkg) => {
-      return {
-        name: pkg,
-        files: `packages/${pkg}/test/visual/${theme}/*.test.{js,ts}`,
-      };
-    })
-    .concat({
-      name: `vaadin-${theme}-styles`,
-      files: `packages/vaadin-${theme}-styles/test/visual/*.test.{js,ts}`,
-    })
-    .concat({
-      name: `icons`,
-      files: `packages/icons/test/visual/*.test.{js,ts}`,
-    });
+  if (theme === 'base') {
+    packages = packages.filter((pkg) => !pkg.includes('lumo'));
+  }
+
+  return packages.map((pkg) => {
+    return {
+      name: pkg,
+      files: [`packages/${pkg}/test/visual/*.test.{js,ts}`, `packages/${pkg}/test/visual/${theme}/*.test.{js,ts}`],
+    };
+  });
 };
 
-const fontRoboto = '<link rel="stylesheet" href="./node_modules/@fontsource/roboto/latin.css">';
-
-const getTestRunnerHtml = (theme) => (testFramework) =>
+const getTestRunnerHtml = () => (testFramework) =>
   `
   <!DOCTYPE html>
   <html>
@@ -195,13 +198,14 @@ const getTestRunnerHtml = (theme) => (testFramework) =>
           padding: 0;
         }
       </style>
-      ${theme === 'material' ? fontRoboto : ''}
       <script>
-        /* Disable Roboto for Material theme tests */
-        window.polymerSkipLoadingFontRoboto = true;
-
         /* Force development mode for element-mixin */
         localStorage.setItem('vaadin.developmentmode.force', true);
+      </script>
+      <script type="module">
+        // See https://github.com/modernweb-dev/web/issues/2802#issuecomment-2352116570
+        import structuredClone from '@ungap/structured-clone';
+        window.structuredClone = (value) => structuredClone(value, { lossy: true });
       </script>
       <script type="module" src="${testFramework}"></script>
     </body>
@@ -211,22 +215,16 @@ const getTestRunnerHtml = (theme) => (testFramework) =>
 const getScreenshotFileName = ({ name, testFile }, type, diff) => {
   let folder;
   if (testFile.includes('-styles')) {
-    const match = testFile.match(/\/packages\/(vaadin-(lumo|material)-styles\/test\/visual\/)(.+)/u);
+    const match = testFile.match(/\/packages\/(vaadin-lumo-styles\/test\/visual\/)(.+)/u);
     folder = `${match[1]}screenshots`;
   } else if (testFile.includes('icons')) {
     folder = 'icons/test/visual/screenshots';
   } else {
     const match = testFile.match(/\/packages\/(.+)\.test\.(js|ts)/u);
-    folder = match[1].replace(/(lumo|material)/u, '$1/screenshots');
+    folder = match[1].replace(/(base|lumo)/u, '$1/screenshots');
   }
   return path.join(folder, type, diff ? `${name}-diff` : name);
 };
-
-const getBaselineScreenshotName = (args) => getScreenshotFileName(args, 'baseline');
-
-const getDiffScreenshotName = (args) => getScreenshotFileName(args, 'failed', true);
-
-const getFailedScreenshotName = (args) => getScreenshotFileName(args, 'failed');
 
 const createSnapshotTestsConfig = (config) => {
   const snapshotPackages = getAllSnapshotPackages();
@@ -268,7 +266,7 @@ const createUnitTestsConfig = (config) => {
 };
 
 const createVisualTestsConfig = (theme, browserVersion) => {
-  const visualPackages = getAllVisualPackages();
+  const visualPackages = theme === 'base' ? getAllBasePackages() : getAllVisualPackages();
   const packages = getTestPackages(visualPackages);
   const groups = getVisualTestGroups(packages, theme);
 
@@ -294,27 +292,42 @@ const createVisualTestsConfig = (theme, browserVersion) => {
       },
     },
     browsers: [
-      sauceLabsLauncher({
-        browserName: 'chrome',
-        platformName: 'Windows 10',
-        browserVersion,
-        'wdio:enforceWebDriverClassic': true,
-      }),
+      hasLocalParam
+        ? playwrightLauncher({
+            product: 'chromium',
+            launchOptions: {
+              channel: 'chrome',
+              headless: true,
+            },
+          })
+        : sauceLabsLauncher({
+            browserName: 'chrome',
+            platformName: 'Windows 10',
+            browserVersion,
+            'wdio:enforceWebDriverClassic': true,
+          }),
     ],
     plugins: [
       esbuildPlugin({ ts: true }),
       visualRegressionPlugin({
         baseDir: 'packages',
-        getBaselineName: getBaselineScreenshotName,
-        getDiffName: getDiffScreenshotName,
-        getFailedName: getFailedScreenshotName,
+        getBaselineName(args) {
+          return getScreenshotFileName(args, `${hasLocalParam ? 'local-' : ''}baseline`);
+        },
+        getDiffName(args) {
+          return getScreenshotFileName(args, `${hasLocalParam ? 'local-' : ''}failed`, true);
+        },
+        getFailedName(args) {
+          return getScreenshotFileName(args, `${hasLocalParam ? 'local-' : ''}failed`);
+        },
         failureThreshold: 0.05,
         failureThresholdType: 'percent',
         update: process.env.TEST_ENV === 'update',
       }),
-    ],
+      theme === 'base' && enforceBaseStylesPlugin(),
+    ].filter(Boolean),
     groups,
-    testRunnerHtml: getTestRunnerHtml(theme),
+    testRunnerHtml: getTestRunnerHtml(),
     filterBrowserLogs,
   };
 };
@@ -352,9 +365,4 @@ const createIntegrationTestsConfig = (config) => {
   };
 };
 
-module.exports = {
-  createSnapshotTestsConfig,
-  createUnitTestsConfig,
-  createVisualTestsConfig,
-  createIntegrationTestsConfig,
-};
+export { createSnapshotTestsConfig, createUnitTestsConfig, createVisualTestsConfig, createIntegrationTestsConfig };

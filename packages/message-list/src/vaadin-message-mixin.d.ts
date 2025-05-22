@@ -5,11 +5,10 @@
  */
 import type { Constructor } from '@open-wc/dedupe-mixin';
 import type { FocusMixinClass } from '@vaadin/a11y-base/src/focus-mixin.js';
-import type { ControllerMixinClass } from '@vaadin/component-base/src/controller-mixin.js';
 
 export declare function MessageMixin<T extends Constructor<HTMLElement>>(
   base: T,
-): Constructor<ControllerMixinClass> & Constructor<FocusMixinClass> & Constructor<MessageMixinClass> & T;
+): Constructor<FocusMixinClass> & Constructor<MessageMixinClass> & T;
 
 export declare class MessageMixinClass {
   /**

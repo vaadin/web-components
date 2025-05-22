@@ -11,8 +11,8 @@ import {
 } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './not-animated-styles.js';
-import '../vaadin-app-layout.js';
-import '../vaadin-drawer-toggle.js';
+import '../src/vaadin-app-layout.js';
+import '../src/vaadin-drawer-toggle.js';
 
 describe('vaadin-app-layout', () => {
   let layout;

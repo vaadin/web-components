@@ -1,58 +1,14 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextRender, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import '../vaadin-chart.js';
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import '../theme/vaadin-chart-base-theme.js';
+import './exporting-styles.js';
+import '../src/vaadin-chart.js';
 import HttpUtilities from 'highcharts/es-modules/Core/HttpUtilities.js';
 import Highcharts from 'highcharts/es-modules/masters/highstock.src.js';
-import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { chartBaseTheme } from '../theme/vaadin-chart-base-theme.js';
-
-const chart = css`
-  /* Ensure exporting works with complex selectors */
-  .highcharts-color-0 {
-    stroke: red;
-    fill: red;
-  }
-
-  :host(#chart) .highcharts-color-0 {
-    stroke: blue;
-    fill: blue;
-  }
-
-  :host(.my-class .dummy-class) .highcharts-color-0 {
-    stroke: blue;
-    fill: blue;
-  }
-
-  :host(.ColumnLineAndPie) g.highcharts-markers > .highcharts-point {
-    fill: white;
-  }
-
-  :host(.GaugeWithDualAxes) .kmh .highcharts-tick,
-  :host(.GaugeWithDualAxes) .kmh .highcharts-axis-line {
-    stroke: #339;
-    stroke-width: 2;
-  }
-`;
-
-registerStyles('vaadin-chart', [chartBaseTheme, chart]);
-
-customElements.define(
-  'chart-exporting',
-  class extends PolymerElement {
-    static get template() {
-      return html`
-        <vaadin-chart id="chart" class="my-class dummy-class">
-          <vaadin-chart-series values="[19,12,9,24,5]"></vaadin-chart-series>
-        </vaadin-chart>
-      `;
-    }
-  },
-);
 
 describe('vaadin-chart exporting', () => {
-  let wrapper, chart, chartContainer, fireEventSpy;
+  let chart, chartContainer, fireEventSpy;
 
   before(() => {
     // Prevent form submit
@@ -62,8 +18,11 @@ describe('vaadin-chart exporting', () => {
   });
 
   beforeEach(async () => {
-    wrapper = fixtureSync('<chart-exporting></chart-exporting>');
-    chart = wrapper.$.chart;
+    chart = fixtureSync(`
+      <vaadin-chart id="chart" class="my-class dummy-class">
+        <vaadin-chart-series values="[19,12,9,24,5]"></vaadin-chart-series>
+      </vaadin-chart>
+    `);
     chart.additionalOptions = { exporting: { enabled: true } };
     await oneEvent(chart, 'chart-add-series');
     chartContainer = chart.$.chart;
@@ -75,15 +34,17 @@ describe('vaadin-chart exporting', () => {
 
   it('should temporarily copy shadow styles to the body before export', async () => {
     let styleCopiedToBody = false;
+    let styleContent;
 
     // Track style movement into the document body
     const observer = new MutationObserver((mutations) => {
-      styleCopiedToBody ||= mutations.some(
-        (mutation) =>
-          Array.from(mutation.addedNodes)
-            .map((node) => node.tagName.toLowerCase())
-            .indexOf('style') >= 0,
-      );
+      mutations.forEach((mutation) => {
+        const styleTag = [...mutation.addedNodes].find((node) => node instanceof HTMLStyleElement);
+        if (styleTag) {
+          styleCopiedToBody = true;
+          styleContent = styleTag.textContent;
+        }
+      });
     });
 
     observer.observe(document.body, { childList: true });
@@ -96,8 +57,9 @@ describe('vaadin-chart exporting', () => {
     pngExportButton.onclick();
 
     expect(fireEventSpy.firstCall.args[1]).to.be.equal('beforeExport');
-    await nextRender(chart);
+    await nextRender();
     expect(styleCopiedToBody).to.be.true;
+    expect(styleContent).to.include('.highcharts-color-0');
   });
 
   it('should remove shadow styles from body after export', async () => {
@@ -123,7 +85,7 @@ describe('vaadin-chart exporting', () => {
     pngExportButton.onclick();
 
     expect(fireEventSpy.lastCall.args[1]).to.be.equal('afterExport');
-    await nextRender(chart);
+    await nextRender();
     expect(styleRemovedFromBody).to.be.true;
   });
 
@@ -154,7 +116,7 @@ describe('vaadin-chart exporting', () => {
     pngExportButton.onclick();
 
     expect(fireEventSpy.lastCall.args[1]).to.be.equal('afterExport');
-    await nextRender(chart);
+    await nextRender();
     expect(styledModeAddedToBody).to.be.true;
     expect(document.body.hasAttribute(attributeName)).to.be.false;
   });
@@ -186,7 +148,7 @@ describe('vaadin-chart exporting', () => {
     pngExportButton.onclick();
 
     expect(fireEventSpy.lastCall.args[1]).to.be.equal('afterExport');
-    await nextRender(chart);
+    await nextRender();
     expect(styledModeAddedToBody).to.be.false;
     expect(document.body.hasAttribute(attributeName)).to.be.false;
   });

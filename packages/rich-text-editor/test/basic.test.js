@@ -1,7 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, focusout, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import '../theme/lumo/vaadin-rich-text-editor-styles.js';
 import '../src/vaadin-rich-text-editor.js';
 
 describe('rich text editor', () => {

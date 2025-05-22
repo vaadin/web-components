@@ -15,37 +15,6 @@ snapshots["vaadin-month-calendar shadow default"] =
 >
   February 2016
 </div>
-<dom-repeat style="display: none;">
-  <template is="dom-repeat">
-  </template>
-</dom-repeat>
-<dom-repeat style="display: none;">
-  <template is="dom-repeat">
-  </template>
-</dom-repeat>
-<dom-repeat style="display: none;">
-  <template is="dom-repeat">
-  </template>
-</dom-repeat>
-<dom-repeat style="display: none;">
-  <template is="dom-repeat">
-  </template>
-</dom-repeat>
-<dom-repeat style="display: none;">
-  <template is="dom-repeat">
-  </template>
-</dom-repeat>
-<dom-repeat style="display: none;">
-  <template is="dom-repeat">
-  </template>
-</dom-repeat>
-<dom-repeat
-  as="week"
-  style="display: none;"
->
-  <template is="dom-repeat">
-  </template>
-</dom-repeat>
 <table
   aria-labelledby="month-header"
   id="monthGrid"
@@ -485,37 +454,6 @@ snapshots["vaadin-month-calendar shadow max date"] =
 >
   February 2016
 </div>
-<dom-repeat style="display: none;">
-  <template is="dom-repeat">
-  </template>
-</dom-repeat>
-<dom-repeat style="display: none;">
-  <template is="dom-repeat">
-  </template>
-</dom-repeat>
-<dom-repeat style="display: none;">
-  <template is="dom-repeat">
-  </template>
-</dom-repeat>
-<dom-repeat style="display: none;">
-  <template is="dom-repeat">
-  </template>
-</dom-repeat>
-<dom-repeat style="display: none;">
-  <template is="dom-repeat">
-  </template>
-</dom-repeat>
-<dom-repeat style="display: none;">
-  <template is="dom-repeat">
-  </template>
-</dom-repeat>
-<dom-repeat
-  as="week"
-  style="display: none;"
->
-  <template is="dom-repeat">
-  </template>
-</dom-repeat>
 <table
   aria-labelledby="month-header"
   id="monthGrid"
@@ -974,37 +912,6 @@ snapshots["vaadin-month-calendar shadow week numbers"] =
 >
   February 2016
 </div>
-<dom-repeat style="display: none;">
-  <template is="dom-repeat">
-  </template>
-</dom-repeat>
-<dom-repeat style="display: none;">
-  <template is="dom-repeat">
-  </template>
-</dom-repeat>
-<dom-repeat style="display: none;">
-  <template is="dom-repeat">
-  </template>
-</dom-repeat>
-<dom-repeat style="display: none;">
-  <template is="dom-repeat">
-  </template>
-</dom-repeat>
-<dom-repeat style="display: none;">
-  <template is="dom-repeat">
-  </template>
-</dom-repeat>
-<dom-repeat style="display: none;">
-  <template is="dom-repeat">
-  </template>
-</dom-repeat>
-<dom-repeat
-  as="week"
-  style="display: none;"
->
-  <template is="dom-repeat">
-  </template>
-</dom-repeat>
 <table
   aria-labelledby="month-header"
   id="monthGrid"
@@ -1429,37 +1336,6 @@ snapshots["vaadin-month-calendar shadow disabled dates"] =
 >
   February 2016
 </div>
-<dom-repeat style="display: none;">
-  <template is="dom-repeat">
-  </template>
-</dom-repeat>
-<dom-repeat style="display: none;">
-  <template is="dom-repeat">
-  </template>
-</dom-repeat>
-<dom-repeat style="display: none;">
-  <template is="dom-repeat">
-  </template>
-</dom-repeat>
-<dom-repeat style="display: none;">
-  <template is="dom-repeat">
-  </template>
-</dom-repeat>
-<dom-repeat style="display: none;">
-  <template is="dom-repeat">
-  </template>
-</dom-repeat>
-<dom-repeat style="display: none;">
-  <template is="dom-repeat">
-  </template>
-</dom-repeat>
-<dom-repeat
-  as="week"
-  style="display: none;"
->
-  <template is="dom-repeat">
-  </template>
-</dom-repeat>
 <table
   aria-labelledby="month-header"
   id="monthGrid"

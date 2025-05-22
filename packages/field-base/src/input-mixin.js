@@ -3,7 +3,7 @@
  * Copyright (c) 2021 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { dedupingMixin } from '@polymer/polymer/lib/utils/mixin.js';
+import { dedupeMixin } from '@open-wc/dedupe-mixin';
 
 /**
  * A mixin to store the reference to an input element
@@ -11,7 +11,7 @@ import { dedupingMixin } from '@polymer/polymer/lib/utils/mixin.js';
  *
  * @polymerMixin
  */
-export const InputMixin = dedupingMixin(
+export const InputMixin = dedupeMixin(
   (superclass) =>
     class InputMixinClass extends superclass {
       static get properties() {
@@ -19,11 +19,8 @@ export const InputMixin = dedupingMixin(
           /**
            * A reference to the input element controlled by the mixin.
            * Any component implementing this mixin is expected to provide it
-           * by using `this._setInputElement(input)` Polymer API.
-           *
-           * A typical case is using `InputController` that does this automatically.
-           * However, the input element does not have to always be native <input>:
-           * as an example, <vaadin-combo-box-light> accepts other components.
+           * by using `this._setInputElement(input)` API. A typical case is
+           * using `InputController` that does this automatically.
            *
            * @protected
            * @type {!HTMLElement}

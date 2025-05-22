@@ -1,7 +1,7 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import '../vaadin-icon.js';
+import '../src/vaadin-icon.js';
 import { unsafeSvgLiteral } from '../src/vaadin-icon-svg.js';
 
 const ANGLE_DOWN = '<path d="M13 4v2l-5 5-5-5v-2l5 5z"></path>';

@@ -4,10 +4,10 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import './vaadin-details-summary.js';
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
-import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
+import { css, html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { DetailsBaseMixin } from './vaadin-details-base-mixin.js';
 
@@ -47,32 +47,38 @@ import { DetailsBaseMixin } from './vaadin-details-base-mixin.js';
  *
  * @customElement
  * @extends HTMLElement
- * @mixes ControllerMixin
  * @mixes DetailsBaseMixin
  * @mixes ElementMixin
  * @mixes ThemableMixin
  */
-class Details extends DetailsBaseMixin(ElementMixin(ThemableMixin(ControllerMixin(PolymerElement)))) {
-  static get template() {
+class Details extends DetailsBaseMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElement)))) {
+  static get is() {
+    return 'vaadin-details';
+  }
+
+  static get styles() {
+    return css`
+      :host {
+        display: block;
+      }
+
+      :host([hidden]) {
+        display: none !important;
+      }
+
+      [part='content'] {
+        display: none;
+      }
+
+      :host([opened]) [part='content'] {
+        display: block;
+      }
+    `;
+  }
+
+  /** @protected */
+  render() {
     return html`
-      <style>
-        :host {
-          display: block;
-        }
-
-        :host([hidden]) {
-          display: none !important;
-        }
-
-        [part='content'] {
-          display: none;
-        }
-
-        :host([opened]) [part='content'] {
-          display: block;
-        }
-      </style>
-
       <slot name="summary"></slot>
 
       <div part="content">
@@ -81,10 +87,6 @@ class Details extends DetailsBaseMixin(ElementMixin(ThemableMixin(ControllerMixi
 
       <slot name="tooltip"></slot>
     `;
-  }
-
-  static get is() {
-    return 'vaadin-details';
   }
 }
 

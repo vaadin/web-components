@@ -39,7 +39,7 @@
       <vaadin-checkbox id="maxWidth" label="Use max-width on the host"></vaadin-checkbox>
       <vaadin-checkbox id="maxHeight" label="Use max-height on the host"></vaadin-checkbox>
       <vaadin-checkbox id="forceOverlay" label="Force overlay"></vaadin-checkbox>
-      <vaadin-checkbox id="stack" label="Set stack threshold"></vaadin-checkbox>
+      <vaadin-checkbox id="stack" label="Use stack mode"></vaadin-checkbox>
       <button id="set-small-detail">Set small detail</button>
       <button id="set-large-detail">Set large detail</button>
       <button id="clear-detail">Clear detail</button>
@@ -117,7 +117,7 @@
       });
 
       document.querySelector('#stack').addEventListener('change', (e) => {
-        layout.stackThreshold = e.target.checked ? '600px' : null;
+        layout.stackOverlay = e.target.checked;
       });
 
       document.querySelector('#set-small-detail').addEventListener('click', () => {

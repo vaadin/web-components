@@ -14,7 +14,7 @@ import { GridSortColumnMixin } from './vaadin-grid-sort-column-mixin.js';
  *
  * #### Example:
  * ```html
- * <vaadin-grid items="[[items]]">
+ * <vaadin-grid>
  *  <vaadin-grid-sort-column path="name.first" direction="asc"></vaadin-grid-sort-column>
  *
  *  <vaadin-grid-column>

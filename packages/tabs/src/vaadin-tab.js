@@ -3,16 +3,14 @@
  * Copyright (c) 2017 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
-import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
+import { html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
-import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { TabMixin } from './vaadin-tab-mixin.js';
 import { tabStyles } from './vaadin-tab-styles.js';
-
-registerStyles('vaadin-tab', tabStyles, { moduleId: 'vaadin-tab-styles' });
 
 /**
  * `<vaadin-tab>` is a Web Component providing an accessible and customizable tab.
@@ -38,21 +36,25 @@ registerStyles('vaadin-tab', tabStyles, { moduleId: 'vaadin-tab-styles' });
  *
  * @customElement
  * @extends HTMLElement
- * @mixes ControllerMixin
  * @mixes ElementMixin
  * @mixes ThemableMixin
  * @mixes TabMixin
  */
-class Tab extends ElementMixin(ThemableMixin(TabMixin(ControllerMixin(PolymerElement)))) {
-  static get template() {
+class Tab extends TabMixin(ThemableMixin(ElementMixin(PolylitMixin(LitElement)))) {
+  static get is() {
+    return 'vaadin-tab';
+  }
+
+  static get styles() {
+    return [tabStyles];
+  }
+
+  /** @protected */
+  render() {
     return html`
       <slot></slot>
       <slot name="tooltip"></slot>
     `;
-  }
-
-  static get is() {
-    return 'vaadin-tab';
   }
 
   /** @protected */

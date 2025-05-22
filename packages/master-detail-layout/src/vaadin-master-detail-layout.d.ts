@@ -8,6 +8,14 @@ import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
 import { SlotStylesMixin } from '@vaadin/component-base/src/slot-styles-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
+export interface MasterDetailLayoutCustomEventMap {
+  'backdrop-click': Event;
+
+  'detail-escape-press': Event;
+}
+
+export interface MasterDetailLayoutEventMap extends HTMLElementEventMap, MasterDetailLayoutCustomEventMap {}
+
 /**
  * `<vaadin-master-detail-layout>` is a web component for building UIs with a master
  * (or primary) area and a detail (or secondary) area that is displayed next to, or
@@ -26,7 +34,7 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  *
  * Part name      | Description
  * ---------------|----------------------
- * `backdrop`     | Backdrop covering the master area in the overlay mode
+ * `backdrop`     | Backdrop covering the master area in the drawer mode
  * `master`       | The master area
  * `detail`       | The detail area
  *
@@ -37,17 +45,21 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * `containment`  | Set to `layout` or `viewport` depending on the containment.
  * `orientation`  | Set to `horizontal` or `vertical` depending on the orientation.
  * `has-detail`   | Set when the detail content is provided.
- * `overlay`      | Set when the layout is using the overlay mode.
+ * `drawer`       | Set when the layout is using the drawer mode.
  * `stack`        | Set when the layout is using the stack mode.
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
+ *
+ * @fires {CustomEvent} backdrop-click - Fired when the user clicks the backdrop in the drawer mode.
+ * @fires {CustomEvent} detail-escape-press - Fired when the user presses Escape in the detail area.
  */
 declare class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ThemableMixin(ElementMixin(HTMLElement)))) {
   /**
    * Fixed size (in CSS length units) to be set on the detail area.
    * When specified, it prevents the detail area from growing or
    * shrinking. If there is not enough space to show master and detail
-   * areas next to each other, the layout switches to the overlay mode.
+   * areas next to each other, the details are shown as an overlay:
+   * either as drawer or stack, depending on the `stackOverlay` property.
    *
    * @attr {string} detail-size
    */
@@ -57,7 +69,8 @@ declare class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ThemableMix
    * Minimum size (in CSS length units) to be set on the detail area.
    * When specified, it prevents the detail area from shrinking below
    * this size. If there is not enough space to show master and detail
-   * areas next to each other, the layout switches to the overlay mode.
+   * areas next to each other, the details are shown as an overlay:
+   * either as drawer or stack, depending on the `stackOverlay` property.
    *
    * @attr {string} detail-min-size
    */
@@ -67,7 +80,8 @@ declare class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ThemableMix
    * Fixed size (in CSS length units) to be set on the master area.
    * When specified, it prevents the master area from growing or
    * shrinking. If there is not enough space to show master and detail
-   * areas next to each other, the layout switches to the overlay mode.
+   * areas next to each other, the details are shown as an overlay:
+   * either as drawer or stack, depending on the `stackOverlay` property.
    *
    * @attr {string} master-size
    */
@@ -77,7 +91,8 @@ declare class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ThemableMix
    * Minimum size (in CSS length units) to be set on the master area.
    * When specified, it prevents the master area from shrinking below
    * this size. If there is not enough space to show master and detail
-   * areas next to each other, the layout switches to the overlay mode.
+   * areas next to each other, the details are shown as an overlay:
+   * either as drawer or stack, depending on the `stackOverlay` property.
    *
    * @attr {string} master-min-size
    */
@@ -92,9 +107,13 @@ declare class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ThemableMix
   orientation: 'horizontal' | 'vertical';
 
   /**
-   * When specified, forces the layout to use overlay mode, even if
-   * there is enough space for master and detail to be shown next to
-   * each other using the default (split) mode.
+   * When specified, forces the details to be shown as an overlay
+   * (either as drawer or stack), even if there is enough space for
+   * master and detail to be shown next to each other using the default
+   * (split) mode.
+   *
+   * In order to enforce the stack mode, use this property together with
+   * `stackOverlay` property and set both to `true`.
    *
    * @attr {boolean} force-overlay
    */
@@ -109,12 +128,16 @@ declare class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ThemableMix
   containment: 'layout' | 'viewport';
 
   /**
-   * The threshold (in CSS length units) at which the layout switches to
-   * the "stack" mode, making detail area fully cover the master area.
+   * When true, the layout in the overlay mode is rendered as a stack,
+   * making detail area fully cover the master area. Otherwise, it is
+   * rendered as a drawer and has a visual backdrop.
+   *
+   * In order to enforce the stack mode, use this property together with
+   * `forceOverlay` property and set both to `true`.
    *
    * @attr {string} stack-threshold
    */
-  stackThreshold: string | null | undefined;
+  stackOverlay: boolean;
 
   /**
    * When true, the layout does not use animated transitions for the detail area.
@@ -122,6 +145,18 @@ declare class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ThemableMix
    * @attr {boolean} no-animation
    */
   noAnimation: boolean;
+
+  addEventListener<K extends keyof MasterDetailLayoutEventMap>(
+    type: K,
+    listener: (this: MasterDetailLayout, ev: MasterDetailLayoutEventMap[K]) => void,
+    options?: AddEventListenerOptions | boolean,
+  ): void;
+
+  removeEventListener<K extends keyof MasterDetailLayoutEventMap>(
+    type: K,
+    listener: (this: MasterDetailLayout, ev: MasterDetailLayoutEventMap[K]) => void,
+    options?: EventListenerOptions | boolean,
+  ): void;
 }
 
 declare global {

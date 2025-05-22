@@ -1,4 +1,4 @@
-import { fire, fixtureSync } from '@vaadin/testing-helpers';
+import { fire, fixtureSync, nextUpdate } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '@vaadin/vaadin-lumo-styles/test/autoload.js';
 import '../../not-animated-styles.js';
@@ -41,6 +41,7 @@ describe('tooltip', () => {
   ].forEach((position) => {
     it(position, async () => {
       element.position = position;
+      await nextUpdate(element);
       fire(target, 'mouseenter');
       await visualDiff(div, position);
     });
@@ -56,6 +57,7 @@ describe('tooltip', () => {
     });
 
     it('theme-dark', async () => {
+      await nextUpdate(element);
       fire(target, 'mouseenter');
       await visualDiff(div, 'theme-dark');
     });
@@ -63,12 +65,14 @@ describe('tooltip', () => {
 
   it('max-width', async () => {
     element.text = 'This is a tooltip with a long text (more than 40 chars), it should wrap in 2 lines for readability';
+    await nextUpdate(element);
     fire(target, 'mouseenter');
     await visualDiff(div, 'max-width');
   });
 
   it('white-space-pre', async () => {
     element.text = 'Line 1\n\nLine 2';
+    await nextUpdate(element);
     fire(target, 'mouseenter');
     await visualDiff(div, 'white-space-pre');
   });

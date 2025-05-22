@@ -1,7 +1,7 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import './enable-layout-improvements.js';
-import '../vaadin-vertical-layout.js';
+import '../src/vaadin-vertical-layout.js';
 
 describe('layout improvements enabled', () => {
   let layout, children;

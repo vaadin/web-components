@@ -2,32 +2,27 @@ import { expect } from '@vaadin/chai-plugins';
 import { escKeyDown, fixtureSync, mousedown, nextRender, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-overlay.js';
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { getDeepActiveElement } from '@vaadin/a11y-base/src/focus-utils.js';
 
 customElements.define(
   'overlay-field-wrapper',
-  class extends PolymerElement {
-    static get template() {
-      return html`
-        <vaadin-overlay id="overlay" renderer="[[renderer]]" focus-trap></vaadin-overlay>
-        <input id="focusable" />
-      `;
-    }
+  class extends HTMLElement {
+    constructor() {
+      super();
 
-    static get properties() {
-      return {
-        renderer: {
-          type: Object,
-          value: () => {
-            return (root) => {
-              if (!root.firstChild) {
-                root.appendChild(document.createElement('input'));
-              }
-            };
-          },
-        },
+      this.attachShadow({ mode: 'open' });
+
+      const overlay = document.createElement('vaadin-overlay');
+      overlay.focusTrap = true;
+      overlay.renderer = (root) => {
+        if (!root.firstChild) {
+          root.appendChild(document.createElement('input'));
+        }
       };
+
+      const input = document.createElement('input');
+
+      this.shadowRoot.append(overlay, input);
     }
   },
 );
@@ -50,8 +45,8 @@ describe('restore focus', () => {
     focusInput = document.createElement('input');
     wrapper = fixtureSync('<overlay-field-wrapper></overlay-field-wrapper>');
     await nextRender();
-    overlay = wrapper.$.overlay;
-    focusable = wrapper.$.focusable;
+    overlay = wrapper.shadowRoot.querySelector('vaadin-overlay');
+    focusable = wrapper.shadowRoot.querySelector('input');
   });
 
   describe('default', () => {

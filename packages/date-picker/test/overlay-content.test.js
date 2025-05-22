@@ -1,18 +1,18 @@
 import { expect } from '@vaadin/chai-plugins';
-import { click, fixtureSync, listenOnce, nextRender, tap } from '@vaadin/testing-helpers';
+import { click, fixtureSync, listenOnce, tap } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-date-picker-overlay-content.js';
-import { getDefaultI18n, getFirstVisibleItem, monthsEqual, waitForScrollToFinish } from './helpers.js';
+import { getDefaultI18n, getFirstVisibleItem, monthsEqual, untilOverlayScrolled } from './helpers.js';
 
 async function customizeFixture({ initialPosition, monthScrollerItems, monthScrollerOffset }) {
   const overlay = fixtureSync(`<vaadin-date-picker-overlay-content></vaadin-date-picker-overlay-content>`);
-  await nextRender();
+  await untilOverlayScrolled(overlay);
   const monthScroller = overlay._monthScroller;
   monthScroller.style.setProperty('--vaadin-infinite-scroller-buffer-offset', monthScrollerOffset);
   monthScroller.style.height = `${270 * monthScrollerItems}px`;
   overlay.i18n = getDefaultI18n();
   overlay.initialPosition = initialPosition || new Date();
-  await nextRender();
+  await untilOverlayScrolled(overlay);
 
   return overlay;
 }
@@ -30,8 +30,7 @@ describe('overlay', () => {
       `);
       overlay.i18n = getDefaultI18n();
       overlay.initialPosition = new Date(2021, 1, 1);
-      await nextRender();
-      await waitForScrollToFinish(overlay);
+      await untilOverlayScrolled(overlay);
     });
 
     it('should mark current year', () => {
@@ -175,12 +174,12 @@ describe('overlay', () => {
       describe('today button', () => {
         it('should scroll to current date', async () => {
           overlay.scrollToDate(new Date(2000, 1, 1));
-          await waitForScrollToFinish(overlay);
+          await untilOverlayScrolled(overlay);
 
           const today = new Date();
           const spy = sinon.spy(overlay, 'scrollToDate');
           tap(overlay._todayButton);
-          await waitForScrollToFinish(overlay);
+          await untilOverlayScrolled(overlay);
 
           expect(spy.calledOnce).to.be.true;
           const date = spy.firstCall.args[0];
@@ -192,7 +191,7 @@ describe('overlay', () => {
         it('should close the overlay and select today if on current month', async () => {
           const today = new Date();
           overlay.scrollToDate(today);
-          await waitForScrollToFinish(overlay);
+          await untilOverlayScrolled(overlay);
 
           const spy = sinon.spy();
           overlay.addEventListener('close', spy);
@@ -207,7 +206,7 @@ describe('overlay', () => {
         it('should not close the overlay and not select today if not on current month', async () => {
           const today = new Date();
           overlay.scrollToDate(today);
-          await waitForScrollToFinish(overlay);
+          await untilOverlayScrolled(overlay);
 
           const spy = sinon.spy();
           overlay.addEventListener('close', spy);
@@ -222,7 +221,7 @@ describe('overlay', () => {
         it('should do nothing if disabled', async () => {
           const initialDate = new Date(2000, 1, 1);
           overlay.scrollToDate(initialDate);
-          await waitForScrollToFinish(overlay);
+          await untilOverlayScrolled(overlay);
 
           const closeSpy = sinon.spy();
           overlay.addEventListener('close', closeSpy);
@@ -285,7 +284,7 @@ describe('overlay', () => {
           it('should select today if today is max', async () => {
             overlay.maxDate = todayMidnight;
             overlay.scrollToDate(todayMidnight);
-            await waitForScrollToFinish(overlay);
+            await untilOverlayScrolled(overlay);
 
             tap(overlay._todayButton);
 
@@ -307,27 +306,27 @@ describe('overlay', () => {
       `);
       overlay.i18n = getDefaultI18n();
       overlay.initialPosition = new Date(2021, 1, 1);
-      await nextRender();
+      await untilOverlayScrolled(overlay);
     });
 
     it('should reflect the year of currently visible month on the toolbar', async () => {
       const date = new Date(2000, 1, 1);
       overlay.scrollToDate(date);
-      await nextRender();
+      await untilOverlayScrolled(overlay);
       expect(parseInt(overlay.shadowRoot.querySelector('[part="years-toggle-button"]').textContent)).to.equal(2000);
     });
 
     it('should scroll to the given date', async () => {
       const date = new Date(2000, 1, 1);
       overlay.scrollToDate(date);
-      await nextRender();
+      await untilOverlayScrolled(overlay);
       expect(monthsEqual(getFirstVisibleItem(overlay._monthScroller, 0).firstElementChild.month, date)).to.be.true;
     });
 
     it('should scroll to the given year', async () => {
       const date = new Date(2000, 1, 1);
       overlay.scrollToDate(date);
-      await nextRender();
+      await untilOverlayScrolled(overlay);
       const offset = overlay._yearScroller.clientHeight / 2;
       overlay._yearScroller._debouncerUpdateClones.flush();
       expect(getFirstVisibleItem(overlay._yearScroller, offset).firstElementChild.year).to.equal(2000);

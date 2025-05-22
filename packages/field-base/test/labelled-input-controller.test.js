@@ -1,37 +1,30 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
+import { defineLit, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
-import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
+import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { InputMixin } from '../src/input-mixin.js';
 import { LabelMixin } from '../src/label-mixin.js';
 import { LabelledInputController } from '../src/labelled-input-controller.js';
 
-customElements.define(
-  'label-for-input-mixin-element',
-  class extends LabelMixin(InputMixin(ControllerMixin(PolymerElement))) {
-    static get template() {
-      return html`<slot name="label"></slot><slot name="input"></slot>`;
-    }
-  },
-);
+describe('LabelledInputController', () => {
+  const inputTag = defineLit(
+    'input',
+    `<slot name="label"></slot><slot name="input"></slot>`,
+    (Base) => class extends InputMixin(LabelMixin(PolylitMixin(Base))) {},
+  );
 
-customElements.define(
-  'label-for-textarea-mixin-element',
-  class extends LabelMixin(InputMixin(ControllerMixin(PolymerElement))) {
-    static get template() {
-      return html`<slot name="label"></slot><slot name="textarea"></slot>`;
-    }
-  },
-);
+  const textareaTag = defineLit(
+    'textarea',
+    `<slot name="label"></slot><slot name="textarea"></slot>`,
+    (Base) => class extends InputMixin(LabelMixin(PolylitMixin(Base))) {},
+  );
 
-describe('labelled-input-controller', () => {
   let element, target, label;
 
-  ['input', 'textarea'].forEach((el) => {
+  Object.entries({ input: inputTag, textarea: textareaTag }).forEach(([el, tag]) => {
     describe(el, () => {
       beforeEach(() => {
-        element = fixtureSync(`<label-for-${el}-mixin-element label="label"></label-for-${el}-mixin-element>`);
+        element = fixtureSync(`<${tag} label="label"></${tag}>`);
         label = element.querySelector('[slot=label]');
         target = document.createElement(el);
         target.setAttribute('slot', el);

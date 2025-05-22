@@ -3,7 +3,6 @@
  * Copyright (c) 2017 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import { isIOS } from '@vaadin/component-base/src/browser-utils.js';
 import { OverlayFocusMixin } from './vaadin-overlay-focus-mixin.js';
 import { OverlayStackMixin } from './vaadin-overlay-stack-mixin.js';
@@ -266,11 +265,12 @@ export const OverlayMixin = (superClass) =>
 
         this._animatedOpening();
 
-        afterNextRender(this, () => {
-          this._trapFocus();
+        this.__scheduledOpen = requestAnimationFrame(() => {
+          setTimeout(() => {
+            this._trapFocus();
 
-          const evt = new CustomEvent('vaadin-overlay-open', { bubbles: true });
-          this.dispatchEvent(evt);
+            this.dispatchEvent(new CustomEvent('vaadin-overlay-open', { bubbles: true }));
+          });
         });
 
         document.addEventListener('keydown', this._boundKeydownListener);
@@ -279,6 +279,11 @@ export const OverlayMixin = (superClass) =>
           this._addGlobalListeners();
         }
       } else if (wasOpened) {
+        if (this.__scheduledOpen) {
+          cancelAnimationFrame(this.__scheduledOpen);
+          this.__scheduledOpen = null;
+        }
+
         this._resetFocus();
 
         this._animatedClosing();

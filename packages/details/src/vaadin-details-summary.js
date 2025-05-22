@@ -3,11 +3,13 @@
  * Copyright (c) 2019 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { html, LitElement } from 'lit';
 import { ButtonMixin } from '@vaadin/button/src/vaadin-button-mixin.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
+import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { detailsSummary } from './vaadin-details-summary-core-styles.js';
 
 /**
  * The details summary element.
@@ -39,33 +41,13 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * @mixes DirMixin
  * @mixes ThemableMixin
  */
-class DetailsSummary extends ButtonMixin(DirMixin(ThemableMixin(PolymerElement))) {
+class DetailsSummary extends ButtonMixin(DirMixin(ThemableMixin(PolylitMixin(LitElement)))) {
   static get is() {
     return 'vaadin-details-summary';
   }
 
-  static get template() {
-    return html`
-      <style>
-        :host {
-          display: block;
-          outline: none;
-          white-space: nowrap;
-          -webkit-user-select: none;
-          user-select: none;
-        }
-
-        :host([hidden]) {
-          display: none !important;
-        }
-
-        :host([disabled]) {
-          pointer-events: none;
-        }
-      </style>
-      <span part="toggle" aria-hidden="true"></span>
-      <div part="content"><slot></slot></div>
-    `;
+  static get styles() {
+    return detailsSummary();
   }
 
   static get properties() {
@@ -78,6 +60,14 @@ class DetailsSummary extends ButtonMixin(DirMixin(ThemableMixin(PolymerElement))
         reflectToAttribute: true,
       },
     };
+  }
+
+  /** @protected */
+  render() {
+    return html`
+      <span part="toggle" aria-hidden="true"></span>
+      <div part="content"><slot></slot></div>
+    `;
   }
 }
 

@@ -3,8 +3,9 @@
  * Copyright (c) 2016 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
+import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { GridColumnMixin } from './vaadin-grid-column-mixin.js';
 
 /**
@@ -18,7 +19,7 @@ import { GridColumnMixin } from './vaadin-grid-column-mixin.js';
  * @extends HTMLElement
  * @mixes GridColumnMixin
  */
-class GridColumn extends GridColumnMixin(PolymerElement) {
+class GridColumn extends GridColumnMixin(PolylitMixin(LitElement)) {
   static get is() {
     return 'vaadin-grid-column';
   }

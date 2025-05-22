@@ -8,14 +8,14 @@ permissions:
 jobs:
   lint:
     name: Lint
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
           cache: 'yarn'
 
       - name: Install Dependencies
@@ -31,7 +31,7 @@ jobs:
         run: yarn lint:types
   snapshots:
     name: Snapshot tests
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
@@ -40,7 +40,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
           cache: 'yarn'
 
       - name: Install Dependencies
@@ -50,7 +50,7 @@ jobs:
         run: yarn test:snapshots
   integration:
     name: Integration tests
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
@@ -59,14 +59,11 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
           cache: 'yarn'
 
       - name: Install Dependencies
         run: yarn --frozen-lockfile --no-progress --non-interactive
-
-      - name: Install Playwright
-        run: npx playwright install chrome --with-deps
 
       - name: Test
         run: yarn test:it

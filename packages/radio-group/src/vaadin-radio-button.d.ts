@@ -3,7 +3,6 @@
  * Copyright (c) 2017 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { type RadioButtonEventMap, RadioButtonMixin } from './vaadin-radio-button-mixin.js';
@@ -45,7 +44,7 @@ export * from './vaadin-radio-button-mixin.js';
  *
  * @fires {CustomEvent} checked-changed - Fired when the `checked` property changes.
  */
-declare class RadioButton extends RadioButtonMixin(ElementMixin(ThemableMixin(ControllerMixin(HTMLElement)))) {
+declare class RadioButton extends RadioButtonMixin(ElementMixin(ThemableMixin(HTMLElement))) {
   addEventListener<K extends keyof RadioButtonEventMap>(
     type: K,
     listener: (this: RadioButton, ev: RadioButtonEventMap[K]) => void,

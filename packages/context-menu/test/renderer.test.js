@@ -1,8 +1,7 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fire, fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import './not-animated-styles.js';
-import '../vaadin-context-menu.js';
+import '../src/vaadin-context-menu.js';
 
 describe('renderer', () => {
   let menu, target, overlay;

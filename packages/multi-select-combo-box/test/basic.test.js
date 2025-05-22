@@ -2,8 +2,8 @@ import { expect } from '@vaadin/chai-plugins';
 import { resetMouse, sendKeys, sendMouse } from '@vaadin/test-runner-commands';
 import { fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import './not-animated-styles.js';
-import '../vaadin-multi-select-combo-box.js';
+import './multi-select-combo-box-test-styles.js';
+import '../src/vaadin-multi-select-combo-box.js';
 import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
 
 describe('basic', () => {

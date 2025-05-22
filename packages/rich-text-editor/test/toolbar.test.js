@@ -7,10 +7,11 @@ import {
   isFirefox,
   nextRender,
   nextUpdate,
+  oneEvent,
   outsideClick,
 } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import '../theme/lumo/vaadin-rich-text-editor.js';
+import '../src/vaadin-rich-text-editor.js';
 import { createImage } from './helpers.js';
 
 describe('toolbar controls', () => {
@@ -31,7 +32,7 @@ describe('toolbar controls', () => {
       editor.focus();
       editor.insertText(0, 'Foo', 'user');
       editor.setSelection(0, 3);
-      await nextRender(rte);
+      await nextRender();
     });
 
     ['bold', 'italic', 'underline', 'strike', 'blockquote', 'code-block'].forEach((fmt) => {
@@ -216,67 +217,71 @@ describe('toolbar controls', () => {
 
     describe('style', () => {
       ['background', 'color'].forEach((style) => {
-        it(`should apply ${style} when clicking the "toolbar-button-${style}" and selecting value`, async () => {
-          btn = getButton(style);
-          btn.click();
-          await nextRender();
+        describe(style, () => {
+          let popup, overlay;
 
-          const popup = document.querySelector('vaadin-rich-text-editor-popup-overlay');
-          const button = popup.querySelectorAll('button')[1];
-          button.click();
-          editor.insertText(0, 'Foo', 'user');
-          expect(editor.getFormat(0, 3)[style]).to.equal(button.dataset.color);
-        });
+          beforeEach(() => {
+            popup = rte.shadowRoot.querySelector(`#${style}Popup`);
+            overlay = popup.shadowRoot.querySelector('vaadin-rich-text-editor-popup-overlay');
+          });
 
-        it(`should clear ${style} when clicking the "toolbar-button-${style}" and selecting default value`, async () => {
-          editor.insertText(0, 'Foo', 'user');
-          editor.setSelection(0, 3);
-          editor.format(style, '#e60000');
-          expect(editor.getFormat(0, 3)[style]).to.equal('#e60000');
+          it(`should apply ${style} when clicking the "toolbar-button-${style}" and selecting value`, async () => {
+            getButton(style).click();
+            await oneEvent(overlay, 'vaadin-overlay-open');
+            const button = overlay.querySelectorAll('button')[1];
+            button.click();
+            editor.insertText(0, 'Foo', 'user');
+            expect(editor.getFormat(0, 3)[style]).to.equal(button.dataset.color);
+          });
 
-          btn = getButton(style);
-          btn.click();
-          await nextRender();
+          it(`should clear ${style} when clicking the "toolbar-button-${style}" and selecting default value`, async () => {
+            editor.insertText(0, 'Foo', 'user');
+            editor.setSelection(0, 3);
+            editor.format(style, '#e60000');
+            expect(editor.getFormat(0, 3)[style]).to.equal('#e60000');
 
-          const popup = document.querySelector('vaadin-rich-text-editor-popup-overlay');
-          // Default color (black) or background (white)
-          const value = style === 'color' ? '#000000' : '#ffffff';
-          const button = popup.querySelector(`[data-color="${value}"]`);
-          button.click();
-          expect(editor.getFormat(0, 3)[style]).to.be.not.ok;
-        });
+            getButton(style).click();
+            await oneEvent(overlay, 'vaadin-overlay-open');
 
-        it(`should restore focus when clicking the "toolbar-button-${style}" and pressing Esc`, async () => {
-          btn = getButton(style);
-          btn.click();
-          await nextRender();
+            // Default color (black) or background (white)
+            const value = style === 'color' ? '#000000' : '#ffffff';
+            const button = overlay.querySelector(`[data-color="${value}"]`);
+            button.click();
+            expect(editor.getFormat(0, 3)[style]).to.be.not.ok;
+          });
 
-          const spy = sinon.spy(btn, 'focus');
-          esc(document.body);
-          expect(spy).to.be.calledOnce;
-        });
+          it(`should restore focus when clicking the "toolbar-button-${style}" and pressing Esc`, async () => {
+            btn = getButton(style);
+            btn.click();
+            await oneEvent(overlay, 'vaadin-overlay-open');
 
-        it(`should toggle aria-expanded attribute on "toolbar-button-${style}" button part`, async () => {
-          btn = getButton(style);
-          btn.click();
-          await nextRender();
-          expect(btn.getAttribute('aria-expanded')).to.equal('true');
+            const spy = sinon.spy(btn, 'focus');
+            esc(document.body);
+            expect(spy).to.be.calledOnce;
+          });
 
-          outsideClick();
-          await nextRender();
-          expect(btn.getAttribute('aria-expanded')).to.equal('false');
-        });
+          it(`should toggle aria-expanded attribute on "toolbar-button-${style}" button part`, async () => {
+            btn = getButton(style);
+            btn.click();
+            await oneEvent(overlay, 'vaadin-overlay-open');
+            expect(btn.getAttribute('aria-expanded')).to.equal('true');
 
-        it(`should update items in ${style} popup when colorOptions property changes`, async () => {
-          rte.colorOptions = ['#000000', '#0066cc', '#008a00', '#e60000'];
-          await nextRender();
+            outsideClick();
+            await nextRender();
+            expect(btn.getAttribute('aria-expanded')).to.equal('false');
+          });
 
-          getButton(style).click();
-          await nextRender();
+          it(`should update items in ${style} popup when colorOptions property changes`, async () => {
+            rte.colorOptions = ['#000000', '#0066cc', '#008a00', '#e60000'];
+            await nextRender();
 
-          const popup = document.querySelector('vaadin-rich-text-editor-popup-overlay');
-          const button = popup.querySelectorAll('button')[1];
-          expect(button.dataset.color).to.equal(rte.colorOptions[1]);
+            getButton(style).click();
+            await oneEvent(overlay, 'vaadin-overlay-open');
+
+            const popup = document.querySelector('vaadin-rich-text-editor-popup-overlay');
+            const button = popup.querySelectorAll('button')[1];
+            expect(button.dataset.color).to.equal(rte.colorOptions[1]);
+          });
         });
       });
     });
@@ -356,11 +361,12 @@ describe('toolbar controls', () => {
 
     describe('hyperlink', () => {
       const url = 'https://vaadin.com';
-      let dialog;
+      let dialog, overlay;
 
       beforeEach(() => {
         btn = getButton('link');
         dialog = rte.$.linkDialog;
+        overlay = dialog._overlayElement;
       });
 
       describe('dialog', () => {
@@ -374,7 +380,7 @@ describe('toolbar controls', () => {
           const spy = sinon.spy(rte.$.linkUrl, 'focus');
           editor.focus();
           btn.click();
-          await nextRender(rte);
+          await oneEvent(overlay, 'vaadin-overlay-open');
           expect(spy.calledOnce).to.be.true;
         });
 
@@ -382,7 +388,7 @@ describe('toolbar controls', () => {
           const spy = sinon.spy(rte.$.confirmLink, 'click');
           editor.focus();
           btn.click();
-          await nextRender();
+          await oneEvent(overlay, 'vaadin-overlay-open');
           const evt = new CustomEvent('keydown');
           evt.keyCode = 13;
           rte.$.linkUrl.dispatchEvent(evt);
@@ -392,7 +398,7 @@ describe('toolbar controls', () => {
         it('should focus whe editor when the dialog is cancelled', async () => {
           editor.focus();
           btn.click();
-          await nextRender();
+          await oneEvent(overlay, 'vaadin-overlay-open');
 
           const spy = sinon.spy(editor, 'focus');
           rte.addEventListener('change', spy);
@@ -408,8 +414,7 @@ describe('toolbar controls', () => {
           editor.focus();
           editor.setSelection(0, 6);
           btn.click();
-          await nextUpdate(rte);
-          await nextRender();
+          await oneEvent(overlay, 'vaadin-overlay-open');
           expect(dialog.opened).to.be.true;
         });
 
@@ -419,7 +424,7 @@ describe('toolbar controls', () => {
           editor.setSelection(0, 6);
           flushValueDebouncer();
           btn.click();
-          await nextRender();
+          await oneEvent(overlay, 'vaadin-overlay-open');
           rte.$.linkUrl.value = url;
           rte.$.confirmLink.click();
           flushValueDebouncer();
@@ -432,7 +437,7 @@ describe('toolbar controls', () => {
           editor.focus();
           editor.setSelection(0, 6);
           btn.click();
-          await nextRender();
+          await oneEvent(overlay, 'vaadin-overlay-open');
           rte.$.linkUrl.value = url;
           rte.$.confirmLink.click();
           flushValueDebouncer();
@@ -445,7 +450,7 @@ describe('toolbar controls', () => {
           editor.focus();
           editor.setSelection(0, 6);
           btn.click();
-          await nextRender();
+          await oneEvent(overlay, 'vaadin-overlay-open');
           rte.$.removeLink.click();
           flushValueDebouncer();
           expect(rte.value).to.equal('[{"insert":"Vaadin\\n"}]');
@@ -456,7 +461,7 @@ describe('toolbar controls', () => {
         it('should open the confirm dialog when the editor has focus and no text selected', async () => {
           editor.focus();
           btn.click();
-          await nextRender();
+          await oneEvent(overlay, 'vaadin-overlay-open');
           expect(dialog.opened).to.be.true;
         });
 
@@ -464,7 +469,7 @@ describe('toolbar controls', () => {
           editor.focus();
           editor.setSelection(0, 0);
           btn.click();
-          await nextRender();
+          await oneEvent(overlay, 'vaadin-overlay-open');
           rte.$.linkUrl.value = url;
           rte.$.confirmLink.click();
           flushValueDebouncer();
@@ -477,7 +482,7 @@ describe('toolbar controls', () => {
           editor.focus();
           editor.setSelection(1, 0);
           btn.click();
-          await nextRender();
+          await oneEvent(overlay, 'vaadin-overlay-open');
           rte.$.linkUrl.value = url;
           rte.$.confirmLink.click();
           flushValueDebouncer();
@@ -490,7 +495,7 @@ describe('toolbar controls', () => {
           editor.focus();
           editor.setSelection(1, 0);
           btn.click();
-          await nextRender();
+          await oneEvent(overlay, 'vaadin-overlay-open');
           rte.$.removeLink.click();
           flushValueDebouncer();
           expect(rte.value).to.equal('[{"insert":"Vaadin\\n"}]');
@@ -504,7 +509,7 @@ describe('toolbar controls', () => {
           editor.focus();
           editor.setSelection(0, 6);
           btn.click();
-          await nextRender();
+          await oneEvent(overlay, 'vaadin-overlay-open');
 
           rte.$.linkUrl.value = url;
 
@@ -525,7 +530,7 @@ describe('toolbar controls', () => {
           editor.focus();
           editor.setSelection(0, 6);
           btn.click();
-          await nextRender();
+          await oneEvent(overlay, 'vaadin-overlay-open');
 
           const spy = sinon.spy();
           rte.addEventListener('change', spy);

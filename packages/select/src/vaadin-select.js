@@ -8,19 +8,16 @@ import './vaadin-select-item.js';
 import './vaadin-select-list-box.js';
 import './vaadin-select-overlay.js';
 import './vaadin-select-value-button.js';
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { html, LitElement } from 'lit';
+import { ifDefined } from 'lit/directives/if-defined.js';
 import { screenReaderOnly } from '@vaadin/a11y-base/src/styles/sr-only-styles.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
-import { processTemplates } from '@vaadin/component-base/src/templates.js';
-import { fieldShared } from '@vaadin/field-base/src/styles/field-shared-styles.js';
-import { inputFieldContainer } from '@vaadin/field-base/src/styles/input-field-container-styles.js';
-import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
+import { inputFieldShared } from '@vaadin/field-base/src/styles/input-field-shared-styles.js';
+import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { SelectBaseMixin } from './vaadin-select-base-mixin.js';
-
-registerStyles('vaadin-select', [fieldShared, inputFieldContainer, screenReaderOnly], {
-  moduleId: 'vaadin-select-styles',
-});
+import { selectStyles } from './vaadin-select-core-styles.js';
 
 /**
  * `<vaadin-select>` is a Web Component for selecting values from a list of items.
@@ -134,40 +131,35 @@ registerStyles('vaadin-select', [fieldShared, inputFieldContainer, screenReaderO
  * @mixes SelectBaseMixin
  * @mixes ThemableMixin
  */
-class Select extends SelectBaseMixin(ElementMixin(ThemableMixin(PolymerElement))) {
+class Select extends SelectBaseMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElement)))) {
   static get is() {
     return 'vaadin-select';
   }
 
-  static get template() {
+  static get styles() {
+    return [inputFieldShared, screenReaderOnly, selectStyles];
+  }
+
+  /** @protected */
+  render() {
     return html`
-      <style>
-        :host {
-          position: relative;
-        }
-
-        ::slotted([slot='value']) {
-          flex-grow: 1;
-        }
-      </style>
-
       <div class="vaadin-select-container">
-        <div part="label" on-click="_onClick">
+        <div part="label" @click="${this._onClick}">
           <slot name="label"></slot>
-          <span part="required-indicator" aria-hidden="true" on-click="focus"></span>
+          <span part="required-indicator" aria-hidden="true" @click="${this.focus}"></span>
         </div>
 
         <vaadin-input-container
           part="input-field"
-          readonly="[[readonly]]"
-          disabled="[[disabled]]"
-          invalid="[[invalid]]"
-          theme$="[[_theme]]"
-          on-click="_onClick"
+          .readonly="${this.readonly}"
+          .disabled="${this.disabled}"
+          .invalid="${this.invalid}"
+          theme="${ifDefined(this._theme)}"
+          @click="${this._onClick}"
         >
           <slot name="prefix" slot="prefix"></slot>
           <slot name="value"></slot>
-          <div part="toggle-button" slot="suffix" aria-hidden="true" on-mousedown="_onToggleMouseDown"></div>
+          <div part="toggle-button" slot="suffix" aria-hidden="true" @mousedown="${this._onToggleMouseDown}"></div>
         </vaadin-input-container>
 
         <div part="helper-text">
@@ -181,14 +173,16 @@ class Select extends SelectBaseMixin(ElementMixin(ThemableMixin(PolymerElement))
 
       <vaadin-select-overlay
         id="overlay"
-        owner="[[__overlayOwner]]"
-        position-target="[[_inputContainer]]"
-        opened="{{opened}}"
-        with-backdrop="[[_phone]]"
-        phone$="[[_phone]]"
-        theme$="[[_theme]]"
-        no-vertical-overlap$="[[noVerticalOverlap]]"
-        on-vaadin-overlay-open="_onOverlayOpen"
+        .owner="${this}"
+        .positionTarget="${this._inputContainer}"
+        .opened="${this.opened}"
+        .withBackdrop="${this._phone}"
+        .renderer="${this.renderer || this.__defaultRenderer}"
+        ?phone="${this._phone}"
+        theme="${ifDefined(this._theme)}"
+        ?no-vertical-overlap="${this.noVerticalOverlap}"
+        @opened-changed="${this._onOpenedChanged}"
+        @vaadin-overlay-open="${this._onOverlayOpen}"
       ></vaadin-select-overlay>
 
       <slot name="tooltip"></slot>
@@ -198,41 +192,9 @@ class Select extends SelectBaseMixin(ElementMixin(ThemableMixin(PolymerElement))
     `;
   }
 
-  static get properties() {
-    return {
-      /** @private */
-      __overlayOwner: {
-        value() {
-          return this;
-        },
-      },
-    };
-  }
-
-  static get observers() {
-    return ['_rendererChanged(renderer, _overlayElement)'];
-  }
-
-  /** @protected */
-  ready() {
-    super.ready();
-
-    processTemplates(this);
-  }
-
-  /**
-   * @param {SelectRenderer | undefined | null} renderer
-   * @param {SelectOverlay | undefined} overlay
-   * @private
-   */
-  _rendererChanged(renderer, overlay) {
-    if (!overlay) {
-      return;
-    }
-
-    overlay.renderer = renderer || this.__defaultRenderer;
-
-    this.requestContentUpdate();
+  /** @private */
+  _onOpenedChanged(event) {
+    this.opened = event.detail.value;
   }
 
   /** @private */

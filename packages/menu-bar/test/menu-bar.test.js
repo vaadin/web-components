@@ -1,18 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
-import { sendKeys } from '@vaadin/test-runner-commands';
-import {
-  arrowLeft,
-  arrowRight,
-  end,
-  fixtureSync,
-  focusin,
-  home,
-  nextRender,
-  nextUpdate,
-} from '@vaadin/testing-helpers';
-import sinon from 'sinon';
-import './not-animated-styles.js';
-import '../vaadin-menu-bar.js';
+import { fixtureSync, focusin, nextRender, nextUpdate } from '@vaadin/testing-helpers';
+import '../src/vaadin-menu-bar.js';
 
 describe('custom element definition', () => {
   let menu, tagName;
@@ -34,16 +22,15 @@ describe('custom element definition', () => {
 describe('root menu layout', () => {
   let menu, buttons;
 
-  async function updateItemsAndButtons() {
+  function updateItemsAndButtons() {
     menu.items = [...menu.items];
-    await nextUpdate(menu);
     buttons = menu._buttons;
   }
 
   beforeEach(async () => {
     menu = fixtureSync('<vaadin-menu-bar></vaadin-menu-bar>');
     menu.items = [{ text: 'Item 1' }, { text: 'Item 2' }, { text: 'Item 3', disabled: true }, { text: 'Item 4' }];
-    await nextRender(menu);
+    await nextRender();
     buttons = menu._buttons;
   });
 
@@ -62,21 +49,20 @@ describe('root menu layout', () => {
     });
   });
 
-  it('should disable all buttons when menu-bar disabled is set to true', async () => {
+  it('should disable all buttons when menu-bar disabled is set to true', () => {
     menu.disabled = true;
-    await nextUpdate(menu);
     buttons.forEach((btn) => {
       expect(btn.disabled).to.be.true;
     });
   });
 
-  it('should keep previously disabled buttons disabled when re-enabling the menu-bar', async () => {
+  it('should keep previously disabled buttons disabled when re-enabling the menu-bar', () => {
     expect(buttons[2].disabled).to.be.true;
+
     menu.disabled = true;
-    await nextUpdate(menu);
     expect(buttons[2].disabled).to.be.true;
+
     menu.disabled = false;
-    await nextUpdate(menu);
     expect(buttons[2].disabled).to.be.true;
   });
 
@@ -92,9 +78,8 @@ describe('root menu layout', () => {
     });
   });
 
-  it('should set tabindex to 0 when the button is not disabled in tab navigation', async () => {
+  it('should set tabindex to 0 when the button is not disabled in tab navigation', () => {
     menu.tabNavigation = true;
-    await nextUpdate(menu);
     buttons.forEach((btn) => {
       if (btn.disabled) {
         expect(btn.getAttribute('tabindex')).to.equal('-1');
@@ -104,11 +89,10 @@ describe('root menu layout', () => {
     });
   });
 
-  it('should reset tabindex after switching back from tab navigation', async () => {
+  it('should reset tabindex after switching back from tab navigation', () => {
     menu.tabNavigation = true;
-    await nextUpdate(menu);
+
     menu.tabNavigation = false;
-    await nextUpdate(menu);
     expect(buttons[0].getAttribute('tabindex')).to.equal('0');
     buttons.slice(1).forEach((btn) => {
       expect(btn.getAttribute('tabindex')).to.equal('-1');
@@ -122,159 +106,14 @@ describe('root menu layout', () => {
     }).to.not.throw(Error);
   });
 
-  describe('keyboard navigation', () => {
-    describe('default mode', () => {
-      it('should move focus to next button on "arrow-right" keydown', () => {
-        buttons[0].focus();
-        const spy = sinon.spy(buttons[1], 'focus');
-        arrowRight(buttons[0]);
-        expect(spy.calledOnce).to.be.true;
-        expect(buttons[1].hasAttribute('focused')).to.be.true;
-      });
-
-      it('should move focus to prev button on "arrow-left" keydown', () => {
-        buttons[1].focus();
-        const spy = sinon.spy(buttons[0], 'focus');
-        arrowLeft(buttons[1]);
-        expect(spy.calledOnce).to.be.true;
-        expect(buttons[0].hasAttribute('focused')).to.be.true;
-      });
-
-      it('should move focus to first button on "home" keydown', () => {
-        buttons[1].focus();
-        const spy = sinon.spy(buttons[0], 'focus');
-        home(buttons[1]);
-        expect(spy.calledOnce).to.be.true;
-        expect(buttons[0].hasAttribute('focused')).to.be.true;
-      });
-
-      it('should move focus to second button if first is disabled on "home" keydown', async () => {
-        menu.items[0].disabled = true;
-        await updateItemsAndButtons();
-        buttons[3].focus();
-        const spy = sinon.spy(buttons[1], 'focus');
-        home(buttons[3]);
-        expect(spy.calledOnce).to.be.true;
-        expect(buttons[1].hasAttribute('focused')).to.be.true;
-      });
-
-      it('should move focus to last button on "end" keydown', () => {
-        buttons[0].focus();
-        const spy = sinon.spy(buttons[3], 'focus');
-        end(buttons[0]);
-        expect(spy.calledOnce).to.be.true;
-        expect(buttons[3].hasAttribute('focused')).to.be.true;
-      });
-
-      it('should move focus to the closest enabled button if last is disabled on "end" keydown', async () => {
-        menu.items[3].disabled = true;
-        await updateItemsAndButtons();
-        buttons[0].focus();
-        const spy = sinon.spy(buttons[1], 'focus');
-        end(buttons[0]);
-        expect(spy.calledOnce).to.be.true;
-        expect(buttons[1].hasAttribute('focused')).to.be.true;
-      });
-
-      it('should move focus to first button on "arrow-right", if last button has focus', () => {
-        buttons[3].focus();
-        const spy = sinon.spy(buttons[0], 'focus');
-        arrowRight(buttons[3]);
-        expect(spy.calledOnce).to.be.true;
-        expect(buttons[0].hasAttribute('focused')).to.be.true;
-      });
-
-      it('should move focus to last button on "arrow-left", if first button has focus', () => {
-        buttons[0].focus();
-        const spy = sinon.spy(buttons[3], 'focus');
-        arrowLeft(buttons[0]);
-        expect(spy.calledOnce).to.be.true;
-        expect(buttons[3].hasAttribute('focused')).to.be.true;
-      });
-    });
-
-    describe('RTL mode', () => {
-      beforeEach(() => {
-        menu.setAttribute('dir', 'rtl');
-      });
-
-      it('should move focus to next button on "arrow-left" keydown', () => {
-        buttons[0].focus();
-        const spy = sinon.spy(buttons[1], 'focus');
-        arrowLeft(buttons[0]);
-        expect(spy.calledOnce).to.be.true;
-        expect(buttons[1].hasAttribute('focused')).to.be.true;
-      });
-
-      it('should move focus to prev button on "arrow-right" keydown', () => {
-        buttons[1].focus();
-        const spy = sinon.spy(buttons[0], 'focus');
-        arrowRight(buttons[1]);
-        expect(spy.calledOnce).to.be.true;
-        expect(buttons[0].hasAttribute('focused')).to.be.true;
-      });
-
-      it('should move focus to first button on "arrow-left", if last button has focus', () => {
-        buttons[3].focus();
-        const spy = sinon.spy(buttons[0], 'focus');
-        arrowLeft(buttons[3]);
-        expect(spy.calledOnce).to.be.true;
-        expect(buttons[0].hasAttribute('focused')).to.be.true;
-      });
-
-      it('should move focus to last button on "arrow-right", if first button has focus', () => {
-        buttons[0].focus();
-        const spy = sinon.spy(buttons[3], 'focus');
-        arrowRight(buttons[0]);
-        expect(spy.calledOnce).to.be.true;
-        expect(buttons[3].hasAttribute('focused')).to.be.true;
-      });
-    });
-  });
-
-  describe('tab navigation mode', () => {
-    beforeEach(() => {
-      menu.tabNavigation = true;
-    });
-
-    it('should move focus to next button on Tab keydown', async () => {
-      buttons[0].focus();
-      await sendKeys({ press: 'Tab' });
-      expect(buttons[1].hasAttribute('focused')).to.be.true;
-    });
-
-    it('should move focus to prev button on Shift Tab keydown', async () => {
-      buttons[1].focus();
-      await sendKeys({ press: 'Shift+Tab' });
-      expect(buttons[0].hasAttribute('focused')).to.be.true;
-    });
-
-    it('should move focus to fourth button if third is disabled on Tab keydown', async () => {
-      await updateItemsAndButtons();
-      buttons[1].focus();
-      await sendKeys({ press: 'Tab' });
-      expect(buttons[3].hasAttribute('focused')).to.be.true;
-    });
-
-    it('should not move the focus to the next button if tab navigation is disabled', async () => {
-      menu.tabNavigation = false;
-      menu.focus();
-      expect(document.activeElement).to.equal(buttons[0]);
-      await sendKeys({ press: 'Tab' });
-      expect(document.activeElement).to.not.equal(buttons[1]);
-    });
-  });
-
   describe('updating items', () => {
-    it('should remove buttons when setting empty array', async () => {
+    it('should remove buttons when setting empty array', () => {
       menu.items = [];
-      await nextUpdate(menu);
       expect(menu._buttons.filter((b) => b !== menu._overflow).length).to.eql(0);
     });
 
-    it('should remove buttons when setting falsy items property', async () => {
+    it('should remove buttons when setting falsy items property', () => {
       menu.items = undefined;
-      await nextUpdate(menu);
       expect(menu._buttons.filter((b) => b !== menu._overflow).length).to.eql(0);
     });
   });
@@ -304,8 +143,10 @@ describe('root menu layout', () => {
 
     it('should override the theme attribute of the component with the item.theme property', async () => {
       menu.setAttribute('theme', 'contained');
+      await nextUpdate(menu);
+
       menu.items[1].theme = 'item-theme';
-      await updateItemsAndButtons();
+      updateItemsAndButtons();
 
       expect(buttons[0].getAttribute('theme')).to.equal('contained');
       expect(buttons[1].getAttribute('theme')).to.equal('item-theme');
@@ -317,94 +158,42 @@ describe('root menu layout', () => {
       expect(buttons[1].getAttribute('theme')).to.equal('item-theme');
     });
 
-    it('should support setting multiple themes with an array', async () => {
+    it('should support setting multiple themes with an array', () => {
       menu.items[1].theme = ['theme-1', 'theme-2'];
-      await updateItemsAndButtons();
+      updateItemsAndButtons();
 
       expect(buttons[1].getAttribute('theme')).to.equal('theme-1 theme-2');
 
       menu.items[1].theme = [];
-      await updateItemsAndButtons();
+      updateItemsAndButtons();
 
       expect(buttons[1].hasAttribute('theme')).to.be.false;
     });
 
     it('should override the theme attribute of the component with an empty item.theme property', async () => {
       menu.setAttribute('theme', 'contained');
+      await nextUpdate(menu);
+
       menu.items[0].theme = '';
-      await updateItemsAndButtons();
+      updateItemsAndButtons();
 
       expect(buttons[0].hasAttribute('theme')).to.be.false;
 
       menu.items[0].theme = [];
-      await updateItemsAndButtons();
+      updateItemsAndButtons();
 
       expect(buttons[0].hasAttribute('theme')).to.be.false;
 
       menu.items[0].theme = [''];
-      await updateItemsAndButtons();
+      updateItemsAndButtons();
 
       expect(buttons[0].hasAttribute('theme')).to.be.false;
 
       menu.items[0].theme = null;
-      await updateItemsAndButtons();
+      updateItemsAndButtons();
 
       expect(buttons[0].getAttribute('theme')).to.equal('contained');
     });
-  });
-});
-
-describe('item components', () => {
-  let menu, buttons;
-
-  function makeComponent(id) {
-    const div = document.createElement('div');
-    div.style.width = '100px';
-    div.textContent = `Item ${id}`;
-    return div;
-  }
-
-  beforeEach(async () => {
-    menu = fixtureSync('<vaadin-menu-bar></vaadin-menu-bar>');
-    menu.items = [
-      { text: 'Item 1' },
-      { text: 'Item 2' },
-      { component: makeComponent('3') },
-      { text: 'Item 4 text', component: makeComponent('4') },
-      { text: 'Item 5', component: document.createElement('vaadin-menu-bar-item') },
-      { component: makeComponent('6'), children: [{ text: 'SubItem6.1' }, { text: 'SubItem6.2' }] },
-    ];
-    await nextRender(menu);
-    buttons = menu._buttons;
-  });
-
-  it('should render the component inside the menu-bar item', () => {
-    const item = buttons[2].firstChild;
-    expect(item).to.equal(buttons[2].item.component);
-    expect(item.localName).to.equal('vaadin-menu-bar-item');
-    const div = item.firstChild;
-    expect(div).to.equal(menu.items[2].component);
-    expect(div.localName).to.equal('div');
-    expect(div.textContent).to.equal('Item 3');
-    expect(getComputedStyle(div).width).to.equal('100px');
-  });
-
-  it('should override the component text when defined on the item', () => {
-    const item = buttons[3].firstChild;
-    expect(item).to.equal(buttons[3].item.component);
-    expect(item.localName).to.equal('vaadin-menu-bar-item');
-    const div = item.firstChild;
-    expect(div).to.equal(menu.items[3].component);
-    expect(div.localName).to.equal('div');
-    expect(div.textContent).to.equal('Item 4 text');
-    expect(getComputedStyle(div).width).to.equal('100px');
-  });
-
-  it('should render provided menu-bar item as a component', () => {
-    expect(buttons[4].firstChild).to.equal(buttons[4].item.component);
-    expect(buttons[4].item.component).to.equal(menu.items[4].component);
-    expect(buttons[4].item.component.children.length).to.equal(0);
-    expect(buttons[4].item.component.textContent).to.equal('Item 5');
   });
 });
 

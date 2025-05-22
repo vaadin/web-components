@@ -1,40 +1,25 @@
 import { expect } from '@vaadin/chai-plugins';
 import { aTimeout, click, fixtureSync, isIOS, makeSoloTouchEvent, nextRender } from '@vaadin/testing-helpers';
-import './not-animated-styles.js';
-import '../vaadin-context-menu.js';
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
-
-class MenuWrapper extends PolymerElement {
-  static get template() {
-    return html`
-      <vaadin-context-menu id="menu" renderer="[[_renderer]]"></vaadin-context-menu>
-      <button on-click="_showMenu" id="button" style="margin: 20px">Show context menu</button>
-    `;
-  }
-
-  constructor() {
-    super();
-
-    this._renderer = (root) => {
-      root.textContent = 'foo';
-    };
-  }
-
-  _showMenu(e) {
-    this.$.menu.open(e);
-  }
-}
-
-customElements.define('menu-wrapper', MenuWrapper);
+import '../src/vaadin-context-menu.js';
 
 describe('integration', () => {
   let wrapper, menu, button, overlay;
 
   beforeEach(async () => {
-    wrapper = fixtureSync('<menu-wrapper></menu-wrapper>');
+    wrapper = fixtureSync(`
+      <div>
+        <vaadin-context-menu></vaadin-context-menu>
+        <button style="margin: 20px">Show context menu</button>
+      </div>
+    `);
     await nextRender();
-    menu = wrapper.$.menu;
-    button = wrapper.$.button;
+    [menu, button] = wrapper.children;
+    menu.renderer = (root) => {
+      root.textContent = 'foo';
+    };
+    button.addEventListener('click', (e) => {
+      menu.open(e);
+    });
     overlay = menu._overlayElement;
   });
 

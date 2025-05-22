@@ -1,36 +1,34 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, focusin, focusout, nextFrame } from '@vaadin/testing-helpers';
+import { defineLit, fixtureSync, focusin, focusout, nextFrame } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { DelegateFocusMixin } from '../src/delegate-focus-mixin.js';
 
-describe('delegate-focus-mixin', () => {
-  let element, input, setFocusedSpy;
+describe('DelegateFocusMixin', () => {
+  let setFocusedSpy;
 
-  customElements.define(
-    'delegate-focus-mixin-element',
-    class extends DelegateFocusMixin(PolymerElement) {
-      static get template() {
-        return html`
-          <slot name="input"></slot>
-          <slot name="suffix"></slot>
-        `;
-      }
+  const tag = defineLit(
+    'delegate-focus-mixin',
+    `
+      <slot name="input"></slot>
+      <slot name="suffix"></slot>
+    `,
+    (Base) =>
+      class extends DelegateFocusMixin(PolylitMixin(Base)) {
+        ready() {
+          super.ready();
+          const input = this.querySelector('input');
+          this._setFocusElement(input);
+        }
 
-      /** @protected */
-      ready() {
-        super.ready();
-
-        const input = this.querySelector('input');
-        this._setFocusElement(input);
-      }
-
-      _setFocused(focused) {
-        super._setFocused(focused);
-        setFocusedSpy?.(focused);
-      }
-    },
+        _setFocused(focused) {
+          super._setFocused(focused);
+          setFocusedSpy?.(focused);
+        }
+      },
   );
+
+  let element, input;
 
   describe('default', () => {
     let button;
@@ -38,10 +36,10 @@ describe('delegate-focus-mixin', () => {
     beforeEach(() => {
       setFocusedSpy = sinon.spy();
       element = fixtureSync(`
-        <delegate-focus-mixin-element>
+        <${tag}>
           <input slot="input" />
           <button slot="suffix"></button>
-        </delegate-focus-mixin-element>
+        </${tag}>
       `);
       input = element.querySelector('input');
       button = element.querySelector('button');
@@ -143,9 +141,9 @@ describe('delegate-focus-mixin', () => {
 
     beforeEach(() => {
       element = fixtureSync(`
-        <delegate-focus-mixin-element>
+        <${tag}>
           <input slot="input" />
-        </delegate-focus-mixin-element>
+        </${tag}>
       `);
       input = element.querySelector('input');
       spy = sinon.spy();
@@ -188,7 +186,7 @@ describe('delegate-focus-mixin', () => {
 
   describe('autofocus', () => {
     beforeEach(() => {
-      element = document.createElement('delegate-focus-mixin-element');
+      element = document.createElement(tag);
       element.autofocus = true;
 
       const input = document.createElement('input');
@@ -246,9 +244,9 @@ describe('delegate-focus-mixin', () => {
     describe('default', () => {
       beforeEach(() => {
         element = fixtureSync(`
-          <delegate-focus-mixin-element>
+          <${tag}>
             <input slot="input" />
-          </delegate-focus-mixin-element>
+          </${tag}>
         `);
         input = element.querySelector('input');
       });
@@ -285,9 +283,9 @@ describe('delegate-focus-mixin', () => {
     describe('attribute', () => {
       beforeEach(() => {
         element = fixtureSync(`
-          <delegate-focus-mixin-element tabindex="-1">
+          <${tag} tabindex="-1">
             <input slot="input" />
-          </delegate-focus-mixin-element>
+          </${tag}>
         `);
         input = element.querySelector('input');
       });

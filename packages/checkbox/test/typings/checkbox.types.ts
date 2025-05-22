@@ -4,7 +4,6 @@ import type { DelegateFocusMixinClass } from '@vaadin/a11y-base/src/delegate-foc
 import type { DisabledMixinClass } from '@vaadin/a11y-base/src/disabled-mixin.js';
 import type { FocusMixinClass } from '@vaadin/a11y-base/src/focus-mixin.js';
 import type { KeyboardMixinClass } from '@vaadin/a11y-base/src/keyboard-mixin.js';
-import type { ControllerMixinClass } from '@vaadin/component-base/src/controller-mixin.js';
 import type { ElementMixinClass } from '@vaadin/component-base/src/element-mixin.js';
 import type { CheckedMixinClass } from '@vaadin/field-base/src/checked-mixin.js';
 import type { FieldMixinClass } from '@vaadin/field-base/src/field-mixin.js';
@@ -36,7 +35,6 @@ assertType<string>(checkbox.name);
 assertType<string>(checkbox.value);
 
 // Mixins
-assertType<ControllerMixinClass>(checkbox);
 assertType<ActiveMixinClass>(checkbox);
 assertType<DisabledMixinClass>(checkbox);
 assertType<ElementMixinClass>(checkbox);

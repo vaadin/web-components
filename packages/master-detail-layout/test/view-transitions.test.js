@@ -1,7 +1,7 @@
 import { expect } from '@vaadin/chai-plugins';
 import { aTimeout, fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import '../vaadin-master-detail-layout.js';
+import '../src/vaadin-master-detail-layout.js';
 import './helpers/master-content.js';
 import './helpers/detail-content.js';
 

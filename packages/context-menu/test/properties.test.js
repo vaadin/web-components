@@ -1,7 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fire, fixtureSync, nextRender } from '@vaadin/testing-helpers';
-import './not-animated-styles.js';
-import '../vaadin-context-menu.js';
+import '../src/vaadin-context-menu.js';
 
 describe('properties', () => {
   let menu;

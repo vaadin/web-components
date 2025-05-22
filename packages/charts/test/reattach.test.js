@@ -1,7 +1,7 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextFrame, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import '../vaadin-chart.js';
+import '../src/vaadin-chart.js';
 
 describe('reattach', () => {
   let wrapper, inner, chart;

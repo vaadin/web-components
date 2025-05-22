@@ -1,7 +1,7 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import '../vaadin-grid.js';
+import '../src/vaadin-grid.js';
 import { html, render } from 'lit';
 import { columnBodyRenderer, columnFooterRenderer, columnHeaderRenderer, gridRowDetailsRenderer } from '../lit.js';
 import { getCellContent, getContainerCell } from './helpers.js';

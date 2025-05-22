@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { arrowDown, arrowRight, enter, fixtureSync, nextRender, outsideClick } from '@vaadin/testing-helpers';
+import { arrowDown, arrowRight, enter, fixtureSync, nextRender, oneEvent, outsideClick } from '@vaadin/testing-helpers';
 import '../src/vaadin-menu-bar.js';
 import { getDeepActiveElement } from '@vaadin/a11y-base/src/focus-utils.js';
 
@@ -20,7 +20,7 @@ describe('a11y', () => {
           children: [{ text: 'Menu Item 3 1' }, { text: 'Menu Item 3 2' }],
         },
       ];
-      await nextRender(menu);
+      await nextRender();
       subMenu = menu._subMenu;
       buttons = menu._buttons;
       overflow = menu._overflow;
@@ -36,38 +36,33 @@ describe('a11y', () => {
       });
     });
 
-    it('should set role attribute on host element in tabNavigation', async () => {
+    it('should set role attribute on host element in tabNavigation', () => {
       menu.tabNavigation = true;
-      await nextRender(menu);
       expect(menu.getAttribute('role')).to.equal('group');
     });
 
-    it('should set role attribute on menu bar buttons in tabNavigation', async () => {
+    it('should set role attribute on menu bar buttons in tabNavigation', () => {
       menu.tabNavigation = true;
-      await nextRender(menu);
       buttons.forEach((btn) => {
         expect(btn.getAttribute('role')).to.equal('button');
       });
     });
 
-    it('should update role attribute on menu bar buttons when changing items', async () => {
+    it('should update role attribute on menu bar buttons when changing items', () => {
       menu.items = [...menu.items, { text: 'New item' }];
-      await nextRender(menu);
       menu._buttons.forEach((btn) => {
         expect(btn.getAttribute('role')).to.equal('menuitem');
       });
     });
 
-    it('should update role attribute on menu bar buttons when changing items in tabNavigation', async () => {
+    it('should update role attribute on menu bar buttons when changing items in tabNavigation', () => {
       menu.tabNavigation = true;
-      await nextRender(menu);
       menu.items = [...menu.items, { text: 'New item' }];
-      await nextRender(menu);
       menu._buttons.forEach((btn) => {
         expect(btn.getAttribute('role')).to.equal('button');
       });
+
       menu.tabNavigation = false;
-      await nextRender(menu);
       menu._buttons.forEach((btn) => {
         expect(btn.getAttribute('role')).to.equal('menuitem');
       });
@@ -89,7 +84,7 @@ describe('a11y', () => {
 
     it('should toggle aria-expanded attribute on submenu open / close', async () => {
       buttons[0].click();
-      await nextRender(subMenu);
+      await oneEvent(subMenu._overlayElement, 'vaadin-overlay-open');
       expect(buttons[0].getAttribute('aria-expanded')).to.equal('true');
 
       buttons[0].click();
@@ -122,14 +117,14 @@ describe('a11y', () => {
 
     it('should move focus to the sub-menu on open', async () => {
       buttons[0].click();
-      await nextRender();
+      await oneEvent(overlay, 'vaadin-overlay-open');
       expect(getDeepActiveElement()).to.equal(overlay.$.overlay);
     });
 
     it('should restore focus on outside click', async () => {
       // Open Item 0
       arrowDown(getDeepActiveElement());
-      await nextRender();
+      await oneEvent(overlay, 'vaadin-overlay-open');
       outsideClick();
       await nextRender();
       expect(getDeepActiveElement()).to.equal(buttons[0]);
@@ -138,7 +133,7 @@ describe('a11y', () => {
     it('should restore focus on outside click when a sub-menu is open', async () => {
       // Open Item 0
       arrowDown(getDeepActiveElement());
-      await nextRender();
+      await oneEvent(overlay, 'vaadin-overlay-open');
       // Move to Item 0/1
       arrowDown(getDeepActiveElement());
       await nextRender();
@@ -152,7 +147,7 @@ describe('a11y', () => {
     it('should restore focus on sub-menu item selection', async () => {
       // Open Item 0
       arrowDown(getDeepActiveElement());
-      await nextRender();
+      await oneEvent(overlay, 'vaadin-overlay-open');
       // Select Item 0/0
       enter(getDeepActiveElement());
       await nextRender();
@@ -162,13 +157,14 @@ describe('a11y', () => {
     it('should restore focus on nested sub-menu item selection', async () => {
       // Open Item 0
       arrowDown(getDeepActiveElement());
-      await nextRender();
+      await oneEvent(overlay, 'vaadin-overlay-open');
       // Move to Item 0/1
       arrowDown(getDeepActiveElement());
       await nextRender();
       // Open Item 0/1
       arrowRight(getDeepActiveElement());
-      await nextRender();
+      const nestedSubMenu = overlay.querySelector('vaadin-menu-bar-submenu');
+      await oneEvent(nestedSubMenu._overlayElement, 'vaadin-overlay-open');
       // Select Item 0/1/0
       enter(getDeepActiveElement());
       await nextRender();

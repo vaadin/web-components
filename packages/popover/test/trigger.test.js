@@ -8,10 +8,11 @@ import {
   mousedown,
   nextRender,
   nextUpdate,
+  oneEvent,
   outsideClick,
 } from '@vaadin/testing-helpers';
 import './not-animated-styles.js';
-import { Popover } from '../vaadin-popover.js';
+import { Popover } from '../src/vaadin-popover.js';
 import { mouseenter, mouseleave } from './helpers.js';
 
 describe('trigger', () => {
@@ -47,13 +48,13 @@ describe('trigger', () => {
 
     it('should open on target click', async () => {
       target.click();
-      await nextRender();
+      await oneEvent(overlay, 'vaadin-overlay-open');
       expect(overlay.opened).to.be.true;
     });
 
     it('should close on target click', async () => {
       target.click();
-      await nextRender();
+      await oneEvent(overlay, 'vaadin-overlay-open');
 
       target.click();
       await nextRender();
@@ -73,7 +74,7 @@ describe('trigger', () => {
       target.parentNode.appendChild(popover);
 
       target.click();
-      await nextRender();
+      await oneEvent(overlay, 'vaadin-overlay-open');
       expect(overlay.opened).to.be.true;
     });
 
@@ -85,7 +86,7 @@ describe('trigger', () => {
 
     it('should not close on target mouseleave', async () => {
       target.click();
-      await nextRender();
+      await oneEvent(overlay, 'vaadin-overlay-open');
 
       mouseenter(target);
       mouseleave(target);
@@ -102,13 +103,13 @@ describe('trigger', () => {
 
     it('should open on target mouseenter', async () => {
       mouseenter(target);
-      await nextRender();
+      await oneEvent(overlay, 'vaadin-overlay-open');
       expect(overlay.opened).to.be.true;
     });
 
     it('should close on target mouseleave', async () => {
       mouseenter(target);
-      await nextRender();
+      await oneEvent(overlay, 'vaadin-overlay-open');
 
       mouseleave(target);
       await nextUpdate(popover);
@@ -118,7 +119,7 @@ describe('trigger', () => {
 
     it('should not close on mouseleave from target to overlay', async () => {
       mouseenter(target);
-      await nextRender();
+      await oneEvent(overlay, 'vaadin-overlay-open');
 
       mouseleave(target, overlay);
       await nextUpdate(popover);
@@ -128,7 +129,7 @@ describe('trigger', () => {
 
     it('should close on overlay mouseleave', async () => {
       mouseenter(target);
-      await nextRender();
+      await oneEvent(overlay, 'vaadin-overlay-open');
 
       mouseenter(overlay);
       mouseleave(overlay);
@@ -139,7 +140,7 @@ describe('trigger', () => {
 
     it('should not close on mouseleave from overlay back to target', async () => {
       mouseenter(target);
-      await nextRender();
+      await oneEvent(overlay, 'vaadin-overlay-open');
 
       mouseleave(target, overlay);
       mouseleave(overlay, target);
@@ -161,7 +162,7 @@ describe('trigger', () => {
       target.parentNode.appendChild(popover);
 
       mouseenter(target);
-      await nextRender();
+      await oneEvent(overlay, 'vaadin-overlay-open');
       expect(overlay.opened).to.be.true;
     });
   });
@@ -174,13 +175,13 @@ describe('trigger', () => {
 
     it('should open on target focusin', async () => {
       focusin(target);
-      await nextRender();
+      await oneEvent(overlay, 'vaadin-overlay-open');
       expect(overlay.opened).to.be.true;
     });
 
     it('should close on target focusout', async () => {
       focusin(target);
-      await nextRender();
+      await oneEvent(overlay, 'vaadin-overlay-open');
 
       focusout(target);
       await nextUpdate(popover);
@@ -196,7 +197,7 @@ describe('trigger', () => {
 
     it('should not close on target focusout to the overlay', async () => {
       focusin(target);
-      await nextRender();
+      await oneEvent(overlay, 'vaadin-overlay-open');
 
       focusout(target, overlay);
       await nextUpdate(popover);
@@ -205,7 +206,7 @@ describe('trigger', () => {
 
     it('should close on overlay focusout', async () => {
       focusin(target);
-      await nextRender();
+      await oneEvent(overlay, 'vaadin-overlay-open');
 
       focusout(target, overlay);
       focusout(overlay);
@@ -215,7 +216,7 @@ describe('trigger', () => {
 
     it('should not close on overlay focusout to the overlay content', async () => {
       focusin(target);
-      await nextRender();
+      await oneEvent(overlay, 'vaadin-overlay-open');
 
       focusout(overlay, overlay.firstElementChild);
       await nextUpdate(popover);
@@ -224,7 +225,7 @@ describe('trigger', () => {
 
     it('should not close on overlay focusout back to the target', async () => {
       focusin(target);
-      await nextRender();
+      await oneEvent(overlay, 'vaadin-overlay-open');
 
       focusout(target, overlay);
       focusout(overlay, target);
@@ -245,7 +246,7 @@ describe('trigger', () => {
       target.parentNode.appendChild(popover);
 
       focusin(target);
-      await nextRender();
+      await oneEvent(overlay, 'vaadin-overlay-open');
       expect(overlay.opened).to.be.true;
     });
 
@@ -257,7 +258,7 @@ describe('trigger', () => {
         target.parentNode.appendChild(input);
 
         target.focus();
-        await nextRender();
+        await oneEvent(overlay, 'vaadin-overlay-open');
       });
 
       afterEach(async () => {
@@ -321,19 +322,19 @@ describe('trigger', () => {
 
     it('should open on target mouseenter', async () => {
       mouseenter(target);
-      await nextRender();
+      await oneEvent(overlay, 'vaadin-overlay-open');
       expect(overlay.opened).to.be.true;
     });
 
     it('should open on target focusin', async () => {
       focusin(target);
-      await nextRender();
+      await oneEvent(overlay, 'vaadin-overlay-open');
       expect(overlay.opened).to.be.true;
     });
 
     it('should not close on target focusout if target has hover', async () => {
       focusin(target);
-      await nextRender();
+      await oneEvent(overlay, 'vaadin-overlay-open');
 
       mouseenter(target);
       focusout(target);
@@ -343,7 +344,7 @@ describe('trigger', () => {
 
     it('should close on target focusout if target has lost hover', async () => {
       focusin(target);
-      await nextRender();
+      await oneEvent(overlay, 'vaadin-overlay-open');
 
       mouseenter(target);
       mouseleave(target);
@@ -354,7 +355,7 @@ describe('trigger', () => {
 
     it('should not close on target focusout if overlay has hover', async () => {
       focusin(target);
-      await nextRender();
+      await oneEvent(overlay, 'vaadin-overlay-open');
 
       mouseenter(overlay);
       focusout(target);
@@ -364,7 +365,7 @@ describe('trigger', () => {
 
     it('should close on target focusout if overlay has lost hover', async () => {
       focusin(target);
-      await nextRender();
+      await oneEvent(overlay, 'vaadin-overlay-open');
 
       mouseenter(overlay);
       mouseleave(overlay);
@@ -375,7 +376,7 @@ describe('trigger', () => {
 
     it('should not close on target mouseleave if target has focus', async () => {
       mouseenter(target);
-      await nextRender();
+      await oneEvent(overlay, 'vaadin-overlay-open');
 
       focusin(target);
       mouseleave(target);
@@ -385,7 +386,7 @@ describe('trigger', () => {
 
     it('should not close on target mouseleave if overlay has focus', async () => {
       mouseenter(target);
-      await nextRender();
+      await oneEvent(overlay, 'vaadin-overlay-open');
 
       focusin(overlay);
       mouseleave(target);
@@ -395,7 +396,7 @@ describe('trigger', () => {
 
     it('should not close on overlay mouseleave if overlay has focus', async () => {
       mouseenter(target);
-      await nextRender();
+      await oneEvent(overlay, 'vaadin-overlay-open');
 
       focusin(overlay);
       mouseenter(overlay);
@@ -415,7 +416,7 @@ describe('trigger', () => {
       mousedown(target);
       target.focus();
       target.click();
-      await nextRender();
+      await oneEvent(overlay, 'vaadin-overlay-open');
       expect(overlay.opened).to.be.true;
     });
 
@@ -423,7 +424,7 @@ describe('trigger', () => {
       mousedown(target);
       target.focus();
       target.click();
-      await nextRender();
+      await oneEvent(overlay, 'vaadin-overlay-open');
 
       target.click();
       await nextRender();
@@ -461,13 +462,13 @@ describe('trigger', () => {
 
         it(`should open on setting opened to true with trigger set to ${trigger}`, async () => {
           popover.opened = true;
-          await nextRender();
+          await oneEvent(overlay, 'vaadin-overlay-open');
           expect(overlay.opened).to.be.true;
         });
 
         it(`should not close on target mouseleave with trigger set to ${trigger}`, async () => {
           popover.opened = true;
-          await nextRender();
+          await oneEvent(overlay, 'vaadin-overlay-open');
 
           mouseenter(target);
           mouseleave(target);
@@ -477,7 +478,7 @@ describe('trigger', () => {
 
         it(`should not close on target focusout with trigger set to ${trigger}`, async () => {
           popover.opened = true;
-          await nextRender();
+          await oneEvent(overlay, 'vaadin-overlay-open');
 
           focusin(target);
           focusout(target);
@@ -487,7 +488,7 @@ describe('trigger', () => {
 
         it(`should close on global Escape press with trigger set to ${trigger}`, async () => {
           popover.opened = true;
-          await nextRender();
+          await oneEvent(overlay, 'vaadin-overlay-open');
 
           esc(document.body);
           await nextUpdate(popover);
@@ -496,7 +497,7 @@ describe('trigger', () => {
 
         it(`should close on target Escape press with trigger set to ${trigger}`, async () => {
           popover.opened = true;
-          await nextRender();
+          await oneEvent(overlay, 'vaadin-overlay-open');
 
           esc(target);
           await nextUpdate(popover);
@@ -506,7 +507,7 @@ describe('trigger', () => {
         it(`should close on global Escape press when modal with trigger set to ${trigger}`, async () => {
           popover.modal = true;
           popover.opened = true;
-          await nextRender();
+          await oneEvent(overlay, 'vaadin-overlay-open');
 
           esc(document.body);
           await nextUpdate(popover);
@@ -515,7 +516,7 @@ describe('trigger', () => {
 
         it(`should close on outside click when not modal with trigger set to ${trigger}`, async () => {
           popover.opened = true;
-          await nextRender();
+          await oneEvent(overlay, 'vaadin-overlay-open');
 
           outsideClick();
           await nextUpdate(popover);
@@ -525,7 +526,7 @@ describe('trigger', () => {
         it(`should close on outside click when modal with trigger set to ${trigger}`, async () => {
           popover.modal = true;
           popover.opened = true;
-          await nextRender();
+          await oneEvent(overlay, 'vaadin-overlay-open');
 
           outsideClick();
           await nextUpdate(popover);
@@ -534,7 +535,7 @@ describe('trigger', () => {
 
         it(`should close when setting opened to false with trigger set to ${trigger}`, async () => {
           popover.opened = true;
-          await nextRender();
+          await oneEvent(overlay, 'vaadin-overlay-open');
 
           popover.opened = false;
           await nextUpdate(popover);

@@ -247,53 +247,6 @@ describe('Basic features', () => {
     });
   });
 
-  describe('change event', () => {
-    let spy;
-
-    beforeEach(() => {
-      spy = sinon.spy();
-      dateTimePicker.addEventListener('change', spy);
-    });
-
-    it('should fire change on date picker change event', () => {
-      changeInputValue(timePicker, '16:00');
-      expect(spy.called).to.be.false;
-      changeInputValue(datePicker, '2020-01-17');
-      expect(spy.calledOnce).to.be.true;
-      changeInputValue(datePicker, '');
-      expect(spy.calledTwice).to.be.true;
-    });
-
-    it('should fire change on time picker change event', () => {
-      changeInputValue(datePicker, '2020-01-17');
-      expect(spy.called).to.be.false;
-      changeInputValue(timePicker, '16:00');
-      expect(spy.calledOnce).to.be.true;
-      changeInputValue(timePicker, '');
-      expect(spy.calledTwice).to.be.true;
-    });
-
-    it('should not fire change on programmatic value change', () => {
-      dateTimePicker.value = '2020-01-17T16:00';
-      expect(spy.called).to.be.false;
-    });
-
-    it('should not fire change on programmatic value change after manual one', () => {
-      dateTimePicker.value = '2020-01-17T16:00'; // Init with valid value
-      changeInputValue(datePicker, '2020-01-20');
-      spy.resetHistory();
-      dateTimePicker.value = '2020-01-10T12:00';
-      expect(spy.called).to.be.false;
-    });
-
-    it('should not fire change on programmatic value change after partial manual one', () => {
-      changeInputValue(datePicker, '2020-01-17');
-      // Time picker has no value so date time picker value is still empty
-      dateTimePicker.value = '2020-01-17T16:00';
-      expect(spy.called).to.be.false;
-    });
-  });
-
   describe('value property formats', () => {
     it('should accept ISO format', () => {
       const date = new Date(Date.UTC(0, 1, 3, 8, 30, 0));

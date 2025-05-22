@@ -2,68 +2,58 @@ import { expect } from '@vaadin/chai-plugins';
 import { escKeyDown, fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
 import './animated-styles.js';
 import '../src/vaadin-overlay.js';
-import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { createOverlay } from './helpers.js';
 
 customElements.define(
   'two-overlays',
-  class extends PolymerElement {
-    static get template() {
-      return html`
-        <vaadin-overlay opened="{{showOverlay1}}" renderer="[[renderer1]]"></vaadin-overlay>
-        <vaadin-overlay opened="{{showOverlay2}}" renderer="[[renderer2]]"></vaadin-overlay>
-      `;
-    }
+  class extends HTMLElement {
+    constructor() {
+      super();
 
-    static get properties() {
-      return {
-        showOverlay1: Boolean,
-        showOverlay2: Boolean,
-        renderer1: {
-          type: Object,
-          value: () => {
-            return (root) => {
-              if (!root.firstChild) {
-                const div = document.createElement('div');
-                div.textContent = 'Overlay 1';
+      this.attachShadow({ mode: 'open' });
 
-                const button = document.createElement('button');
-                button.textContent = 'Go to overlay 2';
+      const overlay1 = document.createElement('vaadin-overlay');
+      const overlay2 = document.createElement('vaadin-overlay');
 
-                button.addEventListener('click', () => {
-                  const host = root.__dataHost;
-                  host.showOverlay1 = false;
-                  host.showOverlay2 = true;
-                });
+      overlay1.renderer = (root) => {
+        if (!root.firstChild) {
+          const div = document.createElement('div');
+          div.textContent = 'Overlay 1';
 
-                root.append(div, button);
-              }
-            };
-          },
-        },
-        renderer2: {
-          type: Object,
-          value: () => {
-            return (root) => {
-              if (!root.firstChild) {
-                const div = document.createElement('div');
-                div.textContent = 'Overlay 2';
-                root.appendChild(div);
-              }
-            };
-          },
-        },
+          const button = document.createElement('button');
+          button.textContent = 'Go to overlay 2';
+
+          button.addEventListener('click', () => {
+            overlay1.opened = false;
+            overlay2.opened = true;
+          });
+
+          root.append(div, button);
+        }
       };
+
+      overlay2.renderer2 = (root) => {
+        if (!root.firstChild) {
+          const div = document.createElement('div');
+          div.textContent = 'Overlay 2';
+          root.appendChild(div);
+        }
+      };
+
+      this.shadowRoot.append(overlay1, overlay2);
     }
   },
 );
 
 customElements.define(
   'animated-div',
-  class extends PolymerElement {
-    static get template() {
-      return html`
+  class extends HTMLElement {
+    constructor() {
+      super();
+
+      this.attachShadow({ mode: 'open' });
+
+      this.shadowRoot.innerHTML = `
         <style>
           :host {
             animation: 1ms div-dummy-animation;
@@ -71,7 +61,7 @@ customElements.define(
 
           @keyframes div-dummy-animation {
             to {
-              opacity: 1 !important; /* stylelint-disable-line keyframe-declaration-no-important */
+              opacity: 1 !important;
             }
           }
         </style>
@@ -89,7 +79,11 @@ function afterOverlayOpeningFinished(overlay, callback) {
 
     if (isOverlayOpened) {
       observer.disconnect();
-      afterNextRender(overlay, callback);
+      requestAnimationFrame(() => {
+        setTimeout(() => {
+          callback();
+        });
+      });
     }
   });
   observer.observe(overlay, { attributes: true, attributeFilter: ['opening'] });
@@ -103,7 +97,11 @@ function afterOverlayClosingFinished(overlay, callback) {
 
     if (isOverlayClosed) {
       observer.disconnect();
-      afterNextRender(overlay, callback);
+      requestAnimationFrame(() => {
+        setTimeout(() => {
+          callback();
+        });
+      });
     }
   });
   observer.observe(overlay, { attributes: true, attributeFilter: ['closing'] });

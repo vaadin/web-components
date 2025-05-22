@@ -114,12 +114,8 @@ Run or debug specific test files filtered by a glob pattern:
 
 ```sh
 yarn test --group combo-box --glob="data-provider*" # all data provider tests
-yarn test --group combo-box --glob="*polymer.test.js" # all polymer tests
-yarn test --group combo-box --glob="*lit.test.js" # all lit tests
 
 yarn debug --group combo-box --glob="data-provider*" # all data provider tests
-yarn debug --group combo-box --glob="*polymer.test.js" # all polymer tests
-yarn debug --group combo-box --glob="*lit.test.js" # all lit tests
 ```
 
 Run tests with code coverage:
@@ -138,22 +134,10 @@ Run tests for Lumo:
 yarn test:lumo
 ```
 
-Run tests for Material:
-
-```sh
-yarn test:material
-```
-
 Update reference screenshots for Lumo:
 
 ```sh
 yarn update:lumo
-```
-
-Update reference screenshots for Material:
-
-```sh
-yarn update:material
 ```
 
 Update screenshots for single package:
@@ -203,13 +187,13 @@ git checkout main && git pull
 Create a new branch from main:
 
 ```sh
-git checkout -b 24.0
+git checkout -b 25.0
 ```
 
 Push a newly created branch:
 
 ```sh
-git push origin 24.0
+git push origin 25.0
 ```
 
 The newly created branch for the current major is protected by default.
@@ -218,7 +202,7 @@ The rest of the changes to that branch should happen the usual way, through a PR
 Create another branch:
 
 ```sh
-git checkout -b update-v24.0
+git checkout -b update-v25.0
 ```
 
 Update [`wtr-utils.js`](https://github.com/vaadin/web-components/blob/main/wtr-utils.js) as follows:
@@ -226,7 +210,7 @@ Update [`wtr-utils.js`](https://github.com/vaadin/web-components/blob/main/wtr-u
 ```diff
 const isLockfileChanged = () => {
 -  const log = execSync('git diff --name-only origin/main HEAD').toString();
-+  const log = execSync('git diff --name-only origin/24.0 HEAD').toString();
++  const log = execSync('git diff --name-only origin/25.0 HEAD').toString();
   return log.split('\n').some((line) => line.includes('yarn.lock'));
 };
 ```
@@ -234,7 +218,7 @@ const isLockfileChanged = () => {
 ```diff
 const getChangedPackages = () => {
 -  const output = execSync('./node_modules/.bin/lerna ls --since origin/main --json --loglevel silent');
-+  const output = execSync('./node_modules/.bin/lerna ls --since origin/24.0 --json --loglevel silent');
++  const output = execSync('./node_modules/.bin/lerna ls --since origin/25.0 --json --loglevel silent');
   return JSON.parse(output.toString());
 };
 ```
@@ -246,16 +230,16 @@ Create a PR to the version branch ([example](https://github.com/vaadin/web-compo
 Create a new branch from main:
 
 ```sh
-git checkout main && git checkout -b bump-v24.1
+git checkout main && git checkout -b bump-v25.1
 ```
 
 Prepare a new version for the `updateVersion` script by running the following command:
 
 ```sh
-export npm_config_bump=24.1.0-alpha0
+export npm_config_bump=25.1.0-alpha0
 ```
 
-Run the script to bump static version getters in `ElementMixin`, `Lumo` and `Material`:
+Run the script to bump version in `packages/component-base/define.js`:
 
 ```sh
 node scripts/updateVersion.js
@@ -270,7 +254,7 @@ lerna version 24.1.0-alpha0 --no-push --no-git-tag-version --force-publish --exa
 Commit all the changes:
 
 ```sh
-git commit -a -m "chore: update main branch to Vaadin 24.1"
+git commit -a -m "chore: update main branch to Vaadin 25.1"
 ```
 
 Create a PR to the `main` branch ([example](https://github.com/vaadin/web-components/pull/4433)).

@@ -1,10 +1,9 @@
 import { expect } from '@vaadin/chai-plugins';
 import { click, enter, fire, fixtureSync, isIOS, nextRender, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import './not-animated-styles.js';
-import '../vaadin-context-menu.js';
-import '@vaadin/item/vaadin-item.js';
-import '@vaadin/list-box/vaadin-list-box.js';
+import '../src/vaadin-context-menu.js';
+import '@vaadin/item/src/vaadin-item.js';
+import '@vaadin/list-box/src/vaadin-list-box.js';
 
 describe('selection', () => {
   let menu, overlay;
@@ -27,7 +26,7 @@ describe('selection', () => {
   it('should close on item click', async () => {
     menu._setOpened(true);
     await oneEvent(overlay, 'vaadin-overlay-open');
-    await nextRender(overlay);
+    await nextRender();
 
     const listBox = overlay.querySelector('#menu');
     click(listBox.items[0]);
@@ -37,7 +36,7 @@ describe('selection', () => {
   it('should close on keyboard selection', async () => {
     menu._setOpened(true);
     await oneEvent(overlay, 'vaadin-overlay-open');
-    await nextRender(overlay);
+    await nextRender();
 
     const spy = sinon.spy();
     menu.addEventListener('opened-changed', spy);
@@ -51,7 +50,7 @@ describe('selection', () => {
   it('should focus the child element', async () => {
     menu._setOpened(true);
     await oneEvent(overlay, 'vaadin-overlay-open');
-    await nextRender(overlay);
+    await nextRender();
 
     const item = overlay.querySelector('#menu vaadin-item');
     expect(document.activeElement).to.eql(item);
@@ -60,7 +59,7 @@ describe('selection', () => {
   (isIOS ? it.skip : it)('should focus the child element on `contextmenu` event', async () => {
     fire(menu, 'contextmenu');
     await oneEvent(overlay, 'vaadin-overlay-open');
-    await nextRender(overlay);
+    await nextRender();
 
     const item = overlay.querySelector('#menu vaadin-item');
     expect(document.activeElement).to.eql(item);

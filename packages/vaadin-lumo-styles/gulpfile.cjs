@@ -142,7 +142,7 @@ Iconset.register('lumo', 1000, template);\n`;
           // Store for later use
           glyphs = glyphData;
         })
-        .pipe(gulp.dest('.'))
+        .pipe(gulp.dest('.', { encoding: false }))
         .on('finish', () => {
           // Generate base64 version of the font
           const lumoIconsWoff = fs.readFileSync('lumo-icons.woff');

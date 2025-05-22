@@ -3,11 +3,11 @@ import { dashboardLayoutStyles } from './vaadin-dashboard-layout-styles.js';
 
 const dashboard = css`
   :host {
-    --_vaadin-dashboard-widget-opacity: 1;
+    --_widget-opacity: 1;
   }
 
   :host([item-selected]) {
-    --_vaadin-dashboard-widget-opacity: 0.7;
+    --_widget-opacity: 0.7;
   }
 `;
 

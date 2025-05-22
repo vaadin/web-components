@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { aTimeout, fixtureSync, nextResize } from '@vaadin/testing-helpers';
-import '../vaadin-board.js';
+import '../src/vaadin-board.js';
 import { allResized } from './helpers.js';
 
 describe('redraw', () => {

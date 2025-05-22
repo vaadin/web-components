@@ -1,9 +1,7 @@
 import { expect } from '@vaadin/chai-plugins';
-import { sendKeys } from '@vaadin/test-runner-commands';
-import { aTimeout, fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-date-time-picker.js';
-import { waitForOverlayRender } from '@vaadin/date-picker/test/helpers.js';
 
 class DateTimePicker2020Element extends customElements.get('vaadin-date-time-picker') {
   checkValidity() {
@@ -25,14 +23,12 @@ const fixtures = {
 
 ['default', 'slotted'].forEach((set) => {
   describe(`Validation (${set})`, () => {
-    let dateTimePicker, validateSpy, changeSpy, datePicker, timePicker;
+    let dateTimePicker, validateSpy, datePicker, timePicker;
 
     beforeEach(async () => {
       dateTimePicker = fixtureSync(fixtures[set]);
       await nextRender();
       validateSpy = sinon.spy(dateTimePicker, 'validate');
-      changeSpy = sinon.spy();
-      dateTimePicker.addEventListener('change', changeSpy);
       datePicker = dateTimePicker.querySelector('[slot=date-picker]');
       timePicker = dateTimePicker.querySelector('[slot=time-picker]');
     });
@@ -58,60 +54,6 @@ const fixtures = {
       dateTimePicker.value = '2020-02-02T02:02:00';
       expect(dateTimePicker.validate()).to.equal(true);
       expect(dateTimePicker.invalid).to.equal(false);
-    });
-
-    it('should validate on date-picker blur', () => {
-      datePicker.focus();
-      datePicker.blur();
-      expect(validateSpy.calledOnce).to.be.true;
-    });
-
-    it('should validate on time-picker blur', () => {
-      timePicker.focus();
-      timePicker.blur();
-      expect(validateSpy.calledOnce).to.be.true;
-    });
-
-    it('should validate before change event on date-picker change', async () => {
-      timePicker.value = '12:00';
-      datePicker.focus();
-      await sendKeys({ type: '1/1/2023' });
-      await sendKeys({ press: 'Enter' });
-      await nextRender();
-      expect(changeSpy.calledOnce).to.be.true;
-      expect(validateSpy.calledOnce).to.be.true;
-      expect(validateSpy.calledBefore(changeSpy)).to.be.true;
-    });
-
-    it('should validate before change event on time-picker change', async () => {
-      datePicker.value = '2023-01-01';
-      timePicker.focus();
-      await sendKeys({ type: '12:00' });
-      await sendKeys({ press: 'Enter' });
-      expect(changeSpy.calledOnce).to.be.true;
-      expect(validateSpy.calledOnce).to.be.true;
-      expect(validateSpy.calledBefore(changeSpy)).to.be.true;
-    });
-
-    it('should not validate when moving focus between pickers', async () => {
-      datePicker.focus();
-      // Move focus to time-picker
-      await sendKeys({ press: 'Tab' });
-
-      // Wait to reduce flakiness
-      await aTimeout(1);
-
-      // Move focus to date-picker
-      await sendKeys({ press: 'Shift+Tab' });
-      expect(validateSpy.called).to.be.false;
-    });
-
-    it('should not validate when moving focus to the date-picker dropdown', async () => {
-      datePicker.focus();
-      await sendKeys({ press: 'ArrowDown' });
-      await waitForOverlayRender();
-      await sendKeys({ press: 'Tab' });
-      expect(validateSpy.called).to.be.false;
     });
 
     it('should not validate on min change without value', () => {

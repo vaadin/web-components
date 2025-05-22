@@ -2,10 +2,9 @@ import { expect } from '@vaadin/chai-plugins';
 import { sendKeys } from '@vaadin/test-runner-commands';
 import { fixtureSync, nextRender, outsideClick, tap } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import './not-animated-styles.js';
-import '../vaadin-date-picker.js';
+import '../src/vaadin-date-picker.js';
 import { getDeepActiveElement } from '@vaadin/a11y-base/src/focus-utils.js';
-import { waitForOverlayRender, waitForScrollToFinish } from './helpers.js';
+import { untilOverlayRendered, untilOverlayScrolled } from './helpers.js';
 
 describe('value commit', () => {
   let datePicker, valueChangedSpy, validateSpy, changeSpy, unparsableChangeSpy, todayDate, yesterdayDate;
@@ -81,14 +80,14 @@ describe('value commit', () => {
 
     it('should not commit but validate on close with outside click', async () => {
       datePicker.click();
-      await waitForOverlayRender();
+      await untilOverlayRendered(datePicker);
       outsideClick();
       expectValidationOnly();
     });
 
     it('should not commit on close with Escape', async () => {
       datePicker.click();
-      await waitForOverlayRender();
+      await untilOverlayRendered(datePicker);
       await sendKeys({ press: 'Escape' });
       expectNoValueCommit();
     });
@@ -97,7 +96,7 @@ describe('value commit', () => {
   describe('parsable input entered', () => {
     beforeEach(async () => {
       await sendKeys({ type: '1/1/2001' });
-      await waitForOverlayRender();
+      await untilOverlayRendered(datePicker);
     });
 
     it('should commit on Enter', async () => {
@@ -121,7 +120,7 @@ describe('value commit', () => {
     beforeEach(async () => {
       await sendKeys({ type: '1/1/2001' });
       await sendKeys({ press: 'Enter' });
-      await waitForOverlayRender();
+      await untilOverlayRendered(datePicker);
       valueChangedSpy.resetHistory();
       validateSpy.resetHistory();
       changeSpy.resetHistory();
@@ -150,7 +149,7 @@ describe('value commit', () => {
 
       it('should revert on close with Escape', async () => {
         await sendKeys({ press: 'ArrowDown' });
-        await waitForOverlayRender();
+        await untilOverlayRendered(datePicker);
         await sendKeys({ press: 'Escape' });
         expectNoValueCommit();
       });
@@ -178,7 +177,7 @@ describe('value commit', () => {
   describe('unparsable input entered', () => {
     beforeEach(async () => {
       await sendKeys({ type: 'foo' });
-      await waitForOverlayRender();
+      await untilOverlayRendered(datePicker);
     });
 
     it('should commit as unparsable value change on Enter', async () => {
@@ -204,7 +203,7 @@ describe('value commit', () => {
     beforeEach(async () => {
       await sendKeys({ type: 'foo' });
       await sendKeys({ press: 'Enter' });
-      await waitForOverlayRender();
+      await untilOverlayRendered(datePicker);
       validateSpy.resetHistory();
       unparsableChangeSpy.resetHistory();
     });
@@ -229,7 +228,7 @@ describe('value commit', () => {
     describe('unparsable input changed', () => {
       beforeEach(async () => {
         await sendKeys({ type: 'bar' });
-        await waitForOverlayRender();
+        await untilOverlayRendered(datePicker);
       });
 
       it('should commit as unparsable value change on Enter', async () => {
@@ -254,10 +253,10 @@ describe('value commit', () => {
     beforeEach(async () => {
       // Open the dropdown.
       await sendKeys({ press: 'ArrowDown' });
-      await waitForOverlayRender();
+      await untilOverlayRendered(datePicker);
       // Focus yesterday's date.
       await sendKeys({ press: 'ArrowLeft' });
-      await waitForScrollToFinish(datePicker);
+      await untilOverlayScrolled(datePicker);
     });
 
     it('should commit on focused date selection with click', () => {
@@ -291,7 +290,7 @@ describe('value commit', () => {
     beforeEach(async () => {
       // Open the dropdown.
       await sendKeys({ press: 'ArrowDown' });
-      await waitForOverlayRender();
+      await untilOverlayRendered(datePicker);
       // Select today's date.
       await sendKeys({ press: 'Space' });
       valueChangedSpy.resetHistory();
@@ -317,7 +316,7 @@ describe('value commit', () => {
       beforeEach(async () => {
         // Focus yesterday's date.
         await sendKeys({ press: 'ArrowLeft' });
-        await waitForScrollToFinish(datePicker);
+        await untilOverlayScrolled(datePicker);
       });
 
       it('should commit on focused date selection with click', () => {
@@ -366,14 +365,14 @@ describe('value commit', () => {
 
       it('should not commit on close with outside click', async () => {
         datePicker.click();
-        await waitForOverlayRender();
+        await untilOverlayRendered(datePicker);
         outsideClick();
         expectNoValueCommit();
       });
 
       it('should not commit on close with Escape', async () => {
         datePicker.click();
-        await waitForOverlayRender();
+        await untilOverlayRendered(datePicker);
         await sendKeys({ press: 'Escape' });
         expectNoValueCommit();
       });
@@ -383,7 +382,7 @@ describe('value commit', () => {
       beforeEach(async () => {
         datePicker.inputElement.select();
         await sendKeys({ type: '1/1/2001' });
-        await waitForOverlayRender();
+        await untilOverlayRendered(datePicker);
       });
 
       it('should commit on Enter', async () => {
@@ -407,7 +406,7 @@ describe('value commit', () => {
       beforeEach(async () => {
         datePicker.inputElement.select();
         await sendKeys({ type: 'foo' });
-        await waitForOverlayRender();
+        await untilOverlayRendered(datePicker);
       });
 
       it('should commit an empty value on Enter', async () => {

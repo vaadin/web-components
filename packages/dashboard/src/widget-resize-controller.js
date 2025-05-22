@@ -111,8 +111,8 @@ export class WidgetResizeController {
     }
 
     const itemWrapper = this.__getItemWrapper(this.resizedItem);
-    itemWrapper.style.removeProperty('--_vaadin-dashboard-widget-resizer-width');
-    itemWrapper.style.removeProperty('--_vaadin-dashboard-widget-resizer-height');
+    itemWrapper.style.removeProperty('--_widget-resizer-width');
+    itemWrapper.style.removeProperty('--_widget-resizer-height');
     if (itemWrapper.firstElementChild) {
       itemWrapper.firstElementChild.toggleAttribute('resizing', false);
     }
@@ -157,7 +157,7 @@ export class WidgetResizeController {
     }
 
     const gridStyle = getComputedStyle(this.host.$.grid);
-    if (rowspanDelta && gridStyle.getPropertyValue('--_vaadin-dashboard-row-min-height') === 'auto') {
+    if (rowspanDelta && gridStyle.getPropertyValue('--_row-min-height') === 'auto') {
       // Do not resize vertically if the min row height is not set
       return;
     }
@@ -182,8 +182,8 @@ export class WidgetResizeController {
   /** @private */
   __updateWidgetStyles() {
     const itemWrapper = this.__getItemWrapper(this.resizedItem);
-    itemWrapper.style.setProperty('--_vaadin-dashboard-widget-resizer-width', `${this.__resizeWidth}px`);
-    itemWrapper.style.setProperty('--_vaadin-dashboard-widget-resizer-height', `${this.__resizeHeight}px`);
+    itemWrapper.style.setProperty('--_widget-resizer-width', `${this.__resizeWidth}px`);
+    itemWrapper.style.setProperty('--_widget-resizer-height', `${this.__resizeHeight}px`);
     if (itemWrapper.firstElementChild) {
       itemWrapper.firstElementChild.toggleAttribute('resizing', true);
     }

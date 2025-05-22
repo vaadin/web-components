@@ -1,6 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
-import './not-animated-styles.js';
 import '../src/vaadin-date-picker.js';
 import { activateScroller, getDefaultI18n, open } from './helpers.js';
 
@@ -23,7 +22,7 @@ describe('WAI-ARIA', () => {
 
     it('should set aria-hidden on all calendars except focusable one', async () => {
       await open(datePicker);
-      await nextRender(datePicker);
+      await nextRender();
       const calendars = datePicker._overlayContent.querySelectorAll('vaadin-month-calendar');
       calendars.forEach((calendar) => {
         const focusable = calendar.shadowRoot.querySelector('[tabindex="0"]');

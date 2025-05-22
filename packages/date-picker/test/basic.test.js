@@ -4,7 +4,7 @@ import { click, fixtureSync, keyboardEventFor, nextRender, oneEvent, tap } from 
 import sinon from 'sinon';
 import '../src/vaadin-date-picker.js';
 import { parseDate } from '../src/vaadin-date-picker-helper.js';
-import { open, touchTap, waitForOverlayRender } from './helpers.js';
+import { open, touchTap, untilOverlayRendered } from './helpers.js';
 
 describe('basic features', () => {
   let datePicker, input, overlay;
@@ -44,14 +44,14 @@ describe('basic features', () => {
   it('should keep focused attribute when focus moves to overlay', async () => {
     datePicker.focus();
     await sendKeys({ press: 'ArrowDown' });
-    await waitForOverlayRender();
+    await untilOverlayRendered(datePicker);
     expect(datePicker.hasAttribute('focused')).to.be.true;
   });
 
   it('should have focused attribute when closed and focused', async () => {
     datePicker.focus();
     await sendKeys({ press: 'ArrowDown' });
-    await waitForOverlayRender();
+    await untilOverlayRendered(datePicker);
     await sendKeys({ press: 'Escape' });
     expect(datePicker.hasAttribute('focused')).to.be.true;
   });
@@ -470,7 +470,7 @@ describe('required', () => {
 
   it('should focus on required indicator click', async () => {
     datePicker.shadowRoot.querySelector('[part="required-indicator"]').click();
-    await waitForOverlayRender();
+    await untilOverlayRendered(datePicker);
     expect(datePicker.hasAttribute('focused')).to.be.true;
   });
 });

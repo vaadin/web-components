@@ -2,8 +2,7 @@ import { expect } from '@vaadin/chai-plugins';
 import { resetMouse, sendKeys, sendMouse } from '@vaadin/test-runner-commands';
 import { fixtureSync, keyboardEventFor, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import './not-animated-styles.js';
-import '../vaadin-multi-select-combo-box.js';
+import '../src/vaadin-multi-select-combo-box.js';
 import { getAllItems, getDataProvider, getFirstItem } from './helpers.js';
 
 describe('selecting items', () => {
@@ -302,12 +301,21 @@ describe('selecting items', () => {
       beforeEach(() => {
         comboBox.itemIdPath = 'id';
         comboBox.items = items;
-        comboBox.selectedItems = items.slice(1, 3);
       });
 
       it('should show selected items at the top of the overlay', () => {
+        comboBox.selectedItems = items.slice(1, 3);
         comboBox.opened = true;
         expectItems(['banana', 'lemon', 'apple', 'orange', 'pear']);
+      });
+
+      it('should synchronize selected item state when overlay is opened', async () => {
+        comboBox.selectedItems = [{ id: '1', label: 'banana' }];
+        comboBox.opened = true;
+        const itemReference = getFirstItem(comboBox).item;
+        comboBox.selectedItems = [{ id: '1', label: 'banana' }];
+        await nextRender();
+        expect(getFirstItem(comboBox).item).to.not.equal(itemReference);
       });
     });
 

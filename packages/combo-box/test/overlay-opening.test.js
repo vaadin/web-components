@@ -1,7 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { arrowDownKeyDown, arrowUpKeyDown, click, fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
-import './not-animated-styles.js';
-import '../vaadin-combo-box.js';
+import '../src/vaadin-combo-box.js';
 import { setInputValue } from './helpers.js';
 
 describe('overlay opening', () => {

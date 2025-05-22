@@ -50,29 +50,6 @@ Once installed, import the component in your application:
 import '@vaadin/context-menu';
 ```
 
-## Themes
-
-Vaadin components come with two built-in [themes](https://vaadin.com/docs/latest/styling), Lumo and Material.
-The [main entrypoint](https://github.com/vaadin/web-components/blob/main/packages/context-menu/vaadin-context-menu.js) of the package uses the Lumo theme.
-
-To use the Material theme, import the component from the `theme/material` folder:
-
-```js
-import '@vaadin/context-menu/theme/material/vaadin-context-menu.js';
-```
-
-You can also import the Lumo version of the component explicitly:
-
-```js
-import '@vaadin/context-menu/theme/lumo/vaadin-context-menu.js';
-```
-
-Finally, you can import the un-themed component from the `src` folder to get a minimal starting point:
-
-```js
-import '@vaadin/context-menu/src/vaadin-context-menu.js';
-```
-
 ## License
 
 Apache License 2.0

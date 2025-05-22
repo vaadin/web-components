@@ -2,7 +2,6 @@ import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../all-imports.js';
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import {
   attributeRenderer,
   flushGrid,
@@ -14,34 +13,38 @@ import {
   scrollToEnd,
 } from './helpers.js';
 
-class GridWrapper extends PolymerElement {
-  static get template() {
-    return html`
+class GridWrapper extends HTMLElement {
+  constructor() {
+    super();
+
+    this.attachShadow({ mode: 'open' });
+
+    this.shadowRoot.innerHTML = `
       <vaadin-grid id="grid" size="10">
         <slot name="grid"></slot>
-        <vaadin-grid-column-group header="wrapper group header" footerRenderer="[[groupFooterRenderer]]">
+        <vaadin-grid-column-group header="wrapper group header">
           <slot name="group"></slot>
 
           <vaadin-grid-column
             header="wrapper column header"
-            footerRenderer="[[columnFooterRenderer]]"
-            renderer="[[columnRenderer]]"
           ></vaadin-grid-column>
         </vaadin-grid-column-group>
       </vaadin-grid>
     `;
-  }
 
-  groupFooterRenderer(root) {
-    root.textContent = 'wrapper group footer';
-  }
+    const group = this.shadowRoot.querySelector('vaadin-grid-column-group');
+    group.footerRenderer = (root) => {
+      root.textContent = 'wrapper group footer';
+    };
 
-  columnFooterRenderer(root, _column) {
-    root.textContent = 'wrapper column footer';
-  }
+    const column = group.querySelector('vaadin-grid-column');
+    column.footerRenderer = (root) => {
+      root.textContent = 'wrapper column footer';
+    };
 
-  columnRenderer(root, _column, model) {
-    root.textContent = `wrapper column body${model.item.value}`;
+    column.renderer = (root, _column, model) => {
+      root.textContent = `wrapper column body${model.item.value}`;
+    };
   }
 }
 
@@ -339,7 +342,7 @@ describe('light dom observing', () => {
               column.footerRenderer = attributeRenderer('footer');
             });
 
-            grid = wrapper.$.grid;
+            grid = wrapper.shadowRoot.querySelector('vaadin-grid');
 
             grid.dataProvider = infiniteDataProvider;
           });
@@ -402,7 +405,7 @@ describe('light dom observing', () => {
               group.footerRenderer = attributeRenderer('footer');
             });
 
-            grid = wrapper.$.grid;
+            grid = wrapper.shadowRoot.querySelector('vaadin-grid');
 
             grid.dataProvider = infiniteDataProvider;
 

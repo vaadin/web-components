@@ -13,7 +13,7 @@ import {
 import sinon from 'sinon';
 import './not-animated-styles.js';
 import { getDeepActiveElement } from '@vaadin/a11y-base/src/focus-utils.js';
-import { Popover } from '../vaadin-popover.js';
+import { Popover } from '../src/vaadin-popover.js';
 import { mouseenter, mouseleave } from './helpers.js';
 
 describe('a11y', () => {
@@ -87,19 +87,19 @@ describe('a11y', () => {
 
         it(`should set aria-expanded attribute on the ${prop} when opened`, async () => {
           popover.opened = true;
-          await nextRender();
+          await oneEvent(overlay, 'vaadin-overlay-open');
           expect(element.getAttribute('aria-expanded')).to.equal('true');
         });
 
         it(`should set aria-controls attribute on the ${prop} when opened`, async () => {
           popover.opened = true;
-          await nextRender();
+          await oneEvent(overlay, 'vaadin-overlay-open');
           expect(element.getAttribute('aria-controls')).to.equal(overlay.id);
         });
 
         it(`should remove aria-controls attribute from the ${prop} when closed`, async () => {
           popover.opened = true;
-          await nextRender();
+          await oneEvent(overlay, 'vaadin-overlay-open');
 
           popover.opened = false;
           await nextUpdate(popover);
@@ -114,7 +114,7 @@ describe('a11y', () => {
 
         it(`should remove aria-controls attribute from ${prop} when target is cleared`, async () => {
           popover.opened = true;
-          await nextRender();
+          await oneEvent(overlay, 'vaadin-overlay-open');
 
           popover.target = null;
           await nextUpdate(popover);
@@ -198,7 +198,7 @@ describe('a11y', () => {
         await nextUpdate(popover);
 
         target.focus();
-        await nextRender();
+        await oneEvent(overlay, 'vaadin-overlay-open');
       });
 
       it('should restore focus on Esc with trigger set to focus', async () => {
@@ -256,7 +256,7 @@ describe('a11y', () => {
         await nextUpdate(popover);
 
         target.click();
-        await nextRender();
+        await oneEvent(overlay, 'vaadin-overlay-open');
       });
 
       it('should restore focus on Esc with trigger set to click', async () => {
@@ -296,7 +296,7 @@ describe('a11y', () => {
 
       it('should not restore focus on Esc with trigger set to hover', async () => {
         mouseenter(target);
-        await nextRender();
+        await oneEvent(overlay, 'vaadin-overlay-open');
 
         const focusSpy = sinon.spy(target, 'focus');
         overlay.$.overlay.focus();
@@ -311,7 +311,7 @@ describe('a11y', () => {
         await nextUpdate(popover);
 
         mouseenter(target);
-        await nextRender();
+        await oneEvent(overlay, 'vaadin-overlay-open');
 
         expect(target.style.pointerEvents).to.equal('auto');
       });
@@ -321,7 +321,7 @@ describe('a11y', () => {
         await nextUpdate(popover);
 
         mouseenter(target);
-        await nextRender();
+        await oneEvent(overlay, 'vaadin-overlay-open');
 
         mouseleave(target);
         await nextRender();
@@ -336,7 +336,7 @@ describe('a11y', () => {
         await nextUpdate(popover);
 
         target.focus();
-        await nextRender();
+        await oneEvent(overlay, 'vaadin-overlay-open');
       });
 
       it('should not restore focus when re-opening on hover after being restored', async () => {
@@ -388,7 +388,7 @@ describe('a11y', () => {
 
             popover.target = wrapper;
           }
-          await nextRender();
+          await oneEvent(overlay, 'vaadin-overlay-open');
         });
 
         it('should focus the overlay content part on target Tab', async () => {
@@ -460,7 +460,7 @@ describe('a11y', () => {
           await nextUpdate(popover);
 
           target.focus();
-          await nextRender();
+          await oneEvent(overlay, 'vaadin-overlay-open');
 
           // Move focus back from the target
           await sendKeys({ press: 'Shift+Tab' });

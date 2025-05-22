@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-lumo-styles",
-  "version": "24.8.0-alpha11",
+  "version": "25.0.0-alpha1",
   "publishConfig": {
     "access": "public"
   },
@@ -36,18 +36,16 @@
     "lumo",
     "design-system",
     "web-components",
-    "web-component",
-    "polymer"
+    "web-component"
   ],
   "dependencies": {
-    "@polymer/polymer": "^3.0.0",
-    "@vaadin/component-base": "24.8.0-alpha11",
-    "@vaadin/icon": "24.8.0-alpha11",
-    "@vaadin/vaadin-themable-mixin": "24.8.0-alpha11"
+    "@vaadin/component-base": "25.0.0-alpha1",
+    "@vaadin/icon": "25.0.0-alpha1",
+    "@vaadin/vaadin-themable-mixin": "25.0.0-alpha1"
   },
   "devDependencies": {
-    "gulp": "^4.0.2",
-    "gulp-cli": "^2.3.0",
+    "gulp": "^5.0.0",
+    "gulp-cli": "^3.0.0",
     "gulp-iconfont": "^11.0.0",
     "gulp-sort": "^2.0.0",
     "gulp-svgmin": "^4.1.0"

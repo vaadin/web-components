@@ -4,9 +4,10 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import './vaadin-message.js';
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { css, html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { MessageListMixin } from './vaadin-message-list-mixin.js';
 
@@ -49,23 +50,27 @@ import { MessageListMixin } from './vaadin-message-list-mixin.js';
  * @mixes ElementMixin
  * @mixes MessageListMixin
  */
-class MessageList extends MessageListMixin(ElementMixin(ThemableMixin(PolymerElement))) {
+class MessageList extends MessageListMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElement)))) {
   static get is() {
     return 'vaadin-message-list';
   }
 
-  static get template() {
-    return html`
-      <style>
-        :host {
-          display: block;
-          overflow: auto;
-        }
+  static get styles() {
+    return css`
+      :host {
+        display: block;
+        overflow: auto;
+      }
 
-        :host([hidden]) {
-          display: none !important;
-        }
-      </style>
+      :host([hidden]) {
+        display: none !important;
+      }
+    `;
+  }
+
+  /** @protected */
+  render() {
+    return html`
       <div part="list" role="list">
         <slot></slot>
       </div>

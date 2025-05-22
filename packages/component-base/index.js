@@ -1,4 +1,3 @@
-export { ControllerMixin } from './src/controller-mixin.js';
 export { DelegateStateMixin } from './src/delegate-state-mixin.js';
 export { DirMixin } from './src/dir-mixin.js';
 export { ElementMixin } from './src/element-mixin.js';

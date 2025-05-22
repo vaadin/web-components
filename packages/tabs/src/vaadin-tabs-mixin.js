@@ -3,7 +3,6 @@
  * Copyright (c) 2017 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import { ListMixin } from '@vaadin/a11y-base/src/list-mixin.js';
 import { getNormalizedScrollLeft } from '@vaadin/component-base/src/dir-utils.js';
 import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
@@ -34,6 +33,7 @@ export const TabsMixin = (superClass) =>
         selected: {
           value: 0,
           type: Number,
+          reflectToAttribute: true,
         },
       };
     }
@@ -79,11 +79,6 @@ export const TabsMixin = (superClass) =>
       this._scrollerElement.addEventListener('scroll', () => this._updateOverflow());
 
       this.setAttribute('role', 'tablist');
-
-      // Wait for the vaadin-tab elements to upgrade and get styled
-      afterNextRender(this, () => {
-        this._updateOverflow();
-      });
     }
 
     /**

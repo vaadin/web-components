@@ -1,8 +1,8 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
-import { ComboBox } from '@vaadin/combo-box';
-import { ContextMenu } from '@vaadin/context-menu';
-import { MenuBar } from '@vaadin/menu-bar';
+import { ComboBox } from '@vaadin/combo-box/src/vaadin-combo-box.js';
+import { ContextMenu } from '@vaadin/context-menu/src/vaadin-context-menu.js';
+import { MenuBar } from '@vaadin/menu-bar/src/vaadin-menu-bar.js';
 
 [
   { tagName: ComboBox.is },

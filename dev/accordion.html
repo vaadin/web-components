@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -9,7 +9,6 @@
 
     <script type="module">
       import '@vaadin/accordion';
-      // import '@vaadin/accordion/theme/material/vaadin-accordion.js';
     </script>
   </head>
 
@@ -25,6 +24,9 @@
       </vaadin-accordion-panel>
       <vaadin-accordion-panel summary="Panel 3">
         <div>Panel 3 content</div>
+      </vaadin-accordion-panel>
+      <vaadin-accordion-panel summary="Panel 4 (disabled)" disabled>
+        <div>Panel 4 content</div>
       </vaadin-accordion-panel>
     </vaadin-accordion>
   </body>

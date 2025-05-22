@@ -28,12 +28,11 @@ import 'highcharts/es-modules/masters/modules/xrange.src.js';
 import 'highcharts/es-modules/masters/modules/bullet.src.js';
 import 'highcharts/es-modules/masters/modules/gantt.src.js';
 import 'highcharts/es-modules/masters/modules/draggable-points.src.js';
-import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
-import { beforeNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import Pointer from 'highcharts/es-modules/Core/Pointer.js';
 import Highcharts from 'highcharts/es-modules/masters/highstock.src.js';
 import { get } from '@vaadin/component-base/src/path-utils.js';
 import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
+import { SlotObserver } from '@vaadin/component-base/src/slot-observer.js';
 import { deepMerge, inflateFunctions } from './helpers.js';
 
 ['exportChart', 'exportChartLocal', 'getSVG'].forEach((methodName) => {
@@ -757,7 +756,7 @@ export const ChartMixin = (superClass) =>
     connectedCallback() {
       super.connectedCallback();
       this.__updateStyles();
-      beforeNextRender(this, () => {
+      queueMicrotask(() => {
         // Detect if the chart had already been initialized. This might happen in
         // environments where the chart is lazily attached (e.g Grid).
         if (this.configuration) {
@@ -807,7 +806,7 @@ export const ChartMixin = (superClass) =>
 
     /** @private */
     __addChildObserver() {
-      this._childObserver = new FlattenedNodesObserver(this.$.slot, (info) => {
+      this._childObserver = new SlotObserver(this.$.slot, (info) => {
         this.__addSeries(info.addedNodes.filter(this.__filterSeriesNodes));
         this.__removeSeries(info.removedNodes.filter(this.__filterSeriesNodes));
         this.__cleanupAfterSeriesRemoved(info.removedNodes.filter(this.__filterSeriesNodes));
@@ -1076,7 +1075,7 @@ export const ChartMixin = (superClass) =>
       inflateFunctions(configCopy);
       this._jsonConfigurationBuffer = this.__makeConfigurationBuffer(this._jsonConfigurationBuffer, configCopy);
 
-      beforeNextRender(this, () => {
+      queueMicrotask(() => {
         if (!this.configuration || !this._jsonConfigurationBuffer) {
           return;
         }
@@ -1236,9 +1235,17 @@ export const ChartMixin = (superClass) =>
               if (!self.tempBodyStyle) {
                 let effectiveCss = '';
 
+                // PolymerElement uses `<style>` tags for adding styles
                 [...self.shadowRoot.querySelectorAll('style')].forEach((style) => {
                   effectiveCss += style.textContent;
                 });
+
+                // LitElement uses `adoptedStyleSheets` for adding styles
+                if (self.shadowRoot.adoptedStyleSheets) {
+                  self.shadowRoot.adoptedStyleSheets.forEach((sheet) => {
+                    effectiveCss += [...sheet.cssRules].map((rule) => rule.cssText).join('\n');
+                  });
+                }
 
                 // Strip off host selectors that target individual instances
                 effectiveCss = effectiveCss.replace(/:host\(.+?\)/gu, (match) => {

@@ -85,16 +85,13 @@ class DashboardSection extends DashboardItemMixin(ElementMixin(ThemableMixin(Pol
           display: grid;
           position: relative;
           grid-template-columns: subgrid;
-          --_vaadin-dashboard-section-column: 1 / calc(var(--_vaadin-dashboard-effective-col-count) + 1);
-          grid-column: var(--_vaadin-dashboard-section-column) !important;
-          gap: var(--_vaadin-dashboard-gap, 1rem);
+          --_section-column: 1 / calc(var(--_effective-col-count) + 1);
+          grid-column: var(--_section-column) !important;
+          gap: var(--_gap, 1rem);
           /* Dashboard section header height */
-          --_vaadin-dashboard-section-header-height: minmax(0, auto);
-          grid-template-rows: var(--_vaadin-dashboard-section-header-height) repeat(
-              auto-fill,
-              var(--_vaadin-dashboard-row-height)
-            );
-          grid-auto-rows: var(--_vaadin-dashboard-row-height);
+          --_section-header-height: minmax(0, auto);
+          grid-template-rows: var(--_section-header-height) repeat(auto-fill, var(--_row-height));
+          grid-auto-rows: var(--_row-height);
         }
 
         :host([hidden]) {
@@ -102,19 +99,16 @@ class DashboardSection extends DashboardItemMixin(ElementMixin(ThemableMixin(Pol
         }
 
         ::slotted(*) {
-          --_vaadin-dashboard-item-column: span
-            min(
-              var(--vaadin-dashboard-item-colspan, 1),
-              var(--_vaadin-dashboard-effective-col-count, var(--_vaadin-dashboard-col-count))
-            );
+          --_item-column: span
+            min(var(--vaadin-dashboard-widget-colspan, 1), var(--_effective-col-count, var(--_col-count)));
 
-          grid-column: var(--_vaadin-dashboard-item-column);
-          --_vaadin-dashboard-item-row: span var(--vaadin-dashboard-item-rowspan, 1);
-          grid-row: var(--_vaadin-dashboard-item-row);
+          grid-column: var(--_item-column);
+          --_item-row: span var(--vaadin-dashboard-widget-rowspan, 1);
+          grid-row: var(--_item-row);
         }
 
         header {
-          grid-column: var(--_vaadin-dashboard-section-column);
+          grid-column: var(--_section-column);
         }
 
         :host::before {

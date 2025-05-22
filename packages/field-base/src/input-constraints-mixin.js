@@ -3,7 +3,7 @@
  * Copyright (c) 2021 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { dedupingMixin } from '@polymer/polymer/lib/utils/mixin.js';
+import { dedupeMixin } from '@open-wc/dedupe-mixin';
 import { DelegateStateMixin } from '@vaadin/component-base/src/delegate-state-mixin.js';
 import { InputMixin } from './input-mixin.js';
 import { ValidateMixin } from './validate-mixin.js';
@@ -16,7 +16,7 @@ import { ValidateMixin } from './validate-mixin.js';
  * @mixes InputMixin
  * @mixes ValidateMixin
  */
-export const InputConstraintsMixin = dedupingMixin(
+export const InputConstraintsMixin = dedupeMixin(
   (superclass) =>
     class InputConstraintsMixinClass extends DelegateStateMixin(ValidateMixin(InputMixin(superclass))) {
       /**

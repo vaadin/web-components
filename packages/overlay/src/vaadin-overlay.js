@@ -3,15 +3,13 @@
  * Copyright (c) 2017 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
-import { processTemplates } from '@vaadin/component-base/src/templates.js';
-import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
+import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { OverlayMixin } from './vaadin-overlay-mixin.js';
 import { overlayStyles } from './vaadin-overlay-styles.js';
-
-registerStyles('vaadin-overlay', overlayStyles, { moduleId: 'vaadin-overlay-styles' });
 
 /**
  * `<vaadin-overlay>` is a Web Component for creating overlays. The content of the overlay
@@ -78,27 +76,25 @@ registerStyles('vaadin-overlay', overlayStyles, { moduleId: 'vaadin-overlay-styl
  * @mixes DirMixin
  * @mixes OverlayMixin
  */
-class Overlay extends OverlayMixin(ThemableMixin(DirMixin(PolymerElement))) {
-  static get template() {
+class Overlay extends OverlayMixin(DirMixin(ThemableMixin(PolylitMixin(LitElement)))) {
+  static get is() {
+    return 'vaadin-overlay';
+  }
+
+  static get styles() {
+    return overlayStyles;
+  }
+
+  /** @protected */
+  render() {
     return html`
-      <div id="backdrop" part="backdrop" hidden$="[[!withBackdrop]]"></div>
+      <div id="backdrop" part="backdrop" ?hidden="${!this.withBackdrop}"></div>
       <div part="overlay" id="overlay" tabindex="0">
         <div part="content" id="content">
           <slot></slot>
         </div>
       </div>
     `;
-  }
-
-  static get is() {
-    return 'vaadin-overlay';
-  }
-
-  /** @protected */
-  ready() {
-    super.ready();
-
-    processTemplates(this);
   }
 
   /**

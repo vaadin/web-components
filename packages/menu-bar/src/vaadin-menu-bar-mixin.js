@@ -3,14 +3,51 @@
  * Copyright (c) 2019 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { html, noChange, nothing, render } from 'lit';
+import { Directive, directive } from 'lit/directive.js';
+import { ifDefined } from 'lit/directives/if-defined.js';
 import { DisabledMixin } from '@vaadin/a11y-base/src/disabled-mixin.js';
 import { FocusMixin } from '@vaadin/a11y-base/src/focus-mixin.js';
-import { isElementFocused, isElementHidden, isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
+import { isElementFocused, isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
 import { KeyboardDirectionMixin } from '@vaadin/a11y-base/src/keyboard-direction-mixin.js';
-import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { I18nMixin } from '@vaadin/component-base/src/i18n-mixin.js';
 import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
+
+/**
+ * Custom Lit directive for rendering item components
+ * inspired by the `flowComponentDirective` logic.
+ */
+class ItemComponentDirective extends Directive {
+  update(part, [{ component, text }]) {
+    const { parentNode, startNode } = part;
+
+    const newNode = component || (text ? document.createTextNode(text) : null);
+    const oldNode = this.getOldNode(part);
+
+    if (oldNode === newNode) {
+      return noChange;
+    } else if (oldNode && newNode) {
+      parentNode.replaceChild(newNode, oldNode);
+    } else if (oldNode) {
+      parentNode.removeChild(oldNode);
+    } else if (newNode) {
+      startNode.after(newNode);
+    }
+
+    return noChange;
+  }
+
+  getOldNode(part) {
+    const { startNode, endNode } = part;
+    if (startNode.nextSibling === endNode) {
+      return null;
+    }
+    return startNode.nextSibling;
+  }
+}
+
+const componentDirective = directive(ItemComponentDirective);
 
 const DEFAULT_I18N = {
   moreOptions: 'More options',
@@ -18,7 +55,6 @@ const DEFAULT_I18N = {
 
 /**
  * @polymerMixin
- * @mixes ControllerMixin
  * @mixes DisabledMixin
  * @mixes FocusMixin
  * @mixes I18nMixin
@@ -28,7 +64,7 @@ const DEFAULT_I18N = {
 export const MenuBarMixin = (superClass) =>
   class MenuBarMixinClass extends I18nMixin(
     DEFAULT_I18N,
-    KeyboardDirectionMixin(ResizeMixin(FocusMixin(DisabledMixin(ControllerMixin(superClass))))),
+    KeyboardDirectionMixin(ResizeMixin(FocusMixin(DisabledMixin(superClass)))),
   ) {
     static get properties() {
       return {
@@ -112,6 +148,7 @@ export const MenuBarMixin = (superClass) =>
          */
         items: {
           type: Array,
+          sync: true,
           value: () => [],
         },
 
@@ -140,6 +177,7 @@ export const MenuBarMixin = (superClass) =>
          */
         reverseCollapse: {
           type: Boolean,
+          sync: true,
         },
 
         /**
@@ -149,6 +187,7 @@ export const MenuBarMixin = (superClass) =>
          */
         tabNavigation: {
           type: Boolean,
+          sync: true,
         },
 
         /**
@@ -169,6 +208,7 @@ export const MenuBarMixin = (superClass) =>
         /** @protected */
         _container: {
           type: Object,
+          sync: true,
         },
       };
     }
@@ -178,7 +218,7 @@ export const MenuBarMixin = (superClass) =>
         '_themeChanged(_theme, _overflow, _container)',
         '__hasOverflowChanged(_hasOverflow, _overflow)',
         '__i18nChanged(__effectiveI18n, _overflow)',
-        '_menuItemsChanged(items, _overflow, _container)',
+        '__updateButtons(items, disabled, _overflow, _container)',
         '_reverseCollapseChanged(reverseCollapse, _overflow, _container)',
         '_tabNavigationChanged(tabNavigation, _overflow, _container)',
       ];
@@ -236,6 +276,17 @@ export const MenuBarMixin = (superClass) =>
     }
 
     /**
+     * Override getter from `KeyboardDirectionMixin`.
+     *
+     * @return {boolean}
+     * @protected
+     * @override
+     */
+    get _tabNavigation() {
+      return this.tabNavigation;
+    }
+
+    /**
      * Override getter from `ResizeMixin` to observe parent.
      *
      * @protected
@@ -273,8 +324,11 @@ export const MenuBarMixin = (superClass) =>
           dots.innerHTML = '&centerdot;'.repeat(3);
           btn.appendChild(dots);
 
+          btn.setAttribute('aria-haspopup', 'true');
+          btn.setAttribute('aria-expanded', 'false');
+          btn.setAttribute('role', this.tabNavigation ? 'button' : 'menuitem');
+
           this._overflow = btn;
-          this._initButtonAttrs(btn);
         },
       });
       this.addController(this._overflowController);
@@ -330,23 +384,6 @@ export const MenuBarMixin = (superClass) =>
     }
 
     /**
-     * Override method inherited from `DisabledMixin`
-     * to update the `disabled` property for the buttons
-     * whenever the property changes on the menu bar.
-     *
-     * @param {boolean} newValue the new disabled value
-     * @param {boolean} oldValue the previous disabled value
-     * @override
-     * @protected
-     */
-    _disabledChanged(newValue, oldValue) {
-      super._disabledChanged(newValue, oldValue);
-      if (oldValue !== newValue) {
-        this.__updateButtonsDisabled(newValue);
-      }
-    }
-
-    /**
      * A callback for the `_theme` property observer.
      * It propagates the host theme to the buttons and the sub menu.
      *
@@ -355,14 +392,16 @@ export const MenuBarMixin = (superClass) =>
      */
     _themeChanged(theme, overflow, container) {
       if (overflow && container) {
-        this._buttons.forEach((btn) => this._setButtonTheme(btn, theme));
+        this.__renderButtons(this.items);
         this.__detectOverflow();
-      }
 
-      if (theme) {
-        this._subMenu.setAttribute('theme', theme);
-      } else {
-        this._subMenu.removeAttribute('theme');
+        if (theme) {
+          overflow.setAttribute('theme', theme);
+          this._subMenu.setAttribute('theme', theme);
+        } else {
+          overflow.removeAttribute('theme');
+          this._subMenu.removeAttribute('theme');
+        }
       }
     }
 
@@ -402,7 +441,7 @@ export const MenuBarMixin = (superClass) =>
     }
 
     /** @private */
-    _menuItemsChanged(items, overflow, container) {
+    __updateButtons(items, disabled, overflow, container) {
       if (!overflow || !container) {
         return;
       }
@@ -410,11 +449,24 @@ export const MenuBarMixin = (superClass) =>
       if (items !== this._oldItems) {
         this._oldItems = items;
         this.__renderButtons(items);
+        this.__detectOverflow();
+      }
+
+      if (disabled !== this._oldDisabled) {
+        this._oldDisabled = disabled;
+        this.__renderButtons(items);
+        overflow.toggleAttribute('disabled', disabled);
       }
 
       const subMenu = this._subMenu;
       if (subMenu && subMenu.opened) {
-        subMenu.close();
+        const button = subMenu._overlayElement.positionTarget;
+
+        // Close sub-menu if the corresponding button is no longer in the DOM,
+        // or if the item on it has been changed to no longer have children.
+        if (!button.isConnected || !Array.isArray(button.item.children) || button.item.children.length === 0) {
+          subMenu.close();
+        }
       }
     }
 
@@ -438,9 +490,9 @@ export const MenuBarMixin = (superClass) =>
     /** @private */
     __restoreButtons(buttons) {
       buttons.forEach((button) => {
-        button.disabled = (button.item && button.item.disabled) || this.disabled;
         button.style.visibility = '';
         button.style.position = '';
+        button.style.width = '';
 
         // Teleport item component back from "overflow" sub-menu
         const item = button.item && button.item.component;
@@ -458,14 +510,6 @@ export const MenuBarMixin = (superClass) =>
       item.removeAttribute('aria-expanded');
       item.removeAttribute('aria-haspopup');
       item.removeAttribute('tabindex');
-    }
-
-    /** @private */
-    __updateButtonsDisabled(disabled) {
-      this._buttons.forEach((btn) => {
-        // Disable the button if the entire menu-bar is disabled or the item alone is disabled
-        btn.disabled = disabled || (btn.item && btn.item.disabled);
-      });
     }
 
     /** @private */
@@ -501,7 +545,6 @@ export const MenuBarMixin = (superClass) =>
 
           // Save width for buttons with component
           btn.style.width = getComputedStyle(btn).width;
-          btn.disabled = true;
           btn.style.visibility = 'hidden';
           btn.style.position = 'absolute';
         }
@@ -550,66 +593,17 @@ export const MenuBarMixin = (superClass) =>
         });
     }
 
-    /** @protected */
-    _removeButtons() {
-      this._buttons.forEach((button) => {
-        if (button !== this._overflow) {
-          this.removeChild(button);
-        }
-      });
-    }
-
-    /** @protected */
-    _initButton(item) {
-      const button = document.createElement('vaadin-menu-bar-button');
-
-      const itemCopy = { ...item };
-      button.item = itemCopy;
-
-      if (item.component) {
-        const component = this.__getComponent(itemCopy);
-        itemCopy.component = component;
-        // Save item for overflow menu
-        component.item = itemCopy;
-        button.appendChild(component);
-      } else if (item.text) {
-        button.textContent = item.text;
-      }
-
-      if (item.className) {
-        button.className = item.className;
-      }
-
-      button.disabled = item.disabled;
-
-      return button;
-    }
-
-    /** @protected */
-    _initButtonAttrs(button) {
-      button.setAttribute('role', this.tabNavigation ? 'button' : 'menuitem');
-
-      if (button === this._overflow || (button.item && button.item.children)) {
-        button.setAttribute('aria-haspopup', 'true');
-        button.setAttribute('aria-expanded', 'false');
-      }
-    }
-
-    /** @protected */
-    _setButtonTheme(btn, hostTheme) {
+    /** @private */
+    __getButtonTheme(item, hostTheme) {
       let theme = hostTheme;
 
       // Item theme takes precedence over host theme even if it's empty, as long as it's not undefined or null
-      const itemTheme = btn.item && btn.item.theme;
+      const itemTheme = item && item.theme;
       if (itemTheme != null) {
         theme = Array.isArray(itemTheme) ? itemTheme.join(' ') : itemTheme;
       }
 
-      if (theme) {
-        btn.setAttribute('theme', theme);
-      } else {
-        btn.removeAttribute('theme');
-      }
+      return theme;
     }
 
     /** @private */
@@ -634,21 +628,47 @@ export const MenuBarMixin = (superClass) =>
 
     /** @private */
     __renderButtons(items = []) {
-      this._removeButtons();
+      render(
+        html`
+          ${items.map((item) => {
+            const itemCopy = { ...item };
+            const hasChildren = Boolean(item && item.children);
 
-      /* Empty array, do nothing */
-      if (items.length === 0) {
-        return;
+            if (itemCopy.component) {
+              const component = this.__getComponent(itemCopy);
+              itemCopy.component = component;
+              component.item = itemCopy;
+            }
+
+            return html`
+              <vaadin-menu-bar-button
+                .item="${itemCopy}"
+                .disabled="${this.disabled || item.disabled}"
+                role="${this.tabNavigation ? 'button' : 'menuitem'}"
+                aria-haspopup="${ifDefined(hasChildren ? 'true' : nothing)}"
+                aria-expanded="${ifDefined(hasChildren ? 'false' : nothing)}"
+                class="${ifDefined(item.className || nothing)}"
+                theme="${ifDefined(this.__getButtonTheme(item, this._theme) || nothing)}"
+                @click="${this.__onRootButtonClick}"
+                >${componentDirective(itemCopy)}</vaadin-menu-bar-button
+              >
+            `;
+          })}
+        `,
+        this,
+        { renderBefore: this._overflow },
+      );
+    }
+
+    /** @private */
+    __onRootButtonClick(event) {
+      const button = event.target;
+      // Propagate click event from button to the item component if it was outside
+      // it e.g. by calling `click()` on the button (used by the Flow counterpart).
+      if (button.item && button.item.component && !event.composedPath().includes(button.item.component)) {
+        event.stopPropagation();
+        button.item.component.click();
       }
-
-      items.forEach((item) => {
-        const button = this._initButton(item);
-        this.insertBefore(button, this._overflow);
-        this._initButtonAttrs(button);
-        this._setButtonTheme(button, this._theme);
-      });
-
-      this.__detectOverflow();
     }
 
     /**
@@ -759,12 +779,7 @@ export const MenuBarMixin = (superClass) =>
      */
     _setFocused(focused) {
       if (focused) {
-        let target = this.querySelector('[tabindex="0"]');
-        if (this.tabNavigation) {
-          // Switch submenu on menu button Tab / Shift Tab
-          target = this.querySelector('[focused]');
-          this.__switchSubMenu(target);
-        }
+        const target = this.tabNavigation ? this.querySelector('[focused]') : this.querySelector('[tabindex="0"]');
         if (target) {
           this._buttons.forEach((btn) => {
             this._setTabindex(btn, btn === target);
@@ -883,30 +898,15 @@ export const MenuBarMixin = (superClass) =>
         if (e.keyCode === 38 && item === list.items[0]) {
           this._close(true);
         }
-        // ArrowLeft, or ArrowRight on non-parent submenu item
+        // ArrowLeft, or ArrowRight on non-parent submenu item,
         if (e.keyCode === 37 || (e.keyCode === 39 && !item._item.children)) {
           // Prevent ArrowLeft from being handled in context-menu
           e.stopImmediatePropagation();
           this._onKeyDown(e);
-        } else if (e.keyCode === 9 && this.tabNavigation) {
-          // Switch opened submenu on submenu item Tab / Shift Tab
-          const items = this._getItems() || [];
-          const currentIdx = items.indexOf(this.focused);
-          const increment = e.shiftKey ? -1 : 1;
-          let idx = currentIdx + increment;
-          idx = this._getAvailableIndex(items, idx, increment, (item) => !isElementHidden(item));
-          this.__switchSubMenu(items[idx]);
         }
-      }
-    }
 
-    /** @private */
-    __switchSubMenu(target) {
-      const wasExpanded = this._expandedButton != null && this._expandedButton !== target;
-      if (wasExpanded) {
-        this._close();
-        if (target.item && target.item.children) {
-          this.__openSubMenu(target, true, { keepFocus: true });
+        if (e.key === 'Tab' && this.tabNavigation) {
+          this._onKeyDown(e);
         }
       }
     }
@@ -951,31 +951,21 @@ export const MenuBarMixin = (superClass) =>
       const overlay = subMenu._overlayElement;
       overlay.noVerticalOverlap = true;
 
+      this._hideTooltip(true);
+
       this._expandedButton = button;
-
-      requestAnimationFrame(() => {
-        // After changing items, buttons are recreated so the old button is
-        // no longer in the DOM. Reset position target to null to prevent
-        // overlay from closing due to target width / height equal to 0.
-        if (overlay.positionTarget && !overlay.positionTarget.isConnected) {
-          overlay.positionTarget = null;
-        }
-
-        button.dispatchEvent(
-          new CustomEvent('opensubmenu', {
-            detail: {
-              children: items,
-            },
-          }),
-        );
-        this._hideTooltip(true);
-
-        this._setExpanded(button, true);
-
-        overlay.positionTarget = button;
-      });
+      this._setExpanded(button, true);
 
       this.style.pointerEvents = 'auto';
+      overlay.positionTarget = button;
+
+      button.dispatchEvent(
+        new CustomEvent('opensubmenu', {
+          detail: {
+            children: items,
+          },
+        }),
+      );
 
       overlay.addEventListener(
         'vaadin-overlay-open',

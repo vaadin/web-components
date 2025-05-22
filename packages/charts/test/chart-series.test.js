@@ -1,7 +1,8 @@
 import { expect } from '@vaadin/chai-plugins';
 import { aTimeout, fixtureSync, nextRender, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import '../vaadin-chart.js';
+import '../theme/vaadin-chart-base-theme.js';
+import '../src/vaadin-chart.js';
 
 describe('vaadin-chart-series', () => {
   describe('properties', () => {
@@ -95,33 +96,33 @@ describe('vaadin-chart-series', () => {
 
       it('should have markers by default for widespread data', async () => {
         series.values = [10, 20, 10, 30, 50];
-        await nextRender(chart);
+        await nextRender();
         expect(markersVisible(chartContainer)).to.be.true;
       });
 
       it('should not have markers by default for dense data', async () => {
         series.values = new Array(400).fill(10);
-        await nextRender(chart);
+        await nextRender();
         expect(markersVisible(chartContainer)).to.be.false;
       });
 
       it('should have markers when set to shown', async () => {
         series.markers = 'shown';
         series.values = new Array(400).fill(10);
-        await nextRender(chart);
+        await nextRender();
         expect(markersVisible(chartContainer)).to.be.true;
       });
 
       it('should not have markers when set to hidden', async () => {
         series.markers = 'hidden';
         series.values = [10, 20, 10, 30, 50];
-        await nextRender(chart);
+        await nextRender();
         expect(markersVisible(chartContainer)).to.be.false;
       });
 
       it('should not have markers when options are set', async () => {
         series.values = [10, 20, 10, 30, 50];
-        await nextRender(chart);
+        await nextRender();
         chart.additionalOptions = { plotOptions: { series: { marker: { enabled: false } } } };
         await aTimeout(50);
         expect(markersVisible(chartContainer)).to.be.false;

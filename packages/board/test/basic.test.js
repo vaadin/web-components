@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync } from '@vaadin/testing-helpers';
-import '../vaadin-board.js';
+import '../src/vaadin-board.js';
 
 describe('vaadin-board', () => {
   let board, tagName;

@@ -2,8 +2,7 @@ import { expect } from '@vaadin/chai-plugins';
 import { sendKeys } from '@vaadin/test-runner-commands';
 import { aTimeout, fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import './not-animated-styles.js';
-import '../vaadin-multi-select-combo-box.js';
+import '../src/vaadin-multi-select-combo-box.js';
 import { getAsyncDataProvider } from './helpers.js';
 
 describe('readonly', () => {

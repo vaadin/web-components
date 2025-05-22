@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-const fs = require('fs');
+import fs from 'fs';
 
 const CAMEL_TO_DASH = /([A-Z])/gu;
 

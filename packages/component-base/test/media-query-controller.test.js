@@ -1,24 +1,16 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync } from '@vaadin/testing-helpers';
+import { defineLit, fixtureSync } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
-import { ControllerMixin } from '../src/controller-mixin.js';
 import { MediaQueryController } from '../src/media-query-controller.js';
+import { PolylitMixin } from '../src/polylit-mixin.js';
 
-customElements.define(
-  'media-query-element',
-  class extends ControllerMixin(PolymerElement) {
-    static get template() {
-      return html`<slot></slot>`;
-    }
-  },
-);
+describe('MediaQueryController', () => {
+  const tag = defineLit('media-query-controller', `<slot></slot>`, (Base) => class extends PolylitMixin(Base) {});
 
-describe('media-query-controller', () => {
   let element, controller;
 
   beforeEach(() => {
-    element = fixtureSync(`<media-query-element></media-query-element>`);
+    element = fixtureSync(`<${tag}></${tag}>`);
   });
 
   it('should return true when media query matches', () => {

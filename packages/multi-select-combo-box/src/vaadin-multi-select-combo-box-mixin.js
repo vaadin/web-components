@@ -6,7 +6,6 @@
 import { announce } from '@vaadin/a11y-base/src/announce.js';
 import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
-import { processTemplates } from '@vaadin/component-base/src/templates.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { InputControlMixin } from '@vaadin/field-base/src/input-control-mixin.js';
 import { InputController } from '@vaadin/field-base/src/input-controller.js';
@@ -271,6 +270,7 @@ export const MultiSelectComboBoxMixin = (superClass) =>
         placeholder: {
           type: String,
           observer: '_placeholderChanged',
+          reflectToAttribute: true,
           sync: true,
         },
 
@@ -430,8 +430,6 @@ export const MultiSelectComboBoxMixin = (superClass) =>
       this.addController(this._overflowController);
 
       this.__updateChips();
-
-      processTemplates(this);
     }
 
     /**
@@ -758,9 +756,24 @@ export const MultiSelectComboBoxMixin = (superClass) =>
     __updateTopGroup(selectedItemsOnTop, selectedItems, opened) {
       if (!selectedItemsOnTop) {
         this._topGroup = [];
-      } else if (!opened) {
+      } else if (!opened || this.__needToSyncTopGroup()) {
         this._topGroup = [...selectedItems];
       }
+    }
+
+    /** @private */
+    __needToSyncTopGroup() {
+      // Only sync for object items
+      if (!this.itemIdPath) {
+        return false;
+      }
+      return (
+        this._topGroup &&
+        this._topGroup.some((item) => {
+          const selectedItem = this.selectedItems[this._findIndex(item, this.selectedItems, this.itemIdPath)];
+          return selectedItem && item !== selectedItem;
+        })
+      );
     }
 
     /** @private */
@@ -877,14 +890,17 @@ export const MultiSelectComboBoxMixin = (superClass) =>
         this.insertBefore(chip, refNode);
 
         // When auto expanding vertically, no need to measure remaining width
-        if (!this.autoExpandVertically && this.$.chips.clientWidth > remainingWidth) {
-          // Always show at least last selected item as a chip
-          if (refNode === null) {
-            chip.style.maxWidth = `${Math.max(chipMinWidth, remainingWidth)}px`;
-          } else {
-            chip.remove();
-            break;
+        if (!this.autoExpandVertically) {
+          if (this.$.chips.clientWidth > remainingWidth) {
+            // If there is no more space for chips, or if there is at least one
+            // chip already shown, collapse all remaining chips to the overflow
+            if (remainingWidth < chipMinWidth || refNode !== null) {
+              chip.remove();
+              break;
+            }
           }
+
+          chip.style.maxWidth = `${remainingWidth}px`;
         }
 
         items.pop();

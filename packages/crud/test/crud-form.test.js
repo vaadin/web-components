@@ -87,7 +87,7 @@ describe('crud form', () => {
 
     beforeEach(async () => {
       crudForm.item = item;
-      await nextRender(crudForm);
+      await nextRender();
     });
 
     it('should automatically generate fields when item is set', () => {

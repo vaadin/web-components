@@ -21,7 +21,7 @@ import { editColumnDefaultRenderer } from './vaadin-crud-helpers.js';
  *
  * #### Example:
  * ```html
- * <vaadin-grid items="[[items]]">
+ * <vaadin-grid>
  *  <vaadin-crud-edit-column></vaadin-crud-edit-column>
  *
  *  <vaadin-grid-column>

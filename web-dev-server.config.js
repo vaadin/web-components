@@ -1,26 +1,21 @@
 /* eslint-env node */
-const fs = require('fs');
-const { esbuildPlugin } = require('@web/dev-server-esbuild');
-const path = require('path');
+import { esbuildPlugin } from '@web/dev-server-esbuild';
+import fs from 'node:fs';
+
+const hasBaseParam = process.argv.includes('--base');
 
 /** @return {import('@web/test-runner').TestRunnerPlugin} */
-function generatedLitTestsPlugin() {
+export function enforceBaseStylesPlugin() {
   return {
-    name: 'generated-lit-tests',
-    transformImport({ source, context }) {
-      if (context.url.includes('-lit.generated.test.')) {
-        const dependencyPath = path.resolve(path.dirname(context.url), source);
-
-        const litDependencyPath = dependencyPath
-          // /button/vaadin-button.js -> /button/vaadin-lit-button.js
-          .replace(/\/vaadin-(?!lit)([^/]+)/u, '/vaadin-lit-$1')
-          // /grid/all-imports.js -> /grid/lit-all-imports.js
-          .replace(/\/all-imports/u, '/lit-all-imports');
-
-        if (litDependencyPath !== dependencyPath && fs.existsSync(`.${litDependencyPath}`)) {
-          return litDependencyPath;
-        }
+    name: 'enforce-base-styles',
+    transform(context) {
+      if (context.response.is('html')) {
+        return { body: context.body.replace('./common.js', './common-base.js') };
       }
+    },
+    transformImport({ source }) {
+      source = source.replace('/theme/lumo/', '/src/');
+      source = source.replace(/(.+)-core-styles\.js/u, '$1-base-styles.js');
       return source;
     },
   };
@@ -43,7 +38,7 @@ const preventFouc = `
   </script>
 `;
 
-module.exports = {
+export default {
   plugins: [
     {
       name: 'dev-page-listing',
@@ -73,11 +68,8 @@ module.exports = {
         }
       },
     },
+    // When passing --base flag to `yarn start` command, load base styles and not Lumo
+    hasBaseParam && enforceBaseStylesPlugin(),
     esbuildPlugin({ ts: true }),
-    generatedLitTestsPlugin(),
-  ],
-  nodeResolve: {
-    // Use Lit in production mode
-    exportConditions: ['default'],
-  },
+  ].filter(Boolean),
 };

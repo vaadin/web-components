@@ -1,18 +1,9 @@
 import { expect } from '@vaadin/chai-plugins';
 import { nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import { PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { LitElement } from 'lit';
 import { DirMixin } from '../src/dir-mixin.js';
 import { PolylitMixin } from '../src/polylit-mixin.js';
-
-class DirMixinPolymerElement extends DirMixin(PolymerElement) {
-  static get is() {
-    return 'dir-mixin-polymer-element';
-  }
-}
-
-customElements.define(DirMixinPolymerElement.is, DirMixinPolymerElement);
 
 class DirMixinLitElement extends DirMixin(PolylitMixin(LitElement)) {
   static get is() {
@@ -22,8 +13,8 @@ class DirMixinLitElement extends DirMixin(PolylitMixin(LitElement)) {
 
 customElements.define(DirMixinLitElement.is, DirMixinLitElement);
 
-const runTests = (baseClass) => {
-  const tag = `dir-mixin-${baseClass}-element`;
+describe('DirMixin', () => {
+  const tag = `dir-mixin-lit-element`;
 
   describe('Native HTMLElement.dir API', () => {
     let element;
@@ -231,12 +222,4 @@ const runTests = (baseClass) => {
       expect(element.getAttribute('dir')).to.eql('ltr');
     });
   });
-};
-
-describe('DirMixin + Polymer', () => {
-  runTests('polymer');
-});
-
-describe('DirMixin + Lit', () => {
-  runTests('lit');
 });
