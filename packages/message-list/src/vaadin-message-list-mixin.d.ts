@@ -5,6 +5,7 @@
  */
 import type { Constructor } from '@open-wc/dedupe-mixin';
 import type { KeyboardDirectionMixinClass } from '@vaadin/a11y-base/src/keyboard-direction-mixin.js';
+import type { SlotStylesMixinClass } from '@vaadin/component-base/src/slot-styles-mixin.js';
 
 export interface MessageListItem {
   text?: string;
@@ -19,7 +20,10 @@ export interface MessageListItem {
 
 export declare function MessageListMixin<T extends Constructor<HTMLElement>>(
   base: T,
-): Constructor<KeyboardDirectionMixinClass> & Constructor<MessageListMixinClass> & T;
+): Constructor<KeyboardDirectionMixinClass> &
+  Constructor<MessageListMixinClass> &
+  Constructor<SlotStylesMixinClass> &
+  T;
 
 export declare class MessageListMixinClass {
   /**
