@@ -1,5 +1,28 @@
 :host {
+  display: block;
+  outline: none;
+  -webkit-user-select: none;
+  user-select: none;
   padding: 0;
+}
+
+:host([hidden]) {
+  display: none !important;
+}
+
+button {
+  display: flex;
+  align-items: center;
+  justify-content: inherit;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  background-color: initial;
+  color: inherit;
+  border: initial;
+  outline: none;
+  font: inherit;
+  text-align: inherit;
 }
 
 [part='content'] {

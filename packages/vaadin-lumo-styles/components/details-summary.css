@@ -1,3 +1,4 @@
+@import '../src/mixins/base-layer-reset.css' vaadin-details-summary;
 @import '../src/components/details-summary.css' vaadin-details-summary;
 
 html {

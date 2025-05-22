@@ -1,4 +1,7 @@
 :host {
+  white-space: nowrap;
+  -webkit-user-select: none;
+  user-select: none;
   display: flex;
   align-items: center;
   width: 100%;
@@ -16,6 +19,14 @@
   -webkit-tap-highlight-color: transparent;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+:host([hidden]) {
+  display: none !important;
+}
+
+:host([disabled]) {
+  pointer-events: none;
 }
 
 :host([disabled]),
