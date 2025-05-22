@@ -934,9 +934,24 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
   __updateTopGroup(selectedItemsOnTop, selectedItems, opened) {
     if (!selectedItemsOnTop) {
       this._topGroup = [];
-    } else if (!opened) {
+    } else if (!opened || this.__needToSyncTopGroup()) {
       this._topGroup = [...selectedItems];
     }
+  }
+
+  /** @private */
+  __needToSyncTopGroup() {
+    // Only sync for object items
+    if (!this.itemIdPath) {
+      return false;
+    }
+    return (
+      this._topGroup &&
+      this._topGroup.some((item) => {
+        const selectedItem = this.selectedItems[this._findIndex(item, this.selectedItems, this.itemIdPath)];
+        return selectedItem && item !== selectedItem;
+      })
+    );
   }
 
   /** @private */
