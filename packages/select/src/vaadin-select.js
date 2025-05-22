@@ -15,6 +15,7 @@ import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { inputFieldShared } from '@vaadin/field-base/src/styles/input-field-shared-styles.js';
+import { CSSInjectionMixin } from '@vaadin/vaadin-themable-mixin/css-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { SelectBaseMixin } from './vaadin-select-base-mixin.js';
 import { selectStyles } from './vaadin-select-core-styles.js';
@@ -131,7 +132,7 @@ import { selectStyles } from './vaadin-select-core-styles.js';
  * @mixes SelectBaseMixin
  * @mixes ThemableMixin
  */
-class Select extends SelectBaseMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElement)))) {
+class Select extends SelectBaseMixin(ElementMixin(CSSInjectionMixin(ThemableMixin(PolylitMixin(LitElement))))) {
   static get is() {
     return 'vaadin-select';
   }
