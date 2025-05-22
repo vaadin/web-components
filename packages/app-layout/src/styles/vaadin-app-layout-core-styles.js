@@ -26,7 +26,7 @@ export const appLayoutStyles = css`
   }
 
   :host([no-anim]) {
-    --vaadin-app-layout-transition-duration: none !important;
+    --vaadin-app-layout-transition-duration: 0s !important;
   }
 
   :host([drawer-opened]) {

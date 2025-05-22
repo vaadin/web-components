@@ -1,9 +1,13 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <!-- possible content values: default, black or black-translucent -->
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <title>App Layout</title>
     <script type="module" src="./common.js"></script>
 
@@ -12,41 +16,79 @@
         margin: 0;
       }
 
-      header h1,
-      h2[slot~="navbar"] {
-        font-size: var(--lumo-font-size-l);
+      header div,
+      div[slot~='navbar'] {
+        font-size: 1.125rem;
         margin: 0;
+        color: var(--_vaadin-color-strong);
+        font-weight: 600;
       }
 
       :is(header, footer) {
         display: flex;
         align-items: center;
-        gap: var(--lumo-space-s);
-        padding: var(--lumo-space-s) var(--lumo-space-m);
-        min-height: var(--lumo-size-xl);
+        gap: 0.5rem;
+        padding: 0.5rem 1rem;
+        min-height: 3rem;
         box-sizing: border-box;
       }
 
       dummy-content {
-        display: block;
-        background-image: linear-gradient(var(--lumo-primary-color), var(--lumo-primary-color-10pct));
-        border-radius: var(--lumo-border-radius-l);
-        margin: var(--lumo-space-m);
+        display: flex;
+        place-items: center;
+        place-content: center;
+        background-image: linear-gradient(45deg, hsl(0 0 50), hsl(0 0 90));
+        border: 2px solid;
+        border-radius: 0.5rem;
+        margin: 1rem;
+        padding: 1rem;
         height: 150vh;
+      }
+
+      vaadin-app-layout:not([overlay]) vaadin-scroller dummy-content {
+        width: 12rem;
+        transition: width 120ms;
+        margin-block: 0;
+      }
+
+      .small-drawer:not([overlay]) vaadin-scroller dummy-content {
+        width: 5rem;
+      }
+
+      .small-drawer:not([overlay]) vaadin-button {
+        scale: -1 1;
+      }
+
+      [overlay] vaadin-button {
+        display: none;
+      }
+
+      dummy-content::before {
+        content: 'Content';
       }
     </style>
 
     <script type="module">
       import '@vaadin/app-layout';
-      import '@vaadin/app-layout/vaadin-drawer-toggle';
+      import '@vaadin/app-layout/vaadin-drawer-toggle.js';
       import '@vaadin/scroller';
+      import '@vaadin/button';
+      import '@vaadin/icon';
+      import '@vaadin/icons';
+
+      document.querySelector('vaadin-button').addEventListener('click', () => {
+        document.querySelector('vaadin-app-layout').classList.toggle('small-drawer');
+      });
     </script>
   </head>
 
   <body>
-    <vaadin-app-layout primary-section="drawer">
+    <vaadin-app-layout primary-section="navbar">
       <header slot="drawer">
-        <h1>My App</h1>
+        <div>Drawer</div>
+        <vaadin-button>
+          <vaadin-icon icon="vaadin:caret-square-left-o"></vaadin-icon>
+        </vaadin-button>
       </header>
       <vaadin-scroller slot="drawer" theme="overflow-indicators">
         <dummy-content></dummy-content>
@@ -56,10 +98,9 @@
       </footer>
 
       <vaadin-drawer-toggle slot="navbar touch-optimized"></vaadin-drawer-toggle>
-      <h2 slot="navbar touch-optimized">View name</h2>
+      <div slot="navbar touch-optimized">Navbar</div>
 
       <dummy-content></dummy-content>
-
     </vaadin-app-layout>
   </body>
 </html>

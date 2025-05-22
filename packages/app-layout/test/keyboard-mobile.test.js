@@ -15,7 +15,7 @@ describe('mobile navigation', () => {
   beforeEach(async () => {
     const wrapper = fixtureSync(`
       <div>
-        <vaadin-app-layout style="--vaadin-app-layout-transition-duration: none;">
+        <vaadin-app-layout style="--vaadin-app-layout-transition-duration: 0s;">
           <vaadin-drawer-toggle slot="navbar"></vaadin-drawer-toggle>
           <h1 slot="navbar">App title</h1>
           <section slot="drawer">
