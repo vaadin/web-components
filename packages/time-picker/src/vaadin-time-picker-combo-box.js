@@ -11,6 +11,7 @@ import { ifDefined } from 'lit/directives/if-defined.js';
 import { ComboBoxMixin } from '@vaadin/combo-box/src/vaadin-combo-box-mixin.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
+import { CSSInjectionMixin } from '@vaadin/vaadin-themable-mixin/css-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 /**
@@ -22,7 +23,7 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * @mixes ThemableMixin
  * @private
  */
-class TimePickerComboBox extends ComboBoxMixin(ThemableMixin(PolylitMixin(LitElement))) {
+class TimePickerComboBox extends ComboBoxMixin(CSSInjectionMixin(ThemableMixin(PolylitMixin(LitElement)))) {
   static get is() {
     return 'vaadin-time-picker-combo-box';
   }

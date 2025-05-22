@@ -18,6 +18,7 @@ import { InputController } from '@vaadin/field-base/src/input-controller.js';
 import { LabelledInputController } from '@vaadin/field-base/src/labelled-input-controller.js';
 import { PatternMixin } from '@vaadin/field-base/src/pattern-mixin.js';
 import { inputFieldShared } from '@vaadin/field-base/src/styles/input-field-shared-styles.js';
+import { CSSInjectionMixin } from '@vaadin/vaadin-themable-mixin/css-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { ComboBoxDataProviderMixin } from './vaadin-combo-box-data-provider-mixin.js';
 import { ComboBoxMixin } from './vaadin-combo-box-mixin.js';
@@ -154,7 +155,9 @@ import { ComboBoxMixin } from './vaadin-combo-box-mixin.js';
  * @mixes ComboBoxMixin
  */
 class ComboBox extends ComboBoxDataProviderMixin(
-  ComboBoxMixin(PatternMixin(InputControlMixin(ThemableMixin(ElementMixin(PolylitMixin(LitElement)))))),
+  ComboBoxMixin(
+    PatternMixin(InputControlMixin(CSSInjectionMixin(ThemableMixin(ElementMixin(PolylitMixin(LitElement)))))),
+  ),
 ) {
   static get is() {
     return 'vaadin-combo-box';

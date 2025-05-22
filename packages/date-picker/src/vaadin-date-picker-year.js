@@ -6,6 +6,7 @@
 import { css, html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
+import { CSSInjectionMixin } from '@vaadin/vaadin-themable-mixin/css-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { DatePickerYearMixin } from './vaadin-date-picker-year-mixin.js';
 
@@ -18,7 +19,7 @@ import { DatePickerYearMixin } from './vaadin-date-picker-year-mixin.js';
  * @mixes DatePickerYearMixin
  * @private
  */
-export class DatePickerYear extends ThemableMixin(DatePickerYearMixin(PolylitMixin(LitElement))) {
+export class DatePickerYear extends CSSInjectionMixin(ThemableMixin(DatePickerYearMixin(PolylitMixin(LitElement)))) {
   static get is() {
     return 'vaadin-date-picker-year';
   }

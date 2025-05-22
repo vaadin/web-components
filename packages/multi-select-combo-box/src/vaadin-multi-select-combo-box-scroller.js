@@ -8,6 +8,7 @@ import { ComboBoxPlaceholder } from '@vaadin/combo-box/src/vaadin-combo-box-plac
 import { ComboBoxScrollerMixin } from '@vaadin/combo-box/src/vaadin-combo-box-scroller-mixin.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
+import { CSSInjectionMixin } from '@vaadin/vaadin-themable-mixin/css-injection-mixin.js';
 
 /**
  * An element used internally by `<vaadin-multi-select-combo-box>`. Not intended to be used separately.
@@ -17,7 +18,7 @@ import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
  * @mixes ComboBoxScrollerMixin
  * @private
  */
-export class MultiSelectComboBoxScroller extends ComboBoxScrollerMixin(PolylitMixin(LitElement)) {
+export class MultiSelectComboBoxScroller extends ComboBoxScrollerMixin(CSSInjectionMixin(PolylitMixin(LitElement))) {
   static get is() {
     return 'vaadin-multi-select-combo-box-scroller';
   }

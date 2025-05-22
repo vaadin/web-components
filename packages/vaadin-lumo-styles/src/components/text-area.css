@@ -1,0 +1,111 @@
+.vaadin-text-area-container {
+  flex: auto;
+}
+
+/* The label, helper text and the error message should neither grow nor shrink. */
+[part='label'],
+[part='helper-text'],
+[part='error-message'] {
+  flex: none;
+}
+
+::slotted(textarea) {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  flex: auto;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+  outline: none;
+  resize: none;
+  margin: 0;
+  padding: 0 0.25em;
+  border: 0;
+  border-radius: 0;
+  min-width: 0;
+  font: inherit;
+  font-size: 1em;
+  line-height: normal;
+  color: inherit;
+  background-color: transparent;
+  /* Disable default invalid style in Firefox */
+  box-shadow: none;
+}
+
+/* Override styles from <vaadin-input-container> */
+[part='input-field'] ::slotted(textarea) {
+  align-self: stretch;
+  white-space: pre-wrap;
+  line-height: inherit;
+  --_lumo-text-field-overflow-mask-image: none;
+}
+
+[part='input-field'] ::slotted(:not(textarea)) {
+  align-self: flex-start;
+}
+
+/* Workaround https://bugzilla.mozilla.org/show_bug.cgi?id=1739079 */
+:host([disabled]) ::slotted(textarea) {
+  user-select: none;
+}
+
+[part='input-field'],
+[part='input-field'] ::slotted(textarea) {
+  height: auto;
+  box-sizing: border-box;
+  min-height: 0;
+}
+
+[part='input-field'] {
+  flex: auto;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+  /* Equal to the implicit padding in vaadin-text-field */
+  padding-top: calc((var(--lumo-text-field-size) - 1em * var(--lumo-line-height-s)) / 2);
+  padding-bottom: calc((var(--lumo-text-field-size) - 1em * var(--lumo-line-height-s)) / 2);
+  transition: background-color 0.1s;
+  line-height: var(--lumo-line-height-s);
+}
+
+:host(:not([readonly])) [part='input-field']::after {
+  display: none;
+}
+
+:host([readonly]) [part='input-field'] {
+  border: var(--vaadin-input-field-readonly-border, 1px dashed var(--lumo-contrast-30pct));
+}
+
+:host([readonly]) [part='input-field']::after {
+  border: none;
+}
+
+:host(:hover:not([readonly]):not([focused]):not([invalid])) [part='input-field'] {
+  background-color: var(--lumo-contrast-20pct);
+}
+
+@media (pointer: coarse) {
+  :host(:hover:not([readonly]):not([focused]):not([invalid])) [part='input-field'] {
+    background-color: var(--lumo-contrast-10pct);
+  }
+
+  :host(:active:not([readonly]):not([focused])) [part='input-field'] {
+    background-color: var(--lumo-contrast-20pct);
+  }
+}
+
+/* Use sticky positioning to keep prefix/suffix/clear button visible when scrolling textarea container */
+[part='input-field'] ::slotted([slot$='fix']),
+[part='clear-button'] {
+  position: sticky;
+  top: 0;
+  align-self: flex-start;
+}
+
+[part='input-field'] ::slotted(vaadin-icon[slot$='fix']),
+[part='clear-button'] {
+  /* Vertically align icon prefix/suffix/clear button with the first line of text */
+  top: calc((var(--lumo-icon-size-m) - 1em * var(--lumo-line-height-s)) / -2);
+  margin-top: calc((var(--lumo-icon-size-m) - 1em * var(--lumo-line-height-s)) / -2);
+  /* Reduce effective height to match line height of native textarea, so icons don't increase component size when using single row */
+  margin-bottom: calc((var(--lumo-icon-size-m) - 1em * var(--lumo-line-height-s)) / -2);
+}
