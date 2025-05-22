@@ -25,14 +25,14 @@ describe('vaadin-side-nav', () => {
 
     it('collapsible', async () => {
       sideNav.collapsible = true;
-      await nextRender(sideNav);
+      await nextRender();
       await expect(sideNav).dom.to.equalSnapshot();
     });
 
     it('collapsed', async () => {
       sideNav.collapsible = true;
       sideNav.collapsed = true;
-      await nextRender(sideNav);
+      await nextRender();
       await expect(sideNav).dom.to.equalSnapshot();
     });
   });
@@ -44,14 +44,14 @@ describe('vaadin-side-nav', () => {
 
     it('collapsible', async () => {
       sideNav.collapsible = true;
-      await nextRender(sideNav);
+      await nextRender();
       await expect(sideNav).shadowDom.to.equalSnapshot();
     });
 
     it('collapsed', async () => {
       sideNav.collapsible = true;
       sideNav.collapsed = true;
-      await nextRender(sideNav);
+      await nextRender();
       await expect(sideNav).shadowDom.to.equalSnapshot();
     });
   });

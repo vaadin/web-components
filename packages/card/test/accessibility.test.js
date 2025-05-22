@@ -10,7 +10,7 @@ describe('accessibility', () => {
 
   beforeEach(async () => {
     card = fixtureSync('<vaadin-card></vaadin-card>');
-    await nextRender(card);
+    await nextRender();
   });
 
   describe('ARIA roles', () => {
@@ -35,7 +35,7 @@ describe('accessibility', () => {
       await nextUpdate(card);
       const customTitleElement = fixtureSync('<span slot="title">Custom title element</span>');
       card.appendChild(customTitleElement);
-      await nextRender(card);
+      await nextRender();
       expect(card.hasAttribute('aria-labelledby')).to.be.false;
     });
   });

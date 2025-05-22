@@ -460,7 +460,7 @@ describe('keyboard navigation', () => {
     it('should focus the closest allowed date with pageup when selected date is disabled', async () => {
       overlay.focusedDate = new Date(1999, 5, 10);
       overlay.minDate = new Date(1999, 11, 25);
-      await nextRender(overlay);
+      await nextRender();
       await sendKeys({ press: 'PageUp' });
       await untilOverlayScrolled(overlay);
       const cell = getFocusedCell(overlay);
@@ -470,7 +470,7 @@ describe('keyboard navigation', () => {
     it('should focus the closest allowed date with pagedown when selected date is disabled', async () => {
       overlay.focusedDate = new Date(1999, 5, 10);
       overlay.minDate = new Date(1999, 11, 25);
-      await nextRender(overlay);
+      await nextRender();
       await sendKeys({ press: 'PageDown' });
       await untilOverlayScrolled(overlay);
       const cell = getFocusedCell(overlay);
@@ -480,7 +480,7 @@ describe('keyboard navigation', () => {
     it('should focus the closest allowed date with shift pageup when selected date is disabled', async () => {
       overlay.focusedDate = new Date(1999, 5, 10);
       overlay.minDate = new Date(1999, 11, 25);
-      await nextRender(overlay);
+      await nextRender();
 
       await sendKeys({ press: 'Shift+PageUp' });
 
@@ -492,7 +492,7 @@ describe('keyboard navigation', () => {
     it('should focus the closest allowed date with shift pagedown when selected date is disabled', async () => {
       overlay.focusedDate = new Date(1999, 5, 10);
       overlay.maxDate = new Date(1999, 11, 25);
-      await nextRender(overlay);
+      await nextRender();
 
       await sendKeys({ press: 'Shift+PageDown' });
 
@@ -522,7 +522,7 @@ describe('keyboard navigation', () => {
     it('should focus the closest allowed date with arrow up when selected date is disabled', async () => {
       overlay.focusedDate = new Date(1999, 5, 10);
       overlay.minDate = new Date(1999, 11, 25);
-      await nextRender(overlay);
+      await nextRender();
       await sendKeys({ press: 'ArrowUp' });
       await untilOverlayScrolled(overlay);
       const cell = getFocusedCell(overlay);
@@ -532,7 +532,7 @@ describe('keyboard navigation', () => {
     it('should focus the closest allowed date with arrow down when selected date is disabled', async () => {
       overlay.focusedDate = new Date(1999, 5, 10);
       overlay.minDate = new Date(1999, 11, 25);
-      await nextRender(overlay);
+      await nextRender();
       await sendKeys({ press: 'ArrowDown' });
       await untilOverlayScrolled(overlay);
       const cell = getFocusedCell(overlay);
@@ -542,7 +542,7 @@ describe('keyboard navigation', () => {
     it('should focus the closest allowed date with arrow left when selected date is disabled', async () => {
       overlay.focusedDate = new Date(1999, 5, 10);
       overlay.minDate = new Date(1999, 11, 25);
-      await nextRender(overlay);
+      await nextRender();
       await sendKeys({ press: 'ArrowLeft' });
       await untilOverlayScrolled(overlay);
       const cell = getFocusedCell(overlay);
@@ -552,7 +552,7 @@ describe('keyboard navigation', () => {
     it('should focus the closest allowed date with arrow right when selected date is disabled', async () => {
       overlay.focusedDate = new Date(1999, 5, 10);
       overlay.minDate = new Date(1999, 11, 25);
-      await nextRender(overlay);
+      await nextRender();
       await sendKeys({ press: 'ArrowRight' });
       await untilOverlayScrolled(overlay);
       const cell = getFocusedCell(overlay);

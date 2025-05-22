@@ -135,13 +135,13 @@ describe('keyboard navigation - row focus', () => {
     body = grid.$.items;
     footer = grid.$.footer;
 
-    await nextRender(grid);
+    await nextRender();
 
     // Make the grid enter row focus mode initially
     focusFirstHeaderCell();
     left();
 
-    await nextRender(grid);
+    await nextRender();
   });
 
   describe('scrolling and navigating', () => {
@@ -234,12 +234,12 @@ describe('keyboard navigation - row focus', () => {
     describe(`interacting with keys - ${direction}`, () => {
       beforeEach(async () => {
         document.dir = direction;
-        await nextRender(grid);
+        await nextRender();
       });
 
       afterEach(async () => {
         document.dir = undefined;
-        await nextRender(grid);
+        await nextRender();
       });
 
       it('should remain in row focus mode on backwards', () => {
@@ -431,13 +431,13 @@ describe('keyboard navigation on column groups - row focus', () => {
     };
     flushGrid(grid);
 
-    await nextRender(grid);
+    await nextRender();
 
     // Make the grid enter row focus mode initially
     focusFirstHeaderCell();
     left();
 
-    await nextRender(grid);
+    await nextRender();
   });
 
   describe('updating tabbable rows', () => {

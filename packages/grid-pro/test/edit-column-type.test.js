@@ -179,7 +179,7 @@ describe('edit column editor type', () => {
         focusout(editor);
         focusin(editor._overlayElement.querySelector('vaadin-select-item'));
         grid._flushStopEdit();
-        await nextRender(editor._menuElement);
+        await nextRender();
         expect(editor.opened).to.equal(true);
       });
 
@@ -192,7 +192,7 @@ describe('edit column editor type', () => {
         editor.opened = false;
         await nextFrame();
         space(editor.focusElement);
-        await nextRender(editor._menuElement);
+        await nextRender();
         expect(editor.opened).to.equal(true);
       });
 
@@ -200,7 +200,7 @@ describe('edit column editor type', () => {
         editor.opened = false;
         await nextFrame();
         arrowDown(editor.focusElement);
-        await nextRender(editor._menuElement);
+        await nextRender();
         expect(editor.opened).to.equal(true);
       });
 
@@ -208,7 +208,7 @@ describe('edit column editor type', () => {
         editor.opened = false;
         await nextFrame();
         arrowUp(editor.focusElement);
-        await nextRender(editor._menuElement);
+        await nextRender();
         expect(editor.opened).to.equal(true);
       });
 
@@ -258,7 +258,7 @@ describe('edit column editor type', () => {
         cell = getContainerCell(grid.$.items, 0, 1);
         enter(cell._content);
         editor = getCellEditor(cell);
-        await nextRender(editor);
+        await nextRender();
 
         sinon.stub(console, 'warn');
       });

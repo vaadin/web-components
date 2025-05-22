@@ -29,7 +29,7 @@ describe('overflow', () => {
         </div>
       `);
       menu = wrapper.querySelector('vaadin-menu-bar');
-      await nextRender(menu);
+      await nextRender();
       menu.items = [{ text: 'Item 1' }, { text: 'Item 2' }, { text: 'Item 3' }, { text: 'Item 4' }, { text: 'Item 5' }];
       buttons = menu._buttons;
       overflow = buttons[buttons.length - 1];
@@ -211,7 +211,7 @@ describe('overflow', () => {
     beforeEach(async () => {
       menu = fixtureSync('<vaadin-menu-bar></vaadin-menu-bar>');
       menu.items = [{ text: 'Item 1' }, { text: 'Item 2' }, { text: 'Item 3' }, { text: 'Item 4' }];
-      await nextRender(menu);
+      await nextRender();
       buttons = menu._buttons;
       overflow = buttons[buttons.length - 1];
     });
@@ -284,7 +284,7 @@ describe('overflow', () => {
       container.style.width = '250px';
 
       menu.items = [{ text: 'Item 1' }, { text: 'Item 2' }, { text: 'Item 3' }, { text: 'Item 4' }, { text: 'Item 5' }];
-      await nextRender(menu);
+      await nextRender();
       buttons = menu._buttons;
       overflow = buttons[buttons.length - 1];
     });
@@ -395,7 +395,7 @@ describe('overflow', () => {
         { text: 'Item 5', component: document.createElement('vaadin-menu-bar-item') },
         { component: makeComponent('6'), children: [{ text: 'SubItem6.1' }, { text: 'SubItem6.2' }] },
       ];
-      await nextRender(menu);
+      await nextRender();
       buttons = menu._buttons;
       overflow = buttons[buttons.length - 1];
       subMenu = menu._subMenu;
@@ -406,7 +406,7 @@ describe('overflow', () => {
 
     it('should close the overflow sub-menu on menu-bar resize', async () => {
       overflow.click();
-      await nextRender(subMenu);
+      await nextRender();
       menu.style.width = 'auto';
       await nextResize(menu);
       expect(subMenu.opened).to.be.false;
@@ -414,7 +414,7 @@ describe('overflow', () => {
 
     it('should close the overflow sub-menu programmatically', async () => {
       overflow.click();
-      await nextRender(subMenu);
+      await nextRender();
       expect(subMenu.opened).to.be.true;
 
       menu.close();
@@ -423,7 +423,7 @@ describe('overflow', () => {
 
     it('should teleport the same component to overflow sub-menu and back', async () => {
       overflow.click();
-      await nextRender(subMenu);
+      await nextRender();
       const listBox = subMenu._overlayElement.querySelector('vaadin-menu-bar-list-box');
       expect(listBox.items[0]).to.equal(buttons[2].item.component);
       expect(listBox.items[0].firstChild).to.equal(menu.items[2].component);
@@ -441,7 +441,7 @@ describe('overflow', () => {
       const item = buttons[5].firstElementChild;
       const itemAttributes = item.getAttributeNames();
       overflow.click();
-      await nextRender(subMenu);
+      await nextRender();
       subMenu.close();
       await nextUpdate(menu);
       menu.style.width = 'auto';
@@ -454,7 +454,7 @@ describe('overflow', () => {
       const item = buttons[5].firstElementChild;
       item.classList.add('test-class-1');
       overflow.click();
-      await nextRender(subMenu);
+      await nextRender();
       subMenu.close();
       await nextUpdate(menu);
       menu.style.width = 'auto';

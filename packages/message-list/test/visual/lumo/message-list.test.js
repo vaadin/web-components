@@ -47,7 +47,7 @@ describe('message-list', () => {
               userColorIndex: 3,
             },
           ];
-          await nextRender(element);
+          await nextRender();
         });
 
         it('basic', async () => {

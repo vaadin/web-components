@@ -29,7 +29,7 @@ describe('vaadin-button', () => {
     describe('default', () => {
       beforeEach(async () => {
         button = fixtureSync('<vaadin-button>Press me</vaadin-button>');
-        await nextRender(button);
+        await nextRender();
       });
 
       it('should set role attribute to button by default', () => {
@@ -40,7 +40,7 @@ describe('vaadin-button', () => {
     describe('custom', () => {
       beforeEach(async () => {
         button = fixtureSync('<vaadin-button role="menuitem">Press me</vaadin-button>');
-        await nextRender(button);
+        await nextRender();
       });
 
       it('should not override custom role attribute', () => {
@@ -52,7 +52,7 @@ describe('vaadin-button', () => {
   describe('keyboard', () => {
     beforeEach(async () => {
       button = fixtureSync('<vaadin-button>Press me</vaadin-button>');
-      await nextRender(button);
+      await nextRender();
       button.focus();
     });
 
@@ -129,7 +129,7 @@ describe('vaadin-button', () => {
           <input id="last-global-focusable" />
         </div>`,
       ).children as unknown as [Button, HTMLInputElement];
-      await nextRender(button);
+      await nextRender();
     });
 
     afterEach(async () => {
@@ -181,7 +181,7 @@ describe('vaadin-button', () => {
           <input id="last-global-focusable" />
         </div>`,
       ).children as unknown as [Button, HTMLInputElement];
-      await nextRender(button);
+      await nextRender();
     });
 
     afterEach(async () => {
