@@ -44,4 +44,9 @@ export declare class MessageListMixinClass {
    * When set to `true`, the message text is parsed as Markdown.
    */
   markdown: boolean | undefined;
+
+  /**
+   * When set to `true`, new messages are announced to assistive technologies using ARIA live regions.
+   */
+  announceMessages: boolean | undefined;
 }
