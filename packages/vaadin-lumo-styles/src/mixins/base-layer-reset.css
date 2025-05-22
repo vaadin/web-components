@@ -5,7 +5,11 @@
  */
 @layer base {
   :is(:host, *, #id) {
-    &, &::before, &::after {
+    &,
+    &::before,
+    &::after {
+      all: revert-layer;
+    }
       all: revert-layer;
     }
   }
