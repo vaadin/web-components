@@ -12,8 +12,8 @@ import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { inputFieldShared } from '@vaadin/field-base/src/styles/input-field-shared-styles.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { textAreaStyles } from './vaadin-text-area-core-styles.js';
 import { TextAreaMixin } from './vaadin-text-area-mixin.js';
-import { textAreaStyles } from './vaadin-text-area-styles.js';
 
 /**
  * `<vaadin-text-area>` is a web component for multi-line text input.
