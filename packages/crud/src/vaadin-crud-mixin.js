@@ -484,7 +484,7 @@ export const CrudMixin = (superClass) =>
         } else {
           this.$.editor.removeAttribute('tabindex');
         }
-      } else if (oldOpened && this.__shouldOpenDialog(this._fullscreen, this.editorPosition)) {
+      } else if (oldOpened) {
         // Teleport form and buttons back to light DOM when closing overlay
         this.__moveChildNodes(this);
       }
