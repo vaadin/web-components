@@ -4,6 +4,12 @@ import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themab
 
 const drawerToggle = css`
   :host {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: default;
+    position: relative;
+    outline: none;
     width: var(--lumo-size-l);
     height: var(--lumo-size-l);
     min-width: auto;
@@ -13,13 +19,11 @@ const drawerToggle = css`
   }
 
   [part='icon'],
-  [part='icon']::after,
   [part='icon']::before {
-    position: inherit;
-    height: auto;
-    width: auto;
     background: transparent;
-    top: auto;
+    width: auto;
+    height: auto;
+    mask-image: none;
   }
 
   [part='icon']::before {
