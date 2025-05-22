@@ -19,7 +19,7 @@ const registeredProperties = new Set();
 function findRoot(element) {
   const root = element.getRootNode();
 
-  if (root.host && root.host.constructor.cssInjectPropName) {
+  if (root.host && root.host.constructor.version) {
     return findRoot(root.host);
   }
 
