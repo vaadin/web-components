@@ -9,6 +9,10 @@ class TestFoo extends CSSInjectionMixin(ThemableMixin(LitElement)) {
     return 'test-foo';
   }
 
+  static get version() {
+    return '1.0.0';
+  }
+
   static get styles() {
     return css`
       :host {
@@ -34,6 +38,10 @@ class TestBar extends CSSInjectionMixin(LitElement) {
     return 'test-bar';
   }
 
+  static get version() {
+    return '1.0.0';
+  }
+
   render() {
     return html`<test-foo></test-foo>`;
   }
@@ -44,6 +52,10 @@ customElements.define(TestBar.is, TestBar);
 class TestBaz extends TestFoo {
   static get is() {
     return 'test-baz';
+  }
+
+  static get version() {
+    return '1.0.0';
   }
 
   render() {
