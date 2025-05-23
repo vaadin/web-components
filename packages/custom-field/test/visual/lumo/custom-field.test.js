@@ -18,7 +18,7 @@ import '@vaadin/combo-box';
 import '@vaadin/date-picker';
 import '@vaadin/email-field';
 import '@vaadin/form-layout';
-import '@vaadin/form-layout';
+import '@vaadin/form-layout/vaadin-form-item.js';
 import '@vaadin/number-field';
 import '@vaadin/password-field';
 import '@vaadin/select';
