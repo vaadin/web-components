@@ -5,6 +5,7 @@
  */
 @import './components/button.css';
 @import './components/combo-box.css';
+@import './components/custom-field.css';
 @import './components/date-picker.css';
 @import './components/email-field.css';
 @import './components/icon.css';
