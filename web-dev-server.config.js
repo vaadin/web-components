@@ -43,14 +43,18 @@ export function enforceThemePlugin(theme) {
     transform(context) {
       let { body } = context;
 
-      if (context.response.is('html') && (theme === 'base' || theme === 'ported-lumo')) {
-        // Load the base theme
-        body = body.replace('./common.js', './common-base.js');
+      if (theme === 'legacy-lumo' && context.response.is('html', 'js')) {
+        body = body.replace('vaadin-lumo-styles/global.css', 'vaadin-lumo-styles/test/autoload.js');
       }
 
-      if (context.response.is('html', 'js') && (theme === 'base' || theme === 'legacy-lumo')) {
-        // Remove all CSS imports
+      if (['base', 'legacy-lumo'].includes(theme) && context.response.is('html', 'js')) {
+        // Remove all not transformed CSS imports
         body = body.replaceAll(/^.+vaadin-lumo-styles\/.+\.css.+$/gmu, '');
+      }
+
+      if (['base', 'ported-lumo'].includes(theme) && context.response.is('html')) {
+        // Load the base theme
+        body = body.replace('./common.js', './common-base.js');
       }
 
       return body;
@@ -60,10 +64,6 @@ export function enforceThemePlugin(theme) {
         // Load the base theme
         source = source.replace('/theme/lumo/', '/src/');
         source = source.replace(/(.+)-core-styles\.js/u, '$1-base-styles.js');
-      }
-
-      if (theme === 'legacy-lumo') {
-        source = source.replace('vaadin-lumo-styles/global.css', 'vaadin-lumo-styles/test/autoload.js');
       }
 
       return source;
