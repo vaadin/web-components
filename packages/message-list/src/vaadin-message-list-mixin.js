@@ -50,6 +50,7 @@ export const MessageListMixin = (superClass) =>
 
         /**
          * When set to `true`, new messages are announced to assistive technologies using ARIA live regions.
+         * @attr {boolean} announce-messages
          * @type {boolean}
          */
         announceMessages: {

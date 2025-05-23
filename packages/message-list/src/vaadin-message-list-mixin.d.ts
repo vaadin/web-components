@@ -47,6 +47,7 @@ export declare class MessageListMixinClass {
 
   /**
    * When set to `true`, new messages are announced to assistive technologies using ARIA live regions.
+   * @attr {boolean} announce-messages
    */
   announceMessages: boolean | undefined;
 }
