@@ -307,10 +307,6 @@ class Card extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
     };
   }
 
-  static get experimental() {
-    return true;
-  }
-
   /** @protected */
   ready() {
     super.ready();
