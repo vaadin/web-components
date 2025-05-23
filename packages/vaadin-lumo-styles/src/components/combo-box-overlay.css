@@ -1,0 +1,8 @@
+:host {
+  --_vaadin-combo-box-items-container-border-width: var(--lumo-space-xs);
+  --_vaadin-combo-box-items-container-border-style: solid;
+}
+
+#overlay {
+  width: var(--vaadin-combo-box-overlay-width, var(--_vaadin-combo-box-overlay-default-width, auto));
+}

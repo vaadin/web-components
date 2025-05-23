@@ -10,6 +10,7 @@ import { css, html, LitElement } from 'lit';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
+import { CSSInjectionMixin } from '@vaadin/vaadin-themable-mixin/css-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { MultiSelectComboBoxInternalMixin } from './vaadin-multi-select-combo-box-internal-mixin.js';
 
@@ -22,7 +23,9 @@ import { MultiSelectComboBoxInternalMixin } from './vaadin-multi-select-combo-bo
  * @mixes ThemableMixin
  * @private
  */
-class MultiSelectComboBoxInternal extends MultiSelectComboBoxInternalMixin(ThemableMixin(PolylitMixin(LitElement))) {
+class MultiSelectComboBoxInternal extends MultiSelectComboBoxInternalMixin(
+  CSSInjectionMixin(ThemableMixin(PolylitMixin(LitElement))),
+) {
   static get is() {
     return 'vaadin-multi-select-combo-box-internal';
   }

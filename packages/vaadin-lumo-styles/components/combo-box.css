@@ -1,0 +1,32 @@
+@import './input-container.css';
+
+@import '../src/mixins/base-layer-reset.css' vaadin-combo-box;
+@import '../src/mixins/field-label.css' vaadin-combo-box;
+@import '../src/mixins/field-required.css' vaadin-combo-box;
+@import '../src/mixins/field-error-message.css' vaadin-combo-box;
+@import '../src/mixins/field-button.css' vaadin-combo-box;
+@import '../src/mixins/field-helper.css' vaadin-combo-box;
+@import '../src/mixins/field-base.css' vaadin-combo-box;
+@import '../src/components/combo-box.css' vaadin-combo-box;
+
+@import '../src/mixins/base-layer-reset.css' vaadin-combo-box-overlay;
+@import '../src/mixins/loader.css' vaadin-combo-box-overlay;
+@import '../src/mixins/combo-box-loader.css' vaadin-combo-box-overlay;
+@import '../src/mixins/overlay.css' vaadin-combo-box-overlay;
+@import '../src/mixins/menu-overlay-core.css' vaadin-combo-box-overlay;
+@import '../src/mixins/combo-box-overlay.css' vaadin-combo-box-overlay;
+@import '../src/components/combo-box-overlay.css' vaadin-combo-box-overlay;
+
+@import '../src/mixins/base-layer-reset.css' vaadin-combo-box-item;
+@import '../src/mixins/item.css' vaadin-combo-box-item;
+@import '../src/components/combo-box-item.css' vaadin-combo-box-item;
+
+@import '../src/mixins/base-layer-reset.css' vaadin-combo-box-scroller;
+@import '../src/components/combo-box-scroller.css' vaadin-combo-box-scroller;
+
+html {
+  --vaadin-combo-box-css-inject: 1;
+  --vaadin-combo-box-item-css-inject: 1;
+  --vaadin-combo-box-overlay-css-inject: 1;
+  --vaadin-combo-box-scroller-css-inject: 1;
+}

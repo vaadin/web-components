@@ -1,8 +1,10 @@
 import { resetMouse, sendKeys, sendMouseToElement } from '@vaadin/test-runner-commands';
 import { fixtureSync, mousedown } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
+import '@vaadin/vaadin-lumo-styles/props.css';
+import '@vaadin/vaadin-lumo-styles/components/number-field.css';
 import '../common.js';
-import '../../../theme/lumo/vaadin-number-field.js';
+import '../../../vaadin-number-field.js';
 
 describe('number-field', () => {
   let div, element;

@@ -1,0 +1,3 @@
+[part='toggle-button']::before {
+  content: var(--lumo-icons-dropdown);
+}

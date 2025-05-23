@@ -1,0 +1,106 @@
+:host {
+  display: inline-flex;
+  align-items: center;
+  align-self: center;
+  white-space: nowrap;
+  box-sizing: border-box;
+  font-size: var(--lumo-font-size-xxs);
+  line-height: 1;
+  color: var(--lumo-body-text-color);
+  border-radius: var(--lumo-border-radius-s);
+  background-color: var(--lumo-contrast-20pct);
+  cursor: var(--lumo-clickable-cursor);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+:host([hidden]),
+:host(:is([readonly], [disabled], [slot='overflow'])) [part='remove-button'] {
+  display: none !important;
+}
+
+:host([disabled]) {
+  background-color: var(--lumo-contrast-10pct);
+}
+
+:host([focused]) [part='remove-button'] {
+  color: inherit;
+}
+
+:host([slot='overflow']) {
+  position: relative;
+  min-width: var(--lumo-size-xxs);
+  margin-inline-start: var(--lumo-space-s);
+}
+
+:host([slot='overflow'])::before,
+:host([slot='overflow'])::after {
+  position: absolute;
+  content: '';
+  width: 100%;
+  height: 100%;
+  border-left: calc(var(--lumo-space-s) / 4) solid var(--lumo-contrast-30pct);
+  border-radius: var(--lumo-border-radius-s);
+}
+
+:host([slot='overflow'])::before {
+  left: calc(-1 * var(--lumo-space-s) / 2);
+}
+
+:host([slot='overflow'])::after {
+  left: calc(-1 * var(--lumo-space-s));
+}
+
+:host([count='2']) {
+  margin-inline-start: calc(var(--lumo-space-s) / 2);
+}
+
+:host([count='2'])::after {
+  display: none;
+}
+
+:host([count='1']) {
+  margin-inline-start: 0;
+}
+
+:host([count='1'])::before,
+:host([count='1'])::after {
+  display: none;
+}
+
+[part='label'] {
+  font-weight: 500;
+  line-height: 1.25;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+[part='remove-button'] {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: -0.3125em;
+  margin-bottom: -0.3125em;
+  margin-inline-start: auto;
+  width: 1.25em;
+  height: 1.25em;
+  font-size: 1.5em;
+  transition: none;
+}
+
+[part='remove-button']::before {
+  content: var(--lumo-icons-cross);
+}
+
+:host([disabled]) [part='label'] {
+  color: var(--lumo-disabled-text-color);
+  -webkit-text-fill-color: var(--lumo-disabled-text-color);
+  pointer-events: none;
+}
+
+@media (forced-colors: active) {
+  :host {
+    outline: 1px solid;
+    outline-offset: -1px;
+  }
+}

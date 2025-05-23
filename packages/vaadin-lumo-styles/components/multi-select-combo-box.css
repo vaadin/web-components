@@ -1,0 +1,41 @@
+@import '../src/mixins/base-layer-reset.css' vaadin-multi-select-combo-box;
+@import '../src/mixins/field-label.css' vaadin-multi-select-combo-box;
+@import '../src/mixins/field-required.css' vaadin-multi-select-combo-box;
+@import '../src/mixins/field-error-message.css' vaadin-multi-select-combo-box;
+@import '../src/mixins/field-button.css' vaadin-multi-select-combo-box;
+@import '../src/mixins/field-helper.css' vaadin-multi-select-combo-box;
+@import '../src/mixins/field-base.css' vaadin-multi-select-combo-box;
+@import '../src/components/multi-select-combo-box.css' vaadin-multi-select-combo-box;
+
+@import '../src/mixins/base-layer-reset.css' vaadin-multi-select-combo-box-container;
+@import '../src/components/input-container.css' vaadin-multi-select-combo-box-container;
+@import '../src/components/multi-select-combo-box-container.css' vaadin-multi-select-combo-box-container;
+
+@import '../src/mixins/base-layer-reset.css' vaadin-multi-select-combo-box-overlay;
+@import '../src/mixins/loader.css' vaadin-multi-select-combo-box-overlay;
+@import '../src/mixins/combo-box-loader.css' vaadin-multi-select-combo-box-overlay;
+@import '../src/mixins/overlay.css' vaadin-multi-select-combo-box-overlay;
+@import '../src/mixins/menu-overlay-core.css' vaadin-multi-select-combo-box-overlay;
+@import '../src/mixins/combo-box-overlay.css' vaadin-multi-select-combo-box-overlay;
+@import '../src/components/multi-select-combo-box-overlay.css' vaadin-multi-select-combo-box-overlay;
+
+@import '../src/mixins/base-layer-reset.css' vaadin-multi-select-combo-box-chip;
+@import '../src/mixins/field-button.css' vaadin-multi-select-combo-box-chip;
+@import '../src/components/multi-select-combo-box-chip.css' vaadin-multi-select-combo-box-chip;
+
+@import '../src/mixins/base-layer-reset.css' vaadin-multi-select-combo-box-item;
+@import '../src/mixins/item.css' vaadin-multi-select-combo-box-item;
+@import '../src/components/combo-box-item.css' vaadin-multi-select-combo-box-item;
+@import '../src/components/multi-select-combo-box-item.css' vaadin-multi-select-combo-box-item;
+
+@import '../src/mixins/base-layer-reset.css' vaadin-multi-select-combo-box-scroller;
+@import '../src/components/multi-select-combo-box-scroller.css' vaadin-multi-select-combo-box-scroller;
+
+html {
+  --vaadin-multi-select-combo-box-container-css-inject: 1;
+  --vaadin-multi-select-combo-box-scroller-css-inject: 1;
+  --vaadin-multi-select-combo-box-overlay-css-inject: 1;
+  --vaadin-multi-select-combo-box-chip-css-inject: 1;
+  --vaadin-multi-select-combo-box-item-css-inject: 1;
+  --vaadin-multi-select-combo-box-css-inject: 1;
+}

@@ -1,6 +1,8 @@
 import { fixtureSync } from '@vaadin/testing-helpers/dist/fixture.js';
 import { visualDiff } from '@web/test-runner-visual-regression';
-import '../../../theme/lumo/vaadin-email-field.js';
+import '@vaadin/vaadin-lumo-styles/props.css';
+import '@vaadin/vaadin-lumo-styles/components/email-field.css';
+import '../../../vaadin-email-field.js';
 
 describe('email-field', () => {
   let div, element;

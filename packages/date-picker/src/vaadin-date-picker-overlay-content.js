@@ -12,6 +12,7 @@ import { html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
+import { CSSInjectionMixin } from '@vaadin/vaadin-themable-mixin/css-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { DatePickerOverlayContentMixin } from './vaadin-date-picker-overlay-content-mixin.js';
 import { overlayContentStyles } from './vaadin-date-picker-overlay-content-styles.js';
@@ -22,7 +23,7 @@ import { overlayContentStyles } from './vaadin-date-picker-overlay-content-style
  * @private
  */
 class DatePickerOverlayContent extends DatePickerOverlayContentMixin(
-  ThemableMixin(DirMixin(PolylitMixin(LitElement))),
+  CSSInjectionMixin(ThemableMixin(DirMixin(PolylitMixin(LitElement)))),
 ) {
   static get is() {
     return 'vaadin-date-picker-overlay-content';

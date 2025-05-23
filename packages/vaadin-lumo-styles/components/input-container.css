@@ -1,0 +1,6 @@
+@import '../src/mixins/base-layer-reset.css' vaadin-input-container;
+@import '../src/components/input-container.css' vaadin-input-container;
+
+html {
+  --vaadin-input-container-css-inject: 1;
+}

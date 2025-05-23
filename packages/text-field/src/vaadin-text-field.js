@@ -11,6 +11,7 @@ import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { inputFieldShared } from '@vaadin/field-base/src/styles/input-field-shared-styles.js';
+import { CSSInjectionMixin } from '@vaadin/vaadin-themable-mixin/css-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { TextFieldMixin } from './vaadin-text-field-mixin.js';
 
@@ -83,7 +84,9 @@ import { TextFieldMixin } from './vaadin-text-field-mixin.js';
  * @mixes ThemableMixin
  * @mixes TextFieldMixin
  */
-export class TextField extends TextFieldMixin(ThemableMixin(ElementMixin(PolylitMixin(LitElement)))) {
+export class TextField extends TextFieldMixin(
+  CSSInjectionMixin(ThemableMixin(ElementMixin(PolylitMixin(LitElement)))),
+) {
   static get is() {
     return 'vaadin-text-field';
   }

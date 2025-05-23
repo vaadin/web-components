@@ -1,0 +1,14 @@
+@import './input-container.css';
+
+@import '../src/mixins/base-layer-reset.css' vaadin-number-field;
+@import '../src/mixins/field-label.css' vaadin-number-field;
+@import '../src/mixins/field-required.css' vaadin-number-field;
+@import '../src/mixins/field-error-message.css' vaadin-number-field;
+@import '../src/mixins/field-button.css' vaadin-number-field;
+@import '../src/mixins/field-helper.css' vaadin-number-field;
+@import '../src/mixins/field-base.css' vaadin-number-field;
+@import '../src/components/number-field.css' vaadin-number-field;
+
+html {
+  --vaadin-number-field-css-inject: 1;
+}
