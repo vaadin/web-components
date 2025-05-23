@@ -8,7 +8,7 @@
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
-import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { css } from 'lit';
 
 const template = document.createElement('template');
 
@@ -88,6 +88,3 @@ export const iconsStyles = css`
     content: var(--vaadin-rte-icons-redo);
   }
 `;
-
-// Register a module with ID for backwards compatibility.
-registerStyles('', iconsStyles, { moduleId: 'vaadin-rich-text-editor-icons' });
