@@ -8,6 +8,7 @@ import { ButtonMixin } from '@vaadin/button/src/vaadin-button-mixin.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
+import { CSSInjectionMixin } from '@vaadin/vaadin-themable-mixin/css-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { detailsSummary } from './vaadin-details-summary-core-styles.js';
 
@@ -41,7 +42,7 @@ import { detailsSummary } from './vaadin-details-summary-core-styles.js';
  * @mixes DirMixin
  * @mixes ThemableMixin
  */
-class DetailsSummary extends ButtonMixin(DirMixin(ThemableMixin(PolylitMixin(LitElement)))) {
+class DetailsSummary extends ButtonMixin(DirMixin(CSSInjectionMixin(ThemableMixin(PolylitMixin(LitElement))))) {
   static get is() {
     return 'vaadin-details-summary';
   }

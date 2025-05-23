@@ -7,6 +7,7 @@ import './vaadin-accordion-heading.js';
 import { html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
+import { CSSInjectionMixin } from '@vaadin/vaadin-themable-mixin/css-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { accordionPanel } from './vaadin-accordion-panel-core-styles.js';
 import { AccordionPanelMixin } from './vaadin-accordion-panel-mixin.js';
@@ -40,7 +41,7 @@ import { AccordionPanelMixin } from './vaadin-accordion-panel-mixin.js';
  * @mixes AccordionPanelMixin
  * @mixes ThemableMixin
  */
-class AccordionPanel extends AccordionPanelMixin(ThemableMixin(PolylitMixin(LitElement))) {
+class AccordionPanel extends AccordionPanelMixin(CSSInjectionMixin(ThemableMixin(PolylitMixin(LitElement)))) {
   static get is() {
     return 'vaadin-accordion-panel';
   }
