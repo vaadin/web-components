@@ -409,4 +409,14 @@ describe('message-list', () => {
       expect(messageElements[1].hasAttribute('focused')).to.be.true;
     });
   });
+
+  describe('a11y', () => {
+    it('should toggle aria live', () => {
+      expect(messageList.getAttribute('aria-live')).to.be.null;
+      messageList.announceMessages = true;
+      expect(messageList.getAttribute('aria-live')).to.equal('polite');
+      messageList.announceMessages = false;
+      expect(messageList.getAttribute('aria-live')).to.be.null;
+    });
+  });
 });

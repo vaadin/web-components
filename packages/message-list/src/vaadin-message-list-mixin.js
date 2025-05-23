@@ -49,6 +49,18 @@ export const MessageListMixin = (superClass) =>
           observer: '__markdownChanged',
           reflectToAttribute: true,
         },
+
+        /**
+         * When set to `true`, new messages are announced to assistive technologies using ARIA live regions.
+         * @attr {boolean} announce-messages
+         * @type {boolean}
+         */
+        announceMessages: {
+          type: Boolean,
+          value: false,
+          observer: '__announceChanged',
+          sync: true,
+        },
       };
     }
 
@@ -63,7 +75,7 @@ export const MessageListMixin = (superClass) =>
 
       // Make screen readers announce new messages
       this.setAttribute('aria-relevant', 'additions');
-      this.setAttribute('role', 'log');
+      this.setAttribute('role', 'region');
     }
 
     /** @protected */
@@ -192,5 +204,10 @@ export const MessageListMixin = (superClass) =>
     _getIndexOfFocusableElement() {
       const index = this._messages.findIndex((e) => e.tabIndex === 0);
       return index !== -1 ? index : 0;
+    }
+
+    /** @private */
+    __announceChanged(announceMessages) {
+      this.ariaLive = announceMessages ? 'polite' : null;
     }
   };
