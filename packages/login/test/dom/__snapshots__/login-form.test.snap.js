@@ -95,7 +95,7 @@ snapshots["vaadin-login-form host default"] =
       role="button"
       slot="submit"
       tabindex="0"
-      theme="primary contained submit"
+      theme="primary submit"
     >
       Log in
     </vaadin-button>
@@ -214,7 +214,7 @@ snapshots["vaadin-login-form host required"] =
       role="button"
       slot="submit"
       tabindex="0"
-      theme="primary contained submit"
+      theme="primary submit"
     >
       Log in
     </vaadin-button>
@@ -325,7 +325,7 @@ snapshots["vaadin-login-form host i18n"] =
       role="button"
       slot="submit"
       tabindex="0"
-      theme="primary contained submit"
+      theme="primary submit"
     >
       Kirjaudu sisään
     </vaadin-button>
@@ -436,7 +436,7 @@ snapshots["vaadin-login-form host i18n-partial"] =
       role="button"
       slot="submit"
       tabindex="0"
-      theme="primary contained submit"
+      theme="primary submit"
     >
       Log in
     </vaadin-button>
@@ -555,7 +555,7 @@ snapshots["vaadin-login-form host i18n-required"] =
       role="button"
       slot="submit"
       tabindex="0"
-      theme="primary contained submit"
+      theme="primary submit"
     >
       Kirjaudu sisään
     </vaadin-button>
@@ -666,7 +666,7 @@ snapshots["vaadin-login-form host noForgotPassword"] =
       role="button"
       slot="submit"
       tabindex="0"
-      theme="primary contained submit"
+      theme="primary submit"
     >
       Log in
     </vaadin-button>
