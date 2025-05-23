@@ -1,7 +1,10 @@
-import { fixtureSync } from '@vaadin/testing-helpers/dist/fixture.js';
+import { fixtureSync } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
-import '@vaadin/item/theme/lumo/vaadin-item.js';
-import '../../../theme/lumo/vaadin-list-box.js';
+import '@vaadin/vaadin-lumo-styles/props.css';
+import '@vaadin/vaadin-lumo-styles/components/item.css';
+import '@vaadin/vaadin-lumo-styles/components/list-box.css';
+import '@vaadin/item';
+import '../../../vaadin-list-box.js';
 
 describe('list-box', () => {
   let div, element;
