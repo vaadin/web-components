@@ -1,37 +1,54 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Avatar group</title>
+    <title>Avatar Group</title>
     <script type="module" src="./common.js"></script>
 
     <script type="module">
       import '@vaadin/avatar-group';
 
-      const group = document.querySelector('vaadin-avatar-group');
-      group.items = [{ name: 'AA' }, { name: 'BB' }, { name: 'CC' }];
+      const groups = document.querySelectorAll('vaadin-avatar-group');
+      groups.forEach(group => group.items = [{ name: 'AA' }, { name: 'BB' }, { name: 'CC' }]);
 
       document.querySelector('#add').addEventListener('click', () => {
         const alphabet = 'abcdefghijklmnopqrstuvwxyz';
         const randomChar = alphabet[Math.floor(Math.random() * alphabet.length)];
-        group.items = [...group.items, { name: randomChar.toUpperCase().repeat(2) }];
+        groups.forEach(group => group.items = [...group.items, { name: randomChar.toUpperCase().repeat(2) }]);
       });
 
       document.querySelector('#remove').addEventListener('click', () => {
-        const items = [...group.items].splice(0, group.items.length - 1);
-        group.items = items;
+        groups.forEach(group => group.items = [...group.items].splice(0, group.items.length - 1));
       });
     </script>
+
+    <style>
+      @layer vaadin.base {
+  :is(html, #id) {
+    --vaadin-focus-ring-color: revert-layer;
+    --vaadin-focus-ring-width: revert-layer;
+  }
+}
+
+    </style>
   </head>
 
   <body>
-    <vaadin-avatar-group></vaadin-avatar-group>
-
     <p>
       <button id="add">Add item</button>
       <button id="remove">Remove item</button>
     </p>
+
+    <section>
+      <h2>Default Stacking</h2>
+      <vaadin-avatar-group></vaadin-avatar-group>
+    </section>
+    <section>
+      <h2>Reverse Stacking</h2>
+      <vaadin-avatar-group theme="reverse"></vaadin-avatar-group>
+    </section>
+
   </body>
 </html>

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -11,11 +11,48 @@
       import '@vaadin/avatar';
       import '@vaadin/tooltip';
     </script>
+
+<style>
+  @layer vaadin.base {
+:is(html, #id) {
+--vaadin-focus-ring-color: revert-layer;
+--vaadin-focus-ring-width: revert-layer;
+}
+}
+
+</style>
   </head>
 
   <body>
-    <vaadin-avatar abbr="AB"></vaadin-avatar>
-    <vaadin-avatar name="Aria Bailey"></vaadin-avatar>
-    <vaadin-avatar name="Aria Bailey" with-tooltip></vaadin-avatar>
+    <section>
+      <h2>Default Icon</h2>
+      <vaadin-avatar></vaadin-avatar>
+    </section>
+    <section>
+      <h2>Explicit Abbreviation</h2>
+      <vaadin-avatar abbr="AB"></vaadin-avatar>
+    </section>
+    <section>
+      <h2>Abbreviation without/with Tooltip</h2>
+      <vaadin-avatar name="Aria Bailey"></vaadin-avatar>
+      <vaadin-avatar name="Aria Bailey" with-tooltip></vaadin-avatar>
+    </section>
+    <section>
+      <h2>Image</h2>
+      <vaadin-avatar
+        name="Aria Bailey"
+        img="https://cdn.jsdelivr.net/gh/alohe/avatars/png/vibrent_22.png"
+      ></vaadin-avatar>
+    </section>
+    <section>
+      <h2>User Color</h2>
+      <vaadin-avatar
+        name="Aria Bailey"
+        img="https://cdn.jsdelivr.net/gh/alohe/avatars/png/vibrent_22.png"
+        has-color-index
+        style="--vaadin-avatar-user-color: #009a6c"
+      ></vaadin-avatar>
+      <vaadin-avatar abbr="AB" has-color-index style="--vaadin-avatar-user-color: #009a6c"></vaadin-avatar>
+    </section>
   </body>
 </html>

@@ -6,46 +6,51 @@
 import { css } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 export const avatarGroupStyles = css`
-  :host {
-    display: block;
-    width: 100%; /* prevent collapsing inside non-stretching column flex */
-    --vaadin-avatar-group-overlap: 8px;
-    --vaadin-avatar-group-overlap-border: 2px;
-  }
+  @layer base {
+    :host {
+      display: block;
+      width: 100%; /* prevent collapsing inside non-stretching column flex */
+      /* 1: last on top */
+      /* -1: first on top */
+      --_dir: 1;
+    }
 
-  :host([hidden]) {
-    display: none !important;
-  }
+    :host([theme~='reverse']) {
+      --_dir: -1;
+    }
 
-  [part='container'] {
-    display: flex;
-    position: relative;
-    width: 100%;
-    flex-wrap: nowrap;
-  }
+    :host([hidden]) {
+      display: none !important;
+    }
 
-  ::slotted(vaadin-avatar:not(:first-child)) {
-    -webkit-mask-image: url('data:image/svg+xml;utf8,<svg viewBox=%220 0 300 300%22 fill=%22none%22 xmlns=%22http://www.w3.org/2000/svg%22><path fill-rule=%22evenodd%22 clip-rule=%22evenodd%22 d=%22M300 0H0V300H300V0ZM150 200C177.614 200 200 177.614 200 150C200 122.386 177.614 100 150 100C122.386 100 100 122.386 100 150C100 177.614 122.386 200 150 200Z%22 fill=%22black%22/></svg>');
-    mask-image: url('data:image/svg+xml;utf8,<svg viewBox=%220 0 300 300%22 fill=%22none%22 xmlns=%22http://www.w3.org/2000/svg%22><path fill-rule=%22evenodd%22 clip-rule=%22evenodd%22 d=%22M300 0H0V300H300V0ZM150 200C177.614 200 200 177.614 200 150C200 122.386 177.614 100 150 100C122.386 100 100 122.386 100 150C100 177.614 122.386 200 150 200Z%22 fill=%22black%22/></svg>');
-    -webkit-mask-size: calc(
-      300% + var(--vaadin-avatar-group-overlap-border) * 6 - var(--vaadin-avatar-outline-width) * 6
-    );
-    mask-size: calc(300% + var(--vaadin-avatar-group-overlap-border) * 6 - var(--vaadin-avatar-outline-width) * 6);
-  }
+    [part='container'] {
+      display: flex;
+      position: relative;
+      width: 100%;
+      flex-wrap: nowrap;
+    }
 
-  ::slotted(vaadin-avatar:not([dir='rtl']):not(:first-child)) {
-    margin-left: calc(var(--vaadin-avatar-group-overlap) * -1 - var(--vaadin-avatar-outline-width));
-    -webkit-mask-position: calc(50% - var(--vaadin-avatar-size) + var(--vaadin-avatar-group-overlap));
-    mask-position: calc(50% - var(--vaadin-avatar-size) + var(--vaadin-avatar-group-overlap));
-  }
+    ::slotted(vaadin-avatar) {
+      mask-image: url('data:image/svg+xml;utf8,<svg viewBox="0 0 300 300" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M300 0H0V300H300V0ZM150 200C177.614 200 200 177.614 200 150C200 122.386 177.614 100 150 100C122.386 100 100 122.386 100 150C100 177.614 122.386 200 150 200Z" fill="black"/></svg>');
+      mask-size: calc(
+        300% + var(--vaadin-avatar-group-overlap-border, 2px) * 6 - var(--vaadin-avatar-outline-width) * 6
+      );
+      mask-position: calc(50% + (var(--vaadin-avatar-size, 2em) - var(--vaadin-avatar-group-overlap, 8px)) * var(--_d));
+      --_d: var(--_dir);
+    }
 
-  ::slotted(vaadin-avatar[dir='rtl']:not(:first-child)) {
-    margin-right: calc(var(--vaadin-avatar-group-overlap) * -1);
-    -webkit-mask-position: calc(
-      50% + var(--vaadin-avatar-size) - var(--vaadin-avatar-group-overlap) + var(--vaadin-avatar-outline-width)
-    );
-    mask-position: calc(
-      50% + var(--vaadin-avatar-size) - var(--vaadin-avatar-group-overlap) + var(--vaadin-avatar-outline-width)
-    );
+    :host(:dir(rtl)) ::slotted(vaadin-avatar) {
+      --_d: calc(var(--_dir) * -1);
+    }
+
+    ::slotted(vaadin-avatar:not(:first-child)) {
+      margin-inline-start: calc(var(--vaadin-avatar-group-overlap, 8px) * -1 - var(--vaadin-avatar-outline-width));
+    }
+
+    :host(:not([theme~='reverse'])) ::slotted(vaadin-avatar:last-child),
+    :host(:not([theme~='reverse'])) [part='container']:not(.has-overflow) ::slotted(vaadin-avatar:nth-last-child(2)),
+    :host([theme~='reverse']) ::slotted(vaadin-avatar:first-child) {
+      mask-image: none;
+    }
   }
 `;

@@ -27,19 +27,19 @@ class AvatarGroupMenu extends ListMixin(ThemableMixin(DirMixin(PolylitMixin(LitE
 
   static get styles() {
     return css`
-      :host {
-        display: flex;
-      }
+      @layer base {
+        :host {
+          display: block;
+          padding: var(--vaadin-item-overlay-padding, 4px);
+        }
 
-      :host([hidden]) {
-        display: none !important;
-      }
+        :host([hidden]) {
+          display: none !important;
+        }
 
-      [part='items'] {
-        height: 100%;
-        width: 100%;
-        overflow-y: auto;
-        -webkit-overflow-scrolling: touch;
+        [part='items'] {
+          display: contents;
+        }
       }
     `;
   }
