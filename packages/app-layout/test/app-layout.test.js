@@ -302,6 +302,23 @@ describe('vaadin-app-layout', () => {
 
         expect(width).to.be.equal(100);
       });
+
+      it('should update content offset when drawer width changes', async () => {
+        // Allow drawer size based on content
+        layout.style.setProperty('--vaadin-app-layout-drawer-width', 'auto');
+        const drawerContent = document.querySelector('section[slot="drawer"]');
+        drawerContent.style.width = '200px';
+        await nextResize(layout);
+        await nextRender();
+        const initialOffset = parseInt(getComputedStyle(layout).getPropertyValue('padding-inline-start'));
+        expect(initialOffset).to.equal(200);
+        // Decrease drawer content size and measure decrease
+        drawerContent.style.width = '100px';
+        await nextResize(layout);
+        await nextRender();
+        const updatedOffset = parseInt(getComputedStyle(layout).getPropertyValue('padding-inline-start'));
+        expect(updatedOffset).to.equal(100);
+      });
     });
 
     describe('mobile layout', () => {
