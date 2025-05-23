@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/tooltip",
-  "version": "24.6.10",
+  "version": "24.6.11",
   "publishConfig": {
     "access": "public"
   },
@@ -36,18 +36,18 @@
   "dependencies": {
     "@open-wc/dedupe-mixin": "^1.3.0",
     "@polymer/polymer": "^3.0.0",
-    "@vaadin/a11y-base": "~24.6.10",
-    "@vaadin/component-base": "~24.6.10",
-    "@vaadin/overlay": "~24.6.10",
-    "@vaadin/popover": "~24.6.10",
-    "@vaadin/vaadin-lumo-styles": "~24.6.10",
-    "@vaadin/vaadin-material-styles": "~24.6.10",
-    "@vaadin/vaadin-themable-mixin": "~24.6.10",
+    "@vaadin/a11y-base": "~24.6.11",
+    "@vaadin/component-base": "~24.6.11",
+    "@vaadin/overlay": "~24.6.11",
+    "@vaadin/popover": "~24.6.11",
+    "@vaadin/vaadin-lumo-styles": "~24.6.11",
+    "@vaadin/vaadin-material-styles": "~24.6.11",
+    "@vaadin/vaadin-themable-mixin": "~24.6.11",
     "lit": "^3.0.0"
   },
   "devDependencies": {
-    "@vaadin/chai-plugins": "~24.6.10",
-    "@vaadin/test-runner-commands": "~24.6.10",
+    "@vaadin/chai-plugins": "~24.6.11",
+    "@vaadin/test-runner-commands": "~24.6.11",
     "@vaadin/testing-helpers": "^1.1.0",
     "sinon": "^18.0.0"
   },
