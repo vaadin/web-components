@@ -8,10 +8,6 @@ import '@vaadin/icon';
 import '@vaadin/icons';
 import '@vaadin/avatar/theme/material/vaadin-avatar.js';
 
-window.Vaadin ||= {};
-window.Vaadin.featureFlags ||= {};
-window.Vaadin.featureFlags.cardComponent = true;
-
 const content = '<div>Content</div>';
 const title = '<div slot="title">Title</div>';
 const subTitle = '<div slot="subtitle">Subtitle</div>';
