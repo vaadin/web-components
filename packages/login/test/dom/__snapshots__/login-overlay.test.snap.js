@@ -109,7 +109,7 @@ snapshots["vaadin-login-overlay host default"] =
         role="button"
         slot="submit"
         tabindex="0"
-        theme="primary contained submit"
+        theme="primary submit"
       >
         Log in
       </vaadin-button>
@@ -235,7 +235,7 @@ snapshots["vaadin-login-overlay host i18n"] =
         role="button"
         slot="submit"
         tabindex="0"
-        theme="primary contained submit"
+        theme="primary submit"
       >
         Kirjaudu sisään
       </vaadin-button>
@@ -361,7 +361,7 @@ snapshots["vaadin-login-overlay host i18n-partial"] =
         role="button"
         slot="submit"
         tabindex="0"
-        theme="primary contained submit"
+        theme="primary submit"
       >
         Log in
       </vaadin-button>
@@ -488,7 +488,7 @@ snapshots["vaadin-login-overlay host overlay class"] =
         role="button"
         slot="submit"
         tabindex="0"
-        theme="primary contained submit"
+        theme="primary submit"
       >
         Log in
       </vaadin-button>

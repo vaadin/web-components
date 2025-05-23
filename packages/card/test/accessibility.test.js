@@ -2,9 +2,6 @@ import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import '../src/vaadin-card.js';
 
-window.Vaadin.featureFlags ||= {};
-window.Vaadin.featureFlags.cardComponent = true;
-
 describe('accessibility', () => {
   let card;
 

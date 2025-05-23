@@ -99,6 +99,16 @@ const getAllVisualPackages = () => {
     .filter((dir) => fs.statSync(`packages/${dir}`).isDirectory() && fs.existsSync(`packages/${dir}/test/visual`));
 };
 
+const getAllPortedLumoPackages = () => {
+  return fs
+    .readdirSync('packages')
+    .filter(
+      (dir) =>
+        fs.statSync(`packages/${dir}`).isDirectory() &&
+        fs.existsSync(`packages/vaadin-lumo-styles/src/components/${dir}.css`),
+    );
+};
+
 /**
  * Get all available packages with visual tests for base styles.
  */
@@ -171,38 +181,16 @@ const getUnitTestGroups = (packages) => {
  * Get visual test groups based on packages.
  */
 const getVisualTestGroups = (packages, theme) => {
-  packages = packages.map((pkg) => {
+  if (theme === 'base') {
+    packages = packages.filter((pkg) => !pkg.includes('lumo'));
+  }
+
+  return packages.map((pkg) => {
     return {
       name: pkg,
       files: [`packages/${pkg}/test/visual/*.test.{js,ts}`, `packages/${pkg}/test/visual/${theme}/*.test.{js,ts}`],
     };
   });
-
-  if (theme === 'base') {
-    packages = packages.filter(({ name }) => !name.includes('lumo'));
-  }
-
-  if (theme === 'lumo' && hasPortedParam) {
-    packages = packages.map(({ name, files }) => {
-      return {
-        name,
-        files: files.flatMap((glob) => {
-          if (name.includes('lumo')) {
-            // In the theme package, run all visual tests
-            return glob;
-          }
-
-          return globSync(glob).filter((file) => {
-            // Otherwise, only run visual tests that import CSS files
-            const content = fs.readFileSync(file, 'utf-8').toString();
-            return /vaadin-lumo-styles\/[^.]+\.css/u.test(content);
-          });
-        }),
-      };
-    });
-  }
-
-  return packages.filter((group) => group.files.length > 0);
 };
 
 const getTestRunnerHtml = () => (testFramework) =>
@@ -289,7 +277,15 @@ const createUnitTestsConfig = (config) => {
 };
 
 const createVisualTestsConfig = (theme, browserVersion) => {
-  const visualPackages = theme === 'base' ? getAllBasePackages() : getAllVisualPackages();
+  let visualPackages = [];
+  if (theme === 'base') {
+    visualPackages = getAllBasePackages();
+  } else if (theme === 'lumo' && hasPortedParam) {
+    visualPackages = getAllPortedLumoPackages();
+  } else {
+    visualPackages = getAllVisualPackages();
+  }
+
   const packages = getTestPackages(visualPackages);
   const groups = getVisualTestGroups(packages, theme);
 

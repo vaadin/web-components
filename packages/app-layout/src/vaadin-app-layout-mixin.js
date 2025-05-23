@@ -166,6 +166,7 @@ export const AppLayoutMixin = (superclass) =>
       });
       this._navbarSizeObserver.observe(this.$.navbarTop);
       this._navbarSizeObserver.observe(this.$.navbarBottom);
+      this._navbarSizeObserver.observe(this.$.drawer);
 
       window.addEventListener('close-overlay-drawer', this.__closeOverlayDrawerListener);
       window.addEventListener('keydown', this.__onDrawerKeyDown);

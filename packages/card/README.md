@@ -2,8 +2,6 @@
 
 A visual content container.
 
-> ⚠️ This component is experimental and the API may change. In order to use it, enable the feature flag by setting `window.Vaadin.featureFlags.cardComponent = true`.
-
 [Documentation + Live Demo ↗](https://vaadin.com/docs/latest/components/card)
 
 [![npm version](https://badgen.net/npm/v/@vaadin/card)](https://www.npmjs.com/package/@vaadin/card)
