@@ -4,7 +4,7 @@ export const snapshots = {};
 snapshots["vaadin-message-list default"] = 
 `<vaadin-message-list
   aria-relevant="additions"
-  role="log"
+  role="region"
 >
 </vaadin-message-list>
 `;
@@ -13,7 +13,7 @@ snapshots["vaadin-message-list default"] =
 snapshots["vaadin-message-list items"] = 
 `<vaadin-message-list
   aria-relevant="additions"
-  role="log"
+  role="region"
 >
   <vaadin-message
     role="listitem"
@@ -54,7 +54,7 @@ snapshots["vaadin-message-list items"] =
 snapshots["vaadin-message-list theme"] = 
 `<vaadin-message-list
   aria-relevant="additions"
-  role="log"
+  role="region"
 >
   <vaadin-message
     role="listitem"
@@ -80,7 +80,7 @@ snapshots["vaadin-message-list theme"] =
 snapshots["vaadin-message-list className"] = 
 `<vaadin-message-list
   aria-relevant="additions"
-  role="log"
+  role="region"
 >
   <vaadin-message
     class="pinned"

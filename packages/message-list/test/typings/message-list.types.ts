@@ -13,6 +13,7 @@ const list = document.createElement('vaadin-message-list');
 // Properties
 assertType<MessageListItem[] | null | undefined>(list.items);
 assertType<boolean | undefined>(list.markdown);
+assertType<boolean | undefined>(list.announceMessages);
 
 // Item properties
 const item: MessageListItem = list.items ? list.items[0] : {};
