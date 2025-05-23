@@ -9,7 +9,7 @@ import minimist from 'minimist';
 import { execSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
-import { cssImportPlugin, enforceBaseStylesPlugin, enforceLegacyLumoPlugin } from './web-dev-server.config.js';
+import { cssImportPlugin, enforceThemePlugin } from './web-dev-server.config.js';
 
 dotenv.config();
 
@@ -349,13 +349,13 @@ const createVisualTestsConfig = (theme, browserVersion) => {
       }),
 
       // yarn test:base
-      theme === 'base' && enforceBaseStylesPlugin(),
+      theme === 'base' && enforceThemePlugin('base'),
 
       // yarn test:lumo (uses legacy lumo styles defined in js files)
-      theme === 'lumo' && !hasPortedParam && enforceLegacyLumoPlugin(),
+      theme === 'lumo' && !hasPortedParam && enforceThemePlugin('legacy-lumo'),
 
       // yarn test:lumo --ported (uses base styles and lumo styles defined in css files)
-      theme === 'lumo' && hasPortedParam && enforceBaseStylesPlugin(),
+      theme === 'lumo' && hasPortedParam && enforceThemePlugin('ported-lumo'),
       theme === 'lumo' && hasPortedParam && cssImportPlugin(),
     ].filter(Boolean),
     groups,
