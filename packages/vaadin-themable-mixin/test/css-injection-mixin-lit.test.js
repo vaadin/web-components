@@ -383,7 +383,7 @@ describe('CSS injection', () => {
 
         assertInjectedStyle();
 
-        host.shadowRoot.adoptedStyleSheets.pop();
+        host.shadowRoot.adoptedStyleSheets.splice(host.shadowRoot.adoptedStyleSheets.indexOf(sheet), 1);
 
         await contentTransition();
         assertBaseStyle();
