@@ -4,6 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { SlotStylesMixin } from '@vaadin/component-base/src/slot-styles-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { MessageListMixin } from './vaadin-message-list-mixin.js';
 
@@ -42,7 +43,7 @@ export { MessageListItem } from './vaadin-message-list-mixin.js';
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  */
-declare class MessageList extends MessageListMixin(ThemableMixin(ElementMixin(HTMLElement))) {}
+declare class MessageList extends SlotStylesMixin(MessageListMixin(ThemableMixin(ElementMixin(HTMLElement)))) {}
 
 declare global {
   interface HTMLElementTagNameMap {

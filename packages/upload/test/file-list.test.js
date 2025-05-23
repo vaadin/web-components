@@ -50,7 +50,7 @@ describe('file list', () => {
     it('should not overflow content', async () => {
       upload.style.width = '180px';
       upload._addFile(createFiles(1)[0]);
-      await nextRender(upload);
+      await nextRender();
       const fileListItem = getFileListItems(upload)[0];
       expect(fileListItem.scrollWidth - fileListItem.offsetWidth).to.equal(0);
     });

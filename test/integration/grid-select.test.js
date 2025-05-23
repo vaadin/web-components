@@ -29,7 +29,7 @@ describe('select in grid', () => {
       }
     };
     flushGrid(grid);
-    await nextRender(grid);
+    await nextRender();
   });
 
   it('should not activate item on select toggle button click', () => {

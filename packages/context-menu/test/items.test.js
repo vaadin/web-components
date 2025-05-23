@@ -129,7 +129,7 @@ describe('items', () => {
 
   (isTouch ? it.skip : it)('should open the subMenu on the left if root menu is end-aligned', async () => {
     subMenu.close();
-    await nextRender(subMenu);
+    await nextRender();
     const rootItem = getMenuItems(rootMenu)[0];
     const rootItemRect = rootItem.getBoundingClientRect();
     rootOverlay.style.removeProperty('left');
@@ -147,7 +147,7 @@ describe('items', () => {
   it.skip('should open the second subMenu on the right again if not enough space', async () => {
     let padding;
     subMenu.close();
-    await nextRender(subMenu);
+    await nextRender();
     rootMenu.items[0].children[2].text = 'foo-0-2-longer';
 
     const rootItem = getMenuItems(rootMenu)[0];
@@ -381,7 +381,7 @@ describe('items', () => {
     rootOverlay.focus();
     await openMenu(getMenuItems(rootMenu)[0]);
     expect(subMenu.opened).to.be.true;
-    await nextRender(subMenu);
+    await nextRender();
     expect(getMenuItems(subMenu)[0].hasAttribute('focused')).to.be.false;
   });
 
@@ -565,7 +565,7 @@ describe('items', () => {
       const subBRCTop2 = subOverlay2.getBoundingClientRect().top;
 
       scrollElm.scrollTop = scrollDistance;
-      await nextRender(rootMenu);
+      await nextRender();
       expect(rootOverlay.getBoundingClientRect().top).to.be.closeTo(rootBRCTop - scrollDistance, 1);
       expect(subOverlay1.getBoundingClientRect().top).to.be.closeTo(subBRCTop1 - scrollDistance, 1);
       expect(subOverlay2.getBoundingClientRect().top).to.be.closeTo(subBRCTop2 - scrollDistance, 1);
@@ -580,7 +580,7 @@ describe('items', () => {
       const subBRCLeft2 = subOverlay2.getBoundingClientRect().left;
 
       scrollElm.scrollLeft = scrollDistance;
-      await nextRender(rootMenu);
+      await nextRender();
       expect(rootOverlay.getBoundingClientRect().left).to.be.closeTo(rootBRCLeft - scrollDistance, 1);
       expect(subOverlay1.getBoundingClientRect().left).to.be.closeTo(subBRCLeft1 - scrollDistance, 1);
       expect(subOverlay2.getBoundingClientRect().left).to.be.closeTo(subBRCLeft2 - scrollDistance, 1);

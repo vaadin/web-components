@@ -28,7 +28,7 @@ describe('grid-pro', () => {
         div,
       );
       element.items = users;
-      await nextRender(element);
+      await nextRender();
       div.style.width = '300px';
       element.focus();
     });
@@ -91,7 +91,7 @@ describe('grid-pro', () => {
         div,
       );
       element.items = users;
-      await nextRender(element);
+      await nextRender();
     });
 
     it('text', async () => {
@@ -112,7 +112,7 @@ describe('grid-pro', () => {
         div,
       );
       element.items = users;
-      await nextRender(element);
+      await nextRender();
     });
 
     it('checkbox', async () => {
@@ -135,7 +135,7 @@ describe('grid-pro', () => {
       element.items = users;
       const column = element.querySelector('vaadin-grid-pro-edit-column');
       column.editorOptions = ['mr', 'mrs', 'ms'];
-      await nextRender(element);
+      await nextRender();
     });
 
     it('select', async () => {

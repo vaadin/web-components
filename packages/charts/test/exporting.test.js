@@ -57,7 +57,7 @@ describe('vaadin-chart exporting', () => {
     pngExportButton.onclick();
 
     expect(fireEventSpy.firstCall.args[1]).to.be.equal('beforeExport');
-    await nextRender(chart);
+    await nextRender();
     expect(styleCopiedToBody).to.be.true;
     expect(styleContent).to.include('.highcharts-color-0');
   });
@@ -85,7 +85,7 @@ describe('vaadin-chart exporting', () => {
     pngExportButton.onclick();
 
     expect(fireEventSpy.lastCall.args[1]).to.be.equal('afterExport');
-    await nextRender(chart);
+    await nextRender();
     expect(styleRemovedFromBody).to.be.true;
   });
 
@@ -116,7 +116,7 @@ describe('vaadin-chart exporting', () => {
     pngExportButton.onclick();
 
     expect(fireEventSpy.lastCall.args[1]).to.be.equal('afterExport');
-    await nextRender(chart);
+    await nextRender();
     expect(styledModeAddedToBody).to.be.true;
     expect(document.body.hasAttribute(attributeName)).to.be.false;
   });
@@ -148,7 +148,7 @@ describe('vaadin-chart exporting', () => {
     pngExportButton.onclick();
 
     expect(fireEventSpy.lastCall.args[1]).to.be.equal('afterExport');
-    await nextRender(chart);
+    await nextRender();
     expect(styledModeAddedToBody).to.be.false;
     expect(document.body.hasAttribute(attributeName)).to.be.false;
   });

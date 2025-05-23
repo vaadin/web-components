@@ -85,7 +85,7 @@ describe('message-list', () => {
   describe('items property', () => {
     beforeEach(async () => {
       messageList.items = messages;
-      await nextRender(messageList);
+      await nextRender();
     });
 
     it('should render vaadin-message element for each item', () => {
@@ -173,7 +173,7 @@ describe('message-list', () => {
             userColorIndex: 2,
           },
         ];
-        await nextRender(messageList);
+        await nextRender();
         expect(messageList.scrollTop).to.be.at.least(scrollTopBeforeMessage + 1);
       });
 
@@ -189,7 +189,7 @@ describe('message-list', () => {
             userColorIndex: 2,
           },
         ];
-        await nextRender(messageList);
+        await nextRender();
         expect(messageList.scrollTop).to.be.equal(0);
       });
     });
@@ -221,7 +221,7 @@ describe('message-list', () => {
             userColorIndex: 2,
           },
         ];
-        await nextRender(messageList);
+        await nextRender();
         const firstMessage = messages[0];
         // Verify that the first item got the new tabIndex=0.
         expect(firstMessage.tabIndex).to.be.equal(0);
@@ -241,7 +241,7 @@ describe('message-list', () => {
             userColorIndex: 2,
           },
         ];
-        await nextRender(messageList);
+        await nextRender();
         const messages = messageList.querySelectorAll('vaadin-message');
         messages.forEach((msg, idx) => {
           expect(msg.tabIndex).to.equal(idx === 1 ? 0 : -1);
@@ -271,7 +271,7 @@ describe('message-list', () => {
           },
         ];
 
-        await nextRender(messageList);
+        await nextRender();
         const messages = messageList.querySelectorAll('vaadin-message');
         // Verify that the second item got the new tabIndex=0.
         expect(messages[0].tabIndex).to.be.equal(-1);
@@ -285,7 +285,7 @@ describe('message-list', () => {
 
     beforeEach(async () => {
       messageList.items = messages;
-      await nextRender(messageList);
+      await nextRender();
       messageElements = messageList.querySelectorAll('vaadin-message');
       message = messageElements[1];
     });
@@ -333,7 +333,7 @@ describe('message-list', () => {
 
     beforeEach(async () => {
       messageList.items = messages;
-      await nextRender(messageList);
+      await nextRender();
       messageElements = messageList.querySelectorAll('vaadin-message');
     });
 
@@ -407,6 +407,16 @@ describe('message-list', () => {
       arrowDown(messageElements[0]);
       arrowRight(messageElements[1]);
       expect(messageElements[1].hasAttribute('focused')).to.be.true;
+    });
+  });
+
+  describe('a11y', () => {
+    it('should toggle aria live', () => {
+      expect(messageList.getAttribute('aria-live')).to.be.null;
+      messageList.announceMessages = true;
+      expect(messageList.getAttribute('aria-live')).to.equal('polite');
+      messageList.announceMessages = false;
+      expect(messageList.getAttribute('aria-live')).to.be.null;
     });
   });
 });

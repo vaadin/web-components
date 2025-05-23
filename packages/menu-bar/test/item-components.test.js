@@ -22,7 +22,7 @@ describe('item components', () => {
         { text: 'Item 3', component: document.createElement('vaadin-menu-bar-item') },
         { text: 'Item 4' },
       ];
-      await nextRender(menu);
+      await nextRender();
       buttons = menu._buttons;
     });
 
@@ -56,14 +56,14 @@ describe('item components', () => {
 
     it('should update buttons when replacing item component with text', async () => {
       menu.items = [{ text: 'Item 0' }, ...menu.items.slice(1)];
-      await nextRender(menu);
+      await nextRender();
       buttons = menu._buttons;
       expect(buttons[0].textContent).to.equal('Item 0');
     });
 
     it('should update buttons when replacing item text with component', async () => {
       menu.items = [...menu.items.slice(0, 3), { component: makeComponent('4') }];
-      await nextRender(menu);
+      await nextRender();
       buttons = menu._buttons;
       expect(buttons[3].firstElementChild).to.equal(buttons[3].item.component);
       expect(buttons[3].firstElementChild.textContent).to.equal('Item 4');
@@ -71,14 +71,14 @@ describe('item components', () => {
 
     it('should update buttons when replacing item component with empty object', async () => {
       menu.items = [{}, ...menu.items.slice(1)];
-      await nextRender(menu);
+      await nextRender();
       buttons = menu._buttons;
       expect(buttons[0].textContent).to.equal('');
     });
 
     it('should update buttons when replacing item text with empty object', async () => {
       menu.items = [...menu.items.slice(0, 3), {}];
-      await nextRender(menu);
+      await nextRender();
       buttons = menu._buttons;
       expect(buttons[3].textContent).to.equal('');
     });

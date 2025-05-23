@@ -41,14 +41,13 @@ export function enforceLegacyLumoPlugin() {
   return {
     name: 'enforce-legacy-lumo',
     transform(context) {
-      if (context.url.includes('.test.')) {
-        let { body } = context;
-        body = body.replaceAll(
-          `import '@vaadin/vaadin-lumo-styles/global.css'`,
-          `import '@vaadin/vaadin-lumo-styles/test/autoload.js'`,
-        );
-        body = body.replaceAll(/^import.+\.css.+$/gmu, '');
-        return body;
+      if (context.response.is('js', 'html')) {
+        return context.body
+          .replaceAll(
+            `import '@vaadin/vaadin-lumo-styles/global.css'`,
+            `import '@vaadin/vaadin-lumo-styles/test/autoload.js'`,
+          )
+          .replaceAll(/^.*@vaadin\/vaadin-lumo-styles\/.*\.css.*$/gmu, '');
       }
     },
   };

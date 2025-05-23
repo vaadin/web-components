@@ -11,7 +11,7 @@ describe('crud', () => {
     div.style.height = '100%';
     element = fixtureSync('<vaadin-crud style="height: calc(100vh - 16px)"></vaadin-crud>', div);
     element.items = [{ name: { first: 'Susan', last: 'Smith' } }];
-    await nextRender(element);
+    await nextRender();
   });
 
   it('basic', async () => {
@@ -48,7 +48,7 @@ describe('crud', () => {
       div.style.height = 'auto';
       element.style.height = '400px';
       element.editorPosition = 'aside';
-      await nextRender(element);
+      await nextRender();
     });
 
     it('row', async () => {
@@ -80,11 +80,11 @@ describe('crud', () => {
               case 'aside':
               case 'bottom':
                 element.editorPosition = position;
-                await nextRender(element);
+                await nextRender();
                 break;
               case 'fullscreen':
                 element._fullscreen = true;
-                await nextRender(element);
+                await nextRender();
                 break;
               default:
               // Do nothing

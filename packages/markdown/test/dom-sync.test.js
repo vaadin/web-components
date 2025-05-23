@@ -7,7 +7,7 @@ describe('vaadin-markdown DOM synchronization', () => {
 
   beforeEach(async () => {
     element = fixtureSync('<vaadin-markdown></vaadin-markdown>');
-    await nextRender(element);
+    await nextRender();
   });
 
   it('should not recreate the entire DOM on content updates', async () => {

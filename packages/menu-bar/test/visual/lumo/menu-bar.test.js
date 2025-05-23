@@ -45,7 +45,7 @@ describe('menu-bar', () => {
         it('opened', async () => {
           div.style.height = '150px';
           element._buttons[1].click();
-          await nextRender(element);
+          await nextRender();
           await visualDiff(div, `${dir}-opened`);
         });
 
@@ -54,7 +54,7 @@ describe('menu-bar', () => {
           div.style.width = '350px';
           div.style.height = '150px';
           element.reverseCollapse = true;
-          await nextRender(element);
+          await nextRender();
           element._buttons[4].click();
           const overlay = element._subMenu._overlayElement;
           await oneEvent(overlay, 'vaadin-overlay-open');

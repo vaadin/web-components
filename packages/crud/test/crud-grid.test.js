@@ -61,7 +61,7 @@ describe('crud grid', () => {
         },
       ];
       flushGrid(grid);
-      await nextRender(grid);
+      await nextRender();
 
       // First column
       expect(getHeaderCellContent(grid, 2, 0).textContent.trim()).to.be.equal('Foo');
@@ -81,7 +81,7 @@ describe('crud grid', () => {
       it('should configure include fields in the provided order', async () => {
         grid.include = 'role,password,name.first,name.last';
         flushGrid(grid);
-        await nextRender(grid);
+        await nextRender();
         expect(getHeaderCellContent(grid, 0, 2).textContent.trim()).to.be.equal('Name');
         expect(getHeaderCellContent(grid, 1, 0).textContent.trim()).to.be.equal('Role');
         expect(getHeaderCellContent(grid, 1, 1).textContent.trim()).to.be.equal('Password');
@@ -92,7 +92,7 @@ describe('crud grid', () => {
       it('should convert camelCase fields label into sentence field label', async () => {
         grid.include = 'passwordField,name.firstName';
         flushGrid(grid);
-        await nextRender(grid);
+        await nextRender();
         expect(getHeaderCellContent(grid, 1, 0).textContent.trim()).to.be.equal('Password field');
         expect(getHeaderCellContent(grid, 1, 1).textContent.trim()).to.be.equal('First name');
       });
@@ -101,7 +101,7 @@ describe('crud grid', () => {
         grid.include = 'a, b, c';
         grid.items = [{ d: 1 }];
         flushGrid(grid);
-        await nextRender(grid);
+        await nextRender();
 
         expect(grid.querySelectorAll('vaadin-grid-column').length).to.be.equal(3);
         expect(getHeaderCellContent(grid, 0, 0).textContent.trim()).to.be.equal('A');
@@ -120,7 +120,7 @@ describe('crud grid', () => {
           },
         ];
         flushGrid(grid);
-        await nextRender(grid);
+        await nextRender();
 
         // The filter column should end up with only one parent group (the sorter group column)
         // which in turn should be a direct child of the grid
@@ -141,7 +141,7 @@ describe('crud grid', () => {
             };
           }
           flushGrid(grid);
-          await nextRender(grid);
+          await nextRender();
         });
 
         it('should ignore excluded fields', () => {
@@ -193,7 +193,7 @@ describe('crud grid', () => {
 
         it('should only render one control in a cell', async () => {
           grid.requestContentUpdate();
-          await nextRender(grid);
+          await nextRender();
           expect(getHeaderCellContent(grid, 1, 0).childElementCount).to.equal(1);
           expect(getHeaderCellContent(grid, 2, 0).childElementCount).to.equal(1);
         });
@@ -210,7 +210,7 @@ describe('crud grid', () => {
       `);
       grid.items = items;
       flushGrid(grid);
-      await nextRender(grid);
+      await nextRender();
     });
 
     it('should theme edit icon element', () => {

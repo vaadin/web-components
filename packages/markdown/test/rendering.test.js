@@ -7,7 +7,7 @@ describe('vaadin-markdown content rendering', () => {
 
   beforeEach(async () => {
     element = fixtureSync('<vaadin-markdown></vaadin-markdown>');
-    await nextRender(element);
+    await nextRender();
   });
 
   it('should render all basic markdown elements correctly', async () => {

@@ -3,7 +3,7 @@
  * Copyright (c) 2015 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { css, html, LitElement } from 'lit';
+import { html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
@@ -11,19 +11,8 @@ import { OverlayMixin } from '@vaadin/overlay/src/vaadin-overlay-mixin.js';
 import { overlayStyles } from '@vaadin/overlay/src/vaadin-overlay-styles.js';
 import { CSSInjectionMixin } from '@vaadin/vaadin-themable-mixin/css-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { comboBoxOverlayStyles } from './styles/vaadin-combo-box-overlay-core-styles.js';
 import { ComboBoxOverlayMixin } from './vaadin-combo-box-overlay-mixin.js';
-
-const comboBoxOverlayStyles = css`
-  #overlay {
-    width: var(--vaadin-combo-box-overlay-width, var(--_vaadin-combo-box-overlay-default-width, auto));
-  }
-
-  [part='content'] {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-  }
-`;
 
 /**
  * An element used internally by `<vaadin-combo-box>`. Not intended to be used separately.

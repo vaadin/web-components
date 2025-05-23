@@ -13,8 +13,8 @@ import { TooltipController } from '@vaadin/component-base/src/tooltip-controller
 import { inputFieldShared } from '@vaadin/field-base/src/styles/input-field-shared-styles.js';
 import { CSSInjectionMixin } from '@vaadin/vaadin-themable-mixin/css-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { textAreaStyles } from './vaadin-text-area-core-styles.js';
 import { TextAreaMixin } from './vaadin-text-area-mixin.js';
-import { textAreaStyles } from './vaadin-text-area-styles.js';
 
 /**
  * `<vaadin-text-area>` is a web component for multi-line text input.

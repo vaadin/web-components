@@ -22,7 +22,7 @@ describe('accessible disabled buttons', () => {
       { text: 'Item 1', disabled: true, children: [{ text: 'SubItem 0' }] },
       { text: 'Item 2' },
     ];
-    await nextRender(menuBar);
+    await nextRender();
     buttons = menuBar._buttons;
   });
 

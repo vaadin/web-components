@@ -1,3 +1,8 @@
+/**
+ * @license
+ * Copyright (c) 2017 - 2025 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
 html {
   color: var(--lumo-body-text-color);
   background-color: var(--lumo-base-color);
@@ -112,6 +117,7 @@ pre {
   background-color: var(--lumo-contrast-10pct);
   border-radius: var(--lumo-border-radius-m);
 }
+
 pre code {
   background: transparent;
 }

@@ -7,7 +7,7 @@ import '@vaadin/input-container/src/vaadin-input-container.js';
 import './vaadin-combo-box-item.js';
 import './vaadin-combo-box-overlay.js';
 import './vaadin-combo-box-scroller.js';
-import { css, html, LitElement } from 'lit';
+import { html, LitElement } from 'lit';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
@@ -20,6 +20,7 @@ import { PatternMixin } from '@vaadin/field-base/src/pattern-mixin.js';
 import { inputFieldShared } from '@vaadin/field-base/src/styles/input-field-shared-styles.js';
 import { CSSInjectionMixin } from '@vaadin/vaadin-themable-mixin/css-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { comboBoxStyles } from './styles/vaadin-combo-box-core-styles.js';
 import { ComboBoxDataProviderMixin } from './vaadin-combo-box-data-provider-mixin.js';
 import { ComboBoxMixin } from './vaadin-combo-box-mixin.js';
 
@@ -164,14 +165,7 @@ class ComboBox extends ComboBoxDataProviderMixin(
   }
 
   static get styles() {
-    return [
-      inputFieldShared,
-      css`
-        :host([opened]) {
-          pointer-events: auto;
-        }
-      `,
-    ];
+    return [inputFieldShared, comboBoxStyles];
   }
 
   static get properties() {

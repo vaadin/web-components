@@ -43,7 +43,7 @@ gulp.task('icons', (done) => {
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
-import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { css } from 'lit';
 
 const template = document.createElement('template');
 
@@ -90,9 +90,6 @@ export const iconsStyles = css\`\n`;
     content: var(--vaadin-rte-icons-redo);
   }`;
       output += `\n\`;\n`;
-      output += `
-// Register a module with ID for backwards compatibility.
-registerStyles('', iconsStyles, { moduleId: 'vaadin-rich-text-editor-icons' });\n`;
       fs.writeFile(`src/${fileName}.js`, output, (err) => {
         if (err) {
           return console.error(err);
