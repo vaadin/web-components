@@ -22,6 +22,8 @@
     "lit.d.ts",
     "lit.js",
     "src",
+    "!src/styles/*-base-styles.d.ts",
+    "!src/styles/*-base-styles.js",
     "theme",
     "vaadin-*.d.ts",
     "vaadin-*.js",

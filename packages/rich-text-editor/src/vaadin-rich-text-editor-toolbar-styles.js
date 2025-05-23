@@ -8,7 +8,7 @@
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
-import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { css } from 'lit';
 import { iconsStyles } from './vaadin-rich-text-editor-icons.js';
 
 export const buttonsStyles = css`
@@ -178,6 +178,3 @@ export const buttonsStyles = css`
 `;
 
 export const toolbarStyles = [iconsStyles, buttonsStyles];
-
-// Register a module with ID for backwards compatibility.
-registerStyles('', toolbarStyles, { moduleId: 'vaadin-rich-text-editor-toolbar-styles' });
