@@ -9,6 +9,7 @@
     &::before,
     &::after {
       all: revert-layer;
+      --vaadin-item-checkmark-display: revert-layer;
     }
   }
 }
