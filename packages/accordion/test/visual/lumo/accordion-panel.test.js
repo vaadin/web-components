@@ -1,6 +1,8 @@
 import { fixtureSync } from '@vaadin/testing-helpers/dist/fixture.js';
 import { visualDiff } from '@web/test-runner-visual-regression';
-import '../../../theme/lumo/vaadin-accordion.js';
+import '@vaadin/vaadin-lumo-styles/props.css';
+import '@vaadin/vaadin-lumo-styles/components/accordion-panel.css';
+import '../../../vaadin-accordion-panel.js';
 
 describe('accordion-panel', () => {
   let div, element;
