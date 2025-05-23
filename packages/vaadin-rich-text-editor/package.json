@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-rich-text-editor",
-  "version": "23.5.12",
+  "version": "23.5.13",
   "publishConfig": {
     "access": "public"
   },
@@ -34,7 +34,7 @@
     "polymer"
   ],
   "dependencies": {
-    "@vaadin/rich-text-editor": "~23.5.12"
+    "@vaadin/rich-text-editor": "~23.5.13"
   },
   "cvdlName": "vaadin-rich-text-editor"
 }
