@@ -56,7 +56,20 @@ registerStyles('vaadin-avatar-group-overlay', [overlay, menuOverlayCore, avatarG
   moduleId: 'lumo-avatar-group-overlay',
 });
 
-registerStyles('vaadin-avatar-group-menu', listBox, { moduleId: 'lumo-avatar-group-menu' });
+registerStyles(
+  'vaadin-avatar-group-menu',
+  [
+    listBox,
+    css`
+      @layer base {
+        :host {
+          padding: revert-layer;
+        }
+      }
+    `,
+  ],
+  { moduleId: 'lumo-avatar-group-menu' },
+);
 
 registerStyles(
   'vaadin-avatar-group-menu-item',
