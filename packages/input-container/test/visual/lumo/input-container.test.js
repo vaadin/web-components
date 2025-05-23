@@ -3,9 +3,9 @@ import { visualDiff } from '@web/test-runner-visual-regression';
 import '@vaadin/vaadin-lumo-styles/props.css';
 import '@vaadin/vaadin-lumo-styles/global.css';
 import '@vaadin/vaadin-lumo-styles/components/input-container.css';
-import '@vaadin/icon';
 import '@vaadin/vaadin-lumo-styles/vaadin-iconset.js';
 import '../common.js';
+import '@vaadin/icon';
 import '../../../vaadin-input-container.js';
 
 describe('input-container', () => {
