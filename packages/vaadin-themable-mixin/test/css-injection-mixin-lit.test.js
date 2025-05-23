@@ -152,7 +152,7 @@ describe('CSS injection', () => {
         await contentTransition();
         assertInjectedStyle();
 
-        document.adoptedStyleSheets.pop();
+        document.adoptedStyleSheets.splice(document.adoptedStyleSheets.indexOf(sheet), 1);
 
         await contentTransition();
         assertBaseStyle();
@@ -213,7 +213,7 @@ describe('CSS injection', () => {
 
         assertInjectedStyle();
 
-        document.adoptedStyleSheets.pop();
+        document.adoptedStyleSheets.splice(document.adoptedStyleSheets.indexOf(sheet), 1);
 
         await contentTransition();
         assertBaseStyle();
@@ -272,7 +272,7 @@ describe('CSS injection', () => {
         await contentTransition();
         assertInjectedStyle();
 
-        document.adoptedStyleSheets.pop();
+        document.adoptedStyleSheets.splice(document.adoptedStyleSheets.indexOf(sheet), 1);
 
         await contentTransition();
         assertBaseStyle();
@@ -313,7 +313,7 @@ describe('CSS injection', () => {
         await contentTransition();
         assertInjectedStyle();
 
-        host.shadowRoot.adoptedStyleSheets.pop();
+        host.shadowRoot.adoptedStyleSheets.splice(host.shadowRoot.adoptedStyleSheets.indexOf(sheet), 1);
 
         await contentTransition();
         assertBaseStyle();
