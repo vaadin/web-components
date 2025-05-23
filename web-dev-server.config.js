@@ -42,14 +42,11 @@ export function enforceLegacyLumoPlugin() {
     name: 'enforce-legacy-lumo',
     transform(context) {
       return context.body
-        .split('\n')
-        .map((line) => {
-          return line.replace('vaadin-lumo-styles/global.css', 'vaadin-lumo-styles/test/autoload.js');
-        })
-        .filter((line) => {
-          return !/import.+\.css/u.test(line);
-        })
-        .join('\n');
+        .replaceAll(
+          `import '@vaadin/vaadin-lumo-styles/global.css'`,
+          `import '@vaadin/vaadin-lumo-styles/test/autoload.js'`,
+        )
+        .replaceAll(/^.*@vaadin\/vaadin-lumo-styles\/.*\.css.*$/gmu, '');
     },
   };
 }
