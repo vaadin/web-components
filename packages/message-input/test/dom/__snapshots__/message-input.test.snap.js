@@ -7,7 +7,7 @@ snapshots["vaadin-message-input default"] =
     role="button"
     slot="button"
     tabindex="0"
-    theme="primary contained"
+    theme="primary"
   >
     Send
   </vaadin-button>
@@ -48,7 +48,7 @@ snapshots["vaadin-message-input disabled"] =
     role="button"
     slot="button"
     tabindex="-1"
-    theme="primary contained"
+    theme="primary"
   >
     Send
   </vaadin-button>
