@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/polymer-legacy-adapter",
-  "version": "24.8.0-alpha18",
+  "version": "24.8.0-alpha19",
   "publishConfig": {
     "access": "public"
   },
@@ -32,15 +32,15 @@
   ],
   "dependencies": {
     "@polymer/polymer": "^3.0.0",
-    "@vaadin/vaadin-themable-mixin": "24.8.0-alpha18",
+    "@vaadin/vaadin-themable-mixin": "24.8.0-alpha19",
     "lit": "^3.0.0"
   },
   "devDependencies": {
-    "@vaadin/chai-plugins": "24.8.0-alpha18",
-    "@vaadin/checkbox": "24.8.0-alpha18",
-    "@vaadin/grid": "24.8.0-alpha18",
-    "@vaadin/grid-pro": "24.8.0-alpha18",
-    "@vaadin/test-runner-commands": "24.8.0-alpha18",
+    "@vaadin/chai-plugins": "24.8.0-alpha19",
+    "@vaadin/checkbox": "24.8.0-alpha19",
+    "@vaadin/grid": "24.8.0-alpha19",
+    "@vaadin/grid-pro": "24.8.0-alpha19",
+    "@vaadin/test-runner-commands": "24.8.0-alpha19",
     "@vaadin/testing-helpers": "^1.1.0",
     "sinon": "^18.0.0"
   }
