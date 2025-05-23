@@ -37,34 +37,35 @@ export function cssImportPlugin() {
 }
 
 /** @return {import('@web/test-runner').TestRunnerPlugin} */
-export function enforceLegacyLumoPlugin() {
+export function enforceThemePlugin(theme) {
   return {
-    name: 'enforce-legacy-lumo',
+    name: 'enforce-theme',
     transform(context) {
-      if (context.response.is('js', 'html')) {
-        return context.body
-          .replaceAll(
-            `import '@vaadin/vaadin-lumo-styles/global.css'`,
-            `import '@vaadin/vaadin-lumo-styles/test/autoload.js'`,
-          )
-          .replaceAll(/^.*@vaadin\/vaadin-lumo-styles\/.*\.css.*$/gmu, '');
-      }
-    },
-  };
-}
+      let { body } = context;
 
-/** @return {import('@web/test-runner').TestRunnerPlugin} */
-export function enforceBaseStylesPlugin() {
-  return {
-    name: 'enforce-base-styles',
-    transform(context) {
-      if (context.response.is('html')) {
-        return { body: context.body.replace('./common.js', './common-base.js') };
+      if (context.response.is('html') && (theme === 'base' || theme === 'ported-lumo')) {
+        // Load the base theme
+        body = body.replace('./common.js', './common-base.js');
       }
+
+      if (context.response.is('html', 'js') && (theme === 'base' || theme === 'legacy-lumo')) {
+        // Remove all CSS imports
+        body = body.replaceAll(/^.+vaadin-lumo-styles\/.+\.css.+$/gmu, '');
+      }
+
+      return body;
     },
     transformImport({ source }) {
-      source = source.replace('/theme/lumo/', '/src/');
-      source = source.replace(/(.+)-core-styles\.js/u, '$1-base-styles.js');
+      if (theme === 'base' || theme === 'ported-lumo') {
+        // Load the base theme
+        source = source.replace('/theme/lumo/', '/src/');
+        source = source.replace(/(.+)-core-styles\.js/u, '$1-base-styles.js');
+      }
+
+      if (theme === 'legacy-lumo') {
+        source = source.replace('vaadin-lumo-styles/global.css', 'vaadin-lumo-styles/test/autoload.js');
+      }
+
       return source;
     },
   };
@@ -120,13 +121,13 @@ export default {
     esbuildPlugin({ ts: true }),
 
     // yarn start --theme=base
-    theme === 'base' && enforceBaseStylesPlugin(),
+    theme === 'base' && enforceThemePlugin('base'),
 
     // yarn start --theme=lumo (uses legacy lumo styles defined in js files)
-    theme === 'lumo' && !hasPortedParam && enforceLegacyLumoPlugin(),
+    theme === 'lumo' && !hasPortedParam && enforceThemePlugin('legacy-lumo'),
 
     // yarn start --theme=lumo --ported (uses base styles and lumo styles defined in css files)
-    theme === 'lumo' && hasPortedParam && enforceBaseStylesPlugin(),
+    theme === 'lumo' && hasPortedParam && enforceThemePlugin('ported-lumo'),
     theme === 'lumo' && hasPortedParam && cssImportPlugin(),
   ].filter(Boolean),
 };
