@@ -182,7 +182,7 @@ const getUnitTestGroups = (packages) => {
  */
 const getVisualTestGroups = (packages, theme) => {
   if (theme === 'base') {
-    packages = packages.filter(({ name }) => !name.includes('lumo'));
+    packages = packages.filter((pkg) => !pkg.includes('lumo'));
   }
 
   return packages.map((pkg) => {
