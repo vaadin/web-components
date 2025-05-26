@@ -71,7 +71,7 @@ export const avatarStyles = css`
       content: '';
       inset: 0;
       border-radius: inherit;
-      box-shadow: inset 0 0 0 2px var(--vaadin-avatar-user-color);
+      border: 2px solid var(--vaadin-avatar-user-color);
     }
 
     :host([focus-ring]) {
