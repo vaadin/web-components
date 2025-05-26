@@ -11,7 +11,7 @@
       import '@vaadin/avatar-group/src/vaadin-avatar-group.js';
 
       const groups = document.querySelectorAll('vaadin-avatar-group');
-      groups.forEach(group => group.items = [{ name: 'AA' }, { name: 'BB' }, { name: 'CC' }]);
+      groups.forEach(group => group.items = [{ name: 'AA' }, { name: 'BB' }, { name: 'CC' }, { name: 'DD' }]);
 
       document.querySelector('#add').addEventListener('click', () => {
         const alphabet = 'abcdefghijklmnopqrstuvwxyz';
@@ -42,7 +42,7 @@
 
     <section>
       <h2>Max Items Visible</h2>
-      <vaadin-avatar-group max-items-visible="5"></vaadin-avatar-group>
+      <vaadin-avatar-group max-items-visible="3"></vaadin-avatar-group>
     </section>
 
   </body>
