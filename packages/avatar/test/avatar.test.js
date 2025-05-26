@@ -324,11 +324,11 @@ describe('vaadin-avatar', () => {
         document.documentElement.style.setProperty('--vaadin-user-color-0', 'red');
       });
 
-      it('should set border color based on color index', async () => {
+      it('should set box-shadow based on color index', async () => {
         avatar.colorIndex = 0;
         await nextUpdate(avatar);
-        const { borderColor } = getComputedStyle(avatar, '::before');
-        expect(['rgb(255, 0, 0)', 'red'].some((v) => borderColor.indexOf(v) > -1)).to.be.true;
+        const { boxShadow } = getComputedStyle(avatar, '::before');
+        expect(['rgb(255, 0, 0)', 'red'].some((v) => boxShadow.indexOf(v) > -1)).to.be.true;
       });
 
       it('should set attribute based on color index', async () => {
