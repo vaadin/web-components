@@ -18,6 +18,7 @@ export default defineConfig({
       components: {
         PageTitle: './src/components/CustomPageTitle.astro',
       },
+      customCss: ['./src/theme.css'],
     }),
   ],
 });

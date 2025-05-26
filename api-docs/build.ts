@@ -103,7 +103,7 @@ function renderElement(element: any) {
   // Related types
   const relatedTypes = typeContext.getRelatedTypes();
   if (relatedTypes.length > 0) {
-    mdContent += `## Related Types\n\n`;
+    mdContent += `## Types\n\n`;
     relatedTypes.forEach((type) => {
       mdContent += `### ${type.name}\n\n`;
       mdContent += '```ts\n';
