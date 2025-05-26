@@ -317,25 +317,13 @@ export const ComboBoxMixin = (subclass) =>
     }
 
     /**
-     * Get a reference to the native `<input>` element.
-     * Override to provide a custom input.
-     * @protected
-     * @return {HTMLInputElement | undefined}
-     */
-    get _nativeInput() {
-      return this.inputElement;
-    }
-
-    /**
      * Override method inherited from `InputMixin`
      * to customize the input element.
      * @protected
      * @override
      */
-    _inputElementChanged(inputElement) {
-      super._inputElementChanged(inputElement);
-
-      const input = this._nativeInput;
+    _inputElementChanged(input) {
+      super._inputElementChanged(input);
 
       if (input) {
         input.autocomplete = 'off';
@@ -352,10 +340,6 @@ export const ComboBoxMixin = (subclass) =>
         input.setAttribute('autocorrect', 'off');
 
         this._revertInputValueToValue();
-
-        if (this.clearElement) {
-          this.clearElement.addEventListener('mousedown', this._boundOnClearButtonMouseDown);
-        }
       }
     }
 
@@ -370,6 +354,10 @@ export const ComboBoxMixin = (subclass) =>
 
       this.addEventListener('click', this._boundOnClick);
       this.addEventListener('touchend', this._boundOnTouchend);
+
+      if (this.clearElement) {
+        this.clearElement.addEventListener('mousedown', this._boundOnClearButtonMouseDown);
+      }
 
       const bringToFrontListener = () => {
         requestAnimationFrame(() => {
@@ -557,7 +545,7 @@ export const ComboBoxMixin = (subclass) =>
 
     /** @private */
     _updateActiveDescendant(index) {
-      const input = this._nativeInput;
+      const input = this.inputElement;
       if (!input) {
         return;
       }
@@ -589,7 +577,7 @@ export const ComboBoxMixin = (subclass) =>
         this._onClosed();
       }
 
-      const input = this._nativeInput;
+      const input = this.inputElement;
       if (input) {
         input.setAttribute('aria-expanded', !!opened);
 

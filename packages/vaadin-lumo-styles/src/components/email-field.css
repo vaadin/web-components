@@ -1,3 +1,9 @@
+/**
+ * @license
+ * Copyright (c) 2017 - 2025 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+
 /* See https://github.com/vaadin/vaadin-text-field/issues/466 */
 
 :host([dir='rtl']) [part='input-field'] {

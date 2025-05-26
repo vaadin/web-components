@@ -65,7 +65,6 @@ const requiredField = css`
 
   :host([required]) [part='required-indicator']::after {
     content: var(--lumo-required-field-indicator, '\\2022');
-    transition: opacity 0.2s;
     color: var(--lumo-required-field-indicator-color, var(--lumo-primary-text-color));
     position: absolute;
     right: 0;
