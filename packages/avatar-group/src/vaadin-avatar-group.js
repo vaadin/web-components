@@ -13,8 +13,8 @@ import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { avatarGroupStyles } from './styles/vaadin-avatar-group-core-styles.js';
 import { AvatarGroupMixin } from './vaadin-avatar-group-mixin.js';
-import { avatarGroupStyles } from './vaadin-avatar-group-styles.js';
 
 /**
  * `<vaadin-avatar-group>` is a Web Component providing avatar group displaying functionality.
