@@ -28,6 +28,8 @@ export class TypeContext {
   private elementSchema: any;
 
   constructor(elementSchema: any) {
+    this.elementSchema = elementSchema;
+
     const modulePath = `./${elementSchema.path}`;
     const className = elementSchema.name;
     const configPath = ts.findConfigFile('./', ts.sys.fileExists, 'tsconfig.json');
@@ -75,7 +77,6 @@ export class TypeContext {
     }
     this.sourceFile = sourceFile;
     this.checker = this.program.getTypeChecker();
-    this.elementSchema = elementSchema;
   }
 
   getMemberType(memberName: string): string {
@@ -87,10 +88,15 @@ export class TypeContext {
     return this.checker.typeToString(type);
   }
 
-  private lookupDeclaration(typeName: string): RelatedTypeDeclaration | undefined {
-    for (const sourceFile of this.program.getSourceFiles()) {
-      // Only consider declaration files
-      if (!sourceFile.isDeclarationFile) continue;
+  private findDeclaration(typeName: string): RelatedTypeDeclaration | undefined {
+    // Only consider declaration files in the same component package
+    const packageName = this.elementSchema.path.split('/')[1];
+    const relatedSourceFiles = this.program
+      .getSourceFiles()
+      .filter((file) => file.fileName.includes(`/${packageName}/`))
+      .filter((file) => file.isDeclarationFile);
+
+    for (const sourceFile of relatedSourceFiles) {
       for (const statement of sourceFile.statements) {
         // Check for exported class
         if (
@@ -125,7 +131,8 @@ export class TypeContext {
     return undefined;
   }
 
-  lookupRelatedTypes(typeString: string): RelatedTypeInfo[] {
+  findRelatedTypes(typeString: string): RelatedTypeInfo[] {
+    // Naive approach to extract possible type names from the type string
     const typeNames = typeString
       .replace(/[^a-zA-Z0-9_]/gu, ' ')
       .split(' ')
@@ -149,20 +156,29 @@ export class TypeContext {
       'Date',
       'RegExp',
     ]);
-    const typeNamesFiltered = typeNames.filter((type) => !basicTypes.has(type));
-    typeNamesFiltered
-      .map((name) => this.lookupDeclaration(name))
-      .filter((declaration) => !!declaration)
-      .forEach((declaration) => {
-        if (!this.relatedTypes.has(declaration.name!.text)) {
-          const sourceFile = declaration.getSourceFile();
-          const text = sourceFile.text.substring(declaration.pos, declaration.end);
-          this.relatedTypes.set(declaration.name!.text, {
-            name: declaration.name!.text,
-            declarationText: text,
-          });
-        }
-      });
+    const customTypeNames = typeNames.filter((type) => !basicTypes.has(type));
+
+    // Skip types already found
+    const unknownTypeNames = customTypeNames.filter((type) => !this.relatedTypes.has(type));
+    const foundTypeInfos = unknownTypeNames
+      .map((name) => this.findDeclaration(name))
+      .filter((declaration) => !!declaration);
+
+    // Store found results as related types
+    foundTypeInfos.forEach((declaration) => {
+      if (!this.relatedTypes.has(declaration.name!.text)) {
+        const sourceFile = declaration.getSourceFile();
+        const text = sourceFile.text.substring(declaration.pos, declaration.end);
+        const relatedType: RelatedTypeInfo = {
+          name: declaration.name!.text,
+          declarationText: text,
+        };
+        this.relatedTypes.set(declaration.name!.text, relatedType);
+
+        // Scan the declaration for nested type usages
+        this.findRelatedTypes(text);
+      }
+    });
 
     return Array.from(this.relatedTypes.values().filter((type) => typeNames.includes(type.name)));
   }
@@ -175,7 +191,7 @@ export class TypeContext {
       .join('');
     typeName = `${this.elementSchema.name}${typeName}Event`;
 
-    return this.lookupRelatedTypes(typeName)[0];
+    return this.findRelatedTypes(typeName)[0];
   }
 
   getRelatedTypes(): RelatedTypeInfo[] {
