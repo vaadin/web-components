@@ -1,0 +1,30 @@
+/**
+ * @license
+ * Copyright (c) 2017 - 2025 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+:host {
+  display: flex;
+  -webkit-tap-highlight-color: transparent;
+  --_lumo-item-selected-icon-display: var(--_lumo-list-box-item-selected-icon-display, block);
+}
+
+:host([hidden]) {
+  display: none !important;
+}
+
+[part='items'] {
+  height: 100%;
+  width: 100%;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Dividers */
+[part='items'] ::slotted(hr) {
+  height: 1px;
+  border: 0;
+  padding: 0;
+  margin: var(--lumo-space-s) var(--lumo-border-radius-m);
+  background-color: var(--lumo-contrast-10pct);
+}

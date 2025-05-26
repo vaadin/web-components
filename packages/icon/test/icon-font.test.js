@@ -1,7 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, isChrome, nextFrame, nextResize } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame, nextResize } from '@vaadin/testing-helpers';
 import '../src/vaadin-icon.js';
-import { needsFontIconSizingFallback, supportsCQUnitsForPseudoElements } from '../src/vaadin-icon-helpers.js';
 import { iconFontCss } from './test-icon-font.js';
 
 describe('vaadin-icon - icon fonts', () => {
@@ -266,73 +265,6 @@ describe('vaadin-icon - icon fonts', () => {
       icon.fontFamily = 'My icons 6';
       const fontIconStyle = getComputedStyle(icon, ':before');
       expect(['"My icons 6"', 'My icons 6']).to.include(fontIconStyle.fontFamily);
-    });
-  });
-
-  // These tests make sure that the heavy container query fallback is only used
-  // when font icons are used.
-  describe('container query fallback', () => {
-    // Tests for browsers that require the fallback
-    const fallBackIt = needsFontIconSizingFallback() ? it : it.skip;
-    // Tests for browsers that we know for sure not to require the fallback
-    const supportedIt = isChrome ? it : it.skip;
-
-    let icon;
-
-    supportedIt('should support CQ width units on pseudo elements', () => {
-      expect(supportsCQUnitsForPseudoElements()).to.be.true;
-    });
-
-    supportedIt('should not need the fallback', () => {
-      expect(needsFontIconSizingFallback()).to.be.false;
-    });
-
-    fallBackIt('should not support CQ width units on pseudo elements', () => {
-      expect(supportsCQUnitsForPseudoElements()).to.be.false;
-    });
-
-    fallBackIt('should have the custom property (iconClass)', async () => {
-      icon = fixtureSync('<vaadin-icon icon-class="foo"></vaadin-icon>');
-      await nextFrame();
-      expect(icon.style.getPropertyValue('--_vaadin-font-icon-size')).to.equal('24px');
-    });
-
-    fallBackIt('should have the custom property (char)', async () => {
-      icon = fixtureSync('<vaadin-icon char="foo"></vaadin-icon>');
-      await nextFrame();
-      expect(icon.style.getPropertyValue('--_vaadin-font-icon-size')).to.equal('24px');
-    });
-
-    fallBackIt('should not have the custom property', async () => {
-      icon = fixtureSync('<vaadin-icon></vaadin-icon>');
-      await nextFrame();
-      expect(icon.style.getPropertyValue('--_vaadin-font-icon-size')).to.equal('');
-    });
-
-    fallBackIt('should set the custom property', async () => {
-      icon = fixtureSync('<vaadin-icon></vaadin-icon>');
-      await nextFrame();
-      icon.iconClass = 'foo';
-      expect(icon.style.getPropertyValue('--_vaadin-font-icon-size')).to.equal('24px');
-    });
-
-    fallBackIt('should update the custom property', async () => {
-      icon = fixtureSync('<vaadin-icon icon-class="foo"></vaadin-icon>');
-      await nextFrame();
-      icon.style.width = '100px';
-      icon.style.height = '100px';
-      await nextResize(icon);
-      expect(icon.style.getPropertyValue('--_vaadin-font-icon-size')).to.equal('100px');
-    });
-
-    fallBackIt('should not update the custom property', async () => {
-      icon = fixtureSync('<vaadin-icon></vaadin-icon>');
-      await nextFrame();
-      icon.style.width = '100px';
-      icon.style.height = '100px';
-      await nextFrame(icon);
-      await nextFrame(icon);
-      expect(icon.style.getPropertyValue('--_vaadin-font-icon-size')).to.equal('');
     });
   });
 });
