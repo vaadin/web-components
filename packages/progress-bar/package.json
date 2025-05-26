@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/progress-bar",
-  "version": "24.8.0-alpha19",
+  "version": "24.8.0-alpha20",
   "publishConfig": {
     "access": "public"
   },
@@ -38,15 +38,15 @@
   "dependencies": {
     "@open-wc/dedupe-mixin": "^1.3.0",
     "@polymer/polymer": "^3.0.0",
-    "@vaadin/component-base": "24.8.0-alpha19",
-    "@vaadin/vaadin-lumo-styles": "24.8.0-alpha19",
-    "@vaadin/vaadin-material-styles": "24.8.0-alpha19",
-    "@vaadin/vaadin-themable-mixin": "24.8.0-alpha19",
+    "@vaadin/component-base": "24.8.0-alpha20",
+    "@vaadin/vaadin-lumo-styles": "24.8.0-alpha20",
+    "@vaadin/vaadin-material-styles": "24.8.0-alpha20",
+    "@vaadin/vaadin-themable-mixin": "24.8.0-alpha20",
     "lit": "^3.0.0"
   },
   "devDependencies": {
-    "@vaadin/chai-plugins": "24.8.0-alpha19",
-    "@vaadin/test-runner-commands": "24.8.0-alpha19",
+    "@vaadin/chai-plugins": "24.8.0-alpha20",
+    "@vaadin/test-runner-commands": "24.8.0-alpha20",
     "@vaadin/testing-helpers": "^1.1.0"
   },
   "web-types": [
