@@ -51,6 +51,9 @@ export const avatarGroupStyles = css`
     :host(:not([theme~='reverse'])) [part='container']:not(.has-overflow) ::slotted(vaadin-avatar:nth-last-child(2)),
     :host([theme~='reverse']) ::slotted(vaadin-avatar:first-child) {
       mask-image: none;
+      /* mask-image creates a positioning context and renders above non-positioned elements.
+      Use this to force the overflow button on top. */
+      position: relative;
     }
   }
 `;
