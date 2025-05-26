@@ -6,13 +6,13 @@ function filterPublicApi(items: any[]) {
   return items.filter((item) => item.privacy === 'public');
 }
 
-function renderFrontMatter(element: any) {
-  let frontMatter = '';
-  frontMatter += `---\n`;
-  frontMatter += `title: ${element.name}\n`;
-  frontMatter += `description: ${element.name}\n`;
-  frontMatter += `---\n\n`;
-  return frontMatter;
+function sanitizeDescription(description: string) {
+  // Fix links to other elements
+  description = description.replace(/#\/elements\//gu, '/elements/');
+  // Fix links to properties (e.g. #property-dataProvider to #dataprovider)
+  description = description.replace(/#property-([a-zA-Z]+)/gu, (_, name) => `#${name.toLowerCase()}`);
+
+  return description;
 }
 
 function renderRelatedTypes(typeContext: TypeContext, typeString: string) {
@@ -32,12 +32,15 @@ function renderElement(element: any) {
   let mdContent = '';
 
   // Front matter
-  mdContent += renderFrontMatter(element);
+  mdContent += `---\n`;
+  mdContent += `title: ${element.name}\n`;
+  mdContent += `description: ${element.name}\n`;
+  mdContent += `---\n\n`;
 
   // Description
   if (element.description) {
     mdContent += `## Description\n\n`;
-    mdContent += `${element.description}\n\n`;
+    mdContent += `${sanitizeDescription(element.description)}\n\n`;
   }
 
   // Properties
@@ -48,7 +51,7 @@ function renderElement(element: any) {
       const propertyType = typeContext.getMemberType(prop.name);
       mdContent += `### ${prop.name}\n\n`;
       mdContent += `**Type:** \`${propertyType}\`\n\n`;
-      mdContent += `${prop.description}\n\n`;
+      mdContent += `${sanitizeDescription(prop.description)}\n\n`;
       mdContent += renderRelatedTypes(typeContext, propertyType);
     });
   } else {
@@ -63,7 +66,7 @@ function renderElement(element: any) {
       const methodType = typeContext.getMemberType(method.name);
       mdContent += `### ${method.name}\n\n`;
       mdContent += `**Type:** \`${methodType}\`\n\n`;
-      mdContent += `${method.description}\n\n`;
+      mdContent += `${sanitizeDescription(method.description)}\n\n`;
     });
   } else {
     mdContent += `No public methods.\n\n`;
@@ -78,7 +81,7 @@ function renderElement(element: any) {
       const eventTypeString = eventType ? `[${eventType.name}](#${eventType.name.toLowerCase()})` : '`CustomEvent`';
       mdContent += `### ${event.name}\n\n`;
       mdContent += `**Type:** ${eventTypeString}\n\n`;
-      mdContent += `${event.description}\n\n`;
+      mdContent += `${sanitizeDescription(event.description)}\n\n`;
     });
 
     // Property change events
