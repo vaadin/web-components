@@ -1,4 +1,9 @@
-[part~='loader'] {
+/**
+ * @license
+ * Copyright (c) 2017 - 2025 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+[part='loader'] {
   box-sizing: border-box;
   width: var(--lumo-icon-size-s);
   height: var(--lumo-icon-size-s);
@@ -10,11 +15,11 @@
   pointer-events: none;
 }
 
-:host(:not([loading])) [part~='loader'] {
+:host(:not([loading])) [part='loader'] {
   display: none;
 }
 
-:host([loading]) [part~='loader'] {
+:host([loading]) [part='loader'] {
   animation:
     1s linear infinite lumo-loader-rotate,
     0.3s 0.1s lumo-loader-fade-in both;
