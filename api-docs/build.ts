@@ -6,11 +6,20 @@ function filterPublicApi(items: any[]) {
   return items.filter((item) => item.privacy === 'public');
 }
 
+function renderFrontMatter(element: any) {
+  let frontMatter = '';
+  frontMatter += `---\n`;
+  frontMatter += `title: ${element.name}\n`;
+  frontMatter += `description: ${element.name}\n`;
+  frontMatter += `---\n\n`;
+  return frontMatter;
+}
+
 function renderRelatedTypes(typeContext: TypeContext, typeString: string) {
   const relatedTypes = typeContext.findRelatedTypes(typeString);
 
   if (relatedTypes.length > 0) {
-    const typeNames = relatedTypes.map((type) => `[${type.name}](#${type.name})`).join(', ');
+    const typeNames = relatedTypes.map((type) => `[${type.name}](#${type.name.toLowerCase()})`).join(', ');
     return `See also: ${typeNames}\n\n`;
   }
 
@@ -22,8 +31,8 @@ function renderElement(element: any) {
 
   let mdContent = '';
 
-  // Heading
-  mdContent += `# ${element.name || element.tagname}\n\n`;
+  // Front matter
+  mdContent += renderFrontMatter(element);
 
   // Description
   if (element.description) {
@@ -66,7 +75,7 @@ function renderElement(element: any) {
     // Custom events
     element.events.forEach((event: any) => {
       const eventType = typeContext.findEventType(event.name);
-      const eventTypeString = eventType ? `[${eventType.name}](#${eventType.name})` : '`CustomEvent`';
+      const eventTypeString = eventType ? `[${eventType.name}](#${eventType.name.toLowerCase()})` : '`CustomEvent`';
       mdContent += `### ${event.name}\n\n`;
       mdContent += `**Type:** ${eventTypeString}\n\n`;
       mdContent += `${event.description}\n\n`;
@@ -79,7 +88,7 @@ function renderElement(element: any) {
     notifyingProperties.forEach((prop: any) => {
       const eventName = `${prop.name}-changed`;
       const eventType = typeContext.findEventType(eventName);
-      const eventTypeString = eventType ? `[${eventType.name}](#${eventType.name})` : '`CustomEvent`';
+      const eventTypeString = eventType ? `[${eventType.name}](#${eventType.name.toLowerCase()})` : '`CustomEvent`';
       mdContent += `### ${eventName}\n\n`;
       mdContent += `**Type:** ${eventTypeString}\n\n`;
       mdContent += `Fired when the \`${prop.name}\` property changes.\n\n`;
@@ -108,7 +117,7 @@ function build() {
   const schemaFilePath = process.argv[2];
   if (!schemaFilePath) {
     // eslint-disable-next-line no-console
-    console.error('Usage: node generate-markdown-docs.js <path_to_schema_file>');
+    console.error('Usage: node api-docs/build.ts <path_to_schema_file>');
     process.exit(1);
   }
 
@@ -123,32 +132,42 @@ function build() {
     process.exit(1);
   }
 
-  const outputDirPath = resolve(process.cwd(), 'api-docs', 'dist');
-  if (!existsSync(outputDirPath)) {
+  const docsPath = resolve(process.cwd(), 'api-docs', 'src', 'content', 'docs', 'elements');
+  if (!existsSync(docsPath)) {
     try {
-      mkdirSync(outputDirPath, { recursive: true });
+      mkdirSync(docsPath, { recursive: true });
     } catch (error) {
-      console.error(`Error creating directory ${outputDirPath}:`, error);
+      console.error(`Error creating directory ${docsPath}:`, error);
       process.exit(1);
     }
   }
 
-  schema.elements
-    //.filter((el: any) => el.name === 'Select')
-    .forEach((element: any) => {
-      const mdFileName = `${element.tagname}.md`;
-      const mdFilePath = join(outputDirPath, mdFileName);
-      const mdContent = renderElement(element);
+  const plainTextPath = resolve(process.cwd(), 'api-docs', 'public', 'elements');
+  if (!existsSync(plainTextPath)) {
+    try {
+      mkdirSync(plainTextPath, { recursive: true });
+    } catch (error) {
+      console.error(`Error creating directory ${plainTextPath}:`, error);
+      process.exit(1);
+    }
+  }
 
-      try {
-        writeFileSync(mdFilePath, mdContent, 'utf-8');
-        // eslint-disable-next-line no-console
-        console.log(`Generated: ${mdFilePath}`);
-      } catch (error) {
-        // eslint-disable-next-line no-console
-        console.error(`Error writing markdown file ${mdFilePath}:`, error);
-      }
-    });
+  const publicElements = filterPublicApi(schema.elements);
+  publicElements.forEach((element: any) => {
+    const docFile = join(docsPath, `${element.tagname}.md`);
+    const plainTextFile = join(plainTextPath, `${element.tagname}.txt`);
+    const mdContent = renderElement(element);
+
+    try {
+      writeFileSync(docFile, mdContent, 'utf-8');
+      writeFileSync(plainTextFile, mdContent, 'utf-8');
+      // eslint-disable-next-line no-console
+      console.log(`Generated: ${docFile}`);
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error(`Error writing markdown file ${docFile}:`, error);
+    }
+  });
   // eslint-disable-next-line no-console
   console.log('Markdown generation complete.');
 }
