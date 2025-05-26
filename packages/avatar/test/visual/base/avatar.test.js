@@ -63,9 +63,6 @@ describe('avatar', () => {
   });
 
   it('focus-ring', async () => {
-    div.style.width = '90px';
-    div.style.height = '90px';
-    div.style.textAlign = 'center';
     await sendKeys({ press: 'Tab' });
     await visualDiff(div, 'focus-ring');
   });
