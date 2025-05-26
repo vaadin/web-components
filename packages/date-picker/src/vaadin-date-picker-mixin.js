@@ -395,15 +395,6 @@ export const DatePickerMixin = (subclass) =>
       this.__setEnteredDate(parsedDate);
     }
 
-    /** @private */
-    get _nativeInput() {
-      if (this.inputElement) {
-        // TODO: support focusElement for backwards compatibility
-        return this.inputElement.focusElement || this.inputElement;
-      }
-      return null;
-    }
-
     /**
      * The input element's value when it cannot be parsed as a date, and an empty string otherwise.
      *
@@ -903,7 +894,7 @@ export const DatePickerMixin = (subclass) =>
         this._focus();
       }
 
-      const input = this._nativeInput;
+      const input = this.inputElement;
       if (this._noInput && input) {
         input.blur();
         this._overlayContent.focusDateElement();
@@ -969,8 +960,8 @@ export const DatePickerMixin = (subclass) =>
       }
       this.__commitParsedOrFocusedDate();
 
-      if (this._nativeInput && this._nativeInput.selectionStart) {
-        this._nativeInput.selectionStart = this._nativeInput.selectionEnd;
+      if (this.inputElement && this.inputElement.selectionStart) {
+        this.inputElement.selectionStart = this.inputElement.selectionEnd;
       }
       // No need to revalidate the value after `_selectedDateChanged`
       // Needed in case the value was not changed: open and close dropdown,
@@ -1007,8 +998,8 @@ export const DatePickerMixin = (subclass) =>
 
     /** @private */
     _setSelectionRange(a, b) {
-      if (this._nativeInput && this._nativeInput.setSelectionRange) {
-        this._nativeInput.setSelectionRange(a, b);
+      if (this.inputElement) {
+        this.inputElement.setSelectionRange(a, b);
       }
     }
 
