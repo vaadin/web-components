@@ -26,6 +26,7 @@ export const avatarStyles = css`
       -webkit-user-select: none;
       user-select: none;
       -webkit-tap-highlight-color: transparent;
+      position: relative;
     }
 
     :host([role='button']) {
@@ -62,7 +63,6 @@ export const avatarStyles = css`
     }
 
     :host([has-color-index]) {
-      position: relative;
       background-color: var(--vaadin-avatar-user-color);
     }
 
