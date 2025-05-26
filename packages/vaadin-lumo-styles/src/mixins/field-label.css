@@ -1,0 +1,61 @@
+/**
+ * @license
+ * Copyright (c) 2017 - 2025 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+[part='label'] {
+  align-self: flex-start;
+  color: var(--vaadin-input-field-label-color, var(--lumo-secondary-text-color));
+  font-weight: var(--vaadin-input-field-label-font-weight, 500);
+  font-size: var(--vaadin-input-field-label-font-size, var(--lumo-font-size-s));
+  transition: color 0.2s;
+  line-height: 1;
+  padding-inline-start: calc(var(--lumo-border-radius-m) / 4);
+  padding-inline-end: 1em;
+  padding-bottom: 0.5em;
+  /* As a workaround for diacritics being cut off, add a top padding and a
+  negative margin to compensate */
+  padding-top: 0.25em;
+  margin-top: -0.25em;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  position: relative;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+:host([focused]:not([readonly])) [part='label'] {
+  color: var(--vaadin-input-field-focused-label-color, var(--lumo-primary-text-color));
+}
+
+:host(:hover:not([readonly]):not([focused])) [part='label'] {
+  color: var(--vaadin-input-field-hovered-label-color, var(--lumo-body-text-color));
+}
+
+/* Touch device adjustment */
+@media (pointer: coarse) {
+  :host(:hover:not([readonly]):not([focused])) [part='label'] {
+    color: var(--vaadin-input-field-label-color, var(--lumo-secondary-text-color));
+  }
+}
+
+:host(:not([has-label])) [part='label'] {
+  display: none;
+}
+
+:host([has-label])::before {
+  margin-top: calc(var(--lumo-font-size-s) * 1.5);
+}
+
+:host([has-label][theme~='small'])::before {
+  margin-top: calc(var(--lumo-font-size-xs) * 1.5);
+}
+
+:host([has-label]) {
+  padding-top: var(--lumo-space-m);
+}
+
+:host([has-label]) ::slotted([slot='tooltip']) {
+  --vaadin-tooltip-offset-bottom: calc((var(--lumo-space-m) - var(--lumo-space-xs)) * -1);
+}

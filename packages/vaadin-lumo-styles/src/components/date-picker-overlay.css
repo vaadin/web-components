@@ -1,0 +1,59 @@
+/**
+ * @license
+ * Copyright (c) 2017 - 2025 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+[part='overlay'] {
+  display: flex;
+  flex: auto;
+
+  /*
+  Width:
+      date cell widths
+    + month calendar side padding
+    + year scroller width
+  */
+  /* prettier-ignore */
+  width:
+  calc(
+      var(--lumo-size-m) * 7
+    + var(--lumo-space-xs) * 2
+    + 57px
+  );
+  height: 100%;
+  max-height: calc(var(--lumo-size-m) * 14);
+  overflow: hidden;
+  -webkit-tap-highlight-color: transparent;
+  flex-direction: column;
+}
+
+[part='content'] {
+  flex: auto;
+  padding: 0;
+  height: 100%;
+  overflow: hidden;
+  -webkit-mask-image: none;
+  mask-image: none;
+}
+
+:host([top-aligned]) [part='overlay'] {
+  margin-top: var(--lumo-space-xs);
+}
+
+:host([bottom-aligned]) [part='overlay'] {
+  margin-bottom: var(--lumo-space-xs);
+}
+
+@media (max-width: 450px), (max-height: 450px) {
+  [part='overlay'] {
+    width: 100vw;
+    height: 70vh;
+    max-height: 70vh;
+  }
+}
+
+@media (forced-colors: active) {
+  [part='overlay'] {
+    outline: 3px solid;
+  }
+}

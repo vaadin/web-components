@@ -1,0 +1,96 @@
+/**
+ * @license
+ * Copyright (c) 2017 - 2025 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+:host {
+  max-width: 100%;
+  --input-min-width: var(--vaadin-multi-select-combo-box-input-min-width, 4em);
+  --_chip-min-width: var(--vaadin-multi-select-combo-box-chip-min-width, 50px);
+}
+
+#chips {
+  display: flex;
+  align-items: center;
+}
+
+::slotted(input) {
+  box-sizing: border-box;
+  flex: 1 0 var(--input-min-width);
+}
+
+::slotted([slot='chip']),
+::slotted([slot='overflow']) {
+  flex: 0 1 auto;
+}
+
+::slotted([slot='chip']) {
+  overflow: hidden;
+}
+
+:host(:is([readonly], [disabled])) ::slotted(input) {
+  flex-grow: 0;
+  flex-basis: 0;
+  padding: 0;
+}
+
+:host([auto-expand-vertically]) #chips {
+  display: contents;
+}
+
+:host([auto-expand-horizontally]) [class$='container'] {
+  width: auto;
+}
+
+:host([has-value]) {
+  padding-inline-start: 0;
+}
+
+:host([has-value]) ::slotted(input:placeholder-shown) {
+  caret-color: var(--lumo-body-text-color) !important;
+}
+
+[part='label'] {
+  flex-shrink: 0;
+}
+
+/* Override input-container styles */
+[part='input-field'] ::slotted([slot='chip']),
+[part='input-field'] ::slotted([slot='overflow']) {
+  min-height: auto;
+  padding: 0.3125em calc(0.5em + var(--lumo-border-radius-s) / 4);
+  color: var(--lumo-body-text-color);
+  -webkit-mask-image: none;
+  mask-image: none;
+}
+
+:host([auto-expand-vertically]) ::slotted([slot='chip']) {
+  margin-block: calc(var(--lumo-space-xs) / 2);
+}
+
+::slotted([slot='chip']:not([readonly]):not([disabled])) {
+  padding-inline-end: 0;
+}
+
+:host([auto-expand-vertically]) ::slotted([slot='input']) {
+  min-height: calc(var(--lumo-text-field-size, var(--lumo-size-m)) - 2 * var(--lumo-space-xs));
+}
+
+::slotted([slot='chip']:not(:last-of-type)),
+::slotted([slot='overflow']:not(:last-of-type)) {
+  margin-inline-end: var(--lumo-space-xs);
+}
+
+::slotted([slot='chip'][focused]) {
+  background-color: var(--vaadin-selection-color, var(--lumo-primary-color));
+  color: var(--lumo-primary-contrast-color);
+}
+
+[part='toggle-button']::before {
+  content: var(--lumo-icons-dropdown);
+}
+
+:host([readonly][has-value]) [part='toggle-button'] {
+  color: var(--lumo-contrast-60pct);
+  cursor: var(--lumo-clickable-cursor);
+}

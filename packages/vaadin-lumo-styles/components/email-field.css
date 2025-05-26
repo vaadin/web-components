@@ -1,0 +1,19 @@
+/**
+ * @license
+ * Copyright (c) 2017 - 2025 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+@import './input-container.css';
+
+@import '../src/mixins/base-layer-reset.css' vaadin-email-field;
+@import '../src/mixins/field-label.css' vaadin-email-field;
+@import '../src/mixins/field-required.css' vaadin-email-field;
+@import '../src/mixins/field-error-message.css' vaadin-email-field;
+@import '../src/mixins/field-button.css' vaadin-email-field;
+@import '../src/mixins/field-helper.css' vaadin-email-field;
+@import '../src/mixins/field-base.css' vaadin-email-field;
+@import '../src/components/email-field.css' vaadin-email-field;
+
+html {
+  --vaadin-email-field-css-inject: 1;
+}

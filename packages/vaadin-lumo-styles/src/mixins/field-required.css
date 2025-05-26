@@ -1,0 +1,24 @@
+/**
+ * @license
+ * Copyright (c) 2017 - 2025 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+:host([required]) [part='required-indicator']::after {
+  content: var(--lumo-required-field-indicator, '\2022');
+  color: var(--lumo-required-field-indicator-color, var(--lumo-primary-text-color));
+  position: absolute;
+  right: 0;
+  width: 1em;
+  text-align: center;
+}
+
+:host([invalid]) [part='required-indicator']::after {
+  color: var(--lumo-required-field-indicator-color, var(--lumo-error-text-color));
+}
+
+/* RTL specific styles */
+
+:host([dir='rtl']) [part='required-indicator']::after {
+  right: auto;
+  left: 0;
+}

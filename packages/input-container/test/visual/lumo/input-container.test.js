@@ -1,10 +1,12 @@
 import { fixtureSync } from '@vaadin/testing-helpers/dist/fixture.js';
 import { visualDiff } from '@web/test-runner-visual-regression';
-import '../common.js';
-import '@vaadin/icon/vaadin-icon.js';
-import '@vaadin/vaadin-lumo-styles/test/autoload.js';
+import '@vaadin/vaadin-lumo-styles/props.css';
+import '@vaadin/vaadin-lumo-styles/global.css';
+import '@vaadin/vaadin-lumo-styles/components/input-container.css';
 import '@vaadin/vaadin-lumo-styles/vaadin-iconset.js';
-import '../../../theme/lumo/vaadin-input-container.js';
+import '../common.js';
+import '@vaadin/icon';
+import '../../../vaadin-input-container.js';
 
 describe('input-container', () => {
   let div, element, input;
