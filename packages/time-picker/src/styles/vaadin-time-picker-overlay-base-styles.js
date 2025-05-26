@@ -6,17 +6,19 @@
 import { css } from 'lit';
 
 export const timePickerOverlayStyles = css`
-  :host {
-    --vaadin-item-checkmark-display: block;
-  }
+  @layer base {
+    :host {
+      --vaadin-item-checkmark-display: block;
+    }
 
-  #overlay {
-    width: var(--vaadin-time-picker-overlay-width, var(--_vaadin-time-picker-overlay-default-width, auto));
-  }
+    #overlay {
+      width: var(--vaadin-time-picker-overlay-width, var(--_vaadin-time-picker-overlay-default-width, auto));
+    }
 
-  [part='content'] {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
+    [part='content'] {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
   }
 `;
