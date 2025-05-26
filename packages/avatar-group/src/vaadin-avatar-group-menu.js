@@ -9,7 +9,7 @@ import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { avatarGroupMenuStyles } from './vaadin-avatar-group-menu-core-styles.js';
+import { avatarGroupMenuStyles } from './styles/vaadin-avatar-group-menu-core-styles.js';
 
 /**
  * An element used internally by `<vaadin-avatar-group>`. Not intended to be used separately.
