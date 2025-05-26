@@ -111,10 +111,6 @@ class Dashboard extends DashboardLayoutMixin(
     return 'vaadin-dashboard';
   }
 
-  static get experimental() {
-    return 'dashboardComponent';
-  }
-
   static get cvdlName() {
     return 'vaadin-dashboard';
   }
