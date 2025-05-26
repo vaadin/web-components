@@ -3,13 +3,13 @@
  * Copyright (c) 2020 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { css, html, LitElement } from 'lit';
+import { html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
-import { itemStyles } from '@vaadin/item/src/vaadin-item-core-styles.js';
 import { ItemMixin } from '@vaadin/item/src/vaadin-item-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { itemStyles } from './vaadin-avatar-group-menu-item-core-styles.js';
 
 /**
  * An element used internally by `<vaadin-avatar-group>`. Not intended to be used separately.
@@ -27,18 +27,7 @@ class AvatarGroupMenuItem extends ItemMixin(ThemableMixin(DirMixin(PolylitMixin(
   }
 
   static get styles() {
-    return [
-      itemStyles,
-      css`
-        @layer base {
-          [part='content'] {
-            display: flex;
-            align-items: center;
-            gap: inherit;
-          }
-        }
-      `,
-    ];
+    return itemStyles;
   }
 
   /** @protected */

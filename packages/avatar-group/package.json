@@ -21,8 +21,8 @@
   "type": "module",
   "files": [
     "src",
-    "!src/vaadin-avatar-group-base-styles.d.ts",
-    "!src/vaadin-avatar-group-base-styles.js",
+    "!src/*-base-styles.d.ts",
+    "!src/*-base-styles.js",
     "theme",
     "vaadin-*.d.ts",
     "vaadin-*.js",
