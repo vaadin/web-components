@@ -32,9 +32,7 @@ export const avatarGroupStyles = css`
 
     ::slotted(vaadin-avatar) {
       mask-image: url('data:image/svg+xml;utf8,<svg viewBox="0 0 300 300" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M300 0H0V300H300V0ZM150 200C177.614 200 200 177.614 200 150C200 122.386 177.614 100 150 100C122.386 100 100 122.386 100 150C100 177.614 122.386 200 150 200Z" fill="black"/></svg>');
-      mask-size: calc(
-        300% + var(--vaadin-avatar-group-overlap-border, 2px) * 6 - var(--vaadin-avatar-outline-width) * 6
-      );
+      mask-size: calc(300% + var(--vaadin-avatar-group-overlap-border, 2px) * 6 - var(--vaadin-focus-ring-width) * 6);
       mask-position: calc(50% + (var(--vaadin-avatar-size, 2em) - var(--vaadin-avatar-group-overlap, 8px)) * var(--_d));
       --_d: var(--_dir);
     }
@@ -44,7 +42,7 @@ export const avatarGroupStyles = css`
     }
 
     ::slotted(vaadin-avatar:not(:first-child)) {
-      margin-inline-start: calc(var(--vaadin-avatar-group-overlap, 8px) * -1 - var(--vaadin-avatar-outline-width));
+      margin-inline-start: calc(var(--vaadin-avatar-group-overlap, 8px) * -1 - var(--vaadin-focus-ring-width));
     }
 
     :host(:not([theme~='reverse'])) ::slotted(vaadin-avatar:last-child),

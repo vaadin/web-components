@@ -18,11 +18,10 @@ export const avatarStyles = css`
       overflow: hidden;
       height: var(--vaadin-avatar-size, 2em);
       width: var(--vaadin-avatar-size, 2em);
-      border: var(--vaadin-avatar-outline-width) solid transparent;
-      margin: calc(var(--vaadin-avatar-outline-width) * -1);
+      border: var(--vaadin-focus-ring-width) solid transparent;
+      margin: calc(var(--vaadin-focus-ring-width) * -1);
       background: var(--vaadin-avatar-background, var(--_vaadin-background-container-strong));
       background-clip: content-box;
-      --vaadin-avatar-outline-width: var(--vaadin-focus-ring-width, 2px);
       vertical-align: middle;
       -webkit-user-select: none;
       user-select: none;
@@ -77,6 +76,7 @@ export const avatarStyles = css`
 
     :host([focus-ring]) {
       outline: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
+      outline-offset: calc((var(--vaadin-focus-ring-width)) * -1);
     }
   }
 `;

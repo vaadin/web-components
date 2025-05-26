@@ -8,7 +8,7 @@
     <script type="module" src="./common.js"></script>
 
     <script type="module">
-      import '@vaadin/avatar-group';
+      import '@vaadin/avatar-group/src/vaadin-avatar-group.js';
 
       const groups = document.querySelectorAll('vaadin-avatar-group');
       groups.forEach(group => group.items = [{ name: 'AA' }, { name: 'BB' }, { name: 'CC' }]);
@@ -23,16 +23,6 @@
         groups.forEach(group => group.items = [...group.items].splice(0, group.items.length - 1));
       });
     </script>
-
-    <style>
-      @layer vaadin.base {
-  :is(html, #id) {
-    --vaadin-focus-ring-color: revert-layer;
-    --vaadin-focus-ring-width: revert-layer;
-  }
-}
-
-    </style>
   </head>
 
   <body>
