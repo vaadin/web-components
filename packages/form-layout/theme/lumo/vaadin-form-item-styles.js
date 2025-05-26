@@ -16,7 +16,6 @@ registerStyles(
       margin-top: var(--lumo-space-m);
       margin-left: calc(var(--lumo-border-radius-m) / 4);
       margin-bottom: var(--lumo-space-xs);
-      transition: color 0.4s;
       line-height: 1.333;
     }
 
