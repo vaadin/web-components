@@ -7,6 +7,8 @@
 @import './components/combo-box.css';
 @import './components/date-picker.css';
 @import './components/email-field.css';
+@import './components/form-item.css';
+@import './components/form-layout.css';
 @import './components/icon.css';
 @import './components/input-container.css';
 @import './components/integer-field.css';

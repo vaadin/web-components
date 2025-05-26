@@ -6,6 +6,7 @@
 import { html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
+import { CSSInjectionMixin } from '@vaadin/vaadin-themable-mixin/css-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { FormItemMixin } from './vaadin-form-item-mixin.js';
 import { formItemStyles } from './vaadin-form-layout-styles.js';
@@ -102,7 +103,7 @@ import { formItemStyles } from './vaadin-form-layout-styles.js';
  * @mixes FormItemMixin
  * @mixes ThemableMixin
  */
-class FormItem extends FormItemMixin(ThemableMixin(PolylitMixin(LitElement))) {
+class FormItem extends FormItemMixin(ThemableMixin(CSSInjectionMixin(PolylitMixin(LitElement)))) {
   static get is() {
     return 'vaadin-form-item';
   }

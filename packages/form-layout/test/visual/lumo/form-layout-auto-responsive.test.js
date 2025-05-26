@@ -1,9 +1,12 @@
 import { nextResize } from '@vaadin/testing-helpers';
 import { fixtureSync } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
-import '../../../theme/lumo/vaadin-form-layout.js';
-import '../../../theme/lumo/vaadin-form-item.js';
-import '../../../theme/lumo/vaadin-form-row.js';
+import '@vaadin/vaadin-lumo-styles/props.css';
+import '@vaadin/vaadin-lumo-styles/components/form-layout.css';
+import '@vaadin/vaadin-lumo-styles/components/form-item.css';
+import '../../../vaadin-form-layout.js';
+import '../../../vaadin-form-item.js';
+import '../../../vaadin-form-row.js';
 
 const DEFAULT_COLUMN_WIDTH = '12em';
 
