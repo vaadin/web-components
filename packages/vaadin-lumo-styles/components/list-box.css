@@ -3,7 +3,9 @@
  * Copyright (c) 2017 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-@import './components/button.css';
-@import './components/icon.css';
-@import './components/item.css';
-@import './components/list-box.css';
+@import '../src/mixins/base-layer-reset.css' vaadin-list-box;
+@import '../src/components/list-box.css' vaadin-list-box;
+
+html {
+  --vaadin-list-box-css-inject: 1;
+}
