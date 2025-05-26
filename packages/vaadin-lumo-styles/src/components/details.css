@@ -1,0 +1,35 @@
+/**
+ * @license
+ * Copyright (c) 2017 - 2025 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+:host {
+  margin: var(--lumo-space-xs) 0;
+  outline: none;
+  --_focus-ring-color: var(--vaadin-focus-ring-color, var(--lumo-primary-color-50pct));
+  --_focus-ring-width: var(--vaadin-focus-ring-width, 2px);
+}
+
+:host([focus-ring]) ::slotted([slot='summary']) {
+  box-shadow: 0 0 0 var(--_focus-ring-width) var(--_focus-ring-color);
+}
+
+[part='content'] {
+  padding: var(--lumo-space-xs) 0 var(--lumo-space-s);
+  font-size: var(--lumo-font-size-m);
+  line-height: var(--lumo-line-height-m);
+}
+
+:host([theme~='filled']) {
+  background-color: var(--lumo-contrast-5pct);
+  border-radius: var(--lumo-border-radius-m);
+}
+
+:host([theme~='filled']) [part='content'] {
+  padding-left: var(--lumo-space-m);
+  padding-right: var(--lumo-space-m);
+}
+
+:host([theme~='small']) [part$='content'] {
+  font-size: var(--lumo-font-size-s);
+}
