@@ -107,10 +107,6 @@ class DashboardWidget extends DashboardItemMixin(ElementMixin(ThemableMixin(Poly
     return 'vaadin-dashboard-widget';
   }
 
-  static get experimental() {
-    return 'dashboardComponent';
-  }
-
   static get styles() {
     return [
       css`

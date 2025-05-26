@@ -74,10 +74,6 @@ class DashboardSection extends DashboardItemMixin(ElementMixin(ThemableMixin(Pol
     return 'vaadin-dashboard-section';
   }
 
-  static get experimental() {
-    return 'dashboardComponent';
-  }
-
   static get styles() {
     return [
       css`
