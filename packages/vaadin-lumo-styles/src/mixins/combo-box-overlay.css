@@ -1,0 +1,28 @@
+/**
+ * @license
+ * Copyright (c) 2017 - 2025 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+[part='content'] {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 0;
+}
+
+/* When items are empty, the spinner needs some room */
+:host(:not([closing])) [part='content'] {
+  min-height: calc(2 * var(--lumo-space-s) + var(--lumo-icon-size-s));
+}
+
+[part='overlay'] {
+  position: relative;
+}
+
+:host([top-aligned]) [part='overlay'] {
+  margin-top: var(--lumo-space-xs);
+}
+
+:host([bottom-aligned]) [part='overlay'] {
+  margin-bottom: var(--lumo-space-xs);
+}

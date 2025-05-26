@@ -2,8 +2,6 @@
 
 A responsive, grid-based dashboard layout component
 
-> ⚠️ This component is experimental and the API may change. In order to use it, enable the feature flag by setting `window.Vaadin.featureFlags.dashboardComponent = true`.
-
 > ℹ️&nbsp; A commercial Vaadin [subscription](https://vaadin.com/pricing) is required to use Dashboard in your project.
 
 [Documentation + Live Demo ↗](https://vaadin.com/docs/latest/components/dashboard)

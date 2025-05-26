@@ -5,13 +5,15 @@
  */
 import '@vaadin/input-container/src/vaadin-input-container.js';
 import './vaadin-time-picker-combo-box.js';
-import { css, html, LitElement } from 'lit';
+import { html, LitElement } from 'lit';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { inputFieldShared } from '@vaadin/field-base/src/styles/input-field-shared-styles.js';
+import { CSSInjectionMixin } from '@vaadin/vaadin-themable-mixin/css-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { timePickerStyles } from './styles/vaadin-time-picker-core-styles.js';
 import { TimePickerMixin } from './vaadin-time-picker-mixin.js';
 
 /**
@@ -94,30 +96,13 @@ import { TimePickerMixin } from './vaadin-time-picker-mixin.js';
  * @mixes ThemableMixin
  * @mixes TimePickerMixin
  */
-class TimePicker extends TimePickerMixin(ThemableMixin(ElementMixin(PolylitMixin(LitElement)))) {
+class TimePicker extends TimePickerMixin(CSSInjectionMixin(ThemableMixin(ElementMixin(PolylitMixin(LitElement))))) {
   static get is() {
     return 'vaadin-time-picker';
   }
 
   static get styles() {
-    return [
-      inputFieldShared,
-      css`
-        /* See https://github.com/vaadin/vaadin-time-picker/issues/145 */
-        :host([dir='rtl']) [part='input-field'] {
-          direction: ltr;
-        }
-
-        :host([dir='rtl']) [part='input-field'] ::slotted(input)::placeholder {
-          direction: rtl;
-          text-align: left;
-        }
-
-        [part~='toggle-button'] {
-          cursor: pointer;
-        }
-      `,
-    ];
+    return [inputFieldShared, timePickerStyles];
   }
 
   /** @protected */

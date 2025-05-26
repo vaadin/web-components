@@ -1,19 +1,67 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Time picker</title>
+    <title>Time Picker</title>
     <script type="module" src="./common.js"></script>
+
     <script type="module">
+      import '@vaadin/icon';
+      import '@vaadin/icons';
       import '@vaadin/time-picker';
-      import '@vaadin/tooltip';
+      import '@vaadin/vaadin-lumo-styles/lumo.css';
+      import '@vaadin/vaadin-lumo-styles/vaadin-iconset.js';
     </script>
   </head>
+
   <body>
-    <vaadin-time-picker value="15:00" clear-button-visible>
-      <vaadin-tooltip slot="tooltip" text="Evening times are preferred"></vaadin-tooltip>
-    </vaadin-time-picker>
+    <section>
+      <h2>Plain</h2>
+      <vaadin-time-picker value="12:00"></vaadin-time-picker>
+      <vaadin-time-picker placeholder="Placeholder"></vaadin-time-picker>
+    </section>
+
+    <section>
+      <h2>Bells & Whistles</h2>
+      <vaadin-time-picker
+        label="Label"
+        helper-text="Description for this field."
+        value="12:00"
+        clear-button-visible
+        error-message="You need to write something in this field."
+        required
+      >
+        <vaadin-icon icon="vaadin:search" slot="prefix"></vaadin-icon>
+      </vaadin-time-picker>
+    </section>
+
+    <section>
+      <h2>States</h2>
+      <vaadin-time-picker
+        label="Read-only"
+        helper-text="Description for this field."
+        value="12:00"
+        clear-button-visible
+        error-message="You need to write something in this field."
+        required
+        readonly
+      >
+        <vaadin-icon icon="vaadin:search" slot="prefix"></vaadin-icon>
+      </vaadin-time-picker>
+
+      <vaadin-time-picker
+        label="Disabled"
+        helper-text="Description for this field."
+        value="12:00"
+        clear-button-visible
+        error-message="You need to write something in this field."
+        required
+        disabled
+      >
+        <vaadin-icon icon="vaadin:search" slot="prefix"></vaadin-icon>
+      </vaadin-time-picker>
+    </section>
   </body>
 </html>

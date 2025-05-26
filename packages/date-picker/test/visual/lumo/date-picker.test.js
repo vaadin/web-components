@@ -1,9 +1,11 @@
 import { resetMouse, sendKeys, sendMouseToElement } from '@vaadin/test-runner-commands';
 import { fixtureSync, mousedown } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
+import '@vaadin/vaadin-lumo-styles/props.css';
+import '@vaadin/vaadin-lumo-styles/components/date-picker.css';
 import '../../not-animated-styles.js';
 import '../common.js';
-import '../../../theme/lumo/vaadin-date-picker.js';
+import '../../../vaadin-date-picker.js';
 import { untilOverlayRendered } from '../../helpers.js';
 
 describe('date-picker', () => {
