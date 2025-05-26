@@ -7,7 +7,7 @@ function filterPublicApi(items: any[]) {
 }
 
 function renderRelatedTypes(typeContext: TypeContext, typeString: string) {
-  const relatedTypes = typeContext.lookupRelatedTypes(typeString);
+  const relatedTypes = typeContext.findRelatedTypes(typeString);
 
   if (relatedTypes.length > 0) {
     const typeNames = relatedTypes.map((type) => `[${type.name}](#${type.name})`).join(', ');
