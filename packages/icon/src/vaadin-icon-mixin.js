@@ -14,7 +14,6 @@ const Iconset = customElements.get('vaadin-iconset');
 /**
  * @polymerMixin
  * @mixes SlotStylesMixin
- * @mixes IconFontSizeMixin
  */
 export const IconMixin = (superClass) =>
   class extends SlotStylesMixin(superClass) {
