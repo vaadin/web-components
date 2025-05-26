@@ -1,0 +1,55 @@
+<div class="custom-page-header">
+  <h1 id="_top">{Astro.locals.starlightRoute.entry.data.title}</h1>
+  <div class="actions">
+    <button id="copy-markdown">Copy as MD</button>
+    <a href={"/" + Astro.locals.starlightRoute.entry.slug + ".txt"}>View as MD</a>
+  </div>
+</div>
+
+<style>
+  @layer starlight.core {
+    h1 {
+      font-size: var(--sl-text-h1);
+      line-height: var(--sl-line-height-headings);
+      font-weight: 600;
+      color: var(--sl-color-white);
+    }
+  }
+
+  .custom-page-header {
+    margin-top: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .custom-page-header .actions {
+    display: flex;
+    gap: 1rem;
+    align-items: baseline;
+  }
+</style>
+
+<script>
+  const copyButton = document.getElementById('copy-markdown');
+  copyButton?.addEventListener('click', () => {
+    const currentUrl = window.location.href;
+    const plainTextUrl = currentUrl.replace(/\/$/, '') + '.txt';
+
+    fetch(plainTextUrl)
+      .then(res => res.text())
+      .then(text => {
+        navigator.clipboard.writeText(text).then(() => {
+          copyButton.textContent = 'Copied!';
+          setTimeout(() => {
+            copyButton.textContent = 'Copy as MD';
+          }, 2000);
+        }).catch(err => {
+          console.error('Failed to copy text: ', err);
+        });
+      })
+      .catch(err => {
+        console.error('Failed to fetch text: ', err);
+      });
+  });
+</script>
