@@ -13,32 +13,14 @@ document.head.appendChild(globalStyle);
 registerStyles(
   'vaadin-avatar',
   css`
-    @layer base {
-      :host {
-        vertical-align: revert-layer;
-        background-image: none;
-        background-color: var(--lumo-contrast-10pct);
-      }
-
-      :host([focus-ring]) {
-        outline: none;
-      }
-
-      [part='icon'] {
-        mask-image: revert-layer;
-        background: revert-layer;
-        margin: revert-layer;
-      }
-
-      [part='icon'] > text {
-        display: revert-layer;
-      }
-    }
-
     :host {
       color: var(--lumo-secondary-text-color);
+      background-color: var(--lumo-contrast-10pct);
+      border-radius: 50%;
       outline: none;
       cursor: default;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
     }
@@ -54,10 +36,6 @@ registerStyles(
     [part='icon'],
     [part='abbr'] {
       fill: currentColor;
-    }
-
-    [part='icon'] > text {
-      font-family: 'vaadin-avatar-icons';
     }
 
     [part='abbr'] {
