@@ -4,10 +4,6 @@ import sinon from 'sinon';
 import type { DashboardSection } from '../src/vaadin-dashboard-section.js';
 import type { DashboardWidget } from '../src/vaadin-dashboard-widget.js';
 
-window.Vaadin ||= {};
-window.Vaadin.featureFlags ||= {};
-window.Vaadin.featureFlags.dashboardComponent = true;
-
 function getCssGrid(element: Element): Element {
   return (element as any).$?.grid || element;
 }
