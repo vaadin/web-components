@@ -13,60 +13,9 @@
 
 </div>
 
-## Installation
+## Documentation
 
-Install the components that you need from npm:
-
-```sh
-npm install @vaadin/grid
-```
-
-## Usage
-
-[Live demo →](https://webcomponents.dev/edit/JZcKP3kkHcJIgiCaI818/www/index.html)
-
-Import the component's JavaScript module, use the component in your HTML, and control it with JavaScript:
-
-```html
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8" />
-    <title>Vaadin example</title>
-  </head>
-  <body>
-    <!-- Use web components in your HTML like regular built-in elements. -->
-    <vaadin-grid column-reordering-allowed multi-sort>
-      <vaadin-grid-selection-column auto-select frozen></vaadin-grid-selection-column>
-      <vaadin-grid-sort-column width="9rem" path="firstName"></vaadin-grid-sort-column>
-      <vaadin-grid-sort-column width="9rem" path="lastName"></vaadin-grid-sort-column>
-      <vaadin-grid-column width="9rem" path="address.city"></vaadin-grid-column>
-    </vaadin-grid>
-
-    <!-- Vaadin web components use standard JavaScript modules. -->
-    <script type="module">
-      // Importing the following modules registers <vaadin-grid> and its column
-      // elements so that you can use them in this page.
-      import '@vaadin/grid/vaadin-grid.js';
-      import '@vaadin/grid/vaadin-grid-selection-column.js';
-      import '@vaadin/grid/vaadin-grid-sort-column.js';
-
-      // Use component's properties to populate data.
-      const grid = document.querySelector('vaadin-grid');
-      fetch('https://demo.vaadin.com/demo-data/1.0/people?count=200')
-        .then((res) => res.json())
-        .then((json) => (grid.items = json.result));
-    </script>
-  </body>
-</html>
-```
-
-Serve your HTML with a development server that supports bare module specifiers, such as [`@web/dev-server`](https://modern-web.dev/docs/dev-server/overview/):
-
-```sh
-npm i -g @web/dev-server
-web-dev-server --node-resolve --open
-```
+Check out our [documentation and live examples](https://vaadin.com/docs/latest/components).
 
 ## Components
 
@@ -157,10 +106,6 @@ The components below are licensed under [Vaadin Commercial License and Service T
 
 - Chrome (evergreen) for Android (4.4 or newer)
 - Safari for iOS (15 or newer)
-
-## Documentation
-
-Check out our [design system documentation](https://vaadin.com/docs/latest/components).
 
 ## Examples
 
