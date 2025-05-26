@@ -5,4 +5,4 @@
  */
 import { itemStyles } from '@vaadin/item/src/vaadin-item-core-styles.js';
 
-export { itemStyles as avatarGroupMenuItemStyles };
+export const avatarGroupMenuItemStyles = itemStyles;
