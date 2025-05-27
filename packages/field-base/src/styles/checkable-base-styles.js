@@ -41,6 +41,7 @@ export const checkable = (part, propName = part) => css`
       line-height: var(--vaadin-${unsafeCSS(propName)}-label-line-height, var(--vaadin-input-field-label-line-height, inherit));
       font-weight: var(--vaadin-${unsafeCSS(propName)}-font-weight, var(--vaadin-input-field-label-font-weight, 500));
       color: var(--vaadin-${unsafeCSS(propName)}-label-color, var(--vaadin-input-field-label-color, var(--_vaadin-color-strong)));
+      word-break: break-word;
     }
 
     [part='${unsafeCSS(part)}'],

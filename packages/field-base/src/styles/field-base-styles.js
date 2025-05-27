@@ -32,21 +32,17 @@ export const field = css`
       display: none;
     }
 
-    [part='label'],
-    ::slotted(label) {
+    [part='label'] {
       font-size: var(--vaadin-input-field-label-font-size, inherit);
       line-height: var(--vaadin-input-field-label-line-height, inherit);
       font-weight: var(--vaadin-input-field-label-font-weight, 500);
       color: var(--vaadin-input-field-label-color, var(--_vaadin-color-strong));
+      order: var(--vaadin-input-field-helper-order);
       word-break: break-word;
     }
 
     ::slotted(label) {
       cursor: inherit;
-    }
-
-    [part='label'] {
-      order: var(--vaadin-input-field-helper-order);
     }
 
     :host([disabled]) [part='label'],
