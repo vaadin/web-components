@@ -3,11 +3,16 @@
  * Copyright (c) 2017 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+@import './components/accordion.css';
 @import './components/button.css';
 @import './components/combo-box.css';
 @import './components/custom-field.css';
 @import './components/date-picker.css';
+@import './components/details-summary.css';
+@import './components/details.css';
 @import './components/email-field.css';
+@import './components/form-item.css';
+@import './components/form-layout.css';
 @import './components/icon.css';
 @import './components/input-container.css';
 @import './components/integer-field.css';

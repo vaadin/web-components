@@ -10,7 +10,8 @@ export const avatarGroupStyles = css`
     display: block;
     width: 100%; /* prevent collapsing inside non-stretching column flex */
     --vaadin-avatar-group-overlap: 8px;
-    --vaadin-avatar-group-overlap-border: 2px;
+    /* Deprecated property name (overlap-border), for backwards compatibility */
+    --vaadin-avatar-group-overlap-border: var(--vaadin-avatar-group-gap, 2px);
   }
 
   :host([hidden]) {
