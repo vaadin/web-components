@@ -20,6 +20,10 @@ export const checkable = (part, propName = part) => css`
       cursor: not-allowed;
     }
 
+    :host(:not([has-label])) {
+      column-gap: 0;
+    }
+
     .vaadin-${unsafeCSS(propName)}-container {
       display: contents;
     }
