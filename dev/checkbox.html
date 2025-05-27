@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -9,14 +9,38 @@
 
     <script type="module">
       import '@vaadin/checkbox';
-      import '@vaadin/tooltip';
+      import '@vaadin/icon';
+      import '@vaadin/icons';
     </script>
   </head>
 
   <body>
-    <vaadin-checkbox>
-      <label slot="label">I accept <a href="http://vaadin.com">the terms and conditions</a></label>
-      <vaadin-tooltip slot="tooltip" text="Please read first"></vaadin-tooltip>
-    </vaadin-checkbox>
+    <section>
+      <h2>Label &amp; Description</h2>
+      <vaadin-checkbox label="Checked" checked></vaadin-checkbox>
+      <vaadin-checkbox label="Indeterminate" indeterminate></vaadin-checkbox>
+      <vaadin-checkbox label="Unchecked"></vaadin-checkbox>
+    </section>
+
+    <section>
+      <h2>All Features</h2>
+      <vaadin-checkbox
+        label="Label"
+        helper-text="Description"
+        required
+        error-message="You have to check me."
+        invalid
+      ></vaadin-checkbox>
+    </section>
+
+    <section>
+      <h2>Complex Label</h2>
+      <vaadin-checkbox>
+        <label slot="label">
+          <vaadin-icon icon="vaadin:file"></vaadin-icon>
+          I accept <a href="http://vaadin.com">the terms and conditions</a>
+        </label>
+      </vaadin-checkbox>
+    </section>
   </body>
 </html>
