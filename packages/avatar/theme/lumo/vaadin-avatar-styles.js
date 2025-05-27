@@ -2,6 +2,7 @@ import '@vaadin/vaadin-lumo-styles/color.js';
 import '@vaadin/vaadin-lumo-styles/sizing.js';
 import '@vaadin/vaadin-lumo-styles/spacing.js';
 import '@vaadin/vaadin-lumo-styles/style.js';
+import '@vaadin/vaadin-lumo-styles/font-icons.js';
 import '@vaadin/vaadin-lumo-styles/typography.js';
 import '@vaadin/vaadin-lumo-styles/user-colors.js';
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
@@ -33,15 +34,17 @@ registerStyles(
       border-color: var(--vaadin-focus-ring-color, var(--lumo-primary-color-50pct));
     }
 
-    [part='icon'],
-    [part='abbr'] {
-      fill: currentColor;
+    [part='icon']::before {
+      content: var(--lumo-icons-user);
+      font-family: lumo-icons;
+      font-size: 0.9em;
     }
 
     [part='abbr'] {
       font-family: var(--lumo-font-family);
       font-size: 2.4375em;
       font-weight: 500;
+      fill: currentColor;
     }
 
     :host([theme~='xlarge']) [part='abbr'] {

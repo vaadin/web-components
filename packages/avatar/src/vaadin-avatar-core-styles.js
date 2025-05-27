@@ -26,22 +26,20 @@ export const avatarStyles = css`
   }
 
   [part='icon'] {
-    font-size: 5.6em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    font-size: var(--vaadin-avatar-size, 64px);
+    line-height: 1;
   }
 
   [part='abbr'] {
     font-size: 2.2em;
   }
 
-  [part='icon'] > text {
-    font-family: 'vaadin-avatar-icons';
-  }
-
-  :host([hidden]) {
-    display: none !important;
-  }
-
-  svg[hidden] {
+  :host([hidden]),
+  [hidden] {
     display: none !important;
   }
 
