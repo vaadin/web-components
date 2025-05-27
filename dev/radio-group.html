@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -9,67 +9,121 @@
 
     <script type="module">
       import '@vaadin/radio-group';
-      import '@vaadin/tooltip';
     </script>
+
+    <style>
+      label img {
+        height: 1lh;
+        padding: 2px;
+        box-sizing: border-box;
+        vertical-align: top;
+      }
+    </style>
   </head>
 
   <body>
-    <vaadin-radio-group label="Travel class">
-      <vaadin-radio-button value="economy" label="Economy"></vaadin-radio-button>
-      <vaadin-radio-button value="business" label="Business"></vaadin-radio-button>
-      <vaadin-radio-button value="firstClass" label="First Class"></vaadin-radio-button>
-      <vaadin-tooltip slot="tooltip" text="First class tickets include meal service"></vaadin-tooltip>
-    </vaadin-radio-group>
+    <section>
+      <h2>Plain Text Labels</h2>
+      <vaadin-radio-group label="Options">
+        <vaadin-radio-button value="1" label="Option One" checked></vaadin-radio-button>
+        <vaadin-radio-button value="2" label="Option Two"></vaadin-radio-button>
+        <vaadin-radio-button value="3" label="Option Three"></vaadin-radio-button>
+      </vaadin-radio-group>
+    </section>
 
-    <br />
-    <br />
+    <section>
+      <h2>Horizontal</h2>
+      <vaadin-radio-group label="Options" theme="horizontal">
+        <vaadin-radio-button value="1" label="Option One" checked></vaadin-radio-button>
+        <vaadin-radio-button value="2" label="Option Two"></vaadin-radio-button>
+        <vaadin-radio-button value="3" label="Option Three"></vaadin-radio-button>
+      </vaadin-radio-group>
+    </section>
 
-    <vaadin-radio-group theme="vertical" label="Payment method">
-      <vaadin-radio-button checked>
-        <label slot="label">
-          <div>
-            <vaadin-horizontal-layout theme="spacing">
+    <section>
+      <h2>Read Only &amp; Disabled</h2>
+      <vaadin-radio-group label="Options" readonly>
+        <vaadin-radio-button value="1" label="Option One" checked></vaadin-radio-button>
+        <vaadin-radio-button value="2" label="Option Two"></vaadin-radio-button>
+        <vaadin-radio-button value="3" label="Option Three"></vaadin-radio-button>
+      </vaadin-radio-group>
+
+      <vaadin-radio-group label="Options" disabled>
+        <vaadin-radio-button value="1" label="Option One" checked></vaadin-radio-button>
+        <vaadin-radio-button value="2" label="Option Two"></vaadin-radio-button>
+        <vaadin-radio-button value="3" label="Option Three"></vaadin-radio-button>
+      </vaadin-radio-group>
+    </section>
+
+    <section>
+      <h2>Bells &amp; Whistles</h2>
+      <vaadin-radio-group
+        label="Payment Method"
+        theme="helper-above-field"
+        helper-text="Choose what payment method you would like to use."
+        required
+        error-message="Choose a payment method."
+        invalid
+      >
+        <vaadin-radio-button value="visa">
+          <label slot="label">
+            <div>
               <img
                 src="data:image/png;base64,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"
                 alt="Visa"
-                style="height: 1em"
               />
               <span>**** **** **** 1234</span>
-            </vaadin-horizontal-layout>
-            <div>Expiry date:12/2026</div>
-          </div>
-        </label>
-      </vaadin-radio-button>
-      <vaadin-radio-button>
-        <label slot="label">
-          <div>
-            <vaadin-horizontal-layout theme="spacing">
+            </div>
+            <small>Expiry date:12/2026</small>
+          </label>
+        </vaadin-radio-button>
+        <vaadin-radio-button value="mastercard">
+          <label slot="label">
+            <div>
               <img
                 src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAE4AAAAwCAMAAACIXLyeAAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAK7OHOkAAABsUExURUdwTOwAG/mIIPifG+wAG+wAG/eeG+sAG/tFJ/leIO0AHO0AHPqgHfieG/eeG+wAG/mgHfieG/ifG/ifG+wAG/ieG/mgHOwAG/tOCusAG/eeG/9fAP5rBfmXGPYxDf15C/IcE/pECP5VA/qLE2jxkIMAAAAZdFJOUwBsIZPfsu/wCRQ7Vy/gx8w/tWp9hqVZmOTex8qZAAABoklEQVRIx62XWXLDIBBEEWLXvhvkJE5y/ztG3mLZQgOU6V9VvaJpBNMIvUpkEyVcc1LRXonXr3k7lAUzrCiHViKXZEL1Wpxmq6/1wMxaZYdBWM/1RiS5LXEszVbDLlAkFtgFqM4ubbBFLLV7xpXe1SQ7sytWW2iKa0CHDwOo3dASCKa/5yPISwNpcxBPOWku3tov5m7awoNw5pGHqCDaab7rC8Ix7LdxP/+4GbQ73BcHWv180Bx28yuuBxc3r/UL4Zrrj+q9OK80vHfOuXuXw0f9YvUItwgKwiuMLMSrw22H0OSfqzPbMnDrHDiGEAnDgVkYiYKScOEw0jFxeejqju/gTsFmo0YhYh+UPu4xjvyTRb4CIl9QYW7d12e8yz33eBf9c729jILEeRhx1Gf7MfVEGSqkFLepV3rZdeWA69pr9PQZyManAS+LOi4uPP7OMNttR21w/w5gCqOtowD59qJl+79qbu8pGQFqCm52ltaJoN5T3VtZbQOmYM8TGeXPFU+t62JaPA+IHqVRqJ5W5Nw/p0Rtq9aYNksDLcomHS0u/wCadzZdj+ddpQAAAABJRU5ErkJggg=="
                 alt="Mastercard"
-                style="height: 1em"
               />
               <span>**** **** **** 7890</span>
-            </vaadin-horizontal-layout>
-            <div>Expiry date:11/2026</div>
-          </div>
-        </label>
-      </vaadin-radio-button>
-      <vaadin-radio-button>
-        <label slot="label">
-          <div>
-            <vaadin-horizontal-layout theme="spacing">
+            </div>
+            <small>Expiry date:11/2026</small>
+          </label>
+        </vaadin-radio-button>
+        <vaadin-radio-button value="american-express">
+          <label slot="label">
+            <div>
               <img
                 src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwBAMAAAClLOS0AAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAK7OHOkAAAAtUExURRV70wBvz/////D3/CaF10eX3Xq05pPC69bp+KfO7zuR21ih4Ap10rza82iq41FJ1oUAAAABdFJOU/2D6lbHAAABpUlEQVQ4y2OQwQ5EGASxA4FRCRIkBFx8XFxEXKDAkcUFyPdxcRBgkFXSVFJKUoICCyDWBEEBBqesJtW1uqtVVy2vWlqUqbsrKcqo65FVpwBDhdQjHT5VFp3cGwnTzy7rCb8pldQo2QiUMPM4rPPA5onO6r0JM88uK1DSimRqXACSMNjJrjPnSYlOWG4iY9GyEqXGlycbGwKBEjWhC3Rmi5cAjUoxebSs8cWDUK9GS0GgRJiSyZW7HLNUGNhLNTy3a671VGqYYLQBKKF0SwnJrcZKSqlKSrog54Y6Lg2FgoDQ0IUuLgeBXgwNITcQHxsbG9tdNkYGFmCJ5N277xVZz4uKtd6dfHv35rZ3l+ueQSTEynslQ0zCYhqfec8pL2Z91+r3EiIhndZUyKFSNLGxdvectGSxGVo7L0MkRHc3XXRWETzWeHDFnN2bpq6ZsZUbIiHZYcHmrVKs1HjbeU5Hk7HpY+MUiISgYOmmnpLizMampRMFJQQFugSPgyVAEahhpKQsp6QMChpjI2VjZbDEsrS0tISwtDyp8tJyKHg1mj9IkMABWAD0UMnWDyQ8pAAAAABJRU5ErkJggg=="
                 alt="American Express"
-                style="height: 1em"
               />
               <span>**** **** **** 5432</span>
-            </vaadin-horizontal-layout>
-            <div>Expiry date:10/2026</div>
-          </div>
-        </label>
-      </vaadin-radio-button>
-    </vaadin-radio-group>
+            </div>
+            <small>Expiry date:10/2026</small>
+          </label>
+        </vaadin-radio-button>
+      </vaadin-radio-group>
+    </section>
+
+    <section>
+      <h2>Content &amp; Layout Variations</h2>
+      <p>Resize the field to test how content flows.</p>
+      <vaadin-radio-group
+        label="A very long label for this field"
+        helper-text="If the label wasn't enough to tell what option you should choose, then this long description should be."
+        error-message="In case you didn't select an option for this required field, this error message is here to let you know that you really should select one option."
+        required
+        invalid
+        theme="horizontal"
+        style="resize: horizontal; overflow: hidden; padding: 1px"
+      >
+        <vaadin-radio-button value="1" label="Overview"></vaadin-radio-button>
+        <vaadin-radio-button value="2" label="Dark Mode"></vaadin-radio-button>
+        <vaadin-radio-button value="3" label="Settings Panel"></vaadin-radio-button>
+        <vaadin-radio-button value="4" label="Advanced Debugging Mode"></vaadin-radio-button>
+        <vaadin-radio-button value="5" label="Optimize Database Execution"></vaadin-radio-button>
+        <vaadin-radio-button value="6" label="Real-Time Performance Metrics"></vaadin-radio-button>
+        <vaadin-radio-button value="7" label="Export Comprehensive Usage Report"></vaadin-radio-button>
+      </vaadin-radio-group>
+    </section>
   </body>
 </html>
