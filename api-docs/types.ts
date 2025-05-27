@@ -46,6 +46,9 @@ export class TypeContext {
     elementSchema.methods.forEach((method: any) => {
       accessExpressions.push(`({} as ${className}).${method.name}`);
     });
+    elementSchema.staticMethods.forEach((method: any) => {
+      accessExpressions.push(`${className}.${method.name}`);
+    });
 
     const compilerHost = ts.createCompilerHost({});
     const originalGetSourceFile = compilerHost.getSourceFile;
