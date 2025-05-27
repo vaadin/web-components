@@ -44,9 +44,10 @@ function renderElement(element: any) {
   }
 
   // Properties
-  mdContent += `## Properties\n\n`;
   const publicProperties = filterPublicApi(element.properties);
   if (publicProperties.length > 0) {
+    mdContent += `## Properties\n\n`;
+
     publicProperties.forEach((prop: any) => {
       const propertyType = typeContext.getMemberType(prop.name);
       mdContent += `### ${prop.name}\n\n`;
@@ -54,27 +55,38 @@ function renderElement(element: any) {
       mdContent += `${sanitizeDescription(prop.description)}\n\n`;
       mdContent += renderRelatedTypes(typeContext, propertyType);
     });
-  } else {
-    mdContent += `No public properties.\n\n`;
   }
 
   // Methods
-  mdContent += `## Methods\n\n`;
   const publicMethods = filterPublicApi(element.methods);
   if (publicMethods.length > 0) {
+    mdContent += `## Methods\n\n`;
+
     publicMethods.forEach((method: any) => {
       const methodType = typeContext.getMemberType(method.name);
       mdContent += `### ${method.name}\n\n`;
       mdContent += `**Type:** \`${methodType}\`\n\n`;
       mdContent += `${sanitizeDescription(method.description)}\n\n`;
     });
-  } else {
-    mdContent += `No public methods.\n\n`;
+  }
+
+  // Static methods
+  const publicStaticMethods = filterPublicApi(element.staticMethods);
+  if (publicStaticMethods.length > 0) {
+    mdContent += `## Static Methods\n\n`;
+
+    publicStaticMethods.forEach((method: any) => {
+      const methodType = typeContext.getMemberType(method.name);
+      mdContent += `### ${method.name}\n\n`;
+      mdContent += `**Type:** \`${methodType}\`\n\n`;
+      mdContent += `${sanitizeDescription(method.description)}\n\n`;
+    });
   }
 
   // Events
-  mdContent += `## Events\n\n`;
   if (element.events && element.events.length > 0) {
+    mdContent += `## Events\n\n`;
+
     // Custom events
     element.events.forEach((event: any) => {
       const eventType = typeContext.findEventType(event.name);
@@ -96,8 +108,6 @@ function renderElement(element: any) {
       mdContent += `**Type:** ${eventTypeString}\n\n`;
       mdContent += `Fired when the \`${prop.name}\` property changes.\n\n`;
     });
-  } else {
-    mdContent += `No public events.\n\n`;
   }
 
   // Related types
