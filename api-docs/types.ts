@@ -92,11 +92,10 @@ export class TypeContext {
   }
 
   private findDeclaration(typeName: string): RelatedTypeDeclaration | undefined {
-    // Only consider declaration files in the same component package
-    const packageName = this.elementSchema.path.split('/')[1];
+    // Only consider declaration files in monorepo packages
     const relatedSourceFiles = this.program
       .getSourceFiles()
-      .filter((file) => file.fileName.includes(`/${packageName}/`))
+      .filter((file) => file.fileName.includes(`/packages/`))
       .filter((file) => file.isDeclarationFile);
 
     for (const sourceFile of relatedSourceFiles) {
