@@ -142,7 +142,7 @@ export class TypeContext {
       .map((type) => type.trim())
       .filter((type) => !!type);
 
-    // Filter out some basic types
+    // Filter out some basic types, as well as mixins
     const basicTypes = new Set([
       'string',
       'number',
@@ -159,7 +159,9 @@ export class TypeContext {
       'Date',
       'RegExp',
     ]);
-    const customTypeNames = typeNames.filter((type) => !basicTypes.has(type));
+    const customTypeNames = typeNames
+      .filter((type) => !basicTypes.has(type))
+      .filter((type) => !type.endsWith('Mixin') && !type.endsWith('MixinClass'));
 
     // Skip types already found
     const unknownTypeNames = customTypeNames.filter((type) => !this.relatedTypes.has(type));
