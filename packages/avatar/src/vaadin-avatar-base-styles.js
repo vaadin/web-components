@@ -41,15 +41,7 @@ export const avatarStyles = css`
 
     [part='icon'] {
       height: 100%;
-      padding: 14%;
-      box-sizing: border-box;
-    }
-
-    [part='icon']::before {
-      content: '';
-      display: block;
-      height: 100%;
-      mask-image: var(--_vaadin-icon-user);
+      mask: var(--_vaadin-icon-user) no-repeat center / 72%;
       background: currentColor;
     }
 
