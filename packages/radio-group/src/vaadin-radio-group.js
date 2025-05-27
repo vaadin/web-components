@@ -9,8 +9,8 @@ import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { radioGroupStyles } from './styles/vaadin-radio-group-core-styles.js';
 import { RadioGroupMixin } from './vaadin-radio-group-mixin.js';
-import { radioGroupStyles } from './vaadin-radio-group-styles.js';
 
 /**
  * `<vaadin-radio-group>` is a web component that allows the user to choose one item from a group of choices.
