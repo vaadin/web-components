@@ -4,7 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import '@vaadin/component-base/src/style-props.js';
-import { css } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { css } from 'lit';
 
 export const avatarStyles = css`
   @layer base {
@@ -41,7 +41,7 @@ export const avatarStyles = css`
 
     [part='icon'] {
       height: 100%;
-      mask: var(--_vaadin-icon-user) no-repeat center / 72%;
+      mask: var(--_vaadin-icon-user) no-repeat center / 74%;
       background: currentColor;
     }
 

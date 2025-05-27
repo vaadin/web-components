@@ -11,7 +11,7 @@ import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { avatarStyles } from './vaadin-avatar-core-styles.js';
+import { avatarStyles } from './styles/vaadin-avatar-core-styles.js';
 import { AvatarMixin } from './vaadin-avatar-mixin.js';
 
 /**
