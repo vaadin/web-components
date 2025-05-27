@@ -6,19 +6,6 @@
 :host {
   align-items: flex-start;
   justify-content: flex-start;
-}
-
-:host(:not([phone])) [part='overlay'] {
-  min-width: var(--vaadin-select-overlay-width, var(--vaadin-select-text-field-width));
-}
-
-@media (forced-colors: active) {
-  [part='overlay'] {
-    outline: 3px solid;
-  }
-}
-
-:host {
   --_lumo-item-selected-icon-display: block;
 }
 
@@ -32,6 +19,10 @@
   /* stylelint-enable declaration-block-no-redundant-longhand-properties */
   align-items: stretch;
   justify-content: flex-end;
+}
+
+:host(:not([phone])) [part='overlay'] {
+  min-width: var(--vaadin-select-overlay-width, var(--vaadin-select-text-field-width));
 }
 
 :host([no-vertical-overlap][top-aligned]) [part='overlay'] {
@@ -52,4 +43,10 @@
 
 :host([theme~='align-center']) {
   text-align: center;
+}
+
+@media (forced-colors: active) {
+  [part='overlay'] {
+    outline: 3px solid;
+  }
 }
