@@ -11,14 +11,8 @@ export const field = css`
     :host {
       display: inline-flex;
       outline: none;
-    }
-
-    :host::before {
-      content: '\\2003';
-      width: 0;
-      display: inline-block;
-      /* Size and position this element on the same vertical position as the input-field element
-            to make vertical align for the host element work as expected */
+      cursor: default;
+      -webkit-tap-highlight-color: transparent;
     }
 
     :host([hidden]) {
@@ -38,16 +32,35 @@ export const field = css`
       display: none;
     }
 
-    [part='label'] {
+    [part='label'],
+    ::slotted(label) {
       font-size: var(--vaadin-input-field-label-font-size, inherit);
       line-height: var(--vaadin-input-field-label-line-height, inherit);
       font-weight: var(--vaadin-input-field-label-font-weight, 500);
       color: var(--vaadin-input-field-label-color, var(--_vaadin-color-strong));
+      word-break: break-word;
+    }
+
+    ::slotted(label) {
+      cursor: inherit;
+    }
+
+    [part='label'] {
       order: var(--vaadin-input-field-helper-order);
     }
 
+    :host([disabled]) [part='label'],
+    :host([disabled]) ::slotted(label) {
+      opacity: 0.5;
+    }
+
+    :host([disabled]) [part='label'] ::slotted(label) {
+      opacity: 1;
+    }
+
     [part='required-indicator'] {
-      color: var(--vaadin-input-field-required-indicator-color, inherit);
+      display: inline-block;
+      color: var(--vaadin-input-field-required-indicator-color, var(--_vaadin-color));
     }
 
     [part='required-indicator']::after {
