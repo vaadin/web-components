@@ -37,11 +37,6 @@ const dashboardWidgetAndSection = css`
     filter: var(--_widget-filter);
   }
 
-  :host([selected]) {
-    opacity: 1;
-    z-index: 1;
-  }
-
   :host([focused]) {
     z-index: 1;
   }
@@ -86,6 +81,8 @@ const dashboardWidgetAndSection = css`
     --_icon-color: var(--lumo-primary-text-color);
   }
   :host([selected]) {
+    opacity: 1;
+    z-index: 1;
     --_icon-color: var(--lumo-primary-text-color);
   }
   :host(:is([move-mode], [resize-mode])) {
@@ -257,6 +254,13 @@ const dashboardWidget = css`
     height: var(--lumo-size-s);
     padding-right: 0;
     padding-left: 0;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+
+  [part~='resize-shrink-height-button']:not([hidden]) + [part~='resize-grow-height-button'] {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
   }
 
   [part~='resize-shrink-height-button'] + [part~='resize-grow-height-button'] {
@@ -293,17 +297,6 @@ const dashboardWidget = css`
   [part~='resize-shrink-height-button'],
   [part~='resize-shrink-width-button'] {
     --icon: var(--lumo-icons-minus);
-  }
-
-  [part~='resize-grow-height-button'],
-  [part~='resize-shrink-height-button'] {
-    border-bottom-left-radius: 0;
-    border-bottom-right-radius: 0;
-  }
-
-  [part~='resize-shrink-height-button']:not([hidden]) + [part~='resize-grow-height-button'] {
-    border-top-left-radius: 0;
-    border-top-right-radius: 0;
   }
 
   /* Windows High Contrast Mode */
