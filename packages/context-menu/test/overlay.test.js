@@ -63,10 +63,10 @@ describe('overlay', () => {
     it('should be invisible before open', async () => {
       menu.openOn = 'foobar';
       fire(menu.listenOn, 'foobar', { x: 5, y: 5, sourceEvent: { clientX: 10, clientY: 20 } });
-      expect(window.getComputedStyle(overlay).opacity).to.eql('0');
+      expect(window.getComputedStyle(overlay).visibility).to.eql('hidden');
 
       await oneEvent(overlay, 'vaadin-overlay-open');
-      expect(window.getComputedStyle(overlay).opacity).to.eql('1');
+      expect(window.getComputedStyle(overlay).visibility).to.eql('visible');
     });
 
     it('should be visible when open', async () => {

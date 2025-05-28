@@ -215,7 +215,7 @@ export const ContextMenuMixin = (superClass) =>
      */
     _onVaadinOverlayOpen() {
       this.__alignOverlayPosition();
-      this._overlayElement.style.opacity = '';
+      this._overlayElement.style.visibility = '';
       this.__forwardFocus();
     }
 
@@ -403,7 +403,8 @@ export const ContextMenuMixin = (superClass) =>
           this.__y = this._getEventCoordinate(e, 'y');
           this.__pageYOffset = window.pageYOffset;
 
-          this._overlayElement.style.opacity = '0';
+          // Hide overlay until it is fully rendered and positioned
+          this._overlayElement.style.visibility = 'hidden';
           this._setOpened(true);
         }
       }
