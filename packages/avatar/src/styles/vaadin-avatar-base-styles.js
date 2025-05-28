@@ -40,21 +40,13 @@ export const avatarStyles = css`
     }
 
     [part='icon'] {
-      font-size: 5.6em;
+      height: 100%;
+      mask: var(--_vaadin-icon-user) no-repeat center / 74%;
+      background: currentColor;
     }
 
     [part='abbr'] {
       font-size: 2.75em;
-    }
-
-    [part='icon'] > text {
-      display: none;
-    }
-
-    [part='icon'] {
-      mask-image: var(--_vaadin-icon-user);
-      background: currentColor;
-      margin: 14%;
     }
 
     :host([hidden]),

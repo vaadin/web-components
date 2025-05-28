@@ -30,9 +30,33 @@ describe('avatar', () => {
     await visualDiff(div, 'name');
   });
 
-  it('name', async () => {
+  it('abbr', async () => {
     element.abbr = 'YY';
     await visualDiff(div, 'abbr');
+  });
+
+  it('abbr theme-xlarge', async () => {
+    element.abbr = 'YY';
+    element.setAttribute('theme', 'xlarge');
+    await visualDiff(div, 'abbr-theme-xlarge');
+  });
+
+  it('abbr theme-large', async () => {
+    element.abbr = 'YY';
+    element.setAttribute('theme', 'large');
+    await visualDiff(div, 'abbr-theme-large');
+  });
+
+  it('abbr theme-small', async () => {
+    element.abbr = 'YY';
+    element.setAttribute('theme', 'small');
+    await visualDiff(div, 'abbr-theme-small');
+  });
+
+  it('abbr theme-xsmall', async () => {
+    element.abbr = 'YY';
+    element.setAttribute('theme', 'xsmall');
+    await visualDiff(div, 'abbr-theme-xsmall');
   });
 
   it('img', async () => {

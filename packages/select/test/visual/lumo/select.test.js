@@ -1,11 +1,15 @@
 import { sendKeys } from '@vaadin/test-runner-commands';
 import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
-import '@vaadin/item/theme/lumo/vaadin-item.js';
-import '@vaadin/list-box/theme/lumo/vaadin-list-box.js';
+import '@vaadin/vaadin-lumo-styles/props.css';
+import '@vaadin/vaadin-lumo-styles/components/item.css';
+import '@vaadin/vaadin-lumo-styles/components/list-box.css';
+import '@vaadin/vaadin-lumo-styles/components/select.css';
+import '@vaadin/item';
+import '@vaadin/list-box';
 import '../../not-animated-styles.js';
 import '../common.js';
-import '../../../theme/lumo/vaadin-select.js';
+import '../../../vaadin-select.js';
 
 describe('select', () => {
   let div, element;

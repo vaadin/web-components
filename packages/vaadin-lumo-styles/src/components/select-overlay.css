@@ -1,0 +1,52 @@
+/**
+ * @license
+ * Copyright (c) 2017 - 2025 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+:host {
+  align-items: flex-start;
+  justify-content: flex-start;
+  --_lumo-item-selected-icon-display: block;
+}
+
+/* Small viewport adjustment */
+:host([phone]) {
+  /* stylelint-disable declaration-block-no-redundant-longhand-properties */
+  top: 0 !important;
+  right: 0 !important;
+  bottom: var(--vaadin-overlay-viewport-bottom, 0) !important;
+  left: 0 !important;
+  /* stylelint-enable declaration-block-no-redundant-longhand-properties */
+  align-items: stretch;
+  justify-content: flex-end;
+}
+
+:host(:not([phone])) [part='overlay'] {
+  min-width: var(--vaadin-select-overlay-width, var(--vaadin-select-text-field-width));
+}
+
+:host([no-vertical-overlap][top-aligned]) [part='overlay'] {
+  margin-block-start: var(--lumo-space-xs);
+}
+
+:host([no-vertical-overlap][bottom-aligned]) [part='overlay'] {
+  margin-block-end: var(--lumo-space-xs);
+}
+
+:host([theme~='align-left']) {
+  text-align: left;
+}
+
+:host([theme~='align-right']) {
+  text-align: right;
+}
+
+:host([theme~='align-center']) {
+  text-align: center;
+}
+
+@media (forced-colors: active) {
+  [part='overlay'] {
+    outline: 3px solid;
+  }
+}

@@ -6,23 +6,6 @@
 import { timeOut } from '@vaadin/component-base/src/async.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
-import { css, registerStyles } from '@vaadin/vaadin-themable-mixin';
-
-registerStyles(
-  'vaadin-grid-filter',
-  css`
-    :host {
-      display: inline-flex;
-      max-width: 100%;
-    }
-
-    ::slotted(*) {
-      width: 100%;
-      box-sizing: border-box;
-    }
-  `,
-  { moduleId: 'vaadin-grid-filter-styles' },
-);
 
 /**
  * @polymerMixin

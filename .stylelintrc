@@ -4,5 +4,8 @@
   ],
   "overrides": [
     { "files": ["**/*.js"], "customSyntax": "postcss-lit" }
-  ]
+  ],
+  "rules": {
+    "no-duplicate-selectors": true
+  }
 }

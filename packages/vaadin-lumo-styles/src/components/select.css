@@ -1,0 +1,54 @@
+/**
+ * @license
+ * Copyright (c) 2017 - 2025 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+:host {
+  position: relative;
+  /* Disable pointer focus-ring for select, not supported yet */
+  --lumo-input-field-pointer-focus-visible: 0;
+}
+
+:host(:not([theme*='align'])) ::slotted([slot='value']) {
+  text-align: start;
+}
+
+[part='input-field'] {
+  cursor: var(--lumo-clickable-cursor);
+}
+
+[part='input-field'] ::slotted([slot='value']) {
+  flex-grow: 1;
+  font-weight: var(--vaadin-input-field-value-font-weight, 500);
+}
+
+[part='input-field'] ::slotted([slot='value']:not([placeholder])) {
+  color: var(--vaadin-input-field-value-color, var(--lumo-body-text-color));
+}
+
+:host([readonly]) [part='input-field'] ::slotted([slot='value']:not([placeholder])) {
+  color: var(--lumo-secondary-text-color);
+}
+
+/* placeholder styles */
+[part='input-field'] ::slotted([slot='value'][placeholder]) {
+  color: var(--vaadin-input-field-placeholder-color, var(--lumo-secondary-text-color));
+}
+
+:host(:is([readonly], [disabled])) ::slotted([slot='value'][placeholder]) {
+  opacity: 0;
+}
+
+[part='toggle-button']::before {
+  content: var(--lumo-icons-dropdown);
+}
+
+/* Highlight the toggle button when hovering over the entire component */
+:host(:hover:not([readonly]):not([disabled])) [part='toggle-button'] {
+  color: var(--lumo-contrast-80pct);
+}
+
+:host([theme~='small']) [part='input-field'] ::slotted([slot='value']) {
+  --_lumo-selected-item-height: var(--lumo-size-s);
+  --_lumo-selected-item-padding: 0;
+}

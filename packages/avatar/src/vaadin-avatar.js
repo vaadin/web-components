@@ -4,7 +4,6 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import '@vaadin/tooltip/src/vaadin-tooltip.js';
-import './vaadin-avatar-icons.js';
 import { html, LitElement } from 'lit';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
@@ -66,20 +65,10 @@ class Avatar extends AvatarMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElem
         @error="${this.__onImageLoadError}"
         draggable="false"
       />
-      <svg
-        part="icon"
-        ?hidden="${!this.__iconVisible}"
-        id="avatar-icon"
-        viewBox="-50 -50 100 100"
-        preserveAspectRatio="xMidYMid meet"
-        aria-hidden="true"
-      >
-        <text dy=".35em" text-anchor="middle">&#xea01;</text>
-      </svg>
+      <div part="icon" ?hidden="${!this.__iconVisible}" aria-hidden="true"></div>
       <svg
         part="abbr"
         ?hidden="${!this.__abbrVisible}"
-        id="avatar-abbr"
         viewBox="-50 -50 100 100"
         preserveAspectRatio="xMidYMid meet"
         aria-hidden="true"

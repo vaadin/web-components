@@ -31,8 +31,8 @@ describe('vaadin-avatar', () => {
   describe('properties', () => {
     beforeEach(() => {
       imgElement = avatar.shadowRoot.querySelector('img');
-      iconElement = avatar.shadowRoot.querySelector('#avatar-icon');
-      abbrElement = avatar.shadowRoot.querySelector('#avatar-abbr');
+      iconElement = avatar.shadowRoot.querySelector('[part=icon]');
+      abbrElement = avatar.shadowRoot.querySelector('[part=abbr]');
     });
 
     const validImageSrc =
@@ -376,12 +376,12 @@ describe('vaadin-avatar', () => {
     });
 
     it('should set aria-hidden="true" on the icon element', () => {
-      const iconElement = avatar.shadowRoot.querySelector('#avatar-icon');
+      const iconElement = avatar.shadowRoot.querySelector('[part=icon]');
       expect(iconElement.getAttribute('aria-hidden')).to.equal('true');
     });
 
     it('should set aria-hidden="true" on the abbr element', () => {
-      const abbrElement = avatar.shadowRoot.querySelector('#avatar-abbr');
+      const abbrElement = avatar.shadowRoot.querySelector('[part=abbr]');
       expect(abbrElement.getAttribute('aria-hidden')).to.equal('true');
     });
 
