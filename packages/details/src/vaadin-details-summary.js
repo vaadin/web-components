@@ -10,7 +10,7 @@ import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { CSSInjectionMixin } from '@vaadin/vaadin-themable-mixin/css-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { detailsSummary } from './vaadin-details-summary-core-styles.js';
+import { detailsSummary } from './styles/vaadin-details-summary-core-styles.js';
 
 /**
  * The details summary element.

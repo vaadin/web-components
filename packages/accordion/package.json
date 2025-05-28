@@ -21,10 +21,8 @@
   "type": "module",
   "files": [
     "src",
-    "!src/vaadin-accordion-heading-base-styles.d.ts",
-    "!src/vaadin-accordion-heading-base-styles.js",
-    "!src/vaadin-accordion-panel-base-styles.d.ts",
-    "!src/vaadin-accordion-panel-base-styles.js",
+    "!src/styles/*-base-styles.d.ts",
+    "!src/styles/*-base-styles.js",
     "theme",
     "vaadin-*.d.ts",
     "vaadin-*.js",

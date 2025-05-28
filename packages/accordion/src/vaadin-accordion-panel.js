@@ -9,7 +9,7 @@ import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { CSSInjectionMixin } from '@vaadin/vaadin-themable-mixin/css-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { accordionPanel } from './vaadin-accordion-panel-core-styles.js';
+import { accordionPanel } from './styles/vaadin-accordion-panel-core-styles.js';
 import { AccordionPanelMixin } from './vaadin-accordion-panel-mixin.js';
 
 /**

@@ -4,7 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { css } from 'lit';
-import { detailsSummary } from '@vaadin/details/src/vaadin-details-summary-base-styles.js';
+import { detailsSummary } from '@vaadin/details/src/styles/vaadin-details-summary-base-styles.js';
 
 export const accordionHeading = [
   detailsSummary('vaadin-accordion-heading'),
