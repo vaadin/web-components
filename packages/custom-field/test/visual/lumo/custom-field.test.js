@@ -8,7 +8,7 @@ import '@vaadin/vaadin-lumo-styles/components/form-item.css';
 import '@vaadin/vaadin-lumo-styles/components/form-layout.css';
 import '@vaadin/vaadin-lumo-styles/components/number-field.css';
 import '@vaadin/vaadin-lumo-styles/components/password-field.css';
-// FIXME: import '@vaadin/vaadin-lumo-styles/components/select.css';
+import '@vaadin/vaadin-lumo-styles/components/select.css';
 import '@vaadin/vaadin-lumo-styles/components/text-area.css';
 import '@vaadin/vaadin-lumo-styles/components/text-field.css';
 import '@vaadin/vaadin-lumo-styles/components/time-picker.css';
