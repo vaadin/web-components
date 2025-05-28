@@ -1,89 +1,92 @@
 <div class="custom-page-header">
   <h1 id="_top">{Astro.locals.starlightRoute.entry.data.title}</h1>
-  <div class="actions">
-    <button id="copy-markdown">
-      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-           stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-        <path d="M3 5m0 2a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v10a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2z" />
-        <path d="M7 15v-6l2 2l2 -2v6" />
-        <path d="M14 13l2 2l2 -2m-2 2v-6" />
-      </svg>
-      <span>Copy as MD</span>
-    </button>
-    <a href={'/' + Astro.locals.starlightRoute.entry.slug + '.txt'} target="_blank">
-      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-           stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-        <path d="M12 6h-6a2 2 0 0 0 -2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-6" />
-        <path d="M11 13l9 -9" />
-        <path d="M15 4h5v5" />
-      </svg>
-      <span>View as MD</span>
-    </a>
-  </div>
+  {
+    Astro.locals.starlightRoute.entry.data.pageType === "element-docs" &&
+    <div class="actions">
+      <button id="copy-markdown">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+          <path d="M3 5m0 2a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v10a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2z" />
+          <path d="M7 15v-6l2 2l2 -2v6" />
+          <path d="M14 13l2 2l2 -2m-2 2v-6" />
+        </svg>
+        <span>Copy as MD</span>
+      </button>
+      <a href={"/" + Astro.locals.starlightRoute.entry.slug + ".txt"} target="_blank">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+          <path d="M12 6h-6a2 2 0 0 0 -2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-6" />
+          <path d="M11 13l9 -9" />
+          <path d="M15 4h5v5" />
+        </svg>
+        <span>View as MD</span>
+      </a>
+    </div>
+  }
 </div>
 
 <style>
-  @layer starlight.core {
-    h1 {
-      font-size: var(--sl-text-h1);
-      line-height: var(--sl-line-height-headings);
-      font-weight: 600;
-      color: var(--sl-color-white);
+    @layer starlight.core {
+        h1 {
+            font-size: var(--sl-text-h1);
+            line-height: var(--sl-line-height-headings);
+            font-weight: 600;
+            color: var(--sl-color-white);
+        }
     }
-  }
 
-  .custom-page-header {
-    margin-top: 1rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
+    .custom-page-header {
+        margin-top: 1rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
 
-  .custom-page-header .actions {
-    display: flex;
-    gap: 1rem;
-    align-items: center;
-    font-size: var(--sl-text-sm);
-  }
+    .custom-page-header .actions {
+        display: flex;
+        gap: 1rem;
+        align-items: center;
+        font-size: var(--sl-text-sm);
+    }
 
-  .custom-page-header .actions :is(button, a) {
-    display: flex;
-    align-items: center;
-    gap: 0.25rem;
-    cursor: pointer;
-    color: var(--sl-color-accent);
-    background: none;
-    border: none;
-    text-decoration: none;
-  }
+    .custom-page-header .actions :is(button, a) {
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+        cursor: pointer;
+        color: var(--sl-color-accent);
+        background: none;
+        border: none;
+        text-decoration: none;
+    }
 
-  :root[data-theme='dark'] .custom-page-header .actions :is(button, a) {
-    color: var(--sl-color-accent-high);
-  }
+    :root[data-theme='dark'] .custom-page-header .actions :is(button, a) {
+        color: var(--sl-color-accent-high);
+    }
 </style>
 
 <script>
-  const copyButton = document.getElementById('copy-markdown');
-  copyButton?.addEventListener('click', () => {
+  const copyButton = document.getElementById("copy-markdown");
+  copyButton?.addEventListener("click", () => {
     const currentUrl = window.location.href;
-    const plainTextUrl = currentUrl.replace(/\/$/, '') + '.txt';
+    const plainTextUrl = currentUrl.replace(/\/$/, "") + ".txt";
 
     fetch(plainTextUrl)
       .then(res => res.text())
       .then(text => {
         navigator.clipboard.writeText(text).then(() => {
-          copyButton.querySelector('span')!.textContent = 'Copied!';
+          copyButton.querySelector("span")!.textContent = "Copied!";
           setTimeout(() => {
-            copyButton.querySelector('span')!.textContent = 'Copy as MD';
+            copyButton.querySelector("span")!.textContent = "Copy as MD";
           }, 2000);
         }).catch(err => {
-          console.error('Failed to copy text: ', err);
+          console.error("Failed to copy text: ", err);
         });
       })
       .catch(err => {
-        console.error('Failed to fetch text: ', err);
+        console.error("Failed to fetch text: ", err);
       });
   });
 </script>

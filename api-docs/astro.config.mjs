@@ -7,7 +7,7 @@ export default defineConfig({
   integrations: [
     starlight({
       favicon: '/favicon.ico',
-      title: 'Vaadin Web Components',
+      title: 'Vaadin WC API Reference',
       social: [{ icon: 'github', label: 'GitHub', href: 'https://github.com/vaadin/web-components' }],
       sidebar: [
         {
