@@ -35,6 +35,7 @@ function renderElement(element: any) {
   mdContent += `---\n`;
   mdContent += `title: ${element.name}\n`;
   mdContent += `description: ${element.name}\n`;
+  mdContent += "pageType: 'element-docs'\n";
   mdContent += `---\n\n`;
 
   // Description
