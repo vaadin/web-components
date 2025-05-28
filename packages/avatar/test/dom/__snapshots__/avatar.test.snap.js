@@ -10,7 +10,6 @@ snapshots["vaadin-avatar default"] =
 <div
   aria-hidden="true"
   hidden=""
-  id="avatar-icon"
   part="icon"
 >
 </div>
@@ -28,7 +27,6 @@ snapshots["vaadin-avatar img"] =
 <div
   aria-hidden="true"
   hidden=""
-  id="avatar-icon"
   part="icon"
 >
 </div>
