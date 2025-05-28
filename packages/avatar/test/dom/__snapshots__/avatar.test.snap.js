@@ -7,6 +7,13 @@ snapshots["vaadin-avatar default"] =
   draggable="false"
   hidden=""
 >
+<div
+  aria-hidden="true"
+  hidden=""
+  id="avatar-icon"
+  part="icon"
+>
+</div>
 <slot name="tooltip">
 </slot>
 `;
@@ -18,6 +25,13 @@ snapshots["vaadin-avatar img"] =
   draggable="false"
   src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs="
 >
+<div
+  aria-hidden="true"
+  hidden=""
+  id="avatar-icon"
+  part="icon"
+>
+</div>
 <slot name="tooltip">
 </slot>
 `;
