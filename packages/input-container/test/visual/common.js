@@ -12,5 +12,10 @@ registerStyles(
         transition: none !important;
       }
     }
+
+    /* Hide caret */
+    ::slotted(input) {
+      caret-color: transparent;
+    }
   `,
 );
