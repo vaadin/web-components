@@ -44,22 +44,6 @@ registerStyles(
       font-weight: 500;
     }
 
-    /* :host([theme~='xlarge']) [part='abbr'] {
-
-    }
-
-    :host([theme~='large']) [part='abbr'] {
-      font-size: 1em;
-    }
-
-    :host([theme~='small']) [part='abbr'] {
-      font-size: 1em;
-    }
-
-    :host([theme~='xsmall']) [part='abbr'] {
-      font-size: 0.75em;
-    } */
-
     :host([theme~='xlarge']) {
       --vaadin-avatar-size: var(--lumo-size-xl);
     }

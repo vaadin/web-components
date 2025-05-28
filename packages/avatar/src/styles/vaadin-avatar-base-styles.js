@@ -54,7 +54,7 @@ export const avatarStyles = css`
     }
 
     [part='abbr'] {
-      font-size: round(var(--_avatar-size) * 0.45, 2px);
+      font-size: round(var(--_avatar-size) * 0.45, 1px);
     }
 
     :host([hidden]),
