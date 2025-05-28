@@ -7,6 +7,7 @@ import { css } from 'lit';
 
 export const avatarStyles = css`
   :host {
+    position: relative;
     display: inline-block;
     flex: none;
     border-radius: 50%;
@@ -44,7 +45,6 @@ export const avatarStyles = css`
   }
 
   :host([has-color-index]) {
-    position: relative;
     background-color: var(--vaadin-avatar-user-color);
   }
 
