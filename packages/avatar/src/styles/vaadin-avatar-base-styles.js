@@ -16,7 +16,8 @@ export const avatarStyles = css`
       cursor: default;
       color: var(--vaadin-avatar-color, inherit);
       overflow: hidden;
-      line-height: 1;
+      line-height: var(--_avatar-size);
+      text-align: center;
       height: var(--_avatar-size);
       width: var(--_avatar-size);
       border: var(--vaadin-focus-ring-width) solid transparent;
@@ -42,9 +43,6 @@ export const avatarStyles = css`
 
     [part='icon'],
     [part='abbr'] {
-      display: flex;
-      align-items: center;
-      justify-content: center;
       height: 100%;
     }
 
@@ -54,7 +52,7 @@ export const avatarStyles = css`
     }
 
     [part='abbr'] {
-      font-size: round(var(--_avatar-size) * 0.45, 1px);
+      font-size: round(up, var(--_avatar-size) * 0.4, 3px);
     }
 
     :host([hidden]),

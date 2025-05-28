@@ -13,9 +13,10 @@ export const avatarStyles = css`
     flex: none;
     border-radius: 50%;
     overflow: hidden;
-    line-height: 1;
     height: var(--_avatar-size);
     width: var(--_avatar-size);
+    text-align: center;
+    line-height: var(--_avatar-size);
     border: var(--vaadin-avatar-outline-width) solid transparent;
     margin: calc(var(--vaadin-avatar-outline-width) * -1);
     background-clip: content-box;
@@ -30,18 +31,15 @@ export const avatarStyles = css`
 
   [part='icon'],
   [part='abbr'] {
-    display: flex;
-    align-items: center;
-    justify-content: center;
     height: 100%;
   }
 
   [part='icon'] {
-    font-size: round(var(--_avatar-size) * 0.9, 1px);
+    font-size: round(up, var(--_avatar-size) * 0.9, 3px);
   }
 
   [part='abbr'] {
-    font-size: round(var(--_avatar-size) * 0.45, 1px);
+    font-size: round(up, var(--_avatar-size) * 0.4, 3px);
   }
 
   :host([hidden]),

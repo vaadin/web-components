@@ -35,6 +35,7 @@ registerStyles(
     }
 
     [part='icon']::before {
+      display: block;
       content: var(--lumo-icons-user);
       font-family: lumo-icons;
     }
