@@ -8,6 +8,7 @@ import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin';
+import { gridSorterStyles } from './styles/vaadin-grid-sorter-core-styles.js';
 import { GridSorterMixin } from './vaadin-grid-sorter-mixin.js';
 
 /**
@@ -58,6 +59,10 @@ import { GridSorterMixin } from './vaadin-grid-sorter-mixin.js';
 class GridSorter extends GridSorterMixin(ThemableMixin(DirMixin(PolylitMixin(LitElement)))) {
   static get is() {
     return 'vaadin-grid-sorter';
+  }
+
+  static get styles() {
+    return gridSorterStyles;
   }
 
   /** @protected */

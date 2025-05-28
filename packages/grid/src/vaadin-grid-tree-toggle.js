@@ -8,6 +8,7 @@ import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin';
+import { gridTreeToggleStyles } from './styles/vaadin-grid-tree-toggle-core-styles.js';
 import { GridTreeToggleMixin } from './vaadin-grid-tree-toggle-mixin.js';
 
 /**
@@ -67,6 +68,10 @@ import { GridTreeToggleMixin } from './vaadin-grid-tree-toggle-mixin.js';
 class GridTreeToggle extends GridTreeToggleMixin(ThemableMixin(DirMixin(PolylitMixin(LitElement)))) {
   static get is() {
     return 'vaadin-grid-tree-toggle';
+  }
+
+  static get styles() {
+    return gridTreeToggleStyles;
   }
 
   /** @protected */
