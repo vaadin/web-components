@@ -30,30 +30,30 @@ describe('avatar', () => {
     await visualDiff(div, 'name');
   });
 
-  it('name', async () => {
+  it('abbr', async () => {
     element.abbr = 'YY';
     await visualDiff(div, 'abbr');
   });
 
-  it('name theme-xlarge', async () => {
+  it('abbr theme-xlarge', async () => {
     element.abbr = 'YY';
     element.setAttribute('theme', 'xlarge');
     await visualDiff(div, 'abbr-theme-xlarge');
   });
 
-  it('name theme-large', async () => {
+  it('abbr theme-large', async () => {
     element.abbr = 'YY';
     element.setAttribute('theme', 'large');
     await visualDiff(div, 'abbr-theme-large');
   });
 
-  it('name theme-small', async () => {
+  it('abbr theme-small', async () => {
     element.abbr = 'YY';
     element.setAttribute('theme', 'small');
     await visualDiff(div, 'abbr-theme-small');
   });
 
-  it('name theme-xsmall', async () => {
+  it('abbr theme-xsmall', async () => {
     element.abbr = 'YY';
     element.setAttribute('theme', 'xsmall');
     await visualDiff(div, 'abbr-theme-xsmall');
