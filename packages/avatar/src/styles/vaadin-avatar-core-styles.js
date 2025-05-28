@@ -11,6 +11,8 @@ export const avatarStyles = css`
     flex: none;
     border-radius: 50%;
     overflow: hidden;
+    line-height: 0;
+    vertical-align: middle;
     height: var(--vaadin-avatar-size, 64px);
     width: var(--vaadin-avatar-size, 64px);
     border: var(--vaadin-avatar-outline-width) solid transparent;
