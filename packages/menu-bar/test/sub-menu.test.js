@@ -125,7 +125,7 @@ describe('sub-menu', () => {
 
   it('should focus the first item on overlay arrow down after open on click', async () => {
     buttons[0].click();
-    await nextRender();
+    await oneEvent(subMenuOverlay, 'vaadin-overlay-open');
     const overlay = subMenuOverlay.$.overlay;
     const item = subMenuOverlay.querySelector('vaadin-menu-bar-item');
     const spy = sinon.spy(item, 'focus');
@@ -135,7 +135,7 @@ describe('sub-menu', () => {
 
   it('should focus the last item on overlay arrow up after open on click', async () => {
     buttons[0].click();
-    await nextRender();
+    await oneEvent(subMenuOverlay, 'vaadin-overlay-open');
     const overlay = subMenuOverlay.$.overlay;
     const items = subMenuOverlay.querySelectorAll('vaadin-menu-bar-item');
     const last = items[items.length - 1];
@@ -237,7 +237,7 @@ describe('sub-menu', () => {
     let item = subMenuOverlay.querySelector('vaadin-menu-bar-item');
     await nextRender();
     arrowLeft(item);
-    await nextRender();
+    await oneEvent(subMenuOverlay, 'vaadin-overlay-open');
     item = subMenuOverlay.querySelector('vaadin-menu-bar-item');
     const spy = sinon.spy(item, 'focus');
     arrowDown(buttons[2]);
