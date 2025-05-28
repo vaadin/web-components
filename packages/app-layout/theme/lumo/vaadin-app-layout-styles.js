@@ -6,6 +6,25 @@ import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themab
 registerStyles(
   'vaadin-app-layout',
   css`
+    @layer base {
+      [part='navbar'] {
+        padding: revert-layer;
+        gap: revert-layer;
+      }
+
+      @media (forced-colors: active) {
+        :host([overlay]) [part='drawer'] {
+          border: revert-layer;
+        }
+      }
+    }
+
+    :host {
+      --_vaadin-app-layout-drawer-width: var(--vaadin-app-layout-drawer-width, 16em);
+      --vaadin-app-layout-transition: 200ms;
+      --vaadin-app-layout-transition-duration: var(--vaadin-app-layout-transition);
+    }
+
     [part='navbar'],
     [part='drawer'] {
       background-color: var(--lumo-base-color);
