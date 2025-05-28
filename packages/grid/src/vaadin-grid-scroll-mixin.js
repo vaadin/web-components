@@ -515,7 +515,7 @@ export const ScrollMixin = (superClass) =>
       });
 
       this.__horizontalScrollPositionStyleSheet.replaceSync(`
-        :host([navigating]) [part~='row']:focus::before {
+        [part~='row']::after {
           transform: translateX(${x}px);
         }
       `);
