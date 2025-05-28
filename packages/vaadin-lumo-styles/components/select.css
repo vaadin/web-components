@@ -1,0 +1,33 @@
+@import './input-container.css';
+
+@import '../src/mixins/base-layer-reset.css' vaadin-select;
+@import '../src/mixins/field-label.css' vaadin-select;
+@import '../src/mixins/field-required.css' vaadin-select;
+@import '../src/mixins/field-error-message.css' vaadin-select;
+@import '../src/mixins/field-button.css' vaadin-select;
+@import '../src/mixins/field-helper.css' vaadin-select;
+@import '../src/mixins/field-base.css' vaadin-select;
+@import '../src/components/select.css' vaadin-select;
+
+@import '../src/mixins/base-layer-reset.css' vaadin-select-item;
+@import '../src/components/item.css' vaadin-select-item;
+
+@import '../src/mixins/base-layer-reset.css' vaadin-select-overlay;
+@import '../src/mixins/overlay.css' vaadin-select-overlay;
+@import '../src/mixins/menu-overlay-core.css' vaadin-select-overlay;
+@import '../src/mixins/menu-overlay-ext.css' vaadin-select-overlay;
+@import '../src/components/select-overlay.css' vaadin-select-overlay;
+
+@import '../src/mixins/base-layer-reset.css' vaadin-select-list-box;
+@import '../src/components/list-box.css' vaadin-select-list-box;
+
+@import '../src/mixins/base-layer-reset.css' vaadin-select-value-button;
+@import '../src/components/select-value-button.css' vaadin-select-value-button;
+
+html {
+  --vaadin-select-css-inject: 1;
+  --vaadin-select-item-css-inject: 1;
+  --vaadin-select-overlay-css-inject: 1;
+  --vaadin-select-list-box-css-inject: 1;
+  --vaadin-select-value-button-css-inject: 1;
+}
