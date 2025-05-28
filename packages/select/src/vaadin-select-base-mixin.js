@@ -644,13 +644,7 @@ export const SelectBaseMixin = (superClass) =>
     }
 
     /** @private */
-    async __dispatchChange() {
-      // Wait for the update complete to guarantee that value-changed is fired
-      // before validated and change events when using the Lit version of the component.
-      if (this.updateComplete) {
-        await this.updateComplete;
-      }
-
+    __dispatchChange() {
       this._requestValidation();
       this.dispatchEvent(new CustomEvent('change', { bubbles: true }));
       this.__dispatchChangePending = false;
