@@ -75,7 +75,12 @@ export const CSSInjectionMixin = (superClass) =>
     disconnectedCallback() {
       super.disconnectedCallback();
 
-      this.__cssInjector.componentDisconnected(this);
-      this.__cssInjector = undefined;
+      // Check if CSSInjector is defined. It might be unavailable if the component
+      // is moved within the DOM during connectedCallback and becomes disconnected
+      // before CSSInjector is assigned.
+      if (this.__cssInjector) {
+        this.__cssInjector.componentDisconnected(this);
+        this.__cssInjector = undefined;
+      }
     }
   };
