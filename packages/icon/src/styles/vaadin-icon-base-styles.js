@@ -3,7 +3,7 @@
  * Copyright (c) 2017 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { css } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { css } from 'lit';
 
 export const iconStyles = css`
   :host {
@@ -12,10 +12,11 @@ export const iconStyles = css`
     align-items: center;
     box-sizing: border-box;
     vertical-align: middle;
-    width: 24px;
-    height: 24px;
-    fill: currentColor;
+    width: var(--vaadin-icon-size, 1lh);
+    height: var(--vaadin-icon-size, 1lh);
+    fill: var(--vaadin-icon-color, currentColor);
     container-type: size;
+    contain: layout;
   }
 
   :host::after,
