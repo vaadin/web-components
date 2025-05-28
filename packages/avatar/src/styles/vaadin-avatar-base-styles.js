@@ -9,15 +9,16 @@ import { css } from 'lit';
 export const avatarStyles = css`
   @layer base {
     :host {
+      --_avatar-size: var(--vaadin-avatar-size, 2em);
       display: inline-block;
       flex: none;
       border-radius: 50%;
       cursor: default;
       color: var(--vaadin-avatar-color, inherit);
-      line-height: 0;
       overflow: hidden;
-      height: var(--vaadin-avatar-size, 2em);
-      width: var(--vaadin-avatar-size, 2em);
+      line-height: 1;
+      height: var(--_avatar-size);
+      width: var(--_avatar-size);
       border: var(--vaadin-focus-ring-width) solid transparent;
       margin: calc(var(--vaadin-focus-ring-width) * -1);
       background: var(--vaadin-avatar-background, var(--_vaadin-background-container-strong));
@@ -39,14 +40,21 @@ export const avatarStyles = css`
       object-fit: cover;
     }
 
-    [part='icon'] {
+    [part='icon'],
+    [part='abbr'] {
+      display: flex;
+      align-items: center;
+      justify-content: center;
       height: 100%;
+    }
+
+    [part='icon'] {
       mask: var(--_vaadin-icon-user) no-repeat center / 74%;
       background: currentColor;
     }
 
     [part='abbr'] {
-      font-size: 2.75em;
+      font-size: round(var(--_avatar-size) * 0.45, 2px);
     }
 
     :host([hidden]),

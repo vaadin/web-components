@@ -74,8 +74,7 @@ registerStyles(
       }
 
       [part='content'] ::slotted(vaadin-avatar) {
-        width: var(--lumo-size-xs);
-        height: var(--lumo-size-xs);
+        --vaadin-avatar-size: var(--lumo-size-xs);
         margin-inline-end: var(--lumo-space-s);
       }
     `,

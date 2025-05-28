@@ -7,13 +7,15 @@ import { css } from 'lit';
 
 export const avatarStyles = css`
   :host {
+    --_avatar-size: var(--vaadin-avatar-size, 64px);
     position: relative;
     display: inline-block;
     flex: none;
     border-radius: 50%;
     overflow: hidden;
-    height: var(--vaadin-avatar-size, 64px);
-    width: var(--vaadin-avatar-size, 64px);
+    line-height: 1;
+    height: var(--_avatar-size);
+    width: var(--_avatar-size);
     border: var(--vaadin-avatar-outline-width) solid transparent;
     margin: calc(var(--vaadin-avatar-outline-width) * -1);
     background-clip: content-box;
@@ -26,17 +28,20 @@ export const avatarStyles = css`
     object-fit: cover;
   }
 
-  [part='icon'] {
+  [part='icon'],
+  [part='abbr'] {
     display: flex;
     align-items: center;
     justify-content: center;
     height: 100%;
-    font-size: var(--vaadin-avatar-size, 64px);
-    line-height: 1;
+  }
+
+  [part='icon'] {
+    font-size: round(var(--_avatar-size) * 0.9, 1px);
   }
 
   [part='abbr'] {
-    font-size: 2.2em;
+    font-size: round(var(--_avatar-size) * 0.45, 1px);
   }
 
   :host([hidden]),

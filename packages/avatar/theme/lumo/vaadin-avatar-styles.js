@@ -37,31 +37,28 @@ registerStyles(
     [part='icon']::before {
       content: var(--lumo-icons-user);
       font-family: lumo-icons;
-      font-size: 0.9em;
     }
 
     [part='abbr'] {
       font-family: var(--lumo-font-family);
-      font-size: 2.4375em;
       font-weight: 500;
-      fill: currentColor;
     }
 
-    :host([theme~='xlarge']) [part='abbr'] {
-      font-size: 2.5em;
+    /* :host([theme~='xlarge']) [part='abbr'] {
+
     }
 
     :host([theme~='large']) [part='abbr'] {
-      font-size: 2.375em;
+      font-size: 1em;
     }
 
     :host([theme~='small']) [part='abbr'] {
-      font-size: 2.75em;
+      font-size: 1em;
     }
 
     :host([theme~='xsmall']) [part='abbr'] {
-      font-size: 3em;
-    }
+      font-size: 0.75em;
+    } */
 
     :host([theme~='xlarge']) {
       --vaadin-avatar-size: var(--lumo-size-xl);
