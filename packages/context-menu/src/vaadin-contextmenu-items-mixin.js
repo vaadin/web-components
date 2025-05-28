@@ -132,14 +132,12 @@ export const ItemsMixin = (superClass) =>
 
     /** @private */
     __openSubMenu(subMenu, itemElement, overlayClass) {
-      subMenu.items = itemElement._item.children;
-      subMenu.listenOn = itemElement;
+      this.__updateSubMenuForItem(subMenu, itemElement);
       subMenu.overlayClass = overlayClass;
 
       const parent = this._overlayElement;
 
       const subMenuOverlay = subMenu._overlayElement;
-      subMenuOverlay.positionTarget = itemElement;
       subMenuOverlay.noHorizontalOverlap = true;
       // Store the reference parent overlay
       subMenuOverlay._setParentOverlay(parent);
@@ -161,6 +159,13 @@ export const ItemsMixin = (superClass) =>
           },
         }),
       );
+    }
+
+    /** @private */
+    __updateSubMenuForItem(subMenu, itemElement) {
+      subMenu.items = itemElement._item.children;
+      subMenu.listenOn = itemElement;
+      subMenu._overlayElement.positionTarget = itemElement;
     }
 
     /**
@@ -318,13 +323,8 @@ export const ItemsMixin = (superClass) =>
         const selectedItem = e.detail.value;
         const index = menu.items.indexOf(selectedItem);
         if (!!selectedItem.keepOpen && index > -1) {
-          menu._overlayElement.requestContentUpdate();
-
-          // Initialize items synchronously
-          menu._listBox._observer.flush();
-
-          const newItem = menu._listBox.children[index];
-          newItem.focus();
+          this.__selectedIndex = index;
+          menu.requestContentUpdate();
         } else if (!selectedItem.keepOpen) {
           this.close();
         }
@@ -391,22 +391,27 @@ export const ItemsMixin = (superClass) =>
       }
     }
 
+    /** @protected */
+    __getListBox() {
+      return this._overlayElement.querySelector(`${this._tagNamePrefix}-list-box`);
+    }
+
     /**
      * @param {!HTMLElement} root
      * @param {!ContextMenu} menu
      * @param {!ContextMenuRendererContext} context
      * @protected
      */
-    __itemsRenderer(root, menu, { detail }) {
+    __itemsRenderer(root, menu) {
       this.__initMenu(root, menu);
 
       const subMenu = root.querySelector(this.constructor.is);
       subMenu.closeOn = menu.closeOn;
 
-      const listBox = root.querySelector(`${this._tagNamePrefix}-list-box`);
+      const listBox = this.__getListBox();
       listBox.innerHTML = '';
 
-      [...(detail.children || menu.items)].forEach((item) => {
+      menu.items.forEach((item) => {
         const component = this.__createComponent(item);
         listBox.appendChild(component);
       });

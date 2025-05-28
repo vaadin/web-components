@@ -493,10 +493,10 @@ describe('items', () => {
     }).to.throw(Error);
   });
 
-  it('should not call requestContentUpdate', () => {
+  it('should call requestContentUpdate on the overlay', () => {
     const spy = sinon.spy(rootOverlay, 'requestContentUpdate');
     rootMenu.requestContentUpdate();
-    expect(spy.called).to.be.false;
+    expect(spy.called).to.be.true;
   });
 
   it('should not remove the component attributes', async () => {
@@ -584,6 +584,72 @@ describe('items', () => {
       expect(rootOverlay.getBoundingClientRect().left).to.be.closeTo(rootBRCLeft - scrollDistance, 1);
       expect(subOverlay1.getBoundingClientRect().left).to.be.closeTo(subBRCLeft1 - scrollDistance, 1);
       expect(subOverlay2.getBoundingClientRect().left).to.be.closeTo(subBRCLeft2 - scrollDistance, 1);
+    });
+  });
+
+  describe('updating while opened', () => {
+    it('should update items when calling requestContentUpdate while opened', async () => {
+      rootMenu.items = [{ text: 'foo-1' }, { text: 'foo-2' }];
+      rootMenu.requestContentUpdate();
+      await nextRender();
+      const items = getMenuItems(rootMenu);
+      expect(items.length).to.equal(2);
+      expect(items[0].textContent).to.equal('foo-1');
+      expect(items[1].textContent).to.equal('foo-2');
+    });
+
+    it('should keep submenu opened and update its items after calling requestContentUpdate while opened', async () => {
+      rootMenu.items = [
+        {
+          text: 'foo-1',
+          children: [{ text: 'foo-1-1' }, { text: 'foo-1-2' }],
+        },
+        { text: 'foo-2' },
+      ];
+      rootMenu.requestContentUpdate();
+      await nextRender();
+      expect(subMenu.opened).to.be.true;
+      const items = getMenuItems(subMenu);
+      expect(items[0].textContent).to.equal('foo-1-1');
+      expect(items[1].textContent).to.equal('foo-1-2');
+    });
+
+    it('should close submenu and focus parent item after calling requestContentUpdate while opened', async () => {
+      rootMenu.items = [{ text: 'foo-1' }, { text: 'foo-2' }];
+      rootMenu.requestContentUpdate();
+      await nextRender();
+      expect(subMenu.opened).to.be.false;
+      expect(getMenuItems(rootMenu)[0].hasAttribute('focused')).to.be.true;
+    });
+
+    it('should close submenu and focus first available item after calling requestContentUpdate while opened', async () => {
+      subMenu.close();
+      await nextRender();
+
+      // Open sub-menu for a last item
+      const parent = getMenuItems(rootMenu)[3];
+      await openMenu(parent);
+
+      rootMenu.items = [{ text: 'foo-1' }, { text: 'foo-2' }];
+      rootMenu.requestContentUpdate();
+      await nextRender();
+
+      expect(subMenu.opened).to.be.false;
+      expect(getMenuItems(rootMenu)[0].hasAttribute('focused')).to.be.true;
+    });
+
+    it('should focus previously focused item after calling requestContentUpdate while opened', async () => {
+      subMenu.close();
+      await nextRender();
+
+      // Focus an item without a submenu
+      getMenuItems(rootMenu)[1].focus();
+
+      rootMenu.items = [{ text: 'foo-1' }, { text: 'foo-2' }];
+      rootMenu.requestContentUpdate();
+      await nextRender();
+
+      expect(getMenuItems(rootMenu)[1].hasAttribute('focused')).to.be.true;
     });
   });
 });
