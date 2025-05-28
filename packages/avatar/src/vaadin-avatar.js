@@ -65,11 +65,10 @@ class Avatar extends AvatarMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElem
         @error="${this.__onImageLoadError}"
         draggable="false"
       />
-      <div part="icon" ?hidden="${!this.__iconVisible}" id="avatar-icon" aria-hidden="true"></div>
+      <div part="icon" ?hidden="${!this.__iconVisible}" aria-hidden="true"></div>
       <svg
         part="abbr"
         ?hidden="${!this.__abbrVisible}"
-        id="avatar-abbr"
         viewBox="-50 -50 100 100"
         preserveAspectRatio="xMidYMid meet"
         aria-hidden="true"
