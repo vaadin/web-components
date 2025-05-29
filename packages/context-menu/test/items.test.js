@@ -43,7 +43,7 @@ describe('items', () => {
         children: [
           { text: 'foo-0-0', checked: true },
           { text: 'foo-0-1', disabled: true },
-          { text: 'foo-0-2', children: [{ text: 'foo-0-2-0' }] },
+          { text: 'foo-0-2', children: [{ text: 'foo-0-2-0', keepOpen: true }] },
           { component: 'hr' },
           { text: 'foo-0-3', keepOpen: true },
         ],
@@ -620,6 +620,35 @@ describe('items', () => {
       await nextRender();
       expect(subMenu.opened).to.be.false;
       expect(getMenuItems(rootMenu)[0].hasAttribute('focused')).to.be.true;
+    });
+
+    it('should close submenu from item-selected event and focus parent item after calling requestContentUpdate while opened', async () => {
+      // Open nested sub-menu
+      await openMenu(getMenuItems(subMenu)[2]);
+
+      rootMenu.addEventListener('item-selected', () => {
+        rootMenu.items = [
+          {
+            text: 'foo-0',
+            children: [
+              { text: 'foo-0-0', checked: true },
+              { text: 'foo-0-1', disabled: true },
+              { text: 'foo-0-2', children: [] },
+            ],
+          },
+        ];
+        rootMenu.requestContentUpdate();
+      });
+
+      const subMenu2 = getSubMenu(subMenu);
+      const item = getMenuItems(subMenu2)[0];
+      item.focus();
+      enterKeyDown(item);
+
+      await nextRender();
+      expect(subMenu2.opened).to.be.false;
+      expect(subMenu.opened).to.be.true;
+      expect(getMenuItems(subMenu)[2].hasAttribute('focused')).to.be.true;
     });
 
     it('should close submenu and focus first available item after calling requestContentUpdate while opened', async () => {

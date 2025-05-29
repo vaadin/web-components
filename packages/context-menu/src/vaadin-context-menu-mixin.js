@@ -440,10 +440,10 @@ export const ContextMenuMixin = (superClass) =>
         // Initialize menu items synchronously
         listBox._observer.flush();
 
-        if (subMenuIndex !== -1) {
+        if (subMenuIndex > -1) {
           const itemToOpen = listBox.items[subMenuIndex];
           if (itemToOpen) {
-            if (itemToOpen._item.children) {
+            if (Array.isArray(itemToOpen._item.children) && itemToOpen._item.children.length) {
               // Keep nested sub-menu opened and update it
               this.__updateSubMenuForItem(this._subMenu, itemToOpen);
               this._subMenu.requestContentUpdate();

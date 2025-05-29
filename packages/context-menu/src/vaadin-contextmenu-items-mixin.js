@@ -322,8 +322,9 @@ export const ItemsMixin = (superClass) =>
         const menu = e.target;
         const selectedItem = e.detail.value;
         const index = menu.items.indexOf(selectedItem);
-        if (!!selectedItem.keepOpen && index > -1) {
-          this.__selectedIndex = index;
+        // Menu can be no longer opened if parent menu items changed
+        if (!!selectedItem.keepOpen && index > -1 && menu.opened) {
+          menu.__selectedIndex = index;
           menu.requestContentUpdate();
         } else if (!selectedItem.keepOpen) {
           this.close();
