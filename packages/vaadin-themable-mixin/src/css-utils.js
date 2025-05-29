@@ -19,7 +19,9 @@ function getEffectiveStyles(component) {
 
   const styleSheet = component.__cssInjectorStyleSheet;
   if (styleSheet) {
-    return [...(componentClass.baseStyles ?? []), styleSheet, ...(componentClass.themeStyles ?? [])];
+    return componentClass.baseStyles ?? componentClass.themeStyles
+      ? [...componentClass.baseStyles, styleSheet, ...componentClass.themeStyles]
+      : [styleSheet, ...componentClass.elementStyles];
   }
 
   return componentClass.elementStyles;
