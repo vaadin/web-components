@@ -23,11 +23,6 @@ export function isValidSvg(source: unknown): source is IconSvgLiteral;
 export function ensureSvgLiteral(source: unknown): IconSvgLiteral;
 
 /**
- * Render a given SVG literal to the container.
- */
-export function renderSvg(source: unknown, container: SVGElement): void;
-
-/**
  * Create an SVG literal from source string.
  */
 export function unsafeSvgLiteral(source: string): IconSvgLiteral;

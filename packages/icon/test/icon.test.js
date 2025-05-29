@@ -404,6 +404,11 @@ describe('vaadin-icon', () => {
         expect(child.getAttribute('fill')).to.equal('red');
       });
 
+      it('should set default preserveAspectRatio attribute when not set on the icon', () => {
+        icon.icon = 'vaadin:angle-down';
+        expect(svgElement.getAttribute('preserveAspectRatio')).to.equal('xMidYMid meet');
+      });
+
       it('should preserve the preserveAspectRatio attribute set on the icon', () => {
         icon.icon = 'vaadin:angle-right';
         expect(svgElement.getAttribute('preserveAspectRatio')).to.equal('xMidYMin slice');
