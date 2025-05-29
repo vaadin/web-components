@@ -5,7 +5,7 @@
  */
 import { SlotStylesMixin } from '@vaadin/component-base/src/slot-styles-mixin.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
-import { ensureSvgLiteral, renderSvg, unsafeSvgLiteral } from './vaadin-icon-svg.js';
+import { unsafeSvgLiteral } from './vaadin-icon-svg.js';
 
 const srcCache = new Map();
 
@@ -133,19 +133,10 @@ export const IconMixin = (superClass) =>
         },
 
         /** @private */
-        __defaultPAR: {
-          type: String,
-          value: 'xMidYMid meet',
-        },
-
-        /** @private */
         __preserveAspectRatio: String,
 
         /** @private */
-        __useRef: Object,
-
-        /** @private */
-        __svgElement: String,
+        __useRef: String,
 
         /** @private */
         __viewBox: String,
@@ -168,11 +159,7 @@ export const IconMixin = (superClass) =>
     }
 
     static get observers() {
-      return [
-        '__svgChanged(svg, __svgElement)',
-        '__fontChanged(iconClass, char, ligature)',
-        '__srcChanged(src, symbol)',
-      ];
+      return ['__fontChanged(iconClass, char, ligature)', '__srcChanged(src, symbol)'];
     }
 
     static get observedAttributes() {
@@ -206,7 +193,6 @@ export const IconMixin = (superClass) =>
     /** @protected */
     ready() {
       super.ready();
-      this.__svgElement = this.shadowRoot.querySelector('#svg-group');
       this._tooltipController = new TooltipController(this);
       this.addController(this._tooltipController);
     }
@@ -243,7 +229,7 @@ export const IconMixin = (superClass) =>
       if (icon) {
         this._applyIcon();
       } else {
-        this.svg = ensureSvgLiteral(null);
+        this.svg = null;
       }
     }
 
@@ -299,29 +285,6 @@ export const IconMixin = (superClass) =>
           this.svg = null;
         }
       }
-    }
-
-    /** @private */
-    __svgChanged(svg, svgElement) {
-      if (!svgElement) {
-        return;
-      }
-      renderSvg(svg, svgElement);
-    }
-
-    /** @private */
-    __computePAR(defaultPAR, preserveAspectRatio) {
-      return preserveAspectRatio || defaultPAR;
-    }
-
-    /** @private */
-    __computeVisibility(__useRef) {
-      return __useRef ? 'visible' : 'hidden';
-    }
-
-    /** @private */
-    __computeViewBox(size, viewBox) {
-      return viewBox || `0 0 ${size} ${size}`;
     }
 
     /** @private */
