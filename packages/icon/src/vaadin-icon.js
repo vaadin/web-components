@@ -87,7 +87,7 @@ class Icon extends IconMixin(ElementMixin(CSSInjectionMixin(ThemableMixin(Polyli
       >
         <g id="svg-group">${ensureSvgLiteral(this.svg)}</g>
         <g id="use-group" visibility="${this.__useRef ? 'visible' : 'hidden'}">
-          <use href="${this.__useRef}" />
+          <use href="${ifDefined(this.__useRef)}" />
         </g>
       </svg>
 

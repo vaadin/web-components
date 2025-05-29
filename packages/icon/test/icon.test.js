@@ -113,6 +113,11 @@ describe('vaadin-icon', () => {
       svgElement = icon.shadowRoot.querySelector('svg');
     });
 
+    it('should not set href attribute on the use element by default', () => {
+      const use = svgElement.querySelector('use');
+      expect(use.hasAttribute('href')).to.be.false;
+    });
+
     it('should render svg when path is provided', async () => {
       const svgSrc = `<svg>${ANGLE_DOWN}</svg>`;
       sinon.stub(icon, '__fetch').resolves({ ok: true, text: () => Promise.resolve(svgSrc) });
