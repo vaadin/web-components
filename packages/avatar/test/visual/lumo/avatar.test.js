@@ -1,5 +1,5 @@
 import { sendKeys } from '@vaadin/test-runner-commands';
-import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
+import { fixtureSync } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '@vaadin/vaadin-lumo-styles/props.css';
 import '@vaadin/vaadin-lumo-styles/components/avatar.css';
@@ -23,9 +23,7 @@ describe('avatar', () => {
     Tooltip.setDefaultHideDelay(0);
   });
 
-  it.only('basic', async () => {
-    await nextRender();
-    debugger
+  it('basic', async () => {
     await visualDiff(div, 'basic');
   });
 
