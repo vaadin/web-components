@@ -79,6 +79,15 @@ html {
   --lumo-warning-color-10pct: hsla(48, 100%, 50%, 0.25);
   --lumo-warning-text-color: hsl(32, 100%, 30%);
   --lumo-warning-contrast-color: var(--lumo-shade-90pct);
+
+  /* User colors */
+  --vaadin-user-color-0: #df0b92;
+  --vaadin-user-color-1: #650acc;
+  --vaadin-user-color-2: #097faa;
+  --vaadin-user-color-3: #ad6200;
+  --vaadin-user-color-4: #bf16f3;
+  --vaadin-user-color-5: #084391;
+  --vaadin-user-color-6: #078836;
 }
 
 /* forced-colors mode adjustments */
