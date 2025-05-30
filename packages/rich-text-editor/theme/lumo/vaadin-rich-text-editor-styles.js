@@ -122,12 +122,14 @@ const richTextEditor = css`
   }
 
   [part~='toolbar-button-background']:hover::before {
-    background-image: linear-gradient(var(--lumo-contrast-5pct), var(--lumo-contrast-5pct)),
+    background-image:
+      linear-gradient(var(--lumo-contrast-5pct), var(--lumo-contrast-5pct)),
       linear-gradient(var(--lumo-contrast-5pct), var(--lumo-contrast-5pct));
   }
 
   [part~='toolbar-button-background']:active::before {
-    background-image: linear-gradient(var(--lumo-contrast-5pct), var(--lumo-contrast-5pct)),
+    background-image:
+      linear-gradient(var(--lumo-contrast-5pct), var(--lumo-contrast-5pct)),
       linear-gradient(var(--lumo-contrast-10pct), var(--lumo-contrast-10pct));
   }
 

@@ -7,8 +7,9 @@ import { css } from '@vaadin/vaadin-themable-mixin/register-styles.js';
 
 export const transition = css`
   .transition {
-    transition-property: -webkit-backdrop-filter, backdrop-filter, background-color, border-color, box-shadow, color,
-      fill, filter, opacity, rotate, scale, stroke, text-decoration-color, transform, translate;
+    transition-property:
+      -webkit-backdrop-filter, backdrop-filter, background-color, border-color, box-shadow, color, fill, filter,
+      opacity, rotate, scale, stroke, text-decoration-color, transform, translate;
     transition-timing-function: var(--lumo-utility-transition-timing-function, cubic-bezier(0.4, 0, 0.2, 1));
     transition-duration: var(--lumo-utility-transition-duration, 150ms);
   }

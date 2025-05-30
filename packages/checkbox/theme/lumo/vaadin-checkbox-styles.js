@@ -255,7 +255,8 @@ registerStyles(
     }
 
     :host([invalid]:hover) [part='checkbox'] {
-      background-image: linear-gradient(var(--_invalid-background) 0%, var(--_invalid-background) 100%),
+      background-image:
+        linear-gradient(var(--_invalid-background) 0%, var(--_invalid-background) 100%),
         linear-gradient(var(--_invalid-background) 0%, var(--_invalid-background) 100%);
     }
 
