@@ -13,7 +13,6 @@
 
 @import '../src/mixins/base-layer-reset.css' vaadin-avatar-group-menu;
 @import '../src/components/list-box.css' vaadin-avatar-group-menu;
-@import '../src/components/avatar-group-menu.css' vaadin-avatar-group-menu;
 
 @import '../src/mixins/base-layer-reset.css' vaadin-avatar-group-menu-item;
 @import '../src/components/item.css' vaadin-avatar-group-menu-item;
