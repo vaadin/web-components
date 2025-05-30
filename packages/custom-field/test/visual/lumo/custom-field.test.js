@@ -1,18 +1,31 @@
-import { fixtureSync } from '@vaadin/testing-helpers/dist/fixture.js';
+import { fixtureSync } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
+import '@vaadin/vaadin-lumo-styles/props.css';
+import '@vaadin/vaadin-lumo-styles/components/combo-box.css';
+import '@vaadin/vaadin-lumo-styles/components/date-picker.css';
+import '@vaadin/vaadin-lumo-styles/components/email-field.css';
+import '@vaadin/vaadin-lumo-styles/components/form-item.css';
+import '@vaadin/vaadin-lumo-styles/components/form-layout.css';
+import '@vaadin/vaadin-lumo-styles/components/number-field.css';
+import '@vaadin/vaadin-lumo-styles/components/password-field.css';
+import '@vaadin/vaadin-lumo-styles/components/select.css';
+import '@vaadin/vaadin-lumo-styles/components/text-area.css';
+import '@vaadin/vaadin-lumo-styles/components/text-field.css';
+import '@vaadin/vaadin-lumo-styles/components/time-picker.css';
+import '@vaadin/vaadin-lumo-styles/components/custom-field.css';
 import '../common.js';
-import '@vaadin/combo-box/theme/lumo/vaadin-combo-box.js';
-import '@vaadin/date-picker/theme/lumo/vaadin-date-picker.js';
-import '@vaadin/email-field/theme/lumo/vaadin-email-field.js';
-import '@vaadin/form-layout/theme/lumo/vaadin-form-item.js';
-import '@vaadin/form-layout/theme/lumo/vaadin-form-layout.js';
-import '@vaadin/number-field/theme/lumo/vaadin-number-field.js';
-import '@vaadin/password-field/theme/lumo/vaadin-password-field.js';
-import '@vaadin/select/theme/lumo/vaadin-select.js';
-import '@vaadin/text-area/theme/lumo/vaadin-text-area.js';
-import '@vaadin/text-field/theme/lumo/vaadin-text-field.js';
-import '@vaadin/time-picker/theme/lumo/vaadin-time-picker.js';
-import '../../../theme/lumo/vaadin-custom-field.js';
+import '@vaadin/combo-box';
+import '@vaadin/date-picker';
+import '@vaadin/email-field';
+import '@vaadin/form-layout';
+import '@vaadin/form-layout/vaadin-form-item.js';
+import '@vaadin/number-field';
+import '@vaadin/password-field';
+import '@vaadin/select';
+import '@vaadin/text-area';
+import '@vaadin/text-field';
+import '@vaadin/time-picker';
+import '../../../vaadin-custom-field.js';
 
 describe('custom-field', () => {
   describe('basic', () => {

@@ -13,20 +13,20 @@ addGlobalThemeStyles(
     @layer vaadin.base {
       html {
         /* Background color */
-        --_vaadin-background: hsl(0 0 100);
+        --_vaadin-background: hsl(0deg, 0%, 100%);
 
         /* Container colors */
-        --_vaadin-background-container: hsl(0 0 95);
-        --_vaadin-background-container-strong: hsl(0 0 90);
+        --_vaadin-background-container: hsl(0deg, 0%, 95%);
+        --_vaadin-background-container-strong: hsl(0deg, 0%, 90%);
 
         /* Border colors */
-        --_vaadin-border-color: hsl(0 0 75);
-        --_vaadin-border-color-strong: hsl(0 0 58); /* Above 3:1 contrast */
+        --_vaadin-border-color: hsl(0deg, 0%, 75%);
+        --_vaadin-border-color-strong: hsl(0deg, 0%, 58%); /* Above 3:1 contrast */
 
         /* Text colors */
-        --_vaadin-color-subtle: hsl(0 0 58); /* Above 3:1 contrast */
-        --_vaadin-color: hsl(0 0 44); /* Above 4.5:1 contrast */
-        --_vaadin-color-strong: hsl(0 0 12); /* Above 7:1 contrast */
+        --_vaadin-color-subtle: hsl(0deg, 0%, 58%); /* Above 3:1 contrast */
+        --_vaadin-color: hsl(0deg, 0%, 44%); /* Above 4.5:1 contrast */
+        --_vaadin-color-strong: hsl(0deg, 0%, 12%); /* Above 7:1 contrast */
 
         /* Padding */
         --_vaadin-padding: 8px;

@@ -145,12 +145,6 @@ export const ComboBoxMixin = (subclass) =>
         },
 
         /**
-         * Used to detect user value changes and fire `change` events.
-         * @private
-         */
-        _lastCommittedValue: String,
-
-        /**
          * When set to `true`, "loading" attribute is added to host and the overlay element.
          * @type {boolean}
          */
@@ -267,15 +261,6 @@ export const ComboBoxMixin = (subclass) =>
         },
 
         /** @private */
-        _closeOnBlurIsPrevented: Boolean,
-
-        /** @private */
-        _scroller: {
-          type: Object,
-          sync: true,
-        },
-
-        /** @private */
         _overlayOpened: {
           type: Boolean,
           sync: true,
@@ -294,12 +279,37 @@ export const ComboBoxMixin = (subclass) =>
       return [
         '_selectedItemChanged(selectedItem, itemValuePath, itemLabelPath)',
         '_openedOrItemsChanged(opened, _dropdownItems, loading, __keepOverlayOpened)',
-        '_updateScroller(_scroller, _dropdownItems, opened, loading, selectedItem, itemIdPath, _focusedIndex, renderer, _theme, itemClassNameGenerator)',
+        '_updateScroller(opened, _dropdownItems, _focusedIndex, _theme)',
       ];
     }
 
     constructor() {
       super();
+
+      /**
+       * Reference to the `vaadin-combo-box-scroller` element instance.
+       * Do not define in `properties` to avoid triggering updates.
+       * @type {HTMLElement}
+       * @protected
+       */
+      this._scroller;
+
+      /**
+       * Used to detect user value changes and fire `change` events.
+       * Do not define in `properties` to avoid triggering updates.
+       * @type {string}
+       * @protected
+       */
+      this._lastCommittedValue;
+
+      /**
+       * Used to detect if focusout should be ignored due to touch.
+       * Do not define in `properties` to avoid triggering updates.
+       * @type {boolean}
+       * @protected
+       */
+      this._closeOnBlurIsPrevented;
+
       this._boundOverlaySelectedItemChanged = this._overlaySelectedItemChanged.bind(this);
       this._boundOnClearButtonMouseDown = this.__onClearButtonMouseDown.bind(this);
       this._boundOnClick = this._onClick.bind(this);
@@ -344,11 +354,20 @@ export const ComboBoxMixin = (subclass) =>
     }
 
     /** @protected */
+    firstUpdated() {
+      super.firstUpdated();
+
+      // Init scroller in `firstUpdated()` to ensure the `_scroller` reference
+      // is available by the time property observer runs. Also, do not store it
+      // in a reactive property to avoid triggering another unnecessary update.
+      this._initScroller();
+    }
+
+    /** @protected */
     ready() {
       super.ready();
 
       this._initOverlay();
-      this._initScroller();
 
       this._lastCommittedValue = this.value;
 
@@ -422,6 +441,12 @@ export const ComboBoxMixin = (subclass) =>
     updated(props) {
       super.updated(props);
 
+      ['loading', 'itemIdPath', 'itemClassNameGenerator', 'renderer', 'selectedItem'].forEach((prop) => {
+        if (props.has(prop)) {
+          this._scroller[prop] = this[prop];
+        }
+      });
+
       if (props.has('filter')) {
         this._filterChanged(this.filter);
       }
@@ -461,7 +486,7 @@ export const ComboBoxMixin = (subclass) =>
       scroller.getItemLabel = this._getItemLabel.bind(this);
       scroller.addEventListener('selection-changed', this._boundOverlaySelectedItemChanged);
 
-      const overlay = this._overlayElement;
+      const overlay = this.$.overlay;
 
       overlay.renderer = (root) => {
         if (!root.innerHTML) {
@@ -477,35 +502,18 @@ export const ComboBoxMixin = (subclass) =>
     }
 
     /** @private */
-    // eslint-disable-next-line @typescript-eslint/max-params
-    _updateScroller(
-      scroller,
-      items,
-      opened,
-      loading,
-      selectedItem,
-      itemIdPath,
-      focusedIndex,
-      renderer,
-      theme,
-      itemClassNameGenerator,
-    ) {
-      if (scroller) {
+    _updateScroller(opened, items, focusedIndex, theme) {
+      if (this._scroller) {
         if (opened) {
-          scroller.style.maxHeight =
+          this._scroller.style.maxHeight =
             getComputedStyle(this).getPropertyValue(`--${this._tagNamePrefix}-overlay-max-height`) || '65vh';
         }
 
-        scroller.setProperties({
+        this._scroller.setProperties({
           items: opened ? items : [],
           opened,
-          loading,
-          selectedItem,
-          itemIdPath,
           focusedIndex,
-          renderer,
           theme,
-          itemClassNameGenerator,
         });
       }
     }

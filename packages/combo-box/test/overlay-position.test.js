@@ -1,5 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { aTimeout, fixtureSync, nextRender } from '@vaadin/testing-helpers';
+import './overlay-position-styles.js';
 import '../src/vaadin-combo-box.js';
 import { makeItems, setInputValue } from './helpers.js';
 
@@ -20,14 +21,6 @@ describe('overlay position', () => {
   }
 
   beforeEach(async () => {
-    fixtureSync(`
-      <style>
-        vaadin-combo-box-overlay::part(overlay) {
-          margin: 0 !important;
-        }
-      </style>
-    `);
-
     comboBox = fixtureSync(`<vaadin-combo-box label='comboBox' style='width: 300px;' items='[1]'></vaadin-combo-box>`);
     await nextRender();
     const comboBoxRect = comboBox.getBoundingClientRect();
