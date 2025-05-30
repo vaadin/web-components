@@ -2,6 +2,7 @@ import { expect } from '@vaadin/chai-plugins';
 import { sendKeys } from '@vaadin/test-runner-commands';
 import { fixtureSync, nextFrame, nextRender, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
+import './grid-test-styles.js';
 import '../src/vaadin-grid.js';
 import { fire, flushGrid, getBodyCellContent, getHeaderCell, infiniteDataProvider } from './helpers.js';
 

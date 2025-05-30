@@ -1,5 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync } from '@vaadin/testing-helpers';
+import './grid-test-styles.js';
 import '../src/vaadin-grid.js';
 import { css } from 'lit';
 import {
@@ -15,6 +16,7 @@ const styles = css`
   :host {
     font-size: 16px;
     line-height: 1.5;
+    border: 0 !important;
   }
 
   :host(.small) [part~='cell'] {
@@ -33,7 +35,7 @@ describe('dynamic physical count', () => {
 
   beforeEach(() => {
     grid = fixtureSync(`
-      <vaadin-grid style="width: 200px; height: 200px;" size="200" theme="no-border">
+      <vaadin-grid style="width: 200px; height: 200px;" size="200">
         <vaadin-grid-column></vaadin-grid-column>
       </vaadin-grid>
     `);

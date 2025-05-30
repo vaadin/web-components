@@ -1,5 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, listenOnce, nextFrame, oneEvent } from '@vaadin/testing-helpers';
+import './grid-test-styles.js';
 import '../all-imports.js';
 import {
   flushGrid,
@@ -10,14 +11,6 @@ import {
   infiniteDataProvider,
   onceInvoked,
 } from './helpers.js';
-
-const style = document.createElement('style');
-style.textContent = `
-  vaadin-grid::part(cell) {
-    min-height: 36px !important;
-  }
-`;
-document.head.append(style);
 
 const createGrid = (height, size) => {
   const grid = fixtureSync(`

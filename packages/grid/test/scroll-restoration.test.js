@@ -1,5 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { aTimeout, fixtureSync, isFirefox } from '@vaadin/testing-helpers';
+import './grid-test-styles.js';
 import '../src/vaadin-grid.js';
 import { fire, flushGrid, infiniteDataProvider } from './helpers.js';
 

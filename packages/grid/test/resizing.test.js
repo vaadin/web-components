@@ -1,6 +1,7 @@
 import { expect } from '@vaadin/chai-plugins';
 import { aTimeout, fixtureSync, nextFrame, nextResize, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
+import './grid-test-styles.js';
 import '../all-imports.js';
 import {
   flushGrid,
@@ -13,23 +14,6 @@ import {
   infiniteDataProvider,
   scrollToEnd,
 } from './helpers.js';
-
-const style = document.createElement('style');
-style.textContent = `
-  vaadin-grid {
-    border: 1px solid !important;
-    font-family: sans-serif !important;
-  }
-  vaadin-grid::part(cell) {
-    min-height: 36px !important;
-  }
-  vaadin-grid::part(header-cell) {
-    font-size: 0.875rem !important;
-    font-weight: 400 !important;
-    min-height: 56px !important;
-  }
-`;
-document.head.append(style);
 
 describe('resizing', () => {
   let component, grid, column;

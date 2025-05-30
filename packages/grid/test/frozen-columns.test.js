@@ -85,7 +85,7 @@ const frozenGridFixture = (frozen, frozenToEnd) => {
           containerElement = grid.shadowRoot.querySelector(container === 'header' ? 'thead' : 'tbody#items');
           containerRows = getRows(containerElement);
           scrollbarWidth = grid.$.table.offsetWidth - grid.$.table.clientWidth;
-          borderWidth = parseInt(getComputedStyle(grid).getPropertyValue('--_lumo-grid-border-width'));
+          borderWidth = parseInt(getComputedStyle(grid).getPropertyValue('border-width'));
           translateValue = isRTL ? -(defaultCellWidth + 2 * borderWidth) : defaultCellWidth;
         });
 
@@ -230,7 +230,7 @@ const frozenGridFixture = (frozen, frozenToEnd) => {
           containerElement = grid.shadowRoot.querySelector(container === 'header' ? 'thead' : 'tbody');
           containerRows = getRows(containerElement);
           scrollbarWidth = grid.$.table.offsetWidth - grid.$.table.clientWidth;
-          borderWidth = parseInt(getComputedStyle(grid).getPropertyValue('--_lumo-grid-border-width'));
+          borderWidth = parseInt(getComputedStyle(grid).getPropertyValue('border-width'));
           const offset = defaultCellWidth + scrollbarWidth + 2 * borderWidth;
           translateValue = isRTL ? offset : -offset;
         });

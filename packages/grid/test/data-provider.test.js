@@ -1,7 +1,7 @@
 import { expect } from '@vaadin/chai-plugins';
 import { aTimeout, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import './data-provider.styles.js';
+import './grid-test-styles.js';
 import '../all-imports.js';
 import {
   flushGrid,
@@ -19,14 +19,6 @@ import {
   infiniteDataProvider,
   scrollToEnd,
 } from './helpers.js';
-
-const style = document.createElement('style');
-style.textContent = `
-  vaadin-grid::part(cell) {
-    min-height: 36px !important;
-  }
-`;
-document.head.append(style);
 
 function simulateScrollToStart(grid) {
   // Make sure not over scroll more than the delta threshold limit of 10k.
