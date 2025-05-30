@@ -1,6 +1,7 @@
 import { expect } from '@vaadin/chai-plugins';
 import { click, fixtureSync, keyUpOn, nextFrame } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
+import './grid-test-styles.js';
 import '../all-imports.js';
 import { Grid } from '../src/vaadin-grid.js';
 import {

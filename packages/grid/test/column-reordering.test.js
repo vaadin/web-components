@@ -1,6 +1,7 @@
 import { expect } from '@vaadin/chai-plugins';
 import { aTimeout, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
+import './grid-test-styles.js';
 import '../all-imports.js';
 import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
 import {

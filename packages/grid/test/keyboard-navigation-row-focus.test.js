@@ -8,6 +8,7 @@ import {
   nextRender,
   up as mouseUp,
 } from '@vaadin/testing-helpers';
+import './grid-test-styles.js';
 import '../src/all-imports.js';
 import { flushGrid, getCellContent, getFocusedCellIndex, getFocusedRowIndex } from './helpers.js';
 

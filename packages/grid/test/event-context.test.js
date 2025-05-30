@@ -1,5 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { click, fixtureSync } from '@vaadin/testing-helpers';
+import './grid-test-styles.js';
 import '../all-imports.js';
 import { flushGrid, getContainerCell } from './helpers.js';
 

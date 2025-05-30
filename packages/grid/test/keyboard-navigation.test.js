@@ -15,6 +15,7 @@ import {
   up as mouseUp,
 } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
+import './grid-test-styles.js';
 import '../all-imports.js';
 import {
   attributeRenderer,

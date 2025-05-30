@@ -1,6 +1,7 @@
 import { expect } from '@vaadin/chai-plugins';
 import { aTimeout, fixtureSync, keyDownOn, nextFrame, nextResize, oneEvent } from '@vaadin/testing-helpers';
 import Sinon from 'sinon';
+import './grid-test-styles.js';
 import '../all-imports.js';
 import { flushGrid, getCellContent, getHeaderCellContent } from './helpers.js';
 

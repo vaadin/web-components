@@ -1,6 +1,7 @@
 import { expect } from '@vaadin/chai-plugins';
 import { aTimeout, fixtureSync, nextFrame, nextResize, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
+import './grid-test-styles.js';
 import '../all-imports.js';
 import {
   flushGrid,
@@ -117,25 +118,23 @@ describe('resizing', () => {
       grid.size = 1;
       component.style.display = 'flex';
       component.style.flexDirection = 'column';
-      grid.allRowsVisible = true;
     });
 
     it('should have the default height inside a column flexbox', () => {
-      grid.allRowsVisible = false;
       expect(grid.getBoundingClientRect().height).to.equal(400);
     });
 
     it('should auto-grow inside a fixed height column flexbox', async () => {
       component.style.height = '500px';
       await nextResize(grid);
-      expect(grid.getBoundingClientRect().height).to.equal(129);
+      expect(grid.getBoundingClientRect().height).to.equal(500);
     });
 
-    it('should auto-grow inside a fixed height row flexbox', async () => {
+    it('should not auto-grow inside a fixed height row flexbox', async () => {
       component.style.flexDirection = 'row';
       component.style.height = '500px';
       await nextResize(grid);
-      expect(grid.getBoundingClientRect().height).to.equal(129);
+      expect(grid.getBoundingClientRect().height).to.equal(400);
     });
 
     it('should not shrink horizontally inside a row flexbox', () => {
@@ -144,6 +143,7 @@ describe('resizing', () => {
     });
 
     it('should not shrink vertically inside a column flexbox with another child', () => {
+      grid.allRowsVisible = true;
       grid.size = 5;
 
       component.style.height = '500px';

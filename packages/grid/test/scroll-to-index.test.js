@@ -1,5 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, listenOnce, nextFrame, oneEvent } from '@vaadin/testing-helpers';
+import './grid-test-styles.js';
 import '../all-imports.js';
 import {
   flushGrid,
