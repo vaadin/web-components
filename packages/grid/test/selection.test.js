@@ -2,6 +2,7 @@ import { expect } from '@vaadin/chai-plugins';
 import { resetMouse, sendKeys, sendMouse, sendMouseToElement } from '@vaadin/test-runner-commands';
 import { click, fixtureSync, listenOnce, mousedown, nextFrame, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
+import './grid-test-styles.js';
 import '../all-imports.js';
 import {
   fire,
@@ -15,14 +16,6 @@ import {
   getRows,
   infiniteDataProvider,
 } from './helpers.js';
-
-const style = document.createElement('style');
-style.textContent = `
-  vaadin-grid::part(cell) {
-    min-height: 36px !important;
-  }
-`;
-document.head.append(style);
 
 describe('selection', () => {
   let grid;

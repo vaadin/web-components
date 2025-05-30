@@ -1,6 +1,7 @@
 import { expect } from '@vaadin/chai-plugins';
 import { aTimeout, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
+import './grid-test-styles.js';
 import '../all-imports.js';
 import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
 import {
@@ -15,14 +16,6 @@ import {
   infiniteDataProvider,
   makeSoloTouchEvent,
 } from './helpers.js';
-
-const style = document.createElement('style');
-style.textContent = `
-  vaadin-grid::part(cell) {
-    min-height: 36px !important;
-  }
-`;
-document.head.append(style);
 
 function getVisualCellContent(section, row, col) {
   let cell = Array.from(section.querySelectorAll('[part~="cell"]:not([part~="details-cell"])')).pop();

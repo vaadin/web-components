@@ -15,6 +15,7 @@ import {
   up as mouseUp,
 } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
+import './grid-test-styles.js';
 import '../all-imports.js';
 import {
   attributeRenderer,
@@ -32,17 +33,6 @@ import {
   infiniteDataProvider,
   scrollToEnd,
 } from './helpers.js';
-
-const style = document.createElement('style');
-style.textContent = `
-  vaadin-grid {
-    border: 1px solid !important;
-  }
-  vaadin-grid::part(cell) {
-    min-height: 36px !important;
-  }
-`;
-document.head.append(style);
 
 let grid, focusable, scroller, header, footer, body;
 

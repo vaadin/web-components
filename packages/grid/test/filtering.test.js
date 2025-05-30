@@ -1,6 +1,7 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fire, fixtureSync, nextFrame, nextRender, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
+import './grid-test-styles.js';
 import '../all-imports.js';
 import { html, LitElement } from 'lit';
 import { flushGrid, getBodyCellContent, getHeaderCellContent, getVisibleItems, scrollToEnd } from './helpers.js';

@@ -1,6 +1,7 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, listenOnce, nextFrame, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
+import './grid-test-styles.js';
 import '../all-imports.js';
 import {
   dragAndDropOver,
@@ -21,7 +22,7 @@ describe('column resizing', () => {
 
   beforeEach(async () => {
     grid = fixtureSync(`
-      <vaadin-grid size="1" style="width: 300px; height: 400px; border: 1px solid;" column-reordering-allowed>
+      <vaadin-grid size="1" style="width: 300px; height: 400px;" column-reordering-allowed>
         <vaadin-grid-column resizable header="0"></vaadin-grid-column>
         <vaadin-grid-column header="1"></vaadin-grid-column>
       </vaadin-grid>

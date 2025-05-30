@@ -1,6 +1,7 @@
 import { expect } from '@vaadin/chai-plugins';
 import { aTimeout, fixtureSync, nextFrame, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
+import './grid-test-styles.js';
 import '../all-imports.js';
 import {
   flushGrid,
@@ -15,17 +16,6 @@ import {
   scrollGrid,
   scrollToEnd,
 } from './helpers.js';
-
-const style = document.createElement('style');
-style.textContent = `
-  vaadin-grid {
-    border: 1px solid !important;
-  }
-  vaadin-grid::part(cell) {
-    min-height: 36px !important;
-  }
-`;
-document.head.append(style);
 
 describe('basic features', () => {
   let grid, column;
