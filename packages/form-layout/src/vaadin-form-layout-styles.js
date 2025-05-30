@@ -162,19 +162,19 @@ export const formLayoutStyles = css`
 export const formLayoutSlotStyles = css`
   /* Using :where to ensure user styles always take precedence */
   :where(
-      vaadin-form-layout[auto-responsive] > *,
-      vaadin-form-layout[auto-responsive] vaadin-form-row > *,
-      vaadin-form-layout[auto-responsive] vaadin-form-item > *
-    ) {
+    vaadin-form-layout[auto-responsive] > *,
+    vaadin-form-layout[auto-responsive] vaadin-form-row > *,
+    vaadin-form-layout[auto-responsive] vaadin-form-item > *
+  ) {
     box-sizing: border-box;
     max-width: 100%;
   }
 
   :where(
-      vaadin-form-layout[auto-responsive][expand-fields] > *,
-      vaadin-form-layout[auto-responsive][expand-fields] vaadin-form-row > *,
-      vaadin-form-layout[auto-responsive][expand-fields] vaadin-form-item > *
-    ) {
+    vaadin-form-layout[auto-responsive][expand-fields] > *,
+    vaadin-form-layout[auto-responsive][expand-fields] vaadin-form-row > *,
+    vaadin-form-layout[auto-responsive][expand-fields] vaadin-form-item > *
+  ) {
     min-width: 100%;
   }
 `;

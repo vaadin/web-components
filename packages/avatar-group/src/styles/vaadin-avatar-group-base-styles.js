@@ -38,7 +38,8 @@ export const avatarGroupStyles = css`
           (
             var(--vaadin-avatar-size, 2em) - var(--vaadin-avatar-group-overlap, 8px) +
               var(--vaadin-avatar-group-gap, 2px)
-          ) * var(--_d)
+          ) *
+          var(--_d)
       );
       --_d: var(--_dir);
     }
