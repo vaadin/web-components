@@ -22,7 +22,7 @@ describe('basic features', () => {
 
   beforeEach(async () => {
     grid = fixtureSync(`
-      <vaadin-grid style="width: 200px; height: 300px; --vaadin-grid-details-transition-duration: 0s;" size="1000">
+      <vaadin-grid style="width: 200px; height: 300px;" size="1000">
         <vaadin-grid-column></vaadin-grid-column>
       </vaadin-grid>
     `);
