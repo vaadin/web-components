@@ -1,0 +1,26 @@
+/**
+ * @license
+ * Copyright (c) 2017 - 2025 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+@import '../src/mixins/base-layer-reset.css' vaadin-avatar-group;
+@import '../src/components/avatar-group.css' vaadin-avatar-group;
+
+@import '../src/mixins/base-layer-reset.css' vaadin-avatar-group-overlay;
+@import '../src/mixins/overlay.css' vaadin-avatar-group-overlay;
+@import '../src/mixins/menu-overlay-core.css' vaadin-avatar-group-overlay;
+@import '../src/components/avatar-group-overlay.css' vaadin-avatar-group-overlay;
+
+@import '../src/mixins/base-layer-reset.css' vaadin-avatar-group-menu;
+@import '../src/components/list-box.css' vaadin-avatar-group-menu;
+
+@import '../src/mixins/base-layer-reset.css' vaadin-avatar-group-menu-item;
+@import '../src/components/item.css' vaadin-avatar-group-menu-item;
+@import '../src/components/avatar-group-menu-item.css' vaadin-avatar-group-menu-item;
+
+html {
+  --vaadin-avatar-group-css-inject: 1;
+  --vaadin-avatar-group-overlay-css-inject: 1;
+  --vaadin-avatar-group-menu-css-inject: 1;
+  --vaadin-avatar-group-menu-item-css-inject: 1;
+}

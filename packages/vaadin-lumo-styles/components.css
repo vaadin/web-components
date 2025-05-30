@@ -4,6 +4,8 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 @import './components/accordion.css';
+@import './components/avatar-group.css';
+@import './components/avatar.css';
 @import './components/button.css';
 @import './components/combo-box.css';
 @import './components/custom-field.css';

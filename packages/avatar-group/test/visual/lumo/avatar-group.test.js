@@ -1,6 +1,9 @@
 import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
-import '../../../theme/lumo/vaadin-avatar-group.js';
+import '@vaadin/vaadin-lumo-styles/props.css';
+import '@vaadin/vaadin-lumo-styles/components/avatar.css';
+import '@vaadin/vaadin-lumo-styles/components/avatar-group.css';
+import '../../../vaadin-avatar-group.js';
 
 describe('avatar-group', () => {
   let div, element;
