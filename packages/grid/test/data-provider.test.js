@@ -20,6 +20,14 @@ import {
   scrollToEnd,
 } from './helpers.js';
 
+const style = document.createElement('style');
+style.textContent = `
+  vaadin-grid::part(cell) {
+    min-height: 36px !important;
+  }
+`;
+document.head.append(style);
+
 function simulateScrollToStart(grid) {
   // Make sure not over scroll more than the delta threshold limit of 10k.
   const table = grid.$.table;

@@ -4,6 +4,34 @@ import sinon from 'sinon';
 import '../all-imports.js';
 import { flushGrid, getContainerCell, getHeaderCell } from './helpers.js';
 
+const style = document.createElement('style');
+style.textContent = `
+  vaadin-grid {
+    border: 1px solid !important;
+    font-family: sans-serif !important;
+  }
+  vaadin-grid::part(cell) {
+    min-height: 36px !important;
+  }
+  vaadin-grid::part(header-cell) {
+    font-size: 0.875rem !important;
+    font-weight: 500 !important;
+    min-height: 56px !important; /* Push the content rows down enough so that certain rows go outside the grid viewport and don't affect the auto-width calculations */
+  }
+  vaadin-grid-cell-content {
+    padding: 4px 16px !important;
+  }
+  vaadin-grid-tree-toggle {
+    --vaadin-grid-tree-toggle-level-offset: 32px !important;
+  }
+  vaadin-grid-tree-toggle::part(toggle) {
+    width: 32px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+`;
+document.head.append(style);
+
 function getCellIntrinsicWidth(cell) {
   const originalInlineStyles = cell.getAttribute('style');
   // Prepare the cell for having its intrinsic width measured
@@ -272,7 +300,7 @@ describe('column auto-width', () => {
     fixtureSync(`
       <style>
         vaadin-grid::part(cell) {
-          padding-right: 20px;
+          padding-right: 24px !important;
         }
       </style>
     `);

@@ -21,6 +21,7 @@ export const gridStyles = css`
     flex: 1 1 auto;
     align-self: stretch;
     position: relative;
+    box-sizing: border-box;
   }
 
   :host([hidden]) {

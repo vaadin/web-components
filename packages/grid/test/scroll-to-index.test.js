@@ -11,6 +11,14 @@ import {
   onceInvoked,
 } from './helpers.js';
 
+const style = document.createElement('style');
+style.textContent = `
+  vaadin-grid::part(cell) {
+    min-height: 36px !important;
+  }
+`;
+document.head.append(style);
+
 const createGrid = (height, size) => {
   const grid = fixtureSync(`
     <vaadin-grid style="width: 200px; height: ${height}px;" size="${size}">

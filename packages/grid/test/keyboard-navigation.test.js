@@ -33,6 +33,17 @@ import {
   scrollToEnd,
 } from './helpers.js';
 
+const style = document.createElement('style');
+style.textContent = `
+  vaadin-grid {
+    border: 1px solid !important;
+  }
+  vaadin-grid::part(cell) {
+    min-height: 36px !important;
+  }
+`;
+document.head.append(style);
+
 let grid, focusable, scroller, header, footer, body;
 
 function getRowCell(rowIndex, cellIndex) {

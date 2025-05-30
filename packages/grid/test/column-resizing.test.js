@@ -21,7 +21,7 @@ describe('column resizing', () => {
 
   beforeEach(async () => {
     grid = fixtureSync(`
-      <vaadin-grid size="1" style="width: 300px; height: 400px" column-reordering-allowed>
+      <vaadin-grid size="1" style="width: 300px; height: 400px; border: 1px solid;" column-reordering-allowed>
         <vaadin-grid-column resizable header="0"></vaadin-grid-column>
         <vaadin-grid-column header="1"></vaadin-grid-column>
       </vaadin-grid>
@@ -67,7 +67,7 @@ describe('column resizing', () => {
       fire('track', { state: 'start' }, options);
       fire('track', { state: 'track', x: rect.left + (direction === 'rtl' ? -200 : 200), y: 0 }, options);
 
-      expect(headerCells[0].clientWidth).to.equal(direction === 'rtl' ? 349 : 200);
+      expect(headerCells[0].offsetWidth).to.equal(direction === 'rtl' ? 349 : 200);
     });
 
     it(`should resize on frozen to end cell track in ${direction}`, () => {
@@ -87,7 +87,7 @@ describe('column resizing', () => {
       const x = direction === 'rtl' ? rect.right + 50 : rect.left - 50;
       fire('track', { state: 'track', x, y: 0 }, options);
 
-      expect(headerCells[1].clientWidth).to.equal(198);
+      expect(headerCells[1].offsetWidth).to.equal(199);
     });
 
     it(`should scroll when handle moves below frozen to end cell in ${direction}`, async () => {
