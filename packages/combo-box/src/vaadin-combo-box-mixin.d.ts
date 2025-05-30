@@ -11,6 +11,7 @@ import type { OverlayClassMixinClass } from '@vaadin/component-base/src/overlay-
 import type { InputMixinClass } from '@vaadin/field-base/src/input-mixin.js';
 import type { ValidateMixinClass } from '@vaadin/field-base/src/validate-mixin.js';
 import type { ComboBox } from './vaadin-combo-box.js';
+import type { ComboBoxBaseMixinClass } from './vaadin-combo-box-base-mixin.js';
 import type { ComboBoxDefaultItem, ComboBoxItemModel, ComboBoxItemRenderer } from './vaadin-combo-box-item-mixin.js';
 
 export type { ComboBoxDefaultItem, ComboBoxItemModel };
@@ -19,7 +20,8 @@ export type ComboBoxRenderer<TItem> = ComboBoxItemRenderer<TItem, ComboBox<TItem
 
 export declare function ComboBoxMixin<TItem, T extends Constructor<HTMLElement>>(
   base: T,
-): Constructor<ComboBoxMixinClass<TItem>> &
+): Constructor<ComboBoxBaseMixinClass> &
+  Constructor<ComboBoxMixinClass<TItem>> &
   Constructor<DisabledMixinClass> &
   Constructor<FocusMixinClass> &
   Constructor<InputMixinClass> &
@@ -29,22 +31,6 @@ export declare function ComboBoxMixin<TItem, T extends Constructor<HTMLElement>>
   T;
 
 export declare class ComboBoxMixinClass<TItem> {
-  /**
-   * True if the dropdown is open, false otherwise.
-   */
-  opened: boolean;
-
-  /**
-   * Set true to prevent the overlay from opening automatically.
-   * @attr {boolean} auto-open-disabled
-   */
-  autoOpenDisabled: boolean | null | undefined;
-
-  /**
-   * When present, it specifies that the field is read-only.
-   */
-  readonly: boolean;
-
   /**
    * Custom function for rendering the content of every item.
    * Receives three arguments:
@@ -145,25 +131,10 @@ export declare class ComboBoxMixinClass<TItem> {
   itemIdPath: string | null | undefined;
 
   /**
-   * Tag name prefix used by scroller and items.
-   */
-  protected readonly _tagNamePrefix: string;
-
-  /**
    * Requests an update for the content of items.
    * While performing the update, it invokes the renderer (passed in the `renderer` property) once an item.
    *
    * It is not guaranteed that the update happens immediately (synchronously) after it is requested.
    */
   requestContentUpdate(): void;
-
-  /**
-   * Opens the dropdown list.
-   */
-  open(): void;
-
-  /**
-   * Closes the dropdown list.
-   */
-  close(): void;
 }
