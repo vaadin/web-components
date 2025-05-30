@@ -4,6 +4,17 @@ import Sinon from 'sinon';
 import '../all-imports.js';
 import { flushGrid, getCellContent, getHeaderCellContent } from './helpers.js';
 
+const style = document.createElement('style');
+style.textContent = `
+  vaadin-grid {
+    border: 1px solid !important;
+  }
+  vaadin-grid::part(cell) {
+    min-height: 36px !important;
+  }
+`;
+document.head.append(style);
+
 ['ltr', 'rtl'].forEach((dir) => {
   describe(`lazy column rendering - ${dir}`, () => {
     let grid, cellContent, columns;

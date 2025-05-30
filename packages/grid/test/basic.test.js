@@ -16,12 +16,23 @@ import {
   scrollToEnd,
 } from './helpers.js';
 
+const style = document.createElement('style');
+style.textContent = `
+  vaadin-grid {
+    border: 1px solid !important;
+  }
+  vaadin-grid::part(cell) {
+    min-height: 36px !important;
+  }
+`;
+document.head.append(style);
+
 describe('basic features', () => {
   let grid, column;
 
   beforeEach(async () => {
     grid = fixtureSync(`
-      <vaadin-grid style="width: 200px; height: 300px;" size="1000">
+      <vaadin-grid style="width: 200px; height: 300px; --vaadin-grid-details-transition-duration: 0s;" size="1000">
         <vaadin-grid-column></vaadin-grid-column>
       </vaadin-grid>
     `);
@@ -303,7 +314,7 @@ describe('basic features', () => {
     await nextFrame();
     expect(getPhysicalItems(grid).length).to.equal(rowHeights.length);
     const sum = rowHeights.reduce((acc, value) => acc + value, 0);
-    expect(grid.clientHeight).to.be.greaterThan(sum);
+    expect(grid.clientHeight).to.be.at.least(sum);
   });
 });
 

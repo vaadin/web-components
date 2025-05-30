@@ -16,6 +16,14 @@ import {
   infiniteDataProvider,
 } from './helpers.js';
 
+const style = document.createElement('style');
+style.textContent = `
+  vaadin-grid::part(cell) {
+    min-height: 36px !important;
+  }
+`;
+document.head.append(style);
+
 describe('selection', () => {
   let grid;
   let rows;

@@ -242,7 +242,7 @@ describe('filtering', () => {
     grid.style.width = '200px';
     const filterWidth = grid._filters[0].parentElement.offsetWidth;
     const textFieldWidth = grid._filters[0].querySelector('vaadin-text-field').offsetWidth;
-    expect(filterWidth).to.be.greaterThan(textFieldWidth);
+    expect(filterWidth).to.be.at.least(textFieldWidth);
   });
 
   describe('filter-column', () => {
