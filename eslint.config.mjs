@@ -64,7 +64,6 @@ export default [
       ],
       'arrow-body-style': 'off',
       'consistent-return': 'off',
-      'logical-assignment-operators': 'off',
       'func-names': 'off',
       'no-await-in-loop': 'off',
       'no-bitwise': 'off',
@@ -86,10 +85,18 @@ export default [
     },
   },
   {
+    files: ['packages/**/vaadin-*.js'],
+    rules: {
+      // Ban ES2020, ES2021 operators in source component files, as they aren't supported by Polymer analyzer
+      'es-x/no-optional-chaining': 'error',
+      'es-x/no-nullish-coalescing-operators': 'error',
+      'es-x/no-logical-assignment-operators': 'error',
+      'logical-assignment-operators': 'off',
+    },
+  },
+  {
     files: ['packages/*/src/**/*.js'],
     rules: {
-      // Prevent using optional-chaining in source files, as it is not supported by Polymer analyzer
-      'es-x/no-optional-chaining': 'error',
       'no-restricted-syntax': [
         'error',
         {
