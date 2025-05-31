@@ -1,4 +1,3 @@
-/* eslint-env node */
 import { esbuildPlugin } from '@web/dev-server-esbuild';
 import { playwrightLauncher } from '@web/test-runner-playwright';
 import { createSauceLabsLauncher } from '@web/test-runner-saucelabs';

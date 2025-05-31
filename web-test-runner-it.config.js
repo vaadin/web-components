@@ -1,4 +1,3 @@
-/* eslint-env node */
 import { playwrightLauncher } from '@web/test-runner-playwright';
 import devServerConfig from './web-dev-server.config.js';
 import { createIntegrationTestsConfig } from './wtr-utils.js';

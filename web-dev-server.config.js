@@ -1,4 +1,3 @@
-/* eslint-env node */
 import { esbuildPlugin } from '@web/dev-server-esbuild';
 import fs from 'node:fs';
 
