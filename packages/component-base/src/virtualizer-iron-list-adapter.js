@@ -551,9 +551,19 @@ export class IronListAdapter {
     this._adjustVirtualIndexOffset(this._scrollTop - (this.__previousScrollTop || 0));
     const delta = this.scrollTarget.scrollTop - this._scrollPosition;
 
+    const lastIndexVisible = this.adjustedLastVisibleIndex === this.size - 1;
+    const hasEmptySpace = lastIndexVisible && this._physicalBottom < this._scrollBottom;
+
     super._scrollHandler();
 
-    if (this._physicalCount !== 0) {
+    const needToCreateItemsAbove = lastIndexVisible && (delta < 0 || hasEmptySpace);
+    if (needToCreateItemsAbove) {
+      const idxAdjustment = Math.round((delta - this._scrollOffset) / this._physicalAverage);
+      this._virtualStart = Math.max(0, this._virtualStart + idxAdjustment);
+      this._physicalStart = Math.max(0, this._physicalStart + idxAdjustment);
+      this._physicalTop = Math.min(Math.floor(this._virtualStart) * this._physicalAverage, this._scrollPosition);
+      this._update();
+    } else if (this._physicalCount !== 0) {
       const isScrollingDown = delta >= 0;
       const reusables = this._getReusables(!isScrollingDown);
 
