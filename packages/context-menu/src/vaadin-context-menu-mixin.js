@@ -3,7 +3,7 @@
  * Copyright (c) 2016 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { isElementFocusable } from '@vaadin/a11y-base/src/focus-utils.js';
+import { isElementFocusable, isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
 import { isAndroid, isIOS } from '@vaadin/component-base/src/browser-utils.js';
 import { addListener, deepTargetFind, gestures, removeListener } from '@vaadin/component-base/src/gestures.js';
 import { MediaQueryController } from '@vaadin/component-base/src/media-query-controller.js';
@@ -338,11 +338,18 @@ export const ContextMenuMixin = (superClass) =>
      * It is not guaranteed that the update happens immediately (synchronously) after it is requested.
      */
     requestContentUpdate() {
-      if (!this._overlayElement || !this.renderer) {
+      if (!this._overlayElement) {
         return;
       }
 
+      // Store state to be restored after re-rendering
+      this.__preserveMenuState();
+
+      // Run overlay renderer to re-create DOM elements
       this._overlayElement.requestContentUpdate();
+
+      // Restore focused item, update sub-menu if needed
+      this.__restoreMenuState();
     }
 
     /** @private */
@@ -406,6 +413,69 @@ export const ContextMenuMixin = (superClass) =>
           // Hide overlay until it is fully rendered and positioned
           this._overlayElement.style.visibility = 'hidden';
           this._setOpened(true);
+        }
+      }
+    }
+
+    /** @private */
+    __preserveMenuState() {
+      const listBox = this.__getListBox();
+      if (listBox) {
+        this.__focusedIndex = listBox.items.indexOf(listBox.focused);
+
+        if (this._subMenu && this._subMenu.opened) {
+          this.__subMenuIndex = listBox.items.indexOf(this._subMenu.listenOn);
+        }
+      }
+    }
+
+    /** @private */
+    __restoreMenuState() {
+      const focusedIndex = this.__focusedIndex;
+      const subMenuIndex = this.__subMenuIndex;
+      const selectedIndex = this.__selectedIndex;
+
+      const listBox = this.__getListBox();
+
+      if (listBox) {
+        // Initialize menu items synchronously
+        listBox._observer.flush();
+
+        if (subMenuIndex > -1) {
+          const itemToOpen = listBox.items[subMenuIndex];
+          if (itemToOpen) {
+            if (Array.isArray(itemToOpen._item.children) && itemToOpen._item.children.length) {
+              // Keep nested sub-menu opened and update it
+              this.__updateSubMenuForItem(this._subMenu, itemToOpen);
+              this._subMenu.requestContentUpdate();
+            } else {
+              // Item no longer has children, close sub-menu
+              this._subMenu.close();
+              this.__focusItem(itemToOpen);
+            }
+          } else {
+            // Item no longer exists, focus the list-box
+            listBox.focus();
+          }
+        }
+
+        // Focus previously selected item, in case it was clicked with
+        // `keepOpen` option, or the previously focused item, if any
+        this.__focusItem(selectedIndex > -1 ? listBox.children[selectedIndex] : listBox.items[focusedIndex]);
+      }
+
+      this.__focusedIndex = undefined;
+      this.__subMenuIndex = undefined;
+      this.__selectedIndex = undefined;
+    }
+
+    /** @private */
+    __focusItem(item) {
+      if (item) {
+        item.focus();
+
+        if (isKeyboardActive()) {
+          item.setAttribute('focus-ring', '');
         }
       }
     }
