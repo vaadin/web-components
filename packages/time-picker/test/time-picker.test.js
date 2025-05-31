@@ -280,23 +280,23 @@ describe('time-picker', () => {
     });
 
     it('should have dropdown items if min nor max is defined', () => {
-      expect(timePicker.__dropdownItems.length).to.be.equal(24);
+      expect(timePicker._dropdownItems.length).to.be.equal(24);
     });
 
     it('should allow setting valid min property value', () => {
       timePicker.min = '04:00';
-      expect(timePicker.__dropdownItems.length).to.be.equal(20);
+      expect(timePicker._dropdownItems.length).to.be.equal(20);
     });
 
     it('should allow setting valid max property value', () => {
       timePicker.max = '19:00';
-      expect(timePicker.__dropdownItems.length).to.be.equal(20);
+      expect(timePicker._dropdownItems.length).to.be.equal(20);
     });
 
     it('should allow setting valid min and max property value', () => {
       timePicker.min = '04:00';
       timePicker.max = '19:00';
-      expect(timePicker.__dropdownItems.length).to.be.equal(16);
+      expect(timePicker._dropdownItems.length).to.be.equal(16);
     });
 
     it('should allow setting valid min value via attribute', () => {
@@ -334,17 +334,17 @@ describe('time-picker', () => {
 
     it('should have dropdown items if step is undefined', () => {
       timePicker.step = undefined;
-      expect(timePicker.__dropdownItems.length).to.be.equal(24);
+      expect(timePicker._dropdownItems.length).to.be.equal(24);
     });
 
     it('should have dropdown items if step is bigger or equal than 15min', () => {
       timePicker.step = 15 * 60;
-      expect(timePicker.__dropdownItems.length).to.be.equal(96);
+      expect(timePicker._dropdownItems.length).to.be.equal(96);
     });
 
     it('should not have dropdown items if step is lesser than 15min', () => {
       timePicker.step = 15 * 60 - 1;
-      expect(timePicker.__dropdownItems.length).to.be.equal(0);
+      expect(timePicker._dropdownItems.length).to.be.equal(0);
     });
 
     it('should allow setting valid step property value', () => {

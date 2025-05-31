@@ -116,7 +116,7 @@ class TimePicker extends TimePickerMixin(CSSInjectionMixin(ThemableMixin(Element
 
         <vaadin-time-picker-combo-box
           id="comboBox"
-          .filteredItems="${this.__dropdownItems}"
+          .filteredItems="${this._dropdownItems}"
           .value="${this._comboBoxValue}"
           .opened="${this.opened}"
           .disabled="${this.disabled}"

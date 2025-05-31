@@ -170,7 +170,7 @@ export const TimePickerMixin = (superClass) =>
         },
 
         /** @private */
-        __dropdownItems: {
+        _dropdownItems: {
           type: Array,
           sync: true,
         },
@@ -184,7 +184,7 @@ export const TimePickerMixin = (superClass) =>
 
     static get observers() {
       return [
-        '__updateAriaAttributes(__dropdownItems, opened, inputElement)',
+        '__updateAriaAttributes(_dropdownItems, opened, inputElement)',
         '__updateDropdownItems(i18n, min, max, step)',
       ];
     }
@@ -321,7 +321,7 @@ export const TimePickerMixin = (superClass) =>
     _onKeyDown(e) {
       super._onKeyDown(e);
 
-      if (this.readonly || this.disabled || this.__dropdownItems.length) {
+      if (this.readonly || this.disabled || this._dropdownItems.length) {
         return;
       }
 
@@ -458,7 +458,7 @@ export const TimePickerMixin = (superClass) =>
       const maxTimeObj = validateTime(parseISOTime(max || MAX_ALLOWED_TIME), step);
       const maxSec = this.__getSec(maxTimeObj);
 
-      this.__dropdownItems = this.__generateDropdownList(minSec, maxSec, step);
+      this._dropdownItems = this.__generateDropdownList(minSec, maxSec, step);
 
       if (step !== this.__oldStep) {
         this.__oldStep = step;
