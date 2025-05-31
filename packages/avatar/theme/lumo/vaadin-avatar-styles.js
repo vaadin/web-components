@@ -35,32 +35,14 @@ registerStyles(
     }
 
     [part='icon']::before {
+      display: block;
       content: var(--lumo-icons-user);
       font-family: lumo-icons;
-      font-size: 0.9em;
     }
 
     [part='abbr'] {
       font-family: var(--lumo-font-family);
-      font-size: 2.4375em;
       font-weight: 500;
-      fill: currentColor;
-    }
-
-    :host([theme~='xlarge']) [part='abbr'] {
-      font-size: 2.5em;
-    }
-
-    :host([theme~='large']) [part='abbr'] {
-      font-size: 2.375em;
-    }
-
-    :host([theme~='small']) [part='abbr'] {
-      font-size: 2.75em;
-    }
-
-    :host([theme~='xsmall']) [part='abbr'] {
-      font-size: 3em;
     }
 
     :host([theme~='xlarge']) {

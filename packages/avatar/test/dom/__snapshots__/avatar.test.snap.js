@@ -13,6 +13,12 @@ snapshots["vaadin-avatar default"] =
   part="icon"
 >
 </div>
+<div
+  aria-hidden="true"
+  hidden=""
+  part="abbr"
+>
+</div>
 <slot name="tooltip">
 </slot>
 `;
@@ -28,6 +34,12 @@ snapshots["vaadin-avatar img"] =
   aria-hidden="true"
   hidden=""
   part="icon"
+>
+</div>
+<div
+  aria-hidden="true"
+  hidden=""
+  part="abbr"
 >
 </div>
 <slot name="tooltip">
