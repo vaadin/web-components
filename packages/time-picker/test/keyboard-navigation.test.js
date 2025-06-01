@@ -4,12 +4,11 @@ import sinon from 'sinon';
 import '../src/vaadin-time-picker.js';
 
 describe('keyboard navigation', () => {
-  let timePicker, comboBox, inputElement;
+  let timePicker, inputElement;
 
   beforeEach(async () => {
     timePicker = fixtureSync(`<vaadin-time-picker></vaadin-time-picker>`);
     await nextRender();
-    comboBox = timePicker.$.comboBox;
     inputElement = timePicker.inputElement;
   });
 
@@ -148,7 +147,7 @@ describe('keyboard navigation', () => {
     it('should not change the value on arrow up, but should open the overlay', () => {
       arrowUp(inputElement);
       expect(inputElement.value).to.be.equal('');
-      expect(comboBox.opened).to.be.true;
+      expect(timePicker.opened).to.be.true;
     });
   });
 

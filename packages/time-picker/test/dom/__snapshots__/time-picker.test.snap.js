@@ -925,35 +925,29 @@ snapshots["vaadin-time-picker shadow default"] =
     >
     </span>
   </div>
-  <vaadin-time-picker-combo-box
-    dir="ltr"
-    id="comboBox"
-  >
-    <vaadin-input-container part="input-field">
-      <slot
-        name="prefix"
-        slot="prefix"
-      >
-      </slot>
-      <slot name="input">
-      </slot>
-      <div
-        aria-hidden="true"
-        id="clearButton"
-        part="clear-button"
-        slot="suffix"
-      >
-      </div>
-      <div
-        aria-hidden="true"
-        class="toggle-button"
-        id="toggleButton"
-        part="toggle-button"
-        slot="suffix"
-      >
-      </div>
-    </vaadin-input-container>
-  </vaadin-time-picker-combo-box>
+  <vaadin-input-container part="input-field">
+    <slot
+      name="prefix"
+      slot="prefix"
+    >
+    </slot>
+    <slot name="input">
+    </slot>
+    <div
+      aria-hidden="true"
+      id="clearButton"
+      part="clear-button"
+      slot="suffix"
+    >
+    </div>
+    <div
+      aria-hidden="true"
+      id="toggleButton"
+      part="toggle-button"
+      slot="suffix"
+    >
+    </div>
+  </vaadin-input-container>
   <div part="helper-text">
     <slot name="helper">
     </slot>
@@ -963,6 +957,17 @@ snapshots["vaadin-time-picker shadow default"] =
     </slot>
   </div>
 </div>
+<vaadin-time-picker-overlay
+  dir="ltr"
+  id="overlay"
+  no-vertical-overlap=""
+>
+  <vaadin-time-picker-scroller
+    id="vaadin-time-picker-scroller-3"
+    role="listbox"
+  >
+  </vaadin-time-picker-scroller>
+</vaadin-time-picker-overlay>
 <slot name="tooltip">
 </slot>
 `;
@@ -979,40 +984,32 @@ snapshots["vaadin-time-picker shadow disabled"] =
     >
     </span>
   </div>
-  <vaadin-time-picker-combo-box
-    aria-disabled="true"
-    dir="ltr"
+  <vaadin-input-container
     disabled=""
-    id="comboBox"
+    part="input-field"
   >
-    <vaadin-input-container
-      disabled=""
-      part="input-field"
+    <slot
+      name="prefix"
+      slot="prefix"
     >
-      <slot
-        name="prefix"
-        slot="prefix"
-      >
-      </slot>
-      <slot name="input">
-      </slot>
-      <div
-        aria-hidden="true"
-        id="clearButton"
-        part="clear-button"
-        slot="suffix"
-      >
-      </div>
-      <div
-        aria-hidden="true"
-        class="toggle-button"
-        id="toggleButton"
-        part="toggle-button"
-        slot="suffix"
-      >
-      </div>
-    </vaadin-input-container>
-  </vaadin-time-picker-combo-box>
+    </slot>
+    <slot name="input">
+    </slot>
+    <div
+      aria-hidden="true"
+      id="clearButton"
+      part="clear-button"
+      slot="suffix"
+    >
+    </div>
+    <div
+      aria-hidden="true"
+      id="toggleButton"
+      part="toggle-button"
+      slot="suffix"
+    >
+    </div>
+  </vaadin-input-container>
   <div part="helper-text">
     <slot name="helper">
     </slot>
@@ -1022,6 +1019,17 @@ snapshots["vaadin-time-picker shadow disabled"] =
     </slot>
   </div>
 </div>
+<vaadin-time-picker-overlay
+  dir="ltr"
+  id="overlay"
+  no-vertical-overlap=""
+>
+  <vaadin-time-picker-scroller
+    id="vaadin-time-picker-scroller-3"
+    role="listbox"
+  >
+  </vaadin-time-picker-scroller>
+</vaadin-time-picker-overlay>
 <slot name="tooltip">
 </slot>
 `;
@@ -1038,39 +1046,32 @@ snapshots["vaadin-time-picker shadow readonly"] =
     >
     </span>
   </div>
-  <vaadin-time-picker-combo-box
-    dir="ltr"
-    id="comboBox"
+  <vaadin-input-container
+    part="input-field"
     readonly=""
   >
-    <vaadin-input-container
-      part="input-field"
-      readonly=""
+    <slot
+      name="prefix"
+      slot="prefix"
     >
-      <slot
-        name="prefix"
-        slot="prefix"
-      >
-      </slot>
-      <slot name="input">
-      </slot>
-      <div
-        aria-hidden="true"
-        id="clearButton"
-        part="clear-button"
-        slot="suffix"
-      >
-      </div>
-      <div
-        aria-hidden="true"
-        class="toggle-button"
-        id="toggleButton"
-        part="toggle-button"
-        slot="suffix"
-      >
-      </div>
-    </vaadin-input-container>
-  </vaadin-time-picker-combo-box>
+    </slot>
+    <slot name="input">
+    </slot>
+    <div
+      aria-hidden="true"
+      id="clearButton"
+      part="clear-button"
+      slot="suffix"
+    >
+    </div>
+    <div
+      aria-hidden="true"
+      id="toggleButton"
+      part="toggle-button"
+      slot="suffix"
+    >
+    </div>
+  </vaadin-input-container>
   <div part="helper-text">
     <slot name="helper">
     </slot>
@@ -1080,6 +1081,17 @@ snapshots["vaadin-time-picker shadow readonly"] =
     </slot>
   </div>
 </div>
+<vaadin-time-picker-overlay
+  dir="ltr"
+  id="overlay"
+  no-vertical-overlap=""
+>
+  <vaadin-time-picker-scroller
+    id="vaadin-time-picker-scroller-3"
+    role="listbox"
+  >
+  </vaadin-time-picker-scroller>
+</vaadin-time-picker-overlay>
 <slot name="tooltip">
 </slot>
 `;
@@ -1096,38 +1108,32 @@ snapshots["vaadin-time-picker shadow invalid"] =
     >
     </span>
   </div>
-  <vaadin-time-picker-combo-box
-    dir="ltr"
-    id="comboBox"
+  <vaadin-input-container
+    invalid=""
+    part="input-field"
   >
-    <vaadin-input-container
-      invalid=""
-      part="input-field"
+    <slot
+      name="prefix"
+      slot="prefix"
     >
-      <slot
-        name="prefix"
-        slot="prefix"
-      >
-      </slot>
-      <slot name="input">
-      </slot>
-      <div
-        aria-hidden="true"
-        id="clearButton"
-        part="clear-button"
-        slot="suffix"
-      >
-      </div>
-      <div
-        aria-hidden="true"
-        class="toggle-button"
-        id="toggleButton"
-        part="toggle-button"
-        slot="suffix"
-      >
-      </div>
-    </vaadin-input-container>
-  </vaadin-time-picker-combo-box>
+    </slot>
+    <slot name="input">
+    </slot>
+    <div
+      aria-hidden="true"
+      id="clearButton"
+      part="clear-button"
+      slot="suffix"
+    >
+    </div>
+    <div
+      aria-hidden="true"
+      id="toggleButton"
+      part="toggle-button"
+      slot="suffix"
+    >
+    </div>
+  </vaadin-input-container>
   <div part="helper-text">
     <slot name="helper">
     </slot>
@@ -1137,6 +1143,17 @@ snapshots["vaadin-time-picker shadow invalid"] =
     </slot>
   </div>
 </div>
+<vaadin-time-picker-overlay
+  dir="ltr"
+  id="overlay"
+  no-vertical-overlap=""
+>
+  <vaadin-time-picker-scroller
+    id="vaadin-time-picker-scroller-3"
+    role="listbox"
+  >
+  </vaadin-time-picker-scroller>
+</vaadin-time-picker-overlay>
 <slot name="tooltip">
 </slot>
 `;
@@ -1153,39 +1170,32 @@ snapshots["vaadin-time-picker shadow theme"] =
     >
     </span>
   </div>
-  <vaadin-time-picker-combo-box
-    dir="ltr"
-    id="comboBox"
+  <vaadin-input-container
+    part="input-field"
     theme="align-right"
   >
-    <vaadin-input-container
-      part="input-field"
-      theme="align-right"
+    <slot
+      name="prefix"
+      slot="prefix"
     >
-      <slot
-        name="prefix"
-        slot="prefix"
-      >
-      </slot>
-      <slot name="input">
-      </slot>
-      <div
-        aria-hidden="true"
-        id="clearButton"
-        part="clear-button"
-        slot="suffix"
-      >
-      </div>
-      <div
-        aria-hidden="true"
-        class="toggle-button"
-        id="toggleButton"
-        part="toggle-button"
-        slot="suffix"
-      >
-      </div>
-    </vaadin-input-container>
-  </vaadin-time-picker-combo-box>
+    </slot>
+    <slot name="input">
+    </slot>
+    <div
+      aria-hidden="true"
+      id="clearButton"
+      part="clear-button"
+      slot="suffix"
+    >
+    </div>
+    <div
+      aria-hidden="true"
+      id="toggleButton"
+      part="toggle-button"
+      slot="suffix"
+    >
+    </div>
+  </vaadin-input-container>
   <div part="helper-text">
     <slot name="helper">
     </slot>
@@ -1195,6 +1205,18 @@ snapshots["vaadin-time-picker shadow theme"] =
     </slot>
   </div>
 </div>
+<vaadin-time-picker-overlay
+  dir="ltr"
+  id="overlay"
+  no-vertical-overlap=""
+  theme="align-right"
+>
+  <vaadin-time-picker-scroller
+    id="vaadin-time-picker-scroller-3"
+    role="listbox"
+  >
+  </vaadin-time-picker-scroller>
+</vaadin-time-picker-overlay>
 <slot name="tooltip">
 </slot>
 `;

@@ -4,12 +4,11 @@ import '../../src/vaadin-time-picker.js';
 import { resetUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 
 describe('vaadin-time-picker', () => {
-  let timePicker, comboBox;
+  let timePicker;
 
   beforeEach(() => {
     resetUniqueId();
     timePicker = fixtureSync('<vaadin-time-picker></vaadin-time-picker>');
-    comboBox = timePicker.$.comboBox;
   });
 
   describe('host', () => {
@@ -78,8 +77,8 @@ describe('vaadin-time-picker', () => {
       };
 
       beforeEach(async () => {
-        comboBox.opened = true;
-        await oneEvent(comboBox.$.overlay, 'vaadin-overlay-open');
+        timePicker.opened = true;
+        await oneEvent(timePicker.$.overlay, 'vaadin-overlay-open');
       });
 
       it('default', async () => {
@@ -87,13 +86,13 @@ describe('vaadin-time-picker', () => {
       });
 
       it('overlay', async () => {
-        await expect(comboBox.$.overlay).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
+        await expect(timePicker.$.overlay).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
       });
 
       it('overlay class', async () => {
         timePicker.overlayClass = 'custom time-picker-overlay';
         await nextUpdate(timePicker);
-        await expect(comboBox.$.overlay).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
+        await expect(timePicker.$.overlay).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
       });
     });
   });

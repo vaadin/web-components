@@ -8,6 +8,10 @@ import { css } from 'lit';
 
 export const timePickerStyles = css`
   @layer base {
+    :host([opened]) {
+      pointer-events: auto;
+    }
+
     [part='toggle-button']::before {
       mask-image: var(--_vaadin-icon-clock);
     }

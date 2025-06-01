@@ -8,7 +8,9 @@ import type { DelegateFocusMixinClass } from '@vaadin/a11y-base/src/delegate-foc
 import type { DisabledMixinClass } from '@vaadin/a11y-base/src/disabled-mixin.js';
 import type { FocusMixinClass } from '@vaadin/a11y-base/src/focus-mixin.js';
 import type { KeyboardMixinClass } from '@vaadin/a11y-base/src/keyboard-mixin.js';
+import type { ComboBoxBaseMixinClass } from '@vaadin/combo-box/src/vaadin-combo-box-base-mixin.js';
 import type { DelegateStateMixinClass } from '@vaadin/component-base/src/delegate-state-mixin.js';
+import type { OverlayClassMixinClass } from '@vaadin/component-base/src/overlay-class-mixin.js';
 import type { SlotStylesMixinClass } from '@vaadin/component-base/src/slot-styles-mixin.js';
 import type { ClearButtonMixinClass } from '@vaadin/field-base/src/clear-button-mixin.js';
 import type { FieldMixinClass } from '@vaadin/field-base/src/field-mixin.js';
@@ -31,6 +33,7 @@ export interface TimePickerI18n {
 export declare function TimePickerMixin<T extends Constructor<HTMLElement>>(
   base: T,
 ): Constructor<ClearButtonMixinClass> &
+  Constructor<ComboBoxBaseMixinClass> &
   Constructor<DelegateFocusMixinClass> &
   Constructor<DelegateStateMixinClass> &
   Constructor<DisabledMixinClass> &
@@ -41,6 +44,7 @@ export declare function TimePickerMixin<T extends Constructor<HTMLElement>>(
   Constructor<InputMixinClass> &
   Constructor<KeyboardMixinClass> &
   Constructor<LabelMixinClass> &
+  Constructor<OverlayClassMixinClass> &
   Constructor<PatternMixinClass> &
   Constructor<SlotStylesMixinClass> &
   Constructor<TimePickerMixinClass> &
@@ -57,11 +61,6 @@ export declare class TimePickerMixinClass {
    * - `hh:mm:ss.fff`
    */
   value: string;
-
-  /**
-   * True if the dropdown is open, false otherwise.
-   */
-  opened: boolean;
 
   /**
    * Minimum time allowed.
@@ -102,19 +101,6 @@ export declare class TimePickerMixinClass {
   step: number | null | undefined;
 
   /**
-   * Set true to prevent the overlay from opening automatically.
-   * @attr {boolean} auto-open-disabled
-   */
-  autoOpenDisabled: boolean | null | undefined;
-
-  /**
-   * A space-delimited list of CSS class names to set on the overlay element.
-   *
-   * @attr {string} overlay-class
-   */
-  overlayClass: string;
-
-  /**
    * The object used to localize this component.
    * To change the default localization, replace the entire
    * _i18n_ object or just the property you want to modify.
@@ -144,14 +130,4 @@ export declare class TimePickerMixinClass {
    * to ensure the component works properly.
    */
   i18n: TimePickerI18n;
-
-  /**
-   * Opens the dropdown list.
-   */
-  open(): void;
-
-  /**
-   * Closes the dropdown list.
-   */
-  close(): void;
 }

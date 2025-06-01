@@ -84,10 +84,15 @@ export const ComboBoxItemMixin = (superClass) =>
 
       this._owner = this.parentNode.owner;
 
-      const hostDir = this._owner.getAttribute('dir');
+      const hostDir = this._getHostDir();
       if (hostDir) {
         this.setAttribute('dir', hostDir);
       }
+    }
+
+    /** @protected */
+    _getHostDir() {
+      return this._owner && this._owner.getAttribute('dir');
     }
 
     /**
