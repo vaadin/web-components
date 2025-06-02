@@ -1,3 +1,4 @@
+import '@vaadin/checkbox/test/visual/common.js';
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 registerStyles(
@@ -5,12 +6,9 @@ registerStyles(
   css`
     /* Disable animation */
     [part='label'],
-    [part$='button'],
     [part='helper-text'],
-    [part='input-field'],
     [part='error-message'],
-    [part='required-indicator'],
-    ::slotted(:is(input, textarea):placeholder-shown) {
+    [part='required-indicator'] {
       &,
       &::before,
       &::after {
