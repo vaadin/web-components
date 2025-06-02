@@ -209,57 +209,35 @@ export const AvatarGroupMixin = (superClass) =>
     /**
      * Renders items when they are provided by the `items` property and clears the content otherwise.
      * @param {!HTMLElement} root
-     * @param {!Select} _select
      * @private
      */
     __overlayRenderer(root) {
-      let menu = root.firstElementChild;
-      if (!menu) {
-        menu = document.createElement('vaadin-avatar-group-menu');
-        menu.addEventListener('keydown', (event) => this._onListKeyDown(event));
-        root.appendChild(menu);
-      }
-
-      menu.textContent = '';
-
-      if (!this._overflowItems) {
-        return;
-      }
-
-      this._overflowItems.forEach((item) => {
-        menu.appendChild(this.__createItemElement(item));
-      });
-    }
-
-    /** @private */
-    __createItemElement(item) {
-      const itemElement = document.createElement('vaadin-avatar-group-menu-item');
-
-      const avatar = document.createElement('vaadin-avatar');
-      itemElement.appendChild(avatar);
-
-      avatar.setAttribute('aria-hidden', 'true');
-      avatar.setAttribute('tabindex', '-1');
-      avatar.i18n = this.__effectiveI18n;
-
-      if (this._theme) {
-        avatar.setAttribute('theme', this._theme);
-      }
-
-      avatar.name = item.name;
-      avatar.abbr = item.abbr;
-      avatar.img = item.img;
-      avatar.colorIndex = item.colorIndex;
-      if (item.className) {
-        avatar.className = item.className;
-      }
-
-      if (item.name) {
-        const text = document.createTextNode(item.name);
-        itemElement.appendChild(text);
-      }
-
-      return itemElement;
+      render(
+        html`
+          <vaadin-avatar-group-menu @keydown="${this._onListKeyDown}">
+            ${(this._overflowItems || []).map(
+              (item) => html`
+                <vaadin-avatar-group-menu-item>
+                  <vaadin-avatar
+                    .name="${item.name}"
+                    .abbr="${item.abbr}"
+                    .img="${item.img}"
+                    .colorIndex="${item.colorIndex}"
+                    .i18n="${this.__effectiveI18n}"
+                    class="${ifDefined(item.className)}"
+                    theme="${ifDefined(this._theme)}"
+                    aria-hidden="true"
+                    tabindex="-1"
+                  ></vaadin-avatar>
+                  ${item.name || ''}
+                </vaadin-avatar-group-menu-item>
+              `,
+            )}
+          </vaadin-avatar-group-menu>
+        `,
+        root,
+        { host: this },
+      );
     }
 
     /** @private */
