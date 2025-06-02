@@ -1,0 +1,106 @@
+/**
+ * @license
+ * Copyright (c) 2017 - 2025 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+:host {
+  color: var(--vaadin-radio-button-label-color, var(--lumo-body-text-color));
+  font-size: var(--vaadin-radio-button-label-font-size, var(--lumo-font-size-m));
+  --_input-size: var(--vaadin-radio-button-size, calc(var(--lumo-size-m) / 2));
+  --_focus-ring-color: var(--vaadin-focus-ring-color, var(--lumo-primary-color-50pct));
+  --_focus-ring-width: var(--vaadin-focus-ring-width, 2px);
+  --_selection-color: var(--vaadin-selection-color, var(--lumo-primary-color));
+}
+
+:host([has-label]) ::slotted(label) {
+  padding: var(
+    --vaadin-radio-button-label-padding,
+    var(--lumo-space-xs) var(--lumo-space-s) var(--lumo-space-xs) var(--lumo-space-xs)
+  );
+}
+
+[part='radio'] {
+  border-radius: 50%;
+  background: var(--vaadin-radio-button-background, var(--lumo-contrast-20pct));
+}
+
+/* Used for the dot */
+[part='radio']::after {
+  content: '';
+  pointer-events: none;
+  width: 0;
+  height: 0;
+  border: var(--vaadin-radio-button-dot-size, 3px) solid
+    var(--vaadin-radio-button-dot-color, var(--lumo-primary-contrast-color));
+  border-radius: 50%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  transition: 0.25s transform;
+  will-change: transform;
+  background-clip: content-box;
+}
+
+:host([checked]) {
+  --vaadin-input-field-border-color: transparent;
+}
+
+:host([checked]) [part='radio'] {
+  background-color: var(--_selection-color);
+}
+
+:host([checked]) [part='radio']::after {
+  transform: translate(-50%, -50%) scale(1);
+}
+
+:host(:not([checked]):not([disabled]):hover) [part='radio'] {
+  background: var(--vaadin-radio-button-background-hover, var(--lumo-contrast-30pct));
+}
+
+:host([active]) [part='radio'] {
+  transform: scale(0.9);
+  transition-duration: 0.05s;
+}
+
+:host([active][checked]) [part='radio'] {
+  transform: scale(1.1);
+}
+
+:host([active]:not([checked])) [part='radio']::before {
+  transition-duration: 0.01s, 0.01s;
+  transform: scale(0);
+  opacity: 0.4;
+}
+
+:host([disabled]) {
+  color: var(--lumo-disabled-text-color);
+}
+
+:host([disabled]) [part='radio'] {
+  background-color: var(--vaadin-radio-button-disabled-background, var(--lumo-contrast-10pct));
+}
+
+:host([disabled]) [part='radio']::after {
+  border-color: var(--vaadin-radio-button-disabled-dot-color, var(--lumo-contrast-30pct));
+}
+
+/* RTL specific styles */
+:host([dir='rtl'][has-label]) ::slotted(label) {
+  padding: var(--lumo-space-xs) var(--lumo-space-xs) var(--lumo-space-xs) var(--lumo-space-s);
+}
+
+@media (forced-colors: active) {
+  [part='radio'] {
+    outline: 1px solid;
+    outline-offset: -1px;
+  }
+
+  :host([focused]) [part='radio'] {
+    outline-width: 2px;
+  }
+
+  :host([disabled]) [part='radio'] {
+    outline-color: GrayText;
+  }
+}
