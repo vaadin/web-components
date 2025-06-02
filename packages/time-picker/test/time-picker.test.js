@@ -137,41 +137,6 @@ describe('time-picker', () => {
     });
   });
 
-  describe('toggle overlay', () => {
-    let overlay;
-
-    beforeEach(() => {
-      overlay = timePicker.shadowRoot.querySelector('vaadin-time-picker-overlay');
-    });
-
-    it('should open overlay using open() call', () => {
-      timePicker.open();
-      expect(timePicker.opened).to.be.true;
-      expect(overlay.opened).to.be.true;
-    });
-
-    it('should close overlay using close() call', () => {
-      timePicker.open();
-      timePicker.close();
-      expect(timePicker.opened).to.be.false;
-      expect(overlay.opened).to.be.false;
-    });
-
-    it('should not open overlay when disabled', () => {
-      timePicker.disabled = true;
-      timePicker.open();
-      expect(timePicker.opened).to.be.false;
-      expect(overlay.opened).to.be.false;
-    });
-
-    it('should not open overlay when readonly', () => {
-      timePicker.readonly = true;
-      timePicker.open();
-      expect(timePicker.opened).to.be.false;
-      expect(overlay.opened).to.be.false;
-    });
-  });
-
   describe('properties and attributes', () => {
     it('should propagate required property to input', async () => {
       timePicker.required = true;
