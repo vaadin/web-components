@@ -18,6 +18,7 @@ import { OverlayClassMixin } from '@vaadin/component-base/src/overlay-class-mixi
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 import { isLastOverlay } from '@vaadin/overlay/src/vaadin-overlay-stack-mixin.js';
+import { CSSInjectionMixin } from '@vaadin/vaadin-themable-mixin/css-injection-mixin.js';
 import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
 import { PopoverPositionMixin } from './vaadin-popover-position-mixin.js';
 import { PopoverTargetMixin } from './vaadin-popover-target-mixin.js';
@@ -203,7 +204,7 @@ class PopoverOpenedStateController {
  * @mixes ThemePropertyMixin
  */
 class Popover extends PopoverPositionMixin(
-  PopoverTargetMixin(OverlayClassMixin(ThemePropertyMixin(ElementMixin(PolylitMixin(LitElement))))),
+  PopoverTargetMixin(OverlayClassMixin(ThemePropertyMixin(ElementMixin(CSSInjectionMixin(PolylitMixin(LitElement)))))),
 ) {
   static get is() {
     return 'vaadin-popover';
