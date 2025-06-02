@@ -481,11 +481,6 @@ export const AvatarGroupMixin = (superClass) =>
     }
 
     /** @private */
-    _updateOverlay() {
-      this.$.overlay.requestContentUpdate();
-    }
-
-    /** @private */
     __overflowItemsChanged(items, oldItems) {
       // Prevent renderer from being called unnecessarily on initialization
       if (items && items.length === 0 && (!oldItems || oldItems.length === 0)) {
@@ -493,7 +488,7 @@ export const AvatarGroupMixin = (superClass) =>
       }
 
       if (items || oldItems) {
-        this._updateOverlay();
+        this.$.overlay.requestContentUpdate();
       }
     }
 

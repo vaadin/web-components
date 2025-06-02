@@ -656,7 +656,7 @@ describe('initial render', () => {
 
   beforeEach(() => {
     group = document.createElement('vaadin-avatar-group');
-    spy = sinon.spy(group, '_updateOverlay');
+    spy = sinon.spy(group, '__overlayRenderer');
   });
 
   afterEach(() => {
