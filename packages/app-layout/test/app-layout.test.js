@@ -165,7 +165,7 @@ describe('vaadin-app-layout', () => {
       const overlayMode = String(layoutMode === 'mobile');
 
       layout = fixtureSync(`
-        <vaadin-app-layout style="--vaadin-app-layout-drawer-overlay: ${overlayMode}; --vaadin-app-layout-transition-duration: none;">
+        <vaadin-app-layout style="--vaadin-app-layout-drawer-overlay: ${overlayMode}; --vaadin-app-layout-transition-duration: 0s;">
           <vaadin-drawer-toggle id="toggle" slot="navbar"></vaadin-drawer-toggle>
           <section slot="drawer">
             <p>Item 1</p>
