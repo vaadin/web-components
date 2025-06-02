@@ -92,11 +92,7 @@ function extractTagScopedCSSRulesFromStyleSheet(styleSheet, tagName) {
     mediaRules = deduplicateMediaRules(mediaRules);
 
     // Group rules by tag name specified in the media query
-    mediaRules = mediaRules.reduce((acc, rule) => {
-      const rules = acc.get(rule.media.mediaText) ?? [];
-      rules.push(rule);
-      return acc.set(rule.media.mediaText, rules);
-    }, new Map());
+    mediaRules = Map.groupBy(mediaRules, (rule) => rule.media.mediaText);
 
     // Save the processed media rules in the cache
     mediaRulesCache.set(styleSheet, mediaRules);
