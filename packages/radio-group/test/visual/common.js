@@ -6,7 +6,6 @@ registerStyles(
     /* Disable animation */
     [part='label'],
     [part='helper-text'],
-    [part='input-field'],
     [part='error-message'],
     [part='required-indicator'] {
       &,

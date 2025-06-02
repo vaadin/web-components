@@ -7,7 +7,6 @@ registerStyles(
     [part='label'],
     [part='checkbox'],
     [part='helper-text'],
-    [part='input-field'],
     [part='error-message'],
     [part='required-indicator'] {
       &,
