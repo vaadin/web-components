@@ -5,12 +5,25 @@ registerStyles(
   css`
     /* Disable animation */
     [part='label'],
-    [part$='button'],
     [part='helper-text'],
     [part='input-field'],
     [part='error-message'],
-    [part='required-indicator'],
-    ::slotted(:is(input, textarea):placeholder-shown) {
+    [part='required-indicator'] {
+      &,
+      &::before,
+      &::after {
+        animation: none !important;
+        transition: none !important;
+      }
+    }
+  `,
+);
+
+registerStyles(
+  'vaadin-radio-button',
+  css`
+    /* Disable animation */
+    [part='radio'] {
       &,
       &::before,
       &::after {
