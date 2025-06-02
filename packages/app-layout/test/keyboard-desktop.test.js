@@ -15,7 +15,7 @@ describe('desktop navigation', () => {
   beforeEach(async () => {
     const wrapper = fixtureSync(`
       <div>
-        <vaadin-app-layout style="--vaadin-app-layout-transition: none;">
+        <vaadin-app-layout style="--vaadin-app-layout-transition-duration: none;">
           <vaadin-drawer-toggle slot="navbar"></vaadin-drawer-toggle>
           <section slot="drawer">
             <input placeholder="Drawer input" />
