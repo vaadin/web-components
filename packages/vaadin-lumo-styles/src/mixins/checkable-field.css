@@ -39,7 +39,7 @@
 }
 
 .vaadin-checkbox-container,
-.vaadin-radio-container {
+.vaadin-radio-button-container {
   display: grid;
   grid-template-columns: auto 1fr;
   align-items: baseline;
