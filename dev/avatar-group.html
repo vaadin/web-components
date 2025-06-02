@@ -8,43 +8,18 @@
     <script type="module" src="./common.js"></script>
 
     <script type="module">
+      import '@vaadin/avatar';
       import '@vaadin/avatar-group';
-      import '@vaadin/vaadin-lumo-styles/lumo.css';
+      import '@vaadin/vaadin-lumo-styles/props.css';
+      import '@vaadin/vaadin-lumo-styles/components/avatar.css';
+      import '@vaadin/vaadin-lumo-styles/components/avatar-group.css';
 
-      const groups = document.querySelectorAll('vaadin-avatar-group');
-      groups.forEach(group => group.items = [{ name: 'AA' }, { name: 'BB' }, { name: 'CC' }, { name: 'DD' }]);
-
-      document.querySelector('#add').addEventListener('click', () => {
-        const alphabet = 'abcdefghijklmnopqrstuvwxyz';
-        const randomChar = alphabet[Math.floor(Math.random() * alphabet.length)];
-        groups.forEach(group => group.items = [...group.items, { name: randomChar.toUpperCase().repeat(2) }]);
-      });
-
-      document.querySelector('#remove').addEventListener('click', () => {
-        groups.forEach(group => group.items = [...group.items].splice(0, group.items.length - 1));
-      });
+      const group = document.querySelector('vaadin-avatar-group');
+      group.items = [{ name: 'AA' }, { name: 'BB' }, { name: 'CC' }, { name: 'DD' }];
     </script>
   </head>
 
   <body>
-    <p>
-      <button id="add">Add item</button>
-      <button id="remove">Remove item</button>
-    </p>
-
-    <section>
-      <h2>Default Stacking</h2>
-      <vaadin-avatar-group></vaadin-avatar-group>
-    </section>
-    <section>
-      <h2>Reverse Stacking</h2>
-      <vaadin-avatar-group theme="reverse"></vaadin-avatar-group>
-    </section>
-
-    <section>
-      <h2>Max Items Visible</h2>
-      <vaadin-avatar-group max-items-visible="3"></vaadin-avatar-group>
-    </section>
-
+    <vaadin-avatar-group></vaadin-avatar-group>
   </body>
 </html>

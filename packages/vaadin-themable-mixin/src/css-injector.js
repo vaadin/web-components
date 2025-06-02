@@ -3,6 +3,7 @@
  * Copyright (c) 2021 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import StyleObserver from 'style-observer';
 import { CSSPropertyObserver } from './css-property-observer.js';
 import { extractTagScopedCSSRules } from './css-rules.js';
 import { cleanupStyleSheet, injectStyleSheet } from './css-utils.js';
@@ -44,14 +45,29 @@ export class CSSInjector {
   /** @type {CSSPropertyObserver} */
   #cssPropertyObserver;
 
+  /** @type {StyleObserver} */
+  #styleObserver;
+
   /** @type {Map<string, CSSStyleSheet>} */
   #styleSheetsByTag = new Map();
 
   constructor(root = document) {
     this.#root = root;
-    this.#cssPropertyObserver = new CSSPropertyObserver(this.#root, 'vaadin-css-injector', (event) => {
-      const tagName = event.propertyName.slice(2).replace('-css-inject', '');
-      this.#updateComponentStyleSheet(tagName);
+    // Our custom implementation:
+    // this.#cssPropertyObserver = new CSSPropertyObserver(this.#root, 'vaadin-css-injector', (event) => {
+    //   console.log('CSSPropertyObserver event:', event);
+    //   const tagName = event.propertyName.slice(2).replace('-css-inject', '');
+    //   this.#updateComponentStyleSheet(tagName);
+    // });
+
+    // StyleObserver implementation:
+    this.#styleObserver = new StyleObserver((records) => {
+      console.log('StyleObserver records:', records);
+      records.forEach((record) => {
+        const { property } = record;
+        const tagName = property.slice(2).replace('-css-inject', '');
+        this.#updateComponentStyleSheet(tagName);
+      });
     });
   }
 
@@ -73,7 +89,11 @@ export class CSSInjector {
 
     this.#updateComponentStyleSheet(tagName);
 
-    this.#cssPropertyObserver.observe(cssInjectPropName);
+    // Our custom implementation:
+    // this.#cssPropertyObserver.observe(cssInjectPropName);
+
+    // StyleObserver implementation:
+    this.#styleObserver.observe(document.documentElement, cssInjectPropName);
   }
 
   /**
