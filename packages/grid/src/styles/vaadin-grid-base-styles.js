@@ -3,6 +3,7 @@
  * Copyright (c) 2025 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import '@vaadin/component-base/src/style-props.js';
 import { css } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 export const gridStyles = css`
@@ -14,33 +15,35 @@ export const gridStyles = css`
 
   :host {
     display: flex;
-    flex-direction: column;
     animation: 1ms vaadin-grid-appear;
+    max-width: 100%;
     height: 400px;
     min-height: var(--_grid-min-height, 0);
     flex: 1 1 auto;
     align-self: stretch;
     position: relative;
     box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+    background: var(--vaadin-grid-background, var(--_vaadin-background));
+    cursor: default;
+    --_row-border-width: var(--vaadin-grid-cell-border-width, 1px);
+    --_column-border-width: var(--vaadin-grid-cell-border-width, 0px);
   }
 
-  :host([hidden]) {
+  :host([hidden]),
+  [hidden] {
     display: none !important;
   }
 
   :host([disabled]) {
     pointer-events: none;
+    opacity: 0.7;
   }
 
-  #scroller {
-    display: flex;
-    flex-direction: column;
-    min-height: 100%;
-    transform: translateY(0);
-    width: auto;
-    height: auto;
-    position: absolute;
-    inset: 0;
+  /* Variant: No outer border */
+  :host(:not([theme~='no-border'])) {
+    border: var(--vaadin-grid-border-width, 1px) solid var(--vaadin-grid-border-color, var(--_vaadin-border-color));
+    border-radius: var(--vaadin-grid-border-radius, var(--_vaadin-radius-l));
   }
 
   :host([all-rows-visible]) {
@@ -48,16 +51,26 @@ export const gridStyles = css`
     align-self: flex-start;
     min-height: auto;
     flex-grow: 0;
-    width: 100%;
   }
 
-  :host([all-rows-visible]) #scroller {
-    width: 100%;
-    height: 100%;
+  #scroller {
+    contain: layout;
+    border-radius: inherit;
     position: relative;
+    display: flex;
+    width: 100%;
+    min-width: 0;
+    min-height: 0;
+    align-self: stretch;
   }
 
-  :host([all-rows-visible]) #items {
+  #items {
+    flex-grow: 1;
+    flex-shrink: 0;
+    display: block;
+    position: sticky;
+    width: 100%;
+    left: 0;
     min-height: 1px;
   }
 
@@ -65,51 +78,48 @@ export const gridStyles = css`
     display: flex;
     flex-direction: column;
     width: 100%;
-    height: 100%;
     overflow: auto;
     position: relative;
-    outline: none;
-    /* Workaround for a Desktop Safari bug: new stacking context here prevents the scrollbar from getting hidden */
+    border-radius: inherit;
+    /* Workaround for a Chrome bug: new stacking context here prevents the scrollbar from getting hidden */
     z-index: 0;
+  }
+
+  [no-scrollbars]:is([safari], [firefox]) #table {
+    overflow: hidden;
   }
 
   #header,
   #footer {
     display: block;
-    position: -webkit-sticky;
     position: sticky;
     left: 0;
-    overflow: visible;
     width: 100%;
     z-index: 1;
+  }
+
+  :host([dir='rtl']) #items,
+  :host([dir='rtl']) #header,
+  :host([dir='rtl']) #footer {
+    left: auto;
   }
 
   #header {
     top: 0;
   }
 
-  th {
-    text-align: inherit;
-  }
-
-  /* Safari doesn't work with "inherit" */
-  [safari] th {
-    text-align: initial;
-  }
-
   #footer {
     bottom: 0;
   }
 
-  #items {
-    flex-grow: 1;
-    flex-shrink: 0;
-    display: block;
-    position: -webkit-sticky;
-    position: sticky;
-    width: 100%;
-    left: 0;
-    overflow: visible;
+  th {
+    text-align: inherit;
+  }
+
+  #header th {
+    font-size: var(--vaadin-grid-header-font-size, 1em);
+    font-weight: var(--vaadin-grid-header-font-weight, 500);
+    color: var(--vaadin-grid-header-color, var(--_vaadin-color-strong));
   }
 
   [part~='row'] {
@@ -117,6 +127,7 @@ export const gridStyles = css`
     width: 100%;
     box-sizing: border-box;
     margin: 0;
+    position: relative;
   }
 
   [part~='row'][loading] [part~='body-cell'] ::slotted(vaadin-grid-cell-content) {
@@ -135,6 +146,12 @@ export const gridStyles = css`
     height: 100%;
   }
 
+  [part~='cell'] {
+    box-sizing: border-box;
+    background: var(--vaadin-grid-cell-background, var(--_vaadin-background));
+    padding: 0;
+  }
+
   [part~='cell']:not([part~='details-cell']) {
     flex-shrink: 0;
     flex-grow: 1;
@@ -143,20 +160,66 @@ export const gridStyles = css`
     width: 100%;
     position: relative;
     align-items: center;
-    padding: 0;
     white-space: nowrap;
   }
 
-  [part~='cell'] {
-    outline: none;
+  :focus-visible {
+    outline: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
+    outline-offset: calc(var(--vaadin-focus-ring-width) * -1);
+  }
+
+  [part~='row']:focus-visible::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    outline: inherit;
+    outline-offset: inherit;
+    z-index: 3;
+    transform: translateX(calc(-1 * var(--_grid-horizontal-scroll-position)));
+  }
+
+  /* Variant: row & column borders */
+
+  :host([theme~='no-row-borders']) {
+    --_row-border-width: 0px;
+  }
+
+  :host([theme~='column-borders']) {
+    --_column-border-width: var(--vaadin-grid-cell-border-width, 1px);
+  }
+
+  [part~='cell']:not([part~='last-column-cell']) {
+    border-inline-end: var(--_column-border-width, 0px) solid
+      var(--vaadin-grid-cell-border-color, var(--_vaadin-border-color));
+  }
+
+  [part~='cell']:where(:not([part~='details-cell'], [part~='first-row-cell'])) {
+    border-top: var(--_row-border-width) solid var(--vaadin-grid-cell-border-color, var(--_vaadin-border-color));
+  }
+
+  [part~='first-header-row-cell'] {
+    border-top: 0;
+  }
+
+  [part~='last-header-row-cell'] {
+    border-bottom: var(--_row-border-width, 1px) solid var(--vaadin-grid-cell-border-color, var(--_vaadin-border-color));
+  }
+
+  [part~='first-footer-row-cell'] {
+    border-top: var(--_row-border-width, 1px) solid var(--vaadin-grid-cell-border-color, var(--_vaadin-border-color));
+  }
+
+  /* Variant: row stripes */
+  :host([theme~='row-stripes']) [part~='odd-row'],
+  :host([theme~='row-stripes']) [part~='odd-row'] [part~='body-cell'],
+  :host([theme~='row-stripes']) [part~='odd-row'] [part~='details-cell'] {
+    background: var(--vaadin-grid-alternate-cell-background, var(--_vaadin-background-container));
   }
 
   [part~='cell'] > [tabindex] {
     display: flex;
     align-items: inherit;
-    outline: none;
-    position: absolute;
-    inset: 0;
+    width: 100%;
   }
 
   /* Switch the focusButtonMode wrapping element to "position: static" temporarily
@@ -169,8 +232,25 @@ export const gridStyles = css`
     position: absolute;
     bottom: 0;
     width: 100%;
-    box-sizing: border-box;
-    padding: 0;
+  }
+
+  @keyframes fade-in {
+    0% {
+      opacity: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    /* Allow rows to transition to new positions when details element becomes visible. */
+    #scroller:not([scrolling]) [part~='row'] {
+      transition: transform var(--vaadin-grid-details-transition-duration, 0.2s);
+    }
+
+    /* Prevent the detail element from showing premature from behind the transitioning rows */
+    [part~='details-cell'] {
+      animation: fade-in var(--vaadin-grid-details-transition-duration, 0.2s)
+        calc(var(--vaadin-grid-details-transition-duration, 0.2s) / 2) backwards;
+    }
   }
 
   [part~='cell'] ::slotted(vaadin-grid-cell-content) {
@@ -179,21 +259,13 @@ export const gridStyles = css`
     box-sizing: border-box;
     overflow: hidden;
     text-overflow: ellipsis;
-  }
-
-  [hidden] {
-    display: none !important;
+    padding: var(--vaadin-grid-cell-padding, var(--_vaadin-padding-container));
   }
 
   [frozen],
   [frozen-to-end] {
     z-index: 2;
     will-change: transform;
-  }
-
-  [no-scrollbars][safari] #table,
-  [no-scrollbars][firefox] #table {
-    overflow: hidden;
   }
 
   /* Empty state */
@@ -237,7 +309,7 @@ export const gridStyles = css`
 
     /* Prevent overflowing the grid in Firefox */
     top: 0;
-    left: 0;
+    inset-inline-start: 0;
   }
 
   :host([reordering]) {
@@ -249,7 +321,7 @@ export const gridStyles = css`
   [part~='resize-handle'] {
     position: absolute;
     top: 0;
-    right: 0;
+    inset-inline-end: 0;
     height: 100%;
     cursor: col-resize;
     z-index: 1;
@@ -259,25 +331,23 @@ export const gridStyles = css`
     position: absolute;
     content: '';
     height: 100%;
-    width: 35px;
+    width: 36px;
     transform: translateX(-50%);
   }
 
-  [last-column] [part~='resize-handle']::before,
-  [last-frozen] [part~='resize-handle']::before {
+  :host([dir='rtl']) [part~='resize-handle']::before {
+    transform: translateX(50%);
+  }
+
+  :is([last-column], [last-frozen]) [part~='resize-handle']::before {
     width: 18px;
     transform: none;
-    right: 0;
+    inset-inline-end: 0;
   }
 
-  [frozen-to-end] [part~='resize-handle'] {
-    left: 0;
-    right: auto;
-  }
-
-  [frozen-to-end] [part~='resize-handle']::before {
-    left: 0;
-    right: auto;
+  [frozen-to-end] :is([part~='resize-handle'], [part~='resize-handle']::before) {
+    inset-inline-start: 0;
+    inset-inline-end: auto;
   }
 
   [first-frozen-to-end] [part~='resize-handle']::before {
@@ -294,8 +364,7 @@ export const gridStyles = css`
     display: none;
   }
 
-  #scroller[column-resizing],
-  #scroller[range-selecting] {
+  #scroller:is([column-resizing], [range-selecting]) {
     -webkit-user-select: none;
     user-select: none;
   }
@@ -303,15 +372,11 @@ export const gridStyles = css`
   /* Sizer styles */
   #sizer {
     display: flex;
-    position: absolute;
     visibility: hidden;
   }
 
-  #sizer [part~='details-cell'] {
-    display: none !important;
-  }
-
-  #sizer [part~='cell'][hidden] {
+  #sizer [part~='details-cell'],
+  #sizer [part~='cell'] ::slotted(vaadin-grid-cell-content) {
     display: none !important;
   }
 
@@ -328,63 +393,5 @@ export const gridStyles = css`
 
   #sizer [part~='cell']::before {
     content: '-';
-  }
-
-  #sizer [part~='cell'] ::slotted(vaadin-grid-cell-content) {
-    display: none !important;
-  }
-
-  /* RTL specific styles */
-
-  :host([dir='rtl']) #items,
-  :host([dir='rtl']) #header,
-  :host([dir='rtl']) #footer {
-    left: auto;
-  }
-
-  :host([dir='rtl']) [part~='reorder-ghost'] {
-    left: auto;
-    right: 0;
-  }
-
-  :host([dir='rtl']) [part~='resize-handle'] {
-    left: 0;
-    right: auto;
-  }
-
-  :host([dir='rtl']) [part~='resize-handle']::before {
-    transform: translateX(50%);
-  }
-
-  :host([dir='rtl']) [last-column] [part~='resize-handle']::before,
-  :host([dir='rtl']) [last-frozen] [part~='resize-handle']::before {
-    left: 0;
-    right: auto;
-  }
-
-  :host([dir='rtl']) [frozen-to-end] [part~='resize-handle'] {
-    right: 0;
-    left: auto;
-  }
-
-  :host([dir='rtl']) [frozen-to-end] [part~='resize-handle']::before {
-    right: 0;
-    left: auto;
-  }
-
-  @media (forced-colors: active) {
-    [part~='selected-row'] [part~='first-column-cell']::after {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      bottom: 0;
-      border: 2px solid;
-    }
-
-    [part~='focused-cell']::before {
-      outline: 2px solid !important;
-      outline-offset: -1px;
-    }
   }
 `;
