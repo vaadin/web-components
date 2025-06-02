@@ -99,13 +99,19 @@ const getAllVisualPackages = () => {
 };
 
 const getAllPortedLumoPackages = () => {
-  return fs
-    .readdirSync('packages')
-    .filter(
-      (dir) =>
-        fs.statSync(`packages/${dir}`).isDirectory() &&
-        fs.existsSync(`packages/vaadin-lumo-styles/src/components/${dir}.css`),
-    );
+  const packages = new Set();
+
+  globSync('packages/*/test/visual/lumo/*.test.{js,ts}').forEach((file) => {
+    const pkg = file.match(/packages\/([^/]+)\//u)[1];
+    const content = fs.readFileSync(file, 'utf-8');
+
+    // Check if the file imports vaadin-lumo-styles/**/*.css
+    if (/vaadin-lumo-styles\/[^.]+\.css/u.test(content)) {
+      packages.add(pkg);
+    }
+  });
+
+  return [...packages];
 };
 
 /**
