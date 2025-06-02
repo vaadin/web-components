@@ -69,14 +69,14 @@ describe('hidden grid', () => {
       // Hide, simulate scroll event
       // This is a simplified reproduction of something triggering a scroll
       // event at the same time the grid is hidden.
-      grid.style.display = 'none';
+      grid.setAttribute('hidden', '');
       fire('scroll', {}, { node: grid.$.table });
 
       // Should not refresh data when hidden
       expect(grid.dataProvider.called).to.be.false;
 
       // Show grid again, should retain scroll position
-      grid.style.display = 'block';
+      grid.removeAttribute('hidden');
       expect(grid.$.table.scrollTop).to.equal(300);
     });
   });
