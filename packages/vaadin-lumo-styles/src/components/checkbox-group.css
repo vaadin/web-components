@@ -1,0 +1,47 @@
+/**
+ * @license
+ * Copyright (c) 2017 - 2025 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+:host {
+  color: var(--lumo-body-text-color);
+  font-size: var(--lumo-font-size-m);
+  font-family: var(--lumo-font-family);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-tap-highlight-color: transparent;
+  padding: var(--lumo-space-xs) 0;
+}
+
+:host::before {
+  /* Effective height of vaadin-checkbox */
+  height: var(--lumo-size-s);
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+}
+
+:host([theme~='vertical']) [part='group-field'] {
+  flex-direction: column;
+}
+
+:host([disabled]) [part='label'] {
+  color: var(--lumo-disabled-text-color);
+  -webkit-text-fill-color: var(--lumo-disabled-text-color);
+}
+
+:host([focused]:not([readonly])) [part='label'] {
+  color: var(--lumo-primary-text-color);
+}
+
+:host(:hover:not([readonly]):not([disabled]):not([focused])) [part='label'],
+:host(:hover:not([readonly]):not([disabled]):not([focused])) [part='helper-text'] {
+  color: var(--lumo-body-text-color);
+}
+
+/* Touch device adjustment */
+@media (pointer: coarse) {
+  :host(:hover:not([readonly]):not([disabled]):not([focused])) [part='label'] {
+    color: var(--lumo-secondary-text-color);
+  }
+}

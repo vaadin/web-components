@@ -55,6 +55,21 @@
   background-color: var(--_selection-color);
 }
 
+/* Checkmark */
+[part='checkbox']::after {
+  pointer-events: none;
+  font-family: 'lumo-icons';
+  content: var(--vaadin-checkbox-checkmark-char, var(--lumo-icons-checkmark));
+  color: var(--vaadin-checkbox-checkmark-color, var(--lumo-primary-contrast-color));
+  font-size: var(--vaadin-checkbox-checkmark-size, calc(var(--_input-size) + 2px));
+  line-height: 1;
+  position: absolute;
+  top: -1px;
+  left: -1px;
+  contain: content;
+  opacity: 0;
+}
+
 :host([checked]) [part='checkbox']::after {
   opacity: 1;
 }
