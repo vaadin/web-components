@@ -15,6 +15,7 @@ import type { LabelMixinClass } from '@vaadin/field-base/src/label-mixin.js';
 import type { PatternMixinClass } from '@vaadin/field-base/src/pattern-mixin.js';
 import type { ValidateMixinClass } from '@vaadin/field-base/src/validate-mixin.js';
 import type { ThemableMixinClass } from '@vaadin/vaadin-themable-mixin';
+import type { ComboBoxBaseMixinClass } from '../../src/vaadin-combo-box-base-mixin';
 import type { ComboBoxDataProviderMixinClass } from '../../src/vaadin-combo-box-data-provider-mixin';
 import type { ComboBoxItem } from '../../src/vaadin-combo-box-item';
 import type { ComboBoxItemMixinClass, ComboBoxItemRenderer } from '../../src/vaadin-combo-box-item-mixin';
@@ -123,6 +124,7 @@ assertType<string>(narrowedComboBox.allowedCharPattern);
 // ComboBox mixins
 assertType<ComboBoxDataProviderMixinClass<TestComboBoxItem>>(narrowedComboBox);
 assertType<ComboBoxMixinClass<TestComboBoxItem>>(narrowedComboBox);
+assertType<ComboBoxBaseMixinClass>(narrowedComboBox);
 assertType<ElementMixinClass>(narrowedComboBox);
 assertType<DelegateFocusMixinClass>(narrowedComboBox);
 assertType<DelegateStateMixinClass>(narrowedComboBox);
