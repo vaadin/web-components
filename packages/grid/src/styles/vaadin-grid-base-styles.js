@@ -138,10 +138,6 @@ export const gridStyles = css`
     transform: translateX(var(--_grid-lazy-columns-start));
   }
 
-  #items [part~='row'] {
-    position: absolute;
-  }
-
   #items [part~='row']:empty {
     height: 100%;
   }
