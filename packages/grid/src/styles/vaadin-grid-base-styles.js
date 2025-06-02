@@ -234,25 +234,6 @@ export const gridStyles = css`
     width: 100%;
   }
 
-  @keyframes fade-in {
-    0% {
-      opacity: 0;
-    }
-  }
-
-  @media (prefers-reduced-motion: no-preference) {
-    /* Allow rows to transition to new positions when details element becomes visible. */
-    #scroller:not([scrolling]) [part~='row'] {
-      transition: transform var(--vaadin-grid-details-transition-duration, 0.2s);
-    }
-
-    /* Prevent the detail element from showing premature from behind the transitioning rows */
-    [part~='details-cell'] {
-      animation: fade-in var(--vaadin-grid-details-transition-duration, 0.2s)
-        calc(var(--vaadin-grid-details-transition-duration, 0.2s) / 2) backwards;
-    }
-  }
-
   [part~='cell'] ::slotted(vaadin-grid-cell-content) {
     display: block;
     width: 100%;

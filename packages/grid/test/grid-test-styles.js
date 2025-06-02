@@ -7,7 +7,6 @@ style.textContent = css`
     border: 1px solid;
     font-family: sans-serif;
     max-width: none;
-    --vaadin-grid-details-transition-duration: 0s;
   }
 
   vaadin-grid::part(cell) {
