@@ -27,7 +27,7 @@ export const gridStyles = css`
     background: var(--vaadin-grid-background, var(--_vaadin-background));
     cursor: default;
     --_row-border-width: var(--vaadin-grid-cell-border-width, 1px);
-    --_column-border-width: var(--vaadin-grid-cell-border-width, 0px);
+    --_column-border-width: var(--vaadin-grid-cell-border-width, 0);
   }
 
   :host([hidden]),
@@ -181,7 +181,7 @@ export const gridStyles = css`
   /* Variant: row & column borders */
 
   :host([theme~='no-row-borders']) {
-    --_row-border-width: 0px;
+    --_row-border-width: 0;
   }
 
   :host([theme~='column-borders']) {
@@ -189,7 +189,7 @@ export const gridStyles = css`
   }
 
   [part~='cell']:not([part~='last-column-cell']) {
-    border-inline-end: var(--_column-border-width, 0px) solid
+    border-inline-end: var(--_column-border-width, 0) solid
       var(--vaadin-grid-cell-border-color, var(--_vaadin-border-color));
   }
 
@@ -346,8 +346,7 @@ export const gridStyles = css`
   }
 
   [frozen-to-end] :is([part~='resize-handle'], [part~='resize-handle']::before) {
-    inset-inline-start: 0;
-    inset-inline-end: auto;
+    inset-inline: 0 auto;
   }
 
   [first-frozen-to-end] [part~='resize-handle']::before {

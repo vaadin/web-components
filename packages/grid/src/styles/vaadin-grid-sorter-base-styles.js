@@ -52,6 +52,6 @@ export const gridSorterStyles = css`
   }
 
   :host([direction='desc']) [part='indicators']::before {
-    padding-block: 6px 0px;
+    padding-block: 6px 0;
   }
 `;
