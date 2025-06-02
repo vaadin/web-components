@@ -650,3 +650,30 @@ describe('avatar group in column flex', () => {
     expect(group._overflow.hasAttribute('hidden')).to.be.true;
   });
 });
+
+describe('initial render', () => {
+  let group, spy;
+
+  beforeEach(() => {
+    group = document.createElement('vaadin-avatar-group');
+    spy = sinon.spy(group, '_updateOverlay');
+  });
+
+  afterEach(() => {
+    group.remove();
+  });
+
+  it('should not request content update on initial render without overflow items', async () => {
+    document.body.appendChild(group);
+    await nextRender();
+    expect(spy.called).to.be.false;
+  });
+
+  it('should only request content update once on initial render with overflow items', async () => {
+    group.items = [{ abbr: 'A' }, { abbr: 'B' }, { abbr: 'C' }];
+    group.maxItemsVisible = 2;
+    document.body.appendChild(group);
+    await nextRender();
+    expect(spy).to.be.calledOnce;
+  });
+});
