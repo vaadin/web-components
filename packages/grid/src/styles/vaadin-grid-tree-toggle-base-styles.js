@@ -36,6 +36,10 @@ export const gridTreeToggleStyles = css`
     width: calc(var(--_level, 0) * var(--vaadin-grid-tree-toggle-level-offset, 1em));
   }
 
+  [part='toggle'] {
+    margin-inline-end: var(--_vaadin-gap-container-inline);
+  }
+
   [part='toggle']::before {
     content: '';
     display: block;
