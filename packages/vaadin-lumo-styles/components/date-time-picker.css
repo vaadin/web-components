@@ -1,0 +1,21 @@
+/**
+ * @license
+ * Copyright (c) 2017 - 2025 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+@import './date-picker.css';
+@import './time-picker.css';
+
+@import '../src/mixins/base-layer-reset.css' vaadin-date-time-picker;
+@import '../src/mixins/field-label.css' vaadin-date-time-picker;
+@import '../src/mixins/field-required.css' vaadin-date-time-picker;
+@import '../src/mixins/field-error-message.css' vaadin-date-time-picker;
+@import '../src/mixins/field-button.css' vaadin-date-time-picker;
+@import '../src/mixins/field-helper.css' vaadin-date-time-picker;
+@import '../src/mixins/field-base.css' vaadin-date-time-picker;
+@import '../src/components/custom-field.css' vaadin-date-time-picker;
+@import '../src/components/date-time-picker.css' vaadin-date-time-picker;
+
+html {
+  --vaadin-date-time-picker-css-inject: 1;
+}
