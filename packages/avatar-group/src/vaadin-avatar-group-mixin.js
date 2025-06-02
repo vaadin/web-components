@@ -167,6 +167,12 @@ export const AvatarGroupMixin = (superClass) =>
       super.i18n = value;
     }
 
+    constructor() {
+      super();
+
+      this.__overlayRenderer = this.__overlayRenderer.bind(this);
+    }
+
     /** @protected */
     ready() {
       super.ready();
@@ -189,9 +195,7 @@ export const AvatarGroupMixin = (superClass) =>
       });
       this.addController(this._overflowController);
 
-      const overlay = this.$.overlay;
-      overlay.renderer = this.__overlayRenderer.bind(this);
-      this._overlayElement = overlay;
+      this._overlayElement = this.$.overlay;
     }
 
     /** @protected */
@@ -478,6 +482,11 @@ export const AvatarGroupMixin = (superClass) =>
 
     /** @private */
     __overflowItemsChanged(items, oldItems) {
+      // Prevent renderer from being called unnecessarily on initialization
+      if (items && items.length === 0 && (!oldItems || oldItems.length === 0)) {
+        return;
+      }
+
       if (items || oldItems) {
         this.$.overlay.requestContentUpdate();
       }
