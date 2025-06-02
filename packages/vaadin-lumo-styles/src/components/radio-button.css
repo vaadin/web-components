@@ -6,7 +6,16 @@
 :host {
   color: var(--vaadin-radio-button-label-color, var(--lumo-body-text-color));
   font-size: var(--vaadin-radio-button-label-font-size, var(--lumo-font-size-m));
-  --_input-size: var(--vaadin-radio-button-size, calc(var(--lumo-size-m) / 2));
+  font-family: var(--lumo-font-family);
+  line-height: var(--lumo-line-height-s);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-user-select: none;
+  user-select: none;
+  cursor: default;
+  outline: none;
+  --_radio-button-size: var(--vaadin-radio-button-size, calc(var(--lumo-size-m) / 2));
   --_focus-ring-color: var(--vaadin-focus-ring-color, var(--lumo-primary-color-50pct));
   --_focus-ring-width: var(--vaadin-focus-ring-width, 2px);
   --_selection-color: var(--vaadin-selection-color, var(--lumo-primary-color));
@@ -20,8 +29,34 @@
 }
 
 [part='radio'] {
+  --_input-size: var(--_radio-button-size);
+  margin: var(--lumo-space-xs);
+  position: relative;
   border-radius: 50%;
   background: var(--vaadin-radio-button-background, var(--lumo-contrast-20pct));
+  transition:
+    transform 0.2s cubic-bezier(0.12, 0.32, 0.54, 2),
+    background-color 0.15s;
+  will-change: transform;
+  cursor: var(--lumo-clickable-cursor);
+  /* Default field border color */
+  --_input-border-color: var(--vaadin-input-field-border-color, var(--lumo-contrast-50pct));
+}
+
+/* Used for activation "halo" */
+[part='radio']::before {
+  pointer-events: none;
+  color: transparent;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  background-color: inherit;
+  transform: scale(1.4);
+  opacity: 0;
+  transition:
+    transform 0.1s,
+    opacity 0.8s;
+  will-change: transform, opacity;
 }
 
 /* Used for the dot */
@@ -73,8 +108,21 @@
   opacity: 0.4;
 }
 
+:host([focus-ring]) [part='radio'] {
+  box-shadow:
+    0 0 0 1px var(--lumo-base-color),
+    0 0 0 calc(var(--_focus-ring-width) + 1px) var(--_focus-ring-color),
+    inset 0 0 0 var(--_input-border-width, 0) var(--_input-border-color);
+}
+
 :host([disabled]) {
+  pointer-events: none;
   color: var(--lumo-disabled-text-color);
+  --vaadin-input-field-border-color: var(--lumo-contrast-20pct);
+}
+
+:host([disabled]) ::slotted(label) {
+  color: inherit;
 }
 
 :host([disabled]) [part='radio'] {
