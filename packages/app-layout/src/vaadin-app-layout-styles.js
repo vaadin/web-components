@@ -10,8 +10,8 @@ export const appLayoutStyles = css`
     display: block;
     box-sizing: border-box;
     height: 100%;
-    --vaadin-app-layout-transition: 200ms;
-    transition: padding var(--vaadin-app-layout-transition);
+    --vaadin-app-layout-transition-duration: 200ms;
+    transition: padding var(--vaadin-app-layout-transition-duration);
     --_vaadin-app-layout-drawer-width: var(--vaadin-app-layout-drawer-width, 16em);
     --vaadin-app-layout-touch-optimized: false;
     --vaadin-app-layout-navbar-offset-top: var(--_vaadin-app-layout-navbar-offset-size);
@@ -26,7 +26,7 @@ export const appLayoutStyles = css`
   }
 
   :host([no-anim]) {
-    --vaadin-app-layout-transition: none !important;
+    --vaadin-app-layout-transition-duration: none !important;
   }
 
   :host([drawer-opened]) {
@@ -58,7 +58,7 @@ export const appLayoutStyles = css`
     align-items: center;
     top: 0;
     inset-inline: 0;
-    transition: inset-inline-start var(--vaadin-app-layout-transition);
+    transition: inset-inline-start var(--vaadin-app-layout-transition-duration);
     padding-top: var(--safe-area-inset-top);
     padding-left: var(--safe-area-inset-left);
     padding-right: var(--safe-area-inset-right);
@@ -86,8 +86,8 @@ export const appLayoutStyles = css`
     bottom: var(--vaadin-app-layout-navbar-offset-bottom, var(--vaadin-viewport-offset-bottom, 0));
     inset-inline: var(--vaadin-app-layout-navbar-offset-left, 0) auto;
     transition:
-      transform var(--vaadin-app-layout-transition),
-      visibility var(--vaadin-app-layout-transition);
+      transform var(--vaadin-app-layout-transition-duration),
+      visibility var(--vaadin-app-layout-transition-duration);
     transform: translateX(-100%);
     max-width: 90%;
     width: var(--_vaadin-app-layout-drawer-width);
@@ -120,7 +120,7 @@ export const appLayoutStyles = css`
     position: fixed;
     inset: 0;
     pointer-events: none;
-    transition: opacity var(--vaadin-app-layout-transition);
+    transition: opacity var(--vaadin-app-layout-transition-duration);
     -webkit-tap-highlight-color: transparent;
   }
 

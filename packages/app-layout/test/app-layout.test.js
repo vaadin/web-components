@@ -165,7 +165,7 @@ describe('vaadin-app-layout', () => {
       const overlayMode = String(layoutMode === 'mobile');
 
       layout = fixtureSync(`
-        <vaadin-app-layout style="--vaadin-app-layout-drawer-overlay: ${overlayMode}; --vaadin-app-layout-transition: none;">
+        <vaadin-app-layout style="--vaadin-app-layout-drawer-overlay: ${overlayMode}; --vaadin-app-layout-transition-duration: none;">
           <vaadin-drawer-toggle id="toggle" slot="navbar"></vaadin-drawer-toggle>
           <section slot="drawer">
             <p>Item 1</p>
@@ -276,7 +276,7 @@ describe('vaadin-app-layout', () => {
         await nextResize(layout);
         await nextRender();
 
-        layout.style.setProperty('--vaadin-app-layout-transition', '100ms');
+        layout.style.setProperty('--vaadin-app-layout-transition-duration', '100ms');
 
         const spy = sinon.spy(layout, '_updateOffsetSize');
         toggle.click();
@@ -376,7 +376,7 @@ describe('vaadin-app-layout', () => {
       });
 
       it('should move focus to the drawer after the opening animation completes', async () => {
-        layout.style.setProperty('--vaadin-app-layout-transition', '100ms');
+        layout.style.setProperty('--vaadin-app-layout-transition-duration', '100ms');
         toggle.focus();
         layout.drawerOpened = true;
         await nextFrame();
@@ -443,7 +443,7 @@ describe('vaadin-app-layout', () => {
         });
 
         it('should move focus to the drawer toggle after the closing animation completes', async () => {
-          layout.style.setProperty('--vaadin-app-layout-transition', '100ms');
+          layout.style.setProperty('--vaadin-app-layout-transition-duration', '100ms');
           layout.drawerOpened = false;
           await nextFrame();
           expect(layout.shadowRoot.activeElement).to.equal(drawer);
