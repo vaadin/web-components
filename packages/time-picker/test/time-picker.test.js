@@ -416,4 +416,26 @@ describe('time-picker', () => {
       expect(timePicker.hasAttribute('focused')).to.be.true;
     });
   });
+
+  describe('autoOpenDisabled', () => {
+    let timePicker, inputElement;
+
+    beforeEach(async () => {
+      timePicker = fixtureSync(`<vaadin-time-picker auto-open-disabled value="05:00"></vaadin-time-picker>`);
+      await nextRender();
+      inputElement = timePicker.inputElement;
+    });
+
+    it('should commit a custom value after setting a predefined value', () => {
+      setInputValue(timePicker, '05:10');
+      enter(inputElement);
+      expect(timePicker.value).to.equal('05:10');
+    });
+
+    it('should commit an empty value after setting a predefined value', () => {
+      setInputValue(timePicker, '');
+      enter(inputElement);
+      expect(timePicker.value).to.equal('');
+    });
+  });
 });

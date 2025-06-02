@@ -1,9 +1,8 @@
 import { expect } from '@vaadin/chai-plugins';
-import { enter, fixtureSync, nextRender } from '@vaadin/testing-helpers';
+import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import '../src/vaadin-time-picker.js';
-import { setInputValue } from './helpers.js';
 
-describe('combo-box', () => {
+describe('dropdown items', () => {
   let timePicker;
 
   beforeEach(async () => {
@@ -64,7 +63,7 @@ describe('combo-box', () => {
     expect(timePicker._dropdownItems.length).to.be.equal(15);
   });
 
-  it('should change the resolution on step change, but selectedItem should remain the same', () => {
+  it('should change the resolution on step change, but selected item should remain the same', () => {
     timePicker.value = '01:00';
     expect(timePicker.value).to.be.equal('01:00');
     timePicker.step = 0.5;
@@ -72,27 +71,5 @@ describe('combo-box', () => {
     timePicker.step = 3600;
     expect(timePicker.value).to.be.equal('01:00');
     expect(timePicker._scroller.selectedItem).to.deep.equal(timePicker._dropdownItems[1]);
-  });
-});
-
-describe('autoOpenDisabled', () => {
-  let timePicker, inputElement;
-
-  beforeEach(async () => {
-    timePicker = fixtureSync(`<vaadin-time-picker auto-open-disabled value="05:00"></vaadin-time-picker>`);
-    await nextRender();
-    inputElement = timePicker.inputElement;
-  });
-
-  it('should commit a custom value after setting a predefined value', () => {
-    setInputValue(timePicker, '05:10');
-    enter(inputElement);
-    expect(timePicker.value).to.equal('05:10');
-  });
-
-  it('should commit an empty value after setting a predefined value', () => {
-    setInputValue(timePicker, '');
-    enter(inputElement);
-    expect(timePicker.value).to.equal('');
   });
 });
