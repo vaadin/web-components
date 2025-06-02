@@ -60,7 +60,6 @@ import { TimePickerMixin } from './vaadin-time-picker-mixin.js';
  * In addition to `<vaadin-time-picker>` itself, the following internal
  * components are themable:
  *
- * - `<vaadin-time-picker-combo-box>` - an internal version of [`<vaadin-combo-box>`](#/elements/vaadin-combo-box).
  * - `<vaadin-time-picker-overlay>` - has the same API as [`<vaadin-overlay>`](#/elements/vaadin-overlay).
  * - `<vaadin-time-picker-item>` - has the same API as [`<vaadin-item>`](#/elements/vaadin-item).
  * - [`<vaadin-input-container>`](#/elements/vaadin-input-container) - an internal element wrapping the input.
