@@ -24,7 +24,7 @@ describe('overlay', () => {
     beforeEach(async () => {
       overlay = fixtureSync(`
         <vaadin-date-picker-overlay-content
-          style="position: absolute; top: 0"
+          style="position: absolute; top: 0; min-width: 300px"
           scroll-duration="0"
         ></vaadin-date-picker-overlay-content>
       `);
