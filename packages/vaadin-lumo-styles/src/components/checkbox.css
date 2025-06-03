@@ -225,7 +225,7 @@
 }
 
 :host([required]) [part='required-indicator']::after {
-  content: var(--lumo-required-field-indicator, '\\2022');
+  content: var(--lumo-required-field-indicator, '\2022');
   transition: opacity 0.2s;
   color: var(--lumo-required-field-indicator-color, var(--lumo-primary-text-color));
   width: 1em;
