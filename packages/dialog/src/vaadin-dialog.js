@@ -10,6 +10,7 @@ import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { OverlayClassMixin } from '@vaadin/component-base/src/overlay-class-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
+import { CSSInjectionMixin } from '@vaadin/vaadin-themable-mixin/css-injection-mixin.js';
 import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
 import { DialogBaseMixin } from './vaadin-dialog-base-mixin.js';
 import { DialogDraggableMixin } from './vaadin-dialog-draggable-mixin.js';
@@ -93,7 +94,9 @@ export { DialogOverlay } from './vaadin-dialog-overlay.js';
  */
 class Dialog extends DialogDraggableMixin(
   DialogResizableMixin(
-    DialogRendererMixin(DialogBaseMixin(OverlayClassMixin(ThemePropertyMixin(ElementMixin(PolylitMixin(LitElement)))))),
+    DialogRendererMixin(
+      DialogBaseMixin(OverlayClassMixin(ThemePropertyMixin(ElementMixin(CSSInjectionMixin(PolylitMixin(LitElement)))))),
+    ),
   ),
 ) {
   static get is() {
