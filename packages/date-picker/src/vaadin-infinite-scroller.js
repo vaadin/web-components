@@ -24,6 +24,7 @@ template.innerHTML = `
       margin-right: -40px;
       -webkit-overflow-scrolling: touch;
       overflow-x: hidden;
+       scrollbar-width: none;
     }
 
     #scroller.notouchscroll {

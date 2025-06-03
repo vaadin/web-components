@@ -7,22 +7,37 @@ import { css } from 'lit';
 
 export const overlayContentStyles = css`
   :host {
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-areas:
+      'header header'
+      'months years'
+      'toolbar years';
+    grid-template-columns: minmax(0, 1fr) 0;
     height: 100%;
-    width: 100%;
     outline: none;
   }
 
-  [part='overlay-header'] {
-    display: flex;
-    flex-shrink: 0;
-    flex-wrap: nowrap;
-    align-items: center;
+  :host([desktop]) {
+    grid-template-columns: minmax(0, 1fr) auto;
   }
 
-  :host(:not([fullscreen])) [part='overlay-header'] {
+  :host([fullscreen][years-visible]) {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  :host([fullscreen]) :is([part='toggle-button'], [part='clear-button'], [part='label']) {
     display: none;
+  }
+
+  [part='overlay-header'] {
+    display: none;
+    grid-area: header;
+    align-items: center;
+    justify-content: center;
+  }
+
+  :host([fullscreen]) [part='overlay-header'] {
+    display: flex;
   }
 
   [part='label'] {
@@ -38,20 +53,16 @@ export const overlayContentStyles = css`
   }
 
   #scrollers {
-    display: flex;
-    height: 100%;
-    width: 100%;
-    position: relative;
-    overflow: hidden;
+    display: contents;
   }
 
-  :host([desktop]) ::slotted([slot='months']) {
-    right: 50px;
-    transform: none !important;
+  ::slotted([slot='years']) {
+    visibility: hidden;
   }
 
-  :host([desktop]) ::slotted([slot='years']) {
-    transform: none !important;
+  :host([desktop]) ::slotted([slot='years']),
+  :host([years-visible]) ::slotted([slot='years']) {
+    visibility: visible;
   }
 
   :host(.animate) ::slotted([slot='months']),
@@ -61,6 +72,7 @@ export const overlayContentStyles = css`
 
   [part='toolbar'] {
     display: flex;
+    grid-area: toolbar;
     justify-content: space-between;
     z-index: 2;
     flex-shrink: 0;
