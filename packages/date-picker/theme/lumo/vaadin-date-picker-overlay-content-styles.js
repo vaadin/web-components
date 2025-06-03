@@ -47,7 +47,7 @@ registerStyles(
 
     ::slotted([slot='years']) {
       /* TODO get rid of fixed magic number */
-      --vaadin-infinite-scroller-buffer-width: 97px;
+      --vaadin-infinite-scroller-buffer-width: 57px;
       width: 57px;
       font-size: var(--lumo-font-size-s);
       box-shadow: inset 2px 0 4px 0 var(--lumo-shade-5pct);
@@ -136,7 +136,7 @@ registerStyles(
 
       /* TODO make date-picker adapt to the width of the years part */
       ::slotted([slot='years']) {
-        --vaadin-infinite-scroller-buffer-width: 90px;
+        --vaadin-infinite-scroller-buffer-width: 50px;
         width: 50px;
         background-color: var(--lumo-shade-5pct);
       }
