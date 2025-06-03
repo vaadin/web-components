@@ -29,7 +29,7 @@
 @import '../src/components/multi-select-combo-box-chip.css' vaadin-multi-select-combo-box-chip;
 
 @import '../src/mixins/base-layer-reset.css' vaadin-multi-select-combo-box-item;
-@import '../src/mixins/item.css' vaadin-multi-select-combo-box-item;
+@import '../src/components/item.css' vaadin-multi-select-combo-box-item;
 @import '../src/components/combo-box-item.css' vaadin-multi-select-combo-box-item;
 @import '../src/components/multi-select-combo-box-item.css' vaadin-multi-select-combo-box-item;
 

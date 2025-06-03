@@ -23,7 +23,7 @@
 @import '../src/components/combo-box-overlay.css' vaadin-combo-box-overlay;
 
 @import '../src/mixins/base-layer-reset.css' vaadin-combo-box-item;
-@import '../src/mixins/item.css' vaadin-combo-box-item;
+@import '../src/components/item.css' vaadin-combo-box-item;
 @import '../src/components/combo-box-item.css' vaadin-combo-box-item;
 
 @import '../src/mixins/base-layer-reset.css' vaadin-combo-box-scroller;
