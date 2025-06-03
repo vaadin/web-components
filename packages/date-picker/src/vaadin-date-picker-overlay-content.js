@@ -46,10 +46,8 @@ class DatePickerOverlayContent extends DatePickerOverlayContentMixin(
         </div>
       </div>
 
-      <div id="scrollers">
-        <slot name="months"></slot>
-        <slot name="years"></slot>
-      </div>
+      <slot name="months"></slot>
+      <slot name="years"></slot>
 
       <div @touchend="${this._preventDefault}" role="toolbar" part="toolbar">
         <slot name="today-button"></slot>

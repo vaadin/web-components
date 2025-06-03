@@ -84,11 +84,6 @@
   --_lumo-date-picker-year-opacity: 1;
 }
 
-/* TODO unsupported selector */
-#scrollers {
-  display: contents;
-}
-
 :host([desktop]) ::slotted([slot='years']),
 :host([years-visible]) ::slotted([slot='years']) {
   visibility: visible;

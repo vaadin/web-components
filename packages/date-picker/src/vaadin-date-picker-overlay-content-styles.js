@@ -52,10 +52,6 @@ export const overlayContentStyles = css`
     display: flex;
   }
 
-  #scrollers {
-    display: contents;
-  }
-
   ::slotted([slot='years']) {
     visibility: hidden;
   }
