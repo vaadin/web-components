@@ -5,8 +5,11 @@ const style = document.createElement('style');
 style.textContent = css`
   vaadin-grid {
     border: 1px solid;
-    font-family: sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, 'Roboto', 'Segoe UI', Helvetica, Arial, sans-serif,
+      'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
     max-width: none;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
   vaadin-grid::part(cell) {
