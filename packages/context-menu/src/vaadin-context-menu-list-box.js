@@ -8,6 +8,7 @@ import { ListMixin } from '@vaadin/a11y-base/src/list-mixin.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
+import { CSSInjectionMixin } from '@vaadin/vaadin-themable-mixin/css-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 /**
@@ -20,7 +21,7 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * @mixes ThemableMixin
  * @protected
  */
-class ContextMenuListBox extends ListMixin(ThemableMixin(DirMixin(PolylitMixin(LitElement)))) {
+class ContextMenuListBox extends ListMixin(ThemableMixin(DirMixin(CSSInjectionMixin(PolylitMixin(LitElement))))) {
   static get is() {
     return 'vaadin-context-menu-list-box';
   }
