@@ -13,10 +13,9 @@ stylesTemplate.innerHTML = `
       --vaadin-infinite-scroller-item-height: 80px;
       width: 50px;
       display: block;
-      height: 100%;
-      position: absolute;
-      right: 0;
-      transform: translateX(100%);
+      position: relative;
+      grid-area: years;
+      height: auto;
       -webkit-tap-highlight-color: transparent;
       -webkit-user-select: none;
       user-select: none;

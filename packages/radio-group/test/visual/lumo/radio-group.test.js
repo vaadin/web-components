@@ -1,8 +1,10 @@
 import { sendKeys } from '@vaadin/test-runner-commands';
 import { fixtureSync } from '@vaadin/testing-helpers/dist/fixture.js';
 import { visualDiff } from '@web/test-runner-visual-regression';
+import '@vaadin/vaadin-lumo-styles/props.css';
+import '@vaadin/vaadin-lumo-styles/components/radio-group.css';
 import '../common.js';
-import '../../../theme/lumo/vaadin-radio-group.js';
+import '../../../vaadin-radio-group.js';
 
 describe('radio-group', () => {
   let div, element;

@@ -110,12 +110,8 @@ export interface DatePickerEventMap extends HTMLElementEventMap, DatePickerCusto
  *
  * Part name             | Description
  * ----------------------|--------------------
- * `overlay-header`      | Fullscreen mode header
- * `label`               | Fullscreen mode value/label
- * `clear-button`        | Fullscreen mode clear button
- * `toggle-button`       | Fullscreen mode toggle button
  * `years-toggle-button` | Fullscreen mode years scroller toggle
- * `toolbar`             | Footer bar with slotted buttons
+ * `toolbar`             | Toolbar with slotted buttons
  *
  * The following state attributes are available on the `<vaadin-date-picker-overlay-content>` element:
  *

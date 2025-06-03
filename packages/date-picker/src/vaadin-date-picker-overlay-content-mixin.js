@@ -5,16 +5,10 @@
  */
 import { timeOut } from '@vaadin/component-base/src/async.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
-import { addListener, setTouchAction } from '@vaadin/component-base/src/gestures.js';
+import { addListener } from '@vaadin/component-base/src/gestures.js';
 import { MediaQueryController } from '@vaadin/component-base/src/media-query-controller.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
-import {
-  dateAfterXMonths,
-  dateAllowed,
-  dateEquals,
-  extractDateParts,
-  getClosestDate,
-} from './vaadin-date-picker-helper.js';
+import { dateAfterXMonths, dateAllowed, dateEquals, getClosestDate } from './vaadin-date-picker-helper.js';
 
 /**
  * @polymerMixin
@@ -73,14 +67,6 @@ export const DatePickerOverlayContentMixin = (superClass) =>
         _desktopMediaQuery: {
           type: String,
           value: '(min-width: 375px)',
-        },
-
-        _translateX: {
-          observer: '_translateXChanged',
-        },
-
-        _yearScrollerWidth: {
-          value: 50,
         },
 
         i18n: {
@@ -179,20 +165,6 @@ export const DatePickerOverlayContentMixin = (superClass) =>
     }
 
     /** @protected */
-    _addListeners() {
-      setTouchAction(this.$.scrollers, 'pan-y');
-
-      addListener(this.$.scrollers, 'track', this._track.bind(this));
-      addListener(this.shadowRoot.querySelector('[part="clear-button"]'), 'tap', this._clear.bind(this));
-      addListener(this.shadowRoot.querySelector('[part="toggle-button"]'), 'tap', this._cancel.bind(this));
-      addListener(
-        this.shadowRoot.querySelector('[part="years-toggle-button"]'),
-        'tap',
-        this._toggleYearScroller.bind(this),
-      );
-    }
-
-    /** @protected */
     _initControllers() {
       this.addController(
         new MediaQueryController(this._desktopMediaQuery, (matches) => {
@@ -206,7 +178,7 @@ export const DatePickerOverlayContentMixin = (superClass) =>
           initializer: (btn) => {
             btn.setAttribute('theme', 'tertiary');
             btn.addEventListener('keydown', (e) => this.__onTodayButtonKeyDown(e));
-            addListener(btn, 'tap', this._onTodayTap.bind(this));
+            btn.addEventListener('click', this._onTodayTap.bind(this));
             this._todayButton = btn;
           },
         }),
@@ -218,7 +190,7 @@ export const DatePickerOverlayContentMixin = (superClass) =>
           initializer: (btn) => {
             btn.setAttribute('theme', 'tertiary');
             btn.addEventListener('keydown', (e) => this.__onCancelButtonKeyDown(e));
-            addListener(btn, 'tap', this._cancel.bind(this));
+            btn.addEventListener('click', this._cancel.bind(this));
             this._cancelButton = btn;
           },
         }),
@@ -230,7 +202,6 @@ export const DatePickerOverlayContentMixin = (superClass) =>
 
     reset() {
       this._closeYearScroller();
-      this._toggleAnimateClass(true);
     }
 
     /**
@@ -527,14 +498,6 @@ export const DatePickerOverlayContentMixin = (superClass) =>
       });
     }
 
-    /** @protected */
-    _formatDisplayed(date, i18n, label) {
-      if (date && i18n && typeof i18n.formatDate === 'function') {
-        return i18n.formatDate(extractDateParts(date));
-      }
-      return label;
-    }
-
     /** @private */
     _onTodayTap() {
       const today = this._getTodayMidnight();
@@ -648,98 +611,13 @@ export const DatePickerOverlayContentMixin = (superClass) =>
     }
 
     /** @private */
-    _limit(value, range) {
-      return Math.min(range.max, Math.max(range.min, value));
-    }
-
-    /** @private */
-    _handleTrack(e) {
-      // Check if horizontal movement threshold (dx) not exceeded or
-      // scrolling fast vertically (ddy).
-      if (Math.abs(e.detail.dx) < 10 || Math.abs(e.detail.ddy) > 10) {
-        return;
-      }
-
-      // If we're flinging quickly -> start animating already.
-      if (Math.abs(e.detail.ddx) > this._yearScrollerWidth / 3) {
-        this._toggleAnimateClass(true);
-      }
-
-      const newTranslateX = this._translateX + e.detail.ddx;
-      this._translateX = this._limit(newTranslateX, {
-        min: 0,
-        max: this._yearScrollerWidth,
-      });
-    }
-
-    /** @private */
-    _track(e) {
-      if (this._desktopMode) {
-        // No need to track for swipe gestures on desktop.
-        return;
-      }
-
-      switch (e.detail.state) {
-        case 'start':
-          this._toggleAnimateClass(false);
-          break;
-        case 'track':
-          this._handleTrack(e);
-          break;
-        case 'end':
-          this._toggleAnimateClass(true);
-          if (this._translateX >= this._yearScrollerWidth / 2) {
-            this._closeYearScroller();
-          } else {
-            this._openYearScroller();
-          }
-          break;
-        default:
-          break;
-      }
-    }
-
-    /** @private */
-    _toggleAnimateClass(enable) {
-      if (enable) {
-        this.classList.add('animate');
-      } else {
-        this.classList.remove('animate');
-      }
-    }
-
-    /** @private */
     _toggleYearScroller() {
-      if (this._isYearScrollerVisible()) {
-        this._closeYearScroller();
-      } else {
-        this._openYearScroller();
-      }
-    }
-
-    /** @private */
-    _openYearScroller() {
-      this._translateX = 0;
-      this.setAttribute('years-visible', '');
+      this.toggleAttribute('years-visible');
     }
 
     /** @private */
     _closeYearScroller() {
       this.removeAttribute('years-visible');
-      this._translateX = this._yearScrollerWidth;
-    }
-
-    /** @private */
-    _isYearScrollerVisible() {
-      return this._translateX < this._yearScrollerWidth / 2;
-    }
-
-    /** @private */
-    _translateXChanged(x) {
-      if (!this._desktopMode) {
-        this._monthScroller.style.transform = `translateX(${x - this._yearScrollerWidth}px)`;
-        this._yearScroller.style.transform = `translateX(${x}px)`;
-      }
     }
 
     /** @private */
@@ -767,11 +645,6 @@ export const DatePickerOverlayContentMixin = (superClass) =>
     _cancel() {
       this.focusedDate = this.selectedDate;
       this._close();
-    }
-
-    /** @protected */
-    _preventDefault(e) {
-      e.preventDefault();
     }
 
     /** @private */

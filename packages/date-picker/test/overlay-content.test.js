@@ -24,7 +24,7 @@ describe('overlay', () => {
     beforeEach(async () => {
       overlay = fixtureSync(`
         <vaadin-date-picker-overlay-content
-          style="position: absolute; top: 0"
+          style="position: absolute; top: 0; min-width: 300px"
           scroll-duration="0"
         ></vaadin-date-picker-overlay-content>
       `);
@@ -124,50 +124,11 @@ describe('overlay', () => {
       });
     });
 
-    describe('header', () => {
-      let header, clearButton;
-
-      beforeEach(() => {
-        header = overlay.shadowRoot.querySelector('[part="overlay-header"]');
-        clearButton = overlay.shadowRoot.querySelector('[part="clear-button"]');
-      });
-
-      it('should be visible', () => {
-        overlay.setAttribute('fullscreen', '');
-        expect(window.getComputedStyle(header).display).to.equal('flex');
-      });
-
-      it('should be invisible', () => {
-        expect(window.getComputedStyle(header).display).to.equal('none');
-      });
-
-      it('should reflect value in label', () => {
-        overlay.i18n = { ...overlay.i18n, formatDate: (date) => `${date.month + 1}/${date.day}/${date.year}` };
-        overlay.selectedDate = new Date(2000, 1, 1);
-        expect(overlay.shadowRoot.querySelector('[part="label"]').textContent.trim()).to.equal('2/1/2000');
-      });
-
-      it('should not show clear button if not value is set', () => {
-        expect(window.getComputedStyle(clearButton).display).to.equal('none');
-      });
-
-      it('should show clear button if value is set', () => {
-        overlay.selectedDate = new Date();
-        expect(window.getComputedStyle(clearButton).display).to.not.equal('none');
-      });
-
-      it('should clear the value', () => {
-        overlay.selectedDate = new Date();
-        click(clearButton);
-        expect(overlay.selectedDate).to.equal('');
-      });
-    });
-
     describe('footer', () => {
       it('should fire close on cancel click', () => {
         const spy = sinon.spy();
         overlay.addEventListener('close', spy);
-        tap(overlay._cancelButton);
+        click(overlay._cancelButton);
         expect(spy.calledOnce).to.be.true;
       });
 
@@ -178,7 +139,7 @@ describe('overlay', () => {
 
           const today = new Date();
           const spy = sinon.spy(overlay, 'scrollToDate');
-          tap(overlay._todayButton);
+          click(overlay._todayButton);
           await untilOverlayScrolled(overlay);
 
           expect(spy.calledOnce).to.be.true;
@@ -195,7 +156,7 @@ describe('overlay', () => {
 
           const spy = sinon.spy();
           overlay.addEventListener('close', spy);
-          tap(overlay._todayButton);
+          click(overlay._todayButton);
 
           expect(overlay.selectedDate.getFullYear()).to.equal(today.getFullYear());
           expect(overlay.selectedDate.getMonth()).to.equal(today.getMonth());
@@ -212,7 +173,7 @@ describe('overlay', () => {
           overlay.addEventListener('close', spy);
 
           overlay._monthScroller.$.scroller.scrollTop -= 1;
-          tap(overlay._todayButton);
+          click(overlay._todayButton);
 
           expect(overlay.selectedDate).to.be.not.ok;
           expect(spy.called).to.be.false;
@@ -228,7 +189,7 @@ describe('overlay', () => {
           const lastScrollPos = overlay._monthScroller.position;
 
           overlay._todayButton.disabled = true;
-          tap(overlay._todayButton);
+          click(overlay._todayButton);
 
           expect(overlay._monthScroller.position).to.equal(lastScrollPos);
           expect(closeSpy.called).to.be.false;
@@ -286,7 +247,7 @@ describe('overlay', () => {
             overlay.scrollToDate(todayMidnight);
             await untilOverlayScrolled(overlay);
 
-            tap(overlay._todayButton);
+            click(overlay._todayButton);
 
             expect(overlay.selectedDate.getFullYear()).to.equal(todayMidnight.getFullYear());
             expect(overlay.selectedDate.getMonth()).to.equal(todayMidnight.getMonth());

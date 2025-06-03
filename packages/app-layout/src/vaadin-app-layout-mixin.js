@@ -363,8 +363,8 @@ export const AppLayoutMixin = (superclass) =>
     /**
      * Returns a promise that resolves when the drawer opening/closing CSS transition ends.
      *
-     * The method relies on the `--vaadin-app-layout-transition` CSS variable to detect whether
-     * the drawer has a CSS transition that needs to be awaited. If the CSS variable equals `none`,
+     * The method relies on the `--vaadin-app-layout-transition-duration` CSS variable to detect whether
+     * the drawer has a CSS transition that needs to be awaited. If the CSS variable equals `0s`,
      * the promise resolves immediately.
      *
      * @return {Promise}
@@ -372,7 +372,7 @@ export const AppLayoutMixin = (superclass) =>
      */
     __drawerTransitionComplete() {
       return new Promise((resolve) => {
-        if (this._getCustomPropertyValue('--vaadin-app-layout-transition') === 'none') {
+        if (this._getCustomPropertyValue('--vaadin-app-layout-transition-duration') === '0s') {
           resolve();
           return;
         }
