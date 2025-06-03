@@ -119,6 +119,7 @@
 
 :host([fullscreen]) [part='toolbar'] {
   grid-area: header;
+  margin-inline-end: 57px;
 }
 
 [part='toolbar'] ::slotted(vaadin-button) {
@@ -181,9 +182,8 @@
     background-image: none;
   }
 
-  [part='toolbar'],
-  ::slotted([slot='months']) {
-    margin-right: 0;
+  :host([fullscreen]) [part='toolbar'] {
+    margin-inline-end: 0;
   }
 
   /* TODO make date-picker adapt to the width of the years part */
