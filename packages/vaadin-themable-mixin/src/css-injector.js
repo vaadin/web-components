@@ -49,8 +49,8 @@ export class CSSInjector {
 
   constructor(root = document) {
     this.#root = root;
-    this.#cssPropertyObserver = new CSSPropertyObserver(this.#root, 'vaadin-css-injector', (event) => {
-      const tagName = event.propertyName.slice(2).replace('-css-inject', '');
+    this.#cssPropertyObserver = new CSSPropertyObserver(this.#root, 'vaadin-css-injector', (propertyName) => {
+      const tagName = propertyName.slice(2).replace('-css-inject', '');
       this.#updateComponentStyleSheet(tagName);
     });
   }

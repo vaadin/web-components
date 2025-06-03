@@ -223,11 +223,6 @@ describe('basic features', () => {
       expect(weekdayTitles).to.eql(['ma', 'ti', 'ke', 'to', 'pe', 'la', 'su']);
     });
 
-    it('should reflect value in overlay header', () => {
-      datePicker.value = '2000-02-01';
-      expect(overlayContent.shadowRoot.querySelector('[part="label"]').textContent.trim()).to.equal('1.2.2000');
-    });
-
     it('should display buttons in correct locale', () => {
       expect(overlayContent._todayButton.textContent.trim()).to.equal('Tänään');
       expect(overlayContent._cancelButton.textContent.trim()).to.equal('Peruuta');

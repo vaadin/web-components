@@ -11,7 +11,7 @@ import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { isEmptyTextNode } from '@vaadin/component-base/src/dom-utils.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { drawerToggle } from './vaadin-drawer-toggle-styles.js';
+import { drawerToggle } from './styles/vaadin-drawer-toggle-core-styles.js';
 
 /**
  * The Drawer Toggle component controls the drawer in App Layout component.

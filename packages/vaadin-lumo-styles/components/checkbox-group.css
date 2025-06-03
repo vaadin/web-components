@@ -1,0 +1,18 @@
+/**
+ * @license
+ * Copyright (c) 2017 - 2025 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+@import './checkbox.css';
+
+@import '../src/mixins/base-layer-reset.css' vaadin-checkbox-group;
+@import '../src/mixins/group-field.css' vaadin-checkbox-group;
+@import '../src/mixins/field-label.css' vaadin-checkbox-group;
+@import '../src/mixins/field-required.css' vaadin-checkbox-group;
+@import '../src/mixins/field-error-message.css' vaadin-checkbox-group;
+@import '../src/mixins/field-helper.css' vaadin-checkbox-group;
+@import '../src/components/checkbox-group.css' vaadin-checkbox-group;
+
+html {
+  --vaadin-checkbox-group-css-inject: 1;
+}

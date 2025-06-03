@@ -20,6 +20,10 @@ registerStyles(
       cursor: default;
     }
 
+    :host([dir='rtl']) {
+      background-position: top left;
+    }
+
     ::slotted([slot='months']) {
       /* Month calendar height:
               header height + margin-bottom
@@ -39,16 +43,12 @@ registerStyles(
       -webkit-mask-image: linear-gradient(transparent, #000 10%, #000 85%, transparent);
       mask-image: linear-gradient(transparent, #000 10%, #000 85%, transparent);
       position: relative;
-      margin-right: 57px;
     }
 
     ::slotted([slot='years']) {
       /* TODO get rid of fixed magic number */
-      --vaadin-infinite-scroller-buffer-width: 97px;
+      --vaadin-infinite-scroller-buffer-width: 57px;
       width: 57px;
-      height: auto;
-      top: 0;
-      bottom: 0;
       font-size: var(--lumo-font-size-s);
       box-shadow: inset 2px 0 4px 0 var(--lumo-shade-5pct);
       -webkit-mask-image: linear-gradient(transparent, #000 35%, #000 65%, transparent);
@@ -56,19 +56,12 @@ registerStyles(
       cursor: var(--lumo-clickable-cursor);
     }
 
+    :host([dir='rtl']) ::slotted([slot='years']) {
+      box-shadow: inset -2px 0 4px 0 var(--lumo-shade-5pct);
+    }
+
     ::slotted([slot='years']:hover) {
       --_lumo-date-picker-year-opacity: 1;
-    }
-
-    /* TODO unsupported selector */
-    #scrollers {
-      position: static;
-      display: block;
-    }
-
-    /* TODO fix this in vaadin-date-picker that it adapts to the width of the year scroller */
-    :host([desktop]) ::slotted([slot='months']) {
-      right: auto;
     }
 
     /* Year scroller position indicator */
@@ -84,10 +77,14 @@ registerStyles(
       z-index: 1;
     }
 
+    :host([dir='rtl']) ::slotted([slot='years'])::before {
+      right: 0;
+      transform: translate(75%, -50%) rotate(45deg);
+    }
+
     [part='toolbar'] {
       padding: var(--lumo-space-s);
       border-bottom-left-radius: var(--lumo-border-radius-l);
-      margin-right: 57px;
     }
 
     [part='toolbar'] ::slotted(vaadin-button) {
@@ -97,24 +94,8 @@ registerStyles(
     /* Narrow viewport mode (fullscreen) */
 
     :host([fullscreen]) [part='toolbar'] {
-      order: -1;
       background-color: var(--lumo-base-color);
-    }
-
-    :host([fullscreen]) [part='overlay-header'] {
-      order: -2;
-      height: var(--lumo-size-m);
-      padding: var(--lumo-space-s);
-      position: absolute;
-      left: 0;
-      right: 0;
-      justify-content: center;
-    }
-
-    :host([fullscreen]) [part='toggle-button'],
-    :host([fullscreen]) [part='clear-button'],
-    [part='overlay-header'] [part='label'] {
-      display: none;
+      margin-inline-end: 57px;
     }
 
     /* Very narrow screen (year scroller initially hidden) */
@@ -122,10 +103,9 @@ registerStyles(
     [part='years-toggle-button'] {
       display: flex;
       align-items: center;
-      height: var(--lumo-size-s);
+      height: var(--lumo-size-m);
       padding: 0 0.5em;
       border-radius: var(--lumo-border-radius-m);
-      z-index: 3;
       color: var(--lumo-primary-text-color);
       font-weight: 500;
       -webkit-font-smoothing: antialiased;
@@ -143,20 +123,15 @@ registerStyles(
         background-image: none;
       }
 
-      [part='toolbar'],
-      ::slotted([slot='months']) {
-        margin-right: 0;
+      :host([fullscreen]) [part='toolbar'] {
+        margin-inline-end: 0;
       }
 
       /* TODO make date-picker adapt to the width of the years part */
       ::slotted([slot='years']) {
-        --vaadin-infinite-scroller-buffer-width: 90px;
+        --vaadin-infinite-scroller-buffer-width: 50px;
         width: 50px;
         background-color: var(--lumo-shade-5pct);
-      }
-
-      :host([years-visible]) ::slotted([slot='months']) {
-        padding-left: 50px;
       }
     }
   `,

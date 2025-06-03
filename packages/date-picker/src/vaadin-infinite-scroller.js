@@ -21,9 +21,9 @@ template.innerHTML = `
       height: 100%;
       overflow: auto;
       outline: none;
-      margin-right: -40px;
       -webkit-overflow-scrolling: touch;
       overflow-x: hidden;
+      scrollbar-width: none;
     }
 
     #scroller.notouchscroll {
@@ -38,7 +38,6 @@ template.innerHTML = `
       position: absolute;
       width: var(--vaadin-infinite-scroller-buffer-width, 100%);
       box-sizing: border-box;
-      padding-right: 40px;
       top: var(--vaadin-infinite-scroller-buffer-offset, 0);
     }
   </style>
