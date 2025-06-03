@@ -75,10 +75,6 @@ export const DatePickerOverlayContentMixin = (superClass) =>
           value: '(min-width: 375px)',
         },
 
-        _translateX: {
-          observer: '_translateXChanged',
-        },
-
         _yearScrollerWidth: {
           value: 50,
         },
@@ -710,11 +706,7 @@ export const DatePickerOverlayContentMixin = (superClass) =>
 
     /** @private */
     _toggleYearScroller() {
-      if (this._isYearScrollerVisible()) {
-        this._closeYearScroller();
-      } else {
-        this._openYearScroller();
-      }
+      this.toggleAttribute('years-visible');
     }
 
     /** @private */
@@ -727,19 +719,6 @@ export const DatePickerOverlayContentMixin = (superClass) =>
     _closeYearScroller() {
       this.removeAttribute('years-visible');
       this._translateX = this._yearScrollerWidth;
-    }
-
-    /** @private */
-    _isYearScrollerVisible() {
-      return this._translateX < this._yearScrollerWidth / 2;
-    }
-
-    /** @private */
-    _translateXChanged(x) {
-      if (!this._desktopMode) {
-        this._monthScroller.style.transform = `translateX(${x - this._yearScrollerWidth}px)`;
-        this._yearScroller.style.transform = `translateX(${x}px)`;
-      }
     }
 
     /** @private */
