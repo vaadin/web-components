@@ -1,0 +1,51 @@
+/**
+ * @license
+ * Copyright (c) 2017 - 2025 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+
+:host {
+  --vaadin-tooltip-offset-top: var(--lumo-space-xs);
+  --vaadin-tooltip-offset-bottom: var(--lumo-space-xs);
+  --vaadin-tooltip-offset-start: var(--lumo-space-xs);
+  --vaadin-tooltip-offset-end: var(--lumo-space-xs);
+}
+
+[part='overlay'] {
+  max-width: 40ch;
+  background: var(--lumo-base-color) linear-gradient(var(--lumo-contrast-5pct), var(--lumo-contrast-5pct));
+  color: var(--lumo-body-text-color);
+  font-size: var(--lumo-font-size-xs);
+  line-height: var(--lumo-line-height-s);
+}
+
+[part='content'] {
+  white-space: pre-wrap;
+  padding: var(--lumo-space-xs) var(--lumo-space-s);
+}
+
+:host([position^='top'][top-aligned]) [part='overlay'],
+:host([position^='bottom'][top-aligned]) [part='overlay'] {
+  margin-top: var(--vaadin-tooltip-offset-top, 0);
+}
+
+:host([position^='top'][bottom-aligned]) [part='overlay'],
+:host([position^='bottom'][bottom-aligned]) [part='overlay'] {
+  margin-bottom: var(--vaadin-tooltip-offset-bottom, 0);
+}
+
+:host([position^='start'][start-aligned]) [part='overlay'],
+:host([position^='end'][start-aligned]) [part='overlay'] {
+  margin-inline-start: var(--vaadin-tooltip-offset-start, 0);
+}
+
+:host([position^='start'][end-aligned]) [part='overlay'],
+:host([position^='end'][end-aligned]) [part='overlay'] {
+  margin-inline-end: var(--vaadin-tooltip-offset-end, 0);
+}
+
+@media (forced-colors: active) {
+  [part='overlay'] {
+    outline: 1px dashed;
+  }
+}
