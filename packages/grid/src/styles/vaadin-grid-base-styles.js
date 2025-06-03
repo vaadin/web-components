@@ -34,6 +34,8 @@ export const gridStyles = css`
       --_cell-padding: var(--vaadin-grid-cell-padding, var(--_vaadin-padding-container));
       --_reorder-background-image: none;
       --_selection-background-image: none;
+      border-radius: var(--_border-radius);
+      --_border-radius: 0px;
     }
 
     :host([hidden]),
@@ -49,7 +51,7 @@ export const gridStyles = css`
     /* Variant: No outer border */
     :host(:not([theme~='no-border'])) {
       --_border-width: var(--vaadin-grid-border-width, 1px);
-      border-radius: var(--vaadin-grid-border-radius, var(--_vaadin-radius-l));
+      --_border-radius: var(--vaadin-grid-border-radius, var(--_vaadin-radius-l));
     }
 
     :host([all-rows-visible]) {
@@ -61,13 +63,14 @@ export const gridStyles = css`
 
     #scroller {
       contain: layout;
-      border-radius: inherit;
+      border-radius: calc(var(--_border-radius) - var(--_border-width));
       position: relative;
       display: flex;
       width: 100%;
       min-width: 0;
       min-height: 0;
       align-self: stretch;
+      overflow: hidden;
     }
 
     #items {
@@ -171,6 +174,10 @@ export const gridStyles = css`
     [part~='row']::after {
       outline: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
       outline-offset: calc(var(--vaadin-focus-ring-width) * -1);
+    }
+
+    [part~='row']:focus-visible {
+      z-index: 1;
     }
 
     /* Used for focus outline and drag'n'drop target indication */
@@ -342,33 +349,47 @@ export const gridStyles = css`
       height: 100%;
       cursor: col-resize;
       z-index: 1;
+      opacity: 0;
+      width: var(--vaadin-focus-ring-width);
+      background: var(--vaadin-grid-column-resize-handle-color, var(--vaadin-focus-ring-color));
+      transition: opacity 0.2s;
+      translate: var(--_column-border-width);
+    }
+
+    [part~='last-column-cell'] [part~='resize-handle'] {
+      translate: 0;
+    }
+
+    :host(:not([reordering])) *:not([column-resizing]) [part='resize-handle']:hover,
+    [part='resize-handle']:active {
+      opacity: 1;
+      transition-delay: 0.15s;
     }
 
     [part~='resize-handle']::before {
       position: absolute;
       content: '';
       height: 100%;
-      width: 36px;
-      transform: translateX(-50%);
+      width: 16px;
+      translate: calc(-50% + var(--vaadin-focus-ring-width) / 2);
     }
 
     :host([dir='rtl']) [part~='resize-handle']::before {
-      transform: translateX(50%);
+      translate: calc(50% - var(--vaadin-focus-ring-width) / 2);
+    }
+
+    [first-frozen-to-end] [part~='resize-handle']::before,
+    :is([last-column], [last-frozen]) [part~='resize-handle']::before {
+      width: 8px;
+      translate: 0;
     }
 
     :is([last-column], [last-frozen]) [part~='resize-handle']::before {
-      width: 18px;
-      transform: none;
       inset-inline-end: 0;
     }
 
     [frozen-to-end] :is([part~='resize-handle'], [part~='resize-handle']::before) {
       inset-inline: 0 auto;
-    }
-
-    [first-frozen-to-end] [part~='resize-handle']::before {
-      width: 18px;
-      transform: none;
     }
 
     [first-frozen-to-end] {
@@ -399,20 +420,24 @@ export const gridStyles = css`
       visibility: visible;
     }
 
-    [part~='first-row'][dragover]::after {
-      inset-block-start: 0;
-    }
-
-    [part~='dragover-above-row']::after {
+    [part~='row'][dragover='above']::after {
       outline: 0;
       border-top: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
       top: calc(var(--vaadin-focus-ring-width) / -2);
     }
 
-    [part~='dragover-below-row']::after {
+    [part~='row'][dragover='below']::after {
       outline: 0;
       border-bottom: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
       bottom: calc(var(--vaadin-focus-ring-width) / -2);
+    }
+
+    :is([part~='row']:first-child, [part~='first-row'])::after {
+      top: 0;
+    }
+
+    :is([part~='row']:last-child, [part~='last-row'])::after {
+      bottom: 0;
     }
 
     [part~='row'][dragstart] [part~='cell'] {
