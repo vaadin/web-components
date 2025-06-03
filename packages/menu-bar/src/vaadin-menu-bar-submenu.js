@@ -9,6 +9,7 @@ import './vaadin-menu-bar-overlay.js';
 import { css, html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
+import { CSSInjectionMixin } from '@vaadin/vaadin-themable-mixin/css-injection-mixin.js';
 import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
 import { SubMenuMixin } from './vaadin-menu-bar-submenu-mixin.js';
 
@@ -21,7 +22,7 @@ import { SubMenuMixin } from './vaadin-menu-bar-submenu-mixin.js';
  * @mixes ThemePropertyMixin
  * @protected
  */
-class MenuBarSubmenu extends SubMenuMixin(ThemePropertyMixin(PolylitMixin(LitElement))) {
+class MenuBarSubmenu extends SubMenuMixin(ThemePropertyMixin(CSSInjectionMixin(PolylitMixin(LitElement)))) {
   static get is() {
     return 'vaadin-menu-bar-submenu';
   }
