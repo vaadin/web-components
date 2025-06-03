@@ -84,7 +84,7 @@ defineCustomElement(ConfirmDialogOverlay);
  * @private
  */
 class ConfirmDialogDialog extends ConfirmDialogBaseMixin(
-  DialogBaseMixin(OverlayClassMixin(ThemePropertyMixin(CSSInjectionMixin(PolylitMixin(LitElement))))),
+  DialogBaseMixin(OverlayClassMixin(ThemePropertyMixin(PolylitMixin(LitElement)))),
 ) {
   static get is() {
     return 'vaadin-confirm-dialog-dialog';
