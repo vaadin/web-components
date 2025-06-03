@@ -25,25 +25,6 @@ export const overlayContentStyles = css`
     grid-template-columns: minmax(0, 1fr) auto;
   }
 
-  :host([fullscreen]) :is([part='toggle-button'], [part='clear-button'], [part='label']) {
-    display: none;
-  }
-
-  [part='overlay-header'] {
-    display: none;
-    grid-area: header;
-    align-items: center;
-    justify-content: center;
-  }
-
-  :host([fullscreen]) [part='overlay-header'] {
-    display: flex;
-  }
-
-  [part='label'] {
-    flex-grow: 1;
-  }
-
   [hidden] {
     display: none !important;
   }
@@ -65,7 +46,6 @@ export const overlayContentStyles = css`
     display: flex;
     grid-area: toolbar;
     justify-content: space-between;
-    z-index: 2;
     flex-shrink: 0;
   }
 

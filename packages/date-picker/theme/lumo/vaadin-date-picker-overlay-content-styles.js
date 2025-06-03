@@ -98,21 +98,14 @@ registerStyles(
       margin-inline-end: 57px;
     }
 
-    :host([fullscreen]) [part='overlay-header'] {
-      height: var(--lumo-size-m);
-      padding: var(--lumo-space-s);
-      justify-content: center;
-    }
-
     /* Very narrow screen (year scroller initially hidden) */
 
     [part='years-toggle-button'] {
       display: flex;
       align-items: center;
-      height: var(--lumo-size-s);
+      height: var(--lumo-size-m);
       padding: 0 0.5em;
       border-radius: var(--lumo-border-radius-m);
-      z-index: 3;
       color: var(--lumo-primary-text-color);
       font-weight: 500;
       -webkit-font-smoothing: antialiased;
