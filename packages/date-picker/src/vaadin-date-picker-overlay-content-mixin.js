@@ -8,13 +8,7 @@ import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { addListener } from '@vaadin/component-base/src/gestures.js';
 import { MediaQueryController } from '@vaadin/component-base/src/media-query-controller.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
-import {
-  dateAfterXMonths,
-  dateAllowed,
-  dateEquals,
-  extractDateParts,
-  getClosestDate,
-} from './vaadin-date-picker-helper.js';
+import { dateAfterXMonths, dateAllowed, dateEquals, getClosestDate } from './vaadin-date-picker-helper.js';
 
 /**
  * @polymerMixin
@@ -171,17 +165,6 @@ export const DatePickerOverlayContentMixin = (superClass) =>
     }
 
     /** @protected */
-    _addListeners() {
-      addListener(this.shadowRoot.querySelector('[part="clear-button"]'), 'tap', this._clear.bind(this));
-      addListener(this.shadowRoot.querySelector('[part="toggle-button"]'), 'tap', this._cancel.bind(this));
-      addListener(
-        this.shadowRoot.querySelector('[part="years-toggle-button"]'),
-        'tap',
-        this._toggleYearScroller.bind(this),
-      );
-    }
-
-    /** @protected */
     _initControllers() {
       this.addController(
         new MediaQueryController(this._desktopMediaQuery, (matches) => {
@@ -195,7 +178,7 @@ export const DatePickerOverlayContentMixin = (superClass) =>
           initializer: (btn) => {
             btn.setAttribute('theme', 'tertiary');
             btn.addEventListener('keydown', (e) => this.__onTodayButtonKeyDown(e));
-            addListener(btn, 'tap', this._onTodayTap.bind(this));
+            btn.addEventListener('click', this._onTodayTap.bind(this));
             this._todayButton = btn;
           },
         }),
@@ -207,7 +190,7 @@ export const DatePickerOverlayContentMixin = (superClass) =>
           initializer: (btn) => {
             btn.setAttribute('theme', 'tertiary');
             btn.addEventListener('keydown', (e) => this.__onCancelButtonKeyDown(e));
-            addListener(btn, 'tap', this._cancel.bind(this));
+            btn.addEventListener('click', this._cancel.bind(this));
             this._cancelButton = btn;
           },
         }),
@@ -515,14 +498,6 @@ export const DatePickerOverlayContentMixin = (superClass) =>
       });
     }
 
-    /** @protected */
-    _formatDisplayed(date, i18n, label) {
-      if (date && i18n && typeof i18n.formatDate === 'function') {
-        return i18n.formatDate(extractDateParts(date));
-      }
-      return label;
-    }
-
     /** @private */
     _onTodayTap() {
       const today = this._getTodayMidnight();
@@ -670,11 +645,6 @@ export const DatePickerOverlayContentMixin = (superClass) =>
     _cancel() {
       this.focusedDate = this.selectedDate;
       this._close();
-    }
-
-    /** @protected */
-    _preventDefault(e) {
-      e.preventDefault();
     }
 
     /** @private */

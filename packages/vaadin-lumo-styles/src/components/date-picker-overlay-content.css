@@ -33,10 +33,6 @@
   grid-template-columns: minmax(0, 1fr) auto;
 }
 
-[part='label'] {
-  flex-grow: 1;
-}
-
 [hidden] {
   display: none !important;
 }
@@ -111,8 +107,6 @@
   display: flex;
   grid-area: toolbar;
   justify-content: space-between;
-  z-index: 2;
-  flex-shrink: 0;
   padding: var(--lumo-space-s);
   border-bottom-left-radius: var(--lumo-border-radius-l);
 }
@@ -128,32 +122,8 @@
 
 /* Narrow viewport mode (fullscreen) */
 
-[part='overlay-header'] {
-  display: none;
-  grid-area: header;
-  align-items: center;
-  justify-content: center;
-}
-
-:host([fullscreen]) :is([part='toggle-button'], [part='clear-button'], [part='label']) {
-  display: none;
-}
-
 :host([fullscreen]) [part='toolbar'] {
   background-color: var(--lumo-base-color);
-}
-
-:host([fullscreen]) [part='overlay-header'] {
-  display: flex;
-  height: var(--lumo-size-m);
-  padding: var(--lumo-space-s);
-  justify-content: center;
-}
-
-:host([fullscreen]) [part='toggle-button'],
-:host([fullscreen]) [part='clear-button'],
-[part='overlay-header'] [part='label'] {
-  display: none;
 }
 
 /* Very narrow screen (year scroller initially hidden) */
@@ -161,10 +131,9 @@
 [part='years-toggle-button'] {
   display: flex;
   align-items: center;
-  height: var(--lumo-size-s);
+  height: var(--lumo-size-m);
   padding: 0 0.5em;
   border-radius: var(--lumo-border-radius-m);
-  z-index: 3;
   color: var(--lumo-primary-text-color);
   font-weight: 500;
   -webkit-font-smoothing: antialiased;

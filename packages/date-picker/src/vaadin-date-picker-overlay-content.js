@@ -36,21 +36,19 @@ class DatePickerOverlayContent extends DatePickerOverlayContentMixin(
   /** @protected */
   render() {
     return html`
-      <div part="overlay-header" @touchend="${this._preventDefault}" aria-hidden="true">
-        <div part="label">${this._formatDisplayed(this.selectedDate, this.i18n, this.label)}</div>
-        <div part="clear-button" ?hidden="${!this.selectedDate}"></div>
-        <div part="toggle-button"></div>
-
-        <div part="years-toggle-button" ?hidden="${this._desktopMode}" aria-hidden="true">
-          ${this._yearAfterXMonths(this._visibleMonthIndex)}
-        </div>
-      </div>
-
       <slot name="months"></slot>
       <slot name="years"></slot>
 
-      <div @touchend="${this._preventDefault}" role="toolbar" part="toolbar">
+      <div role="toolbar" part="toolbar">
         <slot name="today-button"></slot>
+        <div
+          part="years-toggle-button"
+          ?hidden="${this._desktopMode}"
+          aria-hidden="true"
+          @click="${this._toggleYearScroller}"
+        >
+          ${this._yearAfterXMonths(this._visibleMonthIndex)}
+        </div>
         <slot name="cancel-button"></slot>
       </div>
     `;
@@ -62,7 +60,6 @@ class DatePickerOverlayContent extends DatePickerOverlayContentMixin(
 
     this.setAttribute('role', 'dialog');
 
-    this._addListeners();
     this._initControllers();
   }
 }
