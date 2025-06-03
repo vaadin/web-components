@@ -77,4 +77,8 @@ export const overlayContentStyles = css`
     z-index: 2;
     flex-shrink: 0;
   }
+
+  :host([fullscreen]) [part='toolbar'] {
+    grid-area: header;
+  }
 `;

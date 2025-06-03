@@ -127,6 +127,10 @@
   border-bottom-left-radius: var(--lumo-border-radius-l);
 }
 
+:host([fullscreen]) [part='toolbar'] {
+  grid-area: header;
+}
+
 [part='toolbar'] ::slotted(vaadin-button) {
   margin: 0;
 }
