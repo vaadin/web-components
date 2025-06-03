@@ -6,13 +6,15 @@
 import { css } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 export const gridFilterStyles = css`
-  :host {
-    display: inline-flex;
-    max-width: 100%;
-  }
+  @layer base {
+    :host {
+      display: inline-flex;
+      max-width: 100%;
+    }
 
-  ::slotted(*) {
-    width: 100%;
-    box-sizing: border-box;
+    ::slotted(*) {
+      width: 100%;
+      box-sizing: border-box;
+    }
   }
 `;

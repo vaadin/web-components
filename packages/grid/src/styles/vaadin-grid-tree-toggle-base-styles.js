@@ -7,70 +7,72 @@ import '@vaadin/component-base/src/style-props.js';
 import { css } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 export const gridTreeToggleStyles = css`
-  :host {
-    display: flex;
-    max-width: 100%;
-    pointer-events: none;
-  }
-
-  /* Don't expand/collapse when clicking #level-spacer */
-  [part] {
-    pointer-events: auto;
-  }
-
-  :host([hidden]) {
-    display: none !important;
-  }
-
-  :host(:not([leaf])) {
-    cursor: var(--vaadin-clickable-cursor);
-  }
-
-  #level-spacer,
-  [part='toggle'] {
-    flex: none;
-  }
-
-  #level-spacer {
-    width: calc(var(--_level, 0) * var(--vaadin-grid-tree-toggle-level-offset, 1em));
-  }
-
-  [part='toggle'] {
-    margin-inline-end: var(--_vaadin-gap-container-inline);
-  }
-
-  [part='toggle']::before {
-    content: '';
-    display: block;
-    width: var(--vaadin-icon-size, 1lh);
-    height: var(--vaadin-icon-size, 1lh);
-    background: currentColor;
-    mask-image: var(--_vaadin-icon-chevron-down);
-  }
-
-  :host(:not([expanded])) [part='toggle']::before {
-    rotate: -90deg;
-  }
-
-  @media (prefers-reduced-motion: no-preference) {
-    [part='toggle']::before {
-      transition: rotate 120ms;
+  @layer base {
+    :host {
+      display: flex;
+      max-width: 100%;
+      pointer-events: none;
     }
-  }
 
-  :host([leaf]) [part='toggle'] {
-    visibility: hidden;
-  }
+    /* Don't expand/collapse when clicking #level-spacer */
+    [part] {
+      pointer-events: auto;
+    }
 
-  slot {
-    display: block;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
+    :host([hidden]) {
+      display: none !important;
+    }
 
-  @media (forced-colors: active) {
+    :host(:not([leaf])) {
+      cursor: var(--vaadin-clickable-cursor);
+    }
+
+    #level-spacer,
+    [part='toggle'] {
+      flex: none;
+    }
+
+    #level-spacer {
+      width: calc(var(--_level, 0) * var(--vaadin-grid-tree-toggle-level-offset, 1em));
+    }
+
+    [part='toggle'] {
+      margin-inline-end: var(--_vaadin-gap-container-inline);
+    }
+
     [part='toggle']::before {
-      background: CanvasText;
+      content: '';
+      display: block;
+      width: var(--vaadin-icon-size, 1lh);
+      height: var(--vaadin-icon-size, 1lh);
+      background: currentColor;
+      mask-image: var(--_vaadin-icon-chevron-down);
+    }
+
+    :host(:not([expanded])) [part='toggle']::before {
+      rotate: -90deg;
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+      [part='toggle']::before {
+        transition: rotate 120ms;
+      }
+    }
+
+    :host([leaf]) [part='toggle'] {
+      visibility: hidden;
+    }
+
+    slot {
+      display: block;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    @media (forced-colors: active) {
+      [part='toggle']::before {
+        background: CanvasText;
+      }
     }
   }
 `;
