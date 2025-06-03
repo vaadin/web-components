@@ -25,9 +25,14 @@ export const gridStyles = css`
     box-sizing: border-box;
     -webkit-tap-highlight-color: transparent;
     background: var(--vaadin-grid-background, var(--_vaadin-background));
+    border: var(--_border-width) solid var(--vaadin-grid-border-color, var(--_vaadin-border-color));
     cursor: default;
+    --_border-width: 0px;
     --_row-border-width: var(--vaadin-grid-cell-border-width, 1px);
-    --_column-border-width: var(--vaadin-grid-cell-border-width, 0);
+    --_column-border-width: var(--vaadin-grid-cell-border-width, 0px);
+    --_cell-padding: var(--vaadin-grid-cell-padding, var(--_vaadin-padding-container));
+    --_reorder-background-image: none;
+    --_selection-background-image: none;
   }
 
   :host([hidden]),
@@ -42,7 +47,7 @@ export const gridStyles = css`
 
   /* Variant: No outer border */
   :host(:not([theme~='no-border'])) {
-    border: var(--vaadin-grid-border-width, 1px) solid var(--vaadin-grid-border-color, var(--_vaadin-border-color));
+    --_border-width: var(--vaadin-grid-border-width, 1px);
     border-radius: var(--vaadin-grid-border-radius, var(--_vaadin-radius-l));
   }
 
@@ -116,7 +121,8 @@ export const gridStyles = css`
     text-align: inherit;
   }
 
-  #header th {
+  #header th,
+  [part~='reorder-ghost'] {
     font-size: var(--vaadin-grid-header-font-size, 1em);
     font-weight: var(--vaadin-grid-header-font-weight, 500);
     color: var(--vaadin-grid-header-color, var(--_vaadin-color-strong));
@@ -144,7 +150,8 @@ export const gridStyles = css`
 
   [part~='cell'] {
     box-sizing: border-box;
-    background: var(--vaadin-grid-cell-background, var(--_vaadin-background));
+    background: var(--_reorder-background-image), var(--_selection-background-image),
+      var(--vaadin-grid-cell-background, var(--_vaadin-background));
     padding: 0;
   }
 
@@ -159,32 +166,44 @@ export const gridStyles = css`
     white-space: nowrap;
   }
 
-  :focus-visible {
+  :focus-visible,
+  [part~='row']::after {
     outline: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
     outline-offset: calc(var(--vaadin-focus-ring-width) * -1);
   }
 
-  [part~='row']:focus-visible::before {
+  /* Used for focus outline and drag'n'drop target indication */
+  [part~='row']::after {
     content: '';
     position: absolute;
-    inset: 0;
-    outline: inherit;
-    outline-offset: inherit;
+    inset: calc(var(--_row-border-width) * -1) 0;
     z-index: 3;
-    transform: translateX(calc(-1 * var(--_grid-horizontal-scroll-position)));
+    transform: translateX(calc(var(--_grid-horizontal-scroll-position) * -1));
+    pointer-events: none;
+    visibility: hidden;
+  }
+
+  [part~='row']:focus-visible::after {
+    visibility: visible;
+  }
+
+  /* Variant: wrap cell contents */
+
+  :host([theme~='wrap-cell-content']) [part~='cell']:not([part~='details-cell']) {
+    white-space: normal;
   }
 
   /* Variant: row & column borders */
 
   :host([theme~='no-row-borders']) {
-    --_row-border-width: 0;
+    --_row-border-width: 0px;
   }
 
   :host([theme~='column-borders']) {
     --_column-border-width: var(--vaadin-grid-cell-border-width, 1px);
   }
 
-  [part~='cell']:not([part~='last-column-cell']) {
+  [part~='cell']:not([part~='last-column-cell'], [part~='details-cell']) {
     border-inline-end: var(--_column-border-width, 0) solid
       var(--vaadin-grid-cell-border-color, var(--_vaadin-border-color));
   }
@@ -209,19 +228,14 @@ export const gridStyles = css`
   :host([theme~='row-stripes']) [part~='odd-row'],
   :host([theme~='row-stripes']) [part~='odd-row'] [part~='body-cell'],
   :host([theme~='row-stripes']) [part~='odd-row'] [part~='details-cell'] {
-    background: var(--vaadin-grid-alternate-cell-background, var(--_vaadin-background-container));
+    background: var(--_reorder-background-image), var(--_selection-background-image),
+      var(--vaadin-grid-alternate-cell-background, var(--_vaadin-background-container));
   }
 
   [part~='cell'] > [tabindex] {
     display: flex;
     align-items: inherit;
     width: 100%;
-  }
-
-  /* Switch the focusButtonMode wrapping element to "position: static" temporarily
-     when measuring real width of the cells in the auto-width columns. */
-  [measuring-auto-width] [part~='cell'] > [tabindex] {
-    position: static;
   }
 
   [part~='details-cell'] {
@@ -236,7 +250,7 @@ export const gridStyles = css`
     box-sizing: border-box;
     overflow: hidden;
     text-overflow: ellipsis;
-    padding: var(--vaadin-grid-cell-padding, var(--_vaadin-padding-container));
+    padding: var(--_cell-padding);
   }
 
   [frozen],
@@ -245,8 +259,15 @@ export const gridStyles = css`
     will-change: transform;
   }
 
-  /* Empty state */
+  /* Selected row */
+  [part~='row'][selected] [part~='body-cell']:not([part~='details-cell']) {
+    --_selection-background-image: var(
+      --vaadin-grid-row-selected-background-image,
+      linear-gradient(rgba(0, 0, 0, 0.08), rgba(0, 0, 0, 0.08))
+    );
+  }
 
+  /* Empty state */
   #scroller:not([empty-state]) #emptystatebody,
   #scroller[empty-state] #items {
     display: none;
@@ -269,6 +290,7 @@ export const gridStyles = css`
     display: block;
     flex: 1;
     overflow: auto;
+    padding: var(--_cell-padding);
   }
 
   /* Reordering styles */
@@ -282,7 +304,11 @@ export const gridStyles = css`
     visibility: hidden;
     position: fixed;
     pointer-events: none;
-    opacity: 0.5;
+    box-shadow:
+      0 0 0 1px hsla(0deg, 0%, 0%, 0.2),
+      0 8px 24px -2px hsla(0deg, 0%, 0%, 0.2);
+    padding: var(--_cell-padding) !important;
+    border-radius: 3px;
 
     /* Prevent overflowing the grid in Firefox */
     top: 0;
@@ -292,6 +318,18 @@ export const gridStyles = css`
   :host([reordering]) {
     -webkit-user-select: none;
     user-select: none;
+  }
+
+  :host([reordering]) [part~='cell'] {
+    --_reorder-background-image: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1));
+  }
+
+  :host([reordering]) [part~='cell'][reorder-status='allowed'] {
+    --_reorder-background-image: linear-gradient(rgba(0, 0, 0, 0.04), rgba(0, 0, 0, 0.04));
+  }
+
+  :host([reordering]) [part~='cell'][reorder-status='dragging'] {
+    --_reorder-background-image: none;
   }
 
   /* Resizing styles */
@@ -343,6 +381,67 @@ export const gridStyles = css`
   #scroller:is([column-resizing], [range-selecting]) {
     -webkit-user-select: none;
     user-select: none;
+  }
+
+  /* Drag'n'drop styles */
+  :host([dragover]) {
+    outline: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
+    outline-offset: calc(var(--_border-width) * -1);
+  }
+
+  [part~='row'][dragover] {
+    z-index: 100 !important;
+  }
+
+  [part~='row'][dragover]::after {
+    visibility: visible;
+  }
+
+  [part~='first-row'][dragover]::after {
+    inset-block-start: 0;
+  }
+
+  [part~='dragover-above-row']::after {
+    outline: 0;
+    border-top: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
+    top: calc(var(--vaadin-focus-ring-width) / -2);
+  }
+
+  [part~='dragover-below-row']::after {
+    outline: 0;
+    border-bottom: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
+    bottom: calc(var(--vaadin-focus-ring-width) / -2);
+  }
+
+  [part~='row'][dragstart] [part~='cell'] {
+    border-top: 0 !important;
+  }
+
+  [part~='row'][dragstart] [part~='cell'][last-column] {
+    border-radius: 0 3px 3px 0;
+  }
+
+  [part~='row'][dragstart] [part~='cell'][first-column] {
+    border-radius: 3px 0 0 3px;
+  }
+
+  /* Indicates the number of dragged rows */
+  #scroller [part~='row'][dragstart]:not([dragstart=''])::before {
+    position: absolute;
+    left: var(--_grid-drag-start-x);
+    top: var(--_grid-drag-start-y);
+    z-index: 100;
+    content: attr(dragstart);
+    box-sizing: border-box;
+    padding: 0.3em;
+    color: white;
+    background-color: red;
+    border-radius: 1em;
+    font-size: 0.75rem;
+    line-height: 1;
+    font-weight: 500;
+    min-width: 1.6em;
+    text-align: center;
   }
 
   /* Sizer styles */

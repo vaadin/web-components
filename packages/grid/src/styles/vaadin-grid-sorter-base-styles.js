@@ -54,4 +54,10 @@ export const gridSorterStyles = css`
   :host([direction='desc']) [part='indicators']::before {
     padding-block: 6px 0;
   }
+
+  @media (forced-colors: active) {
+    [part='indicators']::before {
+      background: CanvasText;
+    }
+  }
 `;

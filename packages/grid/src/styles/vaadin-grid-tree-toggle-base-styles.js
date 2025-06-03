@@ -9,7 +9,6 @@ import { css } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 export const gridTreeToggleStyles = css`
   :host {
     display: flex;
-    align-items: center;
     max-width: 100%;
     pointer-events: none;
   }
@@ -67,5 +66,11 @@ export const gridTreeToggleStyles = css`
     display: block;
     overflow: hidden;
     text-overflow: ellipsis;
+  }
+
+  @media (forced-colors: active) {
+    [part='toggle']::before {
+      background: CanvasText;
+    }
   }
 `;
