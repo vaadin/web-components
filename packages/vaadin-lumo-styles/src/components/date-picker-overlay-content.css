@@ -94,11 +94,6 @@
   visibility: visible;
 }
 
-:host(.animate) ::slotted([slot='months']),
-:host(.animate) ::slotted([slot='years']) {
-  transition: all 200ms;
-}
-
 /* Year scroller position indicator */
 ::slotted([slot='years'])::before {
   border: none;

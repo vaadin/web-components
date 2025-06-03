@@ -5,7 +5,7 @@
  */
 import { timeOut } from '@vaadin/component-base/src/async.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
-import { addListener, setTouchAction } from '@vaadin/component-base/src/gestures.js';
+import { addListener } from '@vaadin/component-base/src/gestures.js';
 import { MediaQueryController } from '@vaadin/component-base/src/media-query-controller.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 import {
@@ -73,10 +73,6 @@ export const DatePickerOverlayContentMixin = (superClass) =>
         _desktopMediaQuery: {
           type: String,
           value: '(min-width: 375px)',
-        },
-
-        _yearScrollerWidth: {
-          value: 50,
         },
 
         i18n: {
@@ -176,9 +172,6 @@ export const DatePickerOverlayContentMixin = (superClass) =>
 
     /** @protected */
     _addListeners() {
-      setTouchAction(this.$.scrollers, 'pan-y');
-
-      addListener(this.$.scrollers, 'track', this._track.bind(this));
       addListener(this.shadowRoot.querySelector('[part="clear-button"]'), 'tap', this._clear.bind(this));
       addListener(this.shadowRoot.querySelector('[part="toggle-button"]'), 'tap', this._cancel.bind(this));
       addListener(
@@ -226,7 +219,6 @@ export const DatePickerOverlayContentMixin = (superClass) =>
 
     reset() {
       this._closeYearScroller();
-      this._toggleAnimateClass(true);
     }
 
     /**
@@ -644,81 +636,13 @@ export const DatePickerOverlayContentMixin = (superClass) =>
     }
 
     /** @private */
-    _limit(value, range) {
-      return Math.min(range.max, Math.max(range.min, value));
-    }
-
-    /** @private */
-    _handleTrack(e) {
-      // Check if horizontal movement threshold (dx) not exceeded or
-      // scrolling fast vertically (ddy).
-      if (Math.abs(e.detail.dx) < 10 || Math.abs(e.detail.ddy) > 10) {
-        return;
-      }
-
-      // If we're flinging quickly -> start animating already.
-      if (Math.abs(e.detail.ddx) > this._yearScrollerWidth / 3) {
-        this._toggleAnimateClass(true);
-      }
-
-      const newTranslateX = this._translateX + e.detail.ddx;
-      this._translateX = this._limit(newTranslateX, {
-        min: 0,
-        max: this._yearScrollerWidth,
-      });
-    }
-
-    /** @private */
-    _track(e) {
-      if (this._desktopMode) {
-        // No need to track for swipe gestures on desktop.
-        return;
-      }
-
-      switch (e.detail.state) {
-        case 'start':
-          this._toggleAnimateClass(false);
-          break;
-        case 'track':
-          this._handleTrack(e);
-          break;
-        case 'end':
-          this._toggleAnimateClass(true);
-          if (this._translateX >= this._yearScrollerWidth / 2) {
-            this._closeYearScroller();
-          } else {
-            this._openYearScroller();
-          }
-          break;
-        default:
-          break;
-      }
-    }
-
-    /** @private */
-    _toggleAnimateClass(enable) {
-      if (enable) {
-        this.classList.add('animate');
-      } else {
-        this.classList.remove('animate');
-      }
-    }
-
-    /** @private */
     _toggleYearScroller() {
       this.toggleAttribute('years-visible');
     }
 
     /** @private */
-    _openYearScroller() {
-      this._translateX = 0;
-      this.setAttribute('years-visible', '');
-    }
-
-    /** @private */
     _closeYearScroller() {
       this.removeAttribute('years-visible');
-      this._translateX = this._yearScrollerWidth;
     }
 
     /** @private */

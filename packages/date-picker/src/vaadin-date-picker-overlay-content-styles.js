@@ -65,11 +65,6 @@ export const overlayContentStyles = css`
     visibility: visible;
   }
 
-  :host(.animate) ::slotted([slot='months']),
-  :host(.animate) ::slotted([slot='years']) {
-    transition: all 200ms;
-  }
-
   [part='toolbar'] {
     display: flex;
     grid-area: toolbar;
