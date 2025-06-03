@@ -533,7 +533,6 @@ snapshots["vaadin-date-time-picker host overlay class date-picker"] =
   top-aligned=""
 >
   <vaadin-date-picker-overlay-content
-    class="animate"
     desktop=""
     role="dialog"
   >
