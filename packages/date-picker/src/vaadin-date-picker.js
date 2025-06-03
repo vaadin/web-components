@@ -18,8 +18,8 @@ import { LabelledInputController } from '@vaadin/field-base/src/labelled-input-c
 import { inputFieldShared } from '@vaadin/field-base/src/styles/input-field-shared-styles.js';
 import { CSSInjectionMixin } from '@vaadin/vaadin-themable-mixin/css-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { datePickerStyles } from './styles/vaadin-date-picker-core-styles.js';
 import { DatePickerMixin } from './vaadin-date-picker-mixin.js';
-import { datePickerStyles } from './vaadin-date-picker-styles.js';
 
 /**
  * `<vaadin-date-picker>` is an input field that allows to enter a date by typing or by selecting from a calendar overlay.

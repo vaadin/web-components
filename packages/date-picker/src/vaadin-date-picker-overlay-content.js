@@ -14,8 +14,8 @@ import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { CSSInjectionMixin } from '@vaadin/vaadin-themable-mixin/css-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { overlayContentStyles } from './styles/vaadin-date-picker-overlay-content-core-styles.js';
 import { DatePickerOverlayContentMixin } from './vaadin-date-picker-overlay-content-mixin.js';
-import { overlayContentStyles } from './vaadin-date-picker-overlay-content-styles.js';
 
 /**
  * @customElement
