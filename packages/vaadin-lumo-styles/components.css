@@ -5,6 +5,8 @@
  */
 @import './components/accordion.css';
 @import './components/button.css';
+@import './components/checkbox-group.css';
+@import './components/checkbox.css';
 @import './components/combo-box.css';
 @import './components/custom-field.css';
 @import './components/date-picker.css';
@@ -22,6 +24,8 @@
 @import './components/multi-select-combo-box.css';
 @import './components/number-field.css';
 @import './components/password-field.css';
+@import './components/radio-button.css';
+@import './components/radio-group.css';
 @import './components/select.css';
 @import './components/text-area.css';
 @import './components/text-field.css';
