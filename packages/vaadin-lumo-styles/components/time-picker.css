@@ -21,7 +21,7 @@
 @import '../src/components/time-picker-overlay.css' vaadin-time-picker-overlay;
 
 @import '../src/mixins/base-layer-reset.css' vaadin-time-picker-item;
-@import '../src/mixins/item.css' vaadin-time-picker-item;
+@import '../src/components/item.css' vaadin-time-picker-item;
 @import '../src/components/combo-box-item.css' vaadin-time-picker-item;
 
 @import '../src/mixins/base-layer-reset.css' vaadin-time-picker-scroller;
