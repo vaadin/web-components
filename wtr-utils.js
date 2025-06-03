@@ -104,7 +104,7 @@ const getAllPortedLumoPackages = () => {
     .filter(
       (dir) =>
         fs.statSync(`packages/${dir}`).isDirectory() &&
-        fs.existsSync(`packages/vaadin-lumo-styles/src/components/${dir}.css`),
+        fs.existsSync(`packages/vaadin-lumo-styles/components/${dir}.css`),
     );
 };
 
