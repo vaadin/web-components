@@ -48,6 +48,7 @@ snapshots["vaadin-grid shadow default"] =
     aria-rowcount="3"
     id="table"
     role="treegrid"
+    style="--_grid-horizontal-scroll-position: 0px;"
     tabindex="0"
   >
     <caption
@@ -272,6 +273,7 @@ snapshots["vaadin-grid shadow selected"] =
     aria-rowcount="3"
     id="table"
     role="treegrid"
+    style="--_grid-horizontal-scroll-position: 0px;"
     tabindex="0"
   >
     <caption
@@ -497,6 +499,7 @@ snapshots["vaadin-grid shadow details opened"] =
     aria-rowcount="3"
     id="table"
     role="treegrid"
+    style="--_grid-horizontal-scroll-position: 0px;"
     tabindex="0"
   >
     <caption
@@ -722,6 +725,7 @@ snapshots["vaadin-grid shadow hidden column"] =
     aria-rowcount="3"
     id="table"
     role="treegrid"
+    style="--_grid-horizontal-scroll-position: 0px;"
     tabindex="0"
   >
     <caption
@@ -895,6 +899,7 @@ snapshots["vaadin-grid shadow hidden column selected"] =
     aria-rowcount="3"
     id="table"
     role="treegrid"
+    style="--_grid-horizontal-scroll-position: 0px;"
     tabindex="0"
   >
     <caption
