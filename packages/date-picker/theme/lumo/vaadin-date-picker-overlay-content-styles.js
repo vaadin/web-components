@@ -95,6 +95,7 @@ registerStyles(
 
     :host([fullscreen]) [part='toolbar'] {
       background-color: var(--lumo-base-color);
+      margin-inline-end: 57px;
     }
 
     :host([fullscreen]) [part='overlay-header'] {
@@ -129,9 +130,8 @@ registerStyles(
         background-image: none;
       }
 
-      [part='toolbar'],
-      ::slotted([slot='months']) {
-        margin-right: 0;
+      :host([fullscreen]) [part='toolbar'] {
+        margin-inline-end: 0;
       }
 
       /* TODO make date-picker adapt to the width of the years part */
