@@ -46,7 +46,6 @@ export const overlayContentStyles = css`
     display: flex;
     grid-area: toolbar;
     justify-content: space-between;
-    flex-shrink: 0;
   }
 
   :host([fullscreen]) [part='toolbar'] {
