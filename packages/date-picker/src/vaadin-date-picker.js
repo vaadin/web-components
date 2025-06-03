@@ -75,7 +75,7 @@ import { datePickerStyles } from './vaadin-date-picker-styles.js';
  * Part name             | Description
  * ----------------------|--------------------
  * `years-toggle-button` | Fullscreen mode years scroller toggle
- * `toolbar`             | Toolbar bar with slotted buttons
+ * `toolbar`             | Toolbar with slotted buttons
  *
  * The following state attributes are available on the `<vaadin-date-picker-overlay-content>` element:
  *
