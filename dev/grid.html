@@ -13,6 +13,7 @@
         grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
         gap: 2rem;
         margin-bottom: 2rem;
+        font-size: 0.875rem;
       }
 
       .control-group {
@@ -48,6 +49,14 @@
           <vaadin-checkbox id="maxWidth" value="maxWidth" label="Max Width"></vaadin-checkbox>
           <vaadin-checkbox id="maxHeight" value="maxHeight" label="Max Height"></vaadin-checkbox>
         </vaadin-checkbox-group>
+
+        <vaadin-radio-group id="items" label="Items">
+          <vaadin-radio-button value="0" label="0"></vaadin-radio-button>
+          <vaadin-radio-button value="5" label="5"></vaadin-radio-button>
+          <vaadin-radio-button value="100" label="100" checked></vaadin-radio-button>
+          <vaadin-checkbox id="details" value="details" label="Details"></vaadin-checkbox>
+          <vaadin-checkbox id="children" value="children" label="Children" checked></vaadin-checkbox>
+        </vaadin-radio-group>
       </div>
 
       <div class="control-group">
@@ -95,6 +104,8 @@
         <vaadin-grid-sort-column path="city" header="City"></vaadin-grid-sort-column>
         <vaadin-grid-sort-column path="country" header="Country"></vaadin-grid-sort-column>
       </vaadin-grid-column-group>
+
+      <span slot="empty-state">No items.</span>
     </vaadin-grid>
 
     <script type="module">
@@ -119,6 +130,7 @@
 
       // Setup grid and controls
       const grid = document.querySelector('vaadin-grid');
+      // grid.itemHasChildrenPath = '';
       const selectionColumn = grid.querySelector('vaadin-grid-selection-column');
       const treeColumn = grid.querySelector('vaadin-grid-tree-column');
 
@@ -126,7 +138,7 @@
       grid.items = generateItems(100);
 
       // Setup row details renderer
-      grid.rowDetailsRenderer = (root, grid, model) => {
+      const rowDetailsRenderer = (root, grid, model) => {
         root.innerHTML = `
           <div style="padding: 1rem">
             <h4>Details for ${model.item.name}</h4>
@@ -162,6 +174,19 @@
 
       document.getElementById('maxHeight').addEventListener('checked-changed', (e) => {
         grid.classList.toggle('max-height', e.detail.value);
+      });
+
+      // Items Controls
+      document.getElementById('items').addEventListener('value-changed', (e) => {
+        grid.items = generateItems(parseInt(e.detail.value));
+      });
+
+      document.getElementById('details').addEventListener('checked-changed', (e) => {
+        grid.rowDetailsRenderer = e.detail.value ? rowDetailsRenderer : undefined;
+      });
+
+      document.getElementById('children').addEventListener('checked-changed', (e) => {
+        grid.itemHasChildrenPath = e.detail.value ? 'children' : '';
       });
 
       // Column Controls
