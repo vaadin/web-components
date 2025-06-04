@@ -116,10 +116,7 @@ export const ScrollMixin = (superClass) =>
       super.ready();
 
       this.__horizontalScrollPositionStyleSheet = new CSSStyleSheet();
-      this.shadowRoot.adoptedStyleSheets = [
-        ...this.shadowRoot.adoptedStyleSheets,
-        this.__horizontalScrollPositionStyleSheet,
-      ];
+      this.shadowRoot.adoptedStyleSheets.push(this.__horizontalScrollPositionStyleSheet);
 
       this.scrollTarget = this.$.table;
 
