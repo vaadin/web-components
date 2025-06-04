@@ -74,7 +74,7 @@ describe('vaadin-date-time-picker', () => {
         const timePicker = dateTimePicker.querySelector('[slot="time-picker"]');
         timePicker.opened = true;
         await nextUpdate(timePicker);
-        await expect(timePicker.$.comboBox.$.overlay).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
+        await expect(timePicker.$.overlay).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
       });
     });
   });

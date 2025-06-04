@@ -24,14 +24,14 @@ describe('time-picker in dialog', () => {
 
   describe('opened', () => {
     beforeEach(async () => {
-      timePicker.$.comboBox.open();
+      timePicker.open();
       await nextRender();
     });
 
     it('should not close the dialog when closing time-picker on input element Escape', async () => {
       await sendKeys({ press: 'Escape' });
 
-      expect(timePicker.$.comboBox.opened).to.be.false;
+      expect(timePicker.opened).to.be.false;
       expect(dialog.opened).to.be.true;
     });
 

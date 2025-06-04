@@ -46,6 +46,17 @@ export class TimePickerOverlay extends ComboBoxOverlayMixin(
       </div>
     `;
   }
+
+  /**
+   * Override method from `ComboBoxOverlayMixin` to enforce
+   * `dir` attribute to be set to `ltr` on the overlay.
+   * @protected
+   * @override
+   */
+  _getHostDir() {
+    // See https://github.com/vaadin/vaadin-time-picker/issues/145
+    return 'ltr';
+  }
 }
 
 defineCustomElement(TimePickerOverlay);

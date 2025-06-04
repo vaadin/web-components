@@ -26,12 +26,15 @@ export const ComboBoxOverlayMixin = (superClass) =>
     connectedCallback() {
       super.connectedCallback();
 
-      const comboBox = this._comboBox;
-
-      const hostDir = comboBox && comboBox.getAttribute('dir');
+      const hostDir = this._getHostDir();
       if (hostDir) {
         this.setAttribute('dir', hostDir);
       }
+    }
+
+    /** @protected */
+    _getHostDir() {
+      return this._comboBox && this._comboBox.getAttribute('dir');
     }
 
     /**

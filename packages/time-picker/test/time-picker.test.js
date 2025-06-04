@@ -6,12 +6,11 @@ import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
 import { setInputValue } from './helpers.js';
 
 describe('time-picker', () => {
-  let timePicker, comboBox, inputElement;
+  let timePicker, inputElement;
 
   beforeEach(async () => {
     timePicker = fixtureSync(`<vaadin-time-picker></vaadin-time-picker>`);
     await nextRender();
-    comboBox = timePicker.$.comboBox;
     inputElement = timePicker.inputElement;
   });
 
@@ -138,41 +137,6 @@ describe('time-picker', () => {
     });
   });
 
-  describe('toggle overlay', () => {
-    let overlay;
-
-    beforeEach(() => {
-      overlay = comboBox.shadowRoot.querySelector('vaadin-time-picker-overlay');
-    });
-
-    it('should open overlay using open() call', () => {
-      timePicker.open();
-      expect(timePicker.opened).to.be.true;
-      expect(overlay.opened).to.be.true;
-    });
-
-    it('should close overlay using close() call', () => {
-      timePicker.open();
-      timePicker.close();
-      expect(timePicker.opened).to.be.false;
-      expect(overlay.opened).to.be.false;
-    });
-
-    it('should not open overlay when disabled', () => {
-      timePicker.disabled = true;
-      timePicker.open();
-      expect(timePicker.opened).to.be.false;
-      expect(overlay.opened).to.be.false;
-    });
-
-    it('should not open overlay when readonly', () => {
-      comboBox.readonly = true;
-      comboBox.open();
-      expect(comboBox.opened).to.be.false;
-      expect(overlay.opened).to.be.false;
-    });
-  });
-
   describe('properties and attributes', () => {
     it('should propagate required property to input', async () => {
       timePicker.required = true;
@@ -213,24 +177,16 @@ describe('time-picker', () => {
     it('should not open the dropdown', () => {
       timePicker.value = '00:00';
       clearButton.click();
-      expect(comboBox.opened).to.be.false;
+      expect(timePicker.opened).to.be.false;
     });
 
     it('should prevent mousedown event to avoid input blur', () => {
-      comboBox.open();
+      timePicker.open();
 
       const event = new CustomEvent('mousedown', { cancelable: true });
       clearButton.dispatchEvent(event);
 
       expect(event.defaultPrevented).to.be.true;
-    });
-
-    it('should propagate clear button to the internal combo-box', async () => {
-      expect(comboBox.clearButtonVisible).to.be.true;
-
-      timePicker.clearButtonVisible = false;
-      await nextFrame();
-      expect(comboBox.clearButtonVisible).to.be.false;
     });
   });
 
@@ -244,7 +200,7 @@ describe('time-picker', () => {
     // WebKit returns true for isTouch in the test envirnoment. This test fails when isTouch == true, which is a correct behavior
     (isTouch ? it.skip : it)('should focus input element on toggle button click', () => {
       toggleButton.click();
-      expect(comboBox.opened).to.be.true;
+      expect(timePicker.opened).to.be.true;
       expect(document.activeElement).to.equal(inputElement);
     });
   });
@@ -280,23 +236,23 @@ describe('time-picker', () => {
     });
 
     it('should have dropdown items if min nor max is defined', () => {
-      expect(timePicker.__dropdownItems.length).to.be.equal(24);
+      expect(timePicker._dropdownItems.length).to.be.equal(24);
     });
 
     it('should allow setting valid min property value', () => {
       timePicker.min = '04:00';
-      expect(timePicker.__dropdownItems.length).to.be.equal(20);
+      expect(timePicker._dropdownItems.length).to.be.equal(20);
     });
 
     it('should allow setting valid max property value', () => {
       timePicker.max = '19:00';
-      expect(timePicker.__dropdownItems.length).to.be.equal(20);
+      expect(timePicker._dropdownItems.length).to.be.equal(20);
     });
 
     it('should allow setting valid min and max property value', () => {
       timePicker.min = '04:00';
       timePicker.max = '19:00';
-      expect(timePicker.__dropdownItems.length).to.be.equal(16);
+      expect(timePicker._dropdownItems.length).to.be.equal(16);
     });
 
     it('should allow setting valid min value via attribute', () => {
@@ -334,17 +290,17 @@ describe('time-picker', () => {
 
     it('should have dropdown items if step is undefined', () => {
       timePicker.step = undefined;
-      expect(timePicker.__dropdownItems.length).to.be.equal(24);
+      expect(timePicker._dropdownItems.length).to.be.equal(24);
     });
 
     it('should have dropdown items if step is bigger or equal than 15min', () => {
       timePicker.step = 15 * 60;
-      expect(timePicker.__dropdownItems.length).to.be.equal(96);
+      expect(timePicker._dropdownItems.length).to.be.equal(96);
     });
 
     it('should not have dropdown items if step is lesser than 15min', () => {
       timePicker.step = 15 * 60 - 1;
-      expect(timePicker.__dropdownItems.length).to.be.equal(0);
+      expect(timePicker._dropdownItems.length).to.be.equal(0);
     });
 
     it('should allow setting valid step property value', () => {
@@ -408,8 +364,6 @@ describe('time-picker', () => {
         formatTime: sinon.stub().withArgs({ hours: 12, minutes: 0 }).returns('12:00 AM'),
         parseTime: sinon.stub().returns({ hours: 12, minutes: 0, seconds: 0 }),
       };
-      expect(comboBox.selectedItem).to.be.deep.equal({ label: '12:00 AM', value: '12:00 AM' });
-      expect(comboBox.value).to.be.equal('12:00 AM');
       expect(inputElement.value).to.be.equal('12:00 AM');
       expect(timePicker.value).to.be.equal('12:00');
     });
@@ -421,7 +375,7 @@ describe('time-picker', () => {
       };
       timePicker.value = '12';
       expect(timePicker.value).to.be.equal('12:00');
-      expect(comboBox.value).to.be.equal('12:00 AM');
+      expect(inputElement.value).to.be.equal('12:00 AM');
     });
 
     it('should accept custom time formatter', () => {
@@ -460,6 +414,28 @@ describe('time-picker', () => {
     it('should focus on required indicator click', () => {
       timePicker.shadowRoot.querySelector('[part="required-indicator"]').click();
       expect(timePicker.hasAttribute('focused')).to.be.true;
+    });
+  });
+
+  describe('autoOpenDisabled', () => {
+    let timePicker, inputElement;
+
+    beforeEach(async () => {
+      timePicker = fixtureSync(`<vaadin-time-picker auto-open-disabled value="05:00"></vaadin-time-picker>`);
+      await nextRender();
+      inputElement = timePicker.inputElement;
+    });
+
+    it('should commit a custom value after setting a predefined value', () => {
+      setInputValue(timePicker, '05:10');
+      enter(inputElement);
+      expect(timePicker.value).to.equal('05:10');
+    });
+
+    it('should commit an empty value after setting a predefined value', () => {
+      setInputValue(timePicker, '');
+      enter(inputElement);
+      expect(timePicker.value).to.equal('');
     });
   });
 });

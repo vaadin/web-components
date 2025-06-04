@@ -404,7 +404,7 @@ export const DateTimePickerMixin = (superClass) =>
           this.__datePicker,
           this.__datePicker.$.overlay,
           this.__timePicker,
-          this.__timePicker.$.comboBox.$.overlay,
+          this.__timePicker.$.overlay,
         ].includes(node);
       });
 

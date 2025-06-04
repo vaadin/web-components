@@ -4,7 +4,9 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import '@vaadin/input-container/src/vaadin-input-container.js';
-import './vaadin-time-picker-combo-box.js';
+import './vaadin-time-picker-item.js';
+import './vaadin-time-picker-overlay.js';
+import './vaadin-time-picker-scroller.js';
 import { html, LitElement } from 'lit';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
@@ -58,7 +60,6 @@ import { TimePickerMixin } from './vaadin-time-picker-mixin.js';
  * In addition to `<vaadin-time-picker>` itself, the following internal
  * components are themable:
  *
- * - `<vaadin-time-picker-combo-box>` - an internal version of [`<vaadin-combo-box>`](#/elements/vaadin-combo-box).
  * - `<vaadin-time-picker-overlay>` - has the same API as [`<vaadin-overlay>`](#/elements/vaadin-overlay).
  * - `<vaadin-time-picker-item>` - has the same API as [`<vaadin-item>`](#/elements/vaadin-item).
  * - [`<vaadin-input-container>`](#/elements/vaadin-input-container) - an internal element wrapping the input.
@@ -114,35 +115,18 @@ class TimePicker extends TimePickerMixin(CSSInjectionMixin(ThemableMixin(Element
           <span part="required-indicator" aria-hidden="true" @click="${this.focus}"></span>
         </div>
 
-        <vaadin-time-picker-combo-box
-          id="comboBox"
-          .filteredItems="${this.__dropdownItems}"
-          .value="${this._comboBoxValue}"
-          .opened="${this.opened}"
-          .disabled="${this.disabled}"
+        <vaadin-input-container
+          part="input-field"
           .readonly="${this.readonly}"
-          .clearButtonVisible="${this.clearButtonVisible}"
-          .autoOpenDisabled="${this.autoOpenDisabled}"
-          .overlayClass="${this.overlayClass}"
-          .positionTarget="${this._inputContainer}"
+          .disabled="${this.disabled}"
+          .invalid="${this.invalid}"
           theme="${ifDefined(this._theme)}"
-          @value-changed="${this.__onComboBoxValueChanged}"
-          @opened-changed="${this.__onComboBoxOpenedChanged}"
-          @change="${this.__onComboBoxChange}"
         >
-          <vaadin-input-container
-            part="input-field"
-            .readonly="${this.readonly}"
-            .disabled="${this.disabled}"
-            .invalid="${this.invalid}"
-            theme="${ifDefined(this._theme)}"
-          >
-            <slot name="prefix" slot="prefix"></slot>
-            <slot name="input"></slot>
-            <div id="clearButton" part="clear-button" slot="suffix" aria-hidden="true"></div>
-            <div id="toggleButton" class="toggle-button" part="toggle-button" slot="suffix" aria-hidden="true"></div>
-          </vaadin-input-container>
-        </vaadin-time-picker-combo-box>
+          <slot name="prefix" slot="prefix"></slot>
+          <slot name="input"></slot>
+          <div id="clearButton" part="clear-button" slot="suffix" aria-hidden="true"></div>
+          <div id="toggleButton" part="toggle-button" slot="suffix" aria-hidden="true"></div>
+        </vaadin-input-container>
 
         <div part="helper-text">
           <slot name="helper"></slot>
@@ -152,18 +136,17 @@ class TimePicker extends TimePickerMixin(CSSInjectionMixin(ThemableMixin(Element
           <slot name="error-message"></slot>
         </div>
       </div>
+
+      <vaadin-time-picker-overlay
+        id="overlay"
+        .opened="${this._overlayOpened}"
+        theme="${ifDefined(this._theme)}"
+        .positionTarget="${this._inputContainer}"
+        no-vertical-overlap
+      ></vaadin-time-picker-overlay>
+
       <slot name="tooltip"></slot>
     `;
-  }
-
-  /** @private */
-  __onComboBoxOpenedChanged(event) {
-    this.opened = event.detail.value;
-  }
-
-  /** @private */
-  __onComboBoxValueChanged(event) {
-    this._comboBoxValue = event.detail.value;
   }
 }
 
