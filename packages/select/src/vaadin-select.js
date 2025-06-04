@@ -17,8 +17,8 @@ import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { inputFieldShared } from '@vaadin/field-base/src/styles/input-field-shared-styles.js';
 import { CSSInjectionMixin } from '@vaadin/vaadin-themable-mixin/css-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { selectStyles } from './styles/vaadin-select-core-styles.js';
 import { SelectBaseMixin } from './vaadin-select-base-mixin.js';
-import { selectStyles } from './vaadin-select-core-styles.js';
 
 /**
  * `<vaadin-select>` is a Web Component for selecting values from a list of items.
