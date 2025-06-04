@@ -629,16 +629,16 @@ describe('root heading level', () => {
 
   beforeEach(async () => {
     const container = fixtureSync(`
-        <div>
-          <vaadin-dashboard-layout id="layout1">
-            <vaadin-dashboard-widget widget-title="Widget"></vaadin-dashboard-widget>
-            <vaadin-dashboard-section section-title="Section">
-              <vaadin-dashboard-widget widget-title="Nested Widget"></vaadin-dashboard-widget>
-            </vaadin-dashboard-section>
-          </vaadin-dashboard-layout>
-          <vaadin-dashboard-layout id="layout2" root-heading-level="3"></vaadin-dashboard-layout>
-        </div>
-      `);
+      <div>
+        <vaadin-dashboard-layout id="layout1">
+          <vaadin-dashboard-widget widget-title="Widget"></vaadin-dashboard-widget>
+          <vaadin-dashboard-section section-title="Section">
+            <vaadin-dashboard-widget widget-title="Nested Widget"></vaadin-dashboard-widget>
+          </vaadin-dashboard-section>
+        </vaadin-dashboard-layout>
+        <vaadin-dashboard-layout id="layout2" root-heading-level="3"></vaadin-dashboard-layout>
+      </div>
+    `);
     await nextFrame();
     dashboardLayout = container.querySelector('#layout1') as DashboardLayout;
     widget = dashboardLayout.querySelector('vaadin-dashboard-widget') as DashboardWidget;
