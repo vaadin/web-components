@@ -4,8 +4,10 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 :host {
-  margin: calc(var(--lumo-space-xs) / 2);
+  margin-block: calc(var(--lumo-space-xs) / 2);
+  margin-right: calc(var(--lumo-space-xs) / 2);
   margin-left: 0;
+  border-radius: 0;
 }
 
 [part='label'] {
