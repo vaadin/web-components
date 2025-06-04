@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -8,9 +8,9 @@
     <script type="module" src="./common.js"></script>
 
     <script type="module">
-      import '@vaadin/upload';
       import '@vaadin/radio-group';
-      import { xhrCreator, createFiles } from '@vaadin/upload/test/helpers.js';
+      import '@vaadin/upload';
+      import { createFiles, xhrCreator } from '@vaadin/upload/test/helpers.js';
 
       const nextUpload = document.querySelector('#next-upload');
 

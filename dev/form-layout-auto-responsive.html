@@ -23,18 +23,18 @@
     <form-layout-examples></form-layout-examples>
 
     <script type="module">
-      import '@vaadin/dialog';
       import '@vaadin/button';
-      import '@vaadin/tabsheet';
+      import '@vaadin/dialog';
       import '@vaadin/form-layout';
-      import '@vaadin/form-layout/vaadin-form-row.js';
       import '@vaadin/form-layout/vaadin-form-item.js';
+      import '@vaadin/form-layout/vaadin-form-row.js';
+      import '@vaadin/horizontal-layout';
+      import '@vaadin/password-field';
+      import '@vaadin/tabsheet';
       import '@vaadin/text-area';
       import '@vaadin/text-field';
-      import '@vaadin/password-field';
-      import '@vaadin/horizontal-layout';
       import '@vaadin/vaadin-lumo-styles/lumo.css';
-      import { render, html, LitElement } from 'lit';
+      import { html, LitElement, render } from 'lit';
       import { dialogRenderer } from '@vaadin/dialog/lit.js';
 
       class FormLayoutExamples extends LitElement {
@@ -198,7 +198,15 @@
                   <vaadin-password-field></vaadin-password-field>
                 </vaadin-form-item>
               </vaadin-form-layout>
-              <vaadin-form-layout style="flex: 1;" auto-responsive auto-rows max-columns="2" labels-aside expand-columns expand-fields>
+              <vaadin-form-layout
+                style="flex: 1;"
+                auto-responsive
+                auto-rows
+                max-columns="2"
+                labels-aside
+                expand-columns
+                expand-fields
+              >
                 <vaadin-form-item>
                   <label slot="label"> First name </label>
                   <vaadin-text-field></vaadin-text-field>
@@ -241,7 +249,7 @@
             <h1>autoResponsive inside Dialog + minColumns</h1>
             <vaadin-dialog
               ${dialogRenderer(
-            (dialog) => html`
+                (dialog) => html`
                   <vaadin-form-layout auto-responsive auto-rows min-columns="2">
                     <vaadin-text-field label="First name"></vaadin-text-field>
                     <vaadin-text-field label="Last name"></vaadin-text-field>
@@ -250,7 +258,7 @@
                     <vaadin-password-field label="Confirm"></vaadin-password-field>
                   </vaadin-form-layout>
                 `,
-          )}
+              )}
             ></vaadin-dialog>
             <vaadin-button @click="${this.openPrevSiblingDialog}">Open</vaadin-button>
 
@@ -304,7 +312,7 @@
             <h1>autoResponsive inside Dialog + labelsAside + minColumns</h1>
             <vaadin-dialog
               ${dialogRenderer(
-            (dialog) => html`
+                (dialog) => html`
                   <vaadin-form-layout auto-responsive auto-rows min-columns="2" labels-aside>
                     <vaadin-form-item>
                       <label slot="label"> First name </label>
@@ -328,7 +336,7 @@
                     </vaadin-form-item>
                   </vaadin-form-layout>
                 `,
-          )}
+              )}
             ></vaadin-dialog>
             <vaadin-button @click="${this.openPrevSiblingDialog}">Open</vaadin-button>
 
@@ -378,7 +386,14 @@
                       <vaadin-password-field label="Password"></vaadin-password-field>
                       <vaadin-password-field label="Confirm"></vaadin-password-field>
                     </vaadin-form-layout>
-                    <vaadin-form-layout auto-responsive auto-rows max-columns="2" style="flex: 1;" expand-columns expand-fields>
+                    <vaadin-form-layout
+                      auto-responsive
+                      auto-rows
+                      max-columns="2"
+                      style="flex: 1;"
+                      expand-columns
+                      expand-fields
+                    >
                       <vaadin-text-field label="First name"></vaadin-text-field>
                       <vaadin-text-field label="Last name"></vaadin-text-field>
                       <vaadin-text-area label="Address" colspan="2"></vaadin-text-area>

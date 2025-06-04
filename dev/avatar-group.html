@@ -12,16 +12,16 @@
       import '@vaadin/vaadin-lumo-styles/lumo.css';
 
       const groups = document.querySelectorAll('vaadin-avatar-group');
-      groups.forEach(group => group.items = [{ name: 'AA' }, { name: 'BB' }, { name: 'CC' }, { name: 'DD' }]);
+      groups.forEach((group) => (group.items = [{ name: 'AA' }, { name: 'BB' }, { name: 'CC' }, { name: 'DD' }]));
 
       document.querySelector('#add').addEventListener('click', () => {
         const alphabet = 'abcdefghijklmnopqrstuvwxyz';
         const randomChar = alphabet[Math.floor(Math.random() * alphabet.length)];
-        groups.forEach(group => group.items = [...group.items, { name: randomChar.toUpperCase().repeat(2) }]);
+        groups.forEach((group) => (group.items = [...group.items, { name: randomChar.toUpperCase().repeat(2) }]));
       });
 
       document.querySelector('#remove').addEventListener('click', () => {
-        groups.forEach(group => group.items = [...group.items].splice(0, group.items.length - 1));
+        groups.forEach((group) => (group.items = [...group.items].splice(0, group.items.length - 1)));
       });
     </script>
   </head>
@@ -45,6 +45,5 @@
       <h2>Max Items Visible</h2>
       <vaadin-avatar-group max-items-visible="3"></vaadin-avatar-group>
     </section>
-
   </body>
 </html>

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -9,7 +9,7 @@
     <script type="module">
       import '@vaadin/scroller';
 
-      document.querySelectorAll('.content').forEach(content => {
+      document.querySelectorAll('.content').forEach((content) => {
         content.textContent = new Array(1000).fill('content').join(' ');
       });
     </script>
