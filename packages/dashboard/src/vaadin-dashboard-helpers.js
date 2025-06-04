@@ -138,13 +138,15 @@ export function findAncestorInstance(node, baseClass) {
 }
 
 /**
- * Walks up the DOM tree starting from `node`, returning the first ancestor which extends 'DashboardLayoutMixin'.
+ * Walks up the DOM tree starting from `node`, returning the first ancestor which is a `Dashboard` or `DashboardLayout`.
  *
  * @param {Node} node - starting node
  * @returns {HTMLElement | null}
  */
 export function getParentLayout(node) {
   return __findFilteredAncestorInstance(node, (el) => {
-    return el.constructor && el.constructor.toString().includes('DashboardLayoutMixin');
+    return (
+      el.constructor && (el.constructor.is === 'vaadin-dashboard' || el.constructor.is === 'vaadin-dashboard-layout')
+    );
   });
 }
