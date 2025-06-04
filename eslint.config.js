@@ -123,13 +123,18 @@ export default [
     },
   },
   {
-    files: [
-      'scripts/**/*.js',
-      '*.config.js',
-      'wtr-utils.js',
-      'packages/**/gulpfile.cjs',
-      'custom-linter-rules/**/*.js',
-    ],
+    files: ['scripts/**/*.js', '*.config.js', 'wtr-utils.js', 'custom-linter-rules/**/*.js'],
+    languageOptions: {
+      globals: {
+        ...globals.node,
+      },
+    },
+    rules: {
+      'no-console': 'off',
+    },
+  },
+  {
+    files: ['packages/**/gulpfile.cjs'],
     languageOptions: {
       globals: {
         ...globals.node,
@@ -137,7 +142,6 @@ export default [
     },
     rules: {
       '@typescript-eslint/no-require-imports': 'off',
-      'no-console': 'off',
     },
   },
   {
