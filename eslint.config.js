@@ -123,7 +123,7 @@ export default [
     },
   },
   {
-    files: ['scripts/**/*.js', '*.config.js', 'wtr-utils.js'],
+    files: ['scripts/**/*.js', '*.config.js', 'wtr-utils.js', 'custom-linter-rules/**/*.js'],
     languageOptions: {
       globals: {
         ...globals.node,

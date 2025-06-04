@@ -250,7 +250,7 @@ registerStyles(
     }
 
     :host([invalid]) [part='checkbox'] {
-      background: var(--_invalid-background);
+      background-color: var(--_invalid-background);
       background-image: linear-gradient(var(--_invalid-background) 0%, var(--_invalid-background) 100%);
     }
 
