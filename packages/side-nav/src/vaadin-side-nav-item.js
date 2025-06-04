@@ -12,8 +12,8 @@ import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { matchPaths } from '@vaadin/component-base/src/url-utils.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { location } from './location.js';
-import { sideNavItemBaseStyles } from './vaadin-side-nav-base-styles.js';
 import { SideNavChildrenMixin } from './vaadin-side-nav-children-mixin.js';
+import { sideNavItemStyles } from './vaadin-side-nav-core-styles.js';
 
 /**
  * A navigation item to be used within `<vaadin-side-nav>`. Represents a navigation target.
@@ -175,7 +175,7 @@ class SideNavItem extends SideNavChildrenMixin(DisabledMixin(ElementMixin(Themab
   }
 
   static get styles() {
-    return [sideNavItemBaseStyles];
+    return [sideNavItemStyles];
   }
 
   constructor() {

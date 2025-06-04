@@ -10,8 +10,8 @@ import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { sideNavBaseStyles } from './vaadin-side-nav-base-styles.js';
 import { SideNavChildrenMixin } from './vaadin-side-nav-children-mixin.js';
+import { sideNavStyles } from './vaadin-side-nav-core-styles.js';
 
 /**
  * `<vaadin-side-nav>` is a Web Component for navigation menus.
@@ -149,7 +149,7 @@ class SideNav extends SideNavChildrenMixin(FocusMixin(ElementMixin(ThemableMixin
   }
 
   static get styles() {
-    return sideNavBaseStyles;
+    return sideNavStyles;
   }
 
   constructor() {
