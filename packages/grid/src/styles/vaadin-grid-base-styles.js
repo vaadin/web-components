@@ -330,10 +330,12 @@ export const gridStyles = css`
     }
 
     :host([reordering]) [part~='cell'] {
+      /* TODO expose a custom property to control this */
       --_reorder-background-image: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1));
     }
 
     :host([reordering]) [part~='cell'][reorder-status='allowed'] {
+      /* TODO expose a custom property to control this */
       --_reorder-background-image: linear-gradient(rgba(0, 0, 0, 0.04), rgba(0, 0, 0, 0.04));
     }
 
