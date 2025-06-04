@@ -123,7 +123,13 @@ export default [
     },
   },
   {
-    files: ['scripts/**/*.js', '*.config.js', 'wtr-utils.js', 'packages/**/gulpfile.cjs'],
+    files: [
+      'scripts/**/*.js',
+      '*.config.js',
+      'wtr-utils.js',
+      'packages/**/gulpfile.cjs',
+      'custom-linter-rules/**/*.js',
+    ],
     languageOptions: {
       globals: {
         ...globals.node,
