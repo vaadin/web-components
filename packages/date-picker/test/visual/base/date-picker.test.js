@@ -137,6 +137,13 @@ describe('date-picker', () => {
             openOverlay();
             await visualDiff(div, `${dir}-week-numbers`);
           });
+
+          it('fullscreen', async () => {
+            element.value = '2000-01-01';
+            element._fullscreen = true;
+            await openOverlay();
+            await visualDiff(element._overlayContent, `${dir}-fullscreen`);
+          });
         });
       });
     });
