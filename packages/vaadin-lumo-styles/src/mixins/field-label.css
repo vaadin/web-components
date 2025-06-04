@@ -10,8 +10,7 @@
   font-size: var(--vaadin-input-field-label-font-size, var(--lumo-font-size-s));
   transition: color 0.2s;
   line-height: 1;
-  padding-inline-start: calc(var(--lumo-border-radius-m) / 4);
-  padding-inline-end: 1em;
+  padding-inline: calc(var(--lumo-border-radius-m) / 4) 1em;
   padding-bottom: 0.5em;
   /* As a workaround for diacritics being cut off, add a top padding and a
   negative margin to compensate */

@@ -6,6 +6,7 @@
 :host {
   display: block;
   width: 100%; /* prevent collapsing inside non-stretching column flex */
+  --vaadin-avatar-size: var(--lumo-size-m);
   --vaadin-avatar-group-overlap: 8px;
   /* Deprecated property name (overlap-border), for backwards compatibility */
   --vaadin-avatar-group-overlap-border: var(--vaadin-avatar-group-gap, 2px);
@@ -45,10 +46,6 @@
   mask-position: calc(
     50% + var(--vaadin-avatar-size) - var(--vaadin-avatar-group-overlap) + var(--vaadin-avatar-outline-width)
   );
-}
-
-:host {
-  --vaadin-avatar-size: var(--lumo-size-m);
 }
 
 :host([theme~='xlarge']) {

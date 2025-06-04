@@ -12,7 +12,7 @@
     "docs": "yarn analyze && web-dev-server --node-resolve --open",
     "icons": "lerna run icons",
     "lint": "npm-run-all --parallel lint:*",
-    "lint:css": "stylelint --ignore-path .gitignore packages/**/src/**/*.js packages/**/theme/**/*-styles.js packages/**/*.css",
+    "lint:css": "stylelint --ignore-path .gitignore \"packages/**/src/**/*.js\" \"packages/**/theme/**/*-styles.js\" \"packages/**/*.css\"",
     "lint:js": "eslint",
     "lint:types": "tsc",
     "postinstall": "patch-package",
