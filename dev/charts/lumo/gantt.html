@@ -1,29 +1,31 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <title>Vaadin charts | gantt</title>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <script type="module" src="../../common.js"></script>
-  <script type="module">
-    import '@vaadin/charts';
-    import '../theme-switcher.js';
-  </script>
-  <style>
-    body > * {
-      padding-bottom: 7rem;
-    }
-  </style>
-</head>
-<body>
-<theme-switcher></theme-switcher>
+  <head>
+    <title>Vaadin charts | gantt</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script type="module" src="../../common.js"></script>
+    <script type="module">
+      import '@vaadin/charts';
+      import '../theme-switcher.js';
+    </script>
+    <style>
+      body > * {
+        padding-bottom: 7rem;
+      }
+    </style>
+  </head>
+  <body>
+    <theme-switcher></theme-switcher>
 
-<!--  To get values for min, max, start and end,
+    <!--  To get values for min, max, start and end,
  use for example Date.UTC(2014, 10, 29) to get the timestamp for "2014-11-29"
  To find out the date for a timestamp, use "new Date(1417267200000)" to get "2014-11-29" -->
 
-<vaadin-chart type="gantt" title="Gantt Chart Example"
-              additional-options='{
+    <vaadin-chart
+      type="gantt"
+      title="Gantt Chart Example"
+      additional-options='{
                   "xAxis": {
                       "min": 1416182400000,
                       "max": 1417305600000
@@ -36,9 +38,10 @@
                         "Run acceptance tests"
                      ]
                   }
-               }'>
-  <vaadin-chart-series
-    values='[{
+               }'
+    >
+      <vaadin-chart-series
+        values='[{
             "y":0,
             "start": 1416268800000,
             "end": 1416873600000,
@@ -67,14 +70,14 @@
             "assignee":"Torstein",
             "completed": 0.25
         }]'
-    additional-options='{
+        additional-options='{
       "dataLabels": [{
             "enabled":true,
             "format":"<div>{point.assignee}</vaadin-avatar>",
             "useHTML":true,
             "align":"right"
          }]}'
-  ></vaadin-chart-series>
-</vaadin-chart>
-</body>
+      ></vaadin-chart-series>
+    </vaadin-chart>
+  </body>
 </html>

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -10,8 +10,12 @@
     <script type="module">
       import '@vaadin/split-layout';
 
-      document.querySelectorAll('.first').forEach(el => {el.textContent = new Array(1000).fill('a').join(' ');});
-      document.querySelectorAll('.second').forEach(el => {el.textContent = new Array(1000).fill('b').join(' ');});
+      document.querySelectorAll('.first').forEach((el) => {
+        el.textContent = new Array(1000).fill('a').join(' ');
+      });
+      document.querySelectorAll('.second').forEach((el) => {
+        el.textContent = new Array(1000).fill('b').join(' ');
+      });
     </script>
 
     <style>
