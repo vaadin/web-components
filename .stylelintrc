@@ -2,10 +2,14 @@
   "extends": [
     "stylelint-config-vaadin"
   ],
+  "plugins": [
+    "./custom-linter-rules/no-shorthand-with-unresolved-longhand.js"
+  ],
   "overrides": [
     { "files": ["**/*.js"], "customSyntax": "postcss-lit" }
   ],
   "rules": {
-    "no-duplicate-selectors": true
+    "no-duplicate-selectors": true,
+    "custom-linter-rules/no-shorthand-with-unresolved-longhand": true
   }
 }
