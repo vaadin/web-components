@@ -714,13 +714,13 @@ describe('root heading level', () => {
     class CustomWidget extends DashboardWidget {}
     customElements.define('custom-dashboard-widget', CustomWidget);
     const customLayout = fixtureSync(`
-        <custom-dashboard-layout root-heading-level="5">
-          <custom-dashboard-widget widget-title="Custom Widget"></custom-dashboard-widget>
-          <custom-dashboard-section section-title="Custom Section">
-            <custom-dashboard-widget widget-title="Custom Nested Widget"></custom-dashboard-widget>
-          </custom-dashboard-section>
-        </custom-dashboard-layout>
-      `) as CustomLayout;
+      <custom-dashboard-layout root-heading-level="5">
+        <custom-dashboard-widget widget-title="Custom Widget"></custom-dashboard-widget>
+        <custom-dashboard-section section-title="Custom Section">
+          <custom-dashboard-widget widget-title="Custom Nested Widget"></custom-dashboard-widget>
+        </custom-dashboard-section>
+      </custom-dashboard-layout>
+    `) as CustomLayout;
     await nextFrame();
     const widget = customLayout.querySelector('custom-dashboard-widget') as CustomWidget;
     const section = customLayout.querySelector('custom-dashboard-section') as CustomSection;
