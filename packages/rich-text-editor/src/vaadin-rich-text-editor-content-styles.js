@@ -77,10 +77,6 @@ export const contentStyles = css`
     text-align: right;
   }
 
-  .ql-code-block-container {
-    font-family: monospace;
-  }
-
   .ql-editor li {
     list-style-type: none;
     position: relative;
@@ -118,6 +114,7 @@ export const contentStyles = css`
 
   /* Quill converts <pre> to this */
   .ql-code-block-container {
+    font-family: monospace;
     white-space: pre-wrap;
     margin-bottom: 0.3125em;
     margin-top: 0.3125em;
