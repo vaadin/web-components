@@ -49,6 +49,7 @@
     "@web/test-runner-saucelabs": "^0.13.0",
     "@web/test-runner-visual-regression": "^0.10.0",
     "axios": "^1.9.0",
+    "css-shorthand-properties": "^1.1.2",
     "dotenv": "^16.5.0",
     "eslint": "^9.28.0",
     "eslint-config-vaadin": "^1.0.0-beta.3",
@@ -72,8 +73,7 @@
     "rollup": "^4.4.0",
     "stylelint": "^16.20.0",
     "stylelint-config-vaadin": "^1.0.0-alpha.2",
-    "typescript": "^5.8.3",
-    "css-shorthand-properties": "^1.1.2"
+    "typescript": "^5.8.3"
   },
   "resolutions": {
     "playwright": "^1.52.0"
