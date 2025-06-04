@@ -3,11 +3,12 @@
  * Copyright (c) 2016 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { css, html, LitElement } from 'lit';
+import { html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { CSSInjectionMixin } from '@vaadin/vaadin-themable-mixin/css-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { datePickerYearStyles } from './styles/vaadin-date-picker-year-core-styles.js';
 import { DatePickerYearMixin } from './vaadin-date-picker-year-mixin.js';
 
 /**
@@ -25,12 +26,7 @@ export class DatePickerYear extends CSSInjectionMixin(ThemableMixin(DatePickerYe
   }
 
   static get styles() {
-    return css`
-      :host {
-        display: block;
-        height: 100%;
-      }
-    `;
+    return datePickerYearStyles;
   }
 
   /** @protected */

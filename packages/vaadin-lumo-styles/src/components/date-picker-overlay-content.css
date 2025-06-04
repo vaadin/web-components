@@ -111,19 +111,16 @@
   border-bottom-left-radius: var(--lumo-border-radius-l);
 }
 
+/* Narrow viewport mode (fullscreen) */
+
 :host([fullscreen]) [part='toolbar'] {
   grid-area: header;
   margin-inline-end: 57px;
+  background-color: var(--lumo-base-color);
 }
 
 [part='toolbar'] ::slotted(vaadin-button) {
   margin: 0;
-}
-
-/* Narrow viewport mode (fullscreen) */
-
-:host([fullscreen]) [part='toolbar'] {
-  background-color: var(--lumo-base-color);
 }
 
 /* Very narrow screen (year scroller initially hidden) */

@@ -10,8 +10,8 @@ import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { overlayStyles } from '@vaadin/overlay/src/vaadin-overlay-styles.js';
 import { CSSInjectionMixin } from '@vaadin/vaadin-themable-mixin/css-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { datePickerOverlayStyles } from './styles/vaadin-date-picker-overlay-core-styles.js';
 import { DatePickerOverlayMixin } from './vaadin-date-picker-overlay-mixin.js';
-import { datePickerOverlayStyles } from './vaadin-date-picker-overlay-styles.js';
 
 /**
  * An element used internally by `<vaadin-date-picker>`. Not intended to be used separately.
