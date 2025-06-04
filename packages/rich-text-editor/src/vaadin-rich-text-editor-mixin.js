@@ -10,7 +10,6 @@
  */
 import '../vendor/vaadin-quill.js';
 import { timeOut } from '@vaadin/component-base/src/async.js';
-import { isFirefox } from '@vaadin/component-base/src/browser-utils.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { I18nMixin } from '@vaadin/component-base/src/i18n-mixin.js';
 
@@ -352,11 +351,6 @@ export const RichTextEditorMixin = (superClass) =>
       this.__patchToolbar();
       this.__patchKeyboard();
 
-      /* c8 ignore next 3 */
-      if (isFirefox) {
-        this.__patchFirefoxFocus();
-      }
-
       this.__setDirection(this.__dir);
 
       const editorContent = editor.querySelector('.ql-editor');
@@ -510,69 +504,6 @@ export const RichTextEditorMixin = (superClass) =>
     /** @private */
     _cleanToolbarState() {
       this._toolbarState = STATE.DEFAULT;
-    }
-
-    /** @private */
-    __createFakeFocusTarget() {
-      const isRTL = document.documentElement.getAttribute('dir') === 'rtl';
-      const elem = document.createElement('textarea');
-      // Reset box model
-      elem.style.border = '0';
-      elem.style.padding = '0';
-      elem.style.margin = '0';
-      // Move element out of screen horizontally
-      elem.style.position = 'absolute';
-      elem.style[isRTL ? 'right' : 'left'] = '-9999px';
-      // Move element to the same position vertically
-      const yPosition = window.pageYOffset || document.documentElement.scrollTop;
-      elem.style.top = `${yPosition}px`;
-      return elem;
-    }
-
-    /** @private */
-    __patchFirefoxFocus() {
-      // In Firefox 63+ with native Shadow DOM, when moving focus out of
-      // contenteditable and back again within same shadow root, cursor
-      // disappears. See https://bugzilla.mozilla.org/show_bug.cgi?id=1496769
-      const editorContent = this.shadowRoot.querySelector('.ql-editor');
-      let isFake = false;
-
-      const focusFake = () => {
-        isFake = true;
-        this.__fakeTarget = this.__createFakeFocusTarget();
-        document.body.appendChild(this.__fakeTarget);
-        // Let the focus step out of shadow root!
-        this.__fakeTarget.focus();
-        return new Promise((resolve) => {
-          setTimeout(resolve);
-        });
-      };
-
-      const focusBack = (offsetNode, offset) => {
-        this._editor.focus();
-        if (offsetNode) {
-          this._editor.selection.setNativeRange(offsetNode, offset);
-        }
-        document.body.removeChild(this.__fakeTarget);
-        delete this.__fakeTarget;
-        isFake = false;
-      };
-
-      editorContent.addEventListener('mousedown', (e) => {
-        if (!this._editor.hasFocus()) {
-          const { x, y } = e;
-          const { offset, offsetNode } = document.caretPositionFromPoint(x, y);
-          focusFake().then(() => {
-            focusBack(offsetNode, offset);
-          });
-        }
-      });
-
-      editorContent.addEventListener('focusin', () => {
-        if (isFake === false) {
-          focusFake().then(() => focusBack());
-        }
-      });
     }
 
     /** @private */
