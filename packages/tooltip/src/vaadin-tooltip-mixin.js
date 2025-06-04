@@ -617,6 +617,9 @@ export const TooltipMixin = (superClass) =>
 
     /** @protected */
     __onOverlayMouseEnter() {
+      if (this.manual) {
+        return;
+      }
       // Retain opened state when moving pointer over the overlay.
       // Closing can start due to an offset between the target and
       // the overlay itself. If that's the case, re-open overlay.
