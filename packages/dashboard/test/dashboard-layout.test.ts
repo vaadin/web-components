@@ -3,9 +3,9 @@ import { fixtureSync, nextFrame, nextResize } from '@vaadin/testing-helpers';
 import '../vaadin-dashboard-layout.js';
 import '../vaadin-dashboard-section.js';
 import '../vaadin-dashboard-widget.js';
-import type { DashboardLayout } from '../vaadin-dashboard-layout.js';
-import type { DashboardSection } from '../vaadin-dashboard-section.js';
-import type { DashboardWidget } from '../vaadin-dashboard-widget.js';
+import { DashboardLayout } from '../vaadin-dashboard-layout.js';
+import { DashboardSection } from '../vaadin-dashboard-section.js';
+import { DashboardWidget } from '../vaadin-dashboard-widget.js';
 import {
   assertHeadingLevel,
   expectLayout,
@@ -621,25 +621,30 @@ describe('dashboard layout', () => {
 });
 
 describe('root heading level', () => {
-  let dashboard: DashboardLayout;
+  let dashboardLayout: DashboardLayout;
+  let newDashboardLayout: DashboardLayout;
   let section: DashboardSection;
   let widget: DashboardWidget;
   let nestedWidget: DashboardWidget;
 
   beforeEach(async () => {
-    dashboard = fixtureSync(`
-      <vaadin-dashboard-layout>
-        <vaadin-dashboard-widget widget-title="Widget"></vaadin-dashboard-widget>
-        <vaadin-dashboard-section section-title="Section">
-          <vaadin-dashboard-widget widget-title="Nested Widget"></vaadin-dashboard-widget>
-        </vaadin-dashboard-section>
-      </vaadin-dashboard-layout>
-    `);
+    const container = fixtureSync(`
+        <div>
+          <vaadin-dashboard-layout id="layout1">
+            <vaadin-dashboard-widget widget-title="Widget"></vaadin-dashboard-widget>
+            <vaadin-dashboard-section section-title="Section">
+              <vaadin-dashboard-widget widget-title="Nested Widget"></vaadin-dashboard-widget>
+            </vaadin-dashboard-section>
+          </vaadin-dashboard-layout>
+          <vaadin-dashboard-layout id="layout2" root-heading-level="3"></vaadin-dashboard-layout>
+        </div>
+      `);
     await nextFrame();
-    await nextResize(dashboard);
-    widget = dashboard.querySelector('vaadin-dashboard-widget') as DashboardWidget;
-    section = dashboard.querySelector('vaadin-dashboard-section') as DashboardSection;
+    dashboardLayout = container.querySelector('#layout1') as DashboardLayout;
+    widget = dashboardLayout.querySelector('vaadin-dashboard-widget') as DashboardWidget;
+    section = dashboardLayout.querySelector('vaadin-dashboard-section') as DashboardSection;
     nestedWidget = section.querySelector('vaadin-dashboard-widget') as DashboardWidget;
+    newDashboardLayout = container.querySelector('#layout2') as DashboardLayout;
   });
 
   function assertHeadingLevels(expectedHeadingLevel: number) {
@@ -653,31 +658,75 @@ describe('root heading level', () => {
   });
 
   it('should use custom title heading level when set on dashboard layout', async () => {
-    dashboard.rootHeadingLevel = 4;
+    dashboardLayout.rootHeadingLevel = 4;
     await nextFrame();
     assertHeadingLevels(4);
   });
 
   it('should revert to default title heading level (2) when set to null', async () => {
-    dashboard.rootHeadingLevel = 4;
+    dashboardLayout.rootHeadingLevel = 4;
     await nextFrame();
-    dashboard.rootHeadingLevel = null;
+    dashboardLayout.rootHeadingLevel = null;
     await nextFrame();
     assertHeadingLevels(2);
   });
 
   it('should update heading levels for newly added components', async () => {
-    dashboard.rootHeadingLevel = 3;
+    dashboardLayout.rootHeadingLevel = 3;
     await nextFrame();
     const newWidget = document.createElement('vaadin-dashboard-widget');
-    dashboard.appendChild(newWidget);
+    dashboardLayout.appendChild(newWidget);
     const newSection = document.createElement('vaadin-dashboard-section');
     const nestedInNewSection = document.createElement('vaadin-dashboard-widget');
     newSection.appendChild(nestedInNewSection);
-    dashboard.appendChild(newSection);
+    dashboardLayout.appendChild(newSection);
     await nextFrame();
     assertHeadingLevel(newWidget, 3);
     assertHeadingLevel(newSection, 3);
     assertHeadingLevel(nestedInNewSection, 4);
+  });
+
+  describe('moving between parents', () => {
+    it('should update heading level when moved to another dashboard layout', async () => {
+      newDashboardLayout.appendChild(section);
+      await nextFrame();
+      assertHeadingLevel(section, 3);
+      assertHeadingLevel(nestedWidget, 4);
+    });
+
+    it('should update heading level when a new widget is added', async () => {
+      const newWidget = document.createElement('vaadin-dashboard-widget');
+      newWidget.widgetTitle = 'New Widget';
+      section.appendChild(newWidget);
+      await nextFrame();
+      assertHeadingLevel(newWidget, 3);
+      newDashboardLayout.appendChild(section);
+      await nextFrame();
+      assertHeadingLevel(newWidget, 4);
+    });
+  });
+
+  it('should update heading level when custom elements are used', async () => {
+    class CustomLayout extends DashboardLayout {}
+    customElements.define('custom-dashboard-layout', CustomLayout);
+    class CustomSection extends DashboardSection {}
+    customElements.define('custom-dashboard-section', CustomSection);
+    class CustomWidget extends DashboardWidget {}
+    customElements.define('custom-dashboard-widget', CustomWidget);
+    const customLayout = fixtureSync(`
+        <custom-dashboard-layout root-heading-level="5">
+          <custom-dashboard-widget widget-title="Custom Widget"></custom-dashboard-widget>
+          <custom-dashboard-section section-title="Custom Section">
+            <custom-dashboard-widget widget-title="Custom Nested Widget"></custom-dashboard-widget>
+          </custom-dashboard-section>
+        </custom-dashboard-layout>
+      `) as CustomLayout;
+    await nextFrame();
+    const widget = customLayout.querySelector('custom-dashboard-widget') as CustomWidget;
+    const section = customLayout.querySelector('custom-dashboard-section') as CustomSection;
+    const nestedWidget = section.querySelector('custom-dashboard-widget') as CustomWidget;
+    assertHeadingLevel(widget, 5);
+    assertHeadingLevel(section, 5);
+    assertHeadingLevel(nestedWidget, 6);
   });
 });
