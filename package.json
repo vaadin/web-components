@@ -50,7 +50,7 @@
     "@web/test-runner-visual-regression": "^0.10.0",
     "axios": "^1.9.0",
     "dotenv": "^16.5.0",
-    "eslint": "^9.27.0",
+    "eslint": "^9.28.0",
     "eslint-config-vaadin": "^1.0.0-beta.3",
     "eslint-plugin-es-x": "^8.6.2",
     "eslint-plugin-no-only-tests": "^3.3.0",
@@ -69,9 +69,9 @@
     "replace-in-file": "^6.3.5",
     "rimraf": "^6.0.1",
     "rollup": "^4.4.0",
-    "stylelint": "^16.19.0",
+    "stylelint": "^16.20.0",
     "stylelint-config-vaadin": "^1.0.0-alpha.2",
-    "typescript": "^5.7.3"
+    "typescript": "^5.8.3"
   },
   "resolutions": {
     "playwright": "^1.52.0"
