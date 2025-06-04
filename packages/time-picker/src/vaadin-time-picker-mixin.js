@@ -231,8 +231,7 @@ export const TimePickerMixin = (superClass) =>
 
       // Update selected item in the scroller
       if (props.has('_comboBoxValue') && this._dropdownItems) {
-        const valueIndex = this._dropdownItems.findIndex((item) => item.value === this._comboBoxValue);
-        this._scroller.selectedItem = this._dropdownItems[valueIndex];
+        this._scroller.selectedItem = this._dropdownItems.find((item) => item.value === this._comboBoxValue);
       }
     }
 
