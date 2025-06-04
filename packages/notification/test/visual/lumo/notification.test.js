@@ -1,9 +1,12 @@
 import { sendKeys } from '@vaadin/test-runner-commands';
 import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
-import '@vaadin/button/theme/lumo/vaadin-button.js';
+import '@vaadin/vaadin-lumo-styles/props.css';
+import '@vaadin/vaadin-lumo-styles/components/button.css';
+import '@vaadin/vaadin-lumo-styles/components/notification.css';
+import '@vaadin/button';
 import '../../not-animated-styles.js';
-import '../../../theme/lumo/vaadin-notification.js';
+import '../../../vaadin-notification.js';
 
 describe('notification', () => {
   let element;

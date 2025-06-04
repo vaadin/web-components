@@ -65,10 +65,12 @@ export const CSSInjectionMixin = (superClass) =>
     connectedCallback() {
       super.connectedCallback();
 
-      const root = findRoot(this);
-      root.__cssInjector ||= new CSSInjector(root);
-      this.__cssInjector = root.__cssInjector;
-      this.__cssInjector.componentConnected(this);
+      if (this.isConnected) {
+        const root = findRoot(this);
+        root.__cssInjector ||= new CSSInjector(root);
+        this.__cssInjector = root.__cssInjector;
+        this.__cssInjector.componentConnected(this);
+      }
     }
 
     /** @protected */
