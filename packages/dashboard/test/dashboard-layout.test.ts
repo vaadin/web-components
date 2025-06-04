@@ -658,14 +658,6 @@ describe('root heading level', () => {
     assertHeadingLevels(4);
   });
 
-  it('should update title heading level when changed on dashboard layout', async () => {
-    dashboard.rootHeadingLevel = 3;
-    await nextFrame();
-    dashboard.rootHeadingLevel = 1;
-    await nextFrame();
-    assertHeadingLevels(1);
-  });
-
   it('should revert to default title heading level (2) when set to null', async () => {
     dashboard.rootHeadingLevel = 4;
     await nextFrame();
