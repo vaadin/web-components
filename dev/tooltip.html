@@ -50,7 +50,7 @@
 
     <div id="wrapper">
       <div id="target">Save</div>
-      <vaadin-tooltip id="tooltip" text="Tooltip" position="bottom" for="target"></vaadin-tooltip>
+      <vaadin-tooltip id="tooltip" text="Tooltip" for="target"></vaadin-tooltip>
     </div>
 
     <button id="button">Confirm</button>
@@ -60,8 +60,9 @@
       const tooltip = document.querySelector('#tooltip');
       const radioGroup = document.querySelector('#positionGroup');
 
-      radioGroup.addEventListener('value-changed', e => {
-        tooltip.setAttribute('position', e.detail.value);
+      radioGroup.addEventListener('change', (e) => {
+        tooltip.position = e.target.value;
+      });
       });
     </script>
   </body>
