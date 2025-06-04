@@ -125,13 +125,13 @@ describe('resizing', () => {
       expect(grid.getBoundingClientRect().height).to.equal(400);
     });
 
-    it('should auto-grow inside a fixed height column flexbox', async () => {
+    it('should not auto-grow inside a fixed height column flexbox', async () => {
       component.style.height = '500px';
       await nextResize(grid);
       expect(grid.getBoundingClientRect().height).to.equal(129);
     });
 
-    it('should auto-grow inside a fixed height row flexbox', async () => {
+    it('should not auto-grow inside a fixed height row flexbox', async () => {
       component.style.flexDirection = 'row';
       component.style.height = '500px';
       await nextResize(grid);
@@ -140,7 +140,7 @@ describe('resizing', () => {
 
     it('should not shrink horizontally inside a row flexbox', () => {
       component.style.flexDirection = 'row';
-      expect(grid.getBoundingClientRect().width).to.be.above(780);
+      expect(grid.getBoundingClientRect().width).to.equal(component.offsetWidth);
     });
 
     it('should not shrink vertically inside a column flexbox with another child', () => {
@@ -157,7 +157,7 @@ describe('resizing', () => {
       component.style.flexDirection = 'row';
       grid.after(fixtureSync('<div style="height: 100%; width: 100px;"></div>'));
 
-      expect(grid.getBoundingClientRect().width).to.be.below(780);
+      expect(grid.getBoundingClientRect().width).to.be.equal(component.offsetWidth - 100);
     });
   });
 });
