@@ -141,10 +141,6 @@ class Card extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
         row-gap: 0;
       }
 
-      [part='header'] {
-        margin-bottom: auto;
-      }
-
       :host([_hs]) [part='header'] {
         grid-template-columns: 1fr auto;
       }
@@ -201,6 +197,7 @@ class Card extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
       }
 
       [part='header'] {
+        margin-bottom: auto;
         grid-column: calc(1 + var(--_media));
         grid-row: 1;
       }
