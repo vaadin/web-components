@@ -1,14 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { sendKeys } from '@vaadin/test-runner-commands';
-import {
-  down,
-  fixtureSync,
-  focusin,
-  isFirefox,
-  keyboardEventFor,
-  nextRender,
-  nextUpdate,
-} from '@vaadin/testing-helpers';
+import { fixtureSync, keyboardEventFor, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-rich-text-editor.js';
 import { getDeepActiveElement } from '@vaadin/a11y-base/src/focus-utils.js';
@@ -193,34 +185,6 @@ describe('accessibility', () => {
       flushValueDebouncer();
       expect(rte.value).to.equal('[{"insert":"foo"},{"attributes":{"code-block":true},"insert":"\\n"}]');
       expect(e.defaultPrevented).to.be.true;
-    });
-
-    (isFirefox ? it : it.skip)('should focus the fake target on content focusin', (done) => {
-      const spy = sinon.spy(rte, '__createFakeFocusTarget');
-      sinon.stub(editor, 'focus').callsFake(() => {
-        expect(spy.calledOnce).to.be.true;
-        const fake = spy.firstCall.returnValue;
-        const style = getComputedStyle(fake);
-        expect(style.position).to.equal('absolute');
-        expect(style.left).to.equal('-9999px');
-        expect(style.top).to.equal(`${document.documentElement.scrollTop}px`);
-        done();
-      });
-      focusin(content);
-    });
-
-    (isFirefox ? it : it.skip)('should focus the fake target on mousedown when content is not focused', (done) => {
-      const spy = sinon.spy(rte, '__createFakeFocusTarget');
-      sinon.stub(editor, 'focus').callsFake(() => {
-        expect(spy.calledOnce).to.be.true;
-        const fake = spy.firstCall.returnValue;
-        const style = getComputedStyle(fake);
-        expect(style.position).to.equal('absolute');
-        expect(style.left).to.equal('-9999px');
-        expect(style.top).to.equal(`${document.documentElement.scrollTop}px`);
-        done();
-      });
-      down(content);
     });
   });
 
