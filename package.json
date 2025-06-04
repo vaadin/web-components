@@ -72,7 +72,8 @@
     "rollup": "^4.4.0",
     "stylelint": "^16.20.0",
     "stylelint-config-vaadin": "^1.0.0-alpha.2",
-    "typescript": "^5.8.3"
+    "typescript": "^5.8.3",
+    "css-shorthand-properties": "^1.1.2"
   },
   "resolutions": {
     "playwright": "^1.52.0"
