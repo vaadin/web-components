@@ -7,6 +7,7 @@
     <title>Tooltip</title>
     <script type="module" src="./common.js"></script>
     <script type="module">
+      import '@vaadin/radio-group';
       import '@vaadin/tooltip';
       import '@vaadin/vaadin-lumo-styles/lumo.css';
     </script>
@@ -32,24 +33,36 @@
       }
     </style>
 
+    <vaadin-radio-group id="positionGroup" label="Tooltip Position" theme="vertical" value="bottom">
+      <vaadin-radio-button value="bottom-start" label="Bottom Start"></vaadin-radio-button>
+      <vaadin-radio-button value="bottom" label="Bottom"></vaadin-radio-button>
+      <vaadin-radio-button value="bottom-end" label="Bottom End"></vaadin-radio-button>
+      <vaadin-radio-button value="start-top" label="Start Top"></vaadin-radio-button>
+      <vaadin-radio-button value="start" label="Start"></vaadin-radio-button>
+      <vaadin-radio-button value="start-bottom" label="Start Bottom"></vaadin-radio-button>
+      <vaadin-radio-button value="top-start" label="Top Start"></vaadin-radio-button>
+      <vaadin-radio-button value="top" label="Top"></vaadin-radio-button>
+      <vaadin-radio-button value="top-end" label="Top End"></vaadin-radio-button>
+      <vaadin-radio-button value="end-top" label="End Top"></vaadin-radio-button>
+      <vaadin-radio-button value="end" label="End"></vaadin-radio-button>
+      <vaadin-radio-button value="end-bottom" label="End Bottom"></vaadin-radio-button>
+    </vaadin-radio-group>
+
     <div id="wrapper">
       <div id="target">Save</div>
+      <vaadin-tooltip id="tooltip" text="Tooltip" position="bottom" for="target"></vaadin-tooltip>
     </div>
-
-    <vaadin-tooltip text="BS" position="bottom-start" for="target"></vaadin-tooltip>
-    <vaadin-tooltip text="B" position="bottom" for="target"></vaadin-tooltip>
-    <vaadin-tooltip text="BE" position="bottom-end" for="target"></vaadin-tooltip>
-    <vaadin-tooltip text="ST" position="start-top" for="target"></vaadin-tooltip>
-    <vaadin-tooltip text="S" position="start" for="target"></vaadin-tooltip>
-    <vaadin-tooltip text="SB" position="start-bottom" for="target"></vaadin-tooltip>
-    <vaadin-tooltip text="TS" position="top-start" for="target"></vaadin-tooltip>
-    <vaadin-tooltip text="T" position="top" for="target"></vaadin-tooltip>
-    <vaadin-tooltip text="TE" position="top-end" for="target"></vaadin-tooltip>
-    <vaadin-tooltip text="ET" position="end-top" for="target"></vaadin-tooltip>
-    <vaadin-tooltip text="E" position="end" for="target"></vaadin-tooltip>
-    <vaadin-tooltip text="EB" position="end-bottom" for="target"></vaadin-tooltip>
 
     <button id="button">Confirm</button>
     <vaadin-tooltip text="Click to save changes" for="button"></vaadin-tooltip>
+
+    <script type="module">
+      const tooltip = document.querySelector('#tooltip');
+      const radioGroup = document.querySelector('#positionGroup');
+
+      radioGroup.addEventListener('value-changed', e => {
+        tooltip.setAttribute('position', e.detail.value);
+      });
+    </script>
   </body>
 </html>
