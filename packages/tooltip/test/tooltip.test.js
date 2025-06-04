@@ -1,5 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import {
+  aTimeout,
   escKeyDown,
   fixtureSync,
   focusin,
@@ -805,6 +806,27 @@ describe('vaadin-tooltip', () => {
       tooltip.opened = true;
       mousedown(target);
       expect(overlay.opened).to.be.true;
+    });
+
+    it('should not close overlay on overlay mouseleave', () => {
+      tooltip.opened = true;
+      mouseleave(overlay);
+      expect(overlay.opened).to.be.true;
+    });
+
+    it('should not re-open overlay on overlay mouseenter', async () => {
+      // Open tooltip
+      tooltip.opened = true;
+      expect(overlay.opened).to.be.true;
+
+      // Hide tooltip with a delay, while simulating pointer moving into the overlay
+      tooltip.hideDelay = 1;
+      tooltip._stateController.close(false);
+      mouseenter(overlay);
+      await aTimeout(2);
+
+      // Should still close the overlay, as it was closed manually
+      expect(overlay.opened).to.be.false;
     });
 
     it('should close overlay when opened is set to false', () => {
