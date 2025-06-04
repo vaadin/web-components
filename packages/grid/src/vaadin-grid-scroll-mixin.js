@@ -115,6 +115,12 @@ export const ScrollMixin = (superClass) =>
     ready() {
       super.ready();
 
+      this.__horizontalScrollPositionStyleSheet = new CSSStyleSheet();
+      this.shadowRoot.adoptedStyleSheets = [
+        ...this.shadowRoot.adoptedStyleSheets,
+        this.__horizontalScrollPositionStyleSheet,
+      ];
+
       this.scrollTarget = this.$.table;
 
       this.$.items.addEventListener('focusin', (e) => {
@@ -511,11 +517,11 @@ export const ScrollMixin = (superClass) =>
         }
       });
 
-      // Only update the --_grid-horizontal-scroll-position custom property when navigating
-      // on row focus mode to avoid performance issues.
-      if (this.hasAttribute('navigating') && this.__rowFocusMode) {
-        this.$.table.style.setProperty('--_grid-horizontal-scroll-position', `${-x}px`);
-      }
+      this.__horizontalScrollPositionStyleSheet.replaceSync(`
+        :host([navigating]) [part~='row']:focus::before {
+          transform: translateX(${x}px);
+        }
+      `);
     }
 
     /** @private */
