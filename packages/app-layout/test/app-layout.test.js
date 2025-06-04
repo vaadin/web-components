@@ -304,6 +304,15 @@ describe('vaadin-app-layout', () => {
       });
 
       it('should update content offset when drawer width changes', async () => {
+        // Disable border to not affect measurement
+        fixtureSync(`
+          <style>
+            vaadin-app-layout::part(drawer) {
+              border: none;
+            }
+          </style>
+        `);
+
         // Allow drawer size based on content
         layout.style.setProperty('--vaadin-app-layout-drawer-width', 'auto');
         const drawerContent = document.querySelector('section[slot="drawer"]');
