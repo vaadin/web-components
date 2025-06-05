@@ -100,3 +100,5 @@ export const sideNavStyles = css`
     list-style-type: none;
   }
 `;
+
+export const sideNavSlotStyles = css``;

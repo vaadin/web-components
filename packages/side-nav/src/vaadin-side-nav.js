@@ -11,8 +11,9 @@ import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { SlotStylesMixin } from '../../component-base/src/slot-styles-mixin';
 import { SideNavChildrenMixin } from './vaadin-side-nav-children-mixin.js';
-import { sideNavStyles } from './vaadin-side-nav-core-styles.js';
+import { sideNavSlotStyles, sideNavStyles } from './vaadin-side-nav-core-styles.js';
 
 /**
  * `<vaadin-side-nav>` is a Web Component for navigation menus.
@@ -71,7 +72,9 @@ import { sideNavStyles } from './vaadin-side-nav-core-styles.js';
  * @mixes ElementMixin
  * @mixes SideNavChildrenMixin
  */
-class SideNav extends SideNavChildrenMixin(FocusMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElement))))) {
+class SideNav extends SideNavChildrenMixin(
+  SlotStylesMixin(FocusMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElement))))),
+) {
   static get is() {
     return 'vaadin-side-nav';
   }
@@ -151,6 +154,11 @@ class SideNav extends SideNavChildrenMixin(FocusMixin(ElementMixin(ThemableMixin
 
   static get styles() {
     return sideNavStyles;
+  }
+
+  /** @protected */
+  get slotStyles() {
+    return [sideNavSlotStyles];
   }
 
   constructor() {
