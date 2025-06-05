@@ -283,9 +283,9 @@ class SideNavItem extends SideNavChildrenMixin(DisabledMixin(ElementMixin(Themab
   }
 
   /** @private */
-  _onContentClick() {
-    // Navigate to path if defined
-    if (this.path) {
+  _onContentClick(e) {
+    // Navigate if path is defined and not clicking on the link directly
+    if (this.path && !e.composedPath().find((el) => el === this.$.link)) {
       this.$.link.click();
     }
     // Toggle item expanded state unless the link has a non-empty path
