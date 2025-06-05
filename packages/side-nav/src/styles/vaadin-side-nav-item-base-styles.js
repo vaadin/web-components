@@ -22,6 +22,7 @@ const sideNavItem = css`
     border: var(--vaadin-side-nav-item-border-width, 0) solid var(--vaadin-side-nav-item-border-color, transparent);
     border-radius: var(--vaadin-side-nav-item-border-radius, var(--_vaadin-radius-m));
     cursor: var(--vaadin-clickable-cursor);
+    touch-action: manipulation;
   }
 
   :host([current]) [part='content'] {
