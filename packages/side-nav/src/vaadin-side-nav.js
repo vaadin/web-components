@@ -9,9 +9,9 @@ import { FocusMixin } from '@vaadin/a11y-base/src/focus-mixin.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
+import { SlotStylesMixin } from '@vaadin/component-base/src/slot-styles-mixin.js';
 import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { SlotStylesMixin } from '../../component-base/src/slot-styles-mixin';
 import { sideNavSlotStyles, sideNavStyles } from './styles/vaadin-side-nav-core-styles.js';
 import { SideNavChildrenMixin } from './vaadin-side-nav-children-mixin.js';
 
