@@ -17,7 +17,7 @@ import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { OverlayClassMixin } from '@vaadin/component-base/src/overlay-class-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
-import { isLastOverlay } from '@vaadin/overlay/src/vaadin-overlay-stack-mixin.js';
+import { isLastOverlay as isLastOverlayBase } from '@vaadin/overlay/src/vaadin-overlay-stack-mixin.js';
 import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
 import { PopoverPositionMixin } from './vaadin-popover-position-mixin.js';
 import { PopoverTargetMixin } from './vaadin-popover-target-mixin.js';
@@ -147,6 +147,18 @@ class PopoverOpenedStateController {
     }, delay);
   }
 }
+
+/**
+ * Returns true if the popover overlay is the last one in the opened overlays stack, ignoring tooltips.
+ * @param {HTMLElement} overlay
+ * @return {boolean}
+ * @protected
+ */
+const isLastOverlay = (overlay) => {
+  // Ignore tooltips, popovers should still close when a tooltip is present
+  const filter = (o) => o.localName !== 'vaadin-tooltip-overlay';
+  return isLastOverlayBase(overlay, filter);
+};
 
 /**
  * `<vaadin-popover>` is a Web Component for creating overlays
