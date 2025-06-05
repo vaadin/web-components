@@ -5,6 +5,4 @@
  */
 import type { CSSResult } from 'lit';
 
-export const sideNavStyles: CSSResult;
-export const sideNavSlotStyles: CSSResult;
 export const sideNavItemStyles: CSSResult;

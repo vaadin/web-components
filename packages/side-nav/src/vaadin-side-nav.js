@@ -12,8 +12,8 @@ import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { SlotStylesMixin } from '../../component-base/src/slot-styles-mixin';
+import { sideNavSlotStyles, sideNavStyles } from './styles/vaadin-side-nav-core-styles.js';
 import { SideNavChildrenMixin } from './vaadin-side-nav-children-mixin.js';
-import { sideNavSlotStyles, sideNavStyles } from './vaadin-side-nav-core-styles.js';
 
 /**
  * `<vaadin-side-nav>` is a Web Component for navigation menus.

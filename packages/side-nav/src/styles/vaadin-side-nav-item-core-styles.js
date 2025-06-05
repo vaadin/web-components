@@ -69,36 +69,3 @@ export const sideNavItemStyles = css`
     white-space: nowrap;
   }
 `;
-
-export const sideNavStyles = css`
-  :host {
-    display: block;
-  }
-
-  :host([hidden]) {
-    display: none !important;
-  }
-
-  button {
-    display: flex;
-    align-items: center;
-    justify-content: inherit;
-    width: 100%;
-    margin: 0;
-    padding: 0;
-    background-color: initial;
-    color: inherit;
-    border: initial;
-    outline: none;
-    font: inherit;
-    text-align: inherit;
-  }
-
-  [part='children'] {
-    padding: 0;
-    margin: 0;
-    list-style-type: none;
-  }
-`;
-
-export const sideNavSlotStyles = css``;
