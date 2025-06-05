@@ -115,9 +115,6 @@ export const ScrollMixin = (superClass) =>
     ready() {
       super.ready();
 
-      this.__horizontalScrollPositionStyleSheet = new CSSStyleSheet();
-      this.shadowRoot.adoptedStyleSheets.push(this.__horizontalScrollPositionStyleSheet);
-
       this.scrollTarget = this.$.table;
 
       this.$.items.addEventListener('focusin', (e) => {
@@ -479,6 +476,7 @@ export const ScrollMixin = (superClass) =>
 
       // Position frozen cells
       const x = this.__isRTL ? normalizedScrollLeft + clientWidth - scrollWidth : scrollLeft;
+      this.__x = x;
       const transformFrozen = `translate(${x}px, 0)`;
       this._frozenCells.forEach((cell) => {
         cell.style.transform = transformFrozen;
@@ -514,11 +512,26 @@ export const ScrollMixin = (superClass) =>
         }
       });
 
-      this.__horizontalScrollPositionStyleSheet.replaceSync(`
-        [part~='row']::after {
-          transform: translateX(${x}px);
-        }
-      `);
+      var focusedRow = this.shadowRoot.querySelector("[part~='row']:focus");
+      if (focusedRow) {
+        // Update the horizontal scroll position property of the focused row
+        this.__updateRowScrollPositionProperty(focusedRow);
+      }
+    }
+
+    /**
+     * Synchronizes the internal `--_grid-horizontal-scroll-position` CSS property
+     * of the given row with the current horizontal scroll position of the grid.
+     * @private
+     */
+    __updateRowScrollPositionProperty(row) {
+      if (row instanceof HTMLTableRowElement === false) {
+        return;
+      }
+      const newValue = `-${this.__x}px`;
+      if (row.style.getPropertyValue('--_grid-horizontal-scroll-position') !== newValue) {
+        row.style.setProperty('--_grid-horizontal-scroll-position', newValue);
+      }
     }
 
     /** @private */
