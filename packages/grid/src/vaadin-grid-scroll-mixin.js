@@ -512,7 +512,7 @@ export const ScrollMixin = (superClass) =>
         }
       });
 
-      var focusedRow = this.shadowRoot.querySelector("[part~='row']:focus");
+      const focusedRow = this.shadowRoot.querySelector("[part~='row']:focus");
       if (focusedRow) {
         // Update the horizontal scroll position property of the focused row
         this.__updateRowScrollPositionProperty(focusedRow);
