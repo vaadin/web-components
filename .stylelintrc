@@ -1,12 +1,16 @@
 {
   "extends": ["stylelint-config-vaadin"],
-  "plugins": ["./custom-rules/stylelint/no-shorthand-with-unresolved-longhand.js"],
+  "plugins": [
+    "./custom-rules/stylelint/no-shorthand-with-unresolved-longhand.js",
+    "./custom-rules/stylelint/license-header.js"
+  ],
   "overrides": [
     { "files": ["**/*.js"], "customSyntax": "postcss-lit" },
     {
-      "files": ["**/*.css"],
+      "files": ["packages/vaadin-lumo-styles/**/*.css"],
       "rules": {
-        "custom-rules/no-shorthand-with-unresolved-longhand": true
+        "custom-rules/no-shorthand-with-unresolved-longhand": true,
+        "custom-rules/license-header": true
       }
     }
   ],
