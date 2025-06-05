@@ -269,6 +269,8 @@ describe('side-nav-item', () => {
 
       it('should not change expanded state on content click when item has valid path', async () => {
         item.path = '/foo';
+        // prevent navigating away from the test page
+        item.$.link.onclick = (e) => e.preventDefault();
         await item.updateComplete;
         content.click();
         expect(item.expanded).to.be.false;
