@@ -8,42 +8,6 @@
   flex-direction: column;
   grid-column: var(--_item-column);
   grid-row: var(--_item-row);
-  position: relative;
-}
-
-:host([hidden]) {
-  display: none !important;
-}
-
-:host(:not([editable])) [part~='resize-button'] {
-  display: none;
-}
-
-[part~='content'] {
-  flex: 1;
-  overflow: hidden;
-}
-
-[part~='resize-button'] {
-  position: absolute;
-  bottom: 0;
-  inset-inline-end: 0;
-  z-index: 1;
-  overflow: hidden;
-}
-
-:host([resizing])::after {
-  content: '';
-  z-index: 2;
-  position: absolute;
-  top: -1px;
-  width: var(--_widget-resizer-width, 0);
-  height: var(--_widget-resizer-height, 0);
-  background: rgba(0, 0, 0, 0.1);
-  border-radius: inherit;
-}
-
-:host {
   background: var(--_widget-background);
   border-radius: var(--_widget-border-radius);
   box-shadow: var(--_widget-shadow);
@@ -57,6 +21,19 @@
   border: var(--_widget-border-width) solid var(--_widget-border-color);
   border-radius: calc(var(--_widget-border-radius) + var(--_widget-border-width));
   pointer-events: none;
+}
+
+:host([hidden]) {
+  display: none !important;
+}
+
+:host(:not([editable])) [part~='resize-button'] {
+  display: none;
+}
+
+[part~='content'] {
+  flex: 1;
+  overflow: hidden;
 }
 
 /* Widget states */
@@ -84,6 +61,13 @@
 }
 
 :host([resizing])::after {
+  content: '';
+  z-index: 2;
+  position: absolute;
+  top: -1px;
+  width: var(--_widget-resizer-width, 0);
+  height: var(--_widget-resizer-height, 0);
+  border-radius: inherit;
   background: var(--_drop-target-background-color);
   border: var(--_drop-target-border);
 }
@@ -106,7 +90,8 @@ header {
 
 #content {
   min-height: var(--lumo-size-m);
-  padding: var(--vaadin-dashboard-widget-padding, 0);
+  padding-inline: var(--vaadin-dashboard-widget-padding, 0);
+  padding-bottom: var(--vaadin-dashboard-widget-padding, 0);
   padding-top: 0;
   border-radius: inherit;
   border-top-left-radius: 0;
@@ -127,6 +112,8 @@ header {
 /* Resize handle */
 
 [part~='resize-button'] {
+  z-index: 1;
+  overflow: hidden;
   --_resize-button-offset: min(var(--_gap), var(--_padding), var(--lumo-space-xs));
   position: absolute;
   bottom: calc(-1 * var(--_resize-button-offset));
