@@ -528,7 +528,7 @@ export const ScrollMixin = (superClass) =>
       if (row instanceof HTMLTableRowElement === false) {
         return;
       }
-      const newValue = `-${this.__horizontalScrollPosition}px`;
+      const newValue = `${this.__horizontalScrollPosition}px`;
       if (row.style.getPropertyValue('--_grid-horizontal-scroll-position') !== newValue) {
         row.style.setProperty('--_grid-horizontal-scroll-position', newValue);
       }
