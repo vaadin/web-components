@@ -284,8 +284,12 @@ class SideNavItem extends SideNavChildrenMixin(DisabledMixin(ElementMixin(Themab
 
   /** @private */
   _onContentClick() {
+    // Navigate to path if defined
+    if (this.path) {
+      this.$.link.click();
+    }
     // Toggle item expanded state unless the link has a non-empty path
-    if (this.path == null && this.hasAttribute('has-children')) {
+    else if (this.path == null && this.hasAttribute('has-children') && !this.disabled) {
       this.__toggleExpanded();
     }
   }
