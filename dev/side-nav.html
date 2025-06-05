@@ -9,39 +9,145 @@
     <script type="module">
       import '@vaadin/icon';
       import '@vaadin/icons';
-      import '@vaadin/scroller';
       import '@vaadin/side-nav';
+      import '@vaadin/radio-group';
+
+      const icons = [
+        'vaadin:home',
+        'vaadin:folder-open',
+        'vaadin:chart',
+        'vaadin:bed',
+        'vaadin:boat',
+        'vaadin:calendar',
+        'vaadin:chat',
+        'vaadin:cube',
+        'vaadin:file-o',
+        'vaadin:laptop',
+        'vaadin:picture',
+      ];
+
+      function addIcon(item) {
+        const icon = document.createElement('vaadin-icon');
+        icon.icon = icons[Math.floor(Math.random() * icons.length)];
+        icon.setAttribute('slot', 'prefix');
+        item.prepend(icon);
+      }
+
+      document.querySelector('vaadin-radio-button[value="none"]').addEventListener('click', (e) => {
+        document.querySelectorAll('vaadin-side-nav vaadin-icon').forEach((icon) => icon.remove());
+      });
+
+      document.querySelector('vaadin-radio-button[value="all"]').addEventListener('click', (e) => {
+        document.querySelectorAll('vaadin-side-nav vaadin-icon').forEach((icon) => icon.remove());
+        document.querySelectorAll('vaadin-side-nav-item').forEach((item) => addIcon(item));
+      });
+
+      document.querySelector('vaadin-radio-button[value="top"]').addEventListener('click', (e) => {
+        document.querySelectorAll('vaadin-side-nav vaadin-icon').forEach((icon) => icon.remove());
+        document.querySelectorAll('vaadin-side-nav > vaadin-side-nav-item').forEach((item) => addIcon(item));
+      });
+
+      document.querySelector('vaadin-radio-button[value="random"]').addEventListener('click', (e) => {
+        document.querySelectorAll('vaadin-side-nav vaadin-icon').forEach((icon) => icon.remove());
+        document.querySelectorAll('vaadin-side-nav-item').forEach((item) => {
+          if (Math.random() > 0.5) {
+            addIcon(item);
+          }
+        });
+      });
+
+      // Fake navigation: prevent actual navigation, update 'current' item manually
+      document.querySelector('vaadin-side-nav').addEventListener('click', (e) => {
+        const link = e.composedPath().find((el) => el.localName === 'a');
+        if (link) {
+          e.preventDefault();
+          if (link.href) {
+            document.querySelectorAll('vaadin-side-nav-item').forEach((item) => item.removeAttribute('current'));
+            const navItem = e.composedPath().find((el) => el.localName === 'vaadin-side-nav-item');
+            navItem.setAttribute('current', '');
+          }
+        }
+      });
+
+      // TODO seems like the vaadin-side-nav-item[disabled] attribute is not working, it gets overridden by DisabledMixin
+      document.querySelector('vaadin-side-nav-item[data-disabled]').disabled = true;
     </script>
     <style>
-      vaadin-scroller {
-        width: 300px;
+      vaadin-side-nav {
+        width: fit-content;
+        margin-top: 2rem;
+      }
+
+      [theme~='badge'] {
+        font-size: 0.8em;
+        line-height: 1.2;
+        display: inline-block;
+        padding: 0.1em 0.3em;
+        min-width: calc(1lh + 0.2em - 0.6em);
+        background: var(--_vaadin-background-container);
+        border-radius: 0.7em;
+        text-align: center;
       }
     </style>
   </head>
   <body>
-    <vaadin-scroller>
-      <div class="content">
-        <vaadin-side-nav collapsible>
-          <span slot="label">Main menu</span>
+    <vaadin-radio-group
+      label="Icons"
+      id="icons"
+      helper-text="Click again to randomize icons"
+      theme="helper-above-field"
+    >
+      <vaadin-radio-button label="None" value="none" checked></vaadin-radio-button>
+      <vaadin-radio-button label="All" value="all"></vaadin-radio-button>
+      <vaadin-radio-button label="Top Level" value="top"></vaadin-radio-button>
+      <vaadin-radio-button label="Random" value="random"></vaadin-radio-button>
+    </vaadin-radio-group>
 
-          <vaadin-side-nav-item path="/dev">
-            <vaadin-icon icon="vaadin:chart" slot="prefix"></vaadin-icon>
-            Dev main page
-            <span theme="badge primary" slot="suffix" aria-label="(2 new items)">2</span>
+    <vaadin-side-nav collapsible>
+      <span slot="label">Main menu</span>
+
+      <vaadin-side-nav-item path="/dev/side-nav.html">
+        Side Nav
+        <span theme="badge" slot="suffix" aria-label="(2 new items)">1</span>
+      </vaadin-side-nav-item>
+
+      <vaadin-side-nav-item path="/dev" expanded>
+        Dev pages
+        <span theme="badge" slot="suffix" aria-label="(2 new items)">99+</span>
+
+        <vaadin-side-nav-item path="/dev/grid.html" slot="children">Grid</vaadin-side-nav-item>
+        <vaadin-side-nav-item path="/dev/select.html" slot="children">Select</vaadin-side-nav-item>
+        <vaadin-side-nav-item path="/dev/button.html" slot="children">Button</vaadin-side-nav-item>
+
+        <vaadin-side-nav-item slot="children" expanded>
+          Layouts
+
+          <vaadin-side-nav-item path="/dev/app-layout.html" slot="children"> App Layout </vaadin-side-nav-item>
+          <vaadin-side-nav-item path="/dev/form-layout.html" slot="children"> Form Layout </vaadin-side-nav-item>
+          <vaadin-side-nav-item path="/dev/master-detail-layout.html" slot="children">
+            Master-Detail Layout
+            <span theme="badge" slot="suffix" aria-label="(2 new items)">2</span>
           </vaadin-side-nav-item>
-
-          <vaadin-side-nav-item>
-            <vaadin-icon icon="vaadin:folder-open" slot="prefix"></vaadin-icon>
-            Dev pages
-
-            <vaadin-side-nav-item path="/dev/grid.html" slot="children"> Grid </vaadin-side-nav-item>
-
-            <vaadin-side-nav-item path="/dev/select.html" slot="children"> Select </vaadin-side-nav-item>
+          <vaadin-side-nav-item path="/dev/split-layout.html" slot="children"> Split Layout </vaadin-side-nav-item>
+          <vaadin-side-nav-item path="/dev/horizontal-layout.html" slot="children">
+            Horizontal Layout
           </vaadin-side-nav-item>
+          <vaadin-side-nav-item path="/dev/vertical-layout.html" slot="children">
+            Vertical Layout
+          </vaadin-side-nav-item>
+        </vaadin-side-nav-item>
 
-          <vaadin-side-nav-item> Label only (no path) </vaadin-side-nav-item>
-        </vaadin-side-nav>
-      </div>
-    </vaadin-scroller>
+        <vaadin-side-nav-item slot="children" disabled data-disabled expanded>
+          Form Fields
+
+          <vaadin-side-nav-item path="/dev/combo-box.html" slot="children"> Combo Box </vaadin-side-nav-item>
+          <vaadin-side-nav-item path="/dev/date-picker.html" slot="children"> Date Picker </vaadin-side-nav-item>
+          <vaadin-side-nav-item path="/dev/checkbox.html" slot="children"> Checkbox </vaadin-side-nav-item>
+          <vaadin-side-nav-item path="/dev/text-field.html" slot="children"> Text Field </vaadin-side-nav-item>
+        </vaadin-side-nav-item>
+      </vaadin-side-nav-item>
+
+      <vaadin-side-nav-item> Label only (no path) </vaadin-side-nav-item>
+    </vaadin-side-nav>
   </body>
 </html>
