@@ -175,6 +175,9 @@ export const sideNavItemStyles = css`
     min-width: 0;
     overflow: hidden;
     text-overflow: ellipsis;
+    /* Don't clip ascenders or descenders */
+    padding-block: 0.25em;
+    margin-block: -0.25em;
   }
 
   slot:is([name='prefix'], [name='suffix'])::slotted(*) {
