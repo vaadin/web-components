@@ -68,6 +68,9 @@
           }
         }
       });
+
+      // TODO seems like the vaadin-side-nav-item[disabled] attribute is not working, it gets overridden by DisabledMixin
+      document.querySelector('vaadin-side-nav-item[data-disabled]').disabled = true;
     </script>
     <style>
       vaadin-side-nav {
@@ -129,6 +132,15 @@
           <vaadin-side-nav-item path="/dev/vertical-layout.html" slot="children">
             Vertical Layout
           </vaadin-side-nav-item>
+        </vaadin-side-nav-item>
+
+        <vaadin-side-nav-item slot="children" disabled data-disabled expanded>
+          Form Fields
+
+          <vaadin-side-nav-item path="/dev/combo-box.html" slot="children"> Combo Box </vaadin-side-nav-item>
+          <vaadin-side-nav-item path="/dev/date-picker.html" slot="children"> Date Picker </vaadin-side-nav-item>
+          <vaadin-side-nav-item path="/dev/checkbox.html" slot="children"> Checkbox </vaadin-side-nav-item>
+          <vaadin-side-nav-item path="/dev/text-field.html" slot="children"> Text Field </vaadin-side-nav-item>
         </vaadin-side-nav-item>
       </vaadin-side-nav-item>
 
