@@ -3,8 +3,7 @@ import { aTimeout, fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import './not-animated-styles.js';
 import '@vaadin/popover/src/vaadin-popover.js';
 import '@vaadin/tooltip/src/vaadin-tooltip.js';
-import { mouseleave } from '@vaadin/popover/test/helpers';
-import { mouseenter } from '@vaadin/tooltip/test/helpers';
+import { mouseenter, mouseleave } from '@vaadin/popover/test/helpers';
 
 describe('popover and tooltip', () => {
   let target, popover, popoverOverlay, tooltip, tooltipOverlay;

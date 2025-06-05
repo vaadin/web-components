@@ -155,9 +155,9 @@ class PopoverOpenedStateController {
  * @return {boolean}
  * @protected
  */
-export const isLastOverlay = (overlay) => {
+const isLastOverlay = (overlay) => {
   // Ignore tooltips, popovers should still close when a tooltip is present
-  const filter = (o) => o.constructor.is !== 'vaadin-tooltip-overlay';
+  const filter = (o) => o.localName !== 'vaadin-tooltip-overlay';
   return isLastOverlayBase(overlay, filter);
 };
 
