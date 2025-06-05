@@ -541,15 +541,9 @@ export const RichTextEditorMixin = (superClass) =>
       };
 
       const keyboard = this._editor.keyboard;
-      const bindings = keyboard.bindings.Tab;
 
-      // Exclude Quill shift-tab bindings, except for code block,
-      // as some of those are breaking when on a newline in the list
-      // https://github.com/vaadin/vaadin-rich-text-editor/issues/67
-      const originalBindings = bindings.filter((b) => !b.shiftKey || (b.format && b.format['code-block']));
-      const moveFocusBinding = { key: 'Tab', shiftKey: true, handler: focusToolbar };
-
-      keyboard.bindings.Tab = [...originalBindings, moveFocusBinding];
+      // Shift + Tab focuses a toolbar button unless we are in list / code block
+      keyboard.addBinding({ key: 'Tab', shiftKey: true, handler: focusToolbar });
 
       // Alt-f10 focuses a toolbar button
       keyboard.addBinding({ key: 'F10', altKey: true, handler: focusToolbar });
