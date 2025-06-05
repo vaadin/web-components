@@ -102,8 +102,8 @@ export const sideNavStyles = css`
     display: flex;
     align-items: center;
     justify-content: start;
-    gap: var(--vaadin-side-nav-label-gap, var(--_vaadin-gap-container-inline));
-    padding: var(--vaadin-side-nav-label-padding, var(--_vaadin-padding-container));
+    gap: var(--vaadin-side-nav-item-gap, var(--_vaadin-gap-container-inline));
+    padding: var(--vaadin-side-nav-item-padding, var(--_vaadin-padding-container));
     font-size: var(--vaadin-side-nav-label-font-size, 0.875em);
     font-weight: var(--vaadin-side-nav-label-font-weight, 500);
     color: var(--vaadin-side-nav-label-color, inherit);
