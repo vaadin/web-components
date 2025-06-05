@@ -10,6 +10,7 @@ import { sharedStyles } from './vaadin-side-nav-shared-base-styles.js';
 const sideNav = css`
   :host {
     white-space: nowrap;
+    touch-action: manipulation;
   }
 
   [part='label'] {
@@ -24,6 +25,7 @@ const sideNav = css`
     color: var(--vaadin-side-nav-label-color, inherit);
     line-height: var(--vaadin-side-nav-label-line-height, inherit);
     border-radius: var(--vaadin-side-nav-item-border-radius, var(--_vaadin-radius-m));
+    touch-action: manipulation;
   }
 `;
 
