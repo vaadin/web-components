@@ -163,14 +163,15 @@ describe('accessibility', () => {
       expect(result).to.be.false; // DispatchEvent returns false when preventDefault is called
     });
 
-    it('should preserve the text selection on shift-tab', (done) => {
+    // TODO: add tests for changing indentation in lists
+    it('should focus the toolbar on shift-tab at the end of the list', (done) => {
       sinon.stub(buttons[0], 'focus').callsFake(() => {
-        expect(editor.getSelection()).to.deep.equal({ index: 0, length: 2 });
+        expect(editor.getSelection()).to.deep.equal({ index: 3, length: 0 });
         done();
       });
       rte.value = '[{"attributes":{"list":"bullet"},"insert":"Foo\\n"}]';
       editor.focus();
-      editor.setSelection(0, 2);
+      editor.setSelection(3, 0);
       const e = keyboardEventFor('keydown', 9, ['shift'], 'Tab');
       content.dispatchEvent(e);
     });
