@@ -2,7 +2,7 @@ import { sendKeys } from '@vaadin/test-runner-commands';
 import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '../not-animated-styles.js';
-import '../../../theme/lumo/vaadin-side-nav.js';
+import '../../../src/vaadin-side-nav.js';
 import '@vaadin/icon';
 import '@vaadin/icons';
 
@@ -99,12 +99,12 @@ describe('side-nav', () => {
                 <vaadin-side-nav-item>
                   <vaadin-icon icon="vaadin:chart" slot="prefix"></vaadin-icon>
                   Item 1
-                  <span theme="badge primary" slot="suffix">2</span>
+                  <span slot="suffix">2</span>
                 </vaadin-side-nav-item>
                 <vaadin-side-nav-item>
                   <vaadin-icon icon="vaadin:chart" slot="prefix"></vaadin-icon>
                   Item 2
-                  <span theme="badge primary" slot="suffix">3</span>
+                  <span slot="suffix">3</span>
                 </vaadin-side-nav-item>
               </vaadin-side-nav>
             `,
@@ -150,22 +150,22 @@ describe('side-nav', () => {
                 <vaadin-side-nav-item>
                   <vaadin-icon icon="vaadin:chart" slot="prefix"></vaadin-icon>
                   Item 1
-                  <span theme="badge primary" slot="suffix">2</span>
+                  <span slot="suffix">2</span>
                   <vaadin-side-nav-item slot="children">
                     <vaadin-icon icon="vaadin:chart" slot="prefix"></vaadin-icon>
                     Child item 1
-                    <span theme="badge primary" slot="suffix">12</span>
+                    <span slot="suffix">12</span>
                   </vaadin-side-nav-item>
                   <vaadin-side-nav-item slot="children">
                     <vaadin-icon icon="vaadin:chart" slot="prefix"></vaadin-icon>
                     Child item 2
-                    <span theme="badge primary" slot="suffix">13</span>
+                    <span slot="suffix">13</span>
                   </vaadin-side-nav-item>
                 </vaadin-side-nav-item>
                 <vaadin-side-nav-item>
                   <vaadin-icon icon="vaadin:chart" slot="prefix"></vaadin-icon>
                   Item 2
-                  <span theme="badge primary" slot="suffix">3</span>
+                  <span slot="suffix">3</span>
                 </vaadin-side-nav-item>
               </vaadin-side-nav>
             `,
