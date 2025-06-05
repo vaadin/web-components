@@ -187,7 +187,7 @@ export const gridStyles = css`
       position: absolute;
       inset: calc(var(--_row-border-width) * -1) 0;
       z-index: 3;
-      transform: translateX(calc(var(--_grid-horizontal-scroll-position) * -1));
+      transform: translateX(var(--_grid-horizontal-scroll-position));
       pointer-events: none;
       visibility: hidden;
     }
