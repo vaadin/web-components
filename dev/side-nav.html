@@ -80,10 +80,13 @@
 
       [theme~='badge'] {
         font-size: 0.8em;
+        line-height: 1.2;
         display: inline-block;
-        padding: 0.1em 0.5em;
+        padding: 0.1em 0.3em;
+        min-width: calc(1lh + 0.2em - 0.6em);
         background: var(--_vaadin-background-container);
         border-radius: 0.7em;
+        text-align: center;
       }
     </style>
   </head>
@@ -110,7 +113,7 @@
 
       <vaadin-side-nav-item path="/dev" expanded>
         Dev pages
-        <span theme="badge" slot="suffix" aria-label="(2 new items)">2</span>
+        <span theme="badge" slot="suffix" aria-label="(2 new items)">99+</span>
 
         <vaadin-side-nav-item path="/dev/grid.html" slot="children">Grid</vaadin-side-nav-item>
         <vaadin-side-nav-item path="/dev/select.html" slot="children">Select</vaadin-side-nav-item>
