@@ -1,5 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, listenOnce, nextFrame, nextRender, nextResize } from '@vaadin/testing-helpers';
+import './grid-test-styles.js';
 import '../src/vaadin-grid.js';
 import { flushGrid, infiniteDataProvider, scrollToEnd } from './helpers.js';
 

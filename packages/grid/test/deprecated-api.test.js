@@ -1,6 +1,7 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
+import './grid-test-styles.js';
 import '../src/vaadin-grid.js';
 import { flushGrid } from './helpers.js';
 
