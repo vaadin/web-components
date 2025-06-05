@@ -1,11 +1,4 @@
-const LICENSE_HEADER = `
-/**
- * @license
- * Copyright (c) 2000 - ${new Date().getFullYear()} Vaadin Ltd.
- * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
- */
-`.trim();
-
+/** @type {import('eslint').Rule.RuleModule} */
 export default {
   meta: {
     type: 'problem',
@@ -13,21 +6,37 @@ export default {
       description: 'Ensure files have Vaadin license header',
     },
     fixable: 'code',
+    schema: [
+      {
+        type: 'object',
+        properties: {
+          licenseHeader: {
+            type: 'string',
+            description: 'The license header to be used in the file',
+          },
+        },
+      },
+    ],
   },
   create(context) {
-    const { sourceCode } = context;
+    const { sourceCode, options } = context;
+    const [{ licenseHeader }] = options;
 
     return {
-      Program() {
+      Program(node) {
         const firstComment = sourceCode.getAllComments()[0];
         const firstCommentText = sourceCode.getText(firstComment);
 
         if (!firstComment || !firstCommentText.includes('@license')) {
           context.report({
-            message: 'Missing license header',
             loc: {},
+            message: 'Missing license header',
             fix(fixer) {
-              return fixer.insertTextBeforeRange([0, 0], `${LICENSE_HEADER}\n`);
+              let text = `${licenseHeader.trim()}\n`;
+              if (node.body[0].type !== 'ImportDeclaration') {
+                text += '\n';
+              }
+              return fixer.insertTextBeforeRange([0, 0], text);
             },
           });
           return;
@@ -42,7 +51,7 @@ export default {
             node: firstComment,
             message: 'License header year is not up to date',
             fix(fixer) {
-              return fixer.replaceText(firstComment, LICENSE_HEADER);
+              return fixer.replaceText(firstComment, licenseHeader.trim());
             },
           });
         }

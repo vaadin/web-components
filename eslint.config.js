@@ -6,18 +6,32 @@ import html from 'eslint-plugin-html';
 import noOnlyTests from 'eslint-plugin-no-only-tests';
 import simpleImportSort from 'eslint-plugin-simple-import-sort';
 import globals from 'globals';
-import licenseHeader from './custom-eslint-rules/license-header.js';
+import licenseHeader from './custom-rules/eslint/license-header.js';
+
+const LICENSE_HEADER = `
+/**
+ * @license
+ * Copyright (c) 2000 - ${new Date().getFullYear()} Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+`;
+
+const PRO_LICENSE_HEADER = `
+/**
+ * @license
+ * Copyright (c) 2000 - ${new Date().getFullYear()} Vaadin Ltd.
+ *
+ * This program is available under Vaadin Commercial License and Service Terms.
+ *
+ *
+ * See https://vaadin.com/commercial-license-and-service-terms for the full
+ * license.
+ */
+`;
+
+const PRO_COMPONENTS = ['charts', 'board', 'cookie-consent', 'crud', 'dashboard', 'grid-pro', 'rich-text-editor'];
 
 export default [
-  {
-    plugins: {
-      'custom-eslint-rules': {
-        rules: {
-          'license-header': licenseHeader,
-        },
-      },
-    },
-  },
   {
     ignores: [
       'coverage/**/*.js',
@@ -37,6 +51,11 @@ export default [
       'es-x': esX,
       'no-only-tests': noOnlyTests,
       'simple-import-sort': simpleImportSort,
+      'custom-rules': {
+        rules: {
+          'license-header': licenseHeader,
+        },
+      },
     },
     languageOptions: {
       parserOptions: {
@@ -112,7 +131,6 @@ export default [
   {
     files: ['packages/*/src/**/*.js'],
     rules: {
-      'custom-eslint-rules/license-header': 'error',
       'no-restricted-syntax': [
         'error',
         {
@@ -130,12 +148,23 @@ export default [
   {
     files: ['packages/*/src/**/*.d.ts'],
     rules: {
-      'custom-eslint-rules/license-header': 'error',
       '@typescript-eslint/no-unused-vars': ['error', { varsIgnorePattern: '^TItem' }],
     },
   },
   {
-    files: ['scripts/**/*.js', '*.config.js', 'wtr-utils.js', 'custom-linter-rules/**/*.js'],
+    files: ['packages/*/src/**/*.{ts,js}'],
+    rules: {
+      'custom-rules/license-header': ['error', { licenseHeader: LICENSE_HEADER }],
+    },
+  },
+  {
+    files: [`packages/@(${PRO_COMPONENTS.join('|')})/src/**/*.{ts,js}`],
+    rules: {
+      'custom-rules/license-header': ['error', { licenseHeader: PRO_LICENSE_HEADER }],
+    },
+  },
+  {
+    files: ['scripts/**/*.js', '*.config.js', 'wtr-utils.js', 'custom-rules/**/*.js'],
     languageOptions: {
       globals: {
         ...globals.node,
