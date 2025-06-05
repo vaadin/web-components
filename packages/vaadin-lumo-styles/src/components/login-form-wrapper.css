@@ -12,6 +12,8 @@
   -webkit-text-size-adjust: 100%;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  max-width: calc(var(--lumo-size-m) * 10);
+  background: var(--lumo-base-color) linear-gradient(var(--lumo-tint-5pct), var(--lumo-tint-5pct));
 }
 
 :host([hidden]) {
@@ -23,31 +25,26 @@
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
-}
-
-[part='form-title'] {
-  margin: 0;
-}
-
-[part='error-message'] {
-  position: relative;
-}
-
-:host {
-  max-width: calc(var(--lumo-size-m) * 10);
-  background: var(--lumo-base-color) linear-gradient(var(--lumo-tint-5pct), var(--lumo-tint-5pct));
-}
-
-[part='form'] {
   padding: var(--lumo-space-l);
 }
 
 [part='form-title'] {
+  margin: 0;
   margin-top: calc(var(--lumo-font-size-xxxl) - var(--lumo-font-size-xxl));
   color: var(--lumo-header-text-color);
   font-size: var(--lumo-font-size-xxl);
   font-weight: 600;
   line-height: var(--lumo-line-height-xs);
+}
+
+[part='error-message'] {
+  position: relative;
+  background-color: var(--lumo-error-color-10pct);
+  padding: var(--lumo-space-m);
+  border-radius: var(--lumo-border-radius-m);
+  margin-top: var(--lumo-space-m);
+  margin-bottom: var(--lumo-space-s);
+  color: var(--lumo-error-text-color);
 }
 
 ::slotted([slot='submit']) {
@@ -57,15 +54,6 @@
 
 ::slotted([slot='forgot-password']) {
   margin: var(--lumo-space-s) auto;
-}
-
-[part='error-message'] {
-  background-color: var(--lumo-error-color-10pct);
-  padding: var(--lumo-space-m);
-  border-radius: var(--lumo-border-radius-m);
-  margin-top: var(--lumo-space-m);
-  margin-bottom: var(--lumo-space-s);
-  color: var(--lumo-error-text-color);
 }
 
 :host(:not([dir='rtl'])) [part='error-message'] {
