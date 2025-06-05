@@ -1,12 +1,12 @@
 {
   "extends": ["stylelint-config-vaadin"],
-  "plugins": ["./custom-linter-rules/no-shorthand-with-unresolved-longhand.js"],
+  "plugins": ["./custom-stylelint-rules/no-shorthand-with-unresolved-longhand.js"],
   "overrides": [
     { "files": ["**/*.js"], "customSyntax": "postcss-lit" },
     {
       "files": ["**/*.css"],
       "rules": {
-        "custom-linter-rules/no-shorthand-with-unresolved-longhand": true
+        "custom-stylelint-rules/no-shorthand-with-unresolved-longhand": true
       }
     }
   ],

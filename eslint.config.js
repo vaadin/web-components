@@ -6,8 +6,18 @@ import html from 'eslint-plugin-html';
 import noOnlyTests from 'eslint-plugin-no-only-tests';
 import simpleImportSort from 'eslint-plugin-simple-import-sort';
 import globals from 'globals';
+import licenseHeader from './custom-eslint-rules/license-header.js';
 
 export default [
+  {
+    plugins: {
+      'custom-eslint-rules': {
+        rules: {
+          'license-header': licenseHeader,
+        },
+      },
+    },
+  },
   {
     ignores: [
       'coverage/**/*.js',
@@ -102,6 +112,7 @@ export default [
   {
     files: ['packages/*/src/**/*.js'],
     rules: {
+      'custom-eslint-rules/license-header': 'error',
       'no-restricted-syntax': [
         'error',
         {
@@ -119,6 +130,7 @@ export default [
   {
     files: ['packages/*/src/**/*.d.ts'],
     rules: {
+      'custom-eslint-rules/license-header': 'error',
       '@typescript-eslint/no-unused-vars': ['error', { varsIgnorePattern: '^TItem' }],
     },
   },
