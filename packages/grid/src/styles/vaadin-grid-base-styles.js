@@ -28,14 +28,14 @@ export const gridStyles = css`
       background: var(--vaadin-grid-background, var(--_vaadin-background));
       border: var(--_border-width) solid var(--vaadin-grid-border-color, var(--_vaadin-border-color));
       cursor: default;
-      --_border-width: 0px;
+      --_border-width: 0;
       --_row-border-width: var(--vaadin-grid-cell-border-width, 1px);
-      --_column-border-width: var(--vaadin-grid-cell-border-width, 0px);
+      --_column-border-width: var(--vaadin-grid-cell-border-width, 0);
       --_cell-padding: var(--vaadin-grid-cell-padding, var(--_vaadin-padding-container));
       --_reorder-background-image: none;
       --_selection-background-image: none;
       border-radius: var(--_border-radius);
-      --_border-radius: 0px;
+      --_border-radius: 0;
     }
 
     :host([hidden]),
@@ -205,7 +205,7 @@ export const gridStyles = css`
     /* Variant: row & column borders */
 
     :host([theme~='no-row-borders']) {
-      --_row-border-width: 0px;
+      --_row-border-width: 0;
     }
 
     :host([theme~='column-borders']) {
