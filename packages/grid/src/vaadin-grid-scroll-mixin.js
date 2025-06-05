@@ -476,7 +476,7 @@ export const ScrollMixin = (superClass) =>
 
       // Position frozen cells
       const x = this.__isRTL ? normalizedScrollLeft + clientWidth - scrollWidth : scrollLeft;
-      this.__x = x;
+      this.__horizontalScrollPosition = x;
       const transformFrozen = `translate(${x}px, 0)`;
       this._frozenCells.forEach((cell) => {
         cell.style.transform = transformFrozen;
@@ -528,7 +528,7 @@ export const ScrollMixin = (superClass) =>
       if (row instanceof HTMLTableRowElement === false) {
         return;
       }
-      const newValue = `-${this.__x}px`;
+      const newValue = `-${this.__horizontalScrollPosition}px`;
       if (row.style.getPropertyValue('--_grid-horizontal-scroll-position') !== newValue) {
         row.style.setProperty('--_grid-horizontal-scroll-position', newValue);
       }
