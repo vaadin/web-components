@@ -73,7 +73,11 @@
     "rollup": "^4.4.0",
     "stylelint": "^16.20.0",
     "stylelint-config-vaadin": "^1.0.0-alpha.2",
-    "typescript": "^5.8.3"
+    "typescript": "^5.8.3",
+    "acorn": "^8.14.1",
+    "acorn-walk": "^8.3.4",
+    "magic-string": "^0.30.17",
+    "astring": "^1.9.0"
   },
   "resolutions": {
     "svg2ttf": "6.0.3",
