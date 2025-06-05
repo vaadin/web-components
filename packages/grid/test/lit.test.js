@@ -1,5 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { aTimeout, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
+import './grid-test-styles.js';
 import '../all-imports.js';
 import { html, render } from 'lit';
 import { flush } from '@vaadin/component-base/src/debounce.js';

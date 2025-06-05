@@ -1,24 +1,45 @@
-import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { css } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
-// TODO: subset of Lumo needed for unit tests to pass.
-// These should be eventually covered by base styles.
-registerStyles(
-  'vaadin-grid',
-  css`
-    :host {
-      --_lumo-grid-border-width: 0px;
-    }
+const style = document.createElement('style');
 
-    [part~='cell'] {
-      min-height: 2.25rem;
-    }
+style.textContent = css`
+  vaadin-grid {
+    border: 1px solid;
+    font-family:
+      -apple-system, BlinkMacSystemFont, 'Roboto', 'Segoe UI', Helvetica, Arial, sans-serif, 'Apple Color Emoji',
+      'Segoe UI Emoji', 'Segoe UI Symbol';
+    max-width: none;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
 
-    [part~='cell'] ::slotted(vaadin-grid-cell-content) {
-      padding: 0.25rem 1rem;
-    }
+  vaadin-grid::part(cell) {
+    min-height: 36px;
+    padding: 0;
+  }
 
-    [part~='row']:only-child [part~='header-cell'] {
-      min-height: 3.5rem;
-    }
-  `,
-);
+  vaadin-grid::part(header-cell) {
+    font-size: 0.875rem;
+    font-weight: 500;
+  }
+
+  vaadin-grid::part(first-header-row-cell last-header-row-cell) {
+    min-height: 56px;
+  }
+
+  vaadin-grid-cell-content {
+    padding: 4px 16px;
+  }
+
+  vaadin-grid-tree-toggle {
+    --vaadin-grid-tree-toggle-level-offset: 32px;
+  }
+
+  vaadin-grid-tree-toggle::part(toggle) {
+    width: 32px;
+    margin: 0;
+    padding: 0;
+  }
+`;
+
+document.head.append(style);

@@ -1,5 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync } from '@vaadin/testing-helpers';
+import './grid-test-styles.js';
 import { Grid } from '../src/vaadin-grid.js';
 
 customElements.define('vaadin-custom-grid', class CustomGrid extends Grid {});

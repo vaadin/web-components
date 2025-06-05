@@ -1,6 +1,7 @@
 import { expect } from '@vaadin/chai-plugins';
 import { aTimeout, fixtureSync, nextFrame, nextResize, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
+import './grid-test-styles.js';
 import '../all-imports.js';
 import {
   flushGrid,
@@ -128,14 +129,14 @@ describe('resizing', () => {
     it('should not auto-grow inside a fixed height column flexbox', async () => {
       component.style.height = '500px';
       await nextResize(grid);
-      expect(grid.getBoundingClientRect().height).to.equal(129);
+      expect(grid.getBoundingClientRect().height).to.equal(130);
     });
 
     it('should not auto-grow inside a fixed height row flexbox', async () => {
       component.style.flexDirection = 'row';
       component.style.height = '500px';
       await nextResize(grid);
-      expect(grid.getBoundingClientRect().height).to.equal(129);
+      expect(grid.getBoundingClientRect().height).to.equal(130);
     });
 
     it('should not shrink horizontally inside a row flexbox', () => {
