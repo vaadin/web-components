@@ -19,7 +19,7 @@ const sideNavItem = css`
     color: var(--vaadin-side-nav-item-color, inherit);
     background: var(--vaadin-side-nav-item-background, transparent);
     background-origin: border-box;
-    border: var(--vaadin-side-nav-item-border-width, 0px) solid var(--vaadin-side-nav-item-border-color, transparent);
+    border: var(--vaadin-side-nav-item-border-width, 0) solid var(--vaadin-side-nav-item-border-color, transparent);
     border-radius: var(--vaadin-side-nav-item-border-radius, var(--_vaadin-radius-m));
     cursor: var(--vaadin-clickable-cursor);
   }
