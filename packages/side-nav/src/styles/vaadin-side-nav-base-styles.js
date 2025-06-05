@@ -8,35 +8,39 @@ import { css } from 'lit';
 import { sharedStyles } from './vaadin-side-nav-shared-base-styles.js';
 
 const sideNav = css`
-  :host {
-    white-space: nowrap;
-    touch-action: manipulation;
-  }
+  @layer base {
+    :host {
+      white-space: nowrap;
+      touch-action: manipulation;
+    }
 
-  [part='label'] {
-    align-self: start;
-    display: flex;
-    align-items: center;
-    justify-content: start;
-    gap: var(--vaadin-side-nav-item-gap, var(--_vaadin-gap-container-inline));
-    padding: var(--vaadin-side-nav-item-padding, var(--_vaadin-padding-container));
-    font-size: var(--vaadin-side-nav-label-font-size, 0.875em);
-    font-weight: var(--vaadin-side-nav-label-font-weight, 500);
-    color: var(--vaadin-side-nav-label-color, inherit);
-    line-height: var(--vaadin-side-nav-label-line-height, inherit);
-    border-radius: var(--vaadin-side-nav-item-border-radius, var(--_vaadin-radius-m));
-    touch-action: manipulation;
+    [part='label'] {
+      align-self: start;
+      display: flex;
+      align-items: center;
+      justify-content: start;
+      gap: var(--vaadin-side-nav-item-gap, var(--_vaadin-gap-container-inline));
+      padding: var(--vaadin-side-nav-item-padding, var(--_vaadin-padding-container));
+      font-size: var(--vaadin-side-nav-label-font-size, 0.875em);
+      font-weight: var(--vaadin-side-nav-label-font-weight, 500);
+      color: var(--vaadin-side-nav-label-color, inherit);
+      line-height: var(--vaadin-side-nav-label-line-height, inherit);
+      border-radius: var(--vaadin-side-nav-item-border-radius, var(--_vaadin-radius-m));
+      touch-action: manipulation;
+    }
   }
 `;
 
 export const sideNavStyles = [sharedStyles, sideNav];
 
 export const sideNavSlotStyles = css`
-  vaadin-side-nav:has(vaadin-icon[slot='prefix']) {
-    --_has-prefix-icon: '';
-  }
+  @layer vaadin.base {
+    vaadin-side-nav:has(vaadin-icon[slot='prefix']) {
+      --_has-prefix-icon: '';
+    }
 
-  vaadin-side-nav-item:has(> vaadin-icon[slot='prefix'])::part(link) {
-    --_has-prefix-icon:;
+    vaadin-side-nav-item:has(> vaadin-icon[slot='prefix'])::part(link) {
+      --_has-prefix-icon:;
+    }
   }
 `;
