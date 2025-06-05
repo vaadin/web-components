@@ -350,6 +350,8 @@ const createIntegrationTestsConfig = (config) => {
     process.exit(0);
   }
 
+  const filesGlob = argv.glob || '*';
+
   return {
     ...config,
     nodeResolve: true,
@@ -366,7 +368,7 @@ const createIntegrationTestsConfig = (config) => {
     groups: [
       {
         name: 'integration',
-        files: 'test/integration/*.test.{js,ts}',
+        files: `test/integration/${filesGlob}.test.{js,ts}`,
       },
     ],
     testRunnerHtml: getTestRunnerHtml(),
