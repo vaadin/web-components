@@ -15,6 +15,7 @@ import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { I18nMixin } from '@vaadin/component-base/src/i18n-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
+import { CSSInjectionMixin } from '@vaadin/vaadin-themable-mixin/css-injection-mixin.js';
 import { css, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import {
   getElementItem,
@@ -105,7 +106,7 @@ import { WidgetResizeController } from './widget-resize-controller.js';
  * @mixes ThemableMixin
  */
 class Dashboard extends DashboardLayoutMixin(
-  I18nMixin(getDefaultI18n(), ElementMixin(ThemableMixin(PolylitMixin(LitElement)))),
+  I18nMixin(getDefaultI18n(), ElementMixin(ThemableMixin(CSSInjectionMixin(PolylitMixin(LitElement))))),
 ) {
   static get is() {
     return 'vaadin-dashboard';
