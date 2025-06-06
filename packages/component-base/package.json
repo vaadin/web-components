@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/component-base",
-  "version": "24.7.7",
+  "version": "24.7.8",
   "publishConfig": {
     "access": "public"
   },
@@ -38,8 +38,8 @@
     "lit": "^3.0.0"
   },
   "devDependencies": {
-    "@vaadin/chai-plugins": "~24.7.7",
-    "@vaadin/test-runner-commands": "~24.7.7",
+    "@vaadin/chai-plugins": "~24.7.8",
+    "@vaadin/test-runner-commands": "~24.7.8",
     "@vaadin/testing-helpers": "^1.1.0",
     "sinon": "^18.0.0"
   }
