@@ -184,17 +184,6 @@ export default [
     },
   },
   {
-    files: ['packages/**/gulpfile.cjs'],
-    languageOptions: {
-      globals: {
-        ...globals.node,
-      },
-    },
-    rules: {
-      '@typescript-eslint/no-require-imports': 'off',
-    },
-  },
-  {
     files: ['packages/**/test/**', 'test/integration/**'],
     languageOptions: {
       globals: {
