@@ -1,6 +1,7 @@
 import { expect } from '@vaadin/chai-plugins';
 import { aTimeout, fixtureSync, nextFrame, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
+import './grid-test-styles.js';
 import '../all-imports.js';
 import { flushGrid, getContainerCell, getHeaderCell } from './helpers.js';
 
@@ -272,7 +273,7 @@ describe('column auto-width', () => {
     fixtureSync(`
       <style>
         vaadin-grid::part(cell) {
-          padding-right: 20px;
+          padding-right: 20px !important;
         }
       </style>
     `);

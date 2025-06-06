@@ -5,7 +5,7 @@
  */
 import '@vaadin/component-base/src/style-props.js';
 import { css } from 'lit';
-import { buttonStyles } from '@vaadin/button/src/vaadin-button-base-styles.js';
+import { buttonStyles } from '@vaadin/button/src/styles/vaadin-button-base-styles.js';
 
 const passwordFieldBase = css`
   @layer base {

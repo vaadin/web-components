@@ -1,0 +1,24 @@
+/**
+ * @license
+ * Copyright (c) 2017 - 2025 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+@import '../src/mixins/base-layer-reset.css' vaadin-context-menu-overlay;
+@import '../src/mixins/overlay.css' vaadin-context-menu-overlay;
+@import '../src/mixins/menu-overlay-core.css' vaadin-context-menu-overlay;
+@import '../src/mixins/menu-overlay-ext.css' vaadin-context-menu-overlay;
+@import '../src/components/context-menu-overlay.css' vaadin-context-menu-overlay;
+
+@import '../src/mixins/base-layer-reset.css' vaadin-context-menu-list-box;
+@import '../src/components/list-box.css' vaadin-context-menu-list-box;
+@import '../src/components/context-menu-list-box.css' vaadin-context-menu-list-box;
+
+@import '../src/mixins/base-layer-reset.css' vaadin-context-menu-item;
+@import '../src/components/item.css' vaadin-context-menu-item;
+@import '../src/components/context-menu-item.css' vaadin-context-menu-item;
+
+html {
+  --vaadin-context-menu-overlay-css-inject: 1;
+  --vaadin-context-menu-list-box-css-inject: 1;
+  --vaadin-context-menu-item-css-inject: 1;
+}

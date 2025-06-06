@@ -6,7 +6,7 @@ const {
   utils: { report },
 } = stylelint;
 
-const ruleName = 'custom-linter-rules/no-shorthand-with-unresolved-longhand';
+const ruleName = 'custom-rules/no-shorthand-with-unresolved-longhand';
 
 const messages = {
   rejected: (shorthand, longhand) =>

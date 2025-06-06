@@ -3,14 +3,16 @@
  * Copyright (c) 2023 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import './vaadin-side-nav-item.js';
 import { html, LitElement } from 'lit';
 import { FocusMixin } from '@vaadin/a11y-base/src/focus-mixin.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
+import { SlotStylesMixin } from '@vaadin/component-base/src/slot-styles-mixin.js';
 import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { sideNavBaseStyles } from './vaadin-side-nav-base-styles.js';
+import { sideNavSlotStyles, sideNavStyles } from './styles/vaadin-side-nav-core-styles.js';
 import { SideNavChildrenMixin } from './vaadin-side-nav-children-mixin.js';
 
 /**
@@ -70,7 +72,9 @@ import { SideNavChildrenMixin } from './vaadin-side-nav-children-mixin.js';
  * @mixes ElementMixin
  * @mixes SideNavChildrenMixin
  */
-class SideNav extends SideNavChildrenMixin(FocusMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElement))))) {
+class SideNav extends SideNavChildrenMixin(
+  SlotStylesMixin(FocusMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElement))))),
+) {
   static get is() {
     return 'vaadin-side-nav';
   }
@@ -149,7 +153,12 @@ class SideNav extends SideNavChildrenMixin(FocusMixin(ElementMixin(ThemableMixin
   }
 
   static get styles() {
-    return sideNavBaseStyles;
+    return sideNavStyles;
+  }
+
+  /** @protected */
+  get slotStyles() {
+    return [sideNavSlotStyles];
   }
 
   constructor() {
