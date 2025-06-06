@@ -123,6 +123,7 @@ export const DashboardLayoutMixin = (superClass) =>
           value: 2,
           sync: true,
           reflectToAttribute: true,
+          observer: '__rootHeadingLevelChanged',
         },
       };
     }
@@ -155,5 +156,12 @@ export const DashboardLayoutMixin = (superClass) =>
       const columnCount = getComputedStyle(this.$.grid).gridTemplateColumns.split(' ').length;
       // ...and set it as the new value
       this.$.grid.style.setProperty('--_col-count', columnCount);
+    }
+
+    /** @private */
+    __rootHeadingLevelChanged(rootHeadingLevel) {
+      this.dispatchEvent(
+        new CustomEvent('dashboard-root-heading-level-changed', { detail: { value: rootHeadingLevel } }),
+      );
     }
   };
