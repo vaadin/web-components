@@ -288,6 +288,7 @@ export const DashboardItemMixin = (superClass) =>
       super();
       this.__keyboardController = new KeyboardController(this);
       this.__focusTrapController = new FocusTrapController(this);
+      this.__boundRootHeadingLevelChangedListener = this.__updateRootHeadingLevel.bind(this);
     }
 
     /** @protected */
@@ -401,19 +402,22 @@ export const DashboardItemMixin = (superClass) =>
       this.__removeHeadingLevelObserver();
       const parentLayout = getParentLayout(this);
       if (parentLayout) {
-        this.__headingLevelObserver = new MutationObserver(() => this.__updateRootHeadingLevel());
-        this.__headingLevelObserver.observe(parentLayout, {
-          attributes: true,
-          attributeFilter: ['root-heading-level'],
-        });
+        this.__rootHeadingLevelListenerTarget = parentLayout;
+        parentLayout.addEventListener(
+          'dashboard-root-heading-level-changed',
+          this.__boundRootHeadingLevelChangedListener,
+        );
       }
     }
 
     /** @private */
     __removeHeadingLevelObserver() {
-      if (this.__headingLevelObserver) {
-        this.__headingLevelObserver.disconnect();
-        this.__headingLevelObserver = null;
+      if (this.__rootHeadingLevelListenerTarget) {
+        this.__rootHeadingLevelListenerTarget.removeEventListener(
+          'dashboard-root-heading-level-changed',
+          this.__boundRootHeadingLevelChangedListener,
+        );
+        this.__rootHeadingLevelListenerTarget = null;
       }
     }
 
