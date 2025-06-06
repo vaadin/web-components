@@ -10,6 +10,7 @@
 @import './components/checkbox-group.css';
 @import './components/checkbox.css';
 @import './components/combo-box.css';
+@import './components/context-menu.css';
 @import './components/custom-field.css';
 @import './components/date-picker.css';
 @import './components/date-time-picker.css';
@@ -24,6 +25,7 @@
 @import './components/integer-field.css';
 @import './components/item.css';
 @import './components/list-box.css';
+@import './components/menu-bar.css';
 @import './components/multi-select-combo-box.css';
 @import './components/notification.css';
 @import './components/number-field.css';
