@@ -166,24 +166,6 @@ export const DataProviderMixin = (superClass) =>
       this._dataProviderController.addEventListener('page-loaded', this._onDataProviderPageLoaded.bind(this));
     }
 
-    /**
-     * @protected
-     * @deprecated since 24.3 and will be removed in Vaadin 25.
-     */
-    get _cache() {
-      console.warn('<vaadin-grid> The `_cache` property is deprecated and will be removed in Vaadin 25.');
-      return this._dataProviderController.rootCache;
-    }
-
-    /**
-     * @protected
-     * @deprecated since 24.3 and will be removed in Vaadin 25.
-     */
-    get _effectiveSize() {
-      console.warn('<vaadin-grid> The `_effectiveSize` property is deprecated and will be removed in Vaadin 25.');
-      return this._flatSize;
-    }
-
     /** @private */
     _sizeChanged(size) {
       this._dataProviderController.rootCache.size = size;
@@ -307,17 +289,6 @@ export const DataProviderMixin = (superClass) =>
     _getIndexLevel(index = 0) {
       const { level } = this._dataProviderController.getFlatIndexContext(index);
       return level;
-    }
-
-    /**
-     * @param {number} page
-     * @param {ItemCache} cache
-     * @protected
-     * @deprecated since 24.3 and will be removed in Vaadin 25.
-     */
-    _loadPage(page, cache) {
-      console.warn('<vaadin-grid> The `_loadPage` method is deprecated and will be removed in Vaadin 25.');
-      this._dataProviderController.__loadCachePage(cache, page);
     }
 
     /** @protected */
