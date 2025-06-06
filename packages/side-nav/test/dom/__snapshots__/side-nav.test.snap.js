@@ -13,10 +13,10 @@ snapshots["vaadin-side-nav host default"] =
   >
     Main menu
   </span>
-  <vaadin-side-nav-item>
+  <vaadin-side-nav-item role="listitem">
     Item 1
   </vaadin-side-nav-item>
-  <vaadin-side-nav-item>
+  <vaadin-side-nav-item role="listitem">
     Item 2
   </vaadin-side-nav-item>
 </vaadin-side-nav>
@@ -36,10 +36,10 @@ snapshots["vaadin-side-nav host collapsible"] =
   >
     Main menu
   </span>
-  <vaadin-side-nav-item>
+  <vaadin-side-nav-item role="listitem">
     Item 1
   </vaadin-side-nav-item>
-  <vaadin-side-nav-item>
+  <vaadin-side-nav-item role="listitem">
     Item 2
   </vaadin-side-nav-item>
 </vaadin-side-nav>
@@ -60,10 +60,10 @@ snapshots["vaadin-side-nav host collapsed"] =
   >
     Main menu
   </span>
-  <vaadin-side-nav-item>
+  <vaadin-side-nav-item role="listitem">
     Item 1
   </vaadin-side-nav-item>
-  <vaadin-side-nav-item>
+  <vaadin-side-nav-item role="listitem">
     Item 2
   </vaadin-side-nav-item>
 </vaadin-side-nav>

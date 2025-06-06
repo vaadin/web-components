@@ -5,7 +5,7 @@
  */
 import { css } from 'lit';
 
-export const sideNavItemBaseStyles = css`
+export const sideNavItemStyles = css`
   :host {
     display: block;
   }
@@ -67,36 +67,5 @@ export const sideNavItemBaseStyles = css`
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-  }
-`;
-
-export const sideNavBaseStyles = css`
-  :host {
-    display: block;
-  }
-
-  :host([hidden]) {
-    display: none !important;
-  }
-
-  button {
-    display: flex;
-    align-items: center;
-    justify-content: inherit;
-    width: 100%;
-    margin: 0;
-    padding: 0;
-    background-color: initial;
-    color: inherit;
-    border: initial;
-    outline: none;
-    font: inherit;
-    text-align: inherit;
-  }
-
-  [part='children'] {
-    padding: 0;
-    margin: 0;
-    list-style-type: none;
   }
 `;

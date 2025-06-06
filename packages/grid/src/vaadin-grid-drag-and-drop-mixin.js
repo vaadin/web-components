@@ -247,6 +247,9 @@ export const DragAndDropMixin = (superClass) =>
 
         let row = e.composedPath().find((node) => node.localName === 'tr');
 
+        // Update the horizontal scroll position property of the row being dragged over
+        this.__updateRowScrollPositionProperty(row);
+
         if (!this._flatSize || this.dropMode === DropMode.ON_GRID) {
           // The grid is empty or "on-grid" drop mode was used, always default to "empty"
           this._dropLocation = DropLocation.EMPTY;

@@ -9,7 +9,7 @@
  * license.
  */
 import { html, LitElement } from 'lit';
-import { buttonStyles } from '@vaadin/button/src/vaadin-button-core-styles.js';
+import { buttonStyles } from '@vaadin/button/src/styles/vaadin-button-core-styles.js';
 import { ButtonMixin } from '@vaadin/button/src/vaadin-button-mixin.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';

@@ -1,0 +1,35 @@
+/**
+ * @license
+ * Copyright (c) 2017 - 2025 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+@import '../src/mixins/base-layer-reset.css' vaadin-menu-bar;
+@import '../src/components/menu-bar.css' vaadin-menu-bar;
+
+@import '../src/mixins/base-layer-reset.css' vaadin-menu-bar-overlay;
+@import '../src/mixins/overlay.css' vaadin-menu-bar-overlay;
+@import '../src/mixins/menu-overlay-core.css' vaadin-menu-bar-overlay;
+@import '../src/mixins/menu-overlay-ext.css' vaadin-menu-bar-overlay;
+@import '../src/components/context-menu-overlay.css' vaadin-menu-bar-overlay;
+@import '../src/components/menu-bar-overlay.css' vaadin-menu-bar-overlay;
+
+@import '../src/mixins/base-layer-reset.css' vaadin-menu-bar-list-box;
+@import '../src/components/list-box.css' vaadin-menu-bar-list-box;
+@import '../src/components/context-menu-list-box.css' vaadin-menu-bar-list-box;
+
+@import '../src/mixins/base-layer-reset.css' vaadin-menu-bar-item;
+@import '../src/components/item.css' vaadin-menu-bar-item;
+@import '../src/components/context-menu-item.css' vaadin-menu-bar-item;
+@import '../src/components/menu-bar-item.css' vaadin-menu-bar-item;
+
+@import '../src/mixins/base-layer-reset.css' vaadin-menu-bar-button;
+@import '../src/components/button.css' vaadin-menu-bar-button;
+@import '../src/components/menu-bar-button.css' vaadin-menu-bar-button;
+
+html {
+  --vaadin-menu-bar-css-inject: 1;
+  --vaadin-menu-bar-overlay-css-inject: 1;
+  --vaadin-menu-bar-list-box-css-inject: 1;
+  --vaadin-menu-bar-item-css-inject: 1;
+  --vaadin-menu-bar-button-css-inject: 1;
+}

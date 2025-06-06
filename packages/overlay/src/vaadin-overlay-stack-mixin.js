@@ -23,10 +23,14 @@ const getOverlayInstances = () => getAttachedInstances().filter((el) => el.$.ove
 /**
  * Returns true if the overlay is the last one in the opened overlays stack.
  * @param {HTMLElement} overlay
+ * @param {function(HTMLElement): boolean} filter
  * @return {boolean}
  * @protected
  */
-export const isLastOverlay = (overlay) => overlay === getOverlayInstances().pop();
+export const isLastOverlay = (overlay, filter = (_overlay) => true) => {
+  const filteredOverlays = getOverlayInstances().filter(filter);
+  return overlay === filteredOverlays.pop();
+};
 
 const overlayMap = new WeakMap();
 
