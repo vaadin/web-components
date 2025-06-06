@@ -2,6 +2,7 @@ import * as cheerio from 'cheerio';
 import { dest, src, task } from 'gulp';
 import concat from 'gulp-concat';
 import { gulpPlugin } from 'gulp-plugin-extras';
+import { basename } from 'path';
 
 function createCopyright() {
   return `/**
@@ -13,7 +14,7 @@ function createCopyright() {
 
 function transformIcon() {
   return gulpPlugin('gulp-transform-icon', (file) => {
-    const id = file.path.replace(/.*\/(.*).svg/u, '$1');
+    const id = basename(file.path, '.svg');
     const svg = cheerio.load(file.contents, { xmlMode: true })('svg');
     // Remove fill attributes.
     svg.children('[fill]').removeAttr('fill');
