@@ -3,25 +3,23 @@ import { resetMouse, sendKeys, sendMouse } from '@vaadin/test-runner-commands';
 import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import './grid-test-styles.js';
 import '../src/vaadin-grid.js';
-import { flushGrid, getContainerCell, getLastVisibleItem, getPhysicalItems } from './helpers.js';
+import { flushGrid, getCellContent, getContainerCell } from './helpers.js';
 
 describe('scroll into view', () => {
-  let grid, firstCell, secondCell, secondDetailsCell;
+  let grid, firstCell, secondRow, secondCell;
 
-  function verifyRowFullyVisible(grid, rowIndex) {
+  function verifyFullyVisible(element) {
     const scrollerBounds = grid.$.scroller.getBoundingClientRect();
-    const row = getPhysicalItems(grid)[rowIndex];
-    const rowBounds = row.getBoundingClientRect();
-    expect(rowBounds.top).to.be.greaterThanOrEqual(scrollerBounds.top);
-    expect(rowBounds.bottom).to.be.lessThanOrEqual(scrollerBounds.bottom);
+    const elementBounds = element.getBoundingClientRect();
+    expect(elementBounds.top).to.be.greaterThanOrEqual(scrollerBounds.top);
+    expect(elementBounds.bottom).to.be.lessThanOrEqual(scrollerBounds.bottom);
   }
 
-  function verifyRowNotFullyVisible(grid, rowIndex) {
+  function verifyNotFullyVisible(element) {
     const scrollerBounds = grid.$.scroller.getBoundingClientRect();
-    const row = getPhysicalItems(grid)[rowIndex];
-    const rowBounds = row.getBoundingClientRect();
-    const isTopInvisible = rowBounds.top < scrollerBounds.top;
-    const isBottomInvisible = rowBounds.bottom > scrollerBounds.bottom;
+    const elementBounds = element.getBoundingClientRect();
+    const isTopInvisible = elementBounds.top < scrollerBounds.top;
+    const isBottomInvisible = elementBounds.bottom > scrollerBounds.bottom;
     expect(isTopInvisible || isBottomInvisible).to.be.true;
   }
 
@@ -33,64 +31,99 @@ describe('scroll into view', () => {
     `);
     const column = grid.querySelector('vaadin-grid-column');
     column.renderer = (root, _, model) => {
-      root.innerHTML = `<div style="height: 100px">${model.item}</div>`;
+      root.innerHTML = `<div style="height: 100px">${model.item} <textarea style="height: 80px"></div>`;
     };
     grid.rowDetailsRenderer = (root, _, model) => {
-      root.innerHTML = `<div style="height: 30px">${model.item} details</div>`;
+      root.innerHTML = `<div style="height: 10px">${model.item} Details</div>`;
     };
     grid.items = [1, 2];
-    grid.detailsOpenedItems = [2];
+    grid.detailsOpenedItems = [1, 2];
 
     flushGrid(grid);
     await nextFrame();
 
     firstCell = getContainerCell(grid.$.items, 0, 0);
     secondCell = getContainerCell(grid.$.items, 1, 0);
-    secondDetailsCell = getLastVisibleItem(grid).querySelector('[part~="details-cell"]');
+    secondRow = secondCell.parentElement;
   });
 
   afterEach(async () => {
     await resetMouse();
   });
 
-  it('should scroll row into view when focusing programmatically', () => {
-    verifyRowNotFullyVisible(grid, 1);
+  describe('rows and cells', () => {
+    it('should scroll row into view when focusing row programmatically', () => {
+      verifyNotFullyVisible(secondRow);
 
-    secondCell.focus();
+      secondRow.focus();
 
-    expect(grid.$.table.scrollTop).to.be.above(0);
-    verifyRowFullyVisible(grid, 1);
+      expect(grid.$.table.scrollTop).to.be.above(0);
+      verifyFullyVisible(secondRow);
+    });
+
+    it('should scroll row into view when focusing cell programmatically', () => {
+      verifyNotFullyVisible(secondRow);
+
+      secondCell.focus();
+
+      expect(grid.$.table.scrollTop).to.be.above(0);
+      verifyFullyVisible(secondRow);
+    });
+
+    it('should scroll row into view when focusing row with keyboard navigation', async () => {
+      verifyNotFullyVisible(secondRow);
+
+      firstCell.focus();
+      // Move focus to first row
+      await sendKeys({ press: 'ArrowLeft' });
+      // Move focus to second row
+      await sendKeys({ press: 'ArrowDown' });
+
+      expect(grid.shadowRoot.activeElement).to.equal(secondRow);
+      expect(grid.$.table.scrollTop).to.be.above(0);
+      verifyFullyVisible(secondRow);
+    });
+
+    it('should scroll row into view when focusing cell with keyboard navigation', async () => {
+      verifyNotFullyVisible(secondRow);
+
+      firstCell.focus();
+      // Move to details cell of first row
+      await sendKeys({ press: 'ArrowDown' });
+      // Move to column cell of second row
+      await sendKeys({ press: 'ArrowDown' });
+
+      expect(grid.shadowRoot.activeElement).to.equal(secondCell);
+      expect(grid.$.table.scrollTop).to.be.above(0);
+      verifyFullyVisible(secondRow);
+    });
+
+    it('should not change scroll position when focusing row cell with click', async () => {
+      verifyNotFullyVisible(secondRow);
+
+      const bounds = secondCell.getBoundingClientRect();
+      await sendMouse({ type: 'click', position: [bounds.x + 5, bounds.y + 5] });
+
+      expect(grid.$.table.scrollTop).to.equal(0);
+    });
   });
 
-  it('should scroll row into view when focusing with keyboard navigation', async () => {
-    verifyRowNotFullyVisible(grid, 1);
+  describe('focusable elements in cells', () => {
+    it('should only scroll focusable element into view when it receives focus', async () => {
+      const secondCellInput = getCellContent(secondCell).querySelector('textarea');
 
-    firstCell.focus();
-    await sendKeys({ press: 'ArrowDown' });
+      verifyNotFullyVisible(secondRow);
+      verifyNotFullyVisible(secondCellInput);
 
-    expect(grid.$.table.scrollTop).to.be.above(0);
-    verifyRowFullyVisible(grid, 1);
-  });
+      // Enter navigation mode in first cell, Tab to textarea in second cell
+      firstCell.focus();
+      await sendKeys({ press: 'Enter' });
+      await sendKeys({ press: 'Tab' });
 
-  it('should not change scroll position when focusing row cell with click', async () => {
-    verifyRowNotFullyVisible(grid, 1);
-
-    const bounds = secondCell.getBoundingClientRect();
-    await sendMouse({ type: 'click', position: [bounds.x + 5, bounds.y + 5] });
-
-    expect(grid.$.table.scrollTop).to.equal(0);
-  });
-
-  it('should not change scroll position when focusing details cell with click', async () => {
-    // Make details cell partially visible for clicking
-    grid.style.height = '240px';
-    await nextFrame();
-
-    verifyRowNotFullyVisible(grid, 1);
-
-    const bounds = secondDetailsCell.getBoundingClientRect();
-    await sendMouse({ type: 'click', position: [bounds.x + 5, bounds.y + 5] });
-
-    expect(grid.$.table.scrollTop).to.equal(0);
+      // Second input should be focused and fully visible, but second row should not be fully visible
+      expect(document.activeElement).to.equal(secondCellInput);
+      verifyFullyVisible(secondCellInput);
+      verifyNotFullyVisible(secondRow);
+    });
   });
 });

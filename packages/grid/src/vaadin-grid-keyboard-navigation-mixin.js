@@ -9,15 +9,15 @@ import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { addValueToAttribute, removeValueFromAttribute } from '@vaadin/component-base/src/dom-utils.js';
 import { get } from '@vaadin/component-base/src/path-utils.js';
 
-function isRow(element) {
+export function isRow(element) {
   return element instanceof HTMLTableRowElement;
 }
 
-function isCell(element) {
+export function isCell(element) {
   return element instanceof HTMLTableCellElement;
 }
 
-function isDetailsCell(element) {
+export function isDetailsCell(element) {
   return element.matches('[part~="details-cell"]');
 }
 
@@ -280,7 +280,7 @@ export const KeyboardNavigationMixin = (superClass) =>
       if (!targetRowInDom) {
         this._scrollToFlatIndex(index);
       } else {
-        this.__scrollIntoViewport(index);
+        this.__scrollIntoViewport(targetRowInDom);
       }
     }
 

@@ -8,6 +8,7 @@ import { animationFrame, microTask, timeOut } from '@vaadin/component-base/src/a
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { getNormalizedScrollLeft } from '@vaadin/component-base/src/dir-utils.js';
 import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
+import { isCell } from './vaadin-grid-keyboard-navigation-mixin.js';
 
 const timeouts = {
   SCROLLING: 500,
@@ -125,10 +126,16 @@ export const ScrollMixin = (superClass) =>
         const row = composedPath[composedPath.indexOf(this.$.items) - 1];
 
         if (row) {
-          // Make sure the row with the focused element is fully inside the visible viewport
-          // Don't change scroll position if the user is interacting with the mouse
+          // Make sure the focused element (row, cell, or focusable element inside a cell)
+          // is inside the viewport. Don't change scroll position if the user is interacting
+          // with the mouse.
           if (!this._isMousedown) {
-            this.__scrollIntoViewport(row.index);
+            // When target is a cell, scroll the whole row into the viewport, so that it also
+            // reveals a potential details cell. When target is a focusable element inside a
+            // cell, just scroll that element into the viewport. That works better in cases
+            // where the cell is larger than the viewport.
+            const scrollTarget = isCell(e.target) ? row : e.target;
+            this.__scrollIntoViewport(scrollTarget);
           }
 
           if (!this.$.table.contains(e.relatedTarget)) {
@@ -174,25 +181,27 @@ export const ScrollMixin = (superClass) =>
     _scrollToFlatIndex(index) {
       index = Math.min(this._flatSize - 1, Math.max(0, index));
       this.__virtualizer.scrollToIndex(index);
-      this.__scrollIntoViewport(index);
+      const rowElement = [...this.$.items.children].find((child) => child.index === index);
+      this.__scrollIntoViewport(rowElement);
     }
 
     /**
-     * Makes sure the row with the given index (if found in the DOM) is fully
-     * inside the visible viewport, taking header/footer into account.
+     * Makes sure the given element is fully inside the visible viewport,
+     * taking header/footer into account.
      * @private
      */
-    __scrollIntoViewport(index) {
-      const rowElement = [...this.$.items.children].find((child) => child.index === index);
-      if (rowElement) {
-        const dstRect = rowElement.getBoundingClientRect();
-        const footerTop = this.$.footer.getBoundingClientRect().top;
-        const headerBottom = this.$.header.getBoundingClientRect().bottom;
-        if (dstRect.bottom > footerTop) {
-          this.$.table.scrollTop += dstRect.bottom - footerTop;
-        } else if (dstRect.top < headerBottom) {
-          this.$.table.scrollTop -= headerBottom - dstRect.top;
-        }
+    __scrollIntoViewport(element) {
+      if (!element) {
+        return;
+      }
+
+      const dstRect = element.getBoundingClientRect();
+      const footerTop = this.$.footer.getBoundingClientRect().top;
+      const headerBottom = this.$.header.getBoundingClientRect().bottom;
+      if (dstRect.bottom > footerTop) {
+        this.$.table.scrollTop += dstRect.bottom - footerTop;
+      } else if (dstRect.top < headerBottom) {
+        this.$.table.scrollTop -= headerBottom - dstRect.top;
       }
     }
 
