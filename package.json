@@ -76,7 +76,6 @@
     "typescript": "^5.8.3"
   },
   "resolutions": {
-    "ttf2woff2": "^7.0.0",
     "playwright": "^1.52.0"
   },
   "lint-staged": {
