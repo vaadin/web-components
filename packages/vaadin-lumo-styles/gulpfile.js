@@ -1,11 +1,8 @@
-'use strict';
-
-const gulp = require('gulp');
-const sort = require('gulp-sort');
-const iconfont = require('gulp-iconfont');
-const fs = require('fs');
-const svgpath = require('svgpath');
-const svgmin = require('gulp-svgmin');
+import fs from 'fs';
+import { dest, src, task } from 'gulp';
+import iconfont from 'gulp-iconfont';
+import imagemin, { svgo } from 'gulp-imagemin';
+import svgpath from 'svgpath';
 
 /**
  * Normalize file sort order across platforms (OS X vs Linux, maybe others).
@@ -58,36 +55,36 @@ function createIconset(folder, filenames, idPrefix = '') {
   return output;
 }
 
-gulp.task('icons', (done) => {
+task('icons', (done) => {
   const folder = 'icons/svg/';
   let glyphs;
 
   // Optimize the source files
-  gulp
-    .src(`${folder}*.svg`)
+  src(`${folder}*.svg`)
     .pipe(
-      svgmin({
-        plugins: [
-          {
-            removeTitle: true,
-          },
-          {
-            removeViewBox: false,
-          },
-          {
-            cleanupNumericValues: {
-              floatPrecision: 6,
+      imagemin([
+        svgo({
+          floatPrecision: 6,
+          plugins: [
+            {
+              name: 'removeTitle',
+              active: true,
             },
-          },
-          {
-            convertPathData: {
-              floatPrecision: 6,
+            {
+              name: 'removeViewBox',
+              active: false,
             },
-          },
-        ],
-      }),
+            {
+              name: 'cleanupNumericValues',
+            },
+            {
+              name: 'convertPathData',
+            },
+          ],
+        }),
+      ]),
     )
-    .pipe(gulp.dest(folder))
+    .pipe(dest(folder))
     .on('finish', () => {
       // Generate vaadin-iconset
       fs.readdir(folder, (err, filenames) => {
@@ -116,32 +113,21 @@ Iconset.register('lumo', 1000, template);\n`;
       });
 
       // Icon font
-      gulp
-        .src(`${folder}*.svg`)
-        .pipe(
-          sort({
-            comparator(file1, file2) {
-              return sortIconFilesNormalized(file1.relative, file2.relative);
-            },
-          }),
-        )
-        .pipe(
-          iconfont({
-            fontName: 'lumo-icons',
-            formats: ['woff'],
-            fontHeight: 1000,
-            ascent: 850,
-            descent: 150,
-            fixedWidth: true,
-            normalize: true,
-            timestamp: 1, // Truthy!
-          }),
-        )
+      iconfont(`${folder}*.svg`, {
+        fontName: 'lumo-icons',
+        formats: ['woff'],
+        fontHeight: 1000,
+        ascent: 850,
+        descent: 150,
+        fixedWidth: true,
+        normalize: true,
+        timestamp: 1, // Truthy!
+      })
         .on('glyphs', (glyphData) => {
           // Store for later use
           glyphs = glyphData;
         })
-        .pipe(gulp.dest('.', { encoding: false }))
+        .pipe(dest('.', { encoding: false }))
         .on('finish', () => {
           // Generate base64 version of the font
           const lumoIconsWoff = fs.readFileSync('lumo-icons.woff');
