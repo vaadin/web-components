@@ -67,16 +67,7 @@ class Avatar extends AvatarMixin(ElementMixin(ThemableMixin(CSSInjectionMixin(Po
         draggable="false"
       />
       <div part="icon" ?hidden="${!this.__iconVisible}" aria-hidden="true"></div>
-      <svg
-        part="abbr"
-        ?hidden="${!this.__abbrVisible}"
-        viewBox="-50 -50 100 100"
-        preserveAspectRatio="xMidYMid meet"
-        aria-hidden="true"
-      >
-        <text dy=".35em" text-anchor="middle">${this.abbr}</text>
-      </svg>
-
+      <div part="abbr" ?hidden="${!this.__abbrVisible}" aria-hidden="true">${this.abbr}</div>
       <slot name="tooltip"></slot>
     `;
   }
