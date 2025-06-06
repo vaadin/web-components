@@ -17,6 +17,7 @@ const contextMenuOverlay = css`
 
   /* TODO These style overrides should not be needed.
    We should instead offer a way to have non-selectable items inside the context menu. */
+
   :host {
     --_lumo-list-box-item-selected-icon-display: none;
     --_lumo-list-box-item-padding-left: calc(var(--lumo-space-m) + var(--lumo-border-radius-m) / 4);
