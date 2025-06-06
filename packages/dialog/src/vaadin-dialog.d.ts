@@ -20,8 +20,6 @@ export type DialogResizableDirection = 'e' | 'n' | 'ne' | 'nw' | 's' | 'se' | 's
 export type DialogResizeDimensions = {
   width: string;
   height: string;
-  contentWidth: string;
-  contentHeight: string;
   top: string;
   left: string;
 };

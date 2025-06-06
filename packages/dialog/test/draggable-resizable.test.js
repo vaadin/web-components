@@ -315,30 +315,18 @@ describe('resizable', () => {
 
   it('should dispatch resize event with correct details', () => {
     const onResize = sinon.spy();
-    const content = dialog.$.overlay.$.content;
-    let detail = {};
     dialog.addEventListener('resize', onResize);
-    dialog.addEventListener('resize', (e) => {
-      detail = e.detail;
-    });
+
     resize(overlayPart.querySelector('.w'), -dx, 0);
 
+    const { detail } = onResize.firstCall.args[0];
     const resizedBounds = overlayPart.getBoundingClientRect();
-    const contentStyles = getComputedStyle(content);
-    const verticalPadding =
-      parseInt(contentStyles.paddingTop) +
-      parseInt(contentStyles.paddingBottom) +
-      parseInt(contentStyles.borderTopWidth) +
-      parseInt(contentStyles.borderBottomWidth);
-    content.style.boxSizing = 'content-box';
 
     expect(onResize.calledOnce).to.be.true;
     expect(Math.floor(resizedBounds.width)).to.be.eql(parseInt(detail.width));
     expect(Math.floor(resizedBounds.height)).to.be.eql(parseInt(detail.height));
     expect(Math.floor(resizedBounds.left)).to.be.eql(parseInt(detail.left));
     expect(Math.floor(resizedBounds.top)).to.be.eql(parseInt(detail.top));
-    expect(parseInt(detail.contentWidth)).to.be.eql(parseInt(contentStyles.width));
-    expect(parseInt(detail.contentHeight)).to.be.eql(parseInt(contentStyles.height) - verticalPadding);
   });
 
   it('should update "width" and "height" properties on resize', async () => {
