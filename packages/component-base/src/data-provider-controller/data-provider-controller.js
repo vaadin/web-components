@@ -100,8 +100,6 @@ export class DataProviderController extends EventTarget {
     return {
       isExpanded: this.isExpanded,
       placeholder: this.placeholder,
-      // The controller instance is needed to ensure deprecated cache methods work.
-      __controller: this,
     };
   }
 
