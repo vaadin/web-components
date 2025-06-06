@@ -1,7 +1,9 @@
 import fs from 'fs';
 import { dest, src, task } from 'gulp';
 import iconfont from 'gulp-iconfont';
-import imagemin, { svgo } from 'gulp-imagemin';
+import { gulpPlugin } from 'gulp-plugin-extras';
+import imagemin from 'imagemin';
+import svgo from 'imagemin-svgo';
 import svgpath from 'svgpath';
 
 /**
@@ -55,14 +57,10 @@ function createIconset(folder, filenames, idPrefix = '') {
   return output;
 }
 
-task('icons', (done) => {
-  const folder = 'icons/svg/';
-  let glyphs;
-
-  // Optimize the source files
-  src(`${folder}*.svg`)
-    .pipe(
-      imagemin([
+function minifySvg() {
+  return gulpPlugin('gulp-minify-svg', async (file) => {
+    const data = await imagemin.buffer(file.contents, {
+      plugins: [
         svgo({
           floatPrecision: 6,
           plugins: [
@@ -82,8 +80,21 @@ task('icons', (done) => {
             },
           ],
         }),
-      ]),
-    )
+      ],
+    });
+
+    file.contents = Buffer.from(data);
+    return file;
+  });
+}
+
+task('icons', (done) => {
+  const folder = 'icons/svg/';
+  let glyphs;
+
+  // Optimize the source files
+  src(`${folder}*.svg`)
+    .pipe(minifySvg())
     .pipe(dest(folder))
     .on('finish', () => {
       // Generate vaadin-iconset
