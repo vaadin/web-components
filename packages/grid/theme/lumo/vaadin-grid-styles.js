@@ -86,6 +86,7 @@ registerStyles(
     }
 
     :host([navigating]) [part~='row']:focus::before {
+      transform: translateX(var(--_grid-horizontal-scroll-position));
       z-index: 3;
     }
 
