@@ -13,6 +13,7 @@ import { DialogBaseMixin } from '@vaadin/dialog/src/vaadin-dialog-base-mixin.js'
 import { dialogOverlay } from '@vaadin/dialog/src/vaadin-dialog-styles.js';
 import { OverlayMixin } from '@vaadin/overlay/src/vaadin-overlay-mixin.js';
 import { overlayStyles } from '@vaadin/overlay/src/vaadin-overlay-styles.js';
+import { CSSInjectionMixin } from '@vaadin/vaadin-themable-mixin/css-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
 import { ConfirmDialogBaseMixin } from './vaadin-confirm-dialog-base-mixin.js';
@@ -28,7 +29,7 @@ import { confirmDialogOverlay } from './vaadin-confirm-dialog-overlay-styles.js'
  * @mixes ThemableMixin
  * @private
  */
-class ConfirmDialogOverlay extends OverlayMixin(DirMixin(ThemableMixin(PolylitMixin(LitElement)))) {
+class ConfirmDialogOverlay extends OverlayMixin(DirMixin(ThemableMixin(CSSInjectionMixin(PolylitMixin(LitElement))))) {
   static get is() {
     return 'vaadin-confirm-dialog-overlay';
   }

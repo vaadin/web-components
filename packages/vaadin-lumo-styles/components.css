@@ -10,12 +10,14 @@
 @import './components/checkbox-group.css';
 @import './components/checkbox.css';
 @import './components/combo-box.css';
+@import './components/confirm-dialog.css';
 @import './components/context-menu.css';
 @import './components/custom-field.css';
 @import './components/date-picker.css';
 @import './components/date-time-picker.css';
 @import './components/details-summary.css';
 @import './components/details.css';
+@import './components/dialog.css';
 @import './components/email-field.css';
 @import './components/form-item.css';
 @import './components/form-layout.css';
