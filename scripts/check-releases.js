@@ -5,7 +5,7 @@ dotenv.config();
 
 const REPO_OWNER = 'vaadin';
 const REPO_NAME = 'web-components';
-const BRANCHES = ['main', '24.8', '24.7', '24.6', '23.5'];
+const BRANCHES = ['main', '24.8', '24.7', '24.6', '23.6'];
 const GITHUB_TOKEN = process.env.GITHUB_API_TOKEN; // Set this in your .env file
 
 if (!GITHUB_TOKEN) {
