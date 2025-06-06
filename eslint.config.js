@@ -173,7 +173,7 @@ export default [
     },
   },
   {
-    files: ['scripts/**/*.js', '*.config.js', 'wtr-utils.js', 'custom-rules/**/*.js'],
+    files: ['scripts/**/*.js', '*.config.js', 'wtr-utils.js', 'custom-rules/**/*.js', 'packages/**/gulpfile.js'],
     languageOptions: {
       globals: {
         ...globals.node,
