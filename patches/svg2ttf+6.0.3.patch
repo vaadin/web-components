@@ -1,0 +1,35 @@
+diff --git a/node_modules/svg2ttf/lib/sfnt.js b/node_modules/svg2ttf/lib/sfnt.js
+index f303f2a..0907cbf 100644
+--- a/node_modules/svg2ttf/lib/sfnt.js
++++ b/node_modules/svg2ttf/lib/sfnt.js
+@@ -15,13 +15,7 @@ function Font() {
+   this.italicAngle = 0;
+   this.familyClass = 0; // No Classification
+   this.familyName = '';
+-
+-  // 0x40 - REGULAR - Characters are in the standard weight/style for the font
+-  // 0x80 - USE_TYPO_METRICS - use OS/2.sTypoAscender - OS/2.sTypoDescender + OS/2.sTypoLineGap as the default line spacing
+-  // https://docs.microsoft.com/en-us/typography/opentype/spec/os2#fsselection
+-  // https://github.com/fontello/svg2ttf/issues/95
+-  this.fsSelection = 0x40 | 0x80;
+-
++  this.fsSelection = 0x40; // Characters are in the standard weight/style for the font.
+   // Non zero value can cause issues in IE, https://github.com/fontello/svg2ttf/issues/45
+   this.fsType = 0;
+   this.lowestRecPPEM = 8;
+diff --git a/node_modules/svg2ttf/lib/ttf/tables/os2.js b/node_modules/svg2ttf/lib/ttf/tables/os2.js
+index 197d4cf..8f1feae 100644
+--- a/node_modules/svg2ttf/lib/ttf/tables/os2.js
++++ b/node_modules/svg2ttf/lib/ttf/tables/os2.js
+@@ -71,10 +71,7 @@ function createOS2Table(font) {
+   buf.writeInt16(font.ascent); // sTypoAscender
+   buf.writeInt16(font.descent); // sTypoDescender
+   buf.writeInt16(font.lineGap); // lineGap
+-  // Enlarge win acscent/descent to avoid clipping
+-  // WinAscent - WinDecent should at least be equal to TypoAscender - TypoDescender + TypoLineGap:
+-  // https://www.high-logic.com/font-editor/fontcreator/tutorials/font-metrics-vertical-line-spacing
+-  buf.writeInt16(Math.max(font.yMax, font.ascent + font.lineGap)); // usWinAscent
++  buf.writeInt16(Math.max(font.yMax, font.ascent)); // usWinAscent
+   buf.writeInt16(-Math.min(font.yMin, font.descent)); // usWinDescent
+   buf.writeInt32(1); // ulCodePageRange1, Latin 1
+   buf.writeInt32(0); // ulCodePageRange2

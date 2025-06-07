@@ -1,33 +1,27 @@
-'use strict';
+import fs from 'fs';
+import { dest, task } from 'gulp';
+import iconfont from 'gulp-iconfont';
 
-const gulp = require('gulp');
-const iconfont = require('gulp-iconfont');
-const fs = require('fs');
-
-gulp.task('icons', (done) => {
+task('icons', (done) => {
   let glyphs;
   const fontName = 'vaadin-rte-icons';
   const fileName = 'vaadin-rich-text-editor-icons';
 
-  gulp
-    .src('icons/*.svg')
-    .pipe(
-      iconfont({
-        fontName: fileName,
-        formats: ['woff'],
-        fontHeight: 1000,
-        ascent: 850,
-        descent: 150,
-        fixedWidth: true,
-        normalize: true,
-        timestamp: 1, // Truthy!
-      }),
-    )
+  iconfont('icons/*.svg', {
+    fontName: fileName,
+    formats: ['woff'],
+    fontHeight: 1000,
+    ascent: 850,
+    descent: 150,
+    fixedWidth: true,
+    normalize: true,
+    timestamp: 1, // Truthy!
+  })
     .on('glyphs', (glyphData) => {
       // Store for later use
       glyphs = glyphData;
     })
-    .pipe(gulp.dest('.', { encoding: false }))
+    .pipe(dest('.', { encoding: false }))
     .on('finish', () => {
       // Generate base64 version of the font
       const iconsWoff = fs.readFileSync('vaadin-rich-text-editor-icons.woff');
