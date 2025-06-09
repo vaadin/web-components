@@ -9,8 +9,7 @@
  * license.
  */
 import { css } from 'lit';
-import { dialogOverlay, resizableOverlay } from '@vaadin/dialog/src/vaadin-dialog-styles.js';
-import { overlayStyles } from '@vaadin/overlay/src/vaadin-overlay-styles.js';
+import { dialogOverlayStyles } from '@vaadin/dialog/src/styles/vaadin-dialog-overlay-styles.js';
 
 const crudDialogOverlay = css`
   [part='overlay'] {
@@ -44,4 +43,4 @@ const crudDialogOverlay = css`
   }
 `;
 
-export const crudDialogOverlayStyles = [overlayStyles, dialogOverlay, resizableOverlay, crudDialogOverlay];
+export const crudDialogOverlayStyles = [dialogOverlayStyles, crudDialogOverlay];

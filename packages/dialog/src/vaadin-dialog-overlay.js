@@ -7,11 +7,10 @@ import { html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
-import { overlayStyles } from '@vaadin/overlay/src/vaadin-overlay-styles.js';
 import { CSSInjectionMixin } from '@vaadin/vaadin-themable-mixin/css-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { dialogOverlayStyles } from './styles/vaadin-dialog-overlay-styles.js';
 import { DialogOverlayMixin } from './vaadin-dialog-overlay-mixin.js';
-import { dialogOverlay, resizableOverlay } from './vaadin-dialog-styles.js';
 
 /**
  * An element used internally by `<vaadin-dialog>`. Not intended to be used separately.
@@ -31,7 +30,7 @@ export class DialogOverlay extends DialogOverlayMixin(
   }
 
   static get styles() {
-    return [overlayStyles, dialogOverlay, resizableOverlay];
+    return dialogOverlayStyles;
   }
 
   /** @protected */

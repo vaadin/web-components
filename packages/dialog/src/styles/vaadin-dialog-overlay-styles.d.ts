@@ -1,10 +1,10 @@
 /**
  * @license
- * Copyright (c) 2021 - 2025 Vaadin Ltd.
+ * Copyright (c) 2000 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import type { CSSResult } from 'lit';
 
-export const dialogOverlay: CSSResult;
+export const dialogOverlayBase: CSSResult;
 
-export const resizableOverlay: CSSResult;
+export const dialogOverlayStyles: CSSResult;
