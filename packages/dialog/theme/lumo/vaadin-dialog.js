@@ -1,2 +1,2 @@
-import './vaadin-dialog-overlay-styles.js';
+import './vaadin-dialog-styles.js';
 import '../../src/vaadin-dialog.js';
