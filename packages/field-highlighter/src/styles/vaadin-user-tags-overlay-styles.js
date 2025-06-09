@@ -6,7 +6,7 @@
 import { css } from 'lit';
 import { overlayStyles } from '@vaadin/overlay/src/vaadin-overlay-styles.js';
 
-export const userTagsOverlay = css`
+const userTagsOverlay = css`
   :host {
     background: transparent;
     box-shadow: none;
