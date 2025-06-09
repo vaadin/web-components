@@ -5,8 +5,4 @@
  */
 import type { CSSResult } from 'lit';
 
-export const fieldOutlineStyles: CSSResult;
-
 export const userTagStyles: CSSResult;
-
-export const userTagsOverlayStyles: CSSResult;
