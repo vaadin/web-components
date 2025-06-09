@@ -101,6 +101,39 @@ describe('form-layout', () => {
     it('colspan', async () => {
       await visualDiff(element, 'colspan');
     });
+
+    it('colspan alignment', async () => {
+      element = fixtureSync(`
+        <vaadin-form-layout style="width: 645px; padding-inline: 2em;">
+          <vaadin-form-item colspan="2">
+              <label slot="label">Address</label>
+              <div class="full-width">
+                <div style="display: flex; min-width: 100%; width: 12em; max-width: 100%;">
+                  <input style="min-width: 100%;" />
+                </div>
+              </div>
+            </vaadin-form-item>
+
+            <vaadin-form-item>
+              <label slot="label">First Name</label>
+              <div class="full-width">
+                <div style="display: flex; min-width: 100%; width: 12em; max-width: 100%;">
+                  <input style="min-width: 100%;" />
+                </div>
+              </div>
+            </vaadin-form-item>
+
+            <vaadin-form-item>
+              <label slot="label">Last Name</label>
+              <div class="full-width">
+                <div style="display: flex; min-width: 100%; width: 12em; max-width: 100%;">
+                  <input style="min-width: 100%;" />
+                </div>
+              </div>
+            </vaadin-form-item>
+          </vaadin-form-layout> `);
+      await visualDiff(element, 'colspan-alignment');
+    });
   });
 
   describe('CSS properties', () => {
