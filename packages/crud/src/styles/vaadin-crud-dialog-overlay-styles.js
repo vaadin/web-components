@@ -12,7 +12,7 @@ import { css } from 'lit';
 import { dialogOverlay, resizableOverlay } from '@vaadin/dialog/src/vaadin-dialog-styles.js';
 import { overlayStyles } from '@vaadin/overlay/src/vaadin-overlay-styles.js';
 
-export const crudDialogOverlay = css`
+const crudDialogOverlay = css`
   [part='overlay'] {
     max-width: 54em;
     min-width: 20em;
