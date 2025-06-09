@@ -6,5 +6,3 @@
 import type { CSSResult } from 'lit';
 
 export const formLayoutStyles: CSSResult;
-
-export const formItemStyles: CSSResult;
