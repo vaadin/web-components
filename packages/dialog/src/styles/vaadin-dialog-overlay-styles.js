@@ -4,8 +4,9 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { css } from 'lit';
+import { overlayStyles } from '@vaadin/overlay/src/vaadin-overlay-styles.js';
 
-export const dialogOverlay = css`
+export const dialogOverlayBase = css`
   [part='header'],
   [part='header-content'],
   [part='footer'] {
@@ -85,7 +86,7 @@ export const dialogOverlay = css`
   }
 `;
 
-export const resizableOverlay = css`
+const dialogResizableOverlay = css`
   [part='overlay'] {
     position: relative;
     overflow: visible;
@@ -179,3 +180,5 @@ export const resizableOverlay = css`
     cursor: nwse-resize;
   }
 `;
+
+export const dialogOverlayStyles = [overlayStyles, dialogOverlayBase, dialogResizableOverlay];

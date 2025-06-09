@@ -5,6 +5,6 @@
  */
 import type { CSSResult } from 'lit';
 
-export const dialogOverlay: CSSResult;
+export const dialogOverlayBase: CSSResult;
 
-export const resizableOverlay: CSSResult;
+export const dialogOverlayStyles: CSSResult;
