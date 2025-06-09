@@ -17,7 +17,6 @@ const crudDialogOverlay = css`
     max-width: 54em;
     min-width: 20em;
     display: flex;
-    max-height: 100%;
   }
 
   .resizer-container {
