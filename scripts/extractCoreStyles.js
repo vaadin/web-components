@@ -14,20 +14,59 @@ function camelcase(str) {
   return str.replace('vaadin-', '').replace(/-([a-z])/gu, (g) => g[1].toUpperCase());
 }
 
+function read(file) {
+  const content = fs.existsSync(file) ? fs.readFileSync(file, 'utf-8') : '';
+  return {
+    code: new MagicString(content),
+    ast: acorn.parse(content, {
+      ecmaVersion: 'latest',
+      sourceType: 'module',
+    }),
+  };
+}
+
+function write(file, code) {
+  fs.writeFileSync(file, code.toString(), 'utf-8');
+}
+
 function getImports(ast) {
   const importMap = new Map();
   walk.simple(ast, {
     ImportDeclaration(node) {
       node.specifiers.forEach((specifier) => {
-        const localName = specifier.local.name;
-        importMap.set(localName, node);
+        importMap.set(specifier.local.name, node);
       });
     },
   });
   return importMap;
 }
 
-function getComponents(ast, importMap) {
+function getExports(ast) {
+  const exportMap = new Map();
+  walk.simple(ast, {
+    ExportNamedDeclaration(node) {
+      node.declaration.declarations.forEach((declaration) => {
+        exportMap.set(declaration.id.name, { node, declaration });
+      });
+    },
+  });
+  return exportMap;
+}
+
+function getVariables(ast) {
+  const variableMap = new Map();
+  walk.simple(ast, {
+    VariableDeclaration(node) {
+      node.declarations.forEach((declaration) => {
+        variableMap.set(declaration.id.name, declaration);
+      });
+    },
+  });
+  return variableMap;
+}
+
+function getComponents(ast) {
+  const importMap = getImports(ast);
   const componentMap = new Map();
 
   walk.simple(ast, {
@@ -62,77 +101,98 @@ function getComponents(ast, importMap) {
       });
 
       const componentName = isGetter.value.body.body[0].argument.value;
-      componentMap.set(componentName, { styleGetterNodes, styleGetterReturnStatement });
+      componentMap.set(componentName, {
+        styleGetterNodes,
+        styleGetterReturnType: styleGetterReturnStatement.argument.type,
+        styleGetterReturnStatement,
+      });
     },
   });
 
   return componentMap;
 }
 
-function updateComponentStylesJSFile(componentName, { styleGetterNodes, styleGetterReturnStatement }) {
-  const file = `packages/${pkg}/src/styles/${componentName}-styles.js`;
-  const code = new MagicString(fs.existsSync(file) ? fs.readFileSync(file, 'utf-8') : '');
+function updateComponentStylesJSFile(
+  file,
+  componentName,
+  { styleGetterNodes, styleGetterReturnStatement, styleGetterReturnType },
+) {
+  const { code, ast } = read(file);
+  const importMap = getImports(ast);
+  const exportMap = getExports(ast);
+  const variableMap = getVariables(ast);
 
   for (const { node, relatedImportNode } of styleGetterNodes) {
-    if (node.type === 'TaggedTemplateExpression' && styleGetterNodes.size > 1) {
-      if (!new RegExp(`\\W*${camelcase(componentName)}\\W*`, 'u').test(code)) {
+    if (node.type === 'Identifier' && node.name !== camelcase(componentName) && !importMap.has(node.name)) {
+      code.prepend(`\n${astring.generate(relatedImportNode)}\n`);
+    }
+  }
+
+  if (importMap.has('css')) {
+    const importStatement = importMap.get('css');
+    code.overwrite(importStatement.source.start, importStatement.source.end, `'lit'`);
+  } else {
+    code.prepend(`import { css } from 'lit';\n`);
+  }
+
+  if (exportMap.has(`${camelcase(componentName)}Styles`) && styleGetterReturnType !== 'Identifier') {
+    const { declaration } = exportMap.get(`${camelcase(componentName)}Styles`);
+
+    if (declaration.init.type !== styleGetterReturnStatement.argument.type) {
+      code.overwrite(declaration.id.start, declaration.id.end, camelcase(componentName));
+    }
+  }
+
+  if (!variableMap.has(camelcase(componentName)) && styleGetterReturnType !== 'Identifier') {
+    for (const { node } of styleGetterNodes) {
+      if (node.type === 'TaggedTemplateExpression') {
         code.append(`\nconst ${camelcase(componentName)} = ${astring.generate(node)};\n`);
       }
     }
-
-    if (node.type === 'Identifier') {
-      if (!new RegExp(`\\W*${node.name}\\W*`, 'u').test(code)) {
-        code.prepend(`\n${astring.generate(relatedImportNode)}\n`);
-      }
-    }
   }
 
-  if (`${code}`.includes('import { css }')) {
-    code.replace(/^.*import \{ css \}.*$/mu, `import { css } from 'lit';`);
-  } else {
-    const hasTaggedTemplateExpression = [...styleGetterNodes].some(
-      ({ node }) => node.type === 'TaggedTemplateExpression',
-    );
-    if (hasTaggedTemplateExpression) {
-      code.prepend(`import { css } from 'lit';\n`);
-    }
+  const exportValue = new MagicString(astring.generate(styleGetterReturnStatement.argument));
+  exportValue.replace('super', 'css``');
+
+  if (styleGetterReturnStatement.argument.type !== 'TaggedTemplateExpression') {
+    walk.simple(acorn.parseExpressionAt(exportValue), {
+      TaggedTemplateExpression(node) {
+        if (node.tag.name === 'css') {
+          exportValue.overwrite(node.start, node.end, `${camelcase(componentName)}`);
+        }
+      },
+    });
   }
 
-  const exportStatement = `export const ${camelcase(componentName)}Styles = ${astring.generate(styleGetterReturnStatement.argument)};`;
-  if (!`${code}`.includes(exportStatement)) {
-    code.append(`\n${exportStatement}\n`);
-  }
+  code.append(`\nexport const ${camelcase(componentName)}Styles = ${exportValue}\n`);
 
-  fs.writeFileSync(file, `${code}`, 'utf-8');
+  write(file, code);
 }
 
-function updateComponentStylesTSFile(componentName) {
-  const file = `packages/${pkg}/src/styles/${componentName}-styles.d.ts`;
-  const code = new MagicString(fs.existsSync(file) ? fs.readFileSync(file, 'utf-8') : '');
+function updateComponentStylesTSFile(file, componentName) {
+  const { code, ast } = read(file);
+  const importMap = getImports(ast);
+  const exportMap = getExports(ast);
 
-  {
-    const importStatement = `import type { CSSResult } from 'lit';\n`;
-    if (`${code}`.includes('import type { CSSResult }')) {
-      code.replace(/^.*import type \{ CSSResult \}.*$/mu, importStatement);
-    } else {
-      code.prepend(`${importStatement}\n\n`);
-    }
+  if (importMap.has('CSSResult')) {
+    const importStatement = importMap.get('CSSResult');
+    code.remove(importStatement.start, importStatement.end);
   }
 
-  if (`${code}`.includes(`export const ${camelcase(componentName)}Styles`)) {
-    code.replace(
-      new RegExp(`^.*export const ${camelcase(componentName)}Styles.*$`, 'mu'),
-      `export const ${camelcase(componentName)}Styles: CSSResult;`,
-    );
-  } else {
-    code.append(`\nexport const ${camelcase(componentName)}Styles: CSSResult;\n`);
+  code.prepend(`import type { CSSResult } from 'lit';\n`);
+
+  if (exportMap.has(`${camelcase(componentName)}Styles`)) {
+    const { node } = exportMap.get(`${camelcase(componentName)}Styles`);
+    code.remove(node.start, node.end);
   }
 
-  fs.writeFileSync(file, `${code}`, 'utf-8');
+  code.append(`\nexport const ${camelcase(componentName)}Styles: CSSResult;\n`);
+
+  write(file, code);
 }
 
 function updateComponentFile(file, componentName, { styleGetterNodes, styleGetterReturnStatement }) {
-  const code = new MagicString(fs.readFileSync(file, 'utf-8'));
+  const { code } = read(file);
 
   styleGetterNodes.forEach(({ relatedImportNode }) => {
     if (relatedImportNode) {
@@ -150,7 +210,7 @@ function updateComponentFile(file, componentName, { styleGetterNodes, styleGette
 
   code.replace(`./${componentName}-styles.js`, `./styles/${componentName}-styles.js`);
 
-  fs.writeFileSync(file, `${code}`, 'utf-8');
+  write(file, code);
 }
 
 // - - - - - - - - - - - - - - - - - - //
@@ -167,19 +227,9 @@ for (const file of globSync([`packages/${pkg}/src/*-styles.js`, `packages/${pkg}
 }
 
 for (const file of globSync([`packages/${pkg}/src/**/*.js`, `!packages/${pkg}/src/**/*-styles.js`])) {
-  const code = fs.readFileSync(file, 'utf-8').toString();
-  if (!code.includes('static get styles()')) {
-    continue;
-  }
+  const { code, ast } = read(file);
 
-  const ast = acorn.parse(code, {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-  });
-
-  const importMap = getImports(ast);
-
-  for (const [componentName, componentContext] of getComponents(ast, importMap)) {
+  for (const [componentName, componentContext] of getComponents(ast)) {
     const { styleGetterReturnStatement } = componentContext;
 
     const answer = await rl.question(
@@ -189,8 +239,16 @@ for (const file of globSync([`packages/${pkg}/src/**/*.js`, `!packages/${pkg}/sr
       continue;
     }
 
-    updateComponentStylesJSFile(componentName, componentContext);
-    updateComponentStylesTSFile(componentName, componentContext);
+    updateComponentStylesJSFile(
+      `packages/${pkg}/src/styles/${componentName}-styles.js`,
+      componentName,
+      componentContext,
+    );
+    updateComponentStylesTSFile(
+      `packages/${pkg}/src/styles/${componentName}-styles.d.ts`,
+      componentName,
+      componentContext,
+    );
     updateComponentFile(file, componentName, componentContext);
   }
 }
