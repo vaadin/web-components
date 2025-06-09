@@ -5,11 +5,12 @@
  */
 import '@vaadin/tabs/src/vaadin-tabs.js';
 import './vaadin-tabsheet-scroller.js';
-import { css, html, LitElement } from 'lit';
+import { html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { tabSheetStyles } from './styles/vaadin-tabsheet-styles.js';
 import { TabSheetMixin } from './vaadin-tabsheet-mixin.js';
 
 /**
@@ -66,34 +67,7 @@ class TabSheet extends TabSheetMixin(ThemableMixin(ElementMixin(PolylitMixin(Lit
   }
 
   static get styles() {
-    return css`
-      :host {
-        display: flex;
-        flex-direction: column;
-      }
-
-      :host([hidden]) {
-        display: none !important;
-      }
-
-      [part='tabs-container'] {
-        position: relative;
-        display: flex;
-        align-items: center;
-      }
-
-      ::slotted([slot='tabs']) {
-        flex: 1;
-        align-self: stretch;
-        min-width: 8em;
-      }
-
-      [part='content'] {
-        position: relative;
-        flex: 1;
-        box-sizing: border-box;
-      }
-    `;
+    return tabSheetStyles;
   }
 
   /** @protected */
