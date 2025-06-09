@@ -4,8 +4,9 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { css } from 'lit';
+import { overlayStyles } from '@vaadin/overlay/src/vaadin-overlay-styles.js';
 
-export const loginOverlayWrapperStyles = css`
+const loginOverlayWrapper = css`
   [part='overlay'] {
     outline: none;
   }
@@ -33,3 +34,5 @@ export const loginOverlayWrapperStyles = css`
     margin: 0;
   }
 `;
+
+export const loginOverlayWrapperStyles = [overlayStyles, loginOverlayWrapper];
