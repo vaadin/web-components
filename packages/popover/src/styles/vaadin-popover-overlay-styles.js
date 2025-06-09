@@ -6,7 +6,7 @@
 import { css } from 'lit';
 import { overlayStyles } from '@vaadin/overlay/src/vaadin-overlay-styles.js';
 
-export const popoverOverlay = css`
+const popoverOverlay = css`
   :host {
     --_vaadin-popover-content-width: auto;
     --_vaadin-popover-content-height: auto;
