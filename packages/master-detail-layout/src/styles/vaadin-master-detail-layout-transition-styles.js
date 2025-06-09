@@ -5,7 +5,7 @@
  */
 import { css } from 'lit';
 
-export const transitionStyles = css`
+export const masterDetailLayoutTransitionStyles = css`
   html:not([dir='rtl']) {
     --_vaadin-master-detail-layout-dir-multiplier: 1;
   }
