@@ -55,11 +55,9 @@ function gatherCSSTaggedNodes(ast) {
           // },
         });
 
-        if (componentCSSTaggedNodes.size > 0) {
-          const isGetter = members.find((member) => member.kind === 'get' && member.key.name === 'is');
-          const componentName = isGetter.value.body.body[0].argument.value;
-          cssTaggedNodes.set(componentName, componentCSSTaggedNodes);
-        }
+        const isGetter = members.find((member) => member.kind === 'get' && member.key.name === 'is');
+        const componentName = isGetter.value.body.body[0].argument.value;
+        cssTaggedNodes.set(componentName, componentCSSTaggedNodes);
       }
     },
   });
@@ -68,6 +66,10 @@ function gatherCSSTaggedNodes(ast) {
 }
 
 function createCoreStylesJSFile(componentName, cssTaggedNodes) {
+  if (cssTaggedNodes.size === 0) {
+    return;
+  }
+
   const file = `packages/${pkg}/src/${componentName}-core-styles.js`;
   const code = fs.existsSync(file) ? fs.readFileSync(file, 'utf-8') : '';
 
@@ -96,40 +98,42 @@ function createCoreStylesJSFile(componentName, cssTaggedNodes) {
   fs.writeFileSync(file, s.toString(), 'utf-8');
 }
 
-function createCoreStylesTSFile(componentName) {
+function createCoreStylesTSFile(componentName, cssTaggedNodes) {
+  if (cssTaggedNodes.size === 0) {
+    return;
+  }
+
   const file = `packages/${pkg}/src/${componentName}-core-styles.d.ts`;
-  const code = fs.existsSync(file) ? fs.readFileSync(file, 'utf-8') : '';
-  const s = new MagicString(code);
+  const code = new MagicString(fs.existsSync(file) ? fs.readFileSync(file, 'utf-8') : '');
 
   console.log(`Processing ${file}...`);
 
   const exportStatement = `export declare const ${camelcase(componentName)}Styles: CSSResult;\n`;
-  if (code.length === 0) {
-    s.append(`import type { CSSResult } from 'lit';\n\n`);
-    s.append(exportStatement);
-  } else if (!code.includes(`${camelcase(componentName)}Styles`)) {
-    s.append(exportStatement);
+  if (code.toString().length === 0) {
+    code.append(`import type { CSSResult } from 'lit';\n\n`);
+    code.append(exportStatement);
+  } else if (!code.toString().includes(`${camelcase(componentName)}Styles`)) {
+    code.append(exportStatement);
   }
 
-  fs.writeFileSync(file, s.toString(), 'utf-8');
+  fs.writeFileSync(file, code.toString(), 'utf-8');
 }
 
 function updateComponentFile(file, componentName, cssTaggedNodes) {
-  const code = fs.readFileSync(file, 'utf-8');
-  const s = new MagicString(code);
+  const code = new MagicString(fs.readFileSync(file, 'utf-8'));
 
-  // Replace every extracted css tagged literal with our identifier.
+  code.replaceAll(`./${componentName}-styles.js`, `./${componentName}-core-styles.js`);
+
   for (const node of cssTaggedNodes) {
-    s.overwrite(node.start, node.end, `${camelcase(componentName)}Styles`);
+    code.overwrite(node.start, node.end, `${camelcase(componentName)}Styles`);
   }
 
-  // Prepend an import if there isn't one yet.
   const importStatement = `import { ${camelcase(componentName)}Styles } from './${componentName}-core-styles.js';\n`;
-  if (!code.includes(importStatement)) {
-    s.prepend(importStatement);
+  if (!code.toString().includes(importStatement)) {
+    code.prepend(importStatement);
   }
 
-  fs.writeFileSync(file, s.toString(), 'utf-8');
+  fs.writeFileSync(file, code.toString(), 'utf-8');
 }
 
 // - - - - - - - - - - - - - - - - - - //
@@ -137,6 +141,12 @@ function updateComponentFile(file, componentName, cssTaggedNodes) {
 for (const file of globSync(`packages/${pkg}/src/*-styles.js`)) {
   if (!/(core|base)-styles\.js$/u.test(file)) {
     fs.renameSync(file, file.replace('-styles.js', '-core-styles.js'));
+  }
+}
+
+for (const file of globSync(`packages/${pkg}/src/*-styles.d.ts`)) {
+  if (!/(core|base)-styles\.d\.ts$/u.test(file)) {
+    fs.renameSync(file, file.replace('-styles.d.ts', '-core-styles.d.ts'));
   }
 }
 
@@ -157,7 +167,7 @@ for (const file of globSync(`packages/${pkg}/src/**/*.js`)) {
 
   for (const [componentName, cssTaggedNodes] of gatherCSSTaggedNodes(ast)) {
     createCoreStylesJSFile(componentName, cssTaggedNodes);
-    createCoreStylesTSFile(componentName);
+    createCoreStylesTSFile(componentName, cssTaggedNodes);
 
     updateComponentFile(file, componentName, cssTaggedNodes);
   }
