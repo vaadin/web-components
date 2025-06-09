@@ -20,6 +20,8 @@ const crudDialogOverlay = css`
   }
 
   .resizer-container {
+    display: flex;
+    flex-direction: column;
     flex-grow: 1;
   }
 
