@@ -15,7 +15,6 @@ import { CSSInjectionMixin } from '@vaadin/vaadin-themable-mixin/css-injection-m
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
 import { confirmDialogOverlayStyles } from './styles/vaadin-confirm-dialog-overlay-styles.js';
-import { ConfirmDialogBaseMixin } from './vaadin-confirm-dialog-base-mixin.js';
 
 /**
  * An element used internally by `<vaadin-confirm-dialog>`. Not intended to be used separately.
@@ -73,6 +72,25 @@ class ConfirmDialogOverlay extends OverlayMixin(DirMixin(ThemableMixin(CSSInject
     this.setAttribute('has-header', '');
     this.setAttribute('has-footer', '');
   }
+
+  /**
+   * Updates the coordinates of the overlay.
+   */
+  setBounds(bounds) {
+    const overlay = this.$.overlay;
+    const parsedBounds = { ...bounds };
+
+    Object.keys(parsedBounds).forEach((arg) => {
+      // Allow setting width or height to `null`
+      if (parsedBounds[arg] == null) {
+        parsedBounds[arg] = null;
+      } else if (!isNaN(parsedBounds[arg])) {
+        parsedBounds[arg] = `${parsedBounds[arg]}px`;
+      }
+    });
+
+    Object.assign(overlay.style, parsedBounds);
+  }
 }
 
 defineCustomElement(ConfirmDialogOverlay);
@@ -81,9 +99,7 @@ defineCustomElement(ConfirmDialogOverlay);
  * An element used internally by `<vaadin-confirm-dialog>`. Not intended to be used separately.
  * @private
  */
-class ConfirmDialogDialog extends ConfirmDialogBaseMixin(
-  DialogBaseMixin(OverlayClassMixin(ThemePropertyMixin(PolylitMixin(LitElement)))),
-) {
+class ConfirmDialogDialog extends DialogBaseMixin(OverlayClassMixin(ThemePropertyMixin(PolylitMixin(LitElement)))) {
   static get is() {
     return 'vaadin-confirm-dialog-dialog';
   }
@@ -94,6 +110,20 @@ class ConfirmDialogDialog extends ConfirmDialogBaseMixin(
         display: none;
       }
     `;
+  }
+
+  static get properties() {
+    return {
+      /**
+       * Set the `aria-label` attribute for assistive technologies like
+       * screen readers. An empty string value for this property (the
+       * default) means that the `aria-label` attribute is not present.
+       */
+      ariaLabel: {
+        type: String,
+        value: '',
+      },
+    };
   }
 
   /** @protected */
