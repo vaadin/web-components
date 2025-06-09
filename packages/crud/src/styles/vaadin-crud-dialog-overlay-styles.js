@@ -9,12 +9,19 @@
  * license.
  */
 import { css } from 'lit';
-import { dialogOverlayStyles } from '@vaadin/dialog/src/styles/vaadin-dialog-overlay-styles.js';
+import { dialogOverlayBase } from '@vaadin/dialog/src/styles/vaadin-dialog-overlay-styles.js';
+import { overlayStyles } from '@vaadin/overlay/src/vaadin-overlay-styles.js';
 
 const crudDialogOverlay = css`
   [part='overlay'] {
     max-width: 54em;
     min-width: 20em;
+    display: flex;
+    max-height: 100%;
+  }
+
+  .resizer-container {
+    flex-grow: 1;
   }
 
   [part='footer'] {
@@ -43,4 +50,4 @@ const crudDialogOverlay = css`
   }
 `;
 
-export const crudDialogOverlayStyles = [dialogOverlayStyles, crudDialogOverlay];
+export const crudDialogOverlayStyles = [overlayStyles, dialogOverlayBase, crudDialogOverlay];
