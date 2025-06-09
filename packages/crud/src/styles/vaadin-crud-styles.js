@@ -8,7 +8,7 @@
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
-import { css } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { css } from 'lit';
 
 export const crudStyles = css`
   :host {
@@ -89,37 +89,5 @@ export const crudStyles = css`
     display: flex;
     flex: none;
     flex-direction: row-reverse;
-  }
-`;
-
-export const crudDialogOverlayStyles = css`
-  [part='overlay'] {
-    max-width: 54em;
-    min-width: 20em;
-  }
-
-  [part='footer'] {
-    justify-content: flex-start;
-    flex-direction: row-reverse;
-  }
-
-  /* Make buttons clickable */
-  [part='footer'] ::slotted(:not([disabled])) {
-    pointer-events: all;
-  }
-
-  :host([fullscreen]) {
-    inset: 0;
-    padding: 0;
-  }
-
-  :host([fullscreen]) [part='overlay'] {
-    height: 100vh;
-    width: 100vw;
-    border-radius: 0 !important;
-  }
-
-  :host([fullscreen]) [part='content'] {
-    flex: 1;
   }
 `;
