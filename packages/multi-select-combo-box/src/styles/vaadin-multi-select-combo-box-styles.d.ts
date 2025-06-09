@@ -5,6 +5,4 @@
  */
 import type { CSSResult } from 'lit';
 
-export const multiSelectComboBox: CSSResult;
-
-export const multiSelectComboBoxChip: CSSResult;
+export const multiSelectComboBoxStyles: CSSResult;

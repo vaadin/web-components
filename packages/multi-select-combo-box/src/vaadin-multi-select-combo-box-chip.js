@@ -8,7 +8,7 @@ import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { CSSInjectionMixin } from '@vaadin/vaadin-themable-mixin/css-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { multiSelectComboBoxChip } from './vaadin-multi-select-combo-box-styles.js';
+import { multiSelectComboBoxChipStyles } from './styles/vaadin-multi-select-combo-box-chip-styles.js';
 
 /**
  * An element used by `<vaadin-multi-select-combo-box>` to display selected items.
@@ -34,7 +34,7 @@ class MultiSelectComboBoxChip extends CSSInjectionMixin(ThemableMixin(PolylitMix
   }
 
   static get styles() {
-    return multiSelectComboBoxChip;
+    return multiSelectComboBoxChipStyles;
   }
 
   static get properties() {

@@ -14,8 +14,8 @@ import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { inputFieldShared } from '@vaadin/field-base/src/styles/input-field-shared-styles.js';
 import { CSSInjectionMixin } from '@vaadin/vaadin-themable-mixin/css-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { multiSelectComboBoxStyles } from './styles/vaadin-multi-select-combo-box-styles.js';
 import { MultiSelectComboBoxMixin } from './vaadin-multi-select-combo-box-mixin.js';
-import { multiSelectComboBox } from './vaadin-multi-select-combo-box-styles.js';
 
 /**
  * `<vaadin-multi-select-combo-box>` is a web component that wraps `<vaadin-combo-box>` and extends
@@ -108,7 +108,7 @@ class MultiSelectComboBox extends MultiSelectComboBoxMixin(
   }
 
   static get styles() {
-    return [inputFieldShared, multiSelectComboBox];
+    return [inputFieldShared, multiSelectComboBoxStyles];
   }
 
   /** @protected */
