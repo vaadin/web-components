@@ -1,4 +1,3 @@
-import '../vaadin-chart-base-theme.js';
 import '@vaadin/vaadin-lumo-styles/color.js';
 import '@vaadin/vaadin-lumo-styles/typography.js';
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/register-styles.js';

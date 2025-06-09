@@ -9,11 +9,12 @@
  * license.
  */
 import './vaadin-chart-series.js';
-import { css, html, LitElement } from 'lit';
+import { html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { chartStyles } from './styles/vaadin-chart-styles.js';
 import { ChartMixin } from './vaadin-chart-mixin.js';
 
 /**
@@ -190,17 +191,7 @@ class Chart extends ChartMixin(ThemableMixin(ElementMixin(PolylitMixin(LitElemen
   }
 
   static get styles() {
-    return css`
-      :host {
-        display: block;
-        width: 100%;
-        overflow: hidden;
-      }
-
-      :host([hidden]) {
-        display: none !important;
-      }
-    `;
+    return chartStyles;
   }
 
   /** @protected */
