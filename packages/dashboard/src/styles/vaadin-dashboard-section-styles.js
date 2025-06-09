@@ -10,7 +10,6 @@
  */
 import { css } from 'lit';
 import { dashboardWidgetAndSectionStyles } from './vaadin-dashboard-widget-section-styles.js';
-import { hasWidgetWrappersStyles } from './vaadin-dashboard-widget-wrappers-styles.js';
 
 const sectionStyles = css`
   :host {
@@ -45,6 +44,10 @@ const sectionStyles = css`
   :host::before {
     z-index: 2 !important;
   }
+
+  ::slotted(vaadin-dashboard-widget-wrapper) {
+    display: contents;
+  }
 `;
 
-export const dashboardSectionStyles = [sectionStyles, hasWidgetWrappersStyles, dashboardWidgetAndSectionStyles];
+export const dashboardSectionStyles = [sectionStyles, dashboardWidgetAndSectionStyles];

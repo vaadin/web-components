@@ -10,13 +10,16 @@
  */
 import { css } from 'lit';
 import { dashboardLayoutStyles } from './vaadin-dashboard-layout-styles.js';
-import { hasWidgetWrappersStyles } from './vaadin-dashboard-widget-wrappers-styles.js';
 
 const dashboard = css`
   #grid[item-resizing] {
     -webkit-user-select: none;
     user-select: none;
   }
+
+  ::slotted(vaadin-dashboard-widget-wrapper) {
+    display: contents;
+  }
 `;
 
-export const dashboardStyles = [dashboardLayoutStyles, dashboard, hasWidgetWrappersStyles];
+export const dashboardStyles = [dashboardLayoutStyles, dashboard];
