@@ -77,6 +77,10 @@ function createCoreStylesJSFile(componentName, cssTaggedNodes) {
   const file = `packages/${pkg}/src/styles/${componentName}-core-styles.js`;
   const code = new MagicString(fs.existsSync(file) ? fs.readFileSync(file, 'utf-8') : '');
 
+  if (code.toString().length === 0 && cssTaggedNodes.size === 0) {
+    return;
+  }
+
   if (!code.toString().includes(`${camelcase(componentName)}Styles`)) {
     code.append(`
       export const ${camelcase(componentName)}Styles = css\`
