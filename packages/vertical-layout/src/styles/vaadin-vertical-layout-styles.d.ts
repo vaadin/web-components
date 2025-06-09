@@ -5,4 +5,4 @@
  */
 import type { CSSResult } from 'lit';
 
-export const verticalLayoutStyles: CSSResult;
+export const verticalLayoutStyles: CSSResult[];
