@@ -8,7 +8,7 @@
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
-import { css, html, LitElement } from 'lit';
+import { css, html, LitElement, render } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
@@ -16,17 +16,15 @@ import { OverlayMixin } from '@vaadin/overlay/src/vaadin-overlay-mixin.js';
 import { PositionMixin } from '@vaadin/overlay/src/vaadin-overlay-position-mixin.js';
 import { overlayStyles } from '@vaadin/overlay/src/vaadin-overlay-styles.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { RichTextEditorPopupMixin } from './vaadin-rich-text-editor-popup-mixin.js';
 
 /**
  * An element used internally by `<vaadin-rich-text-editor>`. Not intended to be used separately.
  *
  * @customElement
  * @extends HTMLElement
- * @mixes RichTextEditorPopupMixin
  * @private
  */
-class RichTextEditorPopup extends RichTextEditorPopupMixin(PolylitMixin(LitElement)) {
+class RichTextEditorPopup extends PolylitMixin(LitElement) {
   static get is() {
     return 'vaadin-rich-text-editor-popup';
   }
@@ -37,6 +35,31 @@ class RichTextEditorPopup extends RichTextEditorPopupMixin(PolylitMixin(LitEleme
         display: none;
       }
     `;
+  }
+
+  static get properties() {
+    return {
+      target: {
+        type: Object,
+      },
+
+      opened: {
+        type: Boolean,
+        notify: true,
+      },
+
+      colors: {
+        type: Array,
+      },
+
+      renderer: {
+        type: Object,
+      },
+    };
+  }
+
+  static get observers() {
+    return ['__openedOrTargetChanged(opened, target)', '__colorsChanged(colors)'];
   }
 
   /** @protected */
@@ -59,6 +82,41 @@ class RichTextEditorPopup extends RichTextEditorPopupMixin(PolylitMixin(LitEleme
   /** @private */
   _onOpenedChanged(event) {
     this.opened = event.detail.value;
+  }
+
+  /** @private */
+  _onOverlayEscapePress() {
+    this.target.focus();
+  }
+
+  /** @private */
+  _onColorClick(e) {
+    const { color } = e.target.dataset;
+    this.dispatchEvent(new CustomEvent('color-selected', { detail: { color } }));
+  }
+
+  /** @private */
+  __colorsChanged(colors) {
+    this.renderer = (root) => {
+      render(
+        html`
+          ${colors.map(
+            (color) => html`
+              <button data-color="${color}" style="background: ${color}" @click="${this._onColorClick}"></button>
+            `,
+          )}
+        `,
+        root,
+        { host: this },
+      );
+    };
+  }
+
+  /** @private */
+  __openedOrTargetChanged(opened, target) {
+    if (target) {
+      target.setAttribute('aria-expanded', opened ? 'true' : 'false');
+    }
   }
 }
 
