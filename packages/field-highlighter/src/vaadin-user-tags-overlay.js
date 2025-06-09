@@ -9,9 +9,8 @@ import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { OverlayMixin } from '@vaadin/overlay/src/vaadin-overlay-mixin.js';
 import { PositionMixin } from '@vaadin/overlay/src/vaadin-overlay-position-mixin.js';
-import { overlayStyles } from '@vaadin/overlay/src/vaadin-overlay-styles.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { userTagsOverlayStyles } from './vaadin-field-highlighter-styles.js';
+import { userTagsOverlayStyles } from './styles/vaadin-user-tags-overlay-styles.js';
 
 /**
  * An element used internally by `<vaadin-field-highlighter>`. Not intended to be used separately.
@@ -30,7 +29,7 @@ class UserTagsOverlay extends PositionMixin(OverlayMixin(DirMixin(ThemableMixin(
   }
 
   static get styles() {
-    return [overlayStyles, userTagsOverlayStyles];
+    return userTagsOverlayStyles;
   }
 
   /** @protected */
