@@ -20,7 +20,7 @@
   "module": "vaadin-rich-text-editor.js",
   "type": "module",
   "scripts": {
-    "icons": "gulp icons --gulpfile gulpfile.cjs"
+    "icons": "gulp icons"
   },
   "files": [
     "src",
@@ -54,9 +54,9 @@
     "@vaadin/chai-plugins": "25.0.0-alpha3",
     "@vaadin/test-runner-commands": "25.0.0-alpha3",
     "@vaadin/testing-helpers": "^2.0.0",
-    "gulp": "^5.0.0",
-    "gulp-cli": "^3.0.0",
-    "gulp-iconfont": "^11.0.0",
+    "gulp": "^5.0.1",
+    "gulp-cli": "^3.1.0",
+    "gulp-iconfont": "^12.0.0",
     "sinon": "^18.0.0"
   },
   "cvdlName": "vaadin-rich-text-editor",

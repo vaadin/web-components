@@ -20,7 +20,7 @@
   "module": "vaadin-iconset.js",
   "type": "module",
   "scripts": {
-    "icons": "gulp icons --gulpfile gulpfile.cjs"
+    "icons": "gulp icons"
   },
   "files": [
     "assets/**/*",
@@ -37,10 +37,10 @@
     "@vaadin/icon": "25.0.0-alpha3"
   },
   "devDependencies": {
-    "cheerio": "^1.0.0-rc.10",
-    "gulp": "^5.0.0",
-    "gulp-cli": "^3.0.0",
+    "cheerio": "^1.0.0",
+    "gulp": "^5.0.1",
+    "gulp-cli": "^3.1.0",
     "gulp-concat": "^2.6.1",
-    "gulp-modify": "^0.1.1"
+    "gulp-plugin-extras": "^1.0.0"
   }
 }
