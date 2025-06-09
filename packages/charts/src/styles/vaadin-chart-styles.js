@@ -16,17 +16,24 @@
  *
  * License: www.highcharts.com/license
  */
-import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { css } from 'lit';
 
 /* When updating this file do not override vaadin-charts custom properties section */
 
-const chartBaseTheme = css`
+export const chartStyles = css`
   :host {
+    display: block;
+    width: 100%;
+    overflow: hidden;
     font-family:
       -apple-system, BlinkMacSystemFont, 'Roboto', 'Segoe UI', Helvetica, Arial, sans-serif, 'Apple Color Emoji',
       'Segoe UI Emoji', 'Segoe UI Symbol';
     font-size: 12px;
     line-height: normal;
+  }
+
+  :host([hidden]) {
+    display: none !important;
   }
 
   .highcharts-container {
@@ -126,7 +133,7 @@ const chartBaseTheme = css`
   }
 
   :where([styled-mode]) .highcharts-xaxis-grid .highcharts-grid-line {
-    stroke-width: var(--vaadin-charts-xaxis-line-width, 0px);
+    stroke-width: var(--vaadin-charts-xaxis-line-width, 0);
   }
 
   :where([styled-mode]) .highcharts-tick {
@@ -172,9 +179,6 @@ const chartBaseTheme = css`
     pointer-events: none;
     white-space: nowrap;
     transition: stroke 150ms;
-  }
-
-  :where([styled-mode]) .highcharts-tooltip {
     filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.05)) !important;
   }
 
@@ -445,7 +449,7 @@ const chartBaseTheme = css`
   }
 
   :where([styled-mode]) .highcharts-treemap-series .highcharts-point-hover {
-    stroke-width: 0px;
+    stroke-width: 0;
     stroke: var(--vaadin-charts-background, #fff);
     fill-opacity: 0.75;
     transition:
@@ -509,7 +513,7 @@ const chartBaseTheme = css`
   }
 
   :where([styled-mode]) .highcharts-legend-item > .highcharts-point {
-    stroke-width: 0px;
+    stroke-width: 0;
   }
 
   :where([styled-mode]) .highcharts-legend-item:hover text {
@@ -754,7 +758,7 @@ const chartBaseTheme = css`
   :where([styled-mode]) .highcharts-button-hover {
     transition: fill 0ms;
     fill: var(--vaadin-charts-button-hover-background, hsla(214, 90%, 52%, 0.1));
-    stroke-width: 0px;
+    stroke-width: 0;
   }
 
   :where([styled-mode]) .highcharts-button-hover text {
@@ -904,7 +908,7 @@ const chartBaseTheme = css`
 
   :where([styled-mode]) .highcharts-coloraxis-marker {
     fill: var(--vaadin-charts-axis-label, hsla(214, 42%, 18%, 0.72));
-    stroke-width: 0px;
+    stroke-width: 0;
   }
 
   :where([styled-mode]) .highcharts-null-point {
@@ -1054,10 +1058,6 @@ const chartBaseTheme = css`
   /* https://github.com/highcharts/highcharts/issues/16282 */
   /* without this the resize callback always calls __reflow */
   ul[aria-hidden='false'] {
-    margin: 0px;
+    margin: 0;
   }
 `;
-
-registerStyles('vaadin-chart', chartBaseTheme, { moduleId: 'vaadin-chart-base-theme' });
-
-export { chartBaseTheme };
