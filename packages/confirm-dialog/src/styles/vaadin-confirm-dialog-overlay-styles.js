@@ -4,8 +4,10 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { css } from 'lit';
+import { dialogOverlay } from '@vaadin/dialog/src/vaadin-dialog-styles.js';
+import { overlayStyles } from '@vaadin/overlay/src/vaadin-overlay-styles.js';
 
-export const confirmDialogOverlay = css`
+const confirmDialogOverlay = css`
   :host {
     --_vaadin-confirm-dialog-content-width: auto;
     --_vaadin-confirm-dialog-content-height: auto;
@@ -29,3 +31,5 @@ export const confirmDialogOverlay = css`
     pointer-events: all;
   }
 `;
+
+export const confirmDialogOverlayStyles = [overlayStyles, dialogOverlay, confirmDialogOverlay];
