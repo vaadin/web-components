@@ -69,44 +69,48 @@ function getComponents(ast, importMap) {
   return componentMap;
 }
 
+function updateStyleImports(code, componentName) {
+  return code
+    .clone()
+    .replace(`./${componentName}-styles.js`, `./styles/${componentName}-styles.js`)
+    .replace(/^.*import \{ css \}.*$/mu, `import { css } from 'lit';`);
+}
+
 function updateComponentStylesJSFile(componentName, { styleGetterNodes, styleGetterReturnStatement }) {
   const file = `packages/${pkg}/src/styles/${componentName}-styles.js`;
   const code = new MagicString(fs.existsSync(file) ? fs.readFileSync(file, 'utf-8') : '');
 
   for (const { node, relatedImportNode } of styleGetterNodes) {
-    if (node.type === 'TaggedTemplateExpression') {
-      const variableStatement = `const ${camelcase(componentName)} = ${astring.generate(node)};`;
-      if (!`${code}`.includes(variableStatement)) {
-        code.append(`\n${variableStatement}\n`);
+    if (node.type === 'TaggedTemplateExpression' && styleGetterNodes.size > 1) {
+      if (!new RegExp(`\\W*${camelcase(componentName)}\\W*`, 'u').test(code)) {
+        code.append(`\nconst ${camelcase(componentName)} = ${astring.generate(node)};\n`);
       }
     }
 
     if (node.type === 'Identifier') {
-      const importStatement = astring.generate(relatedImportNode);
-      if (!`${code}`.includes(importStatement)) {
-        code.prepend(`\n${importStatement}\n`);
+      if (!new RegExp(`\\W*${node.name}\\W*`, 'u').test(code)) {
+        code.prepend(`\n${astring.generate(relatedImportNode)}\n`);
       }
     }
   }
 
-  {
-    const importStatement = `import { css } from 'lit';\n`;
+  if (`${code}`.includes('import { css }')) {
+    code.replace(/^.*import \{ css \}.*$/mu, `import { css } from 'lit';`);
+  } else {
     const hasTaggedTemplateExpression = [...styleGetterNodes].some(
       ({ node }) => node.type === 'TaggedTemplateExpression',
     );
-    if (!`${code}`.includes(importStatement) && hasTaggedTemplateExpression) {
-      code.prepend(importStatement);
+    if (hasTaggedTemplateExpression) {
+      code.prepend(`import { css } from 'lit';\n`);
     }
   }
 
-  {
-    const exportStatement = `export const ${camelcase(componentName)}Styles = ${astring.generate(styleGetterReturnStatement.argument)};`;
-    if (!`${code}`.includes(exportStatement)) {
-      code.append(`\n${exportStatement}\n`);
-    }
+  const exportStatement = `export const ${camelcase(componentName)}Styles = ${astring.generate(styleGetterReturnStatement.argument)};`;
+  if (!`${code}`.includes(exportStatement)) {
+    code.append(`\n${exportStatement}\n`);
   }
 
-  fs.writeFileSync(file, code.toString(), 'utf-8');
+  fs.writeFileSync(file, `${code}`, 'utf-8');
 }
 
 function updateComponentStylesTSFile(componentName) {
@@ -114,24 +118,30 @@ function updateComponentStylesTSFile(componentName) {
   const code = new MagicString(fs.existsSync(file) ? fs.readFileSync(file, 'utf-8') : '');
 
   {
-    const importStatement = `import { css, CSSResult } from 'lit';`;
-    if (!`${code}`.includes(importStatement)) {
+    const importStatement = `import type { CSSResult } from 'lit';\n`;
+    if (`${code}`.includes('import type { CSSResult }')) {
+      code.replace(/^.*import type \{ CSSResult \}.*$/mu, importStatement);
+    } else {
       code.prepend(`${importStatement}\n\n`);
     }
   }
 
-  {
-    const exportStatement = `export const ${camelcase(componentName)}Styles: CSSResult;`;
-    if (!`${code}`.includes(exportStatement)) {
-      code.append(`\n${exportStatement}\n`);
-    }
+  if (`${code}`.includes(`export const ${camelcase(componentName)}Styles`)) {
+    code.replace(
+      new RegExp(`^.*export const ${camelcase(componentName)}Styles.*$`, 'mu'),
+      `export const ${camelcase(componentName)}Styles: CSSResult;`,
+    );
+  } else {
+    code.append(`\nexport const ${camelcase(componentName)}Styles: CSSResult;\n`);
   }
 
   fs.writeFileSync(file, `${code}`, 'utf-8');
 }
 
 function updateComponentFile(file, componentName, { styleGetterNodes, styleGetterReturnStatement }) {
-  const code = new MagicString(fs.readFileSync(file, 'utf-8'));
+  let code = new MagicString(fs.readFileSync(file, 'utf-8'));
+
+  code = updateStyleImports(code, componentName);
 
   styleGetterNodes.forEach(({ relatedImportNode }) => {
     if (relatedImportNode) {
@@ -150,21 +160,15 @@ function updateComponentFile(file, componentName, { styleGetterNodes, styleGette
   fs.writeFileSync(file, `${code}`, 'utf-8');
 }
 
-function updateComponentStyleImports(file, componentName) {
-  let code = fs.readFileSync(file, 'utf-8').toString();
-  code = code.replace(`./${componentName}-styles.js`, `./styles/${componentName}-styles.js`);
-  fs.writeFileSync(file, code, 'utf-8');
-}
-
 // - - - - - - - - - - - - - - - - - - //
 
-for (const file of globSync([`packages/${pkg}/src/*-styles.js`, `packages/${pkg}/src/*-styles.d.ts`])) {
-  const stylesDir = `packages/${pkg}/src/styles`;
-  if (!fs.existsSync(stylesDir)) {
-    console.log(`Creating styles directory`);
-    fs.mkdirSync(stylesDir);
-  }
+const stylesDir = `packages/${pkg}/src/styles`;
+if (!fs.existsSync(stylesDir)) {
+  console.log(`Creating styles directory`);
+  fs.mkdirSync(stylesDir);
+}
 
+for (const file of globSync([`packages/${pkg}/src/*-styles.js`, `packages/${pkg}/src/*-styles.d.ts`])) {
   console.log(`Moving ${file} to styles directory`);
   fs.renameSync(file, file.replace('src/', 'src/styles/'));
 }
@@ -188,13 +192,13 @@ for (const file of globSync([`packages/${pkg}/src/**/*.js`, `!packages/${pkg}/sr
     const answer = await rl.question(
       `\n\n${code.slice(styleGetterReturnStatement.start, styleGetterReturnStatement.end)}\n\n(y/n): `,
     );
-    if (answer.toLowerCase() === 'y') {
-      updateComponentStylesJSFile(componentName, componentContext);
-      updateComponentStylesTSFile(componentName, componentContext);
-      updateComponentFile(file, componentName, componentContext);
+    if (answer.toLowerCase() !== 'y') {
+      continue;
     }
 
-    updateComponentStyleImports(file, componentName);
+    updateComponentStylesJSFile(componentName, componentContext);
+    updateComponentStylesTSFile(componentName, componentContext);
+    updateComponentFile(file, componentName, componentContext);
   }
 }
 
