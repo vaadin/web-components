@@ -207,7 +207,8 @@ export const DialogOverlayMixin = (superClass) =>
       }
 
       Object.keys(parsedBounds).forEach((arg) => {
-        if (!isNaN(parsedBounds[arg])) {
+        // Allow setting width or height to `null`
+        if (parsedBounds[arg] !== null && !isNaN(parsedBounds[arg])) {
           parsedBounds[arg] = `${parsedBounds[arg]}px`;
         }
       });

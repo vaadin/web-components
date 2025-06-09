@@ -342,5 +342,35 @@ describe('vaadin-dialog', () => {
       expect(getComputedStyle(overlay.$.overlay).position).to.equal('relative');
       expect(getComputedStyle(overlay.$.overlay).maxWidth).to.equal('100%');
     });
+
+    it('should reset overlay width when set to null', async () => {
+      dialog.opened = true;
+      await nextRender();
+
+      const originalWidth = getComputedStyle(overlay.$.overlay).width;
+
+      dialog.width = 300;
+      await nextRender();
+
+      dialog.width = null;
+      await nextRender();
+
+      expect(getComputedStyle(overlay.$.overlay).width).to.equal(originalWidth);
+    });
+
+    it('should reset overlay height when set to null', async () => {
+      dialog.opened = true;
+      await nextRender();
+
+      const originalHeight = getComputedStyle(overlay.$.overlay).height;
+
+      dialog.height = 400;
+      await nextRender();
+
+      dialog.height = null;
+      await nextRender();
+
+      expect(getComputedStyle(overlay.$.overlay).height).to.equal(originalHeight);
+    });
   });
 });
