@@ -33,9 +33,9 @@ function getTaggedTemplateContent(node) {
 //   return importMap;
 // }
 
-function gatherCSSTaggedNodes(ast) {
+function gatherComponents(ast) {
   // const importMap = gatherImports(ast);
-  const cssTaggedNodes = new Map();
+  const components = new Map();
 
   walk.simple(ast, {
     ClassDeclaration(classNode) {
@@ -44,17 +44,17 @@ function gatherCSSTaggedNodes(ast) {
       const styleGetter = members.find((member) => member.kind === 'get' && member.key.name === 'styles');
 
       if (styleGetter) {
-        const componentCSSTaggedNodes = new Set();
+        const cssTaggedNodes = new Set();
 
         walk.simple(styleGetter, {
           TaggedTemplateExpression(node) {
             if (node.tag.name === 'css') {
-              componentCSSTaggedNodes.add(node);
+              cssTaggedNodes.add(node);
             }
           },
           // Identifier(node) {
           //   if (node.name !== 'css') {
-          //     componentCSSTaggedNodes.add({
+          //     cssTaggedNodes.add({
           //       node: importMap.get(node.name),
           //       name: node.name,
           //       external: true,
@@ -65,12 +65,12 @@ function gatherCSSTaggedNodes(ast) {
 
         const isGetter = members.find((member) => member.kind === 'get' && member.key.name === 'is');
         const componentName = isGetter.value.body.body[0].argument.value;
-        cssTaggedNodes.set(componentName, componentCSSTaggedNodes);
+        components.set(componentName, { cssTaggedNodes });
       }
     },
   });
 
-  return cssTaggedNodes;
+  return components;
 }
 
 function createCoreStylesJSFile(componentName, cssTaggedNodes) {
@@ -80,8 +80,6 @@ function createCoreStylesJSFile(componentName, cssTaggedNodes) {
 
   const file = `packages/${pkg}/src/styles/${componentName}-core-styles.js`;
   const code = fs.existsSync(file) ? fs.readFileSync(file, 'utf-8') : '';
-
-  console.log(`Processing ${file}...`);
 
   const s = new MagicString(code);
 
@@ -110,8 +108,6 @@ function createCoreStylesTSFile(componentName, cssTaggedNodes) {
   const file = `packages/${pkg}/src/styles/${componentName}-core-styles.d.ts`;
   const code = new MagicString(fs.existsSync(file) ? fs.readFileSync(file, 'utf-8') : '');
 
-  console.log(`Processing ${file}...`);
-
   const exportStatement = `export declare const ${camelcase(componentName)}Styles: CSSResult;\n`;
   if (code.toString().length === 0) {
     code.append(`import type { CSSResult } from 'lit';\n\n`);
@@ -121,6 +117,42 @@ function createCoreStylesTSFile(componentName, cssTaggedNodes) {
   }
 
   fs.writeFileSync(file, code.toString(), 'utf-8');
+}
+
+function createBaseStylesJSFile(componentName) {
+  const coreFile = `packages/${pkg}/src/styles/${componentName}-core-styles.js`;
+  const baseFile = `packages/${pkg}/src/styles/${componentName}-base-styles.js`;
+  if (!fs.existsSync(coreFile) || fs.existsSync(baseFile)) {
+    return;
+  }
+
+  fs.copyFileSync(coreFile, baseFile);
+
+  const code = new MagicString(fs.readFileSync(baseFile, 'utf-8'));
+  const ast = acorn.parse(code.toString(), {
+    ecmaVersion: 'latest',
+    sourceType: 'module',
+  });
+
+  walk.simple(ast, {
+    TaggedTemplateExpression(node) {
+      if (node.tag.name === 'css') {
+        code.overwrite(node.start, node.end, `css\`\``);
+      }
+    },
+  });
+
+  fs.writeFileSync(baseFile, code.toString(), 'utf-8');
+}
+
+function createBaseStylesTSFile(componentName) {
+  const coreFile = `packages/${pkg}/src/styles/${componentName}-core-styles.d.ts`;
+  const baseFile = `packages/${pkg}/src/styles/${componentName}-base-styles.d.ts`;
+  if (!fs.existsSync(coreFile) || fs.existsSync(baseFile)) {
+    return;
+  }
+
+  fs.copyFileSync(coreFile, baseFile);
 }
 
 function updateComponentFile(file, componentName, cssTaggedNodes) {
@@ -185,19 +217,23 @@ for (const file of globSync(`packages/${pkg}/src/**/*.js`)) {
     sourceType: 'module',
   });
 
-  for (const [componentName, nodes] of gatherCSSTaggedNodes(ast)) {
-    console.log('Extracting core styles for:', componentName);
+  for (const [componentName, { cssTaggedNodes }] of gatherComponents(ast)) {
+    console.log('Processing ', componentName);
 
-    for (const node of nodes) {
+    for (const node of cssTaggedNodes) {
       const answer = await rl.question(`${getTaggedTemplateContent(node)}\n\n(y/n): `);
       if (answer.toLowerCase() !== 'y') {
-        nodes.delete(node);
+        cssTaggedNodes.delete(node);
       }
     }
 
-    createCoreStylesJSFile(componentName, nodes);
-    createCoreStylesTSFile(componentName, nodes);
-    updateComponentFile(file, componentName, nodes);
+    createCoreStylesJSFile(componentName, cssTaggedNodes);
+    createCoreStylesTSFile(componentName, cssTaggedNodes);
+
+    createBaseStylesJSFile(componentName);
+    createBaseStylesTSFile(componentName);
+
+    updateComponentFile(file, componentName, cssTaggedNodes);
   }
 }
 
