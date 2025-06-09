@@ -74,30 +74,24 @@ function gatherComponents(ast) {
 }
 
 function createCoreStylesJSFile(componentName, cssTaggedNodes) {
-  if (cssTaggedNodes.size === 0) {
-    return;
-  }
-
   const file = `packages/${pkg}/src/styles/${componentName}-core-styles.js`;
-  const code = fs.existsSync(file) ? fs.readFileSync(file, 'utf-8') : '';
+  const code = new MagicString(fs.existsSync(file) ? fs.readFileSync(file, 'utf-8') : '');
 
-  const s = new MagicString(code);
-
-  if (!code.includes(`${camelcase(componentName)}Styles`)) {
-    s.append(`
+  if (!code.toString().includes(`${camelcase(componentName)}Styles`)) {
+    code.append(`
       export const ${camelcase(componentName)}Styles = css\`
         ${[...cssTaggedNodes].map((node) => getTaggedTemplateContent(node)).join('\n\n')}
       \`;
     `);
   }
 
-  if (!code.includes(`import { css`)) {
-    s.prepend(`import { css } from 'lit';\n`);
+  if (!code.toString().includes(`import { css`)) {
+    code.prepend(`import { css } from 'lit';\n`);
   } else {
-    s.replace(/^.*import \{ css.*$/mu, `import { css } from 'lit';`);
+    code.replace(/^.*import \{ css.*$/mu, `import { css } from 'lit';`);
   }
 
-  fs.writeFileSync(file, s.toString(), 'utf-8');
+  fs.writeFileSync(file, code.toString(), 'utf-8');
 }
 
 function createCoreStylesTSFile(componentName, cssTaggedNodes) {
