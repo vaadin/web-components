@@ -58,14 +58,6 @@ export class Cache<TItem> {
    */
   get flatSize(): number;
 
-  /**
-   * The total number of items, including items from expanded sub-caches.
-   *
-   * @protected
-   * @deprecated since 24.3 and will be removed in Vaadin 25.
-   */
-  get effectiveSize(): number;
-
   constructor(
     context: CacheContext<TItem>,
     pageSize: number,
@@ -113,34 +105,4 @@ export class Cache<TItem> {
    * of an item in the `items` array.
    */
   getFlatIndex(index: number): number;
-
-  /**
-   * @deprecated since 24.3 and will be removed in Vaadin 25.
-   */
-  getItemForIndex(index: number): TItem | undefined;
-
-  /**
-   * @deprecated since 24.3 and will be removed in Vaadin 25.
-   */
-  getCacheAndIndex(index: number): { cache: Cache<TItem>; scaledIndex: number };
-
-  /**
-   * @deprecated since 24.3 and will be removed in Vaadin 25.
-   */
-  updateSize(): void;
-
-  /**
-   * @deprecated since 24.3 and will be removed in Vaadin 25.
-   */
-  ensureSubCacheForScaledIndex(scaledIndex: number): void;
-
-  /**
-   * @deprecated since 24.3 and will be removed in Vaadin 25.
-   */
-  get grid(): HTMLElement;
-
-  /**
-   * @deprecated since 24.3 and will be removed in Vaadin 25.
-   */
-  get itemCaches(): object;
 }

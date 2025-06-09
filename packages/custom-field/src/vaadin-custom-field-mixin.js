@@ -220,11 +220,10 @@ export const CustomFieldMixin = (superClass) =>
           (inputs.indexOf(e.target) < inputs.length - 1 && !e.shiftKey) ||
           (inputs.indexOf(e.target) > 0 && e.shiftKey)
         ) {
-          this.dispatchEvent(new CustomEvent('internal-tab'));
-        } else {
-          // FIXME(yuriy): remove this workaround when value should not be updated before focusout
-          this.__setValue();
+          return;
         }
+        // FIXME(yuriy): remove this workaround when value should not be updated before focusout
+        this.__setValue();
       }
     }
 

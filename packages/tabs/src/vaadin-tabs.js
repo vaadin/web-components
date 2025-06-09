@@ -9,8 +9,8 @@ import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { tabsStyles } from './styles/vaadin-tabs-styles.js';
 import { TabsMixin } from './vaadin-tabs-mixin.js';
-import { tabsStyles } from './vaadin-tabs-styles.js';
 
 /**
  * `<vaadin-tabs>` is a Web Component for organizing and grouping content into sections.

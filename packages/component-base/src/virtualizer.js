@@ -1,3 +1,8 @@
+/**
+ * @license
+ * Copyright (c) 2000 - 2025 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
 import { IronListAdapter } from './virtualizer-iron-list-adapter.js';
 
 export class Virtualizer {

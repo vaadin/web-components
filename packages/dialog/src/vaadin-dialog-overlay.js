@@ -8,6 +8,7 @@ import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { overlayStyles } from '@vaadin/overlay/src/vaadin-overlay-styles.js';
+import { CSSInjectionMixin } from '@vaadin/vaadin-themable-mixin/css-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { DialogOverlayMixin } from './vaadin-dialog-overlay-mixin.js';
 import { dialogOverlay, resizableOverlay } from './vaadin-dialog-styles.js';
@@ -22,7 +23,9 @@ import { dialogOverlay, resizableOverlay } from './vaadin-dialog-styles.js';
  * @mixes ThemableMixin
  * @private
  */
-export class DialogOverlay extends DialogOverlayMixin(DirMixin(ThemableMixin(PolylitMixin(LitElement)))) {
+export class DialogOverlay extends DialogOverlayMixin(
+  DirMixin(ThemableMixin(CSSInjectionMixin(PolylitMixin(LitElement)))),
+) {
   static get is() {
     return 'vaadin-dialog-overlay';
   }

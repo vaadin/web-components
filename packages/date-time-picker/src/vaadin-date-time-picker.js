@@ -5,13 +5,14 @@
  */
 import '@vaadin/date-picker/src/vaadin-date-picker.js';
 import '@vaadin/time-picker/src/vaadin-time-picker.js';
-import { css, html, LitElement } from 'lit';
+import { html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { inputFieldShared } from '@vaadin/field-base/src/styles/input-field-shared-styles.js';
 import { CSSInjectionMixin } from '@vaadin/vaadin-themable-mixin/css-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { dateTimePickerStyles } from './styles/vaadin-date-time-picker-styles.js';
 import { DateTimePickerMixin } from './vaadin-date-time-picker-mixin.js';
 
 /**
@@ -106,29 +107,7 @@ class DateTimePicker extends DateTimePickerMixin(
   }
 
   static get styles() {
-    return [
-      inputFieldShared,
-      css`
-        .vaadin-date-time-picker-container {
-          --vaadin-field-default-width: auto;
-        }
-
-        .slots {
-          display: flex;
-          --vaadin-field-default-width: 12em;
-        }
-
-        .slots ::slotted([slot='date-picker']) {
-          min-width: 0;
-          flex: 1 1 auto;
-        }
-
-        .slots ::slotted([slot='time-picker']) {
-          min-width: 0;
-          flex: 1 1.65 auto;
-        }
-      `,
-    ];
+    return [inputFieldShared, dateTimePickerStyles];
   }
 
   /** @protected */

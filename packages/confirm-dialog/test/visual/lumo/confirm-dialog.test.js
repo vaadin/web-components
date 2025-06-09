@@ -1,7 +1,9 @@
 import { fixtureSync, oneEvent } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
-import '@vaadin/vaadin-lumo-styles/test/autoload.js';
-import '../../../theme/lumo/vaadin-confirm-dialog.js';
+import '@vaadin/vaadin-lumo-styles/global.css';
+import '@vaadin/vaadin-lumo-styles/props.css';
+import '@vaadin/vaadin-lumo-styles/components/confirm-dialog.css';
+import '../../../vaadin-confirm-dialog.js';
 import '../../not-animated-styles.js';
 
 describe('confirm-dialog', () => {

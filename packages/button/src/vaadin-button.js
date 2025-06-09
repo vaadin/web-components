@@ -10,7 +10,7 @@ import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { CSSInjectionMixin } from '@vaadin/vaadin-themable-mixin/css-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { buttonStyles } from './vaadin-button-core-styles.js';
+import { buttonStyles } from './styles/vaadin-button-core-styles.js';
 import { ButtonMixin } from './vaadin-button-mixin.js';
 
 /**

@@ -1,0 +1,62 @@
+/**
+ * @license
+ * Copyright (c) 2017 - 2025 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+:host {
+  --_vaadin-confirm-dialog-content-width: auto;
+  --_vaadin-confirm-dialog-content-height: auto;
+}
+
+[part='overlay'] {
+  width: var(--_vaadin-confirm-dialog-content-width);
+  height: var(--_vaadin-confirm-dialog-content-height);
+}
+
+#resizerContainer {
+  height: 100%;
+}
+
+::slotted([slot='header']) {
+  pointer-events: auto;
+}
+
+/* Make buttons clickable */
+[part='footer'] > * {
+  pointer-events: all;
+}
+
+[part='header'] ::slotted(h3) {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+  margin-inline-start: calc(var(--lumo-space-l) - var(--lumo-space-m));
+}
+
+[part='message'] {
+  width: 25em;
+  min-width: 100%;
+  max-width: 100%;
+}
+
+::slotted([slot$='button'][theme~='tertiary']) {
+  padding-left: var(--lumo-space-s);
+  padding-right: var(--lumo-space-s);
+}
+
+[part='cancel-button'] {
+  flex-grow: 1;
+}
+
+@media (max-width: 360px) {
+  [part='footer'] {
+    flex-direction: column-reverse;
+    align-items: stretch;
+    padding: var(--lumo-space-s) var(--lumo-space-l);
+    gap: var(--lumo-space-s);
+  }
+
+  ::slotted([slot$='button']) {
+    width: 100%;
+    margin: 0;
+  }
+}

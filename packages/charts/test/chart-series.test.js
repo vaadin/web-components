@@ -1,7 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { aTimeout, fixtureSync, nextRender, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import '../theme/vaadin-chart-base-theme.js';
 import '../src/vaadin-chart.js';
 
 describe('vaadin-chart-series', () => {

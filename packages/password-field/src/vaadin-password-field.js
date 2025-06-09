@@ -7,7 +7,7 @@ import './vaadin-password-field-button.js';
 import { html } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { TextField } from '@vaadin/text-field/src/vaadin-text-field.js';
-import { passwordFieldStyles } from './vaadin-password-field-core-styles.js';
+import { passwordFieldStyles } from './styles/vaadin-password-field-core-styles.js';
 import { PasswordFieldMixin } from './vaadin-password-field-mixin.js';
 
 /**

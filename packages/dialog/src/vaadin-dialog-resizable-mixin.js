@@ -147,17 +147,8 @@ export const DialogResizableMixin = (superClass) =>
      * @protected
      */
     _getResizeDimensions() {
-      const scrollPosition = this.$.overlay.$.resizerContainer.scrollTop;
       const { width, height, top, left } = getComputedStyle(this.$.overlay.$.overlay);
-      const content = this.$.overlay.$.content;
-      content.setAttribute(
-        'style',
-        'position: absolute; top: 0; right: 0; bottom: 0; left: 0; box-sizing: content-box; height: auto;',
-      );
-      const { width: contentWidth, height: contentHeight } = getComputedStyle(content);
-      content.removeAttribute('style');
-      this.$.overlay.$.resizerContainer.scrollTop = scrollPosition;
-      return { width, height, contentWidth, contentHeight, top, left };
+      return { width, height, top, left };
     }
 
     /**

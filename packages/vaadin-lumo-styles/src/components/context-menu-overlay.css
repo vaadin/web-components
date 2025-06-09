@@ -1,0 +1,39 @@
+/**
+ * @license
+ * Copyright (c) 2017 - 2025 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+:host {
+  align-items: flex-start;
+  justify-content: flex-start;
+  /* TODO These style overrides should not be needed.
+     We should instead offer a way to have non-selectable items inside the context menu. */
+  --_lumo-list-box-item-selected-icon-display: none;
+  --_lumo-list-box-item-padding-left: calc(var(--lumo-space-m) + var(--lumo-border-radius-m) / 4);
+}
+
+:host([right-aligned]),
+:host([end-aligned]) {
+  align-items: flex-end;
+}
+
+:host([bottom-aligned]) {
+  justify-content: flex-end;
+}
+
+[part='overlay'] {
+  background-color: #fff;
+  outline: none;
+}
+
+:host([phone]) {
+  inset: 0 0 var(--vaadin-overlay-viewport-bottom, 0) 0 !important;
+  align-items: stretch;
+  justify-content: flex-end;
+}
+
+@media (forced-colors: active) {
+  [part='overlay'] {
+    outline: 3px solid !important;
+  }
+}

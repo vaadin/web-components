@@ -12,7 +12,7 @@ import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { inputFieldShared } from '@vaadin/field-base/src/styles/input-field-shared-styles.js';
 import { CSSInjectionMixin } from '@vaadin/vaadin-themable-mixin/css-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { numberFieldStyles } from './vaadin-number-field-core-styles.js';
+import { numberFieldStyles } from './styles/vaadin-number-field-core-styles.js';
 import { NumberFieldMixin } from './vaadin-number-field-mixin.js';
 
 /**
