@@ -9,8 +9,8 @@ import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { CSSInjectionMixin } from '@vaadin/vaadin-themable-mixin/css-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { formLayoutStyles } from './styles/vaadin-form-layout-styles.js';
 import { FormLayoutMixin } from './vaadin-form-layout-mixin.js';
-import { formLayoutStyles } from './vaadin-form-layout-styles.js';
 
 /**
  * `<vaadin-form-layout>` is a Web Component providing configurable responsive
