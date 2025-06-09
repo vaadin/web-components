@@ -13,8 +13,8 @@ import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { mapStyles } from './styles/vaadin-map-styles.js';
 import { MapMixin } from './vaadin-map-mixin.js';
-import { mapStyles } from './vaadin-map-styles.js';
 
 /**
  * `vaadin-map` is a web component for displaying web maps.
