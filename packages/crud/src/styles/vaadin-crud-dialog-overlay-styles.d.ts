@@ -10,6 +10,4 @@
  */
 import type { CSSResult } from 'lit';
 
-export const crudStyles: CSSResult;
-
-export const crudDialogOverlayStyles: CSSResult;
+export declare const crudDialogOverlayStyles: CSSResult;
