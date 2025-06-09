@@ -3,13 +3,21 @@ import * as walk from 'acorn-walk';
 import { globSync } from 'glob';
 import MagicString from 'magic-string';
 import fs from 'node:fs';
+import { stdin as input, stdout as output } from 'node:process';
+import { createInterface } from 'node:readline/promises';
 
 const pkg = process.argv[2];
+
+const rl = createInterface({ input, output });
 
 // - - - - - - - - - - - - - - - - - - //
 
 function camelcase(str) {
   return str.replace('vaadin-', '').replace(/-([a-z])/gu, (g) => g[1].toUpperCase());
+}
+
+function getTaggedTemplateContent(node) {
+  return node.quasi.quasis.map((quasi) => quasi.value.cooked.trim()).join('');
 }
 
 // function gatherImports(ast) {
@@ -77,14 +85,10 @@ function createCoreStylesJSFile(componentName, cssTaggedNodes) {
 
   const s = new MagicString(code);
 
-  const cssContent = [...cssTaggedNodes]
-    .map((node) => node.quasi.quasis.map((quasi) => quasi.value.cooked.trim()))
-    .join('\n\n');
-
   if (!code.includes(`${camelcase(componentName)}Styles`)) {
     s.append(`
       export const ${camelcase(componentName)}Styles = css\`
-        ${cssContent}
+        ${[...cssTaggedNodes].map((node) => getTaggedTemplateContent(node)).join('\n\n')}
       \`;
     `);
   }
@@ -124,13 +128,15 @@ function updateComponentFile(file, componentName, cssTaggedNodes) {
 
   code.replaceAll(`./${componentName}-styles.js`, `./${componentName}-core-styles.js`);
 
-  for (const node of cssTaggedNodes) {
-    code.overwrite(node.start, node.end, `${camelcase(componentName)}Styles`);
-  }
+  if (cssTaggedNodes.size > 0) {
+    for (const node of cssTaggedNodes) {
+      code.overwrite(node.start, node.end, `${camelcase(componentName)}Styles`);
+    }
 
-  const importStatement = `import { ${camelcase(componentName)}Styles } from './${componentName}-core-styles.js';\n`;
-  if (!code.toString().includes(importStatement)) {
-    code.prepend(importStatement);
+    const importStatement = `import { ${camelcase(componentName)}Styles } from './${componentName}-core-styles.js';\n`;
+    if (!code.toString().includes(importStatement)) {
+      code.prepend(importStatement);
+    }
   }
 
   fs.writeFileSync(file, code.toString(), 'utf-8');
@@ -140,12 +146,14 @@ function updateComponentFile(file, componentName, cssTaggedNodes) {
 
 for (const file of globSync(`packages/${pkg}/src/*-styles.js`)) {
   if (!/(core|base)-styles\.js$/u.test(file)) {
+    console.log(`Renaming ${file}`);
     fs.renameSync(file, file.replace('-styles.js', '-core-styles.js'));
   }
 }
 
 for (const file of globSync(`packages/${pkg}/src/*-styles.d.ts`)) {
   if (!/(core|base)-styles\.d\.ts$/u.test(file)) {
+    console.log(`Renaming ${file}`);
     fs.renameSync(file, file.replace('-styles.d.ts', '-core-styles.d.ts'));
   }
 }
@@ -165,10 +173,20 @@ for (const file of globSync(`packages/${pkg}/src/**/*.js`)) {
     sourceType: 'module',
   });
 
-  for (const [componentName, cssTaggedNodes] of gatherCSSTaggedNodes(ast)) {
-    createCoreStylesJSFile(componentName, cssTaggedNodes);
-    createCoreStylesTSFile(componentName, cssTaggedNodes);
+  for (const [componentName, nodes] of gatherCSSTaggedNodes(ast)) {
+    console.log('Extracting core styles for:', componentName);
 
-    updateComponentFile(file, componentName, cssTaggedNodes);
+    for (const node of nodes) {
+      const answer = await rl.question(`${getTaggedTemplateContent(node)}\n\n(y/n): `);
+      if (answer.toLowerCase() !== 'y') {
+        nodes.delete(node);
+      }
+    }
+
+    createCoreStylesJSFile(componentName, nodes);
+    createCoreStylesTSFile(componentName, nodes);
+    updateComponentFile(file, componentName, nodes);
   }
 }
+
+rl.close();
