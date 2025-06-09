@@ -5,4 +5,4 @@
  */
 import type { CSSResult } from 'lit';
 
-export const styles: CSSResult;
+export const menuOverlayStyles: CSSResult;

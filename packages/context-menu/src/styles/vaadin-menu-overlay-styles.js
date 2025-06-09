@@ -5,7 +5,7 @@
  */
 import { css } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
-export const styles = css`
+export const menuOverlayStyles = css`
   :host {
     align-items: flex-start;
     justify-content: flex-start;
