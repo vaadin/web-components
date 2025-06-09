@@ -78,7 +78,7 @@ function createCoreStylesJSFile(componentName, cssTaggedNodes) {
     return;
   }
 
-  const file = `packages/${pkg}/src/${componentName}-core-styles.js`;
+  const file = `packages/${pkg}/src/styles/${componentName}-core-styles.js`;
   const code = fs.existsSync(file) ? fs.readFileSync(file, 'utf-8') : '';
 
   console.log(`Processing ${file}...`);
@@ -107,7 +107,7 @@ function createCoreStylesTSFile(componentName, cssTaggedNodes) {
     return;
   }
 
-  const file = `packages/${pkg}/src/${componentName}-core-styles.d.ts`;
+  const file = `packages/${pkg}/src/styles/${componentName}-core-styles.d.ts`;
   const code = new MagicString(fs.existsSync(file) ? fs.readFileSync(file, 'utf-8') : '');
 
   console.log(`Processing ${file}...`);
@@ -126,14 +126,15 @@ function createCoreStylesTSFile(componentName, cssTaggedNodes) {
 function updateComponentFile(file, componentName, cssTaggedNodes) {
   const code = new MagicString(fs.readFileSync(file, 'utf-8'));
 
-  code.replaceAll(`./${componentName}-styles.js`, `./${componentName}-core-styles.js`);
+  code.replaceAll(`./${componentName}-styles.js`, `./styles/${componentName}-core-styles.js`);
+  code.replaceAll(`./styles/${componentName}-styles.js`, `./styles/${componentName}-core-styles.js`);
 
   if (cssTaggedNodes.size > 0) {
     for (const node of cssTaggedNodes) {
       code.overwrite(node.start, node.end, `${camelcase(componentName)}Styles`);
     }
 
-    const importStatement = `import { ${camelcase(componentName)}Styles } from './${componentName}-core-styles.js';\n`;
+    const importStatement = `import { ${camelcase(componentName)}Styles } from './styles/${componentName}-core-styles.js';\n`;
     if (!code.toString().includes(importStatement)) {
       code.prepend(importStatement);
     }
@@ -142,19 +143,30 @@ function updateComponentFile(file, componentName, cssTaggedNodes) {
   fs.writeFileSync(file, code.toString(), 'utf-8');
 }
 
+function ensureStylesDirExists() {
+  const stylesDir = `packages/${pkg}/src/styles`;
+  if (!fs.existsSync(stylesDir)) {
+    fs.mkdirSync(stylesDir);
+  }
+}
+
 // - - - - - - - - - - - - - - - - - - //
 
 for (const file of globSync(`packages/${pkg}/src/*-styles.js`)) {
   if (!/(core|base)-styles\.js$/u.test(file)) {
+    ensureStylesDirExists();
+
     console.log(`Renaming ${file}`);
-    fs.renameSync(file, file.replace('-styles.js', '-core-styles.js'));
+    fs.renameSync(file, file.replace('-styles.js', '-core-styles.js').replace('src/', 'src/styles/'));
   }
 }
 
 for (const file of globSync(`packages/${pkg}/src/*-styles.d.ts`)) {
   if (!/(core|base)-styles\.d\.ts$/u.test(file)) {
+    ensureStylesDirExists();
+
     console.log(`Renaming ${file}`);
-    fs.renameSync(file, file.replace('-styles.d.ts', '-core-styles.d.ts'));
+    fs.renameSync(file, file.replace('-styles.d.ts', '-core-styles.d.ts').replace('src/', 'src/styles/'));
   }
 }
 
