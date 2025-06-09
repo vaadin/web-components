@@ -5,13 +5,14 @@
  */
 import './vaadin-menu-bar-submenu.js';
 import './vaadin-menu-bar-button.js';
-import { css, html, LitElement } from 'lit';
+import { html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { CSSInjectionMixin } from '@vaadin/vaadin-themable-mixin/css-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { menuBarStyles } from './styles/vaadin-menu-bar-styles.js';
 import { MenuBarMixin } from './vaadin-menu-bar-mixin.js';
 
 /**
@@ -82,23 +83,7 @@ class MenuBar extends MenuBarMixin(ElementMixin(ThemableMixin(CSSInjectionMixin(
   }
 
   static get styles() {
-    return css`
-      :host {
-        display: block;
-      }
-
-      :host([hidden]) {
-        display: none !important;
-      }
-
-      [part='container'] {
-        position: relative;
-        display: flex;
-        width: 100%;
-        flex-wrap: nowrap;
-        overflow: hidden;
-      }
-    `;
+    return menuBarStyles;
   }
 
   /** @protected */

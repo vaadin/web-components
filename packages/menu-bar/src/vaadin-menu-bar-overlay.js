@@ -7,12 +7,11 @@ import { html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
-import { menuOverlayStyles } from '@vaadin/context-menu/src/styles/vaadin-menu-overlay-styles.js';
 import { MenuOverlayMixin } from '@vaadin/context-menu/src/vaadin-menu-overlay-mixin.js';
 import { OverlayMixin } from '@vaadin/overlay/src/vaadin-overlay-mixin.js';
-import { overlayStyles } from '@vaadin/overlay/src/vaadin-overlay-styles.js';
 import { CSSInjectionMixin } from '@vaadin/vaadin-themable-mixin/css-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { menuBarOverlayStyles } from './styles/vaadin-menu-bar-overlay-styles.js';
 
 /**
  * An element used internally by `<vaadin-menu-bar>`. Not intended to be used separately.
@@ -33,7 +32,7 @@ export class MenuBarOverlay extends MenuOverlayMixin(
   }
 
   static get styles() {
-    return [overlayStyles, menuOverlayStyles];
+    return menuBarOverlayStyles;
   }
 
   /** @protected */

@@ -5,7 +5,7 @@
  */
 import { Button } from '@vaadin/button/src/vaadin-button.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
-import { css } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { menuBarButtonStyles } from './styles/vaadin-menu-bar-button-styles.js';
 
 /**
  * An element used internally by `<vaadin-menu-bar>`. Not intended to be used separately.
@@ -20,18 +20,7 @@ class MenuBarButton extends Button {
   }
 
   static get styles() {
-    return [
-      super.styles,
-      css`
-        :host {
-          flex-shrink: 0;
-        }
-
-        :host([slot='overflow']) {
-          margin-inline-end: 0;
-        }
-      `,
-    ];
+    return [super.styles, menuBarButtonStyles];
   }
 
   /**
