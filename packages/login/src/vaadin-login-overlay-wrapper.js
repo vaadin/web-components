@@ -6,10 +6,9 @@
 import { html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
-import { overlayStyles } from '@vaadin/overlay/src/vaadin-overlay-styles.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { loginOverlayWrapperStyles } from './styles/vaadin-login-overlay-wrapper-styles.js';
 import { LoginOverlayWrapperMixin } from './vaadin-login-overlay-wrapper-mixin.js';
-import { loginOverlayWrapperStyles } from './vaadin-login-overlay-wrapper-styles.js';
 
 /**
  * An element used internally by `<vaadin-login-overlay>`. Not intended to be used separately.
@@ -25,7 +24,7 @@ class LoginOverlayWrapper extends LoginOverlayWrapperMixin(ThemableMixin(Polylit
   }
 
   static get styles() {
-    return [overlayStyles, loginOverlayWrapperStyles];
+    return loginOverlayWrapperStyles;
   }
 
   /** @protected */
