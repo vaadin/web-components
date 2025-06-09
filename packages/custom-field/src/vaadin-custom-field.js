@@ -9,8 +9,8 @@ import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { CSSInjectionMixin } from '@vaadin/vaadin-themable-mixin/css-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { customFieldStyles } from './styles/vaadin-custom-field-styles.js';
 import { CustomFieldMixin } from './vaadin-custom-field-mixin.js';
-import { customFieldStyles } from './vaadin-custom-field-styles.js';
 
 /**
  * `<vaadin-custom-field>` is a web component for wrapping multiple components as a single field.
