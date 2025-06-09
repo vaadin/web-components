@@ -69,13 +69,6 @@ function getComponents(ast, importMap) {
   return componentMap;
 }
 
-function updateStyleImports(code, componentName) {
-  return code
-    .clone()
-    .replace(`./${componentName}-styles.js`, `./styles/${componentName}-styles.js`)
-    .replace(/^.*import \{ css \}.*$/mu, `import { css } from 'lit';`);
-}
-
 function updateComponentStylesJSFile(componentName, { styleGetterNodes, styleGetterReturnStatement }) {
   const file = `packages/${pkg}/src/styles/${componentName}-styles.js`;
   const code = new MagicString(fs.existsSync(file) ? fs.readFileSync(file, 'utf-8') : '');
@@ -139,9 +132,7 @@ function updateComponentStylesTSFile(componentName) {
 }
 
 function updateComponentFile(file, componentName, { styleGetterNodes, styleGetterReturnStatement }) {
-  let code = new MagicString(fs.readFileSync(file, 'utf-8'));
-
-  code = updateStyleImports(code, componentName);
+  const code = new MagicString(fs.readFileSync(file, 'utf-8'));
 
   styleGetterNodes.forEach(({ relatedImportNode }) => {
     if (relatedImportNode) {
@@ -156,6 +147,8 @@ function updateComponentFile(file, componentName, { styleGetterNodes, styleGette
   );
 
   code.prepend(`import { ${camelcase(componentName)}Styles } from './styles/${componentName}-styles.js';\n`);
+
+  code.replace(`./${componentName}-styles.js`, `./styles/${componentName}-styles.js`);
 
   fs.writeFileSync(file, `${code}`, 'utf-8');
 }
