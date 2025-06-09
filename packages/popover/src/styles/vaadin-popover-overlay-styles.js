@@ -4,8 +4,9 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { css } from 'lit';
+import { overlayStyles } from '@vaadin/overlay/src/vaadin-overlay-styles.js';
 
-export const popoverOverlayStyles = css`
+export const popoverOverlay = css`
   :host {
     --_vaadin-popover-content-width: auto;
     --_vaadin-popover-content-height: auto;
@@ -70,3 +71,5 @@ export const popoverOverlayStyles = css`
     display: block;
   }
 `;
+
+export const popoverOverlayStyles = [overlayStyles, popoverOverlay];

@@ -5,4 +5,6 @@
  */
 import type { CSSResult } from 'lit';
 
+export const popoverOverlay: CSSResult;
+
 export const popoverOverlayStyles: CSSResult;
