@@ -82,9 +82,7 @@ class ConfirmDialogOverlay extends OverlayMixin(DirMixin(ThemableMixin(CSSInject
 
     Object.keys(parsedBounds).forEach((arg) => {
       // Allow setting width or height to `null`
-      if (parsedBounds[arg] == null) {
-        parsedBounds[arg] = null;
-      } else if (!isNaN(parsedBounds[arg])) {
+      if (parsedBounds[arg] !== null && !isNaN(parsedBounds[arg])) {
         parsedBounds[arg] = `${parsedBounds[arg]}px`;
       }
     });
