@@ -5,4 +5,4 @@
  */
 import type { CSSResult } from 'lit';
 
-export declare const confirmDialogOverlayStyles: CSSResult;
+export const confirmDialogOverlayStyles: CSSResult;

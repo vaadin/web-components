@@ -31,4 +31,5 @@ const confirmDialogOverlay = css`
     pointer-events: all;
   }
 `;
+
 export const confirmDialogOverlayStyles = [overlayStyles, dialogOverlay, confirmDialogOverlay];
