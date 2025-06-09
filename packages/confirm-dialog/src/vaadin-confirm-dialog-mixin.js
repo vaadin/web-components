@@ -165,6 +165,22 @@ export const ConfirmDialogMixin = (superClass) =>
         },
 
         /**
+         * Set the height of the overlay.
+         * If a unitless number is provided, pixels are assumed.
+         */
+        height: {
+          type: String,
+        },
+
+        /**
+         * Set the width of the overlay.
+         * If a unitless number is provided, pixels are assumed.
+         */
+        width: {
+          type: String,
+        },
+
+        /**
          * A reference to the "Cancel" button which will be teleported to the overlay.
          * @private
          */
@@ -212,22 +228,6 @@ export const ConfirmDialogMixin = (superClass) =>
          */
         _rejectButton: {
           type: Object,
-        },
-
-        /**
-         * Height to be set on the overlay content.
-         * @protected
-         */
-        _contentHeight: {
-          type: String,
-        },
-
-        /**
-         * Width to be set on the overlay content.
-         * @protected
-         */
-        _contentWidth: {
-          type: String,
         },
       };
     }

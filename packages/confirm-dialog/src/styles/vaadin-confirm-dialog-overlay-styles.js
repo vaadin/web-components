@@ -8,16 +8,6 @@ import { dialogOverlayBase } from '@vaadin/dialog/src/styles/vaadin-dialog-overl
 import { overlayStyles } from '@vaadin/overlay/src/vaadin-overlay-styles.js';
 
 const confirmDialogOverlay = css`
-  :host {
-    --_vaadin-confirm-dialog-content-width: auto;
-    --_vaadin-confirm-dialog-content-height: auto;
-  }
-
-  [part='overlay'] {
-    width: var(--_vaadin-confirm-dialog-content-width);
-    height: var(--_vaadin-confirm-dialog-content-height);
-  }
-
   #resizerContainer {
     height: 100%;
   }
