@@ -2,6 +2,26 @@ import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextFrame, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-dialog.js';
+import { css } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+
+const style = document.createElement('style');
+style.textContent = css`
+  /* Disable safe area */
+  vaadin-dialog-overlay {
+    inset: 0;
+  }
+
+  /* Disable optical centering */
+  vaadin-dialog-overlay::after {
+    flex-grow: 1;
+  }
+
+  /* Disable content padding */
+  vaadin-dialog-overlay::part(content) {
+    padding: 0;
+  }
+`;
+document.head.append(style);
 
 customElements.define(
   'internally-draggable',
@@ -251,6 +271,11 @@ describe('resizable', () => {
     const resizeContainer = dialog.$.overlay.$.resizerContainer;
     resizeContainer.scrollTop = 1;
     expect(resizeContainer.scrollTop).to.equal(1);
+
+    // TODO change to this with base styles
+    // const content = dialog.$.overlay.$.content;
+    // content.scrollTop = 1;
+    // expect(content.scrollTop).to.equal(1);
   });
 
   it('should expand content with relative height', () => {
@@ -865,8 +890,25 @@ describe('overflowing content', () => {
     await nextFrame();
     overlay.$.content.style.padding = '20px';
     container.scrollTop = 100;
+    // TODO change to this with new base styles
+    // overlay.$.content.scrollTop = 100;
     resize(overlayPart.querySelector('.s'), 0, -50);
     await nextFrame();
     expect(container.scrollTop).to.equal(100);
+    // TODO change to this with new base styles
+    // expect(overlay.$.content.scrollTop).to.equal(100);
+  });
+
+  it('short dialog should change scroll container', async () => {
+    const div = document.createElement('div');
+    div.textContent = Array(100).join('Lorem ipsum dolor sit amet');
+    overlay.appendChild(div);
+    dialog.$.overlay.setBounds({ height: 100 });
+    await nextFrame();
+    overlay.$.content.style.padding = '20px';
+    const contentOverflow = getComputedStyle(overlay.$.content).overflow;
+    const containerOverflow = getComputedStyle(container).overflow;
+    expect(contentOverflow).to.not.equal('auto');
+    expect(containerOverflow).to.equal('auto');
   });
 });
