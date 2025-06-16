@@ -78,6 +78,7 @@ export const formItemStyles = css`
 
   #content {
     flex: 1 1 auto;
+    min-width: 0;
   }
 
   #content ::slotted(.full-width) {
