@@ -90,8 +90,9 @@ export const dialogOverlayBase = css`
       display: none !important;
     }
 
-    [part='content'] {
-      min-width: 12em;
+    /* Prevent the content from collapsing completely */
+    :host(:not([has-bounds-set])) [part='overlay'] {
+      min-width: 4em;
     }
   }
 `;

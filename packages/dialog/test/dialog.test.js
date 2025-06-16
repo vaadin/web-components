@@ -220,11 +220,11 @@ describe('vaadin-dialog', () => {
       }
     });
 
-    it('should have min-width for content', async () => {
+    it('should have min-width when not explicitly sized', async () => {
       dialog.opened = true;
       await nextRender();
-      const contentMinWidth = parseFloat(getComputedStyle(dialog.$.overlay.$.content).minWidth);
-      expect(contentMinWidth).to.be.gt(0);
+      const overlayMinWidth = parseFloat(getComputedStyle(dialog.$.overlay.$.overlay).minWidth);
+      expect(overlayMinWidth).to.be.gt(0);
     });
   });
 
