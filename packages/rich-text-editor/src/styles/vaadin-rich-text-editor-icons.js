@@ -8,6 +8,8 @@
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
+import { css } from 'lit';
+
 const template = document.createElement('template');
 
 template.innerHTML = `
@@ -35,3 +37,54 @@ template.innerHTML = `
 `;
 
 document.head.appendChild(template.content);
+
+export const icons = css`
+  [part~='toolbar-button-align-center']::before {
+    content: var(--vaadin-rte-icons-align-center);
+  }
+
+  [part~='toolbar-button-align-left']::before {
+    content: var(--vaadin-rte-icons-align-left);
+  }
+
+  [part~='toolbar-button-align-right']::before {
+    content: var(--vaadin-rte-icons-align-right);
+  }
+
+  [part~='toolbar-button-clean']::before {
+    content: var(--vaadin-rte-icons-clean);
+  }
+
+  [part~='toolbar-button-image']::before {
+    content: var(--vaadin-rte-icons-image);
+  }
+
+  [part~='toolbar-button-link']::before {
+    content: var(--vaadin-rte-icons-link);
+  }
+
+  [part~='toolbar-button-list-bullet']::before {
+    content: var(--vaadin-rte-icons-list-bullet);
+  }
+
+  [part~='toolbar-button-list-ordered']::before {
+    content: var(--vaadin-rte-icons-list-ordered);
+  }
+
+  [part~='toolbar-button-redo']::before {
+    content: var(--vaadin-rte-icons-redo);
+  }
+
+  [part~='toolbar-button-undo']::before {
+    content: var(--vaadin-rte-icons-undo);
+  }
+
+  /* RTL specific styles */
+  :host([dir='rtl']) [part~='toolbar-button-redo']::before {
+    content: var(--vaadin-rte-icons-undo);
+  }
+
+  :host([dir='rtl']) [part~='toolbar-button-undo']::before {
+    content: var(--vaadin-rte-icons-redo);
+  }
+`;
