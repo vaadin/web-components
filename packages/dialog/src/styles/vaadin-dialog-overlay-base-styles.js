@@ -85,6 +85,13 @@ export const dialogOverlayBase = css`
       overflow-wrap: anywhere;
     }
 
+    [part='title'] {
+      color: var(--vaadin-dialog-title-color, var(--_vaadin-color-strong));
+      font-weight: var(--vaadin-dialog-title-font-weight, 600);
+      font-size: var(--vaadin-dialog-title-font-size, 1em);
+      line-height: var(--vaadin-dialog-title-line-height, inherit);
+    }
+
     [part='header-content'] {
       flex: 1;
     }
