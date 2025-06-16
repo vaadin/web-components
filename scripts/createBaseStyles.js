@@ -19,8 +19,10 @@ function write(file, code) {
   fs.writeFileSync(file, code.toString(), 'utf-8');
 }
 
-for (const file of globSync([`packages/*/src/**/*-styles.{js,ts}`])) {
-  if (file.endsWith('-core-styles.js') || file.endsWith('-base-styles.js')) {
+const EXCLUDE = ['field-base', 'a11y-base', 'component-base', 'vaadin-lumo-styles'];
+
+for (const file of globSync([`packages/!(${EXCLUDE.join('|')})/src/**/*-styles*`])) {
+  if (file.includes('-core-styles') || file.includes('-base-styles')) {
     continue;
   }
 
@@ -51,16 +53,22 @@ for (const file of globSync([`packages/*/src/**/*-styles.{js,ts}`])) {
   write(baseFile, code);
 }
 
-for (const file of globSync([`packages/*/src/**/*.js`, `!packages/*/src/**/*-styles.js`])) {
+for (const file of globSync([`packages/!(${EXCLUDE.join('|')})/src/**/*.js`])) {
   const { code, module } = read(file);
 
   module.staticImports.forEach(({ moduleRequest }) => {
     const importPath = moduleRequest.value;
-    if (!importPath.endsWith('-styles.js')) {
+    if (!importPath.endsWith('-styles.js') || EXCLUDE.some((pkg) => importPath.includes(`/${pkg}/`))) {
       return;
     }
 
-    if (!importPath.endsWith('-core-styles.js') && !importPath.endsWith('-base-styles.js')) {
+    if (importPath.endsWith('-core-styles.js') || importPath.endsWith('-base-styles.js')) {
+      return;
+    }
+
+    if (file.includes('-base-styles')) {
+      code.update(moduleRequest.start, moduleRequest.end, `'${importPath.replace('-styles.js', '-base-styles.js')}'`);
+    } else {
       code.update(moduleRequest.start, moduleRequest.end, `'${importPath.replace('-styles.js', '-core-styles.js')}'`);
     }
   });
