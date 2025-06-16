@@ -134,8 +134,13 @@ const dialogResizableOverlay = css`
 
     /* Content part scrolls by default */
     [part='content'] {
-      overflow: auto;
       flex: 1;
+      min-height: 0;
+    }
+
+    :host([overflow]) [part='content'] {
+      overflow: auto;
+      overscroll-behavior: contain;
     }
 
     .resizer-container {
