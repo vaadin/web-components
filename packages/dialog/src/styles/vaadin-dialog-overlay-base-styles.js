@@ -61,6 +61,14 @@ export const dialogOverlayBase = css`
       padding: var(--vaadin-dialog-padding, var(--_vaadin-padding));
     }
 
+    :host([has-header]) [part='content'] {
+      padding-top: 0;
+    }
+
+    :host([has-footer]) [part='content'] {
+      padding-bottom: 0;
+    }
+
     [part='header'] {
       flex-wrap: nowrap;
     }
