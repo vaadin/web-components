@@ -45,7 +45,7 @@
     "@web/dev-server-esbuild": "^1.0.4",
     "@web/rollup-plugin-html": "~2.1.0",
     "@web/test-runner": "^0.20.2",
-    "@web/test-runner-playwright": "^0.11.0",
+    "@web/test-runner-playwright": "^0.11.1",
     "@web/test-runner-saucelabs": "^0.13.0",
     "@web/test-runner-visual-regression": "^0.10.0",
     "axios": "^1.9.0",
@@ -77,7 +77,7 @@
   },
   "resolutions": {
     "svg2ttf": "6.0.3",
-    "playwright": "^1.52.0"
+    "playwright": "^1.53.0"
   },
   "lint-staged": {
     "*.{js,ts}": [
