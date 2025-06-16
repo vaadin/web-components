@@ -8,7 +8,7 @@ import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { progressBarStyles } from './vaadin-progress-bar-styles.js';
+import { progressBarStyles } from './styles/vaadin-progress-bar-styles.js';
 import { ProgressMixin } from './vaadin-progress-mixin.js';
 
 /**

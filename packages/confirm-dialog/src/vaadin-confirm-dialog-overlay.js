@@ -10,14 +10,11 @@ import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { OverlayClassMixin } from '@vaadin/component-base/src/overlay-class-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { DialogBaseMixin } from '@vaadin/dialog/src/vaadin-dialog-base-mixin.js';
-import { dialogOverlay } from '@vaadin/dialog/src/vaadin-dialog-styles.js';
 import { OverlayMixin } from '@vaadin/overlay/src/vaadin-overlay-mixin.js';
-import { overlayStyles } from '@vaadin/overlay/src/vaadin-overlay-styles.js';
 import { CSSInjectionMixin } from '@vaadin/vaadin-themable-mixin/css-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
-import { ConfirmDialogBaseMixin } from './vaadin-confirm-dialog-base-mixin.js';
-import { confirmDialogOverlay } from './vaadin-confirm-dialog-overlay-styles.js';
+import { confirmDialogOverlayStyles } from './styles/vaadin-confirm-dialog-overlay-styles.js';
 
 /**
  * An element used internally by `<vaadin-confirm-dialog>`. Not intended to be used separately.
@@ -35,7 +32,7 @@ class ConfirmDialogOverlay extends OverlayMixin(DirMixin(ThemableMixin(CSSInject
   }
 
   static get styles() {
-    return [overlayStyles, dialogOverlay, confirmDialogOverlay];
+    return confirmDialogOverlayStyles;
   }
 
   /** @protected */
@@ -75,6 +72,23 @@ class ConfirmDialogOverlay extends OverlayMixin(DirMixin(ThemableMixin(CSSInject
     this.setAttribute('has-header', '');
     this.setAttribute('has-footer', '');
   }
+
+  /**
+   * Updates the coordinates of the overlay.
+   */
+  setBounds(bounds) {
+    const overlay = this.$.overlay;
+    const parsedBounds = { ...bounds };
+
+    Object.keys(parsedBounds).forEach((arg) => {
+      // Allow setting width or height to `null`
+      if (parsedBounds[arg] !== null && !isNaN(parsedBounds[arg])) {
+        parsedBounds[arg] = `${parsedBounds[arg]}px`;
+      }
+    });
+
+    Object.assign(overlay.style, parsedBounds);
+  }
 }
 
 defineCustomElement(ConfirmDialogOverlay);
@@ -83,9 +97,7 @@ defineCustomElement(ConfirmDialogOverlay);
  * An element used internally by `<vaadin-confirm-dialog>`. Not intended to be used separately.
  * @private
  */
-class ConfirmDialogDialog extends ConfirmDialogBaseMixin(
-  DialogBaseMixin(OverlayClassMixin(ThemePropertyMixin(PolylitMixin(LitElement)))),
-) {
+class ConfirmDialogDialog extends DialogBaseMixin(OverlayClassMixin(ThemePropertyMixin(PolylitMixin(LitElement)))) {
   static get is() {
     return 'vaadin-confirm-dialog-dialog';
   }
@@ -96,6 +108,20 @@ class ConfirmDialogDialog extends ConfirmDialogBaseMixin(
         display: none;
       }
     `;
+  }
+
+  static get properties() {
+    return {
+      /**
+       * Set the `aria-label` attribute for assistive technologies like
+       * screen readers. An empty string value for this property (the
+       * default) means that the `aria-label` attribute is not present.
+       */
+      ariaLabel: {
+        type: String,
+        value: '',
+      },
+    };
   }
 
   /** @protected */

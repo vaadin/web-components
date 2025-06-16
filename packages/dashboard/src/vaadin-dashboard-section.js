@@ -12,10 +12,10 @@ import { html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
-import { css, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { dashboardSectionStyles } from './styles/vaadin-dashboard-section-styles.js';
 import { DashboardItemMixin } from './vaadin-dashboard-item-mixin.js';
 import { getDefaultI18n } from './vaadin-dashboard-item-mixin.js';
-import { hasWidgetWrappers } from './vaadin-dashboard-styles.js';
 
 /**
  * A section component for use with the Dashboard component
@@ -75,45 +75,7 @@ class DashboardSection extends DashboardItemMixin(ElementMixin(ThemableMixin(Pol
   }
 
   static get styles() {
-    return [
-      css`
-        :host {
-          display: grid;
-          position: relative;
-          grid-template-columns: subgrid;
-          --_section-column: 1 / calc(var(--_effective-col-count) + 1);
-          grid-column: var(--_section-column) !important;
-          gap: var(--_gap, 1rem);
-          /* Dashboard section header height */
-          --_section-header-height: minmax(0, auto);
-          grid-template-rows: var(--_section-header-height) repeat(auto-fill, var(--_row-height));
-          grid-auto-rows: var(--_row-height);
-        }
-
-        :host([hidden]) {
-          display: none !important;
-        }
-
-        ::slotted(*) {
-          --_item-column: span
-            min(var(--vaadin-dashboard-widget-colspan, 1), var(--_effective-col-count, var(--_col-count)));
-
-          grid-column: var(--_item-column);
-          --_item-row: span var(--vaadin-dashboard-widget-rowspan, 1);
-          grid-row: var(--_item-row);
-        }
-
-        header {
-          grid-column: var(--_section-column);
-        }
-
-        :host::before {
-          z-index: 2 !important;
-        }
-      `,
-      hasWidgetWrappers,
-      super.styles,
-    ];
+    return dashboardSectionStyles;
   }
 
   static get properties() {

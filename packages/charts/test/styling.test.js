@@ -1,6 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, oneEvent } from '@vaadin/testing-helpers';
-import '../theme/vaadin-chart-base-theme.js';
 import './theme-styles.js';
 import '../src/vaadin-chart.js';
 

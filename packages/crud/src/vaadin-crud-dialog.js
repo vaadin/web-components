@@ -15,12 +15,10 @@ import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { OverlayClassMixin } from '@vaadin/component-base/src/overlay-class-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { DialogBaseMixin } from '@vaadin/dialog/src/vaadin-dialog-base-mixin.js';
-import { dialogOverlay, resizableOverlay } from '@vaadin/dialog/src/vaadin-dialog-styles.js';
 import { OverlayMixin } from '@vaadin/overlay/src/vaadin-overlay-mixin.js';
-import { overlayStyles } from '@vaadin/overlay/src/vaadin-overlay-styles.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
-import { crudDialogOverlayStyles } from './vaadin-crud-styles.js';
+import { crudDialogOverlayStyles } from './styles/vaadin-crud-dialog-overlay-styles.js';
 
 /**
  * An element used internally by `<vaadin-crud>`. Not intended to be used separately.
@@ -38,7 +36,7 @@ class CrudDialogOverlay extends OverlayMixin(DirMixin(ThemableMixin(PolylitMixin
   }
 
   static get styles() {
-    return [overlayStyles, dialogOverlay, resizableOverlay, crudDialogOverlayStyles];
+    return crudDialogOverlayStyles;
   }
 
   /** @protected */

@@ -9,8 +9,8 @@ import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { messageStyles } from './styles/vaadin-message-styles.js';
 import { MessageMixin } from './vaadin-message-mixin.js';
-import { messageStyles } from './vaadin-message-styles.js';
 
 /**
  * `<vaadin-message>` is a Web Component for showing a single message with an author, message and time.

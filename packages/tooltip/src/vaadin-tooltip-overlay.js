@@ -7,11 +7,11 @@ import { html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
-import { overlayStyles } from '@vaadin/overlay/src/vaadin-overlay-styles.js';
+import { overlayStyles } from '@vaadin/overlay/src/styles/vaadin-overlay-core-styles.js';
 import { PopoverOverlayMixin } from '@vaadin/popover/src/vaadin-popover-overlay-mixin.js';
 import { CSSInjectionMixin } from '@vaadin/vaadin-themable-mixin/css-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { tooltipOverlayStyles } from './vaadin-tooltip-overlay-styles.js';
+import { tooltipOverlayStyles } from './styles/vaadin-tooltip-overlay-core-styles.js';
 
 /**
  * An element used internally by `<vaadin-tooltip>`. Not intended to be used separately.

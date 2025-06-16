@@ -21,7 +21,8 @@
   "type": "module",
   "files": [
     "src",
-    "!src/vaadin-input-container-base-styles.js",
+    "!src/styles/*-base-styles.d.ts",
+    "!src/styles/*-base-styles.js",
     "theme",
     "vaadin-*.d.ts",
     "vaadin-*.js"

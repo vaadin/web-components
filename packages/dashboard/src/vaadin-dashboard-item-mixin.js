@@ -14,7 +14,6 @@ import { FocusTrapController } from '@vaadin/a11y-base/src/focus-trap-controller
 import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
 import { KeyboardController } from './keyboard-controller.js';
 import { fireMove, fireRemove, fireResize } from './vaadin-dashboard-helpers.js';
-import { dashboardWidgetAndSectionStyles } from './vaadin-dashboard-styles.js';
 
 const DEFAULT_I18N = {
   selectWidget: 'Select widget for editing',
@@ -47,10 +46,6 @@ export function getDefaultI18n() {
  */
 export const DashboardItemMixin = (superClass) =>
   class DashboardItemMixinClass extends ResizeMixin(superClass) {
-    static get styles() {
-      return dashboardWidgetAndSectionStyles;
-    }
-
     static get properties() {
       return {
         /** @protected */

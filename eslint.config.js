@@ -173,7 +173,7 @@ export default [
     },
   },
   {
-    files: ['scripts/**/*.js', '*.config.js', 'wtr-utils.js', 'custom-rules/**/*.js'],
+    files: ['scripts/**/*.js', '*.config.js', 'wtr-utils.js', 'custom-rules/**/*.js', 'packages/**/gulpfile.js'],
     languageOptions: {
       globals: {
         ...globals.node,
@@ -181,17 +181,6 @@ export default [
     },
     rules: {
       'no-console': 'off',
-    },
-  },
-  {
-    files: ['packages/**/gulpfile.cjs'],
-    languageOptions: {
-      globals: {
-        ...globals.node,
-      },
-    },
-    rules: {
-      '@typescript-eslint/no-require-imports': 'off',
     },
   },
   {

@@ -15,7 +15,8 @@ import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { I18nMixin } from '@vaadin/component-base/src/i18n-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
-import { css, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { dashboardStyles } from './styles/vaadin-dashboard-styles.js';
 import {
   getElementItem,
   getItemsArrayOfItem,
@@ -26,7 +27,6 @@ import {
 import { getDefaultI18n } from './vaadin-dashboard-item-mixin.js';
 import { DashboardLayoutMixin } from './vaadin-dashboard-layout-mixin.js';
 import { DashboardSection } from './vaadin-dashboard-section.js';
-import { hasWidgetWrappers } from './vaadin-dashboard-styles.js';
 import { WidgetReorderController } from './widget-reorder-controller.js';
 import { WidgetResizeController } from './widget-resize-controller.js';
 
@@ -116,16 +116,7 @@ class Dashboard extends DashboardLayoutMixin(
   }
 
   static get styles() {
-    return [
-      super.styles,
-      css`
-        #grid[item-resizing] {
-          -webkit-user-select: none;
-          user-select: none;
-        }
-      `,
-      hasWidgetWrappers,
-    ];
+    return dashboardStyles;
   }
 
   static get properties() {
