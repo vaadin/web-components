@@ -9,8 +9,8 @@ import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { CSSInjectionMixin } from '@vaadin/vaadin-themable-mixin/css-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { splitLayoutStyles } from './styles/vaadin-split-layout-styles.js';
 import { SplitLayoutMixin } from './vaadin-split-layout-mixin.js';
-import { splitLayoutStyles } from './vaadin-split-layout-styles.js';
 
 /**
  * `<vaadin-split-layout>` is a Web Component implementing a split layout for two
