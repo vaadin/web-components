@@ -8,8 +8,8 @@ import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { virtualListStyles } from './styles/vaadin-virtual-list-styles.js';
 import { VirtualListMixin } from './vaadin-virtual-list-mixin.js';
-import { virtualListStyles } from './vaadin-virtual-list-styles.js';
 
 /**
  * `<vaadin-virtual-list>` is a Web Component for displaying a virtual/infinite list of items.
@@ -46,7 +46,7 @@ class VirtualList extends VirtualListMixin(ThemableMixin(ElementMixin(PolylitMix
   }
 
   static get styles() {
-    return [virtualListStyles];
+    return virtualListStyles;
   }
 
   /** @protected */
