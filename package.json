@@ -74,8 +74,8 @@
     "stylelint": "^16.20.0",
     "stylelint-config-vaadin": "^1.0.0-alpha.2",
     "typescript": "^5.8.3",
-    "acorn": "^8.14.1",
-    "acorn-walk": "^8.3.4",
+    "oxc-parser": "^0.73.0",
+    "estree-walker": "^3.0.3",
     "magic-string": "^0.30.17",
     "astring": "^1.9.0"
   },
