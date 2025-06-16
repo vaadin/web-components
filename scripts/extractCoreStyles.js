@@ -209,7 +209,7 @@ function updateComponentCode({
   classNameCamelCase,
 }) {
   for (const styleGetterNode of styleGetterNodes) {
-    if (styleGetterNode.type !== 'Identifier') {
+    if (styleGetterNode.type !== 'Identifier' || styleGetterNode.name === `${classNameCamelCase}Styles`) {
       continue;
     }
 
@@ -266,7 +266,7 @@ for (const file of globSync([`packages/${pkg}/src/**/*.js`, `!packages/${pkg}/sr
     updateComponentStylesJSFile(`packages/${pkg}/src/styles/${tagName}-styles.js`, component);
     updateComponentStylesTSFile(`packages/${pkg}/src/styles/${tagName}-styles.d.ts`, component);
 
-    result.code = updateComponentCode(component);
+    updateComponentCode(component);
   }
 
   write(file, result.code);
