@@ -85,9 +85,7 @@ function getComponents(ast) {
       walk.simple(styleGetterReturnStatement, {
         TaggedTemplateExpression(node) {
           if (node.tag.name === 'css') {
-            styleGetterNodes.add({
-              node,
-            });
+            styleGetterNodes.add({ node });
           }
         },
         Identifier(node) {
@@ -97,6 +95,9 @@ function getComponents(ast) {
               relatedImportNode: importMap.get(node.name),
             });
           }
+        },
+        Super(node) {
+          styleGetterNodes.add({ node });
         },
       });
 
@@ -135,27 +136,28 @@ function updateComponentStylesJSFile(
     code.prepend(`import { css } from 'lit';\n`);
   }
 
-  if (exportMap.has(`${camelcase(componentName)}Styles`) && styleGetterReturnType !== 'Identifier') {
-    const { declaration } = exportMap.get(`${camelcase(componentName)}Styles`);
+  const exportValue = new MagicString(
+    astring.generate(styleGetterReturnStatement.argument).replace('super.styles', ''),
+  );
 
-    if (declaration.init.type !== styleGetterReturnStatement.argument.type) {
-      code.overwrite(declaration.id.start, declaration.id.end, camelcase(componentName));
-    }
-  }
+  if (styleGetterReturnType === 'ArrayExpression') {
+    if (exportMap.has(`${camelcase(componentName)}Styles`)) {
+      const { declaration } = exportMap.get(`${camelcase(componentName)}Styles`);
 
-  if (!variableMap.has(camelcase(componentName)) && styleGetterReturnType !== 'Identifier') {
-    for (const { node } of styleGetterNodes) {
-      if (node.type === 'TaggedTemplateExpression') {
-        code.append(`\nconst ${camelcase(componentName)} = ${astring.generate(node)};\n`);
+      if (declaration.init.type !== styleGetterReturnType) {
+        code.overwrite(declaration.id.start, declaration.id.end, camelcase(componentName));
       }
     }
-  }
 
-  const exportValue = new MagicString(astring.generate(styleGetterReturnStatement.argument));
-  exportValue.replace('super', 'css``');
+    if (!variableMap.has(camelcase(componentName))) {
+      for (const { node } of styleGetterNodes) {
+        if (node.type === 'TaggedTemplateExpression') {
+          code.append(`\nconst ${camelcase(componentName)} = ${astring.generate(node)};\n`);
+        }
+      }
+    }
 
-  if (styleGetterReturnStatement.argument.type !== 'TaggedTemplateExpression') {
-    walk.simple(acorn.parseExpressionAt(exportValue), {
+    walk.simple(acorn.parseExpressionAt(exportValue.toString()), {
       TaggedTemplateExpression(node) {
         if (node.tag.name === 'css') {
           exportValue.overwrite(node.start, node.end, `${camelcase(componentName)}`);
@@ -191,7 +193,11 @@ function updateComponentStylesTSFile(file, componentName) {
   write(file, code);
 }
 
-function updateComponentFile(file, componentName, { styleGetterNodes, styleGetterReturnStatement }) {
+function updateComponentFile(
+  file,
+  componentName,
+  { styleGetterNodes, styleGetterReturnStatement, styleGetterReturnType },
+) {
   const { code } = read(file);
 
   styleGetterNodes.forEach(({ relatedImportNode }) => {
@@ -200,11 +206,19 @@ function updateComponentFile(file, componentName, { styleGetterNodes, styleGette
     }
   });
 
-  code.overwrite(
-    styleGetterReturnStatement.start,
-    styleGetterReturnStatement.end,
-    `return ${camelcase(componentName)}Styles;`,
-  );
+  if (styleGetterReturnType === 'ArrayExpression' && [...styleGetterNodes].some(({ node }) => node.type === 'Super')) {
+    code.overwrite(
+      styleGetterReturnStatement.start,
+      styleGetterReturnStatement.end,
+      `return [super.styles, ${camelcase(componentName)}Styles];`,
+    );
+  } else {
+    code.overwrite(
+      styleGetterReturnStatement.start,
+      styleGetterReturnStatement.end,
+      `return ${camelcase(componentName)}Styles;`,
+    );
+  }
 
   code.prepend(`import { ${camelcase(componentName)}Styles } from './styles/${componentName}-styles.js';\n`);
 
