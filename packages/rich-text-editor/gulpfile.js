@@ -62,7 +62,7 @@ template.innerHTML = \`
 
 document.head.appendChild(template.content);
 
-export const iconsStyles = css\`\n`;
+export const icons = css\`\n`;
       glyphs.forEach((g, index) => {
         const name = g.name.replace(/\s/gu, '-').toLowerCase();
         output += `  [part~='toolbar-button-${name}']::before {
@@ -83,7 +83,7 @@ export const iconsStyles = css\`\n`;
     content: var(--vaadin-rte-icons-redo);
   }`;
       output += `\n\`;\n`;
-      fs.writeFile(`src/${fileName}.js`, output, (err) => {
+      fs.writeFile(`src/styles/${fileName}.js`, output, (err) => {
         if (err) {
           return console.error(err);
         }

@@ -38,7 +38,7 @@ template.innerHTML = `
 
 document.head.appendChild(template.content);
 
-export const iconsStyles = css`
+export const icons = css`
   [part~='toolbar-button-align-center']::before {
     content: var(--vaadin-rte-icons-align-center);
   }

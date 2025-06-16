@@ -18,8 +18,8 @@ import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { richTextEditorStyles } from './styles/vaadin-rich-text-editor-styles.js';
 import { RichTextEditorMixin } from './vaadin-rich-text-editor-mixin.js';
-import { richTextEditorStyles } from './vaadin-rich-text-editor-styles.js';
 
 /**
  * `<vaadin-rich-text-editor>` is a Web Component for rich text editing.
