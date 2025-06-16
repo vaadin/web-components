@@ -4,10 +4,11 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import './vaadin-upload-file.js';
-import { css, html, LitElement } from 'lit';
+import { html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { uploadFileListStyles } from './styles/vaadin-upload-file-list-styles.js';
 import { UploadFileListMixin } from './vaadin-upload-file-list-mixin.js';
 
 /**
@@ -25,21 +26,7 @@ class UploadFileList extends UploadFileListMixin(ThemableMixin(PolylitMixin(LitE
   }
 
   static get styles() {
-    return css`
-      :host {
-        display: block;
-      }
-
-      :host([hidden]) {
-        display: none !important;
-      }
-
-      [part='list'] {
-        padding: 0;
-        margin: 0;
-        list-style-type: none;
-      }
-    `;
+    return uploadFileListStyles;
   }
 
   /** @protected */
