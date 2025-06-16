@@ -8,8 +8,8 @@ import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { overlayStyles } from './styles/vaadin-overlay-core-styles.js';
 import { OverlayMixin } from './vaadin-overlay-mixin.js';
-import { overlayStyles } from './vaadin-overlay-styles.js';
 
 /**
  * `<vaadin-overlay>` is a Web Component for creating overlays. The content of the overlay
