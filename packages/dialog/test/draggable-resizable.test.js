@@ -591,6 +591,7 @@ describe('draggable', () => {
     button.style.marginBottom = '200px';
     dialog.$.overlay.setBounds({ height: '100px' });
     await nextUpdate(dialog);
+    // TODO use dialog.$.overlay.$.content.scrollTop with base styles
     container.scrollTop = 100;
     expect(container.scrollTop).to.equal(100);
     drag(container);
