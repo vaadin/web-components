@@ -83,7 +83,7 @@ export const iconsStyles = css\`\n`;
     content: var(--vaadin-rte-icons-redo);
   }`;
       output += `\n\`;\n`;
-      fs.writeFile(`src/${fileName}.js`, output, (err) => {
+      fs.writeFile(`src/styles/${fileName}.js`, output, (err) => {
         if (err) {
           return console.error(err);
         }
