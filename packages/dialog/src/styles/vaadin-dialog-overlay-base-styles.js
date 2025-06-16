@@ -51,6 +51,10 @@ export const dialogOverlayBase = css`
       gap: var(--vaadin-dialog-toolbar-gap, var(--_vaadin-gap-container-inline));
     }
 
+    ::slotted(*) {
+      pointer-events: auto;
+    }
+
     [part='header'],
     [part='content'],
     [part='footer'] {
@@ -65,7 +69,6 @@ export const dialogOverlayBase = css`
     ::slotted([slot='title']),
     ::slotted([slot='footer']) {
       display: contents;
-      pointer-events: auto;
     }
 
     ::slotted([slot='title']) {
