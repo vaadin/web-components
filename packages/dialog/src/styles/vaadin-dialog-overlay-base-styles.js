@@ -109,8 +109,9 @@ export const dialogOverlayBase = css`
     }
 
     /* Prevent the content from collapsing completely */
-    :host(:not([has-bounds-set])) [part='overlay'] {
-      min-width: 4em;
+    [part='overlay'] {
+      min-width: min(var(--vaadin-dialog-min-width, 4em), 100%);
+      max-width: var(--vaadin-dialog-max-width, none);
     }
   }
 `;
@@ -126,6 +127,7 @@ const dialogResizableOverlay = css`
     }
 
     :host([has-bounds-set]) [part='overlay'] {
+      min-width: 0;
       max-width: none;
       max-height: none;
     }
