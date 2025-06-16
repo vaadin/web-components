@@ -10,8 +10,9 @@ import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { CSSInjectionMixin } from '@vaadin/vaadin-themable-mixin/css-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { notificationCardStyles } from './styles/vaadin-notification-card-styles.js';
+import { notificationContainerStyles } from './styles/vaadin-notification-container-styles.js';
 import { NotificationContainerMixin, NotificationMixin } from './vaadin-notification-mixin.js';
-import { notificationCardStyles, notificationContainerStyles } from './vaadin-notification-styles.js';
 
 /**
  * An element used internally by `<vaadin-notification>`. Not intended to be used separately.

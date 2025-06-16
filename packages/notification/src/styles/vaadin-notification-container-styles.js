@@ -53,19 +53,3 @@ export const notificationContainerStyles = css`
     }
   }
 `;
-
-export const notificationCardStyles = css`
-  :host {
-    display: block;
-  }
-
-  [part='overlay'] {
-    pointer-events: auto;
-  }
-
-  @media (forced-colors: active) {
-    [part='overlay'] {
-      outline: 3px solid;
-    }
-  }
-`;
