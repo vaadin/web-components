@@ -104,25 +104,26 @@ describe('form-layout', () => {
     });
   });
 
-  describe('coslpan alignment', () => {
+  describe('colspan alignment', () => {
     beforeEach(() => {
       element = fixtureSync(`
         <vaadin-form-layout style="width: 645px; padding-inline: 2em;">
           <vaadin-form-item colspan="2">
-              <label slot="label">Address</label>
-              <vaadin-text-field class="full-width"></vaaadin-text-field>
-            </vaadin-form-item>
+            <label slot="label">Address</label>
+            <vaadin-text-field class="full-width"></vaadin-text-field>
+          </vaadin-form-item>
 
-            <vaadin-form-item>
-              <label slot="label">First Name</label>
-              <vaadin-text-field class="full-width"></vaaadin-text-field>
-            </vaadin-form-item>
+          <vaadin-form-item>
+            <label slot="label">First Name</label>
+            <vaadin-text-field class="full-width"></vaadin-text-field>
+          </vaadin-form-item>
 
-            <vaadin-form-item>
-              <label slot="label">Last Name</label>
-              <vaadin-text-field class="full-width"></vaaadin-text-field>
-            </vaadin-form-item>
-          </vaadin-form-layout> `);
+          <vaadin-form-item>
+            <label slot="label">Last Name</label>
+            <vaadin-text-field class="full-width"></vaadin-text-field>
+          </vaadin-form-item>
+        </vaadin-form-layout>
+      `);
     });
 
     it('colspan alignment', async () => {
