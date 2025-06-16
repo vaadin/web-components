@@ -898,17 +898,4 @@ describe('overflowing content', () => {
     // TODO change to this with new base styles
     // expect(overlay.$.content.scrollTop).to.equal(100);
   });
-
-  it('short dialog should change scroll container', async () => {
-    const div = document.createElement('div');
-    div.textContent = Array(100).join('Lorem ipsum dolor sit amet');
-    overlay.appendChild(div);
-    dialog.$.overlay.setBounds({ height: 100 });
-    await nextFrame();
-    overlay.$.content.style.padding = '20px';
-    const contentOverflow = getComputedStyle(overlay.$.content).overflow;
-    const containerOverflow = getComputedStyle(container).overflow;
-    expect(contentOverflow).to.not.equal('auto');
-    expect(containerOverflow).to.equal('auto');
-  });
 });

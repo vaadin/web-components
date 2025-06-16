@@ -102,20 +102,13 @@ const dialogResizableOverlay = css`
       position: relative;
       overflow: visible;
       display: flex;
+      /* Implicitly sized dialog is constrained by the viewport height */
+      max-height: 100%;
     }
 
     :host([has-bounds-set]) [part='overlay'] {
       max-width: none;
-    }
-
-    /* Create a size container when explicitly sized */
-    [part='overlay']:is([style*='height']) {
-      container-type: size;
-    }
-
-    /* Implicitly sized dialog is constrained by the viewport height */
-    [part='overlay']:not([style*='height']) {
-      max-height: 100%;
+      max-height: none;
     }
 
     /* Content part scrolls by default */
@@ -124,28 +117,9 @@ const dialogResizableOverlay = css`
       flex: 1;
     }
 
-    /* If the dialog is resized very small, the resizeContainer element scrolls */
-    @container (max-height: 12em) {
-      [part='content'] {
-        overflow: visible;
-        flex-shrink: 0;
-        flex-basis: auto;
-      }
-    }
-
-    /* Implicitly sized dialog, when constrained by a very small viewport height, allows the resizeContainer element to scroll */
-    @media (max-height: 12rem) {
-      [part='overlay']:not([style*='height']) [part='content'] {
-        overflow: visible;
-        flex-shrink: 0;
-        flex-basis: auto;
-      }
-    }
-
     .resizer-container {
       display: flex;
       flex-direction: column;
-      overflow: auto;
       flex-grow: 1;
       border-radius: inherit;
     }
