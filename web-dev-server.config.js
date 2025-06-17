@@ -1,5 +1,6 @@
 import { esbuildPlugin } from '@web/dev-server-esbuild';
 import fs from 'node:fs';
+import path from 'node:path';
 
 const theme = process.argv.join(' ').match(/--theme=(\w+)/u)?.[1] ?? 'lumo';
 const hasPortedParam = process.argv.includes('--ported');
@@ -58,11 +59,17 @@ export function enforceThemePlugin(theme) {
 
       return body;
     },
-    transformImport({ source }) {
+    transformImport({ source, context }) {
       if (theme === 'base' || theme === 'ported-lumo') {
-        // Load the base theme
         source = source.replace('/theme/lumo/', '/src/');
-        source = source.replace(/(.+)-core-styles\.js/u, '$1-base-styles.js');
+
+        const baseStylesResolvedPath = path.resolve(
+          path.dirname(context.url),
+          source.replace('-core-styles', '-base-styles'),
+        );
+        if (fs.existsSync(`.${baseStylesResolvedPath}`)) {
+          source = source.replace('-core-styles', '-base-styles');
+        }
       }
 
       return source;

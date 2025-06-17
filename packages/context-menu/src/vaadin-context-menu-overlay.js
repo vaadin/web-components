@@ -10,7 +10,7 @@ import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { OverlayMixin } from '@vaadin/overlay/src/vaadin-overlay-mixin.js';
 import { CSSInjectionMixin } from '@vaadin/vaadin-themable-mixin/css-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { contextMenuOverlayStyles } from './styles/vaadin-context-menu-overlay-styles.js';
+import { contextMenuOverlayStyles } from './styles/vaadin-context-menu-overlay-core-styles.js';
 import { MenuOverlayMixin } from './vaadin-menu-overlay-mixin.js';
 
 /**

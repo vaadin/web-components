@@ -7,7 +7,7 @@ import { html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { loginOverlayWrapperStyles } from './styles/vaadin-login-overlay-wrapper-styles.js';
+import { loginOverlayWrapperStyles } from './styles/vaadin-login-overlay-wrapper-core-styles.js';
 import { LoginOverlayWrapperMixin } from './vaadin-login-overlay-wrapper-mixin.js';
 
 /**

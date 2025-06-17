@@ -11,7 +11,7 @@ import { MenuOverlayMixin } from '@vaadin/context-menu/src/vaadin-menu-overlay-m
 import { OverlayMixin } from '@vaadin/overlay/src/vaadin-overlay-mixin.js';
 import { CSSInjectionMixin } from '@vaadin/vaadin-themable-mixin/css-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { menuBarOverlayStyles } from './styles/vaadin-menu-bar-overlay-styles.js';
+import { menuBarOverlayStyles } from './styles/vaadin-menu-bar-overlay-core-styles.js';
 
 /**
  * An element used internally by `<vaadin-menu-bar>`. Not intended to be used separately.
