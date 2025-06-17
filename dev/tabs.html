@@ -57,7 +57,23 @@
         if (e.target.value == 'icons') {
           document.querySelectorAll('vaadin-tab vaadin-icon').forEach((icon) => icon.remove());
           if (e.target.checked) {
-            document.querySelectorAll('vaadin-tab').forEach((item) => addIcon(item));
+            document.querySelectorAll('vaadin-tab:not(:has(a)), vaadin-tab a').forEach((item) => addIcon(item));
+          }
+        }
+
+        if (e.target.value == 'anchors') {
+          if (e.target.checked) {
+            document.querySelectorAll('vaadin-tab').forEach((tab) => {
+              const a = document.createElement('a');
+              a.href = '#';
+              a.innerHTML = tab.innerHTML;
+              tab.innerHTML = '';
+              tab.append(a);
+            });
+          } else {
+            document.querySelectorAll('vaadin-tab a').forEach((a) => {
+              a.parentElement.innerHTML = a.innerHTML;
+            });
           }
         }
       });
@@ -93,11 +109,12 @@
       <vaadin-checkbox label="Hide Scroll Buttons" value="hide-scroll-buttons"></vaadin-checkbox>
       <vaadin-checkbox label="Show Scroll Buttons" value="show-scroll-buttons"></vaadin-checkbox>
       <vaadin-checkbox label="Icons" value="icons"></vaadin-checkbox>
+      <vaadin-checkbox label="Anchors" value="anchors"></vaadin-checkbox>
     </vaadin-checkbox-group>
 
     <section>
       <vaadin-tabs>
-        <vaadin-tab> Analytics </vaadin-tab>
+        <vaadin-tab> Analytics lorem ipsum </vaadin-tab>
         <vaadin-tab> Customers </vaadin-tab>
         <vaadin-tab disabled> Dashboards </vaadin-tab>
         <vaadin-tab> Documents </vaadin-tab>
