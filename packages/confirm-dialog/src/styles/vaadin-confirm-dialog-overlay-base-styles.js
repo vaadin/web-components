@@ -5,7 +5,7 @@
  */
 import { css } from 'lit';
 import { dialogOverlayBase } from '@vaadin/dialog/src/styles/vaadin-dialog-overlay-core-styles.js';
-import { overlayStyles } from '@vaadin/overlay/src/vaadin-overlay-styles.js';
+import { overlayStyles } from '@vaadin/overlay/src/styles/vaadin-overlay-core-styles.js';
 
 const confirmDialogOverlay = css`
   @layer base {
