@@ -3,7 +3,8 @@
  * Copyright (c) 2017 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { eventInWindow, getMouseOrFirstTouchEvent } from './vaadin-dialog-utils.js';
+import { DialogManager, eventInWindow, getMouseOrFirstTouchEvent } from './vaadin-dialog-utils.js';
+
 /**
  * @polymerMixin
  */
@@ -26,8 +27,10 @@ export const DialogResizableMixin = (superClass) =>
     /** @protected */
     ready() {
       super.ready();
-      this._originalBounds = {};
-      this._originalMouseCoords = {};
+
+      // Get or create an instance of manager
+      this.__manager = DialogManager.create(this);
+
       this._resizeListeners = { start: {}, resize: {}, stop: {} };
       this._addResizeListeners();
     }
@@ -65,15 +68,12 @@ export const DialogResizableMixin = (superClass) =>
       if (e.button === 0 || e.touches) {
         e.preventDefault();
 
-        this._originalBounds = this.$.overlay.getBounds();
-        const event = getMouseOrFirstTouchEvent(e);
-        this._originalMouseCoords = { top: event.pageY, left: event.pageX };
         window.addEventListener('mousemove', this._resizeListeners.resize[direction]);
         window.addEventListener('touchmove', this._resizeListeners.resize[direction]);
         window.addEventListener('mouseup', this._resizeListeners.stop[direction]);
         window.addEventListener('touchend', this._resizeListeners.stop[direction]);
-        this.$.overlay.setBounds(this._originalBounds);
-        this.$.overlay.setAttribute('has-bounds-set', '');
+
+        this.__manager.handleEvent(e);
       }
     }
 
@@ -86,11 +86,15 @@ export const DialogResizableMixin = (superClass) =>
       const event = getMouseOrFirstTouchEvent(e);
       if (eventInWindow(event)) {
         const minimumSize = 40;
+        const { height: boundsHeight, width: boundsWidth, top: boundsTop, left: boundsLeft } = this.__manager.bounds;
+        const eventX = this.__manager.getEventX(event);
+        const eventY = this.__manager.getEventY(event);
+
         resizer.split('').forEach((direction) => {
           switch (direction) {
             case 'n': {
-              const height = this._originalBounds.height - (event.pageY - this._originalMouseCoords.top);
-              const top = this._originalBounds.top + (event.pageY - this._originalMouseCoords.top);
+              const height = boundsHeight - eventY;
+              const top = boundsTop + eventY;
               if (height > minimumSize) {
                 this.top = top;
                 this.height = height;
@@ -98,22 +102,22 @@ export const DialogResizableMixin = (superClass) =>
               break;
             }
             case 'e': {
-              const width = this._originalBounds.width + (event.pageX - this._originalMouseCoords.left);
+              const width = boundsWidth + eventX;
               if (width > minimumSize) {
                 this.width = width;
               }
               break;
             }
             case 's': {
-              const height = this._originalBounds.height + (event.pageY - this._originalMouseCoords.top);
+              const height = boundsHeight + eventY;
               if (height > minimumSize) {
                 this.height = height;
               }
               break;
             }
             case 'w': {
-              const width = this._originalBounds.width - (event.pageX - this._originalMouseCoords.left);
-              const left = this._originalBounds.left + (event.pageX - this._originalMouseCoords.left);
+              const width = boundsWidth - eventX;
+              const left = boundsLeft + eventX;
               if (width > minimumSize) {
                 this.left = left;
                 this.width = width;

@@ -18,3 +18,18 @@ export { getMouseOrFirstTouchEvent };
 declare function eventInWindow(e: MouseEvent | TouchEvent): boolean;
 
 export { eventInWindow };
+
+/**
+ * Internal class handling dialog bounds and coordinates.
+ */
+export declare class DialogManager {
+  static create(dialog: HTMLElement): DialogManager;
+
+  readonly bounds: { top: number; left: number; width: number; height: number };
+
+  handleEvent(event: MouseEvent | Touch): void;
+
+  getEventX(event: MouseEvent | Touch): number;
+
+  getEventY(event: MouseEvent | Touch): number;
+}

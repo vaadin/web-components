@@ -4,7 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
-import { eventInWindow, getMouseOrFirstTouchEvent } from './vaadin-dialog-utils.js';
+import { DialogManager, eventInWindow, getMouseOrFirstTouchEvent } from './vaadin-dialog-utils.js';
 
 /**
  * @polymerMixin
@@ -47,8 +47,10 @@ export const DialogDraggableMixin = (superClass) =>
     /** @protected */
     ready() {
       super.ready();
-      this._originalBounds = {};
-      this._originalMouseCoords = {};
+
+      // Get or create an instance of manager
+      this.__manager = DialogManager.create(this);
+
       this._startDrag = this._startDrag.bind(this);
       this._drag = this._drag.bind(this);
       this._stopDrag = this._stopDrag.bind(this);
@@ -86,15 +88,12 @@ export const DialogDraggableMixin = (superClass) =>
           if (!isDraggable) {
             e.preventDefault();
           }
-          this._originalBounds = this.$.overlay.getBounds();
-          const event = getMouseOrFirstTouchEvent(e);
-          this._originalMouseCoords = { top: event.pageY, left: event.pageX };
           window.addEventListener('mouseup', this._stopDrag);
           window.addEventListener('touchend', this._stopDrag);
           window.addEventListener('mousemove', this._drag);
           window.addEventListener('touchmove', this._drag);
-          this.$.overlay.setBounds(this._originalBounds);
-          this.$.overlay.setAttribute('has-bounds-set', '');
+
+          this.__manager.handleEvent(e);
         }
       }
     }
@@ -103,10 +102,9 @@ export const DialogDraggableMixin = (superClass) =>
     _drag(e) {
       const event = getMouseOrFirstTouchEvent(e);
       if (eventInWindow(event)) {
-        const top = this._originalBounds.top + (event.pageY - this._originalMouseCoords.top);
-        const left = this._originalBounds.left + (event.pageX - this._originalMouseCoords.left);
-        this.top = top;
-        this.left = left;
+        const { top, left } = this.__manager.bounds;
+        this.top = top + this.__manager.getEventY(event);
+        this.left = left + this.__manager.getEventX(event);
       }
     }
 

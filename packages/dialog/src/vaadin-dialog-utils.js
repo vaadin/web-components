@@ -24,3 +24,47 @@ export function getMouseOrFirstTouchEvent(e) {
 export function eventInWindow(e) {
   return e.clientX >= 0 && e.clientX <= window.innerWidth && e.clientY >= 0 && e.clientY <= window.innerHeight;
 }
+
+const instancesMap = new WeakMap();
+
+/**
+ * Internal class handling dialog bounds and coordinates.
+ */
+export class DialogManager {
+  static create(dialog) {
+    if (instancesMap.has(dialog)) {
+      return instancesMap.get(dialog);
+    }
+
+    const instance = new DialogManager(dialog);
+    instancesMap.set(dialog, instance);
+    return instance;
+  }
+
+  constructor(dialog) {
+    this.host = dialog;
+    this.overlay = dialog.$.overlay;
+    this._originalBounds = {};
+    this._originalMouseCoords = {};
+  }
+
+  handleEvent(e) {
+    const event = getMouseOrFirstTouchEvent(e);
+    this._originalBounds = this.overlay.getBounds();
+    this._originalMouseCoords = { top: event.pageY, left: event.pageX };
+    this.overlay.setBounds(this._originalBounds);
+    this.overlay.setAttribute('has-bounds-set', '');
+  }
+
+  get bounds() {
+    return this._originalBounds;
+  }
+
+  getEventX(event) {
+    return event.pageX - this._originalMouseCoords.left;
+  }
+
+  getEventY(event) {
+    return event.pageY - this._originalMouseCoords.top;
+  }
+}
