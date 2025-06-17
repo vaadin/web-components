@@ -42,7 +42,6 @@ export class DialogManager {
   }
 
   constructor(dialog) {
-    this.host = dialog;
     this.overlay = dialog.$.overlay;
     this._originalBounds = {};
     this._originalMouseCoords = {};
