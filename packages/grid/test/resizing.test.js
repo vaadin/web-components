@@ -132,8 +132,11 @@ describe('resizing', () => {
     grid.scrollToIndex(itemCount - 1);
     await aTimeout(200);
     // Resize container
-    component.style.height = `${component.offsetHeight + 200}px`;
-    flushGrid(grid);
+    for (let i = 0; i < 10; i++) {
+      component.style.height = `${component.offsetHeight + 200}px`;
+      flushGrid(grid);
+      await aTimeout(50);
+    }
     const gridRect = grid.getBoundingClientRect();
     // Get an element from the area where new rows should be created
     const elementInResizedArea = document.elementFromPoint(gridRect.left + 1, gridRect.top + 50);

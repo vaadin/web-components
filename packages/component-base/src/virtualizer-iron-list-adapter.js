@@ -551,19 +551,9 @@ export class IronListAdapter {
     this._adjustVirtualIndexOffset(this._scrollTop - (this.__previousScrollTop || 0));
     const delta = this.scrollTarget.scrollTop - this._scrollPosition;
 
-    const lastIndexVisible = this.adjustedLastVisibleIndex === this.size - 1;
-    const hasEmptySpace = lastIndexVisible && this._physicalBottom < this._scrollBottom;
-
     super._scrollHandler();
 
-    const needToCreateItemsAbove = lastIndexVisible && (delta < 0 || hasEmptySpace);
-    if (needToCreateItemsAbove) {
-      const idxAdjustment = Math.round((delta - this._scrollOffset) / this._physicalAverage);
-      this._virtualStart = Math.max(0, this._virtualStart + idxAdjustment);
-      this._physicalStart = Math.max(0, this._physicalStart + idxAdjustment);
-      this._physicalTop = Math.min(Math.floor(this._virtualStart) * this._physicalAverage, this._scrollPosition);
-      this._update();
-    } else if (this._physicalCount !== 0) {
+    if (this._physicalCount !== 0) {
       const isScrollingDown = delta >= 0;
       const reusables = this._getReusables(!isScrollingDown);
 
@@ -606,6 +596,23 @@ export class IronListAdapter {
     // scroll to index 0 to fix the issue.
     if (this._scrollTop === 0 && this.firstVisibleIndex !== 0 && Math.abs(delta) > 0) {
       this.scrollToIndex(0);
+    }
+  }
+
+  /** @override */
+  _resizeHandler() {
+    super._resizeHandler();
+
+    // Fixes an issue where the new items are not created on scroll target resize when the scroll position is around the end.
+    // See https://github.com/vaadin/flow-components/issues/7307
+    const lastIndexVisible = this.adjustedLastVisibleIndex === this.size - 1;
+    const emptySpace = this._physicalTop - this._scrollPosition;
+    if (lastIndexVisible && emptySpace > 0) {
+      const idxAdjustment = Math.ceil(emptySpace / this._physicalAverage);
+      this._virtualStart = Math.max(0, this._virtualStart - idxAdjustment);
+      this._physicalStart = Math.max(0, this._physicalStart - idxAdjustment);
+      // Scroll to end for smoother resize
+      super.scrollToIndex(this._virtualCount - 1);
     }
   }
 

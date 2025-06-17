@@ -231,12 +231,8 @@ describe('virtualizer - scrollbar scrolling', () => {
       // Sanity check for iron-list internal properties
       const adapter = virtualizer.__adapter;
       const firstItem = adapter._physicalItems[adapter._physicalStart];
-      expect(firstItem.__virtualIndex).to.closeTo(adapter._virtualStart, 10);
+      expect(firstItem.__virtualIndex).to.equal(adapter._virtualStart);
     }
-
-    const adapter = virtualizer.__adapter;
-    const firstItem = adapter._physicalItems[adapter._physicalStart];
-    expect(firstItem.__virtualIndex).to.eq(adapter._virtualStart);
 
     // There should be an item at the bottom of the viewport
     await nextFrame();
