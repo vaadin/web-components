@@ -50,7 +50,7 @@ export const tabsStyles = css`
       pointer-events: none;
       opacity: 0;
       cursor: var(--vaadin-clickable-cursor);
-      padding: var(--vaadin-tabs-button-padding, var(--_vaadin-padding-container));
+      padding: var(--vaadin-tab-padding, var(--_vaadin-padding-container));
       background: var(--_vaadin-background);
       -webkit-tap-highlight-color: transparent;
       touch-action: manipulation;
