@@ -422,6 +422,9 @@ export const ConfirmDialogMixin = (superClass) =>
           button.setAttribute('theme', rejectTheme);
         }
         button.toggleAttribute('hidden', !showReject);
+        this.$.dialog.$.overlay.shadowRoot
+          .querySelector('[part="reject-button"]')
+          .toggleAttribute('hidden', !showReject);
       }
     }
 
