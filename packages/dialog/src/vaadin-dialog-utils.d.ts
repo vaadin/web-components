@@ -27,7 +27,7 @@ export declare class DialogManager {
 
   readonly bounds: { top: number; left: number; width: number; height: number };
 
-  handleEvent(event: MouseEvent | Touch): void;
+  handleEvent(event: MouseEvent | Touch, setBounds?: boolean): void;
 
   getEventXY(event: MouseEvent | Touch): { x: number; y: number };
 }

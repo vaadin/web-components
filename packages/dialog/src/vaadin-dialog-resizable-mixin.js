@@ -73,7 +73,7 @@ export const DialogResizableMixin = (superClass) =>
         window.addEventListener('mouseup', this._resizeListeners.stop[direction]);
         window.addEventListener('touchend', this._resizeListeners.stop[direction]);
 
-        this.__manager.handleEvent(e);
+        this.__manager.handleEvent(e, true);
       }
     }
 

@@ -47,12 +47,20 @@ export class DialogManager {
     this._originalMouseCoords = {};
   }
 
-  handleEvent(e) {
+  handleEvent(e, setBounds = false) {
     const event = getMouseOrFirstTouchEvent(e);
     this._originalBounds = this.overlay.getBounds();
     this._originalMouseCoords = { top: event.pageY, left: event.pageX };
-    this.overlay.setBounds(this._originalBounds);
-    this.overlay.setAttribute('has-bounds-set', '');
+
+    if (setBounds) {
+      // On resize, we should set width and height
+      this.overlay.setBounds(this._originalBounds);
+      this.overlay.setAttribute('has-bounds-set', '');
+    } else {
+      // On drag, we should only set top and left
+      const { top, left } = this._originalBounds;
+      this.overlay.setBounds({ top, left });
+    }
   }
 
   get bounds() {
