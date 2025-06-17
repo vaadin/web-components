@@ -64,22 +64,22 @@
     </script>
 
     <style>
-      vaadin-tabs[orientation=horizontal].size {
+      vaadin-tabs[orientation='horizontal'].size {
         width: 300px;
       }
 
-      vaadin-tabs[orientation=vertical].size {
+      vaadin-tabs[orientation='vertical'].size {
         height: 100px;
       }
 
       @media (pointer: coarse) {
-        vaadin-checkbox[value=hide-scroll-buttons] {
+        vaadin-checkbox[value='hide-scroll-buttons'] {
           opacity: 0.3;
         }
       }
 
       @media (pointer: fine) {
-        vaadin-checkbox[value=show-scroll-buttons] {
+        vaadin-checkbox[value='show-scroll-buttons'] {
           opacity: 0.3;
         }
       }
@@ -97,21 +97,11 @@
 
     <section>
       <vaadin-tabs>
-        <vaadin-tab>
-          Analytics
-        </vaadin-tab>
-        <vaadin-tab>
-          Customers
-        </vaadin-tab>
-        <vaadin-tab disabled>
-          Dashboards
-        </vaadin-tab>
-        <vaadin-tab>
-          Documents
-        </vaadin-tab>
-        <vaadin-tab>
-          Orders
-        </vaadin-tab>
+        <vaadin-tab> Analytics </vaadin-tab>
+        <vaadin-tab> Customers </vaadin-tab>
+        <vaadin-tab disabled> Dashboards </vaadin-tab>
+        <vaadin-tab> Documents </vaadin-tab>
+        <vaadin-tab> Orders </vaadin-tab>
       </vaadin-tabs>
     </section>
   </body>
