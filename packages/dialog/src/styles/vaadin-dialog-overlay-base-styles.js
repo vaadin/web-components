@@ -63,7 +63,7 @@ export const dialogOverlayBase = css`
       padding: var(--vaadin-dialog-padding, var(--_vaadin-padding));
     }
 
-    :host([has-header]) [part='content'] {
+    :host(:is([has-header], [has-title])) [part='content'] {
       padding-top: 0;
     }
 
