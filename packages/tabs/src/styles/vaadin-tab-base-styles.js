@@ -9,8 +9,10 @@ import { css } from 'lit';
 export const tabStyles = css`
   @layer base {
     :host {
+      flex-shrink: 0;
       display: flex;
-      place-items: center;
+      align-items: center;
+      justify-content: center;
       gap: var(--vaadin-tab-gap, var(--_vaadin-gap-container-inline));
       padding: var(--vaadin-tab-padding, var(--_vaadin-padding-container));
       cursor: var(--vaadin-clickable-cursor);
@@ -24,6 +26,7 @@ export const tabStyles = css`
       -webkit-user-select: none;
       user-select: none;
       touch-action: manipulation;
+      position: relative;
     }
 
     :host([hidden]) {
@@ -43,6 +46,28 @@ export const tabStyles = css`
     :host(:is([focus-ring], :focus-visible)) {
       outline: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
       outline-offset: calc(var(--vaadin-focus-ring-width) * -1);
+    }
+
+    slot {
+      gap: inherit;
+      align-items: inherit;
+      justify-content: inherit;
+    }
+
+    ::slotted(a) {
+      color: inherit;
+      cursor: inherit;
+      text-decoration: inherit;
+      display: flex;
+      align-items: inherit;
+      justify-content: inherit;
+      gap: inherit;
+    }
+
+    ::slotted(a)::before {
+      content: '';
+      position: absolute;
+      inset: 0;
     }
 
     @media (forced-colors: active) {
