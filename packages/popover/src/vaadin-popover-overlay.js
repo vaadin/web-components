@@ -9,7 +9,7 @@ import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { CSSInjectionMixin } from '@vaadin/vaadin-themable-mixin/css-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { popoverOverlayStyles } from './styles/vaadin-popover-overlay-styles.js';
+import { popoverOverlayStyles } from './styles/vaadin-popover-overlay-core-styles.js';
 import { PopoverOverlayMixin } from './vaadin-popover-overlay-mixin.js';
 
 /**

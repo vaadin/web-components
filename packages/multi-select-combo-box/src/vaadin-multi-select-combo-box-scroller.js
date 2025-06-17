@@ -9,7 +9,7 @@ import { ComboBoxScrollerMixin } from '@vaadin/combo-box/src/vaadin-combo-box-sc
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { CSSInjectionMixin } from '@vaadin/vaadin-themable-mixin/css-injection-mixin.js';
-import { multiSelectComboBoxScrollerStyles } from './styles/vaadin-multi-select-combo-box-scroller-styles.js';
+import { multiSelectComboBoxScrollerStyles } from './styles/vaadin-multi-select-combo-box-scroller-core-styles.js';
 
 /**
  * An element used internally by `<vaadin-multi-select-combo-box>`. Not intended to be used separately.

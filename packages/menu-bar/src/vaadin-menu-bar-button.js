@@ -5,7 +5,7 @@
  */
 import { Button } from '@vaadin/button/src/vaadin-button.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
-import { menuBarButtonStyles } from './styles/vaadin-menu-bar-button-styles.js';
+import { menuBarButtonStyles } from './styles/vaadin-menu-bar-button-core-styles.js';
 
 /**
  * An element used internally by `<vaadin-menu-bar>`. Not intended to be used separately.
