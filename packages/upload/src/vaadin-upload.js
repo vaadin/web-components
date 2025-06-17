@@ -12,6 +12,7 @@ import { ifDefined } from 'lit/directives/if-defined.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
+import { CSSInjectionMixin } from '@vaadin/vaadin-themable-mixin/css-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { uploadStyles } from './styles/vaadin-upload-core-styles.js';
 import { UploadMixin } from './vaadin-upload-mixin.js';
@@ -65,7 +66,7 @@ import { UploadMixin } from './vaadin-upload-mixin.js';
  * @mixes ElementMixin
  * @mixes UploadMixin
  */
-class Upload extends UploadMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElement)))) {
+class Upload extends UploadMixin(ElementMixin(ThemableMixin(CSSInjectionMixin(PolylitMixin(LitElement))))) {
   static get is() {
     return 'vaadin-upload';
   }

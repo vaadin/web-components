@@ -1,0 +1,27 @@
+/**
+ * @license
+ * Copyright (c) 2000 - 2025 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+@import './button.css';
+@import './progress-bar.css';
+
+@import '../src/mixins/base-layer-reset.css' vaadin-upload;
+@import '../src/components/upload.css' vaadin-upload;
+
+@import '../src/mixins/base-layer-reset.css' vaadin-upload-icon;
+@import '../src/components/upload-icon.css' vaadin-upload-icon;
+
+@import '../src/mixins/base-layer-reset.css' vaadin-upload-file;
+@import '../src/mixins/field-button.css' vaadin-upload-file;
+@import '../src/components/upload-file.css' vaadin-upload-file;
+
+@import '../src/mixins/base-layer-reset.css' vaadin-upload-file-list;
+@import '../src/components/upload-file-list.css' vaadin-upload-file-list;
+
+html {
+  --vaadin-upload-css-inject: 1;
+  --vaadin-upload-icon-css-inject: 1;
+  --vaadin-upload-file-css-inject: 1;
+  --vaadin-upload-file-list-css-inject: 1;
+}
