@@ -18,7 +18,7 @@ import { DialogBaseMixin } from '@vaadin/dialog/src/vaadin-dialog-base-mixin.js'
 import { OverlayMixin } from '@vaadin/overlay/src/vaadin-overlay-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
-import { crudDialogOverlayStyles } from './styles/vaadin-crud-dialog-overlay-styles.js';
+import { crudDialogOverlayStyles } from './styles/vaadin-crud-dialog-overlay-core-styles.js';
 
 /**
  * An element used internally by `<vaadin-crud>`. Not intended to be used separately.

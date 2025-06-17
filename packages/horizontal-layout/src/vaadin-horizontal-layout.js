@@ -9,7 +9,7 @@ import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { CSSInjectionMixin } from '@vaadin/vaadin-themable-mixin/css-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { horizontalLayoutStyles } from './styles/vaadin-horizontal-layout-styles.js';
+import { horizontalLayoutStyles } from './styles/vaadin-horizontal-layout-core-styles.js';
 import { HorizontalLayoutMixin } from './vaadin-horizontal-layout-mixin.js';
 
 /**

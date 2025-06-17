@@ -14,7 +14,7 @@ import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { inputFieldShared } from '@vaadin/field-base/src/styles/input-field-shared-styles.js';
 import { CSSInjectionMixin } from '@vaadin/vaadin-themable-mixin/css-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { multiSelectComboBoxStyles } from './styles/vaadin-multi-select-combo-box-styles.js';
+import { multiSelectComboBoxStyles } from './styles/vaadin-multi-select-combo-box-core-styles.js';
 import { MultiSelectComboBoxMixin } from './vaadin-multi-select-combo-box-mixin.js';
 
 /**

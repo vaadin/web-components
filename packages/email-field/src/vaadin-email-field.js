@@ -5,7 +5,7 @@
  */
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { TextField } from '@vaadin/text-field/src/vaadin-text-field.js';
-import { emailFieldStyles } from './styles/vaadin-email-field-styles.js';
+import { emailFieldStyles } from './styles/vaadin-email-field-core-styles.js';
 
 /**
  * `<vaadin-email-field>` is a Web Component for email field control in forms.

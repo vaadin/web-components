@@ -14,7 +14,7 @@ import { OverlayMixin } from '@vaadin/overlay/src/vaadin-overlay-mixin.js';
 import { CSSInjectionMixin } from '@vaadin/vaadin-themable-mixin/css-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
-import { confirmDialogOverlayStyles } from './styles/vaadin-confirm-dialog-overlay-styles.js';
+import { confirmDialogOverlayStyles } from './styles/vaadin-confirm-dialog-overlay-core-styles.js';
 
 /**
  * An element used internally by `<vaadin-confirm-dialog>`. Not intended to be used separately.

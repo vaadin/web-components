@@ -9,7 +9,7 @@ import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { cardStyles } from './styles/vaadin-card-styles.js';
+import { cardStyles } from './styles/vaadin-card-core-styles.js';
 
 /**
  * `<vaadin-card>` is a versatile container for grouping related content and actions.

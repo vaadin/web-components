@@ -9,7 +9,7 @@ import { html, LitElement, nothing } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { uploadFileStyles } from './styles/vaadin-upload-file-styles.js';
+import { uploadFileStyles } from './styles/vaadin-upload-file-core-styles.js';
 import { UploadFileMixin } from './vaadin-upload-file-mixin.js';
 
 /**
