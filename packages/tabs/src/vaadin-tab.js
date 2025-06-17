@@ -10,7 +10,7 @@ import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { ItemMixin } from '@vaadin/item/src/vaadin-item-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { tabStyles } from './styles/vaadin-tab-styles.js';
+import { tabStyles } from './styles/vaadin-tab-core-styles.js';
 
 /**
  * `<vaadin-tab>` is a Web Component providing an accessible and customizable tab.

@@ -11,8 +11,8 @@ import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
 import { SlotStylesMixin } from '@vaadin/component-base/src/slot-styles-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { masterDetailLayoutStyles } from './styles/vaadin-master-detail-layout-styles.js';
-import { masterDetailLayoutTransitionStyles } from './styles/vaadin-master-detail-layout-transition-styles.js';
+import { masterDetailLayoutStyles } from './styles/vaadin-master-detail-layout-core-styles.js';
+import { masterDetailLayoutTransitionStyles } from './styles/vaadin-master-detail-layout-transition-core-styles.js';
 
 /**
  * `<vaadin-master-detail-layout>` is a web component for building UIs with a master

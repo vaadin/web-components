@@ -10,7 +10,7 @@ import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { tabSheetStyles } from './styles/vaadin-tabsheet-styles.js';
+import { tabSheetStyles } from './styles/vaadin-tabsheet-core-styles.js';
 import { TabSheetMixin } from './vaadin-tabsheet-mixin.js';
 
 /**

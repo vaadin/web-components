@@ -7,7 +7,7 @@ import { html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { loginFormWrapperStyles } from './styles/vaadin-login-form-wrapper-styles.js';
+import { loginFormWrapperStyles } from './styles/vaadin-login-form-wrapper-core-styles.js';
 
 /**
  * An element used internally by `<vaadin-login-form>`. Not intended to be used separately.

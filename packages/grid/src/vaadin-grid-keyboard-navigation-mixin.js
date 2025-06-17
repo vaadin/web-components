@@ -280,7 +280,7 @@ export const KeyboardNavigationMixin = (superClass) =>
       if (!targetRowInDom) {
         this._scrollToFlatIndex(index);
       } else {
-        this.__scrollIntoViewport(index);
+        this.__scrollIntoViewport(targetRowInDom);
       }
     }
 

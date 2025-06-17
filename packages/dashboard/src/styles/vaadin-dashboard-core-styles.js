@@ -9,7 +9,7 @@
  * license.
  */
 import { css } from 'lit';
-import { dashboardLayoutStyles } from './vaadin-dashboard-layout-styles.js';
+import { dashboardLayoutStyles } from './vaadin-dashboard-layout-core-styles.js';
 
 const dashboard = css`
   #grid[item-resizing] {

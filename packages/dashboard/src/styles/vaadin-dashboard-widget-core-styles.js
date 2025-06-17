@@ -9,7 +9,7 @@
  * license.
  */
 import { css } from 'lit';
-import { dashboardWidgetAndSectionStyles } from './vaadin-dashboard-widget-section-styles.js';
+import { dashboardWidgetAndSectionStyles } from './vaadin-dashboard-widget-section-core-styles.js';
 
 const widgetStyles = css`
   :host {

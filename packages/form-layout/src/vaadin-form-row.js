@@ -7,7 +7,7 @@ import { html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { formRowStyles } from './styles/vaadin-form-row-styles.js';
+import { formRowStyles } from './styles/vaadin-form-row-core-styles.js';
 
 /**
  * `<vaadin-form-row>` is a web component for arranging fields into rows
