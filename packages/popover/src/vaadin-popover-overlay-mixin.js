@@ -57,21 +57,6 @@ export const PopoverOverlayMixin = (superClass) =>
       return 'vaadin-popover';
     }
 
-    requestContentUpdate() {
-      super.requestContentUpdate();
-
-      // Copy custom properties from the owner
-      if (this.positionTarget && this.owner) {
-        const style = getComputedStyle(this.owner);
-        ['top', 'bottom', 'start', 'end'].forEach((prop) => {
-          this.style.setProperty(
-            `--${this._tagNamePrefix}-offset-${prop}`,
-            style.getPropertyValue(`--${this._tagNamePrefix}-offset-${prop}`),
-          );
-        });
-      }
-    }
-
     /**
      * @protected
      * @override
@@ -81,6 +66,15 @@ export const PopoverOverlayMixin = (superClass) =>
 
       if (!this.positionTarget || !this.opened) {
         return;
+      }
+
+      // Copy custom properties from the owner
+      if (this.owner) {
+        const style = getComputedStyle(this.owner);
+        ['top', 'bottom', 'start', 'end'].forEach((prop) => {
+          const propertyName = `--${this._tagNamePrefix}-offset-${prop}`;
+          this.style.setProperty(propertyName, style.getPropertyValue(propertyName));
+        });
       }
 
       this.removeAttribute('arrow-centered');
