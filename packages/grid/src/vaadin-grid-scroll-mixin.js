@@ -8,7 +8,6 @@ import { animationFrame, microTask, timeOut } from '@vaadin/component-base/src/a
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { getNormalizedScrollLeft } from '@vaadin/component-base/src/dir-utils.js';
 import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
-import { isCell } from './vaadin-grid-keyboard-navigation-mixin.js';
 
 const timeouts = {
   SCROLLING: 500,
@@ -126,15 +125,22 @@ export const ScrollMixin = (superClass) =>
         const row = composedPath[composedPath.indexOf(this.$.items) - 1];
 
         if (row) {
-          // Make sure the focused element (row, cell, or focusable element inside a cell)
-          // is inside the viewport. Don't change scroll position if the user is interacting
-          // with the mouse.
+          // Don't change scroll position if the user is interacting with the mouse.
           if (!this._isMousedown) {
-            // When target is a cell, scroll the whole row into the viewport, so that it also
-            // reveals a potential details cell. When target is a focusable element inside a
-            // cell, just scroll that element into the viewport. That works better in cases
-            // where the cell is larger than the viewport.
-            const scrollTarget = isCell(e.target) ? row : e.target;
+            // Make sure the focused element (row, cell, or focusable element inside a cell)
+            // is inside the viewport. If the whole row fits into the viewport, then scroll
+            // the row into view. This ensures that labels, helper texts and other related
+            // elements of focusable elements within cells also become visible. When the row
+            // is larger than the viewport, scroll the focus event target into the viewport.
+            // This works better when focusing elements within cells, which could otherwise
+            // still be outside the viewport when scrolling to the top or bottom of the row.
+            const tableHeight = this.$.table.clientHeight;
+            const headerHeight = this.$.header.clientHeight;
+            const footerHeight = this.$.footer.clientHeight;
+            const viewportHeight = tableHeight - headerHeight - footerHeight;
+            const isRowLargerThanViewport = row.clientHeight > viewportHeight;
+            const scrollTarget = isRowLargerThanViewport ? e.target : row;
+
             this.__scrollIntoViewport(scrollTarget);
           }
 

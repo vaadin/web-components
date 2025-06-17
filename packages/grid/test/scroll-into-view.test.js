@@ -6,7 +6,7 @@ import '../src/vaadin-grid.js';
 import { flushGrid, getCellContent, getContainerCell } from './helpers.js';
 
 describe('scroll into view', () => {
-  let grid, firstCell, secondRow, secondCell;
+  let grid, column, firstCell, secondRow, secondCell;
 
   function verifyFullyVisible(element) {
     const scrollerBounds = grid.$.scroller.getBoundingClientRect();
@@ -29,15 +29,11 @@ describe('scroll into view', () => {
         <vaadin-grid-column></vaadin-grid-column>
       </vaadin-grid>
     `);
-    const column = grid.querySelector('vaadin-grid-column');
+    column = grid.querySelector('vaadin-grid-column');
     column.renderer = (root, _, model) => {
       root.innerHTML = `<div style="height: 100px">${model.item} <textarea style="height: 80px"></div>`;
     };
-    grid.rowDetailsRenderer = (root, _, model) => {
-      root.innerHTML = `<div style="height: 10px">${model.item} Details</div>`;
-    };
     grid.items = [1, 2];
-    grid.detailsOpenedItems = [1, 2];
 
     flushGrid(grid);
     await nextFrame();
@@ -88,12 +84,20 @@ describe('scroll into view', () => {
       verifyNotFullyVisible(secondRow);
 
       firstCell.focus();
-      // Move to details cell of first row
-      await sendKeys({ press: 'ArrowDown' });
       // Move to column cell of second row
       await sendKeys({ press: 'ArrowDown' });
 
       expect(grid.shadowRoot.activeElement).to.equal(secondCell);
+      expect(grid.$.table.scrollTop).to.be.above(0);
+      verifyFullyVisible(secondRow);
+    });
+
+    it('should scroll row into view when focusing nested element', () => {
+      verifyNotFullyVisible(secondRow);
+
+      const secondTextArea = getCellContent(secondCell).querySelector('textarea');
+      secondTextArea.focus();
+
       expect(grid.$.table.scrollTop).to.be.above(0);
       verifyFullyVisible(secondRow);
     });
@@ -108,7 +112,7 @@ describe('scroll into view', () => {
     });
   });
 
-  describe('focusable elements in cells', () => {
+  describe.skip('focusable elements in cells', () => {
     it('should only scroll focusable element into view when it receives focus', async () => {
       const secondCellInput = getCellContent(secondCell).querySelector('textarea');
 
@@ -123,6 +127,30 @@ describe('scroll into view', () => {
       // Second input should be focused and fully visible, but second row should not be fully visible
       expect(document.activeElement).to.equal(secondCellInput);
       verifyFullyVisible(secondCellInput);
+      verifyNotFullyVisible(secondRow);
+    });
+  });
+
+  describe('row is larger than viewport', () => {
+    beforeEach(async () => {
+      column.renderer = (root, _, model) => {
+        root.innerHTML = `<div style="height: 200px">${model.item} <textarea style="height: 80px"></div>`;
+      };
+      flushGrid(grid);
+      await nextFrame();
+    });
+
+    it('should only scroll focusable element into view when it receives focus', async () => {
+      // Scroll down a bit to make second row partially visible
+      grid.$.table.scrollTop = 60;
+      await nextFrame();
+      verifyNotFullyVisible(secondRow);
+
+      const secondTextArea = getCellContent(secondCell).querySelector('textarea');
+      secondTextArea.focus();
+
+      expect(grid.$.table.scrollTop).to.be.above(0);
+      verifyFullyVisible(secondTextArea);
       verifyNotFullyVisible(secondRow);
     });
   });

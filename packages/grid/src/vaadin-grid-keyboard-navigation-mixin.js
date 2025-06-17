@@ -9,15 +9,15 @@ import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { addValueToAttribute, removeValueFromAttribute } from '@vaadin/component-base/src/dom-utils.js';
 import { get } from '@vaadin/component-base/src/path-utils.js';
 
-export function isRow(element) {
+function isRow(element) {
   return element instanceof HTMLTableRowElement;
 }
 
-export function isCell(element) {
+function isCell(element) {
   return element instanceof HTMLTableCellElement;
 }
 
-export function isDetailsCell(element) {
+function isDetailsCell(element) {
   return element.matches('[part~="details-cell"]');
 }
 
