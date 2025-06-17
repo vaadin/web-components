@@ -60,11 +60,10 @@ export class DialogManager {
     return this._originalBounds;
   }
 
-  getEventX(event) {
-    return event.pageX - this._originalMouseCoords.left;
-  }
-
-  getEventY(event) {
-    return event.pageY - this._originalMouseCoords.top;
+  getEventXY(event) {
+    return {
+      x: event.pageX - this._originalMouseCoords.left,
+      y: event.pageY - this._originalMouseCoords.top,
+    };
   }
 }

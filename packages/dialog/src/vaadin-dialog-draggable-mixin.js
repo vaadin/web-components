@@ -103,8 +103,9 @@ export const DialogDraggableMixin = (superClass) =>
       const event = getMouseOrFirstTouchEvent(e);
       if (eventInWindow(event)) {
         const { top, left } = this.__manager.bounds;
-        this.top = top + this.__manager.getEventY(event);
-        this.left = left + this.__manager.getEventX(event);
+        const { x, y } = this.__manager.getEventXY(event);
+        this.top = top + y;
+        this.left = left + x;
       }
     }
 

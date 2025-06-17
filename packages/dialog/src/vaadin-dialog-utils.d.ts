@@ -29,7 +29,5 @@ export declare class DialogManager {
 
   handleEvent(event: MouseEvent | Touch): void;
 
-  getEventX(event: MouseEvent | Touch): number;
-
-  getEventY(event: MouseEvent | Touch): number;
+  getEventXY(event: MouseEvent | Touch): { x: number; y: number };
 }

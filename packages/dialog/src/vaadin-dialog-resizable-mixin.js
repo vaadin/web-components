@@ -87,8 +87,7 @@ export const DialogResizableMixin = (superClass) =>
       if (eventInWindow(event)) {
         const minimumSize = 40;
         const { height: boundsHeight, width: boundsWidth, top: boundsTop, left: boundsLeft } = this.__manager.bounds;
-        const eventX = this.__manager.getEventX(event);
-        const eventY = this.__manager.getEventY(event);
+        const { x: eventX, y: eventY } = this.__manager.getEventXY(event);
 
         resizer.split('').forEach((direction) => {
           switch (direction) {
