@@ -1,6 +1,7 @@
 import { nextFrame } from '@vaadin/testing-helpers';
 import { fixtureSync } from '@vaadin/testing-helpers/dist/fixture.js';
 import { visualDiff } from '@web/test-runner-visual-regression';
+import '@vaadin/text-field';
 import '../../../theme/lumo/vaadin-form-layout.js';
 import '../../../theme/lumo/vaadin-form-item.js';
 
