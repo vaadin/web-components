@@ -26,6 +26,20 @@ const confirmDialogOverlay = css`
       font-size: var(--vaadin-dialog-title-font-size, 1em);
       line-height: var(--vaadin-dialog-title-line-height, inherit);
     }
+
+    [part='overlay'] {
+      display: flex;
+      flex-direction: column;
+    }
+
+    [part='content'] {
+      flex: 1;
+    }
+
+    /* TODO remove this wrapper element */
+    #resizerContainer {
+      display: contents;
+    }
   }
 `;
 
