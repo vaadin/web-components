@@ -112,25 +112,6 @@ describe('scroll into view', () => {
     });
   });
 
-  describe.skip('focusable elements in cells', () => {
-    it('should only scroll focusable element into view when it receives focus', async () => {
-      const secondCellInput = getCellContent(secondCell).querySelector('textarea');
-
-      verifyNotFullyVisible(secondRow);
-      verifyNotFullyVisible(secondCellInput);
-
-      // Enter navigation mode in first cell, Tab to textarea in second cell
-      firstCell.focus();
-      await sendKeys({ press: 'Enter' });
-      await sendKeys({ press: 'Tab' });
-
-      // Second input should be focused and fully visible, but second row should not be fully visible
-      expect(document.activeElement).to.equal(secondCellInput);
-      verifyFullyVisible(secondCellInput);
-      verifyNotFullyVisible(secondRow);
-    });
-  });
-
   describe('row is larger than viewport', () => {
     beforeEach(async () => {
       column.renderer = (root, _, model) => {
