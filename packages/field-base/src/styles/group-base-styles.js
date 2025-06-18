@@ -10,15 +10,12 @@ export const group = (name = 'checkbox') => css`
   @layer base {
     :host {
       width: fit-content;
+      display: grid;
+      gap: var(--vaadin-${unsafeCSS(name)}-group-gap, var(--_vaadin-gap-container-block));
     }
 
     .vaadin-group-field-container {
       display: contents;
-    }
-
-    :host {
-      display: grid;
-      gap: var(--vaadin-${unsafeCSS(name)}-group-gap, var(--_vaadin-gap-container-block));
     }
 
     [part='group-field'] {
