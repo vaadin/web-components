@@ -1,0 +1,30 @@
+/**
+ * @license
+ * Copyright (c) 2017 - 2025 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+@import '../src/mixins/base-layer-reset.css' vaadin-dashboard-layout;
+@import '../src/components/dashboard-layout.css' vaadin-dashboard-layout;
+
+@import '../src/mixins/base-layer-reset.css' vaadin-dashboard;
+@import '../src/components/dashboard-layout.css' vaadin-dashboard;
+@import '../src/components/dashboard.css' vaadin-dashboard;
+
+@import '../src/mixins/base-layer-reset.css' vaadin-dashboard-widget;
+@import '../src/mixins/dashboard-item.css' vaadin-dashboard-widget;
+@import '../src/components/dashboard-widget.css' vaadin-dashboard-widget;
+
+@import '../src/mixins/base-layer-reset.css' vaadin-dashboard-section;
+@import '../src/mixins/dashboard-item.css' vaadin-dashboard-section;
+@import '../src/components/dashboard-section.css' vaadin-dashboard-section;
+
+@import '../src/mixins/base-layer-reset.css' vaadin-dashboard-button;
+@import '../src/components/button.css' vaadin-dashboard-button;
+
+html {
+  --vaadin-dashboard-css-inject: 1;
+  --vaadin-dashboard-widget-css-inject: 1;
+  --vaadin-dashboard-section-css-inject: 1;
+  --vaadin-dashboard-layout-css-inject: 1;
+  --vaadin-dashboard-button-css-inject: 1;
+}

@@ -12,6 +12,7 @@ import { html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
+import { CSSInjectionMixin } from '@vaadin/vaadin-themable-mixin/css-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { dashboardLayoutStyles } from './styles/vaadin-dashboard-layout-core-styles.js';
 import { DashboardLayoutMixin } from './vaadin-dashboard-layout-mixin.js';
@@ -56,7 +57,9 @@ import { DashboardLayoutMixin } from './vaadin-dashboard-layout-mixin.js';
  * @mixes ElementMixin
  * @mixes ThemableMixin
  */
-class DashboardLayout extends DashboardLayoutMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElement)))) {
+class DashboardLayout extends DashboardLayoutMixin(
+  ElementMixin(ThemableMixin(CSSInjectionMixin(PolylitMixin(LitElement)))),
+) {
   static get is() {
     return 'vaadin-dashboard-layout';
   }
