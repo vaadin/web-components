@@ -246,28 +246,3 @@ describe('flex child tabs', () => {
     expect(tabs.$.scroll.scrollWidth).to.be.equal(tabs.$.scroll.offsetWidth);
   });
 });
-
-// TODO: should be either covered by base styles or moved to visual tests
-describe('flex equal width tabs', () => {
-  let wrapper, tabs;
-
-  beforeEach(async () => {
-    wrapper = fixtureSync(`
-      <div style="display: flex; justify-content: center; width: 400px;">
-        <vaadin-tabs theme="equal-width-tabs">
-          <vaadin-tab>Tab one</vaadin-tab>
-          <vaadin-tab>Tab two with a longer title</vaadin-tab>
-          <vaadin-tab>Tab three</vaadin-tab>
-        </vaadin-tabs>
-      </div>
-    `);
-    await nextRender();
-    tabs = wrapper.querySelector('vaadin-tabs');
-    tabs._observer.flush();
-  });
-
-  it('should not cut content', () => {
-    expect(tabs.items[1].offsetWidth).to.be.above(124);
-    expect(tabs.offsetWidth).to.be.eql(400);
-  });
-});

@@ -52,14 +52,5 @@ registerStyles(
     :host([dir='rtl']) ::slotted(:not(vaadin-tab)) {
       margin-right: 1rem;
     }
-
-    /* Lumo-specific, should it be in base styles? */
-    :host([theme~='equal-width-tabs']) {
-      flex: auto;
-    }
-
-    :host([theme~='equal-width-tabs']) [part='tabs'] ::slotted(vaadin-tab) {
-      flex: 1 0 0%;
-    }
   `,
 );
