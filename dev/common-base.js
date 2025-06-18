@@ -30,6 +30,7 @@ addGlobalThemeStyles(
     section {
       display: flex;
       flex-wrap: wrap;
+      align-items: baseline;
       gap: 1lh 1.5lh;
       margin: 2lh 0;
     }
