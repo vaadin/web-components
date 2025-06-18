@@ -93,6 +93,10 @@ export const inputContainerStyles = css`
       outline-offset: calc(var(--vaadin-input-field-border-width, 1px) * -1);
     }
 
+    :host([invalid]) {
+      --vaadin-input-field-border-color: red;
+    }
+
     :host([readonly]) {
       border-style: dashed;
     }
