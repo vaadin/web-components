@@ -13,6 +13,12 @@ export const checkable = (part, propName = part) => css`
       display: inline-grid;
       gap: var(--vaadin-${unsafeCSS(propName)}-gap, 0.25lh var(--_vaadin-gap-container-inline));
       grid-template-columns: auto 1fr;
+      /*
+        Using minmax(auto, max-content) works around a Safari 17 issue where placing a checkbox
+        inside a flex container with flex-direction: column causes the container to unexpectedly
+        grow to the max available height.
+      */
+      grid-template-rows: minmax(auto, max-content);
       -webkit-tap-highlight-color: transparent;
     }
 
