@@ -54,8 +54,14 @@ export const field = css`
       opacity: 1;
     }
 
+    :host([required]) [part='label'] {
+      padding-inline-end: 1em;
+    }
+
     [part='required-indicator'] {
-      display: inline-block;
+      position: absolute;
+      width: 1em;
+      text-align: center;
       color: var(--vaadin-input-field-required-indicator-color, var(--_vaadin-color));
     }
 
