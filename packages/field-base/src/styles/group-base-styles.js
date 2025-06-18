@@ -16,14 +16,14 @@ export const group = (name = 'checkbox') => css`
       display: contents;
     }
 
-    :host,
-    [part='group-field'] {
-      display: flex;
-      flex-direction: column;
+    :host {
+      display: grid;
       gap: var(--vaadin-${unsafeCSS(name)}-group-gap, var(--_vaadin-gap-container-block));
     }
 
     [part='group-field'] {
+      display: flex;
+      flex-direction: column;
       gap: 0.5lh 1.5em;
     }
 
