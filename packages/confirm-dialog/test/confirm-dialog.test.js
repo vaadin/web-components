@@ -627,9 +627,9 @@ describe('vaadin-confirm-dialog', () => {
       it('should reset style after setting width to null', async () => {
         const originalWidth = getComputedStyle(overlay.$.overlay).width;
 
-        confirm.width = '500px';
+        confirm.width = '300px';
         await nextRender();
-        expect(getComputedStyle(overlay.$.overlay).width).to.equal('500px');
+        expect(getComputedStyle(overlay.$.overlay).width).to.equal('300px');
 
         confirm.width = null;
         await nextRender();
@@ -668,13 +668,13 @@ describe('vaadin-confirm-dialog', () => {
       });
 
       it('should update width after opening the dialog', async () => {
-        confirm.width = '200px';
+        confirm.width = '300px';
         document.body.appendChild(confirm);
         await nextRender();
         overlay = confirm.$.dialog.$.overlay;
         confirm.opened = true;
         await oneEvent(overlay, 'vaadin-overlay-open');
-        expect(getComputedStyle(overlay.$.overlay).width).to.be.equal('200px');
+        expect(getComputedStyle(overlay.$.overlay).width).to.be.equal('300px');
       });
 
       it('should update height after opening the dialog', async () => {

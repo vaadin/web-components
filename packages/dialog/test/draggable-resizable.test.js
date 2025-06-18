@@ -2,6 +2,26 @@ import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextFrame, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-dialog.js';
+import { css } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+
+const style = document.createElement('style');
+style.textContent = css`
+  /* Disable safe area */
+  vaadin-dialog-overlay {
+    inset: 0;
+  }
+
+  /* Disable optical centering */
+  vaadin-dialog-overlay::after {
+    flex-grow: 1;
+  }
+
+  /* Disable content padding */
+  vaadin-dialog-overlay::part(content) {
+    padding: 0;
+  }
+`;
+document.head.append(style);
 
 customElements.define(
   'internally-draggable',
@@ -251,6 +271,11 @@ describe('resizable', () => {
     const resizeContainer = dialog.$.overlay.$.resizerContainer;
     resizeContainer.scrollTop = 1;
     expect(resizeContainer.scrollTop).to.equal(1);
+
+    // TODO change to this with base styles
+    // const content = dialog.$.overlay.$.content;
+    // content.scrollTop = 1;
+    // expect(content.scrollTop).to.equal(1);
   });
 
   it('should expand content with relative height', () => {
@@ -303,14 +328,6 @@ describe('resizable', () => {
     await nextRender();
     const resizedBounds = overlayPart.getBoundingClientRect();
     expect(Math.floor(resizedBounds.width)).to.be.eql(Math.floor(bounds.width + dx));
-  });
-
-  it('should not set bounds again after position is set to absolute', () => {
-    const spy = sinon.spy(dialog.$.overlay, 'setBounds');
-    dispatchMouseEvent(overlayPart.querySelector('.n'), 'mousedown');
-    dialog.$.overlay.$.overlay.style.position = 'absolute';
-    dispatchMouseEvent(overlayPart.querySelector('.n'), 'mousedown');
-    expect(spy.calledOnce).to.be.true;
   });
 
   it('should dispatch resize event with correct details', () => {
@@ -428,14 +445,17 @@ describe('draggable', () => {
     expect(Math.floor(draggedBounds.left)).to.be.eql(Math.floor(bounds.left + dx));
   });
 
-  it('should only change "position", "top", and "left" values on drag', () => {
+  it('should set bounds on drag', () => {
     drag(content);
     const overlay = dialog.$.overlay.$.overlay;
     const style = overlay.style;
-    expect(style.length).to.be.eql(3);
+    expect(style.length).to.be.eql(5);
     expect(style.position).to.be.ok;
     expect(style.top).to.be.ok;
     expect(style.left).to.be.ok;
+    expect(style.width).to.be.ok;
+    expect(style.height).to.be.ok;
+    expect(dialog.$.overlay.hasAttribute('has-bounds-set')).to.be.true;
   });
 
   it('should drag and move dialog if mousedown on element with [class="draggable"] in another shadow root', async () => {
@@ -566,19 +586,12 @@ describe('draggable', () => {
     expect(Math.floor(draggedBounds.height)).to.be.eql(Math.floor(bounds.height));
   });
 
-  it('should not update overlay bounds with position: absolute', () => {
-    const spy = sinon.spy(dialog.$.overlay, 'setBounds');
-    dispatchMouseEvent(content, 'mousedown');
-    dialog.$.overlay.$.overlay.style.position = 'absolute';
-    dispatchMouseEvent(content, 'mousedown');
-    expect(spy.calledOnce).to.be.true;
-  });
-
   it('should not reset scroll position on dragstart', async () => {
     dialog.modeless = true;
     button.style.marginBottom = '200px';
     dialog.$.overlay.setBounds({ height: '100px' });
     await nextUpdate(dialog);
+    // TODO use dialog.$.overlay.$.content.scrollTop with base styles
     container.scrollTop = 100;
     expect(container.scrollTop).to.equal(100);
     drag(container);
@@ -603,12 +616,6 @@ describe('draggable', () => {
     const { detail } = onDragged.args[0][0];
     expect(detail.top).to.be.equal(dialog.top);
     expect(detail.left).to.be.equal(dialog.left);
-  });
-
-  it('should not set overlay max-width to none on drag', async () => {
-    drag(container);
-    await nextRender();
-    expect(getComputedStyle(dialog.$.overlay.$.overlay).maxWidth).to.equal('100%');
   });
 });
 
@@ -865,8 +872,12 @@ describe('overflowing content', () => {
     await nextFrame();
     overlay.$.content.style.padding = '20px';
     container.scrollTop = 100;
+    // TODO change to this with new base styles
+    // overlay.$.content.scrollTop = 100;
     resize(overlayPart.querySelector('.s'), 0, -50);
     await nextFrame();
     expect(container.scrollTop).to.equal(100);
+    // TODO change to this with new base styles
+    // expect(overlay.$.content.scrollTop).to.equal(100);
   });
 });
