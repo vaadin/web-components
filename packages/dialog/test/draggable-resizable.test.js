@@ -445,17 +445,14 @@ describe('draggable', () => {
     expect(Math.floor(draggedBounds.left)).to.be.eql(Math.floor(bounds.left + dx));
   });
 
-  it('should set bounds on drag', () => {
+  it('should only change "position", "top", and "left" values on drag', () => {
     drag(content);
     const overlay = dialog.$.overlay.$.overlay;
     const style = overlay.style;
-    expect(style.length).to.be.eql(5);
+    expect(style.length).to.be.eql(3);
     expect(style.position).to.be.ok;
     expect(style.top).to.be.ok;
     expect(style.left).to.be.ok;
-    expect(style.width).to.be.ok;
-    expect(style.height).to.be.ok;
-    expect(dialog.$.overlay.hasAttribute('has-bounds-set')).to.be.true;
   });
 
   it('should drag and move dialog if mousedown on element with [class="draggable"] in another shadow root', async () => {
@@ -616,6 +613,12 @@ describe('draggable', () => {
     const { detail } = onDragged.args[0][0];
     expect(detail.top).to.be.equal(dialog.top);
     expect(detail.left).to.be.equal(dialog.left);
+  });
+
+  it('should not set overlay max-width to none on drag', async () => {
+    drag(container);
+    await nextRender();
+    expect(getComputedStyle(dialog.$.overlay.$.overlay).maxWidth).to.equal('100%');
   });
 });
 
