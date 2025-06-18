@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright (c) 2017 - 2025 Vaadin Ltd.
+ * Copyright (c) 2000 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 @import './components/accordion.css';
@@ -28,6 +28,7 @@
 @import './components/item.css';
 @import './components/list-box.css';
 @import './components/login.css';
+@import './components/map.css';
 @import './components/menu-bar.css';
 @import './components/multi-select-combo-box.css';
 @import './components/notification.css';
