@@ -10,7 +10,6 @@ export const tabsStyles = css`
   @layer base {
     :host {
       display: flex;
-      align-items: center;
       max-width: 100%;
       max-height: 100%;
       position: relative;
