@@ -37,8 +37,10 @@ export const dialogOverlayBase = css`
         0 0 0 var(--vaadin-dialog-border-width, 1px) var(--vaadin-dialog-border-color, rgba(0, 0, 0, 0.1)),
         var(--vaadin-dialog-box-shadow, 0 8px 24px -4px hsl(0 0 0 / 0.3));
       border-radius: var(--vaadin-dialog-border-radius, var(--_vaadin-radius-l));
+      width: max-content;
       min-width: min(var(--vaadin-dialog-min-width, 4em), 100%);
-      max-width: var(--vaadin-dialog-max-width, none);
+      max-width: var(--vaadin-dialog-max-width, 100%);
+      max-height: 100%;
     }
 
     [part='header'],
@@ -118,8 +120,6 @@ const dialogResizableOverlay = css`
       position: relative;
       overflow: visible;
       display: flex;
-      /* Implicitly sized dialog is constrained by the viewport height */
-      max-height: 100%;
     }
 
     :host([has-bounds-set]) [part='overlay'] {
