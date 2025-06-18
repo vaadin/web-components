@@ -91,11 +91,11 @@
 }
 
 [part='back-button']::after {
-  content: var(--lumo-icons-angle-right);
+  content: var(--lumo-icons-angle-left);
 }
 
 [part='forward-button']::after {
-  content: var(--lumo-icons-angle-left);
+  content: var(--lumo-icons-angle-right);
 }
 
 :host([orientation='vertical']) [part='back-button'],
