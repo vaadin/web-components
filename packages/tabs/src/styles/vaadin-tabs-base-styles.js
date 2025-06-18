@@ -49,8 +49,13 @@ export const tabsStyles = css`
       pointer-events: none;
       opacity: 0;
       cursor: var(--vaadin-clickable-cursor);
+      box-sizing: border-box;
+      height: 100%;
       padding: var(--vaadin-tab-padding, var(--_vaadin-padding-container));
       background: var(--_vaadin-background);
+      display: flex;
+      align-items: center;
+      justify-content: center;
       -webkit-tap-highlight-color: transparent;
       touch-action: manipulation;
     }
