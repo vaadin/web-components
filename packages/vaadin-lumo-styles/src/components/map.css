@@ -353,13 +353,6 @@
   background: var(--lumo-base-color) linear-gradient(var(--lumo-contrast-5pct), var(--lumo-contrast-5pct));
 }
 
-@supports not selector(:focus-visible) {
-  .ol-control button:focus {
-    outline: none;
-    box-shadow: 0 0 0 var(--_focus-ring-width) var(--_focus-ring-color);
-  }
-}
-
 .ol-control button:focus-visible {
   outline: none;
   box-shadow: 0 0 0 var(--_focus-ring-width) var(--_focus-ring-color);
