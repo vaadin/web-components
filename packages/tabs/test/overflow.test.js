@@ -24,13 +24,10 @@ describe('overflow', () => {
   });
 
   ['horizontal', 'vertical'].forEach((orientation) => {
-    beforeEach(() => {
-      tabs.orientation = orientation;
-    });
-
     ['ltr', 'rtl'].forEach((direction) => {
       describe(`${orientation}-${direction}`, () => {
         beforeEach(() => {
+          tabs.orientation = orientation;
           document.documentElement.setAttribute('dir', direction);
         });
 
