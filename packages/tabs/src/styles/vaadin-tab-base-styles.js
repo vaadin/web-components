@@ -33,6 +33,10 @@ export const tabStyles = css`
       display: none !important;
     }
 
+    :host([orientation='vertical']) {
+      justify-content: start;
+    }
+
     :host([selected]) {
       --vaadin-tab-background: var(--_vaadin-background-container);
       --vaadin-tab-color: var(--_vaadin-color-strong);
