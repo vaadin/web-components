@@ -45,9 +45,11 @@
   justify-content: center;
 }
 
-/* This seems more future-proof than \`overflow: -moz-scrollbars-none\` which is marked obsolete
-   and is no longer guaranteed to work:
-   https://developer.mozilla.org/en-US/docs/Web/CSS/overflow#Mozilla_Extensions */
+/*
+  This seems more future-proof than `overflow: -moz-scrollbars-none` which is marked obsolete
+  and is no longer guaranteed to work:
+  https://developer.mozilla.org/en-US/docs/Web/CSS/overflow#Mozilla_Extensions
+*/
 @-moz-document url-prefix() {
   :host([orientation='horizontal']) [part='tabs'] {
     overflow: hidden;
@@ -188,16 +190,15 @@
   display: none;
 }
 
-/* prettier-ignore */
 :host([theme~='hide-scroll-buttons'][overflow~='start'][overflow~='end']:not([orientation='vertical'])) [part='tabs'] {
-      --_lumo-tabs-overflow-mask-image: linear-gradient(
-        90deg,
-        transparent,
-        #000 2em,
-        #000 calc(100% - 2em),
-        transparent 100%
-      );
-    }
+  --_lumo-tabs-overflow-mask-image: linear-gradient(
+    90deg,
+    transparent,
+    #000 2em,
+    #000 calc(100% - 2em),
+    transparent 100%
+  );
+}
 
 :host([theme~='hide-scroll-buttons'][overflow~='end']:not([orientation='vertical'])) [part='tabs'] {
   --_lumo-tabs-overflow-mask-image: linear-gradient(90deg, #000 calc(100% - 2em), transparent 100%);

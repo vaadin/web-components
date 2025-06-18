@@ -153,9 +153,9 @@
   outline: none;
 
   /*
-          Override the CSS inherited from \`lumo-color\` and \`lumo-typography\`.
-          Note: \`!important\` is needed because of the \`:slotted\` specificity.
-        */
+    Override the CSS inherited from `lumo-color` and `lumo-typography`.
+    Note: `!important` is needed because of the `:slotted` specificity.
+  */
   text-decoration: none !important;
   color: inherit !important;
 }
