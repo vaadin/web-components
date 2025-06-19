@@ -15,6 +15,7 @@ export const iconStyles = css`
       vertical-align: middle;
       width: var(--vaadin-icon-size, 1lh);
       height: var(--vaadin-icon-size, 1lh);
+      flex: none;
       fill: var(--vaadin-icon-color, currentColor);
       container-type: size;
       contain: layout;
