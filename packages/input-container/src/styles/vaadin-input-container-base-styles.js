@@ -66,6 +66,7 @@ export const inputContainerStyles = css`
       color: inherit;
       background: transparent;
       cursor: inherit;
+      caret-color: var(--vaadin-input-field-value-color);
     }
 
     ::slotted(*) {
