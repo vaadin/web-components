@@ -482,15 +482,13 @@ describe('vaadin-icon', () => {
     let container;
 
     beforeEach(async () => {
-      container = fixtureSync(
-        `
-          <div style="display: flex;">
-            <vaadin-icon style="--vaadin-icon-size: 24px"></vaadin-icon>
-            <vaadin-icon style="--vaadin-icon-size: 24px"></vaadin-icon>
-            <vaadin-icon style="--vaadin-icon-size: 24px"></vaadin-icon>
-          </div>
-        `,
-      );
+      container = fixtureSync(`
+        <div style="display: flex;">
+          <vaadin-icon style="--vaadin-icon-size: 24px"></vaadin-icon>
+          <vaadin-icon style="--vaadin-icon-size: 24px"></vaadin-icon>
+          <vaadin-icon style="--vaadin-icon-size: 24px"></vaadin-icon>
+        </div>
+      `);
 
       await nextFrame();
     });
