@@ -613,6 +613,7 @@ export class IronListAdapter {
       this._physicalStart = Math.max(0, this._physicalStart - idxAdjustment);
       // Scroll to end for smoother resize
       super.scrollToIndex(this._virtualCount - 1);
+      this.scrollTarget.scrollTop = this.scrollTarget.scrollHeight - this.scrollTarget.clientHeight;
     }
   }
 
