@@ -1,8 +1,8 @@
-diff --git a/node_modules/lerna/dist/commands/version/command.js b/node_modules/lerna/dist/commands/version/command.js
-index b8a30b5..80e4579 100644
---- a/node_modules/lerna/dist/commands/version/command.js
-+++ b/node_modules/lerna/dist/commands/version/command.js
-@@ -6209,7 +6209,7 @@ var require_src = __commonJS({
+diff --git a/node_modules/lerna/dist/index.js b/node_modules/lerna/dist/index.js
+index 69bd218..1ba6346 100644
+--- a/node_modules/lerna/dist/index.js
++++ b/node_modules/lerna/dist/index.js
+@@ -9450,7 +9450,7 @@ var require_src2 = __commonJS({
            forceGitTag,
            overrideMessage
          };
