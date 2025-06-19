@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright (c) 2017 - 2025 Vaadin Ltd.
+ * Copyright (c) 2000 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 @import './components/accordion.css';
@@ -36,6 +36,7 @@
 @import './components/popover.css';
 @import './components/radio-button.css';
 @import './components/radio-group.css';
+@import './components/scroller.css';
 @import './components/select.css';
 @import './components/split-layout.css';
 @import './components/text-area.css';
