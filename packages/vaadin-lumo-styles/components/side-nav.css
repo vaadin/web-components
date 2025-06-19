@@ -1,0 +1,13 @@
+/**
+ * @license
+ * Copyright (c) 2000 - 2025 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+@import './side-nav-item.css';
+
+@import '../src/mixins/base-layer-reset.css' vaadin-side-nav;
+@import '../src/components/side-nav.css' vaadin-side-nav;
+
+html {
+  --vaadin-side-nav-css-inject: 1;
+}
