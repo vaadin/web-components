@@ -1,0 +1,25 @@
+/**
+ * @license
+ * Copyright (c) 2000 - 2025 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+[part='overlay'] {
+  margin: var(--lumo-space-xs) 0;
+}
+
+[part='content'] {
+  padding: var(--lumo-space-xs);
+  max-width: calc(7 * (var(--_button-size) + var(--_button-margin) * 2));
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  --_button-size: 1.25rem;
+  --_button-margin: 3px;
+}
+
+[part='content'] ::slotted(button) {
+  border: none;
+  width: var(--_button-size);
+  height: var(--_button-size);
+  margin: var(--_button-margin);
+}
