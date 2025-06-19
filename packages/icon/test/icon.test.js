@@ -493,7 +493,7 @@ describe('vaadin-icon', () => {
       await nextFrame();
     });
 
-    it('should not shrink icons when container is narrow ', () => {
+    it('should not shrink icons when container is narrow', () => {
       container.style.width = 'calc(24px * 2 + 12px)';
 
       [...container.children].forEach((icon) => {
