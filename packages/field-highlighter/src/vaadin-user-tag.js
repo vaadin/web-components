@@ -7,6 +7,7 @@ import { html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
+import { CSSInjectionMixin } from '@vaadin/vaadin-themable-mixin/css-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { userTagStyles } from './styles/vaadin-user-tag-core-styles.js';
 
@@ -19,7 +20,7 @@ import { userTagStyles } from './styles/vaadin-user-tag-core-styles.js';
  * @mixes ThemableMixin
  * @private
  */
-export class UserTag extends ThemableMixin(DirMixin(PolylitMixin(LitElement))) {
+export class UserTag extends ThemableMixin(DirMixin(CSSInjectionMixin(PolylitMixin(LitElement)))) {
   static get is() {
     return 'vaadin-user-tag';
   }

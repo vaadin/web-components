@@ -19,6 +19,7 @@
 @import './components/details.css';
 @import './components/dialog.css';
 @import './components/email-field.css';
+@import './components/field-highlighter.css';
 @import './components/form-item.css';
 @import './components/form-layout.css';
 @import './components/horizontal-layout.css';

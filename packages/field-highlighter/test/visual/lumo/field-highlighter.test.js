@@ -1,16 +1,26 @@
 import { sendKeys, sendMouseToElement } from '@vaadin/test-runner-commands';
 import { fixtureSync, mousedown, nextFrame } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
-import '@vaadin/checkbox/theme/lumo/vaadin-checkbox.js';
-import '@vaadin/checkbox-group/theme/lumo/vaadin-checkbox-group.js';
-import '@vaadin/date-time-picker/theme/lumo/vaadin-date-time-picker.js';
-import '@vaadin/item/theme/lumo/vaadin-item.js';
-import '@vaadin/list-box/theme/lumo/vaadin-list-box.js';
-import '@vaadin/radio-group/theme/lumo/vaadin-radio-group.js';
-import '@vaadin/text-area/theme/lumo/vaadin-text-area.js';
-import '@vaadin/text-field/theme/lumo/vaadin-text-field.js';
+import '@vaadin/vaadin-lumo-styles/props.css';
+import '@vaadin/vaadin-lumo-styles/components/field-highlighter.css';
+import '@vaadin/vaadin-lumo-styles/components/checkbox.css';
+import '@vaadin/vaadin-lumo-styles/components/checkbox-group.css';
+import '@vaadin/vaadin-lumo-styles/components/date-time-picker.css';
+import '@vaadin/vaadin-lumo-styles/components/list-box.css';
+import '@vaadin/vaadin-lumo-styles/components/item.css';
+import '@vaadin/vaadin-lumo-styles/components/radio-group.css';
+import '@vaadin/vaadin-lumo-styles/components/text-area.css';
+import '@vaadin/vaadin-lumo-styles/components/text-field.css';
+import '@vaadin/checkbox';
+import '@vaadin/checkbox-group';
+import '@vaadin/date-time-picker';
+import '@vaadin/item';
+import '@vaadin/list-box';
+import '@vaadin/radio-group';
+import '@vaadin/text-area';
+import '@vaadin/text-field';
 import '../common.js';
-import '../../../theme/lumo/vaadin-field-highlighter.js';
+import '../../../vaadin-field-highlighter.js';
 import { setUsers } from '../helpers.js';
 
 describe('field-highlighter', () => {
