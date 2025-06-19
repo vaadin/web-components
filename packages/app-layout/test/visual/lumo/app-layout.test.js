@@ -1,7 +1,10 @@
 import { fixtureSync } from '@vaadin/testing-helpers/dist/fixture.js';
 import { visualDiff } from '@web/test-runner-visual-regression';
-import '../../../theme/lumo/vaadin-app-layout.js';
-import '../../../theme/lumo/vaadin-drawer-toggle.js';
+import '@vaadin/vaadin-lumo-styles/props.css';
+import '@vaadin/vaadin-lumo-styles/components/app-layout.css';
+import '@vaadin/vaadin-lumo-styles/components/drawer-toggle.css';
+import '../../../vaadin-app-layout.js';
+import '../../../vaadin-drawer-toggle.js';
 
 describe('app-layout', () => {
   let div, element;
