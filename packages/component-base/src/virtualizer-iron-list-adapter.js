@@ -601,6 +601,24 @@ export class IronListAdapter {
     }
   }
 
+  /** @override */
+  _resizeHandler() {
+    super._resizeHandler();
+
+    // Fixes an issue where the new items are not created on scroll target resize when the scroll position is around the end.
+    // See https://github.com/vaadin/flow-components/issues/7307
+    const lastIndexVisible = this.adjustedLastVisibleIndex === this.size - 1;
+    const emptySpace = this._physicalTop - this._scrollPosition;
+    if (lastIndexVisible && emptySpace > 0) {
+      const idxAdjustment = Math.ceil(emptySpace / this._physicalAverage);
+      this._virtualStart = Math.max(0, this._virtualStart - idxAdjustment);
+      this._physicalStart = Math.max(0, this._physicalStart - idxAdjustment);
+      // Scroll to end for smoother resize
+      super.scrollToIndex(this._virtualCount - 1);
+      this.scrollTarget.scrollTop = this.scrollTarget.scrollHeight - this.scrollTarget.clientHeight;
+    }
+  }
+
   /**
    * Work around an iron-list issue with invalid item positioning.
    * See https://github.com/vaadin/flow-components/issues/4306
