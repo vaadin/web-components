@@ -414,7 +414,7 @@ describe('grid', () => {
           const indexInLevel = page * pageSize + i;
 
           return {
-            name: `Very long grid item name ${parentItem ? `${parentItem.name}-` : ''}${indexInLevel}`,
+            name: `A very long grid item name ${parentItem ? `${parentItem.name}-` : ''}${indexInLevel}`,
             children: true,
           };
         });
