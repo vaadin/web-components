@@ -29,6 +29,8 @@
 @import './components/form-layout.css';
 @import './components/grid.css';
 @import './components/grid-filter-column.css';
+@import './components/grid-pro.css';
+@import './components/grid-pro-edit-column.css';
 @import './components/grid-selection-column.css';
 @import './components/grid-sort-column.css';
 @import './components/grid-tree-column.css';
