@@ -4,13 +4,9 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 :host {
+  --vaadin-grid-tree-toggle-level-offset: 2em;
   display: inline-flex;
   max-width: 100%;
-
-  /* CSS API for :host */
-  --vaadin-grid-tree-toggle-level-offset: 1em;
-  --_collapsed-icon: '\e7be\00a0';
-  --vaadin-grid-tree-toggle-level-offset: 2em;
   align-items: center;
   vertical-align: middle;
   transform: translateX(calc(var(--lumo-space-s) * -1));
@@ -18,7 +14,6 @@
 }
 
 :host([dir='rtl']) {
-  --_collapsed-icon: '\e7bd\00a0';
   margin-left: 0;
   margin-right: calc(var(--lumo-space-s) * -1);
 }
@@ -50,12 +45,10 @@
 }
 
 :host(:not([expanded])) [part='toggle']::before {
-  content: var(--_collapsed-icon);
   content: var(--lumo-icons-angle-right);
 }
 
 :host([expanded]) [part='toggle']::before {
-  content: '\e7bc\00a0'; /* icon glyph + single non-breaking space */
   content: var(--lumo-icons-angle-right);
   transform: rotate(90deg);
 }
