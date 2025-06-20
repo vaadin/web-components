@@ -19,6 +19,7 @@
 @import './components/details-summary.css';
 @import './components/details.css';
 @import './components/dialog.css';
+@import './components/drawer-toggle.css';
 @import './components/email-field.css';
 @import './components/form-item.css';
 @import './components/form-layout.css';
