@@ -39,8 +39,9 @@
   justify-content: flex-end;
   padding: var(--lumo-space-s) var(--lumo-space-m);
   background-color: var(--lumo-contrast-5pct);
-  border: 1px solid var(--lumo-contrast-10pct);
-  border-top: none;
+  border-right: 1px solid var(--lumo-contrast-10pct);
+  border-left: 1px solid var(--lumo-contrast-10pct);
+  border-bottom: 1px solid var(--lumo-contrast-10pct);
 }
 
 :host([no-toolbar]) [part='toolbar'] {
