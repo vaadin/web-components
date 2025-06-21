@@ -1,7 +1,9 @@
 import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
+import '@vaadin/vaadin-lumo-styles/props.css';
+import '@vaadin/vaadin-lumo-styles/components/crud.css';
 import '../../not-animated-styles.js';
-import '../../../theme/lumo/vaadin-crud.js';
+import '../../../vaadin-crud.js';
 
 describe('crud', () => {
   let div, element;
