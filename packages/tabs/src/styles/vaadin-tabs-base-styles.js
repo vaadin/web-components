@@ -24,7 +24,7 @@ export const tabsStyles = css`
     }
 
     [part='tabs'] {
-      height: 100%;
+      flex: 1;
       overflow: auto;
       overscroll-behavior: contain;
       display: flex;
