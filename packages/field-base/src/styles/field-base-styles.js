@@ -59,6 +59,7 @@ export const field = css`
     }
 
     [part='required-indicator'] {
+      display: inline-block;
       position: absolute;
       width: 1em;
       text-align: center;
