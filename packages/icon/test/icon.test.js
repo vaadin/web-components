@@ -476,4 +476,30 @@ describe('vaadin-icon', () => {
       });
     });
   });
+
+  // TODO: Enable when unit tests are using the base theme
+  describe.skip('flex container', () => {
+    let container;
+
+    beforeEach(async () => {
+      container = fixtureSync(`
+        <div style="display: flex;">
+          <vaadin-icon style="--vaadin-icon-size: 24px"></vaadin-icon>
+          <vaadin-icon style="--vaadin-icon-size: 24px"></vaadin-icon>
+          <vaadin-icon style="--vaadin-icon-size: 24px"></vaadin-icon>
+        </div>
+      `);
+
+      await nextFrame();
+    });
+
+    it('should not shrink icons when container is narrow', () => {
+      container.style.width = 'calc(24px * 2 + 12px)';
+
+      [...container.children].forEach((icon) => {
+        expect(icon.offsetWidth).to.equal(24);
+        expect(icon.offsetHeight).to.equal(24);
+      });
+    });
+  });
 });

@@ -112,6 +112,39 @@ describe('resizing', () => {
     expect(grid.$.scroller.getBoundingClientRect().bottom).to.equal(grid.$.table.getBoundingClientRect().bottom);
   });
 
+  it('should create rows when resized while scrolled to bottom', async () => {
+    // Have a full width grid inside a fixed width container
+    component = fixtureSync(`
+    <div style="height: 200px;">
+      <vaadin-grid style="height: 100%;">
+        <vaadin-grid-column></vaadin-grid-column>
+      </vaadin-grid>
+    </div>
+    `);
+    grid = component.querySelector('vaadin-grid');
+    grid.querySelector('vaadin-grid-column').renderer = (root, _, model) => {
+      root.textContent = model.item.name;
+    };
+    const itemCount = 1000;
+    grid.items = Array.from({ length: itemCount }, (_, i) => ({
+      name: `Item ${i}`,
+    }));
+    // Scroll to end
+    grid.scrollToIndex(itemCount - 1);
+    await aTimeout(200);
+    // Resize container
+    for (let i = 0; i < 10; i++) {
+      component.style.height = `${component.offsetHeight + 200}px`;
+      flushGrid(grid);
+      await aTimeout(50);
+    }
+    const gridRect = grid.getBoundingClientRect();
+    // Get an element from the area where new rows should be created
+    const elementInResizedArea = document.elementFromPoint(gridRect.left + 1, gridRect.top + 50);
+    const isCell = elementInResizedArea && elementInResizedArea.tagName === 'VAADIN-GRID-CELL-CONTENT';
+    expect(isCell).to.be.true;
+  });
+
   describe('flexbox parent', () => {
     beforeEach(() => {
       grid.style.height = grid.style.width = '';

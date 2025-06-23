@@ -9,6 +9,7 @@ import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { ItemMixin } from '@vaadin/item/src/vaadin-item-mixin.js';
+import { CSSInjectionMixin } from '@vaadin/vaadin-themable-mixin/css-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { tabStyles } from './styles/vaadin-tab-core-styles.js';
 
@@ -40,13 +41,13 @@ import { tabStyles } from './styles/vaadin-tab-core-styles.js';
  * @mixes ItemMixin
  * @mixes ThemableMixin
  */
-class Tab extends ItemMixin(ThemableMixin(ElementMixin(PolylitMixin(LitElement)))) {
+class Tab extends ItemMixin(ThemableMixin(ElementMixin(CSSInjectionMixin(PolylitMixin(LitElement))))) {
   static get is() {
     return 'vaadin-tab';
   }
 
   static get styles() {
-    return [tabStyles];
+    return tabStyles;
   }
 
   /** @protected */

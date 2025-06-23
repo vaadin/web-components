@@ -2,7 +2,9 @@ import { nextFrame } from '@vaadin/testing-helpers';
 import { fixtureSync } from '@vaadin/testing-helpers/dist/fixture.js';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '../not-animated-styles.js';
-import '../../../theme/lumo/vaadin-tabs.js';
+import '@vaadin/vaadin-lumo-styles/props.css';
+import '@vaadin/vaadin-lumo-styles/components/tabs.css';
+import '../../../vaadin-tabs.js';
 
 describe('tabs', () => {
   let div, element;

@@ -44,7 +44,6 @@
     "@vaadin/chai-plugins": "25.0.0-alpha4",
     "@vaadin/checkbox": "25.0.0-alpha4",
     "@vaadin/checkbox-group": "25.0.0-alpha4",
-    "@vaadin/combo-box": "25.0.0-alpha4",
     "@vaadin/date-picker": "25.0.0-alpha4",
     "@vaadin/date-time-picker": "25.0.0-alpha4",
     "@vaadin/item": "25.0.0-alpha4",
