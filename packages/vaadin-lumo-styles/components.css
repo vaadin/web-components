@@ -27,6 +27,8 @@
 @import './components/integer-field.css';
 @import './components/item.css';
 @import './components/list-box.css';
+@import './components/login.css';
+@import './components/map.css';
 @import './components/menu-bar.css';
 @import './components/multi-select-combo-box.css';
 @import './components/notification.css';
@@ -36,8 +38,10 @@
 @import './components/progress-bar.css';
 @import './components/radio-button.css';
 @import './components/radio-group.css';
+@import './components/scroller.css';
 @import './components/select.css';
 @import './components/split-layout.css';
+@import './components/tabs.css';
 @import './components/text-area.css';
 @import './components/text-field.css';
 @import './components/time-picker.css';

@@ -1,14 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import {
-  arrowRight,
-  aTimeout,
-  enter,
-  fixtureSync,
-  listenOnce,
-  nextRender,
-  nextResize,
-  space,
-} from '@vaadin/testing-helpers';
+import { arrowRight, aTimeout, enter, fixtureSync, nextRender, space } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './tabs-test-styles.js';
 import '../src/vaadin-tabs.js';
@@ -75,120 +66,6 @@ describe('tabs', () => {
     });
   });
 
-  ['horizontal', 'vertical'].forEach((orientation) => {
-    ['ltr', 'rtl'].forEach((direction) => {
-      describe(`Overflow ${orientation} ${direction}`, () => {
-        beforeEach(() => {
-          tabs.orientation = orientation;
-          document.documentElement.setAttribute('dir', direction);
-        });
-
-        afterEach(() => {
-          document.documentElement.removeAttribute('dir');
-        });
-
-        describe('large viewport', () => {
-          it(`when orientation=${orientation} should not have overflow`, () => {
-            expect(tabs.hasAttribute('overflow')).to.be.false;
-          });
-        });
-
-        describe('small viewport', () => {
-          const horizontalRtl = orientation === 'horizontal' && direction === 'rtl';
-
-          beforeEach(async () => {
-            if (orientation === 'horizontal') {
-              tabs.style.width = '200px';
-            } else {
-              tabs.style.height = '100px';
-            }
-            await nextResize(tabs);
-            await nextRender();
-          });
-
-          afterEach(() => {
-            document.body.style.zoom = '';
-          });
-
-          it(`when orientation=${orientation} should have overflow="end" if scroll is at the beginning`, () => {
-            expect(tabs.getAttribute('overflow')).to.be.equal('end');
-          });
-
-          it(`when orientation=${orientation} should have overflow="start end" if scroll is at the middle`, (done) => {
-            listenOnce(tabs._scrollerElement, 'scroll', () => {
-              expect(tabs.getAttribute('overflow')).to.contain('start');
-              expect(tabs.getAttribute('overflow')).to.contain('end');
-              done();
-            });
-            tabs._scroll(horizontalRtl ? -2 : 2);
-          });
-
-          it(`when orientation=${orientation} should have overflow="start" if scroll is at the end`, (done) => {
-            listenOnce(tabs._scrollerElement, 'scroll', () => {
-              expect(tabs.getAttribute('overflow')).to.be.equal('start');
-              done();
-            });
-            tabs._scroll(horizontalRtl ? -200 : 200);
-          });
-
-          [1.25, 1.33, 1.5, 1.75].forEach((zoomLevel) => {
-            it(`when orientation=${orientation} should have overflow="start" if scroll is at the end on page zoomed to ${zoomLevel}`, (done) => {
-              document.body.style.zoom = zoomLevel;
-              listenOnce(tabs._scrollerElement, 'scroll', () => {
-                expect(tabs.getAttribute('overflow')).to.be.equal('start');
-                done();
-              });
-              tabs._scroll(horizontalRtl ? -200 : 200);
-            });
-          });
-
-          it(`when orientation=${orientation} should not have overflow="start" when over-scrolling`, () => {
-            const scroll = tabs._scrollerElement;
-
-            // Cannot set negative values to native scroll, monkey patching the properties
-            let pixels = 0;
-            Object.defineProperty(scroll, orientation === 'horizontal' ? 'scrollLeft' : 'scrollTop', {
-              get: () => pixels,
-              set: (v) => {
-                pixels = v;
-              },
-            });
-
-            // Simulate over-scrolling
-            tabs._scroll(horizontalRtl ? 400 : -400);
-            scroll.dispatchEvent(new CustomEvent('scroll'));
-
-            expect(tabs.getAttribute('overflow')).to.be.equal('end');
-          });
-
-          it('should update overflow on resize', async () => {
-            tabs.style.width = 'auto';
-            tabs.style.height = 'auto';
-            await nextResize(tabs);
-            expect(tabs.hasAttribute('overflow')).to.be.false;
-          });
-
-          it('should update overflow on item resize', async () => {
-            tabs.items.forEach((item) => {
-              item.style.height = '1px';
-              item.style.width = '1px';
-              item.style.minHeight = '1px';
-              item.style.minWidth = '1px';
-            });
-            await nextResize(tabs);
-            expect(tabs.hasAttribute('overflow')).to.be.false;
-          });
-
-          it('should update overflow on items change', async () => {
-            tabs.items.forEach((item) => item.remove());
-            await nextRender();
-            expect(tabs.hasAttribute('overflow')).to.be.false;
-          });
-        });
-      });
-    });
-  });
-
   describe('slotted anchor', () => {
     let anchor, tab, spy;
 
@@ -244,30 +121,5 @@ describe('flex child tabs', () => {
 
   it('should not scroll', () => {
     expect(tabs.$.scroll.scrollWidth).to.be.equal(tabs.$.scroll.offsetWidth);
-  });
-});
-
-// TODO: should be either covered by base styles or moved to visual tests
-describe('flex equal width tabs', () => {
-  let wrapper, tabs;
-
-  beforeEach(async () => {
-    wrapper = fixtureSync(`
-      <div style="display: flex; justify-content: center; width: 400px;">
-        <vaadin-tabs theme="equal-width-tabs">
-          <vaadin-tab>Tab one</vaadin-tab>
-          <vaadin-tab>Tab two with a longer title</vaadin-tab>
-          <vaadin-tab>Tab three</vaadin-tab>
-        </vaadin-tabs>
-      </div>
-    `);
-    await nextRender();
-    tabs = wrapper.querySelector('vaadin-tabs');
-    tabs._observer.flush();
-  });
-
-  it('should not cut content', () => {
-    expect(tabs.items[1].offsetWidth).to.be.above(124);
-    expect(tabs.offsetWidth).to.be.eql(400);
   });
 });

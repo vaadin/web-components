@@ -6,6 +6,7 @@
 import { html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
+import { CSSInjectionMixin } from '@vaadin/vaadin-themable-mixin/css-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { loginOverlayWrapperStyles } from './styles/vaadin-login-overlay-wrapper-core-styles.js';
 import { LoginOverlayWrapperMixin } from './vaadin-login-overlay-wrapper-mixin.js';
@@ -18,7 +19,7 @@ import { LoginOverlayWrapperMixin } from './vaadin-login-overlay-wrapper-mixin.j
  * @mixes ThemableMixin
  * @private
  */
-class LoginOverlayWrapper extends LoginOverlayWrapperMixin(ThemableMixin(PolylitMixin(LitElement))) {
+class LoginOverlayWrapper extends LoginOverlayWrapperMixin(ThemableMixin(CSSInjectionMixin(PolylitMixin(LitElement)))) {
   static get is() {
     return 'vaadin-login-overlay-wrapper';
   }

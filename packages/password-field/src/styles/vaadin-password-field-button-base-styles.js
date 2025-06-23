@@ -13,7 +13,7 @@ const passwordFieldBase = css`
       --vaadin-button-background: transparent;
       --vaadin-button-border: none;
       --vaadin-button-padding: 0;
-      color: inherit;
+      color: var(--vaadin-input-field-button-color, inherit);
       display: block;
       cursor: var(--vaadin-clickable-cursor);
     }

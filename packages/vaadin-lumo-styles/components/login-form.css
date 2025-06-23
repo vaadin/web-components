@@ -1,0 +1,17 @@
+/**
+ * @license
+ * Copyright (c) 2017 - 2025 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+@import './button.css';
+@import './text-field.css';
+@import './password-field.css';
+
+@import '../src/mixins/base-layer-reset.css' vaadin-login-form-wrapper;
+@import '../src/global/color.css' vaadin-login-form-wrapper;
+@import '../src/global/typography.css' vaadin-login-form-wrapper;
+@import '../src/components/login-form-wrapper.css' vaadin-login-form-wrapper;
+
+html {
+  --vaadin-login-form-wrapper-css-inject: 1;
+}

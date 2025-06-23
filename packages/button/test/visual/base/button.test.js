@@ -1,6 +1,8 @@
 import { resetMouse, sendKeys, sendMouseToElement } from '@vaadin/test-runner-commands';
 import { fixtureSync, mousedown } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
+import '@vaadin/icon/src/vaadin-icon.js';
+import '@vaadin/icons/vaadin-iconset.js';
 import '../../../src/vaadin-button.js';
 
 describe('button', () => {
@@ -48,6 +50,27 @@ describe('button', () => {
         element.disabled = true;
         await visualDiff(div, `${variant}-disabled`);
       });
+    });
+  });
+
+  describe('icon', () => {
+    const PREFIX_ICON = '<vaadin-icon icon="vaadin:reply" slot="prefix"></vaadin-icon>';
+    const SUFFIX_ICON = '<vaadin-icon icon="vaadin:reply" slot="suffix"></vaadin-icon>';
+
+    it('before text', async () => {
+      element.insertAdjacentHTML('afterbegin', PREFIX_ICON);
+      await visualDiff(div, 'icon-before-text');
+    });
+
+    it('after text', async () => {
+      element.insertAdjacentHTML('beforeend', SUFFIX_ICON);
+      await visualDiff(div, 'icon-after-text');
+    });
+
+    it('without text', async () => {
+      element.textContent = '';
+      element.insertAdjacentHTML('afterbegin', PREFIX_ICON);
+      await visualDiff(div, 'icon-without-text');
     });
   });
 });

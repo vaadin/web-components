@@ -6,7 +6,6 @@
 :host {
   display: block;
   width: 100%; /* prevent collapsing inside non-stretching column flex */
-  height: 8px;
   height: calc(var(--lumo-size-l) / 10);
   margin: var(--lumo-space-s) 0;
 }

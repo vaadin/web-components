@@ -103,12 +103,26 @@ export const InputControlMixin = (superclass) =>
 
     /** @protected */
     get slotStyles() {
-      // Needed for Safari, where ::slotted(...)::placeholder does not work
+      const tag = this.localName;
+
       return [
         `
-          :is(input[slot='input'], textarea[slot='textarea'])::placeholder {
+          /* Needed for Safari, where ::slotted(...)::placeholder does not work */
+          ${tag} > :is(input[slot='input'], textarea[slot='textarea'])::placeholder {
             font: inherit;
             color: inherit;
+          }
+
+          /* Override built-in autofill styles */
+          ${tag} > input[slot='input']:autofill {
+            -webkit-text-fill-color: var(--vaadin-input-field-autofill-color, black);
+            background-clip: text;
+          }
+
+          ${tag}:has(> input[slot='input']:autofill) {
+            --vaadin-input-field-background: var(--vaadin-input-field-autofill-background, lightyellow);
+            --vaadin-input-field-value-color: var(--vaadin-input-field-autofill-color, black);
+            --vaadin-input-field-button-color: var(--vaadin-input-field-autofill-color, black);
           }
         `,
       ];
