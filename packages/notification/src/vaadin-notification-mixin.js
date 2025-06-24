@@ -388,7 +388,11 @@ export const NotificationMixin = (superClass) =>
         this._container.appendChild(this._card);
       }
 
-      this._updateCardOrder(this.position);
+      // SAFARI-WORKAROUND-PART-1: Delay updating the order properties. Otherwise the max-height transition doesn't work when the order changes from 1 -> 2.
+      this._card.style.setProperty('--order', 1);
+      requestAnimationFrame(() => {
+        this._updateCardOrder(this.position);
+      });
     }
 
     /** @private */
