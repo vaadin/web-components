@@ -49,6 +49,11 @@
   white-space: pre-wrap;
 }
 
+[part='time'] {
+  color: var(--lumo-secondary-text-color);
+  font-size: var(--lumo-font-size-s);
+}
+
 ::slotted([slot='avatar']) {
   --vaadin-avatar-outline-width: 0;
   --vaadin-avatar-size: var(--lumo-size-m);
@@ -72,9 +77,4 @@
 
 :host([dir='rtl']) [part='name']:empty {
   margin-left: 0;
-}
-
-[part='time'] {
-  color: var(--lumo-secondary-text-color);
-  font-size: var(--lumo-font-size-s);
 }
