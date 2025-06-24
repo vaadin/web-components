@@ -362,9 +362,9 @@ export const NotificationMixin = (superClass) =>
 
       this._card.slot = this.position;
       if (this._container.firstElementChild && this.position.startsWith('top')) {
-        this._container.insertBefore(this._card, this._container.firstElementChild);
+        this._container.prepend(this._card);
       } else {
-        this._container.appendChild(this._card);
+        this._container.append(this._card);
       }
 
       this._updateCardOrder(this.position);
