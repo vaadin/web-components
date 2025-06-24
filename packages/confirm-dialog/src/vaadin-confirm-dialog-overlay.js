@@ -35,6 +35,20 @@ class ConfirmDialogOverlay extends OverlayMixin(DirMixin(ThemableMixin(CSSInject
     return confirmDialogOverlayStyles;
   }
 
+  static get properties() {
+    return {
+      cancelButtonVisible: {
+        type: Boolean,
+        value: false,
+      },
+
+      rejectButtonVisible: {
+        type: Boolean,
+        value: false,
+      },
+    };
+  }
+
   /** @protected */
   render() {
     return html`
@@ -46,10 +60,10 @@ class ConfirmDialogOverlay extends OverlayMixin(DirMixin(ThemableMixin(CSSInject
             <div part="message"><slot></slot></div>
           </div>
           <footer part="footer" role="toolbar">
-            <div part="cancel-button">
+            <div part="cancel-button" ?hidden="${!this.cancelButtonVisible}">
               <slot name="cancel-button"></slot>
             </div>
-            <div part="reject-button">
+            <div part="reject-button" ?hidden="${!this.rejectButtonVisible}">
               <slot name="reject-button"></slot>
             </div>
             <div part="confirm-button">
@@ -121,6 +135,14 @@ class ConfirmDialogDialog extends DialogBaseMixin(OverlayClassMixin(ThemePropert
         type: String,
         value: '',
       },
+
+      cancelButtonVisible: {
+        type: Boolean,
+      },
+
+      rejectButtonVisible: {
+        type: Boolean,
+      },
     };
   }
 
@@ -139,6 +161,8 @@ class ConfirmDialogDialog extends DialogBaseMixin(OverlayClassMixin(ThemePropert
         .withBackdrop="${!this.modeless}"
         ?resizable="${this.resizable}"
         aria-label="${this.ariaLabel}"
+        .cancelButtonVisible="${this.cancelButtonVisible}"
+        .rejectButtonVisible="${this.rejectButtonVisible}"
         restore-focus-on-close
         focus-trap
       ></vaadin-confirm-dialog-overlay>
