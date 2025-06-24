@@ -27,12 +27,21 @@ describe('rich-text-editor', () => {
   });
 
   it('min-height', async () => {
-    element.style.minHeight = '400px';
+    element.style.minHeight = '250px';
     await visualDiff(div, 'min-height');
   });
 
   it('max-height', async () => {
     element.style.maxHeight = '500px';
+    element.value = JSON.stringify(
+      Array.from({ length: 12 }, () => ({
+        insert: 'High quality rich text editor for the web\n',
+      })),
+    );
+    await visualDiff(div, 'max-height');
+  });
+
+  it('rich content', async () => {
     element.value = `[
       {"insert":"High quality rich text editor for the web"},
       {"attributes":{"header":2},"insert":"\\n"},
@@ -55,7 +64,7 @@ describe('rich-text-editor', () => {
       {"insert":"script"},{"attributes":{"list":"bullet"},"insert":"\\n"},
       {"insert":"In addition to text formatting, additional content blocks can be added.\\nBlockquotes"},
       {"attributes":{"header":3},"insert":"\\n"},
-      {"attributes":{"blockquote":true},"insert":"\\n"},
+      {"attributes":{"blockquote":true},"insert":"This is a blockquote\\n"},
       {"insert":"Code blocks"},
       {"attributes":{"header":3},"insert":"\\n"},{"insert":"<body>"},
       {"attributes":{"code-block":true},"insert":"\\n"},
@@ -65,6 +74,6 @@ describe('rich-text-editor', () => {
       {"attributes":{"code-block":true},"insert":"\\n"},
       {"insert":"\\n"}
     ]`;
-    await visualDiff(div, 'max-height');
+    await visualDiff(div, 'rich-content');
   });
 });
