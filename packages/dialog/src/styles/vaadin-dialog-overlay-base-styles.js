@@ -144,6 +144,7 @@ const dialogResizableOverlay = css`
       flex-direction: column;
       flex-grow: 1;
       border-radius: inherit;
+      max-width: 100%;
     }
 
     :host(:not([resizable])) .resizer {
