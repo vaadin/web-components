@@ -85,6 +85,9 @@ addGlobalThemeStyles(
         /* Cursors for interactive elements */
         --vaadin-clickable-cursor: pointer;
         --vaadin-disabled-cursor: not-allowed;
+
+        /* Timing functions / easings */
+        --_vaadin-ease-in-out-quart: cubic-bezier(0.78, 0, 0.22, 1);
       }
 
       @media (forced-colors: active) {
