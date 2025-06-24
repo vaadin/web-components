@@ -4,8 +4,8 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { css } from 'lit';
-import { dialogOverlayBase } from '@vaadin/dialog/src/styles/vaadin-dialog-overlay-core-styles.js';
-import { overlayStyles } from '@vaadin/overlay/src/styles/vaadin-overlay-core-styles.js';
+import { dialogOverlayBase } from '@vaadin/dialog/src/styles/vaadin-dialog-overlay-base-styles.js';
+import { overlayStyles } from '@vaadin/overlay/src/styles/vaadin-overlay-base-styles.js';
 
 const confirmDialogOverlay = css`
   @layer base {
