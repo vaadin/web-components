@@ -28,12 +28,14 @@
 @import './components/item.css';
 @import './components/list-box.css';
 @import './components/login.css';
+@import './components/map.css';
 @import './components/menu-bar.css';
 @import './components/multi-select-combo-box.css';
 @import './components/notification.css';
 @import './components/number-field.css';
 @import './components/password-field.css';
 @import './components/popover.css';
+@import './components/progress-bar.css';
 @import './components/radio-button.css';
 @import './components/radio-group.css';
 @import './components/rich-text-editor.css';
@@ -45,4 +47,5 @@
 @import './components/text-field.css';
 @import './components/time-picker.css';
 @import './components/tooltip.css';
+@import './components/upload.css';
 @import './components/vertical-layout.css';
