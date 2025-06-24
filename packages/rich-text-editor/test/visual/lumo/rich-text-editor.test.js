@@ -55,17 +55,36 @@ describe('rich-text-editor', () => {
 
     it('text formatting', () => {
       element.value = JSON.stringify([
-        { insert: 'Bold\n', attributes: { list: 'bullet', bold: true } },
-        { insert: 'Italic\n', attributes: { list: 'bullet', italic: true } },
-        { insert: 'Underline\n', attributes: { list: 'bullet', underline: true } },
-        { insert: 'Strike-through\n', attributes: { list: 'bullet', strike: true } },
+        { insert: 'Bold\n', attributes: { bold: true } },
+        { insert: 'Italic\n', attributes: { italic: true } },
+        { insert: 'Underline\n', attributes: { underline: true } },
+        { insert: 'Strike-through\n', attributes: { strike: true } },
         { insert: 'Sub', attributes: { script: 'sub' } },
         { insert: 'script and ' },
         { insert: 'super', attributes: { script: 'super' } },
-        { insert: 'script' },
-        { insert: '\n', attributes: { list: 'bullet' } },
+        { insert: 'script\n' },
+        { insert: '<vaadin-rich-text-editor></vaadin-rich-text-editor>\n', attributes: { code: true } },
       ]);
       return visualDiff(div, 'rich-content-text-formatting');
+    });
+
+    it('text alignment', () => {
+      element.value = JSON.stringify([
+        { insert: 'Left aligned\n', attributes: { align: 'left' } },
+        { insert: 'Center aligned\n', attributes: { align: 'center' } },
+        { insert: 'Right aligned\n', attributes: { align: 'right' } },
+      ]);
+      return visualDiff(div, 'rich-content-text-alignment');
+    });
+
+    it('lists', () => {
+      element.value = JSON.stringify([
+        { insert: 'Ordered list item 1\n', attributes: { list: 'ordered' } },
+        { insert: 'Ordered list item 2\n', attributes: { list: 'ordered' } },
+        { insert: 'Unordered list item 1\n', attributes: { list: 'bullet' } },
+        { insert: 'Unordered list item 2\n', attributes: { list: 'bullet' } },
+      ]);
+      return visualDiff(div, 'rich-content-lists');
     });
 
     it('blocks', () => {
