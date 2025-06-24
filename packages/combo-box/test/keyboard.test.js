@@ -461,6 +461,13 @@ describe('keyboard', () => {
 
   describe('scrolling items', () => {
     beforeEach(async () => {
+      fixtureSync(`
+        <style>
+          vaadin-combo-box-item {
+            min-height: 36px;
+          }
+        </style>
+      `);
       comboBox.open();
       comboBox.items = new Array(100).fill().map((_, idx) => `${idx}`);
       await aTimeout(1);
