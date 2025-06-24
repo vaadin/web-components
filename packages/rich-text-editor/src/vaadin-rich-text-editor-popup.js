@@ -15,6 +15,7 @@ import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { overlayStyles } from '@vaadin/overlay/src/styles/vaadin-overlay-core-styles.js';
 import { OverlayMixin } from '@vaadin/overlay/src/vaadin-overlay-mixin.js';
 import { PositionMixin } from '@vaadin/overlay/src/vaadin-overlay-position-mixin.js';
+import { CSSInjectionMixin } from '@vaadin/vaadin-themable-mixin/css-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 /**
@@ -136,7 +137,7 @@ export { RichTextEditorPopup };
  * @private
  */
 class RichTextEditorPopupOverlay extends PositionMixin(
-  OverlayMixin(DirMixin(ThemableMixin(PolylitMixin(LitElement)))),
+  OverlayMixin(DirMixin(ThemableMixin(CSSInjectionMixin(PolylitMixin(LitElement))))),
 ) {
   static get is() {
     return 'vaadin-rich-text-editor-popup-overlay';
