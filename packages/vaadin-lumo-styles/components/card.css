@@ -8,8 +8,6 @@
 
 html {
   --vaadin-card-css-inject: 1;
-
-  /* TODO: Where is the appropriate place to define these properties? */
   --vaadin-card-background: var(--lumo-contrast-5pct);
   --vaadin-card-border-radius: var(--lumo-border-radius-l);
   --vaadin-card-border-width: 0;
