@@ -9,7 +9,6 @@ import minimist from 'minimist';
 import { execSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
-import { enforceBaseStylesPlugin } from './web-dev-server.config.js';
 
 dotenv.config();
 
@@ -333,8 +332,7 @@ const createVisualTestsConfig = (theme, browserVersion) => {
         failureThresholdType: 'percent',
         update: process.env.TEST_ENV === 'update',
       }),
-      theme === 'base' && enforceBaseStylesPlugin(),
-    ].filter(Boolean),
+    ],
     groups,
     testRunnerHtml: getTestRunnerHtml(theme),
     filterBrowserLogs,
