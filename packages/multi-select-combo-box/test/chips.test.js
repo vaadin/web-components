@@ -558,13 +558,13 @@ describe('chips', () => {
 
       const overlay = document.querySelector('vaadin-multi-select-combo-box-overlay');
       const overlayPart = overlay.$.overlay;
-      const width = overlayPart.clientWidth;
+      const width = overlayPart.offsetWidth;
       expect(width).to.equal(comboBox.clientWidth);
 
       comboBox.selectedItems = ['apple', 'banana'];
       await nextRender();
-      expect(overlayPart.clientWidth).to.be.lessThan(width);
-      expect(overlayPart.clientWidth).to.be.equal(comboBox.clientWidth);
+      expect(overlayPart.offsetWidth).to.be.lessThan(width);
+      expect(overlayPart.offsetWidth).to.be.equal(comboBox.clientWidth);
     });
   });
 
