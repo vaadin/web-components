@@ -1,28 +1,10 @@
+import '@vaadin/text-field/test/visual/common.js';
+import '@vaadin/text-area/test/visual/common.js';
+import '@vaadin/date-time-picker/test/visual/common.js';
+import '@vaadin/radio-group/test/visual/common.js';
+import '@vaadin/checkbox-group/test/visual/common.js';
+import '@vaadin/checkbox/test/visual/common.js';
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-
-/* Hide caret */
-registerStyles(
-  'vaadin-combo-box vaadin-date-picker vaadin-text-field vaadin-text-area',
-  css`
-    :host([focus-ring]) ::slotted(input),
-    :host([focus-ring]) ::slotted(textarea) {
-      caret-color: transparent;
-    }
-
-    /* Show error message immediately */
-    [part='label'],
-    [part='helper-text'],
-    [part='error-message'],
-    [part='required-indicator'] {
-      &,
-      &::before,
-      &::after {
-        animation: none !important;
-        transition: none !important;
-      }
-    }
-  `,
-);
 
 registerStyles(
   'vaadin-user-tags-overlay',
