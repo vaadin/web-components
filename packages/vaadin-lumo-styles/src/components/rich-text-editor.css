@@ -424,16 +424,7 @@ input[type='file'] {
 /* Quill core end */
 
 blockquote {
-  border-left: 0.25em solid #ccc;
-  margin-bottom: 0.3125em;
-  margin-top: 0.3125em;
   padding-left: 1em;
-}
-
-code,
-pre {
-  background-color: #f0f0f0;
-  border-radius: 0.1875em;
 }
 
 pre {
