@@ -3,8 +3,6 @@ import { esbuildPlugin } from '@web/dev-server-esbuild';
 import fs from 'node:fs';
 import path from 'node:path';
 
-const hasBaseParam = process.argv.includes('--base');
-
 /** @return {import('@web/test-runner').TestRunnerPlugin} */
 function generatedLitTestsPlugin() {
   return {
@@ -23,23 +21,6 @@ function generatedLitTestsPlugin() {
           return litDependencyPath;
         }
       }
-      return source;
-    },
-  };
-}
-
-/** @return {import('@web/test-runner').TestRunnerPlugin} */
-export function enforceBaseStylesPlugin() {
-  return {
-    name: 'enforce-base-styles',
-    transform(context) {
-      if (context.response.is('html')) {
-        return { body: context.body.replace('./common.js', './common-base.js') };
-      }
-    },
-    transformImport({ source }) {
-      source = source.replace('/theme/lumo/', '/src/');
-      source = source.replace(/(.+)-core-styles\.js/u, '$1-base-styles.js');
       return source;
     },
   };
@@ -92,8 +73,6 @@ export default {
         }
       },
     },
-    // When passing --base flag to `yarn start` command, load base styles and not Lumo
-    hasBaseParam && enforceBaseStylesPlugin(),
     esbuildPlugin({ ts: true }),
     generatedLitTestsPlugin(),
   ].filter(Boolean),

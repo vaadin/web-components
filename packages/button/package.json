@@ -21,8 +21,6 @@
   "type": "module",
   "files": [
     "src",
-    "!src/vaadin-button-base-styles.d.ts",
-    "!src/vaadin-button-base-styles.js",
     "theme",
     "vaadin-*.d.ts",
     "vaadin-*.js",
