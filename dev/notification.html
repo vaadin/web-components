@@ -143,6 +143,11 @@
       vaadin-notification-card > vaadin-button {
         grid-column: 2;
       }
+
+      /* TODO (SAFARI-WORKAROUND-PART-2): without this, rendering isn't updated properly for the card that changes from order 1 -> 2 (max-height doesn't update) */
+      /* Either this needs to be implemented with SlotStylesMixin or we need to find a way to trigger the same behavior with shadow DOM styles */
+      vaadin-notification-card[style] {
+      }
     </style>
   </head>
 
