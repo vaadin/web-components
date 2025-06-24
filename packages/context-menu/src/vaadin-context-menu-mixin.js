@@ -90,6 +90,10 @@ export const ContextMenuMixin = (superClass) =>
           sync: true,
         },
 
+        position: {
+          type: String,
+        },
+
         /**
          * When true, the menu overlay is modeless.
          * @protected
@@ -409,6 +413,46 @@ export const ContextMenuMixin = (superClass) =>
 
           this.__y = this._getEventCoordinate(e, 'y');
           this.__pageYOffset = window.pageYOffset;
+
+          // Using custom positioning
+          if (this.position) {
+            // Provide position target and position
+            this._overlayElement.positionTarget = this._context.target;
+            this._overlayElement.position = this.position;
+
+            // Configure overlay positioning
+            // Duplicated from vaadin-popover-position-mixin.js, should be cleaned up
+            this._overlayElement.noHorizontalOverlap = [
+              'start-top',
+              'start',
+              'start-bottom',
+              'end-top',
+              'end',
+              'end-bottom',
+            ].includes(this.position);
+            this._overlayElement.noVerticalOverlap = [
+              'top-start',
+              'top-end',
+              'top',
+              'bottom-start',
+              'bottom',
+              'bottom-end',
+            ].includes(this.position);
+            this._overlayElement.horizontalAlign = [
+              'top-end',
+              'bottom-end',
+              'start-top',
+              'start',
+              'start-bottom',
+            ].includes(this.position)
+              ? 'end'
+              : 'start';
+            this._overlayElement.verticalAlign = ['top-start', 'top-end', 'top', 'start-bottom', 'end-bottom'].includes(
+              this.position,
+            )
+              ? 'bottom'
+              : 'top';
+          }
 
           // Hide overlay until it is fully rendered and positioned
           this._overlayElement.style.visibility = 'hidden';

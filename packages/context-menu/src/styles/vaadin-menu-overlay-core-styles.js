@@ -29,4 +29,24 @@ export const menuOverlayStyles = css`
       outline: 3px solid !important;
     }
   }
+
+  :host([position^='top'][top-aligned]) [part='overlay'],
+  :host([position^='bottom'][top-aligned]) [part='overlay'] {
+    margin-top: var(--vaadin-context-menu-offset-top, 0);
+  }
+
+  :host([position^='top'][bottom-aligned]) [part='overlay'],
+  :host([position^='bottom'][bottom-aligned]) [part='overlay'] {
+    margin-bottom: var(--vaadin-context-menu-offset-bottom, 0);
+  }
+
+  :host([position^='start'][start-aligned]) [part='overlay'],
+  :host([position^='end'][start-aligned]) [part='overlay'] {
+    margin-inline-start: var(--vaadin-context-menu-offset-start, 0);
+  }
+
+  :host([position^='start'][end-aligned]) [part='overlay'],
+  :host([position^='end'][end-aligned]) [part='overlay'] {
+    margin-inline-end: var(--vaadin-context-menu-offset-end, 0);
+  }
 `;

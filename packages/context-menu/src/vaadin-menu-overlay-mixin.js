@@ -30,6 +30,11 @@ export const MenuOverlayMixin = (superClass) =>
           readOnly: true,
           sync: true,
         },
+
+        position: {
+          type: String,
+          reflectToAttribute: true,
+        },
       };
     }
 
@@ -126,6 +131,54 @@ export const MenuOverlayMixin = (superClass) =>
           this.style.bottom = `${parseFloat(this.style.bottom) - parseFloat(style.paddingBottom)}px`;
         } else {
           this.style.top = `${parseFloat(this.style.top) - parseFloat(style.paddingTop)}px`;
+        }
+      } else if (this.positionTarget && this.position) {
+        // This is a root overlay with custom positioning
+        // Adjust position for centering the overlay
+        // Duplicated logic from vaadin-popover-overlay-mixin.js, should be cleaned up
+
+        // Copy custom properties from the owner
+        if (this.owner) {
+          const style = getComputedStyle(this.owner);
+          ['top', 'bottom', 'start', 'end'].forEach((prop) => {
+            const propertyName = `--vaadin-context-menu-offset-${prop}`;
+            this.style.setProperty(propertyName, style.getPropertyValue(propertyName));
+          });
+        }
+
+        // Center the overlay horizontally
+        if (this.position === 'bottom' || this.position === 'top') {
+          const targetRect = this.positionTarget.getBoundingClientRect();
+          const overlayRect = this.$.overlay.getBoundingClientRect();
+
+          const offset = targetRect.width / 2 - overlayRect.width / 2;
+
+          if (this.style.left) {
+            const left = overlayRect.left + offset;
+            if (left > 0) {
+              this.style.left = `${left}px`;
+              // Center the pointer arrow horizontally
+              this.setAttribute('arrow-centered', '');
+            }
+          }
+
+          if (this.style.right) {
+            const right = parseFloat(this.style.right) + offset;
+            if (right > 0) {
+              this.style.right = `${right}px`;
+              // Center the pointer arrow horizontally
+              this.setAttribute('arrow-centered', '');
+            }
+          }
+        }
+
+        // Center the overlay vertically
+        if (this.position === 'start' || this.position === 'end') {
+          const targetRect = this.positionTarget.getBoundingClientRect();
+          const overlayRect = this.$.overlay.getBoundingClientRect();
+
+          const offset = targetRect.height / 2 - overlayRect.height / 2;
+          this.style.top = `${overlayRect.top + offset}px`;
         }
       }
     }
