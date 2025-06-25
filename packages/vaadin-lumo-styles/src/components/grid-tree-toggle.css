@@ -23,7 +23,6 @@
 }
 
 :host(:not([leaf])) {
-  cursor: pointer;
   cursor: default;
 }
 
