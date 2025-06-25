@@ -42,7 +42,7 @@ export const overlayContentStyles = css`
     }
 
     :host([years-visible]) [part='years-toggle-button'] {
-      background: var(--_vaadin-color-strong);
+      background: var(--vaadin-color);
       color: var(--vaadin-background-color);
     }
 

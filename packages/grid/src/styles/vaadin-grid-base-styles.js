@@ -129,7 +129,7 @@ export const gridStyles = css`
     [part~='reorder-ghost'] {
       font-size: var(--vaadin-grid-header-font-size, 1em);
       font-weight: var(--vaadin-grid-header-font-weight, 500);
-      color: var(--vaadin-grid-header-color, var(--_vaadin-color-strong));
+      color: var(--vaadin-grid-header-color, var(--vaadin-color));
     }
 
     [part~='row'] {
