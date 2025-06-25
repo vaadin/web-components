@@ -82,7 +82,7 @@ export const checkable = (part, propName = part) => css`
     /* Control container (checkbox, radio button) */
     [part='${unsafeCSS(part)}'] {
       background: var(--vaadin-${unsafeCSS(propName)}-background, var(--vaadin-background-color));
-      border-color: var(--vaadin-${unsafeCSS(propName)}-border-color, var(--vaadin-input-field-border-color, var(--_vaadin-border-color-strong)));
+      border-color: var(--vaadin-${unsafeCSS(propName)}-border-color, var(--vaadin-input-field-border-color, var(--vaadin-border-color-strong)));
       border-radius: var(--vaadin-${unsafeCSS(propName)}-border-radius, var(--_vaadin-radius-s));
       border-style: solid;
       --_border-width: var(--vaadin-${unsafeCSS(propName)}-border-width, var(--vaadin-input-field-border-width, 1px));
