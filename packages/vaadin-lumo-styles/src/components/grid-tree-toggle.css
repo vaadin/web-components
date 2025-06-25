@@ -13,11 +13,6 @@
   -webkit-tap-highlight-color: transparent;
 }
 
-:host([dir='rtl']) {
-  margin-left: 0;
-  margin-right: calc(var(--lumo-space-s) * -1);
-}
-
 :host([hidden]) {
   display: none !important;
 }
@@ -87,6 +82,11 @@ slot {
 }
 
 /* RTL specific styles */
+
+:host([dir='rtl']) {
+  margin-left: 0;
+  margin-right: calc(var(--lumo-space-s) * -1);
+}
 
 :host([dir='rtl']) [part='toggle'] {
   margin-left: 0;
