@@ -5,6 +5,8 @@ addGlobalThemeStyles(
   'dev-common',
   css`
     body {
+      font-family: system-ui, sans-serif;
+      line-height: 1.25;
       margin: 2rem;
     }
 

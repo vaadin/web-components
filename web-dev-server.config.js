@@ -52,11 +52,6 @@ export function enforceThemePlugin(theme) {
         body = body.replaceAll(/^.+vaadin-lumo-styles\/.+\.css.+$/gmu, '');
       }
 
-      if (theme === 'base' && context.response.is('html')) {
-        // Load the base theme
-        body = body.replace('./common.js', './common-base.js');
-      }
-
       return body;
     },
     transformImport({ source, context }) {
