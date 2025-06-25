@@ -19,13 +19,13 @@ const sideNav = css`
       display: flex;
       align-items: center;
       justify-content: start;
-      gap: var(--vaadin-side-nav-item-gap, var(--_vaadin-gap-container-inline));
-      padding: var(--vaadin-side-nav-item-padding, var(--_vaadin-padding-container));
+      gap: var(--vaadin-side-nav-item-gap, var(--vaadin-gap-container-inline));
+      padding: var(--vaadin-side-nav-item-padding, var(--vaadin-padding-container));
       font-size: var(--vaadin-side-nav-label-font-size, 0.875em);
       font-weight: var(--vaadin-side-nav-label-font-weight, 500);
       color: var(--vaadin-side-nav-label-color, inherit);
       line-height: var(--vaadin-side-nav-label-line-height, inherit);
-      border-radius: var(--vaadin-side-nav-item-border-radius, var(--_vaadin-radius-m));
+      border-radius: var(--vaadin-side-nav-item-border-radius, var(--vaadin-radius-m));
       touch-action: manipulation;
     }
   }

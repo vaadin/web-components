@@ -10,8 +10,8 @@ export const tooltipOverlayStyles = css`
   @layer base {
     [part='overlay'] {
       max-width: var(--vaadin-tooltip-max-width, 40ch);
-      padding: var(--vaadin-tooltip-padding, var(--_vaadin-padding-container));
-      border-radius: var(--vaadin-tooltip-border-radius, var(--_vaadin-radius-m));
+      padding: var(--vaadin-tooltip-padding, var(--vaadin-padding-container));
+      border-radius: var(--vaadin-tooltip-border-radius, var(--vaadin-radius-m));
       background: var(--vaadin-tooltip-background, var(--vaadin-background-color));
       color: var(--vaadin-tooltip-color, inherit);
       font-size: var(--vaadin-tooltip-font-size, 0.9em);

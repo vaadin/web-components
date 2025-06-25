@@ -31,7 +31,7 @@ export const gridStyles = css`
       --_border-width: 0;
       --_row-border-width: var(--vaadin-grid-cell-border-width, 1px);
       --_column-border-width: var(--vaadin-grid-cell-border-width, 0);
-      --_cell-padding: var(--vaadin-grid-cell-padding, var(--_vaadin-padding-container));
+      --_cell-padding: var(--vaadin-grid-cell-padding, var(--vaadin-padding-container));
       --_reorder-background-image: none;
       --_selection-background-image: none;
       border-radius: var(--_border-radius);
@@ -51,7 +51,7 @@ export const gridStyles = css`
     /* Variant: No outer border */
     :host(:not([theme~='no-border'])) {
       --_border-width: var(--vaadin-grid-border-width, 1px);
-      --_border-radius: var(--vaadin-grid-border-radius, var(--_vaadin-radius-l));
+      --_border-radius: var(--vaadin-grid-border-radius, var(--vaadin-radius-l));
     }
 
     :host([all-rows-visible]) {

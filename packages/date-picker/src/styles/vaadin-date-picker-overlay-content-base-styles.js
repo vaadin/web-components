@@ -31,13 +31,13 @@ export const overlayContentStyles = css`
     [part='years-toggle-button'] {
       display: inline-flex;
       border: var(--vaadin-button-border, var(--vaadin-button-border-width, 1px) solid transparent);
-      border-radius: var(--vaadin-button-border-radius, var(--_vaadin-radius-m));
+      border-radius: var(--vaadin-button-border-radius, var(--vaadin-radius-m));
       color: var(--vaadin-button-text-color, var(--_vaadin-button-text-color));
       font-size: var(--vaadin-button-font-size, inherit);
       font-weight: var(--vaadin-button-font-weight, 500);
       height: var(--vaadin-button-height, auto);
       line-height: var(--vaadin-button-line-height, inherit);
-      padding: var(--vaadin-button-padding, var(--_vaadin-padding-container));
+      padding: var(--vaadin-button-padding, var(--vaadin-padding-container));
       cursor: var(--vaadin-clickable-cursor);
     }
 
@@ -98,7 +98,7 @@ export const overlayContentStyles = css`
       display: flex;
       grid-area: toolbar;
       justify-content: space-between;
-      padding: var(--vaadin-date-picker-toolbar-padding, var(--_vaadin-padding));
+      padding: var(--vaadin-date-picker-toolbar-padding, var(--vaadin-padding));
     }
 
     :host([fullscreen]) [part='toolbar'] {

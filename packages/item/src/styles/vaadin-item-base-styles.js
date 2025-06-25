@@ -10,13 +10,13 @@ export const itemStyles = css`
   @layer base {
     :host {
       align-items: center;
-      border-radius: var(--vaadin-item-border-radius, var(--_vaadin-radius-m));
+      border-radius: var(--vaadin-item-border-radius, var(--vaadin-radius-m));
       box-sizing: border-box;
       cursor: var(--vaadin-clickable-cursor);
       display: flex;
-      gap: var(--vaadin-item-gap, 0 var(--_vaadin-gap-container-inline));
+      gap: var(--vaadin-item-gap, 0 var(--vaadin-gap-container-inline));
       height: var(--vaadin-item-height, auto);
-      padding: var(--vaadin-item-padding, var(--_vaadin-padding-container));
+      padding: var(--vaadin-item-padding, var(--vaadin-padding-container));
     }
 
     :host([focused]) {

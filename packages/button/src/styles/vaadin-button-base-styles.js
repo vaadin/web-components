@@ -13,7 +13,7 @@ export const buttonStyles = css`
       align-items: center;
       justify-content: center;
       text-align: center;
-      gap: var(--vaadin-button-gap, 0 var(--_vaadin-gap-container-inline));
+      gap: var(--vaadin-button-gap, 0 var(--vaadin-gap-container-inline));
       white-space: nowrap;
       -webkit-tap-highlight-color: transparent;
       -webkit-user-select: none;
@@ -24,7 +24,7 @@ export const buttonStyles = css`
       flex-shrink: 0;
       height: var(--vaadin-button-height, auto);
       margin: var(--vaadin-button-margin, 0);
-      padding: var(--vaadin-button-padding, var(--_vaadin-padding-container));
+      padding: var(--vaadin-button-padding, var(--vaadin-padding-container));
       font-family: var(--vaadin-button-font-family, inherit);
       font-size: var(--vaadin-button-font-size, inherit);
       line-height: var(--vaadin-button-line-height, inherit);
@@ -36,7 +36,7 @@ export const buttonStyles = css`
         --vaadin-button-border,
         var(--vaadin-button-border-width, 1px) solid var(--vaadin-button-border-color, var(--vaadin-border-color))
       );
-      border-radius: var(--vaadin-button-border-radius, var(--_vaadin-radius-m));
+      border-radius: var(--vaadin-button-border-radius, var(--vaadin-radius-m));
       touch-action: manipulation;
     }
 

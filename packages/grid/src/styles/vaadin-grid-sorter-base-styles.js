@@ -13,7 +13,7 @@ export const gridSorterStyles = css`
       align-items: center;
       cursor: pointer;
       max-width: 100%;
-      gap: var(--_vaadin-gap-container-inline);
+      gap: var(--vaadin-gap-container-inline);
       -webkit-user-select: none;
       user-select: none;
       -webkit-tap-highlight-color: transparent;
