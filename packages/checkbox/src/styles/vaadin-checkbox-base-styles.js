@@ -18,7 +18,7 @@ const checkbox = css`
     :host([readonly]) {
       --vaadin-checkbox-background: transparent;
       --vaadin-checkbox-border-color: var(--_vaadin-border-color-strong);
-      --vaadin-checkbox-color: var(--_vaadin-color-strong);
+      --vaadin-checkbox-color: var(--vaadin-color);
     }
 
     :host([readonly]) [part='checkbox'] {

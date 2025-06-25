@@ -29,7 +29,7 @@ export const buttonStyles = css`
       font-size: var(--vaadin-button-font-size, inherit);
       line-height: var(--vaadin-button-line-height, inherit);
       font-weight: var(--vaadin-button-font-weight, 500);
-      color: var(--vaadin-button-text-color, var(--_vaadin-color-strong));
+      color: var(--vaadin-button-text-color, var(--vaadin-color));
       background: var(--vaadin-button-background, var(--vaadin-background-container));
       background-origin: border-box;
       border: var(
@@ -57,7 +57,7 @@ export const buttonStyles = css`
     }
 
     :host([theme~='primary']) {
-      --vaadin-button-background: var(--_vaadin-color-strong);
+      --vaadin-button-background: var(--vaadin-color);
       --vaadin-button-text-color: var(--vaadin-background-color);
       --vaadin-button-border-color: transparent;
     }

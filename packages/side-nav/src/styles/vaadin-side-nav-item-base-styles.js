@@ -28,7 +28,7 @@ const sideNavItem = css`
 
     :host([current]) [part='content'] {
       --vaadin-side-nav-item-background: var(--vaadin-background-container-strong);
-      --vaadin-side-nav-item-color: var(--_vaadin-color-strong);
+      --vaadin-side-nav-item-color: var(--vaadin-color);
     }
 
     :host([disabled]) {

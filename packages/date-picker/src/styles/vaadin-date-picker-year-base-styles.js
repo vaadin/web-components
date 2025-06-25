@@ -22,7 +22,7 @@ export const datePickerYearStyles = css`
     }
 
     :host([current]) [part='year-number'] {
-      color: var(--vaadin-date-picker-year-scroller-current-year-color, var(--_vaadin-color-strong));
+      color: var(--vaadin-date-picker-year-scroller-current-year-color, var(--vaadin-color));
     }
   }
 `;

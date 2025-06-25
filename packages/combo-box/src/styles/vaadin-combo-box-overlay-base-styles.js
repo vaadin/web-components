@@ -20,7 +20,7 @@ export const comboBoxOverlayStyles = css`
     [part='loader'] {
       animation: spin 1s linear infinite;
       border: 2px solid;
-      --_spinner-color: var(--vaadin-combo-box-spinner-color, var(--_vaadin-color-strong));
+      --_spinner-color: var(--vaadin-combo-box-spinner-color, var(--vaadin-color));
       border-color: var(--_spinner-color) var(--_spinner-color) hsl(from var(--_spinner-color) h s l / 0.2)
         hsl(from var(--_spinner-color) h s l / 0.2);
       border-radius: var(--_vaadin-radius-full);
