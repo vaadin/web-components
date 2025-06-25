@@ -6,6 +6,21 @@ const theme = process.argv.join(' ').match(/--theme=(\w+)/u)?.[1] ?? 'lumo';
 const hasPortedParam = process.argv.includes('--ported');
 
 /** @return {import('@web/test-runner').TestRunnerPlugin} */
+export function delayCSSFiles() {
+  return {
+    async transform(context) {
+      if (!context.url.includes('lumo.css')) {
+        return;
+      }
+
+      await new Promise((resolve) => {
+        setTimeout(resolve, 1000);
+      });
+    },
+  };
+}
+
+/** @return {import('@web/test-runner').TestRunnerPlugin} */
 export function cssImportPlugin() {
   return {
     name: 'css-import',
@@ -77,22 +92,24 @@ export function enforceThemePlugin(theme) {
   };
 }
 
-const preventFouc = `
-  <style>
-    body:not(.resolved) {
-      opacity: 0;
-    }
+const preventFouc = ``;
 
-    body {
-      transition: opacity 0.2s;
-    }
-  </style>
+// `
+//   <style>
+//     body:not(.resolved) {
+//       opacity: 0;
+//     }
 
-  <script type="module">
-    // It's important to use type module for the script so the timing is correct
-    document.body.classList.add('resolved');
-  </script>
-`;
+//     body {
+//       transition: opacity 0.2s;
+//     }
+//   </style>
+
+//   <script type="module">
+//     // It's important to use type module for the script so the timing is correct
+//     document.body.classList.add('resolved');
+//   </script>
+// `;
 
 export default {
   plugins: [
@@ -135,5 +152,7 @@ export default {
     // yarn start --theme=lumo --ported (uses base styles and lumo styles defined in css files)
     theme === 'lumo' && hasPortedParam && enforceThemePlugin('ported-lumo'),
     theme === 'lumo' && hasPortedParam && cssImportPlugin(),
+
+    delayCSSFiles(),
   ].filter(Boolean),
 };
