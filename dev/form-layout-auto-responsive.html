@@ -49,7 +49,7 @@
 
         render() {
           return html`
-            <h1>autoResponsive</h1>
+            <h2 class="heading">autoResponsive</h2>
             <vaadin-form-layout auto-responsive auto-rows max-columns="2">
               <vaadin-text-field label="First name"></vaadin-text-field>
               <vaadin-text-field label="Last name"></vaadin-text-field>
@@ -59,7 +59,7 @@
               <vaadin-button>Register</vaadin-button>
             </vaadin-form-layout>
 
-            <h1>autoResponsive + minColumns</h1>
+            <h2 class="heading">autoResponsive + minColumns</h2>
             <vaadin-form-layout auto-responsive auto-rows min-columns="2">
               <vaadin-text-field label="First name"></vaadin-text-field>
               <vaadin-text-field label="Last name"></vaadin-text-field>
@@ -69,7 +69,7 @@
               <vaadin-button>Register</vaadin-button>
             </vaadin-form-layout>
 
-            <h1>autoResponsive + expandColumns</h1>
+            <h2 class="heading">autoResponsive + expandColumns</h2>
             <vaadin-form-layout auto-responsive auto-rows max-columns="2" expand-columns>
               <vaadin-text-field label="First name"></vaadin-text-field>
               <vaadin-text-field label="Last name"></vaadin-text-field>
@@ -79,7 +79,7 @@
               <vaadin-button>Register</vaadin-button>
             </vaadin-form-layout>
 
-            <h1>autoResponsive + expandColumns + expandFields</h1>
+            <h2 class="heading">autoResponsive + expandColumns + expandFields</h2>
             <vaadin-form-layout auto-responsive auto-rows max-columns="2" expand-columns expand-fields>
               <vaadin-text-field label="First name"></vaadin-text-field>
               <vaadin-text-field label="Last name"></vaadin-text-field>
@@ -89,7 +89,7 @@
               <vaadin-button>Register</vaadin-button>
             </vaadin-form-layout>
 
-            <h1>autoResponsive + br</h1>
+            <h2 class="heading">autoResponsive + br</h2>
             <vaadin-form-layout auto-responsive auto-rows max-columns="2">
               <vaadin-text-field label="First name"></vaadin-text-field>
               <br />
@@ -99,7 +99,7 @@
               <vaadin-password-field label="Confirm"></vaadin-password-field>
             </vaadin-form-layout>
 
-            <h1>autoResponsive + FormRow</h1>
+            <h2 class="heading">autoResponsive + FormRow</h2>
             <vaadin-form-layout auto-responsive>
               <vaadin-form-row>
                 <vaadin-text-field label="First name"></vaadin-text-field>
@@ -114,7 +114,7 @@
               </vaadin-form-row>
             </vaadin-form-layout>
 
-            <h1>autoResponsive + FormItem + expandFields</h1>
+            <h2 class="heading">autoResponsive + FormItem + expandFields</h2>
             <vaadin-form-layout auto-responsive auto-rows max-columns="2" expand-fields>
               <vaadin-form-item>
                 <label slot="label"> First name </label>
@@ -138,7 +138,7 @@
               </vaadin-form-item>
             </vaadin-form-layout>
 
-            <h1>autoResponsive inside HorizontalLayout + flex:1</h1>
+            <h2 class="heading">autoResponsive inside HorizontalLayout + flex:1</h2>
             <vaadin-horizontal-layout theme="spacing">
               <vaadin-form-layout style="flex: 1;" auto-responsive auto-rows max-columns="2">
                 <vaadin-text-field label="First name"></vaadin-text-field>
@@ -156,7 +156,7 @@
               </vaadin-form-layout>
             </vaadin-horizontal-layout>
 
-            <h1>autoResponsive inside HorizontalLayout + flex:1 + minColumns</h1>
+            <h2 class="heading">autoResponsive inside HorizontalLayout + flex:1 + minColumns</h2>
             <vaadin-horizontal-layout theme="spacing">
               <vaadin-form-layout style="flex: 1;" auto-responsive auto-rows min-columns="2">
                 <vaadin-text-field label="First name"></vaadin-text-field>
@@ -174,7 +174,7 @@
               </vaadin-form-layout>
             </vaadin-horizontal-layout>
 
-            <h1>autoResponsive inside HorizontalLayout + labels aside</h1>
+            <h2 class="heading">autoResponsive inside HorizontalLayout + labels aside</h2>
             <vaadin-horizontal-layout theme="spacing">
               <vaadin-form-layout style="flex: 1;" auto-responsive auto-rows max-columns="2" labels-aside>
                 <vaadin-form-item>
@@ -230,7 +230,7 @@
               </vaadin-form-layout>
             </vaadin-horizontal-layout>
 
-            <h1>autoResponsive inside Dialog</h1>
+            <h2 class="heading">autoResponsive inside Dialog</h2>
             <vaadin-dialog
               ${dialogRenderer(
                 (dialog) => html`
@@ -246,7 +246,7 @@
             ></vaadin-dialog>
             <vaadin-button @click="${this.openPrevSiblingDialog}">Open</vaadin-button>
 
-            <h1>autoResponsive inside Dialog + minColumns</h1>
+            <h2 class="heading">autoResponsive inside Dialog + minColumns</h2>
             <vaadin-dialog
               ${dialogRenderer(
                 (dialog) => html`
@@ -262,7 +262,7 @@
             ></vaadin-dialog>
             <vaadin-button @click="${this.openPrevSiblingDialog}">Open</vaadin-button>
 
-            <h1>autoResponsive inside Dialog + expandColumns + expandFields</h1>
+            <h2 class="heading">autoResponsive inside Dialog + expandColumns + expandFields</h2>
             <vaadin-dialog
               ${dialogRenderer(
                 (dialog) => html`
@@ -278,7 +278,7 @@
             ></vaadin-dialog>
             <vaadin-button @click="${this.openPrevSiblingDialog}">Open</vaadin-button>
 
-            <h1>autoResponsive inside Dialog + labelsAside</h1>
+            <h2 class="heading">autoResponsive inside Dialog + labelsAside</h2>
             <vaadin-dialog
               ${dialogRenderer(
                 (dialog) => html`
@@ -309,7 +309,7 @@
             ></vaadin-dialog>
             <vaadin-button @click="${this.openPrevSiblingDialog}">Open</vaadin-button>
 
-            <h1>autoResponsive inside Dialog + labelsAside + minColumns</h1>
+            <h2 class="heading">autoResponsive inside Dialog + labelsAside + minColumns</h2>
             <vaadin-dialog
               ${dialogRenderer(
                 (dialog) => html`
@@ -340,7 +340,7 @@
             ></vaadin-dialog>
             <vaadin-button @click="${this.openPrevSiblingDialog}">Open</vaadin-button>
 
-            <h1>autoResponsive inside Dialog 80%</h1>
+            <h2 class="heading">autoResponsive inside Dialog 80%</h2>
             <vaadin-dialog
               width="80%"
               ${dialogRenderer(
@@ -357,7 +357,7 @@
             ></vaadin-dialog>
             <vaadin-button @click="${this.openPrevSiblingDialog}">Open</vaadin-button>
 
-            <h1>autoResponsive inside Dialog 80% + expandColumns + expandFields</h1>
+            <h2 class="heading">autoResponsive inside Dialog 80% + expandColumns + expandFields</h2>
             <vaadin-dialog
               width="80%"
               ${dialogRenderer(
@@ -374,7 +374,7 @@
             ></vaadin-dialog>
             <vaadin-button @click="${this.openPrevSiblingDialog}">Open</vaadin-button>
 
-            <h1>autoResponsive inside HorizontalLayout inside Dialog + flex: 1</h1>
+            <h2 class="heading">autoResponsive inside HorizontalLayout inside Dialog + flex: 1</h2>
             <vaadin-dialog
               ${dialogRenderer(
                 (dialog) => html`
@@ -406,7 +406,7 @@
             ></vaadin-dialog>
             <vaadin-button @click="${this.openPrevSiblingDialog}">Open</vaadin-button>
 
-            <h1>autoResponsive inside Tabsheet inside Dialog</h1>
+            <h2 class="heading">autoResponsive inside Tabsheet inside Dialog</h2>
             <vaadin-dialog
               ${dialogRenderer(
                 (dialog) => html`

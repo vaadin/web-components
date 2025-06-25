@@ -13,12 +13,7 @@ addGlobalThemeStyles(
       margin: 2rem;
     }
 
-    h1,
-    h2,
-    h3,
-    h4,
-    h5,
-    h6 {
+    .heading {
       color: var(--_vaadin-color-strong);
       font-weight: 600;
       font-size: calc(18 / 16 * 1rem);
@@ -27,14 +22,14 @@ addGlobalThemeStyles(
       text-box: cap alphabetic;
     }
 
-    section {
+    .section {
       display: flex;
       flex-wrap: wrap;
       gap: 1lh 1.5lh;
       margin: 2lh 0;
     }
 
-    section > :is(h1, h2, h3, h4, h5, h6, p) {
+    .section > :is(.heading, p) {
       width: 100%;
       margin: 0;
     }
