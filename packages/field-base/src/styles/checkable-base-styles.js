@@ -103,7 +103,7 @@ export const checkable = (part, propName = part) => css`
     :host([disabled]) {
       --vaadin-${unsafeCSS(propName)}-background: var(--vaadin-input-field-disabled-background, var(--vaadin-background-container-strong));
       --vaadin-${unsafeCSS(propName)}-border-color: transparent;
-      --vaadin-${unsafeCSS(propName)}-color: var(--_vaadin-color-subtle);
+      --vaadin-${unsafeCSS(propName)}-color: var(--vaadin-color-disabled);
     }
 
     /* Focus ring */

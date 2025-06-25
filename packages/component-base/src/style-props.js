@@ -36,7 +36,7 @@ addGlobalThemeStyles(
         ); /* Above 3:1 contrast */
 
         /* Text colors */
-        --_vaadin-color-subtle: color-mix(
+        --vaadin-color-disabled: color-mix(
           in oklch,
           var(--_vaadin-color-strong) 48%,
           transparent
@@ -87,7 +87,7 @@ addGlobalThemeStyles(
           --vaadin-background-color: Canvas;
           --_vaadin-border-color: CanvasText;
           --_vaadin-border-color-strong: CanvasText;
-          --_vaadin-color-subtle: CanvasText;
+          --vaadin-color-disabled: CanvasText;
           --_vaadin-color: CanvasText;
           --_vaadin-color-strong: CanvasText;
           --vaadin-icon-color: CanvasText;

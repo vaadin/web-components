@@ -36,7 +36,7 @@ const sideNavItem = css`
     }
 
     :host([disabled]) [part='content'] {
-      --vaadin-side-nav-item-color: var(--_vaadin-color-subtle);
+      --vaadin-side-nav-item-color: var(--vaadin-color-disabled);
     }
 
     [part='link'] {
