@@ -8,11 +8,21 @@ import { css } from 'lit';
 export const tooltipOverlayStyles = css`
   @layer base {
     [part='overlay'] {
-      max-width: 40ch;
+      max-width: var(--vaadin-tooltip-max-width, 40ch);
+      padding: var(--vaadin-tooltip-padding, var(--_vaadin-padding-container));
+      border-radius: var(--vaadin-tooltip-border-radius, var(--_vaadin-radius-m));
+      background: var(--vaadin-tooltip-background, var(--_vaadin-background));
+      color: var(--vaadin-tooltip-color, inherit);
+      font-size: var(--vaadin-tooltip-font-size, 0.9em);
+      font-weight: var(--vaadin-tooltip-font-weight, inherit);
+      line-height: var(--vaadin-tooltip-line-height, inherit);
+      border: 0;
+      box-shadow:
+        0 0 0 var(--vaadin-tooltip-border-width, 1px) var(--vaadin-tooltip-border-color, var(--_vaadin-border-color)),
+        var(--vaadin-tooltip-box-shadow, 0 3px 8px -1px rgba(0, 0, 0, 0.2));
     }
 
     [part='content'] {
-      padding: 0.1875rem 0.25rem;
       white-space: pre-wrap;
     }
 
