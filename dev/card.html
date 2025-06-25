@@ -15,15 +15,11 @@
       import '@vaadin/checkbox-group';
       import '@vaadin/icon';
       import '@vaadin/icons';
-      import '@vaadin/vaadin-lumo-styles/icons.js';
       import '@vaadin/select';
       import '@vaadin/scroller';
-      import { badge } from '@vaadin/vaadin-lumo-styles/badge.js';
-      import { utility } from '@vaadin/vaadin-lumo-styles/utility.js';
-      import { addGlobalThemeStyles } from '@vaadin/vaadin-themable-mixin/register-styles.js';
-
-      addGlobalThemeStyles('utility', utility);
-      addGlobalThemeStyles('badge', badge);
+      import '@vaadin/vaadin-lumo-styles/global.css';
+      import '@vaadin/vaadin-lumo-styles/lumo.css';
+      import '@vaadin/vaadin-lumo-styles/icons.js';
 
       const playground = document.querySelector('.playground');
       const codeExample = document.querySelector('.code-example');
@@ -325,7 +321,7 @@
       <template id="slot-options">
         <div slot="header" class="leading-xs">
           <b class="uppercase text-xs text-secondary">The Exotic North</b>
-          <h2 class="heading">Lapland</h2>
+          <h2>Lapland</h2>
         </div>
         <vaadin-avatar slot="header-prefix" abbr="L"></vaadin-avatar>
         <span slot="header-suffix" theme="badge success">Arctic</span>
