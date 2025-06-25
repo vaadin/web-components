@@ -11,20 +11,21 @@
       import '@vaadin/icon';
       import '@vaadin/icons';
       import '@vaadin/time-picker';
+      import '@vaadin/vaadin-lumo-styles/global.css';
       import '@vaadin/vaadin-lumo-styles/lumo.css';
       import '@vaadin/vaadin-lumo-styles/vaadin-iconset.js';
     </script>
   </head>
 
   <body>
-    <section>
-      <h2>Plain</h2>
+    <section class="section">
+      <h2 class="heading">Plain</h2>
       <vaadin-time-picker value="12:00"></vaadin-time-picker>
       <vaadin-time-picker placeholder="Placeholder"></vaadin-time-picker>
     </section>
 
-    <section>
-      <h2>Bells & Whistles</h2>
+    <section class="section">
+      <h2 class="heading">Bells & Whistles</h2>
       <vaadin-time-picker
         label="Label"
         helper-text="Description for this field."
@@ -37,8 +38,8 @@
       </vaadin-time-picker>
     </section>
 
-    <section>
-      <h2>States</h2>
+    <section class="section">
+      <h2 class="heading">States</h2>
       <vaadin-time-picker
         label="Read-only"
         helper-text="Description for this field."

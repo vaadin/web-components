@@ -11,20 +11,21 @@
       import '@vaadin/checkbox';
       import '@vaadin/icon';
       import '@vaadin/icons';
+      import '@vaadin/vaadin-lumo-styles/global.css';
       import '@vaadin/vaadin-lumo-styles/lumo.css';
     </script>
   </head>
 
   <body>
-    <section>
-      <h2>Label &amp; Description</h2>
+    <section class="section">
+      <h2 class="heading">Label &amp; Description</h2>
       <vaadin-checkbox label="Checked" checked></vaadin-checkbox>
       <vaadin-checkbox label="Indeterminate" indeterminate></vaadin-checkbox>
       <vaadin-checkbox label="Unchecked"></vaadin-checkbox>
     </section>
 
-    <section>
-      <h2>All Features</h2>
+    <section class="section">
+      <h2 class="heading">All Features</h2>
       <vaadin-checkbox
         label="Label"
         helper-text="Description"
@@ -34,8 +35,8 @@
       ></vaadin-checkbox>
     </section>
 
-    <section>
-      <h2>Complex Label</h2>
+    <section class="section">
+      <h2 class="heading">Complex Label</h2>
       <vaadin-checkbox>
         <label slot="label">
           <vaadin-icon icon="vaadin:file"></vaadin-icon>
