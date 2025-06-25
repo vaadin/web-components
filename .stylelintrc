@@ -19,6 +19,12 @@
         "custom-rules/no-shorthand-with-unresolved-longhand": true,
         "custom-rules/license-header": true
       }
+    },
+    {
+      "files": ["packages/vaadin-lumo-styles/components/*.css"],
+      "rules": {
+        "custom-property-empty-line-before": null
+      }
     }
   ],
   "rules": {
