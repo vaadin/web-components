@@ -103,7 +103,7 @@ export const inputContainerStyles = css`
     }
 
     :host([disabled]) {
-      --vaadin-input-field-value-color: var(--vaadin-input-field-disabled-text-color, var(--_vaadin-color-subtle));
+      --vaadin-input-field-value-color: var(--vaadin-input-field-disabled-text-color, var(--vaadin-color-disabled));
       --vaadin-input-field-background: var(
         --vaadin-input-field-disabled-background,
         var(--vaadin-background-container-strong)
