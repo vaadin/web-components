@@ -6,11 +6,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Menu bar</title>
     <script type="module" src="./common.js"></script>
+    <style>
+      .controls {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 2rem;
+        margin-bottom: 2rem;
+        font-size: 0.875rem;
+      }
+
+      .control-group {
+        display: flex;
+        flex-direction: column;
+        gap: 1em;
+      }
+    </style>
 
     <script type="module">
       import '@vaadin/menu-bar';
       import '@vaadin/tooltip';
       import '@vaadin/vaadin-lumo-styles/lumo.css';
+      import '@vaadin/checkbox';
+      import '@vaadin/checkbox-group';
+      import '@vaadin/select';
+      import '@vaadin/split-layout';
 
       const menuBar = document.querySelector('vaadin-menu-bar');
       menuBar.items = [
@@ -24,6 +43,7 @@
               children: [{ text: 'Facebook' }, { text: 'Twitter' }, { text: 'Instagram' }],
             },
             { text: 'By email' },
+            { component: 'hr' },
             { text: 'Get link' },
           ],
         },
@@ -34,12 +54,57 @@
         },
         { text: 'Duplicate', tooltip: 'Create a duplicate' },
       ];
+
+      ['dropdown-indicators', 'small', 'primary', 'tertiary', 'tertiary-inline', 'end-aligned'].forEach((variant) => {
+        document.querySelector(`#${variant}`).addEventListener('checked-changed', (e) => {
+          let theme = menuBar.getAttribute('theme') || '';
+          if (e.detail.value) {
+            theme += ` ${variant}`;
+          } else {
+            theme = theme.replace(variant, '');
+          }
+
+          menuBar.setAttribute('theme', theme.trim());
+        });
+      });
+
+      const enable = document.querySelector('#enable');
+      enable.items = [
+        { label: 'Yes', value: 'y' },
+        { label: 'No', value: 'n' },
+      ];
+      enable.value = 'y';
+      enable.addEventListener('value-changed', (e) => {
+        menuBar.toggleAttribute('disabled', e.detail.value == 'n');
+      });
     </script>
   </head>
 
   <body>
-    <vaadin-menu-bar>
-      <vaadin-tooltip slot="tooltip" hover-delay="500" hide-delay="500"></vaadin-tooltip>
-    </vaadin-menu-bar>
+    <div class="controls">
+      <div class="control-group">
+        <vaadin-checkbox-group label="Themes">
+          <vaadin-checkbox
+            id="dropdown-indicators"
+            value="dropdown-indicators"
+            label="Dropdown indicators"
+          ></vaadin-checkbox>
+          <vaadin-checkbox id="small" value="small" label="Small"></vaadin-checkbox>
+          <vaadin-checkbox id="primary" value="primary" label="Primary"></vaadin-checkbox>
+          <vaadin-checkbox id="tertiary" value="tertiary" label="Tertiary"></vaadin-checkbox>
+          <vaadin-checkbox id="tertiary-inline" value="tertiary-inline" label="Tertiary inline"></vaadin-checkbox>
+          <vaadin-checkbox id="end-aligned" value="end-aligned" label="End aligned"></vaadin-checkbox>
+        </vaadin-checkbox-group>
+      </div>
+      <div class="control-group">
+        <vaadin-select label="Enabled" id="enable"></vaadin-select>
+      </div>
+    </div>
+    <vaadin-split-layout>
+      <vaadin-menu-bar>
+        <vaadin-tooltip slot="tooltip" hover-delay="500" hide-delay="500"></vaadin-tooltip>
+      </vaadin-menu-bar>
+      <span>Resize to show overflow button</span>
+    </vaadin-split-layout>
   </body>
 </html>
