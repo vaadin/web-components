@@ -3,8 +3,8 @@ import { visualDiff } from '@web/test-runner-visual-regression';
 import '@vaadin/vaadin-lumo-styles/global.css';
 import '@vaadin/vaadin-lumo-styles/props.css';
 import '@vaadin/vaadin-lumo-styles/components/confirm-dialog.css';
-import '../../../vaadin-confirm-dialog.js';
 import '../../not-animated-styles.js';
+import '../../../vaadin-confirm-dialog.js';
 
 describe('confirm-dialog', () => {
   let div, element;
