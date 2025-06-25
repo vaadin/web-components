@@ -73,7 +73,7 @@ export const monthCalendarStyles = css`
     }
 
     [part~='date'] {
-      border-radius: var(--vaadin-date-picker-date-border-radius, var(--_vaadin-radius-m));
+      border-radius: var(--vaadin-date-picker-date-border-radius, var(--vaadin-radius-m));
       position: relative;
       width: var(--vaadin-date-picker-date-width, 2rem);
       height: var(--vaadin-date-picker-date-height, 2rem);

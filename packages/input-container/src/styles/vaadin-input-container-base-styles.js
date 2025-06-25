@@ -11,7 +11,7 @@ export const inputContainerStyles = css`
     :host {
       display: flex;
       align-items: center;
-      --_radius: var(--vaadin-input-field-border-radius, var(--_vaadin-radius-m));
+      --_radius: var(--vaadin-input-field-border-radius, var(--vaadin-radius-m));
       border-radius:
       /* See https://developer.mozilla.org/en-US/docs/Web/CSS/border-radius */
         var(--vaadin-input-field-top-start-radius, var(--_radius))
@@ -22,8 +22,8 @@ export const inputContainerStyles = css`
         var(--vaadin-input-field-border-color, var(--vaadin-border-color-strong));
       box-sizing: border-box;
       cursor: text;
-      padding: var(--vaadin-input-field-padding, var(--_vaadin-padding-container));
-      gap: var(--vaadin-input-field-gap, var(--_vaadin-gap-container-inline));
+      padding: var(--vaadin-input-field-padding, var(--vaadin-padding-container));
+      gap: var(--vaadin-input-field-gap, var(--vaadin-gap-container-inline));
       background: var(--vaadin-input-field-background, var(--vaadin-background-color));
       color: var(--vaadin-input-field-value-color, var(--vaadin-color));
       font-size: var(--vaadin-input-field-value-font-size, inherit);
@@ -32,7 +32,7 @@ export const inputContainerStyles = css`
     }
 
     :host([dir='rtl']) {
-      --_radius: var(--vaadin-input-field-border-radius, var(--_vaadin-radius-m));
+      --_radius: var(--vaadin-input-field-border-radius, var(--vaadin-radius-m));
       border-radius:
       /* Don't use logical props, see https://github.com/vaadin/vaadin-time-picker/issues/145 */
         var(--vaadin-input-field-top-end-radius, var(--_radius))

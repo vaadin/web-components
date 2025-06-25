@@ -11,7 +11,7 @@ export const checkable = (part, propName = part) => css`
     :host {
       align-items: center;
       display: inline-grid;
-      gap: var(--vaadin-${unsafeCSS(propName)}-gap, 0.25lh var(--_vaadin-gap-container-inline));
+      gap: var(--vaadin-${unsafeCSS(propName)}-gap, 0.25lh var(--vaadin-gap-container-inline));
       grid-template-columns: auto 1fr;
       /*
         Using minmax(auto, max-content) works around a Safari 17 issue where placing a checkbox
@@ -83,7 +83,7 @@ export const checkable = (part, propName = part) => css`
     [part='${unsafeCSS(part)}'] {
       background: var(--vaadin-${unsafeCSS(propName)}-background, var(--vaadin-background-color));
       border-color: var(--vaadin-${unsafeCSS(propName)}-border-color, var(--vaadin-input-field-border-color, var(--vaadin-border-color-strong)));
-      border-radius: var(--vaadin-${unsafeCSS(propName)}-border-radius, var(--_vaadin-radius-s));
+      border-radius: var(--vaadin-${unsafeCSS(propName)}-border-radius, var(--vaadin-radius-s));
       border-style: solid;
       --_border-width: var(--vaadin-${unsafeCSS(propName)}-border-width, var(--vaadin-input-field-border-width, 1px));
       border-width: var(--_border-width);

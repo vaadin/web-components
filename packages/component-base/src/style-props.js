@@ -37,18 +37,18 @@ addGlobalThemeStyles(
         --_vaadin-color-strong: light-dark(#1f1f1f, white); /* Above 7:1 contrast */
 
         /* Padding */
-        --_vaadin-padding: 8px;
-        --_vaadin-padding-container: 6px 8px;
+        --vaadin-padding: 8px;
+        --vaadin-padding-container: 6px 8px;
 
         /* Gap/spacing */
-        --_vaadin-gap-container-inline: 0.5em;
-        --_vaadin-gap-container-block: 0.5em;
+        --vaadin-gap-container-inline: 0.5em;
+        --vaadin-gap-container-block: 0.5em;
 
         /* Border radius */
-        --_vaadin-radius-s: 3px;
-        --_vaadin-radius-m: 6px;
-        --_vaadin-radius-l: 12px;
-        --_vaadin-radius-full: 999px;
+        --vaadin-radius-s: 3px;
+        --vaadin-radius-m: 6px;
+        --vaadin-radius-l: 12px;
+        --vaadin-radius-full: 999px;
 
         /* Focus outline */
         --vaadin-focus-ring-width: 2px;

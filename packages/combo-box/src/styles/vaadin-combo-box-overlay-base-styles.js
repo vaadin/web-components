@@ -23,7 +23,7 @@ export const comboBoxOverlayStyles = css`
       --_spinner-color: var(--vaadin-combo-box-spinner-color, var(--vaadin-color));
       border-color: var(--_spinner-color) var(--_spinner-color) hsl(from var(--_spinner-color) h s l / 0.2)
         hsl(from var(--_spinner-color) h s l / 0.2);
-      border-radius: var(--_vaadin-radius-full);
+      border-radius: var(--vaadin-radius-full);
       box-sizing: border-box;
       display: none;
       height: var(--vaadin-icon-size, 1lh);

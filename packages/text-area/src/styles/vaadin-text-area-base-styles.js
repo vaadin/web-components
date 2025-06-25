@@ -9,7 +9,7 @@ export const textAreaStyles = css`
   @layer base {
     [part='input-field'] {
       overflow: auto;
-      scroll-padding: var(--vaadin-input-field-padding, var(--_vaadin-padding-container));
+      scroll-padding: var(--vaadin-input-field-padding, var(--vaadin-padding-container));
     }
 
     ::slotted(textarea) {
