@@ -41,7 +41,11 @@ addGlobalThemeStyles(
           var(--_vaadin-color-strong) 48%,
           transparent
         ); /* Above 3:1 contrast */
-        --_vaadin-color: color-mix(in oklch, var(--_vaadin-color-strong) 68%, transparent); /* Above 4.5:1 contrast */
+        --vaadin-color-subtle: color-mix(
+          in oklch,
+          var(--_vaadin-color-strong) 68%,
+          transparent
+        ); /* Above 4.5:1 contrast */
         --_vaadin-color-strong: light-dark(#1f1f1f, white); /* Above 7:1 contrast */
 
         /* Padding */
@@ -88,7 +92,7 @@ addGlobalThemeStyles(
           --_vaadin-border-color: CanvasText;
           --_vaadin-border-color-strong: CanvasText;
           --vaadin-color-disabled: CanvasText;
-          --_vaadin-color: CanvasText;
+          --vaadin-color-subtle: CanvasText;
           --_vaadin-color-strong: CanvasText;
           --vaadin-icon-color: CanvasText;
           --vaadin-focus-ring-color: Highlight;

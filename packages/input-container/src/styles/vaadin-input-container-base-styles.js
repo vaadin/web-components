@@ -85,7 +85,7 @@ export const inputContainerStyles = css`
     }
 
     ::slotted(:is(input, textarea):placeholder-shown) {
-      color: var(--vaadin-input-field-placeholder-color, var(--_vaadin-color));
+      color: var(--vaadin-input-field-placeholder-color, var(--vaadin-color-subtle));
     }
 
     :host(:focus-within) {
