@@ -76,7 +76,7 @@ export const appLayoutStyles = css`
       );
       z-index: 1;
       gap: var(--vaadin-app-layout-navbar-gap, var(--_vaadin-gap-container-inline));
-      background: var(--vaadin-app-layout-navbar-background, var(--_vaadin-background-container));
+      background: var(--vaadin-app-layout-navbar-background, var(--vaadin-background-container));
     }
 
     :host([primary-section='drawer'][drawer-opened]:not([overlay])) [part='navbar'] {
@@ -117,7 +117,7 @@ export const appLayoutStyles = css`
       visibility: hidden;
       display: flex;
       flex-direction: column;
-      background: var(--vaadin-app-layout-drawer-background, var(--_vaadin-background));
+      background: var(--vaadin-app-layout-drawer-background, var(--vaadin-background-color));
     }
 
     :host([drawer-opened]) [part='drawer'] {

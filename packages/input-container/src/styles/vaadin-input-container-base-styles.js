@@ -24,7 +24,7 @@ export const inputContainerStyles = css`
       cursor: text;
       padding: var(--vaadin-input-field-padding, var(--_vaadin-padding-container));
       gap: var(--vaadin-input-field-gap, var(--_vaadin-gap-container-inline));
-      background: var(--vaadin-input-field-background, var(--_vaadin-background));
+      background: var(--vaadin-input-field-background, var(--vaadin-background-color));
       color: var(--vaadin-input-field-value-color, var(--_vaadin-color-strong));
       font-size: var(--vaadin-input-field-value-font-size, inherit);
       line-height: var(--vaadin-input-field-value-line-height, inherit);
@@ -106,7 +106,7 @@ export const inputContainerStyles = css`
       --vaadin-input-field-value-color: var(--vaadin-input-field-disabled-text-color, var(--_vaadin-color-subtle));
       --vaadin-input-field-background: var(
         --vaadin-input-field-disabled-background,
-        var(--_vaadin-background-container-strong)
+        var(--vaadin-background-container-strong)
       );
       --vaadin-input-field-border-color: transparent;
     }
