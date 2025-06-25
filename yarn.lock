@@ -8489,10 +8489,10 @@ object.values@^1.1.6, object.values@^1.2.1:
     define-properties "^1.2.1"
     es-object-atoms "^1.0.0"
 
-ol@10.5.0:
-  version "10.5.0"
-  resolved "https://registry.yarnpkg.com/ol/-/ol-10.5.0.tgz#5831dc55fe5eb5a09cb4193c9289c1b5a0a0f0ca"
-  integrity sha512-nHFx8gkGmvYImsa7iKkwUnZidd5gn1XbMZd9GNOorvm9orjW9gQvT3Naw/MjIasVJ3cB9EJUdCGR2EFAulMHsQ==
+ol@10.6.0:
+  version "10.6.0"
+  resolved "https://registry.yarnpkg.com/ol/-/ol-10.6.0.tgz#cb703b951af0eeed316b2a361d3c7c04f89bf296"
+  integrity sha512-rNnSROaU1du+hFFvA+3AC6Y9NrJpsCJw65r0YtZaoyfKmpPkF7CZZhLLxrC4J3MRWKKEMT0JQkZ0wfc1+hiXjg==
   dependencies:
     "@types/rbush" "4.0.0"
     earcut "^3.0.0"
