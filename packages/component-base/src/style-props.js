@@ -13,14 +13,18 @@ addGlobalThemeStyles(
     @layer vaadin.base {
       html {
         /* Background color */
-        --_vaadin-background: light-dark(#fff, #222);
+        --vaadin-background-color: light-dark(#fff, #222);
 
         /* Container colors */
-        --_vaadin-background-container: color-mix(in oklch, var(--_vaadin-color-strong) 5%, var(--_vaadin-background));
-        --_vaadin-background-container-strong: color-mix(
+        --vaadin-background-container: color-mix(
+          in oklch,
+          var(--_vaadin-color-strong) 5%,
+          var(--vaadin-background-color)
+        );
+        --vaadin-background-container-strong: color-mix(
           in oklch,
           var(--_vaadin-color-strong) 10%,
-          var(--_vaadin-background)
+          var(--vaadin-background-color)
         );
 
         /* Border colors */
@@ -80,7 +84,7 @@ addGlobalThemeStyles(
 
       @media (forced-colors: active) {
         html {
-          --_vaadin-background: Canvas;
+          --vaadin-background-color: Canvas;
           --_vaadin-border-color: CanvasText;
           --_vaadin-border-color-strong: CanvasText;
           --_vaadin-color-subtle: CanvasText;

@@ -103,7 +103,7 @@ export const monthCalendarStyles = css`
     }
 
     [part~='selected'] {
-      color: var(--vaadin-date-picker-date-selected-color, var(--_vaadin-background));
+      color: var(--vaadin-date-picker-date-selected-color, var(--vaadin-background-color));
     }
 
     [part~='selected']::after {

@@ -81,7 +81,7 @@ export const checkable = (part, propName = part) => css`
 
     /* Control container (checkbox, radio button) */
     [part='${unsafeCSS(part)}'] {
-      background: var(--vaadin-${unsafeCSS(propName)}-background, var(--_vaadin-background));
+      background: var(--vaadin-${unsafeCSS(propName)}-background, var(--vaadin-background-color));
       border-color: var(--vaadin-${unsafeCSS(propName)}-border-color, var(--vaadin-input-field-border-color, var(--_vaadin-border-color-strong)));
       border-radius: var(--vaadin-${unsafeCSS(propName)}-border-radius, var(--_vaadin-radius-s));
       border-style: solid;
@@ -97,11 +97,11 @@ export const checkable = (part, propName = part) => css`
     :host(:is([checked], [indeterminate])) {
       --vaadin-${unsafeCSS(propName)}-background: var(--_vaadin-color-strong);
       --vaadin-${unsafeCSS(propName)}-border-color: transparent;
-      --vaadin-${unsafeCSS(propName)}-color: var(--_vaadin-background);
+      --vaadin-${unsafeCSS(propName)}-color: var(--vaadin-background-color);
     }
 
     :host([disabled]) {
-      --vaadin-${unsafeCSS(propName)}-background: var(--vaadin-input-field-disabled-background, var(--_vaadin-background-container-strong));
+      --vaadin-${unsafeCSS(propName)}-background: var(--vaadin-input-field-disabled-background, var(--vaadin-background-container-strong));
       --vaadin-${unsafeCSS(propName)}-border-color: transparent;
       --vaadin-${unsafeCSS(propName)}-color: var(--_vaadin-color-subtle);
     }

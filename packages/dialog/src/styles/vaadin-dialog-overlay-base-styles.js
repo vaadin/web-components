@@ -30,7 +30,7 @@ export const dialogOverlayBase = css`
     }
 
     [part='overlay'] {
-      background: var(--vaadin-dialog-background, var(--_vaadin-background));
+      background: var(--vaadin-dialog-background, var(--vaadin-background-color));
       background-origin: border-box;
       border: 0;
       box-shadow:

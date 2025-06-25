@@ -43,7 +43,7 @@ export const overlayContentStyles = css`
 
     :host([years-visible]) [part='years-toggle-button'] {
       background: var(--_vaadin-color-strong);
-      color: var(--_vaadin-background);
+      color: var(--vaadin-background-color);
     }
 
     [hidden] {
@@ -63,7 +63,7 @@ export const overlayContentStyles = css`
 
     ::slotted([slot='years']) {
       visibility: hidden;
-      background: var(--vaadin-date-picker-year-scroller-background, var(--_vaadin-background-container));
+      background: var(--vaadin-date-picker-year-scroller-background, var(--vaadin-background-container));
       width: var(--vaadin-date-picker-year-scroller-width, 3rem);
       box-sizing: border-box;
       border-inline-start: 1px solid var(--vaadin-date-picker-year-scroller-border-color, var(--_vaadin-border-color));
@@ -73,7 +73,7 @@ export const overlayContentStyles = css`
     }
 
     ::slotted([slot='years'])::before {
-      background: var(--vaadin-overlay-background, var(--_vaadin-background));
+      background: var(--vaadin-overlay-background, var(--vaadin-background-color));
       border: 1px solid var(--vaadin-date-picker-year-scroller-border-color, var(--_vaadin-border-color));
       width: 1em;
       height: 1em;

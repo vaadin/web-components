@@ -25,7 +25,7 @@ export const gridStyles = css`
       position: relative;
       box-sizing: border-box;
       -webkit-tap-highlight-color: transparent;
-      background: var(--vaadin-grid-background, var(--_vaadin-background));
+      background: var(--vaadin-grid-background, var(--vaadin-background-color));
       border: var(--_border-width) solid var(--vaadin-grid-border-color, var(--_vaadin-border-color));
       cursor: default;
       --_border-width: 0;
@@ -156,7 +156,7 @@ export const gridStyles = css`
       box-sizing: border-box;
       background:
         var(--_reorder-background-image), var(--_selection-background-image),
-        var(--vaadin-grid-cell-background, var(--_vaadin-background));
+        var(--vaadin-grid-cell-background, var(--vaadin-background-color));
       padding: 0;
     }
 
@@ -240,7 +240,7 @@ export const gridStyles = css`
     :host([theme~='row-stripes']) [part~='odd-row'] [part~='details-cell'] {
       background:
         var(--_reorder-background-image), var(--_selection-background-image),
-        var(--vaadin-grid-alternate-cell-background, var(--_vaadin-background-container));
+        var(--vaadin-grid-alternate-cell-background, var(--vaadin-background-container));
     }
 
     [part~='cell'] > [tabindex] {
