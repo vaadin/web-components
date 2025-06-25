@@ -5,12 +5,6 @@ addGlobalThemeStyles(
   'dev-common',
   css`
     body {
-      font-family: var(--lumo-font-family);
-      font-size: var(--lumo-font-size-m);
-      line-height: var(--lumo-line-height-m);
-      -webkit-text-size-adjust: 100%;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
       margin: 2rem;
     }
 
