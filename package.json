@@ -68,7 +68,7 @@
     "postcss-lit": "^1.2.0",
     "prettier": "^3.6.0",
     "prettier-plugin-package": "^1.4.0",
-    "replace-in-file": "^6.3.5",
+    "replace-in-file": "^8.3.0",
     "rimraf": "^6.0.1",
     "rollup": "^4.4.0",
     "stylelint": "^16.21.0",
