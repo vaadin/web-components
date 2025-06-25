@@ -19,7 +19,7 @@ export const inputContainerStyles = css`
         var(--vaadin-input-field-bottom-end-radius, var(--_radius))
         var(--vaadin-input-field-bottom-start-radius, var(--_radius));
       border: var(--vaadin-input-field-border-width, 1px) solid
-        var(--vaadin-input-field-border-color, var(--_vaadin-border-color-strong));
+        var(--vaadin-input-field-border-color, var(--vaadin-border-color-strong));
       box-sizing: border-box;
       cursor: text;
       padding: var(--vaadin-input-field-padding, var(--_vaadin-padding-container));

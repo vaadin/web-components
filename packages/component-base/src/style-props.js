@@ -24,8 +24,8 @@ addGlobalThemeStyles(
         );
 
         /* Border colors */
-        --_vaadin-border-color: color-mix(in oklch, var(--vaadin-color) 24%, transparent);
-        --_vaadin-border-color-strong: color-mix(
+        --vaadin-border-color: color-mix(in oklch, var(--vaadin-color) 24%, transparent);
+        --vaadin-border-color-strong: color-mix(
           in oklch,
           var(--_vaadin-color-strong) 48%,
           transparent
@@ -77,8 +77,8 @@ addGlobalThemeStyles(
       @media (forced-colors: active) {
         html {
           --vaadin-background-color: Canvas;
-          --_vaadin-border-color: CanvasText;
-          --_vaadin-border-color-strong: CanvasText;
+          --vaadin-border-color: CanvasText;
+          --vaadin-border-color-strong: CanvasText;
           --vaadin-color-disabled: CanvasText;
           --vaadin-color-subtle: CanvasText;
           --vaadin-color: CanvasText;
