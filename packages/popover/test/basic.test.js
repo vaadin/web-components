@@ -493,20 +493,24 @@ describe('popover', () => {
   });
 
   describe('content overflow', () => {
+    let overlayHeight;
+
     beforeEach(async () => {
       popover.renderer = (root) => {
         root.textContent = new Array(2000).fill('foo').join(' ');
       };
       popover.opened = true;
       await oneEvent(overlay, 'vaadin-overlay-open');
+      overlayHeight = overlay.getBoundingClientRect().height;
     });
 
     it('should limit overlay height if content overflows the viewport', () => {
-      expect(overlay.$.overlay.getBoundingClientRect().height).to.equal(overlay.getBoundingClientRect().height);
+      expect(overlay.$.overlay.getBoundingClientRect().height).to.equal(overlayHeight);
     });
 
     it('should limit content height if content overflows the viewport', () => {
-      expect(overlay.$.content.getBoundingClientRect().height).to.equal(overlay.getBoundingClientRect().height);
+      const border = parseInt(getComputedStyle(overlay.$.overlay).borderTopWidth);
+      expect(overlay.$.content.getBoundingClientRect().height).to.equal(overlayHeight - border * 2);
     });
   });
 
