@@ -27,7 +27,7 @@ addGlobalThemeStyles(
         --vaadin-border-color: color-mix(in oklch, var(--vaadin-color) 24%, transparent);
         --vaadin-border-color-strong: color-mix(
           in oklch,
-          var(--_vaadin-color-strong) 48%,
+          var(--vaadin-color) 48%,
           transparent
         ); /* Above 3:1 contrast */
 
