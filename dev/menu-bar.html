@@ -33,7 +33,14 @@
 
       const menuBar = document.querySelector('vaadin-menu-bar');
       menuBar.items = [
-        { text: 'View', tooltip: 'Options for how to view the content' },
+        {
+          text: 'View',
+          tooltip: 'Options for how to view the content',
+          children: [
+            { text: 'Ruler', checked: false },
+            { text: 'Status bar', checked: true },
+          ],
+        },
         { text: 'Edit' },
         {
           text: 'Share',
@@ -42,7 +49,7 @@
               text: 'On social media',
               children: [{ text: 'Facebook' }, { text: 'Twitter' }, { text: 'Instagram' }],
             },
-            { text: 'By email' },
+            { text: 'By email', disabled: true },
             { component: 'hr' },
             { text: 'Get link' },
           ],
@@ -68,6 +75,13 @@
         });
       });
 
+      menuBar.addEventListener('item-selected', (e) => {
+        const item = e.detail.value;
+        if (item.checked != null) {
+          item.checked = !item.checked;
+        }
+      });
+
       const enable = document.querySelector('#enable');
       enable.items = [
         { label: 'Yes', value: 'y' },
@@ -77,6 +91,14 @@
       enable.addEventListener('value-changed', (e) => {
         menuBar.toggleAttribute('disabled', e.detail.value == 'n');
       });
+
+      const direction = document.querySelector('#direction');
+      direction.items = [
+        { label: 'LTR', value: 'ltr' },
+        { label: 'RTL', value: 'rtl' },
+      ];
+      direction.value = 'ltr';
+      direction.addEventListener('value-changed', (e) => menuBar.setAttribute('dir', e.detail.value));
     </script>
   </head>
 
@@ -98,6 +120,9 @@
       </div>
       <div class="control-group">
         <vaadin-select label="Enabled" id="enable"></vaadin-select>
+      </div>
+      <div class="control-group">
+        <vaadin-select label="Direction" id="direction"></vaadin-select>
       </div>
     </div>
     <vaadin-split-layout>
