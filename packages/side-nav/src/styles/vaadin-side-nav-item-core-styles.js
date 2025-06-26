@@ -35,7 +35,6 @@ export const sideNavItemStyles = css`
   }
 
   button {
-    -webkit-appearance: none;
     appearance: none;
     flex: none;
     position: relative;
