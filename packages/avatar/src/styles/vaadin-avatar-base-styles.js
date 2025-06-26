@@ -47,6 +47,7 @@ export const avatarStyles = css`
 
     [part='abbr'] {
       font-size: 2.75em;
+      fill: currentColor;
     }
 
     :host([hidden]),
