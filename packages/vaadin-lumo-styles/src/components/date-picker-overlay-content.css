@@ -53,7 +53,6 @@
         + var(--lumo-space-s)
       );
   --vaadin-infinite-scroller-buffer-offset: 10%;
-  -webkit-mask-image: linear-gradient(transparent, #000 10%, #000 85%, transparent);
   mask-image: linear-gradient(transparent, #000 10%, #000 85%, transparent);
   position: relative;
 }
@@ -67,7 +66,6 @@
   bottom: 0;
   font-size: var(--lumo-font-size-s);
   box-shadow: inset 2px 0 4px 0 var(--lumo-shade-5pct);
-  -webkit-mask-image: linear-gradient(transparent, #000 35%, #000 65%, transparent);
   mask-image: linear-gradient(transparent, #000 35%, #000 65%, transparent);
   cursor: var(--lumo-clickable-cursor);
 }

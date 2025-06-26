@@ -69,7 +69,6 @@ const menuOverlayExt = css`
       box-sizing: border-box;
       -webkit-overflow-scrolling: touch;
       overflow: auto;
-      -webkit-mask-image: linear-gradient(transparent, #000 40px, #000 calc(100% - 40px), transparent);
       mask-image: linear-gradient(transparent, #000 40px, #000 calc(100% - 40px), transparent);
     }
 

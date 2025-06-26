@@ -15,7 +15,6 @@
   opacity: 0;
   --_active-user-color: transparent;
   transition: opacity 0.3s;
-  -webkit-mask-image: none !important;
   mask-image: none !important;
 }
 

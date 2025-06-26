@@ -44,7 +44,6 @@
 }
 
 button {
-  -webkit-appearance: none;
   appearance: none;
   flex: none;
   position: relative;
@@ -125,17 +124,15 @@ slot:not([name]) {
   transform: none;
 }
 
-@supports selector(:focus-visible) {
-  [part='link'],
-  [part='toggle-button'] {
-    outline: none;
-  }
+[part='link'],
+[part='toggle-button'] {
+  outline: none;
+}
 
-  [part='link']:focus-visible,
-  [part='toggle-button']:focus-visible {
-    border-radius: var(--lumo-border-radius-m);
-    box-shadow: 0 0 0 var(--_focus-ring-width) var(--_focus-ring-color);
-  }
+[part='link']:focus-visible,
+[part='toggle-button']:focus-visible {
+  border-radius: var(--lumo-border-radius-m);
+  box-shadow: 0 0 0 var(--_focus-ring-width) var(--_focus-ring-color);
 }
 
 [part='link']:active {

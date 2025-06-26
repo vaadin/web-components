@@ -17,7 +17,7 @@ describe('overlay', () => {
     };
     await nextRender();
     overlay = menu._overlayElement;
-    content = overlay.$.overlay.children[0];
+    content = overlay.$.content;
     // Make content have a fixed size
     content.style.height = content.style.width = '100px';
     content.style.boxSizing = 'border-box';
@@ -233,7 +233,7 @@ describe('overlay', () => {
         });
       });
 
-      (isIOS ? describe.skip : describe)(`[dir=${direction}] position`, () => {
+      describe(`[dir=${direction}] position`, () => {
         let isRTL;
         before(async () => {
           isRTL = direction === 'rtl';
@@ -278,11 +278,12 @@ describe('overlay', () => {
           contextmenu(viewWidth, viewHeight);
           await oneEvent(overlay, 'vaadin-overlay-open');
 
+          const border = parseInt(getComputedStyle(overlay.$.overlay).borderWidth);
           const rect = content.getBoundingClientRect();
           expect(rect.width).to.be.closeTo(100, 0.5);
           expect(rect.height).to.be.closeTo(100, 0.5);
-          expect(rect.left).to.be.closeTo(viewWidth - 100, 0.5);
-          expect(rect.top).to.be.closeTo(viewHeight - 100, 0.5);
+          expect(rect.left).to.be.closeTo(viewWidth - 100 - border, 0.5);
+          expect(rect.top).to.be.closeTo(viewHeight - 100 - border, 0.5);
         });
 
         it('should reset css properties and attributes on each open', async () => {
@@ -294,9 +295,10 @@ describe('overlay', () => {
           contextmenu(16, 16);
           await oneEvent(overlay, 'vaadin-overlay-open');
 
+          const border = parseInt(getComputedStyle(overlay.$.overlay).borderWidth);
           const rect = content.getBoundingClientRect();
-          expect(rect.left).to.be.closeTo(16, 0.5);
-          expect(rect.top).to.be.closeTo(16, 0.5);
+          expect(rect.left).to.be.closeTo(16 + border, 0.5);
+          expect(rect.top).to.be.closeTo(16 + border, 0.5);
           expect(overlay.hasAttribute('end-aligned')).to.equal(isRTL);
           expect(overlay.hasAttribute('bottom-aligned')).to.be.false;
           expect(overlay.style.right).to.be.empty;
@@ -307,9 +309,10 @@ describe('overlay', () => {
           contextmenu(viewWidth * 1.1, viewHeight * 1.1);
           await oneEvent(overlay, 'vaadin-overlay-open');
 
+          const border = parseInt(getComputedStyle(overlay.$.overlay).borderWidth);
           const rect = content.getBoundingClientRect();
-          expect(rect.left).to.be.closeTo(viewWidth - 100, 0.5);
-          expect(rect.top).to.be.closeTo(viewHeight - 100, 0.5);
+          expect(rect.left).to.be.closeTo(viewWidth - 100 - border, 0.5);
+          expect(rect.top).to.be.closeTo(viewHeight - 100 - border, 0.5);
         });
       });
     });
@@ -356,7 +359,7 @@ describe('overlay', () => {
 
     it('should close on menu contextmenu', () => {
       // Dispatch a contextmenu event on the overlay content
-      const { left, top } = overlay.$.content.getBoundingClientRect();
+      const { left, top } = content.getBoundingClientRect();
       const e = contextmenu(left, top, false, overlay);
       expect(e.defaultPrevented).to.be.true;
       expect(menu.opened).to.be.false;
@@ -444,17 +447,18 @@ describe('overlay', () => {
       expect(contextMenuSpy.calledOnce).to.be.true;
     });
 
-    it('should re-open to correct coodrinates', async () => {
+    it('should re-open to correct coordinates', async () => {
       // Move the target to another location
       target.style.margin = '200px';
 
       const { left, top } = target.getBoundingClientRect();
       contextmenu(left, top, false, document.documentElement);
-      await nextFrame();
+      await oneEvent(overlay, 'vaadin-overlay-open');
 
-      const contentRect = overlay.$.content.getBoundingClientRect();
-      expect(contentRect.left).to.equal(left);
-      expect(contentRect.top).to.equal(top);
+      const border = parseInt(getComputedStyle(overlay.$.overlay).borderWidth);
+      const contentRect = content.getBoundingClientRect();
+      expect(contentRect.left).to.equal(left + border);
+      expect(contentRect.top).to.equal(top + border);
     });
 
     it('should cancel the synthetic contextmenu event', async () => {
