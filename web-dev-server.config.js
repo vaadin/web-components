@@ -45,8 +45,8 @@ export function enforceThemePlugin(theme) {
 
       if (theme === 'legacy-lumo' && context.response.is('html', 'js')) {
         body = body.replace(
-          '<link rel="stylesheet" href="../packages/vaadin-lumo-styles/global.css">',
-          '<script type="module" src="../packages/vaadin-lumo-styles/test/autoload.js"></script>',
+          '<link rel="stylesheet" href="/packages/vaadin-lumo-styles/lumo.css">',
+          '<script type="module" src="/packages/vaadin-lumo-styles/test/autoload.js"></script>',
         );
       }
 
