@@ -18,8 +18,8 @@
     "postinstall": "patch-package",
     "prepare": "husky",
     "serve:dist": "web-dev-server --app-index dist/index.html --open",
-    "start": "web-dev-server --node-resolve --open /dev",
-    "start:base": "web-dev-server --node-resolve --open /dev --theme=base",
+    "start": "web-dev-server --node-resolve",
+    "start:base": "web-dev-server --node-resolve --theme=base",
     "check-releases": "node ./scripts/check-releases.js && web-dev-server --node-resolve --open /scripts/check-releases.html",
     "test": "web-test-runner",
     "test:base": "yarn test --config web-test-runner-base.config.js",
@@ -74,7 +74,8 @@
     "stylelint": "^16.21.0",
     "stylelint-config-html": "^1.1.0",
     "stylelint-config-vaadin": "^1.0.0-alpha.2",
-    "typescript": "^5.8.3"
+    "typescript": "^5.8.3",
+    "vite": "^7.0.0"
   },
   "resolutions": {
     "svg2ttf": "6.0.3",
