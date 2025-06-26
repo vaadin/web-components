@@ -16,11 +16,7 @@ addGlobalThemeStyles(
         --_vaadin-background: light-dark(#fff, #222);
 
         /* Container colors */
-        --_vaadin-background-container: color-mix(
-          in oklch,
-          var(--_vaadin-color-strong) 5.2%,
-          var(--_vaadin-background)
-        );
+        --_vaadin-background-container: color-mix(in oklch, var(--_vaadin-color-strong) 5%, var(--_vaadin-background));
         --_vaadin-background-container-strong: color-mix(
           in oklch,
           var(--_vaadin-color-strong) 10%,
