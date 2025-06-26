@@ -28,7 +28,7 @@
       import '@vaadin/vaadin-lumo-styles/lumo.css';
       import '@vaadin/checkbox';
       import '@vaadin/checkbox-group';
-      import '@vaadin/select';
+      import '@vaadin/radio-group';
       import '@vaadin/split-layout';
 
       const menuBar = document.querySelector('vaadin-menu-bar');
@@ -83,21 +83,11 @@
       });
 
       const enable = document.querySelector('#enable');
-      enable.items = [
-        { label: 'Yes', value: 'y' },
-        { label: 'No', value: 'n' },
-      ];
-      enable.value = 'y';
       enable.addEventListener('value-changed', (e) => {
-        menuBar.toggleAttribute('disabled', e.detail.value == 'n');
+        menuBar.toggleAttribute('disabled', e.detail.value == 'disabled');
       });
 
       const direction = document.querySelector('#direction');
-      direction.items = [
-        { label: 'LTR', value: 'ltr' },
-        { label: 'RTL', value: 'rtl' },
-      ];
-      direction.value = 'ltr';
       direction.addEventListener('value-changed', (e) => menuBar.setAttribute('dir', e.detail.value));
     </script>
   </head>
@@ -119,10 +109,16 @@
         </vaadin-checkbox-group>
       </div>
       <div class="control-group">
-        <vaadin-select label="Enabled" id="enable"></vaadin-select>
+        <vaadin-radio-group label="State" id="enable">
+          <vaadin-radio-button label="Enabled" value="enabled" checked></vaadin-radio-button>
+          <vaadin-radio-button label="Disabled" value="disabled"></vaadin-radio-button>
+        </vaadin-radio-group>
       </div>
       <div class="control-group">
-        <vaadin-select label="Direction" id="direction"></vaadin-select>
+        <vaadin-radio-group label="Direction" id="direction">
+          <vaadin-radio-button label="LTR" value="ltr" checked></vaadin-radio-button>
+          <vaadin-radio-button label="RTL" value="rtl"></vaadin-radio-button>
+        </vaadin-radio-group>
       </div>
     </div>
     <vaadin-split-layout>
