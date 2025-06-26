@@ -1,7 +1,7 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextResize } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import '../vaadin-dashboard.js';
+import '../src/vaadin-dashboard.js';
 import type { CustomElementType } from '@vaadin/component-base/src/define.js';
 import type { DashboardSection } from '../src/vaadin-dashboard-section.js';
 import type { DashboardWidget } from '../src/vaadin-dashboard-widget.js';
@@ -591,7 +591,7 @@ describe('dashboard', () => {
 
     it('should scroll the focused item outside dashboard viewport back into view', async () => {
       // Limit the dashboard height to force scrolling
-      dashboard.style.height = '300px';
+      dashboard.style.height = '150px';
       await nextResize(dashboard);
       // Focus the first item
       getElementFromCell(dashboard, 0, 0)!.focus();
@@ -609,7 +609,7 @@ describe('dashboard', () => {
 
     it('should not scroll the focused item into view if it is partially visible', async () => {
       // Limit the dashboard height to force scrolling
-      dashboard.style.height = '300px';
+      dashboard.style.height = '150px';
       await nextResize(dashboard);
       // Focus the first item
       getElementFromCell(dashboard, 0, 0)!.focus();

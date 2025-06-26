@@ -9,7 +9,6 @@
  * license.
  */
 import { html, LitElement } from 'lit';
-import { buttonStyles } from '@vaadin/button/src/styles/vaadin-button-core-styles.js';
 import { ButtonMixin } from '@vaadin/button/src/vaadin-button-mixin.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
@@ -17,6 +16,7 @@ import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { CSSInjectionMixin } from '@vaadin/vaadin-themable-mixin/css-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { dashboardButtonStyles } from './styles/vaadin-dashboard-button-core-styles.js';
 
 class DashboardButton extends ButtonMixin(ElementMixin(ThemableMixin(CSSInjectionMixin(PolylitMixin(LitElement))))) {
   static get is() {
@@ -24,7 +24,7 @@ class DashboardButton extends ButtonMixin(ElementMixin(ThemableMixin(CSSInjectio
   }
 
   static get styles() {
-    return buttonStyles;
+    return dashboardButtonStyles;
   }
 
   /** @protected */
