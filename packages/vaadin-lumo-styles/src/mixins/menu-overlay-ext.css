@@ -24,7 +24,6 @@
     padding: 30px var(--lumo-space-m);
     max-height: inherit;
     box-sizing: border-box;
-    -webkit-overflow-scrolling: touch;
     overflow: auto;
     mask-image: linear-gradient(transparent, #000 40px, #000 calc(100% - 40px), transparent);
   }
