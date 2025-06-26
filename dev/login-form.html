@@ -10,6 +10,54 @@
 
     <script type="module">
       import '@vaadin/login/vaadin-login-form.js';
+      import '@vaadin/checkbox';
+      import '@vaadin/checkbox-group';
+      import '@vaadin/radio-group';
+
+      const login = document.querySelector('vaadin-login-form');
+      const wrapper = login.querySelector('vaadin-login-form-wrapper');
+
+      [
+        {
+          slot: 'footer',
+          elementFactory: () => {
+            const footer = document.createElement('p');
+            footer.textContent = 'Never share your password with anyone';
+
+            return footer;
+          },
+        },
+        {
+          slot: 'custom-form-area',
+          elementFactory: () => {
+            const remember = document.createElement('vaadin-checkbox');
+            remember.label = 'Remember me';
+
+            return remember;
+          },
+        },
+      ].forEach(({ slot, elementFactory }) => {
+        document.getElementById(slot).addEventListener('checked-changed', (e) => {
+          if (e.detail.value) {
+            const elem = elementFactory();
+            elem.slot = slot;
+
+            wrapper.appendChild(elem);
+          } else {
+            wrapper.querySelector(`[slot=${slot}]`).remove();
+          }
+        });
+      });
+
+      ['error', 'noForgotPassword', 'disabled'].forEach((prop) => {
+        document.getElementById(prop).addEventListener('checked-changed', (e) => {
+          login[prop] = e.detail.value;
+        });
+      });
+
+      document.getElementById('direction').addEventListener('value-changed', (e) => {
+        login.setAttribute('dir', e.detail.value);
+      });
     </script>
   </head>
 
@@ -21,10 +69,46 @@
         padding: var(--lumo-space-l);
         display: flex !important;
       }
+
+      .controls {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 2rem;
+        margin-bottom: 2rem;
+        font-size: 0.875rem;
+      }
+
+      .control-group {
+        display: flex;
+        flex-direction: column;
+        gap: 1em;
+      }
     </style>
 
+    <div class="controls">
+      <div class="control-group">
+        <vaadin-checkbox-group label="Custom content">
+          <vaadin-checkbox id="footer" value="footer" label="Footer"></vaadin-checkbox>
+          <vaadin-checkbox id="custom-form-area" value="custom-form-area" label="Custom form element"></vaadin-checkbox>
+        </vaadin-checkbox-group>
+      </div>
+
+      <div class="control-group">
+        <vaadin-checkbox-group label="State toggle">
+          <vaadin-checkbox label="Error" id="error" value="error"></vaadin-checkbox>
+          <vaadin-checkbox label="No forgot password" id="noForgotPassword" value="noForgotPassword"></vaadin-checkbox>
+          <vaadin-checkbox label="Disabled" id="disabled" value="disabled"></vaadin-checkbox>
+        </vaadin-checkbox-group>
+      </div>
+      <div class="control-group">
+        <vaadin-radio-group id="direction" label="Direction">
+          <vaadin-radio-button label="LTR" value="ltr" checked></vaadin-radio-button>
+          <vaadin-radio-button label="RTL" value="rtl"></vaadin-radio-button>
+        </vaadin-radio-group>
+      </div>
+    </div>
     <div id="wrapper">
-      <vaadin-login-form no-autofocus></vaadin-login-form>
+      <vaadin-login-form no-autofocus> </vaadin-login-form>
     </div>
   </body>
 </html>
