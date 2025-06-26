@@ -12,13 +12,19 @@ describe('menu-bar in dialog', () => {
   let dialog, overlay, menuBar;
 
   beforeEach(async () => {
-    dialog = fixtureSync(`<vaadin-dialog theme="no-padding"></vaadin-dialog>`);
+    fixtureSync(`
+      <style>
+        vaadin-dialog-overlay::part(content) {
+          padding: 0;
+        }
+      </style>
+    `);
+    dialog = fixtureSync(`<vaadin-dialog width="700px"></vaadin-dialog>`);
     dialog.renderer = (root) => {
       if (!root.firstChild) {
-        root.$.overlay.style.width = '700px';
         root.innerHTML = `
           <vaadin-vertical-layout theme="padding spacing" style="width: 100%; align-items: stretch;">
-            <vaadin-menu-bar style="min-width: var(--lumo-size-m);"></vaadin-menu-bar>
+            <vaadin-menu-bar style="min-width: 2.25rem;"></vaadin-menu-bar>
           </vaadin-vertical-layout>
         `;
         const menu = root.querySelector('vaadin-menu-bar');

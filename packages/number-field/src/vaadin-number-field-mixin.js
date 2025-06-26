@@ -87,12 +87,12 @@ export const NumberFieldMixin = (superClass) =>
         `
           ${tag} input[type="number"]::-webkit-outer-spin-button,
           ${tag} input[type="number"]::-webkit-inner-spin-button {
-            -webkit-appearance: none;
+            appearance: none;
             margin: 0;
           }
 
           ${tag} input[type="number"] {
-            -moz-appearance: textfield;
+            appearance: textfield;
           }
 
           ${tag}[dir='rtl'] input[type="number"]::placeholder {

@@ -169,7 +169,7 @@ export const mapStyles = css`
   }
 
   .ol-control button {
-    -webkit-appearance: none;
+    appearance: none;
     border: 0;
     margin: 0;
     padding: 0;

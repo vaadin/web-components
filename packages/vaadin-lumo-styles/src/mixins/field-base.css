@@ -44,7 +44,6 @@
 }
 
 :host([focused]) [part='input-field'] ::slotted(:is(input, textarea)) {
-  -webkit-mask-image: none;
   mask-image: none;
 }
 

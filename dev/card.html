@@ -15,15 +15,11 @@
       import '@vaadin/checkbox-group';
       import '@vaadin/icon';
       import '@vaadin/icons';
-      import '@vaadin/vaadin-lumo-styles/icons.js';
       import '@vaadin/select';
       import '@vaadin/scroller';
-      import { badge } from '@vaadin/vaadin-lumo-styles/badge.js';
-      import { utility } from '@vaadin/vaadin-lumo-styles/utility.js';
-      import { addGlobalThemeStyles } from '@vaadin/vaadin-themable-mixin/register-styles.js';
-
-      addGlobalThemeStyles('utility', utility);
-      addGlobalThemeStyles('badge', badge);
+      import '@vaadin/vaadin-lumo-styles/global.css';
+      import '@vaadin/vaadin-lumo-styles/lumo.css';
+      import '@vaadin/vaadin-lumo-styles/icons.js';
 
       const playground = document.querySelector('.playground');
       const codeExample = document.querySelector('.code-example');
@@ -334,7 +330,7 @@
         <vaadin-button slot="footer">Book Vacation</vaadin-button>
       </template>
 
-      <vaadin-checkbox-group class="slot-options" label="Header & Footer">
+      <vaadin-checkbox-group class="slot-options" theme="horizontal" label="Header & Footer">
         <vaadin-checkbox label="Header" value="header"></vaadin-checkbox>
         <vaadin-checkbox label="Header Prefix" value="header-prefix"></vaadin-checkbox>
         <vaadin-checkbox label="Header Suffix" value="header-suffix"></vaadin-checkbox>
@@ -343,7 +339,7 @@
         <vaadin-checkbox label="Footer" value="footer"></vaadin-checkbox>
       </vaadin-checkbox-group>
 
-      <vaadin-checkbox-group class="theme-variant" label="Theme Variant">
+      <vaadin-checkbox-group class="theme-variant" theme="horizontal" label="Theme Variant">
         <vaadin-checkbox label="Outlined" value="outlined"></vaadin-checkbox>
         <vaadin-checkbox label="Elevated" value="elevated"></vaadin-checkbox>
         <vaadin-checkbox label="Dark" value="dark"></vaadin-checkbox>
@@ -352,7 +348,7 @@
         <vaadin-checkbox label="Cover Media" value="cover-media"></vaadin-checkbox>
       </vaadin-checkbox-group>
 
-      <vaadin-checkbox-group class="playground-resize" label="Resize">
+      <vaadin-checkbox-group class="playground-resize" theme="horizontal" label="Resize">
         <vaadin-checkbox label="Width" value="width"></vaadin-checkbox>
         <vaadin-checkbox label="Height" value="height"></vaadin-checkbox>
       </vaadin-checkbox-group>

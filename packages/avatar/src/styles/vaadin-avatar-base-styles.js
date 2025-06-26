@@ -13,7 +13,7 @@ export const avatarStyles = css`
       flex: none;
       border-radius: 50%;
       cursor: default;
-      color: var(--vaadin-avatar-color, inherit);
+      color: var(--vaadin-avatar-color, var(--_vaadin-color));
       line-height: 0;
       overflow: hidden;
       height: var(--vaadin-avatar-size, 2em);
@@ -47,6 +47,7 @@ export const avatarStyles = css`
 
     [part='abbr'] {
       font-size: 2.75em;
+      fill: currentColor;
     }
 
     :host([hidden]),
@@ -56,6 +57,7 @@ export const avatarStyles = css`
 
     :host([has-color-index]) {
       background-color: var(--vaadin-avatar-user-color);
+      color: oklch(from var(--vaadin-avatar-user-color) clamp(0, (0.62 - l) * 1000, 1) 0 0);
     }
 
     :host([has-color-index])::before {

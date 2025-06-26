@@ -1,0 +1,20 @@
+/**
+ * @license
+ * Copyright (c) 2000 - 2025 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+@import '../src/mixins/base-layer-reset.css' vaadin-user-tags-overlay;
+@import '../src/mixins/overlay.css' vaadin-user-tags-overlay;
+@import '../src/components/user-tags-overlay.css' vaadin-user-tags-overlay;
+
+@import '../src/mixins/base-layer-reset.css' vaadin-user-tag;
+@import '../src/components/user-tag.css' vaadin-user-tag;
+
+@import '../src/mixins/base-layer-reset.css' vaadin-field-outline;
+@import '../src/components/field-outline.css' vaadin-field-outline;
+
+html {
+  --vaadin-user-tags-overlay-css-inject: 1;
+  --vaadin-user-tag-css-inject: 1;
+  --vaadin-field-outline-css-inject: 1;
+}

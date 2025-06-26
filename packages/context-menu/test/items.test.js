@@ -462,7 +462,8 @@ describe('items', () => {
 
   it('should have modeless sub menus', () => {
     const rootItemRect = getMenuItems(rootMenu)[0].getBoundingClientRect();
-    const element = document.elementFromPoint(rootItemRect.left, rootItemRect.top);
+    const border = parseInt(getComputedStyle(rootOverlay.$.overlay).borderWidth);
+    const element = document.elementFromPoint(rootItemRect.left + border, rootItemRect.top + border);
     expect(element).not.to.equal(document.documentElement);
   });
 

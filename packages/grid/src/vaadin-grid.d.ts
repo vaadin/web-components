@@ -102,7 +102,7 @@ export type GridDefaultItem = any;
  * - [`<vaadin-grid-tree-toggle>`](#/elements/vaadin-grid-tree-toggle)
  *
  * __Note that the helper elements must be explicitly imported.__
- * If you want to import everything at once you can use the `all-imports.html` bundle.
+ * If you want to import everything at once you can use the `all-imports.js` entrypoint.
  *
  * ### Lazy Loading with Function Data Provider
  *

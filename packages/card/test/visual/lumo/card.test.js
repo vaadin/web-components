@@ -1,12 +1,16 @@
 import { fixtureSync } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
-import '../../../theme/lumo/vaadin-card.js';
-import '@vaadin/button/theme/lumo/vaadin-button.js';
-import '@vaadin/vaadin-lumo-styles/test/autoload.js';
-import '@vaadin/vaadin-lumo-styles/badge-global.js';
+import '@vaadin/vaadin-lumo-styles/props.css';
+import '@vaadin/vaadin-lumo-styles/global.css';
+import '@vaadin/vaadin-lumo-styles/components/avatar.css';
+import '@vaadin/vaadin-lumo-styles/components/button.css';
+import '@vaadin/vaadin-lumo-styles/components/card.css';
+import '@vaadin/vaadin-lumo-styles/components/icon.css';
+import '../../../vaadin-card.js';
+import '@vaadin/avatar';
+import '@vaadin/button';
 import '@vaadin/icon';
 import '@vaadin/icons';
-import '@vaadin/avatar/theme/lumo/vaadin-avatar.js';
 
 const content = '<div>Content</div>';
 const title = '<div slot="title">Title</div>';

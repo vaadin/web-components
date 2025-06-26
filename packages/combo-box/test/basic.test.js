@@ -252,7 +252,7 @@ describe('pre-opened', () => {
     const comboBox = fixtureSync(`<vaadin-combo-box opened items="[0]"></vaadin-combo-box>`);
     await nextRender();
     const expectedOverlayWidth = comboBox.clientWidth;
-    const actualOverlayWidth = comboBox.$.overlay.$.content.clientWidth;
+    const actualOverlayWidth = comboBox.$.overlay.$.overlay.offsetWidth;
     expect(actualOverlayWidth).to.eq(expectedOverlayWidth);
   });
 

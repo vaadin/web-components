@@ -8,6 +8,7 @@ import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
+import { CSSInjectionMixin } from '@vaadin/vaadin-themable-mixin/css-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { cardStyles } from './styles/vaadin-card-core-styles.js';
 
@@ -51,7 +52,7 @@ import { cardStyles } from './styles/vaadin-card-core-styles.js';
  * @mixes ElementMixin
  * @mixes ThemableMixin
  */
-class Card extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
+class Card extends ElementMixin(ThemableMixin(CSSInjectionMixin(PolylitMixin(LitElement)))) {
   static get is() {
     return 'vaadin-card';
   }
