@@ -34,7 +34,7 @@ addGlobalThemeStyles(
         /* Text colors */
         --vaadin-color-disabled: color-mix(in oklch, var(--vaadin-color) 48%, transparent); /* Above 3:1 contrast */
         --vaadin-color-subtle: color-mix(in oklch, var(--vaadin-color) 68%, transparent); /* Above 4.5:1 contrast */
-        --_vaadin-color-strong: light-dark(#1f1f1f, white); /* Above 7:1 contrast */
+        --vaadin-color: light-dark(#1f1f1f, white); /* Above 7:1 contrast */
 
         /* Padding */
         --vaadin-padding: 8px;
