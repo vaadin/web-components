@@ -44,7 +44,6 @@
 }
 
 button {
-  -webkit-appearance: none;
   appearance: none;
   flex: none;
   position: relative;

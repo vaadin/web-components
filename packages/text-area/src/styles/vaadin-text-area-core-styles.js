@@ -24,8 +24,7 @@ export const textAreaStyles = css`
   }
 
   ::slotted(textarea) {
-    -webkit-appearance: none;
-    -moz-appearance: none;
+    appearance: none;
     flex: auto;
     overflow: hidden;
     width: 100%;
