@@ -28,9 +28,14 @@ const widgetStyles = css`
     display: none;
   }
 
+  vaadin-dashboard-button {
+    min-width: 1rem;
+  }
+
   [part~='content'] {
     flex: 1;
     overflow: hidden;
+    min-height: 1rem;
   }
 
   [part~='resize-button'] {
