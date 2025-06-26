@@ -1,0 +1,11 @@
+@import './css-modules-test-base-field.css';
+
+@media lumo_email-field {
+  #input {
+    color: green;
+  }
+}
+
+html {
+  --vaadin-email-field-css-inject-modules: lumo_base-field, lumo_email-field;
+}

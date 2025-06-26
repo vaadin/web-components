@@ -1,0 +1,11 @@
+@import './css-modules-test-base-field.css';
+
+@media lumo_text-field {
+  #input {
+    color: yellow;
+  }
+}
+
+html {
+  --vaadin-text-field-css-inject-modules: lumo_base-field, lumo_text-field;
+}
