@@ -75,6 +75,7 @@ export const notificationContainerStyles = css`
 
     [region]:is(:hover, :focus-within) {
       overflow: auto;
+      overscroll-behavior: contain;
       z-index: 2;
     }
 
