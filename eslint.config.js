@@ -184,6 +184,15 @@ export default [
     },
   },
   {
+    files: ['release-app/**/*'],
+    languageOptions: {
+      globals: {
+        ...globals.browser,
+        ...globals.node,
+      },
+    },
+  },
+  {
     files: ['packages/**/test/**', 'test/integration/**'],
     languageOptions: {
       globals: {
