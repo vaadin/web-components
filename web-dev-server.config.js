@@ -44,6 +44,13 @@ export function enforceThemePlugin(theme) {
       let { body } = context;
 
       if (theme === 'legacy-lumo' && context.response.is('html', 'js')) {
+        // For dev pages: replace link to CSS stylesheet with JS autoload script
+        body = body.replace(
+          '<link rel="stylesheet" href="/packages/vaadin-lumo-styles/lumo.css" />',
+          '<script type="module" src="/packages/vaadin-lumo-styles/test/autoload.js"></script>',
+        );
+
+        // For visual tests: replace import of CSS file with JS autoload script
         body = body.replace('vaadin-lumo-styles/global.css', 'vaadin-lumo-styles/test/autoload.js');
       }
 
