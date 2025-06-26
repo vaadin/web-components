@@ -24,7 +24,6 @@ export const tabsStyles = css`
     display: flex;
     align-self: stretch;
     overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
   }
 
   /* This seems more future-proof than \`overflow: -moz-scrollbars-none\` which is marked obsolete
@@ -43,7 +42,6 @@ export const tabsStyles = css`
   :host([orientation='vertical']) [part='tabs'] {
     height: 100%;
     overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
   }
 
   [part='back-button'],
