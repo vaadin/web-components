@@ -21,13 +21,8 @@ template.innerHTML = `
       height: 100%;
       overflow: auto;
       outline: none;
-      -webkit-overflow-scrolling: touch;
       overflow-x: hidden;
       scrollbar-width: none;
-    }
-
-    #scroller.notouchscroll {
-      -webkit-overflow-scrolling: auto;
     }
 
     #scroller::-webkit-scrollbar {
@@ -157,17 +152,6 @@ export class InfiniteScroller extends HTMLElement {
       this.$.scroller.scrollTop += (index % 1) * this.itemHeight;
       this._scrollDisabled = false;
     }
-
-    if (this._mayHaveMomentum) {
-      // Stop the possible iOS Safari momentum with -webkit-overflow-scrolling: auto;
-      this.$.scroller.classList.add('notouchscroll');
-      this._mayHaveMomentum = false;
-
-      setTimeout(() => {
-        // Restore -webkit-overflow-scrolling: touch; after a small delay.
-        this.$.scroller.classList.remove('notouchscroll');
-      }, 10);
-    }
   }
 
   /** @protected */
@@ -291,7 +275,6 @@ export class InfiniteScroller extends HTMLElement {
 
     if (!this._preventScrollEvent) {
       this.dispatchEvent(new CustomEvent('custom-scroll', { bubbles: false, composed: true }));
-      this._mayHaveMomentum = true;
     }
     this._preventScrollEvent = false;
 

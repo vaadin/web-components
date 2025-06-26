@@ -5,11 +5,11 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Radio Group</title>
+    <link rel="stylesheet" href="/packages/vaadin-lumo-styles/lumo.css" />
     <script type="module" src="./common.js"></script>
 
     <script type="module">
       import '@vaadin/radio-group';
-      import '@vaadin/vaadin-lumo-styles/lumo.css';
     </script>
 
     <style>
@@ -23,8 +23,8 @@
   </head>
 
   <body>
-    <section>
-      <h2>Plain Text Labels</h2>
+    <section class="section">
+      <h2 class="heading">Plain Text Labels</h2>
       <vaadin-radio-group label="Options">
         <vaadin-radio-button value="1" label="Option One" checked></vaadin-radio-button>
         <vaadin-radio-button value="2" label="Option Two"></vaadin-radio-button>
@@ -32,8 +32,8 @@
       </vaadin-radio-group>
     </section>
 
-    <section>
-      <h2>Horizontal</h2>
+    <section class="section">
+      <h2 class="heading">Horizontal</h2>
       <vaadin-radio-group label="Options" theme="horizontal">
         <vaadin-radio-button value="1" label="Option One" checked></vaadin-radio-button>
         <vaadin-radio-button value="2" label="Option Two"></vaadin-radio-button>
@@ -41,8 +41,8 @@
       </vaadin-radio-group>
     </section>
 
-    <section>
-      <h2>Read Only &amp; Disabled</h2>
+    <section class="section">
+      <h2 class="heading">Read Only &amp; Disabled</h2>
       <vaadin-radio-group label="Options" readonly>
         <vaadin-radio-button value="1" label="Option One" checked></vaadin-radio-button>
         <vaadin-radio-button value="2" label="Option Two"></vaadin-radio-button>
@@ -56,8 +56,8 @@
       </vaadin-radio-group>
     </section>
 
-    <section>
-      <h2>Bells &amp; Whistles</h2>
+    <section class="section">
+      <h2 class="heading">Bells &amp; Whistles</h2>
       <vaadin-radio-group
         label="Payment Method"
         theme="helper-above-field"
@@ -105,8 +105,8 @@
       </vaadin-radio-group>
     </section>
 
-    <section>
-      <h2>Content &amp; Layout Variations</h2>
+    <section class="section">
+      <h2 class="heading">Content &amp; Layout Variations</h2>
       <p>Resize the field to test how content flows.</p>
       <vaadin-radio-group
         label="A very long label for this field"

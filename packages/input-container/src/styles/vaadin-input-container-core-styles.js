@@ -38,8 +38,7 @@ export const inputContainerStyles = css`
 
   /* Reset the native input styles */
   ::slotted(input) {
-    -webkit-appearance: none;
-    -moz-appearance: none;
+    appearance: none;
     flex: auto;
     white-space: nowrap;
     overflow: hidden;

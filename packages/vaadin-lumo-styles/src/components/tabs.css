@@ -21,7 +21,6 @@
 :host([orientation='vertical']) [part='tabs'] {
   height: 100%;
   overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
   width: 100%;
   margin: 0.5rem 0;
 }
@@ -37,7 +36,6 @@
   display: flex;
   align-self: stretch;
   overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
   margin: 0 0.75rem;
 }
 
@@ -107,7 +105,6 @@
 
 [part='tabs'] {
   --_lumo-tabs-overflow-mask-image: none;
-  -webkit-mask-image: var(--_lumo-tabs-overflow-mask-image);
   mask-image: var(--_lumo-tabs-overflow-mask-image);
 }
 

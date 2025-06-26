@@ -14,9 +14,6 @@ export const multiSelectComboBoxScrollerStyles = css`
     /* Fixes item background from getting on top of scrollbars on Safari */
     transform: translate3d(0, 0, 0);
 
-    /* Enable momentum scrolling on iOS */
-    -webkit-overflow-scrolling: touch;
-
     /* Fixes scrollbar disappearing when 'Show scroll bars: Always' enabled in Safari */
     box-shadow: 0 0 0 white;
   }

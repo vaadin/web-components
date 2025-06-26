@@ -38,7 +38,6 @@ const inputField = css`
   }
 
   :host([focused]) [part='input-field'] ::slotted(:is(input, textarea)) {
-    -webkit-mask-image: none;
     mask-image: none;
   }
 
@@ -73,7 +72,7 @@ const inputField = css`
      the ring is only visible / has a width when the respective CSS property is
      "enabled" using a value of 1 */
   :host([focused]) [part='input-field'] {
-    /* Borders are implemented using box-shadows as well. To avoid overriding 
+    /* Borders are implemented using box-shadows as well. To avoid overriding
        the border on focus, even if the pointer focus-ring is disabled, we need to:
        - Duplicate the border box shadow for this rule
        - Remove the border (by using width of 0) when the focus-ring is visible,

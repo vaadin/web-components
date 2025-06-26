@@ -57,7 +57,7 @@ export const checkable = (part, propName = part) => css`
     cursor: inherit;
     margin: 0;
     align-self: stretch;
-    -webkit-appearance: none;
+    appearance: none;
     width: initial;
     height: initial;
   }

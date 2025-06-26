@@ -18,6 +18,5 @@ export const listBoxStyles = css`
     height: 100%;
     width: 100%;
     overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
   }
 `;

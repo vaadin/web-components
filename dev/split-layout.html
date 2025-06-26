@@ -5,11 +5,11 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Split Layout</title>
+    <link rel="stylesheet" href="/packages/vaadin-lumo-styles/lumo.css" />
     <script type="module" src="./common.js"></script>
 
     <script type="module">
       import '@vaadin/split-layout';
-      import '@vaadin/vaadin-lumo-styles/lumo.css';
 
       document.querySelectorAll('.first').forEach((el) => {
         el.textContent = new Array(1000).fill('a').join(' ');
@@ -30,7 +30,7 @@
   </head>
 
   <body>
-    <h2>Default</h2>
+    <h2 class="heading">Default</h2>
     <vaadin-split-layout style="width: 400px; height: 200px">
       <div class="first"></div>
       <div class="second"></div>
@@ -40,7 +40,7 @@
       <div class="second"></div>
     </vaadin-split-layout>
 
-    <h2>Small</h2>
+    <h2 class="heading">Small</h2>
     <vaadin-split-layout style="width: 400px; height: 200px" theme="small">
       <div class="first"></div>
       <div class="second"></div>
@@ -50,7 +50,7 @@
       <div class="second"></div>
     </vaadin-split-layout>
 
-    <h2>Minimal</h2>
+    <h2 class="heading">Minimal</h2>
     <vaadin-split-layout style="width: 400px; height: 200px" theme="minimal">
       <div class="first"></div>
       <div class="second"></div>

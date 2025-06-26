@@ -20,12 +20,10 @@ export const textAreaStyles = css`
   [part='input-field'] {
     flex: auto;
     overflow: auto;
-    -webkit-overflow-scrolling: touch;
   }
 
   ::slotted(textarea) {
-    -webkit-appearance: none;
-    -moz-appearance: none;
+    appearance: none;
     flex: auto;
     overflow: hidden;
     width: 100%;

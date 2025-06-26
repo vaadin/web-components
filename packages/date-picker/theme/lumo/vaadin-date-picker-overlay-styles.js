@@ -29,7 +29,6 @@ const datePickerOverlay = css`
     padding: 0;
     height: 100%;
     overflow: hidden;
-    -webkit-mask-image: none;
     mask-image: none;
   }
 

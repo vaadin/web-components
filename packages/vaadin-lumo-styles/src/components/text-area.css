@@ -15,8 +15,7 @@
 }
 
 ::slotted(textarea) {
-  -webkit-appearance: none;
-  -moz-appearance: none;
+  appearance: none;
   flex: auto;
   overflow: hidden;
   width: 100%;
@@ -64,7 +63,6 @@
 [part='input-field'] {
   flex: auto;
   overflow: auto;
-  -webkit-overflow-scrolling: touch;
   /* Equal to the implicit padding in vaadin-text-field */
   padding-top: calc((var(--lumo-text-field-size) - 1em * var(--lumo-line-height-s)) / 2);
   padding-bottom: calc((var(--lumo-text-field-size) - 1em * var(--lumo-line-height-s)) / 2);
