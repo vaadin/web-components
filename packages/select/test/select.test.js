@@ -324,7 +324,13 @@ describe('vaadin-select', () => {
       it('should prevent default for the toggle button mousedown', () => {
         const e = new CustomEvent('mousedown', { bubbles: true });
         const spy = sinon.spy(e, 'preventDefault');
-        select.shadowRoot.querySelector('[part=toggle-button]').dispatchEvent(e);
+        select.$.toggleButton.dispatchEvent(e);
+        expect(spy.calledOnce).to.be.true;
+      });
+
+      it('should focus the select when opening on toggle button click', () => {
+        const spy = sinon.spy(valueButton, 'focus');
+        select.$.toggleButton.click();
         expect(spy.calledOnce).to.be.true;
       });
 

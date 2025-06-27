@@ -160,7 +160,13 @@ class Select extends SelectBaseMixin(ElementMixin(ThemableMixin(CSSInjectionMixi
         >
           <slot name="prefix" slot="prefix"></slot>
           <slot name="value"></slot>
-          <div part="toggle-button" slot="suffix" aria-hidden="true" @mousedown="${this._onToggleMouseDown}"></div>
+          <div
+            id="toggleButton"
+            part="toggle-button"
+            slot="suffix"
+            aria-hidden="true"
+            @mousedown="${this._onToggleMouseDown}"
+          ></div>
         </vaadin-input-container>
 
         <div part="helper-text">
