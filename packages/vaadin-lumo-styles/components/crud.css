@@ -1,0 +1,36 @@
+/**
+ * @license
+ * Copyright (c) 2000 - 2025 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+@import './button.css';
+@import './text-field.css';
+@import './grid-filter.css';
+@import './grid-sorter.css';
+@import './confirm-dialog.css';
+
+@import '../src/mixins/base-layer-reset.css' vaadin-crud;
+@import '../src/components/crud.css' vaadin-crud;
+
+@import '../src/mixins/base-layer-reset.css' vaadin-crud-grid;
+@import '../src/components/grid.css' vaadin-crud-grid;
+
+@import '../src/mixins/base-layer-reset.css' vaadin-crud-edit;
+@import '../src/components/button.css' vaadin-crud-edit;
+@import '../src/components/crud-edit.css' vaadin-crud-edit;
+
+@import '../src/mixins/base-layer-reset.css' vaadin-crud-form;
+@import '../src/components/form-layout.css' vaadin-crud-form;
+
+@import '../src/mixins/base-layer-reset.css' vaadin-crud-dialog-overlay;
+@import '../src/mixins/overlay.css' vaadin-crud-dialog-overlay;
+@import '../src/components/dialog-overlay.css' vaadin-crud-dialog-overlay;
+@import '../src/components/crud-dialog-overlay.css' vaadin-crud-dialog-overlay;
+
+html {
+  --vaadin-crud-css-inject: 1;
+  --vaadin-crud-edit-css-inject: 1;
+  --vaadin-crud-grid-css-inject: 1;
+  --vaadin-crud-form-css-inject: 1;
+  --vaadin-crud-dialog-overlay-css-inject: 1;
+}
