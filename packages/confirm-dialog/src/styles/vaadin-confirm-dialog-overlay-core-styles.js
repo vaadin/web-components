@@ -12,8 +12,14 @@ const confirmDialogOverlay = css`
     height: 100%;
   }
 
-  ::slotted([slot='header']) {
+  [part='header'] {
     pointer-events: auto;
+  }
+
+  ::slotted([slot='header']) {
+    display: contents !important;
+    font: inherit !important;
+    color: inherit !important;
   }
 
   /* Make buttons clickable */

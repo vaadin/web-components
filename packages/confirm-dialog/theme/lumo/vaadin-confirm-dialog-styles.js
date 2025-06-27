@@ -10,10 +10,12 @@ registerStyles(
     overlay,
     dialogOverlay,
     css`
-      [part='header'] ::slotted(h3) {
-        margin-top: 0 !important;
-        margin-bottom: 0 !important;
+      [part='header'] {
         margin-inline-start: calc(var(--lumo-space-l) - var(--lumo-space-m));
+        font-weight: 600;
+        line-height: var(--lumo-line-height-xs);
+        font-size: var(--lumo-font-size-xl);
+        color: var(--lumo-header-text-color);
       }
 
       [part='message'] {
