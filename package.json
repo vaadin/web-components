@@ -20,7 +20,7 @@
     "serve:dist": "web-dev-server --app-index dist/index.html --open",
     "start": "web-dev-server --node-resolve --open /dev",
     "start:base": "web-dev-server --node-resolve --open /dev --theme=base",
-    "check-releases": "node ./scripts/check-releases.js && web-dev-server --node-resolve --open /scripts/check-releases.html",
+    "release-app": "node ./release-app/check-branches.js && npx -y vite@7.0.0 build --config release-app/vite.config.js && npx -y electron@37.1.0 ./release-app",
     "test": "web-test-runner",
     "test:base": "yarn test --config web-test-runner-base.config.js",
     "test:firefox": "yarn test --config web-test-runner-firefox.config.js",
