@@ -31,19 +31,19 @@ export const overlayContentStyles = css`
     [part='years-toggle-button'] {
       display: inline-flex;
       border: var(--vaadin-button-border, var(--vaadin-button-border-width, 1px) solid transparent);
-      border-radius: var(--vaadin-button-border-radius, var(--_vaadin-radius-m));
+      border-radius: var(--vaadin-button-border-radius, var(--vaadin-radius-m));
       color: var(--vaadin-button-text-color, var(--_vaadin-button-text-color));
       font-size: var(--vaadin-button-font-size, inherit);
       font-weight: var(--vaadin-button-font-weight, 500);
       height: var(--vaadin-button-height, auto);
       line-height: var(--vaadin-button-line-height, inherit);
-      padding: var(--vaadin-button-padding, var(--_vaadin-padding-container));
+      padding: var(--vaadin-button-padding, var(--vaadin-padding-container));
       cursor: var(--vaadin-clickable-cursor);
     }
 
     :host([years-visible]) [part='years-toggle-button'] {
-      background: var(--_vaadin-color-strong);
-      color: var(--_vaadin-background);
+      background: var(--vaadin-color);
+      color: var(--vaadin-background-color);
     }
 
     [hidden] {
@@ -58,23 +58,23 @@ export const overlayContentStyles = css`
     }
 
     :host([desktop]) ::slotted([slot='months']) {
-      border-bottom: 1px solid var(--_vaadin-border-color);
+      border-bottom: 1px solid var(--vaadin-border-color);
     }
 
     ::slotted([slot='years']) {
       visibility: hidden;
-      background: var(--vaadin-date-picker-year-scroller-background, var(--_vaadin-background-container));
+      background: var(--vaadin-date-picker-year-scroller-background, var(--vaadin-background-container));
       width: var(--vaadin-date-picker-year-scroller-width, 3rem);
       box-sizing: border-box;
-      border-inline-start: 1px solid var(--vaadin-date-picker-year-scroller-border-color, var(--_vaadin-border-color));
+      border-inline-start: 1px solid var(--vaadin-date-picker-year-scroller-border-color, var(--vaadin-border-color));
       overflow: visible;
       min-height: 0;
       clip-path: inset(0);
     }
 
     ::slotted([slot='years'])::before {
-      background: var(--vaadin-overlay-background, var(--_vaadin-background));
-      border: 1px solid var(--vaadin-date-picker-year-scroller-border-color, var(--_vaadin-border-color));
+      background: var(--vaadin-overlay-background, var(--vaadin-background-color));
+      border: 1px solid var(--vaadin-date-picker-year-scroller-border-color, var(--vaadin-border-color));
       width: 1em;
       height: 1em;
       position: absolute;
@@ -98,12 +98,12 @@ export const overlayContentStyles = css`
       display: flex;
       grid-area: toolbar;
       justify-content: space-between;
-      padding: var(--vaadin-date-picker-toolbar-padding, var(--_vaadin-padding));
+      padding: var(--vaadin-date-picker-toolbar-padding, var(--vaadin-padding));
     }
 
     :host([fullscreen]) [part='toolbar'] {
       grid-area: header;
-      border-bottom: 1px solid var(--_vaadin-border-color);
+      border-bottom: 1px solid var(--vaadin-border-color);
     }
   }
 `;

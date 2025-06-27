@@ -36,7 +36,7 @@ export const field = css`
       font-size: var(--vaadin-input-field-label-font-size, inherit);
       line-height: var(--vaadin-input-field-label-line-height, inherit);
       font-weight: var(--vaadin-input-field-label-font-weight, 500);
-      color: var(--vaadin-input-field-label-color, var(--_vaadin-color-strong));
+      color: var(--vaadin-input-field-label-color, var(--vaadin-color));
       order: var(--vaadin-input-field-helper-order);
       word-break: break-word;
     }
@@ -63,7 +63,7 @@ export const field = css`
       position: absolute;
       width: 1em;
       text-align: center;
-      color: var(--vaadin-input-field-required-indicator-color, var(--_vaadin-color));
+      color: var(--vaadin-input-field-required-indicator-color, var(--vaadin-color-subtle));
     }
 
     [part='required-indicator']::after {
@@ -90,7 +90,7 @@ export const field = css`
       font-size: var(--vaadin-input-field-helper-font-size, inherit);
       line-height: var(--vaadin-input-field-helper-line-height, inherit);
       font-weight: var(--vaadin-input-field-helper-font-weight, 400);
-      color: var(--vaadin-input-field-helper-color, var(--_vaadin-color));
+      color: var(--vaadin-input-field-helper-color, var(--vaadin-color-subtle));
       order: var(--vaadin-input-field-helper-order);
     }
 
@@ -98,9 +98,9 @@ export const field = css`
       font-size: var(--vaadin-input-field-error-font-size, inherit);
       line-height: var(--vaadin-input-field-error-line-height, inherit);
       font-weight: var(--vaadin-input-field-error-font-weight, 400);
-      color: var(--vaadin-input-field-error-color, var(--_vaadin-color-strong));
+      color: var(--vaadin-input-field-error-color, var(--vaadin-color));
       display: flex;
-      gap: var(--_vaadin-gap-container-inline);
+      gap: var(--vaadin-gap-container-inline);
     }
 
     [part='error-message']::before {

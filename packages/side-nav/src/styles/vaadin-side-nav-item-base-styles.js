@@ -12,8 +12,8 @@ const sideNavItem = css`
     [part='content'] {
       display: flex;
       align-items: center;
-      padding: var(--vaadin-side-nav-item-padding, var(--_vaadin-padding));
-      gap: var(--vaadin-side-nav-item-gap, var(--_vaadin-gap-container-inline));
+      padding: var(--vaadin-side-nav-item-padding, var(--vaadin-padding));
+      gap: var(--vaadin-side-nav-item-gap, var(--vaadin-gap-container-inline));
       font-size: var(--vaadin-side-nav-item-font-size, 1em);
       font-weight: var(--vaadin-side-nav-item-font-weight, 500);
       line-height: var(--vaadin-side-nav-item-line-height, inherit);
@@ -21,14 +21,14 @@ const sideNavItem = css`
       background: var(--vaadin-side-nav-item-background, transparent);
       background-origin: border-box;
       border: var(--vaadin-side-nav-item-border-width, 0) solid var(--vaadin-side-nav-item-border-color, transparent);
-      border-radius: var(--vaadin-side-nav-item-border-radius, var(--_vaadin-radius-m));
+      border-radius: var(--vaadin-side-nav-item-border-radius, var(--vaadin-radius-m));
       cursor: var(--vaadin-clickable-cursor);
       touch-action: manipulation;
     }
 
     :host([current]) [part='content'] {
-      --vaadin-side-nav-item-background: var(--_vaadin-background-container-strong);
-      --vaadin-side-nav-item-color: var(--_vaadin-color-strong);
+      --vaadin-side-nav-item-background: var(--vaadin-background-container-strong);
+      --vaadin-side-nav-item-color: var(--vaadin-color);
     }
 
     :host([disabled]) {
@@ -36,7 +36,7 @@ const sideNavItem = css`
     }
 
     :host([disabled]) [part='content'] {
-      --vaadin-side-nav-item-color: var(--_vaadin-color-subtle);
+      --vaadin-side-nav-item-color: var(--vaadin-color-disabled);
     }
 
     [part='link'] {
@@ -91,10 +91,10 @@ const sideNavItem = css`
     [part='content']::before {
       content: '';
       --_hierarchy-indent: calc(var(--_level, 0) * var(--vaadin-side-nav-child-indent, var(--vaadin-icon-size, 1lh)));
-      --_icon-indent: calc(var(--_level, 0) * var(--vaadin-side-nav-item-gap, var(--_vaadin-gap-container-inline)));
+      --_icon-indent: calc(var(--_level, 0) * var(--vaadin-side-nav-item-gap, var(--vaadin-gap-container-inline)));
       width: calc(var(--_hierarchy-indent) + var(--_icon-indent));
       flex: none;
-      margin-inline-start: calc(var(--vaadin-side-nav-item-gap, var(--_vaadin-gap-container-inline)) * -1);
+      margin-inline-start: calc(var(--vaadin-side-nav-item-gap, var(--vaadin-gap-container-inline)) * -1);
     }
 
     slot[name='children'] {

@@ -20,7 +20,7 @@ export const avatarStyles = css`
       width: var(--vaadin-avatar-size, 2em);
       border: var(--vaadin-focus-ring-width) solid transparent;
       margin: calc(var(--vaadin-focus-ring-width) * -1);
-      background: var(--vaadin-avatar-background, var(--_vaadin-background-container-strong));
+      background: var(--vaadin-avatar-background, var(--vaadin-background-container-strong));
       background-clip: content-box;
       vertical-align: middle;
       -webkit-user-select: none;

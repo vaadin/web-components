@@ -11,7 +11,7 @@ export const sharedStyles = css`
     :host {
       display: flex;
       flex-direction: column;
-      gap: var(--vaadin-side-nav-items-gap, var(--_vaadin-gap-container-block));
+      gap: var(--vaadin-side-nav-items-gap, var(--vaadin-gap-container-block));
       cursor: default;
       -webkit-tap-highlight-color: transparent;
     }
@@ -35,8 +35,8 @@ export const sharedStyles = css`
     }
 
     [part='toggle-button'] {
-      border-radius: var(--vaadin-side-nav-item-border-radius, var(--_vaadin-radius-s));
-      color: var(--_vaadin-color);
+      border-radius: var(--vaadin-side-nav-item-border-radius, var(--vaadin-radius-s));
+      color: var(--vaadin-color-subtle);
     }
 
     [part='toggle-button']::before {
@@ -77,7 +77,7 @@ export const sharedStyles = css`
       list-style-type: none;
       display: flex;
       flex-direction: column;
-      gap: var(--vaadin-side-nav-items-gap, var(--_vaadin-gap-container-block));
+      gap: var(--vaadin-side-nav-items-gap, var(--vaadin-gap-container-block));
     }
 
     :focus-visible {
