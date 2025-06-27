@@ -10,12 +10,6 @@ registerStyles(
     overlay,
     dialogOverlay,
     css`
-      [part='header'] ::slotted(h3) {
-        margin-top: 0 !important;
-        margin-bottom: 0 !important;
-        margin-inline-start: calc(var(--lumo-space-l) - var(--lumo-space-m));
-      }
-
       [part='message'] {
         width: 25em;
         min-width: 100%;

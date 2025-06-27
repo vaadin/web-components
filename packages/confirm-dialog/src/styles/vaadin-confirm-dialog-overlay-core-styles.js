@@ -12,8 +12,19 @@ const confirmDialogOverlay = css`
     height: 100%;
   }
 
-  ::slotted([slot='header']) {
+  [part='header'] {
     pointer-events: auto;
+    margin-inline-start: calc(var(--lumo-space-l) - var(--lumo-space-m));
+    font-weight: 600;
+    line-height: var(--lumo-line-height-xs);
+    font-size: var(--lumo-font-size-xl);
+    color: var(--lumo-header-text-color);
+  }
+
+  ::slotted([slot='header']) {
+    display: contents !important;
+    font: inherit !important;
+    color: inherit !important;
   }
 
   /* Make buttons clickable */
