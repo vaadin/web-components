@@ -7,14 +7,7 @@ import { css } from 'lit';
 import { overlayStyles } from '@vaadin/overlay/src/styles/vaadin-overlay-core-styles.js';
 
 const userTagsOverlay = css`
-  :host {
-    background: transparent;
-    box-shadow: none;
-  }
-
-  :scope [part='overlay'] {
-    box-shadow: none;
-    background: transparent;
+  [part='overlay'] {
     position: relative;
     left: -4px;
     padding: 4px;
@@ -31,10 +24,6 @@ const userTagsOverlay = css`
   :host([dir='rtl']) [part='overlay'] {
     left: auto;
     right: -4px;
-  }
-
-  :scope [part='content'] {
-    padding: 0;
   }
 
   :host([opening]),
