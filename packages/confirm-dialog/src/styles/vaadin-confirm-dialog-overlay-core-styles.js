@@ -14,11 +14,6 @@ const confirmDialogOverlay = css`
 
   [part='header'] {
     pointer-events: auto;
-    margin-inline-start: calc(var(--lumo-space-l) - var(--lumo-space-m));
-    font-weight: 600;
-    line-height: var(--lumo-line-height-xs);
-    font-size: var(--lumo-font-size-xl);
-    color: var(--lumo-header-text-color);
   }
 
   ::slotted([slot='header']) {

@@ -10,6 +10,14 @@ registerStyles(
     overlay,
     dialogOverlay,
     css`
+      [part='header'] {
+        margin-inline-start: calc(var(--lumo-space-l) - var(--lumo-space-m));
+        font-weight: 600;
+        line-height: var(--lumo-line-height-xs);
+        font-size: var(--lumo-font-size-xl);
+        color: var(--lumo-header-text-color);
+      }
+
       [part='message'] {
         width: 25em;
         min-width: 100%;
