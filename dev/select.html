@@ -69,7 +69,7 @@
       import { html, render } from 'lit';
 
       document.querySelectorAll('vaadin-select').forEach((select) => {
-        if ((select.id = 'custom')) {
+        if (select.id === 'custom') {
           select.renderer = (root) => {
             render(
               html`
