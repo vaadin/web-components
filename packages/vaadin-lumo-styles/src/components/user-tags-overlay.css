@@ -3,12 +3,7 @@
  * Copyright (c) 2000 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-:host {
-  background: transparent;
-  box-shadow: none;
-}
-
-:scope [part='overlay'] {
+[part='overlay'] {
   box-shadow: none;
   background: transparent;
   position: relative;
@@ -16,6 +11,7 @@
   padding: 4px;
   outline: none;
   overflow: visible;
+  will-change: opacity, transform;
 }
 
 ::slotted([part='tags']) {
@@ -29,7 +25,7 @@
   right: -4px;
 }
 
-:scope [part='content'] {
+[part='content'] {
   padding: 0;
 }
 
@@ -46,10 +42,6 @@
   100% {
     opacity: 1;
   }
-}
-
-[part='overlay'] {
-  will-change: opacity, transform;
 }
 
 :host([opening]) [part='overlay'] {
