@@ -31,6 +31,7 @@ const widgetStyles = css`
   [part~='content'] {
     flex: 1;
     overflow: hidden;
+    min-height: 1rem;
   }
 
   [part~='resize-button'] {

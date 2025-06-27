@@ -45,7 +45,6 @@ export const overlayStyles = css`
   }
 
   [part='overlay'] {
-    -webkit-overflow-scrolling: touch;
     overflow: auto;
     pointer-events: auto;
 

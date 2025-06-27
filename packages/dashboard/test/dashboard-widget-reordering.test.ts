@@ -2,8 +2,8 @@ import { expect } from '@vaadin/chai-plugins';
 import { resetMouse, sendMouse, sendMouseToElement } from '@vaadin/test-runner-commands';
 import { fixtureSync, isFirefox, nextFrame, nextResize } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import '../vaadin-dashboard.js';
-import type { Dashboard, DashboardItem, DashboardSectionItem } from '../vaadin-dashboard.js';
+import '../src/vaadin-dashboard.js';
+import type { Dashboard, DashboardItem, DashboardSectionItem } from '../src/vaadin-dashboard.js';
 import {
   createDragEvent,
   expectLayout,
