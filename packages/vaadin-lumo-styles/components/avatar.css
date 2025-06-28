@@ -3,10 +3,15 @@
  * Copyright (c) 2017 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-@import '../src/mixins/base-layer-reset.css' vaadin-avatar;
-@import '../src/components/avatar.css' vaadin-avatar;
+@import '../src/mixins/base-layer-reset.css';
+@import '../src/components/avatar.css';
 
 html {
   --vaadin-avatar-css-inject: 1;
-  --vaadin-avatar-size: var(--lumo-size-m);
+  --vaadin-avatar-css-inject-modules:
+    lumo_mixins_base-layer-reset,
+    lumo_components_avatar;
+  --vaadin-avatar-size: var(
+    --lumo-size-m
+  );
 }

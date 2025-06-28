@@ -3,8 +3,9 @@
  * Copyright (c) 2000 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-@import '../src/components/chart.css' vaadin-chart;
+@import '../src/components/chart.css';
 
 html {
   --vaadin-chart-css-inject: 1;
+  --vaadin-chart-css-inject-modules: lumo_components_chart;
 }

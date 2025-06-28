@@ -3,16 +3,29 @@
  * Copyright (c) 2000 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-@import '../src/mixins/base-layer-reset.css' vaadin-card;
-@import '../src/components/card.css' vaadin-card;
+@import '../src/mixins/base-layer-reset.css';
+@import '../src/components/card.css';
 
 html {
   --vaadin-card-css-inject: 1;
-  --vaadin-card-background: var(--lumo-contrast-5pct);
-  --vaadin-card-border-radius: var(--lumo-border-radius-l);
+  --vaadin-card-css-inject-modules:
+    lumo_mixins_base-layer-reset,
+    lumo_components_card;
+  --vaadin-card-background: var(
+    --lumo-contrast-5pct
+  );
+  --vaadin-card-border-radius: var(
+    --lumo-border-radius-l
+  );
   --vaadin-card-border-width: 0;
-  --vaadin-card-border-color: var(--lumo-contrast-20pct);
-  --vaadin-card-padding: var(--lumo-space-m);
-  --vaadin-card-gap: var(--lumo-space-m);
+  --vaadin-card-border-color: var(
+    --lumo-contrast-20pct
+  );
+  --vaadin-card-padding: var(
+    --lumo-space-m
+  );
+  --vaadin-card-gap: var(
+    --lumo-space-m
+  );
   --vaadin-card-shadow: none;
 }

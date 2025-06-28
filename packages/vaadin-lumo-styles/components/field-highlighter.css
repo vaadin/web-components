@@ -3,18 +3,26 @@
  * Copyright (c) 2000 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-@import '../src/mixins/base-layer-reset.css' vaadin-user-tags-overlay;
-@import '../src/mixins/overlay.css' vaadin-user-tags-overlay;
-@import '../src/components/user-tags-overlay.css' vaadin-user-tags-overlay;
-
-@import '../src/mixins/base-layer-reset.css' vaadin-user-tag;
-@import '../src/components/user-tag.css' vaadin-user-tag;
-
-@import '../src/mixins/base-layer-reset.css' vaadin-field-outline;
-@import '../src/components/field-outline.css' vaadin-field-outline;
+@import '../src/mixins/base-layer-reset.css';
+@import '../src/mixins/overlay.css';
+@import '../src/components/field-outline.css';
+@import '../src/components/user-tag.css';
+@import '../src/components/user-tags-overlay.css';
 
 html {
   --vaadin-user-tags-overlay-css-inject: 1;
+  --vaadin-user-tags-overlay-css-inject-modules:
+    lumo_mixins_base-layer-reset,
+    lumo_mixins_overlay,
+    lumo_components_user-tags-overlay;
+
   --vaadin-user-tag-css-inject: 1;
+  --vaadin-user-tag-css-inject-modules:
+    lumo_mixins_base-layer-reset,
+    lumo_components_user-tag;
+
   --vaadin-field-outline-css-inject: 1;
+  --vaadin-field-outline-css-inject-modules:
+    lumo_mixins_base-layer-reset,
+    lumo_components_field-outline;
 }

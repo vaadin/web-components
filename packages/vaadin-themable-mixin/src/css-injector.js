@@ -3,8 +3,8 @@
  * Copyright (c) 2021 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { parseStyleSheets } from './css-modules.js';
 import { CSSPropertyObserver } from './css-property-observer.js';
-import { extractTagScopedCSSRules } from './css-rules.js';
 import { cleanupStyleSheet, injectStyleSheet } from './css-utils.js';
 
 /**
@@ -88,15 +88,31 @@ export class CSSInjector {
   }
 
   #updateComponentStyleSheet(tagName) {
-    const roots = new Set([document, this.#root]);
+    const { tags, modules } = parseStyleSheets(this.#rootStyleSheets);
 
-    const cssText = [...roots]
-      .flatMap((root) => extractTagScopedCSSRules(root, tagName))
-      .map((rule) => rule.cssText)
+    const cssText = (tags.get(tagName) ?? [])
+      .flatMap((moduleName) => {
+        const rules = modules.get(moduleName);
+        return rules;
+      })
+      .map((rule) => {
+        return rule.cssText;
+      })
       .join('\n');
 
     const stylesheet = this.#styleSheetsByTag.get(tagName) ?? new CSSStyleSheet();
     stylesheet.replaceSync(cssText);
     this.#styleSheetsByTag.set(tagName, stylesheet);
+  }
+
+  get #rootStyleSheets() {
+    let styleSheets = new Set();
+
+    for (const root of [this.#root, document]) {
+      styleSheets = styleSheets.union(new Set(root.styleSheets));
+      styleSheets = styleSheets.union(new Set(root.adoptedStyleSheets));
+    }
+
+    return [...styleSheets];
   }
 }

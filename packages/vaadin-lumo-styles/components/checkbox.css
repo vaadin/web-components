@@ -3,10 +3,14 @@
  * Copyright (c) 2017 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-@import '../src/mixins/base-layer-reset.css' vaadin-checkbox;
-@import '../src/mixins/checkable-field.css' vaadin-checkbox;
-@import '../src/components/checkbox.css' vaadin-checkbox;
+@import '../src/mixins/base-layer-reset.css';
+@import '../src/mixins/checkable-field.css';
+@import '../src/components/checkbox.css';
 
 html {
   --vaadin-checkbox-css-inject: 1;
+  --vaadin-checkbox-css-inject-modules:
+    lumo_mixins_base-layer-reset,
+    lumo_mixins_checkable-field,
+    lumo_components_checkbox;
 }

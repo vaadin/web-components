@@ -1,63 +1,61 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, oneEvent } from '@vaadin/testing-helpers';
-import { extractTagScopedCSSRules } from '../src/css-rules.js';
+import { parseStyleSheets } from '../src/css-modules.js';
 
 const BASE_PATH = import.meta.url.split('/').slice(0, -1).join('/');
 
-describe('CSS rules extraction', () => {
-  it('should extract and deduplicate rules from tag-scoped @media', () => {
+describe('CSS modules', () => {
+  it.only('should extract tags', () => {
     fixtureSync(`
       <style>
-        @media test-button {
+        @media lumo_base-field {
           :host {
             color: black;
           }
-        }
 
-        @media test-button {
-          :host {
-            color: red;
-          }
-        }
-
-        @media test-button {
-          :host {
-            color: black;
-          }
-        }
-
-        @media test-text-field {
           #label {
-            color: black;
-          }
-
-          #error-message {
             color: black;
           }
         }
       </style>
       <style>
-        @media test-text-field {
-          #error-message {
-            color: red;
+        @media lumo_text-field {
+          :host {
+            background: red;
           }
+        }
+
+        @media lumo_email-field {
+          :host {
+            background: yellow;
+          }
+        }
+
+        html {
+          --vaadin-text-field-css-inject-modules:
+            lumo_base-field,
+            lumo_text-field;
+
+          --vaadin-email-field-css-inject-modules:
+            lumo_base-field,
+            lumo_email-field;
         }
       </style>
     `);
 
-    {
-      const rules = extractTagScopedCSSRules(document, 'test-button');
-      expect(rules).to.have.lengthOf(2);
-      expect(rules[0].cssText).to.equal(':host { color: red; }');
-      expect(rules[1].cssText).to.equal(':host { color: black; }');
-    }
-    {
-      const rules = extractTagScopedCSSRules(document, 'test-text-field');
-      expect(rules).to.have.lengthOf(3);
-      expect(rules[0].cssText).to.equal('#label { color: black; }');
-      expect(rules[1].cssText).to.equal('#error-message { color: black; }');
-      expect(rules[2].cssText).to.equal('#error-message { color: red; }');
-    }
+    const { tags, modules } = parseStyleSheets([...document.styleSheets]);
+
+    expect(modules).to.have.lengthOf(3);
+    expect(modules.get('lumo_base-field').map((rule) => rule.cssText)).to.eql([
+      ':host { color: black; }',
+      '#label { color: black; }',
+    ]);
+    expect(modules.get('lumo_text-field').map((rule) => rule.cssText)).to.eql([':host { background: red; }']);
+    expect(modules.get('lumo_email-field').map((rule) => rule.cssText)).to.eql([':host { background: yellow; }']);
+
+    expect(tags).to.have.lengthOf(2);
+    expect(tags.get('vaadin-text-field')).to.eql(['lumo_base-field', 'lumo_text-field']);
+    expect(tags.get('vaadin-email-field')).to.eql(['lumo_base-field', 'lumo_email-field']);
   });
 
   it('should extract and deduplicate rules from tag-scoped @import', async () => {

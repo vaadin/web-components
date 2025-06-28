@@ -3,18 +3,20 @@
  * Copyright (c) 2017 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-:host([opened]) {
-  pointer-events: auto;
-}
+@media lumo_components_time-picker {
+  :host([opened]) {
+    pointer-events: auto;
+  }
 
-[part='toggle-button']::before {
-  content: var(--lumo-icons-clock);
-}
+  [part='toggle-button']::before {
+    content: var(--lumo-icons-clock);
+  }
 
-:host([dir='rtl']) [part='input-field'] ::slotted(input:placeholder-shown) {
-  --_lumo-text-field-overflow-mask-image: none;
-}
+  :host([dir='rtl']) [part='input-field'] ::slotted(input:placeholder-shown) {
+    --_lumo-text-field-overflow-mask-image: none;
+  }
 
-:host([dir='rtl']) [part='input-field'] ::slotted(input) {
-  --_lumo-text-field-overflow-mask-image: linear-gradient(to left, transparent, #000 1.25em);
+  :host([dir='rtl']) [part='input-field'] ::slotted(input) {
+    --_lumo-text-field-overflow-mask-image: linear-gradient(to left, transparent, #000 1.25em);
+  }
 }

@@ -3,55 +3,57 @@
  * Copyright (c) 2017 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-#resizerContainer {
-  height: 100%;
-}
-
-[part='header'] {
-  pointer-events: auto;
-  margin-inline-start: calc(var(--lumo-space-l) - var(--lumo-space-m));
-  font-weight: 600;
-  line-height: var(--lumo-line-height-xs);
-  font-size: var(--lumo-font-size-xl);
-  color: var(--lumo-header-text-color);
-}
-
-::slotted([slot='header']) {
-  display: contents !important;
-  font: inherit !important;
-  color: inherit !important;
-}
-
-/* Make buttons clickable */
-[part='footer'] > * {
-  pointer-events: all;
-}
-
-[part='message'] {
-  width: 25em;
-  min-width: 100%;
-  max-width: 100%;
-}
-
-::slotted([slot$='button'][theme~='tertiary']) {
-  padding-left: var(--lumo-space-s);
-  padding-right: var(--lumo-space-s);
-}
-
-[part='cancel-button'] {
-  flex-grow: 1;
-}
-
-@media (max-width: 360px) {
-  [part='footer'] {
-    flex-direction: column-reverse;
-    align-items: stretch;
-    padding: var(--lumo-space-s) var(--lumo-space-l);
-    gap: var(--lumo-space-s);
+@media lumo_components_confirm-dialog-overlay {
+  #resizerContainer {
+    height: 100%;
   }
 
-  ::slotted([slot$='button']) {
-    width: 100%;
-    margin: 0;
+  [part='header'] {
+    pointer-events: auto;
+    margin-inline-start: calc(var(--lumo-space-l) - var(--lumo-space-m));
+    font-weight: 600;
+    line-height: var(--lumo-line-height-xs);
+    font-size: var(--lumo-font-size-xl);
+    color: var(--lumo-header-text-color);
+  }
+
+  ::slotted([slot='header']) {
+    display: contents !important;
+    font: inherit !important;
+    color: inherit !important;
+  }
+
+  /* Make buttons clickable */
+  [part='footer'] > * {
+    pointer-events: all;
+  }
+
+  [part='message'] {
+    width: 25em;
+    min-width: 100%;
+    max-width: 100%;
+  }
+
+  ::slotted([slot$='button'][theme~='tertiary']) {
+    padding-left: var(--lumo-space-s);
+    padding-right: var(--lumo-space-s);
+  }
+
+  [part='cancel-button'] {
+    flex-grow: 1;
+  }
+
+  @media (max-width: 360px) {
+    [part='footer'] {
+      flex-direction: column-reverse;
+      align-items: stretch;
+      padding: var(--lumo-space-s) var(--lumo-space-l);
+      gap: var(--lumo-space-s);
+    }
+
+    ::slotted([slot$='button']) {
+      width: 100%;
+      margin: 0;
+    }
   }
 }

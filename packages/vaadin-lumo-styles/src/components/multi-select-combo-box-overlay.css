@@ -3,14 +3,16 @@
  * Copyright (c) 2017 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-:host {
-  --_vaadin-multi-select-combo-box-items-container-border-width: var(--lumo-space-xs);
-  --_vaadin-multi-select-combo-box-items-container-border-style: solid;
-}
+@media lumo_components_multi-select-combo-box-overlay {
+  :host {
+    --_vaadin-multi-select-combo-box-items-container-border-width: var(--lumo-space-xs);
+    --_vaadin-multi-select-combo-box-items-container-border-style: solid;
+  }
 
-#overlay {
-  width: var(
-    --vaadin-multi-select-combo-box-overlay-width,
-    var(--_vaadin-multi-select-combo-box-overlay-default-width, auto)
-  );
+  #overlay {
+    width: var(
+      --vaadin-multi-select-combo-box-overlay-width,
+      var(--_vaadin-multi-select-combo-box-overlay-default-width, auto)
+    );
+  }
 }

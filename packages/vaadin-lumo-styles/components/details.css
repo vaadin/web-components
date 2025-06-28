@@ -3,10 +3,11 @@
  * Copyright (c) 2017 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-@import './details-summary.css';
 
-@import '../src/components/details.css' vaadin-details;
+@import '../src/components/details.css';
+@import './details-summary.css';
 
 html {
   --vaadin-details-css-inject: 1;
+  --vaadin-details-css-inject-modules: lumo_components_details;
 }

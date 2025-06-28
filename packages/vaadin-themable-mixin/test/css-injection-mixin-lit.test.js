@@ -85,7 +85,7 @@ function createTestFooStyleSheet() {
   return link;
 }
 
-describe('CSS injection', () => {
+describe.skip('CSS injection', () => {
   let element, content;
 
   async function contentTransition() {

@@ -3,14 +3,16 @@
  * Copyright (c) 2017 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-:host(:hover:not([readonly]):not([focused])) [part='label'],
-:host(:hover:not([readonly])) [part='helper-text'] {
-  color: var(--lumo-body-text-color);
-}
+@media lumo_components_radio-group {
+  :host(:hover:not([readonly]):not([focused])) [part='label'],
+  :host(:hover:not([readonly])) [part='helper-text'] {
+    color: var(--lumo-body-text-color);
+  }
 
-/* Touch device adjustment */
-@media (pointer: coarse) {
-  :host(:hover:not([readonly]):not([focused])) [part='label'] {
-    color: var(--lumo-secondary-text-color);
+  /* Touch device adjustment */
+  @media (pointer: coarse) {
+    :host(:hover:not([readonly]):not([focused])) [part='label'] {
+      color: var(--lumo-secondary-text-color);
+    }
   }
 }
