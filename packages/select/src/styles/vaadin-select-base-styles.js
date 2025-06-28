@@ -16,6 +16,10 @@ export const selectStyles = css`
       flex: 1;
     }
 
+    ::slotted(div[slot='overlay']) {
+      display: contents;
+    }
+
     :host(:not([focus-ring])) [part='input-field'] {
       outline: none;
     }

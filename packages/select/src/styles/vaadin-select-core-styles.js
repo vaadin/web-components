@@ -13,4 +13,8 @@ export const selectStyles = css`
   ::slotted([slot='value']) {
     flex-grow: 1;
   }
+
+  ::slotted(div[slot='overlay']) {
+    display: contents;
+  }
 `;

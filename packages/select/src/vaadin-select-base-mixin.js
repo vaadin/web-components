@@ -5,6 +5,7 @@
  */
 import { setAriaIDReference } from '@vaadin/a11y-base/src/aria-id-reference.js';
 import { DelegateFocusMixin } from '@vaadin/a11y-base/src/delegate-focus-mixin.js';
+import { getFocusableElements } from '@vaadin/a11y-base/src/focus-utils.js';
 import { KeyboardMixin } from '@vaadin/a11y-base/src/keyboard-mixin.js';
 import { DelegateStateMixin } from '@vaadin/component-base/src/delegate-state-mixin.js';
 import { MediaQueryController } from '@vaadin/component-base/src/media-query-controller.js';
@@ -153,6 +154,13 @@ export const SelectBaseMixin = (superClass) =>
 
         /** @private */
         _items: Object,
+
+        /** @private */
+        __shouldRestoreFocus: {
+          type: Boolean,
+          value: true,
+          sync: true,
+        },
       };
     }
 
@@ -216,10 +224,6 @@ export const SelectBaseMixin = (superClass) =>
       }
 
       this._overlayElement.requestContentUpdate();
-
-      if (this._menuElement && this._menuElement.items) {
-        this._updateSelectedItem(this.value, this._menuElement.items);
-      }
     }
 
     /**
@@ -279,6 +283,12 @@ export const SelectBaseMixin = (superClass) =>
 
         // Store the menu element reference
         this.__lastMenuElement = menuElement;
+      }
+
+      // When the renderer was re-assigned so that menu element is preserved
+      // but its items have changed, make sure selected property is updated.
+      if (this._menuElement && this._menuElement.items) {
+        this._updateSelectedItem(this.value, this._menuElement.items);
       }
     }
 
@@ -361,8 +371,22 @@ export const SelectBaseMixin = (superClass) =>
      * @protected
      */
     _onKeyDownInside(e) {
-      if (/^(Tab)$/u.test(e.key)) {
+      if (e.key === 'Tab') {
+        this.__shouldRestoreFocus = false;
         this.opened = false;
+
+        if (e.shiftKey) {
+          // On Shift + Tab, focus does not move to previous  element
+          // but returns to `vaadin-select` unexpectedly. Workaround
+          // this by getting the previous focusable and focusing it.
+          const focusables = getFocusableElements(document.body);
+          const idx = focusables.findIndex((el) => el === this.focusElement);
+          const focusable = focusables[idx - 1];
+          if (focusable) {
+            e.preventDefault();
+            focusable.focus();
+          }
+        }
       }
     }
 
@@ -387,7 +411,7 @@ export const SelectBaseMixin = (superClass) =>
           this.removeAttribute('focus-ring');
         }
       } else if (oldOpened) {
-        if (this._openedWithFocusRing) {
+        if (this._openedWithFocusRing && this.__shouldRestoreFocus) {
           this.setAttribute('focus-ring', '');
         }
 
@@ -585,8 +609,16 @@ export const SelectBaseMixin = (superClass) =>
      * @protected
      * @override
      */
-    _shouldRemoveFocus() {
-      return !this.opened;
+    _shouldRemoveFocus(event) {
+      // Component is about to be closed by Tab, remove focus.
+      if (!this.__shouldRestoreFocus) {
+        return true;
+      }
+
+      // With native popover, the overlay item focusout event bubbles to the host,
+      // so we need to ignore it here in order to not call `_setFocused(false)`
+      // as focus is about to be immediately restored on overlay close.
+      return !this.opened && !event.composedPath().includes(this._overlayElement);
     }
 
     /**

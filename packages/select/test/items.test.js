@@ -4,16 +4,17 @@ import './not-animated-styles.js';
 import '../src/vaadin-select.js';
 
 describe('items', () => {
-  let select, overlay, listBox;
+  let select, overlay, rendererRoot, listBox;
 
   beforeEach(async () => {
     select = fixtureSync(`<vaadin-select></vaadin-select>`);
     await nextRender();
     select.items = [{ label: 'Option 1', value: 'value-1' }];
     overlay = select.shadowRoot.querySelector('vaadin-select-overlay');
+    rendererRoot = select.querySelector('[slot="overlay"]');
     select.opened = true;
     await oneEvent(overlay, 'vaadin-overlay-open');
-    listBox = overlay.querySelector('vaadin-select-list-box');
+    listBox = rendererRoot.querySelector('vaadin-select-list-box');
   });
 
   it('should render items', () => {
@@ -43,19 +44,19 @@ describe('items', () => {
   it('should clear the content when setting items property to an empty array', async () => {
     select.items = [];
     await nextUpdate(select);
-    expect(overlay.childNodes).to.be.empty;
+    expect(rendererRoot.childNodes).to.be.empty;
   });
 
   it('should clear the content when setting items property to null', async () => {
     select.items = null;
     await nextUpdate(select);
-    expect(overlay.childNodes).to.be.empty;
+    expect(rendererRoot.childNodes).to.be.empty;
   });
 
   it('should clear the content when setting items property to undefined', async () => {
     select.items = undefined;
     await nextUpdate(select);
-    expect(overlay.childNodes).to.be.empty;
+    expect(rendererRoot.childNodes).to.be.empty;
   });
 
   it('should render item with a custom component', async () => {
@@ -88,13 +89,13 @@ describe('items', () => {
     });
 
     it('should override content with the renderer', () => {
-      expect(overlay.textContent).to.equal('Renderer');
+      expect(rendererRoot.textContent).to.equal('Renderer');
     });
 
     it('should render items when removing the renderer', async () => {
       select.renderer = null;
       await nextUpdate(select);
-      const newListBox = overlay.querySelector('vaadin-select-list-box');
+      const newListBox = rendererRoot.querySelector('vaadin-select-list-box');
       expect(newListBox).to.be.ok;
       expect(newListBox.childNodes).to.have.lengthOf(1);
       expect(newListBox.childNodes[0].textContent).to.equal('Option 1');

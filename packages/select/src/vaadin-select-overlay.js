@@ -6,7 +6,7 @@
 import { html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
-import { overlayStyles } from '@vaadin/overlay/src/styles/vaadin-overlay-core-styles.js';
+import { overlayStyles, popoverOverlayStyles } from '@vaadin/overlay/src/styles/vaadin-overlay-core-styles.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { selectOverlayStyles } from './styles/vaadin-select-overlay-core-styles.js';
@@ -27,7 +27,7 @@ export class SelectOverlay extends SelectOverlayMixin(ThemableMixin(LumoInjectio
   }
 
   static get styles() {
-    return [overlayStyles, selectOverlayStyles];
+    return [popoverOverlayStyles, overlayStyles, selectOverlayStyles];
   }
 
   /** @protected */

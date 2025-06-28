@@ -7,9 +7,7 @@ import '@vaadin/item/src/vaadin-item.js';
 import '@vaadin/list-box/src/vaadin-list-box.js';
 
 describe('renderer', () => {
-  let select;
-  let overlay;
-  let rendererContent;
+  let select, rendererRoot, rendererContent;
 
   function generateRendererWithItems(items) {
     return function (root, select) {
@@ -34,7 +32,7 @@ describe('renderer', () => {
   beforeEach(async () => {
     select = fixtureSync(`<vaadin-select></vaadin-select>`);
     await nextRender();
-    overlay = select.shadowRoot.querySelector('vaadin-select-overlay');
+    rendererRoot = select.querySelector('[slot="overlay"]');
     rendererContent = document.createElement('vaadin-list-box');
     const rendererItem = document.createElement('vaadin-item');
     rendererItem.textContent = 'renderer item';
@@ -52,21 +50,21 @@ describe('renderer', () => {
     });
 
     it('should render content by the renderer', () => {
-      expect(overlay.childNodes).to.have.lengthOf(1);
-      expect(overlay.textContent).to.equal('Content');
+      expect(rendererRoot.childNodes).to.have.lengthOf(1);
+      expect(rendererRoot.textContent).to.equal('Content');
     });
 
-    it('should clear the content when removing the renderer', async () => {
+    it('should reset the default slot when removing the renderer', async () => {
       select.renderer = null;
       await nextUpdate(select);
-      expect(overlay.childNodes).to.be.empty;
+      expect(rendererRoot.innerHTML).to.be.equal('');
     });
 
     it('should not override the content on items property change', async () => {
       select.items = [{ label: 'Item 1', value: 'value-1' }];
       await nextUpdate(select);
-      expect(overlay.childNodes).to.have.lengthOf(1);
-      expect(overlay.textContent).to.equal('Content');
+      expect(rendererRoot.childNodes).to.have.lengthOf(1);
+      expect(rendererRoot.textContent).to.equal('Content');
     });
   });
 
@@ -75,7 +73,7 @@ describe('renderer', () => {
     select.renderer = spy;
     await nextUpdate(select);
     expect(spy.calledOnce).to.be.true;
-    expect(spy.firstCall.args[0]).to.equal(select._overlayElement);
+    expect(spy.firstCall.args[0]).to.equal(rendererRoot);
     expect(spy.firstCall.args[1]).to.equal(select);
   });
 
