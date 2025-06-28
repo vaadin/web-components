@@ -3,11 +3,16 @@
  * Copyright (c) 2017 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-@import '../src/mixins/base-layer-reset.css' vaadin-dialog-overlay;
-@import '../src/mixins/overlay.css' vaadin-dialog-overlay;
-@import '../src/mixins/resizable-overlay.css' vaadin-dialog-overlay;
-@import '../src/components/dialog-overlay.css' vaadin-dialog-overlay;
+@import '../src/mixins/base-layer-reset.css';
+@import '../src/mixins/overlay.css';
+@import '../src/mixins/resizable-overlay.css';
+@import '../src/components/dialog-overlay.css';
 
 html {
   --vaadin-dialog-overlay-css-inject: 1;
+  --vaadin-dialog-overlay-css-inject-modules:
+    lumo_mixins_base-layer-reset,
+    lumo_mixins_overlay,
+    lumo_mixins_resizable-overlay,
+    lumo_components_dialog-overlay;
 }

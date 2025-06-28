@@ -3,9 +3,11 @@
  * Copyright (c) 2017 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-@media (any-hover: hover) {
-  :host(:hover[readonly]) {
-    background-color: transparent;
-    cursor: default;
+@media lumo_components_multi-select-combo-box-item {
+  @media (any-hover: hover) {
+    :host(:hover[readonly]) {
+      background-color: transparent;
+      cursor: default;
+    }
   }
 }

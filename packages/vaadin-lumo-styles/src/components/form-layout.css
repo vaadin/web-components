@@ -3,7 +3,9 @@
  * Copyright (c) 2017 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-:host {
-  --vaadin-form-layout-column-spacing: var(--lumo-space-l);
-  --vaadin-form-layout-row-spacing: 0;
+@media lumo_components_form-layout {
+  :host {
+    --vaadin-form-layout-column-spacing: var(--lumo-space-l);
+    --vaadin-form-layout-row-spacing: 0;
+  }
 }

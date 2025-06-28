@@ -3,21 +3,31 @@
  * Copyright (c) 2000 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+
+@import '../src/mixins/base-layer-reset.css';
+@import '../src/mixins/overlay.css';
+@import '../src/components/rich-text-editor-popup-overlay.css';
+@import '../src/components/rich-text-editor.css';
+@import '../src/global/color.css'
+  lumo_global_color;
+@import '../src/global/typography.css'
+  lumo_global_typography;
 @import './button.css';
 @import './confirm-dialog.css';
 @import './text-field.css';
 @import './tooltip.css';
 
-@import '../src/mixins/base-layer-reset.css' vaadin-rich-text-editor;
-@import '../src/global/color.css' vaadin-rich-text-editor;
-@import '../src/global/typography.css' vaadin-rich-text-editor;
-@import '../src/components/rich-text-editor.css' vaadin-rich-text-editor;
-
-@import '../src/mixins/base-layer-reset.css' vaadin-rich-text-editor-popup-overlay;
-@import '../src/mixins/overlay.css' vaadin-rich-text-editor-popup-overlay;
-@import '../src/components/rich-text-editor-popup-overlay.css' vaadin-rich-text-editor-popup-overlay;
-
 html {
   --vaadin-rich-text-editor-css-inject: 1;
+  --vaadin-rich-text-editor-css-inject-modules:
+    lumo_mixins_base-layer-reset,
+    lumo_global_color,
+    lumo_global_typography,
+    lumo_components_rich-text-editor;
+
   --vaadin-rich-text-editor-popup-overlay-css-inject: 1;
+  --vaadin-rich-text-editor-popup-overlay-css-inject-modules:
+    lumo_mixins_base-layer-reset,
+    lumo_mixins_overlay,
+    lumo_components_rich-text-editor-popup-overlay;
 }

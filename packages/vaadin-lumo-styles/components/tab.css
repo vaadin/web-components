@@ -3,9 +3,12 @@
  * Copyright (c) 2000 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-@import '../src/mixins/base-layer-reset.css' vaadin-tab;
-@import '../src/components/tab.css' vaadin-tab;
+@import '../src/mixins/base-layer-reset.css';
+@import '../src/components/tab.css';
 
 html {
   --vaadin-tab-css-inject: 1;
+  --vaadin-tab-css-inject-modules:
+    lumo_mixins_base-layer-reset,
+    lumo_components_tab;
 }

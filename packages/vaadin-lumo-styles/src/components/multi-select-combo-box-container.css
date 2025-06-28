@@ -3,16 +3,18 @@
  * Copyright (c) 2017 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-#wrapper {
-  display: flex;
-  width: 100%;
-  min-width: 0;
-}
+@media lumo_components_multi-select-combo-box-container {
+  #wrapper {
+    display: flex;
+    width: 100%;
+    min-width: 0;
+  }
 
-:host([auto-expand-vertically]) {
-  padding-block: var(--lumo-space-xs);
-}
+  :host([auto-expand-vertically]) {
+    padding-block: var(--lumo-space-xs);
+  }
 
-:host([auto-expand-vertically]) #wrapper {
-  flex-wrap: wrap;
+  :host([auto-expand-vertically]) #wrapper {
+    flex-wrap: wrap;
+  }
 }

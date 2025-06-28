@@ -3,11 +3,13 @@
  * Copyright (c) 2017 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-:host {
-  --_vaadin-time-picker-items-container-border-width: var(--lumo-space-xs);
-  --_vaadin-time-picker-items-container-border-style: solid;
-}
+@media lumo_components_time-picker-overlay {
+  :host {
+    --_vaadin-time-picker-items-container-border-width: var(--lumo-space-xs);
+    --_vaadin-time-picker-items-container-border-style: solid;
+  }
 
-#overlay {
-  width: var(--vaadin-time-picker-overlay-width, var(--_vaadin-time-picker-overlay-default-width, auto));
+  #overlay {
+    width: var(--vaadin-time-picker-overlay-width, var(--_vaadin-time-picker-overlay-default-width, auto));
+  }
 }
