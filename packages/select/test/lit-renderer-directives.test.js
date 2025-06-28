@@ -3,12 +3,12 @@ import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './not-animated-styles.js';
 import '../src/vaadin-select.js';
-import { html, render } from 'lit';
+import { html, nothing, render } from 'lit';
 import { selectRenderer } from '../lit.js';
 
 async function renderOpenedSelect(container, { content }) {
   render(
-    html`<vaadin-select opened ${content ? selectRenderer(() => html`${content}`, content) : null}></vaadin-select>`,
+    html`<vaadin-select opened ${content ? selectRenderer(() => html`${content}`, content) : nothing}></vaadin-select>`,
     container,
   );
   await nextFrame();
@@ -39,12 +39,12 @@ describe('lit renderer directives', () => {
       });
 
       it('should render the content with the renderer', () => {
-        expect(overlay.textContent).to.equal('Content');
+        expect(overlay._rendererRoot.textContent.trim()).to.equal('Content');
       });
 
       it('should re-render the content when a renderer dependency changes', async () => {
         await renderOpenedSelect(container, { content: 'New Content' });
-        expect(overlay.textContent).to.equal('New Content');
+        expect(overlay._rendererRoot.textContent.trim()).to.equal('New Content');
       });
     });
 

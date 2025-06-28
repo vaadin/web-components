@@ -250,31 +250,6 @@ describe('field components', () => {
         expect(showSpy.callCount).to.equal(1);
       });
     });
-
-    describe('phone', () => {
-      beforeEach(() => {
-        field._phone = true;
-      });
-
-      it('should dispatch vaadin-highlight-hide event on outside click', async () => {
-        await open(field);
-
-        outsideClick();
-        await nextRender();
-
-        expect(hideSpy.callCount).to.equal(1);
-      });
-
-      it('should dispatch vaadin-highlight-hide event on select', async () => {
-        field.focus();
-        await open(field);
-
-        document.activeElement.click();
-        await nextRender();
-
-        expect(hideSpy.callCount).to.equal(1);
-      });
-    });
   });
 
   describe('checkbox group', () => {

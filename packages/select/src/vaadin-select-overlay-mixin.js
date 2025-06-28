@@ -15,15 +15,42 @@ import { PositionMixin } from '@vaadin/overlay/src/vaadin-overlay-position-mixin
  */
 export const SelectOverlayMixin = (superClass) =>
   class SelectOverlayMixin extends PositionMixin(OverlayMixin(DirMixin(superClass))) {
-    static get observers() {
-      return ['_updateOverlayWidth(opened, owner)'];
+    /**
+     * Override getter from `OverlayMixin` to customize renderer root.
+     * @override
+     * @protected
+     */
+    get _rendererRoot() {
+      if (!this.__savedRoot) {
+        const root = document.createElement('div');
+        root.setAttribute('slot', 'overlay');
+        this.owner.appendChild(root);
+        this.__savedRoot = root;
+      }
+
+      return this.__savedRoot;
     }
 
     /** @protected */
-    ready() {
-      super.ready();
+    _attachOverlay() {
+      this.showPopover();
+    }
 
-      this.restoreFocusOnClose = true;
+    /** @protected */
+    _detachOverlay() {
+      this.hidePopover();
+    }
+
+    /**
+     * @protected
+     * @override
+     */
+    _shouldRestoreFocus() {
+      // Default implementation checks for element to be either in body
+      // or a child of the overlay, but in select it's actually slotted
+      // so we override the check here to always restore focus on close
+      // except for Tab key, when `restoreFocusOnClose` is set to false.
+      return true;
     }
 
     /**
@@ -40,21 +67,10 @@ export const SelectOverlayMixin = (superClass) =>
 
     /** @protected */
     _getMenuElement() {
-      return Array.from(this.children).find((el) => el.localName !== 'style');
-    }
-
-    /** @private */
-    _updateOverlayWidth(opened, owner) {
-      if (opened && owner) {
-        const widthProperty = '--vaadin-select-overlay-width';
-        const customWidth = getComputedStyle(owner).getPropertyValue(widthProperty);
-
-        if (customWidth === '') {
-          this.style.removeProperty(widthProperty);
-        } else {
-          this.style.setProperty(widthProperty, customWidth);
-        }
-      }
+      return (
+        this.owner.querySelector('vaadin-select-list-box') ||
+        Array.from(this._rendererRoot.children).find((el) => el.localName !== 'style' && el.localName !== 'slot')
+      );
     }
 
     requestContentUpdate() {

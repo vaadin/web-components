@@ -3,35 +3,30 @@
  * Copyright (c) 2021 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
 import { FieldObserver } from './vaadin-field-observer.js';
 
 export class SelectObserver extends FieldObserver {
   constructor(select) {
     super(select);
 
-    this.blurWhileOpened = false;
     this.overlay = select._overlayElement;
   }
 
-  addListeners(select) {
-    super.addListeners(select);
-
-    select.addEventListener('opened-changed', (event) => {
-      // When in phone mode, focus is lost when closing.
-      if (select._phone && event.detail.value === false) {
-        this.hideOutline(select);
-      }
-    });
-  }
-
   onFocusIn(event) {
-    if (this.overlay.contains(event.relatedTarget)) {
+    if (this.overlay._rendererRoot.contains(event.target)) {
+      // Focus moves to the overlay item, do nothing.
+      return;
+    }
+
+    if (this.overlay._rendererRoot.contains(event.relatedTarget)) {
       // Focus returns on item select, do nothing.
       return;
     }
 
-    if (!this.component._phone && this.overlay.hasAttribute('closing')) {
-      // Focus returns on outside click, do nothing.
+    if (this.outsideClick && (event.relatedTarget == null || event.relatedTarget === document.body)) {
+      // Focus is restored after closing on outside click.
+      this.outsideClick = false;
       return;
     }
 
@@ -39,10 +34,26 @@ export class SelectObserver extends FieldObserver {
   }
 
   onFocusOut(event) {
-    if (this.overlay.contains(event.relatedTarget)) {
-      // Do nothing, overlay is opening.
+    if (this.overlay._rendererRoot.contains(event.relatedTarget)) {
+      // Do nothing, focus moves to the overlay on opening.
       return;
     }
+
+    if (this.overlay._rendererRoot.contains(event.target) && this.component.contains(event.relatedTarget)) {
+      // Do nothing, focus moves from the overlay on select.
+      return;
+    }
+
+    if (
+      this.overlay._rendererRoot.contains(event.target) &&
+      (event.relatedTarget == null || event.relatedTarget === document.body) &&
+      !isKeyboardActive()
+    ) {
+      // Focus moves to body but will be restored, do nothing.
+      this.outsideClick = true;
+      return;
+    }
+
     super.onFocusOut(event);
   }
 }
