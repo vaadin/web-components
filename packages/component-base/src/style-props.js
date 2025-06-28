@@ -13,20 +13,32 @@ addGlobalThemeStyles(
     @layer vaadin.base {
       html {
         /* Background color */
-        --_vaadin-background: hsl(0deg, 0%, 100%);
+        --_vaadin-background: light-dark(#fff, #222);
 
         /* Container colors */
-        --_vaadin-background-container: hsl(0deg, 0%, 95%);
-        --_vaadin-background-container-strong: hsl(0deg, 0%, 90%);
+        --_vaadin-background-container: color-mix(in oklch, var(--_vaadin-color-strong) 5%, var(--_vaadin-background));
+        --_vaadin-background-container-strong: color-mix(
+          in oklch,
+          var(--_vaadin-color-strong) 10%,
+          var(--_vaadin-background)
+        );
 
         /* Border colors */
-        --_vaadin-border-color: hsl(0deg, 0%, 75%);
-        --_vaadin-border-color-strong: hsl(0deg, 0%, 58%); /* Above 3:1 contrast */
+        --_vaadin-border-color: color-mix(in oklch, var(--_vaadin-color-strong) 24%, transparent);
+        --_vaadin-border-color-strong: color-mix(
+          in oklch,
+          var(--_vaadin-color-strong) 48%,
+          transparent
+        ); /* Above 3:1 contrast */
 
         /* Text colors */
-        --_vaadin-color-subtle: hsl(0deg, 0%, 58%); /* Above 3:1 contrast */
-        --_vaadin-color: hsl(0deg, 0%, 44%); /* Above 4.5:1 contrast */
-        --_vaadin-color-strong: hsl(0deg, 0%, 12%); /* Above 7:1 contrast */
+        --_vaadin-color-subtle: color-mix(
+          in oklch,
+          var(--_vaadin-color-strong) 48%,
+          transparent
+        ); /* Above 3:1 contrast */
+        --_vaadin-color: color-mix(in oklch, var(--_vaadin-color-strong) 68%, transparent); /* Above 4.5:1 contrast */
+        --_vaadin-color-strong: light-dark(#1f1f1f, white); /* Above 7:1 contrast */
 
         /* Padding */
         --_vaadin-padding: 8px;
