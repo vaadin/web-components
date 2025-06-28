@@ -3,32 +3,34 @@
  * Copyright (c) 2017 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-:host([opening]),
-:host([closing]) {
-  animation: 0.14s lumo-overlay-dummy-animation;
-}
-
-[part='overlay'] {
-  will-change: opacity, transform;
-}
-
-:host([opening]) [part='overlay'] {
-  animation: 0.1s lumo-menu-overlay-enter ease-out both;
-}
-
-@keyframes lumo-menu-overlay-enter {
-  0% {
-    opacity: 0;
-    transform: translateY(-4px);
+@media lumo_mixins_menu-overlay-core {
+  :host([opening]),
+  :host([closing]) {
+    animation: 0.14s lumo-overlay-dummy-animation;
   }
-}
 
-:host([closing]) [part='overlay'] {
-  animation: 0.1s lumo-menu-overlay-exit both;
-}
+  [part='overlay'] {
+    will-change: opacity, transform;
+  }
 
-@keyframes lumo-menu-overlay-exit {
-  100% {
-    opacity: 0;
+  :host([opening]) [part='overlay'] {
+    animation: 0.1s lumo-menu-overlay-enter ease-out both;
+  }
+
+  @keyframes lumo-menu-overlay-enter {
+    0% {
+      opacity: 0;
+      transform: translateY(-4px);
+    }
+  }
+
+  :host([closing]) [part='overlay'] {
+    animation: 0.1s lumo-menu-overlay-exit both;
+  }
+
+  @keyframes lumo-menu-overlay-exit {
+    100% {
+      opacity: 0;
+    }
   }
 }

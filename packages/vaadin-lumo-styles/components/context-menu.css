@@ -3,22 +3,34 @@
  * Copyright (c) 2017 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-@import '../src/mixins/base-layer-reset.css' vaadin-context-menu-overlay;
-@import '../src/mixins/overlay.css' vaadin-context-menu-overlay;
-@import '../src/mixins/menu-overlay-core.css' vaadin-context-menu-overlay;
-@import '../src/mixins/menu-overlay-ext.css' vaadin-context-menu-overlay;
-@import '../src/components/context-menu-overlay.css' vaadin-context-menu-overlay;
-
-@import '../src/mixins/base-layer-reset.css' vaadin-context-menu-list-box;
-@import '../src/components/list-box.css' vaadin-context-menu-list-box;
-@import '../src/components/context-menu-list-box.css' vaadin-context-menu-list-box;
-
-@import '../src/mixins/base-layer-reset.css' vaadin-context-menu-item;
-@import '../src/components/item.css' vaadin-context-menu-item;
-@import '../src/components/context-menu-item.css' vaadin-context-menu-item;
+@import '../src/mixins/base-layer-reset.css';
+@import '../src/mixins/menu-overlay-core.css';
+@import '../src/mixins/menu-overlay-ext.css';
+@import '../src/mixins/overlay.css';
+@import '../src/components/context-menu-item.css';
+@import '../src/components/context-menu-list-box.css';
+@import '../src/components/context-menu-overlay.css';
+@import '../src/components/item.css';
+@import '../src/components/list-box.css';
 
 html {
   --vaadin-context-menu-overlay-css-inject: 1;
+  --vaadin-context-menu-overlay-css-inject-modules:
+    lumo_mixins_base-layer-reset,
+    lumo_mixins_overlay,
+    lumo_mixins_menu-overlay-core,
+    lumo_mixins_menu-overlay-ext,
+    lumo_components_context-menu-overlay;
+
   --vaadin-context-menu-list-box-css-inject: 1;
+  --vaadin-context-menu-list-box-css-inject-modules:
+    lumo_mixins_base-layer-reset,
+    lumo_components_list-box,
+    lumo_components_context-menu-list-box;
+
   --vaadin-context-menu-item-css-inject: 1;
+  --vaadin-context-menu-item-css-inject-modules:
+    lumo_mixins_base-layer-reset,
+    lumo_components_item,
+    lumo_components_context-menu-item;
 }

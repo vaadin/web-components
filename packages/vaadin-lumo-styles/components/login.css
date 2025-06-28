@@ -3,12 +3,16 @@
  * Copyright (c) 2017 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-@import './login-form.css';
 
-@import '../src/mixins/base-layer-reset.css' vaadin-login-overlay-wrapper;
-@import '../src/mixins/overlay.css' vaadin-login-overlay-wrapper;
-@import '../src/components/login-overlay-wrapper.css' vaadin-login-overlay-wrapper;
+@import '../src/mixins/base-layer-reset.css';
+@import '../src/mixins/overlay.css';
+@import '../src/components/login-overlay-wrapper.css';
+@import './login-form.css';
 
 html {
   --vaadin-login-overlay-wrapper-css-inject: 1;
+  --vaadin-login-overlay-wrapper-css-inject-modules:
+    lumo_mixins_base-layer-reset,
+    lumo_mixins_overlay,
+    lumo_components_login-overlay-wrapper;
 }

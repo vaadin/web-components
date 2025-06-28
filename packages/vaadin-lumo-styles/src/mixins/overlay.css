@@ -3,109 +3,111 @@
  * Copyright (c) 2017 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-:host {
-  z-index: 200;
-  position: fixed;
+@media lumo_mixins_overlay {
+  :host {
+    z-index: 200;
+    position: fixed;
 
-  /* Despite of what the names say, <vaadin-overlay> is just a container
+    /* Despite of what the names say, <vaadin-overlay> is just a container
         for position/sizing/alignment. The actual overlay is the overlay part. */
 
-  /* Use flexbox alignment for the overlay part. */
-  display: flex;
-  flex-direction: column; /* makes dropdowns sizing easier */
-  /* Align to center by default. */
-  align-items: center;
-  justify-content: center;
+    /* Use flexbox alignment for the overlay part. */
+    display: flex;
+    flex-direction: column; /* makes dropdowns sizing easier */
+    /* Align to center by default. */
+    align-items: center;
+    justify-content: center;
 
-  /* Allow centering when max-width/max-height applies. */
-  margin: auto;
+    /* Allow centering when max-width/max-height applies. */
+    margin: auto;
 
-  /* The host is not clickable, only the overlay part is. */
-  pointer-events: none;
+    /* The host is not clickable, only the overlay part is. */
+    pointer-events: none;
 
-  /* Remove tap highlight on touch devices. */
-  -webkit-tap-highlight-color: transparent;
+    /* Remove tap highlight on touch devices. */
+    -webkit-tap-highlight-color: transparent;
 
-  /* CSS API for host */
-  --vaadin-overlay-viewport-bottom: 0;
+    /* CSS API for host */
+    --vaadin-overlay-viewport-bottom: 0;
 
-  inset: var(--lumo-space-m) var(--lumo-space-m) var(--lumo-space-m) var(--lumo-space-m);
-  /* Workaround for Edge issue (only on Surface), where an overflowing vaadin-list-box inside vaadin-select-overlay makes the overlay transparent */
-  /* stylelint-disable-next-line */
-  outline: 0px solid transparent;
-}
-
-:host([hidden]),
-:host(:not([opened]):not([closing])),
-:host(:not([opened]):not([closing])) [part='overlay'] {
-  display: none !important;
-}
-
-[part='overlay'] {
-  overflow: auto;
-  pointer-events: auto;
-
-  /* Prevent overflowing the host */
-  max-width: 100%;
-  box-sizing: border-box;
-
-  -webkit-tap-highlight-color: initial; /* reenable tap highlight inside */
-  background-color: var(--lumo-base-color);
-  background-image: linear-gradient(var(--lumo-tint-5pct), var(--lumo-tint-5pct));
-  border-radius: var(--lumo-border-radius-m);
-  box-shadow:
-    0 0 0 1px var(--lumo-shade-5pct),
-    var(--lumo-box-shadow-m);
-  color: var(--lumo-body-text-color);
-  font-family: var(--lumo-font-family);
-  font-size: var(--lumo-font-size-m);
-  font-weight: 400;
-  line-height: var(--lumo-line-height-m);
-  letter-spacing: 0;
-  text-transform: none;
-  -webkit-text-size-adjust: 100%;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-[part='backdrop'] {
-  z-index: -1;
-  content: '';
-  background: rgba(0, 0, 0, 0.5);
-  position: fixed;
-  inset: 0;
-  pointer-events: auto;
-  background-color: var(--lumo-shade-20pct);
-  animation: 0.2s lumo-overlay-backdrop-enter both;
-  will-change: opacity;
-}
-
-[part='content'] {
-  padding: var(--lumo-space-xs);
-}
-
-@keyframes lumo-overlay-backdrop-enter {
-  0% {
-    opacity: 0;
-  }
-}
-
-:host([closing]) [part='backdrop'] {
-  animation: 0.2s lumo-overlay-backdrop-exit both;
-}
-
-@keyframes lumo-overlay-backdrop-exit {
-  100% {
-    opacity: 0;
-  }
-}
-
-@keyframes lumo-overlay-dummy-animation {
-  0% {
-    opacity: 1;
+    inset: var(--lumo-space-m) var(--lumo-space-m) var(--lumo-space-m) var(--lumo-space-m);
+    /* Workaround for Edge issue (only on Surface), where an overflowing vaadin-list-box inside vaadin-select-overlay makes the overlay transparent */
+    /* stylelint-disable-next-line */
+    outline: 0px solid transparent;
   }
 
-  100% {
-    opacity: 1;
+  :host([hidden]),
+  :host(:not([opened]):not([closing])),
+  :host(:not([opened]):not([closing])) [part='overlay'] {
+    display: none !important;
+  }
+
+  [part='overlay'] {
+    overflow: auto;
+    pointer-events: auto;
+
+    /* Prevent overflowing the host */
+    max-width: 100%;
+    box-sizing: border-box;
+
+    -webkit-tap-highlight-color: initial; /* reenable tap highlight inside */
+    background-color: var(--lumo-base-color);
+    background-image: linear-gradient(var(--lumo-tint-5pct), var(--lumo-tint-5pct));
+    border-radius: var(--lumo-border-radius-m);
+    box-shadow:
+      0 0 0 1px var(--lumo-shade-5pct),
+      var(--lumo-box-shadow-m);
+    color: var(--lumo-body-text-color);
+    font-family: var(--lumo-font-family);
+    font-size: var(--lumo-font-size-m);
+    font-weight: 400;
+    line-height: var(--lumo-line-height-m);
+    letter-spacing: 0;
+    text-transform: none;
+    -webkit-text-size-adjust: 100%;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  [part='backdrop'] {
+    z-index: -1;
+    content: '';
+    background: rgba(0, 0, 0, 0.5);
+    position: fixed;
+    inset: 0;
+    pointer-events: auto;
+    background-color: var(--lumo-shade-20pct);
+    animation: 0.2s lumo-overlay-backdrop-enter both;
+    will-change: opacity;
+  }
+
+  [part='content'] {
+    padding: var(--lumo-space-xs);
+  }
+
+  @keyframes lumo-overlay-backdrop-enter {
+    0% {
+      opacity: 0;
+    }
+  }
+
+  :host([closing]) [part='backdrop'] {
+    animation: 0.2s lumo-overlay-backdrop-exit both;
+  }
+
+  @keyframes lumo-overlay-backdrop-exit {
+    100% {
+      opacity: 0;
+    }
+  }
+
+  @keyframes lumo-overlay-dummy-animation {
+    0% {
+      opacity: 1;
+    }
+
+    100% {
+      opacity: 1;
+    }
   }
 }
