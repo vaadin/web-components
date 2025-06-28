@@ -53,6 +53,15 @@ export const OverlayFocusMixin = (superClass) =>
       this.__focusRestorationController = new FocusRestorationController();
     }
 
+    /**
+     * Override to specify another element used as a content root,
+     * e.g. slotted into the overlay, rather than overlay itself.
+     * @protected
+     */
+    get _contentRoot() {
+      return this;
+    }
+
     /** @protected */
     ready() {
       super.ready();
@@ -127,15 +136,15 @@ export const OverlayFocusMixin = (superClass) =>
      * @protected
      */
     _deepContains(node) {
-      if (this.contains(node)) {
+      if (this._contentRoot.contains(node)) {
         return true;
       }
       let n = node;
       const doc = node.ownerDocument;
-      // Walk from node to `this` or `document`
-      while (n && n !== doc && n !== this) {
+      // Walk from node to content root or `document`
+      while (n && n !== doc && n !== this._contentRoot) {
         n = n.parentNode || n.host;
       }
-      return n === this;
+      return n === this._contentRoot;
     }
   };
