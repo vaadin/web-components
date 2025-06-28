@@ -177,7 +177,7 @@ describe('edit column editor type', () => {
         await nextFrame();
         editor.focusElement.click();
         focusout(editor);
-        focusin(editor._overlayElement.querySelector('vaadin-select-item'));
+        focusin(editor._menuElement.querySelector('vaadin-select-item'));
         grid._flushStopEdit();
         await nextRender();
         expect(editor.opened).to.equal(true);
@@ -214,7 +214,7 @@ describe('edit column editor type', () => {
 
       it('should update value and exit edit mode when item is selected', async () => {
         grid.singleCellEdit = true;
-        const item = editor._overlayElement.querySelector('vaadin-select-item');
+        const item = editor._menuElement.querySelector('vaadin-select-item');
         const value = item.textContent;
         const spy = sinon.spy(cell, 'focus');
         item.click();
@@ -226,7 +226,7 @@ describe('edit column editor type', () => {
 
       it('should work with `enterNextRow`', async () => {
         grid.enterNextRow = true;
-        const item = editor._overlayElement.querySelector('vaadin-select-item');
+        const item = editor._menuElement.querySelector('vaadin-select-item');
         enter(item);
         await nextFrame();
         expect(column._getEditorComponent(cell)).to.not.be.ok;
