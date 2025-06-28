@@ -46,6 +46,7 @@ export const NotificationContainerMixin = (superClass) =>
     _openedChanged(opened) {
       if (opened) {
         document.body.appendChild(this);
+        this._appendAttachedInstance();
         document.addEventListener('vaadin-overlay-close', this._boundVaadinOverlayClose);
         if (this._boundIosResizeListener) {
           this._detectIosNavbar();
@@ -53,6 +54,7 @@ export const NotificationContainerMixin = (superClass) =>
         }
       } else {
         document.body.removeChild(this);
+        this._removeAttachedInstance();
         document.removeEventListener('vaadin-overlay-close', this._boundVaadinOverlayClose);
         if (this._boundIosResizeListener) {
           window.removeEventListener('resize', this._boundIosResizeListener);

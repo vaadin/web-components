@@ -4,12 +4,14 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 
+const attachedInstances = [];
+
 /**
  * Returns all attached overlays in visual stacking order.
  * @private
  */
 const getAttachedInstances = () =>
-  Array.from(document.body.children)
+  attachedInstances
     .filter((el) => el instanceof HTMLElement && el._hasOverlayStackMixin && !el.hasAttribute('closing'))
     .sort((a, b) => a.__zIndex - b.__zIndex || 0);
 
@@ -68,6 +70,16 @@ export const OverlayStackMixin = (superClass) =>
      */
     get _last() {
       return isLastOverlay(this);
+    }
+
+    /**
+     * Returns true if this is overlay is attached.
+     *
+     * @return {boolean}
+     * @protected
+     */
+    get _isAttached() {
+      return attachedInstances.includes(this);
     }
 
     /**
@@ -131,6 +143,18 @@ export const OverlayStackMixin = (superClass) =>
           // Stop after the last modal
           break;
         }
+      }
+    }
+
+    /** @protected */
+    _appendAttachedInstance() {
+      attachedInstances.push(this);
+    }
+
+    /** @protected */
+    _removeAttachedInstance() {
+      if (this._isAttached) {
+        attachedInstances.splice(attachedInstances.indexOf(this), 1);
       }
     }
   };
