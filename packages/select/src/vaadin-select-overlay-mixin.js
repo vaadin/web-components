@@ -19,11 +19,35 @@ export const SelectOverlayMixin = (superClass) =>
       return ['_updateOverlayWidth(opened, positionTarget)'];
     }
 
-    /** @protected */
-    ready() {
-      super.ready();
+    /**
+     * @override
+     * @protected
+     */
+    get _contentRoot() {
+      if (!this.__savedRoot) {
+        const root = document.createElement('div');
+        root.setAttribute('slot', 'overlay');
+        this.owner.appendChild(root);
+        this.__savedRoot = root;
+      }
 
-      this.restoreFocusOnClose = true;
+      return this.__savedRoot;
+    }
+
+    /**
+     * @protected
+     * @override
+     */
+    _attachOverlay() {
+      this.showPopover();
+    }
+
+    /**
+     * @protected
+     * @override
+     */
+    _detachOverlay() {
+      this.hidePopover();
     }
 
     /**
@@ -51,22 +75,13 @@ export const SelectOverlayMixin = (superClass) =>
 
     /** @protected */
     _getMenuElement() {
-      return Array.from(this.children).find((el) => el.localName !== 'style');
+      return Array.from(this._contentRoot.children).find((el) => el.localName !== 'style');
     }
 
     /** @private */
     _updateOverlayWidth(opened, positionTarget) {
       if (opened && positionTarget) {
         this.style.setProperty('--_vaadin-select-overlay-default-width', `${positionTarget.offsetWidth}px`);
-
-        const widthProperty = '--vaadin-select-overlay-width';
-        const customWidth = getComputedStyle(this.owner).getPropertyValue(widthProperty);
-
-        if (customWidth === '') {
-          this.style.removeProperty(widthProperty);
-        } else {
-          this.style.setProperty(widthProperty, customWidth);
-        }
       }
     }
 
