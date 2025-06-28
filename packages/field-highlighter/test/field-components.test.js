@@ -22,7 +22,6 @@ async function waitForIntersectionObserver() {
 
 describe('field components', () => {
   let field;
-  let overlay;
   let showSpy;
   let hideSpy;
 
@@ -63,7 +62,6 @@ describe('field components', () => {
     beforeEach(async () => {
       field = fixtureSync(`<vaadin-date-picker></vaadin-date-picker>`);
       FieldHighlighter.init(field);
-      overlay = field.$.overlay;
       showSpy = sinon.spy();
       hideSpy = sinon.spy();
       field.addEventListener('vaadin-highlight-show', showSpy);
@@ -196,7 +194,6 @@ describe('field components', () => {
         );
       };
       FieldHighlighter.init(field);
-      overlay = field._overlayElement;
       showSpy = sinon.spy();
       hideSpy = sinon.spy();
       field.addEventListener('vaadin-highlight-show', showSpy);
@@ -226,7 +223,8 @@ describe('field components', () => {
         field.focus();
         await open(field);
 
-        overlay.querySelector('vaadin-item').click();
+        // Click on the focused item
+        document.activeElement.click();
         await nextRender();
 
         expect(hideSpy.callCount).to.equal(0);
@@ -271,7 +269,7 @@ describe('field components', () => {
         field.focus();
         await open(field);
 
-        overlay.querySelector('vaadin-item').click();
+        document.activeElement.click();
         await nextRender();
 
         expect(hideSpy.callCount).to.equal(1);
@@ -402,7 +400,6 @@ describe('field components', () => {
       FieldHighlighter.init(field);
       date = field.querySelector('vaadin-date-picker');
       time = field.querySelector('vaadin-time-picker');
-      overlay = field.$.overlay;
       showSpy = sinon.spy();
       hideSpy = sinon.spy();
       field.addEventListener('vaadin-highlight-show', showSpy);
