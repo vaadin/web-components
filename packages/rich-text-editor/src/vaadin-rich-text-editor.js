@@ -27,7 +27,7 @@ import { RichTextEditorMixin } from './vaadin-rich-text-editor-mixin.js';
  * It provides a set of toolbar controls to apply formatting on the content,
  * which is stored and can be accessed as HTML5 or JSON string.
  *
- * ```
+ * ```html
  * <vaadin-rich-text-editor></vaadin-rich-text-editor>
  * ```
  *

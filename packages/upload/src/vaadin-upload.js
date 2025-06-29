@@ -22,7 +22,7 @@ import { UploadMixin } from './vaadin-upload-mixin.js';
  *
  * Example:
  *
- * ```
+ * ```html
  * <vaadin-upload></vaadin-upload>
  * ```
  *

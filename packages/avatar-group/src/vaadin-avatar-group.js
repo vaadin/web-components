@@ -22,13 +22,13 @@ import { AvatarGroupMixin } from './vaadin-avatar-group-mixin.js';
  *
  * To create the avatar group, first add the component to the page:
  *
- * ```
+ * ```html
  * <vaadin-avatar-group></vaadin-avatar-group>
  * ```
  *
  * And then use [`items`](#/elements/vaadin-avatar-group#property-items) property to initialize the structure:
  *
- * ```
+ * ```js
  * document.querySelector('vaadin-avatar-group').items = [
  *   {name: 'John Doe'},
  *   {abbr: 'AB'}

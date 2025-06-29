@@ -16,10 +16,8 @@ import { tabStyles } from './styles/vaadin-tab-core-styles.js';
 /**
  * `<vaadin-tab>` is a Web Component providing an accessible and customizable tab.
  *
- * ```
- *   <vaadin-tab>
- *     Tab 1
- *   </vaadin-tab>
+ * ```html
+ * <vaadin-tab>Tab 1</vaadin-tab>
  * ```
  *
  * The following state attributes are available for styling:

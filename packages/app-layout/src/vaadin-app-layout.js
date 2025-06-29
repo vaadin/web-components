@@ -17,7 +17,7 @@ import { AppLayoutMixin } from './vaadin-app-layout-mixin.js';
 /**
  * `<vaadin-app-layout>` is a Web Component providing a quick and easy way to get a common application layout structure done.
  *
- * ```
+ * ```html
  * <vaadin-app-layout primary-section="navbar|drawer">
  *  <vaadin-drawer-toggle slot="navbar [touch-optimized]"></vaadin-drawer-toggle>
  *  <h3 slot="navbar [touch-optimized]">Company Name</h3>

@@ -16,7 +16,7 @@ import { DetailsBaseMixin } from './vaadin-details-base-mixin.js';
  * `<vaadin-details>` is a Web Component which the creates an
  * expandable panel similar to `<details>` HTML element.
  *
- * ```
+ * ```html
  * <vaadin-details>
  *   <vaadin-details-summary slot="summary">Expandable Details</vaadin-details-summary>
  *   <div>
