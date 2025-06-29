@@ -394,6 +394,12 @@ export const SelectBaseMixin = (superClass) =>
           this.setAttribute('focus-ring', '');
         }
 
+        // Clear flag after focus is restored on overlay closing to ensure
+        // it does not affect subsequent opening after select loses focus.
+        setTimeout(() => {
+          this._openedWithFocusRing = undefined;
+        });
+
         // Skip validation when a change event is scheduled, as validation
         // will be triggered by `__dispatchChange()` in that case.
         // Also, skip validation when closed on Escape or Tab keys.
@@ -592,6 +598,17 @@ export const SelectBaseMixin = (superClass) =>
      */
     _shouldRemoveFocus() {
       return !this.opened;
+    }
+
+    /**
+     * Override method inherited from `FocusMixin` to ensure focus-ring attribute
+     * is restored when closing overlay on outside click if it was set on opening.
+     * @return {boolean}
+     * @protected
+     * @override
+     */
+    _shouldSetFocusRing() {
+      return this._openedWithFocusRing || super._shouldSetFocusRing();
     }
 
     /**

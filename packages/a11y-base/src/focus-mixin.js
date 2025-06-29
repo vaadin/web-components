@@ -65,7 +65,7 @@ export const FocusMixin = dedupeMixin(
 
         // Focus-ring is true when the element was focused from the keyboard.
         // Focus Ring [A11ycasts]: https://youtu.be/ilj2P5-5CjI
-        this.toggleAttribute('focus-ring', focused && this._keyboardActive);
+        this.toggleAttribute('focus-ring', focused && this._shouldSetFocusRing());
       }
 
       /**
@@ -88,6 +88,17 @@ export const FocusMixin = dedupeMixin(
        */
       _shouldRemoveFocus(_event) {
         return true;
+      }
+
+      /**
+       * Override to define if the field should have focus-ring attribute.
+       * This can be used for restoring focus-ring after closing overlay.
+       *
+       * @return {boolean}
+       * @protected
+       */
+      _shouldSetFocusRing() {
+        return this._keyboardActive;
       }
     },
 );
