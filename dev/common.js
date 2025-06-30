@@ -4,6 +4,10 @@ import { addGlobalThemeStyles } from '@vaadin/vaadin-themable-mixin/register-sty
 addGlobalThemeStyles(
   'dev-common',
   css`
+    html {
+      color-scheme: light dark;
+    }
+
     body {
       font-family: system-ui, sans-serif;
       line-height: 1.25;
@@ -23,6 +27,7 @@ addGlobalThemeStyles(
       flex-wrap: wrap;
       gap: 1lh 1.5lh;
       margin: 2lh 0;
+      align-items: baseline;
     }
 
     .section > :is(.heading, p) {
