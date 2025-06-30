@@ -23,6 +23,7 @@ addGlobalThemeStyles(
       flex-wrap: wrap;
       gap: 1lh 1.5lh;
       margin: 2lh 0;
+      align-items: baseline;
     }
 
     .section > :is(.heading, p) {
