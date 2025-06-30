@@ -7,6 +7,7 @@ import {
   fire,
   fixtureSync,
   keyDownChar,
+  mousedown,
   nextRender,
   nextUpdate,
   oneEvent,
@@ -326,6 +327,20 @@ describe('vaadin-select', () => {
         const spy = sinon.spy(e, 'preventDefault');
         select.shadowRoot.querySelector('[part=toggle-button]').dispatchEvent(e);
         expect(spy.calledOnce).to.be.true;
+      });
+
+      it('should focus the value button when opening on toggle button mousedown', () => {
+        const spy = sinon.spy(valueButton, 'focus');
+        mousedown(select.shadowRoot.querySelector('[part=toggle-button]'));
+        expect(spy.calledOnce).to.be.true;
+      });
+
+      it('should not focus the value button on toggle button mousedown if opened', async () => {
+        const spy = sinon.spy(valueButton, 'focus');
+        select.opened = true;
+        await oneEvent(overlay, 'vaadin-overlay-open');
+        mousedown(select.shadowRoot.querySelector('[part=toggle-button]'));
+        expect(spy.calledOnce).to.be.false;
       });
 
       it('should not open the overlay on helper click', async () => {

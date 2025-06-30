@@ -326,6 +326,12 @@ export const SelectBaseMixin = (superClass) =>
       // Prevent mousedown event to avoid blur and preserve focused state
       // while opening, and to restore focus-ring attribute on closing.
       event.preventDefault();
+
+      // Clicking the `vaadin-input-container` focuses the value button
+      // but clicking the toggle button does not, so we handle it here.
+      if (!this.opened) {
+        this.focusElement.focus();
+      }
     }
 
     /**
