@@ -5,7 +5,6 @@
  */
 import { setAriaIDReference } from '@vaadin/a11y-base/src/aria-id-reference.js';
 import { DelegateFocusMixin } from '@vaadin/a11y-base/src/delegate-focus-mixin.js';
-import { isElementFocused } from '@vaadin/a11y-base/src/focus-utils.js';
 import { KeyboardMixin } from '@vaadin/a11y-base/src/keyboard-mixin.js';
 import { DelegateStateMixin } from '@vaadin/component-base/src/delegate-state-mixin.js';
 import { MediaQueryController } from '@vaadin/component-base/src/media-query-controller.js';
@@ -319,12 +318,6 @@ export const SelectBaseMixin = (superClass) =>
       // from handling the click event after it bubbles.
       event.preventDefault();
 
-      // Clicking the `vaadin-input-container` focuses the value button
-      // but clicking the toggle button does not, so we handle it here.
-      if (event.target === this.$.toggleButton && !this.opened && !isElementFocused(this.focusElement)) {
-        this.focusElement.focus();
-      }
-
       this.opened = !this.readonly;
     }
 
@@ -333,6 +326,12 @@ export const SelectBaseMixin = (superClass) =>
       // Prevent mousedown event to avoid blur and preserve focused state
       // while opening, and to restore focus-ring attribute on closing.
       event.preventDefault();
+
+      // Clicking the `vaadin-input-container` focuses the value button
+      // but clicking the toggle button does not, so we handle it here.
+      if (!this.opened) {
+        this.focusElement.focus();
+      }
     }
 
     /**
