@@ -380,6 +380,15 @@ describe('accessibility', () => {
         expect(select.hasAttribute('focus-ring')).to.be.true;
       });
 
+      it('should restore focus-ring attribute on outside click if it was set before opening', async () => {
+        select.setAttribute('focus-ring', '');
+        select.opened = true;
+        await oneEvent(overlay, 'vaadin-overlay-open');
+        await sendMouse({ type: 'click', position: [100, 100] });
+        await nextRender();
+        expect(select.hasAttribute('focus-ring')).to.be.true;
+      });
+
       it('should not set focus-ring attribute on item click if it was not set before opening', async () => {
         select.opened = true;
         await oneEvent(overlay, 'vaadin-overlay-open');

@@ -38,6 +38,17 @@ export const SelectOverlayMixin = (superClass) =>
       return true;
     }
 
+    /**
+     * @protected
+     * @override
+     */
+    _mouseDownListener(event) {
+      super._mouseDownListener(event);
+
+      // Prevent global mousedown event to avoid losing focus on outside click
+      event.preventDefault();
+    }
+
     /** @protected */
     _getMenuElement() {
       return Array.from(this.children).find((el) => el.localName !== 'style');
