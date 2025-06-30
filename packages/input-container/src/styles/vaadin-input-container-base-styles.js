@@ -94,7 +94,7 @@ export const inputContainerStyles = css`
     }
 
     :host([invalid]) {
-      --vaadin-input-field-border-color: var(--vaadin-input-field-error-color, var(--_vaadin-color-strong));
+      --vaadin-input-field-border-color: var(--vaadin-input-field-error-color, var(--vaadin-color));
     }
 
     :host([readonly]) {
