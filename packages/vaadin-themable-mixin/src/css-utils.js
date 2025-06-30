@@ -33,10 +33,6 @@ function getEffectiveStyles(component) {
  * @param {HTMLElement} component
  */
 export function applyInstanceStyles(component) {
-  // The adoptStyles function may fall back to appending style elements to shadow root.
-  // Remove them first to avoid duplicates.
-  [...component.shadowRoot.querySelectorAll('style')].forEach((style) => style.remove());
-
   adoptStyles(component.shadowRoot, getEffectiveStyles(component));
 }
 
