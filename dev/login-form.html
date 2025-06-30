@@ -9,9 +9,9 @@
     <script type="module" src="./common.js"></script>
 
     <script type="module">
-      import '@vaadin/login/vaadin-login-form.js';
       import '@vaadin/checkbox';
       import '@vaadin/checkbox-group';
+      import '@vaadin/login/vaadin-login-form.js';
       import '@vaadin/radio-group';
 
       const login = document.querySelector('vaadin-login-form');
@@ -23,7 +23,6 @@
           elementFactory: () => {
             const footer = document.createElement('p');
             footer.textContent = 'Never share your password with anyone';
-
             return footer;
           },
         },
@@ -32,7 +31,6 @@
           elementFactory: () => {
             const remember = document.createElement('vaadin-checkbox');
             remember.label = 'Remember me';
-
             return remember;
           },
         },
@@ -41,7 +39,6 @@
           if (e.detail.value) {
             const elem = elementFactory();
             elem.slot = slot;
-
             wrapper.appendChild(elem);
           } else {
             wrapper.querySelector(`[slot=${slot}]`).remove();
