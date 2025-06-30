@@ -24,7 +24,7 @@ describe('email-field', () => {
         });
 
         it('value', async () => {
-          element.value = 'value';
+          element.value = 'value@example.com';
           await visualDiff(div, `${dir}-value`);
         });
 
