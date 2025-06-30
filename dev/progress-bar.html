@@ -7,11 +7,96 @@
     <title>Progress Bar</title>
     <link rel="stylesheet" href="/packages/vaadin-lumo-styles/lumo.css" />
     <script type="module" src="./common.js"></script>
+
     <script type="module">
+      import '@vaadin/checkbox';
+      import '@vaadin/checkbox-group';
+      import '@vaadin/number-field';
       import '@vaadin/progress-bar';
+      import '@vaadin/radio-group';
+
+      const progress = document.querySelector('vaadin-progress-bar');
+
+      // Handle value changes
+      document.getElementById('value').addEventListener('value-changed', (e) => {
+        progress.value = e.detail.value;
+      });
+
+      // Handle min/max changes
+      ['min', 'max'].forEach((prop) => {
+        document.getElementById(prop).addEventListener('value-changed', (e) => {
+          progress[prop] = e.detail.value;
+        });
+      });
+
+      // Handle state toggles
+      document.getElementById('indeterminate').addEventListener('checked-changed', (e) => {
+        progress.indeterminate = e.detail.value;
+      });
+
+      // Handle theme changes
+      document.getElementById('theme').addEventListener('value-changed', (e) => {
+        progress.setAttribute('theme', e.detail.value);
+      });
+
+      // Handle direction changes
+      document.getElementById('direction').addEventListener('value-changed', (e) => {
+        progress.setAttribute('dir', e.detail.value);
+      });
     </script>
   </head>
+
   <body>
+    <style>
+      .controls {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 2rem;
+        margin-bottom: 2rem;
+        font-size: 0.875rem;
+      }
+
+      .control-group {
+        display: flex;
+        flex-direction: column;
+        gap: 1em;
+      }
+
+      vaadin-number-field {
+        width: 100%;
+      }
+    </style>
+
+    <div class="controls">
+      <div class="control-group">
+        <vaadin-number-field id="value" label="Value" value="50" min="0" max="100" step="1"> </vaadin-number-field>
+        <vaadin-number-field id="min" label="Min" value="0" step="1"> </vaadin-number-field>
+        <vaadin-number-field id="max" label="Max" value="100" step="1"> </vaadin-number-field>
+      </div>
+
+      <div class="control-group">
+        <vaadin-checkbox-group label="State toggle">
+          <vaadin-checkbox label="Indeterminate" id="indeterminate" value="indeterminate"></vaadin-checkbox>
+        </vaadin-checkbox-group>
+      </div>
+
+      <div class="control-group">
+        <vaadin-radio-group id="theme" label="Theme">
+          <vaadin-radio-button label="Default" value="" checked></vaadin-radio-button>
+          <vaadin-radio-button label="Contrast" value="contrast"></vaadin-radio-button>
+          <vaadin-radio-button label="Error" value="error"></vaadin-radio-button>
+          <vaadin-radio-button label="Success" value="success"></vaadin-radio-button>
+        </vaadin-radio-group>
+      </div>
+
+      <div class="control-group">
+        <vaadin-radio-group id="direction" label="Direction">
+          <vaadin-radio-button label="LTR" value="ltr" checked></vaadin-radio-button>
+          <vaadin-radio-button label="RTL" value="rtl"></vaadin-radio-button>
+        </vaadin-radio-group>
+      </div>
+    </div>
+
     <vaadin-progress-bar min="0" max="100" value="50"></vaadin-progress-bar>
   </body>
 </html>
