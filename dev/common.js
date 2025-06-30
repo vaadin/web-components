@@ -4,6 +4,10 @@ import { addGlobalThemeStyles } from '@vaadin/vaadin-themable-mixin/register-sty
 addGlobalThemeStyles(
   'dev-common',
   css`
+    html {
+      color-scheme: light dark;
+    }
+
     body {
       font-family: system-ui, sans-serif;
       line-height: 1.25;
