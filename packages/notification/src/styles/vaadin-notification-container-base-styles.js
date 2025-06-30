@@ -71,6 +71,12 @@ export const notificationContainerStyles = css`
 
     [region] {
       pointer-events: auto;
+      scrollbar-width: none;
+    }
+
+    /* scrollbar-width is supported in Safari 18.2, use the following for earlier */
+    [region]::-webkit-scrollbar {
+      display: none;
     }
 
     [region]:is(:hover, :focus-within) {
