@@ -105,6 +105,30 @@ describe('tabs', () => {
     });
   });
 
+  describe('hide scroll buttons', () => {
+    beforeEach(() => {
+      div.style.width = '200px';
+
+      element = fixtureSync(
+        `
+          <vaadin-tabs theme="hide-scroll-buttons">
+            <vaadin-tab>Tab-00</vaadin-tab>
+            <vaadin-tab>Tab-01</vaadin-tab>
+            <vaadin-tab>Tab-02</vaadin-tab>
+            <vaadin-tab>Tab-03</vaadin-tab>
+            <vaadin-tab>Tab-04</vaadin-tab>
+            <vaadin-tab>Tab-05</vaadin-tab>
+          </vaadin-tabs>
+        `,
+        div,
+      );
+    });
+
+    it('hide scroll buttons', async () => {
+      await visualDiff(div, 'hide-scroll-buttons');
+    });
+  });
+
   describe('scroll', () => {
     ['horizontal', 'vertical'].forEach((orientation) => {
       describe(orientation, () => {
