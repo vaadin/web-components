@@ -45,6 +45,7 @@ class MultiSelectComboBoxInternal extends MultiSelectComboBoxInternalMixin(
 
       <vaadin-multi-select-combo-box-overlay
         id="overlay"
+        .owner="${this.owner}"
         .opened="${this._overlayOpened}"
         ?loading="${this.loading}"
         theme="${ifDefined(this._theme)}"

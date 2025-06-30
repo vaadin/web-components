@@ -20,6 +20,10 @@ describe('dropdown', () => {
     overlay = datePicker.$.overlay;
   });
 
+  it('should set owner property on the overlay', () => {
+    expect(overlay.owner).to.equal(datePicker);
+  });
+
   it('should update position of the overlay after changing opened property', async () => {
     const inputField = datePicker.shadowRoot.querySelector('[part="input-field"]');
     datePicker.opened = true;

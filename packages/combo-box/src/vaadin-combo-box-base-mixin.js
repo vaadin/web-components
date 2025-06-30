@@ -225,9 +225,6 @@ export const ComboBoxBaseMixin = (superClass) =>
     _initOverlay() {
       const overlay = this.$.overlay;
 
-      // Store instance for detecting "dir" attribute on opening
-      overlay._comboBox = this;
-
       overlay.addEventListener('touchend', this._boundOnOverlayTouchAction);
       overlay.addEventListener('touchmove', this._boundOnOverlayTouchAction);
 

@@ -18,6 +18,10 @@ describe('overlay opening', () => {
       expect(timePicker.opened).to.be.false;
     });
 
+    it('should set owner property on the overlay', () => {
+      expect(overlay.owner).to.equal(timePicker);
+    });
+
     it('should open by clicking label element', () => {
       timePicker.querySelector('[slot="label"]').click();
 
