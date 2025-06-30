@@ -13,7 +13,7 @@ export const avatarStyles = css`
       flex: none;
       border-radius: 50%;
       cursor: default;
-      color: var(--vaadin-avatar-color, var(--_vaadin-color));
+      color: var(--vaadin-avatar-color, var(--vaadin-color-subtle));
       line-height: 0;
       overflow: hidden;
       height: var(--vaadin-avatar-size, 2em);
