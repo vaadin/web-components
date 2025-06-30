@@ -23,7 +23,7 @@ const sideNav = css`
       padding: var(--vaadin-side-nav-item-padding, var(--vaadin-padding-container));
       font-size: var(--vaadin-side-nav-label-font-size, 0.875em);
       font-weight: var(--vaadin-side-nav-label-font-weight, 500);
-      color: var(--vaadin-side-nav-label-color, inherit);
+      color: var(--vaadin-side-nav-label-color, var(--vaadin-color-subtle));
       line-height: var(--vaadin-side-nav-label-line-height, inherit);
       border-radius: var(--vaadin-side-nav-item-border-radius, var(--vaadin-radius-m));
       touch-action: manipulation;
