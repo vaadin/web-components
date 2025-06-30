@@ -63,20 +63,20 @@ export const appLayoutStyles = css`
       top: 0;
       inset-inline: 0;
       transition: inset-inline-start var(--vaadin-app-layout-transition-duration);
-      padding-top: max(var(--vaadin-app-layout-navbar-padding-top, var(--_vaadin-padding)), var(--safe-area-inset-top));
-      padding-bottom: var(--vaadin-app-layout-navbar-padding-bottom, var(--_vaadin-padding));
+      padding-top: max(var(--vaadin-app-layout-navbar-padding-top, var(--vaadin-padding)), var(--safe-area-inset-top));
+      padding-bottom: var(--vaadin-app-layout-navbar-padding-bottom, var(--vaadin-padding));
       padding-inline-start: max(
-        var(--vaadin-app-layout-navbar-padding-inline-start, var(--_vaadin-padding)),
+        var(--vaadin-app-layout-navbar-padding-inline-start, var(--vaadin-padding)),
         var(--safe-area-inset-left)
       );
       /* stylelint-disable-next-line declaration-block-no-redundant-longhand-properties */
       padding-inline-end: max(
-        var(--vaadin-app-layout-navbar-padding-inline-end, var(--_vaadin-padding)),
+        var(--vaadin-app-layout-navbar-padding-inline-end, var(--vaadin-padding)),
         var(--safe-area-inset-right)
       );
       z-index: 1;
-      gap: var(--vaadin-app-layout-navbar-gap, var(--_vaadin-gap-container-inline));
-      background: var(--vaadin-app-layout-navbar-background, var(--_vaadin-background-container));
+      gap: var(--vaadin-app-layout-navbar-gap, var(--vaadin-gap-container-inline));
+      background: var(--vaadin-app-layout-navbar-background, var(--vaadin-background-container));
     }
 
     :host([primary-section='drawer'][drawer-opened]:not([overlay])) [part='navbar'] {
@@ -90,9 +90,9 @@ export const appLayoutStyles = css`
     [part='navbar'][bottom] {
       top: auto;
       bottom: 0;
-      padding-top: var(--vaadin-app-layout-navbar-padding-top, var(--_vaadin-padding));
+      padding-top: var(--vaadin-app-layout-navbar-padding-top, var(--vaadin-padding));
       padding-bottom: max(
-        var(--vaadin-app-layout-navbar-padding-bottom, var(--_vaadin-padding)),
+        var(--vaadin-app-layout-navbar-padding-bottom, var(--vaadin-padding)),
         var(--safe-area-inset-bottom)
       );
     }
@@ -117,7 +117,7 @@ export const appLayoutStyles = css`
       visibility: hidden;
       display: flex;
       flex-direction: column;
-      background: var(--vaadin-app-layout-drawer-background, var(--_vaadin-background));
+      background: var(--vaadin-app-layout-drawer-background, var(--vaadin-background-color));
     }
 
     :host([drawer-opened]) [part='drawer'] {

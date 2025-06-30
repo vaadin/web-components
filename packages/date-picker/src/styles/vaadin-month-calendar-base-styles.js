@@ -14,7 +14,7 @@ export const monthCalendarStyles = css`
     }
 
     [part='month-header'] {
-      color: var(--vaadin-date-picker-month-header-color, var(--_vaadin-color-strong));
+      color: var(--vaadin-date-picker-month-header-color, var(--vaadin-color));
       font-size: var(--vaadin-date-picker-month-header-font-size, 0.9375rem);
       font-weight: var(--vaadin-date-picker-month-header-font-weight, 500);
       line-height: inherit;
@@ -60,10 +60,7 @@ export const monthCalendarStyles = css`
       content: '';
       height: 1px;
       flex: 1;
-      background: var(
-        --vaadin-date-picker-week-divider-color,
-        var(--vaadin-divider-color, var(--_vaadin-border-color))
-      );
+      background: var(--vaadin-date-picker-week-divider-color, var(--vaadin-divider-color, var(--vaadin-border-color)));
     }
 
     [part~='weekday'],
@@ -76,7 +73,7 @@ export const monthCalendarStyles = css`
     }
 
     [part~='date'] {
-      border-radius: var(--vaadin-date-picker-date-border-radius, var(--_vaadin-radius-m));
+      border-radius: var(--vaadin-date-picker-date-border-radius, var(--vaadin-radius-m));
       position: relative;
       width: var(--vaadin-date-picker-date-width, 2rem);
       height: var(--vaadin-date-picker-date-height, 2rem);
@@ -99,21 +96,21 @@ export const monthCalendarStyles = css`
     }
 
     [part~='today'] {
-      color: var(--vaadin-date-picker-date-today-color, var(--_vaadin-color-strong));
+      color: var(--vaadin-date-picker-date-today-color, var(--vaadin-color));
     }
 
     [part~='selected'] {
-      color: var(--vaadin-date-picker-date-selected-color, var(--_vaadin-background));
+      color: var(--vaadin-date-picker-date-selected-color, var(--vaadin-background-color));
     }
 
     [part~='selected']::after {
-      background: var(--vaadin-date-picker-date-selected-background, var(--_vaadin-color-strong));
+      background: var(--vaadin-date-picker-date-selected-background, var(--vaadin-color));
       outline-offset: 1px;
     }
 
     [disabled] {
       cursor: var(--vaadin-disabled-cursor);
-      color: var(--vaadin-date-picker-date-disabled-color, var(--_vaadin-color-subtle));
+      color: var(--vaadin-date-picker-date-disabled-color, var(--vaadin-color-disabled));
       opacity: 0.7;
     }
 

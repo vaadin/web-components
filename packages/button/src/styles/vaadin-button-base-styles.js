@@ -13,7 +13,7 @@ export const buttonStyles = css`
       align-items: center;
       justify-content: center;
       text-align: center;
-      gap: var(--vaadin-button-gap, 0 var(--_vaadin-gap-container-inline));
+      gap: var(--vaadin-button-gap, 0 var(--vaadin-gap-container-inline));
       white-space: nowrap;
       -webkit-tap-highlight-color: transparent;
       -webkit-user-select: none;
@@ -24,19 +24,19 @@ export const buttonStyles = css`
       flex-shrink: 0;
       height: var(--vaadin-button-height, auto);
       margin: var(--vaadin-button-margin, 0);
-      padding: var(--vaadin-button-padding, var(--_vaadin-padding-container));
+      padding: var(--vaadin-button-padding, var(--vaadin-padding-container));
       font-family: var(--vaadin-button-font-family, inherit);
       font-size: var(--vaadin-button-font-size, inherit);
       line-height: var(--vaadin-button-line-height, inherit);
       font-weight: var(--vaadin-button-font-weight, 500);
-      color: var(--vaadin-button-text-color, var(--_vaadin-color-strong));
-      background: var(--vaadin-button-background, var(--_vaadin-background-container));
+      color: var(--vaadin-button-text-color, var(--vaadin-color));
+      background: var(--vaadin-button-background, var(--vaadin-background-container));
       background-origin: border-box;
       border: var(
         --vaadin-button-border,
-        var(--vaadin-button-border-width, 1px) solid var(--vaadin-button-border-color, var(--_vaadin-border-color))
+        var(--vaadin-button-border-width, 1px) solid var(--vaadin-button-border-color, var(--vaadin-border-color))
       );
-      border-radius: var(--vaadin-button-border-radius, var(--_vaadin-radius-m));
+      border-radius: var(--vaadin-button-border-radius, var(--vaadin-radius-m));
       touch-action: manipulation;
     }
 
@@ -57,8 +57,8 @@ export const buttonStyles = css`
     }
 
     :host([theme~='primary']) {
-      --vaadin-button-background: var(--_vaadin-color-strong);
-      --vaadin-button-text-color: var(--_vaadin-background);
+      --vaadin-button-background: var(--vaadin-color);
+      --vaadin-button-text-color: var(--vaadin-background-color);
       --vaadin-button-border-color: transparent;
     }
 
@@ -75,8 +75,8 @@ export const buttonStyles = css`
     }
 
     :host([disabled][theme~='primary']) {
-      --vaadin-button-text-color: var(--_vaadin-background-container-strong);
-      --vaadin-button-background: var(--_vaadin-color-subtle);
+      --vaadin-button-text-color: var(--vaadin-background-container-strong);
+      --vaadin-button-background: var(--vaadin-color-disabled);
     }
 
     @media (forced-colors: active) {

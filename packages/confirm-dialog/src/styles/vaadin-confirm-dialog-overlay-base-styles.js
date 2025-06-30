@@ -21,7 +21,7 @@ const confirmDialogOverlay = css`
     }
 
     [part='header'] {
-      color: var(--vaadin-dialog-title-color, var(--_vaadin-color-strong));
+      color: var(--vaadin-dialog-title-color, var(--vaadin-color));
       font-weight: var(--vaadin-dialog-title-font-weight, 600);
       font-size: var(--vaadin-dialog-title-font-size, 1em);
       line-height: var(--vaadin-dialog-title-line-height, inherit);

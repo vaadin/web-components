@@ -13,14 +13,14 @@ export const avatarStyles = css`
       flex: none;
       border-radius: 50%;
       cursor: default;
-      color: var(--vaadin-avatar-color, var(--_vaadin-color));
+      color: var(--vaadin-avatar-color, var(--vaadin-color-subtle));
       line-height: 0;
       overflow: hidden;
       height: var(--vaadin-avatar-size, 2em);
       width: var(--vaadin-avatar-size, 2em);
       border: var(--vaadin-focus-ring-width) solid transparent;
       margin: calc(var(--vaadin-focus-ring-width) * -1);
-      background: var(--vaadin-avatar-background, var(--_vaadin-background-container-strong));
+      background: var(--vaadin-avatar-background, var(--vaadin-background-container-strong));
       background-clip: content-box;
       vertical-align: middle;
       -webkit-user-select: none;

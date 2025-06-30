@@ -20,7 +20,7 @@ export const group = (name = 'checkbox') => css`
     [part='group-field'] {
       display: flex;
       flex-direction: column;
-      gap: var(--vaadin-${unsafeCSS(name)}-group-gap, var(--_vaadin-gap-container-block));
+      gap: var(--vaadin-${unsafeCSS(name)}-group-gap, var(--vaadin-gap-container-block));
     }
 
     [part='group-field'] {

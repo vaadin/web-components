@@ -30,13 +30,13 @@ export const dialogOverlayBase = css`
     }
 
     [part='overlay'] {
-      background: var(--vaadin-dialog-background, var(--_vaadin-background));
+      background: var(--vaadin-dialog-background, var(--vaadin-background-color));
       background-origin: border-box;
       border: 0;
       box-shadow:
         0 0 0 var(--vaadin-dialog-border-width, 1px) var(--vaadin-dialog-border-color, rgba(0, 0, 0, 0.1)),
         var(--vaadin-dialog-box-shadow, 0 8px 24px -4px hsl(0 0 0 / 0.3));
-      border-radius: var(--vaadin-dialog-border-radius, var(--_vaadin-radius-l));
+      border-radius: var(--vaadin-dialog-border-radius, var(--vaadin-radius-l));
       width: max-content;
       min-width: min(var(--vaadin-dialog-min-width, 4em), 100%);
       max-width: var(--vaadin-dialog-max-width, 100%);
@@ -52,7 +52,7 @@ export const dialogOverlayBase = css`
       flex: none;
       pointer-events: none;
       z-index: 1;
-      gap: var(--vaadin-dialog-toolbar-gap, var(--_vaadin-gap-container-inline));
+      gap: var(--vaadin-dialog-toolbar-gap, var(--vaadin-gap-container-inline));
     }
 
     ::slotted(*) {
@@ -62,7 +62,7 @@ export const dialogOverlayBase = css`
     [part='header'],
     [part='content'],
     [part='footer'] {
-      padding: var(--vaadin-dialog-padding, var(--_vaadin-padding));
+      padding: var(--vaadin-dialog-padding, var(--vaadin-padding));
     }
 
     :host(:is([has-header], [has-title])) [part='content'] {
@@ -90,7 +90,7 @@ export const dialogOverlayBase = css`
     }
 
     [part='title'] {
-      color: var(--vaadin-dialog-title-color, var(--_vaadin-color-strong));
+      color: var(--vaadin-dialog-title-color, var(--vaadin-color));
       font-weight: var(--vaadin-dialog-title-font-weight, 600);
       font-size: var(--vaadin-dialog-title-font-size, 1em);
       line-height: var(--vaadin-dialog-title-line-height, inherit);

@@ -25,13 +25,13 @@ export const gridStyles = css`
       position: relative;
       box-sizing: border-box;
       -webkit-tap-highlight-color: transparent;
-      background: var(--vaadin-grid-background, var(--_vaadin-background));
-      border: var(--_border-width) solid var(--vaadin-grid-border-color, var(--_vaadin-border-color));
+      background: var(--vaadin-grid-background, var(--vaadin-background-color));
+      border: var(--_border-width) solid var(--vaadin-grid-border-color, var(--vaadin-border-color));
       cursor: default;
       --_border-width: 0;
       --_row-border-width: var(--vaadin-grid-cell-border-width, 1px);
       --_column-border-width: var(--vaadin-grid-cell-border-width, 0);
-      --_cell-padding: var(--vaadin-grid-cell-padding, var(--_vaadin-padding-container));
+      --_cell-padding: var(--vaadin-grid-cell-padding, var(--vaadin-padding-container));
       --_reorder-background-image: none;
       --_selection-background-image: none;
       border-radius: var(--_border-radius);
@@ -51,7 +51,7 @@ export const gridStyles = css`
     /* Variant: No outer border */
     :host(:not([theme~='no-border'])) {
       --_border-width: var(--vaadin-grid-border-width, 1px);
-      --_border-radius: var(--vaadin-grid-border-radius, var(--_vaadin-radius-l));
+      --_border-radius: var(--vaadin-grid-border-radius, var(--vaadin-radius-l));
     }
 
     :host([all-rows-visible]) {
@@ -129,7 +129,7 @@ export const gridStyles = css`
     [part~='reorder-ghost'] {
       font-size: var(--vaadin-grid-header-font-size, 1em);
       font-weight: var(--vaadin-grid-header-font-weight, 500);
-      color: var(--vaadin-grid-header-color, var(--_vaadin-color-strong));
+      color: var(--vaadin-grid-header-color, var(--vaadin-color));
     }
 
     [part~='row'] {
@@ -156,7 +156,7 @@ export const gridStyles = css`
       box-sizing: border-box;
       background:
         var(--_reorder-background-image), var(--_selection-background-image),
-        var(--vaadin-grid-cell-background, var(--_vaadin-background));
+        var(--vaadin-grid-cell-background, var(--vaadin-background-color));
       padding: 0;
     }
 
@@ -214,11 +214,11 @@ export const gridStyles = css`
 
     [part~='cell']:not([part~='last-column-cell'], [part~='details-cell']) {
       border-inline-end: var(--_column-border-width, 0) solid
-        var(--vaadin-grid-cell-border-color, var(--_vaadin-border-color));
+        var(--vaadin-grid-cell-border-color, var(--vaadin-border-color));
     }
 
     [part~='cell']:where(:not([part~='details-cell'], [part~='first-row-cell'])) {
-      border-top: var(--_row-border-width) solid var(--vaadin-grid-cell-border-color, var(--_vaadin-border-color));
+      border-top: var(--_row-border-width) solid var(--vaadin-grid-cell-border-color, var(--vaadin-border-color));
     }
 
     [part~='first-header-row-cell'] {
@@ -227,11 +227,11 @@ export const gridStyles = css`
 
     [part~='last-header-row-cell'] {
       border-bottom: var(--_row-border-width, 1px) solid
-        var(--vaadin-grid-cell-border-color, var(--_vaadin-border-color));
+        var(--vaadin-grid-cell-border-color, var(--vaadin-border-color));
     }
 
     [part~='first-footer-row-cell'] {
-      border-top: var(--_row-border-width, 1px) solid var(--vaadin-grid-cell-border-color, var(--_vaadin-border-color));
+      border-top: var(--_row-border-width, 1px) solid var(--vaadin-grid-cell-border-color, var(--vaadin-border-color));
     }
 
     /* Variant: row stripes */
@@ -240,7 +240,7 @@ export const gridStyles = css`
     :host([theme~='row-stripes']) [part~='odd-row'] [part~='details-cell'] {
       background:
         var(--_reorder-background-image), var(--_selection-background-image),
-        var(--vaadin-grid-alternate-cell-background, var(--_vaadin-background-container));
+        var(--vaadin-grid-alternate-cell-background, var(--vaadin-background-container));
     }
 
     [part~='cell'] > [tabindex] {

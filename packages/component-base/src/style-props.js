@@ -13,50 +13,46 @@ addGlobalThemeStyles(
     @layer vaadin.base {
       html {
         /* Background color */
-        --_vaadin-background: light-dark(#fff, #222);
+        --vaadin-background-color: light-dark(#fff, #222);
 
         /* Container colors */
-        --_vaadin-background-container: color-mix(in oklch, var(--_vaadin-color-strong) 5%, var(--_vaadin-background));
-        --_vaadin-background-container-strong: color-mix(
+        --vaadin-background-container: color-mix(in oklch, var(--vaadin-color) 5%, var(--vaadin-background-color));
+        --vaadin-background-container-strong: color-mix(
           in oklch,
-          var(--_vaadin-color-strong) 10%,
-          var(--_vaadin-background)
+          var(--vaadin-color) 10%,
+          var(--vaadin-background-color)
         );
 
         /* Border colors */
-        --_vaadin-border-color: color-mix(in oklch, var(--_vaadin-color-strong) 24%, transparent);
-        --_vaadin-border-color-strong: color-mix(
+        --vaadin-border-color: color-mix(in oklch, var(--vaadin-color) 24%, transparent);
+        --vaadin-border-color-strong: color-mix(
           in oklch,
-          var(--_vaadin-color-strong) 48%,
+          var(--vaadin-color) 48%,
           transparent
         ); /* Above 3:1 contrast */
 
         /* Text colors */
-        --_vaadin-color-subtle: color-mix(
-          in oklch,
-          var(--_vaadin-color-strong) 48%,
-          transparent
-        ); /* Above 3:1 contrast */
-        --_vaadin-color: color-mix(in oklch, var(--_vaadin-color-strong) 68%, transparent); /* Above 4.5:1 contrast */
-        --_vaadin-color-strong: light-dark(#1f1f1f, white); /* Above 7:1 contrast */
+        --vaadin-color-disabled: color-mix(in oklch, var(--vaadin-color) 48%, transparent); /* Above 3:1 contrast */
+        --vaadin-color-subtle: color-mix(in oklch, var(--vaadin-color) 68%, transparent); /* Above 4.5:1 contrast */
+        --vaadin-color: light-dark(#1f1f1f, white); /* Above 7:1 contrast */
 
         /* Padding */
-        --_vaadin-padding: 8px;
-        --_vaadin-padding-container: 6px 8px;
+        --vaadin-padding: 8px;
+        --vaadin-padding-container: 6px 8px;
 
         /* Gap/spacing */
-        --_vaadin-gap-container-inline: 0.5em;
-        --_vaadin-gap-container-block: 0.5em;
+        --vaadin-gap-container-inline: 0.5em;
+        --vaadin-gap-container-block: 0.5em;
 
         /* Border radius */
-        --_vaadin-radius-s: 3px;
-        --_vaadin-radius-m: 6px;
-        --_vaadin-radius-l: 12px;
-        --_vaadin-radius-full: 999px;
+        --vaadin-radius-s: 3px;
+        --vaadin-radius-m: 6px;
+        --vaadin-radius-l: 12px;
+        --vaadin-radius-full: 999px;
 
         /* Focus outline */
         --vaadin-focus-ring-width: 2px;
-        --vaadin-focus-ring-color: var(--_vaadin-color-strong);
+        --vaadin-focus-ring-color: var(--vaadin-color);
 
         /* Icons, used as mask-image */
         --_vaadin-icon-calendar: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" /></svg>');
@@ -80,12 +76,12 @@ addGlobalThemeStyles(
 
       @media (forced-colors: active) {
         html {
-          --_vaadin-background: Canvas;
-          --_vaadin-border-color: CanvasText;
-          --_vaadin-border-color-strong: CanvasText;
-          --_vaadin-color-subtle: CanvasText;
-          --_vaadin-color: CanvasText;
-          --_vaadin-color-strong: CanvasText;
+          --vaadin-background-color: Canvas;
+          --vaadin-border-color: CanvasText;
+          --vaadin-border-color-strong: CanvasText;
+          --vaadin-color-disabled: CanvasText;
+          --vaadin-color-subtle: CanvasText;
+          --vaadin-color: CanvasText;
           --vaadin-icon-color: CanvasText;
           --vaadin-focus-ring-color: Highlight;
         }
