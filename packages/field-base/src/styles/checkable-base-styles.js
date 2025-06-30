@@ -23,7 +23,7 @@ export const checkable = (part, propName = part) => css`
     }
 
     :host([disabled]) {
-      cursor: not-allowed;
+      cursor: var(--vaadin-disabled-cursor);
     }
 
     :host(:not([has-label])) {
