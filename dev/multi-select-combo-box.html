@@ -32,26 +32,36 @@
         flex-direction: column;
         gap: 0.5em;
       }
-      
-
     </style>
 
     <div class="controls">
       <div class="control-group">
         <vaadin-checkbox-group label="Features">
-          <vaadin-checkbox id="allowCustomValue" value="allowCustomValue" label="Allow custom value" checked></vaadin-checkbox>
-          <vaadin-checkbox id="autoExpandHorizontally" value="autoExpandHorizontally" label="Auto expand horizontally" checked></vaadin-checkbox>
-          <vaadin-checkbox id="autoExpandVertically" value="autoExpandVertically" label="Auto expand vertically" checked></vaadin-checkbox>
+          <vaadin-checkbox id="allowCustomValue" value="allowCustomValue" label="Allow custom value"></vaadin-checkbox>
+          <vaadin-checkbox
+            id="autoExpandHorizontally"
+            value="autoExpandHorizontally"
+            label="Auto expand horizontally"
+          ></vaadin-checkbox>
+          <vaadin-checkbox
+            id="autoExpandVertically"
+            value="autoExpandVertically"
+            label="Auto expand vertically"
+          ></vaadin-checkbox>
           <vaadin-checkbox id="autoOpenDisabled" value="autoOpenDisabled" label="Auto open disabled"></vaadin-checkbox>
           <vaadin-checkbox id="keepFilter" value="keepFilter" label="Keep filter"></vaadin-checkbox>
-          <vaadin-checkbox id="selectedItemsOnTop" value="selectedItemsOnTop" label="Selected items on top"></vaadin-checkbox>
+          <vaadin-checkbox
+            id="selectedItemsOnTop"
+            value="selectedItemsOnTop"
+            label="Selected items on top"
+          ></vaadin-checkbox>
         </vaadin-checkbox-group>
       </div>
 
       <div class="control-group">
         <vaadin-checkbox-group label="State">
-          <vaadin-checkbox id="clearButton" value="clearButton" label="Clear button visible" checked></vaadin-checkbox>
-          <vaadin-checkbox id="required" value="required" label="Required" checked></vaadin-checkbox>
+          <vaadin-checkbox id="clearButton" value="clearButton" label="Clear button visible"></vaadin-checkbox>
+          <vaadin-checkbox id="required" value="required" label="Required"></vaadin-checkbox>
           <vaadin-checkbox id="disabled" value="disabled" label="Disabled"></vaadin-checkbox>
           <vaadin-checkbox id="readonly" value="readonly" label="Read-only"></vaadin-checkbox>
         </vaadin-checkbox-group>
