@@ -23,7 +23,6 @@ export const splitLayoutStyles = css`
   :host ::slotted(*) {
     flex: 1 1 auto;
     overflow: auto;
-    -webkit-overflow-scrolling: touch;
   }
 
   [part='splitter'] {

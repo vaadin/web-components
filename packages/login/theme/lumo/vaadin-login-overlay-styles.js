@@ -130,7 +130,6 @@ const loginOverlayWrapper = css`
     [part='form'] {
       height: 100%;
       overflow: auto;
-      -webkit-overflow-scrolling: touch;
     }
   }
 
@@ -175,7 +174,6 @@ const loginFormWrapper = css`
   @media only screen and (max-height: 600px) and (min-width: 600px) and (orientation: landscape) {
     :host([theme~='with-overlay']) [part='form'] {
       height: 100%;
-      -webkit-overflow-scrolling: touch;
       flex: 1;
       padding: 2px;
     }

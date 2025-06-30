@@ -1,10 +1,9 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextFrame, nextResize } from '@vaadin/testing-helpers';
-import '../vaadin-dashboard-layout.js';
-import '../vaadin-dashboard-section.js';
-import '@vaadin/vaadin-lumo-styles/spacing.js';
-import type { DashboardLayout } from '../vaadin-dashboard-layout.js';
-import type { DashboardSection } from '../vaadin-dashboard-section.js';
+import '../src/vaadin-dashboard-layout.js';
+import '../src/vaadin-dashboard-section.js';
+import type { DashboardLayout } from '../src/vaadin-dashboard-layout.js';
+import type { DashboardSection } from '../src/vaadin-dashboard-section.js';
 import {
   expectLayout,
   getColumnWidths,
@@ -25,7 +24,7 @@ const [defaultSpacing, defaultMinimumColumnWidth] = (() => {
   document.body.appendChild(div);
   div.style.width = '1rem';
   const minColWidth = div.offsetWidth * 25;
-  div.style.width = 'var(--lumo-space-m)';
+  div.style.width = '1rem'; // var(--lumo-space-m)
   const spacing = div.offsetWidth;
   div.remove();
   return [spacing, minColWidth];
@@ -360,9 +359,9 @@ describe('dashboard layout', () => {
       await nextResize(dashboard);
 
       const { left: itemLeft } = childElements[0].getBoundingClientRect();
-      const { left: dashbboardLeft } = dashboard.getBoundingClientRect();
-      // Expect the dashbaord to have default padding of 1rem
-      expect(itemLeft - dashbboardLeft).to.eql(defaultSpacing);
+      const { left: dashboardLeft } = dashboard.getBoundingClientRect();
+      // Expect the dashboard to have default padding of 1rem
+      expect(itemLeft - dashboardLeft).to.eql(defaultSpacing);
     });
 
     it('should have custom gap between items horizontally', async () => {
@@ -371,9 +370,9 @@ describe('dashboard layout', () => {
       await nextResize(dashboard);
 
       const { left: itemLeft } = childElements[0].getBoundingClientRect();
-      const { left: dashbboardLeft } = dashboard.getBoundingClientRect();
+      const { left: dashboardLeft } = dashboard.getBoundingClientRect();
       // Expect the items to have a gap of 10px
-      expect(itemLeft - dashbboardLeft).to.eql(customSpacing);
+      expect(itemLeft - dashboardLeft).to.eql(customSpacing);
     });
   });
 

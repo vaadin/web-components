@@ -1,9 +1,9 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fire, fixtureSync, nextFrame, nextResize } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import '../vaadin-dashboard.js';
+import '../src/vaadin-dashboard.js';
 import { isSafari } from '@vaadin/component-base/src/browser-utils.js';
-import type { Dashboard, DashboardItem } from '../vaadin-dashboard.js';
+import type { Dashboard, DashboardItem } from '../src/vaadin-dashboard.js';
 import {
   describeBidirectional,
   expectLayout,

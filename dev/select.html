@@ -5,14 +5,13 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Select</title>
+    <link rel="stylesheet" href="/packages/vaadin-lumo-styles/lumo.css" />
     <script type="module" src="./common.js"></script>
 
     <script type="module">
       import '@vaadin/icon';
       import '@vaadin/icons';
       import '@vaadin/select';
-      import '@vaadin/vaadin-lumo-styles/global.css';
-      import '@vaadin/vaadin-lumo-styles/lumo.css';
       import '@vaadin/vaadin-lumo-styles/vaadin-iconset.js';
     </script>
   </head>
@@ -29,12 +28,16 @@
         label="Label"
         helper-text="Description for this field."
         value="s"
-        clear-button-visible
         error-message="You need to write something in this field."
         required
       >
         <vaadin-icon icon="vaadin:search" slot="prefix"></vaadin-icon>
       </vaadin-select>
+    </section>
+
+    <section>
+      <h2 class="heading">Custom renderer</h2>
+      <vaadin-select id="custom" value="s"></vaadin-select>
     </section>
 
     <section class="section">
@@ -43,7 +46,6 @@
         label="Read-only"
         helper-text="Description for this field."
         value="s"
-        clear-button-visible
         error-message="You need to write something in this field."
         required
         readonly
@@ -55,7 +57,6 @@
         label="Disabled"
         helper-text="Description for this field."
         value="s"
-        clear-button-visible
         error-message="You need to write something in this field."
         required
         disabled
@@ -64,17 +65,38 @@
       </vaadin-select>
     </section>
 
-    <script>
+    <script type="module">
+      import { html, render } from 'lit';
+
       document.querySelectorAll('vaadin-select').forEach((select) => {
-        select.items = items = [
-          { label: 'Show all', value: 'all' },
-          { component: 'hr' },
-          { label: 'XS (out of stock)', value: 'xs', disabled: true },
-          { label: 'S', value: 's' },
-          { label: 'M', value: 'm' },
-          { label: 'L', value: 'l' },
-          { label: 'XL', value: 'xl' },
-        ];
+        if (select.id === 'custom') {
+          select.renderer = (root) => {
+            render(
+              html`
+                <vaadin-select-list-box>
+                  <vaadin-select-item value="all">Show all</vaadin-select-item>
+                  <hr />
+                  <vaadin-select-item value="xs" disabled>XS (out of stock)</vaadin-select-item>
+                  <vaadin-select-item value="s">S</vaadin-select-item>
+                  <vaadin-select-item value="m">M</vaadin-select-item>
+                  <vaadin-select-item value="l">L</vaadin-select-item>
+                  <vaadin-select-item value="xl">XL</vaadin-select-item>
+                </vaadin-select-list-box>
+              `,
+              root,
+            );
+          };
+        } else {
+          select.items = [
+            { label: 'Show all', value: 'all' },
+            { component: 'hr' },
+            { label: 'XS (out of stock)', value: 'xs', disabled: true },
+            { label: 'S', value: 's' },
+            { label: 'M', value: 'm' },
+            { label: 'L', value: 'l' },
+            { label: 'XL', value: 'xl' },
+          ];
+        }
       });
     </script>
   </body>

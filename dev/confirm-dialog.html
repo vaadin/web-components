@@ -4,34 +4,39 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Confirm dialog</title>
+    <title>Confirm Dialog</title>
+    <link rel="stylesheet" href="/packages/vaadin-lumo-styles/lumo.css" />
     <script type="module" src="./common.js"></script>
 
     <script type="module">
       import '@vaadin/confirm-dialog';
-      import '@vaadin/vaadin-lumo-styles/global.css';
-      import '@vaadin/vaadin-lumo-styles/lumo.css';
     </script>
   </head>
   <body>
-    <vaadin-button id="open">Open</vaadin-button>
+    <vaadin-button class="short">Short Message</vaadin-button>
+    <vaadin-button class="long">Long Message</vaadin-button>
+
+    <vaadin-confirm-dialog class="short" header="Save Changes" confirm-text="Save" cancel-button-visible>
+      Save or not?
+    </vaadin-confirm-dialog>
 
     <vaadin-confirm-dialog
-      header="Unsaved changes"
+      class="long"
+      header="Unsaved Changes"
       confirm-text="Save"
       reject-text="Discard"
       cancel-button-visible
       reject-button-visible
     >
-      Do you want to save or discard the changes?
+      Do you want to save or discard the changes? That is the question. But whatever you choose, there will be no
+      consequences.
     </vaadin-confirm-dialog>
 
     <script>
-      const dialog = document.querySelector('vaadin-confirm-dialog');
-      const button = document.querySelector('#open');
-
-      button.addEventListener('click', (event) => {
-        dialog.opened = true;
+      document.querySelectorAll('vaadin-button').forEach((btn) => {
+        btn.addEventListener('click', (e) => {
+          document.querySelector(`vaadin-confirm-dialog.${btn.className}`).opened = true;
+        });
       });
     </script>
   </body>

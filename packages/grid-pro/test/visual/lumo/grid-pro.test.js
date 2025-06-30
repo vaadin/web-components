@@ -1,8 +1,11 @@
 import { sendKeys } from '@vaadin/test-runner-commands';
 import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
-import '../../../theme/lumo/vaadin-grid-pro.js';
-import '../../../theme/lumo/vaadin-grid-pro-edit-column.js';
+import '@vaadin/vaadin-lumo-styles/props.css';
+import '@vaadin/vaadin-lumo-styles/components/grid-pro.css';
+import '@vaadin/vaadin-lumo-styles/components/grid-pro-edit-column.css';
+import '../../../vaadin-grid-pro.js';
+import '../../../vaadin-grid-pro-edit-column.js';
 import '../../not-animated-styles.js';
 import { getContainerCell } from '../../helpers.js';
 import { users } from '../users.js';
