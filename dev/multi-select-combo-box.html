@@ -11,29 +11,74 @@
     <script type="module">
       import '@vaadin/multi-select-combo-box';
       import '@vaadin/tooltip';
+      import '@vaadin/checkbox';
+      import '@vaadin/checkbox-group';
+      import '@vaadin/radio-group';
+      import '@vaadin/text-field';
     </script>
   </head>
   <body>
-    <vaadin-multi-select-combo-box
-      label="Element"
-      clear-button-visible
-      required
-      error-message="Select at least one"
-      allow-custom-value
-      auto-expand-horizontally
-      auto-expand-vertically
-    >
-      <vaadin-tooltip slot="tooltip" text="Vaadin multi-select-combo-box tooltip text"></vaadin-tooltip>
-    </vaadin-multi-select-combo-box>
+    <style>
+      .controls {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 2rem;
+        margin-bottom: 2rem;
+        font-size: 0.875rem;
+      }
 
-    <!--
-    <vaadin-multi-select-combo-box
-      label="Element"
-      clear-button-visible
-      item-label-path="name"
-      item-id-path="id"
-    ></vaadin-multi-select-combo-box>
-    -->
+      .control-group {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5em;
+      }
+      
+
+    </style>
+
+    <div class="controls">
+      <div class="control-group">
+        <vaadin-checkbox-group label="Features">
+          <vaadin-checkbox id="allowCustomValue" value="allowCustomValue" label="Allow custom value" checked></vaadin-checkbox>
+          <vaadin-checkbox id="autoExpandHorizontally" value="autoExpandHorizontally" label="Auto expand horizontally" checked></vaadin-checkbox>
+          <vaadin-checkbox id="autoExpandVertically" value="autoExpandVertically" label="Auto expand vertically" checked></vaadin-checkbox>
+          <vaadin-checkbox id="autoOpenDisabled" value="autoOpenDisabled" label="Auto open disabled"></vaadin-checkbox>
+          <vaadin-checkbox id="keepFilter" value="keepFilter" label="Keep filter"></vaadin-checkbox>
+          <vaadin-checkbox id="selectedItemsOnTop" value="selectedItemsOnTop" label="Selected items on top"></vaadin-checkbox>
+        </vaadin-checkbox-group>
+      </div>
+
+      <div class="control-group">
+        <vaadin-checkbox-group label="State">
+          <vaadin-checkbox id="clearButton" value="clearButton" label="Clear button visible" checked></vaadin-checkbox>
+          <vaadin-checkbox id="required" value="required" label="Required" checked></vaadin-checkbox>
+          <vaadin-checkbox id="disabled" value="disabled" label="Disabled"></vaadin-checkbox>
+          <vaadin-checkbox id="readonly" value="readonly" label="Read-only"></vaadin-checkbox>
+        </vaadin-checkbox-group>
+      </div>
+
+      <div class="control-group">
+        <vaadin-radio-group id="direction" label="Direction">
+          <vaadin-radio-button label="LTR" value="ltr" checked></vaadin-radio-button>
+          <vaadin-radio-button label="RTL" value="rtl"></vaadin-radio-button>
+        </vaadin-radio-group>
+      </div>
+    </div>
+
+    <div>
+      <vaadin-multi-select-combo-box
+        label="Element"
+        clear-button-visible
+        required
+        error-message="Select at least one"
+        allow-custom-value
+        auto-expand-horizontally
+        auto-expand-vertically
+        placeholder="Search elements..."
+      >
+        <vaadin-tooltip slot="tooltip" text="Vaadin multi-select-combo-box tooltip text"></vaadin-tooltip>
+      </vaadin-multi-select-combo-box>
+    </div>
 
     <script>
       const comboBox = document.querySelector('vaadin-multi-select-combo-box');
@@ -73,6 +118,37 @@
 
       comboBox.selectedItems = ['Hydrogen', 'Helium', 'Lithium'];
 
+      // Handle features toggles
+      [
+        'allowCustomValue',
+        'autoExpandHorizontally',
+        'autoExpandVertically',
+        'autoOpenDisabled',
+        'keepFilter',
+        'selectedItemsOnTop',
+      ].forEach((prop) => {
+        document.getElementById(prop).addEventListener('checked-changed', (e) => {
+          comboBox[prop] = e.detail.value;
+        });
+      });
+
+      // Handle state toggles
+      ['clearButton', 'required', 'disabled', 'readonly'].forEach((prop) => {
+        document.getElementById(prop).addEventListener('checked-changed', (e) => {
+          if (prop === 'clearButton') {
+            comboBox.clearButtonVisible = e.detail.value;
+          } else {
+            comboBox[prop] = e.detail.value;
+          }
+        });
+      });
+
+      // Handle direction changes
+      document.getElementById('direction').addEventListener('value-changed', (e) => {
+        comboBox.setAttribute('dir', e.detail.value);
+      });
+
+      // Event listeners for changes
       comboBox.addEventListener('custom-value-set', (event) => {
         const item = event.detail;
         comboBox.items.push(item);
