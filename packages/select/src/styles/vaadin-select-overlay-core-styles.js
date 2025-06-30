@@ -12,7 +12,7 @@ export const selectOverlayStyles = css`
   }
 
   :host(:not([phone])) [part='overlay'] {
-    min-width: var(--vaadin-select-overlay-width, var(--vaadin-select-text-field-width));
+    min-width: var(--vaadin-select-overlay-width, var(--_vaadin-select-overlay-default-width));
   }
 
   @media (forced-colors: active) {

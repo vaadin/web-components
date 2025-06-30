@@ -63,6 +63,7 @@ export const SelectBaseMixin = (superClass) =>
           type: Boolean,
           value: false,
           notify: true,
+          observer: '_openedChanged',
           reflectToAttribute: true,
           sync: true,
         },
@@ -160,11 +161,7 @@ export const SelectBaseMixin = (superClass) =>
     }
 
     static get observers() {
-      return [
-        '_updateAriaExpanded(opened, focusElement)',
-        '_updateSelectedItem(value, _items, placeholder)',
-        '_openedChanged(opened, _overlayElement)',
-      ];
+      return ['_updateAriaExpanded(opened, focusElement)', '_updateSelectedItem(value, _items, placeholder)'];
     }
 
     constructor() {
@@ -364,11 +361,7 @@ export const SelectBaseMixin = (superClass) =>
     }
 
     /** @private */
-    _openedChanged(opened, overlayElement) {
-      if (!overlayElement) {
-        return;
-      }
-
+    _openedChanged(opened, oldOpened) {
       if (opened) {
         if (this.disabled || this.readonly) {
           // Disallow programmatic opening when disabled or readonly
@@ -379,8 +372,6 @@ export const SelectBaseMixin = (superClass) =>
         // Avoid multiple announcements when a value gets selected from the dropdown
         this._updateAriaLive(false);
 
-        overlayElement.style.setProperty('--vaadin-select-text-field-width', `${this._inputContainer.offsetWidth}px`);
-
         // Preserve focus-ring to restore it later
         const hasFocusRing = this.hasAttribute('focus-ring');
         this._openedWithFocusRing = hasFocusRing;
@@ -389,7 +380,7 @@ export const SelectBaseMixin = (superClass) =>
         if (hasFocusRing) {
           this.removeAttribute('focus-ring');
         }
-      } else if (this.__oldOpened) {
+      } else if (oldOpened) {
         if (this._openedWithFocusRing) {
           this.setAttribute('focus-ring', '');
         }
@@ -401,8 +392,6 @@ export const SelectBaseMixin = (superClass) =>
           this._requestValidation();
         }
       }
-
-      this.__oldOpened = opened;
     }
 
     /** @private */
