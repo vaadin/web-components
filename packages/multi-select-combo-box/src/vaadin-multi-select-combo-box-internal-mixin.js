@@ -93,6 +93,10 @@ export const MultiSelectComboBoxInternalMixin = (superClass) =>
           sync: true,
         },
 
+        owner: {
+          type: Object,
+        },
+
         _target: {
           type: Object,
         },
@@ -177,7 +181,7 @@ export const MultiSelectComboBoxInternalMixin = (superClass) =>
       if (items && items.length && this.topGroup && this.topGroup.length) {
         // Filter out items included to the top group.
         const filteredItems = items.filter(
-          (item) => this._comboBox._findIndex(item, this.topGroup, this.itemIdPath) === -1,
+          (item) => this.owner._findIndex(item, this.topGroup, this.itemIdPath) === -1,
         );
 
         super._setDropdownItems(this.topGroup.concat(filteredItems));
@@ -196,18 +200,11 @@ export const MultiSelectComboBoxInternalMixin = (superClass) =>
 
     /**
      * Override combo-box method to set correct owner for using by item renderers.
-     * This needs to be done before the scroller gets added to the DOM to ensure
-     * Lit directive works in case when combo-box is opened using attribute.
-     *
      * @protected
      * @override
      */
     _initScroller() {
-      const comboBox = this.getRootNode().host;
-
-      this._comboBox = comboBox;
-
-      super._initScroller(comboBox);
+      super._initScroller(this.owner);
     }
 
     /**

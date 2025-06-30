@@ -221,6 +221,7 @@ class ComboBox extends ComboBoxDataProviderMixin(
 
       <vaadin-combo-box-overlay
         id="overlay"
+        .owner="${this}"
         .opened="${this._overlayOpened}"
         ?loading="${this.loading}"
         theme="${ifDefined(this._theme)}"

@@ -139,6 +139,7 @@ class TimePicker extends TimePickerMixin(CSSInjectionMixin(ThemableMixin(Element
 
       <vaadin-time-picker-overlay
         id="overlay"
+        .owner="${this}"
         .opened="${this._overlayOpened}"
         theme="${ifDefined(this._theme)}"
         .positionTarget="${this._inputContainer}"

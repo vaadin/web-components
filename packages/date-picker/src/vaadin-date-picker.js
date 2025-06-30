@@ -207,6 +207,7 @@ class DatePicker extends DatePickerMixin(
 
       <vaadin-date-picker-overlay
         id="overlay"
+        .owner="${this}"
         ?fullscreen="${this._fullscreen}"
         ?week-numbers="${this.showWeekNumbers}"
         theme="${ifDefined(this._theme)}"

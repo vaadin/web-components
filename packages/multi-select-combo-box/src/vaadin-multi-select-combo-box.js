@@ -122,6 +122,7 @@ class MultiSelectComboBox extends MultiSelectComboBoxMixin(
 
         <vaadin-multi-select-combo-box-internal
           id="comboBox"
+          .owner="${this}"
           .filteredItems="${this.filteredItems}"
           .items="${this.items}"
           .itemIdPath="${this.itemIdPath}"
