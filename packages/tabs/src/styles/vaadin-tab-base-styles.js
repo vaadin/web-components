@@ -13,15 +13,15 @@ export const tabStyles = css`
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: var(--vaadin-tab-gap, var(--_vaadin-gap-container-inline));
-      padding: var(--vaadin-tab-padding, var(--_vaadin-padding-container));
+      gap: var(--vaadin-tab-gap, var(--vaadin-gap-container-inline));
+      padding: var(--vaadin-tab-padding, var(--vaadin-padding-container));
       cursor: var(--vaadin-clickable-cursor);
       font-size: var(--vaadin-tab-font-size, 1em);
       font-weight: var(--vaadin-tab-font-weight, 500);
       line-height: var(--vaadin-tab-line-height, inherit);
-      color: var(--vaadin-tab-color, inherit);
+      color: var(--vaadin-tab-color, var(--vaadin-color-subtle));
       background: var(--vaadin-tab-background, transparent);
-      border-radius: var(--vaadin-tab-border-radius, var(--_vaadin-radius-m));
+      border-radius: var(--vaadin-tab-border-radius, var(--vaadin-radius-m));
       -webkit-tap-highlight-color: transparent;
       -webkit-user-select: none;
       user-select: none;
@@ -38,8 +38,8 @@ export const tabStyles = css`
     }
 
     :host([selected]) {
-      --vaadin-tab-background: var(--_vaadin-background-container);
-      --vaadin-tab-color: var(--_vaadin-color-strong);
+      --vaadin-tab-background: var(--vaadin-background-container);
+      --vaadin-tab-color: var(--vaadin-color);
     }
 
     :host([disabled]) {

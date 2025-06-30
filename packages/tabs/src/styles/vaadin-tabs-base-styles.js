@@ -29,7 +29,7 @@ export const tabsStyles = css`
       overscroll-behavior: contain;
       display: flex;
       flex-direction: column;
-      gap: var(--vaadin-tabs-gap, var(--_vaadin-gap-container-inline));
+      gap: var(--vaadin-tabs-gap, var(--vaadin-gap-container-inline));
     }
 
     :host([orientation='horizontal']) [part='tabs'] {
@@ -51,8 +51,8 @@ export const tabsStyles = css`
       cursor: var(--vaadin-clickable-cursor);
       box-sizing: border-box;
       height: 100%;
-      padding: var(--vaadin-tab-padding, var(--_vaadin-padding-container));
-      background: var(--_vaadin-background);
+      padding: var(--vaadin-tab-padding, var(--vaadin-padding-container));
+      background: var(--vaadin-background-color);
       display: flex;
       align-items: center;
       justify-content: center;
