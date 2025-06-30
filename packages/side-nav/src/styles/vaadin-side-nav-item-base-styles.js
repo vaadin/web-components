@@ -12,7 +12,7 @@ const sideNavItem = css`
     [part='content'] {
       display: flex;
       align-items: center;
-      padding: var(--vaadin-side-nav-item-padding, var(--vaadin-padding));
+      padding: var(--vaadin-side-nav-item-padding, var(--vaadin-padding-container));
       gap: var(--vaadin-side-nav-item-gap, var(--vaadin-gap-container-inline));
       font-size: var(--vaadin-side-nav-item-font-size, 1em);
       font-weight: var(--vaadin-side-nav-item-font-weight, 500);
@@ -27,7 +27,7 @@ const sideNavItem = css`
     }
 
     :host([current]) [part='content'] {
-      --vaadin-side-nav-item-background: var(--vaadin-background-container-strong);
+      --vaadin-side-nav-item-background: var(--vaadin-background-container);
       --vaadin-side-nav-item-color: var(--vaadin-color);
     }
 
