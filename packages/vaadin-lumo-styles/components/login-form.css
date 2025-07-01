@@ -8,8 +8,6 @@
 @import './password-field.css';
 
 @import '../src/mixins/base-layer-reset.css' vaadin-login-form-wrapper;
-@import '../src/global/color.css' vaadin-login-form-wrapper;
-@import '../src/global/typography.css' vaadin-login-form-wrapper;
 @import '../src/components/login-form-wrapper.css' vaadin-login-form-wrapper;
 
 html {

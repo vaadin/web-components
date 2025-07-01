@@ -6,8 +6,6 @@
 @import './login-form.css';
 
 @import '../src/mixins/base-layer-reset.css' vaadin-login-overlay-wrapper;
-@import '../src/global/color.css' vaadin-login-overlay-wrapper;
-@import '../src/global/typography.css' vaadin-login-overlay-wrapper;
 @import '../src/mixins/overlay.css' vaadin-login-overlay-wrapper;
 @import '../src/components/login-overlay-wrapper.css' vaadin-login-overlay-wrapper;
 
