@@ -1,5 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, oneEvent } from '@vaadin/testing-helpers';
+import sinon from 'sinon';
 import { extractTagScopedCSSRules } from '../src/css-rules.js';
 
 const BASE_PATH = import.meta.url.split('/').slice(0, -1).join('/');
@@ -136,6 +137,18 @@ describe('CSS rules extraction', () => {
       expect(rules).to.have.lengthOf(2);
       expect(rules[0].cssText).to.equal(':host { color: black; }');
       expect(rules[1].cssText).to.equal(':host { color: red; }');
+    });
+
+    it('should not throw when stylesheet rules are not accessible', () => {
+      const style = new CSSStyleSheet();
+
+      sinon.stub(style, 'cssRules').get(() => {
+        throw new DOMException('Failed to read the "cssRules" property from "CSSStyleSheet"', 'SecurityError');
+      });
+
+      document.adoptedStyleSheets = [style];
+
+      expect(() => extractTagScopedCSSRules(document, 'test-button')).to.not.throw();
     });
 
     it('should put adoptedStyleSheet rules after other rules', () => {
