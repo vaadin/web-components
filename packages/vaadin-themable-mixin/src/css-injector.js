@@ -91,13 +91,8 @@ export class CSSInjector {
     const { tags, modules } = parseStyleSheets(this.#rootStyleSheets);
 
     const cssText = (tags.get(tagName) ?? [])
-      .flatMap((moduleName) => {
-        const rules = modules.get(moduleName);
-        return rules;
-      })
-      .map((rule) => {
-        return rule.cssText;
-      })
+      .flatMap((moduleName) => modules.get(moduleName))
+      .map((rule) => rule.cssText)
       .join('\n');
 
     const stylesheet = this.#styleSheetsByTag.get(tagName) ?? new CSSStyleSheet();

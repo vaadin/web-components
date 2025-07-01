@@ -3,6 +3,7 @@
  * Copyright (c) 2000 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+/** @type {WeakMap<CSSStyleSheet, Record<string, Map>>} */
 const cache = new WeakMap();
 
 export function parseStyleSheet(
