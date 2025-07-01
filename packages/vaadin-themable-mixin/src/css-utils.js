@@ -15,16 +15,16 @@ import { adoptStyles } from 'lit';
  * @return {CSSStyleSheet[]}
  */
 function getEffectiveStyles(component) {
-  const componentClass = component.constructor;
+  const { baseStyles, themeStyles, elementStyles, cssInjector } = component.constructor;
+  const lumoInjectorStyleSheet = component.__lumoInjectorStyleSheet;
 
-  const styleSheet = component.__lumoInjectorStyleSheet;
-  if (styleSheet) {
-    return (componentClass.baseStyles ?? componentClass.themeStyles)
-      ? [...componentClass.baseStyles, styleSheet, ...componentClass.themeStyles]
-      : [styleSheet, ...componentClass.elementStyles];
+  if (lumoInjectorStyleSheet && (baseStyles || themeStyles)) {
+    const includeBaseStyles = lumoInjectorStyleSheet.disabled || !cssInjector.baseStylesDisabled;
+
+    return [...(includeBaseStyles ? baseStyles : []), lumoInjectorStyleSheet, ...themeStyles];
   }
 
-  return componentClass.elementStyles;
+  return [lumoInjectorStyleSheet, ...elementStyles].filter(Boolean);
 }
 
 /**

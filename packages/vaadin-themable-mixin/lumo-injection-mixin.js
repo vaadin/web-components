@@ -36,7 +36,7 @@ export const LumoInjectionMixin = (superClass) =>
     static finalize() {
       super.finalize();
 
-      const propName = this.lumoInjectPropName;
+      const propName = `--${this.is}-css-inject`;
 
       // Prevent registering same property twice when a class extends
       // another class using this mixin, since `finalize()` is called
@@ -57,8 +57,10 @@ export const LumoInjectionMixin = (superClass) =>
       }
     }
 
-    static get lumoInjectPropName() {
-      return `--${this.is}-lumo-inject`;
+    static get lumoInjector() {
+      return {
+        baseStylesDisabled: true,
+      };
     }
 
     /** @protected */
