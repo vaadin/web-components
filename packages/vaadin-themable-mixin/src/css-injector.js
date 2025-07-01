@@ -8,30 +8,60 @@ import { CSSPropertyObserver } from './css-property-observer.js';
 import { cleanupStyleSheet, injectStyleSheet } from './css-utils.js';
 
 /**
- * Implements auto-injection of component-scoped CSS styles from document
- * style sheets into the Shadow DOM of the corresponding Vaadin components.
+ * Implements auto-injection of CSS styles from document style sheets
+ * into the Shadow DOM of corresponding Vaadin components.
  *
- * Styles are scoped to a component using the following syntax:
+ * Styles to be injected are defined as reusable modules using the
+ * following syntax, based on media queries and custom properties:
  *
- * 1. `@media vaadin-text-field { ... }` - a media query with a tag name
- * 2. `@import "styles.css" vaadin-text-field` - an import rule with a tag name
+ * ```css
+ * \@media lumo_base-field {
+ *  #label {
+ *    color: gray;
+ *  }
+ * }
+ *
+ * \@media lumo_text-field {
+ *   #input {
+ *     color: yellow;
+ *   }
+ * }
+ *
+ * \@media lumo_email-field {
+ *   #input {
+ *     color: green;
+ *   }
+ * }
+ *
+ * html {
+ *   --vaadin-text-field-css-inject: 1;
+ *   --vaadin-text-field-css-inject-modules:
+ *      lumo_base-field,
+ *      lumo_text-field;
+ *
+ *   --vaadin-email-field-css-inject: 1;
+ *   --vaadin-email-field-css-inject-modules:
+ *      lumo_base-field,
+ *      lumo_email-field;
+ * }
+ * ```
  *
  * The class observes the custom property `--{tagName}-css-inject`,
- * which indicates the presence of styles for the given component in
- * the document style sheets. When the property is set to `1`, the class
- * recursively searches all document style sheets for any CSS rules that
- * are scoped to the given component tag name using the syntax described
- * above. The found rules are then injected into the shadow DOM of all
- * subscribed components through the adoptedStyleSheets API.
+ * which indicates whether styles are present for the given component
+ * in the document style sheets. When the property is set to `1`, the
+ * class recursively searches all document style sheets for CSS modules
+ * listed in the `--{tagName}-css-inject-modules` property that apply to
+ * the given component tag name. The found rules are then injected
+ * into the component's Shadow DOM using the `adoptedStyleSheets` API,
+ * in the order specified in the `--{tagName}-css-inject-modules` property.
+ * The same module can be used in multiple components.
  *
- * The class also observes the custom property to remove the styles when
- * the property is set to `0`.
+ * The class also removes the injected styles when the property is set to `0`.
  *
  * If a root element is provided, the class will additionally search for
- * component-scoped styles in the root element's style sheets. This is
- * useful for embedded Flow applications that are fully isolated from
- * the main document and load styles into a component's shadow DOM
- * rather than the main document.
+ * CSS modules in the root element's style sheets. This is useful for
+ * embedded Flow applications that are fully isolated from the main document
+ * and load styles into a component’s Shadow DOM instead of the main document.
  *
  * WARNING: For internal use only. Do not use this class in custom components.
  *
@@ -56,11 +86,11 @@ export class CSSInjector {
   }
 
   /**
-   * Adds a component to the list of elements monitored for component-scoped
-   * styles in global style sheets. If the styles have already been detected,
-   * they are injected into the component's shadow DOM immediately. Otherwise,
-   * the class watches the custom property `--{tagName}-css-inject` to trigger
-   * injection when the styles are added to the document or root element.
+   * Adds a component to the list of elements monitored for style injection.
+   * If the styles have already been detected, they are injected into the
+   * component's shadow DOM immediately. Otherwise, the class watches the
+   * custom property `--{tagName}-css-inject` to trigger injection when
+   * the styles are added to the document or root element.
    *
    * @param {HTMLElement} component
    */
@@ -78,8 +108,7 @@ export class CSSInjector {
 
   /**
    * Removes the component from the list of elements monitored for
-   * component-scoped styles and cleans up any previously injected
-   * styles from the component's shadow DOM.
+   * style injection and cleans up any previously injected styles.
    *
    * @param {HTMLElement} component
    */

@@ -6,7 +6,7 @@
 /** @type {WeakMap<CSSStyleSheet, Record<string, Map>>} */
 const cache = new WeakMap();
 
-export function parseStyleSheet(
+function parseStyleSheet(
   styleSheet,
   result = {
     tags: new Map(),
@@ -64,6 +64,60 @@ export function parseStyleSheet(
   return result;
 }
 
+/**
+ * Parses the provided CSSStyleSheet objects and returns an object with
+ * tag-to-modules mappings and module rules.
+ *
+ * Modules are defined using CSS media rules with names starting with `lumo_`:
+ *
+ * ```css
+ * \@media lumo_base-field {
+ *  #label {
+ *    color: gray;
+ *  }
+ * }
+ *
+ * \@media lumo_text-field {
+ *   #input {
+ *     color: yellow;
+ *   }
+ * }
+ * ```
+ *
+ * Also, an entire CSS import can be defined as a module:
+ *
+ * ```css
+ * \@import 'lumo-base-field.css' lumo_base-field;
+ * ```
+ *
+ * Tag-to-modules mappings are defined as CSS custom properties that list
+ * the module names to be applied to specific tags, e.g. `vaadin-text-field`:
+ *
+ * ```css
+ * html {
+ *   --vaadin-text-field-css-inject-modules:
+ *      lumo_base-field,
+ *      lumo_text-field;
+ * }
+ * ```
+ *
+ * Example output:
+ *
+ * ```js
+ * {
+ *   tags: Map {
+ *    'vaadin-text-field': ['lumo_base-field', 'lumo_text-field']
+ *   },
+ *   modules: Map {
+ *     'lumo_base-field': [CSSStyleRule],
+ *     'lumo_text-field': [CSSStyleRule]
+ *   }
+ * }
+ * ```
+ *
+ * @param {CSSStyleSheet[]} styleSheets - An array of CSSStyleSheet objects to parse.
+ * @return {{tags: Map<string, string[]>, modules: Map<string, CSSRule[]>}}
+ */
 export function parseStyleSheets(styleSheets) {
   let tags = new Map();
   let modules = new Map();
