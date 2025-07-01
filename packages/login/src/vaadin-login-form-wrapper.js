@@ -62,7 +62,7 @@ class LoginFormWrapper extends ThemableMixin(CSSInjectionMixin(PolylitMixin(LitE
         <div part="form-title" role="heading" aria-level="${this.headingLevel}">${this.i18n.form.title}</div>
         <div part="error-message" ?hidden="${!this.error}">
           <strong part="error-message-title">${this.i18n.errorMessage.title}</strong>
-          <p part="error-message-description">${this.i18n.errorMessage.message}</p>
+          <div part="error-message-description">${this.i18n.errorMessage.message}</div>
         </div>
 
         <slot name="form"></slot>

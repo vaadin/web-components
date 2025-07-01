@@ -29,4 +29,8 @@ export const loginFormWrapperStyles = css`
   [part='error-message'] {
     position: relative;
   }
+
+  strong {
+    font-weight: 600;
+  }
 `;

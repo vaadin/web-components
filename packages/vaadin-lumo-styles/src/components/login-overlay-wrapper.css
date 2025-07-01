@@ -65,7 +65,7 @@
 [part='description'] {
   line-height: var(--lumo-line-height-s);
   color: var(--lumo-tint-70pct);
-  margin-bottom: 0;
+  margin: 0.5em 0 0;
 }
 
 [part='content'] {
