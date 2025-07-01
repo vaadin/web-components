@@ -75,7 +75,7 @@ class LoginFormWrapper extends ThemableMixin(CSSInjectionMixin(PolylitMixin(LitE
 
         <div part="footer">
           <slot name="footer"></slot>
-          <p>${this.i18n.additionalInformation}</p>
+          <div>${this.i18n.additionalInformation}</div>
         </div>
       </section>
     `;
