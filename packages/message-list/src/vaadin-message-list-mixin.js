@@ -6,7 +6,7 @@
 import { html, render } from 'lit';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import { KeyboardDirectionMixin } from '@vaadin/a11y-base/src/keyboard-direction-mixin.js';
-import { SlotStylesMixin } from '@vaadin/component-base/src/slot-styles-mixin';
+import { SlotStylesMixin } from '@vaadin/component-base/src/slot-styles-mixin.js';
 
 /**
  * @polymerMixin
