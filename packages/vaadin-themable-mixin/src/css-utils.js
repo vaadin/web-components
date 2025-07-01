@@ -15,16 +15,14 @@ import { adoptStyles } from 'lit';
  * @return {CSSStyleSheet[]}
  */
 function getEffectiveStyles(component) {
-  const { baseStyles, themeStyles, elementStyles, cssInjector } = component.constructor;
-  const lumoInjectorStyleSheet = component.__lumoInjectorStyleSheet;
+  const { baseStyles, themeStyles, elementStyles, lumoInjector } = component.constructor;
+  const lumoStyleSheet = component.__lumoStyleSheet;
 
-  if (lumoInjectorStyleSheet && (baseStyles || themeStyles)) {
-    const includeBaseStyles = lumoInjectorStyleSheet.disabled || !cssInjector.baseStylesDisabled;
-
-    return [...(includeBaseStyles ? baseStyles : []), lumoInjectorStyleSheet, ...themeStyles];
+  if (lumoStyleSheet && (baseStyles || themeStyles)) {
+    return [...(lumoInjector.includeBaseStyles ? baseStyles : []), lumoStyleSheet, ...themeStyles];
   }
 
-  return [lumoInjectorStyleSheet, ...elementStyles].filter(Boolean);
+  return [lumoStyleSheet, ...elementStyles].filter(Boolean);
 }
 
 /**
@@ -47,21 +45,17 @@ export function applyInstanceStyles(component) {
  */
 export function injectLumoStyleSheet(component, styleSheet) {
   // Store the new stylesheet so that it can be removed later.
-  component.__lumoInjectorStyleSheet = styleSheet;
+  component.__lumoStyleSheet = styleSheet;
   applyInstanceStyles(component);
 }
 
 /**
  * Removes the stylesheet from the component's shadow root that was added
- * by the `injectLumoStyleSheet` function.
+ * by the `applyLumoStyleSheet` function.
  *
  * @param {HTMLElement} component
  */
-export function cleanupLumoStyleSheet(component) {
-  const adoptedStyleSheets = component.shadowRoot.adoptedStyleSheets.filter(
-    (s) => s !== component.__lumoInjectorStyleSheet,
-  );
-
-  component.shadowRoot.adoptedStyleSheets = adoptedStyleSheets;
-  component.__lumoInjectorStyleSheet = undefined;
+export function removeLumoStyleSheet(component) {
+  component.__lumoStyleSheet = undefined;
+  applyInstanceStyles(component);
 }

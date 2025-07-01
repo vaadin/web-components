@@ -4,7 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { CSSPropertyObserver } from './css-property-observer.js';
-import { cleanupLumoStyleSheet, injectLumoStyleSheet, applyInstanceStyles } from './css-utils.js';
+import { injectLumoStyleSheet, removeLumoStyleSheet } from './css-utils.js';
 import { parseStyleSheets } from './lumo-modules.js';
 
 /**
@@ -118,8 +118,7 @@ export class LumoInjector {
     const { is: tagName } = component.constructor;
     this.#componentsByTag.get(tagName)?.delete(component);
 
-    component.__lumoInjectorStyleSheet = undefined;
-    applyInstanceStyles(component);
+    removeLumoStyleSheet(component);
   }
 
   #updateComponentStyleSheet(tagName) {
@@ -131,13 +130,15 @@ export class LumoInjector {
       .join('\n');
 
     const stylesheet = this.#styleSheetsByTag.get(tagName) ?? new CSSStyleSheet();
-    stylesheet.disabled = !cssText;
     stylesheet.replaceSync(cssText);
     this.#styleSheetsByTag.set(tagName, stylesheet);
 
     this.#componentsByTag.get(tagName)?.forEach((component) => {
-      component.__lumoInjectorStyleSheet = stylesheet;
-      applyInstanceStyles(component);
+      if (cssText) {
+        injectLumoStyleSheet(component, stylesheet);
+      } else {
+        removeLumoStyleSheet(component);
+      }
     });
   }
 
