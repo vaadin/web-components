@@ -16,7 +16,13 @@ registerStyles(
     overlay,
     css`
       [part='overlay'] {
+        box-shadow: none;
+        background: transparent;
         will-change: opacity, transform;
+      }
+
+      [part='content'] {
+        padding: 0;
       }
 
       :host([opening]) [part='overlay'] {
