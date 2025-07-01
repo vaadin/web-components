@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/chai-plugins",
-  "version": "24.8.1",
+  "version": "24.8.2",
   "private": true,
   "description": "Vaadin web components test plugins",
   "license": "Apache-2.0",
