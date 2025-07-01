@@ -5,52 +5,52 @@ import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themab
 registerStyles(
   'vaadin-tabs',
   css`
-    ::slotted(vaadin-tab) {
-      display: flex;
-      box-sizing: border-box;
-      padding: 0.5rem 0.75rem;
-      font-family: -apple-system, 'system-ui', Roboto, 'Segoe UI', Helvetica, Arial, sans-serif;
-      font-size: 16px;
-      font-weight: 500;
-    }
-
-    ::slotted(vaadin-tab[orientation='vertical']) {
-      padding: 0.25rem 1rem;
-    }
-
     :host(:not([orientation='vertical'])) {
       position: relative;
       min-height: 2.75rem;
     }
 
-    :host([orientation='horizontal']) [part='tabs'] {
-      margin: 0 0.75rem;
+    [part='tabs'] {
+      gap: 0; /* Disable gap for scroll tests */
     }
 
-    [part='forward-button'],
-    [part='back-button'] {
+    [part$='button'] {
       position: absolute;
+      box-sizing: border-box;
       z-index: 1;
-      top: 0;
-      font-size: 24px;
-      width: 1.5em;
+      height: 100%;
+      padding: 6px 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
-    :host(:not([dir='rtl'])) [part='forward-button'] {
-      right: 0;
+    [part$='button']::after {
+      width: 1lh;
+      height: 1lh;
     }
 
-    :host([dir='rtl']) [part='forward-button'] {
-      left: 0;
-    }
-
-    /* Used by "separator" element in scroll tests */
-    :host(:not([dir='rtl'])) ::slotted(:not(vaadin-tab)) {
-      margin-left: 1rem;
-    }
-
-    :host([dir='rtl']) ::slotted(:not(vaadin-tab)) {
-      margin-right: 1rem;
+    [part='forward-button'] {
+      inset-inline-end: 0;
     }
   `,
+);
+
+registerStyles(
+  'vaadin-tab',
+  css`
+    :host {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      box-sizing: border-box;
+      padding: 6px 8px;
+      font-family: -apple-system, 'system-ui', 'Roboto', 'Segoe UI', Helvetica, Arial, sans-serif;
+      font-size: 16px;
+      font-weight: 500;
+      min-width: 55px; /* Use fixed width for scroll tests */
+    }
+  `,
+  { moduleId: 'vaadin-tab-styles' },
 );
