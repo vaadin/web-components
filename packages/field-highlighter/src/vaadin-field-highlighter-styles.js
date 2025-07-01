@@ -60,14 +60,7 @@ export const userTagStyles = css`
 `;
 
 export const userTagsOverlayStyles = css`
-  :host {
-    background: transparent;
-    box-shadow: none;
-  }
-
-  :scope [part='overlay'] {
-    box-shadow: none;
-    background: transparent;
+  [part='overlay'] {
     position: relative;
     left: -4px;
     padding: 4px;
@@ -84,10 +77,6 @@ export const userTagsOverlayStyles = css`
   :host([dir='rtl']) [part='overlay'] {
     left: auto;
     right: -4px;
-  }
-
-  :scope [part='content'] {
-    padding: 0;
   }
 
   :host([opening]),
