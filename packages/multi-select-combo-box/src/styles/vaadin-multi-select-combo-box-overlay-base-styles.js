@@ -4,18 +4,15 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { css } from 'lit';
+import { comboBoxOverlayStyles } from '../../../combo-box/src/styles/vaadin-combo-box-overlay-base-styles.js';
 
-export const multiSelectComboBoxOverlayStyles = css`
-  #overlay {
-    width: var(
-      --vaadin-multi-select-combo-box-overlay-width,
-      var(--_vaadin-multi-select-combo-box-overlay-default-width, auto)
-    );
-  }
-
-  [part='content'] {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-  }
-`;
+export const multiSelectComboBoxOverlayStyles = [
+  comboBoxOverlayStyles,
+  css`
+    @layer base {
+      #overlay {
+        width: var(--vaadin-combo-box-overlay-width, var(--_vaadin-multi-select-combo-box-overlay-default-width, auto));
+      }
+    }
+  `,
+];

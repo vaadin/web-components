@@ -4,44 +4,56 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { css } from 'lit';
+import { comboBoxStyles } from '@vaadin/combo-box/src/styles/vaadin-combo-box-base-styles';
 
-export const multiSelectComboBoxStyles = css`
-  :host {
-    max-width: 100%;
-    --input-min-width: var(--vaadin-multi-select-combo-box-input-min-width, 4em);
-    --_chip-min-width: var(--vaadin-multi-select-combo-box-chip-min-width, 50px);
-  }
+export const multiSelectComboBoxStyles = [
+  comboBoxStyles,
+  css`
+    @layer base {
+      :host {
+        max-width: 100%;
+        --_input-min-width: var(--vaadin-multi-select-combo-box-input-min-width, 4rem);
+        --_chip-min-width: var(--vaadin-chip-min-width, 6rem);
+        --_wrapper-gap: var(--vaadin-multi-select-combo-box-chips-gap, 2px);
+      }
 
-  #chips {
-    display: flex;
-    align-items: center;
-  }
+      #chips {
+        display: flex;
+        align-items: center;
+        gap: var(--vaadin-multi-select-combo-box-chips-gap, 2px);
+      }
 
-  ::slotted(input) {
-    box-sizing: border-box;
-    flex: 1 0 var(--input-min-width);
-  }
+      ::slotted(input) {
+        box-sizing: border-box;
+        flex: 1 0 var(--_input-min-width);
+      }
 
-  ::slotted([slot='chip']),
-  ::slotted([slot='overflow']) {
-    flex: 0 1 auto;
-  }
+      ::slotted([slot='chip']),
+      ::slotted([slot='overflow']) {
+        flex: 0 1 auto;
+      }
 
-  ::slotted([slot='chip']) {
-    overflow: hidden;
-  }
+      ::slotted([slot='chip']) {
+        overflow: hidden;
+      }
 
-  :host(:is([readonly], [disabled])) ::slotted(input) {
-    flex-grow: 0;
-    flex-basis: 0;
-    padding: 0;
-  }
+      :host(:is([readonly], [disabled])) ::slotted(input) {
+        flex-grow: 0;
+        flex-basis: 0;
+        padding: 0;
+      }
 
-  :host([auto-expand-vertically]) #chips {
-    display: contents;
-  }
+      :host([readonly]:not([disabled])) [part$='button'] {
+        cursor: var(--vaadin-clickable-cursor);
+      }
 
-  :host([auto-expand-horizontally]) [class$='container'] {
-    width: auto;
-  }
-`;
+      :host([auto-expand-vertically]) #chips {
+        display: contents;
+      }
+
+      :host([auto-expand-horizontally]) [class$='container'] {
+        width: auto;
+      }
+    }
+  `,
+];
