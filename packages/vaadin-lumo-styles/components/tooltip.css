@@ -8,8 +8,8 @@
 @import '../src/components/tooltip-overlay.css';
 
 html {
-  --vaadin-tooltip-overlay-css-inject: 1;
-  --vaadin-tooltip-overlay-css-inject-modules:
+  --vaadin-tooltip-overlay-lumo-inject: 1;
+  --vaadin-tooltip-overlay-lumo-inject-modules:
     lumo_mixins_base-layer-reset,
     lumo_mixins_overlay,
     lumo_components_tooltip-overlay;

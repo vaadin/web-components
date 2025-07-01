@@ -7,8 +7,8 @@
 @import '../src/components/button.css';
 
 html {
-  --vaadin-button-css-inject: 1;
-  --vaadin-button-css-inject-modules:
+  --vaadin-button-lumo-inject: 1;
+  --vaadin-button-lumo-inject-modules:
     lumo_mixins_base-layer-reset,
     lumo_components_button;
 }

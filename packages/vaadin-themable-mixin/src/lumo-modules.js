@@ -42,9 +42,9 @@ function parseStyleSheet(
       continue;
     }
 
-    if (rule instanceof CSSStyleRule && rule.cssText.includes('-css-inject')) {
+    if (rule instanceof CSSStyleRule && rule.cssText.includes('-lumo-inject')) {
       for (const property of rule.style) {
-        const tagName = property.match(/^--(.*)-css-inject-modules$/u)?.[1];
+        const tagName = property.match(/^--(.*)-lumo-inject-modules$/u)?.[1];
         if (!tagName) {
           continue;
         }
@@ -95,7 +95,7 @@ function parseStyleSheet(
  *
  * ```css
  * html {
- *   --vaadin-text-field-css-inject-modules:
+ *   --vaadin-text-field-lumo-inject-modules:
  *      lumo_base-field,
  *      lumo_text-field;
  * }

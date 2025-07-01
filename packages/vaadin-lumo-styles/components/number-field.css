@@ -14,8 +14,8 @@
 @import './input-container.css';
 
 html {
-  --vaadin-number-field-css-inject: 1;
-  --vaadin-number-field-css-inject-modules:
+  --vaadin-number-field-lumo-inject: 1;
+  --vaadin-number-field-lumo-inject-modules:
     lumo_mixins_base-layer-reset,
     lumo_mixins_field-label,
     lumo_mixins_field-required,

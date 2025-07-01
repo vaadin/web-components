@@ -15,8 +15,8 @@
 }
 
 html {
-  --vaadin-grid-sorter-css-inject: 1;
-  --vaadin-grid-sorter-css-inject-modules:
+  --vaadin-grid-sorter-lumo-inject: 1;
+  --vaadin-grid-sorter-lumo-inject-modules:
     lumo_mixins_base-layer-reset,
     lumo_components_grid-sorter;
 }

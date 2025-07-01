@@ -17,7 +17,7 @@ import { html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
-import { CSSInjectionMixin } from '@vaadin/vaadin-themable-mixin/css-injection-mixin.js';
+import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { richTextEditorStyles } from './styles/vaadin-rich-text-editor-core-styles.js';
 import { RichTextEditorMixin } from './vaadin-rich-text-editor-mixin.js';
@@ -101,7 +101,7 @@ import { RichTextEditorMixin } from './vaadin-rich-text-editor-mixin.js';
  * @mixes ThemableMixin
  */
 class RichTextEditor extends RichTextEditorMixin(
-  ElementMixin(ThemableMixin(CSSInjectionMixin(PolylitMixin(LitElement)))),
+  ElementMixin(ThemableMixin(LumoInjectionMixin(PolylitMixin(LitElement)))),
 ) {
   static get is() {
     return 'vaadin-rich-text-editor';

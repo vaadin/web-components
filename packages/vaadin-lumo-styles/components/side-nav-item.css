@@ -8,8 +8,8 @@
 @import '../src/components/side-nav-item.css';
 
 html {
-  --vaadin-side-nav-item-css-inject: 1;
-  --vaadin-side-nav-item-css-inject-modules:
+  --vaadin-side-nav-item-lumo-inject: 1;
+  --vaadin-side-nav-item-lumo-inject-modules:
     lumo_mixins_base-layer-reset,
     lumo_mixins_field-button,
     lumo_components_side-nav-item;

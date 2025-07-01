@@ -6,7 +6,7 @@
 import { html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
-import { CSSInjectionMixin } from '@vaadin/vaadin-themable-mixin/css-injection-mixin.js';
+import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { monthCalendarStyles } from './styles/vaadin-month-calendar-core-styles.js';
 import { MonthCalendarMixin } from './vaadin-month-calendar-mixin.js';
@@ -16,7 +16,7 @@ import { MonthCalendarMixin } from './vaadin-month-calendar-mixin.js';
  * @extends HTMLElement
  * @private
  */
-class MonthCalendar extends MonthCalendarMixin(CSSInjectionMixin(ThemableMixin(PolylitMixin(LitElement)))) {
+class MonthCalendar extends MonthCalendarMixin(LumoInjectionMixin(ThemableMixin(PolylitMixin(LitElement)))) {
   static get is() {
     return 'vaadin-month-calendar';
   }

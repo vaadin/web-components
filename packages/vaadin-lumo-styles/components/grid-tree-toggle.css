@@ -7,8 +7,8 @@
 @import '../src/components/grid-tree-toggle.css';
 
 html {
-  --vaadin-grid-tree-toggle-css-inject: 1;
-  --vaadin-grid-tree-toggle-css-inject-modules:
+  --vaadin-grid-tree-toggle-lumo-inject: 1;
+  --vaadin-grid-tree-toggle-lumo-inject-modules:
     lumo_mixins_base-layer-reset,
     lumo_components_grid-tree-toggle;
 }

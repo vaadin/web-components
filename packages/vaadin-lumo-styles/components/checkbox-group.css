@@ -13,8 +13,8 @@
 @import './checkbox.css';
 
 html {
-  --vaadin-checkbox-group-css-inject: 1;
-  --vaadin-checkbox-group-css-inject-modules:
+  --vaadin-checkbox-group-lumo-inject: 1;
+  --vaadin-checkbox-group-lumo-inject-modules:
     lumo_mixins_base-layer-reset,
     lumo_mixins_group-field,
     lumo_mixins_field-label,

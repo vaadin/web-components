@@ -8,7 +8,7 @@ import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { OverflowController } from '@vaadin/component-base/src/overflow-controller.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
-import { CSSInjectionMixin } from '@vaadin/vaadin-themable-mixin/css-injection-mixin.js';
+import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { ScrollerMixin } from './vaadin-scroller-mixin.js';
 
@@ -34,7 +34,7 @@ import { ScrollerMixin } from './vaadin-scroller-mixin.js';
  * @mixes ElementMixin
  * @mixes ScrollerMixin
  */
-class Scroller extends ScrollerMixin(ElementMixin(ThemableMixin(CSSInjectionMixin(PolylitMixin(LitElement))))) {
+class Scroller extends ScrollerMixin(ElementMixin(ThemableMixin(LumoInjectionMixin(PolylitMixin(LitElement))))) {
   static get is() {
     return 'vaadin-scroller';
   }

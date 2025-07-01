@@ -9,7 +9,7 @@ import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { itemStyles } from '@vaadin/item/src/styles/vaadin-item-core-styles.js';
 import { ItemMixin } from '@vaadin/item/src/vaadin-item-mixin.js';
-import { CSSInjectionMixin } from '@vaadin/vaadin-themable-mixin/css-injection-mixin.js';
+import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 /**
@@ -22,7 +22,7 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * @mixes ThemableMixin
  * @protected
  */
-class SelectItem extends ItemMixin(ThemableMixin(DirMixin(CSSInjectionMixin(PolylitMixin(LitElement))))) {
+class SelectItem extends ItemMixin(ThemableMixin(DirMixin(LumoInjectionMixin(PolylitMixin(LitElement))))) {
   static get is() {
     return 'vaadin-select-item';
   }

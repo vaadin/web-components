@@ -7,6 +7,6 @@
 @import './details-summary.css';
 
 html {
-  --vaadin-details-css-inject: 1;
-  --vaadin-details-css-inject-modules: lumo_components_details;
+  --vaadin-details-lumo-inject: 1;
+  --vaadin-details-lumo-inject-modules: lumo_components_details;
 }

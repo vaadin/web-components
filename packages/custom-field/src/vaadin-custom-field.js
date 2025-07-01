@@ -7,7 +7,7 @@ import { html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
-import { CSSInjectionMixin } from '@vaadin/vaadin-themable-mixin/css-injection-mixin.js';
+import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { customFieldStyles } from './styles/vaadin-custom-field-core-styles.js';
 import { CustomFieldMixin } from './vaadin-custom-field-mixin.js';
@@ -61,7 +61,7 @@ import { CustomFieldMixin } from './vaadin-custom-field-mixin.js';
  * @mixes ElementMixin
  * @mixes ThemableMixin
  */
-class CustomField extends CustomFieldMixin(ThemableMixin(ElementMixin(CSSInjectionMixin(PolylitMixin(LitElement))))) {
+class CustomField extends CustomFieldMixin(ThemableMixin(ElementMixin(LumoInjectionMixin(PolylitMixin(LitElement))))) {
   static get is() {
     return 'vaadin-custom-field';
   }

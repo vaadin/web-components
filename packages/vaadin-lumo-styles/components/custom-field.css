@@ -11,8 +11,8 @@
 @import '../src/components/custom-field.css';
 
 html {
-  --vaadin-custom-field-css-inject: 1;
-  --vaadin-custom-field-css-inject-modules:
+  --vaadin-custom-field-lumo-inject: 1;
+  --vaadin-custom-field-lumo-inject-modules:
     lumo_mixins_base-layer-reset,
     lumo_mixins_field-label,
     lumo_mixins_field-required,

@@ -8,7 +8,7 @@ import { ListMixin } from '@vaadin/a11y-base/src/list-mixin.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
-import { CSSInjectionMixin } from '@vaadin/vaadin-themable-mixin/css-injection-mixin.js';
+import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { avatarGroupMenuStyles } from './styles/vaadin-avatar-group-menu-core-styles.js';
 
@@ -22,7 +22,7 @@ import { avatarGroupMenuStyles } from './styles/vaadin-avatar-group-menu-core-st
  * @mixes ThemableMixin
  * @protected
  */
-class AvatarGroupMenu extends ListMixin(ThemableMixin(DirMixin(CSSInjectionMixin(PolylitMixin(LitElement))))) {
+class AvatarGroupMenu extends ListMixin(ThemableMixin(DirMixin(LumoInjectionMixin(PolylitMixin(LitElement))))) {
   static get is() {
     return 'vaadin-avatar-group-menu';
   }

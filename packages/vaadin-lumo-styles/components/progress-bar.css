@@ -7,8 +7,8 @@
 @import '../src/components/progress-bar.css';
 
 html {
-  --vaadin-progress-bar-css-inject: 1;
-  --vaadin-progress-bar-css-inject-modules:
+  --vaadin-progress-bar-lumo-inject: 1;
+  --vaadin-progress-bar-lumo-inject-modules:
     lumo_mixins_base-layer-reset,
     lumo_components_progress-bar;
 }

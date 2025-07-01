@@ -13,25 +13,25 @@
 @import '../src/components/list-box.css';
 
 html {
-  --vaadin-avatar-group-css-inject: 1;
-  --vaadin-avatar-group-css-inject-modules:
+  --vaadin-avatar-group-lumo-inject: 1;
+  --vaadin-avatar-group-lumo-inject-modules:
     lumo_mixins_base-layer-reset,
     lumo_components_avatar-group;
 
-  --vaadin-avatar-group-overlay-css-inject: 1;
-  --vaadin-avatar-group-overlay-css-inject-modules:
+  --vaadin-avatar-group-overlay-lumo-inject: 1;
+  --vaadin-avatar-group-overlay-lumo-inject-modules:
     lumo_mixins_base-layer-reset,
     lumo_mixins_overlay,
     lumo_mixins_menu-overlay-core,
     lumo_components_avatar-group-overlay;
 
-  --vaadin-avatar-group-menu-css-inject: 1;
-  --vaadin-avatar-group-menu-css-inject-modules:
+  --vaadin-avatar-group-menu-lumo-inject: 1;
+  --vaadin-avatar-group-menu-lumo-inject-modules:
     lumo_mixins_base-layer-reset,
     lumo_components_list-box;
 
-  --vaadin-avatar-group-menu-item-css-inject: 1;
-  --vaadin-avatar-group-menu-item-css-inject-modules:
+  --vaadin-avatar-group-menu-item-lumo-inject: 1;
+  --vaadin-avatar-group-menu-item-lumo-inject-modules:
     lumo_mixins_base-layer-reset,
     lumo_components_item,
     lumo_components_avatar-group-menu-item;

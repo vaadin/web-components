@@ -6,6 +6,6 @@
 @import '../src/components/horizontal-layout.css';
 
 html {
-  --vaadin-horizontal-layout-css-inject: 1;
-  --vaadin-horizontal-layout-css-inject-modules: lumo_components_horizontal-layout;
+  --vaadin-horizontal-layout-lumo-inject: 1;
+  --vaadin-horizontal-layout-lumo-inject-modules: lumo_components_horizontal-layout;
 }

@@ -7,8 +7,8 @@
 @import '../src/components/item.css';
 
 html {
-  --vaadin-item-css-inject: 1;
-  --vaadin-item-css-inject-modules:
+  --vaadin-item-lumo-inject: 1;
+  --vaadin-item-lumo-inject-modules:
     lumo_mixins_base-layer-reset,
     lumo_components_item;
 }

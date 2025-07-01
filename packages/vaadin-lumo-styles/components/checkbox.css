@@ -8,8 +8,8 @@
 @import '../src/components/checkbox.css';
 
 html {
-  --vaadin-checkbox-css-inject: 1;
-  --vaadin-checkbox-css-inject-modules:
+  --vaadin-checkbox-lumo-inject: 1;
+  --vaadin-checkbox-lumo-inject-modules:
     lumo_mixins_base-layer-reset,
     lumo_mixins_checkable-field,
     lumo_components_checkbox;

@@ -10,8 +10,8 @@
 @import './button.css';
 
 html {
-  --vaadin-confirm-dialog-overlay-css-inject: 1;
-  --vaadin-confirm-dialog-overlay-css-inject-modules:
+  --vaadin-confirm-dialog-overlay-lumo-inject: 1;
+  --vaadin-confirm-dialog-overlay-lumo-inject-modules:
     lumo_mixins_base-layer-reset,
     lumo_mixins_overlay,
     lumo_components_dialog-overlay,

@@ -7,8 +7,8 @@
 @import '../src/components/icon.css';
 
 html {
-  --vaadin-icon-css-inject: 1;
-  --vaadin-icon-css-inject-modules:
+  --vaadin-icon-lumo-inject: 1;
+  --vaadin-icon-lumo-inject-modules:
     lumo_mixins_base-layer-reset,
     lumo_components_icon;
 }

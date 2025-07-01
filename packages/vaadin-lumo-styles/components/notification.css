@@ -8,13 +8,13 @@
 @import '../src/components/notification-container.css';
 
 html {
-  --vaadin-notification-container-css-inject: 1;
-  --vaadin-notification-container-css-inject-modules:
+  --vaadin-notification-container-lumo-inject: 1;
+  --vaadin-notification-container-lumo-inject-modules:
     lumo_mixins_base-layer-reset,
     lumo_components_notification-container;
 
-  --vaadin-notification-card-css-inject: 1;
-  --vaadin-notification-card-css-inject-modules:
+  --vaadin-notification-card-lumo-inject: 1;
+  --vaadin-notification-card-lumo-inject-modules:
     lumo_mixins_base-layer-reset,
     lumo_components_notification-card;
 }

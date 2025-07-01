@@ -8,7 +8,7 @@ import { ButtonMixin } from '@vaadin/button/src/vaadin-button-mixin.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
-import { CSSInjectionMixin } from '@vaadin/vaadin-themable-mixin/css-injection-mixin.js';
+import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { passwordFieldButton } from './styles/vaadin-password-field-button-core-styles.js';
 
@@ -22,7 +22,7 @@ import { passwordFieldButton } from './styles/vaadin-password-field-button-core-
  * @mixes ThemableMixin
  * @private
  */
-class PasswordFieldButton extends ButtonMixin(DirMixin(CSSInjectionMixin(ThemableMixin(PolylitMixin(LitElement))))) {
+class PasswordFieldButton extends ButtonMixin(DirMixin(LumoInjectionMixin(ThemableMixin(PolylitMixin(LitElement))))) {
   static get is() {
     return 'vaadin-password-field-button';
   }

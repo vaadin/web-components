@@ -1,7 +1,7 @@
 html,
 :host {
-  --test-foo-css-inject: 1;
-  --test-foo-css-inject-modules: lumo_foo;
+  --test-foo-lumo-inject: 1;
+  --test-foo-lumo-inject-modules: lumo_foo;
 }
 
 @media lumo_foo {

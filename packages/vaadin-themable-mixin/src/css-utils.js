@@ -17,7 +17,7 @@ import { adoptStyles } from 'lit';
 function getEffectiveStyles(component) {
   const componentClass = component.constructor;
 
-  const styleSheet = component.__cssInjectorStyleSheet;
+  const styleSheet = component.__lumoInjectorStyleSheet;
   if (styleSheet) {
     return (componentClass.baseStyles ?? componentClass.themeStyles)
       ? [...componentClass.baseStyles, styleSheet, ...componentClass.themeStyles]
@@ -45,23 +45,23 @@ export function applyInstanceStyles(component) {
  * @param {HTMLElement} component
  * @param {CSSStyleSheet} styleSheet
  */
-export function injectStyleSheet(component, styleSheet) {
+export function injectLumoStyleSheet(component, styleSheet) {
   // Store the new stylesheet so that it can be removed later.
-  component.__cssInjectorStyleSheet = styleSheet;
+  component.__lumoInjectorStyleSheet = styleSheet;
   applyInstanceStyles(component);
 }
 
 /**
  * Removes the stylesheet from the component's shadow root that was added
- * by the `injectStyleSheet` function.
+ * by the `injectLumoStyleSheet` function.
  *
  * @param {HTMLElement} component
  */
-export function cleanupStyleSheet(component) {
+export function cleanupLumoStyleSheet(component) {
   const adoptedStyleSheets = component.shadowRoot.adoptedStyleSheets.filter(
-    (s) => s !== component.__cssInjectorStyleSheet,
+    (s) => s !== component.__lumoInjectorStyleSheet,
   );
 
   component.shadowRoot.adoptedStyleSheets = adoptedStyleSheets;
-  component.__cssInjectorStyleSheet = undefined;
+  component.__lumoInjectorStyleSheet = undefined;
 }

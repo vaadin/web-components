@@ -3,9 +3,9 @@
  * Copyright (c) 2021 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { parseStyleSheets } from './css-modules.js';
 import { CSSPropertyObserver } from './css-property-observer.js';
-import { cleanupStyleSheet, injectStyleSheet } from './css-utils.js';
+import { cleanupLumoStyleSheet, injectLumoStyleSheet } from './css-utils.js';
+import { parseStyleSheets } from './lumo-modules.js';
 
 /**
  * Implements auto-injection of CSS styles from document style sheets
@@ -34,26 +34,26 @@ import { cleanupStyleSheet, injectStyleSheet } from './css-utils.js';
  * }
  *
  * html {
- *   --vaadin-text-field-css-inject: 1;
- *   --vaadin-text-field-css-inject-modules:
+ *   --vaadin-text-field-lumo-inject: 1;
+ *   --vaadin-text-field-lumo-inject-modules:
  *      lumo_base-field,
  *      lumo_text-field;
  *
- *   --vaadin-email-field-css-inject: 1;
- *   --vaadin-email-field-css-inject-modules:
+ *   --vaadin-email-field-lumo-inject: 1;
+ *   --vaadin-email-field-lumo-inject-modules:
  *      lumo_base-field,
  *      lumo_email-field;
  * }
  * ```
  *
- * The class observes the custom property `--{tagName}-css-inject`,
+ * The class observes the custom property `--{tagName}-lumo-inject`,
  * which indicates whether styles are present for the given component
  * in the document style sheets. When the property is set to `1`, the
  * class recursively searches all document style sheets for CSS modules
- * listed in the `--{tagName}-css-inject-modules` property that apply to
+ * listed in the `--{tagName}-lumo-inject-modules` property that apply to
  * the given component tag name. The found rules are then injected
  * into the component's Shadow DOM using the `adoptedStyleSheets` API,
- * in the order specified in the `--{tagName}-css-inject-modules` property.
+ * in the order specified in the `--{tagName}-lumo-inject-modules` property.
  * The same module can be used in multiple components.
  *
  * The class also removes the injected styles when the property is set to `0`.
@@ -67,7 +67,7 @@ import { cleanupStyleSheet, injectStyleSheet } from './css-utils.js';
  *
  * @private
  */
-export class CSSInjector {
+export class LumoInjector {
   /** @type {Document | ShadowRoot} */
   #root;
 
@@ -79,8 +79,8 @@ export class CSSInjector {
 
   constructor(root = document) {
     this.#root = root;
-    this.#cssPropertyObserver = new CSSPropertyObserver(this.#root, 'vaadin-css-injector', (propertyName) => {
-      const tagName = propertyName.slice(2).replace('-css-inject', '');
+    this.#cssPropertyObserver = new CSSPropertyObserver(this.#root, 'vaadin-lumo-injector', (propertyName) => {
+      const tagName = propertyName.slice(2).replace('-lumo-inject', '');
       this.#updateComponentStyleSheet(tagName);
     });
   }
@@ -89,21 +89,21 @@ export class CSSInjector {
    * Adds a component to the list of elements monitored for style injection.
    * If the styles have already been detected, they are injected into the
    * component's shadow DOM immediately. Otherwise, the class watches the
-   * custom property `--{tagName}-css-inject` to trigger injection when
+   * custom property `--{tagName}-lumo-inject` to trigger injection when
    * the styles are added to the document or root element.
    *
    * @param {HTMLElement} component
    */
   componentConnected(component) {
-    const { is: tagName, cssInjectPropName } = component.constructor;
+    const { is: tagName, lumoInjectPropName } = component.constructor;
 
     const stylesheet = this.#styleSheetsByTag.get(tagName) ?? new CSSStyleSheet();
-    injectStyleSheet(component, stylesheet);
+    injectLumoStyleSheet(component, stylesheet);
     this.#styleSheetsByTag.set(tagName, stylesheet);
 
     this.#updateComponentStyleSheet(tagName);
 
-    this.#cssPropertyObserver.observe(cssInjectPropName);
+    this.#cssPropertyObserver.observe(lumoInjectPropName);
   }
 
   /**
@@ -113,7 +113,7 @@ export class CSSInjector {
    * @param {HTMLElement} component
    */
   componentDisconnected(component) {
-    cleanupStyleSheet(component);
+    cleanupLumoStyleSheet(component);
   }
 
   #updateComponentStyleSheet(tagName) {

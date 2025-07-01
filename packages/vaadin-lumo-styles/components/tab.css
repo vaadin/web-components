@@ -7,8 +7,8 @@
 @import '../src/components/tab.css';
 
 html {
-  --vaadin-tab-css-inject: 1;
-  --vaadin-tab-css-inject-modules:
+  --vaadin-tab-lumo-inject: 1;
+  --vaadin-tab-lumo-inject-modules:
     lumo_mixins_base-layer-reset,
     lumo_components_tab;
 }

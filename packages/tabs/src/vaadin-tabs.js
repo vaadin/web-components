@@ -8,7 +8,7 @@ import { html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
-import { CSSInjectionMixin } from '@vaadin/vaadin-themable-mixin/css-injection-mixin.js';
+import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { tabsStyles } from './styles/vaadin-tabs-core-styles.js';
 import { TabsMixin } from './vaadin-tabs-mixin.js';
@@ -53,7 +53,7 @@ import { TabsMixin } from './vaadin-tabs-mixin.js';
  * @mixes TabsMixin
  * @mixes ThemableMixin
  */
-class Tabs extends TabsMixin(ElementMixin(ThemableMixin(CSSInjectionMixin(PolylitMixin(LitElement))))) {
+class Tabs extends TabsMixin(ElementMixin(ThemableMixin(LumoInjectionMixin(PolylitMixin(LitElement))))) {
   static get is() {
     return 'vaadin-tabs';
   }

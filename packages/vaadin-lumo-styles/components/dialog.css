@@ -9,8 +9,8 @@
 @import '../src/components/dialog-overlay.css';
 
 html {
-  --vaadin-dialog-overlay-css-inject: 1;
-  --vaadin-dialog-overlay-css-inject-modules:
+  --vaadin-dialog-overlay-lumo-inject: 1;
+  --vaadin-dialog-overlay-lumo-inject-modules:
     lumo_mixins_base-layer-reset,
     lumo_mixins_overlay,
     lumo_mixins_resizable-overlay,

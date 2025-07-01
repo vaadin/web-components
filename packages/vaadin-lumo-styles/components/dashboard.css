@@ -12,31 +12,31 @@
 @import '../src/components/dashboard.css';
 
 html {
-  --vaadin-dashboard-css-inject: 1;
-  --vaadin-dashboard-css-inject-modules:
+  --vaadin-dashboard-lumo-inject: 1;
+  --vaadin-dashboard-lumo-inject-modules:
     lumo_mixins_base-layer-reset,
     lumo_components_dashboard-layout,
     lumo_components_dashboard;
 
-  --vaadin-dashboard-widget-css-inject: 1;
-  --vaadin-dashboard-widget-css-inject-modules:
+  --vaadin-dashboard-widget-lumo-inject: 1;
+  --vaadin-dashboard-widget-lumo-inject-modules:
     lumo_mixins_base-layer-reset,
     lumo_mixins_dashboard-item,
     lumo_components_dashboard-widget;
 
-  --vaadin-dashboard-section-css-inject: 1;
-  --vaadin-dashboard-section-css-inject-modules:
+  --vaadin-dashboard-section-lumo-inject: 1;
+  --vaadin-dashboard-section-lumo-inject-modules:
     lumo_mixins_base-layer-reset,
     lumo_mixins_dashboard-item,
     lumo_components_dashboard-section;
 
-  --vaadin-dashboard-layout-css-inject: 1;
-  --vaadin-dashboard-layout-css-inject-modules:
+  --vaadin-dashboard-layout-lumo-inject: 1;
+  --vaadin-dashboard-layout-lumo-inject-modules:
     lumo_mixins_base-layer-reset,
     lumo_components_dashboard-layout;
 
-  --vaadin-dashboard-button-css-inject: 1;
-  --vaadin-dashboard-button-css-inject-modules:
+  --vaadin-dashboard-button-lumo-inject: 1;
+  --vaadin-dashboard-button-lumo-inject-modules:
     lumo_mixins_base-layer-reset,
     lumo_components_button;
 }

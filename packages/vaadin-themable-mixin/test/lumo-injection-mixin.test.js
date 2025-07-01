@@ -1,10 +1,10 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextRender, oneEvent } from '@vaadin/testing-helpers';
 import { css, html, LitElement } from 'lit';
-import { CSSInjectionMixin } from '../css-injection-mixin.js';
+import { LumoInjectionMixin } from '../lumo-injection-mixin.js';
 import { registerStyles, ThemableMixin } from '../vaadin-themable-mixin.js';
 
-class TestFoo extends CSSInjectionMixin(ThemableMixin(LitElement)) {
+class TestFoo extends LumoInjectionMixin(ThemableMixin(LitElement)) {
   static get is() {
     return 'test-foo';
   }
@@ -33,7 +33,7 @@ class TestFoo extends CSSInjectionMixin(ThemableMixin(LitElement)) {
 
 customElements.define(TestFoo.is, TestFoo);
 
-class TestBar extends CSSInjectionMixin(LitElement) {
+class TestBar extends LumoInjectionMixin(LitElement) {
   static get is() {
     return 'test-bar';
   }
@@ -67,8 +67,8 @@ customElements.define(TestBaz.is, TestBaz);
 
 const TEST_FOO_STYLES = `
   html, :host {
-    --test-foo-css-inject: 1;
-    --test-foo-css-inject-modules: lumo_foo, lumo_non-existing-module;
+    --test-foo-lumo-inject: 1;
+    --test-foo-lumo-inject-modules: lumo_foo, lumo_non-existing-module;
   }
 
   @media lumo_foo {
@@ -82,11 +82,11 @@ function createTestFooStyleSheet() {
   const path = import.meta.url.split('/').slice(0, -1).join('/');
   const link = document.createElement('link');
   link.rel = 'stylesheet';
-  link.href = `${path}/css-injection-test-foo.css`;
+  link.href = `${path}/lumo-injection-test-foo.css`;
   return link;
 }
 
-describe('CSS injection', () => {
+describe('Lumo injection', () => {
   let element, content;
 
   async function contentTransition() {

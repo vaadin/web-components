@@ -1,11 +1,11 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import { parseStyleSheets } from '../src/css-modules.js';
+import { parseStyleSheets } from '../src/lumo-modules.js';
 
 const BASE_PATH = import.meta.url.split('/').slice(0, -1).join('/');
 
-describe('CSS modules', () => {
+describe('Lumo modules', () => {
   it('should extract modules defined via @media rules', () => {
     fixtureSync(`
       <style>
@@ -40,8 +40,8 @@ describe('CSS modules', () => {
   it('should extract modules defined via @import rules', async () => {
     const style = fixtureSync(`
       <style>
-        @import '${BASE_PATH}/css-modules-test-global.css';
-        @import '${BASE_PATH}/css-modules-test-global.css' lumo_global;
+        @import '${BASE_PATH}/lumo-modules-test-global.css';
+        @import '${BASE_PATH}/lumo-modules-test-global.css' lumo_global;
       </style>
     `);
     await oneEvent(style, 'load');
@@ -55,12 +55,12 @@ describe('CSS modules', () => {
     fixtureSync(`
       <style>
         html {
-          --vaadin-text-field-css-inject-modules: lumo_base-field, lumo_text-field;
+          --vaadin-text-field-lumo-inject-modules: lumo_base-field, lumo_text-field;
         }
       </style>
       <style>
         html {
-          --vaadin-email-field-css-inject-modules: lumo_base-field, lumo_email-field;
+          --vaadin-email-field-lumo-inject-modules: lumo_base-field, lumo_email-field;
         }
       </style>
     `);
@@ -74,8 +74,8 @@ describe('CSS modules', () => {
   it('should extract modules defined inside imported stylesheets', async () => {
     const style = fixtureSync(`
       <style>
-        @import '${BASE_PATH}/css-modules-test-email-field.css';
-        @import '${BASE_PATH}/css-modules-test-text-field.css';
+        @import '${BASE_PATH}/lumo-modules-test-email-field.css';
+        @import '${BASE_PATH}/lumo-modules-test-text-field.css';
       </style>
     `);
     await oneEvent(style, 'load');
@@ -90,8 +90,8 @@ describe('CSS modules', () => {
   it('should extract tag-to-modules mappings defined inside imported stylesheets', async () => {
     const style = fixtureSync(`
       <style>
-        @import '${BASE_PATH}/css-modules-test-email-field.css';
-        @import '${BASE_PATH}/css-modules-test-text-field.css';
+        @import '${BASE_PATH}/lumo-modules-test-email-field.css';
+        @import '${BASE_PATH}/lumo-modules-test-text-field.css';
       </style>
     `);
     await oneEvent(style, 'load');
@@ -143,13 +143,13 @@ describe('CSS modules', () => {
       const style0 = new CSSStyleSheet();
       style0.replaceSync(`
         html {
-          --vaadin-text-field-css-inject-modules: lumo_base-field, lumo_text-field;
+          --vaadin-text-field-lumo-inject-modules: lumo_base-field, lumo_text-field;
         }
       `);
       const style1 = new CSSStyleSheet();
       style1.replaceSync(`
         html {
-          --vaadin-email-field-css-inject-modules: lumo_base-field, lumo_email-field;
+          --vaadin-email-field-lumo-inject-modules: lumo_base-field, lumo_email-field;
         }
       `);
       document.adoptedStyleSheets = [style0, style1];
@@ -212,7 +212,7 @@ describe('CSS modules', () => {
       const adoptedStyleSheet = new CSSStyleSheet();
       adoptedStyleSheet.replaceSync(`
         :host  {
-          --vaadin-text-field-css-inject-modules: lumo_text-field;
+          --vaadin-text-field-lumo-inject-modules: lumo_text-field;
         }
       `);
       root.shadowRoot.adoptedStyleSheets = [adoptedStyleSheet];
@@ -220,7 +220,7 @@ describe('CSS modules', () => {
       root.shadowRoot.innerHTML = `
         <style>
           :host {
-            --vaadin-email-field-css-inject-modules: lumo_email-field;
+            --vaadin-email-field-lumo-inject-modules: lumo_email-field;
           }
         </style>
       `;

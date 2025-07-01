@@ -14,22 +14,22 @@
 @import '../src/components/list-box.css';
 
 html {
-  --vaadin-context-menu-overlay-css-inject: 1;
-  --vaadin-context-menu-overlay-css-inject-modules:
+  --vaadin-context-menu-overlay-lumo-inject: 1;
+  --vaadin-context-menu-overlay-lumo-inject-modules:
     lumo_mixins_base-layer-reset,
     lumo_mixins_overlay,
     lumo_mixins_menu-overlay-core,
     lumo_mixins_menu-overlay-ext,
     lumo_components_context-menu-overlay;
 
-  --vaadin-context-menu-list-box-css-inject: 1;
-  --vaadin-context-menu-list-box-css-inject-modules:
+  --vaadin-context-menu-list-box-lumo-inject: 1;
+  --vaadin-context-menu-list-box-lumo-inject-modules:
     lumo_mixins_base-layer-reset,
     lumo_components_list-box,
     lumo_components_context-menu-list-box;
 
-  --vaadin-context-menu-item-css-inject: 1;
-  --vaadin-context-menu-item-css-inject-modules:
+  --vaadin-context-menu-item-lumo-inject: 1;
+  --vaadin-context-menu-item-lumo-inject-modules:
     lumo_mixins_base-layer-reset,
     lumo_components_item,
     lumo_components_context-menu-item;

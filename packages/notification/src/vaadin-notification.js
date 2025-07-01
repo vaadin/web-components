@@ -8,7 +8,7 @@ import { ifDefined } from 'lit/directives/if-defined.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
-import { CSSInjectionMixin } from '@vaadin/vaadin-themable-mixin/css-injection-mixin.js';
+import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { notificationCardStyles } from './styles/vaadin-notification-card-core-styles.js';
 import { notificationContainerStyles } from './styles/vaadin-notification-container-core-styles.js';
@@ -25,7 +25,7 @@ import { NotificationContainerMixin, NotificationMixin } from './vaadin-notifica
  * @private
  */
 class NotificationContainer extends NotificationContainerMixin(
-  ThemableMixin(ElementMixin(CSSInjectionMixin(PolylitMixin(LitElement)))),
+  ThemableMixin(ElementMixin(LumoInjectionMixin(PolylitMixin(LitElement)))),
 ) {
   static get is() {
     return 'vaadin-notification-container';
@@ -63,7 +63,7 @@ class NotificationContainer extends NotificationContainerMixin(
  * @mixes ThemableMixin
  * @private
  */
-class NotificationCard extends ThemableMixin(CSSInjectionMixin(PolylitMixin(LitElement))) {
+class NotificationCard extends ThemableMixin(LumoInjectionMixin(PolylitMixin(LitElement))) {
   static get is() {
     return 'vaadin-notification-card';
   }
@@ -142,7 +142,9 @@ class NotificationCard extends ThemableMixin(CSSInjectionMixin(PolylitMixin(LitE
  * @mixes NotificationMixin
  * @mixes ElementMixin
  */
-class Notification extends NotificationMixin(ElementMixin(ThemableMixin(CSSInjectionMixin(PolylitMixin(LitElement))))) {
+class Notification extends NotificationMixin(
+  ElementMixin(ThemableMixin(LumoInjectionMixin(PolylitMixin(LitElement)))),
+) {
   static get is() {
     return 'vaadin-notification';
   }

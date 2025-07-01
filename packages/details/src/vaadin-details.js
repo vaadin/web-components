@@ -8,7 +8,7 @@ import { css, html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
-import { CSSInjectionMixin } from '@vaadin/vaadin-themable-mixin/css-injection-mixin.js';
+import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { DetailsBaseMixin } from './vaadin-details-base-mixin.js';
 
@@ -52,7 +52,7 @@ import { DetailsBaseMixin } from './vaadin-details-base-mixin.js';
  * @mixes ElementMixin
  * @mixes ThemableMixin
  */
-class Details extends DetailsBaseMixin(ElementMixin(CSSInjectionMixin(ThemableMixin(PolylitMixin(LitElement))))) {
+class Details extends DetailsBaseMixin(ElementMixin(LumoInjectionMixin(ThemableMixin(PolylitMixin(LitElement))))) {
   static get is() {
     return 'vaadin-details';
   }
