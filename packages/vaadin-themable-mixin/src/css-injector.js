@@ -120,7 +120,7 @@ export class CSSInjector {
     const { tags, modules } = parseStyleSheets(this.#rootStyleSheets);
 
     const cssText = (tags.get(tagName) ?? [])
-      .flatMap((moduleName) => modules.get(moduleName))
+      .flatMap((moduleName) => modules.get(moduleName) ?? [])
       .map((rule) => rule.cssText)
       .join('\n');
 
