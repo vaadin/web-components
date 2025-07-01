@@ -1,6 +1,7 @@
+import '@vaadin/vaadin-lumo-styles/color.js';
+import '@vaadin/vaadin-lumo-styles/sizing.js';
 import '@vaadin/vaadin-lumo-styles/spacing.js';
-import { color } from '@vaadin/vaadin-lumo-styles/color.js';
-import { typography } from '@vaadin/vaadin-lumo-styles/typography.js';
+import '@vaadin/vaadin-lumo-styles/typography.js';
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 const loginFormWrapper = css`
@@ -89,6 +90,6 @@ const loginFormWrapper = css`
   }
 `;
 
-registerStyles('vaadin-login-form-wrapper', [color, typography, loginFormWrapper], {
+registerStyles('vaadin-login-form-wrapper', loginFormWrapper, {
   moduleId: 'lumo-login-form-wrapper',
 });

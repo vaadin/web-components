@@ -39,7 +39,7 @@ class LoginOverlayWrapper extends LoginOverlayWrapperMixin(ThemableMixin(CSSInje
               <slot name="title">
                 <div part="title" role="heading" aria-level="${this.headingLevel}">${this.title}</div>
               </slot>
-              <p part="description">${this.description}</p>
+              <div part="description">${this.description}</div>
             </div>
             <div part="form">
               <slot></slot>

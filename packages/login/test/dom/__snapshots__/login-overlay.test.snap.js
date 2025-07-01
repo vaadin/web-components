@@ -532,9 +532,9 @@ snapshots["vaadin-login-overlay shadow default"] =
             App name
           </div>
         </slot>
-        <p part="description">
+        <div part="description">
           Application description
-        </p>
+        </div>
       </div>
       <div part="form">
         <slot>
@@ -572,9 +572,9 @@ snapshots["vaadin-login-overlay shadow i18n"] =
             Sovelluksen nimi
           </div>
         </slot>
-        <p part="description">
+        <div part="description">
           Sovelluksen kuvaus
-        </p>
+        </div>
       </div>
       <div part="form">
         <slot>

@@ -47,6 +47,10 @@
   color: var(--lumo-error-text-color);
 }
 
+strong {
+  font-weight: 600;
+}
+
 ::slotted([slot='submit']) {
   margin-top: var(--lumo-space-l);
   margin-bottom: var(--lumo-space-s);
