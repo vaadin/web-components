@@ -30,9 +30,16 @@ function isTagScopedMedia(media) {
  * @return {Array<CSSMediaRule | CSSImportRule>}
  */
 function extractMediaRulesFromStyleSheet(styleSheet, predicate) {
-  const result = [];
+  let cssRules;
+  try {
+    cssRules = styleSheet.cssRules;
+  } catch {
+    // External stylesheets may not be accessible due to CORS security restrictions.
+    cssRules = [];
+  }
 
-  for (const rule of styleSheet.cssRules) {
+  const result = [];
+  for (const rule of cssRules) {
     const ruleType = rule.constructor.name;
 
     if (ruleType === 'CSSImportRule') {
@@ -49,7 +56,6 @@ function extractMediaRulesFromStyleSheet(styleSheet, predicate) {
       }
     }
   }
-
   return result;
 }
 
