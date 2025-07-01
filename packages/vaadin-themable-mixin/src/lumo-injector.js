@@ -4,7 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { CSSPropertyObserver } from './css-property-observer.js';
-import { cleanupLumoStyleSheet, injectLumoStyleSheet } from './css-utils.js';
+import { cleanupLumoStyleSheet, injectLumoStyleSheet, applyInstanceStyles } from './css-utils.js';
 import { parseStyleSheets } from './lumo-modules.js';
 
 /**
@@ -77,6 +77,9 @@ export class LumoInjector {
   /** @type {Map<string, CSSStyleSheet>} */
   #styleSheetsByTag = new Map();
 
+  /** @type {Map<string, Set<HTMLElement>>} */
+  #componentsByTag = new Map();
+
   constructor(root = document) {
     this.#root = root;
     this.#cssPropertyObserver = new CSSPropertyObserver(this.#root, 'vaadin-lumo-injector', (propertyName) => {
@@ -95,15 +98,14 @@ export class LumoInjector {
    * @param {HTMLElement} component
    */
   componentConnected(component) {
-    const { is: tagName, lumoInjectPropName } = component.constructor;
+    const { is: tagName } = component.constructor;
 
-    const stylesheet = this.#styleSheetsByTag.get(tagName) ?? new CSSStyleSheet();
-    injectLumoStyleSheet(component, stylesheet);
-    this.#styleSheetsByTag.set(tagName, stylesheet);
+    this.#componentsByTag.set(tagName, this.#componentsByTag.get(tagName) ?? new Set());
+    this.#componentsByTag.get(tagName).add(component);
 
     this.#updateComponentStyleSheet(tagName);
 
-    this.#cssPropertyObserver.observe(lumoInjectPropName);
+    this.#cssPropertyObserver.observe(`--${tagName}-lumo-inject`);
   }
 
   /**
@@ -113,7 +115,11 @@ export class LumoInjector {
    * @param {HTMLElement} component
    */
   componentDisconnected(component) {
-    cleanupLumoStyleSheet(component);
+    const { is: tagName } = component.constructor;
+    this.#componentsByTag.get(tagName)?.delete(component);
+
+    component.__lumoInjectorStyleSheet = undefined;
+    applyInstanceStyles(component);
   }
 
   #updateComponentStyleSheet(tagName) {
@@ -125,8 +131,14 @@ export class LumoInjector {
       .join('\n');
 
     const stylesheet = this.#styleSheetsByTag.get(tagName) ?? new CSSStyleSheet();
+    stylesheet.disabled = !cssText;
     stylesheet.replaceSync(cssText);
     this.#styleSheetsByTag.set(tagName, stylesheet);
+
+    this.#componentsByTag.get(tagName)?.forEach((component) => {
+      component.__lumoInjectorStyleSheet = stylesheet;
+      applyInstanceStyles(component);
+    });
   }
 
   get #rootStyleSheets() {

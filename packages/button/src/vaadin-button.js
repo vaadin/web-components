@@ -52,6 +52,12 @@ class Button extends ButtonMixin(ElementMixin(LumoInjectionMixin(ThemableMixin(P
     return 'vaadin-button';
   }
 
+  static get cssInjector() {
+    return {
+      baseStylesDisabled: false,
+    };
+  }
+
   static get styles() {
     return buttonStyles;
   }
