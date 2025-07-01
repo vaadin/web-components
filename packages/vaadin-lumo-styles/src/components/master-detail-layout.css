@@ -1,0 +1,26 @@
+/**
+ * @license
+ * Copyright (c) 2000 - 2025 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+@media lumo_components_master-detail-layout {
+  :host(:is([drawer], [stack])) [part='detail'] {
+    background-color: var(--lumo-base-color);
+  }
+
+  :host([drawer]) [part='detail'] {
+    box-shadow: var(--lumo-box-shadow-s);
+  }
+
+  :host([drawer][orientation='horizontal']) [part='detail'] {
+    border-inline-start: 1px solid var(--lumo-contrast-10pct);
+  }
+
+  :host([drawer][orientation='vertical']) [part='detail'] {
+    border-block-start: 1px solid var(--lumo-contrast-10pct);
+  }
+
+  :host([drawer]) [part='backdrop'] {
+    background-color: var(--lumo-shade-20pct);
+  }
+}

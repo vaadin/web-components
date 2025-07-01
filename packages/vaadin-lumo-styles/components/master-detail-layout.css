@@ -1,0 +1,11 @@
+/**
+ * @license
+ * Copyright (c) 2000 - 2025 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+@import '../src/components/master-detail-layout.css';
+
+html {
+  --vaadin-master-detail-layout-css-inject: 1;
+  --vaadin-master-detail-layout-css-inject-modules: lumo_components_master-detail-layout;
+}

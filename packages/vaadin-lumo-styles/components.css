@@ -29,8 +29,8 @@
 @import './components/form-item.css';
 @import './components/form-layout.css';
 @import './components/grid-filter-column.css';
-@import './components/grid-pro.css';
 @import './components/grid-pro-edit-column.css';
+@import './components/grid-pro.css';
 @import './components/grid-selection-column.css';
 @import './components/grid-sort-column.css';
 @import './components/grid-tree-column.css';
@@ -43,6 +43,7 @@
 @import './components/list-box.css';
 @import './components/login.css';
 @import './components/map.css';
+@import './components/master-detail-layout.css';
 @import './components/menu-bar.css';
 @import './components/message-input.css';
 @import './components/message-list.css';
