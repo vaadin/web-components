@@ -3,32 +3,34 @@
  * Copyright (c) 2017 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-.vaadin-date-time-picker-container {
-  --vaadin-field-default-width: auto;
-}
+@media lumo_components_date-time-picker {
+  .vaadin-date-time-picker-container {
+    --vaadin-field-default-width: auto;
+  }
 
-.slots {
-  display: flex;
-  --vaadin-field-default-width: 12em;
-}
+  .slots {
+    display: flex;
+    --vaadin-field-default-width: 12em;
+  }
 
-.slots ::slotted([slot='date-picker']) {
-  min-width: 0;
-  flex: 1 1 auto;
-}
+  .slots ::slotted([slot='date-picker']) {
+    min-width: 0;
+    flex: 1 1 auto;
+  }
 
-.slots ::slotted([slot='time-picker']) {
-  min-width: 0;
-  flex: 1 1.65 auto;
-}
+  .slots ::slotted([slot='time-picker']) {
+    min-width: 0;
+    flex: 1 1.65 auto;
+  }
 
-::slotted([slot='date-picker']) {
-  margin-inline-end: 2px;
-  --vaadin-input-field-top-end-radius: 0;
-  --vaadin-input-field-bottom-end-radius: 0;
-}
+  ::slotted([slot='date-picker']) {
+    margin-inline-end: 2px;
+    --vaadin-input-field-top-end-radius: 0;
+    --vaadin-input-field-bottom-end-radius: 0;
+  }
 
-::slotted([slot='time-picker']) {
-  --vaadin-input-field-top-start-radius: 0;
-  --vaadin-input-field-bottom-start-radius: 0;
+  ::slotted([slot='time-picker']) {
+    --vaadin-input-field-top-start-radius: 0;
+    --vaadin-input-field-bottom-start-radius: 0;
+  }
 }

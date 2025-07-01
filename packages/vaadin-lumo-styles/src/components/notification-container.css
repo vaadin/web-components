@@ -3,49 +3,51 @@
  * Copyright (c) 2017 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-:host {
-  position: fixed;
-  z-index: 1000;
-  inset: 0;
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  pointer-events: none;
-}
-
-[region-group] {
-  flex: 1 1 0%;
-  display: flex;
-}
-
-[region-group='top'] {
-  align-items: flex-start;
-}
-
-[region-group='bottom'] {
-  align-items: flex-end;
-}
-
-[region-group] > [region] {
-  flex: 1 1 0%;
-}
-
-@media (max-width: 420px) {
-  [region-group] {
+@media lumo_components_notification-container {
+  :host {
+    position: fixed;
+    z-index: 1000;
+    inset: 0;
+    box-sizing: border-box;
+    display: flex;
     flex-direction: column;
     align-items: stretch;
+    pointer-events: none;
+  }
+
+  [region-group] {
+    flex: 1 1 0%;
+    display: flex;
   }
 
   [region-group='top'] {
-    justify-content: flex-start;
+    align-items: flex-start;
   }
 
   [region-group='bottom'] {
-    justify-content: flex-end;
+    align-items: flex-end;
   }
 
   [region-group] > [region] {
-    flex: initial;
+    flex: 1 1 0%;
+  }
+
+  @media (max-width: 420px) {
+    [region-group] {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    [region-group='top'] {
+      justify-content: flex-start;
+    }
+
+    [region-group='bottom'] {
+      justify-content: flex-end;
+    }
+
+    [region-group] > [region] {
+      flex: initial;
+    }
   }
 }

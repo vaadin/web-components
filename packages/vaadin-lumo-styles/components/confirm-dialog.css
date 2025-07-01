@@ -3,13 +3,17 @@
  * Copyright (c) 2017 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+@import '../src/mixins/base-layer-reset.css';
+@import '../src/mixins/overlay.css';
+@import '../src/components/confirm-dialog-overlay.css';
+@import '../src/components/dialog-overlay.css';
 @import './button.css';
-
-@import '../src/mixins/base-layer-reset.css' vaadin-confirm-dialog-overlay;
-@import '../src/mixins/overlay.css' vaadin-confirm-dialog-overlay;
-@import '../src/components/dialog-overlay.css' vaadin-confirm-dialog-overlay;
-@import '../src/components/confirm-dialog-overlay.css' vaadin-confirm-dialog-overlay;
 
 html {
   --vaadin-confirm-dialog-overlay-css-inject: 1;
+  --vaadin-confirm-dialog-overlay-css-inject-modules:
+    lumo_mixins_base-layer-reset,
+    lumo_mixins_overlay,
+    lumo_components_dialog-overlay,
+    lumo_components_confirm-dialog-overlay;
 }

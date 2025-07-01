@@ -5,5 +5,13 @@
   "tabWidth": 2,
   "singleQuote": true,
   "htmlWhitespaceSensitivity": "strict",
-  "endOfLine": "auto"
+  "endOfLine": "auto",
+  "overrides": [
+    {
+      "files": ["packages/vaadin-lumo-styles/components/*.css"],
+      "options": {
+        "printWidth": 40
+      }
+    }
+  ]
 }

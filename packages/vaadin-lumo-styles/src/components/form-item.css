@@ -3,32 +3,34 @@
  * Copyright (c) 2017 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-[part='label'] {
-  /* font-weight, margin-bottom, transition and line-height same as for part label in text-field */
-  color: var(--lumo-secondary-text-color);
-  font-family: var(--lumo-font-family);
-  font-size: var(--lumo-font-size-s);
-  font-weight: 500;
-  margin-top: var(--lumo-space-m);
-  margin-left: calc(var(--lumo-border-radius-m) / 4);
-  margin-bottom: var(--lumo-space-xs);
-  line-height: 1.333;
-}
+@media lumo_components_form-item {
+  [part='label'] {
+    /* font-weight, margin-bottom, transition and line-height same as for part label in text-field */
+    color: var(--lumo-secondary-text-color);
+    font-family: var(--lumo-font-family);
+    font-size: var(--lumo-font-size-s);
+    font-weight: 500;
+    margin-top: var(--lumo-space-m);
+    margin-left: calc(var(--lumo-border-radius-m) / 4);
+    margin-bottom: var(--lumo-space-xs);
+    line-height: 1.333;
+  }
 
-[part='required-indicator']::after {
-  content: var(--lumo-required-field-indicator, '\2022');
-  transition: opacity 0.2s;
-  opacity: 0;
-  color: var(--lumo-required-field-indicator-color, var(--lumo-primary-text-color));
-  position: relative;
-  width: 1em;
-  text-align: center;
-}
+  [part='required-indicator']::after {
+    content: var(--lumo-required-field-indicator, '\2022');
+    transition: opacity 0.2s;
+    opacity: 0;
+    color: var(--lumo-required-field-indicator-color, var(--lumo-primary-text-color));
+    position: relative;
+    width: 1em;
+    text-align: center;
+  }
 
-:host([required]) [part='required-indicator']::after {
-  opacity: 1;
-}
+  :host([required]) [part='required-indicator']::after {
+    opacity: 1;
+  }
 
-:host([invalid]) [part='required-indicator']::after {
-  color: var(--lumo-required-field-indicator-color, var(--lumo-error-text-color));
+  :host([invalid]) [part='required-indicator']::after {
+    color: var(--lumo-required-field-indicator-color, var(--lumo-error-text-color));
+  }
 }

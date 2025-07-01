@@ -3,6 +3,8 @@
  * Copyright (c) 2017 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-:host(:first-of-type) {
-  padding-top: var(--lumo-space-xs);
+@media lumo_components_menu-bar-overlay {
+  :host(:first-of-type) {
+    padding-top: var(--lumo-space-xs);
+  }
 }

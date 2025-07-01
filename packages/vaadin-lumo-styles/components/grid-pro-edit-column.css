@@ -3,36 +3,50 @@
  * Copyright (c) 2000 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-@import './text-field.css';
+@import '../src/mixins/base-layer-reset.css';
+@import '../src/mixins/checkable-field.css';
+@import '../src/mixins/field-base.css';
+@import '../src/mixins/field-button.css';
+@import '../src/mixins/field-error-message.css';
+@import '../src/mixins/field-helper.css';
+@import '../src/mixins/field-label.css';
+@import '../src/mixins/field-required.css';
+@import '../src/mixins/grid-pro-editor.css';
+@import '../src/components/checkbox.css';
+@import '../src/components/grid-pro-edit-select.css';
+@import '../src/components/select.css';
 @import './checkbox.css';
 @import './select.css';
-
-@import '../src/mixins/base-layer-reset.css' vaadin-grid-pro-edit-text-field;
-@import '../src/mixins/field-label.css' vaadin-grid-pro-edit-text-field;
-@import '../src/mixins/field-required.css' vaadin-grid-pro-edit-text-field;
-@import '../src/mixins/field-error-message.css' vaadin-grid-pro-edit-text-field;
-@import '../src/mixins/field-button.css' vaadin-grid-pro-edit-text-field;
-@import '../src/mixins/field-helper.css' vaadin-grid-pro-edit-text-field;
-@import '../src/mixins/field-base.css' vaadin-grid-pro-edit-text-field;
-@import '../src/mixins/grid-pro-editor.css' vaadin-grid-pro-edit-text-field;
-
-@import '../src/mixins/base-layer-reset.css' vaadin-grid-pro-edit-select;
-@import '../src/mixins/field-label.css' vaadin-grid-pro-edit-select;
-@import '../src/mixins/field-required.css' vaadin-grid-pro-edit-select;
-@import '../src/mixins/field-error-message.css' vaadin-grid-pro-edit-select;
-@import '../src/mixins/field-button.css' vaadin-grid-pro-edit-select;
-@import '../src/mixins/field-helper.css' vaadin-grid-pro-edit-select;
-@import '../src/mixins/field-base.css' vaadin-grid-pro-edit-select;
-@import '../src/mixins/grid-pro-editor.css' vaadin-grid-pro-edit-select;
-@import '../src/components/select.css' vaadin-grid-pro-edit-select;
-@import '../src/components/grid-pro-edit-select.css' vaadin-grid-pro-edit-select;
-
-@import '../src/mixins/base-layer-reset.css' vaadin-grid-pro-edit-checkbox;
-@import '../src/mixins/checkable-field.css' vaadin-grid-pro-edit-checkbox;
-@import '../src/components/checkbox.css' vaadin-grid-pro-edit-checkbox;
+@import './text-field.css';
 
 html {
   --vaadin-grid-pro-edit-text-field-css-inject: 1;
+  --vaadin-grid-pro-edit-text-field-css-inject-modules:
+    lumo_mixins_base-layer-reset,
+    lumo_mixins_field-label,
+    lumo_mixins_field-required,
+    lumo_mixins_field-error-message,
+    lumo_mixins_field-button,
+    lumo_mixins_field-helper,
+    lumo_mixins_field-base,
+    lumo_mixins_grid-pro-editor;
+
   --vaadin-grid-pro-edit-select-css-inject: 1;
+  --vaadin-grid-pro-edit-select-css-inject-modules:
+    lumo_mixins_base-layer-reset,
+    lumo_mixins_field-label,
+    lumo_mixins_field-required,
+    lumo_mixins_field-error-message,
+    lumo_mixins_field-button,
+    lumo_mixins_field-helper,
+    lumo_mixins_field-base,
+    lumo_mixins_grid-pro-editor,
+    lumo_components_select,
+    lumo_components_grid-pro-edit-select;
+
   --vaadin-grid-pro-edit-checkbox-css-inject: 1;
+  --vaadin-grid-pro-edit-checkbox-css-inject-modules:
+    lumo_mixins_base-layer-reset,
+    lumo_mixins_checkable-field,
+    lumo_components_checkbox;
 }

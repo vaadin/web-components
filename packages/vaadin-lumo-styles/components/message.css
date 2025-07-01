@@ -3,11 +3,13 @@
  * Copyright (c) 2000 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+@import '../src/mixins/base-layer-reset.css';
+@import '../src/components/message.css';
 @import './avatar.css';
-
-@import '../src/mixins/base-layer-reset.css' vaadin-message;
-@import '../src/components/message.css' vaadin-message;
 
 html {
   --vaadin-message-css-inject: 1;
+  --vaadin-message-css-inject-modules:
+    lumo_mixins_base-layer-reset,
+    lumo_components_message;
 }

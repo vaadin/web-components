@@ -3,28 +3,40 @@
  * Copyright (c) 2017 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-@import '../src/mixins/base-layer-reset.css' vaadin-dashboard-layout;
-@import '../src/components/dashboard-layout.css' vaadin-dashboard-layout;
-
-@import '../src/mixins/base-layer-reset.css' vaadin-dashboard;
-@import '../src/components/dashboard-layout.css' vaadin-dashboard;
-@import '../src/components/dashboard.css' vaadin-dashboard;
-
-@import '../src/mixins/base-layer-reset.css' vaadin-dashboard-widget;
-@import '../src/mixins/dashboard-item.css' vaadin-dashboard-widget;
-@import '../src/components/dashboard-widget.css' vaadin-dashboard-widget;
-
-@import '../src/mixins/base-layer-reset.css' vaadin-dashboard-section;
-@import '../src/mixins/dashboard-item.css' vaadin-dashboard-section;
-@import '../src/components/dashboard-section.css' vaadin-dashboard-section;
-
-@import '../src/mixins/base-layer-reset.css' vaadin-dashboard-button;
-@import '../src/components/button.css' vaadin-dashboard-button;
+@import '../src/mixins/base-layer-reset.css';
+@import '../src/mixins/dashboard-item.css';
+@import '../src/components/button.css';
+@import '../src/components/dashboard-layout.css';
+@import '../src/components/dashboard-section.css';
+@import '../src/components/dashboard-widget.css';
+@import '../src/components/dashboard.css';
 
 html {
   --vaadin-dashboard-css-inject: 1;
+  --vaadin-dashboard-css-inject-modules:
+    lumo_mixins_base-layer-reset,
+    lumo_components_dashboard-layout,
+    lumo_components_dashboard;
+
   --vaadin-dashboard-widget-css-inject: 1;
+  --vaadin-dashboard-widget-css-inject-modules:
+    lumo_mixins_base-layer-reset,
+    lumo_mixins_dashboard-item,
+    lumo_components_dashboard-widget;
+
   --vaadin-dashboard-section-css-inject: 1;
+  --vaadin-dashboard-section-css-inject-modules:
+    lumo_mixins_base-layer-reset,
+    lumo_mixins_dashboard-item,
+    lumo_components_dashboard-section;
+
   --vaadin-dashboard-layout-css-inject: 1;
+  --vaadin-dashboard-layout-css-inject-modules:
+    lumo_mixins_base-layer-reset,
+    lumo_components_dashboard-layout;
+
   --vaadin-dashboard-button-css-inject: 1;
+  --vaadin-dashboard-button-css-inject-modules:
+    lumo_mixins_base-layer-reset,
+    lumo_components_button;
 }

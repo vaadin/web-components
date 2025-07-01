@@ -3,124 +3,126 @@
  * Copyright (c) 2017 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-:host {
-  overflow: hidden;
-  display: inline-block;
-  font-family: var(--lumo-font-family);
-  font-size: var(--lumo-font-size-m);
-  line-height: var(--lumo-line-height-m);
-  -webkit-text-size-adjust: 100%;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  max-width: calc(var(--lumo-size-m) * 10);
-  background: var(--lumo-base-color) linear-gradient(var(--lumo-tint-5pct), var(--lumo-tint-5pct));
-}
+@media lumo_components_login-form-wrapper {
+  :host {
+    overflow: hidden;
+    display: inline-block;
+    font-family: var(--lumo-font-family);
+    font-size: var(--lumo-font-size-m);
+    line-height: var(--lumo-line-height-m);
+    -webkit-text-size-adjust: 100%;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    max-width: calc(var(--lumo-size-m) * 10);
+    background: var(--lumo-base-color) linear-gradient(var(--lumo-tint-5pct), var(--lumo-tint-5pct));
+  }
 
-:host([hidden]) {
-  display: none !important;
-}
+  :host([hidden]) {
+    display: none !important;
+  }
 
-[part='form'] {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  box-sizing: border-box;
-  padding: var(--lumo-space-l);
-}
-
-[part='form-title'] {
-  margin: 0;
-  margin-top: calc(var(--lumo-font-size-xxxl) - var(--lumo-font-size-xxl));
-  color: var(--lumo-header-text-color);
-  font-size: var(--lumo-font-size-xxl);
-  font-weight: 600;
-  line-height: var(--lumo-line-height-xs);
-}
-
-[part='error-message'] {
-  position: relative;
-  background-color: var(--lumo-error-color-10pct);
-  padding: var(--lumo-space-m);
-  border-radius: var(--lumo-border-radius-m);
-  margin-top: var(--lumo-space-m);
-  margin-bottom: var(--lumo-space-s);
-  color: var(--lumo-error-text-color);
-}
-
-strong {
-  font-weight: 600;
-}
-
-::slotted([slot='submit']) {
-  margin-top: var(--lumo-space-l);
-  margin-bottom: var(--lumo-space-s);
-}
-
-::slotted([slot='forgot-password']) {
-  margin: var(--lumo-space-s) auto;
-}
-
-:host(:not([dir='rtl'])) [part='error-message'] {
-  padding-left: var(--lumo-size-m);
-}
-
-:host([dir='rtl']) [part='error-message'] {
-  padding-right: var(--lumo-size-m);
-}
-
-[part='error-message']::before {
-  content: var(--lumo-icons-error);
-  font-family: lumo-icons;
-  font-size: var(--lumo-icon-size-m);
-  position: absolute;
-  width: var(--lumo-size-m);
-  height: 1em;
-  line-height: 1;
-  text-align: center;
-}
-
-:host(:not([dir='rtl'])) [part='error-message']::before {
-  /* Visual centering */
-  margin-left: calc(var(--lumo-size-m) * -0.95);
-}
-
-:host([dir='rtl']) [part='error-message']::before {
-  /* Visual centering */
-  margin-right: calc(var(--lumo-size-m) * -0.95);
-}
-
-[part='error-message-title'] {
-  display: block;
-  margin: 0 0 0.25em;
-  color: inherit;
-  line-height: var(--lumo-line-height-xs);
-}
-
-[part='error-message-description'] {
-  font-size: var(--lumo-font-size-s);
-  line-height: var(--lumo-line-height-s);
-  margin: 0;
-  opacity: 0.9;
-}
-
-[part='footer'] {
-  font-size: var(--lumo-font-size-xs);
-  line-height: var(--lumo-line-height-s);
-  color: var(--lumo-secondary-text-color);
-}
-
-:host([theme~='with-overlay']) {
-  min-height: 100%;
-  display: flex;
-  justify-content: center;
-  max-width: 100%;
-}
-
-/* Landscape small screen */
-@media only screen and (max-height: 600px) and (min-width: 600px) and (orientation: landscape) {
-  :host([theme~='with-overlay']) [part='form'] {
-    height: 100%;
+  [part='form'] {
     flex: 1;
-    padding: 2px;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    padding: var(--lumo-space-l);
+  }
+
+  [part='form-title'] {
+    margin: 0;
+    margin-top: calc(var(--lumo-font-size-xxxl) - var(--lumo-font-size-xxl));
+    color: var(--lumo-header-text-color);
+    font-size: var(--lumo-font-size-xxl);
+    font-weight: 600;
+    line-height: var(--lumo-line-height-xs);
+  }
+
+  [part='error-message'] {
+    position: relative;
+    background-color: var(--lumo-error-color-10pct);
+    padding: var(--lumo-space-m);
+    border-radius: var(--lumo-border-radius-m);
+    margin-top: var(--lumo-space-m);
+    margin-bottom: var(--lumo-space-s);
+    color: var(--lumo-error-text-color);
+  }
+
+  strong {
+    font-weight: 600;
+  }
+
+  ::slotted([slot='submit']) {
+    margin-top: var(--lumo-space-l);
+    margin-bottom: var(--lumo-space-s);
+  }
+
+  ::slotted([slot='forgot-password']) {
+    margin: var(--lumo-space-s) auto;
+  }
+
+  :host(:not([dir='rtl'])) [part='error-message'] {
+    padding-left: var(--lumo-size-m);
+  }
+
+  :host([dir='rtl']) [part='error-message'] {
+    padding-right: var(--lumo-size-m);
+  }
+
+  [part='error-message']::before {
+    content: var(--lumo-icons-error);
+    font-family: lumo-icons;
+    font-size: var(--lumo-icon-size-m);
+    position: absolute;
+    width: var(--lumo-size-m);
+    height: 1em;
+    line-height: 1;
+    text-align: center;
+  }
+
+  :host(:not([dir='rtl'])) [part='error-message']::before {
+    /* Visual centering */
+    margin-left: calc(var(--lumo-size-m) * -0.95);
+  }
+
+  :host([dir='rtl']) [part='error-message']::before {
+    /* Visual centering */
+    margin-right: calc(var(--lumo-size-m) * -0.95);
+  }
+
+  [part='error-message-title'] {
+    display: block;
+    margin: 0 0 0.25em;
+    color: inherit;
+    line-height: var(--lumo-line-height-xs);
+  }
+
+  [part='error-message-description'] {
+    font-size: var(--lumo-font-size-s);
+    line-height: var(--lumo-line-height-s);
+    margin: 0;
+    opacity: 0.9;
+  }
+
+  [part='footer'] {
+    font-size: var(--lumo-font-size-xs);
+    line-height: var(--lumo-line-height-s);
+    color: var(--lumo-secondary-text-color);
+  }
+
+  :host([theme~='with-overlay']) {
+    min-height: 100%;
+    display: flex;
+    justify-content: center;
+    max-width: 100%;
+  }
+
+  /* Landscape small screen */
+  @media only screen and (max-height: 600px) and (min-width: 600px) and (orientation: landscape) {
+    :host([theme~='with-overlay']) [part='form'] {
+      height: 100%;
+      flex: 1;
+      padding: 2px;
+    }
   }
 }

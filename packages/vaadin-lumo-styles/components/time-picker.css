@@ -3,33 +3,51 @@
  * Copyright (c) 2017 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+@import '../src/mixins/base-layer-reset.css';
+@import '../src/mixins/combo-box-overlay.css';
+@import '../src/mixins/field-base.css';
+@import '../src/mixins/field-button.css';
+@import '../src/mixins/field-error-message.css';
+@import '../src/mixins/field-helper.css';
+@import '../src/mixins/field-label.css';
+@import '../src/mixins/field-required.css';
+@import '../src/mixins/menu-overlay-core.css';
+@import '../src/mixins/overlay.css';
+@import '../src/components/combo-box-item.css';
+@import '../src/components/item.css';
+@import '../src/components/time-picker-overlay.css';
+@import '../src/components/time-picker-scroller.css';
+@import '../src/components/time-picker.css';
 @import './input-container.css';
-
-@import '../src/mixins/base-layer-reset.css' vaadin-time-picker;
-@import '../src/mixins/field-label.css' vaadin-time-picker;
-@import '../src/mixins/field-required.css' vaadin-time-picker;
-@import '../src/mixins/field-error-message.css' vaadin-time-picker;
-@import '../src/mixins/field-button.css' vaadin-time-picker;
-@import '../src/mixins/field-helper.css' vaadin-time-picker;
-@import '../src/mixins/field-base.css' vaadin-time-picker;
-@import '../src/components/time-picker.css' vaadin-time-picker;
-
-@import '../src/mixins/base-layer-reset.css' vaadin-time-picker-overlay;
-@import '../src/mixins/overlay.css' vaadin-time-picker-overlay;
-@import '../src/mixins/menu-overlay-core.css' vaadin-time-picker-overlay;
-@import '../src/mixins/combo-box-overlay.css' vaadin-time-picker-overlay;
-@import '../src/components/time-picker-overlay.css' vaadin-time-picker-overlay;
-
-@import '../src/mixins/base-layer-reset.css' vaadin-time-picker-item;
-@import '../src/components/item.css' vaadin-time-picker-item;
-@import '../src/components/combo-box-item.css' vaadin-time-picker-item;
-
-@import '../src/mixins/base-layer-reset.css' vaadin-time-picker-scroller;
-@import '../src/components/time-picker-scroller.css' vaadin-time-picker-scroller;
 
 html {
   --vaadin-time-picker-css-inject: 1;
+  --vaadin-time-picker-css-inject-modules:
+    lumo_mixins_base-layer-reset,
+    lumo_mixins_field-label,
+    lumo_mixins_field-required,
+    lumo_mixins_field-error-message,
+    lumo_mixins_field-button,
+    lumo_mixins_field-helper,
+    lumo_mixins_field-base,
+    lumo_components_time-picker;
+
   --vaadin-time-picker-item-css-inject: 1;
+  --vaadin-time-picker-item-css-inject-modules:
+    lumo_mixins_base-layer-reset,
+    lumo_components_item,
+    lumo_components_combo-box-item;
+
   --vaadin-time-picker-overlay-css-inject: 1;
+  --vaadin-time-picker-overlay-css-inject-modules:
+    lumo_mixins_base-layer-reset,
+    lumo_mixins_overlay,
+    lumo_mixins_menu-overlay-core,
+    lumo_mixins_combo-box-overlay,
+    lumo_components_time-picker-overlay;
+
   --vaadin-time-picker-scroller-css-inject: 1;
+  --vaadin-time-picker-scroller-css-inject-modules:
+    lumo_mixins_base-layer-reset,
+    lumo_components_time-picker-scroller;
 }

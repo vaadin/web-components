@@ -3,16 +3,23 @@
  * Copyright (c) 2017 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+@import '../src/mixins/base-layer-reset.css';
+@import '../src/mixins/field-error-message.css';
+@import '../src/mixins/field-helper.css';
+@import '../src/mixins/field-label.css';
+@import '../src/mixins/field-required.css';
+@import '../src/mixins/group-field.css';
+@import '../src/components/checkbox-group.css';
 @import './checkbox.css';
-
-@import '../src/mixins/base-layer-reset.css' vaadin-checkbox-group;
-@import '../src/mixins/group-field.css' vaadin-checkbox-group;
-@import '../src/mixins/field-label.css' vaadin-checkbox-group;
-@import '../src/mixins/field-required.css' vaadin-checkbox-group;
-@import '../src/mixins/field-error-message.css' vaadin-checkbox-group;
-@import '../src/mixins/field-helper.css' vaadin-checkbox-group;
-@import '../src/components/checkbox-group.css' vaadin-checkbox-group;
 
 html {
   --vaadin-checkbox-group-css-inject: 1;
+  --vaadin-checkbox-group-css-inject-modules:
+    lumo_mixins_base-layer-reset,
+    lumo_mixins_group-field,
+    lumo_mixins_field-label,
+    lumo_mixins_field-required,
+    lumo_mixins_field-error-message,
+    lumo_mixins_field-helper,
+    lumo_components_checkbox-group;
 }

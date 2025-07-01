@@ -3,28 +3,30 @@
  * Copyright (c) 2017 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-@layer base {
-  :is(:host, *, #id),
-  :is(:host, *, #id)::before,
-  :is(:host, *, #id)::after,
-  ::slotted(:is(*, #id)),
-  ::slotted(:is(*, #id))::before,
-  ::slotted(:is(*, #id))::after {
-    all: revert-layer;
-    --vaadin-button-background: revert-layer;
-    --vaadin-button-border-color: revert-layer;
-    --vaadin-button-border: revert-layer;
-    --vaadin-button-padding: revert-layer;
-    --vaadin-button-text-color: revert-layer;
-    --vaadin-combo-box-spinner-color: revert-layer;
-    --vaadin-icon-color: revert-layer;
-    --vaadin-input-field-background: revert-layer;
-    --vaadin-input-field-border-color: revert-layer;
-    --vaadin-input-field-border-color: revert-layer;
-    --vaadin-input-field-helper-order: revert-layer;
-    --vaadin-input-field-placeholder-color: revert-layer;
-    --vaadin-input-field-value-color: revert-layer;
-    --vaadin-item-checkmark-display: revert-layer;
-    --vaadin-overlay-viewport-bottom: revert-layer;
+@media lumo_mixins_base-layer-reset {
+  @layer base {
+    :is(:host, *, #id),
+    :is(:host, *, #id)::before,
+    :is(:host, *, #id)::after,
+    ::slotted(:is(*, #id)),
+    ::slotted(:is(*, #id))::before,
+    ::slotted(:is(*, #id))::after {
+      all: revert-layer;
+      --vaadin-button-background: revert-layer;
+      --vaadin-button-border-color: revert-layer;
+      --vaadin-button-border: revert-layer;
+      --vaadin-button-padding: revert-layer;
+      --vaadin-button-text-color: revert-layer;
+      --vaadin-combo-box-spinner-color: revert-layer;
+      --vaadin-icon-color: revert-layer;
+      --vaadin-input-field-background: revert-layer;
+      --vaadin-input-field-border-color: revert-layer;
+      --vaadin-input-field-border-color: revert-layer;
+      --vaadin-input-field-helper-order: revert-layer;
+      --vaadin-input-field-placeholder-color: revert-layer;
+      --vaadin-input-field-value-color: revert-layer;
+      --vaadin-item-checkmark-display: revert-layer;
+      --vaadin-overlay-viewport-bottom: revert-layer;
+    }
   }
 }

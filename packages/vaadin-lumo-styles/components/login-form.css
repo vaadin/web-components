@@ -3,13 +3,15 @@
  * Copyright (c) 2017 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+@import '../src/mixins/base-layer-reset.css';
+@import '../src/components/login-form-wrapper.css';
 @import './button.css';
-@import './text-field.css';
 @import './password-field.css';
-
-@import '../src/mixins/base-layer-reset.css' vaadin-login-form-wrapper;
-@import '../src/components/login-form-wrapper.css' vaadin-login-form-wrapper;
+@import './text-field.css';
 
 html {
   --vaadin-login-form-wrapper-css-inject: 1;
+  --vaadin-login-form-wrapper-css-inject-modules:
+    lumo_mixins_base-layer-reset,
+    lumo_components_login-form-wrapper;
 }
