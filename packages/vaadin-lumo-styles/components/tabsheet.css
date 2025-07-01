@@ -10,6 +10,9 @@
 @import './tabs.css';
 
 html {
-  --vaadin-tabsheet-css-inject: 1;
-  --vaadin-tabsheet-css-inject-modules: lumo_mixins_base-layer-reset, lumo_mixins_loader, lumo_components_tabsheet;
+  --vaadin-tabsheet-lumo-inject: 1;
+  --vaadin-tabsheet-lumo-inject-modules:
+    lumo_mixins_base-layer-reset,
+    lumo_mixins_loader,
+    lumo_components_tabsheet;
 }
