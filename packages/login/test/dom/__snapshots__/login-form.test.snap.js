@@ -715,8 +715,8 @@ snapshots["vaadin-login-form shadow default"] =
   <div part="footer">
     <slot name="footer">
     </slot>
-    <p>
-    </p>
+    <div>
+    </div>
   </div>
 </section>
 `;
@@ -750,8 +750,8 @@ snapshots["vaadin-login-form shadow error"] =
   <div part="footer">
     <slot name="footer">
     </slot>
-    <p>
-    </p>
+    <div>
+    </div>
   </div>
 </section>
 `;
@@ -788,9 +788,9 @@ snapshots["vaadin-login-form shadow i18n"] =
   <div part="footer">
     <slot name="footer">
     </slot>
-    <p>
+    <div>
       Jos tarvitset lisätietoja käyttäjälle.
-    </p>
+    </div>
   </div>
 </section>
 `;
