@@ -4,6 +4,7 @@ import { visualDiff } from '@web/test-runner-visual-regression';
 import '@vaadin/vaadin-lumo-styles/props.css';
 import '@vaadin/vaadin-lumo-styles/components/tabsheet.css';
 import '@vaadin/tabs/test/visual/not-animated-styles.js';
+import '../../../vaadin-tabsheet.js';
 
 describe('tabsheet', () => {
   let div, element;
