@@ -1,6 +1,5 @@
 import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
-import '../../vaadin-icons.js';
 
 describe('vaadin-iconset', () => {
   let wrapper;
