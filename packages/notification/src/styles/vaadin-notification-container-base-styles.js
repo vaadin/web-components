@@ -9,16 +9,23 @@ import { css } from 'lit';
 export const notificationContainerStyles = css`
   @layer base {
     :host {
+      /* How much space to reserve for overlay box shadow */
+      --_paint-area: 2em;
+      /* Space between notifications and the viewport */
+      --_padding: var(--vaadin-notification-viewport-inset, var(--vaadin-padding));
+      /* Space between notifications in a stack and how much collapsed cards show below the top most */
+      --_gap: var(--vaadin-notification-gap, var(--vaadin-gap-container-block));
       position: fixed;
       z-index: 1000;
       inset: 0;
       box-sizing: border-box;
       display: grid;
-      gap: 1px;
       /* top-stretch, top and bottom regions, bottom-stretch */
       grid-template-rows: auto 1fr auto;
       pointer-events: none;
       interpolate-size: allow-keywords;
+      padding: var(--_padding);
+      overflow: hidden;
     }
 
     :host > * {
@@ -27,51 +34,40 @@ export const notificationContainerStyles = css`
 
     [region-group] {
       position: relative;
+      grid-row: 2 / 3;
     }
 
-    [region-group='top'] {
-      grid-row: 2 / 4;
-    }
-
-    [region-group='bottom'] {
-      grid-row: 1 / 3;
+    [region] {
+      z-index: 1;
+      max-width: 100%;
+      max-height: 100%;
+      pointer-events: auto;
+      scrollbar-width: none;
     }
 
     [region='top-stretch'] {
       grid-row: 1;
-      padding-top: var(--vaadin-notification-margin, var(--_vaadin-gap-container-block));
-      margin-bottom: calc(var(--vaadin-notification-margin, var(--_vaadin-gap-container-block)) * -1);
+      z-index: 3;
     }
 
     [region='bottom-stretch'] {
       grid-row: 3;
-      padding-bottom: var(--vaadin-notification-margin, var(--_vaadin-gap-container-block));
-      margin-top: calc(var(--vaadin-notification-margin, var(--_vaadin-gap-container-block)) * -1);
+      z-index: 3;
     }
 
     [region='middle'],
     [region-group] > [region] {
       position: absolute;
-      width: min(100%, var(--vaadin-notification-width, 40ch));
-      max-height: 100%;
-      box-sizing: border-box;
-    }
-
-    [region] {
-      z-index: 1;
+      width: var(--vaadin-notification-width, 40ch);
     }
 
     [region='middle'] {
       position: fixed;
+      z-index: 4;
       top: 50%;
       left: 50%;
       translate: -50% -50%;
-      padding-top: var(--vaadin-notification-margin, var(--_vaadin-gap-container-block));
-    }
-
-    [region] {
-      pointer-events: auto;
-      scrollbar-width: none;
+      max-width: calc(100% - var(--_padding) * 2);
     }
 
     /* scrollbar-width is supported in Safari 18.2, use the following for earlier */
@@ -79,20 +75,23 @@ export const notificationContainerStyles = css`
       display: none;
     }
 
-    [region]:is(:hover, :focus-within) {
+    [region]:where(:hover, :focus-within) {
       overflow: auto;
       overscroll-behavior: contain;
       z-index: 2;
+      padding: var(--_paint-area);
+    }
+
+    [region]:not([region='middle']):where(:hover, :focus-within) {
+      margin: calc(var(--_paint-area) * -1);
     }
 
     [region-group='top'] > [region] {
       top: 0;
-      padding-top: var(--vaadin-notification-margin, var(--_vaadin-gap-container-block));
     }
 
     [region-group='bottom'] > [region] {
       bottom: 0;
-      padding-bottom: var(--vaadin-notification-margin, var(--_vaadin-gap-container-block));
     }
 
     [region-group] > [region$='start'] {
@@ -102,6 +101,7 @@ export const notificationContainerStyles = css`
     [region-group] > [region$='center'] {
       inset-inline-start: 50%;
       translate: -50%;
+      margin-inline: 0;
     }
 
     [region-group] > [region$='end'] {
@@ -109,21 +109,21 @@ export const notificationContainerStyles = css`
     }
 
     ::slotted(*) {
-      margin: var(--vaadin-notification-margin, var(--_vaadin-gap-container-block));
-      margin-top: 0;
-      transition: 400ms var(--_vaadin-ease-in-out-quart);
+      margin-bottom: var(--_gap);
+      transition: 400ms var(--vaadin-ease-fluid);
       position: relative;
       z-index: calc(var(--order) * -1);
+      --_inset: calc(var(--_paint-area) * -1);
+      --_clip-path: inset(var(--_inset));
     }
 
-    [region^='bottom'] ::slotted(*) {
-      margin-top: var(--vaadin-notification-margin, var(--_vaadin-gap-container-block));
+    :is([region^='bottom'], [region='middle']) ::slotted(*) {
+      margin-top: var(--_gap);
       margin-bottom: 0;
     }
 
     @keyframes enter {
       0% {
-        opacity: 0;
         translate: var(--_enter-translate, 0 100%);
         margin-block: 0;
         height: var(--_enter-height, auto);
@@ -132,23 +132,22 @@ export const notificationContainerStyles = css`
     }
 
     ::slotted(:is([opening], [closing])) {
-      animation: enter 400ms var(--_vaadin-ease-in-out-quart);
+      animation: enter 400ms var(--vaadin-ease-fluid);
+      z-index: 9999;
     }
 
     ::slotted([closing]) {
       animation-direction: reverse;
     }
 
-    ::slotted(:not([style*='order: 1;'])) {
-      clip-path: inset(-2em -1em -1em -1em);
+    [region]:not(:hover, :focus-within) ::slotted(:not([style*='order: 1;'])) {
+      --_inset-exclude: calc(100% - var(--_gap) - 2px);
+      --_clip-path: inset(var(--_inset-exclude) var(--_inset) var(--_inset) var(--_inset));
     }
 
-    [region^='bottom'] ::slotted(:not([style*='order: 1;'])) {
-      clip-path: inset(-1em -1em -2em -1em);
-    }
-
-    [region]:has(:hover, :focus-within) ::slotted(:not([style*='order: 1;'])) {
-      clip-path: inset(-1em);
+    :is([region^='bottom'], [region='middle']):not(:hover, :focus-within) ::slotted(:not([style*='order: 1;'])) {
+      --_clip-path: inset(var(--_inset) var(--_inset) var(--_inset-exclude) var(--_inset));
+      --vaadin-notification-box-shadow: none;
     }
 
     @supports (interpolate-size: allow-keywords) {
@@ -158,6 +157,7 @@ export const notificationContainerStyles = css`
 
       [region]:not(:hover, :focus-within) ::slotted(:not([style*='order: 1;'])) {
         height: 0;
+        --_clip-path-duration: 450ms;
       }
     }
 
@@ -165,25 +165,27 @@ export const notificationContainerStyles = css`
       ::slotted(*) {
         max-height: 25em;
         --_enter-max-height: 0;
+        --_clip-path-duration: 250ms;
       }
 
       [region]:not(:hover, :focus-within) ::slotted(:not([style*='order: 1;'])) {
+        --_clip-path-duration: 500ms;
         max-height: 0;
       }
     }
 
     [region]:not(:hover, :focus-within) {
       ::slotted([style*='order: 2;']) {
-        scale: 0.96;
+        scale: 0.94;
       }
 
       ::slotted([style*='order: 3;']) {
-        scale: 0.9;
+        scale: 0.86;
       }
 
       ::slotted(:not([style*='order: 1;'], [style*='order: 2;'], [style*='order: 3;'])) {
-        scale: 0.84;
-        opacity: 0;
+        scale: 0.78;
+        --_opacity: 0;
         margin-block: 0;
       }
     }
