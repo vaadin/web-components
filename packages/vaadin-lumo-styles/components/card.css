@@ -7,8 +7,8 @@
 @import '../src/components/card.css';
 
 html {
-  --vaadin-card-css-inject: 1;
-  --vaadin-card-css-inject-modules:
+  --vaadin-card-lumo-inject: 1;
+  --vaadin-card-lumo-inject-modules:
     lumo_mixins_base-layer-reset,
     lumo_components_card;
   --vaadin-card-background: var(

@@ -8,7 +8,7 @@ import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { OverlayMixin } from '@vaadin/overlay/src/vaadin-overlay-mixin.js';
-import { CSSInjectionMixin } from '@vaadin/vaadin-themable-mixin/css-injection-mixin.js';
+import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { contextMenuOverlayStyles } from './styles/vaadin-context-menu-overlay-core-styles.js';
 import { MenuOverlayMixin } from './vaadin-menu-overlay-mixin.js';
@@ -25,7 +25,7 @@ import { MenuOverlayMixin } from './vaadin-menu-overlay-mixin.js';
  * @protected
  */
 export class ContextMenuOverlay extends MenuOverlayMixin(
-  OverlayMixin(DirMixin(ThemableMixin(CSSInjectionMixin(PolylitMixin(LitElement))))),
+  OverlayMixin(DirMixin(ThemableMixin(LumoInjectionMixin(PolylitMixin(LitElement))))),
 ) {
   static get is() {
     return 'vaadin-context-menu-overlay';

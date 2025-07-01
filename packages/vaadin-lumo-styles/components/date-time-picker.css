@@ -16,8 +16,8 @@
 @import './time-picker.css';
 
 html {
-  --vaadin-date-time-picker-css-inject: 1;
-  --vaadin-date-time-picker-css-inject-modules:
+  --vaadin-date-time-picker-lumo-inject: 1;
+  --vaadin-date-time-picker-lumo-inject-modules:
     lumo_mixins_base-layer-reset,
     lumo_mixins_field-label,
     lumo_mixins_field-required,

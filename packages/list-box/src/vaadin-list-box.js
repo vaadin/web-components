@@ -8,7 +8,7 @@ import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
-import { CSSInjectionMixin } from '@vaadin/vaadin-themable-mixin/css-injection-mixin.js';
+import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { listBoxStyles } from './styles/vaadin-list-box-core-styles.js';
 import { MultiSelectListMixin } from './vaadin-multi-select-list-mixin.js';
@@ -45,7 +45,7 @@ import { MultiSelectListMixin } from './vaadin-multi-select-list-mixin.js';
  * @mixes ThemableMixin
  * @mixes ElementMixin
  */
-class ListBox extends ElementMixin(MultiSelectListMixin(ThemableMixin(CSSInjectionMixin(PolylitMixin(LitElement))))) {
+class ListBox extends ElementMixin(MultiSelectListMixin(ThemableMixin(LumoInjectionMixin(PolylitMixin(LitElement))))) {
   static get is() {
     return 'vaadin-list-box';
   }

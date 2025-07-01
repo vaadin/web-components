@@ -3,7 +3,7 @@
  * Copyright (c) 2021 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { CSSInjector } from './src/css-injector.js';
+import { LumoInjector } from './src/lumo-injector.js';
 
 /**
  * @type {Set<string>}
@@ -31,12 +31,12 @@ function findRoot(element) {
  *
  * @polymerMixin
  */
-export const CSSInjectionMixin = (superClass) =>
-  class CSSInjectionMixinClass extends superClass {
+export const LumoInjectionMixin = (superClass) =>
+  class LumoInjectionMixinClass extends superClass {
     static finalize() {
       super.finalize();
 
-      const propName = this.cssInjectPropName;
+      const propName = this.lumoInjectPropName;
 
       // Prevent registering same property twice when a class extends
       // another class using this mixin, since `finalize()` is called
@@ -57,8 +57,8 @@ export const CSSInjectionMixin = (superClass) =>
       }
     }
 
-    static get cssInjectPropName() {
-      return `--${this.is}-css-inject`;
+    static get lumoInjectPropName() {
+      return `--${this.is}-lumo-inject`;
     }
 
     /** @protected */
@@ -67,9 +67,9 @@ export const CSSInjectionMixin = (superClass) =>
 
       if (this.isConnected) {
         const root = findRoot(this);
-        root.__cssInjector ||= new CSSInjector(root);
-        this.__cssInjector = root.__cssInjector;
-        this.__cssInjector.componentConnected(this);
+        root.__lumoInjector ||= new LumoInjector(root);
+        this.__lumoInjector = root.__lumoInjector;
+        this.__lumoInjector.componentConnected(this);
       }
     }
 
@@ -77,12 +77,12 @@ export const CSSInjectionMixin = (superClass) =>
     disconnectedCallback() {
       super.disconnectedCallback();
 
-      // Check if CSSInjector is defined. It might be unavailable if the component
+      // Check if LumoInjector is defined. It might be unavailable if the component
       // is moved within the DOM during connectedCallback and becomes disconnected
-      // before CSSInjector is assigned.
-      if (this.__cssInjector) {
-        this.__cssInjector.componentDisconnected(this);
-        this.__cssInjector = undefined;
+      // before LumoInjector is assigned.
+      if (this.__lumoInjector) {
+        this.__lumoInjector.componentDisconnected(this);
+        this.__lumoInjector = undefined;
       }
     }
   };

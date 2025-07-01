@@ -8,8 +8,8 @@
 @import '../src/components/details-summary.css';
 
 html {
-  --vaadin-accordion-heading-css-inject: 1;
-  --vaadin-accordion-heading-css-inject-modules:
+  --vaadin-accordion-heading-lumo-inject: 1;
+  --vaadin-accordion-heading-lumo-inject-modules:
     lumo_mixins_base-layer-reset,
     lumo_components_details-summary,
     lumo_components_accordion-heading;

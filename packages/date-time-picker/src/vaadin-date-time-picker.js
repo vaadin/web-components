@@ -10,7 +10,7 @@ import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { inputFieldShared } from '@vaadin/field-base/src/styles/input-field-shared-styles.js';
-import { CSSInjectionMixin } from '@vaadin/vaadin-themable-mixin/css-injection-mixin.js';
+import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { dateTimePickerStyles } from './styles/vaadin-date-time-picker-core-styles.js';
 import { DateTimePickerMixin } from './vaadin-date-time-picker-mixin.js';
@@ -100,7 +100,7 @@ import { DateTimePickerMixin } from './vaadin-date-time-picker-mixin.js';
  * @mixes DateTimePickerMixin
  */
 class DateTimePicker extends DateTimePickerMixin(
-  ThemableMixin(ElementMixin(CSSInjectionMixin(PolylitMixin(LitElement)))),
+  ThemableMixin(ElementMixin(LumoInjectionMixin(PolylitMixin(LitElement)))),
 ) {
   static get is() {
     return 'vaadin-date-time-picker';

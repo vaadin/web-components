@@ -23,8 +23,8 @@
 @import './input-container.css';
 
 html {
-  --vaadin-combo-box-css-inject: 1;
-  --vaadin-combo-box-css-inject-modules:
+  --vaadin-combo-box-lumo-inject: 1;
+  --vaadin-combo-box-lumo-inject-modules:
     lumo_mixins_base-layer-reset,
     lumo_mixins_field-label,
     lumo_mixins_field-required,
@@ -34,14 +34,14 @@ html {
     lumo_mixins_field-base,
     lumo_components_combo-box;
 
-  --vaadin-combo-box-item-css-inject: 1;
-  --vaadin-combo-box-item-css-inject-modules:
+  --vaadin-combo-box-item-lumo-inject: 1;
+  --vaadin-combo-box-item-lumo-inject-modules:
     lumo_mixins_base-layer-reset,
     lumo_components_item,
     lumo_components_combo-box-item;
 
-  --vaadin-combo-box-overlay-css-inject: 1;
-  --vaadin-combo-box-overlay-css-inject-modules:
+  --vaadin-combo-box-overlay-lumo-inject: 1;
+  --vaadin-combo-box-overlay-lumo-inject-modules:
     lumo_mixins_base-layer-reset,
     lumo_mixins_loader,
     lumo_mixins_combo-box-loader,
@@ -50,8 +50,8 @@ html {
     lumo_mixins_combo-box-overlay,
     lumo_components_combo-box-overlay;
 
-  --vaadin-combo-box-scroller-css-inject: 1;
-  --vaadin-combo-box-scroller-css-inject-modules:
+  --vaadin-combo-box-scroller-lumo-inject: 1;
+  --vaadin-combo-box-scroller-lumo-inject-modules:
     lumo_mixins_base-layer-reset,
     lumo_components_combo-box-scroller;
 }

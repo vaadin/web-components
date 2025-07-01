@@ -10,8 +10,8 @@
 @import './text-field.css';
 
 html {
-  --vaadin-login-form-wrapper-css-inject: 1;
-  --vaadin-login-form-wrapper-css-inject-modules:
+  --vaadin-login-form-wrapper-lumo-inject: 1;
+  --vaadin-login-form-wrapper-lumo-inject-modules:
     lumo_mixins_base-layer-reset,
     lumo_components_login-form-wrapper;
 }

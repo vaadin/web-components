@@ -7,8 +7,8 @@
 @import '../src/components/map.css';
 
 html {
-  --vaadin-map-css-inject: 1;
-  --vaadin-map-css-inject-modules:
+  --vaadin-map-lumo-inject: 1;
+  --vaadin-map-lumo-inject-modules:
     lumo_mixins_base-layer-reset,
     lumo_components_map;
 }

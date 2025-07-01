@@ -7,8 +7,8 @@
 @import '../src/components/avatar.css';
 
 html {
-  --vaadin-avatar-css-inject: 1;
-  --vaadin-avatar-css-inject-modules:
+  --vaadin-avatar-lumo-inject: 1;
+  --vaadin-avatar-lumo-inject-modules:
     lumo_mixins_base-layer-reset,
     lumo_components_avatar;
   --vaadin-avatar-size: var(

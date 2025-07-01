@@ -21,8 +21,8 @@
 @import './input-container.css';
 
 html {
-  --vaadin-time-picker-css-inject: 1;
-  --vaadin-time-picker-css-inject-modules:
+  --vaadin-time-picker-lumo-inject: 1;
+  --vaadin-time-picker-lumo-inject-modules:
     lumo_mixins_base-layer-reset,
     lumo_mixins_field-label,
     lumo_mixins_field-required,
@@ -32,22 +32,22 @@ html {
     lumo_mixins_field-base,
     lumo_components_time-picker;
 
-  --vaadin-time-picker-item-css-inject: 1;
-  --vaadin-time-picker-item-css-inject-modules:
+  --vaadin-time-picker-item-lumo-inject: 1;
+  --vaadin-time-picker-item-lumo-inject-modules:
     lumo_mixins_base-layer-reset,
     lumo_components_item,
     lumo_components_combo-box-item;
 
-  --vaadin-time-picker-overlay-css-inject: 1;
-  --vaadin-time-picker-overlay-css-inject-modules:
+  --vaadin-time-picker-overlay-lumo-inject: 1;
+  --vaadin-time-picker-overlay-lumo-inject-modules:
     lumo_mixins_base-layer-reset,
     lumo_mixins_overlay,
     lumo_mixins_menu-overlay-core,
     lumo_mixins_combo-box-overlay,
     lumo_components_time-picker-overlay;
 
-  --vaadin-time-picker-scroller-css-inject: 1;
-  --vaadin-time-picker-scroller-css-inject-modules:
+  --vaadin-time-picker-scroller-lumo-inject: 1;
+  --vaadin-time-picker-scroller-lumo-inject-modules:
     lumo_mixins_base-layer-reset,
     lumo_components_time-picker-scroller;
 }

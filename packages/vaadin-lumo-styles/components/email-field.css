@@ -14,8 +14,8 @@
 @import './input-container.css';
 
 html {
-  --vaadin-email-field-css-inject: 1;
-  --vaadin-email-field-css-inject-modules:
+  --vaadin-email-field-lumo-inject: 1;
+  --vaadin-email-field-lumo-inject-modules:
     lumo_mixins_base-layer-reset,
     lumo_mixins_field-label,
     lumo_mixins_field-required,

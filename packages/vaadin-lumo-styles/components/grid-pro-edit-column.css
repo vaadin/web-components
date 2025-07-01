@@ -20,8 +20,8 @@
 @import './text-field.css';
 
 html {
-  --vaadin-grid-pro-edit-text-field-css-inject: 1;
-  --vaadin-grid-pro-edit-text-field-css-inject-modules:
+  --vaadin-grid-pro-edit-text-field-lumo-inject: 1;
+  --vaadin-grid-pro-edit-text-field-lumo-inject-modules:
     lumo_mixins_base-layer-reset,
     lumo_mixins_field-label,
     lumo_mixins_field-required,
@@ -31,8 +31,8 @@ html {
     lumo_mixins_field-base,
     lumo_mixins_grid-pro-editor;
 
-  --vaadin-grid-pro-edit-select-css-inject: 1;
-  --vaadin-grid-pro-edit-select-css-inject-modules:
+  --vaadin-grid-pro-edit-select-lumo-inject: 1;
+  --vaadin-grid-pro-edit-select-lumo-inject-modules:
     lumo_mixins_base-layer-reset,
     lumo_mixins_field-label,
     lumo_mixins_field-required,
@@ -44,8 +44,8 @@ html {
     lumo_components_select,
     lumo_components_grid-pro-edit-select;
 
-  --vaadin-grid-pro-edit-checkbox-css-inject: 1;
-  --vaadin-grid-pro-edit-checkbox-css-inject-modules:
+  --vaadin-grid-pro-edit-checkbox-lumo-inject: 1;
+  --vaadin-grid-pro-edit-checkbox-lumo-inject-modules:
     lumo_mixins_base-layer-reset,
     lumo_mixins_checkable-field,
     lumo_components_checkbox;

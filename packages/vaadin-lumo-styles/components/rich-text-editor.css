@@ -17,15 +17,15 @@
 @import './tooltip.css';
 
 html {
-  --vaadin-rich-text-editor-css-inject: 1;
-  --vaadin-rich-text-editor-css-inject-modules:
+  --vaadin-rich-text-editor-lumo-inject: 1;
+  --vaadin-rich-text-editor-lumo-inject-modules:
     lumo_mixins_base-layer-reset,
     lumo_global_color,
     lumo_global_typography,
     lumo_components_rich-text-editor;
 
-  --vaadin-rich-text-editor-popup-overlay-css-inject: 1;
-  --vaadin-rich-text-editor-popup-overlay-css-inject-modules:
+  --vaadin-rich-text-editor-popup-overlay-lumo-inject: 1;
+  --vaadin-rich-text-editor-popup-overlay-lumo-inject-modules:
     lumo_mixins_base-layer-reset,
     lumo_mixins_overlay,
     lumo_components_rich-text-editor-popup-overlay;

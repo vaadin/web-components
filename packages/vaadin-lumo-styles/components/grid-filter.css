@@ -8,8 +8,8 @@
 @import './text-field.css';
 
 html {
-  --vaadin-grid-filter-css-inject: 1;
-  --vaadin-grid-filter-css-inject-modules:
+  --vaadin-grid-filter-lumo-inject: 1;
+  --vaadin-grid-filter-lumo-inject-modules:
     lumo_mixins_base-layer-reset,
     lumo_components_grid-filter;
 }

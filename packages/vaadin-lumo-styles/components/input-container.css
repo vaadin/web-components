@@ -7,8 +7,8 @@
 @import '../src/components/input-container.css';
 
 html {
-  --vaadin-input-container-css-inject: 1;
-  --vaadin-input-container-css-inject-modules:
+  --vaadin-input-container-lumo-inject: 1;
+  --vaadin-input-container-lumo-inject-modules:
     lumo_mixins_base-layer-reset,
     lumo_components_input-container;
 }

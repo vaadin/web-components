@@ -6,6 +6,6 @@
 @import '../src/components/form-layout.css';
 
 html {
-  --vaadin-form-layout-css-inject: 1;
-  --vaadin-form-layout-css-inject-modules: lumo_components_form-layout;
+  --vaadin-form-layout-lumo-inject: 1;
+  --vaadin-form-layout-lumo-inject-modules: lumo_components_form-layout;
 }

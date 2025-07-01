@@ -22,7 +22,7 @@
   "files": [
     "src",
     "*.d.ts",
-    "css-injection-mixin.js",
+    "lumo-injection-mixin.js",
     "register-styles.js",
     "vaadin-*.js"
   ],

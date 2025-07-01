@@ -7,8 +7,8 @@
 @import '../src/components/app-layout.css';
 
 html {
-  --vaadin-app-layout-css-inject: 1;
-  --vaadin-app-layout-css-inject-modules:
+  --vaadin-app-layout-lumo-inject: 1;
+  --vaadin-app-layout-lumo-inject-modules:
     lumo_mixins_base-layer-reset,
     lumo_components_app-layout;
 }

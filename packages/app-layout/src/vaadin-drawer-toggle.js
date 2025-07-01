@@ -10,7 +10,7 @@ import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { isEmptyTextNode } from '@vaadin/component-base/src/dom-utils.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
-import { CSSInjectionMixin } from '@vaadin/vaadin-themable-mixin/css-injection-mixin.js';
+import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { drawerToggle } from './styles/vaadin-drawer-toggle-core-styles.js';
 
@@ -29,7 +29,7 @@ import { drawerToggle } from './styles/vaadin-drawer-toggle-core-styles.js';
  * @mixes DirMixin
  * @mixes ThemableMixin
  */
-class DrawerToggle extends ButtonMixin(DirMixin(ThemableMixin(CSSInjectionMixin(PolylitMixin(LitElement))))) {
+class DrawerToggle extends ButtonMixin(DirMixin(ThemableMixin(LumoInjectionMixin(PolylitMixin(LitElement))))) {
   static get is() {
     return 'vaadin-drawer-toggle';
   }

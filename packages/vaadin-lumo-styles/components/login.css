@@ -9,8 +9,8 @@
 @import './login-form.css';
 
 html {
-  --vaadin-login-overlay-wrapper-css-inject: 1;
-  --vaadin-login-overlay-wrapper-css-inject-modules:
+  --vaadin-login-overlay-wrapper-lumo-inject: 1;
+  --vaadin-login-overlay-wrapper-lumo-inject-modules:
     lumo_mixins_base-layer-reset,
     lumo_mixins_overlay,
     lumo_components_login-overlay-wrapper;

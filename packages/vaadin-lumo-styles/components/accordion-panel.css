@@ -9,8 +9,8 @@
 @import './accordion-heading.css';
 
 html {
-  --vaadin-accordion-panel-css-inject: 1;
-  --vaadin-accordion-panel-css-inject-modules:
+  --vaadin-accordion-panel-lumo-inject: 1;
+  --vaadin-accordion-panel-lumo-inject-modules:
     lumo_mixins_base-layer-reset,
     lumo_components_details,
     lumo_components_accordion-panel;

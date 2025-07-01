@@ -7,8 +7,8 @@
 @import '../src/components/list-box.css';
 
 html {
-  --vaadin-list-box-css-inject: 1;
-  --vaadin-list-box-css-inject-modules:
+  --vaadin-list-box-lumo-inject: 1;
+  --vaadin-list-box-lumo-inject-modules:
     lumo_mixins_base-layer-reset,
     lumo_components_list-box;
 }

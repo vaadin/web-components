@@ -8,8 +8,8 @@
 @import '../src/components/radio-button.css';
 
 html {
-  --vaadin-radio-button-css-inject: 1;
-  --vaadin-radio-button-css-inject-modules:
+  --vaadin-radio-button-lumo-inject: 1;
+  --vaadin-radio-button-lumo-inject-modules:
     lumo_mixins_base-layer-reset,
     lumo_mixins_checkable-field,
     lumo_components_radio-button;

@@ -10,7 +10,7 @@ import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { overlayStyles } from '@vaadin/overlay/src/styles/vaadin-overlay-core-styles.js';
 import { OverlayMixin } from '@vaadin/overlay/src/vaadin-overlay-mixin.js';
-import { CSSInjectionMixin } from '@vaadin/vaadin-themable-mixin/css-injection-mixin.js';
+import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { multiSelectComboBoxOverlayStyles } from './styles/vaadin-multi-select-combo-box-overlay-core-styles.js';
 
@@ -26,7 +26,7 @@ import { multiSelectComboBoxOverlayStyles } from './styles/vaadin-multi-select-c
  * @private
  */
 class MultiSelectComboBoxOverlay extends ComboBoxOverlayMixin(
-  OverlayMixin(DirMixin(CSSInjectionMixin(ThemableMixin(PolylitMixin(LitElement))))),
+  OverlayMixin(DirMixin(LumoInjectionMixin(ThemableMixin(PolylitMixin(LitElement))))),
 ) {
   static get is() {
     return 'vaadin-multi-select-combo-box-overlay';

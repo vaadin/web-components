@@ -6,7 +6,7 @@
 import { html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
-import { CSSInjectionMixin } from '@vaadin/vaadin-themable-mixin/css-injection-mixin.js';
+import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { loginFormWrapperStyles } from './styles/vaadin-login-form-wrapper-core-styles.js';
 
@@ -17,7 +17,7 @@ import { loginFormWrapperStyles } from './styles/vaadin-login-form-wrapper-core-
  * @mixes ThemableMixin
  * @private
  */
-class LoginFormWrapper extends ThemableMixin(CSSInjectionMixin(PolylitMixin(LitElement))) {
+class LoginFormWrapper extends ThemableMixin(LumoInjectionMixin(PolylitMixin(LitElement))) {
   static get is() {
     return 'vaadin-login-form-wrapper';
   }

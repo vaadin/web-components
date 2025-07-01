@@ -8,8 +8,8 @@
 @import './avatar.css';
 
 html {
-  --vaadin-message-css-inject: 1;
-  --vaadin-message-css-inject-modules:
+  --vaadin-message-lumo-inject: 1;
+  --vaadin-message-lumo-inject-modules:
     lumo_mixins_base-layer-reset,
     lumo_components_message;
 }

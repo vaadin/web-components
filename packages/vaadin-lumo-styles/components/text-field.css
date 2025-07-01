@@ -13,8 +13,8 @@
 @import './input-container.css';
 
 html {
-  --vaadin-text-field-css-inject: 1;
-  --vaadin-text-field-css-inject-modules:
+  --vaadin-text-field-lumo-inject: 1;
+  --vaadin-text-field-lumo-inject-modules:
     lumo_mixins_base-layer-reset,
     lumo_mixins_field-label,
     lumo_mixins_field-required,

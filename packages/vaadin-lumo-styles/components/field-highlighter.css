@@ -10,19 +10,19 @@
 @import '../src/components/user-tags-overlay.css';
 
 html {
-  --vaadin-user-tags-overlay-css-inject: 1;
-  --vaadin-user-tags-overlay-css-inject-modules:
+  --vaadin-user-tags-overlay-lumo-inject: 1;
+  --vaadin-user-tags-overlay-lumo-inject-modules:
     lumo_mixins_base-layer-reset,
     lumo_mixins_overlay,
     lumo_components_user-tags-overlay;
 
-  --vaadin-user-tag-css-inject: 1;
-  --vaadin-user-tag-css-inject-modules:
+  --vaadin-user-tag-lumo-inject: 1;
+  --vaadin-user-tag-lumo-inject-modules:
     lumo_mixins_base-layer-reset,
     lumo_components_user-tag;
 
-  --vaadin-field-outline-css-inject: 1;
-  --vaadin-field-outline-css-inject-modules:
+  --vaadin-field-outline-lumo-inject: 1;
+  --vaadin-field-outline-lumo-inject-modules:
     lumo_mixins_base-layer-reset,
     lumo_components_field-outline;
 }

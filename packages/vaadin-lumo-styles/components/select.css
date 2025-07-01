@@ -21,8 +21,8 @@
 @import './input-container.css';
 
 html {
-  --vaadin-select-css-inject: 1;
-  --vaadin-select-css-inject-modules:
+  --vaadin-select-lumo-inject: 1;
+  --vaadin-select-lumo-inject-modules:
     lumo_mixins_base-layer-reset,
     lumo_mixins_field-label,
     lumo_mixins_field-required,
@@ -32,26 +32,26 @@ html {
     lumo_mixins_field-base,
     lumo_components_select;
 
-  --vaadin-select-item-css-inject: 1;
-  --vaadin-select-item-css-inject-modules:
+  --vaadin-select-item-lumo-inject: 1;
+  --vaadin-select-item-lumo-inject-modules:
     lumo_mixins_base-layer-reset,
     lumo_components_item;
 
-  --vaadin-select-overlay-css-inject: 1;
-  --vaadin-select-overlay-css-inject-modules:
+  --vaadin-select-overlay-lumo-inject: 1;
+  --vaadin-select-overlay-lumo-inject-modules:
     lumo_mixins_base-layer-reset,
     lumo_mixins_overlay,
     lumo_mixins_menu-overlay-core,
     lumo_mixins_menu-overlay-ext,
     lumo_components_select-overlay;
 
-  --vaadin-select-list-box-css-inject: 1;
-  --vaadin-select-list-box-css-inject-modules:
+  --vaadin-select-list-box-lumo-inject: 1;
+  --vaadin-select-list-box-lumo-inject-modules:
     lumo_mixins_base-layer-reset,
     lumo_components_list-box;
 
-  --vaadin-select-value-button-css-inject: 1;
-  --vaadin-select-value-button-css-inject-modules:
+  --vaadin-select-value-button-lumo-inject: 1;
+  --vaadin-select-value-button-lumo-inject-modules:
     lumo_mixins_base-layer-reset,
     lumo_components_select-value-button;
 }

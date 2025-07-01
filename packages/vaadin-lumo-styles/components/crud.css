@@ -19,29 +19,29 @@
 @import './text-field.css';
 
 html {
-  --vaadin-crud-css-inject: 1;
-  --vaadin-crud-css-inject-modules:
+  --vaadin-crud-lumo-inject: 1;
+  --vaadin-crud-lumo-inject-modules:
     lumo_mixins_base-layer-reset,
     lumo_components_crud;
 
-  --vaadin-crud-edit-css-inject: 1;
-  --vaadin-crud-edit-css-inject-modules:
+  --vaadin-crud-edit-lumo-inject: 1;
+  --vaadin-crud-edit-lumo-inject-modules:
     lumo_mixins_base-layer-reset,
     lumo_components_button,
     lumo_components_crud-edit;
 
-  --vaadin-crud-grid-css-inject: 1;
-  --vaadin-crud-grid-css-inject-modules:
+  --vaadin-crud-grid-lumo-inject: 1;
+  --vaadin-crud-grid-lumo-inject-modules:
     lumo_mixins_base-layer-reset,
     lumo_components_grid;
 
-  --vaadin-crud-form-css-inject: 1;
-  --vaadin-crud-form-css-inject-modules:
+  --vaadin-crud-form-lumo-inject: 1;
+  --vaadin-crud-form-lumo-inject-modules:
     lumo_mixins_base-layer-reset,
     lumo_components_form-layout;
 
-  --vaadin-crud-dialog-overlay-css-inject: 1;
-  --vaadin-crud-dialog-overlay-css-inject-modules:
+  --vaadin-crud-dialog-overlay-lumo-inject: 1;
+  --vaadin-crud-dialog-overlay-lumo-inject-modules:
     lumo_mixins_base-layer-reset,
     lumo_mixins_overlay,
     lumo_components_dialog-overlay,

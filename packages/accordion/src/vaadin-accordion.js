@@ -8,7 +8,7 @@ import { css, html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
-import { CSSInjectionMixin } from '@vaadin/vaadin-themable-mixin/css-injection-mixin.js';
+import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { AccordionMixin } from './vaadin-accordion-mixin.js';
 
@@ -62,7 +62,7 @@ import { AccordionMixin } from './vaadin-accordion-mixin.js';
  * @mixes ElementMixin
  * @mixes ThemableMixin
  */
-class Accordion extends AccordionMixin(CSSInjectionMixin(ThemableMixin(ElementMixin(PolylitMixin(LitElement))))) {
+class Accordion extends AccordionMixin(LumoInjectionMixin(ThemableMixin(ElementMixin(PolylitMixin(LitElement))))) {
   static get is() {
     return 'vaadin-accordion';
   }

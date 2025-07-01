@@ -12,7 +12,7 @@ import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { inputFieldShared } from '@vaadin/field-base/src/styles/input-field-shared-styles.js';
-import { CSSInjectionMixin } from '@vaadin/vaadin-themable-mixin/css-injection-mixin.js';
+import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { multiSelectComboBoxStyles } from './styles/vaadin-multi-select-combo-box-core-styles.js';
 import { MultiSelectComboBoxMixin } from './vaadin-multi-select-combo-box-mixin.js';
@@ -101,7 +101,7 @@ import { MultiSelectComboBoxMixin } from './vaadin-multi-select-combo-box-mixin.
  * @mixes MultiSelectComboBoxMixin
  */
 class MultiSelectComboBox extends MultiSelectComboBoxMixin(
-  CSSInjectionMixin(ThemableMixin(ElementMixin(PolylitMixin(LitElement)))),
+  LumoInjectionMixin(ThemableMixin(ElementMixin(PolylitMixin(LitElement)))),
 ) {
   static get is() {
     return 'vaadin-multi-select-combo-box';

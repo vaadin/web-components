@@ -6,7 +6,7 @@
 import { html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
-import { CSSInjectionMixin } from '@vaadin/vaadin-themable-mixin/css-injection-mixin.js';
+import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { comboBoxScrollerStyles } from './styles/vaadin-combo-box-scroller-core-styles.js';
 import { ComboBoxScrollerMixin } from './vaadin-combo-box-scroller-mixin.js';
 
@@ -18,7 +18,7 @@ import { ComboBoxScrollerMixin } from './vaadin-combo-box-scroller-mixin.js';
  * @mixes ComboBoxScrollerMixin
  * @private
  */
-export class ComboBoxScroller extends ComboBoxScrollerMixin(CSSInjectionMixin(PolylitMixin(LitElement))) {
+export class ComboBoxScroller extends ComboBoxScrollerMixin(LumoInjectionMixin(PolylitMixin(LitElement))) {
   static get is() {
     return 'vaadin-combo-box-scroller';
   }

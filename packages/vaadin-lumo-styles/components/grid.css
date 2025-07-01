@@ -7,8 +7,8 @@
 @import '../src/components/grid.css';
 
 html {
-  --vaadin-grid-css-inject: 1;
-  --vaadin-grid-css-inject-modules:
+  --vaadin-grid-lumo-inject: 1;
+  --vaadin-grid-lumo-inject-modules:
     lumo_mixins_base-layer-reset,
     lumo_components_grid;
 }

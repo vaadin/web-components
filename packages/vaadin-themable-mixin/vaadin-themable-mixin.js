@@ -354,11 +354,11 @@ export const ThemableMixin = (superClass) =>
      */
     static finalizeStyles(styles) {
       // Preserve the styles the user supplied via the `static get styles()` getter
-      // so that they will always be injected before styles added by `CSSInjector`.
+      // so that they will always be injected before styles added by `LumoInjector`.
       this.baseStyles = styles ? [styles].flat(Infinity) : [];
 
       // Preserve the theme styles the user supplied via the `registerStyles()` API
-      // so that they will always be injected after styles added by `CSSInjector`.
+      // so that they will always be injected after styles added by `LumoInjector`.
       this.themeStyles = this.getStylesForThis();
 
       // Merged styles are stored in `elementStyles` and passed to `adoptStyles()`.
