@@ -3,16 +3,20 @@
  * Copyright (c) 2025 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import '@vaadin/component-base/src/style-props.js';
 import { css } from 'lit';
 
 export const dateTimePickerStyles = css`
   .vaadin-date-time-picker-container {
-    --vaadin-field-default-width: auto;
+    width: calc(
+      var(--vaadin-field-default-width, 12em) * 2 +
+        var(--vaadin-date-time-picker-gap, var(--vaadin-gap-container-inline))
+    );
   }
 
   .slots {
     display: flex;
-    --vaadin-field-default-width: 12em;
+    gap: var(--vaadin-date-time-picker-gap, var(--vaadin-gap-container-inline));
   }
 
   .slots ::slotted([slot='date-picker']) {
