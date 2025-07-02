@@ -1,4 +1,4 @@
-import { arrowDown, fixtureSync, nextRender, nextResize, nextUpdate, oneEvent } from '@vaadin/testing-helpers';
+import { arrowDown, fixtureSync, nextFrame, nextRender, nextResize, oneEvent } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '@vaadin/vaadin-lumo-styles/props.css';
 import '@vaadin/vaadin-lumo-styles/components/icon.css';
@@ -28,8 +28,6 @@ describe('menu-bar', () => {
           div.style.padding = '10px';
 
           element = fixtureSync('<vaadin-menu-bar></vaadin-menu-bar>', div);
-          await nextUpdate(element);
-
           element.items = [
             { text: 'Home' },
             {
@@ -39,6 +37,9 @@ describe('menu-bar', () => {
             { text: 'Dashboard', disabled: true },
             { text: 'Help' },
           ];
+
+          await nextResize(element);
+          await nextFrame();
         });
 
         it('basic', async () => {
@@ -57,7 +58,8 @@ describe('menu-bar', () => {
           div.style.width = '350px';
           div.style.height = '150px';
           element.reverseCollapse = true;
-          await nextRender();
+          await nextResize(element);
+          await nextFrame();
           element._buttons[4].click();
           const overlay = element._subMenu._overlayElement;
           await oneEvent(overlay, 'vaadin-overlay-open');
@@ -72,9 +74,9 @@ describe('menu-bar', () => {
           div.style.padding = '10px';
 
           element = fixtureSync('<vaadin-menu-bar></vaadin-menu-bar>', div);
-          await nextUpdate(element);
-
           element.items = [{ text: 'Actions' }];
+          await nextResize(element);
+          await nextFrame();
         });
 
         it('single button', async () => {
@@ -85,6 +87,7 @@ describe('menu-bar', () => {
           element.items = [{ text: 'View' }, { text: 'Edit' }];
           element.style.maxWidth = '100px';
           await nextResize(element);
+          await nextFrame();
           await visualDiff(div, `${dir}-single-button-overflow`);
         });
       });
@@ -106,8 +109,6 @@ describe('menu-bar', () => {
           div.style.padding = '10px';
 
           element = fixtureSync('<vaadin-menu-bar></vaadin-menu-bar>', div);
-          await nextUpdate(element);
-
           element.items = [
             { component: 'u', text: 'Home' },
             {
@@ -122,13 +123,16 @@ describe('menu-bar', () => {
             { text: 'Help' },
           ];
           overlay = element._subMenu._overlayElement;
+          await nextResize(element);
+          await nextFrame();
         });
 
         it('primary', async () => {
           div.style.width = '320px';
           div.style.height = '150px';
           element.setAttribute('theme', 'primary');
-          await nextUpdate(element);
+          await nextResize(element);
+          await nextFrame();
           arrowDown(element._buttons[1]);
           await oneEvent(overlay, 'vaadin-overlay-open');
           await visualDiff(div, `${dir}-primary`);
@@ -138,7 +142,8 @@ describe('menu-bar', () => {
           div.style.width = '320px';
           div.style.height = '150px';
           element.setAttribute('theme', 'secondary');
-          await nextUpdate(element);
+          await nextResize(element);
+          await nextFrame();
           arrowDown(element._buttons[1]);
           await oneEvent(overlay, 'vaadin-overlay-open');
           await visualDiff(div, `${dir}-secondary`);
@@ -148,7 +153,8 @@ describe('menu-bar', () => {
           div.style.width = '265px';
           div.style.height = '150px';
           element.setAttribute('theme', 'tertiary');
-          await nextUpdate(element);
+          await nextResize(element);
+          await nextFrame();
           arrowDown(element._buttons[1]);
           await oneEvent(overlay, 'vaadin-overlay-open');
           await visualDiff(div, `${dir}-tertiary`);
@@ -158,7 +164,8 @@ describe('menu-bar', () => {
           div.style.width = '200px';
           div.style.height = '150px';
           element.setAttribute('theme', 'tertiary-inline');
-          await nextUpdate(element);
+          await nextResize(element);
+          await nextFrame();
           arrowDown(element._buttons[1]);
           await oneEvent(overlay, 'vaadin-overlay-open');
           await visualDiff(div, `${dir}-tertiary-inline`);
@@ -168,7 +175,8 @@ describe('menu-bar', () => {
           div.style.width = '265px';
           div.style.height = '150px';
           element.setAttribute('theme', 'small');
-          await nextUpdate(element);
+          await nextResize(element);
+          await nextFrame();
           arrowDown(element._buttons[1]);
           await oneEvent(overlay, 'vaadin-overlay-open');
           await visualDiff(div, `${dir}-small`);
@@ -177,14 +185,16 @@ describe('menu-bar', () => {
         it('end-aligned', async () => {
           div.style.width = '600px';
           element.setAttribute('theme', 'end-aligned');
-          await nextUpdate(element);
+          await nextResize(element);
+          await nextFrame();
           await visualDiff(div, `${dir}-end-aligned`);
         });
 
         it('end-aligned overflow button', async () => {
           element.style.width = '100px';
           element.setAttribute('theme', 'end-aligned');
-          await nextUpdate(element);
+          await nextResize(element);
+          await nextFrame();
           await visualDiff(div, `${dir}-end-aligned-overflow-button`);
         });
       });
@@ -202,8 +212,6 @@ describe('menu-bar', () => {
           div.style.padding = '10px';
 
           element = fixtureSync('<vaadin-menu-bar></vaadin-menu-bar>', div);
-          await nextUpdate(element);
-
           element.items = [
             { text: 'Home' },
             {
@@ -217,29 +225,39 @@ describe('menu-bar', () => {
             },
             { text: 'Help' },
           ];
+          await nextResize(element);
+          await nextFrame();
         });
 
         it('dropdown-indicators', async () => {
           div.style.width = '300px';
           element.setAttribute('theme', 'dropdown-indicators');
+          await nextResize(element);
+          await nextFrame();
           await visualDiff(div, `${dir}-dropdown-indicators`);
         });
 
         it('dropdown-indicators small', async () => {
           div.style.width = '250px';
           element.setAttribute('theme', 'dropdown-indicators small');
+          await nextResize(element);
+          await nextFrame();
           await visualDiff(div, `${dir}-dropdown-indicators-small`);
         });
 
         it('dropdown-indicators tertiary', async () => {
           div.style.width = '200px';
           element.setAttribute('theme', 'dropdown-indicators tertiary');
+          await nextResize(element);
+          await nextFrame();
           await visualDiff(div, `${dir}-dropdown-indicators-tertiary`);
         });
 
         it('dropdown-indicators tertiary-inline', async () => {
           div.style.width = '200px';
           element.setAttribute('theme', 'dropdown-indicators tertiary-inline');
+          await nextResize(element);
+          await nextFrame();
           await visualDiff(div, `${dir}-dropdown-indicators-tertiary-inline`);
         });
 
@@ -250,7 +268,8 @@ describe('menu-bar', () => {
           items[1].component = makeIcon('lumo:chevron-down');
           items[1].theme = 'dropdown-indicators icon';
           element.items = items;
-          await nextRender();
+          await nextResize(element);
+          await nextFrame();
           await visualDiff(div, `${dir}-dropdown-indicators-icon`);
         });
       });
