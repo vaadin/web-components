@@ -11,7 +11,7 @@ export const multiSelectComboBoxChipStyles = css`
     :host {
       display: inline-flex;
       align-items: center;
-      align-self: center;
+      justify-content: center;
       white-space: nowrap;
       box-sizing: border-box;
       gap: var(--vaadin-chip-gap, var(--vaadin-chip-padding, 0.3em));
@@ -66,12 +66,48 @@ export const multiSelectComboBoxChipStyles = css`
 
     :host([disabled]) [part='label'] {
       --vaadin-chip-color: var(--vaadin-color-disabled);
-      /* pointer-events: none; */
     }
 
     :host([hidden]),
     :host(:is([readonly], [disabled], [slot='overflow'])) [part='remove-button'] {
       display: none !important;
+    }
+
+    :host([slot='overflow']) {
+      position: relative;
+      margin-inline-start: 8px;
+      min-width: 1.5em;
+    }
+
+    :host([slot='overflow'])::before,
+    :host([slot='overflow'])::after {
+      content: '';
+      position: absolute;
+      inset: calc(var(--vaadin-chip-border-width, 1px) * -1);
+      border-inline-start: 2px solid var(--vaadin-chip-border-color, var(--vaadin-border-color));
+      border-radius: inherit;
+    }
+
+    :host([slot='overflow'])::before {
+      left: calc(-4px - var(--vaadin-chip-border-width, 1px));
+    }
+
+    :host([slot='overflow'])::after {
+      left: calc(-8px - var(--vaadin-chip-border-width, 1px));
+    }
+
+    :host([count='2']) {
+      margin-inline-start: 4px;
+    }
+
+    :host([count='1']) {
+      margin-inline-start: 0;
+    }
+
+    :host([count='2'])::after,
+    :host([count='1'])::before,
+    :host([count='1'])::after {
+      display: none;
     }
   }
 `;
