@@ -129,11 +129,10 @@ describe('multi-select-combo-box', () => {
       await visualDiff(div, 'auto-expand-max-width');
     });
 
-    it('auto expand visible height', async () => {
+    it('auto expand height', async () => {
       element.label = 'Label';
       element.style.width = '300px';
       element.style.height = '200px';
-      div.style.height = '240px';
       const items = Array.from({ length: 20 }).map((_, i) => `Item ${i}`);
       element.items = items;
       element.selectedItems = items;
