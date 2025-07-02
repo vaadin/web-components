@@ -15,4 +15,7 @@ html {
     lumo_mixins_base-layer-reset,
     lumo_mixins_loader,
     lumo_components_tabsheet;
+
+  --vaadin-tabsheet-scroller-lumo-inject: 1;
+  --vaadin-tabsheet-scroller-lumo-inject-modules: lumo_components_scroller;
 }
