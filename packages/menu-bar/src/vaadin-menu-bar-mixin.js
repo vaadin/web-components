@@ -347,13 +347,7 @@ export const MenuBarMixin = (superClass) =>
       const container = this.shadowRoot.querySelector('[part="container"]');
       container.addEventListener('click', this.__onButtonClick.bind(this));
       container.addEventListener('mouseover', (e) => this._onMouseOver(e));
-
-      // Delay setting container to avoid rendering buttons immediately,
-      // which would also trigger detecting overflow and force re-layout
-      // See https://github.com/vaadin/web-components/issues/7271
-      queueMicrotask(() => {
-        this._container = container;
-      });
+      this._container = container;
     }
 
     /**
@@ -571,10 +565,6 @@ export const MenuBarMixin = (superClass) =>
 
     /** @private */
     __detectOverflow() {
-      if (!this._container) {
-        return;
-      }
-
       const overflow = this._overflow;
       const buttons = this._buttons.filter((btn) => btn !== overflow);
       const oldOverflowCount = this.__getOverflowCount(overflow);
