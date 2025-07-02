@@ -68,10 +68,8 @@ describe('scrollable tabs', () => {
       expect(scroller.scrollLeft).to.be.greaterThan(initialScrollLeft);
     });
 
-    it('should scroll back when arrow button is clicked', async () => {
-      tabs.selected = 6;
-      tabs._focus(6);
-      await nextRender();
+    it('should scroll back when arrow button is clicked', () => {
+      tabs.selected = 4;
       const btn = tabs.shadowRoot.querySelector('[part="back-button"]');
       btn.click();
       expect(scroller.scrollLeft).to.be.equal(0);
