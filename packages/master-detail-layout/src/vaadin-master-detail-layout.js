@@ -10,6 +10,7 @@ import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
 import { SlotStylesMixin } from '@vaadin/component-base/src/slot-styles-mixin.js';
+import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { masterDetailLayoutStyles } from './styles/vaadin-master-detail-layout-core-styles.js';
 import { masterDetailLayoutTransitionStyles } from './styles/vaadin-master-detail-layout-transition-core-styles.js';
@@ -58,7 +59,9 @@ import { masterDetailLayoutTransitionStyles } from './styles/vaadin-master-detai
  * @mixes ResizeMixin
  * @mixes SlotStylesMixin
  */
-class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElement))))) {
+class MasterDetailLayout extends SlotStylesMixin(
+  ResizeMixin(ElementMixin(ThemableMixin(LumoInjectionMixin(PolylitMixin(LitElement))))),
+) {
   static get is() {
     return 'vaadin-master-detail-layout';
   }
