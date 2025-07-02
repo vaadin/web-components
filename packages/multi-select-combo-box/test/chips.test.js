@@ -181,7 +181,7 @@ describe('chips', () => {
       });
 
       it('should update overflow chip on clear button state change', async () => {
-        comboBox.style.width = '380px';
+        comboBox.style.width = '370px';
         await nextResize(comboBox);
 
         comboBox.clearButtonVisible = true;
