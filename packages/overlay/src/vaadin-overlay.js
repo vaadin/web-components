@@ -7,6 +7,7 @@ import { html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
+import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { overlayStyles } from './styles/vaadin-overlay-core-styles.js';
 import { OverlayMixin } from './vaadin-overlay-mixin.js';
@@ -76,7 +77,7 @@ import { OverlayMixin } from './vaadin-overlay-mixin.js';
  * @mixes DirMixin
  * @mixes OverlayMixin
  */
-class Overlay extends OverlayMixin(DirMixin(ThemableMixin(PolylitMixin(LitElement)))) {
+class Overlay extends OverlayMixin(DirMixin(ThemableMixin(LumoInjectionMixin(PolylitMixin(LitElement))))) {
   static get is() {
     return 'vaadin-overlay';
   }

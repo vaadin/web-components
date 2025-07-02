@@ -50,6 +50,7 @@
 @import './components/multi-select-combo-box.css';
 @import './components/notification.css';
 @import './components/number-field.css';
+@import './components/overlay.css';
 @import './components/password-field.css';
 @import './components/popover.css';
 @import './components/progress-bar.css';
