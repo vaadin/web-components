@@ -13,7 +13,7 @@
 @import '../src/components/email-field.css';
 @import './input-container.css';
 
-html {
+:is(:root, :host)::before {
   --vaadin-email-field-lumo-inject: 1;
   --vaadin-email-field-lumo-inject-modules:
     lumo_mixins_base-layer-reset,

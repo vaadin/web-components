@@ -6,7 +6,7 @@
 @import '../src/mixins/base-layer-reset.css';
 @import '../src/components/list-box.css';
 
-html {
+:is(:root, :host)::before {
   --vaadin-list-box-lumo-inject: 1;
   --vaadin-list-box-lumo-inject-modules:
     lumo_mixins_base-layer-reset,

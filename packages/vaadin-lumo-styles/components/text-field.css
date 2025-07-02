@@ -12,7 +12,7 @@
 @import '../src/mixins/field-required.css';
 @import './input-container.css';
 
-html {
+:is(:root, :host)::before {
   --vaadin-text-field-lumo-inject: 1;
   --vaadin-text-field-lumo-inject-modules:
     lumo_mixins_base-layer-reset,

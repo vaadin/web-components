@@ -22,7 +22,7 @@
 @import '../src/components/item.css';
 @import './input-container.css';
 
-html {
+:is(:root, :host)::before {
   --vaadin-combo-box-lumo-inject: 1;
   --vaadin-combo-box-lumo-inject-modules:
     lumo_mixins_base-layer-reset,

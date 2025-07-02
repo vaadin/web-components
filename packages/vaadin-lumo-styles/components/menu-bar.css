@@ -18,7 +18,7 @@
 @import '../src/components/menu-bar-overlay.css';
 @import '../src/components/menu-bar.css';
 
-html {
+:is(:root, :host)::before {
   --vaadin-menu-bar-lumo-inject: 1;
   --vaadin-menu-bar-lumo-inject-modules:
     lumo_mixins_base-layer-reset,

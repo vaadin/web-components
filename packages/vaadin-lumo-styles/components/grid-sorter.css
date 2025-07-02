@@ -14,7 +14,7 @@
   font-style: normal;
 }
 
-html {
+:is(:root, :host)::before {
   --vaadin-grid-sorter-lumo-inject: 1;
   --vaadin-grid-sorter-lumo-inject-modules:
     lumo_mixins_base-layer-reset,

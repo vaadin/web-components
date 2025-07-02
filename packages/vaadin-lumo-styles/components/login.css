@@ -8,7 +8,7 @@
 @import '../src/components/login-overlay-wrapper.css';
 @import './login-form.css';
 
-html {
+:is(:root, :host)::before {
   --vaadin-login-overlay-wrapper-lumo-inject: 1;
   --vaadin-login-overlay-wrapper-lumo-inject-modules:
     lumo_mixins_base-layer-reset,

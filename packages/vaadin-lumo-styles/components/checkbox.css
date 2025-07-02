@@ -7,7 +7,7 @@
 @import '../src/mixins/checkable-field.css';
 @import '../src/components/checkbox.css';
 
-html {
+:is(:root, :host)::before {
   --vaadin-checkbox-lumo-inject: 1;
   --vaadin-checkbox-lumo-inject-modules:
     lumo_mixins_base-layer-reset,

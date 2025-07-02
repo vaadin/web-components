@@ -5,7 +5,7 @@
  */
 @import '../src/components/form-layout.css';
 
-html {
+:is(:root, :host)::before {
   --vaadin-form-layout-lumo-inject: 1;
   --vaadin-form-layout-lumo-inject-modules: lumo_components_form-layout;
 }

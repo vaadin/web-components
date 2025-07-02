@@ -7,7 +7,7 @@
 @import '../src/mixins/checkable-field.css';
 @import '../src/components/radio-button.css';
 
-html {
+:is(:root, :host)::before {
   --vaadin-radio-button-lumo-inject: 1;
   --vaadin-radio-button-lumo-inject-modules:
     lumo_mixins_base-layer-reset,

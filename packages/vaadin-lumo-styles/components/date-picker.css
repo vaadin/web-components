@@ -21,7 +21,7 @@
 @import './button.css';
 @import './input-container.css';
 
-html {
+:is(:root, :host)::before {
   --vaadin-date-picker-lumo-inject: 1;
   --vaadin-date-picker-lumo-inject-modules:
     lumo_mixins_base-layer-reset,

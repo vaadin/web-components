@@ -13,7 +13,7 @@
 @import '../src/components/text-area.css';
 @import './input-container.css';
 
-html {
+:is(:root, :host)::before {
   --vaadin-text-area-lumo-inject: 1;
   --vaadin-text-area-lumo-inject-modules:
     lumo_mixins_base-layer-reset,

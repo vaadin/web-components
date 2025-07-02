@@ -12,7 +12,7 @@
 @import '../src/components/checkbox-group.css';
 @import './checkbox.css';
 
-html {
+:is(:root, :host)::before {
   --vaadin-checkbox-group-lumo-inject: 1;
   --vaadin-checkbox-group-lumo-inject-modules:
     lumo_mixins_base-layer-reset,

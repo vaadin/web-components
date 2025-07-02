@@ -5,7 +5,7 @@
  */
 @import '../src/components/vertical-layout.css';
 
-html {
+:is(:root, :host)::before {
   --vaadin-vertical-layout-lumo-inject: 1;
   --vaadin-vertical-layout-lumo-inject-modules: lumo_components_vertical-layout;
 }

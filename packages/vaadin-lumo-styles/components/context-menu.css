@@ -13,7 +13,7 @@
 @import '../src/components/item.css';
 @import '../src/components/list-box.css';
 
-html {
+:is(:root, :host)::before {
   --vaadin-context-menu-overlay-lumo-inject: 1;
   --vaadin-context-menu-overlay-lumo-inject-modules:
     lumo_mixins_base-layer-reset,

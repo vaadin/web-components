@@ -20,7 +20,7 @@
 @import '../src/components/select.css';
 @import './input-container.css';
 
-html {
+:is(:root, :host)::before {
   --vaadin-select-lumo-inject: 1;
   --vaadin-select-lumo-inject-modules:
     lumo_mixins_base-layer-reset,

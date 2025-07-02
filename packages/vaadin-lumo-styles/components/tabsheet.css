@@ -9,7 +9,7 @@
 @import './scroller.css';
 @import './tabs.css';
 
-html {
+:is(:root, :host)::before {
   --vaadin-tabsheet-lumo-inject: 1;
   --vaadin-tabsheet-lumo-inject-modules:
     lumo_mixins_base-layer-reset,

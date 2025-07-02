@@ -8,7 +8,7 @@
 @import '../src/components/details.css';
 @import './accordion-heading.css';
 
-html {
+:is(:root, :host)::before {
   --vaadin-accordion-panel-lumo-inject: 1;
   --vaadin-accordion-panel-lumo-inject-modules:
     lumo_mixins_base-layer-reset,
