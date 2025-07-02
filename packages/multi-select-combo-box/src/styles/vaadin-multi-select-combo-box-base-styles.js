@@ -13,7 +13,7 @@ export const multiSelectComboBoxStyles = [
       :host {
         max-width: 100%;
         --_input-min-width: var(--vaadin-multi-select-combo-box-input-min-width, 4rem);
-        --_chip-min-width: var(--vaadin-chip-min-width, 48px);
+        --_chip-min-width: var(--vaadin-multi-select-combo-box-chip-min-width, var(--vaadin-chip-min-width, 48px));
         --_wrapper-gap: var(--vaadin-multi-select-combo-box-chips-gap, 2px);
       }
 

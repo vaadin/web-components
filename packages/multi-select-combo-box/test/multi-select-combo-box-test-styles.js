@@ -58,7 +58,10 @@ registerStyles(
     }
 
     :host(:not([slot='overflow'])) {
-      min-width: min(max-content, var(--vaadin-chip-min-width, 48px));
+      min-width: min(
+        max-content,
+        var(--vaadin-multi-select-combo-box-chip-min-width, var(--vaadin-chip-min-width, 48px))
+      );
     }
 
     [part='label'] {
