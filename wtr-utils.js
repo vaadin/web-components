@@ -98,16 +98,6 @@ const getAllVisualPackages = () => {
     .filter((dir) => fs.statSync(`packages/${dir}`).isDirectory() && fs.existsSync(`packages/${dir}/test/visual`));
 };
 
-const getAllPortedLumoPackages = () => {
-  return fs
-    .readdirSync('packages')
-    .filter(
-      (dir) =>
-        fs.statSync(`packages/${dir}`).isDirectory() &&
-        fs.existsSync(`packages/vaadin-lumo-styles/components/${dir}.css`),
-    );
-};
-
 /**
  * Get all available packages with visual tests for base styles.
  */
@@ -277,8 +267,6 @@ const createVisualTestsConfig = (theme, browserVersion) => {
   let visualPackages = [];
   if (theme === 'base') {
     visualPackages = getAllBasePackages();
-  } else if (theme === 'lumo' && hasPortedParam) {
-    visualPackages = getAllPortedLumoPackages();
   } else {
     visualPackages = getAllVisualPackages();
   }
