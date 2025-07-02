@@ -1,6 +1,7 @@
 import { fixtureSync } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
-import '../autoload.js';
+import '../../props.css';
+import '../../global.css';
 
 describe('headings', () => {
   it('default', async () => {
@@ -28,27 +29,27 @@ describe('headings', () => {
         h6 {
           margin-top: 1.25em;
         }
-        
+
         h1 {
           margin-bottom: 0.75em;
         }
-        
+
         h2 {
           margin-bottom: 0.5em;
         }
-        
+
         h3 {
           margin-bottom: 0.5em;
         }
-        
+
         h4 {
           margin-bottom: 0.5em;
         }
-        
+
         h5 {
           margin-bottom: 0.25em;
         }
-        
+
         h6 {
           margin-bottom: 0;
         }

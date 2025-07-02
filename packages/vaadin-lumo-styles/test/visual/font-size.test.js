@@ -1,6 +1,7 @@
 import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
-import '../../typography-global.js';
+import '../../props.css';
+import '../../global.css';
 
 describe('font-size', () => {
   let wrapper;

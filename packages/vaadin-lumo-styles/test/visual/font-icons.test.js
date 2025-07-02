@@ -1,6 +1,7 @@
 import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
-import '../../font-icons.js';
+import '../../props.css';
+import '../../global.css';
 
 describe('font-icons', () => {
   let wrapper;
@@ -11,7 +12,7 @@ describe('font-icons', () => {
     const data = await fetch(`${origin}${file}`);
     const icons = await data.json();
     wrapper = fixtureSync(`
-      <div style="display: flex; flex-wrap: wrap; width: 600px">
+      <div style="display: flex; flex-wrap: wrap; width: 600px; line-height: 1">
         <style>
           .font-icon {
             font-family: lumo-icons;

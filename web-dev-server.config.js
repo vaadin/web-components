@@ -52,11 +52,12 @@ export function enforceThemePlugin(theme) {
 
         // For visual tests: replace import of CSS file with JS autoload script
         body = body.replace('vaadin-lumo-styles/global.css', 'vaadin-lumo-styles/test/autoload.js');
+        body = body.replace('../../global.css', '../autoload.js');
       }
 
       if (['base', 'legacy-lumo'].includes(theme) && context.response.is('html', 'js')) {
         // Remove all not transformed CSS imports
-        body = body.replaceAll(/^.+vaadin-lumo-styles\/.+\.css.+$/gmu, '');
+        body = body.replaceAll(/^.+(vaadin-lumo-styles|\.\.)\/.+\.css.+$/gmu, '');
       }
 
       return body;
