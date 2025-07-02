@@ -1,6 +1,6 @@
 import { fixtureSync } from '@vaadin/testing-helpers/dist/fixture.js';
 import { visualDiff } from '@web/test-runner-visual-regression';
-import '../../../theme/lumo/vaadin-cookie-consent.js';
+import '../../../vaadin-cookie-consent.js';
 
 describe('cookie-consent', () => {
   let element;
