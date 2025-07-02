@@ -10,6 +10,8 @@ import { DisabledMixin } from '@vaadin/a11y-base/src/disabled-mixin.js';
 import { FocusMixin } from '@vaadin/a11y-base/src/focus-mixin.js';
 import { isElementFocused, isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
 import { KeyboardDirectionMixin } from '@vaadin/a11y-base/src/keyboard-direction-mixin.js';
+import { animationFrame } from '@vaadin/component-base/src/async.js';
+import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { I18nMixin } from '@vaadin/component-base/src/i18n-mixin.js';
 import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
@@ -380,7 +382,7 @@ export const MenuBarMixin = (superClass) =>
      * @override
      */
     _onResize() {
-      this.__detectOverflow();
+      this.__scheduleOverflow();
     }
 
     /**
@@ -393,7 +395,7 @@ export const MenuBarMixin = (superClass) =>
     _themeChanged(theme, overflow, container) {
       if (overflow && container) {
         this.__renderButtons(this.items);
-        this.__detectOverflow();
+        this.__scheduleOverflow();
 
         if (theme) {
           overflow.setAttribute('theme', theme);
@@ -413,7 +415,7 @@ export const MenuBarMixin = (superClass) =>
      */
     _reverseCollapseChanged(_reverseCollapse, overflow, container) {
       if (overflow && container) {
-        this.__detectOverflow();
+        this.__scheduleOverflow();
       }
     }
 
@@ -449,7 +451,7 @@ export const MenuBarMixin = (superClass) =>
       if (items !== this._oldItems) {
         this._oldItems = items;
         this.__renderButtons(items);
-        this.__detectOverflow();
+        this.__scheduleOverflow();
       }
 
       if (disabled !== this._oldDisabled) {
@@ -558,6 +560,13 @@ export const MenuBarMixin = (superClass) =>
           this._setTabindex(remaining[remaining.length - 1], true);
         }
       }
+    }
+
+    /** @private */
+    __scheduleOverflow() {
+      this._overflowDebouncer = Debouncer.debounce(this._overflowDebouncer, animationFrame, () => {
+        this.__detectOverflow();
+      });
     }
 
     /** @private */
