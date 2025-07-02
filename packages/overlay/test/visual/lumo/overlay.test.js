@@ -1,6 +1,8 @@
 import { fixtureSync } from '@vaadin/testing-helpers/dist/fixture.js';
 import { visualDiff } from '@web/test-runner-visual-regression';
-import '../../../theme/lumo/vaadin-overlay.js';
+import '@vaadin/vaadin-lumo-styles/props.css';
+import '@vaadin/vaadin-lumo-styles/components/overlay.css';
+import '../../../vaadin-overlay.js';
 
 describe('overlay', () => {
   let div, element;
