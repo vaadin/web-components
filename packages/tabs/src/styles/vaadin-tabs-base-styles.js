@@ -42,8 +42,7 @@ export const tabsStyles = css`
       display: none;
     }
 
-    [part='back-button'],
-    [part='forward-button'] {
+    [part$='button'] {
       position: absolute;
       z-index: 1;
       pointer-events: none;
@@ -70,7 +69,7 @@ export const tabsStyles = css`
       opacity: 1;
     }
 
-    :is([part='back-button'], [part='forward-button'])::before {
+    [part$='button']::before {
       content: '';
       display: block;
       width: var(--vaadin-icon-size, 1lh);
@@ -84,23 +83,22 @@ export const tabsStyles = css`
       rotate: -90deg;
     }
 
-    :host(:is([orientation='vertical'], [theme~='hide-scroll-buttons']))
-      :is([part='back-button'], [part='forward-button']) {
+    :host(:is([orientation='vertical'], [theme~='hide-scroll-buttons'])) [part$='button'] {
       display: none;
     }
 
     @media (pointer: coarse) {
-      :host(:not([theme~='show-scroll-buttons'])) :is([part='back-button'], [part='forward-button']) {
+      :host(:not([theme~='show-scroll-buttons'])) [part$='button'] {
         display: none;
       }
     }
 
-    :host([dir='rtl']) :is([part='back-button'], [part='forward-button'])::before {
+    :host([dir='rtl']) [part$='button']::before {
       scale: 1 -1;
     }
 
     @media (forced-colors: active) {
-      :is([part='back-button'], [part='forward-button'])::before {
+      [part$='button']::before {
         background: CanvasText;
       }
     }
