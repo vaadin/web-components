@@ -376,10 +376,6 @@ export const MenuBarMixin = (superClass) =>
      * @override
      */
     _onResize() {
-      if (!this.__firstResized) {
-        this.__firstResized = true;
-      }
-
       this.__scheduleOverflow();
     }
 
@@ -562,10 +558,6 @@ export const MenuBarMixin = (superClass) =>
 
     /** @private */
     __scheduleOverflow() {
-      if (!this.__firstResized) {
-        return;
-      }
-
       this._overflowDebouncer = Debouncer.debounce(this._overflowDebouncer, microTask, () => {
         this.__detectOverflow();
       });
