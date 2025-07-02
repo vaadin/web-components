@@ -1,6 +1,6 @@
 import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
-import '../../font-icons.js';
+import '../autoload.js';
 
 describe('font-icons', () => {
   let wrapper;
