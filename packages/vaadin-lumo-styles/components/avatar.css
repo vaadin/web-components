@@ -11,6 +11,9 @@
   --vaadin-avatar-lumo-inject-modules:
     lumo_mixins_base-layer-reset,
     lumo_components_avatar;
+}
+
+:is(:root, :host) {
   --vaadin-avatar-size: var(
     --lumo-size-m
   );

@@ -11,6 +11,9 @@
   --vaadin-card-lumo-inject-modules:
     lumo_mixins_base-layer-reset,
     lumo_components_card;
+}
+
+:is(:root, :host) {
   --vaadin-card-background: var(
     --lumo-contrast-5pct
   );
