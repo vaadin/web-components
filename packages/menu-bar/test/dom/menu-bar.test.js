@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, nextFrame, nextRender, nextResize } from '@vaadin/testing-helpers';
+import { fixtureSync, nextRender, nextResize } from '@vaadin/testing-helpers';
 import '../not-animated-styles.js';
 import '../../src/vaadin-menu-bar.js';
 
@@ -33,7 +33,6 @@ describe('menu-bar', () => {
       },
     ];
     await nextResize(menu);
-    await nextFrame();
   });
 
   it('basic', async () => {

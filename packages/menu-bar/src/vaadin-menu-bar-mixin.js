@@ -10,7 +10,7 @@ import { DisabledMixin } from '@vaadin/a11y-base/src/disabled-mixin.js';
 import { FocusMixin } from '@vaadin/a11y-base/src/focus-mixin.js';
 import { isElementFocused, isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
 import { KeyboardDirectionMixin } from '@vaadin/a11y-base/src/keyboard-direction-mixin.js';
-import { animationFrame } from '@vaadin/component-base/src/async.js';
+import { microTask } from '@vaadin/component-base/src/async.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { I18nMixin } from '@vaadin/component-base/src/i18n-mixin.js';
 import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
@@ -566,7 +566,7 @@ export const MenuBarMixin = (superClass) =>
         return;
       }
 
-      this._overflowDebouncer = Debouncer.debounce(this._overflowDebouncer, animationFrame, () => {
+      this._overflowDebouncer = Debouncer.debounce(this._overflowDebouncer, microTask, () => {
         this.__detectOverflow();
       });
     }

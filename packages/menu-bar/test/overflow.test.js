@@ -1,12 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import {
-  arrowRight,
-  fixtureSync,
-  nextFrame,
-  nextRender,
-  nextResize as onceResized,
-  nextUpdate,
-} from '@vaadin/testing-helpers';
+import { arrowRight, fixtureSync, nextRender, nextResize, nextUpdate } from '@vaadin/testing-helpers';
 import './menu-bar-test-styles.js';
 import '../src/vaadin-menu-bar.js';
 
@@ -22,12 +15,6 @@ const assertVisible = (elem) => {
   const style = getComputedStyle(elem);
   expect(style.visibility).to.equal('visible');
   expect(style.position).to.not.equal('absolute');
-};
-
-// Wait for the next frame to update overflow on resize
-const nextResize = async (element) => {
-  await onceResized(element);
-  await nextFrame();
 };
 
 describe('overflow', () => {
@@ -187,7 +174,7 @@ describe('overflow', () => {
     describe('reverse-collapse', () => {
       beforeEach(async () => {
         menu.reverseCollapse = true;
-        await nextFrame();
+        await nextUpdate(menu);
       });
 
       it('should show overflow button and hide the buttons which do not fit', () => {
@@ -211,7 +198,7 @@ describe('overflow', () => {
 
       it('should update overflow when reverseCollapse changes', async () => {
         menu.reverseCollapse = false;
-        await nextFrame();
+        await nextUpdate(menu);
         assertVisible(buttons[0]);
         assertVisible(buttons[1]);
         assertHidden(buttons[2]);
