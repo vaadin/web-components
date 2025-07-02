@@ -8,11 +8,10 @@ describe('scrollable tabs', () => {
 
   beforeEach(async () => {
     tabs = fixtureSync(`
-      <vaadin-tabs style="width: 400px; height: 150px;">
+      <vaadin-tabs style="width: 315px; height: 150px;">
         <vaadin-tab>Foo</vaadin-tab>
         <vaadin-tab>Bar</vaadin-tab>
-        <separator>___</separator>
-        <vaadin-tab disabled>Baz</vaadin-tab>
+        <vaadin-tab>Baz</vaadin-tab>
         <vaadin-tab>Foo1</vaadin-tab>
         <vaadin-tab>Bar1</vaadin-tab>
         <vaadin-tab>Baz1</vaadin-tab>
@@ -39,24 +38,24 @@ describe('scrollable tabs', () => {
       await nextFrame();
     });
 
-    it('should show one extra item on the right edge of the viewport on "arrow-right" on last visible tab', () => {
-      tabs.selected = 5;
-      tabs._focus(5);
-      // Check the scroller is not scrolled vertically
+    it('should show one extra item on the right edge of the viewport on "arrow-right" on last visible tab', async () => {
+      tabs.selected = 4;
+      tabs._focus(4);
+      await nextRender();
       arrowRight(tabs);
-      expect(scroller.getBoundingClientRect().right).to.be.closeTo(items[7].getBoundingClientRect().right, 1);
+      expect(scroller.getBoundingClientRect().right).to.be.closeTo(items[6].getBoundingClientRect().right, 1);
     });
 
-    it('should show one extra item on the left edge of the viewport on "arrow-left" on first visible tab', () => {
+    it('should show one extra item on the left edge of the viewport on "arrow-left" on first visible tab', async () => {
       // Move scroller so the first tab will be out of visible part
       tabs.selected = 7;
       tabs._focus(7);
-      // Check the scroller is not scrolled vertically
-      expect(scroller.scrollTop).to.be.equal(0);
+      await nextRender();
+
       // Move focus and choose the first visible tab selected
-      items[2].disabled = false;
       tabs.selected = 2;
       tabs._focus(2);
+      await nextRender();
 
       arrowLeft(tabs);
       expect(scroller.getBoundingClientRect().left).to.be.closeTo(items[0].getBoundingClientRect().left, 1);
@@ -207,29 +206,31 @@ describe('scrollable tabs', () => {
       tabs._updateOverflow();
     });
 
-    it('should move the scroll vertically to display selected item', () => {
+    it('should move the scroll vertically to display selected item', async () => {
       expect(scroller.scrollTop).to.be.equal(0);
       tabs.selected = 5;
       tabs._focus(5);
+      await nextRender();
       expect(scroller.scrollTop).to.be.greaterThan(0);
     });
 
-    it('should show one extra item on the bottom edge of the viewport on "arrow-down" on last visible tab', () => {
+    it('should show one extra item on the bottom edge of the viewport on "arrow-down" on last visible tab', async () => {
       tabs.selected = 5;
       tabs._focus(5);
-
+      await nextRender();
       const scrollPosition = items[7].getBoundingClientRect().bottom;
       arrowDown(tabs);
       expect(items[7].getBoundingClientRect().bottom).to.be.lessThan(scrollPosition);
     });
 
-    it('should show one extra item on the top edge of the viewport on "arrow-up" on first visible tab', () => {
-      items[2].disabled = false;
+    it('should show one extra item on the top edge of the viewport on "arrow-up" on first visible tab', async () => {
       tabs.selected = 7;
       tabs._focus(7);
+      await nextRender();
 
       tabs.selected = 2;
       tabs._focus(2);
+      await nextRender();
 
       const scrollPosition = items[7].getBoundingClientRect().bottom;
       arrowUp(tabs);

@@ -48,7 +48,7 @@ describe('overflow', () => {
             if (orientation === 'horizontal') {
               tabs.style.width = '200px';
             } else {
-              tabs.style.height = '100px';
+              tabs.style.height = '120px';
             }
             await nextResize(tabs);
             await nextRender();
