@@ -12,7 +12,7 @@ describe('font-icons', () => {
     const data = await fetch(`${origin}${file}`);
     const icons = await data.json();
     wrapper = fixtureSync(`
-      <div style="display: flex; flex-wrap: wrap; width: 600px">
+      <div style="display: flex; flex-wrap: wrap; width: 600px; line-height: 1">
         <style>
           .font-icon {
             font-family: lumo-icons;
