@@ -55,7 +55,6 @@ describe('tabsheet', () => {
       });
 
       describe(`${dir}`, () => {
-        beforeEach(() => {});
 
         it('default', async () => {
           await visualDiff(div, `${dir}-default`);
