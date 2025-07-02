@@ -6,7 +6,7 @@
 @import '../src/mixins/base-layer-reset.css';
 @import '../src/components/avatar.css';
 
-html {
+:is(:root, :host)::before {
   --vaadin-avatar-lumo-inject: 1;
   --vaadin-avatar-lumo-inject-modules:
     lumo_mixins_base-layer-reset,

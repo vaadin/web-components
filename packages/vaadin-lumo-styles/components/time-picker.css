@@ -20,7 +20,7 @@
 @import '../src/components/time-picker.css';
 @import './input-container.css';
 
-html {
+:is(:root, :host)::before {
   --vaadin-time-picker-lumo-inject: 1;
   --vaadin-time-picker-lumo-inject-modules:
     lumo_mixins_base-layer-reset,

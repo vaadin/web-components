@@ -7,7 +7,7 @@
 @import '../src/mixins/field-button.css';
 @import '../src/components/side-nav-item.css';
 
-html {
+:is(:root, :host)::before {
   --vaadin-side-nav-item-lumo-inject: 1;
   --vaadin-side-nav-item-lumo-inject-modules:
     lumo_mixins_base-layer-reset,

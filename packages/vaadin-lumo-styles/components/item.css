@@ -6,7 +6,7 @@
 @import '../src/mixins/base-layer-reset.css';
 @import '../src/components/item.css';
 
-html {
+:is(:root, :host)::before {
   --vaadin-item-lumo-inject: 1;
   --vaadin-item-lumo-inject-modules:
     lumo_mixins_base-layer-reset,

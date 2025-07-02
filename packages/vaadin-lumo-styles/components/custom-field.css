@@ -10,7 +10,7 @@
 @import '../src/mixins/field-required.css';
 @import '../src/components/custom-field.css';
 
-html {
+:is(:root, :host)::before {
   --vaadin-custom-field-lumo-inject: 1;
   --vaadin-custom-field-lumo-inject-modules:
     lumo_mixins_base-layer-reset,

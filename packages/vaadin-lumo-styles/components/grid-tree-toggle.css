@@ -6,7 +6,7 @@
 @import '../src/mixins/base-layer-reset.css';
 @import '../src/components/grid-tree-toggle.css';
 
-html {
+:is(:root, :host)::before {
   --vaadin-grid-tree-toggle-lumo-inject: 1;
   --vaadin-grid-tree-toggle-lumo-inject-modules:
     lumo_mixins_base-layer-reset,

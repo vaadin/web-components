@@ -7,7 +7,7 @@
 @import '../src/mixins/overlay.css';
 @import '../src/components/tooltip-overlay.css';
 
-html {
+:is(:root, :host)::before {
   --vaadin-tooltip-overlay-lumo-inject: 1;
   --vaadin-tooltip-overlay-lumo-inject-modules:
     lumo_mixins_base-layer-reset,

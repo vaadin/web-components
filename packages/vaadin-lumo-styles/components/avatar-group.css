@@ -12,7 +12,7 @@
 @import '../src/components/item.css';
 @import '../src/components/list-box.css';
 
-html {
+:is(:root, :host)::before {
   --vaadin-avatar-group-lumo-inject: 1;
   --vaadin-avatar-group-lumo-inject-modules:
     lumo_mixins_base-layer-reset,

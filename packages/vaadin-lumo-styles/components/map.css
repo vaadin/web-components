@@ -6,7 +6,7 @@
 @import '../src/mixins/base-layer-reset.css';
 @import '../src/components/map.css';
 
-html {
+:is(:root, :host)::before {
   --vaadin-map-lumo-inject: 1;
   --vaadin-map-lumo-inject-modules:
     lumo_mixins_base-layer-reset,

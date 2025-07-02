@@ -5,7 +5,7 @@
  */
 @import '../src/components/master-detail-layout.css';
 
-html {
+:is(:root, :host)::before {
   --vaadin-master-detail-layout-lumo-inject: 1;
   --vaadin-master-detail-layout-lumo-inject-modules: lumo_components_master-detail-layout;
 }

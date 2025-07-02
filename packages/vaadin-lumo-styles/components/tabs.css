@@ -7,7 +7,7 @@
 @import '../src/components/tabs.css';
 @import './tab.css';
 
-html {
+:is(:root, :host)::before {
   --vaadin-tabs-lumo-inject: 1;
   --vaadin-tabs-lumo-inject-modules:
     lumo_mixins_base-layer-reset,

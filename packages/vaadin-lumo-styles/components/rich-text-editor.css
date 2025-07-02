@@ -16,7 +16,7 @@
 @import './text-field.css';
 @import './tooltip.css';
 
-html {
+:is(:root, :host)::before {
   --vaadin-rich-text-editor-lumo-inject: 1;
   --vaadin-rich-text-editor-lumo-inject-modules:
     lumo_mixins_base-layer-reset,

@@ -19,7 +19,7 @@
 @import './select.css';
 @import './text-field.css';
 
-html {
+:is(:root, :host)::before {
   --vaadin-grid-pro-edit-text-field-lumo-inject: 1;
   --vaadin-grid-pro-edit-text-field-lumo-inject-modules:
     lumo_mixins_base-layer-reset,

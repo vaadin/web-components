@@ -9,7 +9,7 @@
 @import './password-field.css';
 @import './text-field.css';
 
-html {
+:is(:root, :host)::before {
   --vaadin-login-form-wrapper-lumo-inject: 1;
   --vaadin-login-form-wrapper-lumo-inject-modules:
     lumo_mixins_base-layer-reset,

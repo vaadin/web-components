@@ -12,7 +12,7 @@
 @import './button.css';
 @import './progress-bar.css';
 
-html {
+:is(:root, :host)::before {
   --vaadin-upload-lumo-inject: 1;
   --vaadin-upload-lumo-inject-modules:
     lumo_mixins_base-layer-reset,

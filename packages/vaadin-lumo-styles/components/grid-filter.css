@@ -7,7 +7,7 @@
 @import '../src/components/grid-filter.css';
 @import './text-field.css';
 
-html {
+:is(:root, :host)::before {
   --vaadin-grid-filter-lumo-inject: 1;
   --vaadin-grid-filter-lumo-inject-modules:
     lumo_mixins_base-layer-reset,

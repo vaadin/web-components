@@ -7,7 +7,7 @@
 @import '../src/mixins/overlay.css';
 @import '../src/components/popover-overlay.css';
 
-html {
+:is(:root, :host)::before {
   --vaadin-popover-overlay-lumo-inject: 1;
   --vaadin-popover-overlay-lumo-inject-modules:
     lumo_mixins_base-layer-reset,
