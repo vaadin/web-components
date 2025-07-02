@@ -4,7 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { css } from 'lit';
-import { comboBoxStyles } from '@vaadin/combo-box/src/styles/vaadin-combo-box-base-styles';
+import { comboBoxStyles } from '@vaadin/combo-box/src/styles/vaadin-combo-box-base-styles.js';
 
 export const multiSelectComboBoxStyles = [
   comboBoxStyles,
