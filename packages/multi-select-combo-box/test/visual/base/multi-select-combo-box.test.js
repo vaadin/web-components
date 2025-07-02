@@ -2,7 +2,7 @@ import { resetMouse, sendKeys } from '@vaadin/test-runner-commands';
 import { fixtureSync, mousedown } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '../common.js';
-import '../../../vaadin-multi-select-combo-box.js';
+import '../../../src/vaadin-multi-select-combo-box.js';
 
 describe('multi-select-combo-box', () => {
   let div, element;
