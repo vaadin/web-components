@@ -28,7 +28,7 @@ export const multiSelectComboBoxChipStyles = css`
     }
 
     :host(:not([slot='overflow'])) {
-      min-width: min(max-content, var(--vaadin-chip-min-width, 6em));
+      min-width: min(max-content, var(--vaadin-chip-min-width, 48px));
     }
 
     :host([focused]) {
