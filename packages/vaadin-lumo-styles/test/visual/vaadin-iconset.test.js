@@ -1,5 +1,7 @@
 import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
+import '../../props.css';
+import '../../components/icon.css';
 import '@vaadin/icon/vaadin-icon.js';
 import '../../vaadin-iconset.js';
 
