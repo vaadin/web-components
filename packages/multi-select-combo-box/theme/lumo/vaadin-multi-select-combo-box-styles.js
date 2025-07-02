@@ -51,10 +51,6 @@ registerStyles(
 registerStyles(
   'vaadin-multi-select-combo-box-container',
   css`
-    :host {
-      --_wrapper-gap: 0;
-    }
-
     :host([auto-expand-vertically]) {
       padding-block: var(--lumo-space-xs);
     }
@@ -63,6 +59,10 @@ registerStyles(
 );
 
 const multiSelectComboBox = css`
+  :host {
+    --_wrapper-gap: 0;
+  }
+
   :host([has-value]) {
     padding-inline-start: 0;
   }

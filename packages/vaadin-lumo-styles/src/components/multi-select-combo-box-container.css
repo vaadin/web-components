@@ -4,10 +4,6 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 @media lumo_components_multi-select-combo-box-container {
-  :host {
-    --_wrapper-gap: 0;
-  }
-
   #wrapper {
     display: flex;
     width: 100%;
