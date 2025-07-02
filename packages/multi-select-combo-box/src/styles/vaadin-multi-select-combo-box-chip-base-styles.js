@@ -22,7 +22,6 @@ export const multiSelectComboBoxChipStyles = css`
       line-height: var(--vaadin-input-field-value-line-height, inherit);
       padding: 0 var(--vaadin-chip-padding, 0.3em);
       height: var(--vaadin-chip-height, calc(1lh / 0.875));
-      box-sizing: border-box;
       border-radius: var(--vaadin-chip-border-radius, var(--vaadin-radius-m));
       border: var(--vaadin-chip-border-width, 1px) solid var(--vaadin-chip-border-color, var(--vaadin-border-color));
       cursor: default;
@@ -45,8 +44,7 @@ export const multiSelectComboBoxChipStyles = css`
     [part='remove-button'] {
       flex: none;
       display: block;
-      margin-inline-start: auto;
-      margin-inline-end: calc(var(--vaadin-chip-padding, 0.3em) * -1);
+      margin-inline: auto calc(var(--vaadin-chip-padding, 0.3em) * -1);
       color: var(--vaadin-chip-remove-button-color, var(--vaadin-color-subtle));
       cursor: var(--vaadin-clickable-cursor);
     }
