@@ -49,7 +49,7 @@ export const progressBarStyles = css`
     :host([indeterminate]) [part='value'] {
       --_w-min: clamp(0.5em, 5%, 1em);
       --_w-max: clamp(1em, 20%, 8em);
-      animation: progress-indeterminate 0.7s linear infinite alternate;
+      animation: indeterminate var(--vaadin-progress-bar-animation-duration, 1s) linear infinite alternate;
       width: var(--_w-min);
     }
 
@@ -57,7 +57,7 @@ export const progressBarStyles = css`
       animation-delay: 150ms;
     }
 
-    @keyframes progress-indeterminate {
+    @keyframes indeterminate {
       0% {
         animation-timing-function: ease-in;
       }
@@ -80,6 +80,23 @@ export const progressBarStyles = css`
       100% {
         width: var(--_w-min);
         margin-inline-start: calc(100% - var(--_w-min));
+      }
+    }
+
+    @keyframes indeterminate-reduced {
+      100% {
+        opacity: 0.2;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      [part='value'] {
+        transition: none;
+      }
+
+      :host([indeterminate]) [part='value'] {
+        width: 25%;
+        animation: indeterminate-reduced 2s linear infinite alternate;
       }
     }
   }
