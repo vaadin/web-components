@@ -104,7 +104,13 @@ describe('avatar', () => {
   });
 
   it('avatar-size', async () => {
-    element.style.setProperty('--vaadin-avatar-size', '45px');
+    fixtureSync(`
+      <style>
+        html {
+          --vaadin-avatar-size: 45px;
+        }
+      </style>
+    `);
     await visualDiff(div, 'avatar-size');
   });
 

@@ -210,4 +210,21 @@ describe('card', () => {
       });
     });
   });
+
+  describe('custom properties', () => {
+    beforeEach(() => {
+      fixtureSync(`
+        <style>
+          html {
+            --vaadin-card-background: var(--lumo-contrast-50pct);
+          }
+        </style>
+      `);
+      element = cardFixture(content);
+    });
+
+    it('default', async () => {
+      await visualDiff(div, 'custom-properties');
+    });
+  });
 });
