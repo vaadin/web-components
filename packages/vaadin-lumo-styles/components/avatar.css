@@ -13,8 +13,7 @@
     lumo_components_avatar;
 }
 
-html,
-:host {
+:where(:root, :host) {
   --vaadin-avatar-size: var(
     --lumo-size-m
   );

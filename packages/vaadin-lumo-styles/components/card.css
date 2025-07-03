@@ -13,8 +13,7 @@
     lumo_components_card;
 }
 
-html,
-:host {
+:where(:root, :host) {
   --vaadin-card-background: var(
     --lumo-contrast-5pct
   );

@@ -216,7 +216,7 @@ describe('card', () => {
       fixtureSync(`
         <style>
           html {
-            --vaadin-card-background: var(--lumo-contrast-30pct);
+            --vaadin-card-background: var(--lumo-contrast-50pct);
           }
         </style>
       `);

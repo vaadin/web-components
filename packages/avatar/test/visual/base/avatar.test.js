@@ -57,24 +57,19 @@ describe('avatar', () => {
     await visualDiff(div, 'aspect-ratio');
   });
 
+  it('avatar-size', async () => {
+    fixtureSync(`
+      <style>
+        html {
+          --vaadin-avatar-size: 45px;
+        }
+      </style>
+    `);
+    await visualDiff(div, 'avatar-size');
+  });
+
   it('focus-ring', async () => {
     await sendKeys({ press: 'Tab' });
     await visualDiff(div, 'focus-ring');
-  });
-
-  describe('custom properties', () => {
-    beforeEach(() => {
-      fixtureSync(`
-        <style>
-          html {
-            --vaadin-avatar-size: 45px;
-          }
-        </style>
-      `);
-    });
-
-    it('default', async () => {
-      await visualDiff(div, 'custom-properties');
-    });
   });
 });

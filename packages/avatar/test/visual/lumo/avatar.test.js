@@ -103,6 +103,17 @@ describe('avatar', () => {
     await visualDiff(div, 'aspect-ratio');
   });
 
+  it('avatar-size', async () => {
+    fixtureSync(`
+      <style>
+        html {
+          --vaadin-avatar-size: 45px;
+        }
+      </style>
+    `);
+    await visualDiff(div, 'avatar-size');
+  });
+
   it('tooltip', async () => {
     div.style.width = '90px';
     div.style.height = '90px';
@@ -110,21 +121,5 @@ describe('avatar', () => {
     element.withTooltip = true;
     await sendKeys({ press: 'Tab' });
     await visualDiff(div, 'tooltip');
-  });
-
-  describe('custom properties', () => {
-    beforeEach(() => {
-      fixtureSync(`
-        <style>
-          html {
-            --vaadin-avatar-size: 45px;
-          }
-        </style>
-      `);
-    });
-
-    it('default', async () => {
-      await visualDiff(div, 'custom-properties');
-    });
   });
 });
