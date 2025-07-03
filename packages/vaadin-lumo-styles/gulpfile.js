@@ -159,7 +159,7 @@ Iconset.register('lumo', 1000, template);\n`;
   font-style: normal;
 }
 
-html {
+:where(:root, :host) {
   ${glyphCSSProperties.join('\n  ')}
 }
 `;

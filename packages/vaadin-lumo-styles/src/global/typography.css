@@ -3,7 +3,7 @@
  * Copyright (c) 2017 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-body {
+:where(body, :host) {
   font-family: var(--lumo-font-family);
   font-size: var(--lumo-font-size-m);
   line-height: var(--lumo-line-height-m);
