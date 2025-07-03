@@ -23,13 +23,13 @@ export class CSSPropertyObserver {
     const styleSheet = new CSSStyleSheet();
     styleSheet.replaceSync(`
       :is(:root, :host)::before {
-        content: '';
-        position: absolute;
-        top: -9999px;
-        left: -9999px;
-        visibility: hidden;
-        transition: 1ms allow-discrete step-end;
-        transition-property: var(--${this.#name}-props);
+        content: '' !important;
+        position: absolute !important;
+        top: -9999px !important;
+        left: -9999px !important;
+        visibility: hidden !important;
+        transition: 1ms allow-discrete step-end !important;
+        transition-property: var(--${this.#name}-props) !important;
       }
     `);
     this.#root.adoptedStyleSheets.unshift(styleSheet);
