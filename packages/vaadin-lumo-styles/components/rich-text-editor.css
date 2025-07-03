@@ -7,8 +7,6 @@
 @import '../src/mixins/overlay.css';
 @import '../src/components/rich-text-editor-popup-overlay.css';
 @import '../src/components/rich-text-editor.css';
-@import '../src/global/color.css'
-  lumo_global_color;
 @import '../src/global/typography.css'
   lumo_global_typography;
 @import './button.css';
@@ -20,7 +18,6 @@
   --vaadin-rich-text-editor-lumo-inject: 1;
   --vaadin-rich-text-editor-lumo-inject-modules:
     lumo_mixins_base-layer-reset,
-    lumo_global_color,
     lumo_global_typography,
     lumo_components_rich-text-editor;
 

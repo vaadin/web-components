@@ -4,5 +4,20 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 @import './src/global/badge.css';
-@import './src/global/color.css';
+@import './src/global/dark.css';
 @import './src/global/typography.css';
+
+:where(:root, :host) {
+  color: var(--lumo-body-text-color);
+  background-color: var(--lumo-base-color);
+  color-scheme: light;
+}
+
+:where(body, :host) {
+  font-family: var(--lumo-font-family);
+  font-size: var(--lumo-font-size-m);
+  line-height: var(--lumo-line-height-m);
+  -webkit-text-size-adjust: 100%;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
