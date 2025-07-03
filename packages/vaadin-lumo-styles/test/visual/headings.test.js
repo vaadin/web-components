@@ -4,9 +4,11 @@ import '../../props.css';
 import '../../global.css';
 
 describe('headings', () => {
-  it('default', async () => {
-    const wrapper = fixtureSync(`
-      <div>
+  let wrapper;
+
+  beforeEach(() => {
+    wrapper = fixtureSync(`
+      <div style="width: 600px;">
         <h1>Heading 1</h1>
         <h2>Heading 2</h2>
         <h3>Heading 3</h3>
@@ -15,6 +17,9 @@ describe('headings', () => {
         <h6>Heading 6</h6>
       </div>
     `);
+  });
+
+  it('default', async () => {
     await visualDiff(wrapper, 'headings-default');
   });
 
@@ -55,20 +60,11 @@ describe('headings', () => {
         }
       </style>
     `);
+
     // Use prepend to avoid relying on the order of styles in the DOM.
     // The order can vary depending on the application.
     document.head.prepend(style);
 
-    const wrapper = fixtureSync(`
-      <div>
-        <h1>Heading 1</h1>
-        <h2>Heading 2</h2>
-        <h3>Heading 3</h3>
-        <h4>Heading 4</h4>
-        <h5>Heading 5</h5>
-        <h6>Heading 6</h6>
-      </div>
-    `);
     await visualDiff(wrapper, 'headings-custom-margins');
   });
 });

@@ -3,34 +3,30 @@ import { visualDiff } from '@web/test-runner-visual-regression';
 import '../../props.css';
 import '../../global.css';
 
-describe('font-size', () => {
+describe('color', () => {
   let wrapper;
 
   beforeEach(() => {
     wrapper = fixtureSync(`
-      <div style="width: 600px">
-        <span style="font-size: 1.5em">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-        </span>
-        <span>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-        </span>
+      <div style="display: flex; align-items: center; justify-content: center; width: 600px; height: 400px;">
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
       </div>
     `);
   });
 
   it('default', async () => {
-    await visualDiff(wrapper, 'font-size');
+    await visualDiff(wrapper, 'color');
   });
 
   it('custom', async () => {
     fixtureSync(`
       <style>
         html {
-          --lumo-font-size-m: 48px;
+          --lumo-base-color: black;
+          --lumo-body-text-color: white;
         }
       </style>
     `);
-    await visualDiff(wrapper, 'font-size-custom');
+    await visualDiff(wrapper, 'color-custom');
   });
 });
