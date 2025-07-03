@@ -129,16 +129,19 @@ export const cardStyles = css`
     }
 
     ::slotted([slot='title']) {
-      font-size: var(--vaadin-card-title-font-size, inherit);
-      font-weight: var(--vaadin-card-title-font-weight, 500);
-      line-height: var(--vaadin-card-title-line-height, inherit);
+      color: var(--vaadin-card-title-color, var(--vaadin-color)) !important;
+      font-size: var(--vaadin-card-title-font-size, inherit) !important;
+      font-weight: var(--vaadin-card-title-font-weight, 500) !important;
+      line-height: var(--vaadin-card-title-line-height, inherit) !important;
+      margin: 0 !important;
     }
 
     ::slotted([slot='subtitle']) {
-      color: var(--vaadin-card-subtitle-color, var(--vaadin-color-subtle));
-      font-size: var(--vaadin-card-subtitle-font-size, inherit);
-      font-weight: var(--vaadin-card-subtitle-font-weight, 400);
-      line-height: var(--vaadin-card-subtitle-line-height, inherit);
+      color: var(--vaadin-card-subtitle-color, var(--vaadin-color-subtle)) !important;
+      font-size: var(--vaadin-card-subtitle-font-size, inherit) !important;
+      font-weight: var(--vaadin-card-subtitle-font-weight, 400) !important;
+      line-height: var(--vaadin-card-subtitle-line-height, inherit) !important;
+      margin: 0 !important;
       grid-column: calc(1 + var(--_header-prefix));
       grid-row: calc(1 + var(--_title));
     }
