@@ -35,5 +35,13 @@ registerStyles(
       animation: none;
       opacity: 1;
     }
+
+    :host([opening]),
+    :host([closing]),
+    :host([opening]) [part='overlay'],
+    :host([closing]) [part='overlay'] {
+      transition: none !important;
+      animation: none !important;
+    }
   `,
 );
