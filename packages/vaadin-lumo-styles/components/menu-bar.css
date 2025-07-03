@@ -3,7 +3,6 @@
  * Copyright (c) 2017 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-@import '../src/mixins/base-layer-reset.css';
 @import '../src/mixins/menu-overlay-core.css';
 @import '../src/mixins/menu-overlay-ext.css';
 @import '../src/mixins/overlay.css';
@@ -20,13 +19,10 @@
 
 :is(:root, :host)::before {
   --vaadin-menu-bar-lumo-inject: 1;
-  --vaadin-menu-bar-lumo-inject-modules:
-    lumo_mixins_base-layer-reset,
-    lumo_components_menu-bar;
+  --vaadin-menu-bar-lumo-inject-modules: lumo_components_menu-bar;
 
   --vaadin-menu-bar-overlay-lumo-inject: 1;
   --vaadin-menu-bar-overlay-lumo-inject-modules:
-    lumo_mixins_base-layer-reset,
     lumo_mixins_overlay,
     lumo_mixins_menu-overlay-core,
     lumo_mixins_menu-overlay-ext,
@@ -35,20 +31,17 @@
 
   --vaadin-menu-bar-list-box-lumo-inject: 1;
   --vaadin-menu-bar-list-box-lumo-inject-modules:
-    lumo_mixins_base-layer-reset,
     lumo_components_list-box,
     lumo_components_context-menu-list-box;
 
   --vaadin-menu-bar-item-lumo-inject: 1;
   --vaadin-menu-bar-item-lumo-inject-modules:
-    lumo_mixins_base-layer-reset,
     lumo_components_item,
     lumo_components_context-menu-item,
     lumo_components_menu-bar-item;
 
   --vaadin-menu-bar-button-lumo-inject: 1;
   --vaadin-menu-bar-button-lumo-inject-modules:
-    lumo_mixins_base-layer-reset,
     lumo_components_button,
     lumo_components_menu-bar-button;
 }

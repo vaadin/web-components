@@ -3,7 +3,6 @@
  * Copyright (c) 2000 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-@import '../src/mixins/base-layer-reset.css';
 @import '../src/mixins/field-button.css';
 @import '../src/components/upload-file-list.css';
 @import '../src/components/upload-file.css';
@@ -14,23 +13,16 @@
 
 :is(:root, :host)::before {
   --vaadin-upload-lumo-inject: 1;
-  --vaadin-upload-lumo-inject-modules:
-    lumo_mixins_base-layer-reset,
-    lumo_components_upload;
+  --vaadin-upload-lumo-inject-modules: lumo_components_upload;
 
   --vaadin-upload-icon-lumo-inject: 1;
-  --vaadin-upload-icon-lumo-inject-modules:
-    lumo_mixins_base-layer-reset,
-    lumo_components_upload-icon;
+  --vaadin-upload-icon-lumo-inject-modules: lumo_components_upload-icon;
 
   --vaadin-upload-file-lumo-inject: 1;
   --vaadin-upload-file-lumo-inject-modules:
-    lumo_mixins_base-layer-reset,
     lumo_mixins_field-button,
     lumo_components_upload-file;
 
   --vaadin-upload-file-list-lumo-inject: 1;
-  --vaadin-upload-file-list-lumo-inject-modules:
-    lumo_mixins_base-layer-reset,
-    lumo_components_upload-file-list;
+  --vaadin-upload-file-list-lumo-inject-modules: lumo_components_upload-file-list;
 }

@@ -3,7 +3,6 @@
  * Copyright (c) 2000 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-@import '../src/mixins/base-layer-reset.css';
 @import '../src/mixins/loader.css';
 @import '../src/components/tabsheet.css';
 @import './scroller.css';
@@ -12,7 +11,6 @@
 :is(:root, :host)::before {
   --vaadin-tabsheet-lumo-inject: 1;
   --vaadin-tabsheet-lumo-inject-modules:
-    lumo_mixins_base-layer-reset,
     lumo_mixins_loader,
     lumo_components_tabsheet;
 

@@ -3,7 +3,6 @@
  * Copyright (c) 2017 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-@import '../src/mixins/base-layer-reset.css';
 @import '../src/mixins/field-base.css';
 @import '../src/mixins/field-button.css';
 @import '../src/mixins/field-error-message.css';
@@ -18,7 +17,6 @@
 :is(:root, :host)::before {
   --vaadin-date-time-picker-lumo-inject: 1;
   --vaadin-date-time-picker-lumo-inject-modules:
-    lumo_mixins_base-layer-reset,
     lumo_mixins_field-label,
     lumo_mixins_field-required,
     lumo_mixins_field-error-message,

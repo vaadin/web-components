@@ -183,6 +183,12 @@ import { ChartMixin } from './vaadin-chart-mixin.js';
  * @mixes ElementMixin
  */
 class Chart extends ChartMixin(ThemableMixin(ElementMixin(LumoInjectionMixin(PolylitMixin(LitElement))))) {
+  static get lumoInjector() {
+    return {
+      includeBaseStyles: true,
+    };
+  }
+
   static get is() {
     return 'vaadin-chart';
   }
