@@ -28,6 +28,16 @@
         const content = lorem.substring(dotIndex + 1);
         panelContent.textContent = content.repeat(5);
       });
+
+      const tabsheet = document.querySelector('vaadin-tabsheet');
+
+      document.querySelector('#variant-group').addEventListener('value-changed', (e) => {
+        tabsheet.setAttribute('theme', e.detail.value.join(' '));
+      });
+
+      document.querySelector('#direction-group').addEventListener('value-changed', (e) => {
+        document.dir = e.detail.value;
+      });
     </script>
     <style>
       vaadin-tabsheet {
@@ -38,6 +48,19 @@
   </head>
 
   <body>
+    <section class="section" dir="ltr">
+      <vaadin-checkbox-group label="Tabsheet theme variants" id="variant-group" theme="vertical" dir="ltr">
+        <vaadin-checkbox label="bordered (Lumo)" value="bordered" dir="ltr"></vaadin-checkbox>
+        <vaadin-checkbox label="no-border (base)" value="no-border" dir="ltr"></vaadin-checkbox>
+        <vaadin-checkbox label="no padding" value="no-padding" dir="ltr"></vaadin-checkbox>
+      </vaadin-checkbox-group>
+
+      <vaadin-radio-group label="Direction" id="direction-group" value="ltr" theme="vertical" dir="ltr">
+        <vaadin-radio-button label="ltr" value="ltr" dir="ltr"></vaadin-radio-button>
+        <vaadin-radio-button label="rtl" value="rtl" dir="ltr"></vaadin-radio-button>
+      </vaadin-radio-group>
+    </section>
+
     <vaadin-tabsheet>
       <vaadin-checkbox slot="prefix" label="All tabs"></vaadin-checkbox>
       <vaadin-button slot="suffix" label="Suffix">
@@ -60,30 +83,5 @@
       <div tab="tab-4"></div>
       <div tab="tab-5"></div>
     </vaadin-tabsheet>
-
-    <section class="section">
-      <vaadin-checkbox-group label="Tabsheet theme variants" id="variant-group" theme="vertical">
-        <vaadin-checkbox label="bordered (Lumo)" value="bordered"></vaadin-checkbox>
-        <vaadin-checkbox label="no-border (base)" value="no-border"></vaadin-checkbox>
-        <vaadin-checkbox label="no padding" value="no-padding"></vaadin-checkbox>
-      </vaadin-checkbox-group>
-
-      <vaadin-radio-group label="Direction" id="direction-group" value="ltr" theme="vertical">
-        <vaadin-radio-button label="ltr" value="ltr"></vaadin-radio-button>
-        <vaadin-radio-button label="rtl" value="rtl"></vaadin-radio-button>
-      </vaadin-radio-group>
-
-      <script>
-        const tabsheet = document.querySelector('vaadin-tabsheet');
-
-        document.querySelector('#variant-group').addEventListener('value-changed', (e) => {
-          tabsheet.setAttribute('theme', e.detail.value.join(' '));
-        });
-
-        document.querySelector('#direction-group').addEventListener('value-changed', (e) => {
-          document.dir = e.detail.value;
-        });
-      </script>
-    </section>
   </body>
 </html>
