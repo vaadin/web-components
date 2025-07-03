@@ -5,61 +5,44 @@
  */
 import '@vaadin/component-base/src/style-props.js';
 import { css } from 'lit';
+import { loaderStyles } from '@vaadin/component-base/src/loader-styles.js';
 
-export const comboBoxOverlayStyles = css`
-  @layer base {
-    :host {
-      --vaadin-item-checkmark-display: block;
-    }
-
-    [part='overlay'] {
-      position: relative;
-      width: var(--vaadin-combo-box-overlay-width, var(--_vaadin-combo-box-overlay-default-width, auto));
-    }
-
-    [part='loader'] {
-      animation: spin 1s linear infinite;
-      border: 2px solid;
-      --_spinner-color: var(--vaadin-combo-box-spinner-color, var(--vaadin-color));
-      border-color: var(--_spinner-color) var(--_spinner-color) hsl(from var(--_spinner-color) h s l / 0.2)
-        hsl(from var(--_spinner-color) h s l / 0.2);
-      border-radius: var(--vaadin-radius-full);
-      box-sizing: border-box;
-      display: none;
-      height: var(--vaadin-icon-size, 1lh);
-      inset: calc(var(--vaadin-item-overlay-padding, 4px) + 2px);
-      inset-block-end: auto;
-      inset-inline-start: auto;
-      pointer-events: none;
-      position: absolute;
-      width: var(--vaadin-icon-size, 1lh);
-    }
-
-    [part='content'] {
-      display: flex;
-      flex-direction: column;
-      height: 100%;
-    }
-
-    :host([loading]) [part='loader'] {
-      display: block;
-    }
-
-    :host([loading]) [part='content'] {
-      --_items-min-height: calc(var(--vaadin-icon-size, 1lh) + 4px);
-    }
-
-    @keyframes spin {
-      to {
-        rotate: 1turn;
+export const comboBoxOverlayStyles = [
+  loaderStyles,
+  css`
+    @layer base {
+      :host {
+        --vaadin-item-checkmark-display: block;
       }
-    }
 
-    @media (forced-colors: active) {
+      [part='overlay'] {
+        position: relative;
+        width: var(--vaadin-combo-box-overlay-width, var(--_vaadin-combo-box-overlay-default-width, auto));
+      }
+
+      [part='content'] {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+      }
+
+      :host([loading]) [part='content'] {
+        --_items-min-height: calc(var(--vaadin-icon-size, 1lh) + 4px);
+      }
+
+      @media (forced-colors: active) {
+        [part='loader'] {
+          forced-color-adjust: none;
+          --vaadin-combo-box-spinner-color: CanvasText;
+        }
+      }
+
       [part='loader'] {
-        forced-color-adjust: none;
-        --vaadin-combo-box-spinner-color: CanvasText;
+        position: absolute;
+        inset: calc(var(--vaadin-item-overlay-padding, 4px) + 2px);
+        inset-block-end: auto;
+        inset-inline-start: auto;
       }
     }
-  }
-`;
+  `,
+];
