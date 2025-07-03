@@ -88,8 +88,7 @@
   :host(:is([_h], [_t], [_st], [_hp], [_hs])) [part='header'] {
     display: grid;
     align-items: center;
-    gap: var(--_gap);
-    row-gap: 0;
+    gap: 0 var(--_gap);
   }
 
   :host([_hs]) [part='header'] {
