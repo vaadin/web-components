@@ -3,18 +3,13 @@
  * Copyright (c) 2017 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-@import '../src/mixins/base-layer-reset.css';
 @import '../src/components/notification-card.css';
 @import '../src/components/notification-container.css';
 
 :is(:root, :host)::before {
   --vaadin-notification-container-lumo-inject: 1;
-  --vaadin-notification-container-lumo-inject-modules:
-    lumo_mixins_base-layer-reset,
-    lumo_components_notification-container;
+  --vaadin-notification-container-lumo-inject-modules: lumo_components_notification-container;
 
   --vaadin-notification-card-lumo-inject: 1;
-  --vaadin-notification-card-lumo-inject-modules:
-    lumo_mixins_base-layer-reset,
-    lumo_components_notification-card;
+  --vaadin-notification-card-lumo-inject-modules: lumo_components_notification-card;
 }

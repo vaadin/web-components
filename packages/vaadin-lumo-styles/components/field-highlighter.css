@@ -3,7 +3,6 @@
  * Copyright (c) 2000 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-@import '../src/mixins/base-layer-reset.css';
 @import '../src/mixins/overlay.css';
 @import '../src/components/field-outline.css';
 @import '../src/components/user-tag.css';
@@ -12,17 +11,12 @@
 :is(:root, :host)::before {
   --vaadin-user-tags-overlay-lumo-inject: 1;
   --vaadin-user-tags-overlay-lumo-inject-modules:
-    lumo_mixins_base-layer-reset,
     lumo_mixins_overlay,
     lumo_components_user-tags-overlay;
 
   --vaadin-user-tag-lumo-inject: 1;
-  --vaadin-user-tag-lumo-inject-modules:
-    lumo_mixins_base-layer-reset,
-    lumo_components_user-tag;
+  --vaadin-user-tag-lumo-inject-modules: lumo_components_user-tag;
 
   --vaadin-field-outline-lumo-inject: 1;
-  --vaadin-field-outline-lumo-inject-modules:
-    lumo_mixins_base-layer-reset,
-    lumo_components_field-outline;
+  --vaadin-field-outline-lumo-inject-modules: lumo_components_field-outline;
 }

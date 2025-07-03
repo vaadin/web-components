@@ -3,7 +3,6 @@
  * Copyright (c) 2017 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-@import '../src/mixins/base-layer-reset.css';
 @import '../src/mixins/menu-overlay-core.css';
 @import '../src/mixins/menu-overlay-ext.css';
 @import '../src/mixins/overlay.css';
@@ -16,7 +15,6 @@
 :is(:root, :host)::before {
   --vaadin-context-menu-overlay-lumo-inject: 1;
   --vaadin-context-menu-overlay-lumo-inject-modules:
-    lumo_mixins_base-layer-reset,
     lumo_mixins_overlay,
     lumo_mixins_menu-overlay-core,
     lumo_mixins_menu-overlay-ext,
@@ -24,13 +22,11 @@
 
   --vaadin-context-menu-list-box-lumo-inject: 1;
   --vaadin-context-menu-list-box-lumo-inject-modules:
-    lumo_mixins_base-layer-reset,
     lumo_components_list-box,
     lumo_components_context-menu-list-box;
 
   --vaadin-context-menu-item-lumo-inject: 1;
   --vaadin-context-menu-item-lumo-inject-modules:
-    lumo_mixins_base-layer-reset,
     lumo_components_item,
     lumo_components_context-menu-item;
 }
