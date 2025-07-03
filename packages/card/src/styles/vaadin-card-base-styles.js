@@ -28,6 +28,7 @@ export const cardStyles = css`
       position: relative;
     }
 
+    /* Could be an inset outline on the host as well, but let's reserve that for a potential focus outline */
     :host::before {
       border: var(--vaadin-card-border-width, 0) solid var(--vaadin-card-border-color, var(--vaadin-border-color));
       border-radius: inherit;
