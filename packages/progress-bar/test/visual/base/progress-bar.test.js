@@ -1,6 +1,6 @@
 import { fixtureSync } from '@vaadin/testing-helpers/dist/fixture.js';
 import { visualDiff } from '@web/test-runner-visual-regression';
-import '../../../vaadin-progress-bar.js';
+import '../../../src/vaadin-progress-bar.js';
 
 describe('progress-bar', () => {
   let div, element;
