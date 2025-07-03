@@ -249,6 +249,11 @@ export const cardStyles = css`
       padding-inline: var(--_padding);
     }
 
+    [part='content'] ::slotted(vaadin-scroller)::before,
+    [part='content'] ::slotted(vaadin-scroller)::after {
+      margin-inline: calc(var(--_padding) * -1);
+    }
+
     /* Outlined */
     :host([theme~='outlined']) {
       --vaadin-card-border-width: 1px;
