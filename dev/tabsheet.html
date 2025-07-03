@@ -29,6 +29,12 @@
         panelContent.textContent = content.repeat(5);
       });
     </script>
+    <style>
+      vaadin-tabsheet {
+        overflow: hidden;
+        resize: both;
+      }
+    </style>
   </head>
 
   <body>
@@ -55,7 +61,7 @@
       <div tab="tab-5"></div>
     </vaadin-tabsheet>
 
-    <section style="margin-top: 40px">
+    <section class="section">
       <vaadin-checkbox-group label="Tabsheet theme variants" id="variant-group" theme="vertical">
         <vaadin-checkbox label="bordered (Lumo)" value="bordered"></vaadin-checkbox>
         <vaadin-checkbox label="no-border (base)" value="no-border"></vaadin-checkbox>
