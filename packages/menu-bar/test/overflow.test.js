@@ -1,5 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { arrowRight, fixtureSync, nextRender, nextResize, nextUpdate } from '@vaadin/testing-helpers';
+import sinon from 'sinon';
 import './menu-bar-test-styles.js';
 import '../src/vaadin-menu-bar.js';
 
@@ -467,6 +468,22 @@ describe('overflow', () => {
       menu.style.width = 'auto';
       await nextResize(menu);
       expect(item.classList.contains('test-class-1')).to.be.true;
+    });
+  });
+
+  describe('performance', () => {
+    let menu, spy;
+
+    beforeEach(() => {
+      menu = fixtureSync('<vaadin-menu-bar></vaadin-menu-bar>');
+      spy = sinon.spy(menu, '_hasOverflow', ['get', 'set']);
+    });
+
+    it('should only detect overflow twice on initial render', async () => {
+      menu.items = [{ text: 'Item 1' }, { text: 'Item 2' }, { text: 'Item 3' }, { text: 'Item 4' }, { text: 'Item 5' }];
+      await nextResize(menu);
+      await nextUpdate(menu);
+      expect(spy.set.callCount).to.equal(2);
     });
   });
 });
