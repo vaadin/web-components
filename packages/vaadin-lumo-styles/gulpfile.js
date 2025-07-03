@@ -159,7 +159,7 @@ Iconset.register('lumo', 1000, template);\n`;
   font-style: normal;
 }
 
-html {
+:where(:root, :host) {
   ${glyphCSSProperties.join('\n  ')}
 }
 `;
@@ -178,6 +178,7 @@ import { addLumoGlobalStyles } from './global.js';
 const fontIcons = css\`
 ${outputCSS
   .trim()
+  .replace(':where(:root, :host)', 'html')
   .replace(/\\/gu, '\\\\')
   .replace(/^(?!$)/gmu, '  ')}
 \`;
