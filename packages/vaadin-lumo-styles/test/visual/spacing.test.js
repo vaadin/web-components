@@ -8,7 +8,7 @@ describe('spacing', () => {
 
   beforeEach(() => {
     wrapper = fixtureSync(`
-      <div style="width: 600px">
+      <div style="display: inline-block">
         <div style="margin-block: var(--lumo-space-m);">
           Lorem ipsum dolor sit amet, consectetur adipiscing elit.
         </div>

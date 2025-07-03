@@ -8,13 +8,13 @@ describe('font-size', () => {
 
   beforeEach(() => {
     wrapper = fixtureSync(`
-      <div style="width: 600px">
-        <span style="font-size: 1.5em">
+      <div style="display: inline-block">
+        <div style="font-size: 1.5em">
           Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-        </span>
-        <span>
+        </div>
+        <div>
           Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-        </span>
+        </div>
       </div>
     `);
   });
@@ -27,7 +27,7 @@ describe('font-size', () => {
     fixtureSync(`
       <style>
         html {
-          --lumo-font-size-m: 48px;
+          --lumo-font-size-m: 1.5rem;
         }
       </style>
     `);
