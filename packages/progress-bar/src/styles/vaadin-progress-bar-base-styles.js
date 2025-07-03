@@ -22,9 +22,8 @@ export const progressBarStyles = css`
     [part='bar'] {
       box-sizing: border-box;
       height: 100%;
-      /* stylelint-disable-next-line length-zero-no-unit */
       --_padding: var(--vaadin-progress-bar-padding, 0px);
-      padding: var(--_padding);
+      padding: var(--_padding); /* stylelint-disable-line length-zero-no-unit */
       background: var(--vaadin-progress-bar-background, var(--vaadin-background-container));
       border-radius: var(--vaadin-progress-bar-border-radius, var(--vaadin-radius-m));
       border: var(--vaadin-progress-bar-border-width, 1px) solid
