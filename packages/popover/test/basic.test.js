@@ -443,52 +443,45 @@ describe('popover', () => {
   });
 
   describe('dimensions', () => {
-    function getStyleValue(element) {
-      return element
-        .getAttribute('style')
-        .split(':')
-        .map((str) => str.trim().replace(';', ''));
-    }
-
     beforeEach(async () => {
       popover.opened = true;
       await oneEvent(overlay, 'vaadin-overlay-open');
     });
 
     it('should update width after opening the popover', async () => {
-      popover.contentWidth = '300px';
-      await nextUpdate(popover);
-      expect(getComputedStyle(overlay.$.content).width).to.be.equal('300px');
+      popover.width = '300px';
+      await nextRender();
+      expect(getComputedStyle(overlay.$.overlay).width).to.be.equal('300px');
     });
 
     it('should update height after opening the popover', async () => {
-      popover.contentHeight = '500px';
-      await nextUpdate(popover);
-      expect(getComputedStyle(overlay.$.content).height).to.equal('500px');
+      popover.height = '500px';
+      await nextRender();
+      expect(getComputedStyle(overlay.$.overlay).height).to.equal('500px');
     });
 
     it('should reset style after setting width to null', async () => {
-      const prop = '--_vaadin-popover-content-width';
+      const originalWidth = getComputedStyle(overlay.$.overlay).width;
 
-      popover.contentWidth = '500px';
-      await nextUpdate(popover);
-      expect(getStyleValue(overlay)).to.eql([prop, '500px']);
+      popover.width = '500px';
+      await nextRender();
+      expect(getComputedStyle(overlay.$.overlay).width).to.equal('500px');
 
-      popover.contentWidth = null;
-      await nextUpdate(popover);
-      expect(overlay.getAttribute('style')).to.be.not.ok;
+      popover.width = null;
+      await nextRender();
+      expect(getComputedStyle(overlay.$.overlay).width).to.equal(originalWidth);
     });
 
     it('should reset style after setting height to null', async () => {
-      const prop = '--_vaadin-popover-content-height';
+      const originalHeight = getComputedStyle(overlay.$.overlay).height;
 
-      popover.contentHeight = '500px';
-      await nextUpdate(popover);
-      expect(getStyleValue(overlay)).to.eql([prop, '500px']);
+      popover.height = '500px';
+      await nextRender();
+      expect(getComputedStyle(overlay.$.overlay).height).to.equal('500px');
 
-      popover.contentHeight = null;
-      await nextUpdate(popover);
-      expect(overlay.getAttribute('style')).to.be.not.ok;
+      popover.height = null;
+      await nextRender();
+      expect(getComputedStyle(overlay.$.overlay).height).to.equal(originalHeight);
     });
   });
 

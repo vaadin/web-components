@@ -7,11 +7,6 @@ import { css } from 'lit';
 import { overlayStyles } from '@vaadin/overlay/src/styles/vaadin-overlay-core-styles.js';
 
 const popoverOverlay = css`
-  :host {
-    --_vaadin-popover-content-width: auto;
-    --_vaadin-popover-content-height: auto;
-  }
-
   :host([modeless][with-backdrop]) [part='backdrop'] {
     pointer-events: none;
   }
@@ -31,8 +26,6 @@ const popoverOverlay = css`
     overflow: auto;
     box-sizing: border-box;
     max-height: 100%;
-    width: var(--_vaadin-popover-content-width);
-    height: var(--_vaadin-popover-content-height);
   }
 
   /* Increase the area of the popover so the pointer can go from the target directly to it. */

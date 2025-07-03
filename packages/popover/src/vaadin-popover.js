@@ -259,20 +259,18 @@ class Popover extends PopoverPositionMixin(
       },
 
       /**
-       * Height to be set on the overlay content.
-       *
-       * @attr {string} content-height
+       * Set the height of the overlay.
+       * If a unitless number is provided, pixels are assumed.
        */
-      contentHeight: {
+      height: {
         type: String,
       },
 
       /**
-       * Width to be set on the overlay content.
-       *
-       * @attr {string} content-width
+       * Set the width of the overlay.
+       * If a unitless number is provided, pixels are assumed.
        */
-      contentWidth: {
+      width: {
         type: String,
       },
 
@@ -427,11 +425,7 @@ class Popover extends PopoverPositionMixin(
   }
 
   static get observers() {
-    return [
-      '__updateContentHeight(contentHeight, _overlayElement)',
-      '__updateContentWidth(contentWidth, _overlayElement)',
-      '__updateAriaAttributes(opened, overlayRole, target)',
-    ];
+    return ['__sizeChanged(width, height, _overlayElement)', '__updateAriaAttributes(opened, overlayRole, target)'];
   }
 
   /**
@@ -984,27 +978,9 @@ class Popover extends PopoverPositionMixin(
   }
 
   /** @private */
-  __updateDimension(overlay, dimension, value) {
-    const prop = `--_vaadin-popover-content-${dimension}`;
-
-    if (value) {
-      overlay.style.setProperty(prop, value);
-    } else {
-      overlay.style.removeProperty(prop);
-    }
-  }
-
-  /** @private */
-  __updateContentHeight(height, overlay) {
+  __sizeChanged(width, height, overlay) {
     if (overlay) {
-      this.__updateDimension(overlay, 'height', height);
-    }
-  }
-
-  /** @private */
-  __updateContentWidth(width, overlay) {
-    if (overlay) {
-      this.__updateDimension(overlay, 'width', width);
+      requestAnimationFrame(() => overlay.setBounds({ width, height }, false));
     }
   }
 
