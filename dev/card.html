@@ -18,6 +18,7 @@
       import '@vaadin/icons';
       import '@vaadin/select';
       import '@vaadin/scroller';
+      import '@vaadin/tooltip';
       import '@vaadin/vaadin-lumo-styles/icons.js';
 
       const playground = document.querySelector('.playground');
@@ -109,7 +110,8 @@
             .replaceAll(/src=".+?"/g, 'src="..."')
             .replace(/Lapland is the[\s\S]+?.</, 'Lapland is the...<')
             .replace(/ fill="none"[\s\S]+?<\/svg>/, '>...</svg>')
-            .replace(/ overflow=".*?"/, ''),
+            .replace(/ overflow=".*?"/, '')
+            .replace(/ role="region"/, ''),
         ).replace('\n  </vaadin-avatar>', '</vaadin-avatar>');
       }
 
@@ -135,11 +137,15 @@
     </script>
 
     <style>
-      html {
-        background-image: linear-gradient(var(--lumo-shade-5pct), var(--lumo-shade-5pct));
+      html:has([theme~='elevated']) {
+        background-image: linear-gradient(hsl(0 0 0 / 0.04), hsl(0 0 0 / 0.04));
       }
 
-      body {
+      [theme~='dark'] {
+        color-scheme: dark;
+      }
+
+      :where(body) {
         margin: var(--lumo-space-l);
       }
 
@@ -173,9 +179,6 @@
       }
 
       .options {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0 2rem;
         margin-bottom: 3rem;
       }
 
@@ -185,10 +188,10 @@
         font-size: 13px;
         line-height: 1.4;
         padding: 1rem;
-        border: 1px solid var(--lumo-contrast-10pct);
-        background-color: var(--lumo-shade);
-        color: var(--lumo-tint-90pct);
-        border-radius: var(--lumo-border-radius-l);
+        border: 1px solid hsl(0 0 0 / 0.1);
+        background-color: hsl(0 0 0 / 0.8);
+        color: #fff;
+        border-radius: 0.5em;
         width: fit-content;
       }
 
@@ -202,7 +205,7 @@
   </head>
 
   <body>
-    <div class="options">
+    <section class="section options">
       <vaadin-select label="Media" id="media"></vaadin-select>
       <template id="media-options">
         <img
@@ -340,7 +343,10 @@
 
       <vaadin-checkbox-group class="theme-variant" theme="horizontal" label="Theme Variant">
         <vaadin-checkbox label="Outlined" value="outlined"></vaadin-checkbox>
-        <vaadin-checkbox label="Elevated" value="elevated"></vaadin-checkbox>
+        <vaadin-checkbox label="Elevated" value="elevated">
+          <vaadin-tooltip slot="tooltip" text="Also sets the background color of the page to make the elevated style more apparent"></vaadin-tooltip>
+          <label slot="label">Elevated <vaadin-icon icon="lumo:error" style="scale: -1;"></vaadin-icon></label>
+        </vaadin-checkbox>
         <vaadin-checkbox label="Dark" value="dark"></vaadin-checkbox>
         <vaadin-checkbox label="Horizontal" value="horizontal"></vaadin-checkbox>
         <vaadin-checkbox label="Stretch Media" value="stretch-media"></vaadin-checkbox>
@@ -351,11 +357,11 @@
         <vaadin-checkbox label="Width" value="width"></vaadin-checkbox>
         <vaadin-checkbox label="Height" value="height"></vaadin-checkbox>
       </vaadin-checkbox-group>
-    </div>
+    </section>
 
-    <div class="output">
+    <section class="section output">
       <vaadin-card class="playground"></vaadin-card>
       <div class="code-example"></div>
-    </div>
+    </section>
   </body>
 </html>
