@@ -146,7 +146,7 @@ export const appLayoutStyles = css`
     :host([overlay]) [part='drawer'] {
       top: 0;
       bottom: 0;
-      box-shadow: var(--vaadin-overlay-box-shadow, 0 8px 24px -4px hsl(0 0 0 / 0.3));
+      box-shadow: var(--vaadin-overlay-box-shadow, 0 8px 24px -4px rgba(0, 0, 0, 0.3));
     }
 
     :host([overlay]) [part='drawer'],
