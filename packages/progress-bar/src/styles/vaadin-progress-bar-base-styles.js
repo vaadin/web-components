@@ -22,7 +22,7 @@ export const progressBarStyles = css`
     [part='bar'] {
       box-sizing: border-box;
       height: 100%;
-      padding: var(--vaadin-progress-bar-padding, 0px);
+      padding: var(--vaadin-progress-bar-padding, 0);
       background: var(--vaadin-progress-bar-background, var(--vaadin-background-container));
       border-radius: var(--vaadin-progress-bar-border-radius, var(--vaadin-radius-m));
       border: var(--vaadin-progress-bar-border-width, 1px) solid
@@ -38,7 +38,7 @@ export const progressBarStyles = css`
         var(--vaadin-progress-bar-border-radius, var(--vaadin-radius-m)) - var(
             --vaadin-progress-bar-border-width,
             1px
-          ) - var(--vaadin-progress-bar-padding, 0px)
+          ) - var(--vaadin-progress-bar-padding, 0)
       );
       transition: width 150ms;
     }
