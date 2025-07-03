@@ -254,7 +254,7 @@ export const cardStyles = css`
     /* Elevated */
     :host([theme~='elevated']) {
       --vaadin-card-background: var(--vaadin-background-color);
-      box-shadow: var(--vaadin-card-shadow, 0 1px 4px -1px hsl(0 0 0 / 0.3));
+      box-shadow: var(--vaadin-card-shadow, 0 1px 4px -1px rgba(0, 0, 0, 0.3));
     }
   }
 `;
