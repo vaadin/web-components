@@ -28,6 +28,7 @@ export const tabSheetStyles = [
       align-items: center;
       gap: var(--vaadin-tabsheet-gap, var(--vaadin-gap-container-inline));
       padding: var(--vaadin-tabsheet-padding, var(--vaadin-padding));
+      box-sizing: border-box;
     }
 
     ::slotted([slot='tabs']) {
