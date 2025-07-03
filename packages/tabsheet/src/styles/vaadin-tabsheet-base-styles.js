@@ -28,8 +28,6 @@ export const tabSheetStyles = [
       align-items: center;
       gap: var(--vaadin-tabsheet-gap, var(--vaadin-gap-container-inline));
       padding: var(--vaadin-tabsheet-padding, var(--vaadin-padding));
-      border-bottom: var(--vaadin-tabsheet-border-width, 1px) solid
-        var(--vaadin-tabsheet-border-color, var(--vaadin-border-color));
     }
 
     ::slotted([slot='tabs']) {
@@ -43,6 +41,12 @@ export const tabSheetStyles = [
       flex: 1;
       box-sizing: border-box;
       padding: var(--vaadin-tabsheet-padding, var(--vaadin-padding));
+      border-top: var(--vaadin-tabsheet-border-width, 1px) solid transparent;
+      margin-top: max(1px, calc(var(--vaadin-tabsheet-border-width, 1px) * -1));
+    }
+
+    [part='content'][overflow~='top'] {
+      border-top-color: var(--vaadin-tabsheet-border-color, var(--vaadin-border-color));
     }
 
     :host([loading]) [part='content'] {
