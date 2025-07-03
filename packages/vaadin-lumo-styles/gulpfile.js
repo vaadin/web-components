@@ -178,6 +178,7 @@ import { addLumoGlobalStyles } from './global.js';
 const fontIcons = css\`
 ${outputCSS
   .trim()
+  .replace(':where(:root, :host)', 'html')
   .replace(/\\/gu, '\\\\')
   .replace(/^(?!$)/gmu, '  ')}
 \`;
