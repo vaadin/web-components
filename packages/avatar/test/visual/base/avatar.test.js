@@ -57,13 +57,24 @@ describe('avatar', () => {
     await visualDiff(div, 'aspect-ratio');
   });
 
-  it('avatar-size', async () => {
-    element.style.setProperty('--vaadin-avatar-size', '45px');
-    await visualDiff(div, 'avatar-size');
-  });
-
   it('focus-ring', async () => {
     await sendKeys({ press: 'Tab' });
     await visualDiff(div, 'focus-ring');
+  });
+
+  describe('custom properties', () => {
+    beforeEach(() => {
+      fixtureSync(`
+        <style>
+          html {
+            --vaadin-avatar-size: 45px;
+          }
+        </style>
+      `);
+    });
+
+    it('default', async () => {
+      await visualDiff(div, 'custom-properties');
+    });
   });
 });
