@@ -47,6 +47,11 @@ export const tabSheetStyles = [
         margin-top: calc(var(--vaadin-tabsheet-border-width, 1px) * -1);
       }
 
+      [part='content'][focus-ring] {
+        border-bottom-left-radius: inherit;
+        border-bottom-right-radius: inherit;
+      }
+
       [part='content'][overflow~='top'] {
         border-top-color: var(--vaadin-tabsheet-border-color, var(--vaadin-border-color));
       }
