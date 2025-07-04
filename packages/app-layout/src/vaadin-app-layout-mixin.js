@@ -69,6 +69,7 @@ export const AppLayoutMixin = (superclass) =>
           readOnly: true,
           value: false,
           reflectToAttribute: true,
+          observer: '__overlayChanged',
           sync: true,
         },
 
@@ -245,6 +246,24 @@ export const AppLayoutMixin = (superclass) =>
       }
 
       this.__setAriaExpanded();
+    }
+
+    /**
+     * A callback for the `overlay` property observer.
+     *
+     * When the resizing while overlay open, drawer open state is not changed, but focus trap needs to
+     * be removed.
+     *
+     * @param {boolean} overlay
+     * @param {boolean} oldOverlay
+     * @private
+     */
+    __overlayChanged(overlay, oldOverlay) {
+      if (oldOverlay) {
+        this.__ariaModalController.close();
+        this.__focusTrapController.releaseFocus();
+        this.$.drawer.removeAttribute('tabindex');
+      }
     }
 
     /**
