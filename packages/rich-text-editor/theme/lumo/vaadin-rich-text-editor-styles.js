@@ -200,12 +200,11 @@ const richTextEditor = css`
   }
 
   [part~='toolbar-button-link']::before {
-    font-family: 'vaadin-rte-icons';
-    font-size: var(--lumo-icon-size-m);
+    content: var(--lumo-icons-link);
   }
 
   [part~='toolbar-button-clean']::before {
-    font-family: 'vaadin-rte-icons';
+    content: var(--lumo-icons-clean);
     font-size: var(--lumo-font-size-l);
   }
 

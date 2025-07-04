@@ -9,7 +9,6 @@
  * license.
  */
 import { css } from 'lit';
-import { icons } from './vaadin-rich-text-editor-icons.js';
 
 const base = css`
   :host {
@@ -327,4 +326,4 @@ const states = css`
   }
 `;
 
-export const richTextEditorStyles = [base, content, icons, toolbar, states];
+export const richTextEditorStyles = [base, content, toolbar, states];
