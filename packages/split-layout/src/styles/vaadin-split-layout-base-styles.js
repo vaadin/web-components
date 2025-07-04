@@ -28,10 +28,10 @@ export const splitLayoutStyles = css`
     }
 
     [part='splitter'] {
-      background-color: var(--vaadin-split-layout-background, var(--vaadin-background-container));
+      background-color: var(--vaadin-split-layout-splitter-background, var(--vaadin-background-container));
       flex: none;
-      min-height: var(--vaadin-split-layout-size, 0.5rem);
-      min-width: var(--vaadin-split-layout-size, 0.5rem);
+      min-height: var(--vaadin-split-layout-splitter-size, 0.5rem);
+      min-width: var(--vaadin-split-layout-splitter-size, 0.5rem);
       overflow: visible;
       position: relative;
       z-index: 1;
