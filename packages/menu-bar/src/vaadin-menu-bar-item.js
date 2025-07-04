@@ -7,10 +7,10 @@ import { html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
-import { itemStyles } from '@vaadin/item/src/styles/vaadin-item-core-styles.js';
 import { ItemMixin } from '@vaadin/item/src/vaadin-item-mixin.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { menuBarItemStyles } from './styles/vaadin-menu-bar-item-core-styles.js';
 
 /**
  * An element used internally by `<vaadin-menu-bar>`. Not intended to be used separately.
@@ -28,7 +28,7 @@ class MenuBarItem extends ItemMixin(ThemableMixin(DirMixin(LumoInjectionMixin(Po
   }
 
   static get styles() {
-    return itemStyles;
+    return menuBarItemStyles;
   }
 
   /** @protected */
