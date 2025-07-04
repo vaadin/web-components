@@ -116,18 +116,16 @@ declare class Popover extends PopoverPositionMixin(
   autofocus: boolean;
 
   /**
-   * Height to be set on the overlay content.
-   *
-   * @attr {string} content-height
+   * Set the height of the overlay.
+   * If a unitless number is provided, pixels are assumed.
    */
-  contentHeight: string;
+  height: string;
 
   /**
-   * Width to be set on the overlay content.
-   *
-   * @attr {string} content-width
+   * Set the width of the overlay.
+   * If a unitless number is provided, pixels are assumed.
    */
-  contentWidth: string;
+  width: string;
 
   /**
    * The delay in milliseconds before the popover is opened
