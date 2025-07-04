@@ -6,25 +6,29 @@
 import { css } from 'lit';
 
 export const menuBarStyles = css`
-  :host {
-    display: block;
-  }
+  @layer baes {
+    :host {
+      display: block;
+    }
 
-  :host([hidden]) {
-    display: none !important;
-  }
+    :host([hidden]) {
+      display: none !important;
+    }
 
-  [part='container'] {
-    display: flex;
-    flex-wrap: nowrap;
-    margin: calc((var(--vaadin-focus-ring-width) + 1px) * -1);
-    overflow: hidden;
-    padding: calc(var(--vaadin-focus-ring-width) + 1px);
-    position: relative;
-    width: 100%;
-  }
+    [part='container'] {
+      display: flex;
+      flex-wrap: nowrap;
+      margin: calc((var(--vaadin-focus-ring-width) + 1px) * -1);
+      overflow: hidden;
+      padding: calc(var(--vaadin-focus-ring-width) + 1px);
+      position: relative;
+      width: 100%;
+    }
 
-  [part='container'] ::slotted(vaadin-menu-bar-button:not(:first-of-type)) {
-    margin-inline-start: calc(var(--vaadin-menu-bar-border-collapse, 1) * var(--vaadin-button-border-width, 1px) * -1);
+    [part='container'] ::slotted(vaadin-menu-bar-button:not(:first-of-type)) {
+      margin-inline-start: calc(
+        var(--vaadin-menu-bar-border-collapse, 1) * var(--vaadin-button-border-width, 1px) * -1
+      );
+    }
   }
 `;
