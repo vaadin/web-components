@@ -10,6 +10,7 @@ export const cardStyles = css`
     :host {
       --_content: 0;
       --_footer: 0;
+      --_gap: var(--vaadin-card-gap, var(--vaadin-gap-container-block) var(--vaadin-gap-container-inline));
       --_header: max(var(--_header-prefix), var(--_title), var(--_subtitle), var(--_header-suffix));
       --_header-prefix: 0;
       --_header-suffix: 0;
@@ -23,7 +24,7 @@ export const cardStyles = css`
       box-sizing: border-box;
       display: flex;
       flex-direction: column;
-      gap: var(--vaadin-card-gap, var(--vaadin-gap-container-block));
+      gap: var(--_gap);
       padding: var(--_padding);
       position: relative;
     }
@@ -94,7 +95,8 @@ export const cardStyles = css`
     :host(:is([_h], [_t], [_st], [_hp], [_hs])) [part='header'] {
       align-items: center;
       display: grid;
-      gap: 0 var(--vaadin-gap-container-inline);
+      gap: var(--_gap);
+      row-gap: 0;
     }
 
     :host([_hs]) [part='header'] {
@@ -111,7 +113,7 @@ export const cardStyles = css`
 
     :host([_f]) [part='footer'] {
       display: flex;
-      gap: var(--vaadin-gap-container-inline);
+      gap: var(--_gap);
     }
 
     slot {
