@@ -90,6 +90,7 @@ const shorthandToLonghand = new Map([
       'grid-template-areas',
       'grid-template-columns',
       'grid-template-rows',
+      'gap',
     ],
   ],
   ['grid-area', ['grid-column-end', 'grid-column-start', 'grid-row-end', 'grid-row-start']],
@@ -155,20 +156,6 @@ const shorthandToLonghand = new Map([
   ['transition', ['transition-delay', 'transition-duration', 'transition-property', 'transition-timing-function']],
   ['view-timeline', ['view-timeline-axis', 'view-timeline-inset', 'view-timeline-name']],
   ['-webkit-text-stroke', ['-webkit-text-stroke-color', '-webkit-text-stroke-width']],
-  [
-    '-webkit-border-before',
-    ['-webkit-border-before-color', '-webkit-border-before-style', '-webkit-border-before-width'],
-  ],
-  [
-    '-webkit-mask-box-image',
-    [
-      '-webkit-mask-box-image-outset',
-      '-webkit-mask-box-image-repeat',
-      '-webkit-mask-box-image-slice',
-      '-webkit-mask-box-image-source',
-      '-webkit-mask-box-image-width',
-    ],
-  ],
 ]);
 
 const ruleName = 'custom-rules/no-shorthand-with-unresolved-longhand';
