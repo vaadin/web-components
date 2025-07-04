@@ -1,7 +1,7 @@
 import { sendKeys } from '@vaadin/test-runner-commands';
 import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
-import '@vaadin/tabs/test/visual/not-animated-styles.js';
+import '../common.js';
 import '../../../src/vaadin-tabsheet.js';
 
 describe('tabsheet', () => {
@@ -60,6 +60,13 @@ describe('tabsheet', () => {
     element.shadowRoot.querySelector('[part="content"]').scrollBy(0, 40);
     await nextRender();
     await visualDiff(div, 'overflow-top');
+  });
+
+  it('loading', async () => {
+    element.querySelector('[tab="tab-3"]').remove();
+    element.selected = 2;
+    await nextRender();
+    await visualDiff(div, 'loading');
   });
 
   ['ltr', 'rtl'].forEach((dir) => {
