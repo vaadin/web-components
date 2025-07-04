@@ -12,6 +12,11 @@ const popoverOverlay = css`
       --_arrow-size: var(--vaadin-popover-arrow-size, 0.5rem);
       --_default-offset: 0.25rem;
       --_rtl-multiplier: 1;
+      --_border-width: 1px;
+    }
+
+    [part='overlay']:focus-visible {
+      outline: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
     }
 
     :host([dir='rtl']) {
@@ -85,10 +90,15 @@ const popoverOverlay = css`
       display: block;
       position: absolute;
       background: var(--vaadin-overlay-background, var(--vaadin-background-color));
-      border: var(--vaadin-overlay-border, 1px solid var(--vaadin-border-color));
+      border: var(--vaadin-overlay-border, var(--_border-width) solid var(--vaadin-border-color));
       width: var(--_arrow-size);
       height: var(--_arrow-size);
       rotate: 45deg;
+    }
+
+    :host([theme~='arrow']) [part='overlay']:focus-visible [part='arrow'] {
+      --_border-width: var(--vaadin-focus-ring-width);
+      border: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
     }
 
     /* bottom / top */
@@ -109,11 +119,11 @@ const popoverOverlay = css`
       border-bottom-width: 0;
       border-right-width: 0;
       top: 0;
-      translate: calc(-50% * var(--_rtl-multiplier)) calc(-50% - 1px);
+      translate: calc(-50% * var(--_rtl-multiplier)) calc(-50% - var(--_border-width));
     }
 
     :host([theme~='arrow']:is([position^='bottom'], [position^='top'])[end-aligned][top-aligned]) [part='arrow'] {
-      translate: calc(50% * var(--_rtl-multiplier)) calc(-50% - 1px);
+      translate: calc(50% * var(--_rtl-multiplier)) calc(-50% - var(--_border-width));
     }
 
     /* top */
@@ -121,11 +131,11 @@ const popoverOverlay = css`
       border-top-width: 0;
       border-left-width: 0;
       bottom: 0;
-      translate: calc(-50% * var(--_rtl-multiplier)) calc(50% + 1px);
+      translate: calc(-50% * var(--_rtl-multiplier)) calc(50% + var(--_border-width));
     }
 
     :host([theme~='arrow']:is([position^='bottom'], [position^='top'])[end-aligned][bottom-aligned]) [part='arrow'] {
-      translate: calc(50% * var(--_rtl-multiplier)) calc(50% + 1px);
+      translate: calc(50% * var(--_rtl-multiplier)) calc(50% + var(--_border-width));
     }
 
     /* start / end */
@@ -150,11 +160,11 @@ const popoverOverlay = css`
       border-top-width: 0;
       border-right-width: 0;
       inset-inline-start: 0;
-      translate: calc((-50% - 1px) * var(--_rtl-multiplier)) -50%;
+      translate: calc((-50% - var(--_border-width)) * var(--_rtl-multiplier)) -50%;
     }
 
     :host([theme~='arrow']:is([position^='start'], [position^='end'])[start-aligned][bottom-aligned]) [part='arrow'] {
-      translate: calc((-50% - 1px) * var(--_rtl-multiplier)) 50%;
+      translate: calc((-50% - var(--_border-width)) * var(--_rtl-multiplier)) 50%;
     }
 
     /* start */
@@ -162,11 +172,11 @@ const popoverOverlay = css`
       border-bottom-width: 0;
       border-left-width: 0;
       inset-inline-end: 0;
-      translate: calc((50% + 1px) * var(--_rtl-multiplier)) -50%;
+      translate: calc((50% + var(--_border-width)) * var(--_rtl-multiplier)) -50%;
     }
 
     :host([theme~='arrow']:is([position^='start'], [position^='end'])[end-aligned][bottom-aligned]) [part='arrow'] {
-      translate: calc((50% + 1px) * var(--_rtl-multiplier)) 50%;
+      translate: calc((50% + var(--_border-width)) * var(--_rtl-multiplier)) 50%;
     }
   }
 `;

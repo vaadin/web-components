@@ -68,6 +68,24 @@ describe('popover', () => {
     });
   });
 
+  describe('focus', () => {
+    beforeEach(async () => {
+      element.modal = true;
+      target.click();
+      await nextRender();
+    });
+
+    it('focus-visible', async () => {
+      await visualDiff(div, 'focus-visible');
+    });
+
+    it('focus-visible-arrow', async () => {
+      element.setAttribute('theme', 'arrow');
+      await nextUpdate(element);
+      await visualDiff(div, 'focus-visible-arrow');
+    });
+  });
+
   it('no-padding', async () => {
     element.setAttribute('theme', 'no-padding');
     target.click();
