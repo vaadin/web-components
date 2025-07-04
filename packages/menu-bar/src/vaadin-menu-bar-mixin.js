@@ -10,7 +10,9 @@ import { DisabledMixin } from '@vaadin/a11y-base/src/disabled-mixin.js';
 import { FocusMixin } from '@vaadin/a11y-base/src/focus-mixin.js';
 import { isElementFocused, isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
 import { KeyboardDirectionMixin } from '@vaadin/a11y-base/src/keyboard-direction-mixin.js';
+import { microTask } from '@vaadin/component-base/src/async.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
+import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { I18nMixin } from '@vaadin/component-base/src/i18n-mixin.js';
 import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
@@ -347,13 +349,7 @@ export const MenuBarMixin = (superClass) =>
       const container = this.shadowRoot.querySelector('[part="container"]');
       container.addEventListener('click', this.__onButtonClick.bind(this));
       container.addEventListener('mouseover', (e) => this._onMouseOver(e));
-
-      // Delay setting container to avoid rendering buttons immediately,
-      // which would also trigger detecting overflow and force re-layout
-      // See https://github.com/vaadin/web-components/issues/7271
-      queueMicrotask(() => {
-        this._container = container;
-      });
+      this._container = container;
     }
 
     /**
@@ -382,7 +378,7 @@ export const MenuBarMixin = (superClass) =>
      * @override
      */
     _onResize() {
-      this.__detectOverflow();
+      this.__scheduleOverflow();
     }
 
     /**
@@ -395,7 +391,7 @@ export const MenuBarMixin = (superClass) =>
     _themeChanged(theme, overflow, container) {
       if (overflow && container) {
         this.__renderButtons(this.items);
-        this.__detectOverflow();
+        this.__scheduleOverflow();
 
         if (theme) {
           overflow.setAttribute('theme', theme);
@@ -415,7 +411,7 @@ export const MenuBarMixin = (superClass) =>
      */
     _reverseCollapseChanged(_reverseCollapse, overflow, container) {
       if (overflow && container) {
-        this.__detectOverflow();
+        this.__scheduleOverflow();
       }
     }
 
@@ -451,7 +447,7 @@ export const MenuBarMixin = (superClass) =>
       if (items !== this._oldItems) {
         this._oldItems = items;
         this.__renderButtons(items);
-        this.__detectOverflow();
+        this.__scheduleOverflow();
       }
 
       if (disabled !== this._oldDisabled) {
@@ -563,11 +559,14 @@ export const MenuBarMixin = (superClass) =>
     }
 
     /** @private */
-    __detectOverflow() {
-      if (!this._container) {
-        return;
-      }
+    __scheduleOverflow() {
+      this._overflowDebouncer = Debouncer.debounce(this._overflowDebouncer, microTask, () => {
+        this.__detectOverflow();
+      });
+    }
 
+    /** @private */
+    __detectOverflow() {
       const overflow = this._overflow;
       const buttons = this._buttons.filter((btn) => btn !== overflow);
       const oldOverflowCount = this.__getOverflowCount(overflow);

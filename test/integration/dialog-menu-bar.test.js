@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, nextRender, oneEvent } from '@vaadin/testing-helpers';
+import { fixtureSync, nextRender, nextResize, oneEvent } from '@vaadin/testing-helpers';
 import '@vaadin/dialog';
 import '@vaadin/menu-bar/test/menu-bar-test-styles.js';
 import '@vaadin/menu-bar/src/vaadin-menu-bar.js';
@@ -40,6 +40,7 @@ describe('menu-bar in dialog', () => {
     overlay = dialog.$.overlay;
     await oneEvent(overlay, 'vaadin-overlay-open');
     menuBar = overlay.querySelector('vaadin-menu-bar');
+    await nextResize(menuBar);
   });
 
   it('should fully fit the overflow button in the menu-bar', () => {
