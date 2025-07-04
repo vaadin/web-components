@@ -7,10 +7,14 @@
   :host::before {
     inset: var(--_card-border-inset, 0);
     border-radius: var(--_card-border-pseudo-radius, inherit);
+    border: var(--vaadin-card-border, var(--vaadin-card-border-width) solid var(--vaadin-card-border-color));
+  }
+
+  :host([_f]) [part='footer'] {
+    flex-wrap: revert;
   }
 
   :host([theme~='outlined']) {
-    --vaadin-card-border-width: 1px;
     --vaadin-card-background: var(--lumo-base-color);
   }
 
