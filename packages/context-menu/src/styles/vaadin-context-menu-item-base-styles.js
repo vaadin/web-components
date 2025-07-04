@@ -18,6 +18,10 @@ const menuItemStyles = css`
       width: var(--vaadin-icon-size, 1lh);
     }
   }
+
+  :host([menu-item-checked]) [part='checkmark'] {
+    visibility: visible;
+  }
 `;
 
 export const contextMenuItemStyles = [itemStyles, menuItemStyles];
