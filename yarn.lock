@@ -3887,7 +3887,7 @@ css-select@^5.1.0:
     domutils "^3.0.1"
     nth-check "^2.0.1"
 
-css-shorthand-properties@^1.1.1, css-shorthand-properties@^1.1.2:
+css-shorthand-properties@^1.1.1:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/css-shorthand-properties/-/css-shorthand-properties-1.1.2.tgz#38fe2d8422190607cdb19c273c42303b774daf99"
   integrity sha512-C2AugXIpRGQTxaCW0N7n5jD/p5irUmCrwl03TrnMFBHDbdq44CFWR2zO7rK9xPN4Eo3pUxC4vQzQgbIpzrD1PQ==
