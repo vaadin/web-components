@@ -12,6 +12,7 @@
     ::slotted(:is(*, #id))::before,
     ::slotted(:is(*, #id))::after {
       all: revert-layer;
+      direction: revert-layer;
       --vaadin-button-background: revert-layer;
       --vaadin-button-border-color: revert-layer;
       --vaadin-button-border: revert-layer;
