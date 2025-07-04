@@ -10,6 +10,10 @@ export const menuBarButtonStyles = css`
     flex-shrink: 0;
   }
 
+  :host([focused]) {
+    z-index: 1;
+  }
+
   :host([slot='overflow']) {
     margin-inline-end: 0;
   }
@@ -22,5 +26,9 @@ export const menuBarButtonStyles = css`
     height: var(--vaadin-icon-size, 1lh);
     mask-image: var(--_vaadin-icon-chevron-down);
     width: var(--vaadin-icon-size, 1lh);
+  }
+
+  :host([theme~='end-aligned'][first-visible]) {
+    margin-inline-start: auto;
   }
 `;
