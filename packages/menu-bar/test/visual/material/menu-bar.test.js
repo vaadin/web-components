@@ -1,4 +1,4 @@
-import { arrowDown, fixtureSync, nextRender, oneEvent } from '@vaadin/testing-helpers';
+import { arrowDown, fixtureSync, nextRender, nextResize, oneEvent } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '@vaadin/icon/theme/material/vaadin-icon.js';
 import '@vaadin/vaadin-lumo-styles/vaadin-iconset.js';
@@ -26,8 +26,6 @@ describe('menu-bar', () => {
           div.style.padding = '10px';
 
           element = fixtureSync('<vaadin-menu-bar></vaadin-menu-bar>', div);
-          await nextRender();
-
           element.items = [
             { text: 'Home' },
             {
@@ -37,6 +35,7 @@ describe('menu-bar', () => {
             { text: 'Dashboard', disabled: true },
             { text: 'Help' },
           ];
+          await nextResize(element);
         });
 
         it('basic', async () => {
@@ -53,7 +52,7 @@ describe('menu-bar', () => {
           div.style.width = '250px';
           element.reverseCollapse = true;
           element.setAttribute('theme', 'outlined');
-          await nextRender(element);
+          await nextResize(element);
           element._buttons[4].click();
           const overlay = element._subMenu._overlayElement;
           await oneEvent(overlay, 'vaadin-overlay-open');
@@ -67,10 +66,10 @@ describe('menu-bar', () => {
           div.style.padding = '10px';
 
           element = fixtureSync('<vaadin-menu-bar></vaadin-menu-bar>', div);
-          await nextRender();
 
           element.items = [{ text: 'Actions' }];
           element.setAttribute('theme', 'outlined');
+          await nextResize(element);
         });
 
         it('single button', async () => {
@@ -80,6 +79,7 @@ describe('menu-bar', () => {
         it('single overflow button', async () => {
           element.items = [{ text: 'View' }, { text: 'Edit' }];
           element.style.maxWidth = '100px';
+          await nextResize(element);
           await visualDiff(document.body, `${dir}-single-button-overflow`);
         });
       });
@@ -100,7 +100,6 @@ describe('menu-bar', () => {
           div.style.padding = '10px';
 
           element = fixtureSync('<vaadin-menu-bar></vaadin-menu-bar>', div);
-          await nextRender();
 
           element.items = [
             { component: 'u', text: 'Home' },
@@ -115,12 +114,15 @@ describe('menu-bar', () => {
             },
             { text: 'Help' },
           ];
+
+          await nextResize(element);
           overlay = element._subMenu._overlayElement;
         });
 
         it('outlined', async () => {
           div.style.width = '320px';
           element.setAttribute('theme', 'outlined');
+          await nextResize(element);
           arrowDown(element._buttons[1]);
           await oneEvent(overlay, 'vaadin-overlay-open');
           await visualDiff(document.body, `${dir}-outlined`);
@@ -129,6 +131,7 @@ describe('menu-bar', () => {
         it('contained', async () => {
           div.style.width = '320px';
           element.setAttribute('theme', 'contained');
+          await nextResize(element);
           arrowDown(element._buttons[1]);
           await oneEvent(overlay, 'vaadin-overlay-open');
           await visualDiff(document.body, `${dir}-contained`);
@@ -137,6 +140,7 @@ describe('menu-bar', () => {
         it('text', async () => {
           div.style.width = '320px';
           element.setAttribute('theme', 'text');
+          await nextResize(element);
           arrowDown(element._buttons[1]);
           await oneEvent(overlay, 'vaadin-overlay-open');
           await visualDiff(document.body, `${dir}-text`);
@@ -144,22 +148,26 @@ describe('menu-bar', () => {
 
         it('end-aligned', async () => {
           element.setAttribute('theme', 'end-aligned');
+          await nextResize(element);
           await visualDiff(document.body, `${dir}-end-aligned`);
         });
 
         it('end-aligned overflow button', async () => {
           element.style.width = '100px';
           element.setAttribute('theme', 'end-aligned');
+          await nextResize(element);
           await visualDiff(document.body, `${dir}-end-aligned-overflow-button`);
         });
 
         it('end-aligned outlined', async () => {
           element.setAttribute('theme', 'outlined end-aligned');
+          await nextResize(element);
           await visualDiff(document.body, `${dir}-end-aligned-outlined`);
         });
 
         it('end-aligned contained', async () => {
           element.setAttribute('theme', 'contained end-aligned');
+          await nextResize(element);
           await visualDiff(document.body, `${dir}-end-aligned-contained`);
         });
       });
