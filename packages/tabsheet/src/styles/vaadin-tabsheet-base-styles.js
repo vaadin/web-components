@@ -44,7 +44,7 @@ export const tabSheetStyles = [
         box-sizing: border-box;
         padding: var(--vaadin-tabsheet-padding, var(--vaadin-padding));
         border-top: var(--vaadin-tabsheet-border-width, 1px) solid transparent;
-        margin-top: max(1px, calc(var(--vaadin-tabsheet-border-width, 1px) * -1));
+        margin-top: calc(var(--vaadin-tabsheet-border-width, 1px) * -1);
       }
 
       [part='content'][overflow~='top'] {
