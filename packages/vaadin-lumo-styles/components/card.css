@@ -3,14 +3,11 @@
  * Copyright (c) 2000 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-@import '../src/mixins/base-layer-reset.css';
 @import '../src/components/card.css';
 
 :is(:root, :host)::before {
   --vaadin-card-lumo-inject: 1;
-  --vaadin-card-lumo-inject-modules:
-    lumo_mixins_base-layer-reset,
-    lumo_components_card;
+  --vaadin-card-lumo-inject-modules: lumo_components_card;
 }
 
 :where(:root, :host) {
@@ -31,4 +28,23 @@
     --lumo-space-m
   );
   --vaadin-card-shadow: none;
+  --vaadin-card-title-font-color: var(
+    --lumo-header-text-color
+  );
+  --vaadin-card-title-font-size: var(
+    --lumo-font-size-l
+  );
+  --vaadin-card-title-font-weight: 600;
+  --vaadin-card-title-line-height: var(
+    --lumo-line-height-xs
+  );
+  --vaadin-card-subtitle-font-color: var(
+    --lumo-secondary-text-color
+  );
+  --vaadin-card-subtitle-font-size: var(
+    --lumo-font-size-m
+  );
+  --vaadin-card-subtitle-line-height: var(
+    --lumo-line-height-xs
+  );
 }
