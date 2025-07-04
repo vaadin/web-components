@@ -113,6 +113,7 @@ export const cardStyles = css`
 
     :host([_f]) [part='footer'] {
       display: flex;
+      flex-wrap: wrap;
       gap: var(--_gap);
     }
 
