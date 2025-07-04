@@ -7,7 +7,7 @@
 
 :is(:root, :host)::before {
   --vaadin-card-lumo-inject: 1;
-  --vaadin-card-css-inject-modules: lumo_components_card;
+  --vaadin-card-lumo-inject-modules: lumo_components_card;
 }
 
 :where(:root, :host) {
