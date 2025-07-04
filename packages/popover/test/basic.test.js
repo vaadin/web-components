@@ -451,7 +451,7 @@ describe('popover', () => {
     it('should update width after opening the popover', async () => {
       popover.width = '300px';
       await nextRender();
-      expect(getComputedStyle(overlay.$.overlay).width).to.be.equal('300px');
+      expect(getComputedStyle(overlay.$.overlay).width).to.equal('300px');
     });
 
     it('should update height after opening the popover', async () => {
