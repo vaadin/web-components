@@ -59,6 +59,10 @@ registerStyles(
 );
 
 const multiSelectComboBox = css`
+  :host {
+    --_wrapper-gap: 0;
+  }
+
   :host([has-value]) {
     padding-inline-start: 0;
   }
