@@ -1,5 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { arrowRight, fixtureSync, nextRender, nextResize, nextUpdate } from '@vaadin/testing-helpers';
+import sinon from 'sinon';
 import './menu-bar-test-styles.js';
 import '../src/vaadin-menu-bar.js';
 
@@ -29,8 +30,8 @@ describe('overflow', () => {
         </div>
       `);
       menu = wrapper.querySelector('vaadin-menu-bar');
-      await nextRender();
       menu.items = [{ text: 'Item 1' }, { text: 'Item 2' }, { text: 'Item 3' }, { text: 'Item 4' }, { text: 'Item 5' }];
+      await nextResize(menu);
       buttons = menu._buttons;
       overflow = buttons[buttons.length - 1];
     });
@@ -107,9 +108,10 @@ describe('overflow', () => {
       expect(overflow.item.children.length).to.equal(0);
     });
 
-    it('should hide overflow button and reset its items when all buttons fit after changing items', () => {
+    it('should hide overflow button and reset its items when all buttons fit after changing items', async () => {
       // See https://github.com/vaadin/vaadin-menu-bar/issues/133
       menu.items = [{ text: 'Item 1' }, { text: 'Item 2' }];
+      await nextResize(menu);
       buttons = menu._buttons;
       overflow = buttons[2];
       assertVisible(buttons[1]);
@@ -123,7 +125,7 @@ describe('overflow', () => {
       await nextResize(menu);
       expect(overflow.hasAttribute('hidden')).to.be.true;
       menu.setAttribute('theme', 'big');
-      await nextUpdate(menu);
+      await nextResize(menu);
       assertHidden(buttons[3]);
       assertHidden(buttons[4]);
       expect(overflow.hasAttribute('hidden')).to.be.false;
@@ -171,8 +173,9 @@ describe('overflow', () => {
     });
 
     describe('reverse-collapse', () => {
-      beforeEach(() => {
+      beforeEach(async () => {
         menu.reverseCollapse = true;
+        await nextUpdate(menu);
       });
 
       it('should show overflow button and hide the buttons which do not fit', () => {
@@ -194,8 +197,9 @@ describe('overflow', () => {
         expect(overflow.item.children[2]).to.deep.equal(menu.items[2]);
       });
 
-      it('should update overflow when reverseCollapse changes', () => {
+      it('should update overflow when reverseCollapse changes', async () => {
         menu.reverseCollapse = false;
+        await nextUpdate(menu);
         assertVisible(buttons[0]);
         assertVisible(buttons[1]);
         assertHidden(buttons[2]);
@@ -211,7 +215,7 @@ describe('overflow', () => {
     beforeEach(async () => {
       menu = fixtureSync('<vaadin-menu-bar></vaadin-menu-bar>');
       menu.items = [{ text: 'Item 1' }, { text: 'Item 2' }, { text: 'Item 3' }, { text: 'Item 4' }];
-      await nextRender();
+      await nextResize(menu);
       buttons = menu._buttons;
       overflow = buttons[buttons.length - 1];
     });
@@ -247,12 +251,13 @@ describe('overflow', () => {
       await nextResize(menu);
 
       menu.setAttribute('theme', 'big');
-      await nextUpdate(menu);
+      await nextResize(menu);
       expect(menu.hasAttribute('has-single-button')).to.be.true;
     });
 
-    it('should set when changing items to only have one button', () => {
+    it('should set when changing items to only have one button', async () => {
       menu.items = [{ text: 'Actions' }];
+      await nextResize(menu);
       expect(menu.hasAttribute('has-single-button')).to.be.true;
     });
 
@@ -261,13 +266,16 @@ describe('overflow', () => {
       await nextResize(menu);
 
       menu.items = [{ text: 'Actions' }];
+      await nextResize(menu);
       expect(menu.hasAttribute('has-single-button')).to.be.true;
     });
 
-    it('should remove when changing items to have more than one button', () => {
+    it('should remove when changing items to have more than one button', async () => {
       menu.items = [{ text: 'Actions' }];
+      await nextResize(menu);
 
       menu.items = [{ text: 'Edit' }, { text: 'Delete' }];
+      await nextResize(menu);
       expect(menu.hasAttribute('has-single-button')).to.be.false;
     });
   });
@@ -460,6 +468,22 @@ describe('overflow', () => {
       menu.style.width = 'auto';
       await nextResize(menu);
       expect(item.classList.contains('test-class-1')).to.be.true;
+    });
+  });
+
+  describe('performance', () => {
+    let menu, spy;
+
+    beforeEach(() => {
+      menu = fixtureSync('<vaadin-menu-bar></vaadin-menu-bar>');
+      spy = sinon.spy(menu, '_hasOverflow', ['get', 'set']);
+    });
+
+    it('should only detect overflow twice on initial render', async () => {
+      menu.items = [{ text: 'Item 1' }, { text: 'Item 2' }, { text: 'Item 3' }, { text: 'Item 4' }, { text: 'Item 5' }];
+      await nextResize(menu);
+      await nextUpdate(menu);
+      expect(spy.set.callCount).to.equal(2);
     });
   });
 });

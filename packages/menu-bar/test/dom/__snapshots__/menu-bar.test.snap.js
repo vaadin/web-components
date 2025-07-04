@@ -15,7 +15,7 @@ snapshots["menu-bar basic"] =
     aria-expanded="false"
     aria-haspopup="true"
     role="menuitem"
-    tabindex="-1"
+    tabindex="0"
   >
     Reports
   </vaadin-menu-bar-button>
@@ -31,7 +31,7 @@ snapshots["menu-bar basic"] =
     class="help"
     last-visible=""
     role="menuitem"
-    tabindex="-1"
+    tabindex="0"
   >
     <vaadin-menu-bar-item aria-selected="false">
       <strong>
@@ -46,7 +46,7 @@ snapshots["menu-bar basic"] =
     hidden=""
     role="menuitem"
     slot="overflow"
-    tabindex="-1"
+    tabindex="0"
   >
     <div aria-hidden="true">
       ···
