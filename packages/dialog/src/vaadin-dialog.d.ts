@@ -11,7 +11,7 @@ import { DialogDraggableMixin } from './vaadin-dialog-draggable-mixin.js';
 import { DialogRendererMixin } from './vaadin-dialog-renderer-mixin.js';
 import { DialogResizableMixin } from './vaadin-dialog-resizable-mixin.js';
 
-export { DialogOverlay, DialogOverlayBounds, DialogOverlayBoundsParam } from './vaadin-dialog-overlay.js';
+export { DialogOverlay, DialogOverlayBounds } from './vaadin-dialog-overlay.js';
 
 export type DialogRenderer = (root: HTMLElement, dialog: Dialog) => void;
 

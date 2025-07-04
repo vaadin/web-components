@@ -14,15 +14,6 @@ export type DialogOverlayBounds = {
   height: number;
 };
 
-export type DialogOverlayBoundsParam =
-  | DialogOverlayBounds
-  | {
-      top?: number | string;
-      left?: number | string;
-      width?: number | string;
-      height?: number | string;
-    };
-
 export declare function DialogOverlayMixin<T extends Constructor<HTMLElement>>(
   base: T,
 ): Constructor<DialogOverlayMixinClass> & Constructor<OverlayMixinClass> & T;
@@ -48,9 +39,4 @@ export declare class DialogOverlayMixinClass {
    * Retrieves the coordinates of the overlay.
    */
   getBounds(): DialogOverlayBounds;
-
-  /**
-   * Updates the coordinates of the overlay.
-   */
-  setBounds(bounds: DialogOverlayBoundsParam, absolute: boolean): void;
 }

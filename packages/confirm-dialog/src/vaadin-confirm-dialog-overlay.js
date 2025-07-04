@@ -86,23 +86,6 @@ class ConfirmDialogOverlay extends OverlayMixin(DirMixin(ThemableMixin(LumoInjec
     this.setAttribute('has-header', '');
     this.setAttribute('has-footer', '');
   }
-
-  /**
-   * Updates the coordinates of the overlay.
-   */
-  setBounds(bounds) {
-    const overlay = this.$.overlay;
-    const parsedBounds = { ...bounds };
-
-    Object.keys(parsedBounds).forEach((arg) => {
-      // Allow setting width or height to `null`
-      if (parsedBounds[arg] !== null && !isNaN(parsedBounds[arg])) {
-        parsedBounds[arg] = `${parsedBounds[arg]}px`;
-      }
-    });
-
-    Object.assign(overlay.style, parsedBounds);
-  }
 }
 
 defineCustomElement(ConfirmDialogOverlay);
