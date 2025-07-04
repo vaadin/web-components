@@ -6,7 +6,7 @@
 import { css } from 'lit';
 
 export const menuBarStyles = css`
-  @layer baes {
+  @layer base {
     :host {
       display: block;
     }
