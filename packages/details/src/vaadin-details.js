@@ -53,6 +53,12 @@ import { DetailsBaseMixin } from './vaadin-details-base-mixin.js';
  * @mixes ThemableMixin
  */
 class Details extends DetailsBaseMixin(ElementMixin(LumoInjectionMixin(ThemableMixin(PolylitMixin(LitElement))))) {
+  static get lumoInjector() {
+    return {
+      includeBaseStyles: true,
+    };
+  }
+
   static get is() {
     return 'vaadin-details';
   }

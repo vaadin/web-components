@@ -3,14 +3,12 @@
  * Copyright (c) 2000 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-@import '../src/mixins/base-layer-reset.css';
 @import '../src/mixins/field-button.css';
 @import '../src/components/side-nav-item.css';
 
 :is(:root, :host)::before {
   --vaadin-side-nav-item-lumo-inject: 1;
   --vaadin-side-nav-item-lumo-inject-modules:
-    lumo_mixins_base-layer-reset,
     lumo_mixins_field-button,
     lumo_components_side-nav-item;
 }
