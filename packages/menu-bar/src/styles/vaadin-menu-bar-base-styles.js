@@ -25,6 +25,6 @@ export const menuBarStyles = css`
   }
 
   [part='container'] ::slotted(vaadin-menu-bar-button:not(:first-of-type)) {
-    margin-inline-start: calc(var(--vaadin-button-border-width, 1px) * -1);
+    margin-inline-start: calc(var(--vaadin-menu-bar-border-collapse, 1) * var(--vaadin-button-border-width, 1px) * -1);
   }
 `;
