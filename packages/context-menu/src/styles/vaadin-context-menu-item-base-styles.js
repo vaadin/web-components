@@ -17,10 +17,10 @@ const menuItemStyles = css`
       rotate: -90deg;
       width: var(--vaadin-icon-size, 1lh);
     }
-  }
 
-  :host([menu-item-checked]) [part='checkmark'] {
-    visibility: visible;
+    :host([menu-item-checked]) [part='checkmark'] {
+      visibility: visible;
+    }
   }
 `;
 
