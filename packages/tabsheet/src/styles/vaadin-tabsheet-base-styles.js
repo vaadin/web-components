@@ -17,6 +17,7 @@ export const tabSheetStyles = [
         border: var(--vaadin-tabsheet-border-width, 1px) solid
           var(--vaadin-tabsheet-border-color, var(--vaadin-border-color));
         border-radius: var(--vaadin-tabsheet-border-radius, var(--vaadin-radius-l));
+        overflow: hidden;
       }
 
       :host([hidden]) {
@@ -50,6 +51,7 @@ export const tabSheetStyles = [
       [part='content'][focus-ring] {
         border-bottom-left-radius: inherit;
         border-bottom-right-radius: inherit;
+        outline-offset: calc(var(--vaadin-focus-ring-width) * -1);
       }
 
       [part='content'][overflow~='top'] {

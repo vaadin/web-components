@@ -62,6 +62,15 @@ describe('tabsheet', () => {
     await visualDiff(div, 'overflow-top');
   });
 
+  it('overflow focus-ring', async () => {
+    element.style.setProperty('height', '100px');
+    element.shadowRoot.querySelector('[part="content"]').scrollBy(0, 40);
+    await nextRender();
+    await sendKeys({ press: 'Tab' });
+    await sendKeys({ press: 'Tab' });
+    await visualDiff(div, 'overflow-focus-ring');
+  });
+
   it('loading', async () => {
     element.querySelector('[tab="tab-3"]').remove();
     element.selected = 2;
