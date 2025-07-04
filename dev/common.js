@@ -4,7 +4,7 @@ import { addGlobalThemeStyles } from '@vaadin/vaadin-themable-mixin/register-sty
 addGlobalThemeStyles(
   'dev-common',
   css`
-    body {
+    :where(body) {
       font-family: system-ui, sans-serif;
       line-height: 1.25;
       margin: 2rem;
