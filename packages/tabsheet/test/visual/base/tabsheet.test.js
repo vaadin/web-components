@@ -1,15 +1,13 @@
 import { sendKeys } from '@vaadin/test-runner-commands';
-import { aTimeout, fixtureSync } from '@vaadin/testing-helpers';
+import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
-import '@vaadin/vaadin-lumo-styles/props.css';
-import '@vaadin/vaadin-lumo-styles/components/tabsheet.css';
 import '@vaadin/tabs/test/visual/not-animated-styles.js';
-import '../../../vaadin-tabsheet.js';
+import '../../../src/vaadin-tabsheet.js';
 
 describe('tabsheet', () => {
   let div, element;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     div = document.createElement('div');
     div.style.padding = '10px';
     element = fixtureSync(
@@ -38,6 +36,7 @@ describe('tabsheet', () => {
       `,
       div,
     );
+    await nextRender();
   });
 
   it('scroller focus-ring', async () => {
@@ -48,19 +47,19 @@ describe('tabsheet', () => {
 
   it('no-border', async () => {
     element.setAttribute('theme', 'no-border');
-    await visualDiff(div, `no-border`);
+    await visualDiff(div, 'no-border');
   });
 
   it('no-padding', async () => {
     element.setAttribute('theme', 'no-padding');
-    await visualDiff(div, `no-padding`);
+    await visualDiff(div, 'no-padding');
   });
 
   it('overflow-top', async () => {
     element.style.setProperty('height', '100px');
     element.shadowRoot.querySelector('[part="content"]').scrollBy(0, 40);
-    await aTimeout(200);
-    await visualDiff(div, `overflow-top`);
+    await nextRender();
+    await visualDiff(div, 'overflow-top');
   });
 
   ['ltr', 'rtl'].forEach((dir) => {
