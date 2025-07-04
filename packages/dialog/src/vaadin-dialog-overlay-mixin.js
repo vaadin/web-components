@@ -194,29 +194,6 @@ export const DialogOverlayMixin = (superClass) =>
     }
 
     /**
-     * Updates the coordinates of the overlay.
-     * @param {!DialogOverlayBoundsParam} bounds
-     * @param {boolean} absolute
-     */
-    setBounds(bounds, absolute = true) {
-      const overlay = this.$.overlay;
-      const parsedBounds = { ...bounds };
-
-      if (absolute && overlay.style.position !== 'absolute') {
-        overlay.style.position = 'absolute';
-      }
-
-      Object.keys(parsedBounds).forEach((arg) => {
-        // Allow setting width or height to `null`
-        if (parsedBounds[arg] !== null && !isNaN(parsedBounds[arg])) {
-          parsedBounds[arg] = `${parsedBounds[arg]}px`;
-        }
-      });
-
-      Object.assign(overlay.style, parsedBounds);
-    }
-
-    /**
      * Retrieves the coordinates of the overlay.
      * @return {!DialogOverlayBounds}
      */

@@ -7,7 +7,7 @@ import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { DialogOverlayMixin } from './vaadin-dialog-overlay-mixin.js';
 
-export { DialogOverlayBounds, DialogOverlayBoundsParam } from './vaadin-dialog-overlay-mixin.js';
+export { DialogOverlayBounds } from './vaadin-dialog-overlay-mixin.js';
 
 /**
  * An element used internally by `<vaadin-dialog>`. Not intended to be used separately.

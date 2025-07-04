@@ -182,6 +182,29 @@ export const OverlayMixin = (superClass) =>
       }
     }
 
+    /**
+     * Updates the coordinates of the overlay.
+     * @param {!OverlayBoundsParam} bounds
+     * @param {boolean} absolute
+     */
+    setBounds(bounds, absolute = true) {
+      const overlay = this.$.overlay;
+      const parsedBounds = { ...bounds };
+
+      if (absolute && overlay.style.position !== 'absolute') {
+        overlay.style.position = 'absolute';
+      }
+
+      Object.keys(parsedBounds).forEach((arg) => {
+        // Allow setting width or height to `null`
+        if (parsedBounds[arg] !== null && !isNaN(parsedBounds[arg])) {
+          parsedBounds[arg] = `${parsedBounds[arg]}px`;
+        }
+      });
+
+      Object.assign(overlay.style, parsedBounds);
+    }
+
     /** @private */
     _detectIosNavbar() {
       /* c8 ignore next 15 */
