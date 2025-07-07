@@ -6,27 +6,29 @@
 import { css } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 export const menuOverlayStyles = css`
-  :host {
-    align-items: flex-start;
-    justify-content: flex-start;
-  }
+  @layer base {
+    :host {
+      align-items: flex-start;
+      justify-content: flex-start;
+    }
 
-  :host([right-aligned]),
-  :host([end-aligned]) {
-    align-items: flex-end;
-  }
+    :host([right-aligned]),
+    :host([end-aligned]) {
+      align-items: flex-end;
+    }
 
-  :host([bottom-aligned]) {
-    justify-content: flex-end;
-  }
+    :host([bottom-aligned]) {
+      justify-content: flex-end;
+    }
 
-  [part='overlay'] {
-    background-color: #fff;
-  }
-
-  @media (forced-colors: active) {
     [part='overlay'] {
-      outline: 3px solid !important;
+      background-color: #fff;
+    }
+
+    @media (forced-colors: active) {
+      [part='overlay'] {
+        outline: 3px solid !important;
+      }
     }
   }
 `;
