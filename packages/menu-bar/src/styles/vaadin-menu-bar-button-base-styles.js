@@ -11,7 +11,7 @@ export const menuBarButtonStyles = css`
       flex-shrink: 0;
     }
 
-    :host([focused]) {
+    :host([focus-ring]) {
       z-index: 1;
     }
 
