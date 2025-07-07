@@ -284,6 +284,7 @@ export const MenuBarMixin = (superClass) =>
       return this._overflow && !this._overflow.hasAttribute('hidden');
     }
 
+    /** @private */
     set _hasOverflow(hasOverflow) {
       if (this._overflow) {
         this._overflow.toggleAttribute('hidden', !hasOverflow);
