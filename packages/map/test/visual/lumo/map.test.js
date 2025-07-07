@@ -47,9 +47,9 @@ describe('map', () => {
   });
 
   describe('theme', () => {
-    it('borderless', async () => {
-      element.setAttribute('theme', 'borderless');
-      await visualDiff(div, 'theme-borderless');
+    it('no-border', async () => {
+      element.setAttribute('theme', 'no-border');
+      await visualDiff(div, 'theme-no-border');
     });
   });
 

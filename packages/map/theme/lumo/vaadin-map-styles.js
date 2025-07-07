@@ -34,12 +34,12 @@ registerStyles(
       --_focus-ring-width: var(--vaadin-focus-ring-width, 2px);
     }
 
-    :host(:not([theme~='borderless'])) {
+    :host(:not([theme~='no-border'])) {
       border-radius: var(--lumo-border-radius-l);
       position: relative;
     }
 
-    :host(:not([theme~='borderless']))::before {
+    :host(:not([theme~='no-border']))::before {
       content: '';
       position: absolute;
       inset: 0;
