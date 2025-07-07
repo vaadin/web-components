@@ -70,6 +70,12 @@ class MasterDetailLayout extends SlotStylesMixin(
     return masterDetailLayoutStyles;
   }
 
+  static get lumoInjector() {
+    return {
+      includeBaseStyles: true,
+    };
+  }
+
   static get properties() {
     return {
       /**

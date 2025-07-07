@@ -26,6 +26,12 @@ class TestFoo extends LumoInjectionMixin(ThemableMixin(LitElement)) {
     `;
   }
 
+  static get lumoInjector() {
+    return {
+      includeBaseStyles: true,
+    };
+  }
+
   render() {
     return html`<div part="content">Content</div>`;
   }

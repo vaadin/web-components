@@ -15,16 +15,14 @@ import { adoptStyles } from 'lit';
  * @return {CSSStyleSheet[]}
  */
 function getEffectiveStyles(component) {
-  const componentClass = component.constructor;
+  const { baseStyles, themeStyles, elementStyles, lumoInjector } = component.constructor;
+  const lumoStyleSheet = component.__lumoStyleSheet;
 
-  const styleSheet = component.__lumoInjectorStyleSheet;
-  if (styleSheet) {
-    return (componentClass.baseStyles ?? componentClass.themeStyles)
-      ? [...componentClass.baseStyles, styleSheet, ...componentClass.themeStyles]
-      : [styleSheet, ...componentClass.elementStyles];
+  if (lumoStyleSheet && (baseStyles || themeStyles)) {
+    return [...(lumoInjector.includeBaseStyles ? baseStyles : []), lumoStyleSheet, ...themeStyles];
   }
 
-  return componentClass.elementStyles;
+  return [lumoStyleSheet, ...elementStyles].filter(Boolean);
 }
 
 /**
@@ -47,7 +45,7 @@ export function applyInstanceStyles(component) {
  */
 export function injectLumoStyleSheet(component, styleSheet) {
   // Store the new stylesheet so that it can be removed later.
-  component.__lumoInjectorStyleSheet = styleSheet;
+  component.__lumoStyleSheet = styleSheet;
   applyInstanceStyles(component);
 }
 
@@ -57,11 +55,7 @@ export function injectLumoStyleSheet(component, styleSheet) {
  *
  * @param {HTMLElement} component
  */
-export function cleanupLumoStyleSheet(component) {
-  const adoptedStyleSheets = component.shadowRoot.adoptedStyleSheets.filter(
-    (s) => s !== component.__lumoInjectorStyleSheet,
-  );
-
-  component.shadowRoot.adoptedStyleSheets = adoptedStyleSheets;
-  component.__lumoInjectorStyleSheet = undefined;
+export function removeLumoStyleSheet(component) {
+  component.__lumoStyleSheet = undefined;
+  applyInstanceStyles(component);
 }

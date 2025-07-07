@@ -32,6 +32,12 @@ class UploadIcon extends ThemableMixin(LumoInjectionMixin(LitElement)) {
     `;
   }
 
+  static get lumoInjector() {
+    return {
+      includeBaseStyles: true,
+    };
+  }
+
   /** @protected */
   render() {
     return html``;

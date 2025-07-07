@@ -77,6 +77,12 @@ class Details extends DetailsBaseMixin(ElementMixin(LumoInjectionMixin(ThemableM
     `;
   }
 
+  static get lumoInjector() {
+    return {
+      includeBaseStyles: true,
+    };
+  }
+
   /** @protected */
   render() {
     return html`

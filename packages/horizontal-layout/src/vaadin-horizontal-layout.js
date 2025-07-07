@@ -60,6 +60,12 @@ class HorizontalLayout extends HorizontalLayoutMixin(
     return horizontalLayoutStyles;
   }
 
+  static get lumoInjector() {
+    return {
+      includeBaseStyles: true,
+    };
+  }
+
   /** @protected */
   render() {
     return html`

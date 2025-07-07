@@ -112,6 +112,12 @@ class FormItem extends FormItemMixin(ThemableMixin(LumoInjectionMixin(PolylitMix
     return formItemStyles;
   }
 
+  static get lumoInjector() {
+    return {
+      includeBaseStyles: true,
+    };
+  }
+
   /** @protected */
   render() {
     return html`

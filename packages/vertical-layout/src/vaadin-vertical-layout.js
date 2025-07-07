@@ -46,6 +46,12 @@ class VerticalLayout extends ThemableMixin(ElementMixin(LumoInjectionMixin(Polyl
     return verticalLayoutStyles;
   }
 
+  static get lumoInjector() {
+    return {
+      includeBaseStyles: true,
+    };
+  }
+
   /** @protected */
   render() {
     return html`<slot></slot>`;

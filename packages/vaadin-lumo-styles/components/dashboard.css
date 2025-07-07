@@ -3,7 +3,6 @@
  * Copyright (c) 2017 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-@import '../src/mixins/base-layer-reset.css';
 @import '../src/mixins/dashboard-item.css';
 @import '../src/components/button.css';
 @import '../src/components/dashboard-layout.css';
@@ -14,29 +13,22 @@
 :is(:root, :host)::before {
   --vaadin-dashboard-lumo-inject: 1;
   --vaadin-dashboard-lumo-inject-modules:
-    lumo_mixins_base-layer-reset,
     lumo_components_dashboard-layout,
     lumo_components_dashboard;
 
   --vaadin-dashboard-widget-lumo-inject: 1;
   --vaadin-dashboard-widget-lumo-inject-modules:
-    lumo_mixins_base-layer-reset,
     lumo_mixins_dashboard-item,
     lumo_components_dashboard-widget;
 
   --vaadin-dashboard-section-lumo-inject: 1;
   --vaadin-dashboard-section-lumo-inject-modules:
-    lumo_mixins_base-layer-reset,
     lumo_mixins_dashboard-item,
     lumo_components_dashboard-section;
 
   --vaadin-dashboard-layout-lumo-inject: 1;
-  --vaadin-dashboard-layout-lumo-inject-modules:
-    lumo_mixins_base-layer-reset,
-    lumo_components_dashboard-layout;
+  --vaadin-dashboard-layout-lumo-inject-modules: lumo_components_dashboard-layout;
 
   --vaadin-dashboard-button-lumo-inject: 1;
-  --vaadin-dashboard-button-lumo-inject-modules:
-    lumo_mixins_base-layer-reset,
-    lumo_components_button;
+  --vaadin-dashboard-button-lumo-inject-modules: lumo_components_button;
 }

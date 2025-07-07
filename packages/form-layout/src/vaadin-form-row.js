@@ -30,6 +30,12 @@ class FormRow extends ThemableMixin(PolylitMixin(LitElement)) {
     return formRowStyles;
   }
 
+  static get lumoInjector() {
+    return {
+      includeBaseStyles: true,
+    };
+  }
+
   /** @protected */
   render() {
     return html`<slot></slot>`;

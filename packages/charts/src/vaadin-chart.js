@@ -195,6 +195,12 @@ class Chart extends ChartMixin(ThemableMixin(ElementMixin(LumoInjectionMixin(Pol
     return chartStyles;
   }
 
+  static get lumoInjector() {
+    return {
+      includeBaseStyles: true,
+    };
+  }
+
   /** @protected */
   render() {
     return html`

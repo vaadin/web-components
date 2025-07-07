@@ -3,7 +3,6 @@
  * Copyright (c) 2017 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-@import '../src/mixins/base-layer-reset.css';
 @import '../src/mixins/combo-box-overlay.css';
 @import '../src/mixins/field-base.css';
 @import '../src/mixins/field-button.css';
@@ -22,7 +21,6 @@
 :is(:root, :host)::before {
   --vaadin-time-picker-lumo-inject: 1;
   --vaadin-time-picker-lumo-inject-modules:
-    lumo_mixins_base-layer-reset,
     lumo_mixins_field-label,
     lumo_mixins_field-required,
     lumo_mixins_field-error-message,
@@ -33,13 +31,11 @@
 
   --vaadin-time-picker-item-lumo-inject: 1;
   --vaadin-time-picker-item-lumo-inject-modules:
-    lumo_mixins_base-layer-reset,
     lumo_components_item,
     lumo_components_combo-box-item;
 
   --vaadin-time-picker-overlay-lumo-inject: 1;
   --vaadin-time-picker-overlay-lumo-inject-modules:
-    lumo_mixins_base-layer-reset,
     lumo_mixins_overlay,
     lumo_mixins_menu-overlay-core,
     lumo_mixins_combo-box-overlay,

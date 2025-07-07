@@ -44,6 +44,12 @@ class Scroller extends ScrollerMixin(ElementMixin(ThemableMixin(LumoInjectionMix
     return scrollerStyles;
   }
 
+  static get lumoInjector() {
+    return {
+      includeBaseStyles: true,
+    };
+  }
+
   /** @protected */
   render() {
     return html`<slot></slot>`;

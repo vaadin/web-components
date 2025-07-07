@@ -3,7 +3,6 @@
  * Copyright (c) 2017 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-@import '../src/mixins/base-layer-reset.css';
 @import '../src/mixins/field-base.css';
 @import '../src/mixins/field-button.css';
 @import '../src/mixins/field-error-message.css';
@@ -24,7 +23,6 @@
 :is(:root, :host)::before {
   --vaadin-date-picker-lumo-inject: 1;
   --vaadin-date-picker-lumo-inject-modules:
-    lumo_mixins_base-layer-reset,
     lumo_mixins_field-label,
     lumo_mixins_field-required,
     lumo_mixins_field-error-message,
@@ -34,25 +32,18 @@
     lumo_components_date-picker;
 
   --vaadin-date-picker-year-lumo-inject: 1;
-  --vaadin-date-picker-year-lumo-inject-modules:
-    lumo_mixins_base-layer-reset,
-    lumo_components_date-picker-year;
+  --vaadin-date-picker-year-lumo-inject-modules: lumo_components_date-picker-year;
 
   --vaadin-date-picker-overlay-lumo-inject: 1;
   --vaadin-date-picker-overlay-lumo-inject-modules:
-    lumo_mixins_base-layer-reset,
     lumo_mixins_overlay,
     lumo_mixins_menu-overlay-core,
     lumo_mixins_menu-overlay-ext,
     lumo_components_date-picker-overlay;
 
   --vaadin-date-picker-overlay-content-lumo-inject: 1;
-  --vaadin-date-picker-overlay-content-lumo-inject-modules:
-    lumo_mixins_base-layer-reset,
-    lumo_components_date-picker-overlay-content;
+  --vaadin-date-picker-overlay-content-lumo-inject-modules: lumo_components_date-picker-overlay-content;
 
   --vaadin-month-calendar-lumo-inject: 1;
-  --vaadin-month-calendar-lumo-inject-modules:
-    lumo_mixins_base-layer-reset,
-    lumo_components_date-picker-month-calendar;
+  --vaadin-month-calendar-lumo-inject-modules: lumo_components_date-picker-month-calendar;
 }
