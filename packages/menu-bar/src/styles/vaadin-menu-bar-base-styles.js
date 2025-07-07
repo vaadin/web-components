@@ -23,12 +23,30 @@ export const menuBarStyles = css`
       padding: calc(var(--vaadin-focus-ring-width) + 1px);
       position: relative;
       width: 100%;
+      --_gap: var(--vaadin-menu-bar-gap, 0px);
+      --_bw: var(--vaadin-button-border-width, 1px);
+      gap: var(--_gap);
+      --_rad-button: var(--vaadin-button-border-radius, var(--vaadin-radius-m));
+      --_rad: min(var(--_gap) * 1000, var(--_rad-button));
     }
 
-    [part='container'] ::slotted(vaadin-menu-bar-button:not(:first-of-type)) {
-      margin-inline-start: calc(
-        var(--vaadin-menu-bar-border-collapse, 1) * var(--vaadin-button-border-width, 1px) * -1
-      );
+    ::slotted(vaadin-menu-bar-button:not(:first-of-type)) {
+      margin-inline-start: min(var(--_bw) * -1 + var(--_gap) * 1000, 0px);
+    }
+
+    ::slotted(vaadin-menu-bar-button) {
+      border-radius: var(--_rad);
+    }
+
+    ::slotted([first-visible]),
+    :host([has-single-button]) ::slotted([slot='overflow']) {
+      border-start-start-radius: var(--_rad-button);
+      border-end-start-radius: var(--_rad-button);
+    }
+
+    ::slotted(:is([last-visible], [slot='overflow'])) {
+      border-start-end-radius: var(--_rad-button);
+      border-end-end-radius: var(--_rad-button);
     }
   }
 `;
