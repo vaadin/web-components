@@ -23,13 +23,15 @@
     "icons": "gulp icons"
   },
   "files": [
+    "*.css",
     "*.d.ts",
     "*.js",
     "!gulpfile.js",
-    "auto-complete.css",
+    "components/*.css",
     "mixins/*.d.ts",
     "mixins/*.js",
     "presets/*.js",
+    "src",
     "utilities/*.js"
   ],
   "keywords": [
