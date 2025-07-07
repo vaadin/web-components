@@ -59,10 +59,33 @@ describe('fullscreen mode', () => {
         expect(document.activeElement).to.not.equal(input);
       });
 
+      it('should not focus input element when focusing the date picker', () => {
+        const spy = sinon.spy(input, 'focus');
+        datePicker.focus();
+        expect(spy.called).to.be.false;
+        expect(document.activeElement).to.not.equal(input);
+      });
+
+      it('should focus date element when focusing the date picker', async () => {
+        datePicker.focus();
+        await untilOverlayRendered(datePicker);
+        const cell = getFocusableCell(datePicker);
+        expect(cell).to.be.instanceOf(HTMLTableCellElement);
+        expect(cell.getAttribute('part')).to.include('today');
+      });
+
       it('should not blur input element when focusing it with keyboard', () => {
         const spy = sinon.spy(input, 'blur');
         tabKeyDown(input);
         input.focus();
+        expect(spy.called).to.be.false;
+        expect(document.activeElement).to.equal(input);
+      });
+
+      it('should not blur input element when focusing date picker with keyboard', () => {
+        const spy = sinon.spy(input, 'blur');
+        tabKeyDown(input);
+        datePicker.focus();
         expect(spy.called).to.be.false;
         expect(document.activeElement).to.equal(input);
       });
