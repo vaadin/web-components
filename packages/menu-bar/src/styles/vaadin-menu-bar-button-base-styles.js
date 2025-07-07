@@ -19,11 +19,19 @@ export const menuBarButtonStyles = css`
       margin-inline-end: 0;
     }
 
-    :host([theme~='dropdown-indicators']:not([slot='overflow']):not([theme~='icon'])[aria-haspopup])
-      [part='suffix']::after {
+    .vaadin-button-container {
+      gap: inherit;
+    }
+
+    :host(:not([slot='overflow']):not([theme~='icon'])[aria-haspopup]) [part='suffix'] {
+      display: flex;
+      align-items: center;
+      gap: inherit;
+    }
+
+    :host(:not([slot='overflow']):not([theme~='icon'])[aria-haspopup]) [part='suffix']::after {
       background: currentColor;
       content: '';
-      display: block;
       height: var(--vaadin-icon-size, 1lh);
       mask-image: var(--_vaadin-icon-chevron-down);
       width: var(--vaadin-icon-size, 1lh);
