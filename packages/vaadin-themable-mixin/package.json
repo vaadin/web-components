@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-themable-mixin",
-  "version": "25.0.0-alpha6",
+  "version": "25.0.0-alpha7",
   "publishConfig": {
     "access": "public"
   },
@@ -37,8 +37,8 @@
   },
   "devDependencies": {
     "@polymer/polymer": "^3.0.0",
-    "@vaadin/chai-plugins": "25.0.0-alpha6",
-    "@vaadin/test-runner-commands": "25.0.0-alpha6",
+    "@vaadin/chai-plugins": "25.0.0-alpha7",
+    "@vaadin/test-runner-commands": "25.0.0-alpha7",
     "@vaadin/testing-helpers": "^2.0.0",
     "sinon": "^18.0.0"
   }
