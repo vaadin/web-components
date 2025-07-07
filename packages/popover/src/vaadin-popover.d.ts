@@ -119,13 +119,13 @@ declare class Popover extends PopoverPositionMixin(
    * Set the height of the overlay.
    * If a unitless number is provided, pixels are assumed.
    */
-  height: string;
+  height: string | null;
 
   /**
    * Set the width of the overlay.
    * If a unitless number is provided, pixels are assumed.
    */
-  width: string;
+  width: string | null;
 
   /**
    * The delay in milliseconds before the popover is opened
