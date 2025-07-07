@@ -17,7 +17,6 @@
 @import '../src/mixins/overlay.css';
 @import '../src/components/combo-box-item.css';
 @import '../src/components/combo-box-overlay.css';
-@import '../src/components/combo-box-scroller.css';
 @import '../src/components/combo-box.css';
 @import '../src/components/item.css';
 @import './input-container.css';
@@ -49,9 +48,4 @@
     lumo_mixins_menu-overlay-core,
     lumo_mixins_combo-box-overlay,
     lumo_components_combo-box-overlay;
-
-  --vaadin-combo-box-scroller-lumo-inject: 1;
-  --vaadin-combo-box-scroller-lumo-inject-modules:
-    lumo_mixins_base-layer-reset,
-    lumo_components_combo-box-scroller;
 }

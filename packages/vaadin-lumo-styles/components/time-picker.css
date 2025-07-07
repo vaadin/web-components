@@ -16,7 +16,6 @@
 @import '../src/components/combo-box-item.css';
 @import '../src/components/item.css';
 @import '../src/components/time-picker-overlay.css';
-@import '../src/components/time-picker-scroller.css';
 @import '../src/components/time-picker.css';
 @import './input-container.css';
 
@@ -45,9 +44,4 @@
     lumo_mixins_menu-overlay-core,
     lumo_mixins_combo-box-overlay,
     lumo_components_time-picker-overlay;
-
-  --vaadin-time-picker-scroller-lumo-inject: 1;
-  --vaadin-time-picker-scroller-lumo-inject-modules:
-    lumo_mixins_base-layer-reset,
-    lumo_components_time-picker-scroller;
 }

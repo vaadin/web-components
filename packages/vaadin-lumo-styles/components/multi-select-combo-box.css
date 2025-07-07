@@ -22,7 +22,6 @@
 @import '../src/components/multi-select-combo-box-container.css';
 @import '../src/components/multi-select-combo-box-item.css';
 @import '../src/components/multi-select-combo-box-overlay.css';
-@import '../src/components/multi-select-combo-box-scroller.css';
 @import '../src/components/multi-select-combo-box.css';
 
 :is(:root, :host)::before {
@@ -31,11 +30,6 @@
     lumo_mixins_base-layer-reset,
     lumo_components_input-container,
     lumo_components_multi-select-combo-box-container;
-
-  --vaadin-multi-select-combo-box-scroller-lumo-inject: 1;
-  --vaadin-multi-select-combo-box-scroller-lumo-inject-modules:
-    lumo_mixins_base-layer-reset,
-    lumo_components_multi-select-combo-box-scroller;
 
   --vaadin-multi-select-combo-box-overlay-lumo-inject: 1;
   --vaadin-multi-select-combo-box-overlay-lumo-inject-modules:

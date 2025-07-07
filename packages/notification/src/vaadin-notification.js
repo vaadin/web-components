@@ -142,9 +142,7 @@ class NotificationCard extends ThemableMixin(LumoInjectionMixin(PolylitMixin(Lit
  * @mixes NotificationMixin
  * @mixes ElementMixin
  */
-class Notification extends NotificationMixin(
-  ElementMixin(ThemableMixin(LumoInjectionMixin(PolylitMixin(LitElement)))),
-) {
+class Notification extends NotificationMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElement)))) {
   static get is() {
     return 'vaadin-notification';
   }
