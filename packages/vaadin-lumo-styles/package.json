@@ -26,11 +26,13 @@
     "*.d.ts",
     "*.js",
     "!gulpfile.js",
-    "auto-complete.css",
     "mixins/*.d.ts",
     "mixins/*.js",
     "presets/*.js",
-    "utilities/*.js"
+    "utilities/*.js",
+    "src",
+    "*.css",
+    "components/*.css"
   ],
   "keywords": [
     "vaadin",
