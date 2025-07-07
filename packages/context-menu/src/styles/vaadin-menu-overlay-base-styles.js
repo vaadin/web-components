@@ -25,10 +25,9 @@ export const menuOverlayStyles = css`
       background-color: #fff;
     }
 
-    @media (forced-colors: active) {
-      [part='overlay'] {
-        outline: 3px solid !important;
-      }
+    /* TODO keyboard focus becomes visible even when navigating the menu with the mouse */
+    [part='overlay']:focus-visible {
+      outline: none;
     }
   }
 `;
