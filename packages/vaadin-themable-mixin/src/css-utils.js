@@ -51,7 +51,7 @@ export function injectLumoStyleSheet(component, styleSheet) {
 
 /**
  * Removes the stylesheet from the component's shadow root that was added
- * by the `applyLumoStyleSheet` function.
+ * by the `injectLumoStyleSheet` function.
  *
  * @param {HTMLElement} component
  */
