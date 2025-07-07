@@ -1,0 +1,17 @@
+/**
+ * @license
+ * Copyright (c) 2000 - 2025 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+@import './props.css';
+@import './src/utilities/accessibility.css';
+@import './src/utilities/background.css';
+@import './src/utilities/border.css';
+@import './src/utilities/filter.css';
+@import './src/utilities/flexbox-grid.css';
+@import './src/utilities/layout.css';
+@import './src/utilities/shadows.css';
+@import './src/utilities/sizing.css';
+@import './src/utilities/spacing.css';
+@import './src/utilities/transition.css';
+@import './src/utilities/typography.css';
