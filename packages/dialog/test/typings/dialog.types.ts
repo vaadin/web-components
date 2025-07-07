@@ -56,6 +56,8 @@ assertType<boolean>(dialog.noCloseOnOutsideClick);
 assertType<string>(dialog.overlayClass);
 assertType<string>(dialog.overlayRole);
 assertType<string | null | undefined>(dialog.headerTitle);
+assertType<string | null>(dialog.width);
+assertType<string | null>(dialog.height);
 assertType<DialogRenderer | null | undefined>(dialog.renderer);
 assertType<DialogRenderer | null | undefined>(dialog.headerRenderer);
 assertType<DialogRenderer | null | undefined>(dialog.footerRenderer);

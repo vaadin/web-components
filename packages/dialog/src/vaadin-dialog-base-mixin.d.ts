@@ -63,11 +63,11 @@ export declare class DialogBaseMixinClass {
    * Set the width of the overlay.
    * If a unitless number is provided, pixels are assumed.
    */
-  width: string;
+  width: string | null;
 
   /**
    * Set the height of the overlay.
    * If a unitless number is provided, pixels are assumed.
    */
-  height: string;
+  height: string | null;
 }
