@@ -89,7 +89,7 @@ class MenuBar extends MenuBarMixin(ElementMixin(ThemableMixin(LumoInjectionMixin
   /** @protected */
   render() {
     return html`
-      <div part="container">
+      <div part="container" @click="${this.__onButtonClick}" @mouseover="${this._onMouseOver}">
         <slot></slot>
         <slot name="overflow"></slot>
       </div>
