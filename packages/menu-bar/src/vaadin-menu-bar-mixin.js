@@ -191,16 +191,6 @@ export const MenuBarMixin = (superClass) =>
           type: Boolean,
           sync: true,
         },
-
-        /**
-         * @type {boolean}
-         * @protected
-         */
-        _hasOverflow: {
-          type: Boolean,
-          value: false,
-          sync: true,
-        },
       };
     }
 
@@ -289,6 +279,17 @@ export const MenuBarMixin = (superClass) =>
       return this.shadowRoot.querySelector('vaadin-menu-bar-submenu');
     }
 
+    /** @private */
+    get _hasOverflow() {
+      return this._overflow && !this._overflow.hasAttribute('hidden');
+    }
+
+    set _hasOverflow(hasOverflow) {
+      if (this._overflow) {
+        this._overflow.toggleAttribute('hidden', !hasOverflow);
+      }
+    }
+
     /** @protected */
     ready() {
       super.ready();
@@ -355,10 +356,6 @@ export const MenuBarMixin = (superClass) =>
 
       if (props.has('__effectiveI18n')) {
         this.__i18nChanged(this.__effectiveI18n);
-      }
-
-      if (props.has('_hasOverflow')) {
-        this._overflow.toggleAttribute('hidden', !this._hasOverflow);
       }
     }
 
