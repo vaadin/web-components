@@ -9,7 +9,6 @@ import { ifDefined } from 'lit/directives/if-defined.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
-import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
 import { TooltipMixin } from './vaadin-tooltip-mixin.js';
 
@@ -57,7 +56,7 @@ import { TooltipMixin } from './vaadin-tooltip-mixin.js';
  * @mixes ThemePropertyMixin
  * @mixes TooltipMixin
  */
-class Tooltip extends TooltipMixin(ThemePropertyMixin(ElementMixin(LumoInjectionMixin(PolylitMixin(LitElement))))) {
+class Tooltip extends TooltipMixin(ThemePropertyMixin(ElementMixin(PolylitMixin(LitElement)))) {
   static get is() {
     return 'vaadin-tooltip';
   }
