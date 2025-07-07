@@ -23,16 +23,16 @@
     "icons": "gulp icons"
   },
   "files": [
+    "*.css",
     "*.d.ts",
     "*.js",
     "!gulpfile.js",
+    "components/*.css",
     "mixins/*.d.ts",
     "mixins/*.js",
     "presets/*.js",
-    "utilities/*.js",
     "src",
-    "*.css",
-    "components/*.css"
+    "utilities/*.js"
   ],
   "keywords": [
     "vaadin",
