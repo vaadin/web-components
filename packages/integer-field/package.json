@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/integer-field",
-  "version": "25.0.0-alpha5",
+  "version": "25.0.0-alpha6",
   "publishConfig": {
     "access": "public"
   },
@@ -34,13 +34,13 @@
     "web-component"
   ],
   "dependencies": {
-    "@vaadin/component-base": "25.0.0-alpha5",
-    "@vaadin/number-field": "25.0.0-alpha5",
-    "@vaadin/vaadin-lumo-styles": "25.0.0-alpha5"
+    "@vaadin/component-base": "25.0.0-alpha6",
+    "@vaadin/number-field": "25.0.0-alpha6",
+    "@vaadin/vaadin-lumo-styles": "25.0.0-alpha6"
   },
   "devDependencies": {
-    "@vaadin/chai-plugins": "25.0.0-alpha5",
-    "@vaadin/test-runner-commands": "25.0.0-alpha5",
+    "@vaadin/chai-plugins": "25.0.0-alpha6",
+    "@vaadin/test-runner-commands": "25.0.0-alpha6",
     "@vaadin/testing-helpers": "^2.0.0",
     "sinon": "^18.0.0"
   },
