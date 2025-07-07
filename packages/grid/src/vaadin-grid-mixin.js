@@ -345,7 +345,7 @@ export const GridMixin = (superClass) =>
         row.setAttribute('role', 'row');
         row.setAttribute('tabindex', '-1');
         if (this._columnTree) {
-          this._updateRow(row, this._columnTree[this._columnTree.length - 1], 'body', false, true);
+          this._initRow(row, this._columnTree[this._columnTree.length - 1], 'body', false, true);
         }
         rows.push(row);
       }
@@ -459,7 +459,7 @@ export const GridMixin = (superClass) =>
      * @param {boolean} noNotify
      * @protected
      */
-    _updateRow(row, columns, section = 'body', isColumnRow = false, noNotify = false) {
+    _initRow(row, columns, section = 'body', isColumnRow = false, noNotify = false) {
       const contentsFragment = document.createDocumentFragment();
 
       iterateRowCells(row, (cell) => {
@@ -643,7 +643,7 @@ export const GridMixin = (superClass) =>
 
       this._updateRowOrderParts(row);
       this._a11yUpdateRowRowindex(row);
-      this._requestOrUpdateRowItem(row);
+      this._updateRow(row);
     }
 
     /** @private */
@@ -684,7 +684,7 @@ export const GridMixin = (superClass) =>
      */
     _renderColumnTree(columnTree) {
       iterateChildren(this.$.items, (row) => {
-        this._updateRow(row, columnTree[columnTree.length - 1], 'body', false, true);
+        this._initRow(row, columnTree[columnTree.length - 1], 'body', false, true);
 
         const model = this.__getRowModel(row);
         this._updateRowOrderParts(row);
@@ -711,7 +711,7 @@ export const GridMixin = (superClass) =>
       }
 
       iterateChildren(this.$.header, (headerRow, index, rows) => {
-        this._updateRow(headerRow, columnTree[index], 'header', index === columnTree.length - 1);
+        this._initRow(headerRow, columnTree[index], 'header', index === columnTree.length - 1);
 
         const cells = getBodyRowCells(headerRow);
         updateCellsPart(cells, 'first-header-row-cell', index === 0);
@@ -719,7 +719,7 @@ export const GridMixin = (superClass) =>
       });
 
       iterateChildren(this.$.footer, (footerRow, index, rows) => {
-        this._updateRow(footerRow, columnTree[columnTree.length - 1 - index], 'footer', index === 0);
+        this._initRow(footerRow, columnTree[columnTree.length - 1 - index], 'footer', index === 0);
 
         const cells = getBodyRowCells(footerRow);
         updateCellsPart(cells, 'first-footer-row-cell', index === 0);
@@ -727,7 +727,7 @@ export const GridMixin = (superClass) =>
       });
 
       // Sizer rows
-      this._updateRow(this.$.sizer, columnTree[columnTree.length - 1]);
+      this._initRow(this.$.sizer, columnTree[columnTree.length - 1]);
 
       this._resizeHandler();
       this._frozenCellsChanged();
@@ -742,10 +742,14 @@ export const GridMixin = (superClass) =>
 
     /**
      * @param {!HTMLElement} row
-     * @param {GridItem} item
      * @protected
      */
-    _updateItem(row, item) {
+    _updateRow(row) {
+      const item = this._ensureRowItemLoaded(row);
+      if (!item) {
+        return;
+      }
+
       row._item = item;
       const model = this.__getRowModel(row);
 
@@ -774,6 +778,10 @@ export const GridMixin = (superClass) =>
       this._updateDetailsCellHeight(row);
 
       this._a11yUpdateRowExpanded(row, model.expanded);
+
+      if (this._isExpanded(item)) {
+        this._ensureRowHierarchyLoaded(row);
+      }
     }
 
     /** @private */

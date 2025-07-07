@@ -186,25 +186,22 @@ export const DataProviderMixin = (superClass) =>
      * @param {HTMLElement} row
      * @protected
      */
-    _requestOrUpdateRowItem(row) {
+    _ensureRowItemLoaded(row) {
       const { item } = this._dataProviderController.getFlatIndexContext(row.index);
       if (item) {
         this._updateRowLoading(row, false);
-        this._updateItem(row, item);
-        if (this._isExpanded(item)) {
-          this._ensureRowHierarchy(row);
-        }
       } else {
         this._updateRowLoading(row, true);
         this._dataProviderController.ensureFlatIndexLoaded(row.index);
       }
+      return item;
     }
 
     /**
      * @param {HTMLElement} row
      * @private
      */
-    _ensureRowHierarchy(row) {
+    _ensureRowHierarchyLoaded(row) {
       this._dataProviderController.ensureFlatIndexHierarchy(row.index);
     }
 
@@ -317,7 +314,7 @@ export const DataProviderMixin = (superClass) =>
       }
 
       // After updating the cache, check if some of the expanded items should have sub-caches loaded
-      this._getRenderedRows().forEach((row) => this._ensureRowHierarchy(row));
+      this._getRenderedRows().forEach((row) => this._ensureRowHierarchyLoaded(row));
 
       this._hasData = true;
     }
@@ -334,7 +331,7 @@ export const DataProviderMixin = (superClass) =>
         this._getRenderedRows().forEach((row) => {
           const { item } = this._dataProviderController.getFlatIndexContext(row.index);
           if (item || shouldUpdateAllRenderedRowsAfterPageLoad) {
-            this._requestOrUpdateRowItem(row);
+            this._updateRow(row);
           }
         });
 

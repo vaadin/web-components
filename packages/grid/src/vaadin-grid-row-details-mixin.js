@@ -85,7 +85,7 @@ export const RowDetailsMixin = (superClass) =>
         // Only update the rows if the column tree has already been initialized
         iterateChildren(this.$.items, (row) => {
           if (!row.querySelector('[part~=details-cell]')) {
-            this._updateRow(row, this._columnTree[this._columnTree.length - 1]);
+            this._initRow(row, this._columnTree[this._columnTree.length - 1]);
             const isDetailsOpened = this._isDetailsOpened(row._item);
             this._toggleDetailsCell(row, isDetailsOpened);
           }
@@ -98,13 +98,13 @@ export const RowDetailsMixin = (superClass) =>
       iterateChildren(this.$.items, (row) => {
         // Re-renders the row to possibly close the previously opened details.
         if (row.hasAttribute('details-opened')) {
-          this._updateItem(row, row._item);
+          this._updateRow(row);
           return;
         }
 
         // Re-renders the row to open the details when a row details renderer is provided.
         if (rowDetailsRenderer && this._isDetailsOpened(row._item)) {
-          this._updateItem(row, row._item);
+          this._updateRow(row);
         }
       });
     }

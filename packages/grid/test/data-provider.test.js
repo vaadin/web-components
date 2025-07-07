@@ -323,7 +323,7 @@ describe('data provider', () => {
 
         grid.dataProvider.resetHistory();
         const renderSpy = sinon.spy(grid, '_flatSizeChanged');
-        const updateItemSpy = sinon.spy(grid, '_updateItem');
+        const updateItemSpy = sinon.spy(grid, '_updateRow');
         grid.clearCache();
 
         expect(grid.dataProvider.callCount).to.equal(2);
@@ -607,9 +607,9 @@ describe('data provider', () => {
 
     describe('rendering', () => {
       function getFirstRowUpdateCount() {
-        const callsForFirstIndex = grid._updateItem.getCalls().filter((call) => {
-          const item = call.args[1];
-          return item.value === '0';
+        const callsForFirstIndex = grid._updateRow.getCalls().filter((call) => {
+          const row = call.args[0];
+          return row.index === 0;
         });
         return callsForFirstIndex.length;
       }
@@ -626,14 +626,14 @@ describe('data provider', () => {
 
           cb(pageItems, 3);
         };
-        sinon.spy(grid, '_updateItem');
+        sinon.spy(grid, '_updateRow');
         await nextFrame();
       });
 
       it('should limit row updates', async () => {
         grid.expandedItems = [{ value: '0' }, { value: '1' }, { value: '1-0' }, { value: '2' }];
         await nextFrame();
-        // There are currently two _updateItem calls for a row. The extra one (a direct update request)
+        // There are currently two _updateRow calls for a row. The extra one (a direct update request)
         // is coming from _expandedItemsChanged.
         expect(getFirstRowUpdateCount()).to.equal(2);
       });
@@ -650,14 +650,14 @@ describe('data provider', () => {
         grid.expandedItems = [{ value: '0' }, { value: '1' }, { value: '1-0' }, { value: '2' }];
         await nextFrame();
         // Changing page size causes yet an additional update request
-        expect(getFirstRowUpdateCount()).to.equal(3);
+        expect(getFirstRowUpdateCount()).to.equal(4);
       });
 
       it('should limit row updates on a small page size, reverse property update order', async () => {
         grid.expandedItems = [{ value: '0' }, { value: '1' }, { value: '1-0' }, { value: '2' }];
         grid.pageSize = 1;
         await nextFrame();
-        expect(getFirstRowUpdateCount()).to.equal(3);
+        expect(getFirstRowUpdateCount()).to.equal(4);
       });
     });
   });
