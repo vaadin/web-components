@@ -21,8 +21,8 @@ export const menuOverlayStyles = css`
       justify-content: flex-end;
     }
 
-    [part='overlay'] {
-      background-color: #fff;
+    [part='content'] {
+      padding: var(--vaadin-item-overlay-padding, 4px);
     }
 
     /* TODO keyboard focus becomes visible even when navigating the menu with the mouse */
