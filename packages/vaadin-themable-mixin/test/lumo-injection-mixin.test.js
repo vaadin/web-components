@@ -5,12 +5,6 @@ import { LumoInjectionMixin } from '../lumo-injection-mixin.js';
 import { registerStyles, ThemableMixin } from '../vaadin-themable-mixin.js';
 
 class TestFoo extends LumoInjectionMixin(ThemableMixin(LitElement)) {
-  static get lumoInjector() {
-    return {
-      includeBaseStyles: true,
-    };
-  }
-
   static get is() {
     return 'test-foo';
   }
@@ -30,6 +24,12 @@ class TestFoo extends LumoInjectionMixin(ThemableMixin(LitElement)) {
         background-color: yellow;
       }
     `;
+  }
+
+  static get lumoInjector() {
+    return {
+      includeBaseStyles: true,
+    };
   }
 
   render() {

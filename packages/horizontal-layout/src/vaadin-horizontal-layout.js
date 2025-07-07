@@ -52,18 +52,18 @@ import { HorizontalLayoutMixin } from './vaadin-horizontal-layout-mixin.js';
 class HorizontalLayout extends HorizontalLayoutMixin(
   ThemableMixin(ElementMixin(LumoInjectionMixin(PolylitMixin(LitElement)))),
 ) {
-  static get lumoInjector() {
-    return {
-      includeBaseStyles: true,
-    };
-  }
-
   static get is() {
     return 'vaadin-horizontal-layout';
   }
 
   static get styles() {
     return horizontalLayoutStyles;
+  }
+
+  static get lumoInjector() {
+    return {
+      includeBaseStyles: true,
+    };
   }
 
   /** @protected */

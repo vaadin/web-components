@@ -16,12 +16,6 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * @private
  */
 class UploadIcon extends ThemableMixin(LumoInjectionMixin(LitElement)) {
-  static get lumoInjector() {
-    return {
-      includeBaseStyles: true,
-    };
-  }
-
   static get is() {
     return 'vaadin-upload-icon';
   }
@@ -36,6 +30,12 @@ class UploadIcon extends ThemableMixin(LumoInjectionMixin(LitElement)) {
         display: none !important;
       }
     `;
+  }
+
+  static get lumoInjector() {
+    return {
+      includeBaseStyles: true,
+    };
   }
 
   /** @protected */

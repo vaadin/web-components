@@ -22,18 +22,18 @@ import { formRowStyles } from './styles/vaadin-form-row-core-styles.js';
  * @mixes ThemableMixin
  */
 class FormRow extends ThemableMixin(PolylitMixin(LitElement)) {
-  static get lumoInjector() {
-    return {
-      includeBaseStyles: true,
-    };
-  }
-
   static get is() {
     return 'vaadin-form-row';
   }
 
   static get styles() {
     return formRowStyles;
+  }
+
+  static get lumoInjector() {
+    return {
+      includeBaseStyles: true,
+    };
   }
 
   /** @protected */

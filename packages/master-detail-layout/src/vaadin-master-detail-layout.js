@@ -62,18 +62,18 @@ import { masterDetailLayoutTransitionStyles } from './styles/vaadin-master-detai
 class MasterDetailLayout extends SlotStylesMixin(
   ResizeMixin(ElementMixin(ThemableMixin(LumoInjectionMixin(PolylitMixin(LitElement))))),
 ) {
-  static get lumoInjector() {
-    return {
-      includeBaseStyles: true,
-    };
-  }
-
   static get is() {
     return 'vaadin-master-detail-layout';
   }
 
   static get styles() {
     return masterDetailLayoutStyles;
+  }
+
+  static get lumoInjector() {
+    return {
+      includeBaseStyles: true,
+    };
   }
 
   static get properties() {

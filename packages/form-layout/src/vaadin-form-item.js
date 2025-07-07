@@ -104,18 +104,18 @@ import { FormItemMixin } from './vaadin-form-item-mixin.js';
  * @mixes ThemableMixin
  */
 class FormItem extends FormItemMixin(ThemableMixin(LumoInjectionMixin(PolylitMixin(LitElement)))) {
-  static get lumoInjector() {
-    return {
-      includeBaseStyles: true,
-    };
-  }
-
   static get is() {
     return 'vaadin-form-item';
   }
 
   static get styles() {
     return formItemStyles;
+  }
+
+  static get lumoInjector() {
+    return {
+      includeBaseStyles: true,
+    };
   }
 
   /** @protected */

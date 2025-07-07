@@ -53,18 +53,18 @@ import { cardStyles } from './styles/vaadin-card-core-styles.js';
  * @mixes ThemableMixin
  */
 class Card extends ElementMixin(ThemableMixin(LumoInjectionMixin(PolylitMixin(LitElement)))) {
-  static get lumoInjector() {
-    return {
-      includeBaseStyles: true,
-    };
-  }
-
   static get is() {
     return 'vaadin-card';
   }
 
   static get styles() {
     return cardStyles;
+  }
+
+  static get lumoInjector() {
+    return {
+      includeBaseStyles: true,
+    };
   }
 
   static get properties() {
