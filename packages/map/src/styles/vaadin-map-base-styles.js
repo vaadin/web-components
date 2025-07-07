@@ -362,12 +362,12 @@ export const mapStyles = css`
     mask-image: var(--vaadin-map-icon-zoom-out, var(--_vaadin-icon-minus));
   }
 
-  button.ol-zoom-in {
+  .ol-zoom button.ol-zoom-in {
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
   }
 
-  button.ol-zoom-out {
+  .ol-zoom button.ol-zoom-out {
     border-top-left-radius: 0;
     border-top-right-radius: 0;
   }
