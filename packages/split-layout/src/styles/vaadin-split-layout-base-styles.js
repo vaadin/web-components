@@ -37,6 +37,16 @@ export const splitLayoutStyles = css`
       z-index: 1;
     }
 
+    [part='splitter']::after {
+      content: '';
+      inset: 0 calc(var(--vaadin-split-layout-splitter-target-size, 1rem) / -2);
+      position: absolute;
+    }
+
+    :host([orientation='vertical']) [part='splitter']::after {
+      inset: calc(var(--vaadin-split-layout-splitter-target-size, 1rem) / -2) 0;
+    }
+
     :host(:not([orientation='vertical'])) > [part='splitter'] {
       cursor: ew-resize;
     }
@@ -55,6 +65,7 @@ export const splitLayoutStyles = css`
       transform: translate3d(-50%, -50%, 0);
       top: 50%;
       width: var(--vaadin-split-layout-handle-target-size, 3rem);
+      z-index: 1;
     }
 
     [part='handle']::after {
