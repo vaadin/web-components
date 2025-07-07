@@ -98,14 +98,14 @@ export class LumoInjector {
    * @param {HTMLElement} component
    */
   componentConnected(component) {
-    const { is: tagName } = component.constructor;
+    const { is: tagName, lumoInjectPropName } = component.constructor;
 
     this.#componentsByTag.set(tagName, this.#componentsByTag.get(tagName) ?? new Set());
     this.#componentsByTag.get(tagName).add(component);
 
     this.#updateComponentStyleSheet(tagName);
 
-    this.#cssPropertyObserver.observe(`--${tagName}-lumo-inject`);
+    this.#cssPropertyObserver.observe(lumoInjectPropName);
   }
 
   /**
