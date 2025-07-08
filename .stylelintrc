@@ -2,17 +2,10 @@
   "extends": ["stylelint-config-vaadin"],
   "plugins": [
     "./custom-rules/stylelint/no-shorthand-with-unresolved-longhand.js",
-    "./custom-rules/stylelint/license-header.js",
-    "./custom-rules/stylelint/use-layers.js"
+    "./custom-rules/stylelint/license-header.js"
   ],
   "overrides": [
     { "files": ["**/*.js"], "customSyntax": "postcss-lit" },
-    {
-      "files": ["**/*-base-styles.js"],
-      "rules": {
-        "custom-rules/use-layers": ["^(vaadin\\.)?base$"]
-      }
-    },
     {
       "files": ["packages/vaadin-lumo-styles/**/*.css"],
       "rules": {

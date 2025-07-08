@@ -6,48 +6,46 @@
 import { css } from 'lit';
 
 export const iconStyles = css`
-  @layer base {
-    :host {
-      display: inline-flex;
-      justify-content: center;
-      align-items: center;
-      box-sizing: border-box;
-      vertical-align: middle;
-      width: var(--vaadin-icon-size, 1lh);
-      height: var(--vaadin-icon-size, 1lh);
-      flex: none;
-      fill: var(--vaadin-icon-color, currentColor);
-      container-type: size;
-      contain: layout;
-    }
+  :host {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    box-sizing: border-box;
+    vertical-align: middle;
+    width: var(--vaadin-icon-size, 1lh);
+    height: var(--vaadin-icon-size, 1lh);
+    flex: none;
+    fill: var(--vaadin-icon-color, currentColor);
+    container-type: size;
+    contain: layout;
+  }
 
-    :host::after,
-    :host::before {
-      line-height: 1;
-      font-size: 100cqh;
-      -webkit-font-smoothing: antialiased;
-      text-rendering: optimizeLegibility;
-      -moz-osx-font-smoothing: grayscale;
-    }
+  :host::after,
+  :host::before {
+    line-height: 1;
+    font-size: 100cqh;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    -moz-osx-font-smoothing: grayscale;
+  }
 
-    :host([hidden]) {
-      display: none !important;
-    }
+  :host([hidden]) {
+    display: none !important;
+  }
 
-    svg {
-      display: block;
-      width: 100%;
-      height: 100%;
-      /* prevent overflowing icon from clipping, see https://github.com/vaadin/flow-components/issues/5872 */
-      overflow: visible;
-    }
+  svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+    /* prevent overflowing icon from clipping, see https://github.com/vaadin/flow-components/issues/5872 */
+    overflow: visible;
+  }
 
-    :host(:is([icon-class], [font-icon-content])) svg {
-      display: none;
-    }
+  :host(:is([icon-class], [font-icon-content])) svg {
+    display: none;
+  }
 
-    :host([font-icon-content])::before {
-      content: attr(font-icon-content);
-    }
+  :host([font-icon-content])::before {
+    content: attr(font-icon-content);
   }
 `;

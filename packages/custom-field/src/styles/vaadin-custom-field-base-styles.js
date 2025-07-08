@@ -8,14 +8,12 @@ import { container } from '@vaadin/field-base/src/styles/container-base-styles.j
 import { field } from '@vaadin/field-base/src/styles/field-base-styles.js';
 
 const customField = css`
-  @layer base {
-    .vaadin-custom-field-container {
-      width: 100%;
-    }
+  .vaadin-custom-field-container {
+    width: 100%;
+  }
 
-    .inputs-wrapper {
-      flex: none;
-    }
+  .inputs-wrapper {
+    flex: none;
   }
 `;
 

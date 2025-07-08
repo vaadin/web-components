@@ -7,14 +7,12 @@ import { css } from 'lit';
 
 // See https://github.com/vaadin/vaadin-text-field/issues/466
 export const emailFieldStyles = css`
-  @layer base {
-    :host([dir='rtl']) [part='input-field'] {
-      direction: ltr;
-    }
+  :host([dir='rtl']) [part='input-field'] {
+    direction: ltr;
+  }
 
-    :host([dir='rtl']) [part='input-field'] ::slotted(input)::placeholder {
-      direction: rtl;
-      text-align: left;
-    }
+  :host([dir='rtl']) [part='input-field'] ::slotted(input)::placeholder {
+    direction: rtl;
+    text-align: left;
   }
 `;

@@ -7,25 +7,23 @@ import '@vaadin/component-base/src/style-props.js';
 import { css } from 'lit';
 
 export const numberFieldStyles = css`
-  @layer base {
-    :host([step-buttons-visible]) ::slotted(input) {
-      text-align: center;
-    }
+  :host([step-buttons-visible]) ::slotted(input) {
+    text-align: center;
+  }
 
-    [part='decrease-button']::before {
-      mask-image: var(--_vaadin-icon-minus);
-    }
+  [part='decrease-button']::before {
+    mask-image: var(--_vaadin-icon-minus);
+  }
 
-    [part='increase-button']::before {
-      mask-image: var(--_vaadin-icon-plus);
-    }
+  [part='increase-button']::before {
+    mask-image: var(--_vaadin-icon-plus);
+  }
 
-    :host([dir='rtl']) [part='input-field'] {
-      direction: ltr;
-    }
+  :host([dir='rtl']) [part='input-field'] {
+    direction: ltr;
+  }
 
-    :host([readonly]) [part$='button'] {
-      pointer-events: none;
-    }
+  :host([readonly]) [part$='button'] {
+    pointer-events: none;
   }
 `;
