@@ -8,19 +8,17 @@ import { checkable } from '@vaadin/field-base/src/styles/checkable-base-styles.j
 import { field } from '@vaadin/field-base/src/styles/field-base-styles.js';
 
 const radioButton = css`
-  @layer base {
-    [part='radio'] {
-      border-radius: 50%;
-    }
+  [part='radio'] {
+    border-radius: 50%;
+  }
 
-    [part='radio']::after {
-      top: 50%;
-      left: 50%;
-      translate: -50% -50%;
-      width: var(--vaadin-radio-button-dot-size, 50%);
-      height: var(--vaadin-radio-button-dot-size, 50%);
-      border-radius: 50%;
-    }
+  [part='radio']::after {
+    top: 50%;
+    left: 50%;
+    translate: -50% -50%;
+    width: var(--vaadin-radio-button-dot-size, 50%);
+    height: var(--vaadin-radio-button-dot-size, 50%);
+    border-radius: 50%;
   }
 `;
 

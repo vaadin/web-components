@@ -6,27 +6,25 @@
 import { css } from 'lit';
 
 export const valueButton = css`
-  @layer base {
-    :host {
-      min-height: 1lh;
-      outline: none;
-      overflow: hidden;
-      white-space: nowrap;
-      width: 100%;
-    }
+  :host {
+    min-height: 1lh;
+    outline: none;
+    overflow: hidden;
+    white-space: nowrap;
+    width: 100%;
+  }
 
-    ::slotted(*) {
-      padding: 0;
-      cursor: inherit;
-    }
+  ::slotted(*) {
+    padding: 0;
+    cursor: inherit;
+  }
 
-    .vaadin-button-container,
-    [part='label'] {
-      display: contents;
-    }
+  .vaadin-button-container,
+  [part='label'] {
+    display: contents;
+  }
 
-    :host([disabled]) {
-      pointer-events: none;
-    }
+  :host([disabled]) {
+    pointer-events: none;
   }
 `;

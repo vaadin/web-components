@@ -6,14 +6,12 @@
 import { css } from 'lit';
 
 export const passwordFieldStyles = css`
-  @layer base {
-    [part='reveal-button']::before {
-      display: none;
-    }
+  [part='reveal-button']::before {
+    display: none;
+  }
 
-    [part='input-field']:has([part='reveal-button']:focus-within) {
-      outline: none;
-      --vaadin-input-field-border-color: inherit;
-    }
+  [part='input-field']:has([part='reveal-button']:focus-within) {
+    outline: none;
+    --vaadin-input-field-border-color: inherit;
   }
 `;

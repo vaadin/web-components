@@ -6,15 +6,13 @@
 import { css } from 'lit';
 
 export const gridFilterStyles = css`
-  @layer base {
-    :host {
-      display: inline-flex;
-      max-width: 100%;
-    }
+  :host {
+    display: inline-flex;
+    max-width: 100%;
+  }
 
-    ::slotted(*) {
-      width: 100%;
-      box-sizing: border-box;
-    }
+  ::slotted(*) {
+    width: 100%;
+    box-sizing: border-box;
   }
 `;

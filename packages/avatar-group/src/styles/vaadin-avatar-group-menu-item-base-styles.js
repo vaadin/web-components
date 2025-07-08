@@ -7,12 +7,10 @@ import { css } from 'lit';
 import { itemStyles } from '@vaadin/item/src/styles/vaadin-item-base-styles.js';
 
 const menuItemStyles = css`
-  @layer base {
-    [part='content'] {
-      display: flex;
-      align-items: center;
-      gap: inherit;
-    }
+  [part='content'] {
+    display: flex;
+    align-items: center;
+    gap: inherit;
   }
 `;
 

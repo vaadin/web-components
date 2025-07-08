@@ -7,13 +7,11 @@ import '@vaadin/component-base/src/style-props.js';
 import { css } from 'lit';
 
 export const comboBoxStyles = css`
-  @layer base {
-    :host([opened]) {
-      pointer-events: auto;
-    }
+  :host([opened]) {
+    pointer-events: auto;
+  }
 
-    [part='toggle-button']::before {
-      mask-image: var(--_vaadin-icon-chevron-down);
-    }
+  [part='toggle-button']::before {
+    mask-image: var(--_vaadin-icon-chevron-down);
   }
 `;

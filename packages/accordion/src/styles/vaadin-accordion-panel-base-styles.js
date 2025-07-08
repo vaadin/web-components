@@ -6,25 +6,23 @@
 import { css } from 'lit';
 
 export const accordionPanel = css`
-  @layer base {
-    :host {
-      display: block;
-    }
+  :host {
+    display: block;
+  }
 
-    :host([hidden]) {
-      display: none !important;
-    }
+  :host([hidden]) {
+    display: none !important;
+  }
 
-    [part='content'] {
-      box-sizing: border-box;
-    }
+  [part='content'] {
+    box-sizing: border-box;
+  }
 
-    :host(:not([opened])) [part='content'] {
-      display: none !important;
-    }
+  :host(:not([opened])) [part='content'] {
+    display: none !important;
+  }
 
-    :host([focus-ring]) {
-      --_focus-ring: 1;
-    }
+  :host([focus-ring]) {
+    --_focus-ring: 1;
   }
 `;
