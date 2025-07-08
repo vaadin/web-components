@@ -198,8 +198,8 @@ export const mapStyles = css`
       padding: 0;
       color: inherit;
       font: inherit;
-      width: 1.5em;
-      height: 1.5em;
+      width: var(--vaadin-map-control-size, 1.5em);
+      height: var(--vaadin-map-control-size, 1.5em);
       border-radius: inherit;
     }
 
