@@ -187,7 +187,7 @@ export const mapStyles = css`
 
     .ol-control {
       margin: 0.25em;
-      border-radius: var(--vaadin-radius-m);
+      border-radius: var(--vaadin-button-border-radius, var(--vaadin-radius-m));
     }
 
     .ol-control button {
