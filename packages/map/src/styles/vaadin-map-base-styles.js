@@ -376,17 +376,12 @@ export const mapStyles = css`
     .ol-control button,
     .ol-attribution:not(.ol-uncollapsible) ul {
       transition: 0.15s opacity;
-      background-color: var(--vaadin-background-color);
-      color: var(--vaadin-subtle);
+      background: var(--vaadin-map-control-background, var(--vaadin-background-color));
+      color: var(--vaadin-map-control-color, var(--vaadin-subtle));
       opacity: 0.65;
     }
 
-    .ol-control:hover {
-      background-color: var(--vaadin-background-color);
-    }
-
     .ol-control:not(.ol-uncollapsible):hover {
-      background-color: transparent;
       box-shadow: var(--vaadin-map-control-shadow, 0 3px 8px -1px rgba(0, 0, 0, 0.2));
     }
 
@@ -402,7 +397,7 @@ export const mapStyles = css`
     }
 
     .ol-control button:hover {
-      color: var(--vaadin-color);
+      color: var(--vaadin-map-control-color-hover, var(--vaadin-color));
     }
 
     .ol-control button:focus-visible {
