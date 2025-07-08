@@ -292,7 +292,7 @@ export const mapStyles = css`
       width: 10em;
       margin: 0.25rem;
       border: 0;
-      border-radius: var(--vaadin-radius);
+      border-radius: var(--vaadin-button-border-radius, var(--vaadin-radius));
     }
 
     .ol-overviewmap:not(.ol-uncollapsible) .ol-overviewmap-map {
