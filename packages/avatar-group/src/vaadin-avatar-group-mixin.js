@@ -345,7 +345,7 @@ export const AvatarGroupMixin = (superClass) =>
         overflow.abbr = `+${count - this.__getLimit(count, itemsInView, maxItemsVisible)}`;
         const hasOverflow = maxReached || (itemsInView && itemsInView < count);
         overflow.toggleAttribute('hidden', !hasOverflow);
-        this.$.container.classList.toggle('has-overflow', hasOverflow);
+        this.toggleAttribute('has-overflow', hasOverflow);
       }
     }
 
