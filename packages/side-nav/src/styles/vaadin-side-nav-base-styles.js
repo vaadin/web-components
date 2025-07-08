@@ -36,7 +36,7 @@ export const sideNavSlotStyles = css`
     --_has-prefix-icon: '';
   }
 
-  :where(vaadin-side-nav-item:has(> vaadin-icon[slot='prefix'])) ::part(link) {
+  :where(vaadin-side-nav-item:has(> vaadin-icon[slot='prefix']))::part(link) {
     --_has-prefix-icon:;
   }
 `;
