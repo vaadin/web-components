@@ -48,4 +48,9 @@ export const menuBarStyles = css`
     border-start-end-radius: var(--_rad-button);
     border-end-end-radius: var(--_rad-button);
   }
+
+  :host([theme~='end-aligned']) ::slotted(vaadin-menu-bar-button[first-visible]),
+  :host([theme~='end-aligned'][has-single-button]) ::slotted(vaadin-menu-bar-button) {
+    margin-inline-start: auto;
+  }
 `;
