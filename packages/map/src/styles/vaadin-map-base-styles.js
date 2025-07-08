@@ -266,7 +266,7 @@ export const mapStyles = css`
     }
 
     .ol-compass:empty::before {
-      content: var(--vaadin-map-icon-compass, '\\2191');
+      mask-image: var(--_vaadin-icon-arrow-up);
     }
 
     .ol-full-screen {
@@ -274,11 +274,11 @@ export const mapStyles = css`
     }
 
     .ol-full-screen button:empty::before {
-      content: var(--vaadin-map-icon-fullscreen, '\\2922');
+      mask-image: var(--_vaadin-icon-fullscreen);
     }
 
     .ol-full-screen .ol-full-screen-true:empty::before {
-      content: var(--vaadin-map-icon-close, '\\00D7');
+      mask-image: var(--_vaadin-icon-cross);
     }
 
     .ol-overviewmap {
@@ -330,8 +330,7 @@ export const mapStyles = css`
 
     /* icons & controls styles */
     .ol-overviewmap button span:empty {
-      width: inherit;
-      height: inherit;
+      display: contents;
     }
 
     .ol-overviewmap button span:empty::before {
@@ -344,7 +343,10 @@ export const mapStyles = css`
 
     .ol-overviewmap button span:empty::before,
     .ol-zoom-in:empty::before,
-    .ol-zoom-out:empty::before {
+    .ol-zoom-out:empty::before,
+    .ol-compass:empty::before,
+    .ol-full-screen button:empty::before,
+    .ol-full-screen-true:empty::before {
       content: '';
       display: block;
       background: currentColor;
