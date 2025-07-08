@@ -22,6 +22,7 @@ export const menuBarStyles = css`
     padding: calc(var(--vaadin-focus-ring-width) + 1px);
     position: relative;
     width: 100%;
+    /* stylelint-disable length-zero-no-unit */
     --_gap: var(--vaadin-menu-bar-gap, 0px);
     --_bw: var(--vaadin-button-border-width, 1px);
     gap: var(--_gap);
