@@ -248,7 +248,7 @@ export const mapStyles = css`
       gap: 1em;
       list-style: none;
       margin: 0;
-      color: var(--vaadin-color-subtle);
+      color: var(--vaadin-map-attribution-color, var(--vaadin-color-subtle));
       padding: var(--vaadin-padding-container);
       font-size: 0.8em;
     }
@@ -409,7 +409,7 @@ export const mapStyles = css`
 
     .ol-overviewmap:not(.ol-collapsed),
     .ol-overviewmap:not(.ol-collapsed):hover {
-      background-color: var(--vaadin-background-color);
+      background: var(--vaadin-map-control-background, var(--vaadin-background-color));
       box-shadow: var(--vaadin-map-control-shadow, 0 3px 8px -1px rgba(0, 0, 0, 0.2));
       transition: 0.15s box-shadow;
     }
