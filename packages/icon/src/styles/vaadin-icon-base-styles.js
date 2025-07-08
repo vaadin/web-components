@@ -11,13 +11,11 @@ export const iconStyles = css`
     justify-content: center;
     align-items: center;
     box-sizing: border-box;
-    vertical-align: middle;
     width: var(--vaadin-icon-size, 1lh);
     height: var(--vaadin-icon-size, 1lh);
     flex: none;
     fill: var(--vaadin-icon-color, currentColor);
     container-type: size;
-    contain: layout;
   }
 
   :host::after,
@@ -47,5 +45,11 @@ export const iconStyles = css`
 
   :host([font-icon-content])::before {
     content: attr(font-icon-content);
+  }
+
+  .baseline::before {
+    content: '\\2003';
+    display: inline-block;
+    width: 0;
   }
 `;
