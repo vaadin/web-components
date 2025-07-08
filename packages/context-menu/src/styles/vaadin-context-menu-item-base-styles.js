@@ -8,24 +8,22 @@ import { css } from 'lit';
 import { itemStyles } from '@vaadin/item/src/styles/vaadin-item-base-styles.js';
 
 const menuItemStyles = css`
-  @layer base {
-    :host::after {
-      background: var(--vaadin-color-subtle);
-      content: '';
-      display: block;
-      height: var(--vaadin-icon-size, 1lh);
-      mask-image: var(--_vaadin-icon-chevron-down);
-      rotate: -90deg;
-      visibility: hidden;
-      width: var(--vaadin-icon-size, 1lh);
-    }
+  :host::after {
+    background: var(--vaadin-color-subtle);
+    content: '';
+    display: block;
+    height: var(--vaadin-icon-size, 1lh);
+    mask-image: var(--_vaadin-icon-chevron-down);
+    rotate: -90deg;
+    visibility: hidden;
+    width: var(--vaadin-icon-size, 1lh);
+  }
 
-    /* TODO would be nice to only reserve the space for these if
+  /* TODO would be nice to only reserve the space for these if
     one or mote items in the list is checkable or has child items */
-    :host([aria-haspopup='true'])::after,
-    :host([menu-item-checked]) [part='checkmark'] {
-      visibility: visible;
-    }
+  :host([aria-haspopup='true'])::after,
+  :host([menu-item-checked]) [part='checkmark'] {
+    visibility: visible;
   }
 `;
 

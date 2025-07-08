@@ -6,28 +6,26 @@
 import { css } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 export const menuOverlayStyles = css`
-  @layer base {
-    :host {
-      align-items: flex-start;
-      justify-content: flex-start;
-    }
+  :host {
+    align-items: flex-start;
+    justify-content: flex-start;
+  }
 
-    :host([right-aligned]),
-    :host([end-aligned]) {
-      align-items: flex-end;
-    }
+  :host([right-aligned]),
+  :host([end-aligned]) {
+    align-items: flex-end;
+  }
 
-    :host([bottom-aligned]) {
-      justify-content: flex-end;
-    }
+  :host([bottom-aligned]) {
+    justify-content: flex-end;
+  }
 
-    [part='content'] {
-      padding: var(--vaadin-item-overlay-padding, 4px);
-    }
+  [part='content'] {
+    padding: var(--vaadin-item-overlay-padding, 4px);
+  }
 
-    /* TODO keyboard focus becomes visible even when navigating the menu with the mouse */
-    [part='overlay']:focus-visible {
-      outline: none;
-    }
+  /* TODO keyboard focus becomes visible even when navigating the menu with the mouse */
+  [part='overlay']:focus-visible {
+    outline: none;
   }
 `;
