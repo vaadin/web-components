@@ -19,6 +19,10 @@ const menuItemStyles = css`
     width: var(--vaadin-icon-size, 1lh);
   }
 
+  :host([dir='rtl'])::after {
+    rotate: 90deg;
+  }
+
   /* TODO would be nice to only reserve the space for these if
     one or mote items in the list is checkable or has child items */
   :host([aria-haspopup='true'])::after,
