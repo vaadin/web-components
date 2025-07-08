@@ -7,10 +7,8 @@ import { css } from 'lit';
 import { itemStyles } from '@vaadin/item/src/styles/vaadin-item-base-styles.js';
 
 const menuItemStyles = css`
-  @layer base {
-    :host([menu-item-checked]) [part='checkmark'] {
-      visibility: visible;
-    }
+  :host([menu-item-checked]) [part='checkmark'] {
+    visibility: visible;
   }
 `;
 
