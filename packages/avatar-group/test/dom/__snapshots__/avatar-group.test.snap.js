@@ -161,7 +161,10 @@ Tomi Virkki
 /* end snapshot vaadin-avatar-group theme */
 
 snapshots["vaadin-avatar-group opened default"] = 
-`<vaadin-avatar-group aria-label="Currently 4 active users">
+`<vaadin-avatar-group
+  aria-label="Currently 4 active users"
+  has-overflow=""
+>
   <vaadin-avatar
     abbr="AD"
     aria-describedby="vaadin-tooltip-8"

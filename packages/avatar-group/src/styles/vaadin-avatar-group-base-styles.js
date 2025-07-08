@@ -56,7 +56,7 @@ export const avatarGroupStyles = css`
     }
 
     :host(:not([theme~='reverse'])) ::slotted(vaadin-avatar:last-child),
-    :host(:not([theme~='reverse'])) [part='container']:not(.has-overflow) ::slotted(vaadin-avatar:nth-last-child(2)),
+    :host(:not([theme~='reverse']):not([has-overflow])) ::slotted(vaadin-avatar:nth-last-child(2)),
     :host([theme~='reverse']) ::slotted(vaadin-avatar:first-child) {
       mask-image: none;
     }
