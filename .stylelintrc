@@ -1,5 +1,5 @@
 {
-  "extends": ["stylelint-config-vaadin"],
+  "extends": ["stylelint-config-vaadin", "stylelint-config-html/html"],
   "plugins": [
     "./custom-rules/stylelint/no-shorthand-with-unresolved-longhand.js",
     "./custom-rules/stylelint/license-header.js"
@@ -21,6 +21,7 @@
     }
   ],
   "rules": {
+    "color-function-notation": "legacy",
     "no-duplicate-selectors": true
   }
 }
