@@ -350,8 +350,9 @@ export const mapStyles = css`
       content: '';
       display: block;
       background: currentColor;
-      width: inherit;
-      height: inherit;
+      width: var(--vaadin-icon-size, 1lh);
+      height: var(--vaadin-icon-size, 1lh);
+      flex: none;
     }
 
     .ol-zoom-in:empty::before {
