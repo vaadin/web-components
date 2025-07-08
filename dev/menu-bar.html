@@ -28,8 +28,24 @@
       import '@vaadin/tooltip';
       import '@vaadin/checkbox';
       import '@vaadin/checkbox-group';
+      import '@vaadin/icon';
       import '@vaadin/radio-group';
       import '@vaadin/split-layout';
+      import '@vaadin/vaadin-lumo-styles/vaadin-iconset.js';
+
+      function makeComponent(text) {
+        const item = document.createElement('vaadin-menu-bar-item');
+        item.textContent = text;
+        return item;
+      }
+
+      function makeIcon(img) {
+        const item = document.createElement('vaadin-menu-bar-item');
+        const icon = document.createElement('vaadin-icon');
+        icon.setAttribute('icon', img);
+        item.appendChild(icon);
+        return item;
+      }
 
       const menuBar = document.querySelector('vaadin-menu-bar');
       menuBar.items = [
@@ -41,7 +57,7 @@
             { text: 'Status bar', checked: true },
           ],
         },
-        { text: 'Edit' },
+        { component: makeComponent('Edit') },
         {
           text: 'Share',
           children: [
@@ -60,6 +76,10 @@
           children: [{ text: 'To folder' }, { text: 'To trash' }],
         },
         { text: 'Duplicate', tooltip: 'Create a duplicate' },
+        {
+          component: makeIcon('lumo:user'),
+          children: [{ text: 'Archive' }, { text: 'Configure' }],
+        },
       ];
 
       ['dropdown-indicators', 'small', 'primary', 'tertiary', 'tertiary-inline', 'end-aligned'].forEach((variant) => {
