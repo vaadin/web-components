@@ -39,4 +39,13 @@ export const menuBarButtonStyles = css`
   :host([theme~='end-aligned'][first-visible]) {
     margin-inline-start: auto;
   }
+
+  ::slotted(vaadin-menu-bar-item) {
+    padding: 0;
+    gap: 0;
+  }
+
+  ::slotted(vaadin-menu-bar-item)::after {
+    display: none;
+  }
 `;
