@@ -379,6 +379,9 @@ export const mapStyles = css`
       background: var(--vaadin-map-control-background, var(--vaadin-background-color));
       color: var(--vaadin-map-control-color, var(--vaadin-subtle));
       opacity: 0.65;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .ol-control:not(.ol-uncollapsible):hover {
