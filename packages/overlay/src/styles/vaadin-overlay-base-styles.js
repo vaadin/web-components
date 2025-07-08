@@ -67,14 +67,13 @@ export const overlayStyles = css`
     z-index: -1;
   }
 
+  [part='overlay']:focus-visible {
+    outline: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
+  }
+
   @media (forced-colors: active) {
     [part='overlay'] {
       border: 3px solid;
-    }
-
-    [part='overlay']:focus-visible {
-      outline: var(--vaadin-focus-ring-width) solid;
-      outline-offset: 1px;
     }
   }
 `;
