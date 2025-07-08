@@ -84,7 +84,7 @@ export class LumoInjector {
     this.#root = root;
     this.#cssPropertyObserver = new CSSPropertyObserver(this.#root, 'vaadin-lumo-injector', (propertyName) => {
       const tagName = propertyName.slice(2).replace('-lumo-inject', '');
-      this.#updateComponentStyleSheet(tagName);
+      this.#updateStyleSheet(tagName);
     });
   }
 
@@ -103,8 +103,15 @@ export class LumoInjector {
     this.#componentsByTag.set(tagName, this.#componentsByTag.get(tagName) ?? new Set());
     this.#componentsByTag.get(tagName).add(component);
 
-    this.#updateComponentStyleSheet(tagName);
+    const stylesheet = this.#styleSheetsByTag.get(tagName);
+    if (stylesheet) {
+      if (stylesheet.cssRules.length > 0) {
+        injectLumoStyleSheet(component, stylesheet);
+      }
+      return;
+    }
 
+    this.#initStyleSheet(tagName);
     this.#cssPropertyObserver.observe(lumoInjectPropName);
   }
 
@@ -121,7 +128,12 @@ export class LumoInjector {
     removeLumoStyleSheet(component);
   }
 
-  #updateComponentStyleSheet(tagName) {
+  #initStyleSheet(tagName) {
+    this.#styleSheetsByTag.set(tagName, new CSSStyleSheet());
+    this.#updateStyleSheet(tagName);
+  }
+
+  #updateStyleSheet(tagName) {
     const { tags, modules } = parseStyleSheets(this.#rootStyleSheets);
 
     const cssText = (tags.get(tagName) ?? [])
@@ -129,9 +141,8 @@ export class LumoInjector {
       .map((rule) => rule.cssText)
       .join('\n');
 
-    const stylesheet = this.#styleSheetsByTag.get(tagName) ?? new CSSStyleSheet();
+    const stylesheet = this.#styleSheetsByTag.get(tagName);
     stylesheet.replaceSync(cssText);
-    this.#styleSheetsByTag.set(tagName, stylesheet);
 
     this.#componentsByTag.get(tagName)?.forEach((component) => {
       if (cssText) {
