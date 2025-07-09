@@ -65,14 +65,14 @@ class Icon extends IconMixin(ElementMixin(LumoInjectionMixin(ThemableMixin(Polyl
     return 'vaadin-icon';
   }
 
+  static get styles() {
+    return iconStyles;
+  }
+
   static get lumoInjector() {
     return {
       includeBaseStyles: true,
     };
-  }
-
-  static get styles() {
-    return iconStyles;
   }
 
   /** @protected */
