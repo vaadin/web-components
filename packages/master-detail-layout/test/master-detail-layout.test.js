@@ -10,7 +10,7 @@ window.Vaadin.featureFlags ||= {};
 window.Vaadin.featureFlags.masterDetailLayoutComponent = true;
 
 describe('vaadin-master-detail-layout', () => {
-  let layout, master, detail, detailContent;
+  let layout, master, detail, detailWrapper, detailContent;
   let width, height;
 
   before(() => {
@@ -28,6 +28,7 @@ describe('vaadin-master-detail-layout', () => {
     await nextRender();
     master = layout.shadowRoot.querySelector('[part="master"]');
     detail = layout.shadowRoot.querySelector('[part="detail"]');
+    detailWrapper = detail.parentElement;
     detailContent = layout.querySelector('[slot="detail"]');
   });
 
@@ -58,14 +59,14 @@ describe('vaadin-master-detail-layout', () => {
       expect(getComputedStyle(detail).height).to.equal('1000px');
     });
 
-    it('should show the detail part with the detail child if provided', () => {
-      expect(getComputedStyle(detail).display).to.equal('block');
+    it('should set display: contents on detail part wrapper with the detail child if provided', () => {
+      expect(getComputedStyle(detailWrapper).display).to.equal('contents');
     });
 
-    it('should hide the detail part after the detail child is removed', async () => {
+    it('should set display: none on detail part wrapper after the detail child is removed', async () => {
       detailContent.remove();
       await nextRender();
-      expect(getComputedStyle(detail).display).to.equal('none');
+      expect(getComputedStyle(detailWrapper).display).to.equal('none');
     });
   });
 
@@ -106,16 +107,14 @@ describe('vaadin-master-detail-layout', () => {
         expect(getComputedStyle(detail).flexGrow).to.equal('1');
       });
 
-      it('should use masterMinSize as min-width and disable flex-shrink', () => {
+      it('should use masterMinSize as min-width', () => {
         layout.masterMinSize = '300px';
-        expect(getComputedStyle(master).minWidth).to.equal('300px');
-        expect(getComputedStyle(master).flexShrink).to.equal('0');
+        expect(getComputedStyle(master).minWidth).to.equal('min(100%, 300px)');
       });
 
-      it('should use detailMinSize as min-width and disable flex-shrink', () => {
+      it('should use detailMinSize as min-width', () => {
         layout.detailMinSize = '300px';
-        expect(getComputedStyle(detail).minWidth).to.equal('300px');
-        expect(getComputedStyle(detail).flexShrink).to.equal('0');
+        expect(getComputedStyle(detail).minWidth).to.equal('min(100%, 300px)');
       });
 
       it('should not overflow in split mode when masterSize is set', async () => {
@@ -168,16 +167,14 @@ describe('vaadin-master-detail-layout', () => {
         expect(getComputedStyle(detail).flexShrink).to.equal('0');
       });
 
-      it('should use masterMinSize as min-height and disable flex-shrink', () => {
+      it('should use masterMinSize as min-height', () => {
         layout.masterMinSize = '200px';
-        expect(getComputedStyle(master).minHeight).to.equal('200px');
-        expect(getComputedStyle(master).flexShrink).to.equal('0');
+        expect(getComputedStyle(master).minHeight).to.equal('min(100%, 200px)');
       });
 
-      it('should use detailMinSize as min-height and disable flex-shrink', () => {
+      it('should use detailMinSize as min-height', () => {
         layout.detailMinSize = '200px';
-        expect(getComputedStyle(detail).minHeight).to.equal('200px');
-        expect(getComputedStyle(detail).flexShrink).to.equal('0');
+        expect(getComputedStyle(detail).minHeight).to.equal('min(100%, 200px)');
       });
     });
   });

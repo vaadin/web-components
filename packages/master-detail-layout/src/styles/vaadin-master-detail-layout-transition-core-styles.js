@@ -6,284 +6,135 @@
 import { css } from 'lit';
 
 export const masterDetailLayoutTransitionStyles = css`
-  html:not([dir='rtl']) {
-    --_vaadin-master-detail-layout-dir-multiplier: 1;
-  }
-
-  html[dir='rtl'] {
-    --_vaadin-master-detail-layout-dir-multiplier: -1;
-  }
-
-  /* Default cross-fade animation */
-  vaadin-master-detail-layout[transition] {
-    view-transition-name: vaadin-master-detail-layout;
-  }
-
-  ::view-transition-group(vaadin-master-detail-layout) {
-    animation-duration: var(--vaadin-master-detail-layout-transition-duration, 300ms);
-  }
-
-  /* Drawer - horizontal - add */
-
-  vaadin-master-detail-layout[drawer][orientation='horizontal'][transition='add']::part(detail) {
-    view-transition-name: vaadin-master-detail-layout-drawer-horizontal-detail-add;
-  }
-
-  ::view-transition-group(vaadin-master-detail-layout-drawer-horizontal-detail-add) {
-    clip-path: inset(0);
-  }
-
-  ::view-transition-new(vaadin-master-detail-layout-drawer-horizontal-detail-add) {
-    animation: var(--vaadin-master-detail-layout-transition-duration, 300ms) ease both
-      vaadin-master-detail-layout-drawer-horizontal-detail-add;
-  }
-
-  @keyframes vaadin-master-detail-layout-drawer-horizontal-detail-add {
-    from {
-      transform: translateX(calc(100% * var(--_vaadin-master-detail-layout-dir-multiplier)));
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      --_vaadin-mdl-dir-multiplier: 1;
+      --_vaadin-mdl-stack-master-offset: 20%;
+      --_vaadin-mdl-stack-master-clip-path: inset(0 0 0 var(--_vaadin-mdl-stack-master-offset));
+      --_vaadin-mdl-easing: cubic-bezier(0.78, 0, 0.22, 1);
     }
-  }
 
-  /* Drawer - horizontal - remove */
-
-  vaadin-master-detail-layout[drawer][orientation='horizontal'][transition='remove']::part(detail) {
-    view-transition-name: vaadin-master-detail-layout-drawer-horizontal-detail-remove;
-  }
-
-  ::view-transition-group(vaadin-master-detail-layout-drawer-horizontal-detail-remove) {
-    clip-path: inset(0);
-  }
-
-  ::view-transition-old(vaadin-master-detail-layout-drawer-horizontal-detail-remove) {
-    animation: var(--vaadin-master-detail-layout-transition-duration, 300ms) ease both
-      vaadin-master-detail-layout-drawer-horizontal-detail-remove;
-  }
-
-  @keyframes vaadin-master-detail-layout-drawer-horizontal-detail-remove {
-    to {
-      transform: translateX(calc(100% * var(--_vaadin-master-detail-layout-dir-multiplier)));
+    html[dir='rtl'] {
+      --_vaadin-mdl-dir-multiplier: -1;
+      --_vaadin-mdl-stack-master-clip-path: inset(0 var(--_vaadin-mdl-stack-master-offset) 0 0);
     }
-  }
 
-  /* Stack - horizontal - add */
+    ::view-transition-group(vaadin-mdl-backdrop),
+    ::view-transition-group(vaadin-mdl-master),
+    ::view-transition-group(vaadin-mdl-detail) {
+      animation-duration: 0.4s;
+    }
 
-  vaadin-master-detail-layout[stack][orientation='horizontal'][transition='add'] {
-    view-transition-name: vaadin-master-detail-layout-stack-horizontal-add;
-  }
+    ::view-transition-group(vaadin-mdl-master),
+    ::view-transition-group(vaadin-mdl-detail) {
+      animation-timing-function: var(--_vaadin-mdl-easing);
+    }
 
-  ::view-transition-group(vaadin-master-detail-layout-stack-horizontal-add) {
-    clip-path: inset(0);
-  }
+    ::view-transition-image-pair(vaadin-mdl-master),
+    ::view-transition-image-pair(vaadin-mdl-detail),
+    ::view-transition-new(vaadin-mdl-master),
+    ::view-transition-new(vaadin-mdl-detail),
+    ::view-transition-old(vaadin-mdl-master),
+    ::view-transition-old(vaadin-mdl-detail) {
+      animation-timing-function: inherit;
+    }
 
-  ::view-transition-new(vaadin-master-detail-layout-stack-horizontal-add) {
-    animation: var(--vaadin-master-detail-layout-transition-duration, 300ms) ease both
-      vaadin-master-detail-layout-stack-horizontal-add-new;
-  }
+    /* Needed to promote the backdrop on top the master during the transition */
+    vaadin-master-detail-layout[transition]:not([transition='replace'])::part(backdrop) {
+      view-transition-name: vaadin-mdl-backdrop;
+    }
 
-  ::view-transition-old(vaadin-master-detail-layout-stack-horizontal-add) {
-    animation: var(--vaadin-master-detail-layout-transition-duration, 300ms) ease both
-      vaadin-master-detail-layout-stack-horizontal-add-old;
-  }
+    vaadin-master-detail-layout[transition]:not([transition='replace']):not([drawer], [stack])::part(detail),
+    vaadin-master-detail-layout[transition]:is([drawer], [stack])::part(_detail-internal) {
+      view-transition-name: vaadin-mdl-detail;
+    }
 
-  @keyframes vaadin-master-detail-layout-stack-horizontal-add-new {
-    from {
-      transform: translateX(calc(100px * var(--_vaadin-master-detail-layout-dir-multiplier)));
+    ::view-transition-group(vaadin-mdl-detail) {
+      clip-path: inset(0);
+    }
+
+    ::view-transition-new(vaadin-mdl-detail),
+    ::view-transition-old(vaadin-mdl-detail) {
+      animation-name: vaadin-mdl-detail-slide-in;
+    }
+
+    ::view-transition-old(vaadin-mdl-detail) {
+      animation-direction: reverse;
+    }
+
+    @keyframes vaadin-mdl-detail-slide-in {
+      0% {
+        translate: calc((100% + 30px) * var(--_vaadin-mdl-dir-multiplier));
+      }
+    }
+
+    vaadin-master-detail-layout[orientation='horizontal'][stack][has-detail]::part(master) {
+      translate: calc(var(--_vaadin-mdl-stack-master-offset) * var(--_vaadin-mdl-dir-multiplier) * -1);
       opacity: 0;
     }
-  }
 
-  @keyframes vaadin-master-detail-layout-stack-horizontal-add-old {
-    to {
-      transform: translateX(calc(-100px * var(--_vaadin-master-detail-layout-dir-multiplier)));
-      opacity: 0;
+    vaadin-master-detail-layout[transition]::part(master) {
+      view-transition-name: vaadin-mdl-master;
     }
-  }
 
-  /* Stack - horizontal - remove */
-
-  vaadin-master-detail-layout[stack][orientation='horizontal'][transition='remove'] {
-    view-transition-name: vaadin-master-detail-layout-stack-horizontal-remove;
-  }
-
-  ::view-transition-group(vaadin-master-detail-layout-stack-horizontal-remove) {
-    clip-path: inset(0);
-  }
-
-  ::view-transition-new(vaadin-master-detail-layout-stack-horizontal-remove) {
-    animation: var(--vaadin-master-detail-layout-transition-duration, 300ms) ease both
-      vaadin-master-detail-layout-stack-horizontal-remove-new;
-  }
-
-  ::view-transition-old(vaadin-master-detail-layout-stack-horizontal-remove) {
-    animation: var(--vaadin-master-detail-layout-transition-duration, 300ms) ease both
-      vaadin-master-detail-layout-stack-horizontal-remove-old;
-  }
-
-  @keyframes vaadin-master-detail-layout-stack-horizontal-remove-new {
-    from {
-      transform: translateX(calc(-100px * var(--_vaadin-master-detail-layout-dir-multiplier)));
-      opacity: 0;
+    vaadin-master-detail-layout[orientation='horizontal'][stack][transition='add']::part(master) {
+      view-transition-class: stack-add;
     }
-  }
 
-  @keyframes vaadin-master-detail-layout-stack-horizontal-remove-old {
-    to {
-      transform: translateX(calc(100px * var(--_vaadin-master-detail-layout-dir-multiplier)));
-      opacity: 0;
+    vaadin-master-detail-layout[orientation='horizontal'][stack][transition='remove']::part(master) {
+      view-transition-class: stack-remove;
     }
-  }
 
-  /* Stack - horizontal - viewport - add */
-
-  vaadin-master-detail-layout[stack][orientation='horizontal'][containment='viewport'][transition='add'] {
-    view-transition-name: vaadin-master-detail-layout-stack-horizontal-viewport-add;
-  }
-
-  ::view-transition-new(vaadin-master-detail-layout-stack-horizontal-viewport-add) {
-    animation: var(--vaadin-master-detail-layout-transition-duration, 300ms) ease both
-      vaadin-master-detail-layout-stack-horizontal-add-new;
-  }
-
-  /* Stack - horizontal - viewport - remove */
-
-  vaadin-master-detail-layout[stack][orientation='horizontal'][containment='viewport'][transition='remove'] {
-    view-transition-name: vaadin-master-detail-layout-stack-horizontal-viewport-remove;
-  }
-
-  ::view-transition-old(vaadin-master-detail-layout-stack-horizontal-viewport-remove) {
-    animation: var(--vaadin-master-detail-layout-transition-duration, 300ms) ease both
-      vaadin-master-detail-layout-stack-horizontal-remove-old;
-  }
-
-  /* Drawer - vertical - add */
-
-  vaadin-master-detail-layout[drawer][orientation='vertical'][transition='add']::part(detail) {
-    view-transition-name: vaadin-master-detail-layout-drawer-vertical-detail-add;
-  }
-
-  ::view-transition-group(vaadin-master-detail-layout-drawer-vertical-detail-add) {
-    clip-path: inset(0);
-  }
-
-  ::view-transition-new(vaadin-master-detail-layout-drawer-vertical-detail-add) {
-    animation: var(--vaadin-master-detail-layout-transition-duration, 300ms) ease both
-      vaadin-master-detail-layout-drawer-vertical-detail-add;
-  }
-
-  @keyframes vaadin-master-detail-layout-drawer-vertical-detail-add {
-    from {
-      transform: translateY(100%);
+    ::view-transition-new(vaadin-mdl-master),
+    ::view-transition-old(vaadin-mdl-master) {
+      object-fit: none;
+      object-position: max(0%, var(--_vaadin-mdl-dir-multiplier) * -100%) 0;
     }
-  }
 
-  /* Drawer - vertical - remove */
-
-  vaadin-master-detail-layout[drawer][orientation='vertical'][transition='remove']::part(detail) {
-    view-transition-name: vaadin-master-detail-layout-drawer-vertical-detail-remove;
-  }
-
-  ::view-transition-group(vaadin-master-detail-layout-drawer-vertical-detail-remove) {
-    clip-path: inset(0);
-  }
-
-  ::view-transition-old(vaadin-master-detail-layout-drawer-vertical-detail-remove) {
-    animation: var(--vaadin-master-detail-layout-transition-duration, 300ms) ease both
-      vaadin-master-detail-layout-drawer-vertical-detail-remove;
-  }
-
-  @keyframes vaadin-master-detail-layout-drawer-vertical-detail-remove {
-    to {
-      transform: translateY(100%);
+    ::view-transition-new(vaadin-mdl-master.stack-remove),
+    ::view-transition-old(vaadin-mdl-master.stack-remove) {
+      animation-name: vaadin-mdl-master-stack-remove;
+      clip-path: var(--_vaadin-mdl-stack-master-clip-path);
     }
-  }
 
-  /* Stack - vertical - add */
-
-  vaadin-master-detail-layout[stack][orientation='vertical'][transition='add'] {
-    view-transition-name: vaadin-master-detail-layout-stack-vertical-add;
-  }
-
-  ::view-transition-group(vaadin-master-detail-layout-stack-vertical-add) {
-    clip-path: inset(0);
-  }
-
-  ::view-transition-new(vaadin-master-detail-layout-stack-vertical-add) {
-    animation: var(--vaadin-master-detail-layout-transition-duration, 300ms) ease both
-      vaadin-master-detail-layout-stack-vertical-add-new;
-  }
-
-  ::view-transition-old(vaadin-master-detail-layout-stack-vertical-add) {
-    animation: var(--vaadin-master-detail-layout-transition-duration, 300ms) ease both
-      vaadin-master-detail-layout-stack-vertical-add-old;
-  }
-
-  @keyframes vaadin-master-detail-layout-stack-vertical-add-new {
-    from {
-      transform: translateY(100px);
-      opacity: 0;
+    @keyframes vaadin-mdl-master-stack-remove {
+      100% {
+        clip-path: inset(0);
+      }
     }
-  }
 
-  @keyframes vaadin-master-detail-layout-stack-vertical-add-old {
-    to {
-      transform: translateY(-100px);
-      opacity: 0;
+    ::view-transition-new(vaadin-mdl-master.stack-add),
+    ::view-transition-old(vaadin-mdl-master.stack-add) {
+      animation-name: vaadin-mdl-master-stack-add;
+      clip-path: inset(0);
     }
-  }
 
-  /* Stack - vertical - remove */
-
-  vaadin-master-detail-layout[stack][orientation='vertical'][transition='remove'] {
-    view-transition-name: vaadin-master-detail-layout-stack-vertical-remove;
-  }
-
-  ::view-transition-group(vaadin-master-detail-layout-stack-vertical-remove) {
-    clip-path: inset(0);
-  }
-
-  ::view-transition-new(vaadin-master-detail-layout-stack-vertical-remove) {
-    animation: var(--vaadin-master-detail-layout-transition-duration, 300ms) ease both
-      vaadin-master-detail-layout-stack-vertical-remove-new;
-  }
-
-  ::view-transition-old(vaadin-master-detail-layout-stack-vertical-remove) {
-    animation: var(--vaadin-master-detail-layout-transition-duration, 300ms) ease both
-      vaadin-master-detail-layout-stack-vertical-remove-old;
-  }
-
-  @keyframes vaadin-master-detail-layout-stack-vertical-remove-new {
-    from {
-      transform: translateY(-100px);
-      opacity: 0;
+    @keyframes vaadin-mdl-master-stack-add {
+      100% {
+        clip-path: var(--_vaadin-mdl-stack-master-clip-path);
+      }
     }
-  }
 
-  @keyframes vaadin-master-detail-layout-stack-vertical-remove-old {
-    to {
-      transform: translateY(100px);
-      opacity: 0;
+    /* prettier-ignore */
+    vaadin-master-detail-layout[orientation='vertical']:not([drawer], [stack])[transition]:not([transition='replace'])::part(detail),
+    vaadin-master-detail-layout[orientation='vertical']:is([drawer], [stack])[transition]::part(_detail-internal) {
+      view-transition-name: vaadin-mdl-detail;
+      view-transition-class: vertical;
     }
-  }
 
-  /* Stack - vertical - viewport - add */
+    ::view-transition-new(vaadin-mdl-detail.vertical),
+    ::view-transition-old(vaadin-mdl-detail.vertical) {
+      animation-name: vaadin-mdl-vertical-detail-slide-in;
+    }
 
-  vaadin-master-detail-layout[stack][orientation='vertical'][containment='viewport'][transition='add'] {
-    view-transition-name: vaadin-master-detail-layout-stack-vertical-viewport-add;
-  }
+    ::view-transition-old(vaadin-mdl-detail.vertical) {
+      animation-direction: reverse;
+    }
 
-  ::view-transition-new(vaadin-master-detail-layout-stack-vertical-viewport-add) {
-    animation: var(--vaadin-master-detail-layout-transition-duration, 300ms) ease both
-      vaadin-master-detail-layout-stack-vertical-add-new;
-  }
-
-  /* Stack - vertical - viewport - remove */
-
-  vaadin-master-detail-layout[stack][orientation='vertical'][containment='viewport'][transition='remove'] {
-    view-transition-name: vaadin-master-detail-layout-stack-vertical-viewport-remove;
-  }
-
-  ::view-transition-old(vaadin-master-detail-layout-stack-vertical-viewport-remove) {
-    animation: var(--vaadin-master-detail-layout-transition-duration, 300ms) ease both
-      vaadin-master-detail-layout-stack-vertical-remove-old;
+    @keyframes vaadin-mdl-vertical-detail-slide-in {
+      0% {
+        transform: translateY(calc(100% + 30px));
+      }
+    }
   }
 `;
