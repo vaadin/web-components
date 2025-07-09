@@ -154,7 +154,7 @@ describe('drawer mode', () => {
       await nextRender();
 
       // Shrink viewport
-      layout.detailMinSize = '300px';
+      layout.detailSize = '300px';
       await setViewport({ width: 500, height });
       await nextResize(layout);
 
