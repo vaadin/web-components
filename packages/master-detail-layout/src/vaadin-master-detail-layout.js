@@ -256,7 +256,7 @@ class MasterDetailLayout extends SlotStylesMixin(
   /** @protected */
   render() {
     return html`
-      <div part="backdrop" @click="${this.__onBackdropClick}"></div>
+      <div part="backdrop"></div>
       <div
         id="master"
         part="master"
@@ -264,7 +264,7 @@ class MasterDetailLayout extends SlotStylesMixin(
       >
         <slot></slot>
       </div>
-      <div part="_detail-internal">
+      <div part="_detail-internal" @click="${this.__onDetailClick}">
         <div
           id="detail"
           part="detail"
@@ -296,8 +296,12 @@ class MasterDetailLayout extends SlotStylesMixin(
   }
 
   /** @private */
-  __onBackdropClick() {
-    this.dispatchEvent(new CustomEvent('backdrop-click'));
+  __onDetailClick(e) {
+    // The detail wrapper element fully covers the backdrop part, so listen
+    // to click event on it and detect if it was outside the detail content
+    if (!e.composedPath().includes(this.$.detail)) {
+      this.dispatchEvent(new CustomEvent('backdrop-click'));
+    }
   }
 
   /** @private */
