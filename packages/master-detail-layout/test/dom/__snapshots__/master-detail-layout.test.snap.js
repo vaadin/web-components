@@ -11,12 +11,14 @@ snapshots["vaadin-master-detail-layout shadow default"] =
   <slot>
   </slot>
 </div>
-<div
-  id="detail"
-  part="detail"
->
-  <slot name="detail">
-  </slot>
+<div part="_detail-internal">
+  <div
+    id="detail"
+    part="detail"
+  >
+    <slot name="detail">
+    </slot>
+  </div>
 </div>
 `;
 /* end snapshot vaadin-master-detail-layout shadow default */
