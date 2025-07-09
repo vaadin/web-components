@@ -25,6 +25,12 @@ describe('split-layout', () => {
 
   it('small', async () => {
     element.setAttribute('theme', 'small');
-    await visualDiff(element, 'small');
+    await visualDiff(element, 'horizontal-small');
+  });
+
+  it('vertical small', async () => {
+    element.orientation = 'vertical';
+    element.setAttribute('theme', 'small');
+    await visualDiff(element, 'vertical-small');
   });
 });
