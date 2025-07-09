@@ -115,9 +115,8 @@ export const masterDetailLayoutTransitionStyles = css`
       }
     }
 
-    vaadin-master-detail-layout[orientation='vertical']:not([drawer], [stack])[transition]:not(
-        [transition='replace']
-      )::part(detail),
+    /* prettier-ignore */
+    vaadin-master-detail-layout[orientation='vertical']:not([drawer], [stack])[transition]:not([transition='replace'])::part(detail),
     vaadin-master-detail-layout[orientation='vertical']:is([drawer], [stack])[transition]::part(_detail-internal) {
       view-transition-name: vaadin-mdl-detail;
       view-transition-class: vertical;
