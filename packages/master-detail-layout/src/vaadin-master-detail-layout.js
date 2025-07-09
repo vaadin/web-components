@@ -22,12 +22,6 @@ import { masterDetailLayoutTransitionStyles } from './styles/vaadin-master-detai
  *
  * ### Styling
  *
- * The following custom CSS properties are available for styling (needed to be set
- * on the `<html>` element since they are used by the global view transitions):
- *
- * Custom CSS property                                  | Description         | Default
- * -----------------------------------------------------|---------------------|--------
- *
  * The following shadow DOM parts are available for styling:
  *
  * Part name      | Description
