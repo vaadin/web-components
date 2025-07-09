@@ -106,16 +106,14 @@ describe('vaadin-master-detail-layout', () => {
         expect(getComputedStyle(detail).flexGrow).to.equal('1');
       });
 
-      it('should use masterMinSize as min-width and disable flex-shrink', () => {
+      it('should use masterMinSize as min-width', () => {
         layout.masterMinSize = '300px';
-        expect(getComputedStyle(master).minWidth).to.equal('300px');
-        expect(getComputedStyle(master).flexShrink).to.equal('0');
+        expect(getComputedStyle(master).minWidth).to.equal('min(100%, 300px)');
       });
 
-      it('should use detailMinSize as min-width and disable flex-shrink', () => {
+      it('should use detailMinSize as min-width', () => {
         layout.detailMinSize = '300px';
-        expect(getComputedStyle(detail).minWidth).to.equal('300px');
-        expect(getComputedStyle(detail).flexShrink).to.equal('0');
+        expect(getComputedStyle(detail).minWidth).to.equal('min(100%, 300px)');
       });
 
       it('should not overflow in split mode when masterSize is set', async () => {
@@ -168,16 +166,14 @@ describe('vaadin-master-detail-layout', () => {
         expect(getComputedStyle(detail).flexShrink).to.equal('0');
       });
 
-      it('should use masterMinSize as min-height and disable flex-shrink', () => {
+      it('should use masterMinSize as min-height', () => {
         layout.masterMinSize = '200px';
-        expect(getComputedStyle(master).minHeight).to.equal('200px');
-        expect(getComputedStyle(master).flexShrink).to.equal('0');
+        expect(getComputedStyle(master).minHeight).to.equal('min(100%, 200px)');
       });
 
-      it('should use detailMinSize as min-height and disable flex-shrink', () => {
+      it('should use detailMinSize as min-height', () => {
         layout.detailMinSize = '200px';
-        expect(getComputedStyle(detail).minHeight).to.equal('200px');
-        expect(getComputedStyle(detail).flexShrink).to.equal('0');
+        expect(getComputedStyle(detail).minHeight).to.equal('min(100%, 200px)');
       });
     });
   });
