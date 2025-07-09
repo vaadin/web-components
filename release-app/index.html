@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Release app</title>
+  <style>
+    body {
+      padding: var(--lumo-space-l);
+    }
+
+    section {
+      margin-bottom: var(--lumo-space-l);
+    }
+
+    h1,
+    h2,
+    h3 {
+      margin-bottom: var(--lumo-space-m);
+    }
+
+    table {
+      border-collapse: collapse;
+      margin: var(--lumo-space-s) 0;
+    }
+
+    td {
+      border: 1px solid var(--lumo-contrast-10pct);
+      padding: var(--lumo-space-xs) var(--lumo-space-s);
+    }
+
+    ul {
+      margin: 0;
+    }
+
+    code {
+      padding: 0 4px;
+    }
+
+    .guibutton {
+      font-size: 0.8em;
+      line-height: 1.25;
+      font-weight: 600;
+      border-radius: var(--lumo-border-radius-s);
+      padding: 0.3em 0.6em;
+      background: linear-gradient(white, var(--lumo-contrast-5pct));
+      box-shadow: inset 0 0 0 1px var(--lumo-contrast-10pct);
+      cursor: default;
+      position: relative;
+      top: -0.1em;
+      white-space: nowrap;
+    }
+
+    vaadin-dialog-overlay {
+      max-height: 80%;
+    }
+
+    vaadin-dialog-overlay h3 {
+      font-size: var(--lumo-font-size-m);
+    }
+  </style>
+</head>
+<body>
+<script type="module">
+  import "./app.js";
+</script>
+<ra-app></ra-app>
+</body>
+</html>

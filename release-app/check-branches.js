@@ -1,5 +1,6 @@
 import dotenv from 'dotenv';
 import fs from 'node:fs';
+import path from 'node:path';
 
 dotenv.config();
 
@@ -98,13 +99,10 @@ async function run() {
     }
   }
 
-  const template = fs.readFileSync('./scripts/check-releases.template.html', 'utf8');
-  const filledTemplate = template.replace(
-    '/*{inject-branch-info}*/',
-    `window.branches = ${JSON.stringify(branchInfos, null, 2)};`,
-  );
+  const json = JSON.stringify(branchInfos);
+  const outputPath = path.resolve('release-app', 'branches.json');
 
-  fs.writeFileSync('./scripts/check-releases.html', filledTemplate, 'utf8');
+  fs.writeFileSync(outputPath, json, 'utf8');
 }
 
 run();
