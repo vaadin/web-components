@@ -17,7 +17,6 @@ export const iconStyles = css`
     flex: none;
     fill: var(--vaadin-icon-color, currentColor);
     container-type: size;
-    contain: layout;
   }
 
   :host::after,
@@ -47,5 +46,15 @@ export const iconStyles = css`
 
   :host([font-icon-content])::before {
     content: attr(font-icon-content);
+  }
+
+  .baseline {
+    order: -1;
+  }
+
+  .baseline::before {
+    content: '\\2003' / '';
+    display: inline-block;
+    width: 0;
   }
 `;
