@@ -70,6 +70,12 @@ class Map extends MapMixin(ThemableMixin(ElementMixin(LumoInjectionMixin(Polylit
     return mapStyles;
   }
 
+  static get lumoInjector() {
+    return {
+      includeBaseStyles: true,
+    };
+  }
+
   /** @protected */
   render() {
     return html``;
