@@ -9,8 +9,7 @@ import { css } from 'lit';
 export const splitLayoutStyles = css`
   :host {
     display: flex;
-    overflow: hidden !important;
-    transform: translateZ(0);
+    contain: layout;
   }
 
   :host([hidden]) {
@@ -21,95 +20,98 @@ export const splitLayoutStyles = css`
     flex-direction: column;
   }
 
-  :host ::slotted(*) {
+  ::slotted(*) {
     flex: 1 1 auto;
-    overflow: auto;
+    min-width: 0;
+    min-height: 0;
   }
 
   [part='splitter'] {
-    background-color: var(--vaadin-split-layout-splitter-background, var(--vaadin-background-container-strong));
+    --_splitter-size: var(--vaadin-split-layout-splitter-size, 0.5rem);
+    --_splitter-target-size: var(--vaadin-split-layout-splitter-target-size, 0.5rem);
+    --_handle-size: var(--vaadin-split-layout-handle-size, 0.25rem);
+    --_handle-target-size: var(--vaadin-split-layout-handle-target-size, 2rem);
+    background: var(--vaadin-split-layout-splitter-background, var(--vaadin-background-container-strong));
     flex: none;
-    min-height: var(--vaadin-split-layout-splitter-size, 0.5rem);
-    min-width: var(--vaadin-split-layout-splitter-size, 0.5rem);
-    overflow: visible;
     position: relative;
     z-index: 1;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   [part='splitter']::after {
     content: '';
-    inset: 0
-      calc(
-        (var(--vaadin-split-layout-splitter-target-size, 1rem) - var(--vaadin-split-layout-splitter-size, 0.5rem)) / -2
-      );
+    inset: 0 calc((var(--_splitter-target-size) - var(--_splitter-size)) / -2);
     position: absolute;
   }
 
   :host([orientation='vertical']) [part='splitter']::after {
-    inset: calc(
-        (var(--vaadin-split-layout-splitter-target-size, 1rem) - var(--vaadin-split-layout-splitter-size, 0.5rem)) / -2
-      )
-      0;
+    inset: calc((var(--_splitter-target-size) - var(--_splitter-size)) / -2) 0;
   }
 
   :host(:not([orientation='vertical'])) > [part='splitter'] {
     cursor: ew-resize;
+    width: var(--_splitter-size);
   }
 
   :host([orientation='vertical']) > [part='splitter'] {
     cursor: ns-resize;
+    height: var(--_splitter-size);
   }
 
   [part='handle'] {
-    align-items: center;
-    display: flex;
-    height: var(--vaadin-split-layout-handle-target-size, 3rem);
-    justify-content: center;
-    left: 50%;
-    position: absolute;
-    transform: translate3d(-50%, -50%, 0);
-    top: 50%;
-    width: var(--vaadin-split-layout-handle-target-size, 3rem);
-    z-index: 1;
+    background: var(--vaadin-split-layout-handle-background, var(--vaadin-color-subtle));
+    border-radius: var(--vaadin-radius-m);
+    flex: none;
+    width: var(--_handle-size);
+    height: var(--_handle-target-size);
+    max-height: 50%;
+    position: relative;
+  }
+
+  :host([orientation='vertical']) [part='handle'] {
+    width: var(--_handle-target-size);
+    max-width: 50%;
+    height: var(--_handle-size);
+    max-height: none;
   }
 
   [part='handle']::after {
-    background-color: var(--vaadin-split-layout-handle-background, var(--vaadin-color-subtle));
-    border-radius: var(--vaadin-radius-m);
     content: '';
-    display: block;
-    height: 100%;
-    max-height: 100%;
-    max-width: 100%;
-    width: var(--vaadin-split-layout-handle-size, 0.25rem);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    height: var(--_handle-target-size);
+    width: var(--_handle-target-size);
+    transform: translate3d(-50%, -50%, 0);
+    border-radius: 50%;
   }
 
-  :host([orientation='vertical']) [part='handle']::after {
-    height: var(--vaadin-split-layout-handle-size, 0.25rem);
-    width: 100%;
-  }
-
-  :host([theme~='small']) {
+  :host([theme~='small']) > [part='splitter'] {
     --vaadin-split-layout-splitter-size: 1px;
+    --vaadin-split-layout-splitter-target-size: 5px;
     --vaadin-split-layout-handle-size: 3px;
   }
 
-  :host([theme~='small']) [part='handle']::after {
+  :host([theme~='small']) [part='splitter'] [part='handle'] {
     opacity: 0;
   }
 
-  :host([theme~='small']) [part='splitter']:hover [part='handle']::after {
+  :host([theme~='small']) [part='splitter']:active [part='handle'] {
     opacity: 1;
+  }
+
+  @media (any-hover: hover) {
+    :host([theme~='small']) [part='splitter']:hover [part='handle'] {
+      opacity: 1;
+    }
   }
 
   @media (forced-colors: active) {
     [part~='splitter'] {
-      outline: 1px solid;
-    }
-
-    [part~='handle']::after {
-      background-color: AccentColor !important;
-      forced-color-adjust: none;
+      border: 1px solid;
     }
   }
 `;
