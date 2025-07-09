@@ -116,6 +116,11 @@ describe('Lumo injection', () => {
     expect(getComputedStyle(content).backgroundColor).to.equal('rgb(0, 255, 255)');
   }
 
+  afterEach(() => {
+    document.__lumoInjector?.disconnect();
+    document.__lumoInjector = undefined;
+  });
+
   describe('in global scope', () => {
     describe('styles added after element is connected', () => {
       beforeEach(async () => {

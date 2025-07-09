@@ -88,6 +88,12 @@ export class LumoInjector {
     });
   }
 
+  disconnect() {
+    this.#cssPropertyObserver.disconnect();
+    this.#styleSheetsByTag.clear();
+    this.#componentsByTag.values().forEach((components) => components.forEach(removeLumoStyleSheet));
+  }
+
   /**
    * Adds a component to the list of elements monitored for style injection.
    * If the styles have already been detected, they are injected into the
