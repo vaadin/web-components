@@ -1,10 +1,12 @@
 import { expect } from '@vaadin/chai-plugins';
-import { sendKeys } from '@vaadin/test-runner-commands';
-import { enter, esc, fixtureSync, focusin, focusout, nextFrame } from '@vaadin/testing-helpers';
+import { sendKeys, sendMouse, setViewport } from '@vaadin/test-runner-commands';
+import { click, enter, esc, fixtureSync, focusin, focusout, nextFrame, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './not-animated-styles.js';
 import '../src/vaadin-grid-pro.js';
 import '../src/vaadin-grid-pro-edit-column.js';
+import '@vaadin/date-picker/src/vaadin-date-picker.js';
+import { untilOverlayRendered, untilOverlayScrolled } from '@vaadin/date-picker/test/helpers.js';
 import {
   createItems,
   dblclick,
@@ -823,6 +825,84 @@ describe('edit column', () => {
 
       const dispatch = () => detailsCell.dispatchEvent(new CustomEvent('mousedown', { bubbles: true, composed: true }));
       expect(dispatch).to.not.throw(Error);
+    });
+  });
+
+  describe('mobile', () => {
+    let width, height;
+
+    before(() => {
+      width = window.innerWidth;
+      height = window.innerHeight;
+    });
+
+    beforeEach(async () => {
+      await setViewport({ width: 420, height: 1020 });
+    });
+
+    after(async () => {
+      await setViewport({ width, height });
+    });
+
+    describe('date-picker', () => {
+      let grid, cell;
+
+      beforeEach(() => {
+        grid = fixtureSync(`
+        <vaadin-grid-pro>
+          <vaadin-grid-pro-edit-column path="birthday" header="Birthday"></vaadin-grid-pro-edit-column>
+        </vaadin-grid-pro>
+      `);
+        grid.querySelector('[path="birthday"]').editModeRenderer = (root, _, { item }) => {
+          if (root.firstElementChild) {
+            return;
+          }
+
+          const datePicker = document.createElement('vaadin-date-picker');
+          datePicker.value = item.birthday;
+
+          root.appendChild(datePicker);
+        };
+        grid.items = createItems();
+        flushGrid(grid);
+        cell = getContainerCell(grid.$.items, 0, 0);
+      });
+
+      it('should open date picker on double click', async () => {
+        dblclick(cell);
+        const datePicker = cell._content.querySelector('vaadin-date-picker');
+        expect(datePicker).to.be.ok;
+        await untilOverlayRendered(datePicker);
+        expect(datePicker.opened).to.be.ok;
+      });
+
+      it('should close date picker on selecting a date in the overlay', async () => {
+        dblclick(cell);
+        const datePicker = cell._content.querySelector('vaadin-date-picker');
+        await untilOverlayRendered(datePicker);
+
+        const todayButton = datePicker._overlayElement.querySelector('[slot=today-button]');
+        click(todayButton); // Fist click to scroll to current month
+        await untilOverlayScrolled(datePicker);
+        click(todayButton); // Second click to select today's date
+
+        await nextRender();
+        const TODAY_DATE = new Date().toISOString().split('T')[0];
+        expect(TODAY_DATE).to.be.equal(cell._content.textContent);
+      });
+
+      it('should restore previous cell content if overlay is closed', async () => {
+        const previousContent = cell._content.textContent;
+
+        dblclick(cell);
+        const datePicker = cell._content.querySelector('vaadin-date-picker');
+        await untilOverlayRendered(datePicker);
+
+        sendMouse({ type: 'click', position: [10, 10] });
+        await nextRender();
+        expect(cell._content.querySelector('vaadin-date-picker')).to.not.be.ok;
+        expect(previousContent).to.be.equal(cell._content.textContent);
+      });
     });
   });
 });

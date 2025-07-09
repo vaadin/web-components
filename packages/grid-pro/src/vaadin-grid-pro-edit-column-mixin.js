@@ -8,6 +8,7 @@
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
+import { getDeepActiveElement } from '@vaadin/a11y-base/src/focus-utils';
 import { get, set } from '@vaadin/component-base/src/path-utils.js';
 
 /**
@@ -289,6 +290,19 @@ export const GridProEditColumnMixin = (superClass) =>
         editor.updateComplete.then(() => this._focusEditor(editor));
       } else {
         this._focusEditor(editor);
+      }
+
+      if (this.editorType === 'custom') {
+        editor.addEventListener('opened-changed', (e) => {
+          const element = e.target;
+          const activeElement = getDeepActiveElement();
+          if (
+            !element.opened &&
+            !(element === activeElement || (element.inputElement && element.inputElement === activeElement))
+          ) {
+            this._grid._stopEdit();
+          }
+        });
       }
     }
 
