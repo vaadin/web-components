@@ -99,6 +99,11 @@
 
       window.mdlCount = 1;
 
+      // prettier-ignore
+      const lorem = html`Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eligendi suscipit rem, non temporibus
+      laboriosam maiores distinctio numquam, dolorum ducimus dolores sequi reprehenderit iste consectetur adipisci
+      delectus aperiam voluptatibus! Vitae, adipisci.`;
+
       class MDLView extends LitElement {
         static get is() {
           return 'mdl-view';
@@ -249,11 +254,7 @@
                   <vaadin-radio-button value="400px" label="400px"></vaadin-radio-button>
                   <vaadin-radio-button value="100%" label="100%"></vaadin-radio-button>
                 </vaadin-radio-group>
-                <p
-                  >Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eligendi suscipit rem, non temporibus
-                  laboriosam maiores distinctio numquam, dolorum ducimus dolores sequi reprehenderit iste consectetur
-                  adipisci delectus aperiam voluptatibus! Vitae, adipisci.</p
-                >
+                <p>${lorem}</p>
               </div>
             </vaadin-master-detail-layout>
           `;
