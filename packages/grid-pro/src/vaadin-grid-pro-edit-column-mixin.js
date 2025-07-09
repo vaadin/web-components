@@ -293,13 +293,10 @@ export const GridProEditColumnMixin = (superClass) =>
       }
 
       if (this.editorType === 'custom') {
-        editor.addEventListener('opened-changed', (e) => {
-          const element = e.target;
+        editor.addEventListener('opened-changed', (event) => {
+          const element = event.target;
           const activeElement = getDeepActiveElement();
-          if (
-            !element.opened &&
-            !(element === activeElement || (element.inputElement && element.inputElement === activeElement))
-          ) {
+          if (!element.opened && !element.contains(activeElement)) {
             this._grid._stopEdit();
           }
         });
