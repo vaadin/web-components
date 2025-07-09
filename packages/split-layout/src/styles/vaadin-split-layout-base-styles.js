@@ -27,7 +27,7 @@ export const splitLayoutStyles = css`
   }
 
   [part='splitter'] {
-    background-color: var(--vaadin-split-layout-splitter-background, var(--vaadin-background-container));
+    background-color: var(--vaadin-split-layout-splitter-background, var(--vaadin-background-container-strong));
     flex: none;
     min-height: var(--vaadin-split-layout-splitter-size, 0.5rem);
     min-width: var(--vaadin-split-layout-splitter-size, 0.5rem);
@@ -38,12 +38,18 @@ export const splitLayoutStyles = css`
 
   [part='splitter']::after {
     content: '';
-    inset: 0 calc(var(--vaadin-split-layout-splitter-target-size, 1rem) / -2);
+    inset: 0
+      calc(
+        (var(--vaadin-split-layout-splitter-target-size, 1rem) - var(--vaadin-split-layout-splitter-size, 0.5rem)) / -2
+      );
     position: absolute;
   }
 
   :host([orientation='vertical']) [part='splitter']::after {
-    inset: calc(var(--vaadin-split-layout-splitter-target-size, 1rem) / -2) 0;
+    inset: calc(
+        (var(--vaadin-split-layout-splitter-target-size, 1rem) - var(--vaadin-split-layout-splitter-size, 0.5rem)) / -2
+      )
+      0;
   }
 
   :host(:not([orientation='vertical'])) > [part='splitter'] {
@@ -81,6 +87,19 @@ export const splitLayoutStyles = css`
   :host([orientation='vertical']) [part='handle']::after {
     height: var(--vaadin-split-layout-handle-size, 0.25rem);
     width: 100%;
+  }
+
+  :host([theme~='small']) {
+    --vaadin-split-layout-splitter-size: 1px;
+    --vaadin-split-layout-handle-size: 3px;
+  }
+
+  :host([theme~='small']) [part='handle']::after {
+    opacity: 0;
+  }
+
+  :host([theme~='small']) [part='splitter']:hover [part='handle']::after {
+    opacity: 1;
   }
 
   @media (forced-colors: active) {

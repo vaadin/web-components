@@ -12,10 +12,10 @@
       import '@vaadin/split-layout';
 
       document.querySelectorAll('.first').forEach((el) => {
-        el.textContent = new Array(1000).fill('a').join(' ');
+        el.innerHTML = `<div style="padding: 0.5rem">${new Array(420).fill('a').join(' ')}</div>`;
       });
       document.querySelectorAll('.second').forEach((el) => {
-        el.textContent = new Array(1000).fill('b').join(' ');
+        el.innerHTML = `<div style="padding: 0.5rem">${new Array(420).fill('b').join(' ')}</div>`;
       });
     </script>
 
@@ -46,16 +46,6 @@
       <div class="second"></div>
     </vaadin-split-layout>
     <vaadin-split-layout style="width: 400px; height: 200px" orientation="vertical" theme="small">
-      <div class="first"></div>
-      <div class="second"></div>
-    </vaadin-split-layout>
-
-    <h2 class="heading">Minimal</h2>
-    <vaadin-split-layout style="width: 400px; height: 200px" theme="minimal">
-      <div class="first"></div>
-      <div class="second"></div>
-    </vaadin-split-layout>
-    <vaadin-split-layout style="width: 400px; height: 200px" orientation="vertical" theme="minimal">
       <div class="first"></div>
       <div class="second"></div>
     </vaadin-split-layout>
