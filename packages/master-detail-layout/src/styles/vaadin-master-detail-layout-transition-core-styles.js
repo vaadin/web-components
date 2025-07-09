@@ -88,7 +88,7 @@ export const masterDetailLayoutTransitionStyles = css`
     ::view-transition-new(vaadin-mdl-master),
     ::view-transition-old(vaadin-mdl-master) {
       object-fit: none;
-      object-position: 0 0;
+      object-position: max(0%, var(--_vaadin-mdl-dir-multiplier) * -100%) 0;
     }
 
     ::view-transition-new(vaadin-mdl-master.stack-remove),
