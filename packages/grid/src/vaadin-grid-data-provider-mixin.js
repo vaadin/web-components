@@ -7,7 +7,6 @@ import { microTask, timeOut } from '@vaadin/component-base/src/async.js';
 import { DataProviderController } from '@vaadin/component-base/src/data-provider-controller/data-provider-controller.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { get } from '@vaadin/component-base/src/path-utils.js';
-import { getBodyRowCells, updateCellsPart, updateState } from './vaadin-grid-helpers.js';
 
 /**
  * @polymerMixin
@@ -182,48 +181,20 @@ export const DataProviderMixin = (superClass) =>
       this.requestContentUpdate();
     }
 
-    /**
-     * @param {HTMLElement} row
-     * @protected
-     */
-    _ensureRowItemLoaded(row) {
+    /** @package */
+    _getRowItem(row) {
       const { item } = this._dataProviderController.getFlatIndexContext(row.index);
-      if (item) {
-        this._updateRowLoading(row, false);
-      } else {
-        this._updateRowLoading(row, true);
-        this._dataProviderController.ensureFlatIndexLoaded(row.index);
-      }
       return item;
     }
 
-    /**
-     * @param {HTMLElement} row
-     * @private
-     */
-    _ensureRowHierarchyLoaded(row) {
-      this._dataProviderController.ensureFlatIndexHierarchy(row.index);
+    /** @package */
+    _ensureRowItem(row) {
+      this._dataProviderController.ensureFlatIndexLoaded(row.index);
     }
 
-    /**
-     * @param {!HTMLElement} row
-     * @param {boolean} loading
-     * @private
-     */
-    _updateRowLoading(row, loading) {
-      const cells = getBodyRowCells(row);
-
-      // Row state attribute
-      updateState(row, 'loading', loading);
-
-      // Cells part attribute
-      updateCellsPart(cells, 'loading-row-cell', loading);
-
-      if (loading) {
-        // Run style generators for the loading row to have custom names cleared
-        this._generateCellClassNames(row);
-        this._generateCellPartNames(row);
-      }
+    /** @package */
+    _ensureRowHierarchy(row) {
+      this._dataProviderController.ensureFlatIndexHierarchy(row.index);
     }
 
     /**
@@ -304,7 +275,7 @@ export const DataProviderMixin = (superClass) =>
       if (this._flatSize !== this._dataProviderController.flatSize) {
         // Schedule an update of all rendered rows by _debouncerApplyCachedData,
         // to ensure that all pages associated with the rendered rows are loaded.
-        this._shouldUpdateAllRenderedRowsAfterPageLoad = true;
+        this._shouldLoadAllRenderedRowsAfterPageLoad = true;
 
         // TODO: Updating the flat size property can still result in a synchonous virtualizer update
         // if the size change requires the virtualizer to increase the amount of physical elements
@@ -314,7 +285,7 @@ export const DataProviderMixin = (superClass) =>
       }
 
       // After updating the cache, check if some of the expanded items should have sub-caches loaded
-      this._getRenderedRows().forEach((row) => this._ensureRowHierarchyLoaded(row));
+      this._getRenderedRows().forEach((row) => this._ensureRowHierarchy(row));
 
       this._hasData = true;
     }
@@ -325,13 +296,14 @@ export const DataProviderMixin = (superClass) =>
       this._debouncerApplyCachedData = Debouncer.debounce(this._debouncerApplyCachedData, timeOut.after(0), () => {
         this._setLoading(false);
 
-        const shouldUpdateAllRenderedRowsAfterPageLoad = this._shouldUpdateAllRenderedRowsAfterPageLoad;
-        this._shouldUpdateAllRenderedRowsAfterPageLoad = false;
+        const shouldLoadAllRenderedRowsAfterPageLoad = this._shouldLoadAllRenderedRowsAfterPageLoad;
+        this._shouldLoadAllRenderedRowsAfterPageLoad = false;
 
         this._getRenderedRows().forEach((row) => {
-          const { item } = this._dataProviderController.getFlatIndexContext(row.index);
-          if (item || shouldUpdateAllRenderedRowsAfterPageLoad) {
-            this._updateRow(row);
+          this._updateRow(row);
+
+          if (shouldLoadAllRenderedRowsAfterPageLoad) {
+            this._ensureRowItem(row);
           }
         });
 

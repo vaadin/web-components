@@ -28,6 +28,7 @@ import {
   iterateRowCells,
   updateBooleanRowStates,
   updateCellsPart,
+  updateState,
 } from './vaadin-grid-helpers.js';
 import { KeyboardNavigationMixin } from './vaadin-grid-keyboard-navigation-mixin.js';
 import { RowDetailsMixin } from './vaadin-grid-row-details-mixin.js';
@@ -643,6 +644,9 @@ export const GridMixin = (superClass) =>
 
       this._updateRowOrderParts(row);
       this._a11yUpdateRowRowindex(row);
+
+      this._ensureRowItem(row);
+      this._ensureRowHierarchy(row);
       this._updateRow(row);
     }
 
@@ -740,13 +744,30 @@ export const GridMixin = (superClass) =>
       this.__updateHeaderAndFooter();
     }
 
-    /**
-     * @param {!HTMLElement} row
-     * @protected
-     */
+    /** @package */
+    _updateRowLoading(row, loading) {
+      const cells = getBodyRowCells(row);
+
+      // Row state attribute
+      updateState(row, 'loading', loading);
+
+      // Cells part attribute
+      updateCellsPart(cells, 'loading-row-cell', loading);
+
+      if (loading) {
+        // Run style generators for the loading row to have custom names cleared
+        this._generateCellClassNames(row);
+        this._generateCellPartNames(row);
+      }
+    }
+
+    /** @package */
     _updateRow(row) {
-      const item = this._ensureRowItemLoaded(row);
-      if (!item) {
+      const item = this._getRowItem(row);
+      if (item) {
+        this._updateRowLoading(row, false);
+      } else {
+        this._updateRowLoading(row, true);
         return;
       }
 
@@ -778,10 +799,6 @@ export const GridMixin = (superClass) =>
       this._updateDetailsCellHeight(row);
 
       this._a11yUpdateRowExpanded(row, model.expanded);
-
-      if (this._isExpanded(item)) {
-        this._ensureRowHierarchyLoaded(row);
-      }
     }
 
     /** @private */
