@@ -19,7 +19,7 @@
         root.innerHTML = `<div>${item.label}</div>`;
       };
 
-      document.querySelectorAll('vaadin-virtual-list').forEach(list => {
+      document.querySelectorAll('vaadin-virtual-list').forEach((list) => {
         list.items = items;
         list.renderer = renderer;
       });
