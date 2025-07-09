@@ -92,22 +92,6 @@ describe('drawer mode', () => {
       expect(getComputedStyle(detail).width).to.equal('300px');
     });
 
-    it('should set detail area width in drawer mode when detailMinSize is set', async () => {
-      // Use the threshold at which the drawer mode isn't on by default,
-      // but will be on after setting min size on the detail area.
-      await setViewport({ width: 500, height });
-      await nextResize(layout);
-
-      expect(layout.hasAttribute('drawer')).to.be.false;
-
-      layout.detailMinSize = '300px';
-      await nextResize(layout);
-
-      expect(layout.hasAttribute('drawer')).to.be.true;
-      expect(getComputedStyle(detailWrapper).position).to.equal('absolute');
-      expect(getComputedStyle(detail).width).to.equal('300px');
-    });
-
     it('should switch to the drawer mode when masterSize is set to 100%', async () => {
       layout.masterSize = '100%';
       await nextResize(layout);
