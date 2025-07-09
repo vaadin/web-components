@@ -1,4 +1,5 @@
-import { fixtureSync } from '@vaadin/testing-helpers/dist/fixture.js';
+import { resetMouse, sendMouseToElement } from '@vaadin/test-runner-commands';
+import { fixtureSync } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '../../../src/vaadin-split-layout.js';
 
@@ -14,23 +15,30 @@ describe('split-layout', () => {
     `);
   });
 
-  it('horizontal', async () => {
-    await visualDiff(element, 'horizontal');
+  afterEach(async () => {
+    await resetMouse();
   });
 
-  it('vertical', async () => {
-    element.orientation = 'vertical';
-    await visualDiff(element, 'vertical');
-  });
+  ['horizontal', 'vertical'].forEach((orientation) => {
+    describe(orientation, () => {
+      beforeEach(() => {
+        element.orientation = orientation;
+      });
 
-  it('small', async () => {
-    element.setAttribute('theme', 'small');
-    await visualDiff(element, 'horizontal-small');
-  });
+      it(orientation, async () => {
+        await visualDiff(element, orientation);
+      });
 
-  it('vertical small', async () => {
-    element.orientation = 'vertical';
-    element.setAttribute('theme', 'small');
-    await visualDiff(element, 'vertical-small');
+      it(`${orientation} small`, async () => {
+        element.setAttribute('theme', 'small');
+        await visualDiff(element, `${orientation}-small`);
+      });
+
+      it(`${orientation} small hover`, async () => {
+        element.setAttribute('theme', 'small');
+        await sendMouseToElement({ type: 'move', element: element.$.splitter });
+        await visualDiff(element, `${orientation}-small-hover`);
+      });
+    });
   });
 });
