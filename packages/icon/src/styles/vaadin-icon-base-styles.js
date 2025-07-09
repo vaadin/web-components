@@ -47,6 +47,10 @@ export const iconStyles = css`
     content: attr(font-icon-content);
   }
 
+  .baseline {
+    order: -1;
+  }
+
   .baseline::before {
     content: '\\2003';
     display: inline-block;
