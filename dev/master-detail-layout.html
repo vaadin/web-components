@@ -95,7 +95,7 @@
       import '@vaadin/master-detail-layout';
       import '@vaadin/tooltip';
       import '@vaadin/vaadin-lumo-styles/icons';
-      import { css, html, LitElement, render } from 'lit';
+      import { html, LitElement, render } from 'lit';
 
       window.mdlCount = 1;
 
@@ -260,12 +260,7 @@
         }
 
         _configChange(e) {
-          if (e.target.className == 'mode') {
-            // this._mdl.forceOverlay = e.target.value == 'overlay';
-            // this._mdl.stackThreshold = e.target.value == 'stack' ? '100vw' : null;
-          } else {
-            this._mdl[e.currentTarget.className] = e.target.value.match(/auto|none/) ? null : e.target.value;
-          }
+          this._mdl[e.currentTarget.className] = e.target.value.match(/auto|none/) ? null : e.target.value;
         }
       }
 
