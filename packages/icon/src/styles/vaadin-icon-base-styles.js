@@ -11,6 +11,7 @@ export const iconStyles = css`
     justify-content: center;
     align-items: center;
     box-sizing: border-box;
+    vertical-align: middle;
     width: var(--vaadin-icon-size, 1lh);
     height: var(--vaadin-icon-size, 1lh);
     flex: none;
