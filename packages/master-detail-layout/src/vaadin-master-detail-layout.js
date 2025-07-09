@@ -27,7 +27,6 @@ import { masterDetailLayoutTransitionStyles } from './styles/vaadin-master-detai
  *
  * Custom CSS property                                  | Description         | Default
  * -----------------------------------------------------|---------------------|--------
- * `--vaadin-master-detail-layout-transition-duration`  | Transition duration | 300ms
  *
  * The following shadow DOM parts are available for styling:
  *
@@ -258,17 +257,23 @@ class MasterDetailLayout extends SlotStylesMixin(
   render() {
     return html`
       <div part="backdrop" @click="${this.__onBackdropClick}"></div>
-      <div id="master" part="master" ?inert="${this._hasDetail && this._drawer && this.containment === 'layout'}">
+      <div
+        id="master"
+        part="master"
+        ?inert="${this._hasDetail && (this._stack || (this._drawer && this.containment === 'layout'))}"
+      >
         <slot></slot>
       </div>
-      <div
-        id="detail"
-        part="detail"
-        role="${this._drawer || this._stack ? 'dialog' : nothing}"
-        aria-modal="${this._drawer && this.containment === 'viewport' ? 'true' : nothing}"
-        @keydown="${this.__onDetailKeydown}"
-      >
-        <slot name="detail" @slotchange="${this.__onDetailSlotChange}"></slot>
+      <div part="_detail-internal">
+        <div
+          id="detail"
+          part="detail"
+          role="${this._drawer || this._stack ? 'dialog' : nothing}"
+          aria-modal="${this._drawer && this.containment === 'viewport' ? 'true' : nothing}"
+          @keydown="${this.__onDetailKeydown}"
+        >
+          <slot name="detail" @slotchange="${this.__onDetailSlotChange}"></slot>
+        </div>
       </div>
     `;
   }

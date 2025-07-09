@@ -28,7 +28,6 @@ export interface MasterDetailLayoutEventMap extends HTMLElementEventMap, MasterD
  *
  * Custom CSS property                                  | Description         | Default
  * -----------------------------------------------------|---------------------|--------
- * `--vaadin-master-detail-layout-transition-duration`  | Transition duration | 300ms
  *
  * The following shadow DOM parts are available for styling:
  *

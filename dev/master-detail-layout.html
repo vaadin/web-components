@@ -13,42 +13,72 @@
       html,
       body {
         height: 100%;
+        margin: 0;
+        padding: 10px;
+        box-sizing: border-box;
       }
 
-      vaadin-master-detail-layout {
-        border: solid 1px #ccc;
+      mdl-view {
+        display: block;
+        height: 100%;
+        max-width: 100%;
+        max-height: 100%;
+        overflow: hidden;
       }
 
-      vaadin-master-detail-layout[orientation='horizontal'] > [slot='detail'] {
-        width: var(--detail-size);
+      body > mdl-view > vaadin-master-detail-layout {
+        border: 1px solid lightgray;
+        resize: both;
       }
 
-      vaadin-master-detail-layout[orientation='vertical'] > [slot='detail'] {
-        height: var(--detail-size);
+      .master {
+        box-sizing: border-box;
+        height: 100%;
+        padding: 1.5rem;
+        overflow: auto;
+      }
+
+      .master > header {
+        display: flex;
+        align-items: center;
+        gap: 1em;
+      }
+
+      .master > header > h3 {
+        flex: auto;
+      }
+
+      .close-btn,
+      .replace-btn {
+        visibility: hidden;
+        position: absolute;
+      }
+
+      .detail .close-btn,
+      .detail .replace-btn {
+        visibility: visible;
+        position: relative;
+      }
+
+      .static-detail {
+        box-sizing: border-box;
+        height: 100%;
+        padding: 1.5rem;
+        overflow: auto;
       }
     </style>
 
-    <p>
-      <vaadin-checkbox id="showDetail" label="Show detail" checked></vaadin-checkbox>
-      <vaadin-checkbox id="detailSize" label="Set detail size"></vaadin-checkbox>
-      <vaadin-checkbox id="detailMinSize" label="Set detail min-size"></vaadin-checkbox>
-      <vaadin-checkbox id="masterSize" label="Set master size"></vaadin-checkbox>
-      <vaadin-checkbox id="masterMinSize" label="Set master min-size"></vaadin-checkbox>
-      <vaadin-checkbox id="containmentViewport" label="Use viewport containment"></vaadin-checkbox>
-      <vaadin-checkbox id="vertical" label="Use vertical orientation"></vaadin-checkbox>
-      <vaadin-checkbox id="maxWidth" label="Use max-width on the host"></vaadin-checkbox>
-      <vaadin-checkbox id="maxHeight" label="Use max-height on the host"></vaadin-checkbox>
-      <vaadin-checkbox id="forceOverlay" label="Force overlay"></vaadin-checkbox>
-      <vaadin-checkbox id="stack" label="Use stack mode"></vaadin-checkbox>
-      <button id="set-small-detail">Set small detail</button>
-      <button id="set-large-detail">Set large detail</button>
-      <button id="clear-detail">Clear detail</button>
-    </p>
+    <mdl-view></mdl-view>
 
-    <vaadin-master-detail-layout>
-      <master-content></master-content>
-      <detail-content slot="detail"></detail-content>
-    </vaadin-master-detail-layout>
+    <template id="static-detail">
+      <div class="static-detail">
+        <vaadin-button>Close</vaadin-button><br />
+        <vaadin-text-field label="First Name"></vaadin-text-field>
+        <vaadin-text-field label="Last Name"></vaadin-text-field>
+        <vaadin-text-field label="Email"></vaadin-text-field>
+        <vaadin-select label="Country"></vaadin-select>
+      </div>
+    </template>
 
     <script type="module">
       // Enable feature flag
@@ -56,85 +86,190 @@
       window.Vaadin.featureFlags ||= {};
       window.Vaadin.featureFlags.masterDetailLayoutComponent = true;
 
+      import '@vaadin/button';
       import '@vaadin/checkbox';
+      import '@vaadin/select';
+      import '@vaadin/text-field';
+      import '@vaadin/radio-group';
+      import '@vaadin/icon';
       import '@vaadin/master-detail-layout';
-      import '@vaadin/master-detail-layout/test/helpers/master-content.js';
-      import '@vaadin/master-detail-layout/test/helpers/detail-content.js';
+      import '@vaadin/tooltip';
+      import '@vaadin/vaadin-lumo-styles/icons';
+      import { css, html, LitElement, render } from 'lit';
 
-      const layout = document.querySelector('vaadin-master-detail-layout');
-      const detailContent = document.querySelector('detail-content');
+      window.mdlCount = 1;
 
-      document.querySelector('#showDetail').addEventListener('change', (e) => {
-        if (e.target.checked) {
-          layout.append(detailContent);
-        } else {
-          detailContent.remove();
+      class MDLView extends LitElement {
+        static get is() {
+          return 'mdl-view';
         }
-      });
 
-      document.querySelector('#detailSize').addEventListener('change', (e) => {
-        layout.detailSize = e.target.checked ? '300px' : null;
-      });
-
-      document.querySelector('#detailMinSize').addEventListener('change', (e) => {
-        layout.detailMinSize = e.target.checked ? '300px' : null;
-      });
-
-      document.querySelector('#masterSize').addEventListener('change', (e) => {
-        layout.masterSize = e.target.checked ? '300px' : null;
-      });
-
-      document.querySelector('#masterMinSize').addEventListener('change', (e) => {
-        layout.masterMinSize = e.target.checked ? '300px' : null;
-      });
-
-      document.querySelector('#containmentViewport').addEventListener('change', (e) => {
-        layout.containment = e.target.checked ? 'viewport' : 'layout';
-      });
-
-      document.querySelector('#vertical').addEventListener('change', (e) => {
-        layout.orientation = e.target.checked ? 'vertical' : 'horizontal';
-      });
-
-      document.querySelector('#maxWidth').addEventListener('change', (e) => {
-        if (e.target.checked) {
-          layout.style.maxWidth = '800px';
-        } else {
-          layout.style.maxWidth = '';
+        createRenderRoot() {
+          return this;
         }
-      });
 
-      document.querySelector('#maxHeight').addEventListener('change', (e) => {
-        if (e.target.checked) {
-          layout.style.maxHeight = '600px';
-        } else {
-          layout.style.maxHeight = '';
+        createDetail() {
+          const temp = document.createElement('div');
+          render(html`<mdl-view class="detail"></mdl-view>`, temp, { host: this });
+          return temp.firstElementChild;
         }
-      });
 
-      document.querySelector('#forceOverlay').addEventListener('change', (e) => {
-        layout.forceOverlay = e.target.checked;
-      });
+        firstUpdated() {
+          this._mdl = this.querySelector('vaadin-master-detail-layout');
+          this._parentMdl = this.closest('vaadin-master-detail-layout');
+        }
 
-      document.querySelector('#stack').addEventListener('change', (e) => {
-        layout.stackOverlay = e.target.checked;
-      });
+        openDetail() {
+          window.mdlCount++;
+          this._mdl._setDetail(this.createDetail());
+        }
 
-      document.querySelector('#set-small-detail').addEventListener('click', () => {
-        const detail = document.createElement('detail-content');
-        detail.style.setProperty('--detail-size', '200px');
-        layout._setDetail(detail);
-      });
+        openStaticDetail() {
+          const detail = document.querySelector('#static-detail').content.firstElementChild.cloneNode(true);
+          detail.querySelector('vaadin-button').onclick = () => {
+            detail.closest('vaadin-master-detail-layout')._setDetail(null);
+          };
+          this._mdl._setDetail(detail);
+        }
 
-      document.querySelector('#set-large-detail').addEventListener('click', () => {
-        const detail = document.createElement('detail-content');
-        detail.style.setProperty('--detail-size', '600px');
-        layout._setDetail(detail);
-      });
+        closeDetail() {
+          this._mdl._setDetail(null);
+        }
 
-      document.querySelector('#clear-detail').addEventListener('click', () => {
-        layout._setDetail(null);
-      });
+        closeParentDetail() {
+          this._parentMdl._setDetail(null);
+        }
+
+        replaceDetail() {
+          window.mdlCount++;
+          const detail = this.createDetail();
+          const prop = this._parentMdl.orientation == 'vertical' ? 'height' : 'width';
+          if (this.style.getPropertyValue(prop) != '500px') {
+            detail.style.setProperty(prop, '500px');
+          } else {
+            detail.style.setProperty(prop, '300px');
+          }
+          this._parentMdl._setDetail(detail);
+        }
+
+        render() {
+          return html`
+            <vaadin-master-detail-layout>
+              <div class="master">
+                <header>
+                  <vaadin-button
+                    aria-label="close detail view"
+                    class="close-btn"
+                    theme="tertiary contrast icon"
+                    @click=${this.closeParentDetail}
+                  >
+                    <vaadin-icon icon="lumo:arrow-left"></vaadin-icon>
+                  </vaadin-button>
+                  <h3>View ${window.mdlCount}</h3>
+                  <vaadin-button
+                    aria-label="replace detail view"
+                    class="replace-btn"
+                    theme="tertiary icon"
+                    @click=${this.replaceDetail}
+                  >
+                    <vaadin-icon icon="lumo:reload"
+                      ><vaadin-tooltip
+                        slot="tooltip"
+                        text="Replace with another detail view with different size"
+                      ></vaadin-tooltip
+                    ></vaadin-icon>
+                  </vaadin-button>
+                </header>
+                <vaadin-radio-group
+                  @change=${this._configChange}
+                  class="orientation"
+                  label="Orientation"
+                  theme="vertical"
+                  value="horizontal"
+                >
+                  <vaadin-radio-button value="horizontal" label="Horizontal"></vaadin-radio-button>
+                  <vaadin-radio-button value="vertical" label="Vertical"></vaadin-radio-button>
+                </vaadin-radio-group>
+                <vaadin-radio-group
+                  @change=${this._configChange}
+                  class="containment"
+                  label="Containment"
+                  theme="vertical"
+                  value="layout"
+                >
+                  <vaadin-radio-button value="layout" label="Layout"></vaadin-radio-button>
+                  <vaadin-radio-button value="viewport" label="Viewport"></vaadin-radio-button>
+                </vaadin-radio-group>
+                <br />
+                <vaadin-radio-group
+                  @change=${this._configChange}
+                  class="masterSize"
+                  label="Master Size"
+                  theme="vertical"
+                  value="auto"
+                >
+                  <vaadin-radio-button value="auto" label="Auto"></vaadin-radio-button>
+                  <vaadin-radio-button value="250px" label="250px"></vaadin-radio-button>
+                  <vaadin-radio-button value="30%" label="30%"></vaadin-radio-button>
+                </vaadin-radio-group>
+                <vaadin-radio-group
+                  @change=${this._configChange}
+                  class="masterMinSize"
+                  label="Master Min Size"
+                  theme="vertical"
+                  value="none"
+                >
+                  <vaadin-radio-button value="none" label="None"></vaadin-radio-button>
+                  <vaadin-radio-button value="250px" label="250px"></vaadin-radio-button>
+                  <vaadin-radio-button value="100%" label="100%"></vaadin-radio-button>
+                </vaadin-radio-group>
+                <br />
+                <vaadin-button @click=${this.openStaticDetail}>Open Static Detail</vaadin-button>
+                <vaadin-button @click=${this.openDetail}>Open Nested Test View</vaadin-button>
+                <br />
+                <vaadin-radio-group
+                  @change=${this._configChange}
+                  class="detailSize"
+                  label="Detail Size"
+                  theme="vertical"
+                  value="auto"
+                >
+                  <vaadin-radio-button value="auto" label="Auto"></vaadin-radio-button>
+                  <vaadin-radio-button value="300px" label="300px"></vaadin-radio-button>
+                  <vaadin-radio-button value="70%" label="70%"></vaadin-radio-button>
+                </vaadin-radio-group>
+                <vaadin-radio-group
+                  @change=${this._configChange}
+                  class="detailMinSize"
+                  label="Detail Min Size"
+                  theme="vertical"
+                  value="none"
+                >
+                  <vaadin-radio-button value="none" label="None"></vaadin-radio-button>
+                  <vaadin-radio-button value="400px" label="400px"></vaadin-radio-button>
+                  <vaadin-radio-button value="100%" label="100%"></vaadin-radio-button>
+                </vaadin-radio-group>
+                <p
+                  >Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eligendi suscipit rem, non temporibus
+                  laboriosam maiores distinctio numquam, dolorum ducimus dolores sequi reprehenderit iste consectetur
+                  adipisci delectus aperiam voluptatibus! Vitae, adipisci.</p
+                >
+              </div>
+            </vaadin-master-detail-layout>
+          `;
+        }
+
+        _configChange(e) {
+          if (e.target.className == 'mode') {
+            // this._mdl.forceOverlay = e.target.value == 'overlay';
+            // this._mdl.stackThreshold = e.target.value == 'stack' ? '100vw' : null;
+          } else {
+            this._mdl[e.currentTarget.className] = e.target.value.match(/auto|none/) ? null : e.target.value;
+          }
+        }
+      }
+
+      customElements.define(MDLView.is, MDLView);
     </script>
   </body>
 </html>

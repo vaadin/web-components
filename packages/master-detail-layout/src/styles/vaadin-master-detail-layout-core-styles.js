@@ -6,64 +6,68 @@
 import { css } from 'lit';
 
 export const masterDetailLayoutStyles = css`
+  /* Layout and positioning styles */
+
   :host {
     display: flex;
     box-sizing: border-box;
     height: 100%;
+    max-width: 100%;
+    max-height: 100%;
+    position: relative; /* Keep the positioning context stable across all modes */
+    overflow: hidden;
   }
 
   :host([hidden]) {
     display: none !important;
   }
 
-  :host(:not([has-detail])) [part='detail'],
+  :host([orientation='vertical']) {
+    flex-direction: column;
+  }
+
+  [part='_detail-internal'] {
+    display: contents;
+    justify-content: end;
+  }
+
+  :host(:is([drawer], [stack])) [part='_detail-internal'],
+  :host(:is([drawer], [stack])[has-detail]) [part='backdrop'] {
+    display: flex;
+    position: absolute;
+    z-index: 1;
+    inset: 0;
+    overscroll-behavior: contain;
+  }
+
+  :host(:not([has-detail])) [part='_detail-internal'],
   [part='backdrop'] {
     display: none;
   }
 
-  :host([orientation='horizontal']) [part='master'] {
-    max-width: 100%;
+  :host([orientation='horizontal'][drawer]) [part='detail'] {
+    margin-inline-start: 50px;
   }
 
-  /* Drawer mode */
-  :host(:is([drawer], [stack])) {
-    position: relative;
+  :host([orientation='vertical'][drawer]) [part='detail'] {
+    margin-top: 50px;
   }
 
-  :host(:is([drawer], [stack])[containment='layout']) [part='detail'],
-  :host([drawer][containment='layout']) [part='backdrop'] {
-    position: absolute;
-  }
-
-  :host(:is([drawer], [stack])[containment='viewport']) [part='detail'],
-  :host([drawer][containment='viewport']) [part='backdrop'] {
+  :host(:is([drawer], [stack])[containment='viewport']) :is([part='_detail-internal'], [part='backdrop']) {
     position: fixed;
   }
 
-  :host([drawer][has-detail]) [part='backdrop'] {
-    display: block;
-    inset: 0;
-    z-index: 1;
-  }
+  /* Sizing styles */
 
-  :host(:is([drawer], [stack])) [part='detail'] {
-    z-index: 1;
-  }
-
-  :host([drawer][orientation='horizontal']) [part='detail'] {
-    inset-inline-end: 0;
-    height: 100%;
-    width: var(--_detail-min-size, min-content);
+  [part] {
+    box-sizing: border-box;
     max-width: 100%;
-  }
-
-  :host([drawer][orientation='horizontal'][containment='viewport']) [part='detail'] {
-    inset-block-start: 0;
+    max-height: 100%;
   }
 
   /* No fixed size */
   :host(:not([has-master-size])) [part='master'],
-  :host(:not([has-detail-size])) [part='detail'] {
+  :host(:not([has-detail-size]):not([drawer], [stack])) [part='detail'] {
     flex-grow: 1;
     flex-basis: 50%;
   }
@@ -74,12 +78,20 @@ export const masterDetailLayoutStyles = css`
     flex-shrink: 0;
   }
 
-  :host([has-master-size][orientation='horizontal']) [part='master'] {
+  :host([orientation='horizontal'][has-master-size][has-detail]) [part='master'] {
     width: var(--_master-size);
   }
 
-  :host([has-detail-size][orientation='horizontal']:not([stack])) [part='detail'] {
+  :host([orientation='vertical'][has-master-size][has-detail]) [part='master'] {
+    height: var(--_master-size);
+  }
+
+  :host([orientation='horizontal'][has-detail-size]:not([stack])) [part='detail'] {
     width: var(--_detail-size);
+  }
+
+  :host([orientation='vertical'][has-detail-size]:not([stack])) [part='detail'] {
+    height: var(--_detail-size);
   }
 
   :host([has-master-size][has-detail-size]) [part='master'] {
@@ -87,69 +99,57 @@ export const masterDetailLayoutStyles = css`
     flex-basis: var(--_master-size);
   }
 
-  :host([has-master-size][has-detail-size]) [part='detail'] {
+  :host([has-master-size][has-detail-size]:not([drawer], [stack])) [part='detail'] {
     flex-grow: 1;
     flex-basis: var(--_detail-size);
   }
 
   /* Min size */
-  :host([has-master-min-size][has-detail][orientation='horizontal']:not([drawer]):not([stack])) [part='master'] {
-    min-width: var(--_master-min-size);
+  :host([orientation='horizontal'][has-master-min-size]) [part='master'] {
+    min-width: min(100%, var(--_master-min-size));
   }
 
-  :host([has-detail-min-size][orientation='horizontal']:not([drawer]):not([stack])) [part='detail'] {
-    min-width: var(--_detail-min-size);
+  :host([orientation='vertical'][has-master-min-size]) [part='master'] {
+    min-height: min(100%, var(--_master-min-size));
   }
 
-  :host([has-master-min-size]) [part='master'],
-  :host([has-detail-min-size]) [part='detail'] {
-    flex-shrink: 0;
+  :host([orientation='horizontal'][has-detail-min-size]) [part='detail'] {
+    min-width: min(100%, var(--_detail-min-size));
   }
 
-  /* Vertical */
-  :host([orientation='vertical']) {
-    flex-direction: column;
+  :host([orientation='vertical'][has-detail-min-size]) [part='detail'] {
+    min-height: min(100%, var(--_detail-min-size));
   }
 
-  :host([orientation='vertical'][drawer]) [part='master'] {
-    max-height: 100%;
+  :host([drawer]) [part='master'],
+  :host([stack]) [part] {
+    width: 100% !important;
+    height: 100% !important;
+    min-width: auto !important;
+    min-height: auto !important;
+    max-width: 100% !important;
+    max-height: 100% !important;
   }
 
-  :host([orientation='vertical'][drawer]) [part='detail'] {
-    inset-block-end: 0;
-    width: 100%;
-    height: var(--_detail-min-size, min-content);
+  /* Decorative/visual styles */
+
+  [part='backdrop'] {
+    background-color: rgba(0, 0, 0, 0.2);
   }
 
-  :host([drawer][orientation='vertical'][containment='viewport']) [part='detail'] {
-    inset-inline-start: 0;
+  [part='detail'] {
+    background: #fff;
   }
 
-  /* Fixed size */
-  :host([has-master-size][orientation='vertical']) [part='master'] {
-    height: var(--_master-size);
+  :host(:is([drawer], [stack])) [part='detail'] {
+    box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.3);
   }
 
-  :host([has-detail-size][orientation='vertical']:not([stack])) [part='detail'] {
-    height: var(--_detail-size);
+  :host([orientation='horizontal']:not([drawer], [stack])) [part='detail'] {
+    border-inline-start: 1px solid rgba(0, 0, 0, 0.1);
   }
 
-  /* Min size */
-  :host([has-master-min-size][orientation='vertical']:not([drawer])) [part='master'],
-  :host([has-master-min-size][orientation='vertical'][drawer]) {
-    min-height: var(--_master-min-size);
-  }
-
-  :host([has-detail-min-size][orientation='vertical']:not([drawer]):not([stack])) [part='detail'] {
-    min-height: var(--_detail-min-size);
-  }
-
-  /* Stack mode */
-  :host([stack]) [part='master'] {
-    max-height: 100%;
-  }
-
-  :host([stack]) [part='detail'] {
-    inset: 0;
+  :host([orientation='vertical']:not([drawer], [stack])) [part='detail'] {
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
   }
 `;
