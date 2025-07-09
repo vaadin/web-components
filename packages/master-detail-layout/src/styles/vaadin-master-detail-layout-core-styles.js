@@ -31,6 +31,10 @@ export const masterDetailLayoutStyles = css`
     justify-content: end;
   }
 
+  :host([orientation='vertical']) [part='_detail-internal'] {
+    align-items: end;
+  }
+
   :host(:is([drawer], [stack])) [part='_detail-internal'],
   :host(:is([drawer], [stack])[has-detail]) [part='backdrop'] {
     display: flex;
