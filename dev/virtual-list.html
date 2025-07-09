@@ -19,13 +19,20 @@
         root.innerHTML = `<div>${item.label}</div>`;
       };
 
-      const list = document.querySelector('vaadin-virtual-list');
-      list.items = items;
-      list.renderer = renderer;
+      document.querySelectorAll('vaadin-virtual-list').forEach(list => {
+        list.items = items;
+        list.renderer = renderer;
+      });
     </script>
   </head>
 
   <body>
-    <vaadin-virtual-list style="height: 400px"></vaadin-virtual-list>
+    <section>
+      <vaadin-virtual-list style="height: 200px"></vaadin-virtual-list>
+    </section>
+    <section>
+      <h2 class="heading">Overflow Indicators</h2>
+      <vaadin-virtual-list style="height: 200px" theme="overflow-indicators"></vaadin-virtual-list>
+    </section>
   </body>
 </html>
