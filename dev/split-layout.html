@@ -31,25 +31,28 @@
 
   <body>
     <h2 class="heading">Default</h2>
-    <p>These Split Layouts are wrapped in a div with <code>overflow: auto;</code>, but you shouldn't see a scrollbar even if you drag the splitters to the end.</p>
-    <div style="width: fit-content; height: fit-content; overflow: auto;">
-    <vaadin-split-layout style="width: 400px; height: 200px">
-      <vaadin-split-layout style="width: 400px; height: 200px" orientation="vertical">
-        <div class="first"></div>
-        <div class="second"></div>
+    <p>
+      These Split Layouts are wrapped in a div with <code>overflow: auto;</code>, but you shouldn't see a scrollbar even
+      if you drag the splitters to the end.
+    </p>
+    <div style="width: fit-content; height: fit-content; overflow: auto">
+      <vaadin-split-layout style="width: 400px; height: 200px">
+        <vaadin-split-layout style="width: 400px; height: 200px" orientation="vertical">
+          <div class="first"></div>
+          <div class="second"></div>
+        </vaadin-split-layout>
+        <vaadin-split-layout style="width: 400px; height: 200px" orientation="vertical">
+          <div class="first"></div>
+          <div class="second"></div>
+        </vaadin-split-layout>
       </vaadin-split-layout>
-      <vaadin-split-layout style="width: 400px; height: 200px" orientation="vertical">
-        <div class="first"></div>
-        <div class="second"></div>
-      </vaadin-split-layout>
-    </vaadin-split-layout>
-  </div>
+    </div>
 
     <h2 class="heading">Small</h2>
-    <p
-      >The small variant shouldn't inherit to the nested Split Layouts. The first nested Split Layout uses the small
-      variant explicitly.</p
-    >
+    <p>
+      The small variant shouldn't inherit to the nested Split Layouts. The first nested Split Layout uses the small
+      variant explicitly.
+    </p>
     <vaadin-split-layout style="width: 400px; height: 200px" theme="small">
       <vaadin-split-layout style="width: 400px; height: 200px" orientation="vertical" theme="small">
         <div class="first"></div>
