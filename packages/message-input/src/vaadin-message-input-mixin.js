@@ -92,8 +92,6 @@ export const MessageInputMixin = (superClass) =>
 
       this._buttonController = new SlotController(this, 'button', 'vaadin-button', {
         initializer: (btn) => {
-          btn.setAttribute('theme', 'primary');
-
           btn.addEventListener('click', () => {
             this.__submit();
           });
