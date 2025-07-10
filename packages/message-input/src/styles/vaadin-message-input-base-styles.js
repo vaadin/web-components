@@ -46,7 +46,7 @@ export const messageInputStyles = css`
   ::slotted([slot='button']) {
     flex: none;
     align-self: end;
-    margin: var(--vaadin-padding-container);
+    margin: var(--vaadin-input-field-padding, var(--vaadin-padding-container));
     --vaadin-button-border-width: 0px;
     --vaadin-button-background: transparent;
     --vaadin-button-text-color: var(--vaadin-color);
