@@ -51,7 +51,6 @@
     "@vaadin/chai-plugins": "25.0.0-alpha6",
     "@vaadin/test-runner-commands": "25.0.0-alpha6",
     "@vaadin/testing-helpers": "^2.0.0",
-    "@vaadin/date-picker": "25.0.0-alpha6",
     "sinon": "^18.0.0"
   },
   "cvdlName": "vaadin-grid-pro",
