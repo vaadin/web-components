@@ -112,7 +112,7 @@ export const mapStyles = css`
     display: grid;
     grid-template-columns: min-content 1fr min-content;
     grid-template-rows: min-content 1fr min-content min-content min-content min-content;
-    padding: var(--vaadin-map-controls-inset, 0.25em);
+    padding: var(--vaadin-map-controls-inset, 4px);
     box-sizing: border-box;
     grid-template-areas:
       'scale mouse-position fullscreen'
@@ -162,7 +162,7 @@ export const mapStyles = css`
 
   .ol-scale-step-text {
     position: absolute;
-    top: 0.75em;
+    top: 12px;
     font-size: 0.625em;
     color: #000;
     filter: drop-shadow(0 0 1px #fff) drop-shadow(0 0 1px #fff);
@@ -173,19 +173,19 @@ export const mapStyles = css`
   .ol-scale-text {
     position: absolute;
     font-size: 0.625em;
-    top: 2em;
+    top: 32px;
     color: #000;
     white-space: nowrap;
     filter: drop-shadow(0 0 1px #fff) drop-shadow(0 0 1px #fff);
   }
 
   .ol-scale-singlebar {
-    height: 0.25em;
+    height: 4px;
     opacity: 0.5;
   }
 
   .ol-control {
-    margin: 0.25em;
+    margin: 4px;
     border-radius: var(--vaadin-button-border-radius, var(--vaadin-radius-m));
   }
 
@@ -197,8 +197,8 @@ export const mapStyles = css`
     padding: 0;
     color: inherit;
     font: inherit;
-    width: var(--vaadin-map-control-size, 1.5em);
-    height: var(--vaadin-map-control-size, 1.5em);
+    width: var(--vaadin-map-control-size, 24px);
+    height: var(--vaadin-map-control-size, 24px);
     border-radius: inherit;
   }
 
@@ -228,8 +228,8 @@ export const mapStyles = css`
   }
 
   .ol-attribution.ol-uncollapsible {
-    margin-inline-end: calc(var(--vaadin-map-controls-inset, 0.25em) * -1);
-    margin-block-end: calc(var(--vaadin-map-controls-inset, 0.25em) * -1);
+    margin-inline-end: calc(var(--vaadin-map-controls-inset, 4px) * -1);
+    margin-block-end: calc(var(--vaadin-map-controls-inset, 4px) * -1);
     border-radius: var(--vaadin-radius) 0 0 0;
   }
 
@@ -287,9 +287,9 @@ export const mapStyles = css`
   }
 
   .ol-overviewmap-map {
-    height: 10em;
-    width: 10em;
-    margin: 0.25rem;
+    height: 160px;
+    width: 160px;
+    margin: 4px;
     border: 0;
     border-radius: var(--vaadin-button-border-radius, var(--vaadin-radius));
   }
@@ -312,12 +312,12 @@ export const mapStyles = css`
 
   .ol-zoomslider {
     grid-area: zoom-slider;
-    height: 8em;
+    height: 128px;
   }
 
   .ol-zoomslider button {
     position: relative;
-    height: 0.5em;
+    height: 8px;
     display: block;
     border-radius: inherit;
   }

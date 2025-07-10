@@ -32,7 +32,7 @@ export const gridTreeToggleStyles = css`
   }
 
   #level-spacer {
-    width: calc(var(--_level, 0) * var(--vaadin-grid-tree-toggle-level-offset, 1em));
+    width: calc(var(--_level, 0) * var(--vaadin-grid-tree-toggle-level-offset, 16px));
   }
 
   [part='toggle'] {

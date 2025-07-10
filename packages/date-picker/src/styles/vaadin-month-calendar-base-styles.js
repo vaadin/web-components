@@ -9,7 +9,7 @@ import { css } from 'lit';
 export const monthCalendarStyles = css`
   :host {
     display: block;
-    padding: var(--vaadin-date-picker-month-padding, 0.5rem);
+    padding: var(--vaadin-date-picker-month-padding, var(--vaadin-padding));
   }
 
   [part='month-header'] {

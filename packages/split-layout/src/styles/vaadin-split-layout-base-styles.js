@@ -27,10 +27,10 @@ export const splitLayoutStyles = css`
   }
 
   [part='splitter'] {
-    --_splitter-size: var(--vaadin-split-layout-splitter-size, 0.5rem);
-    --_splitter-target-size: var(--vaadin-split-layout-splitter-target-size, 0.5rem);
-    --_handle-size: var(--vaadin-split-layout-handle-size, 0.25rem);
-    --_handle-target-size: var(--vaadin-split-layout-handle-target-size, 2rem);
+    --_splitter-size: var(--vaadin-split-layout-splitter-size, 8px);
+    --_splitter-target-size: var(--vaadin-split-layout-splitter-target-size, 8px);
+    --_handle-size: var(--vaadin-split-layout-handle-size, 4px);
+    --_handle-target-size: var(--vaadin-split-layout-handle-target-size, 32px);
     background: var(--vaadin-split-layout-splitter-background, var(--vaadin-background-container-strong));
     flex: none;
     position: relative;

@@ -15,8 +15,8 @@ export const avatarStyles = css`
     color: var(--vaadin-avatar-color, var(--vaadin-color-subtle));
     line-height: 0;
     overflow: hidden;
-    height: var(--vaadin-avatar-size, 2em);
-    width: var(--vaadin-avatar-size, 2em);
+    height: var(--vaadin-avatar-size, 32px);
+    width: var(--vaadin-avatar-size, 32px);
     border: var(--vaadin-focus-ring-width) solid transparent;
     margin: calc(var(--vaadin-focus-ring-width) * -1);
     background: var(--vaadin-avatar-background, var(--vaadin-background-container-strong));
