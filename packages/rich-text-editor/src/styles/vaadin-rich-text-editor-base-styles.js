@@ -167,21 +167,22 @@ const toolbar = css`
   }
 
   [part~='toolbar-button'] {
-    background: var(--vaadin-rte-button-background, var(--vaadin-background-container));
+    background: var(--vaadin-rte-toolbar-button-background, var(--vaadin-background-container));
     border: var(
-      --vaadin-rte-button-border,
-      var(--vaadin-rte-button-border-width, 1px) solid var(--vaadin-rte-button-border-color, transparent)
+      --vaadin-rte-toolbar-button-border,
+      var(--vaadin-rte-toolbar-button-border-width, 1px) solid
+        var(--vaadin-rte-toolbar-button-border-color, transparent)
     );
-    border-radius: var(--vaadin-rte-button-border-radius, var(--vaadin-radius-m));
-    color: var(--vaadin-rte-button-text-color, var(--vaadin-color));
+    border-radius: var(--vaadin-rte-toolbar-button-border-radius, var(--vaadin-radius-m));
+    color: var(--vaadin-rte-toolbar-button-text-color, var(--vaadin-color));
     cursor: var(--vaadin-clickable-cursor);
     flex-shrink: 0;
-    font-family: var(--vaadin-rte-button-font-family, inherit);
-    font-size: var(--vaadin-rte-button-font-size, inherit);
-    font-weight: var(--vaadin-rte-button-font-weight, 500);
-    height: var(--vaadin-rte-button-height, auto);
-    line-height: var(--vaadin-rte-button-line-height, inherit);
-    padding: var(--vaadin-rte-button-padding, var(--vaadin-padding-container));
+    font-family: var(--vaadin-rte-toolbar-button-font-family, inherit);
+    font-size: var(--vaadin-rte-toolbar-button-font-size, inherit);
+    font-weight: var(--vaadin-rte-toolbar-button-font-weight, 500);
+    height: var(--vaadin-rte-toolbar-button-height, auto);
+    line-height: var(--vaadin-rte-toolbar-button-line-height, inherit);
+    padding: var(--vaadin-rte-toolbar-button-padding, var(--vaadin-padding-container));
     position: relative;
   }
 
@@ -201,7 +202,7 @@ const toolbar = css`
 
   [part~='toolbar-button'][on],
   [part~='toolbar-button'][aria-expanded='true'] {
-    --vaadin-rte-button-background: var(--vaadin-background-container-strong);
+    --vaadin-rte-toolbar-button-background: var(--vaadin-background-container-strong);
   }
 
   [part~='toolbar-button-undo']::before {
@@ -344,7 +345,7 @@ const states = css`
   :host([disabled]) [part~='toolbar-button'] {
     cursor: var(--vaadin-disabled-cursor);
     opacity: 0.5;
-    pointer-events: var(--_vaadin-rte-button-disabled-pointer-events, none);
+    pointer-events: var(--_vaadin-button-disabled-pointer-events, none);
   }
 `;
 
