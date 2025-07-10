@@ -20,24 +20,24 @@ const loginOverlayWrapper = css`
   }
 
   [part='brand'] {
-    background: var(--vaadin-login-brand-background, var(--vaadin-background-container));
+    background: var(--vaadin-login-overlay-background, var(--vaadin-background-container));
     display: flex;
     flex-direction: column;
-    padding: var(--vaadin-login-brand-padding, var(--vaadin-padding));
+    padding: var(--vaadin-login-overlay-padding, var(--vaadin-padding));
   }
 
   [part='title'] {
-    color: var(--vaadin-login-title-color, var(--vaadin-color));
-    font-size: var(--vaadin-login-title-font-size, inherit);
-    font-weight: var(--vaadin-login-title-font-weight, 600);
-    line-height: var(--vaadin-login-title-line-height, inherit);
+    color: var(--vaadin-login-overlay-title-color, var(--vaadin-color));
+    font-size: var(--vaadin-login-overlay-title-font-size, inherit);
+    font-weight: var(--vaadin-login-overlay-title-font-weight, 600);
+    line-height: var(--vaadin-login-overlay-title-line-height, inherit);
   }
 
   [part='description'] {
-    color: var(--vaadin-login-description-color, var(--vaadin-color-subtle));
-    font-size: var(--vaadin-login-description-font-size, inherit);
-    font-weight: var(--vaadin-login-description-font-weight, inherit);
-    line-height: var(--vaadin-login-description-line-height, inherit);
+    color: var(--vaadin-login-overlay-description-color, var(--vaadin-color-subtle));
+    font-size: var(--vaadin-login-overlay-description-font-size, inherit);
+    font-weight: var(--vaadin-login-overlay-description-font-weight, inherit);
+    line-height: var(--vaadin-login-overlay-description-line-height, inherit);
   }
 
   [part='form'] ::slotted(vaadin-login-form) {
