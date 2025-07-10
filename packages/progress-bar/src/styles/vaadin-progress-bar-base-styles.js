@@ -45,8 +45,8 @@ export const progressBarStyles = css`
 
   /* Indeterminate progress */
   :host([indeterminate]) [part='value'] {
-    --_w-min: clamp(0.5em, 5%, 1em);
-    --_w-max: clamp(1em, 20%, 8em);
+    --_w-min: clamp(8px, 5%, 16px);
+    --_w-max: clamp(16px, 20%, 128px);
     animation: indeterminate var(--vaadin-progress-bar-animation-duration, 1s) linear infinite alternate;
     width: var(--_w-min);
   }

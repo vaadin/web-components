@@ -36,7 +36,8 @@ export const avatarGroupStyles = css`
     mask-position: calc(
       50% +
         (
-          var(--vaadin-avatar-size, 2em) - var(--vaadin-avatar-group-overlap, 8px) + var(--vaadin-avatar-group-gap, 2px)
+          var(--vaadin-avatar-size, 32px) - var(--vaadin-avatar-group-overlap, 8px) +
+            var(--vaadin-avatar-group-gap, 2px)
         ) *
         var(--_d)
     );

@@ -35,7 +35,7 @@ export const tabSheetStyles = [
     ::slotted([slot='tabs']) {
       flex: 1;
       align-self: stretch;
-      min-width: 8em;
+      min-width: 128px;
     }
 
     [part='content'] {

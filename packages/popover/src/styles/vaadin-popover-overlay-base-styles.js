@@ -8,8 +8,8 @@ import { overlayStyles } from '@vaadin/overlay/src/styles/vaadin-overlay-base-st
 
 const popoverOverlay = css`
   :host {
-    --_arrow-size: var(--vaadin-popover-arrow-size, 0.5rem);
-    --_default-offset: 0.25rem;
+    --_arrow-size: var(--vaadin-popover-arrow-size, 8px);
+    --_default-offset: 4px;
     --_rtl-multiplier: 1;
     --_border-width: var(--vaadin-popover-border-width, var(--vaadin-overlay-border-width, 1px));
   }
@@ -85,7 +85,7 @@ const popoverOverlay = css`
   }
 
   :host([theme~='arrow']) {
-    --_default-offset: calc(0.25rem + var(--_arrow-size) / 2);
+    --_default-offset: calc(4px + var(--_arrow-size) / 2);
   }
 
   :host([theme~='arrow']) [part='arrow'] {

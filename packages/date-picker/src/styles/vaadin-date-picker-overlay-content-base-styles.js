@@ -74,8 +74,8 @@ export const overlayContentStyles = css`
   ::slotted([slot='years'])::before {
     background: var(--vaadin-overlay-background, var(--vaadin-background-color));
     border: 1px solid var(--vaadin-date-picker-year-scroller-border-color, var(--vaadin-border-color));
-    width: 1em;
-    height: 1em;
+    width: 16px;
+    height: 16px;
     position: absolute;
     left: auto;
     z-index: 1;

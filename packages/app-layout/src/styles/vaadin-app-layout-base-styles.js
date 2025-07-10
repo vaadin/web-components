@@ -173,7 +173,7 @@ export const appLayoutStyles = css`
   @media (max-width: 800px), (max-height: 600px) {
     :host {
       --vaadin-app-layout-drawer-overlay: true;
-      --_vaadin-app-layout-drawer-width: var(--vaadin-app-layout-drawer-width, 20em);
+      --_vaadin-app-layout-drawer-width: var(--vaadin-app-layout-drawer-width, 320px);
     }
   }
 

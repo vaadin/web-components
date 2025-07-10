@@ -28,22 +28,22 @@ export const tooltipOverlayStyles = css`
 
   :host([position^='top'][top-aligned]) [part='overlay'],
   :host([position^='bottom'][top-aligned]) [part='overlay'] {
-    margin-top: var(--vaadin-tooltip-offset-top, 0.25rem);
+    margin-top: var(--vaadin-tooltip-offset-top, 4px);
   }
 
   :host([position^='top'][bottom-aligned]) [part='overlay'],
   :host([position^='bottom'][bottom-aligned]) [part='overlay'] {
-    margin-bottom: var(--vaadin-tooltip-offset-bottom, 0.25rem);
+    margin-bottom: var(--vaadin-tooltip-offset-bottom, 4px);
   }
 
   :host([position^='start'][start-aligned]) [part='overlay'],
   :host([position^='end'][start-aligned]) [part='overlay'] {
-    margin-inline-start: var(--vaadin-tooltip-offset-start, 0.25rem);
+    margin-inline-start: var(--vaadin-tooltip-offset-start, 4px);
   }
 
   :host([position^='start'][end-aligned]) [part='overlay'],
   :host([position^='end'][end-aligned]) [part='overlay'] {
-    margin-inline-end: var(--vaadin-tooltip-offset-end, 0.25rem);
+    margin-inline-end: var(--vaadin-tooltip-offset-end, 4px);
   }
 
   @media (forced-colors: active) {
