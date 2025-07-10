@@ -1,3 +1,4 @@
+import { sendKeys } from '@vaadin/test-runner-commands';
 import { fixtureSync } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '../../../src/vaadin-message-input.js';
@@ -34,6 +35,17 @@ describe('message-input', () => {
         it('disabled', async () => {
           element.disabled = true;
           await visualDiff(div, `${dir}-disabled`);
+        });
+
+        it('focused', async () => {
+          await sendKeys({ press: 'Tab' });
+          await visualDiff(div, `${dir}-focused`);
+        });
+
+        it('button focused', async () => {
+          await sendKeys({ press: 'Tab' });
+          await sendKeys({ press: 'Tab' });
+          await visualDiff(div, `${dir}-button-focused`);
         });
 
         it('icon-button variant', async () => {
