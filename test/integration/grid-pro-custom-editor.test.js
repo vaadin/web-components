@@ -22,6 +22,16 @@ describe('grid-pro custom editor', () => {
       </vaadin-gri-pro>
     `);
 
+    // FIXME: remove when switching to base styles.
+    // Ensure grid cells have some height.
+    fixtureSync(`
+      <style>
+        vaadin-grid-pro::part(cell) {
+          min-height: 36px;
+        }
+      </style>
+    `);
+
     const column = grid.querySelector(`[path="${path}"]`);
     switch (path) {
       case 'date':
@@ -63,8 +73,6 @@ describe('grid-pro custom editor', () => {
             // NOTE: using `innerHTML` doesn't work due to the timing issue in custom-field
             // See https://github.com/vaadin/web-components/issues/7871
             const field = document.createElement('vaadin-custom-field');
-            // TODO: workaround sendMouse test failing locally in Chrome
-            field.style.lineHeight = '1.5';
             field.appendChild(document.createElement('vaadin-text-field'));
             field.appendChild(document.createElement('vaadin-text-field'));
             root.appendChild(field);
