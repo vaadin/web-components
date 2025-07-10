@@ -38,8 +38,8 @@ export const messageInputStyles = css`
 
   ::slotted([slot='textarea']) {
     flex: 1;
-    --vaadin-input-field-border-width: 0px !important;
-    --vaadin-focus-ring-width: 0px;
+    --vaadin-input-field-border-width: 0 !important;
+    --vaadin-focus-ring-width: 0;
     --vaadin-input-field-background: transparent !important;
   }
 
@@ -47,10 +47,10 @@ export const messageInputStyles = css`
     flex: none;
     align-self: end;
     margin: var(--vaadin-input-field-padding, var(--vaadin-padding-container));
-    --vaadin-button-border-width: 0px;
+    --vaadin-button-border-width: 0;
     --vaadin-button-background: transparent;
     --vaadin-button-text-color: var(--vaadin-color);
-    --vaadin-button-padding: 0px;
+    --vaadin-button-padding: 0;
   }
 
   :host([theme~='icon-button']) ::slotted([slot='button']) {
