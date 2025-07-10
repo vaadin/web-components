@@ -116,6 +116,7 @@ export const MessageInputMixin = (superClass) =>
           });
 
           textarea.minRows = 1;
+          (textarea.inputElement || textarea).setAttribute('enterkeyhint', 'send');
 
           this._textArea = textarea;
         },
