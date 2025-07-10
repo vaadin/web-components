@@ -3,28 +3,71 @@
  * Copyright (c) 2021 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import '@vaadin/component-base/src/style-props.js';
 import { css } from 'lit';
 
 export const messageInputStyles = css`
   :host {
-    align-items: flex-start;
     box-sizing: border-box;
     display: flex;
     max-height: 50vh;
-    overflow: hidden;
     flex-shrink: 0;
+    border: var(--vaadin-input-field-border-width, 1px) solid
+      var(--vaadin-input-field-border-color, var(--vaadin-border-color-strong));
+    border-radius: var(--vaadin-input-field-border-radius, var(--vaadin-radius-m));
+    background: var(--vaadin-input-field-background, var(--vaadin-background-color));
   }
 
   :host([hidden]) {
     display: none !important;
   }
 
-  ::slotted([slot='button']) {
-    flex-shrink: 0;
+  :host(:focus-within) {
+    outline: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
+    outline-offset: calc(var(--vaadin-input-field-border-width, 1px) * -1);
   }
 
   ::slotted([slot='textarea']) {
-    align-self: stretch;
-    flex-grow: 1;
+    flex: 1;
+    --vaadin-input-field-border-width: 0px;
+    --vaadin-focus-ring-width: 0px;
+    --vaadin-input-field-background: transparent;
+  }
+
+  ::slotted([slot='button']) {
+    flex: none;
+    align-self: end;
+    margin: var(--vaadin-padding-container);
+    --vaadin-button-border-width: 0px;
+    --vaadin-button-background: transparent;
+    --vaadin-button-text-color: var(--vaadin-color);
+    --vaadin-button-padding: 0px;
+  }
+
+  :host([theme~='icon-button']) ::slotted([slot='button']) {
+    width: var(--vaadin-icon-size, 1lh);
+    height: var(--vaadin-icon-size, 1lh);
+    color: transparent;
+    position: relative;
+    contain: strict;
+  }
+
+  :host([theme~='icon-button']) ::slotted([slot='button'])::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    mask-image: var(--_vaadin-icon-paper-airplane);
+    background: var(--vaadin-button-text-color);
+  }
+
+  @media (forced-colors: active) {
+    :host([theme~='icon-button']) ::slotted([slot='button']) {
+      forced-color-adjust: none;
+    }
+
+    :host([theme~='icon-button']) ::slotted([slot='button'])::before {
+      forced-color-adjust: auto;
+      background: CanvasText;
+    }
   }
 `;
