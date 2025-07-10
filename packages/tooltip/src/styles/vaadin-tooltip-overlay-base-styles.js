@@ -1,0 +1,54 @@
+/**
+ * @license
+ * Copyright (c) 2022 - 2025 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+import '@vaadin/component-base/src/style-props.js';
+import { css } from 'lit';
+
+export const tooltipOverlayStyles = css`
+  [part='overlay'] {
+    max-width: var(--vaadin-tooltip-max-width, 40ch);
+    padding: var(--vaadin-tooltip-padding, var(--vaadin-padding-container));
+    border-radius: var(--vaadin-tooltip-border-radius, var(--vaadin-radius-m));
+    background: var(--vaadin-tooltip-background, var(--vaadin-background-color));
+    color: var(--vaadin-tooltip-color, inherit);
+    font-size: var(--vaadin-tooltip-font-size, 0.9em);
+    font-weight: var(--vaadin-tooltip-font-weight, inherit);
+    line-height: var(--vaadin-tooltip-line-height, inherit);
+    border: 0;
+    box-shadow:
+      0 0 0 var(--vaadin-tooltip-border-width, 1px) var(--vaadin-tooltip-border-color, var(--vaadin-border-color)),
+      var(--vaadin-tooltip-box-shadow, 0 3px 8px -1px rgba(0, 0, 0, 0.2));
+  }
+
+  [part='content'] {
+    white-space: pre-wrap;
+  }
+
+  :host([position^='top'][top-aligned]) [part='overlay'],
+  :host([position^='bottom'][top-aligned]) [part='overlay'] {
+    margin-top: var(--vaadin-tooltip-offset-top, 0.25rem);
+  }
+
+  :host([position^='top'][bottom-aligned]) [part='overlay'],
+  :host([position^='bottom'][bottom-aligned]) [part='overlay'] {
+    margin-bottom: var(--vaadin-tooltip-offset-bottom, 0.25rem);
+  }
+
+  :host([position^='start'][start-aligned]) [part='overlay'],
+  :host([position^='end'][start-aligned]) [part='overlay'] {
+    margin-inline-start: var(--vaadin-tooltip-offset-start, 0.25rem);
+  }
+
+  :host([position^='start'][end-aligned]) [part='overlay'],
+  :host([position^='end'][end-aligned]) [part='overlay'] {
+    margin-inline-end: var(--vaadin-tooltip-offset-end, 0.25rem);
+  }
+
+  @media (forced-colors: active) {
+    [part='overlay'] {
+      border: 1px dashed;
+    }
+  }
+`;

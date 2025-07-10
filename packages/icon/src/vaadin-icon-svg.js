@@ -3,7 +3,7 @@
  * Copyright (c) 2021 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { nothing, render, svg } from 'lit';
+import { nothing, svg } from 'lit';
 import { isTemplateResult, TemplateResultType } from 'lit/directive-helpers.js';
 import { unsafeSVG } from 'lit/directives/unsafe-svg.js';
 
@@ -46,17 +46,6 @@ export function ensureSvgLiteral(source) {
   }
 
   return result;
-}
-
-/**
- * Render a given SVG literal to the container.
- *
- * @param {unknown} source
- * @param {SVGElement} container
- */
-export function renderSvg(source, container) {
-  const result = ensureSvgLiteral(source);
-  render(result, container);
 }
 
 /**

@@ -17,7 +17,7 @@ import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { OverlayClassMixin } from '@vaadin/component-base/src/overlay-class-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
-import { isLastOverlay } from '@vaadin/overlay/src/vaadin-overlay-stack-mixin.js';
+import { isLastOverlay as isLastOverlayBase } from '@vaadin/overlay/src/vaadin-overlay-stack-mixin.js';
 import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
 import { PopoverPositionMixin } from './vaadin-popover-position-mixin.js';
 import { PopoverTargetMixin } from './vaadin-popover-target-mixin.js';
@@ -149,6 +149,18 @@ class PopoverOpenedStateController {
 }
 
 /**
+ * Returns true if the popover overlay is the last one in the opened overlays stack, ignoring tooltips.
+ * @param {HTMLElement} overlay
+ * @return {boolean}
+ * @protected
+ */
+const isLastOverlay = (overlay) => {
+  // Ignore tooltips, popovers should still close when a tooltip is present
+  const filter = (o) => o.localName !== 'vaadin-tooltip-overlay';
+  return isLastOverlayBase(overlay, filter);
+};
+
+/**
  * `<vaadin-popover>` is a Web Component for creating overlays
  * that are positioned next to specified DOM element (target).
  *
@@ -246,20 +258,18 @@ class Popover extends PopoverPositionMixin(
       },
 
       /**
-       * Height to be set on the overlay content.
-       *
-       * @attr {string} content-height
+       * Set the height of the overlay.
+       * If a unitless number is provided, pixels are assumed.
        */
-      contentHeight: {
+      height: {
         type: String,
       },
 
       /**
-       * Width to be set on the overlay content.
-       *
-       * @attr {string} content-width
+       * Set the width of the overlay.
+       * If a unitless number is provided, pixels are assumed.
        */
-      contentWidth: {
+      width: {
         type: String,
       },
 
@@ -414,11 +424,7 @@ class Popover extends PopoverPositionMixin(
   }
 
   static get observers() {
-    return [
-      '__updateContentHeight(contentHeight, _overlayElement)',
-      '__updateContentWidth(contentWidth, _overlayElement)',
-      '__updateAriaAttributes(opened, overlayRole, target)',
-    ];
+    return ['__sizeChanged(width, height, _overlayElement)', '__updateAriaAttributes(opened, overlayRole, target)'];
   }
 
   /**
@@ -971,27 +977,9 @@ class Popover extends PopoverPositionMixin(
   }
 
   /** @private */
-  __updateDimension(overlay, dimension, value) {
-    const prop = `--_vaadin-popover-content-${dimension}`;
-
-    if (value) {
-      overlay.style.setProperty(prop, value);
-    } else {
-      overlay.style.removeProperty(prop);
-    }
-  }
-
-  /** @private */
-  __updateContentHeight(height, overlay) {
+  __sizeChanged(width, height, overlay) {
     if (overlay) {
-      this.__updateDimension(overlay, 'height', height);
-    }
-  }
-
-  /** @private */
-  __updateContentWidth(width, overlay) {
-    if (overlay) {
-      this.__updateDimension(overlay, 'width', width);
+      requestAnimationFrame(() => overlay.setBounds({ width, height }, false));
     }
   }
 

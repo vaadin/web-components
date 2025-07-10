@@ -113,6 +113,11 @@ describe('vaadin-icon', () => {
       svgElement = icon.shadowRoot.querySelector('svg');
     });
 
+    it('should not set href attribute on the use element by default', () => {
+      const use = svgElement.querySelector('use');
+      expect(use.hasAttribute('href')).to.be.false;
+    });
+
     it('should render svg when path is provided', async () => {
       const svgSrc = `<svg>${ANGLE_DOWN}</svg>`;
       sinon.stub(icon, '__fetch').resolves({ ok: true, text: () => Promise.resolve(svgSrc) });
@@ -404,6 +409,11 @@ describe('vaadin-icon', () => {
         expect(child.getAttribute('fill')).to.equal('red');
       });
 
+      it('should set default preserveAspectRatio attribute when not set on the icon', () => {
+        icon.icon = 'vaadin:angle-down';
+        expect(svgElement.getAttribute('preserveAspectRatio')).to.equal('xMidYMid meet');
+      });
+
       it('should preserve the preserveAspectRatio attribute set on the icon', () => {
         icon.icon = 'vaadin:angle-right';
         expect(svgElement.getAttribute('preserveAspectRatio')).to.equal('xMidYMin slice');
@@ -463,6 +473,32 @@ describe('vaadin-icon', () => {
         await nextFrame();
         svgElement = icon.shadowRoot.querySelector('svg');
         expectIcon(`<g>${ANGLE_UP}</g>`);
+      });
+    });
+  });
+
+  // TODO: Enable when unit tests are using the base theme
+  describe.skip('flex container', () => {
+    let container;
+
+    beforeEach(async () => {
+      container = fixtureSync(`
+        <div style="display: flex;">
+          <vaadin-icon style="--vaadin-icon-size: 24px"></vaadin-icon>
+          <vaadin-icon style="--vaadin-icon-size: 24px"></vaadin-icon>
+          <vaadin-icon style="--vaadin-icon-size: 24px"></vaadin-icon>
+        </div>
+      `);
+
+      await nextFrame();
+    });
+
+    it('should not shrink icons when container is narrow', () => {
+      container.style.width = 'calc(24px * 2 + 12px)';
+
+      [...container.children].forEach((icon) => {
+        expect(icon.offsetWidth).to.equal(24);
+        expect(icon.offsetHeight).to.equal(24);
       });
     });
   });

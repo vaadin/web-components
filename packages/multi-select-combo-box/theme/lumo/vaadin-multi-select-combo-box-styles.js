@@ -59,6 +59,10 @@ registerStyles(
 );
 
 const multiSelectComboBox = css`
+  :host {
+    --_wrapper-gap: 0;
+  }
+
   :host([has-value]) {
     padding-inline-start: 0;
   }
@@ -77,7 +81,6 @@ const multiSelectComboBox = css`
     min-height: auto;
     padding: 0.3125em calc(0.5em + var(--lumo-border-radius-s) / 4);
     color: var(--lumo-body-text-color);
-    -webkit-mask-image: none;
     mask-image: none;
   }
 

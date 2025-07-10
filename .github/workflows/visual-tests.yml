@@ -39,7 +39,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: ${{ failure() }}
         with:
-          name: screenshots
+          name: base-screenshots
           path: |
             packages/*/test/visual/base/screenshots/*/failed/*.png
   lumo:
@@ -75,7 +75,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: ${{ failure() }}
         with:
-          name: screenshots
+          name: lumo-screenshots
           path: |
             packages/*/test/visual/lumo/screenshots/*/failed/*.png
             packages/vaadin-lumo-styles/test/visual/screenshots/failed/*.png
@@ -107,7 +107,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: ${{ failure() }}
         with:
-          name: screenshots
+          name: lumo-css-screenshots
           path: |
             packages/*/test/visual/lumo/screenshots/*/failed/*.png
             packages/vaadin-lumo-styles/test/visual/screenshots/failed/*.png

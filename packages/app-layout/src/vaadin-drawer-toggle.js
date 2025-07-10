@@ -4,14 +4,15 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { html, LitElement } from 'lit';
-import { buttonStyles } from '@vaadin/button/src/vaadin-button-core-styles.js';
+import { buttonStyles } from '@vaadin/button/src/styles/vaadin-button-core-styles.js';
 import { ButtonMixin } from '@vaadin/button/src/vaadin-button-mixin.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { isEmptyTextNode } from '@vaadin/component-base/src/dom-utils.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
+import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { drawerToggle } from './vaadin-drawer-toggle-styles.js';
+import { drawerToggle } from './styles/vaadin-drawer-toggle-core-styles.js';
 
 /**
  * The Drawer Toggle component controls the drawer in App Layout component.
@@ -28,7 +29,7 @@ import { drawerToggle } from './vaadin-drawer-toggle-styles.js';
  * @mixes DirMixin
  * @mixes ThemableMixin
  */
-class DrawerToggle extends ButtonMixin(DirMixin(ThemableMixin(PolylitMixin(LitElement)))) {
+class DrawerToggle extends ButtonMixin(DirMixin(ThemableMixin(LumoInjectionMixin(PolylitMixin(LitElement))))) {
   static get is() {
     return 'vaadin-drawer-toggle';
   }

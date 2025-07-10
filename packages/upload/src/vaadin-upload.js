@@ -7,12 +7,14 @@ import '@vaadin/button/src/vaadin-button.js';
 import './vaadin-upload-icon.js';
 import './vaadin-upload-icons.js';
 import './vaadin-upload-file-list.js';
-import { css, html, LitElement } from 'lit';
+import { html, LitElement } from 'lit';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
+import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { uploadStyles } from './styles/vaadin-upload-core-styles.js';
 import { UploadMixin } from './vaadin-upload-mixin.js';
 
 /**
@@ -64,27 +66,13 @@ import { UploadMixin } from './vaadin-upload-mixin.js';
  * @mixes ElementMixin
  * @mixes UploadMixin
  */
-class Upload extends UploadMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElement)))) {
+class Upload extends UploadMixin(ElementMixin(ThemableMixin(LumoInjectionMixin(PolylitMixin(LitElement))))) {
   static get is() {
     return 'vaadin-upload';
   }
 
   static get styles() {
-    return css`
-      :host {
-        display: block;
-        position: relative;
-        box-sizing: border-box;
-      }
-
-      :host([hidden]) {
-        display: none !important;
-      }
-
-      [hidden] {
-        display: none !important;
-      }
-    `;
+    return uploadStyles;
   }
 
   /** @protected */

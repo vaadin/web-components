@@ -122,10 +122,23 @@ export const ScrollMixin = (superClass) =>
         const row = composedPath[composedPath.indexOf(this.$.items) - 1];
 
         if (row) {
-          // Make sure the row with the focused element is fully inside the visible viewport
-          // Don't change scroll position if the user is interacting with the mouse
+          // Don't change scroll position if the user is interacting with the mouse.
           if (!this._isMousedown) {
-            this.__scrollIntoViewport(row.index);
+            // Make sure the focused element (row, cell, or focusable element inside a cell)
+            // is inside the viewport. If the whole row fits into the viewport, then scroll
+            // the row into view. This ensures that labels, helper texts and other related
+            // elements of focusable elements within cells also become visible. When the row
+            // is larger than the viewport, scroll the focus event target into the viewport.
+            // This works better when focusing elements within cells, which could otherwise
+            // still be outside the viewport when scrolling to the top or bottom of the row.
+            const tableHeight = this.$.table.clientHeight;
+            const headerHeight = this.$.header.clientHeight;
+            const footerHeight = this.$.footer.clientHeight;
+            const viewportHeight = tableHeight - headerHeight - footerHeight;
+            const isRowLargerThanViewport = row.clientHeight > viewportHeight;
+            const scrollTarget = isRowLargerThanViewport ? e.target : row;
+
+            this.__scrollIntoViewport(scrollTarget);
           }
 
           if (!this.$.table.contains(e.relatedTarget)) {
@@ -171,25 +184,27 @@ export const ScrollMixin = (superClass) =>
     _scrollToFlatIndex(index) {
       index = Math.min(this._flatSize - 1, Math.max(0, index));
       this.__virtualizer.scrollToIndex(index);
-      this.__scrollIntoViewport(index);
+      const rowElement = [...this.$.items.children].find((child) => child.index === index);
+      this.__scrollIntoViewport(rowElement);
     }
 
     /**
-     * Makes sure the row with the given index (if found in the DOM) is fully
-     * inside the visible viewport, taking header/footer into account.
+     * Makes sure the given element is fully inside the visible viewport,
+     * taking header/footer into account.
      * @private
      */
-    __scrollIntoViewport(index) {
-      const rowElement = [...this.$.items.children].find((child) => child.index === index);
-      if (rowElement) {
-        const dstRect = rowElement.getBoundingClientRect();
-        const footerTop = this.$.footer.getBoundingClientRect().top;
-        const headerBottom = this.$.header.getBoundingClientRect().bottom;
-        if (dstRect.bottom > footerTop) {
-          this.$.table.scrollTop += dstRect.bottom - footerTop;
-        } else if (dstRect.top < headerBottom) {
-          this.$.table.scrollTop -= headerBottom - dstRect.top;
-        }
+    __scrollIntoViewport(element) {
+      if (!element) {
+        return;
+      }
+
+      const dstRect = element.getBoundingClientRect();
+      const footerTop = this.$.footer.getBoundingClientRect().top;
+      const headerBottom = this.$.header.getBoundingClientRect().bottom;
+      if (dstRect.bottom > footerTop) {
+        this.$.table.scrollTop += dstRect.bottom - footerTop;
+      } else if (dstRect.top < headerBottom) {
+        this.$.table.scrollTop -= headerBottom - dstRect.top;
       }
     }
 
@@ -476,6 +491,7 @@ export const ScrollMixin = (superClass) =>
 
       // Position frozen cells
       const x = this.__isRTL ? normalizedScrollLeft + clientWidth - scrollWidth : scrollLeft;
+      this.__horizontalScrollPosition = x;
       const transformFrozen = `translate(${x}px, 0)`;
       this._frozenCells.forEach((cell) => {
         cell.style.transform = transformFrozen;
@@ -511,10 +527,25 @@ export const ScrollMixin = (superClass) =>
         }
       });
 
-      // Only update the --_grid-horizontal-scroll-position custom property when navigating
-      // on row focus mode to avoid performance issues.
-      if (this.hasAttribute('navigating') && this.__rowFocusMode) {
-        this.$.table.style.setProperty('--_grid-horizontal-scroll-position', `${-x}px`);
+      const focusedRow = this.shadowRoot.querySelector("[part~='row']:focus");
+      if (focusedRow) {
+        // Update the horizontal scroll position property of the focused row
+        this.__updateRowScrollPositionProperty(focusedRow);
+      }
+    }
+
+    /**
+     * Synchronizes the internal `--_grid-horizontal-scroll-position` CSS property
+     * of the given row with the current horizontal scroll position of the grid.
+     * @private
+     */
+    __updateRowScrollPositionProperty(row) {
+      if (row instanceof HTMLTableRowElement === false) {
+        return;
+      }
+      const newValue = `${this.__horizontalScrollPosition}px`;
+      if (row.style.getPropertyValue('--_grid-horizontal-scroll-position') !== newValue) {
+        row.style.setProperty('--_grid-horizontal-scroll-position', newValue);
       }
     }
 

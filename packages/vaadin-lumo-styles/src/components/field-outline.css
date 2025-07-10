@@ -1,0 +1,51 @@
+/**
+ * @license
+ * Copyright (c) 2000 - 2025 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+@media lumo_components_field-outline {
+  :host {
+    display: block;
+    box-sizing: border-box;
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    user-select: none;
+    opacity: 0;
+    --_active-user-color: transparent;
+    transition: opacity 0.3s;
+    mask-image: none !important;
+  }
+
+  :host([has-active-user]) {
+    opacity: 1;
+  }
+
+  :host::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    box-shadow: 0 0 0 2px var(--_active-user-color);
+    border-radius: var(--lumo-border-radius-s);
+    transition: box-shadow 0.3s;
+  }
+
+  :host([context$='checkbox'])::before {
+    box-shadow:
+      0 0 0 2px var(--lumo-base-color),
+      0 0 0 4px var(--_active-user-color);
+  }
+
+  :host([context$='radio-button'])::before {
+    border-radius: 50%;
+    box-shadow:
+      0 0 0 3px var(--lumo-base-color),
+      0 0 0 5px var(--_active-user-color);
+  }
+
+  :host([context$='item'])::before {
+    box-shadow: inset 0 0 0 2px var(--_active-user-color);
+  }
+}

@@ -1,6 +1,7 @@
 import { expect } from '@vaadin/chai-plugins';
 import { aTimeout, fixtureSync, nextFrame, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
+import './grid-test-styles.js';
 import '../all-imports.js';
 import {
   flushGrid,
@@ -303,7 +304,7 @@ describe('basic features', () => {
     await nextFrame();
     expect(getPhysicalItems(grid).length).to.equal(rowHeights.length);
     const sum = rowHeights.reduce((acc, value) => acc + value, 0);
-    expect(grid.clientHeight).to.be.greaterThan(sum);
+    expect(grid.clientHeight).to.be.at.least(sum);
   });
 });
 

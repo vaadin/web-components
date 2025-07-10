@@ -1,0 +1,12 @@
+/**
+ * @license
+ * Copyright (c) 2000 - 2025 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+@import '../src/components/side-nav.css';
+@import './side-nav-item.css';
+
+:is(:root, :host)::before {
+  --vaadin-side-nav-lumo-inject: 1;
+  --vaadin-side-nav-lumo-inject-modules: lumo_components_side-nav;
+}

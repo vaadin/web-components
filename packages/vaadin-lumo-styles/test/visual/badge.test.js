@@ -1,6 +1,7 @@
 import { fixtureSync } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
-import '../../badge-global.js';
+import '../../props.css';
+import '../../global.css';
 
 describe('badge', () => {
   it('flex-shrink', async () => {

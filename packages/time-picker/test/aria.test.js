@@ -3,12 +3,11 @@ import { arrowDownKeyDown, escKeyDown, fixtureSync, nextFrame, nextRender } from
 import '../src/vaadin-time-picker.js';
 
 describe('ARIA', () => {
-  let timePicker, comboBox, input;
+  let timePicker, input;
 
   beforeEach(async () => {
     timePicker = fixtureSync(`<vaadin-time-picker></vaadin-time-picker>`);
     await nextRender();
-    comboBox = timePicker.$.comboBox;
     input = timePicker.inputElement;
   });
 
@@ -31,7 +30,7 @@ describe('ARIA', () => {
 
     beforeEach(async () => {
       arrowDownKeyDown(input);
-      items = comboBox._scroller.querySelectorAll('vaadin-time-picker-item');
+      items = timePicker._scroller.querySelectorAll('vaadin-time-picker-item');
       await nextFrame();
     });
 

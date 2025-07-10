@@ -129,4 +129,16 @@ export declare class ConfirmDialogMixinClass {
    * @attr {string} overlay-class
    */
   overlayClass: string;
+
+  /**
+   * Set the width of the overlay.
+   * If a unitless number is provided, pixels are assumed.
+   */
+  width: string | null;
+
+  /**
+   * Set the height of the overlay.
+   * If a unitless number is provided, pixels are assumed.
+   */
+  height: string | null;
 }

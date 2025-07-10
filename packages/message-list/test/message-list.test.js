@@ -10,6 +10,7 @@ import {
   home,
   mousedown,
   nextRender,
+  nextResize,
   tabKeyDown,
 } from '@vaadin/testing-helpers';
 import '../src/vaadin-message-list.js';
@@ -152,15 +153,28 @@ describe('message-list', () => {
     });
 
     describe('scroll', () => {
-      it('should scroll when height is less than content', () => {
+      beforeEach(async () => {
+        // message-list uses hardcoded 50px threshold to detect
+        // whether to scroll on adding a message, which expects
+        // a message to have > 50px height so we add a padding.
+        fixtureSync(`
+          <style>
+            vaadin-message {
+              padding: 8px 0;
+            }
+          </style>
+        `);
         messageList.style.height = '100px';
+        await nextResize(messageList);
+      });
+
+      it('should scroll when height is less than content', () => {
         expect(messageList.scrollTop).to.be.equal(0);
         messageList.scrollBy(0, 1000);
         expect(messageList.scrollTop).to.be.at.least(1);
       });
 
       it('should scroll to bottom on adding new messages', async () => {
-        messageList.style.height = '100px';
         messageList.scrollBy(0, 1000);
         const scrollTopBeforeMessage = messageList.scrollTop;
         messageList.items = [
@@ -178,7 +192,6 @@ describe('message-list', () => {
       });
 
       it('should not scroll if not at the bottom', async () => {
-        messageList.style.height = '100px';
         messageList.items = [
           ...messageList.items,
           {

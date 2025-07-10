@@ -7,10 +7,10 @@ import {
   fire,
   fixtureSync,
   keyDownChar,
+  mousedown,
   nextRender,
   nextUpdate,
   oneEvent,
-  tab,
 } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './not-animated-styles.js';
@@ -295,22 +295,6 @@ describe('vaadin-select', () => {
         expect(select.opened).to.be.false;
       });
 
-      it('should focus the menu when opening the overlay', async () => {
-        const spy = sinon.spy(select._menuElement, 'focus');
-        select.opened = true;
-        await oneEvent(overlay, 'vaadin-overlay-open');
-        expect(spy.calledOnce).to.be.true;
-      });
-
-      it('should restore attribute focus-ring if it was initially set before opening', async () => {
-        select.setAttribute('focus-ring', '');
-        select.opened = true;
-        await oneEvent(overlay, 'vaadin-overlay-open');
-        select.opened = false;
-        await nextUpdate(select);
-        expect(select.hasAttribute('focus-ring')).to.be.true;
-      });
-
       it('should open the overlay on click event on value button', () => {
         expect(select.opened).to.be.false;
         click(valueButton);
@@ -343,6 +327,20 @@ describe('vaadin-select', () => {
         const spy = sinon.spy(e, 'preventDefault');
         select.shadowRoot.querySelector('[part=toggle-button]').dispatchEvent(e);
         expect(spy.calledOnce).to.be.true;
+      });
+
+      it('should focus the value button when opening on toggle button mousedown', () => {
+        const spy = sinon.spy(valueButton, 'focus');
+        mousedown(select.shadowRoot.querySelector('[part=toggle-button]'));
+        expect(spy.calledOnce).to.be.true;
+      });
+
+      it('should not focus the value button on toggle button mousedown if opened', async () => {
+        const spy = sinon.spy(valueButton, 'focus');
+        select.opened = true;
+        await oneEvent(overlay, 'vaadin-overlay-open');
+        mousedown(select.shadowRoot.querySelector('[part=toggle-button]'));
+        expect(spy.calledOnce).to.be.false;
       });
 
       it('should not open the overlay on helper click', async () => {
@@ -384,10 +382,9 @@ describe('vaadin-select', () => {
     });
 
     describe('overlay opened', () => {
-      let menu, overlay;
+      let overlay;
 
       beforeEach(async () => {
-        menu = select._menuElement;
         overlay = select._overlayElement;
         await nextUpdate(select);
         select.focus();
@@ -400,29 +397,6 @@ describe('vaadin-select', () => {
         click(select._items[0]);
         await nextRender();
         expect(overlay.opened).to.be.false;
-      });
-
-      it('should restore focused state on closing the overlay if phone', async () => {
-        select._phone = true;
-        await nextUpdate(select);
-        click(select._items[1]);
-        expect(select.hasAttribute('focused')).to.be.true;
-      });
-
-      it('should focus the button on closing the overlay if phone', async () => {
-        const focusedSpy = sinon.spy(valueButton, 'focus');
-        select._phone = true;
-        await nextUpdate(select);
-        click(select._items[1]);
-        await nextUpdate(select);
-        expect(focusedSpy.called).to.be.true;
-      });
-
-      it('should focus the button before moving the focus to next selectable element', async () => {
-        const focusedSpy = sinon.spy(valueButton, 'focus');
-        tab(menu);
-        await nextUpdate(select);
-        expect(focusedSpy.called).to.be.true;
       });
 
       it('should close the overlay when clicking on the overlay', async () => {
@@ -550,33 +524,6 @@ describe('vaadin-select', () => {
         select.opened = true;
         await nextUpdate(select);
         expect(select._overlayElement.opened).to.be.false;
-      });
-    });
-
-    describe('focus', () => {
-      it('should be focusable', () => {
-        select.focus();
-        expect(select.hasAttribute('focused')).to.be.true;
-      });
-
-      it('should focus on required indicator click', () => {
-        select.shadowRoot.querySelector('[part="required-indicator"]').click();
-        expect(select.hasAttribute('focused')).to.be.true;
-      });
-    });
-
-    describe('focus when overlay opened', () => {
-      it('should keep focused state after opening overlay when focused', async () => {
-        select.focus();
-        select.opened = true;
-        await nextUpdate(select);
-        expect(select.hasAttribute('focused')).to.be.true;
-      });
-
-      it('should not set focused state after opening overlay if not focused', async () => {
-        select.opened = true;
-        await nextUpdate(select);
-        expect(select.hasAttribute('focused')).to.be.false;
       });
     });
 
@@ -716,7 +663,7 @@ describe('vaadin-select', () => {
         select.style.width = '200px';
         select.opened = true;
         await oneEvent(overlay, 'vaadin-overlay-open');
-        const prop = '--vaadin-select-text-field-width';
+        const prop = '--_vaadin-select-overlay-default-width';
         const inputRect = select._inputContainer.getBoundingClientRect();
         const value = getComputedStyle(overlay).getPropertyValue(prop);
         expect(value).to.be.equal(`${inputRect.width}px`);

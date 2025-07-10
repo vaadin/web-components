@@ -10,13 +10,11 @@ import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { OverlayClassMixin } from '@vaadin/component-base/src/overlay-class-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { DialogBaseMixin } from '@vaadin/dialog/src/vaadin-dialog-base-mixin.js';
-import { dialogOverlay } from '@vaadin/dialog/src/vaadin-dialog-styles.js';
 import { OverlayMixin } from '@vaadin/overlay/src/vaadin-overlay-mixin.js';
-import { overlayStyles } from '@vaadin/overlay/src/vaadin-overlay-styles.js';
+import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
-import { ConfirmDialogBaseMixin } from './vaadin-confirm-dialog-base-mixin.js';
-import { confirmDialogOverlay } from './vaadin-confirm-dialog-overlay-styles.js';
+import { confirmDialogOverlayStyles } from './styles/vaadin-confirm-dialog-overlay-core-styles.js';
 
 /**
  * An element used internally by `<vaadin-confirm-dialog>`. Not intended to be used separately.
@@ -28,13 +26,27 @@ import { confirmDialogOverlay } from './vaadin-confirm-dialog-overlay-styles.js'
  * @mixes ThemableMixin
  * @private
  */
-class ConfirmDialogOverlay extends OverlayMixin(DirMixin(ThemableMixin(PolylitMixin(LitElement)))) {
+class ConfirmDialogOverlay extends OverlayMixin(DirMixin(ThemableMixin(LumoInjectionMixin(PolylitMixin(LitElement))))) {
   static get is() {
     return 'vaadin-confirm-dialog-overlay';
   }
 
   static get styles() {
-    return [overlayStyles, dialogOverlay, confirmDialogOverlay];
+    return confirmDialogOverlayStyles;
+  }
+
+  static get properties() {
+    return {
+      cancelButtonVisible: {
+        type: Boolean,
+        value: false,
+      },
+
+      rejectButtonVisible: {
+        type: Boolean,
+        value: false,
+      },
+    };
   }
 
   /** @protected */
@@ -48,10 +60,10 @@ class ConfirmDialogOverlay extends OverlayMixin(DirMixin(ThemableMixin(PolylitMi
             <div part="message"><slot></slot></div>
           </div>
           <footer part="footer" role="toolbar">
-            <div part="cancel-button">
+            <div part="cancel-button" ?hidden="${!this.cancelButtonVisible}">
               <slot name="cancel-button"></slot>
             </div>
-            <div part="reject-button">
+            <div part="reject-button" ?hidden="${!this.rejectButtonVisible}">
               <slot name="reject-button"></slot>
             </div>
             <div part="confirm-button">
@@ -82,9 +94,7 @@ defineCustomElement(ConfirmDialogOverlay);
  * An element used internally by `<vaadin-confirm-dialog>`. Not intended to be used separately.
  * @private
  */
-class ConfirmDialogDialog extends ConfirmDialogBaseMixin(
-  DialogBaseMixin(OverlayClassMixin(ThemePropertyMixin(PolylitMixin(LitElement)))),
-) {
+class ConfirmDialogDialog extends DialogBaseMixin(OverlayClassMixin(ThemePropertyMixin(PolylitMixin(LitElement)))) {
   static get is() {
     return 'vaadin-confirm-dialog-dialog';
   }
@@ -95,6 +105,28 @@ class ConfirmDialogDialog extends ConfirmDialogBaseMixin(
         display: none;
       }
     `;
+  }
+
+  static get properties() {
+    return {
+      /**
+       * Set the `aria-label` attribute for assistive technologies like
+       * screen readers. An empty string value for this property (the
+       * default) means that the `aria-label` attribute is not present.
+       */
+      ariaLabel: {
+        type: String,
+        value: '',
+      },
+
+      cancelButtonVisible: {
+        type: Boolean,
+      },
+
+      rejectButtonVisible: {
+        type: Boolean,
+      },
+    };
   }
 
   /** @protected */
@@ -112,6 +144,8 @@ class ConfirmDialogDialog extends ConfirmDialogBaseMixin(
         .withBackdrop="${!this.modeless}"
         ?resizable="${this.resizable}"
         aria-label="${this.ariaLabel}"
+        .cancelButtonVisible="${this.cancelButtonVisible}"
+        .rejectButtonVisible="${this.rejectButtonVisible}"
         restore-focus-on-close
         focus-trap
       ></vaadin-confirm-dialog-overlay>

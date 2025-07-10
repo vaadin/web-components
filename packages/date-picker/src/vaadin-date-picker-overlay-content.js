@@ -12,10 +12,10 @@ import { html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
-import { CSSInjectionMixin } from '@vaadin/vaadin-themable-mixin/css-injection-mixin.js';
+import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { overlayContentStyles } from './styles/vaadin-date-picker-overlay-content-core-styles.js';
 import { DatePickerOverlayContentMixin } from './vaadin-date-picker-overlay-content-mixin.js';
-import { overlayContentStyles } from './vaadin-date-picker-overlay-content-styles.js';
 
 /**
  * @customElement
@@ -23,7 +23,7 @@ import { overlayContentStyles } from './vaadin-date-picker-overlay-content-style
  * @private
  */
 class DatePickerOverlayContent extends DatePickerOverlayContentMixin(
-  CSSInjectionMixin(ThemableMixin(DirMixin(PolylitMixin(LitElement)))),
+  LumoInjectionMixin(ThemableMixin(DirMixin(PolylitMixin(LitElement)))),
 ) {
   static get is() {
     return 'vaadin-date-picker-overlay-content';
@@ -36,23 +36,19 @@ class DatePickerOverlayContent extends DatePickerOverlayContentMixin(
   /** @protected */
   render() {
     return html`
-      <div part="overlay-header" @touchend="${this._preventDefault}" aria-hidden="true">
-        <div part="label">${this._formatDisplayed(this.selectedDate, this.i18n, this.label)}</div>
-        <div part="clear-button" ?hidden="${!this.selectedDate}"></div>
-        <div part="toggle-button"></div>
+      <slot name="months"></slot>
+      <slot name="years"></slot>
 
-        <div part="years-toggle-button" ?hidden="${this._desktopMode}" aria-hidden="true">
+      <div role="toolbar" part="toolbar">
+        <slot name="today-button"></slot>
+        <div
+          part="years-toggle-button"
+          ?hidden="${this._desktopMode}"
+          aria-hidden="true"
+          @click="${this._toggleYearScroller}"
+        >
           ${this._yearAfterXMonths(this._visibleMonthIndex)}
         </div>
-      </div>
-
-      <div id="scrollers">
-        <slot name="months"></slot>
-        <slot name="years"></slot>
-      </div>
-
-      <div @touchend="${this._preventDefault}" role="toolbar" part="toolbar">
-        <slot name="today-button"></slot>
         <slot name="cancel-button"></slot>
       </div>
     `;
@@ -64,7 +60,6 @@ class DatePickerOverlayContent extends DatePickerOverlayContentMixin(
 
     this.setAttribute('role', 'dialog');
 
-    this._addListeners();
     this._initControllers();
   }
 }

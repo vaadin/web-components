@@ -26,3 +26,16 @@ registerStyles(
     }
   `,
 );
+
+registerStyles(
+  'vaadin-time-picker-overlay',
+  css`
+    :host([opening]),
+    :host([closing]),
+    :host([opening]) [part='overlay'],
+    :host([closing]) [part='overlay'] {
+      transition: none !important;
+      animation: none !important;
+    }
+  `,
+);

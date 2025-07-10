@@ -89,12 +89,14 @@ class ConfirmDialog extends ConfirmDialogMixin(ElementMixin(ThemePropertyMixin(P
         id="dialog"
         .opened="${this.opened}"
         .overlayClass="${this.overlayClass}"
+        .cancelButtonVisible="${this.cancelButtonVisible}"
+        .rejectButtonVisible="${this.rejectButtonVisible}"
         aria-label="${this.header || 'confirmation'}"
         theme="${ifDefined(this._theme)}"
         no-close-on-outside-click
         .noCloseOnEsc="${this.noCloseOnEsc}"
-        .contentHeight="${this._contentHeight}"
-        .contentWidth="${this._contentWidth}"
+        .height="${this.height}"
+        .width="${this.width}"
         @opened-changed="${this._onOpenedChanged}"
       ></vaadin-confirm-dialog-dialog>
 

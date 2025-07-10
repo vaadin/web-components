@@ -1,0 +1,133 @@
+/**
+ * @license
+ * Copyright (c) 2000 - 2025 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+@media lumo_components_upload-file {
+  :host {
+    display: block;
+    padding: var(--lumo-space-s) 0;
+    outline: none;
+    --_focus-ring-color: var(--vaadin-focus-ring-color, var(--lumo-primary-color-50pct));
+    --_focus-ring-width: var(--vaadin-focus-ring-width, 2px);
+  }
+
+  [hidden] {
+    display: none;
+  }
+
+  [part='row'] {
+    list-style-type: none;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+  }
+
+  button {
+    background: transparent;
+    padding: 0;
+    border: none;
+    box-shadow: none;
+  }
+
+  :host([complete]) ::slotted([slot='progress']),
+  :host([error]) ::slotted([slot='progress']) {
+    display: none !important;
+  }
+
+  :host([focus-ring]) [part='row'] {
+    border-radius: var(--lumo-border-radius-s);
+    box-shadow: 0 0 0 var(--_focus-ring-width) var(--_focus-ring-color);
+  }
+
+  [part='status'],
+  [part='error'] {
+    color: var(--lumo-secondary-text-color);
+    font-size: var(--lumo-font-size-s);
+  }
+
+  [part='info'] {
+    display: flex;
+    align-items: baseline;
+    flex: auto;
+  }
+
+  [part='meta'] {
+    width: 0.001px;
+    flex: 1 1 auto;
+  }
+
+  [part='name'] {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  [part='commands'] {
+    display: flex;
+    align-items: baseline;
+    flex: none;
+  }
+
+  [part$='icon'] {
+    margin-right: var(--lumo-space-xs);
+    font-size: var(--lumo-icon-size-m);
+    font-family: 'lumo-icons';
+    line-height: 1;
+  }
+
+  /* When both icons are hidden, let us keep space for one */
+  [part='done-icon'][hidden] + [part='warning-icon'][hidden] {
+    display: block !important;
+    visibility: hidden;
+  }
+
+  [part$='button'] {
+    flex: none;
+    margin-left: var(--lumo-space-xs);
+    cursor: var(--lumo-clickable-cursor);
+  }
+
+  [part$='button']:focus {
+    outline: none;
+    border-radius: var(--lumo-border-radius-s);
+    box-shadow: 0 0 0 var(--_focus-ring-width) var(--_focus-ring-color);
+  }
+
+  [part$='icon']::before,
+  [part$='button']::before {
+    vertical-align: -0.25em;
+  }
+
+  [part='done-icon']::before {
+    content: var(--lumo-icons-checkmark);
+    color: var(--lumo-primary-text-color);
+  }
+
+  [part='warning-icon']::before {
+    content: var(--lumo-icons-error);
+    color: var(--lumo-error-text-color);
+  }
+
+  [part='start-button']::before {
+    content: var(--lumo-icons-play);
+  }
+
+  [part='retry-button']::before {
+    content: var(--lumo-icons-reload);
+  }
+
+  [part='remove-button']::before {
+    content: var(--lumo-icons-cross);
+  }
+
+  [part='error'] {
+    color: var(--lumo-error-text-color);
+  }
+
+  ::slotted([slot='progress']) {
+    width: auto;
+    margin-left: calc(var(--lumo-icon-size-m) + var(--lumo-space-xs));
+    margin-right: calc(var(--lumo-icon-size-m) + var(--lumo-space-xs));
+  }
+}

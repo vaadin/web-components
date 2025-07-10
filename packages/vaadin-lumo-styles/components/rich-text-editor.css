@@ -1,0 +1,26 @@
+/**
+ * @license
+ * Copyright (c) 2000 - 2025 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+@import '../src/mixins/overlay.css';
+@import '../src/components/rich-text-editor-popup-overlay.css';
+@import '../src/components/rich-text-editor.css';
+@import '../src/global/typography.css'
+  lumo_global_typography;
+@import './button.css';
+@import './confirm-dialog.css';
+@import './text-field.css';
+@import './tooltip.css';
+
+:is(:root, :host)::before {
+  --vaadin-rich-text-editor-lumo-inject: 1;
+  --vaadin-rich-text-editor-lumo-inject-modules:
+    lumo_global_typography,
+    lumo_components_rich-text-editor;
+
+  --vaadin-rich-text-editor-popup-overlay-lumo-inject: 1;
+  --vaadin-rich-text-editor-popup-overlay-lumo-inject-modules:
+    lumo_mixins_overlay,
+    lumo_components_rich-text-editor-popup-overlay;
+}

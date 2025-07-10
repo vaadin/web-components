@@ -8,9 +8,10 @@ import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
+import { ItemMixin } from '@vaadin/item/src/vaadin-item-mixin.js';
+import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { TabMixin } from './vaadin-tab-mixin.js';
-import { tabStyles } from './vaadin-tab-styles.js';
+import { tabStyles } from './styles/vaadin-tab-core-styles.js';
 
 /**
  * `<vaadin-tab>` is a Web Component providing an accessible and customizable tab.
@@ -37,16 +38,16 @@ import { tabStyles } from './vaadin-tab-styles.js';
  * @customElement
  * @extends HTMLElement
  * @mixes ElementMixin
+ * @mixes ItemMixin
  * @mixes ThemableMixin
- * @mixes TabMixin
  */
-class Tab extends TabMixin(ThemableMixin(ElementMixin(PolylitMixin(LitElement)))) {
+class Tab extends ItemMixin(ThemableMixin(ElementMixin(LumoInjectionMixin(PolylitMixin(LitElement))))) {
   static get is() {
     return 'vaadin-tab';
   }
 
   static get styles() {
-    return [tabStyles];
+    return tabStyles;
   }
 
   /** @protected */
@@ -61,8 +62,30 @@ class Tab extends TabMixin(ThemableMixin(ElementMixin(PolylitMixin(LitElement)))
   ready() {
     super.ready();
 
+    this.setAttribute('role', 'tab');
+
     this._tooltipController = new TooltipController(this);
     this.addController(this._tooltipController);
+  }
+
+  /**
+   * Override an event listener from `KeyboardMixin`
+   * to handle clicking anchors inside the tabs.
+   * @param {!KeyboardEvent} event
+   * @protected
+   * @override
+   */
+  _onKeyUp(event) {
+    const willClick = this.hasAttribute('active');
+
+    super._onKeyUp(event);
+
+    if (willClick) {
+      const anchor = this.querySelector('a');
+      if (anchor) {
+        anchor.click();
+      }
+    }
   }
 }
 

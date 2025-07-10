@@ -1,7 +1,7 @@
+import '@vaadin/vaadin-lumo-styles/color.js';
 import '@vaadin/vaadin-lumo-styles/spacing.js';
-import { color } from '@vaadin/vaadin-lumo-styles/color.js';
+import '@vaadin/vaadin-lumo-styles/typography.js';
 import { overlay } from '@vaadin/vaadin-lumo-styles/mixins/overlay.js';
-import { typography } from '@vaadin/vaadin-lumo-styles/typography.js';
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 const loginOverlayWrapper = css`
@@ -37,7 +37,7 @@ const loginOverlayWrapper = css`
   [part='description'] {
     line-height: var(--lumo-line-height-s);
     color: var(--lumo-tint-70pct);
-    margin-bottom: 0;
+    margin: 0.5em 0 0;
   }
 
   [part='content'] {
@@ -130,7 +130,6 @@ const loginOverlayWrapper = css`
     [part='form'] {
       height: 100%;
       overflow: auto;
-      -webkit-overflow-scrolling: touch;
     }
   }
 
@@ -159,7 +158,7 @@ const loginOverlayWrapper = css`
   }
 `;
 
-registerStyles('vaadin-login-overlay-wrapper', [color, typography, overlay, loginOverlayWrapper], {
+registerStyles('vaadin-login-overlay-wrapper', [overlay, loginOverlayWrapper], {
   moduleId: 'lumo-login-overlay-wrapper',
 });
 
@@ -175,7 +174,6 @@ const loginFormWrapper = css`
   @media only screen and (max-height: 600px) and (min-width: 600px) and (orientation: landscape) {
     :host([theme~='with-overlay']) [part='form'] {
       height: 100%;
-      -webkit-overflow-scrolling: touch;
       flex: 1;
       padding: 2px;
     }

@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-lumo-styles",
-  "version": "25.0.0-alpha3",
+  "version": "25.0.0-alpha7",
   "publishConfig": {
     "access": "public"
   },
@@ -20,15 +20,18 @@
   "module": "all-imports.js",
   "type": "module",
   "scripts": {
-    "icons": "gulp icons --gulpfile gulpfile.cjs"
+    "icons": "gulp icons"
   },
   "files": [
+    "*.css",
     "*.d.ts",
     "*.js",
-    "auto-complete.css",
+    "!gulpfile.js",
+    "components/*.css",
     "mixins/*.d.ts",
     "mixins/*.js",
     "presets/*.js",
+    "src",
     "utilities/*.js"
   ],
   "keywords": [
@@ -39,15 +42,16 @@
     "web-component"
   ],
   "dependencies": {
-    "@vaadin/component-base": "25.0.0-alpha3",
-    "@vaadin/icon": "25.0.0-alpha3",
-    "@vaadin/vaadin-themable-mixin": "25.0.0-alpha3"
+    "@vaadin/component-base": "25.0.0-alpha7",
+    "@vaadin/icon": "25.0.0-alpha7",
+    "@vaadin/vaadin-themable-mixin": "25.0.0-alpha7"
   },
   "devDependencies": {
-    "gulp": "^5.0.0",
-    "gulp-cli": "^3.0.0",
-    "gulp-iconfont": "^11.0.0",
-    "gulp-sort": "^2.0.0",
-    "gulp-svgmin": "^4.1.0"
+    "gulp": "^5.0.1",
+    "gulp-cli": "^3.1.0",
+    "gulp-iconfont": "^12.0.0",
+    "gulp-plugin-extras": "^1.0.0",
+    "imagemin": "^9.0.0",
+    "imagemin-svgo": "^10.0.1"
   }
 }

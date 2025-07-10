@@ -3,12 +3,14 @@
  * Copyright (c) 2020 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { css, html, LitElement } from 'lit';
+import { html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { OverflowController } from '@vaadin/component-base/src/overflow-controller.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
+import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { scrollerStyles } from './styles/vaadin-scroller-core-styles.js';
 import { ScrollerMixin } from './vaadin-scroller-mixin.js';
 
 /**
@@ -33,34 +35,19 @@ import { ScrollerMixin } from './vaadin-scroller-mixin.js';
  * @mixes ElementMixin
  * @mixes ScrollerMixin
  */
-class Scroller extends ScrollerMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElement)))) {
+class Scroller extends ScrollerMixin(ElementMixin(ThemableMixin(LumoInjectionMixin(PolylitMixin(LitElement))))) {
   static get is() {
     return 'vaadin-scroller';
   }
 
   static get styles() {
-    return css`
-      :host {
-        display: block;
-        overflow: auto;
-      }
+    return scrollerStyles;
+  }
 
-      :host([hidden]) {
-        display: none !important;
-      }
-
-      :host([scroll-direction='vertical']) {
-        overflow-x: hidden;
-      }
-
-      :host([scroll-direction='horizontal']) {
-        overflow-y: hidden;
-      }
-
-      :host([scroll-direction='none']) {
-        overflow: hidden;
-      }
-    `;
+  static get lumoInjector() {
+    return {
+      includeBaseStyles: true,
+    };
   }
 
   /** @protected */

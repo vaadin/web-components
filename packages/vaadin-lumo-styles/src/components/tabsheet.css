@@ -1,0 +1,59 @@
+/**
+ * @license
+ * Copyright (c) 2000 - 2025 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+@media lumo_components_tabsheet {
+  :host {
+    display: flex;
+    flex-direction: column;
+    font-size: var(--lumo-font-size-m);
+    line-height: var(--lumo-line-height-m);
+    font-family: var(--lumo-font-family);
+  }
+
+  :host([hidden]) {
+    display: none !important;
+  }
+
+  [part='tabs-container'] {
+    position: relative;
+    display: flex;
+    align-items: center;
+    box-shadow: inset 0 -1px 0 0 var(--lumo-contrast-10pct);
+    padding: var(--lumo-space-xs) var(--lumo-space-s);
+    gap: var(--lumo-space-s);
+  }
+
+  ::slotted([slot='tabs']) {
+    flex: 1;
+    align-self: stretch;
+    min-width: 8em;
+    box-shadow: initial;
+    margin: calc(var(--lumo-space-xs) * -1) calc(var(--lumo-space-s) * -1);
+  }
+
+  [part='content'] {
+    position: relative;
+    flex: 1;
+    box-sizing: border-box;
+    padding: var(--lumo-space-s) var(--lumo-space-m);
+    border-bottom-left-radius: inherit;
+    border-bottom-right-radius: inherit;
+  }
+
+  :host([theme~='bordered']) {
+    border: 1px solid var(--lumo-contrast-20pct);
+    border-radius: var(--lumo-border-radius-l);
+  }
+
+  :host([loading]) [part='content'] {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  :host([theme~='no-padding']) [part='content'] {
+    padding: 0;
+  }
+}

@@ -4,15 +4,13 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { css } from 'lit';
-import { itemStyles } from '@vaadin/item/src/vaadin-item-base-styles.js';
+import { itemStyles } from '@vaadin/item/src/styles/vaadin-item-base-styles.js';
 
 const menuItemStyles = css`
-  @layer base {
-    [part='content'] {
-      display: flex;
-      align-items: center;
-      gap: inherit;
-    }
+  [part='content'] {
+    display: flex;
+    align-items: center;
+    gap: inherit;
   }
 `;
 

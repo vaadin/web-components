@@ -3,17 +3,23 @@
  * Copyright (c) 2017 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+@import '../src/mixins/field-base.css';
+@import '../src/mixins/field-button.css';
+@import '../src/mixins/field-error-message.css';
+@import '../src/mixins/field-helper.css';
+@import '../src/mixins/field-label.css';
+@import '../src/mixins/field-required.css';
+@import '../src/components/number-field.css';
 @import './input-container.css';
 
-@import '../src/mixins/base-layer-reset.css' vaadin-integer-field;
-@import '../src/mixins/field-label.css' vaadin-integer-field;
-@import '../src/mixins/field-required.css' vaadin-integer-field;
-@import '../src/mixins/field-error-message.css' vaadin-integer-field;
-@import '../src/mixins/field-button.css' vaadin-integer-field;
-@import '../src/mixins/field-helper.css' vaadin-integer-field;
-@import '../src/mixins/field-base.css' vaadin-integer-field;
-@import '../src/components/number-field.css' vaadin-integer-field;
-
-html {
-  --vaadin-integer-field-css-inject: 1;
+:is(:root, :host)::before {
+  --vaadin-integer-field-lumo-inject: 1;
+  --vaadin-integer-field-lumo-inject-modules:
+    lumo_mixins_field-label,
+    lumo_mixins_field-required,
+    lumo_mixins_field-error-message,
+    lumo_mixins_field-button,
+    lumo_mixins_field-helper,
+    lumo_mixins_field-base,
+    lumo_components_number-field;
 }

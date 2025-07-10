@@ -1,0 +1,22 @@
+/**
+ * @license
+ * Copyright (c) 2017 - 2025 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+@media lumo_components_avatar-group-menu-item {
+  :host {
+    padding: var(--lumo-space-xs);
+    padding-inline-end: var(--lumo-space-m);
+  }
+
+  [part='content'] {
+    display: flex;
+    align-items: center;
+  }
+
+  [part='content'] ::slotted(vaadin-avatar) {
+    width: var(--lumo-size-xs);
+    height: var(--lumo-size-xs);
+    margin-inline-end: var(--lumo-space-s);
+  }
+}

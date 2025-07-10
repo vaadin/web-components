@@ -18,7 +18,7 @@ import { InputController } from '@vaadin/field-base/src/input-controller.js';
 import { LabelledInputController } from '@vaadin/field-base/src/labelled-input-controller.js';
 import { PatternMixin } from '@vaadin/field-base/src/pattern-mixin.js';
 import { inputFieldShared } from '@vaadin/field-base/src/styles/input-field-shared-styles.js';
-import { CSSInjectionMixin } from '@vaadin/vaadin-themable-mixin/css-injection-mixin.js';
+import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { comboBoxStyles } from './styles/vaadin-combo-box-core-styles.js';
 import { ComboBoxDataProviderMixin } from './vaadin-combo-box-data-provider-mixin.js';
@@ -157,7 +157,7 @@ import { ComboBoxMixin } from './vaadin-combo-box-mixin.js';
  */
 class ComboBox extends ComboBoxDataProviderMixin(
   ComboBoxMixin(
-    PatternMixin(InputControlMixin(CSSInjectionMixin(ThemableMixin(ElementMixin(PolylitMixin(LitElement)))))),
+    PatternMixin(InputControlMixin(LumoInjectionMixin(ThemableMixin(ElementMixin(PolylitMixin(LitElement)))))),
   ),
 ) {
   static get is() {
@@ -221,6 +221,7 @@ class ComboBox extends ComboBoxDataProviderMixin(
 
       <vaadin-combo-box-overlay
         id="overlay"
+        .owner="${this}"
         .opened="${this._overlayOpened}"
         ?loading="${this.loading}"
         theme="${ifDefined(this._theme)}"

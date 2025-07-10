@@ -1,0 +1,30 @@
+/**
+ * @license
+ * Copyright (c) 2000 - 2025 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+@media lumo_components_message-input {
+  :host {
+    align-items: flex-start;
+    box-sizing: border-box;
+    display: flex;
+    max-height: 50vh;
+    overflow: hidden;
+    flex-shrink: 0;
+    padding: var(--lumo-space-s) var(--lumo-space-m);
+  }
+
+  :host([hidden]) {
+    display: none !important;
+  }
+
+  ::slotted([slot='button']) {
+    flex-shrink: 0;
+  }
+
+  ::slotted([slot='textarea']) {
+    align-self: stretch;
+    flex-grow: 1;
+    margin-inline-end: var(--lumo-space-s);
+  }
+}

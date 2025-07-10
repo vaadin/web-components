@@ -12,10 +12,10 @@ import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { inputFieldShared } from '@vaadin/field-base/src/styles/input-field-shared-styles.js';
-import { CSSInjectionMixin } from '@vaadin/vaadin-themable-mixin/css-injection-mixin.js';
+import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { multiSelectComboBoxStyles } from './styles/vaadin-multi-select-combo-box-core-styles.js';
 import { MultiSelectComboBoxMixin } from './vaadin-multi-select-combo-box-mixin.js';
-import { multiSelectComboBox } from './vaadin-multi-select-combo-box-styles.js';
 
 /**
  * `<vaadin-multi-select-combo-box>` is a web component that wraps `<vaadin-combo-box>` and extends
@@ -69,7 +69,6 @@ import { multiSelectComboBox } from './vaadin-multi-select-combo-box-styles.js';
  * `--vaadin-field-default-width`                       | Default width of the field | `12em`
  * `--vaadin-multi-select-combo-box-overlay-width`      | Width of the overlay       | `auto`
  * `--vaadin-multi-select-combo-box-overlay-max-height` | Max height of the overlay  | `65vh`
- * `--vaadin-multi-select-combo-box-chip-min-width`     | Min width of the chip      | `50px`
  * `--vaadin-multi-select-combo-box-input-min-width`    | Min width of the input     | `4em`
  *
  * ### Internal components
@@ -101,14 +100,14 @@ import { multiSelectComboBox } from './vaadin-multi-select-combo-box-styles.js';
  * @mixes MultiSelectComboBoxMixin
  */
 class MultiSelectComboBox extends MultiSelectComboBoxMixin(
-  CSSInjectionMixin(ThemableMixin(ElementMixin(PolylitMixin(LitElement)))),
+  LumoInjectionMixin(ThemableMixin(ElementMixin(PolylitMixin(LitElement)))),
 ) {
   static get is() {
     return 'vaadin-multi-select-combo-box';
   }
 
   static get styles() {
-    return [inputFieldShared, multiSelectComboBox];
+    return [inputFieldShared, multiSelectComboBoxStyles];
   }
 
   /** @protected */
@@ -122,6 +121,7 @@ class MultiSelectComboBox extends MultiSelectComboBoxMixin(
 
         <vaadin-multi-select-combo-box-internal
           id="comboBox"
+          .owner="${this}"
           .filteredItems="${this.filteredItems}"
           .items="${this.items}"
           .itemIdPath="${this.itemIdPath}"

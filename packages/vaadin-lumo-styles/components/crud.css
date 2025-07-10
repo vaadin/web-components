@@ -1,0 +1,40 @@
+/**
+ * @license
+ * Copyright (c) 2000 - 2025 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+@import '../src/mixins/overlay.css';
+@import '../src/components/button.css';
+@import '../src/components/crud-dialog-overlay.css';
+@import '../src/components/crud-edit.css';
+@import '../src/components/crud.css';
+@import '../src/components/dialog-overlay.css';
+@import '../src/components/form-layout.css';
+@import '../src/components/grid.css';
+@import './button.css';
+@import './confirm-dialog.css';
+@import './grid-filter.css';
+@import './grid-sorter.css';
+@import './text-field.css';
+
+:is(:root, :host)::before {
+  --vaadin-crud-lumo-inject: 1;
+  --vaadin-crud-lumo-inject-modules: lumo_components_crud;
+
+  --vaadin-crud-edit-lumo-inject: 1;
+  --vaadin-crud-edit-lumo-inject-modules:
+    lumo_components_button,
+    lumo_components_crud-edit;
+
+  --vaadin-crud-grid-lumo-inject: 1;
+  --vaadin-crud-grid-lumo-inject-modules: lumo_components_grid;
+
+  --vaadin-crud-form-lumo-inject: 1;
+  --vaadin-crud-form-lumo-inject-modules: lumo_components_form-layout;
+
+  --vaadin-crud-dialog-overlay-lumo-inject: 1;
+  --vaadin-crud-dialog-overlay-lumo-inject-modules:
+    lumo_mixins_overlay,
+    lumo_components_dialog-overlay,
+    lumo_components_crud-dialog-overlay;
+}

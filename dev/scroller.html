@@ -1,15 +1,16 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Scroller</title>
+    <link rel="stylesheet" href="/packages/vaadin-lumo-styles/lumo.css" />
     <script type="module" src="./common.js"></script>
     <script type="module">
       import '@vaadin/scroller';
 
-      document.querySelectorAll('.content').forEach(content => {
+      document.querySelectorAll('.content').forEach((content) => {
         content.textContent = new Array(1000).fill('content').join(' ');
       });
     </script>
@@ -26,12 +27,12 @@
     </style>
   </head>
   <body>
-    <h2>Standard variant</h2>
+    <h2 class="heading">Standard variant</h2>
     <vaadin-scroller>
       <div class="content"></div>
     </vaadin-scroller>
 
-    <h2>Overflow indicators variant</h2>
+    <h2 class="heading">Overflow indicators variant</h2>
     <vaadin-scroller theme="overflow-indicators">
       <div class="content"></div>
     </vaadin-scroller>

@@ -8,9 +8,9 @@ import { ComboBoxOverlayMixin } from '@vaadin/combo-box/src/vaadin-combo-box-ove
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
+import { overlayStyles } from '@vaadin/overlay/src/styles/vaadin-overlay-core-styles.js';
 import { OverlayMixin } from '@vaadin/overlay/src/vaadin-overlay-mixin.js';
-import { overlayStyles } from '@vaadin/overlay/src/vaadin-overlay-styles.js';
-import { CSSInjectionMixin } from '@vaadin/vaadin-themable-mixin/css-injection-mixin.js';
+import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { timePickerOverlayStyles } from './styles/vaadin-time-picker-overlay-core-styles.js';
 
@@ -25,7 +25,7 @@ import { timePickerOverlayStyles } from './styles/vaadin-time-picker-overlay-cor
  * @private
  */
 export class TimePickerOverlay extends ComboBoxOverlayMixin(
-  OverlayMixin(DirMixin(CSSInjectionMixin(ThemableMixin(PolylitMixin(LitElement))))),
+  OverlayMixin(DirMixin(LumoInjectionMixin(ThemableMixin(PolylitMixin(LitElement))))),
 ) {
   static get is() {
     return 'vaadin-time-picker-overlay';
@@ -45,6 +45,17 @@ export class TimePickerOverlay extends ComboBoxOverlayMixin(
         </div>
       </div>
     `;
+  }
+
+  /**
+   * Override method from `ComboBoxOverlayMixin` to enforce
+   * `dir` attribute to be set to `ltr` on the overlay.
+   * @protected
+   * @override
+   */
+  _getHostDir() {
+    // See https://github.com/vaadin/vaadin-time-picker/issues/145
+    return 'ltr';
   }
 }
 

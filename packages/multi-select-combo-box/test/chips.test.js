@@ -171,7 +171,7 @@ describe('chips', () => {
       it('should update overflow chip on resize when width changes', async () => {
         expect(overflow.hasAttribute('hidden')).to.be.false;
 
-        comboBox.style.width = '350px';
+        comboBox.style.width = '400px';
         await nextResize(comboBox);
         expect(overflow.hasAttribute('hidden')).to.be.true;
 
@@ -181,7 +181,7 @@ describe('chips', () => {
       });
 
       it('should update overflow chip on clear button state change', async () => {
-        comboBox.style.width = '340px';
+        comboBox.style.width = '370px';
         await nextResize(comboBox);
 
         comboBox.clearButtonVisible = true;
@@ -558,13 +558,13 @@ describe('chips', () => {
 
       const overlay = document.querySelector('vaadin-multi-select-combo-box-overlay');
       const overlayPart = overlay.$.overlay;
-      const width = overlayPart.clientWidth;
+      const width = overlayPart.offsetWidth;
       expect(width).to.equal(comboBox.clientWidth);
 
       comboBox.selectedItems = ['apple', 'banana'];
       await nextRender();
-      expect(overlayPart.clientWidth).to.be.lessThan(width);
-      expect(overlayPart.clientWidth).to.be.equal(comboBox.clientWidth);
+      expect(overlayPart.offsetWidth).to.be.lessThan(width);
+      expect(overlayPart.offsetWidth).to.be.equal(comboBox.clientWidth);
     });
   });
 

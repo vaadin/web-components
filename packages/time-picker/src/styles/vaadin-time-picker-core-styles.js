@@ -6,6 +6,10 @@
 import { css } from 'lit';
 
 export const timePickerStyles = css`
+  :host([opened]) {
+    pointer-events: auto;
+  }
+
   /* See https://github.com/vaadin/vaadin-time-picker/issues/145 */
   :host([dir='rtl']) [part='input-field'] {
     direction: ltr;

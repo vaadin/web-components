@@ -21,13 +21,8 @@ template.innerHTML = `
       height: 100%;
       overflow: auto;
       outline: none;
-      margin-right: -40px;
-      -webkit-overflow-scrolling: touch;
       overflow-x: hidden;
-    }
-
-    #scroller.notouchscroll {
-      -webkit-overflow-scrolling: auto;
+      scrollbar-width: none;
     }
 
     #scroller::-webkit-scrollbar {
@@ -38,7 +33,6 @@ template.innerHTML = `
       position: absolute;
       width: var(--vaadin-infinite-scroller-buffer-width, 100%);
       box-sizing: border-box;
-      padding-right: 40px;
       top: var(--vaadin-infinite-scroller-buffer-offset, 0);
     }
   </style>
@@ -157,17 +151,6 @@ export class InfiniteScroller extends HTMLElement {
       this._scrollDisabled = true;
       this.$.scroller.scrollTop += (index % 1) * this.itemHeight;
       this._scrollDisabled = false;
-    }
-
-    if (this._mayHaveMomentum) {
-      // Stop the possible iOS Safari momentum with -webkit-overflow-scrolling: auto;
-      this.$.scroller.classList.add('notouchscroll');
-      this._mayHaveMomentum = false;
-
-      setTimeout(() => {
-        // Restore -webkit-overflow-scrolling: touch; after a small delay.
-        this.$.scroller.classList.remove('notouchscroll');
-      }, 10);
     }
   }
 
@@ -292,7 +275,6 @@ export class InfiniteScroller extends HTMLElement {
 
     if (!this._preventScrollEvent) {
       this.dispatchEvent(new CustomEvent('custom-scroll', { bubbles: false, composed: true }));
-      this._mayHaveMomentum = true;
     }
     this._preventScrollEvent = false;
 

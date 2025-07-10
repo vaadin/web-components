@@ -1,0 +1,50 @@
+/**
+ * @license
+ * Copyright (c) 2000 - 2025 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+@import '../src/components/card.css';
+
+:is(:root, :host)::before {
+  --vaadin-card-lumo-inject: 1;
+  --vaadin-card-lumo-inject-modules: lumo_components_card;
+}
+
+:where(:root, :host) {
+  --vaadin-card-background: var(
+    --lumo-contrast-5pct
+  );
+  --vaadin-card-border-radius: var(
+    --lumo-border-radius-l
+  );
+  --vaadin-card-border-width: 0;
+  --vaadin-card-border-color: var(
+    --lumo-contrast-20pct
+  );
+  --vaadin-card-padding: var(
+    --lumo-space-m
+  );
+  --vaadin-card-gap: var(
+    --lumo-space-m
+  );
+  --vaadin-card-shadow: none;
+  --vaadin-card-title-font-color: var(
+    --lumo-header-text-color
+  );
+  --vaadin-card-title-font-size: var(
+    --lumo-font-size-l
+  );
+  --vaadin-card-title-font-weight: 600;
+  --vaadin-card-title-line-height: var(
+    --lumo-line-height-xs
+  );
+  --vaadin-card-subtitle-font-color: var(
+    --lumo-secondary-text-color
+  );
+  --vaadin-card-subtitle-font-size: var(
+    --lumo-font-size-m
+  );
+  --vaadin-card-subtitle-line-height: var(
+    --lumo-line-height-xs
+  );
+}

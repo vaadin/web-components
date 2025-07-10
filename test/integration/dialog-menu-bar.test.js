@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, nextRender, oneEvent } from '@vaadin/testing-helpers';
+import { fixtureSync, nextRender, nextResize, oneEvent } from '@vaadin/testing-helpers';
 import '@vaadin/dialog';
 import '@vaadin/menu-bar/test/menu-bar-test-styles.js';
 import '@vaadin/menu-bar/src/vaadin-menu-bar.js';
@@ -12,13 +12,19 @@ describe('menu-bar in dialog', () => {
   let dialog, overlay, menuBar;
 
   beforeEach(async () => {
-    dialog = fixtureSync(`<vaadin-dialog theme="no-padding"></vaadin-dialog>`);
+    fixtureSync(`
+      <style>
+        vaadin-dialog-overlay::part(content) {
+          padding: 0;
+        }
+      </style>
+    `);
+    dialog = fixtureSync(`<vaadin-dialog width="700px"></vaadin-dialog>`);
     dialog.renderer = (root) => {
       if (!root.firstChild) {
-        root.$.overlay.style.width = '700px';
         root.innerHTML = `
           <vaadin-vertical-layout theme="padding spacing" style="width: 100%; align-items: stretch;">
-            <vaadin-menu-bar style="min-width: var(--lumo-size-m);"></vaadin-menu-bar>
+            <vaadin-menu-bar style="min-width: 2.25rem;"></vaadin-menu-bar>
           </vaadin-vertical-layout>
         `;
         const menu = root.querySelector('vaadin-menu-bar');
@@ -40,6 +46,7 @@ describe('menu-bar in dialog', () => {
     overlay = dialog.$.overlay;
     await oneEvent(overlay, 'vaadin-overlay-open');
     menuBar = overlay.querySelector('vaadin-menu-bar');
+    await nextResize(menuBar);
   });
 
   it('should fully fit the overflow button in the menu-bar', () => {

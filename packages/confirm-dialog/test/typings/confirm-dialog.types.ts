@@ -25,6 +25,8 @@ assertType<string>(dialog.cancelTheme);
 assertType<string>(dialog.rejectText);
 assertType<string>(dialog.rejectTheme);
 assertType<string>(dialog.overlayClass);
+assertType<string | null>(dialog.height);
+assertType<string | null>(dialog.width);
 
 // Events
 dialog.addEventListener('opened-changed', (event) => {

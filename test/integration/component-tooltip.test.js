@@ -36,7 +36,13 @@ before(() => {
 [
   { tagName: Button.is },
   { tagName: Checkbox.is, ariaTargetSelector: 'input' },
-  { tagName: CheckboxGroup.is },
+  {
+    tagName: CheckboxGroup.is,
+    children: `
+      <vaadin-checkbox label="1" value="1"></vaadin-checkbox>
+      <vaadin-checkbox label="2" value="2"></vaadin-checkbox>
+    `,
+  },
   {
     tagName: ComboBox.is,
     position: 'top',
@@ -78,7 +84,13 @@ before(() => {
   },
   { tagName: NumberField.is, position: 'top', ariaTargetSelector: 'input' },
   { tagName: PasswordField.is, position: 'top', ariaTargetSelector: 'input' },
-  { tagName: RadioGroup.is },
+  {
+    tagName: RadioGroup.is,
+    children: `
+      <vaadin-radio-button label="1" value="1"></vaadin-radio-button>
+      <vaadin-radio-button label="2" value="2"></vaadin-radio-button>
+    `,
+  },
   { tagName: Select.is, position: 'top', ariaTargetSelector: 'vaadin-select-value-button' },
   { tagName: Tab.is },
   { tagName: TextArea.is, position: 'top', ariaTargetSelector: 'textarea' },

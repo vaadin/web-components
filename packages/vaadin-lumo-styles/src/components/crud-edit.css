@@ -1,0 +1,30 @@
+/**
+ * @license
+ * Copyright (c) 2000 - 2025 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+@media lumo_components_crud-edit {
+  :host {
+    display: block;
+    min-width: auto;
+    margin: 0;
+    font-family: 'lumo-icons', var(--lumo-font-family);
+    font-size: var(--lumo-icon-size-m);
+    line-height: 1;
+    position: relative;
+    width: var(--lumo-size-s);
+    height: var(--lumo-size-s);
+    outline: none;
+  }
+
+  [part='icon']::before {
+    content: var(--lumo-icons-edit);
+    width: var(--lumo-size-m);
+    height: var(--lumo-size-m);
+    line-height: var(--lumo-size-m);
+    text-align: center;
+    position: absolute;
+    top: calc((var(--lumo-size-m) - var(--lumo-size-s)) / -2);
+    left: calc((var(--lumo-size-m) - var(--lumo-size-s)) / -2);
+  }
+}

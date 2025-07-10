@@ -1,6 +1,7 @@
 import { expect } from '@vaadin/chai-plugins';
 import { aTimeout, fixtureSync, nextFrame, nextResize, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
+import './grid-test-styles.js';
 import '../all-imports.js';
 import {
   flushGrid,
@@ -111,6 +112,39 @@ describe('resizing', () => {
     expect(grid.$.scroller.getBoundingClientRect().bottom).to.equal(grid.$.table.getBoundingClientRect().bottom);
   });
 
+  it('should create rows when resized while scrolled to bottom', async () => {
+    // Have a full width grid inside a fixed width container
+    component = fixtureSync(`
+    <div style="height: 200px;">
+      <vaadin-grid style="height: 100%;">
+        <vaadin-grid-column></vaadin-grid-column>
+      </vaadin-grid>
+    </div>
+    `);
+    grid = component.querySelector('vaadin-grid');
+    grid.querySelector('vaadin-grid-column').renderer = (root, _, model) => {
+      root.textContent = model.item.name;
+    };
+    const itemCount = 1000;
+    grid.items = Array.from({ length: itemCount }, (_, i) => ({
+      name: `Item ${i}`,
+    }));
+    // Scroll to end
+    grid.scrollToIndex(itemCount - 1);
+    await aTimeout(200);
+    // Resize container
+    for (let i = 0; i < 10; i++) {
+      component.style.height = `${component.offsetHeight + 200}px`;
+      flushGrid(grid);
+      await aTimeout(50);
+    }
+    const gridRect = grid.getBoundingClientRect();
+    // Get an element from the area where new rows should be created
+    const elementInResizedArea = document.elementFromPoint(gridRect.left + 1, gridRect.top + 50);
+    const isCell = elementInResizedArea && elementInResizedArea.tagName === 'VAADIN-GRID-CELL-CONTENT';
+    expect(isCell).to.be.true;
+  });
+
   describe('flexbox parent', () => {
     beforeEach(() => {
       grid.style.height = grid.style.width = '';
@@ -125,22 +159,22 @@ describe('resizing', () => {
       expect(grid.getBoundingClientRect().height).to.equal(400);
     });
 
-    it('should auto-grow inside a fixed height column flexbox', async () => {
+    it('should not auto-grow inside a fixed height column flexbox', async () => {
       component.style.height = '500px';
       await nextResize(grid);
-      expect(grid.getBoundingClientRect().height).to.equal(129);
+      expect(grid.getBoundingClientRect().height).to.equal(130);
     });
 
-    it('should auto-grow inside a fixed height row flexbox', async () => {
+    it('should not auto-grow inside a fixed height row flexbox', async () => {
       component.style.flexDirection = 'row';
       component.style.height = '500px';
       await nextResize(grid);
-      expect(grid.getBoundingClientRect().height).to.equal(129);
+      expect(grid.getBoundingClientRect().height).to.equal(130);
     });
 
     it('should not shrink horizontally inside a row flexbox', () => {
       component.style.flexDirection = 'row';
-      expect(grid.getBoundingClientRect().width).to.be.above(780);
+      expect(grid.getBoundingClientRect().width).to.equal(component.offsetWidth);
     });
 
     it('should not shrink vertically inside a column flexbox with another child', () => {
@@ -157,7 +191,7 @@ describe('resizing', () => {
       component.style.flexDirection = 'row';
       grid.after(fixtureSync('<div style="height: 100%; width: 100px;"></div>'));
 
-      expect(grid.getBoundingClientRect().width).to.be.below(780);
+      expect(grid.getBoundingClientRect().width).to.be.equal(component.offsetWidth - 100);
     });
   });
 });

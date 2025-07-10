@@ -1,9 +1,11 @@
 import { sendKeys } from '@vaadin/test-runner-commands';
 import { fixtureSync } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
-import '@vaadin/vaadin-lumo-styles/test/autoload.js';
+import '@vaadin/vaadin-lumo-styles/global.css';
+import '@vaadin/vaadin-lumo-styles/props.css';
+import '@vaadin/vaadin-lumo-styles/components/checkbox.css';
 import '../common.js';
-import '../../../theme/lumo/vaadin-checkbox.js';
+import '../../../vaadin-checkbox.js';
 
 describe('checkbox', () => {
   let div, element;

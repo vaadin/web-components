@@ -10,9 +10,9 @@ import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { inputFieldShared } from '@vaadin/field-base/src/styles/input-field-shared-styles.js';
-import { CSSInjectionMixin } from '@vaadin/vaadin-themable-mixin/css-injection-mixin.js';
+import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { numberFieldStyles } from './vaadin-number-field-core-styles.js';
+import { numberFieldStyles } from './styles/vaadin-number-field-core-styles.js';
 import { NumberFieldMixin } from './vaadin-number-field-mixin.js';
 
 /**
@@ -70,7 +70,7 @@ import { NumberFieldMixin } from './vaadin-number-field-mixin.js';
  * @mixes ElementMixin
  * @mixes ThemableMixin
  */
-class NumberField extends NumberFieldMixin(CSSInjectionMixin(ThemableMixin(ElementMixin(PolylitMixin(LitElement))))) {
+class NumberField extends NumberFieldMixin(LumoInjectionMixin(ThemableMixin(ElementMixin(PolylitMixin(LitElement))))) {
   static get is() {
     return 'vaadin-number-field';
   }

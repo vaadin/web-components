@@ -3,6 +3,7 @@
  * Copyright (c) 2018 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { ComboBoxBaseMixin } from '@vaadin/combo-box/src/vaadin-combo-box-base-mixin.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { InputControlMixin } from '@vaadin/field-base/src/input-control-mixin.js';
 import { InputController } from '@vaadin/field-base/src/input-controller.js';
@@ -22,11 +23,12 @@ const MAX_ALLOWED_TIME = '23:59:59.999';
  * A mixin providing common time-picker functionality.
  *
  * @polymerMixin
+ * @mixes ComboBoxBaseMixin
  * @mixes InputControlMixin
  * @mixes PatternMixin
  */
 export const TimePickerMixin = (superClass) =>
-  class TimePickerMixinClass extends PatternMixin(InputControlMixin(superClass)) {
+  class TimePickerMixinClass extends PatternMixin(ComboBoxBaseMixin(InputControlMixin(superClass))) {
     static get properties() {
       return {
         /**
@@ -42,17 +44,6 @@ export const TimePickerMixin = (superClass) =>
           type: String,
           notify: true,
           value: '',
-          sync: true,
-        },
-
-        /**
-         * True if the dropdown is open, false otherwise.
-         */
-        opened: {
-          type: Boolean,
-          notify: true,
-          value: false,
-          reflectToAttribute: true,
           sync: true,
         },
 
@@ -108,24 +99,6 @@ export const TimePickerMixin = (superClass) =>
         },
 
         /**
-         * Set true to prevent the overlay from opening automatically.
-         * @attr {boolean} auto-open-disabled
-         */
-        autoOpenDisabled: {
-          type: Boolean,
-          sync: true,
-        },
-
-        /**
-         * A space-delimited list of CSS class names to set on the overlay element.
-         *
-         * @attr {string} overlay-class
-         */
-        overlayClass: {
-          type: String,
-        },
-
-        /**
          * The object used to localize this component.
          * To change the default localization, replace the entire
          * _i18n_ object or just the property you want to modify.
@@ -170,12 +143,6 @@ export const TimePickerMixin = (superClass) =>
         },
 
         /** @private */
-        __dropdownItems: {
-          type: Array,
-          sync: true,
-        },
-
-        /** @private */
         _inputContainer: {
           type: Object,
         },
@@ -184,13 +151,24 @@ export const TimePickerMixin = (superClass) =>
 
     static get observers() {
       return [
-        '__updateAriaAttributes(__dropdownItems, opened, inputElement)',
+        '_openedOrItemsChanged(opened, _dropdownItems)',
+        '_updateScroller(opened, _dropdownItems, _focusedIndex, _theme)',
+        '__updateAriaAttributes(_dropdownItems, opened, inputElement)',
         '__updateDropdownItems(i18n, min, max, step)',
       ];
     }
 
     static get constraints() {
       return [...super.constraints, 'min', 'max'];
+    }
+
+    /**
+     * Tag name prefix used by `ComboBoxBaseMixin` for scroller and items.
+     * @protected
+     * @return {string}
+     */
+    get _tagNamePrefix() {
+      return 'vaadin-time-picker';
     }
 
     /**
@@ -239,6 +217,7 @@ export const TimePickerMixin = (superClass) =>
       );
       this.addController(new LabelledInputController(this.inputElement, this._labelController));
       this._inputContainer = this.shadowRoot.querySelector('[part~="input-field"]');
+      this._toggleElement = this.$.toggleButton;
 
       this._tooltipController = new TooltipController(this);
       this._tooltipController.setShouldShow((timePicker) => !timePicker.opened);
@@ -247,33 +226,14 @@ export const TimePickerMixin = (superClass) =>
       this.addController(this._tooltipController);
     }
 
-    /**
-     * Override method inherited from `InputMixin` to forward the input to combo-box.
-     * @protected
-     * @override
-     */
-    _inputElementChanged(input) {
-      super._inputElementChanged(input);
+    /** @protected */
+    updated(props) {
+      super.updated(props);
 
-      if (input) {
-        this.$.comboBox._setInputElement(input);
+      // Update selected item in the scroller
+      if (props.has('_comboBoxValue') && this._dropdownItems) {
+        this._scroller.selectedItem = this._dropdownItems.find((item) => item.value === this._comboBoxValue);
       }
-    }
-
-    /**
-     * Opens the dropdown list.
-     */
-    open() {
-      if (!this.disabled && !this.readonly) {
-        this.opened = true;
-      }
-    }
-
-    /**
-     * Closes the dropdown list.
-     */
-    close() {
-      this.opened = false;
     }
 
     /**
@@ -288,6 +248,114 @@ export const TimePickerMixin = (superClass) =>
         (!this.value || this._timeAllowed(this.i18n.parseTime(this.value))) &&
         (!this._comboBoxValue || this.i18n.parseTime(this._comboBoxValue))
       );
+    }
+
+    /**
+     * Override method from `ComboBoxBaseMixin` to handle item label path.
+     * @protected
+     * @override
+     */
+    _getItemLabel(item) {
+      return item ? item.label : '';
+    }
+
+    /** @private */
+    _updateScroller(opened, items, focusedIndex, theme) {
+      if (opened) {
+        this._scroller.style.maxHeight =
+          getComputedStyle(this).getPropertyValue(`--${this._tagNamePrefix}-overlay-max-height`) || '65vh';
+      }
+
+      this._scroller.setProperties({
+        items: opened ? items : [],
+        opened,
+        focusedIndex,
+        theme,
+      });
+    }
+
+    /** @private */
+    _openedOrItemsChanged(opened, items) {
+      // Close the overlay if there are no items to display.
+      this._overlayOpened = opened && !!(items && items.length);
+    }
+
+    /**
+     * Override method from `ComboBoxBaseMixin` to commit value on overlay closing.
+     * @protected
+     * @override
+     */
+    _onClosed() {
+      this._commitValue();
+    }
+
+    /**
+     * Override method from `ComboBoxBaseMixin` to handle Escape pres..
+     * @protected
+     * @override
+     */
+    _onEscapeCancel() {
+      this._inputElementValue = this._comboBoxValue;
+      this._closeOrCommit();
+    }
+
+    /**
+     * Override method from `ComboBoxBaseMixin` to implement clearing logic.
+     * @protected
+     * @override
+     */
+    _onClearAction() {
+      this._comboBoxValue = '';
+      this._inputElementValue = '';
+
+      this.__commitValueChange();
+    }
+
+    /**
+     * Override method from `ComboBoxBaseMixin` to implement value commit logic.
+     * @protected
+     * @override
+     */
+    _commitValue() {
+      if (this._focusedIndex > -1) {
+        // Commit value based on focused index
+        const focusedItem = this._dropdownItems[this._focusedIndex];
+        const itemValue = this._getItemLabel(focusedItem);
+        this._inputElementValue = itemValue;
+        this._comboBoxValue = itemValue;
+        this._focusedIndex = -1;
+      } else if (this._inputElementValue === '' || this._inputElementValue === undefined) {
+        this._comboBoxValue = '';
+      } else {
+        this._comboBoxValue = this._inputElementValue;
+      }
+
+      this.__commitValueChange();
+
+      this._clearSelectionRange();
+    }
+
+    /**
+     * Override method from `ComboBoxBaseMixin` to handle loading.
+     * @protected
+     * @override
+     */
+    _closeOrCommit() {
+      if (!this.opened) {
+        this._commitValue();
+      } else {
+        this.close();
+      }
+    }
+
+    /**
+     * Override method from `ComboBoxBaseMixin` to handle reverting value.
+     * @protected
+     * @override
+     */
+    _revertInputValue() {
+      this._inputElementValue = this._comboBoxValue;
+      this._clearSelectionRange();
     }
 
     /**
@@ -321,7 +389,7 @@ export const TimePickerMixin = (superClass) =>
     _onKeyDown(e) {
       super._onKeyDown(e);
 
-      if (this.readonly || this.disabled || this.__dropdownItems.length) {
+      if (this.readonly || this.disabled || this._dropdownItems.length) {
         return;
       }
 
@@ -332,17 +400,6 @@ export const TimePickerMixin = (superClass) =>
       } else if (e.keyCode === 38) {
         this.__onArrowPressWithStep(stepResolution);
       }
-    }
-
-    /**
-     * Override an event listener from `KeyboardMixin`.
-     * Do not call `super` in order to override clear
-     * button logic defined in `InputControlMixin`.
-     * @param {Event} event
-     * @protected
-     */
-    _onEscape() {
-      // Do nothing, the internal combo-box handles Escape.
     }
 
     /** @private */
@@ -458,7 +515,7 @@ export const TimePickerMixin = (superClass) =>
       const maxTimeObj = validateTime(parseISOTime(max || MAX_ALLOWED_TIME), step);
       const maxSec = this.__getSec(maxTimeObj);
 
-      this.__dropdownItems = this.__generateDropdownList(minSec, maxSec, step);
+      this._dropdownItems = this.__generateDropdownList(minSec, maxSec, step);
 
       if (step !== this.__oldStep) {
         this.__oldStep = step;
@@ -575,12 +632,6 @@ export const TimePickerMixin = (superClass) =>
     }
 
     /** @private */
-    __onComboBoxChange(event) {
-      event.stopPropagation();
-      this.__commitValueChange();
-    }
-
-    /** @private */
     __updateValue(obj) {
       const timeString = formatISOTime(validateTime(obj, this.step)) || '';
       this.value = timeString;
@@ -594,6 +645,7 @@ export const TimePickerMixin = (superClass) =>
     /** @private */
     __updateInputValue(obj) {
       const timeString = this.i18n.formatTime(validateTime(obj, this.step)) || '';
+      this._inputElementValue = timeString;
       this._comboBoxValue = timeString;
     }
 
@@ -615,22 +667,44 @@ export const TimePickerMixin = (superClass) =>
     }
 
     /**
-     * Override method inherited from `InputControlMixin`.
+     * Override method from `ComboBoxBaseMixin` to deselect
+     * dropdown item by requesting content update on clear.
+     * @param {Event} event
      * @protected
      */
-    _onClearButtonClick() {}
+    _onClearButtonClick(event) {
+      event.stopPropagation();
+      super._onClearButtonClick(event);
+
+      if (this.opened) {
+        this._scroller.requestContentUpdate();
+      }
+    }
 
     /**
-     * Override method inherited from `InputConstraintsMixin`.
+     * @param {Event} event
      * @protected
      */
-    _onChange() {}
+    _onHostClick(event) {
+      const path = event.composedPath();
+
+      // Open dropdown only when clicking on the label or input field
+      if (path.includes(this._labelNode) || path.includes(this._inputContainer)) {
+        super._onHostClick(event);
+      }
+    }
 
     /**
-     * Override method inherited from `InputMixin`.
+     * Override an event listener from `InputMixin`.
+     * @param {!Event} event
      * @protected
+     * @override
      */
-    _onInput() {}
+    _onChange(event) {
+      // Suppress the native change event fired on the native input.
+      // We use `__commitValueChange` to fire a custom event.
+      event.stopPropagation();
+    }
 
     /**
      * Fired when the user commits a value change.

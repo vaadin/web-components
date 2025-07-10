@@ -2,7 +2,9 @@ import { nextFrame } from '@vaadin/testing-helpers';
 import { fixtureSync } from '@vaadin/testing-helpers/dist/fixture.js';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '../not-animated-styles.js';
-import '../../../theme/lumo/vaadin-tabs.js';
+import '@vaadin/vaadin-lumo-styles/props.css';
+import '@vaadin/vaadin-lumo-styles/components/tabs.css';
+import '../../../vaadin-tabs.js';
 
 describe('tabs', () => {
   let div, element;
@@ -55,10 +57,18 @@ describe('tabs', () => {
           await visualDiff(div, `${dir}-horizontal-centered`);
         });
 
-        it('centered', async () => {
+        it('centered scroll', async () => {
           element.setAttribute('theme', 'centered');
           element.style.maxWidth = '150px';
           await visualDiff(div, `${dir}-horizontal-centered-scroll`);
+        });
+
+        it('equal width tabs', async () => {
+          div.style.display = 'flex';
+          div.style.width = '400px';
+          element.setAttribute('theme', 'equal-width-tabs');
+          element.children[1].textContent = 'Bar with a longer title';
+          await visualDiff(div, `${dir}-horizontal-equal-width-tabs`);
         });
       });
 

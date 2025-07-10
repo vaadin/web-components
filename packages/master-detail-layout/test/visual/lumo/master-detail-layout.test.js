@@ -1,7 +1,9 @@
 import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
-import '@vaadin/vaadin-lumo-styles/color-global.js';
-import '../../../theme/lumo/vaadin-master-detail-layout.js';
+import '@vaadin/vaadin-lumo-styles/global.css';
+import '@vaadin/vaadin-lumo-styles/props.css';
+import '@vaadin/vaadin-lumo-styles/components/master-detail-layout.css';
+import '../../../vaadin-master-detail-layout.js';
 
 window.Vaadin ||= {};
 window.Vaadin.featureFlags ||= {};

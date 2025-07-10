@@ -19,6 +19,10 @@ describe('overlay opening', () => {
       expect(comboBox.opened).to.be.false;
     });
 
+    it('should set owner property on the overlay', () => {
+      expect(overlay.owner).to.equal(comboBox);
+    });
+
     it('should open by clicking label element', () => {
       comboBox.querySelector('[slot="label"]').click();
 

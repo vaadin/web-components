@@ -12,6 +12,7 @@ import { html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
+import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { avatarGroupStyles } from './styles/vaadin-avatar-group-core-styles.js';
 import { AvatarGroupMixin } from './vaadin-avatar-group-mixin.js';
@@ -62,7 +63,7 @@ import { AvatarGroupMixin } from './vaadin-avatar-group-mixin.js';
  * @mixes AvatarGroupMixin
  * @mixes ThemableMixin
  */
-class AvatarGroup extends AvatarGroupMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElement)))) {
+class AvatarGroup extends AvatarGroupMixin(ElementMixin(ThemableMixin(LumoInjectionMixin(PolylitMixin(LitElement))))) {
   static get is() {
     return 'vaadin-avatar-group';
   }
@@ -82,6 +83,7 @@ class AvatarGroup extends AvatarGroupMixin(ElementMixin(ThemableMixin(PolylitMix
         id="overlay"
         .opened="${this._opened}"
         .positionTarget="${this._overflow}"
+        .renderer="${this.__overlayRenderer}"
         no-vertical-overlap
         @vaadin-overlay-close="${this._onVaadinOverlayClose}"
         @vaadin-overlay-open="${this._onVaadinOverlayOpen}"

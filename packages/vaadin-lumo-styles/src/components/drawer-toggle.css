@@ -1,0 +1,51 @@
+/**
+ * @license
+ * Copyright (c) 2000 - 2025 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+@media lumo_components_drawer-toggle {
+  :host {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: default;
+    position: relative;
+    outline: none;
+    width: var(--lumo-size-l);
+    height: var(--lumo-size-l);
+    min-width: auto;
+    margin: 0 var(--lumo-space-s);
+    padding: 0;
+    background: transparent;
+  }
+
+  [part='icon'],
+  [part='icon']::after,
+  [part='icon']::before {
+    position: inherit;
+    height: auto;
+    width: auto;
+    background: transparent;
+    top: auto;
+  }
+
+  [part='icon']::after,
+  [part='icon']::before {
+    content: '';
+  }
+
+  [part='icon']::after {
+    top: 6px;
+  }
+
+  [part='icon']::before {
+    top: 12px;
+    font-family: lumo-icons;
+    font-size: var(--lumo-icon-size-m);
+    content: var(--lumo-icons-menu);
+  }
+
+  :host([slot~='navbar']) {
+    color: var(--lumo-secondary-text-color);
+  }
+}

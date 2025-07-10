@@ -7,9 +7,10 @@ import { html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
+import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { splitLayoutStyles } from './styles/vaadin-split-layout-core-styles.js';
 import { SplitLayoutMixin } from './vaadin-split-layout-mixin.js';
-import { splitLayoutStyles } from './vaadin-split-layout-styles.js';
 
 /**
  * `<vaadin-split-layout>` is a Web Component implementing a split layout for two
@@ -155,7 +156,7 @@ import { splitLayoutStyles } from './vaadin-split-layout-styles.js';
  * @mixes SplitLayoutMixin
  * @mixes ThemableMixin
  */
-class SplitLayout extends SplitLayoutMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElement)))) {
+class SplitLayout extends SplitLayoutMixin(ElementMixin(ThemableMixin(LumoInjectionMixin(PolylitMixin(LitElement))))) {
   static get is() {
     return 'vaadin-split-layout';
   }

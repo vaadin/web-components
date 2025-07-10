@@ -1,26 +1,36 @@
-import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
+import { fixtureSync } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
-import '../../typography-global.js';
+import '../../props.css';
+import '../../global.css';
 
 describe('font-size', () => {
   let wrapper;
 
-  before(async () => {
+  beforeEach(() => {
     wrapper = fixtureSync(`
-      <div style="display: flex; flex-wrap: wrap; width: 600px">
-        <style>
-          html {
-            --lumo-font-size-m: 1.5rem;
-          }
-        </style>
-        <span id="test" style="font-size: 1.5em">Font size 1.5em</span>
-        <span id="test">Using font size 1.5rem from html definition</span>
+      <div style="display: inline-block">
+        <div style="font-size: 1.5em">
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+        </div>
+        <div>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+        </div>
       </div>
     `);
-    await nextFrame();
   });
 
-  it('basic', async () => {
+  it('default', async () => {
     await visualDiff(wrapper, 'font-size');
+  });
+
+  it('custom', async () => {
+    fixtureSync(`
+      <style>
+        html {
+          --lumo-font-size-m: 1.5rem;
+        }
+      </style>
+    `);
+    await visualDiff(wrapper, 'font-size-custom');
   });
 });

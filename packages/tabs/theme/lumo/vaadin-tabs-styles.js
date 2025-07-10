@@ -73,7 +73,6 @@ registerStyles(
 
     [part='tabs'] {
       --_lumo-tabs-overflow-mask-image: none;
-      -webkit-mask-image: var(--_lumo-tabs-overflow-mask-image);
       mask-image: var(--_lumo-tabs-overflow-mask-image);
     }
 

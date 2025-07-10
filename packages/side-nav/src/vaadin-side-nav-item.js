@@ -10,9 +10,10 @@ import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { matchPaths } from '@vaadin/component-base/src/url-utils.js';
+import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { location } from './location.js';
-import { sideNavItemBaseStyles } from './vaadin-side-nav-base-styles.js';
+import { sideNavItemStyles } from './styles/vaadin-side-nav-item-core-styles.js';
 import { SideNavChildrenMixin } from './vaadin-side-nav-children-mixin.js';
 
 /**
@@ -80,7 +81,9 @@ import { SideNavChildrenMixin } from './vaadin-side-nav-children-mixin.js';
  * @mixes ElementMixin
  * @mixes SideNavChildrenMixin
  */
-class SideNavItem extends SideNavChildrenMixin(DisabledMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElement))))) {
+class SideNavItem extends SideNavChildrenMixin(
+  DisabledMixin(ElementMixin(ThemableMixin(LumoInjectionMixin(PolylitMixin(LitElement))))),
+) {
   static get is() {
     return 'vaadin-side-nav-item';
   }
@@ -175,7 +178,7 @@ class SideNavItem extends SideNavChildrenMixin(DisabledMixin(ElementMixin(Themab
   }
 
   static get styles() {
-    return [sideNavItemBaseStyles];
+    return sideNavItemStyles;
   }
 
   constructor() {
@@ -283,9 +286,13 @@ class SideNavItem extends SideNavChildrenMixin(DisabledMixin(ElementMixin(Themab
   }
 
   /** @private */
-  _onContentClick() {
+  _onContentClick(e) {
+    // Navigate if path is defined and not clicking on the link directly
+    if (this.path && !e.composedPath().find((el) => el === this.$.link)) {
+      this.$.link.click();
+    }
     // Toggle item expanded state unless the link has a non-empty path
-    if (this.path == null && this.hasAttribute('has-children')) {
+    else if (this.path == null && this.hasAttribute('has-children') && !this.disabled) {
       this.__toggleExpanded();
     }
   }

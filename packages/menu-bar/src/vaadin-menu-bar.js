@@ -5,12 +5,14 @@
  */
 import './vaadin-menu-bar-submenu.js';
 import './vaadin-menu-bar-button.js';
-import { css, html, LitElement } from 'lit';
+import { html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
+import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { menuBarStyles } from './styles/vaadin-menu-bar-core-styles.js';
 import { MenuBarMixin } from './vaadin-menu-bar-mixin.js';
 
 /**
@@ -75,35 +77,19 @@ import { MenuBarMixin } from './vaadin-menu-bar-mixin.js';
  * @mixes MenuBarMixin
  * @mixes ThemableMixin
  */
-class MenuBar extends MenuBarMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElement)))) {
+class MenuBar extends MenuBarMixin(ElementMixin(ThemableMixin(LumoInjectionMixin(PolylitMixin(LitElement))))) {
   static get is() {
     return 'vaadin-menu-bar';
   }
 
   static get styles() {
-    return css`
-      :host {
-        display: block;
-      }
-
-      :host([hidden]) {
-        display: none !important;
-      }
-
-      [part='container'] {
-        position: relative;
-        display: flex;
-        width: 100%;
-        flex-wrap: nowrap;
-        overflow: hidden;
-      }
-    `;
+    return menuBarStyles;
   }
 
   /** @protected */
   render() {
     return html`
-      <div part="container">
+      <div part="container" @click="${this.__onButtonClick}" @mouseover="${this._onMouseOver}">
         <slot></slot>
         <slot name="overflow"></slot>
       </div>

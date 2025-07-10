@@ -10,6 +10,8 @@ import { DisabledMixin } from '@vaadin/a11y-base/src/disabled-mixin.js';
 import { FocusMixin } from '@vaadin/a11y-base/src/focus-mixin.js';
 import { isElementFocused, isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
 import { KeyboardDirectionMixin } from '@vaadin/a11y-base/src/keyboard-direction-mixin.js';
+import { microTask } from '@vaadin/component-base/src/async.js';
+import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { I18nMixin } from '@vaadin/component-base/src/i18n-mixin.js';
 import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
@@ -189,39 +191,7 @@ export const MenuBarMixin = (superClass) =>
           type: Boolean,
           sync: true,
         },
-
-        /**
-         * @type {boolean}
-         * @protected
-         */
-        _hasOverflow: {
-          type: Boolean,
-          value: false,
-          sync: true,
-        },
-
-        /** @protected */
-        _overflow: {
-          type: Object,
-        },
-
-        /** @protected */
-        _container: {
-          type: Object,
-          sync: true,
-        },
       };
-    }
-
-    static get observers() {
-      return [
-        '_themeChanged(_theme, _overflow, _container)',
-        '__hasOverflowChanged(_hasOverflow, _overflow)',
-        '__i18nChanged(__effectiveI18n, _overflow)',
-        '__updateButtons(items, disabled, _overflow, _container)',
-        '_reverseCollapseChanged(reverseCollapse, _overflow, _container)',
-        '_tabNavigationChanged(tabNavigation, _overflow, _container)',
-      ];
     }
 
     /**
@@ -309,6 +279,18 @@ export const MenuBarMixin = (superClass) =>
       return this.shadowRoot.querySelector('vaadin-menu-bar-submenu');
     }
 
+    /** @private */
+    get _hasOverflow() {
+      return this._overflow && !this._overflow.hasAttribute('hidden');
+    }
+
+    /** @private */
+    set _hasOverflow(hasOverflow) {
+      if (this._overflow) {
+        this._overflow.toggleAttribute('hidden', !hasOverflow);
+      }
+    }
+
     /** @protected */
     ready() {
       super.ready();
@@ -342,16 +324,40 @@ export const MenuBarMixin = (superClass) =>
       const overlay = this._subMenu._overlayElement;
       overlay.addEventListener('keydown', this.__boundOnContextMenuKeydown);
 
-      const container = this.shadowRoot.querySelector('[part="container"]');
-      container.addEventListener('click', this.__onButtonClick.bind(this));
-      container.addEventListener('mouseover', (e) => this._onMouseOver(e));
+      this._container = this.shadowRoot.querySelector('[part="container"]');
+    }
 
-      // Delay setting container to avoid rendering buttons immediately,
-      // which would also trigger detecting overflow and force re-layout
-      // See https://github.com/vaadin/web-components/issues/7271
-      queueMicrotask(() => {
-        this._container = container;
-      });
+    /** @protected */
+    updated(props) {
+      super.updated(props);
+
+      if (props.has('items') || props.has('_theme') || props.has('disabled')) {
+        this.__renderButtons(this.items);
+      }
+
+      if (props.has('items') || props.has('_theme') || props.has('reverseCollapse')) {
+        this.__scheduleOverflow();
+      }
+
+      if (props.has('items')) {
+        this.__updateSubMenu();
+      }
+
+      if (props.has('_theme')) {
+        this._themeChanged(this._theme);
+      }
+
+      if (props.has('disabled')) {
+        this._overflow.toggleAttribute('disabled', this.disabled);
+      }
+
+      if (props.has('tabNavigation')) {
+        this._tabNavigationChanged(this.tabNavigation);
+      }
+
+      if (props.has('__effectiveI18n')) {
+        this.__i18nChanged(this.__effectiveI18n);
+      }
     }
 
     /**
@@ -380,84 +386,37 @@ export const MenuBarMixin = (superClass) =>
      * @override
      */
     _onResize() {
-      this.__detectOverflow();
+      this.__scheduleOverflow();
     }
 
-    /**
-     * A callback for the `_theme` property observer.
-     * It propagates the host theme to the buttons and the sub menu.
-     *
-     * @param {string | null} theme
-     * @private
-     */
-    _themeChanged(theme, overflow, container) {
-      if (overflow && container) {
-        this.__renderButtons(this.items);
-        this.__detectOverflow();
-
-        if (theme) {
-          overflow.setAttribute('theme', theme);
-          this._subMenu.setAttribute('theme', theme);
-        } else {
-          overflow.removeAttribute('theme');
-          this._subMenu.removeAttribute('theme');
-        }
-      }
-    }
-
-    /**
-     * A callback for the 'reverseCollapse' property observer.
-     *
-     * @param {boolean | null} _reverseCollapse
-     * @private
-     */
-    _reverseCollapseChanged(_reverseCollapse, overflow, container) {
-      if (overflow && container) {
-        this.__detectOverflow();
+    /** @private */
+    _themeChanged(theme) {
+      if (theme) {
+        this._overflow.setAttribute('theme', theme);
+        this._subMenu.setAttribute('theme', theme);
+      } else {
+        this._overflow.removeAttribute('theme');
+        this._subMenu.removeAttribute('theme');
       }
     }
 
     /** @private */
-    _tabNavigationChanged(tabNavigation, overflow, container) {
-      if (overflow && container) {
-        const target = this.querySelector('[tabindex="0"]');
-        this._buttons.forEach((btn) => {
-          if (target) {
-            this._setTabindex(btn, btn === target);
-          } else {
-            this._setTabindex(btn, false);
-          }
-          btn.setAttribute('role', tabNavigation ? 'button' : 'menuitem');
-        });
-      }
+    _tabNavigationChanged(tabNavigation) {
+      const target = this.querySelector('[tabindex="0"]');
+      this._buttons.forEach((btn) => {
+        if (target) {
+          this._setTabindex(btn, btn === target);
+        } else {
+          this._setTabindex(btn, false);
+        }
+        btn.setAttribute('role', tabNavigation ? 'button' : 'menuitem');
+      });
+
       this.setAttribute('role', tabNavigation ? 'group' : 'menubar');
     }
 
     /** @private */
-    __hasOverflowChanged(hasOverflow, overflow) {
-      if (overflow) {
-        overflow.toggleAttribute('hidden', !hasOverflow);
-      }
-    }
-
-    /** @private */
-    __updateButtons(items, disabled, overflow, container) {
-      if (!overflow || !container) {
-        return;
-      }
-
-      if (items !== this._oldItems) {
-        this._oldItems = items;
-        this.__renderButtons(items);
-        this.__detectOverflow();
-      }
-
-      if (disabled !== this._oldDisabled) {
-        this._oldDisabled = disabled;
-        this.__renderButtons(items);
-        overflow.toggleAttribute('disabled', disabled);
-      }
-
+    __updateSubMenu() {
       const subMenu = this._subMenu;
       if (subMenu && subMenu.opened) {
         const button = subMenu._overlayElement.positionTarget;
@@ -471,12 +430,12 @@ export const MenuBarMixin = (superClass) =>
     }
 
     /** @private */
-    __i18nChanged(effectiveI18n, overflow) {
-      if (overflow && effectiveI18n && effectiveI18n.moreOptions !== undefined) {
+    __i18nChanged(effectiveI18n) {
+      if (effectiveI18n && effectiveI18n.moreOptions !== undefined) {
         if (effectiveI18n.moreOptions) {
-          overflow.setAttribute('aria-label', effectiveI18n.moreOptions);
+          this._overflow.setAttribute('aria-label', effectiveI18n.moreOptions);
         } else {
-          overflow.removeAttribute('aria-label');
+          this._overflow.removeAttribute('aria-label');
         }
       }
     }
@@ -561,11 +520,14 @@ export const MenuBarMixin = (superClass) =>
     }
 
     /** @private */
-    __detectOverflow() {
-      if (!this._container) {
-        return;
-      }
+    __scheduleOverflow() {
+      this._overflowDebouncer = Debouncer.debounce(this._overflowDebouncer, microTask, () => {
+        this.__detectOverflow();
+      });
+    }
 
+    /** @private */
+    __detectOverflow() {
       const overflow = this._overflow;
       const buttons = this._buttons.filter((btn) => btn !== overflow);
       const oldOverflowCount = this.__getOverflowCount(overflow);

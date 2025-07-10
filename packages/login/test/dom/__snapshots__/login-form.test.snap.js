@@ -700,9 +700,9 @@ snapshots["vaadin-login-form shadow default"] =
     <strong part="error-message-title">
       Incorrect username or password
     </strong>
-    <p part="error-message-description">
+    <div part="error-message-description">
       Check that you have entered the correct username and password and try again.
-    </p>
+    </div>
   </div>
   <slot name="form">
   </slot>
@@ -715,8 +715,8 @@ snapshots["vaadin-login-form shadow default"] =
   <div part="footer">
     <slot name="footer">
     </slot>
-    <p>
-    </p>
+    <div>
+    </div>
   </div>
 </section>
 `;
@@ -735,9 +735,9 @@ snapshots["vaadin-login-form shadow error"] =
     <strong part="error-message-title">
       Incorrect username or password
     </strong>
-    <p part="error-message-description">
+    <div part="error-message-description">
       Check that you have entered the correct username and password and try again.
-    </p>
+    </div>
   </div>
   <slot name="form">
   </slot>
@@ -750,8 +750,8 @@ snapshots["vaadin-login-form shadow error"] =
   <div part="footer">
     <slot name="footer">
     </slot>
-    <p>
-    </p>
+    <div>
+    </div>
   </div>
 </section>
 `;
@@ -773,9 +773,9 @@ snapshots["vaadin-login-form shadow i18n"] =
     <strong part="error-message-title">
       Väärä käyttäjätunnus tai salasana
     </strong>
-    <p part="error-message-description">
+    <div part="error-message-description">
       Tarkista että käyttäjätunnus ja salasana ovat oikein ja yritä uudestaan.
-    </p>
+    </div>
   </div>
   <slot name="form">
   </slot>
@@ -788,9 +788,9 @@ snapshots["vaadin-login-form shadow i18n"] =
   <div part="footer">
     <slot name="footer">
     </slot>
-    <p>
+    <div>
       Jos tarvitset lisätietoja käyttäjälle.
-    </p>
+    </div>
   </div>
 </section>
 `;

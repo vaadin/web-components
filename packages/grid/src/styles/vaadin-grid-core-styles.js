@@ -21,6 +21,7 @@ export const gridStyles = css`
     flex: 1 1 auto;
     align-self: stretch;
     position: relative;
+    box-sizing: border-box;
   }
 
   :host([hidden]) {
@@ -75,7 +76,6 @@ export const gridStyles = css`
   #header,
   #footer {
     display: block;
-    position: -webkit-sticky;
     position: sticky;
     left: 0;
     overflow: visible;
@@ -104,7 +104,6 @@ export const gridStyles = css`
     flex-grow: 1;
     flex-shrink: 0;
     display: block;
-    position: -webkit-sticky;
     position: sticky;
     width: 100%;
     left: 0;

@@ -38,6 +38,11 @@ describe('basic', () => {
       expect(internal.inputElement).to.equal(comboBox.inputElement);
     });
 
+    it('should propagate owner property to combo-box', () => {
+      expect(internal.owner).to.equal(comboBox);
+      expect(internal.$.overlay.owner).to.equal(comboBox);
+    });
+
     it('should propagate opened property to input', () => {
       comboBox.opened = true;
       expect(internal.opened).to.be.true;

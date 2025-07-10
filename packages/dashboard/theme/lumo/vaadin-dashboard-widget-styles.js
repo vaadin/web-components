@@ -18,8 +18,8 @@ const dashboardWidgetAndSection = css`
     --_widget-border-color: var(--vaadin-dashboard-widget-border-color, var(--lumo-contrast-20pct));
     --_widget-shadow: var(--vaadin-dashboard-widget-shadow, 0 0 0 0 transparent);
     --_widget-editable-shadow: var(--lumo-box-shadow-s);
-    --_widget-selected-shadow: 0 2px 4px -1px var(--lumo-primary-color-10pct),
-      0 3px 12px -1px var(--lumo-primary-color-50pct);
+    --_widget-selected-shadow:
+      0 2px 4px -1px var(--lumo-primary-color-10pct), 0 3px 12px -1px var(--lumo-primary-color-50pct);
     --_drop-target-background-color: var(
       --vaadin-dashboard-drop-target-background-color,
       var(--lumo-primary-color-10pct)

@@ -1,0 +1,102 @@
+/**
+ * @license
+ * Copyright (c) 2017 - 2025 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+@media lumo_components_custom-field {
+  :host {
+    display: inline-flex;
+    --lumo-text-field-size: var(--lumo-size-m);
+    color: var(--lumo-body-text-color);
+    font-size: var(--lumo-font-size-m);
+    /* align with text-field height + vertical paddings */
+    line-height: calc(var(--lumo-text-field-size) + 2 * var(--lumo-space-xs));
+    font-family: var(--lumo-font-family);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-tap-highlight-color: transparent;
+    padding: 0;
+  }
+
+  :host::before {
+    content: '\2003';
+    width: 0;
+    /* Size and position this element on the same vertical position as the input-field element
+           to make vertical align for the host element work as expected */
+    margin-top: var(--lumo-space-xs);
+    height: var(--lumo-text-field-size);
+    box-sizing: border-box;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  :host([hidden]) {
+    display: none !important;
+  }
+
+  .vaadin-custom-field-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .inputs-wrapper {
+    flex: none;
+  }
+
+  /* align with text-field label */
+  :host([has-label]) [part='label'] {
+    padding-bottom: calc(0.5em - var(--lumo-space-xs));
+  }
+
+  :host(:not([has-label])) [part='label'],
+  :host(:not([has-label]))::before {
+    display: none;
+  }
+
+  /* align with text-field error message */
+  :host([has-error-message]) [part='error-message']::before {
+    height: calc(0.4em - var(--lumo-space-xs));
+  }
+
+  :host([focused]:not([readonly]):not([disabled])) [part='label'] {
+    color: var(--lumo-primary-text-color);
+  }
+
+  :host(:hover:not([readonly]):not([disabled]):not([focused])) [part='label'],
+  :host(:hover:not([readonly]):not([disabled]):not([focused])) [part='helper-text'] {
+    color: var(--lumo-body-text-color);
+  }
+
+  /* Touch device adjustment */
+  @media (pointer: coarse) {
+    :host(:hover:not([readonly]):not([disabled]):not([focused])) [part='label'] {
+      color: var(--lumo-secondary-text-color);
+    }
+  }
+
+  /* Disabled */
+  :host([disabled]) [part='label'] {
+    color: var(--lumo-disabled-text-color);
+    -webkit-text-fill-color: var(--lumo-disabled-text-color);
+  }
+
+  /* Small theme */
+  :host([theme~='small']) {
+    font-size: var(--lumo-font-size-s);
+    --lumo-text-field-size: var(--lumo-size-s);
+  }
+
+  :host([theme~='small'][has-label]) [part='label'] {
+    font-size: var(--lumo-font-size-xs);
+  }
+
+  :host([theme~='small'][has-label]) [part='error-message'] {
+    font-size: var(--lumo-font-size-xxs);
+  }
+
+  /* When custom-field is used with components without outer margin */
+  :host([theme~='whitespace'][has-label]) [part='label'] {
+    padding-bottom: 0.5em;
+  }
+}

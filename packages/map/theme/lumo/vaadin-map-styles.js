@@ -34,12 +34,12 @@ registerStyles(
       --_focus-ring-width: var(--vaadin-focus-ring-width, 2px);
     }
 
-    :host(:not([theme~='borderless'])) {
+    :host(:not([theme~='no-border'])) {
       border-radius: var(--lumo-border-radius-l);
       position: relative;
     }
 
-    :host(:not([theme~='borderless']))::before {
+    :host(:not([theme~='no-border']))::before {
       content: '';
       position: absolute;
       inset: 0;
@@ -105,13 +105,6 @@ registerStyles(
 
     .ol-control button:active {
       background: var(--lumo-base-color) linear-gradient(var(--lumo-contrast-5pct), var(--lumo-contrast-5pct));
-    }
-
-    @supports not selector(:focus-visible) {
-      .ol-control button:focus {
-        outline: none;
-        box-shadow: 0 0 0 var(--_focus-ring-width) var(--_focus-ring-color);
-      }
     }
 
     .ol-control button:focus-visible {

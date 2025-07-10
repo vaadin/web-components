@@ -27,6 +27,7 @@ class MultiSelectComboBoxContainer extends InputContainer {
           display: flex;
           width: 100%;
           min-width: 0;
+          gap: var(--_wrapper-gap);
         }
 
         :host([auto-expand-vertically]) #wrapper {

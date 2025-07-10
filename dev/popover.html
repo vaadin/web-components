@@ -1,29 +1,70 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Popover</title>
+    <link rel="stylesheet" href="/packages/vaadin-lumo-styles/lumo.css" />
     <script type="module" src="./common.js"></script>
 
     <script type="module">
       import '@vaadin/button';
       import '@vaadin/horizontal-layout';
       import '@vaadin/popover';
+      import '@vaadin/radio-group';
       import '@vaadin/text-field';
     </script>
   </head>
 
   <body>
-    <vaadin-button id="button">Discount</vaadin-button>
+    <style>
+      #wrapper {
+        width: 100%;
+        height: 350px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 1rem;
+      }
 
-    <vaadin-popover for="button" position="bottom-start"></vaadin-popover>
+      #target {
+        width: 150px;
+        height: 150px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border: solid 1px #e2e2e2;
+      }
+    </style>
+
+    <vaadin-radio-group id="positionGroup" label="Tooltip Position" theme="horizontal" value="bottom">
+      <vaadin-radio-button value="bottom-start" label="Bottom Start"></vaadin-radio-button>
+      <vaadin-radio-button value="bottom" label="Bottom"></vaadin-radio-button>
+      <vaadin-radio-button value="bottom-end" label="Bottom End"></vaadin-radio-button>
+      <vaadin-radio-button value="start-top" label="Start Top"></vaadin-radio-button>
+      <vaadin-radio-button value="start" label="Start"></vaadin-radio-button>
+      <vaadin-radio-button value="start-bottom" label="Start Bottom"></vaadin-radio-button>
+      <vaadin-radio-button value="top-start" label="Top Start"></vaadin-radio-button>
+      <vaadin-radio-button value="top" label="Top"></vaadin-radio-button>
+      <vaadin-radio-button value="top-end" label="Top End"></vaadin-radio-button>
+      <vaadin-radio-button value="end-top" label="End Top"></vaadin-radio-button>
+      <vaadin-radio-button value="end" label="End"></vaadin-radio-button>
+      <vaadin-radio-button value="end-bottom" label="End Bottom"></vaadin-radio-button>
+    </vaadin-radio-group>
+
+    <div id="wrapper">
+      <div id="target">Save</div>
+      <vaadin-popover for="target" theme="arrow"></vaadin-popover>
+    </div>
 
     <script type="module">
       const popover = document.querySelector('vaadin-popover');
+      const radioGroup = document.querySelector('#positionGroup');
 
-      // popover.trigger = ['hover', 'focus'];
+      radioGroup.addEventListener('change', (e) => {
+        popover.position = e.target.value;
+      });
 
       popover.renderer = (root) => {
         if (root.firstChild) {
@@ -31,8 +72,8 @@
         }
 
         const layout = document.createElement('vaadin-horizontal-layout');
-        layout.setAttribute('theme', 'spacing-s');
-        layout.style.alignItems = 'baseline';
+        layout.setAttribute('theme', 'spacing');
+        layout.style.alignItems = 'end';
 
         const field = document.createElement('vaadin-text-field');
         field.label = 'Discount code';

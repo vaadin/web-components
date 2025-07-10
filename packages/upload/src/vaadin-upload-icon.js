@@ -5,6 +5,7 @@
  */
 import { css, html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
+import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 /**
@@ -14,7 +15,7 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * @extends HTMLElement
  * @private
  */
-class UploadIcon extends ThemableMixin(LitElement) {
+class UploadIcon extends ThemableMixin(LumoInjectionMixin(LitElement)) {
   static get is() {
     return 'vaadin-upload-icon';
   }
@@ -29,6 +30,12 @@ class UploadIcon extends ThemableMixin(LitElement) {
         display: none !important;
       }
     `;
+  }
+
+  static get lumoInjector() {
+    return {
+      includeBaseStyles: true,
+    };
   }
 
   /** @protected */

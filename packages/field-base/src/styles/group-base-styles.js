@@ -7,28 +7,26 @@ import '@vaadin/component-base/src/style-props.js';
 import { css, unsafeCSS } from 'lit';
 
 export const group = (name = 'checkbox') => css`
-  @layer base {
-    :host {
-      width: fit-content;
-    }
+  :host {
+    width: fit-content;
+  }
 
-    .vaadin-group-field-container {
-      display: contents;
-    }
+  .vaadin-group-field-container {
+    display: contents;
+  }
 
-    :host,
-    [part='group-field'] {
-      display: flex;
-      flex-direction: column;
-      gap: var(--vaadin-${unsafeCSS(name)}-group-gap, var(--_vaadin-gap-container-block));
-    }
+  :host,
+  [part='group-field'] {
+    display: flex;
+    flex-direction: column;
+    gap: var(--vaadin-${unsafeCSS(name)}-group-gap, var(--vaadin-gap-container-block));
+  }
 
-    [part='group-field'] {
-      gap: 0.5lh 1.5em;
-    }
+  [part='group-field'] {
+    gap: 0.5lh 1.5em;
+  }
 
-    :host([theme~='horizontal']) [part='group-field'] {
-      flex-flow: row wrap;
-    }
+  :host([theme~='horizontal']) [part='group-field'] {
+    flex-flow: row wrap;
   }
 `;

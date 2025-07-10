@@ -7,6 +7,13 @@ import type { Constructor } from '@open-wc/dedupe-mixin';
 import type { OverlayFocusMixinClass } from './vaadin-overlay-focus-mixin.js';
 import type { OverlayStackMixinClass } from './vaadin-overlay-stack-mixin.js';
 
+export type OverlayBounds = {
+  top?: number | string;
+  left?: number | string;
+  width?: number | string;
+  height?: number | string;
+};
+
 export type OverlayRenderer = (root: HTMLElement, owner: HTMLElement, model?: object) => void;
 
 export declare function OverlayMixin<T extends Constructor<HTMLElement>>(
@@ -57,6 +64,11 @@ export declare class OverlayMixinClass {
   hidden: boolean;
 
   close(sourceEvent?: Event | null): void;
+
+  /**
+   * Updates the coordinates of the overlay.
+   */
+  setBounds(bounds: OverlayBounds, absolute?: boolean): void;
 
   /**
    * Requests an update for the content of the overlay.

@@ -7,113 +7,118 @@ import '@vaadin/component-base/src/style-props.js';
 import { css } from 'lit';
 
 export const field = css`
-  @layer base {
-    :host {
-      display: inline-flex;
-      outline: none;
-      cursor: default;
-      -webkit-tap-highlight-color: transparent;
-    }
+  :host {
+    display: inline-flex;
+    outline: none;
+    cursor: default;
+    -webkit-tap-highlight-color: transparent;
+  }
 
-    :host([hidden]) {
-      display: none !important;
-    }
+  :host([hidden]) {
+    display: none !important;
+  }
 
-    /* The label, helper text and the error message should neither grow nor shrink. */
-    [part='label'],
-    [part='helper-text'],
-    [part='error-message'] {
-      flex: none;
-    }
+  /* The label, helper text and the error message should neither grow nor shrink. */
+  [part='label'],
+  [part='helper-text'],
+  [part='error-message'] {
+    flex: none;
+  }
 
-    :host(:not([has-label])) [part='label'],
-    :host(:not([has-helper])) [part='helper-text'],
-    :host(:not([has-error-message])) [part='error-message'] {
-      display: none;
-    }
+  :host(:not([has-label])) [part='label'],
+  :host(:not([has-helper])) [part='helper-text'],
+  :host(:not([has-error-message])) [part='error-message'] {
+    display: none;
+  }
 
-    [part='label'] {
-      font-size: var(--vaadin-input-field-label-font-size, inherit);
-      line-height: var(--vaadin-input-field-label-line-height, inherit);
-      font-weight: var(--vaadin-input-field-label-font-weight, 500);
-      color: var(--vaadin-input-field-label-color, var(--_vaadin-color-strong));
-      order: var(--vaadin-input-field-helper-order);
-      word-break: break-word;
-    }
+  [part='label'] {
+    font-size: var(--vaadin-input-field-label-font-size, inherit);
+    line-height: var(--vaadin-input-field-label-line-height, inherit);
+    font-weight: var(--vaadin-input-field-label-font-weight, 500);
+    color: var(--vaadin-input-field-label-color, var(--vaadin-color));
+    order: var(--vaadin-input-field-helper-order);
+    word-break: break-word;
+  }
 
-    ::slotted(label) {
-      cursor: inherit;
-    }
+  ::slotted(label) {
+    cursor: inherit;
+  }
 
-    :host([disabled]) [part='label'],
-    :host([disabled]) ::slotted(label) {
-      opacity: 0.5;
-    }
+  :host([disabled]) [part='label'],
+  :host([disabled]) ::slotted(label) {
+    opacity: 0.5;
+  }
 
-    :host([disabled]) [part='label'] ::slotted(label) {
-      opacity: 1;
-    }
+  :host([disabled]) [part='label'] ::slotted(label) {
+    opacity: 1;
+  }
 
-    [part='required-indicator'] {
-      display: inline-block;
-      color: var(--vaadin-input-field-required-indicator-color, var(--_vaadin-color));
-    }
+  :host([required]) [part='label'] {
+    padding-inline-end: 1em;
+  }
 
-    [part='required-indicator']::after {
-      content: var(--vaadin-input-field-required-indicator, '*');
-    }
+  [part='required-indicator'] {
+    display: inline-block;
+    position: absolute;
+    width: 1em;
+    text-align: center;
+    color: var(--vaadin-input-field-required-indicator-color, var(--vaadin-color-subtle));
+  }
 
-    :host(:not([required])) [part='required-indicator'] {
-      display: none;
-    }
+  [part='required-indicator']::after {
+    content: var(--vaadin-input-field-required-indicator, '*');
+  }
 
-    [part='input-field'] {
-      flex: auto;
-    }
+  :host(:not([required])) [part='required-indicator'] {
+    display: none;
+  }
 
-    :host([readonly]) [part='input-field'] {
-      cursor: default;
-    }
+  [part='input-field'] {
+    flex: auto;
+  }
 
-    :host([disabled]) [part='input-field'] {
-      cursor: var(--vaadin-disabled-cursor);
-    }
+  :host([readonly]) [part='input-field'] {
+    cursor: default;
+  }
 
-    [part='helper-text'] {
-      font-size: var(--vaadin-input-field-helper-font-size, inherit);
-      line-height: var(--vaadin-input-field-helper-line-height, inherit);
-      font-weight: var(--vaadin-input-field-helper-font-weight, 400);
-      color: var(--vaadin-input-field-helper-color, var(--_vaadin-color));
-      order: var(--vaadin-input-field-helper-order);
-    }
+  :host([disabled]) [part='input-field'] {
+    cursor: var(--vaadin-disabled-cursor);
+  }
 
-    [part='error-message'] {
-      font-size: var(--vaadin-input-field-error-font-size, inherit);
-      line-height: var(--vaadin-input-field-error-line-height, inherit);
-      font-weight: var(--vaadin-input-field-error-font-weight, 400);
-      color: var(--vaadin-input-field-error-color, var(--_vaadin-color-strong));
-      display: flex;
-      gap: var(--_vaadin-gap-container-inline);
-    }
+  [part='helper-text'] {
+    font-size: var(--vaadin-input-field-helper-font-size, inherit);
+    line-height: var(--vaadin-input-field-helper-line-height, inherit);
+    font-weight: var(--vaadin-input-field-helper-font-weight, 400);
+    color: var(--vaadin-input-field-helper-color, var(--vaadin-color-subtle));
+    order: var(--vaadin-input-field-helper-order);
+  }
 
+  [part='error-message'] {
+    font-size: var(--vaadin-input-field-error-font-size, inherit);
+    line-height: var(--vaadin-input-field-error-line-height, inherit);
+    font-weight: var(--vaadin-input-field-error-font-weight, 400);
+    color: var(--vaadin-input-field-error-color, var(--vaadin-color));
+    display: flex;
+    gap: var(--vaadin-gap-container-inline);
+  }
+
+  [part='error-message']::before {
+    content: '';
+    display: inline-block;
+    flex: none;
+    width: var(--vaadin-icon-size, 1lh);
+    height: var(--vaadin-icon-size, 1lh);
+    mask-image: var(--_vaadin-icon-warn);
+    background: currentColor;
+  }
+
+  :host([theme~='helper-above-field']) {
+    --vaadin-input-field-helper-order: -1;
+  }
+
+  @media (forced-colors: active) {
     [part='error-message']::before {
-      content: '';
-      display: inline-block;
-      flex: none;
-      width: var(--vaadin-icon-size, 1lh);
-      height: var(--vaadin-icon-size, 1lh);
-      mask-image: var(--_vaadin-icon-warn);
-      background: currentColor;
-    }
-
-    :host([theme~='helper-above-field']) {
-      --vaadin-input-field-helper-order: -1;
-    }
-
-    @media (forced-colors: active) {
-      [part='error-message']::before {
-        background: CanvasText;
-      }
+      background: CanvasText;
     }
   }
 `;

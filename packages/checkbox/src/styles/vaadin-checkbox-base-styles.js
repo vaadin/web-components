@@ -9,26 +9,24 @@ import { checkable } from '@vaadin/field-base/src/styles/checkable-base-styles.j
 import { field } from '@vaadin/field-base/src/styles/field-base-styles.js';
 
 const checkbox = css`
-  @layer base {
-    [part='checkbox']::after {
-      inset: 0;
-      mask-image: var(--_vaadin-icon-checkmark);
-    }
+  [part='checkbox']::after {
+    inset: 0;
+    mask-image: var(--_vaadin-icon-checkmark);
+  }
 
-    :host([readonly]) {
-      --vaadin-checkbox-background: transparent;
-      --vaadin-checkbox-border-color: var(--_vaadin-border-color-strong);
-      --vaadin-checkbox-color: var(--_vaadin-color-strong);
-    }
+  :host([readonly]) {
+    --vaadin-checkbox-background: transparent;
+    --vaadin-checkbox-border-color: var(--vaadin-border-color-strong);
+    --vaadin-checkbox-color: var(--vaadin-color);
+  }
 
-    :host([readonly]) [part='checkbox'] {
-      border-style: dashed;
-    }
+  :host([readonly]) [part='checkbox'] {
+    border-style: dashed;
+  }
 
-    :host([indeterminate]) [part='checkbox']::after {
-      inset: calc(var(--_border-width) * -1);
-      mask-image: var(--_vaadin-icon-minus);
-    }
+  :host([indeterminate]) [part='checkbox']::after {
+    inset: calc(var(--_border-width) * -1);
+    mask-image: var(--_vaadin-icon-minus);
   }
 `;
 

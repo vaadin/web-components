@@ -1,33 +1,48 @@
+/**
+ * @license
+ * Copyright (c) 2000 - 2025 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+@import '../src/mixins/field-base.css';
+@import '../src/mixins/field-button.css';
+@import '../src/mixins/field-error-message.css';
+@import '../src/mixins/field-helper.css';
+@import '../src/mixins/field-label.css';
+@import '../src/mixins/field-required.css';
+@import '../src/mixins/menu-overlay-core.css';
+@import '../src/mixins/menu-overlay-ext.css';
+@import '../src/mixins/overlay.css';
+@import '../src/components/item.css';
+@import '../src/components/list-box.css';
+@import '../src/components/select-overlay.css';
+@import '../src/components/select-value-button.css';
+@import '../src/components/select.css';
 @import './input-container.css';
 
-@import '../src/mixins/base-layer-reset.css' vaadin-select;
-@import '../src/mixins/field-label.css' vaadin-select;
-@import '../src/mixins/field-required.css' vaadin-select;
-@import '../src/mixins/field-error-message.css' vaadin-select;
-@import '../src/mixins/field-button.css' vaadin-select;
-@import '../src/mixins/field-helper.css' vaadin-select;
-@import '../src/mixins/field-base.css' vaadin-select;
-@import '../src/components/select.css' vaadin-select;
+:is(:root, :host)::before {
+  --vaadin-select-lumo-inject: 1;
+  --vaadin-select-lumo-inject-modules:
+    lumo_mixins_field-label,
+    lumo_mixins_field-required,
+    lumo_mixins_field-error-message,
+    lumo_mixins_field-button,
+    lumo_mixins_field-helper,
+    lumo_mixins_field-base,
+    lumo_components_select;
 
-@import '../src/mixins/base-layer-reset.css' vaadin-select-item;
-@import '../src/components/item.css' vaadin-select-item;
+  --vaadin-select-item-lumo-inject: 1;
+  --vaadin-select-item-lumo-inject-modules: lumo_components_item;
 
-@import '../src/mixins/base-layer-reset.css' vaadin-select-overlay;
-@import '../src/mixins/overlay.css' vaadin-select-overlay;
-@import '../src/mixins/menu-overlay-core.css' vaadin-select-overlay;
-@import '../src/mixins/menu-overlay-ext.css' vaadin-select-overlay;
-@import '../src/components/select-overlay.css' vaadin-select-overlay;
+  --vaadin-select-overlay-lumo-inject: 1;
+  --vaadin-select-overlay-lumo-inject-modules:
+    lumo_mixins_overlay,
+    lumo_mixins_menu-overlay-core,
+    lumo_mixins_menu-overlay-ext,
+    lumo_components_select-overlay;
 
-@import '../src/mixins/base-layer-reset.css' vaadin-select-list-box;
-@import '../src/components/list-box.css' vaadin-select-list-box;
+  --vaadin-select-list-box-lumo-inject: 1;
+  --vaadin-select-list-box-lumo-inject-modules: lumo_components_list-box;
 
-@import '../src/mixins/base-layer-reset.css' vaadin-select-value-button;
-@import '../src/components/select-value-button.css' vaadin-select-value-button;
-
-html {
-  --vaadin-select-css-inject: 1;
-  --vaadin-select-item-css-inject: 1;
-  --vaadin-select-overlay-css-inject: 1;
-  --vaadin-select-list-box-css-inject: 1;
-  --vaadin-select-value-button-css-inject: 1;
+  --vaadin-select-value-button-lumo-inject: 1;
+  --vaadin-select-value-button-lumo-inject-modules: lumo_components_select-value-button;
 }

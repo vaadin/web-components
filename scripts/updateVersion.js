@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import { spawn } from 'cross-spawn';
-import replace from 'replace-in-file';
+import { replaceInFile } from 'replace-in-file';
 import lerna from '../lerna.json' with { type: 'json' };
 
 const { version: oldVersion } = lerna;
@@ -45,7 +45,7 @@ if (!version) {
 async function main() {
   const fromRegex = new RegExp(`'${oldVersion.split('.').join('\\.')}'`, 'gu');
   const newVersion = `'${version.replace(/^v/u, '')}'`;
-  const results = await replace({
+  const results = await replaceInFile({
     files: ['packages/component-base/src/define.js'],
     from: fromRegex,
     to: newVersion,

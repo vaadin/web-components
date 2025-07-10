@@ -1,38 +1,34 @@
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
-// TODO: subset of Lumo needed for unit tests to pass.
-// These should be eventually covered by base styles.
+// TODO: subset of base styles needed for unit tests to pass.
+// Should be eventually removed after switching to use base styles.
 registerStyles(
   'vaadin-multi-select-combo-box',
   css`
+    :host {
+      --_chip-min-width: 48px;
+      --_wrapper-gap: 2px;
+    }
+
+    #chips {
+      gap: 2px;
+    }
+
     ::slotted([slot='chip']),
     ::slotted([slot='overflow']) {
-      padding: 0.3125em 0.5625em;
-    }
-
-    ::slotted([slot='chip']:not(:last-of-type)),
-    ::slotted([slot='overflow']:not(:last-of-type)) {
-      margin-inline-end: 0.25rem;
-    }
-
-    ::slotted([slot='chip']:not([readonly]):not([disabled])) {
-      padding-inline-end: 0;
-    }
-
-    ::slotted(input) {
-      padding: 0 0.25em;
+      padding: 0 0.3em;
     }
 
     [part$='button'] {
       flex: none;
-      font-size: 1.5em;
-      width: 1em;
-      height: 1em;
+      line-height: 1.25;
     }
 
     [part$='button']::before {
       display: block;
-      height: 100%;
+      content: '';
+      height: 1lh;
+      width: 1lh;
     }
   `,
 );
@@ -41,7 +37,8 @@ registerStyles(
   'vaadin-multi-select-combo-box-container',
   css`
     :host {
-      padding: 0 6px;
+      padding: 6px 8px;
+      gap: 0.5em;
     }
   `,
 );
@@ -51,7 +48,20 @@ registerStyles(
   css`
     :host {
       font-family: -apple-system, 'system-ui', Roboto, 'Segoe UI', Helvetica, Arial, sans-serif;
-      font-size: 0.75rem;
+      font-size: 0.875rem;
+      border: solid 1px;
+      gap: 0.3em;
+    }
+
+    :host([slot='overflow']) {
+      min-width: 1.5em;
+    }
+
+    :host(:not([slot='overflow'])) {
+      min-width: min(
+        max-content,
+        var(--vaadin-multi-select-combo-box-chip-min-width, var(--vaadin-chip-min-width, 48px))
+      );
     }
 
     [part='label'] {
@@ -60,9 +70,15 @@ registerStyles(
 
     [part='remove-button'] {
       display: flex;
-      width: 1.25em;
-      height: 1.25em;
-      font-size: 1.5em;
+      flex: 0 0 auto;
+      line-height: 1.25;
+    }
+
+    [part='remove-button']::before {
+      content: '';
+      display: block;
+      width: 1lh;
+      height: 1lh;
     }
   `,
 );

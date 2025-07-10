@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-themable-mixin",
-  "version": "25.0.0-alpha3",
+  "version": "25.0.0-alpha7",
   "publishConfig": {
     "access": "public"
   },
@@ -22,7 +22,7 @@
   "files": [
     "src",
     "*.d.ts",
-    "css-injection-mixin.js",
+    "lumo-injection-mixin.js",
     "register-styles.js",
     "vaadin-*.js"
   ],
@@ -33,13 +33,12 @@
   ],
   "dependencies": {
     "@open-wc/dedupe-mixin": "^1.3.0",
-    "lit": "^3.0.0",
-    "style-observer": "^0.0.8"
+    "lit": "^3.0.0"
   },
   "devDependencies": {
     "@polymer/polymer": "^3.0.0",
-    "@vaadin/chai-plugins": "25.0.0-alpha3",
-    "@vaadin/test-runner-commands": "25.0.0-alpha3",
+    "@vaadin/chai-plugins": "25.0.0-alpha7",
+    "@vaadin/test-runner-commands": "25.0.0-alpha7",
     "@vaadin/testing-helpers": "^2.0.0",
     "sinon": "^18.0.0"
   }

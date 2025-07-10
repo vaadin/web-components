@@ -1,0 +1,18 @@
+/**
+ * @license
+ * Copyright (c) 2017 - 2025 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+@media lumo_components_checkbox-group {
+  :host(:hover:not([readonly]):not([disabled]):not([focused])) [part='label'],
+  :host(:hover:not([readonly]):not([disabled]):not([focused])) [part='helper-text'] {
+    color: var(--lumo-body-text-color);
+  }
+
+  /* Touch device adjustment */
+  @media (pointer: coarse) {
+    :host(:hover:not([readonly]):not([disabled]):not([focused])) [part='label'] {
+      color: var(--lumo-secondary-text-color);
+    }
+  }
+}

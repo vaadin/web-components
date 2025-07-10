@@ -1,0 +1,57 @@
+/**
+ * @license
+ * Copyright (c) 2000 - 2025 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+@media lumo_components_crud-dialog-overlay {
+  [part='overlay'] {
+    max-width: 54em;
+    min-width: 20em;
+    display: flex;
+  }
+
+  .resizer-container {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+  }
+
+  [part='footer'] {
+    justify-content: flex-start;
+    flex-direction: row-reverse;
+  }
+
+  /* Make buttons clickable */
+  [part='footer'] ::slotted(:not([disabled])) {
+    pointer-events: all;
+  }
+
+  :host([fullscreen]) {
+    inset: 0;
+    padding: 0;
+  }
+
+  :host([fullscreen]) [part='overlay'] {
+    height: 100vh;
+    width: 100vw;
+    border-radius: 0 !important;
+  }
+
+  :host([fullscreen]) [part='content'] {
+    flex: 1;
+  }
+
+  [part='header'] ::slotted(h3) {
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+    margin-inline-start: var(--lumo-space-s);
+  }
+
+  :host(:not([dir='rtl'])) ::slotted([slot='delete-button']) {
+    margin-right: auto;
+  }
+
+  :host([dir='rtl']) ::slotted([slot='delete-button']) {
+    margin-left: auto;
+  }
+}

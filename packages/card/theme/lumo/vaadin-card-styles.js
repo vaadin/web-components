@@ -57,6 +57,12 @@ const card = css`
     border-radius: var(--lumo-border-radius-m);
   }
 
+  :host([theme~='elevated'][theme~='cover-media']) ::slotted([slot='media']:is(img, video, svg, vaadin-icon)) {
+    margin-top: calc((var(--_padding) + var(--vaadin-card-border-width)) * -1);
+    margin-inline: calc((var(--_padding) + var(--vaadin-card-border-width)) * -1);
+    width: calc(100% + (var(--_padding) + var(--vaadin-card-border-width)) * 2);
+  }
+
   ::slotted([slot='title']) {
     font-size: var(--lumo-font-size-l);
     line-height: var(--lumo-line-height-xs);

@@ -26,3 +26,22 @@ registerStyles(
     }
   `,
 );
+
+/* Stop loader animation */
+registerStyles(
+  'vaadin-multi-select-combo-box-overlay',
+  css`
+    :host([loading]) [part='loader'] {
+      animation: none;
+      opacity: 1;
+    }
+
+    :host([opening]),
+    :host([closing]),
+    :host([opening]) [part='overlay'],
+    :host([closing]) [part='overlay'] {
+      transition: none !important;
+      animation: none !important;
+    }
+  `,
+);

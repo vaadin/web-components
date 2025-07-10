@@ -1,0 +1,70 @@
+/**
+ * @license
+ * Copyright (c) 2000 - 2025 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+@media lumo_components_grid-sorter {
+  :host {
+    display: inline-flex;
+    max-width: 100%;
+    justify-content: flex-start;
+    align-items: baseline;
+    -webkit-user-select: none;
+    user-select: none;
+    cursor: var(--lumo-clickable-cursor);
+  }
+
+  [part='content'] {
+    flex: 1 1 auto;
+    display: inline-block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  [part='indicators'] {
+    position: relative;
+    align-self: center;
+    flex: none;
+    margin-left: var(--lumo-space-s);
+  }
+
+  [part='order'] {
+    display: inline;
+    vertical-align: super;
+    font-size: var(--lumo-font-size-xxs);
+    line-height: 1;
+  }
+
+  [part='indicators']::before {
+    font-family: 'vaadin-grid-sorter-icons';
+    display: inline-block;
+    transform: scale(0.8);
+  }
+
+  :host(:not([direction])) [part='indicators']::before {
+    content: '\e901';
+  }
+
+  :host([direction='asc']) [part='indicators']::before {
+    content: '\e900';
+  }
+
+  :host([direction='desc']) [part='indicators']::before {
+    content: '\e902';
+  }
+
+  :host(:not([direction]):not(:hover)) [part='indicators'] {
+    color: var(--lumo-tertiary-text-color);
+  }
+
+  :host([direction]) {
+    color: var(--vaadin-selection-color-text, var(--lumo-primary-text-color));
+  }
+
+  /* RTL specific styles */
+
+  :host([dir='rtl']) [part='indicators'] {
+    margin-right: var(--lumo-space-s);
+    margin-left: 0;
+  }
+}

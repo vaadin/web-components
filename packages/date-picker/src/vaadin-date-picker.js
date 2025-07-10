@@ -16,10 +16,10 @@ import { InputControlMixin } from '@vaadin/field-base/src/input-control-mixin.js
 import { InputController } from '@vaadin/field-base/src/input-controller.js';
 import { LabelledInputController } from '@vaadin/field-base/src/labelled-input-controller.js';
 import { inputFieldShared } from '@vaadin/field-base/src/styles/input-field-shared-styles.js';
-import { CSSInjectionMixin } from '@vaadin/vaadin-themable-mixin/css-injection-mixin.js';
+import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { datePickerStyles } from './styles/vaadin-date-picker-core-styles.js';
 import { DatePickerMixin } from './vaadin-date-picker-mixin.js';
-import { datePickerStyles } from './vaadin-date-picker-styles.js';
 
 /**
  * `<vaadin-date-picker>` is an input field that allows to enter a date by typing or by selecting from a calendar overlay.
@@ -74,12 +74,8 @@ import { datePickerStyles } from './vaadin-date-picker-styles.js';
  *
  * Part name             | Description
  * ----------------------|--------------------
- * `overlay-header`      | Fullscreen mode header
- * `label`               | Fullscreen mode value/label
- * `clear-button`        | Fullscreen mode clear button
- * `toggle-button`       | Fullscreen mode toggle button
  * `years-toggle-button` | Fullscreen mode years scroller toggle
- * `toolbar`             | Footer bar with slotted buttons
+ * `toolbar`             | Toolbar with slotted buttons
  *
  * The following state attributes are available on the `<vaadin-date-picker-overlay-content>` element:
  *
@@ -149,7 +145,7 @@ import { datePickerStyles } from './vaadin-date-picker-styles.js';
  * @mixes DatePickerMixin
  */
 class DatePicker extends DatePickerMixin(
-  InputControlMixin(CSSInjectionMixin(ThemableMixin(ElementMixin(PolylitMixin(LitElement))))),
+  InputControlMixin(LumoInjectionMixin(ThemableMixin(ElementMixin(PolylitMixin(LitElement))))),
 ) {
   static get is() {
     return 'vaadin-date-picker';
@@ -211,7 +207,9 @@ class DatePicker extends DatePickerMixin(
 
       <vaadin-date-picker-overlay
         id="overlay"
+        .owner="${this}"
         ?fullscreen="${this._fullscreen}"
+        ?week-numbers="${this.showWeekNumbers}"
         theme="${ifDefined(this._theme)}"
         .opened="${this.opened}"
         @opened-changed="${this._onOpenedChanged}"

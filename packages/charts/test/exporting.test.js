@@ -1,7 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextRender, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import '../theme/vaadin-chart-base-theme.js';
 import './exporting-styles.js';
 import '../src/vaadin-chart.js';
 import HttpUtilities from 'highcharts/es-modules/Core/HttpUtilities.js';

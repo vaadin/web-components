@@ -8,7 +8,7 @@ import { ActiveMixin } from '@vaadin/a11y-base/src/active-mixin.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
-import { CSSInjectionMixin } from '@vaadin/vaadin-themable-mixin/css-injection-mixin.js';
+import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { accordionHeading } from './styles/vaadin-accordion-heading-core-styles.js';
 
@@ -51,7 +51,7 @@ import { accordionHeading } from './styles/vaadin-accordion-heading-core-styles.
  * @mixes DirMixin
  * @mixes ThemableMixin
  */
-class AccordionHeading extends ActiveMixin(DirMixin(CSSInjectionMixin(ThemableMixin(PolylitMixin(LitElement))))) {
+class AccordionHeading extends ActiveMixin(DirMixin(LumoInjectionMixin(ThemableMixin(PolylitMixin(LitElement))))) {
   static get is() {
     return 'vaadin-accordion-heading';
   }

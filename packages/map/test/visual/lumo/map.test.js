@@ -1,7 +1,9 @@
 import { sendKeys } from '@vaadin/test-runner-commands';
 import { fixtureSync } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
-import '../../../theme/lumo/vaadin-map.js';
+import '@vaadin/vaadin-lumo-styles/props.css';
+import '@vaadin/vaadin-lumo-styles/components/map.css';
+import '../../../vaadin-map.js';
 import FullScreen from 'ol/control/FullScreen';
 import OverviewMap from 'ol/control/OverviewMap';
 import Rotate from 'ol/control/Rotate';
@@ -45,9 +47,9 @@ describe('map', () => {
   });
 
   describe('theme', () => {
-    it('borderless', async () => {
-      element.setAttribute('theme', 'borderless');
-      await visualDiff(div, 'theme-borderless');
+    it('no-border', async () => {
+      element.setAttribute('theme', 'no-border');
+      await visualDiff(div, 'theme-no-border');
     });
   });
 

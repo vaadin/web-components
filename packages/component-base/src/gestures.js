@@ -58,7 +58,6 @@ function isMouseEvent(name) {
   return MOUSE_EVENTS.indexOf(name) > -1;
 }
 
-/* eslint no-empty: ["error", { "allowEmptyCatch": true }] */
 // check for passive event listeners
 let supportsPassive = false;
 (function () {

@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/custom-field",
-  "version": "25.0.0-alpha3",
+  "version": "25.0.0-alpha7",
   "publishConfig": {
     "access": "public"
   },
@@ -21,6 +21,8 @@
   "type": "module",
   "files": [
     "src",
+    "!src/styles/*-base-styles.d.ts",
+    "!src/styles/*-base-styles.js",
     "theme",
     "vaadin-*.d.ts",
     "vaadin-*.js",
@@ -35,27 +37,27 @@
   ],
   "dependencies": {
     "@open-wc/dedupe-mixin": "^1.3.0",
-    "@vaadin/a11y-base": "25.0.0-alpha3",
-    "@vaadin/component-base": "25.0.0-alpha3",
-    "@vaadin/field-base": "25.0.0-alpha3",
-    "@vaadin/vaadin-lumo-styles": "25.0.0-alpha3",
-    "@vaadin/vaadin-themable-mixin": "25.0.0-alpha3",
+    "@vaadin/a11y-base": "25.0.0-alpha7",
+    "@vaadin/component-base": "25.0.0-alpha7",
+    "@vaadin/field-base": "25.0.0-alpha7",
+    "@vaadin/vaadin-lumo-styles": "25.0.0-alpha7",
+    "@vaadin/vaadin-themable-mixin": "25.0.0-alpha7",
     "lit": "^3.0.0"
   },
   "devDependencies": {
-    "@vaadin/chai-plugins": "25.0.0-alpha3",
-    "@vaadin/combo-box": "25.0.0-alpha3",
-    "@vaadin/date-picker": "25.0.0-alpha3",
-    "@vaadin/email-field": "25.0.0-alpha3",
-    "@vaadin/form-layout": "25.0.0-alpha3",
-    "@vaadin/number-field": "25.0.0-alpha3",
-    "@vaadin/password-field": "25.0.0-alpha3",
-    "@vaadin/select": "25.0.0-alpha3",
-    "@vaadin/test-runner-commands": "25.0.0-alpha3",
+    "@vaadin/chai-plugins": "25.0.0-alpha7",
+    "@vaadin/combo-box": "25.0.0-alpha7",
+    "@vaadin/date-picker": "25.0.0-alpha7",
+    "@vaadin/email-field": "25.0.0-alpha7",
+    "@vaadin/form-layout": "25.0.0-alpha7",
+    "@vaadin/number-field": "25.0.0-alpha7",
+    "@vaadin/password-field": "25.0.0-alpha7",
+    "@vaadin/select": "25.0.0-alpha7",
+    "@vaadin/test-runner-commands": "25.0.0-alpha7",
     "@vaadin/testing-helpers": "^2.0.0",
-    "@vaadin/text-area": "25.0.0-alpha3",
-    "@vaadin/text-field": "25.0.0-alpha3",
-    "@vaadin/time-picker": "25.0.0-alpha3",
+    "@vaadin/text-area": "25.0.0-alpha7",
+    "@vaadin/text-field": "25.0.0-alpha7",
+    "@vaadin/time-picker": "25.0.0-alpha7",
     "sinon": "^18.0.0"
   },
   "web-types": [

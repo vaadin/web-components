@@ -9,6 +9,7 @@ import { ifDefined } from 'lit/directives/if-defined.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
+import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { gridStyles } from './styles/vaadin-grid-core-styles.js';
 import { GridMixin } from './vaadin-grid-mixin.js';
@@ -102,7 +103,7 @@ import { GridMixin } from './vaadin-grid-mixin.js';
  * - [`<vaadin-grid-tree-toggle>`](#/elements/vaadin-grid-tree-toggle)
  *
  * __Note that the helper elements must be explicitly imported.__
- * If you want to import everything at once you can use the `all-imports.html` bundle.
+ * If you want to import everything at once you can use the `all-imports.js` entrypoint.
  *
  * ### Lazy Loading with Function Data Provider
  *
@@ -261,7 +262,7 @@ import { GridMixin } from './vaadin-grid-mixin.js';
  * @mixes GridMixin
  * @mixes ThemableMixin
  */
-class Grid extends GridMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElement)))) {
+class Grid extends GridMixin(ElementMixin(ThemableMixin(LumoInjectionMixin(PolylitMixin(LitElement))))) {
   static get is() {
     return 'vaadin-grid';
   }

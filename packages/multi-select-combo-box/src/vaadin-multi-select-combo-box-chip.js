@@ -6,9 +6,9 @@
 import { html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
-import { CSSInjectionMixin } from '@vaadin/vaadin-themable-mixin/css-injection-mixin.js';
+import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { multiSelectComboBoxChip } from './vaadin-multi-select-combo-box-styles.js';
+import { multiSelectComboBoxChipStyles } from './styles/vaadin-multi-select-combo-box-chip-core-styles.js';
 
 /**
  * An element used by `<vaadin-multi-select-combo-box>` to display selected items.
@@ -28,13 +28,13 @@ import { multiSelectComboBoxChip } from './vaadin-multi-select-combo-box-styles.
  * @extends HTMLElement
  * @private
  */
-class MultiSelectComboBoxChip extends CSSInjectionMixin(ThemableMixin(PolylitMixin(LitElement))) {
+class MultiSelectComboBoxChip extends LumoInjectionMixin(ThemableMixin(PolylitMixin(LitElement))) {
   static get is() {
     return 'vaadin-multi-select-combo-box-chip';
   }
 
   static get styles() {
-    return multiSelectComboBoxChip;
+    return multiSelectComboBoxChipStyles;
   }
 
   static get properties() {

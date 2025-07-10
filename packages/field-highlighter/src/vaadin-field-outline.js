@@ -7,10 +7,9 @@ import { html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
-import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { fieldOutlineStyles } from './vaadin-field-highlighter-styles.js';
-
-registerStyles('vaadin-field-outline', fieldOutlineStyles, { moduleId: 'vaadin-field-outline-styles' });
+import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
+import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { fieldOutlineStyles } from './styles/vaadin-field-outline-core-styles.js';
 
 /**
  * An element used internally by `<vaadin-field-highlighter>`. Not intended to be used separately.
@@ -20,9 +19,13 @@ registerStyles('vaadin-field-outline', fieldOutlineStyles, { moduleId: 'vaadin-f
  * @mixes ThemableMixin
  * @private
  */
-export class FieldOutline extends ThemableMixin(DirMixin(PolylitMixin(LitElement))) {
+export class FieldOutline extends ThemableMixin(DirMixin(LumoInjectionMixin(PolylitMixin(LitElement)))) {
   static get is() {
     return 'vaadin-field-outline';
+  }
+
+  static get styles() {
+    return fieldOutlineStyles;
   }
 
   static get properties() {

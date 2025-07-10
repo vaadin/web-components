@@ -5,25 +5,21 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Card</title>
+    <link rel="stylesheet" href="/packages/vaadin-lumo-styles/lumo.css" />
     <script type="module" src="./common.js"></script>
 
     <script type="module">
       import '@vaadin/card';
-      import { badge } from '@vaadin/vaadin-lumo-styles/badge.js';
       import '@vaadin/avatar';
       import '@vaadin/button';
       import '@vaadin/checkbox';
       import '@vaadin/checkbox-group';
       import '@vaadin/icon';
       import '@vaadin/icons';
-      import '@vaadin/vaadin-lumo-styles/icons.js';
       import '@vaadin/select';
       import '@vaadin/scroller';
-      import { utility } from '@vaadin/vaadin-lumo-styles/utility.js';
-      import { addGlobalThemeStyles } from '@vaadin/vaadin-themable-mixin/register-styles.js';
-
-      addGlobalThemeStyles('utility', utility);
-      addGlobalThemeStyles('badge', badge);
+      import '@vaadin/tooltip';
+      import '@vaadin/vaadin-lumo-styles/icons.js';
 
       const playground = document.querySelector('.playground');
       const codeExample = document.querySelector('.code-example');
@@ -114,7 +110,8 @@
             .replaceAll(/src=".+?"/g, 'src="..."')
             .replace(/Lapland is the[\s\S]+?.</, 'Lapland is the...<')
             .replace(/ fill="none"[\s\S]+?<\/svg>/, '>...</svg>')
-            .replace(/ overflow=".*?"/, ''),
+            .replace(/ overflow=".*?"/, '')
+            .replace(/ role="region"/, ''),
         ).replace('\n  </vaadin-avatar>', '</vaadin-avatar>');
       }
 
@@ -140,11 +137,15 @@
     </script>
 
     <style>
-      html {
-        background-image: linear-gradient(var(--lumo-shade-5pct), var(--lumo-shade-5pct));
+      html:has([theme~='elevated']) {
+        background-image: linear-gradient(rgba(0, 0, 0, 0.04), rgba(0, 0, 0, 0.04));
       }
 
-      body {
+      [theme~='dark'] {
+        color-scheme: dark;
+      }
+
+      :where(body) {
         margin: var(--lumo-space-l);
       }
 
@@ -178,9 +179,6 @@
       }
 
       .options {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0 2rem;
         margin-bottom: 3rem;
       }
 
@@ -190,10 +188,10 @@
         font-size: 13px;
         line-height: 1.4;
         padding: 1rem;
-        border: 1px solid var(--lumo-contrast-10pct);
-        background-color: var(--lumo-shade);
-        color: var(--lumo-tint-90pct);
-        border-radius: var(--lumo-border-radius-l);
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        background-color: rgba(0, 0, 0, 0.8);
+        color: #fff;
+        border-radius: 0.5em;
         width: fit-content;
       }
 
@@ -207,7 +205,7 @@
   </head>
 
   <body>
-    <div class="options">
+    <section class="section options">
       <vaadin-select label="Media" id="media"></vaadin-select>
       <template id="media-options">
         <img
@@ -334,7 +332,7 @@
         <vaadin-button slot="footer">Book Vacation</vaadin-button>
       </template>
 
-      <vaadin-checkbox-group class="slot-options" label="Header & Footer">
+      <vaadin-checkbox-group class="slot-options" theme="horizontal" label="Header & Footer">
         <vaadin-checkbox label="Header" value="header"></vaadin-checkbox>
         <vaadin-checkbox label="Header Prefix" value="header-prefix"></vaadin-checkbox>
         <vaadin-checkbox label="Header Suffix" value="header-suffix"></vaadin-checkbox>
@@ -343,24 +341,27 @@
         <vaadin-checkbox label="Footer" value="footer"></vaadin-checkbox>
       </vaadin-checkbox-group>
 
-      <vaadin-checkbox-group class="theme-variant" label="Theme Variant">
+      <vaadin-checkbox-group class="theme-variant" theme="horizontal" label="Theme Variant">
         <vaadin-checkbox label="Outlined" value="outlined"></vaadin-checkbox>
-        <vaadin-checkbox label="Elevated" value="elevated"></vaadin-checkbox>
+        <vaadin-checkbox label="Elevated" value="elevated">
+          <vaadin-tooltip slot="tooltip" text="Also sets the background color of the page to make the elevated style more apparent"></vaadin-tooltip>
+          <label slot="label">Elevated <vaadin-icon icon="lumo:error" style="scale: -1;"></vaadin-icon></label>
+        </vaadin-checkbox>
         <vaadin-checkbox label="Dark" value="dark"></vaadin-checkbox>
         <vaadin-checkbox label="Horizontal" value="horizontal"></vaadin-checkbox>
         <vaadin-checkbox label="Stretch Media" value="stretch-media"></vaadin-checkbox>
         <vaadin-checkbox label="Cover Media" value="cover-media"></vaadin-checkbox>
       </vaadin-checkbox-group>
 
-      <vaadin-checkbox-group class="playground-resize" label="Resize">
+      <vaadin-checkbox-group class="playground-resize" theme="horizontal" label="Resize">
         <vaadin-checkbox label="Width" value="width"></vaadin-checkbox>
         <vaadin-checkbox label="Height" value="height"></vaadin-checkbox>
       </vaadin-checkbox-group>
-    </div>
+    </section>
 
-    <div class="output">
+    <section class="section output">
       <vaadin-card class="playground"></vaadin-card>
       <div class="code-example"></div>
-    </div>
+    </section>
   </body>
 </html>

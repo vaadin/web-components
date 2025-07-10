@@ -15,10 +15,10 @@ import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { inputFieldShared } from '@vaadin/field-base/src/styles/input-field-shared-styles.js';
-import { CSSInjectionMixin } from '@vaadin/vaadin-themable-mixin/css-injection-mixin.js';
+import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { selectStyles } from './styles/vaadin-select-core-styles.js';
 import { SelectBaseMixin } from './vaadin-select-base-mixin.js';
-import { selectStyles } from './vaadin-select-core-styles.js';
 
 /**
  * `<vaadin-select>` is a Web Component for selecting values from a list of items.
@@ -81,9 +81,8 @@ import { selectStyles } from './vaadin-select-core-styles.js';
  * The following custom properties are available for styling:
  *
  * Custom property                    | Description                  | Target element          | Default
- * -----------------------------------|------------------------------|----------------------------------
+ * -----------------------------------|------------------------------|-------------------------|--------
  * `--vaadin-field-default-width`     | Default width of the field   | :host                   | `12em`
- * `--vaadin-select-text-field-width` | Effective width of the field | `vaadin-select-overlay` |
  * `--vaadin-select-overlay-width`    | Width of the overlay         | `vaadin-select-overlay` |
  *
  * `<vaadin-select>` provides mostly the same set of shadow DOM parts and state attributes as `<vaadin-text-field>`.
@@ -132,7 +131,7 @@ import { selectStyles } from './vaadin-select-core-styles.js';
  * @mixes SelectBaseMixin
  * @mixes ThemableMixin
  */
-class Select extends SelectBaseMixin(ElementMixin(ThemableMixin(CSSInjectionMixin(PolylitMixin(LitElement))))) {
+class Select extends SelectBaseMixin(ElementMixin(ThemableMixin(LumoInjectionMixin(PolylitMixin(LitElement))))) {
   static get is() {
     return 'vaadin-select';
   }

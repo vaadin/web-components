@@ -1,0 +1,15 @@
+/**
+ * @license
+ * Copyright (c) 2017 - 2025 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+@import '../src/mixins/overlay.css';
+@import '../src/components/login-overlay-wrapper.css';
+@import './login-form.css';
+
+:is(:root, :host)::before {
+  --vaadin-login-overlay-wrapper-lumo-inject: 1;
+  --vaadin-login-overlay-wrapper-lumo-inject-modules:
+    lumo_mixins_overlay,
+    lumo_components_login-overlay-wrapper;
+}

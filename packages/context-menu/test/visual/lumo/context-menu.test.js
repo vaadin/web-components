@@ -1,9 +1,13 @@
 import { fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
-import '@vaadin/item/theme/lumo/vaadin-item.js';
-import '@vaadin/list-box/theme/lumo/vaadin-list-box.js';
+import '@vaadin/vaadin-lumo-styles/props.css';
+import '@vaadin/vaadin-lumo-styles/components/item.css';
+import '@vaadin/vaadin-lumo-styles/components/list-box.css';
+import '@vaadin/vaadin-lumo-styles/components/context-menu.css';
+import '@vaadin/list-box';
+import '@vaadin/item';
 import '../../not-animated-styles.js';
-import '../../../theme/lumo/vaadin-context-menu.js';
+import '../../../vaadin-context-menu.js';
 import { openSubMenus } from '../../helpers.js';
 
 describe('context-menu', () => {

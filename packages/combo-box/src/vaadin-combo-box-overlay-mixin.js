@@ -26,12 +26,15 @@ export const ComboBoxOverlayMixin = (superClass) =>
     connectedCallback() {
       super.connectedCallback();
 
-      const comboBox = this._comboBox;
-
-      const hostDir = comboBox && comboBox.getAttribute('dir');
+      const hostDir = this._getHostDir();
       if (hostDir) {
         this.setAttribute('dir', hostDir);
       }
+    }
+
+    /** @protected */
+    _getHostDir() {
+      return this.owner && this.owner.getAttribute('dir');
     }
 
     /**
@@ -66,7 +69,7 @@ export const ComboBoxOverlayMixin = (superClass) =>
       const propPrefix = this.localName;
       this.style.setProperty(`--_${propPrefix}-default-width`, `${this.positionTarget.offsetWidth}px`);
 
-      const customWidth = getComputedStyle(this._comboBox).getPropertyValue(`--${propPrefix}-width`);
+      const customWidth = getComputedStyle(this.owner).getPropertyValue(`--${propPrefix}-width`);
 
       if (customWidth === '') {
         this.style.removeProperty(`--${propPrefix}-width`);

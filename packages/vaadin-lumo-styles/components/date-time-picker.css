@@ -1,0 +1,28 @@
+/**
+ * @license
+ * Copyright (c) 2017 - 2025 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+@import '../src/mixins/field-base.css';
+@import '../src/mixins/field-button.css';
+@import '../src/mixins/field-error-message.css';
+@import '../src/mixins/field-helper.css';
+@import '../src/mixins/field-label.css';
+@import '../src/mixins/field-required.css';
+@import '../src/components/custom-field.css';
+@import '../src/components/date-time-picker.css';
+@import './date-picker.css';
+@import './time-picker.css';
+
+:is(:root, :host)::before {
+  --vaadin-date-time-picker-lumo-inject: 1;
+  --vaadin-date-time-picker-lumo-inject-modules:
+    lumo_mixins_field-label,
+    lumo_mixins_field-required,
+    lumo_mixins_field-error-message,
+    lumo_mixins_field-button,
+    lumo_mixins_field-helper,
+    lumo_mixins_field-base,
+    lumo_components_custom-field,
+    lumo_components_date-time-picker;
+}

@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { resetMouse, sendKeys, sendMouseToElement } from '@vaadin/test-runner-commands';
+import { resetMouse, sendKeys, sendMouse } from '@vaadin/test-runner-commands';
 import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-master-detail-layout.js';
@@ -25,20 +25,31 @@ describe('events', () => {
     });
 
     describe('backdrop click', () => {
+      let spy;
+
+      beforeEach(() => {
+        layout.forceOverlay = true;
+
+        spy = sinon.spy();
+        layout.addEventListener('backdrop-click', spy);
+      });
+
       afterEach(async () => {
         await resetMouse();
       });
 
       it('should fire backdrop-click event on backdrop click in drawer mode', async () => {
-        layout.forceOverlay = true;
-
-        const spy = sinon.spy();
-        layout.addEventListener('backdrop-click', spy);
-
         const backdrop = layout.shadowRoot.querySelector('[part="backdrop"]');
-        await sendMouseToElement({ type: 'click', element: backdrop });
-
+        const bounds = backdrop.getBoundingClientRect();
+        await sendMouse({ type: 'click', position: [bounds.x + 10, bounds.y + 10] });
         expect(spy).to.be.calledOnce;
+      });
+
+      it('should not fire backdrop-click event on detail content click in drawer mode', async () => {
+        const detail = layout.querySelector('[slot="detail"]');
+        const bounds = detail.getBoundingClientRect();
+        await sendMouse({ type: 'click', position: [bounds.x + 10, bounds.y + 10] });
+        expect(spy).to.not.be.called;
       });
     });
 

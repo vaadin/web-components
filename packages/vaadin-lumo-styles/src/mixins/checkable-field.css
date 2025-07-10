@@ -1,0 +1,67 @@
+/**
+ * @license
+ * Copyright (c) 2017 - 2025 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+@media lumo_mixins_checkable-field {
+  :host {
+    display: inline-block;
+  }
+
+  :host([hidden]) {
+    display: none !important;
+  }
+
+  :host([disabled]) {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .vaadin-checkbox-container,
+  .vaadin-radio-button-container {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: baseline;
+  }
+
+  [part='checkbox'],
+  [part='radio'],
+  [part='label'],
+  ::slotted(input),
+  ::slotted(label) {
+    grid-row: 1;
+  }
+
+  [part='checkbox'],
+  [part='radio'],
+  ::slotted(input) {
+    grid-column: 1;
+  }
+
+  /* Control container (checkbox, radio button) */
+  [part='checkbox'],
+  [part='radio'] {
+    width: var(--_input-size, 1em);
+    height: var(--_input-size, 1em);
+    --_input-border-width: var(--vaadin-input-field-border-width, 0);
+    --_input-border-color: var(--vaadin-input-field-border-color, transparent);
+    box-shadow: inset 0 0 0 var(--_input-border-width, 0) var(--_input-border-color);
+  }
+
+  [part='checkbox']::before,
+  [part='radio']::before {
+    display: block;
+    content: '\202F';
+    line-height: var(--_input-size, 1em);
+    contain: paint;
+  }
+
+  /* visually hidden */
+  ::slotted(input) {
+    cursor: inherit;
+    margin: 0;
+    align-self: stretch;
+    appearance: none;
+    width: initial;
+    height: initial;
+  }
+}

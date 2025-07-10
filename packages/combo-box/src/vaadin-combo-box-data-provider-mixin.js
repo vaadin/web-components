@@ -54,17 +54,6 @@ export const ComboBoxDataProviderMixin = (superClass) =>
           observer: '_dataProviderChanged',
           sync: true,
         },
-
-        /** @private */
-        __dataProviderInitialized: {
-          type: Boolean,
-          value: false,
-        },
-
-        /** @private */
-        __previousDataProviderFilter: {
-          type: String,
-        },
       };
     }
 
@@ -78,6 +67,22 @@ export const ComboBoxDataProviderMixin = (superClass) =>
 
     constructor() {
       super();
+
+      /**
+       * Flag indicating that data provider has been initialized.
+       * Do not define in `properties` to avoid triggering updates.
+       * @type {boolean}
+       * @protected
+       */
+      this.__dataProviderInitialized = false;
+
+      /**
+       * Used to store the previous value of the data provider filter.
+       * Do not define in `properties` to avoid triggering updates.
+       * @type {string}
+       * @protected
+       */
+      this.__previousDataProviderFilter;
 
       /**
        * @type {DataProviderController}

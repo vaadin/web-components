@@ -1,4 +1,3 @@
-/* eslint-env node */
 import { esbuildPlugin } from '@web/dev-server-esbuild';
 import { playwrightLauncher } from '@web/test-runner-playwright';
 import { createSauceLabsLauncher } from '@web/test-runner-saucelabs';
@@ -97,16 +96,6 @@ const getAllVisualPackages = () => {
   return fs
     .readdirSync('packages')
     .filter((dir) => fs.statSync(`packages/${dir}`).isDirectory() && fs.existsSync(`packages/${dir}/test/visual`));
-};
-
-const getAllPortedLumoPackages = () => {
-  return fs
-    .readdirSync('packages')
-    .filter(
-      (dir) =>
-        fs.statSync(`packages/${dir}`).isDirectory() &&
-        fs.existsSync(`packages/vaadin-lumo-styles/src/components/${dir}.css`),
-    );
 };
 
 /**
@@ -228,8 +217,6 @@ const getScreenshotFileName = ({ name, testFile }, type, diff) => {
   if (testFile.includes('-styles')) {
     const match = testFile.match(/\/packages\/(vaadin-lumo-styles\/test\/visual\/)(.+)/u);
     folder = `${match[1]}screenshots`;
-  } else if (testFile.includes('icons')) {
-    folder = 'icons/test/visual/screenshots';
   } else {
     const match = testFile.match(/\/packages\/(.+)\.test\.(js|ts)/u);
     folder = match[1].replace(/(base|lumo)/u, '$1/screenshots');
@@ -280,8 +267,6 @@ const createVisualTestsConfig = (theme, browserVersion) => {
   let visualPackages = [];
   if (theme === 'base') {
     visualPackages = getAllBasePackages();
-  } else if (theme === 'lumo' && hasPortedParam) {
-    visualPackages = getAllPortedLumoPackages();
   } else {
     visualPackages = getAllVisualPackages();
   }
@@ -369,6 +354,8 @@ const createIntegrationTestsConfig = (config) => {
     process.exit(0);
   }
 
+  const filesGlob = argv.glob || '*';
+
   return {
     ...config,
     nodeResolve: true,
@@ -385,7 +372,7 @@ const createIntegrationTestsConfig = (config) => {
     groups: [
       {
         name: 'integration',
-        files: 'test/integration/*.test.{js,ts}',
+        files: `test/integration/${filesGlob}.test.{js,ts}`,
       },
     ],
     testRunnerHtml: getTestRunnerHtml(),

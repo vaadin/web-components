@@ -3,9 +3,9 @@
  * Copyright (c) 2017 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-@import '../src/mixins/base-layer-reset.css' vaadin-details-summary;
-@import '../src/components/details-summary.css' vaadin-details-summary;
+@import '../src/components/details-summary.css';
 
-html {
-  --vaadin-details-summary-css-inject: 1;
+:is(:root, :host)::before {
+  --vaadin-details-summary-lumo-inject: 1;
+  --vaadin-details-summary-lumo-inject-modules: lumo_components_details-summary;
 }

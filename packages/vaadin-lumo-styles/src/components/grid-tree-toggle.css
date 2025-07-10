@@ -1,0 +1,104 @@
+/**
+ * @license
+ * Copyright (c) 2000 - 2025 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+@media lumo_components_grid-tree-toggle {
+  :host {
+    --vaadin-grid-tree-toggle-level-offset: 2em;
+    display: inline-flex;
+    max-width: 100%;
+    align-items: center;
+    vertical-align: middle;
+    transform: translateX(calc(var(--lumo-space-s) * -1));
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  :host([hidden]) {
+    display: none !important;
+  }
+
+  :host(:not([leaf])) {
+    cursor: default;
+  }
+
+  #level-spacer,
+  [part='toggle'] {
+    flex: none;
+  }
+
+  #level-spacer {
+    display: inline-block;
+    width: calc(var(--_level, '0') * var(--vaadin-grid-tree-toggle-level-offset));
+  }
+
+  [part='toggle']::before {
+    line-height: 1em; /* make icon font metrics not affect baseline */
+    font-family: 'lumo-icons';
+    display: inline-block;
+    height: 100%;
+  }
+
+  :host(:not([expanded])) [part='toggle']::before {
+    content: var(--lumo-icons-angle-right);
+  }
+
+  :host([expanded]) [part='toggle']::before {
+    content: var(--lumo-icons-angle-right);
+    transform: rotate(90deg);
+  }
+
+  :host([leaf]) [part='toggle'] {
+    visibility: hidden;
+  }
+
+  slot {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  [part='toggle'] {
+    display: inline-block;
+    font-size: 1.5em;
+    line-height: 1;
+    width: 1em;
+    height: 1em;
+    text-align: center;
+    color: var(--lumo-contrast-50pct);
+    cursor: var(--lumo-clickable-cursor);
+    /* Increase touch target area */
+    padding: calc(1em / 3);
+    margin: calc(1em / -3);
+  }
+
+  :host(:not([dir='rtl'])) [part='toggle'] {
+    margin-right: 0;
+  }
+
+  @media (hover: hover) {
+    :host(:hover) [part='toggle'] {
+      color: var(--lumo-contrast-80pct);
+    }
+  }
+
+  /* RTL specific styles */
+
+  :host([dir='rtl']) {
+    margin-left: 0;
+    margin-right: calc(var(--lumo-space-s) * -1);
+  }
+
+  :host([dir='rtl']) [part='toggle'] {
+    margin-left: 0;
+  }
+
+  :host([dir='rtl'][expanded]) [part='toggle']::before {
+    transform: rotate(-90deg);
+  }
+
+  :host([dir='rtl']:not([expanded])) [part='toggle']::before,
+  :host([dir='rtl'][expanded]) [part='toggle']::before {
+    content: var(--lumo-icons-angle-left);
+  }
+}

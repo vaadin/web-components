@@ -1,0 +1,182 @@
+/**
+ * @license
+ * Copyright (c) 2000 - 2025 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+@media lumo_components_map {
+  :host {
+    font-family: var(--lumo-font-family);
+    font-size: var(--lumo-font-size-m);
+    --vaadin-map-controls-inset: var(--lumo-space-xs);
+    --vaadin-map-icon-zoom-in: var(--lumo-icons-plus);
+    --vaadin-map-icon-zoom-out: var(--lumo-icons-minus);
+    --vaadin-map-icon-compass: var(--lumo-icons-arrow-up);
+    --vaadin-map-icon-overview-map-collapse: var(--lumo-icons-angle-down);
+    --vaadin-map-icon-overview-map-expand: var(--lumo-icons-angle-up);
+    --vaadin-map-icon-close: var(--lumo-icons-cross);
+    --vaadin-map-icon-attribution-collapse: var(--lumo-icons-angle-right);
+    --_focus-ring-color: var(--vaadin-focus-ring-color, var(--lumo-primary-color-50pct));
+    --_focus-ring-width: var(--vaadin-focus-ring-width, 2px);
+  }
+
+  :host(:not([theme~='no-border'])) {
+    border-radius: var(--lumo-border-radius-l);
+  }
+
+  :host(:not([theme~='no-border']))::before {
+    border: 1px solid var(--lumo-contrast-10pct);
+  }
+
+  :host([focus-ring]) {
+    outline: none;
+    box-shadow: 0 0 0 var(--_focus-ring-width) var(--_focus-ring-color);
+  }
+
+  .ol-overviewmap button span:empty::before,
+  .ol-zoom-in:empty::before,
+  .ol-zoom-out:empty::before,
+  .ol-compass:empty::before,
+  .ol-full-screen button:empty::before,
+  .ol-full-screen-true:empty::before {
+    background: transparent;
+    mask-image: none;
+    display: inline;
+    width: auto;
+    height: auto;
+  }
+
+  .ol-control:not(.ol-uncollapsible):hover {
+    box-shadow: var(--lumo-box-shadow-s);
+    background-color: var(--lumo-shade-20pct);
+  }
+
+  .ol-scale-bar-inner {
+    border-radius: var(--lumo-border-radius-s);
+  }
+
+  .ol-compass:empty::before {
+    content: var(--vaadin-map-icon-compass);
+  }
+
+  .ol-full-screen {
+    height: var(--lumo-size-s);
+  }
+
+  .ol-full-screen button:empty::before {
+    content: var(--vaadin-map-icon-fullscreen, '\2922');
+  }
+
+  .ol-full-screen .ol-full-screen-true:empty::before {
+    content: var(--vaadin-map-icon-close, '\00D7');
+  }
+
+  .ol-overviewmap button span:empty::before {
+    content: var(--vaadin-map-icon-overview-map-collapse);
+  }
+
+  .ol-overviewmap.ol-collapsed button span:empty::before {
+    content: var(--vaadin-map-icon-overview-map-expand);
+  }
+
+  .ol-overviewmap-map {
+    margin: var(--lumo-space-xs);
+    border-radius: var(--lumo-border-radius-s);
+  }
+
+  .ol-overviewmap:not(.ol-collapsed),
+  .ol-overviewmap:not(.ol-collapsed):hover {
+    background-color: var(--lumo-base-color);
+    box-shadow: var(--lumo-box-shadow-s);
+    transition: 0.15s box-shadow;
+  }
+
+  .ol-overviewmap.ol-collapsed button {
+    rotate: none;
+  }
+
+  .ol-zoomslider button {
+    height: var(--lumo-space-m);
+  }
+
+  .ol-zoomslider:hover button {
+    box-shadow: var(--lumo-box-shadow-s);
+  }
+
+  .ol-control,
+  .ol-scale-bar,
+  .ol-scale-line {
+    margin: var(--lumo-space-xs);
+  }
+
+  .ol-control {
+    border-radius: var(--lumo-border-radius-m);
+    transition:
+      0.15s box-shadow,
+      0.15s background-color;
+    -webkit-backdrop-filter: blur(8px);
+  }
+
+  .ol-control:hover {
+    background-color: var(--lumo-base-color);
+  }
+
+  .ol-control button {
+    width: var(--lumo-size-s);
+    height: var(--lumo-size-s);
+    border-radius: inherit;
+    font-family: 'lumo-icons';
+    font-size: var(--lumo-icon-size-s);
+    font-weight: 400;
+  }
+
+  .ol-control button,
+  .ol-attribution:not(.ol-uncollapsible) ul {
+    display: block;
+    background-color: var(--lumo-base-color);
+    color: var(--lumo-body-text-color);
+  }
+
+  .ol-control button:hover {
+    color: var(--lumo-primary-text-color);
+  }
+
+  .ol-control button:active {
+    background: var(--lumo-base-color) linear-gradient(var(--lumo-contrast-5pct), var(--lumo-contrast-5pct));
+  }
+
+  .ol-control button:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 var(--_focus-ring-width) var(--_focus-ring-color);
+  }
+
+  .ol-zoom-in:empty::before {
+    content: var(--vaadin-map-icon-zoom-in);
+  }
+
+  .ol-zoom-out:empty::before {
+    content: var(--vaadin-map-icon-zoom-out);
+  }
+
+  .ol-attribution.ol-uncollapsible {
+    border-radius: var(--lumo-border-radius-m) 0 0 0;
+  }
+
+  .ol-attribution button span:empty::before {
+    content: var(--vaadin-map-icon-attribution-collapse, '\\25B8');
+  }
+
+  .ol-attribution.ol-collapsed button span:empty::before {
+    content: var(--vaadin-map-icon-attribution-expand, '\\2139');
+  }
+
+  .ol-attribution ul {
+    font-size: var(--lumo-font-size-xxs);
+    color: var(--lumo-secondary-text-color);
+    padding: var(--lumo-space-xs) var(--lumo-space-s);
+    cursor: default;
+  }
+
+  .ol-attribution:not(.ol-uncollapsible) ul {
+    background-color: var(--lumo-base-color);
+  }
+}

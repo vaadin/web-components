@@ -1,0 +1,15 @@
+/**
+ * @license
+ * Copyright (c) 2017 - 2025 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+@media lumo_components_avatar-group-overlay {
+  :host {
+    --_lumo-list-box-item-selected-icon-display: none;
+    --_lumo-list-box-item-padding-left: calc(var(--lumo-space-m) + var(--lumo-border-radius-m) / 4);
+  }
+
+  [part='overlay'] {
+    outline: none;
+  }
+}

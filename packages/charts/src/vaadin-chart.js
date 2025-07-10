@@ -9,11 +9,13 @@
  * license.
  */
 import './vaadin-chart-series.js';
-import { css, html, LitElement } from 'lit';
+import { html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
+import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { chartStyles } from './styles/vaadin-chart-core-styles.js';
 import { ChartMixin } from './vaadin-chart-mixin.js';
 
 /**
@@ -180,7 +182,7 @@ import { ChartMixin } from './vaadin-chart-mixin.js';
  * @mixes ThemableMixin
  * @mixes ElementMixin
  */
-class Chart extends ChartMixin(ThemableMixin(ElementMixin(PolylitMixin(LitElement)))) {
+class Chart extends ChartMixin(ThemableMixin(ElementMixin(LumoInjectionMixin(PolylitMixin(LitElement))))) {
   static get is() {
     return 'vaadin-chart';
   }
@@ -190,17 +192,13 @@ class Chart extends ChartMixin(ThemableMixin(ElementMixin(PolylitMixin(LitElemen
   }
 
   static get styles() {
-    return css`
-      :host {
-        display: block;
-        width: 100%;
-        overflow: hidden;
-      }
+    return chartStyles;
+  }
 
-      :host([hidden]) {
-        display: none !important;
-      }
-    `;
+  static get lumoInjector() {
+    return {
+      includeBaseStyles: true,
+    };
   }
 
   /** @protected */

@@ -7,19 +7,21 @@ import '@vaadin/component-base/src/style-props.js';
 import { css } from 'lit';
 
 export const timePickerStyles = css`
-  @layer base {
-    [part='toggle-button']::before {
-      mask-image: var(--_vaadin-icon-clock);
-    }
+  :host([opened]) {
+    pointer-events: auto;
+  }
 
-    /* See https://github.com/vaadin/vaadin-time-picker/issues/145 */
-    :host([dir='rtl']) [part='input-field'] {
-      direction: ltr;
-    }
+  [part='toggle-button']::before {
+    mask-image: var(--_vaadin-icon-clock);
+  }
 
-    :host([dir='rtl']) [part='input-field'] ::slotted(input)::placeholder {
-      direction: rtl;
-      text-align: left;
-    }
+  /* See https://github.com/vaadin/vaadin-time-picker/issues/145 */
+  :host([dir='rtl']) [part='input-field'] {
+    direction: ltr;
+  }
+
+  :host([dir='rtl']) [part='input-field'] ::slotted(input)::placeholder {
+    direction: rtl;
+    text-align: left;
   }
 `;

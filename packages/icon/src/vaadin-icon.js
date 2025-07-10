@@ -9,10 +9,11 @@ import { ifDefined } from 'lit/directives/if-defined.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
-import { CSSInjectionMixin } from '@vaadin/vaadin-themable-mixin/css-injection-mixin.js';
+import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { iconStyles } from './styles/vaadin-icon-core-styles.js';
 import { IconMixin } from './vaadin-icon-mixin.js';
+import { ensureSvgLiteral } from './vaadin-icon-svg.js';
 
 /**
  * `<vaadin-icon>` is a Web Component for displaying SVG icons.
@@ -59,7 +60,7 @@ import { IconMixin } from './vaadin-icon-mixin.js';
  * @mixes ThemableMixin
  * @mixes ElementMixin
  */
-class Icon extends IconMixin(ElementMixin(CSSInjectionMixin(ThemableMixin(PolylitMixin(LitElement))))) {
+class Icon extends IconMixin(ElementMixin(LumoInjectionMixin(ThemableMixin(PolylitMixin(LitElement))))) {
   static get is() {
     return 'vaadin-icon';
   }
@@ -68,15 +69,22 @@ class Icon extends IconMixin(ElementMixin(CSSInjectionMixin(ThemableMixin(Polyli
     return iconStyles;
   }
 
+  static get lumoInjector() {
+    return {
+      includeBaseStyles: true,
+    };
+  }
+
   /** @protected */
   render() {
     return html`
+      <span class="baseline"></span>
       <svg
         version="1.1"
         xmlns="http://www.w3.org/2000/svg"
         xmlns:xlink="http://www.w3.org/1999/xlink"
-        viewBox="${this.__computeViewBox(this.size, this.__viewBox)}"
-        preserveAspectRatio="${this.__computePAR(this.__defaultPAR, this.__preserveAspectRatio)}"
+        viewBox="${this.__viewBox || `0 0 ${this.size} ${this.size}`}"
+        preserveAspectRatio="${this.__preserveAspectRatio || 'xMidYMid meet'}"
         fill="${ifDefined(this.__fill)}"
         stroke="${ifDefined(this.__stroke)}"
         stroke-width="${ifDefined(this.__strokeWidth)}"
@@ -84,9 +92,9 @@ class Icon extends IconMixin(ElementMixin(CSSInjectionMixin(ThemableMixin(Polyli
         stroke-linejoin="${ifDefined(this.__strokeLinejoin)}"
         aria-hidden="true"
       >
-        <g id="svg-group"></g>
-        <g id="use-group" visibility="${this.__computeVisibility(this.__useRef, this.svg)}">
-          <use href="${this.__useRef}" />
+        <g id="svg-group">${ensureSvgLiteral(this.svg)}</g>
+        <g id="use-group" visibility="${this.__useRef ? 'visible' : 'hidden'}">
+          <use href="${ifDefined(this.__useRef)}" />
         </g>
       </svg>
 

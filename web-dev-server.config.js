@@ -1,6 +1,6 @@
-/* eslint-env node */
 import { esbuildPlugin } from '@web/dev-server-esbuild';
 import fs from 'node:fs';
+import path from 'node:path';
 
 const theme = process.argv.join(' ').match(/--theme=(\w+)/u)?.[1] ?? 'lumo';
 const hasPortedParam = process.argv.includes('--ported');
@@ -44,26 +44,35 @@ export function enforceThemePlugin(theme) {
       let { body } = context;
 
       if (theme === 'legacy-lumo' && context.response.is('html', 'js')) {
+        // For dev pages: replace link to CSS stylesheet with JS autoload script
+        body = body.replace(
+          '<link rel="stylesheet" href="/packages/vaadin-lumo-styles/lumo.css" />',
+          '<script type="module" src="/packages/vaadin-lumo-styles/test/autoload.js"></script>',
+        );
+
+        // For visual tests: replace import of CSS file with JS autoload script
         body = body.replace('vaadin-lumo-styles/global.css', 'vaadin-lumo-styles/test/autoload.js');
+        body = body.replace('../../global.css', '../autoload.js');
       }
 
       if (['base', 'legacy-lumo'].includes(theme) && context.response.is('html', 'js')) {
         // Remove all not transformed CSS imports
-        body = body.replaceAll(/^.+vaadin-lumo-styles\/.+\.css.+$/gmu, '');
-      }
-
-      if (['base', 'ported-lumo'].includes(theme) && context.response.is('html')) {
-        // Load the base theme
-        body = body.replace('./common.js', './common-base.js');
+        body = body.replaceAll(/^.+(vaadin-lumo-styles|\.\.)\/.+\.css.+$/gmu, '');
       }
 
       return body;
     },
-    transformImport({ source }) {
+    transformImport({ source, context }) {
       if (theme === 'base' || theme === 'ported-lumo') {
-        // Load the base theme
         source = source.replace('/theme/lumo/', '/src/');
-        source = source.replace(/(.+)-core-styles\.js/u, '$1-base-styles.js');
+
+        const baseStylesResolvedPath = path.resolve(
+          path.dirname(context.url),
+          source.replace('-core-styles', '-base-styles'),
+        );
+        if (fs.existsSync(`.${baseStylesResolvedPath}`)) {
+          source = source.replace('-core-styles', '-base-styles');
+        }
       }
 
       return source;

@@ -16,7 +16,7 @@ import { PositionMixin } from '@vaadin/overlay/src/vaadin-overlay-position-mixin
 export const SelectOverlayMixin = (superClass) =>
   class SelectOverlayMixin extends PositionMixin(OverlayMixin(DirMixin(superClass))) {
     static get observers() {
-      return ['_updateOverlayWidth(opened, owner)'];
+      return ['_updateOverlayWidth(opened, positionTarget)'];
     }
 
     /** @protected */
@@ -38,16 +38,29 @@ export const SelectOverlayMixin = (superClass) =>
       return true;
     }
 
+    /**
+     * @protected
+     * @override
+     */
+    _mouseDownListener(event) {
+      super._mouseDownListener(event);
+
+      // Prevent global mousedown event to avoid losing focus on outside click
+      event.preventDefault();
+    }
+
     /** @protected */
     _getMenuElement() {
       return Array.from(this.children).find((el) => el.localName !== 'style');
     }
 
     /** @private */
-    _updateOverlayWidth(opened, owner) {
-      if (opened && owner) {
+    _updateOverlayWidth(opened, positionTarget) {
+      if (opened && positionTarget) {
+        this.style.setProperty('--_vaadin-select-overlay-default-width', `${positionTarget.offsetWidth}px`);
+
         const widthProperty = '--vaadin-select-overlay-width';
-        const customWidth = getComputedStyle(owner).getPropertyValue(widthProperty);
+        const customWidth = getComputedStyle(this.owner).getPropertyValue(widthProperty);
 
         if (customWidth === '') {
           this.style.removeProperty(widthProperty);

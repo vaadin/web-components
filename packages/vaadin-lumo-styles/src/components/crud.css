@@ -1,0 +1,157 @@
+/**
+ * @license
+ * Copyright (c) 2000 - 2025 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+@media lumo_components_crud {
+  :host {
+    --vaadin-crud-editor-max-height: 40%;
+    --vaadin-crud-editor-max-width: 40%;
+    --_focus-ring-color: var(--vaadin-focus-ring-color, var(--lumo-primary-color-50pct));
+    --_focus-ring-width: var(--vaadin-focus-ring-width, 2px);
+    width: 100%;
+    height: 400px;
+    font-family: var(--lumo-font-family);
+  }
+
+  :host,
+  #main {
+    display: flex;
+    flex-direction: column;
+    align-self: stretch;
+    position: relative;
+    overflow: hidden;
+  }
+
+  #main {
+    flex: 1 1 100%;
+    height: 100%;
+  }
+
+  :host([hidden]),
+  [hidden] {
+    display: none !important;
+  }
+
+  [part='toolbar'] {
+    display: flex;
+    flex-shrink: 0;
+    align-items: baseline;
+    justify-content: flex-end;
+    padding: var(--lumo-space-s) var(--lumo-space-m);
+    background-color: var(--lumo-contrast-5pct);
+    border-right: 1px solid var(--lumo-contrast-10pct);
+    border-left: 1px solid var(--lumo-contrast-10pct);
+    border-bottom: 1px solid var(--lumo-contrast-10pct);
+  }
+
+  :host([no-toolbar]) [part='toolbar'] {
+    display: none;
+  }
+
+  #container {
+    display: flex;
+    height: 100%;
+  }
+
+  :host([editor-position='bottom']) #container {
+    flex-direction: column;
+  }
+
+  [part='editor'] {
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    outline: none;
+    background: var(--lumo-base-color);
+    box-sizing: border-box;
+    position: relative;
+  }
+
+  :host(:not([editor-position=''])[editor-opened]:not([fullscreen])) [part='editor'] {
+    flex: 1 0 100%;
+  }
+
+  :host([editor-position='bottom'][editor-opened]:not([fullscreen])) [part='editor'] {
+    max-height: var(--vaadin-crud-editor-max-height);
+  }
+
+  :host([editor-position='aside'][editor-opened]:not([fullscreen])) [part='editor'] {
+    min-width: 300px;
+    max-width: var(--vaadin-crud-editor-max-width);
+  }
+
+  [part='scroller'] {
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+    flex: auto;
+    padding: var(--lumo-space-l);
+  }
+
+  [part='footer'] {
+    display: flex;
+    flex: none;
+    flex-direction: row-reverse;
+    background-color: var(--lumo-contrast-5pct);
+    padding: var(--lumo-space-s);
+  }
+
+  [part='header'] ::slotted(h3) {
+    margin-top: 0 !important;
+  }
+
+  :host(:not([dir='rtl'])) ::slotted([slot='delete-button']) {
+    margin-right: auto;
+  }
+
+  :host([dir='rtl']) ::slotted([slot='delete-button']) {
+    margin-left: auto;
+  }
+
+  :host(:not([dir='rtl'])) [part='toolbar'] ::slotted(*:not(:first-child)) {
+    margin-left: var(--lumo-space-s);
+  }
+
+  :host([dir='rtl']) [part='toolbar'] ::slotted(*:not(:first-child)) {
+    margin-right: var(--lumo-space-s);
+  }
+
+  :host([theme~='no-border']) [part='toolbar'] {
+    border: 0;
+  }
+
+  [part='footer'] ::slotted(*) {
+    margin-left: var(--lumo-space-s);
+    margin-right: var(--lumo-space-s);
+  }
+
+  [part='editor']:focus::before {
+    position: absolute;
+    inset: 0;
+    content: '';
+    box-shadow: inset 0 0 0 var(--_focus-ring-width) var(--_focus-ring-color);
+    pointer-events: none;
+  }
+
+  :host(:not([editor-position=''])) [part='editor']:not([hidden]) {
+    box-shadow: var(--lumo-box-shadow-m);
+  }
+
+  :host(:not([theme~='no-border']):not([editor-position=''])) [part='editor']:not([hidden]) {
+    border: 1px solid var(--lumo-contrast-20pct);
+  }
+
+  :host(:not([theme~='no-border'])[editor-position='bottom']) [part='editor']:not([hidden]) {
+    border-top: 0;
+  }
+
+  :host(:not([dir='rtl'])[editor-position='aside']) [part='editor']:not([hidden]) {
+    border-left: 0;
+  }
+
+  :host([dir='rtl']:not([theme~='no-border'])[editor-position='aside']) [part='editor']:not([hidden]) {
+    border-right: 0;
+  }
+}

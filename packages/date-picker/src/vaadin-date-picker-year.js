@@ -3,12 +3,12 @@
  * Copyright (c) 2016 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { css, html, LitElement } from 'lit';
+import { html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
-import { CSSInjectionMixin } from '@vaadin/vaadin-themable-mixin/css-injection-mixin.js';
+import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { DatePickerYearMixin } from './vaadin-date-picker-year-mixin.js';
+import { datePickerYearStyles } from './styles/vaadin-date-picker-year-core-styles.js';
 
 /**
  * An element used internally by `<vaadin-date-picker>`. Not intended to be used separately.
@@ -19,18 +19,27 @@ import { DatePickerYearMixin } from './vaadin-date-picker-year-mixin.js';
  * @mixes DatePickerYearMixin
  * @private
  */
-export class DatePickerYear extends CSSInjectionMixin(ThemableMixin(DatePickerYearMixin(PolylitMixin(LitElement)))) {
+export class DatePickerYear extends LumoInjectionMixin(ThemableMixin(PolylitMixin(LitElement))) {
   static get is() {
     return 'vaadin-date-picker-year';
   }
 
   static get styles() {
-    return css`
-      :host {
-        display: block;
-        height: 100%;
-      }
-    `;
+    return datePickerYearStyles;
+  }
+
+  static get properties() {
+    return {
+      year: {
+        type: String,
+        sync: true,
+      },
+
+      selectedDate: {
+        type: Object,
+        sync: true,
+      },
+    };
   }
 
   /** @protected */
@@ -39,6 +48,19 @@ export class DatePickerYear extends CSSInjectionMixin(ThemableMixin(DatePickerYe
       <div part="year-number">${this.year}</div>
       <div part="year-separator" aria-hidden="true"></div>
     `;
+  }
+
+  /** @protected */
+  updated(props) {
+    super.updated(props);
+
+    if (props.has('year')) {
+      this.toggleAttribute('current', this.year === new Date().getFullYear());
+    }
+
+    if (props.has('year') || props.has('selectedDate')) {
+      this.toggleAttribute('selected', this.selectedDate && this.selectedDate.getFullYear() === this.year);
+    }
   }
 }
 

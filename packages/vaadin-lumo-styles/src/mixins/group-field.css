@@ -1,0 +1,58 @@
+/**
+ * @license
+ * Copyright (c) 2017 - 2025 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+@media lumo_mixins_group-field {
+  :host {
+    display: inline-flex;
+    color: var(--lumo-body-text-color);
+    font-size: var(--lumo-font-size-m);
+    font-family: var(--lumo-font-family);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-tap-highlight-color: transparent;
+    padding: var(--lumo-space-xs) 0;
+  }
+
+  :host::before {
+    content: '\2003';
+    width: 0;
+    height: var(--lumo-size-s);
+    box-sizing: border-box;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  :host([hidden]) {
+    display: none !important;
+  }
+
+  .vaadin-group-field-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+
+  [part='group-field'] {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  :host(:not([has-label])) [part='label'] {
+    display: none;
+  }
+
+  :host([theme~='vertical']) [part='group-field'] {
+    flex-direction: column;
+  }
+
+  :host([disabled]) [part='label'] {
+    color: var(--lumo-disabled-text-color);
+    -webkit-text-fill-color: var(--lumo-disabled-text-color);
+  }
+
+  :host([focused]:not([readonly])) [part='label'] {
+    color: var(--lumo-primary-text-color);
+  }
+}

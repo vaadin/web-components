@@ -7,8 +7,9 @@ import { html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
+import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { progressBarStyles } from './vaadin-progress-bar-styles.js';
+import { progressBarStyles } from './styles/vaadin-progress-bar-core-styles.js';
 import { ProgressMixin } from './vaadin-progress-mixin.js';
 
 /**
@@ -48,7 +49,7 @@ import { ProgressMixin } from './vaadin-progress-mixin.js';
  * @mixes ThemableMixin
  * @mixes ElementMixin
  */
-class ProgressBar extends ProgressMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElement)))) {
+class ProgressBar extends ProgressMixin(ElementMixin(ThemableMixin(LumoInjectionMixin(PolylitMixin(LitElement))))) {
   static get is() {
     return 'vaadin-progress-bar';
   }

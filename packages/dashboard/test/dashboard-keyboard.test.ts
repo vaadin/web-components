@@ -2,8 +2,8 @@ import { expect } from '@vaadin/chai-plugins';
 import { sendKeys } from '@vaadin/test-runner-commands';
 import { fixtureSync, isChrome, isFirefox, nextFrame, nextResize } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import '../vaadin-dashboard.js';
-import type { Dashboard, DashboardItem } from '../vaadin-dashboard.js';
+import '../src/vaadin-dashboard.js';
+import type { Dashboard, DashboardItem } from '../src/vaadin-dashboard.js';
 import {
   describeBidirectional,
   getDraggable,

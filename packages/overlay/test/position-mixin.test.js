@@ -109,7 +109,7 @@ describe('position mixin', () => {
     beforeEach(() => {
       overlay.verticalAlign = TOP;
       margin = parseInt(getComputedStyle(overlay).bottom, 10);
-      targetPositionToFlipOverlay = document.documentElement.clientHeight - overlayContent.clientHeight - margin;
+      targetPositionToFlipOverlay = document.documentElement.clientHeight - overlayContent.offsetHeight - margin;
       targetPositionForCentering = document.documentElement.clientHeight / 2 - target.clientHeight / 2;
     });
 
@@ -193,7 +193,7 @@ describe('position mixin', () => {
       beforeEach(() => {
         overlay.noVerticalOverlap = true;
         targetPositionToFlipOverlay =
-          document.documentElement.clientHeight - overlayContent.clientHeight - margin - target.clientHeight;
+          document.documentElement.clientHeight - overlayContent.offsetHeight - margin - target.clientHeight;
       });
 
       it('should align below the target', () => {
@@ -232,7 +232,7 @@ describe('position mixin', () => {
     beforeEach(() => {
       overlay.verticalAlign = BOTTOM;
       margin = parseInt(getComputedStyle(overlay).top, 10);
-      targetPositionToFlipOverlay = margin + overlayContent.clientHeight - target.clientHeight;
+      targetPositionToFlipOverlay = margin + overlayContent.offsetHeight - target.clientHeight;
       targetPositionForCentering = document.documentElement.clientHeight / 2 - target.clientHeight / 2;
     });
 
@@ -297,7 +297,7 @@ describe('position mixin', () => {
     describe('no overlap', () => {
       beforeEach(() => {
         overlay.noVerticalOverlap = true;
-        targetPositionToFlipOverlay = margin + overlayContent.clientHeight;
+        targetPositionToFlipOverlay = margin + overlayContent.offsetHeight;
       });
 
       it('should align above the target', () => {
@@ -358,7 +358,7 @@ describe('position mixin', () => {
     beforeEach(() => {
       overlay.horizontalAlign = START;
       margin = parseInt(getComputedStyle(overlay).right, 10);
-      targetPositionToFlipOverlay = document.documentElement.clientWidth - overlayContent.clientWidth - margin;
+      targetPositionToFlipOverlay = document.documentElement.clientWidth - overlayContent.offsetWidth - margin;
       targetPositionForCentering = document.documentElement.clientWidth / 2 - target.clientWidth / 2;
     });
 
@@ -424,7 +424,7 @@ describe('position mixin', () => {
       beforeEach(() => {
         overlay.noHorizontalOverlap = true;
         targetPositionToFlipOverlay =
-          document.documentElement.clientWidth - overlayContent.clientWidth - margin - target.clientWidth;
+          document.documentElement.clientWidth - overlayContent.offsetWidth - margin - target.clientWidth;
       });
 
       it('should align on the right side of the target', () => {
@@ -463,7 +463,7 @@ describe('position mixin', () => {
     beforeEach(() => {
       overlay.horizontalAlign = END;
       margin = parseInt(getComputedStyle(overlay).left, 10);
-      targetPositionToFlipOverlay = margin + overlayContent.clientWidth - target.clientWidth;
+      targetPositionToFlipOverlay = margin + overlayContent.offsetWidth - target.clientWidth;
       targetPositionForCentering = document.documentElement.clientWidth / 2 - target.clientWidth / 2;
     });
 
@@ -528,7 +528,7 @@ describe('position mixin', () => {
     describe('no overlap', () => {
       beforeEach(() => {
         overlay.noHorizontalOverlap = true;
-        targetPositionToFlipOverlay = margin + overlayContent.clientWidth;
+        targetPositionToFlipOverlay = margin + overlayContent.offsetWidth;
       });
 
       it('should align on the left side of the target', () => {

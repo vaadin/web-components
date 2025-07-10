@@ -1,0 +1,11 @@
+/**
+ * @license
+ * Copyright (c) 2000 - 2025 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+@import '../src/components/grid-tree-toggle.css';
+
+:is(:root, :host)::before {
+  --vaadin-grid-tree-toggle-lumo-inject: 1;
+  --vaadin-grid-tree-toggle-lumo-inject-modules: lumo_components_grid-tree-toggle;
+}

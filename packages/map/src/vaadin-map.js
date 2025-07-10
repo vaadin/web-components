@@ -12,9 +12,10 @@ import { html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
+import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { mapStyles } from './styles/vaadin-map-core-styles.js';
 import { MapMixin } from './vaadin-map-mixin.js';
-import { mapStyles } from './vaadin-map-styles.js';
 
 /**
  * `vaadin-map` is a web component for displaying web maps.
@@ -56,7 +57,7 @@ import { mapStyles } from './vaadin-map-styles.js';
  * @mixes ThemableMixin
  * @mixes ElementMixin
  */
-class Map extends MapMixin(ThemableMixin(ElementMixin(PolylitMixin(LitElement)))) {
+class Map extends MapMixin(ThemableMixin(ElementMixin(LumoInjectionMixin(PolylitMixin(LitElement))))) {
   static get is() {
     return 'vaadin-map';
   }
@@ -67,6 +68,12 @@ class Map extends MapMixin(ThemableMixin(ElementMixin(PolylitMixin(LitElement)))
 
   static get styles() {
     return mapStyles;
+  }
+
+  static get lumoInjector() {
+    return {
+      includeBaseStyles: true,
+    };
   }
 
   /** @protected */

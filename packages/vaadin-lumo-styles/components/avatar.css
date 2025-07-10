@@ -1,0 +1,17 @@
+/**
+ * @license
+ * Copyright (c) 2017 - 2025 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+@import '../src/components/avatar.css';
+
+:is(:root, :host)::before {
+  --vaadin-avatar-lumo-inject: 1;
+  --vaadin-avatar-lumo-inject-modules: lumo_components_avatar;
+}
+
+:where(:root, :host) {
+  --vaadin-avatar-size: var(
+    --lumo-size-m
+  );
+}

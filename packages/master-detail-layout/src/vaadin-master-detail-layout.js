@@ -3,15 +3,17 @@
  * Copyright (c) 2025 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { css, html, LitElement, nothing } from 'lit';
+import { html, LitElement, nothing } from 'lit';
 import { getFocusableElements } from '@vaadin/a11y-base/src/focus-utils.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
 import { SlotStylesMixin } from '@vaadin/component-base/src/slot-styles-mixin.js';
+import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { transitionStyles } from './vaadin-master-detail-layout-transition-styles.js';
+import { masterDetailLayoutStyles } from './styles/vaadin-master-detail-layout-core-styles.js';
+import { masterDetailLayoutTransitionStyles } from './styles/vaadin-master-detail-layout-transition-core-styles.js';
 
 /**
  * `<vaadin-master-detail-layout>` is a web component for building UIs with a master
@@ -19,13 +21,6 @@ import { transitionStyles } from './vaadin-master-detail-layout-transition-style
  * overlaid on top of, the master area, depending on configuration and viewport size.
  *
  * ### Styling
- *
- * The following custom CSS properties are available for styling (needed to be set
- * on the `<html>` element since they are used by the global view transitions):
- *
- * Custom CSS property                                  | Description         | Default
- * -----------------------------------------------------|---------------------|--------
- * `--vaadin-master-detail-layout-transition-duration`  | Transition duration | 300ms
  *
  * The following shadow DOM parts are available for styling:
  *
@@ -57,160 +52,21 @@ import { transitionStyles } from './vaadin-master-detail-layout-transition-style
  * @mixes ResizeMixin
  * @mixes SlotStylesMixin
  */
-class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElement))))) {
+class MasterDetailLayout extends SlotStylesMixin(
+  ResizeMixin(ElementMixin(ThemableMixin(LumoInjectionMixin(PolylitMixin(LitElement))))),
+) {
   static get is() {
     return 'vaadin-master-detail-layout';
   }
 
   static get styles() {
-    return css`
-      :host {
-        display: flex;
-        box-sizing: border-box;
-        height: 100%;
-      }
+    return masterDetailLayoutStyles;
+  }
 
-      :host([hidden]) {
-        display: none !important;
-      }
-
-      :host(:not([has-detail])) [part='detail'],
-      [part='backdrop'] {
-        display: none;
-      }
-
-      :host([orientation='horizontal']) [part='master'] {
-        max-width: 100%;
-      }
-
-      /* Drawer mode */
-      :host(:is([drawer], [stack])) {
-        position: relative;
-      }
-
-      :host(:is([drawer], [stack])[containment='layout']) [part='detail'],
-      :host([drawer][containment='layout']) [part='backdrop'] {
-        position: absolute;
-      }
-
-      :host(:is([drawer], [stack])[containment='viewport']) [part='detail'],
-      :host([drawer][containment='viewport']) [part='backdrop'] {
-        position: fixed;
-      }
-
-      :host([drawer][has-detail]) [part='backdrop'] {
-        display: block;
-        inset: 0;
-        z-index: 1;
-      }
-
-      :host(:is([drawer], [stack])) [part='detail'] {
-        z-index: 1;
-      }
-
-      :host([drawer][orientation='horizontal']) [part='detail'] {
-        inset-inline-end: 0;
-        height: 100%;
-        width: var(--_detail-min-size, min-content);
-        max-width: 100%;
-      }
-
-      :host([drawer][orientation='horizontal'][containment='viewport']) [part='detail'] {
-        inset-block-start: 0;
-      }
-
-      /* No fixed size */
-      :host(:not([has-master-size])) [part='master'],
-      :host(:not([has-detail-size])) [part='detail'] {
-        flex-grow: 1;
-        flex-basis: 50%;
-      }
-
-      /* Fixed size */
-      :host([has-master-size]) [part='master'],
-      :host([has-detail-size]) [part='detail'] {
-        flex-shrink: 0;
-      }
-
-      :host([has-master-size][orientation='horizontal']) [part='master'] {
-        width: var(--_master-size);
-      }
-
-      :host([has-detail-size][orientation='horizontal']:not([stack])) [part='detail'] {
-        width: var(--_detail-size);
-      }
-
-      :host([has-master-size][has-detail-size]) [part='master'] {
-        flex-grow: 1;
-        flex-basis: var(--_master-size);
-      }
-
-      :host([has-master-size][has-detail-size]) [part='detail'] {
-        flex-grow: 1;
-        flex-basis: var(--_detail-size);
-      }
-
-      /* Min size */
-      :host([has-master-min-size][has-detail][orientation='horizontal']:not([drawer]):not([stack])) [part='master'] {
-        min-width: var(--_master-min-size);
-      }
-
-      :host([has-detail-min-size][orientation='horizontal']:not([drawer]):not([stack])) [part='detail'] {
-        min-width: var(--_detail-min-size);
-      }
-
-      :host([has-master-min-size]) [part='master'],
-      :host([has-detail-min-size]) [part='detail'] {
-        flex-shrink: 0;
-      }
-
-      /* Vertical */
-      :host([orientation='vertical']) {
-        flex-direction: column;
-      }
-
-      :host([orientation='vertical'][drawer]) [part='master'] {
-        max-height: 100%;
-      }
-
-      :host([orientation='vertical'][drawer]) [part='detail'] {
-        inset-block-end: 0;
-        width: 100%;
-        height: var(--_detail-min-size, min-content);
-      }
-
-      :host([drawer][orientation='vertical'][containment='viewport']) [part='detail'] {
-        inset-inline-start: 0;
-      }
-
-      /* Fixed size */
-      :host([has-master-size][orientation='vertical']) [part='master'] {
-        height: var(--_master-size);
-      }
-
-      :host([has-detail-size][orientation='vertical']:not([stack])) [part='detail'] {
-        height: var(--_detail-size);
-      }
-
-      /* Min size */
-      :host([has-master-min-size][orientation='vertical']:not([drawer])) [part='master'],
-      :host([has-master-min-size][orientation='vertical'][drawer]) {
-        min-height: var(--_master-min-size);
-      }
-
-      :host([has-detail-min-size][orientation='vertical']:not([drawer]):not([stack])) [part='detail'] {
-        min-height: var(--_detail-min-size);
-      }
-
-      /* Stack mode */
-      :host([stack]) [part='master'] {
-        max-height: 100%;
-      }
-
-      :host([stack]) [part='detail'] {
-        inset: 0;
-      }
-    `;
+  static get lumoInjector() {
+    return {
+      includeBaseStyles: true,
+    };
   }
 
   static get properties() {
@@ -388,24 +244,30 @@ class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ElementMixin(Themab
 
   /** @override */
   get slotStyles() {
-    return [transitionStyles];
+    return [masterDetailLayoutTransitionStyles];
   }
 
   /** @protected */
   render() {
     return html`
-      <div part="backdrop" @click="${this.__onBackdropClick}"></div>
-      <div id="master" part="master" ?inert="${this._hasDetail && this._drawer && this.containment === 'layout'}">
+      <div part="backdrop"></div>
+      <div
+        id="master"
+        part="master"
+        ?inert="${this._hasDetail && (this._stack || (this._drawer && this.containment === 'layout'))}"
+      >
         <slot></slot>
       </div>
-      <div
-        id="detail"
-        part="detail"
-        role="${this._drawer || this._stack ? 'dialog' : nothing}"
-        aria-modal="${this._drawer && this.containment === 'viewport' ? 'true' : nothing}"
-        @keydown="${this.__onDetailKeydown}"
-      >
-        <slot name="detail" @slotchange="${this.__onDetailSlotChange}"></slot>
+      <div part="_detail-internal" @click="${this.__onDetailClick}">
+        <div
+          id="detail"
+          part="detail"
+          role="${this._drawer || this._stack ? 'dialog' : nothing}"
+          aria-modal="${this._drawer && this.containment === 'viewport' ? 'true' : nothing}"
+          @keydown="${this.__onDetailKeydown}"
+        >
+          <slot name="detail" @slotchange="${this.__onDetailSlotChange}"></slot>
+        </div>
       </div>
     `;
   }
@@ -428,8 +290,12 @@ class MasterDetailLayout extends SlotStylesMixin(ResizeMixin(ElementMixin(Themab
   }
 
   /** @private */
-  __onBackdropClick() {
-    this.dispatchEvent(new CustomEvent('backdrop-click'));
+  __onDetailClick(e) {
+    // The detail wrapper element fully covers the backdrop part, so listen
+    // to click event on it and detect if it was outside the detail content
+    if (!e.composedPath().includes(this.$.detail)) {
+      this.dispatchEvent(new CustomEvent('backdrop-click'));
+    }
   }
 
   /** @private */

@@ -8,6 +8,7 @@ import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
+import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { checkboxStyles } from './styles/vaadin-checkbox-core-styles.js';
 import { CheckboxMixin } from './vaadin-checkbox-mixin.js';
@@ -59,7 +60,7 @@ import { CheckboxMixin } from './vaadin-checkbox-mixin.js';
  * @mixes ThemableMixin
  * @mixes ElementMixin
  */
-export class Checkbox extends CheckboxMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElement)))) {
+export class Checkbox extends CheckboxMixin(ElementMixin(ThemableMixin(LumoInjectionMixin(PolylitMixin(LitElement))))) {
   static get is() {
     return 'vaadin-checkbox';
   }
