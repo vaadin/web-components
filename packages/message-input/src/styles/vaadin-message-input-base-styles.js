@@ -27,11 +27,20 @@ export const messageInputStyles = css`
     outline-offset: calc(var(--vaadin-input-field-border-width, 1px) * -1);
   }
 
+  :host([disabled]) {
+    --vaadin-input-field-value-color: var(--vaadin-input-field-disabled-text-color, var(--vaadin-color-disabled));
+    --vaadin-input-field-background: var(
+      --vaadin-input-field-disabled-background,
+      var(--vaadin-background-container-strong)
+    );
+    --vaadin-input-field-border-color: transparent;
+  }
+
   ::slotted([slot='textarea']) {
     flex: 1;
-    --vaadin-input-field-border-width: 0px;
+    --vaadin-input-field-border-width: 0px !important;
     --vaadin-focus-ring-width: 0px;
-    --vaadin-input-field-background: transparent;
+    --vaadin-input-field-background: transparent !important;
   }
 
   ::slotted([slot='button']) {
@@ -63,11 +72,7 @@ export const messageInputStyles = css`
   @media (forced-colors: active) {
     :host([theme~='icon-button']) ::slotted([slot='button']) {
       forced-color-adjust: none;
-    }
-
-    :host([theme~='icon-button']) ::slotted([slot='button'])::before {
-      forced-color-adjust: auto;
-      background: CanvasText;
+      --vaadin-button-text-color: CanvasText;
     }
   }
 `;
