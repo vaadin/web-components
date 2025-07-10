@@ -1,0 +1,70 @@
+/**
+ * @license
+ * Copyright (c) 2018 - 2025 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+import { css } from 'lit';
+
+export const loginFormWrapperStyles = css`
+  :host {
+    background: var(--vaadin-login-form-background, transparent);
+    border-radius: var(--vaadin-login-form-border-radius, 0);
+    display: inline-block;
+    max-width: 100%;
+    overflow: hidden;
+    width: var(--vaadin-login-form-width, 360px);
+  }
+
+  :host([hidden]) {
+    display: none !important;
+  }
+
+  [part='form'] {
+    box-sizing: border-box;
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: var(--vaadin-login-form-gap, var(--vaadin-gap-container-block));
+    padding: var(--vaadin-login-form-padding, var(--vaadin-padding));
+  }
+
+  [part='form'] ::slotted(form) {
+    display: flex;
+    flex-direction: column;
+    gap: var(--vaadin-login-form-gap, var(--vaadin-gap-container-block));
+  }
+
+  [part='form-title'] {
+    color: var(--vaadin-login-form-title-color, var(--vaadin-color));
+    font-size: var(--vaadin-login-form-title-font-size, 1.5rem);
+    font-weight: var(--vaadin-login-form-title-font-weight, 600);
+    line-height: var(--vaadin-login-form-title-line-height, inherit);
+  }
+
+  :host([error]) [part='error-message'] {
+    display: grid;
+  }
+
+  [part='error-message'] {
+    color: var(--vaadin-login-form-error-color, var(--vaadin-color));
+    font-size: var(--vaadin-login-form-error-font-size, inherit);
+    font-weight: var(--vaadin-login-form-error-font-weight, 400);
+    gap: var(--vaadin-login-form-error-gap, 0 var(--vaadin-gap-container-inline));
+    grid-template-columns: auto 1fr;
+    line-height: var(--vaadin-login-form-error-line-height, inherit);
+  }
+
+  [part='error-message']::before {
+    background: currentColor;
+    content: '';
+    display: inline-block;
+    flex: none;
+    height: var(--vaadin-icon-size, 1lh);
+    mask-image: var(--_vaadin-icon-warn);
+    width: var(--vaadin-icon-size, 1lh);
+  }
+
+  [part='error-message-description'] {
+    grid-column: 2;
+  }
+`;
