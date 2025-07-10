@@ -69,6 +69,10 @@ export const messageInputStyles = css`
     background: var(--vaadin-button-text-color);
   }
 
+  :host([dir='rtl'][theme~='icon-button']) ::slotted([slot='button'])::before {
+    scale: -1;
+  }
+
   @media (forced-colors: active) {
     :host([theme~='icon-button']) ::slotted([slot='button']) {
       forced-color-adjust: none;
