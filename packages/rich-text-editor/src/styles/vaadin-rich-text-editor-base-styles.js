@@ -8,7 +8,9 @@
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
+
 import { css } from 'lit';
+import { icons } from './vaadin-rich-text-editor-base-icons.js';
 
 const base = css`
   :host {
@@ -340,4 +342,4 @@ const states = css`
   }
 `;
 
-export const richTextEditorStyles = [base, content, toolbar, states];
+export const richTextEditorStyles = [icons, base, content, toolbar, states];
