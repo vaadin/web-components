@@ -68,6 +68,7 @@ export const AppLayoutMixin = (superclass) =>
           readOnly: true,
           value: false,
           reflectToAttribute: true,
+          observer: '__overlayChanged',
           sync: true,
         },
 
@@ -245,6 +246,22 @@ export const AppLayoutMixin = (superclass) =>
     }
 
     /**
+     * A callback for the `overlay` property observer.
+     *
+     * When layout resizes while in the overlay mode, drawer opened state
+     * is not changed, but focus trap needs to be removed.
+     *
+     * @param {boolean} overlay
+     * @param {boolean} oldOverlay
+     * @private
+     */
+    __overlayChanged(_overlay, oldOverlay) {
+      if (oldOverlay) {
+        this.__restoreFocus();
+      }
+    }
+
+    /**
      * A callback for the `i18n` property observer.
      *
      * The method ensures the drawer has ARIA attributes updated
@@ -412,9 +429,7 @@ export const AppLayoutMixin = (superclass) =>
         return;
       }
 
-      this.__ariaModalController.close();
-      this.__focusTrapController.releaseFocus();
-      this.$.drawer.removeAttribute('tabindex');
+      this.__restoreFocus();
 
       // Move focus to the drawer toggle when closing the drawer.
       const toggle = this.querySelector('vaadin-drawer-toggle');
@@ -422,6 +437,13 @@ export const AppLayoutMixin = (superclass) =>
         toggle.focus();
         toggle.setAttribute('focus-ring', 'focus');
       }
+    }
+
+    /** @private */
+    __restoreFocus() {
+      this.__ariaModalController.close();
+      this.__focusTrapController.releaseFocus();
+      this.$.drawer.removeAttribute('tabindex');
     }
 
     /**
