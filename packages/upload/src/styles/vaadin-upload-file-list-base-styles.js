@@ -1,0 +1,30 @@
+/**
+ * @license
+ * Copyright (c) 2000 - 2025 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+import { css } from 'lit';
+
+export const uploadFileListStyles = css`
+  :host {
+    display: block;
+  }
+
+  :host([hidden]) {
+    display: none !important;
+  }
+
+  [part='list'] {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  ::slotted(li:not(:last-of-type)) {
+    border-bottom: var(
+      --vaadin-upload-file-list-border,
+      var(--vaadin-upload-file-list-border-width, 1px) solid
+        var(--vaadin-upload-file-list-border-color, var(--vaadin-border-color))
+    );
+  }
+`;
