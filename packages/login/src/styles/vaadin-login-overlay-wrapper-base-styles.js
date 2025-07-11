@@ -5,7 +5,7 @@
  */
 import '@vaadin/component-base/src/style-props.js';
 import { css } from 'lit';
-import { overlayStyles } from '@vaadin/overlay/src/styles/vaadin-overlay-core-styles.js';
+import { overlayStyles } from '@vaadin/overlay/src/styles/vaadin-overlay-base-styles.js';
 
 const loginOverlayWrapper = css`
   [part='overlay'] {
