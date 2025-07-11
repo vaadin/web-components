@@ -3,6 +3,8 @@
  * Copyright (c) 2018 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { html, render } from 'lit';
+import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 import { LoginMixin } from './vaadin-login-mixin.js';
 
 function isCheckbox(field) {
@@ -15,14 +17,85 @@ function isCheckbox(field) {
  */
 export const LoginFormMixin = (superClass) =>
   class LoginFormMixin extends LoginMixin(superClass) {
-    static get observers() {
-      return ['_errorChanged(error)'];
-    }
-
+    /** @protected */
     get _customFields() {
-      return [...this.$.vaadinLoginFormWrapper.children].filter((node) => {
+      return [...this.children].filter((node) => {
         return node.getAttribute('slot') === 'custom-form-area' && node.hasAttribute('name');
       });
+    }
+
+    /** @protected */
+    get _userNameField() {
+      return this.querySelector('#vaadinLoginUsername');
+    }
+
+    /** @protected */
+    get _passwordField() {
+      return this.querySelector('#vaadinLoginPassword');
+    }
+
+    /** @protected */
+    firstUpdated() {
+      super.firstUpdated();
+
+      this.__formController = new SlotController(this, 'form', 'form', {
+        initializer: (form) => {
+          form.setAttribute('method', 'POST');
+          form.addEventListener('formdata', (e) => this._onFormData(e));
+          this.__form = form;
+        },
+      });
+
+      this.__submitController = new SlotController(this, 'submit', 'vaadin-button', {
+        initializer: (button) => {
+          button.setAttribute('theme', 'primary submit');
+          button.addEventListener('click', () => this.submit());
+          this.__submitButton = button;
+        },
+      });
+
+      this.__forgotController = new SlotController(this, 'forgot-password', 'vaadin-button', {
+        initializer: (button) => {
+          button.setAttribute('theme', 'tertiary small');
+          button.addEventListener('click', () => this._onForgotPasswordClick());
+          this.__forgotButton = button;
+        },
+      });
+
+      this.addController(this.__formController);
+      this.addController(this.__submitController);
+      this.addController(this.__forgotController);
+    }
+
+    /** @protected */
+    updated(props) {
+      super.updated(props);
+
+      if (props.has('__effectiveI18n')) {
+        this.__renderForm();
+        this.__submitButton.textContent = this.__effectiveI18n.form.submit;
+        this.__forgotButton.textContent = this.__effectiveI18n.form.forgotPassword;
+      }
+
+      if (props.has('action')) {
+        if (this.action) {
+          this.__form.setAttribute('action', this.action);
+        } else {
+          this.__form.removeAttribute('action');
+        }
+      }
+
+      if (props.has('noForgotPassword')) {
+        this.__forgotButton.toggleAttribute('hidden', this.noForgotPassword);
+      }
+
+      if (props.has('disabled')) {
+        this.__submitButton.disabled = this.disabled;
+      }
+
+      if (props.has('error') && this.error && !this._preventAutoEnable) {
+        this.disabled = false;
+      }
     }
 
     /** @protected */
@@ -32,23 +105,56 @@ export const LoginFormMixin = (superClass) =>
       if (!this.noAutofocus) {
         // Wait for the form to fully render.
         await new Promise(requestAnimationFrame);
-        this.$.vaadinLoginUsername.focus();
+        this._userNameField.focus();
       }
     }
 
     /** @private */
-    _errorChanged() {
-      if (this.error && !this._preventAutoEnable) {
-        this.disabled = false;
-      }
+    __renderForm() {
+      render(
+        html`
+          <input id="csrf" type="hidden" />
+          <vaadin-text-field
+            name="username"
+            .label="${this.__effectiveI18n.form.username}"
+            .errorMessage="${this.__effectiveI18n.errorMessage.username}"
+            id="vaadinLoginUsername"
+            required
+            @keydown="${this._handleInputKeydown}"
+            autocapitalize="none"
+            autocorrect="off"
+            spellcheck="false"
+            autocomplete="username"
+            manual-validation
+          >
+            <input type="text" slot="input" @keyup="${this._handleInputKeyup}" />
+          </vaadin-text-field>
+
+          <vaadin-password-field
+            name="password"
+            .label="${this.__effectiveI18n.form.password}"
+            .errorMessage="${this.__effectiveI18n.errorMessage.password}"
+            id="vaadinLoginPassword"
+            required
+            @keydown="${this._handleInputKeydown}"
+            spellcheck="false"
+            autocomplete="current-password"
+            manual-validation
+          >
+            <input type="password" slot="input" @keyup="${this._handleInputKeyup}" />
+          </vaadin-password-field>
+        `,
+        this.__form,
+        { host: this },
+      );
     }
 
     /**
      * Submits the form.
      */
     submit() {
-      const userName = this.$.vaadinLoginUsername;
-      const password = this.$.vaadinLoginPassword;
+      const userName = this._userNameField;
+      const password = this._passwordField;
 
       // eslint-disable-next-line no-restricted-syntax
       userName.validate();
@@ -91,8 +197,9 @@ export const LoginFormMixin = (superClass) =>
         const csrfMetaName = document.querySelector('meta[name=_csrf_parameter]');
         const csrfMetaValue = document.querySelector('meta[name=_csrf]');
         if (csrfMetaName && csrfMetaValue) {
-          this.$.csrf.name = csrfMetaName.content;
-          this.$.csrf.value = csrfMetaValue.content;
+          const csrf = this.querySelector('#csrf');
+          csrf.name = csrfMetaName.content;
+          csrf.value = csrfMetaValue.content;
         }
         this.querySelector('form').submit();
       }
@@ -117,8 +224,7 @@ export const LoginFormMixin = (superClass) =>
     _handleInputKeydown(e) {
       if (e.key === 'Enter') {
         const { currentTarget: inputActive } = e;
-        const nextInput =
-          inputActive.id === 'vaadinLoginUsername' ? this.$.vaadinLoginPassword : this.$.vaadinLoginUsername;
+        const nextInput = inputActive.id === 'vaadinLoginUsername' ? this._passwordField : this._userNameField;
         // eslint-disable-next-line no-restricted-syntax
         if (inputActive.validate()) {
           if (nextInput.checkValidity()) {
