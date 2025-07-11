@@ -112,8 +112,8 @@ export const LoginOverlayMixin = (superClass) =>
       const form = this.$.vaadinLoginForm;
 
       if (!this.opened) {
-        form.$.vaadinLoginUsername.value = '';
-        form.$.vaadinLoginPassword.value = '';
+        form._userNameField.value = '';
+        form._passwordField.value = '';
         this.disabled = false;
 
         if (this._undoTitleTeleport) {
@@ -129,14 +129,8 @@ export const LoginOverlayMixin = (superClass) =>
         }
       } else {
         this._undoTitleTeleport = this._teleport('title', this.$.vaadinLoginOverlayWrapper);
-
-        this._undoFieldsTeleport = this._teleport(
-          'custom-form-area',
-          form.$.vaadinLoginFormWrapper,
-          form.querySelector('vaadin-button'),
-        );
-
-        this._undoFooterTeleport = this._teleport('footer', form.$.vaadinLoginFormWrapper);
+        this._undoFieldsTeleport = this._teleport('custom-form-area', form, form.querySelector('vaadin-button'));
+        this._undoFooterTeleport = this._teleport('footer', form);
 
         // Overlay sets pointerEvents on body to `none`, which breaks LastPass popup
         // Reverting it back to the previous state

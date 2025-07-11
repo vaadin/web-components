@@ -16,10 +16,10 @@ describe('login overlay', () => {
     overlay.opened = false;
   });
 
-  it('should render form wrapper when opened', async () => {
+  it('should render form when opened', async () => {
     overlay.opened = true;
     await oneEvent(overlay.$.vaadinLoginOverlayWrapper, 'vaadin-overlay-open');
-    expect(document.querySelector('vaadin-login-form-wrapper')).to.be.ok;
+    expect(document.querySelector('vaadin-login-form')).to.be.ok;
   });
 });
 
@@ -47,22 +47,22 @@ describe('opened overlay', () => {
 
   it('should set opened using attribute', () => {
     expect(overlay.opened).to.be.true;
-    expect(document.querySelector('vaadin-login-form-wrapper')).to.exist;
+    expect(document.querySelector('vaadin-login-form')).to.exist;
   });
 
-  it('should remove form wrapper when closed', async () => {
+  it('should remove form when closed', async () => {
     overlay.opened = false;
     await nextUpdate(overlay);
-    expect(document.querySelector('vaadin-login-form-wrapper')).not.to.exist;
+    expect(document.querySelector('vaadin-login-form')).not.to.exist;
   });
 
-  it('should not remove form wrapper when moved within DOM', async () => {
+  it('should not remove form when moved within DOM', async () => {
     const newParent = document.createElement('div');
     document.body.appendChild(newParent);
     newParent.appendChild(overlay);
     await nextRender();
 
-    expect(document.querySelector('vaadin-login-form-wrapper')).to.exist;
+    expect(document.querySelector('vaadin-login-form')).to.exist;
   });
 
   it('should propagate theme to a wrapper', () => {
@@ -108,7 +108,7 @@ describe('opened overlay', () => {
   });
 
   it('should focus the username field', () => {
-    const usernameElement = overlay.$.vaadinLoginForm.$.vaadinLoginUsername;
+    const usernameElement = overlay.$.vaadinLoginForm._userNameField;
     expect(document.activeElement).to.equal(usernameElement.inputElement);
   });
 
@@ -308,11 +308,10 @@ describe('custom-form-area slot', () => {
     overlay.opened = true;
     await oneEvent(overlay.$.vaadinLoginOverlayWrapper, 'vaadin-overlay-open');
 
-    const wrapper = form.querySelector('vaadin-login-form-wrapper');
-    expect(inputs[0].parentElement).to.equal(wrapper);
-    expect(inputs[1].parentElement).to.equal(wrapper);
+    expect(inputs[0].parentElement).to.equal(form);
+    expect(inputs[1].parentElement).to.equal(form);
 
-    const button = wrapper.querySelector('vaadin-button');
+    const button = form.querySelector('vaadin-button');
     expect(inputs[0].nextElementSibling).to.equal(inputs[1]);
     expect(inputs[1].nextElementSibling).to.equal(button);
 
@@ -343,9 +342,8 @@ describe('footer slot', () => {
     overlay.opened = true;
     await oneEvent(overlay.$.vaadinLoginOverlayWrapper, 'vaadin-overlay-open');
 
-    const wrapper = form.querySelector('vaadin-login-form-wrapper');
-    expect(divs[0].parentElement).to.equal(wrapper);
-    expect(divs[1].parentElement).to.equal(wrapper);
+    expect(divs[0].parentElement).to.equal(form);
+    expect(divs[1].parentElement).to.equal(form);
 
     overlay.opened = false;
     await nextRender();
