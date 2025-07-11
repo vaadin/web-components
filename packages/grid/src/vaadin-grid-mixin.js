@@ -645,9 +645,9 @@ export const GridMixin = (superClass) =>
       this._updateRowOrderParts(row);
       this._a11yUpdateRowRowindex(row);
 
-      this._ensureRowItem(row);
-      this._ensureRowHierarchy(row);
-      this._updateRow(row);
+      this.__ensureRowItem(row);
+      this.__ensureRowHierarchy(row);
+      this.__updateRow(row);
     }
 
     /** @private */
@@ -744,8 +744,8 @@ export const GridMixin = (superClass) =>
       this.__updateHeaderAndFooter();
     }
 
-    /** @package */
-    _updateRowLoading(row, loading) {
+    /** @private */
+    __updateRowLoading(row, loading) {
       const cells = getBodyRowCells(row);
 
       // Row state attribute
@@ -761,13 +761,13 @@ export const GridMixin = (superClass) =>
       }
     }
 
-    /** @package */
-    _updateRow(row) {
+    /** @private */
+    __updateRow(row) {
       const item = this._getRowItem(row);
       if (item) {
-        this._updateRowLoading(row, false);
+        this.__updateRowLoading(row, false);
       } else {
-        this._updateRowLoading(row, true);
+        this.__updateRowLoading(row, true);
         return;
       }
 

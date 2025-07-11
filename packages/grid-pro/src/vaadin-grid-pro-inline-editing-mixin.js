@@ -543,17 +543,17 @@ export const InlineEditingMixin = (superClass) =>
 
     /**
      * @param {!HTMLElement} row
-     * @protected
+     * @private
      */
-    _updateRow(row) {
-      const item = this._getRowItem(row);
+    __updateRow(row) {
+      const item = this.__getRowItem(row);
       if (item && this.__edited) {
         const { cell, model } = this.__edited;
         if (cell.parentNode === row && model.item !== item) {
           this._stopEdit();
         }
       }
-      super._updateRow(row);
+      super.__updateRow(row);
     }
 
     /**
