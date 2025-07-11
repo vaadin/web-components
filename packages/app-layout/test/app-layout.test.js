@@ -467,6 +467,17 @@ describe('vaadin-app-layout', () => {
           await nextFrame();
           expect(spy.called).to.be.false;
         });
+
+        it('should remove drawer tabindex when it resizes from the overlay mode', async () => {
+          expect(drawer.hasAttribute('tabindex')).to.be.true;
+
+          // Force it to desktop layout
+          layout.style.setProperty('--vaadin-app-layout-drawer-overlay', 'false');
+          layout._updateOverlayMode();
+          await nextRender();
+
+          expect(drawer.hasAttribute('tabindex')).to.be.false;
+        });
       });
     });
   });
