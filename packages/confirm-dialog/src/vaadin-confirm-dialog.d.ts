@@ -12,7 +12,7 @@ export * from './vaadin-confirm-dialog-mixin.js';
 /**
  * `<vaadin-confirm-dialog>` is a Web Component for showing alerts and asking for user confirmation.
  *
- * ```
+ * ```html
  * <vaadin-confirm-dialog cancel-button-visible>
  *   There are unsaved changes. Do you really want to leave?
  * </vaadin-confirm-dialog>

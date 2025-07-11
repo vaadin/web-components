@@ -23,7 +23,7 @@ import { AccordionMixin } from './vaadin-accordion-mixin.js';
  * Only one panel can be opened at a time, opening a new one forces
  * previous panel to close and hide its content.
  *
- * ```
+ * ```html
  * <vaadin-accordion>
  *   <vaadin-accordion-panel>
  *     <vaadin-accordion-heading slot="summary">Panel 1</vaadin-accordion-heading>
