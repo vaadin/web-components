@@ -323,7 +323,7 @@ describe('data provider', () => {
 
         grid.dataProvider.resetHistory();
         const renderSpy = sinon.spy(grid, '_flatSizeChanged');
-        const updateItemSpy = sinon.spy(grid, '_updateItem');
+        const updateItemSpy = sinon.spy(grid, '__updateRow');
         grid.clearCache();
 
         expect(grid.dataProvider.callCount).to.equal(2);
@@ -607,7 +607,7 @@ describe('data provider', () => {
 
     describe('rendering', () => {
       function getFirstRowUpdateCount() {
-        const callsForFirstIndex = grid._updateItem.getCalls().filter((call) => {
+        const callsForFirstIndex = grid.__updateRow.getCalls().filter((call) => {
           const item = call.args[1];
           return item.value === '0';
         });
@@ -626,14 +626,14 @@ describe('data provider', () => {
 
           cb(pageItems, 3);
         };
-        sinon.spy(grid, '_updateItem');
+        sinon.spy(grid, '__updateRow');
         await nextFrame();
       });
 
       it('should limit row updates', async () => {
         grid.expandedItems = [{ value: '0' }, { value: '1' }, { value: '1-0' }, { value: '2' }];
         await nextFrame();
-        // There are currently two _updateItem calls for a row. The extra one (a direct update request)
+        // There are currently two __updateRow calls for a row. The extra one (a direct update request)
         // is coming from _expandedItemsChanged.
         expect(getFirstRowUpdateCount()).to.equal(2);
       });

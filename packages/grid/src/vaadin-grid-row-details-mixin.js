@@ -140,7 +140,7 @@ export const RowDetailsMixin = (superClass) =>
       }
 
       // Assigns a renderer when the details cell is opened.
-      // The details cell content is rendered later in the `_updateItem` method.
+      // The details cell content is rendered later in the `__updateRow` method.
       if (this.rowDetailsRenderer) {
         cell._renderer = this.rowDetailsRenderer;
       }

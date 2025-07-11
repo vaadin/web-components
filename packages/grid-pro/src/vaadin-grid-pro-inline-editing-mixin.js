@@ -588,7 +588,7 @@ export const InlineEditingMixin = (superClass) =>
       const isEditable = column.isCellEditable(model);
 
       // Cancel editing if the cell is currently edited one and becomes no longer editable
-      // TODO: should be moved to `_updateItem` when Grid connector is updated to use it.
+      // TODO: should be moved to `__updateRow` when Grid connector is updated to use it.
       if (this.__edited && this.__edited.cell === cell && !isEditable) {
         this._stopEdit(true, true);
       }
