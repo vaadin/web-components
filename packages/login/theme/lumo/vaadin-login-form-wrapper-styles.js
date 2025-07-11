@@ -6,12 +6,18 @@ import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themab
 
 const loginFormWrapper = css`
   :host {
-    max-width: calc(var(--lumo-size-m) * 10);
+    width: calc(var(--lumo-size-m) * 10);
+    max-width: 100%;
     background: var(--lumo-base-color) linear-gradient(var(--lumo-tint-5pct), var(--lumo-tint-5pct));
   }
 
   [part='form'] {
     padding: var(--lumo-space-l);
+  }
+
+  ::slotted(form) {
+    display: flex;
+    flex-direction: column;
   }
 
   [part='form-title'] {

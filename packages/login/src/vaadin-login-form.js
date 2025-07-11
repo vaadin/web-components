@@ -71,11 +71,6 @@ class LoginForm extends LoginFormMixin(ElementMixin(ThemableMixin(PolylitMixin(L
   /** @protected */
   render() {
     return html`
-      <style>
-        vaadin-login-form-wrapper > form > * {
-          width: 100%;
-        }
-      </style>
       <vaadin-login-form-wrapper
         id="vaadinLoginFormWrapper"
         theme="${ifDefined(this._theme)}"
