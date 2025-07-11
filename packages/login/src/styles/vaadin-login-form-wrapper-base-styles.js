@@ -10,9 +10,8 @@ export const loginFormWrapperStyles = css`
   :host {
     background: var(--vaadin-login-form-background, transparent);
     border-radius: var(--vaadin-login-form-border-radius, 0);
-    display: inline-block;
+    display: block;
     max-width: 100%;
-    overflow: hidden;
     width: var(--vaadin-login-form-width, 360px);
   }
 
@@ -37,7 +36,7 @@ export const loginFormWrapperStyles = css`
 
   [part='form-title'] {
     color: var(--vaadin-login-form-title-color, var(--vaadin-color));
-    font-size: var(--vaadin-login-form-title-font-size, 1.5rem);
+    font-size: var(--vaadin-login-form-title-font-size, 1.25rem);
     font-weight: var(--vaadin-login-form-title-font-weight, 600);
     line-height: var(--vaadin-login-form-title-line-height, inherit);
   }
