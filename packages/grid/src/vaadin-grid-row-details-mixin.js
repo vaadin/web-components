@@ -85,7 +85,7 @@ export const RowDetailsMixin = (superClass) =>
         // Only update the rows if the column tree has already been initialized
         iterateChildren(this.$.items, (row) => {
           if (!row.querySelector('[part~=details-cell]')) {
-            this._updateRow(row, this._columnTree[this._columnTree.length - 1]);
+            this.__initRow(row, this._columnTree[this._columnTree.length - 1]);
             const isDetailsOpened = this._isDetailsOpened(row._item);
             this._toggleDetailsCell(row, isDetailsOpened);
           }

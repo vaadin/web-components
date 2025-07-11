@@ -345,7 +345,7 @@ export const GridMixin = (superClass) =>
         row.setAttribute('role', 'row');
         row.setAttribute('tabindex', '-1');
         if (this._columnTree) {
-          this._updateRow(row, this._columnTree[this._columnTree.length - 1], 'body', false, true);
+          this.__initRow(row, this._columnTree[this._columnTree.length - 1], 'body', false, true);
         }
         rows.push(row);
       }
@@ -457,9 +457,9 @@ export const GridMixin = (superClass) =>
      * @param {?string} section
      * @param {boolean} isColumnRow
      * @param {boolean} noNotify
-     * @protected
+     * @private
      */
-    _updateRow(row, columns, section = 'body', isColumnRow = false, noNotify = false) {
+    __initRow(row, columns, section = 'body', isColumnRow = false, noNotify = false) {
       const contentsFragment = document.createDocumentFragment();
 
       iterateRowCells(row, (cell) => {
@@ -683,7 +683,7 @@ export const GridMixin = (superClass) =>
      */
     _renderColumnTree(columnTree) {
       iterateChildren(this.$.items, (row) => {
-        this._updateRow(row, columnTree[columnTree.length - 1], 'body', false, true);
+        this.__initRow(row, columnTree[columnTree.length - 1], 'body', false, true);
 
         const model = this.__getRowModel(row);
         this._updateRowOrderParts(row);
@@ -710,7 +710,7 @@ export const GridMixin = (superClass) =>
       }
 
       iterateChildren(this.$.header, (headerRow, index, rows) => {
-        this._updateRow(headerRow, columnTree[index], 'header', index === columnTree.length - 1);
+        this.__initRow(headerRow, columnTree[index], 'header', index === columnTree.length - 1);
 
         const cells = getBodyRowCells(headerRow);
         updateCellsPart(cells, 'first-header-row-cell', index === 0);
@@ -718,7 +718,7 @@ export const GridMixin = (superClass) =>
       });
 
       iterateChildren(this.$.footer, (footerRow, index, rows) => {
-        this._updateRow(footerRow, columnTree[columnTree.length - 1 - index], 'footer', index === 0);
+        this.__initRow(footerRow, columnTree[columnTree.length - 1 - index], 'footer', index === 0);
 
         const cells = getBodyRowCells(footerRow);
         updateCellsPart(cells, 'first-footer-row-cell', index === 0);
@@ -726,7 +726,7 @@ export const GridMixin = (superClass) =>
       });
 
       // Sizer rows
-      this._updateRow(this.$.sizer, columnTree[columnTree.length - 1]);
+      this.__initRow(this.$.sizer, columnTree[columnTree.length - 1]);
 
       this._resizeHandler();
       this._frozenCellsChanged();
