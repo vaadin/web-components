@@ -368,6 +368,24 @@ describe('vaadin-app-layout', () => {
         expect(layout.drawerOpened).to.be.true;
       });
 
+      it('should remove drawer tabindex when it resizes from the overlay mode', async () => {
+        // Force it to mobile layout
+        layout.style.setProperty('--vaadin-app-layout-drawer-overlay', 'true');
+        layout._updateOverlayMode();
+
+        layout.drawerOpened = true;
+        await nextRender();
+
+        expect(drawer.hasAttribute('tabindex')).to.be.true;
+
+        // Force it to desktop layout
+        layout.style.setProperty('--vaadin-app-layout-drawer-overlay', 'false');
+        layout._updateOverlayMode();
+        await nextRender();
+
+        expect(drawer.hasAttribute('tabindex')).to.be.false;
+      });
+
       it('should move focus to the drawer when opening the drawer', async () => {
         toggle.focus();
         layout.drawerOpened = true;
