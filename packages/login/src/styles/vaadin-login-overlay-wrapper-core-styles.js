@@ -7,6 +7,19 @@ import { css } from 'lit';
 import { overlayStyles } from '@vaadin/overlay/src/styles/vaadin-overlay-core-styles.js';
 
 const loginOverlayWrapper = css`
+  /* TODO move to overlay styles */
+  :host {
+    /* Needed for proper positioning */
+    width: auto;
+    height: auto;
+    /* Reset visuals */
+    border: none;
+    padding: 0;
+    background-color: transparent;
+    /* Do not clip shadows */
+    overflow: visible;
+  }
+
   [part='overlay'] {
     outline: none;
   }

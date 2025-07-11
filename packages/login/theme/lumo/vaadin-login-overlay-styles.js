@@ -28,7 +28,7 @@ const loginOverlayWrapper = css`
     min-height: calc(var(--lumo-size-m) * 5);
   }
 
-  [part='title'] {
+  ::slotted([slot='title']) {
     font-size: var(--lumo-font-size-xxxl);
     font-weight: 600;
     line-height: var(--lumo-line-height-xs);
