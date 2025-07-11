@@ -3,14 +3,18 @@
  * Copyright (c) 2018 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import './vaadin-login-form.js';
+import '@vaadin/button/src/vaadin-button.js';
+import '@vaadin/text-field/src/vaadin-text-field.js';
+import '@vaadin/password-field/src/vaadin-password-field.js';
+import './vaadin-login-form-wrapper.js';
 import './vaadin-login-overlay-wrapper.js';
-import { html, LitElement } from 'lit';
+import { css, html, LitElement } from 'lit';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { LoginFormMixin } from './vaadin-login-form-mixin.js';
 import { LoginOverlayMixin } from './vaadin-login-overlay-mixin.js';
 
 /**
@@ -50,11 +54,24 @@ import { LoginOverlayMixin } from './vaadin-login-overlay-mixin.js';
  * @extends HTMLElement
  * @mixes ElementMixin
  * @mixes ThemableMixin
+ * @mixes LoginFormMixin
  * @mixes LoginOverlayMixin
  */
-class LoginOverlay extends LoginOverlayMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElement)))) {
+class LoginOverlay extends LoginFormMixin(LoginOverlayMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElement))))) {
   static get is() {
     return 'vaadin-login-overlay';
+  }
+
+  static get styles() {
+    return css`
+      :host {
+        display: block;
+      }
+
+      :host([hidden]) {
+        display: none !important;
+      }
+    `;
   }
 
   /** @protected */
@@ -62,38 +79,35 @@ class LoginOverlay extends LoginOverlayMixin(ElementMixin(ThemableMixin(PolylitM
     return html`
       <vaadin-login-overlay-wrapper
         id="vaadinLoginOverlayWrapper"
+        .owner="${this}"
         .opened="${this.opened}"
-        .title="${this.title}"
         .description="${this.description}"
-        .headingLevel="${this.headingLevel}"
-        role="dialog"
+        popover="manual"
         focus-trap
         with-backdrop
         theme="${ifDefined(this._theme)}"
         @vaadin-overlay-escape-press="${this._preventClosingLogin}"
         @vaadin-overlay-outside-click="${this._preventClosingLogin}"
         @opened-changed="${this._onOpenedChanged}"
+        exportparts="backdrop, overlay, content, card, brand, description, form:form-container"
       >
-        <vaadin-login-form
+        <slot name="title" slot="title"></slot>
+        <vaadin-login-form-wrapper
+          id="vaadinLoginFormWrapper"
           theme="with-overlay"
-          id="vaadinLoginForm"
-          .action="${this.action}"
-          .disabled="${this.disabled}"
           .error="${this.error}"
-          .noAutofocus="${this.noAutofocus}"
-          .noForgotPassword="${this.noForgotPassword}"
-          .headingLevel="${this.__computeHeadingLevel(this.headingLevel)}"
           .i18n="${this.__effectiveI18n}"
-          @login="${this._retargetEvent}"
-          @forgot-password="${this._retargetEvent}"
-          @disabled-changed="${this._onDisabledChanged}"
-        ></vaadin-login-form>
+          .headingLevel="${this.headingLevel + 1}"
+          part="form-wrapper"
+          exportparts="form, form-title, error-message, error-message-title, error-message-description, footer"
+        >
+          <slot name="form" slot="form"></slot>
+          <slot name="custom-form-area" slot="custom-form-area"></slot>
+          <slot name="submit" slot="submit"></slot>
+          <slot name="forgot-password" slot="forgot-password"></slot>
+          <slot name="footer" slot="footer"></slot>
+        </vaadin-login-form-wrapper>
       </vaadin-login-overlay-wrapper>
-
-      <div hidden>
-        <slot name="custom-form-area"></slot>
-        <slot name="footer"></slot>
-      </div>
     `;
   }
 

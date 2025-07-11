@@ -5,11 +5,16 @@
  */
 import type { Constructor } from '@open-wc/dedupe-mixin';
 import type { OverlayClassMixinClass } from '@vaadin/component-base/src/overlay-class-mixin.js';
+import type { LoginFormMixinClass } from './vaadin-login-form-mixin.js';
 import type { LoginMixinClass } from './vaadin-login-mixin.js';
 
 export declare function LoginOverlayMixin<T extends Constructor<HTMLElement>>(
   base: T,
-): Constructor<LoginMixinClass> & Constructor<LoginOverlayMixinClass> & Constructor<OverlayClassMixinClass> & T;
+): Constructor<LoginFormMixinClass> &
+  Constructor<LoginMixinClass> &
+  Constructor<LoginOverlayMixinClass> &
+  Constructor<OverlayClassMixinClass> &
+  T;
 
 export declare class LoginOverlayMixinClass {
   /**

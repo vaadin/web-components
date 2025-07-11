@@ -4,7 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { OverlayClassMixin } from '@vaadin/component-base/src/overlay-class-mixin.js';
-import { LoginMixin } from './vaadin-login-mixin.js';
+import { TitleController } from './title-controller.js';
 
 /**
  * @polymerMixin
@@ -12,7 +12,7 @@ import { LoginMixin } from './vaadin-login-mixin.js';
  * @mixes OverlayClassMixin
  */
 export const LoginOverlayMixin = (superClass) =>
-  class LoginOverlayMixin extends OverlayClassMixin(LoginMixin(superClass)) {
+  class LoginOverlayMixin extends OverlayClassMixin(superClass) {
     static get properties() {
       return {
         /**
@@ -33,7 +33,6 @@ export const LoginOverlayMixin = (superClass) =>
           type: Boolean,
           value: false,
           sync: true,
-          observer: '_onOpenedChange',
         },
 
         /**
@@ -47,15 +46,33 @@ export const LoginOverlayMixin = (superClass) =>
       };
     }
 
-    static get observers() {
-      return ['__i18nChanged(__effectiveI18n)'];
+    /** @protected */
+    firstUpdated() {
+      super.firstUpdated();
+
+      this.setAttribute('role', 'dialog');
+
+      this.__titleController = new TitleController(this);
+      this.addController(this.__titleController);
+
+      this._overlayElement = this.$.vaadinLoginOverlayWrapper;
     }
 
     /** @protected */
-    ready() {
-      super.ready();
+    updated(props) {
+      super.updated(props);
 
-      this._overlayElement = this.$.vaadinLoginOverlayWrapper;
+      if (props.has('title')) {
+        this.__titleController.setTitle(this.title);
+      }
+
+      if (props.has('opened')) {
+        this._openedChanged(this.opened);
+      }
+
+      if (props.has('__effectiveI18n')) {
+        this.__i18nChanged(this.__effectiveI18n);
+      }
     }
 
     /** @protected */
@@ -92,71 +109,17 @@ export const LoginOverlayMixin = (superClass) =>
       e.preventDefault();
     }
 
-    /**
-     * @param {!Event} e
-     * @protected
-     */
-    _retargetEvent(e) {
-      e.stopPropagation();
-      const { detail, composed, cancelable, bubbles } = e;
-
-      const firedEvent = this.dispatchEvent(new CustomEvent(e.type, { bubbles, cancelable, composed, detail }));
-      // Check if `eventTarget.preventDefault()` was called to prevent default in the original event
-      if (!firedEvent) {
-        e.preventDefault();
-      }
-    }
-
     /** @private */
-    _onOpenedChange() {
-      const form = this.$.vaadinLoginForm;
-
-      if (!this.opened) {
-        form._userNameField.value = '';
-        form._passwordField.value = '';
+    _openedChanged(opened) {
+      if (!opened) {
+        this._userNameField.value = '';
+        this._passwordField.value = '';
         this.disabled = false;
-
-        if (this._undoTitleTeleport) {
-          this._undoTitleTeleport();
-        }
-
-        if (this._undoFieldsTeleport) {
-          this._undoFieldsTeleport();
-        }
-
-        if (this._undoFooterTeleport) {
-          this._undoFooterTeleport();
-        }
       } else {
-        this._undoTitleTeleport = this._teleport('title', this.$.vaadinLoginOverlayWrapper);
-        this._undoFieldsTeleport = this._teleport('custom-form-area', form, form.querySelector('vaadin-button'));
-        this._undoFooterTeleport = this._teleport('footer', form);
-
         // Overlay sets pointerEvents on body to `none`, which breaks LastPass popup
         // Reverting it back to the previous state
         // https://github.com/vaadin/vaadin-overlay/blob/041cde4481b6262eac68d3a699f700216d897373/src/vaadin-overlay.html#L660
         document.body.style.pointerEvents = this.$.vaadinLoginOverlayWrapper._previousDocumentPointerEvents;
       }
-    }
-
-    /** @private */
-    _teleport(slot, target, refNode) {
-      const teleported = [...this.querySelectorAll(`[slot="${slot}"]`)].map((el) => {
-        if (refNode) {
-          target.insertBefore(el, refNode);
-        } else {
-          target.appendChild(el);
-        }
-        return el;
-      });
-      // Function to undo the teleport
-      return () => {
-        this.append(...teleported);
-      };
-    }
-
-    /** @private */
-    __computeHeadingLevel(headingLevel) {
-      return headingLevel + 1;
     }
   };
