@@ -544,16 +544,16 @@ export const InlineEditingMixin = (superClass) =>
     /**
      * @param {!HTMLElement} row
      * @param {GridItem} item
-     * @protected
+     * @private
      */
-    _updateItem(row, item) {
+    __updateRow(row, item = row._item) {
       if (this.__edited) {
         const { cell, model } = this.__edited;
         if (cell.parentNode === row && model.item !== item) {
           this._stopEdit();
         }
       }
-      super._updateItem(row, item);
+      super.__updateRow(row, item);
     }
 
     /**
