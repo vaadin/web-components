@@ -37,7 +37,7 @@ describe('row details', () => {
     flushGrid(grid);
   }
 
-  it('should not increase row update count', () => {
+  it('should not increase row init count', () => {
     grid = fixtureSync(`
       <vaadin-grid style="width: 50px; height: 400px" size="100">
         <vaadin-grid-column></vaadin-grid-column>
