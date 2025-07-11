@@ -320,6 +320,14 @@ const toolbar = css`
     [part~='toolbar-button']::before {
       background: CanvasText;
     }
+
+    [part~='toolbar-button'][on] {
+      background: Highlight;
+    }
+
+    [part~='toolbar-button'][on]::before {
+      background: HighlightText;
+    }
   }
 `;
 
