@@ -31,10 +31,10 @@ const loginOverlayWrapper = css`
   }
 
   [part='brand'] {
-    background: var(--vaadin-login-overlay-background, var(--vaadin-background-container));
+    background: var(--vaadin-login-brand-background, var(--vaadin-background-container));
     display: flex;
     flex-direction: column;
-    padding: var(--vaadin-login-overlay-padding, var(--vaadin-padding));
+    padding: var(--vaadin-login-brand-padding, var(--vaadin-padding));
   }
 
   [part='title'] {
