@@ -606,13 +606,7 @@ describe('data provider', () => {
     });
 
     describe('rendering', () => {
-      function getFirstRowUpdateCount() {
-        const callsForFirstIndex = grid.__updateRow.getCalls().filter((call) => {
-          const item = call.args[1];
-          return item.value === '0';
-        });
-        return callsForFirstIndex.length;
-      }
+      let firstRowRendererSpy;
 
       beforeEach(async () => {
         grid.itemIdPath = 'value';
@@ -624,10 +618,17 @@ describe('data provider', () => {
             };
           });
 
-          cb(pageItems, 3);
+          cb(pageItems, pageItems.length);
         };
-        sinon.spy(grid, '__updateRow');
+        grid.querySelector('vaadin-grid-column').renderer = (_root, _grid, { item }) => {
+          if (item.value === '0') {
+            firstRowRendererSpy?.();
+          }
+        };
+
         await nextFrame();
+
+        firstRowRendererSpy = sinon.spy();
       });
 
       it('should limit row updates', async () => {
@@ -635,14 +636,14 @@ describe('data provider', () => {
         await nextFrame();
         // There are currently two __updateRow calls for a row. The extra one (a direct update request)
         // is coming from _expandedItemsChanged.
-        expect(getFirstRowUpdateCount()).to.equal(2);
+        expect(firstRowRendererSpy).to.have.callCount(4);
       });
 
       it('should limit row updates on a small size', async () => {
         grid.size = 3;
         grid.expandedItems = [{ value: '0' }, { value: '1' }, { value: '1-0' }, { value: '2' }];
         await nextFrame();
-        expect(getFirstRowUpdateCount()).to.equal(2);
+        expect(firstRowRendererSpy).to.have.callCount(4);
       });
 
       it('should limit row updates on a small page size', async () => {
@@ -650,14 +651,14 @@ describe('data provider', () => {
         grid.expandedItems = [{ value: '0' }, { value: '1' }, { value: '1-0' }, { value: '2' }];
         await nextFrame();
         // Changing page size causes yet an additional update request
-        expect(getFirstRowUpdateCount()).to.equal(3);
+        expect(firstRowRendererSpy).to.have.callCount(6);
       });
 
       it('should limit row updates on a small page size, reverse property update order', async () => {
         grid.expandedItems = [{ value: '0' }, { value: '1' }, { value: '1-0' }, { value: '2' }];
         grid.pageSize = 1;
         await nextFrame();
-        expect(getFirstRowUpdateCount()).to.equal(3);
+        expect(firstRowRendererSpy).to.have.callCount(6);
       });
     });
   });
