@@ -73,10 +73,14 @@ describe('vaadin-login-form', () => {
     let wrapper;
 
     beforeEach(() => {
-      wrapper = form.querySelector('vaadin-login-form-wrapper');
+      wrapper = form.$.vaadinLoginFormWrapper;
     });
 
     it('default', async () => {
+      await expect(form).shadowDom.to.equalSnapshot();
+    });
+
+    it('wrapper', async () => {
       await expect(wrapper).shadowDom.to.equalSnapshot();
     });
 
