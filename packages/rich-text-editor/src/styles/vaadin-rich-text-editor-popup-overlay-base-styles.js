@@ -7,27 +7,25 @@ import { css } from 'lit';
 
 export const richTextEditorPopupOverlayStyles = css`
   [part='overlay'] {
-    padding: var(--vaadin-rte-overlay-padding, var(--vaadin-padding-container));
+    padding: var(--vaadin-rich-text-editor-overlay-padding, var(--vaadin-padding-container));
   }
 
   [part='content'] {
     display: grid;
-    gap: var(--vaadin-rte-overlay-gap, var(--vaadin-gap-container-inline));
+    gap: var(--vaadin-rich-text-editor-overlay-gap, var(--vaadin-gap-container-inline));
     grid-template-columns: repeat(7, minmax(0, 1fr));
   }
 
   [part='content'] ::slotted(button) {
-    border: var(
-      --vaadin-rte-overlay-button-border,
-      var(--vaadin-rte-button-border-width, 1px) solid var(--vaadin-rte-button-border-color, transparent)
-    );
-    border-radius: var(--vaadin-rte-overlay-button-border-radius, 9999px);
+    border: var(--vaadin-rich-text-editor-overlay-color-option-border-width, 1px) solid
+      var(--vaadin-rich-text-editor-overlay-color-option-border-color, transparent);
+    border-radius: var(--vaadin-rich-text-editor-overlay-color-option-border-radius, 9999px);
     cursor: var(--vaadin-clickable-cursor);
-    font-size: var(--vaadin-rte-overlay-button-font-size, inherit);
-    height: var(--vaadin-rte-overlay-button-height, 1lh);
-    line-height: var(--vaadin-rte-overlay-button-line-height, inherit);
-    padding: var(--vaadin-rte-overlay-button-padding, 0);
-    width: var(--vaadin-rte-overlay-button-width, 1lh);
+    font-size: var(--vaadin-rich-text-editor-overlay-color-option-font-size, inherit);
+    height: var(--vaadin-rich-text-editor-overlay-color-option-height, 1lh);
+    line-height: var(--vaadin-rich-text-editor-overlay-color-option-line-height, inherit);
+    padding: var(--vaadin-rich-text-editor-overlay-color-option-padding, 0);
+    width: var(--vaadin-rich-text-editor-overlay-color-option-width, 1lh);
   }
 
   [part='content'] ::slotted(button:focus) {

@@ -12,7 +12,7 @@ import { css } from 'lit';
 
 const base = css`
   :host {
-    background: var(--vaadin-rte-background, var(--vaadin-background-color));
+    background: var(--vaadin-rich-text-editor-background, var(--vaadin-background-color));
     border: var(--vaadin-input-field-border-width, 1px) solid
       var(--vaadin-input-field-border-color, var(--vaadin-border-color-strong));
     border-radius: var(--vaadin-input-field-border-radius, var(--vaadin-radius-m));
@@ -78,14 +78,14 @@ export const content = css`
 
   .ql-editor {
     box-sizing: border-box;
-    color: var(--vaadin-rte-editor-color, var(--vaadin-color));
+    color: var(--vaadin-rich-text-editor-editor-color, var(--vaadin-color));
     flex: 1;
-    font-size: var(--vaadin-rte-editor-font-size, inherit);
+    font-size: var(--vaadin-rich-text-editor-editor-font-size, inherit);
     height: 100%;
-    line-height: var(--vaadin-rte-editor-line-height, inherit);
+    line-height: var(--vaadin-rich-text-editor-editor-line-height, inherit);
     outline: none;
     overflow-y: auto;
-    padding: var(--vaadin-rte-editor-padding, var(--vaadin-padding-container));
+    padding: var(--vaadin-rich-text-editor-editor-padding, var(--vaadin-padding-container));
     tab-size: 4;
     -moz-tab-size: 4;
     text-align: left;
@@ -154,12 +154,12 @@ export const content = css`
 
 const toolbar = css`
   [part='toolbar'] {
-    background-color: var(--vaadin-rte-toolbar-background, var(--vaadin-background-container));
+    background-color: var(--vaadin-rich-text-editor-toolbar-background, var(--vaadin-background-container));
     display: flex;
     flex-shrink: 0;
     flex-wrap: wrap;
-    gap: var(--vaadin-rte-toolbar-gap, var(--vaadin-gap-container-inline));
-    padding: var(--vaadin-rte-toolbar-padding, var(--vaadin-padding));
+    gap: var(--vaadin-rich-text-editor-toolbar-gap, var(--vaadin-gap-container-inline));
+    padding: var(--vaadin-rich-text-editor-toolbar-padding, var(--vaadin-padding));
   }
 
   [part~='toolbar-group'] {
@@ -167,22 +167,19 @@ const toolbar = css`
   }
 
   [part~='toolbar-button'] {
-    background: var(--vaadin-rte-toolbar-button-background, var(--vaadin-background-container));
-    border: var(
-      --vaadin-rte-toolbar-button-border,
-      var(--vaadin-rte-toolbar-button-border-width, 1px) solid
-        var(--vaadin-rte-toolbar-button-border-color, transparent)
-    );
-    border-radius: var(--vaadin-rte-toolbar-button-border-radius, var(--vaadin-radius-m));
-    color: var(--vaadin-rte-toolbar-button-text-color, var(--vaadin-color));
+    background: var(--vaadin-rich-text-editor-toolbar-button-background, var(--vaadin-background-container));
+    border: var(--vaadin-rich-text-editor-toolbar-button-border-width, 1px) solid
+      var(--vaadin-rich-text-editor-toolbar-button-border-color, transparent);
+    border-radius: var(--vaadin-rich-text-editor-toolbar-button-border-radius, var(--vaadin-radius-m));
+    color: var(--vaadin-rich-text-editor-toolbar-button-text-color, var(--vaadin-color));
     cursor: var(--vaadin-clickable-cursor);
     flex-shrink: 0;
-    font-family: var(--vaadin-rte-toolbar-button-font-family, inherit);
-    font-size: var(--vaadin-rte-toolbar-button-font-size, inherit);
-    font-weight: var(--vaadin-rte-toolbar-button-font-weight, 500);
-    height: var(--vaadin-rte-toolbar-button-height, auto);
-    line-height: var(--vaadin-rte-toolbar-button-line-height, inherit);
-    padding: var(--vaadin-rte-toolbar-button-padding, var(--vaadin-padding-container));
+    font-family: var(--vaadin-rich-text-editor-toolbar-button-font-family, inherit);
+    font-size: var(--vaadin-rich-text-editor-toolbar-button-font-size, inherit);
+    font-weight: var(--vaadin-rich-text-editor-toolbar-button-font-weight, 500);
+    height: var(--vaadin-rich-text-editor-toolbar-button-height, auto);
+    line-height: var(--vaadin-rich-text-editor-toolbar-button-line-height, inherit);
+    padding: var(--vaadin-rich-text-editor-toolbar-button-padding, var(--vaadin-padding-container));
     position: relative;
   }
 
@@ -202,7 +199,7 @@ const toolbar = css`
 
   [part~='toolbar-button'][on],
   [part~='toolbar-button'][aria-expanded='true'] {
-    --vaadin-rte-toolbar-button-background: var(--vaadin-background-container-strong);
+    --vaadin-rich-text-editor-toolbar-button-background: var(--vaadin-background-container-strong);
   }
 
   [part~='toolbar-button-undo']::before {
@@ -318,14 +315,8 @@ const toolbar = css`
   }
 
   @media (forced-colors: active) {
-    [part~='toolbar-button']:focus,
-    [part~='toolbar-button']:hover {
-      outline: 1px solid !important;
-    }
-
-    [part~='toolbar-button'][on] {
-      outline: 2px solid;
-      outline-offset: -1px;
+    [part~='toolbar-button']::before {
+      background: CanvasText;
     }
   }
 `;
