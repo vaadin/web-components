@@ -10,7 +10,7 @@ import { addGlobalThemeStyles } from '@vaadin/vaadin-themable-mixin/register-sty
 addGlobalThemeStyles(
   'vaadin-base',
   css`
-    @layer base {
+    @layer vaadin.base {
       :where(html) {
         /* Background color */
         --vaadin-background-color: light-dark(#fff, #222);
