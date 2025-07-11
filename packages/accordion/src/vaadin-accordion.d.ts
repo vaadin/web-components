@@ -56,15 +56,6 @@ export type AccordionEventMap = AccordionCustomEventMap & HTMLElementEventMap;
  * See the [`<vaadin-accordion-panel>`](#/elements/vaadin-accordion-panel)
  * documentation for the available state attributes and stylable shadow parts.
  *
- * **Note:** You can apply the theme to `<vaadin-accordion>` component itself,
- * especially by using the following CSS selector:
- *
- * ```
- * :host ::slotted(vaadin-accordion-panel) {
- *   margin-bottom: 5px;
- * }
- * ```
- *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
  * @fires {CustomEvent} items-changed - Fired when the `items` property changes.
