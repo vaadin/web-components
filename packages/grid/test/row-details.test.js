@@ -46,7 +46,7 @@ describe('row details', () => {
     grid.rowDetailsRenderer = simpleDetailsRenderer;
     grid.querySelector('vaadin-grid-column').renderer = indexRenderer;
 
-    const spy = sinon.spy(grid, '_updateRow');
+    const spy = sinon.spy(grid, '__initRow');
     grid.size = 1;
     grid.dataProvider = infiniteDataProvider;
     flushGrid(grid);
