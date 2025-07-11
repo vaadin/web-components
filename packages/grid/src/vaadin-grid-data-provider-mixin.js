@@ -184,7 +184,7 @@ export const DataProviderMixin = (superClass) =>
 
     /**
      * @param {number} index
-     * @param {HTMLElement} el
+     * @param {HTMLElement} row
      * @protected
      */
     _getItem(index, row) {
