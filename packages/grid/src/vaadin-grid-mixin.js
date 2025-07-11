@@ -742,9 +742,9 @@ export const GridMixin = (superClass) =>
     /**
      * @param {!HTMLElement} row
      * @param {GridItem} item
-     * @protected
+     * @private
      */
-    _updateItem(row, item) {
+    __updateRow(row, item = row._item) {
       row._item = item;
       const model = this.__getRowModel(row);
 

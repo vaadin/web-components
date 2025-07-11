@@ -184,21 +184,21 @@ export const DataProviderMixin = (superClass) =>
 
     /**
      * @param {number} index
-     * @param {HTMLElement} el
+     * @param {HTMLElement} row
      * @protected
      */
-    _getItem(index, el) {
-      el.index = index;
+    _getItem(index, row) {
+      row.index = index;
 
       const { item } = this._dataProviderController.getFlatIndexContext(index);
       if (item) {
-        this.__updateLoading(el, false);
-        this._updateItem(el, item);
+        this.__updateLoading(row, false);
+        this.__updateRow(row, item);
         if (this._isExpanded(item)) {
           this._dataProviderController.ensureFlatIndexHierarchy(index);
         }
       } else {
-        this.__updateLoading(el, true);
+        this.__updateLoading(row, true);
         this._dataProviderController.ensureFlatIndexLoaded(index);
       }
     }

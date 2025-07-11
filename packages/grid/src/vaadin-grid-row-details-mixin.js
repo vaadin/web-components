@@ -98,13 +98,13 @@ export const RowDetailsMixin = (superClass) =>
       iterateChildren(this.$.items, (row) => {
         // Re-renders the row to possibly close the previously opened details.
         if (row.hasAttribute('details-opened')) {
-          this._updateItem(row, row._item);
+          this.__updateRow(row);
           return;
         }
 
         // Re-renders the row to open the details when a row details renderer is provided.
         if (rowDetailsRenderer && this._isDetailsOpened(row._item)) {
-          this._updateItem(row, row._item);
+          this.__updateRow(row);
         }
       });
     }
@@ -140,7 +140,7 @@ export const RowDetailsMixin = (superClass) =>
       }
 
       // Assigns a renderer when the details cell is opened.
-      // The details cell content is rendered later in the `_updateItem` method.
+      // The details cell content is rendered later in the `__updateRow` method.
       if (this.rowDetailsRenderer) {
         cell._renderer = this.rowDetailsRenderer;
       }
