@@ -4,7 +4,7 @@ import { css, html, LitElement } from 'lit';
 import { LumoInjectionMixin } from '../lumo-injection-mixin.js';
 import { registerStyles, ThemableMixin } from '../vaadin-themable-mixin.js';
 
-class TestFoo extends ThemableMixin(LumoInjectionMixin(LitElement)) {
+class TestFoo extends LumoInjectionMixin(ThemableMixin(LitElement)) {
   static get is() {
     return 'test-foo';
   }
