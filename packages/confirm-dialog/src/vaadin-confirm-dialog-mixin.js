@@ -192,15 +192,6 @@ export const ConfirmDialogMixin = (superClass) =>
         },
 
         /**
-         * A reference to the overlay element.
-         * @private
-         */
-        _overlayElement: {
-          type: Object,
-          sync: true,
-        },
-
-        /**
          * A reference to the "Reject" button which will be teleported to the overlay.
          * @private
          */
