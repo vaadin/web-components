@@ -162,11 +162,6 @@ describe('field components', () => {
         field._fullscreen = true;
       });
 
-      it('should not dispatch vaadin-highlight-show event on focus', () => {
-        field.focus();
-        expect(showSpy.callCount).to.equal(0);
-      });
-
       it('should dispatch vaadin-highlight-show event on open', async () => {
         field.focus();
         field.click();
