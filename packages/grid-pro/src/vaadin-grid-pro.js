@@ -8,6 +8,7 @@
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
+import { SlotStylesMixin } from '@vaadin/component-base';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { Grid } from '@vaadin/grid/src/vaadin-grid.js';
 import { InlineEditingMixin } from './vaadin-grid-pro-inline-editing-mixin.js';
@@ -49,13 +50,32 @@ import { InlineEditingMixin } from './vaadin-grid-pro-inline-editing-mixin.js';
  * @extends Grid
  * @mixes InlineEditingMixin
  */
-class GridPro extends InlineEditingMixin(Grid) {
+class GridPro extends SlotStylesMixin(InlineEditingMixin(Grid)) {
   static get is() {
     return 'vaadin-grid-pro';
   }
 
   static get cvdlName() {
     return 'vaadin-grid-pro';
+  }
+
+  get slotStyles() {
+    const tag = this.localName;
+
+    return [
+      `
+      ${tag} [theme="grid-pro-editor"] {
+        --vaadin-input-field-border-radius: 0;
+        inset: 0;
+        position: absolute;
+      }
+
+      ${tag} [theme="grid-pro-editor"]::part(input-field) {
+        height: 100%;
+        outline-offset: calc(var(--vaadin-focus-ring-width) * -1);
+      }
+    `,
+    ];
   }
 }
 
