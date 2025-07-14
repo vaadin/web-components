@@ -568,6 +568,33 @@ describe('vaadin-confirm-dialog', () => {
     });
   });
 
+  describe('outside click', () => {
+    let confirm, overlay;
+
+    beforeEach(async () => {
+      confirm = fixtureSync('<vaadin-confirm-dialog opened>Confirmation message</vaadin-confirm-dialog>');
+      await nextRender();
+      overlay = confirm.$.overlay;
+    });
+
+    it('should not close dialog on outside click', async () => {
+      overlay.$.backdrop.click();
+      await nextRender();
+      expect(confirm.opened).to.be.true;
+      expect(overlay.opened).to.be.true;
+    });
+
+    it('should call preventDefault on vaadin-overlay-outside-click', async () => {
+      const spy = sinon.spy();
+      overlay.addEventListener('vaadin-overlay-outside-click', spy);
+
+      overlay.$.backdrop.click();
+      await nextRender();
+      const event = spy.firstCall.args[0];
+      expect(event.defaultPrevented).to.be.true;
+    });
+  });
+
   describe('theme attribute', () => {
     let confirm;
 
