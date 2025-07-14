@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
-import { resetMouse, sendKeys, sendMouse, sendMouseToElement } from '@vaadin/test-runner-commands';
-import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
+import { resetMouse, sendKeys, sendMouse, sendMouseToElement, setViewport } from '@vaadin/test-runner-commands';
+import { click, fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import '@vaadin/combo-box';
 import '@vaadin/custom-field';
 import '@vaadin/date-picker';
@@ -9,13 +9,13 @@ import '@vaadin/grid-pro';
 import '@vaadin/grid-pro/vaadin-grid-pro-edit-column.js';
 import '@vaadin/text-field';
 import '@vaadin/time-picker';
-import { untilOverlayRendered } from '@vaadin/date-picker/test/helpers.js';
-import { flushGrid, getContainerCell } from '@vaadin/grid-pro/test/helpers.js';
+import { untilOverlayRendered, untilOverlayScrolled } from '@vaadin/date-picker/test/helpers.js';
+import { dblclick, flushGrid, getContainerCell } from '@vaadin/grid-pro/test/helpers.js';
 
 describe('grid-pro custom editor', () => {
   let grid, cell;
 
-  function createGrid(path) {
+  function createGrid(path, autoOpen = false) {
     grid = fixtureSync(`
       <vaadin-grid-pro>
         <vaadin-grid-pro-edit-column path="${path}" editor-type="custom"></vaadin-grid-pro-edit-column>
@@ -27,7 +27,7 @@ describe('grid-pro custom editor', () => {
       case 'date':
         column.editModeRenderer = (root, _, model) => {
           root.innerHTML = `
-            <vaadin-date-picker value="${model.item.date}" auto-open-disabled></vaadin-date-picker>
+            <vaadin-date-picker value="${model.item.date}" ${!autoOpen ? 'auto-open-disabled' : ''}></vaadin-date-picker>
           `;
         };
         break;
@@ -163,6 +163,63 @@ describe('grid-pro custom editor', () => {
       const editor = cell._content.querySelector('vaadin-date-picker');
       expect(editor).to.be.ok;
       expect(editor.value).to.equal('1984-01-12');
+    });
+
+    describe('mobile', () => {
+      let width, height;
+
+      before(() => {
+        width = window.innerWidth;
+        height = window.innerHeight;
+      });
+
+      beforeEach(async () => {
+        await setViewport({ width: 420, height: 1020 });
+        grid = createGrid('date', true);
+        await nextRender();
+        cell = getContainerCell(grid.$.items, 0, 0);
+        await sendMouse({ type: 'click', position: [10, 10] });
+      });
+
+      after(async () => {
+        await setViewport({ width, height });
+      });
+
+      it('should open date picker on double click', async () => {
+        dblclick(cell);
+        const datePicker = cell._content.querySelector('vaadin-date-picker');
+        expect(datePicker).to.be.ok;
+        await untilOverlayRendered(datePicker);
+        expect(datePicker.opened).to.be.ok;
+      });
+
+      it('should close date picker on selecting a date in the overlay', async () => {
+        dblclick(cell);
+        const datePicker = cell._content.querySelector('vaadin-date-picker');
+        await untilOverlayRendered(datePicker);
+
+        const todayButton = datePicker._overlayElement.querySelector('[slot=today-button]');
+        click(todayButton); // Fist click to scroll to current month
+        await untilOverlayScrolled(datePicker);
+        click(todayButton); // Second click to select today's date
+
+        await nextRender();
+        const TODAY_DATE = new Date().toISOString().split('T')[0];
+        expect(TODAY_DATE).to.be.equal(cell._content.textContent);
+      });
+
+      it('should restore previous cell content if overlay is closed', async () => {
+        const previousContent = cell._content.textContent;
+
+        dblclick(cell);
+        const datePicker = cell._content.querySelector('vaadin-date-picker');
+        await untilOverlayRendered(datePicker);
+
+        sendMouse({ type: 'click', position: [10, 10] });
+        await nextRender();
+        expect(cell._content.querySelector('vaadin-date-picker')).to.not.be.ok;
+        expect(previousContent).to.be.equal(cell._content.textContent);
+      });
     });
   });
 
