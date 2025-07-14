@@ -48,7 +48,7 @@ export const OverlayFocusMixin = (superClass) =>
     constructor() {
       super();
 
-      this.__ariaModalController = new AriaModalController(this);
+      this.__ariaModalController = new AriaModalController(this, () => this._modalRoot);
       this.__focusTrapController = new FocusTrapController(this);
       this.__focusRestorationController = new FocusRestorationController();
     }
@@ -69,6 +69,15 @@ export const OverlayFocusMixin = (superClass) =>
       this.addController(this.__ariaModalController);
       this.addController(this.__focusTrapController);
       this.addController(this.__focusRestorationController);
+    }
+
+    /**
+     * Override to specify another element used as a modality root,
+     * e.g. the overlay's owner element, rather than overlay itself.
+     * @protected
+     */
+    get _modalRoot() {
+      return this;
     }
 
     /**
