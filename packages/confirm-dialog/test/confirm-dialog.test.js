@@ -741,4 +741,52 @@ describe('vaadin-confirm-dialog', () => {
       expect(getDeepActiveElement()).to.equal(button);
     });
   });
+
+  describe('detach and re-attach', () => {
+    let confirm;
+
+    beforeEach(async () => {
+      confirm = fixtureSync('<vaadin-confirm-dialog opened>Confirmation message</vaadin-confirm-dialog>');
+      await nextRender();
+    });
+
+    it('should close the overlay when removed from DOM', async () => {
+      confirm.remove();
+      await aTimeout(0);
+
+      expect(confirm.opened).to.be.false;
+    });
+
+    it('should restore opened state when added to the DOM', async () => {
+      const parent = confirm.parentNode;
+      confirm.remove();
+      await nextRender();
+      expect(confirm.opened).to.be.false;
+
+      parent.appendChild(confirm);
+      await nextRender();
+      expect(confirm.opened).to.be.true;
+    });
+
+    it('should not close the overlay when moved within the DOM', async () => {
+      const newParent = document.createElement('div');
+      document.body.appendChild(newParent);
+      newParent.appendChild(confirm);
+      await aTimeout(0);
+
+      expect(confirm.opened).to.be.true;
+    });
+
+    it('should not dispatch opened changed events when moved within the DOM', async () => {
+      const onOpenedChanged = sinon.spy();
+      confirm.addEventListener('opened-changed', onOpenedChanged);
+
+      const newParent = document.createElement('div');
+      document.body.appendChild(newParent);
+      newParent.appendChild(confirm);
+      await aTimeout(0);
+
+      expect(onOpenedChanged.called).to.be.false;
+    });
+  });
 });
