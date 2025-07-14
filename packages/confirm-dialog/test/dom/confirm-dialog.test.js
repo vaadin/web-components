@@ -18,7 +18,7 @@ describe('vaadin-confirm-dialog', () => {
       </vaadin-confirm-dialog>
     `);
     await nextRender();
-    overlay = dialog.$.dialog._overlayElement;
+    overlay = dialog.$.overlay;
     dialog.opened = true;
     await oneEvent(overlay, 'vaadin-overlay-open');
   });

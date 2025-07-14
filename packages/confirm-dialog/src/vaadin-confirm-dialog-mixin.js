@@ -4,14 +4,18 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { setAriaIDReference } from '@vaadin/a11y-base/src/aria-id-reference.js';
+import { OverlayClassMixin } from '@vaadin/component-base/src/overlay-class-mixin.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
+import { DialogSizeMixin } from '@vaadin/dialog/src/vaadin-dialog-size-mixin.js';
 
 /**
  * @polymerMixin
+ * @mixes DialogSizeMixin
+ * @mixes OverlayClassMixin
  */
 export const ConfirmDialogMixin = (superClass) =>
-  class ConfirmDialogMixinClass extends superClass {
+  class ConfirmDialogMixinClass extends OverlayClassMixin(DialogSizeMixin(superClass)) {
     static get properties() {
       return {
         /**
@@ -155,32 +159,6 @@ export const ConfirmDialogMixin = (superClass) =>
         },
 
         /**
-         * A space-delimited list of CSS class names
-         * to set on the underlying overlay element.
-         *
-         * @attr {string} overlay-class
-         */
-        overlayClass: {
-          type: String,
-        },
-
-        /**
-         * Set the height of the overlay.
-         * If a unitless number is provided, pixels are assumed.
-         */
-        height: {
-          type: String,
-        },
-
-        /**
-         * Set the width of the overlay.
-         * If a unitless number is provided, pixels are assumed.
-         */
-        width: {
-          type: String,
-        },
-
-        /**
          * A reference to the "Cancel" button which will be teleported to the overlay.
          * @private
          */
@@ -214,15 +192,6 @@ export const ConfirmDialogMixin = (superClass) =>
         },
 
         /**
-         * A reference to the overlay element.
-         * @private
-         */
-        _overlayElement: {
-          type: Object,
-          sync: true,
-        },
-
-        /**
          * A reference to the "Reject" button which will be teleported to the overlay.
          * @private
          */
@@ -253,6 +222,29 @@ export const ConfirmDialogMixin = (superClass) =>
 
     get __slottedNodes() {
       return [this._headerNode, ...this._messageNodes, this._cancelButton, this._confirmButton, this._rejectButton];
+    }
+
+    /** @protected */
+    connectedCallback() {
+      super.connectedCallback();
+      // Restore opened state if overlay was opened when disconnecting
+      if (this.__restoreOpened) {
+        this.opened = true;
+      }
+    }
+
+    /** @protected */
+    disconnectedCallback() {
+      super.disconnectedCallback();
+      // Automatically close the overlay when dialog is removed from DOM
+      // Using a timeout to avoid toggling opened state, and dispatching change
+      // events, when just moving the dialog in the DOM
+      setTimeout(() => {
+        if (!this.isConnected) {
+          this.__restoreOpened = this.opened;
+          this.opened = false;
+        }
+      });
     }
 
     /** @protected */
@@ -304,20 +296,10 @@ export const ConfirmDialogMixin = (superClass) =>
       });
       this.addController(this._confirmController);
 
-      this._overlayElement = this.$.dialog.$.overlay;
-
-      this._initOverlay(this._overlayElement);
+      this._overlayElement = this.$.overlay;
     }
 
     /** @protected */
-    _initOverlay(overlay) {
-      overlay.addEventListener('vaadin-overlay-escape-press', this._escPressed.bind(this));
-      overlay.addEventListener('vaadin-overlay-open', () => this.__onDialogOpened());
-      overlay.addEventListener('vaadin-overlay-closed', () => this.__onDialogClosed());
-      overlay.setAttribute('role', 'alertdialog');
-    }
-
-    /** @private */
     __onDialogOpened() {
       const overlay = this._overlayElement;
 
@@ -332,7 +314,7 @@ export const ConfirmDialogMixin = (superClass) =>
       }
     }
 
-    /** @private */
+    /** @protected */
     __onDialogClosed() {
       // Move nodes from the overlay back to the host.
       this.__slottedNodes.forEach((node) => {
@@ -425,11 +407,18 @@ export const ConfirmDialogMixin = (superClass) =>
       }
     }
 
-    /** @private */
-    _escPressed(event) {
-      if (!event.defaultPrevented) {
+    /** @protected */
+    _onOverlayEscapePress(event) {
+      if (this.noCloseOnEsc) {
+        event.preventDefault();
+      } else {
         this.__cancel();
       }
+    }
+
+    /** @protected */
+    _onOverlayOutsideClick(event) {
+      event.preventDefault();
     }
 
     /** @private */
@@ -448,11 +437,6 @@ export const ConfirmDialogMixin = (superClass) =>
     __reject() {
       this.dispatchEvent(new CustomEvent('reject'));
       this.opened = false;
-    }
-
-    /** @private */
-    _getAriaLabel(header) {
-      return header || 'confirmation';
     }
 
     /**

@@ -4,6 +4,8 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import type { Constructor } from '@open-wc/dedupe-mixin';
+import type { OverlayClassMixinClass } from '@vaadin/component-base/src/overlay-class-mixin.js';
+import type { DialogSizeMixinClass } from '@vaadin/dialog/src/vaadin-dialog-size-mixin.js';
 
 /*
  * Fired when the `opened` property changes.
@@ -31,7 +33,7 @@ export type ConfirmDialogEventMap = ConfirmDialogCustomEventMap & HTMLElementEve
 
 export declare function ConfirmDialogMixin<T extends Constructor<HTMLElement>>(
   base: T,
-): Constructor<ConfirmDialogMixinClass> & T;
+): Constructor<ConfirmDialogMixinClass> & Constructor<DialogSizeMixinClass> & Constructor<OverlayClassMixinClass> & T;
 
 export declare class ConfirmDialogMixinClass {
   /**
@@ -121,24 +123,4 @@ export declare class ConfirmDialogMixinClass {
    * @attr {string} cancel-theme
    */
   cancelTheme: string;
-
-  /**
-   * A space-delimited list of CSS class names
-   * to set on the underlying overlay element.
-   *
-   * @attr {string} overlay-class
-   */
-  overlayClass: string;
-
-  /**
-   * Set the width of the overlay.
-   * If a unitless number is provided, pixels are assumed.
-   */
-  width: string | null;
-
-  /**
-   * Set the height of the overlay.
-   * If a unitless number is provided, pixels are assumed.
-   */
-  height: string | null;
 }

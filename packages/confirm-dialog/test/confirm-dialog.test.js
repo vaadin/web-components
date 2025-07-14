@@ -46,23 +46,22 @@ describe('vaadin-confirm-dialog', () => {
   });
 
   describe('properties', () => {
-    let confirm, dialog, overlay;
+    let confirm, overlay;
 
     beforeEach(async () => {
       confirm = fixtureSync('<vaadin-confirm-dialog>Confirmation message</vaadin-confirm-dialog>');
       await nextRender();
-      dialog = confirm.$.dialog;
-      overlay = dialog.$.overlay;
+      overlay = confirm.$.overlay;
     });
 
     it('should set opened to false by default', () => {
       expect(confirm.opened).to.be.false;
     });
 
-    it('should propagate opened to internal dialog', async () => {
+    it('should propagate opened to the overlay', async () => {
       confirm.opened = true;
       await nextRender();
-      expect(dialog.opened).to.be.true;
+      expect(overlay.opened).to.be.true;
     });
 
     it('should dispatch opened-changed event when opened changes', async () => {
@@ -80,18 +79,8 @@ describe('vaadin-confirm-dialog', () => {
       expect(confirm.noCloseOnEsc).to.be.false;
     });
 
-    it('should propagate noCloseOnEsc to internal dialog', async () => {
-      confirm.noCloseOnEsc = true;
-      await nextFrame();
-      expect(dialog.noCloseOnEsc).to.be.true;
-    });
-
-    it('should set noCloseOnEsc on the dialog', () => {
-      expect(dialog.noCloseOnOutsideClick).to.be.true;
-    });
-
-    it('should set aria-label on the dialog', () => {
-      expect(dialog.ariaLabel).to.equal('confirmation');
+    it('should set aria-label on the overlay', () => {
+      expect(overlay.ariaLabel).to.equal('confirmation');
     });
 
     it('should set `aria-describedby` on the overlay when `accessibleDescriptionRef` is defined', async () => {
@@ -124,10 +113,10 @@ describe('vaadin-confirm-dialog', () => {
         expect(confirm.header).to.equal('');
       });
 
-      it('should update aria-label on the dialog when header changes', async () => {
+      it('should update aria-label on the overlay when header changes', async () => {
         confirm.header = 'Warning';
         await nextFrame();
-        expect(confirm.$.dialog.ariaLabel).to.equal('Warning');
+        expect(confirm.$.overlay.ariaLabel).to.equal('Warning');
       });
     });
 
@@ -135,7 +124,7 @@ describe('vaadin-confirm-dialog', () => {
       beforeEach(async () => {
         confirm = fixtureSync('<vaadin-confirm-dialog opened header="Property header"></vaadin-confirm-dialog>');
         await nextRender();
-        overlay = confirm.$.dialog.$.overlay;
+        overlay = confirm.$.overlay;
         headerSlot = overlay.shadowRoot.querySelector('slot[name="header"]');
       });
 
@@ -160,7 +149,7 @@ describe('vaadin-confirm-dialog', () => {
           </vaadin-confirm-dialog>
         `);
         await nextRender();
-        overlay = confirm.$.dialog.$.overlay;
+        overlay = confirm.$.overlay;
         headerSlot = overlay.shadowRoot.querySelector('slot[name="header"]');
       });
 
@@ -190,7 +179,7 @@ describe('vaadin-confirm-dialog', () => {
       beforeEach(async () => {
         confirm = fixtureSync('<vaadin-confirm-dialog opened message="Confirmation message"></vaadin-confirm-dialog>');
         await nextRender();
-        overlay = confirm.$.dialog.$.overlay;
+        overlay = confirm.$.overlay;
         messageSlot = overlay.shadowRoot.querySelector('[part="message"] > slot');
         await nextUpdate(overlay);
       });
@@ -225,7 +214,7 @@ describe('vaadin-confirm-dialog', () => {
           </vaadin-confirm-dialog>
         `);
         await nextRender();
-        overlay = confirm.$.dialog.$.overlay;
+        overlay = confirm.$.overlay;
         messageSlot = overlay.shadowRoot.querySelector('[part="message"] > slot');
       });
 
@@ -255,7 +244,7 @@ describe('vaadin-confirm-dialog', () => {
           </vaadin-confirm-dialog>
         `);
         await nextRender();
-        overlay = confirm.$.dialog.$.overlay;
+        overlay = confirm.$.overlay;
         messageSlot = overlay.shadowRoot.querySelector('[part="message"] > slot');
       });
 
@@ -294,7 +283,7 @@ describe('vaadin-confirm-dialog', () => {
     beforeEach(async () => {
       confirm = fixtureSync('<vaadin-confirm-dialog opened>Confirmation message</vaadin-confirm-dialog>');
       await nextRender();
-      overlay = confirm.$.dialog.$.overlay;
+      overlay = confirm.$.overlay;
     });
 
     describe('confirm', () => {
@@ -449,7 +438,7 @@ describe('vaadin-confirm-dialog', () => {
         </vaadin-confirm-dialog>
       `);
       await nextRender();
-      overlay = confirm.$.dialog.$.overlay;
+      overlay = confirm.$.overlay;
     });
 
     it('should teleport buttons under overlay when opened', async () => {
@@ -504,7 +493,7 @@ describe('vaadin-confirm-dialog', () => {
     beforeEach(async () => {
       confirm = fixtureSync('<vaadin-confirm-dialog opened>Confirmation message</vaadin-confirm-dialog>');
       await nextRender();
-      overlay = confirm.$.dialog.$.overlay;
+      overlay = confirm.$.overlay;
     });
 
     it('should dispatch confirm event on confirm button click', () => {
@@ -579,6 +568,33 @@ describe('vaadin-confirm-dialog', () => {
     });
   });
 
+  describe('outside click', () => {
+    let confirm, overlay;
+
+    beforeEach(async () => {
+      confirm = fixtureSync('<vaadin-confirm-dialog opened>Confirmation message</vaadin-confirm-dialog>');
+      await nextRender();
+      overlay = confirm.$.overlay;
+    });
+
+    it('should not close dialog on outside click', async () => {
+      overlay.$.backdrop.click();
+      await nextRender();
+      expect(confirm.opened).to.be.true;
+      expect(overlay.opened).to.be.true;
+    });
+
+    it('should call preventDefault on vaadin-overlay-outside-click', async () => {
+      const spy = sinon.spy();
+      overlay.addEventListener('vaadin-overlay-outside-click', spy);
+
+      overlay.$.backdrop.click();
+      await nextRender();
+      const event = spy.firstCall.args[0];
+      expect(event.defaultPrevented).to.be.true;
+    });
+  });
+
   describe('theme attribute', () => {
     let confirm;
 
@@ -587,13 +603,8 @@ describe('vaadin-confirm-dialog', () => {
       await nextRender();
     });
 
-    it('should propagate theme attribute to vaadin-dialog', () => {
-      const themes = confirm.$.dialog.getAttribute('theme').split(' ');
-      expect(themes).to.include.members(['foo']);
-    });
-
     it('should propagate theme attribute to overlay', () => {
-      const themes = confirm.$.dialog.$.overlay.getAttribute('theme').split(' ');
+      const themes = confirm.$.overlay.getAttribute('theme').split(' ');
       expect(themes).to.include.members(['foo']);
     });
   });
@@ -605,7 +616,7 @@ describe('vaadin-confirm-dialog', () => {
       beforeEach(async () => {
         confirm = fixtureSync('<vaadin-confirm-dialog opened>Confirmation message</vaadin-confirm-dialog>');
         await nextRender();
-        overlay = confirm.$.dialog.$.overlay;
+        overlay = confirm.$.overlay;
       });
 
       afterEach(() => {
@@ -671,7 +682,7 @@ describe('vaadin-confirm-dialog', () => {
         confirm.width = '300px';
         document.body.appendChild(confirm);
         await nextRender();
-        overlay = confirm.$.dialog.$.overlay;
+        overlay = confirm.$.overlay;
         confirm.opened = true;
         await oneEvent(overlay, 'vaadin-overlay-open');
         expect(getComputedStyle(overlay.$.overlay).width).to.be.equal('300px');
@@ -681,7 +692,7 @@ describe('vaadin-confirm-dialog', () => {
         confirm.height = '500px';
         document.body.appendChild(confirm);
         await nextRender();
-        overlay = confirm.$.dialog.$.overlay;
+        overlay = confirm.$.overlay;
         confirm.opened = true;
         await oneEvent(overlay, 'vaadin-overlay-open');
         expect(getComputedStyle(overlay.$.overlay).height).to.equal('500px');
@@ -693,7 +704,7 @@ describe('vaadin-confirm-dialog', () => {
         document.body.appendChild(confirm);
         await nextRender();
 
-        const overlay = confirm.$.dialog.$.overlay;
+        const overlay = confirm.$.overlay;
         expect(overlay.getAttribute('aria-describedby')).to.equal('id-0');
       });
     });
@@ -711,7 +722,7 @@ describe('vaadin-confirm-dialog', () => {
       `);
       await nextRender();
       [confirm, button] = wrapper.children;
-      overlay = confirm.$.dialog.$.overlay;
+      overlay = confirm.$.overlay;
       button.focus();
     });
 
@@ -728,6 +739,54 @@ describe('vaadin-confirm-dialog', () => {
       confirm.opened = false;
       await aTimeout(0);
       expect(getDeepActiveElement()).to.equal(button);
+    });
+  });
+
+  describe('detach and re-attach', () => {
+    let confirm;
+
+    beforeEach(async () => {
+      confirm = fixtureSync('<vaadin-confirm-dialog opened>Confirmation message</vaadin-confirm-dialog>');
+      await nextRender();
+    });
+
+    it('should close the overlay when removed from DOM', async () => {
+      confirm.remove();
+      await aTimeout(0);
+
+      expect(confirm.opened).to.be.false;
+    });
+
+    it('should restore opened state when added to the DOM', async () => {
+      const parent = confirm.parentNode;
+      confirm.remove();
+      await nextRender();
+      expect(confirm.opened).to.be.false;
+
+      parent.appendChild(confirm);
+      await nextRender();
+      expect(confirm.opened).to.be.true;
+    });
+
+    it('should not close the overlay when moved within the DOM', async () => {
+      const newParent = document.createElement('div');
+      document.body.appendChild(newParent);
+      newParent.appendChild(confirm);
+      await aTimeout(0);
+
+      expect(confirm.opened).to.be.true;
+    });
+
+    it('should not dispatch opened changed events when moved within the DOM', async () => {
+      const onOpenedChanged = sinon.spy();
+      confirm.addEventListener('opened-changed', onOpenedChanged);
+
+      const newParent = document.createElement('div');
+      document.body.appendChild(newParent);
+      newParent.appendChild(confirm);
+      await aTimeout(0);
+
+      expect(onOpenedChanged.called).to.be.false;
     });
   });
 });
