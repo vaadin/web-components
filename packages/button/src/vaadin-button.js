@@ -47,7 +47,7 @@ import { ButtonMixin } from './vaadin-button-mixin.js';
  * @mixes ElementMixin
  * @mixes ThemableMixin
  */
-class Button extends ButtonMixin(ElementMixin(LumoInjectionMixin(ThemableMixin(PolylitMixin(LitElement))))) {
+class Button extends ButtonMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {
   static get is() {
     return 'vaadin-button';
   }

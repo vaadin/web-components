@@ -52,7 +52,7 @@ import { DetailsBaseMixin } from './vaadin-details-base-mixin.js';
  * @mixes ElementMixin
  * @mixes ThemableMixin
  */
-class Details extends DetailsBaseMixin(ElementMixin(LumoInjectionMixin(ThemableMixin(PolylitMixin(LitElement))))) {
+class Details extends DetailsBaseMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {
   static get is() {
     return 'vaadin-details';
   }

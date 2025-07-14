@@ -26,7 +26,7 @@ import { ComboBoxOverlayMixin } from './vaadin-combo-box-overlay-mixin.js';
  * @private
  */
 export class ComboBoxOverlay extends ComboBoxOverlayMixin(
-  OverlayMixin(DirMixin(LumoInjectionMixin(ThemableMixin(PolylitMixin(LitElement))))),
+  OverlayMixin(DirMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement))))),
 ) {
   static get is() {
     return 'vaadin-combo-box-overlay';

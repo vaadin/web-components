@@ -26,7 +26,7 @@ import { multiSelectComboBoxOverlayStyles } from './styles/vaadin-multi-select-c
  * @private
  */
 class MultiSelectComboBoxOverlay extends ComboBoxOverlayMixin(
-  OverlayMixin(DirMixin(LumoInjectionMixin(ThemableMixin(PolylitMixin(LitElement))))),
+  OverlayMixin(DirMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement))))),
 ) {
   static get is() {
     return 'vaadin-multi-select-combo-box-overlay';

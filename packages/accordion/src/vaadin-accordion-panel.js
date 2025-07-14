@@ -41,7 +41,7 @@ import { AccordionPanelMixin } from './vaadin-accordion-panel-mixin.js';
  * @mixes AccordionPanelMixin
  * @mixes ThemableMixin
  */
-class AccordionPanel extends AccordionPanelMixin(LumoInjectionMixin(ThemableMixin(PolylitMixin(LitElement)))) {
+class AccordionPanel extends AccordionPanelMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement)))) {
   static get is() {
     return 'vaadin-accordion-panel';
   }

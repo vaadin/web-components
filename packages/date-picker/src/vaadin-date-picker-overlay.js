@@ -24,7 +24,7 @@ import { DatePickerOverlayMixin } from './vaadin-date-picker-overlay-mixin.js';
  * @private
  */
 class DatePickerOverlay extends DatePickerOverlayMixin(
-  DirMixin(LumoInjectionMixin(ThemableMixin(PolylitMixin(LitElement)))),
+  DirMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement)))),
 ) {
   static get is() {
     return 'vaadin-date-picker-overlay';

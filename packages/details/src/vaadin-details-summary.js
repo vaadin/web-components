@@ -42,7 +42,7 @@ import { detailsSummary } from './styles/vaadin-details-summary-core-styles.js';
  * @mixes DirMixin
  * @mixes ThemableMixin
  */
-class DetailsSummary extends ButtonMixin(DirMixin(LumoInjectionMixin(ThemableMixin(PolylitMixin(LitElement))))) {
+class DetailsSummary extends ButtonMixin(DirMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {
   static get is() {
     return 'vaadin-details-summary';
   }

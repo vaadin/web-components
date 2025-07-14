@@ -70,7 +70,7 @@ import { NumberFieldMixin } from './vaadin-number-field-mixin.js';
  * @mixes ElementMixin
  * @mixes ThemableMixin
  */
-class NumberField extends NumberFieldMixin(LumoInjectionMixin(ThemableMixin(ElementMixin(PolylitMixin(LitElement))))) {
+class NumberField extends NumberFieldMixin(ThemableMixin(ElementMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {
   static get is() {
     return 'vaadin-number-field';
   }
