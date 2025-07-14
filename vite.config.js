@@ -5,7 +5,7 @@ export default defineConfig({
   build: {
     rollupOptions: {
       input: {
-        bundle: path.resolve(import.meta.dirname, 'dev/bundle.html'),
+        bundle: path.resolve(import.meta.dirname, 'dev/rich-text-editor.html'),
       },
     },
   },

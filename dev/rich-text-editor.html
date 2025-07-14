@@ -6,16 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>RTE</title>
     <link rel="stylesheet" href="/packages/vaadin-lumo-styles/lumo.css" />
-    <script type="module" src="./common.js"></script>
-
-    <script type="module">
-      import '@vaadin/rich-text-editor';
-    </script>
   </head>
 
   <body>
-    <input />
     <vaadin-rich-text-editor></vaadin-rich-text-editor>
-    <input />
+
+    <script type="module">
+      import '@vaadin/rich-text-editor/src/vaadin-rich-text-editor.js';
+    </script>
   </body>
 </html>
