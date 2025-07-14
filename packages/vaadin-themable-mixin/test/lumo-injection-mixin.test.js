@@ -26,6 +26,12 @@ class TestFoo extends LumoInjectionMixin(ThemableMixin(LitElement)) {
     `;
   }
 
+  static get lumoInjector() {
+    return {
+      includeBaseStyles: true,
+    };
+  }
+
   render() {
     return html`<div part="content">Content</div>`;
   }
@@ -111,6 +117,11 @@ describe('Lumo injection', () => {
   }
 
   describe('in global scope', () => {
+    afterEach(() => {
+      document.__lumoInjector?.disconnect();
+      document.__lumoInjector = undefined;
+    });
+
     describe('styles added after element is connected', () => {
       beforeEach(async () => {
         element = fixtureSync('<test-foo></test-foo>');
@@ -229,6 +240,11 @@ describe('Lumo injection', () => {
       host = fixtureSync('<div></div>');
       host.attachShadow({ mode: 'open' });
       element = document.createElement('test-foo');
+    });
+
+    afterEach(() => {
+      host.__lumoInjector?.disconnect();
+      host.__lumoInjector = undefined;
     });
 
     describe('styles added after element is connected', () => {
@@ -407,6 +423,11 @@ describe('Lumo injection', () => {
       wrapper = document.createElement('test-bar');
     });
 
+    afterEach(() => {
+      host.__lumoInjector?.disconnect();
+      host.__lumoInjector = undefined;
+    });
+
     it('should inject matching styles added to parent shadow host', async () => {
       host.shadowRoot.appendChild(wrapper);
       await nextRender();
@@ -439,6 +460,11 @@ describe('Lumo injection', () => {
       element = fixtureSync('<test-baz></test-baz>');
       await nextRender();
       content = element.shadowRoot.querySelector('[part="content"]');
+    });
+
+    afterEach(() => {
+      document.__lumoInjector?.disconnect();
+      document.__lumoInjector = undefined;
     });
 
     it('should inject matching styles for the extending component', async () => {
@@ -477,6 +503,8 @@ describe('Lumo injection', () => {
 
     afterEach(() => {
       style.remove();
+      document.__lumoInjector?.disconnect();
+      document.__lumoInjector = undefined;
     });
 
     it('should not remove styles from injected stylesheets when calling registerStyles()', () => {

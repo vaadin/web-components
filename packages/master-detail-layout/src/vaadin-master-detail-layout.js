@@ -22,13 +22,6 @@ import { masterDetailLayoutTransitionStyles } from './styles/vaadin-master-detai
  *
  * ### Styling
  *
- * The following custom CSS properties are available for styling (needed to be set
- * on the `<html>` element since they are used by the global view transitions):
- *
- * Custom CSS property                                  | Description         | Default
- * -----------------------------------------------------|---------------------|--------
- * `--vaadin-master-detail-layout-transition-duration`  | Transition duration | 300ms
- *
  * The following shadow DOM parts are available for styling:
  *
  * Part name      | Description
@@ -68,6 +61,12 @@ class MasterDetailLayout extends SlotStylesMixin(
 
   static get styles() {
     return masterDetailLayoutStyles;
+  }
+
+  static get lumoInjector() {
+    return {
+      includeBaseStyles: true,
+    };
   }
 
   static get properties() {
@@ -251,18 +250,24 @@ class MasterDetailLayout extends SlotStylesMixin(
   /** @protected */
   render() {
     return html`
-      <div part="backdrop" @click="${this.__onBackdropClick}"></div>
-      <div id="master" part="master" ?inert="${this._hasDetail && this._drawer && this.containment === 'layout'}">
+      <div part="backdrop"></div>
+      <div
+        id="master"
+        part="master"
+        ?inert="${this._hasDetail && (this._stack || (this._drawer && this.containment === 'layout'))}"
+      >
         <slot></slot>
       </div>
-      <div
-        id="detail"
-        part="detail"
-        role="${this._drawer || this._stack ? 'dialog' : nothing}"
-        aria-modal="${this._drawer && this.containment === 'viewport' ? 'true' : nothing}"
-        @keydown="${this.__onDetailKeydown}"
-      >
-        <slot name="detail" @slotchange="${this.__onDetailSlotChange}"></slot>
+      <div part="_detail-internal" @click="${this.__onDetailClick}">
+        <div
+          id="detail"
+          part="detail"
+          role="${this._drawer || this._stack ? 'dialog' : nothing}"
+          aria-modal="${this._drawer && this.containment === 'viewport' ? 'true' : nothing}"
+          @keydown="${this.__onDetailKeydown}"
+        >
+          <slot name="detail" @slotchange="${this.__onDetailSlotChange}"></slot>
+        </div>
       </div>
     `;
   }
@@ -285,8 +290,12 @@ class MasterDetailLayout extends SlotStylesMixin(
   }
 
   /** @private */
-  __onBackdropClick() {
-    this.dispatchEvent(new CustomEvent('backdrop-click'));
+  __onDetailClick(e) {
+    // The detail wrapper element fully covers the backdrop part, so listen
+    // to click event on it and detect if it was outside the detail content
+    if (!e.composedPath().includes(this.$.detail)) {
+      this.dispatchEvent(new CustomEvent('backdrop-click'));
+    }
   }
 
   /** @private */

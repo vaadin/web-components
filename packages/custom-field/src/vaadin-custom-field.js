@@ -15,7 +15,7 @@ import { CustomFieldMixin } from './vaadin-custom-field-mixin.js';
 /**
  * `<vaadin-custom-field>` is a web component for wrapping multiple components as a single field.
  *
- * ```
+ * ```html
  * <vaadin-custom-field label="Appointment time">
  *   <vaadin-date-picker></vaadin-date-picker>
  *   <vaadin-time-picker></vaadin-time-picker>

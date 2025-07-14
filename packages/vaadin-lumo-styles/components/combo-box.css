@@ -3,7 +3,6 @@
  * Copyright (c) 2017 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-@import '../src/mixins/base-layer-reset.css';
 @import '../src/mixins/combo-box-loader.css';
 @import '../src/mixins/combo-box-overlay.css';
 @import '../src/mixins/field-base.css';
@@ -17,7 +16,6 @@
 @import '../src/mixins/overlay.css';
 @import '../src/components/combo-box-item.css';
 @import '../src/components/combo-box-overlay.css';
-@import '../src/components/combo-box-scroller.css';
 @import '../src/components/combo-box.css';
 @import '../src/components/item.css';
 @import './input-container.css';
@@ -25,7 +23,6 @@
 :is(:root, :host)::before {
   --vaadin-combo-box-lumo-inject: 1;
   --vaadin-combo-box-lumo-inject-modules:
-    lumo_mixins_base-layer-reset,
     lumo_mixins_field-label,
     lumo_mixins_field-required,
     lumo_mixins_field-error-message,
@@ -36,22 +33,15 @@
 
   --vaadin-combo-box-item-lumo-inject: 1;
   --vaadin-combo-box-item-lumo-inject-modules:
-    lumo_mixins_base-layer-reset,
     lumo_components_item,
     lumo_components_combo-box-item;
 
   --vaadin-combo-box-overlay-lumo-inject: 1;
   --vaadin-combo-box-overlay-lumo-inject-modules:
-    lumo_mixins_base-layer-reset,
     lumo_mixins_loader,
     lumo_mixins_combo-box-loader,
     lumo_mixins_overlay,
     lumo_mixins_menu-overlay-core,
     lumo_mixins_combo-box-overlay,
     lumo_components_combo-box-overlay;
-
-  --vaadin-combo-box-scroller-lumo-inject: 1;
-  --vaadin-combo-box-scroller-lumo-inject-modules:
-    lumo_mixins_base-layer-reset,
-    lumo_components_combo-box-scroller;
 }

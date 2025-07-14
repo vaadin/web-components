@@ -14,7 +14,7 @@ import { verticalLayoutStyles } from './styles/vaadin-vertical-layout-core-style
 /**
  * `<vaadin-vertical-layout>` provides a simple way to vertically align your HTML elements.
  *
- * ```
+ * ```html
  * <vaadin-vertical-layout>
  *   <div>Item 1</div>
  *   <div>Item 2</div>
@@ -44,6 +44,12 @@ class VerticalLayout extends ThemableMixin(ElementMixin(LumoInjectionMixin(Polyl
 
   static get styles() {
     return verticalLayoutStyles;
+  }
+
+  static get lumoInjector() {
+    return {
+      includeBaseStyles: true,
+    };
   }
 
   /** @protected */

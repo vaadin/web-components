@@ -3,7 +3,6 @@
  * Copyright (c) 2000 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-@import '../src/mixins/base-layer-reset.css';
 @import '../src/mixins/checkable-field.css';
 @import '../src/mixins/field-base.css';
 @import '../src/mixins/field-button.css';
@@ -22,7 +21,6 @@
 :is(:root, :host)::before {
   --vaadin-grid-pro-edit-text-field-lumo-inject: 1;
   --vaadin-grid-pro-edit-text-field-lumo-inject-modules:
-    lumo_mixins_base-layer-reset,
     lumo_mixins_field-label,
     lumo_mixins_field-required,
     lumo_mixins_field-error-message,
@@ -33,7 +31,6 @@
 
   --vaadin-grid-pro-edit-select-lumo-inject: 1;
   --vaadin-grid-pro-edit-select-lumo-inject-modules:
-    lumo_mixins_base-layer-reset,
     lumo_mixins_field-label,
     lumo_mixins_field-required,
     lumo_mixins_field-error-message,
@@ -46,7 +43,6 @@
 
   --vaadin-grid-pro-edit-checkbox-lumo-inject: 1;
   --vaadin-grid-pro-edit-checkbox-lumo-inject-modules:
-    lumo_mixins_base-layer-reset,
     lumo_mixins_checkable-field,
     lumo_components_checkbox;
 }

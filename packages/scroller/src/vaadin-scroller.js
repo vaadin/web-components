@@ -16,7 +16,7 @@ import { ScrollerMixin } from './vaadin-scroller-mixin.js';
 /**
  * `<vaadin-scroller>` provides a simple way to enable scrolling when its content is overflowing.
  *
- * ```
+ * ```html
  * <vaadin-scroller>
  *   <div>Content</div>
  * </vaadin-scroller>
@@ -42,6 +42,12 @@ class Scroller extends ScrollerMixin(ElementMixin(ThemableMixin(LumoInjectionMix
 
   static get styles() {
     return scrollerStyles;
+  }
+
+  static get lumoInjector() {
+    return {
+      includeBaseStyles: true,
+    };
   }
 
   /** @protected */

@@ -69,9 +69,16 @@ class Icon extends IconMixin(ElementMixin(LumoInjectionMixin(ThemableMixin(Polyl
     return iconStyles;
   }
 
+  static get lumoInjector() {
+    return {
+      includeBaseStyles: true,
+    };
+  }
+
   /** @protected */
   render() {
     return html`
+      <span class="baseline"></span>
       <svg
         version="1.1"
         xmlns="http://www.w3.org/2000/svg"

@@ -17,7 +17,7 @@ import { drawerToggle } from './styles/vaadin-drawer-toggle-core-styles.js';
 /**
  * The Drawer Toggle component controls the drawer in App Layout component.
  *
- * ```
+ * ```html
  * <vaadin-app-layout>
  *   <vaadin-drawer-toggle slot="navbar">Toggle drawer</vaadin-drawer-toggle>
  * </vaadin-app-layout>

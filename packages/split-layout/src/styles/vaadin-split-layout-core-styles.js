@@ -9,7 +9,6 @@ export const splitLayoutStyles = css`
   :host {
     display: flex;
     overflow: hidden !important;
-    transform: translateZ(0);
   }
 
   :host([hidden]) {

@@ -10,7 +10,7 @@ window.Vaadin.featureFlags ||= {};
 window.Vaadin.featureFlags.masterDetailLayoutComponent = true;
 
 describe('drawer mode', () => {
-  let layout, master, detail, detailContent;
+  let layout, master, detail, detailWrapper, detailContent;
   let width, height;
 
   before(() => {
@@ -28,6 +28,7 @@ describe('drawer mode', () => {
     await nextRender();
     master = layout.shadowRoot.querySelector('[part="master"]');
     detail = layout.shadowRoot.querySelector('[part="detail"]');
+    detailWrapper = detail.parentElement;
     detailContent = layout.querySelector('[slot="detail"]');
   });
 
@@ -42,7 +43,7 @@ describe('drawer mode', () => {
       await nextResize(layout);
 
       expect(layout.hasAttribute('drawer')).to.be.true;
-      expect(getComputedStyle(detail).position).to.equal('absolute');
+      expect(getComputedStyle(detailWrapper).position).to.equal('absolute');
     });
 
     it('should switch to the drawer mode if not enough space when masterSize is set', async () => {
@@ -57,7 +58,7 @@ describe('drawer mode', () => {
       await nextResize(layout);
 
       expect(layout.hasAttribute('drawer')).to.be.true;
-      expect(getComputedStyle(detail).position).to.equal('absolute');
+      expect(getComputedStyle(detailWrapper).position).to.equal('absolute');
     });
 
     it('should switch to the drawer mode if not enough space when masterMinSize is set', async () => {
@@ -72,7 +73,7 @@ describe('drawer mode', () => {
       await nextResize(layout);
 
       expect(layout.hasAttribute('drawer')).to.be.true;
-      expect(getComputedStyle(detail).position).to.equal('absolute');
+      expect(getComputedStyle(detailWrapper).position).to.equal('absolute');
     });
 
     it('should set detail area width in drawer mode when detailSize is set', async () => {
@@ -87,23 +88,7 @@ describe('drawer mode', () => {
       await nextResize(layout);
 
       expect(layout.hasAttribute('drawer')).to.be.true;
-      expect(getComputedStyle(detail).position).to.equal('absolute');
-      expect(getComputedStyle(detail).width).to.equal('300px');
-    });
-
-    it('should set detail area width in drawer mode when detailMinSize is set', async () => {
-      // Use the threshold at which the drawer mode isn't on by default,
-      // but will be on after setting min size on the detail area.
-      await setViewport({ width: 500, height });
-      await nextResize(layout);
-
-      expect(layout.hasAttribute('drawer')).to.be.false;
-
-      layout.detailMinSize = '300px';
-      await nextResize(layout);
-
-      expect(layout.hasAttribute('drawer')).to.be.true;
-      expect(getComputedStyle(detail).position).to.equal('absolute');
+      expect(getComputedStyle(detailWrapper).position).to.equal('absolute');
       expect(getComputedStyle(detail).width).to.equal('300px');
     });
 
@@ -153,7 +138,7 @@ describe('drawer mode', () => {
       await nextRender();
 
       // Shrink viewport
-      layout.detailMinSize = '300px';
+      layout.detailSize = '300px';
       await setViewport({ width: 500, height });
       await nextResize(layout);
 
@@ -164,7 +149,7 @@ describe('drawer mode', () => {
       await nextRender();
 
       expect(layout.hasAttribute('drawer')).to.be.true;
-      expect(getComputedStyle(detail).position).to.equal('absolute');
+      expect(getComputedStyle(detailWrapper).position).to.equal('absolute');
       expect(getComputedStyle(detail).width).to.equal('300px');
 
       // Remove details
@@ -229,7 +214,7 @@ describe('drawer mode', () => {
       await nextResize(layout);
 
       expect(layout.hasAttribute('drawer')).to.be.true;
-      expect(getComputedStyle(detail).position).to.equal('absolute');
+      expect(getComputedStyle(detailWrapper).position).to.equal('absolute');
     });
 
     it('should set detail area height in drawer mode when detailSize is set', async () => {
@@ -244,7 +229,7 @@ describe('drawer mode', () => {
       await nextResize(layout);
 
       expect(layout.hasAttribute('drawer')).to.be.true;
-      expect(getComputedStyle(detail).position).to.equal('absolute');
+      expect(getComputedStyle(detailWrapper).position).to.equal('absolute');
       expect(getComputedStyle(detail).height).to.equal('250px');
 
       layout.detailSize = '';
@@ -264,7 +249,7 @@ describe('drawer mode', () => {
       await nextResize(layout);
 
       expect(layout.hasAttribute('drawer')).to.be.true;
-      expect(getComputedStyle(detail).position).to.equal('absolute');
+      expect(getComputedStyle(detailWrapper).position).to.equal('absolute');
       expect(getComputedStyle(detail).height).to.equal('250px');
 
       layout.detailMinSize = '';
@@ -359,7 +344,7 @@ describe('drawer mode', () => {
         const layoutBounds = layout.getBoundingClientRect();
         const detailBounds = detail.getBoundingClientRect();
 
-        expect(getComputedStyle(detail).position).to.equal('absolute');
+        expect(getComputedStyle(detailWrapper).position).to.equal('absolute');
         expect(detailBounds.top).to.equal(layoutBounds.top);
         expect(detailBounds.bottom).to.equal(layoutBounds.bottom);
         expect(detailBounds.right).to.equal(layoutBounds.right);
@@ -372,7 +357,7 @@ describe('drawer mode', () => {
         const detailBounds = detail.getBoundingClientRect();
         const windowBounds = document.documentElement.getBoundingClientRect();
 
-        expect(getComputedStyle(detail).position).to.equal('fixed');
+        expect(getComputedStyle(detailWrapper).position).to.equal('fixed');
         expect(detailBounds.top).to.equal(windowBounds.top);
         expect(detailBounds.bottom).to.equal(windowBounds.bottom);
         expect(detailBounds.right).to.equal(windowBounds.right);
@@ -396,7 +381,7 @@ describe('drawer mode', () => {
         const layoutBounds = layout.getBoundingClientRect();
         const detailBounds = detail.getBoundingClientRect();
 
-        expect(getComputedStyle(detail).position).to.equal('absolute');
+        expect(getComputedStyle(detailWrapper).position).to.equal('absolute');
         expect(detailBounds.left).to.equal(layoutBounds.left);
         expect(detailBounds.right).to.equal(layoutBounds.right);
         expect(detailBounds.bottom).to.equal(layoutBounds.bottom);
@@ -409,7 +394,7 @@ describe('drawer mode', () => {
         const detailBounds = detail.getBoundingClientRect();
         const windowBounds = document.documentElement.getBoundingClientRect();
 
-        expect(getComputedStyle(detail).position).to.equal('fixed');
+        expect(getComputedStyle(detailWrapper).position).to.equal('fixed');
         expect(detailBounds.left).to.equal(windowBounds.left);
         expect(detailBounds.right).to.equal(windowBounds.right);
         expect(detailBounds.bottom).to.equal(windowBounds.bottom);

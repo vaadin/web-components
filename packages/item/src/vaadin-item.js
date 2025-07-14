@@ -15,10 +15,8 @@ import { ItemMixin } from './vaadin-item-mixin.js';
 /**
  * `<vaadin-item>` is a Web Component providing layout for items in tabs and menus.
  *
- * ```
- *   <vaadin-item>
- *     Item content
- *   </vaadin-item>
+ * ```html
+ * <vaadin-item>Item content</vaadin-item>
  * ```
  *
  * ### Selectable

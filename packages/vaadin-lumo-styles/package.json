@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-lumo-styles",
-  "version": "25.0.0-alpha6",
+  "version": "25.0.0-alpha7",
   "publishConfig": {
     "access": "public"
   },
@@ -23,13 +23,15 @@
     "icons": "gulp icons"
   },
   "files": [
+    "*.css",
     "*.d.ts",
     "*.js",
     "!gulpfile.js",
-    "auto-complete.css",
+    "components/*.css",
     "mixins/*.d.ts",
     "mixins/*.js",
     "presets/*.js",
+    "src",
     "utilities/*.js"
   ],
   "keywords": [
@@ -40,9 +42,9 @@
     "web-component"
   ],
   "dependencies": {
-    "@vaadin/component-base": "25.0.0-alpha6",
-    "@vaadin/icon": "25.0.0-alpha6",
-    "@vaadin/vaadin-themable-mixin": "25.0.0-alpha6"
+    "@vaadin/component-base": "25.0.0-alpha7",
+    "@vaadin/icon": "25.0.0-alpha7",
+    "@vaadin/vaadin-themable-mixin": "25.0.0-alpha7"
   },
   "devDependencies": {
     "gulp": "^5.0.1",

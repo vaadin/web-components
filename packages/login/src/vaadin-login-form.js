@@ -19,7 +19,7 @@ import { LoginFormMixin } from './vaadin-login-form-mixin.js';
  * `<vaadin-login-form>` is a Web Component providing an easy way to require users
  * to log in into an application. Note that component has no shadowRoot.
  *
- * ```
+ * ```html
  * <vaadin-login-form></vaadin-login-form>
  * ```
  *
@@ -71,11 +71,6 @@ class LoginForm extends LoginFormMixin(ElementMixin(ThemableMixin(PolylitMixin(L
   /** @protected */
   render() {
     return html`
-      <style>
-        vaadin-login-form-wrapper > form > * {
-          width: 100%;
-        }
-      </style>
       <vaadin-login-form-wrapper
         id="vaadinLoginFormWrapper"
         theme="${ifDefined(this._theme)}"

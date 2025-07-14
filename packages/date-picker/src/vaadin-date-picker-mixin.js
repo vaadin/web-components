@@ -472,7 +472,7 @@ export const DatePickerMixin = (subclass) =>
     /**
      * @protected
      * @override
-     * */
+     */
     focus(options) {
       if (this._noInput && !isKeyboardActive()) {
         this.open();

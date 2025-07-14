@@ -14,28 +14,13 @@ export class CSSPropertyObserver {
   #name;
   #callback;
   #properties = new Set();
+  #styleSheet;
+  #isConnected = false;
 
   constructor(root, name, callback) {
     this.#root = root;
     this.#name = name;
     this.#callback = callback;
-
-    const styleSheet = new CSSStyleSheet();
-    styleSheet.replaceSync(`
-      :is(:root, :host)::before {
-        content: '' !important;
-        position: absolute !important;
-        top: -9999px !important;
-        left: -9999px !important;
-        visibility: hidden !important;
-        transition: 1ms allow-discrete step-end !important;
-        transition-property: var(--${this.#name}-props) !important;
-      }
-    `);
-    this.#root.adoptedStyleSheets.unshift(styleSheet);
-
-    this.#rootHost.addEventListener('transitionstart', (event) => this.#handleTransitionEvent(event));
-    this.#rootHost.addEventListener('transitionend', (event) => this.#handleTransitionEvent(event));
   }
 
   #handleTransitionEvent(event) {
@@ -46,8 +31,47 @@ export class CSSPropertyObserver {
   }
 
   observe(property) {
+    this.connect();
+
     this.#properties.add(property);
     this.#rootHost.style.setProperty(`--${this.#name}-props`, [...this.#properties].join(', '));
+  }
+
+  connect() {
+    if (this.#isConnected) {
+      return;
+    }
+
+    this.#styleSheet = new CSSStyleSheet();
+    this.#styleSheet.replaceSync(`
+      :is(:root, :host)::before {
+        content: '' !important;
+        position: absolute !important;
+        top: -9999px !important;
+        left: -9999px !important;
+        visibility: hidden !important;
+        transition: 1ms allow-discrete step-end !important;
+        transition-property: var(--${this.#name}-props) !important;
+      }
+    `);
+    this.#root.adoptedStyleSheets.unshift(this.#styleSheet);
+
+    this.#rootHost.addEventListener('transitionstart', (event) => this.#handleTransitionEvent(event));
+    this.#rootHost.addEventListener('transitionend', (event) => this.#handleTransitionEvent(event));
+
+    this.#isConnected = true;
+  }
+
+  disconnect() {
+    this.#properties.clear();
+
+    this.#root.adoptedStyleSheets = this.#root.adoptedStyleSheets.filter((s) => s !== this.#styleSheet);
+
+    this.#rootHost.removeEventListener('transitionstart', this.#handleTransitionEvent);
+    this.#rootHost.removeEventListener('transitionend', this.#handleTransitionEvent);
+    this.#rootHost.style.removeProperty(`--${this.#name}-props`);
+
+    this.#isConnected = false;
   }
 
   get #rootHost() {

@@ -7,72 +7,70 @@ import '@vaadin/component-base/src/style-props.js';
 import { css } from 'lit';
 
 export const gridTreeToggleStyles = css`
-  @layer base {
-    :host {
-      display: flex;
-      max-width: 100%;
-      pointer-events: none;
-    }
+  :host {
+    display: flex;
+    max-width: 100%;
+    pointer-events: none;
+  }
 
-    /* Don't expand/collapse when clicking #level-spacer */
-    [part] {
-      pointer-events: auto;
-    }
+  /* Don't expand/collapse when clicking #level-spacer */
+  [part] {
+    pointer-events: auto;
+  }
 
-    :host([hidden]) {
-      display: none !important;
-    }
+  :host([hidden]) {
+    display: none !important;
+  }
 
-    :host(:not([leaf])) {
-      cursor: var(--vaadin-clickable-cursor);
-    }
+  :host(:not([leaf])) {
+    cursor: var(--vaadin-clickable-cursor);
+  }
 
-    #level-spacer,
-    [part='toggle'] {
-      flex: none;
-    }
+  #level-spacer,
+  [part='toggle'] {
+    flex: none;
+  }
 
-    #level-spacer {
-      width: calc(var(--_level, 0) * var(--vaadin-grid-tree-toggle-level-offset, 1em));
-    }
+  #level-spacer {
+    width: calc(var(--_level, 0) * var(--vaadin-grid-tree-toggle-level-offset, 16px));
+  }
 
-    [part='toggle'] {
-      margin-inline-end: var(--vaadin-gap-container-inline);
-    }
+  [part='toggle'] {
+    margin-inline-end: var(--vaadin-gap-container-inline);
+  }
 
+  [part='toggle']::before {
+    content: '';
+    display: block;
+    width: var(--vaadin-icon-size, 1lh);
+    height: var(--vaadin-icon-size, 1lh);
+    background: currentColor;
+    mask-image: var(--_vaadin-icon-chevron-down);
+  }
+
+  :host(:not([expanded])) [part='toggle']::before {
+    rotate: -90deg;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
     [part='toggle']::before {
-      content: '';
-      display: block;
-      width: var(--vaadin-icon-size, 1lh);
-      height: var(--vaadin-icon-size, 1lh);
-      background: currentColor;
-      mask-image: var(--_vaadin-icon-chevron-down);
+      transition: rotate 120ms;
     }
+  }
 
-    :host(:not([expanded])) [part='toggle']::before {
-      rotate: -90deg;
-    }
+  :host([leaf]) [part='toggle'] {
+    visibility: hidden;
+  }
 
-    @media (prefers-reduced-motion: no-preference) {
-      [part='toggle']::before {
-        transition: rotate 120ms;
-      }
-    }
+  slot {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 
-    :host([leaf]) [part='toggle'] {
-      visibility: hidden;
-    }
-
-    slot {
-      display: block;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    @media (forced-colors: active) {
-      [part='toggle']::before {
-        background: CanvasText;
-      }
+  @media (forced-colors: active) {
+    [part='toggle']::before {
+      background: CanvasText;
     }
   }
 `;

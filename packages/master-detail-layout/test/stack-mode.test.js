@@ -10,7 +10,7 @@ window.Vaadin.featureFlags ||= {};
 window.Vaadin.featureFlags.masterDetailLayoutComponent = true;
 
 describe('stack mode', () => {
-  let layout, master, detail, detailContent;
+  let layout, master, detail, detailWrapper, detailContent;
 
   let width, height;
 
@@ -34,6 +34,7 @@ describe('stack mode', () => {
       await nextRender();
       master = layout.shadowRoot.querySelector('[part="master"]');
       detail = layout.shadowRoot.querySelector('[part="detail"]');
+      detailWrapper = detail.parentElement;
       detailContent = layout.querySelector('[slot="detail"]');
     });
 
@@ -47,8 +48,8 @@ describe('stack mode', () => {
 
         expect(layout.hasAttribute('drawer')).to.be.false;
         expect(layout.hasAttribute('stack')).to.be.true;
-        expect(getComputedStyle(detail).position).to.equal('absolute');
-        expect(getComputedStyle(detail).inset).to.equal('0px');
+        expect(getComputedStyle(detailWrapper).position).to.equal('absolute');
+        expect(getComputedStyle(detailWrapper).inset).to.equal('0px');
       });
 
       it('should clear the stack mode when there is enough space for both areas to fit', async () => {
@@ -119,7 +120,7 @@ describe('stack mode', () => {
         await nextRender();
 
         expect(layout.hasAttribute('stack')).to.be.true;
-        expect(getComputedStyle(detail).position).to.equal('absolute');
+        expect(getComputedStyle(detailWrapper).position).to.equal('absolute');
 
         // Remove details
         detailContent.remove();
@@ -220,8 +221,8 @@ describe('stack mode', () => {
 
         expect(layout.hasAttribute('drawer')).to.be.false;
         expect(layout.hasAttribute('stack')).to.be.true;
-        expect(getComputedStyle(detail).position).to.equal('absolute');
-        expect(getComputedStyle(detail).inset).to.equal('0px');
+        expect(getComputedStyle(detailWrapper).position).to.equal('absolute');
+        expect(getComputedStyle(detailWrapper).inset).to.equal('0px');
       });
 
       it('should use fixed position in the stack mode when viewport containment is used', async () => {
@@ -235,8 +236,8 @@ describe('stack mode', () => {
 
         expect(layout.hasAttribute('drawer')).to.be.false;
         expect(layout.hasAttribute('stack')).to.be.true;
-        expect(getComputedStyle(detail).position).to.equal('fixed');
-        expect(getComputedStyle(detail).inset).to.equal('0px');
+        expect(getComputedStyle(detailWrapper).position).to.equal('fixed');
+        expect(getComputedStyle(detailWrapper).inset).to.equal('0px');
       });
 
       it('should not apply min-height to the detail area in the stack mode', async () => {

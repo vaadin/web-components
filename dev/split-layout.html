@@ -12,52 +12,56 @@
       import '@vaadin/split-layout';
 
       document.querySelectorAll('.first').forEach((el) => {
-        el.textContent = new Array(1000).fill('a').join(' ');
+        el.innerHTML = `<div style="padding: 0.5rem">${new Array(420).fill('a').join(' ')}</div>`;
       });
       document.querySelectorAll('.second').forEach((el) => {
-        el.textContent = new Array(1000).fill('b').join(' ');
+        el.innerHTML = `<div style="padding: 0.5rem">${new Array(420).fill('b').join(' ')}</div>`;
       });
     </script>
 
     <style>
-      vaadin-split-layout {
-        display: inline-flex;
-        margin: 0 1rem 2rem 0;
+      .first,
+      .second {
         /* Force the natural width of both containers to be equal */
         font-family: monospace;
+        contain: paint;
       }
     </style>
   </head>
 
   <body>
     <h2 class="heading">Default</h2>
-    <vaadin-split-layout style="width: 400px; height: 200px">
-      <div class="first"></div>
-      <div class="second"></div>
-    </vaadin-split-layout>
-    <vaadin-split-layout style="width: 400px; height: 200px" orientation="vertical">
-      <div class="first"></div>
-      <div class="second"></div>
-    </vaadin-split-layout>
+    <p>
+      These Split Layouts are wrapped in a div with <code>overflow: auto;</code>, but you shouldn't see a scrollbar even
+      if you drag the splitters to the end.
+    </p>
+    <div style="width: fit-content; height: fit-content; overflow: auto">
+      <vaadin-split-layout style="width: 400px; height: 200px">
+        <vaadin-split-layout style="width: 400px; height: 200px" orientation="vertical">
+          <div class="first"></div>
+          <div class="second"></div>
+        </vaadin-split-layout>
+        <vaadin-split-layout style="width: 400px; height: 200px" orientation="vertical">
+          <div class="first"></div>
+          <div class="second"></div>
+        </vaadin-split-layout>
+      </vaadin-split-layout>
+    </div>
 
     <h2 class="heading">Small</h2>
+    <p>
+      The small variant shouldn't inherit to the nested Split Layouts. The first nested Split Layout uses the small
+      variant explicitly.
+    </p>
     <vaadin-split-layout style="width: 400px; height: 200px" theme="small">
-      <div class="first"></div>
-      <div class="second"></div>
-    </vaadin-split-layout>
-    <vaadin-split-layout style="width: 400px; height: 200px" orientation="vertical" theme="small">
-      <div class="first"></div>
-      <div class="second"></div>
-    </vaadin-split-layout>
-
-    <h2 class="heading">Minimal</h2>
-    <vaadin-split-layout style="width: 400px; height: 200px" theme="minimal">
-      <div class="first"></div>
-      <div class="second"></div>
-    </vaadin-split-layout>
-    <vaadin-split-layout style="width: 400px; height: 200px" orientation="vertical" theme="minimal">
-      <div class="first"></div>
-      <div class="second"></div>
+      <vaadin-split-layout style="width: 400px; height: 200px" orientation="vertical" theme="small">
+        <div class="first"></div>
+        <div class="second"></div>
+      </vaadin-split-layout>
+      <vaadin-split-layout style="width: 400px; height: 200px" orientation="vertical">
+        <div class="first"></div>
+        <div class="second"></div>
+      </vaadin-split-layout>
     </vaadin-split-layout>
   </body>
 </html>

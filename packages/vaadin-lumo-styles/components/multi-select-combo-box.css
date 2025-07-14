@@ -3,7 +3,6 @@
  * Copyright (c) 2017 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-@import '../src/mixins/base-layer-reset.css';
 @import '../src/mixins/combo-box-loader.css';
 @import '../src/mixins/combo-box-overlay.css';
 @import '../src/mixins/field-base.css';
@@ -22,24 +21,16 @@
 @import '../src/components/multi-select-combo-box-container.css';
 @import '../src/components/multi-select-combo-box-item.css';
 @import '../src/components/multi-select-combo-box-overlay.css';
-@import '../src/components/multi-select-combo-box-scroller.css';
 @import '../src/components/multi-select-combo-box.css';
 
 :is(:root, :host)::before {
   --vaadin-multi-select-combo-box-container-lumo-inject: 1;
   --vaadin-multi-select-combo-box-container-lumo-inject-modules:
-    lumo_mixins_base-layer-reset,
     lumo_components_input-container,
     lumo_components_multi-select-combo-box-container;
 
-  --vaadin-multi-select-combo-box-scroller-lumo-inject: 1;
-  --vaadin-multi-select-combo-box-scroller-lumo-inject-modules:
-    lumo_mixins_base-layer-reset,
-    lumo_components_multi-select-combo-box-scroller;
-
   --vaadin-multi-select-combo-box-overlay-lumo-inject: 1;
   --vaadin-multi-select-combo-box-overlay-lumo-inject-modules:
-    lumo_mixins_base-layer-reset,
     lumo_mixins_loader,
     lumo_mixins_combo-box-loader,
     lumo_mixins_overlay,
@@ -49,20 +40,17 @@
 
   --vaadin-multi-select-combo-box-chip-lumo-inject: 1;
   --vaadin-multi-select-combo-box-chip-lumo-inject-modules:
-    lumo_mixins_base-layer-reset,
     lumo_mixins_field-button,
     lumo_components_multi-select-combo-box-chip;
 
   --vaadin-multi-select-combo-box-item-lumo-inject: 1;
   --vaadin-multi-select-combo-box-item-lumo-inject-modules:
-    lumo_mixins_base-layer-reset,
     lumo_components_item,
     lumo_components_combo-box-item,
     lumo_components_multi-select-combo-box-item;
 
   --vaadin-multi-select-combo-box-lumo-inject: 1;
   --vaadin-multi-select-combo-box-lumo-inject-modules:
-    lumo_mixins_base-layer-reset,
     lumo_mixins_field-label,
     lumo_mixins_field-required,
     lumo_mixins_field-error-message,

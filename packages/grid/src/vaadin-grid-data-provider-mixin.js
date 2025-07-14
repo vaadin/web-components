@@ -7,7 +7,6 @@ import { microTask, timeOut } from '@vaadin/component-base/src/async.js';
 import { DataProviderController } from '@vaadin/component-base/src/data-provider-controller/data-provider-controller.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { get } from '@vaadin/component-base/src/path-utils.js';
-import { getBodyRowCells, updateCellsPart, updateState } from './vaadin-grid-helpers.js';
 
 /**
  * @polymerMixin
@@ -182,46 +181,20 @@ export const DataProviderMixin = (superClass) =>
       this.requestContentUpdate();
     }
 
-    /**
-     * @param {number} index
-     * @param {HTMLElement} el
-     * @protected
-     */
-    _getItem(index, el) {
-      el.index = index;
-
-      const { item } = this._dataProviderController.getFlatIndexContext(index);
-      if (item) {
-        this.__updateLoading(el, false);
-        this._updateItem(el, item);
-        if (this._isExpanded(item)) {
-          this._dataProviderController.ensureFlatIndexHierarchy(index);
-        }
-      } else {
-        this.__updateLoading(el, true);
-        this._dataProviderController.ensureFlatIndexLoaded(index);
-      }
+    /** @private */
+    __getRowItem(row) {
+      const { item } = this._dataProviderController.getFlatIndexContext(row.index);
+      return item;
     }
 
-    /**
-     * @param {!HTMLElement} row
-     * @param {boolean} loading
-     * @private
-     */
-    __updateLoading(row, loading) {
-      const cells = getBodyRowCells(row);
+    /** @private */
+    __ensureRowItem(row) {
+      this._dataProviderController.ensureFlatIndexLoaded(row.index);
+    }
 
-      // Row state attribute
-      updateState(row, 'loading', loading);
-
-      // Cells part attribute
-      updateCellsPart(cells, 'loading-row-cell', loading);
-
-      if (loading) {
-        // Run style generators for the loading row to have custom names cleared
-        this._generateCellClassNames(row);
-        this._generateCellPartNames(row);
-      }
+    /** @private */
+    __ensureRowHierarchy(row) {
+      this._dataProviderController.ensureFlatIndexHierarchy(row.index);
     }
 
     /**
@@ -302,7 +275,7 @@ export const DataProviderMixin = (superClass) =>
       if (this._flatSize !== this._dataProviderController.flatSize) {
         // Schedule an update of all rendered rows by _debouncerApplyCachedData,
         // to ensure that all pages associated with the rendered rows are loaded.
-        this._shouldUpdateAllRenderedRowsAfterPageLoad = true;
+        this._shouldLoadAllRenderedRowsAfterPageLoad = true;
 
         // TODO: Updating the flat size property can still result in a synchonous virtualizer update
         // if the size change requires the virtualizer to increase the amount of physical elements
@@ -312,9 +285,7 @@ export const DataProviderMixin = (superClass) =>
       }
 
       // After updating the cache, check if some of the expanded items should have sub-caches loaded
-      this._getRenderedRows().forEach((row) => {
-        this._dataProviderController.ensureFlatIndexHierarchy(row.index);
-      });
+      this._getRenderedRows().forEach((row) => this.__ensureRowHierarchy(row));
 
       this._hasData = true;
     }
@@ -325,13 +296,14 @@ export const DataProviderMixin = (superClass) =>
       this._debouncerApplyCachedData = Debouncer.debounce(this._debouncerApplyCachedData, timeOut.after(0), () => {
         this._setLoading(false);
 
-        const shouldUpdateAllRenderedRowsAfterPageLoad = this._shouldUpdateAllRenderedRowsAfterPageLoad;
-        this._shouldUpdateAllRenderedRowsAfterPageLoad = false;
+        const shouldLoadAllRenderedRowsAfterPageLoad = this._shouldLoadAllRenderedRowsAfterPageLoad;
+        this._shouldLoadAllRenderedRowsAfterPageLoad = false;
 
         this._getRenderedRows().forEach((row) => {
-          const { item } = this._dataProviderController.getFlatIndexContext(row.index);
-          if (item || shouldUpdateAllRenderedRowsAfterPageLoad) {
-            this._getItem(row.index, row);
+          this.__updateRow(row);
+
+          if (shouldLoadAllRenderedRowsAfterPageLoad) {
+            this.__ensureRowItem(row);
           }
         });
 

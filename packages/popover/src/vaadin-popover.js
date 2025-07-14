@@ -18,7 +18,6 @@ import { OverlayClassMixin } from '@vaadin/component-base/src/overlay-class-mixi
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 import { isLastOverlay as isLastOverlayBase } from '@vaadin/overlay/src/vaadin-overlay-stack-mixin.js';
-import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
 import { PopoverPositionMixin } from './vaadin-popover-position-mixin.js';
 import { PopoverTargetMixin } from './vaadin-popover-target-mixin.js';
@@ -216,7 +215,7 @@ const isLastOverlay = (overlay) => {
  * @mixes ThemePropertyMixin
  */
 class Popover extends PopoverPositionMixin(
-  PopoverTargetMixin(OverlayClassMixin(ThemePropertyMixin(ElementMixin(LumoInjectionMixin(PolylitMixin(LitElement)))))),
+  PopoverTargetMixin(OverlayClassMixin(ThemePropertyMixin(ElementMixin(PolylitMixin(LitElement))))),
 ) {
   static get is() {
     return 'vaadin-popover';

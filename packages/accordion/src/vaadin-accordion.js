@@ -8,7 +8,6 @@ import { css, html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
-import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { AccordionMixin } from './vaadin-accordion-mixin.js';
 
@@ -24,7 +23,7 @@ import { AccordionMixin } from './vaadin-accordion-mixin.js';
  * Only one panel can be opened at a time, opening a new one forces
  * previous panel to close and hide its content.
  *
- * ```
+ * ```html
  * <vaadin-accordion>
  *   <vaadin-accordion-panel>
  *     <vaadin-accordion-heading slot="summary">Panel 1</vaadin-accordion-heading>
@@ -42,15 +41,6 @@ import { AccordionMixin } from './vaadin-accordion-mixin.js';
  * See the [`<vaadin-accordion-panel>`](#/elements/vaadin-accordion-panel)
  * documentation for the available state attributes and stylable shadow parts.
  *
- * **Note:** You can apply the theme to `<vaadin-accordion>` component itself,
- * especially by using the following CSS selector:
- *
- * ```
- * :host ::slotted(vaadin-accordion-panel) {
- *   margin-bottom: 5px;
- * }
- * ```
- *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
  * @fires {CustomEvent} items-changed - Fired when the `items` property changes.
@@ -62,7 +52,7 @@ import { AccordionMixin } from './vaadin-accordion-mixin.js';
  * @mixes ElementMixin
  * @mixes ThemableMixin
  */
-class Accordion extends AccordionMixin(LumoInjectionMixin(ThemableMixin(ElementMixin(PolylitMixin(LitElement))))) {
+class Accordion extends AccordionMixin(ThemableMixin(ElementMixin(PolylitMixin(LitElement)))) {
   static get is() {
     return 'vaadin-accordion';
   }

@@ -9,7 +9,7 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
 /**
  * `<vaadin-vertical-layout>` provides a simple way to vertically align your HTML elements.
  *
- * ```
+ * ```html
  * <vaadin-vertical-layout>
  *   <div>Item 1</div>
  *   <div>Item 2</div>

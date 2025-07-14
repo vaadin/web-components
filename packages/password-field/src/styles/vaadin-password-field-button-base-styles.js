@@ -8,37 +8,35 @@ import { css } from 'lit';
 import { buttonStyles } from '@vaadin/button/src/styles/vaadin-button-base-styles.js';
 
 const passwordFieldBase = css`
-  @layer base {
-    :host {
-      --vaadin-button-background: transparent;
-      --vaadin-button-border: none;
-      --vaadin-button-padding: 0;
-      color: var(--vaadin-input-field-button-color, inherit);
-      display: block;
-      cursor: var(--vaadin-clickable-cursor);
-    }
+  :host {
+    --vaadin-button-background: transparent;
+    --vaadin-button-border: none;
+    --vaadin-button-padding: 0;
+    color: var(--vaadin-input-field-button-color, inherit);
+    display: block;
+    cursor: var(--vaadin-clickable-cursor);
+  }
 
+  :host::before {
+    background: currentColor;
+    content: '';
+    display: block;
+    height: var(--vaadin-icon-size, 1lh);
+    mask-image: var(--_vaadin-icon-eye);
+    width: var(--vaadin-icon-size, 1lh);
+  }
+
+  :host([aria-pressed='true'])::before {
+    mask-image: var(--_vaadin-icon-eye-slash);
+  }
+
+  @media (forced-colors: active) {
     :host::before {
-      background: currentColor;
-      content: '';
-      display: block;
-      height: var(--vaadin-icon-size, 1lh);
-      mask-image: var(--_vaadin-icon-eye);
-      width: var(--vaadin-icon-size, 1lh);
+      background: CanvasText;
     }
 
-    :host([aria-pressed='true'])::before {
-      mask-image: var(--_vaadin-icon-eye-slash);
-    }
-
-    @media (forced-colors: active) {
-      :host::before {
-        background: CanvasText;
-      }
-
-      :host([disabled])::before {
-        background: GrayText;
-      }
+    :host([disabled])::before {
+      background: GrayText;
     }
   }
 `;

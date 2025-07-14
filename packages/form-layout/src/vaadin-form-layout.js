@@ -215,6 +215,12 @@ class FormLayout extends FormLayoutMixin(ThemableMixin(ElementMixin(LumoInjectio
     return formLayoutStyles;
   }
 
+  static get lumoInjector() {
+    return {
+      includeBaseStyles: true,
+    };
+  }
+
   /** @protected */
   render() {
     return html`

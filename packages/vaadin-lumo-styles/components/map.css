@@ -3,12 +3,9 @@
  * Copyright (c) 2000 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-@import '../src/mixins/base-layer-reset.css';
 @import '../src/components/map.css';
 
 :is(:root, :host)::before {
   --vaadin-map-lumo-inject: 1;
-  --vaadin-map-lumo-inject-modules:
-    lumo_mixins_base-layer-reset,
-    lumo_components_map;
+  --vaadin-map-lumo-inject-modules: lumo_components_map;
 }

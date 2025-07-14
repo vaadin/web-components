@@ -6,18 +6,16 @@
 import { css } from 'lit';
 
 export const avatarGroupMenuStyles = css`
-  @layer base {
-    :host {
-      display: block;
-      padding: var(--vaadin-item-overlay-padding, 4px);
-    }
+  :host {
+    display: block;
+    padding: var(--vaadin-item-overlay-padding, 4px);
+  }
 
-    :host([hidden]) {
-      display: none !important;
-    }
+  :host([hidden]) {
+    display: none !important;
+  }
 
-    [part='items'] {
-      display: contents;
-    }
+  [part='items'] {
+    display: contents;
   }
 `;

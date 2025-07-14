@@ -30,13 +30,13 @@ export interface MenuBarEventMap<TItem extends MenuBarItem = MenuBarItem>
  *
  * To create the menu bar, first add the component to the page:
  *
- * ```
+ * ```html
  * <vaadin-menu-bar></vaadin-menu-bar>
  * ```
  *
  * And then use [`items`](#/elements/vaadin-menu-bar#property-items) property to initialize the structure:
  *
- * ```
+ * ```js
  * document.querySelector('vaadin-menu-bar').items = [{text: 'File'}, {text: 'Edit'}];
  * ```
  *

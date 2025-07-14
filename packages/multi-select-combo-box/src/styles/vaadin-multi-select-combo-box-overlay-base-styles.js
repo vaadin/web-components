@@ -9,13 +9,11 @@ import { comboBoxOverlayStyles } from '@vaadin/combo-box/src/styles/vaadin-combo
 export const multiSelectComboBoxOverlayStyles = [
   comboBoxOverlayStyles,
   css`
-    @layer base {
-      #overlay {
-        width: var(
-          --vaadin-multi-select-combo-box-overlay-width,
-          var(--_vaadin-multi-select-combo-box-overlay-default-width, auto)
-        );
-      }
+    #overlay {
+      width: var(
+        --vaadin-multi-select-combo-box-overlay-width,
+        var(--_vaadin-multi-select-combo-box-overlay-default-width, auto)
+      );
     }
   `,
 ];

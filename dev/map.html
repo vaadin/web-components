@@ -11,24 +11,33 @@
   <body>
     <script type="module">
       import '@vaadin/map';
+      import FullScreen from 'ol/control/FullScreen';
+      import OverviewMap from 'ol/control/OverviewMap';
+      import Rotate from 'ol/control/Rotate';
+      import ScaleLine from 'ol/control/ScaleLine';
       import TileLayer from 'ol/layer/Tile';
       import OSM from 'ol/source/OSM';
       import View from 'ol/View';
 
       const map = document.querySelector('vaadin-map');
-      customElements.whenDefined('vaadin-map').then(() => {
-        map.configuration.addLayer(
-          new TileLayer({
-            source: new OSM(),
-          }),
-        );
-        map.configuration.setView(
-          new View({
-            center: [0, 0],
-            zoom: 3,
-          }),
-        );
-      });
+
+      map.configuration.addLayer(
+        new TileLayer({
+          source: new OSM(),
+        }),
+      );
+      map.configuration.setView(
+        new View({
+          center: [0, 0],
+          zoom: 3,
+        }),
+      );
+
+      // Add non-default controls
+      map.configuration.getControls().push(new FullScreen({ label: '', labelActive: '' }));
+      map.configuration.getControls().push(new Rotate({ label: '' }));
+      map.configuration.getControls().push(new ScaleLine());
+      map.configuration.getControls().push(new OverviewMap({ label: '', collapseLabel: '' }));
     </script>
 
     <vaadin-map></vaadin-map>

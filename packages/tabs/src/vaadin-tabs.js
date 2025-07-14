@@ -16,13 +16,13 @@ import { TabsMixin } from './vaadin-tabs-mixin.js';
 /**
  * `<vaadin-tabs>` is a Web Component for organizing and grouping content into sections.
  *
- * ```
- *   <vaadin-tabs selected="4">
- *     <vaadin-tab>Page 1</vaadin-tab>
- *     <vaadin-tab>Page 2</vaadin-tab>
- *     <vaadin-tab>Page 3</vaadin-tab>
- *     <vaadin-tab>Page 4</vaadin-tab>
- *   </vaadin-tabs>
+ * ```html
+ * <vaadin-tabs selected="4">
+ *   <vaadin-tab>Page 1</vaadin-tab>
+ *   <vaadin-tab>Page 2</vaadin-tab>
+ *   <vaadin-tab>Page 3</vaadin-tab>
+ *   <vaadin-tab>Page 4</vaadin-tab>
+ * </vaadin-tabs>
  * ```
  *
  * ### Styling

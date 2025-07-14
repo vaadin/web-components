@@ -92,8 +92,6 @@ export const MessageInputMixin = (superClass) =>
 
       this._buttonController = new SlotController(this, 'button', 'vaadin-button', {
         initializer: (btn) => {
-          btn.setAttribute('theme', 'primary');
-
           btn.addEventListener('click', () => {
             this.__submit();
           });
@@ -118,6 +116,7 @@ export const MessageInputMixin = (superClass) =>
           });
 
           textarea.minRows = 1;
+          (textarea.inputElement || textarea).setAttribute('enterkeyhint', 'send');
 
           this._textArea = textarea;
         },

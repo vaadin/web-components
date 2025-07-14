@@ -52,7 +52,7 @@ export interface LoginOverlayEventMap extends HTMLElementEventMap, LoginOverlayC
  * having an additional `brand` part for application title and description. Using `<vaadin-login-overlay>` allows
  * password managers to work with login form.
  *
- * ```
+ * ```html
  * <vaadin-login-overlay opened></vaadin-login-overlay>
  * ```
  *

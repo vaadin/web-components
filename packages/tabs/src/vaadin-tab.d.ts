@@ -10,10 +10,8 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
 /**
  * `<vaadin-tab>` is a Web Component providing an accessible and customizable tab.
  *
- * ```
- *   <vaadin-tab>
- *     Tab 1
- *   </vaadin-tab>
+ * ```html
+ * <vaadin-tab>Tab 1</vaadin-tab>
  * ```
  *
  * The following state attributes are available for styling:

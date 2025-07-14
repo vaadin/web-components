@@ -61,6 +61,12 @@ export const LumoInjectionMixin = (superClass) =>
       return `--${this.is}-lumo-inject`;
     }
 
+    static get lumoInjector() {
+      return {
+        includeBaseStyles: false,
+      };
+    }
+
     /** @protected */
     connectedCallback() {
       super.connectedCallback();
