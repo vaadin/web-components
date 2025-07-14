@@ -85,20 +85,24 @@ class ConfirmDialog extends ConfirmDialogMixin(ElementMixin(ThemePropertyMixin(P
   /** @protected */
   render() {
     return html`
-      <vaadin-confirm-dialog-dialog
-        id="dialog"
+      <vaadin-confirm-dialog-overlay
+        id="overlay"
+        role="alertdialog"
+        .owner="${this}"
         .opened="${this.opened}"
-        .overlayClass="${this.overlayClass}"
+        theme="${ifDefined(this._theme)}"
+        .ariaLabel="${this.header || 'confirmation'}"
         .cancelButtonVisible="${this.cancelButtonVisible}"
         .rejectButtonVisible="${this.rejectButtonVisible}"
-        aria-label="${this.header || 'confirmation'}"
-        theme="${ifDefined(this._theme)}"
-        no-close-on-outside-click
-        .noCloseOnEsc="${this.noCloseOnEsc}"
-        .height="${this.height}"
-        .width="${this.width}"
+        with-backdrop
+        restore-focus-on-close
+        focus-trap
         @opened-changed="${this._onOpenedChanged}"
-      ></vaadin-confirm-dialog-dialog>
+        @vaadin-overlay-open="${this.__onDialogOpened}"
+        @vaadin-overlay-closed="${this.__onDialogClosed}"
+        @vaadin-overlay-outside-click="${this._onOverlayOutsideClick}"
+        @vaadin-overlay-escape-press="${this._onOverlayEscapePress}"
+      ></vaadin-confirm-dialog-overlay>
 
       <div hidden>
         <slot name="header"></slot>

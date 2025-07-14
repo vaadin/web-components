@@ -420,7 +420,7 @@ export const RichTextEditorMixin = (superClass) =>
       this.$.colorPopup.target = this.shadowRoot.querySelector('#btn-color');
 
       requestAnimationFrame(() => {
-        this.$.linkDialog.$.dialog.$.overlay.addEventListener('vaadin-overlay-open', () => {
+        this.$.linkDialog.$.overlay.addEventListener('vaadin-overlay-open', () => {
           this.$.linkUrl.focus();
         });
       });

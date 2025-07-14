@@ -510,7 +510,7 @@ describe('crud', () => {
       await nextRender();
       flushGrid(crud._grid);
       confirmCancelDialog = crud.$.confirmCancel;
-      confirmCancelOverlay = confirmCancelDialog.$.dialog.$.overlay;
+      confirmCancelOverlay = confirmCancelDialog.$.overlay;
     });
 
     function fakeClickOnRow(idx) {

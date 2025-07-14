@@ -74,7 +74,7 @@ describe('crud buttons', () => {
         let confirmDeleteOverlay;
 
         beforeEach(() => {
-          confirmDeleteOverlay = crud.$.confirmDelete.$.dialog.$.overlay;
+          confirmDeleteOverlay = crud.$.confirmDelete.$.overlay;
         });
 
         it('should save an edited item', async () => {
@@ -171,7 +171,7 @@ describe('crud buttons', () => {
 
           beforeEach(() => {
             confirmCancelDialog = crud.$.confirmCancel;
-            confirmCancelOverlay = confirmCancelDialog.$.dialog.$.overlay;
+            confirmCancelOverlay = confirmCancelDialog.$.overlay;
           });
 
           afterEach(() => {
@@ -316,7 +316,7 @@ describe('crud buttons', () => {
 
           beforeEach(() => {
             confirmDeleteDialog = crud.$.confirmDelete;
-            confirmDeleteOverlay = confirmDeleteDialog.$.dialog.$.overlay;
+            confirmDeleteOverlay = confirmDeleteDialog.$.overlay;
           });
 
           it('should ask for confirmation on delete', async () => {
@@ -417,7 +417,7 @@ describe('crud buttons', () => {
             crud.editorPosition = 'bottom';
             crud.editOnClick = true;
             confirmCancelDialog = crud.$.confirmCancel;
-            confirmCancelOverlay = confirmCancelDialog.$.dialog.$.overlay;
+            confirmCancelOverlay = confirmCancelDialog.$.overlay;
             await nextRender();
             flushGrid(crud._grid);
             crud.items = [{ foo: 'bar' }, { foo: 'baz' }];
@@ -660,7 +660,7 @@ describe('crud buttons', () => {
 
           beforeEach(() => {
             confirmDeleteDialog = crud.$.confirmDelete;
-            confirmDeleteOverlay = confirmDeleteDialog.$.dialog.$.overlay;
+            confirmDeleteOverlay = confirmDeleteDialog.$.overlay;
           });
 
           it('should fire the delete event', async () => {
