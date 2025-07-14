@@ -15,6 +15,7 @@ import { DialogBaseMixin } from './vaadin-dialog-base-mixin.js';
 import { DialogDraggableMixin } from './vaadin-dialog-draggable-mixin.js';
 import { DialogRendererMixin } from './vaadin-dialog-renderer-mixin.js';
 import { DialogResizableMixin } from './vaadin-dialog-resizable-mixin.js';
+import { DialogSizeMixin } from './vaadin-dialog-size-mixin.js';
 
 export { DialogOverlay } from './vaadin-dialog-overlay.js';
 
@@ -89,11 +90,16 @@ export { DialogOverlay } from './vaadin-dialog-overlay.js';
  * @mixes DialogDraggableMixin
  * @mixes DialogRendererMixin
  * @mixes DialogResizableMixin
+ * @mixes DialogSizeMixin
  * @mixes OverlayClassMixin
  */
-class Dialog extends DialogDraggableMixin(
-  DialogResizableMixin(
-    DialogRendererMixin(DialogBaseMixin(OverlayClassMixin(ThemePropertyMixin(ElementMixin(PolylitMixin(LitElement)))))),
+class Dialog extends DialogSizeMixin(
+  DialogDraggableMixin(
+    DialogResizableMixin(
+      DialogRendererMixin(
+        DialogBaseMixin(OverlayClassMixin(ThemePropertyMixin(ElementMixin(PolylitMixin(LitElement))))),
+      ),
+    ),
   ),
 ) {
   static get is() {

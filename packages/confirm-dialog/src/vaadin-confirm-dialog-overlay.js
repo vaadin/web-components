@@ -10,6 +10,7 @@ import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { OverlayClassMixin } from '@vaadin/component-base/src/overlay-class-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { DialogBaseMixin } from '@vaadin/dialog/src/vaadin-dialog-base-mixin.js';
+import { DialogSizeMixin } from '@vaadin/dialog/src/vaadin-dialog-size-mixin.js';
 import { OverlayMixin } from '@vaadin/overlay/src/vaadin-overlay-mixin.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
@@ -94,7 +95,9 @@ defineCustomElement(ConfirmDialogOverlay);
  * An element used internally by `<vaadin-confirm-dialog>`. Not intended to be used separately.
  * @private
  */
-class ConfirmDialogDialog extends DialogBaseMixin(OverlayClassMixin(ThemePropertyMixin(PolylitMixin(LitElement)))) {
+class ConfirmDialogDialog extends DialogSizeMixin(
+  DialogBaseMixin(OverlayClassMixin(ThemePropertyMixin(PolylitMixin(LitElement)))),
+) {
   static get is() {
     return 'vaadin-confirm-dialog-dialog';
   }
