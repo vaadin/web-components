@@ -171,7 +171,7 @@ import { CrudMixin } from './vaadin-crud-mixin.js';
  * @mixes ThemableMixin
  * @mixes CrudMixin
  */
-class Crud extends CrudMixin(ElementMixin(ThemableMixin(LumoInjectionMixin(PolylitMixin(LitElement))))) {
+class Crud extends CrudMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {
   static get styles() {
     return crudStyles;
   }

@@ -50,7 +50,7 @@ import { HorizontalLayoutMixin } from './vaadin-horizontal-layout-mixin.js';
  * @mixes HorizontalLayoutMixin
  */
 class HorizontalLayout extends HorizontalLayoutMixin(
-  ThemableMixin(ElementMixin(LumoInjectionMixin(PolylitMixin(LitElement)))),
+  ThemableMixin(ElementMixin(PolylitMixin(LumoInjectionMixin(LitElement)))),
 ) {
   static get is() {
     return 'vaadin-horizontal-layout';

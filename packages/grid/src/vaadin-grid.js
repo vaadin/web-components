@@ -262,7 +262,7 @@ import { GridMixin } from './vaadin-grid-mixin.js';
  * @mixes GridMixin
  * @mixes ThemableMixin
  */
-class Grid extends GridMixin(ElementMixin(ThemableMixin(LumoInjectionMixin(PolylitMixin(LitElement))))) {
+class Grid extends GridMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {
   static get is() {
     return 'vaadin-grid';
   }

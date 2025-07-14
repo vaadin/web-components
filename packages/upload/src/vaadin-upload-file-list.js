@@ -21,7 +21,7 @@ import { UploadFileListMixin } from './vaadin-upload-file-list-mixin.js';
  * @mixes UploadFileListMixin
  * @private
  */
-class UploadFileList extends UploadFileListMixin(ThemableMixin(LumoInjectionMixin(PolylitMixin(LitElement)))) {
+class UploadFileList extends UploadFileListMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement)))) {
   static get is() {
     return 'vaadin-upload-file-list';
   }

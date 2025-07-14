@@ -52,7 +52,7 @@ import { cardStyles } from './styles/vaadin-card-core-styles.js';
  * @mixes ElementMixin
  * @mixes ThemableMixin
  */
-class Card extends ElementMixin(ThemableMixin(LumoInjectionMixin(PolylitMixin(LitElement)))) {
+class Card extends ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement)))) {
   static get is() {
     return 'vaadin-card';
   }

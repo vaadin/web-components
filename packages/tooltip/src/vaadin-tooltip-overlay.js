@@ -24,7 +24,7 @@ import { tooltipOverlayStyles } from './styles/vaadin-tooltip-overlay-core-style
  * @private
  */
 class TooltipOverlay extends PopoverOverlayMixin(
-  DirMixin(ThemableMixin(LumoInjectionMixin(PolylitMixin(LitElement)))),
+  DirMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement)))),
 ) {
   static get is() {
     return 'vaadin-tooltip-overlay';

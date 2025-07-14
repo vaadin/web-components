@@ -56,7 +56,7 @@ import { ItemMixin } from './vaadin-item-mixin.js';
  * @mixes ThemableMixin
  * @mixes DirMixin
  */
-class Item extends ItemMixin(ThemableMixin(DirMixin(LumoInjectionMixin(PolylitMixin(LitElement))))) {
+class Item extends ItemMixin(ThemableMixin(DirMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {
   static get is() {
     return 'vaadin-item';
   }

@@ -101,7 +101,7 @@ import { RichTextEditorMixin } from './vaadin-rich-text-editor-mixin.js';
  * @mixes ThemableMixin
  */
 class RichTextEditor extends RichTextEditorMixin(
-  ElementMixin(ThemableMixin(LumoInjectionMixin(PolylitMixin(LitElement)))),
+  ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement)))),
 ) {
   static get is() {
     return 'vaadin-rich-text-editor';

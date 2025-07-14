@@ -26,7 +26,7 @@ import { confirmDialogOverlayStyles } from './styles/vaadin-confirm-dialog-overl
  * @mixes ThemableMixin
  * @private
  */
-class ConfirmDialogOverlay extends OverlayMixin(DirMixin(ThemableMixin(LumoInjectionMixin(PolylitMixin(LitElement))))) {
+class ConfirmDialogOverlay extends OverlayMixin(DirMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {
   static get is() {
     return 'vaadin-confirm-dialog-overlay';
   }

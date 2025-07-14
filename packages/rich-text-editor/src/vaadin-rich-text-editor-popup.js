@@ -137,7 +137,7 @@ export { RichTextEditorPopup };
  * @private
  */
 class RichTextEditorPopupOverlay extends PositionMixin(
-  OverlayMixin(DirMixin(ThemableMixin(LumoInjectionMixin(PolylitMixin(LitElement))))),
+  OverlayMixin(DirMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement))))),
 ) {
   static get is() {
     return 'vaadin-rich-text-editor-popup-overlay';

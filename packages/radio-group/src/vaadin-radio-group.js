@@ -61,7 +61,7 @@ import { RadioGroupMixin } from './vaadin-radio-group-mixin.js';
  * @mixes ElementMixin
  * @mixes RadioGroupMixin
  */
-class RadioGroup extends RadioGroupMixin(ElementMixin(ThemableMixin(LumoInjectionMixin(PolylitMixin(LitElement))))) {
+class RadioGroup extends RadioGroupMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {
   static get is() {
     return 'vaadin-radio-group';
   }

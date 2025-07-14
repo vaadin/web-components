@@ -37,7 +37,7 @@ import { verticalLayoutStyles } from './styles/vaadin-vertical-layout-core-style
  * @mixes ThemableMixin
  * @mixes ElementMixin
  */
-class VerticalLayout extends ThemableMixin(ElementMixin(LumoInjectionMixin(PolylitMixin(LitElement)))) {
+class VerticalLayout extends ThemableMixin(ElementMixin(PolylitMixin(LumoInjectionMixin(LitElement)))) {
   static get is() {
     return 'vaadin-vertical-layout';
   }

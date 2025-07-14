@@ -100,7 +100,7 @@ import { DateTimePickerMixin } from './vaadin-date-time-picker-mixin.js';
  * @mixes DateTimePickerMixin
  */
 class DateTimePicker extends DateTimePickerMixin(
-  ThemableMixin(ElementMixin(LumoInjectionMixin(PolylitMixin(LitElement)))),
+  ThemableMixin(ElementMixin(PolylitMixin(LumoInjectionMixin(LitElement)))),
 ) {
   static get is() {
     return 'vaadin-date-time-picker';

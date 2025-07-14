@@ -57,7 +57,7 @@ import { GridSorterMixin } from './vaadin-grid-sorter-mixin.js';
  * @mixes ThemableMixin
  * @mixes DirMixin
  */
-class GridSorter extends GridSorterMixin(ThemableMixin(DirMixin(LumoInjectionMixin(PolylitMixin(LitElement))))) {
+class GridSorter extends GridSorterMixin(ThemableMixin(DirMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {
   static get is() {
     return 'vaadin-grid-sorter';
   }

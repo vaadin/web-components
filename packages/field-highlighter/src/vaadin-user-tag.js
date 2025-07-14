@@ -20,7 +20,7 @@ import { userTagStyles } from './styles/vaadin-user-tag-core-styles.js';
  * @mixes ThemableMixin
  * @private
  */
-export class UserTag extends ThemableMixin(DirMixin(LumoInjectionMixin(PolylitMixin(LitElement)))) {
+export class UserTag extends ThemableMixin(DirMixin(PolylitMixin(LumoInjectionMixin(LitElement)))) {
   static get is() {
     return 'vaadin-user-tag';
   }

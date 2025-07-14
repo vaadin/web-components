@@ -22,7 +22,7 @@ import { contextMenuItemStyles } from './styles/vaadin-context-menu-item-core-st
  * @mixes ThemableMixin
  * @protected
  */
-class ContextMenuItem extends ItemMixin(ThemableMixin(DirMixin(LumoInjectionMixin(PolylitMixin(LitElement))))) {
+class ContextMenuItem extends ItemMixin(ThemableMixin(DirMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {
   static get is() {
     return 'vaadin-context-menu-item';
   }
