@@ -51,7 +51,7 @@ import { accordionHeading } from './styles/vaadin-accordion-heading-core-styles.
  * @mixes DirMixin
  * @mixes ThemableMixin
  */
-class AccordionHeading extends ActiveMixin(DirMixin(LumoInjectionMixin(ThemableMixin(PolylitMixin(LitElement))))) {
+class AccordionHeading extends ActiveMixin(DirMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {
   static get is() {
     return 'vaadin-accordion-heading';
   }

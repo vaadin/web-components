@@ -62,7 +62,7 @@ import { TextAreaMixin } from './vaadin-text-area-mixin.js';
  * @mixes TextAreaMixin
  * @mixes ThemableMixin
  */
-export class TextArea extends TextAreaMixin(LumoInjectionMixin(ThemableMixin(ElementMixin(PolylitMixin(LitElement))))) {
+export class TextArea extends TextAreaMixin(ThemableMixin(ElementMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {
   static get is() {
     return 'vaadin-text-area';
   }

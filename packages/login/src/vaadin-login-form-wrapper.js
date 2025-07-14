@@ -17,7 +17,7 @@ import { loginFormWrapperStyles } from './styles/vaadin-login-form-wrapper-core-
  * @mixes ThemableMixin
  * @private
  */
-class LoginFormWrapper extends ThemableMixin(LumoInjectionMixin(PolylitMixin(LitElement))) {
+class LoginFormWrapper extends ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement))) {
   static get is() {
     return 'vaadin-login-form-wrapper';
   }

@@ -35,7 +35,7 @@ import { ScrollerMixin } from './vaadin-scroller-mixin.js';
  * @mixes ElementMixin
  * @mixes ScrollerMixin
  */
-class Scroller extends ScrollerMixin(ElementMixin(ThemableMixin(LumoInjectionMixin(PolylitMixin(LitElement))))) {
+class Scroller extends ScrollerMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {
   static get is() {
     return 'vaadin-scroller';
   }

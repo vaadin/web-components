@@ -145,7 +145,7 @@ import { DatePickerMixin } from './vaadin-date-picker-mixin.js';
  * @mixes DatePickerMixin
  */
 class DatePicker extends DatePickerMixin(
-  InputControlMixin(LumoInjectionMixin(ThemableMixin(ElementMixin(PolylitMixin(LitElement))))),
+  InputControlMixin(ThemableMixin(ElementMixin(PolylitMixin(LumoInjectionMixin(LitElement))))),
 ) {
   static get is() {
     return 'vaadin-date-picker';

@@ -108,7 +108,7 @@ import { AppLayoutMixin } from './vaadin-app-layout-mixin.js';
  * @mixes ElementMixin
  * @mixes ThemableMixin
  */
-class AppLayout extends AppLayoutMixin(ElementMixin(ThemableMixin(LumoInjectionMixin(PolylitMixin(LitElement))))) {
+class AppLayout extends AppLayoutMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {
   static get is() {
     return 'vaadin-app-layout';
   }

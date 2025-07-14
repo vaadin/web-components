@@ -29,7 +29,7 @@ import { drawerToggle } from './styles/vaadin-drawer-toggle-core-styles.js';
  * @mixes DirMixin
  * @mixes ThemableMixin
  */
-class DrawerToggle extends ButtonMixin(DirMixin(ThemableMixin(LumoInjectionMixin(PolylitMixin(LitElement))))) {
+class DrawerToggle extends ButtonMixin(DirMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {
   static get is() {
     return 'vaadin-drawer-toggle';
   }

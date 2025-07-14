@@ -17,7 +17,7 @@ import { inputContainerStyles } from './styles/vaadin-input-container-core-style
  * @mixes ThemableMixin
  * @mixes DirMixin
  */
-export class InputContainer extends LumoInjectionMixin(ThemableMixin(DirMixin(PolylitMixin(LitElement)))) {
+export class InputContainer extends ThemableMixin(DirMixin(PolylitMixin(LumoInjectionMixin(LitElement)))) {
   static get is() {
     return 'vaadin-input-container';
   }

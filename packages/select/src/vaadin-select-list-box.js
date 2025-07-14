@@ -22,7 +22,7 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * @mixes ThemableMixin
  * @protected
  */
-class SelectListBox extends ListMixin(ThemableMixin(DirMixin(LumoInjectionMixin(PolylitMixin(LitElement))))) {
+class SelectListBox extends ListMixin(ThemableMixin(DirMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {
   static get is() {
     return 'vaadin-select-list-box';
   }

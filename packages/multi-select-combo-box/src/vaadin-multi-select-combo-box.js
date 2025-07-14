@@ -100,7 +100,7 @@ import { MultiSelectComboBoxMixin } from './vaadin-multi-select-combo-box-mixin.
  * @mixes MultiSelectComboBoxMixin
  */
 class MultiSelectComboBox extends MultiSelectComboBoxMixin(
-  LumoInjectionMixin(ThemableMixin(ElementMixin(PolylitMixin(LitElement)))),
+  ThemableMixin(ElementMixin(PolylitMixin(LumoInjectionMixin(LitElement)))),
 ) {
   static get is() {
     return 'vaadin-multi-select-combo-box';

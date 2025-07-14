@@ -61,7 +61,7 @@ import { CustomFieldMixin } from './vaadin-custom-field-mixin.js';
  * @mixes ElementMixin
  * @mixes ThemableMixin
  */
-class CustomField extends CustomFieldMixin(ThemableMixin(ElementMixin(LumoInjectionMixin(PolylitMixin(LitElement))))) {
+class CustomField extends CustomFieldMixin(ThemableMixin(ElementMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {
   static get is() {
     return 'vaadin-custom-field';
   }

@@ -63,7 +63,7 @@ import { AvatarGroupMixin } from './vaadin-avatar-group-mixin.js';
  * @mixes AvatarGroupMixin
  * @mixes ThemableMixin
  */
-class AvatarGroup extends AvatarGroupMixin(ElementMixin(ThemableMixin(LumoInjectionMixin(PolylitMixin(LitElement))))) {
+class AvatarGroup extends AvatarGroupMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {
   static get is() {
     return 'vaadin-avatar-group';
   }

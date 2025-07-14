@@ -28,7 +28,7 @@ import { multiSelectComboBoxChipStyles } from './styles/vaadin-multi-select-comb
  * @extends HTMLElement
  * @private
  */
-class MultiSelectComboBoxChip extends LumoInjectionMixin(ThemableMixin(PolylitMixin(LitElement))) {
+class MultiSelectComboBoxChip extends ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement))) {
   static get is() {
     return 'vaadin-multi-select-combo-box-chip';
   }

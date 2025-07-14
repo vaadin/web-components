@@ -25,7 +25,7 @@ import { userTagsOverlayStyles } from './styles/vaadin-user-tags-overlay-core-st
  * @private
  */
 class UserTagsOverlay extends PositionMixin(
-  OverlayMixin(DirMixin(ThemableMixin(LumoInjectionMixin(PolylitMixin(LitElement))))),
+  OverlayMixin(DirMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement))))),
 ) {
   static get is() {
     return 'vaadin-user-tags-overlay';

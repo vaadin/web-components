@@ -25,7 +25,7 @@ import { menuBarOverlayStyles } from './styles/vaadin-menu-bar-overlay-core-styl
  * @protected
  */
 export class MenuBarOverlay extends MenuOverlayMixin(
-  OverlayMixin(DirMixin(ThemableMixin(LumoInjectionMixin(PolylitMixin(LitElement))))),
+  OverlayMixin(DirMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement))))),
 ) {
   static get is() {
     return 'vaadin-menu-bar-overlay';

@@ -54,7 +54,7 @@ import { UploadFileMixin } from './vaadin-upload-file-mixin.js';
  * @mixes UploadFileMixin
  * @mixes ThemableMixin
  */
-class UploadFile extends UploadFileMixin(ThemableMixin(LumoInjectionMixin(PolylitMixin(LitElement)))) {
+class UploadFile extends UploadFileMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement)))) {
   static get is() {
     return 'vaadin-upload-file';
   }

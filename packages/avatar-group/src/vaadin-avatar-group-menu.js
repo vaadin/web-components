@@ -22,7 +22,7 @@ import { avatarGroupMenuStyles } from './styles/vaadin-avatar-group-menu-core-st
  * @mixes ThemableMixin
  * @protected
  */
-class AvatarGroupMenu extends ListMixin(ThemableMixin(DirMixin(LumoInjectionMixin(PolylitMixin(LitElement))))) {
+class AvatarGroupMenu extends ListMixin(ThemableMixin(DirMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {
   static get is() {
     return 'vaadin-avatar-group-menu';
   }

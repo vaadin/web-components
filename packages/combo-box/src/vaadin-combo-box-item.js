@@ -40,7 +40,7 @@ import { ComboBoxItemMixin } from './vaadin-combo-box-item-mixin.js';
  * @private
  */
 export class ComboBoxItem extends ComboBoxItemMixin(
-  LumoInjectionMixin(ThemableMixin(DirMixin(PolylitMixin(LitElement)))),
+  ThemableMixin(DirMixin(PolylitMixin(LumoInjectionMixin(LitElement)))),
 ) {
   static get is() {
     return 'vaadin-combo-box-item';

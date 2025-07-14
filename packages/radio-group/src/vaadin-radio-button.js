@@ -53,7 +53,7 @@ import { RadioButtonMixin } from './vaadin-radio-button-mixin.js';
  * @mixes ElementMixin
  * @mixes RadioButtonMixin
  */
-class RadioButton extends RadioButtonMixin(ElementMixin(ThemableMixin(LumoInjectionMixin(PolylitMixin(LitElement))))) {
+class RadioButton extends RadioButtonMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {
   static get is() {
     return 'vaadin-radio-button';
   }

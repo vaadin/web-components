@@ -60,7 +60,7 @@ import { ensureSvgLiteral } from './vaadin-icon-svg.js';
  * @mixes ThemableMixin
  * @mixes ElementMixin
  */
-class Icon extends IconMixin(ElementMixin(LumoInjectionMixin(ThemableMixin(PolylitMixin(LitElement))))) {
+class Icon extends IconMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {
   static get is() {
     return 'vaadin-icon';
   }

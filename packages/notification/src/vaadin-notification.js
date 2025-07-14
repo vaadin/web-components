@@ -25,7 +25,7 @@ import { NotificationContainerMixin, NotificationMixin } from './vaadin-notifica
  * @private
  */
 class NotificationContainer extends NotificationContainerMixin(
-  ThemableMixin(ElementMixin(LumoInjectionMixin(PolylitMixin(LitElement)))),
+  ThemableMixin(ElementMixin(PolylitMixin(LumoInjectionMixin(LitElement)))),
 ) {
   static get is() {
     return 'vaadin-notification-container';
@@ -63,7 +63,7 @@ class NotificationContainer extends NotificationContainerMixin(
  * @mixes ThemableMixin
  * @private
  */
-class NotificationCard extends ThemableMixin(LumoInjectionMixin(PolylitMixin(LitElement))) {
+class NotificationCard extends ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement))) {
   static get is() {
     return 'vaadin-notification-card';
   }

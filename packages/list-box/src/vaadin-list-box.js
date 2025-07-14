@@ -45,7 +45,7 @@ import { MultiSelectListMixin } from './vaadin-multi-select-list-mixin.js';
  * @mixes ThemableMixin
  * @mixes ElementMixin
  */
-class ListBox extends ElementMixin(MultiSelectListMixin(ThemableMixin(LumoInjectionMixin(PolylitMixin(LitElement))))) {
+class ListBox extends ElementMixin(MultiSelectListMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {
   static get is() {
     return 'vaadin-list-box';
   }

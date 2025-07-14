@@ -49,7 +49,7 @@ import { ProgressMixin } from './vaadin-progress-mixin.js';
  * @mixes ThemableMixin
  * @mixes ElementMixin
  */
-class ProgressBar extends ProgressMixin(ElementMixin(ThemableMixin(LumoInjectionMixin(PolylitMixin(LitElement))))) {
+class ProgressBar extends ProgressMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {
   static get is() {
     return 'vaadin-progress-bar';
   }
