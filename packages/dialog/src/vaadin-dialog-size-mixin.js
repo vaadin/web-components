@@ -34,11 +34,6 @@ export const DialogSizeMixin = (superClass) =>
     }
 
     /** @private */
-    __positionChanged(top, left) {
-      requestAnimationFrame(() => this.$.overlay.setBounds({ top, left }));
-    }
-
-    /** @private */
     __sizeChanged(width, height) {
       requestAnimationFrame(() => this.$.overlay.setBounds({ width, height }, false));
     }
