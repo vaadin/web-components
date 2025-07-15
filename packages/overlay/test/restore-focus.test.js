@@ -1,8 +1,8 @@
 import { expect } from '@vaadin/chai-plugins';
 import { escKeyDown, fixtureSync, mousedown, nextRender, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import '../src/vaadin-overlay.js';
 import { getDeepActiveElement } from '@vaadin/a11y-base/src/focus-utils.js';
+import { Overlay } from '../src/vaadin-overlay.js';
 
 customElements.define(
   'overlay-field-wrapper',
@@ -158,5 +158,98 @@ describe('restore focus', () => {
         });
       });
     });
+  });
+});
+
+// TODO: temporarily placed in a separate suite using native popover
+// DOM structure, where the content root is slotted into the overlay
+describe('custom content root', () => {
+  customElements.define(
+    'custom-overlay',
+    class extends Overlay {
+      get _contentRoot() {
+        return this.owner;
+      }
+
+      _attachOverlay() {
+        if (this.owner) {
+          this.setAttribute('popover', 'manual');
+          this.showPopover();
+          return;
+        }
+
+        super._attachOverlay();
+      }
+
+      _detachOverlay() {
+        if (this.owner) {
+          this.hidePopover();
+          return;
+        }
+
+        super._detachOverlay();
+      }
+    },
+  );
+
+  customElements.define(
+    'custom-overlay-wrapper',
+    class extends HTMLElement {
+      constructor() {
+        super();
+
+        this.attachShadow({ mode: 'open' });
+
+        const overlay = document.createElement('custom-overlay');
+
+        const owner = document.createElement('div');
+        overlay.owner = owner;
+
+        // Forward the slotted content from wrapper to overlay
+        const slot = document.createElement('slot');
+        overlay.appendChild(slot);
+
+        overlay.focusTrap = true;
+        overlay.renderer = (root) => {
+          if (!root.firstChild) {
+            root.appendChild(document.createElement('input'));
+          }
+        };
+
+        this.shadowRoot.append(overlay);
+        this.append(owner);
+      }
+    },
+  );
+
+  let wrapper, overlay, contentRoot, focusInput;
+
+  beforeEach(async () => {
+    focusInput = document.createElement('input');
+    document.body.appendChild(focusInput);
+
+    wrapper = fixtureSync('<custom-overlay-wrapper></custom-overlay-wrapper>');
+    await nextRender();
+    overlay = wrapper.shadowRoot.querySelector('custom-overlay');
+    contentRoot = wrapper.querySelector('div');
+
+    overlay.restoreFocusOnClose = true;
+  });
+
+  afterEach(() => {
+    document.body.removeChild(focusInput);
+  });
+
+  it('should restore focus from the element in content root on close', async () => {
+    focusInput.focus();
+
+    overlay.opened = true;
+    await oneEvent(overlay, 'vaadin-overlay-open');
+
+    const input = contentRoot.querySelector('input');
+    input.focus();
+
+    overlay.opened = false;
+    expect(getDeepActiveElement()).to.equal(focusInput);
   });
 });
