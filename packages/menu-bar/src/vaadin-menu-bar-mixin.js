@@ -275,11 +275,6 @@ export const MenuBarMixin = (superClass) =>
     }
 
     /** @private */
-    get _subMenu() {
-      return this.shadowRoot.querySelector('vaadin-menu-bar-submenu');
-    }
-
-    /** @private */
     get _hasOverflow() {
       return this._overflow && !this._overflow.hasAttribute('hidden');
     }
@@ -297,6 +292,20 @@ export const MenuBarMixin = (superClass) =>
 
       this.setAttribute('role', 'menubar');
 
+      this._subMenuController = new SlotController(this, 'submenu', 'vaadin-menu-bar-submenu', {
+        initializer: (menu) => {
+          menu.setAttribute('is-root', '');
+
+          menu.addEventListener('item-selected', this.__onItemSelected.bind(this));
+          menu.addEventListener('close-all-menus', this.__onEscapeClose.bind(this));
+
+          const overlay = menu._overlayElement;
+          overlay.addEventListener('keydown', this.__boundOnContextMenuKeydown);
+
+          this._subMenu = menu;
+        },
+      });
+
       this._overflowController = new SlotController(this, 'overflow', 'vaadin-menu-bar-button', {
         initializer: (btn) => {
           btn.setAttribute('hidden', '');
@@ -313,16 +322,12 @@ export const MenuBarMixin = (superClass) =>
           this._overflow = btn;
         },
       });
+
+      this.addController(this._subMenuController);
       this.addController(this._overflowController);
 
       this.addEventListener('mousedown', () => this._hideTooltip(true));
       this.addEventListener('mouseleave', () => this._hideTooltip());
-
-      this._subMenu.addEventListener('item-selected', this.__onItemSelected.bind(this));
-      this._subMenu.addEventListener('close-all-menus', this.__onEscapeClose.bind(this));
-
-      const overlay = this._subMenu._overlayElement;
-      overlay.addEventListener('keydown', this.__boundOnContextMenuKeydown);
 
       this._container = this.shadowRoot.querySelector('[part="container"]');
     }
@@ -341,6 +346,10 @@ export const MenuBarMixin = (superClass) =>
 
       if (props.has('items')) {
         this.__updateSubMenu();
+      }
+
+      if (props.has('overlayClass')) {
+        this._subMenu.overlayClass = this.overlayClass;
       }
 
       if (props.has('_theme')) {
