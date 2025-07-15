@@ -317,6 +317,28 @@ describe('multiple overlays', () => {
       escKeyDown(input);
       expect(spy.called).to.be.false;
     });
+
+    describe('native popovers', () => {
+      beforeEach(() => {
+        modeless1.popover = 'manual';
+        modeless2.popover = 'manual';
+      });
+
+      it('should update stacking order when using bringToFront', () => {
+        modeless1.opened = true;
+        modeless1.showPopover();
+        modeless2.opened = true;
+        modeless2.showPopover();
+
+        modeless1.bringToFront();
+
+        expect(modeless1._last).to.be.true;
+
+        // Check that the overlay is also visually the frontmost
+        const frontmost = getFrontmostOverlayFromScreenCenter();
+        expect(frontmost).to.equal(modeless1);
+      });
+    });
   });
 
   describe('setNestedOverlay', () => {

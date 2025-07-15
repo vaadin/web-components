@@ -12,9 +12,9 @@ const attachedInstances = new Set();
  * @private
  */
 const getAttachedInstances = () =>
-  [...attachedInstances]
-    .filter((el) => el instanceof HTMLElement && el._hasOverlayStackMixin && !el.hasAttribute('closing'))
-    .sort((a, b) => a.__zIndex - b.__zIndex || 0);
+  [...attachedInstances].filter(
+    (el) => el instanceof HTMLElement && el._hasOverlayStackMixin && !el.hasAttribute('closing'),
+  );
 
 /**
  * Returns all attached overlay instances excluding notification container,
@@ -87,16 +87,27 @@ export const OverlayStackMixin = (superClass) =>
      * Brings the overlay as visually the frontmost one.
      */
     bringToFront() {
+      // Update z-index to be the highest among all attached overlays
+      // TODO: Can be removed after switching all overlays to be based on native popover
       let zIndex = '';
       const frontmost = getAttachedInstances()
         .filter((o) => o !== this)
         .pop();
       if (frontmost) {
-        const frontmostZIndex = frontmost.__zIndex;
+        const frontmostZIndex = parseFloat(getComputedStyle(frontmost).zIndex);
         zIndex = frontmostZIndex + 1;
       }
       this.style.zIndex = zIndex;
-      this.__zIndex = zIndex || parseFloat(getComputedStyle(this).zIndex);
+
+      // Update stacking order of native popover-based overlays
+      if (this.matches(':popover-open')) {
+        this.hidePopover();
+        this.showPopover();
+      }
+
+      // Update order of attached instances
+      this._removeAttachedInstance();
+      this._appendAttachedInstance();
 
       // If there is a nested overlay, call `bringToFront()` for it as well.
       if (overlayMap.has(this)) {
