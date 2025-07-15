@@ -64,7 +64,7 @@ class Tooltip extends TooltipMixin(ThemePropertyMixin(ElementMixin(PolylitMixin(
   static get styles() {
     return css`
       :host {
-        display: none;
+        display: contents;
       }
     `;
   }
@@ -76,7 +76,7 @@ class Tooltip extends TooltipMixin(ThemePropertyMixin(ElementMixin(PolylitMixin(
     return html`
       <vaadin-tooltip-overlay
         id="overlay"
-        .renderer="${this._renderer}"
+        popover="manual"
         .owner="${this}"
         theme="${ifDefined(this._theme)}"
         .opened="${this._isConnected && (this.manual ? this.opened : this._autoOpened)}"
@@ -89,9 +89,8 @@ class Tooltip extends TooltipMixin(ThemePropertyMixin(ElementMixin(PolylitMixin(
         @mouseenter="${this.__onOverlayMouseEnter}"
         @mouseleave="${this.__onOverlayMouseLeave}"
         modeless
+        ><slot name="overlay"></slot
       ></vaadin-tooltip-overlay>
-
-      <slot name="sr-label"></slot>
     `;
   }
 }
