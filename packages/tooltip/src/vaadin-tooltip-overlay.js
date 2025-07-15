@@ -53,10 +53,20 @@ class TooltipOverlay extends PopoverOverlayMixin(
     `;
   }
 
-  requestContentUpdate() {
-    super.requestContentUpdate();
+  /**
+   * @protected
+   * @override
+   */
+  _attachOverlay() {
+    this.showPopover();
+  }
 
-    this.toggleAttribute('hidden', this.textContent.trim() === '');
+  /**
+   * @protected
+   * @override
+   */
+  _detachOverlay() {
+    this.hidePopover();
   }
 }
 
