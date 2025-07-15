@@ -369,7 +369,7 @@ export const OverlayMixin = (superClass) =>
 
     /** @private */
     _animatedOpening() {
-      if (this.parentNode === document.body && this.hasAttribute('closing')) {
+      if (this._isAttached && this.hasAttribute('closing')) {
         this._flushAnimation('closing');
       }
       this._attachOverlay();
