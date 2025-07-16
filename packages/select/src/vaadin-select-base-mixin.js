@@ -212,6 +212,15 @@ export const SelectBaseMixin = (superClass) =>
       this.addController(this._tooltipController);
     }
 
+    /** @protected */
+    updated(props) {
+      super.updated(props);
+
+      if (props.has('_phone')) {
+        this.toggleAttribute('phone', this._phone);
+      }
+    }
+
     /**
      * Requests an update for the content of the select.
      * While performing the update, it invokes the renderer passed in the `renderer` property.
