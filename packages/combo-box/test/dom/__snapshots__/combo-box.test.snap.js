@@ -319,6 +319,8 @@ snapshots["vaadin-combo-box host opened default"] =
 `<vaadin-combo-box
   focused=""
   opened=""
+  start-aligned=""
+  top-aligned=""
 >
   <label
     for="input-vaadin-combo-box-4"

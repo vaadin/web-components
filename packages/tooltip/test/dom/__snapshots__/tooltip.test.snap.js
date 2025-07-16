@@ -2,7 +2,7 @@
 export const snapshots = {};
 
 snapshots["vaadin-tooltip host"] = 
-`<vaadin-tooltip>
+`<vaadin-tooltip modeless="">
   <div
     id="vaadin-tooltip-0"
     role="tooltip"
