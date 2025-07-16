@@ -97,9 +97,10 @@ import { SelectBaseMixin } from './vaadin-select-base-mixin.js';
  *
  * In addition to `<vaadin-text-field>` state attributes, the following state attributes are available for theming:
  *
- * Attribute | Description                 | Part name
- * ----------|-----------------------------|-----------
- * `opened`  | Set when the select is open | :host
+ * Attribute | Description
+ * ----------|-----------------------------
+ * `opened`  | Set when the select is open
+ * `phone`   | Set when the overlay is shown in phone mode
  *
  * There are two exceptions in terms of styling compared to `<vaadin-text-field>`:
  * - the `clear-button` shadow DOM part does not exist in `<vaadin-select>`.
