@@ -126,10 +126,10 @@ export interface SelectEventMap extends HTMLElementEventMap, SelectCustomEventMa
  *
  * The following custom properties are available for styling:
  *
- * Custom property                    | Description                  | Target element          | Default
- * -----------------------------------|------------------------------|-------------------------|--------
- * `--vaadin-field-default-width`     | Default width of the field   | :host                   | `12em`
- * `--vaadin-select-overlay-width`    | Width of the overlay         | `vaadin-select-overlay` |
+ * Custom property                  | Description                 | Default
+ * ---------------------------------|-----------------------------|--------
+ * `--vaadin-field-default-width`   | Default width of the field  | `12em`
+ * `--vaadin-select-overlay-width`  | Width of the overlay        |
  *
  * `<vaadin-select>` provides mostly the same set of shadow DOM parts and state attributes as `<vaadin-text-field>`.
  * See [`<vaadin-text-field>`](#/elements/vaadin-text-field) for the styling documentation.
