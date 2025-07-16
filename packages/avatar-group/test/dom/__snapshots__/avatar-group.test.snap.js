@@ -185,6 +185,8 @@ snapshots["vaadin-avatar-group opened default"] =
 `<vaadin-avatar-group
   aria-label="Currently 4 active users"
   has-overflow=""
+  start-aligned=""
+  top-aligned=""
 >
   <vaadin-avatar
     abbr="AD"
