@@ -280,6 +280,7 @@ export const OverlayMixin = (superClass) =>
         this._removeGlobalListeners();
         this._exitModalState();
       }
+      toggleOverlayStateAttribute(this, 'modeless', modeless === true);
     }
 
     /** @private */

@@ -97,6 +97,30 @@ describe('vaadin-overlay', () => {
     });
   });
 
+  describe('modeless', () => {
+    let overlay, owner;
+
+    beforeEach(() => {
+      overlay = createOverlay('overlay content');
+      owner = document.createElement('div');
+      overlay.owner = owner;
+    });
+
+    it('should reflect modeless to owner', () => {
+      overlay.modeless = true;
+      expect(overlay.hasAttribute('modeless')).to.be.true;
+      expect(owner.hasAttribute('modeless')).to.be.true;
+
+      overlay.modeless = false;
+      expect(overlay.hasAttribute('modeless')).to.be.false;
+      expect(owner.hasAttribute('modeless')).to.be.false;
+
+      overlay.modeless = undefined;
+      expect(overlay.hasAttribute('modeless')).to.be.false;
+      expect(owner.hasAttribute('modeless')).to.be.false;
+    });
+  });
+
   describe('backdrop', () => {
     let overlay, backdrop;
 
