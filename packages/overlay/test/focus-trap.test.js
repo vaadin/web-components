@@ -257,9 +257,14 @@ describe('focus-trap', () => {
       inner = fixtureSync(
         `
         <div>
-          <button>Foo</button>
-          <custom-overlay-wrapper></custom-overlay-wrapper>
-          <button>Bar</button>
+          <aside>
+            <button>Foo</button>
+          </aside>
+          <div>
+            <button>Bar</button>
+            <custom-overlay-wrapper></custom-overlay-wrapper>
+            <button>Baz</button>
+          </div>
         </div>
       `,
         outer,
@@ -297,9 +302,12 @@ describe('focus-trap', () => {
       overlay.opened = true;
       await oneEvent(overlay, 'vaadin-overlay-open');
 
-      const buttons = inner.querySelectorAll('button');
+      const buttons = wrapper.parentElement.querySelectorAll('button');
       expect(buttons[0].getAttribute('aria-hidden')).to.equal('true');
       expect(buttons[1].getAttribute('aria-hidden')).to.equal('true');
+
+      const aside = outer.querySelector('aside');
+      expect(aside.getAttribute('aria-hidden')).to.equal('true');
     });
   });
 });
