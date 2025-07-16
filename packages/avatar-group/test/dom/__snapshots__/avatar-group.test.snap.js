@@ -3,6 +3,11 @@ export const snapshots = {};
 
 snapshots["vaadin-avatar-group default"] = 
 `<vaadin-avatar-group aria-label="Currently 0 active users">
+  <vaadin-avatar-group-menu
+    role="menu"
+    slot="overlay"
+  >
+  </vaadin-avatar-group-menu>
   <vaadin-avatar
     aria-expanded="false"
     aria-haspopup="menu"
@@ -29,6 +34,12 @@ snapshots["vaadin-avatar-group default"] =
 
 snapshots["vaadin-avatar-group items"] = 
 `<vaadin-avatar-group aria-label="Currently 2 active users">
+  <vaadin-avatar-group-menu
+    aria-orientation="vertical"
+    role="menu"
+    slot="overlay"
+  >
+  </vaadin-avatar-group-menu>
   <vaadin-avatar
     abbr="YY"
     aria-describedby="vaadin-tooltip-2"
@@ -106,6 +117,12 @@ snapshots["vaadin-avatar-group theme"] =
   aria-label="Currently 2 active users"
   theme="small"
 >
+  <vaadin-avatar-group-menu
+    aria-orientation="vertical"
+    role="menu"
+    slot="overlay"
+  >
+  </vaadin-avatar-group-menu>
   <vaadin-avatar
     abbr="YY"
     aria-describedby="vaadin-tooltip-5"
@@ -188,6 +205,44 @@ snapshots["vaadin-avatar-group opened default"] =
   start-aligned=""
   top-aligned=""
 >
+  <vaadin-avatar-group-menu
+    aria-orientation="vertical"
+    role="menu"
+    slot="overlay"
+  >
+    <vaadin-avatar-group-menu-item
+      aria-selected="false"
+      role="menuitem"
+      tabindex="0"
+    >
+      <vaadin-avatar
+        abbr="MP"
+        aria-hidden="true"
+        aria-label="Mno Pqr (MP)"
+        name="Mno Pqr"
+        role="img"
+        tabindex="-1"
+      >
+      </vaadin-avatar>
+      Mno Pqr
+    </vaadin-avatar-group-menu-item>
+    <vaadin-avatar-group-menu-item
+      aria-selected="false"
+      role="menuitem"
+      tabindex="-1"
+    >
+      <vaadin-avatar
+        abbr="SV"
+        aria-hidden="true"
+        aria-label="Stu Vwx (SV)"
+        name="Stu Vwx"
+        role="img"
+        tabindex="-1"
+      >
+      </vaadin-avatar>
+      Stu Vwx
+    </vaadin-avatar-group-menu-item>
+  </vaadin-avatar-group-menu>
   <vaadin-avatar
     abbr="AD"
     aria-describedby="vaadin-tooltip-8"
@@ -265,46 +320,12 @@ snapshots["vaadin-avatar-group opened overlay"] =
 `<vaadin-avatar-group-overlay
   id="overlay"
   no-vertical-overlap=""
+  popover="manual"
   start-aligned=""
   top-aligned=""
 >
-  <vaadin-avatar-group-menu
-    aria-orientation="vertical"
-    role="menu"
-  >
-    <vaadin-avatar-group-menu-item
-      aria-selected="false"
-      role="menuitem"
-      tabindex="0"
-    >
-      <vaadin-avatar
-        abbr="MP"
-        aria-hidden="true"
-        aria-label="Mno Pqr (MP)"
-        name="Mno Pqr"
-        role="img"
-        tabindex="-1"
-      >
-      </vaadin-avatar>
-      Mno Pqr
-    </vaadin-avatar-group-menu-item>
-    <vaadin-avatar-group-menu-item
-      aria-selected="false"
-      role="menuitem"
-      tabindex="-1"
-    >
-      <vaadin-avatar
-        abbr="SV"
-        aria-hidden="true"
-        aria-label="Stu Vwx (SV)"
-        name="Stu Vwx"
-        role="img"
-        tabindex="-1"
-      >
-      </vaadin-avatar>
-      Stu Vwx
-    </vaadin-avatar-group-menu-item>
-  </vaadin-avatar-group-menu>
+  <slot name="overlay">
+  </slot>
 </vaadin-avatar-group-overlay>
 `;
 /* end snapshot vaadin-avatar-group opened overlay */
@@ -314,46 +335,12 @@ snapshots["vaadin-avatar-group opened overlay class"] =
   class="avatar-group-overlay custom"
   id="overlay"
   no-vertical-overlap=""
+  popover="manual"
   start-aligned=""
   top-aligned=""
 >
-  <vaadin-avatar-group-menu
-    aria-orientation="vertical"
-    role="menu"
-  >
-    <vaadin-avatar-group-menu-item
-      aria-selected="false"
-      role="menuitem"
-      tabindex="0"
-    >
-      <vaadin-avatar
-        abbr="MP"
-        aria-hidden="true"
-        aria-label="Mno Pqr (MP)"
-        name="Mno Pqr"
-        role="img"
-        tabindex="-1"
-      >
-      </vaadin-avatar>
-      Mno Pqr
-    </vaadin-avatar-group-menu-item>
-    <vaadin-avatar-group-menu-item
-      aria-selected="false"
-      role="menuitem"
-      tabindex="-1"
-    >
-      <vaadin-avatar
-        abbr="SV"
-        aria-hidden="true"
-        aria-label="Stu Vwx (SV)"
-        name="Stu Vwx"
-        role="img"
-        tabindex="-1"
-      >
-      </vaadin-avatar>
-      Stu Vwx
-    </vaadin-avatar-group-menu-item>
-  </vaadin-avatar-group-menu>
+  <slot name="overlay">
+  </slot>
 </vaadin-avatar-group-overlay>
 `;
 /* end snapshot vaadin-avatar-group opened overlay class */
