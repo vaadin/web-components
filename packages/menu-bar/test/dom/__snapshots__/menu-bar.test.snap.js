@@ -3,6 +3,11 @@ export const snapshots = {};
 
 snapshots["menu-bar basic"] = 
 `<vaadin-menu-bar role="menubar">
+  <vaadin-menu-bar-submenu
+    is-root=""
+    slot="submenu"
+  >
+  </vaadin-menu-bar-submenu>
   <vaadin-menu-bar-button
     class="home"
     first-visible=""

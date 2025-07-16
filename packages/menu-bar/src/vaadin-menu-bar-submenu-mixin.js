@@ -43,7 +43,7 @@ export const SubMenuMixin = (superClass) =>
 
       // Only handle 1st level submenu
       if (this.hasAttribute('is-root')) {
-        this.getRootNode().host._close();
+        this.parentElement._close();
       }
     }
 

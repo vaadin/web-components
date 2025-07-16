@@ -93,7 +93,8 @@ class MenuBar extends MenuBarMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoI
         <slot></slot>
         <slot name="overflow"></slot>
       </div>
-      <vaadin-menu-bar-submenu is-root .overlayClass="${this.overlayClass}"></vaadin-menu-bar-submenu>
+
+      <slot name="submenu"></slot>
 
       <slot name="tooltip"></slot>
     `;
