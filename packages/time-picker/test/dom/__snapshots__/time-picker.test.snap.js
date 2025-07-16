@@ -320,6 +320,8 @@ snapshots["vaadin-time-picker host opened default"] =
 `<vaadin-time-picker
   focused=""
   opened=""
+  start-aligned=""
+  top-aligned=""
 >
   <label
     for="search-input-vaadin-time-picker-4"

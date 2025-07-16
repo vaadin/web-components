@@ -231,6 +231,7 @@ snapshots["vaadin-crud shadow default"] =
   cancel-button-visible=""
   confirm-theme="primary"
   id="confirmCancel"
+  with-backdrop=""
 >
   <h3 slot="header">
     Discard changes
@@ -273,6 +274,7 @@ snapshots["vaadin-crud shadow default"] =
   cancel-button-visible=""
   confirm-theme="primary error"
   id="confirmDelete"
+  with-backdrop=""
 >
   <h3 slot="header">
     Delete item

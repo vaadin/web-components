@@ -11,7 +11,10 @@ snapshots["vaadin-avatar-group default"] =
     slot="overflow"
     tabindex="0"
   >
-    <vaadin-tooltip slot="tooltip">
+    <vaadin-tooltip
+      modeless=""
+      slot="tooltip"
+    >
       <div
         id="vaadin-tooltip-0"
         role="tooltip"
@@ -34,7 +37,10 @@ snapshots["vaadin-avatar-group items"] =
     tabindex="0"
     with-tooltip=""
   >
-    <vaadin-tooltip slot="tooltip">
+    <vaadin-tooltip
+      modeless=""
+      slot="tooltip"
+    >
       <div
         id="vaadin-tooltip-2"
         role="tooltip"
@@ -53,7 +59,10 @@ snapshots["vaadin-avatar-group items"] =
     tabindex="0"
     with-tooltip=""
   >
-    <vaadin-tooltip slot="tooltip">
+    <vaadin-tooltip
+      modeless=""
+      slot="tooltip"
+    >
       <div
         id="vaadin-tooltip-3"
         role="tooltip"
@@ -74,7 +83,10 @@ snapshots["vaadin-avatar-group items"] =
     slot="overflow"
     tabindex="0"
   >
-    <vaadin-tooltip slot="tooltip">
+    <vaadin-tooltip
+      modeless=""
+      slot="tooltip"
+    >
       <div
         id="vaadin-tooltip-1"
         role="tooltip"
@@ -103,7 +115,10 @@ snapshots["vaadin-avatar-group theme"] =
     theme="small"
     with-tooltip=""
   >
-    <vaadin-tooltip slot="tooltip">
+    <vaadin-tooltip
+      modeless=""
+      slot="tooltip"
+    >
       <div
         id="vaadin-tooltip-5"
         role="tooltip"
@@ -123,7 +138,10 @@ snapshots["vaadin-avatar-group theme"] =
     theme="small"
     with-tooltip=""
   >
-    <vaadin-tooltip slot="tooltip">
+    <vaadin-tooltip
+      modeless=""
+      slot="tooltip"
+    >
       <div
         id="vaadin-tooltip-6"
         role="tooltip"
@@ -145,7 +163,10 @@ snapshots["vaadin-avatar-group theme"] =
     tabindex="0"
     theme="small"
   >
-    <vaadin-tooltip slot="tooltip">
+    <vaadin-tooltip
+      modeless=""
+      slot="tooltip"
+    >
       <div
         id="vaadin-tooltip-4"
         role="tooltip"
@@ -164,6 +185,8 @@ snapshots["vaadin-avatar-group opened default"] =
 `<vaadin-avatar-group
   aria-label="Currently 4 active users"
   has-overflow=""
+  start-aligned=""
+  top-aligned=""
 >
   <vaadin-avatar
     abbr="AD"
@@ -174,7 +197,10 @@ snapshots["vaadin-avatar-group opened default"] =
     tabindex="0"
     with-tooltip=""
   >
-    <vaadin-tooltip slot="tooltip">
+    <vaadin-tooltip
+      modeless=""
+      slot="tooltip"
+    >
       <div
         id="vaadin-tooltip-8"
         role="tooltip"
@@ -193,7 +219,10 @@ snapshots["vaadin-avatar-group opened default"] =
     tabindex="0"
     with-tooltip=""
   >
-    <vaadin-tooltip slot="tooltip">
+    <vaadin-tooltip
+      modeless=""
+      slot="tooltip"
+    >
       <div
         id="vaadin-tooltip-9"
         role="tooltip"
@@ -214,7 +243,10 @@ snapshots["vaadin-avatar-group opened default"] =
     slot="overflow"
     tabindex="0"
   >
-    <vaadin-tooltip slot="tooltip">
+    <vaadin-tooltip
+      modeless=""
+      slot="tooltip"
+    >
       <div
         id="vaadin-tooltip-7"
         role="tooltip"

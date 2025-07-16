@@ -89,7 +89,10 @@ snapshots["menu-bar overlay"] =
       Generate Report
     </vaadin-menu-bar-item>
   </vaadin-menu-bar-list-box>
-  <vaadin-menu-bar-submenu hidden="">
+  <vaadin-menu-bar-submenu
+    hidden=""
+    modeless=""
+  >
   </vaadin-menu-bar-submenu>
 </vaadin-menu-bar-overlay>
 `;
@@ -124,7 +127,10 @@ snapshots["menu-bar overlay class"] =
       Generate Report
     </vaadin-menu-bar-item>
   </vaadin-menu-bar-list-box>
-  <vaadin-menu-bar-submenu hidden="">
+  <vaadin-menu-bar-submenu
+    hidden=""
+    modeless=""
+  >
   </vaadin-menu-bar-submenu>
 </vaadin-menu-bar-overlay>
 `;

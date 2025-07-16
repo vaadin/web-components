@@ -275,7 +275,11 @@ snapshots["vaadin-select host error"] =
 /* end snapshot vaadin-select host error */
 
 snapshots["vaadin-select host opened default"] = 
-`<vaadin-select opened="">
+`<vaadin-select
+  opened=""
+  start-aligned=""
+  top-aligned=""
+>
   <label
     id="label-vaadin-select-0"
     slot="label"

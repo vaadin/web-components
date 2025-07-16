@@ -25,7 +25,7 @@ describe('renderer', () => {
     });
 
     it('should receive empty root, model and owner when they are defined', () => {
-      const overlayOwner = {};
+      const overlayOwner = document.createElement('div');
       const overlayModel = {};
 
       overlay.owner = overlayOwner;
@@ -59,7 +59,7 @@ describe('renderer', () => {
       overlay.opened = true;
       expect(overlay.textContent.trim()).to.equal('renderer-content');
 
-      const overlayOwner = {};
+      const overlayOwner = document.createElement('div');
       const overlayModel = {};
 
       overlay.owner = overlayOwner;
@@ -69,7 +69,7 @@ describe('renderer', () => {
     });
 
     it('should pass owner as this to the renderer', () => {
-      const owner = {};
+      const owner = document.createElement('div');
       overlay.owner = owner;
 
       const renderer = sinon.spy();
@@ -99,7 +99,7 @@ describe('renderer', () => {
       overlay.renderer = renderer;
 
       renderer.resetHistory();
-      overlay.owner = {};
+      overlay.owner = document.createElement('div');
 
       expect(renderer.calledOnce).to.be.true;
     });
