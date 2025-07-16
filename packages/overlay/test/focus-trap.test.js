@@ -1,7 +1,7 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextRender, oneEvent, tabKeyDown } from '@vaadin/testing-helpers';
-import '../src/vaadin-overlay.js';
 import { getFocusableElements, isElementFocused } from '@vaadin/a11y-base/src/focus-utils.js';
+import { Overlay } from '../src/vaadin-overlay.js';
 
 describe('focus-trap', () => {
   let overlay, overlayPart, focusableElements;
@@ -193,6 +193,121 @@ describe('focus-trap', () => {
       await oneEvent(overlay, 'vaadin-overlay-open');
 
       expect(outer.hasAttribute('aria-hidden')).to.be.false;
+    });
+  });
+
+  describe('aria-hidden modal root', () => {
+    customElements.define(
+      'custom-overlay-wrapper',
+      class extends HTMLElement {
+        constructor() {
+          super();
+
+          this.attachShadow({ mode: 'open' });
+
+          const overlay = document.createElement('custom-overlay');
+
+          const owner = document.createElement('div');
+          overlay.owner = owner;
+
+          // Forward the slotted content from wrapper to overlay
+          const slot = document.createElement('slot');
+          overlay.appendChild(slot);
+
+          overlay.focusTrap = true;
+          overlay.renderer = (root) => {
+            root.innerHTML = '<input placeholder="Input">';
+          };
+
+          this.shadowRoot.append(overlay);
+          this.append(owner);
+        }
+      },
+    );
+
+    customElements.define(
+      'custom-overlay',
+      class extends Overlay {
+        get _contentRoot() {
+          return this.owner;
+        }
+
+        get _modalRoot() {
+          return this.owner;
+        }
+
+        _attachOverlay() {
+          this.setAttribute('popover', 'manual');
+          this.showPopover();
+        }
+
+        _detachOverlay() {
+          this.hidePopover();
+        }
+      },
+    );
+
+    let outer, inner, wrapper, overlay;
+
+    beforeEach(() => {
+      // Create outer element and pass it explicitly.
+      outer = document.createElement('main');
+
+      // Our `fixtureSync()` requires a single parent.
+      inner = fixtureSync(
+        `
+        <div>
+          <aside>
+            <button>Foo</button>
+          </aside>
+          <div>
+            <button>Bar</button>
+            <custom-overlay-wrapper></custom-overlay-wrapper>
+            <button>Baz</button>
+          </div>
+        </div>
+      `,
+        outer,
+      );
+
+      wrapper = inner.querySelector('custom-overlay-wrapper');
+      overlay = wrapper.shadowRoot.querySelector('custom-overlay');
+    });
+
+    afterEach(() => {
+      overlay.opened = false;
+    });
+
+    it('should not set aria-hidden on wrapping elements on overlay open', async () => {
+      overlay.opened = true;
+      await oneEvent(overlay, 'vaadin-overlay-open');
+
+      expect(outer.hasAttribute('aria-hidden')).to.be.false;
+      expect(inner.hasAttribute('aria-hidden')).to.be.false;
+      expect(wrapper.hasAttribute('aria-hidden')).to.be.false;
+    });
+
+    it('should not set aria-hidden on content root element on overlay open', async () => {
+      overlay.opened = true;
+      await oneEvent(overlay, 'vaadin-overlay-open');
+
+      const root = wrapper.querySelector('div');
+      const input = root.firstElementChild;
+
+      expect(root.hasAttribute('aria-hidden')).to.be.false;
+      expect(input.hasAttribute('aria-hidden')).to.be.false;
+    });
+
+    it('should set aria-hidden on sibling elements on overlay open', async () => {
+      overlay.opened = true;
+      await oneEvent(overlay, 'vaadin-overlay-open');
+
+      const buttons = wrapper.parentElement.querySelectorAll('button');
+      expect(buttons[0].getAttribute('aria-hidden')).to.equal('true');
+      expect(buttons[1].getAttribute('aria-hidden')).to.equal('true');
+
+      const aside = outer.querySelector('aside');
+      expect(aside.getAttribute('aria-hidden')).to.equal('true');
     });
   });
 });
