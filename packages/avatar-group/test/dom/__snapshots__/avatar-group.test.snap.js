@@ -318,6 +318,7 @@ Stu Vwx
 
 snapshots["vaadin-avatar-group opened overlay"] = 
 `<vaadin-avatar-group-overlay
+  exportparts="overlay, content"
   id="overlay"
   no-vertical-overlap=""
   popover="manual"
@@ -333,6 +334,7 @@ snapshots["vaadin-avatar-group opened overlay"] =
 snapshots["vaadin-avatar-group opened overlay class"] = 
 `<vaadin-avatar-group-overlay
   class="avatar-group-overlay custom"
+  exportparts="overlay, content"
   id="overlay"
   no-vertical-overlap=""
   popover="manual"

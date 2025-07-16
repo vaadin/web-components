@@ -42,6 +42,8 @@ import { AvatarGroupMixin } from './vaadin-avatar-group-mixin.js';
  * Part name   | Description
  * ----------- | ---------------
  * `container` | The container element
+ * `overlay`   | The overflow avatar menu overlay
+ * `content`   | The overflow avatar menu overlay content
  *
  * See the [`<vaadin-avatar>`](#/elements/vaadin-avatar) documentation for the available
  * state attributes and stylable shadow parts of avatar elements.
@@ -86,6 +88,7 @@ class AvatarGroup extends AvatarGroupMixin(ElementMixin(ThemableMixin(PolylitMix
         .opened="${this._opened}"
         .positionTarget="${this._overflow}"
         no-vertical-overlap
+        exportparts="overlay, content"
         @vaadin-overlay-close="${this._onVaadinOverlayClose}"
         @vaadin-overlay-open="${this._onVaadinOverlayOpen}"
         @opened-changed="${this._onOpenedChanged}"
