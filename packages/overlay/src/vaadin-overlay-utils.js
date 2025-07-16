@@ -91,7 +91,7 @@ export function observeMove(element, callback) {
 /**
  * Toggle the state attribute on the overlay element and also its owner element. This allows targeting state attributes
  * in the light DOM in case the overlay is in the shadow DOM of its owner.
- * @param {Element} overlay The overlay element on which to toggle the attribute.
+ * @param {HTMLElement} overlay The overlay element on which to toggle the attribute.
  * @param {string} name The name of the attribute to toggle.
  * @param {string|boolean} value The value of the attribute. If a string is provided, it will be set as the attribute
  * value. Otherwise, the attribute will be added or removed depending on whether `value` is truthy or falsy.
