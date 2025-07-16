@@ -89,16 +89,30 @@ export function observeMove(element, callback) {
 }
 
 /**
- * Toggle the state attribute on the overlay element and also its owner element. This allows targeting state
- * attributes in the light DOM in case the overlay is in the shadow DOM of its owner.
+ * Toggle the state attribute on the overlay element and also its owner element. This allows targeting state attributes
+ * in the light DOM in case the overlay is in the shadow DOM of its owner.
  * @param {Element} overlay The overlay element on which to toggle the attribute.
  * @param {string} name The name of the attribute to toggle.
- * @param {boolean} [force] If true, the attribute will be set, if false, it will be removed. If not provided,
- * the attribute will be toggled based on its current state.
+ * @param {string|boolean} value The value of the attribute. If a string is provided, it will be set as the attribute
+ * value. Otherwise, the attribute will be added or removed depending on whether `value` is truthy or falsy.
  */
-export function toggleOverlayStateAttribute(overlay, name, force) {
-  overlay.toggleAttribute(name, force);
+export function setOverlayStateAttribute(overlay, name, value) {
+  const elements = [overlay];
   if (overlay.owner) {
-    overlay.owner.toggleAttribute(name, force);
+    elements.push(overlay.owner);
+  }
+
+  if (typeof value === 'string') {
+    elements.forEach((element) => {
+      element.setAttribute(name, value);
+    });
+  } else if (value) {
+    elements.forEach((element) => {
+      element.setAttribute(name, '');
+    });
+  } else {
+    elements.forEach((element) => {
+      element.removeAttribute(name);
+    });
   }
 }

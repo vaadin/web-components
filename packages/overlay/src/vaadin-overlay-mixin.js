@@ -6,7 +6,7 @@
 import { isIOS } from '@vaadin/component-base/src/browser-utils.js';
 import { OverlayFocusMixin } from './vaadin-overlay-focus-mixin.js';
 import { OverlayStackMixin } from './vaadin-overlay-stack-mixin.js';
-import { toggleOverlayStateAttribute } from './vaadin-overlay-utils.js';
+import { setOverlayStateAttribute } from './vaadin-overlay-utils.js';
 
 /**
  * @polymerMixin
@@ -281,12 +281,12 @@ export const OverlayMixin = (superClass) =>
         this._removeGlobalListeners();
         this._exitModalState();
       }
-      toggleOverlayStateAttribute(this, 'modeless', modeless === true);
+      setOverlayStateAttribute(this, 'modeless', modeless);
     }
 
     /** @private */
     _withBackdropChanged(withBackdrop) {
-      toggleOverlayStateAttribute(this, 'with-backdrop', withBackdrop === true);
+      setOverlayStateAttribute(this, 'with-backdrop', withBackdrop);
     }
 
     /** @private */
@@ -386,7 +386,7 @@ export const OverlayMixin = (superClass) =>
       if (!this.modeless) {
         this._enterModalState();
       }
-      toggleOverlayStateAttribute(this, 'opening', true);
+      setOverlayStateAttribute(this, 'opening', true);
 
       if (this._shouldAnimate()) {
         this._enqueueAnimation('opening', () => {
@@ -406,7 +406,7 @@ export const OverlayMixin = (superClass) =>
 
     /** @private */
     _finishOpening() {
-      toggleOverlayStateAttribute(this, 'opening', false);
+      setOverlayStateAttribute(this, 'opening', false);
     }
 
     /** @private */
@@ -414,7 +414,7 @@ export const OverlayMixin = (superClass) =>
       this._detachOverlay();
       this._removeAttachedInstance();
       this.$.overlay.style.removeProperty('pointer-events');
-      toggleOverlayStateAttribute(this, 'closing', false);
+      setOverlayStateAttribute(this, 'closing', false);
       this.dispatchEvent(new CustomEvent('vaadin-overlay-closed'));
     }
 
@@ -425,7 +425,7 @@ export const OverlayMixin = (superClass) =>
       }
       if (this._isAttached) {
         this._exitModalState();
-        toggleOverlayStateAttribute(this, 'closing', true);
+        setOverlayStateAttribute(this, 'closing', true);
         this.dispatchEvent(new CustomEvent('vaadin-overlay-closing'));
 
         if (this._shouldAnimate()) {
