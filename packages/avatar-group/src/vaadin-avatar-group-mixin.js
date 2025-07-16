@@ -64,7 +64,6 @@ export const AvatarGroupMixin = (superClass) =>
          */
         items: {
           type: Array,
-          observer: '__itemsChanged',
           sync: true,
         },
 
@@ -80,13 +79,6 @@ export const AvatarGroupMixin = (superClass) =>
         },
 
         /** @private */
-        _avatars: {
-          type: Array,
-          value: () => [],
-          sync: true,
-        },
-
-        /** @private */
         __itemsInView: {
           type: Number,
           value: null,
@@ -94,22 +86,13 @@ export const AvatarGroupMixin = (superClass) =>
         },
 
         /** @private */
-        _overflow: {
-          type: Object,
-          sync: true,
-        },
-
-        /** @private */
         _overflowItems: {
           type: Array,
-          observer: '__overflowItemsChanged',
-          computed: '__computeOverflowItems(items, __itemsInView, maxItemsVisible)',
         },
 
         /** @private */
-        _overflowTooltip: {
-          type: Object,
-          sync: true,
+        _overflowLimit: {
+          type: Number,
         },
 
         /** @private */
@@ -118,17 +101,6 @@ export const AvatarGroupMixin = (superClass) =>
           sync: true,
         },
       };
-    }
-
-    static get observers() {
-      return [
-        '__i18nItemsChanged(__effectiveI18n, items)',
-        '__openedChanged(_opened, _overflow)',
-        '__updateAvatarsTheme(_overflow, _avatars, _theme)',
-        '__updateAvatars(items, __itemsInView, maxItemsVisible, _overflow, __effectiveI18n)',
-        '__updateOverflowAvatar(_overflow, items, __itemsInView, maxItemsVisible)',
-        '__updateOverflowTooltip(_overflowTooltip, items, __itemsInView, maxItemsVisible)',
-      ];
     }
 
     /**
@@ -167,6 +139,11 @@ export const AvatarGroupMixin = (superClass) =>
       super.i18n = value;
     }
 
+    /** @protected */
+    get _avatars() {
+      return [...this.children].filter((node) => node.localName === 'vaadin-avatar');
+    }
+
     constructor() {
       super();
 
@@ -203,6 +180,58 @@ export const AvatarGroupMixin = (superClass) =>
       super.disconnectedCallback();
 
       this._opened = false;
+    }
+
+    /** @protected */
+    willUpdate(props) {
+      super.willUpdate(props);
+
+      if (props.has('items') || props.has('__itemsInView') || props.has('maxItemsVisible')) {
+        // Calculate overflow limit only once to reuse it in updated() observers
+        const count = Array.isArray(this.items) ? this.items.length : 0;
+        const limit = this.__getLimit(count, this.__itemsInView, this.maxItemsVisible);
+        this._overflowLimit = limit;
+        this._overflowItems = limit ? this.items.slice(limit) : [];
+      }
+    }
+
+    /** @protected */
+    updated(props) {
+      super.updated(props);
+
+      if (props.has('items')) {
+        this.__itemsChanged(this.items, props.get('items'));
+      }
+
+      if (props.has('items') || props.has('_overflowLimit') || props.has('__effectiveI18n') || props.has('_theme')) {
+        const limit = this._overflowLimit;
+        this.__renderAvatars(limit ? this.items.slice(0, limit) : this.items || []);
+      }
+
+      if (props.has('items') || props.has('_overflowLimit')) {
+        this.__updateOverflowTooltip(this.items, this._overflowLimit);
+        this.__updateOverflowAvatar(this.items, this._overflowLimit, this.__itemsInView);
+      }
+
+      if (props.has('__effectiveI18n') || props.has('items')) {
+        this.__i18nItemsChanged(this.__effectiveI18n, this.items);
+      }
+
+      if (props.has('_opened')) {
+        this.__openedChanged(this._opened, props.get('_opened'));
+      }
+
+      if (props.has('_theme')) {
+        if (this._theme) {
+          this._overflow.setAttribute('theme', this._theme);
+        } else {
+          this._overflow.removeAttribute('theme');
+        }
+      }
+
+      if (props.has('_overflowItems')) {
+        this.__overflowItemsChanged(this._overflowItems, props.get('_overflowItems'));
+      }
     }
 
     /** @private */
@@ -305,6 +334,7 @@ export const AvatarGroupMixin = (superClass) =>
                 .img="${item.img}"
                 .colorIndex="${item.colorIndex}"
                 .i18n="${this.__effectiveI18n}"
+                theme="${ifDefined(this._theme)}"
                 class="${ifDefined(item.className)}"
                 with-tooltip
               ></vaadin-avatar>
@@ -317,32 +347,13 @@ export const AvatarGroupMixin = (superClass) =>
     }
 
     /** @private */
-    __updateAvatars(items, itemsInView, maxItemsVisible, overflow) {
-      if (!overflow || !Array.isArray(items)) {
-        return;
-      }
-
-      const limit = this.__getLimit(items.length, itemsInView, maxItemsVisible);
-
-      this.__renderAvatars(limit ? items.slice(0, limit) : items);
-
-      this._avatars = [...this.querySelectorAll('vaadin-avatar')];
-    }
-
-    /** @private */
-    __computeOverflowItems(items, itemsInView, maxItemsVisible) {
-      const count = Array.isArray(items) ? items.length : 0;
-      const limit = this.__getLimit(count, itemsInView, maxItemsVisible);
-      return limit ? items.slice(limit) : [];
-    }
-
-    /** @private */
-    __updateOverflowAvatar(overflow, items, itemsInView, maxItemsVisible) {
+    __updateOverflowAvatar(items, limit, itemsInView) {
+      const overflow = this._overflow;
       if (overflow) {
         const count = Array.isArray(items) ? items.length : 0;
-        const maxReached = maxItemsVisible != null && count > this.__getMax(maxItemsVisible);
+        const maxReached = this.maxItemsVisible != null && count > this.__getMax(this.maxItemsVisible);
 
-        overflow.abbr = `+${count - this.__getLimit(count, itemsInView, maxItemsVisible)}`;
+        overflow.abbr = `+${count - limit}`;
         const hasOverflow = maxReached || (itemsInView && itemsInView < count);
         overflow.toggleAttribute('hidden', !hasOverflow);
         this.toggleAttribute('has-overflow', hasOverflow);
@@ -350,25 +361,11 @@ export const AvatarGroupMixin = (superClass) =>
     }
 
     /** @private */
-    __updateAvatarsTheme(overflow, avatars, theme) {
-      if (overflow) {
-        [overflow, ...avatars].forEach((avatar) => {
-          if (theme) {
-            avatar.setAttribute('theme', theme);
-          } else {
-            avatar.removeAttribute('theme');
-          }
-        });
-      }
-    }
-
-    /** @private */
-    __updateOverflowTooltip(tooltip, items, itemsInView, maxItemsVisible) {
-      if (!tooltip || !Array.isArray(items)) {
+    __updateOverflowTooltip(items, limit) {
+      if (!Array.isArray(items)) {
         return;
       }
 
-      const limit = this.__getLimit(items.length, itemsInView, maxItemsVisible);
       if (limit == null) {
         return;
       }
@@ -381,7 +378,7 @@ export const AvatarGroupMixin = (superClass) =>
         }
       }
 
-      tooltip.text = result.join('\n');
+      this._overflowTooltip.text = result.join('\n');
     }
 
     /** @private */
@@ -450,34 +447,25 @@ export const AvatarGroupMixin = (superClass) =>
         if (effectiveI18n.activeUsers[field]) {
           this.setAttribute('aria-label', effectiveI18n.activeUsers[field].replace('{count}', count || 0));
         }
-
-        this._avatars.forEach((avatar) => {
-          avatar.i18n = effectiveI18n;
-        });
       }
     }
 
     /** @private */
-    __openedChanged(opened, overflow) {
-      if (!overflow) {
-        return;
-      }
-
+    __openedChanged(opened, oldOpened) {
       if (opened) {
         if (!this._menuElement) {
           this._menuElement = this.$.overlay.querySelector('vaadin-avatar-group-menu');
         }
 
-        this._openedWithFocusRing = overflow.hasAttribute('focus-ring');
-      } else if (this.__oldOpened) {
-        overflow.focus();
+        this._openedWithFocusRing = this._overflow.hasAttribute('focus-ring');
+      } else if (oldOpened) {
+        this._overflow.focus();
         if (this._openedWithFocusRing) {
-          overflow.setAttribute('focus-ring', '');
+          this._overflow.setAttribute('focus-ring', '');
         }
       }
 
-      overflow.setAttribute('aria-expanded', opened === true);
-      this.__oldOpened = opened;
+      this._overflow.setAttribute('aria-expanded', opened === true);
     }
 
     /** @private */
