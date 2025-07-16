@@ -271,11 +271,11 @@ export const PositionMixin = (superClass) =>
       // Apply the positioning properties to the overlay
       Object.assign(this.style, verticalProps, horizontalProps);
 
-      this.toggleAttribute('bottom-aligned', !shouldAlignStartVertically);
-      this.toggleAttribute('top-aligned', shouldAlignStartVertically);
+      this.__toggleOverlayStateAttribute('bottom-aligned', !shouldAlignStartVertically);
+      this.__toggleOverlayStateAttribute('top-aligned', shouldAlignStartVertically);
 
-      this.toggleAttribute('end-aligned', !flexStart);
-      this.toggleAttribute('start-aligned', flexStart);
+      this.__toggleOverlayStateAttribute('end-aligned', !flexStart);
+      this.__toggleOverlayStateAttribute('start-aligned', flexStart);
     }
 
     __shouldAlignStartHorizontally(targetRect, rtl) {
@@ -396,5 +396,20 @@ export const PositionMixin = (superClass) =>
         [cssPropNameToSet]: valueToSet,
         [cssPropNameToClear]: '',
       };
+    }
+
+    /**
+     * Toggle the state attribute on the overlay element and also its owner element. This allows targeting state
+     * attributes in the light DOM in case the overlay is in the shadow DOM of its owner.
+     * @param name {string} The name of the attribute to toggle.
+     * @param force {boolean} If true, the attribute will be set, if false, it will be removed. If not provided,
+     * the attribute will be toggled based on its current state.
+     * @private
+     */
+    __toggleOverlayStateAttribute(name, force) {
+      this.toggleAttribute(name, force);
+      if (this.owner) {
+        this.owner.toggleAttribute(name, force);
+      }
     }
   };
