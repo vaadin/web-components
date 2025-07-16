@@ -92,6 +92,7 @@ export const OverlayMixin = (superClass) =>
           type: Boolean,
           value: false,
           reflectToAttribute: true,
+          observer: '_withBackdropChanged',
           sync: true,
         },
       };
@@ -281,6 +282,11 @@ export const OverlayMixin = (superClass) =>
         this._exitModalState();
       }
       toggleOverlayStateAttribute(this, 'modeless', modeless === true);
+    }
+
+    /** @private */
+    _withBackdropChanged(withBackdrop) {
+      toggleOverlayStateAttribute(this, 'with-backdrop', withBackdrop === true);
     }
 
     /** @private */

@@ -108,24 +108,23 @@ describe('vaadin-overlay', () => {
 
     it('should reflect modeless to owner', () => {
       overlay.modeless = true;
-      expect(overlay.hasAttribute('modeless')).to.be.true;
       expect(owner.hasAttribute('modeless')).to.be.true;
 
       overlay.modeless = false;
-      expect(overlay.hasAttribute('modeless')).to.be.false;
       expect(owner.hasAttribute('modeless')).to.be.false;
 
       overlay.modeless = undefined;
-      expect(overlay.hasAttribute('modeless')).to.be.false;
       expect(owner.hasAttribute('modeless')).to.be.false;
     });
   });
 
   describe('backdrop', () => {
-    let overlay, backdrop;
+    let overlay, backdrop, owner;
 
     beforeEach(async () => {
       overlay = createOverlay('overlay content');
+      owner = document.createElement('div');
+      overlay.owner = owner;
       overlay.opened = true;
       await oneEvent(overlay, 'vaadin-overlay-open');
       backdrop = overlay.$.backdrop;
@@ -151,6 +150,17 @@ describe('vaadin-overlay', () => {
     it('should reflect withBackdrop property to attribute', () => {
       overlay.withBackdrop = true;
       expect(overlay.hasAttribute('with-backdrop')).to.be.true;
+    });
+
+    it('should reflect withBackdrop to owner', () => {
+      overlay.withBackdrop = true;
+      expect(owner.hasAttribute('with-backdrop')).to.be.true;
+
+      overlay.withBackdrop = false;
+      expect(owner.hasAttribute('with-backdrop')).to.be.false;
+
+      overlay.withBackdrop = undefined;
+      expect(owner.hasAttribute('with-backdrop')).to.be.false;
     });
   });
 
