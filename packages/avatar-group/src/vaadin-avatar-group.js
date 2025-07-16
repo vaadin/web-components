@@ -81,6 +81,7 @@ class AvatarGroup extends AvatarGroupMixin(ElementMixin(ThemableMixin(PolylitMix
       </div>
       <vaadin-avatar-group-overlay
         id="overlay"
+        .owner="${this}"
         .opened="${this._opened}"
         .positionTarget="${this._overflow}"
         .renderer="${this.__overlayRenderer}"

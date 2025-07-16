@@ -283,6 +283,10 @@ describe('avatar-group', () => {
       overflow = group._overflow;
     });
 
+    it('should set owner property on the overlay', () => {
+      expect(overlay.owner).to.equal(group);
+    });
+
     it('should open overlay on overflow avatar click', () => {
       overflow.click();
       expect(overlay.opened).to.be.true;
