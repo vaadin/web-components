@@ -424,6 +424,31 @@ export const RichTextEditorMixin = (superClass) =>
           this.$.linkUrl.focus();
         });
       });
+
+      // Set up tooltip to show when hovering or focusing toolbar buttons
+      this._tooltip = document.createElement('vaadin-tooltip');
+      this._tooltip.slot = 'tooltip';
+      // Create dummy aria target, as toolbar buttons already have aria-label, and also cannot be linked with the
+      // tooltip being in the light DOM
+      this._tooltip.ariaTarget = document.createElement('div');
+      this.append(this._tooltip);
+
+      const buttons = this.shadowRoot.querySelectorAll('[part~="toolbar-button"]');
+      buttons.forEach((button) => {
+        button.addEventListener('mouseenter', this.__showTooltip.bind(this));
+        button.addEventListener('focusin', this.__showTooltip.bind(this));
+      });
+    }
+
+    /** @private */
+    __showTooltip(event) {
+      const target = event.target;
+      this._tooltip.target = target;
+      this._tooltip.text = target.ariaLabel;
+      this._tooltip._stateController.open({
+        focus: event.type === 'focusin',
+        hover: event.type === 'mouseenter',
+      });
     }
 
     /** @private */
@@ -799,10 +824,7 @@ export const RichTextEditorMixin = (superClass) =>
         timeOut.after(timeout),
         () => {
           const formatting = Array.from(this.shadowRoot.querySelectorAll('[part="toolbar"] .ql-active'))
-            .map((button) => {
-              const tooltip = this.shadowRoot.querySelector(`[for="${button.id}"]`);
-              return tooltip.text;
-            })
+            .map((button) => button.getAttribute('aria-label'))
             .join(', ');
           announcer.textContent = formatting;
         },
