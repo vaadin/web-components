@@ -19,6 +19,12 @@ export const SelectOverlayMixin = (superClass) =>
       return ['_updateOverlayWidth(opened, positionTarget)'];
     }
 
+    /** @protected */
+    ready() {
+      super.ready();
+      this.restoreFocusOnClose = true;
+    }
+
     /**
      * @override
      * @protected

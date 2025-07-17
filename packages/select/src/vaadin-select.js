@@ -185,12 +185,10 @@ class Select extends SelectBaseMixin(ElementMixin(ThemableMixin(PolylitMixin(Lum
         .renderer="${this.renderer || this.__defaultRenderer}"
         ?phone="${this._phone}"
         theme="${ifDefined(this._theme)}"
-        .restoreFocusOnClose="${this.__shouldRestoreFocus}"
         ?no-vertical-overlap="${this.noVerticalOverlap}"
         exportparts="backdrop, overlay, content"
         @opened-changed="${this._onOpenedChanged}"
         @vaadin-overlay-open="${this._onOverlayOpen}"
-        @vaadin-overlay-closed="${this._onOverlayClosed}"
       >
         <slot name="overlay"></slot>
       </vaadin-select-overlay>
@@ -211,17 +209,6 @@ class Select extends SelectBaseMixin(ElementMixin(ThemableMixin(PolylitMixin(Lum
   _onOverlayOpen() {
     if (this._menuElement) {
       this._menuElement.focus();
-      this.__shouldRestoreFocus = true;
-    }
-  }
-
-  /** @private */
-  _onOverlayClosed() {
-    // Restore tabindex after closing overlay on Tab
-    if (this.focusElement.getAttribute('tabindex') === '-1') {
-      setTimeout(() => {
-        this.focusElement.setAttribute('tabindex', '0');
-      });
     }
   }
 
