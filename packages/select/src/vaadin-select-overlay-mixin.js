@@ -22,6 +22,7 @@ export const SelectOverlayMixin = (superClass) =>
     /** @protected */
     ready() {
       super.ready();
+
       this.restoreFocusOnClose = true;
     }
 
