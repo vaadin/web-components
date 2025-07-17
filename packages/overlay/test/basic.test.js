@@ -291,7 +291,6 @@ describe('vaadin-overlay', () => {
           const slot = document.createElement('slot');
           overlay.appendChild(slot);
 
-          overlay.focusTrap = true;
           overlay.renderer = (root) => {
             root.innerHTML = '<input placeholder="Input">';
           };
