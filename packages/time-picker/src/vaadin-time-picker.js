@@ -139,12 +139,15 @@ class TimePicker extends TimePickerMixin(ThemableMixin(ElementMixin(PolylitMixin
 
       <vaadin-time-picker-overlay
         id="overlay"
+        popover="manual"
         .owner="${this}"
         .opened="${this._overlayOpened}"
         theme="${ifDefined(this._theme)}"
         .positionTarget="${this._inputContainer}"
         no-vertical-overlap
-      ></vaadin-time-picker-overlay>
+      >
+        <slot name="overlay"></slot>
+      </vaadin-time-picker-overlay>
 
       <slot name="tooltip"></slot>
     `;
