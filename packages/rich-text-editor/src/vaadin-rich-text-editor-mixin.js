@@ -436,8 +436,6 @@ export const RichTextEditorMixin = (superClass) =>
       buttons.forEach((button) => {
         button.addEventListener('mouseenter', this.__showTooltip.bind(this));
         button.addEventListener('focusin', this.__showTooltip.bind(this));
-        button.addEventListener('mouseleave', this.__hideTooltip.bind(this));
-        button.addEventListener('focusout', this.__hideTooltip.bind(this));
       });
     }
 
@@ -450,11 +448,6 @@ export const RichTextEditorMixin = (superClass) =>
         focus: event.type === 'focusin',
         hover: event.type === 'mouseenter',
       });
-    }
-
-    /** @private */
-    __hideTooltip() {
-      this._tooltip._stateController.close();
     }
 
     /** @private */
