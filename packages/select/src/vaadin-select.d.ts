@@ -137,9 +137,12 @@ export interface SelectEventMap extends HTMLElementEventMap, SelectCustomEventMa
  *
  * In addition to `<vaadin-text-field>` parts, the following parts are available for theming:
  *
- * Part name       | Description
- * ----------------|----------------
- * `toggle-button` | The toggle button
+ * Part name        | Description
+ * -----------------|----------------
+ * `toggle-button`  | The toggle button
+ * `backdrop`       | Backdrop of the overlay
+ * `overlay`        | The overlay container
+ * `content`        | The overlay content
  *
  * In addition to `<vaadin-text-field>` state attributes, the following state attributes are available for theming:
  *

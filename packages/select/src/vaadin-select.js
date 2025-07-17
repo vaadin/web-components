@@ -91,9 +91,12 @@ import { SelectBaseMixin } from './vaadin-select-base-mixin.js';
  *
  * In addition to `<vaadin-text-field>` parts, the following parts are available for theming:
  *
- * Part name       | Description
- * ----------------|----------------
- * `toggle-button` | The toggle button
+ * Part name        | Description
+ * -----------------|----------------
+ * `toggle-button`  | The toggle button
+ * `backdrop`       | Backdrop of the overlay
+ * `overlay`        | The overlay container
+ * `content`        | The overlay content
  *
  * In addition to `<vaadin-text-field>` state attributes, the following state attributes are available for theming:
  *
@@ -184,6 +187,7 @@ class Select extends SelectBaseMixin(ElementMixin(ThemableMixin(PolylitMixin(Lum
         theme="${ifDefined(this._theme)}"
         .restoreFocusOnClose="${this.__shouldRestoreFocus}"
         ?no-vertical-overlap="${this.noVerticalOverlap}"
+        exportparts="backdrop, overlay, content"
         @opened-changed="${this._onOpenedChanged}"
         @vaadin-overlay-open="${this._onOverlayOpen}"
       >

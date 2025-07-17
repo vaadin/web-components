@@ -557,6 +557,7 @@ snapshots["vaadin-select host opened default"] =
 
 snapshots["vaadin-select host opened overlay"] = 
 `<vaadin-select-overlay
+  exportparts="backdrop, overlay, content"
   id="overlay"
   opened=""
   popover="manual"
@@ -572,6 +573,7 @@ snapshots["vaadin-select host opened overlay"] =
 snapshots["vaadin-select host opened overlay class"] = 
 `<vaadin-select-overlay
   class="custom select-overlay"
+  exportparts="backdrop, overlay, content"
   id="overlay"
   opened=""
   popover="manual"
@@ -620,6 +622,7 @@ snapshots["vaadin-select shadow default"] =
   </div>
 </div>
 <vaadin-select-overlay
+  exportparts="backdrop, overlay, content"
   id="overlay"
   popover="manual"
 >
@@ -674,6 +677,7 @@ snapshots["vaadin-select shadow disabled"] =
   </div>
 </div>
 <vaadin-select-overlay
+  exportparts="backdrop, overlay, content"
   id="overlay"
   popover="manual"
 >
@@ -728,6 +732,7 @@ snapshots["vaadin-select shadow readonly"] =
   </div>
 </div>
 <vaadin-select-overlay
+  exportparts="backdrop, overlay, content"
   id="overlay"
   popover="manual"
 >
@@ -782,6 +787,7 @@ snapshots["vaadin-select shadow invalid"] =
   </div>
 </div>
 <vaadin-select-overlay
+  exportparts="backdrop, overlay, content"
   id="overlay"
   popover="manual"
 >
@@ -836,6 +842,7 @@ snapshots["vaadin-select shadow theme"] =
   </div>
 </div>
 <vaadin-select-overlay
+  exportparts="backdrop, overlay, content"
   id="overlay"
   popover="manual"
   theme="align-right"
