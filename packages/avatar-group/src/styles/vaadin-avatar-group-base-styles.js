@@ -48,7 +48,7 @@ export const avatarGroupStyles = css`
     --_d: calc(var(--_dir) * -1);
   }
 
-  ::slotted(vaadin-avatar:not(:first-child)) {
+  ::slotted(vaadin-avatar:not(:first-of-type)) {
     margin-inline-start: calc(
       var(--vaadin-avatar-group-overlap, 8px) * -1 - var(--vaadin-focus-ring-width) +
         var(--vaadin-avatar-group-gap, 2px)
@@ -57,7 +57,7 @@ export const avatarGroupStyles = css`
 
   :host(:not([theme~='reverse'])) ::slotted(vaadin-avatar:last-child),
   :host(:not([theme~='reverse']):not([has-overflow])) ::slotted(vaadin-avatar:nth-last-child(2)),
-  :host([theme~='reverse']) ::slotted(vaadin-avatar:first-child) {
+  :host([theme~='reverse']) ::slotted(vaadin-avatar:first-of-type) {
     mask-image: none;
   }
 `;

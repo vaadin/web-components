@@ -144,15 +144,16 @@ export const AvatarGroupMixin = (superClass) =>
       return [...this.children].filter((node) => node.localName === 'vaadin-avatar');
     }
 
-    constructor() {
-      super();
-
-      this.__overlayRenderer = this.__overlayRenderer.bind(this);
-    }
-
     /** @protected */
     ready() {
       super.ready();
+
+      this._menuController = new SlotController(this, 'overlay', 'vaadin-avatar-group-menu', {
+        initializer: (menu) => {
+          menu.addEventListener('keydown', this._onListKeyDown.bind(this));
+          this._menuElement = menu;
+        },
+      });
 
       this._overflowController = new SlotController(this, 'overflow', 'vaadin-avatar', {
         initializer: (overflow) => {
@@ -170,6 +171,8 @@ export const AvatarGroupMixin = (superClass) =>
           this._overflowTooltip = tooltip;
         },
       });
+
+      this.addController(this._menuController);
       this.addController(this._overflowController);
 
       this._overlayElement = this.$.overlay;
@@ -229,8 +232,8 @@ export const AvatarGroupMixin = (superClass) =>
         }
       }
 
-      if (props.has('_overflowItems')) {
-        this.__overflowItemsChanged(this._overflowItems, props.get('_overflowItems'));
+      if (props.has('_overflowItems') || props.has('__effectiveI18n') || props.has('_theme')) {
+        this.__renderMenu();
       }
     }
 
@@ -241,34 +244,31 @@ export const AvatarGroupMixin = (superClass) =>
 
     /**
      * Renders items when they are provided by the `items` property and clears the content otherwise.
-     * @param {!HTMLElement} root
      * @private
      */
-    __overlayRenderer(root) {
+    __renderMenu() {
       render(
         html`
-          <vaadin-avatar-group-menu @keydown="${this._onListKeyDown}">
-            ${(this._overflowItems || []).map(
-              (item) => html`
-                <vaadin-avatar-group-menu-item>
-                  <vaadin-avatar
-                    .name="${item.name}"
-                    .abbr="${item.abbr}"
-                    .img="${item.img}"
-                    .colorIndex="${item.colorIndex}"
-                    .i18n="${this.__effectiveI18n}"
-                    class="${ifDefined(item.className)}"
-                    theme="${ifDefined(this._theme)}"
-                    aria-hidden="true"
-                    tabindex="-1"
-                  ></vaadin-avatar>
-                  ${item.name || ''}
-                </vaadin-avatar-group-menu-item>
-              `,
-            )}
-          </vaadin-avatar-group-menu>
+          ${(this._overflowItems || []).map(
+            (item) => html`
+              <vaadin-avatar-group-menu-item>
+                <vaadin-avatar
+                  .name="${item.name}"
+                  .abbr="${item.abbr}"
+                  .img="${item.img}"
+                  .colorIndex="${item.colorIndex}"
+                  .i18n="${this.__effectiveI18n}"
+                  class="${ifDefined(item.className)}"
+                  theme="${ifDefined(this._theme)}"
+                  aria-hidden="true"
+                  tabindex="-1"
+                ></vaadin-avatar>
+                ${item.name || ''}
+              </vaadin-avatar-group-menu-item>
+            `,
+          )}
         `,
-        root,
+        this._menuElement,
         { host: this },
       );
     }
@@ -453,10 +453,6 @@ export const AvatarGroupMixin = (superClass) =>
     /** @private */
     __openedChanged(opened, oldOpened) {
       if (opened) {
-        if (!this._menuElement) {
-          this._menuElement = this.$.overlay.querySelector('vaadin-avatar-group-menu');
-        }
-
         this._openedWithFocusRing = this._overflow.hasAttribute('focus-ring');
       } else if (oldOpened) {
         this._overflow.focus();
@@ -466,18 +462,6 @@ export const AvatarGroupMixin = (superClass) =>
       }
 
       this._overflow.setAttribute('aria-expanded', opened === true);
-    }
-
-    /** @private */
-    __overflowItemsChanged(items, oldItems) {
-      // Prevent renderer from being called unnecessarily on initialization
-      if (items && items.length === 0 && (!oldItems || oldItems.length === 0)) {
-        return;
-      }
-
-      if (items || oldItems) {
-        this.$.overlay.requestContentUpdate();
-      }
     }
 
     /** @private */
