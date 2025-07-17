@@ -395,6 +395,8 @@ class RichTextEditor extends RichTextEditorMixin(
         @color-selected="${this.__onBackgroundSelected}"
         @opened-changed="${this.__onBackgroundEditingChanged}"
       ></vaadin-rich-text-editor-popup>
+
+      <slot name="tooltip"></slot>
     `;
   }
 
