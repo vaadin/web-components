@@ -69,6 +69,15 @@ describe('vaadin-date-picker', () => {
       await expect(datePicker).dom.to.equalSnapshot();
     });
 
+    it('week numbers', async () => {
+      datePicker.showWeekNumbers = true;
+      datePicker.i18n = {
+        ...datePicker.i18n,
+        firstDayOfWeek: 1,
+      };
+      await expect(datePicker).dom.to.equalSnapshot();
+    });
+
     describe('opened', () => {
       const SNAPSHOT_CONFIG = {
         // Some inline CSS styles related to the overlay's position

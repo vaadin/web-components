@@ -456,6 +456,16 @@ export const DatePickerMixin = (subclass) =>
     }
 
     /** @protected */
+    updated(props) {
+      super.updated(props);
+
+      if (props.has('showWeekNumbers') || props.has('__effectiveI18n')) {
+        // Currently only supported for locales that start the week on Monday.
+        this.toggleAttribute('week-numbers', this.showWeekNumbers && this.__effectiveI18n.firstDayOfWeek === 1);
+      }
+    }
+
+    /** @protected */
     disconnectedCallback() {
       super.disconnectedCallback();
 

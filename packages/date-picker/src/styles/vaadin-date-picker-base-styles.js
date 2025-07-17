@@ -11,6 +11,10 @@ export const datePickerStyles = css`
     pointer-events: auto;
   }
 
+  :host([week-numbers]) {
+    --_vaadin-date-picker-week-numbers-visible: 1;
+  }
+
   :host([dir='rtl']) [part='input-field'] {
     direction: ltr;
   }

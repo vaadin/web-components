@@ -56,9 +56,10 @@ import { DatePickerMixin } from './vaadin-date-picker-mixin.js';
  *
  * In addition to `<vaadin-text-field>` state attributes, the following state attributes are available for theming:
  *
- * Attribute  | Description                                      | Part name
- * -----------|--------------------------------------------------|-----------
- * `opened`   | Set when the date selector overlay is opened     | :host
+ * Attribute      | Description
+ * ---------------|----------------------------------------------
+ * `opened`       | Set when the date selector overlay is opened
+ * `week-numbers` | Set when week numbers are shown in the calendar
  *
  * ### Internal components
  *
@@ -213,7 +214,6 @@ class DatePicker extends DatePickerMixin(
         popover="manual"
         .owner="${this}"
         ?fullscreen="${this._fullscreen}"
-        ?week-numbers="${this.showWeekNumbers}"
         theme="${ifDefined(this._theme)}"
         .opened="${this.opened}"
         @opened-changed="${this._onOpenedChanged}"
