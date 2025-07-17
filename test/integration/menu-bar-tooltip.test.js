@@ -391,31 +391,31 @@ describe('menu-bar with tooltip', () => {
       expect(tooltip.textContent).to.equal('Copy tooltip');
 
       await resetMouse();
-      expect(tooltip.textContent).to.be.null;
+      expect(tooltip.textContent).to.equal('');
     });
 
     it('should toggle tooltip on disabled button focus when navigating with arrow keys', async () => {
       await sendKeys({ press: 'Tab' });
-      expect(tooltip.textContent).to.be.null;
+      expect(tooltip.textContent).to.equal('');
 
       await sendKeys({ press: 'ArrowRight' });
       expect(tooltip.textContent).to.equal('Copy tooltip');
 
       await sendKeys({ press: 'ArrowLeft' });
-      expect(tooltip.textContent).to.be.null;
+      expect(tooltip.textContent).to.equal('');
     });
 
     it('should toggle tooltip on disabled button focus when navigating with Tab', async () => {
       menuBar.tabNavigation = true;
 
       await sendKeys({ press: 'Tab' });
-      expect(tooltip.textContent).to.be.null;
+      expect(tooltip.textContent).to.equal('');
 
       await sendKeys({ press: 'Tab' });
       expect(tooltip.textContent).to.equal('Copy tooltip');
 
       await sendKeys({ press: 'Shift+Tab' });
-      expect(tooltip.textContent).to.be.null;
+      expect(tooltip.textContent).to.equal('');
     });
   });
 });
