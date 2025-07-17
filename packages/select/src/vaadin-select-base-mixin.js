@@ -153,13 +153,6 @@ export const SelectBaseMixin = (superClass) =>
 
         /** @private */
         _items: Object,
-
-        /** @private */
-        __shouldRestoreFocus: {
-          type: Boolean,
-          value: true,
-          sync: true,
-        },
       };
     }
 
@@ -380,11 +373,15 @@ export const SelectBaseMixin = (superClass) =>
      */
     _onKeyDownInside(e) {
       if (e.key === 'Tab') {
-        this.__shouldRestoreFocus = false;
         // Temporarily set tabindex to prevent moving focus
         // to the value button element on item Shift + Tab
         this.focusElement.setAttribute('tabindex', '-1');
+        this._overlayElement.restoreFocusOnClose = false;
         this.opened = false;
+        setTimeout(() => {
+          this.focusElement.setAttribute('tabindex', '0');
+          this._overlayElement.restoreFocusOnClose = true;
+        });
       }
     }
 
@@ -409,7 +406,7 @@ export const SelectBaseMixin = (superClass) =>
           this.removeAttribute('focus-ring');
         }
       } else if (oldOpened) {
-        if (this._openedWithFocusRing && this.__shouldRestoreFocus) {
+        if (this._openedWithFocusRing) {
           this.setAttribute('focus-ring', '');
         }
 
@@ -608,15 +605,7 @@ export const SelectBaseMixin = (superClass) =>
      * @override
      */
     _shouldRemoveFocus(event) {
-      // Component is about to be closed by Tab, remove focus.
-      if (!this.__shouldRestoreFocus) {
-        return true;
-      }
-
-      // With native popover, the overlay item focusout event bubbles to the host,
-      // so we need to ignore it here in order to not call `_setFocused(false)`
-      // as focus is about to be immediately restored on overlay close.
-      return !this.opened && !event.composedPath().includes(this._overlayElement);
+      return !this.contains(event.relatedTarget);
     }
 
     /**
