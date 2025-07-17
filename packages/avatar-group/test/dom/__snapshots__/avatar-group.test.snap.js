@@ -23,7 +23,7 @@ snapshots["vaadin-avatar-group default"] =
       <div
         id="vaadin-tooltip-0"
         role="tooltip"
-        slot="sr-label"
+        slot="overlay"
       >
       </div>
     </vaadin-tooltip>
@@ -55,7 +55,7 @@ snapshots["vaadin-avatar-group items"] =
       <div
         id="vaadin-tooltip-2"
         role="tooltip"
-        slot="sr-label"
+        slot="overlay"
       >
         YY
       </div>
@@ -77,7 +77,7 @@ snapshots["vaadin-avatar-group items"] =
       <div
         id="vaadin-tooltip-3"
         role="tooltip"
-        slot="sr-label"
+        slot="overlay"
       >
         Tomi Virkki
       </div>
@@ -101,7 +101,7 @@ snapshots["vaadin-avatar-group items"] =
       <div
         id="vaadin-tooltip-1"
         role="tooltip"
-        slot="sr-label"
+        slot="overlay"
       >
         YY
 Tomi Virkki
@@ -139,7 +139,7 @@ snapshots["vaadin-avatar-group theme"] =
       <div
         id="vaadin-tooltip-5"
         role="tooltip"
-        slot="sr-label"
+        slot="overlay"
       >
         YY
       </div>
@@ -162,7 +162,7 @@ snapshots["vaadin-avatar-group theme"] =
       <div
         id="vaadin-tooltip-6"
         role="tooltip"
-        slot="sr-label"
+        slot="overlay"
       >
         Tomi Virkki
       </div>
@@ -187,7 +187,7 @@ snapshots["vaadin-avatar-group theme"] =
       <div
         id="vaadin-tooltip-4"
         role="tooltip"
-        slot="sr-label"
+        slot="overlay"
       >
         YY
 Tomi Virkki
@@ -259,7 +259,7 @@ snapshots["vaadin-avatar-group opened default"] =
       <div
         id="vaadin-tooltip-8"
         role="tooltip"
-        slot="sr-label"
+        slot="overlay"
       >
         Abc Def
       </div>
@@ -281,7 +281,7 @@ snapshots["vaadin-avatar-group opened default"] =
       <div
         id="vaadin-tooltip-9"
         role="tooltip"
-        slot="sr-label"
+        slot="overlay"
       >
         Ghi Jkl
       </div>
@@ -305,7 +305,7 @@ snapshots["vaadin-avatar-group opened default"] =
       <div
         id="vaadin-tooltip-7"
         role="tooltip"
-        slot="sr-label"
+        slot="overlay"
       >
         Mno Pqr
 Stu Vwx
