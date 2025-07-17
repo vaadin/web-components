@@ -292,6 +292,13 @@ export const OverlayMixin = (superClass) =>
     /** @private */
     _openedChanged(opened, wasOpened) {
       if (opened) {
+        // Prevent possible errors on re-opening when updating a property on the
+        // already disconnected owner element causes `opened` to be set to `true`
+        if (this.owner && this.getRootNode().host === this.owner && !this.owner.isConnected) {
+          this.opened = false;
+          return;
+        }
+
         this._saveFocus();
 
         this._animatedOpening();
