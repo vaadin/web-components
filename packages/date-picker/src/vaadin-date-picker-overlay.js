@@ -45,6 +45,33 @@ class DatePickerOverlay extends DatePickerOverlayMixin(
       </div>
     `;
   }
+
+  /**
+   * Override method from `OverlayFocusMixin` to specify content root
+   * used to detect whether focus should be restored on overlay close.
+   *
+   * @protected
+   * @override
+   */
+  get _contentRoot() {
+    return this.owner._overlayContent;
+  }
+
+  /**
+   * @protected
+   * @override
+   */
+  _attachOverlay() {
+    this.showPopover();
+  }
+
+  /**
+   * @protected
+   * @override
+   */
+  _detachOverlay() {
+    this.hidePopover();
+  }
 }
 
 defineCustomElement(DatePickerOverlay);

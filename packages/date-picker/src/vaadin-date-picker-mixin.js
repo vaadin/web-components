@@ -295,7 +295,6 @@ export const DatePickerMixin = (subclass) =>
 
       this._boundOnClick = this._onClick.bind(this);
       this._boundOnScroll = this._onScroll.bind(this);
-      this._boundOverlayRenderer = this._overlayRenderer.bind(this);
     }
 
     /**
@@ -453,10 +452,7 @@ export const DatePickerMixin = (subclass) =>
 
       this.addController(new VirtualKeyboardController(this));
 
-      const overlay = this.$.overlay;
-      this._overlayElement = overlay;
-
-      overlay.renderer = this._boundOverlayRenderer;
+      this._overlayElement = this.$.overlay;
 
       this.addEventListener('mousedown', () => this.__bringToFront());
       this.addEventListener('touchstart', () => this.__bringToFront());
@@ -498,14 +494,15 @@ export const DatePickerMixin = (subclass) =>
     }
 
     /** @private */
-    _overlayRenderer(root) {
-      if (root.firstChild) {
+    __ensureContent() {
+      if (this._overlayContent) {
         return;
       }
 
       // Create and store document content element
       const content = document.createElement('vaadin-date-picker-overlay-content');
-      root.appendChild(content);
+      content.setAttribute('slot', 'overlay');
+      this.appendChild(content);
 
       this._overlayContent = content;
 
@@ -752,6 +749,10 @@ export const DatePickerMixin = (subclass) =>
 
     /** @protected */
     _openedChanged(opened) {
+      if (opened) {
+        this.__ensureContent();
+      }
+
       if (this.inputElement) {
         this.inputElement.setAttribute('aria-expanded', opened);
       }
@@ -1119,7 +1120,12 @@ export const DatePickerMixin = (subclass) =>
      * @protected
      * @override
      */
-    _onEnter(_event) {
+    _onEnter(event) {
+      // Ignore Enter keydown event bubbling from the overlay
+      if (event.composedPath().includes(this._overlayContent)) {
+        return;
+      }
+
       if (this.opened) {
         // Closing will implicitly select parsed or focused date
         this.close();

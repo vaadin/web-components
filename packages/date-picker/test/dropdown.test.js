@@ -31,10 +31,10 @@ describe('dropdown', () => {
     expect(inputField.getBoundingClientRect().bottom).to.be.closeTo(overlay.getBoundingClientRect().top, 0.01);
   });
 
-  it('should detach overlay on datePicker detach', async () => {
+  it('should close overlay when date-picker is disconnected', async () => {
     await open(datePicker);
     datePicker.parentElement.removeChild(datePicker);
-    expect(overlay.parentElement).to.not.be.ok;
+    expect(overlay.opened).to.be.false;
   });
 
   describe('toggle button', () => {
