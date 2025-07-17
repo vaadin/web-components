@@ -80,6 +80,10 @@ describe('vaadin-date-picker', () => {
         await open(datePicker);
       });
 
+      it('default', async () => {
+        await expect(datePicker).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
+      });
+
       it('overlay', async () => {
         await expect(datePicker.$.overlay).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
       });

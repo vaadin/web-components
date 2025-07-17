@@ -207,6 +207,7 @@ class DatePicker extends DatePickerMixin(
 
       <vaadin-date-picker-overlay
         id="overlay"
+        popover="manual"
         .owner="${this}"
         ?fullscreen="${this._fullscreen}"
         ?week-numbers="${this.showWeekNumbers}"
@@ -221,7 +222,9 @@ class DatePicker extends DatePickerMixin(
         no-vertical-overlap
         .restoreFocusNode="${this.inputElement}"
         .positionTarget="${this._positionTarget}"
-      ></vaadin-date-picker-overlay>
+      >
+        <slot name="overlay"></slot>
+      </vaadin-date-picker-overlay>
 
       <slot name="tooltip"></slot>
     `;
