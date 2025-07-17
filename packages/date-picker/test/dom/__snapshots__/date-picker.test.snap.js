@@ -471,6 +471,7 @@ snapshots["vaadin-date-picker host opened default"] =
 
 snapshots["vaadin-date-picker host opened overlay"] = 
 `<vaadin-date-picker-overlay
+  exportparts="backdrop, overlay, content"
   id="overlay"
   no-vertical-overlap=""
   opened=""
@@ -488,6 +489,7 @@ snapshots["vaadin-date-picker host opened overlay"] =
 snapshots["vaadin-date-picker host opened overlay class"] = 
 `<vaadin-date-picker-overlay
   class="custom date-picker-overlay"
+  exportparts="backdrop, overlay, content"
   id="overlay"
   no-vertical-overlap=""
   opened=""
@@ -504,6 +506,7 @@ snapshots["vaadin-date-picker host opened overlay class"] =
 
 snapshots["vaadin-date-picker host opened overlay theme"] = 
 `<vaadin-date-picker-overlay
+  exportparts="backdrop, overlay, content"
   id="overlay"
   no-vertical-overlap=""
   opened=""
@@ -562,6 +565,7 @@ snapshots["vaadin-date-picker shadow default"] =
   </div>
 </div>
 <vaadin-date-picker-overlay
+  exportparts="backdrop, overlay, content"
   id="overlay"
   no-vertical-overlap=""
   popover="manual"
@@ -621,6 +625,7 @@ snapshots["vaadin-date-picker shadow disabled"] =
   </div>
 </div>
 <vaadin-date-picker-overlay
+  exportparts="backdrop, overlay, content"
   id="overlay"
   no-vertical-overlap=""
   popover="manual"
@@ -680,6 +685,7 @@ snapshots["vaadin-date-picker shadow readonly"] =
   </div>
 </div>
 <vaadin-date-picker-overlay
+  exportparts="backdrop, overlay, content"
   id="overlay"
   no-vertical-overlap=""
   popover="manual"
@@ -739,6 +745,7 @@ snapshots["vaadin-date-picker shadow invalid"] =
   </div>
 </div>
 <vaadin-date-picker-overlay
+  exportparts="backdrop, overlay, content"
   id="overlay"
   no-vertical-overlap=""
   popover="manual"
@@ -798,6 +805,7 @@ snapshots["vaadin-date-picker shadow theme"] =
   </div>
 </div>
 <vaadin-date-picker-overlay
+  exportparts="backdrop, overlay, content"
   id="overlay"
   no-vertical-overlap=""
   popover="manual"
