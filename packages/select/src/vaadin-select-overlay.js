@@ -34,7 +34,7 @@ export class SelectOverlay extends SelectOverlayMixin(ThemableMixin(PolylitMixin
   render() {
     return html`
       <div id="backdrop" part="backdrop" ?hidden="${!this.withBackdrop}"></div>
-      <div part="overlay" id="overlay" tabindex="0">
+      <div part="overlay" id="overlay">
         <div part="content" id="content">
           <slot></slot>
         </div>

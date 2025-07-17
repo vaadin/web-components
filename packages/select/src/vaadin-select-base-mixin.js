@@ -5,7 +5,6 @@
  */
 import { setAriaIDReference } from '@vaadin/a11y-base/src/aria-id-reference.js';
 import { DelegateFocusMixin } from '@vaadin/a11y-base/src/delegate-focus-mixin.js';
-import { getFocusableElements } from '@vaadin/a11y-base/src/focus-utils.js';
 import { KeyboardMixin } from '@vaadin/a11y-base/src/keyboard-mixin.js';
 import { DelegateStateMixin } from '@vaadin/component-base/src/delegate-state-mixin.js';
 import { MediaQueryController } from '@vaadin/component-base/src/media-query-controller.js';
@@ -382,20 +381,10 @@ export const SelectBaseMixin = (superClass) =>
     _onKeyDownInside(e) {
       if (e.key === 'Tab') {
         this.__shouldRestoreFocus = false;
+        // Temporarily set tabindex to prevent moving focus
+        // to the value button element on item Shift + Tab
+        this.focusElement.setAttribute('tabindex', '-1');
         this.opened = false;
-
-        if (e.shiftKey) {
-          // On Shift + Tab, focus does not move to previous  element
-          // but returns to `vaadin-select` unexpectedly. Workaround
-          // this by getting the previous focusable and focusing it.
-          const focusables = getFocusableElements(document.body);
-          const idx = focusables.findIndex((el) => el === this.focusElement);
-          const focusable = focusables[idx - 1];
-          if (focusable) {
-            e.preventDefault();
-            focusable.focus();
-          }
-        }
       }
     }
 
