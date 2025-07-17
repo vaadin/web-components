@@ -38,6 +38,11 @@ export class DatePickerObserver extends ComponentObserver {
   }
 
   onFocusIn(event) {
+    if (this.isEventInOverlay(event.target)) {
+      // Focus moves to the overlay, do nothing.
+      return;
+    }
+
     if (this.isEventInOverlay(event.relatedTarget)) {
       // Focus returns from the overlay, do nothing.
       return;
@@ -53,9 +58,17 @@ export class DatePickerObserver extends ComponentObserver {
   }
 
   onFocusOut(event) {
+    if (this.isEventInOverlay(event.target) && this.component.contains(event.relatedTarget)) {
+      // Focus returns from the overlay, do nothing.
+      return;
+    }
+
     if (this.isEventInOverlay(event.relatedTarget)) {
-      // Do nothing, overlay is opening.
-    } else if (!this.datePicker.opened) {
+      // Focus moves to the overlay, do nothing.
+      return;
+    }
+
+    if (!this.datePicker.opened) {
       // Field blur when closed.
       this.hideOutline(this.datePicker);
     } else {
