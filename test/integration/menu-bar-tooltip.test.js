@@ -23,11 +23,6 @@ export function mouseover(target) {
   fire(target, 'mouseover');
 }
 
-function getTooltipText() {
-  const overlay = document.querySelector('vaadin-tooltip-overlay:not([hidden])');
-  return overlay && overlay.textContent;
-}
-
 describe('menu-bar with tooltip', () => {
   let menuBar, tooltip, buttons;
 
@@ -74,12 +69,12 @@ describe('menu-bar with tooltip', () => {
 
     it('should use the tooltip property of an item as tooltip', () => {
       mouseover(buttons[0]);
-      expect(getTooltipText()).to.equal('Edit tooltip');
+      expect(tooltip.textContent).to.equal('Edit tooltip');
     });
 
     it('should not show tooltip for an item which has no tooltip', () => {
       mouseover(buttons[1]);
-      expect(getTooltipText()).not.to.be.ok;
+      expect(tooltip.textContent).not.to.be.ok;
     });
 
     it('should not show tooltip on another parent menu button mouseover when open', async () => {
@@ -215,7 +210,7 @@ describe('menu-bar with tooltip', () => {
     it('should not override a custom generator', () => {
       tooltip.generator = () => 'Custom tooltip';
       mouseover(buttons[0]);
-      expect(getTooltipText()).to.equal('Custom tooltip');
+      expect(tooltip.textContent).to.equal('Custom tooltip');
     });
 
     describe('overflow button', () => {
@@ -393,34 +388,34 @@ describe('menu-bar with tooltip', () => {
 
     it('should toggle tooltip on disabled button hover', async () => {
       await sendMouseToElement({ type: 'move', element: buttons[1] });
-      expect(getTooltipText()).to.equal('Copy tooltip');
+      expect(tooltip.textContent).to.equal('Copy tooltip');
 
       await resetMouse();
-      expect(getTooltipText()).to.be.null;
+      expect(tooltip.textContent).to.be.null;
     });
 
     it('should toggle tooltip on disabled button focus when navigating with arrow keys', async () => {
       await sendKeys({ press: 'Tab' });
-      expect(getTooltipText()).to.be.null;
+      expect(tooltip.textContent).to.be.null;
 
       await sendKeys({ press: 'ArrowRight' });
-      expect(getTooltipText()).to.equal('Copy tooltip');
+      expect(tooltip.textContent).to.equal('Copy tooltip');
 
       await sendKeys({ press: 'ArrowLeft' });
-      expect(getTooltipText()).to.be.null;
+      expect(tooltip.textContent).to.be.null;
     });
 
     it('should toggle tooltip on disabled button focus when navigating with Tab', async () => {
       menuBar.tabNavigation = true;
 
       await sendKeys({ press: 'Tab' });
-      expect(getTooltipText()).to.be.null;
+      expect(tooltip.textContent).to.be.null;
 
       await sendKeys({ press: 'Tab' });
-      expect(getTooltipText()).to.equal('Copy tooltip');
+      expect(tooltip.textContent).to.equal('Copy tooltip');
 
       await sendKeys({ press: 'Shift+Tab' });
-      expect(getTooltipText()).to.be.null;
+      expect(tooltip.textContent).to.be.null;
     });
   });
 });
