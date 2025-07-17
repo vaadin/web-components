@@ -22,11 +22,12 @@ import { TooltipMixin } from './vaadin-tooltip-mixin.js';
  *
  * ### Styling
  *
- * `<vaadin-tooltip>` uses `<vaadin-tooltip-overlay>` internal
- * themable component as the actual visible overlay.
+ * The following shadow DOM parts are available for styling:
  *
- * See [`<vaadin-overlay>`](#/elements/vaadin-overlay) documentation
- * for `<vaadin-tooltip-overlay>` parts.
+ * Part name   | Description
+ * ----------- | ---------------
+ * `overlay`   | The overlay element
+ * `content`   | The overlay content element
  *
  * The following state attributes are available for styling:
  *
@@ -89,6 +90,7 @@ class Tooltip extends TooltipMixin(ThemePropertyMixin(ElementMixin(PolylitMixin(
         @mouseenter="${this.__onOverlayMouseEnter}"
         @mouseleave="${this.__onOverlayMouseLeave}"
         modeless
+        exportparts="overlay, content"
         ><slot name="overlay"></slot
       ></vaadin-tooltip-overlay>
     `;
