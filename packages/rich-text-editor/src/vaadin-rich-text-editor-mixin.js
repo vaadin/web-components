@@ -425,6 +425,7 @@ export const RichTextEditorMixin = (superClass) =>
         });
       });
 
+      // Set up tooltip to show when hovering or focusing toolbar buttons
       this._tooltip = document.createElement('vaadin-tooltip');
       // Create dummy aria target, as toolbar buttons already have aria-label, and also cannot be linked with the
       // tooltip being in the light DOM
@@ -444,7 +445,7 @@ export const RichTextEditorMixin = (superClass) =>
     __showTooltip(event) {
       const target = event.target;
       this._tooltip.target = target;
-      this._tooltip.text = target.getAttribute('aria-label');
+      this._tooltip.text = target.ariaLabel;
       this._tooltip._stateController.open({
         focus: event.type === 'focusin',
         hover: event.type === 'mouseenter',

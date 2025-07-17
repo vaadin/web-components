@@ -1,6 +1,7 @@
 import { expect } from '@vaadin/chai-plugins';
 import {
   esc,
+  fire,
   fixtureSync,
   focusout,
   isDesktopSafari,
@@ -560,6 +561,91 @@ describe('toolbar controls', () => {
       btn = getButton('redo');
       btn.click();
       expect(editor.getText()).to.equal('Foo\n');
+    });
+  });
+
+  describe('tooltip', () => {
+    const Tooltip = customElements.get('vaadin-tooltip');
+    let tooltip, overlay;
+
+    before(() => {
+      Tooltip.setDefaultFocusDelay(0);
+      Tooltip.setDefaultHoverDelay(0);
+      Tooltip.setDefaultHideDelay(0);
+    });
+
+    beforeEach(() => {
+      tooltip = rte.querySelector('vaadin-tooltip');
+      overlay = tooltip.shadowRoot.querySelector('vaadin-tooltip-overlay');
+    });
+
+    it('should open tooltip when hovering toolbar button', () => {
+      const undo = getButton('undo');
+      fire(undo, 'mouseenter');
+
+      expect(tooltip.target).to.equal(undo);
+      expect(tooltip.text).to.equal(undo.ariaLabel);
+      expect(overlay.opened).to.be.true;
+    });
+
+    it('should move tooltip when hovering other toolbar button', () => {
+      const undo = getButton('undo');
+      fire(undo, 'mouseenter');
+
+      const redo = getButton('redo');
+      fire(redo, 'mouseenter');
+
+      expect(tooltip.target).to.equal(redo);
+      expect(tooltip.text).to.equal(redo.ariaLabel);
+      expect(overlay.opened).to.be.true;
+    });
+
+    it('should close tooltip when mouse leaves toolbar button', () => {
+      const undo = getButton('undo');
+      fire(undo, 'mouseenter');
+
+      expect(overlay.opened).to.be.true;
+
+      fire(undo, 'mouseleave');
+      expect(overlay.opened).to.be.false;
+    });
+
+    it('should open tooltip when focusing toolbar button', () => {
+      const undo = getButton('undo');
+      undo.focus();
+
+      expect(tooltip.target).to.equal(undo);
+      expect(tooltip.text).to.equal(undo.ariaLabel);
+      expect(overlay.opened).to.be.true;
+    });
+
+    it('should move tooltip when focusing other toolbar button', () => {
+      const undo = getButton('undo');
+      undo.focus();
+
+      const redo = getButton('redo');
+      redo.focus();
+
+      expect(tooltip.target).to.equal(redo);
+      expect(tooltip.text).to.equal(redo.ariaLabel);
+      expect(overlay.opened).to.be.true;
+    });
+
+    it('should close tooltip when focus is moved away from toolbar button', () => {
+      const undo = getButton('undo');
+      undo.focus();
+
+      expect(overlay.opened).to.be.true;
+
+      focusout(undo);
+      expect(overlay.opened).to.be.false;
+    });
+
+    it('should not set aria-describedby on toolbar button', () => {
+      const undo = getButton('undo');
+      undo.focus();
+
+      expect(undo.hasAttribute('aria-describedby')).to.be.false;
     });
   });
 });
