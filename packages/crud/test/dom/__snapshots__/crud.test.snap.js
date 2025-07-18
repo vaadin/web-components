@@ -47,19 +47,19 @@ snapshots["vaadin-crud host default"] =
           theme="small"
         >
           <label
-            for="input-vaadin-text-field-8"
-            id="label-vaadin-text-field-2"
+            for="input-vaadin-text-field-6"
+            id="label-vaadin-text-field-0"
             slot="label"
           >
           </label>
           <div
             hidden=""
-            id="error-message-vaadin-text-field-4"
+            id="error-message-vaadin-text-field-2"
             slot="error-message"
           >
           </div>
           <input
-            id="input-vaadin-text-field-8"
+            id="input-vaadin-text-field-6"
             slot="input"
             type="text"
           >
@@ -78,19 +78,19 @@ snapshots["vaadin-crud host default"] =
           theme="small"
         >
           <label
-            for="input-vaadin-text-field-9"
-            id="label-vaadin-text-field-5"
+            for="input-vaadin-text-field-7"
+            id="label-vaadin-text-field-3"
             slot="label"
           >
           </label>
           <div
             hidden=""
-            id="error-message-vaadin-text-field-7"
+            id="error-message-vaadin-text-field-5"
             slot="error-message"
           >
           </div>
           <input
-            id="input-vaadin-text-field-9"
+            id="input-vaadin-text-field-7"
             slot="input"
             type="text"
           >
@@ -236,13 +236,8 @@ snapshots["vaadin-crud shadow default"] =
   <h3 slot="header">
     Discard changes
   </h3>
-  <div
-    id="confirm-dialog-message-0"
-    style="display: contents;"
-  >
-    <div>
-      There are unsaved changes to this item.
-    </div>
+  <div>
+    There are unsaved changes to this item.
   </div>
   <vaadin-button
     role="button"
@@ -279,13 +274,8 @@ snapshots["vaadin-crud shadow default"] =
   <h3 slot="header">
     Delete item
   </h3>
-  <div
-    id="confirm-dialog-message-1"
-    style="display: contents;"
-  >
-    <div>
-      Are you sure you want to delete this item? This action cannot be undone.
-    </div>
+  <div>
+    Are you sure you want to delete this item? This action cannot be undone.
   </div>
   <vaadin-button
     role="button"
