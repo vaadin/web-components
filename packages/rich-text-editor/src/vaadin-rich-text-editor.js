@@ -13,7 +13,7 @@ import '@vaadin/confirm-dialog/src/vaadin-confirm-dialog.js';
 import '@vaadin/text-field/src/vaadin-text-field.js';
 import '@vaadin/tooltip/src/vaadin-tooltip.js';
 import './vaadin-rich-text-editor-popup.js';
-import { html, LitElement } from 'lit';
+import { html, LitElement, render } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
@@ -350,36 +350,6 @@ class RichTextEditor extends RichTextEditorMixin(
         <div class="announcer" aria-live="polite"></div>
       </div>
 
-      <vaadin-confirm-dialog
-        id="linkDialog"
-        .opened="${this._linkEditing}"
-        .header="${this.__effectiveI18n.linkDialogTitle}"
-        @opened-changed="${this._onLinkEditingChanged}"
-      >
-        <vaadin-text-field
-          id="linkUrl"
-          .value="${this._linkUrl}"
-          style="width: 100%;"
-          @keydown="${this._onLinkKeydown}"
-          @value-changed="${this._onLinkUrlChanged}"
-        ></vaadin-text-field>
-        <vaadin-button id="confirmLink" slot="confirm-button" theme="primary" @click="${this._onLinkEditConfirm}">
-          ${this.__effectiveI18n.ok}
-        </vaadin-button>
-        <vaadin-button
-          id="removeLink"
-          slot="reject-button"
-          theme="error"
-          @click="${this._onLinkEditRemove}"
-          ?hidden="${!this._linkRange}"
-        >
-          ${this.__effectiveI18n.remove}
-        </vaadin-button>
-        <vaadin-button id="cancelLink" slot="cancel-button" @click="${this._onLinkEditCancel}">
-          ${this.__effectiveI18n.cancel}
-        </vaadin-button>
-      </vaadin-confirm-dialog>
-
       <vaadin-rich-text-editor-popup
         id="colorPopup"
         .colors="${this.colorOptions}"
@@ -397,7 +367,52 @@ class RichTextEditor extends RichTextEditorMixin(
       ></vaadin-rich-text-editor-popup>
 
       <slot name="tooltip"></slot>
+
+      <slot name="link-dialog"></slot>
     `;
+  }
+
+  /**
+   * Override update to render slotted link dialog into light DOM after rendering shadow DOM.
+   * @param changedProperties
+   * @protected
+   */
+  update(changedProperties) {
+    super.update(changedProperties);
+
+    this.__renderLinkDialog();
+  }
+
+  /** @private */
+  __renderLinkDialog() {
+    render(
+      html`
+        <vaadin-confirm-dialog
+          slot="link-dialog"
+          cancel-button-visible
+          reject-theme="error"
+          .opened="${this._linkEditing}"
+          .header="${this.__effectiveI18n.linkDialogTitle}"
+          .confirmText="${this.__effectiveI18n.ok}"
+          .rejectText="${this.__effectiveI18n.remove}"
+          .cancelText="${this.__effectiveI18n.cancel}"
+          .rejectButtonVisible="${!!this._linkRange}"
+          @confirm="${this._onLinkEditConfirm}"
+          @cancel="${this._onLinkEditCancel}"
+          @reject="${this._onLinkEditRemove}"
+          @opened-changed="${this._onLinkEditingChanged}"
+        >
+          <vaadin-text-field
+            .value="${this._linkUrl}"
+            style="width: 100%;"
+            @keydown="${this._onLinkKeydown}"
+            @value-changed="${this._onLinkUrlChanged}"
+          ></vaadin-text-field>
+        </vaadin-confirm-dialog>
+      `,
+      this,
+      { host: this },
+    );
   }
 
   /** @private */
@@ -412,6 +427,18 @@ class RichTextEditor extends RichTextEditorMixin(
 
   /** @private */
   _onLinkEditingChanged(event) {
+    // Autofocus the URL field when the dialog opens
+    if (event.detail.value) {
+      const confirmDialog = event.target;
+      const urlField = confirmDialog.querySelector('vaadin-text-field');
+      confirmDialog.$.overlay.addEventListener(
+        'vaadin-overlay-open',
+        () => {
+          urlField.focus();
+        },
+        { once: true },
+      );
+    }
     this._linkEditing = event.detail.value;
   }
 

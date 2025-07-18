@@ -1,5 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import {
+  enter,
   esc,
   fire,
   fixtureSync,
@@ -362,12 +363,16 @@ describe('toolbar controls', () => {
 
     describe('hyperlink', () => {
       const url = 'https://vaadin.com';
-      let dialog, overlay;
+      let dialog, overlay, urlField, cancelButton, confirmButton, removeButton;
 
       beforeEach(() => {
         btn = getButton('link');
-        dialog = rte.$.linkDialog;
+        dialog = rte.querySelector('[slot="link-dialog"]');
         overlay = dialog._overlayElement;
+        urlField = dialog.querySelector('vaadin-text-field');
+        cancelButton = dialog.querySelector('[slot="cancel-button"]');
+        confirmButton = dialog.querySelector('[slot="confirm-button"]');
+        removeButton = dialog.querySelector('[slot="reject-button"]');
       });
 
       describe('dialog', () => {
@@ -377,34 +382,38 @@ describe('toolbar controls', () => {
           expect(dialog.opened).to.be.false;
         });
 
-        it('should focus whe text field when the dialog is opened', async () => {
-          const spy = sinon.spy(rte.$.linkUrl, 'focus');
+        it('should focus the text field when the dialog is opened', async () => {
           editor.focus();
           btn.click();
           await oneEvent(overlay, 'vaadin-overlay-open');
-          expect(spy.calledOnce).to.be.true;
+          expect(urlField.inputElement.matches(':focus')).to.be.true;
         });
 
         it('should confirm the dialog by pressing enter in the focused text field', async () => {
-          const spy = sinon.spy(rte.$.confirmLink, 'click');
+          rte.value = JSON.stringify([{ insert: 'Vaadin' }]);
           editor.focus();
+          editor.setSelection(0, 6);
+          flushValueDebouncer();
+
           btn.click();
           await oneEvent(overlay, 'vaadin-overlay-open');
-          const evt = new CustomEvent('keydown');
-          evt.keyCode = 13;
-          rte.$.linkUrl.dispatchEvent(evt);
-          expect(spy.calledOnce).to.be.true;
+
+          urlField.value = url;
+          enter(urlField);
+          flushValueDebouncer();
+
+          expect(rte.value).to.equal(`[{"attributes":{"link":"${url}"},"insert":"Vaadin"},{"insert":"\\n"}]`);
+          expect(dialog.opened).to.be.false;
         });
 
-        it('should focus whe editor when the dialog is cancelled', async () => {
+        it('should focus the editor when the dialog is cancelled', async () => {
           editor.focus();
           btn.click();
           await oneEvent(overlay, 'vaadin-overlay-open');
 
           const spy = sinon.spy(editor, 'focus');
-          rte.addEventListener('change', spy);
 
-          rte.$.cancelLink.click();
+          cancelButton.click();
           expect(spy.calledOnce).to.be.true;
         });
       });
@@ -426,8 +435,8 @@ describe('toolbar controls', () => {
           flushValueDebouncer();
           btn.click();
           await oneEvent(overlay, 'vaadin-overlay-open');
-          rte.$.linkUrl.value = url;
-          rte.$.confirmLink.click();
+          urlField.value = url;
+          confirmButton.click();
           flushValueDebouncer();
           expect(rte.value).to.equal(`[{"attributes":{"link":"${url}"},"insert":"Vaadin"},{"insert":"\\n"}]`);
         });
@@ -439,8 +448,8 @@ describe('toolbar controls', () => {
           editor.setSelection(0, 6);
           btn.click();
           await oneEvent(overlay, 'vaadin-overlay-open');
-          rte.$.linkUrl.value = url;
-          rte.$.confirmLink.click();
+          urlField.value = url;
+          confirmButton.click();
           flushValueDebouncer();
           expect(rte.value).to.equal(`[{"attributes":{"link":"${url}"},"insert":"Vaadin"},{"insert":"\\n"}]`);
         });
@@ -452,7 +461,7 @@ describe('toolbar controls', () => {
           editor.setSelection(0, 6);
           btn.click();
           await oneEvent(overlay, 'vaadin-overlay-open');
-          rte.$.removeLink.click();
+          removeButton.click();
           flushValueDebouncer();
           expect(rte.value).to.equal('[{"insert":"Vaadin\\n"}]');
         });
@@ -471,8 +480,8 @@ describe('toolbar controls', () => {
           editor.setSelection(0, 0);
           btn.click();
           await oneEvent(overlay, 'vaadin-overlay-open');
-          rte.$.linkUrl.value = url;
-          rte.$.confirmLink.click();
+          urlField.value = url;
+          confirmButton.click();
           flushValueDebouncer();
           expect(rte.value).to.equal(`[{"attributes":{"link":"${url}"},"insert":"${url}"},{"insert":"\\n"}]`);
         });
@@ -484,8 +493,8 @@ describe('toolbar controls', () => {
           editor.setSelection(1, 0);
           btn.click();
           await oneEvent(overlay, 'vaadin-overlay-open');
-          rte.$.linkUrl.value = url;
-          rte.$.confirmLink.click();
+          urlField.value = url;
+          confirmButton.click();
           flushValueDebouncer();
           expect(rte.value).to.equal(`[{"attributes":{"link":"${url}"},"insert":"Vaadin"},{"insert":"\\n"}]`);
         });
@@ -497,7 +506,7 @@ describe('toolbar controls', () => {
           editor.setSelection(1, 0);
           btn.click();
           await oneEvent(overlay, 'vaadin-overlay-open');
-          rte.$.removeLink.click();
+          removeButton.click();
           flushValueDebouncer();
           expect(rte.value).to.equal('[{"insert":"Vaadin\\n"}]');
         });
@@ -512,12 +521,12 @@ describe('toolbar controls', () => {
           btn.click();
           await oneEvent(overlay, 'vaadin-overlay-open');
 
-          rte.$.linkUrl.value = url;
+          urlField.value = url;
 
           const spy = sinon.spy();
           rte.addEventListener('change', spy);
 
-          rte.$.confirmLink.click();
+          confirmButton.click();
           await nextRender();
           flushValueDebouncer();
 
@@ -536,7 +545,7 @@ describe('toolbar controls', () => {
           const spy = sinon.spy();
           rte.addEventListener('change', spy);
 
-          rte.$.cancelLink.click();
+          cancelButton.click();
           await nextRender();
           flushValueDebouncer();
           expect(rte.value).to.equal(value);
