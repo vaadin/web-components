@@ -390,9 +390,16 @@ class RichTextEditor extends RichTextEditorMixin(
         <vaadin-confirm-dialog
           slot="link-dialog"
           cancel-button-visible
+          reject-theme="error"
           .opened="${this._linkEditing}"
           .header="${this.__effectiveI18n.linkDialogTitle}"
+          .confirmText="${this.__effectiveI18n.ok}"
+          .rejectText="${this.__effectiveI18n.remove}"
+          .cancelText="${this.__effectiveI18n.cancel}"
           .rejectButtonVisible="${!!this._linkRange}"
+          @confirm="${this._onLinkEditConfirm}"
+          @cancel="${this._onLinkEditCancel}"
+          @reject="${this._onLinkEditRemove}"
           @opened-changed="${this._onLinkEditingChanged}"
         >
           <vaadin-text-field
@@ -401,15 +408,6 @@ class RichTextEditor extends RichTextEditorMixin(
             @keydown="${this._onLinkKeydown}"
             @value-changed="${this._onLinkUrlChanged}"
           ></vaadin-text-field>
-          <vaadin-button slot="confirm-button" theme="primary" @click="${this._onLinkEditConfirm}">
-            ${this.__effectiveI18n.ok}
-          </vaadin-button>
-          <vaadin-button slot="reject-button" theme="error" @click="${this._onLinkEditRemove}">
-            ${this.__effectiveI18n.remove}
-          </vaadin-button>
-          <vaadin-button slot="cancel-button" @click="${this._onLinkEditCancel}">
-            ${this.__effectiveI18n.cancel}
-          </vaadin-button>
         </vaadin-confirm-dialog>
       `,
       this,
