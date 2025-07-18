@@ -306,7 +306,7 @@ export const OverlayMixin = (superClass) =>
           setTimeout(() => {
             this._trapFocus();
 
-            this.dispatchEvent(new CustomEvent('vaadin-overlay-open', { bubbles: true }));
+            this.dispatchEvent(new CustomEvent('vaadin-overlay-open', { bubbles: true, composed: true }));
           });
         });
 
