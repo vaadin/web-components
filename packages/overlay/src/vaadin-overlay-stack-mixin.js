@@ -24,6 +24,24 @@ const getAttachedInstances = () =>
 const getOverlayInstances = () => getAttachedInstances().filter((el) => el.$.overlay);
 
 /**
+ * Returns true if all the instances on top of the overlay are nested overlays.
+ * @private
+ */
+const hasOnlyNestedOverlays = (overlay) => {
+  const instances = getAttachedInstances();
+  const next = instances[instances.indexOf(overlay) + 1];
+  if (!next) {
+    return true;
+  }
+
+  if (!overlay._deepContains(next)) {
+    return false;
+  }
+
+  return hasOnlyNestedOverlays(next);
+};
+
+/**
  * Returns true if the overlay is the last one in the opened overlays stack.
  * @param {HTMLElement} overlay
  * @param {function(HTMLElement): boolean} filter
@@ -98,6 +116,13 @@ export const OverlayStackMixin = (superClass) =>
         zIndex = frontmostZIndex + 1;
       }
       this.style.zIndex = zIndex;
+
+      // If the overlay is the last one, or if all other overlays shown above
+      // are nested overlays (e.g. date-picker inside a dialog), do not call
+      // `showPopover()` unnecessarily to avoid scroll position being reset.
+      if (hasOnlyNestedOverlays(this)) {
+        return;
+      }
 
       // Update stacking order of native popover-based overlays
       if (this.matches(':popover-open')) {

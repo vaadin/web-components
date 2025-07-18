@@ -338,6 +338,41 @@ describe('multiple overlays', () => {
         const frontmost = getFrontmostOverlayFromScreenCenter();
         expect(frontmost).to.equal(modeless1);
       });
+
+      it('should not call showPopover on bringToFront if only nested overlay is open', () => {
+        modeless2.opened = true;
+        modeless1.showPopover();
+        modeless2.opened = true;
+        modeless2.showPopover();
+
+        // Mimic nested overlays case
+        modeless1.appendChild(modeless2);
+
+        const showSpy1 = sinon.spy(modeless1, 'showPopover');
+        const showSpy2 = sinon.spy(modeless2, 'showPopover');
+
+        modeless1.bringToFront();
+
+        expect(showSpy1).to.be.not.called;
+        expect(showSpy2).to.be.not.called;
+
+        expect(modeless2._last).to.be.true;
+      });
+
+      it('should not call showPopover on bringToFront for the last open overlay', () => {
+        modeless2.opened = true;
+        modeless1.showPopover();
+        modeless2.opened = true;
+        modeless2.showPopover();
+
+        const showSpy2 = sinon.spy(modeless2, 'showPopover');
+
+        modeless2.bringToFront();
+
+        expect(showSpy2).to.be.not.called;
+
+        expect(modeless2._last).to.be.true;
+      });
     });
   });
 
@@ -362,6 +397,13 @@ describe('multiple overlays', () => {
             root.appendChild(btn);
           }
         };
+        el.opened = true;
+      });
+    });
+
+    afterEach(() => {
+      overlays.forEach((el) => {
+        el.opened = false;
       });
     });
 
