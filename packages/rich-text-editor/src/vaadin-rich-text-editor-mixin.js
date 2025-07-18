@@ -419,12 +419,6 @@ export const RichTextEditorMixin = (superClass) =>
       this.$.backgroundPopup.target = this.shadowRoot.querySelector('#btn-background');
       this.$.colorPopup.target = this.shadowRoot.querySelector('#btn-color');
 
-      requestAnimationFrame(() => {
-        this.$.linkDialog.$.overlay.addEventListener('vaadin-overlay-open', () => {
-          this.$.linkUrl.focus();
-        });
-      });
-
       // Set up tooltip to show when hovering or focusing toolbar buttons
       this._tooltip = document.createElement('vaadin-tooltip');
       this._tooltip.slot = 'tooltip';
@@ -677,7 +671,8 @@ export const RichTextEditorMixin = (superClass) =>
       if (e.keyCode === 13) {
         e.preventDefault();
         e.stopPropagation();
-        this.$.confirmLink.click();
+        this._onLinkEditConfirm();
+        this._closeLinkDialog();
       }
     }
 
