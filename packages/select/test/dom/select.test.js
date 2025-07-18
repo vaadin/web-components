@@ -54,6 +54,12 @@ describe('vaadin-select', () => {
       await expect(select).dom.to.equalSnapshot();
     });
 
+    it('phone', async () => {
+      select._phone = true;
+      await nextUpdate(select);
+      await expect(select).dom.to.equalSnapshot();
+    });
+
     it('error', async () => {
       select.errorMessage = 'Error';
       select.invalid = true;

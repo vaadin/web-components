@@ -80,10 +80,10 @@ import { SelectBaseMixin } from './vaadin-select-base-mixin.js';
  *
  * The following custom properties are available for styling:
  *
- * Custom property                    | Description                  | Target element          | Default
- * -----------------------------------|------------------------------|-------------------------|--------
- * `--vaadin-field-default-width`     | Default width of the field   | :host                   | `12em`
- * `--vaadin-select-overlay-width`    | Width of the overlay         | `vaadin-select-overlay` |
+ * Custom property                  | Description                 | Default
+ * ---------------------------------|-----------------------------|--------
+ * `--vaadin-field-default-width`   | Default width of the field  | `12em`
+ * `--vaadin-select-overlay-width`  | Width of the overlay        |
  *
  * `<vaadin-select>` provides mostly the same set of shadow DOM parts and state attributes as `<vaadin-text-field>`.
  * See [`<vaadin-text-field>`](#/elements/vaadin-text-field) for the styling documentation.
@@ -91,15 +91,19 @@ import { SelectBaseMixin } from './vaadin-select-base-mixin.js';
  *
  * In addition to `<vaadin-text-field>` parts, the following parts are available for theming:
  *
- * Part name       | Description
- * ----------------|----------------
- * `toggle-button` | The toggle button
+ * Part name        | Description
+ * -----------------|----------------
+ * `toggle-button`  | The toggle button
+ * `backdrop`       | Backdrop of the overlay
+ * `overlay`        | The overlay container
+ * `content`        | The overlay content
  *
  * In addition to `<vaadin-text-field>` state attributes, the following state attributes are available for theming:
  *
- * Attribute | Description                 | Part name
- * ----------|-----------------------------|-----------
- * `opened`  | Set when the select is open | :host
+ * Attribute | Description
+ * ----------|-----------------------------
+ * `opened`  | Set when the select is open
+ * `phone`   | Set when the overlay is shown in phone mode
  *
  * There are two exceptions in terms of styling compared to `<vaadin-text-field>`:
  * - the `clear-button` shadow DOM part does not exist in `<vaadin-select>`.
@@ -173,6 +177,7 @@ class Select extends SelectBaseMixin(ElementMixin(ThemableMixin(PolylitMixin(Lum
 
       <vaadin-select-overlay
         id="overlay"
+        popover="manual"
         .owner="${this}"
         .positionTarget="${this._inputContainer}"
         .opened="${this.opened}"
@@ -181,9 +186,12 @@ class Select extends SelectBaseMixin(ElementMixin(ThemableMixin(PolylitMixin(Lum
         ?phone="${this._phone}"
         theme="${ifDefined(this._theme)}"
         ?no-vertical-overlap="${this.noVerticalOverlap}"
+        exportparts="backdrop, overlay, content"
         @opened-changed="${this._onOpenedChanged}"
         @vaadin-overlay-open="${this._onOverlayOpen}"
-      ></vaadin-select-overlay>
+      >
+        <slot name="overlay"></slot>
+      </vaadin-select-overlay>
 
       <slot name="tooltip"></slot>
       <div class="sr-only">

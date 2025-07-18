@@ -3,6 +3,27 @@ export const snapshots = {};
 
 snapshots["vaadin-select host default"] = 
 `<vaadin-select>
+  <div slot="overlay">
+    <vaadin-select-list-box
+      aria-orientation="vertical"
+      role="listbox"
+    >
+      <vaadin-select-item
+        aria-selected="false"
+        role="option"
+        tabindex="0"
+      >
+        Option 1
+      </vaadin-select-item>
+      <vaadin-select-item
+        aria-selected="false"
+        role="option"
+        tabindex="-1"
+      >
+        Option 2
+      </vaadin-select-item>
+    </vaadin-select-list-box>
+  </div>
   <label
     id="label-vaadin-select-0"
     slot="label"
@@ -33,6 +54,27 @@ snapshots["vaadin-select host default"] =
 
 snapshots["vaadin-select host label"] = 
 `<vaadin-select has-label="">
+  <div slot="overlay">
+    <vaadin-select-list-box
+      aria-orientation="vertical"
+      role="listbox"
+    >
+      <vaadin-select-item
+        aria-selected="false"
+        role="option"
+        tabindex="0"
+      >
+        Option 1
+      </vaadin-select-item>
+      <vaadin-select-item
+        aria-selected="false"
+        role="option"
+        tabindex="-1"
+      >
+        Option 2
+      </vaadin-select-item>
+    </vaadin-select-list-box>
+  </div>
   <label
     id="label-vaadin-select-0"
     slot="label"
@@ -65,6 +107,27 @@ snapshots["vaadin-select host label"] =
 
 snapshots["vaadin-select host placeholder"] = 
 `<vaadin-select>
+  <div slot="overlay">
+    <vaadin-select-list-box
+      aria-orientation="vertical"
+      role="listbox"
+    >
+      <vaadin-select-item
+        aria-selected="false"
+        role="option"
+        tabindex="0"
+      >
+        Option 1
+      </vaadin-select-item>
+      <vaadin-select-item
+        aria-selected="false"
+        role="option"
+        tabindex="-1"
+      >
+        Option 2
+      </vaadin-select-item>
+    </vaadin-select-list-box>
+  </div>
   <label
     id="label-vaadin-select-0"
     slot="label"
@@ -103,6 +166,27 @@ snapshots["vaadin-select host disabled"] =
   aria-disabled="true"
   disabled=""
 >
+  <div slot="overlay">
+    <vaadin-select-list-box
+      aria-orientation="vertical"
+      role="listbox"
+    >
+      <vaadin-select-item
+        aria-selected="false"
+        role="option"
+        tabindex="0"
+      >
+        Option 1
+      </vaadin-select-item>
+      <vaadin-select-item
+        aria-selected="false"
+        role="option"
+        tabindex="-1"
+      >
+        Option 2
+      </vaadin-select-item>
+    </vaadin-select-list-box>
+  </div>
   <label
     id="label-vaadin-select-0"
     slot="label"
@@ -135,6 +219,27 @@ snapshots["vaadin-select host disabled"] =
 
 snapshots["vaadin-select host required"] = 
 `<vaadin-select required="">
+  <div slot="overlay">
+    <vaadin-select-list-box
+      aria-orientation="vertical"
+      role="listbox"
+    >
+      <vaadin-select-item
+        aria-selected="false"
+        role="option"
+        tabindex="0"
+      >
+        Option 1
+      </vaadin-select-item>
+      <vaadin-select-item
+        aria-selected="false"
+        role="option"
+        tabindex="-1"
+      >
+        Option 2
+      </vaadin-select-item>
+    </vaadin-select-list-box>
+  </div>
   <label
     id="label-vaadin-select-0"
     slot="label"
@@ -166,6 +271,29 @@ snapshots["vaadin-select host required"] =
 
 snapshots["vaadin-select host value"] = 
 `<vaadin-select has-value="">
+  <div slot="overlay">
+    <vaadin-select-list-box
+      aria-orientation="vertical"
+      role="listbox"
+      selected="0"
+    >
+      <vaadin-select-item
+        aria-selected="true"
+        role="option"
+        selected=""
+        tabindex="0"
+      >
+        Option 1
+      </vaadin-select-item>
+      <vaadin-select-item
+        aria-selected="false"
+        role="option"
+        tabindex="-1"
+      >
+        Option 2
+      </vaadin-select-item>
+    </vaadin-select-list-box>
+  </div>
   <label
     id="label-vaadin-select-0"
     slot="label"
@@ -203,6 +331,27 @@ snapshots["vaadin-select host value"] =
 
 snapshots["vaadin-select host helper"] = 
 `<vaadin-select has-helper="">
+  <div slot="overlay">
+    <vaadin-select-list-box
+      aria-orientation="vertical"
+      role="listbox"
+    >
+      <vaadin-select-item
+        aria-selected="false"
+        role="option"
+        tabindex="0"
+      >
+        Option 1
+      </vaadin-select-item>
+      <vaadin-select-item
+        aria-selected="false"
+        role="option"
+        tabindex="-1"
+      >
+        Option 2
+      </vaadin-select-item>
+    </vaadin-select-list-box>
+  </div>
   <label
     id="label-vaadin-select-0"
     slot="label"
@@ -238,11 +387,86 @@ snapshots["vaadin-select host helper"] =
 `;
 /* end snapshot vaadin-select host helper */
 
+snapshots["vaadin-select host phone"] = 
+`<vaadin-select
+  phone=""
+  with-backdrop=""
+>
+  <div slot="overlay">
+    <vaadin-select-list-box
+      aria-orientation="vertical"
+      role="listbox"
+    >
+      <vaadin-select-item
+        aria-selected="false"
+        role="option"
+        tabindex="0"
+      >
+        Option 1
+      </vaadin-select-item>
+      <vaadin-select-item
+        aria-selected="false"
+        role="option"
+        tabindex="-1"
+      >
+        Option 2
+      </vaadin-select-item>
+    </vaadin-select-list-box>
+  </div>
+  <label
+    id="label-vaadin-select-0"
+    slot="label"
+  >
+  </label>
+  <div
+    hidden=""
+    id="error-message-vaadin-select-2"
+    slot="error-message"
+  >
+  </div>
+  <vaadin-select-value-button
+    aria-expanded="false"
+    aria-haspopup="listbox"
+    role="button"
+    slot="value"
+    tabindex="0"
+  >
+  </vaadin-select-value-button>
+  <label
+    id="label-vaadin-select-4"
+    slot="sr-label"
+  >
+  </label>
+</vaadin-select>
+`;
+/* end snapshot vaadin-select host phone */
+
 snapshots["vaadin-select host error"] = 
 `<vaadin-select
   has-error-message=""
   invalid=""
 >
+  <div slot="overlay">
+    <vaadin-select-list-box
+      aria-orientation="vertical"
+      role="listbox"
+    >
+      <vaadin-select-item
+        aria-selected="false"
+        role="option"
+        tabindex="0"
+      >
+        Option 1
+      </vaadin-select-item>
+      <vaadin-select-item
+        aria-selected="false"
+        role="option"
+        tabindex="-1"
+      >
+        Option 2
+      </vaadin-select-item>
+    </vaadin-select-list-box>
+  </div>
   <label
     id="label-vaadin-select-0"
     slot="label"
@@ -280,6 +504,29 @@ snapshots["vaadin-select host opened default"] =
   start-aligned=""
   top-aligned=""
 >
+  <div slot="overlay">
+    <vaadin-select-list-box
+      aria-orientation="vertical"
+      role="listbox"
+    >
+      <vaadin-select-item
+        aria-selected="false"
+        focus-ring=""
+        focused=""
+        role="option"
+        tabindex="0"
+      >
+        Option 1
+      </vaadin-select-item>
+      <vaadin-select-item
+        aria-selected="false"
+        role="option"
+        tabindex="-1"
+      >
+        Option 2
+      </vaadin-select-item>
+    </vaadin-select-list-box>
+  </div>
   <label
     id="label-vaadin-select-0"
     slot="label"
@@ -310,32 +557,15 @@ snapshots["vaadin-select host opened default"] =
 
 snapshots["vaadin-select host opened overlay"] = 
 `<vaadin-select-overlay
+  exportparts="backdrop, overlay, content"
   id="overlay"
   opened=""
+  popover="manual"
   start-aligned=""
   top-aligned=""
 >
-  <vaadin-select-list-box
-    aria-orientation="vertical"
-    role="listbox"
-  >
-    <vaadin-select-item
-      aria-selected="false"
-      focus-ring=""
-      focused=""
-      role="option"
-      tabindex="0"
-    >
-      Option 1
-    </vaadin-select-item>
-    <vaadin-select-item
-      aria-selected="false"
-      role="option"
-      tabindex="-1"
-    >
-      Option 2
-    </vaadin-select-item>
-  </vaadin-select-list-box>
+  <slot name="overlay">
+  </slot>
 </vaadin-select-overlay>
 `;
 /* end snapshot vaadin-select host opened overlay */
@@ -343,32 +573,15 @@ snapshots["vaadin-select host opened overlay"] =
 snapshots["vaadin-select host opened overlay class"] = 
 `<vaadin-select-overlay
   class="custom select-overlay"
+  exportparts="backdrop, overlay, content"
   id="overlay"
   opened=""
+  popover="manual"
   start-aligned=""
   top-aligned=""
 >
-  <vaadin-select-list-box
-    aria-orientation="vertical"
-    role="listbox"
-  >
-    <vaadin-select-item
-      aria-selected="false"
-      focus-ring=""
-      focused=""
-      role="option"
-      tabindex="0"
-    >
-      Option 1
-    </vaadin-select-item>
-    <vaadin-select-item
-      aria-selected="false"
-      role="option"
-      tabindex="-1"
-    >
-      Option 2
-    </vaadin-select-item>
-  </vaadin-select-list-box>
+  <slot name="overlay">
+  </slot>
 </vaadin-select-overlay>
 `;
 /* end snapshot vaadin-select host opened overlay class */
@@ -408,26 +621,13 @@ snapshots["vaadin-select shadow default"] =
     </slot>
   </div>
 </div>
-<vaadin-select-overlay id="overlay">
-  <vaadin-select-list-box
-    aria-orientation="vertical"
-    role="listbox"
-  >
-    <vaadin-select-item
-      aria-selected="false"
-      role="option"
-      tabindex="0"
-    >
-      Option 1
-    </vaadin-select-item>
-    <vaadin-select-item
-      aria-selected="false"
-      role="option"
-      tabindex="-1"
-    >
-      Option 2
-    </vaadin-select-item>
-  </vaadin-select-list-box>
+<vaadin-select-overlay
+  exportparts="backdrop, overlay, content"
+  id="overlay"
+  popover="manual"
+>
+  <slot name="overlay">
+  </slot>
 </vaadin-select-overlay>
 <slot name="tooltip">
 </slot>
@@ -476,26 +676,13 @@ snapshots["vaadin-select shadow disabled"] =
     </slot>
   </div>
 </div>
-<vaadin-select-overlay id="overlay">
-  <vaadin-select-list-box
-    aria-orientation="vertical"
-    role="listbox"
-  >
-    <vaadin-select-item
-      aria-selected="false"
-      role="option"
-      tabindex="0"
-    >
-      Option 1
-    </vaadin-select-item>
-    <vaadin-select-item
-      aria-selected="false"
-      role="option"
-      tabindex="-1"
-    >
-      Option 2
-    </vaadin-select-item>
-  </vaadin-select-list-box>
+<vaadin-select-overlay
+  exportparts="backdrop, overlay, content"
+  id="overlay"
+  popover="manual"
+>
+  <slot name="overlay">
+  </slot>
 </vaadin-select-overlay>
 <slot name="tooltip">
 </slot>
@@ -544,26 +731,13 @@ snapshots["vaadin-select shadow readonly"] =
     </slot>
   </div>
 </div>
-<vaadin-select-overlay id="overlay">
-  <vaadin-select-list-box
-    aria-orientation="vertical"
-    role="listbox"
-  >
-    <vaadin-select-item
-      aria-selected="false"
-      role="option"
-      tabindex="0"
-    >
-      Option 1
-    </vaadin-select-item>
-    <vaadin-select-item
-      aria-selected="false"
-      role="option"
-      tabindex="-1"
-    >
-      Option 2
-    </vaadin-select-item>
-  </vaadin-select-list-box>
+<vaadin-select-overlay
+  exportparts="backdrop, overlay, content"
+  id="overlay"
+  popover="manual"
+>
+  <slot name="overlay">
+  </slot>
 </vaadin-select-overlay>
 <slot name="tooltip">
 </slot>
@@ -612,26 +786,13 @@ snapshots["vaadin-select shadow invalid"] =
     </slot>
   </div>
 </div>
-<vaadin-select-overlay id="overlay">
-  <vaadin-select-list-box
-    aria-orientation="vertical"
-    role="listbox"
-  >
-    <vaadin-select-item
-      aria-selected="false"
-      role="option"
-      tabindex="0"
-    >
-      Option 1
-    </vaadin-select-item>
-    <vaadin-select-item
-      aria-selected="false"
-      role="option"
-      tabindex="-1"
-    >
-      Option 2
-    </vaadin-select-item>
-  </vaadin-select-list-box>
+<vaadin-select-overlay
+  exportparts="backdrop, overlay, content"
+  id="overlay"
+  popover="manual"
+>
+  <slot name="overlay">
+  </slot>
 </vaadin-select-overlay>
 <slot name="tooltip">
 </slot>
@@ -681,28 +842,13 @@ snapshots["vaadin-select shadow theme"] =
   </div>
 </div>
 <vaadin-select-overlay
+  exportparts="backdrop, overlay, content"
   id="overlay"
+  popover="manual"
   theme="align-right"
 >
-  <vaadin-select-list-box
-    aria-orientation="vertical"
-    role="listbox"
-  >
-    <vaadin-select-item
-      aria-selected="false"
-      role="option"
-      tabindex="0"
-    >
-      Option 1
-    </vaadin-select-item>
-    <vaadin-select-item
-      aria-selected="false"
-      role="option"
-      tabindex="-1"
-    >
-      Option 2
-    </vaadin-select-item>
-  </vaadin-select-list-box>
+  <slot name="overlay">
+  </slot>
 </vaadin-select-overlay>
 <slot name="tooltip">
 </slot>

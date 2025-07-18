@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
-import { sendKeys } from '@vaadin/test-runner-commands';
-import { fixtureSync, nextRender, nextUpdate, outsideClick } from '@vaadin/testing-helpers';
+import { sendKeys, sendMouseToElement } from '@vaadin/test-runner-commands';
+import { fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './not-animated-styles.js';
 import '../src/vaadin-select.js';
@@ -47,7 +47,7 @@ describe('validation', () => {
       select.click();
       await nextRender();
 
-      outsideClick();
+      await sendMouseToElement({ element: document.body, type: 'click' });
       await nextUpdate(select);
       expect(validateSpy.calledOnce).to.be.true;
     });

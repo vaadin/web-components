@@ -204,6 +204,15 @@ export const SelectBaseMixin = (superClass) =>
       this.addController(this._tooltipController);
     }
 
+    /** @protected */
+    updated(props) {
+      super.updated(props);
+
+      if (props.has('_phone')) {
+        this.toggleAttribute('phone', this._phone);
+      }
+    }
+
     /**
      * Requests an update for the content of the select.
      * While performing the update, it invokes the renderer passed in the `renderer` property.
@@ -216,10 +225,6 @@ export const SelectBaseMixin = (superClass) =>
       }
 
       this._overlayElement.requestContentUpdate();
-
-      if (this._menuElement && this._menuElement.items) {
-        this._updateSelectedItem(this.value, this._menuElement.items);
-      }
     }
 
     /**
@@ -279,6 +284,12 @@ export const SelectBaseMixin = (superClass) =>
 
         // Store the menu element reference
         this.__lastMenuElement = menuElement;
+      }
+
+      // When the renderer was re-assigned so that menu element is preserved
+      // but its items have changed, make sure selected property is updated.
+      if (this._menuElement && this._menuElement.items) {
+        this._updateSelectedItem(this.value, this._menuElement.items);
       }
     }
 
@@ -361,8 +372,16 @@ export const SelectBaseMixin = (superClass) =>
      * @protected
      */
     _onKeyDownInside(e) {
-      if (/^(Tab)$/u.test(e.key)) {
+      if (e.key === 'Tab') {
+        // Temporarily set tabindex to prevent moving focus
+        // to the value button element on item Shift + Tab
+        this.focusElement.setAttribute('tabindex', '-1');
+        this._overlayElement.restoreFocusOnClose = false;
         this.opened = false;
+        setTimeout(() => {
+          this.focusElement.setAttribute('tabindex', '0');
+          this._overlayElement.restoreFocusOnClose = true;
+        });
       }
     }
 
@@ -585,8 +604,8 @@ export const SelectBaseMixin = (superClass) =>
      * @protected
      * @override
      */
-    _shouldRemoveFocus() {
-      return !this.opened;
+    _shouldRemoveFocus(event) {
+      return !this.contains(event.relatedTarget);
     }
 
     /**
