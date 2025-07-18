@@ -363,11 +363,13 @@ export const NotificationMixin = (superClass) =>
       this._container.bringToFront();
 
       this._card.slot = this.position;
-      if (this._container.firstElementChild && /top/u.test(this.position)) {
-        this._container.insertBefore(this._card, this._container.firstElementChild);
+      if (this._container.firstElementChild && this.position.startsWith('top')) {
+        this._container.prepend(this._card);
       } else {
-        this._container.appendChild(this._card);
+        this._container.append(this._card);
       }
+
+      this._updateCardOrder(this.position);
     }
 
     /** @private */
@@ -378,6 +380,7 @@ export const NotificationMixin = (superClass) =>
 
       if (this._card.parentNode) {
         this._card.parentNode.removeChild(this._card);
+        this._updateCardOrder(this._card.slot);
       }
       this._card.removeAttribute('closing');
       this._container.opened = Boolean(this._container.firstElementChild);
@@ -424,6 +427,13 @@ export const NotificationMixin = (superClass) =>
           this._durationTimeoutId = setTimeout(() => this.close(), duration);
         }
       }
+    }
+
+    /** @private */
+    _updateCardOrder(position) {
+      this._container.querySelectorAll(`[slot="${position}"]`).forEach((card, i, cards) => {
+        card.style.setProperty('--order', this.position.startsWith('top') ? i + 1 : cards.length - i);
+      });
     }
 
     /**
