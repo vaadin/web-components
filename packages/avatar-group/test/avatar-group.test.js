@@ -101,8 +101,7 @@ describe('avatar-group', () => {
       const overflow = group._overflow;
       const items = group.items;
       const tooltip = overflow.querySelector('vaadin-tooltip');
-      const overlay = tooltip.shadowRoot.querySelector('vaadin-tooltip-overlay');
-      expect(overlay.textContent).to.equal([items[2].name, items[3].abbr, 'anonymous'].join('\n'));
+      expect(tooltip.textContent).to.equal([items[2].name, items[3].abbr, 'anonymous'].join('\n'));
     });
 
     it('should show overflow avatar when maxItemsVisible is less than items count', () => {

@@ -678,6 +678,7 @@ export const MenuBarMixin = (superClass) =>
     _hideTooltip(immediate) {
       const tooltip = this._tooltipController && this._tooltipController.node;
       if (tooltip) {
+        this._tooltipController.setContext({ item: null });
         tooltip._stateController.close(immediate);
       }
     }

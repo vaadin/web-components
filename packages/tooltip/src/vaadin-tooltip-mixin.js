@@ -330,7 +330,6 @@ export const TooltipMixin = (superClass) =>
          */
         text: {
           type: String,
-          observer: '__textChanged',
         },
 
         /**
@@ -366,24 +365,7 @@ export const TooltipMixin = (superClass) =>
           type: Boolean,
           sync: true,
         },
-
-        /** @private */
-        _srLabel: {
-          type: Object,
-        },
-
-        /** @private */
-        _overlayContent: {
-          type: String,
-        },
       };
-    }
-
-    static get observers() {
-      return [
-        '__generatorChanged(_overlayElement, generator, context)',
-        '__updateSrLabelText(_srLabel, _overlayContent)',
-      ];
     }
 
     /**
@@ -420,7 +402,6 @@ export const TooltipMixin = (superClass) =>
       super();
 
       this._uniqueId = `vaadin-tooltip-${generateUniqueId()}`;
-      this._renderer = this.__tooltipRenderer.bind(this);
 
       this.__onFocusin = this.__onFocusin.bind(this);
       this.__onFocusout = this.__onFocusout.bind(this);
@@ -467,19 +448,24 @@ export const TooltipMixin = (superClass) =>
 
       this._overlayElement = this.$.overlay;
 
-      this._srLabelController = new SlotController(this, 'sr-label', 'div', {
+      this.__contentController = new SlotController(this, 'overlay', 'div', {
         initializer: (element) => {
           element.id = this._uniqueId;
           element.setAttribute('role', 'tooltip');
-          this._srLabel = element;
+          this.__contentNode = element;
         },
       });
-      this.addController(this._srLabelController);
+      this.addController(this.__contentController);
     }
 
-    /** @private */
-    __computeOpened(manual, opened, autoOpened, connected) {
-      return connected && (manual ? opened : autoOpened);
+    /** @protected */
+    updated(props) {
+      super.updated(props);
+
+      if (props.has('text') || props.has('generator') || props.has('context')) {
+        this.__updateContent();
+        this.$.overlay.toggleAttribute('hidden', this.__contentNode.textContent.trim() === '');
+      }
     }
 
     /** @private */
@@ -688,18 +674,8 @@ export const TooltipMixin = (superClass) =>
     }
 
     /** @private */
-    __textChanged(text, oldText) {
-      if (this._overlayElement && (text || oldText)) {
-        this._overlayElement.requestContentUpdate();
-      }
-    }
-
-    /** @private */
-    __tooltipRenderer(root) {
-      root.textContent = typeof this.generator === 'function' ? this.generator(this.context) : this.text;
-
-      // Update the sr-only label text content
-      this._overlayContent = root.textContent;
+    __updateContent() {
+      this.__contentNode.textContent = typeof this.generator === 'function' ? this.generator(this.context) : this.text;
     }
 
     /** @private */
@@ -721,25 +697,6 @@ export const TooltipMixin = (superClass) =>
         [ariaTarget].flat().forEach((target) => {
           addValueToAttribute(target, 'aria-describedby', this._uniqueId);
         });
-      }
-    }
-
-    /** @private */
-    __generatorChanged(overlayElement, generator, context) {
-      if (overlayElement) {
-        if (generator !== this.__oldTextGenerator || context !== this.__oldContext) {
-          overlayElement.requestContentUpdate();
-        }
-
-        this.__oldTextGenerator = generator;
-        this.__oldContext = context;
-      }
-    }
-
-    /** @private */
-    __updateSrLabelText(srLabel, textContent) {
-      if (srLabel) {
-        srLabel.textContent = textContent;
       }
     }
   };
