@@ -521,7 +521,7 @@ export const GridMixin = (superClass) =>
               row.appendChild(detailsCell);
               // Cache the details cell reference
               row.__detailsCell = detailsCell;
-              this._a11ySetRowDetailsCell(row, detailsCell);
+              this.__a11ySetRowDetailsCell(row, detailsCell);
               detailsCell._vacant = false;
             }
 
@@ -644,7 +644,7 @@ export const GridMixin = (superClass) =>
 
       this._updateRowOrderParts(row, index);
 
-      this._a11yUpdateRowRowindex(row, index);
+      this.__a11yUpdateRowRowindex(row, index);
 
       this.__ensureRowItem(row);
       this.__ensureRowHierarchy(row);
@@ -738,8 +738,8 @@ export const GridMixin = (superClass) =>
       this._frozenCellsChanged();
       this._updateFirstAndLastColumn();
       this._resetKeyboardNavigation();
-      this._a11yUpdateHeaderRows();
-      this._a11yUpdateFooterRows();
+      this.__a11yUpdateHeaderRows();
+      this.__a11yUpdateFooterRows();
       this.generateCellClassNames();
       this.generateCellPartNames();
       this.__updateHeaderAndFooter();
@@ -784,8 +784,8 @@ export const GridMixin = (superClass) =>
 
       this._toggleDetailsCell(row, model.detailsOpened);
 
-      this._a11yUpdateRowLevel(row, model.level);
-      this._a11yUpdateRowSelected(row, model.selected);
+      this.__a11yUpdateRowLevel(row, model.level);
+      this.__a11yUpdateRowSelected(row, model.selected);
 
       this._updateRowStateParts(row, model);
 
@@ -806,7 +806,7 @@ export const GridMixin = (superClass) =>
 
       this._updateDetailsCellHeight(row);
 
-      this._a11yUpdateRowExpanded(row, model.expanded);
+      this.__a11yUpdateRowExpanded(row, model.expanded);
     }
 
     /** @private */
