@@ -48,6 +48,22 @@ export class TimePickerOverlay extends ComboBoxOverlayMixin(
   }
 
   /**
+   * @protected
+   * @override
+   */
+  _attachOverlay() {
+    this.showPopover();
+  }
+
+  /**
+   * @protected
+   * @override
+   */
+  _detachOverlay() {
+    this.hidePopover();
+  }
+
+  /**
    * Override method from `ComboBoxOverlayMixin` to enforce
    * `dir` attribute to be set to `ltr` on the overlay.
    * @protected

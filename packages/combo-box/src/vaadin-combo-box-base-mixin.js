@@ -252,6 +252,18 @@ export const ComboBoxBaseMixin = (superClass) =>
       scroller.getItemLabel = this._getItemLabel.bind(this);
       scroller.addEventListener('selection-changed', this._boundOverlaySelectedItemChanged);
 
+      this._renderScroller(scroller);
+
+      this._scroller = scroller;
+    }
+
+    /**
+     * Render the scroller element to the overlay.
+     * Override to provide custom logic (e.g. setting "slot").
+     *
+     * @protected
+     */
+    _renderScroller(scroller) {
       const overlay = this.$.overlay;
 
       overlay.renderer = (root) => {
@@ -262,8 +274,6 @@ export const ComboBoxBaseMixin = (superClass) =>
 
       // Ensure the scroller is rendered
       overlay.requestContentUpdate();
-
-      this._scroller = scroller;
     }
 
     /**
