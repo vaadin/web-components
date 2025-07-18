@@ -2096,62 +2096,64 @@
   dependencies:
     "@vaadin/vaadin-development-mode-detector" "^2.0.0"
 
-"@wdio/config@9.6.4":
-  version "9.6.4"
-  resolved "https://registry.yarnpkg.com/@wdio/config/-/config-9.6.4.tgz#9765ea4e959532865e8dcbc09ea5af295b480a9b"
-  integrity sha512-oTNXVVzaZ0qaM7oX8tyS3YBr4A3ij2py3Umew3ez0IS2vHpRs1LvLfVWoHRSqrhJIVnfjV3+zqcl9BWALNVD/g==
+"@wdio/config@9.18.0":
+  version "9.18.0"
+  resolved "https://registry.yarnpkg.com/@wdio/config/-/config-9.18.0.tgz#e91fa20a8592fcbafe60fa2f33326c14c2f7e0f4"
+  integrity sha512-fN+Z7SkKjb0u3UUMSxMN4d+CCZQKZhm/tx3eX7Rv+3T78LtpOjlesBYQ7Ax3tQ3tp8hgEo+CoOXU0jHEYubFrg==
   dependencies:
-    "@wdio/logger" "9.4.4"
-    "@wdio/types" "9.6.3"
-    "@wdio/utils" "9.6.4"
+    "@wdio/logger" "9.18.0"
+    "@wdio/types" "9.16.2"
+    "@wdio/utils" "9.18.0"
     deepmerge-ts "^7.0.3"
     glob "^10.2.2"
     import-meta-resolve "^4.0.0"
 
-"@wdio/logger@9.4.4", "@wdio/logger@^9.1.3":
-  version "9.4.4"
-  resolved "https://registry.yarnpkg.com/@wdio/logger/-/logger-9.4.4.tgz#e4851256a076e2b9401f45caaa7a34d6f0278d4a"
-  integrity sha512-BXx8RXFUW2M4dcO6t5Le95Hi2ZkTQBRsvBQqLekT2rZ6Xmw8ZKZBPf0FptnoftFGg6dYmwnDidYv/0+4PiHjpQ==
+"@wdio/logger@9.18.0", "@wdio/logger@^9.1.3":
+  version "9.18.0"
+  resolved "https://registry.yarnpkg.com/@wdio/logger/-/logger-9.18.0.tgz#4a288ae8628ba6031ebee18f9eb7375f22c23111"
+  integrity sha512-HdzDrRs+ywAqbXGKqe1i/bLtCv47plz4TvsHFH3j729OooT5VH38ctFn5aLXgECmiAKDkmH/A6kOq2Zh5DIxww==
   dependencies:
     chalk "^5.1.2"
     loglevel "^1.6.0"
     loglevel-plugin-prefix "^0.8.4"
+    safe-regex2 "^5.0.0"
     strip-ansi "^7.1.0"
 
-"@wdio/protocols@9.7.0":
-  version "9.7.0"
-  resolved "https://registry.yarnpkg.com/@wdio/protocols/-/protocols-9.7.0.tgz#2f2c0a7e371d65305e0d64980f63caa98ba5a4de"
-  integrity sha512-5DI8cqJqT9K6oQn8UpaSTmcGAl4ufkUWC5FoPT3oXdLjILfxvweZDf/2XNBCbGMk4+VOMKqB2ofOqKhDIB2nAg==
+"@wdio/protocols@9.16.2":
+  version "9.16.2"
+  resolved "https://registry.yarnpkg.com/@wdio/protocols/-/protocols-9.16.2.tgz#4bc70c4380fc477413bcecf64f900a876fe143e8"
+  integrity sha512-h3k97/lzmyw5MowqceAuY3HX/wGJojXHkiPXA3WlhGPCaa2h4+GovV2nJtRvknCKsE7UHA1xB5SWeI8MzloBew==
 
-"@wdio/repl@9.4.4":
-  version "9.4.4"
-  resolved "https://registry.yarnpkg.com/@wdio/repl/-/repl-9.4.4.tgz#47a5393e908990a3ba34da8561cd87b8fd1a2c1a"
-  integrity sha512-kchPRhoG/pCn4KhHGiL/ocNhdpR8OkD2e6sANlSUZ4TGBVi86YSIEjc2yXUwLacHknC/EnQk/SFnqd4MsNjGGg==
+"@wdio/repl@9.16.2":
+  version "9.16.2"
+  resolved "https://registry.yarnpkg.com/@wdio/repl/-/repl-9.16.2.tgz#3eb57745147e62eeb9fabd4ae5f839dad93f192a"
+  integrity sha512-FLTF0VL6+o5BSTCO7yLSXocm3kUnu31zYwzdsz4n9s5YWt83sCtzGZlZpt7TaTzb3jVUfxuHNQDTb8UMkCu0lQ==
   dependencies:
     "@types/node" "^20.1.0"
 
-"@wdio/types@9.6.3":
-  version "9.6.3"
-  resolved "https://registry.yarnpkg.com/@wdio/types/-/types-9.6.3.tgz#2fbbb5fcdec32f9d9953ee9d73c659052c0fb6b1"
-  integrity sha512-K3Lu7K5g5bsUcQV6/95XaS3jMwcGUn2pDdryYibKZafklhHjVt3o/xnw6Vgd/JzoSneCKHdwj941n+yDpTJHAw==
+"@wdio/types@9.16.2":
+  version "9.16.2"
+  resolved "https://registry.yarnpkg.com/@wdio/types/-/types-9.16.2.tgz#1d27568b41acde83cfc78621677744ed9894a676"
+  integrity sha512-P86FvM/4XQGpJKwlC2RKF3I21TglPvPOozJGG9HoL0Jmt6jRF20ggO/nRTxU0XiWkRdqESUTmfA87bdCO4GRkQ==
   dependencies:
     "@types/node" "^20.1.0"
 
-"@wdio/utils@9.6.4":
-  version "9.6.4"
-  resolved "https://registry.yarnpkg.com/@wdio/utils/-/utils-9.6.4.tgz#534fd67e0b0c4be85b8c5379a9e79e64aa05bc1d"
-  integrity sha512-FMI/F5ju0h0HKC4RRQKW/H9So2cgtK6dd0JCmVdBzQ+/LMluEzlZmQva14HYmNd2t2ZmejYRqAJPV3aAsMAMZA==
+"@wdio/utils@9.18.0":
+  version "9.18.0"
+  resolved "https://registry.yarnpkg.com/@wdio/utils/-/utils-9.18.0.tgz#647711de454158c5b8d2e9bb1d062de6e6041607"
+  integrity sha512-M+QH05FUw25aFXZfjb+V16ydKoURgV61zeZrMjQdW2aAiks3F5iiI9pgqYT5kr1kHZcMy8gawGqQQ+RVfKYscQ==
   dependencies:
     "@puppeteer/browsers" "^2.2.0"
-    "@wdio/logger" "9.4.4"
-    "@wdio/types" "9.6.3"
+    "@wdio/logger" "9.18.0"
+    "@wdio/types" "9.16.2"
     decamelize "^6.0.0"
     deepmerge-ts "^7.0.3"
-    edgedriver "^6.1.1"
+    edgedriver "^6.1.2"
     geckodriver "^5.0.0"
     get-port "^7.0.0"
     import-meta-resolve "^4.0.0"
     locate-app "^2.2.24"
+    mitt "^3.0.1"
     safaridriver "^1.0.0"
     split2 "^4.2.0"
     wait-port "^1.1.0"
@@ -4358,16 +4360,16 @@ edge-paths@^3.0.5:
     "@types/which" "^2.0.1"
     which "^2.0.2"
 
-edgedriver@^6.1.1:
-  version "6.1.1"
-  resolved "https://registry.yarnpkg.com/edgedriver/-/edgedriver-6.1.1.tgz#9374160a0aa1bab48d3ed21dc7af8f6fe2c3103f"
-  integrity sha512-/dM/PoBf22Xg3yypMWkmRQrBKEnSyNaZ7wHGCT9+qqT14izwtFT+QvdR89rjNkMfXwW+bSFoqOfbcvM+2Cyc7w==
+edgedriver@^6.1.2:
+  version "6.1.2"
+  resolved "https://registry.yarnpkg.com/edgedriver/-/edgedriver-6.1.2.tgz#f9bd737189bdfaa1c3bd9798c6f41526009449cf"
+  integrity sha512-UvFqd/IR81iPyWMcxXbUNi+xKWR7JjfoHjfuwjqsj9UHQKn80RpQmS0jf+U25IPi+gKVPcpOSKm0XkqgGMq4zQ==
   dependencies:
     "@wdio/logger" "^9.1.3"
     "@zip.js/zip.js" "^2.7.53"
     decamelize "^6.0.0"
     edge-paths "^3.0.5"
-    fast-xml-parser "^4.5.0"
+    fast-xml-parser "^5.0.8"
     http-proxy-agent "^7.0.2"
     https-proxy-agent "^7.0.5"
     node-fetch "^3.3.2"
@@ -5157,12 +5159,19 @@ fast-levenshtein@^3.0.0:
   dependencies:
     fastest-levenshtein "^1.0.7"
 
-fast-xml-parser@^4.1.3, fast-xml-parser@^4.5.0:
+fast-xml-parser@^4.1.3:
   version "4.5.3"
   resolved "https://registry.yarnpkg.com/fast-xml-parser/-/fast-xml-parser-4.5.3.tgz#c54d6b35aa0f23dc1ea60b6c884340c006dc6efb"
   integrity sha512-RKihhV+SHsIUGXObeVy9AXiBbFwkVk7Syp8XgwN5U3JV416+Gwp/GO9i0JYKmikykgz/UHRrrV4ROuZEo/T0ig==
   dependencies:
     strnum "^1.1.1"
+
+fast-xml-parser@^5.0.8:
+  version "5.2.5"
+  resolved "https://registry.yarnpkg.com/fast-xml-parser/-/fast-xml-parser-5.2.5.tgz#4809fdfb1310494e341098c25cb1341a01a9144a"
+  integrity sha512-pfX9uG9Ki0yekDHx2SiuRIyFdyAr1kMIMitPvb0YBo8SUfKvia7w7FIyd/l6av85pFYRhZscS75MwMnbvY+hcQ==
+  dependencies:
+    strnum "^2.1.0"
 
 fastest-levenshtein@^1.0.16, fastest-levenshtein@^1.0.7:
   version "1.0.16"
@@ -6188,10 +6197,10 @@ html-tags@^3.3.1:
   resolved "https://registry.yarnpkg.com/html-tags/-/html-tags-3.3.1.tgz#a04026a18c882e4bba8a01a3d39cfe465d40b5ce"
   integrity sha512-ztqyC3kLto0e9WbNp0aeP+M3kTt+nbaIveGmUxAtZa+8iFgKLUOD4YKM5j+f3QD89bra7UeumolZHKuOXnTmeQ==
 
-htmlfy@^0.5.0:
-  version "0.5.1"
-  resolved "https://registry.yarnpkg.com/htmlfy/-/htmlfy-0.5.1.tgz#587ec3d61fcdae9915e8955f53b9a49b3ce15145"
-  integrity sha512-nb66M9g0zKrvmR3kk/WOM+5tOT3DzO1yJ4yEJXsz2zfZ3gXiCTrlGvbc4lQzTZyylJj7at+XSVDxFvAVH6J6tQ==
+htmlfy@^0.8.1:
+  version "0.8.1"
+  resolved "https://registry.yarnpkg.com/htmlfy/-/htmlfy-0.8.1.tgz#9066e318a2ee79d7ab2ef83c3953b02a18fa2b14"
+  integrity sha512-xWROBw9+MEGwxpotll0h672KCaLrKKiCYzsyN8ZgL9cQbVumFnyvsk2JqiB9ELAV1GLj1GG/jxZUjV9OZZi/yQ==
 
 htmlparser2@^10.0.0:
   version "10.0.0"
@@ -7948,7 +7957,7 @@ minimatch@^8.0.2:
   dependencies:
     brace-expansion "^2.0.1"
 
-minimatch@^9.0.0, minimatch@^9.0.3, minimatch@^9.0.4:
+minimatch@^9.0.0, minimatch@^9.0.4:
   version "9.0.5"
   resolved "https://registry.yarnpkg.com/minimatch/-/minimatch-9.0.5.tgz#d74f9dd6b57d83d8e98cfb82133b03978bc929e5"
   integrity sha512-G6T0ZX48xgozx7587koeX9Ys2NYy6Gmv//P89sEte9V9whIapMNF4idKxnW2QtCcLiTWlb/wfCabAtAFWhhBow==
@@ -9804,6 +9813,11 @@ restore-cursor@^5.0.0:
     onetime "^7.0.0"
     signal-exit "^4.1.0"
 
+ret@~0.5.0:
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/ret/-/ret-0.5.0.tgz#30a4d38a7e704bd96dc5ffcbe7ce2a9274c41c95"
+  integrity sha512-I1XxrZSQ+oErkRR4jYbAyEEu2I0avBvvMM5JN+6EBprOGRCs63ENqZ3vjavq8fBw2+62G5LF5XelKwuJpcvcxw==
+
 retry@^0.12.0:
   version "0.12.0"
   resolved "https://registry.yarnpkg.com/retry/-/retry-0.12.0.tgz#1b42a6266a21f07421d1b0b54b7dc167b01c013b"
@@ -9933,6 +9947,13 @@ safe-regex-test@^1.0.3, safe-regex-test@^1.1.0:
     es-errors "^1.3.0"
     is-regex "^1.2.1"
 
+safe-regex2@^5.0.0:
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/safe-regex2/-/safe-regex2-5.0.0.tgz#762e4a4c328603427281d2b99662f2d04e4ae811"
+  integrity sha512-YwJwe5a51WlK7KbOJREPdjNrpViQBI3p4T50lfwPuDhZnE3XGVTlGvi+aolc5+RvxDD6bnUmjVsU9n1eboLUYw==
+  dependencies:
+    ret "~0.5.0"
+
 "safer-buffer@>= 2.1.2 < 3", "safer-buffer@>= 2.1.2 < 3.0.0":
   version "2.1.2"
   resolved "https://registry.yarnpkg.com/safer-buffer/-/safer-buffer-2.1.2.tgz#44fa161b0187b9549dd84bb91802f9bd8385cd6a"
@@ -9988,12 +10009,12 @@ sentence-case@^3.0.4:
     tslib "^2.0.3"
     upper-case-first "^2.0.2"
 
-serialize-error@^11.0.3:
-  version "11.0.3"
-  resolved "https://registry.yarnpkg.com/serialize-error/-/serialize-error-11.0.3.tgz#b54f439e15da5b4961340fbbd376b6b04aa52e92"
-  integrity sha512-2G2y++21dhj2R7iHAdd0FIzjGwuKZld+7Pl/bTU6YIkrC2ZMbVUjm+luj6A6V34Rv9XfKJDKpTWu9W4Gse1D9g==
+serialize-error@^12.0.0:
+  version "12.0.0"
+  resolved "https://registry.yarnpkg.com/serialize-error/-/serialize-error-12.0.0.tgz#aed3d5abff192c855707513929bf8bf48d712194"
+  integrity sha512-ZYkZLAvKTKQXWuh5XpBw7CdbSzagarX39WyZ2H07CDLC5/KfsRGlIXV8d4+tfqX1M7916mRqR1QfNHSij+c9Pw==
   dependencies:
-    type-fest "^2.12.2"
+    type-fest "^4.31.0"
 
 serialize-javascript@^6.0.1:
   version "6.0.2"
@@ -10612,6 +10633,11 @@ strnum@^1.1.1:
   resolved "https://registry.yarnpkg.com/strnum/-/strnum-1.1.2.tgz#57bca4fbaa6f271081715dbc9ed7cee5493e28e4"
   integrity sha512-vrN+B7DBIoTTZjnPNewwhx6cBA/H+IS7rfW68n7XxC1y7uoiGQBxaKzqucGUgavX15dJgiGztLJ8vxuEzwqBdA==
 
+strnum@^2.1.0:
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/strnum/-/strnum-2.1.1.tgz#cf2a6e0cf903728b8b2c4b971b7e36b4e82d46ab"
+  integrity sha512-7ZvoFTiCnGxBtDqJ//Cu6fWtZtc7Y3x+QOirG15wztbdngGSkht27o2pyGWrVy0b4WAy3jbKmnoK6g5VlVNUUw==
+
 strong-log-transformer@2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/strong-log-transformer/-/strong-log-transformer-2.1.0.tgz#0f5ed78d325e0421ac6f90f7f10e691d6ae3ae10"
@@ -11107,15 +11133,15 @@ type-fest@^0.8.1:
   resolved "https://registry.yarnpkg.com/type-fest/-/type-fest-0.8.1.tgz#09e249ebde851d3b1e48d27c105444667f17b83d"
   integrity sha512-4dbzIzqvjtgiM5rw1k5rEHtBANKmdudhGyBEajN01fEyhaAIhsoKNy6y7+IN93IfpFtwY9iqi7kD+xwKhQsNJA==
 
-type-fest@^2.12.2:
-  version "2.19.0"
-  resolved "https://registry.yarnpkg.com/type-fest/-/type-fest-2.19.0.tgz#88068015bb33036a598b952e55e9311a60fd3a9b"
-  integrity sha512-RAH822pAdBgcNMAfWnCBU3CFZcfZ/i1eZjwFU/dsLKumyuuP3niueg2UAukXYF0E2AAoc82ZSSf9J0WQBinzHA==
-
 type-fest@^3.8.0:
   version "3.13.1"
   resolved "https://registry.yarnpkg.com/type-fest/-/type-fest-3.13.1.tgz#bb744c1f0678bea7543a2d1ec24e83e68e8c8706"
   integrity sha512-tLq3bSNx+xSpwvAJnzrK0Ep5CLNWjvFTOp71URMaAEWBfRb9nnJiBoUe0tF8bI4ZFO3omgBR6NvnbzVUT3Ly4g==
+
+type-fest@^4.31.0:
+  version "4.41.0"
+  resolved "https://registry.yarnpkg.com/type-fest/-/type-fest-4.41.0.tgz#6ae1c8e5731273c2bf1f58ad39cbae2c91a46c58"
+  integrity sha512-TeTSQ6H5YHvpqVwBRcnLDCBnDOHWYu7IvGbHT6N8AOymcr9PJGjc1GTtiWZTYg0NCgYwvnYWEkVChQAr9bjfwA==
 
 type-is@^1.6.16:
   version "1.6.18"
@@ -11254,7 +11280,7 @@ undici-types@~6.19.2:
   resolved "https://registry.yarnpkg.com/undici-types/-/undici-types-6.19.8.tgz#35111c9d1437ab83a7cdc0abae2f26d88eda0a02"
   integrity sha512-ve2KP6f/JnbPBFyobGHuerC9g1FYGn/F8n1LWTwNxCEzd6IfqTwUQcNXgEtmmQ6DlRrC1hrSrBnCZPokRrDHjw==
 
-undici@^6.19.5, undici@^6.20.1:
+undici@^6.19.5, undici@^6.21.3:
   version "6.21.3"
   resolved "https://registry.yarnpkg.com/undici/-/undici-6.21.3.tgz#185752ad92c3d0efe7a7d1f6854a50f83b552d7a"
   integrity sha512-gBLkYIlEnSp8pFbT64yFgGE6UIB9tAkhukC23PmMDCe5Nd+cRqKxSjw5y54MK2AZMgZfJWMaNE4nYUHgi1XEOw==
@@ -11502,54 +11528,53 @@ web-worker@^1.2.0:
   resolved "https://registry.yarnpkg.com/web-worker/-/web-worker-1.2.0.tgz#5d85a04a7fbc1e7db58f66595d7a3ac7c9c180da"
   integrity sha512-PgF341avzqyx60neE9DD+XS26MMNMoUQRz9NOZwW32nPQrF6p77f1htcnjBSEV8BGMKZ16choqUG4hyI0Hx7mA==
 
-webdriver@9.7.0, webdriver@^9.0.0:
-  version "9.7.0"
-  resolved "https://registry.yarnpkg.com/webdriver/-/webdriver-9.7.0.tgz#2cc6b0e2c057cb65888bdbf32e5eb221c420a754"
-  integrity sha512-O/Ce4I7HcsqlP3kx9L0F14olOsarKkXUz+hSunOTC9YxsiVoOu5yIcRrHyWUQziYgA4K5gobZSKrTuAr+edA4Q==
+webdriver@9.18.0, webdriver@^9.0.0:
+  version "9.18.0"
+  resolved "https://registry.yarnpkg.com/webdriver/-/webdriver-9.18.0.tgz#c96d3e877d7ed4be889dd1e6f638dbdbdedab134"
+  integrity sha512-07lC4FLj45lHJo0FvLjUp5qkjzEGWJWKGsxLoe9rQ2Fg88iYsqgr9JfSj8qxHpazBaBd+77+ZtpmMZ2X2D1Zuw==
   dependencies:
     "@types/node" "^20.1.0"
     "@types/ws" "^8.5.3"
-    "@wdio/config" "9.6.4"
-    "@wdio/logger" "9.4.4"
-    "@wdio/protocols" "9.7.0"
-    "@wdio/types" "9.6.3"
-    "@wdio/utils" "9.6.4"
+    "@wdio/config" "9.18.0"
+    "@wdio/logger" "9.18.0"
+    "@wdio/protocols" "9.16.2"
+    "@wdio/types" "9.16.2"
+    "@wdio/utils" "9.18.0"
     deepmerge-ts "^7.0.3"
-    undici "^6.20.1"
+    https-proxy-agent "^7.0.6"
+    undici "^6.21.3"
     ws "^8.8.0"
 
-webdriverio@^9.0.0:
-  version "9.7.1"
-  resolved "https://registry.yarnpkg.com/webdriverio/-/webdriverio-9.7.1.tgz#110c87b44e892c9583dbd95792a1e0d661895e81"
-  integrity sha512-P1roVTpXwtzSgNKl9j92LF4+5i2eGd0n9EMvMRdLNnI0v1ws7dNJOHNgsEAepZqMikYPgh2m+5DyXR1Ygoa+nQ==
+webdriverio@^9.0.0, webdriverio@^9.18.1:
+  version "9.18.1"
+  resolved "https://registry.yarnpkg.com/webdriverio/-/webdriverio-9.18.1.tgz#836050fec2566a3b659afc58745898066ea90c5b"
+  integrity sha512-b9aVtmi5+BUkae+SfJlajjKcVWqhMP+HdxpW2B3MlAtvYG2MRpwXkR34yvRIh5IYVMnR5tyUi5knDlJUGOPHPQ==
   dependencies:
     "@types/node" "^20.11.30"
     "@types/sinonjs__fake-timers" "^8.1.5"
-    "@wdio/config" "9.6.4"
-    "@wdio/logger" "9.4.4"
-    "@wdio/protocols" "9.7.0"
-    "@wdio/repl" "9.4.4"
-    "@wdio/types" "9.6.3"
-    "@wdio/utils" "9.6.4"
+    "@wdio/config" "9.18.0"
+    "@wdio/logger" "9.18.0"
+    "@wdio/protocols" "9.16.2"
+    "@wdio/repl" "9.16.2"
+    "@wdio/types" "9.16.2"
+    "@wdio/utils" "9.18.0"
     archiver "^7.0.1"
     aria-query "^5.3.0"
     cheerio "^1.0.0-rc.12"
     css-shorthand-properties "^1.1.1"
     css-value "^0.0.1"
     grapheme-splitter "^1.0.4"
-    htmlfy "^0.5.0"
-    import-meta-resolve "^4.0.0"
+    htmlfy "^0.8.1"
     is-plain-obj "^4.1.0"
     jszip "^3.10.1"
     lodash.clonedeep "^4.5.0"
     lodash.zip "^4.2.0"
-    minimatch "^9.0.3"
     query-selector-shadow-dom "^1.0.1"
     resq "^1.11.0"
     rgb2hex "0.2.5"
-    serialize-error "^11.0.3"
+    serialize-error "^12.0.0"
     urlpattern-polyfill "^10.0.0"
-    webdriver "9.7.0"
+    webdriver "9.18.0"
 
 webidl-conversions@^3.0.0:
   version "3.0.1"
