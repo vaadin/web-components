@@ -292,6 +292,12 @@ export const OverlayMixin = (superClass) =>
     /** @private */
     _openedChanged(opened, wasOpened) {
       if (opened) {
+        // Prevent possible errors on setting `opened` to `true` while disconnected
+        if (!this.isConnected) {
+          this.opened = false;
+          return;
+        }
+
         this._saveFocus();
 
         this._animatedOpening();
