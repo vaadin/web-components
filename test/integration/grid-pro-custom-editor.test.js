@@ -208,7 +208,7 @@ describe('grid-pro custom editor', () => {
         const datePicker = cell._content.querySelector('vaadin-date-picker');
         await untilOverlayRendered(datePicker);
 
-        const todayButton = datePicker._overlayElement.querySelector('[slot=today-button]');
+        const todayButton = datePicker._overlayContent.querySelector('[slot=today-button]');
         click(todayButton); // Fist click to scroll to current month
         await untilOverlayScrolled(datePicker);
         click(todayButton); // Second click to select today's date

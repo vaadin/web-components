@@ -36,10 +36,6 @@ export const datePickerOverlayStyles = css`
     width: 100%;
   }
 
-  :host([week-numbers]) {
-    --_vaadin-date-picker-week-numbers-visible: 1;
-  }
-
   [part~='content'] {
     flex: auto;
   }

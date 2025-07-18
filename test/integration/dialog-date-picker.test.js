@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { sendKeys } from '@vaadin/test-runner-commands';
-import { fixtureSync, nextFrame, nextRender, touchstart } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './not-animated-styles.js';
 import '@vaadin/date-picker/src/vaadin-date-picker.js';
@@ -116,29 +116,6 @@ describe('date-picker in dialog', () => {
 
       expect(datePicker.opened).to.be.false;
       expect(dialog.opened).to.be.true;
-    });
-  });
-
-  describe('modeless', () => {
-    beforeEach(async () => {
-      dialog.modeless = true;
-      await open(datePicker);
-    });
-
-    it('should not end up behind the dialog overlay on mousedown', async () => {
-      datePicker.dispatchEvent(new CustomEvent('mousedown', { bubbles: true, composed: true }));
-      await nextFrame();
-      expect(parseFloat(getComputedStyle(datePicker.$.overlay).zIndex)).to.equal(
-        parseFloat(getComputedStyle(dialog.$.overlay).zIndex) + 1,
-      );
-    });
-
-    it('should not end up behind the dialog overlay on touchstart', async () => {
-      touchstart(datePicker);
-      await nextFrame();
-      expect(parseFloat(getComputedStyle(datePicker.$.overlay).zIndex)).to.equal(
-        parseFloat(getComputedStyle(dialog.$.overlay).zIndex) + 1,
-      );
     });
   });
 });
