@@ -6,7 +6,6 @@
 import { setAriaIDReference } from '@vaadin/a11y-base/src/aria-id-reference.js';
 import { OverlayClassMixin } from '@vaadin/component-base/src/overlay-class-mixin.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
-import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 import { DialogSizeMixin } from '@vaadin/dialog/src/vaadin-dialog-size-mixin.js';
 
 /**
@@ -21,8 +20,8 @@ export const ConfirmDialogMixin = (superClass) =>
         /**
          * Sets the `aria-describedby` attribute of the overlay element.
          *
-         * By default, all elements inside the message area are linked
-         * through the `aria-describedby` attribute. However, there are
+         * By default, the text contents of all elements inside the message area
+         * are combined into the `aria-description` attribute. However, there are
          * cases where this can confuse screen reader users (e.g. the dialog
          * may present a password confirmation form). For these cases,
          * it's better to associate only the elements that will help describe
@@ -263,13 +262,7 @@ export const ConfirmDialogMixin = (superClass) =>
         multiple: true,
         observe: false,
         initializer: (node) => {
-          const wrapper = document.createElement('div');
-          wrapper.style.display = 'contents';
-          const wrapperId = `confirm-dialog-message-${generateUniqueId()}`;
-          wrapper.id = wrapperId;
-          this.appendChild(wrapper);
-          wrapper.appendChild(node);
-          this._messageNodes = [...this._messageNodes, wrapper];
+          this._messageNodes = [...this._messageNodes, node];
         },
       });
       this.addController(this._messageController);
@@ -329,16 +322,17 @@ export const ConfirmDialogMixin = (superClass) =>
         return;
       }
 
-      if (accessibleDescriptionRef !== undefined) {
+      if (accessibleDescriptionRef) {
+        overlay.removeAttribute('aria-description');
         setAriaIDReference(overlay, 'aria-describedby', {
           newId: accessibleDescriptionRef,
           oldId: this.__oldAccessibleDescriptionRef,
           fromUser: true,
         });
       } else {
-        messageNodes.forEach((node) => {
-          setAriaIDReference(overlay, 'aria-describedby', { newId: node.id });
-        });
+        overlay.removeAttribute('aria-describedby');
+        const ariaDescription = messageNodes.map((node) => node.textContent.trim()).join(' ');
+        overlay.setAttribute('aria-description', ariaDescription);
       }
 
       this.__oldAccessibleDescriptionRef = accessibleDescriptionRef;
@@ -387,11 +381,9 @@ export const ConfirmDialogMixin = (superClass) =>
     /** @private */
     __updateMessageNodes(nodes, message) {
       if (nodes && nodes.length > 0) {
-        const defaultWrapperNode = nodes.find(
-          (node) => this._messageController.defaultNode && node === this._messageController.defaultNode.parentElement,
-        );
-        if (defaultWrapperNode) {
-          defaultWrapperNode.firstChild.textContent = message;
+        const defaultNode = nodes.find((node) => node === this._messageController.defaultNode);
+        if (defaultNode) {
+          defaultNode.textContent = message;
         }
       }
     }

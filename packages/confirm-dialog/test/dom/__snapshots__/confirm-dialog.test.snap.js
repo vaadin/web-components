@@ -3,7 +3,7 @@ export const snapshots = {};
 
 snapshots["vaadin-confirm-dialog overlay"] = 
 `<vaadin-confirm-dialog-overlay
-  aria-describedby="confirm-dialog-message-0"
+  aria-description="Do you want to save or discard the changes?"
   aria-label="Unsaved changes"
   focus-trap=""
   has-footer=""
@@ -17,9 +17,7 @@ snapshots["vaadin-confirm-dialog overlay"] =
   <h3 slot="header">
     Unsaved changes
   </h3>
-  <div id="confirm-dialog-message-0">
-    Do you want to save or discard the changes?
-  </div>
+  Do you want to save or discard the changes?
   <vaadin-button
     hidden=""
     role="button"
@@ -53,7 +51,7 @@ snapshots["vaadin-confirm-dialog overlay"] =
 
 snapshots["vaadin-confirm-dialog overlay theme"] = 
 `<vaadin-confirm-dialog-overlay
-  aria-describedby="confirm-dialog-message-1"
+  aria-description="Do you want to save or discard the changes?"
   aria-label="Unsaved changes"
   focus-trap=""
   has-footer=""
@@ -68,9 +66,7 @@ snapshots["vaadin-confirm-dialog overlay theme"] =
   <h3 slot="header">
     Unsaved changes
   </h3>
-  <div id="confirm-dialog-message-1">
-    Do you want to save or discard the changes?
-  </div>
+  Do you want to save or discard the changes?
   <vaadin-button
     hidden=""
     role="button"
@@ -104,7 +100,7 @@ snapshots["vaadin-confirm-dialog overlay theme"] =
 
 snapshots["vaadin-confirm-dialog overlay class"] = 
 `<vaadin-confirm-dialog-overlay
-  aria-describedby="confirm-dialog-message-2"
+  aria-description="Do you want to save or discard the changes?"
   aria-label="Unsaved changes"
   class="confirm-dialog-overlay custom"
   focus-trap=""
@@ -119,9 +115,7 @@ snapshots["vaadin-confirm-dialog overlay class"] =
   <h3 slot="header">
     Unsaved changes
   </h3>
-  <div id="confirm-dialog-message-2">
-    Do you want to save or discard the changes?
-  </div>
+  Do you want to save or discard the changes?
   <vaadin-button
     hidden=""
     role="button"

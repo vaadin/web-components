@@ -83,20 +83,25 @@ describe('vaadin-confirm-dialog', () => {
       expect(overlay.ariaLabel).to.equal('confirmation');
     });
 
+    it('should set aria-description on the overlay', () => {
+      expect(overlay.ariaDescription).to.equal('Confirmation message');
+    });
+
     it('should set `aria-describedby` on the overlay when `accessibleDescriptionRef` is defined', async () => {
       const customId = 'id-0';
       confirm.accessibleDescriptionRef = customId;
       await nextFrame();
       expect(overlay.getAttribute('aria-describedby')).to.equal(customId);
+      expect(overlay.hasAttribute('aria-description')).to.be.false;
     });
 
-    it('should restore `aria-describedby` on the overlay when `accessibleDescriptionRef` is removed', async () => {
-      const generatedDescribedByValue = overlay.getAttribute('aria-describedby');
+    it('should restore `aria-description` on the overlay when `accessibleDescriptionRef` is removed', async () => {
       confirm.accessibleDescriptionRef = 'id-0';
       await nextFrame();
       confirm.accessibleDescriptionRef = null;
       await nextFrame();
-      expect(overlay.getAttribute('aria-describedby')).to.equal(generatedDescribedByValue);
+      expect(overlay.hasAttribute('aria-describedby')).to.be.false;
+      expect(overlay.getAttribute('aria-description')).to.be.equal('Confirmation message');
     });
   });
 
@@ -197,10 +202,9 @@ describe('vaadin-confirm-dialog', () => {
       });
 
       describe('a11y', () => {
-        it('should associate message node with aria-describedby', () => {
+        it('should use message as aria-description', () => {
           const messageNode = messageSlot.assignedNodes()[0];
-          const overlayDescribedBy = overlay.getAttribute('aria-describedby');
-          expect(overlayDescribedBy).to.equal(messageNode.id);
+          expect(overlay.getAttribute('aria-description')).to.equal(messageNode.textContent);
         });
       });
     });
@@ -234,7 +238,7 @@ describe('vaadin-confirm-dialog', () => {
 
     describe('a11y', () => {
       const firstChild = 'Confirm message';
-      const secondChild = '<div>Additionale content</div>';
+      const secondChild = '<div>Additional content</div>';
 
       beforeEach(async () => {
         confirm = fixtureSync(`
@@ -248,31 +252,8 @@ describe('vaadin-confirm-dialog', () => {
         messageSlot = overlay.shadowRoot.querySelector('[part="message"] > slot');
       });
 
-      it('should wrap slotted children inside <div> elements', () => {
-        const nodes = messageSlot.assignedNodes();
-        expect(nodes[0].textContent.trim()).to.equal(firstChild);
-        expect(nodes[1].innerHTML.trim()).to.equal(secondChild);
-      });
-
-      it('should generate id for wrapper elements', () => {
-        const nodes = messageSlot.assignedNodes();
-        nodes.forEach((node) => expect(node.id).to.be.not.null);
-      });
-
-      it('should set "display: contents" on the wrapper elements', () => {
-        const nodes = messageSlot.assignedNodes();
-        nodes.forEach((node) => expect(node.style.display).to.equal('contents'));
-      });
-
-      it('should associate generated ids with aria-describedby in overlay', () => {
-        const nodes = messageSlot.assignedNodes();
-        const overlayDescribedBy = overlay.getAttribute('aria-describedby');
-        expect(overlayDescribedBy).to.be.not.null;
-
-        const overlayDescribedByItems = overlayDescribedBy.split(' ');
-        expect(overlayDescribedByItems).to.have.lengthOf(2);
-        const wrapperIds = nodes.map((node) => node.id);
-        expect(overlayDescribedByItems).to.have.members(wrapperIds);
+      it('should use combined message text as aria-description in overlay', () => {
+        expect(overlay.getAttribute('aria-description')).to.equal('Confirm message Additional content');
       });
     });
   });
