@@ -37,6 +37,7 @@ export const ConfirmDialogMixin = (superClass) =>
          */
         opened: {
           type: Boolean,
+          reflectToAttribute: true,
           value: false,
           notify: true,
           sync: true,
@@ -250,6 +251,8 @@ export const ConfirmDialogMixin = (superClass) =>
     ready() {
       super.ready();
 
+      this.role = 'alertdialog';
+
       this._headerController = new SlotController(this, 'header', 'h3', {
         initializer: (node) => {
           this._headerNode = node;
@@ -288,20 +291,19 @@ export const ConfirmDialogMixin = (superClass) =>
         },
       });
       this.addController(this._confirmController);
+    }
 
-      this._overlayElement = this.$.overlay;
+    updated(props) {
+      super.updated(props);
+
+      if (props.has('header')) {
+        this.ariaLabel = this.header || 'confirmation';
+      }
     }
 
     /** @protected */
     __onDialogOpened() {
-      const overlay = this._overlayElement;
-
-      // Teleport slotted nodes to the overlay element.
-      this.__slottedNodes.forEach((node) => {
-        overlay.appendChild(node);
-      });
-
-      const confirmButton = overlay.querySelector('[slot="confirm-button"]');
+      const confirmButton = this.querySelector('[slot="confirm-button"]');
       if (confirmButton) {
         confirmButton.focus();
       }
@@ -309,10 +311,6 @@ export const ConfirmDialogMixin = (superClass) =>
 
     /** @protected */
     __onDialogClosed() {
-      // Move nodes from the overlay back to the host.
-      this.__slottedNodes.forEach((node) => {
-        this.appendChild(node);
-      });
       this.dispatchEvent(new CustomEvent('closed'));
     }
 
@@ -323,16 +321,16 @@ export const ConfirmDialogMixin = (superClass) =>
       }
 
       if (accessibleDescriptionRef) {
-        overlay.removeAttribute('aria-description');
+        this.removeAttribute('aria-description');
         setAriaIDReference(overlay, 'aria-describedby', {
           newId: accessibleDescriptionRef,
           oldId: this.__oldAccessibleDescriptionRef,
           fromUser: true,
         });
       } else {
-        overlay.removeAttribute('aria-describedby');
+        this.removeAttribute('aria-describedby');
         const ariaDescription = messageNodes.map((node) => node.textContent.trim()).join(' ');
-        overlay.setAttribute('aria-description', ariaDescription);
+        this.setAttribute('aria-description', ariaDescription);
       }
 
       this.__oldAccessibleDescriptionRef = accessibleDescriptionRef;
