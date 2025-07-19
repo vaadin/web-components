@@ -228,9 +228,12 @@ snapshots["vaadin-crud shadow default"] =
 <vaadin-crud-dialog id="dialog">
 </vaadin-crud-dialog>
 <vaadin-confirm-dialog
+  aria-description="There are unsaved changes to this item."
+  aria-label="Discard changes"
   cancel-button-visible=""
   confirm-theme="primary"
   id="confirmCancel"
+  role="alertdialog"
   with-backdrop=""
 >
   <h3 slot="header">
@@ -266,9 +269,12 @@ snapshots["vaadin-crud shadow default"] =
   </vaadin-button>
 </vaadin-confirm-dialog>
 <vaadin-confirm-dialog
+  aria-description="Are you sure you want to delete this item? This action cannot be undone."
+  aria-label="Delete item"
   cancel-button-visible=""
   confirm-theme="primary error"
   id="confirmDelete"
+  role="alertdialog"
   with-backdrop=""
 >
   <h3 slot="header">
