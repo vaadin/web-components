@@ -1,7 +1,52 @@
 /* @web/test-runner snapshot v1 */
 export const snapshots = {};
 
-snapshots["vaadin-confirm-dialog overlay"] = 
+snapshots["vaadin-confirm-dialog host"] =
+`<vaadin-confirm-dialog
+  aria-description="Do you want to save or discard the changes?"
+  aria-label="Unsaved changes"
+  header="Unsaved changes"
+  opened=""
+  role="alertdialog"
+  with-backdrop=""
+>
+  Do you want to save or discard the changes?
+  <h3 slot="header">
+    Unsaved changes
+  </h3>
+  <vaadin-button
+    hidden=""
+    role="button"
+    slot="cancel-button"
+    tabindex="0"
+    theme="tertiary"
+  >
+    Cancel
+  </vaadin-button>
+  <vaadin-button
+    hidden=""
+    role="button"
+    slot="reject-button"
+    tabindex="0"
+    theme="error tertiary"
+  >
+    Reject
+  </vaadin-button>
+  <vaadin-button
+    focused=""
+    role="button"
+    slot="confirm-button"
+    tabindex="0"
+    theme="primary"
+  >
+    Confirm
+  </vaadin-button>
+</vaadin-confirm-dialog>
+`;
+/* end snapshot vaadin-confirm-dialog host */
+
+
+snapshots["vaadin-confirm-dialog overlay"] =
 `<vaadin-confirm-dialog-overlay
   exportparts="backdrop, overlay, header, content, message, footer, cancel-button, confirm-button, reject-button"
   focus-trap=""
@@ -39,7 +84,7 @@ snapshots["vaadin-confirm-dialog overlay"] =
 `;
 /* end snapshot vaadin-confirm-dialog overlay */
 
-snapshots["vaadin-confirm-dialog overlay theme"] = 
+snapshots["vaadin-confirm-dialog overlay theme"] =
 `<vaadin-confirm-dialog-overlay
   exportparts="backdrop, overlay, header, content, message, footer, cancel-button, confirm-button, reject-button"
   focus-trap=""
@@ -78,7 +123,7 @@ snapshots["vaadin-confirm-dialog overlay theme"] =
 `;
 /* end snapshot vaadin-confirm-dialog overlay theme */
 
-snapshots["vaadin-confirm-dialog overlay class"] = 
+snapshots["vaadin-confirm-dialog overlay class"] =
 `<vaadin-confirm-dialog-overlay
   exportparts="backdrop, overlay, header, content, message, footer, cancel-button, confirm-button, reject-button"
   focus-trap=""
