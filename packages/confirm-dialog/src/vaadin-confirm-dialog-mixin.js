@@ -208,7 +208,7 @@ export const ConfirmDialogMixin = (superClass) =>
         '__updateHeaderNode(_headerNode, header)',
         '__updateMessageNodes(_messageNodes, message)',
         '__updateRejectButton(_rejectButton, rejectText, rejectTheme, rejectButtonVisible)',
-        '__accessibleDescriptionRefChanged(_overlayElement, _messageNodes, accessibleDescriptionRef)',
+        '__accessibleDescriptionRefChanged(_messageNodes, accessibleDescriptionRef)',
       ];
     }
 
@@ -315,14 +315,14 @@ export const ConfirmDialogMixin = (superClass) =>
     }
 
     /** @private */
-    __accessibleDescriptionRefChanged(overlay, messageNodes, accessibleDescriptionRef) {
-      if (!overlay || !messageNodes) {
+    __accessibleDescriptionRefChanged(messageNodes, accessibleDescriptionRef) {
+      if (!messageNodes) {
         return;
       }
 
       if (accessibleDescriptionRef) {
         this.removeAttribute('aria-description');
-        setAriaIDReference(overlay, 'aria-describedby', {
+        setAriaIDReference(this, 'aria-describedby', {
           newId: accessibleDescriptionRef,
           oldId: this.__oldAccessibleDescriptionRef,
           fromUser: true,
