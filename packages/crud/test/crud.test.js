@@ -563,7 +563,7 @@ describe('crud', () => {
       crud.__isDirty = true;
       crud._grid.activeItem = null; // A second click will set grid active item to null
       await oneEvent(confirmCancelOverlay, 'vaadin-overlay-open');
-      confirmCancelOverlay.querySelector('[slot^="confirm"]').click();
+      confirmCancelDialog.querySelector('[slot^="confirm"]').click();
       expect(crud.editorOpened).to.be.false;
     });
 
@@ -590,7 +590,7 @@ describe('crud', () => {
       crud.__isDirty = true;
       crud._newButton.click();
       await oneEvent(confirmCancelOverlay, 'vaadin-overlay-open');
-      confirmCancelOverlay.querySelector('[slot^="confirm"]').click();
+      confirmCancelDialog.querySelector('[slot^="confirm"]').click();
       expect(crud.editorOpened).to.be.true;
       await aTimeout(0);
       expect(crud._grid.activeItem).to.be.undefined;

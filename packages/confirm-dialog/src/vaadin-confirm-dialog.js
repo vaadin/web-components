@@ -79,6 +79,12 @@ class ConfirmDialog extends ConfirmDialogMixin(ElementMixin(ThemePropertyMixin(P
       [hidden] {
         display: none !important;
       }
+
+      :host([opened]),
+      :host([opening]),
+      :host([closing]) {
+        display: contents !important;
+      }
     `;
   }
 
@@ -87,30 +93,28 @@ class ConfirmDialog extends ConfirmDialogMixin(ElementMixin(ThemePropertyMixin(P
     return html`
       <vaadin-confirm-dialog-overlay
         id="overlay"
-        role="alertdialog"
+        popover="manual"
         .owner="${this}"
         .opened="${this.opened}"
         theme="${ifDefined(this._theme)}"
-        .ariaLabel="${this.header || 'confirmation'}"
         .cancelButtonVisible="${this.cancelButtonVisible}"
         .rejectButtonVisible="${this.rejectButtonVisible}"
         with-backdrop
         restore-focus-on-close
         focus-trap
+        exportparts="backdrop, overlay, header, content, message, footer, cancel-button, confirm-button, reject-button"
         @opened-changed="${this._onOpenedChanged}"
         @vaadin-overlay-open="${this.__onDialogOpened}"
         @vaadin-overlay-closed="${this.__onDialogClosed}"
         @vaadin-overlay-outside-click="${this._onOverlayOutsideClick}"
         @vaadin-overlay-escape-press="${this._onOverlayEscapePress}"
-      ></vaadin-confirm-dialog-overlay>
-
-      <div hidden>
-        <slot name="header"></slot>
+      >
+        <slot name="header" slot="header"></slot>
         <slot></slot>
-        <slot name="cancel-button"></slot>
-        <slot name="reject-button"></slot>
-        <slot name="confirm-button"></slot>
-      </div>
+        <slot name="cancel-button" slot="cancel-button"></slot>
+        <slot name="reject-button" slot="reject-button"></slot>
+        <slot name="confirm-button" slot="confirm-button"></slot>
+      </vaadin-confirm-dialog-overlay>
     `;
   }
 

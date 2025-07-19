@@ -82,6 +82,38 @@ class ConfirmDialogOverlay extends OverlayMixin(DirMixin(ThemableMixin(PolylitMi
     this.setAttribute('has-header', '');
     this.setAttribute('has-footer', '');
   }
+
+  /**
+   * @protected
+   * @override
+   */
+  _attachOverlay() {
+    this.showPopover();
+  }
+
+  /**
+   * @protected
+   * @override
+   */
+  _detachOverlay() {
+    this.hidePopover();
+  }
+
+  /**
+   * Override method from OverlayFocusMixin to use owner as content root
+   * @protected
+   */
+  get _contentRoot() {
+    return this.owner;
+  }
+
+  /**
+   * Override method from OverlayFocusMixin to use owner as modal root
+   * @protected
+   */
+  get _modalRoot() {
+    return this.owner;
+  }
 }
 
 defineCustomElement(ConfirmDialogOverlay);
