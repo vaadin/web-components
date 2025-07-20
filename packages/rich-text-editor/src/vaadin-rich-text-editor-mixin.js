@@ -176,7 +176,7 @@ export const RichTextEditorMixin = (superClass) =>
               '#ffffff', '#facccc', '#ffebcc', '#ffffcc', '#cce8cc', '#cce0f5', '#ebd6ff',
               '#bbbbbb', '#f06666', '#ffc266', '#ffff66', '#66b966', '#66a3e0', '#c285ff',
               '#888888', '#a10000', '#b26b00', '#b2b200', '#006100', '#0047b2', '#6b24b2',
-              '#444444', '#5c0000', '#663d00', '#666600', '#003700', '#002966', '#3d1466'
+              '#444444', '#5c0000', '#663d00', '#666600', '#003700', '#002966', '#3d1466',
             ];
           },
         },
@@ -416,8 +416,8 @@ export const RichTextEditorMixin = (superClass) =>
       // Flush pending htmlValue only once the editor is fully initialized
       this.__flushPendingHtmlValue();
 
-      this.$.backgroundPopup.target = this.shadowRoot.querySelector('#btn-background');
-      this.$.colorPopup.target = this.shadowRoot.querySelector('#btn-color');
+      this.querySelector('[slot="color-popup"]').target = this.shadowRoot.querySelector('#btn-color');
+      this.querySelector('[slot="background-popup"]').target = this.shadowRoot.querySelector('#btn-background');
 
       // Set up tooltip to show when hovering or focusing toolbar buttons
       this._tooltip = document.createElement('vaadin-tooltip');

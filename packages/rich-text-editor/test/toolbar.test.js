@@ -223,7 +223,7 @@ describe('toolbar controls', () => {
           let popup, overlay;
 
           beforeEach(() => {
-            popup = rte.shadowRoot.querySelector(`#${style}Popup`);
+            popup = rte.querySelector(`[slot="${style}-popup"]`);
             overlay = popup.shadowRoot.querySelector('vaadin-rich-text-editor-popup-overlay');
           });
 
