@@ -33,7 +33,13 @@ class RichTextEditorPopup extends PolylitMixin(LitElement) {
   static get styles() {
     return css`
       :host {
-        display: none;
+        display: none !important;
+      }
+
+      :host([opened]),
+      :host([opening]),
+      :host([closing]) {
+        display: contents !important;
       }
     `;
   }
@@ -46,15 +52,12 @@ class RichTextEditorPopup extends PolylitMixin(LitElement) {
 
       opened: {
         type: Boolean,
+        reflectToAttribute: true,
         notify: true,
       },
 
       colors: {
         type: Array,
-      },
-
-      renderer: {
-        type: Object,
       },
     };
   }
@@ -67,16 +70,20 @@ class RichTextEditorPopup extends PolylitMixin(LitElement) {
   render() {
     return html`
       <vaadin-rich-text-editor-popup-overlay
-        .renderer="${this.renderer}"
+        popover="manual"
+        .owner="${this}"
         .opened="${this.opened}"
         .positionTarget="${this.target}"
         no-vertical-overlap
         horizontal-align="start"
         vertical-align="top"
         focus-trap
+        exportparts="backdrop, overlay, content"
         @opened-changed="${this._onOpenedChanged}"
         @vaadin-overlay-escape-press="${this._onOverlayEscapePress}"
-      ></vaadin-rich-text-editor-popup-overlay>
+      >
+        <slot></slot>
+      </vaadin-rich-text-editor-popup-overlay>
     `;
   }
 
@@ -98,19 +105,17 @@ class RichTextEditorPopup extends PolylitMixin(LitElement) {
 
   /** @private */
   __colorsChanged(colors) {
-    this.renderer = (root) => {
-      render(
-        html`
-          ${colors.map(
-            (color) => html`
-              <button data-color="${color}" style="background: ${color}" @click="${this._onColorClick}"></button>
-            `,
-          )}
-        `,
-        root,
-        { host: this },
-      );
-    };
+    render(
+      html`
+        ${colors.map(
+          (color) => html`
+            <button data-color="${color}" style="background: ${color}" @click="${this._onColorClick}"></button>
+          `,
+        )}
+      `,
+      this,
+      { host: this },
+    );
   }
 
   /** @private */
@@ -152,9 +157,35 @@ class RichTextEditorPopupOverlay extends PositionMixin(
     return html`
       <div id="backdrop" part="backdrop" hidden></div>
       <div part="overlay" id="overlay">
-        <div part="content" id="content"><slot></slot></div>
+        <div part="content" id="content">
+          <slot></slot>
+        </div>
       </div>
     `;
+  }
+
+  /**
+   * @protected
+   * @override
+   */
+  _attachOverlay() {
+    this.showPopover();
+  }
+
+  /**
+   * @protected
+   * @override
+   */
+  _detachOverlay() {
+    this.hidePopover();
+  }
+
+  /**
+   * Override method from OverlayFocusMixin to use owner as content root
+   * @protected
+   */
+  get _contentRoot() {
+    return this.owner;
   }
 }
 

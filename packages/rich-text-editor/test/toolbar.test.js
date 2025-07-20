@@ -230,7 +230,7 @@ describe('toolbar controls', () => {
           it(`should apply ${style} when clicking the "toolbar-button-${style}" and selecting value`, async () => {
             getButton(style).click();
             await oneEvent(overlay, 'vaadin-overlay-open');
-            const button = overlay.querySelectorAll('button')[1];
+            const button = popup.querySelectorAll('button')[1];
             button.click();
             editor.insertText(0, 'Foo', 'user');
             expect(editor.getFormat(0, 3)[style]).to.equal(button.dataset.color);
@@ -247,7 +247,7 @@ describe('toolbar controls', () => {
 
             // Default color (black) or background (white)
             const value = style === 'color' ? '#000000' : '#ffffff';
-            const button = overlay.querySelector(`[data-color="${value}"]`);
+            const button = popup.querySelector(`[data-color="${value}"]`);
             button.click();
             expect(editor.getFormat(0, 3)[style]).to.be.not.ok;
           });
@@ -280,9 +280,17 @@ describe('toolbar controls', () => {
             getButton(style).click();
             await oneEvent(overlay, 'vaadin-overlay-open');
 
-            const popup = document.querySelector('vaadin-rich-text-editor-popup-overlay');
             const button = popup.querySelectorAll('button')[1];
             expect(button.dataset.color).to.equal(rte.colorOptions[1]);
+          });
+
+          it('should export all overlay parts for styling', () => {
+            const parts = [...overlay.shadowRoot.querySelectorAll('[part]')].map((el) => el.getAttribute('part'));
+            const exportParts = overlay.getAttribute('exportparts').split(', ');
+
+            parts.forEach((part) => {
+              expect(exportParts).to.include(part);
+            });
           });
         });
       });
