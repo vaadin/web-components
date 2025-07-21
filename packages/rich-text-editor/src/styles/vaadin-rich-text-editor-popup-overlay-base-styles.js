@@ -34,7 +34,7 @@ export const richTextEditorPopupOverlay = css`
     width: var(--vaadin-rich-text-editor-overlay-color-option-width, 1lh);
   }
 
-  [part='content'] ::slotted(button:focus) {
+  [part='content'] ::slotted(button:focus-visible) {
     outline: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
     outline-offset: 1px;
   }
