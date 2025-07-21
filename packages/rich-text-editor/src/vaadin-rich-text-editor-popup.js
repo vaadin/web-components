@@ -188,6 +188,15 @@ class RichTextEditorPopupOverlay extends PositionMixin(
   get _contentRoot() {
     return this.owner;
   }
+
+  /**
+   * Override method from OverlayFocusMixin to use owner as modal root
+   * @protected
+   * @override
+   */
+  get _modalRoot() {
+    return this.owner;
+  }
 }
 
 defineCustomElement(RichTextEditorPopupOverlay);
