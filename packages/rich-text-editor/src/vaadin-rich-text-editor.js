@@ -350,25 +350,13 @@ class RichTextEditor extends RichTextEditorMixin(
         <div class="announcer" aria-live="polite"></div>
       </div>
 
-      <vaadin-rich-text-editor-popup
-        id="colorPopup"
-        .colors="${this.colorOptions}"
-        .opened="${this._colorEditing}"
-        @color-selected="${this.__onColorSelected}"
-        @opened-changed="${this.__onColorEditingChanged}"
-      ></vaadin-rich-text-editor-popup>
-
-      <vaadin-rich-text-editor-popup
-        id="backgroundPopup"
-        .colors="${this.colorOptions}"
-        .opened="${this._backgroundEditing}"
-        @color-selected="${this.__onBackgroundSelected}"
-        @opened-changed="${this.__onBackgroundEditingChanged}"
-      ></vaadin-rich-text-editor-popup>
-
       <slot name="tooltip"></slot>
 
       <slot name="link-dialog"></slot>
+
+      <slot name="color-popup"></slot>
+
+      <slot name="background-popup"></slot>
     `;
   }
 
@@ -380,11 +368,11 @@ class RichTextEditor extends RichTextEditorMixin(
   update(changedProperties) {
     super.update(changedProperties);
 
-    this.__renderLinkDialog();
+    this.__renderSlottedOverlays();
   }
 
   /** @private */
-  __renderLinkDialog() {
+  __renderSlottedOverlays() {
     render(
       html`
         <vaadin-confirm-dialog
@@ -409,6 +397,22 @@ class RichTextEditor extends RichTextEditorMixin(
             @value-changed="${this._onLinkUrlChanged}"
           ></vaadin-text-field>
         </vaadin-confirm-dialog>
+
+        <vaadin-rich-text-editor-popup
+          slot="color-popup"
+          .colors="${this.colorOptions}"
+          .opened="${this._colorEditing}"
+          @color-selected="${this.__onColorSelected}"
+          @opened-changed="${this.__onColorEditingChanged}"
+        ></vaadin-rich-text-editor-popup>
+
+        <vaadin-rich-text-editor-popup
+          slot="background-popup"
+          .colors="${this.colorOptions}"
+          .opened="${this._backgroundEditing}"
+          @color-selected="${this.__onBackgroundSelected}"
+          @opened-changed="${this.__onBackgroundEditingChanged}"
+        ></vaadin-rich-text-editor-popup>
       `,
       this,
       { host: this },
