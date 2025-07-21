@@ -241,7 +241,7 @@ describe('vaadin-confirm-dialog', () => {
         await nextRender();
       });
 
-      it('should use combined message text as aria-description in overlay', () => {
+      it('should use combined message text as aria-description on host', () => {
         expect(confirm.getAttribute('aria-description')).to.equal('Confirm message Additional content');
       });
     });
