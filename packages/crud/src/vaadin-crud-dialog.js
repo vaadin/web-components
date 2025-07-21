@@ -46,7 +46,9 @@ class CrudDialogOverlay extends OverlayMixin(DirMixin(ThemableMixin(PolylitMixin
       <div part="backdrop" id="backdrop" ?hidden="${!this.withBackdrop}"></div>
       <div part="overlay" id="overlay" tabindex="0">
         <section id="resizerContainer" class="resizer-container">
-          <header part="header"><slot name="header"></slot></header>
+          <header part="header">
+            <slot name="header"></slot>
+          </header>
           <div part="content" id="content">
             <slot name="form"></slot>
           </div>
@@ -71,6 +73,40 @@ class CrudDialogOverlay extends OverlayMixin(DirMixin(ThemableMixin(PolylitMixin
     this.setAttribute('has-header', '');
     this.setAttribute('has-footer', '');
   }
+
+  /**
+   * @protected
+   * @override
+   */
+  _attachOverlay() {
+    this.showPopover();
+  }
+
+  /**
+   * @protected
+   * @override
+   */
+  _detachOverlay() {
+    this.hidePopover();
+  }
+
+  /**
+   * Override method from OverlayFocusMixin to use owner as content root
+   * @protected
+   * @override
+   */
+  get _contentRoot() {
+    return this.owner;
+  }
+
+  /**
+   * Override method from OverlayFocusMixin to use owner as modal root
+   * @protected
+   * @override
+   */
+  get _modalRoot() {
+    return this.owner;
+  }
 }
 
 defineCustomElement(CrudDialogOverlay);
@@ -86,8 +122,15 @@ class CrudDialog extends DialogBaseMixin(OverlayClassMixin(ThemePropertyMixin(Po
 
   static get styles() {
     return css`
-      :host {
-        display: none;
+      :host,
+      [hidden] {
+        display: none !important;
+      }
+
+      :host([opened]),
+      :host([opening]),
+      :host([closing]) {
+        display: contents !important;
       }
     `;
   }
@@ -109,6 +152,8 @@ class CrudDialog extends DialogBaseMixin(OverlayClassMixin(ThemePropertyMixin(Po
     return html`
       <vaadin-crud-dialog-overlay
         id="overlay"
+        popover="manual"
+        .owner="${this}"
         .opened="${this.opened}"
         aria-label="${ifDefined(this.ariaLabel)}"
         @opened-changed="${this._onOverlayOpened}"

@@ -17,6 +17,7 @@ export const DialogBaseMixin = (superClass) =>
          */
         opened: {
           type: Boolean,
+          reflectToAttribute: true,
           value: false,
           notify: true,
           sync: true,
