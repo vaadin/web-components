@@ -83,15 +83,19 @@ export interface DatePickerEventMap extends HTMLElementEventMap, DatePickerCusto
  *
  * In addition to `<vaadin-text-field>` parts, the following parts are available for theming:
  *
- * Part name             | Description
- * ----------------------|--------------------
- * `toggle-button`       | Toggle button
+ * Part name        | Description
+ * -----------------|--------------------
+ * `toggle-button`  | Toggle button
+ * `backdrop`       | Backdrop of the overlay
+ * `overlay`        | The overlay container
+ * `content`        | The overlay content
  *
  * In addition to `<vaadin-text-field>` state attributes, the following state attributes are available for theming:
  *
- * Attribute  | Description                                      | Part name
- * -----------|--------------------------------------------------|-----------
- * `opened`   | Set when the date selector overlay is opened     | :host
+ * Attribute      | Description
+ * ---------------|----------------------------------------------
+ * `opened`       | Set when the date selector overlay is opened
+ * `week-numbers` | Set when week numbers are shown in the calendar
  *
  * ### Internal components
  *
