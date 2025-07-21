@@ -24,6 +24,15 @@ describe('dropdown', () => {
     expect(overlay.owner).to.equal(datePicker);
   });
 
+  it('should export all overlay parts for styling', () => {
+    const parts = [...overlay.shadowRoot.querySelectorAll('[part]')].map((el) => el.getAttribute('part'));
+    const exportParts = overlay.getAttribute('exportparts').split(', ');
+
+    parts.forEach((part) => {
+      expect(exportParts).to.include(part);
+    });
+  });
+
   it('should update position of the overlay after changing opened property', async () => {
     const inputField = datePicker.shadowRoot.querySelector('[part="input-field"]');
     datePicker.opened = true;
