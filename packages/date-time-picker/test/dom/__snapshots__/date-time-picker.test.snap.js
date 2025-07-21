@@ -737,6 +737,7 @@ snapshots["vaadin-date-time-picker host overlay class time-picker"] =
 `<vaadin-time-picker-overlay
   class="custom date-time-picker-overlay"
   dir="ltr"
+  exportparts="overlay, content"
   id="overlay"
   no-vertical-overlap=""
   opened=""

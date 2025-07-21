@@ -78,9 +78,11 @@ export interface TimePickerEventMap extends HTMLElementEventMap, TimePickerCusto
  *
  * In addition to `<vaadin-text-field>` parts, the following parts are available for theming:
  *
- * Part name       | Description
- * ----------------|----------------
- * `toggle-button` | The toggle button
+ * Part name        | Description
+ * -----------------|----------------
+ * `toggle-button`  | The toggle button
+ * `overlay`        | The overlay container
+ * `content`        | The overlay content
  *
  * In addition to `<vaadin-text-field>` state attributes, the following state attributes are available for theming:
  *

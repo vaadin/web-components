@@ -695,6 +695,7 @@ snapshots["vaadin-time-picker host opened default"] =
 snapshots["vaadin-time-picker host opened overlay"] = 
 `<vaadin-time-picker-overlay
   dir="ltr"
+  exportparts="overlay, content"
   id="overlay"
   no-vertical-overlap=""
   opened=""
@@ -712,6 +713,7 @@ snapshots["vaadin-time-picker host opened overlay class"] =
 `<vaadin-time-picker-overlay
   class="custom time-picker-overlay"
   dir="ltr"
+  exportparts="overlay, content"
   id="overlay"
   no-vertical-overlap=""
   opened=""
@@ -770,6 +772,7 @@ snapshots["vaadin-time-picker shadow default"] =
 </div>
 <vaadin-time-picker-overlay
   dir="ltr"
+  exportparts="overlay, content"
   id="overlay"
   no-vertical-overlap=""
   popover="manual"
@@ -830,6 +833,7 @@ snapshots["vaadin-time-picker shadow disabled"] =
 </div>
 <vaadin-time-picker-overlay
   dir="ltr"
+  exportparts="overlay, content"
   id="overlay"
   no-vertical-overlap=""
   popover="manual"
@@ -890,6 +894,7 @@ snapshots["vaadin-time-picker shadow readonly"] =
 </div>
 <vaadin-time-picker-overlay
   dir="ltr"
+  exportparts="overlay, content"
   id="overlay"
   no-vertical-overlap=""
   popover="manual"
@@ -950,6 +955,7 @@ snapshots["vaadin-time-picker shadow invalid"] =
 </div>
 <vaadin-time-picker-overlay
   dir="ltr"
+  exportparts="overlay, content"
   id="overlay"
   no-vertical-overlap=""
   popover="manual"
@@ -1010,6 +1016,7 @@ snapshots["vaadin-time-picker shadow theme"] =
 </div>
 <vaadin-time-picker-overlay
   dir="ltr"
+  exportparts="overlay, content"
   id="overlay"
   no-vertical-overlap=""
   popover="manual"
