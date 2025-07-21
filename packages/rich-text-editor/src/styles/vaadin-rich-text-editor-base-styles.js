@@ -342,12 +342,6 @@ const states = css`
     -webkit-user-select: none;
     user-select: none;
   }
-
-  :host([disabled]) [part~='toolbar-button'] {
-    cursor: var(--vaadin-disabled-cursor);
-    opacity: 0.5;
-    pointer-events: var(--_vaadin-button-disabled-pointer-events, none);
-  }
 `;
 
 export const richTextEditorStyles = [icons, base, content, toolbar, states];
