@@ -169,16 +169,13 @@ const isLastOverlay = (overlay) => {
  *
  * ### Styling
  *
- * `<vaadin-popover>` uses `<vaadin-popover-overlay>` internal
- * themable component as the actual visible overlay.
- *
- * See [`<vaadin-overlay>`](#/elements/vaadin-overlay) documentation
- * for `<vaadin-popover-overlay>` parts.
- *
- * In addition to `<vaadin-overlay>` parts, the following parts are available for styling:
+ * The following shadow DOM parts are available for styling:
  *
  * Part name        | Description
  * -----------------|-------------------------------------------
+ * `backdrop`       | Backdrop of the overlay
+ * `overlay`        | The overlay container
+ * `content`        | The overlay content
  * `arrow`          | Optional arrow pointing to the target when using `theme="arrow"`
  *
  * The following state attributes are available for styling:
@@ -186,9 +183,6 @@ const isLastOverlay = (overlay) => {
  * Attribute        | Description
  * -----------------|----------------------------------------
  * `position`       | Reflects the `position` property value.
- *
- * Note: the `theme` attribute value set on `<vaadin-popover>` is
- * propagated to the internal `<vaadin-popover-overlay>` component.
  *
  * ### Custom CSS Properties
  *
@@ -497,6 +491,7 @@ class Popover extends PopoverPositionMixin(
         @opened-changed="${this.__onOpenedChanged}"
         .restoreFocusOnClose="${this.__shouldRestoreFocus}"
         .restoreFocusNode="${this.target}"
+        exportparts="backdrop, overlay, content, arrow"
         @vaadin-overlay-escape-press="${this.__onEscapePress}"
         @vaadin-overlay-outside-click="${this.__onOutsideClick}"
         @vaadin-overlay-open="${this.__onOverlayOpened}"
