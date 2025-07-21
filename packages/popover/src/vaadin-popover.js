@@ -224,7 +224,7 @@ class Popover extends PopoverPositionMixin(
   static get styles() {
     return css`
       :host {
-        display: none !important;
+        display: contents;
       }
     `;
   }
@@ -232,7 +232,7 @@ class Popover extends PopoverPositionMixin(
   static get properties() {
     return {
       /**
-       * String used to label the overlay to screen reader users.
+       * String used to label the popover to screen reader users.
        *
        * @attr {string} accessible-name
        */
@@ -241,7 +241,7 @@ class Popover extends PopoverPositionMixin(
       },
 
       /**
-       * Id of the element used as label of the overlay to screen reader users.
+       * Id of the element used as label of the popover to screen reader users.
        *
        * @attr {string} accessible-name-ref
        */
@@ -415,11 +415,6 @@ class Popover extends PopoverPositionMixin(
         value: false,
         sync: true,
       },
-
-      /** @private */
-      __overlayId: {
-        type: String,
-      },
     };
   }
 
@@ -460,7 +455,7 @@ class Popover extends PopoverPositionMixin(
   constructor() {
     super();
 
-    this.__overlayId = `vaadin-popover-${generateUniqueId()}`;
+    this.__generatedId = `vaadin-popover-${generateUniqueId()}`;
 
     this.__onGlobalClick = this.__onGlobalClick.bind(this);
     this.__onGlobalKeyDown = this.__onGlobalKeyDown.bind(this);
@@ -479,10 +474,8 @@ class Popover extends PopoverPositionMixin(
 
     return html`
       <vaadin-popover-overlay
-        id="${this.__overlayId}"
-        role="${this.overlayRole}"
-        aria-label="${ifDefined(this.accessibleName)}"
-        aria-labelledby="${ifDefined(this.accessibleNameRef)}"
+        id="overlay"
+        popover="manual"
         .renderer="${this.renderer}"
         .owner="${this}"
         theme="${ifDefined(this._theme)}"
@@ -508,7 +501,9 @@ class Popover extends PopoverPositionMixin(
         @vaadin-overlay-outside-click="${this.__onOutsideClick}"
         @vaadin-overlay-open="${this.__onOverlayOpened}"
         @vaadin-overlay-closed="${this.__onOverlayClosed}"
-      ></vaadin-popover-overlay>
+      >
+        <slot></slot>
+      </vaadin-popover-overlay>
     `;
   }
 
@@ -530,12 +525,42 @@ class Popover extends PopoverPositionMixin(
   ready() {
     super.ready();
 
-    this._overlayElement = this.$[this.__overlayId];
+    this._overlayElement = this.$.overlay;
+  }
+
+  /** @protected */
+  updated(props) {
+    super.updated(props);
+
+    if (props.has('overlayRole')) {
+      this.setAttribute('role', this.overlayRole);
+    }
+
+    if (props.has('accessibleName')) {
+      if (this.accessibleName) {
+        this.setAttribute('aria-label', this.accessibleName);
+      } else {
+        this.removeAttribute('aria-label');
+      }
+    }
+
+    if (props.has('accessibleNameRef')) {
+      if (this.accessibleNameRef) {
+        this.setAttribute('aria-labelledby', this.accessibleNameRef);
+      } else {
+        this.removeAttribute('aria-labelledby');
+      }
+    }
   }
 
   /** @protected */
   connectedCallback() {
     super.connectedCallback();
+
+    // If no user ID is provided, set generated ID
+    if (!this.id) {
+      this.id = this.__generatedId;
+    }
 
     document.documentElement.addEventListener('click', this.__onGlobalClick, true);
   }
@@ -608,7 +633,7 @@ class Popover extends PopoverPositionMixin(
       effectiveTarget.setAttribute('aria-expanded', opened ? 'true' : 'false');
 
       if (opened) {
-        effectiveTarget.setAttribute('aria-controls', this.__overlayId);
+        effectiveTarget.setAttribute('aria-controls', this.id);
       } else {
         effectiveTarget.removeAttribute('aria-controls');
       }
@@ -787,7 +812,7 @@ class Popover extends PopoverPositionMixin(
       return;
     }
 
-    if ((this.__hasTrigger('focus') && this.__mouseDownInside) || this._overlayElement.contains(event.relatedTarget)) {
+    if ((this.__hasTrigger('focus') && this.__mouseDownInside) || this.contains(event.relatedTarget)) {
       return;
     }
 
@@ -815,7 +840,7 @@ class Popover extends PopoverPositionMixin(
       return;
     }
 
-    if (this._overlayElement.contains(event.relatedTarget)) {
+    if (this.contains(event.relatedTarget)) {
       return;
     }
 
@@ -846,7 +871,7 @@ class Popover extends PopoverPositionMixin(
     if (
       (this.__hasTrigger('focus') && this.__mouseDownInside) ||
       event.relatedTarget === this.target ||
-      this._overlayElement.contains(event.relatedTarget)
+      this.contains(event.relatedTarget)
     ) {
       return;
     }

@@ -96,14 +96,14 @@ declare class Popover extends PopoverPositionMixin(
   static setDefaultHoverDelay(hoverDelay: number): void;
 
   /**
-   * String used to label the overlay to screen reader users.
+   * String used to label the popover to screen reader users.
    *
    * @attr {string} accessible-name
    */
   accessibleName: string | null | undefined;
 
   /**
-   * Id of the element used as label of the overlay to screen reader users.
+   * Id of the element used as label of the popover to screen reader users.
    *
    * @attr {string} accessible-name-ref
    */

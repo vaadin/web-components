@@ -18,7 +18,7 @@ async function renderOpenedPopover(container, { content }) {
 }
 
 describe('lit renderer directives', () => {
-  let container, popover, overlay;
+  let container, popover;
 
   beforeEach(() => {
     container = fixtureSync('<div></div>');
@@ -28,7 +28,6 @@ describe('lit renderer directives', () => {
     describe('basic', () => {
       beforeEach(async () => {
         popover = await renderOpenedPopover(container, { content: 'Content' });
-        overlay = popover._overlayElement;
       });
 
       it('should set `renderer` property when the directive is attached', () => {
@@ -41,12 +40,12 @@ describe('lit renderer directives', () => {
       });
 
       it('should render the content with the renderer', () => {
-        expect(overlay.textContent).to.equal('Content');
+        expect(popover.textContent).to.equal('Content');
       });
 
       it('should re-render the content when a renderer dependency changes', async () => {
         await renderOpenedPopover(container, { content: 'New Content' });
-        expect(overlay.textContent).to.equal('New Content');
+        expect(popover.textContent).to.equal('New Content');
       });
     });
 

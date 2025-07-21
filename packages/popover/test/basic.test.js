@@ -29,13 +29,8 @@ describe('popover', () => {
   });
 
   describe('host element', () => {
-    it('should set display: none on the host element by default', () => {
-      expect(getComputedStyle(popover).display).to.equal('none');
-    });
-
-    it('should enforce display: none to hide the host element', () => {
-      popover.style.display = 'block';
-      expect(getComputedStyle(popover).display).to.equal('none');
+    it('should set display: contents on the host element by default', () => {
+      expect(getComputedStyle(popover).display).to.equal('contents');
     });
   });
 

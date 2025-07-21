@@ -5,26 +5,6 @@
  */
 import { OverlayMixin } from '@vaadin/overlay/src/vaadin-overlay-mixin.js';
 import { PositionMixin } from '@vaadin/overlay/src/vaadin-overlay-position-mixin.js';
-import { setNestedOverlay } from '@vaadin/overlay/src/vaadin-overlay-stack-mixin.js';
-
-/**
- * Returns the closest parent overlay for given node, if any.
- * @param {HTMLElement} node
- * @return {HTMLElement}
- */
-const getClosestOverlay = (node) => {
-  let n = node;
-
-  while (n && n !== node.ownerDocument) {
-    n = n.parentNode || n.host;
-
-    if (n && n._hasOverlayStackMixin) {
-      return n;
-    }
-  }
-
-  return null;
-};
 
 /**
  * A mixin providing common popover overlay functionality.
@@ -42,10 +22,6 @@ export const PopoverOverlayMixin = (superClass) =>
           reflectToAttribute: true,
         },
       };
-    }
-
-    static get observers() {
-      return ['__openedOrTargetChanged(opened, positionTarget)'];
     }
 
     /**
@@ -66,15 +42,6 @@ export const PopoverOverlayMixin = (superClass) =>
 
       if (!this.positionTarget || !this.opened) {
         return;
-      }
-
-      // Copy custom properties from the owner
-      if (this.owner) {
-        const style = getComputedStyle(this.owner);
-        ['top', 'bottom', 'start', 'end'].forEach((prop) => {
-          const propertyName = `--${this._tagNamePrefix}-offset-${prop}`;
-          this.style.setProperty(propertyName, style.getPropertyValue(propertyName));
-        });
       }
 
       this.removeAttribute('arrow-centered');
@@ -112,16 +79,6 @@ export const PopoverOverlayMixin = (superClass) =>
 
         const offset = targetRect.height / 2 - overlayRect.height / 2;
         this.style.top = `${overlayRect.top + offset}px`;
-      }
-    }
-
-    /** @private */
-    __openedOrTargetChanged(opened, target) {
-      if (target) {
-        const parent = getClosestOverlay(target);
-        if (parent) {
-          setNestedOverlay(parent, opened ? this : null);
-        }
       }
     }
   };
