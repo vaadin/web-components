@@ -8,7 +8,6 @@
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
-
 import { css } from 'lit';
 import { icons } from './vaadin-rich-text-editor-base-icons.js';
 
