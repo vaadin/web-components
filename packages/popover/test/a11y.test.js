@@ -38,6 +38,30 @@ describe('a11y', () => {
     overlay = popover.shadowRoot.querySelector('vaadin-popover-overlay');
   });
 
+  describe('id', () => {
+    beforeEach(() => {
+      popover = document.createElement('vaadin-popover');
+    });
+
+    afterEach(() => {
+      popover.remove();
+    });
+
+    it('should set generated ID on the host by default', async () => {
+      const ID_REGEX = /^vaadin-popover-\d+$/u;
+      document.body.appendChild(popover);
+      await nextRender();
+      expect(popover.id).to.match(ID_REGEX);
+    });
+
+    it('should not override custom ID set on the popover', async () => {
+      popover.id = 'custom-id';
+      document.body.appendChild(popover);
+      await nextRender();
+      expect(popover.id).to.equal('custom-id');
+    });
+  });
+
   describe('ARIA attributes', () => {
     it('should set role attribute on the host element to dialog', () => {
       expect(popover.getAttribute('role')).to.equal('dialog');
