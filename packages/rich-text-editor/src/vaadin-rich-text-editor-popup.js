@@ -78,7 +78,7 @@ class RichTextEditorPopup extends PolylitMixin(LitElement) {
         horizontal-align="start"
         vertical-align="top"
         focus-trap
-        exportparts="backdrop, overlay, content"
+        exportparts="overlay, content"
         @opened-changed="${this._onOpenedChanged}"
         @vaadin-overlay-escape-press="${this._onOverlayEscapePress}"
       >

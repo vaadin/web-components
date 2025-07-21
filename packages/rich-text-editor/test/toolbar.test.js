@@ -285,7 +285,9 @@ describe('toolbar controls', () => {
           });
 
           it('should export all overlay parts for styling', () => {
-            const parts = [...overlay.shadowRoot.querySelectorAll('[part]')].map((el) => el.getAttribute('part'));
+            const parts = [...overlay.shadowRoot.querySelectorAll('[part]')]
+              .map((el) => el.getAttribute('part'))
+              .filter((part) => part !== 'backdrop');
             const exportParts = overlay.getAttribute('exportparts').split(', ');
 
             parts.forEach((part) => {
