@@ -58,6 +58,15 @@ describe('vaadin-tooltip', () => {
       expect(overlay.owner).to.be.equal(tooltip);
     });
 
+    it('should export all overlay parts for styling', () => {
+      const parts = [...overlay.shadowRoot.querySelectorAll('[part]')].map((el) => el.getAttribute('part'));
+      const exportParts = overlay.getAttribute('exportparts').split(', ');
+
+      parts.forEach((part) => {
+        expect(exportParts).to.include(part);
+      });
+    });
+
     it('should not have tabindex on the overlay part', () => {
       expect(overlay.$.overlay.hasAttribute('tabindex')).to.be.false;
     });
