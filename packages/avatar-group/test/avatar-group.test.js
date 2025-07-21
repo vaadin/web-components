@@ -286,6 +286,15 @@ describe('avatar-group', () => {
       expect(overlay.owner).to.equal(group);
     });
 
+    it('should export all overlay parts for styling', () => {
+      const parts = [...overlay.shadowRoot.querySelectorAll('[part]')].map((el) => el.getAttribute('part'));
+      const exportParts = overlay.getAttribute('exportparts').split(', ');
+
+      parts.forEach((part) => {
+        expect(exportParts).to.include(part);
+      });
+    });
+
     it('should open overlay on overflow avatar click', () => {
       overflow.click();
       expect(overlay.opened).to.be.true;
