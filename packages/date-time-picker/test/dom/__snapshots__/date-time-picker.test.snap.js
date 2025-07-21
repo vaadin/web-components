@@ -37,6 +37,13 @@ snapshots["vaadin-date-time-picker host default"] =
     >
   </vaadin-date-picker>
   <vaadin-time-picker slot="time-picker">
+    <vaadin-time-picker-scroller
+      id="vaadin-time-picker-scroller-10"
+      role="listbox"
+      slot="overlay"
+      tabindex="-1"
+    >
+    </vaadin-time-picker-scroller>
     <label
       for="search-input-vaadin-time-picker-11"
       id="label-vaadin-time-picker-7"
@@ -115,6 +122,13 @@ snapshots["vaadin-date-time-picker host disabled"] =
     disabled=""
     slot="time-picker"
   >
+    <vaadin-time-picker-scroller
+      id="vaadin-time-picker-scroller-10"
+      role="listbox"
+      slot="overlay"
+      tabindex="-1"
+    >
+    </vaadin-time-picker-scroller>
     <label
       for="search-input-vaadin-time-picker-11"
       id="label-vaadin-time-picker-7"
@@ -191,6 +205,13 @@ snapshots["vaadin-date-time-picker host readonly"] =
     readonly=""
     slot="time-picker"
   >
+    <vaadin-time-picker-scroller
+      id="vaadin-time-picker-scroller-10"
+      role="listbox"
+      slot="overlay"
+      tabindex="-1"
+    >
+    </vaadin-time-picker-scroller>
     <label
       for="search-input-vaadin-time-picker-11"
       id="label-vaadin-time-picker-7"
@@ -267,6 +288,13 @@ snapshots["vaadin-date-time-picker host required"] =
     required=""
     slot="time-picker"
   >
+    <vaadin-time-picker-scroller
+      id="vaadin-time-picker-scroller-10"
+      role="listbox"
+      slot="overlay"
+      tabindex="-1"
+    >
+    </vaadin-time-picker-scroller>
     <label
       for="search-input-vaadin-time-picker-11"
       id="label-vaadin-time-picker-7"
@@ -338,6 +366,13 @@ snapshots["vaadin-date-time-picker host label"] =
     >
   </vaadin-date-picker>
   <vaadin-time-picker slot="time-picker">
+    <vaadin-time-picker-scroller
+      id="vaadin-time-picker-scroller-10"
+      role="listbox"
+      slot="overlay"
+      tabindex="-1"
+    >
+    </vaadin-time-picker-scroller>
     <label
       for="search-input-vaadin-time-picker-11"
       id="label-vaadin-time-picker-7"
@@ -407,6 +442,13 @@ snapshots["vaadin-date-time-picker host helper"] =
     >
   </vaadin-date-picker>
   <vaadin-time-picker slot="time-picker">
+    <vaadin-time-picker-scroller
+      id="vaadin-time-picker-scroller-10"
+      role="listbox"
+      slot="overlay"
+      tabindex="-1"
+    >
+    </vaadin-time-picker-scroller>
     <label
       for="search-input-vaadin-time-picker-11"
       id="label-vaadin-time-picker-7"
@@ -491,6 +533,13 @@ snapshots["vaadin-date-time-picker host error"] =
     invalid=""
     slot="time-picker"
   >
+    <vaadin-time-picker-scroller
+      id="vaadin-time-picker-scroller-10"
+      role="listbox"
+      slot="overlay"
+      tabindex="-1"
+    >
+    </vaadin-time-picker-scroller>
     <label
       for="search-input-vaadin-time-picker-11"
       id="label-vaadin-time-picker-7"
@@ -688,281 +737,16 @@ snapshots["vaadin-date-time-picker host overlay class time-picker"] =
 `<vaadin-time-picker-overlay
   class="custom date-time-picker-overlay"
   dir="ltr"
+  exportparts="overlay, content"
   id="overlay"
   no-vertical-overlap=""
   opened=""
+  popover="manual"
   start-aligned=""
   top-aligned=""
 >
-  <vaadin-time-picker-scroller
-    id="vaadin-time-picker-scroller-10"
-    role="listbox"
-  >
-    <vaadin-time-picker-item
-      aria-posinset="1"
-      aria-selected="false"
-      aria-setsize="24"
-      dir="ltr"
-      id="vaadin-time-picker-item-0"
-      role="option"
-      tabindex="-1"
-    >
-      00:00
-    </vaadin-time-picker-item>
-    <vaadin-time-picker-item
-      aria-posinset="2"
-      aria-selected="false"
-      aria-setsize="24"
-      dir="ltr"
-      id="vaadin-time-picker-item-1"
-      role="option"
-      tabindex="-1"
-    >
-      01:00
-    </vaadin-time-picker-item>
-    <vaadin-time-picker-item
-      aria-posinset="3"
-      aria-selected="false"
-      aria-setsize="24"
-      dir="ltr"
-      id="vaadin-time-picker-item-2"
-      role="option"
-      tabindex="-1"
-    >
-      02:00
-    </vaadin-time-picker-item>
-    <vaadin-time-picker-item
-      aria-posinset="4"
-      aria-selected="false"
-      aria-setsize="24"
-      dir="ltr"
-      id="vaadin-time-picker-item-3"
-      role="option"
-      tabindex="-1"
-    >
-      03:00
-    </vaadin-time-picker-item>
-    <vaadin-time-picker-item
-      aria-posinset="5"
-      aria-selected="false"
-      aria-setsize="24"
-      dir="ltr"
-      id="vaadin-time-picker-item-4"
-      role="option"
-      tabindex="-1"
-    >
-      04:00
-    </vaadin-time-picker-item>
-    <vaadin-time-picker-item
-      aria-posinset="6"
-      aria-selected="false"
-      aria-setsize="24"
-      dir="ltr"
-      id="vaadin-time-picker-item-5"
-      role="option"
-      tabindex="-1"
-    >
-      05:00
-    </vaadin-time-picker-item>
-    <vaadin-time-picker-item
-      aria-posinset="7"
-      aria-selected="false"
-      aria-setsize="24"
-      dir="ltr"
-      id="vaadin-time-picker-item-6"
-      role="option"
-      tabindex="-1"
-    >
-      06:00
-    </vaadin-time-picker-item>
-    <vaadin-time-picker-item
-      aria-posinset="8"
-      aria-selected="false"
-      aria-setsize="24"
-      dir="ltr"
-      id="vaadin-time-picker-item-7"
-      role="option"
-      tabindex="-1"
-    >
-      07:00
-    </vaadin-time-picker-item>
-    <vaadin-time-picker-item
-      aria-posinset="9"
-      aria-selected="false"
-      aria-setsize="24"
-      dir="ltr"
-      id="vaadin-time-picker-item-8"
-      role="option"
-      tabindex="-1"
-    >
-      08:00
-    </vaadin-time-picker-item>
-    <vaadin-time-picker-item
-      aria-posinset="10"
-      aria-selected="false"
-      aria-setsize="24"
-      dir="ltr"
-      id="vaadin-time-picker-item-9"
-      role="option"
-      tabindex="-1"
-    >
-      09:00
-    </vaadin-time-picker-item>
-    <vaadin-time-picker-item
-      aria-posinset="11"
-      aria-selected="false"
-      aria-setsize="24"
-      dir="ltr"
-      id="vaadin-time-picker-item-10"
-      role="option"
-      tabindex="-1"
-    >
-      10:00
-    </vaadin-time-picker-item>
-    <vaadin-time-picker-item
-      aria-posinset="12"
-      aria-selected="false"
-      aria-setsize="24"
-      dir="ltr"
-      id="vaadin-time-picker-item-11"
-      role="option"
-      tabindex="-1"
-    >
-      11:00
-    </vaadin-time-picker-item>
-    <vaadin-time-picker-item
-      aria-posinset="13"
-      aria-selected="false"
-      aria-setsize="24"
-      dir="ltr"
-      id="vaadin-time-picker-item-12"
-      role="option"
-      tabindex="-1"
-    >
-      12:00
-    </vaadin-time-picker-item>
-    <vaadin-time-picker-item
-      aria-posinset="14"
-      aria-selected="false"
-      aria-setsize="24"
-      dir="ltr"
-      id="vaadin-time-picker-item-13"
-      role="option"
-      tabindex="-1"
-    >
-      13:00
-    </vaadin-time-picker-item>
-    <vaadin-time-picker-item
-      aria-posinset="15"
-      aria-selected="false"
-      aria-setsize="24"
-      dir="ltr"
-      id="vaadin-time-picker-item-14"
-      role="option"
-      tabindex="-1"
-    >
-      14:00
-    </vaadin-time-picker-item>
-    <vaadin-time-picker-item
-      aria-posinset="16"
-      aria-selected="false"
-      aria-setsize="24"
-      dir="ltr"
-      id="vaadin-time-picker-item-15"
-      role="option"
-      tabindex="-1"
-    >
-      15:00
-    </vaadin-time-picker-item>
-    <vaadin-time-picker-item
-      aria-posinset="17"
-      aria-selected="false"
-      aria-setsize="24"
-      dir="ltr"
-      id="vaadin-time-picker-item-16"
-      role="option"
-      tabindex="-1"
-    >
-      16:00
-    </vaadin-time-picker-item>
-    <vaadin-time-picker-item
-      aria-posinset="18"
-      aria-selected="false"
-      aria-setsize="24"
-      dir="ltr"
-      id="vaadin-time-picker-item-17"
-      role="option"
-      tabindex="-1"
-    >
-      17:00
-    </vaadin-time-picker-item>
-    <vaadin-time-picker-item
-      aria-posinset="19"
-      aria-selected="false"
-      aria-setsize="24"
-      dir="ltr"
-      id="vaadin-time-picker-item-18"
-      role="option"
-      tabindex="-1"
-    >
-      18:00
-    </vaadin-time-picker-item>
-    <vaadin-time-picker-item
-      aria-posinset="20"
-      aria-selected="false"
-      aria-setsize="24"
-      dir="ltr"
-      id="vaadin-time-picker-item-19"
-      role="option"
-      tabindex="-1"
-    >
-      19:00
-    </vaadin-time-picker-item>
-    <vaadin-time-picker-item
-      aria-posinset="21"
-      aria-selected="false"
-      aria-setsize="24"
-      dir="ltr"
-      id="vaadin-time-picker-item-20"
-      role="option"
-      tabindex="-1"
-    >
-      20:00
-    </vaadin-time-picker-item>
-    <vaadin-time-picker-item
-      aria-posinset="22"
-      aria-selected="false"
-      aria-setsize="24"
-      dir="ltr"
-      id="vaadin-time-picker-item-21"
-      role="option"
-      tabindex="-1"
-    >
-      21:00
-    </vaadin-time-picker-item>
-    <vaadin-time-picker-item
-      aria-posinset="23"
-      aria-selected="false"
-      aria-setsize="24"
-      dir="ltr"
-      id="vaadin-time-picker-item-22"
-      role="option"
-      tabindex="-1"
-    >
-      22:00
-    </vaadin-time-picker-item>
-    <vaadin-time-picker-item
-      aria-posinset="24"
-      aria-selected="false"
-      aria-setsize="24"
-      dir="ltr"
-      id="vaadin-time-picker-item-23"
-      role="option"
-      tabindex="-1"
-    >
-      23:00
-    </vaadin-time-picker-item>
-  </vaadin-time-picker-scroller>
+  <slot name="overlay">
+  </slot>
 </vaadin-time-picker-overlay>
 `;
 /* end snapshot vaadin-date-time-picker host overlay class time-picker */

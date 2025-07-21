@@ -45,9 +45,11 @@ import { TimePickerMixin } from './vaadin-time-picker-mixin.js';
  *
  * In addition to `<vaadin-text-field>` parts, the following parts are available for theming:
  *
- * Part name       | Description
- * ----------------|----------------
- * `toggle-button` | The toggle button
+ * Part name        | Description
+ * -----------------|----------------
+ * `toggle-button`  | The toggle button
+ * `overlay`        | The overlay container
+ * `content`        | The overlay content
  *
  * In addition to `<vaadin-text-field>` state attributes, the following state attributes are available for theming:
  *
@@ -139,12 +141,16 @@ class TimePicker extends TimePickerMixin(ThemableMixin(ElementMixin(PolylitMixin
 
       <vaadin-time-picker-overlay
         id="overlay"
+        popover="manual"
         .owner="${this}"
         .opened="${this._overlayOpened}"
         theme="${ifDefined(this._theme)}"
         .positionTarget="${this._inputContainer}"
         no-vertical-overlap
-      ></vaadin-time-picker-overlay>
+        exportparts="overlay, content"
+      >
+        <slot name="overlay"></slot>
+      </vaadin-time-picker-overlay>
 
       <slot name="tooltip"></slot>
     `;
