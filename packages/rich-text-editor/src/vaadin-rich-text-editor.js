@@ -361,7 +361,7 @@ class RichTextEditor extends RichTextEditorMixin(
   }
 
   /**
-   * Override update to render slotted link dialog into light DOM after rendering shadow DOM.
+   * Override update to render slotted overlays into light DOM after rendering shadow DOM.
    * @param changedProperties
    * @protected
    */

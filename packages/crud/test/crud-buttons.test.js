@@ -35,7 +35,7 @@ describe('crud buttons', () => {
         crud.items = [{ foo: 'bar' }];
         await nextRender();
         saveButton = crud.querySelector('[slot=save-button]');
-        cancelButton = crud.querySelector('[slot=cancel-button]');
+        cancelButton = crud.querySelector(':scope > [slot=cancel-button]');
         deleteButton = crud.querySelector('[slot=delete-button]');
       });
 
@@ -74,7 +74,7 @@ describe('crud buttons', () => {
         let confirmDeleteDialog, confirmDeleteOverlay;
 
         beforeEach(() => {
-          confirmDeleteDialog = crud.$.confirmDelete;
+          confirmDeleteDialog = crud._confirmDeleteDialog;
           confirmDeleteOverlay = confirmDeleteDialog.$.overlay;
         });
 
@@ -171,7 +171,7 @@ describe('crud buttons', () => {
           let confirmCancelOverlay;
 
           beforeEach(() => {
-            confirmCancelDialog = crud.$.confirmCancel;
+            confirmCancelDialog = crud._confirmCancelDialog;
             confirmCancelOverlay = confirmCancelDialog.$.overlay;
           });
 
@@ -316,7 +316,7 @@ describe('crud buttons', () => {
           let confirmDeleteOverlay;
 
           beforeEach(() => {
-            confirmDeleteDialog = crud.$.confirmDelete;
+            confirmDeleteDialog = crud._confirmDeleteDialog;
             confirmDeleteOverlay = confirmDeleteDialog.$.overlay;
           });
 
@@ -417,7 +417,7 @@ describe('crud buttons', () => {
           beforeEach(async () => {
             crud.editorPosition = 'bottom';
             crud.editOnClick = true;
-            confirmCancelDialog = crud.$.confirmCancel;
+            confirmCancelDialog = crud._confirmCancelDialog;
             confirmCancelOverlay = confirmCancelDialog.$.overlay;
             await nextRender();
             flushGrid(crud._grid);
@@ -660,7 +660,7 @@ describe('crud buttons', () => {
           let confirmDeleteOverlay;
 
           beforeEach(() => {
-            confirmDeleteDialog = crud.$.confirmDelete;
+            confirmDeleteDialog = crud._confirmDeleteDialog;
             confirmDeleteOverlay = confirmDeleteDialog.$.overlay;
           });
 
@@ -951,7 +951,7 @@ describe('crud buttons', () => {
     });
 
     it('should not create default cancel-button', () => {
-      expect(crud.querySelector('[slot="cancel-button"]')).to.be.null;
+      expect(crud.querySelector(':scope > [slot="cancel-button"]')).to.be.null;
     });
 
     it('should not create default delete-button', () => {

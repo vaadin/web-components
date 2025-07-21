@@ -27,7 +27,7 @@ describe('crud editor', () => {
     beforeEach(async () => {
       crud = fixtureSync('<vaadin-crud style="width: 300px;"></vaadin-crud>');
       crud.items = [{ foo: 'bar' }];
-      header = crud.querySelector('[slot=header]');
+      header = crud.querySelector(':scope > [slot=header]');
       await nextRender();
     });
 
@@ -77,7 +77,7 @@ describe('crud editor', () => {
         dialog = crud.$.dialog;
         overlay = dialog.$.overlay;
         form = crud.querySelector('[slot=form]');
-        btnCancel = crud.querySelector('[slot="cancel-button"]');
+        btnCancel = crud.querySelector(':scope > [slot="cancel-button"]');
       });
 
       it(`should move ${type} form to dialog content with default editorPosition`, async () => {
@@ -158,7 +158,7 @@ describe('crud editor', () => {
         await nextRender();
 
         // Get the elementFromPoint of the editor header
-        const header = crud.querySelector('[slot=header]');
+        const header = crud.querySelector(':scope > [slot=header]');
         const headerRect = header.getBoundingClientRect();
         const x = headerRect.left + headerRect.width / 2;
         const y = headerRect.top + headerRect.height / 2;

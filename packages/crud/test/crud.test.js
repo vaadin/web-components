@@ -80,8 +80,8 @@ describe('crud', () => {
         crud._form,
         crud.$.dialog,
         crud.$.dialog.$.overlay,
-        crud.$.confirmCancel,
-        crud.$.confirmDelete,
+        crud._confirmCancelDialog,
+        crud._confirmDeleteDialog,
       ].forEach((e) => expect(e.getAttribute('theme')).to.be.match(/foo/u));
     });
   });
@@ -509,7 +509,7 @@ describe('crud', () => {
       crud.items = [{ foo: 'bar' }, { foo: 'baz' }];
       await nextRender();
       flushGrid(crud._grid);
-      confirmCancelDialog = crud.$.confirmCancel;
+      confirmCancelDialog = crud._confirmCancelDialog;
       confirmCancelOverlay = confirmCancelDialog.$.overlay;
     });
 
