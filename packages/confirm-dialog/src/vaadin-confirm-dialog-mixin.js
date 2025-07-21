@@ -291,6 +291,8 @@ export const ConfirmDialogMixin = (superClass) =>
         },
       });
       this.addController(this._confirmController);
+
+      this._overlayElement = this.$.overlay;
     }
 
     /** @protected */
@@ -304,9 +306,8 @@ export const ConfirmDialogMixin = (superClass) =>
 
     /** @protected */
     __onDialogOpened() {
-      const confirmButton = this.querySelector('[slot="confirm-button"]');
-      if (confirmButton) {
-        confirmButton.focus();
+      if (this._confirmButton) {
+        this._confirmButton.focus();
       }
     }
 

@@ -123,8 +123,9 @@ snapshots["vaadin-confirm-dialog overlay theme"] =
 `;
 /* end snapshot vaadin-confirm-dialog overlay theme */
 
-snapshots["vaadin-confirm-dialog overlay class"] =
+snapshots["vaadin-confirm-dialog overlay class"] = 
 `<vaadin-confirm-dialog-overlay
+  class="confirm-dialog-overlay custom"
   exportparts="backdrop, overlay, header, content, message, footer, cancel-button, confirm-button, reject-button"
   focus-trap=""
   has-footer=""
