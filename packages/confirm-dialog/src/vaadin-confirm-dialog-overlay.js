@@ -102,6 +102,7 @@ class ConfirmDialogOverlay extends OverlayMixin(DirMixin(ThemableMixin(PolylitMi
   /**
    * Override method from OverlayFocusMixin to use owner as content root
    * @protected
+   * @override
    */
   get _contentRoot() {
     return this.owner;
@@ -110,6 +111,7 @@ class ConfirmDialogOverlay extends OverlayMixin(DirMixin(ThemableMixin(PolylitMi
   /**
    * Override method from OverlayFocusMixin to use owner as modal root
    * @protected
+   * @override
    */
   get _modalRoot() {
     return this.owner;
