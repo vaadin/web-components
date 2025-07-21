@@ -5,7 +5,7 @@
  */
 import { css } from 'lit';
 
-export const richTextEditorPopupOverlayStyles = css`
+export const richTextEditorPopupOverlay = css`
   [part='overlay'] {
     padding: var(--vaadin-rich-text-editor-overlay-padding, var(--vaadin-padding-container));
   }
@@ -33,3 +33,5 @@ export const richTextEditorPopupOverlayStyles = css`
     outline-offset: 1px;
   }
 `;
+
+export richTextEditorPopupOverlayStyles = [overlayStyles, richTextEditorPopupOverlay];

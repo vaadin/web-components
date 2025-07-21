@@ -150,7 +150,7 @@ class RichTextEditorPopupOverlay extends PositionMixin(
   }
 
   static get styles() {
-    return [overlayStyles, richTextEditorPopupOverlayStyles];
+    return richTextEditorPopupOverlayStyles;
   }
 
   /** @protected */
