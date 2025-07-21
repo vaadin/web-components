@@ -3,6 +3,88 @@ export const snapshots = {};
 
 snapshots["vaadin-crud host default"] = 
 `<vaadin-crud editor-position="">
+  <vaadin-confirm-dialog
+    aria-description="There are unsaved changes to this item."
+    aria-label="Discard changes"
+    cancel-button-visible=""
+    confirm-theme="primary"
+    role="alertdialog"
+    slot="confirm-cancel"
+    with-backdrop=""
+  >
+    <h3 slot="header">
+      Discard changes
+    </h3>
+    <div>
+      There are unsaved changes to this item.
+    </div>
+    <vaadin-button
+      role="button"
+      slot="cancel-button"
+      tabindex="0"
+      theme="tertiary"
+    >
+      Cancel
+    </vaadin-button>
+    <vaadin-button
+      hidden=""
+      role="button"
+      slot="reject-button"
+      tabindex="0"
+      theme="error tertiary"
+    >
+      Reject
+    </vaadin-button>
+    <vaadin-button
+      role="button"
+      slot="confirm-button"
+      tabindex="0"
+      theme="primary"
+    >
+      Discard
+    </vaadin-button>
+  </vaadin-confirm-dialog>
+  <vaadin-confirm-dialog
+    aria-description="Are you sure you want to delete this item? This action cannot be undone."
+    aria-label="Delete item"
+    cancel-button-visible=""
+    confirm-theme="primary error"
+    role="alertdialog"
+    slot="confirm-delete"
+    with-backdrop=""
+  >
+    <h3 slot="header">
+      Delete item
+    </h3>
+    <div>
+      Are you sure you want to delete this item? This action cannot be undone.
+    </div>
+    <vaadin-button
+      role="button"
+      slot="cancel-button"
+      tabindex="0"
+      theme="tertiary"
+    >
+      Cancel
+    </vaadin-button>
+    <vaadin-button
+      hidden=""
+      role="button"
+      slot="reject-button"
+      tabindex="0"
+      theme="error tertiary"
+    >
+      Reject
+    </vaadin-button>
+    <vaadin-button
+      role="button"
+      slot="confirm-button"
+      tabindex="0"
+      theme="primary error"
+    >
+      Delete
+    </vaadin-button>
+  </vaadin-confirm-dialog>
   <vaadin-crud-grid
     slot="grid"
     style="touch-action: none;"
@@ -227,88 +309,10 @@ snapshots["vaadin-crud shadow default"] =
 </div>
 <vaadin-crud-dialog id="dialog">
 </vaadin-crud-dialog>
-<vaadin-confirm-dialog
-  aria-description="There are unsaved changes to this item."
-  aria-label="Discard changes"
-  cancel-button-visible=""
-  confirm-theme="primary"
-  id="confirmCancel"
-  role="alertdialog"
-  with-backdrop=""
->
-  <h3 slot="header">
-    Discard changes
-  </h3>
-  <div>
-    There are unsaved changes to this item.
-  </div>
-  <vaadin-button
-    role="button"
-    slot="cancel-button"
-    tabindex="0"
-    theme="tertiary"
-  >
-    Cancel
-  </vaadin-button>
-  <vaadin-button
-    hidden=""
-    role="button"
-    slot="reject-button"
-    tabindex="0"
-    theme="error tertiary"
-  >
-    Reject
-  </vaadin-button>
-  <vaadin-button
-    role="button"
-    slot="confirm-button"
-    tabindex="0"
-    theme="primary"
-  >
-    Discard
-  </vaadin-button>
-</vaadin-confirm-dialog>
-<vaadin-confirm-dialog
-  aria-description="Are you sure you want to delete this item? This action cannot be undone."
-  aria-label="Delete item"
-  cancel-button-visible=""
-  confirm-theme="primary error"
-  id="confirmDelete"
-  role="alertdialog"
-  with-backdrop=""
->
-  <h3 slot="header">
-    Delete item
-  </h3>
-  <div>
-    Are you sure you want to delete this item? This action cannot be undone.
-  </div>
-  <vaadin-button
-    role="button"
-    slot="cancel-button"
-    tabindex="0"
-    theme="tertiary"
-  >
-    Cancel
-  </vaadin-button>
-  <vaadin-button
-    hidden=""
-    role="button"
-    slot="reject-button"
-    tabindex="0"
-    theme="error tertiary"
-  >
-    Reject
-  </vaadin-button>
-  <vaadin-button
-    role="button"
-    slot="confirm-button"
-    tabindex="0"
-    theme="primary error"
-  >
-    Delete
-  </vaadin-button>
-</vaadin-confirm-dialog>
+<slot name="confirm-cancel">
+</slot>
+<slot name="confirm-delete">
+</slot>
 `;
 /* end snapshot vaadin-crud shadow default */
 

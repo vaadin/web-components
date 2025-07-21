@@ -13,7 +13,7 @@ import '@vaadin/confirm-dialog/src/vaadin-confirm-dialog.js';
 import './vaadin-crud-dialog.js';
 import './vaadin-crud-grid.js';
 import './vaadin-crud-form.js';
-import { html, LitElement } from 'lit';
+import { html, LitElement, render } from 'lit';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
@@ -172,6 +172,14 @@ import { CrudMixin } from './vaadin-crud-mixin.js';
  * @mixes CrudMixin
  */
 class Crud extends CrudMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {
+  static get is() {
+    return 'vaadin-crud';
+  }
+
+  static get cvdlName() {
+    return 'vaadin-crud';
+  }
+
   static get styles() {
     return crudStyles;
   }
@@ -222,38 +230,54 @@ class Crud extends CrudMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInjecti
         @opened-changed="${this.__onDialogOpened}"
       ></vaadin-crud-dialog>
 
-      <vaadin-confirm-dialog
-        theme="${ifDefined(this._theme)}"
-        id="confirmCancel"
-        @confirm="${this.__confirmCancel}"
-        cancel-button-visible
-        .confirmText="${this.__effectiveI18n.confirm.cancel.button.confirm}"
-        .cancelText="${this.__effectiveI18n.confirm.cancel.button.dismiss}"
-        .header="${this.__effectiveI18n.confirm.cancel.title}"
-        .message="${this.__effectiveI18n.confirm.cancel.content}"
-        confirm-theme="primary"
-      ></vaadin-confirm-dialog>
+      <slot name="confirm-cancel"></slot>
 
-      <vaadin-confirm-dialog
-        theme="${ifDefined(this._theme)}"
-        id="confirmDelete"
-        @confirm="${this.__confirmDelete}"
-        cancel-button-visible
-        .confirmText="${this.__effectiveI18n.confirm.delete.button.confirm}"
-        .cancelText="${this.__effectiveI18n.confirm.delete.button.dismiss}"
-        .header="${this.__effectiveI18n.confirm.delete.title}"
-        .message="${this.__effectiveI18n.confirm.delete.content}"
-        confirm-theme="primary error"
-      ></vaadin-confirm-dialog>
+      <slot name="confirm-delete"></slot>
     `;
   }
 
-  static get is() {
-    return 'vaadin-crud';
+  /**
+   * Override update to render slotted overlays into light DOM after rendering shadow DOM.
+   * @param changedProperties
+   * @protected
+   */
+  update(changedProperties) {
+    super.update(changedProperties);
+
+    this.__renderSlottedOverlays();
   }
 
-  static get cvdlName() {
-    return 'vaadin-crud';
+  /** @private */
+  __renderSlottedOverlays() {
+    render(
+      html`
+        <vaadin-confirm-dialog
+          theme="${ifDefined(this._theme)}"
+          slot="confirm-cancel"
+          @confirm="${this.__confirmCancel}"
+          cancel-button-visible
+          .confirmText="${this.__effectiveI18n.confirm.cancel.button.confirm}"
+          .cancelText="${this.__effectiveI18n.confirm.cancel.button.dismiss}"
+          .header="${this.__effectiveI18n.confirm.cancel.title}"
+          .message="${this.__effectiveI18n.confirm.cancel.content}"
+          confirm-theme="primary"
+        ></vaadin-confirm-dialog>
+
+        <vaadin-confirm-dialog
+          theme="${ifDefined(this._theme)}"
+          slot="confirm-delete"
+          @confirm="${this.__confirmDelete}"
+          cancel-button-visible
+          .confirmText="${this.__effectiveI18n.confirm.delete.button.confirm}"
+          .cancelText="${this.__effectiveI18n.confirm.delete.button.dismiss}"
+          .header="${this.__effectiveI18n.confirm.delete.title}"
+          .message="${this.__effectiveI18n.confirm.delete.content}"
+          confirm-theme="primary error"
+        ></vaadin-confirm-dialog>
+      `,
+      this,
+      { host: this },
+    );
   }
 }
 
