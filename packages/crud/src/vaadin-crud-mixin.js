@@ -377,12 +377,24 @@ export const CrudMixin = (superClass) =>
       return this.__fields;
     }
 
+    /** @private */
+    get _editor() {
+      return this.shadowRoot.querySelector('#editor');
+    }
+
+    /** @private */
+    get _scroller() {
+      return this.shadowRoot.querySelector('#scroller');
+    }
+
+    /** @private */
+    get _dialogMode() {
+      return this.editorPosition === '' || this._fullscreen;
+    }
+
     /** @protected */
     ready() {
       super.ready();
-
-      this.$.dialog.$.overlay.addEventListener('vaadin-overlay-outside-click', this.__cancel);
-      this.$.dialog.$.overlay.addEventListener('vaadin-overlay-escape-press', this.__cancel);
 
       this._gridController = new GridSlotController(this);
       this.addController(this._gridController);
@@ -477,33 +489,31 @@ export const CrudMixin = (superClass) =>
       }
 
       if (opened) {
-        this.__ensureChildren();
-
         // When using bottom / aside editor position,
         // auto-focus the editor element on open.
-        if (this._form.parentElement === this) {
-          this.$.editor.setAttribute('tabindex', '0');
-          this.$.editor.focus();
-        } else {
-          this.$.editor.removeAttribute('tabindex');
+        if (this._editor) {
+          this._editor.focus();
         }
-      } else if (oldOpened) {
-        // Teleport form and buttons back to light DOM when closing overlay
-        this.__moveChildNodes(this);
+
+        // TODO: Verify if this needs a timeout
+        // Wait to set label until slotted element has been moved.
+        setTimeout(() => {
+          this.__dialogAriaLabel = this._headerNode.textContent.trim();
+        });
       }
 
       this.__toggleToolbar();
 
       // Make sure to reset scroll position
-      this.$.scroller.scrollTop = 0;
+      if (this._scroller) {
+        this._scroller.scrollTop = 0;
+      }
     }
 
     /** @private */
     __fullscreenChanged(fullscreen, oldFullscreen) {
       if (fullscreen || oldFullscreen) {
         this.__toggleToolbar();
-
-        this.__ensureChildren();
 
         this.toggleAttribute('fullscreen', fullscreen);
       }
@@ -515,66 +525,6 @@ export const CrudMixin = (superClass) =>
       if (this.editorPosition === 'bottom' && !this._fullscreen) {
         this.$.toolbar.style.display = this.editorOpened ? 'none' : '';
       }
-    }
-
-    /** @private */
-    __moveChildNodes(target) {
-      const nodes = [this._headerNode, this._form];
-      const buttons = [this._saveButton, this._cancelButton, this._deleteButton].filter(Boolean);
-      if (!nodes.every((node) => node instanceof HTMLElement)) {
-        return;
-      }
-
-      // Teleport header node, form, and the buttons to corresponding slots.
-      // NOTE: order in which buttons are moved matches the order of slots.
-      [...nodes, ...buttons].forEach((node) => {
-        // Do not move nodes if the editor position has not changed
-        if (node.parentNode !== target) {
-          target.appendChild(node);
-        }
-      });
-
-      // Wait to set label until slotted element has been moved.
-      setTimeout(() => {
-        this.__dialogAriaLabel = this._headerNode.textContent.trim();
-      });
-    }
-
-    /** @private */
-    __shouldOpenDialog(fullscreen, editorPosition) {
-      return editorPosition === '' || fullscreen;
-    }
-
-    /** @private */
-    __ensureChildren() {
-      if (this.__shouldOpenDialog(this._fullscreen, this.editorPosition)) {
-        // Move form to dialog
-        this.__moveChildNodes(this.$.dialog.$.overlay);
-      } else {
-        // Move form to crud
-        this.__moveChildNodes(this);
-      }
-    }
-
-    /** @private */
-    __computeDialogOpened(opened, fullscreen, editorPosition) {
-      // Only open dialog when editorPosition is "" or fullscreen is set
-      return this.__shouldOpenDialog(fullscreen, editorPosition) ? opened : false;
-    }
-
-    /** @private */
-    __computeEditorHidden(opened, fullscreen, editorPosition) {
-      // Only show editor when editorPosition is "bottom" or "aside"
-      if (['aside', 'bottom'].includes(editorPosition) && !fullscreen) {
-        return !opened;
-      }
-
-      return true;
-    }
-
-    /** @private */
-    __onDialogOpened(event) {
-      this.editorOpened = event.detail.value;
     }
 
     /** @private */

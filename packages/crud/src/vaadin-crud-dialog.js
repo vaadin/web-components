@@ -144,7 +144,16 @@ class CrudDialog extends DialogBaseMixin(OverlayClassMixin(ThemePropertyMixin(Po
       fullscreen: {
         type: Boolean,
       },
+
+      owner: {
+        type: Object,
+      },
     };
+  }
+
+  /** @private **/
+  __cancel() {
+    this.dispatchEvent(new CustomEvent('cancel', { bubbles: false, composed: false }));
   }
 
   /** @protected */
@@ -153,19 +162,28 @@ class CrudDialog extends DialogBaseMixin(OverlayClassMixin(ThemePropertyMixin(Po
       <vaadin-crud-dialog-overlay
         id="overlay"
         popover="manual"
-        .owner="${this}"
+        .owner="${this.owner}"
         .opened="${this.opened}"
         aria-label="${ifDefined(this.ariaLabel)}"
         @opened-changed="${this._onOverlayOpened}"
         @mousedown="${this._bringOverlayToFront}"
         @touchstart="${this._bringOverlayToFront}"
+        @vaadin-overlay-outside-click="${this.__cancel}"
+        @vaadin-overlay-escape-press="${this.__cancel}"
         theme="${ifDefined(this._theme)}"
         .modeless="${this.modeless}"
         .withBackdrop="${!this.modeless}"
         ?fullscreen="${this.fullscreen}"
         role="dialog"
         focus-trap
-      ></vaadin-crud-dialog-overlay>
+        exportparts="backdrop, overlay, header, content, footer"
+      >
+        <slot name="header" slot="header"></slot>
+        <slot name="form" slot="form"></slot>
+        <slot name="save-button" slot="save-button"></slot>
+        <slot name="cancel-button" slot="cancel-button"></slot>
+        <slot name="delete-button" slot="delete-button"></slot>
+      </vaadin-crud-dialog-overlay>
     `;
   }
 }
