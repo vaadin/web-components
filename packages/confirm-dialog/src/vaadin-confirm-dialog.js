@@ -24,14 +24,13 @@ import { ConfirmDialogMixin } from './vaadin-confirm-dialog-mixin.js';
  *
  * ### Styling
  *
- * The `<vaadin-confirm-dialog>` is not themable. Apply styles to `<vaadin-confirm-dialog-overlay>`
- * component and use its shadow parts for styling.
- * See [`<vaadin-overlay>`](#/elements/vaadin-overlay) for the overlay styling documentation.
- *
- * In addition to `<vaadin-overlay>` parts, the following parts are available for theming:
+ * The following shadow DOM parts are available for styling:
  *
  * Part name        | Description
  * -----------------|-------------------------------------------
+ * `backdrop`       | Backdrop of the overlay
+ * `overlay`        | The overlay container
+ * `content`        | The overlay content
  * `header`         | The header element wrapper
  * `message`        | The message element wrapper
  * `footer`         | The footer element that wraps the buttons
@@ -40,8 +39,6 @@ import { ConfirmDialogMixin } from './vaadin-confirm-dialog-mixin.js';
  * `reject-button`  | The "Reject" button wrapper
  *
  * Use `confirmTheme`, `cancelTheme` and `rejectTheme` properties to customize buttons theme.
- * Also, the `theme` attribute value set on `<vaadin-confirm-dialog>` is propagated to the
- * `<vaadin-confirm-dialog-overlay>` component.
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
