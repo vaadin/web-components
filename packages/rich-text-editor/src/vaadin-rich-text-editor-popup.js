@@ -183,6 +183,7 @@ class RichTextEditorPopupOverlay extends PositionMixin(
   /**
    * Override method from OverlayFocusMixin to use owner as content root
    * @protected
+   * @override
    */
   get _contentRoot() {
     return this.owner;
