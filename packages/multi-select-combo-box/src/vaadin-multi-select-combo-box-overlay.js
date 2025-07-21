@@ -39,7 +39,6 @@ class MultiSelectComboBoxOverlay extends ComboBoxOverlayMixin(
   /** @protected */
   render() {
     return html`
-      <div id="backdrop" part="backdrop" hidden></div>
       <div part="overlay" id="overlay">
         <div part="loader"></div>
         <div part="content" id="content"><slot></slot></div>
