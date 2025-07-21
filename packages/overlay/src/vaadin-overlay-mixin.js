@@ -125,7 +125,9 @@ export const OverlayMixin = (superClass) =>
       // get invoked on iOS Safari (reproducible in <vaadin-dialog>
       // and <vaadin-context-menu>).
       this.addEventListener('click', () => {});
-      this.$.backdrop.addEventListener('click', () => {});
+      if (this.$.backdrop) {
+        this.$.backdrop.addEventListener('click', () => {});
+      }
 
       this.addEventListener('mouseup', () => {
         // In Chrome, focus moves to body on overlay content mousedown
