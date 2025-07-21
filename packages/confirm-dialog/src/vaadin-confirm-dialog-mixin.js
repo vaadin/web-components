@@ -37,6 +37,7 @@ export const ConfirmDialogMixin = (superClass) =>
          */
         opened: {
           type: Boolean,
+          reflectToAttribute: true,
           value: false,
           notify: true,
           sync: true,
@@ -207,7 +208,7 @@ export const ConfirmDialogMixin = (superClass) =>
         '__updateHeaderNode(_headerNode, header)',
         '__updateMessageNodes(_messageNodes, message)',
         '__updateRejectButton(_rejectButton, rejectText, rejectTheme, rejectButtonVisible)',
-        '__accessibleDescriptionRefChanged(_overlayElement, _messageNodes, accessibleDescriptionRef)',
+        '__accessibleDescriptionRefChanged(_messageNodes, accessibleDescriptionRef)',
       ];
     }
 
@@ -249,6 +250,8 @@ export const ConfirmDialogMixin = (superClass) =>
     /** @protected */
     ready() {
       super.ready();
+
+      this.role = 'alertdialog';
 
       this._headerController = new SlotController(this, 'header', 'h3', {
         initializer: (node) => {
@@ -293,46 +296,43 @@ export const ConfirmDialogMixin = (superClass) =>
     }
 
     /** @protected */
+    updated(props) {
+      super.updated(props);
+
+      if (props.has('header')) {
+        this.ariaLabel = this.header || 'confirmation';
+      }
+    }
+
+    /** @protected */
     __onDialogOpened() {
-      const overlay = this._overlayElement;
-
-      // Teleport slotted nodes to the overlay element.
-      this.__slottedNodes.forEach((node) => {
-        overlay.appendChild(node);
-      });
-
-      const confirmButton = overlay.querySelector('[slot="confirm-button"]');
-      if (confirmButton) {
-        confirmButton.focus();
+      if (this._confirmButton) {
+        this._confirmButton.focus();
       }
     }
 
     /** @protected */
     __onDialogClosed() {
-      // Move nodes from the overlay back to the host.
-      this.__slottedNodes.forEach((node) => {
-        this.appendChild(node);
-      });
       this.dispatchEvent(new CustomEvent('closed'));
     }
 
     /** @private */
-    __accessibleDescriptionRefChanged(overlay, messageNodes, accessibleDescriptionRef) {
-      if (!overlay || !messageNodes) {
+    __accessibleDescriptionRefChanged(messageNodes, accessibleDescriptionRef) {
+      if (!messageNodes) {
         return;
       }
 
       if (accessibleDescriptionRef) {
-        overlay.removeAttribute('aria-description');
-        setAriaIDReference(overlay, 'aria-describedby', {
+        this.removeAttribute('aria-description');
+        setAriaIDReference(this, 'aria-describedby', {
           newId: accessibleDescriptionRef,
           oldId: this.__oldAccessibleDescriptionRef,
           fromUser: true,
         });
       } else {
-        overlay.removeAttribute('aria-describedby');
+        this.removeAttribute('aria-describedby');
         const ariaDescription = messageNodes.map((node) => node.textContent.trim()).join(' ');
-        overlay.setAttribute('aria-description', ariaDescription);
+        this.setAttribute('aria-description', ariaDescription);
       }
 
       this.__oldAccessibleDescriptionRef = accessibleDescriptionRef;

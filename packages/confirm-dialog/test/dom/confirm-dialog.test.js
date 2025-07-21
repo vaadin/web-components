@@ -23,6 +23,10 @@ describe('vaadin-confirm-dialog', () => {
     await oneEvent(overlay, 'vaadin-overlay-open');
   });
 
+  it('host', async () => {
+    await expect(dialog).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
+  });
+
   it('overlay', async () => {
     await expect(overlay).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
   });

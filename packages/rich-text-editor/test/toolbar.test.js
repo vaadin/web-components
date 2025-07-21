@@ -378,7 +378,7 @@ describe('toolbar controls', () => {
       beforeEach(() => {
         btn = getButton('link');
         dialog = rte.querySelector('[slot="link-dialog"]');
-        overlay = dialog._overlayElement;
+        overlay = dialog.$.overlay;
         urlField = dialog.querySelector('vaadin-text-field');
         cancelButton = dialog.querySelector('[slot="cancel-button"]');
         confirmButton = dialog.querySelector('[slot="confirm-button"]');
