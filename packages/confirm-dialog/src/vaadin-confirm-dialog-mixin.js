@@ -293,6 +293,7 @@ export const ConfirmDialogMixin = (superClass) =>
       this.addController(this._confirmController);
     }
 
+    /** @protected */
     updated(props) {
       super.updated(props);
 
