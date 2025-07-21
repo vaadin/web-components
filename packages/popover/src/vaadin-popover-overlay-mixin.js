@@ -25,15 +25,6 @@ export const PopoverOverlayMixin = (superClass) =>
     }
 
     /**
-     * Tag name prefix used by custom properties.
-     * @protected
-     * @return {string}
-     */
-    get _tagNamePrefix() {
-      return 'vaadin-popover';
-    }
-
-    /**
      * @protected
      * @override
      */
