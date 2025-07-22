@@ -6,6 +6,7 @@
 import { isIOS } from '@vaadin/component-base/src/browser-utils.js';
 import { OverlayFocusMixin } from './vaadin-overlay-focus-mixin.js';
 import { OverlayStackMixin } from './vaadin-overlay-stack-mixin.js';
+import { setOverlayStateAttribute } from './vaadin-overlay-utils.js';
 
 /**
  * @polymerMixin
@@ -91,6 +92,7 @@ export const OverlayMixin = (superClass) =>
           type: Boolean,
           value: false,
           reflectToAttribute: true,
+          observer: '_withBackdropChanged',
           sync: true,
         },
       };
@@ -123,7 +125,9 @@ export const OverlayMixin = (superClass) =>
       // get invoked on iOS Safari (reproducible in <vaadin-dialog>
       // and <vaadin-context-menu>).
       this.addEventListener('click', () => {});
-      this.$.backdrop.addEventListener('click', () => {});
+      if (this.$.backdrop) {
+        this.$.backdrop.addEventListener('click', () => {});
+      }
 
       this.addEventListener('mouseup', () => {
         // In Chrome, focus moves to body on overlay content mousedown
@@ -163,7 +167,7 @@ export const OverlayMixin = (superClass) =>
      */
     requestContentUpdate() {
       if (this.renderer) {
-        this.renderer.call(this.owner, this, this.owner, this.model);
+        this.renderer.call(this.owner, this._contentRoot, this.owner, this.model);
       }
     }
 
@@ -256,11 +260,11 @@ export const OverlayMixin = (superClass) =>
       this._oldOpened = opened;
 
       if (rendererChanged && hasOldRenderer) {
-        this.innerHTML = '';
+        this._contentRoot.innerHTML = '';
         // Whenever a Lit-based renderer is used, it assigns a Lit part to the node it was rendered into.
         // When clearing the rendered content, this part needs to be manually disposed of.
         // Otherwise, using a Lit-based renderer on the same node will throw an exception or render nothing afterward.
-        delete this._$litPart$;
+        delete this._contentRoot._$litPart$;
       }
 
       if (opened && renderer && (rendererChanged || openedChanged || ownerOrModelChanged)) {
@@ -279,11 +283,23 @@ export const OverlayMixin = (superClass) =>
         this._removeGlobalListeners();
         this._exitModalState();
       }
+      setOverlayStateAttribute(this, 'modeless', modeless);
+    }
+
+    /** @private */
+    _withBackdropChanged(withBackdrop) {
+      setOverlayStateAttribute(this, 'with-backdrop', withBackdrop);
     }
 
     /** @private */
     _openedChanged(opened, wasOpened) {
       if (opened) {
+        // Prevent possible errors on setting `opened` to `true` while disconnected
+        if (!this.isConnected) {
+          this.opened = false;
+          return;
+        }
+
         this._saveFocus();
 
         this._animatedOpening();
@@ -292,7 +308,7 @@ export const OverlayMixin = (superClass) =>
           setTimeout(() => {
             this._trapFocus();
 
-            this.dispatchEvent(new CustomEvent('vaadin-overlay-open', { bubbles: true }));
+            this.dispatchEvent(new CustomEvent('vaadin-overlay-open', { bubbles: true, composed: true }));
           });
         });
 
@@ -369,14 +385,16 @@ export const OverlayMixin = (superClass) =>
 
     /** @private */
     _animatedOpening() {
-      if (this.parentNode === document.body && this.hasAttribute('closing')) {
+      if (this._isAttached && this.hasAttribute('closing')) {
         this._flushAnimation('closing');
       }
       this._attachOverlay();
+      this._appendAttachedInstance();
+      this.bringToFront();
       if (!this.modeless) {
         this._enterModalState();
       }
-      this.setAttribute('opening', '');
+      setOverlayStateAttribute(this, 'opening', true);
 
       if (this._shouldAnimate()) {
         this._enqueueAnimation('opening', () => {
@@ -392,19 +410,19 @@ export const OverlayMixin = (superClass) =>
       this._placeholder = document.createComment('vaadin-overlay-placeholder');
       this.parentNode.insertBefore(this._placeholder, this);
       document.body.appendChild(this);
-      this.bringToFront();
     }
 
     /** @private */
     _finishOpening() {
-      this.removeAttribute('opening');
+      setOverlayStateAttribute(this, 'opening', false);
     }
 
     /** @private */
     _finishClosing() {
       this._detachOverlay();
+      this._removeAttachedInstance();
       this.$.overlay.style.removeProperty('pointer-events');
-      this.removeAttribute('closing');
+      setOverlayStateAttribute(this, 'closing', false);
       this.dispatchEvent(new CustomEvent('vaadin-overlay-closed'));
     }
 
@@ -413,9 +431,9 @@ export const OverlayMixin = (superClass) =>
       if (this.hasAttribute('opening')) {
         this._flushAnimation('opening');
       }
-      if (this._placeholder) {
+      if (this._isAttached) {
         this._exitModalState();
-        this.setAttribute('closing', '');
+        setOverlayStateAttribute(this, 'closing', true);
         this.dispatchEvent(new CustomEvent('vaadin-overlay-closing'));
 
         if (this._shouldAnimate()) {

@@ -47,7 +47,7 @@ import { AvatarMixin } from './vaadin-avatar-mixin.js';
  * @mixes ElementMixin
  * @mixes ThemableMixin
  */
-class Avatar extends AvatarMixin(ElementMixin(ThemableMixin(LumoInjectionMixin(PolylitMixin(LitElement))))) {
+class Avatar extends AvatarMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {
   static get is() {
     return 'vaadin-avatar';
   }

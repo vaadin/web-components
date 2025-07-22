@@ -22,7 +22,7 @@ import { menuBarItemStyles } from './styles/vaadin-menu-bar-item-core-styles.js'
  * @mixes ThemableMixin
  * @protected
  */
-class MenuBarItem extends ItemMixin(ThemableMixin(DirMixin(LumoInjectionMixin(PolylitMixin(LitElement))))) {
+class MenuBarItem extends ItemMixin(ThemableMixin(DirMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {
   static get is() {
     return 'vaadin-menu-bar-item';
   }

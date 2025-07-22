@@ -28,6 +28,7 @@ snapshots["vaadin-message-input default"] =
     </div>
     <textarea
       aria-label="Message"
+      enterkeyhint="send"
       id="textarea-vaadin-text-area-3"
       placeholder="Message"
       rows="1"
@@ -71,6 +72,7 @@ snapshots["vaadin-message-input disabled"] =
     <textarea
       aria-label="Message"
       disabled=""
+      enterkeyhint="send"
       id="textarea-vaadin-text-area-3"
       placeholder="Message"
       rows="1"

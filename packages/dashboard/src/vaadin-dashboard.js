@@ -106,7 +106,7 @@ import { WidgetResizeController } from './widget-resize-controller.js';
  * @mixes ThemableMixin
  */
 class Dashboard extends DashboardLayoutMixin(
-  I18nMixin(getDefaultI18n(), ElementMixin(ThemableMixin(LumoInjectionMixin(PolylitMixin(LitElement))))),
+  I18nMixin(getDefaultI18n(), ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement))))),
 ) {
   static get is() {
     return 'vaadin-dashboard';

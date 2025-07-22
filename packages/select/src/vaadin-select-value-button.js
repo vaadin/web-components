@@ -20,7 +20,7 @@ import { valueButton } from './styles/vaadin-select-value-button-core-styles.js'
  * @mixes ThemableMixin
  * @protected
  */
-class SelectValueButton extends ButtonMixin(ThemableMixin(LumoInjectionMixin(PolylitMixin(LitElement)))) {
+class SelectValueButton extends ButtonMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement)))) {
   static get is() {
     return 'vaadin-select-value-button';
   }

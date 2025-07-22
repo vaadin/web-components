@@ -206,7 +206,7 @@ import { FormLayoutMixin } from './vaadin-form-layout-mixin.js';
  * @mixes ElementMixin
  * @mixes ThemableMixin
  */
-class FormLayout extends FormLayoutMixin(ThemableMixin(ElementMixin(LumoInjectionMixin(PolylitMixin(LitElement))))) {
+class FormLayout extends FormLayoutMixin(ThemableMixin(ElementMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {
   static get is() {
     return 'vaadin-form-layout';
   }

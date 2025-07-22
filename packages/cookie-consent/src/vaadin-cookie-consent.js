@@ -22,7 +22,7 @@ import { CookieConsentMixin } from './vaadin-cookie-consent-mixin.js';
  * predefined text, a link to https://cookiesandyou.com/ describing cookies and a consent button.
  *
  * The texts, link and position can be configured using attributes/properties, e.g.
- * ```
+ * ```html
  * <vaadin-cookie-consent learn-more-link="https://mysite.com/cookies.html"></vaadin-cookie-consent>
  * ```
  *

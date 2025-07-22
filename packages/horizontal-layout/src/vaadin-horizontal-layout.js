@@ -15,7 +15,7 @@ import { HorizontalLayoutMixin } from './vaadin-horizontal-layout-mixin.js';
 /**
  * `<vaadin-horizontal-layout>` provides a simple way to horizontally align your HTML elements.
  *
- * ```
+ * ```html
  * <vaadin-horizontal-layout>
  *   <div>Item 1</div>
  *   <div>Item 2</div>
@@ -50,7 +50,7 @@ import { HorizontalLayoutMixin } from './vaadin-horizontal-layout-mixin.js';
  * @mixes HorizontalLayoutMixin
  */
 class HorizontalLayout extends HorizontalLayoutMixin(
-  ThemableMixin(ElementMixin(LumoInjectionMixin(PolylitMixin(LitElement)))),
+  ThemableMixin(ElementMixin(PolylitMixin(LumoInjectionMixin(LitElement)))),
 ) {
   static get is() {
     return 'vaadin-horizontal-layout';

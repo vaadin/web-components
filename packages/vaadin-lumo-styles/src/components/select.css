@@ -10,6 +10,10 @@
     --lumo-input-field-pointer-focus-visible: 0;
   }
 
+  ::slotted(div[slot='overlay']) {
+    display: contents;
+  }
+
   :host(:not([theme*='align'])) ::slotted([slot='value']) {
     text-align: start;
   }

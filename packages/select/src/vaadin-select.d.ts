@@ -126,10 +126,10 @@ export interface SelectEventMap extends HTMLElementEventMap, SelectCustomEventMa
  *
  * The following custom properties are available for styling:
  *
- * Custom property                    | Description                  | Target element          | Default
- * -----------------------------------|------------------------------|-------------------------|--------
- * `--vaadin-field-default-width`     | Default width of the field   | :host                   | `12em`
- * `--vaadin-select-overlay-width`    | Width of the overlay         | `vaadin-select-overlay` |
+ * Custom property                  | Description                 | Default
+ * ---------------------------------|-----------------------------|--------
+ * `--vaadin-field-default-width`   | Default width of the field  | `12em`
+ * `--vaadin-select-overlay-width`  | Width of the overlay        |
  *
  * `<vaadin-select>` provides mostly the same set of shadow DOM parts and state attributes as `<vaadin-text-field>`.
  * See [`<vaadin-text-field>`](#/elements/vaadin-text-field) for the styling documentation.
@@ -137,15 +137,19 @@ export interface SelectEventMap extends HTMLElementEventMap, SelectCustomEventMa
  *
  * In addition to `<vaadin-text-field>` parts, the following parts are available for theming:
  *
- * Part name       | Description
- * ----------------|----------------
- * `toggle-button` | The toggle button
+ * Part name        | Description
+ * -----------------|----------------
+ * `toggle-button`  | The toggle button
+ * `backdrop`       | Backdrop of the overlay
+ * `overlay`        | The overlay container
+ * `content`        | The overlay content
  *
  * In addition to `<vaadin-text-field>` state attributes, the following state attributes are available for theming:
  *
- * Attribute | Description                 | Part name
- * ----------|-----------------------------|-----------
- * `opened`  | Set when the select is open | :host
+ * Attribute | Description
+ * ----------|-----------------------------
+ * `opened`  | Set when the select is open
+ * `phone`   | Set when the overlay is shown in phone mode
  *
  * There are two exceptions in terms of styling compared to `<vaadin-text-field>`:
  * - the `clear-button` shadow DOM part does not exist in `<vaadin-select>`.

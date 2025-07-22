@@ -49,7 +49,7 @@ export interface GridProEventMap<TItem>
  *
  * See [`<vaadin-grid>`](#/elements/vaadin-grid) documentation for details.
  *
- * ```
+ * ```html
  * <vaadin-grid-pro></vaadin-grid-pro>
  * ```
  *

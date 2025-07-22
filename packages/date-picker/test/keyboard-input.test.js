@@ -193,21 +193,21 @@ describe('keyboard', () => {
       expect(datePicker.hasAttribute('focused')).to.be.true;
     });
 
-    it('should move focus back to the input on Cancel button tap', async () => {
+    it('should move focus back to the input on Cancel button click', async () => {
       // Move focus to the calendar
       await sendKeys({ press: 'ArrowDown' });
       await untilOverlayRendered(datePicker);
       const spy = sinon.spy(input, 'focus');
-      tap(overlayContent._cancelButton);
+      overlayContent._cancelButton.click();
       expect(spy.calledOnce).to.be.true;
     });
 
-    it('should move focus back to the input on Today button tap', async () => {
+    it('should move focus back to the input on Today button click', async () => {
       // Move focus to the calendar
       await sendKeys({ press: 'ArrowDown' });
       await untilOverlayRendered(datePicker);
       const spy = sinon.spy(input, 'focus');
-      tap(overlayContent._todayButton);
+      overlayContent._todayButton.click();
       expect(spy.calledOnce).to.be.true;
     });
 

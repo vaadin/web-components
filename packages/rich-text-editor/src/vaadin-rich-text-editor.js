@@ -13,7 +13,7 @@ import '@vaadin/confirm-dialog/src/vaadin-confirm-dialog.js';
 import '@vaadin/text-field/src/vaadin-text-field.js';
 import '@vaadin/tooltip/src/vaadin-tooltip.js';
 import './vaadin-rich-text-editor-popup.js';
-import { html, LitElement } from 'lit';
+import { html, LitElement, render } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
@@ -27,7 +27,7 @@ import { RichTextEditorMixin } from './vaadin-rich-text-editor-mixin.js';
  * It provides a set of toolbar controls to apply formatting on the content,
  * which is stored and can be accessed as HTML5 or JSON string.
  *
- * ```
+ * ```html
  * <vaadin-rich-text-editor></vaadin-rich-text-editor>
  * ```
  *
@@ -101,7 +101,7 @@ import { RichTextEditorMixin } from './vaadin-rich-text-editor-mixin.js';
  * @mixes ThemableMixin
  */
 class RichTextEditor extends RichTextEditorMixin(
-  ElementMixin(ThemableMixin(LumoInjectionMixin(PolylitMixin(LitElement)))),
+  ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement)))),
 ) {
   static get is() {
     return 'vaadin-rich-text-editor';
@@ -127,35 +127,51 @@ class RichTextEditor extends RichTextEditorMixin(
               id="btn-undo"
               type="button"
               part="toolbar-button toolbar-button-undo"
+              aria-label="${this.__effectiveI18n.undo}"
               @click="${this._undo}"
             ></button>
-            <vaadin-tooltip for="btn-undo" .text="${this.__effectiveI18n.undo}"></vaadin-tooltip>
 
             <button
               id="btn-redo"
               type="button"
               part="toolbar-button toolbar-button-redo"
+              aria-label="${this.__effectiveI18n.redo}"
               @click="${this._redo}"
             ></button>
-            <vaadin-tooltip for="btn-redo" .text="${this.__effectiveI18n.redo}"></vaadin-tooltip>
           </span>
 
           <span part="toolbar-group toolbar-group-emphasis">
             <!-- Bold -->
-            <button id="btn-bold" class="ql-bold" part="toolbar-button toolbar-button-bold"></button>
-            <vaadin-tooltip for="btn-bold" .text="${this.__effectiveI18n.bold}"></vaadin-tooltip>
+            <button
+              id="btn-bold"
+              class="ql-bold"
+              part="toolbar-button toolbar-button-bold"
+              aria-label="${this.__effectiveI18n.bold}"
+            ></button>
 
             <!-- Italic -->
-            <button id="btn-italic" class="ql-italic" part="toolbar-button toolbar-button-italic"></button>
-            <vaadin-tooltip for="btn-italic" .text="${this.__effectiveI18n.italic}"></vaadin-tooltip>
+            <button
+              id="btn-italic"
+              class="ql-italic"
+              part="toolbar-button toolbar-button-italic"
+              aria-label="${this.__effectiveI18n.italic}"
+            ></button>
 
             <!-- Underline -->
-            <button id="btn-underline" class="ql-underline" part="toolbar-button toolbar-button-underline"></button>
-            <vaadin-tooltip for="btn-underline" .text="${this.__effectiveI18n.underline}"></vaadin-tooltip>
+            <button
+              id="btn-underline"
+              class="ql-underline"
+              part="toolbar-button toolbar-button-underline"
+              aria-label="${this.__effectiveI18n.underline}"
+            ></button>
 
             <!-- Strike -->
-            <button id="btn-strike" class="ql-strike" part="toolbar-button toolbar-button-strike"></button>
-            <vaadin-tooltip for="btn-strike" .text="${this.__effectiveI18n.strike}"></vaadin-tooltip>
+            <button
+              id="btn-strike"
+              class="ql-strike"
+              part="toolbar-button toolbar-button-strike"
+              aria-label="${this.__effectiveI18n.strike}"
+            ></button>
           </span>
 
           <span part="toolbar-group toolbar-group-style">
@@ -164,17 +180,17 @@ class RichTextEditor extends RichTextEditorMixin(
               id="btn-color"
               type="button"
               part="toolbar-button toolbar-button-color"
+              aria-label="${this.__effectiveI18n.color}"
               @click="${this.__onColorClick}"
             ></button>
-            <vaadin-tooltip for="btn-color" .text="${this.__effectiveI18n.color}"></vaadin-tooltip>
             <!-- Background -->
             <button
               id="btn-background"
               type="button"
               part="toolbar-button toolbar-button-background"
+              aria-label="${this.__effectiveI18n.background}"
               @click="${this.__onBackgroundClick}"
             ></button>
-            <vaadin-tooltip for="btn-background" .text="${this.__effectiveI18n.background}"></vaadin-tooltip>
           </span>
 
           <span part="toolbar-group toolbar-group-heading">
@@ -185,24 +201,24 @@ class RichTextEditor extends RichTextEditorMixin(
               class="ql-header"
               value="1"
               part="toolbar-button toolbar-button-h1"
+              aria-label="${this.__effectiveI18n.h1}"
             ></button>
-            <vaadin-tooltip for="btn-h1" .text="${this.__effectiveI18n.h1}"></vaadin-tooltip>
             <button
               id="btn-h2"
               type="button"
               class="ql-header"
               value="2"
               part="toolbar-button toolbar-button-h2"
+              aria-label="${this.__effectiveI18n.h2}"
             ></button>
-            <vaadin-tooltip for="btn-h2" .text="${this.__effectiveI18n.h2}"></vaadin-tooltip>
             <button
               id="btn-h3"
               type="button"
               class="ql-header"
               value="3"
               part="toolbar-button toolbar-button-h3"
+              aria-label="${this.__effectiveI18n.h3}"
             ></button>
-            <vaadin-tooltip for="btn-h3" .text="${this.__effectiveI18n.h3}"></vaadin-tooltip>
           </span>
 
           <span part="toolbar-group toolbar-group-glyph-transformation">
@@ -212,15 +228,15 @@ class RichTextEditor extends RichTextEditorMixin(
               class="ql-script"
               value="sub"
               part="toolbar-button toolbar-button-subscript"
+              aria-label="${this.__effectiveI18n.subscript}"
             ></button>
-            <vaadin-tooltip for="btn-subscript" .text="${this.__effectiveI18n.subscript}"></vaadin-tooltip>
             <button
               id="btn-superscript"
               class="ql-script"
               value="super"
               part="toolbar-button toolbar-button-superscript"
+              aria-label="${this.__effectiveI18n.superscript}"
             ></button>
-            <vaadin-tooltip for="btn-superscript" text="${this.__effectiveI18n.superscript}"></vaadin-tooltip>
           </span>
 
           <span part="toolbar-group toolbar-group-list">
@@ -231,16 +247,16 @@ class RichTextEditor extends RichTextEditorMixin(
               class="ql-list"
               value="ordered"
               part="toolbar-button toolbar-button-list-ordered"
+              aria-label="${this.__effectiveI18n.listOrdered}"
             ></button>
-            <vaadin-tooltip for="btn-ol" text="${this.__effectiveI18n.listOrdered}"></vaadin-tooltip>
             <button
               id="btn-ul"
               type="button"
               class="ql-list"
               value="bullet"
               part="toolbar-button toolbar-button-list-bullet"
+              aria-label="${this.__effectiveI18n.listBullet}"
             ></button>
-            <vaadin-tooltip for="btn-ul" text="${this.__effectiveI18n.listBullet}"></vaadin-tooltip>
           </span>
 
           <span part="toolbar-group toolbar-group-alignment">
@@ -251,24 +267,24 @@ class RichTextEditor extends RichTextEditorMixin(
               class="ql-align"
               value=""
               part="toolbar-button toolbar-button-align-left"
+              aria-label="${this.__effectiveI18n.alignLeft}"
             ></button>
-            <vaadin-tooltip for="btn-left" .text="${this.__effectiveI18n.alignLeft}"></vaadin-tooltip>
             <button
               id="btn-center"
               type="button"
               class="ql-align"
               value="center"
               part="toolbar-button toolbar-button-align-center"
+              aria-label="${this.__effectiveI18n.alignCenter}"
             ></button>
-            <vaadin-tooltip for="btn-center" .text="${this.__effectiveI18n.alignCenter}"></vaadin-tooltip>
             <button
               id="btn-right"
               type="button"
               class="ql-align"
               value="right"
               part="toolbar-button toolbar-button-align-right"
+              aria-label="${this.__effectiveI18n.alignRight}"
             ></button>
-            <vaadin-tooltip for="btn-right" .text="${this.__effectiveI18n.alignRight}"></vaadin-tooltip>
           </span>
 
           <span part="toolbar-group toolbar-group-rich-text">
@@ -277,18 +293,18 @@ class RichTextEditor extends RichTextEditorMixin(
               id="btn-image"
               type="button"
               part="toolbar-button toolbar-button-image"
+              aria-label="${this.__effectiveI18n.image}"
               @touchend="${this._onImageTouchEnd}"
               @click="${this._onImageClick}"
             ></button>
-            <vaadin-tooltip for="btn-image" .text="${this.__effectiveI18n.image}"></vaadin-tooltip>
             <!-- Link -->
             <button
               id="btn-link"
               type="button"
               part="toolbar-button toolbar-button-link"
+              aria-label="${this.__effectiveI18n.link}"
               @click="${this._onLinkClick}"
             ></button>
-            <vaadin-tooltip for="btn-link" .text="${this.__effectiveI18n.link}"></vaadin-tooltip>
           </span>
 
           <span part="toolbar-group toolbar-group-block">
@@ -298,22 +314,27 @@ class RichTextEditor extends RichTextEditorMixin(
               type="button"
               class="ql-blockquote"
               part="toolbar-button toolbar-button-blockquote"
+              aria-label="${this.__effectiveI18n.blockquote}"
             ></button>
-            <vaadin-tooltip for="btn-blockquote" .text="${this.__effectiveI18n.blockquote}"></vaadin-tooltip>
             <!-- Code block -->
             <button
               id="btn-code"
               type="button"
               class="ql-code-block"
               part="toolbar-button toolbar-button-code-block"
+              aria-label="${this.__effectiveI18n.codeBlock}"
             ></button>
-            <vaadin-tooltip for="btn-code" .text="${this.__effectiveI18n.codeBlock}"></vaadin-tooltip>
           </span>
 
           <span part="toolbar-group toolbar-group-format">
             <!-- Clean -->
-            <button id="btn-clean" type="button" class="ql-clean" part="toolbar-button toolbar-button-clean"></button>
-            <vaadin-tooltip for="btn-clean" .text="${this.__effectiveI18n.clean}"></vaadin-tooltip>
+            <button
+              id="btn-clean"
+              type="button"
+              class="ql-clean"
+              part="toolbar-button toolbar-button-clean"
+              aria-label="${this.__effectiveI18n.clean}"
+            ></button>
           </span>
 
           <input
@@ -329,52 +350,73 @@ class RichTextEditor extends RichTextEditorMixin(
         <div class="announcer" aria-live="polite"></div>
       </div>
 
-      <vaadin-confirm-dialog
-        id="linkDialog"
-        .opened="${this._linkEditing}"
-        .header="${this.__effectiveI18n.linkDialogTitle}"
-        @opened-changed="${this._onLinkEditingChanged}"
-      >
-        <vaadin-text-field
-          id="linkUrl"
-          .value="${this._linkUrl}"
-          style="width: 100%;"
-          @keydown="${this._onLinkKeydown}"
-          @value-changed="${this._onLinkUrlChanged}"
-        ></vaadin-text-field>
-        <vaadin-button id="confirmLink" slot="confirm-button" theme="primary" @click="${this._onLinkEditConfirm}">
-          ${this.__effectiveI18n.ok}
-        </vaadin-button>
-        <vaadin-button
-          id="removeLink"
-          slot="reject-button"
-          theme="error"
-          @click="${this._onLinkEditRemove}"
-          ?hidden="${!this._linkRange}"
-        >
-          ${this.__effectiveI18n.remove}
-        </vaadin-button>
-        <vaadin-button id="cancelLink" slot="cancel-button" @click="${this._onLinkEditCancel}">
-          ${this.__effectiveI18n.cancel}
-        </vaadin-button>
-      </vaadin-confirm-dialog>
+      <slot name="tooltip"></slot>
 
-      <vaadin-rich-text-editor-popup
-        id="colorPopup"
-        .colors="${this.colorOptions}"
-        .opened="${this._colorEditing}"
-        @color-selected="${this.__onColorSelected}"
-        @opened-changed="${this.__onColorEditingChanged}"
-      ></vaadin-rich-text-editor-popup>
+      <slot name="link-dialog"></slot>
 
-      <vaadin-rich-text-editor-popup
-        id="backgroundPopup"
-        .colors="${this.colorOptions}"
-        .opened="${this._backgroundEditing}"
-        @color-selected="${this.__onBackgroundSelected}"
-        @opened-changed="${this.__onBackgroundEditingChanged}"
-      ></vaadin-rich-text-editor-popup>
+      <slot name="color-popup"></slot>
+
+      <slot name="background-popup"></slot>
     `;
+  }
+
+  /**
+   * Override update to render slotted overlays into light DOM after rendering shadow DOM.
+   * @param changedProperties
+   * @protected
+   */
+  update(changedProperties) {
+    super.update(changedProperties);
+
+    this.__renderSlottedOverlays();
+  }
+
+  /** @private */
+  __renderSlottedOverlays() {
+    render(
+      html`
+        <vaadin-confirm-dialog
+          slot="link-dialog"
+          cancel-button-visible
+          reject-theme="error"
+          .opened="${this._linkEditing}"
+          .header="${this.__effectiveI18n.linkDialogTitle}"
+          .confirmText="${this.__effectiveI18n.ok}"
+          .rejectText="${this.__effectiveI18n.remove}"
+          .cancelText="${this.__effectiveI18n.cancel}"
+          .rejectButtonVisible="${!!this._linkRange}"
+          @confirm="${this._onLinkEditConfirm}"
+          @cancel="${this._onLinkEditCancel}"
+          @reject="${this._onLinkEditRemove}"
+          @opened-changed="${this._onLinkEditingChanged}"
+        >
+          <vaadin-text-field
+            .value="${this._linkUrl}"
+            style="width: 100%;"
+            @keydown="${this._onLinkKeydown}"
+            @value-changed="${this._onLinkUrlChanged}"
+          ></vaadin-text-field>
+        </vaadin-confirm-dialog>
+
+        <vaadin-rich-text-editor-popup
+          slot="color-popup"
+          .colors="${this.colorOptions}"
+          .opened="${this._colorEditing}"
+          @color-selected="${this.__onColorSelected}"
+          @opened-changed="${this.__onColorEditingChanged}"
+        ></vaadin-rich-text-editor-popup>
+
+        <vaadin-rich-text-editor-popup
+          slot="background-popup"
+          .colors="${this.colorOptions}"
+          .opened="${this._backgroundEditing}"
+          @color-selected="${this.__onBackgroundSelected}"
+          @opened-changed="${this.__onBackgroundEditingChanged}"
+        ></vaadin-rich-text-editor-popup>
+      `,
+      this,
+      { host: this },
+    );
   }
 
   /** @private */
@@ -389,6 +431,18 @@ class RichTextEditor extends RichTextEditorMixin(
 
   /** @private */
   _onLinkEditingChanged(event) {
+    // Autofocus the URL field when the dialog opens
+    if (event.detail.value) {
+      const confirmDialog = event.target;
+      const urlField = confirmDialog.querySelector('vaadin-text-field');
+      confirmDialog.$.overlay.addEventListener(
+        'vaadin-overlay-open',
+        () => {
+          urlField.focus();
+        },
+        { once: true },
+      );
+    }
     this._linkEditing = event.detail.value;
   }
 

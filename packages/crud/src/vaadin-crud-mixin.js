@@ -416,6 +416,9 @@ export const CrudMixin = (superClass) =>
       );
 
       this.addController(this.__focusRestorationController);
+
+      this._confirmCancelDialog = this.querySelector('vaadin-confirm-dialog[slot="confirm-cancel"]');
+      this._confirmDeleteDialog = this.querySelector('vaadin-confirm-dialog[slot="confirm-delete"]');
     }
 
     /**
@@ -786,7 +789,7 @@ export const CrudMixin = (superClass) =>
         this.__isDirty && // Form change has been made
         this.editedItem !== item // Item is different
       ) {
-        this.$.confirmCancel.opened = true;
+        this._confirmCancelDialog.opened = true;
         this.addEventListener(
           'cancel',
           (event) => {
@@ -986,7 +989,7 @@ export const CrudMixin = (superClass) =>
     /** @private */
     __cancel() {
       if (this.__isDirty) {
-        this.$.confirmCancel.opened = true;
+        this._confirmCancelDialog.opened = true;
       } else {
         this.__confirmCancel();
       }
@@ -1003,7 +1006,7 @@ export const CrudMixin = (superClass) =>
 
     /** @private */
     __delete() {
-      this.$.confirmDelete.opened = true;
+      this._confirmDeleteDialog.opened = true;
     }
 
     /** @private */

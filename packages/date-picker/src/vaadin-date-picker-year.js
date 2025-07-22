@@ -19,7 +19,7 @@ import { datePickerYearStyles } from './styles/vaadin-date-picker-year-core-styl
  * @mixes DatePickerYearMixin
  * @private
  */
-export class DatePickerYear extends LumoInjectionMixin(ThemableMixin(PolylitMixin(LitElement))) {
+export class DatePickerYear extends ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement))) {
   static get is() {
     return 'vaadin-date-picker-year';
   }

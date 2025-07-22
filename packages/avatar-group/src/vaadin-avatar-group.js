@@ -22,13 +22,13 @@ import { AvatarGroupMixin } from './vaadin-avatar-group-mixin.js';
  *
  * To create the avatar group, first add the component to the page:
  *
- * ```
+ * ```html
  * <vaadin-avatar-group></vaadin-avatar-group>
  * ```
  *
  * And then use [`items`](#/elements/vaadin-avatar-group#property-items) property to initialize the structure:
  *
- * ```
+ * ```js
  * document.querySelector('vaadin-avatar-group').items = [
  *   {name: 'John Doe'},
  *   {abbr: 'AB'}
@@ -42,6 +42,8 @@ import { AvatarGroupMixin } from './vaadin-avatar-group-mixin.js';
  * Part name   | Description
  * ----------- | ---------------
  * `container` | The container element
+ * `overlay`   | The overflow avatar menu overlay
+ * `content`   | The overflow avatar menu overlay content
  *
  * See the [`<vaadin-avatar>`](#/elements/vaadin-avatar) documentation for the available
  * state attributes and stylable shadow parts of avatar elements.
@@ -63,7 +65,7 @@ import { AvatarGroupMixin } from './vaadin-avatar-group-mixin.js';
  * @mixes AvatarGroupMixin
  * @mixes ThemableMixin
  */
-class AvatarGroup extends AvatarGroupMixin(ElementMixin(ThemableMixin(LumoInjectionMixin(PolylitMixin(LitElement))))) {
+class AvatarGroup extends AvatarGroupMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {
   static get is() {
     return 'vaadin-avatar-group';
   }
@@ -81,14 +83,18 @@ class AvatarGroup extends AvatarGroupMixin(ElementMixin(ThemableMixin(LumoInject
       </div>
       <vaadin-avatar-group-overlay
         id="overlay"
+        popover="manual"
+        .owner="${this}"
         .opened="${this._opened}"
         .positionTarget="${this._overflow}"
-        .renderer="${this.__overlayRenderer}"
         no-vertical-overlap
+        exportparts="overlay, content"
         @vaadin-overlay-close="${this._onVaadinOverlayClose}"
         @vaadin-overlay-open="${this._onVaadinOverlayOpen}"
         @opened-changed="${this._onOpenedChanged}"
-      ></vaadin-avatar-group-overlay>
+      >
+        <slot name="overlay"></slot>
+      </vaadin-avatar-group-overlay>
     `;
   }
 

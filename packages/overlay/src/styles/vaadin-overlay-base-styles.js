@@ -19,6 +19,14 @@ export const overlayStyles = css`
     inset: 8px;
     bottom: var(--vaadin-overlay-viewport-bottom);
 
+    /* Override native [popover] user agent styles */
+    width: auto;
+    height: auto;
+    border: none;
+    padding: 0;
+    background-color: transparent;
+    overflow: visible;
+
     /* Use flexbox alignment for the overlay part. */
     display: flex;
     flex-direction: column; /* makes dropdowns sizing easier */
@@ -47,7 +55,7 @@ export const overlayStyles = css`
 
   [part='overlay'] {
     background: var(--vaadin-overlay-background, var(--vaadin-background-color));
-    border: var(--vaadin-overlay-border, 1px solid var(--vaadin-border-color));
+    border: var(--vaadin-overlay-border-width, 1px) solid var(--vaadin-overlay-border-color, var(--vaadin-border-color));
     border-radius: var(--vaadin-overlay-border-radius, var(--vaadin-radius-m));
     box-shadow: var(--vaadin-overlay-box-shadow, 0 8px 24px -4px rgba(0, 0, 0, 0.3));
     box-sizing: border-box;

@@ -11,3 +11,9 @@
  * https://github.com/floating-ui/floating-ui/blob/58ed169/packages/dom/src/autoUpdate.ts#L45
  */
 export function observeMove(element: HTMLElement, callback: () => void): () => void;
+
+/**
+ * Toggle the state attribute on the overlay element and also its owner element. This allows targeting state attributes
+ * in the light DOM in case the overlay is in the shadow DOM of its owner.
+ */
+export function setOverlayStateAttribute(overlay: HTMLElement, name: string, value: string | boolean): void;

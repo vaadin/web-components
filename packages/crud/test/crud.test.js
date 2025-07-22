@@ -80,8 +80,8 @@ describe('crud', () => {
         crud._form,
         crud.$.dialog,
         crud.$.dialog.$.overlay,
-        crud.$.confirmCancel,
-        crud.$.confirmDelete,
+        crud._confirmCancelDialog,
+        crud._confirmDeleteDialog,
       ].forEach((e) => expect(e.getAttribute('theme')).to.be.match(/foo/u));
     });
   });
@@ -509,8 +509,8 @@ describe('crud', () => {
       crud.items = [{ foo: 'bar' }, { foo: 'baz' }];
       await nextRender();
       flushGrid(crud._grid);
-      confirmCancelDialog = crud.$.confirmCancel;
-      confirmCancelOverlay = confirmCancelDialog.$.dialog.$.overlay;
+      confirmCancelDialog = crud._confirmCancelDialog;
+      confirmCancelOverlay = confirmCancelDialog.$.overlay;
     });
 
     function fakeClickOnRow(idx) {
@@ -563,7 +563,7 @@ describe('crud', () => {
       crud.__isDirty = true;
       crud._grid.activeItem = null; // A second click will set grid active item to null
       await oneEvent(confirmCancelOverlay, 'vaadin-overlay-open');
-      confirmCancelOverlay.querySelector('[slot^="confirm"]').click();
+      confirmCancelDialog.querySelector('[slot^="confirm"]').click();
       expect(crud.editorOpened).to.be.false;
     });
 
@@ -590,7 +590,7 @@ describe('crud', () => {
       crud.__isDirty = true;
       crud._newButton.click();
       await oneEvent(confirmCancelOverlay, 'vaadin-overlay-open');
-      confirmCancelOverlay.querySelector('[slot^="confirm"]').click();
+      confirmCancelDialog.querySelector('[slot^="confirm"]').click();
       expect(crud.editorOpened).to.be.true;
       await aTimeout(0);
       expect(crud._grid.activeItem).to.be.undefined;

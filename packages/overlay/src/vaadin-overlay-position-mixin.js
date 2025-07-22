@@ -4,7 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { getAncestorRootNodes } from '@vaadin/component-base/src/dom-utils.js';
-import { observeMove } from './vaadin-overlay-utils.js';
+import { observeMove, setOverlayStateAttribute } from './vaadin-overlay-utils.js';
 
 const PROP_NAMES_VERTICAL = {
   start: 'top',
@@ -271,11 +271,11 @@ export const PositionMixin = (superClass) =>
       // Apply the positioning properties to the overlay
       Object.assign(this.style, verticalProps, horizontalProps);
 
-      this.toggleAttribute('bottom-aligned', !shouldAlignStartVertically);
-      this.toggleAttribute('top-aligned', shouldAlignStartVertically);
+      setOverlayStateAttribute(this, 'bottom-aligned', !shouldAlignStartVertically);
+      setOverlayStateAttribute(this, 'top-aligned', shouldAlignStartVertically);
 
-      this.toggleAttribute('end-aligned', !flexStart);
-      this.toggleAttribute('start-aligned', flexStart);
+      setOverlayStateAttribute(this, 'end-aligned', !flexStart);
+      setOverlayStateAttribute(this, 'start-aligned', flexStart);
     }
 
     __shouldAlignStartHorizontally(targetRect, rtl) {

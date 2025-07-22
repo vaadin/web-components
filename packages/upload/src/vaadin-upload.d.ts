@@ -118,7 +118,7 @@ export interface UploadEventMap extends HTMLElementEventMap, UploadCustomEventMa
  *
  * Example:
  *
- * ```
+ * ```html
  * <vaadin-upload></vaadin-upload>
  * ```
  *

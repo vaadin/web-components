@@ -16,10 +16,8 @@ import { tabStyles } from './styles/vaadin-tab-core-styles.js';
 /**
  * `<vaadin-tab>` is a Web Component providing an accessible and customizable tab.
  *
- * ```
- *   <vaadin-tab>
- *     Tab 1
- *   </vaadin-tab>
+ * ```html
+ * <vaadin-tab>Tab 1</vaadin-tab>
  * ```
  *
  * The following state attributes are available for styling:
@@ -41,7 +39,7 @@ import { tabStyles } from './styles/vaadin-tab-core-styles.js';
  * @mixes ItemMixin
  * @mixes ThemableMixin
  */
-class Tab extends ItemMixin(ThemableMixin(ElementMixin(LumoInjectionMixin(PolylitMixin(LitElement))))) {
+class Tab extends ItemMixin(ThemableMixin(ElementMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {
   static get is() {
     return 'vaadin-tab';
   }

@@ -22,13 +22,13 @@ import { MenuBarMixin } from './vaadin-menu-bar-mixin.js';
  *
  * To create the menu bar, first add the component to the page:
  *
- * ```
+ * ```html
  * <vaadin-menu-bar></vaadin-menu-bar>
  * ```
  *
  * And then use [`items`](#/elements/vaadin-menu-bar#property-items) property to initialize the structure:
  *
- * ```
+ * ```js
  * document.querySelector('vaadin-menu-bar').items = [{text: 'File'}, {text: 'Edit'}];
  * ```
  *
@@ -77,7 +77,7 @@ import { MenuBarMixin } from './vaadin-menu-bar-mixin.js';
  * @mixes MenuBarMixin
  * @mixes ThemableMixin
  */
-class MenuBar extends MenuBarMixin(ElementMixin(ThemableMixin(LumoInjectionMixin(PolylitMixin(LitElement))))) {
+class MenuBar extends MenuBarMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {
   static get is() {
     return 'vaadin-menu-bar';
   }
@@ -93,7 +93,8 @@ class MenuBar extends MenuBarMixin(ElementMixin(ThemableMixin(LumoInjectionMixin
         <slot></slot>
         <slot name="overflow"></slot>
       </div>
-      <vaadin-menu-bar-submenu is-root .overlayClass="${this.overlayClass}"></vaadin-menu-bar-submenu>
+
+      <slot name="submenu"></slot>
 
       <slot name="tooltip"></slot>
     `;

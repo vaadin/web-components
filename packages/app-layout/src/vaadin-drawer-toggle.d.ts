@@ -10,7 +10,7 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
 /**
  * The Drawer Toggle component controls the drawer in App Layout component.
  *
- * ```
+ * ```html
  * <vaadin-app-layout>
  *   <vaadin-drawer-toggle slot="navbar">Toggle drawer</vaadin-drawer-toggle>
  * </vaadin-app-layout>

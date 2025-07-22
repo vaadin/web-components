@@ -22,6 +22,17 @@ describe('overlay opening', () => {
       expect(overlay.owner).to.equal(timePicker);
     });
 
+    it('should export overlay parts for styling', () => {
+      const parts = [...overlay.shadowRoot.querySelectorAll('[part]')]
+        .map((el) => el.getAttribute('part'))
+        .filter((part) => part !== 'backdrop');
+      const exportParts = overlay.getAttribute('exportparts').split(', ');
+
+      parts.forEach((part) => {
+        expect(exportParts).to.include(part);
+      });
+    });
+
     it('should open by clicking label element', () => {
       timePicker.querySelector('[slot="label"]').click();
 

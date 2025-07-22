@@ -13,7 +13,12 @@ export class SelectObserver extends FieldObserver {
   }
 
   onFocusIn(event) {
-    if (this.overlay.contains(event.relatedTarget)) {
+    if (this.overlay._contentRoot.contains(event.target)) {
+      // Focus moves to the overlay item, do nothing.
+      return;
+    }
+
+    if (this.overlay._contentRoot.contains(event.relatedTarget)) {
       // Focus returns on item select, do nothing.
       return;
     }
@@ -22,10 +27,16 @@ export class SelectObserver extends FieldObserver {
   }
 
   onFocusOut(event) {
-    if (this.overlay.contains(event.relatedTarget)) {
-      // Do nothing, overlay is opening.
+    if (this.overlay._contentRoot.contains(event.relatedTarget)) {
+      // Focus moves to the overlay on opening, do nothing.
       return;
     }
+
+    if (this.overlay._contentRoot.contains(event.target) && this.component.contains(event.relatedTarget)) {
+      // Focus returns from the overlay on closing, do nothing.
+      return;
+    }
+
     super.onFocusOut(event);
   }
 }

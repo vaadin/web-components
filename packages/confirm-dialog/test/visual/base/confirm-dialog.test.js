@@ -17,7 +17,7 @@ describe('confirm-dialog', () => {
       `,
       div,
     );
-    await oneEvent(element.$.dialog.$.overlay, 'vaadin-overlay-open');
+    await oneEvent(element.$.overlay, 'vaadin-overlay-open');
   });
 
   it('basic', async () => {

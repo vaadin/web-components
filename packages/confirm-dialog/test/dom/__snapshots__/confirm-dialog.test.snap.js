@@ -1,25 +1,19 @@
 /* @web/test-runner snapshot v1 */
 export const snapshots = {};
 
-snapshots["vaadin-confirm-dialog overlay"] = 
-`<vaadin-confirm-dialog-overlay
-  aria-describedby="confirm-dialog-message-0"
+snapshots["vaadin-confirm-dialog host"] =
+`<vaadin-confirm-dialog
+  aria-description="Do you want to save or discard the changes?"
   aria-label="Unsaved changes"
-  focus-trap=""
-  has-footer=""
-  has-header=""
-  id="overlay"
+  header="Unsaved changes"
   opened=""
-  restore-focus-on-close=""
   role="alertdialog"
   with-backdrop=""
 >
+  Do you want to save or discard the changes?
   <h3 slot="header">
     Unsaved changes
   </h3>
-  <div id="confirm-dialog-message-0">
-    Do you want to save or discard the changes?
-  </div>
   <vaadin-button
     hidden=""
     role="button"
@@ -30,15 +24,6 @@ snapshots["vaadin-confirm-dialog overlay"] =
     Cancel
   </vaadin-button>
   <vaadin-button
-    focused=""
-    role="button"
-    slot="confirm-button"
-    tabindex="0"
-    theme="primary"
-  >
-    Confirm
-  </vaadin-button>
-  <vaadin-button
     hidden=""
     role="button"
     slot="reject-button"
@@ -47,108 +32,132 @@ snapshots["vaadin-confirm-dialog overlay"] =
   >
     Reject
   </vaadin-button>
+  <vaadin-button
+    focused=""
+    role="button"
+    slot="confirm-button"
+    tabindex="0"
+    theme="primary"
+  >
+    Confirm
+  </vaadin-button>
+</vaadin-confirm-dialog>
+`;
+/* end snapshot vaadin-confirm-dialog host */
+
+
+snapshots["vaadin-confirm-dialog overlay"] =
+`<vaadin-confirm-dialog-overlay
+  exportparts="backdrop, overlay, header, content, message, footer, cancel-button, confirm-button, reject-button"
+  focus-trap=""
+  has-footer=""
+  has-header=""
+  id="overlay"
+  opened=""
+  popover="manual"
+  restore-focus-on-close=""
+  with-backdrop=""
+>
+  <slot
+    name="header"
+    slot="header"
+  >
+  </slot>
+  <slot>
+  </slot>
+  <slot
+    name="cancel-button"
+    slot="cancel-button"
+  >
+  </slot>
+  <slot
+    name="reject-button"
+    slot="reject-button"
+  >
+  </slot>
+  <slot
+    name="confirm-button"
+    slot="confirm-button"
+  >
+  </slot>
 </vaadin-confirm-dialog-overlay>
 `;
 /* end snapshot vaadin-confirm-dialog overlay */
 
-snapshots["vaadin-confirm-dialog overlay theme"] = 
+snapshots["vaadin-confirm-dialog overlay theme"] =
 `<vaadin-confirm-dialog-overlay
-  aria-describedby="confirm-dialog-message-1"
-  aria-label="Unsaved changes"
+  exportparts="backdrop, overlay, header, content, message, footer, cancel-button, confirm-button, reject-button"
   focus-trap=""
   has-footer=""
   has-header=""
   id="overlay"
   opened=""
+  popover="manual"
   restore-focus-on-close=""
-  role="alertdialog"
   theme="custom"
   with-backdrop=""
 >
-  <h3 slot="header">
-    Unsaved changes
-  </h3>
-  <div id="confirm-dialog-message-1">
-    Do you want to save or discard the changes?
-  </div>
-  <vaadin-button
-    hidden=""
-    role="button"
+  <slot
+    name="header"
+    slot="header"
+  >
+  </slot>
+  <slot>
+  </slot>
+  <slot
+    name="cancel-button"
     slot="cancel-button"
-    tabindex="0"
-    theme="tertiary"
   >
-    Cancel
-  </vaadin-button>
-  <vaadin-button
-    focused=""
-    role="button"
-    slot="confirm-button"
-    tabindex="0"
-    theme="primary"
-  >
-    Confirm
-  </vaadin-button>
-  <vaadin-button
-    hidden=""
-    role="button"
+  </slot>
+  <slot
+    name="reject-button"
     slot="reject-button"
-    tabindex="0"
-    theme="error tertiary"
   >
-    Reject
-  </vaadin-button>
+  </slot>
+  <slot
+    name="confirm-button"
+    slot="confirm-button"
+  >
+  </slot>
 </vaadin-confirm-dialog-overlay>
 `;
 /* end snapshot vaadin-confirm-dialog overlay theme */
 
 snapshots["vaadin-confirm-dialog overlay class"] = 
 `<vaadin-confirm-dialog-overlay
-  aria-describedby="confirm-dialog-message-2"
-  aria-label="Unsaved changes"
   class="confirm-dialog-overlay custom"
+  exportparts="backdrop, overlay, header, content, message, footer, cancel-button, confirm-button, reject-button"
   focus-trap=""
   has-footer=""
   has-header=""
   id="overlay"
   opened=""
+  popover="manual"
   restore-focus-on-close=""
-  role="alertdialog"
   with-backdrop=""
 >
-  <h3 slot="header">
-    Unsaved changes
-  </h3>
-  <div id="confirm-dialog-message-2">
-    Do you want to save or discard the changes?
-  </div>
-  <vaadin-button
-    hidden=""
-    role="button"
+  <slot
+    name="header"
+    slot="header"
+  >
+  </slot>
+  <slot>
+  </slot>
+  <slot
+    name="cancel-button"
     slot="cancel-button"
-    tabindex="0"
-    theme="tertiary"
   >
-    Cancel
-  </vaadin-button>
-  <vaadin-button
-    focused=""
-    role="button"
-    slot="confirm-button"
-    tabindex="0"
-    theme="primary"
-  >
-    Confirm
-  </vaadin-button>
-  <vaadin-button
-    hidden=""
-    role="button"
+  </slot>
+  <slot
+    name="reject-button"
     slot="reject-button"
-    tabindex="0"
-    theme="error tertiary"
   >
-    Reject
-  </vaadin-button>
+  </slot>
+  <slot
+    name="confirm-button"
+    slot="confirm-button"
+  >
+  </slot>
 </vaadin-confirm-dialog-overlay>
 `;
 /* end snapshot vaadin-confirm-dialog overlay class */

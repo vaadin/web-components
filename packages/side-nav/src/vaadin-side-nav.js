@@ -74,7 +74,7 @@ import { SideNavChildrenMixin } from './vaadin-side-nav-children-mixin.js';
  * @mixes SideNavChildrenMixin
  */
 class SideNav extends SideNavChildrenMixin(
-  SlotStylesMixin(FocusMixin(ElementMixin(ThemableMixin(LumoInjectionMixin(PolylitMixin(LitElement)))))),
+  SlotStylesMixin(FocusMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement)))))),
 ) {
   static get is() {
     return 'vaadin-side-nav';

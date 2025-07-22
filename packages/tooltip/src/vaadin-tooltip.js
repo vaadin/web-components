@@ -22,11 +22,12 @@ import { TooltipMixin } from './vaadin-tooltip-mixin.js';
  *
  * ### Styling
  *
- * `<vaadin-tooltip>` uses `<vaadin-tooltip-overlay>` internal
- * themable component as the actual visible overlay.
+ * The following shadow DOM parts are available for styling:
  *
- * See [`<vaadin-overlay>`](#/elements/vaadin-overlay) documentation
- * for `<vaadin-tooltip-overlay>` parts.
+ * Part name   | Description
+ * ----------- | ---------------
+ * `overlay`   | The overlay element
+ * `content`   | The overlay content element
  *
  * The following state attributes are available for styling:
  *
@@ -64,7 +65,7 @@ class Tooltip extends TooltipMixin(ThemePropertyMixin(ElementMixin(PolylitMixin(
   static get styles() {
     return css`
       :host {
-        display: none;
+        display: contents;
       }
     `;
   }
@@ -76,7 +77,7 @@ class Tooltip extends TooltipMixin(ThemePropertyMixin(ElementMixin(PolylitMixin(
     return html`
       <vaadin-tooltip-overlay
         id="overlay"
-        .renderer="${this._renderer}"
+        popover="manual"
         .owner="${this}"
         theme="${ifDefined(this._theme)}"
         .opened="${this._isConnected && (this.manual ? this.opened : this._autoOpened)}"
@@ -89,9 +90,9 @@ class Tooltip extends TooltipMixin(ThemePropertyMixin(ElementMixin(PolylitMixin(
         @mouseenter="${this.__onOverlayMouseEnter}"
         @mouseleave="${this.__onOverlayMouseLeave}"
         modeless
+        exportparts="overlay, content"
+        ><slot name="overlay"></slot
       ></vaadin-tooltip-overlay>
-
-      <slot name="sr-label"></slot>
     `;
   }
 }

@@ -35,13 +35,13 @@ export interface ListBoxEventMap extends HTMLElementEventMap, ListBoxCustomEvent
 /**
  * `<vaadin-list-box>` is a Web Component for creating menus.
  *
- * ```
- *   <vaadin-list-box selected="2">
- *     <vaadin-item>Item 1</vaadin-item>
- *     <vaadin-item>Item 2</vaadin-item>
- *     <vaadin-item>Item 3</vaadin-item>
- *     <vaadin-item>Item 4</vaadin-item>
- *   </vaadin-list-box>
+ * ```html
+ * <vaadin-list-box selected="2">
+ *   <vaadin-item>Item 1</vaadin-item>
+ *   <vaadin-item>Item 2</vaadin-item>
+ *   <vaadin-item>Item 3</vaadin-item>
+ *   <vaadin-item>Item 4</vaadin-item>
+ * </vaadin-list-box>
  * ```
  *
  * ### Styling

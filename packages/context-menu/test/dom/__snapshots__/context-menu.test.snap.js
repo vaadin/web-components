@@ -51,7 +51,10 @@ snapshots["context-menu items"] =
       Menu Item 5
     </div>
   </vaadin-context-menu-list-box>
-  <vaadin-context-menu hidden="">
+  <vaadin-context-menu
+    hidden=""
+    modeless=""
+  >
   </vaadin-context-menu>
 </vaadin-context-menu-overlay>
 `;
@@ -89,7 +92,12 @@ snapshots["context-menu items nested"] =
       Menu Item 2-2
     </vaadin-context-menu-item>
   </vaadin-context-menu-list-box>
-  <vaadin-context-menu hidden="">
+  <vaadin-context-menu
+    hidden=""
+    modeless=""
+    start-aligned=""
+    top-aligned=""
+  >
   </vaadin-context-menu>
 </vaadin-context-menu-overlay>
 `;
@@ -148,7 +156,10 @@ snapshots["context-menu items overlay class"] =
       Menu Item 5
     </div>
   </vaadin-context-menu-list-box>
-  <vaadin-context-menu hidden="">
+  <vaadin-context-menu
+    hidden=""
+    modeless=""
+  >
   </vaadin-context-menu>
 </vaadin-context-menu-overlay>
 `;
@@ -187,7 +198,12 @@ snapshots["context-menu items overlay class nested"] =
       Menu Item 2-2
     </vaadin-context-menu-item>
   </vaadin-context-menu-list-box>
-  <vaadin-context-menu hidden="">
+  <vaadin-context-menu
+    hidden=""
+    modeless=""
+    start-aligned=""
+    top-aligned=""
+  >
   </vaadin-context-menu>
 </vaadin-context-menu-overlay>
 `;

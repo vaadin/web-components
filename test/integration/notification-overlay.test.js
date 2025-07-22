@@ -9,6 +9,8 @@ import '@vaadin/tooltip/src/vaadin-tooltip.js';
 
 describe('notification and overlays', () => {
   describe('notification and tooltip', () => {
+    let tooltip;
+
     beforeEach(async () => {
       const wrapper = fixtureSync(`
         <div>
@@ -18,7 +20,7 @@ describe('notification and overlays', () => {
         </div>
       `);
       const notification = wrapper.querySelector('vaadin-notification');
-      const tooltip = wrapper.querySelector('vaadin-tooltip');
+      tooltip = wrapper.querySelector('vaadin-tooltip');
       notification.opened = true;
       tooltip.opened = true;
       await nextRender();
@@ -26,7 +28,7 @@ describe('notification and overlays', () => {
 
     it('should show tooltips above notifications', () => {
       const notificationContainer = document.querySelector('vaadin-notification-container');
-      const tooltipOverlay = document.querySelector('vaadin-tooltip-overlay');
+      const tooltipOverlay = tooltip.$.overlay;
 
       const notificationZIndex = parseInt(getComputedStyle(notificationContainer).zIndex);
       const tooltipZIndex = parseInt(getComputedStyle(tooltipOverlay).zIndex);

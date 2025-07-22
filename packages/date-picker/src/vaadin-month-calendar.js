@@ -16,7 +16,7 @@ import { MonthCalendarMixin } from './vaadin-month-calendar-mixin.js';
  * @extends HTMLElement
  * @private
  */
-class MonthCalendar extends MonthCalendarMixin(LumoInjectionMixin(ThemableMixin(PolylitMixin(LitElement)))) {
+class MonthCalendar extends MonthCalendarMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement)))) {
   static get is() {
     return 'vaadin-month-calendar';
   }

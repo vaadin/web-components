@@ -27,7 +27,7 @@ describe('checkbox-group with tooltip', () => {
     group.appendChild(tooltip);
 
     await nextRender();
-    label = tooltip.querySelector('[slot="sr-label"]');
+    label = tooltip.querySelector('[slot="overlay"]');
   });
 
   afterEach(() => {

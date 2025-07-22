@@ -3,6 +3,7 @@
  * Copyright (c) 2021 - 2025 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
 import { ComponentObserver } from './vaadin-component-observer.js';
 
 export class DatePickerObserver extends ComponentObserver {
@@ -10,7 +11,6 @@ export class DatePickerObserver extends ComponentObserver {
     super(datePicker);
 
     this.datePicker = datePicker;
-    this.fullscreenFocus = false;
     this.blurWhileOpened = false;
 
     this.addListeners(datePicker);
@@ -18,14 +18,6 @@ export class DatePickerObserver extends ComponentObserver {
 
   addListeners(datePicker) {
     this.overlay = datePicker.$.overlay;
-
-    // Fullscreen date picker calls blur() to avoid focusing of the input:
-    // 1. first time when focus event is fired (before opening the overlay),
-    // 2. second time after the overlay is open, see "_onOverlayOpened".
-    // Here we set the flag to ignore related focusout events and then to
-    // mark date picker as being edited by user (to show field highlight).
-    // We have to use capture phase in order to catch this event early.
-    datePicker.addEventListener('blur', (event) => this.onBlur(event), true);
 
     datePicker.addEventListener('opened-changed', (event) => this.onOpenedChanged(event));
 
@@ -40,14 +32,17 @@ export class DatePickerObserver extends ComponentObserver {
     return this.datePicker._overlayContent && this.datePicker._overlayContent.contains(node);
   }
 
-  onBlur(event) {
+  isFullscreen() {
     const datePicker = this.datePicker;
-    if (datePicker._fullscreen && !this.isEventInOverlay(event.relatedTarget)) {
-      this.fullscreenFocus = true;
-    }
+    return datePicker._noInput && !isKeyboardActive();
   }
 
   onFocusIn(event) {
+    if (this.isEventInOverlay(event.target)) {
+      // Focus moves to the overlay, do nothing.
+      return;
+    }
+
     if (this.isEventInOverlay(event.relatedTarget)) {
       // Focus returns from the overlay, do nothing.
       return;
@@ -63,9 +58,17 @@ export class DatePickerObserver extends ComponentObserver {
   }
 
   onFocusOut(event) {
-    if (this.fullscreenFocus || this.isEventInOverlay(event.relatedTarget)) {
-      // Do nothing, overlay is opening.
-    } else if (!this.datePicker.opened) {
+    if (this.isEventInOverlay(event.target) && this.component.contains(event.relatedTarget)) {
+      // Focus returns from the overlay, do nothing.
+      return;
+    }
+
+    if (this.isEventInOverlay(event.relatedTarget)) {
+      // Focus moves to the overlay, do nothing.
+      return;
+    }
+
+    if (!this.datePicker.opened) {
       // Field blur when closed.
       this.hideOutline(this.datePicker);
     } else {
@@ -83,8 +86,7 @@ export class DatePickerObserver extends ComponentObserver {
   }
 
   onOpenedChanged(event) {
-    if (event.detail.value === true && this.fullscreenFocus) {
-      this.fullscreenFocus = false;
+    if (event.detail.value === true && this.isFullscreen()) {
       this.showOutline(this.datePicker);
     }
 

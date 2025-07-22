@@ -4,14 +4,17 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 
+/** @type {Set<HTMLElement>} */
+const attachedInstances = new Set();
+
 /**
  * Returns all attached overlays in visual stacking order.
  * @private
  */
 const getAttachedInstances = () =>
-  Array.from(document.body.children)
-    .filter((el) => el instanceof HTMLElement && el._hasOverlayStackMixin && !el.hasAttribute('closing'))
-    .sort((a, b) => a.__zIndex - b.__zIndex || 0);
+  [...attachedInstances].filter(
+    (el) => el instanceof HTMLElement && el._hasOverlayStackMixin && !el.hasAttribute('closing'),
+  );
 
 /**
  * Returns all attached overlay instances excluding notification container,
@@ -19,6 +22,24 @@ const getAttachedInstances = () =>
  * @private
  */
 const getOverlayInstances = () => getAttachedInstances().filter((el) => el.$.overlay);
+
+/**
+ * Returns true if all the instances on top of the overlay are nested overlays.
+ * @private
+ */
+const hasOnlyNestedOverlays = (overlay) => {
+  const instances = getAttachedInstances();
+  const next = instances[instances.indexOf(overlay) + 1];
+  if (!next) {
+    return true;
+  }
+
+  if (!overlay._deepContains(next)) {
+    return false;
+  }
+
+  return hasOnlyNestedOverlays(next);
+};
 
 /**
  * Returns true if the overlay is the last one in the opened overlays stack.
@@ -71,19 +92,47 @@ export const OverlayStackMixin = (superClass) =>
     }
 
     /**
+     * Returns true if this is overlay is attached.
+     *
+     * @return {boolean}
+     * @protected
+     */
+    get _isAttached() {
+      return attachedInstances.has(this);
+    }
+
+    /**
      * Brings the overlay as visually the frontmost one.
      */
     bringToFront() {
+      // Update z-index to be the highest among all attached overlays
+      // TODO: Can be removed after switching all overlays to be based on native popover
       let zIndex = '';
       const frontmost = getAttachedInstances()
         .filter((o) => o !== this)
         .pop();
       if (frontmost) {
-        const frontmostZIndex = frontmost.__zIndex;
+        const frontmostZIndex = parseFloat(getComputedStyle(frontmost).zIndex);
         zIndex = frontmostZIndex + 1;
       }
       this.style.zIndex = zIndex;
-      this.__zIndex = zIndex || parseFloat(getComputedStyle(this).zIndex);
+
+      // If the overlay is the last one, or if all other overlays shown above
+      // are nested overlays (e.g. date-picker inside a dialog), do not call
+      // `showPopover()` unnecessarily to avoid scroll position being reset.
+      if (isLastOverlay(this) || hasOnlyNestedOverlays(this)) {
+        return;
+      }
+
+      // Update stacking order of native popover-based overlays
+      if (this.matches(':popover-open')) {
+        this.hidePopover();
+        this.showPopover();
+      }
+
+      // Update order of attached instances
+      this._removeAttachedInstance();
+      this._appendAttachedInstance();
 
       // If there is a nested overlay, call `bringToFront()` for it as well.
       if (overlayMap.has(this)) {
@@ -131,6 +180,18 @@ export const OverlayStackMixin = (superClass) =>
           // Stop after the last modal
           break;
         }
+      }
+    }
+
+    /** @protected */
+    _appendAttachedInstance() {
+      attachedInstances.add(this);
+    }
+
+    /** @protected */
+    _removeAttachedInstance() {
+      if (this._isAttached) {
+        attachedInstances.delete(this);
       }
     }
   };

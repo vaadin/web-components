@@ -53,7 +53,7 @@ import { masterDetailLayoutTransitionStyles } from './styles/vaadin-master-detai
  * @mixes SlotStylesMixin
  */
 class MasterDetailLayout extends SlotStylesMixin(
-  ResizeMixin(ElementMixin(ThemableMixin(LumoInjectionMixin(PolylitMixin(LitElement))))),
+  ResizeMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement))))),
 ) {
   static get is() {
     return 'vaadin-master-detail-layout';

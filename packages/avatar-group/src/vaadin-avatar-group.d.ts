@@ -15,13 +15,13 @@ export { AvatarGroupI18n, AvatarGroupItem, AvatarI18n };
  *
  * To create the avatar group, first add the component to the page:
  *
- * ```
+ * ```html
  * <vaadin-avatar-group></vaadin-avatar-group>
  * ```
  *
  * And then use [`items`](#/elements/vaadin-avatar-group#property-items) property to initialize the structure:
  *
- * ```
+ * ```js
  * document.querySelector('vaadin-avatar-group').items = [
  *   {name: 'John Doe'},
  *   {abbr: 'AB'}
@@ -35,6 +35,8 @@ export { AvatarGroupI18n, AvatarGroupItem, AvatarI18n };
  * Part name   | Description
  * ----------- | ---------------
  * `container` | The container element
+ * `overlay`   | The overflow avatar menu overlay
+ * `content`   | The overflow avatar menu overlay content
  *
  * See the [`<vaadin-avatar>`](#/elements/vaadin-avatar) documentation for the available
  * state attributes and stylable shadow parts of avatar elements.

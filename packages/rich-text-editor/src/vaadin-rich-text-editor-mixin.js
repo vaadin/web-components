@@ -176,7 +176,7 @@ export const RichTextEditorMixin = (superClass) =>
               '#ffffff', '#facccc', '#ffebcc', '#ffffcc', '#cce8cc', '#cce0f5', '#ebd6ff',
               '#bbbbbb', '#f06666', '#ffc266', '#ffff66', '#66b966', '#66a3e0', '#c285ff',
               '#888888', '#a10000', '#b26b00', '#b2b200', '#006100', '#0047b2', '#6b24b2',
-              '#444444', '#5c0000', '#663d00', '#666600', '#003700', '#002966', '#3d1466'
+              '#444444', '#5c0000', '#663d00', '#666600', '#003700', '#002966', '#3d1466',
             ];
           },
         },
@@ -416,13 +416,32 @@ export const RichTextEditorMixin = (superClass) =>
       // Flush pending htmlValue only once the editor is fully initialized
       this.__flushPendingHtmlValue();
 
-      this.$.backgroundPopup.target = this.shadowRoot.querySelector('#btn-background');
-      this.$.colorPopup.target = this.shadowRoot.querySelector('#btn-color');
+      this.querySelector('[slot="color-popup"]').target = this.shadowRoot.querySelector('#btn-color');
+      this.querySelector('[slot="background-popup"]').target = this.shadowRoot.querySelector('#btn-background');
 
-      requestAnimationFrame(() => {
-        this.$.linkDialog.$.dialog.$.overlay.addEventListener('vaadin-overlay-open', () => {
-          this.$.linkUrl.focus();
-        });
+      // Set up tooltip to show when hovering or focusing toolbar buttons
+      this._tooltip = document.createElement('vaadin-tooltip');
+      this._tooltip.slot = 'tooltip';
+      // Create dummy aria target, as toolbar buttons already have aria-label, and also cannot be linked with the
+      // tooltip being in the light DOM
+      this._tooltip.ariaTarget = document.createElement('div');
+      this.append(this._tooltip);
+
+      const buttons = this.shadowRoot.querySelectorAll('[part~="toolbar-button"]');
+      buttons.forEach((button) => {
+        button.addEventListener('mouseenter', this.__showTooltip.bind(this));
+        button.addEventListener('focusin', this.__showTooltip.bind(this));
+      });
+    }
+
+    /** @private */
+    __showTooltip(event) {
+      const target = event.target;
+      this._tooltip.target = target;
+      this._tooltip.text = target.ariaLabel;
+      this._tooltip._stateController.open({
+        focus: event.type === 'focusin',
+        hover: event.type === 'mouseenter',
       });
     }
 
@@ -652,7 +671,8 @@ export const RichTextEditorMixin = (superClass) =>
       if (e.keyCode === 13) {
         e.preventDefault();
         e.stopPropagation();
-        this.$.confirmLink.click();
+        this._onLinkEditConfirm();
+        this._closeLinkDialog();
       }
     }
 
@@ -799,10 +819,7 @@ export const RichTextEditorMixin = (superClass) =>
         timeOut.after(timeout),
         () => {
           const formatting = Array.from(this.shadowRoot.querySelectorAll('[part="toolbar"] .ql-active'))
-            .map((button) => {
-              const tooltip = this.shadowRoot.querySelector(`[for="${button.id}"]`);
-              return tooltip.text;
-            })
+            .map((button) => button.getAttribute('aria-label'))
             .join(', ');
           announcer.textContent = formatting;
         },

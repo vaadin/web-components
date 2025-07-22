@@ -40,7 +40,7 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * @private
  */
 export class MultiSelectComboBoxItem extends ComboBoxItemMixin(
-  LumoInjectionMixin(ThemableMixin(DirMixin(PolylitMixin(LitElement)))),
+  ThemableMixin(DirMixin(PolylitMixin(LumoInjectionMixin(LitElement)))),
 ) {
   static get is() {
     return 'vaadin-multi-select-combo-box-item';

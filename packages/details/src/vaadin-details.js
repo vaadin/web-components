@@ -16,7 +16,7 @@ import { DetailsBaseMixin } from './vaadin-details-base-mixin.js';
  * `<vaadin-details>` is a Web Component which the creates an
  * expandable panel similar to `<details>` HTML element.
  *
- * ```
+ * ```html
  * <vaadin-details>
  *   <vaadin-details-summary slot="summary">Expandable Details</vaadin-details-summary>
  *   <div>
@@ -52,7 +52,7 @@ import { DetailsBaseMixin } from './vaadin-details-base-mixin.js';
  * @mixes ElementMixin
  * @mixes ThemableMixin
  */
-class Details extends DetailsBaseMixin(ElementMixin(LumoInjectionMixin(ThemableMixin(PolylitMixin(LitElement))))) {
+class Details extends DetailsBaseMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {
   static get is() {
     return 'vaadin-details';
   }

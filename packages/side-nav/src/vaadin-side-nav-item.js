@@ -82,7 +82,7 @@ import { SideNavChildrenMixin } from './vaadin-side-nav-children-mixin.js';
  * @mixes SideNavChildrenMixin
  */
 class SideNavItem extends SideNavChildrenMixin(
-  DisabledMixin(ElementMixin(ThemableMixin(LumoInjectionMixin(PolylitMixin(LitElement))))),
+  DisabledMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement))))),
 ) {
   static get is() {
     return 'vaadin-side-nav-item';

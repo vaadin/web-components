@@ -25,7 +25,7 @@ import { timePickerOverlayStyles } from './styles/vaadin-time-picker-overlay-cor
  * @private
  */
 export class TimePickerOverlay extends ComboBoxOverlayMixin(
-  OverlayMixin(DirMixin(LumoInjectionMixin(ThemableMixin(PolylitMixin(LitElement))))),
+  OverlayMixin(DirMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement))))),
 ) {
   static get is() {
     return 'vaadin-time-picker-overlay';
@@ -38,13 +38,28 @@ export class TimePickerOverlay extends ComboBoxOverlayMixin(
   /** @protected */
   render() {
     return html`
-      <div id="backdrop" part="backdrop" hidden></div>
       <div part="overlay" id="overlay">
         <div part="content" id="content">
           <slot></slot>
         </div>
       </div>
     `;
+  }
+
+  /**
+   * @protected
+   * @override
+   */
+  _attachOverlay() {
+    this.showPopover();
+  }
+
+  /**
+   * @protected
+   * @override
+   */
+  _detachOverlay() {
+    this.hidePopover();
   }
 
   /**

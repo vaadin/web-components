@@ -76,22 +76,6 @@ export const DialogBaseMixin = (superClass) =>
         },
 
         /**
-         * Set the width of the overlay.
-         * If a unitless number is provided, pixels are assumed.
-         */
-        width: {
-          type: String,
-        },
-
-        /**
-         * Set the height of the overlay.
-         * If a unitless number is provided, pixels are assumed.
-         */
-        height: {
-          type: String,
-        },
-
-        /**
          * The `role` attribute value to be set on the overlay. Defaults to "dialog".
          *
          * @attr {string} overlay-role
@@ -104,7 +88,7 @@ export const DialogBaseMixin = (superClass) =>
     }
 
     static get observers() {
-      return ['__positionChanged(top, left)', '__sizeChanged(width, height)'];
+      return ['__positionChanged(top, left)'];
     }
 
     /** @protected */

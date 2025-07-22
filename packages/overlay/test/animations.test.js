@@ -111,10 +111,12 @@ function afterOverlayClosingFinished(overlay, callback) {
   const titleSuffix = withAnimation ? ' (animated)' : '';
 
   describe(`animated overlay${titleSuffix}`, () => {
-    let overlay;
+    let overlay, owner;
 
     beforeEach(async () => {
       overlay = createOverlay('overlay content');
+      owner = fixtureSync('<div></div>');
+      overlay.owner = owner;
       if (withAnimation) {
         overlay.setAttribute('animate', '');
       }
@@ -124,6 +126,56 @@ function afterOverlayClosingFinished(overlay, callback) {
     afterEach(() => {
       overlay.opened = false;
     });
+
+    if (withAnimation) {
+      it('should set opening attribute on the overlay when opened', () => {
+        overlay.opened = true;
+
+        expect(overlay.hasAttribute('opening')).to.be.true;
+        expect(owner.hasAttribute('opening')).to.be.true;
+      });
+
+      it('should clear opening attribute on the overlay after it has opened', async () => {
+        overlay.opened = true;
+
+        await new Promise((resolve) => {
+          afterOverlayOpeningFinished(overlay, resolve);
+        });
+
+        expect(overlay.hasAttribute('opening')).to.be.false;
+        expect(owner.hasAttribute('opening')).to.be.false;
+      });
+
+      it('should set closing attribute on the overlay when closed', async () => {
+        overlay.opened = true;
+
+        await new Promise((resolve) => {
+          afterOverlayOpeningFinished(overlay, resolve);
+        });
+
+        overlay.opened = false;
+
+        expect(overlay.hasAttribute('closing')).to.be.true;
+        expect(owner.hasAttribute('closing')).to.be.true;
+      });
+
+      it('should clear closing attribute on the overlay after it has closed', async () => {
+        overlay.opened = true;
+
+        await new Promise((resolve) => {
+          afterOverlayOpeningFinished(overlay, resolve);
+        });
+
+        overlay.opened = false;
+
+        await new Promise((resolve) => {
+          afterOverlayClosingFinished(overlay, resolve);
+        });
+
+        expect(overlay.hasAttribute('closing')).to.be.false;
+        expect(owner.hasAttribute('closing')).to.be.false;
+      });
+    }
 
     it('should flush closing overlay when re-opened while closing animation is in progress', () => {
       overlay.opened = true;
@@ -142,6 +194,7 @@ function afterOverlayClosingFinished(overlay, callback) {
       overlay.opened = false;
 
       expect(overlay.hasAttribute('opening')).to.be.false;
+      expect(owner.hasAttribute('opening')).to.be.false;
     });
 
     it('should detach the overlay even if it is scheduled for reopening', () => {

@@ -58,7 +58,7 @@ import { DashboardLayoutMixin } from './vaadin-dashboard-layout-mixin.js';
  * @mixes ThemableMixin
  */
 class DashboardLayout extends DashboardLayoutMixin(
-  ElementMixin(ThemableMixin(LumoInjectionMixin(PolylitMixin(LitElement)))),
+  ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement)))),
 ) {
   static get is() {
     return 'vaadin-dashboard-layout';

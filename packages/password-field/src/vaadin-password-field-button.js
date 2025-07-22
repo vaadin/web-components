@@ -22,7 +22,7 @@ import { passwordFieldButton } from './styles/vaadin-password-field-button-core-
  * @mixes ThemableMixin
  * @private
  */
-class PasswordFieldButton extends ButtonMixin(DirMixin(LumoInjectionMixin(ThemableMixin(PolylitMixin(LitElement))))) {
+class PasswordFieldButton extends ButtonMixin(DirMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {
   static get is() {
     return 'vaadin-password-field-button';
   }

@@ -22,7 +22,7 @@ import { UploadMixin } from './vaadin-upload-mixin.js';
  *
  * Example:
  *
- * ```
+ * ```html
  * <vaadin-upload></vaadin-upload>
  * ```
  *
@@ -66,7 +66,7 @@ import { UploadMixin } from './vaadin-upload-mixin.js';
  * @mixes ElementMixin
  * @mixes UploadMixin
  */
-class Upload extends UploadMixin(ElementMixin(ThemableMixin(LumoInjectionMixin(PolylitMixin(LitElement))))) {
+class Upload extends UploadMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {
   static get is() {
     return 'vaadin-upload';
   }

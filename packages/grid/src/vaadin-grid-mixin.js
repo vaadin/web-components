@@ -28,6 +28,7 @@ import {
   iterateRowCells,
   updateBooleanRowStates,
   updateCellsPart,
+  updateState,
 } from './vaadin-grid-helpers.js';
 import { KeyboardNavigationMixin } from './vaadin-grid-keyboard-navigation-mixin.js';
 import { RowDetailsMixin } from './vaadin-grid-row-details-mixin.js';
@@ -345,7 +346,7 @@ export const GridMixin = (superClass) =>
         row.setAttribute('role', 'row');
         row.setAttribute('tabindex', '-1');
         if (this._columnTree) {
-          this._updateRow(row, this._columnTree[this._columnTree.length - 1], 'body', false, true);
+          this.__initRow(row, this._columnTree[this._columnTree.length - 1], 'body', false, true);
         }
         rows.push(row);
       }
@@ -457,9 +458,9 @@ export const GridMixin = (superClass) =>
      * @param {?string} section
      * @param {boolean} isColumnRow
      * @param {boolean} noNotify
-     * @protected
+     * @private
      */
-    _updateRow(row, columns, section = 'body', isColumnRow = false, noNotify = false) {
+    __initRow(row, columns, section = 'body', isColumnRow = false, noNotify = false) {
       const contentsFragment = document.createDocumentFragment();
 
       iterateRowCells(row, (cell) => {
@@ -639,10 +640,15 @@ export const GridMixin = (superClass) =>
         return;
       }
 
+      row.index = index;
+
       this._updateRowOrderParts(row, index);
 
       this._a11yUpdateRowRowindex(row, index);
-      this._getItem(index, row);
+
+      this.__ensureRowItem(row);
+      this.__ensureRowHierarchy(row);
+      this.__updateRow(row);
     }
 
     /** @private */
@@ -683,7 +689,7 @@ export const GridMixin = (superClass) =>
      */
     _renderColumnTree(columnTree) {
       iterateChildren(this.$.items, (row) => {
-        this._updateRow(row, columnTree[columnTree.length - 1], 'body', false, true);
+        this.__initRow(row, columnTree[columnTree.length - 1], 'body', false, true);
 
         const model = this.__getRowModel(row);
         this._updateRowOrderParts(row);
@@ -710,7 +716,7 @@ export const GridMixin = (superClass) =>
       }
 
       iterateChildren(this.$.header, (headerRow, index, rows) => {
-        this._updateRow(headerRow, columnTree[index], 'header', index === columnTree.length - 1);
+        this.__initRow(headerRow, columnTree[index], 'header', index === columnTree.length - 1);
 
         const cells = getBodyRowCells(headerRow);
         updateCellsPart(cells, 'first-header-row-cell', index === 0);
@@ -718,7 +724,7 @@ export const GridMixin = (superClass) =>
       });
 
       iterateChildren(this.$.footer, (footerRow, index, rows) => {
-        this._updateRow(footerRow, columnTree[columnTree.length - 1 - index], 'footer', index === 0);
+        this.__initRow(footerRow, columnTree[columnTree.length - 1 - index], 'footer', index === 0);
 
         const cells = getBodyRowCells(footerRow);
         updateCellsPart(cells, 'first-footer-row-cell', index === 0);
@@ -726,7 +732,7 @@ export const GridMixin = (superClass) =>
       });
 
       // Sizer rows
-      this._updateRow(this.$.sizer, columnTree[columnTree.length - 1]);
+      this.__initRow(this.$.sizer, columnTree[columnTree.length - 1]);
 
       this._resizeHandler();
       this._frozenCellsChanged();
@@ -741,10 +747,38 @@ export const GridMixin = (superClass) =>
 
     /**
      * @param {!HTMLElement} row
-     * @param {GridItem} item
-     * @protected
+     * @param {boolean} loading
+     * @private
      */
-    _updateItem(row, item) {
+    __updateRowLoading(row, loading) {
+      const cells = getBodyRowCells(row);
+
+      // Row state attribute
+      updateState(row, 'loading', loading);
+
+      // Cells part attribute
+      updateCellsPart(cells, 'loading-row-cell', loading);
+
+      if (loading) {
+        // Run style generators for the loading row to have custom names cleared
+        this._generateCellClassNames(row);
+        this._generateCellPartNames(row);
+      }
+    }
+
+    /**
+     * @param {!HTMLElement} row
+     * @private
+     */
+    __updateRow(row) {
+      const item = this.__getRowItem(row);
+      if (item) {
+        this.__updateRowLoading(row, false);
+      } else {
+        this.__updateRowLoading(row, true);
+        return;
+      }
+
       row._item = item;
       const model = this.__getRowModel(row);
 

@@ -15,10 +15,8 @@ import { ItemMixin } from './vaadin-item-mixin.js';
 /**
  * `<vaadin-item>` is a Web Component providing layout for items in tabs and menus.
  *
- * ```
- *   <vaadin-item>
- *     Item content
- *   </vaadin-item>
+ * ```html
+ * <vaadin-item>Item content</vaadin-item>
  * ```
  *
  * ### Selectable
@@ -56,7 +54,7 @@ import { ItemMixin } from './vaadin-item-mixin.js';
  * @mixes ThemableMixin
  * @mixes DirMixin
  */
-class Item extends ItemMixin(ThemableMixin(DirMixin(LumoInjectionMixin(PolylitMixin(LitElement))))) {
+class Item extends ItemMixin(ThemableMixin(DirMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {
   static get is() {
     return 'vaadin-item';
   }

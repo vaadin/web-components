@@ -24,7 +24,7 @@ import { DatePickerOverlayMixin } from './vaadin-date-picker-overlay-mixin.js';
  * @private
  */
 class DatePickerOverlay extends DatePickerOverlayMixin(
-  DirMixin(LumoInjectionMixin(ThemableMixin(PolylitMixin(LitElement)))),
+  DirMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement)))),
 ) {
   static get is() {
     return 'vaadin-date-picker-overlay';
@@ -44,6 +44,33 @@ class DatePickerOverlay extends DatePickerOverlayMixin(
         </div>
       </div>
     `;
+  }
+
+  /**
+   * Override method from `OverlayFocusMixin` to specify content root
+   * used to detect whether focus should be restored on overlay close.
+   *
+   * @protected
+   * @override
+   */
+  get _contentRoot() {
+    return this.owner._overlayContent;
+  }
+
+  /**
+   * @protected
+   * @override
+   */
+  _attachOverlay() {
+    this.showPopover();
+  }
+
+  /**
+   * @protected
+   * @override
+   */
+  _detachOverlay() {
+    this.hidePopover();
   }
 }
 

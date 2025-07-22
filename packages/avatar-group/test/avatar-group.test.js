@@ -88,7 +88,7 @@ describe('avatar-group', () => {
     });
 
     it('should render avatar based on maxItemsVisible, including overflow avatar', () => {
-      const items = group.querySelectorAll('vaadin-avatar');
+      const items = group._avatars;
       expect(items.length).to.equal(group.maxItemsVisible);
     });
 
@@ -101,8 +101,7 @@ describe('avatar-group', () => {
       const overflow = group._overflow;
       const items = group.items;
       const tooltip = overflow.querySelector('vaadin-tooltip');
-      const overlay = tooltip.shadowRoot.querySelector('vaadin-tooltip-overlay');
-      expect(overlay.textContent).to.equal([items[2].name, items[3].abbr, 'anonymous'].join('\n'));
+      expect(tooltip.textContent).to.equal([items[2].name, items[3].abbr, 'anonymous'].join('\n'));
     });
 
     it('should show overflow avatar when maxItemsVisible is less than items count', () => {
@@ -113,7 +112,7 @@ describe('avatar-group', () => {
     it('should show at least two avatars if maxItemsVisible is below 2', async () => {
       group.maxItemsVisible = 1;
       await nextRender();
-      const items = group.querySelectorAll('vaadin-avatar');
+      const items = group._avatars;
       expect(items.length).to.equal(2);
     });
 
@@ -128,7 +127,7 @@ describe('avatar-group', () => {
       group.items = group.items.slice(0, 2);
       group.maxItemsVisible = 1;
       await nextRender();
-      const items = group.querySelectorAll('vaadin-avatar:not([hidden])');
+      const items = group._avatars.filter((el) => !el.hasAttribute('hidden'));
       expect(items.length).to.equal(2);
     });
 
@@ -161,7 +160,7 @@ describe('avatar-group', () => {
       group.items = [];
       group.items = items;
       await nextRender();
-      const renderedElements = group.querySelectorAll('vaadin-avatar');
+      const renderedElements = group._avatars;
       expect(renderedElements.length).to.equal(maxItemsVisible);
     });
 
@@ -175,7 +174,7 @@ describe('avatar-group', () => {
         group.style.width = '100px';
         await nextResize(group);
 
-        const items = group.querySelectorAll('vaadin-avatar');
+        const items = group._avatars;
         expect(items.length).to.equal(3);
       });
 
@@ -202,7 +201,7 @@ describe('avatar-group', () => {
     it('should render avatars to fit width on resize', async () => {
       group.style.width = '110px';
       await nextResize(group);
-      const items = group.querySelectorAll('vaadin-avatar');
+      const items = group._avatars;
       expect(items.length).to.equal(3);
       expect(overflow.abbr).to.equal('+3');
     });
@@ -211,7 +210,7 @@ describe('avatar-group', () => {
       group.items = group.items.slice(0, 2);
       group.style.width = '50px';
       await nextResize(group);
-      const items = group.querySelectorAll('vaadin-avatar:not([hidden])');
+      const items = group._avatars.filter((el) => !el.hasAttribute('hidden'));
       expect(items.length).to.equal(2);
     });
 
@@ -235,7 +234,7 @@ describe('avatar-group', () => {
       overflow.click();
       await oneEvent(overlay, 'vaadin-overlay-open');
 
-      const items = overlay.querySelectorAll('vaadin-avatar-group-menu-item');
+      const items = group.querySelectorAll('vaadin-avatar-group-menu-item');
       expect(items.length).to.equal(3);
     });
 
@@ -249,7 +248,7 @@ describe('avatar-group', () => {
       group.style.width = '75px';
       await nextResize(group);
 
-      const items = overlay.querySelectorAll('vaadin-avatar-group-menu-item');
+      const items = group.querySelectorAll('vaadin-avatar-group-menu-item');
       expect(items.length).to.equal(4);
     });
 
@@ -281,6 +280,19 @@ describe('avatar-group', () => {
       await nextRender();
       overlay = group.$.overlay;
       overflow = group._overflow;
+    });
+
+    it('should set owner property on the overlay', () => {
+      expect(overlay.owner).to.equal(group);
+    });
+
+    it('should export all overlay parts for styling', () => {
+      const parts = [...overlay.shadowRoot.querySelectorAll('[part]')].map((el) => el.getAttribute('part'));
+      const exportParts = overlay.getAttribute('exportparts').split(', ');
+
+      parts.forEach((part) => {
+        expect(exportParts).to.include(part);
+      });
     });
 
     it('should open overlay on overflow avatar click', () => {
@@ -319,7 +331,7 @@ describe('avatar-group', () => {
       overflow.click();
       await oneEvent(overlay, 'vaadin-overlay-open');
 
-      const menu = overlay.querySelector('vaadin-avatar-group-menu');
+      const menu = group.querySelector('vaadin-avatar-group-menu');
       escKeyDown(menu);
 
       await nextRender();
@@ -330,7 +342,7 @@ describe('avatar-group', () => {
       overflow.click();
       await oneEvent(overlay, 'vaadin-overlay-open');
 
-      const menu = overlay.querySelector('vaadin-avatar-group-menu');
+      const menu = group.querySelector('vaadin-avatar-group-menu');
       tabKeyDown(menu);
 
       await nextRender();
@@ -366,7 +378,7 @@ describe('avatar-group', () => {
       overflow.click();
       await oneEvent(overlay, 'vaadin-overlay-open');
 
-      const menu = overlay.querySelector('vaadin-avatar-group-menu');
+      const menu = group.querySelector('vaadin-avatar-group-menu');
       escKeyDown(menu);
 
       await nextRender();
@@ -377,7 +389,7 @@ describe('avatar-group', () => {
       overflow.click();
       await oneEvent(overlay, 'vaadin-overlay-open');
 
-      overlay.querySelector('vaadin-avatar-group-menu-item').click();
+      group.querySelector('vaadin-avatar-group-menu-item').click();
 
       await nextRender();
       expect(overflow.hasAttribute('focus-ring')).to.be.false;
@@ -423,7 +435,7 @@ describe('avatar-group', () => {
       overflow.click();
       await oneEvent(overlay, 'vaadin-overlay-open');
 
-      const avatars = overlay.querySelectorAll('vaadin-avatar');
+      const avatars = group._menuElement.querySelectorAll('vaadin-avatar');
       expect(avatars[0].colorIndex).to.equal(group.items[1].colorIndex);
       expect(avatars[1].colorIndex).to.equal(group.items[2].colorIndex);
     });
@@ -456,7 +468,7 @@ describe('avatar-group', () => {
       overflow.click();
       await oneEvent(overlay, 'vaadin-overlay-open');
 
-      const avatars = overlay.querySelectorAll('vaadin-avatar');
+      const avatars = group._menuElement.querySelectorAll('vaadin-avatar');
       expect(avatars[0].getAttribute('class')).to.equal(group.items[1].className);
       expect(avatars[1].getAttribute('class')).to.equal(group.items[2].className);
     });
@@ -518,7 +530,7 @@ describe('avatar-group', () => {
       overflow.click();
       await oneEvent(overlay, 'vaadin-overlay-open');
 
-      const avatars = overlay.querySelectorAll('vaadin-avatar');
+      const avatars = group._menuElement.querySelectorAll('vaadin-avatar');
       expect(avatars[0].i18n).to.deep.equal(group.__effectiveI18n);
       expect(avatars[1].i18n).to.deep.equal(group.__effectiveI18n);
     });
@@ -648,32 +660,5 @@ describe('avatar group in column flex', () => {
 
   it('should not show overflow avatar', () => {
     expect(group._overflow.hasAttribute('hidden')).to.be.true;
-  });
-});
-
-describe('initial render', () => {
-  let group, spy;
-
-  beforeEach(() => {
-    group = document.createElement('vaadin-avatar-group');
-    spy = sinon.spy(group, '__overlayRenderer');
-  });
-
-  afterEach(() => {
-    group.remove();
-  });
-
-  it('should not request content update on initial render without overflow items', async () => {
-    document.body.appendChild(group);
-    await nextRender();
-    expect(spy.called).to.be.false;
-  });
-
-  it('should only request content update once on initial render with overflow items', async () => {
-    group.items = [{ abbr: 'A' }, { abbr: 'B' }, { abbr: 'C' }];
-    group.maxItemsVisible = 2;
-    document.body.appendChild(group);
-    await nextRender();
-    expect(spy).to.be.calledOnce;
   });
 });

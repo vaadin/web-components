@@ -19,7 +19,7 @@ import { fieldOutlineStyles } from './styles/vaadin-field-outline-core-styles.js
  * @mixes ThemableMixin
  * @private
  */
-export class FieldOutline extends ThemableMixin(DirMixin(LumoInjectionMixin(PolylitMixin(LitElement)))) {
+export class FieldOutline extends ThemableMixin(DirMixin(PolylitMixin(LumoInjectionMixin(LitElement)))) {
   static get is() {
     return 'vaadin-field-outline';
   }

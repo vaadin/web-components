@@ -3,6 +3,11 @@ export const snapshots = {};
 
 snapshots["menu-bar basic"] = 
 `<vaadin-menu-bar role="menubar">
+  <vaadin-menu-bar-submenu
+    is-root=""
+    slot="submenu"
+  >
+  </vaadin-menu-bar-submenu>
   <vaadin-menu-bar-button
     class="home"
     first-visible=""
@@ -84,7 +89,10 @@ snapshots["menu-bar overlay"] =
       Generate Report
     </vaadin-menu-bar-item>
   </vaadin-menu-bar-list-box>
-  <vaadin-menu-bar-submenu hidden="">
+  <vaadin-menu-bar-submenu
+    hidden=""
+    modeless=""
+  >
   </vaadin-menu-bar-submenu>
 </vaadin-menu-bar-overlay>
 `;
@@ -119,7 +127,10 @@ snapshots["menu-bar overlay class"] =
       Generate Report
     </vaadin-menu-bar-item>
   </vaadin-menu-bar-list-box>
-  <vaadin-menu-bar-submenu hidden="">
+  <vaadin-menu-bar-submenu
+    hidden=""
+    modeless=""
+  >
   </vaadin-menu-bar-submenu>
 </vaadin-menu-bar-overlay>
 `;

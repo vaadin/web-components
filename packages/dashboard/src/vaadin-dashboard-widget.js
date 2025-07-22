@@ -105,7 +105,7 @@ import { DashboardSection } from './vaadin-dashboard-section.js';
  * @mixes DashboardItemMixin
  */
 class DashboardWidget extends DashboardItemMixin(
-  ElementMixin(ThemableMixin(LumoInjectionMixin(PolylitMixin(LitElement)))),
+  ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement)))),
 ) {
   static get is() {
     return 'vaadin-dashboard-widget';

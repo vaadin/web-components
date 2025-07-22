@@ -16,13 +16,13 @@ import { MultiSelectListMixin } from './vaadin-multi-select-list-mixin.js';
 /**
  * `<vaadin-list-box>` is a Web Component for creating menus.
  *
- * ```
- *   <vaadin-list-box selected="2">
- *     <vaadin-item>Item 1</vaadin-item>
- *     <vaadin-item>Item 2</vaadin-item>
- *     <vaadin-item>Item 3</vaadin-item>
- *     <vaadin-item>Item 4</vaadin-item>
- *   </vaadin-list-box>
+ * ```html
+ * <vaadin-list-box selected="2">
+ *   <vaadin-item>Item 1</vaadin-item>
+ *   <vaadin-item>Item 2</vaadin-item>
+ *   <vaadin-item>Item 3</vaadin-item>
+ *   <vaadin-item>Item 4</vaadin-item>
+ * </vaadin-list-box>
  * ```
  *
  * ### Styling
@@ -45,7 +45,7 @@ import { MultiSelectListMixin } from './vaadin-multi-select-list-mixin.js';
  * @mixes ThemableMixin
  * @mixes ElementMixin
  */
-class ListBox extends ElementMixin(MultiSelectListMixin(ThemableMixin(LumoInjectionMixin(PolylitMixin(LitElement))))) {
+class ListBox extends ElementMixin(MultiSelectListMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {
   static get is() {
     return 'vaadin-list-box';
   }

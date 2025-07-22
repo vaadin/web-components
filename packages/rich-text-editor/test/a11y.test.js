@@ -24,15 +24,14 @@ describe('accessibility', () => {
       announcer = rte.shadowRoot.querySelector('[aria-live=polite]');
     });
 
-    it('should have default tooltips for the buttons', () => {
+    it('should have aria-label for the buttons', () => {
       buttons.forEach((button, index) => {
         const expectedLabel = rte.i18n[Object.keys(rte.i18n)[index]];
-        const tooltip = rte.shadowRoot.querySelector(`[for="${button.id}"]`);
-        expect(tooltip.text).to.equal(expectedLabel);
+        expect(button.ariaLabel).to.equal(expectedLabel);
       });
     });
 
-    it('should localize tooltips for the buttons', async () => {
+    it('should localize aria-label for the buttons', async () => {
       const defaultI18n = rte.i18n;
 
       const localized = {};
@@ -44,8 +43,7 @@ describe('accessibility', () => {
 
       buttons.forEach((button, index) => {
         const expectedLabel = `${defaultI18n[Object.keys(defaultI18n)[index]]} localized`;
-        const tooltip = rte.shadowRoot.querySelector(`[for="${button.id}"]`);
-        expect(tooltip.text).to.equal(expectedLabel);
+        expect(button.ariaLabel).to.equal(expectedLabel);
       });
     });
 

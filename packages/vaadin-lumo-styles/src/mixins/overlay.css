@@ -18,6 +18,14 @@
     align-items: center;
     justify-content: center;
 
+    /* Override native [popover] user agent styles */
+    width: auto;
+    height: auto;
+    border: none;
+    padding: 0;
+    background-color: transparent;
+    overflow: visible;
+
     /* Allow centering when max-width/max-height applies. */
     margin: auto;
 

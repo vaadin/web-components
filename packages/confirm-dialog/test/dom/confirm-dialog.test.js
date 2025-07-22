@@ -18,9 +18,13 @@ describe('vaadin-confirm-dialog', () => {
       </vaadin-confirm-dialog>
     `);
     await nextRender();
-    overlay = dialog.$.dialog._overlayElement;
+    overlay = dialog.$.overlay;
     dialog.opened = true;
     await oneEvent(overlay, 'vaadin-overlay-open');
+  });
+
+  it('host', async () => {
+    await expect(dialog).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
   });
 
   it('overlay', async () => {

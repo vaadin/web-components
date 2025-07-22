@@ -319,6 +319,8 @@ snapshots["vaadin-combo-box host opened default"] =
 `<vaadin-combo-box
   focused=""
   opened=""
+  start-aligned=""
+  top-aligned=""
 >
   <label
     for="input-vaadin-combo-box-4"
@@ -387,12 +389,6 @@ snapshots["vaadin-combo-box host opened overlay"] =
 
 snapshots["vaadin-combo-box host opened overlay shadow"] = 
 `<div
-  hidden=""
-  id="backdrop"
-  part="backdrop"
->
-</div>
-<div
   id="overlay"
   part="overlay"
 >

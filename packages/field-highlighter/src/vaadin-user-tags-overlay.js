@@ -25,7 +25,7 @@ import { userTagsOverlayStyles } from './styles/vaadin-user-tags-overlay-core-st
  * @private
  */
 class UserTagsOverlay extends PositionMixin(
-  OverlayMixin(DirMixin(ThemableMixin(LumoInjectionMixin(PolylitMixin(LitElement))))),
+  OverlayMixin(DirMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement))))),
 ) {
   static get is() {
     return 'vaadin-user-tags-overlay';
@@ -38,7 +38,6 @@ class UserTagsOverlay extends PositionMixin(
   /** @protected */
   render() {
     return html`
-      <div id="backdrop" part="backdrop" ?hidden="${!this.withBackdrop}"></div>
       <div part="overlay" id="overlay">
         <div part="content" id="content">
           <slot></slot>

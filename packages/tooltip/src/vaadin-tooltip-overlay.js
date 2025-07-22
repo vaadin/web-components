@@ -24,7 +24,7 @@ import { tooltipOverlayStyles } from './styles/vaadin-tooltip-overlay-core-style
  * @private
  */
 class TooltipOverlay extends PopoverOverlayMixin(
-  DirMixin(ThemableMixin(LumoInjectionMixin(PolylitMixin(LitElement)))),
+  DirMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement)))),
 ) {
   static get is() {
     return 'vaadin-tooltip-overlay';
@@ -46,17 +46,26 @@ class TooltipOverlay extends PopoverOverlayMixin(
   /** @protected */
   render() {
     return html`
-      <div id="backdrop" part="backdrop" hidden></div>
       <div part="overlay" id="overlay">
         <div part="content" id="content"><slot></slot></div>
       </div>
     `;
   }
 
-  requestContentUpdate() {
-    super.requestContentUpdate();
+  /**
+   * @protected
+   * @override
+   */
+  _attachOverlay() {
+    this.showPopover();
+  }
 
-    this.toggleAttribute('hidden', this.textContent.trim() === '');
+  /**
+   * @protected
+   * @override
+   */
+  _detachOverlay() {
+    this.hidePopover();
   }
 }
 

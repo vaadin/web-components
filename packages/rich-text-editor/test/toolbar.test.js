@@ -1,6 +1,8 @@
 import { expect } from '@vaadin/chai-plugins';
 import {
+  enter,
   esc,
+  fire,
   fixtureSync,
   focusout,
   isDesktopSafari,
@@ -221,14 +223,14 @@ describe('toolbar controls', () => {
           let popup, overlay;
 
           beforeEach(() => {
-            popup = rte.shadowRoot.querySelector(`#${style}Popup`);
+            popup = rte.querySelector(`[slot="${style}-popup"]`);
             overlay = popup.shadowRoot.querySelector('vaadin-rich-text-editor-popup-overlay');
           });
 
           it(`should apply ${style} when clicking the "toolbar-button-${style}" and selecting value`, async () => {
             getButton(style).click();
             await oneEvent(overlay, 'vaadin-overlay-open');
-            const button = overlay.querySelectorAll('button')[1];
+            const button = popup.querySelectorAll('button')[1];
             button.click();
             editor.insertText(0, 'Foo', 'user');
             expect(editor.getFormat(0, 3)[style]).to.equal(button.dataset.color);
@@ -245,7 +247,7 @@ describe('toolbar controls', () => {
 
             // Default color (black) or background (white)
             const value = style === 'color' ? '#000000' : '#ffffff';
-            const button = overlay.querySelector(`[data-color="${value}"]`);
+            const button = popup.querySelector(`[data-color="${value}"]`);
             button.click();
             expect(editor.getFormat(0, 3)[style]).to.be.not.ok;
           });
@@ -278,9 +280,17 @@ describe('toolbar controls', () => {
             getButton(style).click();
             await oneEvent(overlay, 'vaadin-overlay-open');
 
-            const popup = document.querySelector('vaadin-rich-text-editor-popup-overlay');
             const button = popup.querySelectorAll('button')[1];
             expect(button.dataset.color).to.equal(rte.colorOptions[1]);
+          });
+
+          it('should export all overlay parts for styling', () => {
+            const parts = [...overlay.shadowRoot.querySelectorAll('[part]')].map((el) => el.getAttribute('part'));
+            const exportParts = overlay.getAttribute('exportparts').split(', ');
+
+            parts.forEach((part) => {
+              expect(exportParts).to.include(part);
+            });
           });
         });
       });
@@ -361,12 +371,16 @@ describe('toolbar controls', () => {
 
     describe('hyperlink', () => {
       const url = 'https://vaadin.com';
-      let dialog, overlay;
+      let dialog, overlay, urlField, cancelButton, confirmButton, removeButton;
 
       beforeEach(() => {
         btn = getButton('link');
-        dialog = rte.$.linkDialog;
-        overlay = dialog._overlayElement;
+        dialog = rte.querySelector('[slot="link-dialog"]');
+        overlay = dialog.$.overlay;
+        urlField = dialog.querySelector('vaadin-text-field');
+        cancelButton = dialog.querySelector('[slot="cancel-button"]');
+        confirmButton = dialog.querySelector('[slot="confirm-button"]');
+        removeButton = dialog.querySelector('[slot="reject-button"]');
       });
 
       describe('dialog', () => {
@@ -376,34 +390,38 @@ describe('toolbar controls', () => {
           expect(dialog.opened).to.be.false;
         });
 
-        it('should focus whe text field when the dialog is opened', async () => {
-          const spy = sinon.spy(rte.$.linkUrl, 'focus');
+        it('should focus the text field when the dialog is opened', async () => {
           editor.focus();
           btn.click();
           await oneEvent(overlay, 'vaadin-overlay-open');
-          expect(spy.calledOnce).to.be.true;
+          expect(urlField.inputElement.matches(':focus')).to.be.true;
         });
 
         it('should confirm the dialog by pressing enter in the focused text field', async () => {
-          const spy = sinon.spy(rte.$.confirmLink, 'click');
+          rte.value = JSON.stringify([{ insert: 'Vaadin' }]);
           editor.focus();
+          editor.setSelection(0, 6);
+          flushValueDebouncer();
+
           btn.click();
           await oneEvent(overlay, 'vaadin-overlay-open');
-          const evt = new CustomEvent('keydown');
-          evt.keyCode = 13;
-          rte.$.linkUrl.dispatchEvent(evt);
-          expect(spy.calledOnce).to.be.true;
+
+          urlField.value = url;
+          enter(urlField);
+          flushValueDebouncer();
+
+          expect(rte.value).to.equal(`[{"attributes":{"link":"${url}"},"insert":"Vaadin"},{"insert":"\\n"}]`);
+          expect(dialog.opened).to.be.false;
         });
 
-        it('should focus whe editor when the dialog is cancelled', async () => {
+        it('should focus the editor when the dialog is cancelled', async () => {
           editor.focus();
           btn.click();
           await oneEvent(overlay, 'vaadin-overlay-open');
 
           const spy = sinon.spy(editor, 'focus');
-          rte.addEventListener('change', spy);
 
-          rte.$.cancelLink.click();
+          cancelButton.click();
           expect(spy.calledOnce).to.be.true;
         });
       });
@@ -425,8 +443,8 @@ describe('toolbar controls', () => {
           flushValueDebouncer();
           btn.click();
           await oneEvent(overlay, 'vaadin-overlay-open');
-          rte.$.linkUrl.value = url;
-          rte.$.confirmLink.click();
+          urlField.value = url;
+          confirmButton.click();
           flushValueDebouncer();
           expect(rte.value).to.equal(`[{"attributes":{"link":"${url}"},"insert":"Vaadin"},{"insert":"\\n"}]`);
         });
@@ -438,8 +456,8 @@ describe('toolbar controls', () => {
           editor.setSelection(0, 6);
           btn.click();
           await oneEvent(overlay, 'vaadin-overlay-open');
-          rte.$.linkUrl.value = url;
-          rte.$.confirmLink.click();
+          urlField.value = url;
+          confirmButton.click();
           flushValueDebouncer();
           expect(rte.value).to.equal(`[{"attributes":{"link":"${url}"},"insert":"Vaadin"},{"insert":"\\n"}]`);
         });
@@ -451,7 +469,7 @@ describe('toolbar controls', () => {
           editor.setSelection(0, 6);
           btn.click();
           await oneEvent(overlay, 'vaadin-overlay-open');
-          rte.$.removeLink.click();
+          removeButton.click();
           flushValueDebouncer();
           expect(rte.value).to.equal('[{"insert":"Vaadin\\n"}]');
         });
@@ -470,8 +488,8 @@ describe('toolbar controls', () => {
           editor.setSelection(0, 0);
           btn.click();
           await oneEvent(overlay, 'vaadin-overlay-open');
-          rte.$.linkUrl.value = url;
-          rte.$.confirmLink.click();
+          urlField.value = url;
+          confirmButton.click();
           flushValueDebouncer();
           expect(rte.value).to.equal(`[{"attributes":{"link":"${url}"},"insert":"${url}"},{"insert":"\\n"}]`);
         });
@@ -483,8 +501,8 @@ describe('toolbar controls', () => {
           editor.setSelection(1, 0);
           btn.click();
           await oneEvent(overlay, 'vaadin-overlay-open');
-          rte.$.linkUrl.value = url;
-          rte.$.confirmLink.click();
+          urlField.value = url;
+          confirmButton.click();
           flushValueDebouncer();
           expect(rte.value).to.equal(`[{"attributes":{"link":"${url}"},"insert":"Vaadin"},{"insert":"\\n"}]`);
         });
@@ -496,7 +514,7 @@ describe('toolbar controls', () => {
           editor.setSelection(1, 0);
           btn.click();
           await oneEvent(overlay, 'vaadin-overlay-open');
-          rte.$.removeLink.click();
+          removeButton.click();
           flushValueDebouncer();
           expect(rte.value).to.equal('[{"insert":"Vaadin\\n"}]');
         });
@@ -511,12 +529,12 @@ describe('toolbar controls', () => {
           btn.click();
           await oneEvent(overlay, 'vaadin-overlay-open');
 
-          rte.$.linkUrl.value = url;
+          urlField.value = url;
 
           const spy = sinon.spy();
           rte.addEventListener('change', spy);
 
-          rte.$.confirmLink.click();
+          confirmButton.click();
           await nextRender();
           flushValueDebouncer();
 
@@ -535,7 +553,7 @@ describe('toolbar controls', () => {
           const spy = sinon.spy();
           rte.addEventListener('change', spy);
 
-          rte.$.cancelLink.click();
+          cancelButton.click();
           await nextRender();
           flushValueDebouncer();
           expect(rte.value).to.equal(value);
@@ -560,6 +578,91 @@ describe('toolbar controls', () => {
       btn = getButton('redo');
       btn.click();
       expect(editor.getText()).to.equal('Foo\n');
+    });
+  });
+
+  describe('tooltip', () => {
+    const Tooltip = customElements.get('vaadin-tooltip');
+    let tooltip, overlay;
+
+    before(() => {
+      Tooltip.setDefaultFocusDelay(0);
+      Tooltip.setDefaultHoverDelay(0);
+      Tooltip.setDefaultHideDelay(0);
+    });
+
+    beforeEach(() => {
+      tooltip = rte.querySelector('vaadin-tooltip');
+      overlay = tooltip.shadowRoot.querySelector('vaadin-tooltip-overlay');
+    });
+
+    it('should open tooltip when hovering toolbar button', () => {
+      const undo = getButton('undo');
+      fire(undo, 'mouseenter');
+
+      expect(tooltip.target).to.equal(undo);
+      expect(tooltip.text).to.equal(undo.ariaLabel);
+      expect(overlay.opened).to.be.true;
+    });
+
+    it('should move tooltip when hovering other toolbar button', () => {
+      const undo = getButton('undo');
+      fire(undo, 'mouseenter');
+
+      const redo = getButton('redo');
+      fire(redo, 'mouseenter');
+
+      expect(tooltip.target).to.equal(redo);
+      expect(tooltip.text).to.equal(redo.ariaLabel);
+      expect(overlay.opened).to.be.true;
+    });
+
+    it('should close tooltip when mouse leaves toolbar button', () => {
+      const undo = getButton('undo');
+      fire(undo, 'mouseenter');
+
+      expect(overlay.opened).to.be.true;
+
+      fire(undo, 'mouseleave');
+      expect(overlay.opened).to.be.false;
+    });
+
+    it('should open tooltip when focusing toolbar button', () => {
+      const undo = getButton('undo');
+      undo.focus();
+
+      expect(tooltip.target).to.equal(undo);
+      expect(tooltip.text).to.equal(undo.ariaLabel);
+      expect(overlay.opened).to.be.true;
+    });
+
+    it('should move tooltip when focusing other toolbar button', () => {
+      const undo = getButton('undo');
+      undo.focus();
+
+      const redo = getButton('redo');
+      redo.focus();
+
+      expect(tooltip.target).to.equal(redo);
+      expect(tooltip.text).to.equal(redo.ariaLabel);
+      expect(overlay.opened).to.be.true;
+    });
+
+    it('should close tooltip when focus is moved away from toolbar button', () => {
+      const undo = getButton('undo');
+      undo.focus();
+
+      expect(overlay.opened).to.be.true;
+
+      focusout(undo);
+      expect(overlay.opened).to.be.false;
+    });
+
+    it('should not set aria-describedby on toolbar button', () => {
+      const undo = getButton('undo');
+      undo.focus();
+
+      expect(undo.hasAttribute('aria-describedby')).to.be.false;
     });
   });
 });

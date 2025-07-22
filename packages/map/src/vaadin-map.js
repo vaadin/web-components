@@ -57,7 +57,7 @@ import { MapMixin } from './vaadin-map-mixin.js';
  * @mixes ThemableMixin
  * @mixes ElementMixin
  */
-class Map extends MapMixin(ThemableMixin(ElementMixin(LumoInjectionMixin(PolylitMixin(LitElement))))) {
+class Map extends MapMixin(ThemableMixin(ElementMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {
   static get is() {
     return 'vaadin-map';
   }

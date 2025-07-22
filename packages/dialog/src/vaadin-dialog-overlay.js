@@ -23,7 +23,7 @@ import { DialogOverlayMixin } from './vaadin-dialog-overlay-mixin.js';
  * @private
  */
 export class DialogOverlay extends DialogOverlayMixin(
-  DirMixin(ThemableMixin(LumoInjectionMixin(PolylitMixin(LitElement)))),
+  DirMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement)))),
 ) {
   static get is() {
     return 'vaadin-dialog-overlay';

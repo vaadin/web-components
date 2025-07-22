@@ -157,7 +157,7 @@ import { ComboBoxMixin } from './vaadin-combo-box-mixin.js';
  */
 class ComboBox extends ComboBoxDataProviderMixin(
   ComboBoxMixin(
-    PatternMixin(InputControlMixin(LumoInjectionMixin(ThemableMixin(ElementMixin(PolylitMixin(LitElement)))))),
+    PatternMixin(InputControlMixin(ThemableMixin(ElementMixin(PolylitMixin(LumoInjectionMixin(LitElement)))))),
   ),
 ) {
   static get is() {

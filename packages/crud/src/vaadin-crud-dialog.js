@@ -31,7 +31,7 @@ import { crudDialogOverlayStyles } from './styles/vaadin-crud-dialog-overlay-cor
  * @mixes ThemableMixin
  * @private
  */
-class CrudDialogOverlay extends OverlayMixin(DirMixin(ThemableMixin(LumoInjectionMixin(PolylitMixin(LitElement))))) {
+class CrudDialogOverlay extends OverlayMixin(DirMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {
   static get is() {
     return 'vaadin-crud-dialog-overlay';
   }

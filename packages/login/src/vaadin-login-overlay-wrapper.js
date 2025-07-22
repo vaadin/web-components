@@ -20,7 +20,7 @@ import { LoginOverlayWrapperMixin } from './vaadin-login-overlay-wrapper-mixin.j
  * @private
  */
 class LoginOverlayWrapper extends LoginOverlayWrapperMixin(
-  ThemableMixin(LumoInjectionMixin(PolylitMixin(LitElement))),
+  ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement))),
 ) {
   static get is() {
     return 'vaadin-login-overlay-wrapper';

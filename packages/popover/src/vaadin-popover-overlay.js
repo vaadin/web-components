@@ -23,7 +23,7 @@ import { PopoverOverlayMixin } from './vaadin-popover-overlay-mixin.js';
  * @private
  */
 class PopoverOverlay extends PopoverOverlayMixin(
-  DirMixin(ThemableMixin(LumoInjectionMixin(PolylitMixin(LitElement)))),
+  DirMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement)))),
 ) {
   static get is() {
     return 'vaadin-popover-overlay';

@@ -26,7 +26,7 @@ describe('a11y', () => {
           form = crud.querySelector('vaadin-crud-form');
           newButton = crud.querySelector('[slot=new-button]');
           saveButton = crud.querySelector('[slot=save-button]');
-          cancelButton = crud.querySelector('[slot=cancel-button]');
+          cancelButton = crud.querySelector(':scope > [slot=cancel-button]');
           editButtons = crud.querySelectorAll('vaadin-crud-edit');
         });
 
@@ -81,7 +81,7 @@ describe('a11y', () => {
           form = crud.querySelector('vaadin-crud-form');
           newButton = crud.querySelector('[slot=new-button]');
           saveButton = crud.querySelector('[slot=save-button]');
-          cancelButton = crud.querySelector('[slot=cancel-button]');
+          cancelButton = crud.querySelector(':scope > [slot=cancel-button]');
           editButtons = crud.querySelectorAll('vaadin-crud-edit');
         });
 

@@ -13,7 +13,8 @@
     -webkit-text-size-adjust: 100%;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    max-width: calc(var(--lumo-size-m) * 10);
+    width: calc(var(--lumo-size-m) * 10);
+    max-width: 100%;
     background: var(--lumo-base-color) linear-gradient(var(--lumo-tint-5pct), var(--lumo-tint-5pct));
   }
 
@@ -27,6 +28,11 @@
     flex-direction: column;
     box-sizing: border-box;
     padding: var(--lumo-space-l);
+  }
+
+  ::slotted(form) {
+    display: flex;
+    flex-direction: column;
   }
 
   [part='form-title'] {

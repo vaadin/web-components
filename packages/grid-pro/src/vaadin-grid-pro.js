@@ -19,7 +19,7 @@ import { InlineEditingMixin } from './vaadin-grid-pro-inline-editing-mixin.js';
  *
  * See [`<vaadin-grid>`](#/elements/vaadin-grid) documentation for details.
  *
- * ```
+ * ```html
  * <vaadin-grid-pro></vaadin-grid-pro>
  * ```
  *

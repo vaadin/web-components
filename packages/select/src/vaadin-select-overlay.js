@@ -21,7 +21,7 @@ import { SelectOverlayMixin } from './vaadin-select-overlay-mixin.js';
  * @mixes ThemableMixin
  * @private
  */
-export class SelectOverlay extends SelectOverlayMixin(ThemableMixin(LumoInjectionMixin(PolylitMixin(LitElement)))) {
+export class SelectOverlay extends SelectOverlayMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement)))) {
   static get is() {
     return 'vaadin-select-overlay';
   }
@@ -34,7 +34,7 @@ export class SelectOverlay extends SelectOverlayMixin(ThemableMixin(LumoInjectio
   render() {
     return html`
       <div id="backdrop" part="backdrop" ?hidden="${!this.withBackdrop}"></div>
-      <div part="overlay" id="overlay" tabindex="0">
+      <div part="overlay" id="overlay">
         <div part="content" id="content">
           <slot></slot>
         </div>

@@ -35,7 +35,7 @@ describe('crud buttons', () => {
         crud.items = [{ foo: 'bar' }];
         await nextRender();
         saveButton = crud.querySelector('[slot=save-button]');
-        cancelButton = crud.querySelector('[slot=cancel-button]');
+        cancelButton = crud.querySelector(':scope > [slot=cancel-button]');
         deleteButton = crud.querySelector('[slot=delete-button]');
       });
 
@@ -71,10 +71,11 @@ describe('crud buttons', () => {
       });
 
       describe('actions', () => {
-        let confirmDeleteOverlay;
+        let confirmDeleteDialog, confirmDeleteOverlay;
 
         beforeEach(() => {
-          confirmDeleteOverlay = crud.$.confirmDelete.$.dialog.$.overlay;
+          confirmDeleteDialog = crud._confirmDeleteDialog;
+          confirmDeleteOverlay = confirmDeleteDialog.$.overlay;
         });
 
         it('should save an edited item', async () => {
@@ -100,7 +101,7 @@ describe('crud buttons', () => {
           await nextRender();
           deleteButton.click();
           await oneEvent(confirmDeleteOverlay, 'vaadin-overlay-open');
-          confirmDeleteOverlay.querySelector('[slot^="confirm"]').click();
+          confirmDeleteDialog.querySelector('[slot^="confirm"]').click();
           expect(crud.items.length).to.be.equal(0);
         });
 
@@ -135,7 +136,7 @@ describe('crud buttons', () => {
           await nextRender();
           deleteButton.click();
           await oneEvent(confirmDeleteOverlay, 'vaadin-overlay-open');
-          confirmDeleteOverlay.querySelector('[slot^="confirm"]').click();
+          confirmDeleteDialog.querySelector('[slot^="confirm"]').click();
           expect(crud.items.length).to.be.equal(1);
         });
 
@@ -170,8 +171,8 @@ describe('crud buttons', () => {
           let confirmCancelOverlay;
 
           beforeEach(() => {
-            confirmCancelDialog = crud.$.confirmCancel;
-            confirmCancelOverlay = confirmCancelDialog.$.dialog.$.overlay;
+            confirmCancelDialog = crud._confirmCancelDialog;
+            confirmCancelOverlay = confirmCancelDialog.$.overlay;
           });
 
           afterEach(() => {
@@ -233,7 +234,7 @@ describe('crud buttons', () => {
             change(crud._form);
             cancelButton.click();
             await oneEvent(confirmCancelOverlay, 'vaadin-overlay-open');
-            confirmCancelOverlay.querySelector('[slot^="cancel"]').click();
+            confirmCancelDialog.querySelector('[slot^="cancel"]').click();
             await nextRender();
             expect(confirmCancelDialog.opened).not.to.be.ok;
             expect(editorDialog.opened).to.be.true;
@@ -245,7 +246,7 @@ describe('crud buttons', () => {
             change(crud._form);
             cancelButton.click();
             await oneEvent(confirmCancelOverlay, 'vaadin-overlay-open');
-            confirmCancelOverlay.querySelector('[slot^="confirm"]').click();
+            confirmCancelDialog.querySelector('[slot^="confirm"]').click();
             expect(confirmCancelDialog.opened).not.to.be.ok;
             expect(editorDialog.opened).not.to.be.ok;
           });
@@ -315,8 +316,8 @@ describe('crud buttons', () => {
           let confirmDeleteOverlay;
 
           beforeEach(() => {
-            confirmDeleteDialog = crud.$.confirmDelete;
-            confirmDeleteOverlay = confirmDeleteDialog.$.dialog.$.overlay;
+            confirmDeleteDialog = crud._confirmDeleteDialog;
+            confirmDeleteOverlay = confirmDeleteDialog.$.overlay;
           });
 
           it('should ask for confirmation on delete', async () => {
@@ -332,7 +333,7 @@ describe('crud buttons', () => {
             await nextRender();
             deleteButton.click();
             await oneEvent(confirmDeleteOverlay, 'vaadin-overlay-open');
-            confirmDeleteOverlay.querySelector('[slot^="cancel"]').click();
+            confirmDeleteDialog.querySelector('[slot^="cancel"]').click();
             expect(confirmDeleteDialog.opened).not.to.be.ok;
             expect(editorDialog.opened).to.be.true;
           });
@@ -342,7 +343,7 @@ describe('crud buttons', () => {
             await nextRender();
             deleteButton.click();
             await oneEvent(confirmDeleteOverlay, 'vaadin-overlay-open');
-            confirmDeleteOverlay.querySelector('[slot^="confirm"]').click();
+            confirmDeleteDialog.querySelector('[slot^="confirm"]').click();
             expect(confirmDeleteDialog.opened).not.to.be.ok;
             expect(editorDialog.opened).not.to.be.ok;
           });
@@ -416,8 +417,8 @@ describe('crud buttons', () => {
           beforeEach(async () => {
             crud.editorPosition = 'bottom';
             crud.editOnClick = true;
-            confirmCancelDialog = crud.$.confirmCancel;
-            confirmCancelOverlay = confirmCancelDialog.$.dialog.$.overlay;
+            confirmCancelDialog = crud._confirmCancelDialog;
+            confirmCancelOverlay = confirmCancelDialog.$.overlay;
             await nextRender();
             flushGrid(crud._grid);
             crud.items = [{ foo: 'bar' }, { foo: 'baz' }];
@@ -460,7 +461,7 @@ describe('crud buttons', () => {
             crud._newButton.click();
             await oneEvent(confirmCancelOverlay, 'vaadin-overlay-open');
 
-            confirmCancelOverlay.querySelector('[slot^="confirm"]').click();
+            confirmCancelDialog.querySelector('[slot^="confirm"]').click();
             expect(crud.editorOpened).to.be.true;
           });
 
@@ -471,7 +472,7 @@ describe('crud buttons', () => {
             crud._grid.activeItem = crud.items[1];
             await oneEvent(confirmCancelOverlay, 'vaadin-overlay-open');
 
-            confirmCancelOverlay.querySelector('[slot^="confirm"]').click();
+            confirmCancelDialog.querySelector('[slot^="confirm"]').click();
             expect(crud.editedItem).to.be.equal(crud.items[1]);
           });
         });
@@ -659,8 +660,8 @@ describe('crud buttons', () => {
           let confirmDeleteOverlay;
 
           beforeEach(() => {
-            confirmDeleteDialog = crud.$.confirmDelete;
-            confirmDeleteOverlay = confirmDeleteDialog.$.dialog.$.overlay;
+            confirmDeleteDialog = crud._confirmDeleteDialog;
+            confirmDeleteOverlay = confirmDeleteDialog.$.overlay;
           });
 
           it('should fire the delete event', async () => {
@@ -670,7 +671,7 @@ describe('crud buttons', () => {
             edit(item);
             deleteButton.click();
             await oneEvent(confirmDeleteOverlay, 'vaadin-overlay-open');
-            confirmDeleteOverlay.querySelector('[slot^="confirm"]').click();
+            confirmDeleteDialog.querySelector('[slot^="confirm"]').click();
             expect(spy.calledOnce).to.be.true;
             expect(spy.firstCall.args[0].detail.item).to.be.equal(item);
           });
@@ -679,7 +680,7 @@ describe('crud buttons', () => {
             edit(crud.items[0]);
             deleteButton.click();
             await oneEvent(confirmDeleteOverlay, 'vaadin-overlay-open');
-            confirmDeleteOverlay.querySelector('[slot^="confirm"]').click();
+            confirmDeleteDialog.querySelector('[slot^="confirm"]').click();
             expect(crud.editorOpened).not.to.be.ok;
           });
 
@@ -688,7 +689,7 @@ describe('crud buttons', () => {
             edit(crud.items[0]);
             deleteButton.click();
             await oneEvent(confirmDeleteOverlay, 'vaadin-overlay-open');
-            confirmDeleteOverlay.querySelector('[slot^="confirm"]').click();
+            confirmDeleteDialog.querySelector('[slot^="confirm"]').click();
             expect(crud.editorOpened).to.be.true;
           });
         });
@@ -950,7 +951,7 @@ describe('crud buttons', () => {
     });
 
     it('should not create default cancel-button', () => {
-      expect(crud.querySelector('[slot="cancel-button"]')).to.be.null;
+      expect(crud.querySelector(':scope > [slot="cancel-button"]')).to.be.null;
     });
 
     it('should not create default delete-button', () => {

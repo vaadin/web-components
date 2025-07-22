@@ -33,7 +33,7 @@ import { MessageInputMixin } from './vaadin-message-input-mixin.js';
  * @mixes ElementMixin
  */
 class MessageInput extends MessageInputMixin(
-  ElementMixin(ThemableMixin(LumoInjectionMixin(PolylitMixin(LitElement)))),
+  ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement)))),
 ) {
   static get is() {
     return 'vaadin-message-input';
