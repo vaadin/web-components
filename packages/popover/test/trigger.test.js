@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { resetMouse, sendMouseToElement } from '@vaadin/test-runner-commands';
+import { resetMouse, sendKeys, sendMouseToElement } from '@vaadin/test-runner-commands';
 import {
   esc,
   fixtureSync,
@@ -280,6 +280,36 @@ describe('trigger', () => {
         await nextUpdate();
 
         expect(overlay.opened).to.be.true;
+      });
+
+      it('should only cancel one target focusout after the overlay mousedown', async () => {
+        // Remove the input so that first Tab would leave popover
+        popover.querySelector('input').remove();
+
+        await sendMouseToElement({ type: 'click', element: popover.querySelector('div') });
+        await nextUpdate();
+
+        // Tab to focus input next to the target
+        await sendKeys({ press: 'Tab' });
+
+        // Ensure the flag for ignoring next focusout was cleared
+        expect(overlay.opened).to.be.false;
+      });
+
+      it('should only cancel one overlay focusout after the overlay mousedown', async () => {
+        popover.querySelector('input').focus();
+
+        await sendMouseToElement({ type: 'click', element: popover.querySelector('div') });
+        await nextUpdate();
+
+        // Tab to focus input inside the popover
+        await sendKeys({ press: 'Tab' });
+
+        // Tab to focus input next to the target
+        await sendKeys({ press: 'Tab' });
+
+        // Ensure the flag for ignoring next focusout was cleared
+        expect(overlay.opened).to.be.false;
       });
     });
   });
