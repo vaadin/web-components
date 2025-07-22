@@ -9,7 +9,7 @@
     <script type="module" src="./common.js"></script>
 
     <script type="module">
-      import '@vaadin/button';
+      import '@vaadin/checkbox-group';
       import '@vaadin/popover';
       import '@vaadin/radio-group';
     </script>
@@ -44,6 +44,12 @@
       <vaadin-radio-button value="end-bottom" label="End Bottom"></vaadin-radio-button>
     </vaadin-radio-group>
 
+    <vaadin-checkbox-group id="triggerGroup" label="Trigger" theme="horizontal">
+      <vaadin-checkbox value="click" label="Click"></vaadin-checkbox>
+      <vaadin-checkbox value="focus" label="Focus"></vaadin-checkbox>
+      <vaadin-checkbox value="hover" label="Hover"></vaadin-checkbox>
+    </vaadin-checkbox-group>
+
     <div id="wrapper">
       <input placeholder="Before" />
 
@@ -59,6 +65,13 @@
 
       radioGroup.addEventListener('change', (e) => {
         popover.position = e.target.value;
+      });
+
+      const checkboxGroup = document.querySelector('#triggerGroup');
+      checkboxGroup.value = ['click'];
+
+      checkboxGroup.addEventListener('change', (e) => {
+        popover.trigger = checkboxGroup.value;
       });
 
       popover.renderer = (root) => {
