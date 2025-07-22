@@ -866,6 +866,7 @@ class Popover extends PopoverPositionMixin(
     if (
       (this.__hasTrigger('focus') && this.__mouseDownInside) ||
       event.relatedTarget === this.target ||
+      event.relatedTarget === this._overlayElement ||
       this.contains(event.relatedTarget)
     ) {
       return;
@@ -924,8 +925,7 @@ class Popover extends PopoverPositionMixin(
     }
 
     if (this.__hasTrigger('focus')) {
-      // Do not restore focus if closed on focusout to allow focus
-      // to be moved on popover content Tab or target Shift + Tab.
+      // Do not restore focus if closed on focusout on Tab
       if (isKeyboardActive()) {
         this.__shouldRestoreFocus = false;
       }

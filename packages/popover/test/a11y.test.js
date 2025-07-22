@@ -518,6 +518,20 @@ describe('a11y', () => {
         const activeElement = getDeepActiveElement();
         expect(activeElement).to.equal(input);
       });
+
+      it('should focus the overlay content part on focusable content Shift Tab', async () => {
+        // Move focus to the overlay
+        await sendKeys({ press: 'Tab' });
+
+        // Move focus to the input inside the overlay
+        await sendKeys({ press: 'Tab' });
+
+        // Move focus back to the overlay part
+        await sendKeys({ press: 'Shift+Tab' });
+
+        const activeElement = getDeepActiveElement();
+        expect(activeElement).to.equal(overlay.$.overlay);
+      });
     });
   });
 });
