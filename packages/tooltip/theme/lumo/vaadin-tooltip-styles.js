@@ -6,10 +6,7 @@ import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themab
 
 const tooltipOverlay = css`
   :host {
-    --vaadin-tooltip-offset-top: var(--lumo-space-xs);
-    --vaadin-tooltip-offset-bottom: var(--lumo-space-xs);
-    --vaadin-tooltip-offset-start: var(--lumo-space-xs);
-    --vaadin-tooltip-offset-end: var(--lumo-space-xs);
+    --_vaadin-tooltip-default-offset: var(--lumo-space-xs);
   }
 
   [part='overlay'] {

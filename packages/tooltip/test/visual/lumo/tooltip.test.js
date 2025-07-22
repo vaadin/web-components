@@ -77,4 +77,11 @@ describe('tooltip', () => {
     fire(target, 'mouseenter');
     await visualDiff(div, 'white-space-pre');
   });
+
+  it('custom offset', async () => {
+    element.style.setProperty('--vaadin-tooltip-offset-top', '15px');
+    await nextUpdate(element);
+    fire(target, 'mouseenter');
+    await visualDiff(div, 'custom-offset');
+  });
 });
