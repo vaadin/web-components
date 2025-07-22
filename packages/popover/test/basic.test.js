@@ -29,13 +29,8 @@ describe('popover', () => {
   });
 
   describe('host element', () => {
-    it('should set display: none on the host element by default', () => {
-      expect(getComputedStyle(popover).display).to.equal('none');
-    });
-
-    it('should enforce display: none to hide the host element', () => {
-      popover.style.display = 'block';
-      expect(getComputedStyle(popover).display).to.equal('none');
+    it('should set display: contents on the host element by default', () => {
+      expect(getComputedStyle(popover).display).to.equal('contents');
     });
   });
 
@@ -532,6 +527,17 @@ describe('popover', () => {
       popover.opened = false;
       await nextRender();
       await closedPromise;
+    });
+  });
+
+  describe('exportparts', () => {
+    it('should export all overlay parts for styling', () => {
+      const parts = [...overlay.shadowRoot.querySelectorAll('[part]')].map((el) => el.getAttribute('part'));
+      const exportParts = overlay.getAttribute('exportparts').split(', ');
+
+      parts.forEach((part) => {
+        expect(exportParts).to.include(part);
+      });
     });
   });
 });

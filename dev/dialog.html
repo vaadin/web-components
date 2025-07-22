@@ -15,6 +15,7 @@
       import '@vaadin/dialog';
       import '@vaadin/icon';
       import '@vaadin/icons';
+      import '@vaadin/popover';
     </script>
 
     <style>
@@ -51,6 +52,17 @@
           if (root.firstChild) {
             return;
           }
+
+          root.innerHTML = `
+            <button>I have a popover</button>
+            <vaadin-popover>
+              <div>Popover content</div>
+            </vaadin-popover>
+          `;
+
+          const popover = root.querySelector('vaadin-popover');
+          popover.target = root.querySelector('button');
+
           root.append(scope.cloneNode(true));
           root.querySelector('vaadin-checkbox-group').value = defaultOptions;
           root.querySelector('vaadin-button').addEventListener('click', openDialog);

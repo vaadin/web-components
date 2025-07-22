@@ -26,8 +26,12 @@ describe('a11y', () => {
   });
 
   beforeEach(async () => {
-    popover = fixtureSync('<vaadin-popover></vaadin-popover>');
-    target = fixtureSync('<button>Target</button>');
+    [popover, target] = fixtureSync(`
+      <div>
+        <vaadin-popover></vaadin-popover>
+        <button>Target</button>
+      </div>
+    `).children;
     popover.target = target;
     popover.renderer = (root) => {
       if (!root.firstChild) {
@@ -38,15 +42,39 @@ describe('a11y', () => {
     overlay = popover.shadowRoot.querySelector('vaadin-popover-overlay');
   });
 
-  describe('ARIA attributes', () => {
-    it('should set role attribute on the overlay to dialog', () => {
-      expect(overlay.getAttribute('role')).to.equal('dialog');
+  describe('id', () => {
+    beforeEach(() => {
+      popover = document.createElement('vaadin-popover');
     });
 
-    it('should change role attribute on the overlay based on overlayRole', async () => {
+    afterEach(() => {
+      popover.remove();
+    });
+
+    it('should set generated ID on the host by default', async () => {
+      const ID_REGEX = /^vaadin-popover-\d+$/u;
+      document.body.appendChild(popover);
+      await nextRender();
+      expect(popover.id).to.match(ID_REGEX);
+    });
+
+    it('should not override custom ID set on the popover', async () => {
+      popover.id = 'custom-id';
+      document.body.appendChild(popover);
+      await nextRender();
+      expect(popover.id).to.equal('custom-id');
+    });
+  });
+
+  describe('ARIA attributes', () => {
+    it('should set role attribute on the host element to dialog', () => {
+      expect(popover.getAttribute('role')).to.equal('dialog');
+    });
+
+    it('should change role attribute on the host element based on overlayRole', async () => {
       popover.overlayRole = 'alertdialog';
       await nextUpdate(popover);
-      expect(overlay.getAttribute('role')).to.equal('alertdialog');
+      expect(popover.getAttribute('role')).to.equal('alertdialog');
     });
 
     ['target', 'ariaTarget'].forEach((prop) => {
@@ -94,7 +122,7 @@ describe('a11y', () => {
         it(`should set aria-controls attribute on the ${prop} when opened`, async () => {
           popover.opened = true;
           await oneEvent(overlay, 'vaadin-overlay-open');
-          expect(element.getAttribute('aria-controls')).to.equal(overlay.id);
+          expect(element.getAttribute('aria-controls')).to.equal(popover.id);
         });
 
         it(`should remove aria-controls attribute from the ${prop} when closed`, async () => {
@@ -131,42 +159,42 @@ describe('a11y', () => {
   });
 
   describe('accessible name', () => {
-    it('should not set aria-label on the overlay by default', () => {
-      expect(overlay.hasAttribute('aria-label')).to.be.false;
+    it('should not set aria-label on the host element by default', () => {
+      expect(popover.hasAttribute('aria-label')).to.be.false;
     });
 
-    it('should set aria-label on the overlay when accessibleName is set', async () => {
+    it('should set aria-label on the host element when accessibleName is set', async () => {
       popover.accessibleName = 'Label text';
       await nextUpdate(popover);
-      expect(overlay.getAttribute('aria-label')).to.equal('Label text');
+      expect(popover.getAttribute('aria-label')).to.equal('Label text');
     });
 
-    it('should remove aria-label on the overlay when accessibleName is removed', async () => {
+    it('should remove aria-label from the host element when accessibleName is removed', async () => {
       popover.accessibleName = 'Label text';
       await nextUpdate(popover);
 
       popover.accessibleName = null;
       await nextUpdate(popover);
-      expect(overlay.hasAttribute('aria-label')).to.be.false;
+      expect(popover.hasAttribute('aria-label')).to.be.false;
     });
 
-    it('should not set aria-labelledby on the overlay by default', () => {
-      expect(overlay.hasAttribute('aria-labelledby')).to.be.false;
+    it('should not set aria-labelledby on the host element by default', () => {
+      expect(popover.hasAttribute('aria-labelledby')).to.be.false;
     });
 
-    it('should set aria-labelledby on the overlay when accessibleName is set', async () => {
+    it('should set aria-labelledby the host element when accessibleNameRef is set', async () => {
       popover.accessibleNameRef = 'custom-label';
       await nextUpdate(popover);
-      expect(overlay.getAttribute('aria-labelledby')).to.equal('custom-label');
+      expect(popover.getAttribute('aria-labelledby')).to.equal('custom-label');
     });
 
-    it('should remove aria-label on the overlay when accessibleName is removed', async () => {
+    it('should remove aria-labelledby from the host element when accessibleNameRef is removed', async () => {
       popover.accessibleNameRef = 'custom-label';
       await nextUpdate(popover);
 
       popover.accessibleNameRef = null;
       await nextUpdate(popover);
-      expect(overlay.hasAttribute('aria-labelledby')).to.be.false;
+      expect(popover.hasAttribute('aria-labelledby')).to.be.false;
     });
   });
 
@@ -203,17 +231,6 @@ describe('a11y', () => {
 
       it('should restore focus on Esc with trigger set to focus', async () => {
         const focusSpy = sinon.spy(target, 'focus');
-        overlay.$.overlay.focus();
-        esc(overlay.$.overlay);
-        await nextRender();
-
-        expect(focusSpy).to.be.calledOnce;
-      });
-
-      it('should restore focus on close after Tab to overlay with trigger set to focus', async () => {
-        const focusSpy = sinon.spy(target, 'focus');
-        tab(target);
-        focusout(target, overlay);
         overlay.$.overlay.focus();
         esc(overlay.$.overlay);
         await nextRender();
@@ -434,7 +451,7 @@ describe('a11y', () => {
         it('should focus the last overlay child on the next element Shift Tab', async () => {
           input.focus();
 
-          const focusable = overlay.querySelector('input');
+          const focusable = popover.querySelector('input');
           const spy = sinon.spy(focusable, 'focus');
 
           await sendKeys({ press: 'Shift+Tab' });
@@ -469,6 +486,51 @@ describe('a11y', () => {
           const activeElement = getDeepActiveElement();
           expect(activeElement).to.equal(input);
         });
+      });
+    });
+
+    describe('focus', () => {
+      let input;
+
+      beforeEach(async () => {
+        // Place popover after target
+        target.parentElement.insertBefore(target, popover);
+
+        input = document.createElement('input');
+        target.parentElement.appendChild(input);
+
+        popover.trigger = ['focus'];
+        target.focus();
+
+        await oneEvent(overlay, 'vaadin-overlay-open');
+      });
+
+      it('should focus the next element after target on last overlay child Tab', async () => {
+        // Move focus to the overlay
+        await sendKeys({ press: 'Tab' });
+
+        // Move focus to the input inside the overlay
+        await sendKeys({ press: 'Tab' });
+
+        // Move focus to the input after the overlay
+        await sendKeys({ press: 'Tab' });
+
+        const activeElement = getDeepActiveElement();
+        expect(activeElement).to.equal(input);
+      });
+
+      it('should focus the overlay content part on focusable content Shift Tab', async () => {
+        // Move focus to the overlay
+        await sendKeys({ press: 'Tab' });
+
+        // Move focus to the input inside the overlay
+        await sendKeys({ press: 'Tab' });
+
+        // Move focus back to the overlay part
+        await sendKeys({ press: 'Shift+Tab' });
+
+        const activeElement = getDeepActiveElement();
+        expect(activeElement).to.equal(overlay.$.overlay);
       });
     });
   });

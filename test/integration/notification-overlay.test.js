@@ -38,6 +38,8 @@ describe('notification and overlays', () => {
   });
 
   describe('notification and popover', () => {
+    let popover;
+
     beforeEach(async () => {
       const wrapper = fixtureSync(`
         <div>
@@ -47,7 +49,7 @@ describe('notification and overlays', () => {
         </div>
       `);
       const notification = wrapper.querySelector('vaadin-notification');
-      const popover = wrapper.querySelector('vaadin-popover');
+      popover = wrapper.querySelector('vaadin-popover');
       popover.renderer = (root) => {
         root.textContent = 'Popover content';
       };
@@ -58,7 +60,7 @@ describe('notification and overlays', () => {
 
     it('should show popovers above notifications', () => {
       const notificationContainer = document.querySelector('vaadin-notification-container');
-      const popoverOverlay = document.querySelector('vaadin-popover-overlay');
+      const popoverOverlay = popover.$.overlay;
 
       const notificationZIndex = parseInt(getComputedStyle(notificationContainer).zIndex);
       const popoverZIndex = parseInt(getComputedStyle(popoverOverlay).zIndex);
