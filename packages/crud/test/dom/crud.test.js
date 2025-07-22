@@ -33,5 +33,11 @@ describe('vaadin-crud', () => {
     it('default', async () => {
       await expect(crud).shadowDom.to.equalSnapshot();
     });
+
+    it('inline editor', async () => {
+      crud.editorPosition = 'aside';
+      await nextRender();
+      await expect(crud).shadowDom.to.equalSnapshot();
+    });
   });
 });
