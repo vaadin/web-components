@@ -62,4 +62,11 @@ describe('popover', () => {
     await nextRender();
     await visualDiff(div, 'no-padding');
   });
+
+  it('custom offset', async () => {
+    element.style.setProperty('--vaadin-popover-offset-top', '15px');
+    target.click();
+    await nextRender();
+    await visualDiff(div, 'custom-offset');
+  });
 });
