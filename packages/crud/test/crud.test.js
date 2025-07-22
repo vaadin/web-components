@@ -581,4 +581,41 @@ describe('crud', () => {
       expect(crud.editedItem).to.be.equal(crud.items[0]);
     });
   });
+
+  describe('custom element definition', () => {
+    let tagName;
+
+    beforeEach(() => {
+      crud = fixtureSync('<vaadin-crud style="width: 300px;"></vaadin-crud>');
+      tagName = crud.tagName.toLowerCase();
+    });
+
+    it('should be defined in custom element registry', () => {
+      expect(customElements.get(tagName)).to.be.ok;
+    });
+
+    it('should have a valid static "is" getter', () => {
+      expect(customElements.get(tagName).is).to.equal(tagName);
+    });
+  });
+
+  describe('exportparts', () => {
+    let dialog;
+
+    beforeEach(() => {
+      crud = fixtureSync('<vaadin-crud style="width: 300px;"></vaadin-crud>');
+      dialog = getDialogEditor(crud);
+    });
+
+    it('should export all editor dialog overlay parts for styling', () => {
+      const parts = [...dialog.$.overlay.shadowRoot.querySelectorAll('[part]')].map((el) => el.getAttribute('part'));
+      const dialogExportParts = dialog.getAttribute('exportparts').split(', ');
+      const overlayExportParts = dialog.$.overlay.getAttribute('exportparts').split(', ');
+
+      parts.forEach((part) => {
+        expect(dialogExportParts).to.include(part);
+        expect(overlayExportParts).to.include(part);
+      });
+    });
+  });
 });
