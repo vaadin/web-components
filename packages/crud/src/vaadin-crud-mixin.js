@@ -495,8 +495,7 @@ export const CrudMixin = (superClass) =>
           this._editor.focus();
         }
 
-        // TODO: Verify if this needs a timeout
-        // Wait to set label until slotted element has been moved.
+        // Wait to set label until header node has updated (observer seems to run after this one)
         setTimeout(() => {
           this.__dialogAriaLabel = this._headerNode.textContent.trim();
         });
@@ -570,8 +569,7 @@ export const CrudMixin = (superClass) =>
      * @private
      */
     __formChanged(form, oldForm) {
-      if (oldForm && oldForm.parentElement) {
-        oldForm.parentElement.removeChild(oldForm);
+      if (oldForm) {
         oldForm.removeEventListener('change', this.__onFormChange);
         oldForm.removeEventListener('input', this.__onFormChange);
       }
