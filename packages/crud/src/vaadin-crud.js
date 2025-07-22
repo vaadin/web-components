@@ -228,7 +228,7 @@ class Crud extends CrudMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInjecti
         ? html`
             <vaadin-crud-dialog
               id="dialog"
-              .owner="${this}"
+              .crudElement="${this}"
               .opened="${this.editorOpened}"
               .fullscreen="${this._fullscreen}"
               .ariaLabel="${this.__dialogAriaLabel}"

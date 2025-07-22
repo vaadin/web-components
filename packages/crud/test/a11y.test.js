@@ -327,4 +327,73 @@ describe('a11y', () => {
       expect(dialog.$.overlay.getAttribute('aria-label')).to.equal('Edit item');
     });
   });
+
+  describe('modal dialog', () => {
+    let dialog, grid, header, form, newButton, saveButton, cancelButton, deleteButton, sibling;
+
+    beforeEach(async () => {
+      crud = fixtureSync('<vaadin-crud></vaadin-crud>');
+      crud.items = [{ title: 'Item 1' }];
+
+      dialog = getDialogEditor(crud);
+      grid = crud.querySelector('[slot="grid"]');
+      header = crud.querySelector('[slot="header"]');
+      form = crud.querySelector('[slot="form"]');
+      newButton = crud.querySelector('[slot="new-button"]');
+      saveButton = crud.querySelector('[slot="save-button"]');
+      cancelButton = crud.querySelector('[slot="cancel-button"]');
+      deleteButton = crud.querySelector('[slot="delete-button"]');
+
+      sibling = fixtureSync('<button></button>');
+      await nextRender();
+    });
+
+    it('should hide all elements outside of the dialog when opened', async () => {
+      crud._newButton.click();
+      await nextRender();
+
+      // Sibling elements of CRUD must be hidden
+      expect(sibling.parentElement.getAttribute('aria-hidden')).to.equal('true');
+
+      // Hierarchy to dialog must not be hidden
+      [crud.parentElement, crud, dialog, dialog.$.overlay].forEach((el) => {
+        expect(el.hasAttribute('aria-hidden')).to.be.false;
+      });
+
+      // Elements slotted into the dialog must not be hidden
+      [header, form, saveButton, cancelButton, deleteButton].forEach((el) => {
+        expect(el.hasAttribute('aria-hidden')).to.be.false;
+      });
+
+      // Elements not slotted into the dialog must be hidden
+      [grid, newButton].forEach((el) => {
+        expect(el.getAttribute('aria-hidden')).to.equal('true');
+      });
+    });
+
+    it('should restore visibility of elements outside of the dialog when closed', async () => {
+      crud._newButton.click();
+      await nextRender();
+
+      // Close the dialog
+      await sendKeys({ press: 'Escape' });
+
+      [
+        sibling.parentElement,
+        crud.parentElement,
+        crud,
+        dialog,
+        dialog.$.overlay,
+        header,
+        form,
+        saveButton,
+        cancelButton,
+        deleteButton,
+        grid,
+        newButton,
+      ].forEach((el) => {
+        expect(el.hasAttribute('aria-hidden')).to.be.false;
+      });
+    });
+  });
 });

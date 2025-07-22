@@ -433,6 +433,24 @@ export const CrudMixin = (superClass) =>
       this._confirmDeleteDialog = this.querySelector('vaadin-confirm-dialog[slot="confirm-delete"]');
     }
 
+    /** @protected */
+    updated(props) {
+      super.updated(props);
+
+      // When using dialog mode, hide elements not slotted into the dialog from accessibility tree
+      if (
+        props.has('_grid') ||
+        props.has('_newButton') ||
+        props.has('editorOpened') ||
+        props.has('editorPosition') ||
+        props.has('_fullscreen')
+      ) {
+        const hide = this.editorOpened && this._dialogMode;
+        this.__hideElement(this._grid, hide);
+        this.__hideElement(this._newButton, hide);
+      }
+    }
+
     /**
      * @param {boolean} isDirty
      * @private
@@ -968,6 +986,17 @@ export const CrudMixin = (superClass) =>
         this.__restoreFocusOnDelete();
         this._grid.clearCache();
         this.__closeEditor();
+      }
+    }
+
+    /** @private */
+    __hideElement(element, value) {
+      if (!element) return;
+
+      if (value) {
+        element.setAttribute('aria-hidden', 'true');
+      } else {
+        element.removeAttribute('aria-hidden');
       }
     }
 
