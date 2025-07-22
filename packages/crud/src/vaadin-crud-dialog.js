@@ -48,6 +48,15 @@ class CrudDialogOverlay extends OverlayMixin(DirMixin(ThemableMixin(PolylitMixin
     };
   }
 
+  /**
+   * Override method from OverlayFocusMixin to use CRUD element as modal root
+   * @protected
+   * @override
+   */
+  get _modalRoot() {
+    return this.crudElement;
+  }
+
   /** @protected */
   render() {
     return html`
@@ -97,15 +106,6 @@ class CrudDialogOverlay extends OverlayMixin(DirMixin(ThemableMixin(PolylitMixin
   _detachOverlay() {
     this.hidePopover();
   }
-
-  /**
-   * Override method from OverlayFocusMixin to use CRUD element as modal root
-   * @protected
-   * @override
-   */
-  get _modalRoot() {
-    return this.crudElement;
-  }
 }
 
 defineCustomElement(CrudDialogOverlay);
@@ -150,11 +150,6 @@ class CrudDialog extends DialogBaseMixin(OverlayClassMixin(ThemePropertyMixin(Po
     };
   }
 
-  /** @private **/
-  __cancel() {
-    this.dispatchEvent(new CustomEvent('cancel', { bubbles: false, composed: false }));
-  }
-
   /** @protected */
   render() {
     return html`
@@ -184,6 +179,11 @@ class CrudDialog extends DialogBaseMixin(OverlayClassMixin(ThemePropertyMixin(Po
         <slot name="delete-button" slot="delete-button"></slot>
       </vaadin-crud-dialog-overlay>
     `;
+  }
+
+  /** @private **/
+  __cancel() {
+    this.dispatchEvent(new CustomEvent('cancel', { bubbles: false, composed: false }));
   }
 }
 
