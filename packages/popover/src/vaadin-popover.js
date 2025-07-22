@@ -924,6 +924,12 @@ class Popover extends PopoverPositionMixin(
     }
 
     if (this.__hasTrigger('focus')) {
+      // Do not restore focus if closed on focusout to allow focus
+      // to be moved on popover content Tab or target Shift + Tab.
+      if (isKeyboardActive()) {
+        this.__shouldRestoreFocus = false;
+      }
+
       this._openedStateController.close(true);
     }
   }

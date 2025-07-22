@@ -26,8 +26,12 @@ describe('a11y', () => {
   });
 
   beforeEach(async () => {
-    popover = fixtureSync('<vaadin-popover></vaadin-popover>');
-    target = fixtureSync('<button>Target</button>');
+    [popover, target] = fixtureSync(`
+      <div>
+        <vaadin-popover></vaadin-popover>
+        <button>Target</button>
+      </div>
+    `).children;
     popover.target = target;
     popover.renderer = (root) => {
       if (!root.firstChild) {
@@ -227,17 +231,6 @@ describe('a11y', () => {
 
       it('should restore focus on Esc with trigger set to focus', async () => {
         const focusSpy = sinon.spy(target, 'focus');
-        overlay.$.overlay.focus();
-        esc(overlay.$.overlay);
-        await nextRender();
-
-        expect(focusSpy).to.be.calledOnce;
-      });
-
-      it('should restore focus on close after Tab to overlay with trigger set to focus', async () => {
-        const focusSpy = sinon.spy(target, 'focus');
-        tab(target);
-        focusout(target, overlay);
         overlay.$.overlay.focus();
         esc(overlay.$.overlay);
         await nextRender();
@@ -493,6 +486,37 @@ describe('a11y', () => {
           const activeElement = getDeepActiveElement();
           expect(activeElement).to.equal(input);
         });
+      });
+    });
+
+    describe('focus', () => {
+      let input;
+
+      beforeEach(async () => {
+        // Place popover after target
+        target.parentElement.insertBefore(target, popover);
+
+        input = document.createElement('input');
+        target.parentElement.appendChild(input);
+
+        popover.trigger = ['focus'];
+        target.focus();
+
+        await oneEvent(overlay, 'vaadin-overlay-open');
+      });
+
+      it('should focus the next element after target on last overlay child Tab', async () => {
+        // Move focus to the overlay
+        await sendKeys({ press: 'Tab' });
+
+        // Move focus to the input inside the overlay
+        await sendKeys({ press: 'Tab' });
+
+        // Move focus to the input after the overlay
+        await sendKeys({ press: 'Tab' });
+
+        const activeElement = getDeepActiveElement();
+        expect(activeElement).to.equal(input);
       });
     });
   });
