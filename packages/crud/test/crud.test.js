@@ -4,7 +4,7 @@ import { aTimeout, change, fire, fixtureSync, nextRender, oneEvent } from '@vaad
 import sinon from 'sinon';
 import '../src/vaadin-crud.js';
 import { capitalize, getProperty, setProperty } from '../src/vaadin-crud-helpers.js';
-import { flushGrid, getBodyCellContent } from './helpers.js';
+import { flushGrid, getBodyCellContent, getDialogEditor } from './helpers.js';
 
 describe('crud', () => {
   let crud, btnSave;
@@ -78,8 +78,8 @@ describe('crud', () => {
         crud,
         crud._grid,
         crud._form,
-        crud.$.dialog,
-        crud.$.dialog.$.overlay,
+        getDialogEditor(crud),
+        getDialogEditor(crud).$.overlay,
         crud._confirmCancelDialog,
         crud._confirmDeleteDialog,
       ].forEach((e) => expect(e.getAttribute('theme')).to.be.match(/foo/u));
@@ -414,11 +414,10 @@ describe('crud', () => {
   });
 
   describe('editor-position', () => {
-    let crud, editorDialog;
+    let crud;
 
     beforeEach(async () => {
       crud = fixtureSync('<vaadin-crud style="width: 300px;"></vaadin-crud>');
-      editorDialog = crud.$.dialog;
       await nextRender();
     });
 
@@ -477,23 +476,6 @@ describe('crud', () => {
       crud._newButton.click();
       await nextRender();
       expect(crud._fullscreen).to.be.true;
-    });
-
-    it('should not open dialog on desktop if not in default editor position', () => {
-      crud.editorPosition = 'bottom';
-      crud._fullscreen = false;
-      crud._newButton.click();
-      expect(editorDialog.opened).to.be.false;
-    });
-
-    it('should switch from overlay to below grid if resize happens', async () => {
-      crud.editorPosition = 'bottom';
-      crud._fullscreen = true;
-      crud._newButton.click();
-      await nextRender();
-      expect(editorDialog.opened).to.be.true;
-      crud._fullscreen = false;
-      expect(editorDialog.opened).to.be.false;
     });
   });
 

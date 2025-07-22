@@ -4,7 +4,7 @@ import { sendKeys } from '@vaadin/test-runner-commands';
 import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import '../src/vaadin-crud.js';
 import { getDeepActiveElement } from '@vaadin/a11y-base/src/focus-utils.js';
-import { getVisibleRows } from './helpers.js';
+import { getDialogEditor, getInlineEditor, getVisibleRows } from './helpers.js';
 
 describe('a11y', () => {
   let crud;
@@ -22,7 +22,7 @@ describe('a11y', () => {
           crud = createFixture();
           crud.items = [{ title: 'Item 1' }];
           await nextRender();
-          overlay = crud.$.dialog.$.overlay;
+          overlay = getDialogEditor(crud).$.overlay;
           form = crud.querySelector('vaadin-crud-form');
           newButton = crud.querySelector('[slot=new-button]');
           saveButton = crud.querySelector('[slot=save-button]');
@@ -268,7 +268,7 @@ describe('a11y', () => {
         await nextRender();
         newButton = crud.querySelector('[slot=new-button]');
         editButtons = crud.querySelectorAll('vaadin-crud-edit');
-        editor = crud.$.editor;
+        editor = getInlineEditor(crud);
       });
 
       afterEach(async () => {
@@ -301,7 +301,7 @@ describe('a11y', () => {
       await nextRender();
       newButton = crud.querySelector('[slot=new-button]');
       editButtons = crud.querySelectorAll('vaadin-crud-edit');
-      dialog = crud.$.dialog;
+      dialog = getDialogEditor(crud);
     });
 
     afterEach(async () => {
