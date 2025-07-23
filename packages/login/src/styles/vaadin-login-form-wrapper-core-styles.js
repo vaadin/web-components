@@ -8,7 +8,7 @@ import { css } from 'lit';
 export const loginFormWrapperStyles = css`
   :host {
     overflow: hidden;
-    display: inline-block;
+    display: block;
   }
 
   :host([hidden]) {

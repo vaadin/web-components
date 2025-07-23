@@ -6,7 +6,7 @@
 @media lumo_components_login-form-wrapper {
   :host {
     overflow: hidden;
-    display: inline-block;
+    display: block;
     font-family: var(--lumo-font-family);
     font-size: var(--lumo-font-size-m);
     line-height: var(--lumo-line-height-m);
