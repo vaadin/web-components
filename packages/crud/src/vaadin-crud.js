@@ -13,7 +13,7 @@ import '@vaadin/confirm-dialog/src/vaadin-confirm-dialog.js';
 import './vaadin-crud-dialog.js';
 import './vaadin-crud-grid.js';
 import './vaadin-crud-form.js';
-import { html, LitElement, render } from 'lit';
+import { html, LitElement, nothing, render } from 'lit';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
@@ -221,7 +221,7 @@ class Crud extends CrudMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInjecti
                 </div>
               </div>
             `
-          : ''}
+          : nothing}
       </div>
 
       ${this._dialogMode
@@ -245,7 +245,7 @@ class Crud extends CrudMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInjecti
               <slot name="delete-button" slot="delete-button"></slot>
             </vaadin-crud-dialog>
           `
-        : ''}
+        : nothing}
 
       <slot name="confirm-cancel"></slot>
 
