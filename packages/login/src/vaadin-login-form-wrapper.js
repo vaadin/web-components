@@ -45,13 +45,6 @@ class LoginFormWrapper extends ThemableMixin(PolylitMixin(LumoInjectionMixin(Lit
       i18n: {
         type: Object,
       },
-
-      /**
-       * Used to customize the `aria-level` attribute on the heading element.
-       */
-      headingLevel: {
-        type: Number,
-      },
     };
   }
 
