@@ -10,7 +10,10 @@ export const loginFormWrapperStyles = css`
   :host {
     background: var(--vaadin-login-form-background, transparent);
     border-radius: var(--vaadin-login-form-border-radius, 0);
-    display: block;
+    display: flex;
+    flex-direction: column;
+    gap: var(--vaadin-login-form-gap, var(--vaadin-gap-container-block));
+    padding: var(--vaadin-login-form-padding, var(--vaadin-padding));
     max-width: 100%;
     width: var(--vaadin-login-form-width, 360px);
   }
@@ -19,22 +22,13 @@ export const loginFormWrapperStyles = css`
     display: none !important;
   }
 
-  [part='form'] {
-    box-sizing: border-box;
-    display: flex;
-    flex: 1;
-    flex-direction: column;
-    gap: var(--vaadin-login-form-gap, var(--vaadin-gap-container-block));
-    padding: var(--vaadin-login-form-padding, var(--vaadin-padding));
-  }
-
-  [part='form'] ::slotted(form) {
+  ::slotted(form) {
     display: flex;
     flex-direction: column;
     gap: var(--vaadin-login-form-gap, var(--vaadin-gap-container-block));
   }
 
-  [part='form-title'] {
+  ::slotted([slot='form-title']) {
     color: var(--vaadin-login-form-title-color, var(--vaadin-color));
     font-size: var(--vaadin-login-form-title-font-size, 1.25rem);
     font-weight: var(--vaadin-login-form-title-font-weight, 600);

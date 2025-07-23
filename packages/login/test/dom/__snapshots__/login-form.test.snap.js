@@ -674,10 +674,21 @@ snapshots["vaadin-login-form host noForgotPassword"] =
 
 snapshots["vaadin-login-form shadow default"] = 
 `<vaadin-login-form-wrapper
-  exportparts="form, form-title, error-message, error-message-title, error-message-description, footer"
+  aria-labelledby="title"
+  exportparts="error-message, error-message-title, error-message-description, footer"
   id="wrapper"
-  part="wrapper"
+  part="form"
+  role="region"
 >
+  <div
+    aria-level="1"
+    id="title"
+    part="form-title"
+    role="heading"
+    slot="form-title"
+  >
+    Log in
+  </div>
   <slot
     name="form"
     slot="form"
@@ -708,114 +719,93 @@ snapshots["vaadin-login-form shadow default"] =
 /* end snapshot vaadin-login-form shadow default */
 
 snapshots["vaadin-login-form shadow wrapper"] = 
-`<section part="form">
-  <div
-    aria-level="1"
-    part="form-title"
-    role="heading"
-  >
-    Log in
+`<slot name="form-title">
+</slot>
+<div
+  hidden=""
+  part="error-message"
+>
+  <strong part="error-message-title">
+    Incorrect username or password
+  </strong>
+  <div part="error-message-description">
+    Check that you have entered the correct username and password and try again.
   </div>
-  <div
-    hidden=""
-    part="error-message"
-  >
-    <strong part="error-message-title">
-      Incorrect username or password
-    </strong>
-    <div part="error-message-description">
-      Check that you have entered the correct username and password and try again.
-    </div>
+</div>
+<slot name="form">
+</slot>
+<slot name="custom-form-area">
+</slot>
+<slot name="submit">
+</slot>
+<slot name="forgot-password">
+</slot>
+<div part="footer">
+  <slot name="footer">
+  </slot>
+  <div>
   </div>
-  <slot name="form">
-  </slot>
-  <slot name="custom-form-area">
-  </slot>
-  <slot name="submit">
-  </slot>
-  <slot name="forgot-password">
-  </slot>
-  <div part="footer">
-    <slot name="footer">
-    </slot>
-    <div>
-    </div>
-  </div>
-</section>
+</div>
 `;
 /* end snapshot vaadin-login-form shadow wrapper */
 
 snapshots["vaadin-login-form shadow error"] = 
-`<section part="form">
-  <div
-    aria-level="1"
-    part="form-title"
-    role="heading"
-  >
-    Log in
+`<slot name="form-title">
+</slot>
+<div part="error-message">
+  <strong part="error-message-title">
+    Incorrect username or password
+  </strong>
+  <div part="error-message-description">
+    Check that you have entered the correct username and password and try again.
   </div>
-  <div part="error-message">
-    <strong part="error-message-title">
-      Incorrect username or password
-    </strong>
-    <div part="error-message-description">
-      Check that you have entered the correct username and password and try again.
-    </div>
+</div>
+<slot name="form">
+</slot>
+<slot name="custom-form-area">
+</slot>
+<slot name="submit">
+</slot>
+<slot name="forgot-password">
+</slot>
+<div part="footer">
+  <slot name="footer">
+  </slot>
+  <div>
   </div>
-  <slot name="form">
-  </slot>
-  <slot name="custom-form-area">
-  </slot>
-  <slot name="submit">
-  </slot>
-  <slot name="forgot-password">
-  </slot>
-  <div part="footer">
-    <slot name="footer">
-    </slot>
-    <div>
-    </div>
-  </div>
-</section>
+</div>
 `;
 /* end snapshot vaadin-login-form shadow error */
 
 snapshots["vaadin-login-form shadow i18n"] = 
-`<section part="form">
-  <div
-    aria-level="1"
-    part="form-title"
-    role="heading"
-  >
-    Kirjaudu sisään
+`<slot name="form-title">
+</slot>
+<div
+  hidden=""
+  part="error-message"
+>
+  <strong part="error-message-title">
+    Väärä käyttäjätunnus tai salasana
+  </strong>
+  <div part="error-message-description">
+    Tarkista että käyttäjätunnus ja salasana ovat oikein ja yritä uudestaan.
   </div>
-  <div
-    hidden=""
-    part="error-message"
-  >
-    <strong part="error-message-title">
-      Väärä käyttäjätunnus tai salasana
-    </strong>
-    <div part="error-message-description">
-      Tarkista että käyttäjätunnus ja salasana ovat oikein ja yritä uudestaan.
-    </div>
+</div>
+<slot name="form">
+</slot>
+<slot name="custom-form-area">
+</slot>
+<slot name="submit">
+</slot>
+<slot name="forgot-password">
+</slot>
+<div part="footer">
+  <slot name="footer">
+  </slot>
+  <div>
+    Jos tarvitset lisätietoja käyttäjälle.
   </div>
-  <slot name="form">
-  </slot>
-  <slot name="custom-form-area">
-  </slot>
-  <slot name="submit">
-  </slot>
-  <slot name="forgot-password">
-  </slot>
-  <div part="footer">
-    <slot name="footer">
-    </slot>
-    <div>
-      Jos tarvitset lisätietoja käyttäjälle.
-    </div>
-  </div>
-</section>
+</div>
 `;
 /* end snapshot vaadin-login-form shadow i18n */
 

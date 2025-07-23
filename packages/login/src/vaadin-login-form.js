@@ -78,10 +78,14 @@ class LoginForm extends LoginFormMixin(ElementMixin(ThemableMixin(PolylitMixin(L
         theme="${ifDefined(this._theme)}"
         .error="${this.error}"
         .i18n="${this.__effectiveI18n}"
-        .headingLevel="${this.headingLevel}"
-        part="wrapper"
-        exportparts="form, form-title, error-message, error-message-title, error-message-description, footer"
+        part="form"
+        role="region"
+        aria-labelledby="title"
+        exportparts="error-message, error-message-title, error-message-description, footer"
       >
+        <div id="title" slot="form-title" part="form-title" role="heading" aria-level="${this.headingLevel}">
+          ${this.i18n.form.title}
+        </div>
         <slot name="form" slot="form"></slot>
         <slot name="custom-form-area" slot="custom-form-area"></slot>
         <slot name="submit" slot="submit"></slot>
