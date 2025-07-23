@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { enter, esc, fixtureSync, nextRender, nextUpdate, oneEvent } from '@vaadin/testing-helpers';
+import { aTimeout, enter, esc, fixtureSync, nextRender, nextUpdate, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-login-overlay.js';
 import { getDeepActiveElement } from '@vaadin/a11y-base/src/focus-utils.js';
@@ -24,7 +24,6 @@ describe('login overlay', () => {
   });
 
   afterEach(() => {
-    login.opened = false;
     submitStub.resetHistory();
   });
 
@@ -230,6 +229,42 @@ describe('title slot', () => {
       expect(title.id).to.match(ID_REGEX);
       expect(login.getAttribute('aria-labelledby')).to.equal(title.id);
     });
+  });
+});
+
+describe('detach and re-attach', () => {
+  let login;
+
+  beforeEach(async () => {
+    login = fixtureSync('<vaadin-login-overlay opened></vaadin-login-overlay>');
+    await nextRender();
+  });
+
+  it('should close the overlay when removed from DOM', async () => {
+    login.remove();
+    await aTimeout(0);
+
+    expect(login.opened).to.be.false;
+  });
+
+  it('should restore opened state when added to the DOM', async () => {
+    const parent = login.parentNode;
+    login.remove();
+    await nextRender();
+    expect(login.opened).to.be.false;
+
+    parent.appendChild(login);
+    await nextRender();
+    expect(login.opened).to.be.true;
+  });
+
+  it('should not close the overlay when moved within the DOM', async () => {
+    const newParent = document.createElement('div');
+    document.body.appendChild(newParent);
+    newParent.appendChild(login);
+    await aTimeout(0);
+
+    expect(login.opened).to.be.true;
   });
 });
 

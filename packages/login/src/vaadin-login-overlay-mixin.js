@@ -99,9 +99,14 @@ export const LoginOverlayMixin = (superClass) =>
     disconnectedCallback() {
       super.disconnectedCallback();
 
-      // Close overlay and memorize opened state
-      this.__restoreOpened = this.opened;
-      this.opened = false;
+      // Using a timeout to avoid toggling opened state
+      // when just moving the overlay in the DOM
+      setTimeout(() => {
+        if (!this.isConnected) {
+          this.__restoreOpened = this.opened;
+          this.opened = false;
+        }
+      });
     }
 
     /** @protected */
