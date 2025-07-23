@@ -51,7 +51,7 @@ describe('login form', () => {
   beforeEach(async () => {
     login = fixtureSync('<vaadin-login-form action="login-action"></vaadin-login-form>');
     await nextRender();
-    formWrapper = login.$.wrapper;
+    formWrapper = login.$.form;
     vaadinLoginUsername = login._userNameField;
     vaadinLoginPassword = login._passwordField;
   });
@@ -257,7 +257,7 @@ describe('error message', () => {
   beforeEach(async () => {
     login = fixtureSync('<vaadin-login-form error></vaadin-login-form>');
     await nextRender();
-    formWrapper = login.$.wrapper;
+    formWrapper = login.$.form;
   });
 
   it('should show error message if the error attribute is set', () => {
@@ -284,7 +284,7 @@ describe('exportparts', () => {
   beforeEach(async () => {
     form = fixtureSync('<vaadin-login-form></vaadin-login-form>');
     await nextRender();
-    wrapper = form.$.wrapper;
+    wrapper = form.$.form;
   });
 
   it('should export all wrapper parts for styling', () => {

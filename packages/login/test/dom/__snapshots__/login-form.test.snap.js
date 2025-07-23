@@ -676,7 +676,7 @@ snapshots["vaadin-login-form shadow default"] =
 `<vaadin-login-form-wrapper
   aria-labelledby="title"
   exportparts="error-message, error-message-title, error-message-description, footer"
-  id="wrapper"
+  id="form"
   part="form"
   role="region"
 >

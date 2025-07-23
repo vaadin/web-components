@@ -73,7 +73,7 @@ describe('vaadin-login-form', () => {
     let wrapper;
 
     beforeEach(() => {
-      wrapper = form.$.wrapper;
+      wrapper = form.$.form;
     });
 
     it('default', async () => {
