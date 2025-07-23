@@ -108,8 +108,15 @@ class Dialog extends DialogSizeMixin(
 
   static get styles() {
     return css`
-      :host {
+      :host,
+      [hidden] {
         display: none !important;
+      }
+
+      :host([opened]),
+      :host([opening]),
+      :host([closing]) {
+        display: contents !important;
       }
     `;
   }
@@ -134,6 +141,7 @@ class Dialog extends DialogSizeMixin(
       <vaadin-dialog-overlay
         id="overlay"
         role="${this.overlayRole}"
+        popover="manual"
         .owner="${this}"
         .opened="${this.opened}"
         .headerTitle="${this.headerTitle}"

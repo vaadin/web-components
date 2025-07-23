@@ -43,6 +43,24 @@ export const DialogOverlayMixin = (superClass) =>
       ];
     }
 
+    /**
+     * Override method from OverlayFocusMixin to use owner as content root
+     * @protected
+     * @override
+     */
+    get _contentRoot() {
+      return this.owner;
+    }
+
+    /**
+     * Override method from OverlayFocusMixin to use owner as modal root
+     * @protected
+     * @override
+     */
+    get _modalRoot() {
+      return this.owner;
+    }
+
     /** @protected */
     ready() {
       super.ready();
@@ -57,6 +75,22 @@ export const DialogOverlayMixin = (superClass) =>
       this.$.content.addEventListener('scroll', () => {
         this.__updateOverflow();
       });
+    }
+
+    /**
+     * @protected
+     * @override
+     */
+    _attachOverlay() {
+      this.showPopover();
+    }
+
+    /**
+     * @protected
+     * @override
+     */
+    _detachOverlay() {
+      this.hidePopover();
     }
 
     /** @private */
