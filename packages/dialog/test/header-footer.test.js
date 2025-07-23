@@ -106,15 +106,15 @@ describe('header/footer feature', () => {
     });
 
     describe('accessibility', () => {
-      it('should set arial-label to overlay if header-title is set', async () => {
-        expect(overlay.hasAttribute('aria-label')).to.be.false;
+      it('should set aria-label to dialog if header-title is set', async () => {
+        expect(dialog.hasAttribute('aria-label')).to.be.false;
 
         dialog.headerTitle = HEADER_TITLE;
         dialog.opened = true;
         await nextRender();
 
-        expect(overlay.hasAttribute('aria-label')).to.be.true;
-        expect(overlay.getAttribute('aria-label')).to.equal(HEADER_TITLE);
+        expect(dialog.hasAttribute('aria-label')).to.be.true;
+        expect(dialog.getAttribute('aria-label')).to.equal(HEADER_TITLE);
       });
 
       it('should remove aria-label if header-title is unset', async () => {
@@ -124,17 +124,17 @@ describe('header/footer feature', () => {
 
         dialog.headerTitle = null;
         await nextUpdate(dialog);
-        expect(overlay.hasAttribute('aria-label')).to.be.false;
+        expect(dialog.hasAttribute('aria-label')).to.be.false;
       });
 
-      it('overlay should get the value from aria-label attribute if aria-label and header-title are set', async () => {
+      it('should not overwrite the aria-label attribute if aria-label and header-title are set', async () => {
         const ARIA_LABEL = '__ARIA_LABEL__';
         dialog.headerTitle = HEADER_TITLE;
         dialog.ariaLabel = ARIA_LABEL;
         dialog.opened = true;
         await nextRender();
 
-        expect(overlay.getAttribute('aria-label')).to.be.equal(ARIA_LABEL);
+        expect(dialog.getAttribute('aria-label')).to.be.equal(ARIA_LABEL);
       });
     });
   });

@@ -118,20 +118,6 @@ class Dialog extends DialogSizeMixin(
     `;
   }
 
-  static get properties() {
-    return {
-      /**
-       * Set the `aria-label` attribute for assistive technologies like
-       * screen readers. An empty string value for this property (the
-       * default) means that the `aria-label` attribute is not present.
-       */
-      ariaLabel: {
-        type: String,
-        value: '',
-      },
-    };
-  }
-
   /** @protected */
   render() {
     return html`
@@ -148,7 +134,6 @@ class Dialog extends DialogSizeMixin(
         @mousedown="${this._bringOverlayToFront}"
         @touchstart="${this._bringOverlayToFront}"
         theme="${ifDefined(this._theme)}"
-        aria-label="${ifDefined(this.ariaLabel || this.headerTitle)}"
         .modeless="${this.modeless}"
         .withBackdrop="${!this.modeless}"
         ?resizable="${this.resizable}"

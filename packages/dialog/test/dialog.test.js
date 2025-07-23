@@ -66,35 +66,6 @@ describe('vaadin-dialog', () => {
       await nextRender();
     });
 
-    describe('aria-label', () => {
-      beforeEach(async () => {
-        dialog.ariaLabel = 'accessible';
-        await nextUpdate(dialog);
-      });
-
-      it('should set `aria-label` attribute on the overlay when ariaLabel is set', () => {
-        expect(overlay.getAttribute('aria-label')).to.be.eql('accessible');
-      });
-
-      it('should remove `aria-label` attribute from the overlay when set to undefined', async () => {
-        dialog.ariaLabel = undefined;
-        await nextUpdate(dialog);
-        expect(overlay.getAttribute('aria-label')).to.be.null;
-      });
-
-      it('should remove `aria-label` attribute from the overlay when set to null', async () => {
-        dialog.ariaLabel = null;
-        await nextUpdate(dialog);
-        expect(overlay.getAttribute('aria-label')).to.be.null;
-      });
-
-      it('should remove `aria-label` attribute from the overlay when set to empty string', async () => {
-        dialog.ariaLabel = '';
-        await nextUpdate(dialog);
-        expect(overlay.getAttribute('aria-label')).to.be.null;
-      });
-    });
-
     describe('no-close-on-esc', () => {
       it('should close itself on ESC press by default', async () => {
         esc(document.body);

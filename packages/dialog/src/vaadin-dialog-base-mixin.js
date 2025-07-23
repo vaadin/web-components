@@ -118,6 +118,10 @@ export const DialogBaseMixin = (superClass) =>
       if (props.has('overlayRole')) {
         this.role = this.overlayRole || 'dialog';
       }
+
+      if (props.has('headerTitle')) {
+        this.__applyAutoAriaLabel();
+      }
     }
 
     /** @private */
@@ -190,6 +194,23 @@ export const DialogBaseMixin = (superClass) =>
     /** @private */
     __sizeChanged(width, height) {
       requestAnimationFrame(() => this.$.overlay.setBounds({ width, height }, false));
+    }
+
+    /** @private */
+    __applyAutoAriaLabel() {
+      // If there is a header title and no aria-label,
+      // set the aria-label to the header title.
+      if (this.headerTitle && !this.ariaLabel) {
+        this.ariaLabel = this.headerTitle;
+        this.__useAutoAriaLabel = true;
+      }
+
+      // If there is no header title and the aria-label was set
+      // automatically, remove the aria-label.
+      if (this.__useAutoAriaLabel && !this.headerTitle) {
+        this.ariaLabel = null;
+        this.__useAutoAriaLabel = false;
+      }
     }
 
     /**
