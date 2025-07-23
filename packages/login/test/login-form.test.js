@@ -287,7 +287,7 @@ describe('exportparts', () => {
     wrapper = form.$.wrapper;
   });
 
-  it('should export all overlay parts for styling', () => {
+  it('should export all wrapper parts for styling', () => {
     const parts = [...wrapper.shadowRoot.querySelectorAll('[part]')].map((el) => el.getAttribute('part'));
     const exportParts = wrapper.getAttribute('exportparts').split(', ');
 
