@@ -9,8 +9,8 @@ import { fillUsernameAndPassword } from './helpers.js';
 describe('login form submit', () => {
   let login, iframe;
 
-  function testFormSubmitValues(preventDefault, expectation, done, data = {}) {
-    fillUsernameAndPassword(login);
+  function testFormSubmitValues(element, preventDefault, expectation, done, data = {}) {
+    fillUsernameAndPassword(element);
 
     const formData = { username: 'username', password: 'password', ...data };
 
@@ -18,13 +18,13 @@ describe('login form submit', () => {
       .map(([key, value]) => `${key}=${value}`)
       .join('&');
 
-    const loginForm = login.querySelector('form');
+    const loginForm = element.querySelector('form');
     loginForm.setAttribute('method', 'GET');
     loginForm.setAttribute('target', iframe.getAttribute('name'));
 
     const submitSpy = sinon.spy(loginForm, 'submit');
     if (preventDefault) {
-      login.addEventListener('login', (e) => e.preventDefault());
+      element.addEventListener('login', (e) => e.preventDefault());
     }
 
     iframe.onload = () => {
@@ -32,7 +32,7 @@ describe('login form submit', () => {
       done();
     };
 
-    login.querySelector('vaadin-button').click();
+    element.querySelector('vaadin-button').click();
     expect(submitSpy.called).to.equal(expectation);
 
     if (preventDefault) {
@@ -63,11 +63,11 @@ describe('login form submit', () => {
     });
 
     it('should submit form values from login element', (done) => {
-      testFormSubmitValues(false, true, done);
+      testFormSubmitValues(login, false, true, done);
     });
 
     it('should not submit form if action is defined and event was default prevented', (done) => {
-      testFormSubmitValues(true, false, done);
+      testFormSubmitValues(login, true, false, done);
     });
 
     it('should select username field on tab navigation', (done) => {
@@ -82,24 +82,23 @@ describe('login form submit', () => {
   });
 
   describe('overlay', () => {
-    let overlay;
+    let login;
 
     beforeEach(async () => {
-      overlay = fixtureSync('<vaadin-login-overlay action="login-action" opened></vaadin-login-overlay>');
+      login = fixtureSync('<vaadin-login-overlay action="login-action" opened></vaadin-login-overlay>');
       await nextRender();
-      login = overlay.$.vaadinLoginForm;
     });
 
     it('should submit form values from overlay element', (done) => {
-      testFormSubmitValues(false, true, done);
+      testFormSubmitValues(login, false, true, done);
     });
   });
 
   describe('custom form area', () => {
-    let overlay;
+    let login;
 
     beforeEach(async () => {
-      overlay = fixtureSync(`
+      login = fixtureSync(`
         <vaadin-login-overlay opened>
           <input name="nativeCheckbox" type="checkbox" slot="custom-form-area">
           <vaadin-checkbox name="vaadinCheckbox" slot="custom-form-area"></vaadin-checkbox>
@@ -108,12 +107,11 @@ describe('login form submit', () => {
         </vaadin-login-overlay>
       `);
       await nextRender();
-      login = overlay.$.vaadinLoginForm;
     });
 
     it('should include values of text fields in login event detail', () => {
       const loginSpy = sinon.spy();
-      overlay.addEventListener('login', loginSpy);
+      login.addEventListener('login', loginSpy);
 
       const { vaadinLoginUsername } = fillUsernameAndPassword(login);
 
@@ -127,7 +125,7 @@ describe('login form submit', () => {
 
     it('should not include values of unchecked checkboxes in login event detail', () => {
       const loginSpy = sinon.spy();
-      overlay.addEventListener('login', loginSpy);
+      login.addEventListener('login', loginSpy);
 
       const { vaadinLoginUsername } = fillUsernameAndPassword(login);
       enter(vaadinLoginUsername);
@@ -140,7 +138,7 @@ describe('login form submit', () => {
 
     it('should include values of checked checkboxes in login event detail', () => {
       const loginSpy = sinon.spy();
-      overlay.addEventListener('login', loginSpy);
+      login.addEventListener('login', loginSpy);
 
       const { vaadinLoginUsername } = fillUsernameAndPassword(login);
 
@@ -157,19 +155,19 @@ describe('login form submit', () => {
 
     describe('form submit', () => {
       beforeEach(async () => {
-        overlay.action = 'login-action';
+        login.action = 'login-action';
         await nextRender();
       });
 
       it('should submit values of text fields in custom form area to the native form', (done) => {
-        testFormSubmitValues(false, true, done, { nativeTextField: 'bar', vaadinTextField: '1234' });
+        testFormSubmitValues(login, false, true, done, { nativeTextField: 'bar', vaadinTextField: '1234' });
       });
 
       it('should submit values of checkboxes in custom form area to the native form when checked', (done) => {
         login.querySelector('[name=nativeCheckbox]').checked = true;
         login.querySelector('[name=vaadinCheckbox]').checked = true;
 
-        testFormSubmitValues(false, true, done, {
+        testFormSubmitValues(login, false, true, done, {
           nativeCheckbox: 'on',
           vaadinCheckbox: 'on',
           nativeTextField: 'bar',

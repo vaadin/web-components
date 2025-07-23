@@ -28,7 +28,7 @@ const loginOverlayWrapper = css`
     min-height: calc(var(--lumo-size-m) * 5);
   }
 
-  [part='title'] {
+  ::slotted([slot='title']) {
     font-size: var(--lumo-font-size-xxxl);
     font-weight: 600;
     line-height: var(--lumo-line-height-xs);
@@ -55,6 +55,11 @@ const loginOverlayWrapper = css`
     box-shadow: var(--lumo-box-shadow-s);
     margin: var(--lumo-space-s);
     height: auto;
+  }
+
+  ::slotted(vaadin-login-form-wrapper) {
+    min-height: 100%;
+    max-width: 100%;
   }
 
   /* Small screen */
@@ -94,7 +99,7 @@ const loginOverlayWrapper = css`
     }
 
     [part='brand'],
-    [part='form'] {
+    [part='form-wrapper'] {
       flex: auto;
       flex-basis: 0;
       box-sizing: border-box;
@@ -104,9 +109,14 @@ const loginOverlayWrapper = css`
       justify-content: flex-start;
     }
 
-    [part='form'] {
+    [part='form-wrapper'] {
       padding: var(--lumo-space-l);
       overflow: auto;
+    }
+
+    ::slotted(vaadin-login-form-wrapper) {
+      flex: 1;
+      padding: 2px;
     }
   }
 
@@ -127,7 +137,7 @@ const loginOverlayWrapper = css`
       box-shadow: none;
     }
 
-    [part='form'] {
+    [part='form-wrapper'] {
       height: 100%;
       overflow: auto;
     }
@@ -160,26 +170,4 @@ const loginOverlayWrapper = css`
 
 registerStyles('vaadin-login-overlay-wrapper', [overlay, loginOverlayWrapper], {
   moduleId: 'lumo-login-overlay-wrapper',
-});
-
-const loginFormWrapper = css`
-  :host([theme~='with-overlay']) {
-    min-height: 100%;
-    display: flex;
-    justify-content: center;
-    max-width: 100%;
-  }
-
-  /* Landscape small screen */
-  @media only screen and (max-height: 600px) and (min-width: 600px) and (orientation: landscape) {
-    :host([theme~='with-overlay']) {
-      height: 100%;
-      flex: 1;
-      padding: 2px;
-    }
-  }
-`;
-
-registerStyles('vaadin-login-form-wrapper', [loginFormWrapper], {
-  moduleId: 'lumo-login-overlay',
 });

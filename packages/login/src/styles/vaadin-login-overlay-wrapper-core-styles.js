@@ -29,7 +29,7 @@ const loginOverlayWrapper = css`
     justify-content: flex-end;
   }
 
-  [part='title'] {
+  ::slotted([slot='title']) {
     color: inherit;
     margin: 0;
   }
