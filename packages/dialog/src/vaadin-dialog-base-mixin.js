@@ -102,10 +102,7 @@ export const DialogBaseMixin = (superClass) =>
       overlay.addEventListener('vaadin-overlay-closed', this.__handleOverlayClosed.bind(this));
 
       this._overlayElement = overlay;
-    }
 
-    /** @protected */
-    firstUpdated() {
       if (!this.hasAttribute('role')) {
         this.role = 'dialog';
       }
