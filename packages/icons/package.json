@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/icons",
-  "version": "25.0.0-alpha7",
+  "version": "25.0.0-alpha8",
   "publishConfig": {
     "access": "public"
   },
@@ -34,7 +34,7 @@
     "web-component"
   ],
   "dependencies": {
-    "@vaadin/icon": "25.0.0-alpha7"
+    "@vaadin/icon": "25.0.0-alpha8"
   },
   "devDependencies": {
     "cheerio": "^1.0.0",
