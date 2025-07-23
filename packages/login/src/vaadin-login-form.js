@@ -61,6 +61,7 @@ class LoginForm extends LoginFormMixin(ElementMixin(ThemableMixin(PolylitMixin(L
     return css`
       :host {
         display: block;
+        max-width: max-content;
       }
 
       :host([hidden]) {
