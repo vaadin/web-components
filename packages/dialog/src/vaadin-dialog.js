@@ -48,16 +48,13 @@ export { DialogOverlay } from './vaadin-dialog-overlay.js';
  *
  * ### Styling
  *
- * `<vaadin-dialog>` uses `<vaadin-dialog-overlay>` internal
- * themable component as the actual visible dialog overlay.
- *
- * See [`<vaadin-overlay>`](#/elements/vaadin-overlay) documentation.
- * for `<vaadin-dialog-overlay>` parts.
- *
- * In addition to `<vaadin-overlay>` parts, the following parts are available for styling:
+ * The following shadow DOM parts are available for styling:
  *
  * Part name        | Description
  * -----------------|-------------------------------------------
+ * `backdrop`       | Backdrop of the overlay
+ * `overlay`        | The overlay container
+ * `content`        | The overlay content
  * `header`         | Element wrapping title and header content
  * `header-content` | Element wrapping the header content slot
  * `title`          | Element wrapping the title slot
@@ -158,6 +155,7 @@ class Dialog extends DialogSizeMixin(
         ?resizable="${this.resizable}"
         restore-focus-on-close
         focus-trap
+        exportparts="backdrop, overlay, header, title, header-content, content, footer"
       >
         <slot name="title" slot="title"></slot>
         <slot name="header-content" slot="header-content"></slot>

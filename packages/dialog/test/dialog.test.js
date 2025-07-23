@@ -383,4 +383,23 @@ describe('vaadin-dialog', () => {
       expect(getComputedStyle(overlay.$.overlay).height).to.equal(originalHeight);
     });
   });
+
+  describe('exportparts', () => {
+    let dialog, overlay;
+
+    beforeEach(async () => {
+      dialog = fixtureSync('<vaadin-dialog></vaadin-dialog>');
+      await nextRender();
+      overlay = dialog.$.overlay;
+    });
+
+    it('should export all overlay parts for styling', () => {
+      const parts = [...overlay.shadowRoot.querySelectorAll('[part]')].map((el) => el.getAttribute('part'));
+      const exportParts = overlay.getAttribute('exportparts').split(', ');
+
+      parts.forEach((part) => {
+        expect(exportParts).to.include(part);
+      });
+    });
+  });
 });
