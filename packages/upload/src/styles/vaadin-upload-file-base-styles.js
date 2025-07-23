@@ -7,9 +7,10 @@ import { css } from 'lit';
 
 export const uploadFileStyles = css`
   :host {
-    display: flex;
-    flex-direction: column;
+    align-items: center;
+    display: grid;
     gap: var(--vaadin-upload-file-gap, var(--vaadin-gap-container-block));
+    grid-template-columns: var(--vaadin-icon-size, 1lh) minmax(0, 1fr) auto;
     padding: var(--vaadin-upload-file-padding, var(--vaadin-padding));
   }
 
@@ -18,15 +19,11 @@ export const uploadFileStyles = css`
   }
 
   [part='row'] {
-    align-items: center;
-    display: flex;
-    justify-content: space-between;
+    display: contents;
   }
 
   [part='info'] {
-    display: flex;
-    gap: var(--vaadin-gap-container-inline);
-    overflow: hidden;
+    display: contents;
   }
 
   [part='done-icon']:not([hidden]),
@@ -53,14 +50,8 @@ export const uploadFileStyles = css`
     mask-image: var(--_vaadin-icon-warn);
   }
 
-  [part='done-icon'][hidden] + [part='warning-icon'][hidden] ~ [part='meta'] {
-    padding-inline-start: calc(var(--vaadin-icon-size, 1lh) + var(--vaadin-gap-container-inline));
-  }
-
   [part='meta'] {
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
+    grid-column: 2;
   }
 
   [part='name'] {
@@ -84,10 +75,6 @@ export const uploadFileStyles = css`
     font-size: var(--vaadin-upload-file-error-font-size, inherit);
     font-weight: var(--vaadin-upload-file-error-font-weight, inherit);
     line-height: var(--vaadin-upload-file-error-line-height, inherit);
-  }
-
-  [part='commands'] {
-    display: flex;
   }
 
   button {
@@ -132,7 +119,7 @@ export const uploadFileStyles = css`
   }
 
   ::slotted([slot='progress']) {
-    margin-inline-start: calc(var(--vaadin-icon-size, 1lh) + var(--vaadin-gap-container-inline));
+    grid-column: 2 / -1;
     width: auto;
   }
 
