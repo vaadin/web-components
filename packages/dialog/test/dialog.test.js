@@ -35,6 +35,14 @@ describe('vaadin-dialog', () => {
       dialog.style.display = 'block';
       expect(getComputedStyle(dialog).display).to.equal('none');
     });
+
+    ['opened', 'opening', 'closing'].forEach((state) => {
+      it(`should enforce display: contents when ${state} attribute is set`, () => {
+        dialog.style.display = 'block';
+        dialog.setAttribute(state, '');
+        expect(getComputedStyle(dialog).display).to.equal('contents');
+      });
+    });
   });
 
   describe('opened', () => {

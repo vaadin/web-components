@@ -4,12 +4,11 @@ import sinon from 'sinon';
 import '../src/vaadin-dialog.js';
 
 describe('vaadin-dialog renderer', () => {
-  let dialog, overlay;
+  let dialog;
 
   beforeEach(async () => {
     dialog = fixtureSync('<vaadin-dialog></vaadin-dialog>');
     await nextRender();
-    overlay = dialog.$.overlay;
   });
 
   it('should render the content of renderer function when renderer function provided', async () => {
@@ -21,7 +20,7 @@ describe('vaadin-dialog renderer', () => {
     dialog.opened = true;
     await nextRender();
 
-    expect(overlay.textContent).to.include('The content of the dialog');
+    expect(dialog.textContent).to.include('The content of the dialog');
   });
 
   it('should run renderers when requesting content update', async () => {
@@ -49,11 +48,11 @@ describe('vaadin-dialog renderer', () => {
     dialog.opened = true;
     await nextRender();
 
-    expect(overlay.textContent).to.equal('foo');
+    expect(dialog.textContent).to.equal('foo');
 
     dialog.renderer = null;
     await nextUpdate(dialog);
 
-    expect(overlay.textContent).to.equal('');
+    expect(dialog.textContent).to.equal('');
   });
 });
