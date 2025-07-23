@@ -377,12 +377,24 @@ export const CrudMixin = (superClass) =>
       return this.__fields;
     }
 
+    /** @private */
+    get _editor() {
+      return this.shadowRoot.querySelector('#editor');
+    }
+
+    /** @private */
+    get _scroller() {
+      return this.shadowRoot.querySelector('#scroller');
+    }
+
+    /** @private */
+    get _dialogMode() {
+      return this.editorPosition === '' || this._fullscreen;
+    }
+
     /** @protected */
     ready() {
       super.ready();
-
-      this.$.dialog.$.overlay.addEventListener('vaadin-overlay-outside-click', this.__cancel);
-      this.$.dialog.$.overlay.addEventListener('vaadin-overlay-escape-press', this.__cancel);
 
       this._gridController = new GridSlotController(this);
       this.addController(this._gridController);
@@ -419,6 +431,24 @@ export const CrudMixin = (superClass) =>
 
       this._confirmCancelDialog = this.querySelector('vaadin-confirm-dialog[slot="confirm-cancel"]');
       this._confirmDeleteDialog = this.querySelector('vaadin-confirm-dialog[slot="confirm-delete"]');
+    }
+
+    /** @protected */
+    updated(props) {
+      super.updated(props);
+
+      // When using dialog mode, hide elements not slotted into the dialog from accessibility tree
+      if (
+        props.has('_grid') ||
+        props.has('_newButton') ||
+        props.has('editorOpened') ||
+        props.has('editorPosition') ||
+        props.has('_fullscreen')
+      ) {
+        const hide = this.editorOpened && this._dialogMode;
+        this.__hideElement(this._grid, hide);
+        this.__hideElement(this._newButton, hide);
+      }
     }
 
     /**
@@ -477,33 +507,30 @@ export const CrudMixin = (superClass) =>
       }
 
       if (opened) {
-        this.__ensureChildren();
-
         // When using bottom / aside editor position,
         // auto-focus the editor element on open.
-        if (this._form.parentElement === this) {
-          this.$.editor.setAttribute('tabindex', '0');
-          this.$.editor.focus();
-        } else {
-          this.$.editor.removeAttribute('tabindex');
+        if (this._editor) {
+          this._editor.focus();
         }
-      } else if (oldOpened) {
-        // Teleport form and buttons back to light DOM when closing overlay
-        this.__moveChildNodes(this);
+
+        // Wait to set label until header node has updated (observer seems to run after this one)
+        setTimeout(() => {
+          this.__dialogAriaLabel = this._headerNode.textContent.trim();
+        });
       }
 
       this.__toggleToolbar();
 
       // Make sure to reset scroll position
-      this.$.scroller.scrollTop = 0;
+      if (this._scroller) {
+        this._scroller.scrollTop = 0;
+      }
     }
 
     /** @private */
     __fullscreenChanged(fullscreen, oldFullscreen) {
       if (fullscreen || oldFullscreen) {
         this.__toggleToolbar();
-
-        this.__ensureChildren();
 
         this.toggleAttribute('fullscreen', fullscreen);
       }
@@ -515,66 +542,6 @@ export const CrudMixin = (superClass) =>
       if (this.editorPosition === 'bottom' && !this._fullscreen) {
         this.$.toolbar.style.display = this.editorOpened ? 'none' : '';
       }
-    }
-
-    /** @private */
-    __moveChildNodes(target) {
-      const nodes = [this._headerNode, this._form];
-      const buttons = [this._saveButton, this._cancelButton, this._deleteButton].filter(Boolean);
-      if (!nodes.every((node) => node instanceof HTMLElement)) {
-        return;
-      }
-
-      // Teleport header node, form, and the buttons to corresponding slots.
-      // NOTE: order in which buttons are moved matches the order of slots.
-      [...nodes, ...buttons].forEach((node) => {
-        // Do not move nodes if the editor position has not changed
-        if (node.parentNode !== target) {
-          target.appendChild(node);
-        }
-      });
-
-      // Wait to set label until slotted element has been moved.
-      setTimeout(() => {
-        this.__dialogAriaLabel = this._headerNode.textContent.trim();
-      });
-    }
-
-    /** @private */
-    __shouldOpenDialog(fullscreen, editorPosition) {
-      return editorPosition === '' || fullscreen;
-    }
-
-    /** @private */
-    __ensureChildren() {
-      if (this.__shouldOpenDialog(this._fullscreen, this.editorPosition)) {
-        // Move form to dialog
-        this.__moveChildNodes(this.$.dialog.$.overlay);
-      } else {
-        // Move form to crud
-        this.__moveChildNodes(this);
-      }
-    }
-
-    /** @private */
-    __computeDialogOpened(opened, fullscreen, editorPosition) {
-      // Only open dialog when editorPosition is "" or fullscreen is set
-      return this.__shouldOpenDialog(fullscreen, editorPosition) ? opened : false;
-    }
-
-    /** @private */
-    __computeEditorHidden(opened, fullscreen, editorPosition) {
-      // Only show editor when editorPosition is "bottom" or "aside"
-      if (['aside', 'bottom'].includes(editorPosition) && !fullscreen) {
-        return !opened;
-      }
-
-      return true;
-    }
-
-    /** @private */
-    __onDialogOpened(event) {
-      this.editorOpened = event.detail.value;
     }
 
     /** @private */
@@ -620,8 +587,7 @@ export const CrudMixin = (superClass) =>
      * @private
      */
     __formChanged(form, oldForm) {
-      if (oldForm && oldForm.parentElement) {
-        oldForm.parentElement.removeChild(oldForm);
+      if (oldForm) {
         oldForm.removeEventListener('change', this.__onFormChange);
         oldForm.removeEventListener('input', this.__onFormChange);
       }
@@ -1020,6 +986,17 @@ export const CrudMixin = (superClass) =>
         this.__restoreFocusOnDelete();
         this._grid.clearCache();
         this.__closeEditor();
+      }
+    }
+
+    /** @private */
+    __hideElement(element, value) {
+      if (!element) return;
+
+      if (value) {
+        element.setAttribute('aria-hidden', 'true');
+      } else {
+        element.removeAttribute('aria-hidden');
       }
     }
 
