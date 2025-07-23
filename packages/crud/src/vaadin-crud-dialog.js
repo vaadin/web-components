@@ -40,21 +40,13 @@ class CrudDialogOverlay extends OverlayMixin(DirMixin(ThemableMixin(PolylitMixin
     return crudDialogOverlayStyles;
   }
 
-  static get properties() {
-    return {
-      crudElement: {
-        type: Object,
-      },
-    };
-  }
-
   /**
-   * Override method from OverlayFocusMixin to use CRUD element as modal root
+   * Override method from OverlayFocusMixin to use the owner (CRUD element) as modal root
    * @protected
    * @override
    */
   get _modalRoot() {
-    return this.crudElement;
+    return this.owner;
   }
 
   /** @protected */
@@ -156,7 +148,7 @@ class CrudDialog extends DialogBaseMixin(OverlayClassMixin(ThemePropertyMixin(Po
       <vaadin-crud-dialog-overlay
         id="overlay"
         popover="manual"
-        .crudElement="${this.crudElement}"
+        .owner="${this.crudElement}"
         .opened="${this.opened}"
         aria-label="${ifDefined(this.ariaLabel)}"
         @opened-changed="${this._onOverlayOpened}"
