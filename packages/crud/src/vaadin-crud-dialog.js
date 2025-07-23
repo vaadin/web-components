@@ -175,7 +175,7 @@ class CrudDialog extends DialogBaseMixin(OverlayClassMixin(ThemePropertyMixin(Po
 
   /** @private **/
   __cancel() {
-    this.dispatchEvent(new CustomEvent('cancel', { bubbles: false, composed: false }));
+    this.dispatchEvent(new CustomEvent('cancel'));
   }
 }
 
