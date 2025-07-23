@@ -4,6 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { OverlayMixin } from '@vaadin/overlay/src/vaadin-overlay-mixin.js';
+import { setOverlayStateAttribute } from '@vaadin/overlay/src/vaadin-overlay-utils.js';
 
 /**
  * @polymerMixin
@@ -133,8 +134,8 @@ export const DialogOverlayMixin = (superClass) =>
       this._oldOpenedFooterHeader = opened;
 
       // Set attributes here to update styles before detecting content overflow
-      this.toggleAttribute('has-header', !!headerRenderer);
-      this.toggleAttribute('has-footer', !!footerRenderer);
+      setOverlayStateAttribute(this, 'has-header', !!headerRenderer);
+      setOverlayStateAttribute(this, 'has-footer', !!footerRenderer);
 
       if (headerRendererChanged) {
         if (headerRenderer) {
@@ -168,7 +169,7 @@ export const DialogOverlayMixin = (superClass) =>
 
     /** @private */
     _headerTitleChanged(headerTitle, opened) {
-      this.toggleAttribute('has-title', !!headerTitle);
+      setOverlayStateAttribute(this, 'has-title', !!headerTitle);
 
       if (opened && (headerTitle || this._oldHeaderTitle)) {
         this.requestContentUpdate();
@@ -261,9 +262,9 @@ export const DialogOverlayMixin = (superClass) =>
 
       const value = overflow.trim();
       if (value.length > 0 && this.getAttribute('overflow') !== value) {
-        this.setAttribute('overflow', value);
+        setOverlayStateAttribute(this, 'overflow', value);
       } else if (value.length === 0 && this.hasAttribute('overflow')) {
-        this.removeAttribute('overflow');
+        setOverlayStateAttribute(this, 'overflow', null);
       }
     }
   };

@@ -68,6 +68,7 @@ describe('header/footer feature', () => {
     it('should not have [has-title] attribute on overlay element if header-title is not set', async () => {
       dialog.opened = true;
       await nextRender();
+      expect(dialog.hasAttribute('has-title')).to.be.not.ok;
       expect(overlay.hasAttribute('has-title')).to.be.not.ok;
     });
 
@@ -76,6 +77,7 @@ describe('header/footer feature', () => {
       dialog.opened = true;
       await nextRender();
 
+      expect(dialog.hasAttribute('has-title')).to.be.ok;
       expect(overlay.hasAttribute('has-title')).to.be.ok;
     });
 
@@ -87,6 +89,7 @@ describe('header/footer feature', () => {
       dialog.headerTitle = null;
       await nextUpdate(dialog);
 
+      expect(dialog.hasAttribute('has-title')).to.be.not.ok;
       expect(overlay.hasAttribute('has-title')).to.be.not.ok;
     });
 
@@ -186,6 +189,7 @@ describe('header/footer feature', () => {
     it('should not have [has-header] attribute if no headerRenderer is set', async () => {
       dialog.opened = true;
       await nextRender();
+      expect(dialog.hasAttribute('has-header')).to.be.not.ok;
       expect(overlay.hasAttribute('has-header')).to.be.not.ok;
     });
 
@@ -194,6 +198,7 @@ describe('header/footer feature', () => {
       dialog.opened = true;
       await nextRender();
 
+      expect(dialog.hasAttribute('has-header')).to.be.ok;
       expect(overlay.hasAttribute('has-header')).to.be.ok;
     });
 
@@ -204,6 +209,7 @@ describe('header/footer feature', () => {
 
       dialog.headerRenderer = null;
       await nextUpdate(dialog);
+      expect(dialog.hasAttribute('has-header')).to.be.not.ok;
       expect(overlay.hasAttribute('has-header')).to.be.not.ok;
     });
 
@@ -269,6 +275,7 @@ describe('header/footer feature', () => {
     it('should not have [has-footer] attribute if no footerRenderer is set', async () => {
       dialog.opened = true;
       await nextRender();
+      expect(dialog.hasAttribute('has-footer')).to.be.not.ok;
       expect(overlay.hasAttribute('has-footer')).to.be.not.ok;
     });
 
@@ -277,6 +284,7 @@ describe('header/footer feature', () => {
       dialog.opened = true;
       await nextRender();
 
+      expect(dialog.hasAttribute('has-footer')).to.be.ok;
       expect(overlay.hasAttribute('has-footer')).to.be.ok;
     });
 
@@ -287,6 +295,7 @@ describe('header/footer feature', () => {
 
       dialog.footerRenderer = null;
       await nextUpdate(dialog);
+      expect(dialog.hasAttribute('has-footer')).to.be.not.ok;
       expect(overlay.hasAttribute('has-footer')).to.be.not.ok;
     });
 
@@ -495,32 +504,38 @@ describe('header/footer feature', () => {
 
     describe('resize', () => {
       it('should not set overflow attribute when content has no scrollbar', () => {
+        expect(dialog.hasAttribute('overflow')).to.be.false;
         expect(overlay.hasAttribute('overflow')).to.be.false;
       });
 
       it('should set overflow attribute when scrollbar appears on resize', async () => {
         overlay.style.maxHeight = `${contentHeight}px`;
         await nextResize(overlay);
+        expect(dialog.getAttribute('overflow')).to.equal('bottom');
         expect(overlay.getAttribute('overflow')).to.equal('bottom');
       });
 
       it('should remove overflow attribute when header renderer is removed', async () => {
         overlay.style.maxHeight = `${contentHeight + footerHeight}px`;
         await nextResize(overlay);
+        expect(dialog.hasAttribute('overflow')).to.be.true;
         expect(overlay.hasAttribute('overflow')).to.be.true;
 
         dialog.headerRenderer = null;
         await nextUpdate(dialog);
+        expect(dialog.hasAttribute('overflow')).to.be.false;
         expect(overlay.hasAttribute('overflow')).to.be.false;
       });
 
       it('should remove overflow attribute when footer renderer is removed', async () => {
         overlay.style.maxHeight = `${contentHeight + headerHeight}px`;
         await nextResize(overlay);
+        expect(dialog.hasAttribute('overflow')).to.be.true;
         expect(overlay.hasAttribute('overflow')).to.be.true;
 
         dialog.footerRenderer = null;
         await nextUpdate(dialog);
+        expect(dialog.hasAttribute('overflow')).to.be.false;
         expect(overlay.hasAttribute('overflow')).to.be.false;
       });
 
@@ -531,10 +546,12 @@ describe('header/footer feature', () => {
 
         overlay.style.maxHeight = `${contentHeight}px`;
         await nextResize(overlay);
+        expect(dialog.hasAttribute('overflow')).to.be.false;
         expect(overlay.hasAttribute('overflow')).to.be.false;
 
         dialog.headerTitle = 'Title';
         await nextUpdate(dialog);
+        expect(dialog.getAttribute('overflow')).to.equal('bottom');
         expect(overlay.getAttribute('overflow')).to.equal('bottom');
       });
 
@@ -546,10 +563,12 @@ describe('header/footer feature', () => {
 
         overlay.style.maxHeight = `${contentHeight}px`;
         await nextResize(overlay);
+        expect(dialog.hasAttribute('overflow')).to.be.true;
         expect(overlay.hasAttribute('overflow')).to.be.true;
 
         dialog.headerTitle = null;
         await nextUpdate(dialog);
+        expect(dialog.hasAttribute('overflow')).to.be.false;
         expect(overlay.hasAttribute('overflow')).to.be.false;
       });
 
@@ -562,6 +581,7 @@ describe('header/footer feature', () => {
         dialog.footerRenderer = null;
         dialog.headerTitle = null;
         await nextUpdate(dialog);
+        expect(dialog.hasAttribute('overflow')).to.be.false;
         expect(overlay.hasAttribute('overflow')).to.be.false;
       });
     });
@@ -573,6 +593,7 @@ describe('header/footer feature', () => {
       });
 
       it('should set overflow to "bottom" when scrollbar appears after re-render', () => {
+        expect(dialog.getAttribute('overflow')).to.equal('bottom');
         expect(overlay.getAttribute('overflow')).to.equal('bottom');
       });
 
@@ -580,6 +601,7 @@ describe('header/footer feature', () => {
         content.scrollTop += 200;
         content.dispatchEvent(new CustomEvent('scroll'));
 
+        expect(dialog.getAttribute('overflow')).to.equal('top bottom');
         expect(overlay.getAttribute('overflow')).to.equal('top bottom');
       });
 
@@ -587,6 +609,7 @@ describe('header/footer feature', () => {
         content.scrollTop += content.scrollHeight - content.clientHeight;
         content.dispatchEvent(new CustomEvent('scroll'));
 
+        expect(dialog.getAttribute('overflow')).to.equal('top');
         expect(overlay.getAttribute('overflow')).to.equal('top');
       });
     });
