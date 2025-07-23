@@ -1,7 +1,17 @@
 /* @web/test-runner snapshot v1 */
 export const snapshots = {};
 
-snapshots["vaadin-dialog overlay"] = 
+snapshots["vaadin-dialog host"] =
+`<vaadin-dialog
+  opened=""
+  with-backdrop=""
+>
+  content
+</vaadin-dialog>
+`;
+/* end snapshot vaadin-dialog host */
+
+snapshots["vaadin-dialog overlay"] =
 `<vaadin-dialog-overlay
   exportparts="backdrop, overlay, header, title, header-content, content, footer"
   focus-trap=""
@@ -33,7 +43,7 @@ snapshots["vaadin-dialog overlay"] =
 `;
 /* end snapshot vaadin-dialog overlay */
 
-snapshots["vaadin-dialog overlay modeless"] = 
+snapshots["vaadin-dialog overlay modeless"] =
 `<vaadin-dialog-overlay
   exportparts="backdrop, overlay, header, title, header-content, content, footer"
   focus-trap=""
@@ -65,7 +75,7 @@ snapshots["vaadin-dialog overlay modeless"] =
 `;
 /* end snapshot vaadin-dialog overlay modeless */
 
-snapshots["vaadin-dialog overlay theme"] = 
+snapshots["vaadin-dialog overlay theme"] =
 `<vaadin-dialog-overlay
   exportparts="backdrop, overlay, header, title, header-content, content, footer"
   focus-trap=""
@@ -98,7 +108,7 @@ snapshots["vaadin-dialog overlay theme"] =
 `;
 /* end snapshot vaadin-dialog overlay theme */
 
-snapshots["vaadin-dialog overlay class"] = 
+snapshots["vaadin-dialog overlay class"] =
 `<vaadin-dialog-overlay
   class="custom dialog-overlay"
   exportparts="backdrop, overlay, header, title, header-content, content, footer"
@@ -131,7 +141,7 @@ snapshots["vaadin-dialog overlay class"] =
 `;
 /* end snapshot vaadin-dialog overlay class */
 
-snapshots["vaadin-dialog overlay role"] = 
+snapshots["vaadin-dialog overlay role"] =
 `<vaadin-dialog-overlay
   exportparts="backdrop, overlay, header, title, header-content, content, footer"
   focus-trap=""
@@ -162,4 +172,3 @@ snapshots["vaadin-dialog overlay role"] =
 </vaadin-dialog-overlay>
 `;
 /* end snapshot vaadin-dialog overlay role */
-
