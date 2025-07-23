@@ -1,8 +1,11 @@
 /* @web/test-runner snapshot v1 */
 export const snapshots = {};
 
-snapshots["vaadin-crud host default"] =
-`<vaadin-crud editor-position="">
+snapshots["vaadin-crud host default"] = 
+`<vaadin-crud
+  editor-position=""
+  with-backdrop=""
+>
   <vaadin-confirm-dialog
     aria-description="There are unsaved changes to this item."
     aria-label="Discard changes"
