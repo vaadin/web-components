@@ -4,6 +4,7 @@ export const snapshots = {};
 snapshots["vaadin-dialog host"] =
 `<vaadin-dialog
   opened=""
+  role="dialog"
   with-backdrop=""
 >
   content
@@ -19,7 +20,6 @@ snapshots["vaadin-dialog overlay"] =
   opened=""
   popover="manual"
   restore-focus-on-close=""
-  role="dialog"
   with-backdrop=""
 >
   <slot
@@ -52,7 +52,6 @@ snapshots["vaadin-dialog overlay modeless"] =
   opened=""
   popover="manual"
   restore-focus-on-close=""
-  role="dialog"
 >
   <slot
     name="title"
@@ -83,7 +82,6 @@ snapshots["vaadin-dialog overlay theme"] =
   opened=""
   popover="manual"
   restore-focus-on-close=""
-  role="dialog"
   theme="custom"
   with-backdrop=""
 >
@@ -117,7 +115,6 @@ snapshots["vaadin-dialog overlay class"] =
   opened=""
   popover="manual"
   restore-focus-on-close=""
-  role="dialog"
   with-backdrop=""
 >
   <slot
@@ -140,35 +137,3 @@ snapshots["vaadin-dialog overlay class"] =
 </vaadin-dialog-overlay>
 `;
 /* end snapshot vaadin-dialog overlay class */
-
-snapshots["vaadin-dialog overlay role"] =
-`<vaadin-dialog-overlay
-  exportparts="backdrop, overlay, header, title, header-content, content, footer"
-  focus-trap=""
-  id="overlay"
-  opened=""
-  popover="manual"
-  restore-focus-on-close=""
-  role="alertdialog"
-  with-backdrop=""
->
-  <slot
-    name="title"
-    slot="title"
-  >
-  </slot>
-  <slot
-    name="header-content"
-    slot="header-content"
-  >
-  </slot>
-  <slot
-    name="footer"
-    slot="footer"
-  >
-  </slot>
-  <slot>
-  </slot>
-</vaadin-dialog-overlay>
-`;
-/* end snapshot vaadin-dialog overlay role */

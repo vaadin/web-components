@@ -77,13 +77,12 @@ export const DialogBaseMixin = (superClass) =>
         },
 
         /**
-         * The `role` attribute value to be set on the overlay. Defaults to "dialog".
+         * The `role` attribute value to be set on the dialog. Defaults to "dialog".
          *
          * @attr {string} overlay-role
          */
         overlayRole: {
           type: String,
-          value: 'dialog',
         },
       };
     }
@@ -103,6 +102,22 @@ export const DialogBaseMixin = (superClass) =>
       overlay.addEventListener('vaadin-overlay-closed', this.__handleOverlayClosed.bind(this));
 
       this._overlayElement = overlay;
+    }
+
+    /** @protected */
+    firstUpdated() {
+      if (!this.hasAttribute('role')) {
+        this.role = 'dialog';
+      }
+    }
+
+    /** @protected */
+    updated(props) {
+      super.updated(props);
+
+      if (props.has('overlayRole')) {
+        this.role = this.overlayRole || 'dialog';
+      }
     }
 
     /** @private */

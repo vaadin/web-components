@@ -384,6 +384,42 @@ describe('vaadin-dialog', () => {
     });
   });
 
+  describe('role', () => {
+    let dialog;
+
+    beforeEach(async () => {
+      dialog = fixtureSync('<vaadin-dialog></vaadin-dialog>');
+      await nextRender();
+    });
+
+    it('should have role="dialog" by default', () => {
+      expect(dialog.getAttribute('role')).to.equal('dialog');
+    });
+
+    it('should allow setting role as attribute', async () => {
+      dialog = fixtureSync('<vaadin-dialog role="alertdialog"></vaadin-dialog>');
+      await nextRender();
+
+      expect(dialog.getAttribute('role')).to.equal('alertdialog');
+    });
+
+    it('should set role through overlayRole', async () => {
+      dialog.overlayRole = 'alertdialog';
+      await nextRender();
+
+      expect(dialog.getAttribute('role')).to.equal('alertdialog');
+    });
+
+    it('should restore default role when removing overlayRole', async () => {
+      dialog.overlayRole = 'alertdialog';
+      await nextRender();
+      dialog.overlayRole = undefined;
+      await nextRender();
+
+      expect(dialog.getAttribute('role')).to.equal('dialog');
+    });
+  });
+
   describe('exportparts', () => {
     let dialog, overlay;
 
