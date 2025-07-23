@@ -60,7 +60,7 @@ class LoginForm extends LoginFormMixin(ElementMixin(ThemableMixin(PolylitMixin(L
   static get styles() {
     return css`
       :host {
-        display: inline-block;
+        display: block;
       }
 
       :host([hidden]) {
