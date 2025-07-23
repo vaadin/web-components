@@ -17,7 +17,8 @@ describe('login overlay', () => {
   });
 
   beforeEach(async () => {
-    login = fixtureSync('<vaadin-login-overlay opened theme="some-theme"></vaadin-login-overlay>');
+    login = fixtureSync('<vaadin-login-overlay theme="some-theme"></vaadin-login-overlay>');
+    login.opened = true;
     await nextRender();
     overlay = login.$.overlay;
   });
@@ -27,8 +28,14 @@ describe('login overlay', () => {
     submitStub.resetHistory();
   });
 
-  it('should set opened on the host and the overlay wrapper', () => {
-    expect(login.opened).to.be.true;
+  it('should reflect opened property to attribute', () => {
+    expect(overlay.hasAttribute('opened')).to.be.true;
+
+    overlay.opened = false;
+    expect(overlay.hasAttribute('opened')).to.be.false;
+  });
+
+  it('should set opened on the host overlay wrapper', () => {
     expect(overlay.opened).to.be.true;
   });
 
