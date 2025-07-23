@@ -158,7 +158,12 @@ class Dialog extends DialogSizeMixin(
         ?resizable="${this.resizable}"
         restore-focus-on-close
         focus-trap
-      ></vaadin-dialog-overlay>
+      >
+        <slot name="title" slot="title"></slot>
+        <slot name="header-content" slot="header-content"></slot>
+        <slot name="footer" slot="footer"></slot>
+        <slot></slot>
+      </vaadin-dialog-overlay>
     `;
   }
 }

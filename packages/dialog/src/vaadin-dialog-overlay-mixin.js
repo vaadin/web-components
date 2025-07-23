@@ -184,7 +184,7 @@ export const DialogOverlayMixin = (superClass) =>
           this.headerTitleElement.setAttribute('slot', 'title');
           this.headerTitleElement.classList.add('draggable');
         }
-        this.appendChild(this.headerTitleElement);
+        this.owner.appendChild(this.headerTitleElement);
         this.headerTitleElement.textContent = this.headerTitle;
       } else if (this.headerTitleElement) {
         this.headerTitleElement.remove();
@@ -201,7 +201,7 @@ export const DialogOverlayMixin = (superClass) =>
       if (this.headerContainer) {
         // If a new renderer has been set, make sure to reattach the container
         if (!this.headerContainer.parentElement) {
-          this.appendChild(this.headerContainer);
+          this.owner.appendChild(this.headerContainer);
         }
 
         if (this.headerRenderer) {
@@ -213,7 +213,7 @@ export const DialogOverlayMixin = (superClass) =>
       if (this.footerContainer) {
         // If a new renderer has been set, make sure to reattach the container
         if (!this.footerContainer.parentElement) {
-          this.appendChild(this.footerContainer);
+          this.owner.appendChild(this.footerContainer);
         }
 
         if (this.footerRenderer) {
