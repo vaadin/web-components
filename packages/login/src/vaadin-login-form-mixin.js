@@ -4,7 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { html, render } from 'lit';
-import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
+import { ifDefined } from 'lit/directives/if-defined.js';
 import { LoginMixin } from './vaadin-login-mixin.js';
 
 function isCheckbox(field) {
@@ -34,64 +34,20 @@ export const LoginFormMixin = (superClass) =>
       return this.querySelector('#vaadinLoginPassword');
     }
 
-    /** @protected */
-    firstUpdated() {
-      super.firstUpdated();
+    /**
+     * Override update to render slotted form and buttons
+     * into light DOM after rendering shadow DOM.
+     * @protected
+     */
+    update(props) {
+      super.update(props);
 
-      this.__formController = new SlotController(this, 'form', 'form', {
-        initializer: (form) => {
-          form.setAttribute('method', 'POST');
-          form.addEventListener('formdata', (e) => this._onFormData(e));
-          this.__form = form;
-        },
-      });
-
-      this.__submitController = new SlotController(this, 'submit', 'vaadin-button', {
-        initializer: (button) => {
-          button.setAttribute('theme', 'primary submit');
-          button.addEventListener('click', () => this.submit());
-          this.__submitButton = button;
-        },
-      });
-
-      this.__forgotController = new SlotController(this, 'forgot-password', 'vaadin-button', {
-        initializer: (button) => {
-          button.setAttribute('theme', 'tertiary small');
-          button.addEventListener('click', () => this._onForgotPasswordClick());
-          this.__forgotButton = button;
-        },
-      });
-
-      this.addController(this.__formController);
-      this.addController(this.__submitController);
-      this.addController(this.__forgotController);
+      this.__renderSlottedForm();
     }
 
     /** @protected */
     updated(props) {
       super.updated(props);
-
-      if (props.has('__effectiveI18n')) {
-        this.__renderForm();
-        this.__submitButton.textContent = this.__effectiveI18n.form.submit;
-        this.__forgotButton.textContent = this.__effectiveI18n.form.forgotPassword;
-      }
-
-      if (props.has('action')) {
-        if (this.action) {
-          this.__form.setAttribute('action', this.action);
-        } else {
-          this.__form.removeAttribute('action');
-        }
-      }
-
-      if (props.has('noForgotPassword')) {
-        this.__forgotButton.toggleAttribute('hidden', this.noForgotPassword);
-      }
-
-      if (props.has('disabled')) {
-        this.__submitButton.disabled = this.disabled;
-      }
 
       if (props.has('error') && this.error && !this._preventAutoEnable) {
         this.disabled = false;
@@ -109,42 +65,56 @@ export const LoginFormMixin = (superClass) =>
       }
     }
 
-    /** @private */
-    __renderForm() {
+    __renderSlottedForm() {
       render(
         html`
-          <input id="csrf" type="hidden" />
-          <vaadin-text-field
-            name="username"
-            .label="${this.__effectiveI18n.form.username}"
-            .errorMessage="${this.__effectiveI18n.errorMessage.username}"
-            id="vaadinLoginUsername"
-            required
-            @keydown="${this._handleInputKeydown}"
-            autocapitalize="none"
-            autocorrect="off"
-            spellcheck="false"
-            autocomplete="username"
-            manual-validation
-          >
-            <input type="text" slot="input" @keyup="${this._handleInputKeyup}" />
-          </vaadin-text-field>
+          <form method="POST" action="${ifDefined(this.action)}" @formdata="${this._onFormData}" slot="form">
+            <input id="csrf" type="hidden" />
+            <vaadin-text-field
+              name="username"
+              .label="${this.__effectiveI18n.form.username}"
+              .errorMessage="${this.__effectiveI18n.errorMessage.username}"
+              id="vaadinLoginUsername"
+              required
+              @keydown="${this._handleInputKeydown}"
+              autocapitalize="none"
+              autocorrect="off"
+              spellcheck="false"
+              autocomplete="username"
+              manual-validation
+            >
+              <input type="text" slot="input" @keyup="${this._handleInputKeyup}" />
+            </vaadin-text-field>
 
-          <vaadin-password-field
-            name="password"
-            .label="${this.__effectiveI18n.form.password}"
-            .errorMessage="${this.__effectiveI18n.errorMessage.password}"
-            id="vaadinLoginPassword"
-            required
-            @keydown="${this._handleInputKeydown}"
-            spellcheck="false"
-            autocomplete="current-password"
-            manual-validation
+            <vaadin-password-field
+              name="password"
+              .label="${this.__effectiveI18n.form.password}"
+              .errorMessage="${this.__effectiveI18n.errorMessage.password}"
+              id="vaadinLoginPassword"
+              required
+              @keydown="${this._handleInputKeydown}"
+              spellcheck="false"
+              autocomplete="current-password"
+              manual-validation
+            >
+              <input type="password" slot="input" @keyup="${this._handleInputKeyup}" />
+            </vaadin-password-field>
+          </form>
+
+          <vaadin-button slot="submit" theme="primary submit" @click="${this.submit}" .disabled="${this.disabled}">
+            ${this.__effectiveI18n.form.submit}
+          </vaadin-button>
+
+          <vaadin-button
+            slot="forgot-password"
+            theme="tertiary small"
+            @click="${this._onForgotPasswordClick}"
+            ?hidden="${this.noForgotPassword}"
           >
-            <input type="password" slot="input" @keyup="${this._handleInputKeyup}" />
-          </vaadin-password-field>
+            ${this.__effectiveI18n.form.forgotPassword}
+          </vaadin-button>
         `,
-        this.__form,
+        this,
         { host: this },
       );
     }
