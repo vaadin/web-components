@@ -15,8 +15,8 @@ export default function PopoverPage() {
   const [withBackdrop, setWithBackdrop] = useState(false);
   const [theme, setTheme] = useState('');
   const [useTooltip, setUseTooltip] = useState(false);
-  const [contentWidth, setContentWidth] = useState('');
-  const [contentHeight, setContentHeight] = useState('');
+  const [width, setWidth] = useState<string | null>(null);
+  const [height, setHeight] = useState<string | null>(null);
   const [content, setContent] = useState('This is the popover content');
   const [useRichContent, setUseRichContent] = useState(false);
 
@@ -50,8 +50,8 @@ export default function PopoverPage() {
             modal={modal}
             withBackdrop={withBackdrop}
             theme={theme}
-            contentWidth={contentWidth}
-            contentHeight={contentHeight}
+            width={width}
+            height={height}
             trigger={
               [
                 ...(triggerClick ? ['click'] : []),
@@ -182,20 +182,20 @@ export default function PopoverPage() {
           rich content
         </label>
         <label>
-          Content Width:
+          Width:
           <input
             type="text"
-            value={contentWidth}
-            onChange={(e) => setContentWidth(e.target.value)}
+            value={width || ''}
+            onChange={(e) => setWidth(e.target.value || null)}
             placeholder="e.g., 300px, 50%, etc."
           />
         </label>
         <label>
-          Content Height:
+          Height:
           <input
             type="text"
-            value={contentHeight}
-            onChange={(e) => setContentHeight(e.target.value)}
+            value={height || ''}
+            onChange={(e) => setHeight(e.target.value || null)}
             placeholder="e.g., 200px, auto, etc."
           />
         </label>

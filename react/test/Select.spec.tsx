@@ -32,9 +32,13 @@ describe('Select', () => {
 
     await user.click(valueButton);
 
-    const overlay = await findByQuerySelector('vaadin-select-overlay');
     await vi.waitFor(() => {
-      expect(overlay).to.have.text('FooBar');
+      const listBox = select.querySelector('vaadin-list-box, vaadin-select-list-box');
+      expect(listBox).to.exist;
+
+      const items = listBox!.querySelectorAll('vaadin-item, vaadin-select-item');
+      expect(items[0]).to.have.text('Foo');
+      expect(items[1]).to.have.text('Bar');
     });
   }
 
