@@ -45,39 +45,30 @@ class LoginFormWrapper extends ThemableMixin(PolylitMixin(LumoInjectionMixin(Lit
       i18n: {
         type: Object,
       },
-
-      /**
-       * Used to customize the `aria-level` attribute on the heading element.
-       */
-      headingLevel: {
-        type: Number,
-      },
     };
   }
 
   /** @protected */
   render() {
     return html`
-      <section part="form">
-        <div part="form-title" role="heading" aria-level="${this.headingLevel}">${this.i18n.form.title}</div>
-        <div part="error-message" ?hidden="${!this.error}">
-          <strong part="error-message-title">${this.i18n.errorMessage.title}</strong>
-          <div part="error-message-description">${this.i18n.errorMessage.message}</div>
-        </div>
+      <slot name="form-title"></slot>
+      <div part="error-message" ?hidden="${!this.error}">
+        <strong part="error-message-title">${this.i18n.errorMessage.title}</strong>
+        <div part="error-message-description">${this.i18n.errorMessage.message}</div>
+      </div>
 
-        <slot name="form"></slot>
+      <slot name="form"></slot>
 
-        <slot name="custom-form-area"></slot>
+      <slot name="custom-form-area"></slot>
 
-        <slot name="submit"></slot>
+      <slot name="submit"></slot>
 
-        <slot name="forgot-password"></slot>
+      <slot name="forgot-password"></slot>
 
-        <div part="footer">
-          <slot name="footer"></slot>
-          <div>${this.i18n.additionalInformation}</div>
-        </div>
-      </section>
+      <div part="footer">
+        <slot name="footer"></slot>
+        <div>${this.i18n.additionalInformation}</div>
+      </div>
     `;
   }
 }
