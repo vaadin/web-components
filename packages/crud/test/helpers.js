@@ -49,3 +49,21 @@ export const getBodyCellContent = (grid, row, col) => {
 export function getVisibleRows(container) {
   return getRows(container).filter((row) => isRowVisible(row));
 }
+
+/**
+ * Get the inline editor panel used with bottom / aside editor positions.
+ * @param crud
+ * @returns {Element}
+ */
+export function getInlineEditor(crud) {
+  return crud.shadowRoot.querySelector('#editor');
+}
+
+/**
+ * Get the editor dialog used with the default editor position or in fullscreen mode.
+ * @param crud
+ * @returns {Element}
+ */
+export function getDialogEditor(crud) {
+  return crud.shadowRoot.querySelector('#dialog');
+}

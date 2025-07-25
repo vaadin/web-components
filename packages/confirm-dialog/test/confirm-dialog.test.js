@@ -1,5 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
-import { aTimeout, esc, fixtureSync, listenOnce, nextFrame, nextRender, oneEvent } from '@vaadin/testing-helpers';
+import { sendKeys } from '@vaadin/test-runner-commands';
+import { aTimeout, fixtureSync, listenOnce, nextFrame, nextRender, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './not-animated-styles.js';
 import '../src/vaadin-confirm-dialog.js';
@@ -512,8 +513,8 @@ describe('vaadin-confirm-dialog', () => {
       confirm.addEventListener('cancel', spy);
     });
 
-    it('should close but not cancel dialog by default', () => {
-      esc(document.body);
+    it('should close but not cancel dialog by default', async () => {
+      await sendKeys({ press: 'Escape' });
       expect(spy.called).to.be.true;
       expect(confirm.opened).to.be.false;
     });
@@ -521,7 +522,7 @@ describe('vaadin-confirm-dialog', () => {
     it('should not close and not cancel dialog with no-close-on-esc', async () => {
       confirm.noCloseOnEsc = true;
       await nextFrame();
-      esc(document.body);
+      await sendKeys({ press: 'Escape' });
       expect(spy.called).to.be.false;
       expect(confirm.opened).to.be.true;
     });

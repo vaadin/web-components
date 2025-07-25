@@ -1,6 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
 import { esc, fixtureSync, nextRender, nextUpdate, outsideClick } from '@vaadin/testing-helpers';
-import sinon from 'sinon';
 import './not-animated-styles.js';
 import { Popover } from '../src/vaadin-popover.js';
 import { mouseenter, mouseleave } from './helpers.js';
@@ -166,24 +165,6 @@ describe('nested popover', () => {
       await nextUpdate(popover);
 
       expect(popover.opened).to.be.true;
-    });
-  });
-
-  describe('bring to front', () => {
-    beforeEach(async () => {
-      // Open the first popover
-      target.click();
-      await nextRender();
-
-      // Open the second popover
-      secondTarget.click();
-      await nextRender();
-    });
-
-    it('should bring to front nested overlay on parent overlay bringToFront()', () => {
-      const spy = sinon.spy(secondPopover._overlayElement, 'bringToFront');
-      popover._overlayElement.bringToFront();
-      expect(spy).to.be.calledOnce;
     });
   });
 });

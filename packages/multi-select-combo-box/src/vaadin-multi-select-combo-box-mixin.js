@@ -29,7 +29,6 @@ export const MultiSelectComboBoxMixin = (superClass) =>
           type: Boolean,
           value: false,
           reflectToAttribute: true,
-          observer: '_autoExpandHorizontallyChanged',
           sync: true,
         },
 
@@ -43,7 +42,6 @@ export const MultiSelectComboBoxMixin = (superClass) =>
           type: Boolean,
           value: false,
           reflectToAttribute: true,
-          observer: '_autoExpandVerticallyChanged',
           sync: true,
         },
 
@@ -63,7 +61,6 @@ export const MultiSelectComboBoxMixin = (superClass) =>
         clearButtonVisible: {
           type: Boolean,
           reflectToAttribute: true,
-          observer: '_clearButtonVisibleChanged',
           value: false,
           sync: true,
         },
@@ -85,7 +82,6 @@ export const MultiSelectComboBoxMixin = (superClass) =>
          */
         itemClassNameGenerator: {
           type: Object,
-          observer: '__itemClassNameGeneratorChanged',
           sync: true,
         },
 
@@ -190,7 +186,6 @@ export const MultiSelectComboBoxMixin = (superClass) =>
         readonly: {
           type: Boolean,
           value: false,
-          observer: '_readonlyChanged',
           reflectToAttribute: true,
           sync: true,
         },
@@ -428,8 +423,27 @@ export const MultiSelectComboBoxMixin = (superClass) =>
         },
       });
       this.addController(this._overflowController);
+    }
 
-      this.__updateChips();
+    /** @protected */
+    updated(props) {
+      super.updated(props);
+
+      const chipProps = [
+        'autoExpandHorizontally',
+        'autoExpandVertically',
+        'disabled',
+        'readonly',
+        'clearButtonVisible',
+        'itemClassNameGenerator',
+      ];
+      if (chipProps.some((prop) => props.has(prop))) {
+        this.__updateChips();
+      }
+
+      if (props.has('readonly') && this.dataProvider) {
+        this.clearCache();
+      }
     }
 
     /**
@@ -467,19 +481,6 @@ export const MultiSelectComboBoxMixin = (superClass) =>
     requestContentUpdate() {
       if (this.$ && this.$.comboBox) {
         this.$.comboBox.requestContentUpdate();
-      }
-    }
-
-    /**
-     * Override method inherited from `DisabledMixin` to forward disabled to chips.
-     * @protected
-     * @override
-     */
-    _disabledChanged(disabled, oldDisabled) {
-      super._disabledChanged(disabled, oldDisabled);
-
-      if (disabled || oldDisabled) {
-        this.__updateChips();
       }
     }
 
@@ -541,31 +542,6 @@ export const MultiSelectComboBoxMixin = (superClass) =>
       super._delegateAttribute(name, value);
     }
 
-    /** @private */
-    _autoExpandHorizontallyChanged(autoExpand, oldAutoExpand) {
-      if (autoExpand || oldAutoExpand) {
-        this.__updateChips();
-      }
-    }
-
-    /** @private */
-    _autoExpandVerticallyChanged(autoExpand, oldAutoExpand) {
-      if (autoExpand || oldAutoExpand) {
-        this.__updateChips();
-      }
-    }
-
-    /**
-     * Setting clear button visible reduces total space available
-     * for rendering chips, and making it hidden increases it.
-     * @private
-     */
-    _clearButtonVisibleChanged(visible, oldVisible) {
-      if (visible || oldVisible) {
-        this.__updateChips();
-      }
-    }
-
     /**
      * Implement two-way binding for the `filteredItems` property
      * that can be set on the internal combo-box element.
@@ -577,24 +553,6 @@ export const MultiSelectComboBoxMixin = (superClass) =>
       const { value } = event.detail;
       if (Array.isArray(value) || value == null) {
         this.filteredItems = value;
-      }
-    }
-
-    /** @private */
-    _readonlyChanged(readonly, oldReadonly) {
-      if (readonly || oldReadonly) {
-        this.__updateChips();
-      }
-
-      if (this.dataProvider) {
-        this.clearCache();
-      }
-    }
-
-    /** @private */
-    __itemClassNameGeneratorChanged(generator, oldGenerator) {
-      if (generator || oldGenerator) {
-        this.__updateChips();
       }
     }
 

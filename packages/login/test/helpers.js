@@ -1,5 +1,5 @@
 export function fillUsernameAndPassword(login) {
-  const { vaadinLoginUsername, vaadinLoginPassword } = login.$;
+  const { _userNameField: vaadinLoginUsername, _passwordField: vaadinLoginPassword } = login;
   const usernameValue = 'username';
   const passwordValue = 'password';
 

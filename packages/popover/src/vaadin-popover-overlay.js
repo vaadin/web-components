@@ -43,6 +43,38 @@ class PopoverOverlay extends PopoverOverlayMixin(
       </div>
     `;
   }
+
+  /**
+   * @override
+   * @protected
+   */
+  get _contentRoot() {
+    return this.owner;
+  }
+
+  /**
+   * @override
+   * @protected
+   */
+  get _modalRoot() {
+    return this.owner;
+  }
+
+  /**
+   * @protected
+   * @override
+   */
+  _attachOverlay() {
+    this.showPopover();
+  }
+
+  /**
+   * @protected
+   * @override
+   */
+  _detachOverlay() {
+    this.hidePopover();
+  }
 }
 
 defineCustomElement(PopoverOverlay);

@@ -1,24 +1,14 @@
 import { expect } from '@vaadin/chai-plugins';
 import { setViewport } from '@vaadin/test-runner-commands';
-import { aTimeout, fixtureSync, nextRender } from '@vaadin/testing-helpers';
+import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import '../src/vaadin-crud.js';
-import { flushGrid } from './helpers.js';
+import { flushGrid, getDialogEditor, getInlineEditor } from './helpers.js';
 
 describe('crud editor', () => {
   let crud;
 
   before(async () => {
     await setViewport({ width: 1024, height: 768 });
-  });
-
-  afterEach(async () => {
-    // Wait until the crud dialog overlay is closed
-    let overlay;
-    while ((overlay = document.querySelector('body > vaadin-crud-dialog-overlay'))) {
-      // Press esc to close the dialog
-      overlay.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
-      await aTimeout(1);
-    }
   });
 
   describe('header', () => {
@@ -52,10 +42,100 @@ describe('crud editor', () => {
     });
   });
 
+  describe('editor mode', () => {
+    beforeEach(async () => {
+      crud = fixtureSync('<vaadin-crud style="width: 300px;"></vaadin-crud>');
+      crud.items = [{ foo: 'bar' }, { foo: 'baz' }];
+      await nextRender();
+      flushGrid(crud._grid);
+    });
+
+    function verifyDialogMode() {
+      const inlineEditor = getInlineEditor(crud);
+      const dialogEditor = getDialogEditor(crud);
+
+      expect(inlineEditor).to.be.null;
+      expect(dialogEditor).to.not.be.null;
+      expect(dialogEditor.querySelector('slot[slot="header"][name="header"]')).to.not.be.null;
+      expect(dialogEditor.querySelector('slot[slot="form"][name="form"]')).to.not.be.null;
+      expect(dialogEditor.querySelector('slot[slot="save-button"][name="save-button"]')).to.not.be.null;
+      expect(dialogEditor.querySelector('slot[slot="cancel-button"][name="cancel-button"]')).to.not.be.null;
+      expect(dialogEditor.querySelector('slot[slot="delete-button"][name="delete-button"]')).to.not.be.null;
+    }
+
+    function verifyInlineMode() {
+      const inlineEditor = getInlineEditor(crud);
+      const dialogEditor = getDialogEditor(crud);
+
+      expect(dialogEditor).to.be.null;
+      expect(inlineEditor).to.not.be.null;
+      expect(inlineEditor.querySelector('slot[name="header"]')).to.not.be.null;
+      expect(inlineEditor.querySelector('slot[name="form"]')).to.not.be.null;
+      expect(inlineEditor.querySelector('slot[name="save-button"]')).to.not.be.null;
+      expect(inlineEditor.querySelector('slot[name="cancel-button"]')).to.not.be.null;
+      expect(inlineEditor.querySelector('slot[name="delete-button"]')).to.not.be.null;
+    }
+
+    it('should use dialog mode by default', async () => {
+      crud._newButton.click();
+      await nextRender();
+
+      verifyDialogMode();
+    });
+
+    ['aside', 'bottom'].forEach((position) => {
+      it(`should use inline mode when editorPosition is set to ${position}`, async () => {
+        crud.editorPosition = position;
+        crud._newButton.click();
+        await nextRender();
+
+        verifyInlineMode();
+      });
+    });
+
+    ['', 'aside', 'bottom'].forEach((position) => {
+      it(`should use dialog mode on mobile when editorPosition is set to ${position || 'default'}`, async () => {
+        crud.editorPosition = position;
+        crud._fullscreen = true;
+        crud._newButton.click();
+        await nextRender();
+
+        verifyDialogMode();
+      });
+    });
+
+    it('should switch to inline mode while editing an item', async () => {
+      crud._newButton.click();
+      await nextRender();
+
+      verifyDialogMode();
+      expect(crud.editorOpened).to.be.true;
+
+      crud.editorPosition = 'aside';
+      await nextRender();
+
+      verifyInlineMode();
+      expect(crud.editorOpened).to.be.true;
+    });
+
+    it('should switch to editor mode while editing an item', async () => {
+      crud.editorPosition = 'aside';
+      crud._newButton.click();
+      await nextRender();
+
+      verifyInlineMode();
+      expect(crud.editorOpened).to.be.true;
+
+      crud.editorPosition = '';
+      await nextRender();
+
+      verifyDialogMode();
+      expect(crud.editorOpened).to.be.true;
+    });
+  });
+
   ['default', 'custom'].forEach((type) => {
     describe(`${type} form`, () => {
-      let dialog, form, btnCancel, overlay;
-
       beforeEach(async () => {
         if (type === 'default') {
           crud = fixtureSync('<vaadin-crud style="width: 300px;"></vaadin-crud>');
@@ -74,81 +154,6 @@ describe('crud editor', () => {
 
         crud.items = [{ foo: 'bar' }, { foo: 'baz' }];
         await nextRender();
-        dialog = crud.$.dialog;
-        overlay = dialog.$.overlay;
-        form = crud.querySelector('[slot=form]');
-        btnCancel = crud.querySelector(':scope > [slot="cancel-button"]');
-      });
-
-      it(`should move ${type} form to dialog content with default editorPosition`, async () => {
-        crud._grid.activeItem = crud.items[0];
-        await nextRender();
-        expect(form.parentElement).to.equal(overlay);
-      });
-
-      it(`should move ${type} form to crud after dialog closing with default editorPosition`, async () => {
-        crud._grid.activeItem = crud.items[0];
-        await nextRender();
-        btnCancel.click();
-        expect(form.parentElement).to.equal(crud);
-      });
-
-      it(`should move ${type} form to crud when editorPosition set to bottom`, async () => {
-        crud.editorPosition = 'bottom';
-        crud._grid.activeItem = crud.items[0];
-        await nextRender();
-        expect(form.parentElement).to.equal(crud);
-      });
-
-      it(`should move ${type} form to crud when editorPosition set to aside`, async () => {
-        crud.editorPosition = 'aside';
-        crud._grid.activeItem = crud.items[0];
-        await nextRender();
-        expect(form.parentElement).to.equal(crud);
-      });
-
-      it(`should move ${type} form when editorPosition changes from default to bottom`, async () => {
-        crud._grid.activeItem = crud.items[0];
-        await nextRender();
-        btnCancel.click();
-
-        crud.editorPosition = 'bottom';
-        await nextRender();
-
-        crud._grid.activeItem = crud.items[1];
-        await nextRender();
-        expect(form.parentElement).to.equal(crud);
-      });
-
-      it(`should move ${type} form when editorPosition changes from bottom to default`, async () => {
-        crud.editorPosition = 'bottom';
-        await nextRender();
-
-        crud._grid.activeItem = crud.items[0];
-        await nextRender();
-        btnCancel.click();
-
-        crud.editorPosition = '';
-        await nextRender();
-
-        crud._grid.activeItem = crud.items[1];
-        await nextRender();
-        expect(form.parentElement).to.equal(overlay);
-      });
-
-      it('should support replacing the form when the dialog is open', async () => {
-        const newForm = fixtureSync(`
-          <vaadin-form-layout slot="form">
-            <vaadin-text-field path="foo" required></vaadin-text-field>
-          </vaadin-form-layout>
-        `);
-
-        crud._grid.activeItem = crud.items[0];
-        crud.appendChild(newForm);
-        await nextRender();
-
-        expect(form.parentElement).to.be.null;
-        expect(newForm.parentElement).to.equal(overlay);
       });
 
       it('should not cover the editor content with focus ring element', async () => {

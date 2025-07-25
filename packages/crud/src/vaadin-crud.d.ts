@@ -132,11 +132,26 @@ export * from './vaadin-crud-mixin.js';
  *
  * ### Styling
  *
- * The following shadow DOM parts are available for styling:
+ * The following shadow DOM parts are available for styling when the editor is rendered next to, or below, the grid:
  *
  * Part name | Description
  * ----------------|----------------
- * `toolbar` | Toolbar container at the bottom. By default it contains the the `new` button
+ * `toolbar`  | Toolbar container at the bottom of the grid. By default, it contains the `new` button
+ * `editor`   | The editor container
+ * `scroller` | The wrapper for the header and the form
+ * `header`   | The header of the editor
+ * `footer`   | The footer of the editor
+ *
+ * The following shadow DOM parts are available for styling when the editor renders as a dialog:
+ *
+ * Part name | Description
+ * ----------------|----------------
+ * `toolbar`  | Toolbar container at the bottom of the grid. By default, it contains the `new` button
+ * `overlay`  | The dialog overlay
+ * `backdrop` | The dialog backdrop
+ * `header`   | The header of the dialog
+ * `footer`   | The footer of the dialog
+ * `content`  | The wrapper for the form
  *
  * The following custom properties are available:
  *

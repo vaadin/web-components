@@ -7,6 +7,10 @@ import '@vaadin/component-base/src/style-props.js';
 import { css } from 'lit';
 
 export const tooltipOverlayStyles = css`
+  :host {
+    --_vaadin-tooltip-default-offset: 4px;
+  }
+
   [part='overlay'] {
     max-width: var(--vaadin-tooltip-max-width, 40ch);
     padding: var(--vaadin-tooltip-padding, var(--vaadin-padding-container));
@@ -28,22 +32,22 @@ export const tooltipOverlayStyles = css`
 
   :host([position^='top'][top-aligned]) [part='overlay'],
   :host([position^='bottom'][top-aligned]) [part='overlay'] {
-    margin-top: var(--vaadin-tooltip-offset-top, 4px);
+    margin-top: var(--vaadin-tooltip-offset-top, var(--_vaadin-tooltip-default-offset));
   }
 
   :host([position^='top'][bottom-aligned]) [part='overlay'],
   :host([position^='bottom'][bottom-aligned]) [part='overlay'] {
-    margin-bottom: var(--vaadin-tooltip-offset-bottom, 4px);
+    margin-bottom: var(--vaadin-tooltip-offset-bottom, var(--_vaadin-tooltip-default-offset));
   }
 
   :host([position^='start'][start-aligned]) [part='overlay'],
   :host([position^='end'][start-aligned]) [part='overlay'] {
-    margin-inline-start: var(--vaadin-tooltip-offset-start, 4px);
+    margin-inline-start: var(--vaadin-tooltip-offset-start, var(--_vaadin-tooltip-default-offset));
   }
 
   :host([position^='start'][end-aligned]) [part='overlay'],
   :host([position^='end'][end-aligned]) [part='overlay'] {
-    margin-inline-end: var(--vaadin-tooltip-offset-end, 4px);
+    margin-inline-end: var(--vaadin-tooltip-offset-end, var(--_vaadin-tooltip-default-offset));
   }
 
   @media (forced-colors: active) {

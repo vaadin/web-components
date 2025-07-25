@@ -34,15 +34,6 @@ class TooltipOverlay extends PopoverOverlayMixin(
     return [overlayStyles, tooltipOverlayStyles];
   }
 
-  /**
-   * Tag name prefix used by custom properties.
-   * @protected
-   * @return {string}
-   */
-  get _tagNamePrefix() {
-    return 'vaadin-tooltip';
-  }
-
   /** @protected */
   render() {
     return html`

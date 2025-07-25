@@ -15,7 +15,6 @@
       import '@vaadin/radio-group';
 
       const login = document.querySelector('vaadin-login-form');
-      const wrapper = login.querySelector('vaadin-login-form-wrapper');
 
       [
         {
@@ -39,9 +38,9 @@
           if (e.detail.value) {
             const elem = elementFactory();
             elem.slot = slot;
-            wrapper.appendChild(elem);
+            login.appendChild(elem);
           } else {
-            wrapper.querySelector(`[slot=${slot}]`).remove();
+            login.querySelector(`[slot=${slot}]`).remove();
           }
         });
       });

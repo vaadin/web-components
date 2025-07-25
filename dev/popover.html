@@ -9,11 +9,9 @@
     <script type="module" src="./common.js"></script>
 
     <script type="module">
-      import '@vaadin/button';
-      import '@vaadin/horizontal-layout';
+      import '@vaadin/checkbox-group';
       import '@vaadin/popover';
       import '@vaadin/radio-group';
-      import '@vaadin/text-field';
     </script>
   </head>
 
@@ -21,20 +19,13 @@
     <style>
       #wrapper {
         width: 100%;
+        min-width: 350px;
         height: 350px;
         display: flex;
         justify-content: center;
         align-items: center;
         margin: 1rem;
-      }
-
-      #target {
-        width: 150px;
-        height: 150px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        border: solid 1px #e2e2e2;
+        gap: 1rem;
       }
     </style>
 
@@ -53,9 +44,19 @@
       <vaadin-radio-button value="end-bottom" label="End Bottom"></vaadin-radio-button>
     </vaadin-radio-group>
 
+    <vaadin-checkbox-group id="triggerGroup" label="Trigger" theme="horizontal">
+      <vaadin-checkbox value="click" label="Click"></vaadin-checkbox>
+      <vaadin-checkbox value="focus" label="Focus"></vaadin-checkbox>
+      <vaadin-checkbox value="hover" label="Hover"></vaadin-checkbox>
+    </vaadin-checkbox-group>
+
     <div id="wrapper">
-      <div id="target">Save</div>
-      <vaadin-popover for="target" theme="arrow"></vaadin-popover>
+      <input placeholder="Before" />
+
+      <input id="target" placeholder="Target" />
+      <vaadin-popover for="target" theme="arrow" id="popover"></vaadin-popover>
+
+      <input placeholder="After" />
     </div>
 
     <script type="module">
@@ -66,24 +67,30 @@
         popover.position = e.target.value;
       });
 
+      const checkboxGroup = document.querySelector('#triggerGroup');
+      checkboxGroup.value = ['click'];
+
+      checkboxGroup.addEventListener('change', (e) => {
+        popover.trigger = checkboxGroup.value;
+      });
+
       popover.renderer = (root) => {
         if (root.firstChild) {
           return;
         }
 
-        const layout = document.createElement('vaadin-horizontal-layout');
-        layout.setAttribute('theme', 'spacing');
-        layout.style.alignItems = 'end';
+        const input = document.createElement('input');
 
-        const field = document.createElement('vaadin-text-field');
-        field.label = 'Discount code';
+        const nested = document.createElement('vaadin-popover');
+        nested.setAttribute('theme', 'arrow');
+        nested.trigger = ['click'];
+        nested.target = input;
 
-        const button = document.createElement('vaadin-button');
-        button.textContent = 'Apply';
+        nested.renderer = (root2) => {
+          root2.innerHTML = '<input placeholder="Popover 2" />';
+        };
 
-        layout.append(field, button);
-
-        root.append(layout);
+        root.append(input, nested);
       };
     </script>
   </body>

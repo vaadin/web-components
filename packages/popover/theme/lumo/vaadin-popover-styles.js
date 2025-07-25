@@ -7,12 +7,8 @@ import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themab
 
 const popoverOverlay = css`
   :host {
-    --vaadin-popover-offset-top: var(--_vaadin-popover-default-offset);
-    --vaadin-popover-offset-bottom: var(--_vaadin-popover-default-offset);
-    --vaadin-popover-offset-start: var(--_vaadin-popover-default-offset);
-    --vaadin-popover-offset-end: var(--_vaadin-popover-default-offset);
     --vaadin-popover-arrow-size: 0.5rem;
-    --_vaadin-popover-default-offset: var(--lumo-space-xs);
+    --_default-offset: var(--lumo-space-xs);
   }
 
   [part='overlay'] {
@@ -28,7 +24,7 @@ const popoverOverlay = css`
   }
 
   :host([theme~='arrow']) {
-    --_vaadin-popover-default-offset: calc(var(--lumo-space-s) + var(--vaadin-popover-arrow-size) / 2);
+    --_default-offset: calc(var(--lumo-space-s) + var(--vaadin-popover-arrow-size) / 2);
   }
 
   /* top / bottom position */

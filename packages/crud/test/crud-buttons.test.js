@@ -3,7 +3,7 @@ import { setViewport } from '@vaadin/test-runner-commands';
 import { aTimeout, change, click, fire, fixtureSync, listenOnce, nextRender, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-crud.js';
-import { flushGrid } from './helpers.js';
+import { flushGrid, getDialogEditor } from './helpers.js';
 
 describe('crud buttons', () => {
   let crud, saveButton, cancelButton, deleteButton;
@@ -158,7 +158,7 @@ describe('crud buttons', () => {
         let editorDialog;
 
         beforeEach(() => {
-          editorDialog = crud.$.dialog;
+          editorDialog = getDialogEditor(crud);
         });
 
         afterEach(async () => {
@@ -479,6 +479,12 @@ describe('crud buttons', () => {
       });
 
       describe('events', () => {
+        let editorDialog;
+
+        beforeEach(() => {
+          editorDialog = getDialogEditor(crud);
+        });
+
         afterEach(async () => {
           crud.editorOpened = false;
           await nextRender();
@@ -534,7 +540,7 @@ describe('crud buttons', () => {
             edit(crud.items[0]);
             expect(crud.editedItem).to.be.equal(crud.items[0]);
             await nextRender();
-            expect(crud.$.dialog.opened).to.be.true;
+            expect(editorDialog.opened).to.be.true;
             expect(crud.editorOpened).to.be.true;
           });
 
@@ -543,7 +549,7 @@ describe('crud buttons', () => {
             edit(crud.items[0]);
             expect(crud.editedItem).not.to.be.ok;
             await nextRender();
-            expect(crud.$.dialog.opened).to.be.true;
+            expect(editorDialog.opened).to.be.true;
             expect(crud.editorOpened).to.be.true;
           });
         });
@@ -638,7 +644,7 @@ describe('crud buttons', () => {
             cancelButton.click();
             await nextRender();
 
-            expect(crud.$.dialog.opened).not.to.be.ok;
+            expect(editorDialog.opened).not.to.be.ok;
             expect(crud.editorOpened).not.to.be.ok;
           });
 
@@ -956,14 +962,6 @@ describe('crud buttons', () => {
 
     it('should not create default delete-button', () => {
       expect(crud.querySelector('[slot="delete-button"]')).to.be.null;
-    });
-
-    it('should teleport form and header when no default buttons set', async () => {
-      crud.editedItem = { foo: 'baz' };
-      await nextRender();
-      const overlay = crud.$.dialog.$.overlay;
-      expect(crud._form.parentElement).to.equal(overlay);
-      expect(crud._headerNode.parentElement).to.equal(overlay);
     });
   });
 
