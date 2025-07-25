@@ -127,4 +127,10 @@ export const uploadFileStyles = css`
   :host([error]) ::slotted([slot='progress']) {
     display: none;
   }
+
+  @media (forced-colors: active) {
+    :is([part$='icon'], [part$='button'])::before {
+      background: CanvasText;
+    }
+  }
 `;
