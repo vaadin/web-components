@@ -137,11 +137,6 @@ import { ChartMixin } from './vaadin-chart-mixin.js';
  *
  * For example `--vaadin-charts-color-0` sets the color of the first series on a chart.
  *
- * ### Validating your License
- *
- * When using Vaadin Charts in a development environment, you will see a pop-up that asks you
- * to validate your license by signing in to vaadin.com.
- *
  * @fires {CustomEvent} chart-add-series - Fired when a new series is added.
  * @fires {CustomEvent} chart-after-export - Fired after a chart is exported.
  * @fires {CustomEvent} chart-after-print - Fired after a chart is printed.
