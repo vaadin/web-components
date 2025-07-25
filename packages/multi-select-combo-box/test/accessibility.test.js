@@ -2,6 +2,7 @@ import { expect } from '@vaadin/chai-plugins';
 import { sendKeys } from '@vaadin/test-runner-commands';
 import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
+import './not-animated-styles.js';
 import '../src/vaadin-multi-select-combo-box.js';
 
 describe('accessibility', () => {
@@ -97,12 +98,12 @@ describe('accessibility', () => {
     describe('items', () => {
       beforeEach(async () => {
         comboBox = fixtureSync(`<vaadin-multi-select-combo-box></vaadin-multi-select-combo-box>`);
-        await nextRender();
         comboBox.items = ['Apple', 'Banana', 'Lemon', 'Orange'];
         comboBox.selectedItems = ['Apple', 'Lemon'];
-        comboBox.inputElement.click();
-        scroller = comboBox.$.comboBox._scroller;
-        items = document.querySelectorAll('vaadin-multi-select-combo-box-item');
+        await nextRender();
+        comboBox.open();
+        scroller = comboBox._scroller;
+        items = scroller.querySelectorAll('vaadin-multi-select-combo-box-item');
       });
 
       it('should set aria-multiselectable attribute on the scroller', () => {
@@ -134,7 +135,7 @@ describe('accessibility', () => {
     const lemon = { id: 3, name: 'Lemon' };
     const orange = { id: 4, name: 'Orange' };
     const fruits = [apple, banana, lemon, orange];
-    let clock, region;
+    let clock, region, scroller;
 
     before(() => {
       region = document.querySelector('[aria-live]');
@@ -147,6 +148,7 @@ describe('accessibility', () => {
       comboBox.items = fruits;
       await nextRender();
       inputElement = comboBox.inputElement;
+      scroller = comboBox._scroller;
       clock = sinon.useFakeTimers({ shouldClearNativeTimers: true });
     });
 
@@ -157,7 +159,7 @@ describe('accessibility', () => {
     it('should announce when selecting an item', () => {
       inputElement.click();
 
-      const item = document.querySelector('vaadin-multi-select-combo-box-item');
+      const item = scroller.querySelector('vaadin-multi-select-combo-box-item');
       item.click();
 
       clock.tick(150);
@@ -169,7 +171,7 @@ describe('accessibility', () => {
       comboBox.selectedItems = [apple, banana, lemon];
       inputElement.click();
 
-      const item = document.querySelector('vaadin-multi-select-combo-box-item');
+      const item = scroller.querySelector('vaadin-multi-select-combo-box-item');
       item.click();
 
       clock.tick(150);
