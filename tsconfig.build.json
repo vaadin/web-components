@@ -6,7 +6,8 @@
     "lib": ["esnext", "es2018", "dom"],
     "declaration": true,
     "strict": true,
-    "skipDefaultLibCheck": true
+    "skipDefaultLibCheck": true,
+    "skipLibCheck": true
   },
   "include": ["packages/**/theme"]
 }
