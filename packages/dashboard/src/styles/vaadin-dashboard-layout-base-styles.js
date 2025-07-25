@@ -30,17 +30,17 @@ export const dashboardLayoutStyles = css`
     box-sizing: border-box;
 
     /* Padding around dashboard edges */
-    --_default-padding: 1rem;
+    --_default-padding: 1em;
     --_padding: max(0px, var(--vaadin-dashboard-padding, var(--_default-padding)));
     padding: var(--_padding);
 
     /* Gap between widgets */
-    --_default-gap: 1rem;
+    --_default-gap: 1em;
     --_gap: max(0px, var(--vaadin-dashboard-gap, var(--_default-gap)));
     gap: var(--_gap);
 
     /* Default min and max column widths */
-    --_default-col-min-width: 25rem;
+    --_default-col-min-width: 25em;
     --_default-col-max-width: 1fr;
 
     /* Effective min and max column widths */
@@ -54,7 +54,7 @@ export const dashboardLayoutStyles = css`
     --_effective-col-count: min(var(--_col-count), var(--_col-max-count));
 
     /* Default row min height */
-    --_default-row-min-height: 12rem;
+    --_default-row-min-height: 12em;
     /* Effective row min height */
     --_row-min-height: var(--vaadin-dashboard-row-min-height, var(--_default-row-min-height));
     /* Effective row height */

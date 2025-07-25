@@ -13,7 +13,7 @@ import { buttonStyles } from '@vaadin/button/src/styles/vaadin-button-core-style
 
 const dashboardButton = css`
   :host {
-    min-width: 1rem;
+    min-width: 1em;
   }
 
   :host([theme~='tertiary']) {
