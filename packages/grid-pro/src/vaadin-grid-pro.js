@@ -11,6 +11,7 @@
 import { SlotStylesMixin } from '@vaadin/component-base';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { Grid } from '@vaadin/grid/src/vaadin-grid.js';
+import { gridProStyles } from './styles/vaadin-grid-pro-core-styles.js';
 import { InlineEditingMixin } from './vaadin-grid-pro-inline-editing-mixin.js';
 
 /**
@@ -59,13 +60,18 @@ class GridPro extends SlotStylesMixin(InlineEditingMixin(Grid)) {
     return 'vaadin-grid-pro';
   }
 
+  static get styles() {
+    return gridProStyles;
+  }
+
   get slotStyles() {
     const tag = this.localName;
 
     return [
       `
       ${tag} [theme="grid-pro-editor"] {
-        --vaadin-input-field-border-radius: 0;
+        --vaadin-input-field-border-radius: 0px;
+        --vaadin-input-field-border-width: 0px;
         inset: 0;
         position: absolute;
       }
