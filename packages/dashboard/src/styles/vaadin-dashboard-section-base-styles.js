@@ -19,7 +19,7 @@ const sectionStyles = css`
     grid-template-columns: subgrid;
     --_section-column: 1 / calc(var(--_effective-col-count) + 1);
     grid-column: var(--_section-column) !important;
-    gap: var(--_gap, 1rem);
+    gap: var(--_gap);
     /* Dashboard section header height */
     --_section-header-height: minmax(0, auto);
     grid-template-rows: var(--_section-header-height) repeat(auto-fill, var(--_row-height));
