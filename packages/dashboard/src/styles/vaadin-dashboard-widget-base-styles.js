@@ -92,7 +92,15 @@ const widgetStyles = css`
 
   /* Widget parts */
   header {
-    padding: var(--vaadin-padding-container);
+    padding: var(--vaadin-dashboard-widget-header-padding, var(--vaadin-padding-container));
+  }
+
+  :host([editable]) header {
+    padding: var(--vaadin-dashboard-widget-header-padding, var(--vaadin-padding));
+  }
+
+  header:has([part~='title'][hidden]) {
+    padding: 0;
   }
 `;
 
