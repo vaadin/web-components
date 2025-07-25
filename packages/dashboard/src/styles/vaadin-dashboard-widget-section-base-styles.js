@@ -72,8 +72,8 @@ export const dashboardWidgetAndSectionStyles = css`
   vaadin-dashboard-button .icon::before {
     display: block;
     content: '';
-    height: var(--vaadin-icon-size, 24px);
-    width: var(--vaadin-icon-size, 24px);
+    height: var(--vaadin-icon-size, 1lh);
+    width: var(--vaadin-icon-size, 1lh);
     background: currentColor;
     mask-image: var(--icon);
   }
