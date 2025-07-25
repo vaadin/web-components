@@ -21,8 +21,7 @@ const sectionStyles = css`
     grid-column: var(--_section-column) !important;
     gap: var(--_gap);
     /* Dashboard section header height */
-    --_section-header-height: minmax(0, auto);
-    grid-template-rows: var(--_section-header-height) repeat(auto-fill, var(--_row-height));
+    grid-template-rows: minmax(0, auto) repeat(auto-fill, var(--_row-height));
     grid-auto-rows: var(--_row-height);
     border-radius: var(--vaadin-radius-m);
     --_section-outline-offset: calc(min(var(--_gap), var(--_padding)) / 3);
