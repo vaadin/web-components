@@ -23,4 +23,10 @@ export const uploadIconStyles = css`
   :host([hidden]) {
     display: none !important;
   }
+
+  @media (forced-colors: active) {
+    :host::before {
+      background: CanvasText;
+    }
+  }
 `;
