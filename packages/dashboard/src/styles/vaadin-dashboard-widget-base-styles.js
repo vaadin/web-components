@@ -22,14 +22,17 @@ const widgetStyles = css`
     background: var(--_widget-background);
     border-radius: var(--_widget-border-radius);
     box-shadow: var(--_widget-shadow);
+    border-color: var(--_widget-border-color);
   }
 
   :host::before {
     content: '';
     position: absolute;
-    inset: calc(-1 * var(--_widget-border-width));
-    border: var(--_widget-border-width) solid var(--_widget-border-color);
-    border-radius: calc(var(--_widget-border-radius) + var(--_widget-border-width));
+    inset: 0;
+    border-color: inherit;
+    border-width: var(--_widget-border-width);
+    border-style: solid;
+    border-radius: inherit;
     pointer-events: none;
   }
 
@@ -69,22 +72,10 @@ const widgetStyles = css`
 
   :host([editable]) {
     --vaadin-dashboard-widget-shadow: var(--_widget-editable-shadow);
-    --_widget-border-width: 1px;
-  }
-
-  :host([focused])::before {
-    border-width: var(--_focus-ring-width);
-    border-color: var(--_focus-ring-color);
   }
 
   :host([selected]) {
     --vaadin-dashboard-widget-shadow: var(--_widget-selected-shadow);
-  }
-
-  :host([dragging]) {
-    box-shadow: none;
-    background: var(--_drop-target-background-color);
-    border: var(--_drop-target-border);
   }
 
   :host([resizing])::after {
@@ -95,7 +86,7 @@ const widgetStyles = css`
     width: var(--_widget-resizer-width, 0);
     height: var(--_widget-resizer-height, 0);
     border-radius: inherit;
-    background: var(--_drop-target-background-color);
+    background: var(--_drop-target-background);
     border: var(--_drop-target-border);
   }
 

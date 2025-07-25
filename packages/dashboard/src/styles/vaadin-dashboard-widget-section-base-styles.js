@@ -21,13 +21,22 @@ export const dashboardWidgetAndSectionStyles = css`
     --_widget-shadow: var(--vaadin-dashboard-widget-shadow, 0 0 0 0 transparent);
     --_widget-editable-shadow: 0 1px 4px -1px rgba(0, 0, 0, 0.3);
     --_widget-selected-shadow: 0 3px 12px -1px rgba(0, 0, 0, 0.3);
-    --_drop-target-background-color: var(--vaadin-dashboard-drop-target-background-color, rgba(0, 0, 0, 0.1));
+    --_drop-target-background: var(--vaadin-dashboard-drop-target-background, var(--vaadin-background-container));
+    --_drop-target-border-color: var(--vaadin-dashboard-drop-target-border-color, var(--vaadin-border-color));
     --_focus-ring-color: var(--vaadin-focus-ring-color);
     --_focus-ring-width: var(--vaadin-focus-ring-width);
   }
 
   :host([focused]) {
     z-index: 1;
+    outline: var(--_focus-ring-width) solid var(--_focus-ring-color);
+    outline-offset: calc(var(--_widget-border-width) * -1);
+  }
+
+  :host([dragging]) {
+    box-shadow: none;
+    background: var(--_drop-target-background);
+    border-color: var(--_drop-target-border-color);
   }
 
   :host([dragging]) * {

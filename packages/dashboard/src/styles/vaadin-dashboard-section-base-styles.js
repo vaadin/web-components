@@ -23,9 +23,11 @@ const sectionStyles = css`
     /* Dashboard section header height */
     grid-template-rows: minmax(0, auto) repeat(auto-fill, var(--_row-height));
     grid-auto-rows: var(--_row-height);
-    border-radius: var(--vaadin-radius-m);
-    --_section-outline-offset: calc(min(var(--_gap), var(--_padding)) / 3);
-    --_focus-ring-offset: calc((var(--_section-outline-offset) - var(--_focus-ring-width)));
+    border: var(--_widget-border-width) solid var(--_widget-border-color);
+    border-radius: var(--vaadin-dashboard-section-border-radius, var(--vaadin-radius-l));
+    padding: calc(var(--_gap) - var(--_widget-border-width));
+    margin-inline: calc(var(--_gap) * -1);
+    margin-block: var(--_gap);
   }
 
   :host([hidden]) {
@@ -54,20 +56,8 @@ const sectionStyles = css`
 
   /* Section states */
 
-  :host([editable]) {
-    outline: 1px solid var(--vaadin-border-color);
-    outline-offset: calc(var(--_section-outline-offset) - 1px);
-  }
-
-  :host([focused])::after {
-    content: '';
-    display: block;
-    position: absolute;
-    inset: 0;
-    border-radius: var(--vaadin-radius-m);
-    z-index: 9;
-    outline: var(--_focus-ring-width) solid var(--_focus-ring-color);
-    outline-offset: var(--_focus-ring-offset);
+  :host(:not([editable])) {
+    --_widget-border-width: 0px;
   }
 `;
 

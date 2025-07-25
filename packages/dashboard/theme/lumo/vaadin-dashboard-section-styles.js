@@ -66,12 +66,6 @@ const section = css`
     --_widget-filter: blur(10px);
   }
 
-  :host([dragging]) {
-    background: var(--_drop-target-background-color);
-    outline: var(--_drop-target-border);
-    box-shadow: 0 0 0 var(--_section-outline-offset) var(--_drop-target-background-color);
-  }
-
   /* Accessible move mode controls */
 
   [part~='move-backward-button'] {
