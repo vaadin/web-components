@@ -20,6 +20,10 @@ export const uploadFileListStyles = css`
     padding: 0;
   }
 
+  ::slotted(:first-child) {
+    margin-top: var(--vaadin-upload-gap, var(--vaadin-gap-container-block));
+  }
+
   ::slotted(li:not(:last-of-type)) {
     border-bottom: var(
       --vaadin-upload-file-list-border,

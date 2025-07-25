@@ -16,14 +16,13 @@ export const uploadStyles = css`
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
-    gap: var(--vaadin-upload-gap, var(--vaadin-gap-container-block));
     padding: var(--vaadin-upload-padding, var(--vaadin-padding));
     position: relative;
   }
-  
+
   :host([dragover-valid]) {
     --vaadin-upload-background: var(--vaadin-background-container);
-    --vaadin-upload-border: 1px dashed var(--vaadin-color); 
+    --vaadin-upload-border: 1px dashed var(--vaadin-color);
     );
   }
 
@@ -56,5 +55,5 @@ export const uploadStyles = css`
     --vaadin-upload-border-radius: 0;
     --vaadin-upload-padding: 0;
   }
-  
+
 `;
