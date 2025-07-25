@@ -52,6 +52,7 @@ export const dashboardWidgetAndSectionStyles = css`
     box-sizing: border-box;
     justify-content: space-between;
     overflow: hidden;
+    gap: var(--vaadin-dashboard-header-gap, var(--vaadin-gap-container-inline));
   }
 
   [part='title'] {
@@ -110,7 +111,6 @@ export const dashboardWidgetAndSectionStyles = css`
   /* Remove button */
   [part~='remove-button'] {
     cursor: pointer;
-    margin-inline-start: 4px;
     --icon: var(--_vaadin-icon-cross);
   }
 
