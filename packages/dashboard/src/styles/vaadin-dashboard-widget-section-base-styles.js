@@ -87,7 +87,7 @@ export const dashboardWidgetAndSectionStyles = css`
     width: var(--vaadin-icon-size, 1lh);
     background: currentColor;
     mask-image: var(--icon);
-    /* TODO not sure why this is needed. Probably something wrong with the SVG */
+    /* TODO not sure why this is needed. Probably something wrong with the --_vaadin-icon-drag SVG */
     mask-size: 100%;
   }
 
@@ -286,5 +286,12 @@ export const dashboardWidgetAndSectionStyles = css`
   :host([dir='rtl']) [part~='resize-shrink-width-button']:not([hidden]) + [part~='resize-grow-width-button'] {
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
+  }
+
+  @media (forced-colors: active) {
+    vaadin-dashboard-button .icon::before {
+      background: currentColor;
+      forced-color-adjust: none;
+    }
   }
 `;
