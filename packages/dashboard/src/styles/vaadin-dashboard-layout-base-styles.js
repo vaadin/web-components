@@ -35,7 +35,7 @@ export const dashboardLayoutStyles = css`
     padding: var(--_padding);
 
     /* Gap between widgets */
-    --_default-gap: 1em;
+    --_default-gap: 0.5em;
     --_gap: max(0px, var(--vaadin-dashboard-gap, var(--_default-gap)));
     gap: var(--_gap);
 
