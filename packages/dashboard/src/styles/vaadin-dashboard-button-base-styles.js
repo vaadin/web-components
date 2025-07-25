@@ -15,6 +15,10 @@ const dashboardButton = css`
   :host {
     min-width: 1rem;
   }
+
+  :host([theme~='tertiary']) {
+    color: var(--vaadin-dashboard-button-text-color, var(--vaadin-color-subtle));
+  }
 `;
 
 export const dashboardButtonStyles = [buttonStyles, dashboardButton];
