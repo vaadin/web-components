@@ -38,3 +38,9 @@ scripts/check-releases.html
 
 # TypeScript output
 tsconfig.build.tsbuildinfo
+
+# API docs generated files
+api-docs/.astro
+api-docs/dist
+api-docs/public/elements
+api-docs/src/content/docs/elements
