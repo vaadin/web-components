@@ -11,6 +11,10 @@
     --_wrapper-gap: 0;
   }
 
+  :host([opened]) {
+    pointer-events: auto;
+  }
+
   #chips {
     display: flex;
     align-items: center;

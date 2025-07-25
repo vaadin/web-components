@@ -19,6 +19,7 @@ import type { ComboBoxBaseMixinClass } from '../../src/vaadin-combo-box-base-mix
 import type { ComboBoxDataProviderMixinClass } from '../../src/vaadin-combo-box-data-provider-mixin';
 import type { ComboBoxItem } from '../../src/vaadin-combo-box-item';
 import type { ComboBoxItemMixinClass, ComboBoxItemRenderer } from '../../src/vaadin-combo-box-item-mixin';
+import type { ComboBoxItemsMixinClass } from '../../src/vaadin-combo-box-items-mixin';
 import type { ComboBoxMixinClass } from '../../src/vaadin-combo-box-mixin';
 import type {
   ComboBox,
@@ -123,6 +124,7 @@ assertType<string>(narrowedComboBox.allowedCharPattern);
 
 // ComboBox mixins
 assertType<ComboBoxDataProviderMixinClass<TestComboBoxItem>>(narrowedComboBox);
+assertType<ComboBoxItemsMixinClass<TestComboBoxItem>>(narrowedComboBox);
 assertType<ComboBoxMixinClass<TestComboBoxItem>>(narrowedComboBox);
 assertType<ComboBoxBaseMixinClass>(narrowedComboBox);
 assertType<ElementMixinClass>(narrowedComboBox);
