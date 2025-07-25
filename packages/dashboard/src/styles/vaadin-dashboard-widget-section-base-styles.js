@@ -57,7 +57,10 @@ export const dashboardWidgetAndSectionStyles = css`
 
   [part='title'] {
     flex: 1;
-    color: var(--vaadin-color);
+    color: var(--vaadin-dashboard-widget-title-color, var(--vaadin-color));
+    font-size: var(--vaadin-dashboard-widget-title-font-size, 1em);
+    font-weight: var(--vaadin-dashboard-widget-title-font-weight, 500);
+    line-height: var(--vaadin-dashboard-widget-title-line-height, inherit);
     white-space: var(--vaadin-dashboard-widget-title-wrap, wrap);
     text-overflow: ellipsis;
     overflow: hidden;
