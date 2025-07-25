@@ -82,12 +82,14 @@ const widgetStyles = css`
     content: '';
     z-index: 2;
     position: absolute;
-    top: -1px;
+    top: 0;
     width: var(--_widget-resizer-width, 0);
     height: var(--_widget-resizer-height, 0);
+    background: color-mix(in srgb, currentColor 5%, var(--_widget-background) 70%);
+    border-color: color-mix(in srgb, currentColor 10%, transparent);
+    border-width: var(--_widget-border-width);
+    border-style: solid;
     border-radius: inherit;
-    background: var(--_drop-target-background);
-    border: var(--_drop-target-border);
   }
 
   /* Widget parts */
