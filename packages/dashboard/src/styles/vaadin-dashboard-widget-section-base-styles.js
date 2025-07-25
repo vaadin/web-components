@@ -61,7 +61,6 @@ export const dashboardWidgetAndSectionStyles = css`
     white-space: var(--vaadin-dashboard-widget-title-wrap, wrap);
     text-overflow: ellipsis;
     overflow: hidden;
-    margin: 0 0 1px;
     align-self: safe center;
   }
 
