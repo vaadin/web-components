@@ -51,7 +51,7 @@
     min-height: calc(var(--lumo-size-m) * 5);
   }
 
-  [part='title'] {
+  ::slotted([slot='title']) {
     color: inherit;
     margin: 0;
     font-size: var(--lumo-font-size-xxxl);
@@ -75,6 +75,11 @@
     align-items: center;
     justify-content: center;
     padding: 0;
+  }
+
+  ::slotted(vaadin-login-form-wrapper) {
+    min-height: 100%;
+    max-width: 100%;
   }
 
   /* Small screen */
@@ -114,7 +119,7 @@
     }
 
     [part='brand'],
-    [part='form'] {
+    [part='form-wrapper'] {
       flex: auto;
       flex-basis: 0;
       box-sizing: border-box;
@@ -124,9 +129,14 @@
       justify-content: flex-start;
     }
 
-    [part='form'] {
+    [part='form-wrapper'] {
       padding: var(--lumo-space-l);
       overflow: auto;
+    }
+
+    ::slotted(vaadin-login-form-wrapper) {
+      flex: 1;
+      padding: 2px;
     }
   }
 
@@ -147,7 +157,7 @@
       box-shadow: none;
     }
 
-    [part='form'] {
+    [part='form-wrapper'] {
       height: 100%;
       overflow: auto;
     }

@@ -29,7 +29,7 @@ describe('vaadin-login-overlay', () => {
     resetUniqueId();
     overlay = fixtureSync('<vaadin-login-overlay opened></vaadin-login-overlay>');
     await nextFrame();
-    wrapper = document.querySelector('vaadin-login-overlay-wrapper');
+    wrapper = overlay.$.overlay;
   });
 
   describe('host', () => {

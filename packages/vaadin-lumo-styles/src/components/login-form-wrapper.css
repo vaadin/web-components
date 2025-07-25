@@ -110,20 +110,4 @@
     line-height: var(--lumo-line-height-s);
     color: var(--lumo-secondary-text-color);
   }
-
-  :host([theme~='with-overlay']) {
-    min-height: 100%;
-    display: flex;
-    justify-content: center;
-    max-width: 100%;
-  }
-
-  /* Landscape small screen */
-  @media only screen and (max-height: 600px) and (min-width: 600px) and (orientation: landscape) {
-    :host([theme~='with-overlay']) {
-      height: 100%;
-      flex: 1;
-      padding: 2px;
-    }
-  }
 }

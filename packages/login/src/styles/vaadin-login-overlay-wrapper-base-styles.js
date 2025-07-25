@@ -37,7 +37,7 @@ const loginOverlayWrapper = css`
     padding: var(--vaadin-login-overlay-brand-padding, var(--vaadin-padding));
   }
 
-  [part='title'] {
+  ::slotted([slot='title']) {
     color: var(--vaadin-login-overlay-title-color, var(--vaadin-color));
     font-size: var(--vaadin-login-overlay-title-font-size, inherit);
     font-weight: var(--vaadin-login-overlay-title-font-weight, 600);
@@ -51,7 +51,7 @@ const loginOverlayWrapper = css`
     line-height: var(--vaadin-login-overlay-description-line-height, inherit);
   }
 
-  [part='form'] ::slotted(vaadin-login-form) {
+  [part='form-wrapper'] ::slotted(vaadin-login-form) {
     display: flex;
   }
 `;
