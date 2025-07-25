@@ -6,7 +6,7 @@ import '../src/vaadin-multi-select-combo-box.js';
 import { getAllItems, getAsyncDataProvider, getFirstItem } from './helpers.js';
 
 describe('readonly', () => {
-  let comboBox, inputElement, internal;
+  let comboBox, inputElement;
 
   describe('basic', () => {
     beforeEach(async () => {
@@ -19,42 +19,41 @@ describe('readonly', () => {
       comboBox.items = ['apple', 'banana', 'lemon', 'orange'];
       comboBox.selectedItems = ['apple', 'orange'];
       await nextRender();
-      internal = comboBox.$.comboBox;
       inputElement = comboBox.inputElement;
       inputElement.focus();
     });
 
     it('should open the dropdown on input click when readonly', () => {
       inputElement.click();
-      expect(internal.opened).to.be.true;
+      expect(comboBox.opened).to.be.true;
     });
 
     it('should open the dropdown on Arrow Down when readonly', async () => {
       await sendKeys({ down: 'ArrowDown' });
-      expect(internal.opened).to.be.true;
+      expect(comboBox.opened).to.be.true;
     });
 
     it('should open the dropdown on Arrow Up when readonly', async () => {
       await sendKeys({ down: 'ArrowUp' });
-      expect(internal.opened).to.be.true;
+      expect(comboBox.opened).to.be.true;
     });
 
     it('should close the dropdown on Tab when readonly', async () => {
       await sendKeys({ down: 'ArrowDown' });
       await sendKeys({ down: 'Tab' });
-      expect(internal.opened).to.be.false;
+      expect(comboBox.opened).to.be.false;
     });
 
     it('should close the dropdown on Enter when readonly', async () => {
       await sendKeys({ down: 'ArrowDown' });
       await sendKeys({ down: 'Enter' });
-      expect(internal.opened).to.be.false;
+      expect(comboBox.opened).to.be.false;
     });
 
     it('should close the dropdown on Esc when readonly', async () => {
       await sendKeys({ down: 'ArrowDown' });
       await sendKeys({ down: 'Escape' });
-      expect(internal.opened).to.be.false;
+      expect(comboBox.opened).to.be.false;
     });
 
     it('should not clear on Esc when readonly and clear button visible', async () => {
@@ -141,7 +140,7 @@ describe('readonly', () => {
     it('should not open the dropdown if selected items are empty', () => {
       comboBox.selectedItems = [];
       inputElement.click();
-      expect(internal.opened).to.be.false;
+      expect(comboBox.opened).to.be.false;
     });
 
     it('should not open the dropdown if readonly is set after clearing', () => {
@@ -150,7 +149,7 @@ describe('readonly', () => {
 
       comboBox.readonly = true;
       inputElement.click();
-      expect(internal.opened).to.be.false;
+      expect(comboBox.opened).to.be.false;
     });
   });
 

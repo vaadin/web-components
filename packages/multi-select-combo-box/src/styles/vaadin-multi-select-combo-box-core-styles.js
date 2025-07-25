@@ -12,6 +12,10 @@ export const multiSelectComboBoxStyles = css`
     --_chip-min-width: var(--vaadin-multi-select-combo-box-chip-min-width, 50px);
   }
 
+  :host([opened]) {
+    pointer-events: auto;
+  }
+
   #chips {
     display: flex;
     align-items: center;
