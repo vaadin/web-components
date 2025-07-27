@@ -8,13 +8,20 @@ import { css } from 'lit';
 export const notificationContainerStyles = css`
   :host {
     position: fixed;
-    z-index: 1000;
     inset: 0;
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
     align-items: stretch;
     pointer-events: none;
+
+    /* Override native [popover] user agent styles */
+    width: auto;
+    height: auto;
+    border: none;
+    padding: 0;
+    background-color: transparent;
+    overflow: visible;
   }
 
   [region-group] {
