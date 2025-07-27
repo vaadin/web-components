@@ -17,13 +17,6 @@ const getAttachedInstances = () =>
   );
 
 /**
- * Returns all attached overlay instances excluding notification container,
- * which only needs to be in the stack for zIndex but not pointer-events.
- * @private
- */
-const getOverlayInstances = () => getAttachedInstances().filter((el) => el.$.overlay);
-
-/**
  * Returns true if all the instances on top of the overlay are nested overlays.
  * @private
  */
@@ -49,7 +42,7 @@ const hasOnlyNestedOverlays = (overlay) => {
  * @protected
  */
 export const isLastOverlay = (overlay, filter = (_overlay) => true) => {
-  const filteredOverlays = getOverlayInstances().filter(filter);
+  const filteredOverlays = getAttachedInstances().filter(filter);
   return overlay === filteredOverlays.pop();
 };
 
@@ -128,7 +121,7 @@ export const OverlayStackMixin = (superClass) =>
       }
 
       // Disable pointer events in other attached overlays
-      getOverlayInstances().forEach((el) => {
+      getAttachedInstances().forEach((el) => {
         if (el !== this) {
           el.$.overlay.style.pointerEvents = 'none';
         }
@@ -144,7 +137,7 @@ export const OverlayStackMixin = (superClass) =>
       }
 
       // Restore pointer events in the previous overlay(s)
-      const instances = getOverlayInstances();
+      const instances = getAttachedInstances();
 
       let el;
       // Use instances.pop() to ensure the reverse order
