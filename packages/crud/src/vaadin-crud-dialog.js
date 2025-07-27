@@ -128,10 +128,6 @@ class CrudDialog extends DialogBaseMixin(OverlayClassMixin(ThemePropertyMixin(Po
 
   static get properties() {
     return {
-      ariaLabel: {
-        type: String,
-      },
-
       fullscreen: {
         type: Boolean,
       },
@@ -150,7 +146,6 @@ class CrudDialog extends DialogBaseMixin(OverlayClassMixin(ThemePropertyMixin(Po
         popover="manual"
         .owner="${this.crudElement}"
         .opened="${this.opened}"
-        aria-label="${ifDefined(this.ariaLabel)}"
         @opened-changed="${this._onOverlayOpened}"
         @mousedown="${this._bringOverlayToFront}"
         @touchstart="${this._bringOverlayToFront}"
@@ -160,7 +155,6 @@ class CrudDialog extends DialogBaseMixin(OverlayClassMixin(ThemePropertyMixin(Po
         .modeless="${this.modeless}"
         .withBackdrop="${!this.modeless}"
         ?fullscreen="${this.fullscreen}"
-        role="dialog"
         focus-trap
         exportparts="backdrop, overlay, header, content, footer"
       >
@@ -171,6 +165,13 @@ class CrudDialog extends DialogBaseMixin(OverlayClassMixin(ThemePropertyMixin(Po
         <slot name="delete-button" slot="delete-button"></slot>
       </vaadin-crud-dialog-overlay>
     `;
+  }
+
+  /** @protected */
+  firstUpdated(props) {
+    super.firstUpdated(props);
+
+    this.role = 'dialog';
   }
 
   /** @private **/
