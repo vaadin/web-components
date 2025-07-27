@@ -309,22 +309,22 @@ describe('a11y', () => {
       await nextRender();
     });
 
-    it('should set correct role attribute to the dialog', async () => {
+    it('should set correct role attribute to the dialog overlay', async () => {
       newButton.click();
       await nextRender();
-      expect(dialog.getAttribute('role')).to.equal('dialog');
+      expect(dialog.$.overlay.getAttribute('role')).to.equal('dialog');
     });
 
     it('should set correct aria-label to the new item dialog', async () => {
       newButton.click();
       await nextRender();
-      expect(dialog.getAttribute('aria-label')).to.equal('New item');
+      expect(dialog.$.overlay.getAttribute('aria-label')).to.equal('New item');
     });
 
     it('should set correct aria-label to the edit item dialog', async () => {
       editButtons[0].click();
       await nextRender();
-      expect(dialog.getAttribute('aria-label')).to.equal('Edit item');
+      expect(dialog.$.overlay.getAttribute('aria-label')).to.equal('Edit item');
     });
   });
 

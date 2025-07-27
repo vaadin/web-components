@@ -243,14 +243,14 @@ class Crud extends CrudMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInjecti
         ? html`
             <vaadin-crud-dialog
               id="dialog"
-              aria-label="${ifDefined(this.__dialogAriaLabel)}"
-              theme="${ifDefined(this._theme)}"
-              exportparts="backdrop, overlay, header, content, footer"
               .crudElement="${this}"
               .opened="${this.editorOpened}"
               .fullscreen="${this._fullscreen}"
+              .ariaLabel="${this.__dialogAriaLabel}"
               .noCloseOnOutsideClick="${this.__isDirty}"
               .noCloseOnEsc="${this.__isDirty}"
+              theme="${ifDefined(this._theme)}"
+              exportparts="backdrop, overlay, header, content, footer"
               @cancel="${this.__cancel}"
             >
               <slot name="header" slot="header"></slot>

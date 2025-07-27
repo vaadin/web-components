@@ -261,7 +261,7 @@ snapshots["vaadin-crud host default"] =
 `;
 /* end snapshot vaadin-crud host default */
 
-snapshots["vaadin-crud shadow default"] = 
+snapshots["vaadin-crud shadow default"] =
 `<div id="container">
   <div id="main">
     <slot name="grid">
@@ -280,7 +280,6 @@ snapshots["vaadin-crud shadow default"] =
 <vaadin-crud-dialog
   exportparts="backdrop, overlay, header, content, footer"
   id="dialog"
-  role="dialog"
 >
   <slot
     name="header"
