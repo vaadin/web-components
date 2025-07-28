@@ -241,14 +241,13 @@ export const ComboBoxBaseMixin = (superClass) =>
 
     /**
      * Create and initialize the scroller element.
-     * Override to provide custom host reference.
      *
-     * @protected
+     * @private
      */
-    _initScroller(host) {
+    _initScroller() {
       const scroller = document.createElement(`${this._tagNamePrefix}-scroller`);
 
-      scroller.owner = host || this;
+      scroller.owner = this;
       scroller.getItemLabel = this._getItemLabel.bind(this);
       scroller.addEventListener('selection-changed', this._boundOverlaySelectedItemChanged);
 
