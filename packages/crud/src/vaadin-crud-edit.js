@@ -31,7 +31,7 @@ class CrudEdit extends Button {
   }
 
   static get styles() {
-    return [crudEditStyles, super.styles];
+    return [super.styles, crudEditStyles];
   }
 
   /** @protected */
