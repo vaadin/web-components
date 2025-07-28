@@ -11,7 +11,7 @@
 import { html } from 'lit';
 import { Button } from '@vaadin/button/src/vaadin-button.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
-import { crudEditStyles } from './styles/vaadin-crud-edit-base-styles.js';
+import { crudEditStyles } from './styles/vaadin-crud-edit-core-styles.js';
 
 /**
  * `<vaadin-crud-edit>` is a helper element for `<vaadin-grid-column>` that provides
