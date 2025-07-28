@@ -33,7 +33,7 @@ export declare class DialogBaseMixinClass {
   modeless: boolean;
 
   /**
-   * The `role` attribute value to be set on the overlay. Defaults to "dialog".
+   * The `role` attribute value to be set on the dialog. Defaults to "dialog".
    *
    * @attr {string} overlay-role
    */

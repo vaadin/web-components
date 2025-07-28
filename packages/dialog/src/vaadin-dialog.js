@@ -69,9 +69,6 @@ export { DialogOverlay } from './vaadin-dialog-overlay.js';
  * `has-footer`     | Set when the element has footer renderer
  * `overflow`       | Set to `top`, `bottom`, none or both
  *
- * Note: the `theme` attribute value set on `<vaadin-dialog>` is
- * propagated to the internal `<vaadin-dialog-overlay>` component.
- *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
  * @fires {CustomEvent} resize - Fired when the dialog resize is finished.
