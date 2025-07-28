@@ -20,6 +20,11 @@ const gridPro = css`
   }
 
   [part~='editable-cell'] {
+    display: flex;
+    align-items: inherit;
+    align-self: stretch;
+    flex: 1;
+    min-width: 0;
     cursor: var(--vaadin-clickable-cursor);
     outline: 0;
   }

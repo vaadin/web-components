@@ -72,13 +72,17 @@ class GridPro extends SlotStylesMixin(InlineEditingMixin(Grid)) {
       ${tag} [theme="grid-pro-editor"] {
         --vaadin-input-field-border-radius: 0px;
         --vaadin-input-field-border-width: 0px;
-        inset: 0;
-        position: absolute;
+        width: 100%;
       }
 
       ${tag} [theme="grid-pro-editor"]::part(input-field) {
         height: 100%;
         outline-offset: calc(var(--vaadin-focus-ring-width) * -1);
+      }
+
+      vaadin-grid-cell-content:has([theme="grid-pro-editor"]) {
+        padding: 0;
+        overflow: visible;
       }
     `,
     ];

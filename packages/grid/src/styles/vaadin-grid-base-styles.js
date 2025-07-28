@@ -245,12 +245,6 @@ export const gridStyles = css`
     );
   }
 
-  [part~='cell'] > [tabindex] {
-    display: flex;
-    align-items: inherit;
-    width: 100%;
-  }
-
   [part~='details-cell'] {
     position: absolute;
     bottom: 0;
@@ -259,11 +253,11 @@ export const gridStyles = css`
 
   [part~='cell'] ::slotted(vaadin-grid-cell-content) {
     display: block;
-    width: 100%;
-    box-sizing: border-box;
     overflow: hidden;
     text-overflow: ellipsis;
     padding: var(--_cell-padding);
+    flex: 1;
+    min-width: 0;
   }
 
   [frozen],
