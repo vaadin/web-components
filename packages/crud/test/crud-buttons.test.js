@@ -747,13 +747,13 @@ describe('crud buttons', () => {
         expect(button.textContent).to.equal('Add user');
       });
 
-      it('should set theme attribute of the new item button when marked as a default', async () => {
+      it('should not set theme attribute on the new item button when marked as a default', async () => {
         button._isDefault = true;
 
         crud.appendChild(button);
         await nextRender();
 
-        expect(button.getAttribute('theme')).to.equal('primary');
+        expect(button.hasAttribute('theme')).to.be.false;
       });
 
       it('should not change theme attribute of the new item button when marked as a default', async () => {

@@ -221,7 +221,6 @@ snapshots["vaadin-crud host default"] =
     role="button"
     slot="new-button"
     tabindex="0"
-    theme="primary"
   >
     New item
   </vaadin-button>
