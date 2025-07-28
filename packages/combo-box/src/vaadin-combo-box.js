@@ -227,6 +227,7 @@ class ComboBox extends ComboBoxDataProviderMixin(
         popover="manual"
         exportparts="overlay, content, loader"
         .owner="${this}"
+        .dir="${this.dir}"
         .opened="${this._overlayOpened}"
         ?loading="${this.loading}"
         theme="${ifDefined(this._theme)}"

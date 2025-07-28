@@ -22,21 +22,6 @@ export const ComboBoxOverlayMixin = (superClass) =>
       this.requiredVerticalSpace = 200;
     }
 
-    /** @protected */
-    connectedCallback() {
-      super.connectedCallback();
-
-      const hostDir = this._getHostDir();
-      if (hostDir) {
-        this.setAttribute('dir', hostDir);
-      }
-    }
-
-    /** @protected */
-    _getHostDir() {
-      return this.owner && this.owner.getAttribute('dir');
-    }
-
     /**
      * Override method inherited from `Overlay`
      * to not close on position target click.
