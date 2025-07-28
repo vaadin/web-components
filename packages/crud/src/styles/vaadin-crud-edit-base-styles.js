@@ -18,4 +18,10 @@ export const crudEditStyles = css`
     mask-image: var(--_vaadin-icon-edit);
     width: var(--vaadin-icon-size, 1lh);
   }
+
+  @media (forced-colors: active) {
+    [part='icon'] {
+      background: CanvasText;
+    }
+  }
 `;

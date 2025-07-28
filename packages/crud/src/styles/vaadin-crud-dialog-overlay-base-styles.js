@@ -8,8 +8,9 @@
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
+import '@vaadin/component-base/src/style-props.js';
 import { css } from 'lit';
-import { dialogOverlayBase } from '@vaadin/dialog/src/styles/vaadin-dialog-overlay-core-styles.js';
+import { dialogOverlayStyles } from '@vaadin/dialog/src/styles/vaadin-dialog-overlay-core-styles.js';
 import { overlayStyles } from '@vaadin/overlay/src/styles/vaadin-overlay-core-styles.js';
 
 const crudDialogOverlay = css`
@@ -18,6 +19,7 @@ const crudDialogOverlay = css`
     font-size: var(--vaadin-crud-dialog-header-font-size, 1em);
     font-weight: var(--vaadin-crud-dialog-header-font-weight, 600);
     line-height: var(--vaadin-crud-dialog-header-line-height, inherit);
+    padding: var(--vaadin-crud-header-padding, var(--vaadin-padding));
   }
 
   ::slotted([slot='header']) {
@@ -27,14 +29,21 @@ const crudDialogOverlay = css`
     overflow-wrap: anywhere;
   }
 
-  [part='footer'] {
-    flex-direction: row-reverse;
-    justify-content: normal;
+  :host(:is(*, #id)) [part='content'] {
+    overflow: auto;
+    overscroll-behavior: contain;
+    padding: var(--vaadin-crud-form-padding, var(--vaadin-padding));
   }
 
-  ::slotted([slot='delete-button']) {
-    margin-inline-end: auto;
+  ::slotted([slot='form']) {
+    --vaadin-crud-form-padding: 0;
+  }
+
+  [part='footer'] {
+    justify-content: normal;
+    background: var(--vaadin-crud-footer-background, transparent);
+    border-top: var(--vaadin-crud-border-width, 1px) solid var(--vaadin-crud-border-color, var(--vaadin-border-color));
   }
 `;
 
-export const crudDialogOverlayStyles = [overlayStyles, dialogOverlayBase, crudDialogOverlay];
+export const crudDialogOverlayStyles = [overlayStyles, dialogOverlayStyles, crudDialogOverlay];

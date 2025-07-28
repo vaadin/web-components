@@ -8,18 +8,20 @@
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
+import '@vaadin/component-base/src/style-props.js';
 import { css } from 'lit';
 
 export const crudStyles = css`
   :host {
-    --vaadin-grid-border-radius: 0;
-    --vaadin-grid-border-width: 0;
+    --vaadin-grid-border-width: 0px;
+    --vaadin-grid-border-radius: var(--vaadin-crud-border-radius, var(--vaadin-radius-l));
     --vaadin-crud-editor-max-height: 40%;
     --vaadin-crud-editor-max-width: 40%;
     border: var(--vaadin-crud-border-width, 1px) solid var(--vaadin-crud-border-color, var(--vaadin-border-color));
     border-radius: var(--vaadin-crud-border-radius, var(--vaadin-radius-l));
     height: 400px;
     width: 100%;
+    background: var(--vaadin-crud-background, var(--vaadin-background-color));
   }
 
   :host,
@@ -27,13 +29,19 @@ export const crudStyles = css`
     align-self: stretch;
     display: flex;
     flex-direction: column;
-    overflow: hidden;
     position: relative;
   }
 
   #main {
     flex: 1 1 100%;
     height: 100%;
+    min-width: 0;
+    min-height: 0;
+  }
+
+  ::slotted(vaadin-crud-grid) {
+    border-end-start-radius: 0;
+    border-end-end-radius: 0;
   }
 
   :host([hidden]),
@@ -55,6 +63,11 @@ export const crudStyles = css`
       var(--vaadin-crud-border-color, var(--vaadin-border-color));
   }
 
+  :host([editor-position='aside'][editor-opened]) ::slotted(vaadin-crud-grid) {
+    border-start-end-radius: 0;
+    border-end-end-radius: 0;
+  }
+
   :host([editor-position='bottom'][editor-opened]) #main {
     border-bottom: var(--vaadin-crud-border-width, 1px) solid
       var(--vaadin-crud-border-color, var(--vaadin-border-color));
@@ -62,7 +75,8 @@ export const crudStyles = css`
 
   [part='toolbar'] {
     align-items: baseline;
-    background: var(--vaadin-crud-toolbar-background, var(--vaadin-background-container));
+    background: var(--vaadin-crud-toolbar-background, transparent);
+    border-top: var(--vaadin-crud-border-width, 1px) solid var(--vaadin-crud-border-color, var(--vaadin-border-color));
     display: flex;
     flex-shrink: 0;
     justify-content: flex-end;
@@ -121,15 +135,15 @@ export const crudStyles = css`
   }
 
   [part='footer'] {
-    background: var(--vaadin-crud-footer-background, var(--vaadin-background-container));
+    background: var(--vaadin-crud-footer-background, transparent);
+    border-top: var(--vaadin-crud-border-width, 1px) solid var(--vaadin-crud-border-color, var(--vaadin-border-color));
     display: flex;
     flex: none;
-    flex-direction: row-reverse;
     gap: var(--vaadin-crud-footer-gap, var(--vaadin-gap-container-inline));
     padding: var(--vaadin-crud-footer-padding, var(--vaadin-padding));
   }
 
   ::slotted([slot='delete-button']) {
-    margin-inline-end: auto;
+    margin-inline-start: auto;
   }
 `;
