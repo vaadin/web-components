@@ -506,6 +506,7 @@ export const ComboBoxMixin = (superClass) =>
      * Override this method to show custom items.
      *
      * @protected
+     * @override
      */
     _setDropdownItems(newItems) {
       const oldItems = this._dropdownItems;
