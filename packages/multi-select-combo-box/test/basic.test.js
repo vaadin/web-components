@@ -407,4 +407,23 @@ describe('basic', () => {
       expect(item.textContent).to.equal('');
     });
   });
+
+  describe('exportparts', () => {
+    let overlay;
+
+    beforeEach(() => {
+      overlay = comboBox.$.overlay;
+    });
+
+    it('should export overlay parts for styling', () => {
+      const parts = [...overlay.shadowRoot.querySelectorAll('[part]')]
+        .map((el) => el.getAttribute('part'))
+        .filter((part) => part !== 'backdrop');
+      const exportParts = overlay.getAttribute('exportparts').split(', ');
+
+      parts.forEach((part) => {
+        expect(exportParts).to.include(part);
+      });
+    });
+  });
 });

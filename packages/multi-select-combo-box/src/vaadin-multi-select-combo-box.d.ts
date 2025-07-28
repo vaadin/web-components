@@ -110,6 +110,9 @@ export interface MultiSelectComboBoxEventMap<TItem> extends HTMLElementEventMap 
  * `helper-text`          | The helper text element wrapper
  * `required-indicator`   | The `required` state indicator element
  * `toggle-button`        | The toggle button
+ * `overlay`              | The overlay container
+ * `content`              | The overlay content
+ * `loader`               | The loading indicator shown while loading items
  *
  * The following state attributes are available for styling:
  *

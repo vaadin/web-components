@@ -47,6 +47,9 @@ import { MultiSelectComboBoxMixin } from './vaadin-multi-select-combo-box-mixin.
  * `helper-text`          | The helper text element wrapper
  * `required-indicator`   | The `required` state indicator element
  * `toggle-button`        | The toggle button
+ * `overlay`              | The overlay container
+ * `content`              | The overlay content
+ * `loader`               | The loading indicator shown while loading items
  *
  * The following state attributes are available for styling:
  *
@@ -149,13 +152,17 @@ class MultiSelectComboBox extends MultiSelectComboBoxMixin(
 
       <vaadin-multi-select-combo-box-overlay
         id="overlay"
+        popover="manual"
+        exportparts="overlay, content, loader"
         .owner="${this}"
         .opened="${this._overlayOpened}"
         ?loading="${this.loading}"
         theme="${ifDefined(this._theme)}"
         .positionTarget="${this._inputField}"
         no-vertical-overlap
-      ></vaadin-multi-select-combo-box-overlay>
+      >
+        <slot name="overlay"></slot>
+      </vaadin-multi-select-combo-box-overlay>
 
       <slot name="tooltip"></slot>
     `;
