@@ -10,7 +10,7 @@
  */
 import '@vaadin/component-base/src/style-props.js';
 import { css } from 'lit';
-import { gridStyles } from '@vaadin/grid/src/styles/vaadin-grid-core-styles';
+import { gridStyles } from '@vaadin/grid/src/styles/vaadin-grid-base-styles.js';
 
 const crudGrid = css`
   #scroller {
