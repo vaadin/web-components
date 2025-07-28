@@ -130,9 +130,8 @@ describe('header/footer feature', () => {
         expect(dialog.hasAttribute('aria-label')).to.be.false;
       });
 
-      it('should not overwrite the aria-label attribute if aria-label and header-title are set', async () => {
+      it('should not overwrite the aria-label attribute when no header title is set', async () => {
         const ARIA_LABEL = '__ARIA_LABEL__';
-        dialog.headerTitle = HEADER_TITLE;
         dialog.ariaLabel = ARIA_LABEL;
         dialog.opened = true;
         await nextRender();

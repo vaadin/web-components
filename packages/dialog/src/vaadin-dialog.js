@@ -154,24 +154,7 @@ class Dialog extends DialogSizeMixin(
     super.updated(props);
 
     if (props.has('headerTitle')) {
-      this.__applyHeaderTitleAriaLabel();
-    }
-  }
-
-  /** @private */
-  __applyHeaderTitleAriaLabel() {
-    // If there is a header title and no aria-label,
-    // set the aria-label to the header title.
-    if (this.headerTitle && !this.ariaLabel) {
       this.ariaLabel = this.headerTitle;
-      this.__useHeaderTitleAriaLabel = true;
-    }
-
-    // If there is no header title and the aria-label was set
-    // using a header title, remove the aria-label.
-    if (this.__useHeaderTitleAriaLabel && !this.headerTitle) {
-      this.ariaLabel = null;
-      this.__useHeaderTitleAriaLabel = false;
     }
   }
 }
