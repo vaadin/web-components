@@ -549,10 +549,8 @@ export const DatePickerOverlayContentMixin = (superClass) =>
 
       this._targetPosition = targetPosition;
 
-      let revealResolve;
-      this._revealPromise = new Promise((resolve) => {
-        revealResolve = resolve;
-      });
+      const { promise: revealPromise, resolve: revealResolve } = Promise.withResolvers();
+      this._revealPromise = revealPromise;
 
       // http://gizma.com/easing/
       const easingFunction = (t, b, c, d) => {

@@ -513,12 +513,12 @@ class MasterDetailLayout extends SlotStylesMixin(
     this.setAttribute('transition', transitionType);
     this.__transition = document.startViewTransition(() => {
       // Return a promise that can be resolved once the DOM is updated
-      return new Promise((resolve) => {
-        this.__resolveUpdateCallback = resolve;
-        // Notify the caller that the transition is ready, so that they can
-        // update the DOM
-        updateCallback();
-      });
+      const { promise, resolve } = Promise.withResolvers();
+      this.__resolveUpdateCallback = resolve;
+      // Notify the caller that the transition is ready, so that they can
+      // update the DOM
+      updateCallback();
+      return promise;
     });
     return this.__transition.finished;
   }
