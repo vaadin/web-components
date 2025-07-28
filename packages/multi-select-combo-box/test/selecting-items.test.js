@@ -45,7 +45,7 @@ describe('selecting items', () => {
 
     it('should update selectedItems when selecting an item on click', async () => {
       await sendKeys({ down: 'ArrowDown' });
-      const item = document.querySelector('vaadin-multi-select-combo-box-item');
+      const item = getFirstItem(comboBox);
       item.click();
       expect(comboBox.selectedItems).to.deep.equal(['apple']);
     });
@@ -108,7 +108,7 @@ describe('selecting items', () => {
       await sendKeys({ down: 'ArrowDown' });
       await sendKeys({ down: 'ArrowDown' });
       await sendKeys({ down: 'Enter' });
-      const item = document.querySelector('vaadin-multi-select-combo-box-item');
+      const item = getFirstItem(comboBox);
       expect(item.hasAttribute('focused')).to.be.true;
     });
 
@@ -116,7 +116,7 @@ describe('selecting items', () => {
       await sendKeys({ down: 'ArrowDown' });
       await sendKeys({ type: 'banana' });
       await sendKeys({ down: 'Enter' });
-      const item = document.querySelectorAll('vaadin-multi-select-combo-box-item')[1];
+      const item = getAllItems(comboBox)[1];
       expect(item.hasAttribute('focused')).to.be.true;
     });
 

@@ -3,6 +3,7 @@ import { sendKeys } from '@vaadin/test-runner-commands';
 import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-multi-select-combo-box.js';
+import { getAllItems, getFirstItem } from './helpers.js';
 
 describe('accessibility', () => {
   let comboBox, inputElement;
@@ -102,7 +103,7 @@ describe('accessibility', () => {
         comboBox.selectedItems = ['Apple', 'Lemon'];
         comboBox.inputElement.click();
         scroller = comboBox.$.comboBox._scroller;
-        items = document.querySelectorAll('vaadin-multi-select-combo-box-item');
+        items = getAllItems(comboBox);
       });
 
       it('should set aria-multiselectable attribute on the scroller', () => {
@@ -157,7 +158,7 @@ describe('accessibility', () => {
     it('should announce when selecting an item', () => {
       inputElement.click();
 
-      const item = document.querySelector('vaadin-multi-select-combo-box-item');
+      const item = getFirstItem(comboBox);
       item.click();
 
       clock.tick(150);
@@ -169,7 +170,7 @@ describe('accessibility', () => {
       comboBox.selectedItems = [apple, banana, lemon];
       inputElement.click();
 
-      const item = document.querySelector('vaadin-multi-select-combo-box-item');
+      const item = getFirstItem(comboBox);
       item.click();
 
       clock.tick(150);

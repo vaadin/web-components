@@ -5,6 +5,7 @@ import '../src/vaadin-multi-select-combo-box.js';
 import { html, render } from 'lit';
 import { flushComboBox } from '@vaadin/combo-box/test/helpers.js';
 import { multiSelectComboBoxRenderer } from '../lit.js';
+import { getFirstItem } from './helpers.js';
 
 async function renderComboBox(container, { items }) {
   render(
@@ -44,15 +45,15 @@ describe('lit renderer directives', () => {
 
       it('should render items with the renderer when the combo-box is opened', () => {
         comboBox.opened = true;
-        const items = document.querySelectorAll('vaadin-multi-select-combo-box-item');
-        expect(items[0].textContent).to.equal('Item');
+        const item = getFirstItem(comboBox);
+        expect(item.textContent).to.equal('Item');
       });
 
       it('should re-render items when the combo-box is opened and a renderer dependency changes', async () => {
         comboBox.opened = true;
         await renderComboBox(container, { items: ['New Item'] });
-        const items = document.querySelectorAll('vaadin-multi-select-combo-box-item');
-        expect(items[0].textContent).to.equal('New Item');
+        const item = getFirstItem(comboBox);
+        expect(item.textContent).to.equal('New Item');
       });
     });
 

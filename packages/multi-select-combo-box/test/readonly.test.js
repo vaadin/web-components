@@ -3,7 +3,7 @@ import { sendKeys } from '@vaadin/test-runner-commands';
 import { aTimeout, fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-multi-select-combo-box.js';
-import { getAsyncDataProvider } from './helpers.js';
+import { getAllItems, getAsyncDataProvider, getFirstItem } from './helpers.js';
 
 describe('readonly', () => {
   let comboBox, inputElement, internal;
@@ -78,20 +78,20 @@ describe('readonly', () => {
     it('should not set item focus-ring attribute on Arrow Down', async () => {
       await sendKeys({ down: 'ArrowDown' });
       await sendKeys({ down: 'ArrowDown' });
-      const items = document.querySelectorAll('vaadin-multi-select-combo-box-item');
-      expect(items[0].hasAttribute('focus-ring')).to.be.false;
+      const item = getFirstItem(comboBox);
+      expect(item.hasAttribute('focus-ring')).to.be.false;
     });
 
     it('should not set item focus-ring attribute on Arrow Up', async () => {
       await sendKeys({ down: 'ArrowDown' });
       await sendKeys({ down: 'ArrowDown' });
-      const items = document.querySelectorAll('vaadin-multi-select-combo-box-item');
+      const items = getAllItems(comboBox);
       expect(items[1].hasAttribute('focus-ring')).to.be.false;
     });
 
     it('should only render selected items in the dropdown when readonly', () => {
       inputElement.click();
-      const items = document.querySelectorAll('vaadin-multi-select-combo-box-item');
+      const items = getAllItems(comboBox);
       expect(items.length).to.equal(2);
       expect(items[0].textContent).to.equal('apple');
       expect(items[1].textContent).to.equal('orange');
@@ -100,7 +100,7 @@ describe('readonly', () => {
     it('should render regular items in the dropdown when readonly is off', () => {
       comboBox.readonly = false;
       inputElement.click();
-      const items = document.querySelectorAll('vaadin-multi-select-combo-box-item');
+      const items = getAllItems(comboBox);
       expect(items.length).to.equal(4);
       expect(items[0].textContent).to.equal('apple');
       expect(items[1].textContent).to.equal('banana');
@@ -112,28 +112,28 @@ describe('readonly', () => {
       comboBox.selectedItems = [];
       comboBox.selectedItems = ['lemon'];
       inputElement.click();
-      const items = document.querySelectorAll('vaadin-multi-select-combo-box-item');
+      const items = getAllItems(comboBox);
       expect(items.length).to.equal(1);
       expect(items[0].textContent).to.equal('lemon');
     });
 
     it('should not set selected attribute on the dropdown items', () => {
       inputElement.click();
-      const items = document.querySelectorAll('vaadin-multi-select-combo-box-item');
+      const items = getAllItems(comboBox);
       expect(items[0].hasAttribute('selected')).to.be.false;
       expect(items[1].hasAttribute('selected')).to.be.false;
     });
 
     it('should set readonly attribute on the dropdown items', () => {
       inputElement.click();
-      const items = document.querySelectorAll('vaadin-multi-select-combo-box-item');
+      const items = getAllItems(comboBox);
       expect(items[0].hasAttribute('readonly')).to.be.true;
       expect(items[1].hasAttribute('readonly')).to.be.true;
     });
 
     it('should not un-select item on click when readonly', () => {
       inputElement.click();
-      const item = document.querySelector('vaadin-multi-select-combo-box-item');
+      const item = getFirstItem(comboBox);
       item.click();
       expect(comboBox.selectedItems.length).to.equal(2);
     });
@@ -180,7 +180,7 @@ describe('readonly', () => {
       inputElement.click();
       // Wait for the async data provider timeout
       await aTimeout(0);
-      const items = document.querySelectorAll('vaadin-multi-select-combo-box-item');
+      const items = getAllItems(comboBox);
       expect(items.length).to.equal(2);
       expect(items[0].textContent).to.equal('apple');
       expect(items[1].textContent).to.equal('orange');
@@ -191,7 +191,7 @@ describe('readonly', () => {
       inputElement.click();
       // Wait for the async data provider timeout
       await aTimeout(0);
-      const items = document.querySelectorAll('vaadin-multi-select-combo-box-item');
+      const items = getAllItems(comboBox);
       expect(items.length).to.equal(4);
       expect(items[0].textContent).to.equal('apple');
       expect(items[1].textContent).to.equal('banana');
@@ -204,7 +204,7 @@ describe('readonly', () => {
       // Wait for the async data provider timeout
       await aTimeout(0);
       comboBox.size = 4;
-      const items = document.querySelectorAll('vaadin-multi-select-combo-box-item');
+      const items = getAllItems(comboBox);
       expect(items.length).to.equal(2);
       expect(items[0].textContent).to.equal('apple');
       expect(items[1].textContent).to.equal('orange');
@@ -224,7 +224,7 @@ describe('readonly', () => {
       inputElement.click();
       // Wait for the async data provider timeout
       await aTimeout(0);
-      const items = document.querySelectorAll('vaadin-multi-select-combo-box-item');
+      const items = getAllItems(comboBox);
       expect(items.length).to.equal(2);
       expect(items[0].textContent).to.equal('apple');
       expect(items[1].textContent).to.equal('orange');
@@ -250,7 +250,7 @@ describe('readonly', () => {
       comboBox.inputElement.click();
       // Wait for the async data provider timeout
       await aTimeout(0);
-      const items = document.querySelectorAll('vaadin-multi-select-combo-box-item');
+      const items = getAllItems(comboBox);
       expect(items.length).to.equal(2);
       expect(items[0].textContent).to.equal('new item 1');
       expect(items[1].textContent).to.equal('new item 2');
@@ -270,7 +270,7 @@ describe('readonly', () => {
 
     it('should only render selected items in the dropdown when readonly', () => {
       inputElement.click();
-      const items = document.querySelectorAll('vaadin-multi-select-combo-box-item');
+      const items = getAllItems(comboBox);
       expect(items.length).to.equal(2);
       expect(items[0].textContent).to.equal('apple');
       expect(items[1].textContent).to.equal('orange');
@@ -279,7 +279,7 @@ describe('readonly', () => {
     it('should render regular items in the dropdown when readonly is off', () => {
       comboBox.readonly = false;
       inputElement.click();
-      const items = document.querySelectorAll('vaadin-multi-select-combo-box-item');
+      const items = getAllItems(comboBox);
       expect(items.length).to.equal(4);
       expect(items[0].textContent).to.equal('apple');
       expect(items[1].textContent).to.equal('banana');
