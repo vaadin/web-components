@@ -184,15 +184,6 @@ export const ComboBoxBaseMixin = (superClass) =>
         this.clearElement.addEventListener('mousedown', this._boundOnClearButtonMouseDown);
       }
 
-      const bringToFrontListener = () => {
-        requestAnimationFrame(() => {
-          this._overlayElement.bringToFront();
-        });
-      };
-
-      this.addEventListener('mousedown', bringToFrontListener);
-      this.addEventListener('touchstart', bringToFrontListener);
-
       this.addController(new VirtualKeyboardController(this));
     }
 

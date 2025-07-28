@@ -1,14 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { sendKeys } from '@vaadin/test-runner-commands';
-import {
-  fixtureSync,
-  mousedown,
-  nextFrame,
-  nextUpdate,
-  oneEvent,
-  outsideClick,
-  touchstart,
-} from '@vaadin/testing-helpers';
+import { fixtureSync, nextUpdate, oneEvent, outsideClick } from '@vaadin/testing-helpers';
 import './not-animated-styles.js';
 import '@vaadin/combo-box';
 import '@vaadin/dialog';
@@ -76,28 +68,6 @@ describe('combo-box in dialog', () => {
       await sendKeys({ press: 'Escape' });
 
       expect(dialog.opened).to.be.false;
-    });
-  });
-
-  describe('modeless', () => {
-    beforeEach(async () => {
-      dialog.modeless = true;
-      comboBox.open();
-      await nextFrame();
-    });
-
-    it('should not end up behind the dialog overlay on mousedown', async () => {
-      mousedown(comboBox);
-      await nextFrame();
-      expect(comboBox.$.overlay._last).to.be.true;
-    });
-
-    it('should not end up behind the dialog overlay on touchstart', async () => {
-      const { left: x, top: y } = comboBox.getBoundingClientRect();
-      touchstart(comboBox, { x, y });
-
-      await nextFrame();
-      expect(comboBox.$.overlay._last).to.be.true;
     });
   });
 });
