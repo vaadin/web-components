@@ -13,8 +13,6 @@ import { css } from 'lit';
 import { dashboardWidgetAndSectionStyles } from './vaadin-dashboard-widget-section-core-styles.js';
 
 const sectionStyles = css`
-  /* stylelint-disable length-zero-no-unit */
-
   :host {
     display: grid;
     position: relative;

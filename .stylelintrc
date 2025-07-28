@@ -22,6 +22,7 @@
   ],
   "rules": {
     "color-function-notation": "legacy",
+    "length-zero-no-unit": [true, { "ignore": ["custom-properties"] }],
     "no-duplicate-selectors": true
   }
 }

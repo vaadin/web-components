@@ -5,7 +5,6 @@
  */
 
 @media lumo_mixins_dashboard-item {
-  /* stylelint-disable length-zero-no-unit */
   :host {
     box-sizing: border-box;
     --_widget-background: var(--vaadin-dashboard-widget-background, var(--lumo-base-color));
