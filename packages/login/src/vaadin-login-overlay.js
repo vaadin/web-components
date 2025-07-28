@@ -36,6 +36,7 @@ import { LoginOverlayMixin } from './vaadin-login-overlay-mixin.js';
  * `content`                    | The overlay content element
  * `card`                       | Container for the brand and form wrapper
  * `brand`                      | Container for application title and description
+ * `description`                | The application description
  * `form-wrapper`               | The login form wrapper element
  * `form`                       | The login form element
  * `form-title`                 | Title of the login form

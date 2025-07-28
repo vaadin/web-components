@@ -49,7 +49,7 @@ describe('login overlay', () => {
     expect(overlay.opened).to.be.true;
   });
 
-  it('should not close on backdrop outside', () => {
+  it('should not close on backdrop click', () => {
     overlay.$.backdrop.click();
 
     expect(login.opened).to.be.true;

@@ -50,10 +50,6 @@ const loginOverlayWrapper = css`
     font-weight: var(--vaadin-login-overlay-description-font-weight, inherit);
     line-height: var(--vaadin-login-overlay-description-line-height, inherit);
   }
-
-  [part='form-wrapper'] ::slotted(vaadin-login-form) {
-    display: flex;
-  }
 `;
 
 export const loginOverlayWrapperStyles = [overlayStyles, loginOverlayWrapper];
