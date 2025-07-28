@@ -112,9 +112,12 @@ import { ComboBoxMixin } from './vaadin-combo-box-mixin.js';
  *
  * In addition to `<vaadin-text-field>` parts, the following parts are available for theming:
  *
- * Part name       | Description
- * ----------------|----------------
- * `toggle-button` | The toggle button
+ * Part name        | Description
+ * -----------------|------------------
+ * `toggle-button`  | The toggle button
+ * `overlay`        | The overlay container
+ * `content`        | The overlay content
+ * `loader`         | The loading indicator shown while loading items
  *
  * In addition to `<vaadin-text-field>` state attributes, the following state attributes are available for theming:
  *
@@ -221,13 +224,17 @@ class ComboBox extends ComboBoxDataProviderMixin(
 
       <vaadin-combo-box-overlay
         id="overlay"
+        popover="manual"
+        exportparts="overlay, content, loader"
         .owner="${this}"
         .opened="${this._overlayOpened}"
         ?loading="${this.loading}"
         theme="${ifDefined(this._theme)}"
         .positionTarget="${this._positionTarget}"
         no-vertical-overlap
-      ></vaadin-combo-box-overlay>
+      >
+        <slot name="overlay"></slot>
+      </vaadin-combo-box-overlay>
 
       <slot name="tooltip"></slot>
     `;

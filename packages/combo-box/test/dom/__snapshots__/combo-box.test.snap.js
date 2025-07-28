@@ -3,6 +3,13 @@ export const snapshots = {};
 
 snapshots["vaadin-combo-box host default"] = 
 `<vaadin-combo-box>
+  <vaadin-combo-box-scroller
+    id="vaadin-combo-box-scroller-3"
+    role="listbox"
+    slot="overlay"
+    tabindex="-1"
+  >
+  </vaadin-combo-box-scroller>
   <label
     for="input-vaadin-combo-box-4"
     id="label-vaadin-combo-box-0"
@@ -35,6 +42,13 @@ snapshots["vaadin-combo-box host disabled"] =
   aria-disabled="true"
   disabled=""
 >
+  <vaadin-combo-box-scroller
+    id="vaadin-combo-box-scroller-3"
+    role="listbox"
+    slot="overlay"
+    tabindex="-1"
+  >
+  </vaadin-combo-box-scroller>
   <label
     for="input-vaadin-combo-box-4"
     id="label-vaadin-combo-box-0"
@@ -66,6 +80,13 @@ snapshots["vaadin-combo-box host disabled"] =
 
 snapshots["vaadin-combo-box host placeholder"] = 
 `<vaadin-combo-box placeholder="Placeholder">
+  <vaadin-combo-box-scroller
+    id="vaadin-combo-box-scroller-3"
+    role="listbox"
+    slot="overlay"
+    tabindex="-1"
+  >
+  </vaadin-combo-box-scroller>
   <label
     for="input-vaadin-combo-box-4"
     id="label-vaadin-combo-box-0"
@@ -96,6 +117,13 @@ snapshots["vaadin-combo-box host placeholder"] =
 
 snapshots["vaadin-combo-box host readonly"] = 
 `<vaadin-combo-box readonly="">
+  <vaadin-combo-box-scroller
+    id="vaadin-combo-box-scroller-3"
+    role="listbox"
+    slot="overlay"
+    tabindex="-1"
+  >
+  </vaadin-combo-box-scroller>
   <label
     for="input-vaadin-combo-box-4"
     id="label-vaadin-combo-box-0"
@@ -126,6 +154,13 @@ snapshots["vaadin-combo-box host readonly"] =
 
 snapshots["vaadin-combo-box host required"] = 
 `<vaadin-combo-box required="">
+  <vaadin-combo-box-scroller
+    id="vaadin-combo-box-scroller-3"
+    role="listbox"
+    slot="overlay"
+    tabindex="-1"
+  >
+  </vaadin-combo-box-scroller>
   <label
     for="input-vaadin-combo-box-4"
     id="label-vaadin-combo-box-0"
@@ -156,6 +191,13 @@ snapshots["vaadin-combo-box host required"] =
 
 snapshots["vaadin-combo-box host pattern"] = 
 `<vaadin-combo-box>
+  <vaadin-combo-box-scroller
+    id="vaadin-combo-box-scroller-3"
+    role="listbox"
+    slot="overlay"
+    tabindex="-1"
+  >
+  </vaadin-combo-box-scroller>
   <label
     for="input-vaadin-combo-box-4"
     id="label-vaadin-combo-box-0"
@@ -186,6 +228,13 @@ snapshots["vaadin-combo-box host pattern"] =
 
 snapshots["vaadin-combo-box host label"] = 
 `<vaadin-combo-box has-label="">
+  <vaadin-combo-box-scroller
+    id="vaadin-combo-box-scroller-3"
+    role="listbox"
+    slot="overlay"
+    tabindex="-1"
+  >
+  </vaadin-combo-box-scroller>
   <label
     for="input-vaadin-combo-box-4"
     id="label-vaadin-combo-box-0"
@@ -217,6 +266,13 @@ snapshots["vaadin-combo-box host label"] =
 
 snapshots["vaadin-combo-box host helper"] = 
 `<vaadin-combo-box has-helper="">
+  <vaadin-combo-box-scroller
+    id="vaadin-combo-box-scroller-3"
+    role="listbox"
+    slot="overlay"
+    tabindex="-1"
+  >
+  </vaadin-combo-box-scroller>
   <label
     for="input-vaadin-combo-box-4"
     id="label-vaadin-combo-box-0"
@@ -256,6 +312,13 @@ snapshots["vaadin-combo-box host error"] =
   has-error-message=""
   invalid=""
 >
+  <vaadin-combo-box-scroller
+    id="vaadin-combo-box-scroller-3"
+    role="listbox"
+    slot="overlay"
+    tabindex="-1"
+  >
+  </vaadin-combo-box-scroller>
   <label
     for="input-vaadin-combo-box-4"
     id="label-vaadin-combo-box-0"
@@ -288,6 +351,13 @@ snapshots["vaadin-combo-box host error"] =
 
 snapshots["vaadin-combo-box host value"] = 
 `<vaadin-combo-box has-value="">
+  <vaadin-combo-box-scroller
+    id="vaadin-combo-box-scroller-3"
+    role="listbox"
+    slot="overlay"
+    tabindex="-1"
+  >
+  </vaadin-combo-box-scroller>
   <label
     for="input-vaadin-combo-box-4"
     id="label-vaadin-combo-box-0"
@@ -322,6 +392,33 @@ snapshots["vaadin-combo-box host opened default"] =
   start-aligned=""
   top-aligned=""
 >
+  <vaadin-combo-box-scroller
+    id="vaadin-combo-box-scroller-3"
+    role="listbox"
+    slot="overlay"
+    tabindex="-1"
+  >
+    <vaadin-combo-box-item
+      aria-posinset="1"
+      aria-selected="false"
+      aria-setsize="2"
+      id="vaadin-combo-box-item-0"
+      role="option"
+      tabindex="-1"
+    >
+      Item 1
+    </vaadin-combo-box-item>
+    <vaadin-combo-box-item
+      aria-posinset="2"
+      aria-selected="false"
+      aria-setsize="2"
+      id="vaadin-combo-box-item-1"
+      role="option"
+      tabindex="-1"
+    >
+      Item 2
+    </vaadin-combo-box-item>
+  </vaadin-combo-box-scroller>
   <label
     for="input-vaadin-combo-box-4"
     id="label-vaadin-combo-box-0"
@@ -352,37 +449,16 @@ snapshots["vaadin-combo-box host opened default"] =
 
 snapshots["vaadin-combo-box host opened overlay"] = 
 `<vaadin-combo-box-overlay
+  exportparts="overlay, content, loader"
   id="overlay"
   no-vertical-overlap=""
   opened=""
+  popover="manual"
   start-aligned=""
   top-aligned=""
 >
-  <vaadin-combo-box-scroller
-    id="vaadin-combo-box-scroller-3"
-    role="listbox"
-  >
-    <vaadin-combo-box-item
-      aria-posinset="1"
-      aria-selected="false"
-      aria-setsize="2"
-      id="vaadin-combo-box-item-0"
-      role="option"
-      tabindex="-1"
-    >
-      Item 1
-    </vaadin-combo-box-item>
-    <vaadin-combo-box-item
-      aria-posinset="2"
-      aria-selected="false"
-      aria-setsize="2"
-      id="vaadin-combo-box-item-1"
-      role="option"
-      tabindex="-1"
-    >
-      Item 2
-    </vaadin-combo-box-item>
-  </vaadin-combo-box-scroller>
+  <slot name="overlay">
+  </slot>
 </vaadin-combo-box-overlay>
 `;
 /* end snapshot vaadin-combo-box host opened overlay */
@@ -408,75 +484,33 @@ snapshots["vaadin-combo-box host opened overlay shadow"] =
 snapshots["vaadin-combo-box host opened overlay class"] = 
 `<vaadin-combo-box-overlay
   class="combo-box-overlay custom"
+  exportparts="overlay, content, loader"
   id="overlay"
   no-vertical-overlap=""
   opened=""
+  popover="manual"
   start-aligned=""
   top-aligned=""
 >
-  <vaadin-combo-box-scroller
-    id="vaadin-combo-box-scroller-3"
-    role="listbox"
-  >
-    <vaadin-combo-box-item
-      aria-posinset="1"
-      aria-selected="false"
-      aria-setsize="2"
-      id="vaadin-combo-box-item-0"
-      role="option"
-      tabindex="-1"
-    >
-      Item 1
-    </vaadin-combo-box-item>
-    <vaadin-combo-box-item
-      aria-posinset="2"
-      aria-selected="false"
-      aria-setsize="2"
-      id="vaadin-combo-box-item-1"
-      role="option"
-      tabindex="-1"
-    >
-      Item 2
-    </vaadin-combo-box-item>
-  </vaadin-combo-box-scroller>
+  <slot name="overlay">
+  </slot>
 </vaadin-combo-box-overlay>
 `;
 /* end snapshot vaadin-combo-box host opened overlay class */
 
 snapshots["vaadin-combo-box host opened theme overlay"] = 
 `<vaadin-combo-box-overlay
+  exportparts="overlay, content, loader"
   id="overlay"
   no-vertical-overlap=""
   opened=""
+  popover="manual"
   start-aligned=""
   theme="align-right"
   top-aligned=""
 >
-  <vaadin-combo-box-scroller
-    id="vaadin-combo-box-scroller-3"
-    role="listbox"
-  >
-    <vaadin-combo-box-item
-      aria-posinset="1"
-      aria-selected="false"
-      aria-setsize="2"
-      id="vaadin-combo-box-item-0"
-      role="option"
-      tabindex="-1"
-    >
-      Item 1
-    </vaadin-combo-box-item>
-    <vaadin-combo-box-item
-      aria-posinset="2"
-      aria-selected="false"
-      aria-setsize="2"
-      id="vaadin-combo-box-item-1"
-      role="option"
-      tabindex="-1"
-    >
-      Item 2
-    </vaadin-combo-box-item>
-  </vaadin-combo-box-scroller>
+  <slot name="overlay">
+  </slot>
 </vaadin-combo-box-overlay>
 `;
 /* end snapshot vaadin-combo-box host opened theme overlay */
@@ -525,14 +559,13 @@ snapshots["vaadin-combo-box shadow default"] =
   </div>
 </div>
 <vaadin-combo-box-overlay
+  exportparts="overlay, content, loader"
   id="overlay"
   no-vertical-overlap=""
+  popover="manual"
 >
-  <vaadin-combo-box-scroller
-    id="vaadin-combo-box-scroller-3"
-    role="listbox"
-  >
-  </vaadin-combo-box-scroller>
+  <slot name="overlay">
+  </slot>
 </vaadin-combo-box-overlay>
 <slot name="tooltip">
 </slot>
@@ -586,14 +619,13 @@ snapshots["vaadin-combo-box shadow disabled"] =
   </div>
 </div>
 <vaadin-combo-box-overlay
+  exportparts="overlay, content, loader"
   id="overlay"
   no-vertical-overlap=""
+  popover="manual"
 >
-  <vaadin-combo-box-scroller
-    id="vaadin-combo-box-scroller-3"
-    role="listbox"
-  >
-  </vaadin-combo-box-scroller>
+  <slot name="overlay">
+  </slot>
 </vaadin-combo-box-overlay>
 <slot name="tooltip">
 </slot>
@@ -647,14 +679,13 @@ snapshots["vaadin-combo-box shadow readonly"] =
   </div>
 </div>
 <vaadin-combo-box-overlay
+  exportparts="overlay, content, loader"
   id="overlay"
   no-vertical-overlap=""
+  popover="manual"
 >
-  <vaadin-combo-box-scroller
-    id="vaadin-combo-box-scroller-3"
-    role="listbox"
-  >
-  </vaadin-combo-box-scroller>
+  <slot name="overlay">
+  </slot>
 </vaadin-combo-box-overlay>
 <slot name="tooltip">
 </slot>
@@ -708,14 +739,13 @@ snapshots["vaadin-combo-box shadow invalid"] =
   </div>
 </div>
 <vaadin-combo-box-overlay
+  exportparts="overlay, content, loader"
   id="overlay"
   no-vertical-overlap=""
+  popover="manual"
 >
-  <vaadin-combo-box-scroller
-    id="vaadin-combo-box-scroller-3"
-    role="listbox"
-  >
-  </vaadin-combo-box-scroller>
+  <slot name="overlay">
+  </slot>
 </vaadin-combo-box-overlay>
 <slot name="tooltip">
 </slot>
@@ -769,15 +799,14 @@ snapshots["vaadin-combo-box shadow theme"] =
   </div>
 </div>
 <vaadin-combo-box-overlay
+  exportparts="overlay, content, loader"
   id="overlay"
   no-vertical-overlap=""
+  popover="manual"
   theme="align-right"
 >
-  <vaadin-combo-box-scroller
-    id="vaadin-combo-box-scroller-3"
-    role="listbox"
-  >
-  </vaadin-combo-box-scroller>
+  <slot name="overlay">
+  </slot>
 </vaadin-combo-box-overlay>
 <slot name="tooltip">
 </slot>

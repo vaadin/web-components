@@ -203,4 +203,17 @@ describe('overlay opening', () => {
       expect(overlay.opened).to.be.false;
     });
   });
+
+  describe('exportparts', () => {
+    it('should export overlay parts for styling', () => {
+      const parts = [...overlay.shadowRoot.querySelectorAll('[part]')]
+        .map((el) => el.getAttribute('part'))
+        .filter((part) => part !== 'backdrop');
+      const exportParts = overlay.getAttribute('exportparts').split(', ');
+
+      parts.forEach((part) => {
+        expect(exportParts).to.include(part);
+      });
+    });
+  });
 });

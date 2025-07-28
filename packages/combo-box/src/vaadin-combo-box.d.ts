@@ -181,9 +181,12 @@ export interface ComboBoxEventMap<TItem> extends HTMLElementEventMap {
  *
  * In addition to `<vaadin-text-field>` parts, the following parts are available for theming:
  *
- * Part name       | Description
- * ----------------|----------------
- * `toggle-button` | The toggle button
+ * Part name        | Description
+ * -----------------|------------------
+ * `toggle-button`  | The toggle button
+ * `overlay`        | The overlay container
+ * `content`        | The overlay content
+ * `loader`         | The loading indicator shown while loading items
  *
  * In addition to `<vaadin-text-field>` state attributes, the following state attributes are available for theming:
  *

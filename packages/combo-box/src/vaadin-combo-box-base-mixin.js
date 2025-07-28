@@ -258,21 +258,14 @@ export const ComboBoxBaseMixin = (superClass) =>
 
     /**
      * Render the scroller element to the overlay.
-     * Override to provide custom logic (e.g. setting "slot").
      *
-     * @protected
+     * @private
      */
     _renderScroller(scroller) {
-      const overlay = this.$.overlay;
-
-      overlay.renderer = (root) => {
-        if (!root.innerHTML) {
-          root.appendChild(scroller);
-        }
-      };
-
-      // Ensure the scroller is rendered
-      overlay.requestContentUpdate();
+      scroller.setAttribute('slot', 'overlay');
+      // Prevent focusing scroller on input Tab
+      scroller.setAttribute('tabindex', '-1');
+      this.appendChild(scroller);
     }
 
     /**

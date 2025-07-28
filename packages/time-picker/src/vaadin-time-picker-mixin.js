@@ -259,18 +259,6 @@ export const TimePickerMixin = (superClass) =>
       return item ? item.label : '';
     }
 
-    /**
-     * Override method from `ComboBoxBaseMixin` to render scroller in the slot.
-     * @protected
-     * @override
-     */
-    _renderScroller(scroller) {
-      scroller.setAttribute('slot', 'overlay');
-      // Prevent focusing scroller on input Tab
-      scroller.setAttribute('tabindex', '-1');
-      this.appendChild(scroller);
-    }
-
     /** @private */
     _updateScroller(opened, items, focusedIndex, theme) {
       if (opened) {
