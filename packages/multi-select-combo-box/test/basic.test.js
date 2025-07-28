@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { resetMouse, sendKeys, sendMouse } from '@vaadin/test-runner-commands';
-import { fire, fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
+import { fire, fixtureSync, nextFrame, nextRender, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './multi-select-combo-box-test-styles.js';
 import '../src/vaadin-multi-select-combo-box.js';
@@ -132,6 +132,15 @@ describe('basic', () => {
       inputElement.focus();
       await sendKeys({ press: 'Escape' });
       expect(comboBox.selectedItems).to.deep.equal([]);
+    });
+
+    it('should not clear selected items on Esc when clear button is visible and opened', async () => {
+      comboBox.selectedItems = ['apple', 'orange'];
+      inputElement.focus();
+      inputElement.click();
+      await oneEvent(comboBox.$.overlay, 'vaadin-overlay-open');
+      await sendKeys({ press: 'Escape' });
+      expect(comboBox.selectedItems).to.deep.equal(['apple', 'orange']);
     });
 
     it('should not clear selected items on Esc when clear button is not visible', async () => {
