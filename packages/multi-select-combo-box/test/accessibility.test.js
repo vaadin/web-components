@@ -2,7 +2,6 @@ import { expect } from '@vaadin/chai-plugins';
 import { sendKeys } from '@vaadin/test-runner-commands';
 import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import './not-animated-styles.js';
 import '../src/vaadin-multi-select-combo-box.js';
 import { getAllItems, getFirstItem } from './helpers.js';
 
@@ -99,10 +98,10 @@ describe('accessibility', () => {
     describe('items', () => {
       beforeEach(async () => {
         comboBox = fixtureSync(`<vaadin-multi-select-combo-box></vaadin-multi-select-combo-box>`);
+        await nextRender();
         comboBox.items = ['Apple', 'Banana', 'Lemon', 'Orange'];
         comboBox.selectedItems = ['Apple', 'Lemon'];
-        await nextRender();
-        comboBox.open();
+        comboBox.inputElement.click();
         scroller = comboBox._scroller;
         items = getAllItems(comboBox);
       });
