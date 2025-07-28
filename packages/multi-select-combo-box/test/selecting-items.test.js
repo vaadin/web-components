@@ -455,6 +455,16 @@ describe('selecting items', () => {
       expect(inputElement.value).to.equal('');
     });
 
+    it('should clear the filter when pressing escape with autoOpenDisabled', async () => {
+      comboBox.autoOpenDisabled = true;
+      await sendKeys({ type: 'an' });
+      expect(comboBox.filter).to.equal('an');
+
+      await sendKeys({ down: 'Escape' });
+      expect(comboBox.filter).to.equal('');
+      expect(inputElement.value).to.equal('');
+    });
+
     it('should clear the filter when pressing escape after selecting an item', async () => {
       await sendKeys({ type: 'an' });
       expectItems(['banana', 'orange']);

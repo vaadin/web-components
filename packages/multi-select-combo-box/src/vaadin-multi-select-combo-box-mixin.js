@@ -527,8 +527,7 @@ export const MultiSelectComboBoxMixin = (superClass) =>
           // An item matching by label was found, select it.
           this.__selectItem(itemMatchingInputValue);
         } else {
-          // Clear input value when a custom value was committed
-          // on blur / outside click, but not confirmed on Enter.
+          // Clear input value on Escape press while closed.
           this._inputElementValue = '';
         }
       }
