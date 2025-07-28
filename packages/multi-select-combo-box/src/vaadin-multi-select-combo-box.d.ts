@@ -8,8 +8,12 @@ import type { DisabledMixinClass } from '@vaadin/a11y-base/src/disabled-mixin.js
 import type { FocusMixinClass } from '@vaadin/a11y-base/src/focus-mixin.js';
 import type { KeyboardMixinClass } from '@vaadin/a11y-base/src/keyboard-mixin.js';
 import type { ComboBoxDefaultItem } from '@vaadin/combo-box/src/vaadin-combo-box.js';
+import type { ComboBoxBaseMixinClass } from '@vaadin/combo-box/src/vaadin-combo-box-base-mixin.js';
+import type { ComboBoxDataProviderMixinClass } from '@vaadin/combo-box/src/vaadin-combo-box-data-provider-mixin.js';
+import type { ComboBoxItemsMixinClass } from '@vaadin/combo-box/src/vaadin-combo-box-items-mixin.js';
 import type { DelegateStateMixinClass } from '@vaadin/component-base/src/delegate-state-mixin.js';
 import type { ElementMixinClass } from '@vaadin/component-base/src/element-mixin.js';
+import type { OverlayClassMixinClass } from '@vaadin/component-base/src/overlay-class-mixin.js';
 import type { ResizeMixinClass } from '@vaadin/component-base/src/resize-mixin.js';
 import type { SlotStylesMixinClass } from '@vaadin/component-base/src/slot-styles-mixin.js';
 import type { ClearButtonMixinClass } from '@vaadin/field-base/src/clear-button-mixin.js';
@@ -169,7 +173,10 @@ declare class MultiSelectComboBox<TItem = ComboBoxDefaultItem> extends HTMLEleme
 }
 
 interface MultiSelectComboBox<TItem = ComboBoxDefaultItem>
-  extends ValidateMixinClass,
+  extends ComboBoxBaseMixinClass,
+    ComboBoxDataProviderMixinClass<TItem>,
+    ComboBoxItemsMixinClass<TItem>,
+    ValidateMixinClass,
     SlotStylesMixinClass,
     LabelMixinClass,
     KeyboardMixinClass,
@@ -183,6 +190,7 @@ interface MultiSelectComboBox<TItem = ComboBoxDefaultItem>
     DelegateStateMixinClass,
     DelegateFocusMixinClass,
     MultiSelectComboBoxMixinClass<TItem>,
+    OverlayClassMixinClass,
     ResizeMixinClass,
     ThemableMixinClass,
     ThemePropertyMixinClass,

@@ -2,13 +2,17 @@ import type { DelegateFocusMixinClass } from '@vaadin/a11y-base/src/delegate-foc
 import type { DisabledMixinClass } from '@vaadin/a11y-base/src/disabled-mixin.js';
 import type { FocusMixinClass } from '@vaadin/a11y-base/src/focus-mixin.js';
 import type { KeyboardMixinClass } from '@vaadin/a11y-base/src/keyboard-mixin.js';
+import type { ComboBoxBaseMixinClass } from '@vaadin/combo-box/src/vaadin-combo-box-base-mixin.js';
+import type { ComboBoxDataProviderMixinClass } from '@vaadin/combo-box/src/vaadin-combo-box-data-provider-mixin.js';
 import type {
   ComboBoxItemMixinClass,
   ComboBoxItemRenderer,
 } from '@vaadin/combo-box/src/vaadin-combo-box-item-mixin.js';
+import type { ComboBoxItemsMixinClass } from '@vaadin/combo-box/src/vaadin-combo-box-items-mixin.js';
 import type { DelegateStateMixinClass } from '@vaadin/component-base/src/delegate-state-mixin.js';
 import type { DirMixinClass } from '@vaadin/component-base/src/dir-mixin.js';
 import type { ElementMixinClass } from '@vaadin/component-base/src/element-mixin.js';
+import type { OverlayClassMixinClass } from '@vaadin/component-base/src/overlay-class-mixin.js';
 import type { SlotStylesMixinClass } from '@vaadin/component-base/src/slot-styles-mixin.js';
 import type { ClearButtonMixinClass } from '@vaadin/field-base/src/clear-button-mixin.js';
 import type { FieldMixinClass } from '@vaadin/field-base/src/field-mixin.js';
@@ -109,6 +113,9 @@ assertType<boolean>(narrowedComboBox.selectedItemsOnTop);
 assertType<boolean>(narrowedComboBox.autoExpandVertically);
 
 // Mixins
+assertType<ComboBoxBaseMixinClass>(narrowedComboBox);
+assertType<ComboBoxDataProviderMixinClass<TestComboBoxItem>>(narrowedComboBox);
+assertType<ComboBoxItemsMixinClass<TestComboBoxItem>>(narrowedComboBox);
 assertType<ElementMixinClass>(narrowedComboBox);
 assertType<DelegateFocusMixinClass>(narrowedComboBox);
 assertType<DelegateStateMixinClass>(narrowedComboBox);
@@ -122,6 +129,7 @@ assertType<Omit<InputMixinClass, 'value'>>(narrowedComboBox);
 assertType<KeyboardMixinClass>(narrowedComboBox);
 assertType<LabelMixinClass>(narrowedComboBox);
 assertType<MultiSelectComboBoxMixinClass<TestComboBoxItem>>(narrowedComboBox);
+assertType<OverlayClassMixinClass>(narrowedComboBox);
 assertType<SlotStylesMixinClass>(narrowedComboBox);
 assertType<ValidateMixinClass>(narrowedComboBox);
 assertType<ThemableMixinClass>(narrowedComboBox);
