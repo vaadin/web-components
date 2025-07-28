@@ -8,8 +8,8 @@
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
-import { SlotStylesMixin } from '@vaadin/component-base';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
+import { SlotStylesMixin } from '@vaadin/component-base/src/slot-styles-mixin.js';
 import { Grid } from '@vaadin/grid/src/vaadin-grid.js';
 import { gridProStyles } from './styles/vaadin-grid-pro-core-styles.js';
 import { InlineEditingMixin } from './vaadin-grid-pro-inline-editing-mixin.js';
