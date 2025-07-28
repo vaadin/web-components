@@ -53,23 +53,6 @@ export const isLastOverlay = (overlay, filter = (_overlay) => true) => {
   return overlay === filteredOverlays.pop();
 };
 
-const overlayMap = new WeakMap();
-
-/**
- * Stores the reference to the nested overlay for given parent,
- * or removes it when the nested overlay is null.
- * @param {HTMLElement} parent
- * @param {HTMLElement} nested
- * @protected
- */
-export const setNestedOverlay = (parent, nested) => {
-  if (nested != null) {
-    overlayMap.set(parent, nested);
-  } else {
-    overlayMap.delete(parent);
-  }
-};
-
 /**
  * @polymerMixin
  */
@@ -133,11 +116,6 @@ export const OverlayStackMixin = (superClass) =>
       // Update order of attached instances
       this._removeAttachedInstance();
       this._appendAttachedInstance();
-
-      // If there is a nested overlay, call `bringToFront()` for it as well.
-      if (overlayMap.has(this)) {
-        overlayMap.get(this).bringToFront();
-      }
     }
 
     /** @protected */
