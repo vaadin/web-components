@@ -172,7 +172,7 @@ const loginFormWrapper = css`
 
   /* Landscape small screen */
   @media only screen and (max-height: 600px) and (min-width: 600px) and (orientation: landscape) {
-    :host([theme~='with-overlay']) [part='form'] {
+    :host([theme~='with-overlay']) {
       height: 100%;
       flex: 1;
       padding: 2px;

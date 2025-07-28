@@ -48,10 +48,7 @@ export interface LoginFormEventMap extends HTMLElementEventMap, LoginFormCustomE
  *
  * ### Styling
  *
- * The component doesn't have a shadowRoot, so the `<form>` and input fields can be styled from a global scope.
- *
- * Use `<vaadin-login-form-wrapper>` themable component to apply styles.
- * The following shadow DOM parts of the `<vaadin-login-form-wrapper>` are available for styling:
+ * The following shadow DOM parts are available for styling:
  *
  * Part name      | Description
  * ---------------|---------------------------------------------------------|

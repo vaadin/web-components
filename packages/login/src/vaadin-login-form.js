@@ -7,7 +7,7 @@ import '@vaadin/button/src/vaadin-button.js';
 import '@vaadin/text-field/src/vaadin-text-field.js';
 import '@vaadin/password-field/src/vaadin-password-field.js';
 import './vaadin-login-form-wrapper.js';
-import { html, LitElement } from 'lit';
+import { css, html, LitElement } from 'lit';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
@@ -28,10 +28,7 @@ import { LoginFormMixin } from './vaadin-login-form-mixin.js';
  *
  * ### Styling
  *
- * The component doesn't have a shadowRoot, so the `<form>` and input fields can be styled from a global scope.
- * Use `<vaadin-login-form-wrapper>` themable component to apply styles.
- *
- * The following shadow DOM parts of the `<vaadin-login-form-wrapper>` are available for styling:
+ * The following shadow DOM parts are available for styling:
  *
  * Part name      | Description
  * ---------------|---------------------------------------------------------|
@@ -60,69 +57,40 @@ class LoginForm extends LoginFormMixin(ElementMixin(ThemableMixin(PolylitMixin(L
     return 'vaadin-login-form';
   }
 
-  /**
-   * @protected
-   * @override
-   */
-  createRenderRoot() {
-    return this;
+  static get styles() {
+    return css`
+      :host {
+        display: block;
+        max-width: max-content;
+      }
+
+      :host([hidden]) {
+        display: none !important;
+      }
+    `;
   }
 
   /** @protected */
   render() {
     return html`
       <vaadin-login-form-wrapper
-        id="vaadinLoginFormWrapper"
+        id="form"
         theme="${ifDefined(this._theme)}"
         .error="${this.error}"
         .i18n="${this.__effectiveI18n}"
-        .headingLevel="${this.headingLevel}"
+        part="form"
+        role="region"
+        aria-labelledby="title"
+        exportparts="error-message, error-message-title, error-message-description, footer"
       >
-        <form method="POST" action="${ifDefined(this.action)}" @formdata="${this._onFormData}" slot="form">
-          <input id="csrf" type="hidden" />
-          <vaadin-text-field
-            name="username"
-            .label="${this.__effectiveI18n.form.username}"
-            .errorMessage="${this.__effectiveI18n.errorMessage.username}"
-            id="vaadinLoginUsername"
-            required
-            @keydown="${this._handleInputKeydown}"
-            autocapitalize="none"
-            autocorrect="off"
-            spellcheck="false"
-            autocomplete="username"
-            manual-validation
-          >
-            <input type="text" slot="input" @keyup="${this._handleInputKeyup}" />
-          </vaadin-text-field>
-
-          <vaadin-password-field
-            name="password"
-            .label="${this.__effectiveI18n.form.password}"
-            .errorMessage="${this.__effectiveI18n.errorMessage.password}"
-            id="vaadinLoginPassword"
-            required
-            @keydown="${this._handleInputKeydown}"
-            spellcheck="false"
-            autocomplete="current-password"
-            manual-validation
-          >
-            <input type="password" slot="input" @keyup="${this._handleInputKeyup}" />
-          </vaadin-password-field>
-        </form>
-
-        <vaadin-button slot="submit" theme="primary submit" @click="${this.submit}" .disabled="${this.disabled}">
-          ${this.__effectiveI18n.form.submit}
-        </vaadin-button>
-
-        <vaadin-button
-          slot="forgot-password"
-          theme="tertiary small"
-          @click="${this._onForgotPasswordClick}"
-          ?hidden="${this.noForgotPassword}"
-        >
-          ${this.__effectiveI18n.form.forgotPassword}
-        </vaadin-button>
+        <div id="title" slot="form-title" part="form-title" role="heading" aria-level="${this.headingLevel}">
+          ${this.__effectiveI18n.form.title}
+        </div>
+        <slot name="form" slot="form"></slot>
+        <slot name="custom-form-area" slot="custom-form-area"></slot>
+        <slot name="submit" slot="submit"></slot>
+        <slot name="forgot-password" slot="forgot-password"></slot>
+        <slot name="footer" slot="footer"></slot>
       </vaadin-login-form-wrapper>
     `;
   }

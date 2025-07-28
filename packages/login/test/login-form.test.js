@@ -1,7 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { enter, fixtureSync, nextRender, nextUpdate, tap } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import './login-form-wrapper-styles.js';
 import '../src/vaadin-login-form.js';
 import { fillUsernameAndPassword } from './helpers.js';
 
@@ -39,7 +38,7 @@ describe('login form with csrf', () => {
 });
 
 describe('login form', () => {
-  let login, formWrapper, submitStub;
+  let login, formWrapper, submitStub, vaadinLoginUsername, vaadinLoginPassword;
 
   before(() => {
     submitStub = sinon.stub(HTMLFormElement.prototype, 'submit');
@@ -52,7 +51,9 @@ describe('login form', () => {
   beforeEach(async () => {
     login = fixtureSync('<vaadin-login-form action="login-action"></vaadin-login-form>');
     await nextRender();
-    formWrapper = login.querySelector('vaadin-login-form-wrapper');
+    formWrapper = login.$.form;
+    vaadinLoginUsername = login._userNameField;
+    vaadinLoginPassword = login._passwordField;
   });
 
   afterEach(() => {
@@ -68,8 +69,6 @@ describe('login form', () => {
   });
 
   it('should not validate username on blur', () => {
-    const { vaadinLoginUsername } = login.$;
-
     vaadinLoginUsername.focus();
     vaadinLoginUsername.blur();
 
@@ -77,8 +76,6 @@ describe('login form', () => {
   });
 
   it('should not validate password on blur', () => {
-    const { vaadinLoginPassword } = login.$;
-
     vaadinLoginPassword.focus();
     vaadinLoginPassword.blur();
 
@@ -86,8 +83,6 @@ describe('login form', () => {
   });
 
   it('should mark only username as invalid if user hits ENTER when field is empty', () => {
-    const { vaadinLoginUsername, vaadinLoginPassword } = login.$;
-
     expect(vaadinLoginUsername.invalid).to.be.false;
     expect(vaadinLoginPassword.invalid).to.be.false;
 
@@ -97,7 +92,6 @@ describe('login form', () => {
   });
 
   it('should change focus to password if username is filled and user hits ENTER (password is empty)', () => {
-    const { vaadinLoginUsername, vaadinLoginPassword } = login.$;
     vaadinLoginUsername.value = 'username';
 
     enter(vaadinLoginUsername);
@@ -105,7 +99,6 @@ describe('login form', () => {
   });
 
   it('should not mark password as invalid if username is filled and user hits ENTER (password is empty)', () => {
-    const { vaadinLoginUsername, vaadinLoginPassword } = login.$;
     vaadinLoginUsername.value = 'username';
 
     enter(vaadinLoginUsername);
@@ -113,8 +106,6 @@ describe('login form', () => {
   });
 
   it('should mark password as invalid if user hits ENTER when field is empty', () => {
-    const { vaadinLoginUsername, vaadinLoginPassword } = login.$;
-
     expect(vaadinLoginUsername.invalid).to.be.false;
     expect(vaadinLoginPassword.invalid).to.be.false;
 
@@ -125,8 +116,6 @@ describe('login form', () => {
   });
 
   it('should change focus to username if password is filled and user hits ENTER (username is empty)', () => {
-    const { vaadinLoginUsername, vaadinLoginPassword } = login.$;
-
     vaadinLoginPassword.focus();
     vaadinLoginPassword.value = 'password';
     enter(vaadinLoginPassword);
@@ -134,14 +123,14 @@ describe('login form', () => {
   });
 
   it('should trigger submit if both username and password are filled', () => {
-    const { vaadinLoginPassword } = fillUsernameAndPassword(login);
+    fillUsernameAndPassword(login);
     enter(vaadinLoginPassword);
     expect(submitStub.called).to.be.true;
   });
 
   it('should disable button after submitting form', async () => {
     const submit = login.querySelector('vaadin-button');
-    const { vaadinLoginPassword } = fillUsernameAndPassword(login);
+    fillUsernameAndPassword(login);
     enter(vaadinLoginPassword);
     await nextUpdate(login);
     expect(submit.disabled).to.be.true;
@@ -149,7 +138,7 @@ describe('login form', () => {
 
   it('should prevent submit call when login is disabled', async () => {
     const submit = login.querySelector('vaadin-button');
-    const { vaadinLoginPassword } = fillUsernameAndPassword(login);
+    fillUsernameAndPassword(login);
 
     login.setAttribute('disabled', 'disabled');
     await nextUpdate(login);
@@ -177,7 +166,7 @@ describe('login form', () => {
   });
 
   it('should trigger `login` event if no action is defined', async () => {
-    const { vaadinLoginUsername, vaadinLoginPassword } = fillUsernameAndPassword(login);
+    fillUsernameAndPassword(login);
     login.action = null;
     await nextUpdate(login);
 
@@ -240,13 +229,11 @@ describe('login form', () => {
   });
 
   it('should focus the username field', () => {
-    const usernameElement = login.$.vaadinLoginUsername;
-    expect(document.activeElement).to.equal(usernameElement.inputElement);
+    expect(document.activeElement).to.equal(vaadinLoginUsername.inputElement);
   });
 
   it('should have autocomplete attribute set', () => {
-    const passwordField = login.$.vaadinLoginPassword;
-    expect(passwordField.getAttribute('autocomplete')).to.be.equal('current-password');
+    expect(vaadinLoginPassword.getAttribute('autocomplete')).to.be.equal('current-password');
   });
 });
 
@@ -270,7 +257,7 @@ describe('error message', () => {
   beforeEach(async () => {
     login = fixtureSync('<vaadin-login-form error></vaadin-login-form>');
     await nextRender();
-    formWrapper = login.querySelector('vaadin-login-form-wrapper');
+    formWrapper = login.$.form;
   });
 
   it('should show error message if the error attribute is set', () => {
@@ -291,25 +278,21 @@ describe('error message', () => {
   });
 });
 
-describe('stylable parts', () => {
-  let login, formWrapper;
+describe('exportparts', () => {
+  let form, wrapper;
 
   beforeEach(async () => {
-    login = fixtureSync('<vaadin-login-form theme="green"></vaadin-login-form>');
+    form = fixtureSync('<vaadin-login-form></vaadin-login-form>');
     await nextRender();
-    formWrapper = login.querySelector('vaadin-login-form-wrapper');
+    wrapper = form.$.form;
   });
 
-  it('should be possible to style parts', () => {
-    const color = 'rgb(0, 128, 0)';
+  it('should export all wrapper parts for styling', () => {
+    const parts = [...wrapper.shadowRoot.querySelectorAll('[part]')].map((el) => el.getAttribute('part'));
+    const exportParts = wrapper.getAttribute('exportparts').split(', ');
 
-    const formTitle = formWrapper.shadowRoot.querySelector('[part="form-title"]');
-    expect(getComputedStyle(formTitle).color).to.equal(color);
-
-    const errorTitle = formWrapper.shadowRoot.querySelector('[part="error-message-title"]');
-    expect(getComputedStyle(errorTitle).color).to.equal(color);
-
-    const errorMessage = formWrapper.shadowRoot.querySelector('[part="error-message-description"]');
-    expect(getComputedStyle(errorMessage).color).to.equal(color);
+    parts.forEach((part) => {
+      expect(exportParts).to.include(part);
+    });
   });
 });

@@ -40,13 +40,24 @@ class CrudDialogOverlay extends OverlayMixin(DirMixin(ThemableMixin(PolylitMixin
     return crudDialogOverlayStyles;
   }
 
+  /**
+   * Override method from OverlayFocusMixin to use the owner (CRUD element) as modal root
+   * @protected
+   * @override
+   */
+  get _modalRoot() {
+    return this.owner;
+  }
+
   /** @protected */
   render() {
     return html`
       <div part="backdrop" id="backdrop" ?hidden="${!this.withBackdrop}"></div>
       <div part="overlay" id="overlay" tabindex="0">
         <section id="resizerContainer" class="resizer-container">
-          <header part="header"><slot name="header"></slot></header>
+          <header part="header">
+            <slot name="header"></slot>
+          </header>
           <div part="content" id="content">
             <slot name="form"></slot>
           </div>
@@ -71,6 +82,22 @@ class CrudDialogOverlay extends OverlayMixin(DirMixin(ThemableMixin(PolylitMixin
     this.setAttribute('has-header', '');
     this.setAttribute('has-footer', '');
   }
+
+  /**
+   * @protected
+   * @override
+   */
+  _attachOverlay() {
+    this.showPopover();
+  }
+
+  /**
+   * @protected
+   * @override
+   */
+  _detachOverlay() {
+    this.hidePopover();
+  }
 }
 
 defineCustomElement(CrudDialogOverlay);
@@ -86,20 +113,27 @@ class CrudDialog extends DialogBaseMixin(OverlayClassMixin(ThemePropertyMixin(Po
 
   static get styles() {
     return css`
-      :host {
-        display: none;
+      :host,
+      [hidden] {
+        display: none !important;
+      }
+
+      :host([opened]),
+      :host([opening]),
+      :host([closing]) {
+        display: contents !important;
       }
     `;
   }
 
   static get properties() {
     return {
-      ariaLabel: {
-        type: String,
-      },
-
       fullscreen: {
         type: Boolean,
+      },
+
+      crudElement: {
+        type: Object,
       },
     };
   }
@@ -109,19 +143,40 @@ class CrudDialog extends DialogBaseMixin(OverlayClassMixin(ThemePropertyMixin(Po
     return html`
       <vaadin-crud-dialog-overlay
         id="overlay"
+        popover="manual"
+        .owner="${this.crudElement}"
         .opened="${this.opened}"
-        aria-label="${ifDefined(this.ariaLabel)}"
         @opened-changed="${this._onOverlayOpened}"
         @mousedown="${this._bringOverlayToFront}"
         @touchstart="${this._bringOverlayToFront}"
+        @vaadin-overlay-outside-click="${this.__cancel}"
+        @vaadin-overlay-escape-press="${this.__cancel}"
         theme="${ifDefined(this._theme)}"
         .modeless="${this.modeless}"
         .withBackdrop="${!this.modeless}"
         ?fullscreen="${this.fullscreen}"
-        role="dialog"
         focus-trap
-      ></vaadin-crud-dialog-overlay>
+        exportparts="backdrop, overlay, header, content, footer"
+      >
+        <slot name="header" slot="header"></slot>
+        <slot name="form" slot="form"></slot>
+        <slot name="save-button" slot="save-button"></slot>
+        <slot name="cancel-button" slot="cancel-button"></slot>
+        <slot name="delete-button" slot="delete-button"></slot>
+      </vaadin-crud-dialog-overlay>
     `;
+  }
+
+  /** @protected */
+  firstUpdated(props) {
+    super.firstUpdated(props);
+
+    this.role = 'dialog';
+  }
+
+  /** @private **/
+  __cancel() {
+    this.dispatchEvent(new CustomEvent('cancel'));
   }
 }
 

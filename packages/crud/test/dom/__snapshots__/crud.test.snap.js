@@ -2,7 +2,10 @@
 export const snapshots = {};
 
 snapshots["vaadin-crud host default"] = 
-`<vaadin-crud editor-position="">
+`<vaadin-crud
+  editor-position=""
+  with-backdrop=""
+>
   <vaadin-confirm-dialog
     aria-description="There are unsaved changes to this item."
     aria-label="Discard changes"
@@ -273,12 +276,67 @@ snapshots["vaadin-crud shadow default"] =
       </slot>
     </div>
   </div>
+</div>
+<vaadin-crud-dialog
+  exportparts="backdrop, overlay, header, content, footer"
+  id="dialog"
+  role="dialog"
+>
+  <slot
+    name="header"
+    slot="header"
+  >
+  </slot>
+  <slot
+    name="form"
+    slot="form"
+  >
+  </slot>
+  <slot
+    name="save-button"
+    slot="save-button"
+  >
+  </slot>
+  <slot
+    name="cancel-button"
+    slot="cancel-button"
+  >
+  </slot>
+  <slot
+    name="delete-button"
+    slot="delete-button"
+  >
+  </slot>
+</vaadin-crud-dialog>
+<slot name="confirm-cancel">
+</slot>
+<slot name="confirm-delete">
+</slot>
+`;
+/* end snapshot vaadin-crud shadow default */
+
+snapshots["vaadin-crud shadow inline editor"] =
+`<div id="container">
+  <div id="main">
+    <slot name="grid">
+    </slot>
+    <div
+      id="toolbar"
+      part="toolbar"
+    >
+      <slot name="toolbar">
+      </slot>
+      <slot name="new-button">
+      </slot>
+    </div>
+  </div>
   <div
     aria-labelledby="header"
     hidden=""
     id="editor"
     part="editor"
     role="group"
+    tabindex="0"
   >
     <div
       id="scroller"
@@ -307,12 +365,9 @@ snapshots["vaadin-crud shadow default"] =
     </div>
   </div>
 </div>
-<vaadin-crud-dialog id="dialog">
-</vaadin-crud-dialog>
 <slot name="confirm-cancel">
 </slot>
 <slot name="confirm-delete">
 </slot>
 `;
-/* end snapshot vaadin-crud shadow default */
-
+/* end snapshot vaadin-crud shadow inline editor */

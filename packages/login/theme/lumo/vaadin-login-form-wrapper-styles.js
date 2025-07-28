@@ -7,12 +7,9 @@ import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themab
 const loginFormWrapper = css`
   :host {
     width: calc(var(--lumo-size-m) * 10);
+    padding: var(--lumo-space-l);
     max-width: 100%;
     background: var(--lumo-base-color) linear-gradient(var(--lumo-tint-5pct), var(--lumo-tint-5pct));
-  }
-
-  [part='form'] {
-    padding: var(--lumo-space-l);
   }
 
   ::slotted(form) {
@@ -20,7 +17,7 @@ const loginFormWrapper = css`
     flex-direction: column;
   }
 
-  [part='form-title'] {
+  ::slotted([slot='form-title']) {
     margin-top: calc(var(--lumo-font-size-xxxl) - var(--lumo-font-size-xxl));
     color: var(--lumo-header-text-color);
     font-size: var(--lumo-font-size-xxl);

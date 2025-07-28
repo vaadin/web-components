@@ -13,7 +13,7 @@ import '@vaadin/confirm-dialog/src/vaadin-confirm-dialog.js';
 import './vaadin-crud-dialog.js';
 import './vaadin-crud-grid.js';
 import './vaadin-crud-form.js';
-import { html, LitElement, render } from 'lit';
+import { html, LitElement, nothing, render } from 'lit';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
@@ -140,11 +140,26 @@ import { CrudMixin } from './vaadin-crud-mixin.js';
  *
  * ### Styling
  *
- * The following shadow DOM parts are available for styling:
+ * The following shadow DOM parts are available for styling when the editor is rendered next to, or below, the grid:
  *
  * Part name | Description
  * ----------------|----------------
- * `toolbar` | Toolbar container at the bottom. By default it contains the the `new` button
+ * `toolbar`  | Toolbar container at the bottom of the grid. By default, it contains the `new` button
+ * `editor`   | The editor container
+ * `scroller` | The wrapper for the header and the form
+ * `header`   | The header of the editor
+ * `footer`   | The footer of the editor
+ *
+ * The following shadow DOM parts are available for styling when the editor renders as a dialog:
+ *
+ * Part name | Description
+ * ----------------|----------------
+ * `toolbar`  | Toolbar container at the bottom of the grid. By default, it contains the `new` button
+ * `overlay`  | The dialog overlay
+ * `backdrop` | The dialog backdrop
+ * `header`   | The header of the dialog
+ * `footer`   | The footer of the dialog
+ * `content`  | The wrapper for the form
  *
  * The following custom properties are available:
  *
@@ -197,38 +212,55 @@ class Crud extends CrudMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInjecti
           </div>
         </div>
 
-        <div
-          part="editor"
-          id="editor"
-          role="group"
-          aria-labelledby="header"
-          ?hidden="${this.__computeEditorHidden(this.editorOpened, this._fullscreen, this.editorPosition)}"
-        >
-          <div part="scroller" id="scroller">
-            <div part="header" id="header">
-              <slot name="header"></slot>
-            </div>
-            <slot name="form"></slot>
-          </div>
+        ${!this._dialogMode
+          ? html`
+              <div
+                part="editor"
+                id="editor"
+                role="group"
+                aria-labelledby="header"
+                tabindex="0"
+                ?hidden="${!this.editorOpened}"
+              >
+                <div part="scroller" id="scroller">
+                  <div part="header" id="header">
+                    <slot name="header"></slot>
+                  </div>
+                  <slot name="form"></slot>
+                </div>
 
-          <div part="footer" role="toolbar">
-            <slot name="save-button"></slot>
-            <slot name="cancel-button"></slot>
-            <slot name="delete-button"></slot>
-          </div>
-        </div>
+                <div part="footer" role="toolbar">
+                  <slot name="save-button"></slot>
+                  <slot name="cancel-button"></slot>
+                  <slot name="delete-button"></slot>
+                </div>
+              </div>
+            `
+          : nothing}
       </div>
 
-      <vaadin-crud-dialog
-        id="dialog"
-        .opened="${this.__computeDialogOpened(this.editorOpened, this._fullscreen, this.editorPosition)}"
-        .fullscreen="${this._fullscreen}"
-        .ariaLabel="${this.__dialogAriaLabel}"
-        .noCloseOnOutsideClick="${this.__isDirty}"
-        .noCloseOnEsc="${this.__isDirty}"
-        theme="${ifDefined(this._theme)}"
-        @opened-changed="${this.__onDialogOpened}"
-      ></vaadin-crud-dialog>
+      ${this._dialogMode
+        ? html`
+            <vaadin-crud-dialog
+              id="dialog"
+              aria-label="${ifDefined(this.__dialogAriaLabel)}"
+              theme="${ifDefined(this._theme)}"
+              exportparts="backdrop, overlay, header, content, footer"
+              .crudElement="${this}"
+              .opened="${this.editorOpened}"
+              .fullscreen="${this._fullscreen}"
+              .noCloseOnOutsideClick="${this.__isDirty}"
+              .noCloseOnEsc="${this.__isDirty}"
+              @cancel="${this.__cancel}"
+            >
+              <slot name="header" slot="header"></slot>
+              <slot name="form" slot="form"></slot>
+              <slot name="save-button" slot="save-button"></slot>
+              <slot name="cancel-button" slot="cancel-button"></slot>
+              <slot name="delete-button" slot="delete-button"></slot>
+            </vaadin-crud-dialog>
+          `
+        : nothing}
 
       <slot name="confirm-cancel"></slot>
 
