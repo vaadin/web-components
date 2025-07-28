@@ -108,7 +108,7 @@ describe('helper methods', () => {
   });
 
   it('should move dialog to top when content is clicked', () => {
-    const div = overlay.querySelector('div');
+    const div = dialog1.querySelector('div');
     expect(dialog2.$.overlay._last).to.be.true;
     dispatchMouseEvent(div, 'mousedown');
     expect(dialog1.$.overlay._last).to.be.true;
@@ -254,7 +254,7 @@ describe('resizable', () => {
   });
 
   it('should support scrollable full size content', () => {
-    const container = dialog.$.overlay.firstElementChild;
+    const container = dialog.firstElementChild;
     container.style.height = '100%';
     container.style.width = '100%';
     container.style.overflow = 'auto';
@@ -266,7 +266,7 @@ describe('resizable', () => {
 
   it('should scroll if the content overflows', () => {
     // Fill the content with a lot of text so that it overflows the viewport
-    dialog.$.overlay.firstElementChild.textContent = new Array(10000).fill('foo').join(' ');
+    dialog.firstElementChild.textContent = new Array(10000).fill('foo').join(' ');
 
     const resizeContainer = dialog.$.overlay.$.resizerContainer;
     resizeContainer.scrollTop = 1;
@@ -282,9 +282,9 @@ describe('resizable', () => {
     resize(overlayPart.querySelector('.s'), 0, 10);
 
     // Set the dialog content to have 100% height
-    dialog.$.overlay.firstElementChild.style.height = '100%';
+    dialog.firstElementChild.style.height = '100%';
 
-    const contentBounds = dialog.$.overlay.firstElementChild.getBoundingClientRect();
+    const contentBounds = dialog.firstElementChild.getBoundingClientRect();
     const overlayBounds = overlayPart.getBoundingClientRect();
     expect(Math.floor(contentBounds.height)).to.equal(Math.floor(overlayBounds.height));
   });
@@ -416,7 +416,7 @@ describe('draggable', () => {
 
     container = dialog.$.overlay.$.resizerContainer;
     content = dialog.$.overlay.$.content;
-    button = dialog.$.overlay.querySelector('button');
+    button = dialog.querySelector('button');
     bounds = container.getBoundingClientRect();
     dx = 100;
   });
@@ -438,7 +438,7 @@ describe('draggable', () => {
   });
 
   it('should drag and move dialog if mousedown on element with [class="draggable"]', async () => {
-    drag(dialog.$.overlay.querySelector('.draggable'));
+    drag(dialog.querySelector('.draggable'));
     await nextRender();
     const draggedBounds = container.getBoundingClientRect();
     expect(Math.floor(draggedBounds.top)).to.be.eql(Math.floor(bounds.top + dx));
@@ -456,7 +456,7 @@ describe('draggable', () => {
   });
 
   it('should drag and move dialog if mousedown on element with [class="draggable"] in another shadow root', async () => {
-    drag(dialog.$.overlay.querySelector('internally-draggable').shadowRoot.querySelector('.draggable'));
+    drag(dialog.querySelector('internally-draggable').shadowRoot.querySelector('.draggable'));
     await nextRender();
     const draggedBounds = container.getBoundingClientRect();
     expect(Math.floor(draggedBounds.top)).to.be.eql(Math.floor(bounds.top + dx));
@@ -464,7 +464,7 @@ describe('draggable', () => {
   });
 
   it('should not drag by a draggable-leaf-only if it is not the drag event target', () => {
-    const draggable = dialog.$.overlay.querySelector('internally-draggable').shadowRoot.querySelector('.draggable');
+    const draggable = dialog.querySelector('internally-draggable').shadowRoot.querySelector('.draggable');
     draggable.classList.add('draggable-leaf-only');
     const child = draggable.firstElementChild;
     drag(child);
@@ -474,7 +474,7 @@ describe('draggable', () => {
   });
 
   it('should drag by a draggable-leaf-only if it is directly the dragged element', async () => {
-    const draggable = dialog.$.overlay.querySelector('internally-draggable').shadowRoot.querySelector('.draggable');
+    const draggable = dialog.querySelector('internally-draggable').shadowRoot.querySelector('.draggable');
     draggable.classList.add('draggable-leaf-only');
     drag(draggable);
     await nextRender();
@@ -484,7 +484,7 @@ describe('draggable', () => {
   });
 
   it('should drag by a draggable-leaf-only child if it is marked as draggable', async () => {
-    const draggable = dialog.$.overlay.querySelector('internally-draggable').shadowRoot.querySelector('.draggable');
+    const draggable = dialog.querySelector('internally-draggable').shadowRoot.querySelector('.draggable');
     draggable.classList.add('draggable-leaf-only');
     const child = draggable.firstElementChild;
     child.classList.add('draggable');
@@ -496,7 +496,7 @@ describe('draggable', () => {
   });
 
   it('should drag by a draggable-leaf-only child if it is marked as draggable-leaf-only', async () => {
-    const draggable = dialog.$.overlay.querySelector('internally-draggable').shadowRoot.querySelector('.draggable');
+    const draggable = dialog.querySelector('internally-draggable').shadowRoot.querySelector('.draggable');
     draggable.classList.add('draggable-leaf-only');
     const child = draggable.firstElementChild;
     child.classList.add('draggable-leaf-only');
@@ -508,7 +508,7 @@ describe('draggable', () => {
   });
 
   it('should drag by a child of a draggable node ', async () => {
-    const draggable = dialog.$.overlay.querySelector('internally-draggable').shadowRoot.querySelector('.draggable');
+    const draggable = dialog.querySelector('internally-draggable').shadowRoot.querySelector('.draggable');
     const child = draggable.firstElementChild;
     drag(child);
     await nextRender();
@@ -675,9 +675,9 @@ describe('touch', () => {
     dispatchTouchEvent(target, 'touchend', toXY);
   }
 
-  function getFrontmostOverlayFromScreenCenter() {
+  function getFrontmostDialogFromScreenCenter() {
     let elementFromPoint = document.elementFromPoint(window.innerWidth / 2, window.innerHeight / 2);
-    while (elementFromPoint && elementFromPoint.localName !== 'vaadin-dialog-overlay') {
+    while (elementFromPoint && elementFromPoint.localName !== 'vaadin-dialog') {
       elementFromPoint = elementFromPoint.host || elementFromPoint.parentNode;
     }
     return elementFromPoint;
@@ -731,7 +731,7 @@ describe('touch', () => {
 
   it('should bring to front on touch start', () => {
     dispatchTouchEvent(resizableContainer, 'touchstart');
-    expect(getFrontmostOverlayFromScreenCenter()).to.equal(resizableOverlay);
+    expect(getFrontmostDialogFromScreenCenter()).to.equal(resizable);
   });
 
   it('should not move dialog if there more than two fingers used', () => {
@@ -824,7 +824,7 @@ describe('bring to front', () => {
     modelessDialog.opened = true;
     await nextRender();
 
-    const expectedTextContent = modelessDialog.$.overlay.innerText.trim();
+    const expectedTextContent = modelessDialog.innerText.trim();
 
     const windowCenterHeight = window.innerHeight / 2;
     const windowCenterWidth = window.innerWidth / 2;

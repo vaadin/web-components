@@ -15,7 +15,7 @@ describe('multi-select-combo-box in dialog', () => {
     };
     dialog.opened = true;
     await nextFrame();
-    comboBox = dialog.$.overlay.querySelector('vaadin-multi-select-combo-box');
+    comboBox = dialog.querySelector('vaadin-multi-select-combo-box');
     comboBox.items = ['foo', 'bar', 'baz'];
     comboBox.inputElement.focus();
   });

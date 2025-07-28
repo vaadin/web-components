@@ -124,12 +124,12 @@ describe('notification and overlays', () => {
       await nextRender();
 
       // Open dialog 2
-      dialog1.$.overlay.querySelector('#open').click();
+      dialog1.querySelector('#open').click();
       await nextRender();
       expect(getComputedStyle(dialog1.$.overlay.$.overlay).pointerEvents).to.equal('none');
 
       // Close dialog 2 and show notification
-      dialog2.$.overlay.querySelector('button').click();
+      dialog2.querySelector('button').click();
       await nextRender();
 
       expect(getComputedStyle(dialog1.$.overlay.$.overlay).pointerEvents).to.equal('auto');
@@ -140,7 +140,7 @@ describe('notification and overlays', () => {
       await nextRender();
 
       // Show notification
-      dialog1.$.overlay.querySelector('#show').click();
+      dialog1.querySelector('#show').click();
       await nextRender();
 
       await sendKeys({ press: 'Escape' });

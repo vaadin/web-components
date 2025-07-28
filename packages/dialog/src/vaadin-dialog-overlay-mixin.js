@@ -4,6 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { OverlayMixin } from '@vaadin/overlay/src/vaadin-overlay-mixin.js';
+import { setOverlayStateAttribute } from '@vaadin/overlay/src/vaadin-overlay-utils.js';
 
 /**
  * @polymerMixin
@@ -43,6 +44,24 @@ export const DialogOverlayMixin = (superClass) =>
       ];
     }
 
+    /**
+     * Override method from OverlayFocusMixin to use owner as content root
+     * @protected
+     * @override
+     */
+    get _contentRoot() {
+      return this.owner;
+    }
+
+    /**
+     * Override method from OverlayFocusMixin to use owner as modal root
+     * @protected
+     * @override
+     */
+    get _modalRoot() {
+      return this.owner;
+    }
+
     /** @protected */
     ready() {
       super.ready();
@@ -57,6 +76,22 @@ export const DialogOverlayMixin = (superClass) =>
       this.$.content.addEventListener('scroll', () => {
         this.__updateOverflow();
       });
+    }
+
+    /**
+     * @protected
+     * @override
+     */
+    _attachOverlay() {
+      this.showPopover();
+    }
+
+    /**
+     * @protected
+     * @override
+     */
+    _detachOverlay() {
+      this.hidePopover();
     }
 
     /** @private */
@@ -99,8 +134,8 @@ export const DialogOverlayMixin = (superClass) =>
       this._oldOpenedFooterHeader = opened;
 
       // Set attributes here to update styles before detecting content overflow
-      this.toggleAttribute('has-header', !!headerRenderer);
-      this.toggleAttribute('has-footer', !!footerRenderer);
+      setOverlayStateAttribute(this, 'has-header', !!headerRenderer);
+      setOverlayStateAttribute(this, 'has-footer', !!footerRenderer);
 
       if (headerRendererChanged) {
         if (headerRenderer) {
@@ -134,7 +169,7 @@ export const DialogOverlayMixin = (superClass) =>
 
     /** @private */
     _headerTitleChanged(headerTitle, opened) {
-      this.toggleAttribute('has-title', !!headerTitle);
+      setOverlayStateAttribute(this, 'has-title', !!headerTitle);
 
       if (opened && (headerTitle || this._oldHeaderTitle)) {
         this.requestContentUpdate();
@@ -150,7 +185,7 @@ export const DialogOverlayMixin = (superClass) =>
           this.headerTitleElement.setAttribute('slot', 'title');
           this.headerTitleElement.classList.add('draggable');
         }
-        this.appendChild(this.headerTitleElement);
+        this.owner.appendChild(this.headerTitleElement);
         this.headerTitleElement.textContent = this.headerTitle;
       } else if (this.headerTitleElement) {
         this.headerTitleElement.remove();
@@ -167,7 +202,7 @@ export const DialogOverlayMixin = (superClass) =>
       if (this.headerContainer) {
         // If a new renderer has been set, make sure to reattach the container
         if (!this.headerContainer.parentElement) {
-          this.appendChild(this.headerContainer);
+          this.owner.appendChild(this.headerContainer);
         }
 
         if (this.headerRenderer) {
@@ -179,7 +214,7 @@ export const DialogOverlayMixin = (superClass) =>
       if (this.footerContainer) {
         // If a new renderer has been set, make sure to reattach the container
         if (!this.footerContainer.parentElement) {
-          this.appendChild(this.footerContainer);
+          this.owner.appendChild(this.footerContainer);
         }
 
         if (this.footerRenderer) {
@@ -227,9 +262,9 @@ export const DialogOverlayMixin = (superClass) =>
 
       const value = overflow.trim();
       if (value.length > 0 && this.getAttribute('overflow') !== value) {
-        this.setAttribute('overflow', value);
+        setOverlayStateAttribute(this, 'overflow', value);
       } else if (value.length === 0 && this.hasAttribute('overflow')) {
-        this.removeAttribute('overflow');
+        setOverlayStateAttribute(this, 'overflow', null);
       }
     }
   };

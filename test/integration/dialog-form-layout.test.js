@@ -41,7 +41,7 @@ describe('form-layout in dialog', () => {
       };
       dialog.opened = true;
       await nextRender();
-      layout = dialog.$.overlay.querySelector('vaadin-form-layout');
+      layout = dialog.querySelector('vaadin-form-layout');
     });
 
     afterEach(async () => {
@@ -79,7 +79,7 @@ describe('form-layout in dialog', () => {
         };
         dialog.opened = true;
         await nextRender();
-        layout = dialog.$.overlay.querySelector('vaadin-form-layout');
+        layout = dialog.querySelector('vaadin-form-layout');
       });
 
       afterEach(async () => {
@@ -148,7 +148,7 @@ describe('form-layout in dialog', () => {
         };
         dialog.opened = true;
         await nextRender();
-        layout = dialog.$.overlay.querySelector('vaadin-form-layout');
+        layout = dialog.querySelector('vaadin-form-layout');
       });
 
       afterEach(async () => {

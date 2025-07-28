@@ -35,6 +35,14 @@ describe('vaadin-dialog', () => {
       dialog.style.display = 'block';
       expect(getComputedStyle(dialog).display).to.equal('none');
     });
+
+    ['opened', 'opening', 'closing'].forEach((state) => {
+      it(`should enforce display: contents when ${state} attribute is set`, () => {
+        dialog.style.display = 'block';
+        dialog.setAttribute(state, '');
+        expect(getComputedStyle(dialog).display).to.equal('contents');
+      });
+    });
   });
 
   describe('opened', () => {
@@ -56,35 +64,6 @@ describe('vaadin-dialog', () => {
     afterEach(async () => {
       dialog.opened = false;
       await nextRender();
-    });
-
-    describe('aria-label', () => {
-      beforeEach(async () => {
-        dialog.ariaLabel = 'accessible';
-        await nextUpdate(dialog);
-      });
-
-      it('should set `aria-label` attribute on the overlay when ariaLabel is set', () => {
-        expect(overlay.getAttribute('aria-label')).to.be.eql('accessible');
-      });
-
-      it('should remove `aria-label` attribute from the overlay when set to undefined', async () => {
-        dialog.ariaLabel = undefined;
-        await nextUpdate(dialog);
-        expect(overlay.getAttribute('aria-label')).to.be.null;
-      });
-
-      it('should remove `aria-label` attribute from the overlay when set to null', async () => {
-        dialog.ariaLabel = null;
-        await nextUpdate(dialog);
-        expect(overlay.getAttribute('aria-label')).to.be.null;
-      });
-
-      it('should remove `aria-label` attribute from the overlay when set to empty string', async () => {
-        dialog.ariaLabel = '';
-        await nextUpdate(dialog);
-        expect(overlay.getAttribute('aria-label')).to.be.null;
-      });
     });
 
     describe('no-close-on-esc', () => {
@@ -373,6 +352,61 @@ describe('vaadin-dialog', () => {
       await nextRender();
 
       expect(getComputedStyle(overlay.$.overlay).height).to.equal(originalHeight);
+    });
+  });
+
+  describe('role', () => {
+    let dialog;
+
+    beforeEach(async () => {
+      dialog = fixtureSync('<vaadin-dialog></vaadin-dialog>');
+      await nextRender();
+    });
+
+    it('should have role="dialog" by default', () => {
+      expect(dialog.getAttribute('role')).to.equal('dialog');
+    });
+
+    it('should allow setting role as attribute', async () => {
+      dialog = fixtureSync('<vaadin-dialog role="alertdialog"></vaadin-dialog>');
+      await nextRender();
+
+      expect(dialog.getAttribute('role')).to.equal('alertdialog');
+    });
+
+    it('should set role through overlayRole', async () => {
+      dialog.overlayRole = 'alertdialog';
+      await nextRender();
+
+      expect(dialog.getAttribute('role')).to.equal('alertdialog');
+    });
+
+    it('should restore default role when removing overlayRole', async () => {
+      dialog.overlayRole = 'alertdialog';
+      await nextRender();
+      dialog.overlayRole = undefined;
+      await nextRender();
+
+      expect(dialog.getAttribute('role')).to.equal('dialog');
+    });
+  });
+
+  describe('exportparts', () => {
+    let dialog, overlay;
+
+    beforeEach(async () => {
+      dialog = fixtureSync('<vaadin-dialog></vaadin-dialog>');
+      await nextRender();
+      overlay = dialog.$.overlay;
+    });
+
+    it('should export all overlay parts for styling', () => {
+      const parts = [...overlay.shadowRoot.querySelectorAll('[part]')].map((el) => el.getAttribute('part'));
+      const exportParts = overlay.getAttribute('exportparts').split(', ');
+
+      parts.forEach((part) => {
+        expect(exportParts).to.include(part);
+      });
     });
   });
 });

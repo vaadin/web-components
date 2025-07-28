@@ -17,7 +17,7 @@ describe('date-picker in dialog', () => {
     };
     dialog.opened = true;
     await nextFrame();
-    datePicker = dialog.$.overlay.querySelector('vaadin-date-picker');
+    datePicker = dialog.querySelector('vaadin-date-picker');
   });
 
   afterEach(async () => {
