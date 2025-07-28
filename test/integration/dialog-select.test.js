@@ -18,7 +18,7 @@ describe('select in dialog', () => {
     };
     dialog.opened = true;
     await oneEvent(dialog.$.overlay, 'vaadin-overlay-open');
-    select = dialog.$.overlay.querySelector('vaadin-select');
+    select = dialog.querySelector('vaadin-select');
     select.items = [
       { label: 'Option 1', value: 'value-1' },
       { label: 'Option 2', value: 'value-2' },

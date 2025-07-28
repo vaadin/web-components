@@ -6,7 +6,7 @@ import '@vaadin/accordion/src/vaadin-accordion.js';
 import '@vaadin/dialog/src/vaadin-dialog.js';
 
 describe('accordion in dialog', () => {
-  let dialog, overlay, accordion, panels;
+  let dialog, accordion, panels;
 
   beforeEach(async () => {
     dialog = fixtureSync(`<vaadin-dialog></vaadin-dialog>`);
@@ -28,9 +28,8 @@ describe('accordion in dialog', () => {
     };
     await nextRender();
     dialog.opened = true;
-    overlay = dialog.$.overlay;
-    await oneEvent(overlay, 'vaadin-overlay-open');
-    accordion = overlay.querySelector('vaadin-accordion');
+    await oneEvent(dialog.$.overlay, 'vaadin-overlay-open');
+    accordion = dialog.querySelector('vaadin-accordion');
     panels = accordion.items;
   });
 

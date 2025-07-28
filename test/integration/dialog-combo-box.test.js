@@ -24,7 +24,7 @@ describe('combo-box in dialog', () => {
     };
     dialog.opened = true;
     await oneEvent(dialog.$.overlay, 'vaadin-overlay-open');
-    comboBox = dialog.$.overlay.querySelector('vaadin-combo-box');
+    comboBox = dialog.querySelector('vaadin-combo-box');
     comboBox.items = ['foo', 'bar'];
     comboBox.inputElement.focus();
   });

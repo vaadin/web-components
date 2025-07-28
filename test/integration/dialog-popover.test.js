@@ -31,8 +31,8 @@ describe('popover in dialog', () => {
     };
     dialog.opened = true;
     await nextRender();
-    button = dialog.$.overlay.querySelector('button');
-    popover = dialog.$.overlay.querySelector('vaadin-popover');
+    button = dialog.querySelector('button');
+    popover = dialog.querySelector('vaadin-popover');
     overlay = popover._overlayElement;
   });
 
