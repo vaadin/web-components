@@ -167,13 +167,6 @@ class CrudDialog extends DialogBaseMixin(OverlayClassMixin(ThemePropertyMixin(Po
     `;
   }
 
-  /** @protected */
-  firstUpdated(props) {
-    super.firstUpdated(props);
-
-    this.role = 'dialog';
-  }
-
   /** @private **/
   __cancel() {
     this.dispatchEvent(new CustomEvent('cancel'));
