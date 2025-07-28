@@ -8,6 +8,6 @@
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
-import { css } from 'lit';
+import { gridStyles } from '@vaadin/grid/src/styles/vaadin-grid-core-styles.js';
 
-export const crudGridStyles = css``;
+export const crudGridStyles = [gridStyles];
