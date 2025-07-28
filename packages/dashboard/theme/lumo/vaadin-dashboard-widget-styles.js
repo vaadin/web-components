@@ -9,7 +9,6 @@ import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themab
 /* Styles shared between widgets and sections */
 const dashboardWidgetAndSection = css`
   /* stylelint-disable rule-empty-line-before */
-  /* stylelint-disable length-zero-no-unit */
 
   :host {
     --_widget-background: var(--vaadin-dashboard-widget-background, var(--lumo-base-color));
@@ -304,18 +303,21 @@ const dashboardWidget = css`
     :host {
       border: 1px solid;
     }
+
     :host([focused]) {
       outline: 2px solid;
       outline-offset: 1px;
     }
+
     :host([selected]) {
       outline-width: 1px;
-      outline-offset: 0px;
+      outline-offset: 0;
       outline-color: Highlight;
     }
+
     :host([selected][focused]) {
       outline-width: 3px;
-      outline-offset: 0px;
+      outline-offset: 0;
     }
   }
 `;

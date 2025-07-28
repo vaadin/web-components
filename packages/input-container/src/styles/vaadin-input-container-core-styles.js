@@ -19,7 +19,6 @@ export const inputContainerStyles = css`
     --_border-radius: var(--vaadin-input-field-border-radius, 0);
     --_input-border-width: var(--vaadin-input-field-border-width, 0px);
     --_input-border-color: var(--vaadin-input-field-border-color, transparent);
-    /* stylelint-disable-next-line length-zero-no-unit */
     box-shadow: inset 0 0 0 var(--_input-border-width, 0) var(--_input-border-color);
   }
 
