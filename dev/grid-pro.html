@@ -7,26 +7,266 @@
     <title>Grid Pro</title>
     <link rel="stylesheet" href="/packages/vaadin-lumo-styles/lumo.css" />
     <script type="module" src="./common.js"></script>
+
+    <style>
+      .controls {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 2rem;
+        margin-bottom: 2rem;
+        font-size: 0.875rem;
+      }
+
+      .control-group {
+        display: flex;
+        flex-direction: column;
+        gap: 1em;
+      }
+
+      .control-group h3 {
+        margin-top: 0;
+        font-size: var(--lumo-font-size-m);
+      }
+
+      vaadin-grid-pro.auto-width {
+        width: fit-content;
+      }
+
+      vaadin-grid-pro.max-width {
+        max-width: 50%;
+      }
+
+      vaadin-grid-pro.max-height {
+        max-height: 250px;
+      }
+    </style>
   </head>
   <body>
-    <vaadin-grid-pro single-cell-edit>
-      <vaadin-grid-pro-edit-column path="name.first"></vaadin-grid-pro-edit-column>
-      <vaadin-grid-pro-edit-column path="name.last"></vaadin-grid-pro-edit-column>
+    <div class="controls">
+      <div class="control-group">
+        <vaadin-checkbox-group label="Sizing">
+          <vaadin-checkbox id="autoWidth" value="autoWidth" label="Auto Width"></vaadin-checkbox>
+          <vaadin-checkbox id="all-rows" value="all-rows" label="Auto Height"></vaadin-checkbox>
+          <vaadin-checkbox id="maxWidth" value="maxWidth" label="Max Width"></vaadin-checkbox>
+          <vaadin-checkbox id="maxHeight" value="maxHeight" label="Max Height"></vaadin-checkbox>
+        </vaadin-checkbox-group>
+
+        <vaadin-radio-group id="items" label="Items">
+          <vaadin-checkbox id="details" value="details" label="Details"></vaadin-checkbox>
+        </vaadin-radio-group>
+      </div>
+
+      <div class="control-group">
+        <vaadin-checkbox-group label="Column Features">
+          <vaadin-checkbox id="header" value="header" label="Header" checked></vaadin-checkbox>
+          <vaadin-checkbox id="footer" value="footer" label="Footer"></vaadin-checkbox>
+          <vaadin-checkbox id="autoWidthCols" value="autoWidth" label="Auto Width"></vaadin-checkbox>
+          <vaadin-checkbox id="resizable" value="resizable" label="Resizable"></vaadin-checkbox>
+          <vaadin-checkbox id="frozen" value="frozen" label="Freeze First Name Column"></vaadin-checkbox>
+          <vaadin-checkbox id="frozenEnd" value="frozenEnd" label="Freeze Married Column"></vaadin-checkbox>
+        </vaadin-checkbox-group>
+        <vaadin-select id="textAlign" label="Text Align"></vaadin-select>
+      </div>
+
+      <div class="control-group">
+        <vaadin-checkbox-group label="Theme Variants">
+          <vaadin-checkbox value="no-border" label="No Border"></vaadin-checkbox>
+          <vaadin-checkbox value="no-row-borders" label="No Row Border"></vaadin-checkbox>
+          <vaadin-checkbox value="column-borders" label="Column Borders"></vaadin-checkbox>
+          <vaadin-checkbox value="row-stripes" label="Row Stripes"></vaadin-checkbox>
+          <vaadin-checkbox value="wrap-cell-content" label="Wrap Cell Content"></vaadin-checkbox>
+          <vaadin-checkbox value="highlight-editable-cells" label="Highlight Editable Cells"></vaadin-checkbox>
+          <vaadin-checkbox value="highlight-read-only-cells" label="Highlight Read-Only Cells"></vaadin-checkbox>
+        </vaadin-checkbox-group>
+      </div>
+
+      <div class="control-group">
+        <vaadin-radio-group id="dropMode" label="Drop Mode">
+          <vaadin-radio-button value="none" label="None"></vaadin-radio-button>
+          <vaadin-radio-button value="on-grid" label="On Grid"></vaadin-radio-button>
+          <vaadin-radio-button value="between" label="Between" checked></vaadin-radio-button>
+          <vaadin-radio-button value="on-top" label="On Top"></vaadin-radio-button>
+        </vaadin-radio-group>
+      </div>
+    </div>
+
+    <vaadin-grid-pro single-cell-edit column-reordering-allowed>
+      <vaadin-grid-selection-column></vaadin-grid-selection-column>
+      <vaadin-grid-pro-edit-column path="name.first" header="First Name"></vaadin-grid-pro-edit-column>
+      <vaadin-grid-pro-edit-column path="name.last" header="Last Name"></vaadin-grid-pro-edit-column>
       <vaadin-grid-pro-edit-column
         path="name.title"
+        header="Title"
         editor-type="select"
         editor-options='["mr", "mrs", "ms"]'
       ></vaadin-grid-pro-edit-column>
+      <vaadin-grid-sort-column path="email" header="Email"></vaadin-grid-sort-column>
       <vaadin-grid-pro-edit-column path="married" editor-type="checkbox"></vaadin-grid-pro-edit-column>
     </vaadin-grid-pro>
 
     <script type="module">
+      import '@vaadin/grid/all-imports';
+      import '@vaadin/checkbox';
+      import '@vaadin/checkbox-group';
+      import '@vaadin/radio-group';
+      import '@vaadin/select';
+      import '@vaadin/list-box';
       import '@vaadin/grid-pro';
       import '@vaadin/grid-pro/vaadin-grid-pro-edit-column.js';
       import { users } from '../packages/grid-pro/test/visual/users.js';
 
       const grid = document.querySelector('vaadin-grid-pro');
       grid.items = users;
+
+      // Setup grid and controls
+      const selectionColumn = grid.querySelector('vaadin-grid-selection-column');
+
+      // Setup row details renderer
+      const rowDetailsRenderer = (root, grid, model) => {
+        root.innerHTML = `
+          <div style="padding: 1rem">
+            <h4>Details for ${model.item.name}</h4>
+            <p>Additional information could be shown here.</p>
+          </div>
+        `;
+      };
+
+      // Setup selects
+      const textAlignSelect = document.getElementById('textAlign');
+      textAlignSelect.items = [
+        { label: 'Start', value: 'start' },
+        { label: 'Center', value: 'center' },
+        { label: 'End', value: 'end' },
+      ];
+
+      // Enable drag and drop by default
+      grid.rowsDraggable = true;
+      grid.dropMode = 'between';
+
+      // Sizing Controls
+      document.getElementById('autoWidth').addEventListener('checked-changed', (e) => {
+        grid.classList.toggle('auto-width', e.detail.value);
+      });
+
+      document.getElementById('all-rows').addEventListener('checked-changed', (e) => {
+        grid.allRowsVisible = e.detail.value;
+      });
+
+      document.getElementById('maxWidth').addEventListener('checked-changed', (e) => {
+        grid.classList.toggle('max-width', e.detail.value);
+      });
+
+      document.getElementById('maxHeight').addEventListener('checked-changed', (e) => {
+        grid.classList.toggle('max-height', e.detail.value);
+      });
+
+      document.getElementById('details').addEventListener('checked-changed', (e) => {
+        grid.rowDetailsRenderer = e.detail.value ? rowDetailsRenderer : undefined;
+      });
+
+      // Column Controls
+      document.getElementById('header').addEventListener('checked-changed', (e) => {
+        grid
+          .querySelectorAll(
+            'vaadin-grid-column-group, vaadin-grid-column, vaadin-grid-tree-column, vaadin-grid-filter-column, vaadin-grid-sort-column, vaadin-grid-pro-edit-column',
+          )
+          .forEach((col) => {
+            col.__headerText = col.header ?? col.__headerText;
+            col.header = e.detail.value ? col.__headerText : null;
+            col.headerRenderer = e.detail.value
+              ? (root) => {
+                  root.textContent = col.__headerText || col.path;
+                }
+              : null;
+          });
+      });
+
+      document.getElementById('footer').addEventListener('checked-changed', (e) => {
+        grid
+          .querySelectorAll(
+            'vaadin-grid-column-group, vaadin-grid-column, vaadin-grid-tree-column, vaadin-grid-filter-column, vaadin-grid-sort-column, vaadin-grid-pro-edit-column',
+          )
+          .forEach((col) => {
+            col.__headerText = col.header ?? col.__headerText;
+            col.footerRenderer = e.detail.value
+              ? (root) => {
+                  root.textContent = col.__headerText ?? col.path;
+                }
+              : null;
+          });
+      });
+
+      document.getElementById('autoWidthCols').addEventListener('checked-changed', (e) => {
+        grid
+          .querySelectorAll(
+            'vaadin-grid-column, vaadin-grid-tree-column, vaadin-grid-filter-column, vaadin-grid-sort-column, vaadin-grid-pro-edit-column',
+          )
+          .forEach((col) => {
+            col.autoWidth = e.detail.value;
+            col.width = e.detail.value ? undefined : '100px';
+            col.flexGrow = 1;
+          });
+        grid.recalculateColumnWidths();
+      });
+
+      document.getElementById('resizable').addEventListener('checked-changed', (e) => {
+        grid
+          .querySelectorAll(
+            'vaadin-grid-column, vaadin-grid-tree-column, vaadin-grid-filter-column, vaadin-grid-sort-column, vaadin-grid-pro-edit-column',
+          )
+          .forEach((col) => {
+            col.resizable = e.detail.value;
+          });
+      });
+
+      document.getElementById('frozen').addEventListener('checked-changed', (e) => {
+        const firstCol = grid.querySelector('vaadin-grid-pro-edit-column');
+        if (firstCol) {
+          firstCol.frozen = e.detail.value;
+        }
+        // Also freeze the selection column
+        const selectionColumn = grid.querySelector('vaadin-grid-selection-column');
+        if (selectionColumn) {
+          selectionColumn.frozen = e.detail.value;
+        }
+      });
+
+      document.getElementById('frozenEnd').addEventListener('checked-changed', (e) => {
+        const lastCol = Array.from(grid.querySelectorAll('vaadin-grid-pro-edit-column')).pop();
+        if (lastCol) {
+          lastCol.frozenToEnd = e.detail.value;
+        }
+      });
+
+      document.getElementById('textAlign').addEventListener('value-changed', (e) => {
+        grid
+          .querySelectorAll('vaadin-grid-tree-column, vaadin-grid-sort-column, vaadin-grid-filter-column')
+          .forEach((col) => {
+            col.textAlign = e.detail.value;
+          });
+      });
+
+      // Handle active item changes for details
+      grid.addEventListener('active-item-changed', (e) => {
+        const item = e.detail.value;
+        grid.detailsOpenedItems = item ? [item] : [];
+      });
+
+      // Drag & Drop Controls
+      document.getElementById('dropMode').addEventListener('value-changed', (e) => {
+        grid.dropMode = e.detail.value;
+      });
+
+      // Theme Controls
+      document.querySelectorAll('[label="Theme Variants"] vaadin-checkbox').forEach((control) => {
+        control.addEventListener('checked-changed', (e) => {
+          if (e.detail.value) {
+            grid.setAttribute('theme', `${grid.getAttribute('theme') || ''} ${control.value}`.trim());
+          } else {
+            grid.setAttribute('theme', (grid.getAttribute('theme') || '').replace(control.value, '').trim());
+          }
+        });
+      });
     </script>
   </body>
 </html>
