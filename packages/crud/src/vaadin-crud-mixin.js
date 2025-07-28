@@ -400,7 +400,7 @@ export const CrudMixin = (superClass) =>
       this.addController(this._gridController);
 
       // Init button controllers in `ready()` (not constructor) so that Flow can set `_noDefaultButtons`
-      this._newButtonController = new ButtonSlotController(this, 'new', 'primary', this._noDefaultButtons);
+      this._newButtonController = new ButtonSlotController(this, 'new', null, this._noDefaultButtons);
       this.addController(this._newButtonController);
 
       this._headerController = new SlotController(this, 'header', 'h3', {
