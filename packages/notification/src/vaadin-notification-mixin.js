@@ -375,7 +375,11 @@ export const NotificationMixin = (superClass) =>
         return;
       }
 
-      this._container.bringToFront();
+      // Only call bringToFront if the container already has a child / was already opened.
+      // Otherwise, just setting `opened` on the container will make it the topmost overlay.
+      if (this._container.firstElementChild) {
+        this._container.bringToFront();
+      }
 
       this._card.slot = this.position;
       if (this._container.firstElementChild && /top/u.test(this.position)) {
