@@ -5,6 +5,7 @@ import sinon from 'sinon';
 import './multi-select-combo-box-test-styles.js';
 import '../src/vaadin-multi-select-combo-box.js';
 import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
+import { getFirstItem } from './helpers.js';
 
 describe('basic', () => {
   let comboBox, internal, inputElement;
@@ -328,7 +329,7 @@ describe('basic', () => {
 
     it('should clear input element value after clicking matching value', async () => {
       await sendKeys({ type: 'ora' });
-      const item = document.querySelector('vaadin-multi-select-combo-box-item');
+      const item = getFirstItem(comboBox);
       item.click();
       expect(internal.value).to.equal('');
       expect(inputElement.value).to.equal('');
@@ -336,7 +337,7 @@ describe('basic', () => {
 
     it('should clear filter property after clicking matching value', async () => {
       await sendKeys({ type: 'ora' });
-      const item = document.querySelector('vaadin-multi-select-combo-box-item');
+      const item = getFirstItem(comboBox);
       item.click();
       expect(comboBox.filter).to.equal('');
     });
@@ -442,7 +443,7 @@ describe('basic', () => {
       };
       comboBox.opened = true;
 
-      const item = document.querySelector('vaadin-multi-select-combo-box-item');
+      const item = getFirstItem(comboBox);
       expect(item.textContent.trim()).to.equal('apple 0');
     });
 
@@ -475,7 +476,7 @@ describe('basic', () => {
       };
       comboBox.opened = true;
 
-      const item = document.querySelector('vaadin-multi-select-combo-box-item');
+      const item = getFirstItem(comboBox);
       expect(item.textContent).to.equal('APPLE');
 
       comboBox.renderer = null;
@@ -486,7 +487,7 @@ describe('basic', () => {
     it('should clear the old content after assigning a new renderer', () => {
       comboBox.opened = true;
       comboBox.renderer = () => {};
-      const item = document.querySelector('vaadin-multi-select-combo-box-item');
+      const item = getFirstItem(comboBox);
       expect(item.textContent).to.equal('');
     });
   });
