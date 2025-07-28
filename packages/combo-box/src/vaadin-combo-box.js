@@ -257,6 +257,15 @@ class ComboBox extends ComboBoxDataProviderMixin(
     this._toggleElement = this.$.toggleButton;
   }
 
+  /** @protected */
+  updated(props) {
+    super.updated(props);
+
+    if (props.has('dataProvider') || props.has('value')) {
+      this._warnDataProviderValue(this.dataProvider, this.value);
+    }
+  }
+
   /**
    * Override the method from `InputControlMixin`
    * to stop event propagation to prevent `ComboBoxMixin`
@@ -281,6 +290,22 @@ class ComboBox extends ComboBoxDataProviderMixin(
     // Open dropdown only when clicking on the label or input field
     if (path.includes(this._labelNode) || path.includes(this._positionTarget)) {
       super._onHostClick(event);
+    }
+  }
+
+  /** @private */
+  _warnDataProviderValue(dataProvider, value) {
+    if (dataProvider && value !== '' && (this.selectedItem === undefined || this.selectedItem === null)) {
+      const valueIndex = this.__getItemIndexByValue(this.filteredItems, value);
+      if (valueIndex < 0 || !this._getItemLabel(this.filteredItems[valueIndex])) {
+        console.warn(
+          'Warning: unable to determine the label for the provided `value`. ' +
+            'Nothing to display in the text field. This usually happens when ' +
+            'setting an initial `value` before any items are returned from ' +
+            'the `dataProvider` callback. Consider setting `selectedItem` ' +
+            'instead of `value`',
+        );
+      }
     }
   }
 }
