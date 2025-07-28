@@ -22,6 +22,7 @@ import type { ThemableMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-th
 import type { ThemePropertyMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
 import type { ComboBoxBaseMixinClass } from './vaadin-combo-box-base-mixin.js';
 import type { ComboBoxDataProviderMixinClass } from './vaadin-combo-box-data-provider-mixin.js';
+import type { ComboBoxItemsMixinClass } from './vaadin-combo-box-items-mixin.js';
 import type { ComboBoxMixinClass } from './vaadin-combo-box-mixin.js';
 import type { ComboBoxDefaultItem } from './vaadin-combo-box-mixin.js';
 
@@ -230,6 +231,7 @@ declare class ComboBox<TItem = ComboBoxDefaultItem> extends HTMLElement {
 
 interface ComboBox<TItem = ComboBoxDefaultItem>
   extends ComboBoxDataProviderMixinClass<TItem>,
+    ComboBoxItemsMixinClass<TItem>,
     ComboBoxMixinClass<TItem>,
     ComboBoxBaseMixinClass,
     ValidateMixinClass,
