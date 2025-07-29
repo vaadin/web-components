@@ -264,7 +264,7 @@ describe('pre-opened', () => {
         style="--vaadin-combo-box-overlay-max-height: 200px"
       ></vaadin-combo-box>`);
     await nextRender();
-    const scroller = comboBox.$.overlay.querySelector('vaadin-combo-box-scroller');
+    const scroller = comboBox.querySelector('vaadin-combo-box-scroller');
     expect(scroller.style.maxHeight).to.equal('200px');
   });
 });

@@ -112,9 +112,12 @@ import { ComboBoxMixin } from './vaadin-combo-box-mixin.js';
  *
  * In addition to `<vaadin-text-field>` parts, the following parts are available for theming:
  *
- * Part name       | Description
- * ----------------|----------------
- * `toggle-button` | The toggle button
+ * Part name        | Description
+ * -----------------|------------------
+ * `toggle-button`  | The toggle button
+ * `overlay`        | The overlay container
+ * `content`        | The overlay content
+ * `loader`         | The loading indicator shown while loading items
  *
  * In addition to `<vaadin-text-field>` state attributes, the following state attributes are available for theming:
  *
@@ -128,12 +131,7 @@ import { ComboBoxMixin } from './vaadin-combo-box-mixin.js';
  * In addition to `<vaadin-combo-box>` itself, the following internal
  * components are themable:
  *
- * - `<vaadin-combo-box-overlay>` - has the same API as [`<vaadin-overlay>`](#/elements/vaadin-overlay).
  * - `<vaadin-combo-box-item>` - has the same API as [`<vaadin-item>`](#/elements/vaadin-item).
- * - [`<vaadin-input-container>`](#/elements/vaadin-input-container) - an internal element wrapping the input.
- *
- * Note: the `theme` attribute value set on `<vaadin-combo-box>` is
- * propagated to the internal components listed above.
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
@@ -221,13 +219,18 @@ class ComboBox extends ComboBoxDataProviderMixin(
 
       <vaadin-combo-box-overlay
         id="overlay"
+        popover="manual"
+        exportparts="overlay, content, loader"
         .owner="${this}"
+        .dir="${this.dir}"
         .opened="${this._overlayOpened}"
         ?loading="${this.loading}"
         theme="${ifDefined(this._theme)}"
         .positionTarget="${this._positionTarget}"
         no-vertical-overlap
-      ></vaadin-combo-box-overlay>
+      >
+        <slot name="overlay"></slot>
+      </vaadin-combo-box-overlay>
 
       <slot name="tooltip"></slot>
     `;

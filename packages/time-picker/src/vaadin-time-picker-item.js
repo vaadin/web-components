@@ -59,17 +59,6 @@ export class TimePickerItem extends ComboBoxItemMixin(
       </div>
     `;
   }
-
-  /**
-   * Override method from `ComboBoxItemMixin` to enforce
-   * `dir` attribute to be set to `ltr` on the item.
-   * @protected
-   * @override
-   */
-  _getHostDir() {
-    // See https://github.com/vaadin/vaadin-time-picker/issues/145
-    return 'ltr';
-  }
 }
 
 defineCustomElement(TimePickerItem);

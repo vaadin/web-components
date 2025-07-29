@@ -181,9 +181,12 @@ export interface ComboBoxEventMap<TItem> extends HTMLElementEventMap {
  *
  * In addition to `<vaadin-text-field>` parts, the following parts are available for theming:
  *
- * Part name       | Description
- * ----------------|----------------
- * `toggle-button` | The toggle button
+ * Part name        | Description
+ * -----------------|------------------
+ * `toggle-button`  | The toggle button
+ * `overlay`        | The overlay container
+ * `content`        | The overlay content
+ * `loader`         | The loading indicator shown while loading items
  *
  * In addition to `<vaadin-text-field>` state attributes, the following state attributes are available for theming:
  *
@@ -197,12 +200,7 @@ export interface ComboBoxEventMap<TItem> extends HTMLElementEventMap {
  * In addition to `<vaadin-combo-box>` itself, the following internal
  * components are themable:
  *
- * - `<vaadin-combo-box-overlay>` - has the same API as [`<vaadin-overlay>`](#/elements/vaadin-overlay).
  * - `<vaadin-combo-box-item>` - has the same API as [`<vaadin-item>`](#/elements/vaadin-item).
- * - [`<vaadin-input-container>`](#/elements/vaadin-input-container) - an internal element wrapping the input.
- *
- * Note: the `theme` attribute value set on `<vaadin-combo-box>` is
- * propagated to the internal components listed above.
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *

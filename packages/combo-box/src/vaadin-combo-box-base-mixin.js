@@ -184,15 +184,6 @@ export const ComboBoxBaseMixin = (superClass) =>
         this.clearElement.addEventListener('mousedown', this._boundOnClearButtonMouseDown);
       }
 
-      const bringToFrontListener = () => {
-        requestAnimationFrame(() => {
-          this._overlayElement.bringToFront();
-        });
-      };
-
-      this.addEventListener('mousedown', bringToFrontListener);
-      this.addEventListener('touchstart', bringToFrontListener);
-
       this.addController(new VirtualKeyboardController(this));
     }
 
@@ -258,21 +249,14 @@ export const ComboBoxBaseMixin = (superClass) =>
 
     /**
      * Render the scroller element to the overlay.
-     * Override to provide custom logic (e.g. setting "slot").
      *
-     * @protected
+     * @private
      */
     _renderScroller(scroller) {
-      const overlay = this.$.overlay;
-
-      overlay.renderer = (root) => {
-        if (!root.innerHTML) {
-          root.appendChild(scroller);
-        }
-      };
-
-      // Ensure the scroller is rendered
-      overlay.requestContentUpdate();
+      scroller.setAttribute('slot', 'overlay');
+      // Prevent focusing scroller on input Tab
+      scroller.setAttribute('tabindex', '-1');
+      this.appendChild(scroller);
     }
 
     /**

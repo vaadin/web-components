@@ -22,21 +22,6 @@ export const ComboBoxOverlayMixin = (superClass) =>
       this.requiredVerticalSpace = 200;
     }
 
-    /** @protected */
-    connectedCallback() {
-      super.connectedCallback();
-
-      const hostDir = this._getHostDir();
-      if (hostDir) {
-        this.setAttribute('dir', hostDir);
-      }
-    }
-
-    /** @protected */
-    _getHostDir() {
-      return this.owner && this.owner.getAttribute('dir');
-    }
-
     /**
      * Override method inherited from `Overlay`
      * to not close on position target click.
@@ -66,16 +51,7 @@ export const ComboBoxOverlayMixin = (superClass) =>
 
     /** @protected */
     _updateOverlayWidth() {
-      const propPrefix = this.localName;
-      this.style.setProperty(`--_${propPrefix}-default-width`, `${this.positionTarget.offsetWidth}px`);
-
-      const customWidth = getComputedStyle(this.owner).getPropertyValue(`--${propPrefix}-width`);
-
-      if (customWidth === '') {
-        this.style.removeProperty(`--${propPrefix}-width`);
-      } else {
-        this.style.setProperty(`--${propPrefix}-width`, customWidth);
-      }
+      this.style.setProperty(`--_${this.localName}-default-width`, `${this.positionTarget.offsetWidth}px`);
     }
 
     /** @private */
