@@ -8,6 +8,7 @@
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
+import '@vaadin/component-base/src/style-props.js';
 import { css } from 'lit';
 
 export const crudEditStyles = css`
