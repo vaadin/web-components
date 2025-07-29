@@ -499,6 +499,7 @@ export const MultiSelectComboBoxMixin = (superClass) =>
       // Do not commit focused item on not blur / outside click
       if (this._ignoreCommitValue) {
         this._inputElementValue = '';
+        this._focusedIndex = -1;
         this._ignoreCommitValue = false;
       } else {
         this.__commitUserInput();

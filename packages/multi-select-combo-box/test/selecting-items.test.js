@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { resetMouse, sendKeys, sendMouse } from '@vaadin/test-runner-commands';
+import { resetMouse, sendKeys, sendMouse, sendMouseToElement } from '@vaadin/test-runner-commands';
 import { fixtureSync, keyboardEventFor, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-multi-select-combo-box.js';
@@ -153,6 +153,32 @@ describe('selecting items', () => {
       await sendMouse({ type: 'click', position: [200, 200] });
       await resetMouse();
       expect(comboBox.selectedItems).to.deep.equal([]);
+    });
+
+    it('should reset the item focused state when closing on outside click', async () => {
+      await sendKeys({ press: 'ArrowDown' });
+      await sendKeys({ press: 'ArrowDown' });
+      await sendMouseToElement({ type: 'click', element: document.body });
+      await resetMouse();
+
+      await sendKeys({ press: 'ArrowDown' });
+      const item = getFirstItem(comboBox);
+      expect(item.hasAttribute('focused')).to.be.false;
+    });
+
+    it('should reset the item focused state when closing on blur', async () => {
+      await sendKeys({ press: 'ArrowDown' });
+      await sendKeys({ press: 'ArrowDown' });
+
+      // Blur the combo-box
+      await sendKeys({ press: 'Shift+Tab' });
+
+      // Focus and re-open
+      await sendKeys({ press: 'Tab' });
+
+      await sendKeys({ press: 'ArrowDown' });
+      const item = getFirstItem(comboBox);
+      expect(item.hasAttribute('focused')).to.be.false;
     });
 
     it('should not select an item on blur when it is focused', async () => {
