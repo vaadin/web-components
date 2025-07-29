@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { resetMouse, sendKeys, sendMouse, sendMouseToElement } from '@vaadin/test-runner-commands';
-import { fixtureSync, keyboardEventFor, nextRender } from '@vaadin/testing-helpers';
+import { fixtureSync, keyboardEventFor, nextRender, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-multi-select-combo-box.js';
 import { getAllItems, getDataProvider, getFirstItem } from './helpers.js';
@@ -157,11 +157,16 @@ describe('selecting items', () => {
 
     it('should reset the item focused state when closing on outside click', async () => {
       await sendKeys({ press: 'ArrowDown' });
+      await oneEvent(comboBox, 'vaadin-overlay-open');
+
       await sendKeys({ press: 'ArrowDown' });
+
       await sendMouseToElement({ type: 'click', element: document.body });
       await resetMouse();
 
       await sendKeys({ press: 'ArrowDown' });
+      await oneEvent(comboBox, 'vaadin-overlay-open');
+
       const item = getFirstItem(comboBox);
       expect(item.hasAttribute('focused')).to.be.false;
     });
