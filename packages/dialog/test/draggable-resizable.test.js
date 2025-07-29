@@ -622,6 +622,10 @@ describe('draggable', () => {
     await nextRender();
     expect(getComputedStyle(dialog.$.overlay.$.overlay).maxWidth).to.equal('100%');
   });
+
+  it('should add [draggable] attribute on vaadin-dialog-overlay if vaadin-dialog is draggable', async () => {    
+    expect(dialog.$.overlay.hasAttribute('draggable')).to.be.ok;
+  });
 });
 
 describe('touch', () => {
