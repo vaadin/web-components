@@ -8,9 +8,10 @@
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
-import { css, html } from 'lit';
+import { html } from 'lit';
 import { Button } from '@vaadin/button/src/vaadin-button.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
+import { crudEditStyles } from './styles/vaadin-crud-edit-core-styles.js';
 
 /**
  * `<vaadin-crud-edit>` is a helper element for `<vaadin-grid-column>` that provides
@@ -30,14 +31,7 @@ class CrudEdit extends Button {
   }
 
   static get styles() {
-    return [
-      super.styles,
-      css`
-        :host {
-          display: block;
-        }
-      `,
-    ];
+    return [super.styles, crudEditStyles];
   }
 
   /** @protected */
