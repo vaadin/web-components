@@ -128,7 +128,7 @@ describe('multiple notification', () => {
   });
 
   describe('styles', () => {
-    it('content should ignore pointer events', () => {
+    it('container should ignore pointer events', () => {
       expect(getComputedStyle(container)['pointer-events']).to.equal('none');
     });
 

@@ -5,7 +5,6 @@
  */
 import type { Constructor } from '@open-wc/dedupe-mixin';
 import type { OverlayClassMixinClass } from '@vaadin/component-base/src/overlay-class-mixin.js';
-import type { OverlayStackMixinClass } from '@vaadin/overlay/src/vaadin-overlay-stack-mixin.js';
 import type { ThemePropertyMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
 import type { Notification } from './vaadin-notification.js';
 
@@ -27,7 +26,7 @@ export type NotificationRenderer = (root: HTMLElement, notification: Notificatio
  */
 export declare function NotificationContainerMixin<T extends Constructor<HTMLElement>>(
   base: T,
-): Constructor<NotificationContainerMixinClass> & Constructor<OverlayStackMixinClass> & T;
+): Constructor<NotificationContainerMixinClass> & T;
 
 export declare class NotificationContainerMixinClass {
   /**
