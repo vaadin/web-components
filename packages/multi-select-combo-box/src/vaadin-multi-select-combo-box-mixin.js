@@ -419,6 +419,18 @@ export const MultiSelectComboBoxMixin = (superClass) =>
     }
 
     /**
+     * Override method from `ComboBoxBaseMixin` to render scroller in the slot.
+     * @protected
+     * @override
+     */
+    _renderScroller(scroller) {
+      scroller.setAttribute('slot', 'overlay');
+      // Prevent focusing scroller on input Tab
+      scroller.setAttribute('tabindex', '-1');
+      this.appendChild(scroller);
+    }
+
+    /**
      * Override method from `ComboBoxBaseMixin` to implement clearing logic.
      * @protected
      * @override
@@ -487,6 +499,7 @@ export const MultiSelectComboBoxMixin = (superClass) =>
       // Do not commit focused item on not blur / outside click
       if (this._ignoreCommitValue) {
         this._inputElementValue = '';
+        this._focusedIndex = -1;
         this._ignoreCommitValue = false;
       } else {
         this.__commitUserInput();

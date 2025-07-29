@@ -556,7 +556,7 @@ describe('chips', () => {
     it('should adapt overlay width to the input field width while opened', async () => {
       comboBox.opened = true;
 
-      const overlay = document.querySelector('vaadin-multi-select-combo-box-overlay');
+      const overlay = comboBox.$.overlay;
       const overlayPart = overlay.$.overlay;
       const width = overlayPart.offsetWidth;
       expect(width).to.equal(comboBox.clientWidth);
