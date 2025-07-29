@@ -114,6 +114,7 @@ class Dialog extends DialogDraggableMixin(
         modeless="[[modeless]]"
         with-backdrop="[[!modeless]]"
         resizable$="[[resizable]]"
+        draggable$="[[draggable]]"
         restore-focus-on-close
         focus-trap
       ></vaadin-dialog-overlay>
