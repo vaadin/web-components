@@ -31,6 +31,7 @@ export const ContextMenuMixin = (superClass) =>
          */
         opened: {
           type: Boolean,
+          reflectToAttribute: true,
           value: false,
           notify: true,
           readOnly: true,

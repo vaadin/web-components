@@ -1,8 +1,8 @@
 /* @web/test-runner snapshot v1 */
 export const snapshots = {};
 
-snapshots["context-menu items"] =
-`<vaadin-context-menu>
+snapshots["context-menu items"] = 
+`<vaadin-context-menu opened="">
   <div>
     Target
   </div>
@@ -65,9 +65,10 @@ snapshots["context-menu items"] =
 `;
 /* end snapshot context-menu items */
 
-snapshots["context-menu items nested"] =
+snapshots["context-menu items nested"] = 
 `<vaadin-context-menu
   modeless=""
+  opened=""
   slot="sub-menu"
   start-aligned=""
   top-aligned=""
@@ -101,6 +102,7 @@ snapshots["context-menu items nested"] =
   </div>
   <vaadin-context-menu
     modeless=""
+    opened=""
     slot="sub-menu"
     start-aligned=""
     top-aligned=""
