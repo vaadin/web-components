@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, nextFrame, oneEvent } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame, nextRender, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './test-styles.test.js';
 import '@vaadin/text-field/src/vaadin-text-field.js';
@@ -59,10 +59,13 @@ describe('user-tags', () => {
     it('should replace user tags when replacing users', async () => {
       setUsers([user1, user2]);
       await wrapper.flashPromise;
+      expect(getTags()).to.have.lengthOf(2);
+
+      await nextRender();
+
       setUsers([user3]);
       await wrapper.flashPromise;
-      const tags = getTags();
-      expect(tags).to.have.lengthOf(1);
+      expect(getTags()).to.have.lengthOf(1);
     });
   });
 
