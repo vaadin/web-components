@@ -131,12 +131,7 @@ import { ComboBoxMixin } from './vaadin-combo-box-mixin.js';
  * In addition to `<vaadin-combo-box>` itself, the following internal
  * components are themable:
  *
- * - `<vaadin-combo-box-overlay>` - has the same API as [`<vaadin-overlay>`](#/elements/vaadin-overlay).
  * - `<vaadin-combo-box-item>` - has the same API as [`<vaadin-item>`](#/elements/vaadin-item).
- * - [`<vaadin-input-container>`](#/elements/vaadin-input-container) - an internal element wrapping the input.
- *
- * Note: the `theme` attribute value set on `<vaadin-combo-box>` is
- * propagated to the internal components listed above.
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
