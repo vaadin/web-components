@@ -116,10 +116,10 @@ export const ItemsMixin = (superClass) =>
     /** @protected */
     __forwardFocus() {
       const overlay = this._overlayElement;
-      const child = overlay.getFirstChild();
+      const child = overlay._contentRoot.firstElementChild;
       // If parent item is not focused, do not focus submenu
       if (overlay.parentOverlay) {
-        const parent = overlay.parentOverlay.querySelector('[expanded]');
+        const parent = overlay.parentOverlay._contentRoot.querySelector('[expanded]');
         if (parent && parent.hasAttribute('focused') && child) {
           child.focus();
         } else {
@@ -253,10 +253,20 @@ export const ItemsMixin = (superClass) =>
       // Open a submenu on click event when a touch device is used.
       // On desktop, a submenu opens on hover.
       overlay.addEventListener(isTouch ? 'click' : 'mouseover', (event) => {
+        // Ignore events from the submenus
+        if (event.composedPath().includes(this._subMenu)) {
+          return;
+        }
+
         this.__showSubMenu(event);
       });
 
       overlay.addEventListener('keydown', (event) => {
+        // Ignore events from the submenus
+        if (event.composedPath().includes(this._subMenu)) {
+          return;
+        }
+
         const { key } = event;
         const isRTL = this.__isRTL;
 
@@ -287,10 +297,7 @@ export const ItemsMixin = (superClass) =>
 
       subMenu._modeless = true;
       subMenu.openOn = 'opensubmenu';
-
-      // Sub-menu doesn't have a target to wrap,
-      // so there is no need to keep it visible.
-      subMenu.setAttribute('hidden', '');
+      subMenu.slot = 'sub-menu';
 
       // Close sub-menu when the parent menu closes.
       this.addEventListener('opened-changed', (event) => {
@@ -366,7 +373,7 @@ export const ItemsMixin = (superClass) =>
         const { children } = item._item;
 
         // Check if the sub-menu was focused before closing it.
-        const child = subMenu._overlayElement.getFirstChild();
+        const child = subMenu._overlayElement._contentRoot.firstElementChild;
         const isSubmenuFocused = child && child.focused;
 
         if (subMenu.items !== children) {
@@ -394,7 +401,7 @@ export const ItemsMixin = (superClass) =>
 
     /** @protected */
     __getListBox() {
-      return this._overlayElement.querySelector(`${this._tagNamePrefix}-list-box`);
+      return this._overlayElement._contentRoot.querySelector(`${this._tagNamePrefix}-list-box`);
     }
 
     /**
@@ -406,15 +413,12 @@ export const ItemsMixin = (superClass) =>
     __itemsRenderer(root, menu) {
       this.__initMenu(root, menu);
 
-      const subMenu = root.querySelector(this.constructor.is);
-      subMenu.closeOn = menu.closeOn;
-
-      const listBox = this.__getListBox();
-      listBox.innerHTML = '';
+      this._subMenu.closeOn = menu.closeOn;
+      this._listBox.innerHTML = '';
 
       menu.items.forEach((item) => {
         const component = this.__createComponent(item);
-        listBox.appendChild(component);
+        this._listBox.appendChild(component);
       });
     }
 
@@ -444,7 +448,7 @@ export const ItemsMixin = (superClass) =>
     }
 
     /** @private */
-    __initMenu(root, _menu) {
+    __initMenu(root, menu) {
       // NOTE: in this method, `menu` and `this` reference the same element,
       // so we can use either of those. Original implementation used `menu`.
       if (!root.firstElementChild) {
@@ -456,7 +460,7 @@ export const ItemsMixin = (superClass) =>
 
         const subMenu = this.__initSubMenu();
         this._subMenu = subMenu;
-        root.appendChild(subMenu);
+        menu.appendChild(subMenu);
 
         requestAnimationFrame(() => {
           this.__openListenerActive = true;

@@ -19,7 +19,7 @@ async function renderContextMenu(container, { content }) {
 }
 
 describe('lit renderer directives', () => {
-  let container, contextMenu, target, overlay;
+  let container, contextMenu, overlayContent, target;
 
   beforeEach(() => {
     container = fixtureSync('<div></div>');
@@ -29,8 +29,8 @@ describe('lit renderer directives', () => {
     describe('basic', () => {
       beforeEach(async () => {
         contextMenu = await renderContextMenu(container, { content: 'Content' });
+        overlayContent = contextMenu._overlayElement._contentRoot;
         target = contextMenu.querySelector('button');
-        overlay = contextMenu._overlayElement;
       });
 
       it('should set `renderer` property when the directive is attached', () => {
@@ -45,13 +45,13 @@ describe('lit renderer directives', () => {
       it('should render the content with the renderer when the menu is opened', async () => {
         target.click();
         await nextRender();
-        expect(overlay.textContent).to.equal('Content');
+        expect(overlayContent.textContent).to.equal('Content');
       });
 
       it('should re-render the content when the menu is opened and a renderer dependency changes', async () => {
         target.click();
         await renderContextMenu(container, { content: 'New Content' });
-        expect(overlay.textContent).to.equal('New Content');
+        expect(overlayContent.textContent).to.equal('New Content');
       });
     });
 
