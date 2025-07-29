@@ -140,6 +140,12 @@ export class UserTags extends PolylitMixin(LitElement) {
   }
 
   /** @protected */
+  get wrapper() {
+    // Used by Collaboration Kit util
+    return this;
+  }
+
+  /** @protected */
   connectedCallback() {
     super.connectedCallback();
 
