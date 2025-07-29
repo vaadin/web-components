@@ -175,18 +175,19 @@ import { ContextMenuMixin } from './vaadin-context-menu-mixin.js';
  *
  * ### Styling
  *
- * `<vaadin-context-menu>` uses `<vaadin-context-menu-overlay>` internal
- * themable component as the actual visible context menu overlay.
+ * The following shadow DOM parts are available for styling:
  *
- * See [`<vaadin-overlay>`](#/elements/vaadin-overlay)
- * documentation for `<vaadin-context-menu-overlay>` stylable parts.
+ * Part name        | Description
+ * -----------------|-------------------------------------------
+ * `backdrop`       | Backdrop of the overlay
+ * `overlay`        | The overlay container
+ * `content`        | The overlay content
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
  * ### Internal components
  *
- * When using `items` API, in addition `<vaadin-context-menu-overlay>`, the following
- * internal components are themable:
+ * When using `items` API the following internal components are themable:
  *
  * - `<vaadin-context-menu-item>` - has the same API as [`<vaadin-item>`](#/elements/vaadin-item).
  * - `<vaadin-context-menu-list-box>` - has the same API as [`<vaadin-list-box>`](#/elements/vaadin-list-box).

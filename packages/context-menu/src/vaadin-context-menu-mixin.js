@@ -185,6 +185,7 @@ export const ContextMenuMixin = (superClass) =>
       // Create an overlay in the constructor to use in observers before `ready()`
       const overlay = document.createElement(`${this._tagNamePrefix}-overlay`);
       overlay.owner = this;
+      overlay.setAttribute('exportparts', 'backdrop, overlay, content');
 
       overlay.addEventListener('opened-changed', (e) => {
         this._onOverlayOpened(e);
