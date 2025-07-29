@@ -28,7 +28,7 @@ export const formItemStyles = css`
     display: none !important;
   }
 
-  #label {
+  [part='label'] {
     color: var(--vaadin-form-item-label-color, var(--vaadin-color));
     flex: 0 0 auto;
     font-size: var(--vaadin-form-item-label-font-size, inherit);
