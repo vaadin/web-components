@@ -163,21 +163,21 @@ describe('multi-select-combo-box', () => {
     });
 
     it('opened', async () => {
-      element.$.comboBox.click();
+      element.inputElement.click();
       await visualDiff(div, 'opened');
     });
 
     it('opened selected', async () => {
       element.style.width = '250px';
       element.selectedItems = ['Apple', 'Banana'];
-      element.$.comboBox.click();
+      element.inputElement.click();
       await visualDiff(div, 'opened-selected');
     });
 
     it('opened readonly', async () => {
       element.selectedItems = ['Apple', 'Banana'];
       element.readonly = true;
-      element.$.comboBox.click();
+      element.inputElement.click();
       await visualDiff(div, 'opened-readonly');
     });
   });

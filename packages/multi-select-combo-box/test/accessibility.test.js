@@ -102,7 +102,7 @@ describe('accessibility', () => {
         comboBox.items = ['Apple', 'Banana', 'Lemon', 'Orange'];
         comboBox.selectedItems = ['Apple', 'Lemon'];
         comboBox.inputElement.click();
-        scroller = comboBox.$.comboBox._scroller;
+        scroller = comboBox._scroller;
         items = getAllItems(comboBox);
       });
 

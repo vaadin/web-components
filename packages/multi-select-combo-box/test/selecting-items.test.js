@@ -6,7 +6,7 @@ import '../src/vaadin-multi-select-combo-box.js';
 import { getAllItems, getDataProvider, getFirstItem } from './helpers.js';
 
 describe('selecting items', () => {
-  let comboBox, internal, inputElement;
+  let comboBox, inputElement;
 
   function expectItems(values) {
     const items = getAllItems(comboBox);
@@ -19,7 +19,6 @@ describe('selecting items', () => {
   beforeEach(async () => {
     comboBox = fixtureSync(`<vaadin-multi-select-combo-box></vaadin-multi-select-combo-box>`);
     await nextRender();
-    internal = comboBox.$.comboBox;
     inputElement = comboBox.inputElement;
     inputElement.focus();
   });
@@ -80,28 +79,18 @@ describe('selecting items', () => {
       expect(comboBox.hasAttribute('has-value')).to.be.true;
     });
 
-    it('should clear internal combo-box value when selecting an item', async () => {
+    it('should clear input element value when selecting an item', async () => {
       await sendKeys({ down: 'ArrowDown' });
       await sendKeys({ type: 'apple' });
       await sendKeys({ down: 'Enter' });
-      expect(internal.value).to.equal('');
       expect(inputElement.value).to.equal('');
-    });
-
-    it('should not fire internal value-changed event when selecting an item', async () => {
-      const spy = sinon.spy();
-      internal.addEventListener('value-changed', spy);
-      await sendKeys({ down: 'ArrowDown' });
-      await sendKeys({ type: 'apple' });
-      await sendKeys({ down: 'Enter' });
-      expect(spy.calledOnce).to.be.false;
     });
 
     it('should keep overlay open when selecting an item', async () => {
       await sendKeys({ down: 'ArrowDown' });
       await sendKeys({ down: 'ArrowDown' });
       await sendKeys({ down: 'Enter' });
-      expect(internal.opened).to.be.true;
+      expect(comboBox.opened).to.be.true;
     });
 
     it('should keep overlay focused index when selecting an item', async () => {
@@ -460,6 +449,16 @@ describe('selecting items', () => {
     it('should clear the filter when pressing escape', async () => {
       await sendKeys({ type: 'an' });
       expectItems(['banana', 'orange']);
+
+      await sendKeys({ down: 'Escape' });
+      expect(comboBox.filter).to.equal('');
+      expect(inputElement.value).to.equal('');
+    });
+
+    it('should clear the filter when pressing escape with autoOpenDisabled', async () => {
+      comboBox.autoOpenDisabled = true;
+      await sendKeys({ type: 'an' });
+      expect(comboBox.filter).to.equal('an');
 
       await sendKeys({ down: 'Escape' });
       expect(comboBox.filter).to.equal('');
