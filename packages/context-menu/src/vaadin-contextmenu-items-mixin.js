@@ -297,7 +297,6 @@ export const ItemsMixin = (superClass) =>
 
       subMenu._modeless = true;
       subMenu.openOn = 'opensubmenu';
-      subMenu.slot = 'sub-menu';
 
       // Close sub-menu when the parent menu closes.
       this.addEventListener('opened-changed', (event) => {
@@ -448,7 +447,7 @@ export const ItemsMixin = (superClass) =>
     }
 
     /** @private */
-    __initMenu(root, menu) {
+    __initMenu(root, _menu) {
       // NOTE: in this method, `menu` and `this` reference the same element,
       // so we can use either of those. Original implementation used `menu`.
       if (!root.firstElementChild) {
@@ -459,8 +458,9 @@ export const ItemsMixin = (superClass) =>
         root.appendChild(listBox);
 
         const subMenu = this.__initSubMenu();
+        subMenu.slot = 'sub-menu';
         this._subMenu = subMenu;
-        menu.appendChild(subMenu);
+        this.appendChild(subMenu);
 
         requestAnimationFrame(() => {
           this.__openListenerActive = true;
