@@ -98,6 +98,13 @@ class Overlay extends OverlayMixin(DirMixin(ThemableMixin(PolylitMixin(LumoInjec
     `;
   }
 
+  /** @protected */
+  firstUpdated() {
+    super.firstUpdated();
+
+    this.popover = 'manual';
+  }
+
   /**
    * @event vaadin-overlay-open
    * Fired after the overlay is opened.
