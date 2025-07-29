@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { resetMouse, sendKeys, sendMouse, sendMouseToElement } from '@vaadin/test-runner-commands';
+import { resetMouse, sendKeys, sendMouse } from '@vaadin/test-runner-commands';
 import { fixtureSync, keyboardEventFor, nextRender, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-multi-select-combo-box.js';
@@ -26,6 +26,10 @@ describe('selecting items', () => {
   describe('basic', () => {
     beforeEach(() => {
       comboBox.items = ['apple', 'banana', 'lemon', 'orange'];
+    });
+
+    afterEach(async () => {
+      await resetMouse();
     });
 
     it('should update selectedItems when selecting an item on Enter', async () => {
@@ -122,7 +126,6 @@ describe('selecting items', () => {
       await sendKeys({ down: 'ArrowDown' });
       await sendKeys({ down: 'Enter' });
       await sendMouse({ type: 'click', position: [200, 200] });
-      await resetMouse();
       expect(comboBox.selectedItems).to.deep.equal(['apple']);
     });
 
@@ -132,7 +135,6 @@ describe('selecting items', () => {
       await sendKeys({ down: 'ArrowDown' });
       await sendKeys({ down: 'Enter' });
       await sendMouse({ type: 'click', position: [200, 200] });
-      await resetMouse();
       await sendKeys({ down: 'Tab' });
       expect(comboBox.selectedItems).to.deep.equal(['apple']);
     });
@@ -151,18 +153,14 @@ describe('selecting items', () => {
       await sendKeys({ down: 'ArrowDown' });
       await sendKeys({ down: 'ArrowDown' });
       await sendMouse({ type: 'click', position: [200, 200] });
-      await resetMouse();
       expect(comboBox.selectedItems).to.deep.equal([]);
     });
 
     it('should reset the item focused state when closing on outside click', async () => {
       await sendKeys({ press: 'ArrowDown' });
-      await oneEvent(comboBox, 'vaadin-overlay-open');
-
       await sendKeys({ press: 'ArrowDown' });
 
-      await sendMouseToElement({ type: 'click', element: document.body });
-      await resetMouse();
+      await sendMouse({ type: 'click', position: [400, 400] });
 
       await sendKeys({ press: 'ArrowDown' });
       await oneEvent(comboBox, 'vaadin-overlay-open');
