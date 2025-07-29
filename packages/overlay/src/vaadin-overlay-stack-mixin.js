@@ -81,18 +81,6 @@ export const OverlayStackMixin = (superClass) =>
      * Brings the overlay as visually the frontmost one.
      */
     bringToFront() {
-      // Update z-index to be the highest among all attached overlays
-      // TODO: Can be removed after switching all overlays to be based on native popover
-      let zIndex = '';
-      const frontmost = getAttachedInstances()
-        .filter((o) => o !== this)
-        .pop();
-      if (frontmost) {
-        const frontmostZIndex = parseFloat(getComputedStyle(frontmost).zIndex);
-        zIndex = frontmostZIndex + 1;
-      }
-      this.style.zIndex = zIndex;
-
       // If the overlay is the last one, or if all other overlays shown above
       // are nested overlays (e.g. date-picker inside a dialog), do not call
       // `showPopover()` unnecessarily to avoid scroll position being reset.
