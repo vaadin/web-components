@@ -20,8 +20,7 @@ describe('user-tags', () => {
   let wrapper;
 
   const getTags = () => {
-    const { overlay } = wrapper.$;
-    return overlay.querySelectorAll('vaadin-user-tag');
+    return wrapper.querySelectorAll('vaadin-user-tag');
   };
 
   const addUser = (user) => {
@@ -305,6 +304,34 @@ describe('user-tags', () => {
         await waitForIntersectionObserver();
 
         expect(spy.called).to.be.false;
+      });
+    });
+  });
+
+  describe('exportparts', () => {
+    let overlay;
+
+    beforeEach(() => {
+      field = fixtureSync(`<vaadin-text-field></vaadin-text-field>`);
+      FieldHighlighter.init(field);
+      wrapper = field.shadowRoot.querySelector('vaadin-user-tags');
+      overlay = wrapper.$.overlay;
+    });
+
+    it('should export all overlay parts for styling', () => {
+      const overlayParts = [...overlay.shadowRoot.querySelectorAll('[part]')].map((el) => el.getAttribute('part'));
+      const overlayExportParts = overlay.getAttribute('exportparts').split(', ');
+      const hostExportParts = wrapper.getAttribute('exportparts').split(', ');
+
+      overlayParts.forEach((part) => {
+        expect(overlayExportParts).to.include(`${part}:user-tags-${part}`);
+        expect(hostExportParts).to.include(`user-tags-${part}`);
+      });
+    });
+
+    it('should set part="user-tag" on the user tag elements', () => {
+      getTags().forEach((tag) => {
+        expect(tag.getAttribute('part')).to.equal('user-tag');
       });
     });
   });

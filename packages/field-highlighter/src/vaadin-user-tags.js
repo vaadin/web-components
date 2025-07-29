@@ -46,11 +46,15 @@ export class UserTags extends PolylitMixin(LitElement) {
     return html`
       <vaadin-user-tags-overlay
         id="overlay"
+        popover="manual"
+        exportparts="overlay:user-tags-overlay, content:user-tags-content"
         modeless
         .opened="${this.opened}"
         no-vertical-overlap
         @vaadin-overlay-open="${this._onOverlayOpen}"
-      ></vaadin-user-tags-overlay>
+      >
+        <slot></slot>
+      </vaadin-user-tags-overlay>
     `;
   }
 
@@ -136,11 +140,6 @@ export class UserTags extends PolylitMixin(LitElement) {
   }
 
   /** @protected */
-  get wrapper() {
-    return this.$.overlay.querySelector('[part="tags"]');
-  }
-
-  /** @protected */
   connectedCallback() {
     super.connectedCallback();
 
@@ -162,15 +161,8 @@ export class UserTags extends PolylitMixin(LitElement) {
   ready() {
     super.ready();
 
-    this.$.overlay.renderer = (root) => {
-      if (!root.firstChild) {
-        const tags = document.createElement('div');
-        tags.setAttribute('part', 'tags');
-        root.appendChild(tags);
-      }
-    };
-
-    this.$.overlay.requestContentUpdate();
+    // Export user tags overlay parts for styling
+    this.setAttribute('exportparts', 'user-tags-overlay, user-tags-content');
   }
 
   /** @private */
@@ -222,6 +214,7 @@ export class UserTags extends PolylitMixin(LitElement) {
 
   createUserTag(user) {
     const tag = document.createElement('vaadin-user-tag');
+    tag.setAttribute('part', 'user-tag');
     tag.name = user.name;
     tag.uid = user.id;
     tag.colorIndex = user.colorIndex;
@@ -229,7 +222,7 @@ export class UserTags extends PolylitMixin(LitElement) {
   }
 
   getTagForUser(user) {
-    return Array.from(this.wrapper.children).find((tag) => tag.uid === user.id);
+    return Array.from(this.children).find((tag) => tag.uid === user.id);
   }
 
   getChangedTags(addedUsers, removedUsers) {
@@ -239,21 +232,19 @@ export class UserTags extends PolylitMixin(LitElement) {
   }
 
   applyTagsStart({ added, removed }) {
-    const wrapper = this.wrapper;
     removed.forEach((tag) => {
       if (tag) {
         tag.classList.add('removing');
         tag.classList.remove('show');
       }
     });
-    added.forEach((tag) => wrapper.insertBefore(tag, wrapper.firstChild));
+    added.forEach((tag) => this.insertBefore(tag, this.firstChild));
   }
 
   applyTagsEnd({ added, removed }) {
-    const wrapper = this.wrapper;
     removed.forEach((tag) => {
-      if (tag && tag.parentNode === wrapper) {
-        wrapper.removeChild(tag);
+      if (tag && tag.parentNode === this) {
+        this.removeChild(tag);
       }
     });
     added.forEach((tag) => tag && tag.classList.add('show'));
@@ -329,7 +320,7 @@ export class UserTags extends PolylitMixin(LitElement) {
   /** @private */
   _onOverlayOpen() {
     // Animate all tags except removing ones
-    Array.from(this.wrapper.children).forEach((tag) => {
+    Array.from(this.children).forEach((tag) => {
       if (!tag.classList.contains('removing')) {
         tag.classList.add('show');
       }
@@ -338,17 +329,16 @@ export class UserTags extends PolylitMixin(LitElement) {
 
   flashTags(added) {
     this.flashing = true;
-    const wrapper = this.wrapper;
 
     // Hide existing tags
-    const hidden = Array.from(wrapper.children);
+    const hidden = Array.from(this.children);
     hidden.forEach((tag) => {
       tag.style.display = 'none';
     });
 
     // Render new tags
     added.forEach((tag) => {
-      wrapper.insertBefore(tag, wrapper.firstChild);
+      this.insertBefore(tag, this.firstChild);
     });
 
     this.flashPromise = new Promise((resolve) => {
