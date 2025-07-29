@@ -11,7 +11,6 @@
 import '@vaadin/component-base/src/style-props.js';
 import { css } from 'lit';
 import { dialogOverlayStyles } from '@vaadin/dialog/src/styles/vaadin-dialog-overlay-base-styles.js';
-import { overlayStyles } from '@vaadin/overlay/src/styles/vaadin-overlay-base-styles.js';
 
 const crudDialogOverlay = css`
   [part='header'] {
@@ -46,4 +45,4 @@ const crudDialogOverlay = css`
   }
 `;
 
-export const crudDialogOverlayStyles = [overlayStyles, dialogOverlayStyles, crudDialogOverlay];
+export const crudDialogOverlayStyles = [...dialogOverlayStyles, crudDialogOverlay];
