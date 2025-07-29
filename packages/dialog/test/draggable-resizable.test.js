@@ -622,6 +622,14 @@ describe('draggable', () => {
     await nextRender();
     expect(getComputedStyle(dialog.$.overlay.$.overlay).maxWidth).to.equal('100%');
   });
+
+  it('should toggle draggable attribute on the overlay based on the property', async () => {
+    expect(dialog.$.overlay.hasAttribute('draggable')).to.be.true;
+
+    dialog.draggable = false;
+    await nextUpdate(dialog);
+    expect(dialog.$.overlay.hasAttribute('draggable')).to.be.false;
+  });
 });
 
 describe('touch', () => {
