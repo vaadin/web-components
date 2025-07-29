@@ -1,7 +1,7 @@
 import { expect } from '@vaadin/chai-plugins';
 import { aTimeout, fixtureSync, isIOS, nextFrame, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import { Overlay } from '../src/vaadin-overlay.js';
+import '../src/vaadin-overlay.js';
 import { createOverlay } from './helpers.js';
 
 describe('vaadin-overlay', () => {
@@ -37,30 +37,53 @@ describe('vaadin-overlay', () => {
     });
   });
 
-  describe('moving overlay', () => {
-    let parent, overlay;
+  describe('popover', () => {
+    let overlay;
 
-    beforeEach(async () => {
-      parent = document.createElement('div');
-      overlay = fixtureSync('<vaadin-overlay></vaadin-overlay>', parent);
+    beforeEach(() => {
+      overlay = fixtureSync('<vaadin-overlay></vaadin-overlay>');
       overlay.renderer = (root) => {
         root.textContent = 'overlay content';
       };
-      overlay.opened = true;
-      await oneEvent(overlay, 'vaadin-overlay-open');
     });
 
     afterEach(() => {
       overlay.opened = false;
     });
 
-    it('should move under document body when open', () => {
-      expect(overlay.parentElement).to.eql(document.body);
+    it('should call showPopover when opened property is set to true', async () => {
+      const showSpy = sinon.spy(overlay, 'showPopover');
+
+      overlay.opened = true;
+      await oneEvent(overlay, 'vaadin-overlay-open');
+
+      expect(showSpy).to.be.calledOnce;
     });
 
-    it('should move back to original place after closing', () => {
+    it('should call hidePopover opened property is set to false', async () => {
+      overlay.opened = true;
+      await oneEvent(overlay, 'vaadin-overlay-open');
+
+      const hideSpy = sinon.spy(overlay, 'hidePopover');
+
       overlay.opened = false;
-      expect(overlay.parentElement).to.eql(parent);
+
+      expect(hideSpy).to.be.calledOnce;
+    });
+
+    it('should not call showPopover when opened is set to true while disconnected', async () => {
+      overlay.opened = true;
+      await oneEvent(overlay, 'vaadin-overlay-open');
+
+      const showSpy = sinon.spy(overlay, 'showPopover');
+
+      overlay.opened = false;
+
+      overlay.remove();
+      overlay.opened = true;
+
+      expect(overlay.opened).to.be.false;
+      expect(showSpy).to.be.not.called;
     });
   });
 
@@ -272,88 +295,6 @@ describe('vaadin-overlay', () => {
       window.dispatchEvent(new CustomEvent('resize'));
       expect(overlay._detectIosNavbar.called).to.be.true;
       overlay._detectIosNavbar.restore();
-    });
-  });
-
-  describe('disconnected', () => {
-    customElements.define(
-      'overlay-wrapper',
-      class extends HTMLElement {
-        constructor() {
-          super();
-
-          this.attachShadow({ mode: 'open' });
-
-          const overlay = document.createElement('wrapped-overlay');
-          this.overlay = overlay;
-
-          // Forward the slotted content from wrapper to overlay
-          const slot = document.createElement('slot');
-          overlay.appendChild(slot);
-
-          overlay.renderer = (root) => {
-            root.innerHTML = '<input placeholder="Input">';
-          };
-
-          this.shadowRoot.append(overlay);
-        }
-
-        get opened() {
-          return this.overlay.opened;
-        }
-
-        set opened(opened) {
-          this.overlay.opened = opened;
-        }
-
-        connectedCallback() {
-          const root = document.createElement('div');
-          this.overlay.__customRoot = root;
-          this.append(root);
-        }
-
-        disconnectedCallback() {
-          this.opened = false;
-        }
-      },
-    );
-
-    customElements.define(
-      'wrapped-overlay',
-      class extends Overlay {
-        get _contentRoot() {
-          return this.__customRoot;
-        }
-
-        _attachOverlay() {
-          this.setAttribute('popover', 'manual');
-          this.showPopover();
-        }
-
-        _detachOverlay() {
-          this.hidePopover();
-        }
-      },
-    );
-
-    let owner, overlay;
-
-    beforeEach(() => {
-      owner = document.createElement('overlay-wrapper');
-      document.body.appendChild(owner);
-      overlay = owner.shadowRoot.querySelector('wrapped-overlay');
-    });
-
-    it('should not call overlay opening when overlay is disconnected', async () => {
-      overlay.opened = true;
-      await oneEvent(overlay, 'vaadin-overlay-open');
-
-      const spy = sinon.spy(overlay, '_attachOverlay');
-
-      owner.remove();
-      owner.opened = true;
-
-      expect(spy.called).to.be.false;
     });
   });
 });

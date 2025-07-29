@@ -143,25 +143,24 @@ describe('focus-trap', () => {
   });
 
   describe('aria-hidden', () => {
-    let outer, inner, overlay;
+    let wrapper, sibling, overlay;
 
     beforeEach(() => {
-      // Create outer element and pass it explicitly.
-      outer = document.createElement('main');
-
-      // Our `fixtureSync()` requires a single parent.
-      inner = fixtureSync(
-        `
+      wrapper = fixtureSync(`
         <div>
-          <button>Foo</button>
-          <vaadin-overlay focus-trap></vaadin-overlay>
-          <button>Bar</button>
+          <aside>
+            <button>Foo</button>
+          </aside>
+          <div>
+            <button>Foo</button>
+            <vaadin-overlay focus-trap></vaadin-overlay>
+            <button>Bar</button>
+          </div>
         </div>
-      `,
-        outer,
-      );
+      `);
 
-      overlay = inner.querySelector('vaadin-overlay');
+      overlay = wrapper.querySelector('vaadin-overlay');
+      sibling = wrapper.querySelector('aside');
       overlay.renderer = (root) => {
         root.innerHTML = '<input placeholder="Input">';
       };
@@ -175,7 +174,7 @@ describe('focus-trap', () => {
       overlay.opened = true;
       await oneEvent(overlay, 'vaadin-overlay-open');
 
-      expect(outer.getAttribute('aria-hidden')).to.equal('true');
+      expect(sibling.getAttribute('aria-hidden')).to.equal('true');
     });
 
     it('should remove aria-hidden from other elements on overlay close', async () => {
@@ -183,7 +182,7 @@ describe('focus-trap', () => {
       await oneEvent(overlay, 'vaadin-overlay-open');
 
       overlay.opened = false;
-      expect(outer.hasAttribute('aria-hidden')).to.be.false;
+      expect(sibling.hasAttribute('aria-hidden')).to.be.false;
     });
 
     it('should not set aria-hidden on other elements if focusTrap is set to false', async () => {
@@ -192,7 +191,7 @@ describe('focus-trap', () => {
       overlay.opened = true;
       await oneEvent(overlay, 'vaadin-overlay-open');
 
-      expect(outer.hasAttribute('aria-hidden')).to.be.false;
+      expect(sibling.hasAttribute('aria-hidden')).to.be.false;
     });
   });
 
@@ -235,27 +234,13 @@ describe('focus-trap', () => {
         get _modalRoot() {
           return this.owner;
         }
-
-        _attachOverlay() {
-          this.setAttribute('popover', 'manual');
-          this.showPopover();
-        }
-
-        _detachOverlay() {
-          this.hidePopover();
-        }
       },
     );
 
     let outer, inner, wrapper, overlay;
 
     beforeEach(() => {
-      // Create outer element and pass it explicitly.
-      outer = document.createElement('main');
-
-      // Our `fixtureSync()` requires a single parent.
-      inner = fixtureSync(
-        `
+      outer = fixtureSync(`
         <div>
           <aside>
             <button>Foo</button>
@@ -266,11 +251,10 @@ describe('focus-trap', () => {
             <button>Baz</button>
           </div>
         </div>
-      `,
-        outer,
-      );
+      `);
 
-      wrapper = inner.querySelector('custom-overlay-wrapper');
+      wrapper = outer.querySelector('custom-overlay-wrapper');
+      inner = outer.querySelector('div');
       overlay = wrapper.shadowRoot.querySelector('custom-overlay');
     });
 

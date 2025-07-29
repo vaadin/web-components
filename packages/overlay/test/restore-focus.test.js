@@ -161,33 +161,13 @@ describe('restore focus', () => {
   });
 });
 
-// TODO: temporarily placed in a separate suite using native popover
-// DOM structure, where the content root is slotted into the overlay
+// Emulate dialog DOM structure, where the content root is slotted into the overlay
 describe('custom content root', () => {
   customElements.define(
     'custom-overlay',
     class extends Overlay {
       get _contentRoot() {
         return this.owner;
-      }
-
-      _attachOverlay() {
-        if (this.owner) {
-          this.setAttribute('popover', 'manual');
-          this.showPopover();
-          return;
-        }
-
-        super._attachOverlay();
-      }
-
-      _detachOverlay() {
-        if (this.owner) {
-          this.hidePopover();
-          return;
-        }
-
-        super._detachOverlay();
       }
     },
   );

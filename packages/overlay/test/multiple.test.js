@@ -264,6 +264,37 @@ describe('multiple overlays', () => {
       expect(modeless2.style.zIndex).to.be.empty;
     });
 
+    it('should not call showPopover on bringToFront if only nested overlay is open', () => {
+      modeless2.opened = true;
+      modeless2.opened = true;
+
+      // Mimic nested overlays case
+      modeless1.appendChild(modeless2);
+
+      const showSpy1 = sinon.spy(modeless1, 'showPopover');
+      const showSpy2 = sinon.spy(modeless2, 'showPopover');
+
+      modeless1.bringToFront();
+
+      expect(showSpy1).to.be.not.called;
+      expect(showSpy2).to.be.not.called;
+
+      expect(modeless2._last).to.be.true;
+    });
+
+    it('should not call showPopover on bringToFront for the last open overlay', () => {
+      modeless2.opened = true;
+      modeless2.opened = true;
+
+      const showSpy2 = sinon.spy(modeless2, 'showPopover');
+
+      modeless2.bringToFront();
+
+      expect(showSpy2).to.be.not.called;
+
+      expect(modeless2._last).to.be.true;
+    });
+
     it('should not fire the vaadin-overlay-escape-press if the overlay does not contain focus', () => {
       const spy = sinon.spy();
       modeless1.addEventListener('vaadin-overlay-escape-press', spy);
@@ -315,63 +346,6 @@ describe('multiple overlays', () => {
 
       escKeyDown(input);
       expect(spy.called).to.be.false;
-    });
-
-    describe('native popovers', () => {
-      beforeEach(() => {
-        modeless1.popover = 'manual';
-        modeless2.popover = 'manual';
-      });
-
-      it('should update stacking order when using bringToFront', () => {
-        modeless1.opened = true;
-        modeless1.showPopover();
-        modeless2.opened = true;
-        modeless2.showPopover();
-
-        modeless1.bringToFront();
-
-        expect(modeless1._last).to.be.true;
-
-        // Check that the overlay is also visually the frontmost
-        const frontmost = getFrontmostOverlayFromScreenCenter();
-        expect(frontmost).to.equal(modeless1);
-      });
-
-      it('should not call showPopover on bringToFront if only nested overlay is open', () => {
-        modeless2.opened = true;
-        modeless1.showPopover();
-        modeless2.opened = true;
-        modeless2.showPopover();
-
-        // Mimic nested overlays case
-        modeless1.appendChild(modeless2);
-
-        const showSpy1 = sinon.spy(modeless1, 'showPopover');
-        const showSpy2 = sinon.spy(modeless2, 'showPopover');
-
-        modeless1.bringToFront();
-
-        expect(showSpy1).to.be.not.called;
-        expect(showSpy2).to.be.not.called;
-
-        expect(modeless2._last).to.be.true;
-      });
-
-      it('should not call showPopover on bringToFront for the last open overlay', () => {
-        modeless2.opened = true;
-        modeless1.showPopover();
-        modeless2.opened = true;
-        modeless2.showPopover();
-
-        const showSpy2 = sinon.spy(modeless2, 'showPopover');
-
-        modeless2.bringToFront();
-
-        expect(showSpy2).to.be.not.called;
-
-        expect(modeless2._last).to.be.true;
-      });
     });
   });
 });
