@@ -4,71 +4,100 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Horizontal layout</title>
+    <title>Horizontal Layout</title>
     <link rel="stylesheet" href="/packages/vaadin-lumo-styles/lumo.css" />
     <script type="module" src="./common.js"></script>
 
     <script type="module">
       import '@vaadin/horizontal-layout';
     </script>
+
+    <style>
+      .section {
+        flex-direction: column;
+        align-items: initial;
+      }
+
+      vaadin-horizontal-layout {
+        outline: 1px dashed blue;
+      }
+
+      vaadin-horizontal-layout > div {
+        background: #ccc;
+      }
+    </style>
   </head>
 
   <body>
-    <vaadin-horizontal-layout style="border: solid 1px blue; width: 600px" theme="spacing wrap">
-      <div style="background: #90ee90; width: 100px">Start</div>
-      <div style="background: #90ee90; width: 100px">Start</div>
-      <div slot="middle" style="background: #ffd700">Middle</div>
-      <div slot="end" style="background: #f08080; width: 100px">End</div>
-    </vaadin-horizontal-layout>
+    <section class="section">
+      <h2 class="heading">Variants</h2>
 
-    <br />
+      <vaadin-horizontal-layout theme="margin">
+        <div>Margin</div>
+        <div>Margin</div>
+        <div>Margin</div>
+      </vaadin-horizontal-layout>
 
-    <vaadin-horizontal-layout style="border: solid 1px blue; width: 350px" theme="spacing wrap">
-      <div style="background: #90ee90; width: 100px">Start</div>
-      <div style="background: #90ee90; width: 100px">Start</div>
-      <div slot="middle" style="background: #ffd700">Middle</div>
-      <div slot="end" style="background: #f08080; width: 100px">End</div>
-    </vaadin-horizontal-layout>
+      <vaadin-horizontal-layout theme="padding">
+        <div>Padding</div>
+        <div>Padding</div>
+        <div>Padding</div>
+      </vaadin-horizontal-layout>
 
-    <br />
+      <vaadin-horizontal-layout theme="spacing">
+        <div>Spacing</div>
+        <div>Spacing</div>
+        <div>Spacing</div>
+      </vaadin-horizontal-layout>
+    </section>
 
-    <vaadin-horizontal-layout style="border: solid 1px blue; width: 350px" theme="spacing wrap">
-      <div style="background: #90ee90; width: 200px">Start</div>
-      <div style="background: #90ee90; width: 100px">Start</div>
-      <div slot="middle" style="background: #ffd700">Middle</div>
-      <div slot="end" style="background: #f08080; width: 100px">End</div>
-    </vaadin-horizontal-layout>
+    <section class="section">
+      <h2 class="heading">Slots</h2>
 
-    <br />
+      <vaadin-horizontal-layout style="width: 600px" theme="spacing wrap">
+        <div style="background: #90ee90; width: 100px">Start</div>
+        <div style="background: #90ee90; width: 100px">Start</div>
+        <div slot="middle" style="background: #ffd700">Middle</div>
+        <div slot="end" style="background: #f08080; width: 100px">End</div>
+      </vaadin-horizontal-layout>
 
-    <vaadin-horizontal-layout style="border: solid 1px blue; width: 400px" theme="spacing wrap">
-      <div style="background: #90ee90; width: 100px">Start</div>
-      <div style="background: #90ee90; width: 100px">Start</div>
-      <div slot="middle" style="background: #ffd700">Middle</div>
-    </vaadin-horizontal-layout>
+      <vaadin-horizontal-layout style="width: 350px" theme="spacing wrap">
+        <div style="background: #90ee90; width: 100px">Start</div>
+        <div style="background: #90ee90; width: 100px">Start</div>
+        <div slot="middle" style="background: #ffd700">Middle</div>
+        <div slot="end" style="background: #f08080; width: 100px">End</div>
+      </vaadin-horizontal-layout>
 
-    <br />
+      <vaadin-horizontal-layout style="width: 350px" theme="spacing wrap">
+        <div style="background: #90ee90; width: 200px">Start</div>
+        <div style="background: #90ee90; width: 100px">Start</div>
+        <div slot="middle" style="background: #ffd700">Middle</div>
+        <div slot="end" style="background: #f08080; width: 100px">End</div>
+      </vaadin-horizontal-layout>
 
-    <vaadin-horizontal-layout style="border: solid 1px blue; width: 250px" theme="spacing wrap">
-      <div style="background: #90ee90; width: 100px">Start</div>
-      <div style="background: #90ee90; width: 100px">Start</div>
-      <div slot="middle" style="background: #ffd700">Middle</div>
-    </vaadin-horizontal-layout>
+      <vaadin-horizontal-layout style="width: 400px" theme="spacing wrap">
+        <div style="background: #90ee90; width: 100px">Start</div>
+        <div style="background: #90ee90; width: 100px">Start</div>
+        <div slot="middle" style="background: #ffd700">Middle</div>
+      </vaadin-horizontal-layout>
 
-    <br />
+      <vaadin-horizontal-layout style="width: 250px" theme="spacing wrap">
+        <div style="background: #90ee90; width: 100px">Start</div>
+        <div style="background: #90ee90; width: 100px">Start</div>
+        <div slot="middle" style="background: #ffd700">Middle</div>
+      </vaadin-horizontal-layout>
 
-    <vaadin-horizontal-layout style="border: solid 1px blue; width: 400px" theme="spacing wrap">
-      <div slot="middle" style="background: #ffd700">Middle</div>
-      <div slot="end" style="background: #f08080; width: 100px">End</div>
-      <div slot="end" style="background: #f08080; width: 100px">End</div>
-    </vaadin-horizontal-layout>
+      <vaadin-horizontal-layout style="width: 400px" theme="spacing wrap">
+        <div slot="middle" style="background: #ffd700">Middle</div>
+        <div slot="end" style="background: #f08080; width: 100px">End</div>
+        <div slot="end" style="background: #f08080; width: 100px">End</div>
+      </vaadin-horizontal-layout>
 
-    <br />
-
-    <vaadin-horizontal-layout style="border: solid 1px blue; width: 250px" theme="spacing wrap">
-      <div slot="middle" style="background: #ffd700">Middle</div>
-      <div slot="end" style="background: #f08080; width: 100px">End</div>
-      <div slot="end" style="background: #f08080; width: 100px">End</div>
-    </vaadin-horizontal-layout>
+      <vaadin-horizontal-layout style="width: 250px" theme="spacing wrap">
+        <div slot="middle" style="background: #ffd700">Middle</div>
+        <div slot="end" style="background: #f08080; width: 100px">End</div>
+        <div slot="end" style="background: #f08080; width: 100px">End</div>
+      </vaadin-horizontal-layout>
+    </section>
   </body>
 </html>
