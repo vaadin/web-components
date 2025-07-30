@@ -843,7 +843,7 @@ export const chartStyles = css`
   }
 
   :where([styled-mode]) .highcharts-navigator-handle {
-    stroke: color-mix(in srgb, var(--vaadin-charts-contrast, var(--_label)) 20%, transparent);
+    stroke: var(--_grid-line);
     fill: var(--_bg);
     cursor: ew-resize;
   }
