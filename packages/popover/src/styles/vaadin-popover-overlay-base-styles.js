@@ -50,7 +50,7 @@ const popoverOverlay = css`
   }
 
   :host([theme~='no-padding']) [part='content'] {
-    padding: 0;
+    padding: 0 !important;
   }
 
   /* Increase the area of the popover so the pointer can go from the target directly to it. */

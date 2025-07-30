@@ -20,7 +20,7 @@ const popoverOverlay = css`
   }
 
   :host([theme~='no-padding']) [part='content'] {
-    padding: 0;
+    padding: 0 !important;
   }
 
   :host([theme~='arrow']) {
