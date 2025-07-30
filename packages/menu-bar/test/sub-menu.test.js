@@ -692,4 +692,15 @@ describe('touch', () => {
     expect(subMenu3.opened).to.be.true;
     subMenu3.dispatchEvent(new CustomEvent('close-all-menus'));
   });
+
+  describe('exportparts', () => {
+    it('should export all overlay parts for styling', () => {
+      const parts = [...subMenuOverlay.shadowRoot.querySelectorAll('[part]')].map((el) => el.getAttribute('part'));
+      const exportParts = subMenuOverlay.getAttribute('exportparts').split(', ');
+
+      parts.forEach((part) => {
+        expect(exportParts).to.include(part);
+      });
+    });
+  });
 });
