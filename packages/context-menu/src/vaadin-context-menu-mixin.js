@@ -697,7 +697,11 @@ export const ContextMenuMixin = (superClass) =>
           // Dispatch another contextmenu at the same coordinates after the overlay is closed
           this._overlayElement.addEventListener(
             'vaadin-overlay-closed',
-            () => this.__contextMenuAt(e.clientX, e.clientY),
+            (closeEvent) => {
+              if (closeEvent.target === this._overlayElement) {
+                this.__contextMenuAt(e.clientX, e.clientY);
+              }
+            },
             {
               once: true,
             },

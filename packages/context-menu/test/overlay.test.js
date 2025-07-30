@@ -360,7 +360,7 @@ describe('overlay', () => {
     it('should close on menu contextmenu', () => {
       // Dispatch a contextmenu event on the overlay content
       const { left, top } = content.getBoundingClientRect();
-      const e = contextmenu(left, top, false, overlay);
+      const e = contextmenu(left, top, false, overlay._contentRoot);
       expect(e.defaultPrevented).to.be.true;
       expect(menu.opened).to.be.false;
     });
