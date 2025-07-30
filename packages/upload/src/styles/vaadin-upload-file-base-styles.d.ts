@@ -5,4 +5,4 @@
  */
 import type { CSSResult } from 'lit';
 
-export const uploadStyles: CSSResult;
+export const uploadFileStyles: CSSResult;
