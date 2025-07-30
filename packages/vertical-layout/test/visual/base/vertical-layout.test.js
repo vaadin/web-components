@@ -1,8 +1,6 @@
 import { fixtureSync } from '@vaadin/testing-helpers/dist/fixture.js';
 import { visualDiff } from '@web/test-runner-visual-regression';
-import '@vaadin/vaadin-lumo-styles/props.css';
-import '@vaadin/vaadin-lumo-styles/components/vertical-layout.css';
-import '../../../vaadin-vertical-layout.js';
+import '../../../src/vaadin-vertical-layout.js';
 
 describe('vertical-layout', () => {
   let div, element;
@@ -55,23 +53,9 @@ describe('vertical-layout', () => {
     await visualDiff(div, 'theme-margin-padding-spacing');
   });
 
-  it('theme-spacing-xs', async () => {
-    element.setAttribute('theme', 'spacing-xs');
-    await visualDiff(div, 'theme-spacing-xs');
-  });
-
-  it('theme-spacing-s', async () => {
-    element.setAttribute('theme', 'spacing-s');
-    await visualDiff(div, 'theme-spacing-s');
-  });
-
-  it('theme-spacing-l', async () => {
-    element.setAttribute('theme', 'spacing-l');
-    await visualDiff(div, 'theme-spacing-l');
-  });
-
-  it('theme-spacing-xl', async () => {
-    element.setAttribute('theme', 'spacing-xl');
-    await visualDiff(div, 'theme-spacing-xl');
+  it('theme-wrap', async () => {
+    element.setAttribute('theme', 'wrap');
+    element.style.height = '100px';
+    await visualDiff(div, 'theme-wrap');
   });
 });
