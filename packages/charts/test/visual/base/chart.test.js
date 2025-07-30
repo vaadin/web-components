@@ -1,6 +1,6 @@
 import { fixtureSync } from '@vaadin/testing-helpers/dist/fixture.js';
 import { visualDiff } from '@web/test-runner-visual-regression';
-import '../../../vaadin-chart.js';
+import '../../../src/vaadin-chart.js';
 
 describe('chart', () => {
   let element;
