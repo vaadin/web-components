@@ -109,7 +109,7 @@ describe('popover', () => {
       popover.target = target;
       await nextUpdate(popover);
 
-      popover.querySelector('input').focus();
+      overlay.querySelector('input').focus();
 
       // Close popover
       popover.opened = false;
@@ -136,7 +136,7 @@ describe('popover', () => {
       popover.target = target;
       await nextUpdate(popover);
 
-      popover.querySelector('input').focus();
+      overlay.querySelector('input').focus();
 
       // Clear target
       popover.target = null;
