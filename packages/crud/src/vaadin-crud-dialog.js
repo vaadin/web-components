@@ -82,22 +82,6 @@ class CrudDialogOverlay extends OverlayMixin(DirMixin(ThemableMixin(PolylitMixin
     this.setAttribute('has-header', '');
     this.setAttribute('has-footer', '');
   }
-
-  /**
-   * @protected
-   * @override
-   */
-  _attachOverlay() {
-    this.showPopover();
-  }
-
-  /**
-   * @protected
-   * @override
-   */
-  _detachOverlay() {
-    this.hidePopover();
-  }
 }
 
 defineCustomElement(CrudDialogOverlay);

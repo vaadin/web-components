@@ -42,22 +42,6 @@ export const SelectOverlayMixin = (superClass) =>
     }
 
     /**
-     * @protected
-     * @override
-     */
-    _attachOverlay() {
-      this.showPopover();
-    }
-
-    /**
-     * @protected
-     * @override
-     */
-    _detachOverlay() {
-      this.hidePopover();
-    }
-
-    /**
      * Override method inherited from `Overlay` to always close on outside click,
      * in order to avoid problem when using inside of the modeless dialog.
      *

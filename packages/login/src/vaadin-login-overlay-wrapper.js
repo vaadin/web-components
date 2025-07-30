@@ -49,22 +49,6 @@ class LoginOverlayWrapper extends OverlayMixin(DirMixin(ThemableMixin(PolylitMix
     return this.owner;
   }
 
-  /**
-   * @protected
-   * @override
-   */
-  _attachOverlay() {
-    this.showPopover();
-  }
-
-  /**
-   * @protected
-   * @override
-   */
-  _detachOverlay() {
-    this.hidePopover();
-  }
-
   /** @protected */
   render() {
     return html`

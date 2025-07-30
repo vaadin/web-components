@@ -169,20 +169,4 @@ export const MenuOverlayMixin = (superClass) =>
     _deepContains(node) {
       return this.owner.contains(node);
     }
-
-    /**
-     * @protected
-     * @override
-     */
-    _attachOverlay() {
-      this.showPopover();
-    }
-
-    /**
-     * @protected
-     * @override
-     */
-    _detachOverlay() {
-      this.hidePopover();
-    }
   };
