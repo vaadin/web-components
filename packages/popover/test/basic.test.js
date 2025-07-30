@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { esc, fixtureSync, nextRender, nextUpdate, outsideClick } from '@vaadin/testing-helpers';
+import { esc, fixtureSync, nextRender, nextUpdate, oneEvent, outsideClick } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './not-animated-styles.js';
 import '../vaadin-popover.js';
