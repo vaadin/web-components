@@ -21,6 +21,7 @@ import { css, unsafeCSS } from 'lit';
 import { addGlobalThemeStyles } from '@vaadin/vaadin-themable-mixin/register-styles.js';
 
 /* Tooltip styles, to support `"tooltip": { "outside": true }` config option */
+// postcss-lit-disable-next-line
 const tooltipStyles = (scope) => css`
   ${unsafeCSS(scope)} .highcharts-tooltip {
     cursor: default;
