@@ -16,20 +16,149 @@
  *
  * License: www.highcharts.com/license
  */
-import { css } from 'lit';
+import '@vaadin/component-base/src/style-props.js';
+import { css, unsafeCSS } from 'lit';
+import { addGlobalThemeStyles } from '@vaadin/vaadin-themable-mixin/register-styles.js';
 
-/* When updating this file do not override vaadin-charts custom properties section */
+/* Tooltip styles, to support `"tooltip": { "outside": true }` config option */
+const tooltipStyles = (scope) => css`
+  ${unsafeCSS(scope)} .highcharts-tooltip {
+    cursor: default;
+    pointer-events: none;
+    white-space: nowrap;
+    transition: stroke 150ms;
+    filter: drop-shadow(var(--vaadin-charts-tooltip-shadow, 0 4px 8px rgba(0, 0, 0, 0.2))) !important;
+  }
+
+  ${unsafeCSS(scope)} .highcharts-tooltip text {
+    fill: var(--vaadin-charts-data-label, var(--vaadin-color));
+  }
+
+  ${unsafeCSS(scope)} .highcharts-tooltip .highcharts-header {
+    font-size: 0.85em;
+    color: var(--vaadin-color-subtle);
+  }
+
+  ${unsafeCSS(scope)} .highcharts-tooltip-box {
+    stroke-width: 1px;
+    stroke: var(--vaadin-charts-tooltip-border, var(--vaadin-border-color));
+    fill: var(--vaadin-charts-tooltip-background, var(--vaadin-background-color));
+    fill-opacity: var(--vaadin-charts-tooltip-background-opacity, 1);
+  }
+
+  ${unsafeCSS(scope)} .highcharts-tooltip-box .highcharts-label-box {
+    fill: var(--vaadin-charts-tooltip-background, var(--vaadin-background-color));
+    fill-opacity: var(--vaadin-charts-tooltip-background-opacity, 1);
+    stroke: var(--vaadin-charts-tooltip-border, var(--vaadin-border-color));
+  }
+
+  ${unsafeCSS(scope)} .highcharts-tooltip-header {
+    stroke-width: 1px;
+    stroke: color-mix(in srgb, var(--vaadin-charts-contrast, var(--_label)) 20%, transparent);
+  }
+
+  ${unsafeCSS(scope)} div.highcharts-tooltip {
+    filter: none;
+  }
+`;
+
+addGlobalThemeStyles(
+  'vaadin-charts-tooltip',
+  css`
+    .highcharts-tooltip-container .highcharts-root {
+      overflow: visible;
+      font-size: var(--vaadin-charts-font-size, 0.75rem);
+      line-height: normal;
+    }
+  `,
+  tooltipStyles('.highcharts-tooltip-container'),
+);
 
 export const chartStyles = css`
   :host {
     display: block;
     width: 100%;
     overflow: hidden;
-    font-family:
-      -apple-system, BlinkMacSystemFont, 'Roboto', 'Segoe UI', Helvetica, Arial, sans-serif, 'Apple Color Emoji',
-      'Segoe UI Emoji', 'Segoe UI Symbol';
-    font-size: 12px;
+    font-size: var(--vaadin-charts-font-size, 0.75rem);
     line-height: normal;
+
+    /* Needs to be a color, not a background image */
+    --_bg: var(--vaadin-charts-background, var(--vaadin-background-color));
+    --_hue-scale: 180;
+    --_accent: var(--vaadin-charts-accent, #4172d5);
+    --_accent-0: var(--vaadin-charts-color-0, var(--_accent));
+    --_accent-1: var(
+      --vaadin-charts-color-1,
+      oklch(from var(--_accent-0) clamp(0.2, l - 0.1, 0.8) c calc(h - var(--_hue-scale) / 9 * 1))
+    );
+    --_accent-2: var(
+      --vaadin-charts-color-2,
+      oklch(from var(--_accent-0) clamp(0.2, l + 0.1, 0.8) c calc(h - var(--_hue-scale) / 9 * 2))
+    );
+    --_accent-3: var(
+      --vaadin-charts-color-3,
+      oklch(from var(--_accent-0) clamp(0.2, l - 0.1, 0.8) c calc(h - var(--_hue-scale) / 9 * 3))
+    );
+    --_accent-4: var(
+      --vaadin-charts-color-4,
+      oklch(from var(--_accent-0) clamp(0.2, l + 0.1, 0.8) c calc(h - var(--_hue-scale) / 9 * 4))
+    );
+    --_accent-5: var(
+      --vaadin-charts-color-5,
+      oklch(from var(--_accent-0) clamp(0.2, l - 0.1, 0.8) c calc(h - var(--_hue-scale) / 9 * 5))
+    );
+    --_accent-6: var(
+      --vaadin-charts-color-6,
+      oklch(from var(--_accent-0) clamp(0.2, l + 0.1, 0.8) c calc(h - var(--_hue-scale) / 9 * 6))
+    );
+    --_accent-7: var(
+      --vaadin-charts-color-7,
+      oklch(from var(--_accent-0) clamp(0.2, l - 0.1, 0.8) c calc(h - var(--_hue-scale) / 9 * 7))
+    );
+    --_accent-8: var(
+      --vaadin-charts-color-8,
+      oklch(from var(--_accent-0) clamp(0.2, l + 0.1, 0.8) c calc(h - var(--_hue-scale) / 9 * 8))
+    );
+    --_accent-9: var(
+      --vaadin-charts-color-9,
+      oklch(from var(--_accent-0) clamp(0.2, l - 0.1, 0.8) c calc(h - var(--_hue-scale) / 9 * 9))
+    );
+
+    --_accent-0-label: oklch(from var(--_accent-0) clamp(0, (0.62 - l) * 1000, 1) 0 0);
+    --_accent-1-label: oklch(from var(--_accent-1) clamp(0, (0.62 - l) * 1000, 1) 0 0);
+    --_accent-2-label: oklch(from var(--_accent-2) clamp(0, (0.62 - l) * 1000, 1) 0 0);
+    --_accent-3-label: oklch(from var(--_accent-3) clamp(0, (0.62 - l) * 1000, 1) 0 0);
+    --_accent-4-label: oklch(from var(--_accent-4) clamp(0, (0.62 - l) * 1000, 1) 0 0);
+    --_accent-5-label: oklch(from var(--_accent-5) clamp(0, (0.62 - l) * 1000, 1) 0 0);
+    --_accent-6-label: oklch(from var(--_accent-6) clamp(0, (0.62 - l) * 1000, 1) 0 0);
+    --_accent-7-label: oklch(from var(--_accent-7) clamp(0, (0.62 - l) * 1000, 1) 0 0);
+    --_accent-8-label: oklch(from var(--_accent-8) clamp(0, (0.62 - l) * 1000, 1) 0 0);
+    --_accent-9-label: oklch(from var(--_accent-9) clamp(0, (0.62 - l) * 1000, 1) 0 0);
+
+    --_accent-positive: light-dark(#19b156, #1ccc62);
+    --_accent-negative: light-dark(#dc0611, #f7353f);
+
+    --_label: var(--vaadin-charts-label, var(--vaadin-color));
+    --_secondary-label: var(--vaadin-charts-secondary-label, var(--vaadin-color-subtle));
+    --_disabled-label: var(--vaadin-charts-disabled-label, var(--vaadin-color-disabled));
+    --_point-border: var(--vaadin-charts-point-border, var(--_bg));
+    --_axis-line: var(--vaadin-charts-axis-line, var(--vaadin-border-color));
+    --_axis-title: var(--vaadin-charts-axis-title, var(--_secondary-label));
+    --_axis-label: var(--vaadin-charts-axis-label, var(--_secondary-label));
+    --_grid-line: var(--vaadin-charts-grid-line, var(--vaadin-border-color));
+    --_minor-grid-line: var(
+      --vaadin-charts-minor-grid-line,
+      color-mix(in srgb, var(--vaadin-border-color) 60%, transparent)
+    );
+    --_data-label: var(--vaadin-charts-data-label, var(--_label));
+  }
+
+  /* Safari 17 doesn't support relative colors from light-dark() */
+  @supports not (color: oklch(from light-dark(red, red) l c h)) {
+    :host {
+      /* Safari 17 wants degrees instead of raw numbers */
+      --_hue-scale: 180deg;
+    }
   }
 
   :host([hidden]) {
@@ -43,7 +172,6 @@ export const chartStyles = css`
     height: 100%;
     text-align: left;
     z-index: 0;
-    /* #1072 */
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
   }
 
@@ -68,7 +196,7 @@ export const chartStyles = css`
   }
 
   :where([styled-mode]) .highcharts-background {
-    fill: var(--vaadin-charts-background, #fff);
+    fill: var(--_bg);
   }
 
   :where([styled-mode]) .highcharts-plot-border,
@@ -82,6 +210,8 @@ export const chartStyles = css`
 
   :where([styled-mode]) .highcharts-button-box {
     fill: inherit;
+    rx: var(--vaadin-charts-button-border-radius, var(--vaadin-radius-m));
+    ry: var(--vaadin-charts-button-border-radius, var(--vaadin-radius-m));
   }
 
   :where([styled-mode]) .highcharts-tracker-line {
@@ -98,19 +228,19 @@ export const chartStyles = css`
 
   /* Titles */
   :where([styled-mode]) .highcharts-title {
-    fill: var(--vaadin-charts-title-label, hsl(214, 35%, 15%));
+    fill: var(--vaadin-charts-title-label, var(--_label));
     font-size: 1.5em;
     font-weight: 600;
   }
 
   :where([styled-mode]) .highcharts-subtitle {
-    fill: var(--vaadin-charts-secondary-label, hsla(214, 42%, 18%, 0.72));
+    fill: var(--_secondary-label);
   }
 
   /* Axes */
   :where([styled-mode]) .highcharts-axis-line {
     fill: none;
-    stroke: var(--vaadin-charts-axis-line, hsla(214, 61%, 25%, 0.05));
+    stroke: var(--_axis-line);
   }
 
   :where([styled-mode]) .highcharts-yaxis .highcharts-axis-line {
@@ -118,18 +248,18 @@ export const chartStyles = css`
   }
 
   :where([styled-mode]) .highcharts-axis-title {
-    fill: var(--vaadin-charts-axis-title, hsla(214, 42%, 18%, 0.72));
+    fill: var(--_axis-title);
   }
 
   :where([styled-mode]) .highcharts-axis-labels {
-    fill: var(--vaadin-charts-axis-label, hsla(214, 42%, 18%, 0.72));
+    fill: var(--_axis-label);
     cursor: default;
     font-size: 0.9em;
   }
 
   :where([styled-mode]) .highcharts-grid-line {
     fill: none;
-    stroke: var(--vaadin-charts-grid-line, hsla(214, 53%, 23%, 0.16));
+    stroke: var(--_grid-line);
   }
 
   :where([styled-mode]) .highcharts-xaxis-grid .highcharts-grid-line {
@@ -137,7 +267,7 @@ export const chartStyles = css`
   }
 
   :where([styled-mode]) .highcharts-tick {
-    stroke: var(--vaadin-charts-grid-line, hsla(214, 53%, 23%, 0.16));
+    stroke: var(--_grid-line);
   }
 
   :where([styled-mode]) .highcharts-yaxis .highcharts-tick {
@@ -145,23 +275,23 @@ export const chartStyles = css`
   }
 
   :where([styled-mode]) .highcharts-minor-grid-line {
-    stroke: var(--vaadin-charts-contrast-5pct, hsla(214, 61%, 25%, 0.05));
+    stroke: var(--_minor-grid-line);
   }
 
   :where([styled-mode]) .highcharts-crosshair-thin {
     stroke-width: 1px;
-    stroke: var(--vaadin-charts-grid-line, hsla(214, 53%, 23%, 0.16));
+    stroke: var(--_grid-line);
   }
 
   :where([styled-mode]) .highcharts-crosshair-category {
-    stroke: var(--vaadin-charts-color-0, #5ac2f7);
+    stroke: var(--_accent-0);
     stroke-opacity: 0.25;
   }
 
   /* Credits */
   :where([styled-mode]) .highcharts-credits {
     cursor: pointer;
-    fill: var(--vaadin-charts-disabled-label, hsla(214, 50%, 22%, 0.26));
+    fill: var(--_disabled-label);
     font-size: 0.7em;
     transition:
       fill 250ms,
@@ -174,58 +304,22 @@ export const chartStyles = css`
   }
 
   /* Tooltip */
-  :where([styled-mode]) .highcharts-tooltip {
-    cursor: default;
-    pointer-events: none;
-    white-space: nowrap;
-    transition: stroke 150ms;
-    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.05)) !important;
-  }
-
-  :where([styled-mode]) .highcharts-tooltip text {
-    fill: var(--vaadin-charts-data-label, hsla(214, 40%, 16%, 0.94));
-  }
-
-  :where([styled-mode]) .highcharts-tooltip .highcharts-header {
-    font-size: 0.85em;
-    color: var(--vaadin-charts-secondary-label, hsla(214, 42%, 18%, 0.72));
-  }
-
-  :where([styled-mode]) .highcharts-tooltip-box {
-    stroke-width: 1px;
-    stroke: var(--vaadin-charts-tooltip-border, inherit);
-    fill: var(--vaadin-charts-tooltip-background, #fff);
-    fill-opacity: var(--vaadin-charts-tooltip-background-opacity, 1);
-  }
-
-  :where([styled-mode]) .highcharts-tooltip-box .highcharts-label-box {
-    fill: var(--vaadin-charts-tooltip-background, #fff);
-    fill-opacity: var(--vaadin-charts-tooltip-background-opacity, 1);
-  }
-
-  :where([styled-mode]) .highcharts-tooltip-header {
-    stroke-width: 1px;
-    stroke: var(--vaadin-charts-contrast-20pct, hsla(214, 53%, 23%, 0.16));
-  }
-
-  :where([styled-mode]) div.highcharts-tooltip {
-    filter: none;
-  }
+  ${unsafeCSS(tooltipStyles(':where([styled-mode])'))};
 
   :where([styled-mode]) .highcharts-selection-marker {
-    fill: var(--vaadin-charts-color-0, #5ac2f7);
+    fill: var(--_accent-0);
     fill-opacity: 0.25;
   }
 
   :where([styled-mode]) .highcharts-graph {
     fill: none;
-    stroke-width: 2px;
+    stroke-width: var(--vaadin-chart-graph-stroke-width, 2);
     stroke-linecap: round;
     stroke-linejoin: round;
   }
 
   :where([styled-mode]) .highcharts-state-hover .highcharts-graph {
-    stroke-width: 3;
+    stroke-width: calc(var(--vaadin-chart-graph-stroke-width, 2) + 1);
   }
 
   :where([styled-mode]) .highcharts-point-inactive {
@@ -270,53 +364,107 @@ export const chartStyles = css`
   /* vaadin-charts custom properties */
   /* Use of :where() function to avoid setting classes with high specificity */
   :where([styled-mode]) .highcharts-color-0 {
-    fill: var(--vaadin-charts-color-0, #5ac2f7);
-    stroke: var(--vaadin-charts-color-0, #5ac2f7);
+    fill: var(--_accent-0);
+    stroke: var(--_accent-0);
+    color: var(--_accent-0-label);
   }
 
   :where([styled-mode]) .highcharts-color-1 {
-    fill: var(--vaadin-charts-color-1, #1676f3);
-    stroke: var(--vaadin-charts-color-1, #1676f3);
+    fill: var(--_accent-1);
+    stroke: var(--_accent-1);
+    color: var(--_accent-1-label);
   }
 
   :where([styled-mode]) .highcharts-color-2 {
-    fill: var(--vaadin-charts-color-2, #ff7d94);
-    stroke: var(--vaadin-charts-color-2, #ff7d94);
+    fill: var(--_accent-2);
+    stroke: var(--_accent-2);
+    color: var(--_accent-2-label);
   }
 
   :where([styled-mode]) .highcharts-color-3 {
-    fill: var(--vaadin-charts-color-3, #c5164e);
-    stroke: var(--vaadin-charts-color-3, #c5164e);
+    fill: var(--_accent-3);
+    stroke: var(--_accent-3);
+    color: var(--_accent-2-label);
   }
 
   :where([styled-mode]) .highcharts-color-4 {
-    fill: var(--vaadin-charts-color-4, #15c15d);
-    stroke: var(--vaadin-charts-color-4, #15c15d);
+    fill: var(--_accent-4);
+    stroke: var(--_accent-4);
+    color: var(--_accent-4-label);
   }
 
   :where([styled-mode]) .highcharts-color-5 {
-    fill: var(--vaadin-charts-color-5, #0e8151);
-    stroke: var(--vaadin-charts-color-5, #0e8151);
+    fill: var(--_accent-5);
+    stroke: var(--_accent-5);
+    color: var(--_accent-5-label);
   }
 
   :where([styled-mode]) .highcharts-color-6 {
-    fill: var(--vaadin-charts-color-6, #c18ed2);
-    stroke: var(--vaadin-charts-color-6, #c18ed2);
+    fill: var(--_accent-6);
+    stroke: var(--_accent-6);
+    color: var(--_accent-6-label);
   }
 
   :where([styled-mode]) .highcharts-color-7 {
-    fill: var(--vaadin-charts-color-7, #9233b3);
-    stroke: var(--vaadin-charts-color-7, #9233b3);
+    fill: var(--_accent-7);
+    stroke: var(--_accent-7);
+    color: var(--_accent-7-label);
   }
 
   :where([styled-mode]) .highcharts-color-8 {
-    fill: var(--vaadin-charts-color-8, #fda253);
-    stroke: var(--vaadin-charts-color-8, #fda253);
+    fill: var(--_accent-8);
+    stroke: var(--_accent-8);
+    color: var(--_accent-8-label);
   }
 
   :where([styled-mode]) .highcharts-color-9 {
-    fill: var(--vaadin-charts-color-9, #e24932);
-    stroke: var(--vaadin-charts-color-9, #e24932);
+    fill: var(--_accent-9);
+    stroke: var(--_accent-9);
+    color: var(--_accent-9-label);
+  }
+
+  :where([styled-mode]) .highcharts-data-label-color-0 {
+    color: var(--_accent-0-label);
+  }
+
+  :where([styled-mode]) .highcharts-data-label-color-1 {
+    color: var(--_accent-1-label);
+  }
+
+  :where([styled-mode]) .highcharts-data-label-color-2 {
+    color: var(--_accent-2-label);
+  }
+
+  :where([styled-mode]) .highcharts-data-label-color-3 {
+    color: var(--_accent-3-label);
+  }
+
+  :where([styled-mode]) .highcharts-data-label-color-4 {
+    color: var(--_accent-4-label);
+  }
+
+  :where([styled-mode]) .highcharts-data-label-color-5 {
+    color: var(--_accent-5-label);
+  }
+
+  :where([styled-mode]) .highcharts-data-label-color-6 {
+    color: var(--_accent-6-label);
+  }
+
+  :where([styled-mode]) .highcharts-data-label-color-7 {
+    color: var(--_accent-7-label);
+  }
+
+  :where([styled-mode]) .highcharts-data-label-color-8 {
+    color: var(--_accent-8-label);
+  }
+
+  :where([styled-mode]) .highcharts-data-label-color-9 {
+    color: var(--_accent-9-label);
+  }
+
+  :where([styled-mode]) [class*='highcharts-data-label-color-'] {
+    fill: currentColor;
   }
 
   /* end of vaadin-charts custom properties */
@@ -328,7 +476,7 @@ export const chartStyles = css`
 
   :where([styled-mode]) .highcharts-markers {
     stroke-width: 1px;
-    stroke: var(--vaadin-charts-background, #fff);
+    stroke: var(--_bg);
   }
 
   :where([styled-mode])
@@ -358,7 +506,7 @@ export const chartStyles = css`
 
   :where([styled-mode]) .highcharts-data-label text,
   :where([styled-mode]) text.highcharts-data-label {
-    fill: var(--vaadin-charts-data-label, hsla(214, 40%, 16%, 0.94));
+    fill: var(--_data-label);
   }
 
   :where([styled-mode]) .highcharts-data-label-connector {
@@ -376,12 +524,13 @@ export const chartStyles = css`
 
   :where([styled-mode]) .highcharts-series:not(.highcharts-pie-series) .highcharts-point-select,
   :where([styled-mode]) .highcharts-markers .highcharts-point-select {
-    fill: var(--vaadin-charts-grid-line, hsla(214, 53%, 23%, 0.16));
-    stroke: var(--vaadin-charts-contrast, hsl(214, 35%, 15%));
+    /* TODO where are these used? */
+    fill: var(--_grid-line);
+    stroke: var(--vaadin-charts-contrast, var(--_label));
   }
 
   :where([styled-mode]) .highcharts-column-series rect.highcharts-point {
-    stroke: var(--vaadin-charts-background, #fff);
+    stroke: var(--_point-border);
   }
 
   :where([styled-mode]) .highcharts-column-series .highcharts-point {
@@ -395,7 +544,7 @@ export const chartStyles = css`
 
   :where([styled-mode]) .highcharts-pie-series .highcharts-point {
     stroke-linejoin: round;
-    stroke: var(--vaadin-charts-background, #fff);
+    stroke: var(--_point-border);
   }
 
   :where([styled-mode]) .highcharts-pie-series .highcharts-point-hover {
@@ -405,7 +554,7 @@ export const chartStyles = css`
 
   :where([styled-mode]) .highcharts-funnel-series .highcharts-point {
     stroke-linejoin: round;
-    stroke: var(--vaadin-charts-background, #fff);
+    stroke: var(--_point-border);
     stroke-width: 2px;
   }
 
@@ -421,7 +570,7 @@ export const chartStyles = css`
 
   :where([styled-mode]) .highcharts-pyramid-series .highcharts-point {
     stroke-linejoin: round;
-    stroke: var(--vaadin-charts-background, #fff);
+    stroke: var(--_point-border);
     stroke-width: 2px;
   }
 
@@ -441,7 +590,7 @@ export const chartStyles = css`
 
   :where([styled-mode]) .highcharts-treemap-series .highcharts-point {
     stroke-width: 2px;
-    stroke: var(--vaadin-charts-background, #fff);
+    stroke: var(--_point-border);
     transition:
       stroke 250ms,
       fill 250ms,
@@ -450,7 +599,7 @@ export const chartStyles = css`
 
   :where([styled-mode]) .highcharts-treemap-series .highcharts-point-hover {
     stroke-width: 0;
-    stroke: var(--vaadin-charts-background, #fff);
+    stroke: var(--_point-border);
     fill-opacity: 0.75;
     transition:
       stroke 25ms,
@@ -475,6 +624,10 @@ export const chartStyles = css`
     fill-opacity: 0.75;
   }
 
+  :where([styled-mode]) .highcharts-treemap-series [class*='highcharts-data-label-color-'] text {
+    fill: inherit;
+  }
+
   :where([styled-mode]) .highcharts-vector-series .highcharts-point {
     fill: none;
     stroke-width: 2px;
@@ -486,7 +639,8 @@ export const chartStyles = css`
   }
 
   :where([styled-mode]) .highcharts-lollipop-stem {
-    stroke: var(--vaadin-charts-contrast, hsl(214, 35%, 15%));
+    /* TODO where is this used? */
+    stroke: var(--vaadin-charts-contrast, var(--_label));
   }
 
   :where([styled-mode]) .highcharts-focus-border {
@@ -505,7 +659,7 @@ export const chartStyles = css`
   }
 
   :where([styled-mode]) .highcharts-legend-item > text {
-    fill: var(--vaadin-charts-data-label, hsla(214, 40%, 16%, 0.94));
+    fill: var(--_data-label);
     font-weight: normal;
     font-size: 1em;
     cursor: pointer;
@@ -517,22 +671,22 @@ export const chartStyles = css`
   }
 
   :where([styled-mode]) .highcharts-legend-item:hover text {
-    fill: var(--vaadin-charts-title-label, hsl(214, 35%, 15%));
+    fill: var(--vaadin-charts-title-label, var(--_label));
   }
 
   :where([styled-mode]) .highcharts-legend-item-hidden * {
-    fill: var(--vaadin-charts-disabled-label, hsla(214, 50%, 22%, 0.26)) !important;
-    stroke: var(--vaadin-charts-disabled-label, hsla(214, 50%, 22%, 0.26)) !important;
+    fill: var(--_disabled-label) !important;
+    stroke: var(--_disabled-label) !important;
     transition: fill 250ms;
   }
 
   :where([styled-mode]) .highcharts-legend-nav-active {
-    fill: var(--vaadin-charts-button-label, hsl(214, 90%, 52%));
+    fill: var(--vaadin-charts-button-label, var(--_label));
     cursor: pointer;
   }
 
   :where([styled-mode]) .highcharts-legend-nav-inactive {
-    fill: var(--vaadin-charts-disabled-label, hsla(214, 50%, 22%, 0.26));
+    fill: var(--_disabled-label);
   }
 
   :where([styled-mode]) circle.highcharts-legend-nav-active,
@@ -557,13 +711,13 @@ export const chartStyles = css`
   }
 
   :where([styled-mode]) .highcharts-bubble-legend-labels {
-    fill: var(--vaadin-charts-data-label, hsla(214, 40%, 16%, 0.94));
+    fill: var(--_data-label);
   }
 
   /* Loading */
   :where([styled-mode]) .highcharts-loading {
     position: absolute;
-    background-color: var(--vaadin-charts-background, #fff);
+    background-color: var(--_bg);
     opacity: 0.5;
     text-align: center;
     z-index: 10;
@@ -588,23 +742,24 @@ export const chartStyles = css`
   /* Plot bands and polar pane backgrounds */
   :where([styled-mode]) .highcharts-plot-band,
   :where([styled-mode]) .highcharts-pane {
-    fill: var(--vaadin-charts-contrast, hsl(214, 35%, 15%));
+    fill: var(--vaadin-charts-contrast, var(--_label));
     fill-opacity: 0.05;
   }
 
   :where([styled-mode]) .highcharts-plot-line {
     fill: none;
-    stroke: var(--vaadin-charts-contrast-60pct, hsla(214, 43%, 19%, 0.61));
+    /* TODO where is this used? */
+    stroke: color-mix(in srgb, var(--vaadin-charts-contrast, var(--_label)) 60%, transparent);
     stroke-width: 1px;
   }
 
   :where([styled-mode]) .highcharts-plot-line-label {
-    fill: var(--vaadin-charts-data-label, hsla(214, 40%, 16%, 0.94));
+    fill: var(--_data-label);
   }
 
   /* Highcharts More and modules */
   :where([styled-mode]) .highcharts-boxplot-box {
-    fill: var(--vaadin-charts-background, #fff);
+    fill: var(--_bg);
   }
 
   :where([styled-mode]) .highcharts-boxplot-median {
@@ -616,16 +771,16 @@ export const chartStyles = css`
   }
 
   :where([styled-mode]) .highcharts-errorbar-series .highcharts-point {
-    stroke: var(--vaadin-charts-contrast, hsl(214, 35%, 15%));
+    stroke: var(--vaadin-charts-contrast, var(--_label));
   }
 
   :where([styled-mode]) .highcharts-gauge-series .highcharts-data-label-box {
-    stroke: var(--vaadin-charts-grid-line, hsla(214, 53%, 23%, 0.16));
+    stroke: var(--_grid-line);
     stroke-width: 1px;
   }
 
   :where([styled-mode]) .highcharts-gauge-series .highcharts-dial {
-    fill: var(--vaadin-charts-contrast, hsl(214, 35%, 15%));
+    fill: var(--vaadin-charts-contrast, var(--_label));
     stroke-width: 0;
   }
 
@@ -635,7 +790,7 @@ export const chartStyles = css`
   }
 
   :where([styled-mode]) .highcharts-waterfall-series .highcharts-graph {
-    stroke: var(--vaadin-charts-contrast-60pct, hsla(214, 43%, 19%, 0.61));
+    stroke: color-mix(in srgb, var(--vaadin-charts-contrast, var(--_label)) 60%, transparent);
     stroke-dasharray: 1, 3;
   }
 
@@ -659,7 +814,7 @@ export const chartStyles = css`
 
   :where([styled-mode]) .highcharts-venn-series .highcharts-point {
     fill-opacity: 0.75;
-    stroke: var(--vaadin-charts-background, #fff);
+    stroke: var(--_point-border);
     transition:
       stroke 250ms,
       fill-opacity 250ms;
@@ -667,7 +822,7 @@ export const chartStyles = css`
 
   :where([styled-mode]) .highcharts-venn-series .highcharts-point-hover {
     fill-opacity: 1;
-    stroke: var(--vaadin-charts-background, #fff);
+    stroke: var(--_point-border);
   }
 
   /* Highstock */
@@ -676,26 +831,26 @@ export const chartStyles = css`
   }
 
   :where([styled-mode]) .highcharts-navigator-mask-inside {
-    fill: var(--vaadin-charts-color-0, #5ac2f7);
+    fill: var(--_accent-0);
     /* navigator.maskFill option */
     fill-opacity: 0.2;
     cursor: ew-resize;
   }
 
   :where([styled-mode]) .highcharts-navigator-outline {
-    stroke: var(--vaadin-charts-grid-line, hsla(214, 53%, 23%, 0.16));
+    stroke: var(--_grid-line);
     fill: none;
   }
 
   :where([styled-mode]) .highcharts-navigator-handle {
-    stroke: var(--vaadin-charts-contrast-20pct, hsla(214, 53%, 23%, 0.16));
-    fill: var(--vaadin-charts-background, #fff);
+    stroke: color-mix(in srgb, var(--vaadin-charts-contrast, var(--_label)) 20%, transparent);
+    fill: var(--_bg);
     cursor: ew-resize;
   }
 
   :where([styled-mode]) .highcharts-navigator-series {
-    fill: var(--vaadin-charts-color-1, #1676f3);
-    stroke: var(--vaadin-charts-color-1, #1676f3);
+    fill: var(--_accent-1);
+    stroke: var(--_accent-1);
   }
 
   :where([styled-mode]) .highcharts-navigator-series .highcharts-graph {
@@ -712,11 +867,11 @@ export const chartStyles = css`
 
   :where([styled-mode]) .highcharts-navigator-xaxis .highcharts-grid-line {
     stroke-width: 1px;
-    stroke: var(--vaadin-charts-grid-line, hsla(214, 53%, 23%, 0.16));
+    stroke: var(--_grid-line);
   }
 
   :where([styled-mode]) .highcharts-navigator-xaxis.highcharts-axis-labels {
-    fill: var(--vaadin-charts-secondary-label, hsla(214, 42%, 18%, 0.72));
+    fill: var(--_secondary-label);
   }
 
   :where([styled-mode]) .highcharts-navigator-yaxis .highcharts-grid-line {
@@ -724,61 +879,61 @@ export const chartStyles = css`
   }
 
   :where([styled-mode]) .highcharts-scrollbar-thumb {
-    fill: var(--vaadin-charts-contrast-20pct, hsla(214, 53%, 23%, 0.16));
+    fill: color-mix(in srgb, var(--vaadin-charts-contrast, var(--_label)) 20%, transparent);
   }
 
   :where([styled-mode]) .highcharts-scrollbar-button {
-    fill: var(--vaadin-charts-background, #fff);
+    fill: var(--_bg);
   }
 
   :where([styled-mode]) .highcharts-scrollbar-arrow {
-    fill: var(--vaadin-charts-data-label, hsla(214, 40%, 16%, 0.94));
+    fill: var(--_data-label);
   }
 
   :where([styled-mode]) .highcharts-scrollbar-rifles {
-    stroke: var(--vaadin-charts-data-label, hsla(214, 40%, 16%, 0.94));
+    stroke: var(--_data-label);
     stroke-width: 1px;
   }
 
   :where([styled-mode]) .highcharts-scrollbar-track {
-    fill: var(--vaadin-charts-contrast-5pct, hsla(214, 61%, 25%, 0.05));
+    fill: color-mix(in srgb, var(--vaadin-charts-contrast, var(--_label)) 5%, transparent);
   }
 
   :where([styled-mode]) .highcharts-button {
-    fill: var(--vaadin-charts-button-background, hsla(214, 61%, 25%, 0.05));
+    fill: var(--vaadin-charts-button-background, var(--vaadin-background-container));
     cursor: default;
     transition: fill 250ms;
   }
 
   :where([styled-mode]) .highcharts-button text {
-    fill: var(--vaadin-charts-button-label, hsl(214, 90%, 52%));
+    fill: var(--vaadin-charts-button-label, var(--_label));
     font-weight: 600;
   }
 
   :where([styled-mode]) .highcharts-button-hover {
     transition: fill 0ms;
-    fill: var(--vaadin-charts-button-hover-background, hsla(214, 90%, 52%, 0.1));
+    fill: var(--vaadin-charts-button-hover-background, var(--vaadin-background-container));
     stroke-width: 0;
   }
 
   :where([styled-mode]) .highcharts-button-hover text {
-    fill: var(--vaadin-charts-button-label, hsl(214, 90%, 52%));
+    fill: var(--vaadin-charts-button-label, var(--_label));
   }
 
   :where([styled-mode]) .highcharts-button-pressed {
-    fill: var(--vaadin-charts-button-active-background, hsl(214, 90%, 52%));
+    fill: var(--vaadin-charts-button-active-background, var(--_label));
   }
 
   :where([styled-mode]) .highcharts-button-pressed text {
-    fill: var(--vaadin-charts-button-active-label, #fff);
+    fill: var(--vaadin-charts-button-active-label, var(--_bg));
   }
 
   :where([styled-mode]) .highcharts-button-disabled text {
-    fill: var(--vaadin-charts-button-label, hsl(214, 90%, 52%));
+    fill: var(--vaadin-charts-button-disabled-label, var(--vaadin-color-disabled));
   }
 
-  :where([styled-mode]) .highcharts-range-selector-buttons > text {
-    fill: var(--vaadin-charts-secondary-label, hsla(214, 42%, 18%, 0.72));
+  :where([styled-mode]) .highcharts-range-selector-buttons > :is(text, .highcharts-label) {
+    fill: var(--_secondary-label);
   }
 
   :where([styled-mode]) .highcharts-range-selector-buttons .highcharts-button {
@@ -790,22 +945,22 @@ export const chartStyles = css`
   }
 
   :where([styled-mode]) .highcharts-range-label text {
-    fill: var(--vaadin-charts-secondary-label, hsla(214, 42%, 18%, 0.72));
+    fill: var(--_secondary-label);
   }
 
   :where([styled-mode]) .highcharts-range-input rect {
-    fill: var(--vaadin-charts-contrast-10pct, hsla(214, 57%, 24%, 0.1));
-    rx: 2;
-    ry: 2;
-  }
-
-  :where([styled-mode]) .highcharts-range-input:hover rect {
-    fill: var(--vaadin-charts-contrast-20pct, hsla(214, 53%, 23%, 0.16));
+    fill: var(--vaadin-charts-range-input-background, var(--vaadin-background-container));
+    rx: var(--vaadin-charts-button-border-radius, var(--vaadin-radius-m));
+    ry: var(--vaadin-charts-button-border-radius, var(--vaadin-radius-m));
     transition: fill 250ms;
   }
 
+  :where([styled-mode]) .highcharts-range-input:hover rect {
+    fill: var(--vaadin-charts-range-input-background-hover, var(--vaadin-background-container));
+  }
+
   :where([styled-mode]) .highcharts-range-input text {
-    fill: var(--vaadin-charts-data-label, hsla(214, 40%, 16%, 0.94));
+    fill: var(--_data-label);
   }
 
   :where([styled-mode]) input.highcharts-range-selector {
@@ -821,7 +976,7 @@ export const chartStyles = css`
   }
 
   :where([styled-mode]) .highcharts-crosshair-label text {
-    fill: var(--vaadin-charts-background, #fff);
+    fill: var(--_bg);
     font-size: 1.1em;
   }
 
@@ -830,16 +985,16 @@ export const chartStyles = css`
   }
 
   :where([styled-mode]) .highcharts-candlestick-series .highcharts-point {
-    stroke: var(--vaadin-charts-contrast-60pct, hsla(214, 43%, 19%, 0.61));
+    stroke: var(--vaadin-charts-candlestick-line, var(--vaadin-border-color-strong));
     stroke-width: 1px;
   }
 
   :where([styled-mode]) .highcharts-candlestick-series .highcharts-point-up {
-    fill: var(--vaadin-charts-color-positive, #15c15d);
+    fill: var(--_accent-positive);
   }
 
   :where([styled-mode]) .highcharts-candlestick-series .highcharts-point-down {
-    fill: var(--vaadin-charts-color-negative, #e24932);
+    fill: var(--_accent-negative);
   }
 
   :where([styled-mode]) .highcharts-ohlc-series .highcharts-point-hover {
@@ -847,24 +1002,24 @@ export const chartStyles = css`
   }
 
   :where([styled-mode]) .highcharts-flags-series .highcharts-point .highcharts-label-box {
-    stroke: var(--vaadin-charts-grid-line, hsla(214, 53%, 23%, 0.16));
-    fill: var(--vaadin-charts-background, #fff);
+    stroke: var(--_grid-line);
+    fill: var(--_bg);
     transition: fill 250ms;
   }
 
   :where([styled-mode]) .highcharts-flags-series .highcharts-point-hover .highcharts-label-box {
-    stroke: var(--vaadin-charts-contrast-60pct, hsla(214, 43%, 19%, 0.61));
-    fill: var(--vaadin-charts-background, #fff);
+    stroke: color-mix(in srgb, var(--vaadin-charts-contrast, var(--_label)) 60%, transparent);
+    fill: var(--_bg);
   }
 
   :where([styled-mode]) .highcharts-flags-series .highcharts-point text {
-    fill: var(--vaadin-charts-data-label, hsla(214, 40%, 16%, 0.94));
+    fill: var(--_data-label);
     font-size: 0.9em;
     font-weight: normal;
   }
 
   :where([styled-mode]) .highcharts-flags-series .highcharts-point-hover text {
-    fill: var(--vaadin-charts-title-label, hsl(214, 35%, 15%));
+    fill: var(--vaadin-charts-title-label, var(--_label));
   }
 
   /* Highmaps */
@@ -873,7 +1028,7 @@ export const chartStyles = css`
       fill 500ms,
       fill-opacity 500ms,
       stroke-width 250ms;
-    stroke: var(--vaadin-charts-contrast-20pct, hsla(214, 53%, 23%, 0.16));
+    stroke: color-mix(in srgb, var(--vaadin-charts-contrast, var(--_label)) 20%, transparent);
   }
 
   :where([styled-mode]) .highcharts-map-series .highcharts-point-hover {
@@ -903,17 +1058,17 @@ export const chartStyles = css`
   }
 
   :where([styled-mode]) .highcharts-coloraxis-grid .highcharts-grid-line {
-    stroke: var(--vaadin-charts-background, #fff);
+    stroke: var(--_bg);
   }
 
   :where([styled-mode]) .highcharts-coloraxis-marker {
-    fill: var(--vaadin-charts-axis-label, hsla(214, 42%, 18%, 0.72));
+    fill: var(--_axis-label);
     stroke-width: 0;
   }
 
   :where([styled-mode]) .highcharts-null-point {
-    fill: var(--vaadin-charts-contrast-5pct, hsla(214, 61%, 25%, 0.05));
-    stroke: var(--vaadin-charts-contrast-60pct, hsla(214, 43%, 19%, 0.61));
+    fill: transparent;
+    stroke: var(--vaadin-border-color);
   }
 
   /* 3d charts */
@@ -935,7 +1090,7 @@ export const chartStyles = css`
   }
 
   :where([styled-mode]) .highcharts-button-symbol {
-    stroke: var(--vaadin-charts-secondary-label, hsla(214, 42%, 18%, 0.72));
+    stroke: var(--_secondary-label);
     stroke-width: 3px;
   }
 
@@ -949,7 +1104,7 @@ export const chartStyles = css`
   :where([styled-mode]) .highcharts-menu-item {
     padding: 0.5em 1em;
     background: none;
-    color: var(--vaadin-charts-button-label, hsl(214, 90%, 52%));
+    color: var(--vaadin-charts-button-label, var(--_label));
     cursor: pointer;
     transition:
       background 250ms,
@@ -970,7 +1125,7 @@ export const chartStyles = css`
   :where([styled-mode]) text.highcharts-drilldown-data-label,
   :where([styled-mode]) .highcharts-drilldown-axis-label {
     cursor: pointer;
-    fill: var(--vaadin-charts-button-label, hsl(214, 90%, 52%));
+    fill: var(--vaadin-charts-button-label, var(--_label));
     font-weight: normal;
     text-decoration: underline;
   }
@@ -979,7 +1134,7 @@ export const chartStyles = css`
   :where([styled-mode]) .highcharts-no-data text {
     font-weight: normal;
     font-size: 1rem;
-    fill: var(--vaadin-charts-secondary-label, hsla(214, 42%, 18%, 0.72));
+    fill: var(--_secondary-label);
   }
 
   /* Drag-panes module */
@@ -997,24 +1152,24 @@ export const chartStyles = css`
   /* Lineargauge type series */
   :where([styled-mode]) .highcharts-lineargauge-target {
     stroke-width: 1px;
-    stroke: var(--vaadin-charts-contrast-60pct, hsla(214, 43%, 19%, 0.61));
+    stroke: color-mix(in srgb, var(--vaadin-charts-contrast, var(--_label)) 60%, transparent);
   }
 
   :where([styled-mode]) .highcharts-lineargauge-target-line {
     stroke-width: 1px;
-    stroke: var(--vaadin-charts-contrast-60pct, hsla(214, 43%, 19%, 0.61));
+    stroke: color-mix(in srgb, var(--vaadin-charts-contrast, var(--_label)) 60%, transparent);
   }
 
   /* Annotations module */
   :where([styled-mode]) .highcharts-annotation-label-box {
     stroke-width: 1px;
-    stroke: var(--vaadin-charts-contrast, hsl(214, 35%, 15%));
-    fill: var(--vaadin-charts-contrast, hsl(214, 35%, 15%));
+    stroke: var(--vaadin-charts-contrast, var(--_label));
+    fill: var(--vaadin-charts-contrast, var(--_label));
     fill-opacity: 0.75;
   }
 
   :where([styled-mode]) .highcharts-annotation-label text {
-    fill: var(--vaadin-charts-disabled-label, hsla(214, 50%, 22%, 0.26));
+    fill: var(--_disabled-label);
   }
 
   /* Gantt */
@@ -1033,6 +1188,11 @@ export const chartStyles = css`
 
   :where([styled-mode]) .highcharts-grid-axis .highcharts-axis-line {
     stroke-width: 1px;
+  }
+
+  :where([styled-mode]) .highcharts-organization-series .highcharts-link {
+    stroke: var(--vaadin-charts-org-line, color-mix(in srgb, var(--_label) 50%, var(--_bg)));
+    stroke-width: var(--vaadin-charts-org-line-width, 1);
   }
 
   /* Workaround for https://github.com/highcharts/highcharts/issues/22490 */
