@@ -4,6 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { html, LitElement } from 'lit';
+import { isElementFocused } from '@vaadin/a11y-base/src/focus-utils.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
@@ -42,6 +43,21 @@ class PopoverOverlay extends PopoverOverlayMixin(
         <div part="content" id="content"><slot></slot></div>
       </div>
     `;
+  }
+
+  /** @protected */
+  updated(props) {
+    super.updated(props);
+
+    if (props.has('restoreFocusNode') && this.opened) {
+      // Save focus to be restored when target is set while opened
+      if (this.restoreFocusNode && isElementFocused(this.restoreFocusNode.focusElement || this.restoreFocusNode)) {
+        this.__focusRestorationController.saveFocus();
+      } else if (!this.restoreFocusNode) {
+        // Do not restore focus when target is cleared while opened
+        this.__focusRestorationController.focusNode = null;
+      }
+    }
   }
 
   /**
