@@ -1,6 +1,5 @@
 /* @web/test-runner snapshot v1 */
 export const snapshots = {};
-
 snapshots["menu-bar basic"] =
 `<vaadin-menu-bar role="menubar">
   <vaadin-menu-bar-submenu
@@ -107,7 +106,7 @@ snapshots["menu-bar opened"] =
     </div>
     <vaadin-menu-bar-submenu
       modeless=""
-      slot="sub-menu"
+      slot="submenu"
     >
     </vaadin-menu-bar-submenu>
   </vaadin-menu-bar-submenu>
@@ -177,8 +176,8 @@ snapshots["menu-bar overlay"] =
   <slot name="overlay">
   </slot>
   <slot
-    name="sub-menu"
-    slot="sub-menu"
+    name="submenu"
+    slot="submenu"
   >
   </slot>
 </vaadin-menu-bar-overlay>
@@ -197,8 +196,8 @@ snapshots["menu-bar overlay class"] =
   <slot name="overlay">
   </slot>
   <slot
-    name="sub-menu"
-    slot="sub-menu"
+    name="submenu"
+    slot="submenu"
   >
   </slot>
 </vaadin-menu-bar-overlay>

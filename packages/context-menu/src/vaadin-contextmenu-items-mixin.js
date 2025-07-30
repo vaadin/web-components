@@ -458,7 +458,7 @@ export const ItemsMixin = (superClass) =>
         root.appendChild(listBox);
 
         const subMenu = this.__initSubMenu();
-        subMenu.slot = 'sub-menu';
+        subMenu.slot = 'submenu';
         this._subMenu = subMenu;
         this.appendChild(subMenu);
 

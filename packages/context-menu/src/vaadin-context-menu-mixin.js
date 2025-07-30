@@ -201,8 +201,8 @@ export const ContextMenuMixin = (superClass) =>
       overlay.append(overlaySlot);
 
       const subMenuSlot = document.createElement('slot');
-      subMenuSlot.name = 'sub-menu';
-      subMenuSlot.slot = 'sub-menu';
+      subMenuSlot.name = 'submenu';
+      subMenuSlot.slot = 'submenu';
       overlay.append(subMenuSlot);
 
       this._overlayElement = overlay;

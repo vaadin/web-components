@@ -42,7 +42,7 @@ export class ContextMenuOverlay extends MenuOverlayMixin(
       <div part="overlay" id="overlay" tabindex="0">
         <div part="content" id="content">
           <slot></slot>
-          <slot name="sub-menu"></slot>
+          <slot name="submenu"></slot>
         </div>
       </div>
     `;

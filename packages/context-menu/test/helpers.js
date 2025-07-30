@@ -19,7 +19,7 @@ export function getMenuItems(menu) {
 }
 
 export function getSubMenu(menu) {
-  return menu.querySelector(':scope > vaadin-context-menu[slot="sub-menu"]');
+  return menu.querySelector(':scope > vaadin-context-menu[slot="submenu"]');
 }
 
 export async function openSubMenus(menu) {

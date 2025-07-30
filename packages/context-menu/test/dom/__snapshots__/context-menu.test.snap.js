@@ -1,7 +1,6 @@
 /* @web/test-runner snapshot v1 */
 export const snapshots = {};
-
-snapshots["context-menu items"] = 
+snapshots["context-menu items"] =
 `<vaadin-context-menu opened="">
   <div>
     Target
@@ -58,18 +57,18 @@ snapshots["context-menu items"] =
   </div>
   <vaadin-context-menu
     modeless=""
-    slot="sub-menu"
+    slot="submenu"
   >
   </vaadin-context-menu>
 </vaadin-context-menu>
 `;
 /* end snapshot context-menu items */
 
-snapshots["context-menu items nested"] = 
+snapshots["context-menu items nested"] =
 `<vaadin-context-menu
   modeless=""
   opened=""
-  slot="sub-menu"
+  slot="submenu"
   start-aligned=""
   top-aligned=""
 >
@@ -103,7 +102,7 @@ snapshots["context-menu items nested"] =
   <vaadin-context-menu
     modeless=""
     opened=""
-    slot="sub-menu"
+    slot="submenu"
     start-aligned=""
     top-aligned=""
   >
@@ -146,7 +145,7 @@ snapshots["context-menu items nested"] =
     </div>
     <vaadin-context-menu
       modeless=""
-      slot="sub-menu"
+      slot="submenu"
     >
     </vaadin-context-menu>
   </vaadin-context-menu>
@@ -164,8 +163,8 @@ snapshots["context-menu overlay class"] =
   <slot name="overlay">
   </slot>
   <slot
-    name="sub-menu"
-    slot="sub-menu"
+    name="submenu"
+    slot="submenu"
   >
   </slot>
 </vaadin-context-menu-overlay>
@@ -185,8 +184,8 @@ snapshots["context-menu overlay class nested"] =
   <slot name="overlay">
   </slot>
   <slot
-    name="sub-menu"
-    slot="sub-menu"
+    name="submenu"
+    slot="submenu"
   >
   </slot>
 </vaadin-context-menu-overlay>
