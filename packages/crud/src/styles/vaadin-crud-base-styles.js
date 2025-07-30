@@ -68,9 +68,19 @@ export const crudStyles = css`
     border-end-end-radius: 0;
   }
 
+  :host([editor-position='aside'][editor-opened]) :is(#container, [part='editor']) {
+    border-start-end-radius: inherit;
+    border-end-end-radius: inherit;
+  }
+
   :host([editor-position='bottom'][editor-opened]) #main {
     border-bottom: var(--vaadin-crud-border-width, 1px) solid
       var(--vaadin-crud-border-color, var(--vaadin-border-color));
+  }
+
+  :host([editor-position='bottom'][editor-opened]) :is(#container, [part='editor']) {
+    border-end-start-radius: inherit;
+    border-end-end-radius: inherit;
   }
 
   [part='toolbar'] {
@@ -91,8 +101,11 @@ export const crudStyles = css`
     display: flex;
     flex-direction: column;
     height: 100%;
-    outline: none;
     z-index: 1;
+  }
+
+  [part='editor']:focus-visible {
+    outline: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
   }
 
   :host(:not([editor-position=''])[editor-opened]:not([fullscreen])) [part='editor'] {
