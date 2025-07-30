@@ -588,7 +588,6 @@ class Popover extends PopoverPositionMixin(
     target.addEventListener('focusout', this.__onTargetFocusOut);
 
     if (this.opened && this._overlayElement && isElementFocused(this.__getTargetFocusable())) {
-      this.__shouldRestoreFocus = true;
       this._overlayElement.__focusRestorationController.saveFocus();
     }
   }
