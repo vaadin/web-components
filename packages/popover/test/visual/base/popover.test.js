@@ -86,10 +86,22 @@ describe('popover', () => {
     });
   });
 
-  it('no-padding', async () => {
-    element.setAttribute('theme', 'no-padding');
-    target.click();
-    await nextRender();
-    await visualDiff(div, 'no-padding');
+  describe('no-padding', () => {
+    before(() => {
+      const contentStyles = new CSSStyleSheet();
+      contentStyles.insertRule('vaadin-popover::part(content) { padding: 20px; }');
+      document.adoptedStyleSheets = [contentStyles];
+    });
+
+    after(() => {
+      document.adoptedStyleSheets = [];
+    });
+
+    it('no-padding', async () => {
+      element.setAttribute('theme', 'no-padding');
+      target.click();
+      await nextRender();
+      await visualDiff(div, 'no-padding');
+    });
   });
 });
