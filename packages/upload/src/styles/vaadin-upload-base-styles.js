@@ -24,7 +24,6 @@ export const uploadStyles = css`
   :host([dragover-valid]) {
     --vaadin-upload-background: var(--vaadin-background-container);
     --vaadin-upload-border: 1px dashed var(--vaadin-color);
-    );
   }
 
   :host([hidden]) {
@@ -56,5 +55,4 @@ export const uploadStyles = css`
     --vaadin-upload-border-radius: 0;
     --vaadin-upload-padding: 0;
   }
-
 `;
