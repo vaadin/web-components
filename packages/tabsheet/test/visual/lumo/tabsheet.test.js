@@ -56,18 +56,27 @@ describe('tabsheet', () => {
         document.documentElement.removeAttribute('dir');
       });
 
-      describe(`${dir}`, () => {
-        it('default', async () => {
-          await visualDiff(div, `${dir}-default`);
+      it('default', async () => {
+        await visualDiff(div, `${dir}-default`);
+      });
+
+      it('bordered', async () => {
+        element.setAttribute('theme', 'bordered');
+        await visualDiff(div, `${dir}-bordered`);
+      });
+
+      describe('no-padding', () => {
+        before(() => {
+          const contentStyles = new CSSStyleSheet();
+          contentStyles.insertRule('vaadin-tabsheet::part(content) { padding: 20px; }');
+          document.adoptedStyleSheets = [contentStyles];
         });
 
-        it('bordered', async () => {
-          element.setAttribute('theme', 'bordered');
-          await visualDiff(div, `${dir}-bordered`);
+        after(() => {
+          document.adoptedStyleSheets = [];
         });
 
-        // prettier-ignore
-        it('no-padding', async () => { // NOSONAR
+        it('no-padding', async () => {
           element.setAttribute('theme', 'no-padding');
           await visualDiff(div, `${dir}-no-padding`);
         });
