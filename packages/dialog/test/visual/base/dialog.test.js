@@ -74,4 +74,10 @@ describe('dialog', () => {
     await nextUpdate(element);
     await visualDiff(div, 'header-title-long-single-word');
   });
+
+  it('no-padding theme', async () => {
+    element.setAttribute('theme', 'no-padding');
+    await nextUpdate(element);
+    await visualDiff(div, 'content-no-padding-theme');
+  });
 });
