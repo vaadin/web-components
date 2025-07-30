@@ -22,6 +22,7 @@
     --vaadin-charts-button-hover-background: var(--lumo-primary-color-10pct);
     --vaadin-charts-button-active-label: var(--lumo-primary-contrast-color);
     --vaadin-charts-button-active-background: var(--lumo-primary-color);
+    --vaadin-charts-button-border-radius: 2px;
     --vaadin-charts-xaxis-line-width: 0;
     --vaadin-charts-tooltip-background-opacity: 1;
     --vaadin-charts-color-0: #5ac2f7;
