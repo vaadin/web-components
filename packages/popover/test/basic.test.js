@@ -90,6 +90,64 @@ describe('popover', () => {
       await nextUpdate(popover);
       expect(overlay.restoreFocusNode).to.eql(target);
     });
+
+    it('should restore focus when target is set on already opened popover', async () => {
+      // Focus target before opening
+      target.focus();
+
+      // Open popover
+      popover.renderer = (root) => {
+        if (!root.firstChild) {
+          const input = document.createElement('input');
+          root.appendChild(input);
+        }
+      };
+      popover.opened = true;
+      await oneEvent(overlay, 'vaadin-overlay-open');
+
+      // Set target
+      popover.target = target;
+      await nextUpdate(popover);
+
+      overlay.querySelector('input').focus();
+
+      // Close popover
+      popover.opened = false;
+      await nextRender();
+
+      expect(document.activeElement).to.equal(target);
+    });
+
+    it('should not restore focus when target is cleared on already opened popover', async () => {
+      // Focus target before opening
+      target.focus();
+
+      // Open popover
+      popover.renderer = (root) => {
+        if (!root.firstChild) {
+          const input = document.createElement('input');
+          root.appendChild(input);
+        }
+      };
+      popover.opened = true;
+      await oneEvent(overlay, 'vaadin-overlay-open');
+
+      // Set target
+      popover.target = target;
+      await nextUpdate(popover);
+
+      overlay.querySelector('input').focus();
+
+      // Clear target
+      popover.target = null;
+      await nextUpdate(popover);
+
+      // Close popover
+      popover.opened = false;
+      await nextRender();
+
+      expect(document.activeElement).to.not.equal(target);
+    });
   });
 
   describe('for', () => {
