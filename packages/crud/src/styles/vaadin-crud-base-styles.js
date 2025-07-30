@@ -91,8 +91,11 @@ export const crudStyles = css`
     display: flex;
     flex-direction: column;
     height: 100%;
-    outline: none;
     z-index: 1;
+  }
+
+  [part='editor']:focus-visible {
+    outline: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
   }
 
   :host(:not([editor-position=''])[editor-opened]:not([fullscreen])) [part='editor'] {
