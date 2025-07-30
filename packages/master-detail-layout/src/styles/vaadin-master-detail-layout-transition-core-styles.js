@@ -40,7 +40,7 @@ export const masterDetailLayoutTransitionStyles = css`
     }
 
     /* Needed to promote the backdrop on top the master during the transition */
-    vaadin-master-detail-layout[transition]:not([transition='replace'])::part(backdrop) {
+    vaadin-master-detail-layout[transition]::part(backdrop) {
       view-transition-name: vaadin-mdl-backdrop;
     }
 
