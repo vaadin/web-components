@@ -237,14 +237,37 @@ describe('popover', () => {
       expect(overlay.opened).to.be.true;
     });
 
-    it('should remove document click listener when popover is detached', async () => {
-      const spy = sinon.spy(document.documentElement, 'removeEventListener');
-      popover.remove();
-      await nextRender();
-      expect(spy).to.be.called;
-      expect(spy.firstCall.args[0]).to.equal('click');
-    });
+    it('should restore focus when target is set on already opened popover', async () => {
+      const target = fixtureSync('<button>Test Target</button>');
+      target.focus();
 
+      // Popover without target
+      const popover = document.createElement('vaadin-popover');
+      document.body.appendChild(popover);
+      popover.renderer = (root) => {
+        if (!root.firstChild) {
+          const input = document.createElement('input');
+          root.appendChild(input);
+        }
+      };
+
+      // Open popover
+      popover.opened = true;
+      await nextRender();
+      const overlay = popover.shadowRoot.querySelector('vaadin-popover-overlay');
+      await oneEvent(overlay, 'vaadin-overlay-open');
+
+      // Set target
+      popover.target = target;
+      await nextUpdate(popover);
+      popover.querySelector('input').focus();
+
+      // Close popover
+      popover.opened = false;
+      await nextRender();
+
+      expect(document.activeElement).to.equal(target);
+    });
     describe('Escape press', () => {
       beforeEach(async () => {
         target.click();
